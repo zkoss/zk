@@ -1353,7 +1353,11 @@ setDocument = Sizzle.setDocument = function( node ) {
 						// treechildren may not have the value from $n()
 						elem = w.parent.$n();
 					}
-					elem[zk.Widget._TARGET] = w;
+					if (!elem[zk.Widget._TARGETS]) {
+						elem[zk.Widget._TARGETS] = [w];
+					} else {
+						elem[zk.Widget._TARGETS].push(w);
+					}
 					tmp.push(elem);
 				}
 			} else {
@@ -1364,7 +1368,11 @@ setDocument = Sizzle.setDocument = function( node ) {
 							// treechildren may not have the value from $n()
 							elem = w.parent.$n();
 						}
-						elem[zk.Widget._TARGET] = w;
+						if (!elem[zk.Widget._TARGETS]) {
+							elem[zk.Widget._TARGETS] = [w];
+						} else {
+							elem[zk.Widget._TARGETS].push(w);
+						}
 						tmp.push(elem);
 					}
 				}
@@ -2602,9 +2610,7 @@ function addCombinator( matcher, combinator, base, selector/* Jumper Chen, Potix
 				};
 
 				// we cannot use dom elem for treechildren, treeitem, and treerow
-				while ((wgt = wgt ? getParent(wgt) : zk.Widget.$(elem)) && (elem = zk.isLoaded('zul.sel') &&
-						wgt.$instanceof(zul.sel.Treechildren, zul.sel.Treeitem) ?
-						elem : wgt.$n())) {
+				while ((wgt = wgt ? getParent(wgt) : zk.Widget.$(elem)) && (elem = wgt.$n())) {
 					// don't use cache in this case
 					if (matcher(elem, context, xml, wgt)) {
 						elem[zk.Widget._CURRENT_TARGET] = wgt; // assign to the given wgt
@@ -2923,7 +2929,8 @@ function matcherFromGroupMatchers( elementMatchers, setMatchers ) {
 				contextBackup = outermostContext,
 				elems;
 			/* Jumper Chen, Potix, 20211029*/
-			if (context[zk.Widget._TARGET]) {
+			let hasZChild = context[zk.Widget._TARGET];
+			if (hasZChild) {
 				// Treechildren and Treeitem has not DOM element.
 				elems = seed || byElement && Expr.find["ZCHILD"]("*", outermost);
 			} else {
@@ -2949,6 +2956,19 @@ function matcherFromGroupMatchers( elementMatchers, setMatchers ) {
 			// Tolerate NodeList properties (IE: "length"; Safari: <number>) matching elements by id
 			for ( ; i !== len && ( elem = elems[ i ] ) != null; i++ ) {
 				if ( byElement && elem ) {
+					// Potix 2021/11/04
+					let w;
+					if (hasZChild) {
+						let targets = elem[zk.Widget._TARGETS];
+						w = targets.shift();
+						if (!targets.length) {
+							delete elem[zk.Widget._TARGETS];
+						}
+						elem[zk.Widget._TARGET] = w;
+					} else {
+						w = elem[zk.Widget._CURRENT_TARGET] || elem[zk.Widget._TARGET];
+					}
+
 					j = 0;
 
 					// Support: IE 11+, Edge 17 - 18+
@@ -2959,10 +2979,32 @@ function matcherFromGroupMatchers( elementMatchers, setMatchers ) {
 						setDocument( elem );
 						xml = !documentIsHTML;
 					}
+
+					let hasMatched = false;
 					while ( ( matcher = elementMatchers[ j++ ] ) ) {
-						if ( matcher( elem, context || document, xml, elem[zk.Widget._TARGET] /*added Potix 2021/11/02*/) ) {
+						if ( matcher( elem, context || document, xml, w/*added Potix 2021/11/02*/) ) {
 							results.push( elem );
+
+							// clear up (added by Potix 2021/11/04)
+							hasMatched = true;
+							if (!elem[zk.Widget._TARGET]) {
+								elem[zk.Widget._TARGET] = elem[zk.Widget._CURRENT_TARGET];
+								delete elem[zk.Widget._CURRENT_TARGET];
+							}
 							break;
+						}
+					}
+
+					// clear up (added by Potix 2021/11/04)
+					if (!hasMatched) {
+
+						// avoid this case "#treeitemUuid > @treechildren,
+						// because @treerow and @treechldren are bound to the same element,
+						// and only one element is matched, so we need to keep its
+						// _TARGET for later to use.
+						if (!hasZChild || jq.inArray(elem, results) < 0) {
+							delete elem[zk.Widget._TARGET];
+							delete elem[zk.Widget._CURRENT_TARGET];
 						}
 					}
 					if ( outermost ) {
@@ -2999,7 +3041,7 @@ function matcherFromGroupMatchers( elementMatchers, setMatchers ) {
 			if ( bySet && i !== matchedCount ) {
 				j = 0;
 				while ( ( matcher = setMatchers[ j++ ] ) ) {
-					matcher( unmatched, setMatched, context, xml, elem[zk.Widget._TARGET] /*added Potix 2021/11/02*/ );
+					matcher( unmatched, setMatched, context, xml, elem[zk.Widget._CURRENT_TARGET] || elem[zk.Widget._TARGET] /*added Potix 2021/11/02*/ );
 				}
 
 				if ( seed ) {

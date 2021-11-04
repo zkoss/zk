@@ -393,6 +393,9 @@ declare namespace zk {
     }
 
     interface WidgetStatic extends ObjectStatic {
+	    _TARGET: string;
+	    _TARGETS: string;
+	    _CURRENT_TARGET: string;
         new (): Widget;
         auDelay: number;
 

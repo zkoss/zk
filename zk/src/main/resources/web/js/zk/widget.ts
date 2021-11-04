@@ -4936,7 +4936,10 @@ _doFooSelect: function (evt) {
 			var tmp: HTMLElement[] = [];
 			for (let i = els.length; i--;) {
 				let ele = els[i];
-				ele.n['__target__'] = ele.w;
+				ele.n[zk.Widget._TARGET] = ele.w;
+
+				// clear up
+				delete ele.n[zk.Widget._CURRENT_TARGET];
 				tmp.unshift(ele.n);
 			}
 			return tmp;
@@ -5106,6 +5109,8 @@ zk.Widget.getClass('combobox');
 		}
 	},
 	_TARGET: '__target__', // used for storing the query widget target
+	_TARGETS: '__targets__', // used for storing the query widget targets into one element,
+                             // such as Treerow, Treechildren, and Treeitem.
 	_CURRENT_TARGET: '__ctarget__', // used for storing the current query widget target
 });
 /**	@partial zk

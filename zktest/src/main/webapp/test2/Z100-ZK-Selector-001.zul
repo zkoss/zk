@@ -20,38 +20,58 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 			var t1 = jq('@tree > @treechildren @treeitem:nth-child(3)'),
 				failure = false;
 			if (!(t1.length == 2 && t1.find('.z-treecell-text').html() == 'Root.0.2'))
-				failure = true;
+				failure = "jq('@tree > @treechildren @treeitem:nth-child(3)')";
 
-			t1 = zk.$('$tree > @treechildren > @treeitem:nth-child(3)');
-			if (!(t1 && jq(t1.$n()).find('.z-treecell-text').html() == 'Root.2'))
-				failure = true;
+            if (!failure) {
+                t1 = zk.$('$tree > @treechildren > @treeitem:nth-child(3)');
+                if (!(t1 && jq(t1.$n()).find('.z-treecell-text').html() == 'Root.2'))
+                    failure = "zk.$('$tree > @treechildren > @treeitem:nth-child(3)')";
+            }
 
-			t1 = jq('@tree > @treechildren > @treeitem:nth-child(3)');
-			if (!(t1.length == 1 && t1.find('.z-treecell-text').html() == 'Root.2'))
-				failure = true;
+            if (!failure) {
+                t1 = zk.$('@treechildren > @treeitem:nth-child(1) > @treechildren');
+                if (!(t1 && t1.widgetName == 'treechildren'))
+                    failure = "zk.$('@treechildren > @treeitem:nth-child(1) > @treechildren')";
+            }
 
-			t1 = jq('@tree > @treechildren @treeitem:nth-child(3) td');
-			if (!(t1.length == 2 && t1.find('.z-treecell-text').html() == 'Root.0.2'))
-				failure = true;
+            if (!failure) {
+                t1 = zk.$('#' + t1.parent.uuid + ' > @treechildren');
+                if (!(t1 && t1.widgetName == 'treechildren' && t1.firstChild.getLabel() == 'Root.0.0'))
+                    failure = "zk.$('#' + t1.parent.uuid + ' > @treechildren')";
+            }
+            if (!failure) {
+                t1 = jq('@tree > @treechildren > @treeitem:nth-child(3)');
+                if (!(t1.length == 1 && t1.find('.z-treecell-text').html() == 'Root.2'))
+                    failure = "jq('@tree > @treechildren > @treeitem:nth-child(3)')";
+            }
+            if (!failure) {
+                t1 = jq('@tree > @treechildren @treeitem:nth-child(3) td');
+                if (!(t1.length == 2 && t1.find('.z-treecell-text').html() == 'Root.0.2'))
+                    failure = "jq('@tree > @treechildren @treeitem:nth-child(3) td')";
+            }
+            if (!failure) {
+                t1 = jq('@tree > @treechildren @treeitem:nth-child(3) > @treerow > td');
+                if (!(t1.length == 2 && t1.find('.z-treecell-text').html() == 'Root.0.2'))
+                    failure = "jq('@tree > @treechildren @treeitem:nth-child(3) > @treerow > td')";
+            }
+            if (!failure) {
+                t1 = jq('@tree > @treechildren > @treeitem:nth-child(3) td');
+                if (!(t1.length == 1 && t1.find('.z-treecell-text').html() == 'Root.2'))
+                    failure = "jq('@tree > @treechildren > @treeitem:nth-child(3) td')";
+            }
+            if (!failure) {
+                t1 = jq('@tree > @treechildren > @treeitem:nth-child(3) > @treerow > td');
+                if (!(t1.length == 1 && t1.find('.z-treecell-text').html() == 'Root.2'))
+                    failure = "jq('@tree > @treechildren > @treeitem:nth-child(3) > @treerow > td')";
+            }
 
-			t1 = jq('@tree > @treechildren @treeitem:nth-child(3) > @treerow > td');
-			if (!(t1.length == 2 && t1.find('.z-treecell-text').html() == 'Root.0.2'))
-				failure = true;
+            if (!failure) {
+                var tc = zk.$('@tree > @treechildren');
 
-			t1 = jq('@tree > @treechildren > @treeitem:nth-child(3) td');
-			if (!(t1.length == 1 && t1.find('.z-treecell-text').html() == 'Root.2'))
-				failure = true;
-
-			t1 = jq('@tree > @treechildren > @treeitem:nth-child(3) > @treerow > td');
-			if (!(t1.length == 1 && t1.find('.z-treecell-text').html() == 'Root.2'))
-				failure = true;
-
-			var tc = zk.$('@tree > @treechildren');
-
-			if (tc == null || tc.widgetName != 'treechildren' || tc.parent.widgetName != 'tree')
-			    failure = true;
-
-			jq('$msg').html(failure ? 'Failure' : 'OK');
+                if (tc == null || tc.widgetName != 'treechildren' || tc.parent.widgetName != 'tree')
+                    failure = "zk.$('@tree > @treechildren')";
+            }
+			jq('$msg').html(failure ? 'Failure: ' + failure : 'OK');
 
 		}
 
@@ -95,4 +115,3 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
         </treechildren>
     </tree>
 </zk>
-
