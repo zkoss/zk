@@ -3561,13 +3561,19 @@ jQuery.fn.extend( {
 			i = 0,
 			l = this.length,
 			matched = [],
+			hasZTag = typeof selectors === "string" && /@/.test(selectors), //Potix 20211104
+			hasZID = typeof selectors === "string" && /\$/.test(selectors), //Potix 20211104
 			targets = typeof selectors !== "string" && jQuery( selectors );
 
 		// Positional selectors never match, since there's no _selection_ context
 		if ( !rneedsContext.test( selectors ) ) {
 			for ( ; i < l; i++ ) {
-				for ( cur = this[ i ]; cur && cur !== context; cur = cur.parentNode ) {
-
+				cur = this[ i ];
+				let wgt = (hasZTag || hasZID) ? cur[zk.Widget._TARGET] || zk.Widget.$(cur, {exact: 1}) : false;
+				for ( ; cur && cur !== context; cur = ((hasZTag || hasZID) && wgt ? wgt.$n() : cur.parentNode)) {
+					if (wgt) {
+						cur[zk.Widget._CURRENT_TARGET] = wgt;
+					}
 					// Always skip document fragments
 					if ( cur.nodeType < 11 && ( targets ?
 						targets.index( cur ) > -1 :
@@ -3577,7 +3583,16 @@ jQuery.fn.extend( {
 							jQuery.find.matchesSelector( cur, selectors ) ) ) {
 
 						matched.push( cur );
+						if (cur[zk.Widget._CURRENT_TARGET]) {
+							cur[zk.Widget._TARGET] = cur[zk.Widget._CURRENT_TARGET];
+							delete cur[zk.Widget._CURRENT_TARGET];
+						}
 						break;
+					}
+					if (hasZTag || hasZID) {
+						if (wgt) {
+							wgt = wgt.parent;
+						}
 					}
 				}
 			}
