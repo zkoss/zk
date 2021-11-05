@@ -6,6 +6,7 @@ ZK 9.6.1
   ZK-5003: External resources with browser attribute are not loaded
   ZK-4997: button with autodisable doesn't trigger popup
   ZK-4509: Setting model in onOpen listener of combobox causes "... cannot be cast to org.zkoss.zul.Comboitem" error
+  ZK-5002: shadow element - parameter leak
 
 * Upgrade Notes
   + Reverted and Reopened ZK-4979 (to fix ZK-4997).
