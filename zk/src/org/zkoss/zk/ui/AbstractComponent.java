@@ -1109,10 +1109,6 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 									HtmlShadowElement current = findNearestShadow(shadow, baseChild);
 									return current.resolveVariable(baseChild, name, recurse);
 								}
-							} else {
-								val = shadow.resolveVariable(baseChild, name, recurse);
-								if (val != null)
-									return val;
 							}
 						}
 					} finally {

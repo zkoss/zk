@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B96-ZK-5002.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		2021/11/5, Created by jumperchen
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <div id="host">
+        <apply template="test" myparam="value1"/>
+        <apply template="test" myparam="value2"/>
+        <apply template="test" myparam="value3" vis="${false}"/>
+        <apply template="test" myparam="value4"/>
+        <apply template="test" myparam="value5" vis="${true}"/>
+        <apply template="test" myparam="value6"/>
+        <apply template="test" myparam="value7" vis="${true}"/>
+    </div>
+
+    missing rows: value4, value6 (if bug exists)
+
+    <template name="test">
+        <if test="${vis || vis eq null}">
+            <span style="border: 1px solid green">
+                RENDERED: myparam = ${myparam}, ${'V=' += vis}
+            </span>
+            <separator/>
+        </if>
+    </template>
+</zk>
