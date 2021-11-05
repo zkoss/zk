@@ -2652,8 +2652,7 @@ function addCombinator( matcher, combinator, base, selector/* Jumper Chen, Potix
 					};
 
 				// we cannot use dom elem for treechildren, treeitem, and treerow
-				while ((wgt = wgt ? getParent(wgt) : zk.Widget.$(elem)) && (elem = wgt.isRealElement() ?
-						wgt.$n() : elem)) {
+				while ((wgt = wgt ? getParent(wgt) : zk.Widget.$(elem)) && (elem = wgt.$n())) {
 					// don't use cache in this case
 					if (matcher(elem, context, xml, wgt)) {
 						elem[zk.Widget._CURRENT_TARGET] = wgt; // assign to the given wgt

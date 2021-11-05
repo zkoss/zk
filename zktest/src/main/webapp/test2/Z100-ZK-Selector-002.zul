@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+Z100-ZK-Selector-002.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Fri Nov  5 14:34:09 CST 2021, Created by jumperchen
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:h="client">
+    <script><![CDATA[
+		function testcase() {
+
+			var t1 = zk.$("@treeitem:nth-child(1) @treeitem"),
+				failure = false;
+			if (!(t1 && t1.widgetName == 'treeitem' && t1.getLabel() == 'Root.0.0'))
+				failure = 'zk.$("@treeitem:nth-child(1) @treeitem")';
+
+            if (!failure) {
+                t1 = zk.$("@treeitem:nth-child(1) @treechildren");
+                if (!(t1 && t1.widgetName == 'treechildren' && t1.parent.getLabel() == 'Root.0'))
+                    failure = 'zk.$("@treeitem:nth-child(1) @treechildren")';
+            }
+            if (!failure) {
+                t1 = zk.$("@treeitem:nth-child(1) @treechildren @treeitem:nth-child(3)");
+                if (!(t1 && t1.getLabel() == 'Root.0.2'))
+                    failure = 'zk.$("@treeitem:nth-child(1) @treechildren @treeitem:nth-child(3)")';
+            }
+			jq('$msg').html(failure ? 'Failure: ' + failure : 'OK');
+
+		}
+
+	]]></script>
+    <label style="font-weight: bold" multiline="true">
+        1. Click the "Test Button", and you should see a text with "OK".
+    </label>
+    <button label="Test Button" h:onClick="testcase();"/>
+    <label id="msg"/>
+    <tree id="tree" width="400px" rows="8">
+        <treecols sizable="true">
+            <treecol label="Name" />
+        </treecols>
+        <treechildren>
+            <treeitem>
+                <treerow label="Root.0"/>
+                <treechildren>
+                    <treeitem>
+                        <treerow label="Root.0.0"/>
+                    </treeitem>
+                    <treeitem>
+                        <treerow label="Root.0.1"/>
+                    </treeitem>
+                    <treeitem>
+                        <treerow label="Root.0.2"/>
+                    </treeitem>
+                </treechildren>
+            </treeitem>
+            <treeitem>
+                <treerow label="Root.1"/>
+            </treeitem>
+            <treeitem>
+                <treerow label="Root.2"/>
+            </treeitem>
+            <treeitem>
+                <treerow label="Root.3"/>
+            </treeitem>
+            <treeitem>
+                <treerow label="Root.4"/>
+            </treeitem>
+        </treechildren>
+    </tree>
+</zk>

@@ -1,11 +1,11 @@
-/* Z100_ZK_Selector_001Test.java
+/* Z100_ZK_Selector_002Test.java
 
 	Purpose:
 		
 	Description:
 		
 	History:
-		11:50 AM 2021/11/3, Created by jumperchen
+		2:39 PM 2021/11/5, Created by jumperchen
 
 Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
@@ -19,7 +19,7 @@ import org.zkoss.zktest.zats.WebDriverTestCase;
 /**
  * @author jumperchen
  */
-public class Z100_ZK_Selector_001Test extends WebDriverTestCase {
+public class Z100_ZK_Selector_002Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
@@ -31,3 +31,4 @@ public class Z100_ZK_Selector_001Test extends WebDriverTestCase {
 		Assert.assertEquals("OK", jq(".z-label").eq(1).text().trim());
 	}
 }
+
