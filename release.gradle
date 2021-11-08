@@ -566,7 +566,7 @@ task zkjsdocZip(type: Zip) {
 	archiveFileName = "zk-jsdoc-${project.version}.zip"
 	destinationDirectory = file("$buildDir/bin")
 	from "$buildDir/docs/javadoc/jsdoc"
-	into "zk-jsdoc-${project.version}"
+	into "jsdoc"
 }
 
 task zkjavadocZip(type: Zip) {
@@ -574,7 +574,7 @@ task zkjavadocZip(type: Zip) {
 	archiveFileName = "zk-javadoc-${project.version}.zip"
 	destinationDirectory = file("$buildDir/bin")
 	from "$buildDir/docs/javadoc/zk"
-	into "zk-javadoc-${project.version}"
+	into "zk"
 }
 
 task bins() {
