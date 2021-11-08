@@ -8,6 +8,7 @@ ZK 9.6.1
   ZK-4509: Setting model in onOpen listener of combobox causes "... cannot be cast to org.zkoss.zul.Comboitem" error
   ZK-5002: shadow element - parameter leak
   ZK-5055: atlantic borderlayout east/west always rotated by 90deg (since 9.6.0)
+  ZK-5044: combobx with hflex="min" has a wrong button position
 
 * Upgrade Notes
   + Reverted and Reopened ZK-4979 (to fix ZK-4997).

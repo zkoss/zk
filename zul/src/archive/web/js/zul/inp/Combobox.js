@@ -527,5 +527,15 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 			jq(this.$n('emptySearchMessage')).toggleClass(
 				this.$s('emptySearchMessage-hidden'), this.nChildren > 0);
 		}
+	},
+	// ZK-5044 (touch enable)
+	getChildMinSize_: function (attr, wgt) {
+		let result = this.$supers('getChildMinSize_', arguments);
+		if (attr == 'w' && result == 0) {
+			// use label instead
+			let zkn = zk(wgt.$n());
+			return zkn.textWidth(wgt.getLabel()) + zkn.padBorderWidth();
+		}
+		return result;
 	}
 });
