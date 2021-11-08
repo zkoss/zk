@@ -9,6 +9,7 @@ ZK 9.6.1
   ZK-5002: shadow element - parameter leak
   ZK-5055: atlantic borderlayout east/west always rotated by 90deg (since 9.6.0)
   ZK-5044: combobx with hflex="min" has a wrong button position
+  ZK-5057: minified JS code contains added polyfill functions
 
 * Upgrade Notes
   + Reverted and Reopened ZK-4979 (to fix ZK-4997).
