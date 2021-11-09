@@ -37,15 +37,22 @@ zul.inp.Bandpopup = zk.$extends(zul.Widget, {
 	},
 	_focusout: function (e) {
 		var bandbox = this.parent,
-			self = this,
-			pp = bandbox && bandbox.$n('pp');
-		self._shallClosePopup = pp != null && e.relatedTarget != pp;
-		setTimeout(function () {
-			if (bandbox && bandbox.isOpen() && self._shallClosePopup) {
+			self = this;
+		if (e.relatedTarget) {
+			if (bandbox && bandbox.isOpen() && !jq.isAncestor(this.$n(), e.relatedTarget))
 				bandbox.close();
-				self._shallClosePopup = false;
-			}
-		});
+		} else {
+			// for solving B96-ZK-4748, treechildren will rerender itself when clicking
+			// the open icon, and JQ will simulate a fake focusout event without any relatedTarget.
+
+			self._shallClosePopup = true;
+			setTimeout(function () {
+				if (bandbox && bandbox.isOpen() && self._shallClosePopup) {
+					bandbox.close();
+					self._shallClosePopup = false;
+				}
+			});
+		}
 	},
 	//super
 	afterChildrenMinFlex_: function (orient) {
