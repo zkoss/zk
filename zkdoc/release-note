@@ -13,6 +13,11 @@ ZK 9.6.1
 
 * Upgrade Notes
   + Reverted and Reopened ZK-4979 (to fix ZK-4997).
+  + Add warning message for enabling UUID recycle mechanism,
+    it's enabled by default since ZK 5.0.3 release, and the feature will be removed
+    in next big release version (like ZK 10). Because of the feature was introduced to solve old
+    IE browser issue (but no longer exists for now), and it might cause
+    some side-effects at client side accidentally in some scenarios.
 
    --------
 
