@@ -704,9 +704,14 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	}
 
 	private static boolean recycleUuidDisabled() {
-		if (_recycleUuidDisabled == null)
-			_recycleUuidDisabled = Boolean
-					.valueOf("true".equals(Library.getProperty(Attributes.UUID_RECYCLE_DISABLED)));
+		if (_recycleUuidDisabled == null) {
+			_recycleUuidDisabled = Boolean.valueOf("true".equals(Library.getProperty(Attributes.UUID_RECYCLE_DISABLED)));
+			if (!_recycleUuidDisabled) {
+				log.warn(
+						"UUID recycle is enabled and it's better to disable it by specifying a library property 'org.zkoss.zk.ui.uuidRecycle.disabled' with true to prevent"
+								+ " some unwanted widget uuid reusing at client side accidentally.");
+			}
+		}
 		return _recycleUuidDisabled.booleanValue();
 	}
 
