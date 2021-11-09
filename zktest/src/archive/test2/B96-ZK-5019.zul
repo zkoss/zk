@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B96-ZK-5019.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		2021/11/9, Created by jumperchen
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. open the outer and inner bandbox
+        2. click a listitem
+        3. click anything else inside the inner bandpopup
+
+        Expected Result
+        behavior as before 9.6.0
+        A) the inner bandpopup closes, and the textbox is updated
+        B) the inner and parent band popup remain open
+    </label>
+    <bandbox id="parent">
+        <bandpopup>
+            <bandbox id="bd">
+                <bandpopup>
+                    Search
+                    <textbox />
+                    <button label="test"/>
+                    <listbox width="200px"
+                             onSelect="bd.value=self.selectedItem.label; bd.close();">
+                        <listitem label="AAA"/>
+                        <listitem label="BBB"/>
+                        <listitem label="CCC"/>
+                    </listbox>
+                </bandpopup>
+            </bandbox>
+        </bandpopup>
+    </bandbox>
+</zk>
