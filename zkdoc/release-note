@@ -11,6 +11,7 @@ ZK 9.6.1
   ZK-5044: combobx with hflex="min" has a wrong button position
   ZK-5057: minified JS code contains added polyfill functions
   ZK-5019: Nested Bandbox closing unexpectedly (since 9.6.0)
+  ZK-5010: improve websocket reliabilty/reconnectivity and cleanup behavior
 
 * Upgrade Notes
   + Reverted and Reopened ZK-4979 (to fix ZK-4997).
@@ -19,7 +20,8 @@ ZK 9.6.1
     in next big release version (like ZK 10). Because of the feature was introduced to solve old
     IE browser issue (but no longer exists for now), and it might cause
     some side-effects at client side accidentally in some scenarios.
-
+  + Change the value from 0 to 25 seconds of The library property of "org.zkoss.zkmax.au.websocket.WebSocketEndPoint.pingIntervalSecond".
+    i.e. The heartbeat mechanism of ZK EE Websocket channel is enabled by default since 9.6.1.
    --------
 
 ZK 9.6.0
