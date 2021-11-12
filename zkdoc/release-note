@@ -13,6 +13,7 @@ ZK 9.6.1
   ZK-5019: Nested Bandbox closing unexpectedly (since 9.6.0)
   ZK-5010: improve websocket reliabilty/reconnectivity and cleanup behavior
   ZK-5022: missing safety checks on shift-ctrl selection on listbox
+  ZK-5028: tree JS error when replacing treecols
 
 * Upgrade Notes
   + Reverted and Reopened ZK-4979 (to fix ZK-4997).

@@ -528,6 +528,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _rerender(wgt: zk.Widget, timeout: number): void {
 		if (_rdtid)
 			clearTimeout(_rdtid);
+		wgt._rerendering = true;
 		_rdque.push(wgt);
 		_rdtid = setTimeout(_rerender0, timeout);
 	}
@@ -535,8 +536,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		_rdtid = null;
 		l_out:
 		for (var wgt; wgt = _rdque.shift();) {
-			if (!wgt.desktop)
+			if (!wgt.desktop) {
+				delete wgt._rerendering;
 				continue;
+			}
 
 			for (var j = _rdque.length; j--;) {
 				if (zUtl.isAncestor(wgt, _rdque[j]))
@@ -546,6 +549,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			}
 
 			wgt.rerender(-1);
+			delete wgt._rerendering;
 		}
 	}
 	/* Bug ZK-2281 */
