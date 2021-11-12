@@ -2038,6 +2038,24 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				setTimeout(callback);
 			})();
 		});
+	},
+	// ZK-5028 for Treecols, Listhead, and Columns
+	//@Override
+	shallFireSizedLaterWhenAddChd_: function () {
+		if (this._rerendering) {
+			zWatch.listen({
+				onResponse: [this, this._fixFireSizedLaterWhenAddChd]
+			});
+			return true;
+		}
+		return false;
+	},
+	// ZK-5028 for Treecols, Listhead, and Columns
+	_fixFireSizedLaterWhenAddChd: function () {
+		zUtl.fireSized(this);
+		zWatch.unlisten({
+			onResponse: [this, this._fixFireSizedLaterWhenAddChd]
+		});
 	}
 }, {
 	WIDTH0: zk.webkit ? '0.001px' : '0px',
