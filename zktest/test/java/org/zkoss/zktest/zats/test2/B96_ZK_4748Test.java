@@ -49,8 +49,8 @@ public class B96_ZK_4748Test extends WebDriverTestCase {
 		waitResponse();
 		click(jq(".z-tree-icon"));
 		waitResponse(true);
-		Assert.assertTrue(jq("@treecell:contains(level 2)").exists());
 		System.out.println(jq("body").html());
+		Assert.assertTrue(jq("@treecell:contains(level 2)").exists());
 		Assert.assertTrue(jq("@treecell:contains(level 2)").isVisible());
 		Assert.assertTrue(jq(".z-bandbox-open").exists());
 
