@@ -317,6 +317,22 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 	},
 	getFlexContainer_: function () { //use old flex inside tr/td
 		return null;
-	}
+	},
+	onChildAdded_: function (child) {
+		this.$supers('onChildAdded_', arguments);
+		// ZK-5038
+		let p = this.getMeshWidget();
+		if (p && p.isCheckmark()) {
+			this.clearCache();
+		}
+	},
+	onChildRemoved_: function (child) {
+		this.$supers('onChildRemoved_', arguments);
+		// ZK-5038
+		let p = this.getMeshWidget();
+		if (p && p.isCheckmark()) {
+			this.clearCache();
+		}
+	},
 });
 })();

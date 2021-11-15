@@ -16,6 +16,7 @@ ZK 9.6.1
   ZK-5028: tree JS error when replacing treecols
   ZK-5026: up down arrow key doesn't move menu selection
   ZK-5036: datebox formatting/parsing doesn't handle quoted characters correctly
+  ZK-5038: replace listcells causes checkmark clicking doesn't send onSelect event
 
 * Upgrade Notes
   + Reverted and Reopened ZK-4979 (to fix ZK-4997).
