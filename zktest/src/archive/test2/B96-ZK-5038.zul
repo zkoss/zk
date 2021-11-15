@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B96-ZK-5038.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		2021/11/15, Created by jumperchen
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. click the checkmark of the 1st row, it can select the row
+        2. click the button of the 2nd row to toggle edit mode
+        3. click the checkmar of the 2nd row
+
+        Expected Result:
+            users can select the 2nd row
+    </label>
+    <zscript><![CDATA[
+ListModelList model = new ListModelList();
+model.add("111");
+model.add("222");
+model.add("333");
+    ]]></zscript>
+    <listbox checkmark="true" multiple="true" model="@bind(vm.model)" nonselectableTags="*" viewModel="@id('vm')@init('org.zkoss.zktest.test2.B96_ZK_5038VM')">
+        <listhead>
+            <listheader/>
+            <listheader label="description"/>
+            <listheader/>
+        </listhead>
+        <template name="model">
+            <listitem>
+                <custom-attributes edit="false"/>
+                <apply template="@load(each.edit ? 'newrow' : 'row')">
+                    <template name="row">
+                        <listcell/>
+                        <listcell label="@bind(each.data)"></listcell>
+                        <listcell>
+                            <button label="Edit" onClick="@('toggle',each)"/>
+                        </listcell>
+                    </template>
+                    <template name="newrow">
+                        <listcell/>
+                        <listcell>
+                            <textbox value="@bind(each.data)"/>
+                        </listcell>
+                        <listcell>
+                            <button label="Ok" onClick="@('toggle',each)"/>
+                        </listcell>
+                    </template>
+                </apply>
+            </listitem>
+        </template>
+    </listbox>
+</zk>
