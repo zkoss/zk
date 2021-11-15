@@ -2895,6 +2895,7 @@ public class Tree extends MeshElement {
 				throw new IllegalStateException(
 						"SelectionControl cannot be null, please implement SelectionControl interface for SelectablModel");
 			control.setSelectAll(evt.isChecked());
+			Events.postEvent(evt);
 		} else if (cmd.equals("onUpdateSelectAll") && isSelModel) {
 			final Selectable<Object> selectableModel = (Selectable<Object>) _model;
 			SelectionControl control = selectableModel.getSelectionControl();

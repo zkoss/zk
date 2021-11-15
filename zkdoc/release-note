@@ -1,5 +1,6 @@
 ZK 9.6.1
 * Features
+  ZK-5013: Post onCheckSelectAll event in Tree (for application use)
 
 * Bugs
   ZK-4995: signature component on tablet/mobile cutting off image
