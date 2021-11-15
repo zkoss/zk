@@ -19,10 +19,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 	}
 	function _doClick(wgt, evt) {
-		var byKeyboard = evt.name == 'onKeyDown';
+		var byKeyboard = evt.name == 'onKeyDown',
+			n = wgt.$n();
 		if (wgt.isListen('onClick')) {
-			var n = wgt.$n(),
-				clk = jq(n).find('.' + wgt.$s('separator')),
+			var clk = jq(n).find('.' + wgt.$s('separator')),
 				zclk = zk(clk),
 				offsetX = zclk.revisedOffset()[0];
 
@@ -510,8 +510,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 			var mb = wgt.getMenubar();
 			if (mb)
 				mb._lastTarget = wgt;
-		}
-		if (!top) {
+		} else {
 			var parentMenupopup = wgt.parent;
 			if (parentMenupopup)
 				parentMenupopup.addActive_(wgt);
