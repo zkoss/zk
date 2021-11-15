@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B96-ZK-5040.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		2021/11/15, Created by jumperchen
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1) select one or more leaf node(s) ... or check "select all"
+        2) switch to next page
+        3) switch back to first page
+
+        Expected Result:
+            selection checkmark remains as checked
+    </label>
+    <zscript><![CDATA[
+        DefaultTreeNode root = new DefaultTreeNode("root", new DefaultTreeNode[] {
+            new DefaultTreeNode("item-1", new DefaultTreeNode[] {
+                new DefaultTreeNode("item-1.1"), new DefaultTreeNode("item-1.2"), new DefaultTreeNode("item-1.3")
+            }),
+            new DefaultTreeNode("item-2", new DefaultTreeNode[] {
+                new DefaultTreeNode("item-2.1"), new DefaultTreeNode("item-2.2"), new DefaultTreeNode("item-2.3")
+            }),
+            new DefaultTreeNode("item-3", new DefaultTreeNode[] {
+                new DefaultTreeNode("item-3.1"), new DefaultTreeNode("item-3.2"), new DefaultTreeNode("item-3.3")
+            })
+        });
+        DefaultTreeModel model = new DefaultTreeModel(root);
+        model.addOpenObject(root.getChildAt(0));
+        model.addOpenObject(root.getChildAt(1));
+        model.addOpenObject(root.getChildAt(2));
+        model.setMultiple(true);
+        model.setPageSize(5);
+    ]]></zscript>
+    <tree model="${model}" checkmark="true" mold="paging">
+        <treecols>
+            <treecol label="col1"></treecol>
+        </treecols>
+        <template name="model">
+            <treeitem label="${each.data}"/>
+        </template>
+    </tree>
+</zk>
