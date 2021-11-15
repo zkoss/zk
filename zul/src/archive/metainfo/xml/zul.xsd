@@ -2341,6 +2341,7 @@
 		<xs:attribute name="itemRenderer" type="xs:string" use="optional" />
 		<xs:attribute name="sizedByContent" type="booleanType" use="optional" />
 		<xs:attribute name="onSelect" type="xs:string" use="optional" />
+		<xs:attribute name="onCheckSelectAll" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 		<xs:attribute name="pagingPosition" type="pagingPositionAttrType" use="optional" />
 		<xs:attribute name="innerWidth" type="xs:string" use="optional" />
@@ -3478,6 +3479,7 @@
 		<xs:attribute name="itemRenderer" type="xs:string" use="optional" />
 		<xs:attribute name="sizedByContent" type="booleanType" use="optional" />
 		<xs:attribute name="onSelect" type="xs:string" use="optional" />
+		<xs:attribute name="onCheckSelectAll" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 		<xs:attribute name="pagingPosition" type="pagingPositionAttrType" use="optional" />
 		<xs:attribute name="innerWidth" type="xs:string" use="optional" />

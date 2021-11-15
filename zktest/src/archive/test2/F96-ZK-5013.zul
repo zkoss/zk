@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F96-ZK-5013.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		2021/11/15, Created by jumperchen
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+    public class TreeSelectedItemsVM {
+        private DefaultTreeModel model;
+        private Collection selectedItems = Collections.emptySet();
+
+        public TreeSelectedItemsVM() {
+            DefaultTreeNode root = new DefaultTreeNode("root", new DefaultTreeNode[] {
+                new DefaultTreeNode("item-1", new DefaultTreeNode[] {
+                    new DefaultTreeNode("item-1.1"), new DefaultTreeNode("item-1.2"), new DefaultTreeNode("item-1.3")
+                }),
+                new DefaultTreeNode("item-2", new DefaultTreeNode[] {
+                    new DefaultTreeNode("item-2.1"), new DefaultTreeNode("item-2.2"), new DefaultTreeNode("item-2.3")
+                }),
+                new DefaultTreeNode("item-3", new DefaultTreeNode[] {
+                    new DefaultTreeNode("item-3.1"), new DefaultTreeNode("item-3.2"), new DefaultTreeNode("item-3.3")
+                })
+            });
+            model = new DefaultTreeModel(root);
+            model.addOpenObject(root.getChildAt(0));
+            model.addOpenObject(root.getChildAt(1));
+            model.addOpenObject(root.getChildAt(2));
+            model.setMultiple(true);
+            model.setPageSize(5);
+        }
+
+        public DefaultTreeModel getModel() {
+            return model;
+        }
+
+        public Collection getSelectedItems() {
+            return selectedItems;
+        }
+
+        public void setSelectedItems(Collection selectedItems) {
+            this.selectedItems = selectedItems;
+        }
+    }
+
+    ]]></zscript>
+    <div viewModel="@id('vm') @init('TreeSelectedItemsVM')">
+        <tree checkmark="true" mold="paging" model="@init(vm.model)"
+              selectedItems="@bind(vm.selectedItems)" onCheckSelectAll='Clients.log("selectedItems: " + vm.getModel().getSelectionCount())'>
+            <treecols>
+                <treecol label="Test Tree"/>
+            </treecols>
+        </tree>
+    </div>
+</zk>
