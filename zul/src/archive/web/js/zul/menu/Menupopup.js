@@ -514,6 +514,13 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		return this.$supers('focus_', arguments);
 	},
 	addActive_: function (wgt) {
+		// ZK-5026
+		if (zk.currentFocus != this) {
+			let anc = this.getAnchor_();
+			if (anc) {
+				anc.focus();
+			}
+		}
 		this._curIndex = _indexOfVisibleMenu(this, wgt);
 	},
 	removeActive_: function () {
