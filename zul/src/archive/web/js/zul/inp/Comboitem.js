@@ -22,6 +22,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * @see Combobox
  */
 zul.inp.Comboitem = zk.$extends(zul.LabelImageWidget, {
+	_maxFlexWidth: true, //ZK-5044
 	$define: {
 		/** Returns whether it is disabled.
 		 * <p>Default: false.
