@@ -479,10 +479,15 @@ zk.fmt.Date = {
 			    APM: zk.APM
 		};
 		var txt = '',
-			localeDateTimeFormat = zk.ie < 11 ? null : new Intl.DateTimeFormat(localizedSymbols.LAN_TAG, {year: 'numeric'});
+			localeDateTimeFormat = zk.ie < 11 ? null : new Intl.DateTimeFormat(localizedSymbols.LAN_TAG, {year: 'numeric'}),
+			singleQuote;
 		for (var j = 0, fl = fmt.length; j < fl; ++j) {
 			var cc = fmt.charAt(j);
 			if ((cc >= 'a' && cc <= 'z') || (cc >= 'A' && cc <= 'Z')) {
+				if (singleQuote) {
+					txt += cc;
+					continue;
+				}
 				var len = 1, k;
 				for (k = j; ++k < fl; ++len)
 					if (fmt.charAt(k) != cc) {
@@ -572,6 +577,8 @@ zk.fmt.Date = {
 				j = k - 1;
 			} else if (cc != "'") {
 				txt += cc;
+			} else if (cc === "'") {
+				singleQuote = !singleQuote;
 			}
 		}
 		return txt;

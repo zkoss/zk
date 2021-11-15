@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B96-ZK-5036.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		2021/11/15, Created by jumperchen
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+    1. display a datebox using the Portuguese locale in 'medium' or 'long' format
+    2. Expected result:
+        medium: "14 de out de 2021"
+        long: "14 de outubro de 2021"
+    </label>
+    <datebox locale="pt" format="medium" onCreate="self.setValue(new Date(121, 9, 14));" width="300px"/>
+    <separator/>
+    <datebox locale="pt" format="long" onCreate="self.setValue(new Date(121, 9, 14));" width="300px"/>
+</zk>
