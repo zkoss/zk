@@ -27,7 +27,7 @@ public class B96_ZK_5026Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		Actions act = new Actions(connect());
-		click(jq("$menu"));
+		act.moveToElement(toElement(jq("$menu"))).perform();
 		waitResponse();
 
 		assertTrue(jq(".z-menupopup-open").isVisible());

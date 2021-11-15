@@ -22,7 +22,7 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
         5. press down key twice
         6. can't move the menu selection by keyboard (if bug exists)
     </label>
-    <menubar>
+    <menubar autodrop="true">
         <menu id="menu" label="File" >
             <menupopup>
                 <menuitem label="New"/>
