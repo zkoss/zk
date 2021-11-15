@@ -631,8 +631,9 @@ public class Tree extends MeshElement {
 							if (!ti.isRendered()) {
 								ti.getChildren().clear();
 								Treechildren parent = (Treechildren) ti.getParent();
-								Object childNode = Tree.this.getAssociatedNode(ti, Tree.this);
-								renderChildren0(renderer, parent, ti, childNode, i);
+								int[] treeitemPath = Tree.this.getTreeitemPath(Tree.this, ti);
+								Object childNode = _model.getChild(treeitemPath);
+								renderChildren0(renderer, parent, ti, childNode, treeitemPath[treeitemPath.length - 1]);
 							}
 
 							i++;
