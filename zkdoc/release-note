@@ -20,6 +20,7 @@ ZK 9.6.1
   ZK-5038: replace listcells causes checkmark clicking doesn't send onSelect event
   ZK-5040: tree with model template loses selection state
   ZK-5042: close all tree node doesn't work as expected
+  ZK-5047: combobox with listsubmodel + incorrect selectedObject in onSelect event
 
 * Upgrade Notes
   + Reverted and Reopened ZK-4979 (to fix ZK-4997).

@@ -997,8 +997,16 @@ public class Combobox extends Textbox {
 							if (items == null || items.isEmpty() || _model == null)
 								return null;
 							Set<Object> objs = new LinkedHashSet<Object>();
-							for (Comboitem i : items)
-								objs.add(_model.getElementAt(i.getIndex()));
+							// ZK-5047: we cannot use index here (if it's ListSubModel case)
+							if (_model instanceof ListSubModel) {
+								for (Comboitem i : items) {
+									objs.add(i.getValue());
+								}
+							} else {
+								for (Comboitem i : items) {
+									objs.add(_model.getElementAt(i.getIndex()));
+								}
+							}
 							return objs;
 						}
 
