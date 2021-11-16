@@ -41,6 +41,7 @@ import org.zkoss.bind.sys.ReferenceBinding;
 import org.zkoss.bind.sys.tracker.Tracker;
 import org.zkoss.bind.sys.tracker.TrackerNode;
 import org.zkoss.bind.xel.zel.BindELContext;
+import org.zkoss.lang.Strings;
 import org.zkoss.util.IdentityHashSet;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zul.Combobox;
@@ -336,6 +337,17 @@ public class TrackerImpl implements Tracker, Serializable {
 							if (!baseNode.isPropNameNodeMapped(node)) {
 								baseNode.tieProperty(propName, node);
 								propNodes.add(node);
+							} else {
+								// ZK-5043, tie property if the propName is text, not variable
+								if (script instanceof String) {
+									String expr = ((String) script).substring(
+											1, ((String) script).length() - 1);
+									if (!Strings.isEmpty(expr) && expr.charAt(0) == '\'' && expr.charAt(expr.length() - 1) == '\'') {
+										baseNode.tieProperty(propName, node);
+										propNodes.add(node);
+									}
+								}
+
 							}
 						} else {
 							propNodes.add(node);
