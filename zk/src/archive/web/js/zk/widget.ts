@@ -1726,6 +1726,10 @@ wgt.$f().main.setTitle("foo");
 		} else
 			shallReplace = dt;
 
+		// ZK-5050
+		if (p)
+			p.beforeChildReplaced_(this, newwgt);
+
 		var callback = [];
 		if (shallReplace) {
 			if (node) newwgt.replaceHTML(node, dt, skipper, true, callback);
@@ -3328,6 +3332,10 @@ unbind_: function (skipper, after) {
 	setFlexSizeW_: function (n, zkn, width, isFlexMin) {
 		// excluding margin for F50-3000873.zul and B50-3285635.zul
 		n.style.width = jq.px0(width - (!isFlexMin ? zkn.marginWidth() : 0));
+	},
+	// ZK-5050
+	beforeChildReplaced_: function (oldc, newc) {
+		//to be overridden
 	},
 	beforeChildrenFlex_: function (kid) {
 		//to be overridden
