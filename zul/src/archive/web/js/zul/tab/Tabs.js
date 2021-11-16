@@ -58,19 +58,23 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 		}
 	},
 	insertChildHTML_: function (child, before, desktop) {
-		var last = child.previousSibling;
+		var last = child.previousSibling,
+			out;
 		if (before)
-			jq(before).before(child.redrawHTML_());
+			jq(before).before(out = child.redrawHTML_());
 		else if (last)
-			jq(last).after(child.redrawHTML_());
+			jq(last).after(out = child.redrawHTML_());
 		else {
 			var edge = this.$n('edge');
 			if (edge)
-				jq(edge).before(child.redrawHTML_());
+				jq(edge).before(out = child.redrawHTML_());
 			else
-				jq(this.getCaveNode()).append(child.redrawHTML_());
+				jq(this.getCaveNode()).append(out = child.redrawHTML_());
 		}
-		child.bind(desktop);
+		// ZK-5009, if out is empty, ignore for bind()
+		if (out) {
+			child.bind(desktop);
+		}
 	},
 	//bug #3014664
 	setVflex: function (v) { //vflex ignored for Tabs
