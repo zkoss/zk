@@ -123,6 +123,10 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 		if (!_noSync)
 			this._syncSize();
 	},
+	// ZK-5050
+	beforeChildReplaced_: function (oldc, newc) {
+		this._fixOnAdd(newc, true, true);
+	},
 	onChildRemoved_: function (child) {
 		this.$supers('onChildRemoved_', arguments);
 
