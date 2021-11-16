@@ -22,6 +22,7 @@ ZK 9.6.1
   ZK-5042: close all tree node doesn't work as expected
   ZK-5047: combobox with listsubmodel + incorrect selectedObject in onSelect event
   ZK-5050: Treechildren.invalidate() only re-renders the first Treeitem
+  ZK-5032: Shadow element doesn't resolve page-level imported classes static members as dynamic values
 
 * Upgrade Notes
   + Reverted and Reopened ZK-4979 (to fix ZK-4997).

@@ -32,6 +32,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.ShadowElement;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.sys.ExecutionsCtrl;
 import org.zkoss.zk.xel.Evaluator;
@@ -91,9 +92,19 @@ public class SimpleEvaluator implements Evaluator {
 		final FunctionMapper mapper = getFunctionMapper(ref);
 		final VariableResolver resolver = getVariableResolver(ref);
 		SimpleXelContext context = new SimpleXelContext(resolver, mapper);
-		final Page page = ref instanceof Component
-				? ((Component) ref).getPage()
-				: (ref instanceof Page ? (Page) ref : null);
+		Page page = null;
+
+		// ZK-5032
+		if (ref instanceof ShadowElement) {
+			Component host = ((ShadowElement) ref).getShadowHost();
+			if (host != null) {
+				page = host.getPage();
+			}
+		} else if (ref instanceof Component) {
+			page = ((Component) ref).getPage();
+		} else if (ref instanceof Page) {
+			page = (Page) ref;
+		}
 		if (page != null) {
 			context.setAttribute(ImportHandler.PageClassResolver.class.getName(),
 					(ImportHandler.PageClassResolver) page::resolveClass);
