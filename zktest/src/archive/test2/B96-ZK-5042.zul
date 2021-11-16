@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B96-ZK-5042.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		2021/11/15, Created by jumperchen
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        Main Steps to Reproduce
+        1. click "expand" to open all tree nodes
+        2. scroll down to the node 50
+        3. click "collapse" to close all tree nodes
+        4. scroll down to the last node
+
+        Alternative Steps to reproduce
+        1. scroll down to the last node
+        2. click "expand" to open all tree nodes
+        3. click "collapse" to close all tree nodes
+        4. scroll down to the last node
+
+        Expected Result:
+            all children nodes removed
+    </label>
+    <custom-attributes org.zkoss.zul.tree.rod="true"/>
+    <!--<custom-attributes org.zkoss.zul.client.rod="false"/>   workaround -->
+    only happens in rod
+    <nodom apply="org.zkoss.zktest.test2.B96_ZK_5042Composer">
+        <button id="expand" label="expand"/>
+        <button id="collapse" label="collapse"/>"
+        <tree width="200px" height="300px" />
+    </nodom>
+</zk>
