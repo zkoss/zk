@@ -111,6 +111,28 @@ public class ComponentRedraws {
 		return "";
 	}
 
+	private static List<Integer> _tempStates = new LinkedList<>();
+
+	/**
+	 * Internal used only
+	 */
+	public static final void saveStates() {
+		Context ctx = _ctx.get();
+		if (ctx != null)
+			_tempStates = new LinkedList<>(ctx.states); //copy
+	}
+
+	/**
+	 * Internal used only
+	 */
+	public static final void restoreStates() {
+		Context ctx = _ctx.get();
+		if (ctx != null) {
+			ctx.states.clear();
+			ctx.states.addAll(_tempStates);
+		}
+	}
+
 	/** A list of states. Each state indicates the redrawing state:
 	 * If null, it means it is the root component.
 	 * If Boolean.TRUE, it means it is the first child.
