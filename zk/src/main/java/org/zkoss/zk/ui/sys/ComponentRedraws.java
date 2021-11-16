@@ -16,6 +16,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Stack;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -111,15 +112,21 @@ public class ComponentRedraws {
 		return "";
 	}
 
-	private static List<Integer> _tempStates = new LinkedList<>();
+	private static final ThreadLocal<Stack<List<Integer>>> _tempStates = new ThreadLocal<>();
 
 	/**
 	 * Internal used only
 	 */
 	public static final void saveStates() {
 		Context ctx = _ctx.get();
-		if (ctx != null)
-			_tempStates = new LinkedList<>(ctx.states); //copy
+		if (ctx != null) {
+			Stack<List<Integer>> tmpStates = _tempStates.get();
+			if (tmpStates == null) {
+				tmpStates = new Stack<>();
+				_tempStates.set(tmpStates);
+			}
+			tmpStates.push(new LinkedList<>(ctx.states)); //copy
+		}
 	}
 
 	/**
@@ -129,7 +136,7 @@ public class ComponentRedraws {
 		Context ctx = _ctx.get();
 		if (ctx != null) {
 			ctx.states.clear();
-			ctx.states.addAll(_tempStates);
+			ctx.states.addAll(_tempStates.get().pop());
 		}
 	}
 
