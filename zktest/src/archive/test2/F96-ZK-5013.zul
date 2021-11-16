@@ -55,7 +55,7 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
     ]]></zscript>
     <div viewModel="@id('vm') @init('TreeSelectedItemsVM')">
         <tree checkmark="true" mold="paging" model="@init(vm.model)"
-              selectedItems="@bind(vm.selectedItems)" onCheckSelectAll='Clients.log("selectedItems: " + vm.getModel().getSelectionCount())'>
+              selectedItems="@bind(vm.selectedItems)" onCheckSelectAll='Clients.log("onCheckSelectAll")'>
             <treecols>
                 <treecol label="Test Tree"/>
             </treecols>

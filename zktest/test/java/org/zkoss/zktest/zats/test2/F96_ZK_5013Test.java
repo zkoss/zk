@@ -27,6 +27,6 @@ public class F96_ZK_5013Test  extends WebDriverTestCase {
 
 		click(jq(".z-treecol-checkable"));
 		waitResponse();
-		assertEquals("selectedItems: 12", getZKLog());
+		assertEquals("onCheckSelectAll", getZKLog());
 	}
 }
