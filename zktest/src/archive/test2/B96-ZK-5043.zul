@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B96-ZK-5043.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		2021/11/16, Created by jumperchen
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <div id="map" viewModel="@id('vm')@init('org.zkoss.zktest.test2.B96_ZK_5043VM')">
+        <button label="replace" onClick="@command('replace')"/>
+        <button label="change" onClick="@command('change')"/>
+        <div>
+            map expression:
+            <label value="@load(vm.map['key1'].value)"/>
+        </div>
+    </div>
+    <div id="dot" viewModel="@id('vm') @init('org.zkoss.zktest.test2.B96_ZK_5043VM')">
+        <button label="replace" onClick="@command('replace')"/>
+        <button label="change" onClick="@command('change')"/>
+        <div>
+            dot notation:
+            <label value="@load(vm.map.key1.value)"/>
+        </div>
+    </div>
+</zk>
