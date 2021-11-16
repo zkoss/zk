@@ -24,6 +24,6 @@ public class B96_ZK_5044Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
-		assertTrue(100 < jq(".z-combobox-input").outerWidth());
+		assertTrue(80 < jq(".z-combobox-input").outerWidth());
 	}
 }
