@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?script content="zk.tabletUIEnabled = true;"?>
+<!--
+B96-ZK-4989.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		2021/11/17, Created by jumperchen
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true"><![CDATA[
+        1. Vertical radio group rendered horizontally on mobile/tablet (if bug exists)
+
+        To test this, please enable the tablet ui in zk.xml
+        <library-property>
+            <name>org.zkoss.zkmax.tablet.ui.disabled</name>
+            <value>false</value>
+        </library-property>
+    ]]></label>
+    <apply templateURI="/test2/include/themes.zul"/>
+    <radiogroup orient="vertical">
+        <radio label="A" selected="true"/>
+        <radio label="B"/>
+        <radio label="C"/>
+    </radiogroup>
+</zk>

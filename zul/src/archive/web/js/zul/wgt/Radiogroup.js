@@ -231,6 +231,15 @@ zul.wgt.Radiogroup = zk.$extends(zul.Widget, {
 				this._fixOnRemove(radio);
 			return true;
 		}
+	},
+	// ZK-4989
+	domClass_: function (no) {
+		var scls = this.$supers('domClass_', arguments);
+		if (!no || !no.zclass) {
+			let added = this.$s(this.getOrient());
+			if (added) scls += (scls ? ' ' : '') + added;
+		}
+		return scls;
 	}
 });
 })();

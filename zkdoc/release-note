@@ -26,6 +26,7 @@ ZK 9.6.1
   ZK-5009: adding a checkbox in a caption with tabbox accordion mode causes a javascript error
   ZK-5043: after replacing an object of a Map, notify change doesn't work anymore for a map expression
   ZK-5046: combobox with listsubmodel + instantselect (timing issue)
+  ZK-4989: vertical radio group rendered horizontally on mobile/tablet
 
 * Upgrade Notes
   + Reverted and Reopened ZK-4979 (to fix ZK-4997).
