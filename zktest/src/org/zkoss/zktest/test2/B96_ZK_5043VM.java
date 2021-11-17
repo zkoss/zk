@@ -30,7 +30,7 @@ public class B96_ZK_5043VM {
 	@Command
 	public void replace() {
 		Field newField = new Field();
-		newField.setValue(Long.toString(System.currentTimeMillis()));
+		newField.setValue(Long.toString(System.nanoTime()));
 		map.put("key1", newField);
 		BindUtils.postNotifyChange(this, "map");
 	}
@@ -38,7 +38,7 @@ public class B96_ZK_5043VM {
 	@Command
 	public void change() {
 		Field field = map.get("key1");
-		field.setValue(Long.toString(System.currentTimeMillis()));
+		field.setValue(Long.toString(System.nanoTime()));
 		field.notifyChange();
 	}
 
