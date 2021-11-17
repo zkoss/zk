@@ -240,8 +240,20 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 			//spec change (diff from zk 3): onSelect fired after onChange
 			//purpose: onSelect can retrieve the value correctly
 			//If we want to change this spec, we have to modify Combobox.java about _lastCkVal
-		} else if (opts.sendOnChange) // The value still didn't match any item, but onChange is still needed.
+		} else if (opts.sendOnChange) {// The value still didn't match any item, but onChange is still needed.
 			this.$supers('updateChange_', []);
+		} else {
+			// ZK-5046, if instantSelect="false", the following code will be run.
+			// and the this.valueSel_ (by keyDown event) may not be the same as this.valueEnter_ (by keyUp event)
+			// in this._onChanging() (by a timer event)
+			// so we always sync this.valueEnter_ here to make it consistent with instantSelect="true"
+			if (this._lastsel != sel) {
+				if (sel) {
+					let inp = this.getInputNode();
+					this.valueEnter_ = inp.value;
+				}
+			}
+		}
 	},
 	_hiliteOpt: function (oldTarget, newTarget) {
 		if (oldTarget && oldTarget.parent == this) {
