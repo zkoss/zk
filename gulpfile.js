@@ -62,7 +62,7 @@ function typescript_build(src, dest) {
 				var name = file.basename;
 				name = name.substring(0, name.length - 3);
 				file.contents = Buffer.concat([
-					new Buffer(name.replaceAll('-', '') + '$mold$ = \n'),
+					new Buffer(name.replace(/-/g, '') + '$mold$ = \n'),
 					file.contents
 				]);
 			}
