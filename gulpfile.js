@@ -1,3 +1,4 @@
+var fs = require('fs');
 var gulp = require('gulp');
 var minimist = require('minimist');
 var babel = require('gulp-babel');
@@ -5,6 +6,8 @@ var rename = require('gulp-rename');
 var uglify = require('gulp-uglify');
 var browserSync = require('browser-sync').create();
 var print = require('gulp-print').default;
+var tap = require('gulp-tap');
+var gulpIgnore = require('gulp-ignore');
 
 var knownOptions = {
     string: ['src', 'dest'],
@@ -41,10 +44,31 @@ function typescript_build_single() {
 }
 
 function typescript_build(src, dest) {
-    return gulp.src(src + '/**/*.ts')
-        .pipe(babel({
-            root: __dirname
-        }))
+    return gulp.src([src + '/**/*.ts', src + '/**/*.js'])
+	    .pipe(gulpIgnore.exclude(function (file) {
+			var outpath = dest + '/' + file.relative;
+			if (fs.existsSync(outpath)) {
+				var srcStat = fs.statSync(file.path);
+				var outStat = fs.statSync(outpath);
+				if (srcStat.mtime <= outStat.mtime) {
+					return true;
+				}
+			}
+			return false;
+	    }))
+	    .pipe(tap(function(file) {
+			if (file.path.endsWith('.js') && file.path.includes('/mold/')) {
+				var name = file.basename;
+				name = name.substring(0, name.length - 3);
+				file.contents = Buffer.concat([
+					new Buffer(name.replaceAll('-', '') + '$mold$ = \n'),
+					file.contents
+				]);
+			}
+	    }))
+	    .pipe(babel({
+		    root: __dirname
+	    }))
         .pipe(rename({suffix: '.src'}))
         .pipe(gulp.dest(dest))
         .pipe(uglify())

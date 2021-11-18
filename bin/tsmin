@@ -5,7 +5,7 @@
 #	Purpose:
 #		Compile and compress TypeScript
 #	Description:
-#		
+#
 #	History:
 #		Mon Feb 25 18:27:56 CST 2019, Created by rudyhuang
 #}}IS_NOTE
@@ -27,5 +27,5 @@ maindir="$(pwd)"
 cd "$1" || exit 1
 shift
 
-echo "tsmin: Run Gulp on $maindir"
+echo "TS and JS minify: Run Gulp on $maindir"
 npx gulp -f gulpfile.js --cwd "$maindir" build:single "$@"

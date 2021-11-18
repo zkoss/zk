@@ -168,14 +168,14 @@ if="deploy.tomcat.required">
 <target name="zipjs">
 	<mkdir dir="${src.archive.dir}"/>
 	<mkdir dir="${codegen.archive.dir}"/>
-	<java jar="${dist.lib.ext.dir}/zkjszips.jar" fork="true">
-		<arg value="${src.archive.dir}/${zipjs}"/>
-		<arg value="${codegen.archive.dir}/${zipjs}"/>
-		<jvmarg value="-Xss1024k"/>
-		<classpath>
-			<pathelement location="${dist.lib.ext.dir}/zkjszips.jar"/>
-		</classpath>
-	</java>
+<!--	<java jar="${dist.lib.ext.dir}/zkjszips.jar" fork="true">-->
+<!--		<arg value="${src.archive.dir}/${zipjs}"/>-->
+<!--		<arg value="${codegen.archive.dir}/${zipjs}"/>-->
+<!--		<jvmarg value="-Xss1024k"/>-->
+<!--		<classpath>-->
+<!--			<pathelement location="${dist.lib.ext.dir}/zkjszips.jar"/>-->
+<!--		</classpath>-->
+<!--	</java>-->
 
 	<java jar="${dist.lib.ext.dir}/zkjszips.jar" fork="true">
 		<arg value="${src.archive.dir}/${zipcss}"/>
