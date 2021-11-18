@@ -3371,6 +3371,9 @@ public class Listbox extends MeshElement {
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
 
+		// ZK-4970: reset invalidateListitems here.
+		Executions.getCurrent().removeAttribute("zkoss.Listbox.invalidateListitems" + getUuid());
+
 		if (_rows > 0)
 			renderer.render("rows", getRows());
 
