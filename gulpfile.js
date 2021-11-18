@@ -142,13 +142,13 @@ exports['build:minify-css'] = function () {
 					content = file.contents.toString();
 				}
 				file.contents = Buffer.from(content
-					.replaceAll('<%', '/*!<%')
+					.replace(/<%/g, '/*!<%')
 					.replace(/\${([^}]*)}/g, function (match, g1) {
 						return '\\9' + g1 + '\\0';
 					})
-					.replaceAll('<c:', '<%c--')
-					.replaceAll('%>', '%>*/')
-					.replaceAll('/>', '--c%>'), 'utf-8');
+					.replace(/<c:/g, '<%c--')
+					.replace(/%>/g, '%>*/')
+					.replace(/\/>/g, '--c%>'), 'utf-8');
 			}
 		}))
 		.pipe(tap(function(file, t) {
@@ -166,13 +166,13 @@ exports['build:minify-css'] = function () {
 					content = file.contents.toString();
 				}
 				file.contents = Buffer.from(content
-					.replaceAll('/*!<%', '<%')
+					.replace(/\/\*!<%/g, '<%')
 					.replace(/\\9([^\\0]*)\\0/g, function (match, g1) {
 						return '${' + g1 + '}';
 					})
-					.replaceAll('<%c--', '<c:')
-					.replaceAll('--c%>', '/>')
-					.replaceAll('%>*/', '%>'), 'utf-8');
+					.replace(/<%c--/g, '<c:')
+					.replace(/--c%>/g, '/>')
+					.replace(/%>\*\//g, '%>'), 'utf-8');
 			}
 		}))
 		.pipe(gulp.dest(destDir))
