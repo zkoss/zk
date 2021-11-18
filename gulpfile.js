@@ -8,6 +8,7 @@ var browserSync = require('browser-sync').create();
 var print = require('gulp-print').default;
 var tap = require('gulp-tap');
 var gulpIgnore = require('gulp-ignore');
+var postcss = require('gulp-postcss');
 
 var knownOptions = {
     string: ['src', 'dest'],
@@ -129,6 +130,46 @@ function typescript_dev_zkmax() {
         gulp.lastRun(typescript_dev_zkmax)
     );
 }
+exports['build:minify-css'] = function () {
+	var sources = stripQuotes(options.src),
+		destDir = stripQuotes(options.dest);
+	return gulp.src(sources + '/**/**')
+		.pipe(tap(function(file) {
+			if (file.path.endsWith('.css.dsp')) {
+				// ignore DSP syntax
+				file.contents = Buffer.from(file.contents.toString('utf-8')
+					.replaceAll('<%', '/*!<%')
+					.replace(/\${([^}]*)}/g, function (match, g1) {
+						return '\\9' + g1 + '\\0';
+					})
+					.replaceAll('<c:', '<%c--')
+					.replaceAll('%>', '%>*/')
+					.replaceAll('/>', '--c%>'), 'utf-8');
+			}
+		}))
+		.pipe(tap(function(file, t) {
+			if (file.path.endsWith('.css.dsp')) {
+				return t.through(postcss, [[ require('cssnano') ]]);
+			} else {
+				console.log('copy...', file.path);
+			}
+		}))
+		.pipe(tap(function(file) {
+			if (file.path.endsWith('.css.dsp')) {
+				// revert DSP syntax
+				file.contents = Buffer.from(file.contents.toString('utf-8')
+					.replaceAll('/*!<%', '<%')
+					.replace(/\\9([^\\0]*)\\0/g, function (match, g1) {
+						return '${' + g1 + '}';
+					})
+					.replaceAll('<%c--', '<c:')
+					.replaceAll('--c%>', '/>')
+					.replaceAll('%>*/', '%>'), 'utf-8');
+			}
+		}))
+		.pipe(gulp.dest(destDir))
+		.pipe(print());
+};
 
 exports['build:single'] = typescript_build_single;
 exports.watch = gulp.series(
