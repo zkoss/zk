@@ -137,7 +137,11 @@ exports['build:minify-css'] = function () {
 		.pipe(tap(function(file) {
 			if (file.path.endsWith('.css.dsp')) {
 				// ignore DSP syntax
-				file.contents = Buffer.from(file.contents.toString('utf-8')
+				var content = file.contents.toString('utf-8');
+				if (content == null) {
+					content = file.contents.toString();
+				}
+				file.contents = Buffer.from(content
 					.replaceAll('<%', '/*!<%')
 					.replace(/\${([^}]*)}/g, function (match, g1) {
 						return '\\9' + g1 + '\\0';
@@ -157,7 +161,11 @@ exports['build:minify-css'] = function () {
 		.pipe(tap(function(file) {
 			if (file.path.endsWith('.css.dsp')) {
 				// revert DSP syntax
-				file.contents = Buffer.from(file.contents.toString('utf-8')
+				var content = file.contents.toString('utf-8');
+				if (content == null) {
+					content = file.contents.toString();
+				}
+				file.contents = Buffer.from(content
 					.replaceAll('/*!<%', '<%')
 					.replace(/\\9([^\\0]*)\\0/g, function (match, g1) {
 						return '${' + g1 + '}';
