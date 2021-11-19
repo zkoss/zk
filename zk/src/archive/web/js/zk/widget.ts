@@ -4699,7 +4699,9 @@ _doFooSelect: function (evt) {
 			return this.isRealVisible({dom: true, strict: strict, until: p, cache: cache});
 
 		for (wgt = this; ;) {
-			if (!wgt.$instanceof(zk.Native)) //if native, $n() might be null or wrong (if two with same ID)
+			//1. if native, $n() might be null or wrong (if two with same ID)
+			//2. ZK-5058: if noDom, $n() is invisible by default.
+			if (!wgt.$instanceof(zk.Native) && wgt.getMold() != 'nodom')
 				break;
 
 			//Note: we check _visible only if native, since, when onHide is fired,
