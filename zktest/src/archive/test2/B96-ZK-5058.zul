@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B96-ZK-5058.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		2021/11/19, Created by jumperchen
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        Current Result: (if bug exists)
+            The caption of the second groupbox is not positioned correctly after button clicked
+
+        Expected Result:
+            The caption of the second groupbox is positioned correctly
+    </label>
+    <button label="Show second/third groupbox" id="btn"/>
+
+    <groupbox>
+        <caption label="First groupbox"/>
+        <div>My groupbox content</div>
+    </groupbox>
+
+    <nodom fulfill="btn.onClick">
+        <groupbox>
+            <caption label="Second groupbox"/>
+            <div style="color:red;">groupbox inside nodom positions the caption incorrectly</div>
+        </groupbox>
+    </nodom>
+
+    <div fulfill="btn.onClick">
+        <groupbox>
+            <caption label="Third groupbox"/>
+            <div>My groupbox content</div>
+        </groupbox>
+    </div>
+</zk>
