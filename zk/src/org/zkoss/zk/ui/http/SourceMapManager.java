@@ -175,9 +175,6 @@ public class SourceMapManager implements Serializable {
 			String jsRealPath = jsKey.getY();
 			if (!jsRealPath.contains("wpd.src.js")) { // not wpd
 				jsContent = "window['$zk$" + jsRealPath + "'] = function () {\n" + jsContent + "\n};";
-				if (jsContent.contains("$mold$")) {
-					jsContent = jsContent.replaceAll("([a-zA-Z]+)\\$mold\\$", "window['$1\\$mold\\$']");
-				}
 			}
 			cacheJsSource(sourceCache, jsRealPath.substring(jsRealPath.indexOf("/js/")), jsContent); // set /js/src/*/*.src.js
 			if (jsRealPath.startsWith(File.separator)) {
