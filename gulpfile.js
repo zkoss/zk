@@ -9,6 +9,7 @@ var print = require('gulp-print').default;
 var tap = require('gulp-tap');
 var gulpIgnore = require('gulp-ignore');
 var postcss = require('gulp-postcss');
+var mergeStream = require('merge-stream');
 
 var knownOptions = {
     string: ['src', 'dest'],
@@ -38,6 +39,20 @@ function watch_job(glob, job) {
     return watcher;
 }
 
+function ignoreSameFile(destDir) {
+	return gulpIgnore.exclude(function (file) {
+		var outpath = destDir + '/' + file.relative;
+		if (fs.existsSync(outpath)) {
+			var srcStat = fs.statSync(file.path);
+			var outStat = fs.statSync(outpath);
+			if (srcStat.mtime <= outStat.mtime) {
+				return true;
+			}
+		}
+		return false;
+	});
+}
+
 function typescript_build_single() {
     var sources = stripQuotes(options.src),
         destDir = stripQuotes(options.dest);
@@ -45,18 +60,8 @@ function typescript_build_single() {
 }
 
 function typescript_build(src, dest) {
-    return gulp.src([src + '/**/*.ts', src + '/**/*.js'])
-	    .pipe(gulpIgnore.exclude(function (file) {
-			var outpath = dest + '/' + file.relative;
-			if (fs.existsSync(outpath)) {
-				var srcStat = fs.statSync(file.path);
-				var outStat = fs.statSync(outpath);
-				if (srcStat.mtime <= outStat.mtime) {
-					return true;
-				}
-			}
-			return false;
-	    }))
+	return mergeStream(gulp.src(src + '/**/*.{t,j}s')
+	    .pipe(ignoreSameFile(dest))
 	    .pipe(tap(function(file) {
 			if (file.path.endsWith('.js') && file.path.includes('/mold/')) {
 				var name = file.basename;
@@ -77,7 +82,13 @@ function typescript_build(src, dest) {
             path.basename = path.basename.replace(/\.src/, '');
         }))
         .pipe(gulp.dest(dest))
-        .pipe(print());
+        .pipe(print()),
+		// fix copy resource in zipjs folder
+		gulp.src(src + '/**/!(*.less|*.js)')
+			.pipe(ignoreSameFile(dest))
+			.pipe(gulp.dest(dest))
+			.pipe(print())
+		);
 }
 
 function browsersync_init(done) {
@@ -134,6 +145,7 @@ exports['build:minify-css'] = function () {
 	var sources = stripQuotes(options.src),
 		destDir = stripQuotes(options.dest);
 	return gulp.src(sources + '/**/**')
+		.pipe(ignoreSameFile(destDir))
 		.pipe(tap(function(file) {
 			if (file.path.endsWith('.css.dsp')) {
 				// ignore DSP syntax
