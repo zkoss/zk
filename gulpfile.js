@@ -1,4 +1,5 @@
 var fs = require('fs');
+var path = require('path');
 var gulp = require('gulp');
 var minimist = require('minimist');
 var babel = require('gulp-babel');
@@ -10,6 +11,7 @@ var tap = require('gulp-tap');
 var gulpIgnore = require('gulp-ignore');
 var postcss = require('gulp-postcss');
 var mergeStream = require('merge-stream');
+var createResolver = require('resolve-options');
 
 var knownOptions = {
     string: ['src', 'dest'],
@@ -39,12 +41,24 @@ function watch_job(glob, job) {
     return watcher;
 }
 
+var config = {
+	cwd: {
+		type: 'string',
+		default: process.cwd,
+	}
+};
+
 function ignoreSameFile(destDir) {
 	return gulpIgnore.exclude(function (file) {
-		var outpath = destDir + '/' + file.relative;
-		if (fs.existsSync(outpath)) {
+
+		// simulate gulp.dest() to find a output path
+		var optResolver = createResolver(config);
+		var cwd = path.resolve(optResolver.resolve('cwd', file));
+		var basePath = path.resolve(cwd, destDir);
+		var writePath = path.resolve(basePath, file.relative);
+		if (fs.existsSync(writePath)) {
 			var srcStat = fs.statSync(file.path);
-			var outStat = fs.statSync(outpath);
+			var outStat = fs.statSync(writePath);
 			if (srcStat.mtime <= outStat.mtime) {
 				return true;
 			}
@@ -60,7 +74,7 @@ function typescript_build_single() {
 }
 
 function typescript_build(src, dest) {
-	return mergeStream(gulp.src(src + '/**/*.{t,j}s')
+	return mergeStream(gulp.src([src + '/**/*.ts', src + '/**/*.js'])
 	    .pipe(ignoreSameFile(dest))
 	    .pipe(tap(function(file) {
 			if (file.path.endsWith('.js') && file.path.includes('/mold/')) {
