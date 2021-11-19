@@ -62,7 +62,7 @@ function typescript_build(src, dest) {
 				var name = file.basename;
 				name = name.substring(0, name.length - 3);
 				file.contents = Buffer.concat([
-					new Buffer(name.replace(/-/g, '') + '$mold$ = \n'),
+					Buffer.from(name.replace(/-/g, '') + '$mold$ = \n'),
 					file.contents
 				]);
 			}
@@ -137,11 +137,7 @@ exports['build:minify-css'] = function () {
 		.pipe(tap(function(file) {
 			if (file.path.endsWith('.css.dsp')) {
 				// ignore DSP syntax
-				var content = file.contents.toString('utf-8');
-				if (content == null) {
-					content = file.contents.toString();
-				}
-				file.contents = Buffer.from(content
+				file.contents = Buffer.from(file.contents.toString('utf-8')
 					.replace(/<%/g, '/*!<%')
 					.replace(/\${([^}]*)}/g, function (match, g1) {
 						return '\\9' + g1 + '\\0';
@@ -161,11 +157,7 @@ exports['build:minify-css'] = function () {
 		.pipe(tap(function(file) {
 			if (file.path.endsWith('.css.dsp')) {
 				// revert DSP syntax
-				var content = file.contents.toString('utf-8');
-				if (content == null) {
-					content = file.contents.toString();
-				}
-				file.contents = Buffer.from(content
+				file.contents = Buffer.from(file.contents.toString('utf-8')
 					.replace(/\/\*!<%/g, '<%')
 					.replace(/\\9([^\\0]*)\\0/g, function (match, g1) {
 						return '${' + g1 + '}';
