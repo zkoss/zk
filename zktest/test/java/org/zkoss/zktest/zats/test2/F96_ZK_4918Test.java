@@ -16,15 +16,18 @@ import java.util.Collections;
 import org.junit.Assert;
 import org.junit.ClassRule;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.openqa.selenium.chrome.ChromeOptions;
 
 import org.zkoss.zktest.zats.ExternalZkXml;
+import org.zkoss.zktest.zats.ForkJVMTestOnly;
 import org.zkoss.zktest.zats.WebDriverTestCase;
 import org.zkoss.zktest.zats.ztl.Widget;
 
 /**
  * @author rudyhuang
  */
+@Category(ForkJVMTestOnly.class)
 public class F96_ZK_4918Test extends WebDriverTestCase {
 	@ClassRule
 	public static ExternalZkXml CONFIG = new ExternalZkXml(F96_ZK_4918Test.class);

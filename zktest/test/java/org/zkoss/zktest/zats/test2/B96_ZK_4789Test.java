@@ -17,9 +17,13 @@ import java.io.PrintStream;
 import org.junit.Assert;
 import org.junit.ClassRule;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
+
 import org.zkoss.zktest.zats.ExternalZkXml;
+import org.zkoss.zktest.zats.ForkJVMTestOnly;
 import org.zkoss.zktest.zats.WebDriverTestCase;
 
+@Category(ForkJVMTestOnly.class)
 public class B96_ZK_4789Test extends WebDriverTestCase {
 	@ClassRule
 	public static final ExternalZkXml CONFIG = new ExternalZkXml("/test2/B96-ZK-4789-zk.xml");

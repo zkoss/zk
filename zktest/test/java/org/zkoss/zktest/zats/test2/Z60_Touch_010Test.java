@@ -16,15 +16,18 @@ import java.util.Collections;
 import org.junit.Assert;
 import org.junit.ClassRule;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.touch.TouchActions;
 
 import org.zkoss.zktest.zats.ExternalZkXml;
+import org.zkoss.zktest.zats.ForkJVMTestOnly;
 import org.zkoss.zktest.zats.WebDriverTestCase;
 
 /**
  * @author rudyhuang
  */
+@Category(ForkJVMTestOnly.class)
 public class Z60_Touch_010Test extends WebDriverTestCase {
 	@ClassRule
 	public static final ExternalZkXml CONFIG = new ExternalZkXml("/test2/enable-tablet-ui-zk.xml");

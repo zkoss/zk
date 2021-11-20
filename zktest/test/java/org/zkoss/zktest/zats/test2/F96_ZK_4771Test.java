@@ -11,15 +11,20 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.hamcrest.MatcherAssert;
 import static org.hamcrest.Matchers.greaterThan;
+
+import org.hamcrest.MatcherAssert;
 import org.junit.Assert;
 import org.junit.ClassRule;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
+
 import org.zkoss.zktest.zats.ExternalZkXml;
+import org.zkoss.zktest.zats.ForkJVMTestOnly;
 import org.zkoss.zktest.zats.WebDriverTestCase;
 import org.zkoss.zktest.zats.ztl.JQuery;
 
+@Category(ForkJVMTestOnly.class)
 public class F96_ZK_4771Test extends WebDriverTestCase {
 	@ClassRule
 	public static final ExternalZkXml CONFIG = new ExternalZkXml("/test2/F96-ZK-4771-zk.xml");
