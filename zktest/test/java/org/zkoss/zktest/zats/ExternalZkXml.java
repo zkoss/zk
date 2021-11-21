@@ -11,11 +11,7 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats;
 
-import java.lang.management.ManagementFactory;
-
 import org.junit.rules.ExternalResource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import org.zkoss.lang.Library;
 
@@ -25,7 +21,6 @@ import org.zkoss.lang.Library;
  * @author rudyhuang
  */
 public class ExternalZkXml extends ExternalResource {
-	private static Logger log = LoggerFactory.getLogger(ExternalZkXml.class);
 	private final String configPath;
 
 	/**
@@ -55,13 +50,11 @@ public class ExternalZkXml extends ExternalResource {
 
 	@Override
 	protected void before() {
-		log.info("before import zk.xml : " + configPath + " JVM: " + ManagementFactory.getRuntimeMXBean().getName());
 		Library.setProperty("org.zkoss.zk.config.path", configPath);
 	}
 
 	@Override
 	protected void after() {
-		log.info("after clear zk.xml : " + configPath + " JVM: " + ManagementFactory.getRuntimeMXBean().getName());
 		Library.setProperty("org.zkoss.zk.config.path", null);
 	}
 }
