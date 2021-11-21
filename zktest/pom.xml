@@ -28,6 +28,7 @@
 		<powermock.version>1.7.3</powermock.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<forkCount>1C</forkCount>
+        <reuseForks>true</reuseForks>
 	</properties>
 	<name>ZK Test</name>
 	<url>http://www.zkoss.org/</url>
@@ -435,7 +436,7 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
 					<forkCount>${forkCount}</forkCount>
-					<reuseForks>true</reuseForks>
+					<reuseForks>${reuseForks}</reuseForks>
 					<runOrder>alphabetical</runOrder>
 					<rerunFailingTestsCount>2</rerunFailingTestsCount>
 					<testClassesDirectory>${test.dir}</testClassesDirectory>
