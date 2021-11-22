@@ -9,6 +9,7 @@
   "scripts": {
     "build": "gulp",
     "build:single": "gulp build:single",
+    "build:minify-css": "gulp build:minify-css",
     "dev": "gulp watch"
   },
   "author": "Potix",

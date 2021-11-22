@@ -16,13 +16,15 @@ var createResolver = require('resolve-options');
 var knownOptions = {
     string: ['src', 'dest'],
     number: ['port'],
+	boolean: ['force'],
     default: {
         src: 'zul/src/archive/web/js',
         dest: 'zul/codegen/archive/web/js',
+	    force: false,
         port: 8080
     }
 };
-var options = minimist(process.argv.slice(2), knownOptions);
+var options = minimist(process.argv.slice(3), knownOptions);
 
 // Workaround for maven frontend-maven-plugin passing quoted strings
 function stripQuotes(txt) {
@@ -48,9 +50,9 @@ var config = {
 	}
 };
 
-function ignoreSameFile(destDir) {
+function ignoreSameFile(destDir, force) {
 	return gulpIgnore.exclude(function (file) {
-
+		if (force) return false;
 		// simulate gulp.dest() to find a output path
 		var optResolver = createResolver(config);
 		var cwd = path.resolve(optResolver.resolve('cwd', file));
@@ -69,13 +71,14 @@ function ignoreSameFile(destDir) {
 
 function typescript_build_single() {
     var sources = stripQuotes(options.src),
-        destDir = stripQuotes(options.dest);
-    return typescript_build(sources, destDir);
+	    destDir = stripQuotes(options.dest),
+	    force = options.force;
+    return typescript_build(sources, destDir, force);
 }
 
-function typescript_build(src, dest) {
+function typescript_build(src, dest, force) {
 	return mergeStream(gulp.src([src + '/**/*.ts', src + '/**/*.js'])
-	    .pipe(ignoreSameFile(dest))
+	    .pipe(ignoreSameFile(dest, force))
 	    .pipe(tap(function(file) {
 			if (file.path.endsWith('.js') && file.path.includes('/mold/')) {
 				var name = file.basename;
@@ -157,9 +160,13 @@ function typescript_dev_zkmax() {
 }
 exports['build:minify-css'] = function () {
 	var sources = stripQuotes(options.src),
-		destDir = stripQuotes(options.dest);
+		destDir = stripQuotes(options.dest),
+		force = options.force;
+	if (!fs.existsSync(sources)) {
+		return gulp.src('.');// ignore
+	}
 	return gulp.src(sources + '/**/**')
-		.pipe(ignoreSameFile(destDir))
+		.pipe(ignoreSameFile(destDir, force))
 		.pipe(tap(function(file) {
 			if (file.path.endsWith('.css.dsp')) {
 				// ignore DSP syntax

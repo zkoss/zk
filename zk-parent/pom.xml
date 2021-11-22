@@ -234,21 +234,38 @@
                                 <arguments>install</arguments>
                             </configuration>
                         </execution>
-                        <execution>
-                            <id>typescript_production</id>
-                            <goals>
-                                <goal>npm</goal>
-                            </goals>
-                            <phase>process-resources</phase>
-                            <configuration>
-                                <skip>${maven.frontend.skip}</skip>
-                                <arguments>
-                                    run build:single --
-                                    --src="${project.basedir}/src/archive/web/js"
-                                    --dest="${project.build.outputDirectory}/web/js"
-                                </arguments>
-                            </configuration>
-                        </execution>
+	                    <execution>
+		                    <id>typescript_production</id>
+		                    <goals>
+			                    <goal>npm</goal>
+		                    </goals>
+		                    <phase>process-resources</phase>
+		                    <configuration>
+			                    <skip>${maven.frontend.skip}</skip>
+			                    <arguments>
+				                    run build:single --
+				                    --src="${project.basedir}/src/archive/web/js"
+				                    --dest="${project.build.outputDirectory}/web/js"
+				                    --force
+			                    </arguments>
+		                    </configuration>
+	                    </execution>
+	                    <execution>
+		                    <id>compile-css</id>
+		                    <goals>
+			                    <goal>npm</goal>
+		                    </goals>
+		                    <phase>process-resources</phase>
+		                    <configuration>
+			                    <skip>${maven.frontend.skip}</skip>
+			                    <arguments>
+				                    run build:minify-css --
+				                    --src="${project.basedir}/src/archive/web/css"
+				                    --dest="${project.build.outputDirectory}/web/css"
+				                    --force
+			                    </arguments>
+		                    </configuration>
+	                    </execution>
                         <execution>
                             <id>compile-less</id>
                             <goals>

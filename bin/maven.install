@@ -42,7 +42,7 @@ function upVer {
 	cp pom.xml pom.xml.bak
 	sed -i "1,/version>.*<\/version/s/version>.*<\/version/version>$version<\/version/" pom.xml
 
-	mvn install -N
+	mvn clean install -N
 	mv -f pom.xml.bak pom.xml
 	#Remove local files and folders
 	rm -f debug/*.jar
@@ -68,4 +68,5 @@ upVer zkex
 upVer zml
 upVer zkmax
 upVer zuti
+upVer za11y
 cd $maindir
