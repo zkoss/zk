@@ -926,9 +926,9 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 					x = width * -1,
 					self = this,
 					animaCSS = this.$s('anima'),
-					todayBtn = this.isShowTodayLink() ? jq(this.$n('today')).parent() : jq();
+					todayBtn = this.isShowTodayLink() ? jq(this.$n('today')).parent() : null;
 
-				todayBtn.is(':hidden') && todayBtn.css('display', 'none');
+				if (todayBtn) todayBtn.is(':hidden') && todayBtn.css('display', 'none');
 
 				Renderer[view + 'View'](this, out, localizedSymbols);
 
@@ -971,7 +971,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 						Renderer.titleHTML(self, out, localizedSymbols);
 						jq(self.$n('title')).html(out.join(''));
 						self.clearCache();
-						todayBtn.css('display', '');
+						if (todayBtn) todayBtn.css('display', '');
 					}
 				});
 

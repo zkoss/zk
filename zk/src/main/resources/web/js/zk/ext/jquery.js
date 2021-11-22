@@ -2928,7 +2928,7 @@ function matcherFromGroupMatchers( elementMatchers, setMatchers ) {
 				contextBackup = outermostContext,
 				elems;
 			/* Jumper Chen, Potix, 20211029*/
-			let hasZChild = context[zk.Widget._TARGET];
+			let hasZChild = context != null ? context[zk.Widget._TARGET] : null;
 			if (hasZChild) {
 				// Treechildren and Treeitem has not DOM element.
 				elems = seed || byElement && Expr.find["ZCHILD"]("*", outermost);
