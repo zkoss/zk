@@ -95,9 +95,9 @@ import org.zkoss.zk.ui.util.DesktopRecycle;
  */
 public class RichletFilter implements Filter {
 	private static final Logger log = LoggerFactory.getLogger(RichletFilter.class);
-	private FilterConfig _config;
-	private WebManager _webman;
-	private boolean _compress = true;
+	protected FilterConfig _config;
+	protected WebManager _webman;
+	protected boolean _compress = true;
 
 	public void init(FilterConfig config) throws ServletException {
 		_config = config;

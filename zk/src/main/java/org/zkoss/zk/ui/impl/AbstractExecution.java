@@ -114,7 +114,7 @@ public abstract class AbstractExecution implements Execution, ExecutionCtrl {
 	}
 
 	//-- Execution --//
-	public final boolean isAsyncUpdate(Page page) {
+	public boolean isAsyncUpdate(Page page) {
 		if (page != null)
 			return _creating != page;
 		final Visualizer uv;

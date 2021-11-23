@@ -373,7 +373,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	/** Updates _uuidPrefix based on _id. */
 	private void updateUuidPrefix() {
 		final StringBuffer sb = new StringBuffer();
-		int val = _id.hashCode();
+		int val = _id.hashCode() + (int) System.currentTimeMillis();
 
 		//Thus, the number will 0, 1... max, 0, 1..., max, 0, 1 (less conflict)
 		if (val < 0 && (val += Integer.MIN_VALUE) < 0)
