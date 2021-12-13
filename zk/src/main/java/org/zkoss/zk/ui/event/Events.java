@@ -271,6 +271,18 @@ public class Events {
 	 */
 	public static final String ON_HISTORY_POP_STATE = "onHistoryPopState";
 
+	/** The onSave event used with {@link UploadEvent}.
+	 *
+	 * @since 8.6.0
+	 */
+	public static final String ON_SAVE = "onSave";
+
+	/** The onClear event used with {@link Event}.
+	 *
+	 * @since 8.6.0
+	 */
+	public static final String ON_CLEAR = "onClear";
+
 	/**
 	 * The onSearching event (used with {@link InputEvent}).
 	 * @since 9.0.0
@@ -290,6 +302,13 @@ public class Events {
 	 * @since 9.6.0
 	 */
 	public static final String ON_SCRIPT_ERROR = "onScriptError";
+
+	/**
+	 * The onRangeValueChange event used with {@link RangeValueChangeEvent}.
+	 *
+	 * @since 9.6.0
+	 */
+	public static final String ON_RANGE_VALUE_CHANGE = "onRangeValueChange";
 
 	/** Returns whether an event name is valid.
 	 *
