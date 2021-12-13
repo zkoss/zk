@@ -35,6 +35,7 @@ dependencies {
 	}
 	optionalImplementation 'org.python:jython:2.2.1'
 	optionalImplementation 'org.mozilla:rhino:1.7R4'
+	implementation "org.springframework:spring-web:${springVersion}"
 }
 
 buildConfig {

@@ -223,6 +223,30 @@ public class DHtmlUpdateServlet extends HttpServlet {
 				});
 			}
 		}
+		//==== for Zephyr DropUpload ====//
+		if (getAuExtension("/zephyr/dropupload") == null) {
+			try {
+				addAuExtension("/zephyr/dropupload", new AuZephyrUploader());
+			} catch (Throwable ex) {
+				final String msg = "Make sure commons-fileupload.jar is installed.";
+				log.warn("Failed to configure fileupload. " + msg, ex);
+
+				//still add /upload to generate exception when fileupload is used
+				addAuExtension("/zephyr/dropupload", new AuExtension() {
+					public void init(DHtmlUpdateServlet servlet) {
+					}
+
+					public void destroy() {
+					}
+
+					public void service(HttpServletRequest request, HttpServletResponse response, String pi)
+							throws ServletException, IOException {
+						if (Sessions.getCurrent(false) != null)
+							throw new ServletException("Failed to upload. " + msg);
+					}
+				});
+			}
+		}
 		//================//		
 
 		if (getAuExtension("/view") == null)
