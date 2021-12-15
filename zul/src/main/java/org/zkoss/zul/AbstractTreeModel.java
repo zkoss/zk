@@ -819,6 +819,21 @@ public abstract class AbstractTreeModel<E> implements TreeModel<E>, TreeSelectab
 	/**
 	 * {@inheritDoc}
 	 * <br><br>
+	 * Note: the entire tree will be traversed once to count the number of tree nodes,
+	 * although the result will be cached until the model has changed (open/add/remove/etc.),
+	 * it is still a VERY EXPENSIVE operation, please @Override to provide your
+	 * own implementation for better performance
+	 *
+	 * @return number of total size, or 0 if the model is empty
+	 * @since 10.0.0
+	 */
+	public int getTotalSize() {
+		return getChildNodeCount(_root);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * <br><br>
 	 * Note: the entire tree will be traversed once to count the number of tree nodes, 
 	 * although the result will be cached until the model has changed (open/add/remove/etc.), 
 	 * it is still a VERY EXPENSIVE operation, please @Override to provide your 
@@ -830,7 +845,7 @@ public abstract class AbstractTreeModel<E> implements TreeModel<E>, TreeSelectab
 	public int getPageCount() {
 		if (_pageCount < 1) { // dirty/invalid value, re-calculation required
 			if (_root != null) {
-				int count = getChildNodeCount(_root);
+				int count = getTotalSize();
 				// no child or _pageSize is still default value -1, return one page anyway
 				if (count <= 0 || _pageSize < 0) {
 					_pageCount = 1;

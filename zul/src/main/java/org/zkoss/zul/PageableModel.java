@@ -28,6 +28,12 @@ public interface PageableModel extends Pageable {
 	 */
 	String INTERNAL_EVENT = "internalModelEvent";
 
+
+	/** Returns the total number of items.
+	 * @since 10.0.0
+	 */
+	int getTotalSize();
+
 	/**
 	 * Adds a listener to the list of listeners to be notified when a PagingEvent
 	 * happens outside of standard Paging component

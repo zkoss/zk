@@ -335,6 +335,10 @@ public abstract class AbstractListModel<E>
 		return _pageSize;
 	}
 
+	public int getTotalSize() {
+		return getSize();
+	}
+
 	public void setPageSize(int size) throws WrongValueException {
 		if (size < 0) {
 			throw new WrongValueException("page size should >= 0");
