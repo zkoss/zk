@@ -291,25 +291,6 @@ public class Events {
 	 */
 	public static final String ON_SCRIPT_ERROR = "onScriptError";
 
-	/**
-	 * The onRangeValueChange event used with {@link RangeValueChangeEvent}.
-	 *
-	 * @since 10.0.0
-	 */
-	public static final String ON_RANGE_VALUE_CHANGE = "onRangeValueChange";
-
-	/** The onSave event used with {@link UploadEvent}.
-	 *
-	 * @since 10.0.0
-	 */
-	public static final String ON_SAVE = "onSave";
-
-	/** The onClear event used with {@link Event}.
-	 *
-	 * @since 10.0.0
-	 */
-	public static final String ON_CLEAR = "onClear";
-
 	/** Returns whether an event name is valid.
 	 *
 	 * <p>The event name must start with on and the third character
