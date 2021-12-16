@@ -118,7 +118,6 @@ subprojects {
 							"$projectDir/$codegen",
 							"-Xss1024k"
 					]
-					setDuplicatesStrategy(DuplicatesStrategy.INCLUDE)
 				}
 			}
 		}
