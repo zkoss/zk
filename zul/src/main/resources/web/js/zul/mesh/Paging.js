@@ -569,9 +569,13 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 						return false;
 					}
 				});
-			} else if (wgt.getMold() == 'os')
+			} else if (wgt.getMold() == 'os') {
 				wgt._doAfterGo(anc.text);
+			}
 			wgt.fire('onPaging', pgno);
+
+			// update activePage at client for Zephyr
+			wgt.setActivePage(pgno);
 		}
 	},
 	_increase: function (inp, wgt, add) {
