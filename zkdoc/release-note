@@ -28,6 +28,7 @@ ZK 9.6.1
   ZK-4989: vertical radio group rendered horizontally on mobile/tablet
   ZK-4970: listbox renders empty
   ZK-5058: Groupbox caption not positioned correctly when rendered after load
+  ZK-5078: upgrade GSON to avoid security issue
 
 * Upgrade Notes
   + Reverted and Reopened ZK-4979 (to fix ZK-4997).
