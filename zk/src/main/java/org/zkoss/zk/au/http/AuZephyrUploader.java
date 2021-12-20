@@ -16,8 +16,8 @@ import static org.zkoss.zk.ui.ext.Uploadable.Error.MISSING_REQUIRED_COMPONENT;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -93,20 +93,21 @@ public class AuZephyrUploader implements AuExtension {
 			alert = generateAlertMessage(MISSING_REQUIRED_COMPONENT, "dtid is required!");
 		if (Strings.isEmpty(fetchParameter(request, "cmd", attrs)))
 			alert = generateAlertMessage(MISSING_REQUIRED_COMPONENT, "cmd is required!");
+		fetchParameter(request, "sid", attrs);
 		Desktop desktop = null;
 		try {
 			if (alert == null) {
 				desktop = ((WebAppCtrl) sess.getWebApp()).getDesktopCache(sess).getDesktop(dtid);
 				final Map<String, Object> params = parseRequest(request, desktop);
 				final boolean alwaysNative = Boolean.TRUE.equals(params.get("native"));
-				final Object fis = params.get("file");
-				Media media;
-				if (fis instanceof MultipartFile) {
-					MultipartFile fi = (MultipartFile) fis;
-					media = processItem(desktop, fi, alwaysNative, attrs);
-					request.setAttribute("name", getBaseName(fi));
-					request.setAttribute("media", media);
+				Map<String, Media> meds = new HashMap<>();
+				for (Object o : (ArrayList) params.get("file")) {
+					if (o instanceof MultipartFile) {
+						MultipartFile fi = (MultipartFile) o;
+						meds.put(getBaseName(fi), processItem(desktop, fi, alwaysNative, attrs));
+					}
 				}
+				request.setAttribute("media", meds);
 				final AuDecoder audec = getAuDecoder(sess.getWebApp());
 				List<AuRequest> aureqs = audec.decode(request, desktop);
 				Component comp = desktop.getComponentByUuidIfAny(request.getParameter("uuid"));
@@ -249,9 +250,8 @@ public class AuZephyrUploader implements AuExtension {
 
 		MultipartResolver resolver = new CommonsMultipartResolver(request.getSession().getServletContext());
 		MultipartHttpServletRequest multipartRequest = resolver.resolveMultipart(request);
-		Iterator<String> itr = multipartRequest.getFileNames();
-		MultipartFile file = multipartRequest.getFile(itr.next());
-		params.put("file", file);
+		List<MultipartFile> files = multipartRequest.getFiles("file");
+		params.put("file", files);
 		return params;
 	}
 
@@ -300,7 +300,7 @@ public class AuZephyrUploader implements AuExtension {
 	/** Returns the base name for FileItem (i.e., removing path).
 	 */
 	private static String getBaseName(MultipartFile mf) {
-		String name = mf.getName();
+		String name = mf.getOriginalFilename();
 		if (name == null)
 			return null;
 

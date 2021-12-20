@@ -55,6 +55,7 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 		var old = this._group;
 		if (old !== group) {
 			if (old && this._attachExternal) old._rmExtern(this);
+			if (typeof group === 'string') group = zk.$('$' + group);
 			this._group = group;
 			if (group && this.desktop) {
 				group._addExtern(this);
