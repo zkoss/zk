@@ -17,7 +17,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _initUpld(wgt) {
 		zWatch.listen({onShow: wgt});
 		var v;
-		wgt.cmd = 'onUpload';
 		if (v = wgt._upload)
 			wgt._uplder = new zul.Upload(wgt, wgt._getUploadRef(), v);
 	}

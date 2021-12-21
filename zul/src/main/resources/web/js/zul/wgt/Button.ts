@@ -15,7 +15,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 (function () {
 	function _initUpld(wgt: zk.Widget): void {
 		var v;
-		wgt.cmd = 'onUpload';
 		if (v = wgt._upload)
 			wgt._uplder = new zul.Upload(wgt, null, v);
 	}
