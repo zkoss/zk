@@ -39,7 +39,7 @@ zul.inp.Bandpopup = zk.$extends(zul.Widget, {
 		var bandbox = this.parent,
 			self = this;
 		if (e.relatedTarget) {
-			if (bandbox && bandbox.isOpen() && !jq.isAncestor(this.$n(), e.relatedTarget))
+			if (bandbox && bandbox.isOpen() && !jq.isAncestor(bandbox.$n('pp'), e.relatedTarget))
 				bandbox.close();
 		} else {
 			// for solving B96-ZK-4748, treechildren will rerender itself when clicking
