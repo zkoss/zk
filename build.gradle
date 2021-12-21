@@ -21,29 +21,29 @@ def resources = 'src/main/resources'
 def codegen = 'codegen/resources'
 ext {
 	zkprojects = [
-			'zk': "$rootDir/zk",
-			'zkplus': "$rootDir/zkplus",
-			'zweb-dsp': "$rootDir/zweb-dsp",
-			'zhtml': "$rootDir/zhtml",
-			'zweb': "$rootDir/zweb",
+			'zk'           : "$rootDir/zk",
+			'zkplus'       : "$rootDir/zkplus",
+			'zweb-dsp'     : "$rootDir/zweb-dsp",
+			'zhtml'        : "$rootDir/zhtml",
+			'zweb'         : "$rootDir/zweb",
 			'zkplus-legacy': "$rootDir/zkplus-legacy",
-			'zel': "$rootDir/zel",
-			'zkbind': "$rootDir/zkbind",
-			'zcommon': "$rootDir/zcommon",
+			'zel'          : "$rootDir/zel",
+			'zkbind'       : "$rootDir/zkbind",
+			'zcommon'      : "$rootDir/zcommon",
 			'zkwebfragment': "$rootDir/zkwebfragment",
-			'zul': "$rootDir/zul",
-			'za11y': "$zkcmlDir/za11y",
-			'zkex': "$zkcmlDir/zkex",
-			'zkmax': "$zkcmlDir/zkmax",
-			'zml': "$zkcmlDir/zml",
-			'zuti': "$zkcmlDir/zuti"
+			'zul'          : "$rootDir/zul",
+			'za11y'        : "$zkcmlDir/za11y",
+			'zkex'         : "$zkcmlDir/zkex",
+			'zkmax'        : "$zkcmlDir/zkmax",
+			'zml'          : "$zkcmlDir/zml",
+			'zuti'         : "$zkcmlDir/zuti"
 	]
 	zkcmlprojects = [
 			'za11y': "$zkcmlDir/za11y",
-			'zkex': "$zkcmlDir/zkex",
+			'zkex' : "$zkcmlDir/zkex",
 			'zkmax': "$zkcmlDir/zkmax",
-			'zml': "$zkcmlDir/zml",
-			'zuti': "$zkcmlDir/zuti"
+			'zml'  : "$zkcmlDir/zml",
+			'zuti' : "$zkcmlDir/zuti"
 	]
 }
 
@@ -58,7 +58,7 @@ repositories {
 }
 
 if (project.ext['gradleFrontendSkip'] == 'false') {
-    classes.dependsOn npm_install
+	classes.dependsOn npm_install
 }
 
 subprojects {
@@ -72,24 +72,24 @@ subprojects {
 		}
 	}
 
-    // Prepare the result of TypeScript before gradle assemble
-    task compileTypeScript() {
-        setOnlyIf {project.ext['gradleFrontendSkip'] == 'false'}
-        doLast {
-            exec {
-                commandLine "$rootDir/node_modules/.bin/gulp", 'build:single', "--src=$projectDir/$resources/web/js", "--dest=$projectDir/$codegen/web/js"
-            }
-        }
-    }
+	// Prepare the result of TypeScript before gradle assemble
+	task compileTypeScript() {
+		setOnlyIf { project.ext['gradleFrontendSkip'] == 'false' }
+		doLast {
+			exec {
+				commandLine "$rootDir/node_modules/.bin/gulp", 'build:single', "--src=$projectDir/$resources/web/js", "--dest=$projectDir/$codegen/web/js"
+			}
+		}
+	}
 
-    task compileCSS() {
-        setOnlyIf {project.ext['gradleFrontendSkip'] == 'false'}
-        doLast {
-            exec {
-                commandLine "$rootDir/node_modules/.bin/gulp", 'build:minify-css', "--src=$projectDir/$resources/web/$project.name/css", "--dest=$projectDir/$codegen/web/$project.name/css"
-            }
-        }
-    }
+	task compileCSS() {
+		setOnlyIf { project.ext['gradleFrontendSkip'] == 'false' }
+		doLast {
+			exec {
+				commandLine "$rootDir/node_modules/.bin/gulp", 'build:minify-css', "--src=$projectDir/$resources/web/$project.name/css", "--dest=$projectDir/$codegen/web/$project.name/css"
+			}
+		}
+	}
 
 	java.sourceCompatibility = JavaVersion.VERSION_1_8
 	tasks.withType(JavaCompile) {
@@ -109,7 +109,7 @@ subprojects {
 
 	// Compile LESS
 	task compileLess() {
-		setOnlyIf {project.ext['gradleFrontendSkip'] == 'false'}
+		setOnlyIf { project.ext['gradleFrontendSkip'] == 'false' }
 		doLast {
 			exec {
 				commandLine "$rootDir/node_modules/.bin/zklessc", '-s', "$projectDir/$resources/web/", '-o', "$projectDir/$codegen/web/", '-i', "$rootDir/zul/$resources/web/", '-i', "$zkcmlDir/zkmax/$resources/web/", '-c'
@@ -120,8 +120,8 @@ subprojects {
 	// Configure additional resource for generated resources
 	processResources() {
 		dependsOn(compileTypeScript)
-        dependsOn(compileLess)
-        dependsOn(compileCSS)
+		dependsOn(compileLess)
+		dependsOn(compileCSS)
 
 		from("$projectDir/$codegen") {
 			setDuplicatesStrategy(DuplicatesStrategy.INCLUDE)
@@ -130,7 +130,8 @@ subprojects {
 		// replace @version@ token in xml files
 		from('src/main/resources') {
 			include "**/config.xml", "**/lang.xml", "**/lang-addon.xml"
-			filter(ReplaceTokens, tokens: [version: "$version".toString()]) // Gstring to String
+			filter(ReplaceTokens, tokens: [version: "$version".toString()])
+			// Gstring to String
 			setDuplicatesStrategy(DuplicatesStrategy.INCLUDE)
 		}
 	}
@@ -162,7 +163,7 @@ subprojects {
 	// build javadoc jar each subproject for bundle
 	task javadocJar(type: Jar) {
 		dependsOn 'buildJavadoc'
-		setOnlyIf {project.name != 'zkwebfragment' && project.name != 'zweb-dsp' && project.name != 'zkplus-legacy'}
+		setOnlyIf { project.name != 'zkwebfragment' && project.name != 'zweb-dsp' && project.name != 'zkplus-legacy' }
 		archiveClassifier = 'javadoc'
 		from "$javadoc.destinationDir"
 	}
@@ -191,7 +192,7 @@ subprojects {
 		doLast {
 			// build osgi jar
 			javaexec {
-				main="-jar";
+				main = "-jar";
 				args = [
 						"$rootDir/dist/lib/ext/bnd.jar",
 						"wrap",
@@ -208,7 +209,7 @@ subprojects {
 			}
 			// build osgi source jar
 			javaexec {
-				main="-jar";
+				main = "-jar";
 				args = [
 						"$rootDir/dist/lib/ext/bnd.jar",
 						"wrap",
@@ -250,7 +251,8 @@ task versionCheck() {
 	if (project.hasProperty("check.version")) {
 		fileTree("../").matching {
 			include "**/gradle.properties"
-			exclude "**/zephyr/gradle.properties" // don't check zephyr version for now
+			exclude "**/zephyr/gradle.properties"
+			// don't check zephyr version for now
 		}.each {
 			fileCheck(it, /version=${project.getProperty("check.version")}/)
 		}
