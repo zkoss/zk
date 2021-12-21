@@ -237,16 +237,3 @@ exports.build = gulp.parallel(
     }
 );
 exports.default = exports.build;
-exports.build_zkcml_uglify = gulp.parallel(
-    function build_zkex_ts() {
-        return typescript_build(
-            '../zkcml/zkex/src/main/resources/web/js',
-            '../zkcml/zkex/codegen/resources/web/js');
-    },
-    function build_zkmax_ts() {
-        return typescript_build(
-            '../zkcml/zkmax/src/main/resources/web/js',
-            '../zkcml/zkmax/codegen/resources/web/js');
-    }
-);
-exports['build-cml:uglify'] = exports.build_zkcml_uglify;
