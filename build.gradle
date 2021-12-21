@@ -57,13 +57,9 @@ repositories {
 	mavenCentral()
 }
 
-// Prepare the result of TypeScript before gradle assemble
-task compileTypeScript(type: NpmTask) {
-	dependsOn(npmInstall)
-	setOnlyIf {project.ext['gradleFrontendSkip'] == 'false'}
-	args = ['run', 'build:uglify']
+if (project.ext['gradleFrontendSkip'] == 'false') {
+    classes.dependsOn npm_install
 }
-assemble.dependsOn(compileTypeScript)
 
 subprojects {
 	// Repositories for all subprojects (from 9.6.0 zk-parent)
@@ -75,6 +71,25 @@ subprojects {
 			url = uri('https://mavensync.zkoss.org/maven2')
 		}
 	}
+
+    // Prepare the result of TypeScript before gradle assemble
+    task compileTypeScript() {
+        setOnlyIf {project.ext['gradleFrontendSkip'] == 'false'}
+        doLast {
+            exec {
+                commandLine "$rootDir/node_modules/.bin/gulp", 'build:single', "--src=$projectDir/$resources/web/js", "--dest=$projectDir/$codegen/web/js"
+            }
+        }
+    }
+
+    task compileCSS() {
+        setOnlyIf {project.ext['gradleFrontendSkip'] == 'false'}
+        doLast {
+            exec {
+                commandLine "$rootDir/node_modules/.bin/gulp", 'build:minify-css', "--src=$projectDir/$resources/web/$project.name/css", "--dest=$projectDir/$codegen/web/$project.name/css"
+            }
+        }
+    }
 
 	java.sourceCompatibility = JavaVersion.VERSION_1_8
 	tasks.withType(JavaCompile) {
@@ -105,22 +120,8 @@ subprojects {
 	// Configure additional resource for generated resources
 	processResources() {
 		dependsOn(compileTypeScript)
-		dependsOn(compileLess)
-		doFirst {
-			// run zkjszips.jar to compress js and generate src.js
-			// adding -PgradleFrontendSkip=true into your task will skip this step
-			if (project.ext['gradleFrontendSkip'] == 'false') {
-				javaexec {
-					main = "-jar"
-					args = [
-							"$rootDir/dist/lib/ext/zkjszips.jar",
-							"$projectDir/$resources",
-							"$projectDir/$codegen",
-							"-Xss1024k"
-					]
-				}
-			}
-		}
+        dependsOn(compileLess)
+        dependsOn(compileCSS)
 
 		from("$projectDir/$codegen") {
 			setDuplicatesStrategy(DuplicatesStrategy.INCLUDE)

@@ -174,7 +174,7 @@ public abstract class MeshElement extends XulElement implements Paginated {
 
 		public boolean isAutohide() {
 			if (!autohideModify)
-				return ((MeshElement)getParent()).isAutohidePaging();
+				return ((MeshElement) getParent()).isAutohidePaging();
 			else
 				return super.isAutohide();
 		}

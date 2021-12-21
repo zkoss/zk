@@ -8,8 +8,6 @@
   },
   "scripts": {
     "build": "gulp",
-    "build:uglify": "gulp build:uglify",
-    "build-cml:uglify": "gulp build-cml:uglify",
     "build:single": "gulp build:single",
     "build:minify-css": "gulp build:minify-css",
     "dev": "gulp watch"
