@@ -2118,7 +2118,9 @@ Expr = Sizzle.selectors = {
 							// Incorporate the offset, then check against cycle size
 							diff -= last;
 							if (diff === first || (diff % first === 0 && diff / first >= 0)) {
-								elem[zk.Widget._CURRENT_TARGET] = node;
+								if (elem) {
+									elem[zk.Widget._CURRENT_TARGET] = node;
+								}
 								return true;
 							}
 							return false;
@@ -3040,7 +3042,7 @@ function matcherFromGroupMatchers( elementMatchers, setMatchers ) {
 			if ( bySet && i !== matchedCount ) {
 				j = 0;
 				while ( ( matcher = setMatchers[ j++ ] ) ) {
-					matcher( unmatched, setMatched, context, xml, elem[zk.Widget._CURRENT_TARGET] || elem[zk.Widget._TARGET] /*added Potix 2021/11/02*/ );
+					matcher( unmatched, setMatched, context, xml, elem ? (elem[zk.Widget._CURRENT_TARGET] || elem[zk.Widget._TARGET]) : elem /*added Potix 2021/11/02*/ );
 				}
 
 				if ( seed ) {
