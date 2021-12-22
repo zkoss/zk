@@ -345,6 +345,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 			this.listhead = child;
 		} else if (child.$instanceof(zul.mesh.Paging)) {
 			this.paging = child;
+			this.paging.setMeshWidget(this);
 		} else if (child.$instanceof(zul.sel.Listfoot)) {
 			this.listfoot = child;
 		} else if (child.$instanceof(zul.mesh.Frozen)) {
@@ -374,9 +375,10 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		var stripe;
 		if (child == this.listhead)
 			this.listhead = null;
-		else if (child == this.paging)
+		else if (child == this.paging) {
+			this.paging.setMeshWidget(null);
 			this.paging = null;
-		else if (child == this.frozen) {
+		} else if (child == this.frozen) {
 			this.frozen = null;
 			this.destroyBar_();
 		} else if (child == this.listfoot)

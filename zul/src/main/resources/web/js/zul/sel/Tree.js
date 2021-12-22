@@ -112,9 +112,10 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 		else if (child.$instanceof(zul.sel.Treechildren)) {
 			this.treechildren = child;
 			this._fixSelectedSet();
-		} else if (child.$instanceof(zul.mesh.Paging))
+		} else if (child.$instanceof(zul.mesh.Paging)) {
 			this.paging = child;
-		else if (child.$instanceof(zul.sel.Treefoot))
+			this.paging.setMeshWidget(this);
+		} else if (child.$instanceof(zul.sel.Treefoot))
 			this.treefoot = child;
 		else if (child.$instanceof(zul.mesh.Frozen))
 			this.frozen = child;
@@ -138,9 +139,10 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 			this.treechildren = null;
 			this._selItems = [];
 			this._sel = null;
-		} else if (child == this.paging)
+		} else if (child == this.paging) {
+			this.paging.setMeshWidget(null);
 			this.paging = null;
-		else if (child == this.frozen) {
+		} else if (child == this.frozen) {
 			this.frozen = null;
 			this.destroyBar_();
 		}

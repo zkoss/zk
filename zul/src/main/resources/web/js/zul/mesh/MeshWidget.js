@@ -551,15 +551,6 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		 */
 		autopaging: _zkf,
 		/**
-		 * Returns the external Paging widget, if any.
-		 * @return Paging
-		 */
-		/**
-		 * Sets the external Paging widget.
-		 * @param Paging paging
-		 */
-		paginal: null,
-		/**
 		 * Returns whether the widget is in model mode or not.
 		 * @return boolean
 		 */
@@ -598,12 +589,35 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			if (this.efoottbl) this.efoottbl.style.width = v;
 		}
 	},
+	/**
+	 * Returns the external Paging widget, if any.
+	 * @return Paging
+	 */
+	getPaginal() {
+		return this._paginal;
+	},
+	/**
+	 * Sets the external Paging widget.
+	 * @param Paging paging
+	 */
+	setPaginal: function (newPaginal) {
+		if (this._paginal != newPaginal) {
+			if (this._paginal) {
+				this._paginal.setMeshWidget(null);
+			}
+			this._paginal = newPaginal;
+
+			if (this._paginal) {
+				this._paginal.setMeshWidget(this);
+			}
+		}
+	},
 	/** Returns the page size, aka., the number rows per page.
 	 * @return int
 	 * @see Paging#getPageSize
 	 */
 	getPageSize: function () {
-		var pgnl = this.paging || this._paginal;
+		var pgnl = this.getPagingChild();
 		return pgnl ? pgnl.getPageSize() : 0;
 	},
 	/** Sets the page size, aka., the number rows per page.
@@ -611,7 +625,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	 * @see Paging#setPageSize
 	 */
 	setPageSize: function (pgsz) {
-		var pgnl = this.paging || this._paginal;
+		var pgnl = this.getPagingChild();
 		if (pgnl)
 			pgnl.setPageSize(pgsz);
 	},
@@ -621,7 +635,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	 * @see Paging#getPageCount
 	 */
 	getPageCount: function () {
-		var pgnl = this.paging || this._paginal;
+		var pgnl = this.getPagingChild();
 		return pgnl ? pgnl.getPageCount() : 1;
 	},
 	/** Returns the active page (starting from 0).
@@ -629,7 +643,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	 * @see Paging#getActivePage
 	 */
 	getActivePage: function () {
-		var pgnl = this.paging || this._paginal;
+		var pgnl = this.getPagingChild();
 		return pgnl ? pgnl.getActivePage() : 0;
 	},
 	/** Sets the active page (starting from 0).
@@ -637,7 +651,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	 * @see Paging#setActivePage
 	 */
 	setActivePage: function (pg) {
-		var pgnl = this.paging || this._paginal;
+		var pgnl = this.getPagingChild();
 		if (pgnl)
 			pgnl.setActivePage(pg);
 	},
@@ -648,7 +662,9 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	inPagingMold: function () {
 		return 'paging' == this.getMold();
 	},
-
+	getPagingChild: function () {
+		return this.paging || this.getPaginal();
+	},
 	setHeight: function (height) {
 		this.$supers('setHeight', arguments);
 		if (this.desktop) {
@@ -1940,7 +1956,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		} else {
 			this.ebody.style.height = '';
 			var focusEL = this.$n('a');
-			if ((this.paging || this._paginal) && focusEL)
+			if ((this.getPagingChild()) && focusEL)
 				focusEL.style.top = '0px'; // Bug ZK-1715: focus has no chance to sync if don't select item after changing page.
 		}
 	},

@@ -136,9 +136,10 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 			this._syncEmpty();
 		} else if (child.$instanceof(zul.grid.Foot))
 			this.foot = child;
-		else if (child.$instanceof(zul.mesh.Paging))
+		else if (child.$instanceof(zul.mesh.Paging)) {
 			this.paging = child;
-		else if (child.$instanceof(zul.mesh.Frozen))
+			this.paging.setMeshWidget(this);
+		} else if (child.$instanceof(zul.mesh.Frozen))
 			this.frozen = child;
 
 		if (!ignoreDom)
@@ -159,9 +160,10 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 			this._syncEmpty();
 		} else if (child == this.foot)
 			this.foot = null;
-		else if (child == this.paging)
+		else if (child == this.paging) {
+			this.paging.setMeshWidget(null);
 			this.paging = null;
-		else if (child == this.frozen) {
+		} else if (child == this.frozen) {
 			this.frozen = null;
 			this.destroyBar_();
 		}

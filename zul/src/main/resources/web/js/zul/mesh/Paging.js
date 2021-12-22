@@ -114,7 +114,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 		 * @param boolean autohide
 		 */
 		autohide: function () {
-			if (this._pageCount == 1) this.rerender();
+			if (this.getPageCount() == 1) this.rerender();
 		},
 		/** Returns whether it is disabled.
 		 * <p>Default: false.
@@ -127,7 +127,16 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 		 */
 		disabled: function (disabled) {
 			if (this.desktop) this._drawDisabled(disabled);
-		}
+		},
+		/** Returns the associated {@link zul.mesh.MeshWidget} if any.
+		 * @return zul.mesh.MeshWidget
+		 * @since 10.0.0
+		 */
+		/** Sets the associated {@link zul.mesh.MeshWidget}.
+		 * @param zul.mesh.MeshWidget meshWidget
+		 * @since 10.0.0
+		 */
+		meshWidget: null
 	},
 	setStyle: function () {
 		this.$supers('setStyle', arguments);
@@ -173,10 +182,10 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 	},
 	_drawDisabled: function (disabled) {
 		var uuid = this.uuid,
-			ap = this._activePage,
-			pc = this._pageCount,
+			ap = this.getActivePage(),
+			pc = this.getPageCount(),
 			input = jq.$$(uuid, 'real');
-		if ('os' == this._mold) {
+		if ('os' == this.getMold()) {
 			var btns = jq.$$(uuid, 'button');
 			jq(btns).attr('disabled', disabled);
 		} else {
@@ -193,12 +202,12 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 		}
 	},
 	_updatePageNum: function () {
-		var v = Math.floor((this._totalSize - 1) / this._pageSize + 1);
-		if (v == 0) v = 1;
-		if (v != this._pageCount) {
-			this._pageCount = v;
-			if (this._activePage >= this._pageCount)
-				this._activePage = this._pageCount - 1;
+		var pageCount = Math.floor((this.getTotalSize() - 1) / this._pageSize + 1);
+		if (pageCount == 0) pageCount = 1;
+		if (pageCount != this.getPageCount()) {
+			this.setPageCount(pageCount);
+			if (this.getActivePage() >= pageCount)
+				this.setActivePage(pageCount - 1);
 			if (this.desktop && this.parent) {
 				if (!_rerenderIfBothPaging(this)) {
 					this.rerender();
@@ -228,9 +237,9 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 	 * @return String
 	 */
 	infoText_: function () {
-		var acp = this._activePage,
-			psz = this._pageSize,
-			tsz = this._totalSize,
+		var acp = this.getActivePage(),
+			psz = this.getPageSize(),
+			tsz = this.getTotalSize(),
 			lastItem = (acp + 1) * psz,
 			dash = '';
 
@@ -240,7 +249,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 		return '[ ' + (acp * psz + 1) + dash + ' / ' + tsz + ' ]';
 	},
 	_infoTags: function (out) {
-		if (this._totalSize == 0)
+		if (this.getTotalSize() == 0)
 			return;
 		var uuid = this.uuid,
 			nameOrId = _rerenderIfBothPaging(this) ? 'name' : 'id'; // Bug ZK-2280
@@ -249,12 +258,12 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 	},
 	_innerTags: function () {
 		var out = new zk.Buffer(),
-			pinc = this._pageIncrement,
-			pcount = this._pageCount,
-			acp = this._activePage,
+			pinc = this.getPageIncrement(),
+			pcount = this.getPageCount(),
+			acp = this.getActivePage(),
 			half = Math.round(pinc / 2),
 			begin,
-			end = this._activePage + half - 1;
+			end = acp + half - 1;
 
 		if (end >= pcount) {
 			end = pcount - 1;
@@ -262,7 +271,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 			if (begin < 0)
 				begin = 0;
 		} else {
-			begin = this._activePage - half;
+			begin = acp - half;
 			if (begin < 0)
 				begin = 0;
 			end = begin + pinc - 1;
@@ -286,7 +295,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 				this.appendAnchor(out, msgzul.LAST, pcount - 1);
 		}
 		out.push('</ul>');
-		if (this._detailed)
+		if (this.isDetailed())
 			this._infoTags(out);
 		return out.join('');
 	},
@@ -312,7 +321,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 	},
 	isVisible: function () {
 		var visible = this.$supers('isVisible', arguments);
-		return visible && (this._pageCount > 1 || !this._autohide);
+		return visible && (this.getPageCount() > 1 || !this._autohide);
 	},
 	bind_: function () {
 		this.$supers(zul.mesh.Paging, 'bind_', arguments);
@@ -320,8 +329,8 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 		var uuid = this.uuid,
 			input = jq.$$(uuid, 'real'),
 			Paging = this.$class,
-			pcount = this._pageCount,
-			acp = this._activePage,
+			pcount = this.getPageCount(),
+			acp = this.getActivePage(),
 			postfix = ['first', 'prev', 'last', 'next'],
 			focusInfo = zul.mesh.Paging._autoFocusInfo;
 
@@ -351,13 +360,13 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 			for (var j = btns.length; j--;) {
 				var self = this;
 				jq(btns[j]).on('click', function () {
-					if (self._disabled) return;
+					if (self.isDisabled()) return;
 					Paging.go(self, parseInt(jq(this).attr('data-paging')));
 				});
 			}
 		}
 
-		if (this._disabled) this._drawDisabled(true);
+		if (this.isDisabled()) this._drawDisabled(true);
 
 		if (focusInfo && focusInfo.uuid === this.uuid) {
 			var pos = focusInfo.lastPos,
@@ -441,7 +450,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 			evt.stop();
 			break;
 		case 35://end
-			wgt.$class.go(wgt, wgt._pageCount - 1, inp);
+			wgt.$class.go(wgt, wgt.getPageCount() - 1, inp);
 			evt.stop();
 			break;
 		case 9: case 8: case 46: //tab, backspace, delete
@@ -469,7 +478,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 	},
 	_domfirstClick: function (evt) {
 		var wgt = this;
-		if (wgt._disabled) return;
+		if (wgt.isDisabled()) return;
 		var uuid = wgt.uuid,
 			postfix = ['first', 'prev'];
 
@@ -483,7 +492,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 	},
 	_domprevClick: function (evt) {
 		var wgt = this;
-		if (wgt._disabled) return;
+		if (wgt.isDisabled()) return;
 		var uuid = wgt.uuid,
 			ap = wgt.getActivePage(),
 			postfix = ['first', 'prev'];
@@ -500,7 +509,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 	},
 	_domnextClick: function (evt) {
 		var wgt = this;
-		if (wgt._disabled) return;
+		if (wgt.isDisabled()) return;
 		var uuid = wgt.uuid,
 			ap = wgt.getActivePage(),
 			pc = wgt.getPageCount(),
@@ -583,8 +592,8 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 		value += add;
 		if (value < 1)
 			value = 1;
-		else if (value > wgt._pageCount)
-			value = wgt._pageCount;
+		else if (value > wgt.getPageCount())
+			value = wgt.getPageCount();
 		inp.value = value;
 	},
 	_fixControl: function (node, wgt, wideChanged) {
