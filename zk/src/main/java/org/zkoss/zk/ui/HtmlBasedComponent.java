@@ -45,7 +45,7 @@ import org.zkoss.zk.ui.sys.StringPropertyAccess;
  *
  * <p>Events:<br/>
  *  onClick, onDoubleClick, onRightClick, onDrop,
- *  onMouseOver, onMouseOut, onOK, onCacnel, onCtrlKey and onSwipe.<br/>
+ *  onMouseOver, onMouseOut, onOK, onCancel, onCtrlKey and onSwipe.<br/>
  * 
  * <p>It supports
  * <ul>
