@@ -23,6 +23,22 @@ zk.UploadUtils = {
 		if (zk.xhrWithCredentials)
 			xhr.withCredentials = true;
 		xhr.send(formData);
+	},
+
+	fileUpload: function (wgt, blob, sid, eventName) {
+		var xhr = new XMLHttpRequest(),
+			formData = new FormData();
+		formData.append('file', blob);
+		xhr.onload = function (e) {
+			if (this.readyState === 4) {
+				if (this.status === 200) {
+					wgt.fire(eventName, {sid: sid});
+				} else {
+					zk.error(xhr.statusText);
+				}
+			}
+		};
+		zk.UploadUtils.ajaxUpload(wgt, xhr, formData, sid);
 	}
 };
 })();
