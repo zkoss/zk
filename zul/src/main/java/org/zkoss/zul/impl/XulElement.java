@@ -81,6 +81,10 @@ public abstract class XulElement extends HtmlBasedComponent {
 	 * <dd>PageDn</dd>
 	 * <dt>#f1 #f2 ... #f12</dt>
 	 * <dd>Function keys representing F1, F2, ... F12</dd>
+	 * <dt>%[?]</dt>
+	 * <dd>Mac command(⌘), <tt>[?]</tt> can be {@code a~z, 0~9, #[?]}. (since 8.5.0)</dd>
+	 * <dt>#tab</dt>
+	 * <dd>Tab (since 9.5.1)</dd>
 	 * </dl>
 	 *
 	 * <p>For example,
