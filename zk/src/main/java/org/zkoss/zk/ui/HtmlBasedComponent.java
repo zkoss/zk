@@ -292,7 +292,7 @@ public abstract class HtmlBasedComponent extends AbstractComponent {
 	}
 
 	/**
-	  * Returns the ZK Cascading Style class(es) for this component.
+	  * Returns the ZK Cascading Style class for this component.
 	  * It usually depends on the implementation of the mold ({@link #getMold()}).
 	  *
 	  * <p>Default: null (the default value depends on element).
@@ -312,7 +312,7 @@ public abstract class HtmlBasedComponent extends AbstractComponent {
 	}
 
 	/**
-	 * Sets the ZK Cascading Style class(es) for this component.
+	 * Sets the ZK Cascading Style class for this component.
 	 * It usually depends on the implementation of the mold ({@link #getMold}).
 	 *
 	 * @param zclass the style class used to apply to the whole widget.
@@ -329,7 +329,7 @@ public abstract class HtmlBasedComponent extends AbstractComponent {
 		}
 	}
 
-	/** Returns the CSS class.
+	/** Returns the CSS class(es).
 	 *
 	 * <p>Default: null.
 	 *
@@ -347,7 +347,7 @@ public abstract class HtmlBasedComponent extends AbstractComponent {
 		return _auxinf != null ? _auxinf.sclass : null;
 	}
 
-	/** Sets the CSS class.
+	/** Sets the CSS class(es).
 	 *
 	 * @see #setZclass
 	 */
