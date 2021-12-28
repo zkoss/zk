@@ -4,6 +4,7 @@ ZK 10.0.0
   ZK-5039: remove deprecated classicblue theme in ZK 10
 
 * Bugs
+  ZK-5089: AfterSizeEvent doesn't return a correct size of a Window component
 
 * Upgrade Notes
 

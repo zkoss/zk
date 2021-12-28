@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B100-ZK-5089.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		2021/12/28, Created by jumperchen
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<window title="After Size Event Test" border="normal" width="300px" height="300px">
+		<attribute name="onAfterSize"> lb1.setValue("onAfterSize " + event.getTarget() + " width: " + event.getWidth() + " height: " + event.getHeight()); </attribute>
+		<label id="lb1"/>
+	</window>
+</zk>

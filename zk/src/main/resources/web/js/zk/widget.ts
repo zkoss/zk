@@ -3635,7 +3635,7 @@ unbind_: function (skipper, after) {
 	 */
 	onAfterSize: function () {
 		if (this.desktop && this.isListen('onAfterSize')) {
-			var n = this.getCaveNode(),
+			var n = this.$n(), // ZK-5089: don't use "this.getCaveNode()" here
 				width = n.offsetWidth,
 				height = n.offsetHeight;
 			if (this._preWidth != width || this._preHeight != height) {
