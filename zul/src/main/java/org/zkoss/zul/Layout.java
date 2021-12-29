@@ -13,14 +13,14 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import org.zkoss.lang.Objects;
-import org.zkoss.zk.ui.HtmlBasedComponent;
+import org.zkoss.zul.impl.XulElement;
 
 /**
  * A layout.
  * @author tomyeh
  * @since 5.0.8
  */
-public class Layout extends HtmlBasedComponent {
+public class Layout extends XulElement {
 	private String _spacing = "0.3em";
 
 	/** Returns the spacing between adjacent children, or null if the default

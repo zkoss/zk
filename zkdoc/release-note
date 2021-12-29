@@ -2,11 +2,13 @@ ZK 10.0.0
 * Features
   ZK-5024: Add a library property to change the default apply composer for MVVM
   ZK-5039: remove deprecated classicblue theme in ZK 10
+  ZK-5091: Move Layout.java to extend from XulElement
 
 * Bugs
   ZK-5089: AfterSizeEvent doesn't return a correct size of a Window component
 
 * Upgrade Notes
+  + Layout.java (Vlayout and Hlayout) are extended from XulElement since ZK 10.0.0
 
    --------
 

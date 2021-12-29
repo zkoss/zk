@@ -16,7 +16,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * A skeleton of Vlayout and Hlayout.
  * @since 5.0.4
  */
-zul.box.Layout = zk.$extends(zk.Widget, {
+zul.box.Layout = zk.$extends(zul.Widget, {
 	_spacing: '5px',
 	$define: {
 		/** Sets the spacing between adjacent children.
