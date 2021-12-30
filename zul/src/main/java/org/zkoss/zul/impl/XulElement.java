@@ -259,7 +259,7 @@ public abstract class XulElement extends HtmlBasedComponent {
 	 * </pre>
 	 * <p> (since 6.5.2) the popup can also be shown on customized location of <code>x</code> and <code>y</code> by adding parentheses"()", for example,
 	 * <pre>
-	 * &lt;button label="show" context="id, x=(zk.currentPointer[0] + 10), y=(zk.currentPointer[1] - 10)"/&gt;
+	 * &lt;button label="show" popup="id, x=(zk.currentPointer[0] + 10), y=(zk.currentPointer[1] - 10)"/&gt;
 	 * </pre>
 	 * @see #setPopup(Popup)
 	 * @see Popup#open(org.zkoss.zk.ui.Component, String)
@@ -356,7 +356,7 @@ public abstract class XulElement extends HtmlBasedComponent {
 	 * </pre>
 	 * <p> (since 6.5.2) the tooltip can also be shown on customized location of <code>x</code> and <code>y</code> by adding parentheses"()", for example,
 	 * <pre>
-	 * &lt;button label="show" context="id, x=(zk.currentPointer[0] + 10), y=(zk.currentPointer[1] - 10)"/&gt;
+	 * &lt;button label="show" tooltip="id, x=(zk.currentPointer[0] + 10), y=(zk.currentPointer[1] - 10)"/&gt;
 	 * </pre>
 	 * 
 	 * @see #setTooltip(Popup)
