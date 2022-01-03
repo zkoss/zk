@@ -495,7 +495,9 @@ declare namespace zk {
     }
 
     interface UploadUtils {
-        ajaxUpload(wgt: zk.Widget, xhr: XMLHttpRequest, formData: FormData, sid?: number): void;
+        ajaxUpload(wgt: zk.Widget, xhr: XMLHttpRequest, formData: FormData, uri: string, sid?: number, eventName?: string): void;
+        fileUpload(wgt: zk.Widget, blob: Blob, sid: number, eventName: string): void;
+        getUploadAjaxUri(wgt: zk.Widget, uri: string, sid?: number): string;
     }
 
     interface XMLUtils {
