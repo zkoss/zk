@@ -80,7 +80,9 @@ dependencies {
 	implementation "org.zkoss.zk:zkex:${version}"
 	implementation "org.zkoss.zk:zkmax:${version}"
 	implementation "org.zkoss.zk:zuti:${version}"
-	implementation "org.zkoss.zk:za11y:${version}"
+	if (project.ext['zktestWithoutA11y'] == 'false') {
+		implementation "org.zkoss.zk:za11y:${version}"
+	}
 	implementation 'org.zkoss.zkforge.el:zcommons-el:1.1.0'
 	implementation 'org.zkoss.addon:flashchart:1.0'
 	implementation 'commons-lang:commons-lang:2.6'
@@ -126,6 +128,12 @@ dependencies {
 	providedCompile 'javax.el:javax.el-api:2.2.5'
 	providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
 	providedCompile 'javax.websocket:javax.websocket-api:1.1'
+}
+
+test {
+	if (project.ext['zktestWithoutA11y'] != 'false') {
+		exclude '**/wcag/*Test.java'
+	}
 }
 
 description = 'ZK Test'

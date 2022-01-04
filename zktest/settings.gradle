@@ -1,1 +1,3 @@
 rootProject.name = 'zktest'
+
+includeBuild '../../zk'
