@@ -799,7 +799,7 @@ zAu.beforeSend = function (uri, req, dt) {
 		} else {
 			content = '';
 		}
-		for (let j = 0, el = es.length, aureq; el && (aureq = es.shift()); ++j, --el) {
+		for (let j = 0, aureq; aureq = es.shift(); ++j) {
 			if ((aureq.opts || {}).uri != uri) {
 				es.unshift(aureq);
 				break;
@@ -1906,7 +1906,7 @@ zAu.cmd1 = /*prototype*/ {
 	select: function (wgt, s, e) {
 		if (wgt.select) wgt.select(s, e);
 	},
-	/** Invokes the specifed method of the specified widget.
+	/** Invokes the specified method of the specified widget.
 	 * In other words, it is similar to execute the following:
 	 * <pre><code>wgt[func].apply(wgt, vararg);</code></pre>
 	 *
