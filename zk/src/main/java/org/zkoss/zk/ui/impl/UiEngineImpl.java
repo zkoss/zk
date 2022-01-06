@@ -1439,10 +1439,14 @@ public class UiEngineImpl implements UiEngine {
 	}
 
 	public JSONArray finishUpdate(Object ctx) throws IOException {
+		return finishUpdate(ctx, new LinkedList<Throwable>());
+	}
+
+	// zk 10
+	public JSONArray finishUpdate(Object ctx, List<Throwable> errs) throws IOException {
 		final UpdateInfo ui = (UpdateInfo) ctx;
 		final Execution exec = ui.uv.getExecution();
 		final Desktop desktop = exec.getDesktop();
-		final List<Throwable> errs = new LinkedList<Throwable>();
 
 		//1. process events
 		Event event = nextEvent(ui.uv);
