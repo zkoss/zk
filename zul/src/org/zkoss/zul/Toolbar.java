@@ -162,7 +162,7 @@ public class Toolbar extends XulElement {
 	}
 
 	/**
-	 * When {@link #getOverflowPopup} is true, toolbar has a button that shows a popup
+	 * When {@link #isOverflowPopup} is true, toolbar has a button that shows a popup
 	 * users can customize the overflow popup icon.
 	 * Default: z-icon-ellipsis-h.
 	 * @param overflowPopupIconSclass refer to FontAwesome Cheatsheet.
