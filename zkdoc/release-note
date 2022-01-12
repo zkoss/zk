@@ -12,7 +12,16 @@ ZK 10.0.0
 
    --------
 
+ZK 9.6.2
+* Features
+
+* Bugs
+
+* Upgrade Notes
+
+   --------
 ZK 9.6.1
+Jan 11, 2022
 * Features
   ZK-5013: Post onCheckSelectAll event in Tree (for application use)
 
