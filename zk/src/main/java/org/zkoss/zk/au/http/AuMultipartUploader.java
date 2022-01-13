@@ -191,17 +191,22 @@ public class AuMultipartUploader {
 
 	private static Map<String, Object> getFileuploadMetaPerComp(Map<String, Object> params, Desktop desktop, String uuid) {
 
-		Component comp = desktop.getComponentByUuid(uuid);
-		Integer maxsz = null;
-		try {
-			Integer compMaxsz = (Integer) comp.getAttribute(Attributes.UPLOAD_MAX_SIZE);
-			maxsz = compMaxsz != null ? compMaxsz : desktop.getWebApp().getConfiguration().getMaxUploadSize();
-			params.put("maxSize", maxsz);
-		} catch (NumberFormatException e) {
-			throw new UiException("The upload max size must be a number");
-		}
-		if (Boolean.TRUE.equals(comp.getAttribute(Attributes.UPLOAD_NATIVE))) {
-			params.put("native", true);
+		// zephyr may not have comp at server.
+		Component comp = desktop.getComponentByUuidIfAny(uuid);
+		if (comp != null) {
+			Integer maxsz = null;
+			try {
+				Integer compMaxsz = (Integer) comp.getAttribute(Attributes.UPLOAD_MAX_SIZE);
+				maxsz = compMaxsz != null ? compMaxsz :
+							desktop.getWebApp().getConfiguration()
+									.getMaxUploadSize();
+				params.put("maxSize", maxsz);
+			} catch (NumberFormatException e) {
+				throw new UiException("The upload max size must be a number");
+			}
+			if (Boolean.TRUE.equals(comp.getAttribute(Attributes.UPLOAD_NATIVE))) {
+				params.put("native", true);
+			}
 		}
 		return params;
 	}
