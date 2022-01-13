@@ -28,6 +28,16 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			o.uploaders[key] = uplder;
 	}
 	function _start(o, form, val) { //start upload
+		// delete old upload temp file, if it's not uploaded yet.
+		let oldKey = o.getKey(o.sid - 1),
+			oldUploader = o.uploaders[oldKey];
+
+		if (oldUploader && oldUploader.isStart && !zk.processing) {
+			// delete the old file
+			_cancel(o, o.sid - 1, false);
+		}
+
+
 		//B50-ZK-255: FileUploadBase$SizeLimitExceededException
 		//will not warning in browser
 		_initUploader(o, form, val);
@@ -238,6 +248,13 @@ zul.Upload = zk.$extends(zk.Object, {
 	 */
 	finish: function (sid) {
 		_cancel(this, sid, true);
+	},
+	getFile: function () {
+		let uploader = this.uploaders[this.getKey(this.sid - 1)];
+		if (uploader) {
+			return uploader.getFile();
+		}
+		return null;
 	}
 }, {
 	/**
@@ -360,6 +377,9 @@ zul.Uploader = zk.$extends(zk.Object, {
 				viewer = new cls(self, flnm);
 			});
 		this.viewer = viewer;
+	},
+	getFile: function () {
+		return this._form ? this._form[0].files : null;
 	},
 	/**
 	 * Returns the widget which the uploader belongs to.

@@ -222,6 +222,13 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 			}
 		}
 	},
+	/**
+	 * Returns the file(s) belongs to this button if any.
+	 * @since 10.0.0
+	 */
+	getFile() {
+		return this._uplder?.getFile();
+	},
 
 	//super//
 	focus_(timeout?: number): boolean {
