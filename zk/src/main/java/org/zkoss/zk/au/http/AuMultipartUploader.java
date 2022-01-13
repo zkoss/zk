@@ -39,7 +39,6 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
-import com.google.common.base.Strings;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.fileupload.FileUploadException;
@@ -51,6 +50,7 @@ import org.slf4j.LoggerFactory;
 import org.zkoss.image.AImage;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Exceptions;
+import org.zkoss.lang.Strings;
 import org.zkoss.mesg.Messages;
 import org.zkoss.sound.AAudio;
 import org.zkoss.util.media.AMedia;
@@ -98,7 +98,7 @@ public class AuMultipartUploader {
 		}
 	}
 	public static Map<String, List<String>> splitQuery(String query) {
-		if (Strings.isNullOrEmpty(query)) {
+		if (Strings.isBlank(query)) {
 			return Collections.emptyMap();
 		}
 		return Arrays.stream(query.split("&"))
