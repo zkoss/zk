@@ -32,12 +32,13 @@ declare namespace zk {
         sid: number;
         uri: string;
         dt: zk.Desktop;
-        content: string;
+        content: string|FormData;
         implicit: boolean;
         ignorable: boolean;
         tmout: number;
         rtags: Record<string, unknown>;
         forceAjax: boolean;
+	    uploadCallbacks: unknown[]|null;
     }
 
     interface AUEngine {

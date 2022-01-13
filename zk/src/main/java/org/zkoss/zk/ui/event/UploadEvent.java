@@ -16,16 +16,13 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.event;
 
-import static org.zkoss.lang.Generics.cast;
-
 import java.util.List;
+import java.util.Map;
 
-import org.zkoss.util.UploadUtils;
 import org.zkoss.util.media.Media;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zk.ui.UiException;
 
 /**
  * Represents that user has uploaded one or several files from
@@ -62,7 +59,7 @@ public class UploadEvent extends Event {
 
 	/**
 	 * Creates an instance of {@link UploadEvent} based on the event name and component,
-	 * the {@link UploadEvent} contains the latest upload media from user.
+	 * the {@link UploadEvent} contains the upload media(s) from user.
 	 * Internal Use Only.
 	 *
 	 * @param name event name
@@ -71,14 +68,22 @@ public class UploadEvent extends Event {
 	 * @return upload event
 	 * @since 8.6.0
 	 */
-	public static UploadEvent getLatestUploadEvent(String name, Component component, AuRequest request) {
+	public static UploadEvent getUploadEvent(String name, Component component, AuRequest request) {
 		Desktop desktop = component.getDesktop();
 		String uuid = component.getUuid();
-		String sid = String.valueOf(request.getData().getOrDefault("sid", ""));
-		String uploadInfoKey = uuid + "." + sid;
-		final List<Media> result = cast((List) desktop.removeAttribute(uploadInfoKey));
-		if (result == null)
-			throw new UiException("Upload content not found: " + uploadInfoKey);
-		return new UploadEvent(name, desktop.getComponentByUuid(uuid), UploadUtils.parseResult(result));
+		Object file = request.getData().get("file");
+		if (file instanceof List) {
+			return new UploadEvent(name, desktop.getComponentByUuid(uuid),
+					((List<Media>) file).toArray(new Media[0]));
+		} else if (file instanceof Media) {
+			return new UploadEvent(name, desktop.getComponentByUuidIfAny(uuid),
+					new Media[] {(Media) file});
+		} else if (file instanceof Map) {
+			return new UploadEvent(name, desktop.getComponentByUuidIfAny(uuid),
+					(Media[]) ((Map) file).values().toArray(new Media[0]));
+		} else {
+			return new UploadEvent(name, desktop.getComponentByUuidIfAny(uuid),
+					new Media[0]);
+		}
 	}
 }

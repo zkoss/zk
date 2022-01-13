@@ -643,7 +643,7 @@ public class BindComposer<T extends Component>
 						BindUtils.postGlobalCommand(_binder.getQueueName(), _binder.getQueueScope(), vcmd,
 								(Map<String, Object>) data.get("args"));
 					} else if (cmd.startsWith(ON_BIND_COMMAND_UPLOAD)) { // ZK-4472
-						_binder.postCommand(vcmd, Collections.singletonMap(BinderCtrl.CLIENT_UPLOAD_INFO, UploadEvent.getLatestUploadEvent(vcmd, request.getComponent(), request)));
+						_binder.postCommand(vcmd, Collections.singletonMap(BinderCtrl.CLIENT_UPLOAD_INFO, UploadEvent.getUploadEvent(vcmd, request.getComponent(), request)));
 					}
 				}
 			}

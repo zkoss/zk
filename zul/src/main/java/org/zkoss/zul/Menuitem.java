@@ -40,6 +40,7 @@ public class Menuitem extends LabelImageElement implements org.zkoss.zk.ui.ext.D
 
 	static {
 		addClientEvent(Menuitem.class, Events.ON_CHECK, CE_IMPORTANT);
+		addClientEvent(Menuitem.class, Events.ON_UPLOAD, 0);
 	}
 
 	public Menuitem() {
@@ -324,7 +325,7 @@ public class Menuitem extends LabelImageElement implements org.zkoss.zk.ui.ext.D
 				_auxinf.checkmark = true;
 			Events.postEvent(evt);
 		} else if (Events.ON_UPLOAD.equals(cmd)) {
-			Events.postEvent(UploadEvent.getLatestUploadEvent(cmd, this, request));
+			Events.postEvent(UploadEvent.getUploadEvent(cmd, this, request));
 		} else
 			super.service(request, everError);
 	}

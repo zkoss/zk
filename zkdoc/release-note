@@ -9,7 +9,10 @@ ZK 10.0.0
 
 * Upgrade Notes
   + Layout.java (Vlayout and Hlayout) are extended from XulElement since ZK 10.0.0
-
+  + Refine ZK-3277 to enable multipart file uploads into AUEngine instead of individual
+  ajax request, and also remove the two AuExtensions, AuUploader.java and AuDropUploader.
+  + Support ZK-3277 into CE version, and drop the support of IE9 browser for file
+  upload feature, dur to it cannot support HTML FormData.
    --------
 
 ZK 9.6.2

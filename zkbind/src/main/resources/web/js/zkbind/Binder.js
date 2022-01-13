@@ -275,22 +275,7 @@ zkbind.Binder = zk.$extends(zk.Object, {
 	 * @since 9.0.1
 	 */
 	upload: function (cmd, file) {
-		var formData = new FormData(),
-			xhr = new XMLHttpRequest(),
-			wgt = this.$view,
-			sid = wgt._sid ? ++wgt._sid : (wgt._sid = 0);
-
-		formData.append('file', file);
-		xhr.onload = function () {
-			if (this.readyState === 4) {
-				if (this.status === 200) {
-					zAu.send(new zk.Event(wgt, 'onBindCommandUpload$' + cmd, {cmd: cmd, sid: sid}, {toServer: true}));
-				} else {
-					zk.error(xhr.statusText);
-				}
-			}
-		};
-		zk.UploadUtils.ajaxUpload(wgt, xhr, formData, sid);
+		this.$view.fire('onBindCommandUpload$' + cmd, {cmd: cmd}, {file: file});
 	}
 }, {
 	/**

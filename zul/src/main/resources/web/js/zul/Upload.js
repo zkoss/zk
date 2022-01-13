@@ -313,7 +313,7 @@ zul.Upload = zk.$extends(zk.Object, {
 			files.push(uplder);
 		if (files[0] && !files[0].isStart) {
 			files[0].isStart = true;
-			files[0].start();
+			return files[0].start();
 		}
 		return true;
 	},
@@ -384,68 +384,78 @@ zul.Uploader = zk.$extends(zk.Object, {
 	 * Starts the uploader to upload
 	 */
 	start: function () {
-		var wgt = this._wgt,
-			frameId = this.id + '_ifm';
+		var wgt = this._wgt;
 
-		document.body.appendChild(this._parent);
-		if (!jq('#' + frameId).length)
-			jq.newFrame(frameId);
-		this._form.target = frameId;
-		this._form.submit();
-		this._form.style.display = 'none';
-
-		var self = this,
-			data = 'cmd=uploadInfo&dtid=' + wgt.desktop.id
-				+ '&wid=' + wgt.uuid + '&sid=' + this._sid;
-
-		if (zul.Uploader._tmupload)
-			clearInterval(zul.Uploader._tmupload);
-
-		function t() {
-			jq.ajax({
-				type: 'POST',
-				url: zk.ajaxURI('/upload', {desktop: wgt.desktop, au: true}),
-				data: data,
-				dataType: 'text',
-				success: function (data) {
-					var d = data.split(',');
-					if (data.startsWith('error:')) {
-						self._echo = true; // B50-3309632
-						zul.Uploader.clearInterval(self.id);
-						if (wgt) {
-							self.cancel();
-							zul.Upload.error(data.substring(6, data.length), wgt.uuid, self._sid);
-						}
-					} else if (!data.startsWith('ignore') && !self.update(zk.parseInt(d[0]), zk.parseInt(d[1])))
-						zul.Uploader.clearInterval(self.id);
-				},
-				complete: function (req, status) {
-					var v;
-					if ((v = req.getResponseHeader('ZK-Error')) == '404'/*SC_NOT_FOUND: server restart*/
-					|| v == '410' || status == 'error'
-					|| status == 404 || status == 405 || status == 410/*SC_GONE: session timeout*/) {
-						zul.Uploader.clearInterval(self.id);
-						var wgt = self.getWidget();
-						if (wgt) {
-							self.cancel();
-							zul.Upload.error('server-out-of-service:' + msgzk.FAILED_TO_RESPONSE, wgt.uuid, self._sid);
-						}
-						return;
-					}
+		if (this._passSizeCheck()) {
+			wgt.fire('onUpload', {file: this._form[0].files}, {
+				uploadCallback: {
+					onprogress: this._onprogress(),
+					onload: this._onload()
 				}
 			});
+			//B50-3304877: autodisable and Upload
+			zul.wgt.ADBS.autodisable(wgt);
+			return true;
 		}
-		t.id = this.id;
+		return false;
+	},
+	_passSizeCheck: function () {
+		var uploadMaxsize = this._upload.maxsize,
+			maxBytes = uploadMaxsize > 0 ? uploadMaxsize * 1024 : -1;
 
-		zul.Uploader.clearInterval = function (id) {
-			if (t.id == id) {
-				clearInterval(zul.Uploader._tmupload);
-				zul.Uploader._tmupload = undefined;
+		if (maxBytes != -1) {
+			var files = this._form[0].files,
+				sizeBytes = 0;
+			for (var i = 0; i < files.length; i++) {
+				sizeBytes += files[i].size;
+			}
+			if (sizeBytes > maxBytes) {
+				this._showMaxsizeErrorAndDestroy(sizeBytes, maxBytes);
+				return false;
+			}
+		}
+		return true;
+	},
+	_showMaxsizeErrorAndDestroy: function (sizeBytes, maxBytes) {
+		var uploader = this;
+		zk.load('zk.fmt', function () {
+			var kb = ' ' + msgzk.KBYTES,
+				mb = ' ' + msgzk.MBYTES,
+				sizeKB = Math.round(sizeBytes / 1024),
+				maxKB = Math.round(maxBytes / 1024),
+				sizeMB = Math.round(sizeKB / 1024),
+				maxMB = Math.round(maxKB / 1024),
+				formatFileSize = zk.fmt.Text.formatFileSize,
+				errorMessage = zk.fmt.Text.format(msgzul.UPLOAD_ERROR_EXCEED_MAXSIZE,
+					formatFileSize(sizeBytes), formatFileSize(maxBytes), sizeBytes, maxBytes,
+					sizeKB + kb, maxKB + kb, sizeMB + mb, maxMB + mb);
+			zul.Upload.error('size-limit-exceeded:' + errorMessage, uploader._wgt.uuid, uploader._sid);
+			uploader.destroy();
+		});
+	},
+	_onprogress: function () {
+		var viewer = this.viewer,
+			wgt = this._wgt;
+		return function (event) {
+			wgt._uploading = true;
+			var total = event.total,
+				percentage = event.loaded / total * 100;
+			viewer.update(percentage, total);
+		};
+	},
+	_onload: function () {
+		var uploader = this,
+			wgt = this._wgt;
+		return function (event) {
+			if (this.readyState === 4) {
+				wgt._uploading = false;
+				if (this.status === 200) {
+					wgt._uplder.finish(uploader._sid);
+				} else {
+					zul.Upload.error('server-out-of-service:' + this.statusText);
+				}
 			}
 		};
-		zul.Uploader._tmupload = setInterval(t, 100);
-		//B50-3304877: autodisable and Upload
-		zul.wgt.ADBS.autodisable(wgt);
 	},
 	/**
 	 * Cancels the uploader to upload.

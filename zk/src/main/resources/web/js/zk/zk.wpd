@@ -72,7 +72,6 @@ window.$eval=function(s){return eval(s);};
 	}
 	]]></script>
 	<script src="dateImpl.js"/>
-	<script src="uploadUtils.js"/>
 
 	<script src="zkie.js" browser="ie"/>
 

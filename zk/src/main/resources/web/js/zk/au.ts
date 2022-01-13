@@ -158,7 +158,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		var fetchOpts: RequestInit = {
 			credentials: 'same-origin',
 			method: 'POST',
-			headers: {'Content-Type': zAu.ajaxSettings.contentType as string, 'ZK-SID': '' + reqInf.sid},
+			headers: reqInf.content instanceof FormData ? {'ZK-SID': '' + reqInf.sid} : {'Content-Type': zAu.ajaxSettings.contentType as string, 'ZK-SID': '' + reqInf.sid},
 			body: reqInf.content
 		};
 		zAu.sentTime = jq.now(); //used by server-push (cpsp)
@@ -285,6 +285,52 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			return true;
 		}
 		return false;
+	}
+
+	// refer to socket.io
+	const _withNativeArrayBuffer = typeof ArrayBuffer === 'function',
+	 isView = (obj): boolean => {
+		return typeof ArrayBuffer.isView === 'function'
+			? ArrayBuffer.isView(obj)
+			: obj.buffer instanceof ArrayBuffer;
+	},
+	 toString = Object.prototype.toString,
+	 _withNativeBlob = typeof Blob === 'function' ||
+		(typeof Blob !== 'undefined' &&
+			toString.call(Blob) === '[object BlobConstructor]'),
+	 _withNativeFile = typeof File === 'function' ||
+		(typeof File !== 'undefined' &&
+			toString.call(File) === '[object FileConstructor]');
+	function _isBinary(obj): boolean {
+		return ((_withNativeArrayBuffer && (obj instanceof ArrayBuffer || isView(obj))) ||
+			(_withNativeBlob && obj instanceof Blob) ||
+			(_withNativeFile && obj instanceof File));
+	}
+
+	function _deconstructPacket(data, buffers): unknown {
+		if (!data) return data;
+
+		if (_isBinary(data)) {
+			const placeholder = { _placeholder: true, num: buffers.length };
+			buffers.push(data);
+			return placeholder;
+		} else if (Array.isArray(data)) {
+			const newData = new Array(data.length);
+			for (let i = 0; i < data.length; i++) {
+				newData[i] = _deconstructPacket(data[i], buffers);
+			}
+			return newData;
+		} else if (typeof data === 'object' && !(data instanceof Date) && !zk.Widget.isInstance(data)) {
+			const newData = {};
+			for (const key in data) {
+				// eslint-disable-next-line no-prototype-builtins
+				if (data.hasOwnProperty(key)) {
+					newData[key] = _deconstructPacket(data[key], buffers);
+				}
+			}
+			return newData;
+		}
+		return data;
 	}
 
 /** @class zAu
@@ -799,6 +845,7 @@ zAu.beforeSend = function (uri, req, dt) {
 		} else {
 			content = '';
 		}
+		let files = [], uploadCallbacks: unknown[] = [];
 		for (let j = 0, aureq; aureq = es.shift(); ++j) {
 			if ((aureq.opts || {}).uri != uri) {
 				es.unshift(aureq);
@@ -806,6 +853,16 @@ zAu.beforeSend = function (uri, req, dt) {
 			}
 
 			requri = zAu.beforeSend(requri, aureq, dt);
+			aureq.data = _deconstructPacket(aureq.data, files);
+
+			if (files.length) {
+				// TODO: forceAjax for file upload, we may support it on websocket later on.
+				forceAjax = true;
+				if (aureq.opts && aureq.opts.uploadCallback) {
+					uploadCallbacks.push(aureq.opts.uploadCallback);
+				}
+			}
+
 			if (!forceAjax && ws) {
 				zk.copy(content, zWs.encode(j, aureq, dt));
 			} else {
@@ -818,13 +875,25 @@ zAu.beforeSend = function (uri, req, dt) {
 			requri = zk.portlet2Data[dt.id].resourceURL;
 		}
 
+		if (files.length) {
+
+			let data = content;
+			content = new FormData();
+			content.append('data', data);
+			content.append('attachments', files.length + '');
+			for (let i = 0, j = files.length; i < j; i++) {
+				content.append('files_' + i, files[i]);
+			}
+		}
+
 		//if (zk.portlet2AjaxURI)
 			//requri = zk.portlet2AjaxURI;
 		if (content)
 			ajaxSendNow({
 				sid: zAu.seqId, uri: requri, dt: dt, content: content,
 				implicit: implicit,
-				ignorable: ignorable, tmout: 0, rtags: rtags, forceAjax: forceAjax
+				ignorable: ignorable, tmout: 0, rtags: rtags, forceAjax: forceAjax,
+				uploadCallbacks: uploadCallbacks
 			});
 		return true;
 	},

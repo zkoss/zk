@@ -33,6 +33,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,7 +62,6 @@ import org.zkoss.zk.ui.ActivationTimeoutException;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Session;
-import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.event.Events;
@@ -174,56 +174,6 @@ public class DHtmlUpdateServlet extends HttpServlet {
 				log.warn("Ignore init-param: failed to add an AU extension, " + param, ex);
 			}
 		}
-
-		if (getAuExtension("/upload") == null) {
-			try {
-				addAuExtension("/upload", new AuUploader());
-			} catch (Throwable ex) {
-				final String msg = "Make sure commons-fileupload.jar is installed.";
-				log.warn("Failed to configure fileupload. " + msg, ex);
-
-				//still add /upload to generate exception when fileupload is used
-				addAuExtension("/upload", new AuExtension() {
-					public void init(DHtmlUpdateServlet servlet) {
-					}
-
-					public void destroy() {
-					}
-
-					public void service(HttpServletRequest request, HttpServletResponse response, String pi)
-							throws ServletException, IOException {
-						if (Sessions.getCurrent(false) != null)
-							throw new ServletException("Failed to upload. " + msg);
-					}
-				});
-			}
-		}
-
-		//==== for ZK-447 DropUpload ====//
-		if (getAuExtension("/dropupload") == null) {
-			try {
-				addAuExtension("/dropupload", new AuDropUploader());
-			} catch (Throwable ex) {
-				final String msg = "Make sure commons-fileupload.jar is installed.";
-				log.warn("Failed to configure fileupload. " + msg, ex);
-
-				//still add /upload to generate exception when fileupload is used
-				addAuExtension("/dropupload", new AuExtension() {
-					public void init(DHtmlUpdateServlet servlet) {
-					}
-
-					public void destroy() {
-					}
-
-					public void service(HttpServletRequest request, HttpServletResponse response, String pi)
-							throws ServletException, IOException {
-						if (Sessions.getCurrent(false) != null)
-							throw new ServletException("Failed to upload. " + msg);
-					}
-				});
-			}
-		}
-		//================//		
 
 		if (getAuExtension("/view") == null)
 			addAuExtension("/view", new AuDynaMediar());
@@ -488,7 +438,11 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		//parse desktop ID
 		final WebApp wapp = sess.getWebApp();
 		final WebAppCtrl wappc = (WebAppCtrl) wapp;
-		final AuDecoder audec = getAuDecoder(wapp);
+		AuDecoder audec = getAuDecoder(wapp);
+		boolean multipartContent = ServletFileUpload.isMultipartContent(request);
+		if (multipartContent) {
+			audec = AuMultipartUploader.parseRequest(request, audec);
+		}
 		final String dtid = audec.getDesktopId(request);
 
 		if (dtid == null) {

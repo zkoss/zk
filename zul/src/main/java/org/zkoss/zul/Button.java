@@ -37,6 +37,7 @@ public class Button extends LabelImageElement implements org.zkoss.zk.ui.ext.Dis
 	static {
 		addClientEvent(Button.class, Events.ON_FOCUS, CE_DUPLICATE_IGNORE);
 		addClientEvent(Button.class, Events.ON_BLUR, CE_DUPLICATE_IGNORE);
+		addClientEvent(Button.class, Events.ON_UPLOAD, 0);
 	}
 
 	public Button() {
@@ -316,7 +317,7 @@ public class Button extends LabelImageElement implements org.zkoss.zk.ui.ext.Dis
 	public void service(AuRequest request, boolean everError) {
 		String cmd = request.getCommand();
 		if (Events.ON_UPLOAD.equals(cmd)) {
-			Events.postEvent(UploadEvent.getLatestUploadEvent(cmd, this, request));
+			Events.postEvent(UploadEvent.getUploadEvent(cmd, this, request));
 		} else
 			super.service(request, everError);
 	}

@@ -22,10 +22,10 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 	]]></html>
 	<menubar>
 		<menuitem label="Upload"
-			upload="true,maxsize=-1" autodisable="self" />
+			upload="true,maxsize=-1" autodisable="self" onUpload=""/>
 	</menubar>
 	<button label="Upload"
-		upload="true,maxsize=-1" autodisable="self" />
+		upload="true,maxsize=-1" autodisable="self" onUpload=""/>
 	<toolbarbutton label="Upload"
-		upload="true,maxsize=-1" autodisable="self" />
+		upload="true,maxsize=-1" autodisable="self" onUpload=""/>
 </zk>
