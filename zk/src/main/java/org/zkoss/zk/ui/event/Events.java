@@ -291,6 +291,69 @@ public class Events {
 	 */
 	public static final String ON_SCRIPT_ERROR = "onScriptError";
 
+	/**
+	 * The onInnerWidth event used with {@link Event}.
+	 *
+	 * @since 10.0.0
+	 */
+	public static final String ON_INNER_WIDTH = "onInnerWidth";
+
+	/**
+	 * The onScrollPos event used with {@link Event}.
+	 *
+	 * @since 10.0.0
+	 */
+	public static final String ON_SCROLL_POS = "onScrollPos";
+
+	/**
+	 * The onTopPad event used with {@link Event}.
+	 *
+	 * @since 10.0.0
+	 */
+	public static final String ON_TOP_PAD = "onTopPad";
+
+	/**
+	 * The onDataLoading event used with {@link Event}.
+	 *
+	 * @since 10.0.0
+	 */
+	public static final String ON_DATA_LOADING = "onDataLoading";
+
+	/**
+	 * The onWeekClick event used with {@link Event}.
+	 *
+	 * @since 10.0.0
+	 */
+	public static final String ON_WEEK_CLICK = "onWeekClick";
+
+	/**
+	 * The onTimeZoneChange event used with {@link Event}.
+	 *
+	 * @since 10.0.0
+	 */
+	public static final String ON_TIME_ZONE_CHANGE = "onTimeZoneChange";
+
+	/**
+	 * The onAnchorPos event used with {@link Event}.
+	 *
+	 * @since 10.0.0
+	 */
+	public static final String ON_ANCHOR_POS = "onAnchorPos";
+
+	/**
+	 * The onAcrossPage event used with {@link Event}.
+	 *
+	 * @since 10.0.0
+	 */
+	public static final String ON_ACROSS_PAGE = "onAcrossPage";
+
+	/**
+	 * The onCheckSelectAll event used with {@link Event}.
+	 *
+	 * @since 10.0.0
+	 */
+	public static final String ON_CHECK_SELECT_ALL = "onCheckSelectAll";
+
 	/** Returns whether an event name is valid.
 	 *
 	 * <p>The event name must start with on and the third character

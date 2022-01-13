@@ -356,25 +356,25 @@ public class Listbox extends MeshElement {
 
 	static {
 		addClientEvent(Listbox.class, Events.ON_RENDER, CE_DUPLICATE_IGNORE | CE_IMPORTANT | CE_NON_DEFERRABLE);
-		addClientEvent(Listbox.class, "onInnerWidth", CE_DUPLICATE_IGNORE | CE_IMPORTANT);
+		addClientEvent(Listbox.class, Events.ON_INNER_WIDTH, CE_DUPLICATE_IGNORE | CE_IMPORTANT);
 
 		//ZK-925 We can't use CE_DUPLICATE_IGNORE in "onSelect" event since we need to sync the status when multiple select in ROD.
 		addClientEvent(Listbox.class, Events.ON_SELECT, CE_IMPORTANT);
 		addClientEvent(Listbox.class, Events.ON_FOCUS, CE_DUPLICATE_IGNORE);
 		addClientEvent(Listbox.class, Events.ON_BLUR, CE_DUPLICATE_IGNORE);
-		addClientEvent(Listbox.class, "onScrollPos", CE_DUPLICATE_IGNORE | CE_IMPORTANT); // since 5.0.0
-		addClientEvent(Listbox.class, "onTopPad", CE_DUPLICATE_IGNORE); // since
+		addClientEvent(Listbox.class, Events.ON_SCROLL_POS, CE_DUPLICATE_IGNORE | CE_IMPORTANT); // since 5.0.0
+		addClientEvent(Listbox.class, Events.ON_TOP_PAD, CE_DUPLICATE_IGNORE); // since
 		// 5.0.0
-		addClientEvent(Listbox.class, "onDataLoading", CE_DUPLICATE_IGNORE | CE_IMPORTANT | CE_NON_DEFERRABLE); // since 5.0.0
+		addClientEvent(Listbox.class, Events.ON_DATA_LOADING, CE_DUPLICATE_IGNORE | CE_IMPORTANT | CE_NON_DEFERRABLE); // since 5.0.0
 		addClientEvent(Listbox.class, ZulEvents.ON_PAGE_SIZE, CE_DUPLICATE_IGNORE | CE_IMPORTANT | CE_NON_DEFERRABLE); //since 5.0.2
 
 		// since 6.0.0, F60-ZK-715
-		addClientEvent(Listbox.class, "onAcrossPage", CE_DUPLICATE_IGNORE | CE_IMPORTANT | CE_NON_DEFERRABLE);
+		addClientEvent(Listbox.class, Events.ON_ACROSS_PAGE, CE_DUPLICATE_IGNORE | CE_IMPORTANT | CE_NON_DEFERRABLE);
 
 		// since 6.0.0/5.0.11, B50-ZK-798
-		addClientEvent(Listbox.class, "onAnchorPos", CE_DUPLICATE_IGNORE | CE_IMPORTANT);
+		addClientEvent(Listbox.class, Events.ON_ANCHOR_POS, CE_DUPLICATE_IGNORE | CE_IMPORTANT);
 		// since 6.5.5 F65-ZK-2014
-		addClientEvent(Listbox.class, "onCheckSelectAll", CE_DUPLICATE_IGNORE | CE_IMPORTANT);
+		addClientEvent(Listbox.class, Events.ON_CHECK_SELECT_ALL, CE_DUPLICATE_IGNORE | CE_IMPORTANT);
 	}
 
 	public Listbox() {
@@ -3574,7 +3574,7 @@ public class Listbox extends MeshElement {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
 		final String cmd = request.getCommand();
-		if (cmd.equals("onDataLoading")) {
+		if (cmd.equals(Events.ON_DATA_LOADING)) {
 			if (_rod) {
 				Executions.getCurrent().setAttribute("zkoss.zul.listbox.onDataLoading." + this.getUuid(), Boolean.TRUE); //indicate doing dataloading
 			}
@@ -3597,15 +3597,15 @@ public class Listbox extends MeshElement {
 				// Bug: B50-3204965: onChangePageSize is not fired in autopaging scenario
 				Events.postEvent(new PageSizeEvent(cmd, this, pgi(), size));
 			}
-		} else if (cmd.equals("onScrollPos")) {
+		} else if (cmd.equals(Events.ON_SCROLL_POS)) {
 			final Map<String, Object> data = request.getData();
 			_currentTop = AuRequests.getInt(data, "top", 0);
 			_currentLeft = AuRequests.getInt(data, "left", 0);
-		} else if (cmd.equals("onAnchorPos")) {
+		} else if (cmd.equals(Events.ON_ANCHOR_POS)) {
 			final Map<String, Object> data = request.getData();
 			_anchorTop = AuRequests.getInt(data, "top", 0);
 			_anchorLeft = AuRequests.getInt(data, "left", 0);
-		} else if (cmd.equals("onTopPad")) {
+		} else if (cmd.equals(Events.ON_TOP_PAD)) {
 			_topPad = AuRequests.getInt(request.getData(), "topPad", 0);
 		} else if (cmd.equals(Events.ON_SELECT)) {
 			if (_rod && Executions.getCurrent()
@@ -3769,7 +3769,7 @@ public class Listbox extends MeshElement {
 					selectedObjects, prevSeldObjects, unselectedObjects,
 					desktop.getComponentByUuidIfAny((String) data.get("reference")), null, AuRequests.parseKeys(data));
 			Events.postEvent(evt);
-		} else if (cmd.equals("onInnerWidth")) {
+		} else if (cmd.equals(Events.ON_INNER_WIDTH)) {
 			final String width = AuRequests.getInnerWidth(request);
 			_innerWidth = width == null ? "100%" : width;
 		} else if (cmd.equals(Events.ON_RENDER)) {
@@ -3814,7 +3814,7 @@ public class Listbox extends MeshElement {
 
 			Listbox.this.renderItems(items);
 
-		} else if (cmd.equals("onAcrossPage")) { // F60-ZK-715
+		} else if (cmd.equals(Events.ON_ACROSS_PAGE)) { // F60-ZK-715
 			final Map<String, Object> data = request.getData();
 			int page = AuRequests.getInt(data, "page", 0);
 			int offset = AuRequests.getInt(data, "offset", 0);
@@ -3866,7 +3866,7 @@ public class Listbox extends MeshElement {
 			SelectEvent<Listitem, Object> evt = new SelectEvent<Listitem, Object>("onSelect", this, getSelectedItems(),
 					getItemAtIndex(index), shift != 0 ? SelectEvent.SHIFT_KEY : 0);
 			Events.postEvent(evt);
-		} else if (cmd.equals("onCheckSelectAll")) { // F65-ZK-2014
+		} else if (cmd.equals(Events.ON_CHECK_SELECT_ALL)) { // F65-ZK-2014
 			CheckEvent evt = CheckEvent.getCheckEvent(request);
 			if (_model != null) {
 				final Selectable<Object> selectableModel = getSelectableModel();

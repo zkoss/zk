@@ -238,14 +238,14 @@ public class Tree extends MeshElement {
 
 	static {
 		addClientEvent(Tree.class, Events.ON_RENDER, CE_DUPLICATE_IGNORE | CE_IMPORTANT | CE_NON_DEFERRABLE);
-		addClientEvent(Tree.class, "onInnerWidth", CE_DUPLICATE_IGNORE | CE_IMPORTANT);
+		addClientEvent(Tree.class, Events.ON_INNER_WIDTH, CE_DUPLICATE_IGNORE | CE_IMPORTANT);
 		addClientEvent(Tree.class, Events.ON_SELECT, CE_DUPLICATE_IGNORE | CE_IMPORTANT);
 		addClientEvent(Tree.class, Events.ON_FOCUS, CE_DUPLICATE_IGNORE);
 		addClientEvent(Tree.class, Events.ON_BLUR, CE_DUPLICATE_IGNORE);
 		addClientEvent(Tree.class, ZulEvents.ON_PAGE_SIZE, CE_DUPLICATE_IGNORE | CE_IMPORTANT | CE_NON_DEFERRABLE); //since 5.0.2
-		addClientEvent(Tree.class, "onScrollPos", CE_DUPLICATE_IGNORE | CE_IMPORTANT); //since 5.0.4
-		addClientEvent(Tree.class, "onAnchorPos", CE_DUPLICATE_IGNORE | CE_IMPORTANT); //since 5.0.11 / 6.0.0
-		addClientEvent(Tree.class, "onCheckSelectAll", CE_DUPLICATE_IGNORE | CE_IMPORTANT);
+		addClientEvent(Tree.class, Events.ON_SCROLL_POS, CE_DUPLICATE_IGNORE | CE_IMPORTANT); //since 5.0.4
+		addClientEvent(Tree.class, Events.ON_ANCHOR_POS, CE_DUPLICATE_IGNORE | CE_IMPORTANT); //since 5.0.11 / 6.0.0
+		addClientEvent(Tree.class, Events.ON_CHECK_SELECT_ALL, CE_DUPLICATE_IGNORE | CE_IMPORTANT);
 	}
 
 	public Tree() {
@@ -2876,18 +2876,18 @@ public class Tree extends MeshElement {
 				// Bug: B50-3204965: onChangePageSize is not fired in autopaging scenario
 				Events.postEvent(new PageSizeEvent(cmd, this, pgi(), size));
 			}
-		} else if (cmd.equals("onInnerWidth")) {
+		} else if (cmd.equals(Events.ON_INNER_WIDTH)) {
 			final String width = AuRequests.getInnerWidth(request);
 			_innerWidth = width == null ? "100%" : width;
-		} else if (cmd.equals("onScrollPos")) {
+		} else if (cmd.equals(Events.ON_SCROLL_POS)) {
 			final Map<String, Object> data = request.getData();
 			_currentTop = AuRequests.getInt(data, "top", 0);
 			_currentLeft = AuRequests.getInt(data, "left", 0);
-		} else if (cmd.equals("onAnchorPos")) {
+		} else if (cmd.equals(Events.ON_ANCHOR_POS)) {
 			final Map<String, Object> data = request.getData();
 			_anchorTop = AuRequests.getInt(data, "top", 0);
 			_anchorLeft = AuRequests.getInt(data, "left", 0);
-		} else if (cmd.equals("onCheckSelectAll") && isSelModel) {
+		} else if (cmd.equals(Events.ON_CHECK_SELECT_ALL) && isSelModel) {
 			CheckEvent evt = CheckEvent.getCheckEvent(request);
 			final Selectable<Object> selectableModel = (Selectable<Object>) _model;
 			SelectionControl control = selectableModel.getSelectionControl();

@@ -262,10 +262,10 @@ public class Grid extends MeshElement {
 
 	static {
 		addClientEvent(Grid.class, Events.ON_RENDER, CE_DUPLICATE_IGNORE | CE_IMPORTANT | CE_NON_DEFERRABLE);
-		addClientEvent(Grid.class, "onInnerWidth", CE_DUPLICATE_IGNORE | CE_IMPORTANT);
-		addClientEvent(Grid.class, "onScrollPos", CE_DUPLICATE_IGNORE | CE_IMPORTANT); //since 5.0.0
-		addClientEvent(Grid.class, "onTopPad", CE_DUPLICATE_IGNORE); //since 5.0.0
-		addClientEvent(Grid.class, "onDataLoading", CE_DUPLICATE_IGNORE | CE_IMPORTANT | CE_NON_DEFERRABLE); //since 5.0.0
+		addClientEvent(Grid.class, Events.ON_INNER_WIDTH, CE_DUPLICATE_IGNORE | CE_IMPORTANT);
+		addClientEvent(Grid.class, Events.ON_SCROLL_POS, CE_DUPLICATE_IGNORE | CE_IMPORTANT); //since 5.0.0
+		addClientEvent(Grid.class, Events.ON_TOP_PAD, CE_DUPLICATE_IGNORE); //since 5.0.0
+		addClientEvent(Grid.class, Events.ON_DATA_LOADING, CE_DUPLICATE_IGNORE | CE_IMPORTANT | CE_NON_DEFERRABLE); //since 5.0.0
 		addClientEvent(Grid.class, ZulEvents.ON_PAGE_SIZE, CE_DUPLICATE_IGNORE | CE_IMPORTANT | CE_NON_DEFERRABLE); //since 5.0.2
 	}
 
@@ -1846,7 +1846,7 @@ public class Grid extends MeshElement {
 	 */
 	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
 		final String cmd = request.getCommand();
-		if (cmd.equals("onDataLoading")) {
+		if (cmd.equals(Events.ON_DATA_LOADING)) {
 			Events.postEvent(DataLoadingEvent.getDataLoadingEvent(request, preloadSize()));
 		} else if (inPagingMold() && cmd.equals(ZulEvents.ON_PAGE_SIZE)) {
 			final Map<String, Object> data = request.getData();
@@ -1863,13 +1863,13 @@ public class Grid extends MeshElement {
 				// Bug: B50-3204965: onPageSize is not fired in autopaging scenario
 				Events.postEvent(new PageSizeEvent(cmd, this, pgi(), size));
 			}
-		} else if (cmd.equals("onScrollPos")) {
+		} else if (cmd.equals(Events.ON_SCROLL_POS)) {
 			final Map<String, Object> data = request.getData();
 			_currentTop = AuRequests.getInt(data, "top", 0);
 			_currentLeft = AuRequests.getInt(data, "left", 0);
-		} else if (cmd.equals("onTopPad")) {
+		} else if (cmd.equals(Events.ON_TOP_PAD)) {
 			_topPad = AuRequests.getInt(request.getData(), "topPad", 0);
-		} else if (cmd.equals("onInnerWidth")) {
+		} else if (cmd.equals(Events.ON_INNER_WIDTH)) {
 			final String width = AuRequests.getInnerWidth(request);
 			_innerWidth = width == null ? "100%" : width;
 		} else if (cmd.equals(Events.ON_RENDER)) {

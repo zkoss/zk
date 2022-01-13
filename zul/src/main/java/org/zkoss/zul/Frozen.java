@@ -21,6 +21,7 @@ import java.util.Map;
 import org.zkoss.lang.Objects;
 import org.zkoss.zk.au.AuRequests;
 import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.impl.Utils;
 import org.zkoss.zul.impl.XulElement;
 
@@ -32,7 +33,7 @@ import org.zkoss.zul.impl.XulElement;
  */
 public class Frozen extends XulElement {
 	static {
-		addClientEvent(Frozen.class, "onScrollPos", CE_DUPLICATE_IGNORE | CE_IMPORTANT); // only used in [ZK EE]
+		addClientEvent(Frozen.class, Events.ON_SCROLL_POS, CE_DUPLICATE_IGNORE | CE_IMPORTANT); // only used in [ZK EE]
 	}
 	private int _columns;
 	private int _start;
@@ -170,7 +171,7 @@ public class Frozen extends XulElement {
 
 	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
 		final String cmd = request.getCommand();
-		if (isSmooth() && cmd.equals("onScrollPos")) {
+		if (isSmooth() && cmd.equals(Events.ON_SCROLL_POS)) {
 			final Map<String, Object> data = request.getData();
 			_currentLeft = AuRequests.getInt(data, "left", 0);
 		} else

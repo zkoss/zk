@@ -73,7 +73,7 @@ public class Calendar extends XulElement implements Constrainted {
 	 */
 	static {
 		addClientEvent(Calendar.class, Events.ON_CHANGE, CE_IMPORTANT | CE_REPEAT_IGNORE);
-		addClientEvent(Calendar.class, "onWeekClick", CE_REPEAT_IGNORE);
+		addClientEvent(Calendar.class, Events.ON_WEEK_CLICK, CE_REPEAT_IGNORE);
 	}
 
 	public Calendar() {

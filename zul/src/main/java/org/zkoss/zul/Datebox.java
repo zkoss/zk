@@ -98,7 +98,7 @@ public class Datebox extends DateTimeFormatInputElement {
 	private boolean _closePopupOnTimezoneChange = true;
 
 	static {
-		addClientEvent(Datebox.class, "onTimeZoneChange", CE_IMPORTANT | CE_DUPLICATE_IGNORE);
+		addClientEvent(Datebox.class, Events.ON_TIME_ZONE_CHANGE, CE_IMPORTANT | CE_DUPLICATE_IGNORE);
 	}
 
 	public Datebox() {
@@ -859,7 +859,7 @@ public class Datebox extends DateTimeFormatInputElement {
 	 */
 	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
 		final String cmd = request.getCommand();
-		if (cmd.equals("onTimeZoneChange")) {
+		if (cmd.equals(Events.ON_TIME_ZONE_CHANGE)) {
 			final Map<String, Object> data = request.getData();
 			String timezone = (String) data.get("timezone");
 			setTimeZone(timezone);
