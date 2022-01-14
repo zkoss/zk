@@ -28,7 +28,9 @@ import org.zkoss.zul.impl.XulElement;
  * 
  * @author peterkuo
  * @since 6.0.0
+ * @deprecated since 10.0.0 please use {@link Vlayout} and {@link Hlayout} instead.
  */
+@Deprecated
 public class Anchorlayout extends XulElement {
 
 	public void beforeChildAdded(Component child, Component refChild) {

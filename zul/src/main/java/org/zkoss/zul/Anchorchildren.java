@@ -31,7 +31,9 @@ import org.zkoss.zul.impl.XulElement;
  * <p>Default {@link #getZclass}: z-anchorchildren.
  * @author peterkuo
  * @since 6.0.0
+ * @deprecated since 10.0.0 please use {@link Vlayout} and {@link Hlayout} instead.
  */
+@Deprecated
 public class Anchorchildren extends XulElement {
 
 	/** accept number, percent, space separated*/
