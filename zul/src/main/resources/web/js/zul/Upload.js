@@ -47,14 +47,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _onchange(evt) {
 		var n = this,
 			upload = n._ctrl,
-			wgt = upload._wgt,
-			dt = wgt.desktop,
-			action = zk.ajaxURI('/upload' + '?uuid=' + wgt.uuid + '&dtid=' + dt.id + '&sid=' + upload.sid, {desktop: dt, au: true}),
-			form = n.form;
-		form.action = action;
-
-		// we don't use jq().remove() in this case, because we have to use its reference.
-		var p = form.parentNode;
+			form = n.form,
+			// we don't use jq().remove() in this case, because we have to use its reference.
+			p = form.parentNode;
 		p.parentNode.removeChild(p);
 		upload._formDetached = true;
 		var fileName = !n.files || n.files.length == 1 ? n.value : (function (files) {

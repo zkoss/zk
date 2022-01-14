@@ -17,7 +17,6 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.event;
 
 import java.util.List;
-import java.util.Map;
 
 import org.zkoss.util.media.Media;
 import org.zkoss.zk.au.AuRequest;
@@ -78,9 +77,6 @@ public class UploadEvent extends Event {
 		} else if (file instanceof Media) {
 			return new UploadEvent(name, desktop.getComponentByUuidIfAny(uuid),
 					new Media[] {(Media) file});
-		} else if (file instanceof Map) {
-			return new UploadEvent(name, desktop.getComponentByUuidIfAny(uuid),
-					(Media[]) ((Map) file).values().toArray(new Media[0]));
 		} else {
 			return new UploadEvent(name, desktop.getComponentByUuidIfAny(uuid),
 					new Media[0]);

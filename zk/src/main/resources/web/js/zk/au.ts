@@ -320,6 +320,12 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 				newData[i] = _deconstructPacket(data[i], buffers);
 			}
 			return newData;
+		} else if (data instanceof FileList) { // avoid Object type toJson.
+			const newData = new Array(data.length);
+			for (let i = 0; i < data.length; i++) {
+				newData[i] = _deconstructPacket(data.item(i), buffers);
+			}
+			return newData;
 		} else if (typeof data === 'object' && !(data instanceof Date) && !zk.Widget.isInstance(data)) {
 			const newData = {};
 			for (const key in data) {
