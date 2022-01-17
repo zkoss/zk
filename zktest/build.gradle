@@ -120,7 +120,7 @@ dependencies {
 	testImplementation 'org.apache.commons:commons-lang3:3.8.1'
 	testImplementation 'com.deque.html.axe-core:selenium:4.2.2'
 	testImplementation 'org.powermock:powermock-module-junit4:1.7.3'
-	testImplementation 'org.powermock:powermock-api-mockito:1.7.3'
+	testImplementation 'org.powermock:powermock-api-mockito2:1.7.3'
 	testImplementation 'org.springframework.session:spring-session-core:2.1.6.RELEASE'
 	testImplementation 'org.eclipse.jetty:jetty-webapp:10.0.5'
 	testImplementation 'org.eclipse.jetty:apache-jsp:10.0.5'
@@ -128,11 +128,18 @@ dependencies {
 	providedCompile 'javax.el:javax.el-api:2.2.5'
 	providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
 	providedCompile 'javax.websocket:javax.websocket-api:1.1'
+	// workaround for runing Mockito under Java 11
+	providedCompile "net.bytebuddy:byte-buddy:1.8.22"
+	providedCompile "net.bytebuddy:byte-buddy-agent:1.8.22"
 }
 
 test {
+	useJUnit()
+	maxParallelForks = 8
 	if (project.ext['zktestWithoutA11y'] != 'false') {
-		exclude '**/wcag/*Test.java'
+		filter {
+			excludeTestsMatching('*.wcag.*')
+		}
 	}
 }
 
