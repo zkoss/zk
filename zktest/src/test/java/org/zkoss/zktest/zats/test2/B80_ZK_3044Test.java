@@ -142,7 +142,7 @@ public class B80_ZK_3044Test {
 
 
         RenderedImage renderdeImage = null;
-        renderdeImage = ImageIO.read(new File("src/archive/test2/img/circle.png"));
+        renderdeImage = ImageIO.read(new File("src/main/webapp/test2/img/circle.png"));
 
         String name = "a.png";
         final int j = name.lastIndexOf('.');

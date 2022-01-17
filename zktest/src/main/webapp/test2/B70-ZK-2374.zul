@@ -4,7 +4,7 @@
 
 <zk xmlns:c="client" xmlns:n="native" xmlns:d="http://www.zkoss.org/2005/zk/client/attribute">
 	<div>
-		***When open by iPhone (or iPhone Emulator in Chrome Dev Tool), there should not be any js error cause by domtouch.js (zk/src/archive/web/js/zk)***
+		***When open by iPhone (or iPhone Emulator in Chrome Dev Tool), there should not be any js error cause by domtouch.js (zk/src/main/webapp/web/js/zk)***
 	</div>
 	
 	

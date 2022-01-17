@@ -15,8 +15,8 @@ public abstract class ZATSTestCase {
 	
 	@BeforeClass
 	public static void init() {
-		env = new DefaultZatsEnvironment("./src/archive/WEB-INF", "/zktest");
-		env.init("./src/archive/");
+		env = new DefaultZatsEnvironment("./src/main/webapp/WEB-INF", "/zktest");
+		env.init("./src/main/webapp");
 	}
 	
 	@AfterClass

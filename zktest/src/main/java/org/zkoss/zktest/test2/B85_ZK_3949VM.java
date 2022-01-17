@@ -15,7 +15,7 @@ import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.Command;
 
 public class B85_ZK_3949VM {
-	private String image = "src/archive/img/ZK-Logo.gif";
+	private String image = "src/main/webapp/img/ZK-Logo.gif";
 
 	public String getImage() {
 		return image;
@@ -28,7 +28,7 @@ public class B85_ZK_3949VM {
 	@Command
 	public void showImage()
 	{
-		this.image = "src/archive/img/ZK-Logo.gif";
+		this.image = "src/main/webapp/img/ZK-Logo.gif";
 		BindUtils.postNotifyChange(null, null, this, "image");
 	}
 

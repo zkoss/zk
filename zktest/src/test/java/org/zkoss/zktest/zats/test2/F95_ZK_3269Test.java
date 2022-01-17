@@ -27,7 +27,7 @@ public class F95_ZK_3269Test extends WebDriverTestCase {
 	public void test() throws Exception {
 		connect();
 
-		final Path uploadFile = Paths.get("src/archive/test2/img/sun.jpg");
+		final Path uploadFile = Paths.get("src/main/webapp/test2/img/sun.jpg");
 		dropUploadFile(jq("@dropupload:eq(0)"), uploadFile);
 		waitResponse();
 		Assert.assertFalse("The size-exceeded message should be suppressed", hasError());

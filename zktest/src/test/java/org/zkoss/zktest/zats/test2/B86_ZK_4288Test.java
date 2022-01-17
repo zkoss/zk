@@ -59,7 +59,7 @@ public class B86_ZK_4288Test extends WebDriverTestCase {
 
 		final WebAppContext context = new WebAppContext();
 		context.setContextPath(getContextPath());
-		context.setBaseResource(Resource.newResource("./src/archive/"));
+		context.setBaseResource(Resource.newResource("./src/main/webapp/"));
 		context.getSessionHandler().setSessionIdPathParameterName(null);
 		Filter sessionRepositoryFilter = new SessionRepositoryFilter<>(new B86_ZK_4288SessionRepository());
 		context.addFilter(new FilterHolder(sessionRepositoryFilter), "/*",  EnumSet.of(DispatcherType.REQUEST));

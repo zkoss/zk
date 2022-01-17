@@ -27,7 +27,7 @@ public class B70_ZK_2729Test extends WebDriverTestCase {
 	public void test() throws Exception {
 		connect();
 
-		Path file = Paths.get("src/archive/test2/img/sun.jpg");
+		Path file = Paths.get("src/main/webapp/test2/img/sun.jpg");
 		dropUploadFile(jq("@dropupload"), file);
 		waitResponse();
 

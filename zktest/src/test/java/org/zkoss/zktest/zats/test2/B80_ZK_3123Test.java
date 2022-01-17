@@ -50,7 +50,7 @@ public class B80_ZK_3123Test {
 		final WebAppContext context = new WebAppContext();
 		context.setContextPath(getContextPath());
 
-		Resource[] res = new Resource[] {Resource.newResource("./src/archive/"), JarResource.newJarResource(Resource.newResource("./src/archive/data/zk-3123-1.0.jar"))};
+		Resource[] res = new Resource[] {Resource.newResource("./src/main/webapp/"), JarResource.newJarResource(Resource.newResource("./src/main/webapp/data/zk-3123-1.0.jar"))};
 		context.setBaseResource(new ResourceCollection(res));
 		server.setHandler(context);
 		server.start();

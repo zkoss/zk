@@ -34,7 +34,7 @@ public class B96_ZK_4827Test extends WebDriverTestCase {
 
 		final WebAppContext context = new WebAppContext();
 		context.setContextPath(getContextPath());
-		context.setBaseResource(Resource.newResource("./src/archive/"));
+		context.setBaseResource(Resource.newResource("./src/main/webapp/"));
 		context.getSessionHandler().setSessionIdPathParameterName(null);
 		server.setHandler(new HandlerList(context, new DefaultHandler()));
 		initServer(server);

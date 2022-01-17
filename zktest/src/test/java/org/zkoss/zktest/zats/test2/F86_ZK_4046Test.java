@@ -26,8 +26,8 @@ import org.zkoss.zktest.zats.WebDriverTestCase;
  * @author rudyhuang
  */
 public class F86_ZK_4046Test extends WebDriverTestCase {
-	private Path lbl = Paths.get("./src/archive/WEB-INF/zk-label.properties");
-	private Path lblBak = Paths.get("./src/archive/WEB-INF/zk-label.properties.bak");
+	private Path lbl = Paths.get("./src/main/webapp/WEB-INF/zk-label.properties");
+	private Path lblBak = Paths.get("./src/main/webapp/WEB-INF/zk-label.properties.bak");
 
 	@Test
 	public void test() throws Exception {
@@ -43,7 +43,7 @@ public class F86_ZK_4046Test extends WebDriverTestCase {
 		click(jq("@button:contains(Disable)"));
 		waitResponse();
 
-		String expected = "A message from zktest/src/archive/WEB-INF/zk-label.properties";
+		String expected = "A message from zktest/src/main/webapp/WEB-INF/zk-label.properties";
 		Assert.assertEquals(expected, jq("$lbl1").text());
 		Assert.assertEquals(expected, jq("$lbl2").text());
 		Assert.assertEquals(expected, jq("$lbl3").text());

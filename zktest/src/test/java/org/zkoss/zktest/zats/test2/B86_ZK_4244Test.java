@@ -27,7 +27,7 @@ public class B86_ZK_4244Test extends WebDriverTestCase {
 	public void test() throws FileNotFoundException {
 		connect();
 
-		dropUploadFile(jq("@dropupload"), Paths.get("src/archive/test2/img/sun.jpg"));
+		dropUploadFile(jq("@dropupload"), Paths.get("src/main/webapp/test2/img/sun.jpg"));
 		waitResponse();
 		Assert.assertFalse(isZKLogAvailable());
 	}
