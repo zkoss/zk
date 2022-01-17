@@ -14,7 +14,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
-function (out) {
+function tabpanel$mold$(out) {
 	var uuid = this.uuid,
 		tabbox = this.getTabbox();
 	if (tabbox.inAccordionMold()) {//Accordion

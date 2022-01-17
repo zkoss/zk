@@ -12,7 +12,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-function (out) {
+function listcell$mold$(out) {
 	out.push('<td', this.domAttrs_(), '><div id="', this.uuid,
 		'-cave" class="', this.$s('content'), '"', 
 		this.domTextStyleAttr_(), '>', this.domContent_());

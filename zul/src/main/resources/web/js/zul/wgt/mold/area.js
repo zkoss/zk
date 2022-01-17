@@ -12,6 +12,6 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-function (out) {
+function area$mold$(out) {
 	out.push('<area', this.domAttrs_(), '></area>');
 }

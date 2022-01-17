@@ -12,7 +12,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-function (out) {
+function treechildren$mold$(out) {
 	if (this.parent.$instanceof(zul.sel.Tree)) {
 		out.push('<tbody id="',this.parent.uuid,'-rows" ', this.domAttrs_({id: 1}), '>');
 		for (var w = this.firstChild; w; w = w.nextSibling)

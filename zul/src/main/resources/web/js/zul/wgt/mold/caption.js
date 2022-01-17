@@ -12,7 +12,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-function (out) {
+function caption$mold$(out) {
 	var p = this.parent,
 		cnt = this.domContent_(),
 		tabi = this._tabindex || 0,

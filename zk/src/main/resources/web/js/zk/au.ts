@@ -1203,7 +1203,7 @@ zAu.beforeSend = function (uri, req, dt) {
 			}
 
 			var v,
-				dateKeys = [];
+				dateKeys: string[] = [];
 			for (var n in data) {
 				if ((v = data[n]) instanceof DateImpl) {
 					data[n] = jq.d2j(v);

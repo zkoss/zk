@@ -10,7 +10,7 @@
 Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 */
-function (out) {
+function style$mold$(out) {
 	var src, v;
 	
 	out.push('<div style="display:none" id="', this.uuid, '">&#160;');

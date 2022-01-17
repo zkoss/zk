@@ -14,7 +14,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
-function (out) {
+function tabs$mold$(out) {
 	var tbx = this.getTabbox(),
 		uuid = this.uuid;
 	out.push('<div ', this.domAttrs_(), ' role="none">',

@@ -9,6 +9,6 @@
 
 Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
-function (out) {
+function track$mold$(out) {
 	out.push('<track', this.domAttrs_(), '>');
 }

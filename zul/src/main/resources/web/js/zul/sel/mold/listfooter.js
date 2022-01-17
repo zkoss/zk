@@ -12,7 +12,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-function (out) {
+function listfooter$mold$(out) {
 	out.push('<td', this.domAttrs_(), '><div id="', this.uuid,
 		'-cave" class="', this.$s('content'), '">', this.domContent_());
 	for (var w = this.firstChild; w; w = w.nextSibling)

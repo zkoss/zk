@@ -24,7 +24,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		_lastPt, _lastScrlPt;
 
 	// eslint-disable-next-line no-undef
-	function _activate(dg: zk.Draggable, devt: jQuery.Event, pt: number[]): void {
+	function _activate(dg: zk.Draggable, devt: JQ.Event, pt: number[]): void {
 		_actTmout = setTimeout(function () {
 			_actTmout = null;
 			//bug: 3027322 & 2924049: Wrong target when dragging a sub div in IE browsers
@@ -39,7 +39,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 
 	// eslint-disable-next-line no-undef
-	function _docmousemove(devt: jQuery.Event): void {
+	function _docmousemove(devt: JQ.Event): void {
 		if (!_activedg || _activedg.dead) return;
 
 		var evt = jq.Event.zk(devt),
@@ -58,7 +58,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			//IMG (but still happens if dragging fast)
 	}
 	// eslint-disable-next-line no-undef
-	function _docmouseup(devt: jQuery.Event): void {
+	function _docmouseup(devt: JQ.Event): void {
 		if (_actTmout) {
 			clearTimeout(_actTmout);
 			_actTmout = null;
@@ -82,7 +82,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 	}
 	// eslint-disable-next-line no-undef
-	function _dockeypress(devt: jQuery.Event): void {
+	function _dockeypress(devt: JQuery.Event): void {
 		if (_activedg) _activedg._keypress(devt);
 	}
 
@@ -117,7 +117,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 	}
 	// eslint-disable-next-line no-undef
-	function _disableDragStart(evt: jQuery.Event): boolean {
+	function _disableDragStart(evt: JQ.Event): boolean {
 		return jq.nodeName(evt.target, 'input', 'textarea');
 	}
 /** A draggable object used to make a DOM element draggable.

@@ -13,7 +13,7 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 
-function (out) {
+function slider$mold$(out) {
 	var isVer = this.isVertical(),
 		uuid = this.uuid;
 	out.push('<div', this.domAttrs_(), ' role="slider">' +

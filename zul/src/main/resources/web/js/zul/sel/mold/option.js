@@ -12,6 +12,6 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-function (out) {
+function option$mold$(out) {
 	out.push('<option', this.domAttrs_(), '>', this.domLabel_(), '</option>');
 }

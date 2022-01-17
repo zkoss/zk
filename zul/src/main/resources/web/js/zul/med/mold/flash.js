@@ -12,7 +12,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-function (out) {
+function flash$mold$(out) {
 	out.push('<div', this.domAttrs_({width:true,height:true}),
 		'><object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=',
 		this._version, '" width="', this._width||'', '" height="', this._height||'',

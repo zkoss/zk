@@ -14,7 +14,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
-function (out) {
+function tabbox$mold$(out) {
 	var icon = this.$s('icon'),
 		uuid = this.uuid,
 		tabscroll = this.isTabscroll(),

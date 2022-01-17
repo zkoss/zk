@@ -12,7 +12,7 @@ Copyright (C) 2013 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-function (out) {
+function combobutton$mold$(out) {
 	var tabi = this._tabindex | 0,
 		uuid = this.uuid;
 	

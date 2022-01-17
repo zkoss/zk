@@ -33,6 +33,14 @@ interface Window {
     zkservice: zk.ZKServiceStatic;
     onIframeURLChange(uuid: string, url: string): void;
     zkpe: zk.$void;
+	zkpi(nm: string, wv: boolean): Record<string, unknown> | null;
+	zkpb(pguid: string, dtid: string, contextURI: string, updateURI: string, resourceURI: string, reqURI: string, props: Record<string, string>): void;
+	zkver(ver: string, build: string, ctxURI: string, updURI: string, modVers: Record<string, string>, opts: Record<string, unknown>): void;
+	zkmld(wgtcls: Record<string, zk.Class>, molds: Record<string, (() => void)>): void;
+	zkamn(pkg: string, fn: (() => void)): void;
+	zkopt(opts: Record<string, any>): void;
+	Dates: any;
+	DateImpl: any;
 }
 
 // mount.ts

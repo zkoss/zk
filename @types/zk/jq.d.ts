@@ -108,6 +108,19 @@ interface JQuery {
     selector?: string; // expose
     zk: zk.JQZK;
 
+	on(selector: string, func: Function): this;
+	off(selector: string, func: Function): this;
+	zon<TData>(
+		events: JQuery.TypeEventHandlers<HTMLElement, TData, any, any>,
+		selector: JQuery.Selector,
+		data: TData,
+		delegateEventFunc: Function,
+		...args: unknown[]
+	): this;
+	zoff(event?: JQuery.TriggeredEvent<HTMLElement>,
+	     selector?: JQuery.Selector,
+		delegateEventFunc?: Function,
+		...args: unknown[]): this;
     after(widget: zk.Widget, dt?: zk.Desktop): this;
     append(widget: zk.Widget, dt?: zk.Desktop): this;
     before(widget: zk.Widget, dt?: zk.Desktop): this;
@@ -115,20 +128,23 @@ interface JQuery {
     absolutize(): this;
 }
 
-declare namespace JQuery {
-    interface Event {
+declare namespace JQ {
+	interface Event extends JQuery.TriggeredEvent {
         stop(): void;
         mouseData(): zk.EventMouseData;
         keyData(): zk.EventKeyData;
         metaData(): zk.EventMetaData;
     }
+}
 
-    interface EventStatic {
-        filterMetaData(data: Record<string, unknown>): zk.EventMetaData;
-        fire(el: Element, evtnm: string): void;
-        stop(evt: Event): void;
-        zk(evt: Event, wgt?: zk.Widget): zk.Event;
-    }
+declare namespace JQuery {
+	interface EventStatic {
+		<T extends object>(event: string| UIEvent, properties?: T): JQ.Event & T;
+		filterMetaData(data: Record<string, unknown>): zk.EventMetaData;
+		fire(el: Element, evtnm: string): void;
+		stop(evt: Event): void;
+		zk(evt: Event, wgt?: zk.Widget): zk.Event;
+	}
 }
 
 declare var jq: zk.JQueryStaticExtension;

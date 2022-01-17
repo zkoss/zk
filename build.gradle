@@ -79,6 +79,10 @@ subprojects {
 			exec {
 				commandLine "$rootDir/node_modules/.bin/gulp", 'build:single', "--src=$projectDir/$resources/web/js", "--dest=$projectDir/$codegen/web/js"
 			}
+
+			exec {
+				commandLine "$rootDir/node_modules/.bin/tsc", '--noEmit'
+			}
 		}
 	}
 

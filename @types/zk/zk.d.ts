@@ -39,7 +39,7 @@ declare namespace zk {
         $super(mtd: string, ...vararg: any[]): any;
         $supers(klass: Class, mtd: string, args: ArrayLike<any>): any;
         $supers(mtd: string, args: ArrayLike<any>): any;
-        afterInit(func: (this: this) => void): void;
+        afterInit(func: () => void): void;
         // ref: https://github.com/Microsoft/TypeScript/pull/27028
         proxy<A extends any[], R>(func: (...args: A) => R): (...args: A) => R;
         proxy<A0, A extends any[], R>(func: (arg0: A0, ...args: A) => R): (arg0: A0, ...args: A) => R;
@@ -92,7 +92,7 @@ declare namespace zk {
         auStopped: boolean;
         currentTarget: zk.Widget;
         data: any;
-        domEvent: JQuery.Event;
+        domEvent: JQ.Event;
         domStopped: boolean;
         domTarget: HTMLElement;
         name: string;
@@ -103,7 +103,7 @@ declare namespace zk {
 
         new(target: zk.Widget | null, name: string, data?: any,
             opts?: Partial<EventOptions> | null,
-            domEvent?: JQuery.Event): Event;
+            domEvent?: JQ.Event): Event;
         addOptions(opts: Partial<EventOptions>): void;
         stop(opts?: Partial<EventStopOptions>): void;
     }
@@ -135,7 +135,7 @@ declare namespace zk {
         au: boolean;
     }
 
-    interface Widget extends Object {
+    interface Widget extends Omit<zk.Object, '$init'> {
         _scrollbar?: any;
         $weave: any;
         autag: string;
@@ -343,6 +343,7 @@ declare namespace zk {
     }
 
     interface Page extends zk.Widget {
+		new(dt: zk.Desktop): this;
         className: 'zk.Page';
         contained: Page[];
         widgetName: 'page';
@@ -477,8 +478,8 @@ declare namespace zk {
         _endDrag(evt: zk.Event): void;
         _finishDrag(evt: zk.Event, success): void;
         _getWndScroll(w): zk.Dimension;
-        _keypress(devt: jQuery.Event): void;
-        _mousedown(devt: jQuery.Event): void;
+        _keypress(devt: JQ.Event): void;
+        _mousedown(devt: JQ.Event): void;
         _scroll(): void;
         _startDrag(evt: zk.Event): void;
         _startScrolling(speed): void;
@@ -523,16 +524,17 @@ declare namespace zk {
         $toLocaleString(): string;
     }
 
-    interface Swipe extends zk.Object {
+    interface Swipe extends Omit<zk.Object, '$init'> {
         widget: zk.Widget | null;
         node: HTMLElement | null;
         opts: any;
 
+		new(widget: zk.Widget, node?: HTMLElement | null, opts?): Swipe;
         $init(widget: zk.Widget, node?: HTMLElement | null, opts?): void;
         destroy(node: HTMLElement): void;
-        _swipeStart(devt: JQuery.Event): void;
-        _swipeMove(devt: JQuery.Event): void;
-        _swipeEnd(devt: JQuery.Event): void;
+        _swipeStart(devt: JQ.Event): void;
+        _swipeMove(devt: JQ.Event): void;
+        _swipeEnd(devt: JQ.Event): void;
     }
 
     interface Parser {

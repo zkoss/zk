@@ -12,7 +12,7 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-function (out) {
+function optgroup$mold$(out) {
 	var visible = this.isVisible();
 	if (visible) out.push('<optgroup', this.domAttrs_(), '>');
 	for (var w = this.nextSibling; w ; w = w.nextSibling) {

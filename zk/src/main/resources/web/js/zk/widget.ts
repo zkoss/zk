@@ -102,7 +102,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				args = arguments;
 			var ret = f.apply(wgt, args);
 			if (ret === undefined) ret = zkevt.returnValue;
-			if (zkevt.domStopped) devt.stop();
+			if (zkevt.domStopped) (devt as JQ.Event).stop();
 			if (zkevt.stopped && devt.originalEvent) devt.originalEvent['zkstopped'] = true;
 			return devt.type == 'dblclick' && ret === undefined ? false : ret;
 		};
@@ -771,7 +771,7 @@ new zul.wnd.Window({
 
 		//zkac is a token used by create() in mount.js for optimizing performance
 		if (props !== zkac)
-			this.afterInit(function () {
+			this.afterInit(function (this: zk.Widget): void {
 				//if props.$oid, it must be an object other than {} so ignore
 				if (props && typeof props == 'object' && !props.$oid)
 					for (var nm in props)

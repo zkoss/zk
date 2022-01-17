@@ -12,7 +12,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-function (out) {
+function tree$mold$(out) {
 	var uuid = this.uuid,
 		innerWidth = this.getInnerWidth(),
 		width = innerWidth == '100%' ? ' width="100%"' : '',

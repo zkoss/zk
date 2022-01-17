@@ -150,7 +150,7 @@ zk.copy(zjq.prototype, {
 	cellIndex: function () {
 		var cell = this.jq[0];
 		if (cell) {
-			var cells = cell.parentNode ? cell.parentNode.cells : [];
+			var cells = cell.parentNode ? cell.parentNode['cells'] : [];
 			for (var j = 0, cl = cells.length; j < cl; j++)
 				if (cells[j] == cell)
 					return j;

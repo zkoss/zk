@@ -25,7 +25,7 @@ function _createMouseEvent (type, button, changedTouch, ofs): MouseEvent {
 	return simulatedEvent;
 }
 // eslint-disable-next-line no-undef
-function _createJQEvent (target, type, button, changedTouch, ofs?): jQuery.Event {
+function _createJQEvent (target, type, button, changedTouch, ofs?): JQ.Event {
 	//do not allow text
 	//ZK-1011
 	if (target && (target.nodeType === 3 || target.nodeType === 8))
@@ -47,7 +47,7 @@ function _createJQEvent (target, type, button, changedTouch, ofs?): jQuery.Event
 	return event;
 }
 // eslint-disable-next-line no-undef
-function _toMouseEvent(event, changedTouch): jQuery.Event | null {
+function _toMouseEvent(event, changedTouch): JQ.Event | null {
 	switch (event.type) {
 	case 'touchstart':
 		return _createJQEvent(changedTouch.target, 'mousedown', 0, changedTouch);
@@ -314,7 +314,7 @@ var _jq = {},
 	_jqEvent = {},
 	_jqEventSpecial = {};
 zk.override(jq.fn, _jq, {
-	on: function (type, selector, data, fn) {
+	on: function (type, selector, data, fn, ...rest) {
 		var evtType;
 		if (evtType = zjq.eventTypes[type]) {
 			// refer to jquery on function for reassign args
@@ -336,12 +336,16 @@ zk.override(jq.fn, _jq, {
 			}
 			if (_storeEventFunction(this[0], evtType, data, fn))
 				this.zon(evtType, selector, data, delegateEventFunc);
-		} else
-			this.zon.apply(this, arguments); // Bug ZK-1142: recover back to latest domios.js
-			
+		} else {
+			// eslint-disable-next-line no-undef
+			let args: [JQuery.TypeEventHandlers<HTMLElement, unknown, unknown, unknown>,
+				// eslint-disable-next-line @typescript-eslint/ban-types
+					string, unknown, Function, ...unknown[]] = [type, selector, data, fn, ...rest];
+			this.zon.apply(this, args); // Bug ZK-1142: recover back to latest domios.js
+		}
 		return this;
 	},
-	off: function (type, selector, fn) {
+	off: function (type, selector, fn, ...rest) {
 		var evtType;
 		if (evtType = zjq.eventTypes[type]) {
 			// refer to jquery on function for reassign args
@@ -352,8 +356,13 @@ zk.override(jq.fn, _jq, {
 			}
 			if (_removeEventFunction(this[0], evtType, fn))
 				this.zoff(evtType, selector, delegateEventFunc);
-		} else
-			this.zoff.apply(this, arguments); // Bug ZK-1142: recover back to latest domios.js
+		} else {
+			// eslint-disable-next-line no-undef
+			let args: [JQuery.TriggeredEvent<HTMLElement>,
+				// eslint-disable-next-line @typescript-eslint/ban-types
+				string, Function, ...unknown[]] = [type, selector, fn, ...rest];
+			this.zoff.apply(this, args); // Bug ZK-1142: recover back to latest domios.js
+		}
 		return this;
 	}
 });

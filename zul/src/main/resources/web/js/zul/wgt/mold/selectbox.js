@@ -12,7 +12,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-function (out) {
+function selectbox$mold$(out) {
 	out.push('<select', this.domAttrs_(), '>');
 	var s = $eval(this.items) || [] ;
 	for (var i = 0, j = s.length; i < j; i++) {

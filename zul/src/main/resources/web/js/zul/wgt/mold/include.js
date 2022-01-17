@@ -10,7 +10,7 @@
 Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 
 */
-function (out) {
+function include$mold$(out) {
 	out.push('<', this._enclosingTag, this.domAttrs_(), '>');
 	for (var w = this.firstChild; w; w = w.nextSibling)
 		w.redraw(out);

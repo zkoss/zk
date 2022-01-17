@@ -9,7 +9,7 @@
 
 Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 */
-function (out) {
+function rating$mold$(out) {
 
 	var sclass = this.getIconSclass(),
 		isVert = 'vertical' == this._orient;

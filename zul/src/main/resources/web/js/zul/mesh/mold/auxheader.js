@@ -12,7 +12,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-function (out) {
+function auxheader$mold$(out) {
 	out.push('<th', this.domAttrs_(), ' role="columnheader"><div id="', this.uuid, '-cave" class="',
 	this.getZclass(), '-content"', this.domTextStyleAttr_(), '>', this.domContent_());
 	for (var w = this.firstChild; w; w = w.nextSibling)

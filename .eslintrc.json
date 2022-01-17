@@ -14,6 +14,7 @@
   "globals": {
     "$eval": "readonly",
     "jq": "writable",
+    "JQ": "writable",
     "zjq": "writable",
     "zUtl": "writable",
     "zAu": "writable",

@@ -2,17 +2,22 @@
   "compilerOptions": {
     "target": "es5",
     "lib": [
-      "es5",
-      "dom",
-      "es2015.collection",
-      "es2015.promise"
+      "ESNext",
+      "dom"
     ],
     "module": "none",
     "allowJs": true,
     "noEmit": true, // type checking only
     "strict": true,
+    "useUnknownInCatchVariables": false,
     "noImplicitAny": false, // leave this for js compatible
     "typeRoots": ["./@types/"],
-    "types": ["zk"]
-  }
+    "types": ["zk"],
+  },
+  "exclude": [
+    "node_modules",
+    "zktest",
+    "**/build/*",
+    "**/codegen/*"
+  ]
 }

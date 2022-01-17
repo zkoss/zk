@@ -14,7 +14,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
-function (out) {
+function calendar$mold$(out) {
 	var renderer = zul.db.Renderer,
 		uuid = this.uuid,
 		view = this._view, 

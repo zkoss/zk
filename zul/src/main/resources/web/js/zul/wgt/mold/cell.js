@@ -12,7 +12,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-function (out) {
+function cell$mold$(out) {
 	out.push('<td', this.domAttrs_(), '>', this._colHtmlPre());
 	for (var j = 0, w = this.firstChild; w; w = w.nextSibling, j++)
 		w.redraw(out);

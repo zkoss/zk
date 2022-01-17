@@ -12,7 +12,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-function (out) {
+function radio$mold$(out) {
 	var uuid = this.uuid,
 		rg = this.getRadiogroup();
 	out.push('<span', this.domAttrs_({tabindex: 1}), '><input type="radio" id="', uuid,

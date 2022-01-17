@@ -479,13 +479,21 @@ zk.override(jq.fn, _jq, /*prototype*/ {
 		if (n) w.replaceHTML(n, desktop, skipper);
 		return this;
 	},
-	on: function (type, selector, data, fn) {
+	on: function (type, selector, data, fn, ...rest) {
 		type = zjq.eventTypes[type] || type;
-		return this['zon'].apply(this, arguments);
+		// eslint-disable-next-line no-undef
+		let args: [JQuery.TypeEventHandlers<HTMLElement, unknown, unknown, unknown>,
+			// eslint-disable-next-line @typescript-eslint/ban-types
+			string, unknown, Function, ...unknown[]] = [type, selector, data, fn, ...rest];
+		return this.zon.apply(this, args);
 	},
-	off: function (type, selector, fn) {
+	off: function (type, selector, fn, ...rest) {
 		type = zjq.eventTypes[type] || type;
-		return this['zoff'].apply(this, arguments);
+		// eslint-disable-next-line no-undef
+		let args: [JQuery.TriggeredEvent<HTMLElement>,
+			// eslint-disable-next-line @typescript-eslint/ban-types
+			string, Function, ...unknown[]] = [type, selector, fn, ...rest];
+		return this.zoff.apply(this, args);
 	},
 	bind: function (types, data, fn) {
 		return this.on(types, null, data, fn);

@@ -340,7 +340,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * @since 5.0.6
 	 */
 	today: function (fmt, tz) {
-		var d = Dates.newInstance().tz(tz), hr = 0, min = 0, sec = 0, msec = 0;
+		var d = window.Dates.newInstance().tz(tz), hr = 0, min = 0, sec = 0, msec = 0;
 		if (typeof fmt == 'string') {
 			var fmt0 = fmt.toLowerCase();
 			if (fmt0.indexOf('h') >= 0 || fmt0.indexOf('k') >= 0) hr = d.getHours();
@@ -349,7 +349,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 			if (fmt.indexOf('S') >= 0) msec = d.getMilliseconds();
 		} else if (fmt)
 			return d;
-		return Dates.newInstance([d.getFullYear(), d.getMonth(), d.getDate(),
+		return window.Dates.newInstance([d.getFullYear(), d.getMonth(), d.getDate(),
 			hr, min, sec, msec], tz);
 	},
 	/** Returns if one is ancestor of the other.
@@ -696,10 +696,10 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * @since 8.5.1
 	 */
 	getWeekOfYear: function (year, month, date, firstDayOfWeek, minimalDaysInFirstWeek) {
-		var d = Dates.newInstance([year, month, date, 0, 0, 0, 0], 'UTC'),
+		var d = window.Dates.newInstance([year, month, date, 0, 0, 0, 0], 'UTC'),
 			day = d.getDay();
 		d.setDate(date - minimalDaysInFirstWeek + firstDayOfWeek - (firstDayOfWeek > day ? day : day - 7));
-		var yearStart = Dates.newInstance([d.getFullYear(), 0, 1], 'UTC');
+		var yearStart = window.Dates.newInstance([d.getFullYear(), 0, 1], 'UTC');
 		return Math.ceil(((d.valueOf() - yearStart.valueOf()) / 86400000 + 1) / 7);
 	},
 	/**
@@ -739,19 +739,19 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 */
 	getUserMedia: function (constraints) {
 		var polyfillGUM = function (constraints?, success?, error?): Promise<MediaStream> {
-			var getUserMedia = navigator.getUserMedia || navigator['webkitGetUserMedia'] ||
+			var getUserMedia = navigator['getUserMedia'] || navigator['webkitGetUserMedia'] ||
 				navigator['mozGetUserMedia'] || navigator['msGetUserMedia'] ||
 				navigator['oGetUserMedia'];
 			if (!getUserMedia)
 				return Promise.reject(new Error('Cannot polyfill getUserMedia'));
-			return new Promise(function (constraints, success, error) {
+			return new Promise(function (success, error) {
 				getUserMedia.call(navigator, constraints, success, error);
 			});
 		};
 
 		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-ignore: assign to read only property(mediaDevices) for polyfill
-		if (navigator.mediaDevices === undefined) navigator.mediaDevices = {};
+		if (navigator.mediaDevices === undefined) navigator['mediaDevices'] = {};
 		if (navigator.mediaDevices.getUserMedia === undefined) navigator.mediaDevices.getUserMedia = polyfillGUM;
 		return navigator.mediaDevices.getUserMedia(constraints);
 	},
@@ -781,6 +781,8 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 		return function () {
 			var now = Date.now(),
 				remaining = wait - (now - previous);
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+			// @ts-ignore
 			context = this;
 			args = arguments;
 			if (remaining <= 0 || remaining > wait) {

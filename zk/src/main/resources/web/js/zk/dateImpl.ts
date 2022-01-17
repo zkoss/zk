@@ -53,7 +53,7 @@ function parseTzId(id: string): string {
 	}
 }
 
-DateImpl.prototype = {
+window.DateImpl.prototype = {
 	tz: function (v) {
 		if (v) this._timezone = parseTzId(v);
 		return this;

@@ -12,7 +12,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-function (out) {
+function treecol$mold$(out) {
 	out.push('<th', this.domAttrs_(), '><div id="', this.uuid, '-cave" class="',
 			this.$s('content'), '"', this.domTextStyleAttr_(),
 			'><div class="', this.$s('sorticon'), '"><i id="', this.uuid, '-sort-icon"></i></div>', this.domContent_());

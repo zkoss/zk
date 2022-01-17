@@ -12,7 +12,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-function (out) {
+function comboitem$mold$(out) {
 	out.push('<li', this.domAttrs_({text:true}), '>');
 
 	var icon = this.domIcon_(), img = this.domImage_();

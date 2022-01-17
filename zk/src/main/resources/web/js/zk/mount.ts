@@ -44,7 +44,7 @@ window.zkver = function (ver: string, build: string, ctxURI: string, updURI: str
 
 	if (!zk.feature)
 		zk.feature = {standard: true};
-	zkopt(opts);
+	window.zkopt(opts);
 };
 
 //Define a mold
@@ -618,7 +618,7 @@ jq(function () {
 		}
 	});
 
-	function _doEvt(wevt): void {
+	function _doEvt(wevt: zk.Event): void {
 		var wgt = wevt.target;
 		if (wgt && !wgt.$weave) {
 			var en = wevt.name,
@@ -720,9 +720,9 @@ jq(function () {
 
 	var lastTimestamp, lastTarget;
 	jq(document)
-	.keydown(function (evt) {
+	.keydown(function (evt: Partial<JQ.Event>) {
 		var wgt = Widget.$(evt, {child: true}),
-			wevt = new zk.Event(wgt, 'onKeyDown', evt.keyData(), null, evt);
+			wevt = new zk.Event(wgt, 'onKeyDown', (evt as JQ.Event).keyData(), null, evt as JQ.Event);
 		if (wgt) {
 			_doEvt(wevt);
 			if (!wevt.stopped && wgt.afterKeyDown_) {
@@ -737,21 +737,21 @@ jq(function () {
 		&& (zk._noESC > 0 || zAu.shallIgnoreESC())) //Bug 1927788: prevent FF from closing connection
 			return false; //eat
 	})
-	.keyup(function (evt) {
+	.keyup(function (evt: Partial<JQ.Event>) {
 		var wgt = zk.keyCapture;
 		if (wgt) zk.keyCapture = null;
 		else wgt = Widget.$(evt, {child: true});
-		_doEvt(new zk.Event(wgt, 'onKeyUp', evt.keyData(), null, evt));
+		_doEvt(new zk.Event(wgt, 'onKeyUp', (evt as JQ.Event).keyData(), null, evt as JQ.Event));
 	})
-	.keypress(function (evt) {
+	.keypress(function (evt: Partial<JQ.Event>) {
 		var wgt = zk.keyCapture;
 		if (!wgt) wgt = Widget.$(evt, {child: true});
-		_doEvt(new zk.Event(wgt, 'onKeyPress', evt.keyData(), null, evt));
+		_doEvt(new zk.Event(wgt, 'onKeyPress', (evt as JQ.Event).keyData(), null, evt as JQ.Event));
 	})
 	.on('paste', function (evt) {
 		var wgt = zk.keyCapture;
 		if (!wgt) wgt = Widget.$(evt, {child: true});
-		_doEvt(new zk.Event(wgt, 'onPaste', evt.keyData(), null, evt));
+		_doEvt(new zk.Event(wgt, 'onPaste', (evt as JQ.Event).keyData(), null, evt as JQ.Event));
 	})
 	.on('zcontextmenu', function (evt) {
 		//ios: zcontextmenu shall be listened first,
@@ -764,7 +764,7 @@ jq(function () {
 		if (wgt) {
 			if (zk.ie && zk.ie < 11)
 				evt.which = 3;
-			var wevt = new zk.Event(wgt, 'onRightClick', evt.mouseData(), {}, evt);
+			var wevt = new zk.Event(wgt, 'onRightClick', (evt as JQ.Event).mouseData(), {}, evt as JQ.Event);
 			_doEvt(wevt);
 			if (wevt.domStopped)
 				return false;
@@ -778,7 +778,7 @@ jq(function () {
 		}
 		var wgt = Widget.$(evt, {child: true});
 		_docMouseDown(
-			new zk.Event(wgt, 'onMouseDown', evt.mouseData(), null, evt),
+			new zk.Event(wgt, 'onMouseDown', (evt as JQ.Event).mouseData(), null, evt as JQ.Event),
 			wgt);
 	})
 	.on('zmouseup', function (evt) {
@@ -793,7 +793,7 @@ jq(function () {
 		wgt = zk.mouseCapture;
 		if (wgt) zk.mouseCapture = null;
 		else wgt = Widget.$(evt, {child: true});
-		_doEvt(new zk.Event(wgt, 'onMouseUp', evt.mouseData(), null, evt));
+		_doEvt(new zk.Event(wgt, 'onMouseUp', (evt as JQ.Event).mouseData(), null, evt as JQ.Event));
 	})
 	.on('zmousemove', function (evt) {
 		zk.currentPointer[0] = evt.pageX || 0;
@@ -801,17 +801,17 @@ jq(function () {
 
 		var wgt = zk.mouseCapture;
 		if (!wgt) wgt = Widget.$(evt, {child: true});
-		_doEvt(new zk.Event(wgt, 'onMouseMove', evt.mouseData(), null, evt));
+		_doEvt(new zk.Event(wgt, 'onMouseMove', (evt as JQ.Event).mouseData(), null, evt as JQ.Event));
 	})
-	.mouseover(function (evt) {
+	.mouseover(function (evt: Partial<JQ.Event>) {
 		if (zk.mobile) return; // unsupported on touch device for better performance
-		zk.currentPointer[0] = evt.pageX;
-		zk.currentPointer[1] = evt.pageY;
+		zk.currentPointer[0] = evt.pageX || 0;
+		zk.currentPointer[1] = evt.pageY || 0;
 
-		_doEvt(new zk.Event(Widget.$(evt, {child: true}), 'onMouseOver', evt.mouseData(), {ignorable: true}, evt));
+		_doEvt(new zk.Event(Widget.$(evt, {child: true}), 'onMouseOver', (evt as JQ.Event).mouseData(), {ignorable: true}, evt as JQ.Event));
 	})
-	.mouseout(function (evt) {
-		_doEvt(new zk.Event(Widget.$(evt, {child: true}), 'onMouseOut', evt.mouseData(), {ignorable: true}, evt));
+	.mouseout(function (evt: Partial<JQ.Event>) {
+		_doEvt(new zk.Event(Widget.$(evt, {child: true}), 'onMouseOut', (evt as JQ.Event).mouseData(), {ignorable: true}, evt as JQ.Event));
 	})
 	.click(function (evt) {
 		if (zk.Draggable.ignoreClick()) return;
@@ -828,7 +828,7 @@ jq(function () {
 			
 			if (evt.which == 1)
 				_doEvt(new zk.Event(Widget.$(evt, {child: true}),
-					'onClick', evt.mouseData(), {}, evt));
+					'onClick', (evt as JQ.Event).mouseData(), {}, evt as JQ.Event));
 			//don't return anything. Otherwise, it replaces event.returnValue in IE (Bug 1541132)
 		}
 	})
@@ -837,7 +837,7 @@ jq(function () {
 
 		var wgt = Widget.$(evt, {child: true});
 		if (wgt && evt.which == 1) {
-			var wevt = new zk.Event(wgt, 'onDoubleClick', evt.mouseData(), {}, evt);
+			var wevt = new zk.Event(wgt, 'onDoubleClick', (evt as JQ.Event).mouseData(), {}, evt as JQ.Event);
 			_doEvt(wevt);
 			if (wevt.domStopped)
 				return false;

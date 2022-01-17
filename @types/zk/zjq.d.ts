@@ -15,7 +15,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 declare namespace zk {
     interface ZJQ {
         _sfKeys: Record<string, number>;
-        _evt: Event;
+        _evt: Event | Record<string, unknown>;
         eventTypes: {[key: string]: string};
         src0: string;
         prototype: zk.JQZK;

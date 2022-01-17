@@ -12,7 +12,7 @@ Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-function (out) {
+function layout$mold$(out) {
     out.push('<div ', this.domAttrs_(), '>');
 	for (var w = this.firstChild; w; w = w.nextSibling)
 		this.encloseChildHTML_(w, out);

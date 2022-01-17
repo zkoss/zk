@@ -12,6 +12,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-function (out) {
+function separator$mold$(out) {
 	out.push('<div', this.domAttrs_(), 'role="separator">&nbsp;</div>');
 }

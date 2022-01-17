@@ -12,7 +12,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-function (out) {
+function row$mold$(out) {
 	out.push('<tr', this.domAttrs_(), '>');
 	var zcls = this.getZclass(),
 		grid = this.getGrid(),
