@@ -26,7 +26,7 @@ public class F85_ZK_1148FileDealer {
 	
 	public static void writeMsg(String msg, boolean append) {
 		try {
-			File src = new File("src/org/zkoss/zktest/test2/ZK1148.txt");
+			File src = new File("src/main/webapp/test2/ZK1148.txt");
 			FileWriter fw = new FileWriter(src, append);
 			BufferedWriter bw = new BufferedWriter(fw);;
 			bw.write(msg);
@@ -42,7 +42,7 @@ public class F85_ZK_1148FileDealer {
 	public static String readMsg() {
 		String result = "";
 		try {
-			File src = new File("src/org/zkoss/zktest/test2/ZK1148.txt");
+			File src = new File("src/main/webapp/test2/ZK1148.txt");
 			FileReader fw = new FileReader(src);
 			BufferedReader bw = new BufferedReader(fw);;
 			result = bw.readLine();
@@ -56,7 +56,7 @@ public class F85_ZK_1148FileDealer {
 	}
 
 	public static void close() { 
-		File src = new File("src/org/zkoss/zktest/test2/ZK1148.txt");
+		File src = new File("src/main/webapp/test2/ZK1148.txt");
 		if (src.delete()) {
 			System.out.println(src.getName() + " is deleted!");
 		} else {
