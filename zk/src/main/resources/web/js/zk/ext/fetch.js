@@ -435,7 +435,7 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 		self.fetch = function (input, init) {
 			// only FormData with uploadCallbacks uses ajaxFetch, otherwise, uses
 			// the browser fetch instead.
-			if (init.body instanceof FormData) {
+			if (init && init.body instanceof FormData) {
 				var reqInfo = zAu.ajaxReqInf;
 				if (reqInfo && reqInfo.uploadCallbacks && reqInfo.uploadCallbacks.length) {
 					return self.ajaxFetch.apply(self, arguments);
