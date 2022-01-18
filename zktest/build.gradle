@@ -91,7 +91,7 @@ dependencies {
 	implementation 'net.sf.jasperreports:jasperreports:6.17.0'
 	implementation 'org.jfree:jfreechart:1.0.19'
 	implementation 'com.jhlabs:filters:2.0.235-1'
-	implementation 'org.zkoss.zkforge:ckez:4.16.1.0'
+	implementation 'org.zkoss.zkforge:ckez:4.17.1.0'
 	implementation 'org.zkoss.zkforge:timelinez:2.3.1_50'
 	implementation 'org.zkoss.zkforge:timeplotz:1.1_50'
 	implementation 'org.zkoss.zkforge:gmapsz:3.1.0'
