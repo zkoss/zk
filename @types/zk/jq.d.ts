@@ -19,6 +19,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 declare namespace zk {
     type Offset = [number, number];
 
+	interface JQueryEffectExtension extends JQuery.Effects {
+		speeds: Record<string, number>;
+	}
+
     interface JQueryStaticExtension extends JQueryStatic {
         borders: {l: string; r: string; t: string; b: string};
         browser: {
@@ -73,6 +77,7 @@ declare namespace zk {
         unSyncScroll(wgt: any): void;
         unzsync(obj: any): void;
         zsync(org: any): void;
+		fx: JQueryEffectExtension;
     }
 
     interface EventMetaData {
@@ -109,7 +114,9 @@ interface JQuery {
     zk: zk.JQZK;
 
 	on(selector: string, func: Function): this;
+	on(selector: string, data: unknown, func: Function): this;
 	off(selector: string, func: Function): this;
+	off(selector: string, data: unknown, func: Function): this;
 	zon<TData>(
 		events: JQuery.TypeEventHandlers<HTMLElement, TData, any, any>,
 		selector: JQuery.Selector,

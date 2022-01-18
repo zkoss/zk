@@ -2,7 +2,5 @@
 **/debug/*
 **/codegen/*
 **/.git/*
-**/jquery.js
 **/ext/*
-**/js.ts
 @types
