@@ -133,14 +133,41 @@ dependencies {
 	providedCompile "net.bytebuddy:byte-buddy-agent:1.8.22"
 }
 
-test {
-	useJUnit()
-	maxParallelForks = 8
+task testGroupForkJVMTestOnly(type: Test) {
+	useJUnit {
+		includeCategories 'org.zkoss.zktest.zats.ForkJVMTestOnly'
+	}
+	maxParallelForks = 5
+	forkEvery = 1 // a new test process is started for every test class
 	if (project.ext['zktestWithoutA11y'] != 'false') {
 		filter {
 			excludeTestsMatching('*.wcag.*')
 		}
 	}
+}
+
+test {
+	useJUnit {
+		excludeCategories 'org.zkoss.zktest.zats.ForkJVMTestOnly'
+	}
+	maxParallelForks = 10
+	forkEvery = 0 // no limit, reuse the test process for all test classes
+	if (project.ext['zktestWithoutA11y'] != 'false') {
+		filter {
+			excludeTestsMatching('*.wcag.*')
+		}
+	}
+}
+
+task renameNoA11yTestResult (type: Copy) {
+	mustRunAfter test
+	mustRunAfter 'testGroupForkJVMTestOnly'
+	setOnlyIf { project.ext['zktestWithoutA11y'] != 'false' }
+	destinationDir = file("$buildDir/test-results/no-A11Y")
+	from ("$buildDir/test-results")
+	includeEmptyDirs false
+	include '**/*Test.xml'
+	rename '(.*).xml', '$1NO_A11Y.xml'
 }
 
 description = 'ZK Test'
