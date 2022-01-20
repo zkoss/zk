@@ -128,9 +128,18 @@ dependencies {
 	providedCompile 'javax.el:javax.el-api:2.2.5'
 	providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
 	providedCompile 'javax.websocket:javax.websocket-api:1.1'
-	// workaround for runing Mockito under Java 11
+	// workaround for running Mockito under Java 11
 	providedCompile "net.bytebuddy:byte-buddy:1.8.22"
 	providedCompile "net.bytebuddy:byte-buddy-agent:1.8.22"
+}
+
+sourceSets {
+	main {
+		resources {
+			// some test will try to get content from resources
+			srcDirs += "src/main/webapp"
+		}
+	}
 }
 
 task testGroupForkJVMTestOnly(type: Test) {
