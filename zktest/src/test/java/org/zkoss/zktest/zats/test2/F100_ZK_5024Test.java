@@ -16,13 +16,16 @@ import static org.junit.Assert.assertEquals;
 import org.junit.ClassRule;
 import org.junit.Test;
 
+import org.junit.experimental.categories.Category;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zktest.zats.ExternalZkXml;
+import org.zkoss.zktest.zats.ForkJVMTestOnly;
 import org.zkoss.zktest.zats.ZATSTestCase;
 
 /**
  * @author jameschu
  */
+@Category(ForkJVMTestOnly.class)
 public class F100_ZK_5024Test extends ZATSTestCase {
 	@ClassRule
 	public static final ExternalZkXml CONFIG = new ExternalZkXml("/test2/F100-ZK-5024-zk.xml");
