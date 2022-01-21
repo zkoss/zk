@@ -146,10 +146,9 @@ task testGroupForkJVMTestOnly(type: Test) {
 	useJUnit {
 		includeCategories 'org.zkoss.zktest.zats.ForkJVMTestOnly'
 	}
+	forkEvery = 1 // a new test process is started for every test class
 	if (project.hasProperty('maxParallelForks'))
 		maxParallelForks = project.maxParallelForks as int
-	if (project.hasProperty('forkEvery'))
-		forkEvery = project.forkEvery as int
 	if (project.ext['zktestWithoutA11y'] != 'false') {
 		filter {
 			excludeTestsMatching('*.wcag.*')
@@ -161,10 +160,9 @@ test {
 	useJUnit {
 		excludeCategories 'org.zkoss.zktest.zats.ForkJVMTestOnly'
 	}
+	forkEvery = 0 // reuse the test process for all test classes
 	if (project.hasProperty('maxParallelForks'))
 		maxParallelForks = project.maxParallelForks as int
-	if (project.hasProperty('forkEvery'))
-		forkEvery = project.forkEvery as int
 	if (project.ext['zktestWithoutA11y'] != 'false') {
 		filter {
 			excludeTestsMatching('*.wcag.*')
