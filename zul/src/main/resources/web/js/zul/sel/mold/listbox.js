@@ -64,8 +64,14 @@ function listbox$mold$(out) {
 		this.domFaker_(out, '-bdfaker', zcls);
 
 	out.push('<tbody id="',uuid,'-rows">');
-	for (var item = this.firstItem; item; item = this.nextItem(item))
-		item.redraw(out);
+
+	var iter = this.getBodyWidgetIterator({
+		skipHidden: true
+	});
+	while (iter.hasNext()) {
+		iter.next().redraw(out, iter);
+	}
+
 	out.push('</tbody>');
 	
 	this.redrawEmpty_(out);
