@@ -19,7 +19,9 @@ function selectbox$mold$(out) {
 		out.push('<option');
 		if (this._selectedIndex > -1 && this._selectedIndex == i)
 			out.push(' selected="selected"');
-		out.push('>', s[i], '</option>');
+		if (this._maxlength)
+			out.push('>', zUtl.encodeXML(s[i], {maxlength: this._maxlength}), '</option>');
+		else out.push('>', s[i], '</option>');
 	}
 	out.push('</select>');
 }

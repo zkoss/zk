@@ -48,6 +48,24 @@ zul.wgt.Selectbox = zk.$extends(zul.Widget, {
 			if (n) n.disabled = disabled ? 'disabled' : '';
 		},
 		/**
+		 * Sets whether multiple selections are allowed.
+		 * @param boolean multiple
+		 * @since 10.0.0 for Zephyr
+		 */
+		multiple: function multiple(_multiple) {
+			var n = this.$n();
+			if (n) n.multiple = _multiple ? 'multiple' : '';
+		},
+		/**
+		 * Sets the maximal length of each option's label.
+		 * @param int maxlength
+		 * @since 10.0.0 for Zephyr
+		 */
+		maxlength: function maxlength(_maxlength) {
+			var n = this.$n();
+			if (n) n.maxlength = maxlength;
+		},
+		/**
 		 * Returns the name of this component.
 		 * <p>
 		 * Default: null.
@@ -107,13 +125,36 @@ zul.wgt.Selectbox = zk.$extends(zul.Widget, {
 		zWatch.unlisten({onRestore: fn, onVParent: fn});
 	},
 	_doChange: function (evt) {
-		var n = this.$n(),
-			v = n.selectedIndex;
-		if (zk.opera) n.selectedIndex = v; //ZK-396: opera displays it wrong (while it is actually -1)
-		if (this._selectedIndex == v)
-			return;
-		this.setSelectedIndex(n.selectedIndex);
-		this.fire('onSelect', n.selectedIndex);
+		var n = this.$n();
+		if (!this._multiple) {
+			var v = n.selectedIndex;
+			if (zk.opera) n.selectedIndex = v; //ZK-396: opera displays it wrong (while it is actually -1)
+			if (this._selectedIndex == v)
+				return;
+			this.setSelectedIndex(n.selectedIndex);
+			this.fire('onSelect', n.selectedIndex);
+		} else {
+			var opts = this.items,
+				selIndex = [],
+				changed = false;
+			for (var j = 0, ol = opts.length; j < ol; ++j) {
+				var opt = opts[j],
+					optSelected = n.options[j].selected,
+					isSelected = this._selectedItems ? this._selectedItems.includes(opt) : null;
+				if (isSelected != optSelected) {
+					this._toggleItemSelection(opt, isSelected);
+					changed = true;
+				}
+				if (optSelected) selIndex.push(j);
+			}
+			if (!changed) return;
+			this.fire('onSelect', selIndex);
+		}
+	},
+	_toggleItemSelection: function (item, isSelect) {
+		if (!this._selectedItems) this._selectedItems = [];
+		if (isSelect) this._selectedItems.$remove(item);
+		else this._selectedItems.push(item);
 	},
 	//Bug 3304408: IE does not fire onchange
 	doBlur_: function (evt) {
@@ -129,6 +170,7 @@ zul.wgt.Selectbox = zk.$extends(zul.Widget, {
 		return this.$supers('domAttrs_', arguments)
 			+ (this.isDisabled() ? ' disabled="disabled"' : '')
 			+ ((v = this.getSelectedIndex()) > -1 ? ' selectedIndex="' + v + '"' : '')
-			+ ((v = this.getName()) ? ' name="' + v + '"' : '');
+			+ ((v = this.getName()) ? ' name="' + v + '"' : '')
+			+ (this._multiple ? ' multiple="multiple" style="height: auto; padding: 0;"' : '');
 	}
 });
