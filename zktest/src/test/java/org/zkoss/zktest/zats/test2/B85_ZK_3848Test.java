@@ -59,7 +59,7 @@ public class B85_ZK_3848Test {
 	@Test
 	public void test1() throws Exception {
 		File src = new File("src/test/java/org/zkoss/zktest/zats/test2/ZK3848_lang_addon_Test1.xml");
-		File dst = new File("debug/classes/metainfo/zk/lang-addon.xml");
+		File dst = new File("build/resources/main/metainfo/zk/lang-addon.xml");
 		
 		String name = "metainfo/zk/lang-addon.xml";
 		String elName = "addon-name";
@@ -88,8 +88,8 @@ public class B85_ZK_3848Test {
 
 	@Test
 	public void test2() throws IOException {
-		File src = new File("src/test/java/org/zkoss/zktest/zats/test2/ZK3848_lang_addon_Test1.xml");
-		File dst = new File("debug/classes/metainfo/zk/lang-addon.xml");
+		File src = new File("src/test/java/org/zkoss/zktest/zats/test2/ZK3848_lang_addon_Test2.xml");
+		File dst = new File("build/resources/main/metainfo/zk/lang-addon.xml");
 		
 		String name = "metainfo/zk/lang-addon.xml";
 		String elName = "addon-name";
