@@ -2961,11 +2961,13 @@ function matcherFromGroupMatchers( elementMatchers, setMatchers ) {
 					let w;
 					if (hasZChild) {
 						let targets = elem[zk.Widget._TARGETS];
-						w = targets.shift();
-						if (!targets.length) {
-							delete elem[zk.Widget._TARGETS];
+						if (targets) {
+							w = targets.shift();
+							if (!targets.length) {
+								delete elem[zk.Widget._TARGETS];
+							}
+							elem[zk.Widget._TARGET] = w;
 						}
-						elem[zk.Widget._TARGET] = w;
 					} else {
 						w = elem[zk.Widget._CURRENT_TARGET] || elem[zk.Widget._TARGET];
 					}
