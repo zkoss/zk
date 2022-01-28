@@ -2934,6 +2934,12 @@ function matcherFromGroupMatchers( elementMatchers, setMatchers ) {
 			if (hasZChild) {
 				// Treechildren and Treeitem has not DOM element.
 				elems = seed || byElement && Expr.find["ZCHILD"]("*", outermost);
+
+				/* Jumper Chen, Potix, 20220128*/
+				// if not found, try Dom element instead. for B85-ZK-3965.zul
+				if (!elems.length) {
+					elems = seed || byElement && Expr.find["TAG"]("*", outermost);
+				}
 			} else {
 				// We must always have either seed elements or outermost context
 				elems = seed || byElement && Expr.find["TAG"]("*", outermost);
