@@ -326,7 +326,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 				newData[i] = _deconstructPacket(data.item(i), buffers);
 			}
 			return newData;
-		} else if (typeof data === 'object' && !(data instanceof Date) && !zk.Widget.isInstance(data)) {
+		} else if (typeof data === 'object' && !(data instanceof Date) &&
+				!(data instanceof DateImpl) && !zk.Widget.isInstance(data)) {
 			const newData = {};
 			for (const key in data) {
 				// eslint-disable-next-line no-prototype-builtins
