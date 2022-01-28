@@ -32,6 +32,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -131,10 +132,12 @@ public class EmulatorClient implements Client, ClientCtrl {
 		if(zulPath == null)
 			throw new IllegalArgumentException("the path of ZUL can't be null");
 
+		final String zatsID = UUID.randomUUID().toString();
 		InputStream is = null;
 		try {
 			// load zul page
 			HttpURLConnection huc = getConnection(zulPath, "GET");
+			huc.addRequestProperty("ZATS_ID", zatsID);
 			huc.connect();
 
 			// read response
@@ -142,7 +145,7 @@ public class EmulatorClient implements Client, ClientCtrl {
 
 			// check if there exists any exception during connect
 			List l;
-			if ((l = ZKExceptionHandler.getInstance().getExceptions()).size() > 0) {
+			if ((l = ZKExceptionHandler.getInstance(zatsID).getExceptions()).size() > 0) {
 				//only throw the first exception, and clear all once thrown
 				throw (Throwable)l.get(0);
 			}
@@ -179,7 +182,7 @@ public class EmulatorClient implements Client, ClientCtrl {
 		} finally {
 			close(is);
 			//clear exceptions once thrown out
-			ZKExceptionHandler.getInstance().destroy();
+			ZKExceptionHandler.getInstance(zatsID).destroy();
 		}
 	}
 
@@ -298,9 +301,12 @@ public class EmulatorClient implements Client, ClientCtrl {
 	public void flush(String desktopId) {
 		OutputStream os = null;
 
+		List<String> zatsIDs = new ArrayList<>();
 		// #ZATS-11: when post-flush, handlers process AU responses.
 		// They might require posting more AU requests immediately, so repeat posting.
 		while(auQueues.containsKey(desktopId) && auQueues.get(desktopId).size() > 0) {
+			final String zatsID = UUID.randomUUID().toString();
+			zatsIDs.add(zatsID);
 			try {
 				// for fileupload
 				List<AbstractUploadAgentBuilder.FileItem> files = new ArrayList<>();
@@ -308,11 +314,11 @@ public class EmulatorClient implements Client, ClientCtrl {
 				if (combinedEvents == null) { // do nothing
 					return;
 				}
-
 				// create http request and perform it
 				HttpURLConnection c = getConnection("/zkau", "POST");
 				c.setDoOutput(true);
 				c.setDoInput(true);
+				c.addRequestProperty("ZATS_ID", zatsID);
 
 				// combine AU events from queue into single request
 				StringBuilder sb = new StringBuilder();
@@ -347,7 +353,7 @@ public class EmulatorClient implements Client, ClientCtrl {
 
 				// check if there exists any exception during auRequest
 				List l;
-				if ((l = ZKExceptionHandler.getInstance().getExceptions()).size() > 0) {
+				if ((l = ZKExceptionHandler.getInstance(zatsID).getExceptions()).size() > 0) {
 					//only throw the first exception, but can check in ZKExceptionHandler
 					throw (Throwable)l.get(0);
 				}
@@ -380,7 +386,9 @@ public class EmulatorClient implements Client, ClientCtrl {
 			} finally {
 				close(os);
 				//clear exceptions once thrown out
-				ZKExceptionHandler.getInstance().destroy();
+				for (String zatsId : zatsIDs) {
+					ZKExceptionHandler.destroy(zatsId);
+				}
 			}
 		}
 	}
