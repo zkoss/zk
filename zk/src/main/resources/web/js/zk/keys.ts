@@ -1,9 +1,9 @@
 /* keys.ts
 
 		Purpose:
-		
+
 		Description:
-		
+
 		History:
 				Tue Sep 01 11:59:55 CST 2020, Created by leon
 
@@ -15,7 +15,7 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
  * @since 9.5.0
  * @see <a href="https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values">Key Values</a>
  */
-zKeys = Object.freeze({
+export const zKeys = Object.freeze({
 	// Special values
 	/** UNIDENTIFIED
 	 * @type String

@@ -13,6 +13,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 <language>
 	<language-name>xhtml</language-name>
+	<depends>xul/html</depends>
 	<device-type>ajax</device-type>
 	<namespace>http://www.w3.org/1999/xhtml</namespace>
 	<extension>zhtml</extension><!-- the first one is the major one -->

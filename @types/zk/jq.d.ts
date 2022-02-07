@@ -17,7 +17,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 /// <reference types="jquery-mousewheel"/>
 
 declare namespace zk {
-    type Offset = [number, number];
+
+	type Offset = import('@zk/types').Offset;
+	type Desktop = import('@zk/widget').Desktop;
 
 	interface JQueryEffectExtension extends JQuery.Effects {
 		speeds: Record<string, number>;
@@ -37,7 +39,8 @@ declare namespace zk {
         margins: {l: string; r: string; t: string; b: string};
         paddings: {l: string; r: string; t: string; b: string};
         isReady: boolean; // expose jQuery undocumented property
-    
+
+	    (selector: unknown, zk?: any);
         $$(id: '', subId?: string): null;
         $$(id: string, subId?: string): NodeList;
         $$<T>(id: T, subId?: string): T;
@@ -47,7 +50,7 @@ declare namespace zk {
         css(elem: Node, name: string): string;
         css(elem: Node, name: string, numeric: true): number;
         css(elem: Node, name: string, extra: 'styleonly', styles?: CSSStyleDeclaration): number;
-        d2j(d: Date | DateImpl): string;
+        d2j(d: Date | import('globals').DateImpl): string;
         doSyncScroll(): void;
         evalJSON(s: string): any;
         filterTextStyle(style: string, plus?: string[]): string;
@@ -58,7 +61,7 @@ declare namespace zk {
         innerWidth(): number;
         innerX(): number;
         innerY(): number;
-        isAncestor(p: Node, c: Node): boolean;
+        isAncestor(p: HTMLElement | null | undefined, c: HTMLElement | null | undefined): boolean;
         isOverlapped(ofs1: Offset, dim1: Offset, ofs2: Offset, dim2: Offset, tolerant?: number): boolean;
         j2d(s: string): Date;
         newFrame(id: string, src?: string, style?: string | null): HTMLIFrameElement;
@@ -104,14 +107,15 @@ declare namespace zk {
         title: string;
         icon: 'QUESTION' | 'EXCLAMATION' | 'INFORMATION' | 'ERROR' | 'none' | string;
         button: string | Record<string, unknown>;
-        desktop: zk.Desktop;
+        desktop: Desktop;
     }
 }
 
 // extension of JQuery
 interface JQuery {
+
     selector?: string; // expose
-    zk: zk.JQZK;
+    zk: import('@zk/dom').JQZK;
 
 	on(selector: string, func: Function): this;
 	on(selector: string, data: unknown, func: Function): this;
@@ -128,10 +132,10 @@ interface JQuery {
 	     selector?: JQuery.Selector,
 		delegateEventFunc?: Function,
 		...args: unknown[]): this;
-    after(widget: zk.Widget, dt?: zk.Desktop): this;
-    append(widget: zk.Widget, dt?: zk.Desktop): this;
-    before(widget: zk.Widget, dt?: zk.Desktop): this;
-    prepend(widget: zk.Widget, dt?: zk.Desktop): this;
+    after(widget: Widget, dt?: zk.Desktop): this;
+    append(widget: Widget, dt?: zk.Desktop): this;
+    before(widget: Widget, dt?: zk.Desktop): this;
+    prepend(widget: Widget, dt?: zk.Desktop): this;
     absolutize(): this;
 }
 
@@ -150,7 +154,7 @@ declare namespace JQuery {
 		filterMetaData(data: Record<string, unknown>): zk.EventMetaData;
 		fire(el: Element, evtnm: string): void;
 		stop(evt: Event): void;
-		zk(evt: Event, wgt?: zk.Widget): zk.Event;
+		zk(evt: Event, wgt?: Widget | null): ZKEvent;
 	}
 }
 

@@ -12,6 +12,17 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+import {default as zk} from '@zk/zk';
+import {zjq, type JQZK} from '@zk/dom';
+import {type Widget} from '@zk/widget';
+
+export interface Anima {
+	anima: string;
+	el: HTMLElement;
+	wgt: Widget;
+	opts: Record<string, unknown>;
+}
+
 (function () {
 	var _aftAnims: (() => void)[] = [], //used zk.afterAnimate
 		_jqstop = jq.fx.stop;
@@ -22,7 +33,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			fn();
 	};
 
-	function _addAnique(id: string, data: zk.Anima): void {
+	function _addAnique(id: string, data: Anima): void {
 		var ary = zk._anique[id];
 		if (!ary)
 			ary = zk._anique[id] = [];
@@ -46,26 +57,26 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 	}
 
-	function _saveProp(self: zk.JQZK, set: string[]): zk.JQZK {
+	function _saveProp(self: JQZK, set: string[]): JQZK {
 		var ele = self.jq;
 		for (var i = set.length; i--;)
 			if (set[i] !== null) ele.data('zk.cache.' + set[i], ele[0].style[set[i]]);
 		return self;
 	}
-	function _restoreProp(self: zk.JQZK, set: string[]): zk.JQZK {
+	function _restoreProp(self: JQZK, set: string[]): JQZK {
 		var ele = self.jq;
 		for (var i = set.length; i--;)
 			if (set[i] !== null) ele.css(set[i], ele.data('zk.cache.' + set[i]));
 		return self;
 	}
-	function _checkAnimated(self: zk.JQZK, wgt: zk.Widget, opts, anima): boolean {
+	function _checkAnimated(self: JQZK, wgt: zk.Widget, opts, anima): boolean {
 		if (self.jq.is(':animated')) {
 			_addAnique(wgt.uuid, {el: self.jq[0], wgt: wgt, opts: opts, anima: anima});
 			return true;
 		}
 		return false;
 	}
-	function _checkPosition(self: zk.JQZK, css: Record<string, string>): zk.JQZK {
+	function _checkPosition(self: JQZK, css: Record<string, string>): JQZK {
 		var pos = self.jq.css('position');
 		if (!pos || pos == 'static')
 			css.position = 'relative';
@@ -74,7 +85,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 /** @partial zk
  */
-zk.copy(zk, {
+Object.assign(zk, {
 	/** Returns whether there is some animation taking place.
 	 * If you'd like to have a function to be called only when no animation
 	 * is taking place (such as waiting for sliding down to be completed),
@@ -113,7 +124,7 @@ zk.copy(zk, {
 
 /** @partial jqzk
  */
-zk.copy(zjq.prototype, {
+Object.assign(zjq.prototype, {
 	/**
 	 * Get the value of animation speed assigned through client attribute "data-animationspeed"
 	 * @param Object defaultValue [optional] default value if widget doesn't have this attribute.
@@ -129,17 +140,17 @@ zk.copy(zjq.prototype, {
 	 * @return Object this value will be Integer or String.
 	 * @since 7.0.3
 	 */
-	getAnimationSpeed: function (this: zk.JQZK, defaultValue) {
+	getAnimationSpeed: function (this: JQZK, defaultValue) {
 		var animationSpeed = jq(this.$().$n()).closest('[data-animationspeed]').data('animationspeed'),
 			jqSpeed = jq.fx['speeds'];
-		
+
 		if (typeof animationSpeed === 'string') {
 			if (jqSpeed[animationSpeed])
 				return jqSpeed[animationSpeed];
 			else
 				animationSpeed = parseInt(animationSpeed);
 		}
-		
+
 		return typeof animationSpeed === 'number' && !isNaN(animationSpeed) ? animationSpeed : (defaultValue === 0 ? 0 : defaultValue || jqSpeed._default);
 	},
 	/** Slides down (show) of the matched DOM element(s).
@@ -159,7 +170,7 @@ zk.copy(zjq.prototype, {
 	 * <dd>The function to invoke after the animation.</dd>
 	 * </dl>
 	 */
-	slideDown: function (this: zk.JQZK, wgt, opts) {
+	slideDown: function (this: JQZK, wgt, opts) {
 		if (_checkAnimated(this, wgt, opts, 'slideDown'))
 			return this;
 
@@ -218,10 +229,10 @@ zk.copy(zjq.prototype, {
 	 * <dd>The function to invoke after the animation.</dd>
 	 * </dl>
 	 */
-	slideUp: function (this: zk.JQZK, wgt, opts) {
+	slideUp: function (this: JQZK, wgt, opts) {
 		if (_checkAnimated(this, wgt, opts, 'slideUp'))
 			return this;
-		
+
 		var anchor = opts ? opts.anchor || 't' : 't',
 			prop = ['top', 'left', 'height', 'width', 'overflow', 'position', 'border', 'margin', 'padding'],
 			anima: Record<string, string> = {},
@@ -273,10 +284,10 @@ zk.copy(zjq.prototype, {
 	 * <dd>The function to invoke after the animation.</dd>
 	 * </dl>
 	 */
-	slideOut: function (this: zk.JQZK, wgt, opts) {
+	slideOut: function (this: JQZK, wgt, opts) {
 		if (_checkAnimated(this, wgt, opts, 'slideOut'))
 			return this;
-		
+
 		var anchor = opts ? opts.anchor || 't' : 't',
 			prop = ['top', 'left', 'position', 'border', 'margin', 'padding'],
 			anima: Record<string, string> = {},
@@ -324,10 +335,10 @@ zk.copy(zjq.prototype, {
 	 * <dd>The function to invoke after the animation.</dd>
 	 * </dl>
 	 */
-	slideIn: function (this: zk.JQZK, wgt, opts) {
+	slideIn: function (this: JQZK, wgt, opts) {
 		if (_checkAnimated(this, wgt, opts, 'slideIn'))
 			return this;
-		
+
 		var anchor = opts ? opts.anchor || 't' : 't',
 			prop = ['top', 'left', 'position', 'border', 'margin', 'padding'],
 			anima: Record<string, string> = {},
@@ -362,7 +373,7 @@ zk.copy(zjq.prototype, {
 			always: opts.afterAnima
 		});
 	},
-	_updateProp: function (this: zk.JQZK, prop) { //used by Bandpopup.js
+	_updateProp: function (this: JQZK, prop) { //used by Bandpopup.js
 		_saveProp(this, prop);
 	},
 	/** Initializes the animation with the default effect, such as
@@ -378,7 +389,7 @@ zk.copy(zjq.prototype, {
 	 * @return jqzk
 	 * @since 5.0.6
 	 */
-	defaultAnimaOpts: function (this: zk.JQZK, wgt, opts, prop, visible) {
+	defaultAnimaOpts: function (this: JQZK, wgt, opts, prop, visible) {
 		var self = this;
 		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-ignore

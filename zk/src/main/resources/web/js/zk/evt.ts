@@ -3,7 +3,7 @@
 	Purpose:
 		ZK Event and ZK Watch
 	Description:
-		
+
 	History:
 		Thu Oct 23 10:53:17     2008, Created by tomyeh
 
@@ -12,6 +12,37 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	This program is distributed under LGPL Version 2.1 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
+import {default as zk, ZKObject} from '@zk/zk';
+import type {Widget} from '@zk/widget';
+import {Callable} from '@zk/types';
+
+export interface EventOptions {
+	implicit: boolean;
+	ignorable: boolean;
+	toServer: boolean;
+	uri: string;
+	defer: boolean;
+	serverAlive: boolean;
+	forceAjax: boolean;
+	sendAhead: boolean;
+	rtags: {[key: string]: unknown};
+	start: {
+		time: number | Date;
+		coords: [number, number];
+	};
+	stop: {
+		time: number | Date;
+		coords: [number, number];
+	};
+	dir: string;
+}
+
+export interface EventStopOptions {
+	revoke: boolean;
+	propagation: boolean;
+	dom: boolean;
+	au: boolean;
+}
 /** The class representing a widget event (aka., a ZK event).
  * A widget event is the widget-level event that a widget can fire and the client application can listen.
  *
@@ -58,18 +89,37 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
  * </table>
  * @disable(zkgwt)
  */
-zk.Event = zk.$extends(zk.Object, {
+export class Event extends ZKObject {
+
+	// dom.ts#metaData
+	declare public which;
+	declare public metaKey;
+	declare public ctrlKey;
+	declare public altKey;
+	declare public shiftKey;
+
+	// dom.ts#mouseData
+	declare public pageX;
+	declare public pageY;
+
+	// dom.ts#keyData
+	declare public key;
+	declare public keyCode;
+	declare public charCode;
+
+	public shallStop = false;
+
 	/** The target widget (readonly).
 	 * @type zk.Widget
 	 * @see #currentTarget
 	 */
-	//target: null,
+	public target: Widget;
 	/** Indicates the target which is handling this event.
 	 * <p>By default, an event will be propagated to its parent, and this member tells which widget is handling it, while #target is the widget that the event is targeting.
 	 * @type zk.Widget
 	 * @see #target
 	 */
-	//currentTarget: null,
+	public currentTarget: Widget;
 	/** The event name, such as 'onChange'.
 	 * The data which depends on the event. Here is the list of Event Data.
 	 * <p>However, if data is an instance of Map, its content is copied to the event instance. Thus, you can access them directly with the event instance as follows.
@@ -81,7 +131,7 @@ onClick: function (evt) {
 </code></pre>
 	 * @type String
 	 */
-	//name: null,
+	public name: string;
 	/** The data which depends on the event. Here is the list of Event Data.
 	 * <p>Data can be any javascript Object. You can bring Number, String or JSON object to server side with it.
 	 * <p>The javascript JSON object will be transfered to org.zkoss.json.JSONObject at server side as the following:
@@ -109,7 +159,7 @@ onClick: function (evt) {
 	 * <p>Refer to <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/Communication/AU_Requests/Server-side_Processing">ZK Client-side Reference: AU Requests: Server-side Processing</a>.
 	 * @type Object
 	 */
-	//data: null,
+	public data: unknown | null;
 	/** The options (never null).
 	 * <p>Allowed properties:
 	 * <ul>
@@ -123,36 +173,36 @@ onClick: function (evt) {
 	 * </ul>
      * @type Map
      */
-	//opts: null,
+	public opts: EventOptions;
 	/** The DOM event that causes this widget event, or null if not available.
 	 * @type jq.Event
 	 */
-	//domEvent: null,
+	public domEvent: JQ.Event;
 	/** The DOM element that the event is targeting, or null if not available.
 	 * @type DOMElement
 	 */
-	//domTarget: null,
+	public domTarget: HTMLElement|undefined;
 	/** Indicates whether the event propagation is stopped.
 	 * @type boolean
 	 * @see #stop
 	 * @see #auStopped
 	 * @see #domStopped
 	 */
-	//stopped: false,
+	public stopped = false;
 	/** Indicates whether to stop the sending of the AU request to the server.
 	 * @type boolean
 	 * @see #stop
 	 * @see #stopped
 	 * @see #domStopped
 	 */
-	//auStopped: false,
+	public auStopped = false;
 	/** Indicates whether to stop the native DOM event.
 	 * @type boolean
 	 * @see #stop
 	 * @see #stopped
 	 * @see #auStopped
 	 */
-	//domStopped: false,
+	public domStopped = false;
 
 	/** Constructor.
 	 * @param zk.Widget target the target widget.
@@ -161,7 +211,8 @@ onClick: function (evt) {
 	 * @param Map opts [optional] the options. Refer to {@link #opts}
 	 * @param jq.Event domEvent [optional] the DOM event that causes this widget event.
 	 */
-	$init: function (target, name, data, opts, domEvent) {
+	public constructor(target, name, data, opts, domEvent) {
+		super();
 		this.currentTarget = this.target = target;
 		this.name = name;
 		this.data = data;
@@ -171,13 +222,13 @@ onClick: function (evt) {
 		this.opts = opts || {rtags: {}};
 		if (this.domEvent = domEvent)
 			this.domTarget = domEvent.target;
-	},
+	}
 	/** Adds the additions options to {@link #opts}.
 	 * @param Map opts a map of options to append to #opts
 	 */
-	addOptions: function (opts) {
-		this.opts = zk.copy(this.opts, opts);
-	},
+	public addOptions(opts: Partial<EventOptions>): void {
+		this.opts = Object.assign(this.opts, opts);
+	}
 	/** Stop the event propagation.
 <pre><code>
 evt.stop();
@@ -203,12 +254,12 @@ evt.stop({progagation:true,revoke:true}); //revoke the event propagation
 	In other words, to stop it, you have to specify the au option explicitly. </li>
 	</ul>
 	*/
-	stop: function (opts) {
+	public stop(opts?: Partial<EventStopOptions>): void {
 		var b = !opts || !opts.revoke;
 		if (!opts || opts.propagation) this.stopped = b;
 		if (!opts || opts.dom) this.domStopped = b;
 		if (opts && opts.au) this.auStopped = b;
-	},
+	}
 	/** Indicates whether a key is currently pressed.
 	 * You can also pass more then one key into this method as a key combination, but combination only works with modifier keys(ALT/CONTROL/SHIFT/META).
 	 * If you combine two(or more) keys that are not modifier keys, you will always get an exception since it is invalid.
@@ -220,7 +271,7 @@ evt.stop({progagation:true,revoke:true}); //revoke the event propagation
 	 * @since 9.5.0
 	 * @see _global_.zKeys
 	 */
-	isPressed: function () {
+	public isPressed(): boolean {
 		var keyCount = 0,
 			result = true;
 		for (var i = 0, len = arguments.length; i < len; i++) {
@@ -238,21 +289,56 @@ evt.stop({progagation:true,revoke:true}); //revoke the event propagation
 		}
 		return result;
 	}
-});
+}
+export interface ClientActivity {
+	_beforeSizeForRead: {_beforeSizeForRead} | [unknown, Callable];
+	beforeSize: {beforeSize} | [unknown, Callable];
+	afterSize: {afterSize} | [unknown, Callable];
+	onBindLevelChange: {onBindLevelChange} | [unknown, Callable];
+	onBindLevelMove: {onBindLevelMove: Callable} | [unknown, Callable];
+	onFitSize: {onFitSize} | [unknown, Callable];
+	onHide: {onHide} | [unknown, Callable];
+	onFloatUp: {onFloatUp} | [unknown, Callable];
+	onResponse: {onResponse} | [unknown, Callable];
+	onCommandReady: {onCommandReady} | [unknown, Callable];
+	onRestore: {onRestore} | [unknown, Callable];
+	onScroll: {onScroll} | [unknown, Callable];
+	onSend: {onSend} | [unknown, Callable];
+	onSize: {onSize} | [unknown, Callable];
+	onShow: {onShow} | [unknown, Callable];
+	onVParent: {onVParent} | [unknown, Callable];
+}
 
-zWatch = (function () {
+export interface FireOptions {
+	reverse: boolean;
+	timeout: number;
+	triggerByFocus: boolean;
+	triggerByClick: number;
+	rtags: {[key: string]: unknown};
+}
+
+export interface ZWatch {
+	fire(name: string, origin?: unknown, opts?: Partial<FireOptions>, ...vararg: unknown[]): void;
+	fireDown(name: string, origin: unknown, opts?: Partial<FireOptions> | null, ...vararg: unknown[]): void;
+	listen(infs: Partial<ClientActivity>): void;
+	unlisten(infs: Partial<ClientActivity>): void;
+	unlistenAll(name: string): void;
+}
+
+export const zWatch: ZWatch & {onBindLevelMove: Callable} = (function () {
 	var _visiEvts = {onFitSize: true, onSize: true, onShow: true, onHide: true, beforeSize: true, afterSize: true},
 		_watches = {}, //Map(watch-name, [object, [watches..]]) [0]: obj, [1]: [inf]
 		_dirty,
-		_Gun = zk.$extends(zk.Object, {
-			$init: function (name, xinfs, args, org, fns) {
+		_Gun = class _Gun extends zk.Object {
+			public constructor(name, xinfs, args, org, fns) {
+				super();
 				this.name = name;
 				this.xinfs = xinfs;
 				this.args = args;
 				this.origin = org;
 				this.fns = fns;
-			},
-			fire: function (ref) {
+			}
+			public fire(ref?): void {
 				var infs, xinf,
 					name = this.name,
 					xinfs = this.xinfs,
@@ -269,15 +355,15 @@ zWatch = (function () {
 				} else
 					while (xinf = xinfs.shift())
 						_invoke(name, xinf[1], xinf[0], args, fns);
-			},
-			fireDown: function (ref) {
+			}
+			public fireDown(ref): void {
 				if (!ref || ref.bindLevel == null)
 					this.fire(ref);
 
 				(new _Gun(this.name, _visiChildSubset(this.name, this.xinfs, ref, true), this.args, this.origin, this.fns))
 				.fire();
 			}
-		});
+		};
 
 	function _invoke(name, infs, o, args, fns): void {
 		for (var j = 0, l = infs.length; j < l;) {
@@ -338,7 +424,7 @@ zWatch = (function () {
 					xinfs.splice(j, 1);
 		return xinfs;
 	}
-	function _target(inf): zk.Widget {
+	function _target(inf): Widget {
 		return jq.isArray(inf) ? inf[0] : inf;
 	}
 	function _fn(inf, o, name): (() => void) {
@@ -475,7 +561,7 @@ zWatch.listen({
 	* <p>Note: the order is parent-first (if the watch has a method called getParent or a member called parent), so the invocation ({@link #fire}) is from the parent to the child if both are registered.
 	* @param Map infs a map of the watch listeners. Each key of the map is the the watch name, and each value is the target or a two-element array, where the first element is the target and the second the listener function. It assumes the target implements the method with the same name as the watch name. In addition, when the method is called, this references to the target.
 	*/
-	listen: function (infs) {
+	listen(infs: Partial<ClientActivity>): void {
 		for (var name in infs) {
 			var wts = _watches[name],
 				inf = infs[name],
@@ -518,7 +604,7 @@ zWatch.listen({
 	/** Removes watch listener(s).
 	 * @param Map infs a map of watch listeners. Each key is the watch name, and each value is the target or or a two-element array, where the first element is the target and the second the listener function.
 	 */
-	unlisten: function (infs) {
+	unlisten(infs: Partial<ClientActivity>): void {
 		for (var name in infs) {
 			var wts = _watches[name];
 			if (wts) {
@@ -539,7 +625,7 @@ zWatch.listen({
 	/** Removes all listener of the specified watch.
 	 * @param String name the watch name, such as onShow
 	 */
-	unlistenAll: function (name) {
+	unlistenAll(name): void {
 		delete _watches[name];
 	},
 	/** Fires an watch that invokes all listeners of the watch.
@@ -579,7 +665,7 @@ onX: function (ctl) {
 	* <li>timeout - how many miliseconds to wait before calling the listeners. If Omitted or negative, the listeners are invoked immediately.</li>
 	* @param Object... vararg any number of arguments to pass to the listener. They will become the second, third and following arguments when the listener is called.
 	*/
-	fire: function (name, org, opts) {
+	fire(name: string, org?: unknown, opts?: Partial<FireOptions>): void {
 		_fire(name, org, opts, arguments);
 	},
 	/** Fires an watch but invokes only the listeners that are a descendant of the specified origin.
@@ -627,10 +713,10 @@ onX: function (ctl) {
 	* <li>timeout - how many miliseconds to wait before calling the listeners. If Omitted or negative, the listeners are invoked immediately.</li></ul>
 	* @param Object... vararg any number of arguments to pass to the listener. They will become the third, forth, and following arguments when the listener is called.
 	*/
-	fireDown: function (name, org, opts) {
+	fireDown(name: string, org?: Widget, opts?: Partial<FireOptions> | null, ...vararg: unknown[]): void {
 		_fire(name, org, zk.copy(opts, {down: true}), arguments);
 	},
-	onBindLevelMove: function () { //internal
+	onBindLevelMove(): void { //internal
 		_dirty = true;
 	}
   };

@@ -14,14 +14,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 /// <reference path="globals.d.ts" />
 /// <reference path="jq.d.ts" />
-/// <reference path="zjq.d.ts" />
-/// <reference path="zk.d.ts" />
-/// <reference path="zUtl.d.ts" />
-/// <reference path="zWatch.d.ts" />
 /// <reference path="zKeys.d.ts" />
-/// <reference path="zAu.d.ts" />
 /// <reference path="zul.d.ts" />
 /// <reference path="zkex.d.ts" />
 /// <reference path="zkmax.d.ts" />
 /// <reference path="zkbind.d.ts" />
-/// <reference path="zFlex.d.ts" />

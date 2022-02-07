@@ -1,9 +1,9 @@
 /* math.ts
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Sun Dec 14 17:16:17     2008, Created by tomyeh
 
@@ -12,25 +12,18 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+import {default as zk} from '@zk/zk';
+
 /** A big decimal.
  * @disable(zkgwt)
  */
-zk.BigDecimal = zk.$extends(zk.Object, {
-	_precision: 0,
-	$define: {
-		/** Returns the precision.
-		 * <p>Default: 0
-		 * @return int
-		 */
-		/** Sets the precision
-		 * @param int precision the precision
-		 */
-		precision: null
-	},
+export class BigDecimal extends zk.Object {
+	private _precision = 0;
 	/** Constructor.
 	 * @param Object value a number or a string
 	 */
-	$init: function (value) {
+	public constructor(value: number | string) {
+		super();
 		value = value ? '' + value : '0';
 		var jdot = -1;
 		for (var j = 0, len = value.length; j < len; ++j) {
@@ -55,21 +48,34 @@ zk.BigDecimal = zk.$extends(zk.Object, {
 			this._dot = true;
 		}
 		this._value = value;
-	},
-	$toNumber: function () {
+	}
+	/** Returns the precision.
+	 * <p>Default: 0
+	 * @return int
+	 */
+	public getPrecision(): number {
+		return this._precision;
+	}
+	/** Sets the precision
+	 * @param int precision the precision
+	 */
+	public setPrecision(precision: number): void {
+		this._precision = precision;
+	}
+	public $toNumber(): number {
 		var v = parseFloat(this._value), p;
 		if (this._negative)
 			v *= -1;
 		if (p = this._precision)
 			v /= Math.pow(10, p);
 		return v;
-	},
+	}
 	/** Returns a string for this big decimal (per the original form).
 	 * To have a Locale-dependent string, use {@link #$toLocaleString}
 	 * instead.
 	 * @return String
 	 */
-	$toString: function () { //toString is reserved keyword for IE
+	public $toString(): string { //toString is reserved keyword for IE
 		if (this._value.length == 0) return '';
 		var j = this._value.length - this._precision,
 			valFixed = '';
@@ -77,11 +83,11 @@ zk.BigDecimal = zk.$extends(zk.Object, {
 			for (var len = -j; len-- > 0;)
 				valFixed += '0';
 		return (this._negative ? '-' : '') + this._value.substring(0, j) + (this._dot || this._precision ? '.' + valFixed + this._value.substring(j) : '');
-	},
+	}
 	/** Returns a Locale-dependent string for this big decimal(for human's eye).
 	 * @return String
 	 */
-	$toLocaleString: function () { //toLocaleString is reserved keyword for IE
+	public $toLocaleString(): string { //toLocaleString is reserved keyword for IE
 		if (this._value.length == 0) return '';
 		var j = this._value.length - this._precision;
 		if (j <= 0) {
@@ -92,16 +98,17 @@ zk.BigDecimal = zk.$extends(zk.Object, {
 		}
 		return (this._negative ? zk.MINUS : '') + this._value.substring(0, j) + (this._precision ? zk.DECIMAL + this._value.substring(j) : '');
 	}
-});
+}
 
 /** A long integer.
  * @disable(zkgwt)
  */
-zk.Long = zk.$extends(zk.Object, {
+export class Long extends zk.Object {
 	/** Constructor.
 	 * @param Object value a number or a string
 	 */
-	$init: function (value) {
+	public constructor(value: number | string) {
+		super();
 	//Note: it shall work like parseInt:
 	//1) consider '.' rather than zkDecimal
 	//2) ignore unrecognized characters
@@ -120,13 +127,13 @@ zk.Long = zk.$extends(zk.Object, {
 				value = 'NaN';
 		}
 		this._value = value;
-	},
+	}
 	/** Scales the number as value * 10 ^ digits.
 	 * @param int digits the number of digits to scale.
 	 * If zero, nothing changed.
 	 * @since 5.0.10.
 	 */
-	scale: function (digits) {
+	public scale(digits: number): void {
 		var val = this._value || '',
 			n = val.length;
 		if (n)
@@ -136,20 +143,20 @@ zk.Long = zk.$extends(zk.Object, {
 						val += '0';
 			} else if (digits < 0)
 				this._value = (n += digits) <= 0 ? '0' : val.substring(0, n);
-	},
-	$toNumber: function () {
+	}
+	public $toNumber(): number {
 		return parseFloat(this._value);
-	},
+	}
 	/** Returns a string for this long integer
 	 * To have a Locale-dependent string, use {@link #$toLocaleString}
 	 * instead.
 	 * @return String
 	 */
-	$toString: _zkf = function (this: zk.Long) { //toString is reserved keyword for IE
+	public $toString(): string { //toString is reserved keyword for IE
 		return this._value;
-	},
+	}
 	/** Returns a Locale-dependent string for this long integer.
 	 * @return String
 	 */
-	$toLocaleString: _zkf
-});
+	public $toLocaleString = (): string => this.$toString();
+}

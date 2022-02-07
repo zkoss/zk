@@ -4,7 +4,7 @@
 	Purpose:
 		A definition of the xul/html language for ZK
 	Description:
-		
+
 	Note:
 	 1. Properties defined here are assigned to all instances of the
 		specified definition, no matter it is created by ZUML or by program.
@@ -28,7 +28,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<renderer-class>org.zkoss.zul.impl.PageRenderer</renderer-class>
 	<message-loader-class>org.zkoss.zul.impl.ZulMessageLoader</message-loader-class>
 
-	<javascript package="zk"/>
+	<javascript src="/js/zk.js"/> <!-- TODO: main entry point -->
+	<javascript package="zk"/> <!-- for server side properties. -->
 	<javascript package="zul.lang"/> <!-- Don't merge -->
 	<javascript package="zul" merge="true"/><!-- merge since usually required though optional -->
 	<javascript package="zul.wgt" merge="true"/><!-- merge since usually required though optional -->
@@ -98,7 +99,7 @@ def alert(m):
 	org.zkoss.zul.Messagebox.show(m)
 	</zscript>
 
-	<!-- 
+	<!--
 		Note: '~./' means it is located in the class path starting from
 		'/metainfo/web'. For example, '~./img/abc.gif' means abc.gif located
 		at '/metainfo/web/img'.
@@ -306,7 +307,7 @@ def alert(m):
 			<mold-name>default</mold-name>
 			<mold-uri>mold/bandbox.js</mold-uri>
 			<css-uri>css/combo.css.dsp</css-uri>
-		</mold>		
+		</mold>
 		<mold>
 			<mold-name>rounded</mold-name>
 			<mold-uri>mold/bandbox.js</mold-uri>
@@ -515,7 +516,7 @@ def alert(m):
 			<mold-name>default</mold-name>
 			<mold-uri>mold/datebox.js</mold-uri>
 			<css-uri>css/calendar.css.dsp</css-uri><!-- not combo.css.dsp -->
-		</mold>		
+		</mold>
 		<mold>
 			<mold-name>rounded</mold-name>
 			<mold-uri>mold/datebox.js</mold-uri>
@@ -659,7 +660,7 @@ def alert(m):
 			<css-uri>css/groupbox.css.dsp</css-uri>
 		</mold>
 		<preserve-blank/>
-	</component>	
+	</component>
 	<component>
 		<component-name>hbox</component-name>
 		<component-class>org.zkoss.zul.Hbox</component-class>
@@ -943,7 +944,7 @@ def alert(m):
 		<extends>layoutregion</extends>
 		<component-class>org.zkoss.zul.North</component-class>
 		<widget-class>zul.layout.North</widget-class>
-	</component>	
+	</component>
 	<component>
 		<component-name>paging</component-name>
 		<component-class>org.zkoss.zul.Paging</component-class>
@@ -1186,7 +1187,7 @@ def alert(m):
 		<widget-class>zul.tab.Tabbox</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>mold/tabbox.js</mold-uri>	
+			<mold-uri>mold/tabbox.js</mold-uri>
 			<css-uri>css/tabbox.css.dsp</css-uri>
 		</mold>
 		<mold>

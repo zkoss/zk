@@ -14,6 +14,8 @@ Copyright (C) 2017 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+import {default as zk} from '@zk/zk';
+
 window.Dates = {
 	newInstance: function (param: number | DateImpl | [number, number, number | undefined, number | undefined, number | undefined, number | undefined, number | undefined], tz) {
 		var m;
@@ -38,10 +40,176 @@ window.Dates = {
 	}
 };
 
-window.DateImpl = function (this: DateImpl, m, tz): void {
-	this._moment = m;
-	this._timezone = tz;
-};
+export class DateImpl extends Date {
+	public _moment: Moment;
+	public _timezone: string;
+	public constructor(m: Moment, tz: string) {
+		super();
+		this._moment = m;
+		this._timezone = tz;
+	}
+	public tz(v): this {
+		if (v) this._timezone = parseTzId(v);
+		return this;
+	}
+	public _getTzMoment(): Moment {
+		return this._moment.tz(this._timezone);
+	}
+	public _getUTCMoment(): Moment {
+		return this._moment.tz('UTC');
+	}
+	public getTimeZone(): unknown {
+		return this._timezone;
+	}
+	public getDate(): number {
+		return this._getTzMoment().date();
+	}
+	public getDay(): number {
+		return this._getTzMoment().day();
+	}
+	public getFullYear(): number {
+		return this._getTzMoment().year();
+	}
+	public getHours(): number {
+		return this._getTzMoment().hour();
+	}
+	public getMilliseconds(): number {
+		return this._getTzMoment().millisecond();
+	}
+	public getMinutes(): number {
+		return this._getTzMoment().minute();
+	}
+	public getMonth(): number {
+		return this._getTzMoment().month();
+	}
+	public getSeconds(): number {
+		return this._getTzMoment().second();
+	}
+	public getTime(): number {
+		return this._moment.valueOf();
+	}
+	public getTimezoneOffset(): number {
+		return -this._getTzMoment().utcOffset();
+	}
+	public getUTCDate(): number {
+		return this._getUTCMoment().date();
+	}
+	public getUTCDay(): number {
+		return this._getUTCMoment().day();
+	}
+	public getUTCFullYear(): number {
+		return this._getUTCMoment().year();
+	}
+	public getUTCHours(): number {
+		return this._getUTCMoment().hour();
+	}
+	public getUTCMilliseconds(): number {
+		return this._getUTCMoment().millisecond();
+	}
+	public getUTCMinutes(): number {
+		return this._getUTCMoment().minute();
+	}
+	public getUTCMonth(): number {
+		return this._getUTCMoment().month();
+	}
+	public getUTCSeconds(): number {
+		return this._getUTCMoment().second();
+	}
+	public getYear(): number {
+		return this._getTzMoment().year() - 1900;
+	}
+	public setDate(v): number {
+		return this._getTzMoment().date(v).valueOf();
+	}
+	public setFullYear(y: number, m: number, d: number): number {
+		var mt = this._getTzMoment();
+		mt.year(y);
+		if (m != null) {
+			mt.month(m);
+			if (d != null) mt.date(d);
+		}
+		return mt.valueOf();
+	}
+	public setHours(hr: number, min: number, sec: number, msec: number): number {
+		var mt = this._getTzMoment();
+		mt.hour(hr);
+		if (min != null) {
+			mt.minute(min);
+			if (sec != null) {
+				mt.second(sec);
+				if (msec != null) mt.millisecond(msec);
+			}
+		}
+		return mt.valueOf();
+	}
+	public setMilliseconds(v: number): number {
+		return this._getTzMoment().millisecond(v).valueOf();
+	}
+	public setMinutes(v: number): number {
+		return this._getTzMoment().minute(v).valueOf();
+	}
+	public setMonth(v: number): number {
+		return this._getTzMoment().month(v).valueOf();
+	}
+	public setSeconds(v: number): number {
+		return this._getTzMoment().second(v).valueOf();
+	}
+	public setTime(v: number): number {
+		this._moment = zk.mm(v);
+		return this._moment.valueOf();
+	}
+	public setUTCDate(v: number): number {
+		return this._getUTCMoment().date(v).valueOf();
+	}
+	public setUTCFullYear(v: number): number {
+		return this._getUTCMoment().year(v).valueOf();
+	}
+	public setUTCHours(v: number): number {
+		return this._getUTCMoment().hour(v).valueOf();
+	}
+	public setUTCMilliseconds(v: number): number {
+		return this._getUTCMoment().millisecond(v).valueOf();
+	}
+	public setUTCMinutes(v: number): number {
+		return this._getUTCMoment().minute(v).valueOf();
+	}
+	public setUTCMonth(v: number): number {
+		return this._getUTCMoment().month(v).valueOf();
+	}
+	public setUTCSeconds(v: number): number {
+		return this._getUTCMoment().second(v).valueOf();
+	}
+	public setYear(v: number): number {
+		return this._getTzMoment().year(v).valueOf();
+	}
+	public toString(): string {
+		return this._getTzMoment().toString();
+	}
+	public valueOf(): number {
+		return this._moment.valueOf();
+	}
+	public toDateString(): string {
+		return '';
+	}
+	public toTimeString(): string {
+		return '';
+	}
+	public toLocaleDateString(): string {
+		return '';
+	}
+	public toLocaleTimeString(): string {
+		return '';
+	}
+	public toUTCString(): string {
+		return '';
+	}
+	public toISOString(): string {
+		return '';
+	}
+	public toJSON(key): string {
+		return '';
+	}
+}
 
 function parseTzId(id: string): string {
 	if (/^GMT\+([0]\d|[1][0-2]):[0]{2}$/i.test(id)) {
@@ -53,166 +221,4 @@ function parseTzId(id: string): string {
 	}
 }
 
-window.DateImpl.prototype = {
-	tz: function (v) {
-		if (v) this._timezone = parseTzId(v);
-		return this;
-	},
-	_getTzMoment: function () {
-		return this._moment.tz(this._timezone);
-	},
-	_getUTCMoment: function () {
-		return this._moment.tz('UTC');
-	},
-	getTimeZone: function () {
-		return this._timezone;
-	},
-	getDate: function () {
-		return this._getTzMoment().date();
-	},
-	getDay: function () {
-		return this._getTzMoment().day();
-	},
-	getFullYear: function () {
-		return this._getTzMoment().year();
-	},
-	getHours: function () {
-		return this._getTzMoment().hour();
-	},
-	getMilliseconds: function () {
-		return this._getTzMoment().millisecond();
-	},
-	getMinutes: function () {
-		return this._getTzMoment().minute();
-	},
-	getMonth: function () {
-		return this._getTzMoment().month();
-	},
-	getSeconds: function () {
-		return this._getTzMoment().second();
-	},
-	getTime: function () {
-		return this._moment.valueOf();
-	},
-	getTimezoneOffset: function () {
-		return -this._getTzMoment().utcOffset();
-	},
-	getUTCDate: function () {
-		return this._getUTCMoment().date();
-	},
-	getUTCDay: function () {
-		return this._getUTCMoment().day();
-	},
-	getUTCFullYear: function () {
-		return this._getUTCMoment().year();
-	},
-	getUTCHours: function () {
-		return this._getUTCMoment().hour();
-	},
-	getUTCMilliseconds: function () {
-		return this._getUTCMoment().millisecond();
-	},
-	getUTCMinutes: function () {
-		return this._getUTCMoment().minute();
-	},
-	getUTCMonth: function () {
-		return this._getUTCMoment().month();
-	},
-	getUTCSeconds: function () {
-		return this._getUTCMoment().second();
-	},
-	getYear: function () {
-		return this._getTzMoment().year() - 1900;
-	},
-	setDate: function (v) {
-		return this._getTzMoment().date(v).valueOf();
-	},
-	setFullYear: function (y, m, d) {
-		var mt = this._getTzMoment();
-		mt.year(y);
-		if (m != null) {
-			mt.month(m);
-			if (d != null) mt.date(d);
-		}
-		return mt.valueOf();
-	},
-	setHours: function (hr, min, sec, msec) {
-		var mt = this._getTzMoment();
-		mt.hour(hr);
-		if (min != null) {
-			mt.minute(min);
-			if (sec != null) {
-				mt.second(sec);
-				if (msec != null) mt.millisecond(msec);
-			}
-		}
-		return mt.valueOf();
-	},
-	setMilliseconds: function (v) {
-		return this._getTzMoment().millisecond(v).valueOf();
-	},
-	setMinutes: function (v) {
-		return this._getTzMoment().minute(v).valueOf();
-	},
-	setMonth: function (v) {
-		return this._getTzMoment().month(v).valueOf();
-	},
-	setSeconds: function (v) {
-		return this._getTzMoment().second(v).valueOf();
-	},
-	setTime: function (v) {
-		this._moment = zk.mm(v);
-		return this._moment.valueOf();
-	},
-	setUTCDate: function (v) {
-		return this._getUTCMoment().date(v).valueOf();
-	},
-	setUTCFullYear: function (v) {
-		return this._getUTCMoment().year(v).valueOf();
-	},
-	setUTCHours: function (v) {
-		return this._getUTCMoment().hour(v).valueOf();
-	},
-	setUTCMilliseconds: function (v) {
-		return this._getUTCMoment().millisecond(v).valueOf();
-	},
-	setUTCMinutes: function (v) {
-		return this._getUTCMoment().minute(v).valueOf();
-	},
-	setUTCMonth: function (v) {
-		return this._getUTCMoment().month(v).valueOf();
-	},
-	setUTCSeconds: function (v) {
-		return this._getUTCMoment().second(v).valueOf();
-	},
-	setYear: function (v) {
-		return this._getTzMoment().year(v).valueOf();
-	},
-	toString: function () {
-		return this._getTzMoment().toString();
-	},
-	valueOf: function () {
-		return this._moment.valueOf();
-	},
-	toDateString: function () {
-		return '';
-	},
-	toTimeString: function () {
-		return '';
-	},
-	toLocaleDateString: function () {
-		return '';
-	},
-	toLocaleTimeString: function () {
-		return '';
-	},
-	toUTCString: function () {
-		return '';
-	},
-	toISOString: function () {
-		return '';
-	},
-	toJSON: function (key) {
-		return '';
-	}
-};
+window.DateImpl = DateImpl;

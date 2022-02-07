@@ -1,9 +1,10 @@
+/* global RequestInfo:readonly RequestInit: readonly */
 /* au.ts
 
 	Purpose:
 		ZK Client Engine
 	Description:
-	
+
 	History:
 		Mon Sep 29 17:17:37     2008, Created by tomyeh
 
@@ -12,21 +13,157 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	This program is distributed under LGPL Version 2.1 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
-(function () {
+import {default as zk} from '@zk/zk';
+import type {Event as ZKEvent} from '@zk/evt';
+import {Desktop, Widget} from '@zk/widget';
+import type {Callable, Offset} from '@zk/types';
+import {cast} from '@zk/types';
+import {Effect, Mask} from '@zk/effect';
+import {DateImpl} from '@zk/dateImpl';
+
+declare function $eval(str: string);
+
+export type ErrorHandler = (response: Response, errCode: number) => boolean;
+
+export type AjaxErrorHandler = (req: Response, status: number, statusText: string, ajaxReqTries?: number | null) => number;
+
+export interface AuCommand {
+	cmd: string;
+	data: unknown; // command-specific
+}
+
+export interface AuCommands extends Array<AuCommand> {
+	rid?: number;
+	dt?: Desktop | null;
+	pfIds?: string | null;
+	rtags?: Record<string, unknown>;
+}
+
+export interface AuRequestInfo {
+	sid: number;
+	uri: string;
+	dt: Desktop;
+	content: string|FormData;
+	implicit: boolean;
+	ignorable: boolean;
+	tmout: number;
+	rtags: Record<string, unknown>;
+	forceAjax: boolean;
+	uploadCallbacks: unknown[]|null;
+}
+export interface AUCommand0 {
+	bookmark(bk: string, replace: boolean): void;
+	obsolete(dtid: string, msg: string): void;
+	alert(msg: string, title: string, icon: string, disabledAuRequest: boolean): void;
+	redirect(url: string, target?: string): void;
+	title(title: string): void;
+	log: typeof zk.log;
+	script(script: string): void;
+	echo(dtid: string): void;
+	echoGx: Callable;
+	clientInfo(dtid?: string): void;
+	visibilityChange(dtid?: string): void;
+	download(url: string): void;
+	print: typeof window.print;
+	scrollBy: typeof window.scrollBy;
+	scrollTo: typeof window.scrollTo;
+	resizeBy: typeof window.resizeBy;
+	resizeTo: typeof window.resizeTo;
+	moveBy: typeof window.moveBy;
+	moveTo: typeof window.moveTo;
+	cfmClose(msg: string): void;
+	showNotification(msg: string, type: string, pid: string, ref: Widget,
+	                 pos: string, off: Offset, dur: number, closable: boolean): void;
+	showBusy(uuid: string, msg?: string): void;
+	clearBusy(uuid: string | null): void;
+}
+export interface AUCommand1 {
+	setAttr(wgt: Widget | null, nm: string, val: unknown): void;
+	setAttrs(wgt: Widget, attrs: unknown[]): void;
+	outer(wgt: Widget, code: string): void;
+	addAft(wgt: Widget, ...codes: string[]): void;
+}
+export interface AUEngine {
+	ajaxReq: boolean | null;
+	ajaxReqInf: AuRequestInfo | null;
+	ajaxReqTries: number | null;
+	ajaxReqMaxCount: number;
+	ajaxSettings: JQuery.AjaxSettings;
+	ajaxErrorHandler?: AjaxErrorHandler;
+	cmd0: AUCommand0;
+	cmd1: AUCommand1;
+	disabledRequest?: boolean;
+	doAfterProcessWgts?: Widget[] | null;
+	doneTime?: number;
+	pendingReqInf: AuRequestInfo | null;
+	processPhase?: string | null;
+	sentTime?: number;
+	seqId: number;
+	_cInfoReg?: boolean;
+	_clientInfo?: Array<unknown> | null;
+	_errCode: string | number | null;
+	_errURIs: Record<string, string>;
+
+	_doCmds(sid?: number): void;
+	_fetch(input: RequestInfo, init?: RequestInit): Promise<Response>;
+	_pfdone(dt: Desktop, pfIds?: string | null): void;
+	_pfrecv(dt: Desktop, pfIds?: string | null): void;
+	_pfsend(dt: Desktop, fetchOpts: RequestInit, completeOnly: boolean, forceAjax: boolean): void;
+	_onClientInfo(): void;
+	_onResponseReady(response: Response): void;
+	_onVisibilityChange(): void;
+	_respException(response: Response, reqInf: AuRequestInfo, e: Error): boolean;
+	_respFailure(response: Response, reqInf: AuRequestInfo, rstatus: number): boolean;
+	_respSuccess(response: Response, reqInf: AuRequestInfo, sid: number): boolean;
+	_rmDesktop(dt: Desktop, dummy?: boolean): void;
+	_rmDesktopAjax(url: string, data: string, headers: Record<string, string>): void;
+	_resetTimeout(): void;
+	_storeStub(wgt: Widget): void;
+	_wgt$(uuid: string): Widget;
+	addAuRequest(dt: Desktop, aureq: ZKEvent): void;
+	afterResponse(sid?: number): void;
+	ajaxReqResend(reqInf: AuRequestInfo, timeout?: number): void;
+	beforeSend(uri: string, aureq: ZKEvent, dt?: Desktop): string;
+	confirmRetry(msgCode: string, msg2?: string): boolean;
+	createWidgets(codes: unknown[], fn: (wgts: Widget[]) => void, filter?: (wgt: Widget) => Widget | null): void;
+	doCmds(dtid: string, rs: unknown[]): void;
+	encode(j: number, aureq: ZKEvent, dt: Desktop): string;
+	getAuRequests(dt: Desktop): ZKEvent[];
+	getErrorURI(code: number): string;
+	getPushErrorURI(code: number): string;
+	onError(fn: ErrorHandler): void;
+	onResponseError(response: Response, errCode: number): boolean;
+	pfAddIds(dt: Desktop, prop: string, pfIds?: string | null): void;
+	pfGetIds(response: Response): string | null;
+	process(cmd: string, data: string): void;
+	processing(): boolean;
+	pushReqCmds(reqInf: AuRequestInfo, response: Response): boolean;
+	send(aureq: ZKEvent, timeout?: number): void;
+	sendAhead(aureq: ZKEvent, timeout?: number): void;
+	sendNow(dt: Desktop): boolean;
+	setErrorURI(code: number, uri: string): void;
+	setErrorURI(errors: {[code: number]: string}): void;
+	setPushErrorURI(code: number, uri: string): void;
+	setPushErrorURI(errors: {[code: number]: string}): void;
+	shallIgnoreESC(): boolean;
+	showError(msgCode: string, msg2?: string | null, cmd?: string | null, ex?: Error): void;
+	toJSON(target: Widget, data: unknown): string;
+	unError(fn: ErrorHandler): void;
+	wrongValue_(wgt: Widget, msg: string | false): void;
+}
 	var _perrURIs = {}, //server-push error URI
-		_onErrs: zk.ErrorHandler[] = [], //onError functions
-		cmdsQue: zk.AuCommands[] = [], //response commands in XML
+		_onErrs: Array<ErrorHandler> = cast([]), //onError functions
+		cmdsQue: AuCommands[] = [], //response commands in XML
 		sendPending, responseId,
 		doCmdFns: (() => void)[] = [],
 		idTimeout, //timer ID for automatica timeout
 		pfIndex = 0, //performance meter index
-		_detached: zk.Widget[] & {wgts?: Record<string, zk.Widget>} = [], //used for resolving #stub/#stubs in mount.js (it stores detached widgets in this AU)
-		Widget = zk.Widget,
+		_detached: Widget[] & {wgts?: Record<string, Widget>} = [], //used for resolving #stub/#stubs in mount.js (it stores detached widgets in this AU)
 		_portrait: Record<string, boolean> = {'0': true, '180': true}, //default portrait definition
 		_initLandscape = jq.innerWidth() > jq.innerHeight(), // initial orientation is landscape or not
 		_initDefault = _portrait[window.orientation], //default orientation
 		_aftAuResp: (() => void)[] = []; //store callbacks to be triggered when au is back
-	
+
 	// Checks whether to turn off the progress prompt
 	function checkProgressing(sid?: number): void {
 		if (!zAu.processing()) {
@@ -40,7 +177,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			zAu.doneTime = jq.now();
 		}
 	}
-	function pushCmds(cmds: zk.AuCommands, rs): void {
+	function pushCmds(cmds: AuCommands, rs): void {
 		for (var j = 0, rl = rs ? rs.length : 0; j < rl; ++j) {
 			var r = rs[j],
 				cmd = r[0],
@@ -131,12 +268,12 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		return msg + (m2 ? ' (' + m2.substring(1) + ')' : m2);
 	}
 
-	function ajaxSend(dt: zk.Desktop, aureq: zk.Event, timeout?: number): void {
+	function ajaxSend(dt: zk.Desktop, aureq: ZKEvent, timeout?: number): void {
 		//ZK-1523: dt(desktop) could be null, so search the desktop from target's parent.
 		//call stack: echo2() -> send()
 		if (!dt) {
 			//original dt is decided by aureq.target.desktop, so start by it's parent.
-			var wgt: zk.Widget | null | undefined = aureq.target.parent;
+			var wgt: Widget | null | undefined = aureq.target.parent;
 			while (!wgt?.desktop) {
 				wgt = wgt?.parent;
 			}
@@ -153,7 +290,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		if (dt && timeout >= 0)
 			setTimeout(function () {zAu.sendNow(dt);}, timeout);
 	}
-	function ajaxSendNow(reqInf: zk.AuRequestInfo): void {
+	function ajaxSendNow(reqInf: AuRequestInfo): void {
 		// eslint-disable-next-line no-undef
 		var fetchOpts: RequestInit = {
 			credentials: 'same-origin',
@@ -184,7 +321,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		}
 
 		zAu._fetch(reqInf.uri, fetchOpts)
-		.then(function (response) {
+		.then(function (response: Response & {responseText?: string}) {
 			response.text().then(function (responseText) {
 				response.responseText = responseText;
 				zAu._onResponseReady(response);
@@ -204,7 +341,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		if (!reqInf.implicit)
 			zk.startProcessing(zk.procDelay, reqInf.sid); //wait a moment to avoid annoying
 	}
-	function doCmdsNow(cmds: zk.AuCommands): boolean {
+	function doCmdsNow(cmds: AuCommands): boolean {
 		var rtags = cmds.rtags || {}, ex;
 		try {
 			while (cmds && cmds.length) {
@@ -250,7 +387,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			throw ex;
 		return true;
 	}
-	function _asBodyChild(child: zk.Widget): void {
+	function _asBodyChild(child: Widget): void {
 		jq(document.body).append(child);
 	}
 
@@ -265,22 +402,22 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	}
 
 	//store all widgets into a map
-	function _wgt2map(wgt: zk.Widget, map: Record<string, zk.Widget>): void {
+	function _wgt2map(wgt: Widget, map: Record<string, Widget>): void {
 		map[wgt.uuid] = wgt;
 		for (var child = wgt.firstChild; child; child = child.nextSibling)
 			_wgt2map(child, map);
 	}
 
-	function _beforeAction(wgt: zk.Widget, actnm: string): unknown {
+	function _beforeAction(wgt: Widget, actnm: string): unknown {
 		var act;
-		if (wgt._visible && (act = wgt.actions_[actnm])) {
-			wgt.z$display = 'none'; //control zk.Widget.domAttrs_
+		if (wgt.isVisible() && (act = wgt.actions_[actnm])) {
+			wgt['z$display'] = 'none'; //control zk.Widget.domAttrs_
 			return act;
 		}
 	}
-	function _afterAction(wgt: zk.Widget, act): boolean {
+	function _afterAction(wgt: Widget, act): boolean {
 		if (act) {
-			delete wgt.z$display;
+			delete wgt['z$display'];
 			act[0].call(wgt, wgt.$n(), act[1]);
 			return true;
 		}
@@ -349,9 +486,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
  * The AU Engine used to send the AU requests to the server and to process
  * the AU responses.
  */
-zAu = {
-	cmd0: {},
-	cmd1: {},
+let zAu: AUEngine = {
+	disabledRequest: false,
+	_cInfoReg: false,
 	_fetch: window.fetch.bind(window),
 	_resetTimeout: function () { //called by mount.js
 		if (idTimeout) {
@@ -363,9 +500,9 @@ zAu = {
 	},
 	_onClientInfo: function () { //Called by mount.js when onReSize
 		if (zAu._cInfoReg) setTimeout(fireClientInfo, 20);
-			//we cannot pass zAu.cmd0.clientInfo directly
-			//otherwise, FF will pass 1 as the firt argument,
-			//i.e., it is equivalent to zAu.cmd0.clientInfo(1)
+		//we cannot pass zAu.cmd0.clientInfo directly
+		//otherwise, FF will pass 1 as the firt argument,
+		//i.e., it is equivalent to zAu.cmd0.clientInfo(1)
 	},
 	//Used by mount.js to search widget being detached in this AU
 	_wgt$: function (uuid) {
@@ -508,7 +645,7 @@ zAu = {
 
 		var t = aureq.target;
 		if (t) {
-			ajaxSend(t.className == 'zk.Desktop' ? t as zk.Desktop : t.desktop, aureq, timeout);
+			ajaxSend(t instanceof Desktop ? t as Desktop : t.desktop as Desktop, aureq, timeout);
 		} else {
 			var dts = zk.Desktop.all;
 			for (var dtid in dts)
@@ -523,10 +660,10 @@ zAu = {
 	 * If negative, the request is assumed to be implicit, i.e., no message will
 	 * be shown if an error occurs.
 	 */
-	sendAhead: function (aureq, timeout = 0) {
-		var t = aureq.target;
+	sendAhead: function (aureq: ZKEvent, timeout = 0) {
+		const t = aureq.target;
 		if (t) {
-			var dt = t.className == 'zk.Desktop' ? t as zk.Desktop : t.desktop;
+			const dt = t instanceof Desktop ? t as Desktop : t.desktop as Desktop;
 			zAu.getAuRequests(dt).unshift(aureq);
 			ajaxSend2(dt, timeout);
 		} else {
@@ -543,7 +680,11 @@ zAu = {
 	//remove desktop (used in mount.js and wiget.js)
 	_rmDesktop: function (dt, dummy) {
 		var url = zk.ajaxURI(null, {desktop: dt, au: true}),
-			data = jq.param({dtid: dt.id, cmd_0: dummy ? 'dummy' : 'rmDesktop', opt_0: 'i'}),
+			data = jq.param({
+				dtid: dt.id,
+				cmd_0: dummy ? 'dummy' : 'rmDesktop',
+				opt_0: 'i'
+			}),
 			headers = {};
 		if (zk.pfmeter) {
 			var fakeFetachOpts = {
@@ -569,8 +710,8 @@ zAu = {
 			this._rmDesktopAjax(url, data, headers);
 		}
 		// B65-ZK-2210: clean up portlet2 data when desktop removed.
-		if (!dummy && zk.portlet2Data && zk.portlet2Data[dt.id]) {
-			delete zk.portlet2Data[dt.id];
+		if (!dummy && zk.portlet2Data && zk.portlet2Data[dt.id as string]) {
+			delete zk.portlet2Data[dt.id as string];
 		}
 	},
 	_rmDesktopAjax: function (url, data, headers) {
@@ -612,7 +753,7 @@ zAu = {
 	 * @since 5.0.5
 	 */
 	doCmds: function (dtid, rs) {
-		var cmds = [] as zk.AuCommands;
+		var cmds: AuCommands = cast([]);
 		cmds.dt = zk.Desktop.$(dtid);
 		pushCmds(cmds, rs);
 		zAu._doCmds();
@@ -627,7 +768,7 @@ zAu = {
 
 			var cmds = cmdsQue[j];
 			if (rid == cmds.rid || !rid || !cmds.rid //match
-			|| zk.Desktop._ndt > 1) { //ignore multi-desktops (risky but...)
+				|| zk.Desktop._ndt > 1) { //ignore multi-desktops (risky but...)
 				cmdsQue.splice(j, 1);
 
 				var oldrid = rid;
@@ -641,7 +782,9 @@ zAu = {
 					if (doCmdsNow(cmds)) { //done
 						j = -1; //start over
 						if (zk.pfmeter) {
-							var fnPfDone = function (): void {zAu._pfdone(cmds.dt as zk.Desktop, cmds.pfIds);};
+							var fnPfDone = function (): void {
+								zAu._pfdone(cmds.dt as zk.Desktop, cmds.pfIds);
+							};
 							if (zk.mounting) doCmdFns.push(fnPfDone);
 							else fnPfDone();
 						}
@@ -750,24 +893,26 @@ zAu.beforeSend = function (uri, req, dt) {
 			portlet2Namespace = '';
 
 		// B65-ZK-2210: add porlet namespace
-		if (zk.portlet2Data && zk.portlet2Data[dt.id]) {
-			portlet2Namespace = zk.portlet2Data[dt.id].namespace || '';
+		if (zk.portlet2Data && zk.portlet2Data[dt.id as string]) {
+			portlet2Namespace = zk.portlet2Data[dt.id as string].namespace || '';
 		}
 		var content = j ? '' : portlet2Namespace + 'dtid=' + dt.id;
 
 		content += '&' + portlet2Namespace + 'cmd_' + j + '=' + aureq.name;
 		if ((opts.implicit || opts.ignorable) && !(opts.serverAlive))
 			content += '&' + portlet2Namespace + 'opt_' + j + '=i';
-			//thus, the server will ignore it if session timeout
+		//thus, the server will ignore it if session timeout
 
 		if (target && target.className != 'zk.Desktop')
 			content += '&' + portlet2Namespace + 'uuid_' + j + '=' + target.uuid;
 
 		var data = aureq.data, dtype = typeof data;
-		if (dtype == 'string' || dtype == 'number' || dtype == 'boolean' || jq.isArray(data))
+		if (dtype === 'string' || dtype === 'number' || dtype === 'boolean' || jq.isArray(data)) {
 			data = {'': data};
-		if (data)
+		}
+		if (data) {
 			content += '&' + portlet2Namespace + 'data_' + j + '=' + encodeURIComponent(zAu.toJSON(target, data));
+		}
 		return content;
 	},
 
@@ -787,7 +932,9 @@ zAu.beforeSend = function (uri, req, dt) {
 			return false;
 
 		if (zk.mounting) {
-			zk.afterMount(function () {zAu.sendNow(dt);});
+			zk.afterMount(function () {
+				zAu.sendNow(dt);
+			});
 			return true; //wait
 		}
 
@@ -831,7 +978,7 @@ zAu.beforeSend = function (uri, req, dt) {
 			var aureq = es[j],
 				opts = aureq.opts || {};
 			if ((opts.uri != uri)
-			|| !(ignorable = ignorable && !!opts.ignorable)) //all ignorable
+				|| !(ignorable = ignorable && !!opts.ignorable)) //all ignorable
 				break;
 		}
 		var forceAjax = false;
@@ -878,8 +1025,8 @@ zAu.beforeSend = function (uri, req, dt) {
 			zk.copy(rtags, (aureq.opts || {}).rtags);
 		}
 		// B65-ZK-2210: get resourceURL by desktop id
-		if (zk.portlet2Data && zk.portlet2Data[dt.id]) {
-			requri = zk.portlet2Data[dt.id].resourceURL;
+		if (zk.portlet2Data && zk.portlet2Data[dt.id as string]) {
+			requri = zk.portlet2Data[dt.id as string].resourceURL;
 		}
 
 		if (files.length) {
@@ -894,12 +1041,18 @@ zAu.beforeSend = function (uri, req, dt) {
 		}
 
 		//if (zk.portlet2AjaxURI)
-			//requri = zk.portlet2AjaxURI;
+		//requri = zk.portlet2AjaxURI;
 		if (content)
 			ajaxSendNow({
-				sid: zAu.seqId, uri: requri, dt: dt, content: content,
+				sid: zAu.seqId,
+				uri: requri,
+				dt: dt,
+				content: content,
 				implicit: implicit,
-				ignorable: ignorable, tmout: 0, rtags: rtags, forceAjax: forceAjax,
+				ignorable: ignorable,
+				tmout: 0,
+				rtags: rtags,
+				forceAjax: forceAjax,
 				uploadCallbacks: uploadCallbacks
 			});
 		return true;
@@ -910,7 +1063,7 @@ zAu.beforeSend = function (uri, req, dt) {
 	 * @since 7.0.3
 	 */
 	addAuRequest: function (dt, aureq) {
-		if (!dt.obsolete)
+		if (!dt['obsolete'])
 			dt._aureqs.push(aureq);
 	},
 	/** Returns all pending AU requests.
@@ -954,19 +1107,19 @@ zAu.beforeSend = function (uri, req, dt) {
 		}
 
 		var ids;
-		if (ids = dt._pfRecvIds) {
+		if (ids = dt['_pfRecvIds']) {
 			if (fetchHeaders) fetchHeaders['ZK-Client-Receive'] = ids;
 			if (ws) {
 				zWs.setRequestHeaders('ZK-Client-Receive', ids);
 			}
-			dt._pfRecvIds = null;
+			dt['_pfRecvIds'] = null;
 		}
-		if (ids = dt._pfDoneIds) {
+		if (ids = dt['_pfDoneIds']) {
 			if (fetchHeaders) fetchHeaders['ZK-Client-Complete'] = ids;
 			if (ws) {
 				zWs.setRequestHeaders('ZK-Client-Complete', ids);
 			}
-			dt._pfDoneIds = null;
+			dt['_pfDoneIds'] = null;
 		}
 	},
 
@@ -989,10 +1142,10 @@ zAu.beforeSend = function (uri, req, dt) {
 	 */
 	createWidgets: function (codes, fn, filter) {
 		//bug #3005632: Listbox fails to replace with empty model if in ROD mode
-		var wgts: zk.Widget[] = [], len = codes.length;
+		var wgts: Widget[] = [], len = codes.length;
 		if (len > 0) {
 			for (var j = 0; j < len; ++j)
-				zkx_(codes[j], function (newwgt) {
+				window.zkx_(codes[j], function (newwgt) {
 					wgts.push(newwgt);
 					if (wgts.length == len)
 						fn(wgts);
@@ -1024,7 +1177,7 @@ zAu.beforeSend = function (uri, req, dt) {
 				if ((rstatus = response.status) == 200) { //correct
 					if (zAu._respSuccess(response, reqInf!, sid)) return;
 				} else if ((!sid || sid == zAu.seqId) //ignore only if out-of-seq (note: 467 w/o sid)
-				&& !zAu.onResponseError(response, zAu._errCode = rstatus)) {
+					&& !zAu.onResponseError(response, zAu._errCode = rstatus)) {
 					if (zAu._respFailure(response, reqInf!, rstatus)) return;
 				}
 			}
@@ -1043,16 +1196,16 @@ zAu.beforeSend = function (uri, req, dt) {
 
 		var v;
 		if ((v = response.headers.get('ZK-Error'))
-		&& !zAu.onResponseError(response, v = zk.parseInt(v) || v)
-		&& (v == 5501 || v == 5502) //Handle only ZK's SC_OUT_OF_SEQUENCE or SC_ACTIVATION_TIMEOUT
-		&& zAu.confirmRetry('FAILED_TO_RESPONSE',
+			&& !zAu.onResponseError(response, v = zk.parseInt(v) || v)
+			&& (v == 5501 || v == 5502) //Handle only ZK's SC_OUT_OF_SEQUENCE or SC_ACTIVATION_TIMEOUT
+			&& zAu.confirmRetry('FAILED_TO_RESPONSE',
 				v == 5501 ? 'Request out of sequence' : 'Activation timeout')) {
 			zAu.ajaxReqResend(reqInf);
 			return true;
 		}
 		if (v != 410 //not timeout (SC_GONE)
-		&& !(reqInf.rtags && reqInf.rtags.isDummy) //ZK-3304: dummy request shouldn't reset timeout
-		&& (!reqInf.rtags || !reqInf.rtags.onTimer || zk.timerAlive)) // Bug ZK-2720 only timer-keep-alive should reset the timeout
+			&& !(reqInf.rtags && reqInf.rtags.isDummy) //ZK-3304: dummy request shouldn't reset timeout
+			&& (!reqInf.rtags || !reqInf.rtags.onTimer || zk.timerAlive)) // Bug ZK-2720 only timer-keep-alive should reset the timeout
 			zAu._resetTimeout();
 
 		if (zAu.pushReqCmds(reqInf, response)) { //valid response
@@ -1078,24 +1231,24 @@ zAu.beforeSend = function (uri, req, dt) {
 				return true;
 			}
 		} else {
-		//handle MSIE's buggy HTTP status codes
-		//http://msdn2.microsoft.com/en-us/library/aa385465(VS.85).aspx
+			//handle MSIE's buggy HTTP status codes
+			//http://msdn2.microsoft.com/en-us/library/aa385465(VS.85).aspx
 			switch (rstatus) { //auto-retry for certain case
-			default:
-				if (!zAu.ajaxReqTries) break;
+				default:
+					if (!zAu.ajaxReqTries) break;
 				//fall through
-			case 12002: //server timeout
-			case 12030: //http://danweber.blogspot.com/2007/04/ie6-and-error-code-12030.html
-			case 12031:
-			case 12152: // Connection closed by server.
-			case 12159:
-			case 13030:
-			case 503: //service unavailable
-				if (!zAu.ajaxReqTries) zAu.ajaxReqTries = 3; //two more try
-				if (--zAu.ajaxReqTries) {
-					zAu.ajaxReqResend(reqInf, zk.resendTimeout);
-					return true;
-				}
+				case 12002: //server timeout
+				case 12030: //http://danweber.blogspot.com/2007/04/ie6-and-error-code-12030.html
+				case 12031:
+				case 12152: // Connection closed by server.
+				case 12159:
+				case 13030:
+				case 503: //service unavailable
+					if (!zAu.ajaxReqTries) zAu.ajaxReqTries = 3; //two more try
+					if (--zAu.ajaxReqTries) {
+						zAu.ajaxReqResend(reqInf, zk.resendTimeout);
+						return true;
+					}
 			}
 			if (!reqInf.ignorable && !zk.unloading) {
 				var msg = response.statusText;
@@ -1108,8 +1261,8 @@ zAu.beforeSend = function (uri, req, dt) {
 		}
 		return false;
 	},
-	_respException: function (req, reqInf, e) {
-		if (!window.zAu)
+	_respException: function (req: Response & {abort?: Callable}, reqInf, e) {
+		if (!window['zAu'])
 			return true; //the doc has been unloaded
 
 		zAu.ajaxReq = zAu.ajaxReqInf = null;
@@ -1143,7 +1296,7 @@ zAu.beforeSend = function (uri, req, dt) {
 	 */
 	//cmd1: null, //jsdoc
 
-	pushReqCmds: function (reqInf, response) {
+	pushReqCmds: function (reqInf, response: Response& {responseText: string}) {
 		var dt = reqInf.dt,
 			rt = response.responseText;
 		if (!rt) {
@@ -1151,7 +1304,7 @@ zAu.beforeSend = function (uri, req, dt) {
 			return false; //invalid
 		}
 
-		var cmds = [] as zk.AuCommands;
+		var cmds: AuCommands = cast([]);
 		cmds.rtags = reqInf.rtags;
 		if (zk.pfmeter) {
 			cmds.dt = dt;
@@ -1169,7 +1322,7 @@ zAu.beforeSend = function (uri, req, dt) {
 			}
 			throw e;
 		}
-		var	rid = json.rid;
+		var rid = json.rid;
 		if (rid) {
 			rid = parseInt(rid); //response ID
 			if (!isNaN(rid)) cmds.rid = rid;
@@ -1193,12 +1346,12 @@ zAu.beforeSend = function (uri, req, dt) {
 	},
 	/* @param zk.Widget target
 	 */
-	toJSON: function (target, data) {
+	toJSON: function (target: Widget, data: Partial<{pageX; pageY; x; y}>) {
 		if (!jq.isArray(data)) {
 			if (data.pageX != null && data.x == null) {
 				var ofs = target && target.desktop ? // B50-3336745: target may have been detached
-						target.fromPageCoord(data.pageX, data.pageY) :
-						[data.pageX, data.pageY];
+					target.fromPageCoord(data.pageX, data.pageY) :
+					[data.pageX, data.pageY];
 				data.x = ofs[0];
 				data.y = ofs[1];
 			}
@@ -1254,784 +1407,791 @@ zAu.beforeSend = function (uri, req, dt) {
 			if (fn(response, errCode))
 				return true; //ignored
 		return false;
-	}
-};
+	},
 
-/** @partial zAu
- */
+	/** @partial zAu
+	 */
 //@{
-    /** Implements this function to be called if the request fails.
-     * The function receives four arguments: The XHR (XMLHttpRequest) object,
-     * a number describing the status of the request, a string describing the text
-     * of the status, and a number describing the retry value to re-send.
-     *
-     * <p>For example,
+	/** Implements this function to be called if the request fails.
+	 * The function receives four arguments: The XHR (XMLHttpRequest) object,
+	 * a number describing the status of the request, a string describing the text
+	 * of the status, and a number describing the retry value to re-send.
+	 *
+	 * <p>For example,
 <pre><code>
 zAu.ajaxErrorHandler = function (req, status, statusText, ajaxReqTries) {
     if (ajaxReqTries == null)
         ajaxReqTries = 3; // retry 3 times
-        
+
     // reset the resendTimeout, for more detail, please refer to
     // http://books.zkoss.org/wiki/ZK_Configuration_Reference/zk.xml/The_client-config_Element/The_auto-resend-timeout_Element
     zk.resendTimeout = 2000;//wait 2 seconds to resend.
-    
+
     if (!zAu.confirmRetry("FAILED_TO_RESPONSE", status+(statusText?": "+statusText:"")))
         return 0; // no retry;
     return ajaxReqTries;
 }
 </code></pre>
-     * @param Object req the object of XMLHttpRequest
-     * @param int status the status of the request
-     * @param String statusText the text of the status from the request
-     * @param int ajaxReqTries the retry value for re-sending the request, if undefined
-     *      means the function is invoked first time.
-     * @since 6.5.2
-     */
-    //ajaxErrorHandler: function () {}
+	 * @param Object req the object of XMLHttpRequest
+	 * @param int status the status of the request
+	 * @param String statusText the text of the status from the request
+	 * @param int ajaxReqTries the retry value for re-sending the request, if undefined
+	 *      means the function is invoked first time.
+	 * @since 6.5.2
+	 */
+	//ajaxErrorHandler: function () {}
 //@};
 
 //Commands//
-/** @class zk.AuCmd0
- * The AU command handler for processes commands not related to widgets,
- * sent from the server.
- * @see zAu#cmd0
- */
-zAu.cmd0 = /*prototype*/ { //no uuid at all
-	/** Sets a bookmark
-	 * @param String bk the bookmark
-	 * @param boolean replace if true, it will replace the bookmark without creating
-	 * 		a new one history.
+	/** @class zk.AuCmd0
+	 * The AU command handler for processes commands not related to widgets,
+	 * sent from the server.
+	 * @see zAu#cmd0
 	 */
-	bookmark: function (bk, replace) {
-		zk.bmk.bookmark(bk, replace);
-	},
-	/** Shows an error to indicate the desktop is timeout.
-	 * @param String dtid the desktop UUID
-	 * @param String msg the error message
-	 */
-	obsolete: function (dtid, msg) {
-		var v = zk.Desktop.$(dtid) as zk.Desktop;
-		if (v) v.obsolete = true;
+	// eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+	cmd0: { //no uuid at all
+		/** Sets a bookmark
+		 * @param String bk the bookmark
+		 * @param boolean replace if true, it will replace the bookmark without creating
+		 * 		a new one history.
+		 */
+		bookmark(bk: string, replace: boolean): void {
+			zk.bmk.bookmark(bk, replace);
+		},
+		/** Shows an error to indicate the desktop is timeout.
+		 * @param String dtid the desktop UUID
+		 * @param String msg the error message
+		 */
+		obsolete(dtid: string, msg: string): void {
+			var v = zk.Desktop.$(dtid) as zk.Desktop;
+			if (v) v['obsolete'] = true;
 
-		if (msg.startsWith('script:'))
-			return $eval(msg.substring(7));
+			if (msg.startsWith('script:'))
+				return $eval(msg.substring(7));
 
-		// ZK-2397: prevent from showing reload dialog again while browser is reloading
-		if (zk._isReloadingInObsolete)
-			return;
-
-		var reqPath;
-		if (v && (reqPath = v.requestPath))
-			msg = msg.replace(dtid, reqPath + ' (' + dtid + ')');
-
-		zAu.disabledRequest = true;
-
-		jq.alert(msg, {
-			icon: 'ERROR',
-			button: {
-				Reload: function () {
-					zk._isReloadingInObsolete = true;
-					location.reload();
-				},
-				Cancel: true
-			}
-		});
-	},
-	/** Shows an alert to indicate some error occurs.
-	 * For widget's error message, use {@link #wrongValue} instead.
-	 * @param String msg the error message
-	 */
-	alert: function (msg, title, icon, disabledAuRequest) {
-		if (disabledAuRequest)
-			zAu.disabledRequest = true;
-		jq.alert(msg, {icon: icon || 'ERROR', title: title});
-	},
-	/** Redirects to the specified URL.
-	 * @param String url the URL to redirect to
-	 * @param String target [optional] the window name to show the content
-	 * of the URL. If omitted, it will replace the current content.
-	 */
-	redirect: function (url, target) {
-		try {
-			zUtl.go(url, {target: target});
-
-			// '#' for bookmark change only, Bug ZK-2874
-			var idx;
-			if (url && !url.startsWith('/') && (idx = url.indexOf('#')) >= 0) {
-				var uri = url.substring(0, idx),
-					locHash = window.location.hash,
-					locUrl = window.location.href;
-				if (locHash) {
-					locUrl = locUrl.substring(0, locUrl.length - locHash.length); // excluding '#'
-				}
-				if (locUrl.endsWith(uri))
-					return; // not to disable request for Bug ZK-2844
-			}
-
-			// Bug ZK-2844
-			if (!target)
-				zAu.disabledRequest = true; // Bug ZK-2616
-		} catch (ex) {
-			if (!zk.confirmClose) throw ex;
-		}
-	},
-	/** Changes the brower window's titile.
-	 * @param String title the new title
-	 */
-	title: function (title) {
-		document.title = title;
-	},
-	/** Logs the message.
-	 * @param String msg the message to log
-	 * @since 5.0.8
-	 */
-	log: zk.log,
-	/** Executes the JavaScript.
-	 * @param String script the JavaScript code snippet to execute
-	 */
-	script: function (script) {
-		let scriptErrorHandler = zk.scriptErrorHandler;
-		if (scriptErrorHandler && !zk.scriptErrorHandlerRegistered) {
-			zk.scriptErrorHandlerRegistered = true;
-			jq(window).one('error', scriptErrorHandler);
-		}
-		jq.globalEval(script);
-	},
-	/** Asks the client to echo back an AU request, such that
-	 * the server can return other commands.
-	 * It is used to give the end user a quick response before doing
-	 * a long operation.
-	 * @param String dtid the desktop ID ({@link zk.Desktop}).
-	 * @see zk.AuCmd1#echo2
-	 * @see #echoGx
-	 */
-	echo: function (dtid) {
-		var dt = zk.Desktop.$(dtid),
-			aureqs = dt ? zAu.getAuRequests(dt) : [];
-		// Bug ZK-2741
-		for (var i = 0, j = aureqs.length; i < j; i++) {
-			var aureq0 = aureqs[i];
-			if ((!aureq0.target || aureq0.target.$instanceof(zk.Desktop)) && aureq0.name == 'dummy') {
-				return; //no need to send more
-			}
-		}
-		zAu.send(new zk.Event(dt, 'dummy', null, {ignorable: true, rtags: {isDummy: true}}));
-	},
-	/** Ask the client to echo back globally.
-	 * <p>Unlike {@link #echo}, it will search all browser windows for
-	 * <p>Note: this feature requires ZK EE
-	 * the given desktop IDs.
-	 * @param String evtnm the event name
-	 * @param String data any string-typed data
-	 * @param String... any number of desktop IDs.
-	 * @since 5.0.4
-	 */
-	//echoGx: function () {}
-
-	/** Asks the client information.
-	 * The client will reply the information in the <code>onClientInfo</code> response.
-	 * @param String dtid the desktop ID ({@link zk.Desktop}).
-	 */
-	clientInfo: function (dtid) {
-		zAu._cInfoReg = true;
-		var orient = '',
-			dpr = 1;
-		
-		if (zk.mobile) {
-			//change default portrait definition because landscape is the default orientation for this device/browser.
-			if ((_initLandscape && _initDefault) || (!_initLandscape && !_initDefault))
-				_portrait = {'-90': true, '90': true};
-			
-			orient = _portrait[window.orientation] ? 'portrait' : 'landscape';
-		} else {
-			orient = jq.innerWidth() > jq.innerHeight() ? 'landscape' : 'portrait';
-		}
-		
-		if (window.devicePixelRatio)
-			dpr = window.devicePixelRatio;
-
-		var clientInfo = [new Date().getTimezoneOffset(),
-				screen.width, screen.height, screen.colorDepth,
-				jq.innerWidth(), jq.innerHeight(), jq.innerX(), jq.innerY(), dpr.toFixed(1), orient,
-				zk.mm.tz.guess()],
-			oldClientInfo = zAu._clientInfo;
-
-		// ZK-3181: only send when value changed
-		if (oldClientInfo) {
-			var same = oldClientInfo.every(function (el, index) {
-				return el === clientInfo[index];
-			});
-			if (same) {
-				// ZK-4696: should endprocessing manually since no event is fired
-				zk.endProcessing();
-				delete zk.clientinfo;
+			// ZK-2397: prevent from showing reload dialog again while browser is reloading
+			if (zk._isReloadingInObsolete)
 				return;
-			}
-		}
 
-		zAu._clientInfo = clientInfo;
-		zAu.send(new zk.Event(zk.Desktop.$(dtid), 'onClientInfo',
-			zAu._clientInfo,
-			{implicit: true, rtags: {onClientInfo: 1}}));
-	},
-	visibilityChange: function (dtid) {
-		var hidden = !!(document.hidden || document[zk.vendor_ + 'Hidden']),
-			visibilityState = document.visibilityState || document[zk.vendor_ + 'VisibilityState'];
-		
-		zAu.send(new zk.Event(zk.Desktop.$(dtid), 'onVisibilityChange',
-			{hidden: hidden, visibilityState: visibilityState}, {implicit: true, ignorable: true}));
-	},
-	/** Asks the client to download the resource at the specified URL.
-	 * @param String url the URL to download from
-	 */
-	download: function (url) {
-		if (url) {
-			var ifr: HTMLIFrameElement = jq('#zk_download')[0] as HTMLIFrameElement,
-				ie = zk.ie,
-				sbu = zk.skipBfUnload;
-			if (ie) zk.skipBfUnload = true;
+			var reqPath;
+			if (v && (reqPath = v.requestPath))
+				msg = msg.replace(dtid, reqPath + ' (' + dtid + ')');
 
-			if (!ifr) {
-				ifr = document.createElement('iframe');
-				ifr.id = ifr.name = 'zk_download';
-				ifr.style.display = 'none';
-				ifr.style.width = ifr.style.height = ifr.style.border = ifr.frameBorder = '0';
-				document.body.appendChild(ifr);
-			}
+			zAu.disabledRequest = true;
 
-			if (ie && ie < 11) { // Since IE11 dropped onreadystatechange support: https://stackoverflow.com/a/26835889
-				// Use onreadystatechange to listen if iframe is loaded
-				ifr['onreadystatechange'] = function () {
-					var state = ifr.contentWindow?.document.readyState;
-					if (state === 'interactive')
-						setTimeout(function () { zk.skipBfUnload = sbu; }, 0);
-				};
-			}
-			ifr.src = url; //It is OK to reuse the same iframe
-
-			// Workaround for IE11: wait a second (not perfect) for iframe loading
-			if (ie === 11)
-				setTimeout(function () { zk.skipBfUnload = sbu; }, 1000);
-		}
-	},
-	/** Prints the content of the browser window.
-	 */
-	print: function () {
-		window.print();
-	},
-	/** Scrolls the content of the browser window.
-	 * @param int x the offset (difference) in the X coordinate (horizontally) (pixels)
-	 * @param int y the offset in the Y coordinate (vertically) (pixels)
-	 */
-	scrollBy: function (x, y) {
-		window.scrollBy(x, y);
-	},
-	/** Scrolls the contents of the browser window to the specified location.
-	 * @param int x the X coordinate to scroll to (pixels)
-	 * @param int y the Y coordinate to scroll to (pixels)
-	 */
-	scrollTo: function (x, y) {
-		window.scrollTo(x, y);
-	},
-	/** Resizes the browser window.
-	 * @param int x the number of pixels to increase/decrease (pixels)
-	 * @param int y the number of pixels to increase/decrease (pixels)
-	 */
-	resizeBy: function (x, y) {
-		window.resizeBy(x, y);
-	},
-	/** Resizes the browser window to the specified size.
-	 * @param int x the required width (pixels)
-	 * @param int y the required height (pixels)
-	 */
-	resizeTo: function (x, y) {
-		window.resizeTo(x, y);
-	},
-	/** Moves the browser window.
-	 * @param int x the number of pixels to move in the X coordinate
-	 * @param int y the number of pixels to move in the Y coordinate
-	 */
-	moveBy: function (x, y) {
-		window.moveBy(x, y);
-	},
-	/** Moves the browser window to the specified location
-	 * @param int x the left (pixels)
-	 * @param int y the top (pixels)
-	 */
-	moveTo: function (x, y) {
-		window.moveTo(x, y);
-	},
-	/** Sets the message used to confirm the user when he is closing
-	 * the browser window.
-	 * @param String msg the message to show in the confirm dialog
-	 */
-	cfmClose: function (msg) {
-		zk.confirmClose = msg;
-	},
-	/** Shows a notification popup.
-	 * @param String msg message to show
-	 * @param String type the notification type (warning, info, error)
-	 * @param String pid uuid of the page to which it belongs
-	 * @param String ref uuid of a reference component
-	 * @param String pos the position of notification
-	 * @param Offset off the offset of x and y
-	 * @param int dur the duration of notification
-	 * @param boolean closable the close button of notification
-	 */
-	showNotification: function (msg, type, pid, ref, pos, off, dur, closable) {
-		var notif = (zul && zul.wgt) ? zul.wgt.Notification : null; // in zul
-		if (notif) {
-			var opts = {ref: ref, pos: pos, off: off, dur: dur, type: type, closable: closable};
-			//ZK-2687, show notif after zAu.cmd0.scrollIntoView
-			zk.delayFunction(ref ? ref.uuid : 'nouuid', function () {
-				notif.show(msg, pid, opts);
-			});
-		} else {
-			// TODO: provide a hook to customize
-			jq.alert(msg); // fall back to alert when zul is not available
-		}
-	},
-	/** Shows the busy message covering the specified widget.
-	 * @param String uuid the component's UUID
-	 * @param String msg the message.
-	 */
-	/** Shows the busy message covering the whole browser window.
-	 * @param String msg the message.
-	 */
-	showBusy: function (uuid, msg) {
-		if (arguments.length == 1) {
-			msg = uuid;
-			uuid = null;
-		}
-
-		zAu.cmd0.clearBusy(uuid);
-
-		var w: zk.Widget | null = uuid ? Widget.$(uuid) : null;
-		if (!uuid) {
-			zk._prevFocus = zk.currentFocus;
-			zUtl.progressbox('zk_showBusy', msg || msgzk.PLEASE_WAIT, true, null, {busy: true});
-			jq('html').on('keydown', zk.$void);
-		} else if (w) {
-			zk.delayFunction(uuid, function () {
-				if (w) {
-					w.effects_.showBusy = new zk.eff.Mask!({
-						id: w.uuid + '-shby',
-						anchor: w.$n(),
-						message: msg
-					}) as zk.Effect;
+			jq.alert(msg, {
+				icon: 'ERROR',
+				button: {
+					Reload: function () {
+						zk._isReloadingInObsolete = true;
+						location.reload();
+					},
+					Cancel: true
 				}
 			});
-		}
-	},
-	/** Removes the busy message covering the specified widget.
-	 * @param String uuid the component's UUID
-	 */
-	/** Removes the busy message covering the whole browser.
-	 */
-	clearBusy: function (uuid) {
-		if (uuid) {
-			zk.delayFunction(uuid, function () {
-				var w = Widget.$(uuid),
-					efs = w ? w.effects_ : null;
-				if (efs && efs.showBusy) {
-					efs.showBusy.destroy();
-					delete efs.showBusy;
+		},
+		/** Shows an alert to indicate some error occurs.
+		 * For widget's error message, use {@link #wrongValue} instead.
+		 * @param String msg the error message
+		 */
+		alert(msg: string, title: string, icon: string, disabledAuRequest: boolean): void {
+			if (disabledAuRequest)
+				zAu.disabledRequest = true;
+			jq.alert(msg, {icon: icon || 'ERROR', title: title});
+		},
+		/** Redirects to the specified URL.
+		 * @param String url the URL to redirect to
+		 * @param String target [optional] the window name to show the content
+		 * of the URL. If omitted, it will replace the current content.
+		 */
+		redirect(url: string, target?: string): void {
+			try {
+				zUtl.go(url, {target: target});
+
+				// '#' for bookmark change only, Bug ZK-2874
+				var idx;
+				if (url && !url.startsWith('/') && (idx = url.indexOf('#')) >= 0) {
+					var uri = url.substring(0, idx),
+						locHash = window.location.hash,
+						locUrl = window.location.href;
+					if (locHash) {
+						locUrl = locUrl.substring(0, locUrl.length - locHash.length); // excluding '#'
+					}
+					if (locUrl.endsWith(uri))
+						return; // not to disable request for Bug ZK-2844
 				}
-			});
-		} else {
-			zUtl.destroyProgressbox('zk_showBusy', {busy: true}); //since user might want to show diff msg
-			if (zk._prevFocus) {
-				zk.currentFocus = zk._prevFocus;
-				zk._prevFocus = null;
-				var wgt = zk.currentFocus;
-				try {
-					zk._focusByClearBusy = true;
-					wgt.focus();
-				} finally {
-					zk._focusByClearBusy = false;
+
+				// Bug ZK-2844
+				if (!target)
+					zAu.disabledRequest = true; // Bug ZK-2616
+			} catch (ex) {
+				if (!zk.confirmClose) throw ex;
+			}
+		},
+		/** Changes the brower window's titile.
+		 * @param String title the new title
+		 */
+		title(title: string): void {
+			document.title = title;
+		},
+		/** Logs the message.
+		 * @param String msg the message to log
+		 * @since 5.0.8
+		 */
+		log: zk.log,
+		/** Executes the JavaScript.
+		 * @param String script the JavaScript code snippet to execute
+		 */
+		script(script: string): void {
+			let scriptErrorHandler = zk.scriptErrorHandler;
+			if (scriptErrorHandler && !zk.scriptErrorHandlerRegistered) {
+				zk.scriptErrorHandlerRegistered = true;
+				jq(window).one('error', scriptErrorHandler);
+			}
+			jq.globalEval(script);
+		},
+		/** Asks the client to echo back an AU request, such that
+		 * the server can return other commands.
+		 * It is used to give the end user a quick response before doing
+		 * a long operation.
+		 * @param String dtid the desktop ID ({@link zk.Desktop}).
+		 * @see zk.AuCmd1#echo2
+		 * @see #echoGx
+		 */
+		echo(dtid: string): void {
+			var dt = zk.Desktop.$(dtid),
+				aureqs = dt ? zAu.getAuRequests(dt) : [];
+			// Bug ZK-2741
+			for (var i = 0, j = aureqs.length; i < j; i++) {
+				var aureq0 = aureqs[i];
+				if ((!aureq0.target || aureq0.target.$instanceof(zk.Desktop)) && aureq0.name == 'dummy') {
+					return; //no need to send more
 				}
 			}
-			jq('html').off('keydown', zk.$void);
-		}
-	},
-	/** Closes the all error messages related to the specified widgets.
-	 * It assumes {@link zk.Widget} has a method called <code>clearErrorMessage</code>
-	 * (such as {@link zul.inp.InputWidget#clearErrorMessage}).
-	 * If no such method, nothing happens.
-	 * @param String... any number of UUID of widgets.
-	 * @see #wrongValue
-	 */
-	clearWrongValue: function () {
-		for (var i = arguments.length; i--;) {
-			var wgt = Widget.$(arguments[i]);
-			if (wgt) {
-				var toClearErrMsg = function (w) {
-					return function () {
-						if (w.clearErrorMessage) w.clearErrorMessage();
-						else zAu.wrongValue_(w, false);
-					};
-				};
-				zk.delayFunction(wgt.uuid, toClearErrMsg(wgt));
+			zAu.send(new zk.Event(dt, 'dummy', null, {
+				ignorable: true,
+				rtags: {isDummy: true}
+			}));
+		},
+		/** Ask the client to echo back globally.
+		 * <p>Unlike {@link #echo}, it will search all browser windows for
+		 * <p>Note: this feature requires ZK EE
+		 * the given desktop IDs.
+		 * @param String evtnm the event name
+		 * @param String data any string-typed data
+		 * @param String... any number of desktop IDs.
+		 * @since 5.0.4
+		 */
+		echoGx: function () {},
+
+		/** Asks the client information.
+		 * The client will reply the information in the <code>onClientInfo</code> response.
+		 * @param String dtid the desktop ID ({@link zk.Desktop}).
+		 */
+		clientInfo(dtid?: string): void {
+			zAu._cInfoReg = true;
+			var orient = '',
+				dpr = 1;
+
+			if (zk.mobile) {
+				//change default portrait definition because landscape is the default orientation for this device/browser.
+				if ((_initLandscape && _initDefault) || (!_initLandscape && !_initDefault))
+					_portrait = {'-90': true, '90': true};
+
+				orient = _portrait[window.orientation] ? 'portrait' : 'landscape';
+			} else {
+				orient = jq.innerWidth() > jq.innerHeight() ? 'landscape' : 'portrait';
 			}
-		}
-	},
-	/** Shows the error messages for the specified widgets.
-	 * It assumes {@link zk.Widget} has a method called <code>setErrorMessage</code>
-	 * (such as {@link zul.inp.InputWidget#setErrorMessage}).
-	 * If no such method, {@link jq#alert} is used instead.
-	 * @param Object... the widgets and messages. The first argument
-	 * is the widget's UUID, and the second is the error message.
-	 * The third is UUID, then the fourth the error message, and so on.
-	 * @see #clearWrongValue
-	 */
-	wrongValue: function () {
-		var args = arguments;
-		for (var i = 0, len = args.length - 1; i < len; i += 2) {
-			var uuid = args[i], msg = args[i + 1],
-				wgt = Widget.$(uuid);
-			if (wgt) {
-				//ZK-2687: create a closure to record the current wgt
-				var toSetErrMsg = function (w, m) {
-					return function () {
-						zk.afterAnimate(function () {
-							if (w.setErrorMessage) w.setErrorMessage(m);
-							else zAu.wrongValue_(w, m);
-						}, -1);
-					};
-				};
-				zk.delayFunction(uuid, toSetErrMsg(wgt, msg));
-			} else if (!uuid) //keep silent if component (of uuid) not exist (being detaced)
-				jq.alert(msg);
-		}
-		// for a bug fixed of B60-ZK-1208, we need to delay the func for this test case, B36-2935398.zul
-		// has been removed since 7.0.6
-	},
-	/** Submit a form.
-	 * This method looks for the widget first. If found and the widget
-	 * has a method called <code>submit</code>, then the widget's <code>submit</code>
-	 * method is called. Otherwise, it looks for the DOM element
-	 * and invokes the <code>submit</code> method (i.e., assume it is
-	 * the FROM element).
-	 * @param String id the UUID of the widget, or the ID of the FORM element.
-	 */
-	submit: function (id) {
-		setTimeout(function () {
-			var n = Widget.$(id);
-			if (n && n.submit)
-				n.submit();
-			else
-				zk(id).submit();
-		}, 50);
-	},
-	/** Scrolls the widget or an DOM element into the view
-	 * @param String id the UUID of the widget, or the ID of the DOM element.
-	 */
-	scrollIntoView: function (id) {
-		if (!id) return;
-		var w = Widget.$(id);
-		if (w) {
-			zk.delayFunction(w.uuid, function () {
-				w.scrollIntoView();
-			});
-		} else {
-			var zkjq = zk(id);
-			if (zkjq.$()) {
-				zk.delayFunction(zkjq.$().uuid, function () {
-					zkjq.scrollIntoView();
+
+			if (window.devicePixelRatio)
+				dpr = window.devicePixelRatio;
+
+			var clientInfo = [new Date().getTimezoneOffset(),
+					screen.width, screen.height, screen.colorDepth,
+					jq.innerWidth(), jq.innerHeight(), jq.innerX(), jq.innerY(), dpr.toFixed(1), orient,
+					zk.mm.tz.guess()],
+				oldClientInfo = zAu._clientInfo;
+
+			// ZK-3181: only send when value changed
+			if (oldClientInfo) {
+				var same = oldClientInfo.every(function (el, index) {
+					return el === clientInfo[index];
 				});
+				if (same) {
+					// ZK-4696: should endprocessing manually since no event is fired
+					zk.endProcessing();
+					delete zk.clientinfo;
+					return;
+				}
 			}
-		}
-	},
-	/**
-	 * Loads a JavaScript file and execute it.
-	 * @param String url the JavaScript file path
-	 * @param String callback the function to execute after the JavaScript file loaded.
-	 * @param boolean once true means the JavaScript file will be cached.
-	 * @since 8.0.0
-	 */
-	loadScript: function (url, callback, once) {
-		jq.ajax({
-			dataType: 'script',
-			cache: once,
-			url: url
-		}).done(function () {
-			if (jq.isFunction(callback)) {
-				callback();
-			} else
-				jq.globalEval(callback);
-		});
-	},
-	/** Loads a CSS file.
-	 * @param String href the URL of the CSS file.
-	 * @param String id the identifier. Ignored if not specified.
-	 * @param String media the media attribute. Ignored if not specified.
-	 * @since 8.0.0
-	 */
-	loadCSS: zk.loadCSS,
-	/** Pushes or replaces a history state.
-	 * @param boolean replace if true, it will replace the current history without creating a new one.
-	 * @param Object state a state object.
-	 * @param String title a title for the state. May be ignored by some browsers.
-	 * @param String url the new history entry's URL. Ignored if not specified.
-	 * @since 8.5.0
-	 */
-	historyState: function (replace, state, title, url) {
-		if (replace && window.history.replaceState)
-			window.history.replaceState(state, title, url);
-		if (!replace && window.history.pushState)
-			window.history.pushState(state, title, url);
-	},
-	/** Ask the client to sync all the errorboxes and its reference widget position on the desktop.
-	 * @since 8.5.2
-	 */
-	syncAllErrorbox: function () {
-		jq('.z-errorbox').toArray().forEach(function (ebox) {
-			var wgt = jq(ebox).zk.$();
-			wgt.reposition();
-			wgt._fixarrow();
-		});
-	}
-};
-/** @class zk.AuCmd1
- * The AU command handler for processes commands related to widgets,
- * sent from the server.
- * @see zAu#cmd1
- */
-zAu.cmd1 = /*prototype*/ {
-	/** Sets the attribute of a widget.
-	 * @param zk.Widget wgt the widget
-	 * @param String name the name of the attribute
-	 * @param Object value the value of the attribute.
-	 */
-	setAttr: function (wgt, nm, val) {
-		if (wgt) { // server push may cause wgt is null in some case - zksandbox/#a1
-			if (nm == 'z$al') { //afterLoad
-				zk.afterLoad(function () {
-					for (nm in val)
-						wgt.set(nm, val[nm](), true); //must be func
+
+			zAu._clientInfo = clientInfo;
+			zAu.send(new zk.Event(zk.Desktop.$(dtid), 'onClientInfo',
+				zAu._clientInfo,
+				{implicit: true, rtags: {onClientInfo: 1}}));
+		},
+		visibilityChange(dtid?: string): void {
+			var hidden = !!(document.hidden || document[zk.vendor_ + 'Hidden']),
+				visibilityState = document.visibilityState || document[zk.vendor_ + 'VisibilityState'];
+
+			zAu.send(new zk.Event(zk.Desktop.$(dtid), 'onVisibilityChange',
+				{
+					hidden: hidden,
+					visibilityState: visibilityState
+				}, {implicit: true, ignorable: true}));
+		},
+		/** Asks the client to download the resource at the specified URL.
+		 * @param String url the URL to download from
+		 */
+		download(url: string): void {
+			if (url) {
+				var ifr: HTMLIFrameElement = jq('#zk_download')[0] as HTMLIFrameElement,
+					ie = zk.ie,
+					sbu = zk.skipBfUnload;
+				if (ie) zk.skipBfUnload = true;
+
+				if (!ifr) {
+					ifr = document.createElement('iframe');
+					ifr.id = ifr.name = 'zk_download';
+					ifr.style.display = 'none';
+					ifr.style.width = ifr.style.height = ifr.style.border = ifr.frameBorder = '0';
+					document.body.appendChild(ifr);
+				}
+
+				if (ie && ie < 11) { // Since IE11 dropped onreadystatechange support: https://stackoverflow.com/a/26835889
+					// Use onreadystatechange to listen if iframe is loaded
+					ifr['onreadystatechange'] = function () {
+						var state = ifr.contentWindow?.document.readyState;
+						if (state === 'interactive')
+							setTimeout(function () {
+								zk.skipBfUnload = sbu;
+							}, 0);
+					};
+				}
+				ifr.src = url; //It is OK to reuse the same iframe
+
+				// Workaround for IE11: wait a second (not perfect) for iframe loading
+				if (ie === 11)
+					setTimeout(function () {
+						zk.skipBfUnload = sbu;
+					}, 1000);
+			}
+		},
+		/** Prints the content of the browser window.
+		 */
+		print: window.print,
+		/** Scrolls the content of the browser window.
+		 * @param int x the offset (difference) in the X coordinate (horizontally) (pixels)
+		 * @param int y the offset in the Y coordinate (vertically) (pixels)
+		 */
+		scrollBy: window.scrollBy,
+		/** Scrolls the contents of the browser window to the specified location.
+		 * @param int x the X coordinate to scroll to (pixels)
+		 * @param int y the Y coordinate to scroll to (pixels)
+		 */
+		scrollTo: window.scrollTo,
+		/** Resizes the browser window.
+		 * @param int x the number of pixels to increase/decrease (pixels)
+		 * @param int y the number of pixels to increase/decrease (pixels)
+		 */
+		resizeBy: window.resizeBy,
+		/** Resizes the browser window to the specified size.
+		 * @param int x the required width (pixels)
+		 * @param int y the required height (pixels)
+		 */
+		resizeTo: window.resizeTo,
+		/** Moves the browser window.
+		 * @param int x the number of pixels to move in the X coordinate
+		 * @param int y the number of pixels to move in the Y coordinate
+		 */
+		moveBy: window.moveBy,
+		/** Moves the browser window to the specified location
+		 * @param int x the left (pixels)
+		 * @param int y the top (pixels)
+		 */
+		moveTo: window.moveTo,
+		/** Sets the message used to confirm the user when he is closing
+		 * the browser window.
+		 * @param String msg the message to show in the confirm dialog
+		 */
+		cfmClose(msg: string): void {
+			zk.confirmClose = msg;
+		},
+		/** Shows a notification popup.
+		 * @param String msg message to show
+		 * @param String type the notification type (warning, info, error)
+		 * @param String pid uuid of the page to which it belongs
+		 * @param zk.Widget ref a reference component
+		 * @param String pos the position of notification
+		 * @param Offset off the offset of x and y
+		 * @param int dur the duration of notification
+		 * @param boolean closable the close button of notification
+		 */
+		showNotification(msg: string, type: string, pid: string, ref: Widget,
+		                 pos: string, off: Offset, dur: number, closable: boolean): void {
+			var notif = zk.load('zul.wgt') ? zul.wgt.Notification : null; // in zul
+			if (notif) {
+				var opts = {
+					ref: ref,
+					pos: pos,
+					off: off,
+					dur: dur,
+					type: type,
+					closable: closable
+				};
+				//ZK-2687, show notif after zAu.cmd0.scrollIntoView
+				zk.delayFunction(ref ? ref.uuid : 'nouuid', () => {
+					notif?.show(msg, pid, opts);
 				});
 			} else {
-				// Bug ZK-2281, make sure the wgt is not in the rerendering queue.
-				wgt.rerenderNow_(null);
-				wgt.set(nm, val, true); //3rd arg: fromServer
+				// TODO: provide a hook to customize
+				jq.alert(msg); // fall back to alert when zul is not available
 			}
-		}
-	},
-	/**
-	 * Sets the attributes of a widget.
-	 * @param zk.Widget wgt the widget
-	 * @param Array attrs an array of [name1, value1, name2, value2, ...]
-	 * @since 9.0.1
-	 */
-	setAttrs: function (wgt, attrs) {
-		if (wgt) { // server push may cause wgt is null in some case - zksandbox/#a1
-			var setAttr = zAu.cmd1.setAttr,
-				attrsLength = attrs.length;
-			if (attrsLength % 2)
-				zk.error('Expected an even length of attrs, but ' + attrsLength + ' found.');
-			for (var i = 0; i + 1 <= attrsLength; i += 2)
-				setAttr(wgt, attrs[i], attrs[i + 1]);
-		}
-	},
-	/** Replaces the widget with the widget(s) generated by evaluating the specified JavaScript code snippet.
-	 * @param zk.Widget wgt the old widget to be replaced
-	 * @param String code the JavaScript code snippet to generate new widget(s).
-	 */
-	outer: function (wgt, code) {
-		zkx_(code, function (newwgt) {
-			var act = _beforeAction(newwgt, 'invalidate');
-			wgt.replaceWidget(newwgt);
-			_afterAction(newwgt, act);
-		}, function (wx) {
-			for (var w = wx; w; w = w.parent)
-				if (w == wgt)
-					return null; //ignore it since it is going to be removed
-			return wx;
-		});
-	},
-	/** Adds the widget(s) generated by evaluating the specified JavaScript code snippet
-	 * after the specified widget (as sibling).
-	 * @param zk.Widget wgt the existent widget that new widget(s) will be inserted after
-	 * @param String code the JavaScript code snippet to generate new widget(s).
-	 */
-	/** Adds the widget(s) generated by evaluating the specified JavaScript code snippet
-	 * after the specified widget (as sibling).
-	 * @param zk.Widget wgt the existent widget that new widget(s) will be inserted after
-	 * @param String... codes the JavaScript code snippet to generate new widget(s).
-	 */
-	addAft: function (wgt) {
-		var p = wgt.parent,
-			fn = function (child): void {
-				var act = _beforeAction(child, 'show');
-				if (p) {
-					p.insertBefore(child, wgt.nextSibling);
-					if (p.$instanceof(zk.Desktop))
-						_asBodyChild(child);
-					_afterAction(child, act);
-				} else {
-					var n = wgt.$n();
-					if (n)
-						jq(n).after(child, wgt.desktop);
-					else
-						_asBodyChild(child);
-					if (!_afterAction(child, act) && !child.z_rod)
-						zUtl.fireSized(child);
+		},
+		/** Shows the busy message covering the specified widget.
+		 * @param String uuid the component's UUID
+		 * @param String msg the message.
+		 */
+		/** Shows the busy message covering the whole browser window.
+		 * @param String msg the message.
+		 */
+		showBusy(uuid: string, msg?: string): void {
+			let uid: string | null = uuid;
+			if (msg === undefined) {
+				msg = uuid;
+				uid = null;
+			}
+
+			zAu.cmd0.clearBusy(uid);
+
+			var w: Widget | null = uid ? Widget.$(uid) : null;
+			if (!uid) {
+				zk._prevFocus = zk.currentFocus;
+				zUtl.progressbox('zk_showBusy', msg || msgzk.PLEASE_WAIT, true, null, {busy: true});
+				jq('html').on('keydown', zk.$void);
+			} else if (w) {
+				zk.delayFunction(uid, function () {
+					if (w) {
+						(w.effects_ as Record<string, Effect>).showBusy = new Mask({
+							id: w.uuid + '-shby',
+							anchor: w.$n(),
+							message: msg
+						}) as Effect;
+					}
+				});
+			}
+		},
+		/** Removes the busy message covering the specified widget.
+		 * @param String uuid the component's UUID
+		 */
+		/** Removes the busy message covering the whole browser.
+		 */
+		clearBusy(uuid: string | null): void {
+			if (uuid) {
+				zk.delayFunction(uuid, function () {
+					var w = Widget.$(uuid),
+						efs = w ? w.effects_ : null;
+					if (efs && efs.showBusy) {
+						efs.showBusy.destroy();
+						delete efs.showBusy;
+					}
+				});
+			} else {
+				zUtl.destroyProgressbox('zk_showBusy', {busy: true}); //since user might want to show diff msg
+				if (zk._prevFocus) {
+					zk.currentFocus = zk._prevFocus;
+					zk._prevFocus = null;
+					var wgt = zk.currentFocus;
+					try {
+						zk._focusByClearBusy = true;
+						wgt.focus();
+					} finally {
+						zk._focusByClearBusy = false;
+					}
 				}
-			};
-		for (var args = arguments, j = args.length; --j;)
-			zkx_(args[j], fn);
-
-		if (p && !p.z_rod)
-			zk.afterMount(function () {
-				zUtl.fireSized(p);
-			}, -1);
-	},
-	/** Adds the widget(s) generated by evaluating the specified JavaScript code snippet
-	 * before the specified widget (as sibling).
-	 * @param zk.Widget wgt the existent widget that new widget(s) will be inserted before
-	 * @param String... codes the JavaScript code snippet to generate new widget(s).
-	 */
-	addBfr: function (wgt) {
-		var p = wgt.parent,
-			fn = function (child): void {
-				var act = _beforeAction(child, 'show');
-				p.insertBefore(child, wgt);
-				_afterAction(child, act);
-			};
-		for (var args = arguments, j = 1; j < args.length; ++j)
-			zkx_(args[j], fn);
-
-		if (p && !p.z_rod)
-			zk.afterMount(function () {
-				zUtl.fireSized(p);
-			}, -1);
-	},
-	/** Adds the widget(s) generated by evaluating the specified JavaScript code snippet
-	 * as the last child of the specified widget.
-	 * @param zk.Widget wgt the existent widget that will become the parent of new widget(s)
-	 * @param String... codes the JavaScript code snippet to generate new widget(s).
-	 */
-	addChd: function (wgt) {
-		if (wgt) {
-			var fn = function (child): void {
-				var act = _beforeAction(child, 'show');
-				wgt.appendChild(child);
-				_afterAction(child, act);
-			};
-			for (var args = arguments, j = 1; j < args.length; ++j)
-				zkx_(args[j], fn);
-
-			if (!wgt.z_rod && !wgt.shallFireSizedLaterWhenAddChd_()) {
-				zk.afterMount(function () {
-					zUtl.fireSized(wgt);
-				}, -1);
+				jq('html').off('keydown', zk.$void);
 			}
-		} else {
-			for (var args = arguments, j = 1; j < args.length; ++j) {
-				//possible if <?page complete="true"?>
-				zkx_(args[j], _asBodyChild);
+		},
+		/** Closes the all error messages related to the specified widgets.
+		 * It assumes {@link zk.Widget} has a method called <code>clearErrorMessage</code>
+		 * (such as {@link zul.inp.InputWidget#clearErrorMessage}).
+		 * If no such method, nothing happens.
+		 * @param String... any number of UUID of widgets.
+		 * @see #wrongValue
+		 */
+		clearWrongValue: function () {
+			for (var i = arguments.length; i--;) {
+				var wgt = Widget.$(arguments[i]);
+				if (wgt) {
+					var toClearErrMsg = function (w) {
+						return function () {
+							if (w.clearErrorMessage) w.clearErrorMessage();
+							else zAu.wrongValue_(w, false);
+						};
+					};
+					zk.delayFunction(wgt.uuid, toClearErrMsg(wgt));
+				}
 			}
-		}
-	},
-	/** Removes the widget.
-	 * @param zk.Widget wgt the widget to remove
-	 */
-	rm: function (wgt) {
-		if (wgt) {
-			wgt.detach();
-			_detached.push(wgt); //used by mount.js
-		}
-	},
-	/** Rename UUID.
-	 * @param zk.Widget wgt the widget to rename
-	 * @param String newId the new UUID
-	 * @since 5.0.3
-	 */
-	uuid: function (wgt, newId) {
-		if (wgt)
-			zk._wgtutl.setUuid(wgt, newId); //see widget.js
-	},
-
-	/** Set the focus to the specified widget.
-	 * It invokes {@link zk.Widget#focus}. Not all widgets support
-	 * this method. In other words, it has no effect if the widget doesn't support it.
-	 * @param zk.Widget wgt the widget.
-	 */
-	focus: function (wgt) {
-		if (wgt) {
-			// bug in ZK-2195, the focus command executed after window's doModal() for IE
-			// so we have to do the same as that code in Window.js
+		},
+		/** Shows the error messages for the specified widgets.
+		 * It assumes {@link zk.Widget} has a method called <code>setErrorMessage</code>
+		 * (such as {@link zul.inp.InputWidget#setErrorMessage}).
+		 * If no such method, {@link jq#alert} is used instead.
+		 * @param Object... the widgets and messages. The first argument
+		 * is the widget's UUID, and the second is the error message.
+		 * The third is UUID, then the fourth the error message, and so on.
+		 * @see #clearWrongValue
+		 */
+		wrongValue: function () {
+			var args = arguments;
+			for (var i = 0, len = args.length - 1; i < len; i += 2) {
+				var uuid = args[i], msg = args[i + 1],
+					wgt = Widget.$(uuid);
+				if (wgt) {
+					//ZK-2687: create a closure to record the current wgt
+					var toSetErrMsg = function (w, m) {
+						return function () {
+							zk.afterAnimate(function () {
+								if (w.setErrorMessage) w.setErrorMessage(m);
+								else zAu.wrongValue_(w, m);
+							}, -1);
+						};
+					};
+					zk.delayFunction(uuid, toSetErrMsg(wgt, msg));
+				} else if (!uuid) //keep silent if component (of uuid) not exist (being detaced)
+					jq.alert(msg);
+			}
+			// for a bug fixed of B60-ZK-1208, we need to delay the func for this test case, B36-2935398.zul
+			// has been removed since 7.0.6
+		},
+		/** Submit a form.
+		 * This method looks for the widget first. If found and the widget
+		 * has a method called <code>submit</code>, then the widget's <code>submit</code>
+		 * method is called. Otherwise, it looks for the DOM element
+		 * and invokes the <code>submit</code> method (i.e., assume it is
+		 * the FROM element).
+		 * @param String id the UUID of the widget, or the ID of the FORM element.
+		 */
+		submit: function (id) {
 			setTimeout(function () {
-				zk.afterAnimate(function () {
-					if (zk.ie9_)
-						wgt.focus(100);
-					else
-						wgt.focus(0); //wgt.focus() failed in FF
-				}, -1);
+				var n = Widget.$(id) as {submit?};
+				if (n && n.submit)
+					n.submit();
+				else
+					zk(id).submit();
+			}, 50);
+		},
+		/** Scrolls the widget or an DOM element into the view
+		 * @param String id the UUID of the widget, or the ID of the DOM element.
+		 */
+		scrollIntoView: function (id) {
+			if (!id) return;
+			var w = Widget.$(id);
+			if (w) {
+				zk.delayFunction(w.uuid, function () {
+					w?.scrollIntoView();
+				});
+			} else {
+				var zkjq = zk(id);
+				if (zkjq.$()) {
+					zk.delayFunction(zkjq.$().uuid, function () {
+						zkjq.scrollIntoView();
+					});
+				}
+			}
+		},
+		/**
+		 * Loads a JavaScript file and execute it.
+		 * @param String url the JavaScript file path
+		 * @param String callback the function to execute after the JavaScript file loaded.
+		 * @param boolean once true means the JavaScript file will be cached.
+		 * @since 8.0.0
+		 */
+		loadScript: function (url, callback, once) {
+			jq.ajax({
+				dataType: 'script',
+				cache: once,
+				url: url
+			}).done(function () {
+				if (jq.isFunction(callback)) {
+					callback();
+				} else
+					jq.globalEval(callback);
+			});
+		},
+		/** Loads a CSS file.
+		 * @param String href the URL of the CSS file.
+		 * @param String id the identifier. Ignored if not specified.
+		 * @param String media the media attribute. Ignored if not specified.
+		 * @since 8.0.0
+		 */
+		loadCSS: zk.loadCSS,
+		/** Pushes or replaces a history state.
+		 * @param boolean replace if true, it will replace the current history without creating a new one.
+		 * @param Object state a state object.
+		 * @param String title a title for the state. May be ignored by some browsers.
+		 * @param String url the new history entry's URL. Ignored if not specified.
+		 * @since 8.5.0
+		 */
+		historyState: function (replace, state, title, url) {
+			if (replace && window.history.replaceState)
+				window.history.replaceState(state, title, url);
+			if (!replace && window.history.pushState)
+				window.history.pushState(state, title, url);
+		},
+		/** Ask the client to sync all the errorboxes and its reference widget position on the desktop.
+		 * @since 8.5.2
+		 */
+		syncAllErrorbox: function () {
+			jq('.z-errorbox').toArray().forEach(function (ebox) {
+				var wgt = jq(ebox).zk.$();
+				wgt.reposition();
+				wgt._fixarrow();
 			});
 		}
-	},
-	/** Selects all text of the specified widget.
-	 * It invokes the <code>select</code> method, if any, of the widget.
-	 * It does nothing if the method doesn't exist.
-	 * @param zk.Widget wgt the widget.
-	 * @param int start the starting index of the selection range
-	 * @param int end the ending index of the selection range (excluding).
-	 * 		In other words, the text between start and (end-1) is selected.
+	} as AUCommand0,
+	/** @class zk.AuCmd1
+	 * The AU command handler for processes commands related to widgets,
+	 * sent from the server.
+	 * @see zAu#cmd1
 	 */
-	select: function (wgt, s, e) {
-		if (wgt.select) wgt.select(s, e);
-	},
-	/** Invokes the specified method of the specified widget.
-	 * In other words, it is similar to execute the following:
-	 * <pre><code>wgt[func].apply(wgt, vararg);</code></pre>
-	 *
-	 * @param zk.Widget wgt the widget to invoke
-	 * @param String func the function name
-	 * @param Object... vararg any number of arguments passed to the function
-	 * invocation.
-	 */
-	invoke: function (wgt, func/*, vararg*/) {
-		var args: unknown[] = [];
-		for (var j = arguments.length; --j > 1;) //exclude wgt and func
-			args.unshift(arguments[j]);
-		if (wgt)
-			wgt[func].apply(wgt, args);
-		else {
-			var fn = zk.$import(func);
-			if (!fn) zk.error('not found: ' + func);
-			fn.apply(null, args);
+	// eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+	cmd1: {
+		/** Sets the attribute of a widget.
+		 * @param zk.Widget wgt the widget
+		 * @param String name the name of the attribute
+		 * @param Object value the value of the attribute.
+		 */
+		setAttr(wgt: Widget | null, nm: string, val: unknown): void {
+			if (wgt) { // server push may cause wgt is null in some case - zksandbox/#a1
+				if (nm == 'z$al') { //afterLoad
+					zk.afterLoad(function () {
+						for (nm in val as object)
+							wgt.set(nm, (val as object)[nm](), true); //must be func
+					});
+				} else {
+					// Bug ZK-2281, make sure the wgt is not in the rerendering queue.
+					wgt.rerenderNow_(null);
+					wgt.set(nm, val, true); //3rd arg: fromServer
+				}
+			}
+		},
+		/**
+		 * Sets the attributes of a widget.
+		 * @param zk.Widget wgt the widget
+		 * @param Array attrs an array of [name1, value1, name2, value2, ...]
+		 * @since 9.0.1
+		 */
+		setAttrs(wgt: Widget, attrs: unknown[]): void {
+			if (wgt) { // server push may cause wgt is null in some case - zksandbox/#a1
+				var setAttr = zAu.cmd1.setAttr,
+					attrsLength = attrs.length;
+				if (attrsLength % 2)
+					zk.error('Expected an even length of attrs, but ' + attrsLength + ' found.');
+				for (var i = 0; i + 1 <= attrsLength; i += 2)
+					setAttr(wgt, attrs[i] as string, attrs[i + 1]);
+			}
+		},
+		/** Replaces the widget with the widget(s) generated by evaluating the specified JavaScript code snippet.
+		 * @param zk.Widget wgt the old widget to be replaced
+		 * @param String code the JavaScript code snippet to generate new widget(s).
+		 */
+		outer(wgt: Widget, code: string): void {
+			window.zkx_(code, function (newwgt) {
+				var act = _beforeAction(newwgt, 'invalidate');
+				wgt.replaceWidget(newwgt);
+				_afterAction(newwgt, act);
+			}, function (wx) {
+				for (var w = wx; w; w = w.parent)
+					if (w == wgt)
+						return null; //ignore it since it is going to be removed
+				return wx;
+			});
+		},
+		/** Adds the widget(s) generated by evaluating the specified JavaScript code snippet
+		 * after the specified widget (as sibling).
+		 * @param zk.Widget wgt the existent widget that new widget(s) will be inserted after
+		 * @param String code the JavaScript code snippet to generate new widget(s).
+		 */
+		/** Adds the widget(s) generated by evaluating the specified JavaScript code snippet
+		 * after the specified widget (as sibling).
+		 * @param zk.Widget wgt the existent widget that new widget(s) will be inserted after
+		 * @param String... codes the JavaScript code snippet to generate new widget(s).
+		 */
+		addAft(wgt: Widget, ...codes: string[]): void {
+			let p = wgt.parent,
+				fn = function (child): void {
+					var act = _beforeAction(child, 'show');
+					if (p) {
+						p.insertBefore(child, wgt.nextSibling);
+						if (p.$instanceof(zk.Desktop))
+							_asBodyChild(child);
+						_afterAction(child, act);
+					} else {
+						var n = wgt.$n();
+						if (n)
+							jq(n).after(child, wgt.desktop);
+						else
+							_asBodyChild(child);
+						if (!_afterAction(child, act) && !child.z_rod)
+							zUtl.fireSized(child);
+					}
+				};
+			for (var args = arguments, j = args.length; --j;)
+				window.zkx_(args[j], fn);
+
+			if (p && !p.z_rod)
+				zk.afterMount(function () {
+					zUtl.fireSized(p as Widget);
+				}, -1);
+		},
+		/** Adds the widget(s) generated by evaluating the specified JavaScript code snippet
+		 * before the specified widget (as sibling).
+		 * @param zk.Widget wgt the existent widget that new widget(s) will be inserted before
+		 * @param String... codes the JavaScript code snippet to generate new widget(s).
+		 */
+		addBfr: function (wgt) {
+			var p = wgt.parent,
+				fn = function (child): void {
+					var act = _beforeAction(child, 'show');
+					p.insertBefore(child, wgt);
+					_afterAction(child, act);
+				};
+			for (var args = arguments, j = 1; j < args.length; ++j)
+				window.zkx_(args[j], fn);
+
+			if (p && !p.z_rod)
+				zk.afterMount(function () {
+					zUtl.fireSized(p);
+				}, -1);
+		},
+		/** Adds the widget(s) generated by evaluating the specified JavaScript code snippet
+		 * as the last child of the specified widget.
+		 * @param zk.Widget wgt the existent widget that will become the parent of new widget(s)
+		 * @param String... codes the JavaScript code snippet to generate new widget(s).
+		 */
+		addChd: function (wgt) {
+			if (wgt) {
+				var fn = function (child): void {
+					var act = _beforeAction(child, 'show');
+					wgt.appendChild(child);
+					_afterAction(child, act);
+				};
+				for (var args = arguments, j = 1; j < args.length; ++j)
+					window.zkx_(args[j], fn);
+
+				if (!wgt.z_rod && !wgt.shallFireSizedLaterWhenAddChd_()) {
+					zk.afterMount(function () {
+						zUtl.fireSized(wgt);
+					}, -1);
+				}
+			} else {
+				for (var args = arguments, j = 1; j < args.length; ++j) {
+					//possible if <?page complete="true"?>
+					window.zkx_(args[j], _asBodyChild);
+				}
+			}
+		},
+		/** Removes the widget.
+		 * @param zk.Widget wgt the widget to remove
+		 */
+		rm: function (wgt) {
+			if (wgt) {
+				wgt.detach();
+				_detached.push(wgt); //used by mount.js
+			}
+		},
+		/** Rename UUID.
+		 * @param zk.Widget wgt the widget to rename
+		 * @param String newId the new UUID
+		 * @since 5.0.3
+		 */
+		uuid: function (wgt, newId) {
+			if (wgt)
+				zk._wgtutl.setUuid(wgt, newId); //see widget.js
+		},
+
+		/** Set the focus to the specified widget.
+		 * It invokes {@link zk.Widget#focus}. Not all widgets support
+		 * this method. In other words, it has no effect if the widget doesn't support it.
+		 * @param zk.Widget wgt the widget.
+		 */
+		focus: function (wgt) {
+			if (wgt) {
+				// bug in ZK-2195, the focus command executed after window's doModal() for IE
+				// so we have to do the same as that code in Window.js
+				setTimeout(function () {
+					zk.afterAnimate(function () {
+						if (zk.ie9_)
+							wgt.focus(100);
+						else
+							wgt.focus(0); //wgt.focus() failed in FF
+					}, -1);
+				});
+			}
+		},
+		/** Selects all text of the specified widget.
+		 * It invokes the <code>select</code> method, if any, of the widget.
+		 * It does nothing if the method doesn't exist.
+		 * @param zk.Widget wgt the widget.
+		 * @param int start the starting index of the selection range
+		 * @param int end the ending index of the selection range (excluding).
+		 * 		In other words, the text between start and (end-1) is selected.
+		 */
+		select: function (wgt, s, e) {
+			if (wgt.select) wgt.select(s, e);
+		},
+		/** Invokes the specified method of the specified widget.
+		 * In other words, it is similar to execute the following:
+		 * <pre><code>wgt[func].apply(wgt, vararg);</code></pre>
+		 *
+		 * @param zk.Widget wgt the widget to invoke
+		 * @param String func the function name
+		 * @param Object... vararg any number of arguments passed to the function
+		 * invocation.
+		 */
+		invoke: function (wgt, func/*, vararg*/) {
+			var args: unknown[] = [];
+			for (var j = arguments.length; --j > 1;) //exclude wgt and func
+				args.unshift(arguments[j]);
+			if (wgt)
+				wgt[func].apply(wgt, args);
+			else {
+				var fn = zk.$import(func);
+				if (!fn) zk.error('not found: ' + func);
+				fn.apply(null, args);
+			}
+		},
+		/** Ask the client to echo back an AU request with the specified
+		 * evant name and the target widget.
+		 * @param zk.Widget wgt the target widget to which the AU request will be sent
+		 * @param String evtnm the name of the event, such as onUser
+		 * @param Object data any data
+		 * @see zk.AuCmd0#echo
+		 * @see zk.AuCmd0#echoGx
+		 */
+		echo2: function (wgt, evtnm, data) {
+			zAu.send(new zk.Event(wgt, 'echo',
+				data != null ? [evtnm, data] : [evtnm], {ignorable: true}));
+		},
+		/** Ask the client to re-cacluate the size of the given widget.
+		 * @param zk.Widget wgt the widget to resize
+		 * @since 5.0.8
+		 */
+		resizeWgt: function (wgt) {
+			zUtl.fireSized(wgt, 1); //force cleanup
+		},
+		/** Ask the client to sync a target widget and its errorbox position.
+		 * @param zk.Widget wgt the widget
+		 * @since 8.5.2
+		 */
+		syncErrorbox: function (wgt) {
+			if (wgt._errbox) {
+				wgt._errbox.reposition();
+				wgt._errbox._fixarrow();
+			}
 		}
-	},
-	/** Ask the client to echo back an AU request with the specified
-	 * evant name and the target widget.
-	 * @param zk.Widget wgt the target widget to which the AU request will be sent
-	 * @param String evtnm the name of the event, such as onUser
-	 * @param Object data any data
-	 * @see zk.AuCmd0#echo
-	 * @see zk.AuCmd0#echoGx
-	 */
-	echo2: function (wgt, evtnm, data) {
-		zAu.send(new zk.Event(wgt, 'echo',
-			data != null ? [evtnm, data] : [evtnm], {ignorable: true}));
-	},
-	/** Ask the client to re-cacluate the size of the given widget.
-	 * @param zk.Widget wgt the widget to resize
-	 * @since 5.0.8
-	 */
-	resizeWgt: function (wgt) {
-		zUtl.fireSized(wgt, 1); //force cleanup
-	},
-	/** Ask the client to sync a target widget and its errorbox position.
-	 * @param zk.Widget wgt the widget
-	 * @since 8.5.2
-	 */
-	syncErrorbox: function (wgt) {
-		if (wgt._errbox) {
-			wgt._errbox.reposition();
-			wgt._errbox._fixarrow();
-		}
-	}
+	} as AUCommand1
 };
 /** @partial zk
  */
@@ -2043,20 +2203,25 @@ zAu.cmd1 = /*prototype*/ {
 	 */
 	//afterAuResponse: function () {}
 //@};
-zk.afterAuResponse = function (fn) {
+// zk scope
+export function afterAuResponse(fn): void {
 	if (fn)
 		_aftAuResp.push(fn);
-};
-zk.doAfterAuResponse = function () {
+}
+// zk scope
+export function doAfterAuResponse(): void {
 	for (var fn; fn = _aftAuResp.shift();) {
 		fn();
 	}
-};
-})();
+}
 
-window.onIframeURLChange = function (uuid: string, url: string): void { //doc in jsdoc
+// window scope
+export function onIframeURLChange(uuid: string, url: string): void { //doc in jsdoc
 	if (!zk.unloading) {
 		var wgt = zk.Widget.$(uuid);
 		if (wgt) wgt.fire('onURIChange', url);
 	}
-};
+}
+
+// window scope
+export default zAu;

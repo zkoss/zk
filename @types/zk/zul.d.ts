@@ -12,17 +12,27 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-declare namespace zk {
-    interface ZUL {
-        Widget: zul.WidgetStatic;
-        [key: string]: any;
-    }
-}
+type ZKWidget = import('@zk/widget').Widget;
+type ZKWidgetClass = typeof import('@zk/widget').Widget;
 
-declare namespace zul {
-    interface Widget extends zk.Widget {
-        afterKeyDown_(evt: zk.Event, simulated?: boolean): boolean;
-        beforeCtrlKeys_(evt: zk.Event): boolean;
+declare namespace zk {
+	interface ZUL {
+		Widget: WidgetStatic;
+		[key: string]: any;
+		wgt: {
+			Caption: ZKWidgetClass,
+			Notification: ZKWidgetClass & {show(...args: unknown[])},
+			Image: ZKWidgetClass
+		}
+		mesh: {
+			Auxheader: ZKWidgetClass,
+			HeaderWidget: ZKWidgetClass,
+			MeshWidget: ZKWidgetClass
+		}
+	}
+    interface Widget extends ZKWidget {
+        afterKeyDown_(evt: ZKEvent, simulated?: boolean): boolean;
+        beforeCtrlKeys_(evt: ZKEvent): boolean;
         getContext(): string;
         getCtrlKeys(): string;
         getPopup(): string;
@@ -36,8 +46,8 @@ declare namespace zul {
         setTooltip(popup: any): Widget;
     }
 
-    interface WidgetStatic extends zk.WidgetStatic {
-        getOpenTooltip(): zk.Widget | null;
+    interface WidgetStatic extends ZKWidget {
+        getOpenTooltip(): Widget | null;
     }
 }
 

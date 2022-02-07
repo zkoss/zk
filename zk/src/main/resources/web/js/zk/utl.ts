@@ -1,9 +1,10 @@
+/* global MediaStreamConstraints:readonly */
 /* util.ts
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Tue Sep 30 09:02:06     2008, Created by tomyeh
 
@@ -12,62 +13,121 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-(function () {
-	var _decs = {lt: '<', gt: '>', amp: '&', quot: '"'},
-		_encs = {};
-	for (var v in _decs)
-		_encs[_decs[v]] = v;
+import {default as zk} from '@zk/zk';
+import {type Widget} from '@zk/widget';
 
-	function _pathname(url): string {
-		var j = url.indexOf('//');
-		if (j > 0) {
-			j = url.indexOf('/', j + 2);
-			if (j > 0) return url.substring(j);
-		}
-		return '';
+var _decs = {lt: '<', gt: '>', amp: '&', quot: '"'},
+	_encs = {};
+for (var v in _decs)
+	_encs[_decs[v]] = v;
+
+function _pathname(url): string {
+	var j = url.indexOf('//');
+	if (j > 0) {
+		j = url.indexOf('/', j + 2);
+		if (j > 0) return url.substring(j);
+	}
+	return '';
+}
+
+function _frames(ary, w): void {
+	//Note: the access of frames is allowed for any window (even if it connects other website)
+	ary.push(w);
+	for (var fs = w.frames, j = 0, l = fs.length; j < l; ++j)
+		_frames(ary, fs[j]);
+}
+/* Returns the onSize target of the given widget.
+ * The following code is dirty since it checks _hflexsz (which is implementation)
+ * FUTRE: consider to have zk.Widget.beforeSize to clean up _hflexsz and
+ * this method considers only if _hflex is min
+ */
+function _onSizeTarget(wgt): Widget {
+	var r1 = wgt, p1 = r1,
+		j1 = -1;
+	for (; p1 && p1._hflex == 'min'; p1 = p1.parent) {
+		delete p1._hflexsz;
+		r1 = p1;
+		++j1;
+		if (p1.ignoreFlexSize_('w')) //p1 will not affect its parent's flex size
+			break;
 	}
 
-	function _frames(ary, w): void {
-		//Note: the access of frames is allowed for any window (even if it connects other website)
-		ary.push(w);
-		for (var fs = w.frames, j = 0, l = fs.length; j < l; ++j)
-			_frames(ary, fs[j]);
+	var r2 = wgt, p2 = r2,
+		j2 = -1;
+	for (; p2 && p2._vflex == 'min'; p2 = p2.parent) {
+		delete p2._vflexsz;
+		r2 = p2;
+		++j2;
+		if (p2.ignoreFlexSize_('h')) //p2 will not affect its parent's flex size
+			break;
 	}
-	/* Returns the onSize target of the given widget.
-	 * The following code is dirty since it checks _hflexsz (which is implementation)
-	 * FUTRE: consider to have zk.Widget.beforeSize to clean up _hflexsz and
-	 * this method considers only if _hflex is min
-	 */
-	function _onSizeTarget(wgt): zk.Widget {
-		var r1 = wgt, p1 = r1,
-			j1 = -1;
-		for (; p1 && p1._hflex == 'min'; p1 = p1.parent) {
-			delete p1._hflexsz;
-			r1 = p1;
-			++j1;
-			if (p1.ignoreFlexSize_('w')) //p1 will not affect its parent's flex size
-				break;
-		}
+	return j1 > 0 || j2 > 0 ? j1 > j2 ? r1 : r2 : wgt;
+}
 
-		var r2 = wgt, p2 = r2,
-			j2 = -1;
-		for (; p2 && p2._vflex == 'min'; p2 = p2.parent) {
-			delete p2._vflexsz;
-			r2 = p2;
-			++j2;
-			if (p2.ignoreFlexSize_('h')) //p2 will not affect its parent's flex size
-				break;
-		}
-		return j1 > 0 || j2 > 0 ? j1 > j2 ? r1 : r2 : wgt;
-	}
+export interface IsCharOptions {
+	digit: boolean | number;
+	upper: boolean | number;
+	lower: boolean | number;
+	whitespace: boolean | number;
+	[char: string]: boolean | number | undefined;
+}
 
+export interface EncodeXmlOptions {
+	pre: boolean;
+	multiline: boolean;
+	maxlength: number;
+}
+
+export interface ProgressboxOptions {
+	busy: boolean;
+}
+
+export interface GoOptions {
+	target: string;
+	overwrite: boolean;
+}
+export interface ZUtl {
+	cellps0: string;
+	i0: string;
+	img0: string;
+
+	appendAttr(nm: string, val: unknown, force?: boolean): string;
+	convertDataURLtoBlob(dataURL: string): Blob;
+	decodeXML(txt: string): string;
+	destroyProgressbox(id: string, opts?: Partial<ProgressboxOptions>): void;
+	encodeXML(txt: string, opts?: Partial<EncodeXmlOptions>): string;
+	encodeXMLAttribute(txt: string): string;
+	fireShown(wgt: Widget, bfsz?: number): void;
+	fireSized(wgt: Widget, bfsz?: number): void;
+	frames(w: Window): Window[];
+	getDevicePixelRatio(): number;
+	getUserMedia(constraints: MediaStreamConstraints): Promise<MediaStream>;
+	getWeekOfYear(year: number, month: number, date: number, firstDayOfWeek: number,
+	              minimalDaysInFirstWeek: number): number;
+	go(url: string, opts?: Partial<GoOptions>): void;
+	intsToString(ary: number[] | null): string;
+	isAncestor(p: Widget, c: Widget & {getParent?()}): boolean;
+	isChar(cc: string, opts: Partial<IsCharOptions>): boolean;
+	isImageLoading(): boolean;
+	loadImage(url: string): void;
+	mapToString(map: Record<string, string>, assign?: string, separator?: string): string;
+	parseMap(text: string, separator?: string, quote?: string): {[key: string]: string};
+	progressbox(id: string, msg: string, mask?: boolean, icon?: string | null, opts?: Partial<ProgressboxOptions>): void;
+	stringToInts(text: string | null, defaultValue: number): number[] | null;
+	today(fmt: boolean | string, tz: string): Date;
+	throttle<T, A extends unknown[], R>(func: (this: T, ...args: A) => R, wait: number):
+		(this: T, ...args: A) => R;
+	debounce<T, A extends unknown[], R>(func: (this: T, ...args: A) => R, wait: number,
+	                                    immediate?: boolean): (this: T, ...args: A) => R;
+}
 /** @class zUtl
  * @import zk.Widget
  * @import zk.xml.Utl
  * The basic utilities.
  * <p>For more utilities, refer to {@link Utl}.
  */
-zUtl = { //static methods
+// window scope
+export const zUtl: ZUtl = { //static methods
 	//Character
     /**
      * Returns whether the character is according to its opts.
@@ -109,7 +169,7 @@ zUtl = { //static methods
 </table>
      * @return boolean
      */
-	isChar: function (cc, opts) {
+	isChar(cc: string, opts: Partial<IsCharOptions>): boolean {
 		return !!((opts.digit && cc >= '0' && cc <= '9')
 			|| (opts.upper && cc >= 'A' && cc <= 'Z')
 			|| (opts.lower && cc >= 'a' && cc <= 'z')
@@ -130,7 +190,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * @param String quote the quote to handle. Ignored if omitted.
 	 * @return Map the map
 	 */
-	parseMap: function (text, separator, quote) {
+	parseMap(text: string, separator?: string, quote?: string): {[key: string]: string} {
 		var map = {};
 		if (text) {
 			var ps = text.split(separator || ',');
@@ -186,7 +246,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 			return testRegexp.test(string) ? string.replace(replaceRegexp, escaper) : string;
 		}
 
-		return function (txt) {
+		return function (txt: string): string {
 			txt = txt != null ? String(txt) : '';
 			return _encodeXML0(txt);
 		};
@@ -228,7 +288,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 			return testRegexp.test(string) ? string.replace(replaceRegexp, escaper) : string;
 		}
 
-		return function (txt, opts) {
+		return function (txt: string, opts?: Partial<EncodeXmlOptions>): string {
 			txt = txt != null ? String(txt) : '';
 
 			if (!opts) // speed up the replacement.
@@ -280,7 +340,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * @param String txt the text to decode
 	 * @return String the decoded string
 	 */
-	decodeXML: function (txt) {
+	decodeXML(txt: string): string {
 		var out = '';
 		if (!txt) return out;
 
@@ -318,12 +378,6 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * @type String
 	 */
 	i0: '<i style="height:0;width:0"></i>',
-
-	/** Returns a long value representing the current time (unit: miliseconds).
-	 * @return long
-	 * @deprecated As of release 5.0.6, replaced with jq.now().
-	 */
-	now: jq.now,
 	/** Returns today.
 	 * @param boolean full if true, returns the full time,
 	 * else only returns year, month, and day.
@@ -339,7 +393,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * @return Date
 	 * @since 5.0.6
 	 */
-	today: function (fmt, tz) {
+	today(fmt: boolean | string, tz: string): Date {
 		var d = window.Dates.newInstance().tz(tz), hr = 0, min = 0, sec = 0, msec = 0;
 		if (typeof fmt == 'string') {
 			var fmt0 = fmt.toLowerCase();
@@ -366,7 +420,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * @return boolean
 	 * @see jq#isAncestor
 	 */
-	isAncestor: function (p, c) {
+	isAncestor(p: Widget, c: Widget & {getParent?()}): boolean {
 		if (!p) return true;
 		for (; c; c = c.getParent ? c.getParent() : c.parent)
 			if (p == c)
@@ -384,7 +438,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * Ignored if not specified.
 	 * @see #destroyProgressbox
 	 */
-	progressbox: function (id, msg, mask, icon, _opts) {
+	progressbox(id: string, msg: string, mask?: boolean, icon?: string | null, opts?: Partial<ProgressboxOptions>): void {
 		if (mask && zk.Page.contained.length) {
 			for (var c = zk.Page.contained.length, e = zk.Page.contained[--c]; e; e = zk.Page.contained[--c]) {
 				if (!e._applyMask)
@@ -397,7 +451,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 			return;
 		}
 
-		if (_opts && _opts.busy) {
+		if (opts && opts.busy) {
 			zk.busy++;
 			jq.focusOut(); //Bug 2912533
 		}
@@ -455,12 +509,12 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 					else if (pos.indexOf('right') >= 0)	left = x + wdgap - 1;
 					else if (pos.indexOf('center') >= 0) left = x + wdgap / 2;
 					else left = 0;
-					
+
 					if (pos.indexOf('top') >= 0) top = y;
 					else if (pos.indexOf('bottom') >= 0) top = y + hghgap - 1;
 					else if (pos.indexOf('center') >= 0) top = y + hghgap / 2;
 					else top = 0;
-					
+
 					left = left < x ? x : left;
 					top = top < y ? y : top;
 				}
@@ -474,8 +528,8 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	/** Removes the message box created by {@link #progressbox}.
 	 * @param String id the ID of the DOM element of the message box
 	 */
-	destroyProgressbox: function (id, _opts) {
-		if (_opts && _opts.busy && --zk.busy < 0)
+	destroyProgressbox(id: string, opts?: Partial<ProgressboxOptions>): void {
+		if (opts && opts.busy && --zk.busy < 0)
 			zk.busy = 0;
 		var $n = jq(id, zk), n;
 		if ($n.length) {
@@ -504,7 +558,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * If true, the new page replaces the previous page's position in the history list.</li>
 	 * </ul>
 	 */
-	go: function (url, opts) {
+	go(url: string, opts?: Partial<GoOptions>): void {
 		opts = opts || {};
 		if (opts.target) {
 			open(url, opts.target);
@@ -518,10 +572,10 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 				//bug 3363687, only if '#" exist, has to reload()
 				if (j < 0)
 					return;
-				
+
 				var	un = j >= 0 ? url.substring(0, j) : url,
 					pn = _pathname(location.href);
-				
+
 				j = pn.indexOf('#');
 				if (j >= 0) pn = pn.substring(0, j);
 				if (pn != un)
@@ -540,25 +594,22 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * @return Array
 	 * @since 5.0.4
 	 */
-	frames: function (w) {
-		var ary = [];
+	frames(w: Window): Window[] {
+		var ary: Window[] = [];
 		_frames(ary, w);
 		return ary;
 	},
 
-	/** Converts an integer array to a string (separated by comma).
+	/** Converts an integer array to a string.
 	 * @param int[] ary the integer array to convert.
 	 * If null, an empty string is returned.
 	 * @return String
 	 * @see #stringToInts
+	 * @deprecated Use {@code [].join()} instead.
 	 */
-	intsToString: function (ary) {
+	intsToString(ary: number[] | null): string {
 		if (!ary) return '';
-
-		var sb: number[] = [];
-		for (var j = 0, k = ary.length; j < k; ++j)
-			sb.push(ary[j]);
-		return sb.join();
+		return ary.join();
 	},
 	/** Converts a string separated by comma to an array of integers.
 	 * @see #intsToString
@@ -568,7 +619,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * is not specified. For example, zUtl.stringToInts("1,,3", 2) returns [1, 2, 3].
 	 * @return int[]
 	 */
-	stringToInts: function (text, defaultValue) {
+	stringToInts(text: string | null, defaultValue: number): number[] | null {
 		if (text == null)
 			return null;
 
@@ -594,7 +645,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * @param String separator the symbol for separator. If omitted, ',' is assumed.
 	 * @return String
 	 */
-	mapToString: function (map, assign, separator) {
+	mapToString(map: Record<string, string>, assign?: string, separator?: string): string {
 		assign = assign || '=';
 		separator = separator || ' ';
 		var out: string[] = [];
@@ -621,7 +672,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * If false (or omitted), it is the same as {@link #appendAttr(String, Object)}.
 	 * @since 5.0.3
 	 */
-	appendAttr: function (nm, val, force) {
+	appendAttr(nm: string, val: unknown, force?: boolean): string {
 		return val || force ? ' ' + nm + '="' + val + '"' : '';
 	},
 	/** Fires beforeSize, onFitSize, onSize and afterSize
@@ -635,7 +686,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * </ul>
 	 * @since 5.0.8
 	 */
-	fireSized: function (wgt, bfsz) {
+	fireSized(wgt: Widget, bfsz?: number): void {
 		// ignore delayed rerendering case, like Bug ZK-2281
 		if (wgt.desktop) {
 			if (zUtl.isImageLoading() || zk.clientinfo) {
@@ -648,7 +699,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 			wgt = _onSizeTarget(wgt);
 			if (!(bfsz && bfsz < 0)) { //don't use >= (because bfsz might be undefined)
 				zWatch.fireDown('_beforeSizeForRead', wgt);
-				zWatch.fireDown('beforeSize', wgt, null, bfsz && bfsz > 0);
+				zWatch.fireDown('beforeSize', wgt, undefined, bfsz && bfsz > 0);
 			}
 			zWatch.fireDown('onFitSize', wgt, {reverse: true});
 			zWatch.fireDown('onSize', wgt);
@@ -666,7 +717,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * </ul>
 	 * @since 5.0.8
 	 */
-	fireShown: function (wgt, bfsz) {
+	fireShown(wgt: Widget, bfsz?: number): void {
 		zWatch.fireDown('onShow', wgt);
 		zUtl.fireSized(wgt, bfsz);
 	},
@@ -675,7 +726,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * @param String url the loading image's localation
 	 * @since 6.0.0
 	 */
-	loadImage: function (url) {
+	loadImage(url: string): void {
 		if (!_imgMap[url]) {
 			_imgMap[url] = true;
 			_loadImage(url);
@@ -686,7 +737,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * @see #loadImage
 	 * @since 6.0.0
 	 */
-	isImageLoading: function () {
+	isImageLoading(): boolean {
 		for (var n in _imgMap)
 			return true;
 		return false;
@@ -695,7 +746,8 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * Get week numbers of year for a specific date
 	 * @since 8.5.1
 	 */
-	getWeekOfYear: function (year, month, date, firstDayOfWeek, minimalDaysInFirstWeek) {
+	getWeekOfYear(year: number, month: number, date: number, firstDayOfWeek: number,
+	              minimalDaysInFirstWeek: number): number {
 		var d = window.Dates.newInstance([year, month, date, 0, 0, 0, 0], 'UTC'),
 			day = d.getDay();
 		d.setDate(date - minimalDaysInFirstWeek + firstDayOfWeek - (firstDayOfWeek > day ? day : day - 7));
@@ -706,7 +758,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * Converts the dataURL to Blob object.
 	 * This function is not supported in IE9 and below.
 	 */
-	convertDataURLtoBlob: function (dataURL) {
+	convertDataURLtoBlob(dataURL: string): Blob {
 		var byteString = window.atob(dataURL.split(',')[1]),
 			mimeString = dataURL.split(',')[0].split(':')[1].split(';')[0],
 			len = byteString.length,
@@ -725,7 +777,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * @return double the devicePixelRatio
 	 * @since 8.6.0
 	 */
-	getDevicePixelRatio: function () {
+	getDevicePixelRatio(): number {
 		return window.devicePixelRatio || window.screen['deviceXDPI'] / window.screen['logicalXDPI'];
 	},
 	/**
@@ -737,7 +789,8 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * @return Promise
 	 * @since 8.6.1
 	 */
-	getUserMedia: function (constraints) {
+	// eslint-disable-next-line no-undef
+	getUserMedia(constraints: MediaStreamConstraints): Promise<MediaStream> {
 		var polyfillGUM = function (constraints?, success?, error?): Promise<MediaStream> {
 			var getUserMedia = navigator['getUserMedia'] || navigator['webkitGetUserMedia'] ||
 				navigator['mozGetUserMedia'] || navigator['msGetUserMedia'] ||
@@ -767,8 +820,8 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * @return Function a new, throttled version of the passed function
 	 * @since 9.6.0
 	 */
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	throttle: function (func, wait) {
+	throttle<T, A extends unknown[], R>(func: (this: T, ...args: A) => R, wait: number):
+				(this: T, ...args: A) => R {
 		var timeout: number | null, context, args, result,
 			previous = 0,
 			later = function (): void {
@@ -794,7 +847,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 				result = func.apply(context, args);
 				if (!timeout) context = args = null;
 			} else if (!timeout) {
-				timeout = setTimeout(later, remaining);
+				timeout = window.setTimeout(later, remaining);
 			}
 			return result;
 		};
@@ -812,8 +865,8 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * @return Function a new debounced version of the passed function
 	 * @since 9.6.0
 	 */
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	debounce: function (func, wait, immediate) {
+	debounce<T, A extends unknown[], R>(func: (this: T, ...args: A) => R, wait: number,
+	                                immediate?: boolean): (this: T, ...args: A) => R {
 		var timeout, args, context, timestamp, result;
 		if (null == wait) wait = 100;
 
@@ -857,4 +910,3 @@ function _loadImage(url): void {
 	img.onerror = img.onload = f;
 	img.src = url;
 }
-})();

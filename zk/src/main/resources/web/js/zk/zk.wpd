@@ -2,9 +2,9 @@
 
 <!-- zk.wpd
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Wed Jan 14 12:39:36     2009, Created by tomyeh
 
@@ -12,78 +12,5 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 -->
 
 <package name="zk">
-	<script>
-//ZK, Copyright 2009 Potix Corporation, LGPL
-//jQuery, (c) John Resig, MIT
-//Sizzle, (c) The Dojo Foundation, MIT
-//jQuery Mousewheel, (c) Brandon Aaron, MIT
 
-window.$eval=function(s){return eval(s);};
-	</script>
-		<!-- 1. jq.globalEval() seems have memory leak problem, so use eval()
-			 2. we cannot use eval() directly since compressor won't shorten names
-		-->
-	<script src="crashmsg.js" />
-	<script src="ext/jquery.js"/>
-	<script src="zk.js" jsdoc="true"/>
-	<function class="org.zkoss.zul.impl.Utils"
-        signature="java.lang.String outFeature()"/>
-	<function class="org.zkoss.zk.ui.http.Wpds"
-			  signature="java.lang.String outLibraryPropertyJavaScript()"/>
-	<script src="js.js"/>
-	<script src="dom.js" jsdoc="true"/>
-	<script src="domie.js" browser="ie9-,ie10-"/>
-	<script src="domgecko.js" browser="gecko"/>
-	<script src="domsafari.js" browser="safari"/>
-	<script src="domopera.js" browser="opera"/>
-
-	<script src="evt.js" jsdoc="true"/>
-	<script src="anima.js" jsdoc="true"/>
-	<script src="drag.js" jsdoc="true"/>
-	<script src="effect.js" jsdoc="true"/>
-	<script src="math.js" jsdoc="true"/>
-	<script src="utl.js" jsdoc="true"/>
-	<script src="keys.js" jsdoc="true"/>
-	<script src="widget.js" jsdoc="true"/>
-	<script src="pkg.js" jsdoc="true"/>
-	<script src="mount.js" jsdoc="true"/>
-	<script src="bookmark.js"/>
-	<script src="historystate.js"/>
-	<script src="ext/promise-polyfill.js"/>
-	<script src="ext/fetch.js"/>
-	<script src="au.js" jsdoc="true"/>
-	<script src="flex.js"/>
-	<script><![CDATA[
-	zk.touchEnabled = zk.touchEnabled !== false && (!!zk.mobile || navigator.maxTouchPoints > 0);
-	zk.tabletUIEnabled = zk.tabletUIEnabled !== false && !!zk.mobile;
-	if (zk.touchEnabled) {
-	]]></script>
-		<script src="ext/inputdevicecapabilities-polyfill.js"/>
-		<script src="zswipe.js" jsdoc="true"/>
-		<script src="domtouch.js"/>
-	<script><![CDATA[
-	}
-	if (zk.tabletUIEnabled) {
-		document.addEventListener('DOMContentLoaded', function() {
-			var jqTabletStylesheet = jq('link[href*="zkmax/css/tablet.css.dsp"]').eq(0);
-			if (jqTabletStylesheet)
-				jqTabletStylesheet.attr('disabled', false); // ZK-4451: disable tablet css
-		});
-	}
-	]]></script>
-	<script src="dateImpl.js"/>
-
-	<script src="zkie.js" browser="ie"/>
-
-	<script src="ext/jquery.json.js"/>
-	<script src="ext/jquery.mousewheel.js"/>
-	<script src="ext/jquery.transit.js"/>
-
-	<script src="ext/focus-options-polyfill.js"/>
-
-	<!-- Moment.js -->
-	<script src="ext/moment.js"/>
-	<script src="ext/moment-timezone-with-data.js"/>
-	<function class="org.zkoss.zk.ui.http.Wpds"
-		signature="java.lang.String outMomentTimezoneJavascript()"/>
 </package>

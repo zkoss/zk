@@ -1,9 +1,10 @@
+/* global NodeListOf:readonly */
 /* effect.ts
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Mon Nov 10 14:45:53     2008, Created by tomyeh
 
@@ -15,20 +16,71 @@ Copyright (c) 2005, 2006 Thomas Fuchs (http://script.aculo.us, http://mir.aculo.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-(function () {
+import {default as zk} from '@zk/zk';
+import {type JQZK, type SlideOptions} from '@zk/dom';
+import {zWatch} from '@zk/evt';
+import type {Widget} from '@zk/widget';
+import {DOMFieldValue, StringFieldValue} from '@zk/types';
 
-	var _defSKUOpts, _useSKU;
+var _defSKUOpts, _useSKU;
+
+export interface EffectStackupOptions {
+	stackup: boolean;
+}
+
+export interface EffectFullMaskOptions extends EffectStackupOptions {
+	mask: HTMLElement;
+	anchor: HTMLElement;
+	id: string;
+	zIndex: number;
+	visible: boolean;
+}
+
+export interface EffectMaskOptions extends EffectStackupOptions {
+	id: string;
+	anchor: DOMFieldValue;
+	message: string;
+	offset: [number, number];
+	width: number;
+	height: number;
+}
+
+export interface EffectActions {
+	slideDown(n: HTMLElement, opts?: Partial<SlideOptions>): void;
+	slideUp(n: HTMLElement, opts?: Partial<SlideOptions>): void;
+	slideIn(n: HTMLElement, opts?: Partial<SlideOptions>): void;
+	slideOut(n: HTMLElement, opts?: Partial<SlideOptions>): void;
+}
+export interface Effect {
+	destroy(): void;
+	hide(): void;
+	sync(): void;
+}
+
+export interface Eff {
+	shallStackup(): boolean;
+	_skuOpts<T extends EffectStackupOptions>(opts: Partial<EffectStackupOptions>): T;
+	_onVParent(evt, opts?): void;
+
+	Shadow?: typeof Shadow;
+	FullMask?: typeof FullMask;
+	Mask?: typeof Mask;
+	Actions?: EffectActions;
+	KeyboardTrap?: typeof KeyboardTrap;
+	Opacity?: unknown;
+	Move?: unknown;
+}
 
 /** The effects, such as mask and shadow.
  */
 //zk.$package('zk.eff');
-zk.eff = {
+let eff: Omit<Eff, 'destroy'> = {
 	shallStackup: function () {
 		return _useSKU;
 	},
-	_skuOpts: function (opts) {
+	_skuOpts<T extends EffectStackupOptions>(opts: Partial<EffectStackupOptions>): T {
 		return zk.$default(opts,
-			_defSKUOpts || (_defSKUOpts = {stackup: zk.eff.shallStackup()}));
+			_defSKUOpts || (_defSKUOpts = {stackup: eff.shallStackup()}));
 	},
 	// ZK-1904: stackup should be moved from wgt to document.body
 	_onVParent: function (evt, opts) {
@@ -40,28 +92,31 @@ zk.eff = {
 		}
 	}
 };
-
 /** The shadow effect.
 */
-zk.eff.Shadow = zk.$extends(zk.Object, {
-	$init: function (element, opts) {
+export class Shadow extends zk.Object implements Effect {
+	public constructor(element: HTMLElement, opts: Partial<EffectStackupOptions>) {
+		super();
 		this.wgt = zk.Widget.$(element.id);
-		this.opts = zk.eff._skuOpts(opts);
+		this.opts = eff._skuOpts(opts);
 		this.node = element;
 		// ZK-1904: listen onVParent
-		zWatch.listen({ onVParent: [this.node, zk.eff._onVParent] });
-	},
-	destroy: function () {
+		zWatch.listen({ onVParent: [this.node, eff._onVParent] });
+	}
+
+	public destroy(): void {
 		jq(this.stackup).remove();
 		jq(this.node).removeClass(this.wgt.getZclass() + '-shadow');
-		zWatch.unlisten({ onVParent: [this.node, zk.eff._onVParent] }); // ZK-2586
+		zWatch.unlisten({ onVParent: [this.node, eff._onVParent] }); // ZK-2586
 		this.wgt = this.node = this.stackup = null;
-	},
-	hide: function () {
+	}
+
+	public hide(): void {
 		jq(this.stackup).hide();
 		jq(this.node).removeClass(this.wgt.getZclass() + '-shadow');
-	},
-	sync: function () {
+	}
+
+	public sync(): boolean {
 		var node = this.node, $node = jq(node);
 		if (!node || !$node.zk.isVisible(true)) {
 			if (this.opts.stackup && node) {
@@ -92,15 +147,17 @@ zk.eff.Shadow = zk.$extends(zk.Object, {
 			st.display = 'block';
 		}
 		return true;
-	},
-	getBottomElement: function () {
+	}
+	public getBottomElement(): HTMLElement {
 		return this.stackup;
 	}
-});
+}
+eff.Shadow = Shadow;
 /** A mask covers the browser window fully.
  * @disable(zkgwt)
  */
-zk.eff.FullMask = zk.$extends(zk.Object, {
+export class FullMask extends zk.Object implements Effect {
+	public mask: HTMLElement | null;
 	/** The constructor of the full mask object.
 	 * <p>To remove the full mask, invoke {@link #destroy}.
 	 * @param Map opts [optional] the options. Allowed options:
@@ -112,12 +169,13 @@ zk.eff.FullMask = zk.$extends(zk.Object, {
 	 * <li>boolean visible: whether it is visible</li>
 	 * </ul>
 	 */
-	$init: function (opts) {
-		opts = zk.eff._skuOpts(opts);
+	public constructor(opts: Partial<EffectFullMaskOptions>) {
+		super();
+		opts = eff._skuOpts(opts);
 		var mask = this.mask = jq(opts.mask || [], zk)[0];
 		if (this.mask) {
 			if (opts.anchor)
-				opts.anchor.parentNode.insertBefore(mask, opts.anchor);
+				opts.anchor.parentNode?.insertBefore(mask, opts.anchor);
 			if (opts.id) mask.id = opts.id;
 			if (opts.zIndex != null) mask.style.zIndex = opts.zIndex;
 			if (opts.visible == false) mask.style.display = 'none';
@@ -144,42 +202,46 @@ zk.eff.FullMask = zk.$extends(zk.Object, {
 		}
 
 		jq(mask).click(jq.Event.stop); //don't eat mousemove (drag depends on it)
-	},
+	}
 	/** Removes the full mask. You can not access this object any more.
 	 */
-	destroy: function () {
+	public destroy(): void {
 		var mask = this.mask;
-		jq(mask).off('click', jq.Event.stop)
-			.remove();
+		if (mask) {
+			jq(mask).off('click', jq.Event.stop)
+				.remove();
+		}
 		jq(this.stackup).remove();
 		this.mask = this.stackup = null;
-	},
+	}
 	/** Hide the full mask. Application developers rarely need to invoke this method.
 	 * Rather, use {@link #sync} to synchronized the visual states.
 	 */
-	hide: function () {
-		this.mask.style.display = 'none';
+	public hide(): void {
+		if (this.mask) this.mask.style.display = 'none';
 		if (this.stackup) this.stackup.style.display = 'none';
-	},
+	}
 	/** Synchronizes the visual states of the full mask with the specified element and the browser window.
 	 * The visual states include the visibility and Z Index.
 	 */
-	sync: function (el) {
-		if (!zk(el).isVisible(true)) {
+	public sync(el?: HTMLElement): void {
+		if (el === undefined || !zk(el).isVisible(true)) {
 			this.hide();
 			return;
 		}
 
-		if (this.mask.nextSibling != el) {
-			var p = el.parentNode;
-			p.insertBefore(this.mask, el);
-			if (this.stackup)
-				p.insertBefore(this.stackup, this.mask);
-		}
+		if (this.mask) {
+			if (this.mask.nextSibling != el) {
+				var p = el.parentNode as HTMLElement;
+				p.insertBefore(this.mask, el);
+				if (this.stackup)
+					p.insertBefore(this.stackup, this.mask);
+			}
 
-		var st = this.mask.style;
-		st.display = 'block';
-		st.zIndex = el.style.zIndex;
+			var st = this.mask.style;
+			st.display = 'block';
+			st.zIndex = el.style.zIndex;
+		}
 
 		if (this.stackup) {
 			st = this.stackup.style;
@@ -187,21 +249,23 @@ zk.eff.FullMask = zk.$extends(zk.Object, {
 			st.zIndex = el.style.zIndex;
 		}
 	}
-});
+}
+eff.FullMask = FullMask;
 /** Applies the mask over the specified element to indicate it is busy.
  * @disable(zkgwt)
  */
-zk.eff.Mask = zk.$extends(zk.Object, {
+export class Mask extends zk.Object implements Effect {
 	/** The constructor.
 	 * <p>To remove the mask, invoke {@link #destroy}.
 	 * @param Map opts [optional] the options:
 	 * <ul>
 	 * <li>String id - the id of the applied mask, if any.</li>
 	 * <li>String/{@link DOMElement} anchor - the anchor of the applied mask, it can be an instance of {@link String} or {@link DOMElement}.</li>
-	 * <li>String msg - the message of the indicator, if any. null, Loading... is assumed.</li>
+	 * <li>String message - the message of the indicator, if any. null, Loading... is assumed.</li>
 	 * </ul>
 	 */
-	$init: function (opts) {
+	public constructor(opts?: Partial<EffectMaskOptions>) {
+		super();
 		opts = opts || {};
 		var $anchor = zk(opts.anchor);
 
@@ -211,13 +275,13 @@ zk.eff.Mask = zk.$extends(zk.Object, {
 
 		this._draw(opts, $anchor);
 		this.sync();
-	},
+	}
 	//ZK-3118
-	_draw: function (opts, $anchor) {
+	public _draw(opts: Partial<EffectMaskOptions>, $anchor: JQZK): void {
 		var maskId = opts.id || 'z_applymask',
 			progbox = jq(maskId, zk)[0];
 
-		if (progbox) return this;
+		if (progbox) return;
 
 		var msg = opts.message || ((window.msgzk ? msgzk.LOADING : 'Loading') + '...'),
 			n = document.createElement('div');
@@ -248,20 +312,20 @@ zk.eff.Mask = zk.$extends(zk.Object, {
 			this.wgt.__mask = this;
 		}
 
-	},
+	}
 	/** Hide the mask. Application developers rarely need to invoke this method.
 	 * Rather, use {@link #sync} to synchronized the visual states.
 	 */
-	hide: function () {
+	public hide(): void {
 		this.mask.style.display = 'none';
-	},
-	onHide: function () {
+	}
+	public onHide(): void {
 		this.__mask.hide();
-	},
+	}
 	/** Synchronizes the visual states of the mask with the specified element and the browser window.
 	 * The visual states include the visibility and Z Index.
 	 */
-	sync: function () {
+	public sync(): void {
 		var opts = this._opts,
 			anchor = opts.anchor,
 			$anchor = zk(anchor);
@@ -294,15 +358,16 @@ zk.eff.Mask = zk.$extends(zk.Object, {
 		var body = document.body,
 			html = body.parentNode,
 			// eslint-disable-next-line no-undef
-			rleaf: JQuery<HTMLElement> | HTMLElement = $anchor.jq,
+			rleaf: JQuery<HTMLElement> = $anchor.jq,
 			zi: string | number = 'auto',
 			zic, zicv;
 		// find the highest non-static node with non-auto z-index
-		for (var offp = rleaf.offsetParent(); offp[0] != body && offp[0] != html; offp = offp.offsetParent())
+		for (var offp = rleaf.offsetParent(); offp[0] != body && offp[0] != html; offp = offp.offsetParent()) {
 			if ((zic = offp.css('z-index')) && zic != 'auto') {
 				zi = zk.parseInt(zic);
-				rleaf = offp[0];
+				rleaf = offp;
 			}
+		}
 		// grab the maximum along the chain of nodes
 		for (var n: HTMLElement | null = rleaf[0]; n && n.style; n = n.parentElement) {
 			//Chrome and Safari only, HTML tag's zIndex value is empty
@@ -334,14 +399,14 @@ zk.eff.Mask = zk.$extends(zk.Object, {
 		}
 
 		this.mask.style.visibility = '';
-	},
-	onSize: function () {
+	}
+	public onSize(): void {
 		this.__mask.sync();
-	},
+	}
 
 	/** Removes the mask.
 	 */
-	destroy: function () {
+	public destroy(): void {
 		jq(this.mask).remove();
 		if (this.wgt) {
 			zWatch.unlisten({onHide: [this.wgt, this.onHide], onSize: [this.wgt, this.onSize]});
@@ -349,7 +414,8 @@ zk.eff.Mask = zk.$extends(zk.Object, {
 		}
 		this.mask = this.wgt = null;
 	}
-});
+}
+eff.Mask = Mask;
 /** @class zk.eff.Actions
  * A collection of actions that can be used with {@link zk.Widget#setAction}.
  * <p>The signature of an action must be as follows:<br>
@@ -358,7 +424,7 @@ zk.eff.Mask = zk.$extends(zk.Object, {
  * <code>this</code> references to the widget.
  * @since 5.0.6
  */
-zk.eff.Actions = {
+eff.Actions = {
 	/** Slides down to display this widget.
 	 * @param DOMElement n the node to display
 	 * @param Map opts the options. Allowed options:
@@ -366,7 +432,7 @@ zk.eff.Actions = {
 	 * <li><code>duration</code>: how many milliseconds to slide down</li>
 	 * </ul>
 	 */
-	slideDown: function (this: zk.Widget, n, opts) {
+	slideDown: function (this: Widget, n, opts) {
 		zk(n).slideDown(this, opts);
 	},
 	/** Slides up to hide this widget.
@@ -376,7 +442,7 @@ zk.eff.Actions = {
 	 * <li><code>duration</code>: how many milliseconds to slide up</li>
 	 * </ul>
 	 */
-	slideUp: function (this: zk.Widget, n, opts) {
+	slideUp: function (this: Widget, n, opts) {
 		zk(n).slideUp(this, opts);
 	},
 	/** Slides in to display this widget.
@@ -386,7 +452,7 @@ zk.eff.Actions = {
 	 * <li><code>duration</code>: how many milliseconds to slide in</li>
 	 * </ul>
 	 */
-	slideIn: function (this: zk.Widget, n, opts) {
+	slideIn: function (this: Widget, n, opts) {
 		zk(n).slideIn(this, opts);
 	},
 	/** Slides out to hide this widget.
@@ -396,7 +462,7 @@ zk.eff.Actions = {
 	 * <li><code>duration</code>: how many milliseconds to slide out</li>
 	 * </ul>
 	 */
-	slideOut: function (this: zk.Widget, n, opts) {
+	slideOut: function (this: Widget, n, opts) {
 		zk(n).slideOut(this, opts);
 	}
 };
@@ -404,20 +470,24 @@ zk.eff.Actions = {
  * Applies a keyboard trap that only allows focus moving within an area.
  * @since 9.5.0
  */
-zk.eff.KeyboardTrap = zk.$extends(zk.Object, {
+export class KeyboardTrap extends zk.Object {
+	private _area: HTMLElement | null;
+	private _boundaryTop: HTMLDivElement | null;
+	private _boundaryBottom: HTMLDivElement | null;
 	/**
 	 * The constructor.
 	 * <p>To remove the trap, invoke {@link #destroy}.
 	 * @param DOMElement area which area should the focus be restricted.
 	 */
-	$init: function (area) {
+	public constructor(area: HTMLElement) {
+		super();
 		this._area = area;
 		this._boundaryTop = this._createBoundary('top');
 		this._boundaryBottom = this._createBoundary('bottom');
 		area.insertAdjacentElement('beforebegin', this._boundaryTop);
 		area.insertAdjacentElement('afterend', this._boundaryBottom);
-	},
-	_createBoundary: function (id) {
+	}
+	private _createBoundary(id: string): HTMLDivElement {
 		var boundary = document.createElement('div'),
 			self = this;
 		boundary.tabIndex = 0;
@@ -426,9 +496,9 @@ zk.eff.KeyboardTrap = zk.$extends(zk.Object, {
 			self._handleFocus(id);
 		});
 		return boundary;
-	},
-	_handleFocus: function (id) {
-		var focusableElements = this._area.querySelectorAll(
+	}
+	private _handleFocus(id: string): void {
+		var focusableElements = (this._area as HTMLElement).querySelectorAll(
 			'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'),
 			focusableElementsCount = focusableElements.length,
 			isTop = id == 'top';
@@ -436,41 +506,44 @@ zk.eff.KeyboardTrap = zk.$extends(zk.Object, {
 			var elem = isTop
 				? this._getLastFocusableElement(focusableElements)
 				: this._getFirstFocusableElement(focusableElements);
-			if (elem) elem.focus();
+			if (elem) (elem as HTMLElement).focus();
 		}
-	},
-	_getFirstFocusableElement: function (elems) {
+	}
+	private _getFirstFocusableElement(elems: NodeListOf<Element>): Element | null {
 		var len = elems.length;
 		for (var i = 0; i < len; i++) {
 			if (this._isFocusable(elems[i])) return elems[i];
 		}
 		return null;
-	},
-	_getLastFocusableElement: function (elems) {
+	}
+	private _getLastFocusableElement(elems: NodeListOf<Element>): Element | null {
 		var len = elems.length;
 		for (var i = len - 1; i >= 0; i--) {
 			if (this._isFocusable(elems[i])) return elems[i];
 		}
 		return null;
-	},
-	_isFocusable: function (elem) {
+	}
+	private _isFocusable(elem): boolean {
 		return !(elem.disabled || elem.getAttribute('disabled')) // not disabled
 			&& (elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length); // visible
-	},
+	}
 	/**
 	 * Removes the keyboard trap.
 	 * You can not access this object any more.
 	 */
-	destroy: function () {
+	public destroy(): void {
 		var area = this._area;
 		if (area != null) {
 			var areaParent = area.parentNode;
-			areaParent.removeChild(this._boundaryTop);
-			areaParent.removeChild(this._boundaryBottom);
+			if (areaParent) {
+				areaParent.removeChild(this._boundaryTop as HTMLElement);
+				areaParent.removeChild(this._boundaryBottom as HTMLElement);
+			}
 		}
 		this._area = this._boundaryTop = this._boundaryBottom = null;
 	}
-});
+}
+eff.KeyboardTrap = KeyboardTrap;
 
 jq(function () {
 	//Handle zk.useStackup
@@ -531,4 +604,4 @@ jq(function () {
 	// }
 }); //jq
 
-})();
+export default eff;
