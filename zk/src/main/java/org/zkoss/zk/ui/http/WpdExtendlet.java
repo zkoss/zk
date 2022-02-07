@@ -1,9 +1,9 @@
 /* WpdExtendlet.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Mon Oct  6 10:47:11     2008, Created by tomyeh
 
@@ -182,7 +182,7 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 		 * Here we don't use "org.zkoss.web.classWebResource.cache" directly,
 		 * since some of our users might want to clear the cache for their css.dsp ,
 		 * and still cache the wpd js resource.
-		 * 
+		 *
 		 * So we add on a new config to clear the widget source .
 		 * @see bug 2898413
 		 */
@@ -309,7 +309,7 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 		}
 		StringBuilder preScriptBuilder = new StringBuilder();
 		if (zk) {
-			preScriptBuilder.append("if(!window.zk){\n");
+//			preScriptBuilder.append("if(!window.zk){\n");
 			//may be loaded multiple times because specified in lang.xml
 		} else if (!aaas) {
 			depends = root.getAttributeValue("depends");
@@ -445,7 +445,7 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 			final WebApp wapp = getWebApp();
 			if (wapp != null)
 				writeAppInfo(reqctx, out, wapp, sourceMapManager);
-			appendPostJsScript(out, sourceMapManager, "}"); //end of if(window.zk)
+//			appendPostJsScript(out, sourceMapManager, "}"); //end of if(window.zk)
 			writeHost(wc, out, wapp, reqctx, sourceMapManager);
 		} else if (aaas) {
 			writeHost(wc, out, getWebApp(), reqctx, sourceMapManager);

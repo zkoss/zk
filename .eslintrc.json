@@ -13,6 +13,7 @@
   },
   "globals": {
     "$eval": "readonly",
+    "JQuery": "readonly",
     "jq": "writable",
     "JQ": "writable",
     "zjq": "writable",
@@ -45,7 +46,8 @@
     "zkme": "readonly",
     "zkdh": "readonly",
     // duplicate function declaration reserved keyword
-    "_zkf": "writable"
+    "_zkf": "writable",
+    "Moment": "readonly"
   },
   "rules": {
     // Recommended

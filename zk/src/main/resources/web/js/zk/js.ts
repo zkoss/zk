@@ -4,15 +4,15 @@
 	Purpose:
 		Enhancement to JavaScript
 	Description:
-		
+
 	History:
 		Thu Dec 10 12:24:26 TST 2009, Created by tomyeh
 
 Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
 */
-zk.copy(String.prototype, {
-	$camel: function () {
+Object.assign(String.prototype, {
+	$camel: function (this: string) {
 		var parts = this.split('-'), len = parts.length;
 		if (len == 1) return parts[0];
 
@@ -23,22 +23,22 @@ zk.copy(String.prototype, {
 			camelized += parts[i].charAt(0).toUpperCase() + parts[i].substring(1);
 		return camelized;
 	},
-	$inc: function (diff) {
+	$inc: function (this: string, diff) {
 		return String.fromCharCode(this.charCodeAt(0) + diff);
 	},
-	$sub: function (cc) {
+	$sub: function (this: string, cc) {
 		return this.charCodeAt(0) - cc.charCodeAt(0);
 	}
 });
 
-zk.copy(Array.prototype, {
-	$indexOf: function (o) {
-		return jq.inArray(o, this);
+Object.assign(Array.prototype, {
+	$indexOf(this: Array<unknown>, o): number {
+		return this.indexOf(o);
 	},
-	$contains: function (o) {
-		return this.$indexOf(o) >= 0;
+	$contains(this: Array<unknown>, o): boolean {
+		return this.includes(o);
 	},
-	$equals: function (o) {
+	$equals(this: Array<unknown>, o): boolean {
 		if (jq.isArray(o) && o.length == this.length) {
 			for (var j = this.length; j--;) {
 				var e = this[j];
@@ -47,8 +47,9 @@ zk.copy(Array.prototype, {
 			}
 			return true;
 		}
+		return false;
 	},
-	$remove: function (o) {
+	$remove(this: Array<unknown>, o): boolean {
 		for (var ary = jq.isArray(o), j = 0, tl = this.length; j < tl; ++j) {
 			if (o == this[j] || (ary && o.$equals(this[j]))) {
 				this.splice(j, 1);
@@ -57,10 +58,10 @@ zk.copy(Array.prototype, {
 		}
 		return false;
 	},
-	$addAll: function (o) {
+	$addAll(this: Array<unknown>, o): number {
 		return this.push.apply(this, o);
 	},
-	$clone: function () {
+	$clone(this: Array<unknown>): Array<never> {
 		return [].concat(this as []);
 	}
 });

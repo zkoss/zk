@@ -2,9 +2,9 @@
 /* mount.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Sat Oct 18 19:24:38     2008, Created by tomyeh
 
@@ -13,10 +13,16 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	This program is distributed under LGPL Version 2.1 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
+import {default as zk} from '@zk/zk';
+import {default as pkg} from '@zk/pkg';
+import {Event, zWatch} from '@zk/evt';
+import {Callable, cast} from '@zk/types';
+import {default as zAu} from '@zk/au';
+import {zjq} from '@zk/dom';
 
 //define a package and returns the package info (used in WpdExtendlet)
 window.zkpi = function (nm: string, wv: boolean): Record<string, unknown> | null {
-	return zk.isLoaded(nm) ? null : {n: nm, p: zk.$package(nm, false, wv)};
+	return pkg.isLoaded(nm) ? null : {n: nm, p: zk.$package(nm, false, wv)};
 };
 
 //ZK JSP: page creation (backward compatible)
@@ -26,9 +32,16 @@ window.zkpb = function (pguid: string, dtid: string, contextURI: string, updateU
 		reqURI = resourceURI;
 		resourceURI = updateURI;
 	}
-	zkx([0, pguid,
-		zk.copy(props, {dt: dtid, cu: contextURI, uu: updateURI, rsu: resourceURI, ru: reqURI}), {}, []]);
+	window.zkx([0, pguid,
+		Object.assign(props, {
+			dt: dtid,
+			cu: contextURI,
+			uu: updateURI,
+			rsu: resourceURI,
+			ru: reqURI
+		}), {}, []]);
 };
+
 //ZK JSP (useless; backward compatible)
 window.zkpe = zk.$void;
 
@@ -48,13 +61,15 @@ window.zkver = function (ver: string, build: string, ctxURI: string, updURI: str
 };
 
 //Define a mold
-window.zkmld = function (wgtcls: Record<string, zk.Class>, molds: Record<string, (() => void)>): void {
-	if (!wgtcls.superclass) {
-		zk.afterLoad(function () {window['zkmld'](wgtcls, molds);});
+window.zkmld = function (wgtcls: Record<string, unknown>, molds: Record<string, (() => void)>): void {
+	if (!wgtcls.$oid) {
+		zk.afterLoad(function () {
+			window.zkmld(wgtcls, molds);
+		});
 		return;
 	}
 
-	var ms = wgtcls.molds = {};
+	var ms = wgtcls['molds'] = {};
 	for (var nm in molds) {
 		var fn = molds[nm];
 		ms[nm] = typeof fn == 'function' ? fn : fn[0]['molds'][fn[1]];
@@ -78,246 +93,253 @@ interface Pcai {
 	i?: number;
 }
 
-(function () {
-	var Widget = zk.Widget,
-		_wgt_$, //the original zk.Widget.$
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		_crInfBL0: any[] = [], _crInfBL1: any[] = [], //create info for BL
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		_crInfAU0: any[] = [], //create info for AU
-		_aftMounts: (() => void)[] = [], //afterMount
-		_aftResizes: (() => void)[] = [], //afterResize
-		_mntctx = {}, //the context
-		_paci: Pcai | null = {s: 0, e: -1, f0: [], f1: []}, //for handling page's AU responses
-		_t0 = jq.now();
+var _wgt_$ = zk.Widget.$, //the original zk.Widget.$
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	_crInfBL0: any[] = [], _crInfBL1: any[] = [], //create info for BL
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	_crInfAU0: any[] = [], //create info for AU
+	_aftMounts: (() => void)[] = [], //afterMount
+	_aftResizes: (() => void)[] = [], //afterResize
+	_mntctx = {}, //the context
+	_paci: Pcai | null = {s: 0, e: -1, f0: [], f1: []}, //for handling page's AU responses
+	_t0 = jq.now();
 
-	//Issue of handling page's AU responses
-	//1. page's AU must be processed after all zkx(), while they might be added
-	//  before zkx (such as test/test.zhtml), or multiple zkx (such jspTags.jsp)
-	//2. mount.js:_startCheck must be called after processing page's AU
-	//  (otherwise, zksandbox will jump to #f1 causing additional step)
-	//Note: it is better to block zAu but the chance to be wrong is low --
-	//a timer must be started early and its response depends page's AU
-	jq(function () {
-		function _stateless(): boolean {
-			var dts = zk.Desktop.all;
-			for (var dtid in dts)
-				if (dts[dtid].stateless) return true;
-			return false;
-		}
-		if (!_paci) return;
-		_paci.i = setInterval(function () {
-			var stateless;
-			if (_paci != null && ((zk.booted && !zk.mounting) || (stateless = _stateless())))
-				if (stateless || _paci.s == _paci.e) { //done
-					clearInterval(_paci.i);
-					var fs = _paci.f0.concat(_paci.f1);
-					_paci = null;
-					for (var f; f = fs.shift();)
-						f();
-				} else
-					_paci.e = _paci.s;
-		}, 25);
-	});
-	//run after page AU cmds
-	zk._apac = function (fn, _which_) {
-		if (_paci)
-			return _paci[_which_ || 'f1'].push(fn);
-		zk.afterMount(fn); //it might happen if ZUML loaded later (with custom JS code)
-	};
-
-/** @partial zk
- */
-//@{
-	/** Adds a function that will be executed after the mounting is done. By mounting we mean the creation of peer widgets.
-	 * <p>By mounting we mean the creation of the peer widgets under the
-	 * control of the server. To run after the mounting of the peer widgets,
-	 * <p>If the delay argument is not specified and no mounting is taking place,
-	 * the function is executed with <code>setTimeout(fn, 0)</code>.
-	 * @param Function fn the function to execute after mounted
-	 * @param int delay (since 5.0.6) how many milliseconds to wait before execute if
-	 * there is no mounting taking place. If omitted, 0 is assumed.
-	 * If negative, the function is executed immediately (if no mounting is taking place).
-	 * @return boolean true if this method has been called before return (delay must
-	 * be negative, and no mounting); otherwise, undefined is returned.
-	 * @see #mounting
-	 * @see #afterLoad
-	 * @see #afterAnimate
-	 */
-	//afterMount: function () {}
-//@};
-	zk.afterMount = function (fn, delay) { //part of zk
-		if (fn) {
-			if (!jq.isReady)
-				jq(function () {zk.afterMount(fn);}); //B3278524
-			else if (zk.mounting)
-				_aftMounts.push(fn); //normal
-			else if (zk.loading)
-				zk.afterLoad(fn);
-			else if (delay !== undefined && delay < 0) {
-				fn();
-				return true; //called
-			} else
-				setTimeout(fn, delay);
-		}
+//Issue of handling page's AU responses
+//1. page's AU must be processed after all zkx(), while they might be added
+//  before zkx (such as test/test.zhtml), or multiple zkx (such jspTags.jsp)
+//2. mount.js:_startCheck must be called after processing page's AU
+//  (otherwise, zksandbox will jump to #f1 causing additional step)
+//Note: it is better to block zAu but the chance to be wrong is low --
+//a timer must be started early and its response depends page's AU
+jq(function () {
+	function _stateless(): boolean {
+		var dts = zk.Desktop.all;
+		for (var dtid in dts)
+			if (dts[dtid].stateless) return true;
 		return false;
-	};
+	}
+
+	if (!_paci) return;
+	_paci.i = window.setInterval(function () {
+		var stateless;
+		if (_paci != null && ((zk.booted && !zk.mounting) || (stateless = _stateless())))
+			if (stateless || _paci.s == _paci.e) { //done
+				clearInterval(_paci.i);
+				var fs = _paci.f0.concat(_paci.f1);
+				_paci = null;
+				for (var f; (f = fs.shift());)
+					f();
+			} else
+				_paci.e = _paci.s;
+	}, 25);
+});
+//run after page AU cmds
+zk._apac = function (fn, _which_) {
+	if (_paci)
+		return _paci[_which_ || 'f1'].push(fn);
+	zk.afterMount(fn); //it might happen if ZUML loaded later (with custom JS code)
+};
+
 /** @partial zk
  */
 //@{
-    /** Adds a function that will be executed after all of the onSize events are done.
-     * <p>Here lists the execution phases:
-     * <ol>
-     *     <li>After the page loaded, the function added in the afterResze() will be invoked</li>
-     *     <li>After the browser resized, the function added in the afterResze() will be invoked</li>
-     *     <li>After zWatch.fire/fireDown('onSize'), the function added in the afterResze() will be invoked</li>
-     * </ol>
-     * </p>
-     * @param Function fn the function to execute after resized
-     * @since 6.5.2
-     */
-    //afterResize: function () {}
+/** Adds a function that will be executed after the mounting is done. By mounting we mean the creation of peer widgets.
+ * <p>By mounting we mean the creation of the peer widgets under the
+ * control of the server. To run after the mounting of the peer widgets,
+ * <p>If the delay argument is not specified and no mounting is taking place,
+ * the function is executed with <code>setTimeout(fn, 0)</code>.
+ * @param Function fn the function to execute after mounted
+ * @param int delay (since 5.0.6) how many milliseconds to wait before execute if
+ * there is no mounting taking place. If omitted, 0 is assumed.
+ * If negative, the function is executed immediately (if no mounting is taking place).
+ * @return boolean true if this method has been called before return (delay must
+ * be negative, and no mounting); otherwise, undefined is returned.
+ * @see #mounting
+ * @see #afterLoad
+ * @see #afterAnimate
+ */
+//afterMount: function () {}
 //@};
-	zk.afterResize = function (fn) {
-		if (fn)
-			_aftResizes.push(fn);
-	};
-	zk.doAfterResize = function () {
-		for (var fn; fn = _aftResizes.shift();) {
+zk.afterMount = function (fn, delay?): boolean { //part of zk
+	if (fn) {
+		if (!jq.isReady)
+			jq(function () {
+				zk.afterMount(fn);
+			}); //B3278524
+		else if (zk.mounting)
+			_aftMounts.push(fn); //normal
+		else if (zk.loading)
+			zk.afterLoad(fn);
+		else if (delay !== undefined && delay < 0) {
 			fn();
-		}
-	};
-	function _curdt(): zk.Desktop {
-		return _mntctx['curdt'] || (_mntctx['curdt'] = zk.Desktop.$());
+			return true; //called
+		} else
+			setTimeout(fn, delay);
 	}
-	//Load all required packages
-	function mountpkg(infs): void {
-		var types: Record<string, string> = {};
-		for (var j = infs.length; j--;) {
-			var inf = infs[j];
-			if (!inf.pked) { //mountpkg might be called multiple times before mount()
-				inf.pked = true;
-				getTypes(types, inf[0], inf[1]);
-			}
-		}
+	return false;
+};
+/** @partial zk
+ */
+//@{
+/** Adds a function that will be executed after all of the onSize events are done.
+ * <p>Here lists the execution phases:
+ * <ol>
+ *     <li>After the page loaded, the function added in the afterResze() will be invoked</li>
+ *     <li>After the browser resized, the function added in the afterResze() will be invoked</li>
+ *     <li>After zWatch.fire/fireDown('onSize'), the function added in the afterResze() will be invoked</li>
+ * </ol>
+ * </p>
+ * @param Function fn the function to execute after resized
+ * @since 6.5.2
+ */
+//afterResize: function () {}
+//@};
+zk.afterResize = function (fn): void {
+	if (fn)
+		_aftResizes.push(fn);
+};
+zk.doAfterResize = function (): void {
+	for (var fn; fn = _aftResizes.shift();) {
+		fn();
+	}
+};
 
-		for (var type in types) {
-			var index: number = type.lastIndexOf('.');
-			if (index >= 0)
-				zk._load(type.substring(0, index), types[type]); //use _load for better performance
+function _curdt(): zk.Desktop {
+	return _mntctx['curdt'] || (_mntctx['curdt'] = zk.Desktop.$());
+}
+
+//Load all required packages
+function mountpkg(infs): void {
+	var types: Record<string, string> = {};
+	for (var j = infs.length; j--;) {
+		var inf = infs[j];
+		if (!inf.pked) { //mountpkg might be called multiple times before mount()
+			inf.pked = true;
+			getTypes(types, inf[0], inf[1]);
 		}
 	}
-	//Loads package of a widget tree
-	function getTypes(types, dt, wi): void {
-		var type = wi[0];
-		if (type === 0) //page
-			type = wi[2].wc;
-		else if (type === 1) //1: zhtml.Widget
-			wi[0] = type = 'zhtml.Widget';
-		if (type)
-			types[type] = dt;
 
-		for (var children = wi[4], j = children.length; j--;)
-			getTypes(types, dt, children[j]);
+	for (var type in types) {
+		var index: number = type.lastIndexOf('.');
+		if (index >= 0)
+			zk._load(type.substring(0, index), types[type]); //use _load for better performance
 	}
-	//mount for browser loading
-	function mtBL(): void {
-		for (;;) {
-			if (zk.loading) {
-				zk.afterLoad(mtBL); //later
-				return;
-			}
+}
 
-			var inf = _crInfBL0.shift();
-			if (!inf)
-				break; //done
+//Loads package of a widget tree
+function getTypes(types, dt, wi): void {
+	var type = wi[0];
+	if (type === 0) //page
+		type = wi[2].wc;
+	else if (type === 1) //1: zhtml.Widget
+		wi[0] = type = 'zhtml.Widget';
+	if (type)
+		types[type] = dt;
 
-			_crInfBL1.push([inf[0], create(inf[3] || inf[0], inf[1], true), inf[2], inf[4]]);
-				//inf[0]: desktop used as default parent if no owner
-				//inf[3]: owner passed from zkx
-				//inf[2]: bindOnly
-				//inf[4]: aucmds (if BL)
-				//true: don't update DOM
+	for (var children = wi[4], j = children.length; j--;)
+		getTypes(types, dt, children[j]);
+}
 
-			if (breathe(mtBL))
-				return; //mtBL has been scheduled for later execution
-		}
-
-		mtBL0();
-	}
-	function mtBL0(): void {
-		for (;;) {
-			if (_crInfBL0.length)
-				return; //another page started
-
-			if (zk.loading) {
-				zk.afterLoad(mtBL0);
-				return;
-			}
-
-			if (zk.ie && zk.ie < 11 && !jq.isReady) {//3055849: ie6/ie7 has to wait until isReady (tonyq reported ie8 has similar issue)
-				jq(mtBL0);
-				return;
-			}
-
-			var inf = _crInfBL1.shift();
-			if (!inf) break;
-
-			var wgt: zk.Widget = inf[1];
-			if (inf[2])
-				wgt.bind(inf[0]); //bindOnly
-			else {
-				var $jq;
-				if (zk.processing
-						&& ($jq = jq('#zk_proc')).length) {
-					if ($jq.hasClass('z-loading') && $jq.parent().hasClass('z-temp')) {
-						$jq[0].id = 'zna';
-						if (!jq('#zk_proc').length) //B65-ZK-1431: check if progressbox exists
-							zUtl.progressbox('zk_proc', window.msgzk ? msgzk.PLEASE_WAIT : 'Processing...', true);
-					}
-				}
-				wgt.replaceHTML('#' + wgt.uuid, inf[0]);
-			}
-
-			doAuCmds(inf[3]); //aucmds
+//mount for browser loading
+function mtBL(): void {
+	for (; ;) {
+		if (zk.loading) {
+			zk.afterLoad(mtBL); //later
+			return;
 		}
 
-		mtBL1();
+		var inf = _crInfBL0.shift();
+		if (!inf)
+			break; //done
+
+		_crInfBL1.push([inf[0], create(inf[3] || inf[0], inf[1], true), inf[2], inf[4]]);
+		//inf[0]: desktop used as default parent if no owner
+		//inf[3]: owner passed from zkx
+		//inf[2]: bindOnly
+		//inf[4]: aucmds (if BL)
+		//true: don't update DOM
+
+		if (breathe(mtBL))
+			return; //mtBL has been scheduled for later execution
 	}
-	function mtBL1(): void {
-		if (_crInfBL0.length || _crInfBL1.length)
+
+	mtBL0();
+}
+
+function mtBL0(): void {
+	for (; ;) {
+		if (_crInfBL0.length)
 			return; //another page started
 
-		zk.booted = true;
-		zk.mounting = false;
-		doAfterMount(mtBL1);
-		_paci && ++_paci.s;
-		if (!zk.clientinfo) {// if existed, the endProcessing() will be invoked after onResponse()
-			zk.endProcessing();
-		} else {
-			mtAU(); // resume last not done yet (=zk.mounting) clientinfo ZKAU
+		if (zk.loading) {
+			zk.afterLoad(mtBL0);
+			return;
 		}
 
-		zk.bmk.onURLChange();
-		if (zk.pfmeter) {
-			var dts = zk.Desktop.all;
-			for (var dtid in dts)
-				zAu._pfdone(dts[dtid], dtid);
+		if (zk.ie && zk.ie < 11 && !jq.isReady) {//3055849: ie6/ie7 has to wait until isReady (tonyq reported ie8 has similar issue)
+			jq(mtBL0);
+			return;
 		}
+
+		var inf = _crInfBL1.shift();
+		if (!inf) break;
+
+		var wgt: zk.Widget = inf[1];
+		if (inf[2])
+			wgt.bind(inf[0]); //bindOnly
+		else {
+			var $jq;
+			if (zk.processing
+				&& ($jq = jq('#zk_proc')).length) {
+				if ($jq.hasClass('z-loading') && $jq.parent().hasClass('z-temp')) {
+					$jq[0].id = 'zna';
+					if (!jq('#zk_proc').length) //B65-ZK-1431: check if progressbox exists
+						zUtl.progressbox('zk_proc', window.msgzk ? msgzk.PLEASE_WAIT : 'Processing...', true);
+				}
+			}
+			wgt.replaceHTML('#' + wgt.uuid, inf[0]);
+		}
+
+		doAuCmds(inf[3]); //aucmds
 	}
 
-	/* mount for AU */
-	function mtAU(): void {
-		for (;;) {
-			if (zk.loading) {
-				zk.afterLoad(mtAU);
-				return;
-			}
+	mtBL1();
+}
 
-			var inf = _crInfAU0.shift(), filter, wgt;
-			zk._crWgtUuids.shift(); //sync to _crInfAU0
-			if (!inf)
-				break; //done
+function mtBL1(): void {
+	if (_crInfBL0.length || _crInfBL1.length)
+		return; //another page started
+
+	zk.booted = true;
+	zk.mounting = false;
+	doAfterMount(mtBL1);
+	_paci && ++_paci.s;
+	if (!zk.clientinfo) {// if existed, the endProcessing() will be invoked after onResponse()
+		zk.endProcessing();
+	} else {
+		mtAU(); // resume last not done yet (=zk.mounting) clientinfo ZKAU
+	}
+
+	zk.bmk.onURLChange();
+	if (zk.pfmeter) {
+		var dts = zk.Desktop.all;
+		for (var dtid in dts)
+			zAu._pfdone(dts[dtid], dtid);
+	}
+}
+
+/* mount for AU */
+function mtAU(): void {
+	for (; ;) {
+		if (zk.loading) {
+			zk.afterLoad(mtAU);
+			return;
+		}
+
+		var inf = _crInfAU0.shift(), filter, wgt;
+		zk._crWgtUuids.shift(); //sync to _crInfAU0
+		if (!inf)
+			break; //done
 
 			if (filter = inf[4][1]) {//inf[4] is extra if AU
 				_wgt_$ = Widget.$; // update the latest one, if somewhere else override it already.
@@ -325,274 +347,278 @@ interface Pcai {
 					return filter(_wgt_$(n, opts));
 				};
 			}
-			try {
-				wgt = create(null, inf[1]);
-			} finally {
-				if (filter && _wgt_$) Widget.$ = _wgt_$;
-			}
-			inf[4][0](wgt); //invoke stub
-
-			if (breathe(mtAU))
-				return; //mtAU has been scheduled for later execution
-		}
-		mtAU0();
-	}
-	function mtAU0(): void {
-		zk.mounting = false;
-		doAfterMount(mtAU0);
-
-		zAu._doCmds(); //server-push (w/ afterLoad) and _pfdone
-		doAfterMount(mtAU0);
-	}
-	function doAfterMount(fnext): boolean {
-		for (var fn; fn = _aftMounts.shift();) {
-			fn();
-			if (zk.loading) {
-				zk.afterLoad(fnext); //fn might load packages
-				return true; //wait
-			}
-		}
-		return false;
-	}
-
-	function doAuCmds(cmds): void {
-		if (cmds && cmds.length)
-			zk._apac(function () {
-				for (var j = 0; j < cmds.length; j += 2)
-					zAu.process(cmds[j], cmds[j + 1]);
-			}, 'f0');
-	}
-
-	/* create the widget tree. */
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	function create(parent: zk.Widget | null, wi: any[], ignoreDom?: boolean): zk.Widget {
-		var wgt, stub, v,
-			type = wi[0],
-			uuid = wi[1],
-			props = wi[2] || {},
-			seProps = wi[3] || {};
-		if (type === 0) { //page
-			type = zk.cut(props, 'wc');
-			var cls = type ? zk.$import(type) : zk.Page;
-			(wgt = new cls({uuid: uuid}, zk.cut(props, 'ct'))).inServer = true;
-			if (parent) parent.appendChild(wgt, ignoreDom);
-		} else {
-			if ((stub = type == '#stub') || type == '#stubs') {
-				if (!(wgt = (_wgt_$ || Widget.$)(uuid) //use the original one since filter() might applied
-						|| zAu._wgt$(uuid))) //search detached (in prev cmd of same AU)
-					throw 'Unknown stub ' + uuid;
-				var w = new Widget();
-				//Bug ZK-1596: may already unbind
-				//Bug ZK-1821: should also unbind wgt if in ROD status
-				if (wgt.desktop || wgt.z_rod === 9)
-					wgt.unbind(); //reuse it as new widget, bug ZK-1589: should unbind first then replace
-				zk._wgtutl.replace(wgt, w, stub);
-					//to reuse wgt, we replace it with a dummy widget, w
-					//if #stubs, we have to reuse the whole subtree (not just wgt), so don't move children
-			} else {
-				var cls = zk.$import(type);
-				if (!cls)
-					throw 'Unknown widget: ' + type;
-				(wgt = new cls(zkac)).inServer = true;
-					//zkac used as token to optimize the performance of zk.Widget.$init
-				wgt.uuid = uuid;
-				if (v = wi[5])
-					wgt.setMold(v);
-			}
-			if (parent) parent.appendChild(wgt, ignoreDom);
-
-			//z$is: IdSpace
-			//There are two ways to specify IdSpace at client
-			//1) Override $init and assign _fellows (e.g., Macro/Include/Window)
-			//2) Assign this.z$is to true (used by AbstractComponent.java)
-			if (v = zk.cut(props, 'z$is')) {
-				wgt.z$is = true;
-				wgt._fellows = {};
-			}
-
-			//z$al: afterLoad
-			if (v = zk.cut(props, 'z$al'))
-				zk.afterLoad(function () {
-					for (var p in v)
-						wgt.set(p, v[p](), true); //value must be func; fromServer
-				});
-			
-			if (v = zk.cut(seProps, 'z$al'))
-				zk.afterLoad(function () {
-					for (var i = 0, j = v.length; i < j; i++) {
-						var vv = v[i];
-						for (var p in vv)
-							wgt.set(p, vv[p](), true); //value must be func; fromServer
-					}
-				});
-		}
-
-		for (var nm in props)
-			wgt.set(nm, props[nm], true); //fromServer
-
-		for (var nm in seProps) {
-			var v = seProps[nm];
-			for (var i = 0, length = v.length; i < length; i++) {
-				var vv = v[i];
-				wgt.set(nm, vv, true); //fromServer
-			}
-		}
-
-		for (var j = 0, childs = wi[4], len = childs.length;
-		j < len; ++j)
-			create(wgt, childs[j]);
-
-        // call afterCompose_() after zk.loaded, because some packages may not
-        // be loaded yet or call afterCompose_() directly if every required
-        // packages are loaded.
-        if (zk.loading) {
-            zk.afterLoad(() => wgt.afterCompose_());
-        } else {
-            wgt.afterCompose_();
-        }
-		return wgt;
-	}
-
-	/* Schedules fn for later execution if it takes too long to boot up,
-	 * so progressbox has a chance to show
-	 */
-	function breathe(fn): boolean {
-		var t = jq.now(), dt = t - _t0;
-		if (dt > 2500) { //huge page (the shorter the longer to load; but no loading icon)
-			_t0 = t;
-			dt >>= 6;
-			setTimeout(fn, dt < 10 ? dt : 10); //breathe
-				//IE optimize the display if delay is too short
-			return true;
-		}
-		return false;
-	}
-
-  zk.copy(window, {
-	//define a desktop
-	zkdt: function (dtid, contextURI, updateURI, resourceURI, reqURI) {
-		var dt = zk.Desktop.$(dtid);
-		if (dt == null) {
-			dt = new zk.Desktop(dtid, contextURI, updateURI, resourceURI, reqURI);
-			if (zk.pfmeter) zAu._pfrecv(dt, dtid);
-		} else {
-			if (updateURI != null) dt.updateURI = updateURI;
-			if (resourceURI != null) dt.resourceURI = resourceURI;
-			if (contextURI != null) dt.contextURI = contextURI;
-			if (reqURI != null) dt.requestPath = reqURI;
-		}
-		_mntctx['curdt'] = dt;
-		return dt;
-	},
-
-	//widget creations
-	// wi's index meaning
-	// wi[0] = widget type
-	// wi[1] = uuid
-	// wi[2] = widget properties
-	// wi[3] = shadow properties - since ZK 8.0.0
-	// wi[4] = children
-	// wi[5] = mold
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	zkx: function (wi: any[], extra?: string | null, aucmds?: string | null, js?: string): void { //extra is either delay (BL) or [stub, filter] (AU)
-		zk.mounting = true;
-
 		try {
-			if (js) jq.globalEval(js);
-
-			var mount = mtAU, infs = _crInfAU0, delay, owner;
-			if (!extra || !extra.length) { //if 2nd argument not stub, it must be BL (see zkx_)
-				delay = extra;
-				if (wi) {
-					extra = aucmds;
-					aucmds = null;
-				}
-				mount = mtBL;
-				infs = _crInfBL0;
-			} //else assert(!aucmds); //no aucmds if AU
-
-			if (wi) {
-				if (wi[0] === 0) { //page
-					var props = wi[2],
-						dtid = zk.cut(props, 'dt') as string | undefined,
-						cu = zk.cut(props, 'cu') as string | undefined,
-						uu = zk.cut(props, 'uu') as string | undefined,
-						rsu = zk.cut(props, 'rsu') as string | undefined,
-						ru = zk.cut(props, 'ru') as string | undefined;
-					zkdt(dtid, cu, uu, rsu, ru);
-					if (owner = zk.cut(props, 'ow'))
-						owner = Widget.$(owner);
-				}
-
-				infs.push([_curdt(), wi, _mntctx['bindOnly'], owner, extra]);
-				if (!zk._crWgtUuids) zk._crWgtUuids = [];
-				zk._crWgtUuids.push(wi[1].toString());
-					//extra is [stub-fn, filter] if AU,  aucmds if BL
-				mountpkg(infs);
-			}
-
-			if (delay)
-				setTimeout(mount, 0); //Bug 2983792 (delay until non-defer script evaluated)
-			else if (!breathe(mount)) //give the browser a chance to breathe
-				mount();
-
-			doAuCmds(aucmds);
-		} catch (e) {
-			zk.mounting = false;
-			zk.error('Failed to mount: ' + (e.message || e));
-			setTimeout(function () {
-				throw e;
-			}, 0);
-		}
-	},
-	//widget creation called by au.js
-	//args: [wi] (a single element array containing wi)
-	zkx_: function (args, stub, filter) {
-		_t0 = jq.now(); //so breathe() won't do unncessary delay
-		args[1] = [stub, filter]; //assign stub as 2nd argument (see zkx)
-		zkx.apply(this, args); //args[2] (aucmds) must be null
-	},
-
-	//Run AU commands (used only with ZHTML)
-	zkac: function () {
-		doAuCmds(arguments);
-	},
-
-	//mount and zkx (BL)
-	zkmx: function () {
-		zkmb();
-		try {
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-ignore
-			zkx.apply(window, arguments);
+			wgt = create(null, inf[1]);
 		} finally {
-			zkme();
+				if (filter && _wgt_$) Widget.$ = _wgt_$;
 		}
-	},
+		inf[4][0](wgt); //invoke stub
 
-	//begin of mounting
-	zkmb: function (bindOnly) {
-		_mntctx['bindOnly'] = bindOnly;
-		var t = 390 - (jq.now() - _t0);
-		zk.startProcessing(t > 0 ? t : 0);
-	},
-	//end of mounting
-	zkme: function () {
-		_mntctx['curdt'] = null;
-		_mntctx['bindOnly'] = false;
-	},
-	// register data-attributres handler (since 8.0.0
-	zkdh: function (name, script) {
-		zk.addDataHandler('data-' + name, script);
+		if (breathe(mtAU))
+			return; //mtAU has been scheduled for later execution
 	}
-  });
-})();
+	mtAU0();
+}
+
+function mtAU0(): void {
+	zk.mounting = false;
+	doAfterMount(mtAU0);
+
+	zAu._doCmds(); //server-push (w/ afterLoad) and _pfdone
+	doAfterMount(mtAU0);
+}
+
+function doAfterMount(fnext): boolean {
+	for (var fn; fn = _aftMounts.shift();) {
+		fn();
+		if (zk.loading) {
+			zk.afterLoad(fnext); //fn might load packages
+			return true; //wait
+		}
+	}
+	return false;
+}
+
+function doAuCmds(cmds): void {
+	if (cmds && cmds.length)
+		zk._apac(function () {
+			for (var j = 0; j < cmds.length; j += 2)
+				zAu.process(cmds[j], cmds[j + 1]);
+		}, 'f0');
+}
+
+/* create the widget tree. */
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function create(parent: zk.Widget | null, wi: any[], ignoreDom?: boolean): zk.Widget {
+	var wgt, stub, v,
+		type = wi[0],
+		uuid = wi[1],
+		props = wi[2] || {},
+		seProps = wi[3] || {};
+	if (type === 0) { //page
+		type = zk.cut(props, 'wc');
+		var cls = type ? zk.$import(type) : zk.Page;
+		(wgt = new cls({uuid: uuid}, zk.cut(props, 'ct'))).inServer = true;
+		if (parent) parent.appendChild(wgt, ignoreDom);
+	} else {
+		if ((stub = type == '#stub') || type == '#stubs') {
+			if (!(wgt = (_wgt_$ || Widget.$)(uuid) //use the original one since filter() might applied
+				|| zAu._wgt$(uuid))) //search detached (in prev cmd of same AU)
+				throw 'Unknown stub ' + uuid;
+			var w = new zk.Widget();
+			//Bug ZK-1596: may already unbind
+			//Bug ZK-1821: should also unbind wgt if in ROD status
+			if (wgt.desktop || wgt.z_rod === 9)
+				wgt.unbind(); //reuse it as new widget, bug ZK-1589: should unbind first then replace
+			zk._wgtutl.replace(wgt, w, stub);
+			//to reuse wgt, we replace it with a dummy widget, w
+			//if #stubs, we have to reuse the whole subtree (not just wgt), so don't move children
+		} else {
+			var cls = zk.$import(type);
+			if (!cls)
+				throw 'Unknown widget: ' + type;
+			(wgt = new cls(window.zkac)).inServer = true;
+			//zkac used as token to optimize the performance of zk.Widget.$init
+			wgt.uuid = uuid;
+			if (v = wi[5])
+				wgt.setMold(v);
+		}
+		if (parent) parent.appendChild(wgt, ignoreDom);
+
+		//z$is: IdSpace
+		//There are two ways to specify IdSpace at client
+		//1) Override $init and assign _fellows (e.g., Macro/Include/Window)
+		//2) Assign this.z$is to true (used by AbstractComponent.java)
+		if (v = zk.cut(props, 'z$is')) {
+			wgt.z$is = true;
+			wgt._fellows = {};
+		}
+
+		//z$al: afterLoad
+		if (v = zk.cut(props, 'z$al'))
+			zk.afterLoad(function () {
+				for (var p in v)
+					wgt.set(p, v[p](), true); //value must be func; fromServer
+			});
+
+		if (v = zk.cut(seProps, 'z$al'))
+			zk.afterLoad(function () {
+				for (var i = 0, j = v.length; i < j; i++) {
+					var vv = v[i];
+					for (var p in vv)
+						wgt.set(p, vv[p](), true); //value must be func; fromServer
+				}
+			});
+	}
+
+	for (var nm in props)
+		wgt.set(nm, props[nm], true); //fromServer
+
+	for (var nm in seProps) {
+		var v = seProps[nm];
+		for (var i = 0, length = v.length; i < length; i++) {
+			var vv = v[i];
+			wgt.set(nm, vv, true); //fromServer
+		}
+	}
+
+	for (var j = 0, childs = wi[4], len = childs.length;
+	     j < len; ++j)
+		create(wgt, childs[j]);
+
+	// call afterCompose_() after zk.loaded, because some packages may not
+	// be loaded yet or call afterCompose_() directly if every required
+	// packages are loaded.
+	if (zk.loading) {
+		zk.afterLoad(() => wgt.afterCompose_());
+	} else {
+		wgt.afterCompose_();
+	}
+	return wgt;
+}
+
+/* Schedules fn for later execution if it takes too long to boot up,
+ * so progressbox has a chance to show
+ */
+function breathe(fn): boolean {
+	var t = jq.now(), dt = t - _t0;
+	if (dt > 2500) { //huge page (the shorter the longer to load; but no loading icon)
+		_t0 = t;
+		dt >>= 6;
+		setTimeout(fn, dt < 10 ? dt : 10); //breathe
+		//IE optimize the display if delay is too short
+		return true;
+	}
+	return false;
+}
+
+//define a desktop
+window.zkdt = function (dtid, contextURI, updateURI, resourceURI, reqURI): zk.Desktop {
+	var dt = zk.Desktop.$(dtid);
+	if (dt == null) {
+		dt = new zk.Desktop(dtid, contextURI, updateURI, resourceURI, reqURI);
+		if (zk.pfmeter) zAu._pfrecv(dt, dtid);
+	} else {
+		if (updateURI != null) dt.updateURI = updateURI;
+		if (resourceURI != null) dt.resourceURI = resourceURI;
+		if (contextURI != null) dt.contextURI = contextURI;
+		if (reqURI != null) dt.requestPath = reqURI;
+	}
+	_mntctx['curdt'] = dt;
+	return dt;
+};
+
+//widget creations
+// wi's index meaning
+// wi[0] = widget type
+// wi[1] = uuid
+// wi[2] = widget properties
+// wi[3] = shadow properties - since ZK 8.0.0
+// wi[4] = children
+// wi[5] = mold
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+window.zkx = function (wi: unknown[], extra?: string | null, aucmds?: string | null, js?: string): void { //extra is either delay (BL) or [stub, filter] (AU)
+	zk.mounting = true;
+
+	try {
+		if (js) jq.globalEval(js);
+
+		var mount = mtAU, infs = _crInfAU0, delay, owner;
+		if (!extra || !extra.length) { //if 2nd argument not stub, it must be BL (see zkx_)
+			delay = extra;
+			if (wi) {
+				extra = aucmds;
+				aucmds = null;
+			}
+			mount = mtBL;
+			infs = _crInfBL0;
+		} //else assert(!aucmds); //no aucmds if AU
+
+		if (wi) {
+			if (wi[0] === 0) { //page
+				var props = wi[2],
+					dtid = zk.cut(props, 'dt') as string | undefined,
+					cu = zk.cut(props, 'cu') as string | undefined,
+					uu = zk.cut(props, 'uu') as string | undefined,
+					rsu = zk.cut(props, 'rsu') as string | undefined,
+					ru = zk.cut(props, 'ru') as string | undefined;
+				window.zkdt(dtid, cu, uu, rsu, ru);
+				if (owner = zk.cut(props, 'ow'))
+					owner = zk.Widget.$(owner);
+			}
+
+			infs.push([_curdt(), wi, _mntctx['bindOnly'], owner, extra]);
+			if (!zk._crWgtUuids) zk._crWgtUuids = [];
+			zk._crWgtUuids.push((wi[1] as object).toString());
+			//extra is [stub-fn, filter] if AU,  aucmds if BL
+			mountpkg(infs);
+		}
+
+		if (delay)
+			setTimeout(mount, 0); //Bug 2983792 (delay until non-defer script evaluated)
+		else if (!breathe(mount)) //give the browser a chance to breathe
+			mount();
+
+		doAuCmds(aucmds);
+	} catch (e) {
+		zk.mounting = false;
+		zk.error('Failed to mount: ' + (e.message || e));
+		setTimeout(function () {
+			throw e;
+		}, 0);
+	}
+};
+
+//widget creation called by au.js
+//args: [wi] (a single element array containing wi)
+window.zkx_ = function (args, stub, filter?): void {
+	_t0 = jq.now(); //so breathe() won't do unncessary delay
+	args[1] = [stub, filter]; //assign stub as 2nd argument (see zkx)
+	window.zkx.apply(window, args); //args[2] (aucmds) must be null
+};
+
+//Run AU commands (used only with ZHTML)
+window.zkac = function (): void {
+	doAuCmds(arguments);
+};
+
+//mount and zkx (BL)
+window.zkmx = function (): void {
+	window.zkmb();
+	try {
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// @ts-ignore
+		zkx.apply(window, arguments);
+	} finally {
+		window.zkme();
+	}
+};
+
+//begin of mounting
+window.zkmb = function (bindOnly?): void {
+	_mntctx['bindOnly'] = bindOnly;
+	var t = 390 - (jq.now() - _t0);
+	zk.startProcessing(t > 0 ? t : 0);
+};
+
+//end of mounting
+window.zkme = function (): void {
+	_mntctx['curdt'] = null;
+	_mntctx['bindOnly'] = false;
+};
+
+// window scope
+// register data-attributres handler (since 8.0.0
+window.zkdh = function (name, script): void {
+	zk.addDataHandler('data-' + name, script);
+};
 
 //Event Handler//
 jq(function () {
 	var Widget = zk.Widget,
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		_bfUploads: (() => any)[] = [],
+		_bfUploads: Array<Callable> = cast([]),
 		_reszInf = {},
 		_subevts = { //additonal invocation
 			onClick: 'doSelect_',
@@ -603,7 +629,7 @@ jq(function () {
 
 	/** @partial zk
 	 */
-	zk.copy(zk, {
+	Object.assign(zk, {
 		/** Adds a function that will be executed when the browser is about to unload the document. In other words, it is called when window.onbeforeunload is called.
 		 *
 		 * <p>To remove the function, invoke this method by specifying remove to the opts argument.
@@ -622,9 +648,9 @@ jq(function () {
 		}
 	});
 
-	function _doEvt(wevt: zk.Event): void {
+	function _doEvt(wevt: Event): void {
 		var wgt = wevt.target;
-		if (wgt && !wgt.$weave) {
+		if (wgt && !wgt['$weave']) {
 			var en = wevt.name,
 				fn = _subevts[en];
 			if (fn) {
@@ -633,13 +659,13 @@ jq(function () {
 					wgt[fn].call(wgt, wevt);
 				}
 			}
-			if (!wevt.stopped && (!wevt.originalEvent || !wevt.originalEvent['zkstopped'])) // Bug ZK-2544
+			if (!wevt.stopped && (!wevt['originalEvent'] || !wevt['originalEvent']['zkstopped'])) // Bug ZK-2544
 				wgt['do' + en.substring(2) + '_'].call(wgt, wevt);
 			if (wevt.domStopped)
 				wevt.domEvent.stop();
 		}
 	}
-	
+
 	function _docMouseDown(evt, wgt, noFocusChange?): void {
 		zk.clickPointer[0] = evt.pageX;
 		zk.clickPointer[1] = evt.pageY;
@@ -654,7 +680,7 @@ jq(function () {
 			Widget.mimicMouseDown_(wgt, noFocusChange, evt.which); //wgt is null if mask
 
 		_doEvt(evt);
-		
+
 		//Bug 2799334, 2635555 and 2807475: need to enforce a focus event (IE only)
 		//However, ZK-354: if target is upload, we can NOT focus to it. Thus, focusBackFix was introduced
 		if (old && zk.ie) { // Bug ZK-2795, IE11 still fails in this case.
@@ -687,7 +713,7 @@ jq(function () {
 
 		_reszInf['time'] = null; //handled
 		_reszInf['lastTime'] = now + 1000;
-			//ignore following for a while if processing (in slow machine)
+		//ignore following for a while if processing (in slow machine)
 
 		zAu._onClientInfo();
 
@@ -703,6 +729,7 @@ jq(function () {
 			_reszInf['inResize'] = false;
 		}
 	}
+
 	//Invoke the first root wiget's afterKeyDown_
 	function _afterKeyDown(wevt): void {
 		var dts = zk.Desktop.all, Page = zk.Page;
@@ -715,6 +742,7 @@ jq(function () {
 				} else if (_afterKD(wgt, wevt))
 					return; //handled
 	}
+
 	function _afterKD(wgt, wevt): boolean {
 		if (!wgt.afterKeyDown_)
 			return false; //handled
@@ -724,132 +752,132 @@ jq(function () {
 
 	var lastTimestamp, lastTarget;
 	jq(document)
-	.keydown(function (evt: Partial<JQ.Event>) {
-		var wgt = Widget.$(evt, {child: true}),
-			wevt = new zk.Event(wgt, 'onKeyDown', (evt as JQ.Event).keyData(), null, evt as JQ.Event);
-		if (wgt) {
-			_doEvt(wevt);
-			if (!wevt.stopped && wgt.afterKeyDown_) {
-				wgt.afterKeyDown_(wevt);
+		.keydown(function (evt: Partial<JQ.Event>) {
+			var wgt = Widget.$(evt, {child: true}),
+				wevt = new zk.Event(wgt, 'onKeyDown', (evt as JQ.Event).keyData(), null, evt as JQ.Event);
+			if (wgt) {
+				_doEvt(wevt);
+				if (!wevt.stopped && wgt.afterKeyDown_) {
+					wgt.afterKeyDown_(wevt);
+					if (wevt.domStopped)
+						wevt.domEvent.stop();
+				}
+			} else if (zk['invokeFirstRootForAfterKeyDown'])
+				_afterKeyDown(wevt);
+
+			if (evt.keyCode == 27
+				&& (zk._noESC > 0 || zAu.shallIgnoreESC())) //Bug 1927788: prevent FF from closing connection
+				return false; //eat
+		})
+		.keyup(function (evt: Partial<JQ.Event>) {
+			var wgt = zk.keyCapture;
+			if (wgt) zk.keyCapture = null;
+			else wgt = Widget.$(evt, {child: true});
+			_doEvt(new zk.Event(wgt, 'onKeyUp', (evt as JQ.Event).keyData(), null, evt as JQ.Event));
+		})
+		.keypress(function (evt: Partial<JQ.Event>) {
+			var wgt = zk.keyCapture;
+			if (!wgt) wgt = Widget.$(evt, {child: true});
+			_doEvt(new zk.Event(wgt, 'onKeyPress', (evt as JQ.Event).keyData(), null, evt as JQ.Event));
+		})
+		.on('paste', function (evt) {
+			var wgt = zk.keyCapture;
+			if (!wgt) wgt = Widget.$(evt, {child: true});
+			_doEvt(new zk.Event(wgt, 'onPaste', (evt as JQ.Event).keyData(), null, evt as JQ.Event));
+		})
+		.on('zcontextmenu', function (evt) {
+			//ios: zcontextmenu shall be listened first,
+			//due to need stop other event (ex: click, mouseup)
+
+			zk.clickPointer[0] = evt.pageX || 0;
+			zk.clickPointer[1] = evt.pageY || 0;
+
+			var wgt = Widget.$(evt, {child: true});
+			if (wgt) {
+				if (zk.ie && zk.ie < 11)
+					evt.which = 3;
+				var wevt = new zk.Event(wgt, 'onRightClick', (evt as JQ.Event).mouseData(), {}, evt as JQ.Event);
+				_doEvt(wevt);
 				if (wevt.domStopped)
-					wevt.domEvent.stop();
+					return false;
 			}
-		} else if (zk['invokeFirstRootForAfterKeyDown'])
-			_afterKeyDown(wevt);
+			return !(zk.ie && zk.ie < 11) || evt['returnValue'];
+		})
+		.on('zmousedown', function (evt) {
+			if (zk.mobile) {
+				zk.currentPointer[0] = evt.pageX || 0;
+				zk.currentPointer[1] = evt.pageY || 0;
+			}
+			var wgt = Widget.$(evt, {child: true});
+			_docMouseDown(
+				new zk.Event(wgt, 'onMouseDown', (evt as JQ.Event).mouseData(), null, evt as JQ.Event),
+				wgt);
+		})
+		.on('zmouseup', function (evt) {
+			var e = zk.Draggable.ignoreMouseUp(), wgt;
+			if (e === true)
+				return; //ignore
 
-		if (evt.keyCode == 27
-		&& (zk._noESC > 0 || zAu.shallIgnoreESC())) //Bug 1927788: prevent FF from closing connection
-			return false; //eat
-	})
-	.keyup(function (evt: Partial<JQ.Event>) {
-		var wgt = zk.keyCapture;
-		if (wgt) zk.keyCapture = null;
-		else wgt = Widget.$(evt, {child: true});
-		_doEvt(new zk.Event(wgt, 'onKeyUp', (evt as JQ.Event).keyData(), null, evt as JQ.Event));
-	})
-	.keypress(function (evt: Partial<JQ.Event>) {
-		var wgt = zk.keyCapture;
-		if (!wgt) wgt = Widget.$(evt, {child: true});
-		_doEvt(new zk.Event(wgt, 'onKeyPress', (evt as JQ.Event).keyData(), null, evt as JQ.Event));
-	})
-	.on('paste', function (evt) {
-		var wgt = zk.keyCapture;
-		if (!wgt) wgt = Widget.$(evt, {child: true});
-		_doEvt(new zk.Event(wgt, 'onPaste', (evt as JQ.Event).keyData(), null, evt as JQ.Event));
-	})
-	.on('zcontextmenu', function (evt) {
-		//ios: zcontextmenu shall be listened first,
-		//due to need stop other event (ex: click, mouseup)
+			if (e != null) {
+				_docMouseDown(e, null, true); //simulate mousedown
+			}
 
-		zk.clickPointer[0] = evt.pageX || 0;
-		zk.clickPointer[1] = evt.pageY || 0;
-
-		var wgt = Widget.$(evt, {child: true});
-		if (wgt) {
-			if (zk.ie && zk.ie < 11)
-				evt.which = 3;
-			var wevt = new zk.Event(wgt, 'onRightClick', (evt as JQ.Event).mouseData(), {}, evt as JQ.Event);
-			_doEvt(wevt);
-			if (wevt.domStopped)
-				return false;
-		}
-		return !(zk.ie && zk.ie < 11) || evt['returnValue'];
-	})
-	.on('zmousedown', function (evt) {
-		if (zk.mobile) {
+			wgt = zk.mouseCapture;
+			if (wgt) zk.mouseCapture = null;
+			else wgt = Widget.$(evt, {child: true});
+			_doEvt(new zk.Event(wgt, 'onMouseUp', (evt as JQ.Event).mouseData(), null, evt as JQ.Event));
+		})
+		.on('zmousemove', function (evt) {
 			zk.currentPointer[0] = evt.pageX || 0;
 			zk.currentPointer[1] = evt.pageY || 0;
-		}
-		var wgt = Widget.$(evt, {child: true});
-		_docMouseDown(
-			new zk.Event(wgt, 'onMouseDown', (evt as JQ.Event).mouseData(), null, evt as JQ.Event),
-			wgt);
-	})
-	.on('zmouseup', function (evt) {
-		var e = zk.Draggable.ignoreMouseUp(), wgt;
-		if (e === true)
-			return; //ignore
 
-		if (e != null) {
-			_docMouseDown(e, null, true); //simulate mousedown
-		}
+			var wgt = zk.mouseCapture;
+			if (!wgt) wgt = Widget.$(evt, {child: true});
+			_doEvt(new zk.Event(wgt, 'onMouseMove', (evt as JQ.Event).mouseData(), null, evt as JQ.Event));
+		})
+		.mouseover(function (evt: Partial<JQ.Event>) {
+			if (zk.mobile) return; // unsupported on touch device for better performance
+			zk.currentPointer[0] = evt.pageX || 0;
+			zk.currentPointer[1] = evt.pageY || 0;
 
-		wgt = zk.mouseCapture;
-		if (wgt) zk.mouseCapture = null;
-		else wgt = Widget.$(evt, {child: true});
-		_doEvt(new zk.Event(wgt, 'onMouseUp', (evt as JQ.Event).mouseData(), null, evt as JQ.Event));
-	})
-	.on('zmousemove', function (evt) {
-		zk.currentPointer[0] = evt.pageX || 0;
-		zk.currentPointer[1] = evt.pageY || 0;
+			_doEvt(new zk.Event(Widget.$(evt, {child: true}), 'onMouseOver', (evt as JQ.Event).mouseData(), {ignorable: true}, evt as JQ.Event));
+		})
+		.mouseout(function (evt: Partial<JQ.Event>) {
+			_doEvt(new zk.Event(Widget.$(evt, {child: true}), 'onMouseOut', (evt as JQ.Event).mouseData(), {ignorable: true}, evt as JQ.Event));
+		})
+		.click(function (evt) {
+			if (zk.Draggable.ignoreClick()) return;
 
-		var wgt = zk.mouseCapture;
-		if (!wgt) wgt = Widget.$(evt, {child: true});
-		_doEvt(new zk.Event(wgt, 'onMouseMove', (evt as JQ.Event).mouseData(), null, evt as JQ.Event));
-	})
-	.mouseover(function (evt: Partial<JQ.Event>) {
-		if (zk.mobile) return; // unsupported on touch device for better performance
-		zk.currentPointer[0] = evt.pageX || 0;
-		zk.currentPointer[1] = evt.pageY || 0;
-
-		_doEvt(new zk.Event(Widget.$(evt, {child: true}), 'onMouseOver', (evt as JQ.Event).mouseData(), {ignorable: true}, evt as JQ.Event));
-	})
-	.mouseout(function (evt: Partial<JQ.Event>) {
-		_doEvt(new zk.Event(Widget.$(evt, {child: true}), 'onMouseOut', (evt as JQ.Event).mouseData(), {ignorable: true}, evt as JQ.Event));
-	})
-	.click(function (evt) {
-		if (zk.Draggable.ignoreClick()) return;
-		
-		if (zk.android
+			if (zk.android
 				&& (lastTimestamp && lastTimestamp + 400 > evt.timeStamp)
 				&& (lastTarget && lastTarget == evt.target)) { //fix android 4.1.1 fire twice or more
-			return;
-		} else {
-			lastTimestamp = evt.timeStamp;
-			lastTarget = evt.target;
-			
-			zjq._fixClick(evt);
-			
-			if (evt.which == 1)
-				_doEvt(new zk.Event(Widget.$(evt, {child: true}),
-					'onClick', (evt as JQ.Event).mouseData(), {}, evt as JQ.Event));
-			//don't return anything. Otherwise, it replaces event.returnValue in IE (Bug 1541132)
-		}
-	})
-	.on('zdblclick', function (evt) {
-		if (zk.Draggable.ignoreClick()) return;
+				return;
+			} else {
+				lastTimestamp = evt.timeStamp;
+				lastTarget = evt.target;
 
-		var wgt = Widget.$(evt, {child: true});
-		if (wgt && evt.which == 1) {
-			var wevt = new zk.Event(wgt, 'onDoubleClick', (evt as JQ.Event).mouseData(), {}, evt as JQ.Event);
-			_doEvt(wevt);
-			if (wevt.domStopped)
-				return false;
-		}
-	})
-	.on((document.hidden !== undefined ? '' : zk.vendor_) + 'visibilitychange', function (evt) {
-		zAu._onVisibilityChange();
-	});
+				zjq._fixClick(evt);
+
+				if (evt.which == 1)
+					_doEvt(new zk.Event(Widget.$(evt, {child: true}),
+						'onClick', (evt as JQ.Event).mouseData(), {}, evt as JQ.Event));
+				//don't return anything. Otherwise, it replaces event.returnValue in IE (Bug 1541132)
+			}
+		})
+		.on('zdblclick', function (evt) {
+			if (zk.Draggable.ignoreClick()) return;
+
+			var wgt = Widget.$(evt, {child: true});
+			if (wgt && evt.which == 1) {
+				var wevt = new zk.Event(wgt, 'onDoubleClick', (evt as JQ.Event).mouseData(), {}, evt as JQ.Event);
+				_doEvt(wevt);
+				if (wevt.domStopped)
+					return false;
+			}
+		})
+		.on((document.hidden !== undefined ? '' : zk.vendor_) + 'visibilitychange', function (evt) {
+			zAu._onVisibilityChange();
+		});
 
 	if (zk.scriptErrorHandlerEnabled && !zk.ie9_) {
 		zk.scriptErrorHandler = function (evt) {
@@ -863,11 +891,14 @@ jq(function () {
 					return; //not from Clients.evalJavascript
 				lastCheckPos = checkPos;
 			}
-			zAu.send(new zk.Event(null, 'onScriptError', {message: errorMsg, stack: stack}));
+			zAu.send(new zk.Event(null, 'onScriptError', {
+				message: errorMsg,
+				stack: stack
+			}));
 			zk.scriptErrorHandlerRegistered = false;
 		};
 	}
-	
+
 	var _sizeHandler = function (evt): void {
 		if (zk.mounting)
 			return;
@@ -895,10 +926,10 @@ jq(function () {
 			}
 		}
 	};
-	
+
 	if (zk.mobile) {
 		jq(window).on('orientationchange', _sizeHandler);
-		
+
 		// Bug ZK-2697
 		if (zk.ios) {
 			jq(window).on('pagehide', function () {
@@ -923,8 +954,8 @@ jq(function () {
 			rmDesktop();
 		}
 	});
-	
-	function rmDesktop (): void {
+
+	function rmDesktop(): void {
 		//20061109: Tom Yeh: Failed to disable Opera's cache, so it's better not
 		//to remove the desktop.
 		//Good news: Opera preserves the most udpated content, when BACK to
@@ -966,7 +997,7 @@ jq(function () {
 		}
 
 		zk.unloading = true; //FF3 aborts ajax before calling window.onunload
-		
+
 		// B65-ZK-2051: Remove desktop if not IE.
 		if (!zk.ie) {
 			rmDesktop();
@@ -974,7 +1005,9 @@ jq(function () {
 		//Return nothing
 	};
 
-	zk.afterMount(function () {jq('script.z-runonce').remove();});
-		//clean up the runonce script. otherwise, it might be run again if
-		//the script element is moved
+	zk.afterMount(function () {
+		jq('script.z-runonce').remove();
+	});
+	//clean up the runonce script. otherwise, it might be run again if
+	//the script element is moved
 }); //jq()

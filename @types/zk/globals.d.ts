@@ -28,50 +28,49 @@ interface Array<T> {
     $addAll(o: T[]): number;
     $clone(): T[];
 }
+type ZKObject = import('@zk/zk').ZKObject;
+type Widget = import('@zk/widget').Widget;
+type ZKEvent = import('@zk/evt').Event;
+type EventOptions = import('@zk/evt').EventOptions;
+type Moment = import('moment-timezone').Moment;
 
 interface Window {
-    zkservice: zk.ZKServiceStatic;
+
+    zkservice: any;
     onIframeURLChange(uuid: string, url: string): void;
-    zkpe: zk.$void;
+    zkpe: import('@zk/zk').$void;
 	zkpi(nm: string, wv: boolean): Record<string, unknown> | null;
 	zkpb(pguid: string, dtid: string, contextURI: string, updateURI: string, resourceURI: string, reqURI: string, props: Record<string, string>): void;
 	zkver(ver: string, build: string, ctxURI: string, updURI: string, modVers: Record<string, string>, opts: Record<string, unknown>): void;
-	zkmld(wgtcls: Record<string, zk.Class>, molds: Record<string, (() => void)>): void;
+	zkmld(wgtcls: Record<string, unknown>, molds: Record<string, (() => void)>): void;
 	zkamn(pkg: string, fn: (() => void)): void;
 	zkopt(opts: Record<string, any>): void;
 	Dates: any;
 	DateImpl: any;
+	zkdt(dtid: string | undefined, contextURI: string | undefined, updateURI: string | undefined, resourceURI: string | undefined, reqURI: string | undefined): zk.Desktop;
+	zkx(wi: any[], extra?: string | null, aucmds?, js?: string): void;
+	zkx_(args: any, stub: (child: zk.Widget) => void, filter?): void;
+	zkac(): void;
+	zkmx(): void;
+	zkmb(bindOnly?: boolean): void;
+	zkme(): void;
+	zkdh(name: string, script: string): void;
 }
-
-// mount.ts
-declare function zkdt(dtid: string | undefined, contextURI: string | undefined, updateURI: string | undefined, resourceURI: string | undefined, reqURI: string | undefined): zk.Desktop;
-declare function zkx(wi: any[], extra?: number, aucmds?, js?: string): void;
-declare function zkx_(args: any, stub: (child: zk.Widget) => void, filter?): void;
-declare function zkac(): void;
-declare function zkmx(): void;
-declare function zkmb(bindOnly?: boolean): void;
-declare function zkme(): void;
-declare function zkdh(name: string, script: string): void;
 
 // zk.wpd
 declare function $eval(x: string): any;
 // widget.ts
 declare function zkreg(pkg: string, load: boolean): void;
 
-declare var _zkf: any; // temp object holder
-
-declare class DateImpl extends Date {
-    _moment?: any;
-    _timezone?: any;
-    tz(v): any;
-    _getTzMoment(): any;
-    _getUTCMoment(): any;
-    getTimeZone(): any;
-    getYear(): number;
-    setYear(v: number): number;
-}
-
-declare var zDebug: zk.Object;
+declare var zDebug: ZKObject;
 
 // Workaround for ActiveXObject
 declare var ActiveXObject: (type: string) => void;
+
+declare var zAu: import('@zk/au').AUEngine;
+
+declare var msgzk: Record<string, string>;
+
+declare var zWatch: import('@zk/evt').ZWatch;
+
+declare var zUtl: import('@zk/utl').ZUtl;

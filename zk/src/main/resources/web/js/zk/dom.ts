@@ -3,7 +3,7 @@
 	Purpose:
 		Enhance jQuery
 	Description:
-		
+
 	History:
 		Fri Jun 12 10:44:53 2009, Created by tomyeh
 
@@ -12,12 +12,138 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+import {default as zk} from '@zk/zk';
+import type {Callable, DOMFieldValue} from '@zk/types';
+import type {Widget} from '@zk/widget';
+import type {Event as ZKEvent} from '@zk/evt';
+
+export interface SlideOptions {
+	anchor: string;
+	easing: string;
+	duration: number;
+	afterAnima: () => void;
+}
+
+export interface Dimension {
+	width: number;
+	height: number;
+	left: number;
+	top: number;
+}
+
+export interface PositionOptions {
+	overflow: boolean;
+	dodgeRef: boolean;
+}
+
+export interface RedoCSSOptions {
+	fixFontIcon: boolean;
+	selector: string;
+}
+
+export interface JQZK {
+	jq: JQuery;
+
+	_createWrapper(element: JQuery): JQuery;
+	_removeWrapper(element: JQuery): JQuery;
+	$(): Widget;
+	absolutize(): this;
+	beforeHideOnUnbind(): void;
+	borderHeight(): number;
+	borderWidth(): number;
+	cellIndex(): number;
+	center(flags?: string): this;
+	cleanVisibility(): JQuery;
+	clearStyles(): this;
+	clientHeightDoubleValue(): number;
+	clientWidthDoubleValue(): number;
+	cmOffset(): zk.Offset;
+	contentHeight(excludeMargin?: boolean): number;
+	contentWidth(excludeMargin?: boolean): number;
+	defaultAnimaOpts(wgt: Widget, opts: Partial<SlideOptions>, prop: string[], visible?: boolean): this;
+	detachChildren(): HTMLElement[] | null;
+	dimension(revised?: boolean): Dimension;
+	disableSelection(): this;
+	enableSelection(): this;
+	focus(timeout?: number): boolean;
+	getAnimationSpeed(defaultValue?: 'slow' | 'fast' | number): 'slow' | 'fast' | number;
+	getSelectionRange(): [number, number];
+	hasHScroll(): boolean;
+	hasVParent(): boolean;
+	hasVScroll(): boolean;
+	isInput(): boolean;
+	isOverlapped(el: HTMLElement, tolerant?: number): boolean;
+	isRealScrollIntoView(): boolean;
+	isRealVisible(strict?: boolean): boolean;
+	isScrollIntoView(recursive?: boolean): boolean;
+	isVisible(strict?: boolean): boolean;
+	makeVParent(): this;
+	marginHeight(): number;
+	marginWidth(): number;
+	ncols(visibleOnly?: boolean): number;
+	offsetHeight(): number;
+	offsetHeightDoubleValue(): number;
+	offsetLeft(): number;
+	offsetLeftDoubleValue(): number;
+	offsetTop(): number;
+	offsetTopDoubleValue(): number;
+	offsetWidth(): number;
+	offsetWidthDoubleValue(): number;
+	padBorderHeight(): number;
+	padBorderWidth(): number;
+	paddingHeight(): number;
+	paddingWidth(): number;
+	position(dim?: Dimension, where?: string, opts?: Partial<PositionOptions>): this;
+	position(el?: Element, where?: string, opts?: Partial<PositionOptions>): this;
+	redoCSS(timeout?: number, opts?: Partial<RedoCSSOptions>): this;
+	redoSrc(): this;
+	relativize(): this;
+	revisedHeight(size: number, excludeMargin?: boolean): number;
+	revisedOffset(ofs?: zk.Offset): zk.Offset;
+	revisedWidth(size: number, excludeMargin?: boolean): number;
+	scrollIntoView(parent?: Element): this;
+	scrollOffset(): zk.Offset;
+	scrollTo(): this;
+	select(timeout?: number): boolean;
+	setSelectionRange(start: number, end?: number): this;
+	setStyles(styles: JQuery.PlainObject<string | number | ((this: HTMLElement, index: number, value: string) => string | number | void | undefined)>): this;
+	slideDown(wgt: Widget, opts?: Partial<SlideOptions>): this;
+	slideIn(wgt: Widget, opts?: Partial<SlideOptions>): this;
+	slideOut(wgt: Widget, opts?: Partial<SlideOptions>): this;
+	slideUp(wgt: Widget, opts?: Partial<SlideOptions>): this;
+	submit(): this;
+	sumStyles(areas: string, styles: {[cssProp: string]: string}): number;
+	textSize(text?: string): [number, number];
+	textWidth(text?: string): number;
+	toStyleOffset(x: number, y: number): zk.Offset;
+	undoVParent(): this;
+	vflexHeight(): number;
+	viewportOffset(): zk.Offset;
+	vparentNode(real?: boolean): HTMLElement;
+}
+
+export interface ZJQ {
+	_sfKeys: Record<string, number>;
+	_evt: {fix?: Callable};
+	eventTypes: {[key: string]: string};
+	src0: string;
+
+	new (ret: JQuery | HTMLElement): JQZK;
+	_afterOuter(o: Element): void;
+	_beforeOuter(el: Element): Node;
+	_cleanVisi(n: Element): void;
+	_fixClick(el: Event | JQuery.ClickEvent): void;
+	_fixCSS(el: Element): void;
+	_fixedVParent(el: Element, option?: boolean): void;
+	_fixIframe(el: Element): void;
+	fixInput(el: Element): void;
+	minWidth(el: Element| Widget): number;
+}
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-zjq = function (this: zk.JQZK, jq) { //ZK extension
+export var zjq: ZJQ = function (this: zk.JQZK, jq): JQZK { //ZK extension
 	this.jq = jq;
 };
-(function (document, window) {
 	var _jq = {}, //original jQuery
 		//refer to http://www.w3schools.com/css/css_text.asp
 		_txtStyles = [
@@ -27,7 +153,7 @@ zjq = function (this: zk.JQZK, jq) { //ZK extension
 			'direction', 'word-spacing', 'white-space'],
 		_txtFontStyles = ['font-style', 'font-variant', 'font-weight', 'font-size', 'font-family'],
 		_txtStyles2 = ['color', 'background-color', 'background'],
-		_zsyncs: zk.Widget[] = [],
+		_zsyncs: Widget[] = [],
 		_pendzsync = 0,
 		_vpId = 0, //id for virtual parent's reference node
 		_sbwDiv; //scrollbarWidth
@@ -115,7 +241,7 @@ zjq = function (this: zk.JQZK, jq) { //ZK extension
 				outer.scrollTop = !info ? bottom : bottom - (outer.clientHeight + (inner.parentNode == outer ? 0 : outer.scrollTop));
 				updated = true;
 			}
-			
+
 			// ZK-1924:	scrollIntoView can also adjust horizontal scroll position.
 			// ZK-2193: scrollIntoView support exclude horizontal
 			if (!excludeHorizontal)
@@ -126,7 +252,7 @@ zjq = function (this: zk.JQZK, jq) { //ZK extension
 					outer.scrollLeft = !info ? right : right - (outer.clientWidth + (inner.parentNode == outer ? 0 : outer.scrollLeft));
 					updated = true;
 				}
-			
+
 			if (updated || !info) {
 				if (!info)
 					info = {
@@ -137,12 +263,12 @@ zjq = function (this: zk.JQZK, jq) { //ZK extension
 					};
 				else info.oft = zk(info.el).revisedOffset();
 			}
-			
+
 			return info;
 		}
 	}
 
-	
+
 	function _cmOffset(el: HTMLElement): zk.Offset {
 		var t = 0, l = 0, operaBug;
 		//Fix gecko difference, the offset of gecko excludes its border-width when its CSS position is relative or absolute
@@ -202,7 +328,7 @@ zjq = function (this: zk.JQZK, jq) { //ZK extension
 		} while (el);
 		return [l, t];
 	}
-	function _addOfsToDim($this: zk.JQZK, dim, revised?: boolean): zk.Dimension {
+	function _addOfsToDim($this: JQZK, dim, revised?: boolean): Dimension {
 		if (revised) {
 			var ofs = $this.revisedOffset();
 			dim.left = ofs[0];
@@ -224,7 +350,7 @@ zjq = function (this: zk.JQZK, jq) { //ZK extension
 				} catch (e) {
 					zk.debugLog(e.message || e);
 				}
-		
+
 			// just in case
 			setTimeout(_redoCSS0);
 		}
@@ -236,19 +362,19 @@ zjq = function (this: zk.JQZK, jq) { //ZK extension
 		return function (): boolean {
 			if (html5 === undefined) {
 				if (document.doctype === null) return false;
-		
+
 				var node = document.doctype,
 					doctype_string = '<!DOCTYPE ' + node.name
 						+ (node.publicId ? ' PUBLIC"' + node.publicId + '"' : '')
 						+ (!node.publicId && node.systemId ? ' SYSTEM' : '')
 						+ (node.systemId ? ' "' + node.systemId + '"' : '') + '>';
-		
+
 				html5 = doctype_string === '<!DOCTYPE html>';
 			}
 			return html5;
 		};
 	})();
-	
+
 	// refix ZK-2371
 	// eslint-disable-next-line one-var
 	var DocRoot = (function () {
@@ -262,7 +388,7 @@ zjq = function (this: zk.JQZK, jq) { //ZK extension
 		};
 	})();
 
-zk.copy(zjq, {
+Object.assign(zjq, {
 	//Returns the minimal width to hold the given cell called by getChildMinSize_
 	minWidth: (!zk.ie11_) ? function (el) {
 		return zk(el).offsetWidth();
@@ -440,7 +566,7 @@ zk.override(jq.fn, _jq, /*prototype*/ {
 	 */
 	//zk: null,
 
-	init: function (sel, ctx) {
+	init: function (sel, ctx, ...rest: unknown[]) {
 		if (ctx === zk) {
 			if (typeof sel == 'string'
 			&& zUtl.isChar(sel.charAt(0), {digit: 1, upper: 1, lower: 1, '_': 1})) {
@@ -459,7 +585,7 @@ zk.override(jq.fn, _jq, /*prototype*/ {
 		if (zk.Widget && zk.Widget.isInstance(sel))
 			sel = sel.$n() || '#' + sel.uuid;
 		if (sel == '#') sel = ''; //ZK-4565, '#' is not allowed in jquery 3.5.0
-		var ret = _jq['init'].apply(this, arguments);
+		var ret = _jq['init'].apply(this, [sel, ctx, ...rest]);
 		ret.zk = new zjq(ret);
 		return ret;
 	},
@@ -612,7 +738,8 @@ jq.each(['before', 'after', 'append', 'prepend'], function (i, nm) {
  * <li>{@link jq.Event} - the event object passed to the event listener</li>
  * </ul>
  */
-zjq.prototype = {
+// eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+Object.assign(zjq.prototype, {
 	/** The associated instance of {@link jq}, the object returned by <code>jq(...)</code>.
 	 * @type jq
 	 */
@@ -623,7 +750,7 @@ zjq.prototype = {
 	 * @return jq
 	 */
 	cleanVisibility: function () {
-		return this.jq.each(function () {
+		return this.jq.each(function (this: HTMLElement) {
 			zjq._cleanVisi(this);
 		});
 	},
@@ -707,18 +834,18 @@ zjq.prototype = {
 						p = p.offsetParent as HTMLElement;
 					}
 				}
-				
+
 				// check whether the n is an instance of ItemWidget
 				// for B65-ZK-2193.zul, to have better scrollIntoView's behavior
 				if (!isAbsolute && zk.isLoaded('zul.sel')) {
 					var w = zk.Widget.$(n);
-					isAbsolute = w && w.$instanceof(zul.sel.ItemWidget);
+					isAbsolute = w && w instanceof zul.sel['ItemWidget'];
 				}
 
 				if (isAbsolute) {
 					var parent = parent || document.documentElement;
-					for (let p: HTMLElement | null = n, c; (p = p.parentElement) && n != parent; n = p)
-						c = _scrlIntoView(p, n, c, true);
+					for (let p: HTMLElement | null | undefined = n, c; (p = p?.parentElement) && n != parent; n = p)
+						c = _scrlIntoView(p, n as HTMLElement, c, true);
 				} else {
 					// use browser's scrollIntoView() method instead of ours for F70-ZK-1924.zul
 					zk.delayFunction(this.$().uuid, function () {
@@ -746,7 +873,7 @@ zjq.prototype = {
 
 		// ZK-2069: check whether the input is shown in parents' viewport.
 		while (p && p != desktop) {
-			bar = p._scrollbar;
+			bar = p['_scrollbar'];
 			if (bar && (bar.hasVScroll() || bar.hasHScroll())) {
 				inView = bar.isScrollIntoView(n);
 				if (!inView)
@@ -784,11 +911,11 @@ zjq.prototype = {
 				}
 				el = el.parentNode;
 			} while (el && (el != document));
-				
+
 			return oels;
 		}
 		// ZK-2069: can check whether the element is shown in parents' viewport.
-		return function (this: zk.JQZK, recursive) {
+		return function (this: JQZK, recursive) {
 			var vOffset = this.viewportOffset(),
 				x = vOffset[0],
 				y = vOffset[1],
@@ -796,7 +923,7 @@ zjq.prototype = {
 				h = this.jq[0].offsetHeight,
 				x1 = x + w,
 				y1 = y + h;
-			
+
 			// browser's viewport
 			if (x >= 0 && y >= 0 && x1 <= jq.innerWidth() && y1 <= jq.innerHeight()) {
 				var oels = _overflowElement(this, recursive),
@@ -830,8 +957,8 @@ zjq.prototype = {
 		var n, scrollbarWidth = 0; //zk-3938: if zoom-in, the scrollbarWidth will be smaller than 11.
 		if (n = this.jq[0]) {
 			var borderWidth = Math.round(jq.css(n, 'borderLeftWidth', true))
-					+ Math.round(jq.css(n, 'borderRightWidth', true)),
-				scrollbarWidth = n.offsetWidth - borderWidth - n.clientWidth;
+					+ Math.round(jq.css(n, 'borderRightWidth', true));
+			scrollbarWidth = n.offsetWidth - borderWidth - n.clientWidth;
 		}
 		return scrollbarWidth > 0;
 	},
@@ -847,8 +974,8 @@ zjq.prototype = {
 		var n, scrollbarHeight = 0; //zk-3938: if zoom-in, the scrollbarHeight will be smaller than 11.
 		if (n = this.jq[0]) {
 			var borderHeight = Math.round(jq.css(n, 'borderTopWidth', true))
-					+ Math.round(jq.css(n, 'borderBottomWidth', true)),
-				scrollbarHeight = n.offsetHeight - borderHeight - n.clientHeight;
+					+ Math.round(jq.css(n, 'borderBottomWidth', true));
+			scrollbarHeight = n.offsetHeight - borderHeight - n.clientHeight;
 		}
 		return scrollbarHeight > 0;
 	},
@@ -888,7 +1015,7 @@ jq(el).zk.sumStyles("lr", jq.paddings);
 		}
 		return val;
 	},
-	
+
 	/** Returns the revised (i.e., browser's coordinate) offset of the selected
 	 * element.
 	 * In other words, it is the offset of the left-top corner related to
@@ -928,7 +1055,7 @@ jq(el).zk.sumStyles("lr", jq.paddings);
 				// fix float number issue for ZTL B50-3298164
 				b[0] = Math.ceil(b[0]);
 				b[1] = Math.ceil(b[1]);
-				
+
 				return b;
 				// IE adds the HTML element's border, by default it is medium which is 2px
 				// IE 6 and 7 quirks mode the border width is overwritable by the following css html { border: 0; }
@@ -1072,12 +1199,12 @@ jq(el).zk.sumStyles("lr", jq.paddings);
 			parent = el.parentElement,
 			hgh = parent ? zk(parent).clientHeightDoubleValue() : 0,
 			zkp;
-		for (let p: Element | null = el; p = p.previousElementSibling;) {
+		for (let p: Element | null = el.previousElementSibling; p; p = p.previousElementSibling) {
 			zkp = zk(p);
 			if (zkp.isVisible())
 				hgh -= zkp.offsetHeightDoubleValue();
 		}
-		for (let p: Element | null = el; p = p.nextElementSibling;) {
+		for (let p: Element | null = el.nextElementSibling; p; p = p.nextElementSibling) {
 			zkp = zk(p);
 			if (zkp.isVisible())
 				hgh -= zkp.offsetHeightDoubleValue();
@@ -1246,7 +1373,7 @@ jq(el).zk.center(); //same as 'center'
 	 */
 	position: function (dim, where, opts) {
 		where = where || 'overlap';
-		
+
 		if (!dim) {
 			var bd = jq('body')[0];
 			dim = {
@@ -1254,13 +1381,13 @@ jq(el).zk.center(); //same as 'center'
 				width: bd.offsetWidth, height: bd.offsetHeight
 			};
 		}
-		
+
 		if (dim.nodeType) //DOM element
 			dim = zk(dim).dimension(true);
 		var x = dim.left, y = dim.top,
 			wd = this.dimension(), hgh = wd.height, //only width and height
 			wdh = wd.width;
-		
+
 		/*Fixed since ios safari 5.0.2(webkit 533.17.9)
 		if (zk.ios) { // Bug 3042165(iphone/ipad)
 			x -= jq.innerX();
@@ -1356,19 +1483,19 @@ jq(el).zk.center(); //same as 'center'
 		default: // overlap/top_left is assumed
 			// nothing to do.
 		}
-		
+
 		if (!opts || !opts.overflow) {
 			var scX = jq.innerX(),
 				scY = jq.innerY(),
 				scMaxX = scX + jq.innerWidth(),
 				scMaxY = scY + jq.innerHeight();
-			
+
 			if (x + wdh > scMaxX) x = scMaxX - wdh;
 			if (x < scX) x = scX;
 			if (y + hgh > scMaxY) y = scMaxY - hgh;
 			if (y < scY) y = scY;
 		}
-		
+
 		// Bug 3251564
 		// dodge reference element (i.e. not to cover the reference textbox, etc)
 		if (opts && opts.dodgeRef) {
@@ -1527,7 +1654,7 @@ jq(el).zk.center(); //same as 'center'
 		if (isHTML5DocType()
 				&& jq.nodeName(n, 'SPAN') && this.jq.css('display') != 'block') {
 			var text = n.outerHTML;
-			
+
 			// replace uuid to speed up the calculation
 			if (zk.Widget.$(n, {exact: 1})) {
 				text = text.replace(/id="[^"]*"/g, '');
@@ -1609,7 +1736,7 @@ jq(el).zk.center(); //same as 'center'
 			p = p.offsetParent as HTMLElement;
 		}
 
-		while (el = el.parentElement) {
+		while (el && (el = el.parentElement)) {
 			// Opera 12.15 fix this
 			// if (!zk.opera || jq.nodeName(el, 'body')) {
 			t -= el.scrollTop || 0;
@@ -1629,7 +1756,7 @@ jq(el).zk.center(); //same as 'center'
 			_txtSizDiv: HTMLElement | null,
 			_defaultStyle = 'left:-1000px;top:-1000px;position:absolute;visibility:hidden;border:none;display:none;',
 			_cache = {};
-		return function (this: zk.JQZK, txt) {
+		return function (this: JQZK, txt) {
 			var jq = this.jq;
 			txt = txt || jq[0].innerHTML;
 			if (!_txtSizDiv) {
@@ -1645,7 +1772,7 @@ jq(el).zk.center(); //same as 'center'
 				var nm = ss[j];
 				newStyle += _txtStyles[j] + ':' + jq.css(nm) + ';';
 			}
-			
+
 			var result,
 				key = newStyle + txt;
 			if (!(result = _cache[key])) {
@@ -1783,10 +1910,10 @@ jq(el).zk.center(); //same as 'center'
 			agt = document.createElement('span');
 		agt.id = el['z_vpagt'] = '_z_vpagt' + _vpId++;
 		agt.style.display = 'none';
-		
+
 		// Bug 3049181 and 3092040
 		zjq._fixedVParent(el, true);
-		
+
 		if (sib) p.insertBefore(agt, sib);
 		else p.appendChild(agt);
 
@@ -1814,16 +1941,16 @@ jq(el).zk.center(); //same as 'center'
 
 			p = p ? jq('#' + p)[0] : agt ? agt.parentNode : null;
 			if (p) {
-				
+
 				// Bug 3049181
 				zjq._fixedVParent(el);
-				
+
 				if (agt) {
 					p.insertBefore(el, agt);
 					$agt.remove();
 				} else
 					p.appendChild(el);
-				
+
 				var cf, p, a;
 				// ZK-851
 				if ((zk.ff || zk.opera) && (cf = zk._prevFocus)
@@ -1833,7 +1960,7 @@ jq(el).zk.center(); //same as 'center'
 					else if ((a = cf.$n('a')) // ZK-1955
 							&& jq.nodeName(a, 'button', 'input', 'textarea', 'a', 'select', 'iframe'))
 						jq(a).trigger('blur');
-					else if (cf.$instanceof(zul.wgt.Button)) // ZK-1324: Trendy button inside bandbox popup doesn't lose focus when popup is closed
+					else if (cf.$instanceof(zul.wgt['Button'])) // ZK-1324: Trendy button inside bandbox popup doesn't lose focus when popup is closed
 						jq(cf.$n('btn') || cf.$n()).trigger('blur');
 				}
 			}
@@ -2030,11 +2157,11 @@ jq(el).css(jq.parseStyle(jq.filterTextStle('width:100px;font-size:10pt')));
 				return false;
 		return len > 0; //false if nothing selected
 	}
-};
+} as ThisType<JQZK>);
 
 /** @partial jq
  */
-zk.copy(jq, {
+Object.assign(jq, {
 	/** Returns the node name of the specified element in the lower case.
 	 * @param DOMElement el the element to test.
 	 * If el is null, an empty string is returned.
@@ -2103,7 +2230,7 @@ zk.copy(jq, {
 	 * @return boolean if p is an ancesotor of c.
 	 * @see zUtl#isAncestor
 	 */
-	isAncestor: function (p, c) {
+	isAncestor: function (p: DOMFieldValue, c: DOMFieldValue): boolean {
 		if (!p) return true;
 		for (; c; c = zk(c).vparentNode(true))
 			if (p == c)
@@ -2339,7 +2466,7 @@ jq.filterTextStyle({width:"100px", fontSize: "10pt"});
 	 * (i.e., anchor will become the next sibling of the stackup, so anchor will be on top of the stackup if z-index is the same). If omitted, el is assumed.
 	 * @return DOMElement
 	 */
-	newStackup: function (el, id, anchor) {
+	newStackup: function (el, id, anchor?) {
 		el = jq(el || [], zk)[0];
 		var ifr = document.createElement('iframe');
 		ifr.id = id || (el ? el.id + '-ifrstk' : 'z_ifrstk');
@@ -2584,7 +2711,7 @@ jq.css(elem, 'width', 'styleonly');
 <pre><code>
 text = jq.toJSON(['e', {pluribus: 'unum'}]);
 // text is '["e",{"pluribus":"unum"}]'
- 
+
 text = jq.toJSON([new Date()], function (key, value) {
     return this[key] instanceof Date ?
         'Date(' + this[key] + ')' : value;
@@ -2739,7 +2866,7 @@ zk.copy(jq.Event.prototype, {
 
 /** @partial jq.Event
  */
-zk.copy(jq.Event, {
+Object.assign(jq.Event, {
 	/** Fires a DOM element.
 	 * @param DOMElement el the target element
 	 * @param String evtnm the name of the event
@@ -2782,7 +2909,7 @@ zk.copy(jq.Event, {
 	 * can be resolved from the event (<code>zk.Widget.$(evt)</code>)
 	 * @return zk.Event the ZK event
 	 */
-	zk: function (evt, wgt) {
+	zk(evt: JQ.Event, wgt?: Widget | null): ZKEvent {
 		var type = evt.type,
 			target = zk.Widget.$(evt) || wgt,
 			data;
@@ -2843,5 +2970,3 @@ zk.delayFunction = function (uuid, func, opts) {
 		}
 	}
 };
-
-})(document, window);

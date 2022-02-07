@@ -1,56 +1,59 @@
 /* pkg.ts
 
-	Purpose:
-		The package utilities (part of zk)
-	Description:
+Purpose:
+	The package utilities (part of zk)
+Description:
 
-	History:
-		Tue Oct  7 16:32:04     2008, Created by tomyeh
+History:
+	Tue Oct  7 16:32:04     2008, Created by tomyeh
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zk.copy(zk, (function () {
-	var _loaded = {'zk': true}, //loaded
-		_xloadings: string[] = [], //loading (exclude loaded)
-		_loadedsemis: string[] = [], //loaded but not inited
-		_afterLoadFronts: (() => void)[] = [],
-		_afterLoads: (() => void)[] = [],
-		_afterPkgLoad = {}, //after pkg loaded
-		_pkgdepend = {},
-		_pkgver = {},
-		_pkghosts = {}/*package host*/, _defhost: string[] = []/*default host*/,
-		_loading = zk.copy({'zul.lang': true}, _loaded); //loading (include loaded)
+import {Callable, cast} from '@zk/types';
+import {default as zk} from '@zk/zk';
 
-	//We don't use e.onload since Safari doesn't support t
-	//See also Bug 1815074
-	function markLoading(nm: string): void {
-		//loading
-		_loading[nm] = true;
+var _zkf, _loaded = {'zk': true}, //loaded
+	_xloadings: Array<string> = cast([]), //loading (exclude loaded)
+	_loadedsemis: Array<string> = cast([]), //loaded but not inited
+	_afterLoadFronts: Array<Callable> = cast([]),
+	_afterLoads: Array<Callable> = cast([]),
+	_afterPkgLoad = {}, //after pkg loaded
+	_pkgdepend = {},
+	_pkgver = {},
+	_pkghosts = {}/*package host*/,
+	_defhost: Array<string> = cast([])/*default host*/,
+	_loading = Object.assign({'zul.lang': true}, _loaded); //loading (include loaded)
 
-		_xloadings.push(nm);
-		if (updCnt() == 1) {
-			zk.disableESC();
+//We don't use e.onload since Safari doesn't support t
+//See also Bug 1815074
+function markLoading(nm: string): void {
+	//loading
+	_loading[nm] = true;
+
+	_xloadings.push(nm);
+	if (updCnt() == 1) {
+		zk.disableESC();
+	}
+}
+function doEnd(afs, wait?): void {
+	for (var fn; fn = afs.shift();) {
+		if (updCnt() || (wait && _loadedsemis.length)) {
+			afs.unshift(fn);
+			return;
 		}
+		fn();
 	}
-	function doEnd(afs, wait?): void {
-		for (var fn; fn = afs.shift();) {
-			if (updCnt() || (wait && _loadedsemis.length)) {
-				afs.unshift(fn);
-				return;
-			}
-			fn();
-		}
-	}
-	function updCnt(): number {
-		return (zk.loading = _xloadings.length);
-	}
+}
+function updCnt(): number {
+	return (zk.loading = _xloadings.length);
+}
 /** @partial zk
- */
-  return { //internal utility
-	setLoaded: _zkf = function (pkg, wait) { //internal
+*/
+let _pkg = { //internal utility
+	setLoaded: _zkf = function (pkg: string, wait: boolean) { //internal
 		_xloadings.$remove(pkg);
 		_loading[pkg] = true;
 
@@ -99,16 +102,16 @@ zk.copy(zk, (function () {
 	 * @return boolean true if loaded
 	 * @see #load
 	 */
-	isLoaded: function (pkg, loading) {
+	isLoaded: function (pkg: string, loading?: boolean): boolean {
 		return (loading && _loading[pkg]) || _loaded[pkg];
 	},
 	/** Loads the specified package(s). This method is called automatically when mounting the peer widgets. However, if an application developer wants to access JavaScript packages that are not loaded, he has to invoke this method.
 	 * <p>The loading of a package is asynchronous, so you cannot create the widget immediately. Rather, use the <code>func</code> argument, func, or use #afterLoad to execute.
-<pre><code>
-zk.load('zul.utl', function () {
-  new zul.utl.Timer();
-});
-</code></pre>
+	<pre><code>
+	zk.load('zul.utl', function () {
+	new zul.utl.Timer();
+	});
+	</code></pre>
 	 * @param String pkg the package name
 	 * @param Function func [optional] the function to execute after all packages are loaded. Ignored if omitted. Notice that func won't be executed until all requested packages are loaded; not just what are specified here.
 	 * @return boolean true if all required packages are loaded
@@ -257,11 +260,11 @@ zk.load('zul.utl', function () {
 	 * <p>To know whether all requested packages are loaded (i.e., ZK is not loading any package), you can check {@link #loading} if it is 0.
 	 * <p>Notice that functions specified in the second format execute before those specified in the first format.
 	 * <p>Example
-<pre><code>
-zk.afterLoad('foo', function() {new foo.Foo();});
-zk.afterLoad('foo1,foo2', function() {new foo1.Foo(foo2.Foo);});
-zk.afterLoad(function() {});
-</code></pre>
+	<pre><code>
+	zk.afterLoad('foo', function() {new foo.Foo();});
+	zk.afterLoad('foo1,foo2', function() {new foo1.Foo(foo2.Foo);});
+	zk.afterLoad(function() {});
+	</code></pre>
 	 * @param String pkgs the package(s) that the specified function depends on. In other words, the function is evaluated only if the package(s) are loaded. If you want to specify multiple packages, separate them with comma.
 	 * @param Function func the function to execute
 	 * @see #afterLoad(Function)
@@ -335,7 +338,7 @@ zk.afterLoad(function() {});
 				var src = scs[j].src;
 				if (src)
 					if (src.startsWith(host)) {
-						_defhost = [host, hostRes];
+						_defhost = cast([host, hostRes]);
 						break;
 					} else if (src.indexOf('/zk.wpd') >= 0)
 						break;
@@ -343,5 +346,6 @@ zk.afterLoad(function() {});
 		for (var j = 0; j < pkgs.length; ++j)
 			_pkghosts[pkgs[j]] = [host, hostRes];
 	}
-  };
-})());
+};
+
+export default _pkg;
