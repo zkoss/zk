@@ -111,7 +111,7 @@ dependencies {
 	runtimeOnly 'org.mozilla:rhino:1.7R4'
 	testImplementation 'org.jruby:jruby:1.1.2'
 	testImplementation 'org.python:jython:2.2.1'
-	testImplementation 'org.zkoss.zats:zats-mimic-ext96:3.0.0-FL-2021062415'
+	testImplementation 'org.zkoss.zats:zats-mimic-ext:10.0.0-FL-2022021115'
 	testImplementation 'junit:junit:4.13.2'
 	testImplementation 'org.hamcrest:hamcrest:2.1'
 	testImplementation 'net.jcip:jcip-annotations:1.0'
