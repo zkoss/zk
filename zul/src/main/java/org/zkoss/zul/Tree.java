@@ -86,7 +86,7 @@ import org.zkoss.zul.impl.Utils;
 import org.zkoss.zul.impl.XulElement;
 
 /**
- *  A container which can be used to hold a tabular
+ * A container which can be used to hold a tabular
  * or hierarchical set of rows of elements.
  * <p>Event:
  * <ol>
@@ -104,19 +104,19 @@ import org.zkoss.zul.impl.XulElement;
  * item, if the checkmark ({@link #isCheckmark}) is enabled.</br>
  * Notice that you could specify this attribute in any of its ancestor's attributes.
  * It will be inherited.</dd>
- * <dt>org.zkoss.zul.tree.autoSort</dt>.(since 5.0.7) 
+ * <dt>org.zkoss.zul.tree.autoSort</dt>.(since 5.0.7)
  * <dd>Specifies whether to sort the model when the following cases:</br>
  * <ol>
  * <li>{@link #setModel} is called and {@link Treecol#setSortDirection} is set.</li>
  * <li>{@link Treecol#setSortDirection} is called.</li>
  * <li>Model receives {@link TreeDataEvent} and {@link Treecol#setSortDirection} is set.</li>
  * </ol>
- * If you want to ignore sort when receiving {@link TreeDataEvent}, 
+ * If you want to ignore sort when receiving {@link TreeDataEvent},
  * you can specifies the value as "ignore.change".</br>
  * Notice that you could specify this attribute in any of its ancestor's attributes.
  * It will be inherited.</dd>
  * </dl>
- * 
+ *
  * <br/>
  * [Since 6.0.0]
  * <p>To retrieve what are selected in Tree with a {@link TreeSelectableModel},
@@ -135,7 +135,7 @@ import org.zkoss.zul.impl.XulElement;
  * 		selected.add(model.getChild(paths[i]));
  * }
  * </code></pre>
- * 
+ *
  * <br/>
  * [Since 6.0.0]
  * <p> If the TreeModel in Tree implements a {@link TreeSelectableModel}, the
@@ -147,7 +147,7 @@ import org.zkoss.zul.impl.XulElement;
  * selModel.setMultiple(true);
  * tree.setModel(selModel);
  * </code></pre>
- * 
+ *
  * <br/>
  * [Since 6.0.0]
  * <p>To retrieve what are opened nodes in Tree with a {@link TreeOpenableModel},
@@ -166,35 +166,35 @@ import org.zkoss.zul.impl.XulElement;
  * 		opened.add(model.getChild(paths[i]));
  * }
  * </code></pre>
- * 
+ *
  * <dt>org.zkoss.zul.tree.selectOnHighlight.disabled</dt>.(since 7.0.4)
- * <dd>Sets whether to disable select functionality when highlighting text 
+ * <dd>Sets whether to disable select functionality when highlighting text
  * content with mouse dragging or not.</dd>
- * 
+ *
  * </br/>
  * [Since 7.0.0] (EE version only)
- * 
- * <dt>org.zkoss.zul.tree.initRodSize</dt>. 
+ *
+ * <dt>org.zkoss.zul.tree.initRodSize</dt>.
  * <dd>Specifies the number of items rendered when the Tree first render.
- * 
- * <dt>org.zkoss.zul.tree.maxRodPageSize</dt>. 
+ *
+ * <dt>org.zkoss.zul.tree.maxRodPageSize</dt>.
  * <dd>Specifies how many pages (of treeitems) to keep rendered in memory
  *  (on the server side) when navigating the tree using pagination. (Paging mold only)
- * 
- * <dt>org.zkoss.zul.tree.preloadSize</dt>. 
+ *
+ * <dt>org.zkoss.zul.tree.preloadSize</dt>.
  * <dd>Specifies the number of items to preload when receiving
  * the rendering request from the client.
  * <p>It is used only if live data ({@link #setModel(TreeModel)} and
  * not paging ({@link #getPagingChild}).</dd>
- * 
- * 
+ *
+ *
  * @author tomyeh
  */
 @SuppressWarnings("serial")
 public class Tree extends MeshElement {
 	private static final Logger log = LoggerFactory.getLogger(Tree.class);
 	private static final String ATTR_ON_INIT_RENDER_POSTED = "org.zkoss.zul.Tree.onInitLaterPosted";
-	private static final int DEFAULT_THROTTLE_MILLIS = 300;
+	public static final int DEFAULT_THROTTLE_MILLIS = 300;
 
 	private transient Treecols _treecols;
 	private transient Treefoot _treefoot;
@@ -799,7 +799,7 @@ public class Tree extends MeshElement {
 	public void setHeight(String height) {
 		if (_rows != 0)
 			throw new UiException("Not allowed to set height and rows at the same time");
-		
+
 		super.setHeight(height);
 	}
 
@@ -902,12 +902,12 @@ public class Tree extends MeshElement {
 			smartUpdate("vflex", _vflex);
 		}
 	}
-	
+
 	@Override
 	public void setVflex(String flex) { //ZK-4296: Error indicating incorrect usage when using both vflex and rows
 		if (_rows != 0)
 			throw new UiException("Not allowed to set vflex and rows at the same time");
-		
+
 		super.setVflex(flex);
 	}
 
@@ -1041,11 +1041,11 @@ public class Tree extends MeshElement {
 
 	/**
 	 * Returns the count the specified item in which it should be shown on the
-	 * paging mold recursively in breadth-first order. 
+	 * paging mold recursively in breadth-first order.
 	 * @since 3.0.7
 	 */
 	private int getVisibleIndexOfItem0(Treeitem item, boolean inclusive) {
-		// ZK-2539: use vector instead of recursive calls to avoid stack overflow 
+		// ZK-2539: use vector instead of recursive calls to avoid stack overflow
 		// when number of tree items is huge.
 		Vector<Treeitem> items = new Vector<Treeitem>();
 		int count = 0;
@@ -1168,7 +1168,7 @@ public class Tree extends MeshElement {
 				item.setSelectedDirectly(false);
 				_selItems.remove(item);
 
-				if (_sel == item) //bug fix:3131173 
+				if (_sel == item) //bug fix:3131173
 					_sel = _selItems.size() > 0 ? _selItems.iterator().next() : null;
 
 				smartUpdateSelection();
@@ -1760,7 +1760,7 @@ public class Tree extends MeshElement {
 
 	/**
 	 * Return the Tree or Treeitem component by a path, or null if corresponding
-	 * Treeitem is not instantiated (i.e., rendered) yet. It returns this tree 
+	 * Treeitem is not instantiated (i.e., rendered) yet. It returns this tree
 	 * if the given node is the root node. (i.e., {@link TreeModel#getRoot}).
 	 * @since 6.0.0
 	 */
@@ -2105,7 +2105,7 @@ public class Tree extends MeshElement {
 		return path;
 	}
 
-	/** 
+	/**
 	 * Returns the number of rows to preload when receiving the rendering
 	 * request from the client.
 	 * <p>
@@ -2123,7 +2123,7 @@ public class Tree extends MeshElement {
 		return sz;
 	}
 
-	/** 
+	/**
 	 * Returns Specifies how many pages (of treeitems) to keep rendered in memory
 	 *  (on the server side) when navigating the tree using pagination.
 	 *  <p>
@@ -2139,7 +2139,7 @@ public class Tree extends MeshElement {
 		return -1;
 	}
 
-	/** 
+	/**
 	 * Returns the number of items rendered when the Tree first render.
 	 *  <p>
 	 * Default: 50. (Since 7.0.0)
@@ -2689,7 +2689,8 @@ public class Tree extends MeshElement {
 				: val != null ? "true".equals(val) || "ignore.change".equals(val) : false;
 	}
 
-	/** Returns whether to sort all of item when model or sort direction be changed.
+	/** Returns whether to ignore sort all items when model or sort direction be changed.
+	 * <p>Default: {@code true}</p>
 	 * @since 5.0.7
 	 */
 	private boolean isIgnoreSortWhenChanged() {

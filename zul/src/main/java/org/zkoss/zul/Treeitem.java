@@ -1,9 +1,9 @@
 /* Treeitem.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Wed Jul  6 18:56:15     2005, Created by tomyeh
 
@@ -100,7 +100,7 @@ public class Treeitem extends XulElement implements org.zkoss.zk.ui.ext.Disable 
 
 	/** Sets whether it is selectable.
 	 *
-	 * <p>If the listbox is in a checkmark mode, the selectable state will affect
+	 * <p>If the tree is in a checkmark mode, the selectable state will affect
 	 * the checkable icon to display or not.</p>
 	 * <p>Default: true.</p>
 	 * @param selectable
@@ -118,9 +118,9 @@ public class Treeitem extends XulElement implements org.zkoss.zk.ui.ext.Disable 
 
 	/**
 	 * Unload the tree item
-	 * <p>To load the tree item, with 
+	 * <p>To load the tree item, with
 	 * {@link Tree#renderItem(Treeitem)}, {@link Tree#renderItem(Treeitem, Object)}, or {@link Tree#renderItems(java.util.Set)}
-	 * 
+	 *
 	 * @since 3.0.4
 	 */
 	public void unload() {
@@ -470,14 +470,14 @@ public class Treeitem extends XulElement implements org.zkoss.zk.ui.ext.Disable 
 	}
 
 	/**
-	 * @deprecated as of release 6.0.0. To control the size of Tree related 
+	 * @deprecated as of release 6.0.0. To control the size of Tree related
 	 * components, please refer to {@link Tree} and {@link Treecol} instead.
 	 */
 	public void setWidth(String width) {
 	}
 
 	/**
-	 * @deprecated as of release 6.0.0. To control the size of Tree related 
+	 * @deprecated as of release 6.0.0. To control the size of Tree related
 	 * components, please refer to {@link Tree} and {@link Treecol} instead.
 	 */
 	public void setHflex(String flex) {

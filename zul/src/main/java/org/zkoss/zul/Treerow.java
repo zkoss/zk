@@ -1,9 +1,9 @@
 /* Treerow.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Wed Jul  6 18:56:22     2005, Created by tomyeh
 
@@ -64,7 +64,7 @@ public class Treerow extends XulElement {
 		return parent != null ? ((Treeitem) parent).getTreechildren() : null;
 	}
 
-	/** Returns the label of the {@link Treecell} it contains, or null
+	/** Returns the label of the first {@link Treecell} it contains, or null
 	 * if no such cell.
 	 * @since 5.0.8
 	 */
@@ -73,7 +73,7 @@ public class Treerow extends XulElement {
 		return cell != null ? cell.getLabel() : null;
 	}
 
-	/** Sets the label of the {@link Treecell} it contains.
+	/** Sets the label of the first {@link Treecell} it contains.
 	 *
 	 * <p>If treecell are not created, we automatically create it.
 	 *
@@ -117,14 +117,14 @@ public class Treerow extends XulElement {
 	}
 
 	/**
-	 * @deprecated as of release 6.0.0. To control the size of Tree related 
+	 * @deprecated as of release 6.0.0. To control the size of Tree related
 	 * components, please refer to {@link Tree} and {@link Treecol} instead.
 	 */
 	public void setWidth(String width) {
 	}
 
 	/**
-	 * @deprecated as of release 6.0.0. To control the size of Tree related 
+	 * @deprecated as of release 6.0.0. To control the size of Tree related
 	 * components, please refer to {@link Tree} and {@link Treecol} instead.
 	 */
 	public void setHflex(String flex) {
