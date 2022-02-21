@@ -1,9 +1,9 @@
 /* FormatInputElement.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Tue Jul  5 09:27:34     2005, Created by tomyeh
 
@@ -32,14 +32,14 @@ import org.zkoss.zk.ui.sys.StringPropertyAccess;
 public abstract class FormatInputElement extends InputElement {
 	private String _format;
 
-	/** Returns the format.
-	 * <p>Default: null (used what is defined in the format sheet).
+	/** Returns the format of the input component.
+	 * <p>Default: null (used what is defined in the inherited implementation).
 	 */
 	public String getFormat() {
 		return _format;
 	}
 
-	/** Sets the format.
+	/** Sets the format to the input component.
 	 */
 	public void setFormat(String format) throws WrongValueException {
 		if (!Objects.equals(_format, format)) {

@@ -1,9 +1,9 @@
 /* Decimalbox.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Tue Jun 28 13:40:20     2005, Created by tomyeh
 

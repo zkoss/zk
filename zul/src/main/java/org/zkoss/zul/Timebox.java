@@ -2,9 +2,9 @@
 
 
  Purpose:
- 
+
  Description:
- 
+
  History:
  	Jul 9, 2007 10:03:38 AM , Created by Dennis Chen
 
@@ -45,10 +45,10 @@ import org.zkoss.zul.impl.DateTimeFormatInputElement;
 import org.zkoss.zul.mesg.MZul;
 
 /**
- * An input box for holding a time (a java.util.Date Object , but only Hour & Minute are used.
+ * An input box for holding a time (a java.util.Date Object), but only Hour & Minute are used.
  *
  * <p>Default {@link #getZclass}: z-timebox. (since 3.5.0)
- * 
+ *
  * <p>timebox supports below key events.
  * <ul>
  *  <li>0-9 : set the time digit depend on the position on the inner text box.
@@ -66,7 +66,7 @@ import org.zkoss.zul.mesg.MZul;
  * @since 3.0.0
  */
 public class Timebox extends DateTimeFormatInputElement {
-	/*package*/ static final String DEFAULT_FORMAT = "HH:mm";
+	public static final String DEFAULT_FORMAT = "HH:mm";
 	private boolean _btnVisible = true;
 	private static Date _dummyDate = new Date();
 
@@ -118,10 +118,10 @@ public class Timebox extends DateTimeFormatInputElement {
 	<td>{@link DateFormats#getTimeFormat} with {@link DateFormat#FULL}</td>
 	</tr>
 	</table>
-	
+
 	<p>In additions, the format could be a combination of the following pattern letters:
 	<table border=0 cellspacing=3 cellpadding=0>
-	
+
 	 <tr bgcolor="#ccccff">
 	     <th align=left>Letter
 	     <th align=left>Date or Time Component
@@ -231,7 +231,7 @@ public class Timebox extends DateTimeFormatInputElement {
 	 * Returns the default format, which is used when constructing a timebox.
 	 * <p>Default: DateFormats.getTimeFormat(DEFAULT, null, "HH:mm")
 	 * (see {@link DateFormats#getTimeFormat}).
-	 * 
+	 *
 	 * <p>Though you might override this method to provide your own default format,
 	 * it is suggested to specify the format for the current thread
 	 * with {@link DateFormats#setLocalFormatInfo}.
