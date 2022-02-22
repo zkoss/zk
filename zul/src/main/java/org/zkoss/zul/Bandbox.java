@@ -2,9 +2,9 @@
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Mon Mar 20 12:14:46     2006, Created by tomyeh
 }}IS_NOTE
@@ -17,6 +17,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import org.zkoss.lang.Objects;
+import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.out.AuInvoke;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
@@ -45,9 +46,10 @@ import org.zkoss.zk.ui.event.OpenEvent;
  * @author tomyeh
  */
 public class Bandbox extends Textbox {
+	public static final String ICON_SCLASS = "z-icon-search";
 	private boolean _autodrop, _btnVisible = true, _open;
 	private String _popupWidth;
-	private String _iconSclass = "z-icon-search";
+	private String _iconSclass = ICON_SCLASS;
 
 	static {
 		addClientEvent(Bandbox.class, Events.ON_OPEN, CE_IMPORTANT | CE_DUPLICATE_IGNORE);
@@ -110,8 +112,8 @@ public class Bandbox extends Textbox {
 		return _open;
 	}
 
-	/** Drops down or closes the child.
-	 * only works while visible
+	/** Sets to display dropdown or close the child.
+	 * Only works while visible.
 	 * @since 3.0.1
 	 * @see #open
 	 * @see #close
@@ -195,13 +197,13 @@ public class Bandbox extends Textbox {
 			renderer.render("buttonVisible", false);
 		if (_popupWidth != null)
 			renderer.render("popupWidth", _popupWidth);
-		if (!"z-icon-search".equals(_iconSclass))
+		if (!ICON_SCLASS.equals(_iconSclass))
 			renderer.render("iconSclass", _iconSclass);
 	}
 
 	/** Processes an AU request.
 	 *
-	 * <p>Default: in addition to what are handled by {@link Textbox#service},
+	 * <p>Default: in addition to what are handled by {@link Textbox#service(AuRequest, boolean)} service},
 	 * it also handles onOpen and onSelect.
 	 * @since 5.0.0
 	 */
