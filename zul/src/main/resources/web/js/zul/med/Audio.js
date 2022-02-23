@@ -63,6 +63,10 @@ zul.med.Audio = zk.$extends(zul.Widget, {
 		src: function () {
 			this.rerender();
 		},
+		// for zephyr to treat as "src" attribute at client side
+		content: function (v) {
+			this.setSrc(v);
+		},
 		/** Returns whether to auto start playing the audio.
 		 * <p>Default: false.
 		 * @return boolean
