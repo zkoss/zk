@@ -15,7 +15,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 /**
  * A radio button.
  *
- * <p>Radio buttons without a ancestor {@link Radiogroup} is considered
+ * <p>Radio buttons without an ancestor {@link Radiogroup} is considered
  * as the same group.
  * The nearest ancestor {@link Radiogroup} is the group that the radio
  * belongs to. See also {@link #getRadiogroup}.
@@ -71,11 +71,11 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 		}
 	},
 	unbind_: function () {
-		this.$supers(zul.wgt.Radio, 'unbind_', arguments);
 		if (this._group && this._attachExternal) {
 			this._group._rmExtern(this);
 			this._attachExternal = false;
 		}
+		this.$supers(zul.wgt.Radio, 'unbind_', arguments);
 	},
 	/** Sets the radio is checked and unchecked the others in the same radio
 	 * group ({@link Radiogroup}
@@ -174,6 +174,11 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 	fireOnCheck_: function (checked) {
 		// if Radiogroup listens to onCheck, we shall fire the event too.
 		var group = this.getRadiogroup();
-		this.fire('onCheck', checked, {toServer: group && group.isListen('onCheck')});
+		this.fire('onCheck', checked);
+
+		// send event to group at client instead of server side. in ZK 10 for zephyr
+		if (group) {
+			group.fire('onCheck', checked);
+		}
 	}
 });

@@ -1,9 +1,9 @@
 /* Radio.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Fri Jun 17 09:20:52     2005, Created by tomyeh
 
@@ -34,7 +34,7 @@ import org.zkoss.zul.impl.Utils;
  * as the same group.
  * The nearest ancestor {@link Radiogroup} is the group that the radio
  * belongs to. See also {@link #getRadiogroup}.
- * 
+ *
  * <p>Event:
  * <ol>
  * <li>{@link org.zkoss.zk.ui.event.CheckEvent} is sent when a checkbox
@@ -208,7 +208,7 @@ public class Radio extends Checkbox {
 	 *
 	 * <p>Default: "z-radio"
 	 * <p>Since 3.5.1
-	 * 
+	 *
 	 */
 	public String getZclass() {
 		return _zclass == null ? "z-radio" : _zclass;
@@ -232,7 +232,7 @@ public class Radio extends Checkbox {
 		}
 
 		if (oldgp != newgp) {
-			if (oldgp != null) { //removed from the component tree  
+			if (oldgp != null) { //removed from the component tree
 				if (_explictGroup && oldgp == _group) {
 					_group.removeExternal(this);
 					_attachExternal = false;
@@ -268,9 +268,10 @@ public class Radio extends Checkbox {
 			fixSiblings(_checked, true); //invoke syncSelectionToModel
 			Events.postEvent(evt);
 			// Bug: B50-3284663: Radio always sends onCheck event
-			final Radiogroup rg = getRadiogroup();
-			if (rg != null)
-				Events.postEvent(rg, evt);
+			// ZK 10, we send event from client to Radiogroup directly.
+//			final Radiogroup rg = getRadiogroup();
+//			if (rg != null)
+//				Events.postEvent(rg, evt);
 		} else
 			super.service(request, everError);
 	}

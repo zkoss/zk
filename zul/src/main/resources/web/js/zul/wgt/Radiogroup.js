@@ -123,6 +123,21 @@ zul.wgt.Radiogroup = zk.$extends(zul.Widget, {
 		name: function (v) {
 			for (var items = this.getItems(), i = items.length; i--;)
 				items[i].setName(v);
+		},
+		/** Returns whether it is disabled.
+		 * <p>Default: false.
+		 * @since 10.0.0
+		 */
+		/** Sets whether to disable all radios.
+		 * <p>Default: false.
+		 * @since 10.0.0
+		 */
+		disabled: function (v) {
+			this.getItems().forEach((r) => {
+				if (r.desktop) {
+					r.setDisabled(v);
+				}
+			});
 		}
 	},
 	/** Returns the radio button at the specified index.
@@ -150,17 +165,20 @@ zul.wgt.Radiogroup = zk.$extends(zul.Widget, {
 	getSelectedIndex: function () {
 		return this._jsel;
 	},
-	/** Deselects all of the currently selected radio button and selects
+	/** Deselects all the currently selected radio button and selects
 	 * the radio button with the given index.
 	 * @param int selectedIndex
 	 */
 	setSelectedIndex: function (jsel) {
 		if (jsel < 0) jsel = -1;
 		if (this._jsel != jsel) {
-			if (jsel < 0) {
-				this.getSelectedItem().setSelected(false);
-			} else {
-				this.getItemAtIndex(jsel).setSelected(true);
+			this._jsel = jsel;
+			if (this.desktop) {
+				if (jsel < 0) {
+					this.getSelectedItem().setSelected(false);
+				} else {
+					this.getItemAtIndex(jsel).setSelected(true);
+				}
 			}
 		}
 	},
@@ -211,6 +229,8 @@ zul.wgt.Radiogroup = zk.$extends(zul.Widget, {
 		} else {
 			this._fixSelectedIndex();
 		}
+		// handle this disabled state for zephyr.
+		child.setDisabled(this.isDisabled());
 	},
 	_fixOnRemove: function (child) {
 		if (child.isSelected()) {
@@ -240,6 +260,17 @@ zul.wgt.Radiogroup = zk.$extends(zul.Widget, {
 			if (added) scls += (scls ? ' ' : '') + added;
 		}
 		return scls;
+	},
+	bind_: function () {
+		this.$supers(zul.wgt.Radiogroup, 'bind_', arguments);
+		this.listen({onCheck: this});
+	},
+	unbind_: function () {
+		this.unlisten({onCheck: this});
+		this.$supers(zul.wgt.Radiogroup, 'unbind_', arguments);
+	},
+	onCheck: function (evt) {
+		this._fixSelectedIndex();
 	}
 });
 })();
