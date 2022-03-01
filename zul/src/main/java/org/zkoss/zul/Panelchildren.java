@@ -1,9 +1,9 @@
 /* Panelchildren.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Jun 10, 2008 11:47:15 AM , Created by jumperchen
 
@@ -16,21 +16,19 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import java.io.IOException;
-
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.sys.ContentRenderer;
 import org.zkoss.zul.impl.XulElement;
 
 /**
  * Panelchildren is used for {@link Panel} component to manage each child who will
  * be shown in the body of Panel.
- * Note that the size of Panelchildren is automatically calculated by Panel so both
- * {@link #setWidth(String)} and {@link #setHeight(String)} are read-only.
- * 
+ * Note that the size of Panelchildren is automatically calculated by Panel so
+ * {@link #setWidth(String)}, {@link #setHeight(String)}, {@link #setHflex(String)}
+ * and {@link #setVflex(String)} are read-only.
+ *
  * <p>Default {@link #getZclass}: z-panelchildren.
- * 
+ *
  * @author jumperchen
  * @since 3.5.0
  */
@@ -84,12 +82,6 @@ public class Panelchildren extends XulElement {
 
 	protected void smartUpdate(String attr, Object value) {
 		super.smartUpdate(attr, value); // provides a bridge so it can be called by Panel
-	}
-
-	protected void renderProperties(ContentRenderer renderer) throws IOException {
-		super.renderProperties(renderer);
-		render(renderer, "hflex", getHflex());
-		render(renderer, "vflex", getVflex());
 	}
 
 	// super

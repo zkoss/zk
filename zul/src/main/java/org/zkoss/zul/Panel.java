@@ -1,9 +1,9 @@
 /* Panel.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Jun 10, 2008 11:39:33 AM , Created by jumperchen
 
@@ -34,7 +34,7 @@ import org.zkoss.zul.impl.XulElement;
  * that make it the perfect building block for application-oriented user interfaces.
  * The Panel contains bottom, top, and foot toolbars, along with separate header,
  * footer and body sections. It also provides built-in collapsible, closable,
- * maximizable, and minimizable behavior, along with a variety of pre-built tool 
+ * maximizable, and minimizable behavior, along with a variety of pre-built tool
  * buttons that can be wired up to provide other customized behavior. Panels can
  * be easily embedded into any kind of ZUL component that is allowed to have children
  * or layout component. Panels also provide specific features like float and move.
@@ -43,14 +43,14 @@ import org.zkoss.zul.impl.XulElement;
  * if Panel's parent node is an relative position, the floated panel is only inside
  * its parent, not the whole page.
  * The second difference of {@link Window} is that Panel is not an independent ID
- * space (by implementing {@link IdSpace}), so the ID of each child can be used 
+ * space (by implementing {@link IdSpace}), so the ID of each child can be used
  * throughout the panel.
- * 
+ *
  * <p>Events:<br/>
  * onMove, onOpen, onZIndex, onMaximize, onMinimize, and onClose.<br/>
- * 
+ *
  * <p>Default {@link #getZclass}: z-panel.
- * 
+ *
  * @author jumperchen
  * @since 3.5.0
  */
@@ -83,7 +83,7 @@ public class Panel extends XulElement implements Framable {
 		return _open;
 	}
 
-	/** 
+	/**
 	 * Opens or closes this Panel.
 	 */
 	public void setOpen(boolean open) {
@@ -105,7 +105,7 @@ public class Panel extends XulElement implements Framable {
 	/**
 	 * @deprecated As of release 5.0.6, replaced with {@link #setBorder}.
 	 * Sets whether to render the panel with custom rounded borders.
-	 * 
+	 *
 	 * <p>Default: false.
 	 */
 	public void setFramable(boolean framable) {
@@ -116,7 +116,7 @@ public class Panel extends XulElement implements Framable {
 
 	/**
 	 * Sets whether to move the panel to display it inline where it is rendered.
-	 * 
+	 *
 	 * <p>Default: false;
 	 * <p>Note that this method only applied when {@link #isFloatable()} is true.
 	 */
@@ -156,9 +156,9 @@ public class Panel extends XulElement implements Framable {
 
 	/**
 	 * Sets whether to float the panel to display it inline where it is rendered.
-	 * 
+	 *
 	 * <p>Note that by default, setting floatable to true will cause the
-	 * panel to display at default offsets, which depend on the offsets of 
+	 * panel to display at default offsets, which depend on the offsets of
 	 * the embedded panel from its element to <i>document.body</i> -- because the panel
 	 * is absolute positioned, the position must be set explicitly by {@link #setTop(String)}
 	 * and {@link #setLeft(String)}. Also, when floatable a panel you should always
@@ -180,13 +180,13 @@ public class Panel extends XulElement implements Framable {
 	}
 
 	/**
-	 * Sets whether the panel is maximized, and then the size of the panel will depend 
-	 * on it to show a appropriate size. In other words, if true, the size of the
+	 * Sets whether the panel is maximized, and then the size of the panel will depend
+	 * on it to show an appropriate size. In other words, if true, the size of the
 	 * panel will count on the size of its offset parent node whose position is
 	 * absolute (by {@link #isFloatable()}) or its parent node. Otherwise, its size
 	 * will be original size. Note that the maximized effect will run at client's
 	 * sizing phase not initial phase.
-	 * 
+	 *
 	 * <p>Default: false.
 	 * @exception UiException if {@link #isMaximizable} is false.
 	 */
@@ -206,7 +206,7 @@ public class Panel extends XulElement implements Framable {
 
 	/**
 	 * Returns whether to display the maximizing button and allow the user to maximize
-	 * the panel. 
+	 * the panel.
 	 * <p>Default: false.
 	 */
 	public boolean isMaximizable() {
@@ -219,7 +219,7 @@ public class Panel extends XulElement implements Framable {
 	 * change to a restore button with the appropriate behavior already built-in
 	 * that will restore the panel to its previous size.
 	 * <p>Default: false.
-	 * 
+	 *
 	 * <p>Note: the maximize button won't be displayed if no title or caption at all.
 	 */
 	public void setMaximizable(boolean maximizable) {
@@ -259,7 +259,7 @@ public class Panel extends XulElement implements Framable {
 
 	/**
 	 * Returns whether to display the minimizing button and allow the user to minimize
-	 * the panel. 
+	 * the panel.
 	 * <p>Default: false.
 	 */
 	public boolean isMinimizable() {
@@ -272,8 +272,8 @@ public class Panel extends XulElement implements Framable {
 	 * of minimizing a panel is implementation-specific, so the MinimizeEvent
 	 * event must be handled and a custom minimize behavior implemented for this
 	 * option to be useful.
-	 * 
-	 * <p>Default: false. 
+	 *
+	 * <p>Default: false.
 	 * <p>Note: the maximize button won't be displayed if no title or caption at all.
 	 * @see MinimizeEvent
 	 */
@@ -331,7 +331,7 @@ public class Panel extends XulElement implements Framable {
 
 	/**
 	 * Sets the minimum height in pixels allowed for this panel. If negative, 100 is assumed.
-	 * <p>Default: 100. 
+	 * <p>Default: 100.
 	 * <p>Note: Only applies when {@link #isSizable()} = true.
 	 * @since 5.0.0
 	 */
@@ -355,7 +355,7 @@ public class Panel extends XulElement implements Framable {
 
 	/**
 	 * Sets the minimum width in pixels allowed for this panel. If negative, 200 is assumed.
-	 * <p>Default: 200. 
+	 * <p>Default: 200.
 	 * <p>Note: Only applies when {@link #isSizable()} = true.
 	 * @since 5.0.0
 	 */
@@ -375,20 +375,6 @@ public class Panel extends XulElement implements Framable {
 	 */
 	public int getMinwidth() {
 		return _minwidth;
-	}
-
-	public void setHflex(String flex) {
-		super.setHflex(flex);
-		Panelchildren pc = getPanelchildren();
-		if (pc != null)
-			pc.smartUpdate("hflex", flex);
-	}
-
-	public void setVflex(String flex) {
-		super.setVflex(flex);
-		Panelchildren pc = getPanelchildren();
-		if (pc != null)
-			pc.smartUpdate("vflex", flex);
 	}
 
 	/** Returns whether the panel is sizable.
@@ -470,7 +456,7 @@ public class Panel extends XulElement implements Framable {
 		}
 	}
 
-	/** 
+	/**
 	 * Returns the title.
 	 * Besides this attribute, you could use {@link Caption} to define
 	 * a more sophisticated caption (a.k.a., title).
@@ -497,8 +483,8 @@ public class Panel extends XulElement implements Framable {
 	 * Adds the toolbar of the panel by these names, "tbar", "bbar", and "fbar".
 	 * "tbar" is the name of top toolbar, and "bbar" the name of bottom toolbar,
 	 * and "fbar" the name of foot toolbar.
-	 * 
-	 * @param name "tbar", "bbar", and "fbar". 
+	 *
+	 * @param name "tbar", "bbar", and "fbar".
 	 */
 	public boolean addToolbar(String name, Toolbar toolbar) {
 		Component refChild = null;
