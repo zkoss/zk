@@ -119,11 +119,9 @@ public class Bandbox extends Textbox {
 	 * @see #close
 	 */
 	public void setOpen(boolean open) {
-		if (isVisible()) {
-			if (open)
-				open();
-			else
-				close();
+		if (_open != open) {
+			_open = open;
+			smartUpdate("open", open);
 		}
 	}
 
@@ -199,6 +197,8 @@ public class Bandbox extends Textbox {
 			renderer.render("popupWidth", _popupWidth);
 		if (!ICON_SCLASS.equals(_iconSclass))
 			renderer.render("iconSclass", _iconSclass);
+		if (_open)
+			renderer.render("open", true);
 	}
 
 	/** Processes an AU request.
