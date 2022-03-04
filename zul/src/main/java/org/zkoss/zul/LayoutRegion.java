@@ -1,9 +1,9 @@
 /* LayoutRegion.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Feb 10, 2009 4:17:16 PM , Created by jumperchen
 
@@ -34,11 +34,11 @@ import org.zkoss.zul.impl.XulElement;
  * A layout region in a border layout.
  * <p>
  * Events:<br/> onOpen, onSize, onSlide.<br/>
- * 
+ *
  * <h3>Support Caption component</h3>
  * [ZK EE]
  * [Since 6.5.0]
- * 
+ *
  * @author jumperchen
  * @since 5.0.0
  */
@@ -85,11 +85,11 @@ public abstract class LayoutRegion extends XulElement {
 	 * <p>
 	 * The border actually controls what CSS class to use: If border is null, it
 	 * implies "none".
-	 * 
+	 *
 	 * <p>
 	 * If you also specify the CSS class ({@link #setClass}), it overwrites
 	 * whatever border you specify here.
-	 * 
+	 *
 	 * <p>
 	 * Default: "normal".
 	 */
@@ -99,7 +99,7 @@ public abstract class LayoutRegion extends XulElement {
 
 	/**
 	 * Sets the border (either none or normal).
-	 * 
+	 *
 	 * @param border
 	 *            the border. If null or "0", "none" is assumed.
 	 */
@@ -123,7 +123,7 @@ public abstract class LayoutRegion extends XulElement {
 
 	/**
 	 * @deprecated As of release 6.0.2, use {@link #setHflex(String)} and {@link #setVflex(String)} on child component instead
-	 * 
+	 *
 	 */
 	public void setFlex(boolean flex) {
 		log.warn("The flex attribute is deprecated, use setHflex and setVflex on child component instead.");
@@ -135,7 +135,7 @@ public abstract class LayoutRegion extends XulElement {
 
 	/**
 	 * Returns the margins, which is a list of numbers separated by comma.
-	 * 
+	 *
 	 * <p>
 	 * Default: "0,0,0,0".
 	 */
@@ -176,7 +176,7 @@ public abstract class LayoutRegion extends XulElement {
 
 	/**
 	 * Returns this regions position (north/south/east/west/center).
-	 * 
+	 *
 	 * @see Borderlayout#NORTH
 	 * @see Borderlayout#SOUTH
 	 * @see Borderlayout#EAST
@@ -205,7 +205,7 @@ public abstract class LayoutRegion extends XulElement {
 	 */
 	public abstract String getSize();
 
-	/** 
+	/**
 	 * Returns the title.
 	 * <p>Default: null.
 	 */
@@ -292,7 +292,7 @@ public abstract class LayoutRegion extends XulElement {
 	/**
 	 * Sets the collapsed margins for the element "0,1,2,3" that direction is
 	 * "top,left,right,bottom"
-	 * 
+	 *
 	 * <p>
 	 * Default: "3,3,3,3" for center, "0,3,3,0" for east and west,
 	 * and "3,0,0,3" for north and south.
@@ -324,7 +324,7 @@ public abstract class LayoutRegion extends XulElement {
 
 	/**
 	 * Sets whether set the initial display to collapse.
-	 * 
+	 *
 	 * <p>It only applied when {@link #getTitle()} is not null. (since 3.5.0)
 	 */
 	public void setCollapsible(boolean collapsible) {
@@ -336,7 +336,7 @@ public abstract class LayoutRegion extends XulElement {
 
 	/**
 	 * Returns whether it is open (i.e., not collapsed. Meaningful only if
-	 * {@link #isCollapsible} is not false.
+	 * {@link #isCollapsible} is not false).
 	 * <p>
 	 * Default: true.
 	 */
@@ -355,10 +355,22 @@ public abstract class LayoutRegion extends XulElement {
 		}
 	}
 
+	/**
+	 * Returns whether it is slide down.
+	 * <p>
+	 * Default: false.
+	 * @since 8.0.2
+	 */
 	public boolean isSlide() {
 		return _slide;
 	}
 
+	/**
+	 * Slides down or up the region. Meaningful only if
+	 * {@link #isCollapsible} is not false and {@link #isOpen} is false.
+	 * @param slide
+	 * @since 8.0.2
+	 */
 	public void setSlide(boolean slide) {
 		if (_slide != slide) {
 			_slide = slide;
