@@ -131,7 +131,9 @@ subprojects {
 	task buildJavadoc(type: Javadoc) {
 		// dependsOn all subprojects jar for javadoc classpath
 		dependsOn rootProject.subprojects.collect { ":$it.name:jar" }
-		dependsOn gradle.includedBuild('zkcml').task(':jar')
+		if (gradle.includedBuilds.contains({ it.name == 'zkcml'})) {
+			dependsOn gradle.includedBuild('zkcml').task(':jar')
+		}
 		title = "$project.description ${version} API"
 		options.setWindowTitle("$project.description ${version} API")
 		configure javadocOptions

@@ -112,12 +112,16 @@ task prepareBin() {
 		dependsOn ":$it.name:sourcesJar"
 	}
 	zkcmlprojects.each { prjName, dir ->
-		dependsOn gradle.includedBuild('zkcml').task(":$prjName:jar")
-		dependsOn gradle.includedBuild('zkcml').task(":$prjName:sourcesJar")
-		dependsOn gradle.includedBuild('zkcml').task(":$prjName:evalJar")
+		if (gradle.includedBuilds.contains({ it.name == 'zkcml'})) {
+			dependsOn gradle.includedBuild('zkcml').task(":$prjName:jar")
+			dependsOn gradle.includedBuild('zkcml').task(":$prjName:sourcesJar")
+			dependsOn gradle.includedBuild('zkcml').task(":$prjName:evalJar")
+		}
 	}
-	dependsOn gradle.includedBuild('zksandbox').task(":war")
-	dependsOn gradle.includedBuild('zkthemes').task(':release')
+	if (gradle.includedBuilds.contains({ it.name == 'zkcml'})) {
+		dependsOn gradle.includedBuild('zksandbox').task(":war")
+		dependsOn gradle.includedBuild('zkthemes').task(':release')
+	}
 	doLast {
 		// ext lib jars
 		copy {
@@ -271,8 +275,10 @@ task prepareBinOSGi() {
 	subprojects.each {
 		dependsOn ":$it.name:buildOSGi"
 	}
-	zkcmlprojects.each { prjName, dir ->
-		dependsOn gradle.includedBuild('zkcml').task(":$prjName:buildOSGi")
+	if (gradle.includedBuilds.contains({ it.name == 'zkcml'})) {
+		zkcmlprojects.each { prjName, dir ->
+			dependsOn gradle.includedBuild('zkcml').task(":$prjName:buildOSGi")
+		}
 	}
 	doLast {
 		// osgi jars
@@ -611,18 +617,20 @@ task bins() {
 // maven part
 
 task eeBundles() {
-	subprojects.each {
-		dependsOn it.getTasksByName('bundleJar', false)
-	}
-	dependsOn gradle.includedBuild('zkcml').task(':bundleJar')
-	doLast {
-		zkprojects.each { prjName, dir ->
-			copy {
-				includeEmptyDirs false
-				into "$buildDir/maven/proprietary/EE"
-				from("$dir/build/libs") {
-					include "**/*-bundle.jar"
-					exclude "eval/**"
+	if (gradle.includedBuilds.contains({ it.name == 'zkcml'})) {
+		subprojects.each {
+			dependsOn it.getTasksByName('bundleJar', false)
+		}
+		dependsOn gradle.includedBuild('zkcml').task(':bundleJar')
+		doLast {
+			zkprojects.each { prjName, dir ->
+				copy {
+					includeEmptyDirs false
+					into "$buildDir/maven/proprietary/EE"
+					from("$dir/build/libs") {
+						include "**/*-bundle.jar"
+						exclude "eval/**"
+					}
 				}
 			}
 		}
@@ -630,19 +638,21 @@ task eeBundles() {
 }
 
 task peBundles() {
-	subprojects.each {
-		dependsOn it.getTasksByName('bundleJar', false)
-	}
-	dependsOn gradle.includedBuild('zkcml').task(':bundleJar')
-	doLast {
-		zkprojects.each { prjName, dir ->
-			if (prjName != 'za11y' && prjName != 'zkmax' && prjName != 'zuti') {
-				copy {
-					includeEmptyDirs false
-					into "$buildDir/maven/proprietary/PE"
-					from("$dir/build/libs") {
-						include "**/*-bundle.jar"
-						exclude "eval/**"
+	if (gradle.includedBuilds.contains({ it.name == 'zkcml'})) {
+		subprojects.each {
+			dependsOn it.getTasksByName('bundleJar', false)
+		}
+		dependsOn gradle.includedBuild('zkcml').task(':bundleJar')
+		doLast {
+			zkprojects.each { prjName, dir ->
+				if (prjName != 'za11y' && prjName != 'zkmax' && prjName != 'zuti') {
+					copy {
+						includeEmptyDirs false
+						into "$buildDir/maven/proprietary/PE"
+						from("$dir/build/libs") {
+							include "**/*-bundle.jar"
+							exclude "eval/**"
+						}
 					}
 				}
 			}
@@ -669,26 +679,28 @@ task ceBundles() {
 }
 
 task eeEvalBundles() {
-	subprojects.each {
-		dependsOn it.getTasksByName('bundleJar', false)
-	}
-	dependsOn gradle.includedBuild('zkcml').task(':bundleEvalJar')
-	doLast {
-		subprojects.each {prj ->
-			copy {
-				includeEmptyDirs false
-				into "$buildDir/maven/EE-eval"
-				from("$prj.projectDir/build/libs") {
-					include "**/*-bundle.jar"
+	if (gradle.includedBuilds.contains({ it.name == 'zkcml'})) {
+		subprojects.each {
+			dependsOn it.getTasksByName('bundleJar', false)
+		}
+		dependsOn gradle.includedBuild('zkcml').task(':bundleEvalJar')
+		doLast {
+			subprojects.each { prj ->
+				copy {
+					includeEmptyDirs false
+					into "$buildDir/maven/EE-eval"
+					from("$prj.projectDir/build/libs") {
+						include "**/*-bundle.jar"
+					}
 				}
 			}
-		}
-		zkcmlprojects.each { prjName, dir ->
-			copy {
-				includeEmptyDirs false
-				into "$buildDir/maven/EE-eval"
-				from("$dir/build/libs/eval") {
-					include "**/*-bundle.jar"
+			zkcmlprojects.each { prjName, dir ->
+				copy {
+					includeEmptyDirs false
+					into "$buildDir/maven/EE-eval"
+					from("$dir/build/libs/eval") {
+						include "**/*-bundle.jar"
+					}
 				}
 			}
 		}
@@ -696,27 +708,29 @@ task eeEvalBundles() {
 }
 
 task peEvalBundles() {
-	subprojects.each {
-		dependsOn it.getTasksByName('bundleJar', false)
-	}
-	dependsOn gradle.includedBuild('zkcml').task(':bundleEvalJar')
-	doLast {
-		subprojects.each {prj ->
-			copy {
-				includeEmptyDirs false
-				into "$buildDir/maven/PE-eval"
-				from("$prj.projectDir/build/libs") {
-					include "**/*-bundle.jar"
-				}
-			}
+	if (gradle.includedBuilds.contains({ it.name == 'zkcml'})) {
+		subprojects.each {
+			dependsOn it.getTasksByName('bundleJar', false)
 		}
-		zkcmlprojects.each { prjName, dir ->
-			if (prjName == 'zkex' || prjName == 'zml') {
+		dependsOn gradle.includedBuild('zkcml').task(':bundleEvalJar')
+		doLast {
+			subprojects.each { prj ->
 				copy {
 					includeEmptyDirs false
 					into "$buildDir/maven/PE-eval"
-					from("$dir/build/libs/eval") {
+					from("$prj.projectDir/build/libs") {
 						include "**/*-bundle.jar"
+					}
+				}
+			}
+			zkcmlprojects.each { prjName, dir ->
+				if (prjName == 'zkex' || prjName == 'zml') {
+					copy {
+						includeEmptyDirs false
+						into "$buildDir/maven/PE-eval"
+						from("$dir/build/libs/eval") {
+							include "**/*-bundle.jar"
+						}
 					}
 				}
 			}
@@ -727,20 +741,25 @@ task peEvalBundles() {
 task release() {
 	// check before release
 	dependsOn 'check'
-	dependsOn gradle.includedBuild('zkcml').task(':check')
+	if (gradle.includedBuilds.contains({ it.name == 'zkcml'})) {
+		dependsOn gradle.includedBuild('zkcml').task(':check')
+	}
 	// bin
 	dependsOn 'bins'
 	// maven bundles
 	dependsOn 'ceBundles'
-	dependsOn 'peBundles'
-	dependsOn 'eeBundles'
-	dependsOn 'peEvalBundles'
-	dependsOn 'eeEvalBundles'
+	if (gradle.includedBuilds.contains({ it.name == 'zkcml'})) {
+		dependsOn 'peBundles'
+		dependsOn 'eeBundles'
+		dependsOn 'peEvalBundles'
+		dependsOn 'eeEvalBundles'
+	}
 	// javadoc & jsdoc
 	dependsOn 'alljavadoc'
 	dependsOn 'alljsdoc'
 }
-
-publishToMavenLocal {
-	dependsOn gradle.includedBuild('zkcml').task(':publishToMavenLocal')
+if (gradle.includedBuilds.contains({ it.name == 'zkcml'})) {
+	publishToMavenLocal {
+		dependsOn gradle.includedBuild('zkcml').task(':publishToMavenLocal')
+	}
 }

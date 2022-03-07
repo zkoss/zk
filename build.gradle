@@ -270,17 +270,19 @@ task cleanJsdoc(type: Delete) {
 
 clean {
 	// also clean cml
-	dependsOn(gradle.includedBuild('zkcml').task(':clean'))
-	zkcmlprojects.each { prjName, dir ->
-		dependsOn(gradle.includedBuild('zkcml').task(":$prjName:clean"))
+	if (gradle.includedBuilds.contains({ it.name == 'zkcml'})) {
+		dependsOn(gradle.includedBuild('zkcml').task(':clean'))
+		zkcmlprojects.each { prjName, dir ->
+			dependsOn(gradle.includedBuild('zkcml').task(":$prjName:clean"))
+		}
+		// also clean themes
+		dependsOn(gradle.includedBuild('zkthemes').task(':clean'))
+		dependsOn(gradle.includedBuild('zkthemes').task(':breeze:clean'))
+		dependsOn(gradle.includedBuild('zkthemes').task(':sapphire:clean'))
+		dependsOn(gradle.includedBuild('zkthemes').task(':silvertail:clean'))
+		// also clean sandbox
+		dependsOn(gradle.includedBuild('zksandbox').task(':clean'))
 	}
-	// also clean themes
-	dependsOn(gradle.includedBuild('zkthemes').task(':clean'))
-	dependsOn(gradle.includedBuild('zkthemes').task(':breeze:clean'))
-	dependsOn(gradle.includedBuild('zkthemes').task(':sapphire:clean'))
-	dependsOn(gradle.includedBuild('zkthemes').task(':silvertail:clean'))
-	// also clean sandbox
-	dependsOn(gradle.includedBuild('zksandbox').task(':clean'))
 }
 
 // change all the version in gradle.properties under zk
