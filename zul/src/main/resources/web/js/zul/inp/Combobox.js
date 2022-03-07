@@ -273,10 +273,6 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 	open: function (opts) {
 		this.$supers('open', arguments);
 		this._hilite(); //after _open is set
-		var msg = jq(this.$n('emptySearchMessage'));
-		if (msg.text() != this._emptySearchMessage) {
-			msg.text(this._emptySearchMessage);
-		}
 	},
 	dnPressed_: function (evt) {
 		this._updnSel(evt);
