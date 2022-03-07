@@ -25,7 +25,13 @@ jobs:
         node-version: 14
     - name: Build Latest ZK
       run: |
-        npm ci
+        if [ -e yarn.lock ]; then
+          yarn install --frozen-lockfile
+        elif [ -e package-lock.json ]; then
+          npm ci
+        else
+          npm i
+        fi
         ./build clean
         ./build zel zcommon zweb zk zul zkbind zhtml zkplus
 
