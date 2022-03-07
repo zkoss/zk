@@ -32,5 +32,6 @@ jobs:
         else
           npm i
         fi
+        sed -i 's/includeBuild/\/\/includeBuild/' settings.gradle
         ./gradlew build
 
