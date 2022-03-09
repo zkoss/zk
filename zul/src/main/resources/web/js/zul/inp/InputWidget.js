@@ -366,6 +366,9 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	 */
 	setValue: function (value, fromServer) {
 		var vi;
+		// for zephyr to treat as "value" attribute from "_value" at client side
+		if (typeof value == 'number' || typeof value == 'string')
+			value = this.unmarshall_(value);
 		if (fromServer)
 			this.clearErrorMessage(this.cst != null);
 		else {
