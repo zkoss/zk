@@ -1,9 +1,9 @@
 /* HeadersElement.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Thu Dec  7 09:43:48     2006, Created by tomyeh
 
@@ -46,7 +46,7 @@ public abstract class HeadersElement extends XulElement {
 	}
 
 	/** Sets whether the width of the child column is sizable.
-	 * If true, an user can drag the border between two columns (e.g., {@link org.zkoss.zul.Column})
+	 * If true, a user can drag the border between two columns (e.g., {@link org.zkoss.zul.Column})
 	 * to change the widths of adjacent columns.
 	 * <p>Default: false.
 	 */

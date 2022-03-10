@@ -1,9 +1,9 @@
 /* Button.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Wed Jun  8 10:31:02     2005, Created by tomyeh
 
@@ -83,7 +83,7 @@ public class Button extends LabelImageElement implements org.zkoss.zk.ui.ext.Dis
 	 * For example, <code>&lt;button id="ok" autodisable="self,cancel"/></code>
 	 * is the same as <code>&lt;button id="ok" autodisable="ok,cancel"/></code>
 	 * that will disable
-	 * both the ok and cancel buttons when an user clicks it.
+	 * both the ok and cancel buttons when a user clicks it.
 	 *
 	 * <p>The button being disabled will be enabled automatically
 	 * once the client receives a response from the server.
@@ -176,7 +176,7 @@ public class Button extends LabelImageElement implements org.zkoss.zk.ui.ext.Dis
 		}
 	}
 
-	/** Returns the href that the browser shall jump to, if an user clicks
+	/** Returns the href that the browser shall jump to, if a user clicks
 	 * this button.
 	 * <p>Default: null. If null, the button has no function unless you
 	 * specify the onClick event listener.
