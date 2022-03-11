@@ -1,9 +1,9 @@
 /* listbox.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Mon May  4 15:34:02     2009, Created by tomyeh
 
@@ -37,7 +37,7 @@ function listbox$mold$(out) {
 			'<table id="', uuid, '-headtbl"', wdAttr, ' style="table-layout:fixed;',
 			wdStyle,'">');
 		this.domFaker_(out, '-hdfaker');
-		
+
 		out.push('<tbody id="', uuid, '-headrows">');
 		for (var hds = this.heads, j = 0, len = hds.length; j < len;)
 			hds[j++].redraw(out);
@@ -48,46 +48,47 @@ function listbox$mold$(out) {
 	if (this._autopaging)
 		out.push(' ', this.$s('autopaging'));
 	out.push('"');
-	
+
 	var hgh = this.getHeight(),
 		iOSNativeBar = zk.ios && this._nativebar;
 	if (hgh || iOSNativeBar)
 		out.push(' style="overflow:hidden;', hgh ? 'height:' + hgh + ';' : '', iOSNativeBar ? '-webkit-overflow-scrolling:touch;' : '', '"');
 	out.push('>');
-	
+
 	if (this.domPad_ && !inPaging)
 		this.domPad_(out, '-tpad');
-	
+
 	out.push('<table', wdAttr, ' id="', uuid, '-cave"', ' style="table-layout:fixed;', wdStyle,'">');
-	
+
 	if (this.listhead)
 		this.domFaker_(out, '-bdfaker', zcls);
 
 	out.push('<tbody id="',uuid,'-rows">');
 
 	var iter = this.getBodyWidgetIterator({
-		skipHidden: true
+		skipHidden: true,
+		z_rod: true
 	});
 	while (iter.hasNext()) {
 		iter.next().redraw(out, iter);
 	}
 
 	out.push('</tbody>');
-	
+
 	this.redrawEmpty_(out);
 
 	out.push('</table>');
 
 	if (this.domPad_ && !inPaging)
 		this.domPad_(out, '-bpad');
-	
-	out.push('<', tag, ' id="', uuid, '-a" style="top:',jq.px0(this._anchorTop),';left:',jq.px0(this._anchorLeft), 
+
+	out.push('<', tag, ' id="', uuid, '-a" style="top:',jq.px0(this._anchorTop),';left:',jq.px0(this._anchorLeft),
 			 '" onclick="return false;" href="javascript:;" class="z-focus-a"');
 	var tabindex = this._tabindex; // Feature ZK-2531
 	if (tabindex != undefined)
 		out.push(' tabindex="' + tabindex + '"');
 	out.push('></', tag, '>', "</div>");
-	
+
 	if (this._nativebar && this.frozen) {
 		out.push('<div id="', uuid, '-frozen" class="', this.$s('frozen'), '">');
 		this.frozen.redraw(out);
@@ -97,9 +98,9 @@ function listbox$mold$(out) {
 	if (this.listfoot) {
 		out.push('<div id="', uuid, '-foot" class="', this.$s('footer'), '">',
 			'<table id="', uuid, '-foottbl"', wdAttr, ' style="table-layout:fixed;', wdStyle,'">');
-		if (this.listhead) 
+		if (this.listhead)
 			this.domFaker_(out, '-ftfaker');
-		
+
 		out.push('<tbody id="', uuid, '-footrows">');
 		this.listfoot.redraw(out);
 		out.push('</tbody></table></div>');
