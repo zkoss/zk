@@ -1,9 +1,9 @@
 /* Grid.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Tue Oct 25 15:40:35     2005, Created by tomyeh
 
@@ -83,7 +83,7 @@ import org.zkoss.zul.impl.XulElement;
  *
  * <p>Events: onAfterRender<br/>
  * onAfterRender is sent when the model's data has been rendered.(since 5.0.4)
- * 
+ *
  * <p>Besides creating {@link Row} programmatically, you can assign
  * a data model (a {@link ListModel} or {@link GroupsModel} instance) to a grid via
  * {@link #setModel(ListModel)} or {@link #setModel(GroupsModel)}
@@ -99,7 +99,7 @@ import org.zkoss.zul.impl.XulElement;
  * In other words, the default renderer adds a label to
  * a row by calling toString against the object returned
  * by {@link ListModel#getElementAt}
- * 
+ *
  * <p>There are two ways to handle long content: scrolling and paging.
  * If {@link #getMold} is "default", scrolling is used if {@link #setHeight}
  * is called and too much content to display.
@@ -128,47 +128,47 @@ import org.zkoss.zul.impl.XulElement;
  * <h3>Render on Demand (rod)</h3>
  * [ZK EE]
  * [Since 5.0.0]
- * 
- * <p>For huge data, you can turn on Grid's ROD to request ZK engine to load from 
+ *
+ * <p>For huge data, you can turn on Grid's ROD to request ZK engine to load from
  * {@link ListModel} only the required data chunk and create only the required
- * {@link Row}s in memory and render only the required DOM elements in browser. 
- * So it saves both the memory and the processing time in both server and browser 
- * for huge data. If you don't use the {@link ListModel} with the Grid, turn on 
- * the ROD will still have ZK engine to render only a chunk of DOM elements in 
- * browser so it at least saves the memory and processing time in browser. Note 
- * that ROD works only if the Grid is configured to has a limited "view port" 
- * height. That is, either the Grid is in the "paging" mold or you have to 
- * {@link #setHeight(String)} or {@link #setVflex(String)} of the Grid to 
+ * {@link Row}s in memory and render only the required DOM elements in browser.
+ * So it saves both the memory and the processing time in both server and browser
+ * for huge data. If you don't use the {@link ListModel} with the Grid, turn on
+ * the ROD will still have ZK engine to render only a chunk of DOM elements in
+ * browser so it at least saves the memory and processing time in browser. Note
+ * that ROD works only if the Grid is configured to has a limited "view port"
+ * height. That is, either the Grid is in the "paging" mold or you have to
+ * {@link #setHeight(String)} or {@link #setVflex(String)} of the Grid to
  * make ROD works.</p>
- * 
- * <p>You can turn on/off ROD for all Grids in the application or only 
- * for a specific Grid. To turn on ROD for all Grids in the application, you 
- * have to specify the Library Property "org.zkoss.zul.grid.rod" to "true" in 
- * WEB-INF/zk.xml. If you did not specify the Library Property, 
+ *
+ * <p>You can turn on/off ROD for all Grids in the application or only
+ * for a specific Grid. To turn on ROD for all Grids in the application, you
+ * have to specify the Library Property "org.zkoss.zul.grid.rod" to "true" in
+ * WEB-INF/zk.xml. If you did not specify the Library Property,
  * default is false.</p>
- * 
+ *
  * <pre><code>
  *	<library-property>
  *		<name>org.zkoss.zul.grid.rod</name>
  *		<value>true</value>
  *	</library-property>
  * </code></pre>
- * 
+ *
  * <p>To turn on ROD for a specific Grid, you have to specify the Grid's attribute
- * map with key "org.zkoss.zul.grid.rod" to true. That is, for example, if in 
+ * map with key "org.zkoss.zul.grid.rod" to true. That is, for example, if in
  * a zul file, you shall specify &lt;custom-attributes> of the Grid like this:</p>
  * <pre><code>
  *	<grid ...>
  *    <custom-attributes org.zkoss.zul.grid.rod="true"/>
  *  </grid>
  * </code></pre>
- * 
+ *
  * <p>You can mix the Library Property and &lt;custom-attributes> ways together.
  * The &lt;custom-attributes> way always takes higher priority. So you
- * can turn OFF ROD in general and turn ON only some specific Grid component. Or 
+ * can turn OFF ROD in general and turn ON only some specific Grid component. Or
  * you can turn ON ROD in general and turn OFF only some specific Grid component.</P>
- * 
- * <p>Since only partial {@link Row}s are created and rendered in the Grid if 
+ *
+ * <p>Since only partial {@link Row}s are created and rendered in the Grid if
  * you turn the ROD on, there will be some limitations on accessing {@link Row}s.
  * For example, if you call
  * <pre><code>
@@ -176,43 +176,43 @@ import org.zkoss.zul.impl.XulElement;
  * </code></pre>
  * <p>The {@link Row} in index 100 is not necessary created yet if it is not in the
  * current "view port" and you will get "null" instead.</p>
- * 
+ *
  * <p>And it is generally a bad idea to "cache" the created {@link Row} in your
- * application if you turn the ROD on because rows might be removed later. 
- * Basically, you shall operate on the item of the ListModel rather than on the 
+ * application if you turn the ROD on because rows might be removed later.
+ * Basically, you shall operate on the item of the ListModel rather than on the
  * {@link Row} if you use the ListModel and ROD.</p>
- * 
+ *
  * <h3>Custom Attributes</h3>
  * <dl>
  * <dt>org.zkoss.zul.grid.rod</dt>
  * <dd>Specifies whether to enable ROD (render-on-demand).</br>
  * Notice that you could specify this attribute in any of its ancestor's attributes.
  * It will be inherited.</dd>
- * <dt>org.zkoss.zul.grid.autoSort</dt>.(since 5.0.7) 
+ * <dt>org.zkoss.zul.grid.autoSort</dt>.(since 5.0.7)
  * <dd>Specifies whether to sort the model when the following cases:</br>
  * <ol>
  * <li>{@link #setModel} is called and {@link Column#setSortDirection} is set.</li>
  * <li>{@link Column#setSortDirection} is called.</li>
  * <li>Model receives {@link ListDataEvent} and {@link Column#setSortDirection} is set.</li>
  * </ol>
- * If you want to ignore sort when receiving {@link ListDataEvent}, 
+ * If you want to ignore sort when receiving {@link ListDataEvent},
  * you can specifies the value as "ignore.change".</br>
  * Notice that you could specify this attribute in any of its ancestor's attributes.
  * It will be inherited.</dd>
  * </dl>
- * 
- * <dt>org.zkoss.zul.grid.preloadSize</dt>.(since 5.0.8) 
+ *
+ * <dt>org.zkoss.zul.grid.preloadSize</dt>.(since 5.0.8)
  * <dd>Specifies the number of rows to preload when receiving
  * the rendering request from the client.
  * <p>It is used only if live data ({@link #setModel(ListModel)} and
  * not paging ({@link #getPagingChild}).</dd>
- * 
- * <dt>org.zkoss.zul.grid.initRodSize</dt>.(since 5.0.8) 
+ *
+ * <dt>org.zkoss.zul.grid.initRodSize</dt>.(since 5.0.8)
  * <dd>Specifies the number of rows rendered when the Grid first render.
  * <p>
  * It is used only if live data ({@link #setModel(ListModel)} and not paging
  * ({@link #getPagingChild}).</dd>
- * 
+ *
  * @author tomyeh
  * @see ListModel
  * @see RowRenderer
@@ -436,7 +436,7 @@ public class Grid extends MeshElement {
 	public void setVflex(String flex) { //ZK-4296: Error indicating incorrect usage when using both vflex and rows
 		if (_visibleRows != 0)
 			throw new UiException("Not allowed to set vflex and visibleRows at the same time");
-		
+
 		super.setVflex(flex);
 	}
 
@@ -547,7 +547,7 @@ public class Grid extends MeshElement {
 	public void setHeight(String height) {
 		if (_visibleRows != 0)
 			throw new UiException("Not allowed to set height and visibleRows at the same time");
-		
+
 		super.setHeight(height);
 	}
 
@@ -963,7 +963,7 @@ public class Grid extends MeshElement {
 	 * if {@link #getModel} is not null.
 	 *
 	 * <p>Note: changing a render will not cause the grid to re-render.
-	 * If you want it to re-render, you could assign the same model again 
+	 * If you want it to re-render, you could assign the same model again
 	 * (i.e., setModel(getModel())), or fire an {@link ListDataEvent} event.
 	 *
 	 * @param renderer the renderer, or null to use the default.
@@ -1140,7 +1140,7 @@ public class Grid extends MeshElement {
 		} finally {
 			renderer.doFinally();
 		}
-		Events.postEvent(ZulEvents.ON_AFTER_RENDER, this, null); // notify the grid when all of the row have been rendered. 		
+		Events.postEvent(ZulEvents.ON_AFTER_RENDER, this, null); // notify the grid when all of the row have been rendered.
 		removeAttribute(Attributes.BEFORE_MODEL_ITEMS_RENDERED);
 	}
 
@@ -1536,7 +1536,7 @@ public class Grid extends MeshElement {
 		//TODO: performance enhancement: support GroupsModel in ROD
 	}
 
-	/** Returns whether to sort all of item when model or sort direction be changed.
+	/** Returns whether to sort all items when model or sort direction be changed.
 	 * @since 5.0.7
 	 */
 	/*package*/ boolean isAutosort() {
@@ -1548,7 +1548,7 @@ public class Grid extends MeshElement {
 				: val != null ? "true".equals(val) || "ignore.change".equals(val) : false;
 	}
 
-	/** 
+	/**
 	 * Returns the number of rows to preload when receiving the rendering
 	 * request from the client.
 	 * <p>
@@ -1566,7 +1566,7 @@ public class Grid extends MeshElement {
 		return sz;
 	}
 
-	/** 
+	/**
 	 * Returns the number of rows rendered when the Grid first render.
 	 *  <p>
 	 * Default: 50. (since 6.0.1)
@@ -1616,7 +1616,7 @@ public class Grid extends MeshElement {
 		clone._pgListener = null;
 		clone._pgImpListener = null;
 
-		//recreate the DataLoader 
+		//recreate the DataLoader
 		final int offset = clone.getDataLoader().getOffset();
 
 		int cnt = 0;
@@ -1791,7 +1791,7 @@ public class Grid extends MeshElement {
 			renderer.render("rows", _visibleRows);
 
 		if (_rod && !_renderAll) {
-			if (((Cropper) getDataLoader()).isCropper())//bug #2936064 
+			if (((Cropper) getDataLoader()).isCropper())//bug #2936064
 				renderer.render("_grid$rod", true);
 			int sz = initRodSize();
 			if (sz != INIT_LIMIT)
@@ -1962,7 +1962,7 @@ public class Grid extends MeshElement {
 		}
 		super.setPageSize(pgsz);
 	}
-	
+
 	public void onAfterRender() {
 		if (inPagingMold() && _model instanceof Pageable) {
 			Pageable m = (Pageable) _model;
@@ -1979,7 +1979,7 @@ public class Grid extends MeshElement {
 			}
 		}
 	}
-	
+
 	/**
 	 * Scroll to the specified row by the given index.
 	 * @param index the index of row
