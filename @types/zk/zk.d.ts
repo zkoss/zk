@@ -194,7 +194,7 @@ declare namespace zk {
         doKeyUp_(evt: Event): void;
         domAttrs_(no?: {[noAttr: string]: boolean}): string;
         domClass_(no?: {[noAttr: string]: boolean}): string;
-        domListen_(node: Element, evtnm: string, fn?: any, keyword?: string): Widget;
+        domListen_(node: Element, evtnm: string, fn?: any, keyword?: string | unknown): Widget;
         doMouseDown_(evt: Event): void;
         doMouseMove_(evt: Event): void;
         doMouseOut_(evt: Event): void;
@@ -203,7 +203,7 @@ declare namespace zk {
         domStyle_(no?: {[noAttr: string]: boolean}): string;
         domTextStyleAttr_(): string;
         domTooltiptext_(): string;
-        domUnlisten_(node: Element, evtnm: string, fn?: any, keyword?: string): Widget;
+        domUnlisten_(node: Element, evtnm: string, fn?: any, keyword?: string | unknown): Widget;
         doPaste_(evt: Event): void;
         doResizeScroll_(): void;
         doRightClick_(evt: Event): void;
@@ -471,7 +471,7 @@ declare namespace zk {
         offset: number[];
         lastScrolled: Date;
         scrollSpeed: number[];
-        
+
         $init(control?: any, node?: HTMLElement, opts?: any): void;
         _currentDelta(): zk.Offset;
         _draw(point, evt?: zk.Event): void;
