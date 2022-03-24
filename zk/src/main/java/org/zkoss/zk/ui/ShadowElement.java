@@ -12,6 +12,7 @@ Copyright (C) 2014 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui;
 
 import java.util.List;
+import java.util.Map;
 
 import org.zkoss.zk.ui.ext.AfterCompose;
 
@@ -54,4 +55,10 @@ public interface ShadowElement extends AfterCompose {
 	 * to re-create child components to reflect the new values.
 	 */
 	public void recreate();
+
+	/**
+	 * Internal used only
+	 * @hidden for Javadoc
+	 */
+	public Map<String, Object> getProperties();
 }
