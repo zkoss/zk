@@ -19,7 +19,7 @@
 		<jasperreports.version>6.17.0</jasperreports.version>
 		<jfreechart.version>1.0.19</jfreechart.version>
 		<filters.version>2.0.235-1</filters.version>
-		<ckez.version>4.16.2.0</ckez.version>
+		<ckez.version>4.18.0.0</ckez.version>
 		<gmapsz.version>3.1.0</gmapsz.version>
 		<timelinez.version>2.3.1_50</timelinez.version>
 		<timeplotz.version>1.1_50</timeplotz.version>
@@ -259,9 +259,9 @@
 			<artifactId>gmapsz</artifactId>
 			<version>${gmapsz.version}</version>
 		</dependency>
-		
+
 		<!--  for zkbind jsr 303 -->
-		
+
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-validator</artifactId>
@@ -278,14 +278,14 @@
 			<version>${slf4j.version}</version>
 		</dependency>
 		<!-- for JSR 299 -->
-		 
+
 		<dependency>
 			<groupId>javax.inject</groupId>
 			<artifactId>javax.inject</artifactId>
 			<version>1</version>
 			<optional>true</optional>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>javax.enterprise</groupId>
 			<artifactId>cdi-api</artifactId>
