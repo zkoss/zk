@@ -55,10 +55,4 @@ public interface ShadowElement extends AfterCompose {
 	 * to re-create child components to reflect the new values.
 	 */
 	public void recreate();
-
-	/**
-	 * Internal used only
-	 * @hidden for Javadoc
-	 */
-	public Map<String, Object> getProperties();
 }
