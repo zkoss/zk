@@ -11,7 +11,7 @@
 	<artifactId>zkplus</artifactId>
 	<packaging>jar</packaging>
 	<properties>
-		<org.springframework.version>5.2.15.RELEASE</org.springframework.version>
+		<org.springframework.version>5.3.18</org.springframework.version>
 	</properties>
 	<name>ZK Plus Utilities</name>
 	<url>http://www.zkoss.org/zkplus</url>
