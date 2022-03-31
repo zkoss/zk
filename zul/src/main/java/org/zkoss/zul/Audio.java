@@ -1,9 +1,9 @@
 /* Audio.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Wed Nov 16 11:48:27     2005, Created by tomyeh
 
@@ -17,7 +17,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.zkoss.util.media.Media;
@@ -63,14 +62,14 @@ public class Audio extends XulElement implements MediaElement {
 	 */
 	public static final int END = 3;
 
-	protected List<String> _src = new ArrayList<String>();
+	protected List<String> _src = new ArrayList<>();
 	/** The audio. _src and _audio cannot be nonnull at the same time. */
 	private org.zkoss.sound.Audio _audio;
 	/** Count the version of {@link #_audio}. */
 	private byte _audver;
 	private boolean _autoplay, _controls, _loop, _muted;
 	private String _preload;
-	private int _currentState;
+	private int _currentState = STOP;
 
 	static {
 		addClientEvent(Audio.class, Events.ON_STATE_CHANGE, CE_IMPORTANT);
@@ -87,8 +86,9 @@ public class Audio extends XulElement implements MediaElement {
 	public void service(AuRequest request, boolean everError) {
 		final String cmd = request.getCommand();
 		if (Events.ON_STATE_CHANGE.equals(cmd)) {
-			_currentState = (Integer) request.getData().get("state");
-			Events.postEvent(new StateChangeEvent(cmd, this, _currentState));
+			StateChangeEvent event = StateChangeEvent.getStateChangeEvent(request);
+			_currentState = event.getState();
+			Events.postEvent(event);
 		} else {
 			super.service(request, everError);
 		}
@@ -100,12 +100,10 @@ public class Audio extends XulElement implements MediaElement {
 		response("ctrl", new AuInvoke(this, "play"));
 	}
 
-	/** Stops the audio at the client.
+	/** Stops the audio at the client, and reset its currentTime to zero. (i.e. reset to begin)
 	 */
 	public void stop() {
 		response("ctrl", new AuInvoke(this, "stop"));
-		_currentState = STOP;
-		Events.postEvent(new StateChangeEvent(Events.ON_STATE_CHANGE, this, _currentState));
 	}
 
 	/** Pauses the audio at the client.
@@ -129,21 +127,21 @@ public class Audio extends XulElement implements MediaElement {
 	 * @see #setContent
 	 */
 	public void setSrc(String src) {
-		List<String> list = new ArrayList<String>();
-		if (src.contains(",")) {
-			list = new ArrayList<String>(Arrays.asList(src.split("\\s*,\\s*")));
-		} else {
-			list.add(src.trim());
+		String[] split = src.split(",");
+		List<String> list = new ArrayList<>(split.length);
+
+		for (String s : split) {
+			list.add(s.trim());
 		}
+
 		if (_audio != null || !_src.equals(list)) {
 			_audio = null;
 			setSrc(list);
 		}
-
 	}
 
 	/** Sets the source list.
-	 * 
+	 *
 	 * @since 7.0.0
 	 */
 	public void setSrc(List<String> src) {
@@ -163,7 +161,7 @@ public class Audio extends XulElement implements MediaElement {
 	}
 
 	/** Sets whether to auto start playing the audio.
-	 * 
+	 *
 	 * @deprecated As of release 7.0.0, use {@link #setAutoplay} instead.
 	 */
 	public void setAutostart(boolean autostart) {
@@ -180,7 +178,7 @@ public class Audio extends XulElement implements MediaElement {
 	}
 
 	/** Sets whether to auto start playing the audio.
-	 * 
+	 *
 	 * @since 7.0.0
 	 */
 	public void setAutoplay(boolean autoplay) {
@@ -247,7 +245,7 @@ public class Audio extends XulElement implements MediaElement {
 	}
 
 	/** Sets whether to play the audio repeatedly.
-	 * 
+	 *
 	 * @since 3.6.1
 	 */
 	public void setLoop(boolean loop) {
@@ -267,7 +265,7 @@ public class Audio extends XulElement implements MediaElement {
 	}
 
 	/** Sets whether to mute the audio.
-	 * 
+	 *
 	 * @since 7.0.0
 	 */
 	public void setMuted(boolean muted) {
@@ -319,7 +317,7 @@ public class Audio extends XulElement implements MediaElement {
 	}
 
 	/** Sets the content directly.
-	 * 
+	 *
 	 * <p>Default: null.
 	 *
 	 * <p>Calling this method implies setSrc(null).
