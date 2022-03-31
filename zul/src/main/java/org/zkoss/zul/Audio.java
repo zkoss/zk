@@ -97,19 +97,25 @@ public class Audio extends XulElement implements MediaElement {
 	/** Plays the audio at the client.
 	 */
 	public void play() {
-		response("ctrl", new AuInvoke(this, "play"));
+		if (_currentState != PLAY) {
+			response("ctrl", new AuInvoke(this, "play"));
+		}
 	}
 
 	/** Stops the audio at the client, and reset its currentTime to zero. (i.e. reset to begin)
 	 */
 	public void stop() {
-		response("ctrl", new AuInvoke(this, "stop"));
+		if (_currentState != STOP) {
+			response("ctrl", new AuInvoke(this, "stop"));
+		}
 	}
 
 	/** Pauses the audio at the client.
 	 */
 	public void pause() {
-		response("ctrl", new AuInvoke(this, "pause"));
+		if (_currentState != PAUSE) {
+			response("ctrl", new AuInvoke(this, "pause"));
+		}
 	}
 
 	/** Returns the src.
