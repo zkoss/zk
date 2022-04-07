@@ -73,7 +73,14 @@ zul.inp.Comboitem = zk.$extends(zul.LabelImageWidget, {
 		 */
 		content: _zkf
 	},
-
+	// since 10.0.0 for Zephyr to use
+	setValue: function (val) {
+		this._value = val;
+	},
+	// since 10.0.0 for Zephyr to use
+	getValue: function () {
+		return this._value;
+	},
 	//super
 	domLabel_: function () {
 		return zUtl.encodeXML(this.getLabel(), {pre: 1});
