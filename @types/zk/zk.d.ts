@@ -258,7 +258,7 @@ declare namespace zk {
         ignoreDescendantFloatUp_(): boolean;
         ignoreDrag_(pt: any): boolean;
         initDrag_(): void;
-        insertBefore(child: Widget, sibling: Widget | null): boolean;
+        insertBefore(child: Widget, sibling: Widget | null, ignoreDom?: boolean): boolean;
         insertChildHTML_(child: Widget, before: Widget | null, desktop: Desktop): void;
         isBinding(): boolean;
         isFloating_(): boolean;
@@ -281,7 +281,7 @@ declare namespace zk {
         removeChild(child: Widget, ignoreDom?: boolean): boolean;
         removeChildHTML_(child: Widget, ignoreDom?: boolean): void;
         removeHTML_(n?: any[]): void;
-        replaceCavedChildren_(subId: string, wgts: Widget[], tagBeg: string, tagEnd: string): void;
+        replaceCavedChildren_(subId: string, wgts: Widget[], tagBeg?: string, tagEnd?: string): void;
         replaceChildHTML_(child: Widget, n: Element, dt: Desktop | null, skipper: Skipper | null, _trim_?: boolean): void;
         replaceHTML(n: Element | string, desktop: Desktop | null, skipper?: Skipper | null, _trim_?: boolean, _callback_?: (() => void)[]): Widget;
         replaceWidget(newwgt: Widget): void;
