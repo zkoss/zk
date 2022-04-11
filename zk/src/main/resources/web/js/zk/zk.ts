@@ -1173,12 +1173,15 @@ zk.endProcessing();
 	 *  Example:
 <pre><code>zk.error('Oops! Something wrong:(');</code></pre>
 	 * @param String msg the error message
+	 * @param boolean silent only show error box
 	 * @see #errorDismiss
 	 * @see #log
 	 * @see #stamp(String, boolean)
 	 */
-	error: function (msg) {
-		zAu.send(new zk.Event(null, 'error', {message: msg}, {ignorable: true}), 800);
+	error: function (msg, silent) {
+		if (!silent) {
+			zAu.send(new zk.Event(null, 'error', {message: msg}, {ignorable: true}), 800);
+		}
 		zk._Erbx.push(msg);
 	},
 	//DEBUG//

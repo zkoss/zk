@@ -771,7 +771,7 @@ declare namespace zk {
         doAfterResize(): void;
         enableESC(): void;
         endProcessing(sid?: number): void;
-        error(msg: string): void;
+        error(msg: string, silent?: boolean): void;
         errorDismiss(): void;
         get(o: any, name: string): any;
         getDataHandler(name: string): any;
