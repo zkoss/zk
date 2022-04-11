@@ -12,7 +12,7 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-    
+
     steps:
     - uses: actions/checkout@v2
     - name: Set up Java 11
@@ -25,7 +25,13 @@ jobs:
         node-version: 14
     - name: Build Latest ZK
       run: |
-        npm ci
-        ./build clean
-        ./build zel zcommon zweb zk zul zkbind zhtml zkplus
+        if [ -e yarn.lock ]; then
+          yarn install --frozen-lockfile
+        elif [ -e package-lock.json ]; then
+          npm ci
+        else
+          npm i
+        fi
+        sed -i 's/includeBuild/\/\/includeBuild/' settings.gradle
+        ./gradlew build
 

@@ -26,17 +26,18 @@ import org.zkoss.zk.ui.Component;
  * Represents an event cause by user's slidedown or slideup
  * something at the client.
  *
- * <p>Note: When using with LayoutRegion component, we couldn't guarantee the triggered order of ClickEvent and SlideEvent
- * when clicking out of the region but on elements that is listened to the onClick event.
+ * <p>Note: When using with LayoutRegion component, we couldn't guarantee the triggered
+ * order of onClick event and onSlide event when clicking out of the region but
+ * on elements that is listened to the onClick event.
  *
  * @author wenninghsu
+ * @since 8.0.2
  */
 public class SlideEvent extends Event {
 
     private final boolean _slide;
 
     /** Converts an AU request to an slide event.
-     * @since 8.0.2
      */
     public static final SlideEvent getSlideEvent(AuRequest request) {
         final Map<String, Object> data = request.getData();
@@ -45,7 +46,6 @@ public class SlideEvent extends Event {
 
     /** Constructs an onOpen event.
      * @param slide whether the new status is slide
-     * @since 8.0.2
      */
     public SlideEvent(String name, Component target, boolean slide) {
         super(name, target);
@@ -53,7 +53,6 @@ public class SlideEvent extends Event {
     }
 
     /** Returns whether it is slide out.
-     * @since 8.0.2
      */
     public boolean isSlide() {
         return _slide;

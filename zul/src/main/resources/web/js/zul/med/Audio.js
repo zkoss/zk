@@ -13,9 +13,10 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
-	var _PLAY = 1,
-	_PAUSE = 2,
-	_ENDED = 3;
+	var _STOP = 0,
+		_PLAY = 1,
+		_PAUSE = 2,
+		_ENDED = 3;
 
 	function _invoke(wgt, fn) {
 		// Note: setSrc will rerender, so we need to delay the invocation of play
@@ -33,6 +34,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				if (fn === 'stop') {
 					n.pause();
 					n.currentTime = 0;
+					wgt._fireOnStateChange(_STOP);
 				} else
 					n[fn]();
 			} catch (e) {
@@ -62,6 +64,10 @@ zul.med.Audio = zk.$extends(zul.Widget, {
 		 */
 		src: function () {
 			this.rerender();
+		},
+		// for zephyr to treat as "src" attribute at client side
+		content: function (v) {
+			this.setSrc(v);
 		},
 		/** Returns whether to auto start playing the audio.
 		 * <p>Default: false.

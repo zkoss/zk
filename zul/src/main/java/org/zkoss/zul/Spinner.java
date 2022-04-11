@@ -1,9 +1,9 @@
 /* Spinner.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Fri Mar 14 10:26:55 TST 2008, Created by gracelin
 
@@ -85,14 +85,14 @@ public class Spinner extends NumberInputElement {
 	}
 
 	/**
-	 * Return the step of spinner
+	 * Returns the step of spinner
 	 */
 	public int getStep() {
 		return _step;
 	}
 
 	/**
-	 * Set the step of spinner
+	 * Sets the step of spinner
 	 */
 	public void setStep(int step) {
 		if (_step != step) {
@@ -101,14 +101,14 @@ public class Spinner extends NumberInputElement {
 		}
 	}
 
-	/** Returns whether the button (on the right of the textbox) is visible.
+	/** Returns whether the button (on the right of the spinner) is visible.
 	 * <p>Default: true.
 	 */
 	public boolean isButtonVisible() {
 		return _btnVisible;
 	}
 
-	/** Sets whether the button (on the right of the textbox) is visible.
+	/** Sets whether the button (on the right of the spinner) is visible.
 	 */
 	public void setButtonVisible(boolean visible) {
 		if (_btnVisible != visible) {

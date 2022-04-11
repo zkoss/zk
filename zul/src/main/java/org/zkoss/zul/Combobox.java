@@ -1,9 +1,9 @@
 /* Combobox.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Thu Dec 15 17:33:01     2005, Created by tomyeh
 
@@ -76,18 +76,18 @@ import org.zkoss.zul.impl.Utils;
  *
  * <p>Besides assign a list model, you could assign a renderer
  * (a {@link ComboitemRenderer} instance) to a combobox, such that
- * the combobox will use this renderer to render the data returned by 
+ * the combobox will use this renderer to render the data returned by
  * {@link ListModel#getElementAt}.
  * If not assigned, the default renderer, which assumes a label per
  * combo item, is used.
  * In other words, the default renderer adds a label to
  * a row by calling toString against the object returned
  * by {@link ListModel#getElementAt}. (since 3.0.2)
- * 
+ *
  * <p>Note: to have better performance, onOpen is sent only if
  * a non-deferrable event listener is registered
  * (see {@link org.zkoss.zk.ui.event.Deferrable}).
- * 
+ *
  * <p>Like {@link Datebox},
  * the value of a read-only comobobox ({@link #isReadonly}) can be changed
  * by dropping down the list and selecting an combo item
@@ -98,6 +98,8 @@ import org.zkoss.zul.impl.Utils;
  */
 @SuppressWarnings("serial")
 public class Combobox extends Textbox {
+	public static final String ICON_SCLASS = "z-icon-caret-down";
+
 	private static final Logger log = LoggerFactory.getLogger(Combobox.class);
 	private boolean _autodrop, _autocomplete = true, _btnVisible = true, _open;
 	//Note: _selItem is maintained loosely, i.e., its value might not be correct
@@ -119,7 +121,7 @@ public class Combobox extends Textbox {
 	private String _popupWidth;
 	private String _emptySearchMessage;
 	private boolean _instantSelect = true;
-	private String _iconSclass = "z-icon-caret-down";
+	private String _iconSclass = ICON_SCLASS;
 
 	private static final String ATTR_ON_INIT_RENDER = "org.zkoss.zul.Combobox.onInitRender";
 
@@ -305,7 +307,7 @@ public class Combobox extends Textbox {
 						if (min >= 0)
 							max = min + cnt - 1;
 						else if (max < 0)
-							max = cnt - 1; //0 ~ cnt - 1			
+							max = cnt - 1; //0 ~ cnt - 1
 						if (max > oldsz - 1)
 							max = oldsz - 1;
 
@@ -400,7 +402,7 @@ public class Combobox extends Textbox {
 	 * if {@link #getModel} is not null.
 	 *
 	 * <p>Note: changing a render will not cause the combobox to re-render.
-	 * If you want it to re-render, you could assign the same model again 
+	 * If you want it to re-render, you could assign the same model again
 	 * (i.e., setModel(getModel())), or fire an {@link ListDataEvent} event.
 	 *
 	 * @param renderer the renderer, or null to use the default.
@@ -483,8 +485,8 @@ public class Combobox extends Textbox {
 		} finally {
 			renderer.doFinally();
 		}
-		Events.postEvent("onInitRenderLater", this, null); // notify databinding load-when. 
-		Events.postEvent(ZulEvents.ON_AFTER_RENDER, this, null); // notify the combobox when items have been rendered. 
+		Events.postEvent("onInitRenderLater", this, null); // notify databinding load-when.
+		Events.postEvent(ZulEvents.ON_AFTER_RENDER, this, null); // notify the combobox when items have been rendered.
 		removeAttribute(Attributes.BEFORE_MODEL_ITEMS_RENDERED);
 	}
 
@@ -702,11 +704,9 @@ public class Combobox extends Textbox {
 	 * @see #close
 	 */
 	public void setOpen(boolean open) {
-		if (isVisible()) {
-			if (open)
-				open();
-			else
-				close();
+		if (_open != open) {
+			_open = open;
+			smartUpdate("open", open);
 		}
 	}
 
@@ -821,7 +821,7 @@ public class Combobox extends Textbox {
 	}
 
 	/**  Deselects the currently selected items and selects the given item.
-	 * <p>Note: if the label of comboitem has the same more than one, the first 
+	 * <p>Note: if the label of comboitem has the same more than one, the first
 	 * comboitem will be selected at client side, it is a limitation of {@link Combobox}
 	 * and it is different from {@link Listbox}.</p>
 	 * @since 3.0.2
@@ -848,7 +848,7 @@ public class Combobox extends Textbox {
 
 	/** Deselects the currently selected items and selects
 	 * the item with the given index.
-	 * <p>Note: if the label of comboitem has the same more than one, the first 
+	 * <p>Note: if the label of comboitem has the same more than one, the first
 	 * comboitem will be selected at client side, it is a limitation of {@link Combobox}
 	 * and it is different from {@link Listbox}.</p>
 	 * @since 3.0.2
@@ -977,8 +977,12 @@ public class Combobox extends Textbox {
 			renderer.render("emptySearchMessage", _emptySearchMessage);
 		if (!_instantSelect)
 			renderer.render("instantSelect", false);
-		if (!"z-icon-caret-down".equals(_iconSclass))
+		if (!ICON_SCLASS.equals(_iconSclass))
 			renderer.render("iconSclass", _iconSclass);
+
+		// handle open state here instead of send AuInvoke for Zephyr
+		if (_open)
+			renderer.render("open", true);
 	}
 
 	/** Processes an AU request.
@@ -997,7 +1001,7 @@ public class Combobox extends Textbox {
 			final Set<Comboitem> prevSelectedItems = new LinkedHashSet<Comboitem>();
 			Comboitem prevSeld = (Comboitem) request.getDesktop()
 					.getComponentByUuidIfAny((String) request.getData().get("prevSeld"));
-			// ZK-2089: should skip when selected item is null 
+			// ZK-2089: should skip when selected item is null
 			if (prevSeld != null)
 				prevSelectedItems.add(prevSeld);
 			SelectEvent<Comboitem, Object> evt = SelectEvent.getSelectEvent(request,

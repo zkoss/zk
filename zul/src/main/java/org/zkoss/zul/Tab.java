@@ -1,9 +1,9 @@
 /* Tab.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Tue Jul 12 10:43:18     2005, Created by tomyeh
 
@@ -36,12 +36,12 @@ import org.zkoss.zul.impl.LabelImageElement;
  * A tab.
  * <p>
  * Default {@link #getZclass}: z-tab. (since 3.5.0)
- * 
+ *
  * <h3>Support child component</h3>
  * {@link Caption} child component is allowed.
  * [ZK EE]
  * [Since 6.5.0]
- * 
+ *
  * @author tomyeh
  */
 @SuppressWarnings("serial")
@@ -113,7 +113,7 @@ public class Tab extends LabelImageElement {
 
 	/**
 	 * Returns whether this tab is closable. If closable, a button is displayed
-	 * and the onClose event is sent if an user clicks the button.
+	 * and the onClose event is sent if a user clicks the button.
 	 * <p>
 	 * Default: false.
 	 */
@@ -123,13 +123,13 @@ public class Tab extends LabelImageElement {
 
 	/**
 	 * Sets whether this tab is closable. If closable, a button is displayed and
-	 * the onClose event is sent if an user clicks the button.
+	 * the onClose event is sent if a user clicks the button.
 	 * <p>
 	 * Default: false.
 	 * <p>
 	 * You can intercept the default behavior by either overriding
 	 * {@link #onClose}, or listening the onClose event.
-	 * 
+	 *
 	 * <p>If {@link Tabbox#getModel()} is assigned, there is no an action to do with {@link #onClose},
 	 * i.e. developer has to listen onClose event to delete that item in model not
 	 * component itself. (since 7.0.0)
@@ -242,7 +242,7 @@ public class Tab extends LabelImageElement {
 				tabbox.setSelectedTab(this);
 			} else if (tabbox.getSelectedTab() == this) { //selected false and selected
 
-				//clean selected tab , not set any others selected , if user call setSelected(false) manually , 
+				//clean selected tab , not set any others selected , if user call setSelected(false) manually ,
 				//they should set another tab to be selected or no any tab will be selected.
 				tabbox.clearSelectedTab();
 				_selected = false;
@@ -257,7 +257,7 @@ public class Tab extends LabelImageElement {
 	 * Returns whether this tab is disabled.
 	 * <p>
 	 * Default: false.
-	 * 
+	 *
 	 * @since 3.0.0
 	 */
 	public boolean isDisabled() {
@@ -268,7 +268,7 @@ public class Tab extends LabelImageElement {
 	 * Sets whether this tab is disabled. If a tab is disabled, then it cann't
 	 * be selected or closed by user, but it still can be controlled by server
 	 * side program.
-	 * 
+	 *
 	 * @since 3.0.0
 	 */
 	public void setDisabled(boolean disabled) {

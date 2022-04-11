@@ -1,9 +1,9 @@
 /* AuMultipartUploader.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		3:13 PM 2022/1/10, Created by jumperchen
 
@@ -75,6 +75,7 @@ import org.zkoss.zk.ui.util.Configuration;
  * @since 10.0.0
  */
 public class AuMultipartUploader {
+	private static final String FILE_DATA = AuMultipartUploader.class.getName() + ".FILE_DATA";
 	private static final Logger log = LoggerFactory.getLogger(AuMultipartUploader.class);
 	public static AuDecoder parseRequest(HttpServletRequest request, AuDecoder decoder) {
 		Map<String, Object> params = getFileuploadMetaPerWebApp(
@@ -90,6 +91,15 @@ public class AuMultipartUploader {
 					dataMap.put(item.getFieldName(), item.getString());
 				} else {
 					dataMap.put(item.getFieldName(), item);
+				}
+			}
+			// avoid servlet filter to read twice to become empty data.
+			if (!dataMap.isEmpty()) {
+				request.setAttribute(FILE_DATA, dataMap);
+			} else {
+				Object attribute = request.getAttribute(FILE_DATA);
+				if (attribute instanceof Map) {
+					dataMap = (Map<String, Object>) attribute;
 				}
 			}
 			return new AuMultipartDecoder(dataMap, decoder);

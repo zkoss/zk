@@ -2,9 +2,9 @@
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Aug 6, 2010 11:34:20 AM , Created by jumperchen
 }}IS_NOTE
@@ -29,7 +29,7 @@ public class Hlayout extends Layout {
 	private String _valign = "top"; // middle, bottom
 
 	/** Returns the vertical-align property used for the inner children.
-	 * <p>Default: empty.
+	 * <p>Default: "top".
 	 * @since 6.0.0
 	 */
 	public String getValign() {

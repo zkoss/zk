@@ -495,6 +495,22 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	},
 
 	//super//
+	setVflex: function (vflex) {
+		this.$supers('setVflex', arguments);
+		if (this.desktop) {
+			if (this.panelchildren) {
+				this.panelchildren.setVflex(vflex);
+			}
+		}
+	},
+	setHflex: function (hflex) {
+		this.$supers('setHflex', arguments);
+		if (this.desktop) {
+			if (this.panelchildren) {
+				this.panelchildren.setHflex(hflex);
+			}
+		}
+	},
 	setVisible: function (visible) {
 		if (this._visible != visible) {
 			if (this._maximized) {
@@ -971,9 +987,11 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		this.$supers('onChildAdded_', arguments);
 		if (child.$instanceof(zul.wgt.Caption))
 			this.caption = child;
-		else if (child.$instanceof(zul.wnd.Panelchildren))
+		else if (child.$instanceof(zul.wnd.Panelchildren)) {
 			this.panelchildren = child;
-		else if (child.$instanceof(zul.wgt.Toolbar)) {
+			this.panelchildren.setVflex(this.getVflex());
+			this.panelchildren.setHflex(this.getHflex());
+		} else if (child.$instanceof(zul.wgt.Toolbar)) {
 			if (this.firstChild == child || (this.nChildren == (this.caption ? 2 : 1)))
 				this.tbar = child;
 			else if (this.lastChild == child && child.previousSibling.$instanceof(zul.wgt.Toolbar))

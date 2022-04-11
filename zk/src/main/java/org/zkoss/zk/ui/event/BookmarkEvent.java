@@ -1,9 +1,9 @@
 /* BookmarkEvent.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Mon May 29 22:44:05     2006, Created by tomyeh
 
@@ -25,8 +25,8 @@ import org.zkoss.zk.au.AuRequest;
  * that causes the bookmark changed (but still in the same desktop).
  *
  * <p>All root components of all pages of the desktop will
- * receives this event.
- * 
+ * receive this event.
+ *
  * @author tomyeh
  * @see URIEvent
  */

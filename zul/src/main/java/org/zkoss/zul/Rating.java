@@ -120,7 +120,7 @@ public class Rating extends HtmlBasedComponent implements Disable, Readonly {
 
 	/**
 	 * Returns whether this rating component is cancelable.
-	 * If true, the rating could be cancel by clicking the rated rating again.
+	 * If true, the rating could be cancelled by clicking the rated rating again.
 	 * Default: true
 	 * @return true if enabled
 	 */

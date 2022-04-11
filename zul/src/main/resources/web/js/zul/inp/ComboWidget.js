@@ -191,9 +191,16 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	 * @see #close
 	 */
 	setOpen: function (open, opts) {
-		if (this.isRealVisible()) {
-			if (open) this.open(opts);
-			else this.close(opts);
+		var self = this;
+		if (this.desktop) {
+			if (self.isRealVisible()) {
+				if (open) self.open(opts);
+				else self.close(opts);
+			}
+		} else {
+			zk.afterMount(function () {
+				self.setOpen(open, opts);
+			});
 		}
 	},
 	/** Returns whether the list of combo items is open

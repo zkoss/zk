@@ -1,9 +1,9 @@
 /* Radiogroup.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Fri Jun 17 09:20:41     2005, Created by tomyeh
 
@@ -259,7 +259,7 @@ public class Radiogroup extends XulElement implements Disable {
 
 	/** Returns the name of this group of radio buttons.
 	 * All child radio buttons shared the same name ({@link Radio#getName}).
-	 * <p>Default: automatically generated an unique name
+	 * <p>Default: automatically generated a unique name
 	 * <p>Don't use this method if your application is purely based
 	 * on ZK's event-driven model.
 	 */
@@ -366,7 +366,7 @@ public class Radiogroup extends XulElement implements Disable {
 	private String genGroupName() {
 		return Strings.encode(new StringBuffer(16).append("_pg"), System.identityHashCode(this)).toString();
 	}
-	
+
 	/** Returns whether it is disabled.
 	 * <p>Default: false.
 	 * @since 9.6.0
@@ -374,7 +374,7 @@ public class Radiogroup extends XulElement implements Disable {
 	public boolean isDisabled() {
 		return _disabled;
 	}
-	
+
 	/** Sets whether the radiogroup is disabled.
 	 * All the radios belong to this radiogroup will be set to disabled or not disabled as well.
 	 * Notice: Once a radio is added to a disabled radiogroup (including external radio),
@@ -398,6 +398,12 @@ public class Radiogroup extends XulElement implements Disable {
 			render(renderer, "name", _name);
 		if (!"horizontal".equals(_orient))
 			render(renderer, "orient", _orient);
+		if (isDisabled()) {
+			render(renderer, "disabled", true);
+		}
+		if (_jsel >= 0) {
+			render(renderer, "selectedIndex", _jsel);
+		}
 	}
 
 	//-- ListModel dependent codes --//
@@ -536,8 +542,8 @@ public class Radiogroup extends XulElement implements Disable {
 		} finally {
 			renderer.doFinally();
 		}
-		Events.postEvent("onInitRenderLater", this, null); // notify databinding load-when. 
-		Events.postEvent(ZulEvents.ON_AFTER_RENDER, this, null); // notify the combobox when items have been rendered. 
+		Events.postEvent("onInitRenderLater", this, null); // notify databinding load-when.
+		Events.postEvent(ZulEvents.ON_AFTER_RENDER, this, null); // notify the combobox when items have been rendered.
 	}
 
 	/**
@@ -573,7 +579,7 @@ public class Radiogroup extends XulElement implements Disable {
 	 * if {@link #getModel} is not null.
 	 *
 	 * <p>Note: changing a render will not cause the radiogroup to re-render.
-	 * If you want it to re-render, you could assign the same model again 
+	 * If you want it to re-render, you could assign the same model again
 	 * (i.e., setModel(getModel())), or fire an {@link ListDataEvent} event.
 	 *
 	 * @param renderer the renderer, or null to use the default.
@@ -595,7 +601,7 @@ public class Radiogroup extends XulElement implements Disable {
 	}
 
 	/**
-	 * The default Renderer for model rendering. 
+	 * The default Renderer for model rendering.
 	 */
 	@SuppressWarnings("rawtypes")
 	private static final RadioRenderer _defRend = new RadioRenderer() {

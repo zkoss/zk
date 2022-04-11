@@ -1,9 +1,9 @@
 /* LabelImageElement.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Tue Jul 12 12:09:00     2005, Created by tomyeh
 
@@ -32,7 +32,7 @@ import org.zkoss.zk.ui.sys.PropertyAccess;
 import org.zkoss.zk.ui.sys.StringPropertyAccess;
 
 /**
- * A XUL element with a label ({@link #getLabel}) 
+ * A XUL element with a label ({@link #getLabel})
  * and an image ({@link #getImage}).
  * <p>
  * [Since 6.0.0]
@@ -45,7 +45,7 @@ import org.zkoss.zk.ui.sys.StringPropertyAccess;
  *     &lt;custom-attributes org.zkoss.zul.image.preload=&quot;true&quot;/&gt;
  * &lt;/button&gt;
  * </code></pre>
- * 
+ *
  * Or specify it onto the root component.
  * For example,
  * <pre><code> &lt;window ...&gt;
@@ -58,10 +58,10 @@ import org.zkoss.zk.ui.sys.StringPropertyAccess;
  * For example,
  * <pre><code> &lt;library-property/&gt;
  *     &lt;name&gt;org.zkoss.zul.image.preload&lt;/name/&gt;
- *     &lt;value&gt;ture&lt;/value/&gt;
+ *     &lt;value&gt;true&lt;/value/&gt;
  * &lt;/library-property/&gt;
  * </code></pre>
- * 
+ *
  * @author tomyeh
  */
 public abstract class LabelImageElement extends LabelElement {
@@ -308,7 +308,7 @@ public abstract class LabelImageElement extends LabelElement {
 	//super//
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
-		//ZK-1638: preload image can also defined in zk.xml by library property
+		//ZK-1638: preload image can also be defined in zk.xml by library property
 		render(renderer, "_preloadImage", Utils.testAttribute(this, "org.zkoss.zul.image.preload", false, true));
 		render(renderer, "image", getEncodedImageURL());
 		render(renderer, "hoverImage", getEncodedHoverURL());

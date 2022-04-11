@@ -26,11 +26,12 @@ zul.wgt.Image = zk.$extends(zul.Widget, {
 		/** Sets the source URI of the image.
 		 * @param String src the URI of the image source
 		 */
-		src: function (v) {
+		src: _zkf = function (v) {
 			if (v && this._preloadImage) zUtl.loadImage(v);
 			var n = this.getImageNode();
 			if (n) n.src = v || '';
 		},
+		content: _zkf, // for zephyr to treat as "src" attribute at client side
 		/** Returns the URI of the hover image.
 		 * The hover image is used when the mouse is moving over this component.
 		 * <p>Default: null.

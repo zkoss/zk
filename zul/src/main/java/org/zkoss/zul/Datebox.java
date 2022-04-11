@@ -70,20 +70,20 @@ import org.zkoss.zul.mesg.MZul;
 
 /**
  * An edit box for holding a date.
- * 
+ *
  * <p>
- * The default format ({@link #getFormat}) depends on {@link DateFormats#getDateFormat}
+ * The default format ({@link #getFormat}) depends on {@link DateFormats#getDateFormat(int, Locale, String)}
  * and the current user's locale (unless {@link #setLocale} is assigned.
  * Please refer to {@link #setFormat} for more details.
  * <p>
  * Default {@link #getZclass}: z-datebox.(since 3.5.0)
- * 
+ *
  * @author tomyeh
  */
 public class Datebox extends DateTimeFormatInputElement {
 
 	private static final Logger log = LoggerFactory.getLogger(Datebox.class);
-	private static final String DEFAULT_FORMAT = "yyyy/MM/dd";
+	public static final String DEFAULT_FORMAT = "yyyy/MM/dd";
 
 	private List<TimeZone> _dtzones;
 	private boolean _btnVisible = true, _lenient = true, _dtzonesReadonly = false;
@@ -217,7 +217,7 @@ public class Datebox extends DateTimeFormatInputElement {
 	}
 
 	/**
-	 * Returns whether or not date/time should be strict.
+	 * Returns whether date/time should be strict or not.
 	 * <p>Default: false.
 	 *
 	 * @since 8.6.0
@@ -231,7 +231,7 @@ public class Datebox extends DateTimeFormatInputElement {
 	 * or when {@link #setFormat} is called with null or empty.
 	 * <p>Default: DateFormats.getDateFormat(DEFAULT, null, "yyyy/MM/dd")
 	 * (see {@link DateFormats#getDateFormat}).
-	 * 
+	 *
 	 * <p>Though you might override this method to provide your own default format,
 	 * it is suggested to specify the format for the current thread
 	 * with {@link DateFormats#setLocalFormatInfo}.
@@ -252,8 +252,8 @@ public class Datebox extends DateTimeFormatInputElement {
 	}
 
 	/**
-	 * Returns whether or not date/time parsing is to be lenient.
-	 * 
+	 * Returns whether date/time parsing is to be lenient or not.
+	 *
 	 * <p>
 	 * With lenient parsing, the parser may use heuristics to interpret inputs
 	 * that do not precisely match this object's format. With strict parsing,
@@ -264,10 +264,10 @@ public class Datebox extends DateTimeFormatInputElement {
 	}
 
 	/**
-	 * Sets whether or not date/time parsing is to be lenient.
+	 * Sets whether date/time parsing is to be lenient or not.
 	 * <p>
 	 * Default: true.
-	 * 
+	 *
 	 * <p>
 	 * With lenient parsing, the parser may use heuristics to interpret inputs
 	 * that do not precisely match this object's format. With strict parsing,
@@ -295,7 +295,7 @@ public class Datebox extends DateTimeFormatInputElement {
 	 * Returns whether the button (on the right of the textbox) is visible.
 	 * <p>
 	 * Default: true.
-	 * 
+	 *
 	 * @since 2.4.1
 	 */
 	public boolean isButtonVisible() {
@@ -304,7 +304,7 @@ public class Datebox extends DateTimeFormatInputElement {
 
 	/**
 	 * Sets whether the button (on the right of the textbox) is visible.
-	 * 
+	 *
 	 * @since 2.4.1
 	 */
 	public void setButtonVisible(boolean visible) {
@@ -384,15 +384,15 @@ public class Datebox extends DateTimeFormatInputElement {
 	<td>{@link DateFormats#getDateFormat} with {@link DateFormat#FULL}</td>
 	</tr>
 	</table>
-	
+
 	<p>To specify a date/time format, you could specify two reserved words, separated
-	by a plus. For example, "medium+short" means 
+	by a plus. For example, "medium+short" means
 	{@link DateFormats#getDateTimeFormat} with the medium date styling and
 	the short time styling.
-	
+
 	<p>In additions, the format could be a combination of the following pattern letters:
 	<table border=0 cellspacing=3 cellpadding=0>
-	
+
 	 <tr bgcolor="#ccccff">
 	     <th align=left>Letter
 	     <th align=left>Date or Time Component
@@ -403,7 +403,7 @@ public class Datebox extends DateTimeFormatInputElement {
 	     <td>Era designator
 	     <td><a href="#text">Text</a>
 	     <td><code>AD</code>
-	
+
 	 <tr bgcolor="#eeeeff">
 	     <td><code>y</code>
 	     <td>Year
@@ -411,7 +411,7 @@ public class Datebox extends DateTimeFormatInputElement {
 	     <td><code>1996</code>; <code>96</code>
 	 <tr>
 	     <td><code>M</code>
-	
+
 	     <td>Month in year
 	     <td><a href="#month">Month</a>
 	     <td><code>July</code>; <code>Jul</code>; <code>07</code>
@@ -419,7 +419,7 @@ public class Datebox extends DateTimeFormatInputElement {
 	     <td><code>w</code>
 	     <td>Week in year (starting at 1)
 	     <td><a href="#number">Number</a>
-	
+
 	     <td><code>27</code>
 	 <tr>
 	     <td><code>W</code>
@@ -427,7 +427,7 @@ public class Datebox extends DateTimeFormatInputElement {
 	     <td><a href="#number">Number</a>
 	     <td><code>2</code>
 	 <tr bgcolor="#eeeeff">
-	
+
 	     <td><code>D</code>
 	     <td>Day in year (starting at 1)
 	     <td><a href="#number">Number</a>
@@ -436,7 +436,7 @@ public class Datebox extends DateTimeFormatInputElement {
 	     <td><code>d</code>
 	     <td>Day in month (starting at 1)
 	     <td><a href="#number">Number</a>
-	
+
 	     <td><code>10</code>
 	 <tr bgcolor="#eeeeff">
 	     <td><code>F</code>
@@ -444,7 +444,7 @@ public class Datebox extends DateTimeFormatInputElement {
 	     <td><a href="#number">Number</a>
 	     <td><code>2</code>
 	 <tr>
-	
+
 	     <td><code>E</code>
 	     <td>Day in week
 	     <td><a href="#text">Text</a>
@@ -615,7 +615,11 @@ public class Datebox extends DateTimeFormatInputElement {
 		}
 	}
 
-	private static Map loadSymbols(Locale locale) {
+	/**
+	 * Internal use
+	 * @hidden for Javadoc
+	 */
+	public static Map loadSymbols(Locale locale) {
 		WaitLock lock = null;
 		for (;;) {
 			final Object o;
@@ -638,7 +642,7 @@ public class Datebox extends DateTimeFormatInputElement {
 
 		try {
 
-			// the following implementation is referred to 
+			// the following implementation is referred to
 			// org.zkoss.zk.ui.http.Wpds#getDateJavaScript()
 			final Map<String, Object> map = new HashMap<String, Object>();
 			final Calendar cal = Calendar.getInstance(locale);
@@ -835,7 +839,7 @@ public class Datebox extends DateTimeFormatInputElement {
 
 	/**
 	 * Drops down the calendar to select a date. The same as setOpen(true).
-	 * 
+	 *
 	 * @since 3.0.1
 	 */
 	public void open() {
@@ -844,7 +848,7 @@ public class Datebox extends DateTimeFormatInputElement {
 
 	/**
 	 * Closes the calendar if it was dropped down. The same as setOpen(false).
-	 * 
+	 *
 	 * @since 3.0.1
 	 */
 	public void close() {
@@ -930,10 +934,10 @@ public class Datebox extends DateTimeFormatInputElement {
 
 	/**
 	 * Returns the date format of the specified format
-	 * 
+	 *
 	 * <p>
 	 * Default: it uses SimpleDateFormat to format the date.
-	 * 
+	 *
 	 * @param fmt
 	 *            the pattern.
 	 */
@@ -1005,7 +1009,6 @@ public class Datebox extends DateTimeFormatInputElement {
 	 * Returns the default datetime if the value is empty.
 	 * <p>Default: null (means current datetime)
 	 * @since 9.0.0
-	 * @return String
 	 */
 	public LocalDateTime getDefaultDateTime() {
 		return _defaultDateTime;

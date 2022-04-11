@@ -736,6 +736,7 @@
 			<xs:element ref="radiogroup" />
 			<xs:element ref="rangeslider" />
 			<xs:element ref="rowlayout" />
+			<xs:element ref="span" />
 			<xs:element ref="script" />
 			<xs:element ref="scrollview" />
 			<xs:element ref="searchbox" />
@@ -853,6 +854,7 @@
 				<xs:element ref="radiogroup" />
 				<xs:element ref="rangeslider" />
 				<xs:element ref="rowlayout" />
+				<xs:element ref="span" />
 				<xs:element ref="script" />
 				<xs:element ref="scrollview" />
 				<xs:element ref="searchbox" />
@@ -2866,6 +2868,13 @@
 		<xs:attribute name="orient" type="orientAttrType" use="optional" />
 		<xs:attribute name="ncols" type="intType" use="optional" />
 		<xs:attribute name="spacing" type="xs:string" use="optional" />
+	</xs:complexType>
+	<!-- span -->
+	<xs:element name="span" type="spanType" />
+	<xs:complexType name="spanType" mixed="true">
+		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
 	<!-- script -->
 	<xs:element name="script" type="scriptType" />

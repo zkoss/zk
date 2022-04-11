@@ -1,4 +1,4 @@
-# [ZK](http://www.zkoss.org/) [![Build Status](https://github.com/zkoss/zk/workflows/zk-build/badge.svg)](https://github.com/zkoss/zk/actions?query=workflow%3Azk-build) [![Discord badge][]][Discord instructions] [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.zkoss.zk/zk/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.zkoss.zk/zk) [![Code Climate](https://codeclimate.com/github/zkoss/zk/badges/gpa.svg)](https://codeclimate.com/github/zkoss/zk)
+# [ZK](http://www.zkoss.org/) [![Build Status](https://github.com/zkoss/zk/workflows/zk-build/badge.svg)](https://github.com/zkoss/zk/actions?query=workflow%3Azk-build) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.zkoss.zk/zk/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.zkoss.zk/zk) [![Code Climate](https://codeclimate.com/github/zkoss/zk/badges/gpa.svg)](https://codeclimate.com/github/zkoss/zk)
 ZK is a highly productive Java framework for building amazing enterprise web
 and mobile applications.
 
@@ -66,6 +66,3 @@ and mobile applications.
 
 > ZUML also allows developers to automate CRUD between UI components and the data
 > source with annotations, data binding and MVVM.
-
-[Discord instructions]: https://discord.gg/Qv95wYgSKp
-[Discord badge]: https://img.shields.io/discord/879939886843584533

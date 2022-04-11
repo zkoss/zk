@@ -2,9 +2,9 @@
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Mon Mar 20 12:31:44     2006, Created by tomyeh
 }}IS_NOTE
@@ -23,7 +23,7 @@ import org.zkoss.zul.impl.XulElement;
 /**
  * The popup that belongs to a {@link Bandbox} instance.
  *
- * <p>Developer usually listen to the onOpen event that is sent to
+ * <p>Developer usually listens to the onOpen event that is sent to
  * {@link Bandbox} and then creates proper components as children
  * of this component.
  *

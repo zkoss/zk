@@ -1,9 +1,9 @@
 /** RichletFilter.java.
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		2:22:20 PM Aug 5, 2013, Created by jumperchen
 
@@ -64,7 +64,7 @@ import org.zkoss.zk.ui.util.DesktopRecycle;
  * </code></pre>
  *
  * In the zk.xml
- * 
+ *
  * <pre><code>
 &lt;richlet&gt;
 	&lt;richlet-name&gt;Foo&lt;/richlet-name&gt;
@@ -79,10 +79,10 @@ import org.zkoss.zk.ui.util.DesktopRecycle;
 	&lt;url-pattern&gt;/zk/foo/*&lt;/url-pattern&gt;
 &lt;/richlet-mapping&gt;
  * </code></pre>
- * 
+ *
  * <strong>Note:</strong> The url-pattern of richlet-mapping should start with
  * <tt>/zk</tt> in this example which is the filter-mapping mapping to.
- * 
+ *
  * <p>Init parameters:
  *
  * <dl>
@@ -98,6 +98,7 @@ public class RichletFilter implements Filter {
 	protected FilterConfig _config;
 	protected WebManager _webman;
 	protected boolean _compress = true;
+	protected static final String RICHLET_FLAG = RichletFilter.class.getName() + ".RICHLET";
 
 	public void init(FilterConfig config) throws ServletException {
 		_config = config;
@@ -179,6 +180,7 @@ public class RichletFilter implements Filter {
 					final Page page = WebManager.newPage(uf, ri, richlet, response, path);
 					final Execution exec = new ExecutionImpl(ctx, request, response, desktop, page);
 					wappc.getUiEngine().execNewPage(exec, richlet, page, out);
+					request.setAttribute(RICHLET_FLAG, RICHLET_FLAG);
 					// no need to set device type here, since UiEngine will do
 					// it later
 				} else {
