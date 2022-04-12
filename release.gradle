@@ -739,6 +739,8 @@ task peEvalBundles() {
 }
 
 task release() {
+	// run npm first
+	dependsOn(npmInstall)
 	// check before release
 	dependsOn 'check'
 	if (gradle.includedBuilds.find {it.name == 'zkcml'} != null) {
