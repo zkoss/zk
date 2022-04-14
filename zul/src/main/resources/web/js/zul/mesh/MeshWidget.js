@@ -445,6 +445,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	_innerWidth: '100%',
 	_currentTop: 0,
 	_currentLeft: 0,
+	_nativebar: true,
 
 	$define: {
 		/**

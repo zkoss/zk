@@ -801,8 +801,8 @@ public class Tabbox extends XulElement {
 			renderer.render("maximalHeight", _maximalHeight);
 		}
 		//ZK-3678: Provide a switch to enable/disable iscroll
-		if (isNativeScrollbar())
-			renderer.render("_nativebar", true);
+		if (!isNativeScrollbar())
+			renderer.render("_nativebar", false);
 	}
 
 	public void onPageAttached(Page newpage, Page oldpage) {
