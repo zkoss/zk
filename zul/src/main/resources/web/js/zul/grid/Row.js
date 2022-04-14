@@ -40,7 +40,7 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 		align: function (v) {
 			var n = this.$n();
 			if (n)
-				n.align = v;
+				n.style.textAlign = v;
 		},
 		/** Returns the nowrap.
 		 * <p>Default: null (system default: wrap).
@@ -65,7 +65,7 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 		valign: function (v) {
 			var n = this.$n();
 			if (n)
-				n.vAlign = v;
+				n.style.verticalAlign = v;
 		}
 	},
 	/** Returns the grid that contains this row.
