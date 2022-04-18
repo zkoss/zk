@@ -67,6 +67,14 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 					emptyContentDiv.removeClass(emptyContentClz);
 				emptyContentDiv.html(msg);
 			}
+		},
+		/** Sets the visible rows.
+		 * Not allowed to set visibleRows and height/vflex at the same time.
+		 * @param int rows
+		 * @since 10.0.0
+		 */
+		visibleRows: function (_visibleRows) {
+			this.setRows(_visibleRows);
 		}
 	},
 	/** Returns the specified cell, or null if not available.
