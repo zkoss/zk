@@ -2,6 +2,7 @@ ZK 9.6.2
 * Features
 
 * Bugs
+  ZK-5069: DesktopEventQueue unsubscribe can cause NPE in heavy request traffic
 
 * Upgrade Notes
 

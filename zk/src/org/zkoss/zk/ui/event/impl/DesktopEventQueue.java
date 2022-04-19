@@ -17,6 +17,7 @@ package org.zkoss.zk.ui.event.impl;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,7 +49,7 @@ public class DesktopEventQueue<T extends Event> implements EventQueue<T>, java.i
 
 	/** A dummy target for handling onQueue. */
 	private final Component _dummyTarget = new AbstractComponent();
-	private final List<ListenerInfo<T>> _listenerInfos = new LinkedList<ListenerInfo<T>>();
+	private final ConcurrentLinkedQueue<ListenerInfo<T>> _listenerInfos = new ConcurrentLinkedQueue<>();
 	private int _nAsync;
 	private boolean _serverPushEnabled;
 	private boolean _closed;
