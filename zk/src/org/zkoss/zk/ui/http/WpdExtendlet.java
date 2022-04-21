@@ -621,7 +621,8 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 		else
 			sb.append("\nzkver('','");
 
-		sb.append(obfuscateVer(exposeVer, wapp.getBuild(), verInfoEnabled));
+		String build = wapp.getBuild();
+		sb.append(exposeVer ? build : Utils.obfuscateHashWithSalt(build, verInfoEnabled));
 
 		final ServletContext ctx = getServletContext();
 		String s = Encodes.encodeURL(ctx, reqctx.request, reqctx.response, "/");
@@ -637,8 +638,9 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 			final LanguageDefinition langdef = (LanguageDefinition) it.next();
 			for (Iterator e = langdef.getJavaScriptModules().entrySet().iterator(); e.hasNext();) {
 				final Map.Entry me = (Map.Entry) e.next();
+				Object value = me.getValue();
 				sb.append('\'').append(me.getKey()).append("':'")
-						.append(obfuscateVer(exposeVer, me.getValue(), verInfoEnabled)).append("',");
+						.append(exposeVer ? value : Utils.obfuscateHashWithSalt(value, verInfoEnabled)).append("',");
 			}
 			removeLast(sb, ',');
 		}
@@ -689,10 +691,6 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 				.append(Encodes.encodeURL(ctx, reqctx.request, reqctx.response, wapp.getResourceURI(false)))
 				.append("'").append("});");
 		appendPostJsScript((ByteArrayOutputStream) out, sourceMapManager, sb.toString());
-	}
-
-	private Object obfuscateVer(boolean exposeVersion, Object ver, String salt) {
-		return exposeVersion ? ver : Integer.toHexString(37 * ver.hashCode() + salt.hashCode());
 	}
 
 	private void outErrReloads(RequestContext reqctx, Configuration config, StringBuffer sb, Object[][] infs) {
