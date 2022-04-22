@@ -3,6 +3,7 @@ ZK 10.0.0
   ZK-5024: Add a library property to change the default apply composer for MVVM
   ZK-5039: remove deprecated classicblue theme in ZK 10
   ZK-5091: Move Layout.java to extend from XulElement
+  ZK-5123: Searchbox open attribute doesn't work while initializing
 
 * Bugs
   ZK-5089: AfterSizeEvent doesn't return a correct size of a Window component
