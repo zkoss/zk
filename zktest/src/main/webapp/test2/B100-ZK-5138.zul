@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B100-ZK-5138.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Mon Apr 11 10:45:07 CST 2022, Created by katherine
+
+Copyright (C) 2022 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label>
+		Click the button, should see text align at left.
+	</label>
+	<grid>
+		<columns>
+			<column label='column 1' />
+			<column label='column 2' />
+		</columns>
+		<rows>
+			<row align='center' id='row'>
+				<label value='cell 2.1' />
+				<label value='cell 2.2' />
+			</row>
+		</rows>
+	</grid>
+	<button label='set align left' onClick='row.setAlign("left")'/>
+</zk>
