@@ -6,6 +6,7 @@ ZK 10.0.0
 
 * Bugs
   ZK-5089: AfterSizeEvent doesn't return a correct size of a Window component
+  ZK-5145: Chosenbox smart update emptyMessage doesn't work
 
 * Upgrade Notes
   + Layout.java (Vlayout and Hlayout) are extended from XulElement since ZK 10.0.0
