@@ -204,6 +204,10 @@ public class Comboitem extends LabelImageElement implements org.zkoss.zk.ui.ext.
 		render(renderer, "disabled", _disabled);
 		render(renderer, "description", getDescription()); //allow overriding getDescription()
 		render(renderer, "content", getContent()); //allow overriding getContent()
+
+		if (_value instanceof String) {
+			render(renderer, "value", _value);
+		}
 	}
 
 	public void beforeParentChanged(Component parent) {

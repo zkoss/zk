@@ -1,9 +1,9 @@
 /* AbstractComponent.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Mon May 30 21:49:42     2005, Created by tomyeh
 
@@ -599,7 +599,7 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 
 	public String getUuid() {
 		if (_uuid == null) {
-			Execution exec = null; // ZK-2606: if parent has _page, child is in the same component tree 
+			Execution exec = null; // ZK-2606: if parent has _page, child is in the same component tree
 			for (Component comp = this; comp != null; comp = comp.getParent()) {
 				if (comp.getPage() != null) {
 					exec = Executions.getCurrent();
@@ -854,7 +854,7 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 	}
 
 	public Set<String> getWidgetAttributeNames() {
-		if (_auxinf.domattrs != null)
+		if (_auxinf != null && _auxinf.domattrs != null)
 			return _auxinf.domattrs.keySet();
 		return Collections.emptySet();
 	}
@@ -962,7 +962,7 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 		return false;
 	}
 
-	// Bug ZK-2789: allow null attribute values. If auto remove lib prop is 
+	// Bug ZK-2789: allow null attribute values. If auto remove lib prop is
 	// enabled, then set null attribute value = remove attribute
 	public Object setAttribute(String name, Object value, int scope) {
 		if (value == null && Boolean.parseBoolean(Library.getProperty(AUTO_REMOVE_NULL))) {
@@ -2960,7 +2960,7 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 
 	/** Utility to invoke {@link ComponentActivationListener#willPassivate}
 	 * for the specified object.
-	 * @param o the object to invoke. Ignore if 
+	 * @param o the object to invoke. Ignore if
 	 * ComponentActivationListener not implemented or null.
 	 * @since 3.6.4
 	 */
@@ -2983,7 +2983,7 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 
 	/** Utility to invoke {@link ComponentActivationListener#didActivate}
 	 * for the specified object.
-	 * @param o the object to invoke. Ignore if 
+	 * @param o the object to invoke. Ignore if
 	 * ComponentActivationListener not implemented or null.
 	 * @since 3.6.4
 	 */
@@ -3484,7 +3484,7 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 
 	/** Utility to invoke {@link ComponentSerializationListener#willSerialize}
 	 * for the specified object.
-	 * @param o the object to invoke. Ignore if 
+	 * @param o the object to invoke. Ignore if
 	 * ComponentSerializationListener not implemented or null.
 	 * @since 3.6.4
 	 */
@@ -3584,7 +3584,7 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 
 	/** Utility to invoke {@link ComponentSerializationListener#didDeserialize}
 	 * for the specified object.
-	 * @param o the object to invoke. Ignore if 
+	 * @param o the object to invoke. Ignore if
 	 * ComponentSerializationListener not implemented or null.
 	 * @since 3.6.4
 	 */

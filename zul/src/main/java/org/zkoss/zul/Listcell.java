@@ -141,7 +141,7 @@ public class Listcell extends LabelImageElement {
 	public void setSpan(int span) {
 		if (getSpan() != span) {
 			initAuxInfo().span = span;
-			smartUpdate("colspan", getSpan());
+			smartUpdate("span", getSpan());
 		}
 	}
 
@@ -162,7 +162,7 @@ public class Listcell extends LabelImageElement {
 		super.renderProperties(renderer);
 
 		if (getSpan() > 1)
-			renderer.render("colspan", getSpan());
+			renderer.render("span", getSpan());
 	}
 
 	public void beforeParentChanged(Component parent) {

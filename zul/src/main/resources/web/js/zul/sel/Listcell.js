@@ -26,7 +26,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>Default {@link #getZclass}: z-listcell
  */
 	zul.sel.Listcell = zk.$extends(zul.LabelImageWidget, {
-	_colspan: 1,
+	_span: 1,
 	$define: {
 		/** Returns number of columns to span this cell.
 		 * Default: 1.
@@ -36,13 +36,19 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		 * <p>It is the same as the colspan attribute of HTML TD tag.
 		 * @param int colspan
 		 */
-		colspan: [
+		colspan: [function (colspan) {
+			return this.setSpan(colspan);
+		}, function () {
+			this.getSpan();
+		}],
+		// change colspan to span since ZK 10.0.0
+		span: [
 			function (colspan) {
 				return colspan > 1 ? colspan : 1;
 			},
 			function () {
 				var n = this.$n();
-				if (n) n.colSpan = this._colspan;
+				if (n) n.colSpan = this._span;
 			}]
 	},
 	setLabel: function () {
@@ -184,7 +190,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	},
 	domAttrs_: function () {
 		return this.$supers('domAttrs_', arguments)
-			+ (this._colspan > 1 ? ' colspan="' + this._colspan + '"' : '');
+			+ (this._span > 1 ? ' colspan="' + this._span + '"' : '');
 	},
 	//-- super --//
 	domStyle_: function (no) {

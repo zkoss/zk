@@ -375,8 +375,9 @@ public class Listitem extends XulElement {
 		render(renderer, "_loaded", _loaded ? _loaded : getListbox().getModel() == null);
 		renderer.render("_index", _index);
 
-		if (_value instanceof String && getListbox().getName() != null)
+		if (_value instanceof String) {
 			render(renderer, "value", _value);
+		}
 
 		if (!isCheckable())
 			renderer.render("checkable", false);

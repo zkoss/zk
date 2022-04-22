@@ -30,6 +30,33 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 	isOpen: function () {
 		return this.isVisible();
 	},
+	// a delegator for open() in zephyr.
+	setOpen: function (options) {
+		if (this.desktop || this.z_rod) {
+			this.open.apply(this, options);
+		} else {
+			let self = this;
+			zk.afterMount(function () {
+				if (self.desktop || self.z_rod) {// just in case if removed.
+					self.open.apply(self, options);
+				}
+			});
+		}
+	},
+	// a delegator for close() in zephyr.
+	setClose: function (closed) {
+		if (closed != this.isOpen()) return; // do nothing.
+		if (this.desktop || this.z_rod) {
+			this.close();
+		} else {
+			let self = this;
+			zk.afterMount(function () {
+				if (self.desktop || self.z_rod) {
+					self.close();
+				}
+			});
+		}
+	},
 	/**
 	 * Opens the popup.
 	 * <p>Note: the ref with the position parameter is prior to the offset parameter,

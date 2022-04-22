@@ -1,9 +1,9 @@
 /* ColSizeEvent.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Thu Dec  7 10:25:43     2006, Created by tomyeh
 
@@ -30,12 +30,12 @@ import org.zkoss.zk.ui.event.MouseEvent;
 /**
  * Used to notify that the width of a column is changed.
  *
- * <p>When an user drags the border of a sizable column, only the width of the
+ * <p>When a user drags the border of a sizable column, only the width of the
  * column itself is changed, other columns are not affected.
  *
  * <p>The event is sent to the parent (e.g., {@link org.zkoss.zul.Columns}
  * and {@link org.zkoss.zul.Treecols}).
- * 
+ *
  * @author tomyeh
  */
 public class ColSizeEvent extends Event {
@@ -132,10 +132,10 @@ public class ColSizeEvent extends Event {
 	public String getWidth() {
 		return _width;
 	}
-	
+
 	/**
 	 * Returns the column width of the specified column index.
-	 * @param col the column index 
+	 * @param col the column index
 	 * @since 5.0.6
 	 */
 	public String getWidth(int col) {
@@ -149,7 +149,7 @@ public class ColSizeEvent extends Event {
 	public String getPreviousWidth() {
 		return _oldWd;
 	}
-	
+
 	/**
 	 * Returns the previous column width of the specified column index.
 	 * @param col the column index

@@ -42,6 +42,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	_minheight: 100,
 	_minwidth: 200,
 	_tabindex: 0,
+	_nativebar: true,
 
 	$init: function () {
 		this.$supers('$init', arguments);

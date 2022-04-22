@@ -80,7 +80,7 @@ interface Pcai {
 
 (function () {
 	var Widget = zk.Widget,
-		_wgt_$ = Widget.$, //the original zk.Widget.$
+		_wgt_$, //the original zk.Widget.$
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		_crInfBL0: any[] = [], _crInfBL1: any[] = [], //create info for BL
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -319,12 +319,16 @@ interface Pcai {
 			if (!inf)
 				break; //done
 
-			if (filter = inf[4][1]) //inf[4] is extra if AU
-				Widget.$ = function (n, opts) {return filter(_wgt_$(n, opts));};
+			if (filter = inf[4][1]) {//inf[4] is extra if AU
+				_wgt_$ = Widget.$; // update the latest one, if somewhere else override it already.
+				Widget.$ = function (n, opts) {
+					return filter(_wgt_$(n, opts));
+				};
+			}
 			try {
 				wgt = create(null, inf[1]);
 			} finally {
-				if (filter) Widget.$ = _wgt_$;
+				if (filter && _wgt_$) Widget.$ = _wgt_$;
 			}
 			inf[4][0](wgt); //invoke stub
 
@@ -374,7 +378,7 @@ interface Pcai {
 			if (parent) parent.appendChild(wgt, ignoreDom);
 		} else {
 			if ((stub = type == '#stub') || type == '#stubs') {
-				if (!(wgt = _wgt_$(uuid) //use the original one since filter() might applied
+				if (!(wgt = (_wgt_$ || Widget.$)(uuid) //use the original one since filter() might applied
 						|| zAu._wgt$(uuid))) //search detached (in prev cmd of same AU)
 					throw 'Unknown stub ' + uuid;
 				var w = new Widget();

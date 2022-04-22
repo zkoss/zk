@@ -2,9 +2,9 @@
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Sun Oct 15 12:15:47     2006, Created by tomyeh
 }}IS_NOTE
@@ -43,7 +43,7 @@ import org.zkoss.zk.ui.sys.HtmlPageRenders;
  * <p>Approach 2: Specify the JavaScript codes directly without defer.
  * The JavaScript codes are evaluated immediately before the widget is
  * instantiated, so you cannot access any widget. Rather, it is used to
- * do desktop-level initialization, such as defining a widget class, and 
+ * do desktop-level initialization, such as defining a widget class, and
  * a global function.
  * <pre><code>&lt;script defer="true"&gt;
  * zk.$package('foo');
@@ -102,7 +102,7 @@ public class Script extends AbstractComponent {
 	public void setType(String type) {
 	}
 
-	/** Returns the character enconding of the source.
+	/** Returns the character encoding of the source.
 	 * It is used with {@link #getSrc}.
 	 *
 	 * <p>Default: null.

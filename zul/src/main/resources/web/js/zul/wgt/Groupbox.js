@@ -23,6 +23,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 zul.wgt.Groupbox = zk.$extends(zul.ContainerWidget, {
 	_open: true,
 	_closable: true,
+	_nativebar: true,
 
 	$define: { //zk.def
 		/** Returns whether this groupbox is open.
