@@ -65,7 +65,12 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 		 * @param String msg
 		 * @since 8.5.1
 		 */
-		emptySearchMessage: null,
+		emptySearchMessage: function emptySearchMessage(v) {
+			var msg = this.$n('empty-search-message');
+			if (v && msg && v != jq(msg).text()) {
+				jq(msg).text(v);
+			}
+		},
 		/**
 		 * Returns true if onSelect event is sent as soon as user selects using keyboard navigation.
 		 * <p>Default: true
@@ -509,8 +514,8 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 
 		// F85-ZK-3827: Combobox empty search message
 		if (msg) {
-			out.push('<div id="', uuid, '-emptySearchMessage" class="',
-			this.$s('emptySearchMessage'), ' ', this.$s('emptySearchMessage-hidden'),
+			out.push('<div id="', uuid, '-empty-search-message" class="',
+			this.$s('empty-search-message'), ' ', this.$s('empty-search-message-hidden'),
 			'">', msg, '</div>');
 		}
 
@@ -538,8 +543,8 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 	},
 	_fixEmptySearchMessage: function () {
 		if (this._emptySearchMessage) {
-			jq(this.$n('emptySearchMessage')).toggleClass(
-				this.$s('emptySearchMessage-hidden'), this.nChildren > 0);
+			jq(this.$n('empty-search-message')).toggleClass(
+				this.$s('empty-search-message-hidden'), this.nChildren > 0);
 		}
 	},
 	// ZK-5044 (touch enable)

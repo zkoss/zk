@@ -7,6 +7,7 @@ ZK 10.0.0
 
 * Bugs
   ZK-5089: AfterSizeEvent doesn't return a correct size of a Window component
+  ZK-5120: Combobox smart update emptySearchMessage doesn't work
   ZK-5138: Grid row setAlign not work after rendered
   ZK-5145: Chosenbox smart update emptyMessage doesn't work
 
@@ -16,6 +17,9 @@ ZK 10.0.0
   ajax request, and also remove the two AuExtensions, AuUploader.java and AuDropUploader.
   + Support ZK-3277 into CE version, and drop the support of IE9 browser for file
   upload feature, dur to it cannot support HTML FormData.
+  + Some z-class names are changed:
+        z-combobox-emptySearchMessage -> z-combobox-empty-search-message
+        z-combobox-emptySearchMessage-hidden -> z-combobox-empty-search-message-hidden
    --------
 
 ZK 9.6.2
