@@ -276,6 +276,12 @@ public class Events {
 	 * @since 9.0.0
 	 */
 	public static final String ON_SEARCHING = "onSearching";
+	/**
+	 * The onSearching event (used with {@link InputEvent}).
+	 * @since 10.0.0
+	 */
+	public static final String ON_SEARCH = "onSearch";
+
 
 	/**
 	 * The onStateChange event used with {@link StateChangeEvent}.

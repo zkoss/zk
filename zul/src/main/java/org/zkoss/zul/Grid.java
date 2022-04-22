@@ -539,7 +539,7 @@ public class Grid extends MeshElement {
 
 		if (_visibleRows != visibleRows) {
 			_visibleRows = visibleRows;
-			smartUpdate("rows", _visibleRows);
+			smartUpdate("visibleRows", _visibleRows);
 		}
 	}
 
@@ -1788,7 +1788,7 @@ public class Grid extends MeshElement {
 		renderer.render("_offset", getDataLoader().getOffset());
 
 		if (_visibleRows > 0)
-			renderer.render("rows", _visibleRows);
+			renderer.render("visibleRows", _visibleRows);
 
 		if (_rod && !_renderAll) {
 			if (((Cropper) getDataLoader()).isCropper())//bug #2936064
