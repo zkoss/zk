@@ -906,8 +906,8 @@ public class Window extends XulElement implements Framable, IdSpace {
 		//render mode as the last property
 
 		//ZK-3678: Provide a switch to enable/disable iscroll
-		if (isNativeScrollbar())
-			renderer.render("_nativebar", true);
+		if (!isNativeScrollbar())
+			renderer.render("_nativebar", false);
 	}
 
 	public String getZclass() {

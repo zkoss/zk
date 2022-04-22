@@ -53,6 +53,9 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 	 */
 	setRadiogroup: function (group) {
 		var old = this._group;
+		// for zephyr to support set radiogroup by id
+		if (typeof group == 'string')
+			group = zk.$('$' + group);
 		if (old !== group) {
 			if (old && this._attachExternal) old._rmExtern(this);
 			this._group = group;

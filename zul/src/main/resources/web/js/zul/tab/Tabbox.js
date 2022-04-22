@@ -49,6 +49,7 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 	 * Reference: doClick_() in Tab.js, _sel() in Tabpanel.js
 	 */
 	_animating: false,
+	_nativebar: true,
 
 	$define: {
 		/**

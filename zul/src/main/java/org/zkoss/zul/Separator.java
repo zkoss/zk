@@ -1,9 +1,9 @@
 /* Separator.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Tue Jul 19 12:31:35     2005, Created by tomyeh
 
@@ -80,7 +80,7 @@ public class Separator extends XulElement {
 		return _bar;
 	}
 
-	/** Sets  whether to display a visual bar as the separator.
+	/** Sets whether to display a visual bar as the separator.
 	 */
 	public void setBar(boolean bar) {
 		if (_bar != bar) {

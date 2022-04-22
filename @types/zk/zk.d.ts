@@ -194,7 +194,7 @@ declare namespace zk {
         doKeyUp_(evt: Event): void;
         domAttrs_(no?: {[noAttr: string]: boolean}): string;
         domClass_(no?: {[noAttr: string]: boolean}): string;
-        domListen_(node: Element, evtnm: string, fn?: any, keyword?: string): Widget;
+        domListen_(node: Element, evtnm: string, fn?: any, keyword?: string | unknown): Widget;
         doMouseDown_(evt: Event): void;
         doMouseMove_(evt: Event): void;
         doMouseOut_(evt: Event): void;
@@ -203,7 +203,7 @@ declare namespace zk {
         domStyle_(no?: {[noAttr: string]: boolean}): string;
         domTextStyleAttr_(): string;
         domTooltiptext_(): string;
-        domUnlisten_(node: Element, evtnm: string, fn?: any, keyword?: string): Widget;
+        domUnlisten_(node: Element, evtnm: string, fn?: any, keyword?: string | unknown): Widget;
         doPaste_(evt: Event): void;
         doResizeScroll_(): void;
         doRightClick_(evt: Event): void;
@@ -258,7 +258,7 @@ declare namespace zk {
         ignoreDescendantFloatUp_(): boolean;
         ignoreDrag_(pt: any): boolean;
         initDrag_(): void;
-        insertBefore(child: Widget, sibling: Widget | null): boolean;
+        insertBefore(child: Widget, sibling: Widget | null, ignoreDom?: boolean): boolean;
         insertChildHTML_(child: Widget, before: Widget | null, desktop: Desktop): void;
         isBinding(): boolean;
         isFloating_(): boolean;
@@ -281,7 +281,7 @@ declare namespace zk {
         removeChild(child: Widget, ignoreDom?: boolean): boolean;
         removeChildHTML_(child: Widget, ignoreDom?: boolean): void;
         removeHTML_(n?: any[]): void;
-        replaceCavedChildren_(subId: string, wgts: Widget[], tagBeg: string, tagEnd: string): void;
+        replaceCavedChildren_(subId: string, wgts: Widget[], tagBeg?: string, tagEnd?: string): void;
         replaceChildHTML_(child: Widget, n: Element, dt: Desktop | null, skipper: Skipper | null, _trim_?: boolean): void;
         replaceHTML(n: Element | string, desktop: Desktop | null, skipper?: Skipper | null, _trim_?: boolean, _callback_?: (() => void)[]): Widget;
         replaceWidget(newwgt: Widget): void;
@@ -471,7 +471,7 @@ declare namespace zk {
         offset: number[];
         lastScrolled: Date;
         scrollSpeed: number[];
-        
+
         $init(control?: any, node?: HTMLElement, opts?: any): void;
         _currentDelta(): zk.Offset;
         _draw(point, evt?: zk.Event): void;
@@ -771,7 +771,7 @@ declare namespace zk {
         doAfterResize(): void;
         enableESC(): void;
         endProcessing(sid?: number): void;
-        error(msg: string): void;
+        error(msg: string, silent?: boolean): void;
         errorDismiss(): void;
         get(o: any, name: string): any;
         getDataHandler(name: string): any;

@@ -1,9 +1,9 @@
 /* Row.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Tue Oct 25 16:02:43     2005, Created by tomyeh
 
@@ -83,7 +83,7 @@ public class Row extends XulElement {
 	}
 
 	/** Returns the nowrap.
-	 * <p>Default: null (system default: wrap).
+	 * <p>Default: false (system default: wrap).
 	 */
 	public boolean isNowrap() {
 		return _nowrap;
@@ -216,14 +216,14 @@ public class Row extends XulElement {
 	}
 
 	/**
-	 * @deprecated as of release 6.0.0. To control the size of Grid related 
+	 * @deprecated as of release 6.0.0. To control the size of Grid related
 	 * components, please refer to {@link Grid} and {@link Column} instead.
 	 */
 	public void setWidth(String width) {
 	}
 
 	/**
-	 * @deprecated as of release 6.0.0. To control the size of Grid related 
+	 * @deprecated as of release 6.0.0. To control the size of Grid related
 	 * components, please refer to {@link Grid} and {@link Column} instead.
 	 */
 	public void setHflex(String flex) {

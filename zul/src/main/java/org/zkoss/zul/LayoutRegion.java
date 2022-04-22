@@ -510,8 +510,8 @@ public abstract class LayoutRegion extends XulElement {
 		if (!_open)
 			renderer.render("open", _open);
 
-		if (isNativeScrollbar())
-			renderer.render("_nativebar", true);
+		if (!isNativeScrollbar())
+			renderer.render("_nativebar", false);
 
 		if (!_slidable)
 			renderer.render("slidable", false);
