@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-5034.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Mon Apr 18 15:22:11 CST 2022, Created by jameschu
+
+Copyright (C) 2022 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<zscript><![CDATA[
+	List model = new ListModelList(Locale.getAvailableLocales());
+	]]></zscript>
+	<label>Scroll to the right most and see "z-columns-bar" in view (header)</label>
+	<grid model="${model}" visibleRows="5" width="600px">
+		<frozen columns="1" />
+		<columns>
+			<column label="Locale" width="50px"/>
+			<column label="Locale" width="250px"/>
+			<column label="Locale" width="300px"/>
+			<column label="Locale" width="300px"/>
+			<column label="Locale 5" width="300px"/>
+		</columns>
+		<template name="model">
+			<row>
+				<cell>${each.country}</cell>
+				<cell>${each}</cell>
+				<cell>${each}</cell>
+				<cell>${each}</cell>
+				<cell>${each}</cell>
+			</row>
+		</template>
+	</grid>
+</zk>
