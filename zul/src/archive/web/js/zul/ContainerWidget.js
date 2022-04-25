@@ -18,7 +18,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 /**
  * 	A ContainerWidget.
- *
+ *  <p>Note: it remains empty extension for compatibility after ZK-4894
  *  @see zul.wnd.Window
  *  @see zul.wnd.Panelchildren
  *  @see zul.wgt.Groupbox
