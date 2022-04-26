@@ -281,6 +281,16 @@ import org.zkoss.zk.ui.sys.Visualizer;
 					new TimedValue(_timed++, comp, attr, value, priority));
 	}
 
+	/**
+	 * Clears all existing smart updates that belong to the given component.
+	 * @since 10.0.0
+	 */
+	public void clearSmartUpdate(Component comp) {
+		if (comp == null)
+			throw new IllegalArgumentException();
+		_smartUpdated.remove(comp);
+	}
+
 	/** Sets whether to disable the update of the client widget.
 	 * By default, if a component is attached to a page, modifications that
 	 * change the visual representation will be sent to the client to
