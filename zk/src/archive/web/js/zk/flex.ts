@@ -679,6 +679,7 @@ zFlex = { //static methods
 		for (var c; fcc && cwgt;) { // assume cwgt -> fcc
 			c = cwgt.$n();
 			if (cwgt.ignoreFlexSize_(isRow ? 'w' : 'h') || (c && !fContainer.contains(c))) { // skip ignored or moved dom (ex.caption)
+				cwgt._cssFlexApplied = {flexApplied: true};
 				cwgt = cwgt.nextSibling;
 				continue;
 			}

@@ -5,6 +5,7 @@ ZK 9.6.2
   ZK-5034: z-columns-bar's position is shifted after scrolling
   ZK-4986: version information not salted for static resources
   ZK-5071: org.zkoss.zk.ui.versionInfo.enabled cannot bust browser cache
+  ZK-5134: caption with hflex="min" causes a javascript error
 
 * Upgrade Notes
 
