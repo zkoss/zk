@@ -5,10 +5,12 @@ ZK 9.6.2
   ZK-5034: z-columns-bar's position is shifted after scrolling
   ZK-4986: version information not salted for static resources
   ZK-5071: org.zkoss.zk.ui.versionInfo.enabled cannot bust browser cache
+  ZK-5079: remove an item of ListModelList causes nullponiterexception
   ZK-5134: caption with hflex="min" causes a javascript error
   ZK-5137: modifying sclass clears vflex="1"
 
 * Upgrade Notes
+  + Since inconsistent forEach rendering by ListModel, reopen ZK-2800 after ZK-5079
 
    --------
 ZK 9.6.1
