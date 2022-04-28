@@ -709,7 +709,7 @@ zFlex = { //static methods
 
 	let _xWidget = {};
 	zk.override(zk.Widget.prototype, _xWidget, {
-		domClass_: function(this: zk.Widget, no) {
+		domClass_: function (this: zk.Widget, no) {
 			let domClass = (_xWidget as zk.Widget).domClass_.apply(this, no),
 				n = this.$n();
 			if (n) {
