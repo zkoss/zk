@@ -647,11 +647,13 @@ public interface Component extends Scope, java.io.Serializable, Cloneable {
 
 	/** Returns whether this component is visible.
 	 * @see Components#isRealVisible
+	 * @see #setVisible
 	 */
 	public boolean isVisible();
 
 	/** Sets whether this component is visible.
-	 *
+	 * A component is visible by default. Both visible and invisible components are rendered in a browser's DOM. But an invisible component's DOM elements with CSS <code>display:none</code>. Since a DOM element will inherit its parent's CSS rules, a component is visible only if all of its parents are also visible.<br/>
+	 * To remove a component's DOM elements, use {@link #detach()}.
 	 * @return the previous visibility
 	 */
 	public boolean setVisible(boolean visible);
