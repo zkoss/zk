@@ -706,4 +706,23 @@ zFlex = { //static methods
 		return {isFlexRow: isRow, flexContainerChildren: fccs, childrenWidgets: cwgts};
 	}
 };
+
+	let _xWidget = {};
+	zk.override(zk.Widget.prototype, _xWidget, {
+		domClass_: function(this: zk.Widget, no) {
+			let domClass = (_xWidget as zk.Widget).domClass_.apply(this, no),
+				n = this.$n();
+			if (n) {
+				let jqn = jq(n),
+					flexClasses = ['z-flex', 'z-flex-row', 'z-flex-column', 'z-flex-item'];
+				for (let i = 0, length = flexClasses.length; i < length; i++) {
+					let flexClass = flexClasses[i];
+					if (jqn.hasClass(flexClass)) {
+						domClass += ' ' + flexClass;
+					}
+				}
+			}
+			return domClass;
+		}
+	});
 })();
