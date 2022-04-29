@@ -8,6 +8,7 @@ ZK 9.6.2
   ZK-5079: remove an item of ListModelList causes nullponiterexception
   ZK-5134: caption with hflex="min" causes a javascript error
   ZK-5137: modifying sclass clears vflex="1"
+  ZK-5117: cannot open a treeitem after sorting
   ZK-5121: cascader / searchbox do no clean popup on unbind
   ZK-5107: replace treecells causes checkmark clicking doesn't send onSelect event
 

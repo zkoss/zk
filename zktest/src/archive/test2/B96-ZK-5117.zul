@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-5117.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu Apr 28 15:27:36 CST 2022, Created by jameschu
+
+Copyright (C) 2022 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label>Click head column "Description" twice to trigger sorting, and the open/close should work after click the open icon.</label>
+    <tree id="tree">
+        <treecols sizable="true">
+            <treecol label="Name" sort="auto"/>
+            <treecol label="Description" sort="auto"/>
+        </treecols>
+        <treechildren>
+            <treeitem>
+                <treerow>
+                    <treecell label="Item 1"/>
+                    <treecell label="Item 1 description"/>
+                </treerow>
+            </treeitem>
+            <treeitem open="false">
+                <treerow>
+                    <treecell label="Item 2"/>
+                    <treecell label="Item 2 description"/>
+                </treerow>
+                <treechildren>
+                    <treeitem>
+                        <treerow>
+                            <treecell label="Item 2.1"/>
+                        </treerow>
+                    </treeitem>
+                    <treeitem>
+                        <treerow>
+                            <treecell label="Item 2.2"/>
+                            <treecell
+                                    label="Item 2.2 is something who cares"/>
+                        </treerow>
+                    </treeitem>
+                </treechildren>
+            </treeitem>
+            <treeitem label="Item 3"/>
+            <treeitem label="Item 4"/>
+            <treeitem label="Item 5"/>
+            <treeitem label="Item 6"/>
+            <treeitem label="Item 7" open="false">
+                <treechildren>
+                    <treeitem>
+                        <treerow>
+                            <treecell label="Item 7.1"/>
+                        </treerow>
+                    </treeitem>
+                    <treeitem>
+                        <treerow>
+                            <treecell label="Item 7.2"/>
+                            <treecell
+                                    label="Item 7.2 is something who cares"/>
+                        </treerow>
+                    </treeitem>
+                </treechildren>
+            </treeitem>
+        </treechildren>
+    </tree>
+</zk>
