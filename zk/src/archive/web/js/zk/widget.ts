@@ -5288,6 +5288,18 @@ zk.Desktop = zk.$extends(zk.Widget, {
 				}
 		}
 		return Desktop._dt;
+	},
+	/**
+	 * Destroy the desktop
+	 * @param desktop zk desktop
+	 * @since 9.6.2
+	 */
+	destroy: function (desktop) {
+		if (desktop != null) {
+			zAu._rmDesktop(desktop);
+			delete zk.Desktop.all[desktop.id];
+			--zk.Desktop._ndt;
+		}
 	}
 });
 
