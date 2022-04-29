@@ -88,5 +88,32 @@ zul.sel.Treerow = zk.$extends(zul.Widget, {
 	},
 	deferRedrawHTML_: function (out) {
 		out.push('<tr', this.domAttrs_({domClass: 1}), ' class="z-renderdefer"></tr>');
+	},
+	bind_: function () {
+		this.$supers(zul.sel.Treerow, 'bind_', arguments);
+		zWatch.listen({onResponse: this});
+	},
+	unbind_: function () {
+		zWatch.unlisten({onResponse: this});
+		this.$supers(zul.sel.Treerow, 'unbind_', arguments);
+	},
+	onChildAdded_: function (child) {
+		this.$supers('onChildAdded_', arguments);
+		// ZK-5107
+		this._shallCheckClearCache = true;
+	},
+	onChildRemoved_: function (child) {
+		this.$supers('onChildRemoved_', arguments);
+		// ZK-5107
+		this._shallCheckClearCache = true;
+	},
+	onResponse: function () {
+		if (this._shallCheckClearCache) {
+			this._shallCheckClearCache = false;
+			let p = this.getTree();
+			if (p && p.isCheckmark()) {
+				this.clearCache();
+			}
+		}
 	}
 });

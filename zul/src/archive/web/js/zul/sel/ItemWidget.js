@@ -318,21 +318,32 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 	getFlexContainer_: function () { //use old flex inside tr/td
 		return null;
 	},
+	bind_: function () {
+		this.$supers(zul.sel.ItemWidget, 'bind_', arguments);
+		zWatch.listen({onResponse: this});
+	},
+	unbind_: function () {
+		zWatch.unlisten({onResponse: this});
+		this.$supers(zul.sel.ItemWidget, 'unbind_', arguments);
+	},
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
 		// ZK-5038
-		let p = this.getMeshWidget();
-		if (p && p.isCheckmark()) {
-			this.clearCache();
-		}
+		this._shallCheckClearCache = true;
 	},
 	onChildRemoved_: function (child) {
 		this.$supers('onChildRemoved_', arguments);
 		// ZK-5038
-		let p = this.getMeshWidget();
-		if (p && p.isCheckmark()) {
-			this.clearCache();
-		}
+		this._shallCheckClearCache = true;
 	},
+	onResponse: function () {
+		if (this._shallCheckClearCache) {
+			this._shallCheckClearCache = false;
+			let p = this.getMeshWidget();
+			if (p && p.isCheckmark()) {
+				this.clearCache();
+			}
+		}
+	}
 });
 })();

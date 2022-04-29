@@ -9,6 +9,8 @@ ZK 9.6.2
   ZK-5134: caption with hflex="min" causes a javascript error
   ZK-5137: modifying sclass clears vflex="1"
   ZK-5117: cannot open a treeitem after sorting
+  ZK-5121: cascader / searchbox do no clean popup on unbind
+  ZK-5107: replace treecells causes checkmark clicking doesn't send onSelect event
 
 * Upgrade Notes
   + Since inconsistent forEach rendering by ListModel, reopen ZK-2800 after ZK-5079
