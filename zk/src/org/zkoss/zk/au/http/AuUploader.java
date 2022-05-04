@@ -108,7 +108,7 @@ public class AuUploader implements AuExtension {
 		}
 
 		final Map<String, String> attrs = new HashMap<String, String>();
-		String alert = null, uuid = null, nextURI = null, sid = null;
+		String alert = null, uuid = null, sid = null;
 		Desktop desktop = null;
 		try {
 			if (!isMultipartContent(request)) {
@@ -161,7 +161,6 @@ public class AuUploader implements AuExtension {
 					} else {
 						desktop = ((WebAppCtrl) sess.getWebApp()).getDesktopCache(sess).getDesktop(dtid);
 						final Map<String, Object> params = parseRequest(request, desktop, uuid + '_' + sid);
-						nextURI = (String) params.get("nextURI");
 
 						processItems(desktop, params, attrs);
 					}
@@ -173,8 +172,6 @@ public class AuUploader implements AuExtension {
 				if (uuid != null)
 					attrs.put("uuid", uuid);
 			}
-			if (nextURI == null)
-				nextURI = request.getParameter("nextURI");
 
 			if (ex instanceof ComponentNotFoundException) {
 				alert = generateAlertMessage(MISSING_REQUIRED_COMPONENT, Messages.get(MZk.UPDATE_OBSOLETE_PAGE, uuid));
@@ -212,9 +209,7 @@ public class AuUploader implements AuExtension {
 		if (log.isTraceEnabled())
 			log.trace(Objects.toString(attrs));
 
-		if (nextURI == null || nextURI.length() == 0)
-			nextURI = "~./zul/html/fileupload-done.html.dsp";
-		Servlets.forward(_ctx, request, response, nextURI, attrs, Servlets.PASS_THRU_ATTR);
+		Servlets.forward(_ctx, request, response, "~./zul/html/fileupload-done.html.dsp", attrs, Servlets.PASS_THRU_ATTR);
 	}
 
 	/** Handles the exception that was thrown when uploading files,
