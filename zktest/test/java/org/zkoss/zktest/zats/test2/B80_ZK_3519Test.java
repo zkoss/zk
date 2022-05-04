@@ -50,10 +50,9 @@ public class B80_ZK_3519Test extends WebDriverTestCase{
 		click(jq("@button:eq(0)"));
 		waitResponse();
 		assertEquals(false, isZKLogAvailable());
-		rightClick(jq("@button:eq(0)"));
-		waitResponse();
-		assertEquals(false, isZKLogAvailable());
+//		TODO: bug ZK-4979
+//		rightClick(jq("@button:eq(0)"));
+//		waitResponse();
+//		assertEquals(false, isZKLogAvailable());
     }
-
-
 }
