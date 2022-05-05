@@ -12,6 +12,7 @@ ZK 9.6.2
   ZK-5121: cascader / searchbox do no clean popup on unbind
   ZK-5107: replace treecells causes checkmark clicking doesn't send onSelect event
   ZK-5083: zEmbedded destroy doesn't remove Desktop from the zk.Desktop.all collection, cause unwanted events
+  ZK-5126: Apostrophe (French quote character) is displayed as Hex character code in chosenbox emptyMessage
 
 * Upgrade Notes
   + Since inconsistent forEach rendering by ListModel, reopen ZK-2800 after ZK-5079
