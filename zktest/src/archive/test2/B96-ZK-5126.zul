@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    B96-ZK-5126.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Wed May 04 12:21:48 2022, Created by jameschu
+
+Copyright (C) 2022 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label>You should see the same text in Label and Chosenbox</label>
+	<label id="lb" value="rôle dans l'organisation" />
+	<separator />
+	<chosenbox emptyMessage="rôle dans l'organisation" />
+</zk>
