@@ -14,6 +14,7 @@ ZK 9.6.2
   ZK-5083: zEmbedded destroy doesn't remove Desktop from the zk.Desktop.all collection, cause unwanted events
   ZK-5126: Apostrophe (French quote character) is displayed as Hex character code in chosenbox emptyMessage
   ZK-5095: NotSerializableException: org.zkoss.zkmax.au.websocket.WebSocketEndPoint
+  ZK-5149: DropUpload anchor position shifted by browser scroll if any, gets out of view
 
 * Upgrade Notes
   + Since inconsistent forEach rendering by ListModel, reopen ZK-2800 after ZK-5079
