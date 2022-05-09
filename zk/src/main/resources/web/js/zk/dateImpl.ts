@@ -61,67 +61,67 @@ export class DateImpl extends Date {
 	public getTimeZone(): unknown {
 		return this._timezone;
 	}
-	public getDate(): number {
+	public override getDate(): number {
 		return this._getTzMoment().date();
 	}
-	public getDay(): number {
+	public override getDay(): number {
 		return this._getTzMoment().day();
 	}
-	public getFullYear(): number {
+	public override getFullYear(): number {
 		return this._getTzMoment().year();
 	}
-	public getHours(): number {
+	public override getHours(): number {
 		return this._getTzMoment().hour();
 	}
-	public getMilliseconds(): number {
+	public override getMilliseconds(): number {
 		return this._getTzMoment().millisecond();
 	}
-	public getMinutes(): number {
+	public override getMinutes(): number {
 		return this._getTzMoment().minute();
 	}
-	public getMonth(): number {
+	public override getMonth(): number {
 		return this._getTzMoment().month();
 	}
-	public getSeconds(): number {
+	public override getSeconds(): number {
 		return this._getTzMoment().second();
 	}
-	public getTime(): number {
+	public override getTime(): number {
 		return this._moment.valueOf();
 	}
-	public getTimezoneOffset(): number {
+	public override getTimezoneOffset(): number {
 		return -this._getTzMoment().utcOffset();
 	}
-	public getUTCDate(): number {
+	public override getUTCDate(): number {
 		return this._getUTCMoment().date();
 	}
-	public getUTCDay(): number {
+	public override getUTCDay(): number {
 		return this._getUTCMoment().day();
 	}
-	public getUTCFullYear(): number {
+	public override getUTCFullYear(): number {
 		return this._getUTCMoment().year();
 	}
-	public getUTCHours(): number {
+	public override getUTCHours(): number {
 		return this._getUTCMoment().hour();
 	}
-	public getUTCMilliseconds(): number {
+	public override getUTCMilliseconds(): number {
 		return this._getUTCMoment().millisecond();
 	}
-	public getUTCMinutes(): number {
+	public override getUTCMinutes(): number {
 		return this._getUTCMoment().minute();
 	}
-	public getUTCMonth(): number {
+	public override getUTCMonth(): number {
 		return this._getUTCMoment().month();
 	}
-	public getUTCSeconds(): number {
+	public override getUTCSeconds(): number {
 		return this._getUTCMoment().second();
 	}
 	public getYear(): number {
 		return this._getTzMoment().year() - 1900;
 	}
-	public setDate(v): number {
+	public override setDate(v): number {
 		return this._getTzMoment().date(v).valueOf();
 	}
-	public setFullYear(y: number, m: number, d: number): number {
+	public override setFullYear(y: number, m: number, d: number): number {
 		var mt = this._getTzMoment();
 		mt.year(y);
 		if (m != null) {
@@ -130,7 +130,7 @@ export class DateImpl extends Date {
 		}
 		return mt.valueOf();
 	}
-	public setHours(hr: number, min: number, sec: number, msec: number): number {
+	public override setHours(hr: number, min: number, sec: number, msec: number): number {
 		var mt = this._getTzMoment();
 		mt.hour(hr);
 		if (min != null) {
@@ -142,71 +142,71 @@ export class DateImpl extends Date {
 		}
 		return mt.valueOf();
 	}
-	public setMilliseconds(v: number): number {
+	public override setMilliseconds(v: number): number {
 		return this._getTzMoment().millisecond(v).valueOf();
 	}
-	public setMinutes(v: number): number {
+	public override setMinutes(v: number): number {
 		return this._getTzMoment().minute(v).valueOf();
 	}
-	public setMonth(v: number): number {
+	public override setMonth(v: number): number {
 		return this._getTzMoment().month(v).valueOf();
 	}
-	public setSeconds(v: number): number {
+	public override setSeconds(v: number): number {
 		return this._getTzMoment().second(v).valueOf();
 	}
-	public setTime(v: number): number {
+	public override setTime(v: number): number {
 		this._moment = zk.mm(v);
 		return this._moment.valueOf();
 	}
-	public setUTCDate(v: number): number {
+	public override setUTCDate(v: number): number {
 		return this._getUTCMoment().date(v).valueOf();
 	}
-	public setUTCFullYear(v: number): number {
+	public override setUTCFullYear(v: number): number {
 		return this._getUTCMoment().year(v).valueOf();
 	}
-	public setUTCHours(v: number): number {
+	public override setUTCHours(v: number): number {
 		return this._getUTCMoment().hour(v).valueOf();
 	}
-	public setUTCMilliseconds(v: number): number {
+	public override setUTCMilliseconds(v: number): number {
 		return this._getUTCMoment().millisecond(v).valueOf();
 	}
-	public setUTCMinutes(v: number): number {
+	public override setUTCMinutes(v: number): number {
 		return this._getUTCMoment().minute(v).valueOf();
 	}
-	public setUTCMonth(v: number): number {
+	public override setUTCMonth(v: number): number {
 		return this._getUTCMoment().month(v).valueOf();
 	}
-	public setUTCSeconds(v: number): number {
+	public override setUTCSeconds(v: number): number {
 		return this._getUTCMoment().second(v).valueOf();
 	}
 	public setYear(v: number): number {
 		return this._getTzMoment().year(v).valueOf();
 	}
-	public toString(): string {
+	public override toString(): string {
 		return this._getTzMoment().toString();
 	}
-	public valueOf(): number {
+	public override valueOf(): number {
 		return this._moment.valueOf();
 	}
-	public toDateString(): string {
+	public override toDateString(): string {
 		return '';
 	}
-	public toTimeString(): string {
+	public override toTimeString(): string {
 		return '';
 	}
-	public toLocaleDateString(): string {
+	public override toLocaleDateString(): string {
 		return '';
 	}
-	public toLocaleTimeString(): string {
+	public override toLocaleTimeString(): string {
 		return '';
 	}
-	public toUTCString(): string {
+	public override toUTCString(): string {
 		return '';
 	}
-	public toISOString(): string {
+	public override toISOString(): string {
 		return '';
 	}
-	public toJSON(key): string {
+	public override toJSON(key): string {
 		return '';
 	}
 }

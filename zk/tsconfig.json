@@ -16,8 +16,9 @@
     //    "noImplicitReturns": true,
     //    "noUnusedLocals": true,
     "noImplicitAny": false, // leave this for js compatible,
-    // "noImplicitOverride": true, // TODO
+    "noImplicitOverride": true, // TODO
     // "importsNotUsedAsValues": "error", // TODO
+    // "noUnusedParameters": true,
     "typeRoots": [
       "../@types/",
       "../node_modules/@types/"
@@ -33,6 +34,6 @@
     }
   },
   "include": [
-    "./src/main/resources/web/js/zk/*",
+    "./src/main/resources/web/js/zk/**/*",
   ]
 }
