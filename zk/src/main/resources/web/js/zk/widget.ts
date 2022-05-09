@@ -5590,13 +5590,13 @@ export class RefWidget extends Widget {
 	 * @type String
 	 * @since 5.0.3
 	 */
-	public className = 'zk.RefWidget';
+	public override className = 'zk.RefWidget';
 	/** The widget name (<code>refWidget</code>).
 	 * @type String
 	 * @since 5.0.3
 	 */
-	public widgetName = 'refWidget';
-	protected bind_(): void {
+	public override widgetName = 'refWidget';
+	protected override bind_(): void {
 		var w = Widget.$(this.uuid as string);
 		if (!w) {
 			zk.error('RefWidget not found: ' + this.uuid);
@@ -5636,16 +5636,16 @@ export class Desktop extends Widget {
 	//a virtual node that might have no DOM node and must be handled specially
 	public z_virnd = true;
 
-	public bindLevel = 0;
+	public override bindLevel = 0;
 	/** The class name (<code>zk.Desktop</code>).
 	 * @type String
 	 */
-	public className = 'zk.Desktop';
+	public override className = 'zk.Desktop';
 	/** The widget name (<code>desktop</code>).
 	 * @type String
 	 * @since 5.0.2
 	 */
-	public widgetName = 'desktop';
+	public override widgetName = 'desktop';
 	/** The request path.
 	 * @type String
 	 */
@@ -5692,17 +5692,17 @@ export class Desktop extends Widget {
 		Desktop.sync(60000); //wait since liferay on IE delays the creation
 	}
 
-	public bind_ = zk.$void;
-	public unbind_ = zk.$void;
+	public override bind_ = zk.$void;
+	public override unbind_ = zk.$void;
 	/** This method is voided (does nothing) since the desktop's ID
 	 * can be changed.
 	 * @param String id the ID
 	 * @return zk.Widget this widget
 	 */
-	public setId = zk.$void;
+	public override setId = zk.$void;
 
 	//ZK-2663: Popup does not show up when its parent is native
-	public isRealVisible(): boolean {
+	public override isRealVisible(): boolean {
 		return true;
 	}
 
@@ -5712,7 +5712,7 @@ export class Desktop extends Widget {
 	 * If not specified, the default desktop is assumed.
 	 * @return zk.Desktop
 	 */
-	public static $<T extends Desktop>(dtid?: string | Desktop): T | null {
+	public static override $<T extends Desktop>(dtid?: string | Desktop): T | null {
 		var Desktop = zk.Desktop, w;
 		if (dtid) {
 			if (Desktop.isInstance(dtid))
@@ -5881,16 +5881,16 @@ export class Page extends Widget {
 	//a virtual node that might have no DOM node and must be handled specially
 	public z_virnd = true;
 
-	protected _style = 'width:100%;height:100%';
+	protected override _style = 'width:100%;height:100%';
 	/** The class name (<code>zk.Page</code>).
 	 * @type String
 	 */
-	public className = 'zk.Page';
+	public override className = 'zk.Page';
 	/** The widget name (<code>page</code>).
 	 * @type String
 	 * @since 5.0.2
 	 */
-	public widgetName = 'page';
+	public override widgetName = 'page';
 
 	/** Constructor.
 	 * @param Map props the properties to assign to this page
@@ -5911,7 +5911,7 @@ export class Page extends Widget {
 	 * of all child widgets.
 	 * @param Array out an array of HTML fragments.
 	 */
-	public redraw(out: string[]): void {
+	public override redraw(out: string[]): void {
 		out.push('<div', this.domAttrs_(), '>');
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
@@ -5940,11 +5940,11 @@ export class Body extends Page {
 		this.desktop = dt;
 	}
 
-	public $n(subId?: StringFieldValue): HTMLElement | null {
+	public override $n(subId?: StringFieldValue): HTMLElement | null {
 		return subId ? null : document.body;
 	}
 
-	public redraw = zk.$void;
+	public override redraw = zk.$void;
 }
 
 /** A native widget.
@@ -5964,19 +5964,19 @@ export class Native extends Widget {
 	/** The class name (<code>zk.Native</code>)
 	 * @type String
 	 */
-	public className = 'zk.Native';
+	public override className = 'zk.Native';
 	/** The widget name (<code>native</code>).
 	 * @type String
 	 * @since 5.0.2
 	 */
-	public widgetName = 'native';
+	public override widgetName = 'native';
 	//rawId: true, (Bug 3358505: it cannot be rawId)
 
-	public $n(subId?: StringFieldValue): DOMFieldValue {
+	public override $n(subId?: StringFieldValue): DOMFieldValue {
 		return !subId && this.id ? document.getElementById(this.id) :
 			this.$supers('$n', arguments as unknown as unknown[]) as DOMFieldValue; // Bug ZK-606/607
 	}
-	public redraw(out: string[]): void {
+	public override redraw(out: string[]): void {
 		var s = this.prolog, p;
 		if (s) {
 			//Bug ZK-606/607: hflex/vflex and many components need to know
@@ -6060,12 +6060,12 @@ export class Macro extends Widget {
 	/** The class name (<code>zk.Macro</code>).
 	 * @type String
 	 */
-	public className = 'zk.Macro';
+	public override className = 'zk.Macro';
 	/** The widget name (<code>macro</code>).
 	 * @type String
 	 * @since 5.0.2
 	 */
-	public widgetName = 'macro';
+	public override widgetName = 'macro';
 	// B70-ZK-2065: Replace span with div, because block-level element inside an inline element is not valid.
 	private _enclosingTag = 'div';
 
@@ -6099,7 +6099,7 @@ export class Macro extends Widget {
 	 * of all child widgets.
 	 * @param Array out an array of HTML fragments (String).
 	 */
-	public redraw(out: string[]): void {
+	public override redraw(out: string[]): void {
 		out.push('<', this._enclosingTag, this.domAttrs_(), '>');
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
