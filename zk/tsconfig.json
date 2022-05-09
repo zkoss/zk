@@ -1,0 +1,38 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": [
+      "esnext",
+      "dom"
+    ],
+    "moduleResolution": "node",
+    "module": "commonjs",
+    "allowJs": true,
+    "noEmit": true, // type checking only
+    "strict": true,
+    "allowSyntheticDefaultImports": true,
+    //    "noFallthroughCasesInSwitch": true,
+    "useUnknownInCatchVariables": false,
+    //    "noImplicitReturns": true,
+    //    "noUnusedLocals": true,
+    "noImplicitAny": false, // leave this for js compatible,
+    // "noImplicitOverride": true, // TODO
+    // "importsNotUsedAsValues": "error", // TODO
+    "typeRoots": [
+      "../@types/",
+      "../node_modules/@types/"
+    ],
+    "types": [
+      "zk",
+      "webpack-env"
+    ],
+    "paths": {
+      "@zk/*": [
+        "./src/main/resources/web/js/zk/*"
+      ]
+    }
+  },
+  "include": [
+    "./src/main/resources/web/js/zk/*",
+  ]
+}

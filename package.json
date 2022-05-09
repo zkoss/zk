@@ -55,5 +55,8 @@
     "webpack": "5.66.0",
     "webpack-cli": "4.9.1",
     "zkless-engine": "^1.1.10"
-  }
+  },
+  "workspaces": [
+    "zk"
+  ]
 }

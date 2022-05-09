@@ -1,0 +1,13 @@
+{
+  "name": "zk",
+  "version": "0.1.0",
+  "description": "Core ZK frontend functionality",
+  "main": "codegen/resources/web/index.js",
+  "devDependencies": {},
+  "scripts": {},
+  "keywords": [
+    "zk"
+  ],
+  "author": "Potix",
+  "license": "LGPL-2.0-or-later"
+}
