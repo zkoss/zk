@@ -19,6 +19,14 @@
       "parserOptions": {
         "project": "./zk/tsconfig.json"
       },
+  "overrides": [
+    {
+      "files": [
+        "*.ts"
+      ],
+      "parserOptions": {
+        "project": "./zk/tsconfig.json"
+      },
       "rules": {
         // Recommended
         "for-direction": "error",
