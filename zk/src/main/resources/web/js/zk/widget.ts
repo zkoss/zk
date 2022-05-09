@@ -4893,7 +4893,24 @@ _doFooSelect: function (evt) {
 		var els: ({n: HTMLElement; w: zk.Widget})[] = [];
 		for (var wid in _binds) {
 			if (name == '*' || name == _binds[wid].widgetName) {
-				var n = _binds[wid].$n(), w;
+				var _w = _binds[wid],
+					n = _w.$n(), w;
+
+				// force rod to render before query.
+				if (!n && _w.z_rod) {
+					var parent = _w;
+					for (var p: zk.Widget|null = _w; p != null; p = p.parent) {
+						if (p.z_rod || p._rodKid) {
+							parent = p;
+						} else {
+							break;
+						}
+					}
+					if (parent != null) {
+						parent.forcerender();
+					}
+					n = _w.$n();
+				}
 				//Bug B50-3310406 need to check if widget is removed or not.
 				if (n && (w = Widget.$(_binds[wid]))) {
 					els.push({
