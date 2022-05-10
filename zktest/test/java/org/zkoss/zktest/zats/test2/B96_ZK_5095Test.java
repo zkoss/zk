@@ -12,19 +12,23 @@ Copyright (C) 2022 Potix Corporation. All Rights Reserved.
 package org.zkoss.zktest.zats.test2;
 
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
+import org.junit.ClassRule;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
-import org.zkoss.zats.mimic.DesktopAgent;
+import org.zkoss.zktest.zats.ExternalZkXml;
+import org.zkoss.zktest.zats.ForkJVMTestOnly;
 import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ZATSTestCase;
 
 /**
  * @author jameschu
  */
+@Category(ForkJVMTestOnly.class)
 public class B96_ZK_5095Test extends WebDriverTestCase {
+	@ClassRule
+	public static final ExternalZkXml CONFIG = new ExternalZkXml("/test2/B96-ZK-5095.xml");
+
 	@Test
 	public void test() {
 		connect();
