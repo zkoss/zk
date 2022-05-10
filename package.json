@@ -40,7 +40,7 @@
     "gulp-tap": "^2.0.0",
     "gulp-uglify": "^3.0.2",
     "merge-stream": "^2.0.0",
-    "minimist": "^1.2.5",
+    "minimist": "^1.2.6",
     "postcss": "^8.4.5",
     "typescript": "^4.5.4",
     "zkless-engine": "^1.1.10"

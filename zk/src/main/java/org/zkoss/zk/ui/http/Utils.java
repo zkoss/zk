@@ -216,4 +216,14 @@ public class Utils {
 		}
 		return updateURI;
 	}
+
+	/**
+	 * obfuscate object with salt string
+	 * @param obj target object
+	 * @param salt string
+	 * @return hex string
+	 */
+	/*package*/ static String obfuscateHashWithSalt(Object obj, String salt) {
+		return Integer.toHexString(37 * obj.hashCode() + salt.hashCode());
+	}
 }

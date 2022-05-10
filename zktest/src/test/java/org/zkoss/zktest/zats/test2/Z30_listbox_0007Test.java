@@ -24,8 +24,8 @@ public class Z30_listbox_0007Test extends WebDriverTestCase {
 	public void test() {
 		connect();
 		Assert.assertEquals(
-				Streams.stream(jq(".z-listitem")).limit(4).mapToInt(JQuery::outerHeight).sum(),
+				Streams.stream(jq(".z-listitem")).limit(4).mapToDouble(JQuery::outerHeight).sum(),
 				jq(".z-listbox-body").height(),
-				2);
+				3);
 	}
 }
