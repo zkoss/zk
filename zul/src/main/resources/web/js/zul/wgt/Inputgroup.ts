@@ -51,6 +51,11 @@ zul.wgt.Inputgroup = zk.$extends(zul.Widget, {
 		}
 	},
 
+	// treat this as setVertical(boolean) for zephyr
+	setOrient(orient: string) {
+		this.setVertical(orient == 'vertical');
+	},
+
 	domClass_(): string {
 		let classes = this.$supers('domClass_', arguments);
 		return classes + (this._vertical ? ' ' + this.$s('vertical') : '');
