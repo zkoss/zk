@@ -3434,7 +3434,7 @@ public class Listbox extends MeshElement {
 			if (_nonselTags != null)
 				renderer.render("nonselectableTags", _nonselTags);
 			if (isCheckmarkDeselectOther())
-				renderer.render("_cdo", true);
+				renderer.render("checkmarkDeselectOther", true);
 			if (!isRightSelect())
 				renderer.render("rightSelect", false);
 			if (isListgroupSelectable())
