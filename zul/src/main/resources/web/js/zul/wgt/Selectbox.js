@@ -73,9 +73,8 @@ zul.wgt.Selectbox = zk.$extends(zul.Widget, {
 		 * @param int maxlength
 		 * @since 10.0.0 for Zephyr
 		 */
-		maxlength: function (maxlength) {
-			var n = this.$n();
-			if (n) n.maxlength = maxlength;
+		maxlength: function () {
+			this.rerender();
 		},
 
 		/**
