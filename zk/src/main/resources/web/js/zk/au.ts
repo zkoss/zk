@@ -864,6 +864,7 @@ zAu.beforeSend = function (uri, req, dt) {
 			// split the different request for the different ReqUri for zephyr
 			if (j > 0 && oldRequri != requri) {
 				es.unshift(aureq);
+				sendPending = true;
 				break;
 			}
 			requri = oldRequri;
