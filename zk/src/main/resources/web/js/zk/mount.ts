@@ -134,11 +134,12 @@ jq(function () {
 	}, 25);
 });
 //run after page AU cmds
-zk._apac = function (fn, _which_) {
+zk._apac = _apac;
+export function _apac(fn: () => void, _which_?: string): void {
 	if (_paci)
 		return _paci[_which_ || 'f1'].push(fn);
 	zk.afterMount(fn); //it might happen if ZUML loaded later (with custom JS code)
-};
+}
 
 /** @partial zk
  */
@@ -160,7 +161,8 @@ zk._apac = function (fn, _which_) {
  */
 //afterMount: function () {}
 //@};
-zk.afterMount = function (fn, delay?): boolean { //part of zk
+zk.afterMount = afterMount;
+export function afterMount(fn: () => void, delay?: number): boolean { //part of zk
 	if (fn) {
 		if (!jq.isReady)
 			jq(function () {
@@ -177,7 +179,7 @@ zk.afterMount = function (fn, delay?): boolean { //part of zk
 			setTimeout(fn, delay);
 	}
 	return false;
-};
+}
 /** @partial zk
  */
 //@{
@@ -194,15 +196,17 @@ zk.afterMount = function (fn, delay?): boolean { //part of zk
  */
 //afterResize: function () {}
 //@};
-zk.afterResize = function (fn): void {
+zk.afterResize = afterResize;
+export function afterResize(fn: () => void): void {
 	if (fn)
 		_aftResizes.push(fn);
-};
-zk.doAfterResize = function (): void {
+}
+zk.doAfterResize = doAfterResize;
+export function doAfterResize(): void {
 	for (var fn; fn = _aftResizes.shift();) {
 		fn();
 	}
-};
+}
 
 function _curdt(): zk.Desktop {
 	return _mntctx['curdt'] || (_mntctx['curdt'] = zk.Desktop.$());
@@ -396,8 +400,8 @@ function create(parent: zk.Widget | null, wi: any[], ignoreDom?: boolean): zk.Wi
 		seProps = wi[3] || {};
 	if (type === 0) { //page
 		type = zk.cut(props, 'wc');
-		var cls = type ? zk.$import(type) : zk.Page;
-		(wgt = new cls({uuid: uuid}, zk.cut(props, 'ct'))).inServer = true;
+		const cls = type ? zk.$import(type) as typeof zk.Page : zk.Page;
+		(wgt = new cls({uuid: uuid}, zk.cut(props, 'ct') as unknown as boolean)).inServer = true;
 		if (parent) parent.appendChild(wgt, ignoreDom);
 	} else {
 		if ((stub = type == '#stub') || type == '#stubs') {
@@ -413,7 +417,7 @@ function create(parent: zk.Widget | null, wi: any[], ignoreDom?: boolean): zk.Wi
 			//to reuse wgt, we replace it with a dummy widget, w
 			//if #stubs, we have to reuse the whole subtree (not just wgt), so don't move children
 		} else {
-			var cls = zk.$import(type);
+			const cls = zk.$import(type) as typeof zk.Widget;
 			if (!cls)
 				throw 'Unknown widget: ' + type;
 			(wgt = new cls(window.zkac)).inServer = true;
@@ -492,10 +496,11 @@ function breathe(fn): boolean {
 }
 
 //define a desktop
-window.zkdt = function (dtid, contextURI, updateURI, resourceURI, reqURI): zk.Desktop {
+window.zkdt = zkdt;
+export function zkdt(dtid?: string, contextURI?: string, updateURI?: string, resourceURI?: string, reqURI?: string): zk.Desktop {
 	var dt = zk.Desktop.$(dtid);
 	if (dt == null) {
-		dt = new zk.Desktop(dtid, contextURI, updateURI, resourceURI, reqURI);
+		dt = new zk.Desktop(dtid!, contextURI, updateURI, resourceURI, reqURI);
 		if (zk.pfmeter) zAu._pfrecv(dt, dtid);
 	} else {
 		if (updateURI != null) dt.updateURI = updateURI;
@@ -505,7 +510,7 @@ window.zkdt = function (dtid, contextURI, updateURI, resourceURI, reqURI): zk.De
 	}
 	_mntctx['curdt'] = dt;
 	return dt;
-};
+}
 
 //widget creations
 // wi's index meaning
@@ -515,8 +520,8 @@ window.zkdt = function (dtid, contextURI, updateURI, resourceURI, reqURI): zk.De
 // wi[3] = shadow properties - since ZK 8.0.0
 // wi[4] = children
 // wi[5] = mold
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-window.zkx = function (wi: unknown[], extra?: string | null, aucmds?: string | null, js?: string): void { //extra is either delay (BL) or [stub, filter] (AU)
+window.zkx = zkx;
+export function zkx(wi?: unknown[], extra?: string | null, aucmds?: string | null, js?: string): void { //extra is either delay (BL) or [stub, filter] (AU)
 	zk.mounting = true;
 
 	try {
@@ -535,7 +540,7 @@ window.zkx = function (wi: unknown[], extra?: string | null, aucmds?: string | n
 
 		if (wi) {
 			if (wi[0] === 0) { //page
-				var props = wi[2],
+				var props = wi[2] as Record<string, unknown>,
 					dtid = zk.cut(props, 'dt') as string | undefined,
 					cu = zk.cut(props, 'cu') as string | undefined,
 					uu = zk.cut(props, 'uu') as string | undefined,
@@ -566,23 +571,27 @@ window.zkx = function (wi: unknown[], extra?: string | null, aucmds?: string | n
 			throw e;
 		}, 0);
 	}
-};
+}
 
 //widget creation called by au.js
 //args: [wi] (a single element array containing wi)
-window.zkx_ = function (args, stub, filter?): void {
+window.zkx_ = zkx_;
+export function zkx_(args: ArrayLike<unknown>, stub, filter?): void {
 	_t0 = jq.now(); //so breathe() won't do unncessary delay
-	args[1] = [stub, filter]; //assign stub as 2nd argument (see zkx)
-	window.zkx.apply(window, args); //args[2] (aucmds) must be null
-};
+	(args as unknown[])[1] = [stub, filter]; //assign stub as 2nd argument (see zkx)
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	window.zkx.apply(window, args as any); //args[2] (aucmds) must be null
+}
 
 //Run AU commands (used only with ZHTML)
-window.zkac = function (): void {
+window.zkac = zkac;
+export function zkac(): void {
 	doAuCmds(arguments);
-};
+}
 
 //mount and zkx (BL)
-window.zkmx = function (): void {
+window.zkmx = zkmx;
+export function zkmx(): void {
 	window.zkmb();
 	try {
 		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -591,26 +600,29 @@ window.zkmx = function (): void {
 	} finally {
 		window.zkme();
 	}
-};
+}
 
 //begin of mounting
-window.zkmb = function (bindOnly?): void {
+window.zkmb = zkmb;
+export function zkmb(bindOnly?: boolean): void {
 	_mntctx['bindOnly'] = bindOnly;
 	var t = 390 - (jq.now() - _t0);
 	zk.startProcessing(t > 0 ? t : 0);
-};
+}
 
 //end of mounting
-window.zkme = function (): void {
+window.zkme = zkme;
+export function zkme(): void {
 	_mntctx['curdt'] = null;
 	_mntctx['bindOnly'] = false;
-};
+}
 
 // window scope
 // register data-attributres handler (since 8.0.0
-window.zkdh = function (name, script): void {
+window.zkdh = zkdh;
+export function zkdh(name: string, script: string): void {
 	zk.addDataHandler('data-' + name, script);
-};
+}
 
 //Event Handler//
 jq(function () {
@@ -627,24 +639,23 @@ jq(function () {
 
 	/** @partial zk
 	 */
-	Object.assign(zk, {
-		/** Adds a function that will be executed when the browser is about to unload the document. In other words, it is called when window.onbeforeunload is called.
-		 *
-		 * <p>To remove the function, invoke this method by specifying remove to the opts argument.
+	
+	/** Adds a function that will be executed when the browser is about to unload the document. In other words, it is called when window.onbeforeunload is called.
+	 *
+	 * <p>To remove the function, invoke this method by specifying remove to the opts argument.
 <pre><code>zk.beforeUnload(fn, {remove: true});</code></pre>
-		 *
-		 * @param Function fn the function to execute.
-		 * The function shall return null if it is OK to close, or a message (String) if it wants to show it to the end user for confirmation.
-		 * @param Map opts [optional] a map of options. Allowed vlaues:<br/>
-		 * <ul>
-		 * <li>remove: whether to remove instead of add.</li>
-		 * </ul>
-		 */
-		beforeUnload: function (fn, opts): void { //part of zk
-			if (opts && opts.remove) _bfUploads.$remove(fn);
-			else _bfUploads.push(fn);
-		}
-	});
+	 *
+	 * @param Function fn the function to execute.
+	 * The function shall return null if it is OK to close, or a message (String) if it wants to show it to the end user for confirmation.
+	 * @param Map opts [optional] a map of options. Allowed vlaues:<br/>
+	 * <ul>
+	 * <li>remove: whether to remove instead of add.</li>
+	 * </ul>
+	 */
+	zk.beforeUnload = function (fn: () => string | null, opts?: {remove: boolean}): void { //part of zk
+		if (opts && opts.remove) _bfUploads.$remove(fn);
+		else _bfUploads.push(fn);
+	};
 
 	function _doEvt(wevt: Event): void {
 		var wgt = wevt.target;
@@ -660,7 +671,7 @@ jq(function () {
 			if (!wevt.stopped && (!wevt['originalEvent'] || !wevt['originalEvent']['zkstopped'])) // Bug ZK-2544
 				wgt['do' + en.substring(2) + '_'].call(wgt, wevt);
 			if (wevt.domStopped)
-				wevt.domEvent.stop();
+				wevt.domEvent!.stop();
 		}
 	}
 
@@ -750,15 +761,15 @@ jq(function () {
 
 	var lastTimestamp, lastTarget;
 	jq(document)
-		.keydown(function (evt: Partial<JQ.Event>) {
+		.keydown(function (evt) {
 			var wgt = Widget.$(evt, {child: true}),
-				wevt = new zk.Event(wgt, 'onKeyDown', (evt as JQ.Event).keyData(), null, evt as JQ.Event);
+				wevt = new zk.Event(wgt, 'onKeyDown', evt.keyData(), null, evt);
 			if (wgt) {
 				_doEvt(wevt);
 				if (!wevt.stopped && wgt.afterKeyDown_) {
 					wgt.afterKeyDown_(wevt);
 					if (wevt.domStopped)
-						wevt.domEvent.stop();
+						wevt.domEvent!.stop();
 				}
 			} else if (zk['invokeFirstRootForAfterKeyDown'])
 				_afterKeyDown(wevt);
@@ -767,21 +778,21 @@ jq(function () {
 				&& (zk._noESC > 0 || zAu.shallIgnoreESC())) //Bug 1927788: prevent FF from closing connection
 				return false; //eat
 		})
-		.keyup(function (evt: Partial<JQ.Event>) {
+		.keyup(function (evt) {
 			var wgt = zk.keyCapture;
 			if (wgt) zk.keyCapture = null;
 			else wgt = Widget.$(evt, {child: true});
-			_doEvt(new zk.Event(wgt, 'onKeyUp', (evt as JQ.Event).keyData(), null, evt as JQ.Event));
+			_doEvt(new zk.Event(wgt, 'onKeyUp', evt.keyData(), null, evt));
 		})
-		.keypress(function (evt: Partial<JQ.Event>) {
+		.keypress(function (evt) {
 			var wgt = zk.keyCapture;
 			if (!wgt) wgt = Widget.$(evt, {child: true});
-			_doEvt(new zk.Event(wgt, 'onKeyPress', (evt as JQ.Event).keyData(), null, evt as JQ.Event));
+			_doEvt(new zk.Event(wgt, 'onKeyPress', evt.keyData(), null, evt));
 		})
 		.on('paste', function (evt) {
 			var wgt = zk.keyCapture;
 			if (!wgt) wgt = Widget.$(evt, {child: true});
-			_doEvt(new zk.Event(wgt, 'onPaste', (evt as JQ.Event).keyData(), null, evt as JQ.Event));
+			_doEvt(new zk.Event(wgt, 'onPaste', evt.keyData(), null, evt));
 		})
 		.on('zcontextmenu', function (evt) {
 			//ios: zcontextmenu shall be listened first,
@@ -794,7 +805,7 @@ jq(function () {
 			if (wgt) {
 				if (zk.ie && zk.ie < 11)
 					evt.which = 3;
-				var wevt = new zk.Event(wgt, 'onRightClick', (evt as JQ.Event).mouseData(), {}, evt as JQ.Event);
+				var wevt = new zk.Event(wgt, 'onRightClick', evt.mouseData(), {}, evt);
 				_doEvt(wevt);
 				if (wevt.domStopped)
 					return false;
@@ -808,7 +819,7 @@ jq(function () {
 			}
 			var wgt = Widget.$(evt, {child: true});
 			_docMouseDown(
-				new zk.Event(wgt, 'onMouseDown', (evt as JQ.Event).mouseData(), null, evt as JQ.Event),
+				new zk.Event(wgt, 'onMouseDown', evt.mouseData(), null, evt),
 				wgt);
 		})
 		.on('zmouseup', function (evt) {
@@ -823,7 +834,7 @@ jq(function () {
 			wgt = zk.mouseCapture;
 			if (wgt) zk.mouseCapture = null;
 			else wgt = Widget.$(evt, {child: true});
-			_doEvt(new zk.Event(wgt, 'onMouseUp', (evt as JQ.Event).mouseData(), null, evt as JQ.Event));
+			_doEvt(new zk.Event(wgt, 'onMouseUp', evt.mouseData(), null, evt));
 		})
 		.on('zmousemove', function (evt) {
 			zk.currentPointer[0] = evt.pageX || 0;
@@ -831,17 +842,17 @@ jq(function () {
 
 			var wgt = zk.mouseCapture;
 			if (!wgt) wgt = Widget.$(evt, {child: true});
-			_doEvt(new zk.Event(wgt, 'onMouseMove', (evt as JQ.Event).mouseData(), null, evt as JQ.Event));
+			_doEvt(new zk.Event(wgt, 'onMouseMove', evt.mouseData(), null, evt));
 		})
-		.mouseover(function (evt: Partial<JQ.Event>) {
+		.mouseover(function (evt) {
 			if (zk.mobile) return; // unsupported on touch device for better performance
 			zk.currentPointer[0] = evt.pageX || 0;
 			zk.currentPointer[1] = evt.pageY || 0;
 
-			_doEvt(new zk.Event(Widget.$(evt, {child: true}), 'onMouseOver', (evt as JQ.Event).mouseData(), {ignorable: true}, evt as JQ.Event));
+			_doEvt(new zk.Event(Widget.$(evt, {child: true}), 'onMouseOver', evt.mouseData(), {ignorable: true}, evt));
 		})
-		.mouseout(function (evt: Partial<JQ.Event>) {
-			_doEvt(new zk.Event(Widget.$(evt, {child: true}), 'onMouseOut', (evt as JQ.Event).mouseData(), {ignorable: true}, evt as JQ.Event));
+		.mouseout(function (evt) {
+			_doEvt(new zk.Event(Widget.$(evt, {child: true}), 'onMouseOut', evt.mouseData(), {ignorable: true}, evt));
 		})
 		.click(function (evt) {
 			if (zk.Draggable.ignoreClick()) return;
@@ -858,7 +869,7 @@ jq(function () {
 
 				if (evt.which == 1)
 					_doEvt(new zk.Event(Widget.$(evt, {child: true}),
-						'onClick', (evt as JQ.Event).mouseData(), {}, evt as JQ.Event));
+						'onClick', evt.mouseData(), {}, evt));
 				//don't return anything. Otherwise, it replaces event.returnValue in IE (Bug 1541132)
 			}
 		})
@@ -867,7 +878,7 @@ jq(function () {
 
 			var wgt = Widget.$(evt, {child: true});
 			if (wgt && evt.which == 1) {
-				var wevt = new zk.Event(wgt, 'onDoubleClick', (evt as JQ.Event).mouseData(), {}, evt as JQ.Event);
+				var wevt = new zk.Event(wgt, 'onDoubleClick', evt.mouseData(), {}, evt);
 				_doEvt(wevt);
 				if (wevt.domStopped)
 					return false;
@@ -878,7 +889,7 @@ jq(function () {
 		});
 
 	if (zk.scriptErrorHandlerEnabled && !zk.ie9_) {
-		zk.scriptErrorHandler = function (evt) {
+		zk.scriptErrorHandler = function (evt): void {
 			let errorMsg = evt.originalEvent.message,
 				stack = evt.originalEvent.error.stack,
 				checkFunctionList = ['globalEval', 'script', '_doCmds', 'afterResponse', '_onResponseReady'];

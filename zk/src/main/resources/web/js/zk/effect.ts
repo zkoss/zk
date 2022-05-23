@@ -20,7 +20,7 @@ import {default as zk} from '@zk/zk';
 import {type JQZK, type SlideOptions} from '@zk/dom';
 import {zWatch} from '@zk/evt';
 import type {Widget} from '@zk/widget';
-import {DOMFieldValue, StringFieldValue} from '@zk/types';
+import type {DOMFieldValue} from '@zk/types';
 
 var _defSKUOpts, _useSKU;
 
@@ -62,19 +62,18 @@ export interface Eff {
 	_skuOpts<T extends EffectStackupOptions>(opts: Partial<EffectStackupOptions>): T;
 	_onVParent(evt, opts?): void;
 
-	Shadow?: typeof Shadow;
-	FullMask?: typeof FullMask;
-	Mask?: typeof Mask;
-	Actions?: EffectActions;
-	KeyboardTrap?: typeof KeyboardTrap;
-	Opacity?: unknown;
-	Move?: unknown;
+	Shadow: typeof Shadow;
+	FullMask: typeof FullMask;
+	Mask: typeof Mask;
+	Actions: EffectActions;
+	KeyboardTrap: typeof KeyboardTrap;
 }
 
 /** The effects, such as mask and shadow.
  */
 //zk.$package('zk.eff');
-let eff: Omit<Eff, 'destroy'> = {
+// eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+let eff = {
 	shallStackup: function () {
 		return _useSKU;
 	},
@@ -91,10 +90,15 @@ let eff: Omit<Eff, 'destroy'> = {
 				$stk.insertBefore(sdw.node);
 		}
 	}
-};
+} as Omit<Eff, 'destroy'>;
 /** The shadow effect.
 */
 export class Shadow extends zk.Object implements Effect {
+	declare public wgt: Widget | null;
+	declare public node: HTMLElement | null;
+	declare public stackup?: HTMLIFrameElement | null;
+	declare public opts: Partial<EffectStackupOptions>;
+
 	public constructor(element: HTMLElement, opts: Partial<EffectStackupOptions>) {
 		super();
 		this.wgt = zk.Widget.$(element.id);
@@ -105,19 +109,19 @@ export class Shadow extends zk.Object implements Effect {
 	}
 
 	public destroy(): void {
-		jq(this.stackup).remove();
-		jq(this.node).removeClass(this.wgt.getZclass() + '-shadow');
+		jq(this.stackup!).remove();
+		jq(this.node!).removeClass(this.wgt!.getZclass() + '-shadow');
 		zWatch.unlisten({ onVParent: [this.node, eff._onVParent] }); // ZK-2586
 		this.wgt = this.node = this.stackup = null;
 	}
 
 	public hide(): void {
-		jq(this.stackup).hide();
-		jq(this.node).removeClass(this.wgt.getZclass() + '-shadow');
+		jq(this.stackup!).hide();
+		jq(this.node!).removeClass(this.wgt!.getZclass() + '-shadow');
 	}
 
 	public sync(): boolean {
-		var node = this.node, $node = jq(node);
+		var node = this.node, $node = jq(node!);
 		if (!node || !$node.zk.isVisible(true)) {
 			if (this.opts.stackup && node) {
 				if (!this.stackup)
@@ -127,7 +131,7 @@ export class Shadow extends zk.Object implements Effect {
 			return false;
 		}
 
-		$node.addClass(this.wgt.getZclass() + '-shadow');
+		$node.addClass(this.wgt!.getZclass() + '-shadow');
 
 		var opts = this.opts,
 			l = node.offsetLeft, t = node.offsetTop,
@@ -143,12 +147,12 @@ export class Shadow extends zk.Object implements Effect {
 			st.top = jq.px(t);
 			st.width = jq.px0(w);
 			st.height = jq.px0(h);
-			st.zIndex = zk.parseInt($node.css('zIndex'));
+			st.zIndex = zk.parseInt($node.css('zIndex')) as unknown as string;
 			st.display = 'block';
 		}
 		return true;
 	}
-	public getBottomElement(): HTMLElement {
+	public getBottomElement(): DOMFieldValue {
 		return this.stackup;
 	}
 }
@@ -157,7 +161,9 @@ eff.Shadow = Shadow;
  * @disable(zkgwt)
  */
 export class FullMask extends zk.Object implements Effect {
-	public mask: HTMLElement | null;
+	declare public mask: HTMLElement | null;
+	declare public stackup?: HTMLIFrameElement | null;
+	
 	/** The constructor of the full mask object.
 	 * <p>To remove the full mask, invoke {@link #destroy}.
 	 * @param Map opts [optional] the options. Allowed options:
@@ -177,7 +183,7 @@ export class FullMask extends zk.Object implements Effect {
 			if (opts.anchor)
 				opts.anchor.parentNode?.insertBefore(mask, opts.anchor);
 			if (opts.id) mask.id = opts.id;
-			if (opts.zIndex != null) mask.style.zIndex = opts.zIndex;
+			if (opts.zIndex != null) mask.style.zIndex = opts.zIndex as unknown as string;
 			if (opts.visible == false) mask.style.display = 'none';
 		} else {
 			var maskId = opts.id || 'z_mask',
@@ -211,7 +217,7 @@ export class FullMask extends zk.Object implements Effect {
 			jq(mask).off('click', jq.Event.stop)
 				.remove();
 		}
-		jq(this.stackup).remove();
+		jq(this.stackup!).remove();
 		this.mask = this.stackup = null;
 	}
 	/** Hide the full mask. Application developers rarely need to invoke this method.
@@ -255,6 +261,11 @@ eff.FullMask = FullMask;
  * @disable(zkgwt)
  */
 export class Mask extends zk.Object implements Effect {
+	declare public mask?: HTMLElement | null;
+	declare private _opts: Partial<EffectMaskOptions>;
+	declare public __mask?: Effect;
+	declare public wgt?: Widget & Pick<Mask, '__mask'> | null;
+
 	/** The constructor.
 	 * <p>To remove the mask, invoke {@link #destroy}.
 	 * @param Map opts [optional] the options:
@@ -317,10 +328,10 @@ export class Mask extends zk.Object implements Effect {
 	 * Rather, use {@link #sync} to synchronized the visual states.
 	 */
 	public hide(): void {
-		this.mask.style.display = 'none';
+		this.mask!.style.display = 'none';
 	}
 	public onHide(): void {
-		this.__mask.hide();
+		this.__mask!.hide();
 	}
 	/** Synchronizes the visual states of the mask with the specified element and the browser window.
 	 * The visual states include the visibility and Z Index.
@@ -331,7 +342,7 @@ export class Mask extends zk.Object implements Effect {
 			$anchor = zk(anchor);
 
 		if (!anchor) {
-			var optsId = opts.id;
+			var optsId = opts.id!;
 			opts.anchor = anchor = jq('#' + optsId.substring(0, optsId.indexOf('-')))[0];
 			$anchor = zk(anchor);
 			this._draw(opts, $anchor);
@@ -342,7 +353,7 @@ export class Mask extends zk.Object implements Effect {
 			return;
 		}
 
-		var st = this.mask.firstChild.style,
+		var st = (this.mask!.firstChild as HTMLElement).style,
 			xy = opts.offset || $anchor.revisedOffset(),
 			w = opts.width || $anchor.offsetWidth(),
 			h = opts.height || $anchor.offsetHeight();
@@ -382,13 +393,13 @@ export class Mask extends zk.Object implements Effect {
 		}
 
 		if (zi != 'auto') { //Bug ZK-1381: only apply z-index when it is not auto
-			st.zIndex = zi;
-			this.mask.lastChild.style.zIndex = zi;
+			st.zIndex = zi as string;
+			(this.mask!.lastChild as HTMLElement).style.zIndex = zi as string;
 		}
 
-		this.mask.style.display = 'block';
+		this.mask!.style.display = 'block';
 
-		var loading = jq(this.mask.id + '-z_loading', zk)[0];
+		var loading = jq(this.mask!.id + '-z_loading', zk)[0];
 		if (loading) {
 			if (loading.offsetHeight > h)
 				loading.style.height = jq.px0(zk(loading).revisedHeight(h));
@@ -398,16 +409,16 @@ export class Mask extends zk.Object implements Effect {
 			loading.style.left = jq.px0(xy[0] + ((w - loading.offsetWidth) / 2));
 		}
 
-		this.mask.style.visibility = '';
+		this.mask!.style.visibility = '';
 	}
 	public onSize(): void {
-		this.__mask.sync();
+		this.__mask!.sync();
 	}
 
 	/** Removes the mask.
 	 */
 	public destroy(): void {
-		jq(this.mask).remove();
+		jq(this.mask!).remove();
 		if (this.wgt) {
 			zWatch.unlisten({onHide: [this.wgt, this.onHide], onSize: [this.wgt, this.onSize]});
 			delete this.wgt.__mask;
@@ -471,9 +482,9 @@ eff.Actions = {
  * @since 9.5.0
  */
 export class KeyboardTrap extends zk.Object {
-	private _area: HTMLElement | null;
-	private _boundaryTop: HTMLDivElement | null;
-	private _boundaryBottom: HTMLDivElement | null;
+	declare private _area: HTMLElement | null;
+	declare private _boundaryTop: HTMLDivElement | null;
+	declare private _boundaryBottom: HTMLDivElement | null;
 	/**
 	 * The constructor.
 	 * <p>To remove the trap, invoke {@link #destroy}.

@@ -10,8 +10,13 @@
 Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
 */
-zk.cpsp.SPush = zk.$extends(zk.Object, {
-	start: function (dt, min, max, factor) {
+export class SPush extends zk.Object {
+	declare public desktop?: zk.Desktop;
+	declare public min?: number;
+	declare public max?: number;
+	declare public factor?: number;
+	declare public intv?: number | null;
+	public start(dt: zk.Desktop, min: number, max: number, factor: number): void {
 		this.desktop = dt;
 		this.min = min > 0 ? min : 1000;
 		this.max = max > 0 ? max : 15000;
@@ -21,21 +26,21 @@ zk.cpsp.SPush = zk.$extends(zk.Object, {
 		if (freq < 500) freq = 500; //no less than 500
 
 		this.intv = setInterval(this.proxy(this._do), freq);
-	},
-	stop: function () {
-		clearInterval(this.intv);
+	}
+	public stop(): void {
+		clearInterval(this.intv!);
 		this.intv = null;
-	},
-	_do: function () {
+	}
+	private _do(): void {
 		if (!zAu.processing()) {
 			var doNow = !zAu.doneTime;
 			if (!doNow) {
 				var doneTime = zAu.doneTime || 0,
-					delay = (doneTime - (zAu.sentTime || 0)) * this.factor,
+					delay = (doneTime - (zAu.sentTime || 0)) * this.factor!,
 					max = this.max,
 					min = this.min;
-				if (delay > max) delay = max;
-				else if (isNaN(delay) || delay < min) delay = min;
+				if (delay > max!) delay = max!;
+				else if (isNaN(delay) || delay < min!) delay = min!;
 				doNow = jq.now() > doneTime + delay;
 			}
 
@@ -43,17 +48,20 @@ zk.cpsp.SPush = zk.$extends(zk.Object, {
 				zAu.send(new zk.Event(this.desktop, 'dummy', null, {ignorable: true, rtags: {isDummy: true}}));
 		}
 	}
-});
+}
+zk.cpsp.SPush = SPush;
 
-zk.cpsp.start = function (dtid, min, max, factor) {
+zk.cpsp.start = start;
+export function start(dtid: string, min: number, max: number, factor: number): void {
 	var dt = zk.Desktop.$(dtid);
 	if (dt!._cpsp) dt!._cpsp.stop();
 	(dt!._cpsp = new zk.cpsp.SPush()).start(dt!, min, max, factor);
-};
-zk.cpsp.stop = function (dtid) {
+}
+zk.cpsp.stop = stop;
+export function stop(dtid: string): void {
 	var dt = zk.Desktop.$(dtid);
 	if (dt && dt._cpsp) {
 		dt._cpsp.stop();
 		dt._cpsp = null;
 	}
-};
+}

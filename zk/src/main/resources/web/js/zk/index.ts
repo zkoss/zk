@@ -30,16 +30,13 @@ import {default as zFlex} from '@zk/flex';
 import {zkreg} from '@zk/widget';
 
 declare global {
-	// eslint-disable-next-line no-unused-vars
 	interface Window {
-		$eval(s: string): unknown;
-		zk;
-		zKeys;
-		zjq;
-		zFlex;
+		zk: ZKStatic;
+		zjq: typeof zjq;
+		zFlex: typeof zFlex;
 	}
 }
-// export first for following js to us
+// export first for following js to use
 window.zk = zk;
 
 window.zjq = zjq;
@@ -142,7 +139,7 @@ if (zk.tabletUIEnabled) {
 	document.addEventListener('DOMContentLoaded', function () {
 		var jqTabletStylesheet = jq('link[href*="zkmax/css/tablet.css.dsp"]').eq(0);
 		if (jqTabletStylesheet)
-			jqTabletStylesheet.attr('disabled', false); // ZK-4451: disable tablet css
+			jqTabletStylesheet.attr('disabled', false as unknown as string); // ZK-4451: disable tablet css
 	});
 }
 

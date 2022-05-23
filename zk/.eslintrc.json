@@ -11,44 +11,6 @@
   "env": {
     "browser": true
   },
-  "globals": {
-    "$eval": "readonly",
-    "JQuery": "readonly",
-    "jq": "writable",
-    "JQ": "writable",
-    "zjq": "writable",
-    "zUtl": "writable",
-    "zAu": "writable",
-    "zWs": "writable",
-    "zWatch": "writable",
-    "zFlex": "writable",
-    "zKeys": "writable",
-    "msgzk": "writable",
-    "msgzul": "writable",
-    "Dates": "readonly",
-    "DateImpl": "readonly",
-    "WeakMap": "readonly",
-    // packages
-    "zk": "writable",
-    "zhtml": "writable",
-    "zkbind": "writable",
-    "zul": "writable",
-    "zkex": "writable",
-    "zkmax": "writable",
-    "za11y": "writable",
-    // mount.js exports
-    "zkdt": "readonly",
-    "zkx": "readonly",
-    "zkx_": "readonly",
-    "zkac": "readonly",
-    "zkmx": "readonly",
-    "zkmb": "readonly",
-    "zkme": "readonly",
-    "zkdh": "readonly",
-    // duplicate function declaration reserved keyword
-    "_zkf": "writable",
-    "Moment": "readonly"
-  },
   "overrides": [
     {
       "files": [
@@ -116,19 +78,14 @@
         "no-with": "error",
         "no-delete-var": "error",
         "no-shadow-restricted-names": "error",
-        "no-undef": [
-          "error",
-          {
-            "typeof": false
-          }
-        ],
-        "no-unused-vars": [
-          "error",
-          {
-            "vars": "local",
-            "args": "none" // TODO
-          }
-        ],
+        // https://typescript-eslint.io/docs/linting/troubleshooting/#i-get-errors-from-the-no-undef-rule-about-global-variables-not-being-defined-even-though-there-are-no-typescript-errors
+        // https://github.com/typescript-eslint/typescript-eslint/issues/1856
+        // https: //github.com/typescript-eslint/typescript-eslint/issues/2477#issuecomment-686892459
+        // Just rely on tsc for no-undef, eslint is lacking in scope analysis.
+        "no-undef": "off", // no-undef": ["error", {"typeof": false}],
+        // https://github.com/typescript-eslint/typescript-eslint/blob/main/packages/eslint-plugin/docs/rules/no-unused-vars.md#how-to-use
+        // Prefer tsc 
+        "no-unused-vars": "off", // "no-unused-vars": ["error", {"vars": "local", "args": "none" /*TODO*/}],
         "no-eval": "error",
         "no-implied-eval": "error",
         "no-mixed-spaces-and-tabs": [
@@ -192,7 +149,14 @@
         ],
         "unicode-bom": "error",
         "@typescript-eslint/adjacent-overload-signatures": "error",
-        "@typescript-eslint/ban-types": "error",
+        "@typescript-eslint/ban-types": [
+          "error",
+          {
+            "types": {
+              "Function": false
+            }
+          }
+        ],
         "@typescript-eslint/ban-ts-comment": "error",
         "@typescript-eslint/consistent-type-assertions": [
           "error",
@@ -231,8 +195,8 @@
         "@typescript-eslint/no-empty-interface": "error",
         "@typescript-eslint/no-explicit-any": "error",
         "@typescript-eslint/no-inferrable-types": "error",
-        "@typescript-eslint/no-misused-new": "error",
-        "@typescript-eslint/no-namespace": "error",
+        "@typescript-eslint/no-misused-new": "off",
+        "@typescript-eslint/no-namespace": "off",
         "@typescript-eslint/no-parameter-properties": "error",
         "@typescript-eslint/no-require-imports": "error",
         "@typescript-eslint/triple-slash-reference": [

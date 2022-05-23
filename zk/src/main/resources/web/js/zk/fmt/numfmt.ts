@@ -12,59 +12,67 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-(function () {
-	var _defaultSymbols = {
-		GROUPING: zk.GROUPING,
-		DECIMAL: zk.DECIMAL,
-		PERCENT: zk.PERCENT,
-		PER_MILL: zk.PER_MILL,
-		MINUS: zk.MINUS
-	};
+var _defaultSymbols = {
+	GROUPING: zk.GROUPING,
+	DECIMAL: zk.DECIMAL,
+	PERCENT: zk.PERCENT,
+	PER_MILL: zk.PER_MILL,
+	MINUS: zk.MINUS
+};
 
-	function down(valStr, ri): string {
-		return valStr.substring(0, ri);
-	}
-	function up(valStr, ri): string {
-		var k = 1, val = '';
-		for (var j = ri; k && --j >= 0;) {
-			var ch = valStr.charAt(j);
-			if (k == 1) {
-				if (ch >= '0' && ch < '9') {
-					ch = ch.$inc(1);
-					k = 0;
-				} else if (ch == '9')
-					ch = '0';
-			}
-			val = ch + val;
+function down(valStr, ri): string {
+	return valStr.substring(0, ri);
+}
+function up(valStr, ri): string {
+	var k = 1, val = '';
+	for (var j = ri; k && --j >= 0;) {
+		var ch = valStr.charAt(j);
+		if (k == 1) {
+			if (ch >= '0' && ch < '9') {
+				ch = ch.$inc(1);
+				k = 0;
+			} else if (ch == '9')
+				ch = '0';
 		}
-		if (j >= 0)
-			val = valStr.substring(0, j) + val;
-		return k ? '1' + val : val;
+		val = ch + val;
 	}
-	function compareHalf(valStr, ri): number {
-		var result,
-			base = 5;
-		for (var j = ri, len = valStr.length; j < len; ++j) {
-			result = parseInt(valStr.charAt(j)) - base;
-			if (j == ri) { //first digit
-				base = 0;
-			}
-			if (result != 0)
-				return result;
+	if (j >= 0)
+		val = valStr.substring(0, j) + val;
+	return k ? '1' + val : val;
+}
+function compareHalf(valStr, ri): number {
+	var result,
+		base = 5;
+	for (var j = ri, len = valStr.length; j < len; ++j) {
+		result = parseInt(valStr.charAt(j)) - base;
+		if (j == ri) { //first digit
+			base = 0;
 		}
-		return result;
+		if (result != 0)
+			return result;
 	}
-	function preDigit(valStr, ri): string | null {
-		for (var j = ri; --j >= 0;) {
-			var ch = valStr.charAt(j);
-			if (ch >= '0' && ch <= '9')
-				return ch;
-		}
-		return null;
+	return result;
+}
+function preDigit(valStr, ri): string | null {
+	for (var j = ri; --j >= 0;) {
+		var ch = valStr.charAt(j);
+		if (ch >= '0' && ch <= '9')
+			return ch;
 	}
+	return null;
+}
 
-zk.fmt.Number = {
-	setScale: function (val, scale, rounding) { //bug #3089502: setScale in decimalbox not working
+interface Efmt {
+	shift: number;
+	fmt: string;
+	pureFmtStr: string;
+	jdot: number;
+	purejdot: number;
+	prej: number;
+}
+
+export let Number = {
+	setScale(val: zk.BigDecimal, scale: number, rounding: number): string | zk.BigDecimal { //bug #3089502: setScale in decimalbox not working
 		if (scale === undefined || scale < 0)
 			return val;
 		var valStr = val.$toString(),
@@ -79,7 +87,7 @@ zk.fmt.Number = {
 		}
 	},
 	//Test if rounding is required (used if Rounding is UNNECESSARY
-	isRoundingRequired: function (val, fmt, localizedSymbols) {
+	isRoundingRequired(val: string | number, fmt: string, localizedSymbols): boolean {
 		if (!fmt || val == null || val == '')
 			return false;
 		
@@ -131,7 +139,7 @@ zk.fmt.Number = {
 		
 		return valFixed > fixed;
 	},
-	rounding: function (valStr, ri, rounding, minus) {
+	rounding(valStr: string, ri: number, rounding: number, minus: boolean): string {
 		switch (rounding) {
 			case 0: //UP
 				valStr = up(valStr, ri);
@@ -165,7 +173,7 @@ zk.fmt.Number = {
 		}
 		return valStr;
 	},
-	format: function (fmt, val, rounding, localizedSymbols) {
+	format(fmt: string, val: string, rounding: number, localizedSymbols): string {
 		if (val == null) return '';
 		if (!fmt) return val + '';
 		
@@ -331,7 +339,7 @@ zk.fmt.Number = {
 			shownZero = suf ? rexp.test(suf) && /^0*$/.test(pre) : rexp.test(pre);
 		return (val != '' && parseFloat(val) < 0 && !shownZero && !useMinsuFmt ? localizedSymbols.MINUS : '') + (suf ? pre + (/[\d]/.test(suf.charAt(0)) ? localizedSymbols.DECIMAL : '') + suf : pre);
 	},
-	_escapeQuote: function (fmt, localizedSymbols) {
+	_escapeQuote(fmt: string, localizedSymbols): Efmt {
 		//note we do NOT support mixing of quoted and unquoted percent
 		var cc, q = -2, shift = 0, ret = '', jdot = -1, purejdot = -1, pure = '', prej = -1,
 			validPercent = fmt ? !new RegExp('(\'[' + localizedSymbols.PERCENT + '|' + localizedSymbols.PER_MILL + ']+\')', 'g').test(fmt) : true;
@@ -368,7 +376,7 @@ zk.fmt.Number = {
 		}
 		return {shift: shift, fmt: ret, pureFmtStr: pure, jdot: jdot, purejdot: purejdot, prej: prej};
 	},
-	_extraFmtIndex: function (fmt) {
+	_extraFmtIndex(fmt: string): number {
 		var j = 0;
 		for (var len = fmt.length; j < len; ++j) {
 			var c = fmt.charAt(j);
@@ -377,7 +385,7 @@ zk.fmt.Number = {
 		}
 		return j;
 	},
-	_removePrefixSharps: function (val, localizedSymbols) {
+	_removePrefixSharps(val: string, localizedSymbols): string {
 		var ret = '',
 			sharp = true;
 		for (var len = val.length, j = 0; j < len; ++j) {
@@ -390,7 +398,7 @@ zk.fmt.Number = {
 		}
 		return ret;
 	},
-	unformat: function (fmt, val, ignoreLocale, localizedSymbols) {
+	unformat(fmt: string, val: string, ignoreLocale: boolean, localizedSymbols) {
 		if (!val) return {raw: val, divscale: 0};
 
 		// localized symbols
@@ -473,4 +481,4 @@ zk.fmt.Number = {
 		return {raw: sb, divscale: divscale};
 	}
 };
-})();
+zk.fmt.Number = Number;
