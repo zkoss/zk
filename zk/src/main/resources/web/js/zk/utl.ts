@@ -103,7 +103,7 @@ export interface ZUtl {
 	getDevicePixelRatio(): number;
 	getUserMedia(constraints: MediaStreamConstraints): Promise<MediaStream>;
 	getWeekOfYear(year: number, month: number, date: number, firstDayOfWeek: number,
-	              minimalDaysInFirstWeek: number): number;
+				  minimalDaysInFirstWeek: number): number;
 	go(url: string, opts?: Partial<GoOptions>): void;
 	intsToString(ary: number[] | null): string;
 	isAncestor(p: Widget, c: Widget & {getParent?()}): boolean;
@@ -118,7 +118,7 @@ export interface ZUtl {
 	throttle<T, A extends unknown[], R>(func: (this: T, ...args: A) => R, wait: number):
 		(this: T, ...args: A) => R;
 	debounce<T, A extends unknown[], R>(func: (this: T, ...args: A) => R, wait: number,
-	                                    immediate?: boolean): (this: T, ...args: A) => R;
+										immediate?: boolean): (this: T, ...args: A) => R;
 }
 /** @class zUtl
  * @import zk.Widget
@@ -129,10 +129,10 @@ export interface ZUtl {
 // window scope
 export const zUtl: ZUtl = { //static methods
 	//Character
-    /**
-     * Returns whether the character is according to its opts.
-     * @param char cc the character
-     * @param Map opts the options.
+	/**
+	 * Returns whether the character is according to its opts.
+	 * @param char cc the character
+	 * @param Map opts the options.
 <table border="1" cellspacing="0" width="100%">
 <caption> Allowed Options
 </caption>
@@ -167,8 +167,8 @@ export const zUtl: ZUtl = { //static methods
 </td><td> Specifies the character is allowed only.
 </td></tr>
 </table>
-     * @return boolean
-     */
+	 * @return boolean
+	 */
 	isChar(cc: string, opts: Partial<IsCharOptions>): boolean {
 		return !!((opts.digit && cc >= '0' && cc <= '9')
 			|| (opts.upper && cc >= 'A' && cc <= 'Z')
@@ -747,7 +747,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * @since 8.5.1
 	 */
 	getWeekOfYear(year: number, month: number, date: number, firstDayOfWeek: number,
-	              minimalDaysInFirstWeek: number): number {
+				  minimalDaysInFirstWeek: number): number {
 		var d = window.Dates.newInstance([year, month, date, 0, 0, 0, 0], 'UTC'),
 			day = d.getDay();
 		d.setDate(date - minimalDaysInFirstWeek + firstDayOfWeek - (firstDayOfWeek > day ? day : day - 7));
@@ -866,7 +866,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * @since 9.6.0
 	 */
 	debounce<T, A extends unknown[], R>(func: (this: T, ...args: A) => R, wait: number,
-	                                immediate?: boolean): (this: T, ...args: A) => R {
+									immediate?: boolean): (this: T, ...args: A) => R {
 		var timeout, args, context, timestamp, result;
 		if (null == wait) wait = 100;
 

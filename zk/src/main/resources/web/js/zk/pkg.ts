@@ -127,8 +127,8 @@ let _pkg = { //internal utility
 	 * @see #load(String, Function)
 	 */
 	// FIXME: load(pkg: string, dt: any, func: Function): boolean;
-    // FIXME: load(pkg: string, func: Function): boolean;
-    // FIXME: load(pkg: string): boolean;
+	// FIXME: load(pkg: string, func: Function): boolean;
+	// FIXME: load(pkg: string): boolean;
 	load(pkg: string, dt?: unknown, func?: () => void): boolean {
 		if (typeof dt == 'function') {
 			if (func)
@@ -277,7 +277,7 @@ let _pkg = { //internal utility
 	 * @see #load
 	 */
 	// FIXME: afterLoad(func: () => void): boolean;
-    // FIXME: afterLoad(pkgs: string, func: () => void, front?: boolean): void;
+	// FIXME: afterLoad(pkgs: string, func: () => void, front?: boolean): void;
 	afterLoad(a: string | (() => void), b?: () => void, front?: boolean): boolean | void {
 		if (typeof a == 'string') {
 			if (!b) return true;
