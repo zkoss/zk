@@ -108,7 +108,8 @@ subprojects {
 	// eslint
 	task jscheck(type: Exec) {
 		workingDir = "$rootDir"
-		commandLine "$rootDir/bin/jscheck", "$rootDir", "$project.name/$resources", "--config=$rootDir/.eslintrc.json", "--ignore-path=$rootDir/.eslintignore", "--max-warnings=-1", "--no-error-on-unmatched-pattern"
+		def eslintDir = project.file(".eslintrc.json").exists() ? projectDir : rootDir;
+		commandLine "$rootDir/bin/jscheck", "$rootDir", "$project.name/$resources", "--config=$eslintDir/.eslintrc.json", "--ignore-path=$rootDir/.eslintignore", "--max-warnings=-1", "--no-error-on-unmatched-pattern"
 	}
 	check.dependsOn(jscheck)
 
