@@ -36,7 +36,7 @@ function _getTextSize(zkc, zkp, zkpOffset): [number, number] {
 			coldVal = {};
 			poldVal = {};
 			for (let margins = ['marginTop', 'marginBottom', 'marginLeft', 'marginRight'],
-				     len = margins.length; len-- > 0;) {
+					 len = margins.length; len-- > 0;) {
 				coldVal[margins[len]] = zs[margins[len]];
 				poldVal[margins[len]] = ps[margins[len]];
 
@@ -83,7 +83,7 @@ function _isSameBaseline(ref, cur, vertical): boolean {
 }
 
 function _fixMinFlex(isVflex?): ((wgt: Widget, wgtn: HTMLElement, o: FlexOrient,
-                                  min: NumberFieldValue) => number) {
+								  min: NumberFieldValue) => number) {
 	let flexsz, sizePos, flex, offsetPos, marginPos, maxFlexPos, sumFlexPos,
 		index, contentPos;
 	if (isVflex) {

@@ -468,7 +468,7 @@ function create(parent: zk.Widget | null, wi: any[], ignoreDom?: boolean): zk.Wi
 	}
 
 	for (var j = 0, childs = wi[4], len = childs.length;
-	     j < len; ++j)
+		 j < len; ++j)
 		create(wgt, childs[j]);
 
 	// call afterCompose_() after zk.loaded, because some packages may not

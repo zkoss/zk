@@ -1701,7 +1701,7 @@ function getProxy(o, f) { //used by zk.Object
  */
 export class ZKObject {
 	// FIXME: $copyf: Class;
-    // FIXME: $copied: boolean;
+	// FIXME: $copied: boolean;
 	declare public _$ais: Callable[] | null;
 	declare public _$supers: Record<string, unknown>;
 	declare public _$proxies: WeakMap<object, unknown>;
@@ -2128,16 +2128,16 @@ declare namespace _zk {
 
 	// not used in ./zk
 	export let ie6: boolean | undefined;
-    export let ie6_: boolean | undefined;
-    export let ie7: boolean | undefined;
-    export let ie7_: boolean | undefined;
-    export let ie8: boolean | undefined;
-    export let ie8_: boolean | undefined;
-    export let ie8c: boolean | undefined;
-    export let ie9: boolean | undefined;
-    export let ie9_: boolean | undefined;
-    export let ie10: boolean | undefined;
-    export let ie10_: boolean | undefined;
-    export let ie11: boolean | undefined;
-    export let ie11_: boolean | undefined;
+	export let ie6_: boolean | undefined;
+	export let ie7: boolean | undefined;
+	export let ie7_: boolean | undefined;
+	export let ie8: boolean | undefined;
+	export let ie8_: boolean | undefined;
+	export let ie8c: boolean | undefined;
+	export let ie9: boolean | undefined;
+	export let ie9_: boolean | undefined;
+	export let ie10: boolean | undefined;
+	export let ie10_: boolean | undefined;
+	export let ie11: boolean | undefined;
+	export let ie11_: boolean | undefined;
 }

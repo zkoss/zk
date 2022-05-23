@@ -3493,8 +3493,8 @@ bind_: function (desktop, skipper, after) {
   this.$supers('bind_', arguments);
   var self = this;
   after.push(function () {
-    self._doAfterBind(something);
-    ...
+	self._doAfterBind(something);
+	...
   });
 }
 </code></pre>
@@ -3574,8 +3574,8 @@ bind_: function (desktop, skipper, after) {
 unbind_: function (skipper, after) {
   var self = this;
   after.push(function () {
-    self._doAfterUnbind(something);
-    ...
+	self._doAfterUnbind(something);
+	...
   }
   this.$supers('unbind_', arguments);
 }
@@ -4085,7 +4085,7 @@ unbind_: function (skipper, after) {
 	 * This method will check if this widget can be activated by invoking {@link #canActivate} first.
 	 * <p>Notice: don't override this method. Rather, override {@link #focus_},
 	 * which this method depends on.
-     * @param int timeout how many milliseconds before changing the focus. If not specified or negative, the focus is changed immediately,
+	 * @param int timeout how many milliseconds before changing the focus. If not specified or negative, the focus is changed immediately,
 	 * @return boolean whether the focus is gained to this widget.
 	 */
 	public focus(timeout?: number): boolean {
@@ -4107,7 +4107,7 @@ focus_: function (timeout) {
   return true;
 }
 </pre></code>
-     * @param int timeout how many milliseconds before changing the focus. If not specified or negative, the focus is changed immediately,
+	 * @param int timeout how many milliseconds before changing the focus. If not specified or negative, the focus is changed immediately,
 	 * @return boolean whether the focus is gained to this widget.
 	 * @since 5.0.5
 	 */
@@ -4189,8 +4189,8 @@ focus_: function (timeout) {
 }</code></pre>
 	 *
 	 * @param String name the property name
-     * @param Object value the property value
-     * @param int timeout the delay before sending out the AU request. It is optional. If omitted, -1 is assumed (i.e., it will be sent with next non-deferrable request).
+	 * @param Object value the property value
+	 * @param int timeout the delay before sending out the AU request. It is optional. If omitted, -1 is assumed (i.e., it will be sent with next non-deferrable request).
 	 * @see zAu#send
 	 */
 	public smartUpdate(nm: string, val: unknown, timeout?: number): void {
@@ -4510,7 +4510,7 @@ wgt.setListeners({
 	 * @see #setListeners
 	 * @see #listen
 	 */
-    public setListener(evt: string, fn: unknown): void;
+	public setListener(evt: string, fn: unknown): void;
 	public setListener(evt: string | [string, unknown], fn?: unknown): void { //used by server
 		if (jq.isArray(evt)) {
 			fn = evt[1];
@@ -4716,7 +4716,7 @@ wgt.setListeners({
 	 * @see #doMouseDown_
 	 * @see #doMouseUp_
 	 * @see #doTooltipOver_
-     */
+	 */
 	protected doMouseOver_(evt: Event): void {
 		if (!this.fireX(evt).stopped) {
 			var p = this.parent;
@@ -5170,11 +5170,11 @@ _doFooSelect: function (evt) {
 		return false;
 	}
 
-    /** A callback called after a widget is composed but not yet be bound to DOM tree.
-     * @since 10.0.0
-     */
-    protected afterCompose_(): void {
-    }
+	/** A callback called after a widget is composed but not yet be bound to DOM tree.
+	 * @since 10.0.0
+	 */
+	protected afterCompose_(): void {
+	}
 	// internal use, since zk 8.0.0
 	public static disableChildCallback(): void {
 		_noChildCallback = true;
@@ -5213,7 +5213,7 @@ _doFooSelect: function (evt) {
 	 * @return zk.Widget
 	 */
 	public static $<T extends Widget>(n?: string | JQuery | JQuery.Event | Node | null | T,
-	                opts?: Partial<{exact: boolean; strict: boolean; child: boolean}>): T | null {
+					opts?: Partial<{exact: boolean; strict: boolean; child: boolean}>): T | null {
 		if (n && n['zk'] && n['zk'].jq == n) //jq()
 			n = n[0];
 
@@ -5572,7 +5572,7 @@ zk.Widget.getClass('combobox');
 	}
 	public static readonly _TARGET = '__target__'; // used for storing the query widget target
 	public static readonly _TARGETS = '__targets__'; // used for storing the query widget targets into one element,
-                             // such as Treerow, Treechildren, and Treeitem.
+							 // such as Treerow, Treechildren, and Treeitem.
 	public static readonly _CURRENT_TARGET = '__ctarget__'; // used for storing the current query widget target
 }
 /**	@partial zk
@@ -5654,8 +5654,8 @@ export class Desktop extends Widget {
 	declare public _aureqs: Event[];
 	declare public _bpg: Body;
 	declare public _pfDoneIds?: string | null;
-    declare public _pfRecvIds?: string | null;
-    declare public obsolete?: boolean;
+	declare public _pfRecvIds?: string | null;
+	declare public obsolete?: boolean;
 
 	//a virtual node that might have no DOM node and must be handled specially
 	public z_virnd = true;
@@ -5689,7 +5689,7 @@ export class Desktop extends Widget {
 	 * Specify true if you want to use <a href="http://books.zkoss.org/wiki/Small_Talks/2009/July/ZK_5.0_and_Client-centric_Approach">the client-centric approach</a>.
 	 */
 	public constructor(dtid: string, contextURI?: string, updateURI?: string,
-	                   resourceURI?: string, reqURI?: string, stateless?: boolean) {
+					   resourceURI?: string, reqURI?: string, stateless?: boolean) {
 		super({uuid: dtid}); //id also uuid
 
 		var dts = Desktop.all, dt: Desktop | undefined;
@@ -6537,7 +6537,7 @@ export let NoDOM: ThisType<NoDOMInterface> = {
 		return this._oldWgt;
 	},
 	replaceHTML(n: HTMLElement, desktop: Desktop | null, skipper: Skipper
-	                       , _trim_?: boolean, _callback_?: Callable | Callable[]): void {
+						   , _trim_?: boolean, _callback_?: Callable | Callable[]): void {
 		if (this.getMold() == 'nodom') {
 			var context = this.$getInterceptorContext$();
 			if (!desktop) {
