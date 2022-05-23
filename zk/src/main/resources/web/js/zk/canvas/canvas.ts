@@ -19,15 +19,13 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
  *</code></pre>
  */
 //zk.$package('zk.canvas');
-
-(function () {
-	var _init = (zk.ie && zk.ie < 11) ? function (el) {window['G_vmlCanvasManager'].initElement(el);} : zk.$void;
+var _init = (zk.ie && zk.ie < 11) ? function (el) {window['G_vmlCanvasManager'].initElement(el);} : zk.$void;
 
 /** @class zk.canvas.Canvas
  * Utilities to create and manipulate the canvas element.
  * @since 5.0.2
  */
-zk.canvas.Canvas = {
+export let Canvas = {
 	/** Creates a canvas element.
 	 * <p>For example,
 	 *<pre><code>
@@ -48,7 +46,7 @@ zk.canvas.Canvas = {
 	 * Notice that it accepts only integer (unlike other DOM element)
 	 * @return DOMElement
 	 */
-	create: function (width, height) {
+	create(width?: number, height?: number): HTMLCanvasElement {
 		var el = document.createElement('canvas');
 		if (width) el.width = zk.parseInt(width);
 		if (height) el.height = zk.parseInt(height);
@@ -56,4 +54,4 @@ zk.canvas.Canvas = {
 		return el;
 	}
 };
-})();
+zk.canvas.Canvas = Canvas;

@@ -12,18 +12,17 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-(function () {
-	var _wgtInfs = {page: 'zk.Page'};
+var _wgtInfs = {page: 'zk.Page'};
 
-	function _load(pkgs: string[], f: (() => void), weave: boolean): void {
-		zk.load(pkgs.join(','), weave ? function () {
-			for (var j = pkgs.length, nm: string; --j >= 0;) {
-				if (zk.$package(nm = pkgs[j]).$wv)
-					zk.load(nm + '.wv');
-			}
-			zk.afterLoad(f);
-		} : f);
-	}
+function _load(pkgs: string[], f: (() => void), weave: boolean): void {
+	zk.load(pkgs.join(','), weave ? function () {
+		for (var j = pkgs.length, nm: string; --j >= 0;) {
+			if ((zk.$package(nm = pkgs[j]) as Record<string, unknown>).$wv)
+				zk.load(nm + '.wv');
+		}
+		zk.afterLoad(f);
+	} : f);
+}
 
 /** Utilities to handle widgets, such as the information about widgets.
  */
@@ -34,7 +33,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>Whne this package (zk.wgt) is loaded, all widget informations defined
  * in the server are loaded automatically.
  */
-zk.wgt.WidgetInfo = {
+export let WidgetInfo = {
 	/** A map ({@link Map}) of widget informations (readonly).
 	 * The key is the widget name, such as textbox, and the value is
 	 * the class name. However the value might be changed in the future,
@@ -47,14 +46,14 @@ zk.wgt.WidgetInfo = {
 	 * @param String wgtnm the widget name, such as textbox
 	 * @return String the class name, such as zul.inp.Textbox
 	 */
-	getClassName: function (wgtnm) {
+	getClassName(wgtnm: string): string {
 		return _wgtInfs[wgtnm];
 	},
 	/** Registers an arry of widget information.
 	 * @param Array infs an array of widget class names. For example,
 	 * ['zul.wnd.Window', 'zul.inp.Textbox'].
 	 */
-	register: function (infs) {
+	register(infs: string[]): void {
 		for (var i = 0, len = infs.length; i < len; ++i) {
 			var clsnm = infs[i],
 				j = clsnm.lastIndexOf('.'),
@@ -70,7 +69,7 @@ zk.wgt.WidgetInfo = {
 	 * For example, if a package is called zul.wnd, then we assume zul.wnd.wv is the package
 	 * for widgets defined in zul.wnd to communicate with ZK Weaver.
 	 */
-	loadAll: function (f, weave) {
+	loadAll(f: () => void, weave: boolean): void {
 		var pkgmap = {}, pkgs: string[] = [];
 		for (var w in _wgtInfs) {
 			var clsnm = _wgtInfs[w];
@@ -81,5 +80,4 @@ zk.wgt.WidgetInfo = {
 		_load(pkgs, f, weave);
 	}
 };
-
-})();
+zk.wgt.WidgetInfo = WidgetInfo;

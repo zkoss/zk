@@ -23,104 +23,106 @@ export interface Anima {
 	opts: Record<string, unknown>;
 }
 
-(function () {
-	var _aftAnims: (() => void)[] = [], //used zk.afterAnimate
-		_jqstop = jq.fx.stop;
+var _aftAnims: (() => void)[] = [], //used zk.afterAnimate
+	_jqstop = jq.fx.stop;
 
-	jq.fx.stop = function () {
-		_jqstop();
-		for (var fn; fn = _aftAnims.shift();)
-			fn();
-	};
+jq.fx.stop = function () {
+	_jqstop();
+	for (var fn; fn = _aftAnims.shift();)
+		fn();
+};
 
-	function _addAnique(id: string, data: Anima): void {
-		var ary = zk._anique[id];
-		if (!ary)
-			ary = zk._anique[id] = [];
-		ary.push(data);
-	}
-	function _doAnique(id: string): void {
-		var ary = zk._anique[id];
-		if (ary) {
-			var al = ary.length, data;
-			while (data = ary.shift()) {
-				if (jq(data.el).is(':animated')) {
-					ary.unshift(data);
-					break;
-				}
-				zk(data.el)[data.anima](data.wgt, data.opts);
-				al--;
+function _addAnique(id: string, data: Anima): void {
+	var ary = zk._anique[id];
+	if (!ary)
+		ary = zk._anique[id] = [];
+	ary.push(data);
+}
+function _doAnique(id: string): void {
+	var ary = zk._anique[id];
+	if (ary) {
+		var al = ary.length, data;
+		while (data = ary.shift()) {
+			if (jq(data.el).is(':animated')) {
+				ary.unshift(data);
+				break;
 			}
-
-			if (!al)
-				delete zk._anique[id];
+			zk(data.el)[data.anima](data.wgt, data.opts);
+			al--;
 		}
-	}
 
-	function _saveProp(self: JQZK, set: string[]): JQZK {
-		var ele = self.jq;
-		for (var i = set.length; i--;)
-			if (set[i] !== null) ele.data('zk.cache.' + set[i], ele[0].style[set[i]]);
-		return self;
+		if (!al)
+			delete zk._anique[id];
 	}
-	function _restoreProp(self: JQZK, set: string[]): JQZK {
-		var ele = self.jq;
-		for (var i = set.length; i--;)
-			if (set[i] !== null) ele.css(set[i], ele.data('zk.cache.' + set[i]));
-		return self;
+}
+
+function _saveProp(self: JQZK, set: string[]): JQZK {
+	var ele = self.jq;
+	for (var i = set.length; i--;)
+		if (set[i] !== null) ele.data('zk.cache.' + set[i], ele[0].style[set[i]]);
+	return self;
+}
+function _restoreProp(self: JQZK, set: string[]): JQZK {
+	var ele = self.jq;
+	for (var i = set.length; i--;)
+		if (set[i] !== null) ele.css(set[i], ele.data('zk.cache.' + set[i]));
+	return self;
+}
+function _checkAnimated(self: JQZK, wgt: zk.Widget, opts, anima): boolean {
+	if (self.jq.is(':animated')) {
+		_addAnique(wgt.uuid, {el: self.jq[0], wgt: wgt, opts: opts, anima: anima});
+		return true;
 	}
-	function _checkAnimated(self: JQZK, wgt: zk.Widget, opts, anima): boolean {
-		if (self.jq.is(':animated')) {
-			_addAnique(wgt.uuid, {el: self.jq[0], wgt: wgt, opts: opts, anima: anima});
-			return true;
-		}
-		return false;
-	}
-	function _checkPosition(self: JQZK, css: Record<string, string>): JQZK {
-		var pos = self.jq.css('position');
-		if (!pos || pos == 'static')
-			css.position = 'relative';
-		return self;
-	}
+	return false;
+}
+function _checkPosition(self: JQZK, css: Record<string, string>): JQZK {
+	var pos = self.jq.css('position');
+	if (!pos || pos == 'static')
+		css.position = 'relative';
+	return self;
+}
 
 /** @partial zk
  */
-Object.assign(zk, {
-	/** Returns whether there is some animation taking place.
-	 * If you'd like to have a function to be called only when no animation
-	 * is taking place (such as waiting for sliding down to be completed),
-	 * you could use {@link #afterMount}.
-	 * @return boolean
-	 * @see #afterAnimate
-	 */
-	animating: function () {
-		return !!jq.timers.length;
-	},
-	/** Executes a function only when no animation is taking place.
-	 * If there is some animation, the specified function will be queued
-	 * and invoked after the animation is done.
-	 * <p>If the delay argument is not specified and no animation is taking place,
-	 * the function is executed with <code>setTimeout(fn, 0)</code>.
-	 * @param Function fn the function to execute
-	 * @param int delay how many milliseconds to wait before execute if
-	 * there is no animation is taking place. If omitted, 0 is assumed.
-	 * If negative, the function is executed immediately.
-	 * @return boolean true if this method has been called before return (delay must
-	 * be negative, and no animation); otherwise, undefined is returned.
-	 * @see #animating
-	 * @since 5.0.6
-	 */
-	afterAnimate: function (fn, delay) {
-		if (zk.animating())
-			_aftAnims.push(fn);
-		else if (delay < 0) {
-			fn();
-			return true;
-		} else
-			setTimeout(fn, delay);
-	},
-	_anique: {}
-});
+
+/** Returns whether there is some animation taking place.
+ * If you'd like to have a function to be called only when no animation
+ * is taking place (such as waiting for sliding down to be completed),
+ * you could use {@link #afterMount}.
+ * @return boolean
+ * @see #afterAnimate
+ */
+zk.animating = animating;
+export function animating(): boolean {
+	return !!jq.timers.length;
+}
+/** Executes a function only when no animation is taking place.
+ * If there is some animation, the specified function will be queued
+ * and invoked after the animation is done.
+ * <p>If the delay argument is not specified and no animation is taking place,
+ * the function is executed with <code>setTimeout(fn, 0)</code>.
+ * @param Function fn the function to execute
+ * @param int delay how many milliseconds to wait before execute if
+ * there is no animation is taking place. If omitted, 0 is assumed.
+ * If negative, the function is executed immediately.
+ * @return boolean true if this method has been called before return (delay must
+ * be negative, and no animation); otherwise, undefined is returned.
+ * @see #animating
+ * @since 5.0.6
+ */
+zk.afterAnimate = afterAnimate;
+export function afterAnimate(fn: () => void, delay: number): boolean | void {
+	if (zk.animating())
+		_aftAnims.push(fn);
+	else if (delay < 0) {
+		fn();
+		return true;
+	} else
+		setTimeout(fn, delay);
+}
+
+export let _anique: Record<string, Anima[]> = {};
+zk._anique = _anique;
 
 /** @partial jqzk
  */
@@ -141,7 +143,7 @@ Object.assign(zjq.prototype, {
 	 * @since 7.0.3
 	 */
 	getAnimationSpeed: function (this: JQZK, defaultValue) {
-		var animationSpeed = jq(this.$().$n()).closest('[data-animationspeed]').data('animationspeed'),
+		var animationSpeed = jq(this.$().$n()!).closest('[data-animationspeed]').data('animationspeed'),
 			jqSpeed = jq.fx['speeds'];
 
 		if (typeof animationSpeed === 'string') {
@@ -493,4 +495,3 @@ Object.assign(zjq.prototype, {
 		return element;
 	}
 });
-})();

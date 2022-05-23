@@ -46,7 +46,7 @@ export interface JQZK {
 
 	_createWrapper(element: JQuery): JQuery;
 	_removeWrapper(element: JQuery): JQuery;
-	$(): Widget;
+	$<T extends Widget>(): T;
 	absolutize(): this;
 	beforeHideOnUnbind(): void;
 	borderHeight(): number;
@@ -106,7 +106,7 @@ export interface JQZK {
 	scrollTo(): this;
 	select(timeout?: number): boolean;
 	setSelectionRange(start: number, end?: number): this;
-	setStyles(styles: JQuery.PlainObject<string | number | ((this: HTMLElement, index: number, value: string) => string | number | void | undefined)>): this;
+	/** @deprecated */ setStyles(styles: JQuery.PlainObject<string | number | ((this: HTMLElement, index: number, value: string) => string | number | void | undefined)>): this;
 	slideDown(wgt: Widget, opts?: Partial<SlideOptions>): this;
 	slideIn(wgt: Widget, opts?: Partial<SlideOptions>): this;
 	slideOut(wgt: Widget, opts?: Partial<SlideOptions>): this;
@@ -144,249 +144,249 @@ export interface ZJQ {
 export var zjq: ZJQ = function (this: zk.JQZK, jq): JQZK { //ZK extension
 	this.jq = jq;
 };
-	var _jq = {}, //original jQuery
-		//refer to http://www.w3schools.com/css/css_text.asp
-		_txtStyles = [
-			'font-family', 'font-size', 'font-weight', 'font-style',
-			'letter-spacing', 'line-height', 'text-align', 'text-decoration',
-			'text-indent', 'text-shadow', 'text-transform', 'text-overflow',
-			'direction', 'word-spacing', 'white-space'],
-		_txtFontStyles = ['font-style', 'font-variant', 'font-weight', 'font-size', 'font-family'],
-		_txtStyles2 = ['color', 'background-color', 'background'],
-		_zsyncs: Widget[] = [],
-		_pendzsync = 0,
-		_vpId = 0, //id for virtual parent's reference node
-		_sbwDiv; //scrollbarWidth
+var _jq = {}, //original jQuery
+	//refer to http://www.w3schools.com/css/css_text.asp
+	_txtStyles = [
+		'font-family', 'font-size', 'font-weight', 'font-style',
+		'letter-spacing', 'line-height', 'text-align', 'text-decoration',
+		'text-indent', 'text-shadow', 'text-transform', 'text-overflow',
+		'direction', 'word-spacing', 'white-space'],
+	_txtFontStyles = ['font-style', 'font-variant', 'font-weight', 'font-size', 'font-family'],
+	_txtStyles2 = ['color', 'background-color', 'background'],
+	_zsyncs: Widget[] = [],
+	_pendzsync = 0,
+	_vpId = 0, //id for virtual parent's reference node
+	_sbwDiv; //scrollbarWidth
 
-	function _ofsParent(el: HTMLElement): HTMLElement {
-		if (el.offsetParent) return el.offsetParent as HTMLElement;
-		if (el == document.body) return el;
+function _ofsParent(el: HTMLElement): HTMLElement {
+	if (el.offsetParent) return el.offsetParent as HTMLElement;
+	if (el == document.body) return el;
 
-		let curr: HTMLElement | null = el;
-		while ((curr = curr.parentElement) && curr != document.body)
-			if (curr.style && jq(curr).css('position') != 'static') //in IE, style might not be available
-				return curr;
+	let curr: HTMLElement | null = el;
+	while ((curr = curr.parentElement) && curr != document.body)
+		if (curr.style && jq(curr).css('position') != 'static') //in IE, style might not be available
+			return curr;
 
-		return document.body;
-	}
-	function _zsync(org): void {
-		if (--_pendzsync <= 0)
-			for (var j = _zsyncs.length; j--;)
-				_zsyncs[j].zsync(org);
-	}
-	function _focus(n: HTMLElement): void {
-		zk.afterAnimate(function () {
-			try {
-				n.focus();
-				var w = zk.Widget.$(n);
-				if (w) zk.currentFocus = w;
-
-				zjq.fixInput(n);
-			} catch (e) {
-				zk.debugLog(e.message || e);
-			}
-		}, -1); //FF cannot change focus to a DOM element being animated
-	}
-	function _select(n: HTMLInputElement | HTMLTextAreaElement): void {
+	return document.body;
+}
+function _zsync(org): void {
+	if (--_pendzsync <= 0)
+		for (var j = _zsyncs.length; j--;)
+			_zsyncs[j].zsync(org);
+}
+function _focus(n: HTMLElement): void {
+	zk.afterAnimate(function () {
 		try {
-			n.select();
+			n.focus();
+			var w = zk.Widget.$(n);
+			if (w) zk.currentFocus = w;
+
+			zjq.fixInput(n);
 		} catch (e) {
 			zk.debugLog(e.message || e);
 		}
+	}, -1); //FF cannot change focus to a DOM element being animated
+}
+function _select(n: HTMLInputElement | HTMLTextAreaElement): void {
+	try {
+		n.select();
+	} catch (e) {
+		zk.debugLog(e.message || e);
 	}
+}
 
-	function _submit(this: HTMLElement): void {
-		if (this instanceof HTMLFormElement) {
-			if (this.requestSubmit) {
-				this.requestSubmit();
-			} else {
-				jq.Event.fire(this, 'submit');
-				this.submit();
-			}
+function _submit(this: HTMLElement): void {
+	if (this instanceof HTMLFormElement) {
+		if (this.requestSubmit) {
+			this.requestSubmit();
+		} else {
+			jq.Event.fire(this, 'submit');
+			this.submit();
 		}
 	}
+}
 
-	function _dissel(this: HTMLElement): void {
-		var $this = jq(this);
-		$this.css('user-select', 'none');
-		if (zk.ie11_ || zk.edge_legacy)
-			$this.on('selectstart', zk.$void);
-	}
-	function _ensel(this: HTMLElement): void {
-		var $this = jq(this);
-		$this.css('user-select', '');
-		if (zk.ie11_ || zk.edge_legacy)
-			$this.off('selectstart', zk.$void);
-	}
+function _dissel(this: HTMLElement): void {
+	var $this = jq(this);
+	$this.css('user-select', 'none');
+	if (zk.ie11_ || zk.edge_legacy)
+		$this.on('selectstart', zk.$void);
+}
+function _ensel(this: HTMLElement): void {
+	var $this = jq(this);
+	$this.css('user-select', '');
+	if (zk.ie11_ || zk.edge_legacy)
+		$this.off('selectstart', zk.$void);
+}
 
-	type scrollIntoViewInfo = { oft: zk.Offset; h: number; w: number; el: HTMLElement } | undefined;
-	function _scrlIntoView(outer: HTMLElement, inner: HTMLElement, info: scrollIntoViewInfo, excludeHorizontal: boolean): scrollIntoViewInfo {
-		if (outer && inner) {
-			var ooft = zk(outer).revisedOffset(),
-				ioft = info ? info.oft : zk(inner).revisedOffset(),
-				top = ioft[1] - ooft[1]
-					+ (outer == DocRoot() ? 0 : outer.scrollTop),
-				left = ioft[0] - ooft[0]
-					+ (outer == DocRoot() ? 0 : outer.scrollLeft),
-				ih = info ? info.h : inner.offsetHeight,
-				iw = info ? info.w : inner.offsetWidth,
-				right = left + iw,
-				bottom = top + ih,
-				updated;
-			//for fix the listbox(livedate) keydown select always at top
-			if (/*outer.clientHeight < inner.offsetHeight || */ outer.scrollTop > top) {
-				outer.scrollTop = top;
+type scrollIntoViewInfo = { oft: zk.Offset; h: number; w: number; el: HTMLElement } | undefined;
+function _scrlIntoView(outer: HTMLElement, inner: HTMLElement, info: scrollIntoViewInfo, excludeHorizontal: boolean): scrollIntoViewInfo {
+	if (outer && inner) {
+		var ooft = zk(outer).revisedOffset(),
+			ioft = info ? info.oft : zk(inner).revisedOffset(),
+			top = ioft[1] - ooft[1]
+				+ (outer == DocRoot() ? 0 : outer.scrollTop),
+			left = ioft[0] - ooft[0]
+				+ (outer == DocRoot() ? 0 : outer.scrollLeft),
+			ih = info ? info.h : inner.offsetHeight,
+			iw = info ? info.w : inner.offsetWidth,
+			right = left + iw,
+			bottom = top + ih,
+			updated;
+		//for fix the listbox(livedate) keydown select always at top
+		if (/*outer.clientHeight < inner.offsetHeight || */ outer.scrollTop > top) {
+			outer.scrollTop = top;
+			updated = true;
+		} else if (bottom > outer.clientHeight + outer.scrollTop) {
+			outer.scrollTop = !info ? bottom : bottom - (outer.clientHeight + (inner.parentNode == outer ? 0 : outer.scrollTop));
+			updated = true;
+		}
+
+		// ZK-1924:	scrollIntoView can also adjust horizontal scroll position.
+		// ZK-2193: scrollIntoView support exclude horizontal
+		if (!excludeHorizontal)
+			if (outer.scrollLeft > left) {
+				outer.scrollLeft = left;
 				updated = true;
-			} else if (bottom > outer.clientHeight + outer.scrollTop) {
-				outer.scrollTop = !info ? bottom : bottom - (outer.clientHeight + (inner.parentNode == outer ? 0 : outer.scrollTop));
+			} else if (right > outer.clientWidth + outer.scrollLeft) {
+				outer.scrollLeft = !info ? right : right - (outer.clientWidth + (inner.parentNode == outer ? 0 : outer.scrollLeft));
 				updated = true;
 			}
 
-			// ZK-1924:	scrollIntoView can also adjust horizontal scroll position.
-			// ZK-2193: scrollIntoView support exclude horizontal
-			if (!excludeHorizontal)
-				if (outer.scrollLeft > left) {
-					outer.scrollLeft = left;
-					updated = true;
-				} else if (right > outer.clientWidth + outer.scrollLeft) {
-					outer.scrollLeft = !info ? right : right - (outer.clientWidth + (inner.parentNode == outer ? 0 : outer.scrollLeft));
-					updated = true;
-				}
+		if (updated || !info) {
+			if (!info)
+				info = {
+					oft: ioft,
+					h: inner.offsetHeight,
+					w: inner.offsetWidth,
+					el: inner
+				};
+			else info.oft = zk(info.el).revisedOffset();
+		}
 
-			if (updated || !info) {
-				if (!info)
-					info = {
-						oft: ioft,
-						h: inner.offsetHeight,
-						w: inner.offsetWidth,
-						el: inner
-					};
-				else info.oft = zk(info.el).revisedOffset();
+		return info;
+	}
+}
+
+
+function _cmOffset(el: HTMLElement): zk.Offset {
+	var t = 0, l = 0, operaBug;
+	//Fix gecko difference, the offset of gecko excludes its border-width when its CSS position is relative or absolute
+	if (zk.gecko) {
+		var p = el.parentElement;
+		while (p && p != document.body) {
+			var $p = jq(p),
+				style = $p.css('position');
+			if (style == 'relative' || style == 'absolute') {
+				t += zk.parseInt($p.css('border-top-width'));
+				l += zk.parseInt($p.css('border-left-width'));
 			}
-
-			return info;
+			p = p.offsetParent as HTMLElement;
 		}
 	}
 
-
-	function _cmOffset(el: HTMLElement): zk.Offset {
-		var t = 0, l = 0, operaBug;
-		//Fix gecko difference, the offset of gecko excludes its border-width when its CSS position is relative or absolute
-		if (zk.gecko) {
-			var p = el.parentElement;
-			while (p && p != document.body) {
-				var $p = jq(p),
-					style = $p.css('position');
-				if (style == 'relative' || style == 'absolute') {
-					t += zk.parseInt($p.css('border-top-width'));
-					l += zk.parseInt($p.css('border-left-width'));
-				}
-				p = p.offsetParent as HTMLElement;
+	do {
+		//Bug 1577880: fix originated from http://dev.rubyonrails.org/ticket/4843
+		var $el = jq(el);
+		if ($el.css('position') == 'fixed') {
+			t += jq.innerY() + el.offsetTop;
+			l += jq.innerX() + el.offsetLeft;
+			break;
+		} else {
+			//Fix opera bug. If the parent of "input" or "span" is "div"
+			// and the scrollTop of "div" is more than 0, the offsetTop of "input" or "span" always is wrong.
+			if (zk.opera) {
+				if (operaBug && jq.nodeName(el, 'div') && el.scrollTop != 0)
+					t += el.scrollTop || 0;
+				operaBug = jq.nodeName(el, 'span', 'input');
 			}
-		}
-
-		do {
-			//Bug 1577880: fix originated from http://dev.rubyonrails.org/ticket/4843
-			var $el = jq(el);
-			if ($el.css('position') == 'fixed') {
-				t += jq.innerY() + el.offsetTop;
-				l += jq.innerX() + el.offsetLeft;
-				break;
-			} else {
-				//Fix opera bug. If the parent of "input" or "span" is "div"
-				// and the scrollTop of "div" is more than 0, the offsetTop of "input" or "span" always is wrong.
-				if (zk.opera) {
-					if (operaBug && jq.nodeName(el, 'div') && el.scrollTop != 0)
-						t += el.scrollTop || 0;
-					operaBug = jq.nodeName(el, 'span', 'input');
-				}
-				t += el.offsetTop || 0;
-				l += el.offsetLeft || 0;
-				//Bug 1721158: In FF, el.offsetParent is null in this case
-				el = zk.gecko && el != document.body ?
-					_ofsParent(el) : el.offsetParent as HTMLElement;
-			}
-		} while (el);
-		return [l, t];
-	}
-	function _posOffset(el: HTMLElement): zk.Offset {
-		if (zk.webkit && el instanceof HTMLTableRowElement && el.cells.length)
-			el = el.cells[0];
-
-		var t = 0, l = 0;
-		do {
 			t += el.offsetTop || 0;
 			l += el.offsetLeft || 0;
 			//Bug 1721158: In FF, el.offsetParent is null in this case
 			el = zk.gecko && el != document.body ?
 				_ofsParent(el) : el.offsetParent as HTMLElement;
-			if (el) {
-				if (jq.nodeName(el, 'body')) break;
-				var p = jq(el).css('position');
-				if (p == 'relative' || p == 'absolute') break;
-			}
-		} while (el);
-		return [l, t];
-	}
-	function _addOfsToDim($this: JQZK, dim, revised?: boolean): Dimension {
-		if (revised) {
-			var ofs = $this.revisedOffset();
-			dim.left = ofs[0];
-			dim.top = ofs[1];
-		} else {
-			dim.left = $this.offsetLeft();
-			dim.top = $this.offsetTop();
 		}
-		return dim;
-	}
+	} while (el);
+	return [l, t];
+}
+function _posOffset(el: HTMLElement): zk.Offset {
+	if (zk.webkit && el instanceof HTMLTableRowElement && el.cells.length)
+		el = el.cells[0];
 
-	//redoCSS
-	var _rdcss: HTMLElement[] = [];
-	function _redoCSS0(): void {
-		if (_rdcss.length) {
-			for (var el; el = _rdcss.pop();)
-				try {
-					zjq._fixCSS(el);
-				} catch (e) {
-					zk.debugLog(e.message || e);
-				}
-
-			// just in case
-			setTimeout(_redoCSS0);
+	var t = 0, l = 0;
+	do {
+		t += el.offsetTop || 0;
+		l += el.offsetLeft || 0;
+		//Bug 1721158: In FF, el.offsetParent is null in this case
+		el = zk.gecko && el != document.body ?
+			_ofsParent(el) : el.offsetParent as HTMLElement;
+		if (el) {
+			if (jq.nodeName(el, 'body')) break;
+			var p = jq(el).css('position');
+			if (p == 'relative' || p == 'absolute') break;
 		}
+	} while (el);
+	return [l, t];
+}
+function _addOfsToDim($this: JQZK, dim, revised?: boolean): Dimension {
+	if (revised) {
+		var ofs = $this.revisedOffset();
+		dim.left = ofs[0];
+		dim.top = ofs[1];
+	} else {
+		dim.left = $this.offsetLeft();
+		dim.top = $this.offsetTop();
 	}
+	return dim;
+}
 
-	// since ZK 7.0.0
-	var isHTML5DocType = (function () {
-		var html5;
-		return function (): boolean {
-			if (html5 === undefined) {
-				if (document.doctype === null) return false;
-
-				var node = document.doctype,
-					doctype_string = '<!DOCTYPE ' + node.name
-						+ (node.publicId ? ' PUBLIC"' + node.publicId + '"' : '')
-						+ (!node.publicId && node.systemId ? ' SYSTEM' : '')
-						+ (node.systemId ? ' "' + node.systemId + '"' : '') + '>';
-
-				html5 = doctype_string === '<!DOCTYPE html>';
+//redoCSS
+var _rdcss: HTMLElement[] = [];
+function _redoCSS0(): void {
+	if (_rdcss.length) {
+		for (var el; el = _rdcss.pop();)
+			try {
+				zjq._fixCSS(el);
+			} catch (e) {
+				zk.debugLog(e.message || e);
 			}
-			return html5;
-		};
-	})();
 
-	// refix ZK-2371
-	// eslint-disable-next-line one-var
-	var DocRoot = (function () {
-		var docRoot,
-			// document.body may not be initiated.
-			initDocRoot = function (): HTMLElement {
-				return docRoot = (zk.safari || zk.opera) ? document.body : document.documentElement;
-			};
-		return function (): HTMLElement {
-			return docRoot || initDocRoot();
+		// just in case
+		setTimeout(_redoCSS0);
+	}
+}
+
+// since ZK 7.0.0
+var isHTML5DocType = (function () {
+	var html5;
+	return function (): boolean {
+		if (html5 === undefined) {
+			if (document.doctype === null) return false;
+
+			var node = document.doctype,
+				doctype_string = '<!DOCTYPE ' + node.name
+					+ (node.publicId ? ' PUBLIC"' + node.publicId + '"' : '')
+					+ (!node.publicId && node.systemId ? ' SYSTEM' : '')
+					+ (node.systemId ? ' "' + node.systemId + '"' : '') + '>';
+
+			html5 = doctype_string === '<!DOCTYPE html>';
+		}
+		return html5;
+	};
+})();
+
+// refix ZK-2371
+// eslint-disable-next-line one-var
+var DocRoot = (function () {
+	var docRoot,
+		// document.body may not be initiated.
+		initDocRoot = function (): HTMLElement {
+			return docRoot = (zk.safari || zk.opera) ? document.body : document.documentElement;
 		};
-	})();
+	return function (): HTMLElement {
+		return docRoot || initDocRoot();
+	};
+})();
 
 Object.assign(zjq, {
 	//Returns the minimal width to hold the given cell called by getChildMinSize_
@@ -605,7 +605,7 @@ zk.override(jq.fn, _jq, /*prototype*/ {
 		if (n) w.replaceHTML(n, desktop, skipper);
 		return this;
 	},
-	on: function (type, selector, data, fn, ...rest) {
+	on: function (this: JQuery, type, selector, data, fn, ...rest) {
 		type = zjq.eventTypes[type] || type;
 		// eslint-disable-next-line no-undef
 		let args: [JQuery.TypeEventHandlers<HTMLElement, unknown, unknown, unknown>,
@@ -613,7 +613,7 @@ zk.override(jq.fn, _jq, /*prototype*/ {
 			string, unknown, Function, ...unknown[]] = [type, selector, data, fn, ...rest];
 		return this.zon.apply(this, args);
 	},
-	off: function (type, selector, fn, ...rest) {
+	off: function (this: JQuery, type, selector, fn, ...rest) {
 		type = zjq.eventTypes[type] || type;
 		// eslint-disable-next-line no-undef
 		let args: [JQuery.TriggeredEvent<HTMLElement>,
@@ -621,7 +621,7 @@ zk.override(jq.fn, _jq, /*prototype*/ {
 			string, Function, ...unknown[]] = [type, selector, fn, ...rest];
 		return this.zoff.apply(this, args);
 	},
-	bind: function (types, data, fn) {
+	bind: function (this: JQuery, types, data, fn) {
 		return this.on(types, null, data, fn);
 	},
 	unbind: function (types, fn) {
@@ -1007,7 +1007,7 @@ jq(el).zk.sumStyles("lr", jq.paddings);
 	 * @param Array styles an array of styles, such as {@link jq#paddings}, {@link jq#margins} or {@link jq#borders}.
 	 * @return int the summation
 	 */
-	sumStyles: function (areas, styles) {
+	sumStyles: function (areas: string, styles: Record<string, string>): number {
 		var val = 0;
 		for (var i = 0, len = areas.length, $jq = this.jq; i < len; i++) {
 			var w = Math.round(zk.parseFloat($jq.css(styles[areas.charAt(i)])));
@@ -1656,7 +1656,7 @@ jq(el).zk.center(); //same as 'center'
 			var text = n.outerHTML;
 
 			// replace uuid to speed up the calculation
-			if (zk.Widget.$(n, {exact: 1})) {
+			if (zk.Widget.$(n, {exact: 1 as unknown as boolean})) {
 				text = text.replace(/id="[^"]*"/g, '');
 			}
 			return zk(document.body).textSize(text)[1];
@@ -2786,10 +2786,26 @@ text = jq.toJSON([new Date()], function (key, value) {
 /** @class jq.Event
  * A DOM event.
  */
-zk.copy(jq.Event.prototype, {
+export interface EventMetaData {
+	altKey?: boolean;
+	ctrlKey?: boolean;
+	shiftKey?: boolean;
+	metaKey?: boolean;
+	which: number;
+}
+export interface EventMouseData extends EventMetaData {
+	pageX: number | undefined;
+	pageY: number | undefined;
+}
+export interface EventKeyData extends EventMetaData {
+	keyCode: number | undefined;
+	charCode: number | undefined;
+	key: string | undefined;
+}
+export const _JQEvent = {
 	/** Stops the event propagation.
 	 */
-	stop: function () {
+	stop(this: JQuery.Event): void {
 		this.preventDefault();
 		this.stopPropagation();
 	},
@@ -2797,7 +2813,7 @@ zk.copy(jq.Event.prototype, {
 	 * @return Map a map of data.
 	 * @see zk.Event#data
 	 */
-	mouseData: function () {
+	mouseData(this: JQuery.MouseEventBase): EventMouseData {
 		return zk.copy({
 			pageX: this.pageX, pageY: this.pageY
 		}, this.metaData());
@@ -2806,16 +2822,16 @@ zk.copy(jq.Event.prototype, {
 	 * @return Map a map of data.
 	 * @see zk.Event#data
 	 */
-	keyData: function () {
+	keyData(this: JQuery.KeyboardEventBase): EventKeyData {
 		return zk.copy({
 			keyCode: this.keyCode,
 			charCode: this.charCode,
 			key: this._keyDataKey()
 			}, this.metaData());
 	},
-	_keyDataKey: function () {
+	_keyDataKey(this: JQuery.KeyboardEventBase): string {
 		// Ref: https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values
-		var key = this.originalEvent.key;
+		var key = this.originalEvent!.key;
 		switch (key) {
 			case 'Scroll': return 'ScrollLock';
 			case 'Spacebar': return ' ';
@@ -2852,8 +2868,8 @@ zk.copy(jq.Event.prototype, {
 	 * @return Map a map of data.
 	 * @see zk.Event#data
 	 */
-	metaData: function () {
-		var inf: zk.EventMetaData = {
+	metaData(this: JQuery.Event): EventMetaData {
+		var inf: EventMetaData = {
 			which: this.which || 0
 		};
 		if (this.altKey) inf.altKey = true;
@@ -2862,11 +2878,12 @@ zk.copy(jq.Event.prototype, {
 		if (this.metaKey) inf.metaKey = true;
 		return inf;
 	}
-});
+};
+zk.copy(jq.Event.prototype, _JQEvent);
 
 /** @partial jq.Event
  */
-Object.assign(jq.Event, {
+export const _JQEventStatic = {
 	/** Fires a DOM element.
 	 * @param DOMElement el the target element
 	 * @param String evtnm the name of the event
@@ -2883,7 +2900,7 @@ Object.assign(jq.Event, {
 	 * <pre><code>jq(el).mousemove(jq.Event.stop)</code></pre>
 	 * @param jq.Event evt the event.
 	 */
-	stop: function (evt) {
+	stop(evt: JQuery.Event) {
 		evt.stop();
 	},
 	/** Returns only the properties that are meta data, such as altKey, ctrlKey, shiftKey, metaKey and which.
@@ -2893,8 +2910,8 @@ Object.assign(jq.Event, {
 	* by {@link #mouseData} or {@link #metaData}.
 	* @return Map a map of data after filtered
 	*/
-	filterMetaData: function (data) {
-		var inf: zk.EventMetaData = {
+	filterMetaData(data: EventMetaData): EventMetaData {
+		var inf: EventMetaData = {
 			which: data.which || 0
 		};
 		if (data.altKey) inf.altKey = true;
@@ -2909,7 +2926,7 @@ Object.assign(jq.Event, {
 	 * can be resolved from the event (<code>zk.Widget.$(evt)</code>)
 	 * @return zk.Event the ZK event
 	 */
-	zk(evt: JQ.Event, wgt?: Widget | null): ZKEvent {
+	zk(evt: JQuery.TriggeredEvent, wgt?: Widget | null): ZKEvent {
 		var type = evt.type,
 			target = zk.Widget.$(evt) || wgt,
 			data;
@@ -2917,23 +2934,26 @@ Object.assign(jq.Event, {
 		if (type.startsWith('mouse')) {
 			if (type.length > 5)
 				type = 'Mouse' + type.charAt(5).toUpperCase() + type.substring(6);
-			data = evt.mouseData();
+			data = (evt as JQuery.MouseEventBase).mouseData();
 		} else if (type.startsWith('key')) {
 			if (type.length > 3)
 				type = 'Key' + type.charAt(3).toUpperCase() + type.substring(4);
-			data = evt.keyData();
+			data = (evt as JQuery.KeyboardEventBase).keyData();
 		} else if (type == 'dblclick') {
-			data = evt.mouseData();
+			data = (evt as JQuery.MouseEventBase).mouseData();
 			type = 'DoubleClick';
 		} else {
 			if (type == 'click')
-				data = evt.mouseData();
+				data = (evt as JQuery.MouseEventBase).mouseData();
 			type = type.charAt(0).toUpperCase() + type.substring(1);
 		}
 		return new zk.Event(target, 'on' + type, data, {}, evt);
 	}
-});
-zk.delayQue = {}; //key is uuid, value is array of pending functions
+};
+Object.assign(jq.Event, _JQEventStatic);
+// eslint-disable-next-line @typescript-eslint/ban-types
+export let delayQue: Record<string, Function[]> = {};
+zk.delayQue = delayQue; //key is uuid, value is array of pending functions
 /**
  * Execute function related to specified widget after a while,
  * and will insure the execution order.
@@ -2946,7 +2966,8 @@ zk.delayQue = {}; //key is uuid, value is array of pending functions
  * </ul>
  * Note: timeout is only meaningful for the first function added to wgt
  */
-zk.delayFunction = function (uuid, func, opts) {
+zk.delayFunction = delayFunction;
+export function delayFunction(uuid: string, func: () => void, opts?: Partial<{ timeout: number; urgent: boolean }>): void {
 	if (uuid && typeof func == 'function') {
 		if (!opts)
 			opts = {};
@@ -2969,4 +2990,4 @@ zk.delayFunction = function (uuid, func, opts) {
 				idQue.push(func);
 		}
 	}
-};
+}

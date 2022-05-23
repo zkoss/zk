@@ -442,7 +442,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 		if (mask && zk.Page.contained.length) {
 			for (var c = zk.Page.contained.length, e = zk.Page.contained[--c]; e; e = zk.Page.contained[--c]) {
 				if (!e._applyMask)
-					e._applyMask = new zk.eff.Mask!({
+					e._applyMask = new zk.eff.Mask({
 						id: e.uuid + '-mask',
 						message: msg,
 						anchor: e.$n()
@@ -738,7 +738,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * @since 6.0.0
 	 */
 	isImageLoading(): boolean {
-		for (var n in _imgMap)
+		for (var _n in _imgMap)
 			return true;
 		return false;
 	},

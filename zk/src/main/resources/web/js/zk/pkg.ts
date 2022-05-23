@@ -15,7 +15,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 import {Callable, cast} from '@zk/types';
 import {default as zk} from '@zk/zk';
 
-var _zkf, _loaded = {'zk': true}, //loaded
+var _loaded = {'zk': true}, //loaded
 	_xloadings: Array<string> = cast([]), //loading (exclude loaded)
 	_loadedsemis: Array<string> = cast([]), //loaded but not inited
 	_afterLoadFronts: Array<Callable> = cast([]),
@@ -53,7 +53,7 @@ function updCnt(): number {
 /** @partial zk
 */
 let _pkg = { //internal utility
-	setLoaded: _zkf = function (pkg: string, wait: boolean) { //internal
+	setLoaded(pkg: string, wait?: boolean): void { //internal
 		_xloadings.$remove(pkg);
 		_loading[pkg] = true;
 
@@ -93,7 +93,9 @@ let _pkg = { //internal utility
 	 * @param String name the name of the JavaScript file.
 	 * It must be the same as the one passed to {@link #loadScript}.
 	 */
-	setScriptLoaded: _zkf,
+	setScriptLoaded(name: string): void {//_zkf,
+		this.setLoaded(name);
+	},
 
 	/** Tests if a package is loaded (or being loaded).
 	 * @param String pkg the package name
@@ -102,7 +104,7 @@ let _pkg = { //internal utility
 	 * @return boolean true if loaded
 	 * @see #load
 	 */
-	isLoaded: function (pkg: string, loading?: boolean): boolean {
+	isLoaded(pkg: string, loading?: boolean): boolean {
 		return (loading && _loading[pkg]) || _loaded[pkg];
 	},
 	/** Loads the specified package(s). This method is called automatically when mounting the peer widgets. However, if an application developer wants to access JavaScript packages that are not loaded, he has to invoke this method.
@@ -124,12 +126,15 @@ let _pkg = { //internal utility
 	 * @return boolean true if all required packages are loaded
 	 * @see #load(String, Function)
 	 */
-	load: function (pkg, dt, func) {
+	// FIXME: load(pkg: string, dt: any, func: Function): boolean;
+    // FIXME: load(pkg: string, func: Function): boolean;
+    // FIXME: load(pkg: string): boolean;
+	load(pkg: string, dt?: unknown, func?: () => void): boolean {
 		if (typeof dt == 'function') {
 			if (func)
 				throw 'At most one function allowed';
 			else {
-				func = dt;
+				func = dt as () => void;
 				dt = null;
 			}
 		}
@@ -144,7 +149,7 @@ let _pkg = { //internal utility
 		}
 		return !loading;
 	},
-	_load: function (pkg, dt) { //called by mount.js (better performance)
+	_load(pkg: string, dt: unknown) { //called by mount.js (better performance)
 		if (!pkg || _loading[pkg])
 			return !zk.loading && !_loadedsemis.length;
 			//since pkg might be loading (-> return false)
@@ -179,7 +184,7 @@ let _pkg = { //internal utility
 	 * @param boolean force the script to be loaded. (no matter it is loading or loaded)
 	 * @return zk
 	 */
-	loadScript: function (src, name, charset, force) {
+	loadScript(src: string, name?: string, charset?: string, force?: boolean) { // FIXME: return ZKCoreUtilityStatic;
 		if (name) {
 			if (!force && zk.isLoaded(name, true))
 				return;
@@ -200,7 +205,7 @@ let _pkg = { //internal utility
 	 * @since 5.0.4
 	 * @return zk
 	 */
-	loadCSS: function (href, id, media) {
+	loadCSS(href: string, id?: string, media?: string) {
 		var ln = document.createElement('link');
 		if (id) ln.id = id;
 		ln.rel = 'stylesheet';
@@ -215,7 +220,7 @@ let _pkg = { //internal utility
 	 * @param String pkg the package name
 	 * @return String the version
 	 */
-	getVersion: function (pkg) {
+	getVersion(pkg: string): string | undefined {
 		for (var ver; pkg; pkg = pkg.substring(0, pkg.lastIndexOf('.')))
 			if (ver = _pkgver[pkg])
 				return ver;
@@ -224,7 +229,7 @@ let _pkg = { //internal utility
 	 * @param String pkg the package name
 	 * @param String ver the version
 	 */
-	setVersion: function (pkg, ver) {
+	setVersion(pkg: string, ver: string): void {
 		_pkgver[pkg] = ver;
 	},
 	/** Declare a package that must be loaded when loading another package.
@@ -234,7 +239,7 @@ let _pkg = { //internal utility
 	 * In other words, it reads "a depends on b".
 	 * @see #afterLoad
 	 */
-	depends: function (a, b) {
+	depends(a: string, b: string): void {
 		if (a && b) {//a depends on b
 			if (_loaded[a])
 				zk.load(b);
@@ -271,7 +276,9 @@ let _pkg = { //internal utility
 	 * @see #depends
 	 * @see #load
 	 */
-	afterLoad: function (a, b, front) {
+	// FIXME: afterLoad(func: () => void): boolean;
+    // FIXME: afterLoad(pkgs: string, func: () => void, front?: boolean): void;
+	afterLoad(a: string | (() => void), b?: () => void, front?: boolean): boolean | void {
 		if (typeof a == 'string') {
 			if (!b) return true;
 
@@ -317,7 +324,7 @@ let _pkg = { //internal utility
 	 * @return String the URI
 	 * @see #setHost
 	 */
-	getHost: function (pkg, js) {
+	getHost(pkg: string, js: boolean): string {
 		for (var p in _pkghosts)
 			if (pkg.startsWith(p))
 				return _pkghosts[p][js ? 1 : 0];
@@ -330,7 +337,7 @@ let _pkg = { //internal utility
 	 * @param Array pkgs an array of pckage names (String)
 	 * @see #getHost
 	 */
-	setHost: function (host, resURI, pkgs) {
+	setHost(host: string, resURI: string, pkgs: string[]): void {
 		var hostRes = host + resURI;
 		if (!_defhost.length)
 			for (var scs = document.getElementsByTagName('script'), j = 0, len = scs.length;

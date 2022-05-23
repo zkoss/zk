@@ -17,7 +17,6 @@ import {zjq} from '@zk/dom';
 import {Widget} from '@zk/widget';
 import {Event} from '@zk/evt';
 
-(function () {
 function _createMouseEvent (type, button, changedTouch, ofs): MouseEvent {
 	if (!ofs)
 		ofs = {sx: 0, sy: 0, cx: 0, cy: 0};
@@ -29,8 +28,7 @@ function _createMouseEvent (type, button, changedTouch, ofs): MouseEvent {
 		false, false, false, false, button, null);
 	return simulatedEvent;
 }
-// eslint-disable-next-line no-undef
-function _createJQEvent (target, type, button, changedTouch, ofs?): JQ.Event {
+function _createJQEvent (target, type, button, changedTouch, ofs?): JQuery.Event {
 	//do not allow text
 	//ZK-1011
 	if (target && (target.nodeType === 3 || target.nodeType === 8))
@@ -51,8 +49,7 @@ function _createJQEvent (target, type, button, changedTouch, ofs?): JQ.Event {
 	event.target = target;
 	return event;
 }
-// eslint-disable-next-line no-undef
-function _toMouseEvent(event, changedTouch): JQ.Event | null {
+function _toMouseEvent(event, changedTouch): JQuery.Event | null {
 	switch (event.type) {
 	case 'touchstart':
 		return _createJQEvent(changedTouch.target, 'mousedown', 0, changedTouch);
@@ -149,7 +146,7 @@ var _xWidget = {};
 zk.override(Widget.prototype, _xWidget, {
 	bindSwipe_: function (this: Widget & {_swipe}) {
 		var node = this.$n();
-		if (this.isListen('onSwipe') || jq(node).data('swipeable'))
+		if (this.isListen('onSwipe') || jq(node!).data('swipeable'))
 			this._swipe = new zk.Swipe(this, node);
 	},
 	unbindSwipe_: function (this: zk.Widget & {_swipe}) {
@@ -169,14 +166,14 @@ zk.override(Widget.prototype, _xWidget, {
 					wgt._tapValid = false;
 				}, doubleClickTime);
 			};
-			jq(this.$n()).on('touchstart', this.proxy(this._dblTapStart))
+			jq(this.$n()!).on('touchstart', this.proxy(this._dblTapStart))
 				.on('touchend', this.proxy(this._dblTapEnd));
 		}
 	},
 	unbindDoubleTap_: function (this: zk.Widget & {_startTap; _dblTapStart; _dblTapEnd}) {
 		if (this.isListen('onDoubleClick')) {
 			this._startTap = null;
-			jq(this.$n()).off('touchstart', this.proxy(this._dblTapStart))
+			jq(this.$n()!).off('touchstart', this.proxy(this._dblTapStart))
 				.off('touchend', this.proxy(this._dblTapEnd));
 		}
 	},
@@ -211,12 +208,12 @@ zk.override(Widget.prototype, _xWidget, {
 				if (!wevt.stopped)
 					this['doDoubleClick_'].call(this, wevt);
 				if (wevt.domStopped)
-					wevt.domEvent.stop();
+					wevt.domEvent!.stop();
 			}
 			tevt.preventDefault(); //stop ios zoom
 		}
 	},
-	bindTapHold_: function (this: zk.Widget & { _holdTime; _holdTimeout;
+	bindTapHold_: function (this: zk.Widget & { _holdTime; _holdTimeout; getContext;
 		_rightClickEvent; _rightClickPending; _cancelMouseUp; _startHold(evt: Event): void; _cancelHold();
 		_tapHoldStart; _tapHoldMove; _tapHoldClick; _tapHoldEnd; _pt: [number, number];}) {
 		if (this.isListen('onRightClick') || (this.getContext && this.getContext())) { //also register context menu to tapHold event
@@ -235,7 +232,7 @@ zk.override(Widget.prototype, _xWidget, {
 							if (!wevt.stopped)
 								self['doRightClick_'].call(self, wevt);
 							if (wevt.domStopped)
-								wevt.domEvent.stop();
+								wevt.domEvent!.stop();
 						}
 
 						// Note:: I don't mouse up the right click here however feel free to add if required
@@ -252,17 +249,17 @@ zk.override(Widget.prototype, _xWidget, {
 					this._holdTimeout = null;
 				}
 			};
-			jq(this.$n()).on('touchstart', this.proxy(this._tapHoldStart))
+			jq(this.$n()!).on('touchstart', this.proxy(this._tapHoldStart))
 				.on('touchmove', this.proxy(this._tapHoldMove)) //cancel hold if moved
 				.on('click', this.proxy(this._tapHoldClick))    //prevent click during hold
 				.on('touchend', this.proxy(this._tapHoldEnd));
 		}
 	},
-	unbindTapHold_: function (this: zk.Widget & {_startHold; _cancelHold; _tapHoldStart;
+	unbindTapHold_: function (this: zk.Widget & {_startHold; _cancelHold; _tapHoldStart; getContext;
 		_tapHoldMove; _tapHoldClick; _tapHoldEnd;}) {
 		if (this.isListen('onRightClick') || (this.getContext && this.getContext())) { //also register context menu to tapHold event
 			this._startHold = this._cancelHold = null;
-			jq(this.$n()).off('touchstart', this.proxy(this._tapHoldStart))
+			jq(this.$n()!).off('touchstart', this.proxy(this._tapHoldStart))
 				.off('touchmove', this.proxy(this._tapHoldMove)) //cancel hold if moved
 				.off('click', this.proxy(this._tapHoldClick))    //prevent click during hold
 				.off('touchend', this.proxy(this._tapHoldEnd));
@@ -322,7 +319,7 @@ var _jq = {},
 	_jqEvent = {},
 	_jqEventSpecial = {};
 zk.override(jq.fn, _jq, {
-	on: function (type, selector, data, fn, ...rest) {
+	on: function (this: JQuery, type, selector, data, fn, ...rest) {
 		var evtType;
 		if ((evtType = zjq.eventTypes[type])) {
 			// refer to jquery on function for reassign args
@@ -345,15 +342,13 @@ zk.override(jq.fn, _jq, {
 			if (_storeEventFunction(this[0], evtType, data, fn))
 				this.zon(evtType, selector, data, delegateEventFunc);
 		} else {
-			// eslint-disable-next-line no-undef
 			let args: [JQuery.TypeEventHandlers<HTMLElement, unknown, unknown, unknown>,
-				// eslint-disable-next-line @typescript-eslint/ban-types
 					string, unknown, Function, ...unknown[]] = [type, selector, data, fn, ...rest];
 			this.zon.apply(this, args); // Bug ZK-1142: recover back to latest domios.js
 		}
 		return this;
 	},
-	off: function (type, selector, fn, ...rest) {
+	off: function (this: JQuery, type, selector, fn, ...rest) {
 		var evtType;
 		if ((evtType = zjq.eventTypes[type])) {
 			// refer to jquery on function for reassign args
@@ -365,9 +360,7 @@ zk.override(jq.fn, _jq, {
 			if (_removeEventFunction(this[0], evtType, fn))
 				this.zoff(evtType, selector, delegateEventFunc);
 		} else {
-			// eslint-disable-next-line no-undef
 			let args: [JQuery.TriggeredEvent<HTMLElement>,
-				// eslint-disable-next-line @typescript-eslint/ban-types
 				string, Function, ...unknown[]] = [type, selector, fn, ...rest];
 			this.zoff.apply(this, args); // Bug ZK-1142: recover back to latest domios.js
 		}
@@ -375,7 +368,7 @@ zk.override(jq.fn, _jq, {
 	}
 });
 zk.override(jq.Event.prototype, _jqEvent, {
-	stop: function () {
+	stop: function (this: {touchEvent}) {
 		_jqEvent['stop'].apply(this);
 		var tEvt;
 		if ((tEvt = this.touchEvent)) {
@@ -396,4 +389,3 @@ zk.override(jq.event.special, _jqEventSpecial, {
 		}
 	}
 });
-})();

@@ -19,7 +19,7 @@ let popped = ('state' in window.history),
 
 zk.historystate = {
 	enabled: true,
-	onPopState: function (event) {
+	onPopState(event: PopStateEvent): void {
 		var initialPop = !popped && location.href == initialURL;
 		popped = true;
 		if (initialPop) return;
@@ -32,7 +32,7 @@ zk.historystate = {
 		if (zk.bmk.checkBookmark)
 			zk.bmk.checkBookmark();
 	},
-	register: function () {
+	register(): void {
 		if (zk.historystate.enabled)
 			window.addEventListener('popstate', this.onPopState);
 	}

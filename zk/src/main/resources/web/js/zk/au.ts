@@ -21,8 +21,6 @@ import {cast} from '@zk/types';
 import {Effect, Mask} from '@zk/effect';
 import {DateImpl} from '@zk/dateImpl';
 
-declare function $eval(str: string);
-
 export type ErrorHandler = (response: Response, errCode: number) => boolean;
 
 export type AjaxErrorHandler = (req: Response, status: number, statusText: string, ajaxReqTries?: number | null) => number;
@@ -147,335 +145,335 @@ export interface AUEngine {
 	setPushErrorURI(errors: {[code: number]: string}): void;
 	shallIgnoreESC(): boolean;
 	showError(msgCode: string, msg2?: string | null, cmd?: string | null, ex?: Error): void;
-	toJSON(target: Widget, data: unknown): string;
+	toJSON(target: Widget | null | undefined, data: unknown): string;
 	unError(fn: ErrorHandler): void;
 	wrongValue_(wgt: Widget, msg: string | false): void;
 }
-	var _perrURIs = {}, //server-push error URI
-		_onErrs: Array<ErrorHandler> = cast([]), //onError functions
-		cmdsQue: AuCommands[] = [], //response commands in XML
-		sendPending, responseId,
-		doCmdFns: (() => void)[] = [],
-		idTimeout, //timer ID for automatica timeout
-		pfIndex = 0, //performance meter index
-		_detached: Widget[] & {wgts?: Record<string, Widget>} = [], //used for resolving #stub/#stubs in mount.js (it stores detached widgets in this AU)
-		_portrait: Record<string, boolean> = {'0': true, '180': true}, //default portrait definition
-		_initLandscape = jq.innerWidth() > jq.innerHeight(), // initial orientation is landscape or not
-		_initDefault = _portrait[window.orientation], //default orientation
-		_aftAuResp: (() => void)[] = []; //store callbacks to be triggered when au is back
+var _perrURIs = {}, //server-push error URI
+	_onErrs: Array<ErrorHandler> = cast([]), //onError functions
+	cmdsQue: AuCommands[] = [], //response commands in XML
+	sendPending, responseId,
+	doCmdFns: (() => void)[] = [],
+	idTimeout, //timer ID for automatica timeout
+	pfIndex = 0, //performance meter index
+	_detached: Widget[] & {wgts?: Record<string, Widget>} = [], //used for resolving #stub/#stubs in mount.js (it stores detached widgets in this AU)
+	_portrait: Record<string, boolean> = {'0': true, '180': true}, //default portrait definition
+	_initLandscape = jq.innerWidth() > jq.innerHeight(), // initial orientation is landscape or not
+	_initDefault = _portrait[window.orientation], //default orientation
+	_aftAuResp: (() => void)[] = []; //store callbacks to be triggered when au is back
 
-	// Checks whether to turn off the progress prompt
-	function checkProgressing(sid?: number): void {
-		if (!zAu.processing()) {
-			_detached = []; //clean up
-			if (!zk.clientinfo)
-				zk.endProcessing(sid);
-				//setTimeout(zk.endProcessing, 50);
-				// using a timeout to stop the processing after doing onSize in the fireSized() method of the Utl.js
-				//Bug ZK-1505: using timeout cause progress bar disapper such as Thread.sleep(1000) case, so revert it back
+// Checks whether to turn off the progress prompt
+function checkProgressing(sid?: number): void {
+	if (!zAu.processing()) {
+		_detached = []; //clean up
+		if (!zk.clientinfo)
+			zk.endProcessing(sid);
+			//setTimeout(zk.endProcessing, 50);
+			// using a timeout to stop the processing after doing onSize in the fireSized() method of the Utl.js
+			//Bug ZK-1505: using timeout cause progress bar disapper such as Thread.sleep(1000) case, so revert it back
 
-			zAu.doneTime = jq.now();
-		}
+		zAu.doneTime = jq.now();
 	}
-	function pushCmds(cmds: AuCommands, rs): void {
-		for (var j = 0, rl = rs ? rs.length : 0; j < rl; ++j) {
-			var r = rs[j],
-				cmd = r[0],
-				data = r[1];
+}
+function pushCmds(cmds: AuCommands, rs): void {
+	for (var j = 0, rl = rs ? rs.length : 0; j < rl; ++j) {
+		var r = rs[j],
+			cmd = r[0],
+			data = r[1];
 
-			if (!cmd) {
-				zAu.showError('ILLEGAL_RESPONSE', 'command required');
-				continue;
-			}
-
-			cmds.push({cmd: cmd, data: data || []});
+		if (!cmd) {
+			zAu.showError('ILLEGAL_RESPONSE', 'command required');
+			continue;
 		}
 
-		cmdsQue.push(cmds);
+		cmds.push({cmd: cmd, data: data || []});
 	}
-	function dataNotReady(cmd: string, data): boolean {
-		for (var j = data.length, id, w; j--;)
-			if (id = data[j] && data[j].$u) {
-				if (!(w = Widget.$(id))) { //not ready
-					var processFn = function (): void {
-						if (zk._crWgtUuids.indexOf(id) != -1 && !Widget.$(id)) {
-							zk.afterMount(processFn, 0);
-						} else {
-							do {
-								if (id = data[j] && data[j].$u)
-									data[j] = Widget.$(id);
-							} while (j--);
-							doProcess(cmd, data);
-						}
-					};
-					zk.afterMount(processFn, -1);
-					return true; //not ready
-				}
-				data[j] = w;
-			}
-		return false;
-	}
-	function doProcess(cmd: string, data): void { //decoded
-		if (!dataNotReady(cmd, data)) {
-			if (!zAu.processPhase) {
-				zAu.processPhase = cmd;
-			}
-			//1. process zAu.cmd1 (cmd1 has higher priority)
-			var fn = zAu.cmd1[cmd];
-			if (fn) {
-				if (!data.length)
-					return zAu.showError('ILLEGAL_RESPONSE', 'uuid required', cmd);
 
-				data[0] = Widget.$(data[0]); //might be null (such as rm)
-
-				// Bug ZK-2827
-				if (!data[0] && cmd != 'invoke' && cmd != 'addChd' /*Bug ZK-2839*/) {
-					return;
-				}
-
-				if (cmd == 'setAttr' || cmd == 'setAttrs') {
-					if (!zAu.doAfterProcessWgts) {
-						zAu.doAfterProcessWgts = [];
+	cmdsQue.push(cmds);
+}
+function dataNotReady(cmd: string, data): boolean {
+	for (var j = data.length, id, w; j--;)
+		if (id = data[j] && data[j].$u) {
+			if (!(w = Widget.$(id))) { //not ready
+				var processFn = function (): void {
+					if (zk._crWgtUuids.indexOf(id) != -1 && !Widget.$(id)) {
+						zk.afterMount(processFn, 0);
+					} else {
+						do {
+							if (id = data[j] && data[j].$u)
+								data[j] = Widget.$(id);
+						} while (j--);
+						doProcess(cmd, data);
 					}
-					zAu.doAfterProcessWgts.push(data[0]);
-				}
-
-			} else {
-				//2. process zAu.cmd0
-				fn = zAu.cmd0[cmd];
-				if (!fn)
-					return zAu.showError('ILLEGAL_RESPONSE', 'Unknown', cmd);
+				};
+				zk.afterMount(processFn, -1);
+				return true; //not ready
 			}
-			fn.apply(zAu, data);
-			zAu.processPhase = null;
+			data[j] = w;
 		}
-	}
+	return false;
+}
+function doProcess(cmd: string, data): void { //decoded
+	if (!dataNotReady(cmd, data)) {
+		if (!zAu.processPhase) {
+			zAu.processPhase = cmd;
+		}
+		//1. process zAu.cmd1 (cmd1 has higher priority)
+		var fn = zAu.cmd1[cmd];
+		if (fn) {
+			if (!data.length)
+				return zAu.showError('ILLEGAL_RESPONSE', 'uuid required', cmd);
 
-	function ajaxReqResend2(): void {
-		var reqInf = zAu.pendingReqInf;
-		if (reqInf) {
-			zAu.pendingReqInf = null;
-			if (zAu.seqId == reqInf.sid)
-				ajaxSendNow(reqInf);
+			data[0] = Widget.$(data[0]); //might be null (such as rm)
+
+			// Bug ZK-2827
+			if (!data[0] && cmd != 'invoke' && cmd != 'addChd' /*Bug ZK-2839*/) {
+				return;
+			}
+
+			if (cmd == 'setAttr' || cmd == 'setAttrs') {
+				if (!zAu.doAfterProcessWgts) {
+					zAu.doAfterProcessWgts = [];
+				}
+				zAu.doAfterProcessWgts.push(data[0]);
+			}
+
+		} else {
+			//2. process zAu.cmd0
+			fn = zAu.cmd0[cmd];
+			if (!fn)
+				return zAu.showError('ILLEGAL_RESPONSE', 'Unknown', cmd);
 		}
+		fn.apply(zAu, data);
+		zAu.processPhase = null;
 	}
-	function _exmsg(e: Error): string {
-		var msg = e.message || e, m2 = '';
-		if (e.name) m2 = ' ' + e.name;
+}
+
+function ajaxReqResend2(): void {
+	var reqInf = zAu.pendingReqInf;
+	if (reqInf) {
+		zAu.pendingReqInf = null;
+		if (zAu.seqId == reqInf.sid)
+			ajaxSendNow(reqInf);
+	}
+}
+function _exmsg(e: Error): string {
+	var msg = e.message || e, m2 = '';
+	if (e.name) m2 = ' ' + e.name;
 //		if (e.fileName) m2 += " " +e.fileName;
 //		if (e.lineNumber) m2 += ":" +e.lineNumber;
 //		if (e.stack) m2 += " " +e.stack;
-		return msg + (m2 ? ' (' + m2.substring(1) + ')' : m2);
+	return msg + (m2 ? ' (' + m2.substring(1) + ')' : m2);
+}
+
+function ajaxSend(dt: zk.Desktop, aureq: ZKEvent, timeout?: number): void {
+	//ZK-1523: dt(desktop) could be null, so search the desktop from target's parent.
+	//call stack: echo2() -> send()
+	if (!dt) {
+		//original dt is decided by aureq.target.desktop, so start by it's parent.
+		var wgt: Widget | null | undefined = aureq.target!.parent;
+		while (!wgt?.desktop) {
+			wgt = wgt?.parent;
+		}
+		dt = wgt?.desktop;
+	}
+	////
+	zAu.addAuRequest(dt, aureq);
+
+	ajaxSend2(dt, timeout);
+		//Note: we don't send immediately (Bug 1593674)
+}
+function ajaxSend2(dt: zk.Desktop, timeout?: number): void {
+	if (!timeout) timeout = 0;
+	if (dt && timeout >= 0)
+		setTimeout(function () {zAu.sendNow(dt);}, timeout);
+}
+function ajaxSendNow(reqInf: AuRequestInfo): void {
+	// eslint-disable-next-line no-undef
+	var fetchOpts: RequestInit = {
+		credentials: 'same-origin',
+		method: 'POST',
+		headers: reqInf.content instanceof FormData ? {'ZK-SID': '' + reqInf.sid} : {'Content-Type': zAu.ajaxSettings.contentType as string, 'ZK-SID': '' + reqInf.sid},
+		body: reqInf.content
+	};
+	zAu.sentTime = jq.now(); //used by server-push (cpsp)
+	zk.ausending = true;
+	if (zk.xhrWithCredentials)
+		fetchOpts.credentials = 'include';
+	if (zAu._errCode) {
+		if (fetchOpts.headers) {
+			fetchOpts.headers['ZK-Error-Report'] = zAu._errCode;
+		}
+		zAu._errCode = null;
 	}
 
-	function ajaxSend(dt: zk.Desktop, aureq: ZKEvent, timeout?: number): void {
-		//ZK-1523: dt(desktop) could be null, so search the desktop from target's parent.
-		//call stack: echo2() -> send()
-		if (!dt) {
-			//original dt is decided by aureq.target.desktop, so start by it's parent.
-			var wgt: Widget | null | undefined = aureq.target.parent;
-			while (!wgt?.desktop) {
-				wgt = wgt?.parent;
-			}
-			dt = wgt?.desktop;
-		}
-		////
-		zAu.addAuRequest(dt, aureq);
+	var forceAjax = reqInf.forceAjax;
+	if (zk.pfmeter) zAu._pfsend(reqInf.dt, fetchOpts, false, forceAjax);
 
-		ajaxSend2(dt, timeout);
-			//Note: we don't send immediately (Bug 1593674)
+	zAu.ajaxReq = true; // processing flag
+	zAu.ajaxReqInf = reqInf;
+
+	if (!forceAjax && typeof zWs != 'undefined' && zWs.ready) {
+		zWs.send(reqInf);
+		return;
 	}
-	function ajaxSend2(dt: zk.Desktop, timeout?: number): void {
-		if (!timeout) timeout = 0;
-		if (dt && timeout >= 0)
-			setTimeout(function () {zAu.sendNow(dt);}, timeout);
-	}
-	function ajaxSendNow(reqInf: AuRequestInfo): void {
-		// eslint-disable-next-line no-undef
-		var fetchOpts: RequestInit = {
-			credentials: 'same-origin',
-			method: 'POST',
-			headers: reqInf.content instanceof FormData ? {'ZK-SID': '' + reqInf.sid} : {'Content-Type': zAu.ajaxSettings.contentType as string, 'ZK-SID': '' + reqInf.sid},
-			body: reqInf.content
-		};
-		zAu.sentTime = jq.now(); //used by server-push (cpsp)
-		zk.ausending = true;
-		if (zk.xhrWithCredentials)
-			fetchOpts.credentials = 'include';
-		if (zAu._errCode) {
-			if (fetchOpts.headers) {
-				fetchOpts.headers['ZK-Error-Report'] = zAu._errCode;
-			}
-			zAu._errCode = null;
-		}
 
-		var forceAjax = reqInf.forceAjax;
-		if (zk.pfmeter) zAu._pfsend(reqInf.dt, fetchOpts, false, forceAjax);
-
-		zAu.ajaxReq = true; // processing flag
-		zAu.ajaxReqInf = reqInf;
-
-		if (!forceAjax && typeof zWs != 'undefined' && zWs.ready) {
-			zWs.send(reqInf);
-			return;
-		}
-
-		zAu._fetch(reqInf.uri, fetchOpts)
-		.then(function (response: Response & {responseText?: string}) {
-			response.text().then(function (responseText) {
-				response.responseText = responseText;
-				zAu._onResponseReady(response);
-			});
-			return response;
-		}).catch(function (e) {
-			zAu.ajaxReq = zAu.ajaxReqInf = null; // ZK-4775: should clear processing flag
-			if (!reqInf.ignorable && !zk.unloading) {
-				var msg = _exmsg(e);
-				zAu._errCode = '[Send] ' + msg;
-				if (zAu.confirmRetry('FAILED_TO_SEND', msg)) {
-					zAu.ajaxReqResend(reqInf);
-				}
-			}
+	zAu._fetch(reqInf.uri, fetchOpts)
+	.then(function (response: Response & {responseText?: string}) {
+		response.text().then(function (responseText) {
+			response.responseText = responseText;
+			zAu._onResponseReady(response);
 		});
-
-		if (!reqInf.implicit)
-			zk.startProcessing(zk.procDelay, reqInf.sid); //wait a moment to avoid annoying
-	}
-	function doCmdsNow(cmds: AuCommands): boolean {
-		var rtags = cmds.rtags || {}, ex;
-		try {
-			while (cmds && cmds.length) {
-				if (zk.mounting) return false;
-
-				var cmd = cmds.shift();
-				try {
-					doProcess(cmd!.cmd, cmd!.data);
-				} catch (e) {
-					zk.mounting = false; //make it able to proceed
-					zAu.showError('FAILED_TO_PROCESS', null, cmd!.cmd, e);
-					if (!ex) ex = e;
-				}
+		return response;
+	}).catch(function (e) {
+		zAu.ajaxReq = zAu.ajaxReqInf = null; // ZK-4775: should clear processing flag
+		if (!reqInf.ignorable && !zk.unloading) {
+			var msg = _exmsg(e);
+			zAu._errCode = '[Send] ' + msg;
+			if (zAu.confirmRetry('FAILED_TO_SEND', msg)) {
+				zAu.ajaxReqResend(reqInf);
 			}
-			if (zAu.doAfterProcessWgts) {
-				zAu.doAfterProcessWgts.forEach(function (wgt) {
-					if (wgt.doAfterProcessRerenderArgs) {
-						wgt.rerender.apply(wgt, wgt.doAfterProcessRerenderArgs);
-						wgt.doAfterProcessRerenderArgs = null;
-					}
-				});
-				zAu.doAfterProcessWgts = null;
-			}
-		} finally {
-		//Bug #2871135, always fire since the client might send back empty
-			if (!cmds || !cmds.length) {
-				// ZK-3288, If the wpd file of new created widget was never loaded,
-				// sometimes onCommandReady and onResponse will be called during the widget mounting phase. (timing issue)
-				zk.afterMount(function () {
-					// Bug ZK-2516
-					zWatch.fire('onCommandReady', null, {timeout: -1, rtags: rtags}); //won't use setTimeout
-					zWatch.fire('onResponse', null, {timeout: 0, rtags: rtags}); //use setTimeout
-					if (rtags.onClientInfo) {
-						setTimeout(zk.endProcessing, 50); // always stop the processing
-						delete zk.clientinfo;
-					}
-				}, -1);
-			}
-			zk.ausending = false;
-			zk.doAfterAuResponse();
 		}
-		if (ex)
-			throw ex;
+	});
+
+	if (!reqInf.implicit)
+		zk.startProcessing(zk.procDelay, reqInf.sid); //wait a moment to avoid annoying
+}
+function doCmdsNow(cmds: AuCommands): boolean {
+	var rtags = cmds.rtags || {}, ex;
+	try {
+		while (cmds && cmds.length) {
+			if (zk.mounting) return false;
+
+			var cmd = cmds.shift();
+			try {
+				doProcess(cmd!.cmd, cmd!.data);
+			} catch (e) {
+				zk.mounting = false; //make it able to proceed
+				zAu.showError('FAILED_TO_PROCESS', null, cmd!.cmd, e);
+				if (!ex) ex = e;
+			}
+		}
+		if (zAu.doAfterProcessWgts) {
+			zAu.doAfterProcessWgts.forEach(function (wgt) {
+				if (wgt.doAfterProcessRerenderArgs) {
+					wgt.rerender.apply(wgt, wgt.doAfterProcessRerenderArgs);
+					wgt.doAfterProcessRerenderArgs = null;
+				}
+			});
+			zAu.doAfterProcessWgts = null;
+		}
+	} finally {
+	//Bug #2871135, always fire since the client might send back empty
+		if (!cmds || !cmds.length) {
+			// ZK-3288, If the wpd file of new created widget was never loaded,
+			// sometimes onCommandReady and onResponse will be called during the widget mounting phase. (timing issue)
+			zk.afterMount(function () {
+				// Bug ZK-2516
+				zWatch.fire('onCommandReady', null, {timeout: -1, rtags: rtags}); //won't use setTimeout
+				zWatch.fire('onResponse', null, {timeout: 0, rtags: rtags}); //use setTimeout
+				if (rtags.onClientInfo) {
+					setTimeout(zk.endProcessing, 50); // always stop the processing
+					delete zk.clientinfo;
+				}
+			}, -1);
+		}
+		zk.ausending = false;
+		zk.doAfterAuResponse();
+	}
+	if (ex)
+		throw ex;
+	return true;
+}
+function _asBodyChild(child: Widget): void {
+	jq(document.body).append(child);
+}
+
+//misc//
+function fireClientInfo(): void {
+	zAu.cmd0.clientInfo();
+}
+function sendTimeout(): void {
+	zAu.send(new zk.Event(null, 'dummy', null, {ignorable: true, serverAlive: true, rtags: {isDummy: true}, forceAjax: true}));
+		//serverAlive: the server shall not ignore it if session timeout
+	zk.isTimeout = true; //ZK-3304: already timeout
+}
+
+//store all widgets into a map
+function _wgt2map(wgt: Widget, map: Record<string, Widget>): void {
+	map[wgt.uuid] = wgt;
+	for (var child = wgt.firstChild; child; child = child.nextSibling)
+		_wgt2map(child, map);
+}
+
+function _beforeAction(wgt: Widget, actnm: string): unknown {
+	var act;
+	if (wgt.isVisible() && (act = wgt.actions_[actnm])) {
+		wgt['z$display'] = 'none'; //control zk.Widget.domAttrs_
+		return act;
+	}
+}
+function _afterAction(wgt: Widget, act): boolean {
+	if (act) {
+		delete wgt['z$display'];
+		act[0].call(wgt, wgt.$n(), act[1]);
 		return true;
 	}
-	function _asBodyChild(child: Widget): void {
-		jq(document.body).append(child);
-	}
+	return false;
+}
 
-	//misc//
-	function fireClientInfo(): void {
-		zAu.cmd0.clientInfo();
-	}
-	function sendTimeout(): void {
-		zAu.send(new zk.Event(null, 'dummy', null, {ignorable: true, serverAlive: true, rtags: {isDummy: true}, forceAjax: true}));
-			//serverAlive: the server shall not ignore it if session timeout
-		zk.isTimeout = true; //ZK-3304: already timeout
-	}
-
-	//store all widgets into a map
-	function _wgt2map(wgt: Widget, map: Record<string, Widget>): void {
-		map[wgt.uuid] = wgt;
-		for (var child = wgt.firstChild; child; child = child.nextSibling)
-			_wgt2map(child, map);
-	}
-
-	function _beforeAction(wgt: Widget, actnm: string): unknown {
-		var act;
-		if (wgt.isVisible() && (act = wgt.actions_[actnm])) {
-			wgt['z$display'] = 'none'; //control zk.Widget.domAttrs_
-			return act;
-		}
-	}
-	function _afterAction(wgt: Widget, act): boolean {
-		if (act) {
-			delete wgt['z$display'];
-			act[0].call(wgt, wgt.$n(), act[1]);
-			return true;
-		}
-		return false;
-	}
-
-	// refer to socket.io
-	const _withNativeArrayBuffer = typeof ArrayBuffer === 'function',
-	 isView = (obj): boolean => {
+// refer to socket.io
+const _withNativeArrayBuffer = typeof ArrayBuffer === 'function',
+	isView = (obj): boolean => {
 		return typeof ArrayBuffer.isView === 'function'
 			? ArrayBuffer.isView(obj)
 			: obj.buffer instanceof ArrayBuffer;
 	},
-	 toString = Object.prototype.toString,
-	 _withNativeBlob = typeof Blob === 'function' ||
+	toString = Object.prototype.toString,
+	_withNativeBlob = typeof Blob === 'function' ||
 		(typeof Blob !== 'undefined' &&
 			toString.call(Blob) === '[object BlobConstructor]'),
-	 _withNativeFile = typeof File === 'function' ||
+	_withNativeFile = typeof File === 'function' ||
 		(typeof File !== 'undefined' &&
 			toString.call(File) === '[object FileConstructor]');
-	function _isBinary(obj): boolean {
-		return ((_withNativeArrayBuffer && (obj instanceof ArrayBuffer || isView(obj))) ||
-			(_withNativeBlob && obj instanceof Blob) ||
-			(_withNativeFile && obj instanceof File));
-	}
+function _isBinary(obj): boolean {
+	return ((_withNativeArrayBuffer && (obj instanceof ArrayBuffer || isView(obj))) ||
+		(_withNativeBlob && obj instanceof Blob) ||
+		(_withNativeFile && obj instanceof File));
+}
 
-	function _deconstructPacket(data, buffers): unknown {
-		if (!data) return data;
+function _deconstructPacket(data, buffers): unknown {
+	if (!data) return data;
 
-		if (_isBinary(data)) {
-			const placeholder = { _placeholder: true, num: buffers.length };
-			buffers.push(data);
-			return placeholder;
-		} else if (Array.isArray(data)) {
-			const newData = new Array(data.length);
-			for (let i = 0; i < data.length; i++) {
-				newData[i] = _deconstructPacket(data[i], buffers);
-			}
-			return newData;
-		} else if (data instanceof FileList) { // avoid Object type toJson.
-			const newData = new Array(data.length);
-			for (let i = 0; i < data.length; i++) {
-				newData[i] = _deconstructPacket(data.item(i), buffers);
-			}
-			return newData;
-		} else if (typeof data === 'object' && !(data instanceof Date) &&
-				!(data instanceof DateImpl) && !zk.Widget.isInstance(data)) {
-			const newData = {};
-			for (const key in data) {
-				// eslint-disable-next-line no-prototype-builtins
-				if (data.hasOwnProperty(key)) {
-					newData[key] = _deconstructPacket(data[key], buffers);
-				}
-			}
-			return newData;
+	if (_isBinary(data)) {
+		const placeholder = { _placeholder: true, num: buffers.length };
+		buffers.push(data);
+		return placeholder;
+	} else if (Array.isArray(data)) {
+		const newData = new Array(data.length);
+		for (let i = 0; i < data.length; i++) {
+			newData[i] = _deconstructPacket(data[i], buffers);
 		}
-		return data;
+		return newData;
+	} else if (data instanceof FileList) { // avoid Object type toJson.
+		const newData = new Array(data.length);
+		for (let i = 0; i < data.length; i++) {
+			newData[i] = _deconstructPacket(data.item(i), buffers);
+		}
+		return newData;
+	} else if (typeof data === 'object' && !(data instanceof Date) &&
+			!(data instanceof DateImpl) && !zk.Widget.isInstance(data)) {
+		const newData = {};
+		for (const key in data) {
+			// eslint-disable-next-line no-prototype-builtins
+			if (data.hasOwnProperty(key)) {
+				newData[key] = _deconstructPacket(data[key], buffers);
+			}
+		}
+		return newData;
 	}
+	return data;
+}
 
 /** @class zAu
  * @import zk.Widget
@@ -1155,7 +1153,7 @@ zAu.beforeSend = function (uri, req, dt) {
 		var wgts: Widget[] = [], len = codes.length;
 		if (len > 0) {
 			for (var j = 0; j < len; ++j)
-				window.zkx_(codes[j], function (newwgt) {
+				window.zkx_(codes[j] as Parameters<Window['zkx_']>[0], function (newwgt) {
 					wgts.push(newwgt);
 					if (wgts.length == len)
 						fn(wgts);
@@ -1356,11 +1354,11 @@ zAu.beforeSend = function (uri, req, dt) {
 	},
 	/* @param zk.Widget target
 	 */
-	toJSON: function (target: Widget, data: Partial<{pageX; pageY; x; y}>) {
+	toJSON(target: Widget | null | undefined, data: {pageX?: number; pageY?: number; x?: number; y?: number} | unknown[]): string {
 		if (!jq.isArray(data)) {
 			if (data.pageX != null && data.x == null) {
 				var ofs = target && target.desktop ? // B50-3336745: target may have been detached
-					target.fromPageCoord(data.pageX, data.pageY) :
+					target.fromPageCoord(data.pageX, data.pageY!) :
 					[data.pageX, data.pageY];
 				data.x = ofs[0];
 				data.y = ofs[1];
@@ -1477,7 +1475,7 @@ zAu.ajaxErrorHandler = function (req, status, statusText, ajaxReqTries) {
 			if (v) v['obsolete'] = true;
 
 			if (msg.startsWith('script:'))
-				return $eval(msg.substring(7));
+				return $eval(msg.substring(7)) as void;
 
 			// ZK-2397: prevent from showing reload dialog again while browser is reloading
 			if (zk._isReloadingInObsolete)
@@ -1954,7 +1952,7 @@ zAu.ajaxErrorHandler = function (req, status, statusText, ajaxReqTries) {
 		 */
 		syncAllErrorbox: function () {
 			jq('.z-errorbox').toArray().forEach(function (ebox) {
-				var wgt = jq(ebox).zk.$();
+				var wgt = jq(ebox).zk.$<zul.wgt.Errorbox>();
 				wgt.reposition();
 				wgt._fixarrow();
 			});
@@ -2040,7 +2038,7 @@ zAu.ajaxErrorHandler = function (req, status, statusText, ajaxReqTries) {
 					} else {
 						var n = wgt.$n();
 						if (n)
-							jq(n).after(child, wgt.desktop);
+							jq(n).after(child, wgt.desktop!);
 						else
 							_asBodyChild(child);
 						if (!_afterAction(child, act) && !child.z_rod)
@@ -2167,7 +2165,7 @@ zAu.ajaxErrorHandler = function (req, status, statusText, ajaxReqTries) {
 			if (wgt)
 				wgt[func].apply(wgt, args);
 			else {
-				var fn = zk.$import(func);
+				var fn = zk.$import(func) as Function;
 				if (!fn) zk.error('not found: ' + func);
 				fn.apply(null, args);
 			}
@@ -2214,7 +2212,7 @@ zAu.ajaxErrorHandler = function (req, status, statusText, ajaxReqTries) {
 	//afterAuResponse: function () {}
 //@};
 // zk scope
-export function afterAuResponse(fn): void {
+export function afterAuResponse(fn: () => void): void {
 	if (fn)
 		_aftAuResp.push(fn);
 }
