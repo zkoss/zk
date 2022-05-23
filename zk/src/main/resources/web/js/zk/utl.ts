@@ -845,6 +845,39 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 		};
 
 		return debounced;
+	},
+	/**
+	 * Check if the two objects has the same value
+	 * ref: undersore isEqual
+	 * @param a first object
+	 * @param b second object
+	 * @return boolean the two object is the same or not
+	 * @since 10.0.0
+	 */
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	isEqualObject: function (a, b) {
+		// Identical objects are equal. `0 === -0`, but they aren't identical.
+		// See the [Harmony `egal` proposal](http://wiki.ecmascript.org/doku.php?id=harmony:egal).
+		if (a === b) return a !== 0 || 1 / a === 1 / b;
+		// `null` or `undefined` only equal to itself (strict comparison).
+		if (a == null || b == null) return false;
+		// `NaN`s are equivalent, but non-reflexive.
+		if (a !== a) return b !== b;
+		// Exhaust primitive checks
+		let type = typeof a;
+		if (type !== 'function' && type !== 'object' && typeof b != 'object') return false;
+
+		const keys = Object.keys(a);
+		if (Object.keys(b).length !== keys.length) {
+			return false;
+		}
+		for (const key of keys) {
+			if (!Object.prototype.propertyIsEnumerable.call(b, key) ||
+				!this.isEqualObject(a[key], b[key])) {
+				return false;
+			}
+		}
+		return true;
 	}
 };
 

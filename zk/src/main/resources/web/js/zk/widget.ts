@@ -2234,9 +2234,9 @@ wgt.$f().main.setTitle("foo");
 	 * @return zk.Widget this widget.
 	 */
 	setZIndex: function (zIndex, opts) {
-		if (opts.floatZIndex && this._userZIndex)
+		if (opts && opts.floatZIndex && this._userZIndex)
 			return this;
-		if (!opts.floatZIndex)
+		if (!opts || !opts.floatZIndex)
 			this._userZIndex = true;
 		if (!zIndex)
 			this._userZIndex = false;

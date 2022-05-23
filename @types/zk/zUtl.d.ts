@@ -70,6 +70,7 @@ declare namespace zk {
         today(fmt: string, tz: string): Date;
         throttle<T, A extends any[], R>(func: (this: T, ...args: A) => R, wait: number): (this: T, ...args: A) => R;
         debounce<T, A extends any[], R>(func: (this: T, ...args: A) => R, wait: number, immediate?: boolean): (this: T, ...args: A) => R;
+        isEqualObject(a, b): boolean;
     }
 }
 
