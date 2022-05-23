@@ -69,8 +69,8 @@ interface JQuery {
 }
 
 declare namespace JQ {
-    type Event = typeof import('./dom')._JQEvent;
-    type EventStatic = typeof import('./dom')._JQEventStatic;
+    type Event = typeof import('@zk/dom')._JQEvent;
+    type EventStatic = typeof import('@zk/dom')._JQEventStatic;
 }
 
 declare namespace JQuery {
@@ -103,7 +103,7 @@ interface JQueryStatic {
     css(elem: Node, name: string): string;
     css(elem: Node, name: string, numeric: true): number;
     css(elem: Node, name: string, extra: 'styleonly', styles?: CSSStyleDeclaration): number;
-    d2j(d: Date | import('globals').DateImpl): string;
+    d2j(d: Date | DateImpl): string;
     doSyncScroll(): void;
     evalJSON(s: string): unknown;
     filterTextStyle(style: string, plus?: string[]): string;
@@ -155,37 +155,37 @@ interface Array<T> {
 type Widget = import('@zk/widget').Widget;
 type EventOptions = import('@zk/evt').EventOptions;
 type Moment = import('moment-timezone').Moment;
-type DateImpl = import('./dateimpl').DateImpl;
+type DateImpl = import('@zk/dateimpl').DateImpl;
 
 interface Window {
-    zkservice: typeof import('./widget').zkservice;
-    zkopt: typeof import('./widget').zkopt;
-    onIframeURLChange: typeof import('./au').onIframeURLChange;
+    zkservice: typeof import('@zk/widget').zkservice;
+    zkopt: typeof import('@zk/widget').zkopt;
+    onIframeURLChange: typeof import('@zk/au').onIframeURLChange;
     zkpe: import('@zk/zk').$void;
 	zkpi(nm: string, wv: boolean): Record<string, unknown> | null;
 	zkpb(pguid: string, dtid: string, contextURI: string, updateURI: string, resourceURI: string, reqURI: string, props: Record<string, string>): void;
 	zkver(ver: string, build: string, ctxURI: string, updURI: string, modVers: Record<string, string>, opts: Record<string, unknown>): void;
 	zkmld(wgtcls: Record<string, unknown>, molds: Record<string, (() => void)>): void;
 	zkamn(pkg: string, fn: (() => void)): void;
-	DateImpl: typeof import('./dateimpl').DateImpl;
+	DateImpl: typeof import('@zk/dateimpl').DateImpl;
     Dates: {
         newInstance(param?: number | DateImpl | Parameters<DateConstructor['UTC']>, tz?: string): DateImpl;
     };
 
     // assigned in ./mount
-    zkdt: typeof import('./mount').zkdt;
-    zkx: typeof import('./mount').zkx;
-    zkx_: typeof import('./mount').zkx_;
-	zkmx: typeof import('./mount').zkmx;
-	zkmb: typeof import('./mount').zkmb;
-	zkme: typeof import('./mount').zkme;
-	zkdh: typeof import('./mount').zkdh;
+    zkdt: typeof import('@zk/mount').zkdt;
+    zkx: typeof import('@zk/mount').zkx;
+    zkx_: typeof import('@zk/mount').zkx_;
+	zkmx: typeof import('@zk/mount').zkmx;
+	zkmb: typeof import('@zk/mount').zkmb;
+	zkme: typeof import('@zk/mount').zkme;
+	zkdh: typeof import('@zk/mount').zkdh;
 }
-declare var zkac: typeof import('./mount').zkac;
+declare var zkac: typeof import('@zk/mount').zkac;
 declare function $eval(x: string): unknown;
-declare var zkreg: typeof import('./widget').zkreg;
-declare var zDebug: import('./zk').ZKObject;
-declare var zAu: typeof import('./au').default;
+declare var zkreg: typeof import('@zk/widget').zkreg;
+declare var zDebug: import('@zk/zk').ZKObject;
+declare var zAu: typeof import('@zk/au').default;
 declare var msgzk: Record<
     | 'NOT_FOUND'
     | 'UNSUPPORTED'
@@ -209,23 +209,23 @@ declare var msgzk: Record<
 	| 'CAUSE'
 	| 'LOADING'
     , string>;
-declare var zWatch: import('./evt').ZWatch;
-declare var zUtl: import('./utl').ZUtl;
-declare var zKeys: typeof import('./keys').zKeys;
+declare var zWatch: import('@zk/evt').ZWatch;
+declare var zUtl: import('@zk/utl').ZUtl;
+declare var zKeys: typeof import('@zk/keys').zKeys;
 
 declare namespace zk {
-    type Object = import('./zk').ZKObject;
+    type Object = import('@zk/zk').ZKObject;
     type Offset = import('@zk/types').Offset;
 	type Desktop = import('@zk/widget').Desktop;
     type Widget = import('@zk/widget').Widget;
-    type BigDecimal = import('./math').BigDecimal;
-    type JQZK = import('./dom').JQZK;
+    type BigDecimal = import('@zk/math').BigDecimal;
+    type JQZK = import('@zk/dom').JQZK;
 
     interface Websocket {
         readonly ready: boolean;
 
         encode(j: number, aureq, dt: zk.Desktop): Record<string, unknown>;
-        send(reqInf: import('./au').AuRequestInfo): void;
+        send(reqInf: import('@zk/au').AuRequestInfo): void;
         setRequestHeaders(key: string, value: string): void;
     }
 
@@ -263,7 +263,7 @@ declare var zkmax: Record<string, unknown>;
 declare var zWs: zk.Websocket;
 declare var zkbind: zk.ZKBind;
 
-type ZKStatic = typeof import('./zk').default;
+type ZKStatic = typeof import('@zk/zk').default;
 declare var zk: ZKStatic;
 
 declare namespace zul {
