@@ -2500,7 +2500,7 @@ wgt.$f().main.setTitle("foo");
 	public getZIndex(): number {
 		return this._zIndex;
 	}
-	public isZindex(): number {
+	public getZindex(): number {
 		return this.getZIndex();
 	}
 
