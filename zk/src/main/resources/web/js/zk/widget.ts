@@ -2525,6 +2525,10 @@ wgt.$f().main.setTitle("foo");
 		}
 	}
 
+	public setZindex(zIndex: number, opts: Partial<{ floatZIndex: boolean; fire: boolean }>): void {
+		this.setZIndex(zIndex, opts);
+	}
+
 	/** Returns the scroll top of the associated DOM element of this widget.
 	 * <p>0 is always returned if this widget is not bound to a DOM element yet.
 	 * @return int
