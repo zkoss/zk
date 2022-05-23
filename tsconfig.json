@@ -3,7 +3,8 @@
     "target": "es5",
     "lib": [
       "esnext",
-      "dom"
+      "dom",
+      "ScriptHost" // declare var ActiveXObject: (type: string) => void;
     ],
     "moduleResolution": "node",
     "module": "commonjs",
@@ -11,14 +12,19 @@
     "noEmit": true, // type checking only
     "strict": true,
     "allowSyntheticDefaultImports": true,
-//    "noFallthroughCasesInSwitch": true,
+    //    "noFallthroughCasesInSwitch": true,
     "useUnknownInCatchVariables": false,
-//    "noImplicitReturns": true,
-//    "noUnusedLocals": true,
+    //    "noImplicitReturns": true,
+    //    "noUnusedLocals": true,
     "noImplicitAny": false, // leave this for js compatible
-    "typeRoots": ["./@types/"],
-    "types": ["zk", "webpack-env"],
-    "paths":{
+    "typeRoots": [
+      "./@types/"
+    ],
+    "types": [
+      "zk",
+      "webpack-env"
+    ],
+    "paths": {
       "@zk/*": [
         "./zk/src/main/resources/web/js/zk/*"
       ]
@@ -26,7 +32,7 @@
   },
   "include": [
     "zk/src/main/resources/web/js/zk/*",
-//    "zul/src/main/resources/web/js/zul/**/*"
+    //    "zul/src/main/resources/web/js/zul/**/*"
   ],
   "exclude": [
     "node_modules",
