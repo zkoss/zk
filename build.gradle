@@ -79,9 +79,9 @@ subprojects {
 			exec {
 				commandLine "$rootDir/node_modules/.bin/gulp", 'build:single', "--src=$projectDir/$resources/web/js", "--dest=$projectDir/$codegen/web/js"
 			}
-
+			def tsconfigDir = project.file('tsconfig.json').exists() ? projectDir : rootDir
 			exec {
-				commandLine "$rootDir/node_modules/.bin/tsc", '--noEmit'
+				commandLine "$rootDir/node_modules/.bin/tsc", '--noEmit', '--project',  tsconfigDir
 			}
 		}
 	}
