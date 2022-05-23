@@ -1277,8 +1277,8 @@ jq(el).zk.center('left'); //not to change the Y coordinate
 jq(el).zk.center(); //same as 'center'
 </code></pre>
 	 *
-     * @param Map flags A combination of center, left, right, top and bottom. If omitted, center is assumed.
-     * @return jqzk this object
+	 * @param Map flags A combination of center, left, right, top and bottom. If omitted, center is assumed.
+	 * @return jqzk this object
 	 * @see #position
 	 */
 	center: function (flags) {
@@ -1358,8 +1358,8 @@ jq(el).zk.center(); //same as 'center'
 	 * @param Map opts a map of addition options. Allowed values include
 <ol><li> <b>overflow</b><br /> whether to allow the element being scrolled out of the visible area (Default: false, i.e., not allowed). If not specified (or false), the popup always remains visible even if the user scrolls the anchor widget out of the visible area</li></ol>
 	 * @return jqzk this object
-     * @see #center
-     */
+	 * @see #center
+	 */
 	/** Position the first matched element to the specified location.
 	 *
 	 * @param DOMElement dim the element used to get the dimension of the achor location.
@@ -2312,13 +2312,13 @@ Object.assign(jq, {
 		}
 		return _sbwDiv._value || (_sbwDiv._value = _sbwDiv.getBoundingClientRect().width - _sbwDiv.firstChild.getBoundingClientRect().width);
 	},
-    /** Returns if the specified rectangles are overlapped with each other.
-     * @param Offset ofs1 the offset of the first rectangle
-     * @param Offset dim1 the dimension (size) of the first rectangle
-     * @param Offset ofs2 the offset of the second rectangle
-     * @param Offset dim2 the dimension (size) of the second rectangle
-     * @return boolean
-     */
+	/** Returns if the specified rectangles are overlapped with each other.
+	 * @param Offset ofs1 the offset of the first rectangle
+	 * @param Offset dim1 the dimension (size) of the first rectangle
+	 * @param Offset ofs2 the offset of the second rectangle
+	 * @param Offset dim2 the dimension (size) of the second rectangle
+	 * @return boolean
+	 */
 	/** Returns if the specified rectangles are overlapped with each other.
 	 * @param Offset ofs1 the offset of the first rectangle
 	 * @param Offset dim1 the dimension (size) of the first rectangle
@@ -2713,8 +2713,8 @@ text = jq.toJSON(['e', {pluribus: 'unum'}]);
 // text is '["e",{"pluribus":"unum"}]'
 
 text = jq.toJSON([new Date()], function (key, value) {
-    return this[key] instanceof Date ?
-        'Date(' + this[key] + ')' : value;
+	return this[key] instanceof Date ?
+		'Date(' + this[key] + ')' : value;
 });
 // text is '["Date(---current time---)"]'
 </code></pre>

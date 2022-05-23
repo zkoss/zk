@@ -138,7 +138,7 @@ onClick: function (evt) {
 <pre><code>
 // at client side
 var json = { "aa" : [{"a11":"11", "a12":12},{"a21":"21","a22":22.2}],
-    "bb":[{"b11":"31","b12":"32"},{"b21":"41","b22":"42","b23":43}]
+	"bb":[{"b11":"31","b12":"32"},{"b21":"41","b22":"42","b23":43}]
   },
   data = {jsonObject:json};
 
@@ -171,8 +171,8 @@ onClick: function (evt) {
 	 * <li>rtags (since 5.0.2): a map ({@link Map}) that can be anything and will be passed to
 	 * the <code>onResponse</code> watch (see also {@link _global_.zWatch}).</li>
 	 * </ul>
-     * @type Map
-     */
+	 * @type Map
+	 */
 	public opts: Partial<EventOptions>;
 	/** The DOM event that causes this widget event, or null if not available.
 	 * @type jq.Event
@@ -239,7 +239,7 @@ evt.stop({au:true}); //stop only the sending of the AU request
 <pre><code>
 evt.stop({progagation:true,revoke:true}); //revoke the event propagation
 </code></pre>
-    * <p>Notice that the event won't be sent to the server if stop() was called.
+	* <p>Notice that the event won't be sent to the server if stop() was called.
 	*
 	* @param Map opts [optional] control what to stop.
 	* If omitted, the event propagation ({@link #stopped}) and the native DOM event ({@link #domStopped}) are both stopped
@@ -557,7 +557,7 @@ zWatch.listen({onSend: ml})
 <p>The watch listener is added in the parent-first sequence if it has a method called getParent, or a member called parent (a typical example is {@link Widget}). Thus, the parent will be called before its children, if they are all registered to the same action.
  */
 export const zWatch: ZWatch & {onBindLevelMove: Callable} = {
-    /** Registers watch listener(s). For example,
+	/** Registers watch listener(s). For example,
 <pre><code>
 zWatch.listen({
   onSize: this,

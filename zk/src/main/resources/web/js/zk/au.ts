@@ -71,7 +71,7 @@ export interface AUCommand0 {
 	moveTo: typeof window.moveTo;
 	cfmClose(msg: string): void;
 	showNotification(msg: string, type: string, pid: string, ref: Widget,
-	                 pos: string, off: Offset, dur: number, closable: boolean): void;
+					 pos: string, off: Offset, dur: number, closable: boolean): void;
 	showBusy(uuid: string, msg?: string): void;
 	clearBusy(uuid: string | null): void;
 }
@@ -835,7 +835,7 @@ zAu.beforeSend = function (uri, req, dt) {
   var target = req.target;
   if (target.id) {
    var data = req.data||{},
-       value = data.items &amp;&amp; data.items[0]?data.items[0].id:data.value;
+	   value = data.items &amp;&amp; data.items[0]?data.items[0].id:data.value;
    pageTracker._trackPageview((target.desktop?target.desktop.requestPath:"") + "/" + target.id + "/" + req.name + (value?"/"+value:""));
   }
  } catch (e) {
@@ -1418,16 +1418,16 @@ zAu.beforeSend = function (uri, req, dt) {
 	 * <p>For example,
 <pre><code>
 zAu.ajaxErrorHandler = function (req, status, statusText, ajaxReqTries) {
-    if (ajaxReqTries == null)
-        ajaxReqTries = 3; // retry 3 times
+	if (ajaxReqTries == null)
+		ajaxReqTries = 3; // retry 3 times
 
-    // reset the resendTimeout, for more detail, please refer to
-    // http://books.zkoss.org/wiki/ZK_Configuration_Reference/zk.xml/The_client-config_Element/The_auto-resend-timeout_Element
-    zk.resendTimeout = 2000;//wait 2 seconds to resend.
+	// reset the resendTimeout, for more detail, please refer to
+	// http://books.zkoss.org/wiki/ZK_Configuration_Reference/zk.xml/The_client-config_Element/The_auto-resend-timeout_Element
+	zk.resendTimeout = 2000;//wait 2 seconds to resend.
 
-    if (!zAu.confirmRetry("FAILED_TO_RESPONSE", status+(statusText?": "+statusText:"")))
-        return 0; // no retry;
-    return ajaxReqTries;
+	if (!zAu.confirmRetry("FAILED_TO_RESPONSE", status+(statusText?": "+statusText:"")))
+		return 0; // no retry;
+	return ajaxReqTries;
 }
 </code></pre>
 	 * @param Object req the object of XMLHttpRequest
@@ -1726,7 +1726,7 @@ zAu.ajaxErrorHandler = function (req, status, statusText, ajaxReqTries) {
 		 * @param boolean closable the close button of notification
 		 */
 		showNotification(msg: string, type: string, pid: string, ref: Widget,
-		                 pos: string, off: Offset, dur: number, closable: boolean): void {
+						 pos: string, off: Offset, dur: number, closable: boolean): void {
 			var notif = zk.load('zul.wgt') ? zul.wgt.Notification : null; // in zul
 			if (notif) {
 				var opts = {
