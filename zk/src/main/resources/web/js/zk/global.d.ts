@@ -155,7 +155,7 @@ interface Array<T> {
 type Widget = import('@zk/widget').Widget;
 type EventOptions = import('@zk/evt').EventOptions;
 type Moment = import('moment-timezone').Moment;
-type DateImpl = import('@zk/dateimpl').DateImpl;
+type DateImpl = import('@zk/dateImpl').DateImpl;
 
 interface Window {
 	zkservice: typeof import('@zk/widget').zkservice;
@@ -167,7 +167,7 @@ interface Window {
 	zkver(ver: string, build: string, ctxURI: string, updURI: string, modVers: Record<string, string>, opts: Record<string, unknown>): void;
 	zkmld(wgtcls: Record<string, unknown>, molds: Record<string, (() => void)>): void;
 	zkamn(pkg: string, fn: (() => void)): void;
-	DateImpl: typeof import('@zk/dateimpl').DateImpl;
+	DateImpl: typeof import('@zk/dateImpl').DateImpl;
 	Dates: {
 		newInstance(param?: number | DateImpl | Parameters<DateConstructor['UTC']>, tz?: string): DateImpl;
 	};
