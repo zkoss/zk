@@ -12,7 +12,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
 */
 Object.assign(String.prototype, {
-	$camel: function (this: string) {
+	$camel(this: string): string {
 		var parts = this.split('-'), len = parts.length;
 		if (len == 1) return parts[0];
 
@@ -23,10 +23,10 @@ Object.assign(String.prototype, {
 			camelized += parts[i].charAt(0).toUpperCase() + parts[i].substring(1);
 		return camelized;
 	},
-	$inc: function (this: string, diff) {
+	$inc(this: string, diff: number): string {
 		return String.fromCharCode(this.charCodeAt(0) + diff);
 	},
-	$sub: function (this: string, cc) {
+	$sub(this: string, cc: string): number {
 		return this.charCodeAt(0) - cc.charCodeAt(0);
 	}
 });

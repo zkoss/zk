@@ -12,8 +12,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zk.fmt.Text = {
-	format: function (msg) {
+export let Text = {
+	format(msg: string): string {
 		var i = 0, sb = '';
 		for (var j = 0, len = msg.length, cc, k; j < len; ++j) {
 			cc = msg.charAt(j);
@@ -47,7 +47,7 @@ zk.fmt.Text = {
 	 * >= 1024 B : 1.0 KB,
 	 * else: bytes. Decimal point is determined by System language.
 	 */
-	formatFileSize: function (bytes) {
+	formatFileSize(bytes: number): string {
 		var divider = 1024;
 
 		if (Math.abs(bytes) < divider) {
@@ -65,3 +65,4 @@ zk.fmt.Text = {
 		return bytes.toFixed(1) + ' ' + units[unit];
 	}
 };
+zk.fmt.Text = Text;

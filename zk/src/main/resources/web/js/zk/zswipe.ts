@@ -41,10 +41,10 @@ export interface SwipeOptions {
  * A swipe object used to make a DOM element swipe-able.
  * @disable(zkgwt)
  */
-zk.Swipe = class extends zk.Object {
-	declare public widget;
-	declare public option;
-	declare public node;
+export class Swipe extends zk.Object {
+	declare public widget: zk.Widget | null;
+	declare public opts;
+	declare public node: HTMLElement | null;
 	/**
 	 * The Constructor.
 	 * @param Object widget the object for swipe.
@@ -59,7 +59,7 @@ zk.Swipe = class extends zk.Object {
 	 * <li>int maxDisplacement: the maximum swipe displacement(pixel). When larger than maximum displacement, it is not a swipe action. Default: 75.</li>
 	 * </ul>
 	 */
-	public constructor(widget: Widget, node: HTMLElement, opts?: Partial<SwipeOptions>) {
+	public constructor(widget: Widget, node?: HTMLElement | null, opts?: Partial<SwipeOptions>) {
 		super();
 		this.widget = widget;
 		this.node = node = node ? jq(node, zk)[0] : widget['node'] || (widget.$n ? widget.$n() : null);
@@ -73,7 +73,7 @@ zk.Swipe = class extends zk.Object {
 			maxDisplacement: 75
 		});
 
-		jq(this.node).on(startEvt, this.proxy(this._swipeStart));
+		jq(this.node!).on(startEvt, this.proxy(this._swipeStart));
 	}
 
 	/**
@@ -85,7 +85,7 @@ zk.Swipe = class extends zk.Object {
 		this.widget = this.node = this.opts = null;
 	}
 
-	private _swipeStart(devt: JQ.Event): void {
+	private _swipeStart(devt: JQuery.TriggeredEvent): void {
 		var evt = devt.originalEvent as TouchEvent,
 			data = evt.touches ? evt.touches[0] : (cast(evt) as MouseEvent);
 
@@ -93,10 +93,12 @@ zk.Swipe = class extends zk.Object {
 			time: evt.timeStamp || Date.now(),
 			coords: [data.pageX, data.pageY]
 		};
-		jq(this.node).on(moveEvt, this.proxy(this._swipeMove)).one(endEvt, this.proxy(this._swipeEnd));
+		jq(this.node!)
+			.on(moveEvt, this.proxy(this._swipeMove) as unknown as false)
+			.one(endEvt, this.proxy(this._swipeEnd) as unknown as false);
 	}
 
-	private _swipeMove(devt: JQ.Event): void {
+	private _swipeMove(devt: JQuery.TriggeredEvent): void {
 		if (!start) return;
 		var evt = devt.originalEvent as TouchEvent,
 			data = evt.touches ? evt.touches[0] : (cast(evt) as MouseEvent);
@@ -116,8 +118,8 @@ zk.Swipe = class extends zk.Object {
 			evt.preventDefault();
 	}
 
-	private _swipeEnd(devt: JQ.Event): void {
-		jq(this.node).off(moveEvt, this.proxy(this._swipeMove));
+	private _swipeEnd(devt: JQuery.TriggeredEvent): void {
+		jq(this.node!).off(moveEvt, this.proxy(this._swipeMove));
 		if (start && stop) {
 			var dispX, dispY, dispT = stop.time - start.time, dir;
 
@@ -145,4 +147,5 @@ zk.Swipe = class extends zk.Object {
 		// eslint-disable-next-line no-global-assign
 		start = stop = null;
 	}
-};
+}
+zk.Swipe = Swipe;

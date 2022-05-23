@@ -26,9 +26,10 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-(function () {
-zk.gapi.GOOGLE_API_LOADING_TIMEOUT = 10000; //default to ten seconds
-zk.gapi.loadAPIs = function (wgt, callback, msg, timeout) {
+export let GOOGLE_API_LOADING_TIMEOUT = 10000; //default to ten seconds
+zk.gapi.GOOGLE_API_LOADING_TIMEOUT = GOOGLE_API_LOADING_TIMEOUT;
+zk.gapi.loadAPIs = loadAPIs;
+export function loadAPIs(wgt: Widget, callback: () => void, msg: string, timeout: number): void {
 	var opts = {};
 	opts['condition'] = function () {return window['google'] && window['google'].load;};
 	opts['callback'] = function () {callback(); delete zk.gapi['LOADING'];};
@@ -42,18 +43,19 @@ zk.gapi.loadAPIs = function (wgt, callback, msg, timeout) {
 		}
 	} else
 		callback();
-};
-zk.gapi.waitUntil = function (wgt, opts) {
+}
+zk.gapi.waitUntil = waitUntil;
+export function waitUntil(wgt: Widget, opts): void {
 	opts.inittime = opts.inittime || new Date().getTime();
 	opts.timeout = opts.timeout || zk.gapi.GOOGLE_API_LOADING_TIMEOUT;
 	initMask(wgt, opts);
-	waitUntil(wgt, opts);
-};
-function waitUntil(wgt, opts): void {
+	_waitUntil(wgt, opts);
+}
+function _waitUntil(wgt, opts): void {
 	if (!opts.condition()) {
 		var timestamp0 = new Date().getTime();
 		if ((timestamp0 - opts.inittime) < opts.timeout) {
-			setTimeout(function () {waitUntil(wgt, opts);}, 100);
+			setTimeout(function () {_waitUntil(wgt, opts);}, 100);
 			return;
 		}
 	}
@@ -64,10 +66,9 @@ function initMask(wgt, opts): void {
 	var opt = {};
 	opt['anchor'] = wgt;
 	if (opts.message) opt['message'] = opts.message;
-	opts['_mask'] = new zk.eff.Mask!(opt);
+	opts['_mask'] = new zk.eff.Mask(opt);
 }
 function clearMask(wgt, opts): void {
 	if (opts._mask)
 		opts._mask.destroy();
 }
-})();

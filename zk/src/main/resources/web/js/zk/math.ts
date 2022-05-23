@@ -19,6 +19,9 @@ import {default as zk} from '@zk/zk';
  */
 export class BigDecimal extends zk.Object {
 	private _precision = 0;
+	declare private _negative?: boolean;
+	declare private _dot?: boolean;
+	declare private _value: string;
 	/** Constructor.
 	 * @param Object value a number or a string
 	 */
@@ -104,6 +107,7 @@ export class BigDecimal extends zk.Object {
  * @disable(zkgwt)
  */
 export class Long extends zk.Object {
+	declare private _value: string;
 	/** Constructor.
 	 * @param Object value a number or a string
 	 */
@@ -158,5 +162,5 @@ export class Long extends zk.Object {
 	/** Returns a Locale-dependent string for this long integer.
 	 * @return String
 	 */
-	public $toLocaleString = (): string => this.$toString();
+	public $toLocaleString = Long.prototype.$toString;
 }

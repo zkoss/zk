@@ -113,13 +113,13 @@ export class Event extends ZKObject {
 	 * @type zk.Widget
 	 * @see #currentTarget
 	 */
-	public target: Widget;
+	public target?: Widget | null;
 	/** Indicates the target which is handling this event.
 	 * <p>By default, an event will be propagated to its parent, and this member tells which widget is handling it, while #target is the widget that the event is targeting.
 	 * @type zk.Widget
 	 * @see #target
 	 */
-	public currentTarget: Widget;
+	public currentTarget?: Widget | null;
 	/** The event name, such as 'onChange'.
 	 * The data which depends on the event. Here is the list of Event Data.
 	 * <p>However, if data is an instance of Map, its content is copied to the event instance. Thus, you can access them directly with the event instance as follows.
@@ -173,11 +173,11 @@ onClick: function (evt) {
 	 * </ul>
      * @type Map
      */
-	public opts: EventOptions;
+	public opts: Partial<EventOptions>;
 	/** The DOM event that causes this widget event, or null if not available.
 	 * @type jq.Event
 	 */
-	public domEvent: JQ.Event;
+	public domEvent?: JQuery.TriggeredEvent;
 	/** The DOM element that the event is targeting, or null if not available.
 	 * @type DOMElement
 	 */
@@ -211,7 +211,7 @@ onClick: function (evt) {
 	 * @param Map opts [optional] the options. Refer to {@link #opts}
 	 * @param jq.Event domEvent [optional] the DOM event that causes this widget event.
 	 */
-	public constructor(target, name, data, opts, domEvent) {
+	public constructor(target: Widget | null | undefined, name: string, data?: unknown, opts?: Partial<EventOptions> | null, domEvent?: JQuery.TriggeredEvent) { // FIXME: TriggeredEvent missing type parameters
 		super();
 		this.currentTarget = this.target = target;
 		this.name = name;
@@ -325,202 +325,210 @@ export interface ZWatch {
 	unlistenAll(name: string): void;
 }
 
-export const zWatch: ZWatch & {onBindLevelMove: Callable} = (function () {
-	var _visiEvts = {onFitSize: true, onSize: true, onShow: true, onHide: true, beforeSize: true, afterSize: true},
-		_watches = {}, //Map(watch-name, [object, [watches..]]) [0]: obj, [1]: [inf]
-		_dirty,
-		_Gun = class _Gun extends zk.Object {
-			public constructor(name, xinfs, args, org, fns) {
-				super();
-				this.name = name;
-				this.xinfs = xinfs;
-				this.args = args;
-				this.origin = org;
-				this.fns = fns;
-			}
-			public fire(ref?): void {
-				var infs, xinf,
-					name = this.name,
-					xinfs = this.xinfs,
-					args = this.args,
-					fns = this.fns;
-				if (ref) {
-					for (var j = 0, l = xinfs.length; j < l; ++j)
-						if (xinfs[j][0] == ref) {
-							infs = xinfs[j][1];
-							xinfs.splice(j--, 1);
-							--l;
-							_invoke(name, infs, ref, args, fns);
-						}
-				} else
-					while (xinf = xinfs.shift())
-						_invoke(name, xinf[1], xinf[0], args, fns);
-			}
-			public fireDown(ref): void {
-				if (!ref || ref.bindLevel == null)
-					this.fire(ref);
-
-				(new _Gun(this.name, _visiChildSubset(this.name, this.xinfs, ref, true), this.args, this.origin, this.fns))
-				.fire();
-			}
-		};
-
-	function _invoke(name, infs, o, args, fns): void {
-		for (var j = 0, l = infs.length; j < l;) {
-			var f = _fn(infs[j++], o, name);
-			if (fns)
-				fns.push([f, o]); //store it fns first
-			else
-				f.apply(o, args);
-		}
-		if (name == 'onSize') { //Feature ZK-1672: invoke onAfterSize after onSize
-			var after = o['onAfterSize'];
-			if (after)
-				after.apply(o, args);
-		}
+var _visiEvts = {onFitSize: true, onSize: true, onShow: true, onHide: true, beforeSize: true, afterSize: true},
+	_watches = {}, //Map(watch-name, [object, [watches..]]) [0]: obj, [1]: [inf]
+	_dirty;
+// See `ctl.orign` of `zul.wgt.Popup::onFloatUp`.
+// `ZWatchController` was previously named `_Gun` and not exported.
+// To export this class, the variables above and functions below are pulled out from `zWatch` (exported later in this file).
+export class ZWatchController extends zk.Object {
+	public name: string;
+	public xinfs;
+	public args;
+	public origin: Widget;
+	public fns;
+	public constructor(name: string, xinfs, args, org: Widget, fns) {
+		super();
+		this.name = name;
+		this.xinfs = xinfs;
+		this.args = args;
+		this.origin = org;
+		this.fns = fns;
 	}
-	//Returns if c is visible
-	function _visible(name, c): boolean {
-		return c.isWatchable_ && c.isWatchable_(name); //in future, c might not be a widget
-	}
-	//Returns if c is a visible child of p (assuming p is visible)
-	function _visibleChild(name, p, c, cache): boolean {
-		for (var w = c; w; w = w.parent)
-			if (p == w) //yes, c is a child of p
-				return !cache || c.isWatchable_(name, p, cache);
-		return false;
-	}
-	//Returns subset of xinfs that are visible and childrens of p
-	function _visiChildSubset(name, xinfs, p, remove?): Node[] {
-		var found: Node[] = [], bindLevel = p.bindLevel,
-			cache = _visiEvts[name] && {}, pvisible;
-		if (p.isWatchable_) //in future, w might not be a widget
-			for (var j = xinfs.length; j--;) {
-				var xinf = xinfs[j],
-					o = xinf[0],
-					diff = bindLevel > o.bindLevel;
-				if (diff) //neither ancestor, nor this (nor sibling)
-					break;
-
-				if (!pvisible && cache) { //not cached yet
-					if (!(pvisible = _visible(name, p))) //check p first (since _visibleChild checks only o)
-						break; //p is NOT visible
-					cache[p.uuid] = true; //cache result to speed up _visiChild
+	public fire(ref?: Widget | null): void {
+		var infs, xinf,
+			name = this.name,
+			xinfs = this.xinfs,
+			args = this.args,
+			fns = this.fns;
+		if (ref) {
+			for (var j = 0, l = xinfs.length; j < l; ++j)
+				if (xinfs[j][0] == ref) {
+					infs = xinfs[j][1];
+					xinfs.splice(j--, 1);
+					--l;
+					_invoke(name, infs, ref, args, fns);
 				}
+		} else
+			while (xinf = xinfs.shift())
+				_invoke(name, xinf[1], xinf[0], args, fns);
+	}
+	public fireDown(ref: Widget): void {
+		if (!ref || ref.bindLevel == null)
+			this.fire(ref);
 
-				if (_visibleChild(name, p, o, cache)) {
-					if (remove)
-						xinfs.splice(j, 1);
-					found.unshift(xinf); //parent first
-				}
-			}
-		return found;
+		(new ZWatchController(this.name, _visiChildSubset(this.name, this.xinfs, ref, true), this.args, this.origin, this.fns))
+		.fire();
 	}
-	function _visiSubset(name, xinfs): Node[] {
-		xinfs = xinfs.$clone(); //make a copy since unlisten might happen
-		if (_visiEvts[name])
-			for (var j = xinfs.length; j--;)
-				if (!_visible(name, xinfs[j][0]))
-					xinfs.splice(j, 1);
-		return xinfs;
-	}
-	function _target(inf): Widget {
-		return jq.isArray(inf) ? inf[0] : inf;
-	}
-	function _fn(inf, o, name): (() => void) {
-		var fn = jq.isArray(inf) ? inf[1] : o[name];
-		if (!fn)
-			throw (o.className || o) + ':' + name + ' not found';
-		return fn;
-	}
-	function _sync(): void {
-		if (!_dirty) return;
+}
 
-		_dirty = false;
-		for (var nm in _watches) {
-			var wts = _watches[nm];
-			if (wts.length && wts[0][0].bindLevel != null)
-				wts.sort(_cmpLevel);
-		}
-	}
-	function _bindLevel(a): number {
-		return (a = a.bindLevel) == null || isNaN(a) ? -1 : a;
-	}
-	function _cmpLevel(a, b): number {
-		return _bindLevel(a[0]) - _bindLevel(b[0]);
-	}
-	zk._zsyncFns = function (name, org) {
-		if (name == 'onSize' || name == 'onShow' || name == 'onHide') {
-			jq.zsync(org);
-			if (name == 'onSize')
-				setTimeout(zk.doAfterResize, 20); // invoked after mounted
-		}
-		if (name == 'onResponse')
-			jq.doSyncScroll();
-	};
-	//invoke fns in the reverse order
-	function _reversefns(fns, args): void {
+function _invoke(name, infs, o, args, fns): void {
+	for (var j = 0, l = infs.length; j < l;) {
+		var f = _fn(infs[j++], o, name);
 		if (fns)
-			//we group methods together if their parents are the same
-			//then we invoke them in the normal order (not reverse), s.t.,
-			//child invokes firsd, but also superclass invoked first (first register, first call if same object)
-			for (var j = fns.length, k = j - 1, i, f, oldp, newp; j >= 0;) {
-				if (--j < 0 || (oldp != (newp = fns[j][1].parent) && oldp)) {
-					for (i = j; ++i <= k;) {
-						f = fns[i];
-						f[0].apply(f[1], args);
-					}
-					k = j;
-				}
-				oldp = newp;
-			}
+			fns.push([f, o]); //store it fns first
+		else
+			f.apply(o, args);
 	}
-	function _fire(name, org, opts, vararg): void {
-		var wts = _watches[name];
-		if (wts && wts.length) {
-			var down = opts && opts.down && org.bindLevel != null;
-			if (down) _sync();
+	if (name == 'onSize') { //Feature ZK-1672: invoke onAfterSize after onSize
+		var after = o['onAfterSize'];
+		if (after)
+			after.apply(o, args);
+	}
+}
+//Returns if c is visible
+function _visible(name, c): boolean {
+	return c.isWatchable_ && c.isWatchable_(name); //in future, c might not be a widget
+}
+//Returns if c is a visible child of p (assuming p is visible)
+function _visibleChild(name, p, c, cache): boolean {
+	for (var w = c; w; w = w.parent)
+		if (p == w) //yes, c is a child of p
+			return !cache || c.isWatchable_(name, p, cache);
+	return false;
+}
+//Returns subset of xinfs that are visible and childrens of p
+function _visiChildSubset(name, xinfs, p, remove?): Node[] {
+	var found: Node[] = [], bindLevel = p.bindLevel,
+		cache = _visiEvts[name] && {}, pvisible;
+	if (p.isWatchable_) //in future, w might not be a widget
+		for (var j = xinfs.length; j--;) {
+			var xinf = xinfs[j],
+				o = xinf[0],
+				diff = bindLevel > o.bindLevel;
+			if (diff) //neither ancestor, nor this (nor sibling)
+				break;
 
-			var args: Record<string, unknown>[] = [],
-				fns = opts && opts.reverse ? [] : null,
-				gun = new _Gun(name,
-					down ? _visiChildSubset(name, wts, org) : _visiSubset(name, wts),
-					args, org, fns);
-			args.push(gun);
-			for (var j = 2, l = vararg.length; j < l;) //skip name and origin
-				args.push(vararg[j++]);
+			if (!pvisible && cache) { //not cached yet
+				if (!(pvisible = _visible(name, p))) //check p first (since _visibleChild checks only o)
+					break; //p is NOT visible
+				cache[p.uuid] = true; //cache result to speed up _visiChild
+			}
 
-			if (opts && opts.timeout >= 0)
-				setTimeout(function () {
-					gun.fire();
-					_reversefns(fns, args);
-					zk._zsyncFns(name, org);
-				}, opts.timeout);
-			else {
+			if (_visibleChild(name, p, o, cache)) {
+				if (remove)
+					xinfs.splice(j, 1);
+				found.unshift(xinf); //parent first
+			}
+		}
+	return found;
+}
+function _visiSubset(name, xinfs): Node[] {
+	xinfs = xinfs.$clone(); //make a copy since unlisten might happen
+	if (_visiEvts[name])
+		for (var j = xinfs.length; j--;)
+			if (!_visible(name, xinfs[j][0]))
+				xinfs.splice(j, 1);
+	return xinfs;
+}
+function _target(inf): Widget {
+	return jq.isArray(inf) ? inf[0] : inf;
+}
+function _fn(inf, o, name): (() => void) {
+	var fn = jq.isArray(inf) ? inf[1] : o[name];
+	if (!fn)
+		throw (o.className || o) + ':' + name + ' not found';
+	return fn;
+}
+function _sync(): void {
+	if (!_dirty) return;
+
+	_dirty = false;
+	for (var nm in _watches) {
+		var wts = _watches[nm];
+		if (wts.length && wts[0][0].bindLevel != null)
+			wts.sort(_cmpLevel);
+	}
+}
+function _bindLevel(a): number {
+	return (a = a.bindLevel) == null || isNaN(a) ? -1 : a;
+}
+function _cmpLevel(a, b): number {
+	return _bindLevel(a[0]) - _bindLevel(b[0]);
+}
+zk._zsyncFns = _zsyncFns;
+export function _zsyncFns(name: string, org: unknown): void {
+	if (name == 'onSize' || name == 'onShow' || name == 'onHide') {
+		jq.zsync(org);
+		if (name == 'onSize')
+			setTimeout(zk.doAfterResize, 20); // invoked after mounted
+	}
+	if (name == 'onResponse')
+		jq.doSyncScroll();
+}
+//invoke fns in the reverse order
+function _reversefns(fns, args): void {
+	if (fns)
+		//we group methods together if their parents are the same
+		//then we invoke them in the normal order (not reverse), s.t.,
+		//child invokes firsd, but also superclass invoked first (first register, first call if same object)
+		for (var j = fns.length, k = j - 1, i, f, oldp, newp; j >= 0;) {
+			if (--j < 0 || (oldp != (newp = fns[j][1].parent) && oldp)) {
+				for (i = j; ++i <= k;) {
+					f = fns[i];
+					f[0].apply(f[1], args);
+				}
+				k = j;
+			}
+			oldp = newp;
+		}
+}
+function _fire(name, org, opts, vararg): void {
+	var wts = _watches[name];
+	if (wts && wts.length) {
+		var down = opts && opts.down && org.bindLevel != null;
+		if (down) _sync();
+
+		var args: unknown[] = [],
+			fns = opts && opts.reverse ? [] : null,
+			gun = new ZWatchController(name,
+				down ? _visiChildSubset(name, wts, org) : _visiSubset(name, wts),
+				args, org, fns);
+		args.push(gun);
+		for (var j = 2, l = vararg.length; j < l;) //skip name and origin
+			args.push(vararg[j++]);
+
+		if (opts && opts.timeout >= 0)
+			setTimeout(function () {
 				gun.fire();
 				_reversefns(fns, args);
 				zk._zsyncFns(name, org);
-			}
-		} else
+			}, opts.timeout);
+		else {
+			gun.fire();
+			_reversefns(fns, args);
 			zk._zsyncFns(name, org);
-	}
-	//Feature ZK-1672: check if already listen to the same listener
-	function _isListened(wts, inf): boolean {
-		if (wts) {
-			if (jq.isArray(inf)) {
-				var isListen = false;
-				for (var i = wts.length; i > 0; i--) {
-					if (jq.isArray(wts[i]) && wts[i].$equals(inf)) {
-						isListen = true;
-						break;
-					}
-				}
-				return isListen;
-			}
-			return wts.$contains(inf);
 		}
-		return false;
+	} else
+		zk._zsyncFns(name, org);
+}
+//Feature ZK-1672: check if already listen to the same listener
+function _isListened(wts, inf): boolean {
+	if (wts) {
+		if (jq.isArray(inf)) {
+			var isListen = false;
+			for (var i = wts.length; i > 0; i--) {
+				if (jq.isArray(wts[i]) && wts[i].$equals(inf)) {
+					isListen = true;
+					break;
+				}
+			}
+			return isListen;
+		}
+		return wts.$contains(inf);
 	}
+	return false;
+}
 
 /** @class zWatch
  * @import zk.Widget
@@ -548,7 +556,7 @@ zWatch.listen({onSend: ml})
 
 <p>The watch listener is added in the parent-first sequence if it has a method called getParent, or a member called parent (a typical example is {@link Widget}). Thus, the parent will be called before its children, if they are all registered to the same action.
  */
-  return {
+export const zWatch: ZWatch & {onBindLevelMove: Callable} = {
     /** Registers watch listener(s). For example,
 <pre><code>
 zWatch.listen({
@@ -719,6 +727,5 @@ onX: function (ctl) {
 	onBindLevelMove(): void { //internal
 		_dirty = true;
 	}
-  };
-})();
+};
 zWatch.listen({onBindLevelMove: zWatch});

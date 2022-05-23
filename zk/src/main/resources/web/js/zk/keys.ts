@@ -830,4 +830,4 @@ export const zKeys = Object.freeze({
 	 * @type String
 	 */
 	NUMPAD9: '9'
-});
+} as const);

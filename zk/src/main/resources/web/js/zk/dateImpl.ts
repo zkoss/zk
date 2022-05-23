@@ -17,7 +17,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 import {default as zk} from '@zk/zk';
 
 window.Dates = {
-	newInstance: function (param: number | DateImpl | [number, number, number | undefined, number | undefined, number | undefined, number | undefined, number | undefined], tz) {
+	newInstance(param?: number | DateImpl | Parameters<DateConstructor['UTC']>, tz?: string): DateImpl {
 		var m;
 		if (tz)
 			tz = parseTzId(tz);

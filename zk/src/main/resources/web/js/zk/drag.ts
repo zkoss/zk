@@ -19,7 +19,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 import type {Offset, Callable} from '@zk/types';
 import {default as zk} from '@zk/zk';
 import type {Widget} from '@zk/widget';
-import {zWatch, type Event} from '@zk/evt';
+import {type FireOptions, zWatch, type Event} from '@zk/evt';
+import type { Dimension } from './dom';
 
 export interface DraggableScrollOptions {
 	scrollTo(left: number, top: number): void;
@@ -57,8 +58,7 @@ export interface DraggableOptions {
 		_stackup, _activedg, _initPt, _dnEvt,
 		_lastPt, _lastScrlPt;
 
-	// eslint-disable-next-line no-undef
-	function _activate(dg: Draggable, devt: JQ.Event, pt: number[]): void {
+	function _activate(dg: Draggable, devt: JQuery.TriggeredEvent, pt: number[]): void {
 		_actTmout = setTimeout(function () {
 			_actTmout = null;
 			//bug: 3027322 & 2924049: Wrong target when dragging a sub div in IE browsers
@@ -71,9 +71,7 @@ export interface DraggableOptions {
 		_activedg = null;
 		if (_dnEvt) setTimeout(function () {_dnEvt = null;}, 0);
 	}
-
-	// eslint-disable-next-line no-undef
-	function _docmousemove(devt: JQ.Event): void {
+	function _docmousemove(devt: JQuery.TriggeredEvent): void {
 		if (!_activedg || _activedg.dead) return;
 
 		var evt = jq.Event.zk(devt),
@@ -91,8 +89,7 @@ export interface DraggableOptions {
 			//test/dragdrop.zul: it seems less stall-dragging when dragging
 			//IMG (but still happens if dragging fast)
 	}
-	// eslint-disable-next-line no-undef
-	function _docmouseup(devt: JQ.Event): void {
+	function _docmouseup(devt: JQuery.TriggeredEvent): void {
 		if (_actTmout) {
 			clearTimeout(_actTmout);
 			_actTmout = null;
@@ -115,8 +112,7 @@ export interface DraggableOptions {
 			adg.destroy();
 		}
 	}
-	// eslint-disable-next-line no-undef
-	function _dockeypress(devt: JQuery.Event): void {
+	function _dockeypress(devt: JQuery.TriggeredEvent): void {
 		if (_activedg) _activedg._keypress(devt);
 	}
 
@@ -127,37 +123,87 @@ export interface DraggableOptions {
 			node['_$opacity'] = jq(node).css('opacity');
 			_dragging[node.toString()] = true;
 		}
-		new zk.eff.Opacity(node, {duration: 0.2, from: node ? node['_$opacity'] : null, to: 0.7});
+		if (node) {
+			jq(node)
+				.css({ // from
+					opacity: node ? node['_$opacity'] : null
+				})
+				.animate({ // to
+					opacity: 0.7
+				}, { // properties
+					duration: 200
+				});
+		}
 	}
 	function _defEndEffect(dg: Draggable): void {
 		var node = dg.node,
 			toOpacity = typeof node!['_$opacity'] == 'number' ? node!['_$opacity'] : 1.0;
-		new zk.eff.Opacity(node, {duration: 0.2, from: 0.7,
-			to: toOpacity, queue: {scope: '_draggable', position: 'end'},
-			afterFinish: function () {
-				delete _dragging[node!.toString()];
-			}
-		});
+		if (node) {
+			jq(node)
+				.css({ // from
+					opacity: 0.7
+				})
+				.animate({ // to
+					opacity: toOpacity
+				}, { // properties
+					duration: 200,
+					queue: '_draggable',
+					complete: function () {
+						delete _dragging[node!.toString()];
+					}
+				});
+		}
 	}
 	function _defRevertEffect(dg: Draggable, offset: Offset): void {
 		var dx, dy;
 		if ((dx = offset[0]) || (dy = offset[1])) {
 			var node = dg.node,
 				orgpos = node?.style.position,
-				dur = Math.sqrt(Math.abs(dy ^ 2) + Math.abs(dx ^ 2)) * 0.02;
-			new zk.eff.Move(node, { x: -dx, y: -dy,
-				duration: dur, queue: {scope: '_draggable', position: 'end'},
-				afterFinish: function () {node!.style.position = orgpos || '';}});
+				dur = Math.sqrt(Math.abs(dy ^ 2) + Math.abs(dx ^ 2)) * 20;
+			
+			if (node) {
+				jq(node)
+					.animate({ // to
+						left: `-=${dx}`,
+						top: `-=${dy}`
+					}, { // properties
+						duration: dur,
+						queue: '_draggable',
+						complete: function () {
+							node!.style.position = orgpos || '';
+						}
+					});
+			}
 		}
 	}
-	// eslint-disable-next-line no-undef
-	function _disableDragStart(evt: JQ.Event): boolean {
+	function _disableDragStart(evt: JQuery.TriggeredEvent): boolean {
 		return jq.nodeName(evt.target, 'input', 'textarea');
 	}
 /** A draggable object used to make a DOM element draggable.
  * @disable(zkgwt)
  */
 export class Draggable extends zk.Object {
+	declare private _isScrollChild?: boolean;
+	declare public delta: Offset;
+	declare public dragging: boolean;
+	declare public _suicide?: boolean;
+	declare public dead?: boolean;
+	declare public lastScrolled?: Date;
+	declare public scrollSpeed: Offset;
+	declare public offset: Offset;
+	declare public scrollInterval?: number | null;
+	declare private _innerOfs: Offset;
+	declare public stackup?: HTMLDivElement;
+	declare private _stackup?: HTMLIFrameElement;
+	declare public orgnode?: HTMLElement | null;
+	declare public z_scrl?: Offset;
+	declare public z_orgpos?: string;
+	declare public orgZ?: number;
+	declare public orgScrlLeft?: number;
+	declare public orgScrlTop?: number;
+	declare private _clone?: Node | null;
+	declare public _orgcursor?: string; // zk.Widget::uncloneDrag_
+	
 	private static _drags: Draggable[] = [];
 	/** The control object for this draggable.
 	 * @type Object
@@ -424,13 +470,13 @@ String scroll; //DOM Element's ID</code></pre>
 	}
 
 	/** [left, right] of this node. */
-	private _currentDelta(): [left: number, right: number] {
+	private _currentDelta(): Offset {
 		var $node = jq(this.node as HTMLElement);
 		return [zk.parseInt($node.css('left')), zk.parseInt($node.css('top'))];
 	}
 
-	private _startDrag(evt): void {
-		zWatch.fire('onStartDrag', this, evt);
+	private _startDrag(evt: Event): void {
+		zWatch.fire('onStartDrag', this, evt as unknown as FireOptions);
 
 		//disable selection
 		zk(document.body).disableSelection(); // Bug #1820433
@@ -455,10 +501,10 @@ String scroll; //DOM Element's ID</code></pre>
 
 				var $node = zk(this.node),
 					ofs = $node.cmOffset();
-				this.z_scrl = $node.scrollOffset();
-				this.z_scrl[0] -= jq.innerX(); this.z_scrl[1] -= jq.innerY();
+				this.z_scrl = $node.scrollOffset(); // TODO: assert non null after assignment
+				this.z_scrl![0] -= jq.innerX(); this.z_scrl![1] -= jq.innerY();
 					//Store scrolling offset since _draw not handle DIV well
-				ofs[0] -= this.z_scrl[0]; ofs[1] -= this.z_scrl[1];
+				ofs[0] -= this.z_scrl![0]; ofs[1] -= this.z_scrl![1];
 
 				node = this.node = opt(this, ofs, evt);
 			} else {
@@ -466,7 +512,7 @@ String scroll; //DOM Element's ID</code></pre>
 				this.z_orgpos = node.style.position; //Bug 1514789
 				if (this.z_orgpos != 'absolute')
 					jq(node).absolutize();
-				node.parentNode?.insertBefore(this._clone, node);
+				node.parentNode?.insertBefore(this._clone!, node);
 			}
 
 		if (this.opts.stackup) {
@@ -517,7 +563,7 @@ String scroll; //DOM Element's ID</code></pre>
 		}
 	}
 
-	private _updateDrag(pt, evt): void {
+	public _updateDrag(pt, evt: Event): void {
 		if (!this.dragging) {
 			let v = this.opts.initSensitivity;
 			if (v && pt[0] <= _initPt[0] + v && pt[0] >= _initPt[0] - v
@@ -562,7 +608,7 @@ String scroll; //DOM Element's ID</code></pre>
 		evt.stop();
 	}
 
-	private _finishDrag(evt, success): void {
+	private _finishDrag(evt: Event, success): void {
 		this.dragging = false;
 		if (this.stackup) {
 			jq(this.stackup).remove();
@@ -584,18 +630,18 @@ String scroll; //DOM Element's ID</code></pre>
 		if (this.opts.ghosting)
 			if (typeof this.opts.ghosting == 'function') {
 				if (this.opts.endghosting)
-					this.opts.endghosting(this, this.orgnode);
+					this.opts.endghosting(this, this.orgnode!);
 				if (node != this.orgnode) {
 					jq(node).remove();
-					this.node = this.orgnode;
+					this.node = this.orgnode!;
 				}
 				delete this.orgnode;
 			} else {
 				if (this.z_orgpos != 'absolute') { //Bug 1514789
 					zk(this.node).relativize();
-					node.style.position = this.z_orgpos;
+					node.style.position = this.z_orgpos!;
 				}
-				jq(this._clone).remove();
+				jq(this._clone!).remove();
 				this._clone = null;
 			}
 
@@ -615,7 +661,7 @@ String scroll; //DOM Element's ID</code></pre>
 		}
 
 		if (this.orgZ != -1)
-			(node as HTMLElement).style.zIndex = this.orgZ;
+			node.style.zIndex = this.orgZ as unknown as string;
 
 		if (this.opts.endeffect)
 			this.opts.endeffect(this, evt);
@@ -633,12 +679,12 @@ String scroll; //DOM Element's ID</code></pre>
 		var self = this;
 		setTimeout(function () {
 			zk.dragging = false;
-			zWatch.fire('onEndDrag', self, evt);
+			zWatch.fire('onEndDrag', self, evt as unknown as FireOptions);
 		}, zk.ios ? 500 : 0);
 			//we have to reset it later since event is fired later (after onmouseup)
 	}
 
-	private _mousedown(this: Draggable, devt): void {
+	private _mousedown(devt: JQuery.TriggeredEvent): void {
 		var node = this.node,
 			evt = jq.Event.zk(devt),
 			target = devt.target;
@@ -660,7 +706,7 @@ String scroll; //DOM Element's ID</code></pre>
 		// and ZK-484 (get the pos variable after invoking ignoredrag function)
 		var zkn = zk(node!),
 			pos = zkn.cmOffset(),
-			ofs = [pt[0] - pos[0], pt[1] - pos[1]],
+			ofs: Offset = [pt[0] - pos[0], pt[1] - pos[1]],
 			jqBorders = jq.borders, v;
 
 		// ZK-488 node.clientWidth and node.clientHeight are 0 if no scrollbar on IE9
@@ -676,14 +722,14 @@ String scroll; //DOM Element's ID</code></pre>
 			//simulate mousedown later (mount.js's invocation of ignoreMouseUp)
 		}
 	}
-	private _keypress(devt): void {
+	public _keypress(devt: JQuery.TriggeredEvent): void {
 		if (devt.keyCode == 27) {
 			this._finishDrag(jq.Event.zk(devt), false);
 			devt.stop();
 		}
 	}
 
-	private _endDrag(evt): void {
+	public _endDrag(evt: Event): void {
 		if (this.dragging) {
 			this._stopScrolling();
 			this._finishDrag(evt, true);
@@ -692,7 +738,7 @@ String scroll; //DOM Element's ID</code></pre>
 			_deactivate();
 	}
 
-	private _draw(point: Offset, evt?): void {
+	private _draw(point: Offset, evt?: Event): void {
 		var node = this.node as HTMLElement,
 			$node = zk(node),
 			pos = $node.cmOffset(),
@@ -707,8 +753,8 @@ String scroll; //DOM Element's ID</code></pre>
 		pos[0] -= d[0]; pos[1] -= d[1];
 
 		if (scroll && (scroll != window && this._isScrollChild)) {
-			pos[0] -= (scroll as HTMLElement).scrollLeft - this.orgScrlLeft;
-			pos[1] -= (scroll as HTMLElement).scrollTop - this.orgScrlTop;
+			pos[0] -= (scroll as HTMLElement).scrollLeft - this.orgScrlLeft!;
+			pos[1] -= (scroll as HTMLElement).scrollTop - this.orgScrlTop!;
 		}
 
 		var p: Offset = [point[0] - pos[0] - this.offset[0],
@@ -735,9 +781,9 @@ String scroll; //DOM Element's ID</code></pre>
 
 		var style = node.style;
 		if (typeof opts.draw == 'function') {
-			opts.draw(this, this.snap_(p, opts), evt);
+			opts.draw(this, this.snap_(p, opts), evt!);
 		} else if (typeof opts.constraint == 'function') {
-			var np = opts.constraint(this, p, evt); //return null or [newx, newy]
+			var np = opts.constraint(this, p, evt!); //return null or [newx, newy]
 			if (np) p = np;
 			p = this.snap_(p, opts);
 			style.left = jq.px(p[0]);
@@ -769,9 +815,9 @@ String scroll; //DOM Element's ID</code></pre>
 		}
 	}
 
-	private _scroll(this: Draggable): void {
+	private _scroll(): void {
 		var current = new Date(),
-			delta = current.valueOf() - this.lastScrolled.valueOf();
+			delta = current.valueOf() - this.lastScrolled!.valueOf();
 		this.lastScrolled = current;
 		if (this.opts.scroll == window) {
 			if (this.scrollSpeed[0] || this.scrollSpeed[1]) {
@@ -808,7 +854,7 @@ String scroll; //DOM Element's ID</code></pre>
 	private _updateInnerOfs(): void {
 		this._innerOfs = [jq.innerX(), jq.innerY()];
 	}
-	private _getWndScroll(w): {top: number; left: number; width: number; height: number} {
+	private _getWndScroll(w): Dimension {
 		var T, L, W, H,
 			doc = w.document,
 			de = doc.documentElement;
@@ -841,7 +887,7 @@ String scroll; //DOM Element's ID</code></pre>
 	 * @param Offset ofs the offset of the dragging position
 	 * @return Offset the offset after snapped
 	 */
-	protected snap_(pos, opts): Offset {
+	protected snap_(pos: Offset, opts): Offset {
 		if (!opts.snap && pos[1] < 0)
 			pos[1] = 0;
 		return pos;
@@ -850,12 +896,14 @@ String scroll; //DOM Element's ID</code></pre>
 	public static ignoreMouseUp(): boolean { //called by mount
 		return zk.dragging ? true : _dnEvt;
 	}
-	public static ignoreClick(): boolean { //called by mount
+	public static ignoreClick(): boolean | undefined { //called by mount
 		return zk.dragging;
 	}
-	// @deprecated since 8.0.2
-	// not to remove the function for backward compatibility (just in case)
-	public static ignoreStop(target): boolean { //called by mount
+	/**
+	 * @deprecated since 8.0.2
+	 * not to remove the function for backward compatibility (just in case)
+	 */
+	public static ignoreStop(target: HTMLElement): boolean { //called by mount
 		return false;
 	}
 }
