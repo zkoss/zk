@@ -22,6 +22,7 @@
     "noUnusedLocals": true,
     // "noUnusedParameters": true, // TODO
     // "exactOptionalPropertyTypes": true, // TODO
+    "forceConsistentCasingInFileNames": true,
     "types": [
       "webpack-env"
     ],
