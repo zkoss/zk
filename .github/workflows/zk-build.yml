@@ -33,6 +33,6 @@ jobs:
           else
             npm i
           fi
-          ./build clean
-          ./build zel zcommon zweb zk zul zkbind zhtml zkplus
+          sed -i 's/includeBuild/\/\/includeBuild/' settings.gradle
+          ./gradlew build
 
