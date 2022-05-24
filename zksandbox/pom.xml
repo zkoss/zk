@@ -5,7 +5,7 @@
 		<groupId>org.zkoss.zk</groupId>
 		<artifactId>zk-parent</artifactId>
 		<relativePath>../zk-parent/pom.xml</relativePath>
-		<version>9.6.2-SNAPSHOT</version>
+		<version>9.6.2</version>
 	</parent>
 	<artifactId>zksandbox</artifactId>
 	<properties>
