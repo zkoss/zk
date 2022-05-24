@@ -17,7 +17,7 @@ import org.zkoss.json.parser.JSONParser;
  * Utilities to encode and decode data in JSON format.
  * To decode, use {@link #parse(String)}.
  * To encode, use {@link #toJSONString}.
- * @author FangYidong<fangyidong@yahoo.com.cn>
+ * @author FangYidong&lt;fangyidong@yahoo.com.cn>
  */
 public class JSONValue {
 	/**

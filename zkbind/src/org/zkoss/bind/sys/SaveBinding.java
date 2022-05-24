@@ -58,8 +58,8 @@ public interface SaveBinding extends Binding {
 	public Validator getValidator();
 
 	/**
-	 * Returns an argument <tags, object> pairs map for validator. 
-	 * @return an argument <tags, object> pairs map for validator.
+	 * Returns an argument {@code <tags, object>} pairs map for validator.
+	 * @return an argument {@code <tags, object>} pairs map for validator.
 	 */
 	public Map<String, Object> getValidatorArgs();
 }

@@ -743,7 +743,7 @@ public class Maps {
 		}
 	}
 	/**
-	 * Tranfer Set<<Map.Entry<K, V>> to be serializable
+	 * Transfer {@code Set<<Map.Entry<K, V>>} to be serializable
 	 * @since 8.0.0
 	 */
 	public static <K, V> Set<SerializableEntry<K, V>> transferToSerializableEntrySet(Set<Map.Entry<K, V>> entry) {

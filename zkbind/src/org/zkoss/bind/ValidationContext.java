@@ -68,10 +68,10 @@ public interface ValidationContext {
 	 * get dependent properties by a base object.
 	 * this method returns a Map (key is the property name) of properties that have same base object. 
 	 * It is useful in the form validation case to get all dependent property that related to a form.
-	 * For example in a validator of a form, <pre><code>
+	 * For example in a validator of a form, <pre>{@code
 	 * Map<String,Property> beanProps = ctx.getProperties(ctx.getProperty().getBase());
 	 * Map<String,Property> formProps = ctx.getProperties(ctx.getProperty().getValue());
-	 * </code></pre>
+	 * }</pre>
 	 * Notice that if the property is under a collection, you would see "$each", which represents "each"
 	 * @param base the base object of properties
 	 * @return a Map of properties that has same base object.

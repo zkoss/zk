@@ -30,12 +30,12 @@ import org.zkoss.xel.XelException;
  * <p> To specify a different JNDI name for the bean manager, please specify them
  * in zk.xml as follows. (By default is <tt>java:comp/env/BeanManager</tt>) since
  * 5.0.11.
- * <pre><code>
+ * <pre>{@code
  *	<library-property>
  *		<name>org.zkoss.zkplus.cdi.beanManager.jndiName</name>
  *		<value>java:comp/env/BeanManager</value>
  *	</library-property>
- * </code></pre>
+ * }</pre>
  * @author henrichen
  *
  */

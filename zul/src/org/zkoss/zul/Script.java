@@ -66,9 +66,9 @@ import org.zkoss.zk.ui.sys.HtmlPageRenders;
  * <p>Alternative to {@link Script}, you can use the script directive
  * as shown below..
  *
- * <pre><code>&lt:?script src="/js/mine.js"?/&gt;
- *&lt:?script content="jq.IE6_ALPHAFIX=/.png/"?/&gt;
- </code></pre>
+ * <pre>{@code <?script src="/js/mine.js"?/>
+ * <?script content="jq.IE6_ALPHAFIX=/.png/"?/>
+ * }</pre>
  *
  * @author tomyeh
  */
