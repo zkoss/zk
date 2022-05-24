@@ -45,12 +45,12 @@ import org.zkoss.zul.ext.Selectable;
  * backward compatible (i.e. still fire the "onSelect" event when page is first 
  * loaded or model is changed)</p>
  * 
- * <code><pre>	
+ * <code>{@code
  *	<library-property>
  *		<name>org.zkoss.zkplus.databind.onSelectWhenLoad</name>
  *		<value>true</value>
  *	</library-property>
- * </pre></code>
+ * }</code>
  * @author Henri Chen
  * @deprecated As of release 7.0.0, replace with new ZK binding.
  */

@@ -36,8 +36,8 @@ public interface Binding {
 	public Component getComponent();
 
 	/**
-	 * Returns an argument <tags, object> pairs map(read only). 
-	 * @return an argument <tags, object> pairs map(read only).
+	 * Returns an argument {@code <tags, object>} pairs map(read only).
+	 * @return an argument {@code <tags, object>} pairs map(read only).
 	 */
 	public Map<String, Object> getArgs();
 }

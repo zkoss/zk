@@ -195,12 +195,12 @@ public abstract class NumberInputElement extends FormatInputElement {
 	 * Return a default format for the number input element when the locale is specified.
 	 * <p> Default: <code>##,##0.##</code>, you can overwrite this by specifying
 	 * the following setting in zk.xml
-	 * <pre><code>
+	 * <pre>{@code
 	 *	<library-property>
 	 *		<name>org.zkoss.zul.numberFormat</name>
 	 *		<value>##,##0.##</value>
 	 *	</library-property>
-	 * </code></pre>
+	 * }</pre>
 	 * @since 5.0.9
 	 * @see #setLocale(Locale)
 	 */

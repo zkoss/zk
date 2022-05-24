@@ -23,10 +23,11 @@ import org.zkoss.idom.Element;
  * <p>You can specify it in /metainfo/config.xml or WEB-INF/zk.xml
  * as follows:
  *
- * <pre><code>&lt;system-config>
-	&lt;config-parser-class>com.foo.ConfigParser</config-parser-class>
-&lt;/system-config>
- *</code></pre>
+ * <pre>{@code
+ * <system-config>
+ * 		<config-parser-class>com.foo.ConfigParser</config-parser-class>
+ * </system-config>
+ * }</pre>
  *
  * @author tomyeh
  * @since 5.0.0

@@ -171,7 +171,7 @@ public class SimpleListModel<E> extends AbstractListModel<E>
 
 	/** Returns the maximal allowed number of matched items in the sub-model
 	 * returned by {@link #getSubModel}.
-	 * <p>Default: <code>nRows < 0 ? 15: nRows</code>.
+	 * <p>Default: {@code nRows < 0 ? 15: nRows}.
 	 * @since 5.0.4
 	 */
 	protected int getMaxNumberInSubModel(int nRows) {
