@@ -22,8 +22,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<language-name>xul/html</language-name>
 	<version>
 		<version-class>org.zkoss.zkplus.legacy.Version</version-class>
-		<version-uid>9.6.2</version-uid>
-		<zk-version>9.6.2</zk-version><!-- or later -->
+		<version-uid>9.6.3</version-uid>
+		<zk-version>9.6.3</zk-version><!-- or later -->
 	</version>
 	<zscript language="Java">
 	import org.zkoss.zkplus.databind.*;
