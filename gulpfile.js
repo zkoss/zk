@@ -14,32 +14,32 @@ var mergeStream = require('merge-stream');
 var createResolver = require('resolve-options');
 
 var knownOptions = {
-    string: ['src', 'dest'],
-    number: ['port'],
+	string: ['src', 'dest'],
+	number: ['port'],
 	boolean: ['force'],
-    default: {
-        src: 'zul/src/main/resources/web/js',
-        dest: 'zul/codegen/resources/web/js',
-	    force: false,
-        port: 8080
-    }
+	default: {
+		src: 'zul/src/main/resources/web/js',
+		dest: 'zul/codegen/resources/web/js',
+		force: false,
+		port: 8080
+	}
 };
 var options = minimist(process.argv.slice(3), knownOptions);
 
 // Workaround for maven frontend-maven-plugin passing quoted strings
 function stripQuotes(txt) {
-    if (txt.charAt(0) === '"' && txt.charAt(txt.length - 1) === '"') {
-        return txt.substring(1, txt.length - 1);
-    }
-    return txt;
+	if (txt.charAt(0) === '"' && txt.charAt(txt.length - 1) === '"') {
+		return txt.substring(1, txt.length - 1);
+	}
+	return txt;
 }
 
 function watch_job(glob, job) {
-    var watcher = gulp.watch(glob, {ignoreInitial: false}, job);
-    watcher.on('change', function (path) {
-        console.log('Detect file change: ' + path + '...');
-    });
-    return watcher;
+	var watcher = gulp.watch(glob, {ignoreInitial: false}, job);
+	watcher.on('change', function (path) {
+		console.log('Detect file change: ' + path + '...');
+	});
+	return watcher;
 }
 
 var config = {
@@ -76,10 +76,10 @@ function ignoreSameFile(destDir, force) {
  * Used by gradle task `compileTypeScript`
  */
 function typescript_build_single() {
-    var sources = stripQuotes(options.src),
-	    destDir = stripQuotes(options.dest),
-	    force = options.force;
-    return typescript_build(sources, destDir, force);
+	var sources = stripQuotes(options.src),
+		destDir = stripQuotes(options.dest),
+		force = options.force;
+	return typescript_build(sources, destDir, force);
 }
 
 /**
@@ -90,18 +90,18 @@ function typescript_build_single() {
  */
 function typescript_build(src, dest, force) {
 	return mergeStream(gulp.src([src + '/**/*.ts', src + '/**/*.js'])
-	    .pipe(ignoreSameFile(dest, force))
-	    .pipe(babel({
-		    root: __dirname
-	    }))
-        .pipe(rename({suffix: '.src'}))
-        .pipe(gulp.dest(dest))
-        .pipe(uglify())
-        .pipe(rename(function (path) {
-            path.basename = path.basename.replace(/\.src/, '');
-        }))
-        .pipe(gulp.dest(dest))
-        .pipe(print()),
+		.pipe(ignoreSameFile(dest, force))
+		.pipe(babel({
+			root: __dirname
+		}))
+		.pipe(rename({suffix: '.src'}))
+		.pipe(gulp.dest(dest))
+		.pipe(uglify())
+		.pipe(rename(function (path) {
+			path.basename = path.basename.replace(/\.src/, '');
+		}))
+		.pipe(gulp.dest(dest))
+		.pipe(print()),
 		// fix copy resource in zipjs folder
 		gulp.src(src + '/**/!(*.less|*.js)')
 			.pipe(ignoreSameFile(dest))
@@ -111,10 +111,10 @@ function typescript_build(src, dest, force) {
 }
 
 function browsersync_init(done) {
-    browserSync.init({
-        proxy: `localhost:${options.port}`
-    });
-    done();
+	browserSync.init({
+		proxy: `localhost:${options.port}`
+	});
+	done();
 }
 
 /**
@@ -124,47 +124,47 @@ function browsersync_init(done) {
  * @returns {NodeJS.WritableStream}
  */
 function typescript_dev(src, dest, since) {
-    return gulp.src(src + '/**/*.ts', {since: since})
-        .pipe(print())
-        .pipe(babel({
-            root: __dirname
-        }))
-        .pipe(gulp.dest(dest))
-        .pipe(rename({suffix: '.src'}))
-        .pipe(gulp.dest(dest))
-        .pipe(browserSync.stream());
+	return gulp.src(src + '/**/*.ts', {since: since})
+		.pipe(print())
+		.pipe(babel({
+			root: __dirname
+		}))
+		.pipe(gulp.dest(dest))
+		.pipe(rename({suffix: '.src'}))
+		.pipe(gulp.dest(dest))
+		.pipe(browserSync.stream());
 }
 
 function typescript_dev_zk() {
-    return typescript_dev(
-        'zk/src/main/resources',
-        'zk/codegen/resources',
-        gulp.lastRun(typescript_dev_zk)
-    );
+	return typescript_dev(
+		'zk/src/main/resources',
+		'zk/codegen/resources',
+		gulp.lastRun(typescript_dev_zk)
+	);
 }
 
 function typescript_dev_zul() {
-    return typescript_dev(
-        'zul/src/main/resources',
-        'zul/codegen/resources',
-        gulp.lastRun(typescript_dev_zul)
-    );
+	return typescript_dev(
+		'zul/src/main/resources',
+		'zul/codegen/resources',
+		gulp.lastRun(typescript_dev_zul)
+	);
 }
 
 function typescript_dev_zkex() {
-    return typescript_dev(
-        '../zkcml/zkex/src/main/resources',
-        '../zkcml/zkex/codegen/resources',
-        gulp.lastRun(typescript_dev_zkex)
-    );
+	return typescript_dev(
+		'../zkcml/zkex/src/main/resources',
+		'../zkcml/zkex/codegen/resources',
+		gulp.lastRun(typescript_dev_zkex)
+	);
 }
 
 function typescript_dev_zkmax() {
-    return typescript_dev(
-        '../zkcml/zkmax/src/main/resources',
-        '../zkcml/zkmax/codegen/resources',
-        gulp.lastRun(typescript_dev_zkmax)
-    );
+	return typescript_dev(
+		'../zkcml/zkmax/src/main/resources',
+		'../zkcml/zkmax/codegen/resources',
+		gulp.lastRun(typescript_dev_zkmax)
+	);
 }
 exports['build:minify-css'] = function () {
 	var sources = stripQuotes(options.src),
@@ -214,34 +214,34 @@ exports['build:minify-css'] = function () {
 
 exports['build:single'] = typescript_build_single;
 exports.watch = gulp.series(
-    browsersync_init,
-    gulp.parallel(
-        () => watch_job('zk/src/**/*.ts', typescript_dev_zk),
-        () => watch_job('zul/src/**/*.ts', typescript_dev_zul),
-        () => watch_job('../zkcml/zkex/src/**/*.ts', typescript_dev_zkex),
-        () => watch_job('../zkcml/zkmax/src/**/*.ts', typescript_dev_zkmax),
-    )
+	browsersync_init,
+	gulp.parallel(
+		() => watch_job('zk/src/**/*.ts', typescript_dev_zk),
+		() => watch_job('zul/src/**/*.ts', typescript_dev_zul),
+		() => watch_job('../zkcml/zkex/src/**/*.ts', typescript_dev_zkex),
+		() => watch_job('../zkcml/zkmax/src/**/*.ts', typescript_dev_zkmax),
+	)
 );
 exports.build = gulp.parallel(
-    function build_zk() {
-        return typescript_dev(
-            'zk/src/main/resources/web/js',
-            'zk/codegen/resources/web/js');
-    },
-    function build_zul() {
-        return typescript_dev(
-            'zul/src/main/resources/web/js',
-            'zul/codegen/resources/web/js');
-    },
-    function build_zkex() {
-        return typescript_dev(
-            '../zkcml/zkex/src/main/resources/web/js',
-            '../zkcml/zkex/codegen/resources/web/js');
-    },
-    function build_zkmax() {
-        return typescript_dev(
-            '../zkcml/zkmax/src/main/resources/web/js',
-            '../zkcml/zkmax/codegen/resources/web/js');
-    }
+	function build_zk() {
+		return typescript_dev(
+			'zk/src/main/resources/web/js',
+			'zk/codegen/resources/web/js');
+	},
+	function build_zul() {
+		return typescript_dev(
+			'zul/src/main/resources/web/js',
+			'zul/codegen/resources/web/js');
+	},
+	function build_zkex() {
+		return typescript_dev(
+			'../zkcml/zkex/src/main/resources/web/js',
+			'../zkcml/zkex/codegen/resources/web/js');
+	},
+	function build_zkmax() {
+		return typescript_dev(
+			'../zkcml/zkmax/src/main/resources/web/js',
+			'../zkcml/zkmax/codegen/resources/web/js');
+	}
 );
 exports.default = exports.build;
