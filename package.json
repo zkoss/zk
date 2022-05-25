@@ -25,7 +25,7 @@
     "@babel/plugin-proposal-object-rest-spread": "^7.16.7",
     "@babel/plugin-transform-typescript": "^7.16.8",
     "@babel/preset-env": "^7.16.10",
-    "@babel/preset-typescript": "^7.16.7",
+    "@babel/preset-typescript": "7.16.7",
     "@types/jquery": "^3.5.13",
     "@types/jquery-mousewheel": "^3.1.9",
     "@types/jquery.transit": "^0.9.31",
