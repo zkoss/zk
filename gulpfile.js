@@ -37,7 +37,6 @@ function stripQuotes(txt) {
 function watch_job(glob, job) {
     var watcher = gulp.watch(glob, {ignoreInitial: false}, job);
     watcher.on('change', function (path) {
-        // eslint-disable-next-line no-console
         console.log('Detect file change: ' + path + '...');
     });
     return watcher;
@@ -50,6 +49,10 @@ var config = {
 	}
 };
 
+/**
+ * @param {string} destDir - Output directory
+ * @param {boolean} [force] - Force keep
+ */
 function ignoreSameFile(destDir, force) {
 	return gulpIgnore.exclude(function (file) {
 		if (force) return false;
@@ -69,6 +72,9 @@ function ignoreSameFile(destDir, force) {
 	});
 }
 
+/**
+ * Used by gradle task `compileTypeScript`
+ */
 function typescript_build_single() {
     var sources = stripQuotes(options.src),
 	    destDir = stripQuotes(options.dest),
@@ -76,19 +82,15 @@ function typescript_build_single() {
     return typescript_build(sources, destDir, force);
 }
 
+/**
+ * See {@link typescript_build_single}
+ * @param {string} src - Directory containing JS/TS sources
+ * @param {string} dest - Output directory
+ * @param {boolean} [force] - Force keep. See {@link ignoreSameFile}.
+ */
 function typescript_build(src, dest, force) {
 	return mergeStream(gulp.src([src + '/**/*.ts', src + '/**/*.js'])
 	    .pipe(ignoreSameFile(dest, force))
-	    .pipe(tap(function(file) {
-			if (file.path.endsWith('.js') && file.path.includes('/mold/')) {
-				var name = file.basename;
-				name = name.substring(0, name.length - 3);
-				file.contents = Buffer.concat([
-					Buffer.from(name.replace(/-/g, '') + '$mold$ = \n'),
-					file.contents
-				]);
-			}
-	    }))
 	    .pipe(babel({
 		    root: __dirname
 	    }))
@@ -115,6 +117,12 @@ function browsersync_init(done) {
     done();
 }
 
+/**
+ * @param {string} src - Directory containing JS/TS sources
+ * @param {string} dest - Output directory
+ * @param {number | Date} [since] - Only find files that have been modified since the time specified
+ * @returns {NodeJS.WritableStream}
+ */
 function typescript_dev(src, dest, since) {
     return gulp.src(src + '/**/*.ts', {since: since})
         .pipe(print())
@@ -167,7 +175,7 @@ exports['build:minify-css'] = function () {
 	}
 	return gulp.src(sources + '/**/**')
 		.pipe(ignoreSameFile(destDir, force))
-		.pipe(tap(function(file) {
+		.pipe(tap(function (file) {
 			if (file.path.endsWith('.css.dsp')) {
 				// ignore DSP syntax
 				file.contents = Buffer.from(file.contents.toString('utf-8')
@@ -180,14 +188,14 @@ exports['build:minify-css'] = function () {
 					.replace(/\/>/g, '--c%>'), 'utf-8');
 			}
 		}))
-		.pipe(tap(function(file, t) {
+		.pipe(tap(function (file, t) {
 			if (file.path.endsWith('.css.dsp')) {
 				return t.through(postcss, [[ require('cssnano') ]]);
 			} else {
 				console.log('copy...', file.path);
 			}
 		}))
-		.pipe(tap(function(file) {
+		.pipe(tap(function (file) {
 			if (file.path.endsWith('.css.dsp')) {
 				// revert DSP syntax
 				file.contents = Buffer.from(file.contents.toString('utf-8')
