@@ -16,7 +16,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
     <depends>zweb</depends>
 	<version>
 		<version-class>org.zkoss.zk.Version</version-class>
-		<version-uid>9.5.1.3</version-uid>
+		<version-uid>9.5.1.4</version-uid>
 	</version>
 	<taglib>
 		<taglib-uri>http://www.zkoss.org/dsp/zk/core</taglib-uri>

@@ -23,5 +23,5 @@ package org.zkoss.zkplus.legacy;
 public class Version {
 	/** Returns the version UID.
 	 */
-	public static final String UID = "9.5.1.3";
+	public static final String UID = "9.5.1.4";
 }
