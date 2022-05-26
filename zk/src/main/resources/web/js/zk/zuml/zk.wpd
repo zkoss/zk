@@ -12,5 +12,5 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 -->
 
 <package name="zk.zuml" language="xul/html" depends="zk.wgt,zk.xml">
-	<script src="Parser.js" jsdoc="true"/>
+	<script src="index.js" jsdoc="true"/>
 </package>
