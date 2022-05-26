@@ -28,7 +28,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<renderer-class>org.zkoss.zul.impl.PageRenderer</renderer-class>
 	<message-loader-class>org.zkoss.zul.impl.ZulMessageLoader</message-loader-class>
 
-	<javascript src="/js/zk.js"/> <!-- TODO: main entry point -->
 	<javascript package="zk"/> <!-- for server side properties. -->
 	<javascript package="zul.lang"/> <!-- Don't merge -->
 	<javascript package="zul" merge="true"/><!-- merge since usually required though optional -->
