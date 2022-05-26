@@ -12,6 +12,9 @@ var gulpIgnore = require('gulp-ignore');
 var postcss = require('gulp-postcss');
 var mergeStream = require('merge-stream');
 var createResolver = require('resolve-options');
+const webpackStream = require('webpack-stream');
+const webpack = require('webpack');
+const flatmap = require('gulp-flatmap');
 
 var knownOptions = {
 	string: ['src', 'dest'],
@@ -89,25 +92,73 @@ function typescript_build_single() {
  * @param {boolean} [force] - Force keep. See {@link ignoreSameFile}.
  */
 function typescript_build(src, dest, force) {
-	return mergeStream(gulp.src([src + '/**/*.ts', src + '/**/*.js'])
-		.pipe(ignoreSameFile(dest, force))
-		.pipe(babel({
-			root: __dirname
-		}))
-		.pipe(rename({suffix: '.src'}))
-		.pipe(gulp.dest(dest))
-		.pipe(uglify())
-		.pipe(rename(function (path) {
-			path.basename = path.basename.replace(/\.src/, '');
-		}))
-		.pipe(gulp.dest(dest))
-		.pipe(print()),
+	const webpackConfig = require('./webpack.config.js');
+	webpackConfig.mode = 'production';
+	// Streams are not sequenced. If one uses `ignoreSameFile` on stream 1, but stream 3
+	// executes first, then `*.ts` will be excluded from compilation because stream 1 would
+	// have already copied the same `*.ts` into `dest`. Thus, I don't rely on ignoreSameFile.
+	// Fortunately, stream 1 and stream 2 both produces only `*.js` which stream 3 will not
+	// overwrite (stream 3 explicitly ignores `*.js` in `gulp.src()`).
+	return mergeStream(
+		// Transpile single files with babel which are not siblings of some `index.ts`
+		gulp.src('/**/@(*.ts|*.js)', { // stream 1
+				root: src,
+				ignore: ['/**/*.d.ts'],
+			})
+			.pipe(gulpIgnore.exclude(
+				file => fs.existsSync(path.join(path.dirname(file.path), 'index.ts'))
+			))
+			.pipe(babel({
+				root: __dirname
+			}))
+			.pipe(rename({suffix: '.src'}))
+			.pipe(gulp.dest(dest))
+			.pipe(uglify())
+			.pipe(rename(function (path) {
+				path.basename = path.basename.replace(/\.src/, '');
+			}))
+			.pipe(gulp.dest(dest))
+			.pipe(print()),
+		// Bundle `index.ts` with webpack
+		gulp.src('/**/index.ts', { // stream 2
+				root: src,
+			})
+			// There is no official way to specify the "library" property in a
+			// webpack "entry" from webpack-stream, so we manipulate the stream
+			// manually; note that specifying the "library" property in "output"
+			// doesn't work. However, webpack-stream doesn't implement _readableState
+			// which gulp-tap reqires. Thus, we use gulp-flatmap.
+			.pipe(flatmap(function (stream, file) {
+				const entryName = path.join(
+					path.dirname(file.relative),
+					path.basename(file.path, path.extname(file.path))
+				);
+				webpackConfig.entry = {
+					[entryName]: {
+						import: file.path,
+						library: {
+							type: 'window',
+							export: 'default',
+						}
+					}
+				};
+				webpackConfig.output = {
+					filename: '[name].js',
+					path: process.cwd(),
+				};
+				return webpackStream(webpackConfig, webpack);
+			}))
+			.pipe(gulp.dest(dest))
+			.pipe(print()),
 		// fix copy resource in zipjs folder
-		gulp.src(src + '/**/!(*.less|*.js)')
+		gulp.src('/**/!(*.less|*.js|*.d.ts)', { // stream 3
+				root: src,
+				nodir: true,
+			})
 			.pipe(ignoreSameFile(dest))
 			.pipe(gulp.dest(dest))
 			.pipe(print())
-		);
+	);
 }
 
 function browsersync_init(done) {

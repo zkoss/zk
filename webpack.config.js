@@ -4,21 +4,6 @@ var CircularDependencyPlugin = require('circular-dependency-plugin');
 var ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 module.exports = {
-	entry: {
-		zk: {
-			import: '/zk/src/main/resources/web/js/zk/index.ts',
-			library: {
-				type: 'window',
-				export: 'default'
-			}
-		}
-	},
-
-	output: {
-		filename: '[name].js',
-		path: path.resolve(__dirname, 'build/output'),
-	},
-
 	resolve: {
 		extensions: ['.ts', '.js', '.json'],
 		alias: {
