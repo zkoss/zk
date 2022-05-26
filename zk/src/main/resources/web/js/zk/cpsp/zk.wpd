@@ -12,5 +12,5 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 -->
 
 <package name="zk.cpsp">
-	<script src="serverpush.js"/>
+	<script src="index.js"/>
 </package>
