@@ -12,5 +12,5 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 -->
 
 <package name="zk.xml" language="xul/html">
-	<script src="utl.js" jsdoc="true"/>
+	<script src="index.js" jsdoc="true"/>
 </package>
