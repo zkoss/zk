@@ -95,7 +95,7 @@ function typescript_build(src, dest, force) {
 	const webpackConfig = require('./webpack.config.js');
 	webpackConfig.mode = 'production';
 	// Streams are not sequenced. If one uses `ignoreSameFile` on stream 1, but stream 3
-	// executes first, then `*.ts` will be excluded from compilation because stream 1 would
+	// executes first, then `*.ts` will be excluded from compilation because stream 3 would
 	// have already copied the same `*.ts` into `dest`. Thus, I don't rely on ignoreSameFile.
 	// Fortunately, stream 1 and stream 2 both produces only `*.js` which stream 3 will not
 	// overwrite (stream 3 explicitly ignores `*.js` in `gulp.src()`).
