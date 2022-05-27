@@ -8,7 +8,7 @@
 	<properties>
 		<org.springframework.version>5.2.3.RELEASE</org.springframework.version>
 	</properties>
-	<version>9.0.1.2</version>
+	<version>9.0.1.3-SNAPSHOT</version>
 	<name>ZK Plus Utilities</name>
 	<url>http://www.zkoss.org/zkplus</url>
 	<description>ZK plus utilities</description>
