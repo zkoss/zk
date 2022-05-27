@@ -93,7 +93,7 @@ public class AuDropUploader implements AuExtension {
 		}
 
 		final Map<String, String> attrs = new HashMap<String, String>();
-		String alert = null, uuid = null, dtid = null, nextURI = null;
+		String alert = null, uuid = null, dtid = null;
 		Desktop desktop = null;
 		try {
 			if (Strings.isEmpty(uuid = fetchParameter(request, "uuid", attrs)))
@@ -105,7 +105,6 @@ public class AuDropUploader implements AuExtension {
 			if (alert == null) {
 				desktop = ((WebAppCtrl) sess.getWebApp()).getDesktopCache(sess).getDesktop(dtid);
 				final Map<String, Object> params = parseRequest(request, desktop, "");
-				nextURI = (String) params.get("nextURI");
 				processItems(desktop, params, attrs);
 			}
 		} catch (Throwable ex) {
@@ -115,8 +114,6 @@ public class AuDropUploader implements AuExtension {
 				if (uuid != null)
 					attrs.put("uuid", uuid);
 			}
-			if (nextURI == null)
-				nextURI = request.getParameter("nextURI");
 
 			if (ex instanceof ComponentNotFoundException) {
 				alert = Messages.get(MZk.UPDATE_OBSOLETE_PAGE, uuid);
