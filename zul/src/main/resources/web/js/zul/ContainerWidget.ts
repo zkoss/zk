@@ -25,5 +25,5 @@ it will be useful, but WITHOUT ANY WARRANTY.
  *  @see zul.tab.Tabpanel
  *
  */
-zul.ContainerWidget = zk.$extends(zul.Widget, {
-});
+export class ContainerWidget extends zul.Widget {}
+zul.ContainerWidget = ContainerWidget;
