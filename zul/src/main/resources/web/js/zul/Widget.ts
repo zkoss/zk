@@ -1,4 +1,4 @@
-/* Widget.js
+/* Widget.ts
 
 	Purpose:
 
