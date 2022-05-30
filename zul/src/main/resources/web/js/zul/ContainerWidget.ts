@@ -1,4 +1,4 @@
-/* ContainerWidget.js
+/* ContainerWidget.ts
 
 	Purpose:
 
