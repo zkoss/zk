@@ -1,4 +1,4 @@
-/* LabelImageWidget.js
+/* LabelImageWidget.ts
 
 	Purpose:
 
