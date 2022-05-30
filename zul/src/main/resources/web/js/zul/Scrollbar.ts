@@ -1,4 +1,4 @@
-/* Scrollbar.js
+/* Scrollbar.ts
 
 	Purpose:
 
