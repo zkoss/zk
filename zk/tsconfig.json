@@ -25,12 +25,7 @@
     "forceConsistentCasingInFileNames": true,
     "types": [
       "webpack-env"
-    ],
-    "paths": {
-      "@zk/*": [
-        "./src/main/resources/web/js/zk/*"
-      ]
-    }
+    ]
   },
   "include": [
     "./src/main/resources/web/js/zk"

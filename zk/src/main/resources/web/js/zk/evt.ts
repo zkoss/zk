@@ -12,9 +12,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	This program is distributed under LGPL Version 2.1 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
-import {default as zk, ZKObject} from '@zk/zk';
-import type {Widget} from '@zk/widget';
-import {Callable} from '@zk/types';
+import {default as zk, ZKObject} from './zk';
+import type {Widget} from './widget';
+import {Callable} from './types';
 
 export interface EventOptions {
 	implicit: boolean;

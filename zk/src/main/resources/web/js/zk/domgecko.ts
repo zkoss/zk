@@ -10,7 +10,7 @@
 Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 
 */
-import {type JQZK, zjq} from '@zk/dom';
+import {type JQZK, zjq} from './dom';
 
 Object.assign(zjq.prototype, {
 	beforeHideOnUnbind: function (this: JQZK) { //Bug 3076384
