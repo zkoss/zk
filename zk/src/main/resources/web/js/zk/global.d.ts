@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-empty-interface */
-/* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable one-var */
 /* eslint-disable @typescript-eslint/triple-slash-reference */
 /* globals.d.ts
