@@ -12,10 +12,10 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-import {default as zk} from '@zk/zk';
-import {zjq} from '@zk/dom';
-import {Widget} from '@zk/widget';
-import {Event} from '@zk/evt';
+import {default as zk} from './zk';
+import {zjq} from './dom';
+import {Widget} from './widget';
+import {Event} from './evt';
 
 function _createMouseEvent (type, button, changedTouch, ofs): MouseEvent {
 	if (!ofs)

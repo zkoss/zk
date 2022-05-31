@@ -12,8 +12,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	This program is distributed under LGPL Version 2.1 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
-import {default as zk} from '@zk/zk';
-import {default as zAu} from '@zk/au';
+import {default as zk} from './zk';
+import {default as zAu} from './au';
 
 let _curbk = '', _initbk = '';
 

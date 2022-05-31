@@ -12,8 +12,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-import {Callable, cast} from '@zk/types';
-import {default as zk} from '@zk/zk';
+import {Callable, cast} from './types';
+import {default as zk} from './zk';
 
 var _loaded = {'zk': true}, //loaded
 	_xloadings: Array<string> = cast([]), //loading (exclude loaded)
