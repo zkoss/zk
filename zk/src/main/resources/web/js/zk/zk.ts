@@ -13,9 +13,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-import {type Draggable} from '@zk/drag';
-import {type Offset, type Callable} from '@zk/types';
-import {type Widget} from '@zk/widget';
+import {type Draggable} from './drag';
+import {type Offset, type Callable} from './types';
+import {type Widget} from './widget';
 
 export type DataHandler = (wgt: Widget, val: unknown) => void;
 
@@ -212,7 +212,7 @@ function wgt2s(w: Widget): string {
 	return s + (w.id ? '$' + w.id : '') + '#' + w.uuid + '$' + w.$oid;
 }
 async function toLogMsg(ars: Array<Element | Widget> | IArguments, detailed): Promise<string> {
-	let {Widget} = await import('@zk/widget'); // avoid circular dependence
+	let {Widget} = await import('./widget'); // avoid circular dependence
 	var msg: string[] = [];
 	for (var j = 0, len = ars.length; j < len; j++) {
 		if (msg.length) msg.push(', ');

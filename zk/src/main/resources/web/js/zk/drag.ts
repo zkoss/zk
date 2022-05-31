@@ -16,10 +16,10 @@ Copyright (c) 2005, 2006 Thomas Fuchs (http://script.aculo.us, http://mir.aculo.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-import type {Offset, Callable} from '@zk/types';
-import {default as zk} from '@zk/zk';
-import type {Widget} from '@zk/widget';
-import {type FireOptions, zWatch, type Event} from '@zk/evt';
+import type {Offset, Callable} from './types';
+import {default as zk} from './zk';
+import type {Widget} from './widget';
+import {type FireOptions, zWatch, type Event} from './evt';
 import type { Dimension } from './dom';
 
 export interface DraggableScrollOptions {

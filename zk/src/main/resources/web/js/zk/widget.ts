@@ -14,7 +14,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-import {default as zk, ZKObject} from '@zk/zk';
+import {default as zk, ZKObject} from './zk';
 
 import {
 	Callable,
@@ -22,14 +22,14 @@ import {
 	NumberFieldValue,
 	Offset,
 	StringFieldValue
-} from '@zk/types';
-import type {Mask, Effect} from '@zk/effect';
-import {JQZK, zjq} from '@zk/dom';
-import type {DraggableOptions, Draggable} from '@zk/drag';
-import type {Event, EventOptions} from '@zk/evt';
-import {BooleanFieldValue, DOMFieldValue} from '@zk/types';
-import {zWatch} from '@zk/evt';
-import zFlex, {type FlexOrient} from '@zk/flex';
+} from './types';
+import type {Mask, Effect} from './effect';
+import {JQZK, zjq} from './dom';
+import type {DraggableOptions, Draggable} from './drag';
+import type {Event, EventOptions} from './evt';
+import {BooleanFieldValue, DOMFieldValue} from './types';
+import {zWatch} from './evt';
+import zFlex, {type FlexOrient} from './flex';
 import type { SPush } from './cpsp/serverpush';
 
 export interface RealVisibleOptions {

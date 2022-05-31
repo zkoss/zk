@@ -13,13 +13,13 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	This program is distributed under LGPL Version 2.1 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
-import {default as zk} from '@zk/zk';
-import type {Event as ZKEvent} from '@zk/evt';
-import {Desktop, Widget} from '@zk/widget';
-import type {Callable, Offset} from '@zk/types';
-import {cast} from '@zk/types';
-import {Effect, Mask} from '@zk/effect';
-import {DateImpl} from '@zk/dateImpl';
+import {default as zk} from './zk';
+import type {Event as ZKEvent} from './evt';
+import {Desktop, Widget} from './widget';
+import type {Callable, Offset} from './types';
+import {cast} from './types';
+import {Effect, Mask} from './effect';
+import {DateImpl} from './dateImpl';
 
 export type ErrorHandler = (response: Response, errCode: number) => boolean;
 

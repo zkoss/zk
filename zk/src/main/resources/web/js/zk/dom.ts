@@ -12,10 +12,10 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-import {default as zk} from '@zk/zk';
-import type {Callable, DOMFieldValue} from '@zk/types';
-import type {Widget} from '@zk/widget';
-import type {Event as ZKEvent} from '@zk/evt';
+import {default as zk} from './zk';
+import type {Callable, DOMFieldValue} from './types';
+import type {Widget} from './widget';
+import type {Event as ZKEvent} from './evt';
 
 export interface SlideOptions {
 	anchor: string;

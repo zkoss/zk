@@ -9,10 +9,10 @@
 
 Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 */
-import {default as zk} from '@zk/zk';
-import {Event as ZKEvent} from '@zk/evt';
-import {Widget} from '@zk/widget';
-import {cast} from '@zk/types';
+import {default as zk} from './zk';
+import {Event as ZKEvent} from './evt';
+import {Widget} from './widget';
+import {cast} from './types';
 
 let hastouch = 'ontouchstart' in window,
 	startEvt = hastouch ? 'touchstart' : 'mousedown',

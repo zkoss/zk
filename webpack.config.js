@@ -6,9 +6,6 @@ var ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 module.exports = {
 	resolve: {
 		extensions: ['.ts', '.js', '.json'],
-		alias: {
-			'@zk': path.resolve('/zk/src/main/resources/web/js/zk')
-		}
 	},
 
 	module: {
