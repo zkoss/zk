@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": [
+      "esnext",
+      "dom",
+    ],
+    "module": "commonjs",
+    "allowJs": false, // prevent importing JS files from TS
+    "noEmit": true, // type checking only
+    "strict": true,
+    // Rules
+    "exactOptionalPropertyTypes": true,
+    "forceConsistentCasingInFileNames": true,
+    "importsNotUsedAsValues": "error",
+    "isolatedModules": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": false,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "types": [
+      // "webpack-env",
+      "zk"
+    ]
+  },
+  "include": [
+    "./src/main/resources/web/js",
+  ]
+}
