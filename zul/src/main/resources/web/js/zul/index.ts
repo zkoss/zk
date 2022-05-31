@@ -5,4 +5,3 @@ export * from './ContainerWidget'; // jsdoc="true"
 export * from './Upload'; // jsdoc="true"
 export * from './WScroll'; // jsdoc="true"
 export * from './Scrollbar'; // jsdoc="true"
-export default {};
