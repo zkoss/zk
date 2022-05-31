@@ -24,12 +24,7 @@
     "types": [
       "zk",
       "webpack-env"
-    ],
-    "paths": {
-      "@zk/*": [
-        "./zk/src/main/resources/web/js/zk/*"
-      ]
-    }
+    ]
   },
   "include": [
     "zk/src/main/resources/web/js/zk/*",

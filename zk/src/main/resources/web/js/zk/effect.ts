@@ -16,11 +16,11 @@ Copyright (c) 2005, 2006 Thomas Fuchs (http://script.aculo.us, http://mir.aculo.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-import {default as zk} from '@zk/zk';
-import {type JQZK, type SlideOptions} from '@zk/dom';
-import {zWatch} from '@zk/evt';
-import type {Widget} from '@zk/widget';
-import type {DOMFieldValue} from '@zk/types';
+import {default as zk} from './zk';
+import {type JQZK, type SlideOptions} from './dom';
+import {zWatch} from './evt';
+import type {Widget} from './widget';
+import type {DOMFieldValue} from './types';
 
 var _defSKUOpts, _useSKU;
 

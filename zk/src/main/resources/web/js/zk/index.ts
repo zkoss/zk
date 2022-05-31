@@ -12,22 +12,22 @@
 
 Copyright (C) 2022 Potix Corporation. All Rights Reserved.
 */
-import '@zk/crashmsg';
-import '@zk/ext/jquery';
-import {default as zk} from '@zk/zk';
-import '@zk/js';
-import {zjq} from '@zk/dom';
-import {Event, zWatch} from '@zk/evt';
-import '@zk/anima';
-import {Draggable} from '@zk/drag';
-import eff from '@zk/effect';
-import * as math from '@zk/math';
-import {zUtl} from '@zk/utl';
-import {zKeys} from '@zk/keys';
-import * as widget from '@zk/widget';
-import * as zAu from '@zk/au';
-import {default as zFlex} from '@zk/flex';
-import {zkreg} from '@zk/widget';
+import './crashmsg';
+import './ext/jquery';
+import {default as zk} from './zk';
+import './js';
+import {zjq} from './dom';
+import {Event, zWatch} from './evt';
+import './anima';
+import {Draggable} from './drag';
+import eff from './effect';
+import * as math from './math';
+import {zUtl} from './utl';
+import {zKeys} from './keys';
+import * as widget from './widget';
+import * as zAu from './au';
+import {default as zFlex} from './flex';
+import {zkreg} from './widget';
 
 declare global {
 	interface Window {
@@ -42,11 +42,11 @@ window.zk = zk;
 window.zjq = zjq;
 
 if (zk.gecko) {
-	require('@zk/domgecko');
+	require('./domgecko');
 } else if (zk.safari) {
-	require('@zk/domsafari');
+	require('./domsafari');
 } else if (zk.opera) {
-	require('@zk/domopera');
+	require('./domopera');
 }
 
 window.$eval = function (s: string): unknown {
@@ -91,7 +91,7 @@ window.zkreg = widget.zkreg;
 window.zkservice = widget.zkservice;
 window.zkopt = widget.zkopt;
 
-let pkg = require('@zk/pkg').default;
+let pkg = require('./pkg').default;
 
 zk.setLoaded = pkg.setLoaded;
 zk.setScriptLoaded = pkg.setScriptLoaded;
@@ -107,18 +107,18 @@ zk.afterLoad = pkg.afterLoad;
 zk.getHost = pkg.getHost;
 zk.setHost = pkg.setHost;
 
-require('@zk/mount');
+require('./mount');
 
-require('@zk/bookmark');
+require('./bookmark');
 
-require('@zk/historystate');
+require('./historystate');
 
 if (!Promise) {
-	require('@zk/ext/promise-polyfill.js');
+	require('./ext/promise-polyfill.js');
 }
 
 // workaround for FileUpload with fetch() API.
-require('@zk/ext/fetch.js');
+require('./ext/fetch.js');
 
 window.zAu = zAu.default;
 zk.afterAuResponse = zAu.afterAuResponse;
@@ -130,9 +130,9 @@ window.zFlex = zFlex;
 zk.touchEnabled = zk.touchEnabled !== false && (!!zk.mobile || navigator.maxTouchPoints > 0);
 zk.tabletUIEnabled = zk.tabletUIEnabled !== false && !!zk.mobile;
 if (zk.touchEnabled) {
-	require('@zk/ext/inputdevicecapabilities-polyfill');
-	require('@zk/zswipe');
-	require('@zk/domtouch');
+	require('./ext/inputdevicecapabilities-polyfill');
+	require('./zswipe');
+	require('./domtouch');
 }
 
 if (zk.tabletUIEnabled) {
@@ -143,16 +143,16 @@ if (zk.tabletUIEnabled) {
 	});
 }
 
-require('@zk/dateImpl');
+require('./dateImpl');
 
-require('@zk/ext/jquery.json.js');
-require('@zk/ext/jquery.mousewheel.js');
-require('@zk/ext/jquery.transit.js');
-require('@zk/ext/focus-options-polyfill.js');
+require('./ext/jquery.json.js');
+require('./ext/jquery.mousewheel.js');
+require('./ext/jquery.transit.js');
+require('./ext/focus-options-polyfill.js');
 
-// workaround for webpack with @zk/ext/moment-timezone-with-data.js
-zk.mm = require('@zk/ext/moment.js');
-require('@zk/ext/moment-timezone-with-data.js');
+// workaround for webpack with ./ext/moment-timezone-with-data.js
+zk.mm = require('./ext/moment.js');
+require('./ext/moment-timezone-with-data.js');
 
 //
 // <function class="org.zkoss.zk.ui.http.Wpds"

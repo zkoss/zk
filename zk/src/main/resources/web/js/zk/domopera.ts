@@ -12,7 +12,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-import {type JQZK, zjq} from '@zk/dom';
+import {type JQZK, zjq} from './dom';
 
 Object.assign(zjq.prototype, {
 	scrollOffset: function (this: JQZK) {

@@ -12,9 +12,9 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-import {default as zk} from '@zk/zk';
-import {zjq, type JQZK} from '@zk/dom';
-import {type Widget} from '@zk/widget';
+import {default as zk} from './zk';
+import {zjq, type JQZK} from './dom';
+import {type Widget} from './widget';
 
 export interface Anima {
 	anima: string;

@@ -13,12 +13,12 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	This program is distributed under LGPL Version 2.1 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
-import {default as zk} from '@zk/zk';
-import {default as pkg} from '@zk/pkg';
-import {Event, zWatch} from '@zk/evt';
-import {Callable, cast} from '@zk/types';
-import {default as zAu} from '@zk/au';
-import {zjq} from '@zk/dom';
+import {default as zk} from './zk';
+import {default as pkg} from './pkg';
+import {Event, zWatch} from './evt';
+import {Callable, cast} from './types';
+import {default as zAu} from './au';
+import {zjq} from './dom';
 
 //define a package and returns the package info (used in WpdExtendlet)
 window.zkpi = function (nm: string, wv: boolean): Record<string, unknown> | null {
