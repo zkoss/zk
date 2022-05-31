@@ -9,5 +9,6 @@
     "zk"
   ],
   "author": "Potix",
-  "license": "LGPL-2.0-or-later"
+  "license": "LGPL-2.0-or-later",
+  "types": "./src/main/resources/web/js/zk/global.d.ts"
 }
