@@ -202,7 +202,7 @@ export class Draggable extends zk.Object {
 	declare public orgScrlLeft?: number;
 	declare public orgScrlTop?: number;
 	declare private _clone?: Node | null;
-	declare public _orgcursor?: string; // zk.Widget::uncloneDrag_
+	declare public _orgcursor?: string; // zk.Widget.prototype.uncloneDrag_
 	
 	private static _drags: Draggable[] = [];
 	/** The control object for this draggable.
