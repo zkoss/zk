@@ -1,7 +1,7 @@
 // export * from './ButtonRenderer'; // jsdoc="true"
 // export * from './A';
 // export * from './Cell';
-// export * from './Div';
+export * from './Div';
 // export * from './Span';
 // export * from './Idspace';
 // export * from './Include';

@@ -18,27 +18,39 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
  * as {@link Div}, but {@link Div} doesn't implement IdSpace.
  * In other words, {@link Div} won't affect the uniqueness of identifiers.
  */
-zul.wgt.Div = zk.$extends(zul.Widget, {
-	$define: {
-		/** Returns the alignment.
-		 * <p>Default: null (use browser default).
-		 * @return String
-		 * @deprecated as of release 6.0.0, use CSS instead.
-		 */
-		/** Sets the alignment: one of left, center, right, ustify,
-		 * @param String align
-		 * @deprecated as of release 6.0.0, use CSS instead.
-		 */
-		align: function (v) {
+export class Div extends zul.Widget {
+	private _align?: string;
+
+	/** Returns the alignment.
+	 * <p>Default: null (use browser default).
+	 * @return String
+	 * @deprecated as of release 6.0.0, use CSS instead.
+	 */
+	public getAlign(): string | undefined {
+		return this._align;
+	}
+
+	/** Sets the alignment: one of left, center, right, ustify,
+	 * @param String align
+	 * @deprecated as of release 6.0.0, use CSS instead.
+	 */
+	public setAlign(v: string, opts?: Record<string, boolean>): this {
+		const o = this._align;
+		this._align = v;
+
+		if (o !== v || (opts && opts.force)) {
 			var n = this.$n();
 			if (n)
-				n.align = v;
+				(n as HTMLDivElement).align = v;
 		}
-	},
+
+		return this;
+	}
+
 	//super//
-	domAttrs_: function (no) {
+	public override domAttrs_(no?: Partial<zk.DomAttrsOptions>): string {
 		var align = this._align,
-			attr = this.$supers('domAttrs_', arguments);
+			attr = super.domAttrs_(no);
 		return align != null ? attr + ' align="' + align + '"' : attr;
 	}
-});
+}
