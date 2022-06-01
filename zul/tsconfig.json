@@ -20,6 +20,7 @@
     "noImplicitReturns": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
+    "allowUmdGlobalAccess": true,
     "types": [
       // "webpack-env",
       "zk"
