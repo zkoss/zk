@@ -169,6 +169,7 @@
     "@typescript-eslint/no-non-null-assertion": "off",
     "@typescript-eslint/no-parameter-properties": "error", // deprecated
     "@typescript-eslint/no-require-imports": "error",
+    "@typescript-eslint/no-this-alias": "warn",
     "@typescript-eslint/triple-slash-reference": [
       "error",
       {
