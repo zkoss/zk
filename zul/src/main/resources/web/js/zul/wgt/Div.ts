@@ -1,4 +1,4 @@
-/* Div.js
+/* Div.ts
 
 	Purpose:
 
