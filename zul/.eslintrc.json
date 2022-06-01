@@ -55,6 +55,8 @@
     "no-implied-eval": "warn",
     "no-var": "off",
     "prefer-const": "warn",
+    "prefer-rest-params": "warn",
+    "prefer-spread": "warn",
     // Layout & Formatting
     "brace-style": [
       "error",
