@@ -10,7 +10,7 @@
     "noEmit": true, // type checking only
     "strict": true,
     // Rules
-    "exactOptionalPropertyTypes": true,
+    // "exactOptionalPropertyTypes": true,
     "forceConsistentCasingInFileNames": true,
     "importsNotUsedAsValues": "error",
     "isolatedModules": true,
