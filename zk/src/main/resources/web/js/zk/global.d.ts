@@ -225,6 +225,7 @@ declare namespace zk {
 	type PositionOptions = import('./dom').PositionOptions;
 	type ZWatchController = import('./evt').ZWatchController;
 	type FireOptions = import('./evt').FireOptions;
+	type DomAttrsOptions = import('./widget').DomAttrsOptions;
 	namespace eff {
 		type Mask = import('./effect').Mask;
 	}
