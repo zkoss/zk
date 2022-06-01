@@ -91,7 +91,7 @@ function _isProlog(el: Node | null): boolean {
 // eslint-disable-next-line no-undef
 type JQueryEventHandler = (evt: JQuery.TriggeredEvent, ...args: unknown[]) => unknown;
 type ZKEventHandler = (evt: Event, ...args: unknown[]) => unknown;
-function _domEvtInf(wgt: Widget, evtnm: string, fn: string | ZKEventHandler, keyword?: string): [string, JQueryEventHandler] { //proxy event listener
+function _domEvtInf(wgt: Widget, evtnm: string, fn?: string | ZKEventHandler, keyword?: string): [string, JQueryEventHandler] { //proxy event listener
 	if (typeof fn != 'function') {
 		if (!fn && !(fn = _domevtfnm[evtnm]))
 			_domevtfnm[evtnm] = fn = '_do' + evtnm.substring(2);
@@ -680,7 +680,6 @@ const _dragoptions: Partial<DraggableOptions> = {
 export class Widget extends ZKObject {
 	declare public offsetWidth?;
 	declare public offsetHeight?;
-	declare public afterKeyDown_?: (evt: Event) => boolean;
 	declare public blankPreserved?: boolean;
 	// FIXME: _scrollbar?: any;
 	// FIXME: $binder(): zk.Binder | null;
@@ -743,7 +742,7 @@ export class Widget extends ZKObject {
 	declare public static _repeatIgnoreEvts;
 	declare public static molds;
 
-	private _visible = true;
+	public _visible = true;
 	private _mold = 'default';
 	protected _style: StringFieldValue;
 	private _renderdefer = -1;
@@ -2500,7 +2499,7 @@ wgt.$f().main.setTitle("foo");
 	 * @return boolean
 	 * @see #setFloating_
 	 */
-	protected isFloating_(): boolean {
+	public isFloating_(): boolean {
 		return this._floating;
 	}
 
@@ -2515,7 +2514,7 @@ wgt.$f().main.setTitle("foo");
 	 * </ul>
 	 * @see #isFloating_
 	 */
-	protected setFloating_(floating: boolean, opts: Partial<{ node: HTMLElement }>): void {
+	protected setFloating_(floating: boolean, opts?: Partial<{ node: HTMLElement }>): void {
 		if (this._floating != floating) {
 			if (floating) {
 				//parent first
@@ -3499,7 +3498,7 @@ bind_: function (desktop, skipper, after) {
 }
 </code></pre>
 	 */
-	protected bind_(desktop?: Desktop | null, skipper?: Skipper | null, after?: Callable[]): void {
+	protected bind_(desktop?: Desktop | null, skipper?: Skipper | null, after?: CallableFunction[]): void {
 		this.get$Class<typeof Widget>()._bind0(this);
 
 		this.desktop = desktop || (desktop = zk.Desktop.$(this.parent));
@@ -3544,7 +3543,7 @@ bind_: function (desktop, skipper, after) {
 	 * @param Array after an array of function ({@link Function}) that will be invoked after {@link #bind_} has been called. For example,
 	 * @since 5.0.5
 	 */
-	protected bindChildren_(desktop?: Desktop, skipper?: Skipper | null, after?: Callable[]): void {
+	protected bindChildren_(desktop?: Desktop, skipper?: Skipper | null, after?: CallableFunction[]): void {
 		for (var child = this.firstChild, nxt; child; child = nxt) {
 			nxt = child.nextSibling;
 				//we have to store first since RefWidget will replace widget
@@ -3582,7 +3581,7 @@ unbind_: function (skipper, after) {
 </code></pre>
 	 * @param boolean keepRod [optional] used if the ROD flag needs to be kept.
 	 */
-	protected unbind_(skipper?: Skipper | null, after?: Callable[], keepRod?: boolean): void {
+	protected unbind_(skipper?: Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		this.get$Class<typeof Widget>()._unbind0(this);
 		_unlistenFlex(this);
 
@@ -3619,7 +3618,7 @@ unbind_: function (skipper, after) {
 	 * @param boolean keepRod [optional] used if the ROD flag needs to be kept.
 	 * @since 5.0.5
 	 */
-	protected unbindChildren_(skipper?: Skipper | null, after?: Callable[], keepRod?: boolean): void {
+	protected unbindChildren_(skipper?: Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		for (var child = this.firstChild, nxt; child; child = nxt) {
 			nxt = child.nextSibling; //just in case
 
@@ -5037,7 +5036,7 @@ _doFooSelect: function (evt) {
 	 * @return zk.Widget this widget
 	 * @see #domUnlisten_
 	 */
-	protected domListen_(n: HTMLElement, evtnm: string, fn: Callable, keyword?: string): this {
+	protected domListen_(n: HTMLElement, evtnm: string, fn?: string | Callable, keyword?: string): this {
 		if (!this.$weave) {
 			var inf = _domEvtInf(this, evtnm, fn, keyword);
 			jq(n, zk).on(inf[0], inf[1]);
@@ -5061,7 +5060,7 @@ _doFooSelect: function (evt) {
 	 * @return zk.Widget this widget
 	 * @see #domListen_
 	 */
-	protected domUnlisten_(n: HTMLElement, evtnm: string, fn: Callable, keyword?: string): this {
+	public domUnlisten_(n: HTMLElement, evtnm: string, fn?: string | Callable, keyword?: string): this {
 		if (!this.$weave) {
 			var inf = _domEvtInf(this, evtnm, fn, keyword);
 			jq(n, zk).off(inf[0], inf[1]);
@@ -5153,7 +5152,7 @@ _doFooSelect: function (evt) {
 	 * @return boolean
 	 * @since 6.0.0
 	 */
-	protected ignoreDescendantFloatUp_(des: Widget): boolean {
+	public ignoreDescendantFloatUp_(des: Widget): boolean {
 		return false;
 	}
 
