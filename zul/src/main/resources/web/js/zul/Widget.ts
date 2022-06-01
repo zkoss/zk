@@ -16,120 +16,149 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 //zk.$package('zul');
 
-(function () {
-	//Tooltip
-	var _tt_inf, _tt_tmClosing, _tt_tip, _tt_ref;
-	function _tt_beforeBegin(ref) {
-		if (_tt_tip && !_tt_tip.isOpen()) { //closed by other (such as clicking on menuitem)
-			_tt_clearOpening_();
-			_tt_clearClosing_();
-			_tt_tip = _tt_ref = null;
-		}
+export interface PopupParams {
+	id?: string;
+	position?: string;
+	delay?: number;
+	ref?: zul.wgt.Ref;
+	x?: number;
+	y?: number;
+	type?: string;
+}
 
-		var overTip = _tt_tip && zUtl.isAncestor(_tt_tip, ref);
-		if (overTip) _tt_clearClosing_(); //not close tip if over tip
-		return !overTip;//disable tip in tip
-	}
-	function _tt_begin(tip, ref, params, event) {
-		if (_tt_tip != tip || _tt_ref != ref) {
-			_tt_close_();
-			_tt_inf = {
-				tip: tip, ref: ref, params: params,
-				timer: setTimeout(function () {_tt_open_(event);}, params.delay !== undefined ? params.delay : zk.tipDelay)
-			};
-		} else
-			_tt_clearClosing_();
-	}
-	function _tt_end(ref) {
-		if (_tt_ref == ref || _tt_tip == ref) {
-			_tt_clearClosing_(); //just in case
-			_tt_tmClosing = setTimeout(_tt_close_, 100);
-			//don't cloes immediate since user might move from ref to toolip
-		} else
-			_tt_clearOpening_();
-	}
-	function _tt_clearOpening_() {
-		var inf = _tt_inf;
-		if (inf) {
-			_tt_inf = null;
-			clearTimeout(inf.timer);
-		}
-	}
-	function _tt_clearClosing_() {
-		var tmClosing = _tt_tmClosing;
-		if (tmClosing) {
-			_tt_tmClosing = null;
-			clearTimeout(tmClosing);
-		}
-	}
-	function _tt_open_(event) {
-		var inf = _tt_inf;
-		if (inf) {
-			_tt_tip = inf.tip,
-			_tt_ref = inf.ref;
-			_tt_inf = null;
-
-			var n = _tt_ref.$n();
-			// B65-ZK-1934: If reference's dom is null or not visible, then just return.
-			if (!n || !zk(n).isRealVisible()) //gone
-				return _tt_tip = _tt_ref = null;
-
-			var params = inf.params,
-				x = params.x, y = params.y;
-			if (x)
-				params.x = _parseParamFunc(event, x);
-			if (y)
-				params.y = _parseParamFunc(event, y);
-
-			var xy = params.x !== undefined ? [params.x, params.y] : zk.currentPointer;
-			_tt_tip.open(params.ref || _tt_ref, xy, zul.Widget._getPopupPosition(params), {focusFirst: true, sendOnOpen: true});
-		}
-	}
-	function _tt_close_() {
+//Tooltip
+var _tt_inf: {
+		tip: zul.wgt.Popup;
+		ref: zul.Widget;
+		params: PopupParams;
+		timer: number;
+	} | null,
+	_tt_tmClosing: number | null,
+	_tt_tip: zul.wgt.Popup | null,
+	_tt_ref: zul.Widget | null;
+function _tt_beforeBegin(ref: zul.Widget): boolean {
+	if (_tt_tip && !_tt_tip.isOpen()) { //closed by other (such as clicking on menuitem)
 		_tt_clearOpening_();
 		_tt_clearClosing_();
+		_tt_tip = _tt_ref = null;
+	}
 
-		var tip = _tt_tip;
-		if (tip && tip.desktop) { //check still attached to desktop
-			// Bug ZK-1222, ZK-1594
-			// If the tooltip (popup) and mouse pointer overlapped, a TooltipOut event
-			// will be triggered again that closes the tooltip immediately, then another
-			// TooltipOver event will open the tooltip again...
-			// If mouse pointer still overlapped on tooltip, do not close.
-			// IE10: Bug ZK-1519, Chrome: Bug ZK-3583
-			var $tip = jq(tip.$n()),
-				$tipOff = $tip.offset(),
-				pointer = zk.currentPointer;
-			if ((pointer[0] >= $tipOff.left && pointer[0] <= ($tipOff.left + $tip.width()))
-				&& (pointer[1] >= $tipOff.top && pointer[1] <= ($tipOff.top + $tip.height())))
-				return;
-			_tt_tip = _tt_ref = null;
-			tip.close({sendOnOpen: true});
-		}
+	var overTip = _tt_tip && zUtl.isAncestor(_tt_tip, ref);
+	if (overTip) _tt_clearClosing_(); //not close tip if over tip
+	return !overTip;//disable tip in tip
+}
+function _tt_begin(tip: zul.wgt.Popup, ref: zul.Widget, params: PopupParams, event: zk.Event): void {
+	if (_tt_tip != tip || _tt_ref != ref) {
+		_tt_close_();
+		_tt_inf = {
+			tip: tip, ref: ref, params: params,
+			timer: setTimeout(function () {_tt_open_(event);}, params.delay !== undefined ? params.delay : zk.tipDelay)
+		};
+	} else
+		_tt_clearClosing_();
+}
+function _tt_end(ref: zul.Widget): void {
+	if (_tt_ref == ref || _tt_tip == ref) {
+		_tt_clearClosing_(); //just in case
+		_tt_tmClosing = setTimeout(_tt_close_, 100);
+		//don't cloes immediate since user might move from ref to toolip
+	} else
+		_tt_clearOpening_();
+}
+function _tt_clearOpening_(): void {
+	var inf = _tt_inf;
+	if (inf) {
+		_tt_inf = null;
+		clearTimeout(inf.timer);
 	}
-	function _setCtrlKeysErr(msg) {
-		zk.error('setCtrlKeys: ' + msg);
+}
+function _tt_clearClosing_(): void {
+	var tmClosing = _tt_tmClosing;
+	if (tmClosing) {
+		_tt_tmClosing = null;
+		clearTimeout(tmClosing);
 	}
-	function _parseParamFunc(event, funcBody) {
-		if (funcBody.indexOf('(') != -1 && funcBody.indexOf(')') != -1) {
-			var func = new Function('event', 'return ' + funcBody + ';');
-			return func(event);
-		} else {
-			return zk.parseInt(funcBody);
-		}
+}
+function _tt_open_(event: zk.Event): null | void {
+	var inf = _tt_inf;
+	if (inf) {
+		_tt_tip = inf.tip,
+		_tt_ref = inf.ref;
+		_tt_inf = null;
+
+		var n = _tt_ref.$n();
+		// B65-ZK-1934: If reference's dom is null or not visible, then just return.
+		if (!n || !zk(n).isRealVisible()) //gone
+			return _tt_tip = _tt_ref = null;
+
+		// `params.x/y` should be `number` throughout except being initialized by Java.
+		// Hence, we define `params.x/y` as number and force-cast to string here.
+		var params = inf.params,
+			x = params.x as unknown as string,
+			y = params.y as unknown as string;
+		if (x)
+			params.x = _parseParamFunc(event, x);
+		if (y)
+			params.y = _parseParamFunc(event, y);
+
+		var xy: zk.Offset = params.x !== undefined ? [params.x, params.y!] : zk.currentPointer;
+		_tt_tip.open(params.ref || _tt_ref, xy, zul.Widget._getPopupPosition(params), {focusFirst: true, sendOnOpen: true});
 	}
+}
+function _tt_close_(): void {
+	_tt_clearOpening_();
+	_tt_clearClosing_();
+
+	var tip = _tt_tip;
+	if (tip && tip.desktop) { //check still attached to desktop
+		// Bug ZK-1222, ZK-1594
+		// If the tooltip (popup) and mouse pointer overlapped, a TooltipOut event
+		// will be triggered again that closes the tooltip immediately, then another
+		// TooltipOver event will open the tooltip again...
+		// If mouse pointer still overlapped on tooltip, do not close.
+		// IE10: Bug ZK-1519, Chrome: Bug ZK-3583
+		var $tip = jq(tip.$n()!),
+			$tipOff = $tip.offset()!,
+			pointer = zk.currentPointer;
+		if ((pointer[0] >= $tipOff.left && pointer[0] <= ($tipOff.left + $tip.width()!))
+			&& (pointer[1] >= $tipOff.top && pointer[1] <= ($tipOff.top + $tip.height()!)))
+			return;
+		_tt_tip = _tt_ref = null;
+		tip.close({sendOnOpen: true});
+	}
+}
+function _setCtrlKeysErr(msg: string): void {
+	zk.error('setCtrlKeys: ' + msg);
+}
+function _parseParamFunc(event: zk.Event | undefined, funcBody: string): number {
+	if (funcBody.indexOf('(') != -1 && funcBody.indexOf(')') != -1) {
+		var func = new Function('event', 'return ' + funcBody + ';');
+		return func(event) as number;
+	} else {
+		return zk.parseInt(funcBody);
+	}
+}
+
+export type ParsedCtlKeys = Record<number, boolean>[];
 
 /** The base class for ZUL widget.
  * <p>The corresponding Java class is org.zkoss.zul.impl.XulElement.
  * <p>If a widget has a client attribute 'scrollable', it will listen <code>onScroll</code> event.
  */
-zul.Widget = zk.$extends(zk.Widget, {
-	bind_: function () {
-		this.$supers(zul.Widget, 'bind_', arguments);
+export class Widget extends zk.Widget {
+	private _context?: string;
+	private _popup?: string;
+	private _doScrollableSyncScroll?: (() => void);
+	private _tooltip?: string;
+	private _ctrlKeys?: string | null;
+	public _parsedCtlKeys?: ParsedCtlKeys | null;
+
+	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+		super.bind_(desktop, skipper, after);
 		// B70-ZK-2069: some widget need fire onScroll event, which has
 		// characteristic of container
 		if (jq(this.uuid, zk).data('scrollable')) { // Avoid caching $n() too early
-			this._doScrollableSyncScroll = zUtl.throttle(function () {
+			this._doScrollableSyncScroll = zUtl.throttle(function (this: object) {
 				if (jq(this).data('scrollable')) {
 					zWatch.fireDown('onScroll', this);
 					zWatch.fire('_onSyncScroll', this); // ZK-4408: for Popup only
@@ -137,22 +166,25 @@ zul.Widget = zk.$extends(zk.Widget, {
 			}, 1000 / 60); // 60fps
 			this.domListen_(this.getCaveNode(), 'onScroll', '_doScrollableSyncScroll');
 		}
-	},
-	unbind_: function () {
+	}
+
+	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		if (this._doScrollableSyncScroll) {
 			this.domUnlisten_(this.getCaveNode(), 'onScroll', '_doScrollableSyncScroll');
 		}
-		this.$supers(zul.Widget, 'unbind_', arguments);
-	},
+		super.unbind_(skipper, after, keepRod);
+	}
+
 	/** Returns the ID of the popup ({@link zul.wgt.Popup}) that should appear
 	 * when the user right-clicks on the element (aka., context menu).
 	 *
 	 * <p>Default: null (no context menu).
 	 * @return String
 	 */
-	getContext: function () {
+	public getContext(): string | undefined {
 		return this._context;
-	},
+	}
+
 	/**
 	 * Sets the ID of the popup ({@link zul.wgt.Popup}) that should appear
 	 * when the user right-clicks on the element (aka., context menu).
@@ -211,21 +243,23 @@ zul.Widget = zk.$extends(zk.Widget, {
 	 * @param zul.wgt.Popup context the popup widget.
 	 * @return zul.Widget
 	 */
-	setContext: function (context) {
+	public setContext(context: zul.wgt.Popup | string): this {
 		if (zk.Widget.isInstance(context))
 			context = 'uuid(' + context.uuid + ')';
 		this._context = context;
 		return this;
-	},
+	}
+
 	/** Returns the ID of the popup ({@link zul.wgt.Popup}) that should appear
 	 * when the user clicks on the element.
 	 *
 	 * <p>Default: null (no popup).
 	 * @return String the ID of the popup widget
 	 */
-	getPopup: function () {
+	public getPopup(): string | undefined {
 		return this._popup;
-	},
+	}
+
 	/**
 	 * Sets the ID of the popup ({@link zul.wgt.Popup}) that should appear
 	 * when the user clicks on the element.
@@ -284,12 +318,13 @@ zul.Widget = zk.$extends(zk.Widget, {
 	 * @param zul.wgt.Popup popup the popup widget.
 	 * @return zul.Widget
 	 */
-	setPopup: function (popup) {
+	public setPopup(popup: zul.wgt.Popup | string): this {
 		if (zk.Widget.isInstance(popup))
 			popup = 'uuid(' + popup.uuid + ')';
 		this._popup = popup;
 		return this;
-	},
+	}
+
 	/** Returns the ID of the popup ({@link zul.wgt.Popup}) that should be used
 	 * as a tooltip window when the mouse hovers over the element for a moment.
 	 * The tooltip will automatically disappear when the mouse is moved away.
@@ -297,9 +332,10 @@ zul.Widget = zk.$extends(zk.Widget, {
 	 * <p>Default: null (no tooltip).
 	 * @return String the ID of the popup widget
 	 */
-	getTooltip: function () {
+	public getTooltip(): string | undefined {
 		return this._tooltip;
-	},
+	}
+
 	/**
 	 * Sets the ID of the popup ({@link zul.wgt.Popup}) that should be used
 	 * as a tooltip window when the mouse hovers over the element for a moment.
@@ -360,19 +396,21 @@ zul.Widget = zk.$extends(zk.Widget, {
 	 * @param zul.wgt.Popup popup the popup widget.
 	 * @return zul.Widget
 	 */
-	setTooltip: function (tooltip) {
+	public setTooltip(tooltip: zul.wgt.Popup | string): this {
 		if (zk.Widget.isInstance(tooltip))
 			tooltip = 'uuid(' + tooltip.uuid + ')';
 		this._tooltip = tooltip;
 		return this;
-	},
+	}
+
 	/** Returns what keystrokes to intercept.
 	 * <p>Default: null.
 	 * @return String
 	 */
-	getCtrlKeys: function () {
+	public getCtrlKeys(): string | null | undefined {
 		return this._ctrlKeys;
-	},
+	}
+
 	/** Sets what keystrokes to intercept.
 	 *
 	 * <p>The string could be a combination of the following:
@@ -426,14 +464,15 @@ zul.Widget = zk.$extends(zk.Widget, {
 	 * @param String keys
 	 * @return zul.Widget
 	 */
-	setCtrlKeys: function (keys) {
+	public setCtrlKeys(keys: string): this | void {
 		if (this._ctrlKeys == keys) return;
 		if (!keys) {
 			this._ctrlKeys = this._parsedCtlKeys = null;
 			return;
 		}
 		//ext(#), ctrl(001), alt(010), ctrl + alt(011), shift(100), ctrl + shift(101), alt + shift(110), ctrl + alt + shift(111)
-		var parsed = [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}], which = 0;
+		var parsed: ParsedCtlKeys = [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
+			which = 0;
 		for (var j = 0, len = keys.length; j < len; ++j) {
 			var cc = keys.charAt(j); //ext
 			switch (cc) {
@@ -447,7 +486,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 				else
 					which |= flag;
 				break;
-			case '#':
+			case '#': {
 				var k = j + 1;
 				for (; k < len; ++k) {
 					var c2 = keys.charAt(k);
@@ -456,8 +495,9 @@ zul.Widget = zk.$extends(zk.Widget, {
 						break;
 				}
 				if (k == j + 1)
-					return _setCtrlKeysErr('Unexpected character ' + cc + ' in ' + keys);
-
+					return _setCtrlKeysErr('Unexpected character # in ' + keys);
+				
+				let cc: number;
 				var s = keys.substring(j + 1, k).toLowerCase();
 				if ('pgup' == s) cc = 33;
 				else if ('pgdn' == s) cc = 34;
@@ -483,6 +523,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 				which = 0;
 				j = k - 1;
 				break;
+			}
 			default:
 				if (!which || ((cc > 'Z' || cc < 'A')
 				&& (cc > 'z' || cc < 'a') && (cc > '9' || cc < '0')))
@@ -501,10 +542,18 @@ zul.Widget = zk.$extends(zk.Widget, {
 		this._parsedCtlKeys = parsed;
 		this._ctrlKeys = keys;
 		return this;
-	},
+	}
 
-	_parsePopParams: function (txt, event) {
-		var params = {},
+	private _parsePopParams(txt: string, event?: zk.Event): PopupParams {
+		var params: {
+				id?: string;
+				position?: string;
+				delay?: number | string;
+				ref?: zul.wgt.Ref | null;
+				x?: number | string;
+				y?: number | string;
+				type?: string;
+			} = {},
 			index = txt.indexOf(','),
 			start = txt.indexOf('='),
 			t = txt;
@@ -522,7 +571,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 			params.id = txt.trim();
 
 		if (this._popup || this._context) { //should prepare tooltip in _tt_open_
-			var x = params.x, y = params.y;
+			var x = params.x as string, y = params.y as string;
 			if (x)
 				params.x = _parseParamFunc(event, x);
 			if (y)
@@ -531,20 +580,21 @@ zul.Widget = zk.$extends(zk.Widget, {
 		if (params.delay)
 			params.delay = zk.parseInt(params.delay);
 		if (params.ref)
-			params.ref = this._smartFellow(params.ref);
-		return params;
-	},
+			params.ref = this._smartFellow(params.ref as string);
+		return params as PopupParams;
+	}
+
 	//super//
-	doClick_: function (evt, popupOnly) {
+	protected override doClick_(evt: zk.Event, popupOnly?: boolean): void {
 		if (!this.shallIgnoreClick_(evt) && !evt.contextSelected) {
 			var params = this._popup ? this._parsePopParams(this._popup, evt) : {},
-				popup = this._smartFellow(params.id);
+				popup = this._smartFellow(params.id) as zul.wgt.Popup | null;
 			if (popup) {
 				evt.contextSelected = true;
 
 				// to avoid a focus in IE, we have to pop up it later. for example, zksandbox/#t5
 				var self = this,
-					xy = params.x !== undefined ? [params.x, params.y]
+					xy: zk.Offset = params.x !== undefined ? [params.x, params.y!]
 							: [evt.pageX, evt.pageY];
 				// F70-ZK-2007: When type=toggle, close the popup
 				if (params.type && params.type == 'toggle' && popup.isOpen()) {
@@ -552,25 +602,26 @@ zul.Widget = zk.$extends(zk.Widget, {
 				} else {
 					setTimeout(function () { // F70-ZK-2007: Add the type and button number information
 						if (self.desktop)
-							popup.open(params.ref || self, xy, zul.Widget._getPopupPosition(params), {focusFirst: true, sendOnOpen: true, type: params.type, which: 1});
+							popup!.open(params.ref || self, xy, zul.Widget._getPopupPosition(params), {focusFirst: true, sendOnOpen: true, type: params.type, which: 1});
 					}, 0);
 				}
 				evt.stop({dom: true});
 			}
 		}
 		if (popupOnly !== true)
-			this.$supers('doClick_', arguments);
-	},
-	doRightClick_: function (evt) {
+			super.doClick_(evt);
+	}
+
+	protected override doRightClick_(evt: zk.Event): void {
 		if (!this.shallIgnoreClick_(evt) && !evt.contextSelected) {
 			var params = this._context ? this._parsePopParams(this._context, evt) : {},
-				ctx = this._smartFellow(params.id);
+				ctx = this._smartFellow(params.id) as zul.wgt.Popup | null;
 			if (ctx) {
 				evt.contextSelected = true;
 
 				// to avoid a focus in IE, we have to pop up it later. for example, zksandbox/#t5
 				var self = this,
-					xy = params.x !== undefined ? [params.x, params.y]
+					xy: zk.Offset = params.x !== undefined ? [params.x, params.y!]
 							: [evt.pageX, evt.pageY];
 				// F70-ZK-2007: When type=toggle, close the popup
 				if (params.type && params.type == 'toggle' && ctx.isOpen()) {
@@ -578,44 +629,49 @@ zul.Widget = zk.$extends(zk.Widget, {
 				} else {
 					setTimeout(function () { // F70-ZK-2007: Add the type and button number information
 						if (self.desktop)
-							ctx.open(params.ref || self, xy, zul.Widget._getPopupPosition(params), {focusFirst: true, sendOnOpen: true, type: params.type, which: 3}); //Bug #2870620
+							ctx!.open(params.ref || self, xy, zul.Widget._getPopupPosition(params), {focusFirst: true, sendOnOpen: true, type: params.type, which: 3}); //Bug #2870620
 					}, 0);
 				}
 				evt.stop({dom: true}); //prevent default context menu to appear
 			}
 		}
-		this.$supers('doRightClick_', arguments);
-	},
-	doTooltipOver_: function (evt) {
+		super.doRightClick_(evt);
+	}
+
+	protected override doTooltipOver_(evt: zk.Event): void {
 		if (!evt.tooltipped && _tt_beforeBegin(this)) {
 			var params = this._tooltip ? this._parsePopParams(this._tooltip) : {},
-				tip = this._smartFellow(params.id);
+				tip = this._smartFellow(params.id) as zul.wgt.Popup | null;
 			if (tip) {
 				evt.tooltipped = true;
 					//still call parent's doTooltipOver_ for better extensibility (though not necessary)
 				_tt_begin(tip, this, params, evt);
 			}
 		}
-		this.$supers('doTooltipOver_', arguments);
-	},
-	doTooltipOut_: function (evt) {
+		super.doTooltipOver_(evt);
+	}
+
+	protected override doTooltipOut_(evt: zk.Event): void {
 		_tt_end(this);
-		this.$supers('doTooltipOut_', arguments);
-	},
-	_smartFellow: function (id) {
+		super.doTooltipOut_(evt);
+	}
+
+	private _smartFellow(id?: string | null): zk.Widget | null {
 		return id ? id.startsWith('uuid(') && id.endsWith(')') ?
 			zk.Widget.$(id.substring(5, id.length - 1)) :
 			this.$f(id, true) : null;
-	},
+	}
+
 	//B70-ZK-2435: catch key down event right now rather than propagate it
-	doKeyDown_: function (evt) {
+	protected override doKeyDown_(evt: zk.Event): void {
 		if (this.getCtrlKeys() || this.isListen('onOK') || this.isListen('onCancel')) {
 			//B70-ZK-2532: if afterKeyDown_ doesn't handle evt, then propagate to super
 			if (!this.afterKeyDown_(evt))
-				this.$supers('doKeyDown_', arguments);
+				super.doKeyDown_(evt);
 		} else
-			this.$supers('doKeyDown_', arguments);
-	},
+			super.doKeyDown_(evt);
+	}
+
 	/**
 	 * Called after {@link zk.Widget#doKeyDown_} is called and the event
 	 * propagation is not stopped.
@@ -629,18 +685,19 @@ zul.Widget = zk.$extends(zk.Widget, {
 	 * @return boolean true if the event has been processed
 	 * @see #setCtrlKeys
 	 */
-	afterKeyDown_: function (evt/*, simulated*/) {
+	protected afterKeyDown_(evt: zk.Event/*, simulated*/): boolean | undefined {
 		var keyCode = evt.keyCode, evtnm = 'onCtrlKey', okcancel, commandKey = zk.mac && evt.metaKey;
 		switch (keyCode) {
-		case 13: //ENTER
-			var target = evt.domTarget, tn = jq.nodeName(target);
+		case 13: { //ENTER
+			const target = evt.domTarget!, tn = jq.nodeName(target);
 			if (tn == 'textarea' || (tn == 'button'
 			// if button's ID end with '-a' still fire onOK(Like Listbox and Menupopup)
 			&& (!target.id || !target.id.endsWith('-a')))
-			|| (tn == 'input' && target.type.toLowerCase() == 'button'))
+			|| (tn == 'input' && (target as HTMLInputElement).type.toLowerCase() == 'button'))
 				return; //don't change button's behavior (Bug 1556836)
 			okcancel = evtnm = 'onOK';
 			break;
+		}
 		case 27: //ESC
 			okcancel = evtnm = 'onCancel';
 			break;
@@ -661,7 +718,8 @@ zul.Widget = zk.$extends(zk.Widget, {
 			return;
 		}
 
-		var target = evt.target, wgt = target;
+		var target = evt.target,
+			wgt: zk.Widget & {_parsedCtlKeys?: ParsedCtlKeys} | null | undefined = target;
 		for (;; wgt = wgt.parent) {
 			if (!wgt) return;
 			if (!wgt.isListen(evtnm, {any: true})) continue;
@@ -687,7 +745,10 @@ zul.Widget = zk.$extends(zk.Widget, {
 		//Bug 3304408: SELECT fixes the selected index later than mousedown
 		//so we have to defer the firing of ctrl keys
 		setTimeout(function () {
-			for (var w = target; ; w = w.parent) {
+			interface WidgetBeforeCtrlKeys extends zk.Widget {
+				beforeCtrlKeys_?: Widget['beforeCtrlKeys_'];
+			}
+			for (var w: WidgetBeforeCtrlKeys = target!; ; w = w.parent!) {
 				if (w.beforeCtrlKeys_ && w.beforeCtrlKeys_(evt))
 					return;
 				if (w == wgt) break;
@@ -696,17 +757,12 @@ zul.Widget = zk.$extends(zk.Widget, {
 		}, 0);
 
 		evt.stop();
-		if (jq.nodeName(evt.domTarget, 'select'))
+		if (jq.nodeName(evt.domTarget!, 'select'))
 			evt.stop({dom: true, revoke: true}); //Bug 1756559: don't stop DOM since it affects IE and Opera's SELECT's closing dropdown
 
-		//Bug 2041347
-		if (zk.ie < 11 && keyCode == 112) {
-			zk._oldOnHelp = window.onhelp;
-			window.onhelp = function () {return false;};
-			setTimeout(function () {window.onhelp = zk._oldOnHelp; zk._oldOnHelp = null;}, 200);
-		}
 		return true; //handled
-	},
+	}
+
 	/**
 	 * Called before a control key is pressed. A control key includes onOK and
 	 * onCancel; refer to #setCtrlKeys for details.
@@ -717,22 +773,24 @@ zul.Widget = zk.$extends(zk.Widget, {
 	 * @return boolean if true, the widget want to abort the firing of the control
 	 * 		key. In other words, if true is returned, the control key is ignored.
 	 */
-	beforeCtrlKeys_: function (evt) {
+	protected beforeCtrlKeys_(evt: zk.Event): void {
+		// empty on purpose
 	}
-}, {
+
 	/** Returns the tooltip that is opened, or null if no tooltip is opened.
 	 * @return zk.Widget
 	 * @since 5.0.5
 	 */
-	getOpenTooltip: function () {
+	public static getOpenTooltip(): zul.wgt.Popup | null {
 		return _tt_tip && _tt_tip.isOpen() ? _tt_tip : null;
-	},
-	_getPopupPosition: function (params) {
+	}
+
+	public static _getPopupPosition(params: PopupParams): string | null {
 		if (params.position)
 			return params.position;
 		if ('x' in params || 'y' in params) // ZK-1655
 			return null;
 		return 'at_pointer';
 	}
-});
-})();
+}
+zul.Widget = Widget;
