@@ -23,6 +23,7 @@
     // "noUnusedParameters": true, // TODO
     // "exactOptionalPropertyTypes": true, // TODO
     "forceConsistentCasingInFileNames": true,
+    "allowUmdGlobalAccess": true,
     "types": [
       "webpack-env"
     ]
