@@ -15,45 +15,82 @@ it will be useful, but WITHOUT ANY WARRANTY.
 /**
  * A skeletal implementation for ZUL widgets that support both label and image.
  */
-zul.LabelImageWidget = zk.$extends(zul.Widget, {
-	_label: '',
+export abstract class LabelImageWidget extends zul.Widget {
+	private _label = '';
+	private _iconSclass?: string;
+	private _image?: string;
+	private _hoverImage?: string;
+	private _eimg?: HTMLImageElement | null;
+	private _preloadImage?: boolean;
 
-	$define: {
-		/** Sets the label.
-		 * <p>If label is changed, the whole component is invalidate.
-		 * Thus, you want to smart-update, you have to override {@link #updateDomContent_}.
-		 * @param String label
-		 */
-		/** Returns the label (never null).
-		 * <p>Default: "".
-		 * @return String
-		 */
-		label: _zkf = function () {
+	public _uplder?: zul.Upload | null;
+	public _autodisable_self?: boolean;
+	public abstract _autodisable: string | undefined;
+	public abstract _disabled: boolean | undefined;
+	public abstract setDisabled(disabled: boolean, opts?: Record<string, boolean>): this;
+	public abstract isDisabled(): boolean | undefined;
+	/** Sets the label.
+	 * <p>If label is changed, the whole component is invalidate.
+	 * Thus, you want to smart-update, you have to override {@link #updateDomContent_}.
+	 * @param String label
+	 */
+	public setLabel(label: string, opts?: Record<string, boolean>): this {
+		const o = this._label;
+		this._label = label;
+
+		if (o !== label || (opts && opts.force)) {
 			if (this.desktop)
 				this.updateDomContent_();
-		},
-		/**
-		 * Sets the icon font
-		 * @param String iconSclass a CSS class name for the icon font
-		 * @since 7.0.0
-		 */
-		/**
-		 * Returns the icon font
-		 * @return String iconSclass a CSS class name for the icon font
-		 * @since 7.0.0
-		 */
-		iconSclass: _zkf,
-		/** Sets the image URI. The image would hide if src == null </p>
-		 * @param String image the URI of the image
-		 */
-		/** Returns the image URI.
-		 * <p>Default: null.
-		 * @return String
-		 */
-		image: function (v) {
+		}
+
+		return this;
+	}
+
+	/** Returns the label (never null).
+	 * <p>Default: "".
+	 * @return String
+	 */
+	public getLabel(): string {
+		return this._label;
+	}
+
+	/**
+	 * Sets the icon font
+	 * @param String iconSclass a CSS class name for the icon font
+	 * @since 7.0.0
+	 */
+	public setIconSclass(iconSclass: string, opts?: Record<string, boolean>): this {
+		const o = this._iconSclass;
+		this._iconSclass = iconSclass;
+
+		if (o !== iconSclass || (opts && opts.force)) {
+			if (this.desktop)
+				this.updateDomContent_();
+		}
+
+		return this;
+	}
+
+	/**
+	 * Returns the icon font
+	 * @return String iconSclass a CSS class name for the icon font
+	 * @since 7.0.0
+	 */
+	public getIconSclass(): string | undefined {
+		return this._iconSclass;
+	}
+
+	/** Sets the image URI. The image would hide if src == null </p>
+	 * @param String image the URI of the image
+	 */
+	public setImage(v: string, opts?: Record<string, boolean>): this {
+		const o = this._image;
+		this._image = v;
+
+		if (o !== v || (opts && opts.force)) {
 			if (v && this._preloadImage) zUtl.loadImage(v);
 			var n = this.getImageNode(),
-				jqn = jq(n);
+				jqn = jq(n!);
 			if (n) {
 				var img = v || '';
 				if (jq.nodeName(n, 'img')) // ZK-1100
@@ -63,41 +100,62 @@ zul.LabelImageWidget = zk.$extends(zul.Widget, {
 				jqn[!img ? 'hide' : 'show']();
 			} else if (this.desktop) //<IMG> might not be generated (Bug 3007738)
 				this.updateDomContent_();
-		},
-		/** Sets the image URI.
-		 * The hover image is used when the mouse is moving over this component.
-		 * @param String src
-		 */
-		/** Returns the URI of the hover image.
-		 * The hover image is used when the mouse is moving over this component.
-		 * <p>Default: null.
-		 * @return String
-		 */
-		hoverImage: null
-	},
+		}
+
+		return this;
+	}
+
+	/** Returns the image URI.
+	 * <p>Default: null.
+	 * @return String
+	 */
+	public getImage(): string | undefined {
+		return this._image;
+	}
+
+	/** Sets the image URI.
+	 * The hover image is used when the mouse is moving over this component.
+	 * @param String src
+	 */
+	public setHoverImage(src: string): this {
+		this._hoverImage = src;
+		return this;
+	}
+
+	/** Returns the URI of the hover image.
+	 * The hover image is used when the mouse is moving over this component.
+	 * <p>Default: null.
+	 * @return String
+	 */
+	public getHoverImage(): string | undefined {
+		return this._hoverImage;
+	}
+
 	/**
 	 * Updates the DOM tree for the modified label and image. It is called by
 	 * {@link #setLabel} and {@link #setImage} to update the new content of the
 	 * label and/or image to the DOM tree.
 	 * Default: invoke {@link zk.Widget#rerender} to redraw and re-bind.
 	 */
-	updateDomContent_: function () {
+	protected updateDomContent_(): void {
 		this.rerender();
-	},
+	}
+
 	/**
 	 * Returns the HTML image content.
 	 * @return String
 	 */
-	domImage_: function () {
+	protected domImage_(): string {
 		var img = this._image;
 		return img ? '<img src="' + img + '" align="absmiddle" alt="" aria-hidden="true">' : '';
-	},
+	}
+
 	/**
 	 * Returns the icon font class name with HTML content.
 	 * @return String
 	 * @since 7.0.0
 	 */
-	domIcon_: function () {
+	protected domIcon_(): string {
 		var icon = this.getIconSclass(), // use getIconSclass() to allow overriding
 			result = '';
 		//ZK-3636: Added simple support for stacked font awesome icons
@@ -118,15 +176,17 @@ zul.LabelImageWidget = zk.$extends(zul.Widget, {
 			}
 		}
 		return result;
-	},
+	}
+
 	/**
 	 * Returns the encoded label.
 	 * @return String
 	 * @see zUtl#encodeXML
 	 */
-	domLabel_: function () {
+	protected domLabel_(): string {
 		return zUtl.encodeXML(this.getLabel());
-	},
+	}
+
 	/**
 	 * Returns the HTML content of the label and image.
 	 * It is a fragment of HTML that you can use in the mold.
@@ -134,7 +194,7 @@ zul.LabelImageWidget = zk.$extends(zul.Widget, {
 	 * @see #domImage_
 	 * @see #domLabel_
 	 */
-	domContent_: function () {
+	protected domContent_(): string {
 		var label = this.domLabel_(),
 			icon = this.domIcon_(),
 			img = this.domImage_();
@@ -148,39 +208,45 @@ zul.LabelImageWidget = zk.$extends(zul.Widget, {
 		} else {
 			return icon ? label ? icon + ' ' + label : icon : label;
 		}
-	},
-	doMouseOver_: function () {
+	}
+
+	protected override doMouseOver_(evt: zk.Event): void {
 		this._updateHoverImage(true);
-		this.$supers('doMouseOver_', arguments);
-	},
-	doMouseOut_: function () {
+		super.doMouseOver_(evt);
+	}
+
+	protected override doMouseOut_(evt: zk.Event): void {
 		this._updateHoverImage();
-		this.$supers('doMouseOut_', arguments);
-	},
+		super.doMouseOut_(evt);
+	}
+
 	/**
 	 * Returns the image node if any.
 	 * @return DOMElement
 	 */
-	getImageNode: function () {
+	public getImageNode(): HTMLImageElement | null | undefined {
 		if (!this._eimg && this._image) {
 			var n = this.$n();
-			if (n) this._eimg = jq(n).find('img:first')[0];
+			if (n) this._eimg = jq(n).find('img:first')[0] as HTMLImageElement;
 		}
 		return this._eimg;
-	},
-	_updateHoverImage: function (inHover) {
+	}
+
+	private _updateHoverImage(inHover?: boolean): void {
 		var n = this.getImageNode(),
 			img = inHover ? this._hoverImage : this._image;
 		if (n && this._hoverImage) {
 			if (jq.nodeName(n, 'img'))
-				n.src = img;
+				n.src = img!;
 			else
 				jq(n).css('background-image', 'url(' + img + ')');
 		}
-	},
-	//@Override
-	clearCache: function () {
-		this._eimg = null;
-		this.$supers('clearCache', arguments);
 	}
-});
+
+	//@Override
+	public override clearCache(): void {
+		this._eimg = null;
+		super.clearCache();
+	}
+}
+zul.LabelImageWidget = LabelImageWidget;
