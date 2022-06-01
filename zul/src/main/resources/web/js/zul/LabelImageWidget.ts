@@ -24,7 +24,6 @@ export abstract class LabelImageWidget extends zul.Widget {
 	private _preloadImage?: boolean;
 
 	public _uplder?: zul.Upload | null;
-	public _autodisable_self?: boolean;
 	public abstract _autodisable: string | undefined;
 	public abstract _disabled: boolean | undefined;
 	public abstract setDisabled(disabled: boolean, opts?: Record<string, boolean>): this;

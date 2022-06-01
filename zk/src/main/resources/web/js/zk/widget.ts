@@ -678,6 +678,7 @@ const _dragoptions: Partial<DraggableOptions> = {
  */
 // zk scope
 export class Widget extends ZKObject {
+	declare public _autodisable_self?: boolean;
 	declare public offsetWidth?;
 	declare public offsetHeight?;
 	declare public blankPreserved?: boolean;
@@ -732,7 +733,7 @@ export class Widget extends ZKObject {
 	declare private _height: StringFieldValue;
 	declare private _left: StringFieldValue;
 	declare private _top: StringFieldValue;
-	declare private _tooltiptext: StringFieldValue;
+	declare public _tooltiptext: StringFieldValue;
 	declare private _droppable: StringFieldValue;
 	declare private _dropTypes: string[] | null;
 	declare private _fitSizeListened: boolean | undefined;
