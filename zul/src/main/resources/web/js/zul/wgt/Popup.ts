@@ -1,4 +1,4 @@
-/* Popup.js
+/* Popup.ts
 
 	Purpose:
 
