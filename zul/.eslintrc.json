@@ -51,8 +51,8 @@
       }
     ],
     "no-empty-function": "error",
-    "no-eval": "error",
-    "no-implied-eval": "error",
+    "no-eval": "warn",
+    "no-implied-eval": "warn",
     "no-var": "off",
     // Layout & Formatting
     "brace-style": [
@@ -156,6 +156,7 @@
         "allowSingleExtends": true
       }
     ],
+    "@typescript-eslint/no-implied-eval": "warn",
     "@typescript-eslint/no-namespace": [
       "error",
       {
