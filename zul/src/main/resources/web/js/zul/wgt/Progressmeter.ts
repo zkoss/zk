@@ -17,39 +17,59 @@ it will be useful, but WITHOUT ANY WARRANTY.
  *
  * <p>Default {@link #getZclass}: z-progressmeter.
  */
-zul.wgt.Progressmeter = zk.$extends(zul.Widget, {
-	_value: 0,
-	_indeterminate: false,
-	_indeterminateAnimation: false,
+export class Progressmeter extends zul.Widget {
+	private _value = 0;
+	private _indeterminate = false;
+	private _indeterminateAnimation = false;
 
-	$define: {
-		/** Returns the current value of the progress meter.
-		 * @return int
-		 */
-		/** Sets the current value of the progress meter.
-		 * <p>Range: 0~100.
-		 * @param int value
-		 */
-		value: function () {
+	/** Returns the current value of the progress meter.
+	 * @return int
+	 */
+	public getValue(): number {
+		return this._value;
+	}
+
+	/** Sets the current value of the progress meter.
+	 * <p>Range: 0~100.
+	 * @param int value
+	 */
+	public setValue(value: number, opts?: Record<string, boolean>): this {
+		const o = this._value;
+		this._value = value;
+
+		if (o !== value || (opts && opts.force)) {
 			if (this.$n())
 				this._fixImgWidth();
-		},
-		/** Returns the indeterminate state of the progress meter.(default false)
-		 * @return boolean
-		 */
-		/** Sets the indeterminate state of the progress meter.
-		 * @param boolean indeterminate
-		 */
-		indeterminate: function (indeterminate) {
+		}
+
+		return this;
+	}
+
+	/** Returns the indeterminate state of the progress meter.(default false)
+	 * @return boolean
+	 */
+	public isIndeterminate(): boolean {
+		return this._indeterminate;
+	}
+
+	/** Sets the indeterminate state of the progress meter.
+	 * @param boolean indeterminate
+	 */
+	public setIndeterminate(indeterminate: boolean, opts?: Record<string, boolean>): this {
+		const o = this._indeterminate;
+		this._indeterminate = indeterminate;
+
+		if (o !== indeterminate || (opts && opts.force)) {
 			if (this.$n()) {
-				jq(this.$n()).toggleClass(this.$s('indeterminate'), indeterminate);
-				this._handleIndeterminateAnimation();
+				jq(this.$n()!).toggleClass(this.$s('indeterminate'), indeterminate);
 			}
 		}
-	},
+
+		return this;
+	}
 
 	//super//
-	_fixImgWidth: _zkf = function () {
+	private _fixImgWidth(): void {
 		var n = this.$n(),
 			img = this.$n('img');
 		if (img) {
@@ -61,50 +81,35 @@ zul.wgt.Progressmeter = zk.$extends(zul.Widget, {
 				}, { duration: $img.zk.getAnimationSpeed('slow'), queue: false, easing: 'linear' }); //ZK-4079: progressmeter animation not catching up with actual value
 			}
 		}
-	},
-	_handleIndeterminateAnimation: zk.ie9 ? function () { // ZK-3629: for ie9 indetermination animation
-		var $img = jq(this.$n('img'));
-		if (this._indeterminate) {
-			$img.css({width: '50%'});
-			this._startIndeterminateAnimation($img);
-			this._indeterminateAnimation = true;
-		} else if (this._indeterminateAnimation) {
-			$img.stop(true);
-			this._indeterminateAnimation = false;
-			this._fixImgWidth();
-		}
-	} : zk.$void,
-	_startIndeterminateAnimation: function (target) { // ZK-3629: for ie9 indetermination animation
-		var self = this;
-		target.css({left: '-100%'});
-		target.animate({
-			left: '100%',
-		}, 1500, 'linear', function () {
-			self._startIndeterminateAnimation(target);
-		});
-	},
-	onSize: _zkf,
-	bind_: function () {//after compose
-		this.$supers(zul.wgt.Progressmeter, 'bind_', arguments);
-		this._fixImgWidth(this._value);
-		this._handleIndeterminateAnimation();
-		zWatch.listen({onSize: this});
-	},
-	unbind_: function () {
-		zWatch.unlisten({onSize: this});
-		this.$supers(zul.wgt.Progressmeter, 'unbind_', arguments);
-	},
-	setWidth: function (val) {
-		this.$supers('setWidth', arguments);
+	}
+
+	public override onSize(): void {
 		this._fixImgWidth();
-	},
-	domClass_: function (no) {
-		var scls = this.$supers('domClass_', arguments);
+	}
+
+	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {//after compose
+		super.bind_(desktop, skipper, after);
+		this._fixImgWidth();
+		zWatch.listen({onSize: this});
+	}
+
+	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+		zWatch.unlisten({onSize: this});
+		super.unbind_(skipper, after, keepRod);
+	}
+
+	public override setWidth(val?: string | null): void {
+		super.setWidth(val);
+		this._fixImgWidth();
+	}
+
+	protected override domClass_(no?: Partial<zk.DomClassOptions>): string {
+		var scls = super.domClass_(no);
 		if (!no || !no.zclass) {
 			if (this._indeterminate)
 				scls += ' ' + this.$s('indeterminate');
 		}
 		return scls;
 	}
-});
-
+}
+zul.wgt.Progressmeter = Progressmeter;
