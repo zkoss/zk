@@ -228,6 +228,8 @@ declare namespace zk {
 	type DomAttrsOptions = import('./widget').DomAttrsOptions;
 	type DomClassOptions = import('./widget').DomClassOptions;
 	type DomStyleOptions = import('./widget').DomStyleOptions;
+	type EventMetaData = import('./dom').EventMetaData;
+	type FlexOrient = import('./flex').FlexOrient;
 	namespace eff {
 		type Mask = import('./effect').Mask;
 	}

@@ -678,7 +678,10 @@ const _dragoptions: Partial<DraggableOptions> = {
  */
 // zk scope
 export class Widget extends ZKObject {
+	// declare public _uplder?: zul.Upload | null;
 	declare public _autodisable_self?: boolean;
+	declare public _uploading?: boolean;
+	
 	declare public offsetWidth?;
 	declare public offsetHeight?;
 	declare public blankPreserved?: boolean;
@@ -729,8 +732,8 @@ export class Widget extends ZKObject {
 	declare private _subzcls: Record<string, string>;
 	declare private _sclass: StringFieldValue;
 	declare private _zclass: StringFieldValue;
-	declare private _width: StringFieldValue;
-	declare private _height: StringFieldValue;
+	declare public _width: StringFieldValue;
+	declare public _height: StringFieldValue;
 	declare private _left: StringFieldValue;
 	declare private _top: StringFieldValue;
 	declare public _tooltiptext: StringFieldValue;
@@ -1488,7 +1491,7 @@ wgt.$f().main.setTitle("foo");
 	 * If omitted, it won't search all ID spaces.
 	 * @return zk.Widget
 	 */
-	public $f(id: string, global: boolean): Widget | null {
+	public $f(id: string, global?: boolean): Widget | null {
 		var f = this.$o();
 		if (!arguments.length)
 			return f ? f._fellows : {};
@@ -3763,7 +3766,7 @@ unbind_: function (skipper, after) {
 		return {height: zkp.contentHeight(), width: zkp.contentWidth()};
 	}
 
-	public getMarginSize_(attr: string): number { //'w' for width or 'h' for height
+	public getMarginSize_(attr: FlexOrient): number { //'w' for width or 'h' for height
 		return zk(this).sumStyles(attr == 'h' ? 'tb' : 'lr', jq.margins);
 	}
 
@@ -4314,7 +4317,7 @@ focus_: function (timeout) {
 	 * @return boolean whether to ignore it
 	 * @since 5.0.1
 	 */
-	public shallIgnoreClick_(evt: Event): boolean {
+	public shallIgnoreClick_(evt: Event): boolean | undefined {
 		return false;
 	}
 
@@ -5037,7 +5040,7 @@ _doFooSelect: function (evt) {
 	 * @return zk.Widget this widget
 	 * @see #domUnlisten_
 	 */
-	protected domListen_(n: HTMLElement, evtnm: string, fn?: string | Callable, keyword?: string): this {
+	public domListen_(n: HTMLElement, evtnm: string, fn?: string | Callable, keyword?: string): this {
 		if (!this.$weave) {
 			var inf = _domEvtInf(this, evtnm, fn, keyword);
 			jq(n, zk).on(inf[0], inf[1]);
