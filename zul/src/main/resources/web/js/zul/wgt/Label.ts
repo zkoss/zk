@@ -1,4 +1,4 @@
-/* Label.js
+/* Label.ts
 
 	Purpose:
 
