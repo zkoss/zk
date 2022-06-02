@@ -708,7 +708,7 @@ export class Widget extends ZKObject {
 	declare public _flexFixed;
 	declare public _nvflex;
 	declare public _nhflex;
-	declare public _hflexsz;
+	declare public _hflexsz?: number;
 	declare public _vflexsz;
 
 	declare private _binding;
@@ -731,7 +731,7 @@ export class Widget extends ZKObject {
 	declare private _subnodes: Record<string, HTMLElement | string | null | undefined>;
 	declare private _subzcls: Record<string, string>;
 	declare private _sclass: StringFieldValue;
-	declare private _zclass: StringFieldValue;
+	declare protected _zclass: StringFieldValue;
 	declare public _width: StringFieldValue;
 	declare public _height: StringFieldValue;
 	declare private _left: StringFieldValue;
@@ -747,7 +747,7 @@ export class Widget extends ZKObject {
 	declare public static molds;
 
 	public _visible = true;
-	private _mold = 'default';
+	protected _mold = 'default';
 	protected _style: StringFieldValue;
 	private _renderdefer = -1;
 
@@ -3829,7 +3829,7 @@ unbind_: function (skipper, after) {
 		zFlex.fixFlex(this);
 	}
 
-	protected fixMinFlex_(n: HTMLElement, orient: FlexOrient): number { //internal use
+	public fixMinFlex_(n: HTMLElement, orient: FlexOrient): number { //internal use
 		return zFlex.fixMinFlex(this, n, orient);
 	}
 
@@ -3846,7 +3846,7 @@ unbind_: function (skipper, after) {
 		n.style[orient == 'w' ? 'width' : 'height'] = '';
 	}
 
-	public getFlexContainer_(): HTMLElement | undefined {
+	public getFlexContainer_(): HTMLElement | null | undefined {
 		return this.getCaveNode();
 	}
 
