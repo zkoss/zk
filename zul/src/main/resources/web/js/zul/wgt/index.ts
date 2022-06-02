@@ -5,7 +5,7 @@ export * from './Div';
 // export * from './Span';
 // export * from './Idspace';
 // export * from './Include';
-// export * from './Label';
+export * from './Label';
 // export * from './Button';
 export * from './Separator';
 // export * from './Space';
