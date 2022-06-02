@@ -7,7 +7,7 @@ export * from './Div';
 // export * from './Include';
 // export * from './Label';
 // export * from './Button';
-// export * from './Separator';
+export * from './Separator';
 // export * from './Space';
 // export * from './Caption';
 // export * from './Checkbox';
