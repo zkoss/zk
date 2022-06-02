@@ -24,7 +24,7 @@ export * from './Popup';
 // export * from './Area';
 // export * from './Chart';
 // export * from './Captcha';
-// export * from './Progressmeter';
+export * from './Progressmeter';
 // export * from './Fileupload';
 // export * from './Combobutton';
 // export * from './Selectbox';
