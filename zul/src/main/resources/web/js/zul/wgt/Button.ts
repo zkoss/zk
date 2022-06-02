@@ -1,4 +1,4 @@
-/* Button.js
+/* Button.ts
 
 	Purpose:
 
