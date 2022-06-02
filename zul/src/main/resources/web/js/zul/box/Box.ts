@@ -1,4 +1,4 @@
-/* Box.js
+/* Box.ts
 
 	Purpose:
 
