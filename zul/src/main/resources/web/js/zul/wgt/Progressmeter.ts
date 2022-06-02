@@ -1,4 +1,4 @@
-/* Progressmeter.js
+/* Progressmeter.ts
 
 	Purpose:
 
