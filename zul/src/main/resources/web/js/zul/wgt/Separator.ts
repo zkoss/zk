@@ -1,4 +1,4 @@
-/* Separator.js
+/* Separator.ts
 
 	Purpose:
 
