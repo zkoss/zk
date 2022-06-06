@@ -532,7 +532,6 @@ export class Uploader extends zk.Object {
 	 * Cancels the uploader to upload.
 	 */
 	public cancel(): void {
-		// zul.Uploader.clearInterval(this.id); // FIXME: bug?
 		if (this._upload)
 			this._upload.cancel(this._sid);
 	}
@@ -690,14 +689,14 @@ export class UploadManager extends zul.wgt.Popup {
 	 * Updates the status of the file item.
 	 * @param zul.Uploader uplder
 	 * @param int val how many percentage being uploaded
-	 * @param int total the size of the file
+	 * @param string total the size of the file
 	 */
-	public updateFile(uplder: zul.Uploader, val: number, total: number): void {
+	public updateFile(uplder: zul.Uploader, val: number, total: string): void {
 		var id = uplder.id,
 			prog = this.getFileItem(id);
 		if (!prog) return;
 		(prog.$f(id) as zul.wgt.Progressmeter).setValue(val);
-		(prog.$f(id + '_total') as zul.wgt.Progressmeter).setValue(total);
+		(prog.$f(id + '_total') as zul.wgt.Label).setValue(total);
 	}
 
 	/**
@@ -720,16 +719,15 @@ export class UploadManager extends zul.wgt.Popup {
 	 * @param zk.Widget wgt the wgt where the file manager is shown
 	 * @param String position the position where the file manager is located
 	 */
-	// Dirty hack to work around subtyping restrictions
-	// eslint-disable-next-line @typescript-eslint/explicit-member-accessibility
-	declare open;
+	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+	// @ts-ignore
+	public open(wgt: zk.Widget | null, position?: string): void {
+		super.open(wgt, null, position || 'after_start', {
+			sendOnOpen: false,
+			disableMask: true
+		});
+	}
 }
-UploadManager.prototype.open = function (this: UploadManager, wgt: zk.Widget | null, position?: string): void {
-	(this.constructor.prototype as zul.wgt.Popup).open(wgt, null, position || 'after_start', {
-		sendOnOpen: false,
-		disableMask: true
-	});
-};
 
 /**
  * Default file viewer to see the upload status.
@@ -758,8 +756,8 @@ export class UploadViewer extends zk.Object {
 		if (flman) {
 			if (!flman.isOpen())
 					flman.open(this._uplder.getWidget()); // eslint-disable-line @typescript-eslint/no-unsafe-call
-			const acc = msgzk.FILE_SIZE + Math.round(total / 1024) + msgzk.KBYTES; // FIXME: bug?
-			flman.updateFile(this._uplder, sent, acc as unknown as number);
+			const acc = msgzk.FILE_SIZE + Math.round(total / 1024) + msgzk.KBYTES;
+			flman.updateFile(this._uplder, sent, acc);
 		}
 	}
 
