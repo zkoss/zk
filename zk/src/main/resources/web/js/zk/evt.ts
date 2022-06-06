@@ -35,6 +35,10 @@ export interface EventOptions {
 		coords: [number, number];
 	};
 	dir: string;
+	uploadCallback: { // zul.Uploader.prototype.start
+		onprogress(event): void;
+		onload(evemt): void;
+	};
 }
 
 export interface EventStopOptions {

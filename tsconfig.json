@@ -18,11 +18,13 @@
     //    "noUnusedLocals": true,
     "noImplicitAny": false, // leave this for js compatible
     "forceConsistentCasingInFileNames": true,
-    "typeRoots": [
-      "./@types/"
-    ],
+    "allowUmdGlobalAccess": true,
+    // "typeRoots": [
+    //   "./@types/"
+    // ],
     "types": [
       "zk",
+      "zul",
       "webpack-env"
     ]
   },

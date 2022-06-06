@@ -839,7 +839,7 @@ Object.assign(zjq.prototype, {
 				// for B65-ZK-2193.zul, to have better scrollIntoView's behavior
 				if (!isAbsolute && zk.isLoaded('zul.sel')) {
 					var w = zk.Widget.$(n);
-					isAbsolute = w && w instanceof zul.sel['ItemWidget'];
+					isAbsolute = w && w instanceof zul.sel.ItemWidget;
 				}
 
 				if (isAbsolute) {

@@ -407,7 +407,7 @@ export class Box extends zul.Widget {
 	 * @param Array out an array of HTML fragments.
 	 * @return String
 	 */
-	protected encloseChildHTML_(child: zk.Widget, prefixSpace?: boolean, out?: string[]): string | undefined {
+	protected encloseChildHTML_(child: zk.Widget, prefixSpace?: boolean, out?: string[]): string | void {
 		var oo: string[] = [],
 			isCell = child.$instanceof(zul.wgt.Cell);
 		if (this.isVertical()) {
