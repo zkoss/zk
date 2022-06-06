@@ -58,7 +58,7 @@ function _tt_begin(tip: zul.wgt.Popup, ref: zul.Widget, params: PopupParams, eve
 		_tt_clearClosing_();
 }
 function _tt_end(ref: zul.Widget): void {
-	if (_tt_ref == ref || _tt_tip == ref) {
+	if (_tt_ref == ref || (_tt_tip as unknown as zul.Widget) == ref) {
 		_tt_clearClosing_(); //just in case
 		_tt_tmClosing = setTimeout(_tt_close_, 100);
 		//don't cloes immediate since user might move from ref to toolip
@@ -773,7 +773,7 @@ export class Widget extends zk.Widget {
 	 * @return boolean if true, the widget want to abort the firing of the control
 	 * 		key. In other words, if true is returned, the control key is ignored.
 	 */
-	protected beforeCtrlKeys_(evt: zk.Event): void {
+	protected beforeCtrlKeys_(_evt: zk.Event): void {
 		// empty on purpose
 	}
 

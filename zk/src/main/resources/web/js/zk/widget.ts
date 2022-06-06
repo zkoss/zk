@@ -678,7 +678,7 @@ const _dragoptions: Partial<DraggableOptions> = {
  */
 // zk scope
 export class Widget extends ZKObject {
-	// declare public _uplder?: zul.Upload | null;
+	declare public _uplder?: zul.Upload | null;
 	declare public _autodisable_self?: boolean;
 	declare public _uploading?: boolean;
 	

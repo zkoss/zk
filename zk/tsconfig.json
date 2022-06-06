@@ -25,7 +25,8 @@
     "forceConsistentCasingInFileNames": true,
     "allowUmdGlobalAccess": true,
     "types": [
-      "webpack-env"
+      "webpack-env",
+      "zul"
     ]
   },
   "include": [

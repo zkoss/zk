@@ -186,7 +186,7 @@ export class Popup extends zul.Widget {
 	/** The handling after the opening effect of popup.
 	 * @since 6.0.1
 	 */
-	 protected afterOpenAnima_(ref?: Ref | null, offset?: zk.Offset | null, position?: string | null, opts?: PopupOptions | null): void {
+	 protected afterOpenAnima_(ref?: Ref | null, _offset?: zk.Offset | null, _position?: string | null, opts?: PopupOptions | null): void {
 		var node = this.$n(),
 			sendOnOpen = opts && opts.sendOnOpen;
 		// B85-ZK-3606: for adjusting popup position
@@ -294,7 +294,7 @@ export class Popup extends zul.Widget {
 		}
 	}
 
-	protected _posInfo(ref?: Ref | null, offset?: zk.Offset | null, position?: string | null, opts?: PopupOptions | null): PositionInfo | undefined {
+	protected _posInfo(ref?: Ref | null, offset?: zk.Offset | null, position?: string | null, _opts?: PopupOptions | null): PositionInfo | void {
 		var pos: string | undefined,
 			dim: zk.Dimension | undefined;
 
@@ -506,11 +506,11 @@ export class Popup extends zul.Widget {
 			zWatch.fireDown('onShow', this);
 	}
 
-	protected prologHTML_(out: string[]): void {
+	protected prologHTML_(_out: string[]): void {
 		// empty on purpose
 	}
 
-	protected epilogHTML_(out: string[]): void {
+	protected epilogHTML_(_out: string[]): void {
 		// empty on purpose
 	}
 

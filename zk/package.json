@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "description": "Core ZK frontend functionality",
   "main": "codegen/resources/web/index.js",
-  "devDependencies": {},
+  "devDependencies": {
+    "zul": "^0.1.0"
+  },
   "scripts": {},
   "keywords": [
     "zk"

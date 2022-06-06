@@ -4,29 +4,31 @@
     "lib": [
       "esnext",
       "dom",
+      "ScriptHost" // declare var ActiveXObject: (type: string) => void;
     ],
     "module": "commonjs",
-    "allowJs": false, // prevent importing JS files from TS
+    "allowJs": true,
     "noEmit": true, // type checking only
     "strict": true,
-    // Rules
-    // "exactOptionalPropertyTypes": true,
-    "forceConsistentCasingInFileNames": true,
-    "importsNotUsedAsValues": "error",
-    "isolatedModules": true,
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitAny": false,
-    "noImplicitOverride": true,
-    "noImplicitReturns": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
+    "allowSyntheticDefaultImports": true,
     "allowUmdGlobalAccess": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": false, // leave this for js compatible,
+    "noImplicitOverride": true,
+    "noUnusedLocals": true,
+    "useUnknownInCatchVariables": false,
     "types": [
-      // "webpack-env",
+      "webpack-env",
       "zk"
     ]
   },
   "include": [
     "./src/main/resources/web/js",
+  ],
+  "exclude": [
+    "./src/main/resources/web/js/zul/wgt/A.ts",
+    "./src/main/resources/web/js/zul/wgt/Checkbox.ts",
+    "./src/main/resources/web/js/zul/wgt/Inputgroup.ts",
+    "./src/main/resources/web/js/zul/med/Track.ts"
   ]
 }

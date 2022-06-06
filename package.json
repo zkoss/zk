@@ -59,6 +59,7 @@
     "zkless-engine": "^1.1.10"
   },
   "workspaces": [
-    "zk"
+    "zk",
+    "zul"
   ]
 }
