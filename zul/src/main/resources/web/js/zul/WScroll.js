@@ -1,4 +1,4 @@
-/* WScroll.ts
+/* WScroll.js
 
 	Purpose:
 
