@@ -23,10 +23,15 @@ export abstract class LabelImageWidget extends zul.Widget {
 	private _eimg?: HTMLImageElement | null;
 	private _preloadImage?: boolean;
 
-	public abstract _autodisable?: string;
-	public abstract _disabled?: boolean;
+	public _autodisable?: string;
+	public abstract setAutodisable(autodisable: string): this
+	public abstract getAutodisable(): string | undefined
+
+	protected _adbs?: boolean;
+	public _disabled?: boolean;
 	public abstract setDisabled(disabled: boolean, opts?: Record<string, boolean>): this;
 	public abstract isDisabled(): boolean | undefined;
+
 	/** Sets the label.
 	 * <p>If label is changed, the whole component is invalidate.
 	 * Thus, you want to smart-update, you have to override {@link #updateDomContent_}.
@@ -247,4 +252,6 @@ export abstract class LabelImageWidget extends zul.Widget {
 		super.clearCache();
 	}
 }
-zul.LabelImageWidget = LabelImageWidget;
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+zul.LabelImageWidget = zk.regClass(LabelImageWidget);

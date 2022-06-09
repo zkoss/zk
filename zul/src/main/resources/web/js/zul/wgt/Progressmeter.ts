@@ -112,4 +112,4 @@ export class Progressmeter extends zul.Widget {
 		return scls;
 	}
 }
-zul.wgt.Progressmeter = Progressmeter;
+zul.wgt.Progressmeter = zk.regClass(Progressmeter);

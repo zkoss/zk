@@ -148,4 +148,4 @@ export class Label extends zul.Widget {
 		return o;
 	}
 }
-zul.wgt.Label = Label;
+zul.wgt.Label = zk.regClass(Label);

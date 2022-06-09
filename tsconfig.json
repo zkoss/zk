@@ -19,9 +19,6 @@
     "noImplicitAny": false, // leave this for js compatible
     "forceConsistentCasingInFileNames": true,
     "allowUmdGlobalAccess": true,
-    // "typeRoots": [
-    //   "./@types/"
-    // ],
     "types": [
       "zk",
       "zul",
@@ -29,8 +26,7 @@
     ]
   },
   "include": [
-    "zk/src/main/resources/web/js/zk/*",
-    //    "zul/src/main/resources/web/js/zul/**/*"
+    "zk/src/main/resources/web/js/zk/*"
   ],
   "exclude": [
     "node_modules",

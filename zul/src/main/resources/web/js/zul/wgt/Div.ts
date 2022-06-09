@@ -54,3 +54,4 @@ export class Div extends zul.Widget {
 		return align != null ? attr + ' align="' + align + '"' : attr;
 	}
 }
+zul.wgt.Div = zk.regClass(Div);

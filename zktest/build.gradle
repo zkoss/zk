@@ -30,11 +30,19 @@ repositories {
 	}
 
 	maven {
+		url = uri('https://maven.zkoss.org/repo/zk/ee')
+	}
+
+	maven {
 		url = uri('https://repo.maven.apache.org/maven2/')
 	}
 
 	maven {
 		url = uri('https://maven.seasar.org/maven2')
+	}
+
+	maven {
+		url = uri('https://repository.jboss.org/nexus/content/groups/public-jboss/')
 	}
 
 	maven {

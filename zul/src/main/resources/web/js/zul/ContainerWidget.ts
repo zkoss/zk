@@ -26,4 +26,4 @@ it will be useful, but WITHOUT ANY WARRANTY.
  *
  */
 export class ContainerWidget extends zul.Widget {}
-zul.ContainerWidget = ContainerWidget;
+zul.ContainerWidget = zk.regClass(ContainerWidget);

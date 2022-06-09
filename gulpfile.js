@@ -101,9 +101,13 @@ function typescript_build(src, dest, force) {
 	// overwrite (stream 3 explicitly ignores `*.js` in `gulp.src()`).
 	return mergeStream(
 		// Transpile single files with babel which are not siblings of some `index.ts`
-		gulp.src('/**/*.js', { // stream 1
+		gulp.src('/**/@(*.ts|*.js)', { // stream 1
 				root: src,
+				ignore: ['/**/*.d.ts'],
 			})
+			.pipe(gulpIgnore.exclude(
+				file => fs.existsSync(path.join(path.dirname(file.path), 'index.ts'))
+			))
 			.pipe(babel({
 				root: __dirname
 			}))
@@ -116,14 +120,9 @@ function typescript_build(src, dest, force) {
 			.pipe(gulp.dest(dest))
 			.pipe(print()),
 		// Bundle `index.ts` with webpack
-		gulp.src('/**/*.ts', { // stream 2
+		gulp.src('/**/index.ts', { // stream 2
 				root: src,
-				ignore: ['/**/*.d.ts'],
 			})
-			.pipe(gulpIgnore.exclude(
-				file => path.basename(file.path) !== 'index.ts' &&
-					fs.existsSync(path.join(path.dirname(file.path), 'index.ts'))
-			))
 			// There is no official way to specify the "library" property in a
 			// webpack "entry" from webpack-stream, so we manipulate the stream
 			// manually; note that specifying the "library" property in "output"

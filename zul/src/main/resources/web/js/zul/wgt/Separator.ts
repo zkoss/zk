@@ -25,8 +25,8 @@ let _shallFixPercent: (wgt: zul.wgt.Separator) => boolean =
  * A separator.
  *  <p>Default {@link #getZclass} is "z-separator".
  */
- export class Separator extends zul.Widget {
-	private _orient = 'horizontal';
+export class Separator extends zul.Widget {
+	public _orient = 'horizontal';
 	private _bar = false;
 	public _spacing?: string;
 
@@ -134,4 +134,4 @@ let _shallFixPercent: (wgt: zul.wgt.Separator) => boolean =
 			|| _shallFixPercent(this) ? hgh : this._spacing;
 	}
 }
-zul.wgt.Separator = Separator;
+zul.wgt.Separator = zk.regClass(Separator);
