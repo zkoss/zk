@@ -375,7 +375,7 @@ export class Upload extends zk.Object {
 
 	public static files: Uploader[] = [];
 }
-zul.Upload = Upload;
+zul.Upload = zk.regClass(Upload);
 /**
  * Default file uploader for the upload widget.
  * <p> One upload widget can have multi-instance of uploader to upload multiple
@@ -590,7 +590,7 @@ export class Uploader extends zk.Object {
 		}
 	}
 }
-zul.Uploader = Uploader;
+zul.Uploader = zk.regClass(Uploader);
 
 // default UploadViewer
 function _addUM(uplder: Uploader, _flnm: string): void {
@@ -607,126 +607,136 @@ function _addUM(uplder: Uploader, _flnm: string): void {
 	flman.addFile(uplder);
 }
 function _initUM(uplder: Uploader, flnm: string): void {
-	// zul.UploadManager is declared to exist in global.d.ts but isn't initialized.
-	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 	if (zul.UploadManager)
 		return _addUM(uplder, flnm);
 
 	zk.load('zul.wgt,zul.box', function () {
-		zul.UploadManager = UploadManager;
+		/**
+		 * Default file upload manager to manage the uploading files in a panel.
+		 * Users can add/delete the file upon the panel.
+		 */
+		class UploadManager extends zul.wgt.Popup {
+			private _files: Record<string, zul.wgt.Div>;
+			public constructor() {
+				super();
+				this._files = {};
+				this.setSclass('z-fileupload-manager');
+			}
+
+			public override onFloatUp(_ctl: zk.ZWatchController): void {
+				if (!this.isVisible())
+					return;
+				this.setTopmost();
+			}
+
+			/**
+			 * Returns the file item.
+			 * @param String id the ID of the file or the ID of upload widget
+			 * @return zul.wgt.Div the file item widget.
+			 */
+			public getFileItem(id: string): zul.wgt.Div {
+				return this._files[id] || zk.Widget.$(id);
+			}
+
+			/**
+			 * Adds the file item to upload.
+			 * @param zul.Uploader uplder
+			 * @return zul.wgt.Div the file item widget
+			 */
+			public addFile(uplder: zul.Uploader): zul.wgt.Div {
+				var id = uplder.id,
+					flnm = uplder.flnm,
+					prog = this.getFileItem(id);
+				if (!prog) {
+					prog = new zul.wgt.Div({
+						uuid: id,
+						children: [new zul.wgt.Label({
+							value: flnm + ':'
+						}), new zul.box.Box({
+							mold: 'horizontal',
+							children: [new zul.wgt.Progressmeter({
+								id: id,
+								sclass: 'z-fileupload-progress'
+							}),
+							new zul.wgt.Div({
+								sclass: 'z-fileupload-remove z-icon-times',
+								listeners: {
+									onClick: function () {
+										uplder.cancel();
+									}
+								}
+							})]
+						}), new zul.wgt.Label({id: id + '_total'}), new zul.wgt.Separator()]
+					});
+					// Bug 2987059: IE may cause JS error in the appendChild()
+					try {
+						this.appendChild(prog);
+					} catch (e) {
+						zk.debugLog((e as Error).message || e as string);
+					}
+					this._files[id] = prog;
+				}
+				return prog;
+			}
+
+			/**
+			 * Updates the status of the file item.
+			 * @param zul.Uploader uplder
+			 * @param int val how many percentage being uploaded
+			 * @param string total the size of the file
+			 */
+			public updateFile(uplder: zul.Uploader, val: number, total: string): void {
+				var id = uplder.id,
+					prog = this.getFileItem(id);
+				if (!prog) return;
+				(prog.$f(id) as zul.wgt.Progressmeter).setValue(val);
+				(prog.$f(id + '_total') as zul.wgt.Label).setValue(total);
+			}
+
+			/**
+			 * Removes the file item.
+			 * @param zul.Uploader uplder
+			 */
+			public removeFile(uplder: zul.Uploader): void {
+				var id = uplder.id,
+					prog = this.getFileItem(id);
+				if (prog)
+					prog.detach();
+				delete this._files[id];
+				var close = Object.keys(this._files).length === 0;
+				if (close)
+					this.close();
+			}
+
+			/**
+			 * Opens the file manager to show.
+			 * @param zk.Widget wgt the wgt where the file manager is shown
+			 * @param String position the position where the file manager is located
+			 */
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+			// @ts-ignore
+			public override open(wgt: zk.Widget | null, position?: string): void {
+				super.open(wgt, null, position || 'after_start', {
+					sendOnOpen: false,
+					disableMask: true
+				});
+			}
+		}
+		zul.UploadManager = zk.regClass(UploadManager);
 		_addUM(uplder, flnm);
 	});
 }
-/**
- * Default file upload manager to manage the uploading files in a panel.
- * Users can add/delete the file upon the panel.
- */
-export class UploadManager extends zul.wgt.Popup {
-	private _files: Record<string, zul.wgt.Div>;
-	public constructor() {
-		super();
-		this._files = {};
-		this.setSclass('z-fileupload-manager');
-	}
 
-	public override onFloatUp(_ctl: zk.ZWatchController): void {
-		if (!this.isVisible())
-			return;
-		this.setTopmost();
-	}
-
-	/**
-	 * Returns the file item.
-	 * @param String id the ID of the file or the ID of upload widget
-	 * @return zul.wgt.Div the file item widget.
-	 */
-	public getFileItem(id: string): zul.wgt.Div {
-		return this._files[id] || zk.Widget.$(id);
-	}
-
-	/**
-	 * Adds the file item to upload.
-	 * @param zul.Uploader uplder
-	 * @return zul.wgt.Div the file item widget
-	 */
-	public addFile(uplder: zul.Uploader): zul.wgt.Div {
-		var id = uplder.id,
-			flnm = uplder.flnm,
-			prog = this.getFileItem(id);
-		if (!prog) {
-			prog = new zul.wgt.Div({
-				uuid: id,
-				children: [new zul.wgt.Label({
-					value: flnm + ':'
-				}), new zul.box.Box({
-					mold: 'horizontal',
-					children: [new zul.wgt.Progressmeter({
-						id: id,
-						sclass: 'z-fileupload-progress'
-					}),
-					new zul.wgt.Div({
-						sclass: 'z-fileupload-remove z-icon-times',
-						listeners: {
-							onClick: function () {
-								uplder.cancel();
-							}
-						}
-					})]
-				}), new zul.wgt.Label({id: id + '_total'}), new zul.wgt.Separator()]
-			});
-			// Bug 2987059: IE may cause JS error in the appendChild()
-			try {
-				this.appendChild(prog);
-			} catch (e) {
-				zk.debugLog((e as Error).message || e as string);
-			}
-			this._files[id] = prog;
-		}
-		return prog;
-	}
-
-	/**
-	 * Updates the status of the file item.
-	 * @param zul.Uploader uplder
-	 * @param int val how many percentage being uploaded
-	 * @param string total the size of the file
-	 */
-	public updateFile(uplder: zul.Uploader, val: number, total: string): void {
-		var id = uplder.id,
-			prog = this.getFileItem(id);
-		if (!prog) return;
-		(prog.$f(id) as zul.wgt.Progressmeter).setValue(val);
-		(prog.$f(id + '_total') as zul.wgt.Label).setValue(total);
-	}
-
-	/**
-	 * Removes the file item.
-	 * @param zul.Uploader uplder
-	 */
-	public removeFile(uplder: zul.Uploader): void {
-		var id = uplder.id,
-			prog = this.getFileItem(id);
-		if (prog)
-			prog.detach();
-		delete this._files[id];
-		var close = Object.keys(this._files).length === 0;
-		if (close)
-			this.close();
-	}
-
-	/**
-	 * Opens the file manager to show.
-	 * @param zk.Widget wgt the wgt where the file manager is shown
-	 * @param String position the position where the file manager is located
-	 */
+// FIXME: DRY?
+export declare class UploadManager extends zul.wgt.Popup {
+	public override onFloatUp(_ctl: zk.ZWatchController): void
+	public getFileItem(id: string): zul.wgt.Div
+	public addFile(uplder: zul.Uploader): zul.wgt.Div
+	public updateFile(uplder: zul.Uploader, val: number, total: string): void
+	public removeFile(uplder: zul.Uploader): void
 	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 	// @ts-ignore
-	public open(wgt: zk.Widget | null, position?: string): void {
-		super.open(wgt, null, position || 'after_start', {
-			sendOnOpen: false,
-			disableMask: true
-		});
-	}
+	public override open(wgt: zk.Widget | null, position?: string): void
 }
 
 /**
@@ -770,4 +780,4 @@ export class UploadViewer extends zk.Object {
 			flman.removeFile(this._uplder);
 	}
 }
-zul.UploadViewer = UploadViewer;
+zul.UploadViewer = zk.regClass(UploadViewer);

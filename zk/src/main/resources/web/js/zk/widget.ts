@@ -681,7 +681,7 @@ export class Widget extends ZKObject {
 	declare public _uplder?: zul.Upload | null;
 	declare public _autodisable_self?: boolean;
 	declare public _uploading?: boolean;
-	
+
 	declare public offsetWidth?;
 	declare public offsetHeight?;
 	declare public blankPreserved?: boolean;
@@ -723,7 +723,7 @@ export class Widget extends ZKObject {
 	declare private _preWidth;
 	declare private _preHeight;
 	declare private _action: StringFieldValue;
-	declare private _tabindex: NumberFieldValue;
+	declare protected _tabindex: NumberFieldValue;
 	declare private _draggable: StringFieldValue;
 	declare private _asaps: Record<string, unknown>;
 	declare private _lsns: Record<string, unknown & {priority: number}[]>;
@@ -2777,7 +2777,7 @@ redraw: function (out) {
 	 * @see #domTextStyleAttr_
 	 * @see #updateDomStyle_
 	 */
-	public getTextNode(): HTMLElement | null {
+	public getTextNode(): HTMLElement | null | undefined {
 		return null;
 	}
 

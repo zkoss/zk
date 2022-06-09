@@ -15,6 +15,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 /**
  * Space is a {@link Separator} with the orient default to "vertical".
  */
-zul.wgt.Space = zk.$extends(zul.wgt.Separator, {
-	_orient: 'vertical'
-});
+export class Space extends zul.wgt.Separator {
+	public override _orient = 'vertical';
+}
+zul.wgt.Space = zk.regClass(Space);

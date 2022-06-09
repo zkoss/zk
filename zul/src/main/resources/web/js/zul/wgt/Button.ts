@@ -37,10 +37,7 @@ export class Button extends zul.LabelImageWidget {
 	private _type = 'button';
 	private _href?: string;
 	private _target?: string;
-	public _disabled?: boolean;
-	public _autodisable?: string;
 	public _upload?: string;
-	private _adbs?: boolean;
 	private _delayFocus?: boolean | null;
 
 	/** Returns the href that the browser shall jump to, if an user clicks
@@ -385,13 +382,13 @@ export class Button extends zul.LabelImageWidget {
 		super.unbind_(skipper, after, keepRod);
 	}
 
-	protected override doClick_(evt: zk.Event): void {
+	public override doClick_(evt: zk.Event): void {
 		if (!evt.domEvent) // mobile will trigger doClick twice
 			return;
 
 		if (!this._disabled) {
 			if (!this._upload)
-				zul.wgt.ADBS.autodisable(this as unknown as zul.LabelImageWidget);
+				zul.wgt.ADBS.autodisable(this);
 			else if (!zk.ie || zk.ie > 10) // ZK-2471
 				this._uplder!.openFileDialog();
 
@@ -441,7 +438,7 @@ export class Button extends zul.LabelImageWidget {
 		return this.isDisabled();
 	}
 }
-zul.wgt.Button = Button;
+zul.wgt.Button = zk.regClass(Button);
 
 //handle autodisabled buttons
 export class ADBS extends zk.Object {
@@ -509,4 +506,4 @@ export class ADBS extends zk.Object {
 		}
 	}
 }
-zul.wgt.ADBS = ADBS;
+zul.wgt.ADBS = zk.regClass(ADBS);

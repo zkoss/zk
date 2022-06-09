@@ -15,5 +15,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 /**
  * The same as HTML SPAN tag.
  */
-zul.wgt.Span = zk.$extends(zul.Widget, {
-});
+export class Span extends zul.Widget {
+}
+zul.wgt.Span = zk.regClass(Span);

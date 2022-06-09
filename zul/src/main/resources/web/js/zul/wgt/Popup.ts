@@ -523,4 +523,4 @@ export class Popup extends zul.Widget {
 		return [p, [dim.left + this._adjustLeft!, dim.top + this._adjustTop!], null, {dodgeRef: false}];
 	}
 }
-zul.wgt.Popup = Popup;
+zul.wgt.Popup = zk.regClass(Popup);

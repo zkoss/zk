@@ -585,7 +585,7 @@ export class Widget extends zk.Widget {
 	}
 
 	//super//
-	protected override doClick_(evt: zk.Event, popupOnly?: boolean): void {
+	public override doClick_(evt: zk.Event, popupOnly?: boolean): void {
 		if (!this.shallIgnoreClick_(evt) && !evt.contextSelected) {
 			var params = this._popup ? this._parsePopParams(this._popup, evt) : {},
 				popup = this._smartFellow(params.id) as zul.wgt.Popup | null;
@@ -793,4 +793,4 @@ export class Widget extends zk.Widget {
 		return 'at_pointer';
 	}
 }
-zul.Widget = Widget;
+zul.Widget = zk.regClass(Widget);

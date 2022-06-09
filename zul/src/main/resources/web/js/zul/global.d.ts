@@ -4,40 +4,39 @@ export * as box from './box';
 // export * as grid from './grid';
 export declare namespace grid {
     export import Row = zul.Widget; // zk/domtouch
-    
 }
 // export * as inp from './inp';
 export declare namespace inp {
-    class Errorbox extends zul.wgt.Notification { // zk/au
+    export class Errorbox extends zul.wgt.Notification { // zk/au
         public _fixarrow(): void
     }
+	export import InputWidget = zul.Widget; // zul/wgt/Inputgroup
 }
 // export * as lang from './lang';
 // export * as layout from './layout';
-// export * as med from './med';
+export * as med from './med';
 // export * as menu from './menu';
 export declare namespace menu {
-    abstract class Menuitem extends zul.LabelImageWidget {
+    export abstract class Menuitem extends zul.LabelImageWidget {
         public _getUploadRef(): HTMLElement | null | undefined
     }
 }
+// export * as mesh from './mesh';
 export declare namespace mesh {
     export import HeaderWidget = zul.LabelImageWidget; // zk/flex
     export import Auxheader = zul.mesh.HeaderWidget; // zk/flex
 }
-// export * as mesh from './mesh';
 // export * as sel from './sel';
 export declare namespace sel {
     export import ItemWidget = zul.Widget; // zk/dom
     export import Listitem = zul.sel.ItemWidget; // zk/domtouch
     export import Treerow = zul.Widget; // zk/domtouch
-
 }
 // export * as tab from './tab';
 // export * as utl from './utl';
 export * as wgt from './wgt';
 // export * as wnd from './wnd';
-export declare namespace wnd { // TODO: used by zk/flex
+export declare namespace wnd { // zk/flex
     export import Panelchildren = zul.ContainerWidget;
 }
 export * from '.';

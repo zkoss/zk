@@ -6,8 +6,3 @@
 **/ext/*
 @types
 *.config.js
-
-zul/src/main/resources/web/js/zul/wgt/A.ts
-zul/src/main/resources/web/js/zul/wgt/Checkbox.ts
-zul/src/main/resources/web/js/zul/wgt/Inputgroup.ts
-zul/src/main/resources/web/js/zul/med/Track.ts

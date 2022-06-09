@@ -965,4 +965,4 @@ export class Box extends zul.Widget {
 		return v ? 'start' == v ? 'left' : 'end' == v ? 'right' : v : null;
 	}
 }
-zul.box.Box = Box;
+zul.box.Box = zk.regClass(Box);

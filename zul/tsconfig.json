@@ -4,11 +4,13 @@
     "lib": [
       "esnext",
       "dom",
-      "ScriptHost" // declare var ActiveXObject: (type: string) => void;
+      "ScriptHost" // ActiveObject
     ],
     "module": "commonjs",
-    "allowJs": true,
-    "noEmit": true, // type checking only
+    "allowJs": false,
+    "checkJs": false,
+    "outDir": "../build/js",
+    "rootDir": "./src/main/resources/web/js",
     "strict": true,
     "allowSyntheticDefaultImports": true,
     "allowUmdGlobalAccess": true,
@@ -23,12 +25,6 @@
     ]
   },
   "include": [
-    "./src/main/resources/web/js",
-  ],
-  "exclude": [
-    "./src/main/resources/web/js/zul/wgt/A.ts",
-    "./src/main/resources/web/js/zul/wgt/Checkbox.ts",
-    "./src/main/resources/web/js/zul/wgt/Inputgroup.ts",
-    "./src/main/resources/web/js/zul/med/Track.ts"
+    "./src/main/resources/web/js"
   ]
 }
