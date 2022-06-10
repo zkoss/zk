@@ -314,6 +314,7 @@ export interface ClientActivity {
 	onSize: {onSize} | [unknown, Callable];
 	onShow: {onShow} | [unknown, Callable];
 	onVParent: {onVParent} | [unknown, Callable];
+	onMove: {onMove} | [unknown, Callable];
 }
 
 export interface FireOptions {

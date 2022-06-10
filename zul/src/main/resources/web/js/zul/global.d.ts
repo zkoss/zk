@@ -5,13 +5,7 @@ export * as box from './box';
 export declare namespace grid {
     export import Row = zul.Widget; // zk/domtouch
 }
-// export * as inp from './inp';
-export declare namespace inp {
-    export class Errorbox extends zul.wgt.Notification { // zk/au
-        public _fixarrow(): void
-    }
-	export import InputWidget = zul.Widget; // zul/wgt/Inputgroup
-}
+export * as inp from './inp';
 // export * as lang from './lang';
 // export * as layout from './layout';
 export * as med from './med';
