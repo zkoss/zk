@@ -43,7 +43,7 @@ export interface DraggableOptions {
 	change(dg: Draggable, offset: Offset, evt?: Event): void;
 	constraint(dg: Draggable, offset: Offset, evt: Event): Offset;
 	draw(dg: Draggable, offset: Offset, evt: Event): void;
-	ignoredrag(dg: Draggable, offset: Offset, evt: Event): void;
+	ignoredrag(dg: Draggable, offset: Offset, evt: Event): boolean;
 	handle: HTMLElement;
 	scroll: DraggableScrollOptions | HTMLElement | Window;
 	overlay: boolean;
@@ -389,7 +389,7 @@ String scroll; //DOM Element's ID</code></pre>
 	 * If omitted and control is a widget, {@link zk.Widget#$n} is assumed.
 	 * @param Map opts [optional] options. Refer to {@link #opts} for allowed options.
 	 */
-	public constructor(control, node: HTMLElement, opts: Partial<DraggableOptions>) {
+	public constructor(control, node: HTMLElement | null, opts: Partial<DraggableOptions>) {
 		super();
 		if (!_stackup) {
 		//IE: if we don't insert stackup at beginning, dragging is slow

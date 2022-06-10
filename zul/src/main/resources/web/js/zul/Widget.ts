@@ -749,7 +749,7 @@ export class Widget extends zk.Widget {
 				beforeCtrlKeys_?: Widget['beforeCtrlKeys_'];
 			}
 			for (var w: WidgetBeforeCtrlKeys = target!; ; w = w.parent!) {
-				if (w.beforeCtrlKeys_ && w.beforeCtrlKeys_(evt))
+				if (w.beforeCtrlKeys_ && w.beforeCtrlKeys_(evt) as undefined)
 					return;
 				if (w == wgt) break;
 			}

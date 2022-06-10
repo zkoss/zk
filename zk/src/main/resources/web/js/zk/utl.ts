@@ -114,7 +114,7 @@ export interface ZUtl {
 	parseMap(text: string, separator?: string, quote?: string): {[key: string]: string};
 	progressbox(id: string, msg: string, mask?: boolean, icon?: string | null, opts?: Partial<ProgressboxOptions>): void;
 	stringToInts(text: string | null, defaultValue: number): number[] | null;
-	today(fmt: boolean | string, tz: string): Date;
+	today(fmt: boolean | string | null, tz: string): Date;
 	throttle<T, A extends unknown[], R>(func: (this: T, ...args: A) => R, wait: number):
 		(this: T, ...args: A) => R;
 	debounce<T, A extends unknown[], R>(func: (this: T, ...args: A) => R, wait: number,
@@ -393,7 +393,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * @return Date
 	 * @since 5.0.6
 	 */
-	today(fmt: boolean | string, tz: string): Date {
+	today(fmt: boolean | string | null, tz: string): Date {
 		var d = window.Dates.newInstance().tz(tz), hr = 0, min = 0, sec = 0, msec = 0;
 		if (typeof fmt == 'string') {
 			var fmt0 = fmt.toLowerCase();

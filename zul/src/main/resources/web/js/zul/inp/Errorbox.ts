@@ -1,4 +1,4 @@
-/* Errorbox.js
+/* Errorbox.ts
 
 	Purpose:
 
@@ -12,56 +12,65 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-(function () {
 
-	var _dirMap = {
-		'u': 'up',
-		'd': 'down',
-		'l': 'left',
-		'r': 'right'
-	};
+var _dirMap = {
+	'u': 'up',
+	'd': 'down',
+	'l': 'left',
+	'r': 'right'
+};
 /**
  * A error message box that is displayed as a popup.
  */
-zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
-	_defaultPos: 'end_before',
-	$init: function (owner, msg) {
-		this.$supers('$init', [msg, {ref: owner}]);
+export class Errorbox extends zul.wgt.Notification {
+	public _defaultPos = 'end_before';
+	public msg: string;
+	public sclass?: string;
+	public iconSclass: string;
+	private __ebox?: Errorbox;
+	declare public parent: zul.inp.InputWidget | null;
+
+	public constructor(owner: zul.inp.InputWidget, msg: string) {
+		super(msg, {ref: owner});
 		this.parent = owner;
 		this.parent.__ebox = this;
 		this.msg = msg;
 		this.sclass = owner._errorboxSclass;
 		this.iconSclass = owner._errorboxIconSclass || 'z-icon-exclamation-triangle';
-	},
-	domClass_: function (no) {
+	}
+
+	protected override domClass_(no?: Partial<zk.DomClassOptions>): string {
 		var sclass = this.sclass,
-			s = this.$supers(zul.inp.Errorbox, 'domClass_', arguments);
+			s = super.domClass_(no);
 		if (sclass)
 			s += ' ' + sclass;
 		return s;
-	},
+	}
+
 	/** Opens the popup.
 	 * @see zul.wgt.Popup#open
 	 */
-	show: function () {
+	public override show(): this {
 		if (!this.$n())
 			jq(document.body).append(this);
 
 		// Fixed IE6/7 issue in B50-2941554.zul
-		var self = this, cstp = this.parent._cst && this.parent._cst._pos;
+		var self = this, cstp = this.parent!._cst && this.parent!._cst._pos;
 		// ZK-2069: show only if is in view //B85-ZK-3321
-		if (this.parent.isRealVisible()) {
+		if (this.parent!.isRealVisible()) {
 			setTimeout(function () {
 				if (self.parent && zul.inp.InputWidget._isInView(self)) //Bug #3067998: if
 					self.open(self.parent, null, cstp || self._defaultPos, {dodgeRef: !cstp});
 			}, 50); // B36-2935398: add time
 		}
 		zWatch.listen({onHide: [this.parent, this.onParentHide]});
-	},
+		return this;
+	}
+
 	/**
 	 * Destroys the errorbox
 	 */
-	destroy: function () {
+	public destroy(): void {
 		if (this.parent) {
 			zWatch.unlisten({onHide: [this.parent, this.onParentHide]});
 			delete this.parent.__ebox;
@@ -70,16 +79,18 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 		this.unbind();
 		jq(this).remove();
 		this.parent = null;
-	},
-	onParentHide: function () {
+	}
+
+	public onParentHide(): void {
 		if (this.__ebox) {
 			this.__ebox.setFloating_(false);
 			this.__ebox.close();
 		}
-	},
+	}
+
 	//super//
-	bind_: function () {
-		this.$supers(zul.inp.Errorbox, 'bind_', arguments);
+	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+		super.bind_(desktop, skipper, after);
 
 		var Errorbox = zul.inp.Errorbox;
 		this._drag = new zk.Draggable(this, null, {
@@ -89,8 +100,9 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 			change: Errorbox._change
 		});
 		zWatch.listen({onMove: this});
-	},
-	unbind_: function () {
+	}
+
+	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		// bug ZK-1143
 		var drag = this._drag;
 		this._drag = null;
@@ -102,50 +114,63 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 		if (this.parent)
 			zWatch.unlisten({onHide: [this.parent, this.onParentHide]});
 
-		this.$supers(zul.inp.Errorbox, 'unbind_', arguments);
-	},
-	getInputNode: function () {
-		return this.parent ? this.parent.$n() : null;
-	},
-	onMove: function () {
+		super.unbind_(skipper, after, keepRod);
+	}
+
+	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+	// @ts-ignore
+	public override getInputNode(): HTMLInputElement | null | undefined {
+		return this.parent ? this.parent.$n() as HTMLInputElement | null | undefined : null;
+	}
+
+	public onMove(): void {
 		if (this.isOpen()) {
 			this.reposition(); //call reposition in super
 			this._fixarrow();
 		}
-	},
-	onSize: function () {
-		this.$supers('onSize', arguments);
+	}
+
+	public override onSize(): void {
+		super.onSize();
 		if (this.isOpen())
 			this._fixarrow();
-	},
-	setDomVisible_: function (node, visible) {
-		this.$supers('setDomVisible_', arguments);
+	}
+
+	public override setDomVisible_(node: HTMLElement, visible: boolean, opts?: Partial<zk.DomVisibleOptions>): void {
+		super.setDomVisible_(node, visible, opts);
 		var stackup = this._stackup;
 		if (stackup) stackup.style.display = visible ? '' : 'none';
-	},
-	doClick_: function (evt) {
-		var p = evt.domTarget;
+	}
+
+	public override doClick_(evt: zk.Event, popupOnly?: boolean): void {
+		interface WidgetErrorMessage extends zk.Widget {
+			clearErrorMessage?(revalidate: boolean, remainError?: boolean): void;
+		}
+		var p: HTMLElement | WidgetErrorMessage | null | undefined = evt.domTarget;
 		if (p == this.$n('cls') || p == this.$n('clsIcon')) { //may click on font-icon
 			if ((p = this.parent) && p.clearErrorMessage) {
 				p.clearErrorMessage(true, true);
 				p.focus(0); // Bug #3159848
 			} else
-				zAu.wrongValue_(p, false);
+				zAu.wrongValue_(p!, false);
 		} else {
-			this.$supers('doClick_', arguments);
-			this.parent.focus(0);
+			super.doClick_(evt, popupOnly);
+			this.parent!.focus(0);
 		}
-	},
-	open: function () {
-		this.$supers('open', arguments);
+	}
+
+	public override open(ref: zk.Widget, offset?: zk.Offset | null, position?: string, opts?: zul.wgt.PopupOptions): void {
+		super.open(ref, offset, position, opts);
 		this.setTopmost();
 		this._fixarrow();
-	},
-	afterCloseAnima_: function (opts) {
+	}
+
+	protected override afterCloseAnima_(opts?: zul.wgt.PopupOptions): void {
 		opts = zk.copy(opts, {keepVisible: true});
-		this.$supers('afterCloseAnima_', arguments);
-	},
-	redraw: function (out) {
+		super.afterCloseAnima_(opts);
+	}
+
+	public override redraw(out: string[]): void {
 		var uuid = this.uuid,
 			icon = this.$s('icon'),
 			iconSclass = this.iconSclass;
@@ -160,8 +185,9 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 				// Bug ZK-2952: added missing id for the "x" icon
 				this.$s('close'), '"><i id="', uuid, '-clsIcon" class="', icon,
 				' z-icon-times"></i></div></div>');
-	},
-	onFloatUp: function (ctl) {
+	}
+
+	public override onFloatUp(ctl: zk.ZWatchController): void {
 		var wgt = ctl.origin;
 		if (wgt == this) {
 			this.setTopmost();
@@ -170,7 +196,8 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 		if (!wgt || wgt == this.parent || !this.isVisible())
 			return;
 
-		var top1 = this, top2 = wgt;
+		var top1: zk.Widget | null = this,
+			top2: zk.Widget | null = wgt;
 		while ((top1 = top1.parent) && !top1.isFloating_())
 			if (top1 == wgt) //wgt is parent
 				return;
@@ -180,16 +207,17 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 			var n = wgt.$n();
 			if (n) this._uncover(n);
 		}
-	},
-	_uncover: function (el) {
+	}
+
+	private _uncover(el: HTMLElement): void {
 		var elofs = zk(el).revisedOffset(),
-			node = this.$n(),
+			node = this.$n()!,
 			nodeofs = zk(node).cmOffset();
 
 		if (jq.isOverlapped(
 		elofs, [el.offsetWidth, el.offsetHeight],
 		nodeofs, [node.offsetWidth, node.offsetHeight])) {
-			var parent = this.parent.$n(), y,
+			var parent = this.parent!.$n()!, y,
 				ptofs = zk(parent).cmOffset(),
 				pthgh = parent.offsetHeight,
 				ptbtm = ptofs[1] + pthgh;
@@ -200,11 +228,12 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 			node.style.top = ofs[1] + 'px';
 			this._fixarrow();
 		}
-	},
-	_fixarrow: function () {
-		var parent = this.parent.$n(),
-			node = this.$n(),
-			pointer = this.$n('p'),
+	}
+
+	public override _fixarrow(): void {
+		var parent = this.parent!.$n()!,
+			node = this.$n()!,
+			pointer = this.$n('p')!,
 			ptofs = zk(parent).revisedOffset(),
 			nodeofs = zk(node).revisedOffset(),
 			dx = nodeofs[0] - ptofs[0],
@@ -229,7 +258,7 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 				mx = node.offsetWidth - 11;
 			pointer.style.left = (md > mx ? mx : md < 1 ? 1 : md) + 'px';
 			if (dir == 'd') {
-				pointer.style.top = null;
+				pointer.style.top = null as unknown as string;
 				pointer.style.bottom = '-4px';
 				s.paddingBottom = ph + 'px';
 			} else {
@@ -242,7 +271,7 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 				mx = node.offsetHeight - 11;
 			pointer.style.top = (md > mx ? mx : md < 1 ? 1 : md) + 'px';
 			if (dir == 'r') {
-				pointer.style.left = null;
+				pointer.style.left = null as unknown as string;
 				pointer.style.right = '-4px';
 				s.paddingRight = pw + 'px';
 			} else {
@@ -252,7 +281,7 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 
 		} else {
 			var ps = pointer.style;
-			ps.left = ps.top = ps.right = ps.bottom = null;
+			ps.left = ps.top = ps.right = ps.bottom = null as unknown as string;
 			switch (dir) {
 			case 'lu':
 				ps.left = '0px';
@@ -280,28 +309,31 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 
 		pointer.className = this.$s('pointer') + (_dirMap[dir] ? ' ' + this.$s(_dirMap[dir]) : '');
 		jq(pointer).show();
-	},
-	isInView_: function () {
+	}
+
+	protected override isInView_(): boolean {
 		return zul.inp.InputWidget._isInView(this);
-	},
-	getPositionArgs_: function () {
+	}
+
+	protected override getPositionArgs_(): zul.wgt.PositionArgs {
 		var p = this.parent, cstp = p ? p._cst && p._cst._pos : false;
 		return [p, null, cstp || 'end_before', {dodgeRef: !cstp}];
 	}
-}, {
 
-	_enddrag: function (dg) {
-		var errbox = dg.control;
+	private static _enddrag(dg: zk.Draggable): void {
+		var errbox = dg.control as Errorbox;
 		errbox.setTopmost();
 		errbox._fixarrow();
-	},
-	_ignoredrag: function (dg, pointer, evt) {
+	}
+
+	private static _ignoredrag(dg: zk.Draggable, pointer: zk.Offset, evt: zk.Event): boolean {
 		return zul.inp.InputCtrl.isIgnoredDragForErrorbox(dg, pointer, evt);
-	},
-	_change: function (dg) {
-		var errbox = dg.control,
+	}
+
+	private static _change(dg: zk.Draggable): void {
+		var errbox = dg.control as Errorbox,
 			stackup = errbox._stackup,
-			el = errbox.$n();
+			el = errbox.$n()!;
 		if (stackup) {
 			stackup.style.top = el.style.top;
 			stackup.style.left = el.style.left;
@@ -310,5 +342,5 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 		if (zk.mobile)
 			zk(el).redoCSS();
 	}
-});
-})();
+}
+zul.inp.Errorbox = zk.regClass(Errorbox);
