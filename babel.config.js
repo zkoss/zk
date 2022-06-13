@@ -14,7 +14,8 @@ module.exports = function (api) {
 		        'allowDeclareFields': true
 	        }],
             '@babel/plugin-proposal-class-properties',
-            '@babel/plugin-proposal-object-rest-spread'
+            '@babel/plugin-proposal-object-rest-spread',
+			'remove-import-export',
         ]
     };
 };

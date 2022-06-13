@@ -235,7 +235,7 @@ zk.override(Widget.prototype, _xWidget, {
 								wevt.domEvent!.stop();
 						}
 
-						// Note:: I don't mouse up the right click here however feel free to add if required
+						// Note: I don't mouse up the right click here however feel free to add if required
 						self._cancelMouseUp = true;
 						self._rightClickEvent = null;
 					}, self._holdTime);

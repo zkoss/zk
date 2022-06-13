@@ -143,6 +143,7 @@ function regClass<S extends typeof ZKObject>(jclass: S): S {
 	_zk.classes[oid] = jclass;
 	return jclass;
 }
+_zk.regClass = regClass;
 
 function defGet(nm: string): Getter {
 	return new Function('return this.' + nm + ';');

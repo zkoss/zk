@@ -91,7 +91,7 @@ function _isProlog(el: Node | null): boolean {
 // eslint-disable-next-line no-undef
 type JQueryEventHandler = (evt: JQuery.TriggeredEvent, ...args: unknown[]) => unknown;
 type ZKEventHandler = (evt: Event, ...args: unknown[]) => unknown;
-function _domEvtInf(wgt: Widget, evtnm: string, fn: string | ZKEventHandler, keyword?: string): [string, JQueryEventHandler] { //proxy event listener
+function _domEvtInf(wgt: Widget, evtnm: string, fn?: string | ZKEventHandler, keyword?: string): [string, JQueryEventHandler] { //proxy event listener
 	if (typeof fn != 'function') {
 		if (!fn && !(fn = _domevtfnm[evtnm]))
 			_domevtfnm[evtnm] = fn = '_do' + evtnm.substring(2);
@@ -678,9 +678,12 @@ const _dragoptions: Partial<DraggableOptions> = {
  */
 // zk scope
 export class Widget extends ZKObject {
+	declare public _uplder?: zul.Upload | null;
+	declare public _autodisable_self?: boolean;
+	declare public _uploading?: boolean;
+
 	declare public offsetWidth?;
 	declare public offsetHeight?;
-	declare public afterKeyDown_?: (evt: Event) => boolean;
 	declare public blankPreserved?: boolean;
 	// FIXME: _scrollbar?: any;
 	// FIXME: $binder(): zk.Binder | null;
@@ -705,7 +708,7 @@ export class Widget extends ZKObject {
 	declare public _flexFixed;
 	declare public _nvflex;
 	declare public _nhflex;
-	declare public _hflexsz;
+	declare public _hflexsz?: number;
 	declare public _vflexsz;
 
 	declare private _binding;
@@ -720,7 +723,7 @@ export class Widget extends ZKObject {
 	declare private _preWidth;
 	declare private _preHeight;
 	declare private _action: StringFieldValue;
-	declare private _tabindex: NumberFieldValue;
+	declare protected _tabindex: NumberFieldValue;
 	declare private _draggable: StringFieldValue;
 	declare private _asaps: Record<string, unknown>;
 	declare private _lsns: Record<string, unknown & {priority: number}[]>;
@@ -728,12 +731,12 @@ export class Widget extends ZKObject {
 	declare private _subnodes: Record<string, HTMLElement | string | null | undefined>;
 	declare private _subzcls: Record<string, string>;
 	declare private _sclass: StringFieldValue;
-	declare private _zclass: StringFieldValue;
-	declare private _width: StringFieldValue;
-	declare private _height: StringFieldValue;
+	declare protected _zclass: StringFieldValue;
+	declare public _width: StringFieldValue;
+	declare public _height: StringFieldValue;
 	declare private _left: StringFieldValue;
 	declare private _top: StringFieldValue;
-	declare private _tooltiptext: StringFieldValue;
+	declare public _tooltiptext: StringFieldValue;
 	declare private _droppable: StringFieldValue;
 	declare private _dropTypes: string[] | null;
 	declare private _fitSizeListened: boolean | undefined;
@@ -743,8 +746,8 @@ export class Widget extends ZKObject {
 	declare public static _repeatIgnoreEvts;
 	declare public static molds;
 
-	private _visible = true;
-	private _mold = 'default';
+	public _visible = true;
+	protected _mold = 'default';
 	protected _style: StringFieldValue;
 	private _renderdefer = -1;
 
@@ -1488,7 +1491,7 @@ wgt.$f().main.setTitle("foo");
 	 * If omitted, it won't search all ID spaces.
 	 * @return zk.Widget
 	 */
-	public $f(id: string, global: boolean): Widget | null {
+	public $f(id: string, global?: boolean): Widget | null {
 		var f = this.$o();
 		if (!arguments.length)
 			return f ? f._fellows : {};
@@ -2453,7 +2456,7 @@ wgt.$f().main.setTitle("foo");
 	 * @return boolean
 	 * @see #setFloating_
 	 */
-	protected isFloating_(): boolean {
+	public isFloating_(): boolean {
 		return this._floating;
 	}
 
@@ -2468,7 +2471,7 @@ wgt.$f().main.setTitle("foo");
 	 * </ul>
 	 * @see #isFloating_
 	 */
-	protected setFloating_(floating: boolean, opts: Partial<{ node: HTMLElement }>): void {
+	protected setFloating_(floating: boolean, opts?: Partial<{ node: HTMLElement }>): void {
 		if (this._floating != floating) {
 			if (floating) {
 				//parent first
@@ -2727,7 +2730,7 @@ redraw: function (out) {
 	 * @see #domTextStyleAttr_
 	 * @see #updateDomStyle_
 	 */
-	public getTextNode(): HTMLElement | null {
+	public getTextNode(): HTMLElement | null | undefined {
 		return null;
 	}
 
@@ -3452,7 +3455,7 @@ bind_: function (desktop, skipper, after) {
 }
 </code></pre>
 	 */
-	protected bind_(desktop?: Desktop | null, skipper?: Skipper | null, after?: Callable[]): void {
+	protected bind_(desktop?: Desktop | null, skipper?: Skipper | null, after?: CallableFunction[]): void {
 		this.get$Class<typeof Widget>()._bind0(this);
 
 		this.desktop = desktop || (desktop = zk.Desktop.$(this.parent));
@@ -3497,7 +3500,7 @@ bind_: function (desktop, skipper, after) {
 	 * @param Array after an array of function ({@link Function}) that will be invoked after {@link #bind_} has been called. For example,
 	 * @since 5.0.5
 	 */
-	protected bindChildren_(desktop?: Desktop, skipper?: Skipper | null, after?: Callable[]): void {
+	protected bindChildren_(desktop?: Desktop, skipper?: Skipper | null, after?: CallableFunction[]): void {
 		for (var child = this.firstChild, nxt; child; child = nxt) {
 			nxt = child.nextSibling;
 				//we have to store first since RefWidget will replace widget
@@ -3535,7 +3538,7 @@ unbind_: function (skipper, after) {
 </code></pre>
 	 * @param boolean keepRod [optional] used if the ROD flag needs to be kept.
 	 */
-	protected unbind_(skipper?: Skipper | null, after?: Callable[], keepRod?: boolean): void {
+	protected unbind_(skipper?: Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		this.get$Class<typeof Widget>()._unbind0(this);
 		_unlistenFlex(this);
 
@@ -3572,7 +3575,7 @@ unbind_: function (skipper, after) {
 	 * @param boolean keepRod [optional] used if the ROD flag needs to be kept.
 	 * @since 5.0.5
 	 */
-	protected unbindChildren_(skipper?: Skipper | null, after?: Callable[], keepRod?: boolean): void {
+	protected unbindChildren_(skipper?: Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		for (var child = this.firstChild, nxt; child; child = nxt) {
 			nxt = child.nextSibling; //just in case
 
@@ -3716,7 +3719,7 @@ unbind_: function (skipper, after) {
 		return {height: zkp.contentHeight(), width: zkp.contentWidth()};
 	}
 
-	public getMarginSize_(attr: string): number { //'w' for width or 'h' for height
+	public getMarginSize_(attr: FlexOrient): number { //'w' for width or 'h' for height
 		return zk(this).sumStyles(attr == 'h' ? 'tb' : 'lr', jq.margins);
 	}
 
@@ -3779,7 +3782,7 @@ unbind_: function (skipper, after) {
 		zFlex.fixFlex(this);
 	}
 
-	protected fixMinFlex_(n: HTMLElement, orient: FlexOrient): number { //internal use
+	public fixMinFlex_(n: HTMLElement, orient: FlexOrient): number { //internal use
 		return zFlex.fixMinFlex(this, n, orient);
 	}
 
@@ -3796,7 +3799,7 @@ unbind_: function (skipper, after) {
 		n.style[orient == 'w' ? 'width' : 'height'] = '';
 	}
 
-	public getFlexContainer_(): HTMLElement | undefined {
+	public getFlexContainer_(): HTMLElement | null | undefined {
 		return this.getCaveNode();
 	}
 
@@ -4267,7 +4270,7 @@ focus_: function (timeout) {
 	 * @return boolean whether to ignore it
 	 * @since 5.0.1
 	 */
-	public shallIgnoreClick_(evt: Event): boolean {
+	public shallIgnoreClick_(evt: Event): boolean | undefined {
 		return false;
 	}
 
@@ -4990,7 +4993,7 @@ _doFooSelect: function (evt) {
 	 * @return zk.Widget this widget
 	 * @see #domUnlisten_
 	 */
-	protected domListen_(n: HTMLElement, evtnm: string, fn: Callable, keyword?: string): this {
+	public domListen_(n: HTMLElement, evtnm: string, fn?: string | Callable, keyword?: string): this {
 		if (!this.$weave) {
 			var inf = _domEvtInf(this, evtnm, fn, keyword);
 			jq(n, zk).on(inf[0], inf[1]);
@@ -5014,7 +5017,7 @@ _doFooSelect: function (evt) {
 	 * @return zk.Widget this widget
 	 * @see #domListen_
 	 */
-	protected domUnlisten_(n: HTMLElement, evtnm: string, fn: Callable, keyword?: string): this {
+	public domUnlisten_(n: HTMLElement, evtnm: string, fn?: string | Callable, keyword?: string): this {
 		if (!this.$weave) {
 			var inf = _domEvtInf(this, evtnm, fn, keyword);
 			jq(n, zk).off(inf[0], inf[1]);
@@ -5106,7 +5109,7 @@ _doFooSelect: function (evt) {
 	 * @return boolean
 	 * @since 6.0.0
 	 */
-	protected ignoreDescendantFloatUp_(des: Widget): boolean {
+	public ignoreDescendantFloatUp_(des: Widget): boolean {
 		return false;
 	}
 

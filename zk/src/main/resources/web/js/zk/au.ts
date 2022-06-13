@@ -1951,7 +1951,7 @@ zAu.ajaxErrorHandler = function (req, status, statusText, ajaxReqTries) {
 		 */
 		syncAllErrorbox: function () {
 			jq('.z-errorbox').toArray().forEach(function (ebox) {
-				var wgt = jq(ebox).zk.$<zul.wgt.Errorbox>();
+				var wgt = jq(ebox).zk.$<zul.inp.Errorbox>();
 				wgt.reposition();
 				wgt._fixarrow();
 			});

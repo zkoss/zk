@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-empty-interface */
-/* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable one-var */
 /* eslint-disable @typescript-eslint/triple-slash-reference */
 /* globals.d.ts
@@ -221,6 +219,21 @@ declare namespace zk {
 	type BigDecimal = import('./math').BigDecimal;
 	type JQZK = import('./dom').JQZK;
 
+	type Event = import('./evt').Event;
+	type Skipper = import('./widget').Skipper;
+	type Dimension = import('./dom').Dimension;
+	type PositionOptions = import('./dom').PositionOptions;
+	type ZWatchController = import('./evt').ZWatchController;
+	type FireOptions = import('./evt').FireOptions;
+	type DomAttrsOptions = import('./widget').DomAttrsOptions;
+	type DomClassOptions = import('./widget').DomClassOptions;
+	type DomStyleOptions = import('./widget').DomStyleOptions;
+	type EventMetaData = import('./dom').EventMetaData;
+	type FlexOrient = import('./flex').FlexOrient;
+	namespace eff {
+		type Mask = import('./effect').Mask;
+	}
+
 	interface Websocket {
 		readonly ready: boolean;
 
@@ -265,37 +278,3 @@ declare var zkbind: zk.ZKBind;
 
 type ZKStatic = typeof import('./zk').default;
 declare var zk: ZKStatic;
-
-declare namespace zul {
-	namespace wgt {
-		class Image {} // ./widget
-		class Caption {} // ./flex
-		// ./au
-		class Popup extends zk.Widget {
-			public reposition(): void
-		}
-		class Notification extends Popup {
-			public static show(msg: string, pid: string, opts: Record<string, unknown>): void
-		}
-		class Errorbox extends Notification {
-			public _fixarrow(): void
-		}
-	}
-	namespace mesh {
-		class HeaderWidget {} // ./flex
-		class Auxheader {} // ./flex
-	}
-	namespace wnd {
-		class Panelchildren {} // ./flex
-	}
-	namespace sel {
-		class ItemWidget {} // ./dom
-		// ./domtouch
-		class Listitem {}
-		class Treerow {}
-	}
-	// ./domtouch
-	namespace grid {
-		class Row {}
-	}
-}

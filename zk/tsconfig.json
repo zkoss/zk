@@ -9,7 +9,8 @@
     "moduleResolution": "node",
     "module": "commonjs",
     "allowJs": true,
-    "noEmit": true, // type checking only
+    "outDir": "../build/js",
+    "rootDir": "./src/main/resources/web/js",
     "strict": true,
     "allowSyntheticDefaultImports": true,
     //    "noFallthroughCasesInSwitch": true,
@@ -23,8 +24,10 @@
     // "noUnusedParameters": true, // TODO
     // "exactOptionalPropertyTypes": true, // TODO
     "forceConsistentCasingInFileNames": true,
+    "allowUmdGlobalAccess": true,
     "types": [
-      "webpack-env"
+      "webpack-env",
+      "zul"
     ]
   },
   "include": [
