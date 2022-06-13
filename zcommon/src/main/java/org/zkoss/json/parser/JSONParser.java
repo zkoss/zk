@@ -18,7 +18,7 @@ import org.zkoss.json.JSONObject;
 /**
  * Parser for JSON text. Please note that JSONParser is NOT thread-safe.
  * 
- * @author FangYidong<fangyidong@yahoo.com.cn>
+ * @author FangYidong&lt;fangyidong@yahoo.com.cn>
  */
 @SuppressWarnings("unchecked")
 public class JSONParser {

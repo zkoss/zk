@@ -3,9 +3,13 @@ ZK 10.0.0
   ZK-5024: Add a library property to change the default apply composer for MVVM
   ZK-5039: remove deprecated classicblue theme in ZK 10
   ZK-5091: Move Layout.java to extend from XulElement
+  ZK-5123: Searchbox open attribute doesn't work while initializing
 
 * Bugs
   ZK-5089: AfterSizeEvent doesn't return a correct size of a Window component
+  ZK-5120: Combobox smart update emptySearchMessage doesn't work
+  ZK-5138: Grid row setAlign not work after rendered
+  ZK-5145: Chosenbox smart update emptyMessage doesn't work
 
 * Upgrade Notes
   + Layout.java (Vlayout and Hlayout) are extended from XulElement since ZK 10.0.0
@@ -13,14 +17,42 @@ ZK 10.0.0
   ajax request, and also remove the two AuExtensions, AuUploader.java and AuDropUploader.
   + Support ZK-3277 into CE version, and drop the support of IE9 browser for file
   upload feature, dur to it cannot support HTML FormData.
+  + Some z-class names are changed:
+        z-combobox-emptySearchMessage -> z-combobox-empty-search-message
+        z-combobox-emptySearchMessage-hidden -> z-combobox-empty-search-message-hidden
    --------
 
-ZK 9.6.2
+ZK 9.6.3
 * Features
 
 * Bugs
 
 * Upgrade Notes
+
+   --------
+ZK 9.6.2
+May 24, 2022
+* Features
+
+* Bugs
+  ZK-5034: z-columns-bar's position is shifted after scrolling
+  ZK-4986: version information not salted for static resources
+  ZK-5071: org.zkoss.zk.ui.versionInfo.enabled cannot bust browser cache
+  ZK-5079: remove an item of ListModelList causes nullponiterexception
+  ZK-5134: caption with hflex="min" causes a javascript error
+  ZK-5137: modifying sclass clears vflex="1"
+  ZK-5117: cannot open a treeitem after sorting
+  ZK-5121: cascader / searchbox do no clean popup on unbind
+  ZK-5107: replace treecells causes checkmark clicking doesn't send onSelect event
+  ZK-5083: zEmbedded destroy doesn't remove Desktop from the zk.Desktop.all collection, cause unwanted events
+  ZK-5126: Apostrophe (French quote character) is displayed as Hex character code in chosenbox emptyMessage
+  ZK-5095: NotSerializableException: org.zkoss.zkmax.au.websocket.WebSocketEndPoint
+  ZK-5149: DropUpload anchor position shifted by browser scroll if any, gets out of view
+  ZK-5150: uploading issue
+  ZK-5110: ZKWebSocket cause NPE on reconnect if session has been destroyed
+
+* Upgrade Notes
+  + Since ListModel renders forEach inconsistently, reopen ZK-2800 after ZK-5079
 
    --------
 ZK 9.6.1

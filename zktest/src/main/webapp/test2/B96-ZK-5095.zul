@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-5095.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Fri Apr 22 17:27:36 CST 2022, Created by jameschu
+
+Copyright (C) 2022 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		(automatically test)
+		1. Test serialization, click button and see no error
+		(manually test)
+		1. use nginx + tomcat cluster, setting websocket and SerializableUiFactory
+		2. open this page and click "Test AU" several times.
+		3. restart current tomcat node (force change to another node)
+		4. should not see "Not Serializable Exception" (org.zkoss.zkmax.au.websocket.WebSocketEndPoint)"
+	</label>
+	<div viewModel="@id('vm')@init('org.zkoss.zktest.test2.B96_ZK_5095VM')">
+		<label>Click button and no exception occur</label>
+		<button label="Test AU" onClick='Clients.log("Test AU")'/>
+		<button id="serializeBtn" label="try to serialize" onClick="@command('write')"/>
+	</div>
+</zk>

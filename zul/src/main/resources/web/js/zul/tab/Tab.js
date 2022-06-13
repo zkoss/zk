@@ -167,7 +167,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		}
 
 		if (notify)
-			this.fire('onSelect', {items: [this], reference: this.uuid});
+			this.fire('onSelect', {items: [this], reference: this});
 	},
 	setHeight: function (height) {
 		this.$supers('setHeight', arguments);

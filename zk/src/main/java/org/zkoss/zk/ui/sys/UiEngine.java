@@ -135,6 +135,12 @@ public interface UiEngine {
 	 */
 	public void addSmartUpdate(Component comp, String attr, Object value, int priority);
 
+	/**
+	 * Clears all existing smart updates that belong to the given component.
+	 * @since 10.0.0
+	 */
+	public void clearSmartUpdate(Component comp);
+
 	/** Adds a response directly by using {@link AuResponse#getOverrideKey}
 	 * as the override key.
 	 * In other words, it is the same as <code>addResponse(resposne.getOverrideKey(), response)</code>

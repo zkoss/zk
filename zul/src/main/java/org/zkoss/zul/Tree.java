@@ -126,7 +126,7 @@ import org.zkoss.zul.impl.XulElement;
  * the item of the {@link TreeSelectableModel} rather than on the {@link Treeitem}
  * of the {@link Tree} if you use the {@link TreeSelectableModel} and {@link TreeModel}.</p>
  *
- * <pre><code>
+ * <pre>{@code
  * TreeSelectableModel selModel = ((TreeSelectableModel)getModel());
  * int[][] paths = selModel.getSelectionPaths();
  * List<E> selected = new ArrayList<E>();
@@ -134,7 +134,7 @@ import org.zkoss.zul.impl.XulElement;
  * for (int i = 0; i < paths.length; i++) {
  * 		selected.add(model.getChild(paths[i]));
  * }
- * </code></pre>
+ * }</pre>
  *
  * <br/>
  * [Since 6.0.0]
@@ -157,7 +157,7 @@ import org.zkoss.zul.impl.XulElement;
  * the item of the {@link TreeOpenableModel} rather than on the {@link Treeitem}
  * of the {@link Tree} if you use the {@link TreeOpenableModel} and {@link TreeModel}.</p>
  *
- * <pre><code>
+ * <pre>{@code
  * TreeOpenableModel openModel = ((TreeOpenableModel)getModel());
  * int[][] paths = openModel.getOpenPaths();
  * List<E> opened = new ArrayList<E>();
@@ -165,13 +165,13 @@ import org.zkoss.zul.impl.XulElement;
  * for (int i = 0; i < paths.length; i++) {
  * 		opened.add(model.getChild(paths[i]));
  * }
- * </code></pre>
+ * }</pre>
  *
  * <dt>org.zkoss.zul.tree.selectOnHighlight.disabled</dt>.(since 7.0.4)
  * <dd>Sets whether to disable select functionality when highlighting text
  * content with mouse dragging or not.</dd>
  *
- * </br/>
+ * <br/>
  * [Since 7.0.0] (EE version only)
  *
  * <dt>org.zkoss.zul.tree.initRodSize</dt>.
@@ -2634,7 +2634,7 @@ public class Tree extends MeshElement {
 		if (_nonselTags != null)
 			renderer.render("nonselectableTags", _nonselTags);
 		if (isCheckmarkDeselectOther())
-			renderer.render("_cdo", true);
+			renderer.render("checkmarkDeselectOther", true);
 		if (!isRightSelect())
 			renderer.render("rightSelect", false);
 		if (isSelectOnHighlightDisabled()) // F70-ZK-2433

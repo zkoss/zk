@@ -53,8 +53,8 @@ public interface PropertyBinding extends Binding {
 	public ConditionType getConditionType();
 
 	/**
-	 * Returns an argument <tags, object> pairs map for converter. 
-	 * @return an argument <tags, object> pairs map for converter.
+	 * Returns an argument {@code <tags, object>} pairs map for converter.
+	 * @return an argument {@code <tags, object>} pairs map for converter.
 	 */
 	public Map<String, Object> getConverterArgs();
 

@@ -771,7 +771,7 @@ public abstract class InputElement extends XulElement implements Constrainted, R
 	}
 	
 	/**
-	 * Returns the additional attributes which is set by setInputAttributes(Map<String, String> inputAttributes).
+	 * Returns the additional attributes which is set by {@code setInputAttributes(Map<String, String> inputAttributes)}.
 	 * @return inputAttributes a Map with attribute names as the keys.
 	 * @since 8.6.1
 	 */

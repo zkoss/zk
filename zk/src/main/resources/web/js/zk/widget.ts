@@ -2509,9 +2509,9 @@ wgt.$f().main.setTitle("foo");
 	 * @param Map opts if opts.fire is specified the onZIndex event will be triggered. If opts.floatZIndex is false, represent it is not from setFloatZIndex, so the userZIndex may be true.
 	 */
 	public setZIndex(zIndex: number, opts: Partial<{ floatZIndex: boolean; fire: boolean }>): void {
-		if (opts.floatZIndex && this._userZIndex)
+		if (opts && opts.floatZIndex && this._userZIndex)
 			return;
-		if (!opts.floatZIndex)
+		if (!opts || !opts.floatZIndex)
 			this._userZIndex = true;
 		if (!zIndex)
 			this._userZIndex = false;
@@ -5283,7 +5283,24 @@ _doFooSelect: function (evt) {
 		var els: {n: HTMLElement; w: Widget}[] = [];
 		for (var wid in _binds) {
 			if (name == '*' || name == _binds[wid].widgetName) {
-				var n = _binds[wid].$n(), w;
+				var _w = _binds[wid],
+					n = _w.$n(), w;
+
+				// force rod to render before query.
+				if (!n && _w.z_rod) {
+					var parent = _w;
+					for (var p: zk.Widget|null = _w; p != null; p = p.parent) {
+						if (p.z_rod || p._rodKid) {
+							parent = p;
+						} else {
+							break;
+						}
+					}
+					if (parent != null) {
+						parent.forcerender();
+					}
+					n = _w.$n();
+				}
 				//Bug B50-3310406 need to check if widget is removed or not.
 				if (n && (w = Widget.$(_binds[wid]))) {
 					els.push({
@@ -5743,6 +5760,18 @@ export class Desktop extends Widget {
 				}
 		}
 		return Desktop._dt;
+	},
+	/**
+	 * Destroy the desktop
+	 * @param Desktop zk desktop
+	 * @since 9.6.2
+	 */
+	destroy: function (desktop: zk.Desktop | null) {
+		if (desktop != null) {
+			zAu._rmDesktop(desktop);
+			delete zk.Desktop.all[desktop.id];
+			--zk.Desktop._ndt;
+		}
 	}
 }
 
@@ -6209,19 +6238,19 @@ rerender: function (skipper) {
 </code></pre>
  * <p>Since {@link zk.Widget#rerender} will pass the returned value of {@link #skip} to {@link #restore}, the skipper doesn't need to store what are skipped. That means, it is possible to have one skipper to serve many widgets. {@link #nonCaptionSkipper} is a typical example.
  * <p>In additions to passing a skipper to {@link zk.Widget#rerender}, the widget has to implement the mold method to handle the skipper:
-<pre><code>
-function (skipper) {
- var html = '<fieldset' + this.domAttrs_() + '>',
- cap = this.caption;
- if (cap) html += cap.redraw();
-
- html += '<div id="' + this.uuid + '$cave"' + this._contentAttrs() + '>';
- if (!skipper)
-  for (var w = this.firstChild; w; w = w.nextSibling)
-   if (w != cap) html += w.redraw();
- return html + '</div></fieldset>';
-}
-</pre></code>
+ * <pre>{@code
+ * function (skipper) {
+ * 	var html = '<fieldset' + this.domAttrs_() + '>',
+ * 		cap = this.caption;
+ * 	if (cap) html += cap.redraw();
+ *
+ * 	html += '<div id="' + this.uuid + '$cave"' + this._contentAttrs() + '>';
+ * 	if (!skipper)
+ * 	for (var w = this.firstChild; w; w = w.nextSibling)
+ * 		if (w != cap) html += w.redraw();
+ * 	return html + '</div></fieldset>';
+ * }
+ * }</pre>
  * <p>See also <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/Component Development/Server-side/Property_Rendering">ZK Client-side Reference: Property Rendering</a>.
  * @disable(zkgwt)
  */

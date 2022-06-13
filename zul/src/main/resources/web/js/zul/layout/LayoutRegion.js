@@ -46,6 +46,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	_scrollbar: null,
 	_slidable: true,
 	_closable: true,
+	_nativebar: true,
 
 	$init: function () {
 		this.$supers('$init', arguments);

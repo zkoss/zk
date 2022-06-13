@@ -59,7 +59,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		 * <th align=left>Examples
 		 * <tr><td><code>G</code>
 		 * <td>Era designator
-		 * <td><Text</a>
+		 * <td>Text</a>
 		 * <td><code>AD</code>
 		 * <tr bgcolor="#eeeeff">
 		 * <td><code>y</code>

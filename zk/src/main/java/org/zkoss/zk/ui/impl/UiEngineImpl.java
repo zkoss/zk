@@ -335,6 +335,10 @@ public class UiEngineImpl implements UiEngine {
 		getCurrentVisualizer().addSmartUpdate(comp, attr, value, priority);
 	}
 
+	public void clearSmartUpdate(Component comp) {
+		getCurrentVisualizer().clearSmartUpdate(comp);
+	}
+
 	public void addResponse(AuResponse response) {
 		getCurrentVisualizer().addResponse(response);
 	}

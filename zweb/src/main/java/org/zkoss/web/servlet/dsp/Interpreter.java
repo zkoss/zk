@@ -32,7 +32,7 @@ import org.zkoss.xel.XelException;
 /**
  * The interpreter of the DSP file.
  *
- * <p>Note: we recognize only <%, <\%, %>, %\>, ${ and $\{.
+ * <p>Note: we recognize only {@code <%, <\%, %>, %\>}, ${ and $\{.
  * Unlike JSP, we don't recognize \${ or \$\{.
  *
  * @author tomyeh

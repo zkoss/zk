@@ -1,0 +1,54 @@
+<!--
+B96-ZK-5083-test.html
+
+	Purpose:
+
+	Description:
+
+	History:
+		Fri Apr 29 14:30:23 CST 2022, Created by jameschu
+
+	Copyright (C) 2022 Potix Corporation. All Rights Reserved.
+-->
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Title</title>
+	</head> 
+	<body>
+		<div id="aaa">
+			Enabled Embedded ZK in zk.xml (ZK-4390)
+		</div>
+		<br />
+		<div id="status"></div>
+		<button id="loadBtn">Click it to load embedded ZK</button>
+		<button id="destroyBtn">Click it to destory, and see 'destroy!'</button>
+		<button id="seeDtCntBtn">Click it and see number 0 (desktop count) and undefined (in zk.Desktop.all)</button>
+		<script src="http://localhost:8080/zktest/zkau/web/js/zkmax/embedded/embedded.js"></script>
+		<script>
+			var loadBtn = document.getElementById('loadBtn');
+			loadBtn.addEventListener('click', embedZK, false);
+			function embedZK() {
+				var p = zEmbedded.load('aaa', 'http://localhost:8080/zktest/test2/B96-ZK-5083.zul')
+					.then(function(result) {
+						var dt = result.widget.desktop;
+						dt.listen({onBeforeDestroy: function() {
+							document.getElementById('status').innerHTML = 'destroy!';
+						}});
+						window['tempZKDtid'] = dt.id;
+					});;
+			}
+			var destroyBtn = document.getElementById('destroyBtn');
+			destroyBtn.addEventListener('click', destroyEmbeddedZK, false);
+			function destroyEmbeddedZK() {
+			   zEmbedded.destroy('aaa');
+			}
+			var seeDtCntBtn = document.getElementById('seeDtCntBtn');
+			seeDtCntBtn.addEventListener('click', showDesktopCount, false);
+			function showDesktopCount() {
+				alert(zk.Desktop._ndt + ', ' + zk.Desktop.all[window['tempZKDtid']]);
+			}
+		</script>
+	</body>
+</html>

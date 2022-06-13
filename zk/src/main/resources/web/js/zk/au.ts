@@ -1004,7 +1004,16 @@ zAu.beforeSend = function (uri, req, dt) {
 				break;
 			}
 
-			requri = zAu.beforeSend(requri, aureq, dt);
+			let oldRequri = zAu.beforeSend(requri, aureq, dt);
+
+			// split the different request for the different ReqUri for zephyr
+			if (j > 0 && oldRequri != requri) {
+				es.unshift(aureq);
+				sendPending = true;
+				break;
+			}
+			requri = oldRequri;
+
 			aureq.data = _deconstructPacket(aureq.data, files);
 
 			if (files.length) {

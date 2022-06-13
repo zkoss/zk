@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-5134.zul
+		Purpose:
+
+		Description:
+
+		History:
+			Wed Apr 27 14:37:46 CST 2022, Created by jameschu
+
+Copyright (C) 2022 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true"><![CDATA[
+		Should not see any javascript error.
+	]]></label>
+	<groupbox id="groupbox">
+		<caption id="caption" hflex="min">
+			Caption
+		</caption>
+		<div id="div" hflex="min">
+			data
+		</div>
+	</groupbox>
+</zk>

@@ -8,7 +8,7 @@ import java.util.Map;
  * 
  * @see org.zkoss.json.parser.JSONParser#parse(java.io.Reader, ContainerFactory)
  * 
- * @author FangYidong<fangyidong@yahoo.com.cn>
+ * @author FangYidong&lt;fangyidong@yahoo.com.cn>
  */
 public interface ContainerFactory {
 	/**

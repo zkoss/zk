@@ -219,6 +219,7 @@ public class Combobox extends Textbox {
 
 	/** Sets empty search message.
 	 * This message would be displayed, when no matching results was found.
+	 * Note: it's meaningless if no model case.
 	 *
 	 * @param msg
 	 * @since 8.5.1

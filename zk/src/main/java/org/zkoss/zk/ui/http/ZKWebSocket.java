@@ -54,6 +54,9 @@ public final class ZKWebSocket extends ServerEndpointConfig.Configurator {
 	@Override
 	public void modifyHandshake(ServerEndpointConfig config, HandshakeRequest request, HandshakeResponse response) {
 		org.zkoss.zk.ui.Session zkSession = SessionsCtrl.getSession(WebApps.getCurrent(), request.getHttpSession());
+		if (zkSession == null) {
+			return; //skip when session is expired but websocket try to reconnect
+		}
 		Map<String, List<String>> parameterMap = request.getParameterMap();
 		String tempSessionKey = tempSessionKey(extractDesktopId(parameterMap), extractConnectionUuid(request.getUserPrincipal()));
 		config.getUserProperties().put(tempSessionKey, zkSession);

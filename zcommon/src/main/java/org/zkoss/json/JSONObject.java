@@ -12,7 +12,7 @@ import java.util.Map;
  * A JSON object. Key value pairs are in the order of adding.
  * JSONObject supports java.util.Map interface.
  * 
- * @author FangYidong<fangyidong@yahoo.com.cn>
+ * @author FangYidong&lt;fangyidong@yahoo.com.cn>
  */
 public class JSONObject extends LinkedHashMap<Object, Object> implements Map<Object, Object>, JSONAware {
 	private static final long serialVersionUID = -503443796854799292L;

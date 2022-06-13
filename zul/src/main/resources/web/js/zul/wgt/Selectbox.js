@@ -48,23 +48,72 @@ zul.wgt.Selectbox = zk.$extends(zul.Widget, {
 			if (n) n.disabled = disabled ? 'disabled' : '';
 		},
 		/**
+		 * Returns whether it is multiple selections.
+		 * <p>
+		 * Default: false.
+		 * @return boolean
+		 * @since 10.0.0 for Zephyr
+		 */
+		/**
 		 * Sets whether multiple selections are allowed.
 		 * @param boolean multiple
 		 * @since 10.0.0 for Zephyr
 		 */
-		multiple: function multiple(_multiple) {
+		multiple: function (multiple) {
 			var n = this.$n();
-			if (n) n.multiple = _multiple ? 'multiple' : '';
+			if (n) n.multiple = multiple ? 'multiple' : '';
 		},
+		/**
+		 * Returns the maximal length of each item's label.
+		 * @return int
+		 * @since 10.0.0 for Zephyr
+		 */
 		/**
 		 * Sets the maximal length of each option's label.
 		 * @param int maxlength
 		 * @since 10.0.0 for Zephyr
 		 */
-		maxlength: function maxlength(_maxlength) {
-			var n = this.$n();
-			if (n) n.maxlength = maxlength;
+		maxlength: function () {
+			this.rerender();
 		},
+
+		/**
+		 * Returns all the selected indexes or null if no selections.
+		 * @return int[] selectedIndexes
+		 * @since 10.0.0 for Zephyr
+		 */
+		/**
+		 * Sets all the selected indexes.
+		 * @param int[] selectedIndexes
+		 * @since 10.0.0 for Zephyr
+		 */
+		selectedIndexes: (function () {
+			function doSelection(options, selectedIndexes) {
+				selectedIndexes = selectedIndexes || [];
+				var bucket = [];
+				for (var j of selectedIndexes) {
+					bucket[j] = true;
+				}
+				for (var i = 0, j = options.length; i < j; i++) {
+					options[i].selected = bucket[i];
+				}
+			}
+			return function (selectedIndexes) {
+				if (!this.isMultiple()) return;
+				if (this.desktop) {
+					var n = this.$n(),
+						options = n.options;
+					doSelection(options, selectedIndexes);
+				} else {
+					let self = this;
+					zk.afterMount(function () {
+						var n = self.$n(),
+							options = n.options;
+						doSelection(options, selectedIndexes);
+					});
+				}
+			};
+		})(),
 		/**
 		 * Returns the name of this component.
 		 * <p>
@@ -134,27 +183,22 @@ zul.wgt.Selectbox = zk.$extends(zul.Widget, {
 			this.setSelectedIndex(n.selectedIndex);
 			this.fire('onSelect', n.selectedIndex);
 		} else {
-			var opts = this.items,
-				selIndex = [],
-				changed = false;
+			var n = this.$n(),
+				opts = n.options,
+				selIndexes = [],
+				oldSelIndexes = this.getSelectedIndexes();
 			for (var j = 0, ol = opts.length; j < ol; ++j) {
-				var opt = opts[j],
-					optSelected = n.options[j].selected,
-					isSelected = this._selectedItems ? this._selectedItems.includes(opt) : null;
-				if (isSelected != optSelected) {
-					this._toggleItemSelection(opt, isSelected);
-					changed = true;
+				var opt = opts[j];
+				if (opt.selected) {
+					selIndexes.push(j);
 				}
-				if (optSelected) selIndex.push(j);
 			}
-			if (!changed) return;
-			this.fire('onSelect', selIndex);
+			selIndexes.sort();
+			oldSelIndexes.sort();
+			if (JSON.stringify(selIndexes) == JSON.stringify(oldSelIndexes)) return;
+			this._selectedIndexes = selIndexes;
+			this.fire('onSelect', selIndexes);
 		}
-	},
-	_toggleItemSelection: function (item, isSelect) {
-		if (!this._selectedItems) this._selectedItems = [];
-		if (isSelect) this._selectedItems.$remove(item);
-		else this._selectedItems.push(item);
 	},
 	//Bug 3304408: IE does not fire onchange
 	doBlur_: function (evt) {

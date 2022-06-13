@@ -300,10 +300,10 @@ boolean revert({@link zk.Draggable} dg, {@link Offset} pointer, {@link zk.Event}
 	 * <li>pos - the position of the new created element, i.e., the left-top corner. </li>
 	 * </ul>
 	 * <p>Example:
-<pre><code>
-var html = '<div style="left:' + pos[0] + 'px;top:' + pos[1] +'px"';
-...
-</code></pre>
+	 * <pre>{@code
+	 * var html = '<div style="left:' + pos[0] + 'px;top:' + pos[1] +'px"';
+	 * //...
+	 * }</pre>
 	 * <p>Returns the ghost element. This element will become {@link #node}, and
 	 * the original node will be restored after the dragging is finished (also after function specified in <code>endghosting</code> is called).
 	 *

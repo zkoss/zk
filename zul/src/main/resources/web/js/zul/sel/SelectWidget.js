@@ -201,7 +201,10 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		name: function () {
 			if (this.destkop) this.updateFormData();
 		},
-		selectOnHighlightDisabled: _zkf
+		selectOnHighlightDisabled: null,
+		checkmarkDeselectOther: function (cdo) {
+			this._cdo = cdo; // backward compatible
+		}
 	},
 	setChgSel: function (val) { //called from the server
 		var sels = {};

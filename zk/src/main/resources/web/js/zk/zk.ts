@@ -281,7 +281,7 @@ let _caches = {};
  * <p>Refer to {@link jq} for DOM related utilities.
  */
 
-/** A map of all classes, Map<int oid, zk.Class cls>.
+/** A map of all classes, {@code Map<int oid, zk.Class cls>}.
  * @since 5.0.8
  */
 // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
@@ -616,7 +616,7 @@ _zk.cut = function (props: Record<string, unknown>, nm: string): object | undefi
  * It is similar to Java's package statement except it returns the package
  * object.
  * <p>Notice the package is usually defined automatically by use of
- * <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/Widget_Package_Descriptor>WPD</a>,
+ * <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/Widget_Package_Descriptor">WPD</a>,
  * so you're rarely need to use this method.
  *
  * <p>Example:
@@ -1205,12 +1205,15 @@ _zk._noESC = 0; //# of disableESC being called (also used by mount.js)
  *  Example:
 <pre><code>zk.error('Oops! Something wrong:(');</code></pre>
 	* @param String msg the error message
+	 * @param boolean silent only show error box
 	* @see #errorDismiss
 	* @see #log
 	* @see #stamp(String, boolean)
 	*/
-_zk.error = function (msg: string): void {
-	zAu.send(new zk.Event(null, 'error', {message: msg}, {ignorable: true}), 800);
+_zk.error = function (msg: string, silent: boolean): void {
+	if (!silent) {
+		zAu.send(new zk.Event(null, 'error', {message: msg}, {ignorable: true}), 800);
+	}
 	_zk._Erbx.push(msg);
 };
 //DEBUG//

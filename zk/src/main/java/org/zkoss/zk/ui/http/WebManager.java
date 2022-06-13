@@ -295,7 +295,12 @@ public class WebManager {
 
 	/** Returns the prefix of URL to represent this build. */
 	private String getCWRURLPrefix() {
-		int code = _wapp.getVersion().hashCode() ^ _wapp.getBuild().hashCode() ^ WebApps.getEdition().hashCode();
+		final String verInfoEnabled = Library.getProperty("org.zkoss.zk.ui.versionInfo.enabled", "true");
+		String build = _wapp.getBuild();
+		if (!"true".equals(verInfoEnabled)) {
+			return org.zkoss.zk.ui.http.Utils.obfuscateHashWithSalt(build, verInfoEnabled);
+		}
+		int code = _wapp.getVersion().hashCode() ^ build.hashCode() ^ WebApps.getEdition().hashCode();
 
 		for (Iterator<LanguageDefinition> it = LanguageDefinition.getAll().iterator(); it.hasNext();) {
 			final LanguageDefinition langdef = it.next();

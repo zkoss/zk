@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-5137.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu Apr 28 10:00:36 CST 2022, Created by jameschu
+
+Copyright (C) 2022 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<style>
+		.z-div{
+		background-color: blue;
+		}
+		.some-class{
+		background-color: green;
+		}
+	</style>
+	<div id="flexItem" vflex="1">
+		<label>Click the buttons, the flex should works fine (color cover all viewport background)</label>
+		<button id="setBtn" label="set" onClick="setSclass()"/>
+		<button id="addBtn" label="add" onClick="addSclass()"/>
+		<button id="toggleBtn" label="toggle" onClick="toggleSclass()"/>
+	</div>
+	<zscript><![CDATA[
+public void setSclass(){
+    flexItem.setSclass("some-class");
+}
+
+public void addSclass(){
+    flexItem.addSclass("some-class");
+}
+
+public void toggleSclass(){
+    if (flexItem.getSclass() != null && flexItem.getSclass().contains("some-class")){
+        flexItem.removeSclass("some-class");
+    }else{
+        flexItem.addSclass("some-class");
+    }
+}
+    ]]></zscript>
+</zk>

@@ -410,7 +410,7 @@ public class Exceptions {
 	 * will be created if null.
 	 * @param prefix the prefix shown in front of each line of the stack trace;
 	 * null to denote empty
-	 * @param maxcnt the maximal allowed number of lines to dump (<=0: no limit)
+	 * @param maxcnt the maximal allowed number of lines to dump ({@code <=0}: no limit)
 	 */
 	public static final StringBuffer
 	formatStackTrace(StringBuffer sb, Throwable t, String prefix, int maxcnt) {

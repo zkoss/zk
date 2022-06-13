@@ -1174,7 +1174,7 @@ public interface Execution extends Scope {
 	/** Returns whether it is a browser of the specified type.
 	 *
 	 * @param type the type of the browser.
-	 * The syntax: <code>&lt;browser-name&gt;[&lt;version-number&gt];[-]</code>.<br/>
+	 * The syntax: {@code <browser-name>[<version-number>][-]}.<br/>
 	 * For example, ie9, ios and ie6-.
 	 * And, <code>ie9</code> means Internet Explorer 9 and later, while
 	 * <code>ie6-</code> means Internet Explorer 6 (not prior, nor later).

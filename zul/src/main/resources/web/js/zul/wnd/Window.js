@@ -404,6 +404,7 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 	_minwidth: 200,
 	_shadow: true,
 	_tabindex: 0,
+	_nativebar: true,
 
 	$init: function () {
 		this._fellows = {};

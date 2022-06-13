@@ -87,7 +87,6 @@ subprojects {
 	}
 
 	task compileCSS() {
-		dependsOn(npmInstall)
 		setOnlyIf { project.ext['gradleFrontendSkip'] == 'false' }
 		doLast {
 			exec {

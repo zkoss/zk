@@ -95,7 +95,7 @@ public interface PageCtrl {
 
 	/** Adds the tags that will be generated inside the head element
 	 * and before ZK's default tags. For example,
-	 * <pre><code>((PageCtrl)page).addBeforeHeadTags("<meta name=\"robots\" content=\"index,follow\"/>");</code></pre>
+	 * <pre>{@code ((PageCtrl)page).addBeforeHeadTags("<meta name=\"robots\" content=\"index,follow\"/>");}</pre>
 	 *
 	 * <p>You could specify the link, meta and script directive to have the similar
 	 * result.
@@ -105,7 +105,7 @@ public interface PageCtrl {
 
 	/** Adds the tags that will be generated inside the head element
 	 * and after ZK's default tags. For example,
-	 * <pre><code>((PageCtrl)page).addBeforeHeadTags("<meta name=\"robots\" content=\"index,follow\"/>");</code></pre>
+	 * <pre>{@code ((PageCtrl)page).addBeforeHeadTags("<meta name=\"robots\" content=\"index,follow\"/>");}</pre>
 	 *
 	 * <p>You could specify the link, meta and script directive to have the similar
 	 * result.

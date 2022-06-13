@@ -192,23 +192,23 @@ import org.zkoss.zul.impl.XulElement;
  * "true" in WEB-INF/zk.xml. If you did not specify the Library Property,
  * default is false.</p>
  *
- * <pre><code>
+ * <pre>{@code
  *	<library-property>
  *		<name>org.zkoss.zul.listbox.rod</name>
  *		<value>true</value>
  *	</library-property>
- * </code></pre>
+ * }</pre>
  *
  * <p>To turn on ROD for a specific Listbox, you have to specify the Listbox's
  * attribute map with key "org.zkoss.zul.listbox.rod" to true. That is, for
  * example, if in a zul file, you shall specify &lt;custom-attributes> of the
  * Listbox like this:</p>
  *
- * <pre><code>
+ * <pre>{@code
  *	<listbox ...>
  *    <custom-attributes org.zkoss.zul.listbox.rod="true"/>
  *  </listbox>
- * </code></pre>
+ * }</pre>
  *
  * <p>You can mix the Library Property and &lt;custom-attributes> ways together.
  * The &lt;custom-attributes> way always takes higher priority. So you
@@ -3434,7 +3434,7 @@ public class Listbox extends MeshElement {
 			if (_nonselTags != null)
 				renderer.render("nonselectableTags", _nonselTags);
 			if (isCheckmarkDeselectOther())
-				renderer.render("_cdo", true);
+				renderer.render("checkmarkDeselectOther", true);
 			if (!isRightSelect())
 				renderer.render("rightSelect", false);
 			if (isListgroupSelectable())

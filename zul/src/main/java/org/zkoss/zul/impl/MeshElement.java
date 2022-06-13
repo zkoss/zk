@@ -287,8 +287,8 @@ public abstract class MeshElement extends XulElement implements Paginated {
 		if (!"bottom".equals(_pagingPosition))
 			render(renderer, "pagingPosition", _pagingPosition);
 
-		if (isNativeScrollbar())
-			renderer.render("_nativebar", true);
+		if (!isNativeScrollbar())
+			renderer.render("_nativebar", false);
 	}
 
 	//internal use only
