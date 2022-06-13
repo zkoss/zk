@@ -57,6 +57,7 @@ export interface DomStyleOptions {
 export interface DomClassOptions {
 	sclass: boolean;
 	zclass: boolean;
+	input?: boolean; // zul.inp.InputWidget.prototype.domClass_
 }
 
 export interface DomAttrsOptions extends DomStyleOptions, DomClassOptions {
@@ -65,6 +66,7 @@ export interface DomAttrsOptions extends DomStyleOptions, DomClassOptions {
 	domClass: boolean;
 	tooltiptext: boolean;
 	tabindex: boolean;
+	text?: boolean; // zul.inp.InputWidget.prototype.domAttrs_
 }
 
 var _binds: Record<string, Widget> = {}, //{uuid, wgt}: bind but no node
@@ -688,7 +690,7 @@ export class Widget extends ZKObject {
 	// FIXME: _scrollbar?: any;
 	// FIXME: $binder(): zk.Binder | null;
 
-	declare public getInputNode?: () => HTMLInputElement;
+	declare public getInputNode?: () => HTMLInputElement | null | undefined;
 
 	declare public z_rod?: boolean | number;
 	declare public _rodKid?: boolean;
@@ -720,7 +722,7 @@ export class Widget extends ZKObject {
 	declare private _userZIndex;
 	declare private _zIndex;
 	declare private z_isDataHandlerBound;
-	declare private _drag;
+	declare protected _drag;
 	declare private _preWidth;
 	declare private _preHeight;
 	declare private _action: StringFieldValue;
@@ -894,6 +896,8 @@ new zul.wnd.Window({
 	 */
 	public constructor(props?: Record<string, unknown> | typeof zkac) {
 		super();
+		this.className = this.constructor.prototype.className;
+		this.widgetName = this.constructor.prototype.widgetName;
 		this._asaps = {}; //event listened at server
 		this._lsns = {}; //listeners(evtnm,listener)
 		this._bklsns = {}; //backup for listeners by setListeners
@@ -3805,7 +3809,7 @@ unbind_: function (skipper, after) {
 		delete this._vflexsz;
 	}
 
-	protected resetSize_(orient: string): void {
+	protected resetSize_(orient: zk.FlexOrient): void {
 		var n = this.$n() as HTMLElement,
 			hasScroll = this._beforeSizeHasScroll;
 		if (hasScroll || (hasScroll == null && (n.scrollTop || n.scrollLeft))) // keep the scroll status, the issue also happens (not only IE8) if trigger by resize browser window.
@@ -4305,7 +4309,7 @@ focus_: function (timeout) {
 	 * @see #fire
 	 * @see #listen
 	 */
-	public fire(evtnm: string, data?: unknown, opts?: Partial<EventOptions>, timeout?: number): Event {
+	public fire(evtnm: string, data?: unknown, opts?: Partial<EventOptions> | null, timeout?: number): Event {
 		return this.fireX(new zk.Event(this, evtnm, data, opts), timeout);
 	}
 

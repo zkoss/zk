@@ -512,7 +512,7 @@ export class Box extends zul.Widget {
 	}
 
 	//bug#3042306
-	protected override resetSize_(orient: string): void { //@Overrid zk.Widget#resetSize_, called when beforeSize
+	protected override resetSize_(orient: zk.FlexOrient): void { //@Overrid zk.Widget#resetSize_, called when beforeSize
 		super.resetSize_(orient);
 
 		// B85-ZK-3516: remove size of frame

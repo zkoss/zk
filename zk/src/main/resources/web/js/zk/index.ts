@@ -32,7 +32,6 @@ import {zkreg} from './widget';
 declare global {
 	interface Window {
 		zk: ZKStatic;
-		zjq: typeof zjq;
 		zFlex: typeof zFlex;
 	}
 }

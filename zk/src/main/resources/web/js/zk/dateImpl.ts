@@ -16,7 +16,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 import {default as zk} from './zk';
 
-window.Dates = {
+export const Dates = {
 	newInstance(param?: number | DateImpl | Parameters<DateConstructor['UTC']>, tz?: string): DateImpl {
 		var m;
 		if (tz)
@@ -39,6 +39,7 @@ window.Dates = {
 		return new DateImpl(m, tz);
 	}
 };
+window.Dates = Dates;
 
 export class DateImpl extends Date {
 	public _moment: Moment;
@@ -58,7 +59,7 @@ export class DateImpl extends Date {
 	public _getUTCMoment(): Moment {
 		return this._moment.tz('UTC');
 	}
-	public getTimeZone(): unknown {
+	public getTimeZone(): string {
 		return this._timezone;
 	}
 	public override getDate(): number {
