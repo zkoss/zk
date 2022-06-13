@@ -113,7 +113,7 @@ export class SimpleConstraint extends zk.Object {
 					try {
 						this._regex = new RegExp(k >= 0 ? cst.substring(j, k) : cst.substring(j), regexFlags || 'g');
 					} catch (e) {
-						zk.error(e.message || e);
+						zk.error((e as Error).message || e as string);
 					}
 					
 					this._cstArr[this._cstArr.length] = 'regex';
@@ -147,7 +147,7 @@ export class SimpleConstraint extends zk.Object {
 					break;
 			}
 
-			var s;
+			var s: string;
 			for (k = j; ; ++k) {
 				if (k >= len) {
 					s = cst.substring(j);
@@ -188,7 +188,7 @@ export class SimpleConstraint extends zk.Object {
 	protected parseConstraint_(cst: string): void {
 		var f = this._flags,
 			arr = this._cstArr,
-			bsCst = _baseConstraints[cst];
+			bsCst = _baseConstraints[cst as keyof typeof _baseConstraints];
 		if (cst && bsCst) {
 			if (cst == 'server') this.serverValidate = true;
 			f[bsCst] = true;
