@@ -18,17 +18,15 @@
     //    "noUnusedLocals": true,
     "noImplicitAny": false, // leave this for js compatible
     "forceConsistentCasingInFileNames": true,
-    "typeRoots": [
-      "./@types/"
-    ],
+    "allowUmdGlobalAccess": true,
     "types": [
       "zk",
+      "zul",
       "webpack-env"
     ]
   },
   "include": [
-    "zk/src/main/resources/web/js/zk/*",
-    //    "zul/src/main/resources/web/js/zul/**/*"
+    "zk/src/main/resources/web/js/zk/*"
   ],
   "exclude": [
     "node_modules",

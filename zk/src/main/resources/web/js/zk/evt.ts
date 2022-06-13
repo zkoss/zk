@@ -35,6 +35,10 @@ export interface EventOptions {
 		coords: [number, number];
 	};
 	dir: string;
+	uploadCallback: { // zul.Uploader.prototype.start
+		onprogress(event): void;
+		onload(evemt): void;
+	};
 }
 
 export interface EventStopOptions {
@@ -90,21 +94,23 @@ export interface EventStopOptions {
  * @disable(zkgwt)
  */
 export class Event extends ZKObject {
+	public tooltipped?: boolean; // zul.Widget.prototype.doTooltipOver_
+	public contextSelected?: boolean; // zul.Widget.prototype.doClick_
 
 	// dom.ts#metaData
 	declare public which;
-	declare public metaKey;
+	declare public metaKey: boolean;
 	declare public ctrlKey;
 	declare public altKey;
 	declare public shiftKey;
 
 	// dom.ts#mouseData
-	declare public pageX;
-	declare public pageY;
+	declare public pageX: number;
+	declare public pageY: number;
 
 	// dom.ts#keyData
 	declare public key;
-	declare public keyCode;
+	declare public keyCode: number;
 	declare public charCode;
 
 	public shallStop = false;
@@ -291,6 +297,7 @@ evt.stop({progagation:true,revoke:true}); //revoke the event propagation
 	}
 }
 export interface ClientActivity {
+	_onSyncScroll: {_onSyncScroll} | [unknown, Callable];
 	_beforeSizeForRead: {_beforeSizeForRead} | [unknown, Callable];
 	beforeSize: {beforeSize} | [unknown, Callable];
 	afterSize: {afterSize} | [unknown, Callable];
@@ -328,7 +335,7 @@ export interface ZWatch {
 var _visiEvts = {onFitSize: true, onSize: true, onShow: true, onHide: true, beforeSize: true, afterSize: true},
 	_watches = {}, //Map(watch-name, [object, [watches..]]) [0]: obj, [1]: [inf]
 	_dirty;
-// See `ctl.orign` of `zul.wgt.Popup::onFloatUp`.
+// See `ctl.orign` of `zul.wgt.Popup.prototype.onFloatUp`.
 // `ZWatchController` was previously named `_Gun` and not exported.
 // To export this class, the variables above and functions below are pulled out from `zWatch` (exported later in this file).
 export class ZWatchController extends zk.Object {

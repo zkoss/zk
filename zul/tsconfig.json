@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": [
+      "esnext",
+      "dom",
+      "ScriptHost" // ActiveObject
+    ],
+    "module": "commonjs",
+    "allowJs": false,
+    "checkJs": false,
+    "outDir": "../build/js",
+    "rootDir": "./src/main/resources/web/js",
+    "strict": true,
+    "allowSyntheticDefaultImports": true,
+    "allowUmdGlobalAccess": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": false, // leave this for js compatible,
+    "noImplicitOverride": true,
+    "noUnusedLocals": true,
+    "useUnknownInCatchVariables": false,
+    "types": [
+      "webpack-env",
+      "zk"
+    ]
+  },
+  "include": [
+    "./src/main/resources/web/js"
+  ]
+}

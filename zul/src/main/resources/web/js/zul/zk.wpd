@@ -12,12 +12,5 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 -->
 
 <package name="zul" language="xul/html" depends="zul.lang">
-	<script src="dom.js"/>
-	<script src="Widget.js" jsdoc="true"/>
-	<script src="LabelImageWidget.js" jsdoc="true"/>
-	<script src="ContainerWidget.js" jsdoc="true"/>
-	
-	<script src="Upload.js" jsdoc="true"/>
-	<script src="WScroll.js" jsdoc="true"/>
-	<script src="Scrollbar.js" jsdoc="true"/>
+	<script src="index.js"/>
 </package>

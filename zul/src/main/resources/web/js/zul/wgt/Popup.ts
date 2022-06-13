@@ -1,4 +1,4 @@
-/* Popup.js
+/* Popup.ts
 
 	Purpose:
 
@@ -12,6 +12,28 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+
+export type Ref = zk.Widget | string
+export interface PopupOptions extends Partial<zk.PositionOptions> {
+	focusFirst?: boolean;
+	sendOnOpen?: boolean;
+	type?: string;
+	disableMask?: boolean;
+	which?: number; // See the usage of `Popup.prototype.open` in `zul.Widget`.
+	keepVisible?: boolean;
+}
+// Offset can be null in zul.inp.Errorbox.prototype.getPositionArgs_
+export type PositionArgs = [
+	Ref | null | undefined,
+	zk.Offset | null | undefined,
+	string | null | undefined,
+	PopupOptions | null | undefined
+]
+export interface PositionInfo {
+	dim?: zk.Dimension;
+	pos?: string | null;
+}
+
 /**
  * A container that is displayed as a popup.
  * The popup window does not have any special frame.
@@ -21,17 +43,27 @@ it will be useful, but WITHOUT ANY WARRANTY.
  *
  * <p>Default {@link #getZclass}: z-popup.
  */
-zul.wgt.Popup = zk.$extends(zul.Widget, {
-	_visible: false,
+export class Popup extends zul.Widget {
+	public override _visible = false;
+	protected _fakeParent?: zk.Widget | null;
+	public mask?: zk.eff.Mask | null;
+	private _openInfo?: PositionArgs | null;
+	private _adjustLeft?: number | null;
+	private _adjustTop?: number | null;
+	private _shallToggle?: boolean | null;
+	protected _keepVisible?: boolean | null;
+	public _stackup?: HTMLIFrameElement | null;
+
 	/**
 	 * Returns whether the popup is visible.
 	 * @return boolean
 	 */
-	isOpen: function () {
+	public isOpen(): boolean | null | undefined {
 		return this.isVisible();
-	},
+	}
+
 	// a delegator for open() in zephyr.
-	setOpen: function (options) {
+	public setOpen(options: PositionArgs): void {
 		if (this.desktop || this.z_rod) {
 			this.open.apply(this, options);
 		} else {
@@ -42,9 +74,10 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 				}
 			});
 		}
-	},
+	}
+
 	// a delegator for close() in zephyr.
-	setClose: function (closed) {
+	public setClose(closed: boolean): void {
 		if (closed != this.isOpen()) return; // do nothing.
 		if (this.desktop || this.z_rod) {
 			this.close();
@@ -56,7 +89,8 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 				}
 			});
 		}
-	},
+	}
+
 	/**
 	 * Opens the popup.
 	 * <p>Note: the ref with the position parameter is prior to the offset parameter,
@@ -111,11 +145,11 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 	 *  element.
 	 *  @see #open(zk.Widget, Offset, String, Map)
 	 */
-	open: function (ref, offset, position, opts) {
+	public open(ref?: Ref | null, offset?: zk.Offset | null, position?: string | null, opts?: PopupOptions | null): void {
 		this._fakeParent = zk.$(ref);
 		var posInfo = this._posInfo(ref, offset, position),
 			node = this.$n(),
-			$n = jq(node);
+			$n = jq(node!);
 
 		// the top is depend on children's height, if child will re-size after onSize/onShow,
 		// popup need to re-position top after children height has calculated.
@@ -123,7 +157,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		// should keep openInfo each time,
 		// maybe have to reposition in onResponse if the child changed with onOpen event,
 		if (arguments.length != 0) //do not update _openInfo when just call open()
-			this._openInfo = arguments;
+			this._openInfo = arguments as unknown as PositionArgs;
 
 		//F70-ZK-2007: Check if it is toggle type.
 		this._shallToggle = opts && opts.type == 'toggle';
@@ -139,18 +173,20 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		this.setFloating_(true); // B50-ZK-280: setFloating_ first
 		this.setTopmost();
 		this.openAnima_(ref, offset, position, opts);
-	},
+	}
+
 	/** The effect for opening the popup. Override this function to provide
 	 * opening effect. afterOpenAnima_ needs to be called after the effect.
 	 * @since 6.0.1
 	 */
-	openAnima_: function (ref, offset, position, opts) {
+	 protected openAnima_(ref?: Ref | null, offset?: zk.Offset | null, position?: string | null, opts?: PopupOptions | null): void {
 		this.afterOpenAnima_(ref, offset, position, opts);
-	},
+	}
+
 	/** The handling after the opening effect of popup.
 	 * @since 6.0.1
 	 */
-	afterOpenAnima_: function (ref, offset, position, opts) {
+	 protected afterOpenAnima_(ref?: Ref | null, _offset?: zk.Offset | null, _position?: string | null, opts?: PopupOptions | null): void {
 		var node = this.$n(),
 			sendOnOpen = opts && opts.sendOnOpen;
 		// B85-ZK-3606: for adjusting popup position
@@ -186,7 +222,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 			if (!this._stackup)
 				this._stackup = jq.newStackup(node, node.id + '-stk');
 			else {
-				var dst, src;
+				var dst: CSSStyleDeclaration, src: CSSStyleDeclaration;
 				(dst = this._stackup.style).top = (src = node.style).top;
 				dst.left = src.left;
 				dst.zIndex = src.zIndex;
@@ -196,9 +232,10 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 
 		if (sendOnOpen) this.fire('onOpen', {open: true, reference: ref});
 		//add extra CSS class for easy customize
-		jq(node).addClass(this.$s('open'));
-	},
-	_adjustOffsets: function (ref) {
+		jq(node!).addClass(this.$s('open'));
+	}
+
+	private _adjustOffsets(ref: zk.Widget | null): void {
 		if (ref && ref.desktop && this.desktop) {
 			var refDim = zk(ref).dimension(true),
 				thisDim = zk(this).dimension(true);
@@ -208,16 +245,18 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 			}
 			this._keepVisible = true;
 		}
-	},
+	}
+
 	/** Returns whether to instantiate a stackup when {@link #open}
 	 * is called.
 	 * <p>If the derive class created its own stackup (such as creating
 	 * a shadow), it shall override this method to return false.
 	 * @return boolean
 	 */
-	shallStackup_: function () {
+	protected shallStackup_(): boolean {
 		return zk.eff.shallStackup();
-	},
+	}
+
 	/**
 	 * Sets the popup position.
 	 * <p>Note: the ref with the position parameter is prior to the offset parameter,
@@ -231,15 +270,16 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 	 * @param Map opts a map of addition options.<br/>
 	 * Allowed values: refer to {@link jqzk#position(Dimension,String,Map)}.
 	 */
-	position: function (ref, offset, position, opts) {
+	public position(ref?: Ref | null, offset?: zk.Offset | null, position?: string | null, opts?: Partial<zk.PositionOptions> | null): void {
 		var posInfo = this._posInfo(ref, offset, position);
 		if (posInfo)
 			zk(this.$n()).position(posInfo.dim, posInfo.pos, opts);
-	},
+	}
+
 	/** Reset the position on scroll
-	 * @param zk.Event evt
+	 * @param zk.ZWatchController evt
 	 */
-	_onSyncScroll: function (evt) {
+	public _onSyncScroll(evt: zk.ZWatchController): void {
 		if (evt && (!this._fakeParent || zUtl.isAncestor(evt.origin, this._fakeParent))) {
 			if (this.isInView_()) {
 				var args = this.getPositionArgs_();
@@ -252,9 +292,11 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 				this.close({keepVisible: true});
 			}
 		}
-	},
-	_posInfo: function (ref, offset, position, opts) {
-		var pos, dim;
+	}
+
+	protected _posInfo(ref?: Ref | null, offset?: zk.Offset | null, position?: string | null, _opts?: PopupOptions | null): PositionInfo | void {
+		var pos: string | undefined,
+			dim: zk.Dimension | undefined;
 
 		if (position) {
 			if (ref) {
@@ -285,8 +327,9 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 			dim.left += $n.sumStyles('l', jq.margins);
 			return {pos: pos, dim: dim};
 		}
-	},
-	onResponse: function () {
+	}
+
+	public onResponse(): void {
 		if (this.mask) this.mask.destroy();
 		// B50-ZK-391: Tooltip loses "position=after_end" positioning if onOpen eventlistener added to popup
 		var openInfo = this._openInfo;
@@ -295,7 +338,8 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		}
 		zWatch.unlisten({onResponse: this});
 		this.mask = null;
-	},
+	}
+
 	/**
 	 * Closes this popup at the client.
 	 *
@@ -303,7 +347,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 	 * clicks outside of the popup.
 	 * @param Map opts if opts.sendOnOpen exists, it will fire onOpen event.
 	 */
-	close: function (opts) {
+	public close(opts?: PopupOptions): void {
 		if (this._stackup)
 			this._stackup.style.display = 'none';
 		// F70-ZK-2007: Clear toggle type.
@@ -313,7 +357,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 			//fix firefox, safari and ie issue
 			if ((zk.ie || zk.ff || zk.safari) && zk.currentFocus) {
 				 // Bug ZK-2922, check ancestor first.
-				var n = zk.currentFocus.getInputNode ? zk.currentFocus.getInputNode() : zk.currentFocus.$n();
+				var n = zk.currentFocus.getInputNode ? zk.currentFocus.getInputNode() : zk.currentFocus.$n()!;
 				if (jq.nodeName(n, 'input')) {
 					if ((zk.ff || zk.safari) && jq.isAncestor(this.$n(), n)) {
 						jq(n).blur(); // trigger a missing blur event.
@@ -324,7 +368,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 				}
 			}
 		} catch (e) {
-			zk.debugLog(e.message || e);
+			zk.debugLog((e as Error).message || e as string);
 		}
 
 		this.closeAnima_(opts);  // Bug ZK-1124: should pass arguments to closeAnima_ function
@@ -334,38 +378,34 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 			this._keepVisible = false;
 			this._fakeParent = null;
 		}
-	},
+	}
+
 	/** The effect for closing the popup. Override this function to provide
 	 * closing effect. afterCloseAnima_ needs to be called after the effect.
 	 * @since 6.0.1
 	 */
-	closeAnima_: function (opts) {
+	protected closeAnima_(opts?: PopupOptions): void {
 		this.afterCloseAnima_(opts);
-	},
+	}
+
 	/** The handling after the closing effect of popup.
 	 * @since 6.0.1
 	 */
-	afterCloseAnima_: function (opts) {
+	protected afterCloseAnima_(opts?: PopupOptions): void {
 		this.setVisible(false);
 
-		var node = this.$n();
+		var node = this.$n()!;
 		zk(node).undoVParent();
 		zWatch.fireDown('onVParent', this);
 
 		this.setFloating_(false);
 		if (opts && opts.sendOnOpen)
 			this.fire('onOpen', {open: false});
-
-		if (zk.ie < 11) { // re-create dom element to remove :hover state style
-			var that = this;
-			setTimeout(function () {
-				that.replaceHTML(node); // see also ZK-1216, ZK-1124, ZK-318
-			}, 50);
-		}
 		//remove extra CSS class
 		jq(node).removeClass(this.$s('open'));
-	},
-	onFloatUp: function (ctl, opts) {
+	}
+
+	public onFloatUp(ctl: zk.ZWatchController, opts: zk.FireOptions): void {
 		this._keepVisible = false;
 		if (!this.isVisible())
 			return;
@@ -374,16 +414,17 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		// F70-ZK-2007: If popup belongs to widget's ascendant then return.
 		if (this._shallToggle && openInfo && opts && (
 				opts.triggerByClick === undefined || (
-				openInfo[3].which == opts.triggerByClick && zUtl.isAncestor(this._openInfo[0], ctl.origin)))) {
+				openInfo[3]!.which == opts.triggerByClick && zUtl.isAncestor(openInfo[0] as zk.Widget, ctl.origin)))) {
 			return;
 		}
 		this._doFloatUp(ctl);
-	},
-	_doFloatUp: function (ctl) {
+	}
+
+	private _doFloatUp(ctl: zk.ZWatchController): void {
 		if (!this.isVisible())
 			return;
-		var wgt = ctl.origin;
-		for (var floatFound; wgt; wgt = wgt.parent) {
+		var wgt: zk.Widget | null = ctl.origin;
+		for (var floatFound: boolean | undefined; wgt; wgt = wgt.parent) {
 			if (wgt == this) {
 				if (!floatFound)
 					this.setTopmost();
@@ -394,20 +435,23 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 			floatFound = floatFound || wgt.isFloating_();
 		}
 		this.close({sendOnOpen: true});
-	},
+	}
+
 	// ZK-2990: should also change the zIndex of the stackup of the widget
-	setFloatZIndex_: function (node, zi) {
-		this.$supers('setFloatZIndex_', arguments);
+	protected override setFloatZIndex_(node: HTMLElement, zi: number): void {
+		super.setFloatZIndex_(node, zi);
 		if (this._stackup) {
-			this._stackup.style.zIndex = zi;
+			this._stackup.style.zIndex = zi as unknown as string;
 		}
-	},
-	bind_: function () {
-		this.$supers(zul.wgt.Popup, 'bind_', arguments);
+	}
+
+	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+		super.bind_(desktop, skipper, after);
 		zWatch.listen({onFloatUp: this, onShow: this, afterSize: this, _onSyncScroll: this});
 		this.setFloating_(true);
-	},
-	unbind_: function () {
+	}
+
+	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		zk(this.$n()).undoVParent(); //Bug 3079480
 		if (this._stackup) {
 			jq(this._stackup).remove();
@@ -418,15 +462,17 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		this._shallToggle = null;
 		zWatch.unlisten({onFloatUp: this, onShow: this, afterSize: this, _onSyncScroll: this});
 		this.setFloating_(false);
-		this.$supers(zul.wgt.Popup, 'unbind_', arguments);
-	},
-	afterSize: function () {
+		super.unbind_(skipper, after, keepRod);
+	}
+
+	public afterSize(): void {
 		this.reposition();
-	},
+	}
+
 	/** Reposition popup
 	 * @since 8.0.3
 	 */
-	reposition: function () {
+	public reposition(): void {
 		if (this._fakeParent) {
 			// B85-ZK-3606: reposition based on the current position of the item
 			this.position.apply(this, this.getPositionArgs_());
@@ -437,34 +483,44 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 				//openInfo: ref, offset, position, opts
 				var posInfo = this._posInfo(openInfo[0], openInfo[1], openInfo[2]);
 				if (posInfo)
-					jq(this.$n()).zk.position(posInfo.dim, posInfo.pos, openInfo[3]);
+					jq(this.$n()!).zk.position(posInfo.dim, posInfo.pos, openInfo[3]);
 			}
 		}
-	},
-	onShow: function (ctl) {
+	}
+
+	public onShow(ctl: zk.ZWatchController): void {
 		//bug 3034505: call children's onShow to calculate the height first
 		ctl.fire(this.firstChild);
 		zk(this).redoCSS(-1, {'fixFontIcon': true});
-	},
-	setHeight: function (height) {
-		this.$supers('setHeight', arguments);
+	}
+
+	public override setHeight(height?: string | null): void {
+		super.setHeight(height);
 		if (this.desktop)
 			zUtl.fireShown(this);
-	},
-	setWidth: function (width) {
-		this.$supers('setWidth', arguments);
+	}
+
+	public override setWidth(width?: string | null): void {
+		super.setWidth(width);
 		if (this.desktop)
 			zWatch.fireDown('onShow', this);
-	},
-	prologHTML_: function (out) {
-	},
-	epilogHTML_: function (out) {
-	},
-	isInView_: function () {
-		return this._fakeParent ? zk(this._fakeParent).isRealScrollIntoView(true) : false;
-	},
-	getPositionArgs_: function () {
-		var p = this._fakeParent, dim = zk(p).dimension(true);
-		return [p, [dim.left + this._adjustLeft, dim.top + this._adjustTop], null, {dodgeRef: false}];
 	}
-});
+
+	protected prologHTML_(_out: string[]): void {
+		// empty on purpose
+	}
+
+	protected epilogHTML_(_out: string[]): void {
+		// empty on purpose
+	}
+
+	protected isInView_(): boolean {
+		return this._fakeParent ? zk(this._fakeParent).isRealScrollIntoView(true) : false;
+	}
+
+	protected getPositionArgs_(): PositionArgs {
+		var p = this._fakeParent, dim = zk(p).dimension(true);
+		return [p, [dim.left + this._adjustLeft!, dim.top + this._adjustTop!], null, {dodgeRef: false}];
+	}
+}
+zul.wgt.Popup = zk.regClass(Popup);

@@ -73,7 +73,7 @@ export interface JQZK {
 	hasVScroll(): boolean;
 	isInput(): boolean;
 	isOverlapped(el: HTMLElement, tolerant?: number): boolean;
-	isRealScrollIntoView(): boolean;
+	isRealScrollIntoView(opt?: boolean): boolean;
 	isRealVisible(strict?: boolean): boolean;
 	isScrollIntoView(recursive?: boolean): boolean;
 	isVisible(strict?: boolean): boolean;
@@ -93,8 +93,8 @@ export interface JQZK {
 	padBorderWidth(): number;
 	paddingHeight(): number;
 	paddingWidth(): number;
-	position(dim?: Dimension, where?: string, opts?: Partial<PositionOptions>): this;
-	position(el?: Element, where?: string, opts?: Partial<PositionOptions>): this;
+	position(dim?: Dimension, where?: string | null, opts?: Partial<PositionOptions> | null): this;
+	position(el?: Element, where?: string | null, opts?: Partial<PositionOptions> | null): this;
 	redoCSS(timeout?: number, opts?: Partial<RedoCSSOptions>): this;
 	redoSrc(): this;
 	relativize(): this;
@@ -839,7 +839,7 @@ Object.assign(zjq.prototype, {
 				// for B65-ZK-2193.zul, to have better scrollIntoView's behavior
 				if (!isAbsolute && zk.isLoaded('zul.sel')) {
 					var w = zk.Widget.$(n);
-					isAbsolute = w && w instanceof zul.sel['ItemWidget'];
+					isAbsolute = w && w instanceof zul.sel.ItemWidget;
 				}
 
 				if (isAbsolute) {
