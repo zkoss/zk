@@ -749,7 +749,8 @@ export class Widget extends zk.Widget {
 				beforeCtrlKeys_?: Widget['beforeCtrlKeys_'];
 			}
 			for (var w: WidgetBeforeCtrlKeys = target!; ; w = w.parent!) {
-				if (w.beforeCtrlKeys_ && w.beforeCtrlKeys_(evt))
+				// eslint-disable-next-line @typescript-eslint/ban-types
+				if (w.beforeCtrlKeys_ && (w.beforeCtrlKeys_ as Function)(evt))
 					return;
 				if (w == wgt) break;
 			}

@@ -43,7 +43,7 @@ export interface DraggableOptions {
 	change(dg: Draggable, offset: Offset, evt?: Event): void;
 	constraint(dg: Draggable, offset: Offset, evt: Event): Offset;
 	draw(dg: Draggable, offset: Offset, evt: Event): void;
-	ignoredrag(dg: Draggable, offset: Offset, evt: Event): void;
+	ignoredrag(dg: Draggable, offset: Offset, evt: Event): boolean;
 	handle: HTMLElement;
 	scroll: DraggableScrollOptions | HTMLElement | Window;
 	overlay: boolean;

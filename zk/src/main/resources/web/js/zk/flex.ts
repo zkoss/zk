@@ -716,3 +716,22 @@ let zFlex = { //static methods
 	};
 // window scope
 export default zFlex;
+
+let _xWidget = {};
+zk.override(zk.Widget.prototype, _xWidget, {
+	domClass_: function (this: zk.Widget) {
+		let domClass = _xWidget['domClass_'].apply(this, arguments),
+			n = this.$n();
+		if (n) {
+			let jqn = jq(n),
+				flexClasses = ['z-flex', 'z-flex-row', 'z-flex-column', 'z-flex-item'];
+			for (let i = 0, length = flexClasses.length; i < length; i++) {
+				let flexClass = flexClasses[i];
+				if (jqn.hasClass(flexClass)) {
+					domClass += ' ' + flexClass;
+				}
+			}
+		}
+		return domClass;
+	}
+});

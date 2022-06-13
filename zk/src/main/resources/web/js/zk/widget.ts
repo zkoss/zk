@@ -691,6 +691,7 @@ export class Widget extends ZKObject {
 	declare public getInputNode?: () => HTMLInputElement;
 
 	declare public z_rod?: boolean | number;
+	declare public _rodKid?: boolean;
 	declare public _node: DOMFieldValue;
 	declare public _nodeSolved;
 	declare public _rmAftAnm;
@@ -2849,7 +2850,20 @@ redraw: function (out) {
 			s = this.getSclass();
 		if (!no || !no.zclass)
 			z = this.getZclass();
-		return s ? z ? s + ' ' + z : s : z || '';
+		let domClass = s ? z ? s + ' ' + z : s : z || '',
+			n = this.$n();
+		// FIX ZK-5137: modifying sclass clears vflex="1 here to avoid circular dependency issue in ZK 10
+		if (n) {
+			let jqn = jq(n),
+				flexClasses = ['z-flex', 'z-flex-row', 'z-flex-column', 'z-flex-item'];
+			for (let i = 0, length = flexClasses.length; i < length; i++) {
+				let flexClass = flexClasses[i];
+				if (jqn.hasClass(flexClass)) {
+					domClass += ' ' + flexClass;
+				}
+			}
+		}
+		return domClass;
 	}
 
 	/** Returns the HTML attributes that is used to generate DOM element of this widget.
@@ -5810,16 +5824,16 @@ export class Desktop extends Widget {
 				}
 		}
 		return Desktop._dt;
-	},
+	}
 	/**
 	 * Destroy the desktop
 	 * @param Desktop zk desktop
 	 * @since 9.6.2
 	 */
-	destroy: function (desktop: zk.Desktop | null) {
+	public static destroy(desktop: zk.Desktop | null): void {
 		if (desktop != null) {
 			zAu._rmDesktop(desktop);
-			delete zk.Desktop.all[desktop.id];
+			delete zk.Desktop.all[desktop.id as string];
 			--zk.Desktop._ndt;
 		}
 	}
