@@ -223,7 +223,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>Refer to {@link jq} for DOM related utilities.
  */
 zk.copy(zk, {
-	/** A map of all classes, Map<int oid, zk.Class cls>.
+	/** A map of all classes, {@code Map<int oid, zk.Class cls>}.
 	 * @since 5.0.8
 	 */
 	classes: {},
@@ -542,7 +542,7 @@ try {
 	 * It is similar to Java's package statement except it returns the package
 	 * object.
 	 * <p>Notice the package is usually defined automatically by use of
-	 * <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/Widget_Package_Descriptor>WPD</a>,
+	 * <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/Widget_Package_Descriptor">WPD</a>,
 	 * so you're rarely need to use this method.
 	 *
 	 * <p>Example:

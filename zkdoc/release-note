@@ -22,7 +22,16 @@ ZK 10.0.0
         z-combobox-emptySearchMessage-hidden -> z-combobox-empty-search-message-hidden
    --------
 
+ZK 9.6.3
+* Features
+
+* Bugs
+
+* Upgrade Notes
+
+   --------
 ZK 9.6.2
+May 24, 2022
 * Features
 
 * Bugs
@@ -39,9 +48,11 @@ ZK 9.6.2
   ZK-5126: Apostrophe (French quote character) is displayed as Hex character code in chosenbox emptyMessage
   ZK-5095: NotSerializableException: org.zkoss.zkmax.au.websocket.WebSocketEndPoint
   ZK-5149: DropUpload anchor position shifted by browser scroll if any, gets out of view
+  ZK-5150: uploading issue
+  ZK-5110: ZKWebSocket cause NPE on reconnect if session has been destroyed
 
 * Upgrade Notes
-  + Since inconsistent forEach rendering by ListModel, reopen ZK-2800 after ZK-5079
+  + Since ListModel renders forEach inconsistently, reopen ZK-2800 after ZK-5079
 
    --------
 ZK 9.6.1

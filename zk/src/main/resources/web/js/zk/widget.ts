@@ -5338,10 +5338,10 @@ zk.Desktop = zk.$extends(zk.Widget, {
 	},
 	/**
 	 * Destroy the desktop
-	 * @param desktop zk desktop
+	 * @param Desktop zk desktop
 	 * @since 9.6.2
 	 */
-	destroy: function (desktop) {
+	destroy: function (desktop: zk.Desktop | null) {
 		if (desktop != null) {
 			zAu._rmDesktop(desktop);
 			delete zk.Desktop.all[desktop.id];
@@ -5779,19 +5779,19 @@ rerender: function (skipper) {
 </code></pre>
  * <p>Since {@link zk.Widget#rerender} will pass the returned value of {@link #skip} to {@link #restore}, the skipper doesn't need to store what are skipped. That means, it is possible to have one skipper to serve many widgets. {@link #nonCaptionSkipper} is a typical example.
  * <p>In additions to passing a skipper to {@link zk.Widget#rerender}, the widget has to implement the mold method to handle the skipper:
-<pre><code>
-function (skipper) {
- var html = '<fieldset' + this.domAttrs_() + '>',
- cap = this.caption;
- if (cap) html += cap.redraw();
- 
- html += '<div id="' + this.uuid + '$cave"' + this._contentAttrs() + '>';
- if (!skipper)
-  for (var w = this.firstChild; w; w = w.nextSibling)
-   if (w != cap) html += w.redraw();
- return html + '</div></fieldset>';
-}
-</pre></code>
+ * <pre>{@code
+ * function (skipper) {
+ * 	var html = '<fieldset' + this.domAttrs_() + '>',
+ * 		cap = this.caption;
+ * 	if (cap) html += cap.redraw();
+ *
+ * 	html += '<div id="' + this.uuid + '$cave"' + this._contentAttrs() + '>';
+ * 	if (!skipper)
+ * 	for (var w = this.firstChild; w; w = w.nextSibling)
+ * 		if (w != cap) html += w.redraw();
+ * 	return html + '</div></fieldset>';
+ * }
+ * }</pre>
  * <p>See also <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/Component Development/Server-side/Property_Rendering">ZK Client-side Reference: Property Rendering</a>.
  * @disable(zkgwt)
  */

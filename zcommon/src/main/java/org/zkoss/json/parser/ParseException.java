@@ -3,7 +3,7 @@ package org.zkoss.json.parser;
 /**
  * ParseException explains why and where the error occurs in source JSON text.
  * 
- * @author FangYidong<fangyidong@yahoo.com.cn>
+ * @author FangYidong&lt;fangyidong@yahoo.com.cn>
  *
  */
 public class ParseException extends RuntimeException {

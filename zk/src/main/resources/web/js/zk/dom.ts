@@ -530,7 +530,7 @@ zk.override(jq.fn, _jq, /*prototype*/ {
 
 	/** Insert content before each of the matched elements.
 	 * <p>Notice that this method is extended to handle {@link Widget}.
-	 * <p>Refer to <a href="http://docs.jquery.com/Manipulation/before>jQuery documentation</a>
+	 * <p>Refer to <a href="http://docs.jquery.com/Manipulation/before">jQuery documentation</a>
 	 * for more information.
 	 * @param Object content If it is a string, it is assumed to be
 	 * a HTML fragment. If it is a widget, the widget will be insert before
@@ -540,7 +540,7 @@ zk.override(jq.fn, _jq, /*prototype*/ {
 	//before: function () {}
 	/** Insert content after each of the matched elements.
 	 * <p>Notice that this method is extended to handle {@link Widget}.
-	 * <p>Refer to <a href="http://docs.jquery.com/Manipulation/after>jQuery documentation</a>
+	 * <p>Refer to <a href="http://docs.jquery.com/Manipulation/after">jQuery documentation</a>
 	 * for more information.
 	 * @param Object content If it is a string, it is assumed to be
 	 * a HTML fragment. If it is a widget, the widget will be insert after
@@ -550,7 +550,7 @@ zk.override(jq.fn, _jq, /*prototype*/ {
 	//after: function () {}
 	/** Append content to inside of every matched element.
 	 * <p>Notice that this method is extended to handle {@link Widget}.
-	 * <p>Refer to <a href="http://docs.jquery.com/Manipulation/append>jQuery documentation</a>
+	 * <p>Refer to <a href="http://docs.jquery.com/Manipulation/append">jQuery documentation</a>
 	 * for more information.
 	 * @param Object content If it is a string, it is assumed to be
 	 * a HTML fragment. If it is a widget, the widget will be appended
@@ -560,7 +560,7 @@ zk.override(jq.fn, _jq, /*prototype*/ {
 	//append: function () {}
 	/** Prepend content to the inside of every matched element.
 	 * <p>Notice that this method is extended to handle {@link Widget}.
-	 * <p>Refer to <a href="http://docs.jquery.com/Manipulation/prepend>jQuery documentation</a>
+	 * <p>Refer to <a href="http://docs.jquery.com/Manipulation/prepend">jQuery documentation</a>
 	 * for more information.
 	 * @param Object content If it is a string, it is assumed to be
 	 * a HTML fragment. If it is a widget, the widget will be prepended

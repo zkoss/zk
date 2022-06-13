@@ -29,9 +29,9 @@ import org.zkoss.lang.Objects;
  * <p>It is thread-safe.
  *
  * <p>Typical use:
- * <pre><code>Object[] ary = fra.toArray();
+ * <pre>{@code Object[] ary = fra.toArray();
  *for (int j = 0; j < ary.length; ++j)
- *  <i>whatever</i>;</code></pre>
+ *  <i>whatever</i>;}</pre>
  *
  * @author tomyeh
  * @since 3.0.6
