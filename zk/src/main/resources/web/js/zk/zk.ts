@@ -1706,7 +1706,6 @@ export class ZKObject {
 	declare public _$supers: Record<string, unknown>;
 	declare public _$proxies: WeakMap<object, unknown>;
 	declare public _$super;
-	declare public prototype;
 	declare public _importantEvts: {[key: string]: unknown};
 
 	declare public static $oid;
@@ -1817,8 +1816,8 @@ foo.MyClass = zk.$extends(foo.MySuper, {
 	 * @see #$supers
 	 * @since 5.0.2
 	 */
-	protected $super(klass: ZKObject, mtd: string, ...args: unknown[]): unknown;
-	protected $super(klass: ZKObject | string, mtd: string, ...args: unknown[]): unknown {
+	protected $super(klass: typeof ZKObject, mtd: string, ...args: unknown[]): unknown;
+	protected $super(klass: typeof ZKObject | string, mtd: string, ...args: unknown[]): unknown {
 		if (typeof klass != 'string') {
 			return this.$supers(klass, mtd, args);
 		}
@@ -1859,7 +1858,7 @@ foo.MyClass = zk.$extends(foo.MySuper, {
 	 * @see #$super
 	 * @since 5.0.2
 	 */
-	public $supers(nm: ZKObject | string, args: string | unknown[], argx?: unknown[]): unknown {
+	public $supers(nm: typeof ZKObject | string, args: string | unknown[], argx?: unknown[]): unknown {
 		var supers = this._$supers;
 		if (!supers) supers = this._$supers = {};
 

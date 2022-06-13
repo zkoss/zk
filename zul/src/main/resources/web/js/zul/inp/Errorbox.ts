@@ -91,8 +91,6 @@ export class Errorbox extends zul.wgt.Notification {
 	//super//
 	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
-
-		var Errorbox = zul.inp.Errorbox;
 		this._drag = new zk.Draggable(this, null, {
 			starteffect: zk.$void,
 			endeffect: Errorbox._enddrag,
