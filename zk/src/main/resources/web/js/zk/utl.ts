@@ -119,6 +119,7 @@ export interface ZUtl {
 		(this: T, ...args: A) => R;
 	debounce<T, A extends unknown[], R>(func: (this: T, ...args: A) => R, wait: number,
 										immediate?: boolean): (this: T, ...args: A) => R;
+	isEqualObject(a: unknown, b: unknown): boolean;
 }
 /** @class zUtl
  * @import zk.Widget
@@ -907,11 +908,10 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * @return boolean the two object is the same or not
 	 * @since 10.0.0
 	 */
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	isEqualObject: function (a, b) {
+	isEqualObject(a: unknown, b: unknown): boolean {
 		// Identical objects are equal. `0 === -0`, but they aren't identical.
 		// See the [Harmony `egal` proposal](http://wiki.ecmascript.org/doku.php?id=harmony:egal).
-		if (a === b) return a !== 0 || 1 / a === 1 / b;
+		if (a === b) return a !== 0 || 1 / (a as number) === 1 / (b as number);
 		// `null` or `undefined` only equal to itself (strict comparison).
 		if (a == null || b == null) return false;
 		// `NaN`s are equivalent, but non-reflexive.
@@ -920,13 +920,13 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 		let type = typeof a;
 		if (type !== 'function' && type !== 'object' && typeof b != 'object') return false;
 
-		const keys = Object.keys(a);
-		if (Object.keys(b).length !== keys.length) {
+		const keys = Object.keys(a as Record<string, unknown>);
+		if (Object.keys(b as Record<string, unknown>).length !== keys.length) {
 			return false;
 		}
 		for (const key of keys) {
 			if (!Object.prototype.propertyIsEnumerable.call(b, key) ||
-				!this.isEqualObject(a[key], b[key])) {
+				!zUtl.isEqualObject((a as Record<string, unknown>)[key], (b as Record<string, unknown>)[key])) {
 				return false;
 			}
 		}

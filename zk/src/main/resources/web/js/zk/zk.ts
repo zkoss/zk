@@ -1211,7 +1211,7 @@ _zk._noESC = 0; //# of disableESC being called (also used by mount.js)
 	* @see #log
 	* @see #stamp(String, boolean)
 	*/
-_zk.error = function (msg: string, silent: boolean): void {
+_zk.error = function (msg: string, silent?: boolean): void {
 	if (!silent) {
 		zAu.send(new zk.Event(null, 'error', {message: msg}, {ignorable: true}), 800);
 	}
