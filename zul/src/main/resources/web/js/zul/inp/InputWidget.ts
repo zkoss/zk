@@ -16,6 +16,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 //zk.$package('zul.inp');
 
+interface InputValidation {
+	value?: unknown;
+	rawValue?: unknown;
+	server?: boolean;
+	error?: string;
+}
 
 var _keyIgnorable = zk.opera ? function (code: number) {
 		return code == 32 || code > 46; //DEL
@@ -41,7 +47,9 @@ export let RoundUtl = {
 		var n = wgt.$n('btn');
 		if (n) {
 			var fnm = v ? 'removeClass' : 'addClass';
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-call
 			jq(n)[fnm](wgt.$s('disabled'));
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-call
 			jq(wgt.getInputNode()!)[fnm](wgt.$s('input-full'));
 		}
 	},
@@ -108,7 +116,7 @@ export class InputWidget extends zul.Widget {
 	private _multiline?: boolean;
 	private _disabled?: boolean;
 	private _readonly?: boolean;
-	private _value?: string;
+	protected _value?: string;
 	private _errmsg?: string | null;
 	private _defRawVal?: string;
 	private _lastKeyDown?: number | null;
@@ -175,6 +183,7 @@ export class InputWidget extends zul.Widget {
 			if (inp) { //check if bind
 				inp.disabled = disabled;
 				var fnm = disabled ? 'addClass' : 'removeClass';
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-call
 				jq(this.$n()!)[fnm](this.$s('disabled'));
 			}
 		}
@@ -205,6 +214,7 @@ export class InputWidget extends zul.Widget {
 				var fnm = readonly ? 'addClass' : 'removeClass';
 
 				inp.readOnly = readonly;
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-call
 				jq(this.$n()!)[fnm](this.$s('readonly')); //Merge breeze
 			}
 		}
@@ -526,7 +536,7 @@ export class InputWidget extends zul.Widget {
 	 * The error message will be cleared if true
 	 */
 	public setValue(value: unknown, fromServer?: boolean): void {
-		var vi;
+		var vi: InputValidation | undefined;
 		// for zephyr to treat as "value" attribute from "_value" at client side
 		if (typeof value == 'number' || typeof value == 'string')
 			value = this.unmarshall_(value);
@@ -823,8 +833,8 @@ export class InputWidget extends zul.Widget {
 	 * @param Object value the value that will be coerced to a string
 	 * @return String
 	 */
-	protected coerceToString_(value: string | null | undefined): string {
-		return value || '';
+	protected coerceToString_(value: unknown): string {
+		return (value as string | null | undefined) || '';
 	}
 
 	private _markError(msg: string, val: string | null, noOnError?: boolean): void {
@@ -832,10 +842,14 @@ export class InputWidget extends zul.Widget {
 
 		if (this.desktop) { //err not visible if not attached //B85-ZK-3321
 			jq(this.getInputNode()!).addClass(this.$s('invalid'));
-
-			var cst = this._cst, errbox;
+			
+			interface CustomConstraint extends zul.inp.SimpleConstraint {
+				showCustomError?: (inp: InputWidget, msg: string) => boolean;
+			}
+			var cst: CustomConstraint | null | undefined = this._cst,
+				errbox: CustomConstraint['showCustomError'] | boolean;
 			if (cst as unknown != '[c') {
-				if (cst && (errbox = (cst as unknown as {showCustomError}).showCustomError))
+				if (cst && (errbox = cst.showCustomError))
 					errbox = errbox.call(cst, this, msg);
 
 				if (!errbox) this._errbox = this.showError_(msg);
@@ -851,20 +865,21 @@ export class InputWidget extends zul.Widget {
 	 * @param Object val a String, a number, or a date,the number or name of flag,
 	 * such as 'no positive", 0x0001.
 	 */
-	protected validate_(val: unknown): boolean | undefined {
-		var cst;
+	protected validate_(val: unknown): string | boolean | undefined {
+		var cst: zul.inp.SimpleConstraint | null | undefined;
 		if (cst = this._cst) {
 			if (typeof cst == 'string') return false; //by server
 			var msg = cst.validate(this, val);
 			if (!msg && cst.serverValidate) return false; //client + server
-			return msg;
+			return msg as string;
 		}
 	}
 
-	private _validate(value: unknown): {value?; rawValue?; server?: boolean; error?: boolean} {
+	private _validate(value: unknown): InputValidation {
 		zul.inp.validating = true;
 		try {
-			var val = value, msg;
+			var val = value,
+				msg: string | boolean | undefined;
 			if (typeof val == 'string' || val == null) {
 				val = this.coerceFromString_(val as string);
 				if (val && ((msg = (val as {error: string}).error) || (val as {server: boolean}).server)) {
@@ -874,7 +889,7 @@ export class InputWidget extends zul.Widget {
 						return {rawValue: value || '', server: true}; //let server to validate it
 					}
 					this._markError(msg, val as string);
-					return val as {server?: boolean; error?: boolean};
+					return val as {server?: boolean; error?: string};
 				}
 			}
 
@@ -889,8 +904,8 @@ export class InputWidget extends zul.Widget {
 					return {value: val, server: true}; //let server to validate it
 				}
 				if (msg) {
-					this._markError(msg, val as string);
-					return {error: msg};
+					this._markError(msg as string, val as string);
+					return {error: msg as string};
 				}
 				this._reVald = false;
 				if (em)
@@ -912,7 +927,7 @@ export class InputWidget extends zul.Widget {
 		if (zk.mac && evt.metaKey)
 			return;
 		else {
-			var code = (zk.ie < 11 || zk.opera) ? evt.keyCode : evt.charCode;
+			var code = (zk.ie < 11 || zk.opera) ? evt.keyCode : evt.charCode as number;
 			if (!evt.altKey && !evt.ctrlKey && _keyIgnorable(code) && keys.indexOf(String.fromCharCode(code)) < 0) {
 				evt.stop();
 				return true;
@@ -963,7 +978,7 @@ export class InputWidget extends zul.Widget {
 		var wasErr = this._errmsg,
 			vi = this._validate(value);
 		if (!vi.error || vi.server) {
-			var upd, data;
+			var upd, data: InputValidation | undefined;
 			if (vi.rawValue != null) { //coerce failed
 				data = {rawValue: vi.rawValue};
 			} else if (!vi.error) {
@@ -982,14 +997,14 @@ export class InputWidget extends zul.Widget {
 				//to save the trouble of coerceToString issue
 				upd = wasErr || !this._equalValue(vi.value, this._value);
 				if (upd) {
-					this._value = vi.value; //vi - not coerced
+					this._value = vi.value as string; //vi - not coerced
 					this._defRawVal = value;
 				}
 			}
 			if (upd || vi.server)
 				this.fire('onChange',
 					InputWidget._onChangeData(this,
-						data != null ? data : {value: this.marshall_(vi.value)}),
+						data != null ? data as Record<string, unknown> : {value: this.marshall_(vi.value)}),
 					vi.server ? {toServer: true} : null, 90);
 		}
 		return true;
@@ -1103,7 +1118,7 @@ export class InputWidget extends zul.Widget {
 	}
 
 	protected override resetSize_(orient: zk.FlexOrient): void {
-		var n;
+		var n: HTMLInputElement | null | undefined;
 		if (this.$n() != (n = this.getInputNode()))
 			n!.style[orient == 'w' ? 'width' : 'height'] = '';
 		super.resetSize_(orient);
@@ -1318,7 +1333,7 @@ export let InputCtrl = {
 	 * @param jq.Event evt
 	 * @return boolean
 	 */
-	isIgnoredDragForErrorbox(dg: zk.Draggable, pointer: zk.Offset, evt: zk.Event) {
+	isIgnoredDragForErrorbox(dg: zk.Draggable, pointer: zk.Offset, evt: zk.Event): boolean {
 		var c = dg.control!.$n('c');
 		return evt.domTarget == c && jq(c!).hasClass('z-errbox-close-over');
 	}
