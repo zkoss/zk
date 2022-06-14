@@ -11,7 +11,7 @@ export * from './NumberInputWidget'; // jsdoc="true"
 export * from './Intbox';
 export * from './Longbox';
 // export * from './Doublebox';
-// export * from './Decimalbox';
+export * from './Decimalbox';
 export * from './ComboWidget'; // jsdoc="true"
 export * from './Combobox';
 export * from './Comboitem';

@@ -57,6 +57,7 @@ declare global {
 	| 'NO_POSITIVE'
 	| 'NO_TODAY'
 	| 'NO_ZERO'
+	| 'NUMBER_REQUIRED' // zul/inp/Decimalbox
 	| 'OK' // zul/dom
 	| 'OUT_OF_RANGE'
 	| 'PANEL_EXPAND' // zul/inp/ComboWidget

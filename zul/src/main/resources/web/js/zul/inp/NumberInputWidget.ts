@@ -17,6 +17,7 @@ export interface LocalizedSymbols {
 	MINUS?: string;
 	PERCENT?: string;
 	GROUPING?: string;
+	DECIMAL?: string; // zul/inp/Decimalbox
 }
 
 var _allowKeys: string,

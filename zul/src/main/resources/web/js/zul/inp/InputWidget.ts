@@ -117,7 +117,7 @@ export class InputWidget extends zul.Widget {
 	protected _disabled?: boolean;
 	protected _readonly?: boolean;
 	protected _value?: string;
-	private _errmsg?: string | null;
+	protected _errmsg?: string | null;
 	private _defRawVal?: string;
 	private _lastKeyDown?: number | null;
 	protected _tabbable?: boolean;

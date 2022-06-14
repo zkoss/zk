@@ -24,23 +24,23 @@ it will be useful, but WITHOUT ANY WARRANTY.
 export class Bandpopup extends zul.Widget {
 	private _shallClosePopup?: boolean;
 
-    protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		jq(this.$n()!).on('focusin', this.proxy(this._focusin))
 			.on('focusout', this.proxy(this._focusout));
 	}
 
-    protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		jq(this.$n()!).off('focusout', this.proxy(this._focusout))
 			.off('focusin', this.proxy(this._focusin));
 		super.unbind_(skipper, after, keepRod);
 	}
 
-    private _focusin(e: JQuery.FocusInEvent): void {
+	private _focusin(e: JQuery.FocusInEvent): void {
 		this._shallClosePopup = false;
 	}
 
-    private _focusout(e: JQuery.FocusOutEvent): void {
+	private _focusout(e: JQuery.FocusOutEvent): void {
 		var bandbox = this.parent as zul.inp.Bandbox | null,
 			self = this;
 		if (e.relatedTarget) {
@@ -60,8 +60,8 @@ export class Bandpopup extends zul.Widget {
 		}
 	}
 
-    //super
-    public override afterChildrenMinFlex_(orient: zk.FlexOrient): void {
+	//super
+	public override afterChildrenMinFlex_(orient: zk.FlexOrient): void {
 		if (orient == 'w') {
 			var bandbox = this.parent,
 				pp = bandbox && bandbox.$n('pp');
@@ -73,7 +73,7 @@ export class Bandpopup extends zul.Widget {
 		}
 	}
 
-    public override doClick_(evt: zk.Event, popupOnly?: boolean): void {
+	public override doClick_(evt: zk.Event, popupOnly?: boolean): void {
 		if (evt.domTarget == this.$n())
 			this.parent!.focus();
 		super.doClick_(evt, popupOnly);
