@@ -29,7 +29,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 export let GOOGLE_API_LOADING_TIMEOUT = 10000; //default to ten seconds
 zk.gapi.GOOGLE_API_LOADING_TIMEOUT = GOOGLE_API_LOADING_TIMEOUT;
 zk.gapi.loadAPIs = loadAPIs;
-export function loadAPIs(wgt: Widget, callback: () => void, msg: string, timeout: number): void {
+export function loadAPIs(wgt: zk.Widget, callback: () => void, msg: string, timeout: number): void {
 	var opts = {};
 	opts['condition'] = function () {return window['google'] && window['google'].load;};
 	opts['callback'] = function () {callback(); delete zk.gapi['LOADING'];};
@@ -45,7 +45,7 @@ export function loadAPIs(wgt: Widget, callback: () => void, msg: string, timeout
 		callback();
 }
 zk.gapi.waitUntil = waitUntil;
-export function waitUntil(wgt: Widget, opts): void {
+export function waitUntil(wgt: zk.Widget, opts): void {
 	opts.inittime = opts.inittime || new Date().getTime();
 	opts.timeout = opts.timeout || zk.gapi.GOOGLE_API_LOADING_TIMEOUT;
 	initMask(wgt, opts);

@@ -14,6 +14,17 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 
 export type PopupSize = [width: string, height: string];
+export interface ResponseOptions {
+	rtags: { // see zk/evt/EventOptions
+		onOpen?: unknown;
+		onChanging?: unknown;
+	};
+}
+export interface OpenOptions {
+	focus?: boolean;
+	sendOnOpen?: boolean;
+}
+
 /**
  * A skeletal implementation for a combo widget.
  */
@@ -209,7 +220,7 @@ export class ComboWidget extends zul.inp.InputWidget {
 		}
 	}
 
-	public onResponse(ctl: zk.ZWatchController, opts: {rtags: {onOpen?: boolean; onChanging?: boolean}}): void { // FIXME: reconsider opts type
+	public onResponse(ctl: zk.ZWatchController, opts: ResponseOptions): void { // FIXME: reconsider opts type
 		if ((this._shallFixPopupDimension || opts.rtags.onOpen || opts.rtags.onChanging) && this.isOpen()) {
 			// ZK-2192: Only need to determine if popup is animating
 			if (jq(this.getPopupNode_()!).is(':animated')) {
@@ -279,7 +290,7 @@ export class ComboWidget extends zul.inp.InputWidget {
 	 * It is the same as setOpen(true).
 	 * @param Map opts the options.
 	 */
-	public open(opts: Record<string, unknown>): void {
+	public open(opts?: OpenOptions): void {
 		if (this._open) return;
 		if (this._inplace) this._inplaceIgnore = true;
 		this._open = true;
@@ -455,7 +466,9 @@ export class ComboWidget extends zul.inp.InputWidget {
 	/**
 	 * Extra handling for min size of popup widget. Return true if size is affected.
 	 */
-	protected presize_ = zk.$void;
+	protected presize_(): boolean {
+		return false;
+	}
 
 	/** Slides down the drop-down list.
 	 * <p>Default: <code>zk(pp).slideDown(this, {afterAnima: this._afterSlideDown});</code>

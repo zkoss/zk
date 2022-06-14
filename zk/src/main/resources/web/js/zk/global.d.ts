@@ -150,8 +150,6 @@ interface Array<T> {
 	$clone(): T[];
 }
 
-type Widget = import('./widget').Widget;
-type EventOptions = import('./evt').EventOptions;
 type Moment = import('moment-timezone').Moment;
 type DateImpl = import('./dateImpl').DateImpl;
 
@@ -255,9 +253,9 @@ declare namespace zk {
 	interface BinderStatic {
 		new (wgt: Widget, target): Binder;
 		postCommand(dom: HTMLElement, command: string, args?: Record<string, unknown> | null,
-			opts?: Partial<EventOptions> | null, timeout?: number): void;
+			opts?: EventOptions | null, timeout?: number): void;
 		postGlobalCommand(dom: HTMLElement, command: string, args?: Record<string, unknown> | null,
-			opts?: Partial<EventOptions> | null, timeout?: number): void;
+			opts?: EventOptions | null, timeout?: number): void;
 	}
 
 	interface BinderOptions {
@@ -270,8 +268,8 @@ declare namespace zk {
 		after(cmd: string, fn: (args?: Record<string, unknown>) => void): this;
 		unAfter(cmd: string, fn: (args?: Record<string, unknown>) => void): this;
 		destroy(): void;
-		command(cmd: string, args?: Record<string, unknown> | null, opts?: Partial<EventOptions> | null, timeout?: number): this;
-		globalCommand(cmd: string, args?: Record<string, unknown> | null, opts?: Partial<EventOptions> | null, timeout?: number): this;
+		command(cmd: string, args?: Record<string, unknown> | null, opts?: EventOptions | null, timeout?: number): this;
+		globalCommand(cmd: string, args?: Record<string, unknown> | null, opts?: EventOptions | null, timeout?: number): this;
 		upload(cmd: string, file: File): void;
 	}
 }

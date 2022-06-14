@@ -1016,7 +1016,7 @@ export class InputWidget extends zul.Widget {
 	 * @param Map opts [optional] the options. Refer to {@link zk.Event#opts}
 	 * @since 5.0.5
 	 */
-	public fireOnChange(opts?: Partial<zk.EventOptions>): void {
+	public fireOnChange(opts?: zk.EventOptions): void {
 		this.fire('onChange',
 			InputWidget._onChangeData(this, {value: this.marshall_(this.getValue())}), opts);
 	}
@@ -1255,7 +1255,7 @@ export class InputWidget extends zul.Widget {
 				this.valueSel_ = null;
 				if (this.isListen('onChanging'))
 					this.fire('onChanging', zul.inp.InputWidget._onChangeData(this, {value: val}, valsel == val), //pass inp.value directly
-						{ignorable: 1 as unknown as boolean, rtags: {onChanging: 1}}, timeout || 5);
+						{ignorable: true, rtags: {onChanging: 1}}, timeout || 5);
 				if (this._instant)
 					this.updateChange_();
 			}

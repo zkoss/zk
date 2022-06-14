@@ -17,25 +17,25 @@ import type {Widget} from './widget';
 import {Callable} from './types';
 
 export interface EventOptions {
-	implicit: boolean;
-	ignorable: boolean;
-	toServer: boolean;
-	uri: string;
-	defer: boolean;
-	serverAlive: boolean;
-	forceAjax: boolean;
-	sendAhead: boolean;
-	rtags: {[key: string]: unknown};
-	start: {
+	implicit?: boolean;
+	ignorable?: boolean;
+	toServer?: boolean;
+	uri?: string;
+	defer?: boolean;
+	serverAlive?: boolean;
+	forceAjax?: boolean;
+	sendAhead?: boolean;
+	rtags?: {[key: string]: unknown};
+	start?: {
 		time: number | Date;
 		coords: [number, number];
 	};
-	stop: {
+	stop?: {
 		time: number | Date;
 		coords: [number, number];
 	};
-	dir: string;
-	uploadCallback: { // zul.Uploader.prototype.start
+	dir?: string;
+	uploadCallback?: { // zul.Uploader.prototype.start
 		onprogress(event): void;
 		onload(evemt): void;
 	};
@@ -179,7 +179,7 @@ onClick: function (evt) {
 	 * </ul>
 	 * @type Map
 	 */
-	public opts: Partial<EventOptions>;
+	public opts: EventOptions;
 	/** The DOM event that causes this widget event, or null if not available.
 	 * @type jq.Event
 	 */
@@ -217,7 +217,7 @@ onClick: function (evt) {
 	 * @param Map opts [optional] the options. Refer to {@link #opts}
 	 * @param jq.Event domEvent [optional] the DOM event that causes this widget event.
 	 */
-	public constructor(target: Widget | null | undefined, name: string, data?: unknown, opts?: Partial<EventOptions> | null, domEvent?: JQuery.TriggeredEvent) { // FIXME: TriggeredEvent missing type parameters
+	public constructor(target: Widget | null | undefined, name: string, data?: unknown, opts?: EventOptions | null, domEvent?: JQuery.TriggeredEvent) { // FIXME: TriggeredEvent missing type parameters
 		super();
 		this.currentTarget = this.target = target;
 		this.name = name;
@@ -232,7 +232,7 @@ onClick: function (evt) {
 	/** Adds the additions options to {@link #opts}.
 	 * @param Map opts a map of options to append to #opts
 	 */
-	public addOptions(opts: Partial<EventOptions>): void {
+	public addOptions(opts: EventOptions): void {
 		this.opts = Object.assign(this.opts, opts);
 	}
 	/** Stop the event propagation.
