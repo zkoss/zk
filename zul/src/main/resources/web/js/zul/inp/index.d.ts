@@ -10,7 +10,7 @@ export * from './FormatWidget'; // jsdoc="true"
 export * from './NumberInputWidget'; // jsdoc="true"
 export * from './Intbox';
 export * from './Longbox';
-// export * from './Doublebox';
+export * from './Doublebox';
 export * from './Decimalbox';
 export * from './ComboWidget'; // jsdoc="true"
 export * from './Combobox';

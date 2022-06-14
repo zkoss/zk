@@ -1,4 +1,4 @@
-/* Doublebox.js
+/* Doublebox.ts
 
 	Purpose:
 
@@ -16,11 +16,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * An edit box for holding an float point value (double).
  * <p>Default {@link #getZclass}: z-doublebox.
  */
-zul.inp.Doublebox = zk.$extends(zul.inp.NumberInputWidget, {
-	coerceFromString_: function (value) {
+export class Doublebox extends zul.inp.NumberInputWidget {
+	protected override coerceFromString_(value: string | null | undefined): {error?: string; server?: boolean} | number | null {
 		if (!value) return null;
 
-		var info = zk.fmt.Number.unformat(this._format, value, false, this._localizedSymbols),
+		var info = zk.fmt.Number.unformat(this._format!, value, false, this._localizedSymbols),
 			raw = info.raw,
 			val = parseFloat(raw),
 			valstr = '' + val,
@@ -33,7 +33,7 @@ zul.inp.Doublebox = zk.$extends(zul.inp.NumberInputWidget, {
 				++rawind;
 			}
 
-			if (rawind >= 0 && raw.substring(raw.substring(rawind + 1)) && valind < 0) {
+			if (rawind >= 0 && raw.substring(raw.substring(rawind + 1) as unknown as number) && valind < 0) {
 				valind = valstr.length;
 				valstr += '.';
 			}
@@ -63,29 +63,33 @@ zul.inp.Doublebox = zk.$extends(zul.inp.NumberInputWidget, {
 		}
 
 		if (this._rounding == 7 && (this._errmsg/*server has to clean up*/
-			|| zk.fmt.Number.isRoundingRequired(value, this.getFormat(), this._localizedSymbols)))
+			|| zk.fmt.Number.isRoundingRequired(value, this.getFormat()!, this._localizedSymbols)))
 					return {server: true};
 
 		if (info.divscale) val = val / Math.pow(10, info.divscale);
 		return val;
-	},
-	_allzero: function (val) {
+	}
+
+	public _allzero(val: string): boolean {
 		for (var len = val.length; len-- > 0;)
 			if (val.charAt(len) != '0') return false;
 		return true;
-	},
-	coerceToString_: function (value) {
+	}
+
+	protected override coerceToString_(value: number | string | null | undefined): string {
 		var fmt = this._format,
 			symbols = this._localizedSymbols,
 			DECIMAL = (symbols ? symbols : zk).DECIMAL;
 		return value == null ? '' : fmt ?
-			zk.fmt.Number.format(fmt, value, this._rounding, symbols) :
-			DECIMAL == '.' ? ('' + value) : ('' + value).replace('.', DECIMAL);
-	},
-	getAllowedKeys_: function () {
+			zk.fmt.Number.format(fmt, value as string, this._rounding!, symbols) :
+			DECIMAL == '.' ? ('' + value) : ('' + value).replace('.', DECIMAL!);
+	}
+
+	protected override getAllowedKeys_(): string {
 		var symbols = this._localizedSymbols;
-		return this.$supers('getAllowedKeys_', arguments)
+		return super.getAllowedKeys_()
 			+ (symbols ? symbols : zk).DECIMAL + 'e';
 		//supports scientific expression such as 1e2
 	}
-});
+}
+zul.inp.Doublebox = zk.regClass(Doublebox);
