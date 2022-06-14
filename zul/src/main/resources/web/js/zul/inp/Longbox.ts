@@ -33,7 +33,7 @@ export class Longbox extends zul.inp.NumberInputWidget {
 		return val;
 	}
 
-	protected override coerceToString_(value: string | zk.Long | null | undefined): string {
+	protected override coerceToString_(value: zk.Long | string | null | undefined): string {
 		var fmt = this._format;
 		return value != null ? typeof value == 'string' ? value :
 			fmt ? zk.fmt.Number.format(fmt, value.$toString(), this._rounding!, this._localizedSymbols)
