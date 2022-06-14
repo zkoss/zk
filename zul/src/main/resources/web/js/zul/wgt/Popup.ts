@@ -14,7 +14,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 
 export type Ref = zk.Widget | string
-export interface PopupOptions extends Partial<zk.PositionOptions> {
+export interface PopupOptions extends zk.PositionOptions {
 	focusFirst?: boolean;
 	sendOnOpen?: boolean;
 	type?: string;
@@ -270,7 +270,7 @@ export class Popup extends zul.Widget {
 	 * @param Map opts a map of addition options.<br/>
 	 * Allowed values: refer to {@link jqzk#position(Dimension,String,Map)}.
 	 */
-	public position(ref?: Ref | null, offset?: zk.Offset | null, position?: string | null, opts?: Partial<zk.PositionOptions> | null): void {
+	public position(ref?: Ref | null, offset?: zk.Offset | null, position?: string | null, opts?: zk.PositionOptions | null): void {
 		var posInfo = this._posInfo(ref, offset, position);
 		if (posInfo)
 			zk(this.$n()).position(posInfo.dim, posInfo.pos, opts);
@@ -494,13 +494,13 @@ export class Popup extends zul.Widget {
 		zk(this).redoCSS(-1, {'fixFontIcon': true});
 	}
 
-	public override setHeight(height?: string | null): void {
+	public override setHeight(height: string | null): void {
 		super.setHeight(height);
 		if (this.desktop)
 			zUtl.fireShown(this);
 	}
 
-	public override setWidth(width?: string | null): void {
+	public override setWidth(width: string | null): void {
 		super.setWidth(width);
 		if (this.desktop)
 			zWatch.fireDown('onShow', this);

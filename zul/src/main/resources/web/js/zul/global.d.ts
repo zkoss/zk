@@ -59,6 +59,7 @@ declare global {
 	| 'NO_ZERO'
 	| 'OK' // zul/dom
 	| 'OUT_OF_RANGE'
+	| 'PANEL_EXPAND' // zul/inp/ComboWidget
 	| 'UNKNOWN_TYPE'
 	| 'UPLOAD_ERROR_EXCEED_MAXSIZE' // zul/Upload
 	, string>;

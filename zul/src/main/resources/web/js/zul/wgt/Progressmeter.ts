@@ -98,7 +98,7 @@ export class Progressmeter extends zul.Widget {
 		super.unbind_(skipper, after, keepRod);
 	}
 
-	public override setWidth(val?: string | null): void {
+	public override setWidth(val: string | null): void {
 		super.setWidth(val);
 		this._fixImgWidth();
 	}

@@ -236,6 +236,7 @@ declare namespace zk {
 	type Long = import('./math').Long;
 	namespace eff {
 		type Mask = import('./effect').Mask;
+		type Shadow = import('./effect').Shadow;
 	}
 
 	interface Websocket {
