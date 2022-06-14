@@ -731,7 +731,7 @@ export class ComboWidget extends zul.inp.InputWidget {
 		super.doKeyUp_(evt);
 	}
 
-	public override doClick_(evt: zk.Event): void {
+	public override doClick_(evt: zk.Event, popupOnly?: boolean): void {
 		if (!this._disabled) {
 			if (evt.domTarget == this.getPopupNode_())
 				this.close({
@@ -743,7 +743,7 @@ export class ComboWidget extends zul.inp.InputWidget {
 					focus: zul.inp.InputCtrl.isPreservedFocus(this),
 					sendOnOpen: true
 				});
-			super.doClick_(evt);
+			super.doClick_(evt, popupOnly);
 		}
 	}
 

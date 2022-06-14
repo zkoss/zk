@@ -16,7 +16,7 @@ export * from './ComboWidget'; // jsdoc="true"
 export * from './Combobox';
 export * from './Comboitem';
 export * from './Bandbox';
-// export * from './Bandpopup';
+export * from './Bandpopup';
 // export * from './Slider';
 // export * from './Spinner';
 // export * from './Doublespinner';
