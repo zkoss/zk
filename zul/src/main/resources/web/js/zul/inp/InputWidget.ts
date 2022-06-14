@@ -113,14 +113,14 @@ export class InputWidget extends zul.Widget {
 	private _errbox?: zul.inp.Errorbox | null;
 	public __ebox?: zul.inp.Errorbox;
 	private _tidChg?: number | null;
-	private _multiline?: boolean;
+	protected _multiline?: boolean;
 	private _disabled?: boolean;
 	private _readonly?: boolean;
 	protected _value?: string;
 	private _errmsg?: string | null;
 	private _defRawVal?: string;
 	private _lastKeyDown?: number | null;
-	private _tabbable?: boolean;
+	protected _tabbable?: boolean;
 	private _instant?: boolean;
 	public _errorboxSclass?: string;
 	public _errorboxIconSclass?: string;
@@ -490,7 +490,7 @@ export class InputWidget extends zul.Widget {
 	 * <p>Default: false.
 	 * @return boolean
 	 */
-	public isMultiline(): boolean {
+	public isMultiline(): boolean | undefined {
 		return false;
 	}
 

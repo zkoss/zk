@@ -1,4 +1,4 @@
-/* Textbox.js
+/* Textbox.ts
 
 	Purpose:
 
@@ -16,83 +16,138 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * A textbox.
  * <p>Default {@link #getZclass}: z-textbox.
  */
-zul.inp.Textbox = zk.$extends(zul.inp.InputWidget, {
-	_value: '',
-	_rows: 1,
+export class Textbox extends zul.inp.InputWidget {
+	protected override _value = '';
+	private _rows = 1;
+	private _submitByEnter?: boolean;
 
-	$define: {
-		/** Returns whether it is multiline.
-		 * <p>Default: false.
-		 * @return boolean
-		 */
-		/** Sets whether it is multiline.
-		 * @param boolean multiline
-		 */
-		multiline: function () {
+	/** Returns whether it is multiline.
+	 * <p>Default: false.
+	 * @return boolean
+	 */
+	public override isMultiline(): boolean | undefined {
+		return this._multiline;
+	}
+
+	/** Sets whether it is multiline.
+	 * @param boolean multiline
+	 */
+	public setMultiline(multiline: boolean, opts?: Record<string, boolean>): this {
+		const o = this._multiline;
+		this._multiline = multiline;
+
+		if (o !== multiline || (opts && opts.force)) {
 			this.rerender();
-		},
-		/** Returns whether TAB is allowed.
-		 * If true, the user can enter TAB in the textbox, rather than change
-		 * focus.
-		 * <p>Default: false.
-		 * @return boolean
-		 */
-		/** Sets whether TAB is allowed.
-		 * If true, the user can enter TAB in the textbox, rather than change
-		 * focus.
-		 * <p>Default: false.
-		 * @param boolean tabbable
-		 */
-		tabbable: null,
-		/** Returns the rows.
-		 * <p>Default: 1.
-		 * @return int
-		 */
-		/** Sets the rows.
-		 * @param int rows
-		 */
-		rows: function (v) {
-			var inp = this.getInputNode();
+		}
+
+		return this;
+	}
+
+	/** Returns whether TAB is allowed.
+	 * If true, the user can enter TAB in the textbox, rather than change
+	 * focus.
+	 * <p>Default: false.
+	 * @return boolean
+	 */
+	public isTabbable(): boolean | undefined {
+		return this._tabbable;
+	}
+
+	/** Sets whether TAB is allowed.
+	 * If true, the user can enter TAB in the textbox, rather than change
+	 * focus.
+	 * <p>Default: false.
+	 * @param boolean tabbable
+	 */
+	public setTabbable(tabbable: boolean): this {
+		this._tabbable = tabbable;
+		return this;
+	}
+
+	/** Returns the rows.
+	 * <p>Default: 1.
+	 * @return int
+	 */
+	public getRows(): number {
+		return this._rows;
+	}
+
+	/** Sets the rows.
+	 * @param int rows
+	 */
+	public setRows(v: number, opts?: Record<string, boolean>): this {
+		const o = this._rows;
+		this._rows = v;
+
+		if (o !== v || (opts && opts.force)) {
+			interface ZULInputElement extends HTMLInputElement {
+				rows: number;
+			}
+			// FIXME: grid?
+			var inp = this.getInputNode() as ZULInputElement | null | undefined;
 			if (inp && this.isMultiline())
 				inp.rows = v;
-		},
-		/** Returns the type.
-		 * <p>Default: text.
-		 * @return String
-		 */
-		/** Sets the type.
-		 * @param String type the type. Acceptable values are "text" and "password".
-		 * Unlike XUL, "timed" is redudant because it is enabled as long as
-		 * onChanging is added.
-		 */
-		type: zk.ie < 11 ? function () {
-			this.rerender(); //though IE9 allows type to change but value is reset
-		} : function (type) {
+		}
+
+		return this;
+	}
+
+	/** Returns the type.
+	 * <p>Default: text.
+	 * @return String
+	 */
+	public override getType(): string {
+		return this._type;
+	}
+
+	/** Sets the type.
+	 * @param String type the type. Acceptable values are "text" and "password".
+	 * Unlike XUL, "timed" is redudant because it is enabled as long as
+	 * onChanging is added.
+	 */
+	public setType(type: string, opts?: Record<string, boolean>): this {
+		const o = this._type;
+		this._type = type;
+
+		if (o !== type || (opts && opts.force)) {
 			var inp = this.getInputNode();
 			if (inp)
 				inp.type = type;
-		},
-		/** Returns whether it is submitByEnter.
-		 * <p>Default: false.
-		 * @return boolean
-		 */
-		/** Sets whether it is submitByEnter.
-		 * @param boolean submitByEnter
-		 */
-		submitByEnter: null
-	},
+		}
+
+		return this;
+	}
+
+	/** Returns whether it is submitByEnter.
+	 * <p>Default: false.
+	 * @return boolean
+	 */
+	public isSubmitByEnter(): boolean | undefined {
+		return this._submitByEnter;
+	}
+
+	/** Sets whether it is submitByEnter.
+	 * @param boolean submitByEnter
+	 */
+	public setSubmitByEnter(submitByEnter: boolean): this {
+		this._submitByEnter = submitByEnter;
+		return this;
+	}
+
 	//super//
-	textAttrs_: function () {
-		var html = this.$supers('textAttrs_', arguments);
+	protected override textAttrs_(): string {
+		var html = super.textAttrs_();
 		if (this._multiline)
 			html += ' rows="' + this._rows + '"';
 		return html;
-	},
-	doKeyDown_: function (evt, simulated) {
+	}
+
+	protected override doKeyDown_(evt: zk.Event): void { // FIXME: `simulated` is never used in super
 		if (evt.keyCode == 13 && this._submitByEnter && this._multiline && !evt.shiftKey) {
 			evt.stop();
 			this.fire('onOK');
 		}
-		this.$supers('doKeyDown_', arguments);
+		super.doKeyDown_(evt);
 	}
-});
+}
+zul.inp.Textbox = zk.regClass(Textbox);
