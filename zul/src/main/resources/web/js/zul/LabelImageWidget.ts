@@ -24,8 +24,8 @@ export abstract class LabelImageWidget extends zul.Widget {
 	private _preloadImage?: boolean;
 
 	public _autodisable?: string;
-	public abstract setAutodisable(autodisable: string): this
-	public abstract getAutodisable(): string | undefined
+	// public abstract setAutodisable(autodisable: string): this
+	// public abstract getAutodisable(): string | undefined
 
 	protected _adbs?: boolean;
 	public _disabled?: boolean;
@@ -235,7 +235,7 @@ export abstract class LabelImageWidget extends zul.Widget {
 		return this._eimg;
 	}
 
-	private _updateHoverImage(inHover?: boolean): void {
+	protected _updateHoverImage(inHover?: boolean): void {
 		var n = this.getImageNode(),
 			img = inHover ? this._hoverImage : this._image;
 		if (n && this._hoverImage) {

@@ -127,7 +127,7 @@ export class NumberInputWidget extends zul.inp.FormatWidget {
 		return this._type;
 	}
 
-	public override domAttrs_(no?: Partial<zk.DomAttrsOptions>): string {
+	public override domAttrs_(no?: zk.DomAttrsOptions): string {
 		var attr = super.domAttrs_(no);
 		if ((!no || !no.text) && zk.mobile)
 			attr += ' inputmode="decimal"';

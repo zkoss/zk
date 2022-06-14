@@ -99,7 +99,7 @@ export class Separator extends zul.Widget {
 	public override getZclass(): string {
 		return 'z-separator';
 	}
-	protected override domClass_(no?: Partial<zk.DomClassOptions>): string {
+	protected override domClass_(no?: zk.DomClassOptions): string {
 		var sc = super.domClass_(no),
 			bar = this.isBar();
 		if (!no || !no.zclass) {
@@ -108,7 +108,7 @@ export class Separator extends zul.Widget {
 		}
 		return sc;
 	}
-	protected override domStyle_(no?: Partial<zk.DomStyleOptions>): string {
+	protected override domStyle_(no?: zk.DomStyleOptions): string {
 		var s = super.domStyle_(no);
 		if (!_shallFixPercent(this))
 			return s;

@@ -39,7 +39,7 @@ export class Errorbox extends zul.wgt.Notification {
 		this.iconSclass = owner._errorboxIconSclass || 'z-icon-exclamation-triangle';
 	}
 
-	protected override domClass_(no?: Partial<zk.DomClassOptions>): string {
+	protected override domClass_(no?: zk.DomClassOptions): string {
 		var sclass = this.sclass,
 			s = super.domClass_(no);
 		if (sclass)
