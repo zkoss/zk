@@ -64,7 +64,7 @@ export class Inputgroup extends zul.Widget {
 		return this.setVertical(orient == 'vertical');
 	}
 
-	protected override domClass_(no?: Partial<zk.DomClassOptions>): string {
+	protected override domClass_(no?: zk.DomClassOptions): string {
 		let classes = this.domClass_(no);
 		return classes + (this._vertical ? ' ' + this.$s('vertical') : '');
 	}
@@ -86,7 +86,7 @@ export class Inputgroup extends zul.Widget {
 	}
 
 	protected encloseChildHTML_(opts: {child: zk.Widget; out?: string[]}): string | undefined {
-		let out = opts.out || new zk.Buffer(),
+		const out = opts.out || new zk.Buffer<string>(),
 			w = opts.child;
 		if (!w.$instanceof(zul.wgt.Button) && !w.$instanceof(zul.wgt.Toolbarbutton)
 				&& (!zul.inp || !w.$instanceof(zul.inp.InputWidget))) {

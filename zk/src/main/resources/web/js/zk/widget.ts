@@ -45,27 +45,27 @@ export interface DomVisibleOptions {
 }
 
 export interface DomStyleOptions {
-	style: boolean;
-	width: boolean;
-	height: boolean;
-	left: boolean;
-	top: boolean;
-	zIndex: boolean;
-	visible: boolean;
+	style?: boolean;
+	width?: boolean;
+	height?: boolean;
+	left?: boolean;
+	top?: boolean;
+	zIndex?: boolean;
+	visible?: boolean;
 }
 
 export interface DomClassOptions {
-	sclass: boolean;
-	zclass: boolean;
+	sclass?: boolean;
+	zclass?: boolean;
 	input?: boolean; // zul.inp.InputWidget.prototype.domClass_
 }
 
 export interface DomAttrsOptions extends DomStyleOptions, DomClassOptions {
-	id: boolean;
-	domStyle: boolean;
-	domClass: boolean;
-	tooltiptext: boolean;
-	tabindex: boolean;
+	id?: boolean;
+	domStyle?: boolean;
+	domClass?: boolean;
+	tooltiptext?: boolean;
+	tabindex?: boolean;
 	text?: boolean; // zul.inp.InputWidget.prototype.domAttrs_
 }
 
@@ -2759,7 +2759,7 @@ redraw: function (out) {
 	 * @see #domClass_
 	 * @see #domAttrs_
 	 */
-	protected domStyle_(no?: Partial<DomStyleOptions>): string {
+	protected domStyle_(no?: DomStyleOptions): string {
 		var out = '', s;
 		if (s = this['z$display']) //see au.js
 			out += 'display:' + s + ';';
@@ -2801,7 +2801,7 @@ redraw: function (out) {
 	 * @see #domStyle_
 	 * @see #domAttrs_
 	 */
-	protected domClass_(no?: Partial<DomClassOptions>): string {
+	protected domClass_(no?: DomClassOptions): string {
 		var s, z;
 		if (!no || !no.sclass)
 			s = this.getSclass();
@@ -2848,7 +2848,7 @@ function () {
 	 * <p>return the HTML attributes, such as id="z_u7_3" class="z-button"
 	 * @return String
 	 */
-	public domAttrs_(no?: Partial<DomAttrsOptions>): string {
+	public domAttrs_(no?: DomAttrsOptions): string {
 		var out = '', s;
 		if (!no) {
 			if ((s = this.uuid))

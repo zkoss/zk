@@ -577,7 +577,7 @@ export class InputWidget extends zul.Widget {
 		return this.getInputNode();
 	}
 
-	public override domAttrs_(no?: Partial<zk.DomAttrsOptions>): string {
+	public override domAttrs_(no?: zk.DomAttrsOptions): string {
 		var attr = super.domAttrs_(no);
 		if (!no || !no.text)
 			attr += this.textAttrs_();
@@ -1039,7 +1039,7 @@ export class InputWidget extends zul.Widget {
 		return true;
 	}
 
-	protected override domClass_(no?: Partial<zk.DomClassOptions>): string {
+	protected override domClass_(no?: zk.DomClassOptions): string {
 		var sc = super.domClass_(no);
 		if ((!no || !no.zclass) && this._disabled)
 			sc += ' ' + this.$s('disabled');

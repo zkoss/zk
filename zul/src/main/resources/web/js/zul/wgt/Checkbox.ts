@@ -17,7 +17,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 function _shallIgnore(evt: zk.Event): boolean | undefined {
 	var v = evt.domEvent;
 	// B96-ZK-4821: shall ignore if target is not the real input checkbox (label or span)
-	return v && !jq.nodeName(v.target, 'input');
+	return v && !jq.nodeName(v.target as Node, 'input');
 }
 
 /**
@@ -430,7 +430,7 @@ export class Checkbox extends zul.LabelImageWidget {
 		return this.isDisabled();
 	}
 
-	protected override domClass_(no?: Partial<zk.DomClassOptions>): string {
+	protected override domClass_(no?: zk.DomClassOptions): string {
 		var cls = super.domClass_(no),
 			mold = this.getMold();
 

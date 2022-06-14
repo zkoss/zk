@@ -40,6 +40,7 @@ export class Combobox extends zul.inp.ComboWidget {
 	private _autoCompleteSuppressed?: boolean;
 	private _bDel?: boolean | null;
 	private _initSelUuid?: string | null;
+	declare public _shallClose?: boolean;
 
 	/** Returns whether to automatically complete this text box
 	 * by matching the nearest item ({@link Comboitem}.
@@ -403,7 +404,7 @@ export class Combobox extends zul.inp.ComboWidget {
 				(bUp ? this.firstChild : this.lastChild) as zul.LabelImageWidget, !bUp, true);
 	}
 
-	private _select(sel: zul.LabelImageWidget | null, opts: Record<string, unknown>): void {
+	public _select(sel: zul.LabelImageWidget | null, opts: Record<string, unknown>): void {
 		var inp = this.getInputNode()!,
 			val = inp.value = sel ? sel.getLabel() : '';
 		this.valueSel_ = val;

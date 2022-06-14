@@ -73,9 +73,9 @@ export interface IsCharOptions {
 }
 
 export interface EncodeXmlOptions {
-	pre: boolean;
-	multiline: boolean;
-	maxlength: number;
+	pre?: boolean;
+	multiline?: boolean;
+	maxlength?: number;
 }
 
 export interface ProgressboxOptions {
@@ -95,7 +95,7 @@ export interface ZUtl {
 	convertDataURLtoBlob(dataURL: string): Blob;
 	decodeXML(txt: string): string;
 	destroyProgressbox(id: string, opts?: Partial<ProgressboxOptions>): void;
-	encodeXML(txt: string, opts?: Partial<EncodeXmlOptions>): string;
+	encodeXML(txt: string, opts?: EncodeXmlOptions): string;
 	encodeXMLAttribute(txt: string): string;
 	fireShown(wgt: Widget, bfsz?: number): void;
 	fireSized(wgt: Widget, bfsz?: number): void;
@@ -289,7 +289,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 			return testRegexp.test(string) ? string.replace(replaceRegexp, escaper) : string;
 		}
 
-		return function (txt: string, opts?: Partial<EncodeXmlOptions>): string {
+		return function (txt: string, opts?: EncodeXmlOptions): string {
 			txt = txt != null ? String(txt) : '';
 
 			if (!opts) // speed up the replacement.

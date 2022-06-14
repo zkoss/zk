@@ -103,7 +103,7 @@ export class Progressmeter extends zul.Widget {
 		this._fixImgWidth();
 	}
 
-	protected override domClass_(no?: Partial<zk.DomClassOptions>): string {
+	protected override domClass_(no?: zk.DomClassOptions): string {
 		var scls = super.domClass_(no);
 		if (!no || !no.zclass) {
 			if (this._indeterminate)

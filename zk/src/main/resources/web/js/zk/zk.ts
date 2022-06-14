@@ -1664,12 +1664,12 @@ zk.Buffer = Array;
 	 * </p>
 	 * @since 8.0.0
 	 */
+	_zk.Buffer = function<T> (this: T[]) {
+		this['out'] = '';
+	} as ArrayConstructor;
+
 	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 	// @ts-ignore
-	_zk.Buffer = function () {
-		this['out'] = '';
-	};
-
 	_zk.Buffer.prototype = new Array;
 	Object.assign(_zk.Buffer.prototype, {
 		push: function () {

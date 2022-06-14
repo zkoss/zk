@@ -72,7 +72,7 @@ export class Notification extends zul.wgt.Popup {
 		out.push('</div>'); // not encoded to support HTML
 	}
 
-	protected override domClass_(no?: Partial<zk.DomClassOptions>): string {
+	protected override domClass_(no?: zk.DomClassOptions): string {
 		var type = this._type,
 			s = super.domClass_(no);
 		if (type)
