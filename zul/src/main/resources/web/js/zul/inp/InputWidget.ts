@@ -96,7 +96,7 @@ export class InputWidget extends zul.Widget {
 	private _maxlength = 0;
 	private _cols = 0;
 	//_tabindex: 0,
-	private _type = 'text';
+	protected _type = 'text';
 	private _placeholder: string | null = null;
 	private _inputAttributes: Record<string, string> | null = null;
 	private _lastinputAttributes: Record<string, string> | null = null;
