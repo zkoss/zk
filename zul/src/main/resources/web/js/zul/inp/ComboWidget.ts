@@ -19,12 +19,12 @@ export type PopupSize = [width: string, height: string];
  */
 export class ComboWidget extends zul.inp.InputWidget {
 	private _buttonVisible = true;
-	private _iconSclass: string | null = null;
+	protected _iconSclass: string | null = null;
 	private _autodrop?: boolean;
 	private _popupWidth?: string;
 	private _shallFixPopupDimension?: boolean;
-	private _repos?: boolean;
-	private _open?: boolean;
+	protected _repos?: boolean;
+	protected _open?: boolean;
 	protected _shallSyncPopupPosition?: boolean;
 	private _shadow?: zk.eff.Shadow | null;
 	protected _windowX?: number;
@@ -550,7 +550,7 @@ export class ComboWidget extends zul.inp.InputWidget {
 		jq(pp).removeClass(openClass);
 	}
 
-	private _fixsz(ppofs: PopupSize): void {
+	protected _fixsz(ppofs: PopupSize): void {
 		var pp = this.getPopupNode_();
 		if (!pp) return;
 
