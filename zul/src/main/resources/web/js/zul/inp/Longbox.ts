@@ -1,4 +1,4 @@
-/* Longbox.js
+/* Longbox.ts
 
 	Purpose:
 
@@ -16,12 +16,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * An edit box for holding an integer.
  * <p>Default {@link #getZclass}: z-longbox.
  */
-zul.inp.Longbox = zk.$extends(zul.inp.NumberInputWidget, {
+export class Longbox extends zul.inp.NumberInputWidget {
 	//bug #2997037, cannot enter large long integer into longbox
-	coerceFromString_: function (value) {
+	protected override coerceFromString_(value: string | null | undefined): {error: string} | zk.Long | null {
 		if (!value) return null;
 
-		var info = zk.fmt.Number.unformat(this._format, value, false, this._localizedSymbols),
+		var info = zk.fmt.Number.unformat(this._format!, value, false, this._localizedSymbols),
 			val = new zk.Long(info.raw),
 			sval = val.$toString();
 		if (info.raw != sval && info.raw != '-' + sval) //1e2 not supported (unlike Doublebox)
@@ -31,14 +31,16 @@ zul.inp.Longbox = zk.$extends(zul.inp.NumberInputWidget, {
 		if (this._isOutRange(val.$toString()))
 			return {error: zk.fmt.Text.format(msgzul.OUT_OF_RANGE + '(−9223372036854775808 - 9223372036854775807)')};
 		return val;
-	},
-	coerceToString_: function (value) {
+	}
+
+	protected override coerceToString_(value: string | zk.Long | null | undefined): string {
 		var fmt = this._format;
 		return value != null ? typeof value == 'string' ? value :
-			fmt ? zk.fmt.Number.format(fmt, value.$toString(), this._rounding, this._localizedSymbols)
+			fmt ? zk.fmt.Number.format(fmt, value.$toString(), this._rounding!, this._localizedSymbols)
 				 : value.$toLocaleString() : '';
-	},
-	_isOutRange: function (val) {
+	}
+
+	private _isOutRange(val: string): boolean {
 		var negative = val.charAt(0) == '-';
 		if (negative)
 			val = val.substring(1);
@@ -54,11 +56,14 @@ zul.inp.Longbox = zk.$extends(zul.inp.NumberInputWidget, {
 				return false;
 		}
 		return false;
-	},
-	marshall_: function (val) {
-		return val ? val.$toString() : val;
-	},
-	unmarshall_: function (val) {
-		return val ? new zk.Long(val) : val;
 	}
-});
+
+	protected override marshall_(val: zk.Long | null): string | null {
+		return val ? val.$toString() : val;
+	}
+
+	protected override unmarshall_(val: string | number | null): zk.Long | null {
+		return val ? new zk.Long(val) : val as null;
+	}
+}
+zul.inp.Longbox = zk.regClass(Longbox);

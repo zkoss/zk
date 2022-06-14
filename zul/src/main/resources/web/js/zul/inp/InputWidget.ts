@@ -956,11 +956,11 @@ export class InputWidget extends zul.Widget {
 		return a == b || this.marshall_(a) == this.marshall_(b);
 	}
 
-	protected marshall_<T>(val: T): T {
+	protected marshall_(val: unknown): unknown {
 		return val;
 	}
 
-	protected unmarshall_<T>(val: T): T {
+	protected unmarshall_(val: unknown): unknown {
 		return val;
 	}
 
