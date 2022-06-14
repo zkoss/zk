@@ -233,6 +233,7 @@ declare namespace zk {
 	type FlexOrient = import('./flex').FlexOrient;
 	type Draggable = import('./drag').Draggable;
 	type DateImpl = import('./dateImpl').DateImpl;
+	type Long = import('./math').Long;
 	namespace eff {
 		type Mask = import('./effect').Mask;
 	}
