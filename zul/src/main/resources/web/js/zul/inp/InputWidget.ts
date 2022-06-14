@@ -818,7 +818,7 @@ export class InputWidget extends zul.Widget {
 	 * @param String value the string to coerce from
 	 * @return String
 	 */
-	protected coerceFromString_(value: string | null | undefined): string | null | undefined {
+	protected coerceFromString_(value: string | null | undefined): unknown {
 		return value;
 	}
 

@@ -17,17 +17,18 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>Default {@link #getZclass}: z-intbox.
  *
  */
-zul.inp.Intbox = zk.$extends(zul.inp.NumberInputWidget, {
+export class Intbox extends zul.inp.NumberInputWidget {
 	/** Returns the value in int. If null, zero is returned.
 	 * @return int
 	 */
-	intValue: function () {
-		return this.$supers('getValue', arguments);
-	},
-	coerceFromString_: function (value) {
+	public intValue(): string | undefined { // FIXME: return type mismatch with comment
+		return super.getValue();
+	}
+
+	protected override coerceFromString_(value: string | null | undefined): {error: string} | number | null {
 		if (!value) return null;
 
-		var info = zk.fmt.Number.unformat(this._format, value, false, this._localizedSymbols),
+		var info = zk.fmt.Number.unformat(this._format!, value, false, this._localizedSymbols),
 			val = parseInt(info.raw, 10),
 			sval;
 		if (info.raw.length < 17)
@@ -43,10 +44,12 @@ zul.inp.Intbox = zk.$extends(zul.inp.NumberInputWidget, {
 
 		if (info.divscale) val = Math.round(val / Math.pow(10, info.divscale));
 		return val;
-	},
-	coerceToString_: function (value) {
+	}
+
+	protected override coerceToString_(value: unknown): string {
 		var fmt = this._format;
-		return fmt ? zk.fmt.Number.format(fmt, value, this._rounding, this._localizedSymbols)
+		return fmt ? zk.fmt.Number.format(fmt, value as string, this._rounding!, this._localizedSymbols)
 					: value != null ? '' + value : '';
 	}
-});
+}
+zul.inp.Intbox = zk.regClass(Intbox);
