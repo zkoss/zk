@@ -123,7 +123,7 @@ export class Combobox extends zul.inp.ComboWidget {
 		return this;
 	}
 
-	public override onResponse(ctl: zk.ZWatchController, opts: {rtags: {onOpen?: boolean; onChanging?: boolean}}): void {
+	public override onResponse(ctl: zk.ZWatchController, opts: zul.inp.ResponseOptions): void {
 		// Bug ZK-2960: need to wait until the animation is finished before calling super
 		var args = arguments as unknown as Parameters<Combobox['onResponse']>;
 		if (this.isOpen() && jq(this.getPopupNode_()!).is(':animated')) {

@@ -712,7 +712,7 @@ export class Widget extends ZKObject {
 	declare public _nvflex;
 	declare public _nhflex;
 	declare public _hflexsz?: number;
-	declare public _vflexsz;
+	declare public _vflexsz?: number;
 
 	declare private _binding;
 	declare public rawId;
@@ -3184,8 +3184,8 @@ function () {
 	 * @see #insertChildHTML_
 	 * @return DOMElement
 	 */
-	public getCaveNode(): HTMLElement {
-		return this.$n('cave') || this.$n() as HTMLElement;
+	public getCaveNode(): HTMLElement | null | undefined {
+		return this.$n('cave') || this.$n();
 	}
 	/** Returns the first DOM element of this widget.
 	 * If this widget has no corresponding DOM element, this method will look
@@ -4309,7 +4309,7 @@ focus_: function (timeout) {
 	 * @see #fire
 	 * @see #listen
 	 */
-	public fire(evtnm: string, data?: unknown, opts?: Partial<EventOptions> | null, timeout?: number): Event {
+	public fire(evtnm: string, data?: unknown, opts?: EventOptions | null, timeout?: number): Event {
 		return this.fireX(new zk.Event(this, evtnm, data, opts), timeout);
 	}
 
@@ -6145,7 +6145,7 @@ export const zkservice = {
 		return null;
 	}
 };
-function _fixCommandName(prefix: string, cmd: string, opts: Partial<EventOptions>, prop: string): void {
+function _fixCommandName(prefix: string, cmd: string, opts: EventOptions, prop: string): void {
 	if (opts[prop]) {
 		var ignores = {};
 		ignores[prefix + cmd] = true;
@@ -6220,8 +6220,8 @@ export class Service extends Object {
 	 * @param Map opts a map of options to zk.Event, if any.
 	 * @param int timeout the time (milliseconds) to wait before sending the request.
 	 */
-	public command(cmd: string, args: unknown[], opts?: Partial<EventOptions &
-			{ duplicateIgnore: boolean; repeatIgnore: boolean}>, timeout?: number): this {
+	public command(cmd: string, args: unknown[], opts?: EventOptions &
+			{ duplicateIgnore?: boolean; repeatIgnore?: boolean}, timeout?: number): this {
 		var wgt = this.$view;
 		if (opts) {
 			if (opts.duplicateIgnore)

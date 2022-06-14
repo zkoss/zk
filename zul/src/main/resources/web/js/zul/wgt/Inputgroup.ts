@@ -74,7 +74,7 @@ export class Inputgroup extends zul.Widget {
 			jq(before.$n('chdex') || before.$n()!).before(
 				this.encloseChildHTML_({child: child})!);
 		else
-			jq(this.getCaveNode()).append(
+			jq(this.getCaveNode()!).append(
 				this.encloseChildHTML_({child: child})!);
 
 		child.bind(desktop);
