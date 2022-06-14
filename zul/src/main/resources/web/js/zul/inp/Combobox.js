@@ -137,7 +137,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
         if (selectedIndex >= 0) {
             if (this.desktop) {
                 let selectedItem = this.getChildAt(selectedIndex);
-                this.setSelectedItemUuid_(selectedItem);
+                this.setSelectedItemUuid_(selectedItem.uuid);
             } else {
                 this._initSelIndex = selectedIndex;
             }
