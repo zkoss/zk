@@ -3697,7 +3697,7 @@ unbind_: function (skipper, after) {
 		//to be overridden, before my minimum flex parent ask my natural(not minimized) width/height
 	}
 
-	public afterChildrenMinFlex_(attr: string): void {
+	public afterChildrenMinFlex_(orient: zk.FlexOrient): void {
 		//to be overridden, after my children fix the minimum flex (both width and height)
 	}
 

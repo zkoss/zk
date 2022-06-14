@@ -128,7 +128,7 @@ export class Comboitem extends zul.LabelImageWidget {
 		return zUtl.encodeXML(this.getLabel(), {pre: true});
 	}
 
-	public override doClick_(evt: zk.Event): void {
+	public override doClick_(evt: zk.Event, popupOnly?: boolean): void {
 		if (!this._disabled) {
 
 			var cb = this.parent as zul.inp.Combobox;

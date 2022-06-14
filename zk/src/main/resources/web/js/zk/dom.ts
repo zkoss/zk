@@ -46,6 +46,7 @@ export interface JQZK {
 
 	_createWrapper(element: JQuery): JQuery;
 	_removeWrapper(element: JQuery): JQuery;
+	_updateProp(prop: string[]);
 	$<T extends Widget>(): T;
 	absolutize(): this;
 	beforeHideOnUnbind(): void;
