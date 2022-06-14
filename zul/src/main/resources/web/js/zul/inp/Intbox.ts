@@ -1,4 +1,4 @@
-/* Intbox.js
+/* Intbox.ts
 
 	Purpose:
 

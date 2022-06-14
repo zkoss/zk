@@ -1,4 +1,4 @@
-/* NumberInputWidget.js
+/* NumberInputWidget.ts
 
 	Purpose:
 
