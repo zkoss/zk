@@ -35,9 +35,9 @@ export type SimpleConstraintErrorMessages = Record<string, string | undefined>
 export class SimpleConstraint extends zk.Object {
 	private _finishParseCst = true;
 	private _regex?: RegExp;
-	private _flags: SimpleConstraintFlags;
+	public _flags: SimpleConstraintFlags;
 	public _pos?: string;
-	private _errmsg: SimpleConstraintErrorMessages;
+	public _errmsg: SimpleConstraintErrorMessages;
 	private _cst?: string;
 	public serverValidate?: boolean;
 	private _cstArr!: string[];

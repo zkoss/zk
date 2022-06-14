@@ -62,5 +62,6 @@ declare global {
 	| 'PANEL_EXPAND' // zul/inp/ComboWidget
 	| 'UNKNOWN_TYPE'
 	| 'UPLOAD_ERROR_EXCEED_MAXSIZE' // zul/Upload
+	| 'VALUE_NOT_MATCHED' // zul/inp/Combobox
 	, string>;
 }
