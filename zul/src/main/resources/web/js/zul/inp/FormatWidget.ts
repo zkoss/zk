@@ -16,7 +16,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * A skeletal implementation for an input box with format.
  */
  export class FormatWidget extends zul.inp.InputWidget {
-	private _format?: string;
+	protected _format?: string;
 	private _shortcut?: string;
 
 	//zk.def

@@ -41,6 +41,7 @@ declare global {
 	| 'DATE_REQUIRED'
 	| 'EMPTY_NOT_ALLOWED'
 	| 'ILLEGAL_VALUE'
+	| 'INTEGER_REQUIRED' // zul/inp/Intbox
 	| 'NO_AUDIO_SUPPORT'
 	| 'NO_FUTURE_PAST_TODAY'
 	| 'NO_FUTURE_PAST'

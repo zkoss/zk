@@ -31,8 +31,8 @@ zk.load('zul.lang', function () {
  * @since 5.0.8
  */
 export class NumberInputWidget extends zul.inp.FormatWidget {
-	private _rounding?: number;
-	private _localizedSymbols?: LocalizedSymbols;
+	protected _rounding?: number;
+	protected _localizedSymbols?: LocalizedSymbols;
 	private _allowKeys?: string | null;
 
 	/** Returns the rounding mode.

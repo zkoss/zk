@@ -411,7 +411,10 @@ export let Number = {
 			};
 			
 		var divscale = 0, //the second element
-			minus, sb, cc, ignore,
+			minus,
+			sb: string | undefined,
+			cc,
+			ignore,
 			zkMinus = ignoreLocale ? '-' : localizedSymbols.MINUS,
 			zkDecimal = ignoreLocale ? '.' : localizedSymbols.DECIMAL, //bug #2932443, no format and German Locale
 			zkPercent = ignoreLocale ? '%' : localizedSymbols.PERCENT,
