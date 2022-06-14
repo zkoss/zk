@@ -21,7 +21,7 @@ export interface SlideOptions {
 	anchor: string;
 	easing: string;
 	duration: number;
-	afterAnima: () => void;
+	afterAnima: (wgt: zk.Widget) => void; // zul/inp/ComboWidget
 }
 
 export interface Dimension {
@@ -32,8 +32,8 @@ export interface Dimension {
 }
 
 export interface PositionOptions {
-	overflow: boolean;
-	dodgeRef: boolean;
+	overflow?: boolean;
+	dodgeRef?: boolean;
 }
 
 export interface RedoCSSOptions {
@@ -93,8 +93,8 @@ export interface JQZK {
 	padBorderWidth(): number;
 	paddingHeight(): number;
 	paddingWidth(): number;
-	position(dim?: Dimension, where?: string | null, opts?: Partial<PositionOptions> | null): this;
-	position(el?: Element, where?: string | null, opts?: Partial<PositionOptions> | null): this;
+	position(dim?: Dimension, where?: string | null, opts?: PositionOptions | null): this;
+	position(el?: Element, where?: string | null, opts?: PositionOptions | null): this;
 	redoCSS(timeout?: number, opts?: Partial<RedoCSSOptions>): this;
 	redoSrc(): this;
 	relativize(): this;

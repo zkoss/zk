@@ -63,7 +63,7 @@ export class Notification extends zul.wgt.Popup {
 		out.push('<div', this.domAttrs_(), '>');
 		if (this._ref) //output arrow if reference exist
 			out.push('<div id="', uuid, '-p" class="', this.$s('pointer'), '"></div>');
-		out.push('<i id="', uuid, '-icon" class="', icon, ' ', (_iconMap[this._type!]), '"></i>');
+		out.push('<i id="', uuid, '-icon" class="', icon, ' ', (_iconMap[this._type!] as string), '"></i>');
 		out.push('<div id="', uuid, '-cave" class="', this.$s('content'), '">',
 				this._msg, '</div>');
 		if (this._closable)
@@ -114,7 +114,7 @@ export class Notification extends zul.wgt.Popup {
 		zk(this).redoCSS(-1, {'fixFontIcon': true});
 	}
 
-	public override position(ref: zk.Widget, offset?: zk.Offset | null, position?: string | null, opts?: Partial<zk.PositionOptions> | null): void {
+	public override position(ref: zk.Widget, offset?: zk.Offset | null, position?: string | null, opts?: zk.PositionOptions | null): void {
 		if (ref && !ref.$n())
 			return;
 		super.position(ref, offset, position, opts);

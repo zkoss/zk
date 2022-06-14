@@ -102,7 +102,7 @@ export class InputWidget extends zul.Widget {
 	private _lastinputAttributes: Record<string, string> | null = null;
 	public _inplaceTimerId: number | null = null;
 	public _inplaceTimeout = 150;
-	private _inplaceIgnore = false;
+	protected _inplaceIgnore = false;
 
 	private _name?: string;
 	public _cst?: zul.inp.SimpleConstraint | null;
@@ -114,8 +114,8 @@ export class InputWidget extends zul.Widget {
 	public __ebox?: zul.inp.Errorbox;
 	private _tidChg?: number | null;
 	protected _multiline?: boolean;
-	private _disabled?: boolean;
-	private _readonly?: boolean;
+	protected _disabled?: boolean;
+	protected _readonly?: boolean;
 	protected _value?: string;
 	private _errmsg?: string | null;
 	private _defRawVal?: string;
@@ -1153,7 +1153,7 @@ export class InputWidget extends zul.Widget {
 		super.doKeyDown_(evt);
 	}
 
-	private _updateValue(): void {
+	protected _updateValue(): void {
 		//Support maxlength for Textarea
 		if (this.isMultiline()) {
 			var maxlen = this._maxlength;

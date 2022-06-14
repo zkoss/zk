@@ -42,10 +42,10 @@ export interface EventOptions {
 }
 
 export interface EventStopOptions {
-	revoke: boolean;
-	propagation: boolean;
-	dom: boolean;
-	au: boolean;
+	revoke?: boolean;
+	propagation?: boolean;
+	dom?: boolean;
+	au?: boolean;
 }
 /** The class representing a widget event (aka., a ZK event).
  * A widget event is the widget-level event that a widget can fire and the client application can listen.
@@ -260,7 +260,7 @@ evt.stop({progagation:true,revoke:true}); //revoke the event propagation
 	In other words, to stop it, you have to specify the au option explicitly. </li>
 	</ul>
 	*/
-	public stop(opts?: Partial<EventStopOptions>): void {
+	public stop(opts?: EventStopOptions | null): void {
 		var b = !opts || !opts.revoke;
 		if (!opts || opts.propagation) this.stopped = b;
 		if (!opts || opts.dom) this.domStopped = b;

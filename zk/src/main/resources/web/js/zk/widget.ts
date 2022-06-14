@@ -1025,7 +1025,7 @@ new zul.wnd.Window({
 	 * @param String width the width. Remember to specify 'px', 'pt' or '%'.
 	 * An empty or null value means "auto"
 	 */
-	public setWidth(width: StringFieldValue): void {
+	public setWidth(width: string | null): void {
 		if (this._width != width) {
 			this._width = width;
 			if (!this._nhflex) {
@@ -1045,7 +1045,7 @@ new zul.wnd.Window({
 	 * @param String height the height. Remember to specify 'px', 'pt' or '%'.
 	 * An empty or null value means "auto"
 	 */
-	public setHeight(height: StringFieldValue): void {
+	public setHeight(height: string | null): void {
 		if (this._height != height) {
 			this._height = height;
 			if (!this._nvflex) {
