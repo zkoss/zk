@@ -17,7 +17,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>Default {@link #getZclass}: z-textbox.
  */
 export class Textbox extends zul.inp.InputWidget {
-	protected override _value = '';
+	public override _value = '';
 	private _rows = 1;
 	private _submitByEnter?: boolean;
 
@@ -142,7 +142,7 @@ export class Textbox extends zul.inp.InputWidget {
 		return html;
 	}
 
-	protected override doKeyDown_(evt: zk.Event): void { // FIXME: `simulated` is never used in super
+	protected override doKeyDown_(evt: zk.Event): void {
 		if (evt.keyCode == 13 && this._submitByEnter && this._multiline && !evt.shiftKey) {
 			evt.stop();
 			this.fire('onOK');
