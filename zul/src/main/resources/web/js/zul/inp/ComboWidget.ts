@@ -220,7 +220,7 @@ export class ComboWidget extends zul.inp.InputWidget {
 		}
 	}
 
-	public onResponse(ctl: zk.ZWatchController, opts: ResponseOptions): void { // FIXME: reconsider opts type
+	public onResponse(ctl: zk.ZWatchController, opts: ResponseOptions): void {
 		if ((this._shallFixPopupDimension || opts.rtags.onOpen || opts.rtags.onChanging) && this.isOpen()) {
 			// ZK-2192: Only need to determine if popup is animating
 			if (jq(this.getPopupNode_()!).is(':animated')) {
