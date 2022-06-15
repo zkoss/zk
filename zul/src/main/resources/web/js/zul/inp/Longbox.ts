@@ -18,7 +18,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 export class Longbox extends zul.inp.NumberInputWidget {
 	//bug #2997037, cannot enter large long integer into longbox
-	protected override coerceFromString_(value: string | null | undefined): {error: string} | zk.Long | null {
+	protected override coerceFromString_(value: string | null | undefined): zul.inp.CoerceFromStringResult | zk.Long | null {
 		if (!value) return null;
 
 		var info = zk.fmt.Number.unformat(this._format!, value, false, this._localizedSymbols),

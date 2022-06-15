@@ -48,9 +48,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			this.getInputNode()!.value = this._shortcut;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore: signature different from super
-	protected override updateChange_(clear: boolean): boolean {
+	protected override updateChange_(clear?: boolean): boolean {
 		var upd = super.updateChange_();
 		if (clear)
 			delete this._shortcut;

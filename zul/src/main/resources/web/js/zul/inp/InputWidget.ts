@@ -16,11 +16,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 //zk.$package('zul.inp');
 
-interface InputValidation {
-	value?: unknown;
-	rawValue?: unknown;
+export interface CoerceFromStringResult {
 	server?: boolean;
 	error?: string;
+}
+export interface InputValidationResult extends CoerceFromStringResult {
+	value?: unknown;
+	rawValue?: unknown;
 }
 
 var _keyIgnorable = zk.opera ? function (code: number) {
@@ -116,9 +118,9 @@ export class InputWidget extends zul.Widget {
 	protected _multiline?: boolean;
 	protected _disabled?: boolean;
 	protected _readonly?: boolean;
-	protected _value?: string;
+	public _value?: unknown;
 	protected _errmsg?: string | null;
-	private _defRawVal?: string;
+	protected _defRawVal?: string;
 	private _lastKeyDown?: number | null;
 	protected _tabbable?: boolean;
 	private _instant?: boolean;
@@ -523,7 +525,7 @@ export class InputWidget extends zul.Widget {
 	/** Returns the value in the String format.
 	 * @return String
 	 */
-	public getValue(): string | undefined {
+	public getValue(): unknown {
 		return this._value;
 	}
 
@@ -536,7 +538,7 @@ export class InputWidget extends zul.Widget {
 	 * The error message will be cleared if true
 	 */
 	public setValue(value: unknown, fromServer?: boolean): void {
-		var vi: InputValidation | undefined;
+		var vi: InputValidationResult | undefined;
 		// for zephyr to treat as "value" attribute from "_value" at client side
 		if (typeof value == 'number' || typeof value == 'string')
 			value = this.unmarshall_(value);
@@ -552,10 +554,10 @@ export class InputWidget extends zul.Widget {
 		//Note: for performance reason, we don't send value back if
 		//the validation shall be done at server, i.e., if (vi.server)
 		if ((!vi || !vi.error) && (fromServer || !this._equalValue(this._value, value))) {
-			this._value = value as string;
+			this._value = value;
 			var inp = this.getInputNode();
 			if (inp) //check if bind
-				this._defRawVal = this._lastChg = inp.value = value = this.coerceToString_(value as string);
+				this._defRawVal = this._lastChg = inp.value = value = this.coerceToString_(value);
 		}
 	}
 
@@ -622,7 +624,7 @@ export class InputWidget extends zul.Widget {
 		return html;
 	}
 
-	protected _onChanging(timeout: number): void {
+	protected _onChanging(timeout?: number): void {
 		InputWidget._onChanging.call(this, timeout);
 	}
 
@@ -634,11 +636,11 @@ export class InputWidget extends zul.Widget {
 	 * <p>Default: null (means no constraint all all).
 	 * @param String cst
 	 */
-	public setConstraint(cst: string | null): void {
+	public setConstraint(cst: zul.inp.SimpleConstraint | string | null): void {
 		if (typeof cst == 'string' && cst.charAt(0) != '['/*by server*/)
 			this._cst = new zul.inp.SimpleConstraint(cst);
 		else
-			this._cst = cst as null;
+			this._cst = cst as zul.inp.SimpleConstraint | null;
 		if (this._cst)
 			this._reVald = true; //revalidate required
 	}
@@ -875,21 +877,21 @@ export class InputWidget extends zul.Widget {
 		}
 	}
 
-	private _validate(value: unknown): InputValidation {
+	private _validate(value: unknown): InputValidationResult {
 		zul.inp.validating = true;
 		try {
 			var val = value,
 				msg: string | boolean | undefined;
 			if (typeof val == 'string' || val == null) {
 				val = this.coerceFromString_(val as string);
-				if (val && ((msg = (val as {error: string}).error) || (val as {server: boolean}).server)) {
+				if (val && ((msg = (val as InputValidationResult).error) || (val as InputValidationResult).server)) {
 					this.clearErrorMessage(true);
-					if ((val as {server: boolean}).server || this._cst as unknown == '[c') { //CustomConstraint
+					if ((val as InputValidationResult).server || this._cst as unknown == '[c') { //CustomConstraint
 						this._reVald = false;
 						return {rawValue: value || '', server: true}; //let server to validate it
 					}
-					this._markError(msg, val as string);
-					return val as {server?: boolean; error?: string};
+					this._markError(msg!, val as string);
+					return val as InputValidationResult;
 				}
 			}
 
@@ -978,7 +980,7 @@ export class InputWidget extends zul.Widget {
 		var wasErr = this._errmsg,
 			vi = this._validate(value);
 		if (!vi.error || vi.server) {
-			var upd, data: InputValidation | undefined;
+			var upd, data: InputValidationResult | undefined;
 			if (vi.rawValue != null) { //coerce failed
 				data = {rawValue: vi.rawValue};
 			} else if (!vi.error) {
@@ -997,7 +999,7 @@ export class InputWidget extends zul.Widget {
 				//to save the trouble of coerceToString issue
 				upd = wasErr || !this._equalValue(vi.value, this._value);
 				if (upd) {
-					this._value = vi.value as string; //vi - not coerced
+					this._value = vi.value; //vi - not coerced
 					this._defRawVal = value;
 				}
 			}
@@ -1244,7 +1246,7 @@ export class InputWidget extends zul.Widget {
 		return zk(n).isRealScrollIntoView(true);
 	}
 
-	private static _onChanging(this: InputWidget, timeout: number): void {
+	private static _onChanging(this: InputWidget, timeout?: number): void {
 		//Note: "this" is available here
 		if (this.desktop) {
 			var inp = this.getInputNode()!,

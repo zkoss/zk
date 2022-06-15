@@ -2,7 +2,7 @@ export * from './InputWidget'; // jsdoc="true"
 export * from './Errorbox';
 export * from './SimpleConstraint'; // jsdoc="true"
 // export * from './SimpleSpinnerConstraint'; // jsdoc="true"
-// export * from './SimpleDoubleSpinnerConstraint'; // jsdoc="true"
+export * from './SimpleDoubleSpinnerConstraint'; // jsdoc="true"
 // export * from './SimpleDateConstraint'; // jsdoc="true"
 // export * from './SimpleLocalTimeConstraint'; // jsdoc="true"
 export * from './Textbox';
@@ -19,5 +19,5 @@ export * from './Bandbox';
 export * from './Bandpopup';
 // export * from './Slider';
 // export * from './Spinner';
-// export * from './Doublespinner';
+export * from './Doublespinner';
 export declare let validating: boolean | undefined; // zul.inp.InputWidget

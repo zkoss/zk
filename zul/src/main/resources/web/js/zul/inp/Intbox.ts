@@ -21,11 +21,11 @@ export class Intbox extends zul.inp.NumberInputWidget {
 	/** Returns the value in int. If null, zero is returned.
 	 * @return int
 	 */
-	public intValue(): string | undefined { // FIXME: return type mismatch with comment
-		return super.getValue();
+	public intValue(): number {
+		return super.getValue() as number;
 	}
 
-	protected override coerceFromString_(value: string | null | undefined): {error: string} | number | null {
+	protected override coerceFromString_(value: string | null | undefined): zul.inp.CoerceFromStringResult | number | null {
 		if (!value) return null;
 
 		var info = zk.fmt.Number.unformat(this._format!, value, false, this._localizedSymbols),

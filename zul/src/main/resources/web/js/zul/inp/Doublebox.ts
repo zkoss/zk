@@ -17,7 +17,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>Default {@link #getZclass}: z-doublebox.
  */
 export class Doublebox extends zul.inp.NumberInputWidget {
-	protected override coerceFromString_(value: string | null | undefined): {error?: string; server?: boolean} | number | null {
+	protected override coerceFromString_(value: string | null | undefined): zul.inp.CoerceFromStringResult | number | null {
 		if (!value) return null;
 
 		var info = zk.fmt.Number.unformat(this._format!, value, false, this._localizedSymbols),

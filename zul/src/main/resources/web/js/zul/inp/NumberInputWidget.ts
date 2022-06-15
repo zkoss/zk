@@ -33,7 +33,7 @@ zk.load('zul.lang', function () {
  */
 export class NumberInputWidget extends zul.inp.FormatWidget {
 	protected _rounding?: number;
-	protected _localizedSymbols?: LocalizedSymbols;
+	public _localizedSymbols?: LocalizedSymbols;
 	private _allowKeys?: string | null;
 
 	/** Returns the rounding mode.
@@ -78,7 +78,7 @@ export class NumberInputWidget extends zul.inp.FormatWidget {
 	public setLocalizedSymbols(val: string | undefined, opts?: Record<string, boolean>): this {
 		const o = this._localizedSymbols;
 
-		if (val) { // FIXME: cannot understand the logic
+		if (val) {
 			var ary = jq.evalJSON(val) as [string, string];
 			if (!globallocalizedSymbols[ary[0]])
 				globallocalizedSymbols[ary[0]] = ary[1];
