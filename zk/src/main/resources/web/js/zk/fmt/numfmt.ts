@@ -87,7 +87,7 @@ export let Number = {
 		}
 	},
 	//Test if rounding is required (used if Rounding is UNNECESSARY
-	isRoundingRequired(val: string | number, fmt: string, localizedSymbols): boolean {
+	isRoundingRequired(val: string | number, fmt: string, localizedSymbols: zk.LocalizedSymbols): boolean {
 		if (!fmt || val == null || val == '')
 			return false;
 		
@@ -173,7 +173,7 @@ export let Number = {
 		}
 		return valStr;
 	},
-	format(fmt: string, val: string, rounding: number, localizedSymbols): string {
+	format(fmt: string, val: string, rounding: number, localizedSymbols: zk.LocalizedSymbols): string {
 		if (val == null) return '';
 		if (!fmt) return val + '';
 		
@@ -339,7 +339,7 @@ export let Number = {
 			shownZero = suf ? rexp.test(suf) && /^0*$/.test(pre) : rexp.test(pre);
 		return (val != '' && parseFloat(val) < 0 && !shownZero && !useMinsuFmt ? localizedSymbols.MINUS : '') + (suf ? pre + (/[\d]/.test(suf.charAt(0)) ? localizedSymbols.DECIMAL : '') + suf : pre);
 	},
-	_escapeQuote(fmt: string, localizedSymbols): Efmt {
+	_escapeQuote(fmt: string, localizedSymbols: zk.LocalizedSymbols): Efmt {
 		//note we do NOT support mixing of quoted and unquoted percent
 		var cc, q = -2, shift = 0, ret = '', jdot = -1, purejdot = -1, pure = '', prej = -1,
 			validPercent = fmt ? !new RegExp('(\'[' + localizedSymbols.PERCENT + '|' + localizedSymbols.PER_MILL + ']+\')', 'g').test(fmt) : true;
@@ -385,7 +385,7 @@ export let Number = {
 		}
 		return j;
 	},
-	_removePrefixSharps(val: string, localizedSymbols): string {
+	_removePrefixSharps(val: string, localizedSymbols: zk.LocalizedSymbols): string {
 		var ret = '',
 			sharp = true;
 		for (var len = val.length, j = 0; j < len; ++j) {
@@ -398,7 +398,7 @@ export let Number = {
 		}
 		return ret;
 	},
-	unformat(fmt: string, val: string, ignoreLocale: boolean, localizedSymbols) {
+	unformat(fmt: string, val: string, ignoreLocale: boolean, localizedSymbols: zk.LocalizedSymbols) {
 		if (!val) return {raw: val, divscale: 0};
 
 		// localized symbols

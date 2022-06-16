@@ -10,7 +10,7 @@
     "module": "commonjs",
     "allowJs": true,
     "outDir": "../build/js",
-    "rootDir": "./src/main/resources/web/js",
+    // "rootDir": "./src/main/resources/web/js",
     "strict": true,
     "allowSyntheticDefaultImports": true,
     //    "noFallthroughCasesInSwitch": true,
@@ -28,7 +28,12 @@
     "types": [
       "webpack-env",
       "zul"
-    ]
+    ],
+    "paths": {
+      "@zul/*": [
+        "../zul/src/main/resources/web/js/zul/*"
+      ]
+    }
   },
   "include": [
     "./src/main/resources/web/js/zk"

@@ -2054,7 +2054,9 @@ interface ZKVars {
 	wgt: typeof import('./wgt/WidgetInfo');
 	xml: typeof import('./xml/utl');
 	zuml: typeof import('./zuml/Parser');
-	fmt: typeof import('./fmt/msgfmt') & typeof import('./fmt/numfmt');
+	fmt: typeof import('./fmt/msgfmt')
+		& typeof import('./fmt/numfmt')
+		& typeof import('@zul/db/datefmt');
 	canvas: typeof import('./canvas/canvas');
 	cpsp: typeof import('./cpsp/serverpush');
 
@@ -2142,4 +2144,19 @@ declare namespace _zk {
 	export let ie10_: boolean | undefined;
 	export let ie11: boolean | undefined;
 	export let ie11_: boolean | undefined;
+
+	// zul/db/datefmt
+	export const APM: string[];
+	export const DOW_1ST: number;
+	export const ERA: string;
+	export const FDOW: string[];
+	export const FMON: string[];
+	export const LAN_TAG: string;
+	export const MINDAYS: number;
+	export const S2DOW: string[];
+	export const S2MON: never;
+	export const SDOW: string[];
+	export const SMON: string[];
+	export const TDYS: number;
+	export const YDELTA: number;
 }
