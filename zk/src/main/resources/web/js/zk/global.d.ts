@@ -150,12 +150,11 @@ interface Array<T> {
 	$clone(): T[];
 }
 
-type Widget = import('./widget').Widget;
-type EventOptions = import('./evt').EventOptions;
 type Moment = import('moment-timezone').Moment;
 type DateImpl = import('./dateImpl').DateImpl;
 
 interface Window {
+	zjq: typeof import('./dom').zjq;
 	zkservice: typeof import('./widget').zkservice;
 	zkopt: typeof import('./widget').zkopt;
 	onIframeURLChange: typeof import('./au').onIframeURLChange;
@@ -166,9 +165,7 @@ interface Window {
 	zkmld(wgtcls: Record<string, unknown>, molds: Record<string, (() => void)>): void;
 	zkamn(pkg: string, fn: (() => void)): void;
 	DateImpl: typeof import('./dateImpl').DateImpl;
-	Dates: {
-		newInstance(param?: number | DateImpl | Parameters<DateConstructor['UTC']>, tz?: string): DateImpl;
-	};
+	Dates: typeof import('./dateImpl').Dates;
 
 	// assigned in ./mount
 	zkdt: typeof import('./mount').zkdt;
@@ -225,13 +222,19 @@ declare namespace zk {
 	type PositionOptions = import('./dom').PositionOptions;
 	type ZWatchController = import('./evt').ZWatchController;
 	type FireOptions = import('./evt').FireOptions;
+	type EventOptions = import('./evt').EventOptions;
 	type DomAttrsOptions = import('./widget').DomAttrsOptions;
 	type DomClassOptions = import('./widget').DomClassOptions;
 	type DomStyleOptions = import('./widget').DomStyleOptions;
+	type DomVisibleOptions = import('./widget').DomVisibleOptions;
 	type EventMetaData = import('./dom').EventMetaData;
 	type FlexOrient = import('./flex').FlexOrient;
+	type Draggable = import('./drag').Draggable;
+	type DateImpl = import('./dateImpl').DateImpl;
+	type Long = import('./math').Long;
 	namespace eff {
 		type Mask = import('./effect').Mask;
+		type Shadow = import('./effect').Shadow;
 	}
 
 	interface Websocket {
@@ -250,9 +253,9 @@ declare namespace zk {
 	interface BinderStatic {
 		new (wgt: Widget, target): Binder;
 		postCommand(dom: HTMLElement, command: string, args?: Record<string, unknown> | null,
-			opts?: Partial<EventOptions> | null, timeout?: number): void;
+			opts?: EventOptions | null, timeout?: number): void;
 		postGlobalCommand(dom: HTMLElement, command: string, args?: Record<string, unknown> | null,
-			opts?: Partial<EventOptions> | null, timeout?: number): void;
+			opts?: EventOptions | null, timeout?: number): void;
 	}
 
 	interface BinderOptions {
@@ -265,8 +268,8 @@ declare namespace zk {
 		after(cmd: string, fn: (args?: Record<string, unknown>) => void): this;
 		unAfter(cmd: string, fn: (args?: Record<string, unknown>) => void): this;
 		destroy(): void;
-		command(cmd: string, args?: Record<string, unknown> | null, opts?: Partial<EventOptions> | null, timeout?: number): this;
-		globalCommand(cmd: string, args?: Record<string, unknown> | null, opts?: Partial<EventOptions> | null, timeout?: number): this;
+		command(cmd: string, args?: Record<string, unknown> | null, opts?: EventOptions | null, timeout?: number): this;
+		globalCommand(cmd: string, args?: Record<string, unknown> | null, opts?: EventOptions | null, timeout?: number): this;
 		upload(cmd: string, file: File): void;
 	}
 }

@@ -228,7 +228,7 @@ export class A extends zul.LabelImageWidget {
 		return this.getDir() == 'reverse' ? label + img : img + label;
 	}
 
-	public override domAttrs_(no?: Partial<zk.DomAttrsOptions>): string {
+	public override domAttrs_(no?: zk.DomAttrsOptions): string {
 		var attr = super.domAttrs_(no),
 			v: string | undefined;
 		if (v = this.getTarget())

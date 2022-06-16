@@ -1,4 +1,4 @@
-/* Bandpopup.js
+/* Bandpopup.ts
 
 	Purpose:
 
@@ -21,25 +21,30 @@ it will be useful, but WITHOUT ANY WARRANTY.
  *
  * <p>z-class: z-bandpopup
  */
-zul.inp.Bandpopup = zk.$extends(zul.Widget, {
-	bind_: function () {
-		this.$supers(zul.inp.Bandpopup, 'bind_', arguments);
-		jq(this.$n()).on('focusin', this.proxy(this._focusin))
+export class Bandpopup extends zul.Widget {
+	private _shallClosePopup?: boolean;
+
+	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+		super.bind_(desktop, skipper, after);
+		jq(this.$n()!).on('focusin', this.proxy(this._focusin))
 			.on('focusout', this.proxy(this._focusout));
-	},
-	unbind_: function () {
-		jq(this.$n()).off('focusout', this.proxy(this._focusout))
+	}
+
+	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+		jq(this.$n()!).off('focusout', this.proxy(this._focusout))
 			.off('focusin', this.proxy(this._focusin));
-		this.$supers(zul.inp.Bandpopup, 'unbind_', arguments);
-	},
-	_focusin: function (e) {
+		super.unbind_(skipper, after, keepRod);
+	}
+
+	private _focusin(e: JQuery.FocusInEvent): void {
 		this._shallClosePopup = false;
-	},
-	_focusout: function (e) {
-		var bandbox = this.parent,
+	}
+
+	private _focusout(e: JQuery.FocusOutEvent): void {
+		var bandbox = this.parent as zul.inp.Bandbox | null,
 			self = this;
 		if (e.relatedTarget) {
-			if (bandbox && bandbox.isOpen() && !jq.isAncestor(bandbox.$n('pp'), e.relatedTarget))
+			if (bandbox && bandbox.isOpen() && !jq.isAncestor(bandbox.$n('pp'), e.relatedTarget as HTMLElement))
 				bandbox.close();
 		} else {
 			// for solving B96-ZK-4748, treechildren will rerender itself when clicking
@@ -53,22 +58,25 @@ zul.inp.Bandpopup = zk.$extends(zul.Widget, {
 				}
 			});
 		}
-	},
+	}
+
 	//super
-	afterChildrenMinFlex_: function (orient) {
+	public override afterChildrenMinFlex_(orient: zk.FlexOrient): void {
 		if (orient == 'w') {
 			var bandbox = this.parent,
 				pp = bandbox && bandbox.$n('pp');
 			if (pp) {
 				// test case is B50-ZK-859.zul
-				pp.style.width = jq.px0(this._hflexsz + zk(pp).padBorderWidth());
+				pp.style.width = jq.px0(this._hflexsz! + zk(pp).padBorderWidth());
 				zk(pp)._updateProp(['width']);
 			}
 		}
-	},
-	doClick_: function (evt) {
-		if (evt.domTarget == this.$n())
-			this.parent.focus();
-		this.$supers('doClick_', arguments);
 	}
-});
+
+	public override doClick_(evt: zk.Event, popupOnly?: boolean): void {
+		if (evt.domTarget == this.$n())
+			this.parent!.focus();
+		super.doClick_(evt, popupOnly);
+	}
+}
+zul.inp.Bandpopup = zk.regClass(Bandpopup);

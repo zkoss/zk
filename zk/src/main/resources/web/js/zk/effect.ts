@@ -25,24 +25,28 @@ import type {DOMFieldValue} from './types';
 var _defSKUOpts, _useSKU;
 
 export interface EffectStackupOptions {
-	stackup: boolean;
+	stackup?: boolean;
+	left?: number; // zul/inp/ComboWidget
+	right?: number; // zul/inp/ComboWidget
+	top?: number; // zul/inp/ComboWidget
+	bottom?: number; // zul/inp/ComboWidget
 }
 
 export interface EffectFullMaskOptions extends EffectStackupOptions {
-	mask: HTMLElement;
-	anchor: HTMLElement;
-	id: string;
-	zIndex: number;
-	visible: boolean;
+	mask?: HTMLElement;
+	anchor?: HTMLElement;
+	id?: string;
+	zIndex?: number;
+	visible?: boolean;
 }
 
 export interface EffectMaskOptions extends EffectStackupOptions {
-	id: string;
-	anchor: DOMFieldValue;
-	message: string;
-	offset: [number, number];
-	width: number;
-	height: number;
+	id?: string;
+	anchor?: DOMFieldValue;
+	message?: string;
+	offset?: [number, number];
+	width?: number;
+	height?: number;
 }
 
 export interface EffectActions {
@@ -59,7 +63,7 @@ export interface Effect {
 
 export interface Eff {
 	shallStackup(): boolean;
-	_skuOpts<T extends EffectStackupOptions>(opts: Partial<EffectStackupOptions>): T;
+	_skuOpts<T extends EffectStackupOptions>(opts: EffectStackupOptions): T;
 	_onVParent(evt, opts?): void;
 
 	Shadow: typeof Shadow;
@@ -77,7 +81,7 @@ let eff = {
 	shallStackup: function () {
 		return _useSKU;
 	},
-	_skuOpts<T extends EffectStackupOptions>(opts: Partial<EffectStackupOptions>): T {
+	_skuOpts<T extends EffectStackupOptions>(opts: EffectStackupOptions): T {
 		return zk.$default(opts,
 			_defSKUOpts || (_defSKUOpts = {stackup: eff.shallStackup()}));
 	},
@@ -97,9 +101,9 @@ export class Shadow extends zk.Object implements Effect {
 	declare public wgt: Widget | null;
 	declare public node: HTMLElement | null;
 	declare public stackup?: HTMLIFrameElement | null;
-	declare public opts: Partial<EffectStackupOptions>;
+	declare public opts: EffectStackupOptions;
 
-	public constructor(element: HTMLElement, opts: Partial<EffectStackupOptions>) {
+	public constructor(element: HTMLElement, opts: EffectStackupOptions) {
 		super();
 		this.wgt = zk.Widget.$(element.id);
 		this.opts = eff._skuOpts(opts);
@@ -175,7 +179,7 @@ export class FullMask extends zk.Object implements Effect {
 	 * <li>boolean visible: whether it is visible</li>
 	 * </ul>
 	 */
-	public constructor(opts: Partial<EffectFullMaskOptions>) {
+	public constructor(opts: EffectFullMaskOptions) {
 		super();
 		opts = eff._skuOpts(opts);
 		var mask = this.mask = jq(opts.mask || [], zk)[0];
@@ -262,7 +266,7 @@ eff.FullMask = FullMask;
  */
 export class Mask extends zk.Object implements Effect {
 	declare public mask?: HTMLElement | null;
-	declare private _opts: Partial<EffectMaskOptions>;
+	declare private _opts: EffectMaskOptions;
 	declare public __mask?: Effect;
 	declare public wgt?: Widget & Pick<Mask, '__mask'> | null;
 
@@ -275,7 +279,7 @@ export class Mask extends zk.Object implements Effect {
 	 * <li>String message - the message of the indicator, if any. null, Loading... is assumed.</li>
 	 * </ul>
 	 */
-	public constructor(opts?: Partial<EffectMaskOptions>) {
+	public constructor(opts?: EffectMaskOptions) {
 		super();
 		opts = opts || {};
 		var $anchor = zk(opts.anchor);
@@ -288,7 +292,7 @@ export class Mask extends zk.Object implements Effect {
 		this.sync();
 	}
 	//ZK-3118
-	public _draw(opts: Partial<EffectMaskOptions>, $anchor: JQZK): void {
+	public _draw(opts: EffectMaskOptions, $anchor: JQZK): void {
 		var maskId = opts.id || 'z_applymask',
 			progbox = jq(maskId, zk)[0];
 

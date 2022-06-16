@@ -345,7 +345,7 @@ export class Box extends zul.Widget {
 		if (this.desktop) this._fixChildDomVisible(child, child._visible);
 	}
 
-	protected override replaceChildHTML_(child: Widget, en: HTMLElement | string, desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, _trim_?: boolean): void {
+	protected override replaceChildHTML_(child: zk.Widget, en: HTMLElement | string, desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, _trim_?: boolean): void {
 		super.replaceChildHTML_(child, en, desktop, skipper, _trim_);
 		this._fixChildDomVisible(child, child._visible);
 		if (child.$instanceof(zul.box.Splitter)) {
@@ -377,7 +377,7 @@ export class Box extends zul.Widget {
 		return child.$n('chdex') || child.$n();
 	}
 
-	protected override insertChildHTML_(child: zk.Widget, before?: Widget | null, desktop?: zk.Desktop | null): void {
+	protected override insertChildHTML_(child: zk.Widget, before?: zk.Widget | null, desktop?: zk.Desktop | null): void {
 		if (before) {
 			jq(this._chdextr(before)!).before(this.encloseChildHTML_(child)!);
 		} else {
@@ -390,11 +390,11 @@ export class Box extends zul.Widget {
 		child.bind(desktop);
 	}
 
-	public override removeChildHTML_(child: Widget, ignoreDom?: boolean): void {
+	public override removeChildHTML_(child: zk.Widget, ignoreDom?: boolean): void {
 		super.removeChildHTML_(child, ignoreDom);
 		jq(child.uuid + '-chdex', zk).remove();
 		jq(child.uuid + '-chdex2', zk).remove();
-		var sib: Widget | null;
+		var sib: zk.Widget | null;
 		if (this.lastChild == child && (sib = child.previousSibling)) //child is last
 			jq(sib.uuid + '-chdex2', zk).remove();
 	}
@@ -512,7 +512,7 @@ export class Box extends zul.Widget {
 	}
 
 	//bug#3042306
-	protected override resetSize_(orient: string): void { //@Overrid zk.Widget#resetSize_, called when beforeSize
+	protected override resetSize_(orient: zk.FlexOrient): void { //@Overrid zk.Widget#resetSize_, called when beforeSize
 		super.resetSize_(orient);
 
 		// B85-ZK-3516: remove size of frame

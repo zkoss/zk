@@ -163,7 +163,7 @@ export class Track extends zul.Widget {
 		return this;
 	}
 
-	public override domAttrs_(no?: Partial<zk.DomAttrsOptions>): string {
+	public override domAttrs_(no?: zk.DomAttrsOptions): string {
 		let attr = super.domAttrs_(no)
 			+ zUtl.appendAttr('kind', this._kind)
 			+ zUtl.appendAttr('label', this._label)
