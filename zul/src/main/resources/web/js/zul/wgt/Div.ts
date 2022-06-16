@@ -48,7 +48,7 @@ export class Div extends zul.Widget {
 	}
 
 	//super//
-	public override domAttrs_(no?: Partial<zk.DomAttrsOptions>): string {
+	public override domAttrs_(no?: zk.DomAttrsOptions): string {
 		var align = this._align,
 			attr = super.domAttrs_(no);
 		return align != null ? attr + ' align="' + align + '"' : attr;

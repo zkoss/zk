@@ -5,13 +5,7 @@ export * as box from './box';
 export declare namespace grid {
     export import Row = zul.Widget; // zk/domtouch
 }
-// export * as inp from './inp';
-export declare namespace inp {
-    export class Errorbox extends zul.wgt.Notification { // zk/au
-        public _fixarrow(): void
-    }
-	export import InputWidget = zul.Widget; // zul/wgt/Inputgroup
-}
+export * as inp from './inp';
 // export * as lang from './lang';
 // export * as layout from './layout';
 export * as med from './med';
@@ -47,6 +41,7 @@ declare global {
 	| 'DATE_REQUIRED'
 	| 'EMPTY_NOT_ALLOWED'
 	| 'ILLEGAL_VALUE'
+	| 'INTEGER_REQUIRED' // zul/inp/Intbox
 	| 'NO_AUDIO_SUPPORT'
 	| 'NO_FUTURE_PAST_TODAY'
 	| 'NO_FUTURE_PAST'
@@ -62,9 +57,12 @@ declare global {
 	| 'NO_POSITIVE'
 	| 'NO_TODAY'
 	| 'NO_ZERO'
+	| 'NUMBER_REQUIRED' // zul/inp/Decimalbox
 	| 'OK' // zul/dom
 	| 'OUT_OF_RANGE'
+	| 'PANEL_EXPAND' // zul/inp/ComboWidget
 	| 'UNKNOWN_TYPE'
 	| 'UPLOAD_ERROR_EXCEED_MAXSIZE' // zul/Upload
+	| 'VALUE_NOT_MATCHED' // zul/inp/Combobox
 	, string>;
 }

@@ -164,13 +164,13 @@ export class Widget extends zk.Widget {
 					zWatch.fire('_onSyncScroll', this); // ZK-4408: for Popup only
 				}
 			}, 1000 / 60); // 60fps
-			this.domListen_(this.getCaveNode(), 'onScroll', '_doScrollableSyncScroll');
+			this.domListen_(this.getCaveNode()!, 'onScroll', '_doScrollableSyncScroll');
 		}
 	}
 
 	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		if (this._doScrollableSyncScroll) {
-			this.domUnlisten_(this.getCaveNode(), 'onScroll', '_doScrollableSyncScroll');
+			this.domUnlisten_(this.getCaveNode()!, 'onScroll', '_doScrollableSyncScroll');
 		}
 		super.unbind_(skipper, after, keepRod);
 	}
@@ -749,8 +749,7 @@ export class Widget extends zk.Widget {
 				beforeCtrlKeys_?: Widget['beforeCtrlKeys_'];
 			}
 			for (var w: WidgetBeforeCtrlKeys = target!; ; w = w.parent!) {
-				// eslint-disable-next-line @typescript-eslint/ban-types
-				if (w.beforeCtrlKeys_ && (w.beforeCtrlKeys_ as Function)(evt))
+				if (w.beforeCtrlKeys_ && w.beforeCtrlKeys_(evt) as undefined)
 					return;
 				if (w == wgt) break;
 			}

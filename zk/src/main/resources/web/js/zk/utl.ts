@@ -73,9 +73,9 @@ export interface IsCharOptions {
 }
 
 export interface EncodeXmlOptions {
-	pre: boolean;
-	multiline: boolean;
-	maxlength: number;
+	pre?: boolean;
+	multiline?: boolean;
+	maxlength?: number;
 }
 
 export interface ProgressboxOptions {
@@ -95,7 +95,7 @@ export interface ZUtl {
 	convertDataURLtoBlob(dataURL: string): Blob;
 	decodeXML(txt: string): string;
 	destroyProgressbox(id: string, opts?: Partial<ProgressboxOptions>): void;
-	encodeXML(txt: string, opts?: Partial<EncodeXmlOptions>): string;
+	encodeXML(txt: string, opts?: EncodeXmlOptions): string;
 	encodeXMLAttribute(txt: string): string;
 	fireShown(wgt: Widget, bfsz?: number): void;
 	fireSized(wgt: Widget, bfsz?: number): void;
@@ -114,7 +114,7 @@ export interface ZUtl {
 	parseMap(text: string, separator?: string, quote?: string): {[key: string]: string};
 	progressbox(id: string, msg: string, mask?: boolean, icon?: string | null, opts?: Partial<ProgressboxOptions>): void;
 	stringToInts(text: string | null, defaultValue: number): number[] | null;
-	today(fmt: boolean | string, tz: string): Date;
+	today(fmt: boolean | string | null, tz: string): Date;
 	throttle<T, A extends unknown[], R>(func: (this: T, ...args: A) => R, wait: number):
 		(this: T, ...args: A) => R;
 	debounce<T, A extends unknown[], R>(func: (this: T, ...args: A) => R, wait: number,
@@ -289,7 +289,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 			return testRegexp.test(string) ? string.replace(replaceRegexp, escaper) : string;
 		}
 
-		return function (txt: string, opts?: Partial<EncodeXmlOptions>): string {
+		return function (txt: string, opts?: EncodeXmlOptions): string {
 			txt = txt != null ? String(txt) : '';
 
 			if (!opts) // speed up the replacement.
@@ -394,7 +394,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * @return Date
 	 * @since 5.0.6
 	 */
-	today(fmt: boolean | string, tz: string): Date {
+	today(fmt: boolean | string | null, tz: string): Date {
 		var d = window.Dates.newInstance().tz(tz), hr = 0, min = 0, sec = 0, msec = 0;
 		if (typeof fmt == 'string') {
 			var fmt0 = fmt.toLowerCase();

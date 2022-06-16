@@ -45,26 +45,28 @@ export interface DomVisibleOptions {
 }
 
 export interface DomStyleOptions {
-	style: boolean;
-	width: boolean;
-	height: boolean;
-	left: boolean;
-	top: boolean;
-	zIndex: boolean;
-	visible: boolean;
+	style?: boolean;
+	width?: boolean;
+	height?: boolean;
+	left?: boolean;
+	top?: boolean;
+	zIndex?: boolean;
+	visible?: boolean;
 }
 
 export interface DomClassOptions {
-	sclass: boolean;
-	zclass: boolean;
+	sclass?: boolean;
+	zclass?: boolean;
+	input?: boolean; // zul.inp.InputWidget.prototype.domClass_
 }
 
 export interface DomAttrsOptions extends DomStyleOptions, DomClassOptions {
-	id: boolean;
-	domStyle: boolean;
-	domClass: boolean;
-	tooltiptext: boolean;
-	tabindex: boolean;
+	id?: boolean;
+	domStyle?: boolean;
+	domClass?: boolean;
+	tooltiptext?: boolean;
+	tabindex?: boolean;
+	text?: boolean; // zul.inp.InputWidget.prototype.domAttrs_
 }
 
 var _binds: Record<string, Widget> = {}, //{uuid, wgt}: bind but no node
@@ -688,7 +690,7 @@ export class Widget extends ZKObject {
 	// FIXME: _scrollbar?: any;
 	// FIXME: $binder(): zk.Binder | null;
 
-	declare public getInputNode?: () => HTMLInputElement;
+	declare public getInputNode?: () => HTMLInputElement | null | undefined;
 
 	declare public z_rod?: boolean | number;
 	declare public _rodKid?: boolean;
@@ -710,7 +712,7 @@ export class Widget extends ZKObject {
 	declare public _nvflex;
 	declare public _nhflex;
 	declare public _hflexsz?: number;
-	declare public _vflexsz;
+	declare public _vflexsz?: number;
 
 	declare private _binding;
 	declare public rawId;
@@ -720,7 +722,7 @@ export class Widget extends ZKObject {
 	declare private _userZIndex;
 	declare private _zIndex;
 	declare private z_isDataHandlerBound;
-	declare private _drag;
+	declare protected _drag;
 	declare private _preWidth;
 	declare private _preHeight;
 	declare private _action: StringFieldValue;
@@ -894,6 +896,8 @@ new zul.wnd.Window({
 	 */
 	public constructor(props?: Record<string, unknown> | typeof zkac) {
 		super();
+		this.className = this.constructor.prototype.className;
+		this.widgetName = this.constructor.prototype.widgetName;
 		this._asaps = {}; //event listened at server
 		this._lsns = {}; //listeners(evtnm,listener)
 		this._bklsns = {}; //backup for listeners by setListeners
@@ -1021,7 +1025,7 @@ new zul.wnd.Window({
 	 * @param String width the width. Remember to specify 'px', 'pt' or '%'.
 	 * An empty or null value means "auto"
 	 */
-	public setWidth(width: StringFieldValue): void {
+	public setWidth(width: string | null): void {
 		if (this._width != width) {
 			this._width = width;
 			if (!this._nhflex) {
@@ -1041,7 +1045,7 @@ new zul.wnd.Window({
 	 * @param String height the height. Remember to specify 'px', 'pt' or '%'.
 	 * An empty or null value means "auto"
 	 */
-	public setHeight(height: StringFieldValue): void {
+	public setHeight(height: string | null): void {
 		if (this._height != height) {
 			this._height = height;
 			if (!this._nvflex) {
@@ -2755,7 +2759,7 @@ redraw: function (out) {
 	 * @see #domClass_
 	 * @see #domAttrs_
 	 */
-	protected domStyle_(no?: Partial<DomStyleOptions>): string {
+	protected domStyle_(no?: DomStyleOptions): string {
 		var out = '', s;
 		if (s = this['z$display']) //see au.js
 			out += 'display:' + s + ';';
@@ -2797,7 +2801,7 @@ redraw: function (out) {
 	 * @see #domStyle_
 	 * @see #domAttrs_
 	 */
-	protected domClass_(no?: Partial<DomClassOptions>): string {
+	protected domClass_(no?: DomClassOptions): string {
 		var s, z;
 		if (!no || !no.sclass)
 			s = this.getSclass();
@@ -2844,7 +2848,7 @@ function () {
 	 * <p>return the HTML attributes, such as id="z_u7_3" class="z-button"
 	 * @return String
 	 */
-	public domAttrs_(no?: Partial<DomAttrsOptions>): string {
+	public domAttrs_(no?: DomAttrsOptions): string {
 		var out = '', s;
 		if (!no) {
 			if ((s = this.uuid))
@@ -3180,8 +3184,8 @@ function () {
 	 * @see #insertChildHTML_
 	 * @return DOMElement
 	 */
-	public getCaveNode(): HTMLElement {
-		return this.$n('cave') || this.$n() as HTMLElement;
+	public getCaveNode(): HTMLElement | null | undefined {
+		return this.$n('cave') || this.$n();
 	}
 	/** Returns the first DOM element of this widget.
 	 * If this widget has no corresponding DOM element, this method will look
@@ -3693,7 +3697,7 @@ unbind_: function (skipper, after) {
 		//to be overridden, before my minimum flex parent ask my natural(not minimized) width/height
 	}
 
-	public afterChildrenMinFlex_(attr: string): void {
+	public afterChildrenMinFlex_(orient: zk.FlexOrient): void {
 		//to be overridden, after my children fix the minimum flex (both width and height)
 	}
 
@@ -3805,7 +3809,7 @@ unbind_: function (skipper, after) {
 		delete this._vflexsz;
 	}
 
-	protected resetSize_(orient: string): void {
+	protected resetSize_(orient: zk.FlexOrient): void {
 		var n = this.$n() as HTMLElement,
 			hasScroll = this._beforeSizeHasScroll;
 		if (hasScroll || (hasScroll == null && (n.scrollTop || n.scrollLeft))) // keep the scroll status, the issue also happens (not only IE8) if trigger by resize browser window.
@@ -4305,7 +4309,7 @@ focus_: function (timeout) {
 	 * @see #fire
 	 * @see #listen
 	 */
-	public fire(evtnm: string, data?: unknown, opts?: Partial<EventOptions>, timeout?: number): Event {
+	public fire(evtnm: string, data?: unknown, opts?: EventOptions | null, timeout?: number): Event {
 		return this.fireX(new zk.Event(this, evtnm, data, opts), timeout);
 	}
 
@@ -6141,7 +6145,7 @@ export const zkservice = {
 		return null;
 	}
 };
-function _fixCommandName(prefix: string, cmd: string, opts: Partial<EventOptions>, prop: string): void {
+function _fixCommandName(prefix: string, cmd: string, opts: EventOptions, prop: string): void {
 	if (opts[prop]) {
 		var ignores = {};
 		ignores[prefix + cmd] = true;
@@ -6216,8 +6220,8 @@ export class Service extends Object {
 	 * @param Map opts a map of options to zk.Event, if any.
 	 * @param int timeout the time (milliseconds) to wait before sending the request.
 	 */
-	public command(cmd: string, args: unknown[], opts?: Partial<EventOptions &
-			{ duplicateIgnore: boolean; repeatIgnore: boolean}>, timeout?: number): this {
+	public command(cmd: string, args: unknown[], opts?: EventOptions &
+			{ duplicateIgnore?: boolean; repeatIgnore?: boolean}, timeout?: number): this {
 		var wgt = this.$view;
 		if (opts) {
 			if (opts.duplicateIgnore)

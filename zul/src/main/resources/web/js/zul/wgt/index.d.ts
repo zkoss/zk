@@ -36,9 +36,6 @@ export * from './Progressmeter';
 // export * from './Fileupload';
 // export * from './Combobutton';
 // export * from './Selectbox';
-// export * from './Notification';
-export class Notification extends zul.wgt.Popup { // zk/au
-    public static show(msg: string, pid: string, opts: Record<string, unknown>): void
-}
+export * from './Notification';
 // export * from './Rating';
 export * from './Inputgroup';

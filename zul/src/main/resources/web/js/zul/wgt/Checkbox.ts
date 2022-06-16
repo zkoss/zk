@@ -17,7 +17,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 function _shallIgnore(evt: zk.Event): boolean | undefined {
 	var v = evt.domEvent;
 	// B96-ZK-4821: shall ignore if target is not the real input checkbox (label or span)
-	return v && !jq.nodeName(v.target, 'input');
+	return v && !jq.nodeName(v.target as Node, 'input');
 }
 
 /**
@@ -260,10 +260,6 @@ export class Checkbox extends zul.LabelImageWidget {
 	public isIndeterminate(): boolean | undefined {
 		return this._indeterminate;
 	}
-	// FIXME: prefer above, but this file uses below
-	public getIndeterminate(): boolean | undefined {
-		return this._indeterminate;
-	}
 
 	/**
 	 * Set whether checkbox is in indeterminate state.
@@ -332,7 +328,7 @@ export class Checkbox extends zul.LabelImageWidget {
 
 		var n = this.$n('real') as HTMLInputElement,
 			mold = this.$n('mold')!,
-			indeterminate = this.getIndeterminate();
+			indeterminate = this.isIndeterminate();
 
 		// Bug 2383106
 		if (n.checked != n.defaultChecked)
@@ -399,7 +395,7 @@ export class Checkbox extends zul.LabelImageWidget {
 
 				// B85-ZK-3866: do extra click, if it's a radio
 				if (this.$instanceof(zul.wgt.Radio)) {
-					var rg = (this as unknown as zul.wgt.Radio).getRadiogroup(); // FIXME: why `this` can be another type?
+					var rg = (this as unknown as zul.wgt.Radio).getRadiogroup();
 					if (rg) {
 						rg.doClick_(evt);
 					}
@@ -430,7 +426,7 @@ export class Checkbox extends zul.LabelImageWidget {
 		return this.isDisabled();
 	}
 
-	protected override domClass_(no?: Partial<zk.DomClassOptions>): string {
+	protected override domClass_(no?: zk.DomClassOptions): string {
 		var cls = super.domClass_(no),
 			mold = this.getMold();
 

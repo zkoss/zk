@@ -72,7 +72,7 @@ interface Efmt {
 }
 
 export let Number = {
-	setScale(val: zk.BigDecimal, scale: number, rounding: number): string | zk.BigDecimal { //bug #3089502: setScale in decimalbox not working
+	setScale(val: zk.BigDecimal, scale: number, rounding: number): zk.BigDecimal { //bug #3089502: setScale in decimalbox not working
 		if (scale === undefined || scale < 0)
 			return val;
 		var valStr = val.$toString(),
@@ -411,7 +411,10 @@ export let Number = {
 			};
 			
 		var divscale = 0, //the second element
-			minus, sb, cc, ignore,
+			minus,
+			sb: string | undefined,
+			cc,
+			ignore,
 			zkMinus = ignoreLocale ? '-' : localizedSymbols.MINUS,
 			zkDecimal = ignoreLocale ? '.' : localizedSymbols.DECIMAL, //bug #2932443, no format and German Locale
 			zkPercent = ignoreLocale ? '%' : localizedSymbols.PERCENT,

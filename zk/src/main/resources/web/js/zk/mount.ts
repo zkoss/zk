@@ -765,7 +765,7 @@ jq(function () {
 	var lastTimestamp, lastTarget;
 	jq(document)
 		.keydown(function (evt) {
-			var wgt = Widget.$(evt, {child: true}) as Widget & {afterKeyDown_?},
+			var wgt = Widget.$(evt, {child: true}) as zk.Widget & {afterKeyDown_?},
 				wevt = new zk.Event(wgt, 'onKeyDown', evt.keyData(), null, evt);
 			if (wgt) {
 				_doEvt(wevt);

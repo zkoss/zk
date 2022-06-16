@@ -1,4 +1,4 @@
-/* constraint.js
+/* constraint.ts
 
 	Purpose:
 
@@ -12,25 +12,36 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-(function () {
-	var _posAllowed = [
+var _posAllowed = [
 		'before_start', 'before_end', 'end_before', 'end_after',
 		'after_end', 'after_start', 'start_after', 'start_before',
 		'overlap', 'overlap_end', 'overlap_before', 'overlap_after',
 		'at_pointer', 'after_pointer'
-		],
-		_baseConstraints = {
+	],
+	_baseConstraints = {
 		'no positive': 'NO_POSITIVE', 'no negative': 'NO_NEGATIVE', 'no zero': 'NO_ZERO', 'no empty': 'NO_EMPTY',
 		'no future': 'NO_FUTURE', 'no past': 'NO_PAST', 'no today': 'NO_TODAY', 'strict': 'STRICT', 'server': 'SERVER'
-		};
+	} as const;
+
+export type SimpleConstraintFlags = Partial<Record<typeof _baseConstraints[keyof typeof _baseConstraints], boolean>>
+export type SimpleConstraintValidateStrict = (val: string) => string | null;
+export type SimpleConstraintErrorMessages = Record<string, string | undefined>
 
 /**
  * The default constraint supporting no empty, regular expressions and so on.
  * <p>Depending on the component (such as {@link Intbox} and {@link zul.db.Datebox}).
  * @disable(zkgwt)
  */
-zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
-	_finishParseCst: true,
+export class SimpleConstraint extends zk.Object {
+	private _finishParseCst = true;
+	private _regex?: RegExp;
+	public _flags: SimpleConstraintFlags;
+	public _pos?: string;
+	public _errmsg: SimpleConstraintErrorMessages;
+	private _cst?: string;
+	public serverValidate?: boolean;
+	private _cstArr!: string[];
+
 	/** Constructor.
 	 * @param Object a
 	 * It can be String or number, the number or name of flag,
@@ -38,7 +49,8 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 	 * @param String b the regular expression
 	 * @param String c the error message
 	 */
-	$init: function (a, b, c) {
+	public constructor(a: unknown, b?: RegExp | string, c?: string) {
+		super();
 		if (typeof a == 'string') {
 			this._flags = {};
 			this._errmsg = {};
@@ -47,7 +59,7 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 			this._finishParseCst = false;
 			this._init(a);
 		} else {
-			this._flags = typeof a == 'number' ? this._cvtNum(a) : a || {};
+			this._flags = typeof a == 'number' ? this._cvtNum(a) : a as SimpleConstraintFlags || {};
 			this._regex = typeof b == 'string' ? new RegExp(b, 'g') : b;
 			this._errmsg = {};
 
@@ -61,8 +73,9 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 			if (this._flags.SERVER)
 				this.serverValidate = true;
 		}
-	},
-	_init: function (cst) {
+	}
+
+	private _init(cst: string): void {
 		l_out:
 		for (var j = 0, k = 0, len = cst.length; k >= 0; j = k + 1) {
 			for (;; ++j) {
@@ -88,7 +101,7 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 					if (hasEndingSlash) {
 						var restCst = cst.substring(k + 1),
 							// match zero-or-more character, until reaching a comma or a semicolon or end of string.
-							regexFlags = restCst.match(/.*?(?=,|:|$)/)[0].trim();
+							regexFlags: string | undefined = restCst.match(/.*?(?=,|:|$)/)![0].trim();
 						if (regexFlags) {
 							if (regexFlags.indexOf('d') != -1 || regexFlags.indexOf('y') != -1)
 								zk.error('unsupported regex flags in constraint: ' + cst);
@@ -100,7 +113,7 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 					try {
 						this._regex = new RegExp(k >= 0 ? cst.substring(j, k) : cst.substring(j), regexFlags || 'g');
 					} catch (e) {
-						zk.error(e.message || e);
+						zk.error((e as Error).message || e as string);
 					}
 					
 					this._cstArr[this._cstArr.length] = 'regex';
@@ -134,7 +147,7 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 					break;
 			}
 
-			var s;
+			var s: string;
 			for (k = j; ; ++k) {
 				if (k >= len) {
 					s = cst.substring(j);
@@ -155,25 +168,27 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 
 			this.parseConstraint_(s.trim().toLowerCase());
 		}
-	},
+	}
+
 	/** Returns the constraint flags Object which has many attribute about constraint,
 	 *  For example, f.NO_POSITIVE = true.
 	 *
 	 * @return Object
 	 */
-	getFlags: function () {
+	public getFlags(): SimpleConstraintFlags {
 		return this._flags;
-	},
+	}
+
 	/** Parses a constraint into an Object attribute.
 	 * For example, "no positive" is parsed to f.NO_POSITIVE = true.
 	 *
 	 * <p>Deriving classes might override this to provide more constraints.
 	 * @param String cst
 	 */
-	parseConstraint_: function (cst) {
+	protected parseConstraint_(cst: string): void {
 		var f = this._flags,
 			arr = this._cstArr,
-			bsCst = _baseConstraints[cst];
+			bsCst = _baseConstraints[cst as keyof typeof _baseConstraints];
 		if (cst && bsCst) {
 			if (cst == 'server') this.serverValidate = true;
 			f[bsCst] = true;
@@ -182,9 +197,10 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 			this._pos = cst;
 		else if (!arr.length && zk.debugJS)
 			zk.error('Unknown constraint: ' + cst);
-	},
-	_cvtNum: function (v) { //compatible with server side
-		var f = {};
+	}
+
+	private _cvtNum(v: number): SimpleConstraintFlags { //compatible with server side
+		var f: SimpleConstraintFlags = {};
 		if (v & 1)
 			f.NO_POSITIVE = f.NO_FUTURE = true;
 		if (v & 2)
@@ -198,22 +214,26 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 		if (v = (v & 0xf000))
 			this._pos = _posAllowed[(v >> 12) - 1];
 		return f;
-	},
+	}
+
 	/** validation for flag, validate date if val is date
 	 * @param zk.Widget wgt
 	 * @param Object val a String, a number, or a date, the number or name of flag,
 	 * such as "no positive", 0x0001.
 	 */
-	validate: function (wgt, val) {
+	public validate(wgt: zk.Widget & {validateStrict?: SimpleConstraintValidateStrict}, val: unknown): SimpleConstraintErrorMessages | string | undefined {
 		if (!this._finishParseCst) {
 			this._cst && this._init(this._cst);
 			this._finishParseCst = true;
 		}
-		var f = this._flags,
+		const f = this._flags,
 			msg = this._errmsg;
 
-		if (val && val.$toNumber)
-			val = val.$toNumber();
+		interface NumberLike {
+			$toNumber(): number;
+		}
+		if (val && (val as NumberLike).$toNumber)
+			val = (val as NumberLike).$toNumber();
 
 		switch (typeof val) {
 		case 'string':
@@ -227,7 +247,7 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 					return msg['regex'] || msgzul.ILLEGAL_VALUE;
 			}
 			if (f.STRICT && val && wgt.validateStrict) {
-				msg = wgt.validateStrict(val);
+				const msg = wgt.validateStrict(val);
 				if (msg) return msg;
 			}
 			return;
@@ -241,13 +261,14 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 			return;
 		}
 
-		if (val && val.getFullYear) {
-			var tz = val.getTimeZone(),
+		if (val && (val as DateImpl).getFullYear) {
+			var date = val as DateImpl,
+				tz = date.getTimeZone(),
 				today = zUtl.today(null, tz),
-				val = Dates.newInstance([val.getFullYear(), val.getMonth(), val.getDate()], tz);
-			if ((today - val) / 86400000 < 0) {
+				date = window.Dates.newInstance([date.getFullYear(), date.getMonth(), date.getDate()], tz);
+			if ((+today - +date) / 86400000 < 0) {
 				if (f.NO_FUTURE) return msg['NO_FUTURE'] || this._msgDateDenied();
-			} else if (val - today == 0) {
+			} else if (+date - +today == 0) {
 				if (f.NO_TODAY) return msg['NO_TODAY'] || this._msgDateDenied();
 			} else
 				if (f.NO_PAST) return msg['NO_PAST'] || this._msgDateDenied();
@@ -255,8 +276,9 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 		}
 
 		if (!val && f.NO_EMPTY) return msg['NO_EMPTY'] || msgzul.EMPTY_NOT_ALLOWED;
-	},
-	_msgNumDenied: function () {
+	}
+
+	private _msgNumDenied(): SimpleConstraintErrorMessages | string {
 		var f = this._flags,
 			msg = this._errmsg;
 		if (f.NO_POSITIVE)
@@ -268,8 +290,9 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 		else if (f.NO_ZERO)
 			return msg['NO_ZERO'] || msgzul.NO_ZERO;
 		return msg || msgzul.ILLEGAL_VALUE;
-	},
-	_msgDateDenied: function () {
+	}
+
+	private _msgDateDenied(): SimpleConstraintErrorMessages | string {
 		var f = this._flags,
 			msg = this._errmsg;
 		if (f.NO_FUTURE)
@@ -281,9 +304,10 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 		else if (f.NO_TODAY)
 			return msg['NO_TODAY'] || msgzul.NO_TODAY;
 		return msg || msgzul.ILLEGAL_VALUE;
-	},
-	reparseConstraint: function () {
+	}
+
+	public reparseConstraint(): void {
 		this._finishParseCst = false;
 	}
-});
-})();
+}
+zul.inp.SimpleConstraint = zk.regClass(SimpleConstraint);

@@ -17,35 +17,35 @@ import type {Widget} from './widget';
 import {Callable} from './types';
 
 export interface EventOptions {
-	implicit: boolean;
-	ignorable: boolean;
-	toServer: boolean;
-	uri: string;
-	defer: boolean;
-	serverAlive: boolean;
-	forceAjax: boolean;
-	sendAhead: boolean;
-	rtags: {[key: string]: unknown};
-	start: {
+	implicit?: boolean;
+	ignorable?: boolean;
+	toServer?: boolean;
+	uri?: string;
+	defer?: boolean;
+	serverAlive?: boolean;
+	forceAjax?: boolean;
+	sendAhead?: boolean;
+	rtags?: {[key: string]: unknown};
+	start?: {
 		time: number | Date;
 		coords: [number, number];
 	};
-	stop: {
+	stop?: {
 		time: number | Date;
 		coords: [number, number];
 	};
-	dir: string;
-	uploadCallback: { // zul.Uploader.prototype.start
+	dir?: string;
+	uploadCallback?: { // zul.Uploader.prototype.start
 		onprogress(event): void;
 		onload(evemt): void;
 	};
 }
 
 export interface EventStopOptions {
-	revoke: boolean;
-	propagation: boolean;
-	dom: boolean;
-	au: boolean;
+	revoke?: boolean;
+	propagation?: boolean;
+	dom?: boolean;
+	au?: boolean;
 }
 /** The class representing a widget event (aka., a ZK event).
  * A widget event is the widget-level event that a widget can fire and the client application can listen.
@@ -179,7 +179,7 @@ onClick: function (evt) {
 	 * </ul>
 	 * @type Map
 	 */
-	public opts: Partial<EventOptions>;
+	public opts: EventOptions;
 	/** The DOM event that causes this widget event, or null if not available.
 	 * @type jq.Event
 	 */
@@ -217,7 +217,7 @@ onClick: function (evt) {
 	 * @param Map opts [optional] the options. Refer to {@link #opts}
 	 * @param jq.Event domEvent [optional] the DOM event that causes this widget event.
 	 */
-	public constructor(target: Widget | null | undefined, name: string, data?: unknown, opts?: Partial<EventOptions> | null, domEvent?: JQuery.TriggeredEvent) { // FIXME: TriggeredEvent missing type parameters
+	public constructor(target: Widget | null | undefined, name: string, data?: unknown, opts?: EventOptions | null, domEvent?: JQuery.TriggeredEvent) { // FIXME: TriggeredEvent missing type parameters
 		super();
 		this.currentTarget = this.target = target;
 		this.name = name;
@@ -232,7 +232,7 @@ onClick: function (evt) {
 	/** Adds the additions options to {@link #opts}.
 	 * @param Map opts a map of options to append to #opts
 	 */
-	public addOptions(opts: Partial<EventOptions>): void {
+	public addOptions(opts: EventOptions): void {
 		this.opts = Object.assign(this.opts, opts);
 	}
 	/** Stop the event propagation.
@@ -260,7 +260,7 @@ evt.stop({progagation:true,revoke:true}); //revoke the event propagation
 	In other words, to stop it, you have to specify the au option explicitly. </li>
 	</ul>
 	*/
-	public stop(opts?: Partial<EventStopOptions>): void {
+	public stop(opts?: EventStopOptions | null): void {
 		var b = !opts || !opts.revoke;
 		if (!opts || opts.propagation) this.stopped = b;
 		if (!opts || opts.dom) this.domStopped = b;
@@ -314,6 +314,7 @@ export interface ClientActivity {
 	onSize: {onSize} | [unknown, Callable];
 	onShow: {onShow} | [unknown, Callable];
 	onVParent: {onVParent} | [unknown, Callable];
+	onMove: {onMove} | [unknown, Callable];
 }
 
 export interface FireOptions {
