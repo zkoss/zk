@@ -176,6 +176,7 @@ interface Window {
 	zkme: typeof import('./mount').zkme;
 	zkdh: typeof import('./mount').zkdh;
 }
+declare var zjq: typeof import('./dom').zjq;
 declare var zkac: typeof import('./mount').zkac;
 declare function $eval(x: string): unknown;
 declare var zkreg: typeof import('./widget').zkreg;
