@@ -18,25 +18,37 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
  */
 //zk.$package('zul.db');
 
-(function () {
-	function _newDate(year, month, day, bFix, tz) {
-		var v = Dates.newInstance([year, month, day], tz);
-		return bFix && v.getMonth() != month && v.getDate() != day ? //Bug ZK-1213: also need to check date
-			Dates.newInstance([year, month + 1, 0], tz)/*last day of month*/ : v;
+interface MarkCalOptions {
+	sameMonth?: boolean;
+	silent?: boolean;
+	timeout?: number;
+}
+interface TimeZoneWidget extends zk.Widget {
+	getTimeZone?: () => string;
+}
+declare global {
+	interface HTMLTableCellElement {
+		_monofs?: number | null;
 	}
+}
 
-	function _getTimeZone(wgt) {
-		var parent = wgt.parent,
-			tz = parent && parent.getTimeZone && parent.getTimeZone();
-		return tz ? tz : wgt._defaultTzone;
-	}
+function _newDate(year, month, day, bFix, tz?: string): DateImpl {
+	var v = Dates.newInstance([year, month, day], tz);
+	return bFix && v.getMonth() != month && v.getDate() != day ? //Bug ZK-1213: also need to check date
+		Dates.newInstance([year, month + 1, 0], tz)/*last day of month*/ : v;
+}
 
-var Renderer =
+function _getTimeZone(wgt: zul.db.Calendar): string | undefined {
+	var parent: TimeZoneWidget | null = wgt.parent,
+		tz = parent && parent.getTimeZone && parent.getTimeZone();
+	return tz ? tz : wgt._defaultTzone;
+}
+
 /** @class zul.db.Renderer
  * The renderer used to render a calendar.
  * It is designed to be overridden
  */
-zul.db.Renderer = {
+export let Renderer = {
 	/** Returns the HTML fragment representing a day cell.
 	 * By overriding this method, you could customize the look of a day cell.
 	 * <p>Default: day
@@ -48,7 +60,7 @@ zul.db.Renderer = {
 	 * @return String the HTML fragment
 	 * @since 5.0.3
 	 */
-	cellHTML: function (cal, y, m, day, monthofs) {
+	cellHTML(cal: zul.db.Calendar, y: number, m: number, day: number, monthofs: number): number {
 		return day;
 	},
 	/**
@@ -64,16 +76,17 @@ zul.db.Renderer = {
 	 * @return String the label of a date
 	 * @since 9.5.0
 	 */
-	cellAriaLabel: function (cal, y, m, day, monthofs, dayofweek) {
+	cellAriaLabel(cal: zul.db.Calendar, y: number, m: number, day: number, monthofs: number, dayofweek: number): string {
 		var localizedSymbols = cal.getLocalizedSymbols();
-		return day + ' ' + localizedSymbols.FMON[m] + ', ' + y;
+		return day + ' ' + localizedSymbols.FMON![m] + ', ' + y;
 	},
 	/** Called before {@link zul.db.Calendar#redraw} is invoked.
 	 * <p>Default: does nothing
 	 * @param zul.db.Calendar cal the calendar
 	 * @since 5.0.3
 	 */
-	beforeRedraw: function (cal) {
+	beforeRedraw(cal: zul.db.Calendar): void {
+		// empty on purpose
 	},
 	/** Tests if the specified date is disabled.
 	 * <p>Default: it depends on the constraint, if any
@@ -85,23 +98,23 @@ zul.db.Renderer = {
 	 * @since 5.0.3
 	 * @return boolean
 	 */
-	disabled: function (cal, y, m, v, today) {
+	disabled(cal: zul.db.Calendar, y: number, m: number, v: number, today: DateImpl): boolean {
 		var d = Dates.newInstance([y, m, v, 0, 0, 0, 0], _getTimeZone(cal)),
 			constraint;
 
 		if ((constraint = cal._constraint) && typeof constraint == 'string') {
 
 			// Bug ID: 3106676
-			if ((constraint.indexOf('no past') > -1 && (d - today) / 86400000 < 0)
-				|| (constraint.indexOf('no future') > -1 && (today - d) / 86400000 < 0)
-				|| (constraint.indexOf('no today') > -1 && today - d == 0))
+			if ((constraint.indexOf('no past') > -1 && (+d - +today) / 86400000 < 0)
+				|| (constraint.indexOf('no future') > -1 && (+today - +d) / 86400000 < 0)
+				|| (constraint.indexOf('no today') > -1 && +today - +d == 0))
 					return true;
 		}
 
 		var result = false;
-		if (cal._beg && (result = (d - cal._beg) / 86400000 < 0))
+		if (cal._beg && (result = (+d - +cal._beg) / 86400000 < 0))
 			return result;
-		if (cal._end && (result = (cal._end - d) / 86400000 < 0))
+		if (cal._end && (result = (+cal._end - +d) / 86400000 < 0))
 			return result;
 		return result;
 	},
@@ -114,8 +127,8 @@ zul.db.Renderer = {
 	 * @return String the label of the week of year
 	 * @since 6.5.0
 	 */
-	labelOfWeekOfYear: function (wgt, val) {
-		return val;
+	labelOfWeekOfYear(wgt: zul.db.Calendar, val: number): string {
+		return val as unknown as string;
 	},
 	/**
 	 * Generates the title of the week of year.
@@ -124,7 +137,7 @@ zul.db.Renderer = {
 	 * @return String the title of the week of year
 	 * @since 6.5.0
 	 */
-	titleOfWeekOfYear: function (wgt) {
+	titleOfWeekOfYear(wgt: zul.db.Calendar): string {
 		return 'Wk';
 	},
 	/**
@@ -134,7 +147,7 @@ zul.db.Renderer = {
 	 * @param Map localizedSymbols the symbols for localization
 	 * @since 6.5.3
 	 */
-	titleHTML: function (wgt, out, localizedSymbols) {
+	titleHTML(wgt: zul.db.Calendar, out: string[], localizedSymbols: zk.LocalizedSymbols): void {
 		var uuid = wgt.uuid,
 			view = wgt._view,
 			val = wgt.getTime(),
@@ -142,7 +155,7 @@ zul.db.Renderer = {
 			y = val.getFullYear(),
 			// to avoid moment using the last day(according to local timezone) of the previous year in ie.
 			date = zk.ie ? new Date(y, m) : val._moment.toDate(),
-			localeDateTimeFormat = zk.ie < 11 ? null : new Intl.DateTimeFormat(localizedSymbols.LAN_TAG, {year: 'numeric'}),
+			localeDateTimeFormat = new Intl.DateTimeFormat(localizedSymbols.LAN_TAG, {year: 'numeric'}),
 			displayYear = this._getDisplayYear(date, localizedSymbols, localeDateTimeFormat),
 			yofs = y - (y % 10 + 1),
 			ydec = zk.parseInt(y / 100),
@@ -155,7 +168,7 @@ zul.db.Renderer = {
 		switch (view) {
 		case 'day':
 			out.push('<span id="', uuid, '-tm" class="', text, '">',
-					localizedSymbols.SMON[m], '</span> <span id="', uuid,
+					localizedSymbols.SMON![m], '</span> <span id="', uuid,
 					'-ty" class="', text, '">', displayYear, '</span>');
 			break;
 		case 'month':
@@ -198,9 +211,9 @@ zul.db.Renderer = {
 	 * @param Map localizedSymbols the symbols for localization
 	 * @since 6.5.0
 	 */
-	dayView: function (wgt, out, localizedSymbols) {
+	dayView(wgt: zul.db.Calendar, out: string[], localizedSymbols: zk.LocalizedSymbols): void {
 		var uuid = wgt.uuid,
-			sun = (7 - localizedSymbols.DOW_1ST) % 7, sat = (6 + sun) % 7,
+			sun = (7 - localizedSymbols.DOW_1ST!) % 7, sat = (6 + sun) % 7,
 			wkend = wgt.$s('weekend'),
 			wkday = wgt.$s('weekday'),
 			cell = wgt.$s('cell');
@@ -209,12 +222,12 @@ zul.db.Renderer = {
 				zUtl.cellps0, '>', '<thead><tr>');
 		for (var j = 0; j < 7; ++j)
 			out.push('<th class="', (j == sun || j == sat) ? wkend : wkday,
-					'" aria-label="', localizedSymbols.FDOW[j], '">', localizedSymbols.S2DOW[j], '</th>');
+					'" aria-label="', localizedSymbols.FDOW![j], '">', localizedSymbols.S2DOW![j], '</th>');
 		out.push('</tr></thead><tbody>');
 		for (var j = 0; j < 6; ++j) { //at most 7 rows
-			out.push('<tr id="', uuid, '-w', j, '">');
+			out.push('<tr id="', uuid, '-w', j as unknown as string, '">');
 			for (var k = 0; k < 7; ++k)
-				out.push('<td id="', uuid, '-w', j, '-p', k, '" class="', cell, ' ', (k == sun || k == sat) ? wkend : wkday,
+				out.push('<td id="', uuid, '-w', j as unknown as string, '-p', k as unknown as string, '" class="', cell, ' ', (k == sun || k == sat) ? wkend : wkday,
 						'"></td>');
 			out.push('</tr>');
 		}
@@ -227,15 +240,15 @@ zul.db.Renderer = {
 	 * @param Map localizedSymbols the symbols for localization
 	 * @since 6.5.0
 	 */
-	monthView: function (wgt, out, localizedSymbols) {
+	monthView(wgt: zul.db.Calendar, out: string[], localizedSymbols: zk.LocalizedSymbols): void {
 		var uuid = wgt.uuid,
 			cell = wgt.$s('cell');
 		out.push('<table role="grid" class="', wgt.$s('body'), ' ', wgt.$s('month'),
 				'" id="', uuid, '-mid"', zUtl.cellps0, '><tbody>');
 		for (var j = 0; j < 12; ++j) {
 			if (!(j % 4)) out.push('<tr>');
-			out.push('<td class="', cell, '" id="', uuid, '-m', j, '" data-value="', j, '" aria-label="', localizedSymbols.FMON[j], '">',
-					localizedSymbols.SMON[j], '</td>');
+			out.push('<td class="', cell, '" id="', uuid, '-m', j as unknown as string, '" data-value="', j as unknown as string, '" aria-label="', localizedSymbols.FMON![j], '">',
+					localizedSymbols.SMON![j], '</td>');
 			if (!((j + 1) % 4)) out.push('</tr>');
 		}
 		out.push('</tbody></table>');
@@ -247,7 +260,7 @@ zul.db.Renderer = {
 	 * @param Map localizedSymbols the symbols for localization
 	 * @since 6.5.0
 	 */
-	yearView: function (wgt, out, localizedSymbols) {
+	yearView(wgt: zul.db.Calendar, out: string[], localizedSymbols: zk.LocalizedSymbols): void {
 		var uuid = wgt.uuid,
 			cell = wgt.$s('cell'),
 			disd = wgt.$s('disabled'),
@@ -256,7 +269,7 @@ zul.db.Renderer = {
 			yofs = y - (y % 10 + 1),
 			minyear = wgt._minyear,
 			maxyear = wgt._maxyear,
-			localeDateTimeFormat = zk.ie < 11 ? null : new Intl.DateTimeFormat(localizedSymbols.LAN_TAG, {year: 'numeric'}),
+			localeDateTimeFormat = new Intl.DateTimeFormat(localizedSymbols.LAN_TAG, {year: 'numeric'}),
 			endYearLength = this._getPadYearLength(wgt, localizedSymbols, localeDateTimeFormat);
 		out.push('<table role="grid" class="', wgt.$s('body'), ' ', wgt.$s('year'), '" id="', uuid, '-mid"',
 				zUtl.cellps0, '><tbody>');
@@ -271,7 +284,7 @@ zul.db.Renderer = {
 				continue;
 			}
 			var date = new Date(yofs, 0);
-			out.push('<td class="', cell, '" data-value="', yofs, '" id="', uuid, '-y', j, '" >',
+			out.push('<td class="', cell, '" data-value="', yofs as unknown as string, '" id="', uuid, '-y', j as unknown as string, '" >',
 					this._getDisplayYear(date, localizedSymbols, localeDateTimeFormat, endYearLength), '</td>');
 			if (!((j + 1) % 4)) out.push('</tr>');
 			yofs++;
@@ -285,7 +298,7 @@ zul.db.Renderer = {
 	 * @param Map localizedSymbols the symbols for localization
 	 * @since 6.5.0
 	 */
-	decadeView: function (wgt, out, localizedSymbols) {
+	decadeView(wgt: zul.db.Calendar, out: string[], localizedSymbols: zk.LocalizedSymbols): void {
 		var uuid = wgt.uuid,
 			cell = wgt.$s('cell'),
 			disd = wgt.$s('disabled'),
@@ -296,7 +309,7 @@ zul.db.Renderer = {
 			maxyear = wgt._maxyear,
 			mindec = zk.parseInt(minyear / 10) * 10,
 			maxdec = zk.parseInt(maxyear / 10) * 10,
-			localeDateTimeFormat = zk.ie < 11 ? null : new Intl.DateTimeFormat(localizedSymbols.LAN_TAG, {year: 'numeric'}),
+			localeDateTimeFormat = new Intl.DateTimeFormat(localizedSymbols.LAN_TAG, {year: 'numeric'}),
 			endYearLength = this._getPadYearLength(wgt, localizedSymbols, localeDateTimeFormat);
 
 
@@ -316,7 +329,7 @@ zul.db.Renderer = {
 
 			var startDate = new Date(temp < minyear ? minyear : temp, 0),
 				endDate = new Date(temp + 9 > maxyear ? maxyear : temp + 9, 11);
-			out.push('<td data-value="', temp, '" id="', uuid, '-de', j, '" class="',
+			out.push('<td data-value="', temp as unknown as string, '" id="', uuid, '-de', j as unknown as string, '" class="',
 					cell, (y >= temp && y <= (temp + 9)) ? ' ' + selected : '', '" >',
 							this._getDisplayYear(startDate, localizedSymbols, localeDateTimeFormat, endYearLength) + ' -<br aria-hidden="true" />'
 							+ this._getDisplayYear(endDate, localizedSymbols, localeDateTimeFormat, endYearLength) + '</td>');
@@ -331,7 +344,7 @@ zul.db.Renderer = {
 	 * @param Map localizedSymbols the symbols for localization
 	 * @since 8.0.0
 	 */
-	todayView: function (wgt, out, localizedSymbols) {
+	todayView(wgt: zul.db.Calendar, out: string[], localizedSymbols: zk.LocalizedSymbols): void {
 		var val = wgt.getTodayLinkLabel();
 		if (!val) {
 			var tz = _getTimeZone(wgt);
@@ -339,10 +352,10 @@ zul.db.Renderer = {
 		}
 		out.push(val);
 	},
-	_getDisplayYear: function (date, localizedSymbols, localeDateTimeFormat, padLength) { // override
-		return date.getFullYear() + localizedSymbols.YDELTA + '';
+	_getDisplayYear(date: Date, localizedSymbols: zk.LocalizedSymbols, localeDateTimeFormat: Intl.DateTimeFormat, padLength?: number): string { // override
+		return date.getFullYear() + localizedSymbols.YDELTA! + '';
 	},
-	_getPadYearLength: function (wgt, localizedSymbols, localeDateTimeFormat) {
+	_getPadYearLength(wgt: zul.db.Calendar, localizedSymbols: zk.LocalizedSymbols, localeDateTimeFormat: Intl.DateTimeFormat): number {
 		var y = wgt.getTime().getFullYear(),
 			yearGap = 10 * 11 + 9,
 			maxyear = wgt._maxyear,
@@ -354,197 +367,296 @@ zul.db.Renderer = {
 		return endYearLength;
 	}
 };
-// eslint-disable-next-line one-var
-var Calendar =
-/**
- * A calendar.
- * <p>Default {@link #getZclass}: z-calendar.
- */
-zul.db.Calendar = zk.$extends(zul.Widget, {
-	_view: 'day', //"day", "month", "year", "decade",
-	_minyear: 1900,
-	_maxyear: 2099,
-	$init: function () {
-		this.$supers('$init', arguments);
+zul.db.Renderer = Renderer;
+
+export class Calendar extends zul.Widget {
+	public _view = 'day';
+	public _minyear = 1900; //"day", "month", "year", "decade",
+	public _maxyear = 2099;
+	public _beg?: DateImpl | null;
+	public _end?: DateImpl | null;
+	public _constraint?: string;
+	private _localizedSymbols?: zk.LocalizedSymbols;
+	private _selectedValue?: DateImpl;
+	private _value?: DateImpl;
+	public _defaultTzone?: string;
+	private _name?: string;
+	private _weekOfYear?: boolean;
+	private _showTodayLink?: boolean;
+	public efield?: HTMLInputElement | null;
+	private _fmt?: string;
+	private _todayLinkLabel?: string;
+
+	public constructor() {
+		super();
 		this.listen({onChange: this}, -1000);
-	},
-	$define: {
-		/** Assigns a value to this component.
-		 * @param Date value the date to assign. If null, today is assumed.
-		 */
-		/** Returns the value that is assigned to this component.
-		 * @return Date
-	 	 */
-		value: function () {
-			var parent = this.parent;
+	}
+
+	/** Assigns a value to this component.
+	 * @param Date value the date to assign. If null, today is assumed.
+	 */
+	public setValue(value: DateImpl, opts?: Record<string, boolean>): this {
+		const o = this._value;
+		this._value = value;
+
+		if (o !== value || (opts && opts.force)) {
+			var parent: TimeZoneWidget | null = this.parent;
 			if (!parent || !parent.getTimeZone) {
 				this._value.tz(this._defaultTzone);
 			}
 			this.rerender();
-		},
-		/** Sets default time zone that this calendar belongs to.
-		 * @param String timezone the time zone's ID, such as "America/Los_Angeles".
-		 */
-		/** Returns default time zone that this calendar belongs to.
-		 * @return String the time zone's ID, such as "America/Los_Angeles".
-		 */
-		defaultTzone: null,
-		/** Set the date limit for this component with yyyyMMdd format,
-		 * such as 20100101 is mean Jan 01 2010
-		 *
-		 * <dl>
-		 * <dt>Example:</dt>
-		 * <dd>between 20091201 and 20091231</dd>
-		 * <dd>before 20091201</dd>
-		 * <dd>after 20091231</dd>
-		 * </dl>
-		 *
-		 * @param String constraint
-		 */
-		/** Returns the constraint of this component.
-		 * @return String
-		 */
-		constraint: function () {
+		}
+
+		return this;
+	}
+
+	/** Returns the value that is assigned to this component.
+	 * @return Date
+	 */
+	public getValue(): DateImpl | undefined {
+		return this._value;
+	}
+
+	/** Sets default time zone that this calendar belongs to.
+	 * @param String timezone the time zone's ID, such as "America/Los_Angeles".
+	 */
+	public setDefaultTzone(timezone: string): this {
+		this._defaultTzone = timezone;
+		return this;
+	}
+
+	/** Returns default time zone that this calendar belongs to.
+	 * @return String the time zone's ID, such as "America/Los_Angeles".
+	 */
+	public getDefaultTzone(): string | undefined {
+		return this._defaultTzone;
+	}
+
+	/** Set the date limit for this component with yyyyMMdd format,
+	 * such as 20100101 is mean Jan 01 2010
+	 *
+	 * <dl>
+	 * <dt>Example:</dt>
+	 * <dd>between 20091201 and 20091231</dd>
+	 * <dd>before 20091201</dd>
+	 * <dd>after 20091231</dd>
+	 * </dl>
+	 *
+	 * @param String constraint
+	 */
+	public setConstraint(constraint: string, opts?: Record<string, boolean>): this {
+		const o = this._constraint;
+		this._constraint = constraint;
+
+		if (o !== constraint || (opts && opts.force)) {
 			this._fixConstraint();
 			// ZK-3619, this method could be called when datebox opening the calendar,
 			// inServer means there is a calendar tag in zul file.
 			if (this.desktop && this.inServer) {
 				this.rerender();
 			}
-		},
-		/** Sets the name of this component.
-		 * <p>The name is used only to work with "legacy" Web application that
-		 * handles user's request by servlets.
-		 * It works only with HTTP/HTML-based browsers. It doesn't work
-		 * with other kind of clients.
-		 * <p>Don't use this method if your application is purely based
-		 * on ZK's event-driven model.
-		 *
-		 * @param String name the name of this component.
-		 */
-		/** Returns the name of this component.
-		 * <p>The name is used only to work with "legacy" Web application that
-		 * handles user's request by servlets.
-		 * It works only with HTTP/HTML-based browsers. It doesn't work
-		 * with other kind of clients.
-		 * <p>Don't use this method if your application is purely based
-		 * on ZK's event-driven model.
-		 * <p>Default: null.
-		 * @return String
-		 */
-		name: function () {
+		}
+
+		return this;
+	}
+
+	/** Returns the constraint of this component.
+	 * @return String
+	 */
+	public getConstraint(): string | undefined {
+		return this._constraint;
+	}
+
+	/** Sets the name of this component.
+	 * <p>The name is used only to work with "legacy" Web application that
+	 * handles user's request by servlets.
+	 * It works only with HTTP/HTML-based browsers. It doesn't work
+	 * with other kind of clients.
+	 * <p>Don't use this method if your application is purely based
+	 * on ZK's event-driven model.
+	 *
+	 * @param String name the name of this component.
+	 */
+	public setName(name: string, opts?: Record<string, boolean>): this {
+		const o = this._name;
+		this._name = name;
+
+		if (o !== name || (opts && opts.force)) {
 			if (this.efield)
 				this.efield.name = this._name;
-		},
-		/**
-		 * Sets whether enable to show the week number within the current year or
-    	 * not. [ZK EE]
-    	 * @since 6.5.0
-    	 * @param boolean weekOfYear
-		 */
-	    /**
-	     * Returns whether enable to show the week number within the current year or not.
-	     * <p>Default: false
-	     * @since 6.5.0
-	     * @return boolean
-	     */
-		weekOfYear: function () {
+		}
+
+		return this;
+	}
+
+	/** Returns the name of this component.
+	 * <p>The name is used only to work with "legacy" Web application that
+	 * handles user's request by servlets.
+	 * It works only with HTTP/HTML-based browsers. It doesn't work
+	 * with other kind of clients.
+	 * <p>Don't use this method if your application is purely based
+	 * on ZK's event-driven model.
+	 * <p>Default: null.
+	 * @return String
+	 */
+	public getName(): string | undefined {
+		return this._name;
+	}
+
+	/**
+	 * Sets whether enable to show the week number within the current year or
+	 * not. [ZK EE]
+	 * @since 6.5.0
+	 * @param boolean weekOfYear
+	 */
+	public setWeekOfYear(weekOfYear: boolean, opts?: Record<string, boolean>): this {
+		const o = this._weekOfYear;
+		this._weekOfYear = weekOfYear;
+
+		if (o !== weekOfYear || (opts && opts.force)) {
 			if (this.desktop && zk.feature.ee)
 				this.rerender();
-		},
-		/**
-		 * Sets whether enable to show the link that jump to today in day view
-    	 * @since 8.0.0
-    	 * @param boolean showTodayLink
-		 */
-	    /**
-	     * Returns whether enable to show the link that jump to today in day view
-	     * <p>Default: false
-	     * @since 8.0.0
-	     * @return boolean
-	     */
-		showTodayLink: function () {
-			this.rerender();
-		},
-		/**
-		 * Sets the label of the link that jump to today in day view
-		 * @since 8.0.4
-		 * @param String todayLinkLabel
-		 */
-		/**
-		 * Returns the label of the link that jump to today in day view
-		 * @since 8.0.4
-		 * @return String
-		 */
-		todayLinkLabel: function () {
+		}
+
+		return this;
+	}
+
+	/**
+	 * Returns whether enable to show the week number within the current year or not.
+	 * <p>Default: false
+	 * @since 6.5.0
+	 * @return boolean
+	 */
+	public isWeekOfYear(): boolean | undefined {
+		return this._weekOfYear;
+	}
+
+	/**
+	 * Sets whether enable to show the link that jump to today in day view
+	 * @since 8.0.0
+	 * @param boolean showTodayLink
+	 */
+	public setShowTodayLink(showTodayLink: boolean, opts?: Record<string, boolean>): this {
+		const o = this._showTodayLink;
+		this._showTodayLink = showTodayLink;
+
+		if (o !== showTodayLink || (opts && opts.force)) {
 			this.rerender();
 		}
-	},
+
+		return this;
+	}
+
+	/**
+	 * Returns whether enable to show the link that jump to today in day view
+	 * <p>Default: false
+	 * @since 8.0.0
+	 * @return boolean
+	 */
+	public isShowTodayLink(): boolean | undefined {
+		return this._showTodayLink;
+	}
+
+	/**
+	 * Sets the label of the link that jump to today in day view
+	 * @since 8.0.4
+	 * @param String todayLinkLabel
+	 */
+	public setTodayLinkLabel(todayLinkLabel: string, opts?: Record<string, boolean>): this {
+		const o = this._todayLinkLabel;
+		this._todayLinkLabel = todayLinkLabel;
+
+		if (o !== todayLinkLabel || (opts && opts.force)) {
+			this.rerender();
+		}
+
+		return this;
+	}
+
+	/**
+	 * Returns the label of the link that jump to today in day view
+	 * @since 8.0.4
+	 * @return String
+	 */
+	public getTodayLinkLabel(): string | undefined {
+		return this._todayLinkLabel;
+	}
+
 	/**
 	 * A method for component getter symmetry, it will call getValue
 	 * @since 10.0.0
 	 */
-	getValueInZonedDateTime: function () {
+	public getValueInZonedDateTime(): DateImpl | undefined {
 		return this.getValue();
-	},
+	}
+
 	/**
 	 * A method for component setter symmetry, it will call setValue
 	 * @since 10.0.0
 	 */
-	setValueInZonedDateTime: function () {
-		this.setValue.apply(this, arguments);
-	},
+	public setValueInZonedDateTime(value: DateImpl, opts?: Record<string, boolean>): void {
+		this.setValue(value, opts);
+	}
+
 	/**
 	 * A method for component getter symmetry, it will call getValue
 	 * @since 10.0.0
 	 */
-	getValueInLocalDateTime: function () {
+	public getValueInLocalDateTime(): DateImpl | undefined {
 		return this.getValue();
-	},
+	}
+
 	/**
 	 * A method for component setter symmetry, it will call setValue
 	 * @since 10.0.0
 	 */
-	setValueInLocalDateTime: function () {
-		this.setValue.apply(this, arguments);
-	},
+	public setValueInLocalDateTime(value: DateImpl, opts?: Record<string, boolean>): void {
+		this.setValue(value, opts);
+	}
+
 	/**
 	 * A method for component getter symmetry, it will call getValue
 	 * @since 10.0.0
 	 */
-	getValueInLocalDate: function () {
+	public getValueInLocalDate(): DateImpl | undefined {
 		return this.getValue();
-	},
+	}
+
 	/**
 	 * A method for component setter symmetry, it will call setValue
 	 * @since 10.0.0
 	 */
-	setValueInLocalDate: function () {
-		this.setValue.apply(this, arguments);
-	},
+	public setValueInLocalDate(value: DateImpl, opts?: Record<string, boolean>): void {
+		this.setValue(value, opts);
+	}
+
 	/**
 	 * A method for component getter symmetry, it will call getValue
 	 * @since 10.0.0
 	 */
-	getValueInLocalTime: function () {
+	public getValueInLocalTime(): DateImpl | undefined {
 		return this.getValue();
-	},
+	}
+
 	/**
 	 * A method for component setter symmetry, it will call setValue
 	 * @since 10.0.0
 	 */
-	setValueInLocalTime: function () {
-		this.setValue.apply(this, arguments);
-	},
+	public setValueInLocalTime(value: DateImpl, opts?: Record<string, boolean>): void {
+		this.setValue(value, opts);
+	}
+
 	//@Override
-	redraw: function () {
+	public override redraw(out: string[], skipper?: zk.Skipper | null): void {
 		Renderer.beforeRedraw(this);
-		this.$supers('redraw', arguments);
-	},
-	onChange: function (evt) {
-		this._updFormData(evt.data.value);
-	},
-	doKeyDown_: function (evt) {
+		super.redraw(out, skipper);
+	}
+
+	public onChange(evt: zk.Event): void {
+		this._updFormData((evt.data as {value: DateImpl}).value);
+	}
+
+	protected override doKeyDown_(evt: zk.Event): void {
 		var keyCode = evt.keyCode,
 			ofs = keyCode == 37 ? -1 : keyCode == 39 ? 1 : keyCode == 38 ? -7 : keyCode == 40 ? 7 : 0;
 		if (ofs) {
@@ -554,28 +666,31 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			// pass a fake event
 			this._clickDate({
 				target: this,
-				domTarget: jq(this.$n('mid')).find('.' + this.$s('selected'))[0],
+				domTarget: jq(this.$n('mid')!).find('.' + this.$s('selected'))[0],
 				stop: zk.$void
 			});
 		}
-	},
-	setMinYear_: function (v) {
+	}
+
+	protected setMinYear_(v: number): void {
 		if (v) {
 			var y = this.getTime().getFullYear();
 			this._minyear = v > y ? y : (v > 100 ? v : 100);
 		} else {
 			this._minyear = 1900;
 		}
-	},
-	setMaxYear_: function (v) {
+	}
+
+	protected setMaxYear_(v: number): void {
 		if (v) {
 			var y = this.getTime().getFullYear();
 			this._maxyear = v < y ? y : (v > this._minyear ? v : this._minyear);
 		} else {
 			this._maxyear = 2099;
 		}
-	},
-	_shift: function (ofs, opts) {
+	}
+
+	private _shift(ofs: number, opts?: MarkCalOptions): void {
 		var oldTime = this.getTime(),
 			tz = _getTimeZone(this),
 			shiftTime = Dates.newInstance(oldTime.getTime(), tz),
@@ -643,8 +758,9 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			this.rerender(-1);
 			this.focus();
 		}
-	},
-	_fixConstraint: function () {
+	}
+
+	private _fixConstraint(): void {
 		var constraint = this._constraint || '';
 		// ZK-4641: Datebox doesn't clean beginning and end at client when removing constraint
 		this._beg = null;
@@ -656,6 +772,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			format = 'yyyyMMdd',
 			len = format.length + 1,
 			tz = _getTimeZone(this);
+		// eslint-disable-next-line @typescript-eslint/prefer-for-of
 		for (var i = 0; i < constraints.length; i++) {
 			constraint = jq.trim(constraints[i]); //Bug ZK-1718: should trim whitespace
 			if (constraint.startsWith('between')) {
@@ -664,52 +781,56 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 					zk.error('Unknown constraint: ' + constraint);
 				this._beg = new zk.fmt.Calendar(null, this._localizedSymbols).parseDate(constraint.substring(7, j), format, null, null, null, tz);
 				this._end = new zk.fmt.Calendar(null, this._localizedSymbols).parseDate(constraint.substring(j + 3, j + 3 + len), format, null, null, null, tz);
-				if (this._beg.getTime() > this._end.getTime()) {
+				if (this._beg!.getTime() > this._end!.getTime()) {
 					var d = this._beg;
 					this._beg = this._end;
 					this._end = d;
 				}
-				this._beg.setHours(0, 0, 0, 0);
-				this._end.setHours(0, 0, 0, 0);
+				this._beg!.setHours(0, 0, 0, 0);
+				this._end!.setHours(0, 0, 0, 0);
 			} else if (constraint.startsWith('before_') || constraint.startsWith('after_')) {
 				continue; //Constraint start with 'before_' and 'after_' means errorbox position, skip it
 			} else if (constraint.startsWith('before')) {
 				this._end = new zk.fmt.Calendar(null, this._localizedSymbols).parseDate(constraint.substring(6, 6 + len), format, null, null, null, tz);
-				this._end.setHours(0, 0, 0, 0);
+				this._end!.setHours(0, 0, 0, 0);
 			} else if (constraint.startsWith('after')) {
 				this._beg = new zk.fmt.Calendar(null, this._localizedSymbols).parseDate(constraint.substring(5, 5 + len), format, null, null, null, tz);
-				this._beg.setHours(0, 0, 0, 0);
+				this._beg!.setHours(0, 0, 0, 0);
 			}
 		}
-	},
+	}
+
 	/** Returns the format of this component.
 	 * @return String
 	 */
-	getFormat: function () {
+	public getFormat(): string {
 		return this._fmt || 'yyyy/MM/dd';
-	},
-	_updFormData: function (val) {
-		val = new zk.fmt.Calendar().formatDate(val, this.getFormat(), this._localizedSymbols);
+	}
+
+	private _updFormData(formData: DateImpl): void {
+		let val = new zk.fmt.Calendar().formatDate(formData, this.getFormat(), this._localizedSymbols!);
 		if (this._name) {
 			val = val || '';
 			if (!this.efield)
-				this.efield = jq.newHidden(this._name, val, this.$n());
+				this.efield = jq.newHidden(this._name, val, this.$n()!);
 			else
 				this.efield.value = val;
 		}
-	},
-	focus_: function (timeout) {
+	}
+
+	public override focus_(timeout: number): boolean {
 		if (this._view != 'decade')
 			this._markCal({timeout: timeout});
 		else {
-			var anc;
+			var anc: HTMLAnchorElement | null | undefined;
 			if (anc = this.getAnchor_())
 				this._doFocus(anc, true);
 		}
 		return true;
-	},
-	bind_: function (desktop, skipper, after) {
-		this.$supers(Calendar, 'bind_', arguments);
+	}
+
+	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+		super.bind_(desktop, skipper, after);
 		var node = this.$n(),
 			title = this.$n('title'),
 			mid = this.$n('mid'),
@@ -719,58 +840,63 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		if (this._view != 'decade')
 			this._markCal({silent: true});
 
-		this.domListen_(title, 'onClick', '_changeView')
-			.domListen_(mid, 'onClick', '_clickDate')
-			.domListen_(left, 'onClick', '_clickArrow')
-			.domListen_(right, 'onClick', '_clickArrow')
-			.domListen_(today, 'onClick', '_clickToday')
-			.domListen_(node, 'onMousewheel');
+		this.domListen_(title!, 'onClick', '_changeView')
+			.domListen_(mid!, 'onClick', '_clickDate')
+			.domListen_(left!, 'onClick', '_clickArrow')
+			.domListen_(right!, 'onClick', '_clickArrow')
+			.domListen_(today!, 'onClick', '_clickToday')
+			.domListen_(node!, 'onMousewheel');
 
 		this._updFormData(this.getTime());
-	},
-	unbind_: function () {
+	}
+
+	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		var node = this.$n(),
 			title = this.$n('title'),
 			mid = this.$n('mid'),
 			left = this.$n('left'),
 			right = this.$n('right'),
 			today = this.$n('today');
-		this.domUnlisten_(title, 'onClick', '_changeView')
-			.domUnlisten_(mid, 'onClick', '_clickDate')
-			.domUnlisten_(left, 'onClick', '_clickArrow')
-			.domUnlisten_(right, 'onClick', '_clickArrow')
-			.domUnlisten_(today, 'onClick', '_clickToday')
-			.domUnlisten_(node, 'onMousewheel')
-			.$supers(Calendar, 'unbind_', arguments);
+		this.domUnlisten_(title!, 'onClick', '_changeView')
+			.domUnlisten_(mid!, 'onClick', '_clickDate')
+			.domUnlisten_(left!, 'onClick', '_clickArrow')
+			.domUnlisten_(right!, 'onClick', '_clickArrow')
+			.domUnlisten_(today!, 'onClick', '_clickToday')
+			.domUnlisten_(node!, 'onMousewheel');
+		super.unbind_(skipper, after, keepRod);
 		this.efield = null;
-	},
-	rerender: function () {
+	}
+
+	public override rerender(skipper?: zk.Skipper | number | null): void {
 		if (this.desktop) {
-			var s = this.$n().style,
+			var s = this.$n()!.style,
 				w = s.width,
 				h = s.height,
-				result = this.$supers('rerender', arguments);
-			s = this.$n().style;
+				result = super.rerender(skipper);
+			s = this.$n()!.style;
 			s.width = w;
 			s.height = h;
 			return result;
 		}
-	},
-	_clickArrow: function (evt) {
+	}
+
+	public _clickArrow(evt: zk.Event): void {
 		if (zk.animating()) return; // ignore
-		var node = jq.nodeName(evt.domTarget, 'a') ? evt.domTarget
-					: jq(evt.domTarget).parent('a')[0];
-		if (jq(node).attr('disabled'))
+		var node = jq.nodeName(evt.domTarget!, 'a') ? evt.domTarget
+					: jq(evt.domTarget!).parent('a')[0];
+		if (jq(node!).attr('disabled'))
 			return;
-		this._shiftView(jq(node).hasClass(this.$s('left')) ? -1 : 1);
+		this._shiftView(jq(node!).hasClass(this.$s('left')) ? -1 : 1);
 		//ZK-2679: prevent default behavior of clicking anchor
 		evt.stop();
-	},
-	_clickToday: function () {
+	}
+
+	public _clickToday(): void {
 		this.setValue(zUtl.today(parent, _getTimeZone(this)));
 		this._setView('day');
-	},
-	_shiftView: function (ofs, disableAnima) {
+	}
+
+	private _shiftView(ofs: number, disableAnima?: boolean): void {
 		switch (this._view) {
 		case 'day':
 			this._shiftDate('month', ofs);
@@ -791,21 +917,24 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			this.rerender(-1);
 			this.focus();
 		}
-	},
-	_doMousewheel: function (evt, intDelta) {
-		if (jq(this.$n(-intDelta > 0 ? 'right' : 'left')).attr('disabled'))
+	}
+
+	public _doMousewheel(evt: zk.Event, intDelta: number): void {
+		if (jq(this.$n(-intDelta > 0 ? 'right' : 'left')!).attr('disabled'))
 			return;
 		this._shiftView(intDelta > 0 ? -1 : 1, true);
 		evt.stop();
-	},
+	}
+
 	/** Returns the Date that is assigned to this component.
 	 *  <p>returns today if value is null
 	 * @return Date
 	 */
-	getTime: function () {
+	public getTime(): DateImpl {
 		return this._value || zUtl.today(this.getFormat(), _getTimeZone(this));
-	},
-	_setTime: function (y, m, d, fireOnChange) {
+	}
+
+	private _setTime(y: number | null, m?: number | null, d?: number, fireOnChange?: boolean): void {
 		var dateobj = this.getTime(),
 			year = y != null ? y : dateobj.getFullYear(),
 			month = m != null ? m : dateobj.getMonth(),
@@ -817,27 +946,30 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		this._selectedValue = val;
 		if (fireOnChange)
 			this.fire('onChange', {value: val});
-	},
+	}
+
 	// calendar-ctrl.js will override this function
-	_clickDate: function (evt) {
-		var target = evt.domTarget, val;
-		for (; target; target = target.parentNode)
+	private _clickDate(evt: Pick<zk.Event, 'target' | 'domTarget' | 'stop'>): void {
+		var target = evt.domTarget as HTMLTableCellElement | null | undefined,
+			val: number;
+		for (; target; target = target.parentNode as HTMLTableCellElement | null)
 			try { //Note: data-dt is also used in mold/calendar.js
-				if ((val = jq(target).data('value')) !== undefined) {
+				if ((val = jq(target).data('value') as number) !== undefined) {
 					val = zk.parseInt(val);
 					break;
 				}
 			} catch (e) {
 				continue; //skip
 			}
-		this._chooseDate(target, val);
-		var anc;
+		this._chooseDate(target, val!);
+		var anc: HTMLAnchorElement | null | undefined;
 		if (anc = this.getAnchor_())
 			this._doFocus(anc, true);
 
 		evt.stop();
-	},
-	_chooseDate: function (target, val) {
+	}
+
+	private _chooseDate(target: HTMLTableCellElement | null | undefined, val: number): void {
 		if (target && !jq(target).hasClass(this.$s('disabled'))) {
 			var cell = target,
 				dateobj = this.getTime();
@@ -870,8 +1002,9 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 				break;
 			}
 		}
-	},
-	_shiftDate: function (opt, ofs, ignoreUpdate) {
+	}
+
+	private _shiftDate(opt: string, ofs: number, ignoreUpdate?: boolean): DateImpl {
 		var dateobj = this.getTime(),
 			year = dateobj.getFullYear(),
 			month = dateobj.getMonth(),
@@ -902,8 +1035,9 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			}
 		}
 		return newTime;
-	},
-	_changeView: function (evt) {
+	}
+
+	public _changeView(evt: zk.Event): void {
 		var tm = this.$n('tm'),
 			ty = this.$n('ty'),
 			tyd = this.$n('tyd'),
@@ -923,123 +1057,118 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 				this._setView('month');
 		}
 		evt.stop();
-	},
-	_setView: (function () {
+	}
 
+	private _setView(view: string, force?): void {
 		// check whether to disable the arrow
-		function _updateArrow(wgt) {
+		function _updateArrow(wgt: zul.db.Calendar): void {
 			if (wgt.isOutOfRange(true)) {
-				jq(wgt.$n('left')).attr('disabled', 'disabled');
+				jq(wgt.$n('left')!).attr('disabled', 'disabled');
 			} else {
-				jq(wgt.$n('left')).removeAttr('disabled');
+				jq(wgt.$n('left')!).removeAttr('disabled');
 			}
 			if (wgt.isOutOfRange()) {
-				jq(wgt.$n('right')).attr('disabled', 'disabled');
+				jq(wgt.$n('right')!).attr('disabled', 'disabled');
 			} else {
-				jq(wgt.$n('right')).removeAttr('disabled');
+				jq(wgt.$n('right')!).removeAttr('disabled');
 			}
 		}
-		return function (view, force) {
-			if (this._view != view) {
-				this._view = view;
+		type ComputedView = (wgt: zul.db.Calendar, out: string[], localizedSymbols: zk.LocalizedSymbols) => void;
 
-				// ie9 and early won't support css3 transition
-				if (zk.ie < 10) {
-					this.rerender(-1);
-					this.focus();
-					return;
-				}
-				var out = new zk.Buffer(),
-					localizedSymbols = this.getLocalizedSymbols();
+		if (this._view != view) {
+			this._view = view;
 
-				Renderer[view + 'View'](this, out, localizedSymbols);
+			var out = new zk.Buffer<string>(),
+				localizedSymbols = this.getLocalizedSymbols();
 
-				jq(this.$n('mid')).after(out.join('')).remove();
+			(Renderer[view + 'View'] as ComputedView)(this, out, localizedSymbols);
 
-				var after = [];
-				// unlisten event
-				this.unbind_(null, after);
-				// listen event
-				this.bind_(this.desktop, null, after);
+			jq(this.$n('mid')!).after(out.join('')).remove();
 
-				out = []; // reset
-				Renderer.titleHTML(this, out, localizedSymbols);
-				jq(this.$n('title')).html(out.join(''));
-				jq(this.$n('mid')).transition({scale: 0}, 0).transition({scale: 1}, this.animationSpeed_());
+			var after = [];
+			// unlisten event
+			this.unbind_(null, after);
+			// listen event
+			this.bind_(this.desktop, null, after);
 
-				_updateArrow(this);
+			out = []; // reset
+			Renderer.titleHTML(this, out, localizedSymbols);
+			jq(this.$n('title')!).html(out.join(''));
+			jq(this.$n('mid')!).transition({scale: 0}, 0).transition({scale: 1}, this.animationSpeed_() as number);
 
-				var anc;
-				if (anc = this.getAnchor_())
-					this._doFocus(anc, true);
+			_updateArrow(this);
 
-			} else if (force) {
-				var out = [],
-					localizedSymbols = this.getLocalizedSymbols(),
-					oldMid = this.$n('mid'),
-					isLeft = force == -1,
-					width = oldMid.offsetWidth,
-					x = width * -1,
-					self = this,
-					animaCSS = this.$s('anima'),
-					todayBtn = this.isShowTodayLink() ? jq(this.$n('today')).parent() : null;
+			var anc: HTMLAnchorElement | null | undefined;
+			if (anc = this.getAnchor_())
+				this._doFocus(anc, true);
 
-				if (todayBtn) todayBtn.is(':hidden') && todayBtn.css('display', 'none');
+		} else if (force) {
+			var out: string[] = [],
+				localizedSymbols = this.getLocalizedSymbols(),
+				oldMid = this.$n('mid')!,
+				isLeft = force == -1,
+				width = oldMid.offsetWidth,
+				x = width * -1,
+				self = this,
+				animaCSS = this.$s('anima'),
+				todayBtn = this.isShowTodayLink() ? jq(this.$n('today')!).parent() : null;
 
-				Renderer[view + 'View'](this, out, localizedSymbols);
+			if (todayBtn) todayBtn.is(':hidden') && todayBtn.css('display', 'none');
 
-				jq(oldMid).after('<div style="height:' + oldMid.offsetHeight
-						+ 'px;width:' + width + 'px" class="' + animaCSS
-						+ '"><div class="' + animaCSS + '-inner"></div');
+			(Renderer[view + 'View'] as ComputedView)(this, out, localizedSymbols);
 
-				var animaInner = oldMid.nextSibling.firstChild;
-				jq(animaInner).append(oldMid);
-				oldMid = animaInner.firstChild;
-				if (isLeft) {
-					jq(oldMid).before(out.join('')).remove();
-				} else {
-					jq(oldMid).after(out.join('')).remove();
-				}
+			jq(oldMid).after('<div style="height:' + oldMid.offsetHeight
+					+ 'px;width:' + width + 'px" class="' + animaCSS
+					+ '"><div class="' + animaCSS + '-inner"></div');
 
-				// clear for _makrCal to get the latest reference
-				this.clearCache();
-				if (view != 'decade')
-					this._markCal();
-
-				var newMid;
-				if (isLeft) {
-					jq(animaInner.firstChild).after(oldMid);
-					newMid = oldMid.previousSibling;
-					jq(animaInner).css({left: x});
-					x = 0;
-				} else {
-					jq(animaInner.firstChild).before(oldMid);
-					newMid = oldMid.nextSibling;
-				}
-
-				jq(animaInner).animate({left: x}, {
-					duration: this.animationSpeed_(),
-					always: function (/*callback*/) {
-						self.domUnlisten_(oldMid, 'onClick', '_clickDate');
-						jq(animaInner.parentNode).after(newMid).remove();
-						self.domListen_(newMid, 'onClick', '_clickDate');
-						var out = []; // reset
-						Renderer.titleHTML(self, out, localizedSymbols);
-						jq(self.$n('title')).html(out.join(''));
-						self.clearCache();
-						if (todayBtn) todayBtn.css('display', '');
-					}
-				});
-
-				_updateArrow(this);
+			var animaInner = oldMid.nextSibling!.firstChild!;
+			jq(animaInner).append(oldMid);
+			oldMid = animaInner.firstChild as HTMLElement;
+			if (isLeft) {
+				jq(oldMid).before(out.join('')).remove();
+			} else {
+				jq(oldMid).after(out.join('')).remove();
 			}
-		};
-	})(),
-	getLocalizedSymbols: function () {
+
+			// clear for _makrCal to get the latest reference
+			this.clearCache();
+			if (view != 'decade')
+				this._markCal();
+
+			var newMid: HTMLElement;
+			if (isLeft) {
+				jq(animaInner.firstChild!).after(oldMid);
+				newMid = oldMid.previousSibling as HTMLElement;
+				jq(animaInner).css({left: x});
+				x = 0;
+			} else {
+				jq(animaInner.firstChild!).before(oldMid);
+				newMid = oldMid.nextSibling as HTMLElement;
+			}
+
+			jq(animaInner).animate({left: x}, {
+				duration: this.animationSpeed_(),
+				always: function (/*callback*/) {
+					self.domUnlisten_(oldMid, 'onClick', '_clickDate');
+					jq(animaInner.parentNode!).after(newMid).remove();
+					self.domListen_(newMid, 'onClick', '_clickDate');
+					var out = []; // reset
+					Renderer.titleHTML(self, out, localizedSymbols);
+					jq(self.$n('title')!).html(out.join(''));
+					self.clearCache();
+					if (todayBtn) todayBtn.css('display', '');
+				}
+			});
+
+			_updateArrow(this);
+		}
+	}
+
+	public getLocalizedSymbols(): zk.LocalizedSymbols {
 		return this._localizedSymbols || {
 			DOW_1ST: zk.DOW_1ST,
 			MINDAYS: zk.MINDAYS,
-			    ERA: zk.ERA,
+				ERA: zk.ERA,
 			 YDELTA: zk.YDELTA,
 			LAN_TAG: zk.LAN_TAG,
 			   SDOW: zk.SDOW,
@@ -1048,9 +1177,10 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			   SMON: zk.SMON,
 			  S2MON: zk.S2MON,
 			   FMON: zk.FMON,
-			    APM: zk.APM
+				APM: zk.APM
 		};
-	},
+	}
+
 	/**
 	 * Check whether the date is out of range between 1900~2100 years
 	 * @param boolean left it is used for the left arrow button
@@ -1059,7 +1189,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 	 * @return boolean if true it means the date is out of range.
 	 * @since 6.5.3
 	 */
-	isOutOfRange: function (left, date) {
+	public isOutOfRange(left?: boolean, date?: Date): boolean {
 		var view = this._view,
 			val = date || this.getTime(),
 			y = val.getFullYear(),
@@ -1085,18 +1215,20 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			return left ? value <= minyear : value >= maxyear;
 		}
 
-	},
-	_markCal: function (opts) {
+	}
+
+	private _markCal(opts?: MarkCalOptions): void {
 		this._markCal0(opts);
-		var anc;
+		var anc: HTMLAnchorElement | null | undefined;
 		if ((anc = this.getAnchor_()) && (!opts || !opts.silent))
 			this._doFocus(anc, opts && opts.timeout);
-	},
+	}
+
 	// calendar-ctrl.js will override this function
-	_markCal0: function (opts) {
+	private _markCal0(opts?: MarkCalOptions): void {
 		var	seldate = this.getTime(),
 			m = seldate.getMonth(),
-			mid = this.$n('mid'),
+			mid = this.$n('mid')!,
 			$mid = jq(mid),
 			seldClass = this.$s('selected'),
 			y = seldate.getFullYear(),
@@ -1126,7 +1258,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 
 			if (v < 0) v += 7;
 			for (var j = 0, cur = -v + 1; j < 6; ++j) {
-				var week = this.$n('w' + j);
+				var week = this.$n('w' + j) as HTMLTableRowElement | null | undefined;
 				if (week != null) {
 					for (var k = 0; k < 7; ++k, ++cur) {
 						v = cur <= 0 ? prev + cur : cur <= last ? cur : cur - last;
@@ -1159,7 +1291,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 								if (isSelectDisabled) {
 									$cell.addClass(disdClass);
 								}
-								$cell[0].innerHTML = Renderer.cellHTML(this, y, m + monofs, v, monofs);
+								$cell[0].innerHTML = Renderer.cellHTML(this, y, m + monofs, v, monofs) as unknown as string;
 								$cell[0].setAttribute('aria-label', Renderer.cellAriaLabel(this, y, m + monofs, v, monofs, k));
 								$cell.data('value', v);
 							}
@@ -1179,29 +1311,33 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 				if (index == j && (node = this.$n(field + j)))
 					jq(node).addClass(seldClass);
 		}
-	},
-	domClass_: function (no) {
+	}
+
+	protected override domClass_(no?: zk.DomClassOptions): string {
 		var cls = '';
 		if (this._weekOfYear)
 			cls += this.$s('wk') + ' ';
-		return cls + this.$supers('domClass_', arguments);
-	},
-	animationSpeed_: function () {
+		return cls + super.domClass_(no);
+	}
+
+	protected animationSpeed_(): 'slow' | 'fast' | number {
 		return zk(this).getAnimationSpeed('_default');
-	},
-	getAnchor_: function () {
-		return this.$n('a');
-	},
+	}
+
+	protected getAnchor_(): HTMLAnchorElement | null | undefined {
+		return this.$n('a') as HTMLAnchorElement | null | undefined;
+	}
+
 	// Bug 2936994, fixed unnecessary setting scrollTop
-	_doFocus: (zk.gecko ? function (n, timeout) {
+	private _doFocus = zk.gecko ? function (n: HTMLElement, timeout?: number | boolean) {
 		if (timeout)
 			setTimeout(function () {
 				zk(n).focus();
 			});
 		else
 			zk(n).focus();
-	} : function (n) {
+	} : function (n: HTMLElement) {
 		zk(n).focus();
-	})
-});
-})();
+	};
+}
+zul.db.Calendar = zk.regClass(Calendar);

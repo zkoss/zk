@@ -49,7 +49,7 @@ export class DateImpl extends Date {
 		this._moment = m;
 		this._timezone = tz;
 	}
-	public tz(v): this {
+	public tz(v?: string): this {
 		if (v) this._timezone = parseTzId(v);
 		return this;
 	}
@@ -119,10 +119,10 @@ export class DateImpl extends Date {
 	public getYear(): number {
 		return this._getTzMoment().year() - 1900;
 	}
-	public override setDate(v): number {
+	public override setDate(v: number): number {
 		return this._getTzMoment().date(v).valueOf();
 	}
-	public override setFullYear(y: number, m: number, d: number): number {
+	public override setFullYear(y: number, m?: number, d?: number): number {
 		var mt = this._getTzMoment();
 		mt.year(y);
 		if (m != null) {
@@ -131,7 +131,7 @@ export class DateImpl extends Date {
 		}
 		return mt.valueOf();
 	}
-	public override setHours(hr: number, min: number, sec: number, msec: number): number {
+	public override setHours(hr: number, min?: number, sec?: number, msec?: number): number {
 		var mt = this._getTzMoment();
 		mt.hour(hr);
 		if (min != null) {

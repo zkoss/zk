@@ -3,7 +3,7 @@ export * from './Errorbox';
 export * from './SimpleConstraint'; // jsdoc="true"
 // export * from './SimpleSpinnerConstraint'; // jsdoc="true"
 export * from './SimpleDoubleSpinnerConstraint'; // jsdoc="true"
-// export * from './SimpleDateConstraint'; // jsdoc="true"
+export * from './SimpleDateConstraint'; // jsdoc="true"
 // export * from './SimpleLocalTimeConstraint'; // jsdoc="true"
 export * from './Textbox';
 export * from './FormatWidget'; // jsdoc="true"
