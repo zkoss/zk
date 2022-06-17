@@ -3284,6 +3284,27 @@ function () {
 	}
 
 	/**
+	 * Returns the DOM element that this widget is bound to. (Never null)
+	 * @return DOMElement
+	 * @see #$n_(String)
+	 * @since 10.0
+	 */
+	/** Returns the child element of the DOM element(s) that this widget is bound to.
+	 *  (Never null)
+	 * @param String subId the sub ID of the child element
+	 * @return DOMElement
+	 * @see #$n_()
+	 * @since 10.0
+	 */
+	public $n_(subId?: string): HTMLElement {
+		let n = this.$n();
+		if (n == null) {
+			throw 'Node ' + (subId ? 'with ' + subId : '') + ' is not found!';
+		}
+		return n;
+	}
+
+	/**
 	 * Returns the service instance from the current widget, if any.
 	 * @since 8.0.0
 	 * @return zk.Service
