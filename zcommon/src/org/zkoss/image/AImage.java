@@ -175,19 +175,19 @@ public class AImage implements Image, java.io.Serializable {
 	public byte[] getByteData() {
 		return _data;
 	}
-	/** Always throws IllegalStateException.
+	/** Always throws {@link IllegalStateException}.
 	 */
 	public final String getStringData() {
 		throw new IllegalStateException("Use getByteData() instead");
 	}
-	/** An input stream on top of {@link #getByteData}.
+	/** Return a {@link ByteArrayInputStream} that contains data of {@link #getByteData()}.
 	 * <p>Though harmless, the caller doesn't need to close the returned
 	 * stream.
 	 */
 	public final InputStream getStreamData() {
 		return new ByteArrayInputStream(_data);
 	}
-	/** Always throws IllegalStateException.
+	/** Always throws {@link IllegalStateException}.
 	 */
 	public final Reader getReaderData() {
 		throw new IllegalStateException("Use getStreamData() instead");
