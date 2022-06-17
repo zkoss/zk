@@ -332,11 +332,11 @@ public class AMedia implements Media, java.io.Serializable {
 	}
 	/** Returns the input stream of this media.
 	 *
-	 * <p>Note: the caller has to invoke {@link InputStream#close}
-	 * after using the input stream returned by {@link #getStreamData}.
-	 *
-	 * @exception IllegalStateException if the media is not binary
-	 * {@link #isBinary}.
+	 * <p>Note: the caller has to invoke {@link InputStream#close()}
+	 * after using the input stream returned by this method.
+	 * <p>It wraps {@link #getByteData()} with {@link ByteArrayInputStream}
+	 * if {@link #inMemory()} returns true.
+	 * @exception IllegalStateException if the media {@link #isBinary()} returns false
 	 */
 	public InputStream getStreamData() {
 		if (_isdata != null) return _isdata;
@@ -345,11 +345,11 @@ public class AMedia implements Media, java.io.Serializable {
 	}
 	/** Returns the reader of this media to retrieve the data.
 	 *
-	 * <p>Note: the caller has to invoke {@link Reader#close}
-	 * after using the input stream returned by {@link #getReaderData}.
-	 *
-	 * @exception IllegalStateException if the media is binary
-	 * {@link #isBinary}.
+	 * <p>Note: the caller has to invoke {@link Reader#close()}
+	 * after using the input stream returned by this method.
+	 * <p>It wraps {@link #getStringData()} with {@link StringReader},
+	 * if {@link #inMemory()} returns true.
+	 * @exception IllegalStateException if {@link #isBinary()} returns true
 	 */
 	public Reader getReaderData() {
 		if (_rddata != null) return _rddata;
