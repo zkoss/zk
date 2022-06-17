@@ -100,12 +100,16 @@ public abstract class WebDriverTestCase {
 		return "http://" + getHost() + ":" + getPort() + getContextPath();
 	}
 
+	protected boolean isHeadless() {
+		return true;
+	}
+
 	protected WebDriver getWebDriver() {
 		if (driver == null) {
 			ChromeOptions driverOptions = getWebDriverOptions();
 			driver = isUsingRemoteWebDriver(driverOptions)
 					? new DockerChromeRemoteWebDriver(driverOptions)
-					: new ChromiumHeadlessDriver(driverOptions, true);
+					: new ChromiumHeadlessDriver(driverOptions, isHeadless());
 		}
 		return driver;
 	}
