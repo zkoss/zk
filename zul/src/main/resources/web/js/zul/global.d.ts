@@ -60,6 +60,7 @@ declare global {
 	| 'NUMBER_REQUIRED' // zul/inp/Decimalbox
 	| 'OK' // zul/dom
 	| 'OUT_OF_RANGE'
+	| 'OUT_OF_RANGE_SEPARATOR' // zul/inp/SimpleLocalTimeConstraint
 	| 'PANEL_EXPAND' // zul/inp/ComboWidget
 	| 'UNKNOWN_TYPE'
 	| 'UPLOAD_ERROR_EXCEED_MAXSIZE' // zul/Upload

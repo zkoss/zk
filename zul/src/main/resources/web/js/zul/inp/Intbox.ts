@@ -17,12 +17,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>Default {@link #getZclass}: z-intbox.
  *
  */
-export class Intbox extends zul.inp.NumberInputWidget {
+export class Intbox extends zul.inp.NumberInputWidget<number> {
 	/** Returns the value in int. If null, zero is returned.
 	 * @return int
 	 */
-	public intValue(): number {
-		return super.getValue() as number;
+	public intValue(): number | undefined {
+		return super.getValue();
 	}
 
 	protected override coerceFromString_(value: string | null | undefined): zul.inp.CoerceFromStringResult | number | null {

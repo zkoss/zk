@@ -16,7 +16,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * An edit box for holding an float point value (double).
  * <p>Default {@link #getZclass}: z-doublebox.
  */
-export class Doublebox extends zul.inp.NumberInputWidget {
+export class Doublebox extends zul.inp.NumberInputWidget<number> {
 	protected override coerceFromString_(value: string | null | undefined): zul.inp.CoerceFromStringResult | number | null {
 		if (!value) return null;
 
@@ -76,7 +76,7 @@ export class Doublebox extends zul.inp.NumberInputWidget {
 		return true;
 	}
 
-	protected override coerceToString_(value: number | string | null | undefined): string {
+	protected override coerceToString_(value?: number | string | null): string {
 		var fmt = this._format,
 			symbols = this._localizedSymbols,
 			DECIMAL = (symbols ? symbols : zk).DECIMAL;

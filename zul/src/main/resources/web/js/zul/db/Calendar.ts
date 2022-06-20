@@ -369,14 +369,19 @@ export let Renderer = {
 };
 zul.db.Renderer = Renderer;
 
+export interface CalendarOnChangeData {
+	value?: DateImpl;
+	shallClose: boolean;
+	shiftView: boolean;
+}
 export class Calendar extends zul.Widget {
 	public _view = 'day';
 	public _minyear = 1900; //"day", "month", "year", "decade",
 	public _maxyear = 2099;
 	public _beg?: DateImpl | null;
 	public _end?: DateImpl | null;
-	public _constraint?: string;
-	private _localizedSymbols?: zk.LocalizedSymbols;
+	public _constraint?: string | null;
+	protected _localizedSymbols?: zk.LocalizedSymbols;
 	private _selectedValue?: DateImpl;
 	private _value?: DateImpl;
 	public _defaultTzone?: string;
@@ -384,7 +389,7 @@ export class Calendar extends zul.Widget {
 	private _weekOfYear?: boolean;
 	private _showTodayLink?: boolean;
 	public efield?: HTMLInputElement | null;
-	private _fmt?: string;
+	protected _fmt?: string;
 	private _todayLinkLabel?: string;
 
 	public constructor() {
@@ -444,7 +449,7 @@ export class Calendar extends zul.Widget {
 	 *
 	 * @param String constraint
 	 */
-	public setConstraint(constraint: string, opts?: Record<string, boolean>): this {
+	public setConstraint(constraint: string | null, opts?: Record<string, boolean>): this {
 		const o = this._constraint;
 		this._constraint = constraint;
 
@@ -463,7 +468,7 @@ export class Calendar extends zul.Widget {
 	/** Returns the constraint of this component.
 	 * @return String
 	 */
-	public getConstraint(): string | undefined {
+	public getConstraint(): string | null | undefined {
 		return this._constraint;
 	}
 
@@ -760,7 +765,7 @@ export class Calendar extends zul.Widget {
 		}
 	}
 
-	private _fixConstraint(): void {
+	public _fixConstraint(): void {
 		var constraint = this._constraint || '';
 		// ZK-4641: Datebox doesn't clean beginning and end at client when removing constraint
 		this._beg = null;
@@ -808,7 +813,7 @@ export class Calendar extends zul.Widget {
 	}
 
 	private _updFormData(formData: DateImpl): void {
-		let val = new zk.fmt.Calendar().formatDate(formData, this.getFormat(), this._localizedSymbols!);
+		let val = new zk.fmt.Calendar().formatDate(formData, this.getFormat(), this._localizedSymbols);
 		if (this._name) {
 			val = val || '';
 			if (!this.efield)
@@ -934,7 +939,7 @@ export class Calendar extends zul.Widget {
 		return this._value || zUtl.today(this.getFormat(), _getTimeZone(this));
 	}
 
-	private _setTime(y: number | null, m?: number | null, d?: number, fireOnChange?: boolean): void {
+	protected _setTime(y: number | null, m?: number | null, d?: number, fireOnChange?: boolean): void {
 		var dateobj = this.getTime(),
 			year = y != null ? y : dateobj.getFullYear(),
 			month = m != null ? m : dateobj.getMonth(),
@@ -969,7 +974,7 @@ export class Calendar extends zul.Widget {
 		evt.stop();
 	}
 
-	private _chooseDate(target: HTMLTableCellElement | null | undefined, val: number): void {
+	protected _chooseDate(target: HTMLTableCellElement | null | undefined, val: number): void {
 		if (target && !jq(target).hasClass(this.$s('disabled'))) {
 			var cell = target,
 				dateobj = this.getTime();
@@ -1059,7 +1064,7 @@ export class Calendar extends zul.Widget {
 		evt.stop();
 	}
 
-	private _setView(view: string, force?): void {
+	protected _setView(view: string, force?: number): void {
 		// check whether to disable the arrow
 		function _updateArrow(wgt: zul.db.Calendar): void {
 			if (wgt.isOutOfRange(true)) {
@@ -1217,7 +1222,7 @@ export class Calendar extends zul.Widget {
 
 	}
 
-	private _markCal(opts?: MarkCalOptions): void {
+	protected _markCal(opts?: MarkCalOptions): void {
 		this._markCal0(opts);
 		var anc: HTMLAnchorElement | null | undefined;
 		if ((anc = this.getAnchor_()) && (!opts || !opts.silent))

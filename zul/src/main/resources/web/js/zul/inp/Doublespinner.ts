@@ -44,7 +44,7 @@ function _updateFixedDigits(wgt: Doublespinner, val?: number): void {
  * <p>Default {@link #getZclass}: z-doublespinner.
  * @since 5.0.6
  */
-export class Doublespinner extends zul.inp.NumberInputWidget {
+export class Doublespinner extends zul.inp.NumberInputWidget<number> {
 	public _step = 1;
 	private _buttonVisible = true;
 	public timerId?: number | null;
@@ -103,8 +103,8 @@ export class Doublespinner extends zul.inp.NumberInputWidget {
 	/** Returns the value in double. If null, zero is returned.
 	 * @return double
 	 */
-	public doubleValue(): number {
-		return super.getValue() as number;
+	public doubleValue(): number | undefined {
+		return super.getValue();
 	}
 
 	public override setConstraint(constr: string | null): void {
@@ -170,7 +170,7 @@ export class Doublespinner extends zul.inp.NumberInputWidget {
 		return val;
 	}
 
-	protected override coerceToString_(value: number | string | null | undefined): string {//copy from intbox
+	protected override coerceToString_(value?: number | string | null): string {//copy from intbox
 		var fmt = this._format,
 			DECIMAL = this._localizedSymbols ? this._localizedSymbols.DECIMAL : zk.DECIMAL;
 

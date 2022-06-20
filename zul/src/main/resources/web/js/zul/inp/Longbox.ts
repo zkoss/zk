@@ -16,7 +16,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * An edit box for holding an integer.
  * <p>Default {@link #getZclass}: z-longbox.
  */
-export class Longbox extends zul.inp.NumberInputWidget {
+export class Longbox extends zul.inp.NumberInputWidget<zk.Long> {
 	//bug #2997037, cannot enter large long integer into longbox
 	protected override coerceFromString_(value: string | null | undefined): zul.inp.CoerceFromStringResult | zk.Long | null {
 		if (!value) return null;
@@ -33,7 +33,7 @@ export class Longbox extends zul.inp.NumberInputWidget {
 		return val;
 	}
 
-	protected override coerceToString_(value: zk.Long | string | null | undefined): string {
+	protected override coerceToString_(value?: zk.Long | string | null): string {
 		var fmt = this._format;
 		return value != null ? typeof value == 'string' ? value :
 			fmt ? zk.fmt.Number.format(fmt, value.$toString(), this._rounding!, this._localizedSymbols)
@@ -58,12 +58,12 @@ export class Longbox extends zul.inp.NumberInputWidget {
 		return false;
 	}
 
-	protected override marshall_(val: zk.Long | null): string | null {
+	protected override marshall_(val: zk.Long | undefined): string | undefined {
 		return val ? val.$toString() : val;
 	}
 
-	protected override unmarshall_(val: string | number | null): zk.Long | null {
-		return val ? new zk.Long(val) : val as null;
+	protected override unmarshall_(val: string | number): zk.Long | '' | 0 {
+		return val ? new zk.Long(val) : val as '' | 0;
 	}
 }
 zul.inp.Longbox = zk.regClass(Longbox);

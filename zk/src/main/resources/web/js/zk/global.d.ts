@@ -152,6 +152,7 @@ interface Array<T> {
 
 type Moment = import('moment-timezone').Moment;
 type DateImpl = import('./dateImpl').DateImpl; // exposed under globalThis, see the end of zk/dateImpl
+declare var DateImpl: typeof import('./dateImpl').DateImpl; // assigned at the end of zk/dateImpl
 declare var Dates: typeof import('./dateImpl').Dates;
 
 interface Window {
@@ -165,7 +166,6 @@ interface Window {
 	zkver(ver: string, build: string, ctxURI: string, updURI: string, modVers: Record<string, string>, opts: Record<string, unknown>): void;
 	zkmld(wgtcls: Record<string, unknown>, molds: Record<string, (() => void)>): void;
 	zkamn(pkg: string, fn: (() => void)): void;
-	DateImpl: typeof import('./dateImpl').DateImpl; // assigned at the end of zk/dateImpl
 
 	// assigned in ./mount
 	zkdt: typeof import('./mount').zkdt;

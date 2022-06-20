@@ -1,4 +1,4 @@
-/* Timebox.zul
+/* Timebox.ts
 
 	Purpose:
 		testing textbox.intbox.spinner,timebox,doublebox,longbox and decimalbox on zk5
@@ -12,224 +12,304 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-(function () {
-	var LEGAL_CHARS = 'ahKHksmz',
-		/*constant for MINUTE (m) field alignment.
-		 * @type int
-		 */
-		MINUTE_FIELD = 1,
-		/*constant for SECOND (s) field alignment.
-		 * @type int
-		 */
-		SECOND_FIELD = 2,
-		/*constant for AM_PM (a) field alignment.
-		 * @type int
-		 */
-		AM_PM_FIELD = 3,
-		/*constant for HOUR0 (H) field alignment. (Hour in day (0-23))
-		 * @type int
-		 */
-		HOUR0_FIELD = 4,
-		/*constant for HOUR1 (k) field alignment. (Hour in day (1-24))
-		 * @type int
-		 */
-		HOUR1_FIELD = 5,
-		/*constant for HOUR2 (h) field alignment. (Hour in am/pm (1-12))
-		 * @type int
-		 */
-		HOUR2_FIELD = 6,
-		/*constant for HOUR3 (K) field alignment. (Hour in am/pm (0-11))
-		 * @type int
-		 */
-		HOUR3_FIELD = 7,
-		globallocalizedSymbols = {},
-		Timebox =
-/**
- * An input box for holding a time (a Date Object, but only Hour & Minute are used.
- *
- * <p>Default {@link #getZclass}: z-timebox.
- *
- * <p>timebox doens't support customized format. It support HH:mm formate, where HH is hour of day and mm is minute of hour.
- *
- * <p>Like {@link zul.inp.Combobox} and {@link Datebox},
- * the value of a read-only time box ({@link #isReadonly}) can be changed
- * by clicking the up or down button (though users cannot type anything
- * in the input box).
- */
-zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
-	_buttonVisible: true,
-	_format: 'HH:mm',
-	_timezoneAbbr: '',
-	$init: function () {
-		this.$supers('$init', arguments);
-		this.$class._updFormat(this, this._format);
-	},
-	$define: {
-		timezoneAbbr: function (v) {
-			this.$class._updFormat(this, this._format);
-		},
-		/** Sets the time zone ID that this time box belongs to.
-		 * @param String timezone the time zone's ID, such as "America/Los_Angeles".
-		 * @since 9.0.0
-		 */
-		/** Returns the time zone ID that this time box belongs to.
-		 * @return String the time zone's ID, such as "America/Los_Angeles".
-		 * @since 9.0.0
-		 */
-		timeZone: function (v) {
+var LEGAL_CHARS = 'ahKHksmz',
+	/*constant for MINUTE (m) field alignment.
+	 * @type int
+	 */
+	MINUTE_FIELD = 1,
+	/*constant for SECOND (s) field alignment.
+	 * @type int
+	 */
+	SECOND_FIELD = 2,
+	/*constant for AM_PM (a) field alignment.
+	 * @type int
+	 */
+	AM_PM_FIELD = 3,
+	/*constant for HOUR0 (H) field alignment. (Hour in day (0-23))
+	 * @type int
+	 */
+	HOUR0_FIELD = 4,
+	/*constant for HOUR1 (k) field alignment. (Hour in day (1-24))
+	 * @type int
+	 */
+	HOUR1_FIELD = 5,
+	/*constant for HOUR2 (h) field alignment. (Hour in am/pm (1-12))
+	 * @type int
+	 */
+	HOUR2_FIELD = 6,
+	/*constant for HOUR3 (K) field alignment. (Hour in am/pm (0-11))
+	 * @type int
+	 */
+	HOUR3_FIELD = 7,
+	globallocalizedSymbols: Record<string, zk.LocalizedSymbols> = {};
+
+export class Timebox extends zul.inp.FormatWidget<DateImpl> {
+	private _buttonVisible = true;
+	public override readonly _format = 'HH:mm';
+	private _timezoneAbbr = '';
+	public _fmthdler!: TimeHandler[];
+	private _timeZone?: string;
+	private _unformater?: string;
+	private static _unformater?: zul.db.Unformater;
+	public _localizedSymbols?: zk.LocalizedSymbols;
+	private _changed?: boolean;
+	public type?: number;
+	public timerId?: number | null;
+	public lastPos?: number;
+	private _lastPos?: number;
+	private _constraint?: string | null;
+	private _currentbtn?: HTMLElement | null;
+
+	public constructor() {
+		super();
+		Timebox._updFormat(this, this._format);
+	}
+
+	public getTimezoneAbbr(): string {
+		return this._timezoneAbbr;
+	}
+
+	public setTimezoneAbbr(v: string, opts?: Record<string, boolean>): this {
+		const o = this._timezoneAbbr;
+		this._timezoneAbbr = v;
+
+		if (o !== v || (opts && opts.force)) {
+			Timebox._updFormat(this, this._format);
+		}
+
+		return this;
+	}
+
+	/** Sets the time zone ID that this time box belongs to.
+	 * @param String timezone the time zone's ID, such as "America/Los_Angeles".
+	 * @since 9.0.0
+	 */
+	public setTimeZone(v: string, opts?: Record<string, boolean>): this {
+		const o = this._timeZone;
+		this._timeZone = v;
+
+		if (o !== v || (opts && opts.force)) {
 			this._value && this._value.tz(v);
-		},
-		/** Returns whether the button (on the right of the textbox) is visible.
-		 * <p>Default: true.
-		 * @return boolean
-		 */
-		/** Sets whether the button (on the right of the textbox) is visible.
-		 * @param boolean buttonVisible
-		 */
-		buttonVisible: function (v) {
+		}
+
+		return this;
+	}
+
+	/** Returns the time zone ID that this time box belongs to.
+	 * @return String the time zone's ID, such as "America/Los_Angeles".
+	 * @since 9.0.0
+	 */
+	public getTimeZone(): string | undefined {
+		return this._timeZone;
+	}
+
+	/** Returns whether the button (on the right of the textbox) is visible.
+	 * <p>Default: true.
+	 * @return boolean
+	 */
+	public isButtonVisible(): boolean {
+		return this._buttonVisible;
+	}
+
+	/** Sets whether the button (on the right of the textbox) is visible.
+	 * @param boolean buttonVisible
+	 */
+	public setButtonVisible(v: boolean, opts?: Record<string, boolean>): this {
+		const o = this._buttonVisible;
+		this._buttonVisible = v;
+
+		if (o !== v || (opts && opts.force)) {
 			zul.inp.RoundUtl.buttonVisible(this, v);
-		},
-		/** Sets the unformater function. This method is called from Server side.
-		 * @param String unf the unformater function
-		 */
-		/** Returns the unformater.
-		 * @return String the unformater function
-		 */
-		unformater: function (unf) {
+		}
+
+		return this;
+	}
+
+	/** Sets the unformater function. This method is called from Server side.
+	 * @param String unf the unformater function
+	 */
+	public setUnformater(unf: string, opts?: Record<string, boolean>): this {
+		const o = this._unformater;
+		this._unformater = unf;
+
+		if (o !== unf || (opts && opts.force)) {
 			eval('Timebox._unformater = ' + unf); // eslint-disable-line no-eval
-		},
-		localizedSymbols: [
-			function (val) {
-				if (val) {
-					if (!globallocalizedSymbols[val[0]])
-						globallocalizedSymbols[val[0]] = val[1];
-					return globallocalizedSymbols[val[0]];
-				}
-				return val;
-			}
-		],
-		/** Sets the constraint.
-		 * <p>Default: null (means no constraint all all).
-		 * @param String cst
-		 */
-		/** Returns the constraint, or null if no constraint at all.
-		 * @return String
-		 */
-		constraint: function (cst) {
+		}
+
+		return this;
+	}
+
+	/** Returns the unformater.
+	 * @return String the unformater function
+	 */
+	public getUnformater(): string | undefined {
+		return this._unformater;
+	}
+
+	public getLocalizedSymbols(): zk.LocalizedSymbols | undefined {
+		return this._localizedSymbols;
+	}
+
+	public setLocalizedSymbols(val: [string, zk.LocalizedSymbols]): this {
+		if (val) {
+			if (!globallocalizedSymbols[val[0]])
+				globallocalizedSymbols[val[0]] = val[1];
+			this._localizedSymbols = globallocalizedSymbols[val[0]];
+		}
+		return this;
+	}
+
+	/** Sets the constraint.
+	 * <p>Default: null (means no constraint all all).
+	 * @param String cst
+	 */
+	public override setConstraint(cst: string | null, opts?: Record<string, boolean>): this {
+		const o = this._constraint;
+		this._constraint = cst;
+
+		if (o !== cst || (opts && opts.force)) {
 			if (typeof cst == 'string' && cst.charAt(0) != '['/*by server*/)
 				this._cst = new zul.inp.SimpleLocalTimeConstraint(cst, this);
 			else
-				this._cst = cst;
+				this._cst = cst as null;
 			if (this._cst)
 				this._reVald = true; //revalidate required
-			if (this._pop) {
-				this._pop.setConstraint(this._constraint);
-				this._pop.rerender();
-			}
-		},
-	},
+			// FIXME: never assigned
+			// if (this._pop) {
+			// 	this._pop.setConstraint(this._constraint);
+			// 	this._pop.rerender();
+			// }
+		}
+
+		return this;
+	}
+
+	/** Returns the constraint, or null if no constraint at all.
+	 * @return String
+	 */
+	// Signature doesn't match super method
+	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+	// @ts-ignore
+	public override getConstraint(): string | null | undefined {
+		return this._constraint;
+	}
+
 	/**
 	 * A method for component getter symmetry, it will call getValue
 	 * @since 10.0.0
 	 */
-	getValueInZonedDateTime: function () {
+	public getValueInZonedDateTime(): DateImpl | undefined {
 		return this.getValue();
-	},
+	}
+
 	/**
 	 * A method for component setter symmetry, it will call setValue
 	 * @since 10.0.0
 	 */
-	setValueInZonedDateTime: function () {
-		this.setValue.apply(this, arguments);
-	},
+	public setValueInZonedDateTime(value: DateImpl, fromServer?: boolean): void {
+		this.setValue(value, fromServer);
+	}
+
 	/**
 	 * A method for component getter symmetry, it will call getValue
 	 * @since 10.0.0
 	 */
-	getValueInLocalDateTime: function () {
+	public getValueInLocalDateTime(): DateImpl | undefined {
 		return this.getValue();
-	},
+	}
+
 	/**
 	 * A method for component setter symmetry, it will call setValue
 	 * @since 10.0.0
 	 */
-	setValueInLocalDateTime: function () {
-		this.setValue.apply(this, arguments);
-	},
+	public setValueInLocalDateTime(value: DateImpl, fromServer?: boolean): void {
+		this.setValue(value, fromServer);
+	}
+
 	/**
 	 * A method for component getter symmetry, it will call getValue
 	 * @since 10.0.0
 	 */
-	getValueInLocalDate: function () {
+	public getValueInLocalDate(): DateImpl | undefined {
 		return this.getValue();
-	},
+	}
+
 	/**
 	 * A method for component setter symmetry, it will call setValue
 	 * @since 10.0.0
 	 */
-	setValueInLocalDate: function () {
-		this.setValue.apply(this, arguments);
-	},
+	public setValueInLocalDate(value: DateImpl, fromServer?: boolean): void {
+		this.setValue(value, fromServer);
+	}
+
 	/**
 	 * A method for component getter symmetry, it will call getValue
 	 * @since 10.0.0
 	 */
-	getValueInLocalTime: function () {
+	public getValueInLocalTime(): DateImpl | undefined {
 		return this.getValue();
-	},
+	}
+
 	/**
 	 * A method for component setter symmetry, it will call setValue
 	 * @since 10.0.0
 	 */
-	setValueInLocalTime: function () {
-		this.setValue.apply(this, arguments);
-	},
+	public setValueInLocalTime(value: DateImpl, fromServer?: boolean): void {
+		this.setValue(value, fromServer);
+	}
+
 	/**
 	 * Sets the time zone ID that this time box belongs to.
 	 * @param String timezone the time zone's ID, such as "America/Los_Angeles".
 	 * @deprecated Use {@link #setTimeZone(String)} instead.
 	 */
-	setTimezone: function (v) {
+	public setTimezone(v: string): void {
 		this.setTimeZone(v);
-	},
+	}
+
 	/** Returns the time zone ID that this time box belongs to.
 	 * @return String the time zone's ID, such as "America/Los_Angeles".
 	 * @since 8.5.1
 	 * @deprecated Use {@link #getTimeZone()} instead.
 	 */
-	getTimezone: function () {
+	public getTimezone(): string | undefined {
 		return this._timeZone;
-	},
-	inRoundedMold: function () {
+	}
+
+	public override inRoundedMold(): boolean {
 		return true;
-	},
-	setFormat: function (fmt) {
+	}
+
+	public override setFormat(fmt: string, opts?: Record<string, boolean> | undefined): void {
 		fmt = fmt ? fmt.replace(/'/g, '') : fmt;
-		this.$class._updFormat(this, fmt);
-		this.$supers('setFormat', arguments);
-	},
-	setValue: function (value, fromServer) {
+		Timebox._updFormat(this, fmt);
+		super.setFormat(fmt, opts);
+	}
+
+	public override setValue(value: DateImpl, fromServer?: boolean): void {
 		var tz = this.getTimeZone();
 		if (tz && value) value.tz(tz);
 		if (fromServer && value === null) //Bug ZK-1322: if from server side, return empty string
 			this._changed = false;
-		this.$supers('setValue', arguments);
-	},
-	coerceToString_: function (date) {
+		super.setValue(value, fromServer);
+	}
+
+	protected override coerceToString_(date?: DateImpl | null): string {
 		if (!this._changed && !date && arguments.length) return '';
-		var out = '', th, text, offset;
+		var out = '', th: TimeHandler, text: string, offset: number | boolean;
 		for (var i = 0, f = this._fmthdler, l = f.length; i < l; i++) {
 			th = f[i];
 			text = th.format(date);
 			out += text;
 			//sync handler index
 			if (th.type && (offset = th.isSingleLength()) !== false
-				&& (offset += text.length - 1))
-				th._doShift(this, offset);
+				&& ((offset as number) += text.length - 1))
+				th._doShift(this, offset as number);
 		}
 		return out;
-	},
-	coerceFromString_: function (val) {
+	}
+
+	protected override coerceFromString_(val: string | null | undefined): DateImpl | null | undefined {
 		var unf = Timebox._unformater,
 			tz = this.getTimeZone();
 		if (unf && jq.isFunction(unf)) {
@@ -246,7 +326,9 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		// event. Using clone date instead.
 		var date = this._value ? Dates.newInstance(this._value) : zUtl.today(this._format, tz),
 			hasAM, isAM,
-			fmt = [], fmtObeyCount = [], emptyCount = 0;
+			fmt: TimeHandler[] = [],
+			fmtObeyCount: boolean[] = [],
+			emptyCount = 0;
 		date.setSeconds(0);
 		date.setMilliseconds(0);
 
@@ -258,7 +340,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 				if (!th.getText(val).trim().length)
 					emptyCount++;
 			} else if (th.type) {
-				var shouldObeyCount = i + 1 < l && this.$class._shouldObeyCount(f[i + 1].type);
+				var shouldObeyCount = i + 1 < l && Timebox._shouldObeyCount(f[i + 1].type);
 				fmt.push(th);
 				fmtObeyCount.push(shouldObeyCount);
 				th.parse(val, {obeyCount: shouldObeyCount}); // in order to shift if necessary
@@ -275,45 +357,51 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		for (var i = 0, l = fmt.length; i < l; i++) {
 			if (!hasAM && (fmt[i].type == HOUR2_FIELD || fmt[i].type == HOUR3_FIELD))
 				isAM = true;
-			date = fmt[i].unformat(date, val, {am: isAM, obeyCount: fmtObeyCount[i]});
+			date = fmt[i].unformat(date, val, {am: isAM, obeyCount: fmtObeyCount[i]}) as DateImpl; // FIXME: inconsistent use of unformat
 		}
 		return date;
-	},
-	onSize: function () {
+	}
+
+	public override onSize(): void {
 		var inp = this.getInputNode();
 		if (inp && this._value && !inp.value)
 			inp.value = this.coerceToString_(this._value);
-	},
-	onHide: zul.inp.Textbox.onHide,
-	validate: zul.inp.Intbox.validate,
-	doClick_: function (evt) {
+	}
+
+	public onHide = null;
+	public validate = null;
+
+	public override doClick_(evt: zk.Event, popupOnly?: boolean | undefined): void {
 		if (evt.domTarget == this.getInputNode())
 			this._doCheckPos();
-		this.$supers('doClick_', arguments);
-	},
-	doKeyPress_: function (evt) {
+		super.doClick_(evt, popupOnly);
+	}
+
+	protected override doKeyPress_(evt: zk.Event): void {
 		if (zk.opera && evt.keyCode != 9) {
 			evt.stop();
 			return;
 		}
-		this.$supers('doKeyPress_', arguments);
-	},
-	_doBeforeInput: function (evt) {
-		var inp = this.getInputNode();
+		super.doKeyPress_(evt);
+	}
+
+	public _doBeforeInput(evt: zk.Event): void {
+		var inp = this.getInputNode()!;
 		if (inp.disabled || inp.readOnly)
 			return;
 
 		// control input keys only when no custom unformater is given
 		if (!Timebox._unformater) {
-			var char = evt.domEvent.originalEvent.data;
+			var char = (evt.domEvent!.originalEvent as InputEvent).data!;
 			if (/\d/.test(char)) {
 				this._doType(parseInt(char));
 				evt.stop();
 			}
 		}
-	},
-	doKeyDown_: function (evt) {
-		var inp = this.getInputNode();
+	}
+
+	protected override doKeyDown_(evt: zk.Event): void {
+		var inp = this.getInputNode()!;
 		if (inp.disabled || inp.readOnly)
 			return;
 
@@ -342,12 +430,12 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 				this.lastPos = 0;
 				return;
 			case 37://left
-				if (this.lastPos > 0)
-					this.lastPos--;
+				if (this.lastPos! > 0)
+					this.lastPos!--;
 				return;
 			case 39://right
-				if (this.lastPos < inp.value.length)
-					this.lastPos++;
+				if (this.lastPos! < inp.value.length)
+					this.lastPos!++;
 				return;
 			case 38://up
 				this._doUp();
@@ -370,13 +458,6 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 				break;
 			case 13: case 27://enter,esc,tab
 				break;
-			case 86: // ctrl + v
-				// Bug ZK-1749
-				if (zk.ie <= 9 && evt.ctrlKey) { // IE9 onpaste not support
-					this._updateChanged();
-					break;
-				}
-				// fallthrough and no need to break here, let it run with 'default' case
 			default:
 				if (!(code >= 112 && code <= 123) //F1-F12
 						&& !evt.ctrlKey && !evt.metaKey && !evt.altKey) {
@@ -385,14 +466,16 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 				}
 			}
 		}
-		this.$supers('doKeyDown_', arguments);
-	},
-	doPaste_: function (evt) {
+		super.doKeyDown_(evt);
+	}
+
+	protected override doPaste_(evt: zk.Event): void {
 		this._updateChanged();
-		this.$supers('doPaste_', arguments);
-	},
-	_updateChanged: function () {
-		var inp = this.getInputNode(),
+		super.doPaste_(evt);
+	}
+
+	private _updateChanged(): void {
+		var inp = this.getInputNode()!,
 			self = this,
 			curVal = inp.value;
 		setTimeout(function () {
@@ -403,20 +486,22 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 				}
 			}
 		}, 0);
-	},
-	_ondropbtnup: function (evt) {
+	}
+
+	private _ondropbtnup(evt: zk.Event): void {
 		this.domUnlisten_(document.body, 'onZMouseup', '_ondropbtnup');
 		this._stopAutoIncProc();
 		this._currentbtn = null;
-	},
-	_btnDown: function (evt) { // TODO: format the value first
+	}
+
+	public _btnDown(evt: zk.Event): void { // TODO: format the value first
 		if (!this._buttonVisible || this._disabled) return;
 
 		// cache it for IE and others to keep the same position at the first time being clicked.
 		this._lastPos = this._getPos();
 
 		var btn = this.$n('btn'),
-			inp = this.getInputNode();
+			inp = this.getInputNode()!;
 
 		if (!zk.dragging) {
 			if (this._currentbtn) // just in case
@@ -433,7 +518,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 			inp.value = this.coerceToString_();
 
 		var ofs = zk(btn).revisedOffset(),
-			isOverUpBtn = (evt.pageY - ofs[1]) < btn.offsetHeight / 2;
+			isOverUpBtn = (evt.pageY - ofs[1]) < btn!.offsetHeight / 2;
 		if (zk.webkit) {
 			zk(inp).focus(); //Bug ZK-1527: chrome and safari will trigger focus if executing setSelectionRange, focus it early here
 		}
@@ -461,8 +546,9 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 
 		// disable browser's text selection
 		evt.stop();
-	},
-	_btnUp: function (evt) {
+	}
+
+	public _btnUp(evt: zk.Event): void {
 		if (!this._buttonVisible || this._disabled || zk.dragging) return;
 
 		if (zk.opera) zk(this.getInputNode()).focus();
@@ -471,44 +557,52 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		this._onChanging();
 		this._stopAutoIncProc();
 
-		if ((zk.ie < 11 || zk.webkit) && this._lastPos)
+		if (zk.webkit && this._lastPos)
 			zk(this.getInputNode()).setSelectionRange(this._lastPos, this._lastPos);
-	},
-	_getPos: function () {
+	}
+
+	private _getPos(): number {
 		return zk(this.getInputNode()).getSelectionRange()[0];
-	},
-	_doCheckPos: function () {
+	}
+
+	private _doCheckPos(): void {
 		this.lastPos = this._getPos();
-	},
-	_doUp: function () {
+	}
+
+	private _doUp(): void {
 		this._changed = true;
 		this.getTimeHandler().increase(this, 1);
 		this._onChanging();
-	},
-	_doDown: function () {
+	}
+
+	private _doDown(): void {
 		this._changed = true;
 		this.getTimeHandler().increase(this, -1);
 		this._onChanging();
-	},
-	_doBack: function () {
+	}
+
+	private _doBack(): void {
 		this._changed = true;
 		this.getTimeHandler().deleteTime(this, true);
-	},
-	_doDel: function () {
+	}
+
+	private _doDel(): void {
 		this._changed = true;
 		this.getTimeHandler().deleteTime(this, false);
-	},
-	_doType: function (val) {
+	}
+
+	private _doType(val: number): void {
 		this._changed = true;
 		this.getTimeHandler().addTime(this, val);
-	},
-	getTimeHandler: function () {
+	}
+
+	public getTimeHandler(): TimeHandler {
 		var sr = zk(this.getInputNode()).getSelectionRange(),
 			start = sr[0],
 			end = sr[1],
 			//don't use [0] as the end variable, it may have a bug when the format is aHH:mm:ss
 			//when use UP/Down key to change the time
-			hdler;
+			hdler: TimeHandler | undefined;
 
 		// Bug ZK-434
 		for (var i = 0, f = this._fmthdler, l = f.length; i < l; i++) {
@@ -520,39 +614,43 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 			}
 		}
 		return hdler || this._fmthdler[0];
-	},
-	getNextTimeHandler: function (th) {
+	}
+
+	public getNextTimeHandler(th: TimeHandler): TimeHandler {
 		var f = this._fmthdler,
 			index = f.$indexOf(th),
-			lastHandler;
+			lastHandler: TimeHandler;
 
 		while ((lastHandler = f[++index])
 				&& (!lastHandler.type || lastHandler.type == AM_PM_FIELD));
 
 		return lastHandler;
-	},
-	_startAutoIncProc: function (up) {
+	}
+
+	private _startAutoIncProc(up: boolean): void {
 		if (this.timerId)
 			clearInterval(this.timerId);
 		var self = this,
-			fn = up ? '_doUp' : '_doDown';
+			fn: '_doUp' | '_doDown' = up ? '_doUp' : '_doDown';
 		this.timerId = setInterval(function () {
-			if ((zk.ie < 11 || zk.webkit) && self._lastPos)
+			if (zk.webkit && self._lastPos)
 				zk(self.getInputNode()).setSelectionRange(self._lastPos, self._lastPos);
 			self[fn]();
 		}, 300);
-		jq(this.$n('btn-' + (up ? 'up' : 'down'))).addClass(this.$s('active'));
-	},
-	_stopAutoIncProc: function () {
+		jq(this.$n('btn-' + (up ? 'up' : 'down'))!).addClass(this.$s('active'));
+	}
+
+	private _stopAutoIncProc(): void {
 		if (this.timerId)
 			clearTimeout(this.timerId);
-		this.currentStep = this.defaultStep;
+		// this.currentStep = this.defaultStep; // FIXME: both properties are not initialized
 		this.timerId = null;
-		jq('.' + this.$s('icon'), this.$n('btn')).removeClass(this.$s('active'));
-	},
-	doFocus_: function (evt) {
-		this.$supers('doFocus_', arguments);
-		var inp = this.getInputNode(),
+		jq('.' + this.$s('icon'), this.$n('btn')!).removeClass(this.$s('active'));
+	}
+
+	protected override doFocus_(evt: zk.Event): void {
+		super.doFocus_(evt);
+		var inp = this.getInputNode()!,
 			selrng = zk(inp).getSelectionRange();
 
 		if (!inp.value)
@@ -567,34 +665,38 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		}
 
 		zul.inp.RoundUtl.doFocus_(this);
-	},
-	doBlur_: function (evt) {
+	}
+
+	protected override doBlur_(evt: zk.Event): void {
 		// skip onchange, Bug 2936568
 		if (!this._value && !this._changed && !Timebox._unformater)
-			this.getInputNode().value = this._defRawVal = '';
+			this.getInputNode()!.value = this._defRawVal = '';
 
-		this.$supers('doBlur_', arguments);
+		super.doBlur_(evt);
 
 		zul.inp.RoundUtl.doBlur_(this);
-	},
-	afterKeyDown_: function (evt, simulated) {
-		if (!simulated && this._inplace)
-			jq(this.$n()).toggleClass(this.getInplaceCSS(), evt.keyCode == 13 ? null : false);
+	}
 
-		return this.$supers('afterKeyDown_', arguments);
-	},
-	bind_: function () {
-		this.$supers(zul.db.Timebox, 'bind_', arguments);
-		var btn;
+	protected override afterKeyDown_(evt: zk.Event, simulated?: boolean): boolean | undefined {
+		if (!simulated && this._inplace)
+			jq(this.$n_()).toggleClass(this.getInplaceCSS(), evt.keyCode == 13 ? null! : false);
+
+		return super.afterKeyDown_(evt, simulated);
+	}
+
+	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+		super.bind_(desktop, skipper, after);
+		var btn: HTMLElement | null | undefined;
 
 		if (zk.android && zk.chrome)
-			this.domListen_(this.getInputNode(), 'onBeforeInput', '_doBeforeInput');
+			this.domListen_(this.getInputNode()!, 'onBeforeInput', '_doBeforeInput');
 		if (btn = this.$n('btn'))
 			this.domListen_(btn, 'onZMouseDown', '_btnDown')
 				.domListen_(btn, 'onZMouseUp', '_btnUp');
 		zWatch.listen({onSize: this});
-	},
-	unbind_: function () {
+	}
+
+	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		if (this.timerId) {
 			clearTimeout(this.timerId);
 			this.timerId = null;
@@ -606,20 +708,22 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 				.domUnlisten_(btn, 'onZMouseUp', '_btnUp');
 		}
 		if (zk.android && zk.chrome)
-			this.domUnlisten_(this.getInputNode(), 'onBeforeInput', '_doBeforeInput');
+			this.domUnlisten_(this.getInputNode()!, 'onBeforeInput', '_doBeforeInput');
 		this._changed = false;
-		this.$supers(zul.db.Timebox, 'unbind_', arguments);
-	},
-	getBtnUpIconClass_: function () {
+		super.unbind_(skipper, after, keepRod);
+	}
+
+	protected getBtnUpIconClass_(): string {
 		return 'z-icon-angle-up';
-	},
-	getBtnDownIconClass_: function () {
+	}
+
+	protected getBtnDownIconClass_(): string {
 		return 'z-icon-angle-down';
 	}
-}, {
-	_updFormat: function (wgt, fmt) {
-		var index = [],
-			APM = wgt._localizedSymbols ? wgt._localizedSymbols.APM : zk.APM;
+
+	private static _updFormat(wgt: Timebox, fmt: string): void {
+		var index: TimeHandler[] = [],
+			APM = wgt._localizedSymbols ? wgt._localizedSymbols.APM! : zk.APM;
 		for (var i = 0, l = fmt.length; i < l; i++) {
 			var c = fmt.charAt(i);
 			switch (c) {
@@ -658,11 +762,12 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 				index.push(new zul.inp.SecondHandler([start, end], SECOND_FIELD, wgt));
 				break;
 			case 'z':
+				// eslint-disable-next-line @typescript-eslint/consistent-type-assertions
 				index.push({index: [i, i], format: (function (text) {
 					return function () {
 						return text;
 					};
-				})(wgt._timezoneAbbr)});
+				})(wgt._timezoneAbbr)} as TimeHandler);
 				break;
 			default:
 				var ary = '',
@@ -676,11 +781,12 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 						break;
 					}
 				}
+				// eslint-disable-next-line @typescript-eslint/consistent-type-assertions
 				index.push({index: [start, end], format: (function (text) {
 					return function () {
 						return text;
 					};
-				})(ary)});
+				})(ary)} as TimeHandler);
 				i = end;
 			}
 		}
@@ -694,8 +800,9 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 			}
 		}
 		wgt._fmthdler = index;
-	},
-	_shouldObeyCount: function (nextType) {
+	}
+
+	private static _shouldObeyCount(nextType: number): boolean {
 		switch (nextType) {
 			case MINUTE_FIELD:
 			case SECOND_FIELD:
@@ -708,32 +815,42 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 				return false;
 		}
 	}
-});
-zul.inp.TimeHandler = zk.$extends(zk.Object, {
-	maxsize: 59,
-	minsize: 0,
-	digits: 2,
-	$init: function (index, type, wgt) {
+}
+zul.db.Timebox = zk.regClass(Timebox);
+
+export class TimeHandler extends zk.Object {
+	public maxsize = 59;
+	public minsize = 0;
+	public digits = 2;
+	public index: number[];
+	public type: number;
+	public wgt: Timebox;
+
+	public constructor(index: number[], type: number, wgt: Timebox) {
+		super();
 		this.index = index;
 		this.type = type;
 		if (index[0] == index[1])
 			this.digits = 1;
 		this.wgt = wgt;
-	},
-	format: function (date) {
+	}
+
+	public format(date?: DateImpl | null): string {
 		return '00';
-	},
-	unformat: function (date, val, opt) {
+	}
+
+	public unformat(date: DateImpl, val: string, opt: Record<string, unknown>): DateImpl | boolean {
 		return date;
-	},
-	increase: function (wgt, up) {
-		var inp = wgt.getInputNode(),
+	}
+
+	public increase(wgt: Timebox, up: number): void {
+		var inp = wgt.getInputNode()!,
 			start = this.index[0],
 			end = this.index[1] + 1,
 			val = inp.value,
-			text = this.getText(val),
+			text: string | number = this.getText(val),
 			singleLen = this.isSingleLength() !== false,
-			ofs;
+			ofs: number | undefined;
 
 		text = zk.parseInt(singleLen ? text :
 				text.replace(/ /g, '0')) + up;
@@ -751,7 +868,7 @@ zul.inp.TimeHandler = zk.$extends(zk.Object, {
 					(text == 9) ? -1 : 0;
 
 		if (text < 10 && !singleLen)
-			 text = '0' + text;
+				text = '0' + text;
 
 		inp.value = val.substring(0, start) + text + val.substring(end);
 
@@ -761,13 +878,14 @@ zul.inp.TimeHandler = zk.$extends(zk.Object, {
 		}
 
 		zk(inp).setSelectionRange(start, end);
-	},
-	deleteTime: function (wgt, backspace) {
-		var inp = wgt.getInputNode(),
+	}
+
+	public deleteTime(wgt: Timebox, backspace: boolean): void {
+		var inp = wgt.getInputNode()!,
 			sel = zk(inp).getSelectionRange(),
 			pos = sel[0],
 			val = inp.value,
-			maxLength = this.$class._getMaxLen(wgt);
+			maxLength = TimeHandler._getMaxLen(wgt);
 
 		// clean over text
 		if (val.length > maxLength) {
@@ -778,7 +896,7 @@ zul.inp.TimeHandler = zk.$extends(zk.Object, {
 
 		if (pos != sel[1]) {
 			//select delete
-			inp.value = val.substring(0, pos) + this.$class._cleanSelectionText(wgt, this)
+			inp.value = val.substring(0, pos) + TimeHandler._cleanSelectionText(wgt, this)
 							+ val.substring(sel[1]);
 		} else {
 			var fmthdler = wgt._fmthdler,
@@ -786,7 +904,8 @@ zul.inp.TimeHandler = zk.$extends(zk.Object, {
 				ofs = backspace ? -1 : 1,
 				ofs2 = backspace ? 0 : 1,
 				ofs3 = backspace ? 1 : 0,
-				hdler, posOfs;
+				hdler: TimeHandler,
+				posOfs: number | boolean | undefined;
 			if (pos == this.index[ofs2] + ofs2) {// on start or end
 				//delete by sibling handler
 				if (hdler = fmthdler[index + ofs * 2])
@@ -800,15 +919,17 @@ zul.inp.TimeHandler = zk.$extends(zk.Object, {
 				inp.value = val.substring(0, (ofs3 += pos) - 1)
 					+ (posOfs ? '' : ' ') + val.substring(ofs3);
 				if (posOfs)
-					hdler._doShift(wgt, posOfs);
+					hdler._doShift(wgt, posOfs as number);
 			}
 			if (posOfs && !backspace) pos--;
 		}
 		zk(inp).setSelectionRange(pos, pos);
-	},
-	_addNextTime: function (wgt, num) {
+	}
+
+	protected _addNextTime(wgt: Timebox, num: number): void {
 		var inp = wgt.getInputNode(),
-			index, NTH;
+			index: number,
+			NTH: TimeHandler;
 		if (NTH = wgt.getNextTimeHandler(this)) {
 			index = NTH.index[0];
 			zk(inp).setSelectionRange(index,
@@ -816,13 +937,14 @@ zul.inp.TimeHandler = zk.$extends(zk.Object, {
 					zk(inp).getSelectionRange()[1]));
 			NTH.addTime(wgt, num);
 		}
-	},
-	addTime: function (wgt, num) {
-		var inp = wgt.getInputNode(),
+	}
+
+	public addTime(wgt: Timebox, num: number): void {
+		var inp = wgt.getInputNode()!,
 			sel = zk(inp).getSelectionRange(),
 			val = inp.value,
 			pos = sel[0],
-			maxLength = this.$class._getMaxLen(wgt),
+			maxLength = TimeHandler._getMaxLen(wgt),
 			posOfs = this.isSingleLength();
 
 		// clean over text
@@ -851,7 +973,7 @@ zul.inp.TimeHandler = zk.$extends(zk.Object, {
 					sel = zk(inp).getSelectionRange();
 				}
 				if (posOfs)
-					this._doShift(wgt, posOfs);
+					this._doShift(wgt, posOfs as number);
 			}
 		} else if (pos == (this.index[1] + 1)) {//end of handler
 			var i;
@@ -861,14 +983,14 @@ zul.inp.TimeHandler = zk.$extends(zk.Object, {
 					if (i && i < 10) // 1-9
 						pos--;
 					else if (i || posOfs) { // 0 or larger then 10, except zero and non-posOfs
-						val = inp.value = val.substring(0, (pos + posOfs))
+						val = inp.value = val.substring(0, (pos + (posOfs as number)))
 								+ (posOfs ? '' : '0') + val.substring(pos);
 						if (i) // larger then 10
 							this._doShift(wgt, 1);
 						else { // 0
 							zk(inp).setSelectionRange(pos, Math.max(sel[1], pos));
 							if (posOfs)//2 digits zero
-								this._doShift(wgt, posOfs);
+								this._doShift(wgt, posOfs as number);
 						}
 					}
 				}
@@ -882,8 +1004,8 @@ zul.inp.TimeHandler = zk.$extends(zk.Object, {
 
 		if (pos != sel[1]) {
 			//select edit
-			var s = this.$class._cleanSelectionText(wgt, this),
-				ofs;
+			var s = TimeHandler._cleanSelectionText(wgt, this),
+				ofs: number | undefined;
 			//in middle position
 			if (posOfs !== false && (ofs = pos - this.index[1]))
 				this._doShift(wgt, ofs);
@@ -897,38 +1019,44 @@ zul.inp.TimeHandler = zk.$extends(zk.Object, {
 		}
 		wgt.lastPos = pos;
 		zk(inp).setSelectionRange(pos, pos);
-	},
-	getText: function (val, obeyCount) {
+	}
+
+	public getText(val: string, obeyCount?: boolean): string {
 		var start = this.index[0],
 			end = this.index[1] + 1;
 		return obeyCount !== false ? val.substring(start, end) : val.substring(start);
-	},
-	_doShift: function (wgt, shift) {
+	}
+
+	public _doShift(wgt: Timebox, shift: number): void {
 		var f = wgt._fmthdler,
 			index = f.$indexOf(this),
-			NTH;
+			NTH: TimeHandler;
 		this.index[1] += shift;
 		while (NTH = f[++index]) {
 			NTH.index[0] += shift;
 			NTH.index[1] += shift;
 		}
-	},
-	isSingleLength: function () {
+	}
+
+	public isSingleLength(): boolean | number {
 		return this.digits == 1 && (this.index[0] - this.index[1]);
-	},
-	parse: function (val, opt) {
+	}
+
+	public parse(val: string, opt: {obeyCount?: boolean}): number {
 		var text = this.getText(val, opt.obeyCount),
-			parsed = /^\s*\d*/.exec(text),
+			parsed = /^\s*\d*/.exec(text)!,
 			offset = parsed.length ? parsed[0].length - (this.index[1] - this.index[0] + 1) : 0;
 		if (offset) {
 			this._doShift(this.wgt, offset);
 		}
 		return zk.parseInt(text);
 	}
-}, {
-	_getMaxLen: function (wgt) {
-		var val = wgt.getInputNode().value,
-			len = 0, th, lastTh;
+
+	private static _getMaxLen(wgt: Timebox): number {
+		var val = wgt.getInputNode()!.value,
+			len = 0,
+			th: TimeHandler,
+			lastTh: TimeHandler | undefined;
 		for (var i = 0, f = wgt._fmthdler, l = f.length; i < l; i++) {
 			th = f[i];
 			if (i == l - 1) {
@@ -937,9 +1065,10 @@ zul.inp.TimeHandler = zk.$extends(zk.Object, {
 				len += (th.type ? th.getText(val) : th.format()).length;
 			if (th.type) lastTh = th;
 		}
-		return (lastTh.digits == 1) ? ++len : len;
-	},
-	_cleanSelectionText: function (wgt, startHandler) {
+		return (lastTh!.digits == 1) ? ++len : len;
+	}
+
+	private static _cleanSelectionText(wgt: Timebox, startHandler: TimeHandler): string {
 		var inp = wgt.getInputNode(),
 			sel = zk(inp).getSelectionRange(),
 			pos = sel[0],
@@ -949,7 +1078,11 @@ zul.inp.TimeHandler = zk.$extends(zk.Object, {
 			text = '',
 			hdler = startHandler,
 			isFirst = true,
-			prevStart, ofs, hStart, hEnd, posOfs;
+			prevStart: number | undefined,
+			ofs,
+			hStart: number,
+			hEnd,
+			posOfs: number | boolean;
 
 		//restore separator
 		do {
@@ -958,7 +1091,7 @@ zul.inp.TimeHandler = zk.$extends(zk.Object, {
 
 			if (hdler.type && (posOfs = hdler.isSingleLength())) {
 				//sync handler index
-				hdler._doShift(wgt, posOfs);
+				hdler._doShift(wgt, posOfs as number);
 				selEnd--;
 			}
 
@@ -975,7 +1108,7 @@ zul.inp.TimeHandler = zk.$extends(zk.Object, {
 				isFirst = false;
 				continue;
 			}
-			ofs = hStart - prevStart;
+			ofs = hStart - prevStart!;
 			while (ofs-- > 0) //replace by space (before)
 				text += ' ';
 
@@ -984,54 +1117,65 @@ zul.inp.TimeHandler = zk.$extends(zk.Object, {
 		} while (hdler = fmthdler[++index]);
 		return text;
 	}
-});
-zul.inp.HourInDayHandler = zk.$extends(zul.inp.TimeHandler, {
-	maxsize: 23,
-	minsize: 0,
-	format: function (date) {
+}
+zul.inp.TimeHandler = zk.regClass(TimeHandler);
+
+export class HourInDayHandler extends zul.inp.TimeHandler {
+	public override maxsize = 23;
+	public override minsize = 0;
+
+	public override format(date?: DateImpl | null): string {
 		var singleLen = this.digits == 1;
 		if (!date) return singleLen ? '0' : '00';
 		else {
-			var h = date.getHours();
+			var h: number | string = date.getHours();
 			if (!singleLen && h < 10)
 				h = '0' + h;
 			return h.toString();
 		}
-	},
-	unformat: function (date, val, opt) {
+	}
+
+	public override unformat(date: DateImpl, val: string, opt: Record<string, unknown>): DateImpl {
 		date.setHours(this.parse(val, opt));
 		return date;
 	}
-});
-zul.inp.HourInDayHandler2 = zk.$extends(zul.inp.TimeHandler, {
-	maxsize: 24,
-	minsize: 1,
-	format: function (date) {
+}
+zul.inp.HourInDayHandler = zk.regClass(HourInDayHandler);
+
+export class HourInDayHandler2 extends zul.inp.TimeHandler {
+	public override maxsize = 24;
+	public override minsize = 1;
+
+	public override format(date?: DateImpl | null): string {
 		if (!date) return '24';
 		else {
-			var h = date.getHours();
+			var h: number | string = date.getHours();
 			if (h == 0)
 				h = '24';
 			else if (this.digits == 2 && h < 10)
 				h = '0' + h;
 			return h.toString();
 		}
-	},
-	unformat: function (date, val, opt) {
+	}
+
+	public override unformat(date: DateImpl, val: string, opt: Record<string, unknown>): DateImpl {
 		var hours = this.parse(val, opt);
 		if (hours >= this.maxsize)
 			hours = 0;
 		date.setHours(hours);
 		return date;
 	}
-});
-zul.inp.HourHandler = zk.$extends(zul.inp.TimeHandler, {
-	maxsize: 12,
-	minsize: 1,
-	format: function (date) {
+}
+zul.inp.HourInDayHandler2 = zk.regClass(HourInDayHandler2);
+
+export class HourHandler extends zul.inp.TimeHandler {
+	public override maxsize = 12;
+	public override minsize = 1;
+
+	public override format(date?: DateImpl | null): string {
 		if (!date) return '12';
 		else {
-			var h = date.getHours();
+			var h: number | string = date.getHours();
 			h = (h % 12);
 			if (h == 0)
 				h = '12';
@@ -1039,98 +1183,114 @@ zul.inp.HourHandler = zk.$extends(zul.inp.TimeHandler, {
 				h = '0' + h;
 			return h.toString();
 		}
-	},
-	unformat: function (date, val, opt) {
+	}
+
+	public override unformat(date: DateImpl, val: string, opt: Record<string, unknown>): DateImpl {
 		var hours = this.parse(val, opt);
 		if (hours >= this.maxsize)
 			hours = 0;
 		date.setHours(opt.am ? hours : hours + 12);
 		return date;
 	}
-});
-zul.inp.HourHandler2 = zk.$extends(zul.inp.TimeHandler, {
-	maxsize: 11,
-	minsize: 0,
-	format: function (date) {
+}
+zul.inp.HourHandler = zk.regClass(HourHandler);
+
+export class HourHandler2 extends zul.inp.TimeHandler {
+	public override maxsize = 11;
+	public override minsize = 0;
+
+	public override format(date?: DateImpl | null): string {
 		var singleLen = this.digits == 1;
 		if (!date) return singleLen ? '0' : '00';
 		else {
-			var h = date.getHours();
+			var h: number | string = date.getHours();
 			h = (h % 12);
 			if (!singleLen && h < 10)
 				h = '0' + h;
 			return h.toString();
 		}
-	},
-	unformat: function (date, val, opt) {
+	}
+
+	public override unformat(date: DateImpl, val: string, opt: Record<string, unknown>): DateImpl {
 		var hours = this.parse(val, opt);
 		date.setHours(opt.am ? hours : hours + 12);
 		return date;
 	}
-});
-zul.inp.MinuteHandler = zk.$extends(zul.inp.TimeHandler, {
-	format: function (date) {
+}
+zul.inp.HourHandler2 = zk.regClass(HourHandler2);
+
+export class MinuteHandler extends zul.inp.TimeHandler {
+	public override format(date?: DateImpl | null): string {
 		var singleLen = this.digits == 1;
 		if (!date) return singleLen ? '0' : '00';
 		else {
-			var m = date.getMinutes();
+			var m: number | string = date.getMinutes();
 			if (!singleLen && m < 10)
 				m = '0' + m;
 			return m.toString();
 		}
-	},
-	unformat: function (date, val, opt) {
+	}
+
+	public override unformat(date: DateImpl, val: string, opt: Record<string, unknown>): DateImpl {
 		date.setMinutes(this.parse(val, opt));
 		return date;
 	}
-});
-zul.inp.SecondHandler = zk.$extends(zul.inp.TimeHandler, {
-	format: function (date) {
+}
+zul.inp.MinuteHandler = zk.regClass(MinuteHandler);
+
+export class SecondHandler extends zul.inp.TimeHandler {
+	public override format(date?: DateImpl | null): string {
 		var singleLen = this.digits == 1;
 		if (!date) return singleLen ? '0' : '00';
 		else {
-			var s = date.getSeconds();
+			var s: number | string = date.getSeconds();
 			if (!singleLen && s < 10)
 				s = '0' + s;
 			return s.toString();
 		}
-	},
-	unformat: function (date, val, opt) {
+	}
+
+	public override unformat(date: DateImpl, val: string, opt: Record<string, unknown>): DateImpl {
 		date.setSeconds(this.parse(val, opt));
 		return date;
 	}
-});
-zul.inp.AMPMHandler = zk.$extends(zul.inp.TimeHandler, {
-	format: function (date) {
-		var APM = this.wgt._localizedSymbols ? this.wgt._localizedSymbols.APM : zk.APM;
+}
+zul.inp.SecondHandler = zk.regClass(SecondHandler);
+
+export class AMPMHandler extends zul.inp.TimeHandler {
+	public override format(date?: DateImpl | null): string {
+		var APM = this.wgt._localizedSymbols ? this.wgt._localizedSymbols.APM! : zk.APM;
 		if (!date)
 			return APM[0];
 		var h = date.getHours();
 		return APM[h < 12 ? 0 : 1];
-	},
-	unformat: function (date, val, opt) {
+	}
+
+	public override unformat(date: DateImpl, val: string, opt: Record<string, unknown>): boolean {
 		var text = this.getText(val).trim(),
-			APM = this.wgt._localizedSymbols ? this.wgt._localizedSymbols.APM : zk.APM;
+			APM = this.wgt._localizedSymbols ? this.wgt._localizedSymbols.APM! : zk.APM;
 		return (text.length == APM[0].length) ?
 			APM[0] == text : true;
-	},
-	addTime: function (wgt, num) {
-		var inp = wgt.getInputNode(),
+	}
+
+	public override addTime(wgt: Timebox, num: number): void {
+		var inp = wgt.getInputNode()!,
 			start = this.index[0],
 			end = this.index[1] + 1,
 			val = inp.value,
 			text = val.substring(start, end),
-			APM = wgt._localizedSymbols ? wgt._localizedSymbols.APM : zk.APM;
+			APM = wgt._localizedSymbols ? wgt._localizedSymbols.APM! : zk.APM;
 		//restore A/PM text
 		if (text != APM[0] && text != APM[1]) {
 			text = APM[0];
 			inp.value = val.substring(0, start) + text + val.substring(end);
 		}
 		this._addNextTime(wgt, num);
-	},
+	}
+
 	// Bug ZK-434, we have to delete a sets of "AM/PM", rather than a single word "A/P/M"
-	deleteTime: function (wgt, backspace) {
-		var inp = wgt.getInputNode(),
+	public override deleteTime(wgt: Timebox, backspace: boolean): void {
+		var inp = wgt.getInputNode()!,
 			sel = zk(inp).getSelectionRange(),
 			pos = sel[0],
 			pos1 = sel[1],
@@ -1138,7 +1298,7 @@ zul.inp.AMPMHandler = zk.$extends(zul.inp.TimeHandler, {
 			end = this.index[1] + 1,
 			val = inp.value;
 		if (pos1 - pos > end - start)
-			return this.$supers('deleteTime', arguments);
+			return super.deleteTime(wgt, backspace);
 
 		var t = [''];
 		for (var i = end - start; i > 0; i--)
@@ -1146,22 +1306,23 @@ zul.inp.AMPMHandler = zk.$extends(zul.inp.TimeHandler, {
 
 		inp.value = val.substring(0, start) + t.join('') + val.substring(end);
 		zk(inp).setSelectionRange(start, start);
-	},
-	increase: function (wgt, up) {
-		var inp = wgt.getInputNode(),
+	}
+
+	public override increase(wgt: Timebox, up: number): void {
+		var inp = wgt.getInputNode()!,
 			start = this.index[0],
 			end = this.index[1] + 1,
 			val = inp.value,
 			text = val.substring(start, end),
-			APM = wgt._localizedSymbols ? wgt._localizedSymbols.APM : zk.APM;
+			APM = wgt._localizedSymbols ? wgt._localizedSymbols.APM! : zk.APM;
 
 		text = APM[0] == text ? APM[1] : APM[0];
 		inp.value = val.substring(0, start) + text + val.substring(end);
 		zk(inp).setSelectionRange(start, end);
-	},
-	parse: function (val, opt) {
-		return this.getText(val).trim();
 	}
-});
 
-})();
+	public override parse(val: string, opt: {obeyCount?: boolean}): number {
+		return zk.parseInt(this.getText(val).trim());
+	}
+}
+zul.inp.AMPMHandler = zk.regClass(AMPMHandler);

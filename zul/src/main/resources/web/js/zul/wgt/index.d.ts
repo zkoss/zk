@@ -18,7 +18,7 @@ export * from './Checkbox';
 export * from './Popup';
 // export * from './Radio';
 export declare class Radio extends zul.wgt.Checkbox { // zul/wgt/Checkbox
-    public getRadiogroup(parent?): zul.wgt.Radiogroup
+    public getRadiogroup(parent?: zk.Widget): zul.wgt.Radiogroup
 }
 // export * from './Radiogroup';
 export import Radiogroup = zul.LabelImageWidget; // zul/wgt/Radio

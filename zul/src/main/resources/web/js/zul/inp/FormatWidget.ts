@@ -15,12 +15,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 /**
  * A skeletal implementation for an input box with format.
  */
- export class FormatWidget extends zul.inp.InputWidget {
-	protected _format?: string;
-	private _shortcut?: string;
+ export class FormatWidget<ValueType> extends zul.inp.InputWidget<ValueType> {
+	public _format?: string;
+	public _shortcut?: string | null;
 
 	//zk.def
-	public setFormat(v: string, opts?: Record<string, boolean>): this {
+	public setFormat(v: string, opts?: Record<string, boolean>): void {
 		const o = this._format;
 		this._format = v;
 
@@ -29,8 +29,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			if (inp)
 				inp.value = this.coerceToString_(this._value);
 		}
-
-		return this;
 	}
 
 	/** Returns the format.

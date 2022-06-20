@@ -1713,7 +1713,7 @@ export class ZKObject {
 
 	declare public static $oid;
 
-	public constructor(..._rest) { // for override compatibility
+	public constructor(..._rest: never[]/* for override compatibility */) {
 		this.$oid = ++_oid;
 	}
 

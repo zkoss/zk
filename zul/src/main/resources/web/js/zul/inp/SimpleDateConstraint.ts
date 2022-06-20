@@ -1,4 +1,4 @@
-/* SimpleDateConstraint.js
+/* SimpleDateConstraint.ts
 
 	Purpose:
 
@@ -16,7 +16,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * A simple date constraint.
  * @disable(zkgwt)
  */
-zul.inp.SimpleDateConstraint = zk.$extends(zul.inp.SimpleConstraint, {
+export class SimpleDateConstraint extends zul.inp.SimpleConstraint {
+	public readonly format = 'yyyyMMdd';
+	private _wgt: zul.db.Datebox;
+	private _localizedSymbols?: zk.LocalizedSymbols;
+	private _beg?: DateImpl;
+	private _end?: DateImpl;
+
 	/** Constructor.
 	 * @param Object a
 	 * It can be String or number, the number or name of flag,
@@ -24,13 +30,13 @@ zul.inp.SimpleDateConstraint = zk.$extends(zul.inp.SimpleConstraint, {
 	 * @param zk.Widget the datebox
 	 * @since 5.0.8
 	 */
-	$init: function (a, wgt) {
+	public constructor(a: unknown, wgt: zul.db.Datebox) {
+		super(a); // FIXME: super was originally called at the end of the constructor
 		this._wgt = wgt;
 		this._localizedSymbols = wgt._localizedSymbols;
-		this.$super('$init', a);
-	},
-	format: 'yyyyMMdd',
-	parseConstraint_: function (constraint) {
+	}
+
+	protected override parseConstraint_(constraint: string): void {
 		var len = this.format.length + 1,
 			arr = this._cstArr,
 			wgt = this._wgt,
@@ -41,29 +47,30 @@ zul.inp.SimpleDateConstraint = zk.$extends(zul.inp.SimpleConstraint, {
 				zk.error('Unknown constraint: ' + constraint);
 			this._beg = new zk.fmt.Calendar(null, this._localizedSymbols).parseDate(constraint.substring(7, j), this.format, null, null, null, tz);
 			this._end = new zk.fmt.Calendar(null, this._localizedSymbols).parseDate(constraint.substring(j + 3, j + 3 + len), this.format, null, null, null, tz);
-			if (this._beg.getTime() > this._end.getTime()) {
+			if (this._beg!.getTime() > this._end!.getTime()) {
 				var d = this._beg;
 				this._beg = this._end;
 				this._end = d;
 			}
 
-			this._beg.setHours(0, 0, 0, 0);
-			this._end.setHours(0, 0, 0, 0);
+			this._beg!.setHours(0, 0, 0, 0);
+			this._end!.setHours(0, 0, 0, 0);
 			arr[arr.length] = 'between';
 		} else if (constraint.startsWith('before') && !constraint.startsWith('before_')) {
 			this._end = new zk.fmt.Calendar(null, this._localizedSymbols).parseDate(constraint.substring(6, 6 + len), this.format, null, null, null, tz);
-			this._end.setHours(0, 0, 0, 0);
+			this._end!.setHours(0, 0, 0, 0);
 			arr[arr.length] = 'before';
 		} else if (constraint.startsWith('after') && !constraint.startsWith('after_')) {
 			this._beg = new zk.fmt.Calendar(null, this._localizedSymbols).parseDate(constraint.substring(5, 5 + len), this.format, null, null, null, tz);
-			this._beg.setHours(0, 0, 0, 0);
+			this._beg!.setHours(0, 0, 0, 0);
 			arr[arr.length] = 'after';
 		}
-		return this.$supers('parseConstraint_', arguments);
-	},
-	validate: function (wgt, val) {
-		var result = this.$supers('validate', arguments);
-		if (val instanceof DateImpl) {
+		return super.parseConstraint_(constraint);
+	}
+
+	public override validate(wgt: zk.Widget, val: unknown): zul.inp.SimpleConstraintErrorMessages | string | undefined {
+		var result = super.validate(wgt, val);
+		if (val instanceof window.DateImpl) {
 			var msg = this._errmsg,
 				v = Dates.newInstance([val.getFullYear(), val.getMonth(), val.getDate()], val.getTimeZone());
 			if (this._beg != null && this._beg.getTime() > v.getTime())
@@ -72,17 +79,19 @@ zul.inp.SimpleDateConstraint = zk.$extends(zul.inp.SimpleConstraint, {
 				return msg['between'] || msg['before'] || this.outOfRangeValue();
 		}
 		return result;
-	},
+	}
+
 	/** Returns the message about out of range value
 	 * @return String
 	 */
-	outOfRangeValue: function () {
+	public outOfRangeValue(): string {
 		var format = this._wgt._format,
 			separator = msgzul.OUT_OF_RANGE_SEPARATOR ? ' ' + msgzul.OUT_OF_RANGE_SEPARATOR + ' ' : ' ~ ';
 		return msgzul.OUT_OF_RANGE + ': ' + (this._beg != null ? this._end != null ?
 				new zk.fmt.Calendar(null, this._localizedSymbols).formatDate(this._beg, format) + separator
 					+ new zk.fmt.Calendar().formatDate(this._end, format) :
 					'>= ' + new zk.fmt.Calendar().formatDate(this._beg, format) :
-					'<= ' + new zk.fmt.Calendar().formatDate(this._end, format));
+					'<= ' + new zk.fmt.Calendar().formatDate(this._end!, format));
 	}
-});
+}
+zul.inp.SimpleDateConstraint = zk.regClass(SimpleDateConstraint);

@@ -727,7 +727,6 @@ function _initUM(uplder: Uploader, flnm: string): void {
 	});
 }
 
-// FIXME: DRY?
 export declare class UploadManager extends zul.wgt.Popup {
 	public override onFloatUp(_ctl: zk.ZWatchController): void
 	public getFileItem(id: string): zul.wgt.Div

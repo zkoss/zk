@@ -19,7 +19,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 export class SimpleLocalTimeConstraint extends zul.inp.SimpleConstraint {
 	public readonly format = 'HHmmss';
-	private _wgt: zul.db.Datebox;
+	private _wgt: zul.db.Timebox;
 	private _localizedSymbols?: zk.LocalizedSymbols;
 	private _beg?: DateImpl;
 	private _end?: DateImpl;
@@ -30,7 +30,7 @@ export class SimpleLocalTimeConstraint extends zul.inp.SimpleConstraint {
 	 * such as "no positive", 0x0001.
 	 * @param zk.Widget the datebox
 	 */
-	public constructor(a: unknown, wgt: zul.db.Datebox) {
+	public constructor(a: unknown, wgt: zul.db.Timebox) {
 		super(a);
 		this._wgt = wgt;
 		this._localizedSymbols = wgt._localizedSymbols;
