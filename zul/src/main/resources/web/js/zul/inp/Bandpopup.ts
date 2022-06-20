@@ -41,7 +41,7 @@ export class Bandpopup extends zul.Widget {
 	}
 
 	private _focusout(e: JQuery.FocusOutEvent): void {
-		var bandbox = this.parent as zul.inp.Bandbox | null,
+		var bandbox = this.parent as zul.inp.Bandbox<never> | null,
 			self = this;
 		if (e.relatedTarget) {
 			if (bandbox && bandbox.isOpen() && !jq.isAncestor(bandbox.$n('pp'), e.relatedTarget as HTMLElement))

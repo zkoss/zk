@@ -40,7 +40,7 @@ export class SimpleConstraint extends zk.Object {
 	public _errmsg: SimpleConstraintErrorMessages;
 	private _cst?: string;
 	public serverValidate?: boolean;
-	private _cstArr!: string[];
+	protected _cstArr!: string[];
 
 	/** Constructor.
 	 * @param Object a

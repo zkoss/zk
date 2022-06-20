@@ -23,14 +23,14 @@ var _dirMap = {
  * A error message box that is displayed as a popup.
  */
 export class Errorbox extends zul.wgt.Notification {
+	public override parent: zul.inp.InputWidget<unknown> | null;
 	public _defaultPos = 'end_before';
 	public msg: string;
 	public sclass?: string;
 	public iconSclass: string;
 	private __ebox?: Errorbox;
-	declare public parent: zul.inp.InputWidget | null;
 
-	public constructor(owner: zul.inp.InputWidget, msg: string) {
+	public constructor(owner: zul.inp.InputWidget<unknown>, msg: string) {
 		super(msg, {ref: owner});
 		this.parent = owner;
 		this.parent.__ebox = this;
@@ -55,7 +55,8 @@ export class Errorbox extends zul.wgt.Notification {
 			jq(document.body).append(this);
 
 		// Fixed IE6/7 issue in B50-2941554.zul
-		var self = this, cstp = this.parent!._cst && this.parent!._cst._pos;
+		var self = this,
+			cstp = this.parent!._cst && (this.parent!._cst as zul.inp.SimpleConstraint)._pos;
 		// ZK-2069: show only if is in view //B85-ZK-3321
 		if (this.parent!.isRealVisible()) {
 			setTimeout(function () {
@@ -115,6 +116,7 @@ export class Errorbox extends zul.wgt.Notification {
 		super.unbind_(skipper, after, keepRod);
 	}
 
+	// Super defines getInputNode as optional property (not a method), and super cannot be made abstract.
 	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 	// @ts-ignore
 	public override getInputNode(): HTMLInputElement | null | undefined {
@@ -134,7 +136,7 @@ export class Errorbox extends zul.wgt.Notification {
 			this._fixarrow();
 	}
 
-	public override setDomVisible_(node: HTMLElement, visible: boolean, opts?: Partial<zk.DomVisibleOptions>): void {
+	public override setDomVisible_(node: HTMLElement, visible: boolean, opts?: zk.DomVisibleOptions): void {
 		super.setDomVisible_(node, visible, opts);
 		var stackup = this._stackup;
 		if (stackup) stackup.style.display = visible ? '' : 'none';
@@ -215,14 +217,13 @@ export class Errorbox extends zul.wgt.Notification {
 		if (jq.isOverlapped(
 		elofs, [el.offsetWidth, el.offsetHeight],
 		nodeofs, [node.offsetWidth, node.offsetHeight])) {
-			var parent = this.parent!.$n()!, y,
+			var parent = this.parent!.$n_(),
 				ptofs = zk(parent).cmOffset(),
 				pthgh = parent.offsetHeight,
-				ptbtm = ptofs[1] + pthgh;
-			y = elofs[1] + el.offsetHeight <= ptbtm ? ptbtm : ptofs[1] - node.offsetHeight;
-				//we compare bottom because default is located below
-
-			var ofs = zk(node).toStyleOffset(0, y);
+				ptbtm = ptofs[1] + pthgh,
+				y = elofs[1] + el.offsetHeight <= ptbtm ? ptbtm : ptofs[1] - node.offsetHeight,
+				/* we compare bottom because default is located below */
+				ofs = zk(node).toStyleOffset(0, y);
 			node.style.top = ofs[1] + 'px';
 			this._fixarrow();
 		}
@@ -236,7 +237,7 @@ export class Errorbox extends zul.wgt.Notification {
 			nodeofs = zk(node).revisedOffset(),
 			dx = nodeofs[0] - ptofs[0],
 			dy = nodeofs[1] - ptofs[1],
-			dir,
+			dir: string,
 			s = node.style,
 			pw = 2 + (zk(pointer).borderWidth() / 2) || 0,
 			ph = 2 + (zk(pointer).borderHeight() / 2) || 0;
@@ -305,7 +306,7 @@ export class Errorbox extends zul.wgt.Notification {
 			dir = dir == 'ru' || dir == 'lu' ? 'u' : 'd';
 		}
 
-		pointer.className = this.$s('pointer') + (_dirMap[dir] ? ' ' + this.$s(_dirMap[dir]) : '');
+		pointer.className = this.$s('pointer') + (_dirMap[dir] ? ' ' + this.$s(_dirMap[dir as keyof typeof _dirMap]) : '');
 		jq(pointer).show();
 	}
 
@@ -314,7 +315,7 @@ export class Errorbox extends zul.wgt.Notification {
 	}
 
 	protected override getPositionArgs_(): zul.wgt.PositionArgs {
-		var p = this.parent, cstp = p ? p._cst && p._cst._pos : false;
+		var p = this.parent, cstp = p ? p._cst && (p._cst as zul.inp.SimpleConstraint)._pos : false;
 		return [p, null, cstp || 'end_before', {dodgeRef: !cstp}];
 	}
 

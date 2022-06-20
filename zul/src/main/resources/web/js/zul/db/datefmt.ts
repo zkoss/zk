@@ -113,7 +113,7 @@ class LeapDay extends zk.Object {
 	public constructor(date: DateImpl)
 	public constructor(y: number, m: number, d: number, hr: number, min: number, sec: number, msec: number, tz?: string)
 	public constructor(y: DateImpl | number, m?, d?, hr?, min?, sec?, msec?, tz?: string) {
-		super(y, m, d, hr, min, sec, msec, tz);
+		super();
 		if (arguments.length > 1) {
 			this._date = Dates.newInstance([y as number, m, d, hr, min, sec, msec], tz);
 		} else
@@ -185,9 +185,9 @@ export let Date = {
 	parseDate(
 		txt: string,
 		fmt: string,
-		nonLenient: boolean | null,
-		refval: DateImpl | null,
-		localizedSymbols: zk.LocalizedSymbols | null,
+		nonLenient?: boolean | null,
+		refval?: DateImpl | null,
+		localizedSymbols?: zk.LocalizedSymbols | null,
 		tz?: string,
 		strictDate?: boolean
 	): DateImpl | undefined {
@@ -447,7 +447,7 @@ export let Date = {
 
 		if (hasHour1 && isAM === false)
 			hr += 12;
-		var dt: DateImpl | LeapDay; // FIXME: enforce common interface?
+		var dt: DateImpl | LeapDay; // TODO: enforce common interface?
 		if (m == 1 && d == 29 && ydelta) {
 			dt = new LeapDay(y, m, d, hr, min, sec, msec, tz);
 			dt.setOffset(ydelta);
@@ -473,7 +473,7 @@ export let Date = {
 		return +dt == +refval ? refval : dt as DateImpl;
 			//we have to use getTime() since dt == refVal always false
 	},
-	formatDate(val: DateImpl, fmt: string, localizedSymbols: zk.LocalizedSymbols): string {
+	formatDate(val: DateImpl, fmt?: string, localizedSymbols?: zk.LocalizedSymbols): string {
 		if (!fmt) fmt = 'yyyy/MM/dd';
 
 		localizedSymbols = localizedSymbols || {
@@ -644,7 +644,7 @@ export class Calendar extends zk.Object {
 		return this._offset;
 	}
 
-	public formatDate(val: DateImpl, fmt: string, localizedSymbols: zk.LocalizedSymbols): string {
+	public formatDate(val: DateImpl, fmt?: string, localizedSymbols?: zk.LocalizedSymbols): string {
 		var d: LeapDay | undefined;
 		if (localizedSymbols) {
 			var localeDateTimeFormat = new Intl.DateTimeFormat(localizedSymbols.LAN_TAG, {year: 'numeric'});
@@ -672,9 +672,9 @@ export class Calendar extends zk.Object {
 	public parseDate(
 		txt: string,
 		fmt: string,
-		strict: boolean | null,
-		refval: DateImpl | null,
-		localizedSymbols: zk.LocalizedSymbols | null,
+		strict?: boolean | null,
+		refval?: DateImpl | null,
+		localizedSymbols?: zk.LocalizedSymbols | null,
 		tz?: string,
 		strictDate?: boolean
 	): DateImpl | undefined {

@@ -609,7 +609,7 @@ export class Widget extends zk.Widget {
 			}
 		}
 		if (popupOnly !== true)
-			super.doClick_(evt);
+			super.doClick_(evt); // super method doesn't accept a second parameter
 	}
 
 	protected override doRightClick_(evt: zk.Event): void {

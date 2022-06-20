@@ -87,7 +87,7 @@ export let Number = {
 		}
 	},
 	//Test if rounding is required (used if Rounding is UNNECESSARY
-	isRoundingRequired(val: string | number, fmt: string, localizedSymbols: zk.LocalizedSymbols): boolean {
+	isRoundingRequired(val: string | number, fmt: string, localizedSymbols?: zk.LocalizedSymbols): boolean {
 		if (!fmt || val == null || val == '')
 			return false;
 		
@@ -173,7 +173,7 @@ export let Number = {
 		}
 		return valStr;
 	},
-	format(fmt: string, val: string, rounding: number, localizedSymbols: zk.LocalizedSymbols): string {
+	format(fmt: string, val: string, rounding: number, localizedSymbols?: zk.LocalizedSymbols): string {
 		if (val == null) return '';
 		if (!fmt) return val + '';
 		
@@ -398,7 +398,7 @@ export let Number = {
 		}
 		return ret;
 	},
-	unformat(fmt: string, val: string, ignoreLocale: boolean, localizedSymbols: zk.LocalizedSymbols) {
+	unformat(fmt: string, val: string, ignoreLocale: boolean, localizedSymbols?: zk.LocalizedSymbols) {
 		if (!val) return {raw: val, divscale: 0};
 
 		// localized symbols

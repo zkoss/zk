@@ -16,7 +16,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * A textbox.
  * <p>Default {@link #getZclass}: z-textbox.
  */
-export class Textbox extends zul.inp.InputWidget {
+export class Textbox extends zul.inp.InputWidget<string> {
 	public override _value = '';
 	private _rows = 1;
 	private _submitByEnter?: boolean;

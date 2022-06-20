@@ -67,7 +67,6 @@ export interface JQZK {
 	disableSelection(): this;
 	enableSelection(): this;
 	focus(timeout?: number): boolean;
-	// FIXME: reconsider the following.
 	// The JS logic of JQuery actually accepts any string, but we have to hide any string value apart from
 	// 'slow' and 'fast' for jQuery.d.ts to accept the parameter. It is
 	// `zul.db.Calendar.prototype.animationSpeed_` that broke this contract.

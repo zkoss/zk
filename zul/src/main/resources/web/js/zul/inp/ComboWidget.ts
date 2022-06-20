@@ -28,7 +28,7 @@ export interface OpenOptions {
 /**
  * A skeletal implementation for a combo widget.
  */
-export class ComboWidget extends zul.inp.InputWidget {
+export class ComboWidget<ValueType> extends zul.inp.InputWidget<ValueType> {
 	private _buttonVisible = true;
 	protected _iconSclass: string | null = null;
 	private _autodrop?: boolean;
@@ -109,7 +109,7 @@ export class ComboWidget extends zul.inp.InputWidget {
 
 				var ppofs = this._getPopupSize(pp, pp2);
 				this._fixsz(ppofs);
-				this._checkPopupSpaceAndPosition(pp, this.$n()!);
+				this._checkPopupSpaceAndPosition(pp, this.$n_());
 				this._fixFfWhileBothScrollbar(pp, pp2);
 			}
 		}
@@ -194,7 +194,7 @@ export class ComboWidget extends zul.inp.InputWidget {
 		if (this._open) {
 			var pp = this.getPopupNode_();
 			if (pp)
-				this._checkPopupSpaceAndPosition(pp, this.$n()!);
+				this._checkPopupSpaceAndPosition(pp, this.$n_());
 		}
 	}
 
@@ -265,7 +265,7 @@ export class ComboWidget extends zul.inp.InputWidget {
 	 * @see #open
 	 * @see #close
 	 */
-	public setOpen(open: boolean, opts: Record<string, unknown>): void { // FIXME: opts type is tentative
+	public setOpen(open: boolean, opts: Record<string, unknown>): void {
 		var self = this;
 		if (this.desktop) {
 			if (self.isRealVisible()) {
@@ -388,7 +388,7 @@ export class ComboWidget extends zul.inp.InputWidget {
 		var $pp = zk(pp),
 			ppHeight = $pp.dimension().height,
 			ppWidth = $pp.dimension().width,
-			inpDim = (inp.nodeType ? zk(inp) : inp as unknown as zk.JQZK).dimension(true), // FIXME: reconsider inp type
+			inpDim = zk(inp).dimension(true),
 			inpTop = inpDim.top,
 			inpLeft = inpDim.left,
 			inpHeight = inpDim.height,
@@ -652,7 +652,7 @@ export class ComboWidget extends zul.inp.InputWidget {
 
 	protected override afterKeyDown_(evt: zk.Event, simulated?: boolean): boolean | undefined {
 		if (!simulated && this._inplace)
-			jq(this.$n()!).toggleClass(this.getInplaceCSS(), evt.keyCode == 13 ? null! : false); // FIXME: redundant?
+			jq(this.$n_()).toggleClass(this.getInplaceCSS(), evt.keyCode == 13 ? null! : false);
 
 		return super.afterKeyDown_(evt, simulated);
 	}

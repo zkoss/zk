@@ -33,15 +33,15 @@ import zFlex, {type FlexOrient} from './flex';
 import type { SPush } from './cpsp/serverpush';
 
 export interface RealVisibleOptions {
-	dom: boolean;
-	until: Widget;
-	strict: boolean;
-	cache: Record<string, unknown>;
+	dom?: boolean;
+	until?: Widget;
+	strict?: boolean;
+	cache?: Record<string, unknown>;
 }
 
 export interface DomVisibleOptions {
-	display: boolean;
-	visibility: boolean;
+	display?: boolean;
+	visibility?: boolean;
 }
 
 export interface DomStyleOptions {
@@ -722,7 +722,7 @@ export class Widget extends ZKObject {
 	declare private _userZIndex;
 	declare private _zIndex;
 	declare private z_isDataHandlerBound;
-	declare protected _drag;
+	declare protected _drag: Draggable | null;
 	declare private _preWidth;
 	declare private _preHeight;
 	declare private _action: StringFieldValue;
@@ -2130,7 +2130,7 @@ wgt.$f().main.setTitle("foo");
 	 * @return boolean
 	 * @see #isVisible
 	 */
-	public isRealVisible(opts?: Partial<RealVisibleOptions>): boolean {
+	public isRealVisible(opts?: RealVisibleOptions): boolean {
 		var dom = opts && opts.dom,
 			cache = opts && opts.cache, visited: Widget[] = [], ck,
 			wgt: Widget | null = this;
@@ -2346,7 +2346,7 @@ wgt.$f().main.setTitle("foo");
 	 * <li>visibility - Modify n.style.visibility</li>
 	 * </ul>
 	 */
-	public setDomVisible_(n: HTMLElement, visible: boolean, opts?: Partial<DomVisibleOptions>): void {
+	public setDomVisible_(n: HTMLElement, visible: boolean, opts?: DomVisibleOptions): void {
 		if (!opts || opts.display) {
 			var act;
 			if (act = this.actions_[visible ? 'show' : 'hide'])
@@ -2523,7 +2523,7 @@ wgt.$f().main.setTitle("foo");
 	 * </ul>
 	 * @see #isFloating_
 	 */
-	protected setFloating_(floating: boolean, opts?: Partial<{ node: HTMLElement }>): void {
+	public setFloating_(floating: boolean, opts?: Partial<{ node: HTMLElement }>): void {
 		if (this._floating != floating) {
 			if (floating) {
 				//parent first
@@ -3325,6 +3325,27 @@ function () {
 		if (!n && this.desktop && !this._nodeSolved) {
 			this._node = n = jq(this.uuid, zk)[0];
 			this._nodeSolved = true;
+		}
+		return n;
+	}
+
+	/**
+	 * Returns the DOM element that this widget is bound to. (Never null)
+	 * @return DOMElement
+	 * @see #$n_(String)
+	 * @since 10.0
+	 */
+	/** Returns the child element of the DOM element(s) that this widget is bound to.
+	 *  (Never null)
+	 * @param String subId the sub ID of the child element
+	 * @return DOMElement
+	 * @see #$n_()
+	 * @since 10.0
+	 */
+	 public $n_(subId?: string): HTMLElement {
+		let n = this.$n();
+		if (n == null) {
+			throw 'Node ' + (subId ? 'with ' + subId : '') + ' is not found!';
 		}
 		return n;
 	}
@@ -5317,7 +5338,7 @@ _doFooSelect: function (evt) {
 	 * @param boolean noFocusChange whether zk.currentFocus shall be changed to wgt.
 	 * @param int which the button number that was pressed.
 	 */
-	public static mimicMouseDown_(wgt: Widget, noFocusChange: boolean, which: number): void { //called by mount
+	public static mimicMouseDown_(wgt: Widget, noFocusChange?: boolean, which?: number): void { //called by mount
 		var modal = zk.currentModal;
 		if (modal && !wgt) {
 			var cf = zk.currentFocus;
