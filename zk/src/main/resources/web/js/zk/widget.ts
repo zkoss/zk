@@ -3297,7 +3297,7 @@ function () {
 	 * @since 10.0
 	 */
 	public $n_(subId?: string): HTMLElement {
-		let n = this.$n();
+		let n = this.$n(subId);
 		if (n == null) {
 			throw 'Node ' + (subId ? 'with ' + subId : '') + ' is not found!';
 		}
