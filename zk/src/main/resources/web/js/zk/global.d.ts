@@ -230,6 +230,7 @@ declare namespace zk {
 	type EventMetaData = import('./dom').EventMetaData;
 	type FlexOrient = import('./flex').FlexOrient;
 	type Draggable = import('./drag').Draggable;
+	type DraggableOptions = import('./drag').DraggableOptions;
 	type Long = import('./math').Long;
 	namespace eff {
 		type Mask = import('./effect').Mask;
