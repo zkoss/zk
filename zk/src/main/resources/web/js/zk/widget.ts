@@ -718,7 +718,7 @@ export class Widget extends ZKObject {
 	declare public rawId;
 	declare private _$service;
 	declare private _tooltiptex;
-	declare private childReplacing_;
+	declare protected childReplacing_;
 	declare private _userZIndex;
 	declare private _zIndex;
 	declare private z_isDataHandlerBound;
@@ -3297,7 +3297,7 @@ function () {
 	 * @since 10.0
 	 */
 	public $n_(subId?: string): HTMLElement {
-		let n = this.$n();
+		let n = this.$n(subId);
 		if (n == null) {
 			throw 'Node ' + (subId ? 'with ' + subId : '') + ' is not found!';
 		}
