@@ -2,24 +2,41 @@
  * A simple spinner constraint.
  * @disable(zkgwt)
  */
-zul.inp.SimpleSpinnerConstraint = zk.$extends(zul.inp.SimpleConstraint, {
-	$define: {
-		/** Returns the minimum value.
-		 * @return int
-		 */
-		/** Set the minimum value.
-		 * @param int min
-		 */
-		min: _zkf = function () {},
-		/** Returns the maximum value.
-		 * @return int
-		 */
-		/** Set the maximum value.
-		 * @param int max
-		 */
-		max: _zkf
-	},
-	parseConstraint_: function (cst) {
+export class SimpleSpinnerConstraint extends zul.inp.SimpleConstraint {
+	private _min?: number;
+	private _max?: number;
+
+	/** Returns the minimum value.
+	 * @return int
+	 */
+	public getMin(): number | undefined {
+		return this._min;
+	}
+
+	/** Set the minimum value.
+	 * @param int min
+	 */
+	public setMin(min: number): this {
+		this._min = min;
+		return this;
+	}
+
+	/** Returns the maximum value.
+	 * @return int
+	 */
+	public getMax(): number | undefined {
+		return this._max;
+	}
+
+	/** Set the maximum value.
+	 * @param int max
+	 */
+	public setMax(max: number): this {
+		this._max = max;
+		return this;
+	}
+
+	protected override parseConstraint_(cst: string): void {
 		var cstList = cst.replace(/ +/g, ' ').split(/[, ]/),
 			len = cstList.length,
 			isSpinner,
@@ -41,10 +58,11 @@ zul.inp.SimpleSpinnerConstraint = zk.$extends(zul.inp.SimpleConstraint, {
 		if (isSpinner) {
 			return;
 		} else
-			return this.$supers('parseConstraint_', arguments);
-	},
-	validate: function (wgt, val) {
-		var result = this.$supers('validate', arguments);
+			return super.parseConstraint_(cst);
+	}
+
+	public override validate(wgt: zk.Widget, val: unknown): zul.inp.SimpleConstraintErrorMessages | string | undefined {
+		var result = super.validate(wgt, val);
 		switch (typeof val) {
 			case 'number':
 				var maxErr = this._max && val > this._max,
@@ -52,10 +70,11 @@ zul.inp.SimpleSpinnerConstraint = zk.$extends(zul.inp.SimpleConstraint, {
 				if (maxErr || minErr) {
 					var maxminErrMsg = this._errmsg['maxmin'],
 						errmsg = maxminErrMsg ? maxminErrMsg : (maxErr ? this._errmsg['max'] : this._errmsg['min']),
-						msg = errmsg ? errmsg : msgzul.OUT_OF_RANGE + ': ' + (this._min != null ? this._max != null ?
+						msg: string | undefined = errmsg ? errmsg : msgzul.OUT_OF_RANGE + ': ' + (this._min != null ? this._max != null ?
 							this._min + ' - ' + this._max : '>= ' + this._min : '<= ' + this._max);
 				}
 		}
 		return msg || result;
 	}
-});
+}
+zul.inp.SimpleSpinnerConstraint = zk.regClass(SimpleSpinnerConstraint);
