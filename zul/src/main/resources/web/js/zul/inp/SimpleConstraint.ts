@@ -264,7 +264,7 @@ export class SimpleConstraint extends zk.Object {
 		if (val && (val as DateImpl).getFullYear) {
 			var date = val as DateImpl,
 				tz = date.getTimeZone(),
-				today = zUtl.today(null, tz),
+				today = zUtl.today(false, tz),
 				date = window.Dates.newInstance([date.getFullYear(), date.getMonth(), date.getDate()], tz);
 			if ((+today - +date) / 86400000 < 0) {
 				if (f.NO_FUTURE) return msg['NO_FUTURE'] || this._msgDateDenied();

@@ -156,7 +156,6 @@ declare var DateImpl: typeof import('./dateImpl').DateImpl; // assigned at the e
 declare var Dates: typeof import('./dateImpl').Dates;
 
 interface Window {
-	zjq: typeof import('./dom').zjq;
 	zkservice: typeof import('./widget').zkservice;
 	zkopt: typeof import('./widget').zkopt;
 	onIframeURLChange: typeof import('./au').onIframeURLChange;
@@ -176,6 +175,7 @@ interface Window {
 	zkme: typeof import('./mount').zkme;
 	zkdh: typeof import('./mount').zkdh;
 }
+declare var zjq: typeof import('./dom').zjq;
 declare var zkac: typeof import('./mount').zkac;
 declare function $eval(x: string): unknown;
 declare var zkreg: typeof import('./widget').zkreg;

@@ -1,4 +1,4 @@
-/* Vlayout.js
+/* Vlayout.ts
 
 	Purpose:
 
@@ -17,11 +17,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>Default {@link #getZclass}: z-vlayout.
  * @since 5.0.4
  */
-zul.box.Vlayout = zk.$extends(zul.box.Layout, {
-	isVertical_: function () {
+export class Vlayout extends zul.box.Layout {
+    protected override isVertical_(): boolean {
 		return true;
-	},
-	getFlexDirection_: function () {
+	}
+
+    protected override getFlexDirection_(): string {
 		return 'column';
 	}
-});
+}
+zul.box.Vlayout = zk.regClass(Vlayout);

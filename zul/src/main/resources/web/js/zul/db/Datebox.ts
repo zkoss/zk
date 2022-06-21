@@ -467,7 +467,7 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 	 * @since 9.0.0
 	 * @return Date
 	 */
-	public getDefaultDateTime(): Date | undefined {
+	public getDefaultDateTime(): DateImpl | undefined {
 		return this._defaultDateTime;
 	}
 

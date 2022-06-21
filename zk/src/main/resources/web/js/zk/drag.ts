@@ -41,7 +41,7 @@ export interface DraggableOptions {
 	starteffect(dg: Draggable, evt?: Event): void;
 	endghosting(dg: Draggable, node: HTMLElement): void;
 	change(dg: Draggable, offset: Offset, evt?: Event): void;
-	constraint(dg: Draggable, offset: Offset, evt: Event): Offset;
+	constraint: string | ((dg: Draggable, offset: Offset, evt: Event) => Offset);
 	draw(dg: Draggable, offset: Offset, evt: Event): void;
 	ignoredrag(dg: Draggable, offset: Offset, evt: Event): boolean;
 	handle: HTMLElement;

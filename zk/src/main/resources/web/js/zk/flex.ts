@@ -539,7 +539,7 @@ let zFlex = { //static methods
 		if (!wgt._nvflex && !wgt._nhflex)
 			return;
 
-		const cssFlexAppliedInfo = wgt._cssFlexApplied,
+		var cssFlexAppliedInfo = wgt._cssFlexApplied,
 			minFlexInfoListKeyStr = 'minFlexInfoList',
 			pwgt = wgt.parent;
 		if (!pwgt) return;
@@ -560,8 +560,13 @@ let zFlex = { //static methods
 			wgt._cssflex = false;
 			return;
 		}
-		let flexInfo = zFlex.getFlexInfo(wgt),
-			isRow = flexInfo.isFlexRow,
+
+		let flexInfo = zFlex.getFlexInfo(wgt);
+
+		// reassigned after getFlexInfo
+		cssFlexAppliedInfo = wgt._cssFlexApplied;
+
+		let isRow = flexInfo.isFlexRow,
 			fccs: HTMLElement[] = flexInfo.flexContainerChildren,
 			cwgts = flexInfo.childrenWidgets,
 			isAllMin = true,

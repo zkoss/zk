@@ -41,11 +41,10 @@ export const Dates = {
 };
 window.Dates = Dates;
 
-export class DateImpl extends Date {
+export class DateImpl {
 	public _moment: Moment;
 	public _timezone: string;
 	public constructor(m: Moment, tz: string) {
-		super();
 		this._moment = m;
 		this._timezone = tz;
 	}
@@ -62,67 +61,67 @@ export class DateImpl extends Date {
 	public getTimeZone(): string {
 		return this._timezone;
 	}
-	public override getDate(): number {
+	public getDate(): number {
 		return this._getTzMoment().date();
 	}
-	public override getDay(): number {
+	public getDay(): number {
 		return this._getTzMoment().day();
 	}
-	public override getFullYear(): number {
+	public getFullYear(): number {
 		return this._getTzMoment().year();
 	}
-	public override getHours(): number {
+	public getHours(): number {
 		return this._getTzMoment().hour();
 	}
-	public override getMilliseconds(): number {
+	public getMilliseconds(): number {
 		return this._getTzMoment().millisecond();
 	}
-	public override getMinutes(): number {
+	public getMinutes(): number {
 		return this._getTzMoment().minute();
 	}
-	public override getMonth(): number {
+	public getMonth(): number {
 		return this._getTzMoment().month();
 	}
-	public override getSeconds(): number {
+	public getSeconds(): number {
 		return this._getTzMoment().second();
 	}
-	public override getTime(): number {
+	public getTime(): number {
 		return this._moment.valueOf();
 	}
-	public override getTimezoneOffset(): number {
+	public getTimezoneOffset(): number {
 		return -this._getTzMoment().utcOffset();
 	}
-	public override getUTCDate(): number {
+	public getUTCDate(): number {
 		return this._getUTCMoment().date();
 	}
-	public override getUTCDay(): number {
+	public getUTCDay(): number {
 		return this._getUTCMoment().day();
 	}
-	public override getUTCFullYear(): number {
+	public getUTCFullYear(): number {
 		return this._getUTCMoment().year();
 	}
-	public override getUTCHours(): number {
+	public getUTCHours(): number {
 		return this._getUTCMoment().hour();
 	}
-	public override getUTCMilliseconds(): number {
+	public getUTCMilliseconds(): number {
 		return this._getUTCMoment().millisecond();
 	}
-	public override getUTCMinutes(): number {
+	public getUTCMinutes(): number {
 		return this._getUTCMoment().minute();
 	}
-	public override getUTCMonth(): number {
+	public getUTCMonth(): number {
 		return this._getUTCMoment().month();
 	}
-	public override getUTCSeconds(): number {
+	public getUTCSeconds(): number {
 		return this._getUTCMoment().second();
 	}
 	public getYear(): number {
 		return this._getTzMoment().year() - 1900;
 	}
-	public override setDate(v: number): number {
+	public setDate(v: number): number {
 		return this._getTzMoment().date(v).valueOf();
 	}
-	public override setFullYear(y: number, m?: number, d?: number): number {
+	public setFullYear(y: number, m?: number, d?: number): number {
 		var mt = this._getTzMoment();
 		mt.year(y);
 		if (m != null) {
@@ -131,7 +130,7 @@ export class DateImpl extends Date {
 		}
 		return mt.valueOf();
 	}
-	public override setHours(hr: number, min?: number, sec?: number, msec?: number): number {
+	public setHours(hr: number, min?: number, sec?: number, msec?: number): number {
 		var mt = this._getTzMoment();
 		mt.hour(hr);
 		if (min != null) {
@@ -143,71 +142,71 @@ export class DateImpl extends Date {
 		}
 		return mt.valueOf();
 	}
-	public override setMilliseconds(v: number): number {
+	public setMilliseconds(v: number): number {
 		return this._getTzMoment().millisecond(v).valueOf();
 	}
-	public override setMinutes(v: number): number {
+	public setMinutes(v: number): number {
 		return this._getTzMoment().minute(v).valueOf();
 	}
-	public override setMonth(v: number): number {
+	public setMonth(v: number): number {
 		return this._getTzMoment().month(v).valueOf();
 	}
-	public override setSeconds(v: number): number {
+	public setSeconds(v: number): number {
 		return this._getTzMoment().second(v).valueOf();
 	}
-	public override setTime(v: number): number {
+	public setTime(v: number): number {
 		this._moment = zk.mm(v);
 		return this._moment.valueOf();
 	}
-	public override setUTCDate(v: number): number {
+	public setUTCDate(v: number): number {
 		return this._getUTCMoment().date(v).valueOf();
 	}
-	public override setUTCFullYear(v: number): number {
+	public setUTCFullYear(v: number): number {
 		return this._getUTCMoment().year(v).valueOf();
 	}
-	public override setUTCHours(v: number): number {
+	public setUTCHours(v: number): number {
 		return this._getUTCMoment().hour(v).valueOf();
 	}
-	public override setUTCMilliseconds(v: number): number {
+	public setUTCMilliseconds(v: number): number {
 		return this._getUTCMoment().millisecond(v).valueOf();
 	}
-	public override setUTCMinutes(v: number): number {
+	public setUTCMinutes(v: number): number {
 		return this._getUTCMoment().minute(v).valueOf();
 	}
-	public override setUTCMonth(v: number): number {
+	public setUTCMonth(v: number): number {
 		return this._getUTCMoment().month(v).valueOf();
 	}
-	public override setUTCSeconds(v: number): number {
+	public setUTCSeconds(v: number): number {
 		return this._getUTCMoment().second(v).valueOf();
 	}
 	public setYear(v: number): number {
 		return this._getTzMoment().year(v).valueOf();
 	}
-	public override toString(): string {
+	public toString(): string {
 		return this._getTzMoment().toString();
 	}
-	public override valueOf(): number {
+	public valueOf(): number {
 		return this._moment.valueOf();
 	}
-	public override toDateString(): string {
+	public toDateString(): string {
 		return '';
 	}
-	public override toTimeString(): string {
+	public toTimeString(): string {
 		return '';
 	}
-	public override toLocaleDateString(): string {
+	public toLocaleDateString(): string {
 		return '';
 	}
-	public override toLocaleTimeString(): string {
+	public toLocaleTimeString(): string {
 		return '';
 	}
-	public override toUTCString(): string {
+	public toUTCString(): string {
 		return '';
 	}
-	public override toISOString(): string {
+	public toISOString(): string {
 		return '';
 	}
-	public override toJSON(key): string {
+	public toJSON(key): string {
 		return '';
 	}
 }

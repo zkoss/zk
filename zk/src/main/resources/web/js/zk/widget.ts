@@ -710,7 +710,7 @@ export class Widget extends ZKObject {
 	declare public _hflex: StringFieldValue;
 	declare public _flexFixed;
 	declare public _nvflex;
-	declare public _nhflex;
+	declare public _nhflex?: number;
 	declare public _hflexsz?: number;
 	declare public _vflexsz?: number;
 
@@ -3135,11 +3135,12 @@ function () {
 	 * @param zk.Desktop desktop
 	 * @see #getCaveNode
 	 */
-	protected insertChildHTML_(child: Widget, before?: Widget | HTMLElement | null, desktop?: Desktop | null): void {
-		var ben, html = child.redrawHTML_();
-		if (before) {
-			if (before instanceof Native) { //native.$n() is usually null
-				ben = before.previousSibling;
+	protected insertChildHTML_(child: Widget, before?: Widget | null, desktop?: Desktop | null): void {
+		var ben, html = child.redrawHTML_(),
+			before0: Widget | HTMLElement | null | undefined = before;
+		if (before0) {
+			if (before0 instanceof Native) { //native.$n() is usually null
+				ben = before0.previousSibling;
 				if (ben) {
 					if (ben == child) //always true (since link ready), but to be safe
 						ben = ben.previousSibling;
@@ -3151,15 +3152,15 @@ function () {
 				}
 				//FUTURE: it is not correct to go here, but no better choice yet
 			}
-			before = (before as Widget).getFirstNode_();
+			before0 = (before0 as Widget).getFirstNode_();
 		}
-		if (!before)
+		if (!before0)
 			for (var w: Widget | null = this; ;) {
 				ben = w.getCaveNode();
 				if (ben) break;
 
 				var w2 = w.nextSibling;
-				if (w2 && (before = w2.getFirstNode_()))
+				if (w2 && (before0 = w2.getFirstNode_()))
 					break;
 
 				if (!(w = w.parent)) {
@@ -3168,10 +3169,10 @@ function () {
 				}
 			}
 
-		if (before) {
-			var sib = (before as HTMLElement).previousSibling;
-			if (_isProlog(sib)) before = sib as HTMLElement;
-			jq(before).before(html);
+		if (before0) {
+			var sib = (before0 as HTMLElement).previousSibling;
+			if (_isProlog(sib)) before0 = sib as HTMLElement;
+			jq(before0).before(html);
 		} else
 			jq(ben).append(html);
 		child.bind(desktop);
@@ -3295,7 +3296,7 @@ function () {
 	 * @see #$n_()
 	 * @since 10.0
 	 */
-	 public $n_(subId?: string): HTMLElement {
+	public $n_(subId?: string): HTMLElement {
 		let n = this.$n();
 		if (n == null) {
 			throw 'Node ' + (subId ? 'with ' + subId : '') + ' is not found!';

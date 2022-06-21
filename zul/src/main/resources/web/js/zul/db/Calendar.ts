@@ -348,7 +348,7 @@ export let Renderer = {
 		var val = wgt.getTodayLinkLabel();
 		if (!val) {
 			var tz = _getTimeZone(wgt);
-			val = new zk.fmt.Calendar().formatDate(zUtl.today(parent, tz), wgt.getFormat(), localizedSymbols);
+			val = new zk.fmt.Calendar().formatDate(zUtl.today(!!wgt.parent, tz), wgt.getFormat(), localizedSymbols);
 		}
 		out.push(val);
 	},
@@ -701,7 +701,7 @@ export class Calendar extends zul.Widget {
 			shiftTime = Dates.newInstance(oldTime.getTime(), tz),
 			minTime = Dates.newInstance([this._minyear, 0, 1, 0, 0, 0, 0], tz),
 			maxTime = Dates.newInstance([this._maxyear, 11, 31, 23, 59, 59, 999], tz),
-			today = zUtl.today(null, tz);
+			today = zUtl.today(false, tz);
 
 		switch (this._view) {
 		case 'day':
@@ -897,7 +897,7 @@ export class Calendar extends zul.Widget {
 	}
 
 	public _clickToday(): void {
-		this.setValue(zUtl.today(parent, _getTimeZone(this)));
+		this.setValue(zUtl.today(!!this.parent, _getTimeZone(this)));
 		this._setView('day');
 	}
 
@@ -1034,7 +1034,7 @@ export class Calendar extends zul.Widget {
 		var newTime = _newDate(year, month, day, !nofix, tz);
 		if (!ignoreUpdate) {
 			this._value = newTime;
-			if (!Renderer.disabled(this, year, month, day, zUtl.today(null, this._defaultTzone))) {
+			if (!Renderer.disabled(this, year, month, day, zUtl.today(false, this._defaultTzone))) {
 				this._selectedValue = newTime;
 				this.fire('onChange', {value: this._selectedValue, shallClose: false, shiftView: true});
 			}
@@ -1251,7 +1251,7 @@ export class Calendar extends zul.Widget {
 				v = Dates.newInstance([y, m, 1], 'UTC').getDay() - DOW_1ST,
 				last = Dates.newInstance([y, m + 1, 0], 'UTC').getDate(), //last date of this month
 				prev = Dates.newInstance([y, m, 0], 'UTC').getDate(), //last date of previous month
-				today = zUtl.today(null, tz), //no time part
+				today = zUtl.today(false, tz), //no time part
 				outsideClass = this.$s('outside'),
 				disdClass = this.$s('disabled');
 
