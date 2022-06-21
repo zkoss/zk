@@ -3,8 +3,8 @@
  * @disable(zkgwt)
  */
 export class SimpleSpinnerConstraint extends zul.inp.SimpleConstraint {
-	private _min?: number;
-	private _max?: number;
+	public _min?: number;
+	public _max?: number;
 
 	/** Returns the minimum value.
 	 * @return int
