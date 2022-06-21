@@ -135,7 +135,7 @@ export class Scrollbar extends zk.Object {
 			wheelAmountStep: 3, //wheel amount of step
 			startPositionX: 0, //hor-bar start position
 			startPositionY: 0 //ver-bar start position
-		});
+		}) as ScrollbarOptions;
 		this.widget = zk.Widget.$(cave)!;
 		this.uid = this.widget.uuid;
 		//initialize scroll-bar position
