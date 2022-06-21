@@ -15,11 +15,7 @@ export declare namespace menu {
         public _getUploadRef(): HTMLElement | null | undefined
     }
 }
-// export * as mesh from './mesh';
-export declare namespace mesh {
-    export import HeaderWidget = zul.LabelImageWidget; // zk/flex
-    export import Auxheader = zul.mesh.HeaderWidget; // zk/flex
-}
+export * as mesh from './mesh';
 // export * as sel from './sel';
 export declare namespace sel {
     export import ItemWidget = zul.Widget; // zk/dom
