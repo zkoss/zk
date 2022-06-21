@@ -1,4 +1,4 @@
-/* Spinner.js
+/* Spinner.ts
 
 	Purpose:
 
@@ -17,50 +17,77 @@ it will be useful, but WITHOUT ANY WARRANTY.
  *
  * <p>Default {@link #getZclass}: z-spinner.
  */
-zul.inp.Spinner = zk.$extends(zul.inp.NumberInputWidget, {
-	_step: 1,
-	_buttonVisible: true,
-	$define: {
-		/** Return the step of spinner
-		 * @return int
-		 */
-		/** Set the step of spinner
-		 * @param int step
-		 */
-		step: _zkf = function () {},
-		/** Returns whether the button (on the right of the textbox) is visible.
-		 * <p>Default: true.
-		 * @return boolean
-		 */
-		/** Sets whether the button (on the right of the textbox) is visible.
-		 * @param boolean visible
-	 	*/
-		buttonVisible: function (v) {
+export class Spinner extends zul.inp.NumberInputWidget<number> {
+	private _step = 1;
+	private _buttonVisible = true;
+	private _min?: number;
+	private _max?: number;
+	private _currentbtn?: HTMLElement | null;
+	private _noPreviousValue?: boolean;
+	public timerId?: number | null;
+
+	/** Return the step of spinner
+	 * @return int
+	 */
+	public getStep(): number | null {
+		return this._step;
+	}
+
+	/** Set the step of spinner
+	 * @param int step
+	 */
+	public setStep(step: number, opts?: Record<string, boolean>): this {
+		this._step = step;
+		return this;
+	}
+
+	/** Returns whether the button (on the right of the textbox) is visible.
+	 * <p>Default: true.
+	 * @return boolean
+	 */
+	public isButtonVisible(): boolean {
+		return this._buttonVisible;
+	}
+
+	/** Sets whether the button (on the right of the textbox) is visible.
+	 * @param boolean visible
+	 */
+	public setButtonVisible(v: boolean, opts?: Record<string, boolean>): this {
+		const o = this._buttonVisible;
+		this._buttonVisible = v;
+
+		if (o !== v || (opts && opts.force)) {
 			zul.inp.RoundUtl.buttonVisible(this, v);
 		}
-	},
-	inRoundedMold: function () {
+
+		return this;
+	}
+
+	public override inRoundedMold(): boolean {
 		return true;
-	},
+	}
+
 	/** Returns the value in int. If null, zero is returned.
 	 * @return int
 	 */
-	intValue: function () {
-		return this.$supers('getValue', arguments);
-	},
-	setConstraint: function (constr) {
+	public intValue(): number | undefined {
+		return super.getValue();
+	}
+
+	public override setConstraint(constr: string): void {
 		if (typeof constr == 'string' && constr.charAt(0) != '['/*by server*/) {
 			var constraint = new zul.inp.SimpleSpinnerConstraint(constr);
 			this._min = constraint._min;
 			this._max = constraint._max;
-			this.$supers('setConstraint', [constraint]);
+			super.setConstraint(constraint);
 		} else
-			this.$supers('setConstraint', arguments);
-	},
-	coerceFromString_: function (value) {//copy from intbox
+			super.setConstraint(constr);
+	}
+
+	protected override coerceFromString_(value: string | null | undefined): zul.inp.CoerceFromStringResult | number | null {//copy from intbox
 		if (!value) return null;
 
-		var info = zk.fmt.Number.unformat(this._format, value, false, this._localizedSymbols),
+		var info = zk.fmt.Number.unformat(this._format!, value, false, this._localizedSymbols),
 			val = parseInt(info.raw, 10);
 		if (isNaN(val) || (info.raw != '' + val && info.raw != '-' + val))
 			return {error: zk.fmt.Text.format(msgzul.INTEGER_REQUIRED, value)};
@@ -69,16 +96,19 @@ zul.inp.Spinner = zk.$extends(zul.inp.NumberInputWidget, {
 
 		if (info.divscale) val = Math.round(val / Math.pow(10, info.divscale));
 		return val;
-	},
-	coerceToString_: function (value) {//copy from intbox
+	}
+
+	protected override coerceToString_(value: unknown): string {//copy from intbox
 		var fmt = this._format;
-		return fmt ? zk.fmt.Number.format(fmt, value, this._rounding, this._localizedSymbols)
+		return fmt ? zk.fmt.Number.format(fmt, value as string, this._rounding!, this._localizedSymbols)
 				: value != null ? '' + value : '';
-	},
-	onHide: zul.inp.Textbox.onHide,
-	validate: zul.inp.Intbox.validate,
-	doKeyDown_: function (evt) {
-		var inp = this.getInputNode();
+	}
+
+	public onHide = null;
+	public validate = null;
+
+	protected override doKeyDown_(evt: zk.Event): void {
+		var inp = this.getInputNode()!;
 		if (inp.disabled || inp.readOnly)
 			return;
 
@@ -94,17 +124,19 @@ zul.inp.Spinner = zk.$extends(zul.inp.NumberInputWidget, {
 			evt.stop();
 			return;
 		}
-		this.$supers('doKeyDown_', arguments);
-	},
-	_ondropbtnup: function (evt) {
+		super.doKeyDown_(evt);
+	}
+
+	private _ondropbtnup(evt: zk.Event): void {
 		this.domUnlisten_(document.body, 'onZMouseup', '_ondropbtnup');
 		this._stopAutoIncProc();
 		this._currentbtn = null;
-	},
-	_btnDown: function (evt) {
+	}
+
+	public _btnDown(evt: zk.Event): void {
 		if (!this._buttonVisible || this._disabled) return;
 
-		var btn = this.$n('btn');
+		var btn = this.$n_('btn');
 
 		if (!zk.dragging) {
 			if (this._currentbtn) // just in case
@@ -129,53 +161,52 @@ zul.inp.Spinner = zk.$extends(zul.inp.NumberInputWidget, {
 
 		// disable browser's text selection
 		evt.stop();
-	},
+	}
+
 	/**
 	 * Sets bound value if the value out of range
 	 */
-	checkValue: function () {
-		var inp = this.getInputNode(),
+	public checkValue(): void {
+		var inp = this.getInputNode()!,
 			min = this._min,
 			max = this._max;
 		this._noPreviousValue = inp.value == '';
 
 		if (!inp.value) {
 			if (min && max)
-				inp.value = (min <= 0 && 0 <= max) ? 0 : min;
+				inp.value = ((min <= 0 && 0 <= max) ? 0 : min) as unknown as string;
 			else if (min)
-				inp.value = min <= 0 ? 0 : min;
+				inp.value = (min <= 0 ? 0 : min) as unknown as string;
 			else if (max)
-				inp.value = 0 <= max ? 0 : max;
+				inp.value = (0 <= max ? 0 : max) as unknown as string;
 			else
-				inp.value = 0;
+				inp.value = (0) as unknown as string;
 		}
-	},
-	_btnUp: function (evt) {
+	}
+
+	public _btnUp(evt: zk.Event): void {
 		if (!this._buttonVisible || this._disabled || zk.dragging) return;
 
 		this._onChanging();
 		this._stopAutoIncProc();
 
-		var inp = this.getInputNode();
-		if (zk.ie < 11) {
-			var len = inp.value.length;
-			zk(inp).setSelectionRange(len, len);
-		}
+		var inp = this.getInputNode()!;
 		inp.focus();
-	},
-	_increase: function (is_add) {
-		var inp = this.getInputNode(),
+	}
+
+	private _increase(is_add: boolean): void {
+		var inp = this.getInputNode()!,
 			value = this.coerceFromString_(inp.value), //ZK-1851 convert input value using pattern
 			result;
 
-		if (value && value.error)
+		if (value && (value as zul.inp.CoerceFromStringResult).error)
 			return; //nothing to do if error happens
 
-		if (this._noPreviousValue && (this._min > 0 || this._max < 0)) {
+		if (this._noPreviousValue && (this._min! > 0 || this._max! < 0)) {
 			result = value;
 			this._noPreviousValue = false;
 		} else {
-			result = is_add ? (value + this._step) : (value - this._step);
+			result = is_add ? ((value as number) + this._step) : ((value as number) - this._step);
 		}
 
 		// control overflow
@@ -192,52 +223,60 @@ zul.inp.Spinner = zk.$extends(zul.inp.NumberInputWidget, {
 
 		this._onChanging();
 
-	},
-	_clearValue: function () {
-		this.getInputNode().value = this._defRawVal = '';
+	}
+
+	public _clearValue(): boolean {
+		this.getInputNode()!.value = this._defRawVal = '';
 		return true;
-	},
-	_startAutoIncProc: function (isup) {
+	}
+
+	private _startAutoIncProc(isup: boolean): void {
 		var widget = this;
 		if (this.timerId)
 			clearInterval(this.timerId);
 
 		this.timerId = setInterval(function () {widget._increase(isup);}, 200);
-		jq(this.$n('btn-' + (isup ? 'up' : 'down'))).addClass(this.$s('active'));
-	},
-	_stopAutoIncProc: function () {
+		jq(this.$n_('btn-' + (isup ? 'up' : 'down'))).addClass(this.$s('active'));
+	}
+
+	private _stopAutoIncProc(): void {
 		if (this.timerId)
 			clearTimeout(this.timerId);
 
 		this.timerId = null;
-		jq('.' + this.$s('icon'), this.$n('btn')).removeClass(this.$s('active'));
-	},
-	doFocus_: function (evt) {
-		this.$supers('doFocus_', arguments);
+		jq('.' + this.$s('icon'), this.$n_('btn')).removeClass(this.$s('active'));
+	}
+
+	protected override doFocus_(evt: zk.Event): void {
+		super.doFocus_(evt);
 
 		zul.inp.RoundUtl.doFocus_(this);
-	},
-	doBlur_: function (evt) {
-		this.$supers('doBlur_', arguments);
+	}
+
+	protected override doBlur_(evt: zk.Event): void {
+		super.doBlur_(evt);
 		zul.inp.RoundUtl.doBlur_(this);
-	},
-	afterKeyDown_: function (evt, simulated) {
+	}
+
+	protected override afterKeyDown_(evt: zk.Event, simulated?: boolean): boolean | undefined {
 		if (!simulated && this._inplace)
-			jq(this.$n()).toggleClass(this.getInplaceCSS(), evt.keyCode == 13 ? null : false);
+			jq(this.$n_()).toggleClass(this.getInplaceCSS(), evt.keyCode == 13 ? null! : false);
 
-		return this.$supers('afterKeyDown_', arguments);
-	},
-	bind_: function () {//after compose
-		this.$supers(zul.inp.Spinner, 'bind_', arguments);
+		return super.afterKeyDown_(evt, simulated);
+	}
 
-		var btn;
+	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {//after compose
+		super.bind_(desktop, skipper, after);
+
+		var btn: HTMLElement | null | undefined;
 		if (btn = this.$n('btn'))
 			this.domListen_(btn, 'onZMouseDown', '_btnDown')
 				.domListen_(btn, 'onZMouseUp', '_btnUp');
 
 		zWatch.listen({onSize: this});
-	},
-	unbind_: function () {
+	}
+
+	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		if (this.timerId) {
 			clearTimeout(this.timerId);
 			this.timerId = null;
@@ -248,12 +287,15 @@ zul.inp.Spinner = zk.$extends(zul.inp.NumberInputWidget, {
 			this.domUnlisten_(btn, 'onZMouseDown', '_btnDown')
 				.domUnlisten_(btn, 'onZMouseUp', '_btnUp');
 
-		this.$supers(zul.inp.Spinner, 'unbind_', arguments);
-	},
-	getBtnUpIconClass_: function () {
+		super.unbind_(skipper, after, keepRod);
+	}
+
+	protected getBtnUpIconClass_(): string {
 		return 'z-icon-angle-up';
-	},
-	getBtnDownIconClass_: function () {
+	}
+
+	protected getBtnDownIconClass_(): string {
 		return 'z-icon-angle-down';
 	}
-});
+}
+zul.inp.Spinner = zk.regClass(Spinner);
