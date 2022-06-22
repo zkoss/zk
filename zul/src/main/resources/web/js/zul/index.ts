@@ -4,5 +4,5 @@ export * from './LabelImageWidget'; // jsdoc="true"
 export * from './ContainerWidget'; // jsdoc="true"
 export * from './Upload'; // jsdoc="true"
 import './WScroll'; // jsdoc="true"
-import './Scrollbar'; // jsdoc="true"
+export * from './Scrollbar'; // jsdoc="true"
 export default {};
