@@ -180,7 +180,7 @@ export class Splitter extends zul.Widget {
 		return sc;
 	}
 
-	public override setZclass(zclass: string | null): void {
+	public override setZclass(zclass: string): void {
 		super.setZclass(zclass);
 		if (this.desktop)
 			this._fixDomClass(true);

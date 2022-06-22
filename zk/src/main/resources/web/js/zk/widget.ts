@@ -680,6 +680,7 @@ const _dragoptions: Partial<DraggableOptions> = {
  */
 // zk scope
 export class Widget extends ZKObject {
+	declare public _navWidth?: number; // zul.mesh.Paging
 	declare public _uplder?: zul.Upload | null;
 	declare public _autodisable_self?: boolean;
 	declare public _uploading?: boolean;
@@ -946,7 +947,7 @@ new zul.wnd.Window({
 	 * @see #setSclass
 	 * @see #setZclass
 	 */
-	public setStyle(style: StringFieldValue): void {
+	public setStyle(style: string): void {
 		if (this._style != style) {
 			this._style = style;
 			this.updateDomStyle_();
@@ -973,7 +974,7 @@ new zul.wnd.Window({
 	 * @see #setZclass
 	 * @see #setStyle
 	 */
-	public setSclass(sclass: StringFieldValue): void {
+	public setSclass(sclass: string): void {
 		if (this._sclass != sclass) {
 			this._sclass = sclass;
 			this.updateDomClass_();
@@ -1002,7 +1003,7 @@ new zul.wnd.Window({
 	 * @see #setSclass
 	 * @see #setStyle
 	 */
-	public setZclass(zclass: StringFieldValue): void {
+	public setZclass(zclass: string): void {
 		if (this._zclass != zclass) {
 			this._zclass = zclass;
 			this._subzcls = {}; // reset
@@ -1066,7 +1067,7 @@ new zul.wnd.Window({
 	 * @param String left the left. Remember to specify 'px', 'pt' or '%'.
 	 * An empty or null value means "auto"
 	 */
-	public setLeft(left: StringFieldValue): void {
+	public setLeft(left: string): void {
 		if (this._left != left) {
 			this._left = left;
 			var n = this.$n();
@@ -1088,7 +1089,7 @@ new zul.wnd.Window({
 	 * @param String top the top. Remember to specify 'px', 'pt' or '%'.
 	 * An empty or null value means "auto"
 	 */
-	public setTop(top: StringFieldValue): void {
+	public setTop(top: string): void {
 		if (this._top != top) {
 			this._top = top;
 			var n = this.$n();
@@ -1107,7 +1108,7 @@ new zul.wnd.Window({
 	 * <p>Default implementation of setTooltiptext: update the title attribute of {@link #$n}
 	 * @param String title the tooltip text
 	 */
-	public setTooltiptext(tooltiptext: StringFieldValue): void {
+	public setTooltiptext(tooltiptext: string): void {
 		if (this._tooltiptext != tooltiptext) {
 			this._tooltiptex = tooltiptext;
 			var n = this.$n();
@@ -2949,7 +2950,7 @@ function () {
 	 * @see #replaceWidget
 	 * @see _global_.jq#replaceWith
 	 */
-	public replaceHTML(n: HTMLElement | string, desktop: Desktop | null, skipper?: Skipper | null, _trim_?: boolean, _callback_?: Callable[]): void {
+	public replaceHTML(n: HTMLElement | string, desktop: Desktop | null, skipper?: Skipper | null, _trim_?: boolean, _callback_?: CallableFunction[]): void {
 		if (!desktop) {
 			desktop = this.desktop;
 			if (!zk.Desktop._ndt) zk.stateless();
@@ -3347,7 +3348,7 @@ function () {
 	 * @see #getZclass()
 	 * @since 7.0.0
 	 */
-	public $s(subclass: string): string {
+	public $s(subclass?: string): string {
 		if (subclass) {
 			var subcls = this._subzcls[subclass];
 			if (!subcls) {
