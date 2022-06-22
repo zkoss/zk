@@ -1,4 +1,4 @@
-/* Anchorlayout.js
+/* Anchorlayout.ts
 
 	Purpose:
 
@@ -21,7 +21,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * @author peterkuo
  * @since 6.0.0
  */
-zul.layout.Anchorlayout = zk.$extends(zul.Widget, {
+export class Anchorlayout extends zul.Widget {}
 	beforeChildAdded_: function (child, insertBefore) {
 		if (!child.$instanceof(zul.layout.Anchorchildren)) {
 			zk.error('Unsupported child for Anchorlayout: ' + child.className);
@@ -29,4 +29,5 @@ zul.layout.Anchorlayout = zk.$extends(zul.Widget, {
 		}
 		return true;
 	}
-});
+}
+zul.layout.Anchorlayout = zk.regClass(Anchorlayout);

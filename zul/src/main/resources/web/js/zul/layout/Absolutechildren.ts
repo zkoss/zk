@@ -1,4 +1,4 @@
-/* Absolutechildren.js
+/* Absolutechildren.ts
 
 	Purpose:
 
@@ -24,51 +24,78 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * @author ashish
  * @since 6.0.0
  */
-zul.layout.Absolutechildren = zk.$extends(zul.Widget, {
-	_x: 0,
-	_y: 0,
-	$define: {
-		/**
-		 * Sets current "x" position within parent container component.
-		 * <p>Default: 0
-		 * @param int x the x position
-		 */
-		/**
-		 * Returns the current "x" position within parent container component
-		 * @return int
-		 */
-		x: function () {
+export class Absolutechildren extends zul.Widget {
+    private _x = 0;
+    private _y = 0;
+
+    /**
+     * Sets current "x" position within parent container component.
+     * <p>Default: 0
+     * @param int x the x position
+     */
+    public setX(x: number, opts?: Record<string, boolean>): this {
+        const o = this._x;
+        this._x = x;
+
+        if (o !== x || (opts && opts.force)) {
 			if (this.desktop) {
 				this._rePositionX();
 			}
-		},
-		/**
-		 * Sets current "y" position within parent container component.
-		 * <p>Default: 0
-		 * @param int y the y position
-		 */
-		/**
-		 * Returns the current "y" position within parent container component
-		 * @return int
-		 */
-		y: function () {
+		}
+
+        return this;
+    }
+
+    /**
+     * Returns the current "x" position within parent container component
+     * @return int
+     */
+    public getX(): number | null {
+        return this._x;
+    }
+
+    /**
+     * Sets current "y" position within parent container component.
+     * <p>Default: 0
+     * @param int y the y position
+     */
+    public setY(y: number, opts?: Record<string, boolean>): this {
+        const o = this._y;
+        this._y = y;
+
+        if (o !== y || (opts && opts.force)) {
 			if (this.desktop) {
 				this._rePositionY();
 			}
 		}
-	},
-	_rePositionBoth: function () {
+
+        return this;
+    }
+
+    /**
+     * Returns the current "y" position within parent container component
+     * @return int
+     */
+    public getY(): number | null {
+        return this._y;
+    }
+
+    private _rePositionBoth(): void {
 		this._rePositionX();
 		this._rePositionY();
-	},
-	_rePositionX: function () {
-		jq(this.$n()).css('left', this._x);
-	},
-	_rePositionY: function () {
-		jq(this.$n()).css('top', this._y);
-	},
-	bind_: function () {
-		this.$supers(zul.layout.Absolutechildren, 'bind_', arguments);
+	}
+
+    private _rePositionX(): void {
+		jq(this.$n()!).css('left', this._x);
+	}
+
+    private _rePositionY(): void {
+		jq(this.$n()!).css('top', this._y);
+	}
+
+	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+		super.bind_(desktop, skipper, after);
 		this._rePositionBoth();
 	}
-});
+}
+zul.layout.Absolutechildren = zk.regClass(Absolutechildren);

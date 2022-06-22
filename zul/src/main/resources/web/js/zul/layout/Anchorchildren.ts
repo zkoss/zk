@@ -1,4 +1,4 @@
-/* Anchorchildren.js
+/* Anchorchildren.ts
 
 	Purpose:
 
@@ -20,43 +20,56 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * @author peterkuo
  * @since 6.0.0
  */
-zul.layout.Anchorchildren = zk.$extends(zul.Widget, {
-	_anchor: null,
-	$define: {
-		/**
-		 * Sets the width, height relative to parent, anchorlayout.
-		 * It can use % or number.
-		 * Accept one argument, or two argument separated by space.
-		 * The first argument is for width, and second for height.
-		 * For example, "50% 50%" means the anchorchildren width and height is 50%
-		 * of {@link Anchorlayout}.
-		 * "-30 20%" means the width is 20px less than parent, and height is 20% of parent.
-		 * "50%" means the width is 50% of parent, and the height is no assumed.
-		 * @param String anchor
-		 */
-		/**
-		 * Returns the anchor setting.
-		 * @return String
-		 */
-		anchor: function () {
+export class Anchorchildren extends zul.Widget {
+    private _anchor?: string;
+
+    /**
+     * Sets the width, height relative to parent, anchorlayout.
+     * It can use % or number.
+     * Accept one argument, or two argument separated by space.
+     * The first argument is for width, and second for height.
+     * For example, "50% 50%" means the anchorchildren width and height is 50%
+     * of {@link Anchorlayout}.
+     * "-30 20%" means the width is 20px less than parent, and height is 20% of parent.
+     * "50%" means the width is 50% of parent, and the height is no assumed.
+     * @param String anchor
+     */
+    public setAnchor(anchor: string, opts?: Record<string, boolean>): this {
+        const o = this._anchor;
+        this._anchor = anchor;
+
+        if (o !== anchor || (opts && opts.force)) {
 			if (this.desktop)
 				this.onSize();
 		}
-	},
-	bind_: function () {
-		this.$supers(zul.layout.Anchorchildren, 'bind_', arguments);
+
+        return this;
+    }
+
+    /**
+     * Returns the anchor setting.
+     * @return String
+     */
+    public getAnchor(): string | undefined {
+        return this._anchor;
+    }
+
+	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+		super.bind_(desktop, skipper, after);
 		zWatch.listen({onSize: this});
-	},
-	unbind_: function () {
+	}
+
+	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		zWatch.unlisten({onSize: this});
-		this.$supers(zul.layout.Anchorchildren, 'unbind_', arguments);
-	},
-	onSize: function () {
+		super.unbind_(skipper, after, keepRod);
+	}
+
+    public override onSize(): void {
 		//calculate the height and width in pixel based on _anchor
-		var n = this.$n(),
-			parentn = this.parent.$n(),
-			parentwidth = jq(parentn).width(),
-			parentheight = jq(parentn).height(),
+		var n = this.$n_(),
+			parentn = this.parent!.$n_(),
+			parentwidth = jq(parentn).width()!,
+			parentheight = jq(parentn).height()!,
 			arr = this._anchor ? this._anchor.split(' ', 2) : [],
 			anchorWidth = arr[0],
 			anchorHeight = arr[1];
@@ -77,4 +90,5 @@ zul.layout.Anchorchildren = zk.$extends(zul.Widget, {
 			}
 		}
 	}
-});
+}
+zul.layout.Anchorchildren = zk.regClass(Anchorchildren);

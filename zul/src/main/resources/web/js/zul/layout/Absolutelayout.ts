@@ -1,4 +1,4 @@
-/* Absolutelayout.js
+/* Absolutelayout.ts
 
 	Purpose:
 
@@ -22,7 +22,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * @author ashish
  * @since 6.0.0
  */
-zul.layout.Absolutelayout = zk.$extends(zul.Widget, {
+export class Absolutelayout extends zul.Widget {
 	beforeChildAdded_: function (child, insertBefore) {
 		if (!child.$instanceof(zul.layout.Absolutechildren)) {
 			zk.error('Unsupported child for Absolutelayout: ' + child.className);
@@ -30,11 +30,12 @@ zul.layout.Absolutelayout = zk.$extends(zul.Widget, {
 		}
 		return true;
 	}
-}, {
-	redraw: function (out) {
+	
+	public static redraw(this: zk.Widget, out: string[]): void {
 		out.push('<div ', this.domAttrs_(), '>');
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
 		out.push('</div>');
 	}
-});
+}
+zul.layout.Absolutelayout = zk.regClass(Absolutelayout);
