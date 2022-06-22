@@ -2054,9 +2054,7 @@ interface ZKVars {
 	wgt: typeof import('./wgt/WidgetInfo');
 	xml: typeof import('./xml/utl');
 	zuml: typeof import('./zuml/Parser');
-	fmt: typeof import('./fmt/msgfmt')
-		& typeof import('./fmt/numfmt')
-		& typeof import('@zul/db/datefmt');
+	fmt: typeof import('./fmt');
 	canvas: typeof import('./canvas/canvas');
 	cpsp: typeof import('./cpsp/serverpush');
 

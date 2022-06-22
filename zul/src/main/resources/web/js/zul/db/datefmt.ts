@@ -178,7 +178,7 @@ class LeapDay extends zk.Object {
 		return this._date.getTimeZone();
 	}
 }
-export let Date = {
+export let FmtDate = {
 	_isoDateTimeFormat: new Intl.DateTimeFormat('en-US', {year: 'numeric'}),
 	// strictDate: No invalid date allowed (e.g., Jan 0 or Nov 31)
 	// nonLenient: strictDate + inputs must match this object's format (no additional character allowed)
@@ -607,7 +607,7 @@ export let Date = {
 		return null;
 	}
 };
-zk.fmt.Date = Date;
+zk.fmt.Date = FmtDate;
 /**
  * The <code>calendar</code> object provides a way
  * to convert between a specific instant in time for locale-sensitive
