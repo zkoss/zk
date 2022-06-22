@@ -20,9 +20,9 @@ export interface CoerceFromStringResult {
 	server?: boolean;
 	error?: string;
 }
-export interface InputValidationResult extends CoerceFromStringResult {
-	value?: unknown;
-	rawValue?: unknown;
+export interface InputValidationResult<ValueType> extends CoerceFromStringResult {
+	value?: ValueType;
+	rawValue?: string;
 }
 
 var _keyIgnorable = zk.opera ? function (code: number) {
@@ -30,7 +30,7 @@ var _keyIgnorable = zk.opera ? function (code: number) {
 	} : function (code: number) {
 		return code >= 32;
 	},
-	_fixInput = zk.ie ? function (wgt: InputWidget) { //ZK-426; ZK-3237: IE 11 also have this problem
+	_fixInput = zk.ie ? function<T> (wgt: InputWidget<T>) { //ZK-426; ZK-3237: IE 11 also have this problem
 		setTimeout(function () { //we have to delay since zk.currentFocus might not be ready
 			if (wgt == zk.currentFocus)
 				window.zjq.fixInput(wgt.getInputNode()!);
@@ -45,7 +45,7 @@ var _keyIgnorable = zk.opera ? function (code: number) {
  */
 export let RoundUtl = {
 	// @since 7.0.0
-	buttonVisible(wgt: InputWidget, v: boolean): void {
+	buttonVisible<T>(wgt: InputWidget<T>, v: boolean): void {
 		var n = wgt.$n('btn');
 		if (n) {
 			var fnm = v ? 'removeClass' : 'addClass';
@@ -56,7 +56,7 @@ export let RoundUtl = {
 		}
 	},
 	// @since 7.0.0
-	doFocus_(wgt: InputWidget): void {
+	doFocus_<T>(wgt: InputWidget<T>): void {
 		if (wgt._inplace) {
 			if (wgt._inplaceTimerId != null) {
 				clearTimeout(wgt._inplaceTimerId);
@@ -65,9 +65,9 @@ export let RoundUtl = {
 			wgt.onSize();
 		}
 	},
-	doBlur_(wgt: InputWidget): void {
+	doBlur_<T>(wgt: InputWidget<T>): void {
 		if (wgt._inplace) {
-			var n = wgt.$n()!;
+			var n = wgt.$n_();
 			if (wgt._inplaceTimerId != null) {
 				clearTimeout(wgt._inplaceTimerId);
 				wgt._inplaceTimerId = null;
@@ -94,7 +94,7 @@ zul.inp.RoundUtl = RoundUtl;
 &lt;?script content="zk.afterLoad('zul.inp',function(){zul.inp.InputWidget.onChangingDelay=1000;})"?&gt;
 </code></pre>
  */
-export class InputWidget extends zul.Widget {
+export class InputWidget<ValueType> extends zul.Widget {
 	private _maxlength = 0;
 	private _cols = 0;
 	//_tabindex: 0,
@@ -104,11 +104,11 @@ export class InputWidget extends zul.Widget {
 	private _lastinputAttributes: Record<string, string> | null = null;
 	public _inplaceTimerId: number | null = null;
 	public _inplaceTimeout = 150;
-	protected _inplaceIgnore = false;
+	public _inplaceIgnore = false;
 
 	private _name?: string;
-	public _cst?: zul.inp.SimpleConstraint | null;
-	private _reVald?: boolean;
+	public _cst?: zul.inp.SimpleConstraint | string | null;
+	protected _reVald?: boolean;
 	protected valueEnter_?: string | null;
 	protected valueSel_?: string | null;
 	private _lastChg?: string;
@@ -118,7 +118,7 @@ export class InputWidget extends zul.Widget {
 	protected _multiline?: boolean;
 	protected _disabled?: boolean;
 	protected _readonly?: boolean;
-	public _value?: unknown;
+	public _value?: ValueType;
 	protected _errmsg?: string | null;
 	protected _defRawVal?: string;
 	private _lastKeyDown?: number | null;
@@ -470,7 +470,7 @@ export class InputWidget extends zul.Widget {
 		// bug ZK-1695: need to focus input and set selection range in Firefox
 		var inpNode = this.getInputNode();
 		if (inpNode) { // ZK-4538: can't be focused anyway unless rendered
-			if (zk.currentFocus != inpNode as unknown)
+			if (zk.currentFocus != inpNode as unknown) // FIXME: comparing a zk.Widget with a HTMLElement?
 				this.focus_();
 
 			if (start == null && end == null)
@@ -519,13 +519,13 @@ export class InputWidget extends zul.Widget {
 	 * @since 5.0.5
 	 */
 	public setText(txt: string): void {
-		this.setValue(this.coerceFromString_(txt));
+		this.setValue(this.coerceFromString_(txt) as ValueType);
 	}
 
 	/** Returns the value in the String format.
 	 * @return String
 	 */
-	public getValue(): unknown {
+	public getValue(): ValueType | undefined {
 		return this._value;
 	}
 
@@ -537,38 +537,39 @@ export class InputWidget extends zul.Widget {
 	 * @param boolean fromServer whether it is called from the server.
 	 * The error message will be cleared if true
 	 */
-	public setValue(value: unknown, fromServer?: boolean): void {
-		var vi: InputValidationResult | undefined;
+	public setValue(value: ValueType | number | string, fromServer?: boolean): void {
+		var vi: InputValidationResult<ValueType> | undefined;
 		// for zephyr to treat as "value" attribute from "_value" at client side
 		if (typeof value == 'number' || typeof value == 'string')
 			value = this.unmarshall_(value);
 		if (fromServer)
 			this.clearErrorMessage(this._cst != null);
 		else {
-			vi = this._validate(value);
-			value = vi.value;
+			vi = this._validate(value as ValueType);
+			value = vi.value!;
 		}
 
 		InputWidget._clearOnChanging(this);
 
 		//Note: for performance reason, we don't send value back if
 		//the validation shall be done at server, i.e., if (vi.server)
-		if ((!vi || !vi.error) && (fromServer || !this._equalValue(this._value, value))) {
-			this._value = value;
+		if ((!vi || !vi.error) && (fromServer || !this._equalValue(this._value, value as ValueType))) {
+			this._value = value as ValueType;
 			var inp = this.getInputNode();
 			if (inp) //check if bind
-				this._defRawVal = this._lastChg = inp.value = value = this.coerceToString_(value);
+				this._defRawVal = this._lastChg = inp.value = value = this.coerceToString_(value as ValueType);
 		}
 	}
 
 	//value object set from server(smartUpdate, renderProperites)
-	public set_value(value: void, fromServer?: boolean): void {
+	public set_value(value: string | number, fromServer?: boolean): void {
 		this.setValue(this.unmarshall_(value), fromServer);
 	}
 
 	/** Returns the input node of this widget
 	 * @return DOMElement
 	 */
+	// Super defines getInputNode as optional property (not a method), and super cannot be made abstract.
 	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 	// @ts-ignore
 	public override getInputNode(): HTMLInputElement | null | undefined {
@@ -648,7 +649,7 @@ export class InputWidget extends zul.Widget {
 	/** Returns the constraint, or null if no constraint at all.
 	 * @return zul.inp.SimpleConstraint
 	 */
-	public getConstraint(): zul.inp.SimpleConstraint | null | undefined {
+	public getConstraint(): zul.inp.SimpleConstraint | string | null | undefined {
 		return this._cst;
 	}
 
@@ -668,7 +669,7 @@ export class InputWidget extends zul.Widget {
 
 			// Bug #2280308
 			if (this._errbox) {
-				var self = this, cstp = self._cst && self._cst._pos;
+				var self = this, cstp = self._cst && (self._cst as zul.inp.SimpleConstraint)._pos;
 				setTimeout(function () {
 					if (self._errbox)
 						self._errbox.open(self, null, cstp || self._errbox._defaultPos,
@@ -820,8 +821,8 @@ export class InputWidget extends zul.Widget {
 	 * @param String value the string to coerce from
 	 * @return String
 	 */
-	protected coerceFromString_(value: string | null | undefined): unknown {
-		return value;
+	protected coerceFromString_(value: string | null | undefined): zul.inp.CoerceFromStringResult | ValueType | null | undefined {
+		return value as unknown as ValueType;
 	}
 
 	/** Coerces the value passed to {@link #setValue}.
@@ -835,8 +836,8 @@ export class InputWidget extends zul.Widget {
 	 * @param Object value the value that will be coerced to a string
 	 * @return String
 	 */
-	protected coerceToString_(value: unknown): string {
-		return (value as string | null | undefined) || '';
+	protected coerceToString_(value: ValueType | undefined): string {
+		return (value as unknown as string | null | undefined) || '';
 	}
 
 	private _markError(msg: string, val: string | null, noOnError?: boolean): void {
@@ -846,12 +847,12 @@ export class InputWidget extends zul.Widget {
 			jq(this.getInputNode()!).addClass(this.$s('invalid'));
 			
 			interface CustomConstraint extends zul.inp.SimpleConstraint {
-				showCustomError?: (inp: InputWidget, msg: string) => boolean;
+				showCustomError?: (inp: InputWidget<ValueType>, msg: string) => boolean;
 			}
-			var cst: CustomConstraint | null | undefined = this._cst,
+			var cst = this._cst,
 				errbox: CustomConstraint['showCustomError'] | boolean;
-			if (cst as unknown != '[c') {
-				if (cst && (errbox = cst.showCustomError))
+			if (cst != '[c') {
+				if (cst && (errbox = (cst as CustomConstraint).showCustomError))
 					errbox = errbox.call(cst, this, msg);
 
 				if (!errbox) this._errbox = this.showError_(msg);
@@ -868,7 +869,7 @@ export class InputWidget extends zul.Widget {
 	 * such as 'no positive", 0x0001.
 	 */
 	protected validate_(val: unknown): string | boolean | undefined {
-		var cst: zul.inp.SimpleConstraint | null | undefined;
+		var cst: zul.inp.SimpleConstraint | string | null | undefined;
 		if (cst = this._cst) {
 			if (typeof cst == 'string') return false; //by server
 			var msg = cst.validate(this, val);
@@ -877,21 +878,21 @@ export class InputWidget extends zul.Widget {
 		}
 	}
 
-	private _validate(value: unknown): InputValidationResult {
+	private _validate(value: string | ValueType | null | undefined): InputValidationResult<ValueType> {
 		zul.inp.validating = true;
 		try {
-			var val = value,
+			var val: typeof value | CoerceFromStringResult = value,
 				msg: string | boolean | undefined;
 			if (typeof val == 'string' || val == null) {
 				val = this.coerceFromString_(val as string);
-				if (val && ((msg = (val as InputValidationResult).error) || (val as InputValidationResult).server)) {
+				if (val && ((msg = (val as CoerceFromStringResult).error) || (val as CoerceFromStringResult).server)) {
 					this.clearErrorMessage(true);
-					if ((val as InputValidationResult).server || this._cst as unknown == '[c') { //CustomConstraint
+					if ((val as CoerceFromStringResult).server || this._cst as unknown == '[c') { //CustomConstraint
 						this._reVald = false;
-						return {rawValue: value || '', server: true}; //let server to validate it
+						return {rawValue: (value as string) || '', server: true}; //let server to validate it
 					}
 					this._markError(msg!, val as string);
-					return val as InputValidationResult;
+					return val;
 				}
 			}
 
@@ -903,7 +904,7 @@ export class InputWidget extends zul.Widget {
 				msg = this.validate_(val);
 				if (msg === false) {
 					this._reVald = false;
-					return {value: val, server: true}; //let server to validate it
+					return {value: val as ValueType, server: true}; //let server to validate it
 				}
 				if (msg) {
 					this._markError(msg as string, val as string);
@@ -913,7 +914,7 @@ export class InputWidget extends zul.Widget {
 				if (em)
 					this._sendClearingErrorEvent(val);
 			}
-			return {value: val};
+			return {value: val as ValueType};
 		} finally {
 			zul.inp.validating = false;
 		}
@@ -954,16 +955,16 @@ export class InputWidget extends zul.Widget {
 		}
 	}
 
-	private _equalValue(a: unknown, b: unknown): boolean {
+	private _equalValue(a: ValueType | undefined, b: ValueType | undefined): boolean {
 		return a == b || this.marshall_(a) == this.marshall_(b);
 	}
 
-	protected marshall_(val: unknown): unknown {
-		return val;
+	protected marshall_(val: ValueType | undefined): string | undefined {
+		return val as never;
 	}
 
-	protected unmarshall_(val: unknown): unknown {
-		return val;
+	protected unmarshall_(val: string | number): ValueType | '' | 0 {
+		return val as never;
 	}
 
 	/** Updates the change to server by firing onChange if necessary.
@@ -980,7 +981,7 @@ export class InputWidget extends zul.Widget {
 		var wasErr = this._errmsg,
 			vi = this._validate(value);
 		if (!vi.error || vi.server) {
-			var upd, data: InputValidationResult | undefined;
+			var upd, data: InputValidationResult<ValueType> | undefined;
 			if (vi.rawValue != null) { //coerce failed
 				data = {rawValue: vi.rawValue};
 			} else if (!vi.error) {
@@ -1209,7 +1210,7 @@ export class InputWidget extends zul.Widget {
 			if (inp) {
 				var zkinp = zk(inp);
 				// IE/Edge would get caretPos as 0 if not getting focus first
-				if (zk.currentFocus != inp as unknown)
+				if (zk.currentFocus != inp as unknown) // FIXME: comparing a zk.Widget with a HTMLElement?
 					zkinp.focus();
 				var caretPos = zkinp.getSelectionRange()[0],
 					txt = this.getText(),
@@ -1241,12 +1242,12 @@ export class InputWidget extends zul.Widget {
 	public static onChangingForced = true;
 
 	// for errorbox, datebox, combowidget
-	public static _isInView(wgt: Pick<InputWidget, 'getInputNode'>): boolean {
+	public static _isInView<T>(wgt: Pick<InputWidget<T>, 'getInputNode'>): boolean {
 		var n = wgt.getInputNode();
 		return zk(n).isRealScrollIntoView(true);
 	}
 
-	private static _onChanging(this: InputWidget, timeout?: number): void {
+	private static _onChanging<T>(this: InputWidget<T>, timeout?: number): void {
 		//Note: "this" is available here
 		if (this.desktop) {
 			var inp = this.getInputNode()!,
@@ -1264,19 +1265,19 @@ export class InputWidget extends zul.Widget {
 		}
 	}
 
-	private static _onChangeData(wgt: InputWidget, inf: Record<string, unknown>, selbk?: boolean): Record<string, unknown> {
+	private static _onChangeData<T>(wgt: InputWidget<T>, inf: Record<string, unknown>, selbk?: boolean): Record<string, unknown> {
 		inf.start = zk(wgt.getInputNode()).getSelectionRange()[0];
 		if (selbk) inf.bySelectBack = true;
 		return inf;
 	}
 
-	private static _startOnChanging(wgt: InputWidget): void {
+	private static _startOnChanging<T>(wgt: InputWidget<T>): void {
 		InputWidget._stopOnChanging(wgt);
 		wgt._tidChg = setTimeout(
 			wgt.proxy(InputWidget._onChanging), InputWidget.onChangingDelay);
 	}
 
-	private static _stopOnChanging(wgt: InputWidget, onBlur?: boolean): void {
+	private static _stopOnChanging<T>(wgt: InputWidget<T>, onBlur?: boolean): void {
 		if (wgt._tidChg) {
 			clearTimeout(wgt._tidChg);
 			wgt._tidChg = null;
@@ -1290,11 +1291,11 @@ export class InputWidget extends zul.Widget {
 		}
 	}
 
-	private static _clearOnChanging(wgt: InputWidget): void {
+	private static _clearOnChanging<T>(wgt: InputWidget<T>): void {
 		wgt.valueEnter_ = wgt.valueSel_ = null;
 	}
 
-	private static _clearInplaceTimeout(widget: InputWidget): void {
+	private static _clearInplaceTimeout<T>(widget: InputWidget<T>): void {
 		if (widget._inplaceTimerId) {
 			clearTimeout(widget._inplaceTimerId);
 			widget._inplaceTimerId = null;
@@ -1336,8 +1337,8 @@ export let InputCtrl = {
 	 * @return boolean
 	 */
 	isIgnoredDragForErrorbox(dg: zk.Draggable, pointer: zk.Offset, evt: zk.Event): boolean {
-		var c = dg.control!.$n('c');
-		return evt.domTarget == c && jq(c!).hasClass('z-errbox-close-over');
+		var c = dg.control!.$n_('c');
+		return evt.domTarget == c && jq(c).hasClass('z-errbox-close-over');
 	}
 };
 zul.inp.InputCtrl = InputCtrl;

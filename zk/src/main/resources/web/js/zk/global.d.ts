@@ -151,10 +151,11 @@ interface Array<T> {
 }
 
 type Moment = import('moment-timezone').Moment;
-type DateImpl = import('./dateImpl').DateImpl;
+type DateImpl = import('./dateImpl').DateImpl; // exposed under globalThis, see the end of zk/dateImpl
+declare var DateImpl: typeof import('./dateImpl').DateImpl; // assigned at the end of zk/dateImpl
+declare var Dates: typeof import('./dateImpl').Dates;
 
 interface Window {
-	zjq: typeof import('./dom').zjq;
 	zkservice: typeof import('./widget').zkservice;
 	zkopt: typeof import('./widget').zkopt;
 	onIframeURLChange: typeof import('./au').onIframeURLChange;
@@ -164,8 +165,6 @@ interface Window {
 	zkver(ver: string, build: string, ctxURI: string, updURI: string, modVers: Record<string, string>, opts: Record<string, unknown>): void;
 	zkmld(wgtcls: Record<string, unknown>, molds: Record<string, (() => void)>): void;
 	zkamn(pkg: string, fn: (() => void)): void;
-	DateImpl: typeof import('./dateImpl').DateImpl;
-	Dates: typeof import('./dateImpl').Dates;
 
 	// assigned in ./mount
 	zkdt: typeof import('./mount').zkdt;
@@ -231,11 +230,14 @@ declare namespace zk {
 	type EventMetaData = import('./dom').EventMetaData;
 	type FlexOrient = import('./flex').FlexOrient;
 	type Draggable = import('./drag').Draggable;
-	type DateImpl = import('./dateImpl').DateImpl;
+	type DraggableOptions = import('./drag').DraggableOptions;
 	type Long = import('./math').Long;
 	namespace eff {
 		type Mask = import('./effect').Mask;
 		type Shadow = import('./effect').Shadow;
+	}
+	namespace fmt {
+		type Calendar = typeof zk.fmt.Calendar;
 	}
 
 	interface Websocket {
@@ -272,6 +274,33 @@ declare namespace zk {
 		command(cmd: string, args?: Record<string, unknown> | null, opts?: EventOptions | null, timeout?: number): this;
 		globalCommand(cmd: string, args?: Record<string, unknown> | null, opts?: EventOptions | null, timeout?: number): this;
 		upload(cmd: string, file: File): void;
+	}
+
+	interface LocalizedSymbols {
+		APM?: string[];
+		DECIMAL?: string;
+		DOW_1ST?: number;
+		ERA?: string;
+		ERAS?: Record<string, LocalizedSymbols.ErasElementType>;
+		FDOW?: string[];
+		FMON?: string[];
+		GROUPING?: string;
+		LAN_TAG?: string;
+		MINDAYS?: number;
+		MINUS?: string;
+		PER_MILL?: string;
+		PERCENT?: string;
+		S2DOW?: string[];
+		S2MON?: never;
+		SDOW?: string[];
+		SMON?: string[];
+		YDELTA?: number;
+	}
+	namespace LocalizedSymbols {
+		export interface ErasElementType {
+			firstYear: number;
+			direction: number;
+		}
 	}
 }
 

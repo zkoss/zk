@@ -17,21 +17,21 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * @since 5.0.4
  */
 export class Layout extends zul.Widget {
-    private _spacing = '5px';
+	private _spacing = '5px';
 	private _shallSize = false;
 
-    /** Sets the spacing between adjacent children.
-     * @param String spacing the spacing (such as "0", "5px", "3pt" or "1em"),
-     * or null to use the default spacing. If the spacing is set to "auto",
-     * the DOM style is left intact, so the spacing can be customized from
-     * CSS.
-     * @see #getSpacing
-     */
-    public setSpacing(spacing: string, opts?: Record<string, boolean>): this {
-        const o = this._spacing;
-        this._spacing = spacing;
+	/** Sets the spacing between adjacent children.
+	 * @param String spacing the spacing (such as "0", "5px", "3pt" or "1em"),
+	 * or null to use the default spacing. If the spacing is set to "auto",
+	 * the DOM style is left intact, so the spacing can be customized from
+	 * CSS.
+	 * @see #getSpacing
+	 */
+	public setSpacing(spacing: string, opts?: Record<string, boolean>): this {
+		const o = this._spacing;
+		this._spacing = spacing;
 
-        if (o !== spacing || (opts && opts.force)) {
+		if (o !== spacing || (opts && opts.force)) {
 			var n = this.$n(),
 				vert = this.isVertical_(),
 				spc = this._spacing;
@@ -39,26 +39,26 @@ export class Layout extends zul.Widget {
 				jq(n).children('div:not(:last-child)').css('padding-' + (vert ? 'bottom' : 'right'), (spc && spc != 'auto') ? spc : '');
 		}
 
-        return this;
-    }
+		return this;
+	}
 
-    /** Returns the spacing between adjacent children, or null if the default
-     * spacing is used.
-     *
-     * <p>Default: 0.3em (means to use the default spacing).
-     * @return String
-     */
-    public getSpacing(): string {
-        return this._spacing;
-    }
+	/** Returns the spacing between adjacent children, or null if the default
+	 * spacing is used.
+	 *
+	 * <p>Default: 0.3em (means to use the default spacing).
+	 * @return String
+	 */
+	public getSpacing(): string {
+		return this._spacing;
+	}
 
-    private _chdextr(child: zk.Widget): HTMLElement | null | undefined {
+	private _chdextr(child: zk.Widget): HTMLElement | null | undefined {
 		return child.$n('chdex') || child.$n();
 	}
 
-    protected override insertChildHTML_(child: zk.Widget, before?: zk.Widget | null, desktop?: zk.Desktop | null): void {
+	protected override insertChildHTML_(child: zk.Widget, before?: zk.Widget | null, desktop?: zk.Desktop | null): void {
 		if (before)
-			jq(this._chdextr(before!)!).before(this.encloseChildHTML_(child));
+			jq(this._chdextr(before)!).before(this.encloseChildHTML_(child));
 		else {
 			var jqn = jq(this.$n()!),
 			spc = this._spacing;
@@ -68,24 +68,24 @@ export class Layout extends zul.Widget {
 		child.bind(desktop);
 	}
 
-    protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		zWatch.listen({onResponse: this});
 	}
 
-    protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		zWatch.unlisten({onResponse: this});
 		super.unbind_(skipper, after, keepRod);
 	}
 
-    /** Synchronizes the size immediately.
+	/** Synchronizes the size immediately.
 	 * This method is called automatically if the widget is created
 	 * at the server (i.e., {@link #inServer} is true).
 	 * You have to invoke this method only if you create this widget
 	 * at client and add or remove children from this widget.
 	 * @since 5.0.8
 	 */
-    public syncSize(): void {
+	public syncSize(): void {
 		this._shallSize = false;
 		if (this.desktop) {
 			// only fire when child has h/vflex
@@ -98,13 +98,13 @@ export class Layout extends zul.Widget {
 		}
 	}
 
-    public onResponse(): void {
+	public onResponse(): void {
 		if (this._shallSize)
 			this.syncSize();
 	}
 
-    //Bug ZK-1579: should resize if child's visible state changed.
-    protected override onChildVisible_(child: zk.Widget): void {
+	//Bug ZK-1579: should resize if child's visible state changed.
+	protected override onChildVisible_(child: zk.Widget): void {
 		super.onChildVisible_(child);
 		if (this.desktop) {
 			var n = child.$n('chdex');
@@ -114,7 +114,7 @@ export class Layout extends zul.Widget {
 		}
 	}
 
-    protected override onChildAdded_(child: zk.Widget): void {
+	protected override onChildAdded_(child: zk.Widget): void {
 		super.onChildAdded_(child);
 		if (this.desktop) {
 			var n = child.$n('chdex');
@@ -124,27 +124,27 @@ export class Layout extends zul.Widget {
 		}
 	}
 
-    protected override onChildRemoved_(child: zk.Widget): void {
+	protected override onChildRemoved_(child: zk.Widget): void {
 		super.onChildRemoved_(child);
 		if (this.desktop)
 			this._shallSize = true;
 	}
 
-    public override removeChildHTML_(child: zk.Widget, ignoreDom?: boolean): void {
+	public override removeChildHTML_(child: zk.Widget, ignoreDom?: boolean): void {
 		super.removeChildHTML_(child, ignoreDom);
 		jq(child.uuid + '-chdex', zk).remove();
 		if (this._spacing != 'auto' && this.lastChild == child)
 			jq(this.$n()!).children('div:last-child').css('padding-' + (this.isVertical_() ? 'bottom' : 'right'), '');
 	}
 
-    /** Enclose child with HTML tag such as DIV,
+	/** Enclose child with HTML tag such as DIV,
 	 * and return a HTML code or add HTML fragments in out array.
 	 * @param zk.Widget child the child which will be enclosed
 	 * @param Array out an array of HTML fragments.
 	 * @return String
 	 */
-    protected encloseChildHTML_(child: zk.Widget, out?: string[]): string {
-		var oo = new zk.Buffer(),
+	protected encloseChildHTML_(child: zk.Widget, out?: string[]): string {
+		var oo = new zk.Buffer<string>(),
 			vert = this.isVertical_(),
 			spc = this._spacing;
 
@@ -170,22 +170,22 @@ export class Layout extends zul.Widget {
 
 	}
 
-    /**
+	/**
 	 * Returns whether the layout is vertical
 	 * @return boolean
 	 */
-    protected isVertical_(): boolean {
+	protected isVertical_(): boolean {
 		return false;
-    }
+	}
 
-    private _resetBoxSize(vert: boolean): void {
+	private _resetBoxSize(vert: boolean): void {
 		for (var kid = this.firstChild; kid; kid = kid.nextSibling) {
 			var chdex = kid.$n('chdex');
 			// ZK-1861: Js error when flex + visible = false
 			if (chdex) {
 				//ZK-1679: clear height only vflex != min, clear width only hflex != min
 				if (vert && kid._nvflex && kid.getVflex() != 'min') {
-					var n;
+					var n: HTMLElement | null | undefined;
 					if ((n = kid.$n()) && (n.scrollTop || n.scrollLeft)) { // keep the scroll status
 						// do nothing Bug ZK-1885: scrollable div (with vflex) and tooltip
 					} else {
@@ -195,7 +195,7 @@ export class Layout extends zul.Widget {
 						chdex.style.height = '';
 				}
 				if (!vert && kid._nhflex && kid.getHflex() != 'min') {
-					var n;
+					var n: HTMLElement | null | undefined;
 					if ((n = kid.$n()) && (n.scrollTop || n.scrollLeft)) { // keep the scroll status
 						// do nothing Bug ZK-1885: scrollable div (with vflex) and tooltip
 					} else {
@@ -208,8 +208,8 @@ export class Layout extends zul.Widget {
 		}
 	}
 
-    //bug#3296056
-    public override afterResetChildSize_(orient: string): void {
+	//bug#3296056
+	public override afterResetChildSize_(orient: string): void {
 		for (var kid = this.firstChild; kid; kid = kid.nextSibling) {
 			var chdex = kid.$n('chdex');
 			if (chdex) {
@@ -222,8 +222,8 @@ export class Layout extends zul.Widget {
 		}
 	}
 
-    //bug#3042306
-    protected override resetSize_(orient: zk.FlexOrient): void { ////@Overrid zk.Widget#resetSize_, called when beforeSize
+	//bug#3042306
+	protected override resetSize_(orient: zk.FlexOrient): void { ////@Overrid zk.Widget#resetSize_, called when beforeSize
 		super.resetSize_(orient);
 		var vert = this.isVertical_();
 		for (var kid = this.firstChild; kid; kid = kid.nextSibling) {
@@ -241,14 +241,14 @@ export class Layout extends zul.Widget {
 		}
 	}
 
-    public override getChildMinSize_(attr: string, wgt: zk.Widget): number { //'w' for width or 'h' for height
+	public override getChildMinSize_(attr: string, wgt: zk.Widget): number { //'w' for width or 'h' for height
 		var el = wgt.$n()!; //Bug ZK-1578: should get child size instead of chdex size
 		//If child uses hflex="1" when parent has hflex="min"
 		//   Find max sibling width and apply on the child
 		if (attr == 'w' && wgt._hflex && this.isVertical_()) {
-			for (var w = wgt.nextSibling, max = 0, width; w; w = w.nextSibling) {
+			for (var w = wgt.nextSibling, max = 0, width: number; w; w = w.nextSibling) {
 				if (!w._hflex) {
-					width = zjq.minWidth(w.$n()!);
+					width = zjq.minWidth(w.$n_());
 					max = width > max ? width : max;
 				}
 			}
@@ -261,8 +261,8 @@ export class Layout extends zul.Widget {
 		}
 	}
 
-    //Bug ZK-1577: should consider spacing size of all chdex node
-    protected override getContentEdgeHeight_(height: number): number {
+	//Bug ZK-1577: should consider spacing size of all chdex node
+	protected override getContentEdgeHeight_(height: number): number {
 		var h = 0;
 		for (var kid = this.firstChild; kid; kid = kid.nextSibling)
 			h += zk(kid.$n('chdex')).paddingHeight();
@@ -270,8 +270,8 @@ export class Layout extends zul.Widget {
 		return h;
 	}
 
-    //Bug ZK-1577: should consider spacing size of all chdex node
-    protected override getContentEdgeWidth_(width: number): number {
+	//Bug ZK-1577: should consider spacing size of all chdex node
+	protected override getContentEdgeWidth_(width: number): number {
 		var w = 0;
 		for (var kid = this.firstChild; kid; kid = kid.nextSibling)
 			w += zk(kid.$n('chdex')).paddingWidth();
@@ -279,7 +279,7 @@ export class Layout extends zul.Widget {
 		return w;
 	}
 
-    public override beforeChildrenFlex_(child: zk.Widget): boolean {
+	public override beforeChildrenFlex_(child: zk.Widget): boolean {
 		// optimized for performance
 		this._shallSize = false;
 		child._flexFixed = true;
@@ -311,7 +311,7 @@ export class Layout extends zul.Widget {
 
 		for (; xc; xc = xc.nextSibling) {
 			//Bug ZK-2434: not considering the element with vparent (like popup)
-			var zkc;
+			var zkc: zk.JQZK;
 			if (xc.getMold() == 'nodom') { //ZK-4354: a nodom sibling causes hflex=1 calculate the wrong size
 				var fc = xc.firstChild;
 				if (fc) {
@@ -419,7 +419,7 @@ export class Layout extends zul.Widget {
 		lastsz = wdh > 0 ? wdh : 0;
 		while (hflexs.length > 1) {
 			var cwgt = hflexs.shift()!, //{n: node, f: hflex}
-				hsz = (vert ? wdh : (cwgt._nhflex * wdh / hflexsz)) | 0, //cast to integer
+				hsz = (vert ? wdh : (cwgt._nhflex! * wdh / hflexsz)) | 0, //cast to integer
 				chdex = cwgt.$n('chdex')!,
 				minus = zk(chdex).padBorderWidth();
 
@@ -453,7 +453,7 @@ export class Layout extends zul.Widget {
 		return false; //to skip original _fixFlex
 	}
 
-    public override afterChildrenMinFlex_(opts: string): void {
+	public override afterChildrenMinFlex_(opts: string): void {
 		var n = this.$n()!;
 		if (opts == 'h') {
 			if (this.isVertical_()) {

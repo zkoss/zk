@@ -22,6 +22,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * @see Combobox
  */
 export class Comboitem extends zul.LabelImageWidget {
+	public override parent!: zul.inp.Combobox<never>;
 	public _maxFlexWidth = true; //ZK-5044
 	private _description?: string;
 	private _content?: string;
@@ -131,7 +132,7 @@ export class Comboitem extends zul.LabelImageWidget {
 	public override doClick_(evt: zk.Event, popupOnly?: boolean): void {
 		if (!this._disabled) {
 
-			var cb = this.parent as zul.inp.Combobox;
+			var cb = this.parent;
 			cb._select(this, {sendOnSelect: true, sendOnChange: true});
 			this._updateHoverImage();
 			cb.close({sendOnOpen: true, focus: true});

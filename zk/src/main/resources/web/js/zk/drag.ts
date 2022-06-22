@@ -50,7 +50,7 @@ export interface DraggableOptions {
 	ghosting: Callable;
 	stackup: boolean;
 	zIndex: number;
-	snap: (dg: Draggable, offset: Offset) => Offset | Offset;
+	snap: ((dg: Draggable, offset: Offset) => Offset) | Offset;
 }
 
 	var _dragging = {},

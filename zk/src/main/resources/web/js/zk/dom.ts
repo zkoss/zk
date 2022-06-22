@@ -68,7 +68,10 @@ export interface JQZK {
 	disableSelection(): this;
 	enableSelection(): this;
 	focus(timeout?: number): boolean;
-	getAnimationSpeed(defaultValue?: 'slow' | 'fast' | number): 'slow' | 'fast' | number;
+	// The JS logic of JQuery actually accepts any string, but we have to hide any string value apart from
+	// 'slow' and 'fast' for jQuery.d.ts to accept the parameter. It is
+	// `zul.db.Calendar.prototype.animationSpeed_` that broke this contract.
+	getAnimationSpeed(defaultValue?: '_default' | 'slow' | 'fast' | number): 'slow' | 'fast' | number;
 	getSelectionRange(): [number, number];
 	hasHScroll(): boolean;
 	hasVParent(): boolean;

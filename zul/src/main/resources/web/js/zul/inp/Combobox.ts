@@ -28,7 +28,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  *
  * @see Comboitem
  */
-export class Combobox extends zul.inp.ComboWidget {
+export class Combobox<ValueType> extends zul.inp.ComboWidget<ValueType> {
 	private _autocomplete = true;
 	private _instantSelect = true;
 	protected override _iconSclass = 'z-icon-caret-down';
@@ -125,7 +125,7 @@ export class Combobox extends zul.inp.ComboWidget {
 
 	public override onResponse(ctl: zk.ZWatchController, opts: zul.inp.ResponseOptions): void {
 		// Bug ZK-2960: need to wait until the animation is finished before calling super
-		var args = arguments as unknown as Parameters<Combobox['onResponse']>;
+		var args = arguments as unknown as Parameters<Combobox<ValueType>['onResponse']>;
 		if (this.isOpen() && jq(this.getPopupNode_()!).is(':animated')) {
 			var self = this;
 			setTimeout(function () {if (self.desktop) self.onResponse.apply(self, args);}, 50);
@@ -202,7 +202,7 @@ export class Combobox extends zul.inp.ComboWidget {
 		}
 	}
 
-	public override setValue(val: unknown, fromServer?: boolean): void {
+	public override setValue(val: ValueType, fromServer?: boolean): void {
 		super.setValue(val, fromServer);
 		this._reIndex();
 		this.valueEnter_ = null; // reset bug #3014660
@@ -210,7 +210,7 @@ export class Combobox extends zul.inp.ComboWidget {
 	}
 
 	private _reIndex(): void {
-		var value = this.getValue();
+		var value = this.getValue() as unknown;
 		if (!this._sel || value != this._sel.getLabel()) {
 			if (this._sel) {
 				var n = this._sel.$n();
@@ -230,7 +230,7 @@ export class Combobox extends zul.inp.ComboWidget {
 	 * @param String val the name of flag, such as "no positive".
 	 */
 	public validateStrict(val: string): string | null {
-		var cst = this._cst;
+		var cst = this._cst as zul.inp.SimpleConstraint | null | undefined;
 		return this._findItem(val, true) ? null :
 			(cst ? cst._errmsg['STRICT'] ? cst._errmsg['STRICT'] : '' : '') || msgzul.VALUE_NOT_MATCHED;
 	}
@@ -313,7 +313,7 @@ export class Combobox extends zul.inp.ComboWidget {
 	}
 
 	private _isStrict(): boolean | null | undefined {
-		var strict = this.getConstraint();
+		var strict = this.getConstraint() as zul.inp.SimpleConstraint;
 		return strict && strict._flags && strict._flags.STRICT;
 	}
 
@@ -514,7 +514,7 @@ export class Combobox extends zul.inp.ComboWidget {
 	}
 
 	protected override updateChange_(): boolean {
-		var chng = this._value != this.getInputNode()!.value; // B50-ZK-297
+		var chng = this._value != this.getInputNode()!.value as unknown; // B50-ZK-297
 		if (chng) {
 			this._hilite({sendOnSelect: true, sendOnChange: true, noSelectRange: true});
 			return true;

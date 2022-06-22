@@ -16,7 +16,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * An edit box for holding BigDecimal.
  * <p>Default {@link #getZclass}: z-decimalbox.
  */
-export class Decimalbox extends zul.inp.NumberInputWidget {
+export class Decimalbox extends zul.inp.NumberInputWidget<zk.BigDecimal> {
 	private _scale?: number;
 
 	// zk.def
@@ -51,19 +51,19 @@ export class Decimalbox extends zul.inp.NumberInputWidget {
 		return val;
 	}
 
-	protected override coerceToString_(value: zk.BigDecimal | string | null | undefined): string {
+	protected override coerceToString_(value?: zk.BigDecimal | string | null): string {
 		var fmt = this._format;
 		return value != null ? typeof value == 'string' ? value :
 			fmt ? zk.fmt.Number.format(fmt, value.$toString(), this._rounding!, this._localizedSymbols)
 			: value.$toLocaleString() : '';
 	}
 
-	protected override marshall_(val: zk.BigDecimal | null): string | null {
+	protected override marshall_(val: zk.BigDecimal | undefined): string | undefined {
 		return val ? val.$toString() : val;
 	}
 
-	protected override unmarshall_(val: string | number | null): zk.BigDecimal | null {
-		return val ? new zk.BigDecimal(val) : val as null;
+	protected override unmarshall_(val: string | number): zk.BigDecimal | '' | 0 {
+		return val ? new zk.BigDecimal(val) : val as '' | 0;
 	}
 
 	protected override getAllowedKeys_(): string {

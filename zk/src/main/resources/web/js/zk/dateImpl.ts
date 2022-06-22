@@ -48,7 +48,7 @@ export class DateImpl {
 		this._moment = m;
 		this._timezone = tz;
 	}
-	public tz(v): this {
+	public tz(v?: string): this {
 		if (v) this._timezone = parseTzId(v);
 		return this;
 	}
@@ -118,10 +118,10 @@ export class DateImpl {
 	public getYear(): number {
 		return this._getTzMoment().year() - 1900;
 	}
-	public setDate(v): number {
+	public setDate(v: number): number {
 		return this._getTzMoment().date(v).valueOf();
 	}
-	public setFullYear(y: number, m: number, d: number): number {
+	public setFullYear(y: number, m?: number, d?: number): number {
 		var mt = this._getTzMoment();
 		mt.year(y);
 		if (m != null) {
@@ -130,7 +130,7 @@ export class DateImpl {
 		}
 		return mt.valueOf();
 	}
-	public setHours(hr: number, min: number, sec: number, msec: number): number {
+	public setHours(hr: number, min?: number, sec?: number, msec?: number): number {
 		var mt = this._getTzMoment();
 		mt.hour(hr);
 		if (min != null) {

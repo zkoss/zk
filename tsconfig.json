@@ -23,7 +23,12 @@
       "zk",
       "zul",
       "webpack-env"
-    ]
+    ],
+    "paths": {
+      "@zul/*": [
+        "./zul/src/main/resources/web/js/zul/*"
+      ]
+    }
   },
   "include": [
     "zk/src/main/resources/web/js/zk/*"

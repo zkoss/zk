@@ -13,15 +13,8 @@ This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 
-export interface LocalizedSymbols {
-	MINUS?: string;
-	PERCENT?: string;
-	GROUPING?: string;
-	DECIMAL?: string; // zul/inp/Decimalbox
-}
-
 var _allowKeys: string,
-	globallocalizedSymbols: LocalizedSymbols = {};
+	globallocalizedSymbols: Record<string, zk.LocalizedSymbols> = {};
 
 // Fixed merging JS issue
 zk.load('zul.lang', function () {
@@ -31,9 +24,9 @@ zk.load('zul.lang', function () {
  * A skeletal implementation for number-type input box.
  * @since 5.0.8
  */
-export class NumberInputWidget extends zul.inp.FormatWidget {
+export class NumberInputWidget<ValueType> extends zul.inp.FormatWidget<ValueType> {
 	protected _rounding?: number;
-	public _localizedSymbols?: LocalizedSymbols;
+	public _localizedSymbols?: zk.LocalizedSymbols;
 	private _allowKeys?: string | null;
 
 	/** Returns the rounding mode.
@@ -71,7 +64,7 @@ export class NumberInputWidget extends zul.inp.FormatWidget {
 		return this;
 	}
 
-	public getLocalizedSymbols(): LocalizedSymbols | undefined {
+	public getLocalizedSymbols(): zk.LocalizedSymbols | undefined {
 		return this._localizedSymbols;
 	}
 
@@ -79,10 +72,10 @@ export class NumberInputWidget extends zul.inp.FormatWidget {
 		const o = this._localizedSymbols;
 
 		if (val) {
-			var ary = jq.evalJSON(val) as [string, string];
+			var ary = jq.evalJSON(val) as [string, zk.LocalizedSymbols];
 			if (!globallocalizedSymbols[ary[0]])
 				globallocalizedSymbols[ary[0]] = ary[1];
-			this._localizedSymbols = globallocalizedSymbols[ary[0]] as LocalizedSymbols;
+			this._localizedSymbols = globallocalizedSymbols[ary[0]];
 		} else {
 			this._localizedSymbols = val as undefined;
 		}
