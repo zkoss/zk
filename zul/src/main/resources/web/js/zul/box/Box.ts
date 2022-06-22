@@ -671,7 +671,7 @@ export class Box extends zul.Widget {
 		var lastsz = hgh > 0 ? hgh : 0;
 		for (var j = vflexs.length - 1; j > 0; --j) {
 			let cwgt = vflexs.shift()!,
-				vsz = (cwgt._nvflex * hgh / vflexsz) | 0, //cast to integer
+				vsz = (cwgt._nvflex as number * hgh / vflexsz) | 0, //cast to integer
 				//B50-3014664.zul offtop = cwgt.$n().offsetTop,
 				isz = vsz, // B50-3014664.zul vsz - ((zk.ie && offtop > 0) ? (offtop * 2) : 0);
 				chdex = cwgt.$n('chdex')!,

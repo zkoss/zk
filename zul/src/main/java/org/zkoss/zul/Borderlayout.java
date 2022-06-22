@@ -151,7 +151,7 @@ public class Borderlayout extends HtmlBasedComponent {
 	public void setAnimationDisabled(boolean animationDisabled) {
 		if (_animationDisabled != animationDisabled) {
 			_animationDisabled = animationDisabled;
-			smartUpdate("_animationDisabled", animationDisabled);
+			smartUpdate("animationDisabled", animationDisabled);
 		}
 	}
 
@@ -235,7 +235,7 @@ public class Borderlayout extends HtmlBasedComponent {
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
 
-		render(renderer, "_animationDisabled", _animationDisabled);
+		render(renderer, "animationDisabled", _animationDisabled);
 	}
 
 	public void onChildRemoved(Component child) {

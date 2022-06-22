@@ -712,7 +712,7 @@ export class Widget extends ZKObject {
 	declare public _vflex: StringFieldValue | boolean;
 	declare public _hflex: StringFieldValue | boolean;
 	declare public _flexFixed;
-	declare public _nvflex;
+	declare public _nvflex?: number;
 	declare public _nhflex;
 	declare public _hflexsz?: number;
 	declare public _vflexsz?: number;
@@ -5478,10 +5478,10 @@ _doFooSelect: function (evt) {
 	 * @param String subId the ID of a DOM element
 	 * @return String the uuid of the widget (notice that the widget might not exist)
 	 */
-	public static uuid(id: string): string {
+	public static uuid(id: HTMLElement | string): string {
 		var uuid = typeof id == 'object' ? id['id'] || '' : id,
 			j = uuid.indexOf('-');
-		return j >= 0 ? uuid.substring(0, j) : id;
+		return j >= 0 ? uuid.substring(0, j) : id as string;
 	}
 
 	/** Returns the next unique UUID for a widget.

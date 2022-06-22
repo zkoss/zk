@@ -11,6 +11,10 @@ export * as layout from './layout';
 export * as med from './med';
 export * as menu from './menu';
 export * as mesh from './mesh';
+	export abstract class Frozen extends zk.Widget {
+		public _scrollScale: number;
+		public _doScroll(val: number): void;
+	}
 // export * as sel from './sel';
 export declare namespace sel {
     export import ItemWidget = zul.Widget; // zk/dom

@@ -344,7 +344,7 @@ export class Layout extends zul.Widget {
 					} else {
 						vflexs.push(cwgt);
 						if (vert) {
-							vflexsz += cwgt._nvflex;
+							vflexsz += cwgt._nvflex as number;
 
 							//bug#3157031: remove chdex's padding, border, margin
 							hgh = hgh - zkxc.marginHeight();
@@ -385,7 +385,7 @@ export class Layout extends zul.Widget {
 		var lastsz = hgh > 0 ? hgh : 0;
 		while (vflexs.length > 1) {
 			var cwgt = vflexs.shift()!,
-				vsz = (vert ? (cwgt._nvflex * hgh / vflexsz) : hgh) | 0, //cast to integer
+				vsz = (vert ? (cwgt._nvflex as number * hgh / vflexsz) : hgh) | 0, //cast to integer
 				offtop = cwgt.$n()!.offsetTop,
 				isz = vsz - ((zk.ie < 11 && offtop > 0) ? (offtop * 2) : 0),
 				chdex = cwgt.$n('chdex')!,
