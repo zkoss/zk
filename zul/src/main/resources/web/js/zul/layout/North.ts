@@ -1,4 +1,4 @@
-/* North.js
+/* North.ts
 
 	Purpose:
 
@@ -12,56 +12,57 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-var North =
 /**
  * A north region of a border layout.
  * <p>Default {@link #getZclass}: z-north.
  */
-zul.layout.North = zk.$extends(_zkf = zul.layout.LayoutRegion, {
-	_sumFlexHeight: true, //indicate shall add this flex height for borderlayout. @See _fixMinFlex in widget.js
+export class North extends zul.layout.LayoutRegion {
+	public _sumFlexHeight = true; //indicate shall add this flex height for borderlayout. @See _fixMinFlex in widget.js
+	public override sanchor = 't';
+	protected override _cmargins = [0, 0, 0, 0];
+
 	/**
 	 * The width can't be specified in this component because its width is
 	 * determined by other region components ({@link West} or {@link East}).
 	 * @param String width
 	 */
-	setWidth: zk.$void, // readonly
-	sanchor: 't',
+	public override setWidth(width: string): this { // readonly
+		return this;
+	}
 
-	$init: function () {
-		this.$supers('$init', arguments);
-		this._cmargins = [0, 0, 0, 0];
-	},
 	/**
 	 * Returns {@link Borderlayout#NORTH}.
 	 * @return String
 	 */
-	getPosition: function () {
+	public override getPosition(): string {
 		return zul.layout.Borderlayout.NORTH;
-	},
+	}
+
 	/**
 	 * Returns the size of this region. This method is shortcut for
 	 * {@link #getHeight()}.
 	 * @return String
 	 */
-	getSize: function () {
-		// Bug ZK-1490: Cannot find 'getHeight' method in widget.js
-		return this.$supers(North, 'getHeight', arguments);
-	},
+	public getSize(): string | null | undefined {
+		return this.getHeight();
+	}
+
 	/**
 	 * Sets the size of this region. This method is shortcut for
 	 * {@link #setHeight(String)}.
 	 * @param String size
 	 */
-	setSize: function () {
-		return this.$supers(North, 'setHeight', arguments);
-	},
+	public setSize(size: string): this {
+		return this.setHeight(size);
+	}
 
-	_ambit2: function (ambit, mars, split) {
-		ambit.w = mars.left + mars.right;
+	protected override _ambit2(ambit: zul.layout.LayoutRegionAmbit, mars: zk.Dimension, split: { offsetWidth; offsetHeight }): void {
+		ambit.w = mars.width;
 		ambit.h += split.offsetHeight;
-		ambit.ts = ambit.y + ambit.h + mars.bottom; // total size;
-	},
-	_reszSp2: function (ambit, split) {
+		ambit.ts = ambit.y + ambit.h + (mars.height - mars.top); // total size;
+	}
+
+	protected override _reszSp2(ambit: zul.layout.LayoutRegionAmbit, split: { w; h }): Partial<{ left; top; width; height }> {
 		ambit.h -= split.h;
 		return {
 			left: jq.px0(ambit.x),
@@ -69,4 +70,6 @@ zul.layout.North = zk.$extends(_zkf = zul.layout.LayoutRegion, {
 			width: jq.px0(ambit.w)
 		};
 	}
-});
+}
+
+zul.layout.North = zk.regClass(North);
