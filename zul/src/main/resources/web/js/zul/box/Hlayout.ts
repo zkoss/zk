@@ -1,4 +1,4 @@
-/* Hlayout.js
+/* Hlayout.ts
 
 	Purpose:
 

@@ -1,4 +1,4 @@
-/* Splitter.js
+/* Splitter.ts
 
 Purpose:
 

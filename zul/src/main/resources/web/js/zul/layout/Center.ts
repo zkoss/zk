@@ -1,4 +1,4 @@
-/* Center.js
+/* Center.ts
 
 	Purpose:
 
@@ -24,92 +24,131 @@ it will be useful, but WITHOUT ANY WARRANTY.
  *
  * <p>Default {@link #getZclass}: z-center.
  */
-zul.layout.Center = zk.$extends(zul.layout.LayoutRegion, {
-	_sumFlexWidth: true, //indicate shall add this flex width for borderlayout. @See _fixMinFlex in widget.js
-	_maxFlexHeight: true, //indicate shall check if the maximum flex height for borderlayout. @See _fixMinFlex in widget.js
-	_slidable: false, //Center region can't be slided
-	_closable: false, //Center region can't be closed
+export class Center extends zul.layout.LayoutRegion {
+	public _sumFlexWidth = true; //indicate shall add this flex width for borderlayout. @See _fixMinFlex in widget.js
+	public _maxFlexHeight = true;  //indicate shall check if the maximum flex height for borderlayout. @See _fixMinFlex in widget.js
+	protected override _slidable = false; //Center region can't be slided
+	protected override _closable = false; //Center region can't be closed
 
 	/**
 	 * The height can't be specified in this component because its height is
 	 * determined by other region components ({@link North} or {@link South}).
 	 * @param String height
 	 */
-	setHeight: zk.$void,      // readonly
+	public override setHeight(height: string): this { // readonly
+		return this;
+	}
+
 	/**
 	 * The width can't be specified in this component because its width is
 	 * determined by other region components ({@link West} or {@link East}).
 	 * @param String width
 	 */
-	setWidth: zk.$void,       // readonly
+	public override setWidth(width: string): this { // readonly
+		return this;
+	}
+
 	/**
 	 * This component can't be hidden.
 	 * @param boolean visible
 	 */
-	setVisible: zk.$void,     // readonly
+	public override setVisible(visible: boolean): this { // readonly
+		return this;
+	}
+
 	/**
 	 * The size can't be returned in this component.
 	 * @return String
 	 */
-	getSize: zk.$void,        // readonly
+	public getSize = zk.$void;     // readonly
+
 	/**
 	 * The size can't be specified in this component.
 	 * @param String size
 	 */
-	setSize: zk.$void,        // readonly
+	public setSize = zk.$void;        // readonly
+
 	/**
 	 * Center region can't be enabled the collapsed margin functionality.
 	 * @param String cmargins
 	 */
-	setCmargins: zk.$void,    // readonly
+	public override setCmargins = zk.$void;        // readonly
+
 	/**
 	 * Center region can't be enabled the split functionality.
 	 * @param boolean splittable
 	 */
-	setSplittable: zk.$void,  // readonly
+	public override setSplittable(splittable: boolean, opts?: Record<string, boolean>): this {// readonly
+		return this;
+	}
+
 	/**
 	 * Center region can't be closed.
 	 * @param boolean open
 	 */
-	setOpen: zk.$void,        // readonly
+	public override setOpen(open: boolean, opts?: Record<string, boolean>): this {// readonly
+		return this;
+	}
+
 	/**
 	 * Center region can't be enabled the collapse functionality.
 	 * @param boolean collapsible
 	 */
-	setCollapsible: zk.$void, // readonly
+	public override setCollapsible(collapsible: boolean, opts?: Record<string, boolean>): this { // readonly
+		return this;
+	}
+
 	/**
 	 * Center region can't be enabled the maxsize.
 	 * @param int maxsize
 	 */
-	setMaxsize: zk.$void,     // readonly
+	public override setMaxsize(maxsize: number): this {// readonly
+		return this;
+	}
+
 	/**
 	 * Center region can't be enabled the minsize.
 	 * @param int minsize
 	 */
-	setMinsize: zk.$void,     // readonly
+	public override setMinsize(minsize: number): this { // readonly
+		return this;
+	}
+
 	/**
 	 * Center region can't be slided.
 	 * @param boolean slide
 	 */
-	setSlide: zk.$void,       // readonly
+	public override setSlide(slide: boolean, opts?: Record<string, boolean>): this { // readonly
+		return this;
+	}
+
 	/**
 	 * Center region can't be slided.
 	 * @param boolean slidable
 	 */
-	setSlidable: zk.$void,    // readonly
+	public override setSlidable(slidable: boolean): this { // readonly
+		return this;
+	}
+
 	/**
 	 * Center region can't be closed.
 	 * @param boolean closable
 	 */
-	setClosable: zk.$void,    // readonly
-	doMouseOver_: zk.$void,   // do nothing.
-	doMouseOut_: zk.$void,    // do nothing.
-	doClick_: zk.$void,       // do nothing.
+	public override setClosable(v: boolean, opts?: Record<string, boolean>): this { // readonly
+		return this;
+	}
+
+	protected override doMouseOver_ = zk.$void;    // do nothing.
+	protected override doMouseOut_ = zk.$void;     // do nothing.
+	public override doClick_ = zk.$void;           // do nothing.
+
 	/**
 	 * Returns {@link Borderlayout#CENTER}.
 	 * @return String
 	 */
-	getPosition: function () {
+	public override getPosition(): string {
 		return zul.layout.Borderlayout.CENTER;
 	}
-});
+}
+
+zul.layout.Center = zk.regClass(Center);

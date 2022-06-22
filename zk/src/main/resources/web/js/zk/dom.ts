@@ -21,7 +21,8 @@ export interface SlideOptions {
 	anchor: string;
 	easing: string;
 	duration: number;
-	afterAnima: (wgt: zk.Widget) => void; // zul/inp/ComboWidget
+	beforeAnima: (self: zk.JQZK) => void;
+	afterAnima: (node: HTMLElement) => void; // zul/inp/ComboWidget
 }
 
 export interface Dimension {

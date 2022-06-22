@@ -7,7 +7,7 @@ export declare namespace grid {
 }
 export * as inp from './inp';
 // export * as lang from './lang';
-// export * as layout from './layout';
+export * as layout from './layout';
 export * as med from './med';
 // export * as menu from './menu';
 export declare namespace menu {

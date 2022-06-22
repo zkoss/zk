@@ -1,4 +1,4 @@
-/* Vlayout.js
+/* Vlayout.ts
 
 	Purpose:
 
