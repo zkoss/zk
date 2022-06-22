@@ -33,11 +33,20 @@ export * from '.';
 export as namespace zul;
 
 declare global {
+	interface HTMLElement {
+		_lastsz?: null | {
+			height: number;
+			width: number;
+		};
+	}
     const msgzul: Record<
 	| 'DATE_REQUIRED'
 	| 'EMPTY_NOT_ALLOWED'
+	| 'FIRST' // zul/mesh/Paging
 	| 'ILLEGAL_VALUE'
 	| 'INTEGER_REQUIRED' // zul/inp/Intbox
+	| 'LAST' // zul/inp/Intbox
+	| 'NEXT' // zul/inp/Intbox
 	| 'NO_AUDIO_SUPPORT'
 	| 'NO_FUTURE_PAST_TODAY'
 	| 'NO_FUTURE_PAST'
@@ -55,9 +64,10 @@ declare global {
 	| 'NO_ZERO'
 	| 'NUMBER_REQUIRED' // zul/inp/Decimalbox
 	| 'OK' // zul/dom
-	| 'OUT_OF_RANGE'
 	| 'OUT_OF_RANGE_SEPARATOR' // zul/inp/SimpleLocalTimeConstraint
+	| 'OUT_OF_RANGE'
 	| 'PANEL_EXPAND' // zul/inp/ComboWidget
+	| 'PREV' // zul/inp/Intbox
 	| 'UNKNOWN_TYPE'
 	| 'UPLOAD_ERROR_EXCEED_MAXSIZE' // zul/Upload
 	| 'VALUE_NOT_MATCHED' // zul/inp/Combobox
