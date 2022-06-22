@@ -12,7 +12,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-function _setFirstChildFlex(wgt: LayoutRegion & Partial<{ _fcvflex; _fchflex }>, flex: boolean, ignoreMin?: boolean): void {
+function _setFirstChildFlex(wgt: LayoutRegion & Partial<{ _fcvflex: string | null; _fchflex: string | null }>, flex: boolean, ignoreMin?: boolean): void {
 	var cwgt = wgt.getFirstChild();
 	if (cwgt) {
 		if (flex) {
@@ -318,7 +318,7 @@ export class LayoutRegion extends zul.Widget {
 				return this; //nothing changed
 			}
 
-			nonAnima = this.parent['_animationDisabled'] || nonAnima;
+			nonAnima = (this.parent as zul.layout.Borderlayout)._animationDisabled || nonAnima;
 
 			var colled = this.$n('colled'),
 				real = this.$n_('real');
@@ -922,7 +922,7 @@ export class LayoutRegion extends zul.Widget {
 	private _fireSizedIfChildFlex(): void {
 		// only fire when child has h/vflex
 		for (var w = this.firstChild; w; w = w.nextSibling) {
-			if (w._nvflex > 0 || w._nhflex > 0) {
+			if ((w._nvflex && w._nvflex > 0) || (w._nhflex && w._nhflex > 0)) {
 				zUtl.fireSized(this);
 				break;
 			}
@@ -961,7 +961,7 @@ export class LayoutRegion extends zul.Widget {
 	}
 
 	private _docClick(evt: JQuery.TriggeredEvent): void {
-		var target = evt.target;
+		var target = evt.target as HTMLElement;
 		if (this._isSlide && !jq.isAncestor(this.$n('real'), target)) {
 			var btned = this.$n('btned');
 			if (this._closable && (btned == target || btned == target.parentNode)) {
@@ -988,9 +988,9 @@ export class LayoutRegion extends zul.Widget {
 
 		this._open = true;
 
-		for (var region, rs = ['north', 'south', 'west', 'east'],
+		for (var region: LayoutRegion | undefined, rs = ['north', 'south', 'west', 'east'],
 				 j = 0, k = rs.length; j < k; ++j) {
-			region = layout[rs[j]];
+			region = layout[rs[j]] as LayoutRegion | undefined;
 			if (region && (zk(region.$n()).isVisible()
 				|| zk(region.$n('colled')).isVisible())) {
 				var ignoreSplit = region == this,
@@ -1001,10 +1001,10 @@ export class LayoutRegion extends zul.Widget {
 					case 'south':
 						ambit.w = width - ambit.w;
 						if (rs[j] == 'north')
-							center.y = ambit.ts;
+							center.y = ambit.ts!;
 						else
 							ambit.y = height - ambit.y;
-						center.h -= ambit.ts;
+						center.h -= ambit.ts!;
 						if (ignoreSplit) {
 							ambit.w = this.$n_('colled').offsetWidth;
 							if (inclusive) {
@@ -1021,8 +1021,8 @@ export class LayoutRegion extends zul.Widget {
 						ambit.h = center.h - ambit.h;
 						if (rs[j] == 'east')
 							ambit.x = width - ambit.x;
-						else center.x += ambit.ts;
-						center.w -= ambit.ts;
+						else center.x += ambit.ts!;
+						center.w -= ambit.ts!;
 						if (ignoreSplit) {
 							ambit.h = this.$n_('colled').offsetHeight;
 							if (inclusive) {
@@ -1089,8 +1089,8 @@ export class LayoutRegion extends zul.Widget {
 	}
 
 	// returns the ambit of the specified cmp for region calculation.
-	protected _ambit(ignoreSplit: boolean): LayoutRegionAmbit {
-		var ambit, mars = this.getCurrentMargins_(),
+	public _ambit(ignoreSplit?: boolean): LayoutRegionAmbit {
+		var ambit: LayoutRegionAmbit, mars = this.getCurrentMargins_(),
 			region = this.getPosition();
 		if (region && !this._open) {
 			var colled = this.$n('colled');
@@ -1103,9 +1103,9 @@ export class LayoutRegion extends zul.Widget {
 			ignoreSplit = true;
 		} else {
 			var pn = this.parent!.$n_(),
-				w = this.getWidth() || '',
-				h = this.getHeight() || '',
-				pert;
+				w = this.getWidth() ?? '',
+				h = this.getHeight() ?? '',
+				pert: number;
 			ambit = {
 				x: mars.left,
 				y: mars.top,
@@ -1122,7 +1122,7 @@ export class LayoutRegion extends zul.Widget {
 		var split = ignoreSplit ? {
 			offsetHeight: 0,
 			offsetWidth: 0
-		} : this.$n('split') || {offsetHeight: 0, offsetWidth: 0};
+		} : this.$n('split') ?? {offsetHeight: 0, offsetWidth: 0};
 		if (!ignoreSplit) this._fixSplit();
 
 		this._ambit2(ambit, mars, split);
@@ -1213,7 +1213,7 @@ export class LayoutRegion extends zul.Widget {
 	}
 
 	// invokes border layout's renderer before the component slides out
-	public static beforeSlideOut(this: LayoutRegion, n: zk.JQZK): void {
+	public static beforeSlideOut(this: LayoutRegion, _n: zk.JQZK): void {
 		var s = this.$n_('colled').style;
 		s.display = '';
 		s.visibility = 'hidden';
@@ -1243,7 +1243,7 @@ export class LayoutRegion extends zul.Widget {
 				anchor: this.sanchor,
 				duration: 200,
 				// B50-ZK-301: fire onOpen after animation
-				afterAnima: fireOnOpen ? function (this: zk.Widget & {_open?}, n: HTMLElement) {
+				afterAnima: fireOnOpen ? function (this: zk.Widget & {_open: boolean}, _n: HTMLElement) {
 					this.fire('onOpen', {open: this._open});
 				} : zk.$void
 			});
@@ -1259,13 +1259,13 @@ export class LayoutRegion extends zul.Widget {
 	}
 
 	// recalculates the size of the whole border layout after the component sildes in.
-	public static afterSlideIn(this: LayoutRegion, n: HTMLElement): void {
+	public static afterSlideIn(this: LayoutRegion, _n: HTMLElement): void {
 		(this.parent as zul.layout.Borderlayout).resize();
 		this._fixFontIcon();
 	}
 
 	// a callback function after the collapsed region slides down
-	public static afterSlideDown(this: LayoutRegion, n: HTMLElement): void {
+	public static afterSlideDown(this: LayoutRegion, _n: HTMLElement): void {
 		jq(document).on('click', this.proxy(this._docClick));
 		this._fixFontIcon();
 	}
@@ -1286,7 +1286,7 @@ export class LayoutRegion extends zul.Widget {
 	}
 
 	//drag
-	private static _ignoredrag(dg: zk.Draggable & Partial<{ _rootoffs }>, pointer: Pointer, evt: zk.Event): boolean {
+	private static _ignoredrag(dg: zk.Draggable & Partial<{ _rootoffs }>, _pointer: Pointer, evt: zk.Event): boolean {
 		var target = evt.domTarget,
 			wgt = dg.control as LayoutRegion,
 			split = wgt.$n_('split');
@@ -1306,7 +1306,7 @@ export class LayoutRegion extends zul.Widget {
 			switch (pos) {
 				case BL.NORTH:
 				case BL.SOUTH: {
-					let r = ol.center || (pos == BL.NORTH ? ol.south : ol.north);
+					let r = ol.center ?? (pos == BL.NORTH ? ol.south : ol.north);
 					if (r) {
 						if (BL.CENTER == r.getPosition()) {
 							maxs = Math.min(maxs, (real.offsetHeight + r.$n_('real').offsetHeight) - min);
@@ -1322,7 +1322,7 @@ export class LayoutRegion extends zul.Widget {
 				}
 				case BL.WEST:
 				case BL.EAST: {
-					let r = ol.center || (pos == BL.WEST ? ol.east : ol.west);
+					let r = ol.center ?? (pos == BL.WEST ? ol.east : ol.west);
 					if (r) {
 						if (BL.CENTER == r.getPosition()) {
 							maxs = Math.min(maxs, (real.offsetWidth
@@ -1352,12 +1352,12 @@ export class LayoutRegion extends zul.Widget {
 		return true;
 	}
 
-	private static _endeffect(dg: zk.Draggable & Partial<{ _point; _rootoffs }>, evt: zk.Event): void {
+	private static _endeffect(dg: zk.Draggable & { _point: Pointer | null; _rootoffs? }, evt: zk.Event): void {
 		var wgt = dg.control as LayoutRegion;
 		if (wgt._isVertical())
-			wgt.setHeight(dg._point[1] + 'px');
+			wgt.setHeight(dg._point![1] + 'px');
 		else
-			wgt.setWidth(dg._point[0] + 'px');
+			wgt.setWidth(dg._point![0] + 'px');
 
 		// Bug #1939859
 		wgt.$n_().style.zIndex = '';
@@ -1371,13 +1371,15 @@ export class LayoutRegion extends zul.Widget {
 		}, evt.data));
 	}
 
-	private static _snap(dg: zk.Draggable & Partial<{ _point; _rootoffs }>, pointer: Pointer): Pointer {
+	private static _snap(dg: zk.Draggable &
+		Partial<{ _point; _rootoffs: { maxs: number; left: number; right: number; top: number; bottom: number; mins: number }}>,
+						 pointer: Pointer): Pointer {
 		var wgt = dg.control as LayoutRegion,
 			x = pointer[0],
 			y = pointer[1],
 			BL = zul.layout.Borderlayout,
 			split = wgt.$n_('split'),
-			b = dg._rootoffs, w, h;
+			b = dg._rootoffs!, w, h;
 		switch (wgt.getPosition()) {
 			case BL.NORTH:
 				if (y > b.maxs + b.top) y = b.maxs + b.top;

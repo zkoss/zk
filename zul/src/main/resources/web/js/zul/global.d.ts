@@ -19,6 +19,10 @@ export declare namespace menu {
 export declare namespace mesh {
     export import HeaderWidget = zul.LabelImageWidget; // zk/flex
     export import Auxheader = zul.mesh.HeaderWidget; // zk/flex
+	export abstract class Frozen extends zk.Widget {
+		public _scrollScale: number;
+		public _doScroll(val: number): void;
+	}
 }
 // export * as sel from './sel';
 export declare namespace sel {

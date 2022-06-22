@@ -15,38 +15,43 @@ it will be useful, but WITHOUT ANY WARRANTY.
 /** The layout widgets, such as borderlayout.
  */
 //zk.$package('zul.layout');
-
-var _ambit = {
-	'north': function (ambit, center, width, height) {
+interface Ambit {
+	north(ambit: zul.layout.LayoutRegionAmbit, center: zul.layout.LayoutRegionAmbit, width: number, height: number): void;
+	south(ambit: zul.layout.LayoutRegionAmbit, center: zul.layout.LayoutRegionAmbit, width: number, height: number): void;
+	east(ambit: zul.layout.LayoutRegionAmbit, center: zul.layout.LayoutRegionAmbit, width: number, height: number): void;
+	west(ambit: zul.layout.LayoutRegionAmbit, center: zul.layout.LayoutRegionAmbit, width: number, height: number): void;
+}
+var _ambit: Ambit = {
+	'north': function (ambit: zul.layout.LayoutRegionAmbit, center: zul.layout.LayoutRegionAmbit, width: number, height: number): void {
 		ambit.w = width - ambit.w;
-		center.y = ambit.ts;
-		center.h -= ambit.ts;
+		center.y = ambit.ts!;
+		center.h -= ambit.ts!;
 	},
-	'south': function (ambit, center, width, height) {
+	'south': function (ambit: zul.layout.LayoutRegionAmbit, center: zul.layout.LayoutRegionAmbit, width: number, height: number): void {
 		ambit.w = width - ambit.w;
 		ambit.y = height - ambit.y;
-		center.h -= ambit.ts;
+		center.h -= ambit.ts!;
 	},
-	'east': function (ambit, center, width) {
+	'east': function (ambit: zul.layout.LayoutRegionAmbit, center: zul.layout.LayoutRegionAmbit, width: number, height: number): void {
 		ambit.y += center.y;
 		ambit.h = center.h - ambit.h;
 		ambit.x = width - ambit.x;
-		center.w -= ambit.ts;
+		center.w -= ambit.ts!;
 	},
-	'west': function (ambit, center) {
+	'west': function (ambit: zul.layout.LayoutRegionAmbit, center: zul.layout.LayoutRegionAmbit, width: number, height: number): void {
 		ambit.y += center.y;
 		ambit.h = center.h - ambit.h;
-		center.x += ambit.ts;
-		center.w -= ambit.ts;
+		center.x += ambit.ts!;
+		center.w -= ambit.ts!;
 	}
 };
 
 function _getRegionSize(wgt?: zul.layout.LayoutRegion, hor?: boolean, ext?: boolean): number {
 	if (!wgt)
 		return 0;
-	var n = wgt.$n('real')!,
+	var n = wgt.$n_('real')!,
 		sz = hor ? 'offsetWidth' : 'offsetHeight',
-		sum = n[sz];
+		sum = n[sz] as number;
 	if (ext) {
 		var cn = wgt.$n('colled'),
 			sn = wgt.$n('split');
@@ -77,9 +82,30 @@ export class Borderlayout extends zul.Widget {
 	public east?: zul.layout.East;
 	private _shallResize?: boolean;
 	private _isOnSize?: boolean;
+	public _animationDisabled = false;
 
 	public setResize(): void {
 		this.resize();
+	}
+
+	/**
+	 * Returns whether disable animation effects
+	 * <p>Default: false.
+	 * @since 5.0.8
+	 */
+	public isAnimationDisabled(): boolean {
+		return this._animationDisabled;
+	}
+
+	/**
+	 * Sets to disable animation effects.
+	 * @since 5.0.8
+	 */
+	public setAnimationDisabled(animationDisabled: boolean): this {
+		if (this._animationDisabled != animationDisabled) {
+			this._animationDisabled = animationDisabled;
+		}
+		return this;
 	}
 
 	//-- super --//
@@ -177,9 +203,9 @@ export class Borderlayout extends zul.Widget {
 		if (!zk(this.$n()).isRealVisible()) return; //ZK-2686: incorrect borderlayout resizing to 0px in tabbox
 
 		//make sure all regions size is resolved
-		var rs = ['north', 'south', 'west', 'east'], k = rs.length;
-		for (var region, j = 0; j < k; ++j) {
-			region = this[rs[j]];
+		var rs: ['north', 'south', 'west', 'east'] = ['north', 'south', 'west', 'east'], k = rs.length;
+		for (var region: zul.layout.LayoutRegion | undefined, j = 0; j < k; ++j) {
+			region = this[rs[j]] as zul.layout.LayoutRegion | undefined;
 			if (region && zk(region.$n()).isVisible()
 				&& ((region._nvflex && region._vflexsz === undefined)
 					|| (region._nhflex && region._hflexsz === undefined)))
@@ -206,14 +232,14 @@ export class Borderlayout extends zul.Widget {
 			center.h = height = parent.offsetHeight;
 		}
 
-		for (var region, ambit, j = 0; j < k; ++j) {
-			region = this[rs[j]];
+		for (var region: zul.layout.LayoutRegion | undefined, ambit: zul.layout.LayoutRegionAmbit, j = 0; j < k; ++j) {
+			region = this[rs[j]] as zul.layout.LayoutRegion | undefined;
 			if (region && zk(region.$n()).isVisible()) {
 				ambit = region._ambit();
-				_ambit[rs[j]](ambit, center, width, height);
+				_ambit[rs[j]]!(ambit, center, width, height);
 				this._resizeWgt(region, ambit); //might recursive back
-				var directionToCalculate = region._isVertical() ? 'width' : 'height';
-				jq(region.$n('title')).width(jq(region.$n('colled'))[directionToCalculate]() - jq(region.$n('btned'))[directionToCalculate]());
+				var directionToCalculate: 'width' | 'height' = region._isVertical() ? 'width' : 'height';
+				jq(region.$n('title')!).width((jq(region.$n('colled')!)[directionToCalculate]() as number) - ((jq(region.$n('btned')!)[directionToCalculate]()) as number));
 			}
 		}
 		if (this.center && zk(this.center.$n()).isVisible()) {
@@ -294,7 +320,7 @@ export class Borderlayout extends zul.Widget {
 			if (fchild) { // B50-ZK-198: always need cave height
 				var cv;
 				if (cv = wgt.$n('cave'))
-					cv.style.height = jq.px0(ambit.h - $el.padBorderHeight());
+					(cv as HTMLElement).style.height = jq.px0(ambit.h - $el.padBorderHeight());
 			}
 			bs.height = jq.px0(ambit.h - $el.padBorderHeight());
 			if (wgt._nativebar && wgt.isAutoscroll()) {
@@ -306,7 +332,7 @@ export class Borderlayout extends zul.Widget {
 		}
 	}
 
-	private _ignoreResize(el: HTMLElement & { _lastSize? }, w: number, h: number): boolean {
+	private _ignoreResize(el: HTMLElement & { _lastSize?: {width; height} }, w: number, h: number): boolean {
 		if (el._lastSize && el._lastSize.width == w && el._lastSize.height == h) {
 			return true;
 		}

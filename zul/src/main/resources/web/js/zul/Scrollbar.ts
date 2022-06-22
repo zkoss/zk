@@ -98,7 +98,7 @@ export class Scrollbar extends zk.Object {
 	private _pressTimer: number | null = null;
 	public cave: HTMLElement;
 	public scroller: HTMLElement;
-	public widget: zk.Widget & {frozen?};
+	public widget: zk.Widget & {frozen?: zul.mesh.Frozen};
 	public uid: string;
 	public currentPos: Position | null;
 	public opts: ScrollbarOptions;
