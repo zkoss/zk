@@ -1,4 +1,4 @@
-/* Frozen.js
+/* Frozen.ts
 
 	Purpose:
 
@@ -12,109 +12,139 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-(function () {
-	// Bug 3218078
-	function _onSizeLater(wgt) {
-		var parent = wgt.parent;
+// Bug 3218078
+function _onSizeLater(wgt: Frozen): void {
+	var parent = wgt.parent!;
 
-		// ZK-2130: should skip fake scroll bar
-		if (parent.eheadtbl && parent._nativebar) {
-			var cells = parent._getFirstRowCells(parent.eheadrows),
-				head = parent.head,
-				totalcols = cells.length - jq(head).find(head.$n('bar')).length,
-				columns = wgt._columns,
-				leftWidth = 0;
+	// ZK-2130: should skip fake scroll bar
+	if (parent.eheadtbl && parent._nativebar) {
+		var cells = parent._getFirstRowCells(parent.eheadrows),
+			head = parent.head!,
+			totalcols = cells!.length - jq(head).find(head.$n_('bar')).length,
+			columns = wgt._columns!,
+			leftWidth = 0;
 
-			//B70-ZK-2553: one may specify frozen without any real column
-			if (!cells || totalcols <= 0) {
-				//no need to do the following computation since there is no any column
-				return;
-			}
-
-			//ZK-2776: don't take hidden column, like setVisible(false), into account
-			for (var header = parent.head.firstChild; header; header = header.nextSibling) {
-				if (!header.isVisible())
-					totalcols -= 1;
-			}
-			for (var i = 0; i < columns; i++)
-					leftWidth += cells[i].offsetWidth;
-
-			parent._deleteFakeRow(parent.eheadrows);
-
-			wgt.$n('cave').style.width = jq.px0(leftWidth);
-			var scroll = wgt.$n('scrollX'),
-				width = parent.$n('body').offsetWidth;
-
-			// B70-ZK-2074: Resize forzen's width as meshwidget's body.
-			parent.$n('frozen').style.width = jq.px0(width);
-			width -= leftWidth;
-			scroll.style.width = jq.px0(width);
-			var scrollScale = totalcols - columns - 1;
-			scroll.firstChild.style.width = jq.px0(width + 50 * scrollScale);
-			wgt.syncScroll();
+		// FIXME: cells is assumed to exist while `totalcols` is initialized
+		//B70-ZK-2553: one may specify frozen without any real column
+		if (!cells || totalcols <= 0) {
+			//no need to do the following computation since there is no any column
+			return;
 		}
+
+		//ZK-2776: don't take hidden column, like setVisible(false), into account
+		for (var header: zul.mesh.HeaderWidget | null = parent.head!.firstChild; header; header = header.nextSibling) {
+			if (!header.isVisible())
+				totalcols -= 1;
+		}
+		for (var i = 0; i < columns; i++)
+				leftWidth += cells[i].offsetWidth;
+
+		parent._deleteFakeRow(parent.eheadrows);
+
+		wgt.$n_('cave').style.width = jq.px0(leftWidth);
+		var scroll = wgt.$n_('scrollX'),
+			width = parent.$n_('body').offsetWidth;
+
+		// B70-ZK-2074: Resize forzen's width as meshwidget's body.
+		parent.$n_('frozen').style.width = jq.px0(width);
+		width -= leftWidth;
+		scroll.style.width = jq.px0(width);
+		var scrollScale = totalcols - columns - 1;
+		(scroll.firstChild as HTMLElement).style.width = jq.px0(width + 50 * scrollScale);
+		wgt.syncScroll();
 	}
+}
 
 /**
  * A frozen component to represent a frozen column or row in grid, like MS Excel.
  * <p>Default {@link #getZclass}: z-frozen.
  */
-zul.mesh.Frozen = zk.$extends(zul.Widget, {
-	_start: 0,
-	_scrollScale: 0,
-	$define: {
-		/**
-		 * Returns the number of columns to freeze.
-		 * <p>Default: 0
-		 * @return int
-		 */
-		/**
-		 * Sets the number of columns to freeze.(from left to right)
-		 * @param int columns positive only
-		 */
-		columns: [function (v) {
-			return v < 0 ? 0 : v;
-		}, function (v) {
+export class Frozen extends zul.Widget {
+	// Parent could be null because it's checked in `Frozen.prototype.syncScroll`.
+	declare public parent: zul.mesh.MeshWidget | null;
+	private _start = 0;
+	public _scrollScale = 0;
+	public _smooth?: boolean;
+	public _columns?: number;
+	public _shallSyncScale?: boolean;
+	private _delayedScroll?: number | null;
+	private _lastScale?: number;
+	private _shallSync?: boolean;
+
+	/**
+	 * Returns the number of columns to freeze.
+	 * <p>Default: 0
+	 * @return int
+	 */
+	public getColumns(): number | undefined {
+		return this._columns;
+	}
+
+	/**
+	 * Sets the number of columns to freeze.(from left to right)
+	 * @param int columns positive only
+	 */
+	public setColumns(v: number, opts?: Record<string, boolean>): this {
+		const o = this._columns;
+		v = (v < 0 ? 0 : v);
+		this._columns = v;
+
+		if (o !== v || (opts && opts.force)) {
 			if (this._columns) {
 				if (this.desktop) {
 					this.onSize();
 					this.syncScroll();
 				}
 			} else this.rerender();
-		}],
-		/**
-		 * Returns the start position of the scrollbar.
-		 * <p>Default: 0
-		 * @return int
-		 */
-		/**
-		 * Sets the start position of the scrollbar.
-		 * <p> Default: 0
-		 * @param int start the column number
-		 */
-		start: function () {
+		}
+
+		return this;
+	}
+
+	/**
+	 * Returns the start position of the scrollbar.
+	 * <p>Default: 0
+	 * @return int
+	 */
+	public getStart(): number {
+		return this._start;
+	}
+
+	/**
+	 * Sets the start position of the scrollbar.
+	 * <p> Default: 0
+	 * @param int start the column number
+	 */
+	public setStart(start: number, opts?: Record<string, boolean>): this {
+		const o = this._start;
+		this._start = start;
+
+		if (o !== start || (opts && opts.force)) {
 			this.syncScroll();
 		}
-	},
+
+		return this;
+	}
+
 	/**
 	 * Synchronizes the scrollbar according to {@link #getStart}.
 	 */
-	syncScroll: function () {
+	public syncScroll(): void {
 		var p = this.parent;
 		if (p && p._nativebar) {
 			var scroll = this.$n('scrollX');
 			if (scroll)
 				scroll.scrollLeft = this._start * 50;
 		}
-	},
+	}
 
 	/**
 	 * Synchronizes the scrollbar according to parent ebody scrollleft.
 	 */
-	syncScrollByParentBody: function () {
+	public syncScrollByParentBody(): void {
 		var p = this.parent,
-			ebody,
-			l;
+			ebody: HTMLDivElement | null | undefined,
+			l: number;
 		if (p && p._nativebar && (ebody = p.ebody) && (l = ebody.scrollLeft) > 0) {
 			var scroll = this.$n('scrollX');
 			if (scroll) {
@@ -122,22 +152,22 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 				scroll.scrollLeft = Math.ceil(scrollScale * (scroll.scrollWidth - scroll.clientWidth));
 			}
 		}
-	},
+	}
 
-	bind_: function () {
-		this.$supers(zul.mesh.Frozen, 'bind_', arguments);
-		var p = this.parent,
+	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+		super.bind_(desktop, skipper, after);
+		var p = this.parent!,
 			body = p.$n('body'),
 			foot = p.$n('foot');
 
 		if (p._nativebar) {
 			//B70-ZK-2130: No need to reset when beforeSize, ZK-343 with native bar works fine too.
 			zWatch.listen({onSize: this});
-			var scroll = this.$n('scrollX'),
+			var scroll = this.$n_('scrollX'),
 				scrollbarWidth = jq.scrollbarWidth();
 			// ZK-2583: native IE bug, add 1px in scroll div's height for workaround
-			this.$n().style.height = this.$n('cave').style.height = this.$n('right').style.height = scroll.style.height
-				 = scroll.firstChild.style.height = jq.px0(zk.ie ? scrollbarWidth + 1 : scrollbarWidth);
+			this.$n_().style.height = this.$n_('cave').style.height = this.$n_('right').style.height = scroll.style.height
+					= (scroll.firstChild as HTMLElement).style.height = jq.px0(zk.ie ? scrollbarWidth + 1 : scrollbarWidth);
 			p._currentLeft = 0;
 			this.domListen_(scroll, 'onScroll');
 
@@ -155,15 +185,16 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 			jq(body).addClass('z-word-nowrap');
 		if (foot)
 			jq(foot).addClass('z-word-nowrap');
-	},
-	unbind_: function () {
-		var p = this.parent,
+	}
+
+	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+		var p = this.parent!,
 			body = p.$n('body'),
 			foot = p.$n('foot'),
 			head = p.$n('head');
 
 		if (p._nativebar) {
-			this.domUnlisten_(this.$n('scrollX'), 'onScroll');
+			this.domUnlisten_(this.$n_('scrollX'), 'onScroll');
 			p.unlisten({onScroll: this.proxy(this._onScroll)});
 			zWatch.unlisten({onSize: this});
 
@@ -178,39 +209,44 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 			jq(body).removeClass('z-word-nowrap');
 		if (foot)
 			jq(foot).removeClass('z-word-nowrap');
-		this.$supers(zul.mesh.Frozen, 'unbind_', arguments);
-	},
+		super.unbind_(skipper, after, keepRod);
+	}
+
 	// Bug ZK-2264, we should resync the variable of _scrollScale, which do the same as HeadWidget.js
-	onResponse: function () {
-		if (this.parent._nativebar) {
+	public onResponse(): void {
+		if (this.parent!._nativebar) {
 			// refix-ZK-3100455 : grid/listbox with frozen trigger "invalidate" should _syncFrozenNow
 			this._syncFrozenNow();
 		} else if (this._shallSyncScale) {
-			var hdfaker = this.parent.ehdfaker;
+			var hdfaker = this.parent!.ehdfaker;
 			if (hdfaker) {
-				this._scrollScale = hdfaker.childNodes.length - this._columns - 1;
+				this._scrollScale = hdfaker.childNodes.length - this._columns! - 1;
 			}
 			this._shallSyncScale = false;
 		}
-	},
-	onSize: function () {
+	}
+
+	public override onSize(): void {
 		if (!this._columns)
 			return;
 		var self = this;
 		self._syncFrozen(); // B65-ZK-1470
 
 		//B70-ZK-2129: prevent height changed by scrolling
-		var p = this.parent,
+		var p = this.parent!,
 			phead = p.head,
-			firstHdcell, fhcs;
+			firstHdcell: HTMLElement | null;
 		if (p._nativebar && phead) {
+			interface HTMLElementWithOptionalCells extends HTMLElement {
+				cells?: HTMLTableRowElement['cells'];
+			}
 			//B70-ZK-2558: frozen will onSize before other columns,
 			//so there might be no any column in the beginning
-			var n = phead.$n();
+			var n = phead.$n() as HTMLElementWithOptionalCells | null | undefined;
 			firstHdcell = n ? (n.cells ? n.cells[0] : null) : null;
 			//B70-ZK-2463: if firstHdcell is not undefined
 			if (firstHdcell) {
-				fhcs = firstHdcell.style;
+				const fhcs = firstHdcell.style;
 				if (!fhcs.height)
 					fhcs.height = firstHdcell.offsetHeight + 'px';
 			}
@@ -221,43 +257,47 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 			_onSizeLater(self);
 			self._syncFrozenNow();
 		});
-	},
-	_syncFrozen: function () { //called by Rows, HeadWidget...
+	}
+
+	private _syncFrozen(): void { //called by Rows, HeadWidget...
 		this._shallSync = true;
-	},
-	_syncFrozenNow: function () {
+	}
+
+	private _syncFrozenNow(): void {
 		var num = this._start;
 		if (this._shallSync && num)
 			this._doScrollNow(num, true);
 
 		this._shallSync = false;
-	},
-	beforeParentChanged_: function (p) {
+	}
+
+	public override beforeParentChanged_(p: zk.Widget | null): void {
 		//bug B50-ZK-238
 		//ZK-2651: JS Error showed when clear grid children component that include frozen
 		if (this.desktop && this._lastScale) //if large then 0
 			this._doScroll(0);
 
-		this.$supers('beforeParentChanged_', arguments);
-	},
-	_onScroll: function (evt) {
+		super.beforeParentChanged_(p);
+	}
+
+	private _onScroll(evt: zk.Event): void {
 		if (!evt.data || !zk.currentFocus)
 			return;
 
 		var p = this.parent,
-			td,
+			td: HTMLTableCellElement | undefined,
 			frozen = this,
-			fn = function () {
+			fn = function (): void { // p shouldn't be null when fn is called
 				var cf = zk.currentFocus;
 				if (cf) {
-					td = p.getFocusCell(cf.$n());
-					var index;
-					if (td && (index = td.cellIndex - frozen._columns) >= 0) {
+					td = p!.getFocusCell(cf.$n_());
+					var index: number;
+					if (td && (index = td.cellIndex - frozen._columns!) >= 0) {
 						frozen.setStart(index);
-						p.ebody.scrollLeft = 0;
+						p!.ebody!.scrollLeft = 0;
 
-						if (p.ehead)
-							p.ehead.scrollLeft = 0;
+						if (p!.ehead)
+							p!.ehead.scrollLeft = 0;
 					}
 				}
 			};
@@ -268,20 +308,23 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 				fn();
 		}
 		evt.stop();
-	},
-	_doHeadScroll: function (evt) {
-		var head = evt.domTarget,
+	}
+
+	public _doHeadScroll(evt: zk.Event): void {
+		var head = evt.domTarget!,
 			num = Math.ceil(head.scrollLeft / 50);
 		// ignore scrollLeft is 0
 		if (!head.scrollLeft || this._lastScale == num)
 			return;
 		evt.data = head.scrollLeft;
 		this._onScroll(evt);
-	},
-	_doScroll: function (n) {
-		var p = this.parent, num;
+	}
+
+	public _doScroll(n: number): void {
+		var p = this.parent!,
+			num: number;
 		if (p._nativebar)
-			num = Math.ceil(this.$n('scrollX').scrollLeft / 50);
+			num = Math.ceil(this.$n_('scrollX').scrollLeft / 50);
 		else
 			num = Math.ceil(n);
 		if (this._lastScale == num)
@@ -297,12 +340,13 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 			self._start = num;
 			self._delayedScroll = null;
 		}, 0);
-	},
-	_doScrollNow: function (num, force) {
+	}
+
+	public _doScrollNow(num: number, force?: boolean): void {
 		var totalWidth = 0,
-			mesh = this.parent,
+			mesh = this.parent!,
 			cnt = num,
-			c = this._columns,
+			c = this._columns!,
 			width0 = zul.mesh.MeshWidget.WIDTH0,
 			hasVScroll = zk(mesh.ebody).hasVScroll(),
 			scrollbarWidth = hasVScroll ? jq.scrollbarWidth() : 0;
@@ -310,16 +354,16 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 			// set fixed size
 			var totalCols = mesh.head.nChildren,
 				// B70-ZK-2071: Use mesh.head to get columns.
-				hdcells = mesh.head.$n().cells,
-				hdcol = mesh.ehdfaker.firstChild,
+				hdcells = (mesh.head.$n_() as HTMLTableRowElement).cells,
+				hdcol = mesh.ehdfaker!.firstChild,
 				ftrows = mesh.foot ? mesh.efootrows : null,
 				ftcells = ftrows ? ftrows.rows[0].cells : null;
 
-			for (var faker, i = 0; hdcol && i < totalCols; hdcol = hdcol.nextSibling, i++) {
-				if (hdcol.style.width.indexOf('px') == -1) {
-					var sw = hdcol.style.width = jq.px0(hdcells[i].offsetWidth),
-						wgt = zk.Widget.$(hdcol);
-					if (!wgt.$instanceof(zul.mesh.HeadWidget)) {
+			for (var faker: HTMLElement | null | undefined, i = 0; hdcol && i < totalCols; hdcol = hdcol.nextSibling, i++) {
+				if ((hdcol as HTMLElement).style.width.indexOf('px') == -1) {
+					var sw = (hdcol as HTMLElement).style.width = jq.px0(hdcells[i].offsetWidth),
+						wgt = zk.Widget.$(hdcol)!;
+					if (!(wgt instanceof zul.mesh.HeadWidget)) {
 						if ((faker = wgt.$n('bdfaker')))
 							faker.style.width = sw;
 						if ((faker = wgt.$n('ftfaker')))
@@ -328,14 +372,19 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 				}
 			}
 
-			var updateBatch = [];
+			interface Update {
+				node: HTMLTableCellElement;
+				index: number;
+				width?: string;
+			}
+			var updateBatch: Update[] = [];
 			// B70-ZK-2071: Use mesh.head to get column.
-			for (var i = c, faker; i < totalCols; i++) {
+			for (var i = c, faker: HTMLElement | null | undefined; i < totalCols; i++) {
 				var n = hdcells[i],
-					hdWgt = zk.Widget.$(n),
+					hdWgt = zk.Widget.$<zul.mesh.HeaderWidget>(n)!,
 					isVisible = hdWgt && hdWgt.isVisible(),
 					shallUpdate = false,
-					cellWidth;
+					cellWidth: string | undefined;
 
 				//ZK-2776, once a column is hidden, there is an additional style
 				if (!hdWgt.isVisible())
@@ -343,7 +392,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 
 				if (cnt-- <= 0) { //show
 					var wd = isVisible ?
-							(zk.ie ? Math.max(jq(n).width(), 0) : n.offsetWidth) // Bug ZK-2690
+							(zk.ie ? Math.max(jq(n).width()!, 0) : n.offsetWidth) // Bug ZK-2690
 							: 0;
 					// ZK-2071: nativebar behavior should be same as fakebar
 					// ZK-4762: cellWidth should update while scroll into view
@@ -357,8 +406,8 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 						shallUpdate = true;
 					}
 				} else if (force ||
-						 // Bug ZK-2690
-						((zk.ie ? Math.max(jq(n).width(), 0) : n.offsetWidth) != 0)) { //hide
+							// Bug ZK-2690
+						((zk.ie ? Math.max(jq(n).width()!, 0) : n.offsetWidth) != 0)) { //hide
 					faker = jq('#' + n.id + '-hdfaker')[0];
 					//ZK-2776: consider faker's width first for layout consistent
 					if (faker.style.width && zk.parseInt(faker.style.width) > 1)
@@ -375,10 +424,10 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 			//hide the element without losing focus
 			jq(mesh).css({position: 'absolute', left: -9999});
 
-			var update;
+			var update: Update | undefined;
 			while (update = updateBatch.shift()) {
-				var n = update.node,
-					cellWidth = update.width,
+				const n = update.node,
+					cellWidth = update.width!,
 					i = update.index;
 
 				if ((faker = jq('#' + n.id + '-hdfaker')[0]))
@@ -397,19 +446,23 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 				}
 			}
 
-			hdcol = mesh.ehdfaker.firstChild;
+			hdcol = mesh.ehdfaker!.firstChild;
 			for (var i = 0; hdcol && i < totalCols; hdcol = hdcol.nextSibling, i++) {
-				if (hdcol.style.display != 'none')
-					totalWidth += zk.parseInt(hdcol.style.width);
+				if ((hdcol as HTMLElement).style.display != 'none')
+					totalWidth += zk.parseInt((hdcol as HTMLElement).style.width);
 			}
 			totalWidth += scrollbarWidth;
 
 			//hide the element without losing focus
 			jq(mesh).css({position: '', left: ''});
 		}
+		// TODO: The following lines could be refactored with optional chaining since
+		// transpilation to "if statements" is as bloat as it currently is.
 		// Set style width to table to avoid colgroup width not working
 		// because of width attribute (width="100%") on table
-		var headtbl, bodytbl, foottbl;
+		var headtbl: HTMLTableElement | null | undefined,
+			bodytbl: HTMLTableElement | null | undefined,
+			foottbl: HTMLTableElement | null | undefined;
 		if (headtbl = mesh.eheadtbl)
 			headtbl.style.width = jq.px(totalWidth);
 		if (bodytbl = mesh.ebodytbl)
@@ -421,12 +474,14 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 
 		// Bug ZK-601, Bug ZK-1572
 		if (zk.ie9_) {
-			var n = mesh.$n();
+			const n = mesh.$n_();
 			n.className += ' ';
-			if (n.offsetHeight);
+			if (n.offsetHeight) {
+				// Empty on purpose.
+				// This is a trick for IE to recalculate its size by invoking `offsetHeight` or `offsetWidth`.
+			}
 			n.className.trim();
 		}
 	}
-});
-
-})();
+}
+zul.mesh.Frozen = zk.regClass(Frozen);
