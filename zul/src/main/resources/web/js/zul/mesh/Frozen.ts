@@ -61,7 +61,7 @@ function _onSizeLater(wgt: Frozen): void {
  */
 export class Frozen extends zul.Widget {
 	// Parent could be null because it's checked in `Frozen.prototype.syncScroll`.
-	declare public parent: zul.mesh.MeshWidget | null;
+	public override parent!: zul.mesh.MeshWidget | null;
 	public _start = 0;
 	public _scrollScale = 0;
 	public _smooth?: boolean;
