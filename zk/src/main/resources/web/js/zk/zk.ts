@@ -1722,7 +1722,14 @@ export class ZKObject {
 	 * (also harmless to call back).
 	 * @see #afterInit
 	 */
-	protected $init(value?: number | string): void {
+	protected $init(props?: Record<string, unknown> | typeof zkac): void {
+		//zkac is a token used by create() in mount.js for optimizing performance
+		if (props !== zkac) {
+			//if props.$oid, it must be an object other than {} so ignore
+			if (props && typeof props == 'object' && !props.$oid)
+				for (var nm in props)
+					this['set'](nm, props[nm]);
+		}
 	}
 	/** Specifies a function that shall be called after the object is initialized,
 	 * i.e., after {@link #$init} is called. This method can be called only during the execution of {@link #$init}.
