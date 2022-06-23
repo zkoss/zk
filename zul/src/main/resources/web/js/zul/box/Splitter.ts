@@ -95,7 +95,7 @@ function _setOpen(wgt: Splitter, open: boolean, opts?: {sendOnOpen?: boolean}): 
  *
  */
 export class Splitter extends zul.Widget {
-	declare public parent: zul.box.Box | null;
+	public override parent!: zul.box.Box | null;
 	private _collapse = 'none';
 	public _open = true;
 	private _drag0: zk.Draggable | null = null;

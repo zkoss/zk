@@ -39,8 +39,8 @@ function _syncFrozen(wgt: HeadWidget): void {
 }
 
 export class HeadWidget extends zul.Widget {
-	// FIXME: Parent could be null because it is checked in `afterChildrenFlex_`.
-	declare public parent: zul.mesh.MeshWidget | null;
+	// NOTE: Parent could be null because it is checked in `afterChildrenFlex_`.
+	public override parent!: zul.mesh.MeshWidget | null;
 	declare public firstChild: zul.mesh.HeaderWidget | null;
 	private _sizable?: boolean;
 	// FIXME: The following three properties are never assigned.
