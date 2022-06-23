@@ -1711,7 +1711,7 @@ wgt.$f().main.setTitle("foo");
 	 * Notice this method does NOT remove any existent child widget.
 	 * @param Array children an array of children ({@link zk.Widget}) to add
 	 */
-	public setChildren(...children: Widget[]): void {
+	public setChildren(children: Widget[]): void {
 		if (children)
 			for (var j = 0, l = children.length; j < l;)
 				this.appendChild(children[j++]);
