@@ -611,7 +611,7 @@ export class Slider extends zul.Widget {
 		}
 	}
 
-	public override setFlexSize_(sz: {width?: string | number; height?: string | number}, isFlexMin?: boolean): void {
+	public override setFlexSize_(sz: zk.FlexSize, isFlexMin?: boolean): void {
 		super.setFlexSize_(sz, isFlexMin);
 		if (this._mold != 'knob') {
 			this.onSize();

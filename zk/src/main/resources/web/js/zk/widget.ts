@@ -3650,7 +3650,7 @@ unbind_: function (skipper, after) {
 		else _binds[uuid] = this;
 	}
 
-	public setFlexSize_(sz: {width?: string | number; height?: string | number}, isFlexMin?: boolean): void {
+	public setFlexSize_(sz: zk.FlexSize, isFlexMin?: boolean): void {
 		if (this._cssflex && this.parent && this.parent.getFlexContainer_() != null && !isFlexMin)
 			return;
 		var n = this.$n() as HTMLElement,

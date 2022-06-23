@@ -241,6 +241,7 @@ declare namespace zk {
 	type DomVisibleOptions = import('./widget').DomVisibleOptions;
 	type EventMetaData = import('./dom').EventMetaData;
 	type FlexOrient = import('./flex').FlexOrient;
+	type FlexSize = import('./flex').FlexSize;
 	type Draggable = import('./drag').Draggable;
 	type DraggableOptions = import('./drag').DraggableOptions;
 	type Long = import('./math').Long;

@@ -879,7 +879,7 @@ export abstract class MeshWidget extends zul.Widget {
 		return td;
 	}
 
-	protected _moveToHidingFocusCell(index: number, ignoreWidth: boolean, notFocusBack: boolean): void { //used in Row/Listcell and a11y frozen
+	public _moveToHidingFocusCell(index: number, ignoreWidth?: boolean, notFocusBack?: boolean): void { //used in Row/Listcell and a11y frozen
 		//B50-3178977 navigating the input in hiddin column.
 		var td = this.ehdfaker ? this.ehdfaker.childNodes[index] as HTMLTableCellElement | undefined : null,
 			frozen = this.frozen,
@@ -1385,7 +1385,7 @@ export abstract class MeshWidget extends zul.Widget {
 				hgh - this.efrozen!.offsetHeight : hgh;
 	}
 
-	public override setFlexSize_(sz: {width?: string | number; height?: string | number}, isFlexMin?: boolean): void {
+	public override setFlexSize_(sz: zk.FlexSize, isFlexMin?: boolean): void {
 		if (this._cssflex && this.parent!.getFlexContainer_() != null && !isFlexMin)
 			return;
 		var n = this.$n_(),

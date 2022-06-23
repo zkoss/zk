@@ -17,6 +17,10 @@ import type {Widget} from './widget';
 import {NumberFieldValue} from './types';
 
 export type FlexOrient = 'w' | 'h';
+export interface FlexSize {
+	width?: string | number;
+	height?: string | number;
+}
 
 function _getTextSize(zkc, zkp, zkpOffset): [number, number] {
 	let $zkc = zkc.jq,
