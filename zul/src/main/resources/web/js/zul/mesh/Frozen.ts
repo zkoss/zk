@@ -32,7 +32,7 @@ function _onSizeLater(wgt: Frozen): void {
 		}
 
 		//ZK-2776: don't take hidden column, like setVisible(false), into account
-		for (var header: zul.mesh.HeaderWidget | null = parent.head!.firstChild; header; header = header.nextSibling) {
+		for (var header = parent.head!.firstChild; header; header = header.nextSibling) {
 			if (!header.isVisible())
 				totalcols -= 1;
 		}
@@ -62,7 +62,7 @@ function _onSizeLater(wgt: Frozen): void {
 export class Frozen extends zul.Widget {
 	// Parent could be null because it's checked in `Frozen.prototype.syncScroll`.
 	declare public parent: zul.mesh.MeshWidget | null;
-	private _start = 0;
+	public _start = 0;
 	public _scrollScale = 0;
 	public _smooth?: boolean;
 	public _columns?: number;
@@ -259,7 +259,7 @@ export class Frozen extends zul.Widget {
 		});
 	}
 
-	private _syncFrozen(): void { //called by Rows, HeadWidget...
+	public _syncFrozen(): void { //called by Rows, HeadWidget...
 		this._shallSync = true;
 	}
 

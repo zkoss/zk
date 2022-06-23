@@ -192,6 +192,7 @@ declare function $eval(x: string): unknown;
 declare var zkreg: typeof import('./widget').zkreg;
 declare var zDebug: import('./zk').ZKObject;
 declare var zAu: typeof import('./au').default;
+declare var zFlex: typeof import('./flex').default;
 declare var msgzk: Record<
 	| 'NOT_FOUND'
 	| 'UNSUPPORTED'

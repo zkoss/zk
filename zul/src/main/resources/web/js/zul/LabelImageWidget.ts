@@ -252,6 +252,4 @@ export abstract class LabelImageWidget extends zul.Widget {
 		super.clearCache();
 	}
 }
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 zul.LabelImageWidget = zk.regClass(LabelImageWidget);

@@ -36,7 +36,7 @@ export interface PagingFocusInfo {
  * <p>Default {@link #getZclass}: z-paging.
  */
 export class Paging extends zul.Widget {
-	declare public parent: null | (zk.Widget & Partial<Pick<zul.mesh.MeshWidget, 'getPagingPosition'>>);
+	declare public parent: zul.mesh.MeshWidget | null;
 	private _pageSize = 20;
 	private _totalSize = 0;
 	private _pageCount = 1;
@@ -46,7 +46,7 @@ export class Paging extends zul.Widget {
 	private _detailed?: boolean;
 	private _autohide?: boolean;
 	private _disabled?: boolean;
-	private _meshWidget?: zul.mesh.MeshWidget;
+	private _meshWidget?: zul.mesh.MeshWidget | null;
 	private static _autoFocusInfo: PagingFocusInfo | null;
 	private _lastIsWide?: boolean;
 
@@ -245,7 +245,7 @@ export class Paging extends zul.Widget {
 	 * @return zul.mesh.MeshWidget
 	 * @since 10.0.0
 	 */
-	public getMeshWidget(): zul.mesh.MeshWidget | undefined {
+	public getMeshWidget(): zul.mesh.MeshWidget | null | undefined {
 		return this._meshWidget;
 	}
 
@@ -253,7 +253,7 @@ export class Paging extends zul.Widget {
 	 * @param zul.mesh.MeshWidget meshWidget
 	 * @since 10.0.0
 	 */
-	public setMeshWidget(v: zul.mesh.MeshWidget): this {
+	public setMeshWidget(v: zul.mesh.MeshWidget | null): this {
 		this._meshWidget = v;
 		return this;
 	}

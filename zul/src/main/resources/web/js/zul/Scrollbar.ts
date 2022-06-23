@@ -40,8 +40,8 @@ export interface Position {
 	y: number;
 }
 export interface ScrollbarOptions {
-	onSyncPosition?: () => void;
-	onScrollEnd?: () => void;
+	onSyncPosition?: (this: zul.Scrollbar) => void;
+	onScrollEnd?: (this: zul.Scrollbar) => void;
 	embed?: boolean;
 	step: number; // scrolling pixels
 	wheelAmountStep: number; // wheel amount of step
@@ -111,12 +111,13 @@ export class Scrollbar extends zk.Object {
 	public vLimit!: number;
 	public vBarLimit!: number;
 	public vRatio!: number;
+	public frozen?: zul.mesh.Frozen; // Tested for falsity in `zul.mesh.Scrollbar.init`
 
 	public $n(id: string): HTMLElement {
 		return jq(this.uid + '-' + id, zk)[0];
 	}
 
-	public constructor(cave: HTMLElement, scroller: HTMLElement, opts: Partial<ScrollbarOptions>) {
+	public constructor(cave: HTMLElement | null | undefined, scroller: HTMLElement | null | undefined, opts: Partial<ScrollbarOptions>) {
 		super();
 		if (!cave || !scroller)
 			throw 'Both wrapper and scroller dom element are required to generate scrollbar';
@@ -134,7 +135,7 @@ export class Scrollbar extends zk.Object {
 			wheelAmountStep: 3, //wheel amount of step
 			startPositionX: 0, //hor-bar start position
 			startPositionY: 0 //ver-bar start position
-		}) as ScrollbarOptions;
+		});
 		this.widget = zk.Widget.$(cave)!;
 		this.uid = this.widget.uuid;
 		//initialize scroll-bar position
