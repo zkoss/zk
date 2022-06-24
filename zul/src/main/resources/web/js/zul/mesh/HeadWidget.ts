@@ -47,6 +47,7 @@ export class HeadWidget extends zul.Widget {
 	public hdfaker!: HTMLTableColElement;
 	public bdfaker!: HTMLTableColElement;
 	public ftfaker!: HTMLTableColElement;
+	public _menupopup?: string; // zul.mesh.HeaderWidget
 
 	public constructor() {
 		super(); // FIXME: reconsider constructor params
@@ -182,8 +183,7 @@ export class HeadWidget extends zul.Widget {
 			}
 			_syncFrozen(this);
 			mesh._minWd = null;
-			// FIXME: assumed non-null throughout this function, but checked in following line.
-			var frozen = mesh ? mesh.frozen : null;
+			var frozen = mesh.frozen;
 			if (frozen)
 				frozen.onSize();
 

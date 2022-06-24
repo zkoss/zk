@@ -445,8 +445,8 @@ export abstract class MeshWidget extends zul.Widget {
 	private _pagingPosition = 'bottom';
 	public _prehgh = -1;
 	public _minWd: MeshWidth | null = null; //minimum width for each column
-	private _sizedByContent?: boolean;
-	private _span?: string | boolean;
+	public _sizedByContent?: boolean;
+	public _span?: string | boolean;
 	private _nspan?: number;
 	private _autopaging: boolean | undefined;
 	private _model: boolean | undefined;
@@ -683,6 +683,10 @@ export abstract class MeshWidget extends zul.Widget {
 	 * @return boolean
 	 */
 	public isModel(): boolean | undefined {
+		return this._model;
+	}
+	// TODO: Used by grid. Should prefer the use of isModel
+	public getModel(): boolean | undefined {
 		return this._model;
 	}
 
@@ -1751,7 +1755,7 @@ export abstract class MeshWidget extends zul.Widget {
 			this._calcSize();
 	}
 
-	protected override clearCachedSize_(): void {
+	public override clearCachedSize_(): void {
 		super.clearCachedSize_();
 		this._clearCachedSize();
 
@@ -1767,7 +1771,7 @@ export abstract class MeshWidget extends zul.Widget {
 		}
 	}
 
-	private _clearCachedSize(): void {
+	public _clearCachedSize(): void {
 		var n: HTMLElement | null | undefined;
 		if (n = this.$n())
 			n._lastsz = this._minWd = null;

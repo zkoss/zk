@@ -1383,7 +1383,7 @@ new zul.wnd.Window({
 		}
 	}
 
-	protected setHflex_(v: StringFieldValue | boolean): void {
+	public setHflex_(v: StringFieldValue | boolean): void {
 		this._nhflex = (true === v || 'true' == v) ? 1 : v == 'min' ? -65500 : zk.parseInt(v);
 		if (this._nhflex < 0 && v != 'min')
 			this._nhflex = 0;
@@ -5117,7 +5117,7 @@ _doFooSelect: function (evt) {
 	 * @return boolean
 	 * @since 5.0.3
 	 */
-	protected isWatchable_(name: string, p: Widget, cache?: Record<string, unknown>): boolean {
+	public isWatchable_(name: string, p: Widget, cache?: Record<string, unknown>): boolean {
 		//if onShow, we don't check visibility since window uses it for
 		//non-embedded window that becomes invisible because of its parent
 		var strict = name != 'onShow', wgt;

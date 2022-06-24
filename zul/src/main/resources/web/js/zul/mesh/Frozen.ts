@@ -18,15 +18,14 @@ function _onSizeLater(wgt: Frozen): void {
 
 	// ZK-2130: should skip fake scroll bar
 	if (parent.eheadtbl && parent._nativebar) {
-		var cells = parent._getFirstRowCells(parent.eheadrows),
+		var cells = parent._getFirstRowCells(parent.eheadrows)!,
 			head = parent.head!,
-			totalcols = cells!.length - jq(head).find(head.$n_('bar')).length,
+			totalcols = cells.length - jq(head).find(head.$n_('bar')).length,
 			columns = wgt._columns!,
 			leftWidth = 0;
 
-		// FIXME: cells is assumed to exist while `totalcols` is initialized
 		//B70-ZK-2553: one may specify frozen without any real column
-		if (!cells || totalcols <= 0) {
+		if (totalcols <= 0) {
 			//no need to do the following computation since there is no any column
 			return;
 		}
