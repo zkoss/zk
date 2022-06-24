@@ -12,14 +12,14 @@
 -->
 <zk>
 	<script><![CDATA[
-		$(document).ready(function() {
-			$(document).click(function() {
+		jq(document).ready(function() {
+			jq(document).click(function() {
 				cutCheck();
 			});
 		});
 
 		function cutCheck() {
-			var bounding = $('.z-colorbox-popup')[0].getBoundingClientRect();
+			var bounding = jq('.z-colorbox-popup')[0].getBoundingClientRect();
 			if (bounding.top < 0) {
 				zk.log('Top side is out of viewoprt')
 			}
