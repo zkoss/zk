@@ -98,21 +98,23 @@ function _createSuper(Derived): Callable {
 		return result;
 	};
 }
-
+// the "___s" is the sequence number of the "this" instance to check its "_$super" order
+var ___s = 1;
 function newClass<T>(superclass): T {
-	var init = function (this: ZKObject & {____?}): object {
-
+	var init = function (this: ZKObject & {___s? ; ____?}): object {
+		this.___s = ___s;
 		let ____ = this.____;
 
-		this._$super.____ = true;
+		this._$super.____ = ___s++;
 		// call super constructor refer to babel
 		let _this = _super.call(this) as ZKObject;
 
 		// Note: we cannot use Object.assign() here, because some prototype property may not be copied.
 		_zk.copy(_this, Object.getPrototypeOf(this));
 
-
-		if (____ === undefined) {
+		// if not differed by 1, it could be another instance with the same zk.$extends() widget.
+		// for example in B50-ZK-441.zul
+		if (____ === undefined || ____ - 1 < this.___s) {
 			// eslint-disable-next-line no-console
 		// 	this.$oid = ++_oid;
 			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -126,8 +128,13 @@ function newClass<T>(superclass): T {
 					ais[j].call(_this);
 			}
 		}
-		//
+
 		delete this._$super.____;
+		delete this.___s;
+
+		// reset if it's greater than 100,000.
+		___s %= 100000;
+
 		return _this as object;
 	};
 
