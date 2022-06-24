@@ -5997,9 +5997,9 @@ export class Native extends Widget {
 	public override widgetName = 'native';
 	//rawId: true, (Bug 3358505: it cannot be rawId)
 
-	public override $n(subId?: StringFieldValue): DOMFieldValue {
+	public override $n(subId?: string): DOMFieldValue {
 		return !subId && this.id ? document.getElementById(this.id) :
-			this.$supers('$n', arguments as unknown as unknown[]) as DOMFieldValue; // Bug ZK-606/607
+			super.$n(subId); // Bug ZK-606/607
 	}
 	public override redraw(out: string[]): void {
 		var s = this.prolog, p;
