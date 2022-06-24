@@ -19,6 +19,7 @@ export abstract class HeaderWidget extends zul.LabelImageWidget {
 	// NOTE: parent can be null, as `getMeshWidget` asserts
 	public override parent!: zul.mesh.HeadWidget | null;
 	public override nextSibling!: zul.mesh.HeaderWidget | null;
+	public override previousSibling!: zul.mesh.HeaderWidget | null;
 	protected _sumWidth = true; // FIXME: never used
 	private _align?: string;
 	private _valign?: string;
