@@ -698,7 +698,7 @@ export class LayoutRegion extends zul.Widget {
 		super.onChildAdded_(child);
 		if (child instanceof zul.layout.Borderlayout) {
 			this._flex = true;
-			jq(this.$n_()).addClass(this.$s('nested'));
+			jq(this.$n()!).addClass(this.$s('nested'));
 		}
 
 		// Bug for B36-2841185.zul, resync flex="true"
