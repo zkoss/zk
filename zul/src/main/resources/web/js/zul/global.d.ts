@@ -9,12 +9,7 @@ export * as inp from './inp';
 // export * as lang from './lang';
 // export * as layout from './layout';
 export * as med from './med';
-// export * as menu from './menu';
-export declare namespace menu {
-    export abstract class Menuitem extends zul.LabelImageWidget {
-        public _getUploadRef(): HTMLElement | null | undefined
-    }
-}
+export * as menu from './menu';
 export * as mesh from './mesh';
 // export * as sel from './sel';
 export declare namespace sel {
