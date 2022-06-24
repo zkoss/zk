@@ -17,7 +17,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 export abstract class LabelImageWidget extends zul.Widget {
 	private _label = '';
-	private _iconSclass?: string;
+	protected _iconSclass?: string;
 	private _image?: string;
 	private _hoverImage?: string;
 	private _eimg?: HTMLImageElement | null;
