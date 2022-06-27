@@ -1,4 +1,4 @@
-/* Auxhead.js
+/* Auxhead.ts
 
 	Purpose:
 
@@ -18,20 +18,22 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>Non XUL element.
  * <p>Default {@link #getZclass}: z-auxhead.
  */
-zul.mesh.Auxhead = zk.$extends(zul.mesh.HeadWidget, {
-	bind_: function (desktop, skipper, after) {
-		this.$supers(zul.mesh.Auxhead, 'bind_', arguments);
+export class Auxhead extends zul.mesh.HeadWidget {
+	protected override bind_(desktop: zk.Desktop | null | undefined, skipper: zk.Skipper | null | undefined, after: CallableFunction[]): void {
+		super.bind_(desktop, skipper, after);
 		// B50-3306729: the first header should have border-left when the first column is covered with other header
 		this.fixBorder_();
-	},
+	}
+
 	// B50-3306729: the first header should have border-left when the first column is covered with other header
-	fixBorder_: function () {
+	protected fixBorder_(): void {
 		var fc = jq(this).children(':first-child'),
-			rspan = fc.attr('rowspan'),
+			rspan = fc.attr('rowspan')!,
 			times = parseInt(rspan) - 1;
 		if (rspan && times > 0) {
 			for (var head = this.nextSibling; head && times != 0; head = head.nextSibling, times--)
-				jq(head.firstChild).addClass(this.$s('border'));
+				jq(head.firstChild!).addClass(this.$s('border'));
 		}
 	}
-});
+}
+zul.mesh.Auxhead = zk.regClass(Auxhead);
