@@ -1374,6 +1374,7 @@ new zul.wnd.Window({
 	 */
 	public setCssflex(cssflex: boolean): void {
 		if (this._cssflex != cssflex) {
+			this._cssflex = cssflex;
 			if (this.desktop) {
 				this.rerender();
 			}
