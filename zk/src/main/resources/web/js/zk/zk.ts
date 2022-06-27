@@ -1256,7 +1256,7 @@ _zk.log = function (detailed): void {
 		(detailed !== _zk) ? arguments :
 			[].slice.call(arguments, 1)
 		, (detailed === _zk)
-	).then(msg => (_logmsg ? _logmsg + msg : msg) + '\n');
+	).then(msg => _logmsg = (_logmsg ? _logmsg + msg : msg) + '\n');
 	setTimeout(function () {jq(doLog);}, 300);
 };
 /** Make a time stamp for this momemt; used for performance tuning.
