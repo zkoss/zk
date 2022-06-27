@@ -20,7 +20,7 @@ export abstract class ColumnMenuWidget extends zul.mesh.HeadWidget {
 	public override _menupopup = 'none';
 	private _columnshide = true;
 	private _columnsgroup = true;
-	private _mpop?: ColumnMenupopup | null;
+	public override _mpop?: zul.mesh.ColumnMenupopup | null;
 	private _shallColMenu?: boolean | null;
 	private _mref?: zul.mesh.HeaderWidget;
 
@@ -296,7 +296,9 @@ export class ColumnMenupopup extends zul.menu.Menupopup {
 		return this._group;
 	}
 
-	public getUngroupitem = zk.$void;
+	public getUngroupitem(): zul.menu.Menuitem | null {
+		return null;
+	}
 
 	private _init(): void {
 		var w = this._columns!;

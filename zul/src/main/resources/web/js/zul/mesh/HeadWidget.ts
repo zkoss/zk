@@ -49,6 +49,7 @@ export class HeadWidget extends zul.Widget {
 	public bdfaker!: HTMLTableColElement;
 	public ftfaker!: HTMLTableColElement;
 	public _menupopup?: string;
+	public _mpop?: zul.menu.Menupopup | null;
 
 	public constructor() {
 		super(); // FIXME: reconsider constructor params

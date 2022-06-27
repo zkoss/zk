@@ -508,6 +508,7 @@ export abstract class MeshWidget extends zul.Widget {
 	public abstract getBodyWidgetIterator(opts?: Record<string, unknown>): BodyWidgetIterator;
 	protected abstract _getFirstItemIndex(): number;
 	protected abstract _getLastItemIndex(): number;
+	public abstract hasGroup(): boolean;
 
 	/**
 	 * Returns the rows. Zero means no limitation.
