@@ -38,6 +38,10 @@ declare global {
 	| 'DATE_REQUIRED'
 	| 'EMPTY_NOT_ALLOWED'
 	| 'FIRST' // zul/mesh/Paging
+	| 'GRID_ASC' // zul/mesh/ColumnMenuWidget
+	| 'GRID_DESC' // zul/mesh/ColumnMenuWidget
+	| 'GRID_GROUP' // zul/mesh/ColumnMenuWidget
+	| 'GRID_UNGROUP' // zul/mesh/ColumnMenuWidget
 	| 'ILLEGAL_VALUE'
 	| 'INTEGER_REQUIRED' // zul/inp/Intbox
 	| 'LAST' // zul/inp/Intbox

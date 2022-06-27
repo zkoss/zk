@@ -109,7 +109,7 @@ export class Event extends ZKObject {
 	declare public pageY: number;
 
 	// dom.ts#keyData
-	declare public key;
+	declare public key: string;
 	declare public keyCode: number;
 	declare public charCode;
 
