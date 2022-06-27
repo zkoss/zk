@@ -12,6 +12,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+export type SortDirection = 'ascending' | 'descending' | 'natural';
 /**
  * A skeletal implementation for a header.
  */
@@ -28,7 +29,9 @@ export abstract class HeaderWidget extends zul.LabelImageWidget {
 	public _origWd?: string | null;
 	private _dragsz?: zk.Draggable | null;
 
-	public abstract getSortDirection(): 'ascending' | 'descending' | 'natural';
+	protected _sortDirection!: SortDirection;
+	public abstract getSortDirection(): SortDirection;
+	public abstract setSortDirection(direction: SortDirection, opts?: Record<string, boolean>): this;
 
 	/** Returns the horizontal alignment of this column.
 	 * <p>Default: null (system default: left unless CSS specified).
