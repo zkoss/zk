@@ -102,10 +102,18 @@ function _createSuper(Derived): Callable {
 var ___s = 1;
 function newClass<T>(superclass): T {
 	var init = function (this: ZKObject & {___s? ; ____?}): object {
-		this.___s = ___s;
+		// For B95-ZK-4320.zul, the ___s is always differed by 1, so we use
+		// "superclass.$oid" to distinguish whether is the same inherited class or not.
+		// For example,
+		// "->" means extension, "=>" means creation
+		// case 1: A3 -> A2 -> A1 -> A
+		//       : only A3 can invoke $init()
+		// case 2: B1's $init() => (C2 and D3)
+		//       : B1, C2, and D3 can invoke $init() if any.
+		this.___s = superclass.$oid ?? ___s;
 		let ____ = this.____;
 
-		this._$super.____ = ___s++;
+		this._$super.____ = superclass.$oid ? (superclass.$oid + 1) : ___s++;
 		// call super constructor refer to babel
 		let _this = _super.call(this) as ZKObject;
 
