@@ -48,7 +48,7 @@ export class HeadWidget extends zul.Widget {
 	public hdfaker!: HTMLTableColElement;
 	public bdfaker!: HTMLTableColElement;
 	public ftfaker!: HTMLTableColElement;
-	public _menupopup?: string; // zul.mesh.HeaderWidget
+	public _menupopup?: string;
 
 	public constructor() {
 		super(); // FIXME: reconsider constructor params
@@ -80,7 +80,7 @@ export class HeadWidget extends zul.Widget {
 		return this;
 	}
 
-	public override isVisible(): boolean {
+	public override isVisible(): boolean | undefined {
 		return this._visible;
 	}
 

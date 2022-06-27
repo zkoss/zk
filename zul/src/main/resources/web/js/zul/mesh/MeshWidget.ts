@@ -491,6 +491,7 @@ export abstract class MeshWidget extends zul.Widget {
 	private _syncingbodyrows?: boolean;
 	private _shallClearTableWidth?: boolean;
 	private _shallShowScrollbar?: boolean;
+	public _syncEmpty?: () => void; // zul.mesh.ColumnMenuWidget
 
 	public constructor() {
 		super(); // FIXME: arguments?

@@ -752,7 +752,7 @@ export class Widget extends ZKObject {
 	declare public static _repeatIgnoreEvts;
 	declare public static molds;
 
-	public _visible = true;
+	public _visible?: boolean = true;
 	protected _mold = 'default';
 	protected _style: StringFieldValue;
 	private _renderdefer = -1;
@@ -2201,7 +2201,7 @@ wgt.$f().main.setTitle("foo");
 	 * </ul>
 	 * @param boolean visible whether to be visible
 	 */
-	public setVisible(visible: boolean): void {
+	public setVisible(visible: boolean | undefined): void {
 		if (this._visible != visible) {
 			this._visible = visible;
 
@@ -2315,7 +2315,7 @@ wgt.$f().main.setTitle("foo");
 	 * <li>visibility - Modify n.style.visibility</li>
 	 * </ul>
 	 */
-	public setDomVisible_(n: HTMLElement, visible: boolean, opts?: DomVisibleOptions): void {
+	public setDomVisible_(n: HTMLElement, visible: boolean | undefined, opts?: DomVisibleOptions): void {
 		if (!opts || opts.display) {
 			var act;
 			if (act = this.actions_[visible ? 'show' : 'hide'])
