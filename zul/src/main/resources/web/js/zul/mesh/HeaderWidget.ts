@@ -21,8 +21,8 @@ export abstract class HeaderWidget extends zul.LabelImageWidget {
 	public override nextSibling!: zul.mesh.HeaderWidget | null;
 	public override previousSibling!: zul.mesh.HeaderWidget | null;
 	protected _sumWidth = true; // FIXME: never used
-	private _align?: string;
-	private _valign?: string;
+	public _align?: string;
+	public _valign?: string;
 	public _hflexWidth?: number;
 	public _nhflexbak?: boolean;
 	public _origWd?: string | null;
@@ -511,12 +511,12 @@ export abstract class HeaderWidget extends zul.LabelImageWidget {
 		return {height: 0, width: 0};
 	}
 
-	public override isWatchable_(name: string, p: zk.Widget, cache?: Record<string, unknown>): boolean {
+	public override isWatchable_(name: string, p: zk.Widget, cache?: Record<string, unknown>): boolean | null | undefined {
 		//Bug 3164504: Hflex will not recalculate when the colum without label
 		//Cause: DIV (parent of HeadWidget) is invisible if all columns have no label
 		var wp: zul.mesh.HeadWidget | zul.mesh.MeshWidget | null;
-		return this._visible && !!(wp = this.parent) && wp._visible //check this and HeadWidget
-			&& !!(wp = wp.parent) && wp.isWatchable_(name, p, cache); //then MeshWidget.isWatchable_
+		return this._visible && (wp = this.parent) && wp._visible //check this and HeadWidget
+			&& (wp = wp.parent) && wp.isWatchable_(name, p, cache); //then MeshWidget.isWatchable_
 	}
 
 	private _insizer(x: number): boolean {

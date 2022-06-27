@@ -5117,7 +5117,7 @@ _doFooSelect: function (evt) {
 	 * @return boolean
 	 * @since 5.0.3
 	 */
-	public isWatchable_(name: string, p: Widget, cache?: Record<string, unknown>): boolean {
+	public isWatchable_(name: string, p: Widget, cache?: Record<string, unknown>): boolean | null | undefined {
 		//if onShow, we don't check visibility since window uses it for
 		//non-embedded window that becomes invisible because of its parent
 		var strict = name != 'onShow', wgt;
