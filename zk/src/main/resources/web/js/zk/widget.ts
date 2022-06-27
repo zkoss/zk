@@ -896,8 +896,8 @@ new zul.wnd.Window({
 	 */
 	public constructor(props?: Record<string, unknown> | typeof zkac) {
 		super();
-		this.className = this.constructor.prototype.className;
-		this.widgetName = this.constructor.prototype.widgetName;
+		this.className = this.constructor.prototype.className ?? 'widget';
+		this.widgetName = this.constructor.prototype.widgetName ?? 'widget';
 		this._asaps = {}; //event listened at server
 		this._lsns = {}; //listeners(evtnm,listener)
 		this._bklsns = {}; //backup for listeners by setListeners
