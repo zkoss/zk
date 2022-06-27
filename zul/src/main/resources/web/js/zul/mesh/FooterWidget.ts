@@ -1,4 +1,4 @@
-/* FooterWidget.js
+/* FooterWidget.ts
 
 	Purpose:
 
@@ -15,67 +15,106 @@ it will be useful, but WITHOUT ANY WARRANTY.
 /**
  * A skeletal implementation for a footer.
  */
-zul.mesh.FooterWidget = zk.$extends(zul.LabelImageWidget, {
-	_span: 1,
+export abstract class FooterWidget extends zul.LabelImageWidget {
+	public override parent!: zul.mesh.HeadWidget | null;
+	private _span = 1;
+	private _align?: string;
+	private _valign?: string;
 
-	$define: {
-		/** Returns number of columns to span this footer.
-		 * Default: 1.
-		 * @return int
-		 */
-		/** Sets the number of columns to span this footer.
-		 * <p>It is the same as the colspan attribute of HTML TD tag.
-		 * @param int span
-		 */
-		span: function (v) {
-			var n = this.$n();
+	/** Returns number of columns to span this footer.
+	 * Default: 1.
+	 * @return int
+	 */
+	public getSpan(): number {
+		return this._span;
+	}
+
+	/** Sets the number of columns to span this footer.
+	 * <p>It is the same as the colspan attribute of HTML TD tag.
+	 * @param int span
+	 */
+	public setSpan(v: number, opts?: Record<string, boolean>): this {
+		const o = this._span;
+		this._span = v;
+
+		if (o !== v || (opts && opts.force)) {
+			var n = this.$n() as HTMLTableCellElement | null | undefined;
 			if (n) n.colSpan = v;
-		},
-		/** Returns the horizontal alignment of this footer.
-		 * <p>Default: null (system default: left unless CSS specified).
-		 * @return String
-		 */
-		/** Sets the horizontal alignment of this footer.
-		 * @param String align
-		 */
-		align: function (v) {
-			var n = this.$n();
+		}
+
+		return this;
+	}
+
+	/** Returns the horizontal alignment of this footer.
+	 * <p>Default: null (system default: left unless CSS specified).
+	 * @return String
+	 */
+	public getAlign(): string | undefined {
+		return this._align;
+	}
+
+	/** Sets the horizontal alignment of this footer.
+	 * @param String align
+	 */
+	public setAlign(v: string, opts?: Record<string, boolean>): this {
+		const o = this._align;
+		this._align = v;
+
+		if (o !== v || (opts && opts.force)) {
+			var n = this.$n() as HTMLTableCellElement | null | undefined;
 			if (n) n.align = v;
-		},
-		/** Returns the vertical alignment of this footer.
-		 * <p>Default: null (system default: top).
-		 * @return String
-		 */
-		/** Sets the vertical alignment of this footer.
-		 * @param String valign
-		 */
-		valign: function (v) {
-			var n = this.$n();
+		}
+
+		return this;
+	}
+
+	/** Returns the vertical alignment of this footer.
+	 * <p>Default: null (system default: top).
+	 * @return String
+	 */
+	public getValign(): string | undefined {
+		return this._valign;
+	}
+
+	/** Sets the vertical alignment of this footer.
+	 * @param String valign
+	 */
+	public setValign(v: string, opts?: Record<string, boolean>): this {
+		const o = this._valign;
+		this._valign = v;
+
+		if (o !== v || (opts && opts.force)) {
+			var n = this.$n() as HTMLTableCellElement | null | undefined;
 			if (n) n.vAlign = v;
 		}
-	},
+
+		return this;
+	}
+
 	/**
 	 * Returns the mesh widget that this belongs to.
 	 * @return zul.mesh.MeshWidget
 	 */
-	getMeshWidget: function () {
+	public getMeshWidget(): zul.mesh.MeshWidget | null | undefined {
 		return this.parent ? this.parent.parent : null;
-	},
+	}
+
 	/** Returns the column that is in the same column as
 	 * this footer, or null if not available.
 	 * @return zul.mesh.HeaderWidget
 	 */
-	getHeaderWidget: function () {
+	public getHeaderWidget(): zul.mesh.HeaderWidget | null | undefined {
 		var meshWidget = this.getMeshWidget();
 		if (meshWidget) {
 			var cs = meshWidget.getHeadWidget();
 			if (cs)
-				return cs.getChildAt(this.getChildIndex());
+				return cs.getChildAt(this.getChildIndex()) as zul.mesh.HeaderWidget | undefined;
 		}
 		return null;
-	},
+	}
+
 	//super
-	domStyle_: function (no) {
+	protected override domStyle_(no?: zk.DomStyleOptions): string {
 		var style = '',
 			header = this.getHeaderWidget();
 		if (this._align)
@@ -87,13 +126,16 @@ zul.mesh.FooterWidget = zk.$extends(zul.LabelImageWidget, {
 		else if (header && header._valign)
 			style += 'vertical-align:' + header._valign + ';';
 
-		return this.$super('domStyle_', no) + style;
-	},
-	domAttrs_: function () {
-		return this.$supers('domAttrs_', arguments)
-			+ (this._span > 1 ? ' colspan="' + this._span + '"' : '');
-	},
-	deferRedrawHTML_: function (out) {
-		out.push('<td', this.domAttrs_({domClass: 1}), ' class="z-renderdefer"></td>');
+		return super.domStyle_(no) + style;
 	}
-});
+
+	public override domAttrs_(no?: zk.DomAttrsOptions): string {
+		return super.domAttrs_(no)
+			+ (this._span > 1 ? ' colspan="' + this._span + '"' : '');
+	}
+
+	protected override deferRedrawHTML_(out: string[]): void {
+		out.push('<td', this.domAttrs_({domClass: true}), ' class="z-renderdefer"></td>');
+	}
+}
+zul.mesh.FooterWidget = zk.regClass(FooterWidget);
