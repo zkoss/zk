@@ -104,9 +104,6 @@ export abstract class HeaderWidget extends zul.LabelImageWidget {
 		//     but it requires a lot of code change from other places. However, it might turn out that incorporating
 		//     the "0 literal type" into the return type union is the most robust solution, albeit cumbersome.
 		// 2. Return something else instead of 0. Returning null seems feasible, but `'width:' + wd + ';'` will break.
-		// RANT: There are many tiny inconsistencies throughout the codebase. Deep refactoring could remove them and
-		// possibly cut a third of the total code size, but deep refactoring would add almost no business value. See
-		// how long it takes for you to stumble upon this rant.
 		return this.isVisible() ? this._width : 0 as never;
 	}
 

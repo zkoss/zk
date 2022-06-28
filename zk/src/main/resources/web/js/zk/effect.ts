@@ -63,7 +63,7 @@ export interface Effect {
 
 export interface Eff {
 	shallStackup(): boolean;
-	_skuOpts<T extends EffectStackupOptions>(opts: EffectStackupOptions): T;
+	_skuOpts<T extends EffectStackupOptions>(opts?: EffectStackupOptions): T;
 	_onVParent(evt, opts?): void;
 
 	Shadow: typeof Shadow;
@@ -81,7 +81,7 @@ let eff = {
 	shallStackup: function () {
 		return _useSKU;
 	},
-	_skuOpts<T extends EffectStackupOptions>(opts: EffectStackupOptions): T {
+	_skuOpts<T extends EffectStackupOptions>(opts?: EffectStackupOptions): T {
 		return zk.$default(opts,
 			_defSKUOpts || (_defSKUOpts = {stackup: eff.shallStackup()}));
 	},
@@ -103,7 +103,7 @@ export class Shadow extends zk.Object implements Effect {
 	declare public stackup?: HTMLIFrameElement | null;
 	declare public opts: EffectStackupOptions;
 
-	public constructor(element: HTMLElement, opts: EffectStackupOptions) {
+	public constructor(element: HTMLElement, opts?: EffectStackupOptions) {
 		super();
 		this.wgt = zk.Widget.$(element.id);
 		this.opts = eff._skuOpts(opts);

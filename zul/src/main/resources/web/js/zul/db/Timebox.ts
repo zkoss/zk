@@ -371,7 +371,7 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 	public onHide = null;
 	public validate = null;
 
-	public override doClick_(evt: zk.Event, popupOnly?: boolean | undefined): void {
+	public override doClick_(evt: zk.Event, popupOnly?: boolean): void {
 		if (evt.domTarget == this.getInputNode())
 			this._doCheckPos();
 		super.doClick_(evt, popupOnly);

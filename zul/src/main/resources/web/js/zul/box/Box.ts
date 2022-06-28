@@ -358,7 +358,7 @@ export class Box extends zul.Widget {
 		}
 	}
 
-	public _fixChildDomVisible(child: zk.Widget, visible: boolean): void {
+	public _fixChildDomVisible(child: zk.Widget, visible: boolean | undefined): void {
 		var n: zk.Widget | HTMLElement | null | undefined = this._chdextr(child);
 		if (n) n.style.display = visible ? '' : 'none';
 		n = child.$n('chdex2');

@@ -108,7 +108,7 @@ export abstract class FooterWidget extends zul.LabelImageWidget {
 		if (meshWidget) {
 			var cs = meshWidget.getHeadWidget();
 			if (cs)
-				return cs.getChildAt(this.getChildIndex()) as zul.mesh.HeaderWidget | undefined;
+				return cs.getChildAt<zul.mesh.HeaderWidget>(this.getChildIndex());
 		}
 		return null;
 	}
