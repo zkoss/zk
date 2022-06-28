@@ -25,21 +25,22 @@ import org.zkoss.test.webdriver.ztl.JQuery;
  * @author Sefi
  */
 public class F80_ZK_3176Test extends WebDriverTestCase{
-    @Test
+
+	@Test
     public void test() {
         connect();
         JQuery menu = jq("@menu").eq(1);
         click(menu);
         waitResponse();
         JQuery menuPopup = jq("@menupopup:visible");
-        Assertions.assertFalse(menuPopup.exists());
+        Assertions.assertFalse(menuPopup.isVisible());
 
         click(jq("@button").eq(0));
         waitResponse();
         click(menu);
         waitResponse();
         menuPopup = jq("@menupopup:visible");
-        Assertions.assertTrue(menuPopup.exists());
+        Assertions.assertTrue(menuPopup.isVisible());
 
         JQuery subMenu = menuPopup.find("@menu");
         click(subMenu);
