@@ -11,12 +11,7 @@ export * as layout from './layout';
 export * as med from './med';
 export * as menu from './menu';
 export * as mesh from './mesh';
-// export * as sel from './sel';
-export declare namespace sel {
-    export import ItemWidget = zul.Widget; // zk/dom
-    export import Listitem = zul.sel.ItemWidget; // zk/domtouch
-    export import Treerow = zul.Widget; // zk/domtouch
-}
+export * as sel from './sel';
 // export * as tab from './tab';
 // export * as utl from './utl';
 export * as wgt from './wgt';
