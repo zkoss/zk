@@ -495,7 +495,7 @@ export class ComboWidget<ValueType> extends zul.inp.InputWidget<ValueType> {
 			this._shadow.sync();
 	}
 
-	private _afterSlideDown(n: zk.Widget): void {
+	private _afterSlideDown(n: HTMLElement): void {
 		if (!this.desktop) {
 			//Bug 3035847: close (called by unbind) won't remove popup when animating
 			zk(n).undoVParent(); //no need to fire onVParent since it will be removed

@@ -34,6 +34,7 @@ export class SimpleDateConstraint extends zul.inp.SimpleConstraint {
 		super(a); // FIXME: super was originally called at the end of the constructor
 		this._wgt = wgt;
 		this._localizedSymbols = wgt._localizedSymbols;
+		this.lazyInit_(); // call it after all member fields are ready.
 	}
 
 	protected override parseConstraint_(constraint: string): void {

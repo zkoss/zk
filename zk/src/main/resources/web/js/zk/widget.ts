@@ -712,7 +712,7 @@ export class Widget extends ZKObject {
 	declare public _vflex: StringFieldValue | boolean;
 	declare public _hflex: StringFieldValue | boolean;
 	declare public _flexFixed;
-	declare public _nvflex;
+	declare public _nvflex?: number;
 	declare public _nhflex?: number;
 	declare public _hflexsz?: number;
 	declare public _vflexsz?: number;
@@ -899,8 +899,8 @@ new zul.wnd.Window({
 	 */
 	public constructor(props?: Record<string, unknown> | typeof zkac) {
 		super();
-		this.className = this.constructor.prototype.className;
-		this.widgetName = this.constructor.prototype.widgetName;
+		this.className = this.constructor.prototype.className ?? 'widget';
+		this.widgetName = this.constructor.prototype.widgetName ?? 'widget';
 		this._asaps = {}; //event listened at server
 		this._lsns = {}; //listeners(evtnm,listener)
 		this._bklsns = {}; //backup for listeners by setListeners
@@ -1377,6 +1377,7 @@ new zul.wnd.Window({
 	 */
 	public setCssflex(cssflex: boolean): void {
 		if (this._cssflex != cssflex) {
+			this._cssflex = cssflex;
 			if (this.desktop) {
 				this.rerender();
 			}
@@ -1714,7 +1715,7 @@ wgt.$f().main.setTitle("foo");
 	 * Notice this method does NOT remove any existent child widget.
 	 * @param Array children an array of children ({@link zk.Widget}) to add
 	 */
-	public setChildren(...children: Widget[]): void {
+	public setChildren(children: Widget[]): void {
 		if (children)
 			for (var j = 0, l = children.length; j < l;)
 				this.appendChild(children[j++]);
@@ -3461,7 +3462,7 @@ function () {
 		}
 		_rerenderDone(this, skipper); //cancel pending async rerender
 		if (this.z_rod)
-			this.get$Class<typeof Widget>()._unbindrod(this, false, keepRod);
+			this.get$Class<typeof Widget>()._unbindrod(this, keepRod); // keepRod is "nest" here
 		else {
 			var after: (() => void)[] = [];
 			this.unbind_(skipper, after, keepRod);
@@ -4436,7 +4437,7 @@ wgt.unlisten({
 		if (opts) {
 			if (opts.asapOnly) {
 				v = this.get$Class<typeof Widget>()._importantEvts;
-				return v !== undefined && (v as object)[evt] != null;
+				return !!v && !!(v as object)[evt];
 			}
 			if (opts.any) {
 				if (v != null) return true;
@@ -5431,10 +5432,10 @@ _doFooSelect: function (evt) {
 	 * @param String subId the ID of a DOM element
 	 * @return String the uuid of the widget (notice that the widget might not exist)
 	 */
-	public static uuid(id: string): string {
+	public static uuid(id: HTMLElement | string): string {
 		var uuid = typeof id == 'object' ? id['id'] || '' : id,
 			j = uuid.indexOf('-');
-		return j >= 0 ? uuid.substring(0, j) : id;
+		return j >= 0 ? uuid.substring(0, j) : id as string;
 	}
 
 	/** Returns the next unique UUID for a widget.
@@ -6000,9 +6001,9 @@ export class Native extends Widget {
 	public override widgetName = 'native';
 	//rawId: true, (Bug 3358505: it cannot be rawId)
 
-	public override $n(subId?: StringFieldValue): DOMFieldValue {
+	public override $n(subId?: string): DOMFieldValue {
 		return !subId && this.id ? document.getElementById(this.id) :
-			this.$supers('$n', arguments as unknown as unknown[]) as DOMFieldValue; // Bug ZK-606/607
+			super.$n(subId); // Bug ZK-606/607
 	}
 	public override redraw(out: string[]): void {
 		var s = this.prolog, p;

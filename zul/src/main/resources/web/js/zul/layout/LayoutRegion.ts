@@ -1,4 +1,4 @@
-/* LayoutRegion.js
+/* LayoutRegion.ts
 
 	Purpose:
 
@@ -12,174 +12,264 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-(function () {
-
-	function _setFirstChildFlex(wgt, flex, ignoreMin) {
-		var cwgt = wgt.getFirstChild();
-		if (cwgt) {
-			if (flex) {
-				wgt._fcvflex = cwgt.getVflex();
-				wgt._fchflex = cwgt.getHflex();
-				if (!ignoreMin || cwgt._vflex != 'min') // B50-ZK-237
-					cwgt.setVflex(true);
-				if (!ignoreMin || cwgt._hflex != 'min') // B50-ZK-237
-					cwgt.setHflex(true);
-			} else {
-				cwgt.setVflex(wgt._fcvflex);
-				cwgt.setHflex(wgt._fchflex);
-				delete wgt._fcvflex;
-				delete wgt._fchflex;
-			}
+function _setFirstChildFlex(wgt: LayoutRegion, flex: boolean, ignoreMin?: boolean): void {
+	var cwgt = wgt.getFirstChild();
+	if (cwgt) {
+		if (flex) {
+			wgt._fcvflex = cwgt.getVflex();
+			wgt._fchflex = cwgt.getHflex();
+			if (!ignoreMin || cwgt._vflex != 'min') // B50-ZK-237
+				cwgt.setVflex('true');
+			if (!ignoreMin || cwgt._hflex != 'min') // B50-ZK-237
+				cwgt.setHflex('true');
+		} else {
+			cwgt.setVflex(wgt._fcvflex);
+			cwgt.setHflex(wgt._fchflex);
+			delete wgt._fcvflex;
+			delete wgt._fchflex;
 		}
 	}
+}
+
+declare type Pointer = [number, number];
+
+export interface LayoutRegionAmbit {
+	x: number;
+	y: number;
+	w: number;
+	h: number;
+	ts?: number;
+}
 
 /**
  * A layout region in a border layout.
  * <p>
  * Events:<br/> onOpen, onSize, onSlide.<br/>
  */
-zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
-	_open: true,
-	_border: 'normal',
-	_maxsize: 2000,
-	_minsize: 0,
-	_scrollbar: null,
-	_slidable: true,
-	_closable: true,
-	_nativebar: true,
+export class LayoutRegion extends zul.Widget {
+	public _open = true;
+	private _border = 'normal';
+	private _maxsize = 2000;
+	private _minsize = 0;
+	public _scrollbar?: zul.Scrollbar;
+	protected _slidable = true;
+	protected _closable = true;
+	public _nativebar = true;
+	protected _margins = [0, 0, 0, 0];
+	protected _cmargins = [3, 3, 3, 3]; //center
+	public sanchor?: string;
 
-	$init: function () {
-		this.$supers('$init', arguments);
-		this._margins = [0, 0, 0, 0];
-		this._cmargins = [3, 3, 3, 3]; //center
-	},
+	private _collapsible = false;
+	private _splittable = false;
+	private _flex = false;
+	private _autoscroll = false;
+	private _slide = false;
+	private _isSlide = false;
+	private _original?: [string, string];
+	private _fixBarHeight?: boolean;
+	private _title: string | null = null;
+	public _fcvflex?: string | boolean | null;
+	public _fchflex?: string | boolean | null;
 
-	$define: {
-		/**
-		 * Sets whether to grow and shrink vertical/horizontal to fit their given
-		 * space, so called flexibility.
-		 * @param boolean flex
-		 */
-		/**
-		 * Returns whether to grow and shrink vertical/horizontal to fit their given
-		 * space, so called flexibility.
-		 *
-		 * <p>
-		 * Default: false.
-		 * @return boolean
-		 */
-		flex: function (v) {
-			_setFirstChildFlex(this, v);
+	/**
+	 * Sets whether to grow and shrink vertical/horizontal to fit their given
+	 * space, so called flexibility.
+	 * @param boolean flex
+	 */
+	public setFlex(flex: boolean, opts?: Record<string, boolean>): this {
+		const o = this._flex;
+		this._flex = flex;
+
+		if (o !== flex || (opts && opts.force)) {
+			_setFirstChildFlex(this, flex);
 			this.rerender();
-		},
-		/**
-		 * Sets the border (either none or normal).
-		 *
-		 * @param String border the border. If null or "0", "none" is assumed.
-		 */
-		/**
-		 * Returns the border.
-		 * <p>
-		 * The border actually controls what CSS class to use: If border is null, it
-		 * implies "none".
-		 *
-		 * <p>
-		 * If you also specify the CSS class ({@link #setSclass}), it overwrites
-		 * whatever border you specify here.
-		 *
-		 * <p>
-		 * Default: "normal".
-		 * @return String
-		 */
-		border: function (border) {
+		}
+
+		return this;
+	}
+
+	/**
+	 * Returns whether to grow and shrink vertical/horizontal to fit their given
+	 * space, so called flexibility.
+	 *
+	 * <p>
+	 * Default: false.
+	 * @return boolean
+	 */
+	public isFlex(): boolean {
+		return this._flex;
+	}
+
+	/**
+	 * Sets the border (either none or normal).
+	 *
+	 * @param String border the border. If null or "0", "none" is assumed.
+	 */
+	public setBorder(border: string, opts?: Record<string, boolean>): this {
+		const o = this._border;
+		this._border = border;
+
+		if (o !== border || (opts && opts.force)) {
 			if (!border || '0' == border)
-				this._border = border = 'none';
+				this._border = 'none';
 
 			if (this.desktop)
-				(this.$n('real') || {})._lastSize = null;
+				((this.$n('real') || {}) as { _lastSize })._lastSize = null;
 
 			this.updateDomClass_();
-		},
-		/**
-		 * Sets the title.
-		 * @param String title
-		 */
-		/**
-		 * Returns the title.
-		 * <p>Default: null.
-		 * @return String
-		 */
-		title: function () {
+		}
+
+		return this;
+	}
+
+	/**
+	 * Returns the border.
+	 * <p>
+	 * The border actually controls what CSS class to use: If border is null, it
+	 * implies "none".
+	 *
+	 * <p>
+	 * If you also specify the CSS class ({@link #setSclass}), it overwrites
+	 * whatever border you specify here.
+	 *
+	 * <p>
+	 * Default: "normal".
+	 * @return String
+	 */
+	public getBorder(): string {
+		return this._border;
+	}
+
+	/**
+	 * Sets the title.
+	 * @param String title
+	 */
+	public setTitle(title: string, opts?: Record<string, boolean>): this {
+		const o = this._title;
+		this._title = title;
+
+		if (o !== title || (opts && opts.force)) {
 			this.rerender();
-		},
-		/**
-		 * Sets whether enable the split functionality.
-		 * @param boolean splittable
-		 */
-		/**
-		 * Returns whether enable the split functionality.
-		 * <p>
-		 * Default: false.
-		 * @return boolean
-		 */
-		splittable: function (splittable) {
+		}
+
+		return this;
+	}
+
+	/**
+	 * Returns the title.
+	 * <p>Default: null.
+	 * @return String
+	 */
+	public getTitle(): string | null {
+		return this._title;
+	}
+
+	/**
+	 * Sets whether enable the split functionality.
+	 * @param boolean splittable
+	 */
+	public setSplittable(splittable: boolean, opts?: Record<string, boolean>): this {
+		const o = this._splittable;
+		this._splittable = splittable;
+
+		if (o !== splittable || (opts && opts.force)) {
 			if (this.parent && this.desktop)
-				this.parent.resize();
-		},
-		/**
-		 * Sets the maximum size of the resizing element.
-		 * @param int maxsize
-		 */
-		/**
-		 * Returns the maximum size of the resizing element.
-		 * <p>
-		 * Default: 2000.
-		 * @return int
-		 */
-		maxsize: null,
-		/**
-		 * Sets the minimum size of the resizing element.
-		 * @param int minsize
-		 */
-		/**
-		 * Returns the minimum size of the resizing element.
-		 * <p>
-		 * Default: 0.
-		 * @return int
-		 */
-		minsize: null,
-		/**
-		 * Sets whether set the initial display to collapse.
-		 *
-		 * <p>It only applied when {@link #getTitle()} is not null.
-		 * @param boolean collapsible
-		 */
-		/**
-		 * Returns whether set the initial display to collapse.
-		 * <p>
-		 * Default: false.
-		 * @return boolean
-		 */
-		collapsible: function (collapsible) {
+				(this.parent as zul.layout.Borderlayout).resize();
+		}
+
+		return this;
+	}
+
+	/**
+	 * Returns whether enable the split functionality.
+	 * <p>
+	 * Default: false.
+	 * @return boolean
+	 */
+	public isSplittable(): boolean {
+		return this._splittable;
+	}
+
+	/**
+	 * Sets the maximum size of the resizing element.
+	 * @param int maxsize
+	 */
+	public setMaxsize(maxsize: number): this {
+		this._maxsize = maxsize;
+		return this;
+	}
+
+	/**
+	 * Returns the maximum size of the resizing element.
+	 * <p>
+	 * Default: 2000.
+	 * @return int
+	 */
+	public getMaxsize(): number {
+		return this._maxsize;
+	}
+
+	/**
+	 * Sets the minimum size of the resizing element.
+	 * @param int minsize
+	 */
+	public setMinsize(minsize: number): this {
+		this._minsize = minsize;
+		return this;
+	}
+
+	/**
+	 * Returns the minimum size of the resizing element.
+	 * <p>
+	 * Default: 0.
+	 * @return int
+	 */
+	public getMinsize(): number {
+		return this._minsize;
+	}
+
+	/**
+	 * Sets whether set the initial display to collapse.
+	 *
+	 * <p>It only applied when {@link #getTitle()} is not null.
+	 * @param boolean collapsible
+	 */
+	public setCollapsible(collapsible: boolean, opts?: Record<string, boolean>): this {
+		const o = this._collapsible;
+		this._collapsible = collapsible;
+
+		if (o !== collapsible || (opts && opts.force)) {
 			var btn = this.$n(this._open ? 'btn' : 'btned');
 			if (btn && (!collapsible || this._closable))
 				btn.style.display = collapsible ? '' : 'none';
-		},
-		/**
-		 * Sets whether enable overflow scrolling.
-		 * @param boolean autoscroll
-		 */
-		/**
-		 * Returns whether enable overflow scrolling.
-		 * <p>
-		 * Default: false.
-		 * @return boolean
-		 */
-		autoscroll: function (autoscroll) {
+		}
+
+		return this;
+	}
+
+	/**
+	 * Returns whether set the initial display to collapse.
+	 * <p>
+	 * Default: false.
+	 * @return boolean
+	 */
+	public isCollapsible(): boolean {
+		return this._collapsible;
+	}
+
+	/**
+	 * Sets whether enable overflow scrolling.
+	 * @param boolean autoscroll
+	 */
+	public setAutoscroll(autoscroll: boolean, opts?: Record<string, boolean>): this {
+		const o = this._autoscroll;
+		this._autoscroll = autoscroll;
+
+		if (o !== autoscroll || (opts && opts.force)) {
 			var cave = this.$n('cave');
 			if (cave) {
 				var bodyEl = this.isFlex() && this.getFirstChild() ?
-						this.getFirstChild().$n() : cave;
+					this.getFirstChild()!.$n_() : cave;
 				if (autoscroll) {
 					if (this._nativebar) {
 						bodyEl.style.overflow = 'auto';
@@ -201,28 +291,39 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				}
 				this._fireSizedIfChildFlex();
 			}
-		},
-		/**
-		 * Opens or collapses the splitter. Meaningful only if
-		 * {@link #isCollapsible} is not false.
-		 * @param boolean open
-		 */
-		/**
-		 * Returns whether it is open (i.e., not collapsed. Meaningful only if
-		 * {@link #isCollapsible} is not false.
-		 * <p>
-		 * Default: true.
-		 * @return boolean
-		 */
-		open: function (open, fromServer, nonAnima) {
+		}
+
+		return this;
+	}
+
+	/**
+	 * Returns whether enable overflow scrolling.
+	 * <p>
+	 * Default: false.
+	 * @return boolean
+	 */
+	public isAutoscroll(): boolean {
+		return this._autoscroll;
+	}
+
+	/**
+	 * Opens or collapses the splitter. Meaningful only if
+	 * {@link #isCollapsible} is not false.
+	 * @param boolean open
+	 */
+	public setOpen(open: boolean, fromServer?: Record<string, boolean>, nonAnima?: boolean): this {
+		const o = this._open;
+		this._open = open;
+
+		if (o !== open || (fromServer && fromServer.force)) {
 			if (!this.$n() || !this.isCollapsible() || !this.parent || (!fromServer && !this._closable)) {
-				return; //nothing changed
+				return this; //nothing changed
 			}
 
-			nonAnima = this.parent._animationDisabled || nonAnima;
+			nonAnima = (this.parent as zul.layout.Borderlayout)._animationDisabled || nonAnima;
 
 			var colled = this.$n('colled'),
-				real = this.$n('real');
+				real = this.$n_('real');
 			if (open) {
 				// Bug 2994592
 				if (fromServer) {
@@ -233,9 +334,9 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 							jq(real).show();
 							jq(colled).hide();
 						}
-						return;
+						return this;
 					}
-					var s = this.$n('real').style;
+					var s = real.style;
 					s.visibility = 'hidden';
 					s.display = '';
 					this._syncSize(true);
@@ -248,8 +349,8 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 						zk(colled).slideOut(this, {
 							anchor: this.sanchor,
 							duration: 200,
-							afterAnima: fromServer ? this.$class.afterSlideOut :
-								this.$class._afterSlideOutX
+							afterAnima: fromServer ? LayoutRegion.afterSlideOut :
+								LayoutRegion._afterSlideOutX
 						});
 					else {
 						jq(real).show();
@@ -260,116 +361,164 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			} else {
 				if (colled && !nonAnima)
 					zk(real).slideOut(this, {
-							anchor: this.sanchor,
-							beforeAnima: this.$class.beforeSlideOut,
-							afterAnima: fromServer ? this.$class.afterSlideOut :
-								this.$class._afterSlideOutX
-						});
+						anchor: this.sanchor,
+						beforeAnima: LayoutRegion.beforeSlideOut,
+						afterAnima: fromServer ? LayoutRegion.afterSlideOut :
+							LayoutRegion._afterSlideOutX
+					});
 				else {
 					if (colled)
 						jq(colled).show();
 					jq(real).hide();
 				}
 			}
-			if (nonAnima) this.parent.resize();
+			if (nonAnima) (this.parent as zul.layout.Borderlayout).resize();
 			if (!fromServer && nonAnima) // B50-ZK-301: onOpen is fire after animation
 				this.fire('onOpen', {open: open});
-		},
-		/**
-		 * Slides down or up the region. Meaningful only if
-		 * {@link #isCollapsible} is not false and {@link #isOpen} is false.
-		 * @param boolean slide
-		 * @since 8.0.2
-		 */
-		/**
-		 * Returns whether it is slide down.
-		 * <p>
-		 * Default: false.
-		 * @return boolean
-		 * @since 8.0.2
-		 */
-		slide: function (slide, fromServer, nonAnima) {
+		}
+
+		return this;
+	}
+
+	/**
+	 * Returns whether it is open (i.e., not collapsed. Meaningful only if
+	 * {@link #isCollapsible} is not false.
+	 * <p>
+	 * Default: true.
+	 * @return boolean
+	 */
+	public isOpen(): boolean {
+		return this._open;
+	}
+
+	/**
+	 * Slides down or up the region. Meaningful only if
+	 * {@link #isCollapsible} is not false and {@link #isOpen} is false.
+	 * @param boolean slide
+	 * @since 8.0.2
+	 */
+	public setSlide(slide: boolean, fromServer?: Record<string, boolean>, nonAnima?: boolean): this {
+		const o = this._slide;
+		this._slide = slide;
+
+		if (o !== slide || (fromServer && fromServer.force)) {
 			if (!this._isSlide) {
 				this._isSlide = true;
-				var real = this.$n('real'),
+				var real = this.$n_('real'),
 					s = real.style;
 				s.visibility = 'hidden';
 				s.display = '';
 				this._syncSize();
 				this._original = [s.left, s.top];
 				this._alignTo();
-				s.zIndex = 100;
+				s.zIndex = '100';
 
 				if (this.$n('btn'))
-					this.$n('btn').style.display = 'none';
+					this.$n_('btn').style.display = 'none';
 				s.visibility = '';
 				s.display = 'none';
-				jq(this.$n()).addClass(this.$s('slide'));
+				jq(this.$n()!).addClass(this.$s('slide'));
 				zk(real).slideDown(this, {
 					anchor: this.sanchor,
-					afterAnima: this.$class.afterSlideDown
+					afterAnima: LayoutRegion.afterSlideDown
 				});
 			} else {
-				if (nonAnima) this.$class.afterSlideUp.apply(this, [this.$n('real')]);
+				if (nonAnima) LayoutRegion.afterSlideUp.apply(this, [this.$n_('real')]);
 				else {
 					zk(this.$n('real')).slideUp(this, {
 						anchor: this.sanchor,
-						afterAnima: this.$class.afterSlideUp
+						afterAnima: LayoutRegion.afterSlideUp
 					});
 				}
 			}
 			if (!fromServer) this.fire('onSlide', {slide: slide});
-		},
-		/**
-		 * Sets whether users can slide (preview) the region when clicked on a collapsed region.
-		 * Meaningful only if {@link #isCollapsible()} is true and {@link #isOpen()} is false.
-		 *
-		 * @param boolean slidable whether users can slide (preview) the region.
-		 * @since 8.5.2
-		 */
-		/**
-		 * Returns whether users can slide (preview) the region when clicked on a collapsed region.
-		 * In other words, if false, clicking on a collapsed region will open it instead of sliding.
-		 * <p>Default: true.
-		 *
-		 * @return boolean whether users can slide (preview) the region.
-		 * @since 8.5.2
-		 */
-		slidable: null,
-		/**
-		 * Sets whether users can open or close the region.
-		 * Meaningful only if {@link #isCollapsible()} is true.
-		 *
-		 * @param boolean closable whether users can open or close the region.
-		 * @since 8.5.2
-		 */
-		/**
-		 * Returns whether users can open or close the region.
-		 * In other words, if false, users are no longer allowed to
-		 * change the open status (by clicking the button on the bar).
-		 * <p>Default: true.
-		 *
-		 * @return boolean whether users can open or close the region.
-		 * @since 8.5.2
-		 */
-		closable: function (v) {
+		}
+
+		return this;
+	}
+
+	/**
+	 * Returns whether it is slide down.
+	 * <p>
+	 * Default: false.
+	 * @return boolean
+	 * @since 8.0.2
+	 */
+	public isSlide(): boolean {
+		return this._slide;
+	}
+
+	/**
+	 * Sets whether users can slide (preview) the region when clicked on a collapsed region.
+	 * Meaningful only if {@link #isCollapsible()} is true and {@link #isOpen()} is false.
+	 *
+	 * @param boolean slidable whether users can slide (preview) the region.
+	 * @since 8.5.2
+	 */
+	public setSlidable(slidable: boolean): this {
+		this._slidable = slidable;
+		return this;
+	}
+
+	/**
+	 * Returns whether users can slide (preview) the region when clicked on a collapsed region.
+	 * In other words, if false, clicking on a collapsed region will open it instead of sliding.
+	 * <p>Default: true.
+	 *
+	 * @return boolean whether users can slide (preview) the region.
+	 * @since 8.5.2
+	 */
+	public isSlidable(): boolean {
+		return this._slidable;
+	}
+
+	/**
+	 * Sets whether users can open or close the region.
+	 * Meaningful only if {@link #isCollapsible()} is true.
+	 *
+	 * @param boolean closable whether users can open or close the region.
+	 * @since 8.5.2
+	 */
+	public setClosable(v: boolean, opts?: Record<string, boolean>): this {
+		const o = this._closable;
+		this._closable = v;
+
+		if (o !== v || (opts && opts.force)) {
 			if (this.desktop && this._collapsible) {
-				jq(this.$n('btn')).toggle(v);
-				jq(this.$n('btned')).toggle(v);
-				jq(this.$n('splitbtn')).toggleClass(this.$s('splitter-button-disabled'), !v);
+				jq(this.$n('btn')!).toggle(v);
+				jq(this.$n('btned')!).toggle(v);
+				jq(this.$n('splitbtn')!).toggleClass(this.$s('splitter-button-disabled'), !v);
 			}
 		}
-	},
+
+		return this;
+	}
+
+	/**
+	 * Returns whether users can open or close the region.
+	 * In other words, if false, users are no longer allowed to
+	 * change the open status (by clicking the button on the bar).
+	 * <p>Default: true.
+	 *
+	 * @return boolean whether users can open or close the region.
+	 * @since 8.5.2
+	 */
+	public isClosable(): boolean {
+		return this._closable;
+	}
+
 	//bug #3014664
-	setVflex: function (v) { //vflex ignored for LayoutRegion
-		if (v != 'min') v = false;
-		this.$super(zul.layout.LayoutRegion, 'setVflex', v);
-	},
+	public override setVflex(v: string | null): void { //vflex ignored for LayoutRegion
+		if (v != 'min') v = 'false';
+		super.setVflex(v);
+	}
+
 	//bug #3014664
-	setHflex: function (v) { //hflex ignored for LayoutRigion
-		if (v != 'min') v = false;
-		this.$super(zul.layout.LayoutRegion, 'setHflex', v);
-	},
+	public override setHflex(v: string | null): void { //hflex ignored for LayoutRigion
+		if (v != 'min') v = 'false';
+		super.setHflex(v);
+	}
+
 	/**
 	 * Returns the collapsed margins, which is a list of numbers separated by comma.
 	 *
@@ -377,87 +526,97 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	 * Default: "3,3,3,3".
 	 * @return String
 	 */
-	getCmargins: function () {
+	public getCmargins(): string {
 		return zUtl.intsToString(this._open ? this._margins : this._cmargins);
-	},
+	}
+
 	/**
 	 * Sets the collapsed margins for the element "0,1,2,3" that direction is
 	 * "top,left,right,bottom"
 	 * @param String cmargins
 	 */
-	setCmargins: function (cmargins) {
+	public setCmargins(cmargins: string): void {
 		if (this.getCmargins() != cmargins) {
-			this._cmargins = zUtl.stringToInts(cmargins, 0);
+			this._cmargins = zUtl.stringToInts(cmargins, 0)!;
 			if (this.parent && this.desktop)
-				this.parent.resize();
+				(this.parent as zul.layout.Borderlayout).resize();
 		}
-	},
+	}
+
 	/**
 	 * Returns the current margins.
 	 * @return Dimension
 	 */
-	getCurrentMargins_: function () {
-		return zul.layout.LayoutRegion._aryToObject(this._open ? this._margins : this._cmargins);
-	},
+	public getCurrentMargins_(): zk.Dimension {
+		return LayoutRegion._aryToObject(this._open ? this._margins : this._cmargins);
+	}
+
 	/**
 	 * Returns the margins, which is a list of numbers separated by comma.
 	 * <p>
 	 * Default: "0,0,0,0".
 	 * @return String
 	 */
-	getMargins: function () {
+	public getMargins(): string {
 		return zUtl.intsToString(this._margins);
-	},
+	}
+
 	/**
 	 * Sets margins for the element "0,1,2,3" that direction is
 	 * "top,left,right,bottom"
 	 * @param String margins
 	 */
-	setMargins: function (margins) {
+	public setMargins(margins: string): void {
 		if (this.getMargins() != margins) {
-			this._margins = zUtl.stringToInts(margins, 0);
+			this._margins = zUtl.stringToInts(margins, 0)!;
 			if (this.parent && this.desktop)
-				this.parent.resize();
+				(this.parent as zul.layout.Borderlayout).resize();
 		}
-	},
-	domClass_: function (no) {
-		var scls = this.$supers('domClass_', arguments);
+	}
+
+	protected override domClass_(no?: zk.DomClassOptions): string {
+		var scls = super.domClass_(no);
 		if (!no || !no.zclass) {
 			var added = 'normal' == this.getBorder() ? '' : this.$s('noborder');
 			if (added) scls += (scls ? ' ' : '') + added;
 		}
 		return scls;
-	},
-	getZclass: function () {
+	}
+
+	public override getZclass(): string {
 		return this._zclass == null ? 'z-' + this.getPosition() : this._zclass;
-	},
+	}
+
 	//-- super --//
-	getMarginSize_: function (attr) {
+	public override getMarginSize_(attr: string): number {
 		return zk(this.$n('real')).sumStyles(attr == 'h' ? 'tb' : 'lr', jq.margins);
-	},
-	setWidth: function (width) {
+	}
+
+	public override setWidth(width: string): this {
 		this._width = width;
-		var real = this.$n('real');
+		var real: null | undefined | HTMLElement & Partial<{ _lastSize }> = this.$n('real');
 		if (real) {
 			real.style.width = width ? width : '';
 			real._lastSize = null;
-			this.parent.resize();
+			(this.parent as zul.layout.Borderlayout).resize();
 		}
 		return this;
-	},
-	setHeight: function (height) {
+	}
+
+	public override setHeight(height: string): this {
 		this._height = height;
-		var real = this.$n('real');
+		var real: null | undefined | HTMLElement & Partial<{ _lastSize }> = this.$n('real');
 		if (real) {
 			real.style.height = height ? height : '';
 			real._lastSize = null;
-			this.parent.resize();
+			(this.parent as zul.layout.Borderlayout).resize();
 		}
 		return this;
-	},
-	setVisible: function (visible) {
+	}
+
+	public override setVisible(visible: boolean): this {
 		if (this._visible != visible) {
-			this.$supers('setVisible', arguments);
+			super.setVisible(visible);
 			var real = this.$n('real'),
 				colled = this.$n('colled');
 			if (real) {
@@ -476,16 +635,17 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 					if (colled)
 						jq(colled).hide();
 				}
-				this.parent.resize();
+				(this.parent as zul.layout.Borderlayout).resize();
 			}
 		}
 		return this;
-	},
+	}
+
 	//@Override to apply the calculated value on xxx-real element
-	setFlexSize_: function (sz, isFlexMin) {
-		if (this._cssflex && this.parent.getFlexContainer_() != null && !isFlexMin)
+	public override setFlexSize_(sz: { width?: string | number; height?: string | number }, isFlexMin?: boolean): void {
+		if (this._cssflex && this.parent!.getFlexContainer_() != null && !isFlexMin)
 			return;
-		var n = this.$n('real'),
+		var n = this.$n_('real'),
 			ns = n.style;
 		if (sz.height !== undefined) {
 			if (sz.height == 'auto')
@@ -496,7 +656,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				var cave = this.$n('cave'),
 					cap = this.$n('cap'),
 					hgh = cave && this._vflex != 'min' ? (cave.offsetHeight + cave.offsetTop)
-						: sz.height - zk(n).marginHeight();
+						: (sz.height as number) - zk(n).marginHeight();
 				if (cap) // B50-ZK-236: add header height
 					hgh += cap.offsetHeight;
 				ns.height = jq.px0(hgh);
@@ -508,36 +668,39 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			else if (sz.width == '')
 				n.style.width = this._width ? this._width : '';
 			else {
-				var wdh = sz.width - zk(n).marginWidth();
+				var wdh = (sz.width as number) - zk(n).marginWidth();
 				n.style.width = jq.px0(wdh);
 			}
 		}
-	},
-	updateDomClass_: function () {
+	}
+
+	protected override updateDomClass_(): void {
 		if (this.desktop) {
 			var real = this.$n('real');
 			if (real) {
 				real.className = this.domClass_();
 				if (this.parent)
-					this.parent.resize();
+					(this.parent as zul.layout.Borderlayout).resize();
 			}
 		}
-	},
-	updateDomStyle_: function () {
+	}
+
+	protected override updateDomStyle_(): void {
 		if (this.desktop) {
 			var real = this.$n('real');
 			if (real) {
 				zk(real).clearStyles().jq.css(jq.parseStyle(this.domStyle_()));
 				if (this.parent)
-					this.parent.resize();
+					(this.parent as zul.layout.Borderlayout).resize();
 			}
 		}
-	},
-	onChildAdded_: function (child) {
-		this.$supers('onChildAdded_', arguments);
-		if (child.$instanceof(zul.layout.Borderlayout)) {
+	}
+
+	protected override onChildAdded_(child: zk.Widget): void {
+		super.onChildAdded_(child);
+		if (child instanceof zul.layout.Borderlayout) {
 			this._flex = true;
-			jq(this.$n()).addClass(this.$s('nested'));
+			jq(this.$n()!).addClass(this.$s('nested'));
 		}
 
 		// Bug for B36-2841185.zul, resync flex="true"
@@ -545,15 +708,16 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			_setFirstChildFlex(this, true, true);
 
 		// reset
-		(this.$n('real') || {})._lastSize = null;
+		((this.$n('real') || {}) as { _lastSize })._lastSize = null;
 		if (this.parent && this.desktop) {
 			// B65-ZK-1076 for tabpanel, should fix in isRealVisible() when zk 7
 			if (this.parent.isRealVisible({dom: true}))
-				this.parent.resize();
+				(this.parent as zul.layout.Borderlayout).resize();
 		}
-	},
-	onChildRemoved_: function (child) {
-		this.$supers('onChildRemoved_', arguments);
+	}
+
+	protected override onChildRemoved_(child: zk.Widget): void {
+		super.onChildRemoved_(child);
 
 		// check before "if (child.$instanceof(zul.layout.Borderlayout)) {"
 		if (this.isFlex())
@@ -561,31 +725,33 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 
 		if (child.$instanceof(zul.layout.Borderlayout)) {
 			this._flex = false;
-			jq(this.$n()).removeClass(this.$s('nested'));
+			jq(this.$n_()).removeClass(this.$s('nested'));
 		}
 
 		// reset
-		(this.$n('real') || {})._lastSize = null;
+		((this.$n('real') || {}) as { _lastSize })._lastSize = null;
 		if (this.parent && this.desktop && !this.childReplacing_) {
 			// B65-ZK-1076 for tabpanel, should fix in isRealVisible() when zk 7
 			if (this.parent.isRealVisible({dom: true}))
-				this.parent.resize();
+				(this.parent as zul.layout.Borderlayout).resize();
 		}
-	},
-	rerender: function () {
-		this.$supers('rerender', arguments);
-		if (this.parent)
-			this.parent.resize();
-		return this;
-	},
-	bind_: function () {
-		this.$supers(zul.layout.LayoutRegion, 'bind_', arguments);
+	}
+
+	public override rerender(skipper?: zk.Skipper | number | null): void {
+		super.rerender(skipper);
+		if (this.parent) {
+			(this.parent as zul.layout.Borderlayout).resize();
+		}
+	}
+
+	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+		super.bind_(desktop, skipper, after);
 		if (this.getPosition() != zul.layout.Borderlayout.CENTER) {
 			var split = this.$n('split');
 			if (split) {
 				this._fixSplit();
 				var vert = this._isVertical(),
-					LR = this.$class;
+					LR = LayoutRegion;
 
 				this._drag = new zk.Draggable(this, split, {
 					constraint: vert ? 'vertical' : 'horizontal',
@@ -603,26 +769,26 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 						real = this.$n('real');
 					if (colled)
 						jq(colled).show();
-					jq(real).hide();
+					jq(real!).hide();
 				}
 
 				if (!this._visible) {
 					var colled = this.$n('colled'),
 						real = this.$n('real');
-					jq(real).hide();
+					jq(real!).hide();
 					if (colled)
 						jq(colled).hide();
 				}
 			}
 		}
 
-		if (this._open && !this.isVisible()) this.$n().style.display = 'none';
+		if (this._open && !this.isVisible()) this.$n_().style.display = 'none';
 
 		if (this.isAutoscroll()) {
 			if (this._nativebar) {
 				var bodyEl = this.isFlex() && this.getFirstChild() ?
-						this.getFirstChild().$n() : this.$n('cave');
-				this.domListen_(bodyEl, 'onScroll');
+					this.getFirstChild()!.$n() : this.$n('cave');
+				this.domListen_(bodyEl!, 'onScroll');
 			} else {
 				zWatch.listen({onSize: this});
 			}
@@ -630,13 +796,14 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 
 		if (this.isFlex())
 			_setFirstChildFlex(this, true, true);
-	},
-	unbind_: function () {
+	}
+
+	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		if (this.isAutoscroll()) {
 			if (this._nativebar) {
 				var bodyEl = this.isFlex() && this.getFirstChild() ?
-						this.getFirstChild().$n() : this.$n('cave');
-				this.domUnlisten_(bodyEl, 'onScroll');
+					this.getFirstChild()!.$n() : this.$n('cave');
+				this.domUnlisten_(bodyEl!, 'onScroll');
 			} else {
 				zWatch.unlisten({onSize: this});
 			}
@@ -654,9 +821,10 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		if (this.isFlex())
 			_setFirstChildFlex(this, false);
 
-		this.$supers(zul.layout.LayoutRegion, 'unbind_', arguments);
-	},
-	afterChildMinFlexChanged_: function (wgt, o) {
+		super.unbind_(skipper, after, keepRod);
+	}
+
+	public override afterChildMinFlexChanged_(wgt: zk.Widget, o: string): void {
 		if (this.desktop) {
 			var cave = this.$n('cave'),
 				real = this.$n('real');
@@ -665,10 +833,11 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			if (real)
 				real.style[o == 'h' ? 'height' : 'width'] = '';
 			// resize again
-			this.parent._resize();
+			(this.parent as zul.layout.Borderlayout).resize();
 		}
-	},
-	onSize: function () {
+	}
+
+	public override onSize(): void {
 		var wgt = this;
 
 		// Bug ZK-2784 we should reset the height of the target before doing children's onSize
@@ -684,121 +853,132 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				var cave = wgt.$n('cave');
 				if (!wgt._scrollbar && !wgt._nativebar && cave && cave.firstChild)
 					wgt._scrollbar = wgt.initScrollbar_();
-				wgt.refreshBar_();
+				(wgt as LayoutRegion).refreshBar_();
 			}
 		}, 200);
-	},
-	initScrollbar_: function () {
+	}
+
+	protected initScrollbar_(): zul.Scrollbar {
 		var wgt = this,
-			embed = jq(wgt.$n('real')).data('embedscrollbar') !== false, // change default value to true since 7.0.2
-			cave = wgt.$n('cave');
-		return new zul.Scrollbar(cave, cave.firstChild, {
+			embed = jq(wgt.$n_('real')).data('embedscrollbar') !== false, // change default value to true since 7.0.2
+			cave = wgt.$n_('cave');
+		return new zul.Scrollbar(cave, cave.firstChild as HTMLElement, {
 			embed: embed,
 			onScrollEnd: function () {
 				wgt._doScroll();
 			}
 		});
-	},
-	refreshBar_: function (showBar, scrollToTop) {
+	}
+
+	protected refreshBar_(showBar?: boolean, scrollToTop?: boolean): void {
 		var bar = this._scrollbar;
 		if (bar && this._open) {
-			var p = this.$n('cave'),
+			var p = this.$n_('cave'),
 				fc = this.firstChild,
-				fch = fc ? fc.getHeight() : 0,
+				fch = fc ? fc.getHeight() : '',
 				c = p.firstChild,
 				ph = p.offsetHeight;
 
 			while (c && c.nodeType == 3)
 				c = c.nextSibling;
 			if (c) {
-				var cs = c.style;
+				var cs = (c as HTMLElement).style;
 
 				if (!fch || !fch.indexOf('px')) { // only recalculate size if no fixed height
 					// force to recalculate size
 					cs.height = '';
-					if (c.offsetHeight);
+					if ((c as HTMLElement).offsetHeight) {
+						// empty to force recalculate size
+					}
 
-					cs.height = jq.px(c.scrollHeight >= ph ? c.scrollHeight : ph);
+					cs.height = jq.px((c as HTMLElement).scrollHeight >= ph ? (c as HTMLElement).scrollHeight : ph);
 					this._fixBarHeight = true;
 				} else {
 					this._fixBarHeight = false;
 				}
-				bar.scroller = c;
+				bar.scroller = c as HTMLElement;
 				bar.syncSize(showBar);
 				if (scrollToTop)
 					bar.scrollTo(0, 0);
 			}
 		}
-	},
-	destroyBar_: function () {
+	}
+
+	protected destroyBar_(): void {
 		var bar = this._scrollbar;
 		if (bar) {
 			bar.destroy();
-			bar = this._scrollbar = null;
+			delete this._scrollbar;
 		}
-	},
-	doResizeScroll_: function () {
-		this.$supers('doResizeScroll_', arguments);
+	}
+
+	protected override doResizeScroll_(): void {
+		super.doResizeScroll_();
 		this.refreshBar_(true);
-	},
-	onResponse: function () {
+	}
+
+	public onResponse(): void {
 		this._fireSizedIfChildFlex();
-	},
-	_fireSizedIfChildFlex: function () {
+	}
+
+	private _fireSizedIfChildFlex(): void {
 		// only fire when child has h/vflex
 		for (var w = this.firstChild; w; w = w.nextSibling) {
-			if (w._nvflex > 0 || w._nhflex > 0) {
+			if ((w._nvflex && w._nvflex > 0) || (w._nhflex && w._nhflex > 0)) {
 				zUtl.fireSized(this);
 				break;
 			}
 		}
-	},
-	doClick_: function (evt) {
-		var target = evt.domTarget;
+	}
+
+	public override doClick_(evt: zk.Event, popupOnly?: boolean): void {
+		var target = evt.domTarget!;
 		if (!target.id)
-			target = target.parentNode;
+			target = target.parentNode as HTMLElement;
 		switch (target) {
-		case this.$n('colled'):
-		case this.$n('title'):
-			if (this._slidable) {
-				this.setSlide(!this._isSlide);
-				break;
-			}
+			case this.$n('colled'):
+			case this.$n('title'):
+				if (this._slidable) {
+					this.setSlide(!this._isSlide);
+					break;
+				}
 			// fall through if not sildable
-		case this.$n('btn'):
-		case this.$n('btned'):
-		case this.$n('splitbtn'):
-			if (!this.isCollapsible() || this._isSlide || zk.animating() || !this._closable)
-				return;
-			if (!this._open) {
-				var s = this.$n('real').style;
-				s.visibility = 'hidden';
-				s.display = '';
-				this._syncSize(true);
-				s.visibility = '';
-				s.display = 'none';
-			}
-			this.setOpen(!this._open);
-			break;
+			case this.$n('btn'):
+			case this.$n('btned'):
+			case this.$n('splitbtn'):
+				if (!this.isCollapsible() || this._isSlide || zk.animating() || !this._closable)
+					return;
+				if (!this._open) {
+					var s = this.$n_('real').style;
+					s.visibility = 'hidden';
+					s.display = '';
+					this._syncSize(true);
+					s.visibility = '';
+					s.display = 'none';
+				}
+				this.setOpen(!this._open);
+				break;
 		}
-		this.$supers('doClick_', arguments);
-	},
-	_docClick: function (evt) {
-		var target = evt.target;
+		super.doClick_(evt, popupOnly);
+	}
+
+	private _docClick(evt: JQuery.TriggeredEvent): void {
+		var target = evt.target as HTMLElement;
 		if (this._isSlide && !jq.isAncestor(this.$n('real'), target)) {
 			var btned = this.$n('btned');
 			if (this._closable && (btned == target || btned == target.parentNode)) {
-				this.setSlide(false, false, true);
-				this.setOpen(true, false, true);
-				this.$n('real').style.zIndex = ''; //reset
-			} else if ((this.$class.uuid(target) != this.uuid) || !zk.animating()) {
+				this.setSlide(false, undefined, true);
+				this.setOpen(true, undefined, true);
+				this.$n_('real').style.zIndex = ''; //reset
+			} else if ((LayoutRegion.uuid(target) != this.uuid) || !zk.animating()) {
 				this.setSlide(false);
 			}
 		}
-	},
-	_syncSize: function (inclusive) {
-		var layout = this.parent,
-			el = layout.$n(),
+	}
+
+	private _syncSize(inclusive?: boolean): void {
+		var layout = this.parent as zul.layout.Borderlayout,
+			el = layout.$n_(),
 			width = el.offsetWidth,
 			height = el.offsetHeight,
 			center = {
@@ -810,101 +990,110 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 
 		this._open = true;
 
-		for (var region, rs = ['north', 'south', 'west', 'east'],
-				j = 0, k = rs.length; j < k; ++j) {
-			region = layout[rs[j]];
+		for (var region: LayoutRegion | undefined, rs = ['north', 'south', 'west', 'east'],
+				 j = 0, k = rs.length; j < k; ++j) {
+			region = layout[rs[j]] as LayoutRegion | undefined;
 			if (region && (zk(region.$n()).isVisible()
-			|| zk(region.$n('colled')).isVisible())) {
+				|| zk(region.$n('colled')).isVisible())) {
 				var ignoreSplit = region == this,
 					ambit = region._ambit(ignoreSplit),
-					LR = this.$class;
+					LR = LayoutRegion;
 				switch (rs[j]) {
-				case 'north':
-				case 'south':
-					ambit.w = width - ambit.w;
-					if (rs[j] == 'north')
-						center.y = ambit.ts;
-					else
-						ambit.y = height - ambit.y;
-					center.h -= ambit.ts;
-					if (ignoreSplit) {
-						ambit.w = this.$n('colled').offsetWidth;
-						if (inclusive) {
-							var cmars = LR._aryToObject(this._cmargins);
-							ambit.w += cmars.left + cmars.right;
+					case 'north':
+					case 'south':
+						ambit.w = width - ambit.w;
+						if (rs[j] == 'north')
+							center.y = ambit.ts!;
+						else
+							ambit.y = height - ambit.y;
+						center.h -= ambit.ts!;
+						if (ignoreSplit) {
+							ambit.w = this.$n_('colled').offsetWidth;
+							if (inclusive) {
+								var cmars = LR._aryToObject(this._cmargins);
+								ambit.w += cmars.width;
+							}
+							layout._resizeWgt(region, ambit, true);
+							this._open = false;
+							return;
 						}
-						layout._resizeWgt(region, ambit, true);
-						this._open = false;
-						return;
-					}
-					break;
-				default:
-					ambit.y += center.y;
-					ambit.h = center.h - ambit.h;
-					if (rs[j] == 'east')
-						ambit.x = width - ambit.x;
-					else center.x += ambit.ts;
-					center.w -= ambit.ts;
-					if (ignoreSplit) {
-						ambit.h = this.$n('colled').offsetHeight;
-						if (inclusive) {
-							var cmars = LR._aryToObject(this._cmargins);
-							ambit.h += cmars.top + cmars.bottom;
+						break;
+					default:
+						ambit.y += center.y;
+						ambit.h = center.h - ambit.h;
+						if (rs[j] == 'east')
+							ambit.x = width - ambit.x;
+						else center.x += ambit.ts!;
+						center.w -= ambit.ts!;
+						if (ignoreSplit) {
+							ambit.h = this.$n_('colled').offsetHeight;
+							if (inclusive) {
+								var cmars = LR._aryToObject(this._cmargins);
+								ambit.h += cmars.height;
+							}
+							layout._resizeWgt(region, ambit, true);
+							this._open = false;
+							return;
 						}
-						layout._resizeWgt(region, ambit, true);
-						this._open = false;
-						return;
-					}
-					break;
+						break;
 				}
 			}
 		}
-	},
-	_alignTo: function () {
-		var from = this.$n('colled'),
-			to = this.$n('real'),
+	}
+
+	private _alignTo(): void {
+		var from = this.$n_('colled'),
+			to = this.$n_('real'),
 			ts = to.style,
 			BL = zul.layout.Borderlayout;
 		switch (this.getPosition()) {
-		case BL.NORTH:
-			ts.top = jq.px(from.offsetTop + from.offsetHeight);
-			ts.left = jq.px(from.offsetLeft);
-			break;
-		case BL.SOUTH:
-			ts.top = jq.px(from.offsetTop - to.offsetHeight);
-			ts.left = jq.px(from.offsetLeft);
-			break;
-		case BL.WEST:
-			ts.left = jq.px(from.offsetLeft + from.offsetWidth);
-			ts.top = jq.px(from.offsetTop);
-			break;
-		case BL.EAST:
-			ts.left = jq.px(from.offsetLeft - to.offsetWidth);
-			ts.top = jq.px(from.offsetTop);
-			break;
+			case BL.NORTH:
+				ts.top = jq.px(from.offsetTop + from.offsetHeight);
+				ts.left = jq.px(from.offsetLeft);
+				break;
+			case BL.SOUTH:
+				ts.top = jq.px(from.offsetTop - to.offsetHeight);
+				ts.left = jq.px(from.offsetLeft);
+				break;
+			case BL.WEST:
+				ts.left = jq.px(from.offsetLeft + from.offsetWidth);
+				ts.top = jq.px(from.offsetTop);
+				break;
+			case BL.EAST:
+				ts.left = jq.px(from.offsetLeft - to.offsetWidth);
+				ts.top = jq.px(from.offsetTop);
+				break;
 		}
-	},
-	_doScroll: function () {
+	}
+
+	private _doScroll(): void {
 		zWatch.fireDown('onScroll', this);
 		zWatch.fire('_onSyncScroll', this); // ZK-4408: for Popup only
-	},
-	_fixSplit: function () {
+	}
+
+	public _fixSplit(): void {
 		var split = this.$n('split');
 		if (split)
 			split.style.display = this._splittable ? 'block' : 'none';
-	},
-	_fixFontIcon: function () {
-		zk(this).redoCSS(-1, {'fixFontIcon': true, 'selector': '.z-borderlayout-icon'});
-	},
-	_isVertical: function () {
+	}
+
+	private _fixFontIcon(): void {
+		zk(this).redoCSS(-1, {
+			'fixFontIcon': true,
+			'selector': '.z-borderlayout-icon'
+		});
+	}
+
+	public _isVertical(): boolean {
 		var BL = zul.layout.Borderlayout;
 		return this.getPosition() != BL.WEST
-				&& this.getPosition() != BL.EAST;
-	},
+			&& this.getPosition() != BL.EAST;
+	}
 
 	// returns the ambit of the specified cmp for region calculation.
-	_ambit: function (ignoreSplit) {
-		var ambit, mars = this.getCurrentMargins_(), region = this.getPosition();
+	public _ambit(ignoreSplit?: boolean): LayoutRegionAmbit {
+		var ambit: LayoutRegionAmbit, mars = this.getCurrentMargins_(),
+			region = this.getPosition();
 		if (region && !this._open) {
 			var colled = this.$n('colled');
 			ambit = {
@@ -915,39 +1104,47 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			};
 			ignoreSplit = true;
 		} else {
-			var pn = this.parent.$n(),
-				w = this.getWidth() || '',
-				h = this.getHeight() || '',
-				pert;
+			var pn = this.parent!.$n_(),
+				w = this.getWidth() ?? '',
+				h = this.getHeight() ?? '',
+				pert: number;
 			ambit = {
 				x: mars.left,
 				y: mars.top,
 				w: (pert = w.indexOf('%')) > 0 ?
 					Math.max(
 						Math.floor(pn.offsetWidth * zk.parseInt(w.substring(0, pert)) / 100),
-						0) : this.$n('real').offsetWidth,
+						0) : this.$n_('real').offsetWidth,
 				h: (pert = h.indexOf('%')) > 0 ?
 					Math.max(
 						Math.floor(pn.offsetHeight * zk.parseInt(h.substring(0, pert)) / 100),
-						0) : this.$n('real').offsetHeight
+						0) : this.$n_('real').offsetHeight
 			};
 		}
-		var split = ignoreSplit ? {offsetHeight: 0, offsetWidth: 0} : this.$n('split') || {offsetHeight: 0, offsetWidth: 0};
+		var split = ignoreSplit ? {
+			offsetHeight: 0,
+			offsetWidth: 0
+		} : this.$n('split') ?? {offsetHeight: 0, offsetWidth: 0};
 		if (!ignoreSplit) this._fixSplit();
 
 		this._ambit2(ambit, mars, split);
 		return ambit;
-	},
-	_ambit2: zk.$void,
-	setBtnPos_: function (ambit, ver) {
-		var sbtn = this.$n('splitbtn');
+	}
+
+	protected _ambit2(ambit: LayoutRegionAmbit, mars: zk.Dimension, split: { offsetWidth; offsetHeight }): void {
+		// empty
+	}
+
+	protected setBtnPos_(ambit: LayoutRegionAmbit, ver: boolean): void {
+		var sbtn = this.$n_('splitbtn');
 		if (ver)
 			sbtn.style.marginLeft = jq.px0(((ambit.w - sbtn.offsetWidth) / 2));
 		else
 			sbtn.style.marginTop = jq.px0(((ambit.h - sbtn.offsetHeight) / 2));
-	},
-	_reszSplt: function (ambit) {
-		var split = this.$n('split'),
+	}
+
+	public _reszSplt(ambit: LayoutRegionAmbit): LayoutRegionAmbit {
+		var split = this.$n_('split'),
 			sbtn = this.$n('splitbtn');
 		if (zk(split).isVisible()) {
 			if (zk(sbtn).isVisible()) {
@@ -959,70 +1156,88 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			}));
 		}
 		return ambit;
-	},
-	_reszSp2: zk.$void,
-	getIconClass_: function (collapsed) {
+	}
+
+	protected _reszSp2(ambit: LayoutRegionAmbit, split: { w; h }): Partial<{ left; top; width; height }> {
+		// empty;
+		return {};
+	}
+
+	protected getIconClass_(collapsed?: boolean): string {
 		var BL = zul.layout.Borderlayout;
 		switch (this.getPosition()) {
-		case BL.NORTH:
-			return collapsed ? 'z-icon-angle-double-down' : 'z-icon-angle-double-up';
-		case BL.SOUTH:
-			return collapsed ? 'z-icon-angle-double-up' : 'z-icon-angle-double-down';
-		case BL.WEST:
-			return collapsed ? 'z-icon-angle-double-right' : 'z-icon-angle-double-left';
-		case BL.EAST:
-			return collapsed ? 'z-icon-angle-double-left' : 'z-icon-angle-double-right';
+			case BL.NORTH:
+				return collapsed ? 'z-icon-angle-double-down' : 'z-icon-angle-double-up';
+			case BL.SOUTH:
+				return collapsed ? 'z-icon-angle-double-up' : 'z-icon-angle-double-down';
+			case BL.WEST:
+				return collapsed ? 'z-icon-angle-double-right' : 'z-icon-angle-double-left';
+			case BL.EAST:
+				return collapsed ? 'z-icon-angle-double-left' : 'z-icon-angle-double-right';
 		}
 		return ''; // no icon
-	},
-	titleRenderer_: function (out) {
+	}
+
+	protected titleRenderer_(out: string[]): void {
 		if (this._title) {
 			var uuid = this.uuid,
 				pos = this.getPosition(),
 				noCenter = pos != zul.layout.Borderlayout.CENTER,
-				parent = this.parent;
+				parent = this.parent!;
 
 			out.push('<div id="', uuid, '-cap" class="', this.$s('header'), '">');
 			if (noCenter) {
 				out.push('<i id="', uuid, '-btn" class="', parent.$s('icon'),
-						' ', this.getIconClass_(), '"');
+					' ', this.getIconClass_(), '"');
 				if (!this._collapsible || !this._closable)
 					out.push(' style="display:none;"');
 				out.push('></i>');
 			}
 			out.push(zUtl.encodeXML(this._title), '</div>');
 		}
-	},
-	getFirstChild: function () {
+	}
+
+	public getPosition(): string {
+		return '';
+	}
+
+	public getFirstChild(): zk.Widget | null {
 		return this.firstChild;
 	}
-}, {
-	_aryToObject: function (array) {
-		return {top: array[0], left: array[1], right: array[2], bottom: array[3]};
-	},
+
+	public static _aryToObject(array: number[]): zk.Dimension {
+		return {
+			top: array[0],
+			left: array[1],
+			width: array[1] + array[2],
+			height: array[0] + array[3]
+		};
+	}
 
 	// invokes border layout's renderer before the component slides out
-	beforeSlideOut: function (n) {
-		var s = this.$n('colled').style;
+	public static beforeSlideOut(this: LayoutRegion, _n: zk.JQZK): void {
+		var s = this.$n_('colled').style;
 		s.display = '';
 		s.visibility = 'hidden';
-		s.zIndex = 1;
-		this.parent.resize();
-	},
-	_afterSlideOutX: function (n) {
+		s.zIndex = '1';
+		(this.parent as zul.layout.Borderlayout).resize();
+	}
+
+	private static _afterSlideOutX(this: LayoutRegion, n: HTMLElement): void {
 		// B50-ZK-301: fire onOpen after animation
-		this.$class.afterSlideOut.call(this, n, true);
+		LayoutRegion.afterSlideOut.call(this, n, true);
 		this._fixFontIcon();
-	},
+	}
+
 	// a callback function after the component slides out.
-	afterSlideOut: function (n, fireOnOpen) {
+	public static afterSlideOut(this: LayoutRegion, n: HTMLElement, fireOnOpen?: unknown): void {
 		if (this._open)
 			zk(this.$n('real')).slideIn(this, {
 				anchor: this.sanchor,
-				afterAnima: fireOnOpen ? this.$class._afterSlideInX : this.$class.afterSlideIn
+				afterAnima: fireOnOpen ? LayoutRegion._afterSlideInX : LayoutRegion.afterSlideIn
 			});
 		else {
-			var colled = this.$n('colled'),
+			var colled = this.$n_('colled'),
 				s = colled.style;
 			s.zIndex = ''; // reset z-index refered to the beforeSlideOut()
 			s.visibility = '';
@@ -1030,91 +1245,100 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				anchor: this.sanchor,
 				duration: 200,
 				// B50-ZK-301: fire onOpen after animation
-				afterAnima: fireOnOpen ? function (n) {this.fire('onOpen', {open: this._open});} : zk.$void
+				afterAnima: fireOnOpen ? function (this: zk.Widget & {_open: boolean}, _n: HTMLElement) {
+					this.fire('onOpen', {open: this._open});
+				} : zk.$void
 			});
 		}
 		this._fixFontIcon();
-	},
-	_afterSlideInX: function (n) {
+	}
+
+	private static _afterSlideInX(this: LayoutRegion, n: HTMLElement): void {
 		// B50-ZK-301: fire onOpen after animation
-		this.$class.afterSlideIn.call(this, n);
+		LayoutRegion.afterSlideIn.call(this, n);
 		this.fire('onOpen', {open: this._open});
 		this._fixFontIcon();
-	},
+	}
+
 	// recalculates the size of the whole border layout after the component sildes in.
-	afterSlideIn: function (n) {
-		this.parent.resize();
+	public static afterSlideIn(this: LayoutRegion, _n: HTMLElement): void {
+		(this.parent as zul.layout.Borderlayout).resize();
 		this._fixFontIcon();
-	},
+	}
+
 	// a callback function after the collapsed region slides down
-	afterSlideDown: function (n) {
+	public static afterSlideDown(this: LayoutRegion, _n: HTMLElement): void {
 		jq(document).on('click', this.proxy(this._docClick));
 		this._fixFontIcon();
-	},
+	}
+
 	// a callback function after the collapsed region slides up
-	afterSlideUp: function (n) {
+	public static afterSlideUp(this: LayoutRegion, n: HTMLElement & {_lastSize?}): void {
 		var s = n.style;
-		s.left = this._original[0];
-		s.top = this._original[1];
+		s.left = this._original![0];
+		s.top = this._original![1];
 		n._lastSize = null;// reset size for Borderlayout
 		s.zIndex = '';
 		if (this.$n('btn'))
-			this.$n('btn').style.display = this._closable ? '' : 'none';
-		jq(this.$n()).removeClass(this.$s('slide'));
+			this.$n_('btn').style.display = this._closable ? '' : 'none';
+		jq(this.$n_()).removeClass(this.$s('slide'));
 		jq(document).off('click', this.proxy(this._docClick));
 		this._isSlide = false;
 		this._fixFontIcon();
-	},
+	}
+
 	//drag
-	_ignoredrag: function (dg, pointer, evt) {
+	private static _ignoredrag(dg: zk.Draggable & Partial<{ _rootoffs }>, _pointer: Pointer, evt: zk.Event): boolean {
 		var target = evt.domTarget,
-			wgt = dg.control,
-			split = wgt.$n('split');
+			wgt = dg.control as LayoutRegion,
+			split = wgt.$n_('split');
 		if (!target || (split != target && !jq.contains(split, target))) return true;
 		if (wgt.isSplittable() && wgt._open) {
 			var BL = zul.layout.Borderlayout,
 				pos = wgt.getPosition(),
 				maxs = wgt.getMaxsize(),
 				mins = wgt.getMinsize(),
-				ol = wgt.parent,
-				real = wgt.$n('real'),
+				ol = wgt.parent as zul.layout.Borderlayout,
+				real = wgt.$n_('real'),
 				mars = zul.layout.LayoutRegion._aryToObject(wgt._margins),
 				pbw = zk(real).padBorderWidth(),
-				lr = pbw + (pos == BL.WEST ? mars.left : mars.right),
-				tb = pbw + (pos == BL.NORTH ? mars.top : mars.bottom),
+				lr = pbw + (pos == BL.WEST ? mars.left : (mars.width - mars.left)),
+				tb = pbw + (pos == BL.NORTH ? mars.top : (mars.height - mars.top)),
 				min = 0;
 			switch (pos) {
-			case BL.NORTH:
-			case BL.SOUTH:
-				var r = ol.center || (pos == BL.NORTH ? ol.south : ol.north);
-				if (r) {
-					if (BL.CENTER == r.getPosition()) {
-						maxs = Math.min(maxs, (real.offsetHeight + r.$n('real').offsetHeight) - min);
+				case BL.NORTH:
+				case BL.SOUTH: {
+					let r = ol.center ?? (pos == BL.NORTH ? ol.south : ol.north);
+					if (r) {
+						if (BL.CENTER == r.getPosition()) {
+							maxs = Math.min(maxs, (real.offsetHeight + r.$n_('real').offsetHeight) - min);
+						} else {
+							maxs = Math.min(maxs, ol.$n_().offsetHeight
+								- r.$n_('real').offsetHeight - r.$n_('split').offsetHeight
+								- wgt.$n_('split').offsetHeight - min);
+						}
 					} else {
-						maxs = Math.min(maxs, ol.$n().offsetHeight
-								- r.$n('real').offsetHeight - r.$n('split').offsetHeight
-								- wgt.$n('split').offsetHeight - min);
+						maxs = ol.$n_().offsetHeight - wgt.$n_('split').offsetHeight;
 					}
-				} else {
-					maxs = ol.$n().offsetHeight - wgt.$n('split').offsetHeight;
+					break;
 				}
-				break;
-			case BL.WEST:
-			case BL.EAST:
-				var r = ol.center || (pos == BL.WEST ? ol.east : ol.west);
-				if (r) {
-					if (BL.CENTER == r.getPosition()) {
-						maxs = Math.min(maxs, (real.offsetWidth
-								+ r.$n('real').offsetWidth) - min);
+				case BL.WEST:
+				case BL.EAST: {
+					let r = ol.center ?? (pos == BL.WEST ? ol.east : ol.west);
+					if (r) {
+						if (BL.CENTER == r.getPosition()) {
+							maxs = Math.min(maxs, (real.offsetWidth
+								+ r.$n_('real').offsetWidth) - min);
+						} else {
+							maxs = Math.min(maxs, ol.$n_().offsetWidth
+								- r.$n_('real').offsetWidth - r.$n_('split').offsetWidth
+								- wgt.$n_('split').offsetWidth - min);
+						}
 					} else {
-						maxs = Math.min(maxs, ol.$n().offsetWidth
-								- r.$n('real').offsetWidth - r.$n('split').offsetWidth
-								- wgt.$n('split').offsetWidth - min);
+						maxs = ol.$n_().offsetWidth - wgt.$n_('split').offsetWidth;
 					}
-				} else {
-					maxs = ol.$n().offsetWidth - wgt.$n('split').offsetWidth;
+					break;
 				}
-				break;
 			}
 			var ofs = zk(real).cmOffset();
 			dg._rootoffs = {
@@ -1124,81 +1348,86 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				left: ofs[0] + lr,
 				right: real.offsetWidth,
 				bottom: real.offsetHeight
-				};
+			};
 			return false;
 		}
 		return true;
-	},
-	_endeffect: function (dg, evt) {
-		var wgt = dg.control;
+	}
+
+	private static _endeffect(dg: zk.Draggable & { _point: Pointer | null; _rootoffs? }, evt: zk.Event): void {
+		var wgt = dg.control as LayoutRegion;
 		if (wgt._isVertical())
-			wgt.setHeight(dg._point[1] + 'px');
+			wgt.setHeight(dg._point![1] + 'px');
 		else
-			wgt.setWidth(dg._point[0] + 'px');
+			wgt.setWidth(dg._point![0] + 'px');
 
 		// Bug #1939859
-		wgt.$n().style.zIndex = '';
+		wgt.$n_().style.zIndex = '';
 
 		dg._rootoffs = dg._point = null;
 
-		wgt.parent.resize();
+		(wgt.parent as zul.layout.Borderlayout).resize();
 		wgt.fire('onSize', zk.copy({
-			width: wgt.$n('real').style.width,
-			height: wgt.$n('real').style.height
+			width: wgt.$n_('real').style.width,
+			height: wgt.$n_('real').style.height
 		}, evt.data));
-	},
-	_snap: function (dg, pointer) {
-		var wgt = dg.control,
+	}
+
+	private static _snap(dg: zk.Draggable &
+		Partial<{ _point; _rootoffs: { maxs: number; left: number; right: number; top: number; bottom: number; mins: number }}>,
+						 pointer: Pointer): Pointer {
+		var wgt = dg.control as LayoutRegion,
 			x = pointer[0],
 			y = pointer[1],
 			BL = zul.layout.Borderlayout,
-			split = wgt.$n('split'),
-			b = dg._rootoffs, w, h;
+			split = wgt.$n_('split'),
+			b = dg._rootoffs!, w, h;
 		switch (wgt.getPosition()) {
-		case BL.NORTH:
-			if (y > b.maxs + b.top) y = b.maxs + b.top;
-			if (y < b.mins + b.top) y = b.mins + b.top;
-			w = x;
-			h = y - b.top;
-			break;
-		case BL.SOUTH:
-			if (b.top + b.bottom - y - split.offsetHeight > b.maxs) {
-				y = b.top + b.bottom - b.maxs - split.offsetHeight;
-				h = b.maxs;
-			} else if (b.top + b.bottom - b.mins - split.offsetHeight <= y) {
-				y = b.top + b.bottom - b.mins - split.offsetHeight;
-				h = b.mins;
-			} else h = b.top - y + b.bottom - split.offsetHeight;
-			w = x;
-			break;
-		case BL.WEST:
-			if (x > b.maxs + b.left) x = b.maxs + b.left;
-			if (x < b.mins + b.left) x = b.mins + b.left;
-			w = x - b.left;
-			h = y;
-			break;
-		case BL.EAST:
-			if (b.left + b.right - x - split.offsetWidth > b.maxs) {
-				x = b.left + b.right - b.maxs - split.offsetWidth;
-				w = b.maxs;
-			} else if (b.left + b.right - b.mins - split.offsetWidth <= x) {
-				x = b.left + b.right - b.mins - split.offsetWidth;
-				w = b.mins;
-			} else w = b.left - x + b.right - split.offsetWidth;
-			h = y;
-			break;
+			case BL.NORTH:
+				if (y > b.maxs + b.top) y = b.maxs + b.top;
+				if (y < b.mins + b.top) y = b.mins + b.top;
+				w = x;
+				h = y - b.top;
+				break;
+			case BL.SOUTH:
+				if (b.top + b.bottom - y - split.offsetHeight > b.maxs) {
+					y = b.top + b.bottom - b.maxs - split.offsetHeight;
+					h = b.maxs;
+				} else if (b.top + b.bottom - b.mins - split.offsetHeight <= y) {
+					y = b.top + b.bottom - b.mins - split.offsetHeight;
+					h = b.mins;
+				} else h = b.top - y + b.bottom - split.offsetHeight;
+				w = x;
+				break;
+			case BL.WEST:
+				if (x > b.maxs + b.left) x = b.maxs + b.left;
+				if (x < b.mins + b.left) x = b.mins + b.left;
+				w = x - b.left;
+				h = y;
+				break;
+			case BL.EAST:
+				if (b.left + b.right - x - split.offsetWidth > b.maxs) {
+					x = b.left + b.right - b.maxs - split.offsetWidth;
+					w = b.maxs;
+				} else if (b.left + b.right - b.mins - split.offsetWidth <= x) {
+					x = b.left + b.right - b.mins - split.offsetWidth;
+					w = b.mins;
+				} else w = b.left - x + b.right - split.offsetWidth;
+				h = y;
+				break;
 		}
 		dg._point = [w, h];
 		return [x, y];
-	},
-	_ghosting: function (dg, ofs, evt) {
-		var el = dg.node, $el = zk(el);
+	}
+
+	private static _ghosting(dg: zk.Draggable, ofs: Pointer, evt: zk.Event): HTMLElement {
+		var el = dg.node!, $el = zk(el);
 		jq(document.body).prepend('<div id="zk_layoutghost" class="z-splitter-ghost" style="font-size:0;line-height:0;background:#AAA;position:absolute;top:'
 			+ ofs[1] + 'px;left:' + ofs[0] + 'px;width:'
 			+ $el.offsetWidth() + 'px;height:' + $el.offsetHeight()
 			+ 'px;cursor:' + el.style.cursor + ';"></div>');
 		return jq('#zk_layoutghost')[0];
 	}
-});
+}
 
-})();
+zul.layout.LayoutRegion = zk.regClass(LayoutRegion);

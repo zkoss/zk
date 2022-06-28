@@ -587,16 +587,16 @@ let zFlex = { //static methods
 				dim = isRow ? 'width' : 'height',
 				flex = flexs[isRow ? 1 : 0];
 
-			if (flex > 0) {
+			if (flex && flex > 0) {
 				isAllMin = false;
 				jqFcc.addClass(flexItemClass);
 				if (flex != 1 || fcc.style.flexGrow)
-					fcc.style.flexGrow = flex; //update flex
+					fcc.style.flexGrow = flex as unknown as string; //update flex
 				if (fcc != c && !c.style[dim])
 					c.style[dim] = '100%';
 				else
 					sz[dim] = 'auto';
-			} else if (flex < 0) {//min
+			} else if (flex && flex < 0) {//min
 				const orient = dim.substring(0, 1) as FlexOrient;
 				zFlex.fixMinFlex(cwgt, c, orient);
 				minFlexInfoList.push({wgt: cwgt, wgtn: c, orient: orient});
@@ -605,14 +605,14 @@ let zFlex = { //static methods
 			//check else flex
 			flex = flexs[isRow ? 0 : 1];
 			dim = isRow ? 'height' : 'width';
-			if (flex > 0) {
+			if (flex && flex > 0) {
 				const marginSize = isRow ? zk(jqFcc).marginHeight() : zk(jqFcc).marginWidth(); //handle margin issue
 				fcc.style[dim] = marginSize > 0 ? 'calc(100% - ' + jq.px0(marginSize) + ')' : '100%';
 				if (fcc != c)
 					c.style[dim] = '100%';
 				else
 					sz[dim] = 'auto';
-			} else if (flex < 0) {//min
+			} else if (flex && flex < 0) {//min
 				const orient = dim.substring(0, 1) as FlexOrient;
 				zFlex.fixMinFlex(cwgt, c, orient);
 				minFlexInfoList.push({wgt: cwgt, wgtn: c, orient: orient});

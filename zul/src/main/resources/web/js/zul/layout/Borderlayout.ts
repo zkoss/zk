@@ -1,4 +1,4 @@
-/* Borderlayout.js
+/* Borderlayout.ts
 
 	Purpose:
 
@@ -15,52 +15,54 @@ it will be useful, but WITHOUT ANY WARRANTY.
 /** The layout widgets, such as borderlayout.
  */
 //zk.$package('zul.layout');
-
-(function () {
-
-	var _ambit = {
-		'north': function (ambit, center, width, height) {
-			ambit.w = width - ambit.w;
-			center.y = ambit.ts;
-			center.h -= ambit.ts;
-		},
-		'south': function (ambit, center, width, height) {
-			ambit.w = width - ambit.w;
-			ambit.y = height - ambit.y;
-			center.h -= ambit.ts;
-		},
-		'east': function (ambit, center, width) {
-			ambit.y += center.y;
-			ambit.h = center.h - ambit.h;
-			ambit.x = width - ambit.x;
-			center.w -= ambit.ts;
-		},
-		'west': function (ambit, center) {
-			ambit.y += center.y;
-			ambit.h = center.h - ambit.h;
-			center.x += ambit.ts;
-			center.w -= ambit.ts;
-		}
-	};
-
-	function _getRegionSize (wgt, hor, ext) {
-		if (!wgt)
-			return 0;
-		var n = wgt.$n('real'),
-			sz = hor ? 'offsetWidth' : 'offsetHeight',
-			sum = n[sz];
-		if (ext) {
-			var cn = wgt.$n('colled'),
-				sn = wgt.$n('split');
-			if (cn)
-				sum += cn[sz];
-			if (sn)
-				sum += sn[sz];
-		}
-		return sum;
+interface Ambit {
+	north(ambit: zul.layout.LayoutRegionAmbit, center: zul.layout.LayoutRegionAmbit, width: number, height: number): void;
+	south(ambit: zul.layout.LayoutRegionAmbit, center: zul.layout.LayoutRegionAmbit, width: number, height: number): void;
+	east(ambit: zul.layout.LayoutRegionAmbit, center: zul.layout.LayoutRegionAmbit, width: number, height: number): void;
+	west(ambit: zul.layout.LayoutRegionAmbit, center: zul.layout.LayoutRegionAmbit, width: number, height: number): void;
+}
+var _ambit: Ambit = {
+	'north': function (ambit: zul.layout.LayoutRegionAmbit, center: zul.layout.LayoutRegionAmbit, width: number, height: number): void {
+		ambit.w = width - ambit.w;
+		center.y = ambit.ts!;
+		center.h -= ambit.ts!;
+	},
+	'south': function (ambit: zul.layout.LayoutRegionAmbit, center: zul.layout.LayoutRegionAmbit, width: number, height: number): void {
+		ambit.w = width - ambit.w;
+		ambit.y = height - ambit.y;
+		center.h -= ambit.ts!;
+	},
+	'east': function (ambit: zul.layout.LayoutRegionAmbit, center: zul.layout.LayoutRegionAmbit, width: number, height: number): void {
+		ambit.y += center.y;
+		ambit.h = center.h - ambit.h;
+		ambit.x = width - ambit.x;
+		center.w -= ambit.ts!;
+	},
+	'west': function (ambit: zul.layout.LayoutRegionAmbit, center: zul.layout.LayoutRegionAmbit, width: number, height: number): void {
+		ambit.y += center.y;
+		ambit.h = center.h - ambit.h;
+		center.x += ambit.ts!;
+		center.w -= ambit.ts!;
 	}
+};
 
-var Borderlayout =
+function _getRegionSize(wgt?: zul.layout.LayoutRegion, hor?: boolean, ext?: boolean): number {
+	if (!wgt)
+		return 0;
+	var n = wgt.$n_('real')!,
+		sz = hor ? 'offsetWidth' : 'offsetHeight',
+		sum = n[sz] as number;
+	if (ext) {
+		var cn = wgt.$n('colled'),
+			sn = wgt.$n('split');
+		if (cn)
+			sum += cn[sz];
+		if (sn)
+			sum += sn[sz];
+	}
+	return sum;
+}
+
 /**
  * A border layout is a layout container for arranging and resizing
  * child components to fit in five regions: north, south, east, west, and center.
@@ -72,61 +74,95 @@ var Borderlayout =
  * <p>Default {@link #getZclass}: z-borderlayout.
  *
  */
-zul.layout.Borderlayout = zk.$extends(zul.Widget, {
-	setResize: function () {
+export class Borderlayout extends zul.Widget {
+	public north?: zul.layout.North;
+	public south?: zul.layout.South;
+	public center?: zul.layout.Center;
+	public west?: zul.layout.West;
+	public east?: zul.layout.East;
+	private _shallResize?: boolean;
+	private _isOnSize?: boolean;
+	public _animationDisabled = false;
+
+	public setResize(): void {
 		this.resize();
-	},
+	}
+
+	/**
+	 * Returns whether disable animation effects
+	 * <p>Default: false.
+	 * @since 5.0.8
+	 */
+	public isAnimationDisabled(): boolean {
+		return this._animationDisabled;
+	}
+
+	/**
+	 * Sets to disable animation effects.
+	 * @since 5.0.8
+	 */
+	public setAnimationDisabled(animationDisabled: boolean): this {
+		if (this._animationDisabled != animationDisabled) {
+			this._animationDisabled = animationDisabled;
+		}
+		return this;
+	}
+
 	//-- super --//
-	onChildAdded_: function (child) {
-		this.$supers('onChildAdded_', arguments);
-		var BL = zul.layout.Borderlayout;
-		switch (child.getPosition()) {
-		case BL.NORTH:
-			this.north = child;
-			break;
-		case BL.SOUTH:
-			this.south = child;
-			break;
-		case BL.CENTER:
-			this.center = child;
-			break;
-		case BL.WEST:
-			this.west = child;
-			break;
-		case BL.EAST:
-			this.east = child;
-			break;
+	protected override onChildAdded_(child: zk.Widget): void {
+		super.onChildAdded_(child);
+		switch ((child as zul.layout.LayoutRegion).getPosition()) {
+			case Borderlayout.NORTH:
+				this.north = child as zul.layout.North;
+				break;
+			case Borderlayout.SOUTH:
+				this.south = child as zul.layout.South;
+				break;
+			case Borderlayout.CENTER:
+				this.center = child as zul.layout.Center;
+				break;
+			case Borderlayout.WEST:
+				this.west = child as zul.layout.West;
+				break;
+			case Borderlayout.EAST:
+				this.east = child as zul.layout.East;
+				break;
 		}
 		this._shallResize = true;
-	},
-	onChildRemoved_: function (child) {
-		this.$supers('onChildRemoved_', arguments);
+	}
+
+	protected override onChildRemoved_(child: zk.Widget): void {
+		super.onChildRemoved_(child);
 		if (child == this.north)
-			this.north = null;
+			delete this.north;
 		else if (child == this.south)
-			this.south = null;
+			delete this.south;
 		else if (child == this.center)
-			this.center = null;
+			delete this.center;
 		else if (child == this.west)
-			this.west = null;
+			delete this.west;
 		else if (child == this.east)
-			this.east = null;
+			delete this.east;
 		if (!this.childReplacing_)
 			this._shallResize = true;
-	},
-	bind_: function () {
-		this.$supers(Borderlayout, 'bind_', arguments);
+	}
+
+	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+		super.bind_(desktop, skipper, after);
 		zWatch.listen({onSize: this, onCommandReady: this});
-	},
-	unbind_: function () {
+	}
+
+	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		zWatch.unlisten({onSize: this, onCommandReady: this});
-		this.$supers(Borderlayout, 'unbind_', arguments);
-	},
-	onCommandReady: function () {
+		super.unbind_(skipper, after, keepRod);
+	}
+
+	public onCommandReady(): void {
 		if (this._shallResize)
 			this.resize();
-	},
-	beforeMinFlex_: function (o) {
+	}
+
+	public override beforeMinFlex_(o: string): number {
 		// B50-ZK-309
 		var east = this.east,
 			west = this.west,
@@ -139,45 +175,48 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 				_getRegionSize(east, true, true) + _getRegionSize(west, true, true)
 				+ _getRegionSize(center, true)) :
 			_getRegionSize(north, false, true)
-				+ _getRegionSize(south, false, true)
-				+ Math.max(
-					_getRegionSize(east), _getRegionSize(west),
-					_getRegionSize(center));
-	},
+			+ _getRegionSize(south, false, true)
+			+ Math.max(
+				_getRegionSize(east), _getRegionSize(west),
+				_getRegionSize(center));
+	}
+
 	//@Override, region with vflex/hflex, must wait flex resolved then do resize
-	afterChildrenFlex_: function () {
+	public override afterChildrenFlex_(): void {
 		//region's min vflex/hflex resolved and try the border resize
 		//@see #_resize
 		if (this._isOnSize)
 			this._resize(true);
-	},
+	}
+
 	/**
 	 * Re-sizes this layout component.
 	 */
-	resize: function () {
+	public resize(): void {
 		if (this.desktop)
 			this._resize();
-	},
-	_resize: function (isOnSize) {
+	}
+
+	private _resize(isOnSize?: boolean): void {
 		this._shallResize = false;
 		this._isOnSize = isOnSize;
 		if (!zk(this.$n()).isRealVisible()) return; //ZK-2686: incorrect borderlayout resizing to 0px in tabbox
 
 		//make sure all regions size is resolved
-		var rs = ['north', 'south', 'west', 'east'], k = rs.length;
-		for (var region, j = 0; j < k; ++j) {
-			region = this[rs[j]];
+		var rs: ['north', 'south', 'west', 'east'] = ['north', 'south', 'west', 'east'], k = rs.length;
+		for (var region: zul.layout.LayoutRegion | undefined, j = 0; j < k; ++j) {
+			region = this[rs[j]] as zul.layout.LayoutRegion | undefined;
 			if (region && zk(region.$n()).isVisible()
 				&& ((region._nvflex && region._vflexsz === undefined)
-						|| (region._nhflex && region._hflexsz === undefined)))
+					|| (region._nhflex && region._hflexsz === undefined)))
 				return;	//region size unknown, border cannot _resize() now,
-						//return and keep this._isOnSize true
-						//onSize event will be fired to region later, and region will
-						//call back to _resize() via afterChildrenFlex_() when it resolve
-						//itself the vflex and hflex
+						   //return and keep this._isOnSize true
+						   //onSize event will be fired to region later, and region will
+						   //call back to _resize() via afterChildrenFlex_() when it resolve
+						   //itself the vflex and hflex
 		}
 
-		var el = this.$n(),
+		var el = this.$n_(),
 			width = el.offsetWidth,
 			height = el.offsetHeight,
 			center = {
@@ -189,43 +228,44 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 
 		// fixed Opera 10.5+ bug
 		if (zk.opera && !height && (!el.style.height || el.style.height == '100%')) {
-			var parent = el.parentNode;
+			var parent = el.parentElement!;
 			center.h = height = parent.offsetHeight;
 		}
 
-		for (var region, ambit, j = 0; j < k; ++j) {
-			region = this[rs[j]];
+		for (var region: zul.layout.LayoutRegion | undefined, ambit: zul.layout.LayoutRegionAmbit, j = 0; j < k; ++j) {
+			region = this[rs[j]] as zul.layout.LayoutRegion | undefined;
 			if (region && zk(region.$n()).isVisible()) {
 				ambit = region._ambit();
-				_ambit[rs[j]](ambit, center, width, height);
+				_ambit[rs[j]]!(ambit, center, width, height);
 				this._resizeWgt(region, ambit); //might recursive back
-				var directionToCalculate = region._isVertical() ? 'width' : 'height';
-				jq(region.$n('title')).width(jq(region.$n('colled'))[directionToCalculate]() - jq(region.$n('btned'))[directionToCalculate]());
+				var directionToCalculate: 'width' | 'height' = region._isVertical() ? 'width' : 'height';
+				jq(region.$n('title')!).width((jq(region.$n('colled')!)[directionToCalculate]() as number) - ((jq(region.$n('btned')!)[directionToCalculate]()) as number));
 			}
 		}
 		if (this.center && zk(this.center.$n()).isVisible()) {
 			var mars = this.center.getCurrentMargins_();
 			center.x += mars.left;
 			center.y += mars.top;
-			center.w -= mars.left + mars.right;
-			center.h -= mars.top + mars.bottom;
+			center.w -= mars.width;
+			center.h -= mars.height;
 			this._resizeWgt(this.center, center); //might recursive back
 		}
 		this._isOnSize = false; // reset
-	},
-	_resizeWgt: function (wgt, ambit, ignoreSplit) {
+	}
+
+	public _resizeWgt(wgt: zul.layout.LayoutRegion, ambit: zul.layout.LayoutRegionAmbit, ignoreSplit?: boolean): void {
 		if (wgt._open) {
 			if (!ignoreSplit && wgt.$n('split')) {
 				wgt._fixSplit();
 				ambit = wgt._reszSplt(ambit);
 			}
-			zk.copy(wgt.$n('real').style, {
+			zk.copy(wgt.$n_('real').style, {
 				left: jq.px(ambit.x),
 				top: jq.px(ambit.y)
 			});
 			this._resizeBody(wgt, ambit);
 		} else {
-			wgt.$n('split').style.display = 'none';
+			wgt.$n_('split').style.display = 'none';
 			var colled = wgt.$n('colled');
 			if (colled) {
 				zk.copy(colled.style, {
@@ -253,14 +293,15 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 				this._resizeBody(wgt, ambit);
 			}
 		}
-	},
-	_resizeBody: function (wgt, ambit) {
+	}
+
+	private _resizeBody(wgt: zul.layout.LayoutRegion, ambit: zul.layout.LayoutRegionAmbit): void {
 		ambit.w = Math.max(0, ambit.w);
 		ambit.h = Math.max(0, ambit.h);
-		var el = wgt.$n('real');
+		var el = wgt.$n_('real');
 		if (!this._ignoreResize(el, ambit.w, ambit.h)) {
 			var fchild = wgt.isFlex() && wgt.getFirstChild(),
-				bodyEl = fchild ? wgt.getFirstChild().$n() : wgt.$n('cave'),
+				bodyEl = fchild ? wgt.getFirstChild()!.$n_() : wgt.$n_('cave'),
 				bs = bodyEl.style,
 				$el = zk(el);
 
@@ -273,13 +314,13 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 
 			el.style.height = jq.px0(ambit.h);
 			if (wgt.$n('cap'))
-				ambit.h = Math.max(0, ambit.h - wgt.$n('cap').offsetHeight);
+				ambit.h = Math.max(0, ambit.h - wgt.$n_('cap').offsetHeight);
 
 			// Bug: B50-3201762: Borderlayout flex has issue with listbox hflex in IE 6
 			if (fchild) { // B50-ZK-198: always need cave height
 				var cv;
 				if (cv = wgt.$n('cave'))
-					cv.style.height = jq.px0(ambit.h - $el.padBorderHeight());
+					(cv as HTMLElement).style.height = jq.px0(ambit.h - $el.padBorderHeight());
 			}
 			bs.height = jq.px0(ambit.h - $el.padBorderHeight());
 			if (wgt._nativebar && wgt.isAutoscroll()) {
@@ -289,8 +330,9 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 			if (!this._isOnSize)
 				zUtl.fireSized(wgt);
 		}
-	},
-	_ignoreResize: function (el, w, h) {
+	}
+
+	private _ignoreResize(el: HTMLElement & { _lastSize?: {width; height} }, w: number, h: number): boolean {
 		if (el._lastSize && el._lastSize.width == w && el._lastSize.height == h) {
 			return true;
 		}
@@ -298,37 +340,42 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 		// store fot next time to check
 		el._lastSize = {width: w, height: h};
 		return false;
-	},
+	}
+
 	//zWatch//
-	onSize: function () {
+	public override onSize(): void {
 		this._resize(true);
 	}
-}, {
+
 	/**
 	 * The north layout constraint (top of container).
 	 * @type String
 	 */
-	NORTH: 'north',
+	public static NORTH = 'north';
+
 	/**
 	 * The south layout constraint (bottom of container).
 	 * @type String
 	 */
-	SOUTH: 'south',
+	public static SOUTH = 'south';
+
 	/**
 	 * The east layout constraint (right side of container).
 	 * @type String
 	 */
-	EAST: 'east',
+	public static EAST = 'east';
+
 	/**
 	 * The west layout constraint (left side of container).
 	 * @type String
 	 */
-	WEST: 'west',
+	public static WEST = 'west';
+
 	/**
 	 * The center layout constraint (middle of container).
 	 * @type String
 	 */
-	CENTER: 'center'
-});
+	public static CENTER = 'center';
+}
 
-})();
+zul.layout.Borderlayout = zk.regClass(Borderlayout);
