@@ -317,7 +317,14 @@ declare namespace zk {
 	}
 }
 
-declare var zkex: Record<string, unknown>;
+declare namespace zkex {
+	namespace inp {
+		class ContentHandler extends zul.menu.ContentHandler { // zul.menu.Menu
+			// TODO: maybe the type of wgt can be narrowed to zul.menu.Menu
+			public constructor(wgt: zk.Widget, content: string)
+		}
+	}
+}
 declare var zkmax: Record<string, unknown>;
 declare var zWs: zk.Websocket;
 declare var zkbind: zk.ZKBind;

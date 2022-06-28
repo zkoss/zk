@@ -156,7 +156,7 @@ export class Button extends zul.LabelImageWidget {
 	/** Sets whether it is disabled.
 	 * @param boolean disabled
 	 */
-	public setDisabled(v: boolean, opts?: Record<string, boolean>): this {
+	public setDisabled(v: boolean | undefined, opts?: Record<string, boolean>): this {
 		const o = this._disabled;
 
 		// B60-ZK-1176
@@ -173,7 +173,7 @@ export class Button extends zul.LabelImageWidget {
 				this._adbs = false;
 			} else if (opts && opts.adbs === false)
 				// ignore re-enable by autodisable mechanism
-				v = this._disabled as boolean;
+				v = this._disabled;
 		}
 		this._disabled = v;
 

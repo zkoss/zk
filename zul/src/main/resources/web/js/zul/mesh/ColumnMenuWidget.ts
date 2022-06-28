@@ -344,7 +344,7 @@ export class ColumnMenupopup extends zul.menu.Menupopup {
 	 */
 	public syncColMenu(): void {
 		var w = this._columns;
-		for (var c = this.lastChild, p: zk.Widget | null; c != this._desc;) {
+		for (var c = this.lastChild, p: zul.menu.Menuitem | null; c != this._desc;) {
 			p = c!.previousSibling;
 			this.removeChild(c!);
 			c = p;

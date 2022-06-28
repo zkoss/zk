@@ -111,7 +111,7 @@ export class Upload extends zk.Object {
 	 *      It contains upload options like maxsize, multiple, and so on.
 	 *      It specifies the widget class name of the fileupload.
 	 */
-	public constructor(wgt: zk.Widget, parent: HTMLElement | null, option: string) {
+	public constructor(wgt: zk.Widget, parent: HTMLElement | null | undefined, option: string) {
 		super();
 		this.uploaders = {};
 		this.suppressedErrors = [];

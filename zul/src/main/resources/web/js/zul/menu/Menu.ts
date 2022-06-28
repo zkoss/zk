@@ -1,4 +1,4 @@
-/* Menu.js
+/* Menu.ts
 
 	Purpose:
 
@@ -12,60 +12,59 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-(function () {
-	function _toggleClickableCSS(wgt, remove) {
-		if (wgt.isListen('onClick')) {
-			jq(wgt.$n())[remove ? 'removeClass' : 'addClass'](wgt.$s('hover'));
-		}
+function _toggleClickableCSS(wgt: zul.menu.Menu, remove?: boolean): void {
+	if (wgt.isListen('onClick')) {
+		jq(wgt.$n_())[remove ? 'removeClass' : 'addClass'](wgt.$s('hover'));
 	}
-	function _doClick(wgt, evt) {
-		var byKeyboard = evt.name == 'onKeyDown',
-			n = wgt.$n();
-		if (wgt.isListen('onClick')) {
-			var clk = jq(n).find('.' + wgt.$s('separator')),
-				zclk = zk(clk),
-				offsetX = zclk.revisedOffset()[0];
+}
+function _doClick(wgt: zul.menu.Menu, evt: zk.Event): void {
+	var byKeyboard = evt.name == 'onKeyDown',
+		n = wgt.$n_();
+	if (wgt.isListen('onClick')) {
+		var clk = jq(n).find('.' + wgt.$s('separator')),
+			zclk = zk(clk),
+			offsetX = zclk.revisedOffset()[0];
 
-			//Bug ZK-1357: minus 10px for easily open menupopup when click near arrow icon
-			if (jq(n).hasClass('z-menu-clickable') && evt.pageX > offsetX) {
-				jq(n).addClass(wgt.$s('selected'));
-				wgt.menupopup._shallClose = false;
-				wgt._togglePopup(byKeyboard);
-				evt.stop();
-			} else
-				wgt.fireX(new zk.Event(wgt, 'onClick', evt.data));
-
-		} else {
-			jq(n).addClass(wgt.isTopmost() ? wgt.$s('selected') : wgt.$s('hover'));
-			wgt.menupopup._shallClose = false;
+		//Bug ZK-1357: minus 10px for easily open menupopup when click near arrow icon
+		if (jq(n).hasClass('z-menu-clickable') && evt.pageX > offsetX) {
+			jq(n).addClass(wgt.$s('selected'));
+			wgt.menupopup!._shallClose = false;
 			wgt._togglePopup(byKeyboard);
-		}
-	}
+			evt.stop();
+		} else
+			wgt.fireX(new zk.Event(wgt, 'onClick', evt.data));
 
-	function _isActiveItem(wgt) {
-		return wgt.isVisible() && wgt.$instanceof(zul.menu.Menu) && !wgt.isDisabled();
+	} else {
+		jq(n).addClass(wgt.isTopmost() ? wgt.$s('selected') : wgt.$s('hover'));
+		wgt.menupopup!._shallClose = false;
+		wgt._togglePopup(byKeyboard);
 	}
-	function _nextVisibleMenu(menu) {
-		for (var m = menu; m; m = m.nextSibling) {
-			if (_isActiveItem(m))
-				return m;
-		}
-		var mb = menu.parent;
-		if (mb.firstChild == menu)
-			return menu;
-		return _nextVisibleMenu(mb.firstChild);
-	}
+}
 
-	function _prevVisibleMenu(menu) {
-		for (var m = menu; m; m = m.previousSibling) {
-			if (_isActiveItem(m))
-				return m;
-		}
-		var mb = menu.parent;
-		if (mb.lastChild == menu)
-			return menu;
-		return _prevVisibleMenu(mb.lastChild);
+function _isActiveItem(wgt: zul.menu.Menu): boolean | null | undefined {
+	return wgt.isVisible() && wgt instanceof zul.menu.Menu && !wgt.isDisabled();
+}
+function _nextVisibleMenu(menu: zul.menu.Menu): zul.menu.Menu {
+	for (var m: zul.menu.Menu | null = menu; m; m = m.nextSibling) {
+		if (_isActiveItem(m))
+			return m;
 	}
+	var mb = menu.parent!;
+	if (mb.firstChild == menu)
+		return menu;
+	return _nextVisibleMenu(mb.firstChild!);
+}
+
+function _prevVisibleMenu(menu: zul.menu.Menu): zul.menu.Menu {
+	for (var m: zul.menu.Menu | null = menu; m; m = m.previousSibling) {
+		if (_isActiveItem(m))
+			return m;
+	}
+	var mb = menu.parent!;
+	if (mb.lastChild == menu)
+		return menu;
+	return _prevVisibleMenu(mb.lastChild!);
+}
 /**
  * An element, much like a button, that is placed on a menu bar.
  * When the user clicks the menu element, the child {@link Menupopup}
@@ -74,26 +73,45 @@ it will be useful, but WITHOUT ANY WARRANTY.
  *
  * <p>Default {@link #getZclass}: z-mean.
  */
-zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
-	$define: {
-		/** Returns the embedded content (i.e., HTML tags) that is
-		 * shown as part of the description.
-		 * <p>It is useful to show the description in more versatile way.
-		 * <p>Default: empty ("").
-		 * @return String
-		 */
-		/** Sets the embedded content (i.e., HTML tags) that is
-		 * shown as part of the description.
-		 *
-		 * <p>It is useful to show the description in more versatile way.
-		 *
-		 * <p>There is a way to create {@link zkex.inp.Colorbox} automatically by using
-		 * #color=#RRGGBB, usage example <code>setContent("#color=FFFFFF")</code>
-		 *
-		 * @param String content
-		 */
-		content: function (content) {
-			if (!content || content.length == 0) return;
+export class Menu extends zul.LabelImageWidget {
+	// parent could be null as asserted in getMenubar
+	public override parent!: zul.menu.Menubar | null;
+	public override nextSibling!: zul.menu.Menu | null;
+	public override previousSibling!: zul.menu.Menu | null;
+	// menupopup could be null as asserted in _doMouseEnter
+	public menupopup?: zul.menu.Menupopup | null;
+	private _content?: string;
+	public _contentHandler?: ContentHandler;
+	private _ignoreActive?: boolean;
+	private _topmost?: boolean | null;
+
+	/** Returns the embedded content (i.e., HTML tags) that is
+	 * shown as part of the description.
+	 * <p>It is useful to show the description in more versatile way.
+	 * <p>Default: empty ("").
+	 * @return String
+	 */
+	public getContent(): string | undefined {
+		return this._content;
+	}
+
+	/** Sets the embedded content (i.e., HTML tags) that is
+	 * shown as part of the description.
+	 *
+	 * <p>It is useful to show the description in more versatile way.
+	 *
+	 * <p>There is a way to create {@link zkex.inp.Colorbox} automatically by using
+	 * #color=#RRGGBB, usage example <code>setContent("#color=FFFFFF")</code>
+	 *
+	 * @param String content
+	 */
+	public setContent(content: string, opts?: Record<string, boolean>): this {
+		const o = this._content;
+		this._content = content;
+
+		if (o !== content || (opts && opts.force)) {
+			if (!content || content.length == 0)
+				return this;
 
 			if (!this._contentHandler) {
 				if (zk.feature.pe) {
@@ -101,60 +119,90 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 					zk.load('zkex.inp', null, function () {
 						self._contentHandler = new zkex.inp.ContentHandler(self, content);
 					});
-					return;
+					return this;
 				}
 				this._contentHandler = new zul.menu.ContentHandler(this, content);
 			} else
 				this._contentHandler.setContent(content);
-		},
-		 /** Returns whether it is disabled.
-		 * <p>Default: false.
-		 * @since 8.0.3
-		 * @return boolean
-		 */
-		 /** Sets whether it is disabled.
-		 * @param boolean disabled
-		 * @since 8.0.3
-		 */
-		disabled: function (disabled) {
-			if (!this.desktop) return;
+		}
+
+		return this;
+	}
+
+	/** Returns whether it is disabled.
+	 * <p>Default: false.
+	 * @since 8.0.3
+	 * @return boolean
+	 */
+	public isDisabled(): boolean | undefined {
+		return this._disabled;
+	}
+
+	/** Sets whether it is disabled.
+	 * @param boolean disabled
+	 * @since 8.0.3
+	 */
+	public setDisabled(disabled: boolean, opts?: Record<string, boolean>): this {
+		const o = this._disabled;
+		this._disabled = disabled;
+
+		if (o !== disabled || (opts && opts.force)) {
+			if (!this.desktop)
+				return this;
 			if (disabled) {
-				jq(this.$n('a'))
+				jq(this.$n_('a'))
 					.attr('disabled', 'disabled')
 					.attr('tabindex', '-1');
 			} else {
-				jq(this.$n('a'))
+				jq(this.$n_('a'))
 					.removeAttr('disabled')
 					.removeAttr('tabindex');
 			}
-		},
-		image: function (v) {
+		}
+
+		return this;
+	}
+
+	public override getImage(): string | undefined {
+		return this._image;
+	}
+
+	public override setImage(v: string, opts?: Record<string, boolean>): this {
+		const o = this._image;
+		this._image = v;
+
+		if (o !== v || (opts && opts.force)) {
 			if (v && this._preloadImage) zUtl.loadImage(v);
 			this.rerender();
 		}
-	},
+
+		return this;
+	}
+
 	/**
 	 * Opens the menupopup that belongs to the menu.
 	 * <p>
 	 * Note that this function is only applied when it is topmost menu, i.e. the parent of the menu is {@link Menubar}
 	 * @since 6.0.0
 	 */
-	open: function () {
+	public open(): void {
 		if (this.desktop && this.isTopmost()) {
-			jq(this.$n()).addClass(this.$s('selected'));
-			var mb = this.getMenubar();
+			jq(this.$n_()).addClass(this.$s('selected'));
+			var mb = this.getMenubar()!;
 			if (mb._lastTarget)
-				this.$class._rmActive(mb._lastTarget);
+				(this.$class as typeof Menu)._rmActive(mb._lastTarget);
 			mb._lastTarget = this;
-			this.menupopup._shallClose = false;
+			this.menupopup!._shallClose = false;
 			this._togglePopup();
 		}
-	},
+	}
+
 	// since ZK 6.5.0 internal use only.
-	getAnchor_: function () {
-		return this.$n('a');
-	},
-	domContent_: function () {
+	public getAnchor_(): HTMLAnchorElement | null | undefined {
+		return this.$n('a') as HTMLAnchorElement | null | undefined;
+	}
+
+	protected override domContent_(): string {
 		var label = '<span class="' + this.$s('text') + '">'
 					+ (zUtl.encodeXML(this.getLabel())) + '</span>',
 		img = this.getImage(),
@@ -176,65 +224,74 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 			}
 		}
 		return img + label + separator + icon;
-	},
+	}
+
 	/** Returns whether this is an top-level menu, i.e., not owning
 	 * by another {@link Menupopup}.
 	 * @return boolean
 	 */
-	isTopmost: function () {
+	public isTopmost(): boolean | null | undefined {
 		return this._topmost;
-	},
-	beforeParentChanged_: function (newParent) {
-		this._topmost = newParent && !(newParent.$instanceof(zul.menu.Menupopup));
-		this.$supers('beforeParentChanged_', arguments);
-	},
-	onChildAdded_: function (child) {
-		this.$supers('onChildAdded_', arguments);
-		if (child.$instanceof(zul.menu.Menupopup)) {
+	}
+
+	public override beforeParentChanged_(newParent: zk.Widget | null): void {
+		this._topmost = newParent && !(newParent instanceof zul.menu.Menupopup);
+		super.beforeParentChanged_(newParent);
+	}
+
+	protected override onChildAdded_(child: zk.Widget): void {
+		super.onChildAdded_(child);
+		if (child instanceof zul.menu.Menupopup) {
 			this.menupopup = child;
 
 			if (this._contentHandler)
 				this._contentHandler.destroy();
 		}
-	},
-	onChildRemoved_: function (child) {
-		this.$supers('onChildRemoved_', arguments);
+	}
+
+	protected override onChildRemoved_(child: zk.Widget): void {
+		super.onChildRemoved_(child);
 		if (child == this.menupopup) {
 			this.menupopup = null;
 
 			if (this._contentHandler)
 				this._contentHandler.setContent(this._content);
 		}
-	},
+	}
+
 	/** Returns the {@link Menubar} that contains this menu, or null if not available.
 	 * @return zul.menu.Menubar
 	 */
-	getMenubar: function () {
-		for (var p = this.parent; p; p = p.parent) {
-			if (p.$instanceof(zul.menu.Menubar))
+	public getMenubar(): zul.menu.Menubar | null {
+		for (var p: zk.Widget | null = this.parent; p; p = p.parent) {
+			if (p instanceof zul.menu.Menubar)
 				return p;
 
-			if (!p.$instanceof(zul.menu.Menupopup, zul.menu.Menu))
+			if (!(p instanceof zul.menu.Menupopup || p instanceof zul.menu.Menu))
 				break; // not found
 		}
 		return null;
-	},
-	onShow: function () {
+	}
+
+	public onShow(): void {
 		if (this._contentHandler)
 			this._contentHandler.onShow();
-	},
-	onFloatUp: function (ctl) {
+	}
+
+	public onFloatUp(ctl: zk.ZWatchController): void {
 		if (this._contentHandler)
 			this._contentHandler.onFloatUp(ctl);
-	},
-	onHide: function () {
+	}
+
+	public onHide(): void {
 		if (this._contentHandler)
 			this._contentHandler.onHide();
-	},
-	focus_: function (timeout, ignoreActive/* used for Menupopup.js*/) {
+	}
+
+	public override focus_(timeout?: number, ignoreActive?: boolean/* used for Menupopup.js*/): boolean {
 		if (this.isTopmost() && zk(this.getAnchor_()).focus(timeout)) {
 			// fixed for pressing TAB key from menupopup when the menupopup
-            // is the last one, in IE it will delay to show the active effect.
+			// is the last one, in IE it will delay to show the active effect.
 			// We have to use the ignoreActive to avoid adding the active effect
 			// to the menu widget.
 			if (ignoreActive) {
@@ -242,10 +299,11 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 			}
 			return true;
 		}
-		return this.$supers('focus_', arguments);
-	},
+		return super.focus_(timeout);
+	}
+
 	// used for Menupopup.js
-	_getPrevVisibleMenu: function () {
+	public _getPrevVisibleMenu(): zul.menu.Menu {
 		var prev = this.previousSibling;
 		if (!prev) {
 			var mb = this.getMenubar();
@@ -253,9 +311,10 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 				prev = mb.lastChild;
 		}
 		return prev ? _prevVisibleMenu(prev) : this;
-	},
+	}
+
 	// used for Menupopup.js
-	_getNextVisibleMenu: function () {
+	public _getNextVisibleMenu(): zul.menu.Menu {
 		var next = this.nextSibling;
 		if (!next) {
 			var mb = this.getMenubar();
@@ -263,8 +322,9 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 				next = mb.firstChild;
 		}
 		return next ? _nextVisibleMenu(next) : this;
-	},
-	doKeyDown_: function (evt) {
+	}
+
+	protected override doKeyDown_(evt: zk.Event): void {
 
 		// only support for the topmost menu
 		if (this.isTopmost()) {
@@ -293,17 +353,17 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 				// 2. make the menu as focus effect
 				var pp = this.menupopup;
 				if (pp && pp.isOpen()) {
-					jq(this.$n()).removeClass(this.$s('hover')).removeClass(this.$s('selected'));
+					jq(this.$n_()).removeClass(this.$s('hover')).removeClass(this.$s('selected'));
 					pp.close();
 				}
-				this.$class._addActive(this); // keep the focus
+				(this.$class as typeof Menu)._addActive(this); // keep the focus
 				evt.stop();
 				break;
 			case 40: //DOWN
 				// 1. open menupopup if any.
 				// 2. pass the focus control to menupopup
 				if (this.menupopup && !this._disabled) {
-					jq(this.$n()).addClass(this.$s('selected')).removeClass(this.$s('hover'));
+					jq(this.$n_()).addClass(this.$s('selected')).removeClass(this.$s('hover'));
 					this.menupopup._shallClose = false;
 					this.menupopup.open(null, null, null, {focusFirst: true, sendOnOpen: true, disableMask: true});
 				}
@@ -318,16 +378,17 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 				break;
 			case 9:
 				// 1. deactive this menu, then it will jump to the next focus target.
-				this.$class._rmActive(this);
+				(this.$class as typeof Menu)._rmActive(this);
 				break;
 			}
 		}
-		this.$supers('doKeyDown_', arguments);
-	},
-	doFocus_: function () {
+		super.doKeyDown_(evt);
+	}
+
+	protected override doFocus_(evt: zk.Event): void {
 		if (this.isTopmost()) {
 			var menubar = this.getMenubar(),
-				$menu = this.$class;
+				$menu = this.$class as typeof Menu;
 
 			// clear the previous active target, if any.
 			if (menubar && menubar._lastTarget)
@@ -337,12 +398,13 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		}
 		// delete the variable used for IE
 		delete this._ignoreActive;
-		this.$supers('doFocus_', arguments);
-	},
-	bind_: function () {
-		this.$supers(zul.menu.Menu, 'bind_', arguments);
+		super.doFocus_(evt);
+	}
 
-		var anc = this.getAnchor_();
+	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+		super.bind_(desktop, skipper, after);
+
+		var anc = this.getAnchor_()!;
 
 		this.domListen_(anc, 'onFocus', 'doFocus_') // used to handle keystroke
 			.domListen_(anc, 'onBlur', 'doBlur_')
@@ -351,14 +413,15 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 
 
 		if (this.isTopmost() && this.isListen('onClick')) {
-			jq(this.$n()).addClass(this.$s('clickable'));
+			jq(this.$n_()).addClass(this.$s('clickable'));
 		}
 
 		if (this._contentHandler)
 			this._contentHandler.bind();
-	},
-	unbind_: function () {
-		var anc = this.getAnchor_();
+	}
+
+	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+		var anc = this.getAnchor_()!;
 		this.domUnlisten_(anc, 'onFocus', 'doFocus_')
 			.domUnlisten_(anc, 'onBlur', 'doBlur_')
 			.domUnlisten_(anc, 'onMouseEnter')
@@ -367,32 +430,36 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		if (this._contentHandler)
 			this._contentHandler.unbind();
 
-		this.$supers(zul.menu.Menu, 'unbind_', arguments);
-	},
+		super.unbind_(skipper, after, keepRod);
+	}
+
 	// used for overriding from different theme
-	_getArrowWidth: function () {
+	public _getArrowWidth(): number {
 		return 20;
-	},
-	_showContentHandler: function () {
+	}
+
+	private _showContentHandler(): void {
 		var content = this._contentHandler;
 		if (content && !content.isOpen())
 			content.onShow();
-	},
-	_hideContentHandler: function () {
+	}
+
+	public _hideContentHandler(): void {
 		var content = this._contentHandler;
 		if (content && content.isOpen()) {
 			content.onHide();
 			if (this.isTopmost())
 				this.focus();
 			else
-				this.parent.focus();
+				this.parent!.focus();
 		}
-	},
-	doClick_: function (evt) {
+	}
+
+	public override doClick_(evt: zk.Event, popupOnly?: boolean): void {
 		if (!this._disabled) {
 			if (this.menupopup) {
 				if (this.isTopmost())
-					this.getMenubar()._lastTarget = this;
+					this.getMenubar()!._lastTarget = this;
 				// toggle the open/close status of menupopup/contenthandler
 				_doClick(this, evt);
 			} else {
@@ -400,29 +467,32 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 			}
 		}
 		evt.stop();
-	},
-	doMouseOver_: function () {
+	}
+
+	protected override doMouseOver_(evt: zk.Event): void {
 		if (!this.isTopmost()) {
 			this._showContentHandler();
 		}
-		this.$supers('doMouseOver_', arguments);
-	},
-	_togglePopup: function (byKeyboard) {
+		super.doMouseOver_(evt);
+	}
+
+	public _togglePopup(byKeyboard?: boolean): void {
 		// show the content handler
 		if (!this.menupopup && this._contentHandler) {
 			this._showContentHandler();
 		} else {
-			if (!this.menupopup.isOpen()) {
+			if (!this.menupopup!.isOpen()) {
 				if (this.isTopmost())
 					_toggleClickableCSS(this);
-				this.menupopup.open(null, null, null, {focusFirst: byKeyboard, sendOnOpen: true, disableMask: true});
+				this.menupopup!.open(null, null, null, {focusFirst: byKeyboard, sendOnOpen: true, disableMask: true});
 			} else if (this.isTopmost())
-				this.menupopup.close({sendOnOpen: true});
+				this.menupopup!.close({sendOnOpen: true});
 			else
-				zk(this.menupopup.$n('a')).focus(); // force to get a focus
+				zk(this.menupopup!.$n('a')).focus(); // force to get a focus
 		}
-	},
-	_doMouseEnter: function (evt) {
+	}
+
+	public _doMouseEnter(evt: zk.Event): void {
 		var menubar = this.getMenubar();
 		if (menubar) {
 			menubar._noFloatUp = false;
@@ -439,15 +509,19 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		if (!topmost) {
 			zWatch.fire('onFloatUp', this); //notify all
 			if (this.menupopup && !this.menupopup.isOpen()) this.menupopup.open();
-			this.parent.removeActive_();
+			// FIXME: Only Menupopup defines `removeActive_`, but shouldn't the parent be a Menubar?
+			(this.parent as unknown as zul.menu.Menupopup).removeActive_();
 		} else {
-			if (this.menupopup && menubar._autodrop) {
+			// NOTE: It has always been the case that menubar is assumed to exist in this branch,
+			// i.e., if `topmost` holds, but menubar is tested for nullity in the beginning of this
+			// function, i.e., `if (menubar) { menubar._noFloatUp = false; }`. Is this intended?
+			if (this.menupopup && menubar!._autodrop) {
 				zWatch.fire('onFloatUp', this); //notify all
 				if (!this.menupopup.isOpen()) this.menupopup.open();
 			} else {
-				var target = menubar._lastTarget;
+				var target = menubar!._lastTarget;
 				if (target && target != this) {
-					this.$class._rmActive(target);
+					(this.$class as typeof Menu)._rmActive(target);
 					if (target.menupopup && target.menupopup.isVisible()) {
 						target.menupopup.close({sendOnOpen: true});
 						if (this.menupopup) this.menupopup.open();
@@ -455,36 +529,40 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 				}
 			}
 		}
-		this.$class._addActive(this);
-	},
-	_doMouseLeave: function (evt) { //not zk.Widget.doMouseOut_
+		(this.$class as typeof Menu)._addActive(this);
+	}
+
+	public _doMouseLeave(evt: zk.Widget): void { //not zk.Widget.doMouseOut_
 		var menubar = this.getMenubar();
 		this._updateHoverImage(); // remove hover image if any
 		if (this._disabled) return;
 		var topmost = this.isTopmost(),
 			menupopup = this.menupopup;
 		if (topmost) { //implies menubar
-			this.$class._rmActive(this, true);
-			if (menupopup && menubar._autodrop) {
+			(this.$class as typeof Menu)._rmActive(this, true);
+			if (menupopup && menubar!._autodrop) {
 				if (menupopup.isOpen())
 					menupopup._shallClose = true; //autodrop -> autoclose if mouseout
 			}
 		} else if (!menupopup || !menupopup.isOpen())
-			this.$class._rmActive(this);
-	},
+			(this.$class as typeof Menu)._rmActive(this);
+	}
+
 	//@Override
-	getImageNode: function () {
+	public override getImageNode(): HTMLImageElement | null | undefined {
 		if (!this._eimg && (this._image || this._hoverImage)) {
 			var n = this.$n();
 			if (n)
-				this._eimg = this.$n('a').firstChild;
+				this._eimg = this.$n_('a').firstChild as HTMLImageElement | null;
 		}
 		return this._eimg;
-	},
-	ignoreDescendantFloatUp_: function (des) {
-		return des && des.$instanceof(zul.menu.Menupopup);
-	},
-	isVertical_: function () {
+	}
+
+	public override ignoreDescendantFloatUp_(des: zk.Widget): boolean {
+		return des && des instanceof zul.menu.Menupopup;
+	}
+
+	public isVertical_(): boolean {
 		if (this.isTopmost()) {
 			var bar = this.getMenubar();
 			if (bar)
@@ -492,17 +570,18 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		}
 		return false;
 	}
-}, {
-	_isActive: function (wgt) {
+
+	public static _isActive(wgt: zul.menu.Menu): boolean {
 		var top = wgt.isTopmost(),
-			n = wgt.$n(),
+			n = wgt.$n_(),
 			menupopup = wgt.menupopup,
 			cls = top ? menupopup && menupopup.isOpen() ? wgt.$s('selected') : wgt.$s('hover') : wgt.$s('hover');
 		return jq(n).hasClass(cls);
-	},
-	_addActive: function (wgt) {
+	}
+
+	public static _addActive(wgt: zul.menu.Menu): void {
 		var top = wgt.isTopmost(),
-			n = wgt.$n(),
+			n = wgt.$n_(),
 			menupopup = wgt.menupopup,
 			cls = top ? menupopup && menupopup.isOpen() ? wgt.$s('selected') : wgt.$s('hover') : wgt.$s('hover');
 		jq(n).addClass(cls);
@@ -511,45 +590,66 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 			if (mb)
 				mb._lastTarget = wgt;
 		} else {
-			var parentMenupopup = wgt.parent;
+			// FIXME: This branch is hardly ever taken. I was never able to get into this branch by playing in ZK Demo.
+			// So, I can't tell whether the logic below is correct or not. Two points seem fishy.
+			// 1. Prior to ZK-4598 `wgt.parent` was not tested for nullity. After ZK-4598, the second `if` assumes that
+			//    `wgt.parent` is not null, but tests it for the first `if`. What should be the case?
+			// 2. Shouldn't `wgt.parent` be a Menubar? But the code assumes it to be a Menupopup. Which is the case?
+			var parentMenupopup = wgt.parent as unknown as zul.menu.Menupopup;
 			if (parentMenupopup)
 				parentMenupopup.addActive_(wgt);
-			if (parentMenupopup.parent.$instanceof(zul.menu.Menu))
+			if (parentMenupopup.parent instanceof zul.menu.Menu)
 				this._addActive(parentMenupopup.parent);
 		}
-	},
-	_rmActive: function (wgt, ignoreSeld/* used for mouseout when topmost*/) {
+	}
+
+	public static _rmActive(wgt: zul.menu.Menu, ignoreSeld?: boolean/* used for mouseout when topmost*/): void {
 		var top = wgt.isTopmost(),
-			n = wgt.$n(),
+			n = wgt.$n_(),
 			menupopup = wgt.menupopup,
 			cls = top ? (!ignoreSeld && menupopup && menupopup.isOpen()) ? wgt.$s('selected') : wgt.$s('hover') : wgt.$s('hover'),
 			anode = jq(n).removeClass(cls);
 		if (top && !(anode.hasClass(wgt.$s('selected')) || anode.hasClass(wgt.$s('hover'))))
 			_toggleClickableCSS(wgt, true);
 	}
-});
 
-zul.menu.ContentHandler = zk.$extends(zk.Object, {
-	$init: function (wgt, content) {
+	// Prior to TS migration, this method was accidentally declared in ContentHandler.
+	protected override deferRedrawHTML_(out: string[]): void {
+		out.push('<li', this.domAttrs_({domClass: true}), ' class="z-renderdefer"></li>');
+	}
+}
+zul.menu.Menu = zk.regClass(Menu);
+
+export class ContentHandler extends zk.Object {
+	private _wgt: Menu;
+	private _content?: string;
+	private _shadow?: zk.eff.Shadow | null;
+	private _pp?: HTMLElement | null;
+
+	public constructor(wgt: zul.menu.Menu, content: string) {
+		super();
 		this._wgt = wgt;
 		this._content = content;
-	},
-	setContent: function (content) {
+	}
+
+	public setContent(content: string | undefined): void {
 		if (this._content != content || !this._pp) {
 			this._content = content;
 			this._wgt.rerender();
 		}
-	},
-	redraw: function (out) {
+	}
+
+	public redraw(out: string[]): void {
 		var wgt = this._wgt;
 
 		out.push('<div id="', wgt.uuid, '-cnt-pp" class="', wgt.$s('content-popup'),
-			'" style=""><div class="', wgt.$s('content-body'), '">', this._content, '</div></div>');
-	},
-	bind: function () {
+			'" style=""><div class="', wgt.$s('content-body'), '">', this._content!, '</div></div>');
+	}
+
+	public bind(): void {
 		var wgt = this._wgt;
 		if (!wgt.menupopup) {
-			wgt.domListen_(wgt.$n(), 'onClick', 'onShow');
+			wgt.domListen_(wgt.$n_(), 'onClick', 'onShow');
 			zWatch.listen({onFloatUp: wgt, onHide: wgt});
 		}
 
@@ -558,15 +658,16 @@ zul.menu.ContentHandler = zk.$extends(zk.Object, {
 		jq(this._pp, zk)
 			.on('mouseenter', this.proxy(this._doMouseEnter))
 			.on('mouseleave', this.proxy(this._doMouseLeave));
-	},
-	unbind: function () {
+	}
+
+	public unbind(): void {
 		var wgt = this._wgt;
 		if (!wgt.menupopup) {
 			if (this._shadow) {
 				this._shadow.destroy();
 				this._shadow = null;
 			}
-			wgt.domUnlisten_(wgt.$n(), 'onClick', 'onShow');
+			wgt.domUnlisten_(wgt.$n_(), 'onClick', 'onShow');
 			zWatch.unlisten({onFloatUp: wgt, onHide: wgt});
 		}
 
@@ -574,20 +675,24 @@ zul.menu.ContentHandler = zk.$extends(zk.Object, {
 			.off('mouseenter', this.proxy(this._doMouseEnter))
 			.off('mouseleave', this.proxy(this._doMouseLeave));
 		this._pp = null;
-	},
-	isOpen: function () {
+	}
+
+	public isOpen(): boolean | null | undefined {
 		var pp = this._pp;
 		return (pp && zk(pp).isVisible());
-	},
-	_doMouseEnter: function () {
+	}
+
+	private _doMouseEnter(): void {
 		var menubar = this._wgt.getMenubar();
 		if (menubar) menubar._bOver = true;
-	},
-	_doMouseLeave: function () {
+	}
+
+	private _doMouseLeave(): void {
 		var menubar = this._wgt.getMenubar();
 		if (menubar) menubar._bOver = false;
-	},
-	onShow: function () {
+	}
+
+	public onShow(): void {
 		var wgt = this._wgt,
 			pp = this._pp;
 		if (!pp) return;
@@ -597,10 +702,11 @@ zul.menu.ContentHandler = zk.$extends(zk.Object, {
 		jq(pp).zk.makeVParent();
 		zWatch.fireDown('onVParent', this);
 
-		zk(pp).position(wgt.$n(), this.getPosition());
+		zk(pp).position(wgt.$n_(), this.getPosition());
 		this.syncShadow();
-	 },
-	onHide: function () {
+		}
+
+	public onHide(): void {
 		var pp = this._pp;
 		if (!pp || !zk(pp).isVisible()) return;
 
@@ -609,30 +715,31 @@ zul.menu.ContentHandler = zk.$extends(zk.Object, {
 		zWatch.fireDown('onVParent', this);
 
 		this.hideShadow();
-	},
-	onFloatUp: function (ctl) {
+	}
+
+	public onFloatUp(ctl: zk.ZWatchController): void {
 		if (!zUtl.isAncestor(this._wgt, ctl.origin))
 			this.onHide();
-	},
-	syncShadow: function () {
+	}
+
+	public syncShadow(): void {
 		if (!this._shadow)
-			this._shadow = new zk.eff.Shadow(this._wgt.$n('cnt-pp'), {stackup: zk.useStackup});
+			this._shadow = new zk.eff.Shadow(this._wgt.$n_('cnt-pp'), {stackup: zk.useStackup as boolean});
 		this._shadow.sync();
-	},
-	hideShadow: function () {
+	}
+
+	public hideShadow(): void {
 		if (this._shadow)
 			this._shadow.hide();
-	},
-	destroy: function () {
+	}
+
+	public destroy(): void {
 		this._wgt.rerender();
-	},
-	getPosition: function () {
+	}
+
+	public getPosition(): 'end_before' | 'after_start' {
 		var wgt = this._wgt;
 		return wgt.isVertical_() ? 'end_before' : 'after_start';
-	},
-	deferRedrawHTML_: function (out) {
-		out.push('<li', this.domAttrs_({domClass: 1}), ' class="z-renderdefer"></li>');
 	}
-});
-
-})();
+}
+zul.menu.ContentHandler = zk.regClass(ContentHandler);

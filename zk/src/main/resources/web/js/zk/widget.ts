@@ -1685,11 +1685,11 @@ wgt.$f().main.setTitle("foo");
 	 * @return zk.Widget the widget or null if no such index
 	 * @see #getChildIndex
 	 */
-	public getChildAt(j: number): Widget | undefined {
+	public getChildAt<T extends Widget>(j: number): T | undefined {
 		if (j >= 0 && j < this.nChildren)
 			for (var w = this.firstChild; w; w = w.nextSibling)
 				if (--j < 0)
-					return w;
+					return w as T;
 	}
 
 	/** Returns the child index of this widget.
@@ -2401,7 +2401,7 @@ wgt.$f().main.setTitle("foo");
 	 * @return int the new value of z-index of the topmost floating window, -1 if this widget and none of its ancestors is floating or not bound to the DOM tree.
 	 * @see #setFloating_
 	 */
-	public setTopmost(): number {
+	public setTopmost(): number | void {
 		if (!this.desktop || this._userZIndex) return -1;
 
 		for (var wgt: Widget | null = this; wgt; wgt = wgt.parent)
