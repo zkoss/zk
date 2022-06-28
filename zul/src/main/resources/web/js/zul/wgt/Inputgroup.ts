@@ -65,7 +65,7 @@ export class Inputgroup extends zul.Widget {
 	}
 
 	protected override domClass_(no?: zk.DomClassOptions): string {
-		let classes = this.domClass_(no);
+		let classes = super.domClass_(no);
 		return classes + (this._vertical ? ' ' + this.$s('vertical') : '');
 	}
 
