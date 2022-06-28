@@ -15,12 +15,6 @@ export * as mesh from './mesh';
 		public _scrollScale: number;
 		public _doScroll(val: number): void;
 	}
-// export * as sel from './sel';
-export declare namespace sel {
-    export import ItemWidget = zul.Widget; // zk/dom
-    export import Listitem = zul.sel.ItemWidget; // zk/domtouch
-    export import Treerow = zul.Widget; // zk/domtouch
-}
 // export * as tab from './tab';
 // export * as utl from './utl';
 export * as wgt from './wgt';
