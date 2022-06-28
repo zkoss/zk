@@ -106,7 +106,7 @@ export interface JQZK {
 	revisedHeight(size: number, excludeMargin?: boolean): number;
 	revisedOffset(ofs?: zk.Offset): zk.Offset;
 	revisedWidth(size: number, excludeMargin?: boolean): number;
-	scrollIntoView(parent?: Element): this;
+	scrollIntoView(parent?: Element | null): this;
 	scrollOffset(): zk.Offset;
 	scrollTo(): this;
 	select(timeout?: number): boolean;
@@ -2803,7 +2803,7 @@ export interface EventMouseData extends EventMetaData {
 	pageY: number | undefined;
 }
 export interface EventKeyData extends EventMetaData {
-	keyCode: number | undefined;
+	keyCode: string | number | undefined;
 	charCode: number | undefined;
 	key: string | undefined;
 }
