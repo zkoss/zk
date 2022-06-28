@@ -4434,7 +4434,7 @@ wgt.unlisten({
 		if (opts) {
 			if (opts.asapOnly) {
 				v = this.get$Class<typeof Widget>()._importantEvts;
-				return v !== undefined && (v as object)[evt] != null;
+				return !!v && !!(v as object)[evt];
 			}
 			if (opts.any) {
 				if (v != null) return true;
