@@ -717,7 +717,6 @@ export class Widget extends ZKObject {
 	declare private _binding;
 	declare public rawId;
 	declare private _$service;
-	declare private _tooltiptex;
 	declare protected childReplacing_;
 	declare private _userZIndex;
 	declare private _zIndex;
@@ -1109,10 +1108,10 @@ new zul.wnd.Window({
 	 */
 	public setTooltiptext(tooltiptext: StringFieldValue): void {
 		if (this._tooltiptext != tooltiptext) {
-			this._tooltiptex = tooltiptext;
+			this._tooltiptext = tooltiptext;
 			var n = this.$n();
 			// ZK-676 , ZK-752
-			if (n) n.title = this._tooltiptex || '';
+			if (n) n.title = this._tooltiptext || '';
 		}
 	}
 	/** Returns the tooltip text of this widget.
