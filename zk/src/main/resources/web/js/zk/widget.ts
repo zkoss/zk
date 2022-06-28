@@ -6179,7 +6179,7 @@ function _fixCommandName(prefix: string, cmd: string, opts: EventOptions, prop: 
  * @since 8.0.0
  */
 // zk scope
-export class Service extends Object {
+export class Service extends ZKObject {
 	declare private _aftercmd;
 	declare private _lastcmd: StringFieldValue;
 
