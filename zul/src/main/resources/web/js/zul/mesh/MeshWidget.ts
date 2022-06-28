@@ -430,9 +430,9 @@ function unlistenOnFitSize(wgt: MeshWidget): void {
 	}
 }
 
-export interface BodyWidgetIterator {
+export interface ItemIterator {
 	hasNext(): boolean;
-	next(): zk.Widget;
+	next(): zul.sel.ItemWidget;
 }
 /**
  *  A skeletal implementation for a mesh widget.
@@ -449,8 +449,8 @@ export abstract class MeshWidget extends zul.Widget {
 	public _span?: string | boolean;
 	private _nspan?: number;
 	private _autopaging: boolean | undefined;
-	private _model: boolean | undefined;
-	private _paginal?: zul.mesh.Paging;
+	protected _model: boolean | undefined;
+	protected _paginal?: zul.mesh.Paging;
 	private _pendOnRender?: boolean;
 	private _ebodyScrollPos?: null | { l: number; t: number };
 	// Types established from inspecting https://www.zkoss.org/zkdemo/grid/header_and_footer
@@ -500,12 +500,13 @@ export abstract class MeshWidget extends zul.Widget {
 
 	// `zul.mesh.prototype.HeadWidget.onColSize` could assign `_innerWidth` a number
 	public _innerWidth = '100%';
-	private _currentTop = 0;
+	protected _currentTop = 0;
 	public _currentLeft = 0;
 	public _nativebar = true;
 
 	protected abstract getHeadWidgetClass(): typeof zul.mesh.HeadWidget;
-	public abstract getBodyWidgetIterator(opts?: Record<string, unknown>): BodyWidgetIterator;
+	public abstract getBodyWidgetIterator(opts?: Record<string, unknown>): ItemIterator;
+	public abstract itemIterator(): ItemIterator;
 	protected abstract _getFirstItemIndex(): number;
 	protected abstract _getLastItemIndex(): number;
 	public abstract hasGroup(): boolean;
@@ -979,7 +980,8 @@ export abstract class MeshWidget extends zul.Widget {
 		}
 	}
 
-	public onResponse(): void {
+	// These paramters are not used. They exist for the sake of inheritance.
+	public onResponse(ctl?: zk.ZWatchController, opts?: Record<string, unknown>): void {
 		if (this._shallSize) {
 			if (this._shallClearTableWidth) {
 				this._clearTableWidth();
@@ -1484,7 +1486,7 @@ export abstract class MeshWidget extends zul.Widget {
 		this._afterCalcSize();
 	}
 
-	private _beforeCalcSize(): void {
+	protected _beforeCalcSize(): void {
 		var ebody = this.ebody!;
 		if (!this._nativebar && (ebody.scrollLeft || ebody.scrollTop)) {
 			// ZK-2046: Keep ebody scroll position before calculated size, _setHgh would reset it to 0.
@@ -1493,7 +1495,7 @@ export abstract class MeshWidget extends zul.Widget {
 		this._calcHgh();
 	}
 
-	private _afterCalcSize(): void {
+	protected _afterCalcSize(): void {
 		var isCSSFlex = this._cssflex && this.isChildrenFlex();
 		if (this._ebodyScrollPos) {
 			// ZK-2046: Restore ebody scroll position after calculated size.
@@ -2081,7 +2083,7 @@ export abstract class MeshWidget extends zul.Widget {
 			this._calcHgh();
 	}
 
-	private _calcHgh(): void {
+	protected _calcHgh(): void {
 		var rows: ArrayLike<HTMLTableRowElement> = this.ebodyrows ? this.ebodyrows.rows : [],
 			n = this.$n_(),
 			hgh: string | number = n.style.height,
@@ -2188,7 +2190,7 @@ export abstract class MeshWidget extends zul.Widget {
 	}
 
 	/* Returns the real # of rows (aka., real size). */
-	private _visibleRows(v: number): number | undefined {
+	protected _visibleRows(v?: number): number | undefined {
 		if ('number' == typeof v) {
 			this._visiRows = v;
 		} else

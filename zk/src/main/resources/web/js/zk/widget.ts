@@ -408,7 +408,7 @@ export let DnD = { //for easy overriding
 	 * @param String msg the message to show inside the returned element
 	 * @return DOMElement the element representing what is being dragged
 	 */
-	ghost(drag, ofs: Offset, msg?: string): HTMLElement {
+	ghost(drag: zk.Draggable, ofs: Offset, msg?: string): HTMLElement {
 		if (msg != null) {
 			if (msg)
 				msg = '<span class="z-drop-text">' + msg + '</span>';
@@ -419,7 +419,7 @@ export let DnD = { //for easy overriding
 			return jq('#zk_ddghost')[0];
 		}
 
-		var dgelm = jq(drag.node).clone()[0];
+		var dgelm = jq(drag.node!).clone()[0];
 		dgelm.id = 'zk_ddghost';
 		zk.copy(dgelm.style, {
 			position: 'absolute', left: ofs[0] + 'px', top: ofs[1] + 'px'
@@ -680,6 +680,8 @@ const _dragoptions: Partial<DraggableOptions> = {
  */
 // zk scope
 export class Widget extends ZKObject {
+	declare public $button?: boolean; // zul/sel/SelectWidget _isButton
+	declare public $inputWidget?: boolean; // zul/sel/SelectWidget _isInputWidget
 	declare public _loaded?: boolean; // zul.mesh.MeshWidget
 	declare public _index?: number; // zul.mesh.MeshWidget
 	declare public _navWidth?: number; // zul.mesh.Paging

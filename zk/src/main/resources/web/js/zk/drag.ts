@@ -384,6 +384,11 @@ String scroll; //DOM Element's ID</code></pre>
 	 * @type Map
 	 */
 	public opts: Partial<DraggableOptions>;
+
+	public _dragImg?:
+		| HTMLElement // zk.Widget.prototype.ghost
+		| JQuery<HTMLElement>; // zul/sel/ItemWidget and zul/sel/Listitem
+
 	/** Constructor.
 	 * @param Object control the control object for this draggable.
 	 * It can be anything, but it is usually a widget ({@link zk.Widget}).

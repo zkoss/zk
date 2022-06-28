@@ -382,7 +382,7 @@ export class Combobox<ValueType> extends zul.inp.ComboWidget<ValueType> {
 		}
 
 		if (sel)
-			zk(sel).scrollIntoView(this.$n('pp')!);
+			zk(sel).scrollIntoView(this.$n('pp'));
 
 		//B70-ZK-2548: fire onChange event to notify server the current value
 		var highlightOnly = !this._instantSelect && this._open;
@@ -590,7 +590,7 @@ export class Combobox<ValueType> extends zul.inp.ComboWidget<ValueType> {
 		// B50-ZK-568: Combobox does not scroll to selected item
 		// shall do after slide down
 		if (visible && this._lastsel)
-			zk(this._lastsel).scrollIntoView(this.$n('pp')!);
+			zk(this._lastsel).scrollIntoView(this.$n('pp'));
 		super.afterAnima_(visible);
 	}
 

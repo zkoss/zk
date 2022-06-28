@@ -1,6 +1,5 @@
-// export * from './SelectWidget'; // jsdoc="true"
-// export * from './ItemWidget'; // jsdoc="true"
-export declare class ItemWidget extends zul.Widget {}
+export * from './SelectWidget'; // jsdoc="true"
+export * from './ItemWidget'; // jsdoc="true"
 // export * from './Listbox';
 // export * from './Listitem';
 export declare class Listitem extends zul.sel.ItemWidget {}

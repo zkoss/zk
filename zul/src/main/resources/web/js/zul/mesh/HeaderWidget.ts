@@ -29,6 +29,7 @@ export abstract class HeaderWidget extends zul.LabelImageWidget {
 	public _origWd?: string | null;
 	private _dragsz?: zk.Draggable | null;
 
+	public _checked?: boolean; // zul.sel.SelectWidget.prototype._isAllSelected
 	protected _sortDirection!: SortDirection;
 	public abstract getSortDirection(): SortDirection;
 	public abstract setSortDirection(direction: SortDirection, opts?: Record<string, boolean>): this;

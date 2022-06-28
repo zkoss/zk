@@ -93,7 +93,8 @@ export interface EventStopOptions {
  * </table>
  * @disable(zkgwt)
  */
-export class Event extends ZKObject {
+export class Event<TData = unknown> extends ZKObject {
+	public itemSelected?: boolean; // zul.sel.ItemWidget.prototype.doSelect_
 	public tooltipped?: boolean; // zul.Widget.prototype.doTooltipOver_
 	public contextSelected?: boolean; // zul.Widget.prototype.doClick_
 
@@ -165,7 +166,7 @@ onClick: function (evt) {
 	 * <p>Refer to <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/Communication/AU_Requests/Server-side_Processing">ZK Client-side Reference: AU Requests: Server-side Processing</a>.
 	 * @type Object
 	 */
-	public data: unknown | null;
+	public data?: TData | null;
 	/** The options (never null).
 	 * <p>Allowed properties:
 	 * <ul>
@@ -217,7 +218,7 @@ onClick: function (evt) {
 	 * @param Map opts [optional] the options. Refer to {@link #opts}
 	 * @param jq.Event domEvent [optional] the DOM event that causes this widget event.
 	 */
-	public constructor(target: Widget | null | undefined, name: string, data?: unknown, opts?: EventOptions | null, domEvent?: JQuery.TriggeredEvent) { // FIXME: TriggeredEvent missing type parameters
+	public constructor(target: Widget | null | undefined, name: string, data?: TData, opts?: EventOptions | null, domEvent?: JQuery.TriggeredEvent) { // FIXME: TriggeredEvent missing type parameters
 		super();
 		this.currentTarget = this.target = target;
 		this.name = name;
