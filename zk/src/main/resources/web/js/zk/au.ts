@@ -123,7 +123,7 @@ export interface AUEngine {
 	ajaxReqResend(reqInf: AuRequestInfo, timeout?: number): void;
 	beforeSend(uri: string, aureq: ZKEvent, dt?: Desktop): string;
 	confirmRetry(msgCode: string, msg2?: string): boolean;
-	createWidgets(codes: unknown[], fn: (wgts: Widget[]) => void, filter?: (wgt: Widget) => Widget | null): void;
+	createWidgets(codes: ArrayLike<unknown>[], fn: (wgts: Widget[]) => void, filter?: (wgt: Widget) => Widget | null): void;
 	doCmds(dtid: string, rs: unknown[]): void;
 	encode(j: number, aureq: ZKEvent, dt: Desktop): string;
 	getAuRequests(dt: Desktop): ZKEvent[];
@@ -1152,7 +1152,7 @@ zAu.beforeSend = function (uri, req, dt) {
 		var wgts: Widget[] = [], len = codes.length;
 		if (len > 0) {
 			for (var j = 0; j < len; ++j)
-				window.zkx_(codes[j] as Parameters<Window['zkx_']>[0], function (newwgt) {
+				window.zkx_(codes[j], function (newwgt) {
 					wgts.push(newwgt);
 					if (wgts.length == len)
 						fn(wgts);

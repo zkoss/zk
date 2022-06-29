@@ -215,7 +215,7 @@ export abstract class SortWidget extends zul.mesh.HeaderWidget {
 				index: number;
 			}
 			var d: Data[] = [], col = this.getChildIndex();
-			for (var i = 0, z = 0, it = mesh.getBodyWidgetIterator(), w: zk.Widget; (w = it.next()); z++)
+			for (var i = 0, z = 0, it = mesh.getBodyWidgetIterator(), w: zk.Widget | null | undefined; (w = it.next()); z++)
 				for (var k = 0, cell = w.firstChild; cell; cell = cell.nextSibling, k++)
 					if (k == col) {
 						d[i++] = {

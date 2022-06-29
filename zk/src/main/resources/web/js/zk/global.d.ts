@@ -328,7 +328,9 @@ declare namespace zkex {
 		}
 	}
 	namespace sel {
-		class Listgroup extends zul.sel.Listitem {} // zul.sel.ItemWidget
+		class Listgroup extends zul.sel.Listitem { // zul.sel.ItemWidget
+			public isOpen(): boolean
+		}
 		class Listgroupfoot extends zul.sel.Listitem {} // zul.sel.ItemWidget
 	}
 }

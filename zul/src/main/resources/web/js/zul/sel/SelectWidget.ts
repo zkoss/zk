@@ -72,6 +72,8 @@ function _isListgroupfoot(w: zul.sel.ItemWidget): boolean {
 }
 
 export abstract class SelectWidget extends zul.mesh.MeshWidget {
+	public override firstChild!: zul.sel.ItemWidget | null;
+	public override lastChild!: zul.sel.ItemWidget | null;
 	/** Whether to change a list item selection on right click
 	 * <p>Default: true (unless the server changes the setting)
 	 * @since 5.0.5
@@ -85,12 +87,12 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	public nonselectableTags?: string;
 	private _checkmark?: boolean;
 	public _multiple?: boolean;
-	private _selItems: zul.sel.ItemWidget[];
+	public _selItems: zul.sel.ItemWidget[];
 	public _focusItem?: zul.sel.ItemWidget | null;
 	public efield?: HTMLElement | null;
 	private _selectedIndex?: number;
 	private _name?: string;
-	private _selectOnHighlightDisabled?: boolean;
+	protected _selectOnHighlightDisabled?: boolean;
 	private _checkmarkDeselectOther?: boolean;
 	private _cdo?: boolean;
 	public $$selectAll?: boolean;
@@ -104,9 +106,9 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	public _shallSyncCM?: boolean;
 	protected _itemForSelect?: zul.sel.ItemWidget;
 	private _disableSelection_?: boolean;
-	declare public static shallSyncSelInView: Record<string, boolean>;
+	declare public static shallSyncSelInView?: Record<string, boolean>;
 
-	public abstract stripe(): this
+	public abstract stripe(): this | undefined
 
 	public constructor() {
 		super(); // FIXME: params?
@@ -203,7 +205,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 			this.clearSelection();
 			this._selectedIndex = selected;
 			if (selected > -1) {
-				var w: zul.sel.ItemWidget | undefined;
+				var w: zul.sel.ItemWidget | null | undefined;
 				for (var it = this.getBodyWidgetIterator(); selected-- >= 0;)
 					w = it.next();
 				if (w) {
@@ -303,7 +305,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		// reset $$selectAll
 		this.$$selectAll = undefined;
 
-		for (var it = this.getBodyWidgetIterator(), w: zul.sel.ItemWidget; (w = it.next());)
+		for (var it = this.getBodyWidgetIterator(), w: zul.sel.ItemWidget | null | undefined; (w = it.next());)
 			this._changeSelect(w, sels[w.uuid] == true);
 	}
 
@@ -313,7 +315,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 			return;
 		var self = this;
 		setTimeout(function () { // items not ready yet
-			var w: zul.sel.ItemWidget;
+			var w: zul.sel.ItemWidget | null | undefined;
 			for (var it = self.getBodyWidgetIterator(); (w = it.next()) && index--;)
 				if (!it.hasNext())
 					break;
@@ -531,7 +533,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		var btn: HTMLAnchorElement | null | undefined;
 		if (btn = this.$n('a')) {
 			if (this._focusItem) {
-				for (var it = this.getBodyWidgetIterator(), w: zul.sel.ItemWidget; (w = it.next());)
+				for (var it = this.getBodyWidgetIterator(), w: zul.sel.ItemWidget | null | undefined; (w = it.next());)
 					if (this._isFocus(w)) {
 						w.focus_(timeout);
 						break;
@@ -660,7 +662,9 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	}
 
 	// F70-ZK-2433 to be overridden
-	protected checkOnHighlightDisabled_ = zk.$void;
+	protected checkOnHighlightDisabled_(): boolean {
+		return false;
+	}
 
 	public _doItemSelect(row: zul.sel.ItemWidget, evt: zk.Event<zk.EventMetaData>): void { //called by ItemWidget
 		//It is better not to change selection only if dragging selected
@@ -872,12 +876,9 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 								offset: step > 0 ? 0 : -1,
 								shift: !this._multiple || !shift ? 0 : step > 0 ? -1 : 1
 							});
-							if ((this.$class as typeof SelectWidget).shallSyncSelInView) {
-								(this.$class as typeof SelectWidget).shallSyncSelInView[this.uuid] = true;
-							} else {
-								(this.$class as typeof SelectWidget).shallSyncSelInView = {};
-								(this.$class as typeof SelectWidget).shallSyncSelInView[this.uuid] = true;
-							}
+							const $class = this.$class as typeof SelectWidget;
+							$class.shallSyncSelInView ||= {};
+							$class.shallSyncSelInView[this.uuid] = true;
 						}
 					}
 					break;
@@ -1028,7 +1029,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 					lastSelected = item;
 			}
 		}
-		for (var it = this.getBodyWidgetIterator(), si = this.getSelectedItem(), w: zul.sel.ItemWidget; (w = it.next());) {
+		for (var it = this.getBodyWidgetIterator(), si = this.getSelectedItem(), w: zul.sel.ItemWidget | null | undefined; (w = it.next());) {
 			if (w.isDisabled() || !w.isSelectable()) continue; // Bug: 2030986
 			if (focusfound) {
 				this._changeSelect(w, true);
@@ -1066,7 +1067,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	 * @disable(zkgwt)
 	 */
 	public setSelectAll(notify: boolean, evt: zk.Event<zk.EventMetaData>): void {
-		for (var it = this.getBodyWidgetIterator(), w: zul.sel.ItemWidget; (w = it.next());)
+		for (var it = this.getBodyWidgetIterator(), w: zul.sel.ItemWidget | null | undefined; (w = it.next());)
 			if (w._loaded && !w.isDisabled() && w.isSelectable())
 				this._changeSelect(w, true);
 		if (notify) // FIXME: why was the condition `notify && evt !== true`?
@@ -1303,7 +1304,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		}
 
 		var isGroupSelect = this.groupSelect;
-		for (var it = this.getBodyWidgetIterator({skipHidden: true}), w: zul.sel.ItemWidget; (w = it.next());) {
+		for (var it = this.getBodyWidgetIterator({skipHidden: true}), w: zul.sel.ItemWidget | null | undefined; (w = it.next());) {
 			//Bug ZK-1998: skip listgroup and listgroupfoot widget if groupSelect is false
 			if ((_isListgroup(w) || _isListgroupfoot(w)) && !isGroupSelect)
 				continue;

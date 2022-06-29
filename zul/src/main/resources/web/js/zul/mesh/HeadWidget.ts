@@ -23,7 +23,7 @@ var _fixOnChildChanged = zk.opera ? function (head: HeadWidget): boolean {
 
 function _syncFrozen(wgt: HeadWidget): void {
 	var mesh = wgt.getMeshWidget(),
-		frozen: zul.mesh.Frozen | undefined;
+		frozen: zul.mesh.Frozen | undefined | null;
 	if (mesh && (frozen = mesh.frozen)) {
 		var hdfaker: HTMLTableColElement | null | undefined;
 		if (mesh._nativebar) {

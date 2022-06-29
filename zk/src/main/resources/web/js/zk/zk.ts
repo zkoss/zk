@@ -1915,7 +1915,13 @@ foo.MyClass = zk.$extends(foo.MySuper, {
 			oldmtd = this[nm];
 			p = this;
 		}
-		while (p = p._$super)
+		// In the following two cases, we have to examine `Object.getPrototypeOf`.
+		// 1. When something `zk.$extends` an ES6 class.
+		// 2. When something `zk.override` an ES6 class with a method body containing
+		//    `$supers`, as in `zkcml/zkmax/listbox-rod/fireOnRender`.
+		// Furthermore, for ZK classes created with `zk.$extends` to work as usual,
+		// we need to prioritize `_$supers`.
+		while (p = (p._$super || Object.getPrototypeOf(p)))
 			if (oldmtd != p[nm]) {
 				m = p[nm];
 				if (m) supers[nm] = p;

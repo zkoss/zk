@@ -358,7 +358,7 @@ function _cpCellWd(wgt: MeshWidget): void {
 	var ncols = dst.cells.length,
 		src: HTMLTableRowElement | null | undefined,
 		maxnc = 0;
-	for (var j = 0, it = wgt.getBodyWidgetIterator({skipHidden: true}), w: zk.Widget; (w = it.next());) {
+	for (var j = 0, it = wgt.getBodyWidgetIterator({skipHidden: true}), w: zk.Widget | null | undefined; (w = it.next());) {
 		if (!w._loaded || w.z_rod)
 			continue;
 
@@ -432,7 +432,7 @@ function unlistenOnFitSize(wgt: MeshWidget): void {
 
 export interface ItemIterator {
 	hasNext(): boolean;
-	next(): zul.sel.ItemWidget;
+	next(): zul.sel.ItemWidget | null | undefined;
 }
 /**
  *  A skeletal implementation for a mesh widget.
@@ -449,7 +449,7 @@ export abstract class MeshWidget extends zul.Widget {
 	public _span?: string | boolean;
 	private _nspan?: number;
 	private _autopaging: boolean | undefined;
-	protected _model: boolean | undefined;
+	public _model: boolean | undefined;
 	protected _paginal?: zul.mesh.Paging;
 	private _pendOnRender?: boolean;
 	private _ebodyScrollPos?: null | { l: number; t: number };
@@ -470,9 +470,9 @@ export abstract class MeshWidget extends zul.Widget {
 	public efootrows?: HTMLTableSectionElement | null;
 
 	public efrozen?: HTMLElement | null;
-	public frozen?: zul.mesh.Frozen;
+	public frozen?: zul.mesh.Frozen | null;
 
-	public paging?: zul.mesh.Paging;
+	public paging?: zul.mesh.Paging | null;
 	public heads: zul.mesh.HeadWidget[];
 	public head?: zul.mesh.HeadWidget | null;
 	public foot?: null; // FIXME: Tentative. See `zul.mesh.Frozen.prototype._doScrollNow`.
@@ -483,7 +483,7 @@ export abstract class MeshWidget extends zul.Widget {
 	private _bottomBoundary?: number;
 	private _topBoundary?: number;
 	public _rowsOnFitSize?: boolean;
-	public _scrollbar?: zul.Scrollbar;
+	public _scrollbar?: zul.Scrollbar | null;
 	private _cachehgh?: number;
 	private _lastDevicePixelRatio?: number;
 	private _adjustScrollTopLater?: boolean;
@@ -491,7 +491,7 @@ export abstract class MeshWidget extends zul.Widget {
 	private _syncingbodyrows?: boolean;
 	private _shallClearTableWidth?: boolean;
 	private _shallShowScrollbar?: boolean;
-	public _syncEmpty?: () => void; // zul.mesh.ColumnMenuWidget
+	declare public _syncEmpty?: () => void; // zul.mesh.ColumnMenuWidget
 
 	public constructor() {
 		super(); // FIXME: arguments?
@@ -506,7 +506,7 @@ export abstract class MeshWidget extends zul.Widget {
 
 	protected abstract getHeadWidgetClass(): typeof zul.mesh.HeadWidget;
 	public abstract getBodyWidgetIterator(opts?: Record<string, unknown>): ItemIterator;
-	public abstract itemIterator(): ItemIterator;
+	public abstract itemIterator(opts?: Record<string, unknown>): ItemIterator;
 	protected abstract _getFirstItemIndex(): number;
 	protected abstract _getLastItemIndex(): number;
 	public abstract hasGroup(): boolean;
@@ -890,7 +890,7 @@ export abstract class MeshWidget extends zul.Widget {
 		//B50-3178977 navigating the input in hiddin column.
 		var td = this.ehdfaker ? this.ehdfaker.childNodes[index] as HTMLTableCellElement | undefined : null,
 			frozen = this.frozen,
-			bar: zul.Scrollbar | undefined;
+			bar: zul.Scrollbar | null | undefined;
 		if (td && frozen && (ignoreWidth || zk.parseInt(td.style.width) == 0)
 			&& (index = index - frozen.getColumns()!) >= 0) {
 			if (this._nativebar) {
@@ -992,7 +992,7 @@ export abstract class MeshWidget extends zul.Widget {
 		}
 	}
 
-	public _syncSize(shallClearTableWidth: boolean): void {
+	public _syncSize(shallClearTableWidth?: boolean): void {
 		// fixed for F50-3025422.zul on ZTL
 		if (this.desktop) {
 			this._shallSize = true;
@@ -1275,7 +1275,7 @@ export abstract class MeshWidget extends zul.Widget {
 
 	private _timeoutId: number | null = null;
 
-	private _fireOnScrollPos(time?: number): void { //overriden in zkmax
+	protected _fireOnScrollPos(time?: number): void { //overriden in zkmax
 		clearTimeout(this._timeoutId!);
 		this._timeoutId = setTimeout(this.proxy(this._onScrollPos), time! >= 0 ? time : 300);
 	}
@@ -1321,7 +1321,7 @@ export abstract class MeshWidget extends zul.Widget {
 			max = min + this.ebody!.offsetHeight;
 		if (min == 0 && max == 0) return; //ZK-2796: Uncessary onRender command triggered when setting tabbox's maximalHeight attribute to true
 		for (var j = 0, it = this.getBodyWidgetIterator({skipHidden: true}),
-				len = rows.length, w: zk.Widget; (w = it.next()) && j < len; j++) {
+				len = rows.length, w: zk.Widget | null | undefined; (w = it.next()) && j < len; j++) {
 			if (!w._loaded) {
 				//B70-ZK-2589: w and rows[j] belongs to different widget,
 				//w shouldn't depend on rows[j], origin -> row = rows[j];
@@ -2054,7 +2054,7 @@ export abstract class MeshWidget extends zul.Widget {
 			jq('#' + tbody.id + '-fakeRow').remove();
 	} // for Grid.js and Listbox.js
 
-	protected refreshBar_(showBar: boolean, scrollToTop: boolean): void {
+	protected refreshBar_(showBar?: boolean, scrollToTop?: boolean): void {
 		var bar = this._scrollbar;
 		if (bar) {
 			// ZK-355: Keep scroll position before sync scrollbar size
@@ -2218,7 +2218,7 @@ export abstract class MeshWidget extends zul.Widget {
 	 * @param int index the index of item
 	 * @param double scrollRatio the scroll ratio
 	 */
-	private _scrollToIndex(index: number, scrollRatio?: number): void {
+	protected _scrollToIndex(index: number, scrollRatio?: number): void {
 		var firstItemIndex = this._getFirstItemIndex(),
 			lastItemIndex = this._getLastItemIndex(),
 			body = this.ebody!;
@@ -2228,7 +2228,7 @@ export abstract class MeshWidget extends zul.Widget {
 		if (index >= firstItemIndex && index <= lastItemIndex) {
 			var itemIterator = this.getBodyWidgetIterator();
 			while (itemIterator.hasNext()) {
-				var item = itemIterator.next();
+				var item = itemIterator.next()!;
 				if (item._index == index) {
 					item.$n_().scrollIntoView(true);
 					this._keepScroll = false;
