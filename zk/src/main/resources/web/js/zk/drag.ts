@@ -30,27 +30,27 @@ export interface DraggableScrollOptions {
 }
 
 export interface DraggableOptions {
-	scrollSensitivity: number;
-	scrollSpeed: number;
-	initSensitivity: number;
-	delay: number;
-	fireOnMove: boolean;
-	reverteffect(dg: Draggable, offset: Offset): void;
-	revert: boolean | ((dg: Draggable, offset: Offset, evt: Event) => boolean);
-	endeffect(dg: Draggable, evt?: Event): void;
-	starteffect(dg: Draggable, evt?: Event): void;
-	endghosting(dg: Draggable, node: HTMLElement): void;
-	change(dg: Draggable, offset: Offset, evt?: Event): void;
-	constraint: string | ((dg: Draggable, offset: Offset, evt: Event) => Offset);
-	draw(dg: Draggable, offset: Offset, evt: Event): void;
-	ignoredrag(dg: Draggable, offset: Offset, evt: Event): boolean;
-	handle: HTMLElement;
-	scroll: DraggableScrollOptions | HTMLElement | Window;
-	overlay: boolean;
-	ghosting: Callable;
-	stackup: boolean;
-	zIndex: number;
-	snap: ((dg: Draggable, offset: Offset) => Offset) | Offset;
+	scrollSensitivity?: number;
+	scrollSpeed?: number;
+	initSensitivity?: number;
+	delay?: number;
+	fireOnMove?: boolean;
+	reverteffect?(dg: Draggable, offset: Offset): void;
+	revert?: boolean | ((dg: Draggable, offset: Offset, evt: Event) => boolean);
+	endeffect?(dg: Draggable, evt?: Event): void;
+	starteffect?(dg: Draggable, evt?: Event): void;
+	endghosting?(dg: Draggable, node: HTMLElement): void;
+	change?(dg: Draggable, offset: Offset, evt?: Event): void;
+	constraint?: string | ((dg: Draggable, offset: Offset, evt: Event) => Offset);
+	draw?(dg: Draggable, offset: Offset, evt: Event): void;
+	ignoredrag?(dg: Draggable, offset: Offset, evt: Event): boolean;
+	handle?: HTMLElement;
+	scroll?: DraggableScrollOptions | HTMLElement | Window;
+	overlay?: boolean;
+	ghosting?: Callable;
+	stackup?: boolean;
+	zIndex?: number;
+	snap?: ((dg: Draggable, offset: Offset) => Offset) | Offset;
 }
 
 	var _dragging = {},
@@ -383,7 +383,7 @@ String scroll; //DOM Element's ID</code></pre>
 	 * </blockquote>
 	 * @type Map
 	 */
-	public opts: Partial<DraggableOptions>;
+	public opts: DraggableOptions;
 
 	public _dragImg?:
 		| HTMLElement // zk.Widget.prototype.ghost
@@ -396,7 +396,7 @@ String scroll; //DOM Element's ID</code></pre>
 	 * If omitted and control is a widget, {@link zk.Widget#$n} is assumed.
 	 * @param Map opts [optional] options. Refer to {@link #opts} for allowed options.
 	 */
-	public constructor(control, node: HTMLElement | null, opts: Partial<DraggableOptions>) {
+	public constructor(control, node: HTMLElement | null, opts: DraggableOptions) {
 		super();
 		if (!_stackup) {
 		//IE: if we don't insert stackup at beginning, dragging is slow

@@ -24,6 +24,8 @@ function _isListgroupfoot(w: ItemWidget): boolean {
 export class ItemWidget extends zul.Widget {
 	// Parent could be null as asserted in `afterParentChanged_`.
 	public override parent!: zul.sel.SelectWidget | null;
+	public override nextSibling!: zul.sel.ItemWidget | null;
+	public override previousSibling!: zul.sel.ItemWidget | null;
 	// Children are Treecells or Listcells. See `getLabel`.
 	public override firstChild!: zul.LabelImageWidget | null;
 	public override lastChild!: zul.LabelImageWidget | null;
@@ -179,7 +181,7 @@ export class ItemWidget extends zul.Widget {
 	 * <p>Default: true.
 	 * @return boolean
 	 */
-	protected isStripeable_(): boolean {
+	public isStripeable_(): boolean {
 		return true;
 	}
 
@@ -287,7 +289,7 @@ export class ItemWidget extends zul.Widget {
 			msg: string | undefined;
 		if (!this.isSelected())	return zUtl.encodeXML(this.getLabel()!);
 		while (iterator.hasNext()) {
-			var item = iterator.next();
+			var item = iterator.next()!;
 			if (item.isSelected()) {
 				var label = item.getLabel()!;
 				if (label.length > 9)

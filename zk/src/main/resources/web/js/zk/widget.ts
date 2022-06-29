@@ -660,7 +660,7 @@ function _markCache(cache, visited, visible: boolean): boolean {
 	return visible;
 }
 
-const _dragoptions: Partial<DraggableOptions> = {
+const _dragoptions: DraggableOptions = {
 	starteffect: zk.$void, //see bug #1886342
 	endeffect: DD_enddrag, change: DD_dragging,
 	ghosting: DD_ghosting, endghosting: DD_endghosting,
@@ -801,7 +801,7 @@ export class Widget extends ZKObject {
 	public _visible?: boolean = true;
 	protected _mold = 'default';
 	protected _style: StringFieldValue;
-	private _renderdefer = -1;
+	public _renderdefer = -1;
 
 	public _cssflex = true;
 
@@ -3999,7 +3999,7 @@ unbind_: function (skipper, after) {
 	 * @param Map map the default implementation
 	 * @return Map
 	 */
-	public getDragOptions_(map: Partial<DraggableOptions>): Partial<DraggableOptions> {
+	public getDragOptions_(map: DraggableOptions): DraggableOptions {
 		return map;
 	}
 
