@@ -12,7 +12,6 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 import {default as zk} from './zk';
 import {Event as ZKEvent} from './evt';
 import {Widget} from './widget';
-import {cast} from './types';
 
 let hastouch = 'ontouchstart' in window,
 	startEvt = hastouch ? 'touchstart' : 'mousedown',
@@ -87,7 +86,7 @@ export class Swipe extends zk.Object {
 
 	private _swipeStart(devt: JQuery.TriggeredEvent): void {
 		var evt = devt.originalEvent as TouchEvent,
-			data = evt.touches ? evt.touches[0] : (cast(evt) as MouseEvent);
+			data = evt.touches ? evt.touches[0] : (evt as unknown as MouseEvent);
 
 		start = {
 			time: evt.timeStamp || Date.now(),
@@ -101,7 +100,7 @@ export class Swipe extends zk.Object {
 	private _swipeMove(devt: JQuery.TriggeredEvent): void {
 		if (!start) return;
 		var evt = devt.originalEvent as TouchEvent,
-			data = evt.touches ? evt.touches[0] : (cast(evt) as MouseEvent);
+			data = evt.touches ? evt.touches[0] : (evt as unknown as MouseEvent);
 		evt.stopPropagation();
 
 		// eslint-disable-next-line no-global-assign

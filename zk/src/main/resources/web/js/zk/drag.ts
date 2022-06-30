@@ -16,7 +16,6 @@ Copyright (c) 2005, 2006 Thomas Fuchs (http://script.aculo.us, http://mir.aculo.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-import type {Offset, Callable} from './types';
 import {default as zk} from './zk';
 import type {Widget} from './widget';
 import {type FireOptions, zWatch, type Event} from './evt';
@@ -35,22 +34,22 @@ export interface DraggableOptions {
 	initSensitivity?: number;
 	delay?: number;
 	fireOnMove?: boolean;
-	reverteffect?(dg: Draggable, offset: Offset): void;
-	revert?: boolean | ((dg: Draggable, offset: Offset, evt: Event) => boolean);
+	reverteffect?(dg: Draggable, offset: zk.Offset): void;
+	revert?: boolean | ((dg: Draggable, offset: zk.Offset, evt: Event) => boolean);
 	endeffect?(dg: Draggable, evt?: Event): void;
 	starteffect?(dg: Draggable, evt?: Event): void;
 	endghosting?(dg: Draggable, node: HTMLElement): void;
-	change?(dg: Draggable, offset: Offset, evt?: Event): void;
-	constraint?: string | ((dg: Draggable, offset: Offset, evt: Event) => Offset);
-	draw?(dg: Draggable, offset: Offset, evt: Event): void;
-	ignoredrag?(dg: Draggable, offset: Offset, evt: Event): boolean;
+	change?(dg: Draggable, offset: zk.Offset, evt?: Event): void;
+	constraint?: string | ((dg: Draggable, offset: zk.Offset, evt: Event) => zk.Offset);
+	draw?(dg: Draggable, offset: zk.Offset, evt: Event): void;
+	ignoredrag?(dg: Draggable, offset: zk.Offset, evt: Event): boolean;
 	handle?: HTMLElement;
 	scroll?: DraggableScrollOptions | HTMLElement | Window;
 	overlay?: boolean;
-	ghosting?: Callable;
+	ghosting?: zk.Callable;
 	stackup?: boolean;
 	zIndex?: number;
-	snap?: ((dg: Draggable, offset: Offset) => Offset) | Offset;
+	snap?: ((dg: Draggable, offset: zk.Offset) => zk.Offset) | zk.Offset;
 }
 
 	var _dragging = {},
@@ -154,7 +153,7 @@ export interface DraggableOptions {
 				});
 		}
 	}
-	function _defRevertEffect(dg: Draggable, offset: Offset): void {
+	function _defRevertEffect(dg: Draggable, offset: zk.Offset): void {
 		var dx, dy;
 		if ((dx = offset[0]) || (dy = offset[1])) {
 			var node = dg.node,
@@ -184,19 +183,19 @@ export interface DraggableOptions {
  */
 export class Draggable extends zk.Object {
 	declare private _isScrollChild?: boolean;
-	declare public delta: Offset;
+	declare public delta: zk.Offset;
 	declare public dragging: boolean;
 	declare public _suicide?: boolean;
 	declare public dead?: boolean;
 	declare public lastScrolled?: Date;
-	declare public scrollSpeed: Offset;
-	declare public offset: Offset;
+	declare public scrollSpeed: zk.Offset;
+	declare public offset: zk.Offset;
 	declare public scrollInterval?: number | null;
-	declare private _innerOfs: Offset;
+	declare private _innerOfs: zk.Offset;
 	declare public stackup?: HTMLDivElement;
 	declare private _stackup?: HTMLIFrameElement;
 	declare public orgnode?: HTMLElement | null;
-	declare public z_scrl?: Offset;
+	declare public z_scrl?: zk.Offset;
 	declare public z_orgpos?: string;
 	declare public orgZ?: number;
 	declare public orgScrlLeft?: number;
@@ -232,9 +231,9 @@ export class Draggable extends zk.Object {
 	 * <p>Default: null (i.e., {@link #node} is used.
 	 *
 	 * <h4>snap</h4>
-	 *<pre><code>{@link Offset} snap;
+	 *<pre><code>{@link zk.Offset} snap;
 int snap;
-Offset snap({@link zk.Draggable} dg, {@link Offset} pos);
+Offset snap({@link zk.Draggable} dg, {@link zk.Offset} pos);
 </code></pre>
 	 * <p>Specifies how many pixels to snap the dragging. For example, if the snap is 10, then the dragging has no effect if the offset is only 4, and the dragging offset is considered as 10 if it was 5.
 	 * <p>The first format specifies the snaps for the x and y coordinate, such as [5, 3]. The second format specifies the snap for both x and y coordinate. The third format is used to calculate the snap dynamically based on the current position.
@@ -270,7 +269,7 @@ Offset snap({@link zk.Draggable} dg, {@link Offset} pos);
 	 *
 	 * <h4>revert</h4>
 	 * <pre><code>boolean revert;</code></pre>
-boolean revert({@link zk.Draggable} dg, {@link Offset} pointer, {@link zk.Event} evt);
+boolean revert({@link zk.Draggable} dg, {@link zk.Offset} pointer, {@link zk.Event} evt);
 	 * <p>The revert option could be a boolean, or a function that returns a boolean value. The boolean value decides whether to revert the dragging after dragged. If true, the element is reverted to its original location.
 	 * <p>Default: false
 	 * <p>To have a custom revert effect, you can specify a function as the #reverteffect option. It is usually an animation effect; see zEffect;
@@ -282,7 +281,7 @@ boolean revert({@link zk.Draggable} dg, {@link Offset} pointer, {@link zk.Event}
 	 *
 	 * <h4>constraint</h4>
 	 * <pre><code>String constraint;</code></pre>
-{@link Offset} constraint({@link zk.Draggable} dg, {@link Offset} pos, {@link zk.Event} evt);</code></pre>
+{@link zk.Offset} constraint({@link zk.Draggable} dg, {@link zk.Offset} pos, {@link zk.Event} evt);</code></pre>
 	 * <p>Specifies the constraint. The first format specifies either 'vertical' or 'horizontal' to indicate that it can be dragged only in the vertical or horizontal direction.
 	 * <p>The second format specified a function that can modify the position dynamically. For example, you can limit the drag at the diagonal direction.
 	 * <ul>
@@ -293,7 +292,7 @@ boolean revert({@link zk.Draggable} dg, {@link Offset} pointer, {@link zk.Event}
 	 *
 	 * <h4>ghosting</h4>
 	 * <pre><code>boolean ghosting;</code></pre>
-{@link DOMElement} ghosting({@link zk.Draggable dg}, {@link Offset} pos, {@link zk.Event} evt);</code></pre>
+{@link DOMElement} ghosting({@link zk.Draggable dg}, {@link zk.Offset} pos, {@link zk.Event} evt);</code></pre>
 	 * <p>Specified whether to make a copy of the element and then drag the copy instead of the element itself.
 	 * <p>If true is specified (the first format), {@link #node} is cloned and the cloned element will be dragged.
 	 * <p>If a function is specified (the second format), the function is called and it shall create and return a DOM element (so called a ghost or a copy)that will be used for dragging. Furthermore, after dragging, <code>endghosting</code>, if specified, will be called to clean up.
@@ -343,7 +342,7 @@ boolean revert({@link zk.Draggable} dg, {@link Offset} pointer, {@link zk.Event}
 	 * Default: <i>not assign any value to z-index</i>
 	 *
 	 * <h4>change</h4>
-	 * <pre><code>void change({@link zk.Draggable} dg, {@link Offset} pointer, {@link zk.Event} evt);</code></pre>
+	 * <pre><code>void change({@link zk.Draggable} dg, {@link zk.Offset} pointer, {@link zk.Event} evt);</code></pre>
 	 * <p>Called after the dragging has changed the position of the element
 	 * ({@link #node}). It is called after the function specified
 	 * in the snap and draw or constraint option.
@@ -355,7 +354,7 @@ boolean revert({@link zk.Draggable} dg, {@link Offset} pointer, {@link zk.Event}
 	 * </ul>
 	 *
 	 * <h4>draw</h4>
-	 * <pre><code>void draw({@link zk.Draggable} dg, {@link Offset} pos, {@link zk.Event} evt);</code></pre>
+	 * <pre><code>void draw({@link zk.Draggable} dg, {@link zk.Offset} pos, {@link zk.Event} evt);</code></pre>
 	 * <p>Used to override the default change of the element's position. If not specified, the constraint option is,
 	 * if any, called and then {@link #node}'s position (left and top) are changed. You can provide your own way to change the position.
 	 * <p>Default: null
@@ -477,7 +476,7 @@ String scroll; //DOM Element's ID</code></pre>
 	}
 
 	/** [left, right] of this node. */
-	private _currentDelta(): Offset {
+	private _currentDelta(): zk.Offset {
 		var $node = jq(this.node as HTMLElement);
 		return [zk.parseInt($node.css('left')), zk.parseInt($node.css('top'))];
 	}
@@ -652,7 +651,7 @@ String scroll; //DOM Element's ID</code></pre>
 				this._clone = null;
 			}
 
-		var pt: Offset = [evt.pageX, evt.pageY],
+		var pt: zk.Offset = [evt.pageX, evt.pageY],
 			revert = this.opts.revert,
 			revertResult = false;
 		if (revert && typeof revert == 'function')
@@ -702,7 +701,7 @@ String scroll; //DOM Element's ID</code></pre>
 			// Bug B50-3147909: Safari has issue with select and draggable
 			// Now select element is not draggable in Chrome and Safari
 
-		var pt = [evt.pageX, evt.pageY] as Offset;
+		var pt = [evt.pageX, evt.pageY] as zk.Offset;
 
 		if (this.opts.ignoredrag && this.opts.ignoredrag(this, pt, evt)) {
 			if (evt.domStopped) devt.stop();
@@ -713,7 +712,7 @@ String scroll; //DOM Element's ID</code></pre>
 		// and ZK-484 (get the pos variable after invoking ignoredrag function)
 		var zkn = zk(node!),
 			pos = zkn.cmOffset(),
-			ofs: Offset = [pt[0] - pos[0], pt[1] - pos[1]],
+			ofs: zk.Offset = [pt[0] - pos[0], pt[1] - pos[1]],
 			jqBorders = jq.borders, v;
 
 		// ZK-488 node.clientWidth and node.clientHeight are 0 if no scrollbar on IE9
@@ -745,7 +744,7 @@ String scroll; //DOM Element's ID</code></pre>
 			_deactivate();
 	}
 
-	private _draw(point: Offset, evt?: Event): void {
+	private _draw(point: zk.Offset, evt?: Event): void {
 		var node = this.node as HTMLElement,
 			$node = zk(node),
 			pos = $node.cmOffset(),
@@ -764,7 +763,7 @@ String scroll; //DOM Element's ID</code></pre>
 			pos[1] -= (scroll as HTMLElement).scrollTop - this.orgScrlTop!;
 		}
 
-		var p: Offset = [point[0] - pos[0] - this.offset[0],
+		var p: zk.Offset = [point[0] - pos[0] - this.offset[0],
 			point[1] - pos[1] - this.offset[1]],
 			snap = opts.snap;
 
@@ -891,10 +890,10 @@ String scroll; //DOM Element's ID</code></pre>
 	 * Notice this method is always called no matter if the snap or constraint
 	 * options are specified.
 	 * <p>Default: return <code>pos</code> (i.e., not changing at all)
-	 * @param Offset ofs the offset of the dragging position
-	 * @return Offset the offset after snapped
+	 * @param zk.Offset ofs the offset of the dragging position
+	 * @return zk.Offset the offset after snapped
 	 */
-	protected snap_(pos: Offset, opts): Offset {
+	protected snap_(pos: zk.Offset, opts): zk.Offset {
 		if (!opts.snap && pos[1] < 0)
 			pos[1] = 0;
 		return pos;
