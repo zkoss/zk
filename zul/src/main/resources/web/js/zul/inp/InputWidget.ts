@@ -95,7 +95,7 @@ zul.inp.RoundUtl = RoundUtl;
 </code></pre>
  */
 @zk.WrapClass('zul.inp.InputWidget')
-export class InputWidget<ValueType> extends zul.Widget {
+export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElement> {
 	private _maxlength = 0;
 	private _cols = 0;
 	//_tabindex: 0,

@@ -18,7 +18,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 @zk.WrapClass('zul.LabelImageWidget')
-export abstract class LabelImageWidget extends zul.Widget {
+export abstract class LabelImageWidget<TElement extends HTMLElement = HTMLElement> extends zul.Widget<TElement> {
 	private _label = '';
 	protected _iconSclass?: string;
 	protected _image?: string;
@@ -233,7 +233,7 @@ export abstract class LabelImageWidget extends zul.Widget {
 	public getImageNode(): HTMLImageElement | null | undefined {
 		if (!this._eimg && this._image) {
 			var n = this.$n();
-			if (n) this._eimg = jq(n).find('img:first')[0] as HTMLImageElement;
+			if (n) this._eimg = jq(n).find<HTMLImageElement>('img:first')[0];
 		}
 		return this._eimg;
 	}

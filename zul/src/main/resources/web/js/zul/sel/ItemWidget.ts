@@ -21,7 +21,7 @@ function _isListgroupfoot(w: ItemWidget): boolean {
 /**
  * The item widget for {@link Treeitem} and {@link Listitem}
  */
-export class ItemWidget extends zul.Widget {
+export class ItemWidget extends zul.Widget<HTMLTableRowElement> {
 	// Parent could be null as asserted in `afterParentChanged_`.
 	public override parent!: zul.sel.SelectWidget | null;
 	public override nextSibling!: zul.sel.ItemWidget | null;
@@ -254,7 +254,7 @@ export class ItemWidget extends zul.Widget {
 	}
 
 	public _doFocusOut(): void {
-		var n = this.$n() as HTMLTableRowElement | null | undefined;
+		var n = this.$n();
 		if (n) {
 			var cls = this.$s('focus');
 			jq(n).removeClass(cls);

@@ -32,7 +32,7 @@ function _cleanUpld(wgt: zul.wgt.Button): void {
  * <p>Default {@link #getZclass}: z-button.
  */
 @zk.WrapClass('zul.wgt.Button')
-export class Button extends zul.LabelImageWidget {
+export class Button extends zul.LabelImageWidget<HTMLButtonElement> {
 	private _orient = 'horizontal';
 	private _dir = 'normal';
 	private _type = 'button';
@@ -315,7 +315,7 @@ export class Button extends zul.LabelImageWidget {
 	//super//
 	public override focus_(timeout?: number): boolean {
 		// Bug ZK-1295 and ZK-2935: Disabled buttons cannot regain focus by re-enabling and then setting focus
-		let btn = this.$n() as HTMLButtonElement;
+		let btn = this.$n();
 		if (btn && btn.disabled) {
 			if (!this._delayFocus) {
 				this._delayFocus = true;

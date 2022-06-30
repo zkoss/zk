@@ -40,7 +40,7 @@ export abstract class Auxheader extends zul.mesh.HeaderWidget {
 		this._colspan = v;
 
 		if (o !== v || (opts && opts.force)) {
-			var n = this.$n() as HTMLTableCellElement | null | undefined;
+			var n = this.$n();
 			if (n) {
 				n.colSpan = v;
 				if (zk.ie < 11) this.rerender(); //IE's limitation
@@ -67,7 +67,7 @@ export abstract class Auxheader extends zul.mesh.HeaderWidget {
 		this._rowspan = v;
 
 		if (o !== v || (opts && opts.force)) {
-			var n = this.$n() as HTMLTableCellElement | null | undefined;
+			var n = this.$n();
 			if (n) {
 				n.rowSpan = v;
 				if (zk.ie < 11) this.rerender(); //IE's limitation

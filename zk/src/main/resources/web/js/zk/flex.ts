@@ -238,7 +238,7 @@ function _fixMinFlex(isVflex?): ((wgt: Widget, wgtn: HTMLElement, o: FlexOrient,
 
 			// ZK-970: refixed for caption
 			let map = {},
-				wn = wgt.$n() as HTMLElement,
+				wn = wgt.$n()!,
 				hasChildren = zk.isLoaded('zul.wgt') && wgt.$instanceof(zul.wgt.Caption) && wgt.nChildren > 0,
 				size = hasChildren ? zk(wgt.$n('cave'))[offsetPos]() : max;
 
@@ -581,7 +581,7 @@ let zFlex = { //static methods
 			let fcc = fccs[i],
 				jqFcc = jq(fcc),
 				cwgt = cwgts[i],
-				c = cwgt.$n() as HTMLElement,
+				c = cwgt.$n()!,
 				flexs = [cwgt._nvflex, cwgt._nhflex],
 				sz: Record<string, string> = {},
 				dim = isRow ? 'width' : 'height',
@@ -653,7 +653,7 @@ let zFlex = { //static methods
 				jqFcc = jq(fcc),
 				cwgt = cwgts[i],
 				isTargetWgt = cwgt == wgt,
-				c = cwgt.$n() as HTMLElement,
+				c = cwgt.$n()!,
 				dim = isRow ? 'width' : 'height';
 
 			if ((clearAllSiblings || isTargetWgt) && (isHorizontal && isRow) || (!isHorizontal && !isRow)) {
