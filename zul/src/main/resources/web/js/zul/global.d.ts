@@ -36,6 +36,7 @@ declare global {
 	| 'GRID_ASC' // zul/mesh/ColumnMenuWidget
 	| 'GRID_DESC' // zul/mesh/ColumnMenuWidget
 	| 'GRID_GROUP' // zul/mesh/ColumnMenuWidget
+	| 'GRID_OTHER' // zul/sel/Listheader
 	| 'GRID_UNGROUP' // zul/mesh/ColumnMenuWidget
 	| 'ILLEGAL_VALUE'
 	| 'INTEGER_REQUIRED' // zul/inp/Intbox

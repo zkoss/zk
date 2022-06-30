@@ -85,7 +85,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	protected _isSelecting = true;
 	private _startRow: zul.sel.ItemWidget | null = null;
 	public nonselectableTags?: string;
-	private _checkmark?: boolean;
+	public _checkmark?: boolean;
 	public _multiple?: boolean;
 	public _selItems: zul.sel.ItemWidget[];
 	public _focusItem?: zul.sel.ItemWidget | null;
@@ -99,7 +99,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	private _oldCSS?: string;
 	private _lastSelectedItem?: zul.sel.ItemWidget | null;
 	public _nUpdHeaderCM?: number;
-	public _headercm?: HTMLElement;
+	public _headercm?: HTMLElement | null;
 	private _$services?: Record<string, zk.Callable[] | null>;
 	public groupSelect?: boolean;
 	private _shallSyncFocus?: boolean | zul.sel.ItemWidget;
@@ -991,7 +991,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	}
 
 	/* Selects an item, notify server and change focus if necessary. */
-	private _select(row: zul.sel.ItemWidget, evt: zk.Event<zk.EventMetaData>, skipFocus?: boolean): void {
+	public _select(row: zul.sel.ItemWidget | null, evt: zk.Event<zk.EventMetaData>, skipFocus?: boolean): void {
 		if (this._selectOne(row, skipFocus)) {
 			//notify server
 			this.fireOnSelect(row, evt);
@@ -1085,7 +1085,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	/* Selects one and deselect others, and return whehter any changes.
 	 * It won't notify the server.
 	 */
-	private _selectOne(row: zul.sel.ItemWidget, skipFocus: boolean | undefined): boolean {
+	private _selectOne(row: zul.sel.ItemWidget | null, skipFocus: boolean | undefined): boolean {
 		var selItem = this.getSelectedItem();
 		if (this._multiple) {
 			if (row) this._unsetFocusExcept(row);
@@ -1139,7 +1139,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	 * Ignored if null.
 	 * @since 5.0.5
 	 */
-	public fireOnSelect(ref: zk.Widget, evt: zk.Event<zk.EventMetaData>): void {
+	public fireOnSelect(ref: zk.Widget | null, evt: zk.Event<zk.EventMetaData>): void {
 		var data: zul.sel.ItemWidget[] = [];
 
 		for (var it = this.getSelectedItems(), len = it.length, j = 0; j < len; j++)
@@ -1218,7 +1218,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	/* Cleans selected except the specified one, and returns any selected status
 	 * is changed.
 	 */
-	private _unsetSelectAllExcept(row: zul.sel.ItemWidget): boolean {
+	private _unsetSelectAllExcept(row: zul.sel.ItemWidget | null): boolean {
 		this.$$selectAll = undefined;
 		var changed = false;
 		for (var it = this.getSelectedItems(), j = it.length; j--;) {

@@ -1,4 +1,4 @@
-/* Optgroup.js
+/* Optgroup.ts
 
 	Purpose:
 
@@ -16,57 +16,87 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * A HTML optgroup tag.
  * @since 8.6.0
  */
-zul.sel.Optgroup = zk.$extends(zul.Widget, {
-	_open: true,
+export class Optgroup extends zul.Widget<HTMLOptGroupElement> {
+	public override parent!: zul.sel.Select | null;
+	public override firstChild!: zul.sel.Option | null;
+	public override lastChild!: zul.sel.Option | null;
+	private _open = true;
+	private _disabled?: boolean;
 
-	$define: {
-		/**
-		 * Returns whether it is disabled.
-		 * <p>
-		 * Default: false.
-		 * @return boolean
-		 */
-		/**
-		 * Sets whether it is disabled.
-		 * @param boolean disabled
-		 */
-		disabled: function (disabled) {
+	/**
+	 * Returns whether it is disabled.
+	 * <p>
+	 * Default: false.
+	 * @return boolean
+	 */
+	public isDisabled(): boolean | undefined {
+		return this._disabled;
+	}
+
+	/**
+	 * Sets whether it is disabled.
+	 * @param boolean disabled
+	 */
+	public setDisabled(disabled: boolean, opts?: Record<string, boolean>): this {
+		const o = this._disabled;
+		this._disabled = disabled;
+
+		if (o !== disabled || (opts && opts.force)) {
 			var n = this.$n();
-			if (n) n.disabled = disabled ? 'disabled' : '';
-		},
-		/** Returns whether this container is open.
-		 * <p>Default: true.
-		 * @return boolean
-		 */
-		/** Sets whether this container is open.
-		 * @param boolean open
-		 */
-		open: function (open, fromServer) {
-			if (this.desktop)
-				this.parent.requestRerender_(fromServer);
+			if (n) n.disabled = (disabled ? 'disabled' : '') as unknown as boolean;
 		}
-	},
+
+		return this;
+	}
+
+	/** Returns whether this container is open.
+	 * <p>Default: true.
+	 * @return boolean
+	 */
+	public isOpen(): boolean {
+		return this._open;
+	}
+
+	/** Sets whether this container is open.
+	 * @param boolean open
+	 */
+	// FIXME: can a defSet generated setter accept more than one arguments before `opts`?
+	public setOpen(open: boolean, fromServer: boolean, opts?: Record<string, boolean>): this {
+		const o = this._open;
+		this._open = open;
+
+		if (o !== open || (opts && opts.force)) {
+			if (this.desktop)
+				this.parent!.requestRerender_(fromServer);
+		}
+
+		return this;
+	}
+
 	/** Returns the label of the {@link Listcell} it contains, or null
 	 * if no such cell.
 	 * @return String
 	 */
-	getLabel: function () {
+	public getLabel(): string | null {
 		return this.firstChild ? this.firstChild.domLabel_() : null;
-	},
-	updateLabel_: function () {
+	}
+
+	public updateLabel_(): void {
 		var n = this.$n();
-		if (n) n.label = this.getLabel();
-	},
+		if (n) n.label = this.getLabel()!;
+	}
+
 	//@Override
-	setVisible: function (visible, fromServer) {
+	public override setVisible(visible: boolean | undefined, fromServer?: boolean): void {
 		if (this._visible != visible) {
 			this._visible = visible;
 			if (this.desktop)
-				this.parent.requestRerender_(fromServer);
+				this.parent!.requestRerender_(fromServer);
 		}
-	},
-	domAttrs_: function (no) {
-		var attr = this.$supers('domAttrs_', arguments),
+	}
+
+	public override domAttrs_(no?: zk.DomAttrsOptions): string {
+		var attr = super.domAttrs_(no),
 			label = this.getLabel(),
 			disabled = this.isDisabled();
 		if (label)
@@ -75,4 +105,5 @@ zul.sel.Optgroup = zk.$extends(zul.Widget, {
 			attr += ' disabled="disabled"';
 		return attr;
 	}
-});
+}
+zul.sel.Optgroup = zk.regClass(Optgroup);

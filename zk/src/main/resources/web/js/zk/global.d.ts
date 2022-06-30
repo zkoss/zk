@@ -329,7 +329,10 @@ declare namespace zkex {
 	}
 	namespace sel {
 		class Listgroup extends zul.sel.Listitem { // zul.sel.ItemWidget
-			public isOpen(): boolean
+			public _open: boolean; // is initialized to true
+			public isOpen(): boolean;
+			public getIconOpenClass_(): string;
+			public getIconCloseClass_(): string;
 		}
 		class Listgroupfoot extends zul.sel.Listitem {} // zul.sel.ItemWidget
 	}

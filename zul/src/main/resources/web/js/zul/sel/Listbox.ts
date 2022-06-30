@@ -61,6 +61,7 @@ export class Listbox extends zul.sel.SelectWidget {
 	private _shallScrollIntoView?: boolean;
 	private _listbox$shallUpdateScrollPos?: boolean;
 	private _listbox$shallSyncSelInView?: boolean;
+	public _listbox$noSelectAll?: boolean;
 	private _tmpScrollTop?: number | null;
 	public listhead?: zul.sel.Listhead | null;
 	public listfoot?: zul.sel.Listfoot | null;

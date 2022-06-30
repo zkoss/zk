@@ -12,6 +12,11 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+export interface SortableWidget extends zk.Widget {
+	getLabel?(): string | undefined;
+	getValue?(): unknown;
+}
+
 /**
  * A skeletal implementation for a sortable widget.
  */
@@ -21,7 +26,7 @@ export abstract class SortWidget extends zul.mesh.HeaderWidget {
 	protected _sortAscending = 'none';
 	protected _sortDescending = 'none';
 	
-	public abstract getMeshBody(): zk.Widget;
+	public abstract getMeshBody(): zk.Widget | null;
 
 	/** Returns the sort direction.
 	 * <p>Default: "natural".
@@ -203,7 +208,7 @@ export abstract class SortWidget extends zul.mesh.HeaderWidget {
 	 */
 	protected replaceCavedChildrenInOrder_(ascending: boolean): void {
 		var mesh = this.getMeshWidget()!,
-			body = this.getMeshBody(),
+			body = this.getMeshBody()!,
 			dir = this.getSortDirection(),
 			sorter = ascending ? this._sortAscending : this._sortDescending,
 			desktop = body.desktop,
@@ -226,7 +231,7 @@ export abstract class SortWidget extends zul.mesh.HeaderWidget {
 
 			var dsc = dir == 'ascending' ? -1 : 1, fn = this.sorting, isNumber = sorter == 'client(number)';
 			d.sort(function (a, b) {
-				var v = fn(a.wgt as never, b.wgt as never, isNumber) * dsc;
+				var v = fn(a.wgt, b.wgt, isNumber) * dsc;
 				if (v == 0) {
 					v = (a.index < b.index ? -1 : 1);
 				}
@@ -249,18 +254,18 @@ export abstract class SortWidget extends zul.mesh.HeaderWidget {
 	 * @param boolean isNumber
 	 * @return int
 	 */
-	public sorting(a: {getLabel?(): never; getValue?(): never}, b: {getLabel?(): never; getValue?(): never}, isNumber: boolean): number {
+	public sorting(a: zul.mesh.SortableWidget, b: zul.mesh.SortableWidget, isNumber: boolean): number {
 		var v1: never, v2: never;
 		if (typeof a.getLabel == 'function')
-			v1 = a.getLabel();
+			v1 = a.getLabel() as never;
 		else if (typeof a.getValue == 'function')
-			v1 = a.getValue();
+			v1 = a.getValue() as never;
 		else v1 = a as never;
 
 		if (typeof b.getLabel == 'function')
-			v2 = b.getLabel();
+			v2 = b.getLabel() as never;
 		else if (typeof b.getValue == 'function')
-			v2 = b.getValue();
+			v2 = b.getValue() as never;
 		else v2 = b as never;
 
 		if (isNumber) return v1 - v2;

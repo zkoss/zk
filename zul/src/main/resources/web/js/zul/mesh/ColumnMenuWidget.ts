@@ -235,7 +235,7 @@ export abstract class ColumnMenuWidget extends zul.mesh.HeadWidget {
 		if (mesh) mesh._syncEmpty!();
 	}
 
-	public getGroupPackage_(): '' { // FIXME: orignally, `zk.$void`
+	public getGroupPackage_(): string { // FIXME: orignally, `zk.$void`
 		return '';
 	}
 

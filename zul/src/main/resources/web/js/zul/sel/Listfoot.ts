@@ -1,4 +1,4 @@
-/* Listfoot.js
+/* Listfoot.ts
 
 	Purpose:
 
@@ -18,24 +18,29 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>Like {@link Listhead}, each listbox has at most one {@link Listfoot}.
  * <p>Default {@link #getZclass}: z-listfoot
  */
-zul.sel.Listfoot = zk.$extends(zul.Widget, {
+export class Listfoot extends zul.Widget {
+	public override parent!: zul.sel.Listbox | null;
 	/** Returns the list box that it belongs to.
 	 * @return Listbox
 	 */
-	getListbox: function () {
+	public getListbox(): zul.sel.Listbox | null {
 		return this.parent;
-	},
-	//bug #3014664
-	setVflex: function (v) { //vflex ignored for Listfoot
-		v = false;
-		this.$super(zul.sel.Listfoot, 'setVflex', v);
-	},
-	//bug #3014664
-	setHflex: function (v) { //hflex ignored for Listfoot
-		v = false;
-		this.$super(zul.sel.Listfoot, 'setHflex', v);
-	},
-	deferRedrawHTML_: function (out) {
-		out.push('<tr', this.domAttrs_({domClass: 1}), ' class="z-renderdefer"></tr>');
 	}
-});
+
+	//bug #3014664
+	public override setVflex(v: boolean | string | null | undefined): void { //vflex ignored for Listfoot
+		v = false;
+		super.setVflex(v);
+	}
+
+	//bug #3014664
+	public override setHflex(v: boolean | string | null | undefined): void { //hflex ignored for Listfoot
+		v = false;
+		super.setHflex(v);
+	}
+
+	protected override deferRedrawHTML_(out: string[]): void {
+		out.push('<tr', this.domAttrs_({domClass: true}), ' class="z-renderdefer"></tr>');
+	}
+}
+zul.sel.Listfoot = zk.regClass(Listfoot);
