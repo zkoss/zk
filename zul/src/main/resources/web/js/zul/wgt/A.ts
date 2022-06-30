@@ -20,10 +20,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>Default {@link #getZclass}: z-a.
  */
 @zk.WrapClass('zul.wgt.A')
-export class A extends zul.LabelImageWidget<HTMLAnchorElement> {
+export class A extends zul.LabelImageWidget<HTMLAnchorElement> implements zul.LabelImageWidgetWithAutodisable {
 	private _dir = 'normal';
 	private _href?: string;
 	private _target?: string;
+	public _disabled?: boolean;
+	public _adbs?: boolean;
+	public _autodisable?: string;
 	//_tabindex: 0,
 
 	/** Returns whether it is disabled.
