@@ -29,7 +29,7 @@ export interface OpenOptions {
  * A skeletal implementation for a combo widget.
  */
 @zk.WrapClass('zul.inp.ComboWidget')
-export class ComboWidget<ValueType> extends zul.inp.InputWidget<ValueType> {
+export class ComboWidget extends zul.inp.InputWidget<string> {
 	private _buttonVisible = true;
 	protected _iconSclass: string | null = null;
 	private _autodrop?: boolean;
