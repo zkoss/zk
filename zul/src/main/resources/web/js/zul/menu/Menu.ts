@@ -73,7 +73,7 @@ function _prevVisibleMenu(menu: zul.menu.Menu): zul.menu.Menu {
  *
  * <p>Default {@link #getZclass}: z-mean.
  */
-export class Menu extends zul.LabelImageWidget {
+export class Menu extends zul.LabelImageWidget implements zul.LabelImageWidgetWithDisable {
 	// parent could be null as asserted in getMenubar
 	public override parent!: zul.menu.Menubar | null;
 	public override nextSibling!: zul.menu.Menu | null;
@@ -84,6 +84,8 @@ export class Menu extends zul.LabelImageWidget {
 	public _contentHandler?: ContentHandler;
 	private _ignoreActive?: boolean;
 	private _topmost?: boolean | null;
+	public _disabled?: boolean;
+	public _autodisable?: string;
 
 	/** Returns the embedded content (i.e., HTML tags) that is
 	 * shown as part of the description.

@@ -34,7 +34,7 @@ function _cleanUpld(wgt: zul.menu.Menuitem): void {
  *
  * <p>Default {@link #getZclass}: z-menuitem.
  */
-export class Menuitem extends zul.LabelImageWidget {
+export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidgetWithAutodisable {
 	// Parent could be null as asserted in _doMouseEnter
 	public override parent!: zul.menu.Menupopup | null;
 	public override nextSibling!: zul.menu.Menuitem | null;
@@ -48,6 +48,9 @@ export class Menuitem extends zul.LabelImageWidget {
 	private _topmost?: boolean | null;
 	public _col?: string;
 	private _href?: string;
+	public _disabled?: boolean;
+	public _adbs?: boolean;
+	public _autodisable?: string;
 
 	/** Returns whether the check mark shall be displayed in front
 	 * of each item.

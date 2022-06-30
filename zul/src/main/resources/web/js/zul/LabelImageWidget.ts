@@ -12,6 +12,22 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+
+// `zul.wgt.ADBS.prototype.autodisable` requires the properties _adbs, _disabled,
+// and _autodisable to be public.
+export interface LabelImageWidgetWithDisable extends LabelImageWidget {
+	_adbs?: boolean;
+	_disabled?: boolean;
+	isDisabled(): boolean | undefined;
+	setDisabled(disabled: boolean | undefined, opts?: Record<string, boolean>): this;
+}
+
+export interface LabelImageWidgetWithAutodisable extends LabelImageWidgetWithDisable {
+	_autodisable?: string;
+	getAutodisable(): string | undefined;
+	setAutodisable(autodisable: string): this;
+}
+
 /**
  * A skeletal implementation for ZUL widgets that support both label and image.
  */
@@ -22,15 +38,6 @@ export abstract class LabelImageWidget<TElement extends HTMLElement = HTMLElemen
 	protected _hoverImage?: string;
 	protected _eimg?: HTMLImageElement | null;
 	protected _preloadImage?: boolean;
-
-	public _autodisable?: string;
-	// public abstract setAutodisable(autodisable: string): this
-	// public abstract getAutodisable(): string | undefined
-
-	protected _adbs?: boolean;
-	public _disabled?: boolean;
-	public abstract setDisabled(disabled: boolean | undefined, opts?: Record<string, boolean>): this;
-	public abstract isDisabled(): boolean | undefined;
 
 	/** Sets the label.
 	 * <p>If label is changed, the whole component is invalidate.

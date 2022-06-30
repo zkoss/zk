@@ -459,7 +459,7 @@ export class Uploader extends zk.Object {
 				}
 			});
 			//B50-3304877: autodisable and Upload
-			zul.wgt.ADBS.autodisable(wgt as zul.LabelImageWidget);
+			zul.wgt.ADBS.autodisable(wgt as zul.LabelImageWidgetWithAutodisable); // FIXME: type of `wgt` should be made more explicit
 			return true;
 		}
 		return false;
