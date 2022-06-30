@@ -1,4 +1,4 @@
-/* Listcell.js
+/* Listcell.ts
 
 	Purpose:
 
@@ -12,67 +12,77 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-(function () {
-
-	function _isListgroup(wgt) {
-		return zk.isLoaded('zkex.sel') && wgt.$instanceof(zkex.sel.Listgroup);
-	}
-	function _isListgroupfoot(wgt) {
-		return zk.isLoaded('zkex.sel') && wgt.$instanceof(zkex.sel.Listgroupfoot);
-	}
+function _isListgroup(wgt: zk.Widget): wgt is zkex.sel.Listgroup {
+	return zk.isLoaded('zkex.sel') && wgt instanceof zkex.sel.Listgroup;
+}
+function _isListgroupfoot(wgt: zk.Widget): boolean {
+	return zk.isLoaded('zkex.sel') && wgt instanceof zkex.sel.Listgroupfoot;
+}
 /**
  * A list cell.
  *
  * <p>Default {@link #getZclass}: z-listcell
  */
-	zul.sel.Listcell = zk.$extends(zul.LabelImageWidget, {
-	_span: 1,
-	$define: {
-		/** Returns number of columns to span this cell.
-		 * Default: 1.
-		 * @return int
-		 */
-		/** Sets the number of columns to span this cell.
-		 * <p>It is the same as the colspan attribute of HTML TD tag.
-		 * @param int colspan
-		 */
-		colspan: [function (colspan) {
-			return this.setSpan(colspan);
-		}, function () {
-			this.getSpan();
-		}],
-		// change colspan to span since ZK 10.0.0
-		span: [
-			function (colspan) {
-				return colspan > 1 ? colspan : 1;
-			},
-			function () {
-				var n = this.$n();
-				if (n) n.colSpan = this._span;
-			}]
-	},
-	setLabel: function () {
-		this.$supers('setLabel', arguments);
+export class Listcell extends zul.LabelImageWidget<HTMLTableCellElement> {
+	// Parent could be null as asserted by `bindChildren_`.
+	public override parent!: zul.sel.Listitem | null;
+	private _span = 1;
+
+	/** Returns number of columns to span this cell.
+	 * Default: 1.
+	 * @return int
+	 */
+	public getColspan = Listcell.prototype.getSpan;
+
+	/** Sets the number of columns to span this cell.
+	 * <p>It is the same as the colspan attribute of HTML TD tag.
+	 * @param int colspan
+	 */
+	public setColspan = Listcell.prototype.setSpan;
+
+	// change colspan to span since ZK 10.0.0
+	public getSpan(): number {
+		return this._span;
+	}
+
+	// change colspan to span since ZK 10.0.0
+	public setSpan(v: number, opts?: Record<string, boolean>): this {
+		const o = this._span;
+		this._span = v = Math.min(v, 1);
+
+		if (o !== v || (opts && opts.force)) {
+			var n = this.$n();
+			if (n) n.colSpan = this._span;
+		}
+
+		return this;
+	}
+
+	public override setLabel(label: string, opts?: Record<string, boolean>): this {
+		super.setLabel(label, opts);
 		if (this.desktop) {
-			var p = this.parent;
+			var p: zk.Widget = this.parent!;
 			if (_isListgroup(p))
 				p.rerender();
-			else if (p.$instanceof(zul.sel.Option) || p.$instanceof(zul.sel.Optgroup))
+			else if (p instanceof zul.sel.Option || p instanceof zul.sel.Optgroup)
 				p.updateLabel_();
 		}
-	},
+		return this;
+	}
+
 	/** Returns the list box that it belongs to.
 	 * @return Listbox
 	 */
-	getListbox: function () {
+	public getListbox(): zul.sel.Listbox | null {
 		var p = this.parent;
 		return p ? p.parent : null;
-	},
+	}
 
 	//super//
-	getTextNode: function () {
-		return jq(this.$n()).find('>div:first')[0];
-	},
+	public override getTextNode(): HTMLElement | null | undefined {
+		return jq(this.$n_()).find('>div:first')[0];
+	}
+
 	/** Returns the maximal length for this cell.
 	 * If listbox's mold is "select", it is the same as
 	 * {@link Select#getMaxlength}
@@ -82,38 +92,47 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	 * <p>Note: {@link Option#getMaxlength} is the same as {@link Select#getMaxlength}.
 	 * @return int
 	 */
-	getMaxlength: function () {
+	public getMaxlength(): number | undefined {
 		var box = this.getListbox();
 		if (!box) return 0;
-		if (box.getMold() == 'select')
+		if (box.getMold() == 'select') {
+			// FIXME: This is likely dead code and Listbox doesn't have getMaxlength.
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+			// @ts-ignore
+			// eslint-disable-next-line
 			return box.getMaxlength();
+		}
 		var lc = this.getListheader();
 		return lc ? lc.getMaxlength() : 0;
-	},
+	}
+
 	/** Returns the list header that is in the same column as
 	 * this cell, or null if not available.
 	 * @return Listheader
 	 */
-	getListheader: function () {
+	public getListheader(): zul.sel.Listheader | null | undefined {
 		var box = this.getListbox();
 		if (box && box.listhead) {
 			var j = this.getChildIndex();
 			if (j < box.listhead.nChildren)
-				return box.listhead.getChildAt(j);
+				return box.listhead.getChildAt<zul.sel.Listheader>(j);
 		}
 		return null;
-	},
-	domLabel_: function () {
+	}
+
+	protected override domLabel_(): string {
 		return zUtl.encodeXML(this.getLabel(), {maxlength: this.getMaxlength()});
-	},
-	domContent_: function () {
-		var s1 = this.$supers('domContent_', arguments),
+	}
+
+	protected override domContent_(): string {
+		var s1 = super.domContent_(),
 			s2 = this._colHtmlPre();
 		return s1 ? s2 ? s2 + '&nbsp;' + s1 : s1 : s2;
-	},
-	domClass_: function (no) {
-		var scls = this.$supers('domClass_', arguments),
-			p = this.parent,
+	}
+
+	protected override domClass_(no?: zk.DomClassOptions): string {
+		var scls = super.domClass_(no),
+			p = this.parent!,
 			head = this.getListheader();
 
 		if ((!no || !no.zclass) && (_isListgroup(p) || _isListgroupfoot(p)))
@@ -122,11 +141,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			scls += ' ' + this.$s('hidden-header');
 
 		return scls;
-	},
-	_colHtmlPre: function () {
+	}
+
+	private _colHtmlPre(): string {
 		var s = '',
 			box = this.getListbox(),
-			p = this.parent;
+			p = this.parent!;
 		if (box != null && p.firstChild == this) {
 			var isGrp = _isListgroup(p);
 			// insert checkmark
@@ -149,7 +169,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					+ (multi ? 'z-icon-check' : 'z-icon-radio') + '"></i></span>';
 			}
 			// insert toggle icon
-			if (isGrp) {
+			if (_isListgroup(p)) { // For "type predicates" to work, isGrp cannot be used.
 				var cls = p._open ?
 						p.getIconOpenClass_() + ' ' + p.$s('icon-open') :
 						p.getIconCloseClass_() + ' ' + p.$s('icon-close');
@@ -158,42 +178,47 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			if (s) return s;
 		}
 		return (!this.getImage() && !this.getLabel() && !this.firstChild) ? '&nbsp;' : '';
-	},
-	doFocus_: function (evt) {
-		this.$supers('doFocus_', arguments);
+	}
+
+	protected override doFocus_(evt: zk.Event): void {
+		super.doFocus_(evt);
 		//sync frozen
 		var box = this.getListbox(),
 			frozen = box ? box.frozen : null,
 			node = this.$n();
-		if (frozen && node)
-			box._moveToHidingFocusCell(node.cellIndex);
-	},
-	doMouseOver_: function (evt) {
+		if (frozen && node) // NOTE: non-null frozen implies non-null box
+			box!._moveToHidingFocusCell(node.cellIndex);
+	}
+
+	protected override doMouseOver_(evt: zk.Event): void {
 		var n = this.$n();
 
 		// ZK-2136: all children should apply -moz-user-select: none
-		if (n && zk.gecko && (this._draggable || this.parent._draggable)
-				&& !jq.nodeName(evt.domTarget, 'input', 'textarea')) {
+		if (n && zk.gecko && (this._draggable || this.parent!._draggable)
+				&& !jq.nodeName(evt.domTarget!, 'input', 'textarea')) {
 			jq(n).addClass('z-draggable-over');
 		}
-		this.$supers('doMouseOver_', arguments);
-	},
-	doMouseOut_: function (evt) {
+		super.doMouseOver_(evt);
+	}
+
+	protected override doMouseOut_(evt: zk.Event): void {
 		var n = this.$n();
 
 		// ZK-2136: all children should apply -moz-user-select: none
-		if (n && zk.gecko && (this._draggable || this.parent._draggable)
-				&& !jq.nodeName(evt.domTarget, 'input', 'textarea')) {
+		if (n && zk.gecko && (this._draggable || this.parent!._draggable)
+				&& !jq.nodeName(evt.domTarget!, 'input', 'textarea')) {
 			jq(n).removeClass('z-draggable-over'); // Bug ZK-580
 		}
-		this.$supers('doMouseOut_', arguments);
-	},
-	domAttrs_: function () {
-		return this.$supers('domAttrs_', arguments)
+		super.doMouseOut_(evt);
+	}
+
+	public override domAttrs_(no?: zk.DomAttrsOptions): string {
+		return super.domAttrs_(no)
 			+ (this._span > 1 ? ' colspan="' + this._span + '"' : '');
-	},
+	}
+
 	//-- super --//
-	domStyle_: function (no) {
+	protected override domStyle_(no?: zk.DomStyleOptions): string {
 		var style = '',
 			head = this.getListheader();
 		if (head) {
@@ -204,20 +229,23 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			if (!head.isVisible())
 				no = zk.copy(no, {visible: true});
 		}
-		return this.$supers('domStyle_', [no]) + style;
-	},
-	bindChildren_: function () {
-		var p;
-		if (!(p = this.parent) || !(p.$instanceof(zul.sel.Option) || p.$instanceof(zul.sel.Optgroup)))
-			this.$supers('bindChildren_', arguments);
-	},
-	unbindChildren_: function () {
-		var p;
-		if (!(p = this.parent) || !(p.$instanceof(zul.sel.Option) || p.$instanceof(zul.sel.Optgroup)))
-			this.$supers('unbindChildren_', arguments);
-	},
-	deferRedrawHTML_: function (out) {
-		out.push('<td', this.domAttrs_({domClass: 1}), ' class="z-renderdefer"></td>');
+		return super.domStyle_(no) + style;
 	}
-});
-})();
+
+	protected override bindChildren_(desktop?: zk.Desktop, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+		var p = this.parent;
+		if (!p || !(p instanceof zul.sel.Option || p instanceof zul.sel.Optgroup))
+			super.bindChildren_(desktop, skipper, after);
+	}
+
+	protected override unbindChildren_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+		var p = this.parent;
+		if (!p || !(p instanceof zul.sel.Option || p instanceof zul.sel.Optgroup))
+			super.unbindChildren_(skipper, after, keepRod);
+	}
+
+	protected override deferRedrawHTML_(out: string[]): void {
+		out.push('<td', this.domAttrs_({domClass: true}), ' class="z-renderdefer"></td>');
+	}
+}
+zul.sel.Listcell = zk.regClass(Listcell);

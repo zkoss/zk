@@ -1,4 +1,4 @@
-/* Select.js
+/* Select.ts
 
 	Purpose:
 
@@ -15,62 +15,105 @@ it will be useful, but WITHOUT ANY WARRANTY.
 /**
  * A HTML select tag.
  */
-zul.sel.Select = zk.$extends(zul.Widget, {
-	_selectedIndex: -1,
-	_rows: 0,
-	$init: function () {
-		this.$supers('$init', arguments);
+export class Select extends zul.Widget<HTMLSelectElement> {
+	public _selectedIndex = -1;
+	private _rows = 0;
+	private _shouldRerenderFlag?: boolean;
+	public _selItems: zul.sel.Option[];
+	private _groupsInfo: zul.sel.Optgroup[];
+	private _multiple?: boolean;
+	private _disabled?: boolean;
+	private _name?: string;
+	private _maxlength?: number;
+
+	public constructor() {
+		super(); // FIXME: params?
 		this._selItems = [];
 		this._groupsInfo = [];
-	},
-	$define: {
-		/**
-		 * Returns whether multiple selections are allowed.
-		 * <p>
-		 * Default: false.
-		 * @return boolean
-		 */
-		/**
-		 * Sets whether multiple selections are allowed.
-		 * @param boolean multiple
-		 */
-		multiple: function (multiple) {
+	}
+
+	/**
+	 * Returns whether multiple selections are allowed.
+	 * <p>
+	 * Default: false.
+	 * @return boolean
+	 */
+	public isMultiple(): boolean | undefined {
+		return this._multiple;
+	}
+
+	/**
+	 * Sets whether multiple selections are allowed.
+	 * @param boolean multiple
+	 */
+	public setMultiple(multiple: boolean, opts?: Record<string, boolean>): this {
+		const o = this._multiple;
+		this._multiple = multiple;
+
+		if (o !== multiple || (opts && opts.force)) {
 			var n = this.$n();
-			if (n) n.multiple = multiple ? 'multiple' : '';
-		},
-		/**
-		 * Returns whether it is disabled.
-		 * <p>
-		 * Default: false.
-		 * @return boolean
-		 */
-		/**
-		 * Sets whether it is disabled.
-		 * @param boolean disabled
-		 */
-		disabled: function (disabled) {
+			if (n) n.multiple = (multiple ? 'multiple' : '') as unknown as boolean;
+		}
+
+		return this;
+	}
+
+	/**
+	 * Returns whether it is disabled.
+	 * <p>
+	 * Default: false.
+	 * @return boolean
+	 */
+	public isDisabled(): boolean | undefined {
+		return this._disabled;
+	}
+
+	/**
+	 * Sets whether it is disabled.
+	 * @param boolean disabled
+	 */
+	public setDisabled(disabled: boolean, opts?: Record<string, boolean>): this {
+		const o = this._disabled;
+		this._disabled = disabled;
+
+		if (o !== disabled || (opts && opts.force)) {
 			var n = this.$n();
-			if (n) n.disabled = disabled ? 'disabled' : '';
-		},
-		/**
-		 * Returns the index of the selected item (-1 if no one is selected).
-		 * @return int
-		 */
-		/**
-		 * Deselects all of the currently selected items and selects the item with
-		 * the given index.
-		 * @param int selectedIndex
-		 */
-		selectedIndex: function (selectedIndex) {
-			var i = 0, j = 0, w, n = this.$n();
+			if (n) n.disabled = (disabled ? 'disabled' : '') as unknown as boolean;
+		}
+
+		return this;
+	}
+
+	/**
+	 * Returns the index of the selected item (-1 if no one is selected).
+	 * @return int
+	 */
+	public getSelectedIndex(): number {
+		return this._selectedIndex;
+	}
+
+	/**
+	 * Deselects all of the currently selected items and selects the item with
+	 * the given index.
+	 * @param int selectedIndex
+	 */
+	public setSelectedIndex(selectedIndex: number, opts?: Record<string, boolean>): this {
+		const o = this._selectedIndex;
+		this._selectedIndex = selectedIndex;
+
+		if (o !== selectedIndex || (opts && opts.force)) {
+			var i = 0,
+				j = 0,
+				w: zk.Widget | null,
+				n = this.$n();
 			this.clearSelection();
 			// B50-ZK-989: original skipFixIndex way gives wrong value for this._selectedIndex
 			// select from server API call, fix the index
 			for (w = this.firstChild; w && i < selectedIndex; w = w.nextSibling, i++) {
-				if (w.$instanceof(zul.sel.Option)) {
+				if (w instanceof zul.sel.Option) {
 					if (!w.isVisible())
 						j++;
-				} else if (w.$instanceof(zul.sel.Optgroup))
+				} else if (w instanceof zul.sel.Optgroup)
 					j++;
 				else i--;
 			}
@@ -79,74 +122,113 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 			if (n)
 				n.selectedIndex = selectedIndex;
 
-			if (selectedIndex > -1 && w && w.$instanceof(zul.sel.Option)) {
+			if (selectedIndex > -1 && w && w instanceof zul.sel.Option) {
 				w.setSelected(true);
 				this._selItems.push(w);
 			}
-		},
-		/**
-		 * Returns the name of this component.
-		 * <p>
-		 * Default: null.
-		 * <p>
-		 * The name is used only to work with "legacy" Web application that handles
-		 * user's request by servlets. It works only with HTTP/HTML-based browsers.
-		 * It doesn't work with other kind of clients.
-		 * <p>
-		 * Don't use this method if your application is purely based on ZK's
-		 * event-driven model.
-		 * @return String
-		 */
-		/**
-		 * Sets the name of this component.
-		 * <p>
-		 * The name is used only to work with "legacy" Web application that handles
-		 * user's request by servlets. It works only with HTTP/HTML-based browsers.
-		 * It doesn't work with other kind of clients.
-		 * <p>
-		 * Don't use this method if your application is purely based on ZK's
-		 * event-driven model.
-		 *
-		 * @param String name
-		 *            the name of this component.
-		 */
-		name: function (name) {
+		}
+
+		return this;
+	}
+
+	/**
+	 * Returns the name of this component.
+	 * <p>
+	 * Default: null.
+	 * <p>
+	 * The name is used only to work with "legacy" Web application that handles
+	 * user's request by servlets. It works only with HTTP/HTML-based browsers.
+	 * It doesn't work with other kind of clients.
+	 * <p>
+	 * Don't use this method if your application is purely based on ZK's
+	 * event-driven model.
+	 * @return String
+	 */
+	public getName(): string | undefined {
+		return this._name;
+	}
+
+	/**
+	 * Sets the name of this component.
+	 * <p>
+	 * The name is used only to work with "legacy" Web application that handles
+	 * user's request by servlets. It works only with HTTP/HTML-based browsers.
+	 * It doesn't work with other kind of clients.
+	 * <p>
+	 * Don't use this method if your application is purely based on ZK's
+	 * event-driven model.
+	 *
+	 * @param String name
+	 *            the name of this component.
+	 */
+	public setName(name: string, opts?: Record<string, boolean>): this {
+		const o = this._name;
+		this._name = name;
+
+		if (o !== name || (opts && opts.force)) {
 			var n = this.$n();
 			if (n) n.name = name;
-		},
-		/**
-		 * Returns the rows. Zero means no limitation.
-		 * <p>
-		 * Default: 0.
-		 * @return int
-		 */
-		/**
-		 * Sets the rows.
-		 * <p>
-		 * Note: if both {@link #setHeight} is specified with non-empty,
-		 * {@link #setRows} is ignored
-		 * @param int rows
-		 */
-		rows: function (rows) {
+		}
+
+		return this;
+	}
+
+	/**
+	 * Returns the rows. Zero means no limitation.
+	 * <p>
+	 * Default: 0.
+	 * @return int
+	 */
+	public getRows(): number {
+		return this._rows;
+	}
+
+	/**
+	 * Sets the rows.
+	 * <p>
+	 * Note: if both {@link #setHeight} is specified with non-empty,
+	 * {@link #setRows} is ignored
+	 * @param int rows
+	 */
+	public setRows(rows: number, opts?: Record<string, boolean>): this {
+		const o = this._rows;
+		this._rows = rows;
+
+		if (o !== rows || (opts && opts.force)) {
 			var n = this.$n();
 			if (n) n.size = rows;
-		},
-		/**
-		 * Returns the maximal length of each item's label.
-		 * @return int
-		 */
-		/**
-		 * Sets the maximal length of each item's label.
-		 * @param int maxlength
-		 */
-		maxlength: function (maxlength, fromServer) {
+		}
+
+		return this;
+	}
+
+	/**
+	 * Returns the maximal length of each item's label.
+	 * @return int
+	 */
+	public getMaxlength(): number | undefined {
+		return this._maxlength;
+	}
+
+	/**
+	 * Sets the maximal length of each item's label.
+	 * @param int maxlength
+	 */
+	// FIXME: can a defSet generated setter accept more than one arguments before `opts`?
+	public setMaxlength(maxlength: number, fromServer: boolean, opts?: Record<string, boolean>): this {
+		const o = this._maxlength;
+		this._maxlength = maxlength;
+
+		if (o !== maxlength || (opts && opts.force)) {
 			if (this.desktop)
 				this.requestRerender_(fromServer);
 		}
-	},
+
+		return this;
+	}
 
 	// ZK-2133: should sync all items
-	setChgSel: function (val) { //called from the server
+	public setChgSel(val: string): void { //called from the server
 		var sels = {};
 		for (var j = 0; ;) {
 			var k = val.indexOf(',', j),
@@ -156,36 +238,38 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 			j = k + 1;
 		}
 		for (var w = this.firstChild; w; w = w.nextSibling)
-			this._changeSelect(w, sels[w.uuid] == true);
-	},
+			this._changeSelect(w as zul.sel.Option, sels[w.uuid] == true);
+	}
 
 	/* Changes the selected status of an item without affecting other items
 	 * and return true if the status is really changed.
 	 */
-	_changeSelect: function (option, toSel) {
+	private _changeSelect(option: zul.sel.Option, toSel: boolean): boolean {
 		var changed = !!option.isSelected() != toSel;
 		if (changed) {
 			option.setSelected(toSel);
 		}
 		return changed;
-	},
+	}
+
 	/**
 	 * If the specified item is selected, it is deselected. If it is not
 	 * selected, it is selected. Other items in the list box that are selected
 	 * are not affected, and retain their selected state.
 	 * @param Option item
 	 */
-	toggleItemSelection: function (item) {
+	public toggleItemSelection(item: zul.sel.Option): void {
 		if (item.isSelected()) this._removeItemFromSelection(item);
 		else this._addItemToSelection(item);
-	},
+	}
+
 	/**
 	 * Deselects all of the currently selected items and selects the given item.
 	 *
 	 * @param Option item
 	 *            the item to select. If null, all items are deselected.
 	 */
-	selectItem: function (item) {
+	public selectItem(item: zul.sel.Option): void {
 		if (!item)
 			this.setSelectedIndex(-1);
 		else if (this._multiple || !item.isSelected()) {
@@ -194,8 +278,9 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 			else
 				this.setSelectedIndex(item.getChildIndex());
 		}
-	},
-	_addItemToSelection: function (item) {
+	}
+
+	private _addItemToSelection(item: zul.sel.Option): void {
 		if (!item.isSelected()) {
 			var multiple = this._multiple;
 			if (!multiple)
@@ -206,8 +291,9 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 			item._setSelectedDirectly(true);
 			this._selItems.push(item);
 		}
-	},
-	_removeItemFromSelection: function (item) {
+	}
+
+	private _removeItemFromSelection(item: zul.sel.Option): void {
 		if (item.isSelected()) {
 			if (!this._multiple) {
 				this.clearSelection();
@@ -216,66 +302,74 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 				this._selItems.$remove(item);
 			}
 		}
-	},
+	}
+
 	/**
 	 * Clears the selection.
 	 */
-	clearSelection: function () {
+	public clearSelection(): void {
 		if (this._selItems.length) {
-			var item;
+			var item: zul.sel.Option | undefined;
 			for (;(item = this._selItems.pop());)
 				item._setSelectedDirectly(false);
 			this._selectedIndex = -1;
 		}
-	},
-	domAttrs_: function () {
+	}
+
+	public override domAttrs_(no?: zk.DomAttrsOptions): string {
 		var v;
-		return this.$supers('domAttrs_', arguments)
+		return super.domAttrs_(no)
 			+ (this.isDisabled() ? ' disabled="disabled"' : '')
 			+ (this.isMultiple() ? ' multiple="multiple"' : '')
 			+ ((v = this.getSelectedIndex()) > -1 ? ' selectedIndex="' + v + '"' : '')
 			+ ((v = this.getRows()) > 0 ? ' size="' + v + '"' : '')
 			+ ((v = this.getName()) ? ' name="' + v + '"' : '');
-	},
-	bind_: function () {
-		this.$supers(zul.sel.Select, 'bind_', arguments);
+	}
 
-		var n = this.$n();
+	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+		super.bind_(desktop, skipper, after);
+
+		var n = this.$n_();
 		this.domListen_(n, 'onChange')
 			.domListen_(n, 'onFocus', 'doFocus_')
 			.domListen_(n, 'onBlur', 'doBlur_');
 
 		if (!zk.gecko) {
-			var fn = [this, this._fixSelIndex];
+			var fn: [unknown, zk.Callable] = [this, this._fixSelIndex];
 			zWatch.listen({onRestore: fn, onVParent: fn});
 		}
 		zWatch.listen({onCommandReady: this});
 
 		this._fixSelIndex();
-	},
-	unbind_: function () {
+	}
+
+	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		zWatch.unlisten({onCommandReady: this});
-		var n = this.$n();
+		var n = this.$n_();
 		this.domUnlisten_(n, 'onChange')
 			.domUnlisten_(n, 'onFocus', 'doFocus_')
-			.domUnlisten_(n, 'onBlur', 'doBlur_')
-			.$supers(zul.sel.Select, 'unbind_', arguments);
+			.domUnlisten_(n, 'onBlur', 'doBlur_');
+		super.unbind_(skipper, after, keepRod);
 
-		var fn = [this, this._fixSelIndex];
+		var fn: [unknown, zk.Callable] = [this, this._fixSelIndex];
 		zWatch.unlisten({onRestore: fn, onVParent: fn});
-	},
-	_fixSelIndex: function () {
+	}
+
+	private _fixSelIndex(): void {
 		if (this._selectedIndex < 0)
-			this.$n().selectedIndex = -1;
-	},
-	_doChange: function (evt) {
-		var n = this.$n(),
+			this.$n_().selectedIndex = -1;
+	}
+
+	private _doChange(evt: zk.Event): void {
+		var n = this.$n_(),
 			opts = n.options,
 			multiple = this._multiple,
-			data = [], changed = false, reference;
+			data: string[] = [],
+			changed = false,
+			reference: string | undefined;
 		for (var j = 0, ol = opts.length; j < ol; ++j) {
 			var opt = opts[j],
-				o = zk.Widget.$(opt.id),
+				o = zk.Widget.$<zul.sel.Option>(opt.id),
 				v = opt.selected;
 			if (multiple) {
 				if (o && o._selected != v) {
@@ -300,58 +394,70 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 			return;
 
 		this.fire('onSelect', {items: data, reference: reference});
-	},
-	doBlur_: zk.$void,
+	}
+
+	protected override doBlur_(evt: zk.Event): void {
+		// Empty for override
+	}
+
 	//Bug 1756559: ctrl key shall fore it to be sent first
-	beforeCtrlKeys_: function (evt) {
+	protected override beforeCtrlKeys_(evt: zk.Event): void {
 		this._doChange(evt);
-	},
-	onChildAdded_: function (child) {
-		if (child.$instanceof(zul.sel.Optgroup))
+	}
+
+	protected override onChildAdded_(child: zk.Widget): void {
+		if (child instanceof zul.sel.Optgroup)
 			this._groupsInfo.push(child);
 		if (this.desktop)
 			this.requestRerender_(true);
-	},
-	onChildRemoved_: function (child) {
-		if (child.$instanceof(zul.sel.Optgroup))
+	}
+
+	protected override onChildRemoved_(child: zk.Widget): void {
+		if (child instanceof zul.sel.Optgroup)
 			this._groupsInfo.$remove(child);
 		if (this.desktop && !this.childReplacing_)
 			this.requestRerender_(true);
-	},
-	requestRerender_: function (fromServer) {
+	}
+
+	public requestRerender_(fromServer: boolean | undefined): void {
 		if (fromServer)
 			this._shouldRerenderFlag = true;
 		else
 			this.rerender();
-	},
-	onCommandReady: function () {
+	}
+
+	public onCommandReady(): void {
 		if (this._shouldRerenderFlag) {
 			this._shouldRerenderFlag = false;
 			this.rerender();
 		}
-	},
+	}
+
 	/** Returns whether any {@link Optgroup} exists.
 	 * @return boolean
 	 * @since 8.6.0
 	 */
-	hasGroup: function () {
-		return this._groupsInfo.length;
-	},
+	public hasGroup(): boolean {
+		return !!this._groupsInfo.length;
+	}
+
 	/** Returns the number of {@link Optgroup}.
 	 * @return int
 	 * @since 8.6.0
 	 */
-	getGroupCount: function () {
+	public getGroupCount(): number {
 		return this._groupsInfo.length;
-	},
+	}
+
 	/** Returns a list of all {@link Optgroup}. The order is unmaintained.
 	 * @return Array
 	 * @since 8.6.0
 	 */
-	getGroups: function () {
+	public getGroups(): zul.sel.Optgroup[] {
 		return this._groupsInfo.$clone();
-	},
-	setItemsInvalid_: function (wgts) {
+	}
+
+	protected setItemsInvalid_(wgts: ArrayLike<unknown>[]): void {
 		var wgt = this;
 		zAu.createWidgets(wgts, function (ws) {
 			wgt.replaceCavedChildren_('', ws);
@@ -359,4 +465,5 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 			return wx;
 		});
 	}
-});
+}
+zul.sel.Select = zk.regClass(Select);
