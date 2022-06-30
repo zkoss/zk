@@ -21,7 +21,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
  *
  * <p>Default {@link #getZclass}: z-bandbox.
  */
-export class Bandbox<ValueType> extends zul.inp.ComboWidget<ValueType> {
+export class Bandbox extends zul.inp.ComboWidget {
+	public override firstChild!: zul.inp.Bandpopup | null;
+	public override lastChild!: zul.inp.Bandpopup | null;
 	protected override _iconSclass = 'z-icon-search';
 
 	//super

@@ -22,7 +22,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * @see Combobox
  */
 export class Comboitem extends zul.LabelImageWidget {
-	public override parent!: zul.inp.Combobox<never>;
+	public override parent!: zul.inp.Combobox;
+	public override nextSibling!: zul.inp.Comboitem | null;
+	public override previousSibling!: zul.inp.Comboitem | null;
 	public _maxFlexWidth = true; //ZK-5044
 	private _description?: string;
 	private _content?: string;

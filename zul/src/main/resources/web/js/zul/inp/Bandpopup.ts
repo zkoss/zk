@@ -22,6 +22,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>z-class: z-bandpopup
  */
 export class Bandpopup extends zul.Widget {
+	public override parent!: zul.inp.Bandbox | null;
+	public override nextSibling!: zul.inp.Bandpopup | null;
+	public override previousSibling!: zul.inp.Bandpopup | null;
 	private _shallClosePopup?: boolean;
 
 	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
@@ -41,7 +44,7 @@ export class Bandpopup extends zul.Widget {
 	}
 
 	private _focusout(e: JQuery.FocusOutEvent): void {
-		var bandbox = this.parent as zul.inp.Bandbox<never> | null,
+		var bandbox = this.parent,
 			self = this;
 		if (e.relatedTarget) {
 			if (bandbox && bandbox.isOpen() && !jq.isAncestor(bandbox.$n('pp'), e.relatedTarget as HTMLElement))
