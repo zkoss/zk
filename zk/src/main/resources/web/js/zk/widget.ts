@@ -679,7 +679,7 @@ const _dragoptions: DraggableOptions = {
  * @disable(zkgwt)
  */
 // zk scope
-export class Widget extends ZKObject {
+export class Widget<TElement extends HTMLElement = HTMLElement> extends ZKObject {
 	declare public $button?: boolean; // zul/sel/SelectWidget _isButton
 	declare public $inputWidget?: boolean; // zul/sel/SelectWidget _isInputWidget
 	declare public _loaded?: boolean; // zul.mesh.MeshWidget
@@ -699,7 +699,7 @@ export class Widget extends ZKObject {
 
 	declare public z_rod?: boolean | number;
 	declare public _rodKid?: boolean;
-	declare public _node: DOMFieldValue;
+	declare public _node?: TElement | null;
 	declare public _nodeSolved;
 	declare public _rmAftAnm;
 	declare public _$evproxs;
@@ -732,7 +732,7 @@ export class Widget extends ZKObject {
 	declare private _preHeight;
 	declare private _action: StringFieldValue;
 	declare protected _tabindex: NumberFieldValue;
-	declare private _draggable: StringFieldValue;
+	declare public _draggable: StringFieldValue;
 	declare private _asaps: Record<string, unknown>;
 	declare private _lsns: Record<string, unknown & {priority: number}[]>;
 	declare private _bklsns: Record<string, unknown>;
@@ -2211,7 +2211,7 @@ wgt.$f().main.setTitle("foo");
 			var p = this.parent, ocvCalled;
 			if (this.desktop) {
 				var parentVisible = !p || p.isRealVisible(),
-					node = this.$n() as HTMLElement,
+					node = this.$n()!,
 					floating = this._floating;
 
 				if (!parentVisible) {
@@ -2486,7 +2486,7 @@ wgt.$f().main.setTitle("foo");
 		if (this._floating != floating) {
 			if (floating) {
 				//parent first
-				var inf = {widget: this, node: opts && opts.node ? opts.node : this.$n() as HTMLElement},
+				var inf = {widget: this, node: opts && opts.node ? opts.node : this.$n()!},
 					bindLevel = this.bindLevel;
 				for (var j = _floatings.length; ;) {
 					if (--j < 0) {
@@ -2704,7 +2704,7 @@ redraw: function (out) {
 	protected updateDomStyle_(): void {
 		if (this.desktop) {
 			var s = jq.parseStyle(this.domStyle_()),
-				n = this.$n() as HTMLElement;
+				n = this.$n()!;
 			// B50-3355680: size is potentially affected when setStyle
 			if (!s.width && this._hflex)
 				s.width = n.style.width;
@@ -3262,6 +3262,7 @@ function () {
 	 * @return DOMElement
 	 * @see #$n(String)
 	 */
+	public $n(): TElement | null | undefined
 	/** Returns the child element of the DOM element(s) that this widget is bound to.
 	 * This method assumes the ID of the child element the concatenation of
 	 * {@link #uuid}, -, and subId. For example,
@@ -3272,6 +3273,7 @@ function () {
 	 * @return DOMElement
 	 * @see #$n()
 	 */
+	public $n(subId: string | undefined): HTMLElement | null | undefined
 	public $n(subId?: string): DOMFieldValue {
 		if (subId) {
 			let n = this._subnodes[subId];
@@ -3283,7 +3285,7 @@ function () {
 		}
 		let n = this._node;
 		if (!n && this.desktop && !this._nodeSolved) {
-			this._node = n = jq(this.uuid, zk)[0];
+			this._node = n = jq<string, TElement>(this.uuid, zk)[0];
 			this._nodeSolved = true;
 		}
 		return n;
@@ -3295,6 +3297,7 @@ function () {
 	 * @see #$n_(String)
 	 * @since 10.0
 	 */
+	public $n_(): TElement
 	/** Returns the child element of the DOM element(s) that this widget is bound to.
 	 *  (Never null)
 	 * @param String subId the sub ID of the child element
@@ -3302,6 +3305,7 @@ function () {
 	 * @see #$n_()
 	 * @since 10.0
 	 */
+	public $n_(subId: string | undefined): HTMLElement
 	public $n_(subId?: string): HTMLElement {
 		let n = this.$n(subId);
 		if (n == null) {
@@ -3656,7 +3660,7 @@ unbind_: function (skipper, after) {
 	public setFlexSize_(sz: zk.FlexSize, isFlexMin?: boolean): void {
 		if (this._cssflex && this.parent && this.parent.getFlexContainer_() != null && !isFlexMin)
 			return;
-		var n = this.$n() as HTMLElement,
+		var n = this.$n()!,
 			zkn = zk(n);
 		if (sz.height !== undefined) {
 			if (sz.height == 'auto')
@@ -3838,7 +3842,7 @@ unbind_: function (skipper, after) {
 	}
 
 	protected resetSize_(orient: zk.FlexOrient): void {
-		var n = this.$n() as HTMLElement,
+		var n = this.$n()!,
 			hasScroll = this._beforeSizeHasScroll;
 		if (hasScroll || (hasScroll == null && (n.scrollTop || n.scrollLeft))) // keep the scroll status, the issue also happens (not only IE8) if trigger by resize browser window.
 			return;// do nothing Bug ZK-1885: scrollable div (with vflex) and tooltip
@@ -4024,7 +4028,7 @@ unbind_: function (skipper, after) {
 	 */
 	public onAfterSize(): void {
 		if (this.desktop && this.isListen('onAfterSize')) {
-			var n = this.$n() as HTMLElement, // ZK-5089: don't use "this.getCaveNode()" here
+			var n = this.$n()!, // ZK-5089: don't use "this.getCaveNode()" here
 				width = n.offsetWidth,
 				height = n.offsetHeight;
 			if (this._preWidth != width || this._preHeight != height) {

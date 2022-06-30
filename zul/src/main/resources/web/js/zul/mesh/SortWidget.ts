@@ -18,8 +18,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 export abstract class SortWidget extends zul.mesh.HeaderWidget {
 	public override parent!: zul.mesh.ColumnMenuWidget | null;
 	protected override _sortDirection: zul.mesh.SortDirection = 'natural';
-	private _sortAscending = 'none';
-	private _sortDescending = 'none';
+	protected _sortAscending = 'none';
+	protected _sortDescending = 'none';
 	
 	public abstract getMeshBody(): zk.Widget;
 
@@ -267,7 +267,7 @@ export abstract class SortWidget extends zul.mesh.HeaderWidget {
 		return v1 > v2 ? 1 : (v1 < v2 ? -1 : 0);
 	}
 
-	private _fixDirection(ascending: boolean): void {
+	protected _fixDirection(ascending: boolean): void {
 		//maintain
 		var direction: zul.mesh.SortDirection = ascending ? 'ascending' : 'descending';
 		for (var w = this.parent!.firstChild; w; w = w.nextSibling)

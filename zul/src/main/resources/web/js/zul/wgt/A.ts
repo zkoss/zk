@@ -19,7 +19,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * The same as HTML A tag.
  * <p>Default {@link #getZclass}: z-a.
  */
-export class A extends zul.LabelImageWidget {
+export class A extends zul.LabelImageWidget<HTMLAnchorElement> {
 	private _dir = 'normal';
 	private _href?: string;
 	private _target?: string;
@@ -112,7 +112,7 @@ export class A extends zul.LabelImageWidget {
 		this._href = v;
 
 		if (o !== v || (opts && opts.force)) {
-			var n = this.$n() as HTMLAnchorElement;
+			var n = this.$n();
 			if (n) n.href = v || '';
 		}
 
@@ -139,7 +139,7 @@ export class A extends zul.LabelImageWidget {
 		this._target = v;
 
 		if (o !== v || (opts && opts.force)) {
-			var n = this.$n() as HTMLAnchorElement;
+			var n = this.$n();
 			if (n) n.target = v || '';
 		}
 

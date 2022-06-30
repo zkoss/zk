@@ -94,7 +94,7 @@ zul.inp.RoundUtl = RoundUtl;
 &lt;?script content="zk.afterLoad('zul.inp',function(){zul.inp.InputWidget.onChangingDelay=1000;})"?&gt;
 </code></pre>
  */
-export class InputWidget<ValueType> extends zul.Widget {
+export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElement> {
 	private _maxlength = 0;
 	private _cols = 0;
 	//_tabindex: 0,

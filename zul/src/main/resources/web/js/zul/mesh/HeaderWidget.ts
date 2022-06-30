@@ -16,7 +16,7 @@ export type SortDirection = 'ascending' | 'descending' | 'natural';
 /**
  * A skeletal implementation for a header.
  */
-export abstract class HeaderWidget extends zul.LabelImageWidget {
+export abstract class HeaderWidget extends zul.LabelImageWidget<HTMLTableCellElement> {
 	// NOTE: parent can be null, as `getMeshWidget` asserts
 	public override parent!: zul.mesh.HeadWidget | null;
 	public override nextSibling!: zul.mesh.HeaderWidget | null;
@@ -29,7 +29,7 @@ export abstract class HeaderWidget extends zul.LabelImageWidget {
 	public _origWd?: string | null;
 	private _dragsz?: zk.Draggable | null;
 
-	public _checked?: boolean; // zul.sel.SelectWidget.prototype._isAllSelected
+	public _checked?: boolean | null; // zul.sel.SelectWidget.prototype._isAllSelected
 	protected _sortDirection!: SortDirection;
 	public abstract getSortDirection(): SortDirection;
 	public abstract setSortDirection(direction: SortDirection, opts?: Record<string, boolean>): this;
@@ -122,7 +122,7 @@ export abstract class HeaderWidget extends zul.LabelImageWidget {
 			node: HTMLTableCellElement | null | undefined;
 		if ((box = this.getMeshWidget()) && box.efrozen
 			&& zk.Widget.$(box.efrozen.firstChild)
-			&& (node = this.$n() as HTMLTableCellElement | null | undefined)) {
+			&& (node = this.$n())) {
 			box._moveToHidingFocusCell(node.cellIndex);
 		}
 	}

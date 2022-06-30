@@ -13,12 +13,8 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 //Bug 1926480: opera failed to add listheader dynamically (since hdfakerflex introduced)
-var _fixOnChildChanged = zk.opera ? function (head: HeadWidget): boolean {
-	// An expression of type 'void' cannot be tested for truthiness.
-	// However, in JS, a funtion returns undefined implicitly, but TS is strict in casting `void` to `undefined`.
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore
-	return head.parent && head.parent.rerender(); //later
+var _fixOnChildChanged = zk.opera ? function (head: HeadWidget): boolean | null | undefined {
+	return head.parent && head.parent.rerender() as undefined; //later
 } : zk.$void;
 
 function _syncFrozen(wgt: HeadWidget): void {
@@ -38,7 +34,7 @@ function _syncFrozen(wgt: HeadWidget): void {
 	}
 }
 
-export class HeadWidget extends zul.Widget {
+export class HeadWidget extends zul.Widget<HTMLTableRowElement> {
 	// NOTE: Parent could be null because it is checked in `afterChildrenFlex_`.
 	public override parent!: zul.mesh.MeshWidget | null;
 	public override firstChild!: zul.mesh.HeaderWidget | null;

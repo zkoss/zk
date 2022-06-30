@@ -18,7 +18,7 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
  * @author rudyhuang
  * @since 9.5.0
  */
-export class Track extends zul.Widget {
+export class Track extends zul.Widget<HTMLTrackElement> {
 	private _default?: boolean;
 	private _kind?: string;
 	private _label?: string;
@@ -43,7 +43,7 @@ export class Track extends zul.Widget {
 		this._default = isDefault;
 
 		if (o !== isDefault || (opts && opts.force)) {
-			const n = this.$n() as HTMLTrackElement;
+			const n = this.$n();
 			if (n) n.default = isDefault;
 		}
 
@@ -75,7 +75,7 @@ export class Track extends zul.Widget {
 		this._kind = kind;
 
 		if (o !== kind || (opts && opts.force)) {
-			const n = this.$n() as HTMLTrackElement;
+			const n = this.$n();
 			if (n) n.kind = kind;
 		}
 
@@ -100,7 +100,7 @@ export class Track extends zul.Widget {
 		this._label = label;
 
 		if (o !== label || (opts && opts.force)) {
-			const n = this.$n() as HTMLTrackElement;
+			const n = this.$n();
 			if (n) n.label = label;
 		}
 
@@ -129,7 +129,7 @@ export class Track extends zul.Widget {
 		this._src = src;
 
 		if (o !== src || (opts && opts.force)) {
-			const n = this.$n() as HTMLTrackElement;
+			const n = this.$n();
 			if (n) n.src = src;
 		}
 
@@ -156,7 +156,7 @@ export class Track extends zul.Widget {
 		this._srclang = srclang;
 
 		if (o !== srclang || (opts && opts.force)) {
-			const n = this.$n() as HTMLTrackElement;
+			const n = this.$n();
 			if (n) n.srclang = srclang;
 		}
 

@@ -340,7 +340,7 @@ function _getMinWd(wgt: MeshWidget): number {
 function _getSigRow(wgt: MeshWidget): HTMLTableRowElement | undefined {
 	// scan for tr with largest number of td children
 	var rw = wgt.getBodyWidgetIterator().next(),
-		tr = rw ? rw.$n() as HTMLTableRowElement | null | undefined : null;
+		tr = rw ? rw.$n() : null;
 	if (!tr)
 		return;
 	for (var maxtr = tr, len: number, max = maxtr.cells.length; tr; tr = tr.nextSibling as HTMLTableRowElement | null)

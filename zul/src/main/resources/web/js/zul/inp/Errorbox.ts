@@ -23,14 +23,14 @@ var _dirMap = {
  * A error message box that is displayed as a popup.
  */
 export class Errorbox extends zul.wgt.Notification {
-	public override parent: zul.inp.InputWidget<unknown> | null;
+	public override parent: zul.inp.InputWidget | null;
 	public _defaultPos = 'end_before';
 	public msg: string;
 	public sclass?: string;
 	public iconSclass: string;
 	private __ebox?: Errorbox;
 
-	public constructor(owner: zul.inp.InputWidget<unknown>, msg: string) {
+	public constructor(owner: zul.inp.InputWidget, msg: string) {
 		super(msg, {ref: owner});
 		this.parent = owner;
 		this.parent.__ebox = this;
@@ -120,7 +120,7 @@ export class Errorbox extends zul.wgt.Notification {
 	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 	// @ts-ignore
 	public override getInputNode(): HTMLInputElement | null | undefined {
-		return this.parent ? this.parent.$n() as HTMLInputElement | null | undefined : null;
+		return this.parent ? this.parent.$n() : null;
 	}
 
 	public onMove(): void {

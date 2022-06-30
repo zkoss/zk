@@ -145,7 +145,7 @@ export type ParsedCtlKeys = Record<number, boolean>[];
  * <p>The corresponding Java class is org.zkoss.zul.impl.XulElement.
  * <p>If a widget has a client attribute 'scrollable', it will listen <code>onScroll</code> event.
  */
-export class Widget extends zk.Widget {
+export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Widget<TElement> {
 	private _context?: string;
 	private _popup?: string;
 	private _doScrollableSyncScroll?: (() => void);
