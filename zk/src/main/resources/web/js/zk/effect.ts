@@ -20,7 +20,6 @@ import {default as zk} from './zk';
 import {type JQZK, type SlideOptions} from './dom';
 import {zWatch} from './evt';
 import type {Widget} from './widget';
-import type {DOMFieldValue} from './types';
 
 var _defSKUOpts, _useSKU;
 
@@ -42,7 +41,7 @@ export interface EffectFullMaskOptions extends EffectStackupOptions {
 
 export interface EffectMaskOptions extends EffectStackupOptions {
 	id?: string;
-	anchor?: DOMFieldValue;
+	anchor?: zk.DOMFieldValue;
 	message?: string;
 	offset?: [number, number];
 	width?: number;
@@ -156,7 +155,7 @@ export class Shadow extends zk.Object implements Effect {
 		}
 		return true;
 	}
-	public getBottomElement(): DOMFieldValue {
+	public getBottomElement(): zk.DOMFieldValue {
 		return this.stackup;
 	}
 }

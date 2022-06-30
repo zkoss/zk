@@ -221,9 +221,15 @@ declare var zUtl: import('./utl').ZUtl;
 declare var zKeys: typeof import('./keys').zKeys;
 
 declare namespace zk {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	type Callable = (...arg: any[]) => unknown;
+	type StringFieldValue = string | null | undefined;
+	type BooleanFieldValue = boolean | null | undefined;
+	type NumberFieldValue = number | null | undefined;
+	type DOMFieldValue = HTMLElement | null | undefined;
+	type Offset = [number, number];
+
 	type Object = import('./zk').ZKObject;
-	type Offset = import('./types').Offset;
-	type Callable = import('./types').Callable;
 	type Desktop = import('./widget').Desktop;
 	type Widget = import('./widget').Widget;
 	type BigDecimal = import('./math').BigDecimal;

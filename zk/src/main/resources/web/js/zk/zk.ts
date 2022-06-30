@@ -14,7 +14,6 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 import {type Draggable} from './drag';
-import {type Offset, type Callable} from './types';
 import {type Widget} from './widget';
 
 export type DataHandler = (wgt: Widget, val: unknown) => void;
@@ -79,7 +78,7 @@ function _inherits(subClass, superClass): void {
 	if (superClass) Object.setPrototypeOf(subClass, superClass);
 }
 
-function _createSuper(Derived): Callable {
+function _createSuper(Derived): zk.Callable {
 	var hasNativeReflectConstruct = _isNativeReflectConstruct();
 	return function _createSuperInternal() {
 		var Super = Object.getPrototypeOf(Derived),
@@ -333,13 +332,13 @@ _zk.tipDelay = 800;
  */
 _zk.resendTimeout = 200;
 /** The last position that the mouse was clicked (including left and right clicks).
- * @type Offset
+ * @type zk.Offset
  */
-_zk.clickPointer = [0, 0] as Offset;
+_zk.clickPointer = [0, 0] as zk.Offset;
 /** The position of the mouse (including mouse move and click).
- * @type Offset
+ * @type zk.Offset
  */
-_zk.currentPointer = [0, 0] as Offset;
+_zk.currentPointer = [0, 0] as zk.Offset;
 /** The widget that gains the focus now, or null if no one gains focus now.
  * @type Widget
  */
@@ -697,7 +696,7 @@ zk.$import('zul.sel.Listbox', function (cls) {new cls();});
  * @see #$import(String)
  * @see #load
  */
-_zk.$import = function (name: string, fn?: Callable): unknown {
+_zk.$import = function (name: string, fn?: zk.Callable): unknown {
 	var last;
 	if (last = _caches[name]) {
 		if (fn) fn(last);
@@ -1725,7 +1724,7 @@ function getProxy(o, f) { //used by zk.Object
 export abstract class ZKObject {
 	// FIXME: $copyf: Class;
 	// FIXME: $copied: boolean;
-	declare public _$ais: Callable[] | null;
+	declare public _$ais: zk.Callable[] | null;
 	declare public _$supers: Record<string, unknown>;
 	declare public _$proxies: WeakMap<object, unknown>;
 	declare public _$super;
@@ -1764,7 +1763,7 @@ export abstract class ZKObject {
 	 * @param Function func the function to register for execution later
 	 * @see #$init
 	 */
-	protected afterInit(func: Callable): void {
+	protected afterInit(func: zk.Callable): void {
 		(this._$ais = this._$ais || []).unshift(func); //reverse
 	}
 	/** The class that this object belongs to.

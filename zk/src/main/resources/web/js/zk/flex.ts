@@ -14,7 +14,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 import {default as zk} from './zk';
 import type {Widget} from './widget';
-import {NumberFieldValue} from './types';
 
 export type FlexOrient = 'w' | 'h';
 export interface FlexSize {
@@ -87,7 +86,7 @@ function _isSameBaseline(ref, cur, vertical): boolean {
 }
 
 function _fixMinFlex(isVflex?): ((wgt: Widget, wgtn: HTMLElement, o: FlexOrient,
-								  min: NumberFieldValue) => number) {
+								  min: zk.NumberFieldValue) => number) {
 	let flexsz, sizePos, flex, offsetPos, marginPos, maxFlexPos, sumFlexPos,
 		index, contentPos;
 	if (isVflex) {
@@ -111,7 +110,7 @@ function _fixMinFlex(isVflex?): ((wgt: Widget, wgtn: HTMLElement, o: FlexOrient,
 		index = 0;
 		contentPos = 'getContentEdgeWidth_';
 	}
-	return function (wgt: Widget, wgtn: HTMLElement, o: FlexOrient, min: NumberFieldValue) {
+	return function (wgt: Widget, wgtn: HTMLElement, o: FlexOrient, min: zk.NumberFieldValue) {
 		if (wgt[flexsz] === undefined) { //cached?
 			let cwgt = wgt.firstChild, //bug #2928109
 				n = wgtn,
