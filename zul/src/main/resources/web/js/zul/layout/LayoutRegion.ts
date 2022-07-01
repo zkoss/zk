@@ -598,7 +598,7 @@ export class LayoutRegion extends zul.Widget {
 		if (real) {
 			real.style.width = width ? width : '';
 			real._lastSize = null;
-			(this.parent as zul.layout.Borderlayout).resize();
+			this.parent!.resize();
 		}
 		return this;
 	}
@@ -609,7 +609,7 @@ export class LayoutRegion extends zul.Widget {
 		if (real) {
 			real.style.height = height ? height : '';
 			real._lastSize = null;
-			(this.parent as zul.layout.Borderlayout).resize();
+			this.parent!.resize();
 		}
 		return this;
 	}
@@ -635,7 +635,7 @@ export class LayoutRegion extends zul.Widget {
 					if (colled)
 						jq(colled).hide();
 				}
-				(this.parent as zul.layout.Borderlayout).resize();
+				this.parent!.resize();
 			}
 		}
 		return this;
@@ -849,7 +849,7 @@ export class LayoutRegion extends zul.Widget {
 			if (real)
 				real.style[o == 'h' ? 'height' : 'width'] = '';
 			// resize again
-			(this.parent as zul.layout.Borderlayout).resize();
+			this.parent!.resize();
 		}
 	}
 
@@ -993,7 +993,7 @@ export class LayoutRegion extends zul.Widget {
 	}
 
 	private _syncSize(inclusive?: boolean): void {
-		var layout = this.parent as zul.layout.Borderlayout,
+		var layout = this.parent!,
 			el = layout.$n_(),
 			width = el.offsetWidth,
 			height = el.offsetHeight,
@@ -1236,7 +1236,7 @@ export class LayoutRegion extends zul.Widget {
 		s.display = '';
 		s.visibility = 'hidden';
 		s.zIndex = '1';
-		(this.parent as zul.layout.Borderlayout).resize();
+		this.parent!.resize();
 	}
 
 	private static _afterSlideOutX(this: LayoutRegion, n: HTMLElement): void {
@@ -1278,7 +1278,7 @@ export class LayoutRegion extends zul.Widget {
 
 	// recalculates the size of the whole border layout after the component sildes in.
 	public static afterSlideIn(this: LayoutRegion, _n: HTMLElement): void {
-		(this.parent as zul.layout.Borderlayout).resize();
+		this.parent!.resize();
 		this._fixFontIcon();
 	}
 
