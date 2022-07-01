@@ -573,7 +573,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 	// @ts-ignore
 	public override getInputNode(): HTMLInputElement | null | undefined {
-		return (this.$n('real') || this.$n()) as HTMLInputElement | null | undefined;
+		return this.$n('real') || this.$n();
 	}
 
 	public override getTextNode(): HTMLInputElement | null | undefined {

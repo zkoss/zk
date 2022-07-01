@@ -381,7 +381,7 @@ export class Box extends zul.Widget {
 		if (before) {
 			jq(this._chdextr(before)!).before(this.encloseChildHTML_(child)!);
 		} else {
-			var n = this.$n('real') as HTMLTableElement, tbs = n.tBodies;
+			var n = this.$n<HTMLTableElement>('real')!, tbs = n.tBodies;
 			if (!tbs || !tbs.length)
 				n.appendChild(document.createElement('tbody'));
 			jq(this.isVertical() ? tbs[0] : tbs[0].rows[0]).append(

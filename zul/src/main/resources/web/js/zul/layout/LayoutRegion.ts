@@ -47,6 +47,7 @@ export interface LayoutRegionAmbit {
  * Events:<br/> onOpen, onSize, onSlide.<br/>
  */
 export class LayoutRegion extends zul.Widget {
+	public override parent!: zul.layout.Borderlayout | null;
 	public _open = true;
 	private _border = 'normal';
 	private _maxsize = 2000;
@@ -174,7 +175,7 @@ export class LayoutRegion extends zul.Widget {
 
 		if (o !== splittable || (opts && opts.force)) {
 			if (this.parent && this.desktop)
-				(this.parent as zul.layout.Borderlayout).resize();
+				this.parent.resize();
 		}
 
 		return this;
@@ -320,7 +321,7 @@ export class LayoutRegion extends zul.Widget {
 				return this; //nothing changed
 			}
 
-			nonAnima = (this.parent as zul.layout.Borderlayout)._animationDisabled || nonAnima;
+			nonAnima = this.parent._animationDisabled || nonAnima;
 
 			var colled = this.$n('colled'),
 				real = this.$n_('real');
@@ -372,7 +373,7 @@ export class LayoutRegion extends zul.Widget {
 					jq(real).hide();
 				}
 			}
-			if (nonAnima) (this.parent as zul.layout.Borderlayout).resize();
+			if (nonAnima) this.parent.resize();
 			if (!fromServer && nonAnima) // B50-ZK-301: onOpen is fire after animation
 				this.fire('onOpen', {open: open});
 		}
@@ -539,7 +540,7 @@ export class LayoutRegion extends zul.Widget {
 		if (this.getCmargins() != cmargins) {
 			this._cmargins = zUtl.stringToInts(cmargins, 0)!;
 			if (this.parent && this.desktop)
-				(this.parent as zul.layout.Borderlayout).resize();
+				this.parent.resize();
 		}
 	}
 
@@ -570,7 +571,7 @@ export class LayoutRegion extends zul.Widget {
 		if (this.getMargins() != margins) {
 			this._margins = zUtl.stringToInts(margins, 0)!;
 			if (this.parent && this.desktop)
-				(this.parent as zul.layout.Borderlayout).resize();
+				this.parent.resize();
 		}
 	}
 
@@ -680,7 +681,7 @@ export class LayoutRegion extends zul.Widget {
 			if (real) {
 				real.className = this.domClass_();
 				if (this.parent)
-					(this.parent as zul.layout.Borderlayout).resize();
+					this.parent.resize();
 			}
 		}
 	}
@@ -691,7 +692,7 @@ export class LayoutRegion extends zul.Widget {
 			if (real) {
 				zk(real).clearStyles().jq.css(jq.parseStyle(this.domStyle_()));
 				if (this.parent)
-					(this.parent as zul.layout.Borderlayout).resize();
+					this.parent.resize();
 			}
 		}
 	}
@@ -712,7 +713,7 @@ export class LayoutRegion extends zul.Widget {
 		if (this.parent && this.desktop) {
 			// B65-ZK-1076 for tabpanel, should fix in isRealVisible() when zk 7
 			if (this.parent.isRealVisible({dom: true}))
-				(this.parent as zul.layout.Borderlayout).resize();
+				this.parent.resize();
 		}
 	}
 
@@ -733,14 +734,14 @@ export class LayoutRegion extends zul.Widget {
 		if (this.parent && this.desktop && !this.childReplacing_) {
 			// B65-ZK-1076 for tabpanel, should fix in isRealVisible() when zk 7
 			if (this.parent.isRealVisible({dom: true}))
-				(this.parent as zul.layout.Borderlayout).resize();
+				this.parent.resize();
 		}
 	}
 
 	public override rerender(skipper?: zk.Skipper | number | null): void {
 		super.rerender(skipper);
 		if (this.parent) {
-			(this.parent as zul.layout.Borderlayout).resize();
+			this.parent.resize();
 		}
 	}
 

@@ -232,7 +232,7 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 		this._timeZonesReadonly = readonly;
 
 		if (o !== readonly || (opts && opts.force)) {
-			var select = this.$n('dtzones') as HTMLSelectElement | null | undefined;
+			var select = this.$n<HTMLSelectElement>('dtzones');
 			if (select) select.disabled = (readonly ? 'disabled' : '') as unknown as boolean;
 		}
 
@@ -594,7 +594,7 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 	}
 
 	public _setTimeZonesIndex(): void {
-		var select = this.$n('dtzones') as HTMLSelectElement | null | undefined;
+		var select = this.$n<HTMLSelectElement>('dtzones');
 		if (select && this._timeZone) {
 			var opts = jq(select).children('option');
 			for (var i = opts.length; i--;) {
@@ -825,7 +825,7 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 	}
 
 	public _doTimeZoneChange(evt: zk.Event): void {
-		var select = this.$n_('dtzones') as HTMLSelectElement,
+		var select = this.$n_<HTMLSelectElement>('dtzones'),
 			timezone = select.value;
 		this.updateChange_();
 		this.fire('onTimeZoneChange', {timezone: timezone}, {toServer: true}, 150);
@@ -1144,7 +1144,7 @@ export class CalendarPop extends zul.db.Calendar {
 
 	private _bindTimezoneEvt(): void {
 		var db = this.parent,
-			select = db.$n('dtzones') as HTMLSelectElement | null | undefined;
+			select = db.$n<HTMLSelectElement>('dtzones');
 		if (select) {
 			select.disabled = (db.isTimeZonesReadonly() ? 'disable' : '') as unknown as boolean;
 			db.domListen_(select, 'onChange', '_doTimeZoneChange');

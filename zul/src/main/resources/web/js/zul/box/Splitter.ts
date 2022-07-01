@@ -224,10 +224,9 @@ export class Splitter extends zul.Widget {
 	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		zWatch.unlisten({onSize: this, beforeSize: this});
 
-		var btn;
-		if (btn = this.$n('btn')) {
-			var $btn = jq(btn);
-			$btn.off('click', Splitter.onclick);
+		const btn = this.$n('btn');
+		if (btn) {
+			jq(btn).off('click', Splitter.onclick);
 		}
 
 		this._drag0!.destroy();

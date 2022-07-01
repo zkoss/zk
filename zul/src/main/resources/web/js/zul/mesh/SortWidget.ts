@@ -317,7 +317,7 @@ export abstract class SortWidget extends zul.mesh.HeaderWidget {
 	public _doMenuClick(evt: JQuery.Event): void {
 		if (this.parent!._menupopup && this.parent!._menupopup != 'none') {
 			var pp: string | zul.menu.Menupopup = this.parent!._menupopup,
-				btn = this.$n_('btn') as HTMLAnchorElement;
+				btn = this.$n_('btn');
 
 			//for not removing hover effect when moving mouse on menupopup
 			jq(this.$n_()).addClass(this.$s('visited'));

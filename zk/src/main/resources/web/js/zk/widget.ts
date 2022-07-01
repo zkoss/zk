@@ -3264,7 +3264,7 @@ function () {
 	 * @return DOMElement
 	 * @see #$n()
 	 */
-	public $n(subId: string | undefined): HTMLElement | null | undefined
+	public $n<T extends HTMLElement = HTMLElement>(subId: string | undefined): T | null | undefined
 	public $n(subId?: string): zk.DOMFieldValue {
 		if (subId) {
 			let n = this._subnodes[subId];
@@ -3296,7 +3296,7 @@ function () {
 	 * @see #$n_()
 	 * @since 10.0
 	 */
-	public $n_(subId: string | undefined): HTMLElement
+	public $n_<T extends HTMLElement = HTMLElement>(subId: string | undefined): T
 	public $n_(subId?: string): HTMLElement {
 		let n = this.$n(subId);
 		if (n == null) {

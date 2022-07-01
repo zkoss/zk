@@ -477,7 +477,7 @@ String scroll; //DOM Element's ID</code></pre>
 
 	/** [left, right] of this node. */
 	private _currentDelta(): zk.Offset {
-		var $node = jq(this.node as HTMLElement);
+		var $node = jq(this.node!);
 		return [zk.parseInt($node.css('left')), zk.parseInt($node.css('top'))];
 	}
 

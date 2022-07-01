@@ -1152,11 +1152,6 @@ export abstract class MeshWidget extends zul.Widget {
 			this._afterCalcSize();
 		}
 	}
-	
-	// TODO: should move this signature to super
-	public override $n<T extends HTMLElement>(subId?: string): T | null | undefined {
-		return super.$n(subId) as T | null | undefined;
-	}
 
 	private _bindDomNode(): void {
 		this.ehead = this.$n('head');
@@ -1174,10 +1169,10 @@ export abstract class MeshWidget extends zul.Widget {
 
 		if (this.ehead) {
 			this.eheadrows = this.$n('headrows');
-			this.ehdfaker = this.head!.$n('hdfaker') as HTMLTableColElement | null | undefined;
-			this.ebdfaker = this.head!.$n('bdfaker') as HTMLTableColElement | null | undefined;
+			this.ehdfaker = this.head!.$n('hdfaker');
+			this.ebdfaker = this.head!.$n('bdfaker');
 			if (this.efoot)
-				this.eftfaker = this.head!.$n('ftfaker') as HTMLTableColElement | null | undefined;
+				this.eftfaker = this.head!.$n('ftfaker');
 		}
 		if (this.efoot)
 			this.efootrows = this.$n('footrows');

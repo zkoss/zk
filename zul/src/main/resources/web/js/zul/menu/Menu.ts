@@ -201,7 +201,7 @@ export class Menu extends zul.LabelImageWidget implements zul.LabelImageWidgetWi
 
 	// since ZK 6.5.0 internal use only.
 	public getAnchor_(): HTMLAnchorElement | null | undefined {
-		return this.$n('a') as HTMLAnchorElement | null | undefined;
+		return this.$n('a');
 	}
 
 	protected override domContent_(): string {

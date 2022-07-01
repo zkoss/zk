@@ -715,7 +715,7 @@ export class Paging extends zul.Widget {
 	 * @param int pagenumber the page number
 	 */
 	public static go(anc: Paging | HTMLAnchorElement, pgno: number, inp?: HTMLInputElement): void {
-		var wgt = zk.Widget.isInstance(anc) ? anc as Paging : zk.Widget.$<Paging>(anc);
+		var wgt = zk.Widget.isInstance(anc) ? anc : zk.Widget.$<Paging>(anc);
 		if (wgt && wgt.getActivePage() != pgno) {
 			if (inp) {
 				var uuid = wgt.uuid,

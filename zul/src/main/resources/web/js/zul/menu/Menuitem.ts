@@ -222,7 +222,7 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 		this._target = target;
 
 		if (o !== target || (opts && opts.force)) {
-			var anc = this.$n('a') as HTMLAnchorElement | null | undefined;
+			var anc = this.$n<HTMLAnchorElement>('a');
 			if (anc) {
 				if (this.isTopmost())
 					anc = anc.parentNode as HTMLAnchorElement;
@@ -381,7 +381,7 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 		super.bind_(desktop, skipper, after);
 
 		if (!this.isDisabled()) {
-			var anc = this.$n_('a') as HTMLAnchorElement;
+			var anc = this.$n_('a');
 			if (this.isTopmost()) {
 				this.domListen_(anc, 'onFocus', 'doFocus_')
 					.domListen_(anc, 'onBlur', 'doBlur_');
@@ -395,7 +395,7 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		if (!this.isDisabled()) {
 			if (this._upload) _cleanUpld(this);
-			var anc = this.$n_('a') as HTMLAnchorElement;
+			var anc = this.$n_('a');
 			if (this.isTopmost()) {
 				this.domUnlisten_(anc, 'onFocus', 'doFocus_')
 					.domUnlisten_(anc, 'onBlur', 'doBlur_');
@@ -420,7 +420,7 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 			}
 
 			var topmost = this.isTopmost(),
-				anc = this.$n_('a') as HTMLAnchorElement;
+				anc = this.$n_<HTMLAnchorElement>('a');
 
 			if (anc.href.startsWith('javascript:')) {
 				if (this.isAutocheck()) {
@@ -505,7 +505,7 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 	}
 
 	public _getUploadRef(): HTMLAnchorElement | null | undefined {
-		return this.$n('a') as HTMLAnchorElement | null | undefined;
+		return this.$n('a');
 	}
 
 	public _doMouseEnter(evt: MouseEvent): void {
@@ -543,7 +543,7 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 
 	// internal use only.
 	protected getAnchor_(): HTMLAnchorElement | null | undefined {
-		return this.$n('a') as HTMLAnchorElement | null | undefined;
+		return this.$n('a');
 	}
 
 	public override focus_(timeout?: number): boolean {
