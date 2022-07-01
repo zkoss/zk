@@ -114,8 +114,11 @@ export class LayoutRegion extends zul.Widget {
 			if (!border || '0' == border)
 				this._border = 'none';
 
-			if (this.desktop)
-				((this.$n('real') || {}) as { _lastSize })._lastSize = null;
+			if (this.desktop) {
+				const n = this.$n('real');
+				if (n)
+					n._lastSize = null;
+			}
 
 			this.updateDomClass_();
 		}
@@ -595,7 +598,7 @@ export class LayoutRegion extends zul.Widget {
 
 	public override setWidth(width: string): this {
 		this._width = width;
-		var real: null | undefined | HTMLElement & Partial<{ _lastSize }> = this.$n('real');
+		var real = this.$n('real');
 		if (real) {
 			real.style.width = width ? width : '';
 			real._lastSize = null;
@@ -606,7 +609,7 @@ export class LayoutRegion extends zul.Widget {
 
 	public override setHeight(height: string): this {
 		this._height = height;
-		var real: null | undefined | HTMLElement & Partial<{ _lastSize }> = this.$n('real');
+		var real = this.$n('real');
 		if (real) {
 			real.style.height = height ? height : '';
 			real._lastSize = null;
@@ -709,7 +712,9 @@ export class LayoutRegion extends zul.Widget {
 			_setFirstChildFlex(this, true, true);
 
 		// reset
-		((this.$n('real') || {}) as { _lastSize })._lastSize = null;
+		const n = this.$n('real');
+		if (n)
+			n._lastSize = null;
 		if (this.parent && this.desktop) {
 			// B65-ZK-1076 for tabpanel, should fix in isRealVisible() when zk 7
 			if (this.parent.isRealVisible({dom: true}))
@@ -730,7 +735,9 @@ export class LayoutRegion extends zul.Widget {
 		}
 
 		// reset
-		((this.$n('real') || {}) as { _lastSize })._lastSize = null;
+		const n = this.$n('real');
+		if (n)
+			n._lastSize = null;
 		if (this.parent && this.desktop && !this.childReplacing_) {
 			// B65-ZK-1076 for tabpanel, should fix in isRealVisible() when zk 7
 			if (this.parent.isRealVisible({dom: true}))
@@ -1274,7 +1281,7 @@ export class LayoutRegion extends zul.Widget {
 	}
 
 	// a callback function after the collapsed region slides up
-	public static afterSlideUp(this: LayoutRegion, n: HTMLElement & {_lastSize?}): void {
+	public static afterSlideUp(this: LayoutRegion, n: HTMLElement): void {
 		var s = n.style;
 		s.left = this._original![0];
 		s.top = this._original![1];
@@ -1299,7 +1306,7 @@ export class LayoutRegion extends zul.Widget {
 				pos = wgt.getPosition(),
 				maxs = wgt.getMaxsize(),
 				mins = wgt.getMinsize(),
-				ol = wgt.parent as zul.layout.Borderlayout,
+				ol = wgt.parent!,
 				real = wgt.$n_('real'),
 				mars = zul.layout.LayoutRegion._aryToObject(wgt._margins),
 				pbw = zk(real).padBorderWidth(),
@@ -1367,7 +1374,7 @@ export class LayoutRegion extends zul.Widget {
 
 		dg._rootoffs = dg._point = null;
 
-		(wgt.parent as zul.layout.Borderlayout).resize();
+		wgt.parent!.resize();
 		wgt.fire('onSize', zk.copy({
 			width: wgt.$n_('real').style.width,
 			height: wgt.$n_('real').style.height

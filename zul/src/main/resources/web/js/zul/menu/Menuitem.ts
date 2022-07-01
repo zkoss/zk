@@ -565,11 +565,11 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 			// additional point here.
 			// 3. Shouldn't this function take a parameter of type Menuitem?
 			//    However, `parentMenupopup.parent` seems to never be a Menuitem.
-			var parentMenupopup = wgt.parent as unknown as zul.menu.Menupopup;
+			var parentMenupopup = wgt.parent;
 			if (parentMenupopup)
 				parentMenupopup.addActive_(wgt);
-			if (parentMenupopup.parent instanceof zul.menu.Menu)
-				this._addActive(parentMenupopup.parent as unknown as zul.menu.Menuitem);
+			if (parentMenupopup!.parent instanceof zul.menu.Menu)
+				this._addActive(parentMenupopup!.parent as unknown as zul.menu.Menuitem);
 		}
 	}
 

@@ -332,7 +332,7 @@ export class Borderlayout extends zul.Widget {
 		}
 	}
 
-	private _ignoreResize(el: HTMLElement & { _lastSize?: {width; height} }, w: number, h: number): boolean {
+	private _ignoreResize(el: HTMLElement, w: number, h: number): boolean {
 		if (el._lastSize && el._lastSize.width == w && el._lastSize.height == h) {
 			return true;
 		}

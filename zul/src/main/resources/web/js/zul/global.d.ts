@@ -24,9 +24,13 @@ export as namespace zul;
 
 declare global {
 	interface HTMLElement {
-		_lastsz?: null | {
-			height: number;
+		_lastsz?: null | { // zul/mesh
 			width: number;
+			height: number;
+		};
+		_lastSize?: null | { // zul/layout
+			width: number;
+			height: number;
 		};
 	}
     const msgzul: Record<
