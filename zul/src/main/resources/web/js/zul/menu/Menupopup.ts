@@ -531,7 +531,7 @@ export class Menupopup extends zul.wgt.Popup {
 
 	// internal use only.
 	protected getAnchor_(): HTMLAnchorElement | null | undefined {
-		return this.$n('a') as HTMLAnchorElement | null | undefined;
+		return this.$n('a');
 	}
 
 	public override focus_(timeout?: number): boolean {

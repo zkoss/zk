@@ -22,7 +22,7 @@ function _syncFrozen(wgt: zul.sel.Listbox): void {
 }
 function _fixForEmpty(wgt: zul.sel.Listbox): void {
 	if (wgt.desktop) {
-		var empty = wgt.$n_('empty') as HTMLTableCellElement,
+		var empty = wgt.$n_<HTMLTableCellElement>('empty'),
 			colspan = 0;
 		if (wgt._nrows) {
 			empty.style.display = 'none';

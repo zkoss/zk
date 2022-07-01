@@ -231,7 +231,7 @@ export class ItemWidget extends zul.Widget<HTMLTableRowElement> {
 		var mesh = this.getMeshWidget()!;
 		this._doFocusIn();
 		mesh._syncFocus(this);
-		mesh.focusA_(mesh.$n<HTMLAnchorElement>('a')!, timeout);
+		mesh.focusA_(mesh.$n('a')!, timeout);
 		return true;
 	}
 
