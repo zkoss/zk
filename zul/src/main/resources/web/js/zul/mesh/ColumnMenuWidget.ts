@@ -16,6 +16,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * A skeletal implementation for a column menu widget.
  * @since 6.5.0
  */
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+@zk.WrapClass('zul.mesh.ColumnMenuWidget')
 export abstract class ColumnMenuWidget extends zul.mesh.HeadWidget {
 	public override _menupopup = 'none';
 	private _columnshide = true;
@@ -246,12 +249,12 @@ export abstract class ColumnMenuWidget extends zul.mesh.HeadWidget {
 		return cls + super.domClass_(no);
 	}
 }
-zul.mesh.ColumnMenuWidget = zk.regClass(ColumnMenuWidget);
 
 /**
  * The Columns' Menu popup
  * @since 6.5.0
  */
+@zk.WrapClass('zul.mesh.ColumnMenupopup')
 export class ColumnMenupopup extends zul.menu.Menupopup {
 	private _columns?: zul.mesh.ColumnMenuWidget;
 	private _asc?: zul.menu.Menuitem;
@@ -366,4 +369,3 @@ export class ColumnMenupopup extends zul.menu.Menupopup {
 		}
 	}
 }
-zul.mesh.ColumnMenupopup = zk.regClass(ColumnMenupopup);

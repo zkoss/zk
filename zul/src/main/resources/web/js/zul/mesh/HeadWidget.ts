@@ -38,6 +38,7 @@ function _syncFrozen(wgt: HeadWidget): void {
 	}
 }
 
+@zk.WrapClass('zul.mesh.HeadWidget')
 export class HeadWidget extends zul.Widget {
 	// NOTE: Parent could be null because it is checked in `afterChildrenFlex_`.
 	public override parent!: zul.mesh.MeshWidget | null;
@@ -424,4 +425,3 @@ export class HeadWidget extends zul.Widget {
 		out.push('</tr>');
 	}
 }
-zul.mesh.HeadWidget = zk.regClass(HeadWidget);
