@@ -725,6 +725,9 @@ export function WrapClass(pkg: string) {
 // zk scope
 @WrapClass('zk.Widget')
 export class Widget extends ZKObject {
+	declare public _loaded?: boolean; // zul.mesh.MeshWidget
+	declare public _index?: number; // zul.mesh.MeshWidget
+	declare public _navWidth?: number; // zul.mesh.Paging
 	declare public _uplder?: zul.Upload | null;
 	declare public _autodisable_self?: boolean;
 	declare public _uploading?: boolean;
@@ -751,8 +754,8 @@ export class Widget extends ZKObject {
 	declare public _cssFlexApplied;
 	declare public _beforeSizeHasScroll;
 	declare public doAfterProcessRerenderArgs;
-	declare public _vflex: StringFieldValue;
-	declare public _hflex: StringFieldValue;
+	declare public _vflex: StringFieldValue | boolean;
+	declare public _hflex: StringFieldValue | boolean;
 	declare public _flexFixed;
 	declare public _nvflex?: number;
 	declare public _nhflex?: number;
@@ -775,7 +778,7 @@ export class Widget extends ZKObject {
 	declare private _asaps: Record<string, unknown>;
 	declare private _lsns: Record<string, unknown & {priority: number}[]>;
 	declare private _bklsns: Record<string, unknown>;
-	declare private _subnodes: Record<string, HTMLElement | string | null | undefined>;
+	declare protected _subnodes: Record<string, HTMLElement | string | null | undefined>;
 	declare private _subzcls: Record<string, string>;
 	declare private _sclass: StringFieldValue;
 	declare protected _zclass: StringFieldValue;
@@ -793,7 +796,7 @@ export class Widget extends ZKObject {
 	declare public static _repeatIgnoreEvts;
 	declare public static molds;
 
-	public _visible = true;
+	public _visible?: boolean = true;
 	protected _mold = 'default';
 	protected _style: StringFieldValue;
 	private _renderdefer = -1;
@@ -992,7 +995,7 @@ new zul.wnd.Window({
 	 * @see #setSclass
 	 * @see #setZclass
 	 */
-	public setStyle(style: StringFieldValue): void {
+	public setStyle(style: string): void {
 		if (this._style != style) {
 			this._style = style;
 			this.updateDomStyle_();
@@ -1019,7 +1022,7 @@ new zul.wnd.Window({
 	 * @see #setZclass
 	 * @see #setStyle
 	 */
-	public setSclass(sclass: StringFieldValue): void {
+	public setSclass(sclass: string): void {
 		if (this._sclass != sclass) {
 			this._sclass = sclass;
 			this.updateDomClass_();
@@ -1048,7 +1051,7 @@ new zul.wnd.Window({
 	 * @see #setSclass
 	 * @see #setStyle
 	 */
-	public setZclass(zclass: StringFieldValue): void {
+	public setZclass(zclass: string): void {
 		if (this._zclass != zclass) {
 			this._zclass = zclass;
 			this._subzcls = {}; // reset
@@ -1112,7 +1115,7 @@ new zul.wnd.Window({
 	 * @param String left the left. Remember to specify 'px', 'pt' or '%'.
 	 * An empty or null value means "auto"
 	 */
-	public setLeft(left: StringFieldValue): void {
+	public setLeft(left: string): void {
 		if (this._left != left) {
 			this._left = left;
 			var n = this.$n();
@@ -1134,7 +1137,7 @@ new zul.wnd.Window({
 	 * @param String top the top. Remember to specify 'px', 'pt' or '%'.
 	 * An empty or null value means "auto"
 	 */
-	public setTop(top: StringFieldValue): void {
+	public setTop(top: string): void {
 		if (this._top != top) {
 			this._top = top;
 			var n = this.$n();
@@ -1153,7 +1156,7 @@ new zul.wnd.Window({
 	 * <p>Default implementation of setTooltiptext: update the title attribute of {@link #$n}
 	 * @param String title the tooltip text
 	 */
-	public setTooltiptext(tooltiptext: StringFieldValue): void {
+	public setTooltiptext(tooltiptext: string): void {
 		if (this._tooltiptext != tooltiptext) {
 			this._tooltiptext = tooltiptext;
 			var n = this.$n();
@@ -1222,7 +1225,7 @@ new zul.wnd.Window({
 	 * @see #getVflex
 	 * @param String flex the vertical flex hint.
 	 */
-	public setVflex(vflex: StringFieldValue): void {
+	public setVflex(vflex: StringFieldValue | boolean): void {
 		if (this._vflex != vflex) {
 			this._vflex = vflex;
 			this.setVflex_(vflex);
@@ -1239,10 +1242,10 @@ new zul.wnd.Window({
 	 * @see #setVflex
 	 * @return String vertical flex hint of this widget.
 	 */
-	public getVflex(): StringFieldValue {
+	public getVflex(): StringFieldValue | boolean {
 		return this._vflex;
 	}
-	public isVflex(): StringFieldValue {
+	public isVflex(): StringFieldValue | boolean {
 		return this.getVflex();
 	}
 
@@ -1270,7 +1273,7 @@ new zul.wnd.Window({
 	 * @see #setVflex
 	 * @see #getHflex
 	 */
-	public setHflex(hflex: StringFieldValue): void {
+	public setHflex(hflex: StringFieldValue | boolean): void {
 		if (this._hflex != hflex) {
 			this._hflex = hflex;
 			this.setHflex_(hflex);
@@ -1287,10 +1290,10 @@ new zul.wnd.Window({
 	 * @return String horizontal flex hint of this widget.
 	 * @see #setHflex
 	 */
-	public getHflex(): StringFieldValue {
+	public getHflex(): StringFieldValue | boolean {
 		return this._hflex;
 	}
-	public isHflex(): StringFieldValue {
+	public isHflex(): StringFieldValue | boolean {
 		return this.getHflex();
 	}
 	/** Returns the number of milliseconds before rendering this component
@@ -1427,7 +1430,7 @@ new zul.wnd.Window({
 		}
 	}
 
-	protected setHflex_(v: StringFieldValue | boolean): void {
+	public setHflex_(v: StringFieldValue | boolean): void {
 		this._nhflex = (true === v || 'true' == v) ? 1 : v == 'min' ? -65500 : zk.parseInt(v);
 		if (this._nhflex < 0 && v != 'min')
 			this._nhflex = 0;
@@ -1729,11 +1732,11 @@ wgt.$f().main.setTitle("foo");
 	 * @return zk.Widget the widget or null if no such index
 	 * @see #getChildIndex
 	 */
-	public getChildAt(j: number): Widget | undefined {
+	public getChildAt<T extends Widget>(j: number): T | undefined {
 		if (j >= 0 && j < this.nChildren)
 			for (var w = this.firstChild; w; w = w.nextSibling)
 				if (--j < 0)
-					return w;
+					return w as T;
 	}
 
 	/** Returns the child index of this widget.
@@ -2245,7 +2248,7 @@ wgt.$f().main.setTitle("foo");
 	 * </ul>
 	 * @param boolean visible whether to be visible
 	 */
-	public setVisible(visible: boolean): void {
+	public setVisible(visible: boolean | undefined): void {
 		if (this._visible != visible) {
 			this._visible = visible;
 
@@ -2359,7 +2362,7 @@ wgt.$f().main.setTitle("foo");
 	 * <li>visibility - Modify n.style.visibility</li>
 	 * </ul>
 	 */
-	public setDomVisible_(n: HTMLElement, visible: boolean, opts?: DomVisibleOptions): void {
+	public setDomVisible_(n: HTMLElement, visible: boolean | undefined, opts?: DomVisibleOptions): void {
 		if (!opts || opts.display) {
 			var act;
 			if (act = this.actions_[visible ? 'show' : 'hide'])
@@ -2445,7 +2448,7 @@ wgt.$f().main.setTitle("foo");
 	 * @return int the new value of z-index of the topmost floating window, -1 if this widget and none of its ancestors is floating or not bound to the DOM tree.
 	 * @see #setFloating_
 	 */
-	public setTopmost(): number {
+	public setTopmost(): number | void {
 		if (!this.desktop || this._userZIndex) return -1;
 
 		for (var wgt: Widget | null = this; wgt; wgt = wgt.parent)
@@ -2996,7 +2999,7 @@ function () {
 	 * @see #replaceWidget
 	 * @see _global_.jq#replaceWith
 	 */
-	public replaceHTML(n: HTMLElement | string, desktop: Desktop | null, skipper?: Skipper | null, _trim_?: boolean, _callback_?: Callable[]): void {
+	public replaceHTML(n: HTMLElement | string, desktop: Desktop | null, skipper?: Skipper | null, _trim_?: boolean, _callback_?: CallableFunction[]): void {
 		if (!desktop) {
 			desktop = this.desktop;
 			if (!zk.Desktop._ndt) zk.stateless();
@@ -3168,7 +3171,7 @@ function () {
 		if (skipInfo) {
 			skipper?.restore(child, skipInfo);
 		}
-		child.bind(desktop as Desktop, skipper);
+		child.bind(desktop, skipper);
 	}
 
 	/** Inserts the HTML content generated by the specified child widget before the reference widget (the before argument).
@@ -3394,7 +3397,7 @@ function () {
 	 * @see #getZclass()
 	 * @since 7.0.0
 	 */
-	public $s(subclass: string): string {
+	public $s(subclass?: string): string {
 		if (subclass) {
 			var subcls = this._subzcls[subclass];
 			if (!subcls) {
@@ -3694,7 +3697,7 @@ unbind_: function (skipper, after) {
 		else _binds[uuid] = this;
 	}
 
-	public setFlexSize_(sz: {width?: string | number; height?: string | number}, isFlexMin?: boolean): void {
+	public setFlexSize_(sz: zk.FlexSize, isFlexMin?: boolean): void {
 		if (this._cssflex && this.parent && this.parent.getFlexContainer_() != null && !isFlexMin)
 			return;
 		var n = this.$n() as HTMLElement,
@@ -3737,7 +3740,7 @@ unbind_: function (skipper, after) {
 		return true; //return true to continue children flex fixing
 	}
 
-	public afterChildrenFlex_(kid: Widget): void {
+	public afterChildrenFlex_(kid?: Widget): void {
 		//to be overridden
 	}
 
@@ -3757,12 +3760,12 @@ unbind_: function (skipper, after) {
 		return false;
 	}
 
-	public beforeMinFlex_(attr: string): NumberFieldValue { //'w' for width or 'h' for height
+	public beforeMinFlex_(attr: zk.FlexOrient): NumberFieldValue { //'w' for width or 'h' for height
 		//to be overridden, before calculate my minimum flex
 		return undefined;
 	}
 
-	public beforeParentMinFlex_(attr: string): void { //'w' for width or 'h' for height
+	public beforeParentMinFlex_(attr: zk.FlexOrient): void { //'w' for width or 'h' for height
 		//to be overridden, before my minimum flex parent ask my natural(not minimized) width/height
 	}
 
@@ -3865,7 +3868,7 @@ unbind_: function (skipper, after) {
 		return w;
 	}
 
-	protected fixFlex_(): void {
+	public fixFlex_(): void {
 		zFlex.fixFlex(this);
 	}
 
@@ -5161,7 +5164,7 @@ _doFooSelect: function (evt) {
 	 * @return boolean
 	 * @since 5.0.3
 	 */
-	protected isWatchable_(name: string, p: Widget, cache?: Record<string, unknown>): boolean {
+	public isWatchable_(name: string, p: Widget, cache?: Record<string, unknown>): boolean | null | undefined {
 		//if onShow, we don't check visibility since window uses it for
 		//non-embedded window that becomes invisible because of its parent
 		var strict = name != 'onShow', wgt;

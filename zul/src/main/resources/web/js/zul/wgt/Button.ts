@@ -157,7 +157,7 @@ export class Button extends zul.LabelImageWidget {
 	/** Sets whether it is disabled.
 	 * @param boolean disabled
 	 */
-	public setDisabled(v: boolean, opts?: Record<string, boolean>): this {
+	public setDisabled(v: boolean | undefined, opts?: Record<string, boolean>): this {
 		const o = this._disabled;
 
 		// B60-ZK-1176
@@ -174,7 +174,7 @@ export class Button extends zul.LabelImageWidget {
 				this._adbs = false;
 			} else if (opts && opts.adbs === false)
 				// ignore re-enable by autodisable mechanism
-				v = this._disabled as boolean;
+				v = this._disabled;
 		}
 		this._disabled = v;
 
@@ -415,13 +415,13 @@ export class Button extends zul.LabelImageWidget {
 		//will fired)
 	}
 
-	public override setFlexSize_(sz: {height?: string; width?: string}): void { //Bug #2870652
+	public override setFlexSize_(sz: zk.FlexSize): void { //Bug #2870652
 		var n = this.$n()!;
 		if (sz.height !== undefined) {
 			if (sz.height == 'auto')
 				n.style.height = '';
 			else if (sz.height != '')
-				n.style.height = jq.px0(parseInt(sz.height));
+				n.style.height = jq.px0(parseInt(sz.height as string));
 			else
 				n.style.height = this._height ? this._height : '';
 		}
@@ -429,7 +429,7 @@ export class Button extends zul.LabelImageWidget {
 			if (sz.width == 'auto')
 				n.style.width = '';
 			else if (sz.width != '')
-				n.style.width = jq.px0(parseInt(sz.width));
+				n.style.width = jq.px0(parseInt(sz.width as string));
 			else
 				n.style.width = this._width ? this._width : '';
 		}

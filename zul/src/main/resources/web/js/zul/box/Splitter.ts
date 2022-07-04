@@ -96,7 +96,7 @@ function _setOpen(wgt: Splitter, open: boolean, opts?: {sendOnOpen?: boolean}): 
  */
 @zk.WrapClass('zul.box.Splitter')
 export class Splitter extends zul.Widget {
-	declare public parent: zul.box.Box | null;
+	public override parent!: zul.box.Box | null;
 	private _collapse = 'none';
 	public _open = true;
 	private _drag0: zk.Draggable | null = null;
@@ -181,7 +181,7 @@ export class Splitter extends zul.Widget {
 		return sc;
 	}
 
-	public override setZclass(zclass: string | null): void {
+	public override setZclass(zclass: string): void {
 		super.setZclass(zclass);
 		if (this.desktop)
 			this._fixDomClass(true);

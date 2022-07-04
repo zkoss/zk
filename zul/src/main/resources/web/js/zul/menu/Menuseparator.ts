@@ -1,4 +1,4 @@
-/* Menuseparator.js
+/* Menuseparator.ts
 
 	Purpose:
 
@@ -17,25 +17,28 @@ it will be useful, but WITHOUT ANY WARRANTY.
  *
  *<p>Default {@link #getZclass}: z-menuseparator.
  */
-zul.menu.Menuseparator = zk.$extends(zul.Widget, {
+export class Menuseparator extends zul.Widget {
 	/** Returns whether parent is a {@link Menupopup}
 	 * @return boolean
 	 */
-	isPopup: function () {
-		return this.parent && this.parent.$instanceof(zul.menu.Menupopup);
-	},
+	public isPopup(): boolean | null {
+		return this.parent && this.parent instanceof zul.menu.Menupopup;
+	}
+
 	/** Returns the {@link Menubar} that contains this menuseparator, or null if not available.
 	 * @return zul.menu.Menubar
 	 */
-	getMenubar: function () {
+	public getMenubar(): zul.menu.Menubar | null {
 		for (var p = this.parent; p; p = p.parent)
-			if (p.$instanceof(zul.menu.Menubar))
+			if (p instanceof zul.menu.Menubar)
 				return p;
 		return null;
-	},
-	doMouseOver_: function () {
+	}
+
+	protected override doMouseOver_(evt: zk.Event): void {
 		if (zul.menu._nOpen)
 			zWatch.fire('onFloatUp', this); //notify all
-		this.$supers('doMouseOver_', arguments);
+		super.doMouseOver_(evt);
 	}
-});
+}
+zul.menu.Menuseparator = zk.regClass(Menuseparator);

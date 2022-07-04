@@ -490,7 +490,7 @@ export class ComboWidget<ValueType> extends zul.inp.InputWidget<ValueType> {
 		pp.style.display = 'none';
 	}
 
-	public override zsync(opts?: Record<string, unknown>): void { // FIXME: parameter is not used in super
+	public override zsync(opts?: Record<string, unknown>): void {
 		super.zsync(opts);
 		if (!zk.css3 && this.isOpen() && this._shadow)
 			this._shadow.sync();

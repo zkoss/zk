@@ -13,7 +13,8 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 
-export type Ref = zk.Widget | string
+// zul.menu.Menupopup.prototype.open passes an HTMLAnchorElement
+export type Ref = zk.Widget | HTMLElement | string;
 export interface PopupOptions extends zk.PositionOptions {
 	focusFirst?: boolean;
 	sendOnOpen?: boolean;
@@ -46,12 +47,12 @@ export interface PositionInfo {
 @zk.WrapClass('zul.wgt.Popup')
 export class Popup extends zul.Widget {
 	public override _visible = false;
-	protected _fakeParent?: zk.Widget | null;
+	public _fakeParent?: zk.Widget | null;
 	public mask?: zk.eff.Mask | null;
-	private _openInfo?: PositionArgs | null;
+	protected _openInfo?: PositionArgs | null;
 	private _adjustLeft?: number | null;
 	private _adjustTop?: number | null;
-	private _shallToggle?: boolean | null;
+	protected _shallToggle?: boolean | null;
 	protected _keepVisible?: boolean | null;
 	public _stackup?: HTMLIFrameElement | null;
 
@@ -421,7 +422,7 @@ export class Popup extends zul.Widget {
 		this._doFloatUp(ctl);
 	}
 
-	private _doFloatUp(ctl: zk.ZWatchController): void {
+	protected _doFloatUp(ctl: zk.ZWatchController): void {
 		if (!this.isVisible())
 			return;
 		var wgt: zk.Widget | null = ctl.origin;

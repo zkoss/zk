@@ -848,13 +848,13 @@ opts = zk.$default(opts, {timeout: 100, max: true});
  * @return Map the merged options
  * @see #copy
  */
-_zk.$default = function<T> (opts: T, defaults: T): T {
+_zk.$default = function<T, U> (opts: T, defaults: U): T & U {
 	// eslint-disable-next-line @typescript-eslint/consistent-type-assertions
 	opts = opts || ({} as T);
 	for (var p in defaults)
-		if (opts[p] === undefined)
-			opts[p] = defaults[p];
-	return opts;
+		if (opts[p as string] === undefined)
+			opts[p as string] = defaults[p];
+	return opts as T & U;
 };
 
 /** Overrides the properties of a map.
@@ -1055,7 +1055,7 @@ _zk.$void = function (): false {return false;};
  * @param int b represent the base of the number in the string. 10 is assumed if omitted.
  * @return int the integer
  */
-_zk.parseInt = function (v: string | number | null | undefined | false, b?: number): number {
+_zk.parseInt = function (v: string | number | boolean | null | undefined, b?: number): number {
 	return v && !isNaN(v = parseInt(v as string, b || 10)) ? v : 0;
 };
 /** Parses a string to a floating number.
@@ -1721,7 +1721,12 @@ function getProxy(o, f) { //used by zk.Object
  * The root of the class hierarchy.
  * @see zk.Class
  */
-export class ZKObject {
+// Originally, making ZKObject abstract is to allow zk.regClass to accept abstract
+// classes as parameter, yet it also makes sense that ZKObject is defined abstract
+// independent of the use of zk.regClass. There are also "workarounds" for zk.regClass
+// to accept abstract classes in the face of a concrete ZKObject, e.g., omit
+// `new` property from `typeof ZKObject` then intersect with `{abstract new() => T}`.
+export abstract class ZKObject {
 	// FIXME: $copyf: Class;
 	// FIXME: $copied: boolean;
 	declare public _$ais: Callable[] | null;

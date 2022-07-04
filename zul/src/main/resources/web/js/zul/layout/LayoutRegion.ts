@@ -12,7 +12,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-function _setFirstChildFlex(wgt: LayoutRegion & Partial<{ _fcvflex: string | null; _fchflex: string | null }>, flex: boolean, ignoreMin?: boolean): void {
+function _setFirstChildFlex(wgt: LayoutRegion, flex: boolean, ignoreMin?: boolean): void {
 	var cwgt = wgt.getFirstChild();
 	if (cwgt) {
 		if (flex) {
@@ -69,6 +69,8 @@ export class LayoutRegion extends zul.Widget {
 	private _original?: [string, string];
 	private _fixBarHeight?: boolean;
 	private _title: string | null = null;
+	public _fcvflex?: string | boolean | null;
+	public _fchflex?: string | boolean | null;
 
 	/**
 	 * Sets whether to grow and shrink vertical/horizontal to fit their given

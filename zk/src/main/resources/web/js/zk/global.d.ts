@@ -64,6 +64,9 @@ interface JQuery {
 	before(widget: zk.Widget, dt?: zk.Desktop): this;
 	prepend(widget: zk.Widget, dt?: zk.Desktop): this;
 	absolutize(): this;
+
+	// Used extensively in zul.mesh.Paging
+	attr(attributeName: 'disabled', value: boolean);
 }
 
 declare namespace JQ {
@@ -92,9 +95,17 @@ interface JQueryStatic {
 	
 	<U, T extends HTMLElement = HTMLElement>(selector: T | U, zk: ZKStatic): JQuery<T>;
 	
+	// This specialization for the "empty string literal" is good, as it will always null.
 	$$(id: '', subId?: string): null;
-	$$(id: string, subId?: string): NodeList;
+	// NodeListOf<HTMLElement> is not the same as NodeList. NodeList will give incorrect "this" type
+	// for the <callback> of `jq(<selector>).each(<callback>)` in `zul.mesh.Paging._callWgtDoAfterGo`.
+	// Furthermore, `document.getElementsByName` is defined to return `NodeListOf<HTMLElement>`.
+	// Also, we shouldn't rule out the possibility of returning null in this overload, for an
+	// empty string of type "string" will not match an empty string of type "empty string literal".
+	// See this demo: https://bit.ly/3n7R7p2
+	$$(id: string, subId?: string): NodeListOf<HTMLElement> | null;
 	$$<T>(id: T, subId?: string): T;
+
 	alert(msg: string, opts?: Partial<zk.AlertOptions>): void;
 	clearSelection(): boolean;
 	confirm(msg: string): boolean;
@@ -181,6 +192,7 @@ declare function $eval(x: string): unknown;
 declare var zkreg: typeof import('./widget').zkreg;
 declare var zDebug: import('./zk').ZKObject;
 declare var zAu: typeof import('./au').default;
+declare var zFlex: typeof import('./flex').default;
 declare var msgzk: Record<
 	| 'NOT_FOUND'
 	| 'UNSUPPORTED'
@@ -229,6 +241,7 @@ declare namespace zk {
 	type DomVisibleOptions = import('./widget').DomVisibleOptions;
 	type EventMetaData = import('./dom').EventMetaData;
 	type FlexOrient = import('./flex').FlexOrient;
+	type FlexSize = import('./flex').FlexSize;
 	type Draggable = import('./drag').Draggable;
 	type DraggableOptions = import('./drag').DraggableOptions;
 	type Long = import('./math').Long;
@@ -304,7 +317,14 @@ declare namespace zk {
 	}
 }
 
-declare var zkex: Record<string, unknown>;
+declare namespace zkex {
+	namespace inp {
+		class ContentHandler extends zul.menu.ContentHandler { // zul.menu.Menu
+			// TODO: maybe the type of wgt can be narrowed to zul.menu.Menu
+			public constructor(wgt: zk.Widget, content: string)
+		}
+	}
+}
 declare var zkmax: Record<string, unknown>;
 declare var zWs: zk.Websocket;
 declare var zkbind: zk.ZKBind;

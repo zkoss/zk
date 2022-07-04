@@ -20,11 +20,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 @zk.WrapClass('zul.LabelImageWidget')
 export abstract class LabelImageWidget extends zul.Widget {
 	private _label = '';
-	private _iconSclass?: string;
-	private _image?: string;
-	private _hoverImage?: string;
-	private _eimg?: HTMLImageElement | null;
-	private _preloadImage?: boolean;
+	protected _iconSclass?: string;
+	protected _image?: string;
+	protected _hoverImage?: string;
+	protected _eimg?: HTMLImageElement | null;
+	protected _preloadImage?: boolean;
 
 	public _autodisable?: string;
 	// public abstract setAutodisable(autodisable: string): this
@@ -32,7 +32,7 @@ export abstract class LabelImageWidget extends zul.Widget {
 
 	protected _adbs?: boolean;
 	public _disabled?: boolean;
-	public abstract setDisabled(disabled: boolean, opts?: Record<string, boolean>): this;
+	public abstract setDisabled(disabled: boolean | undefined, opts?: Record<string, boolean>): this;
 	public abstract isDisabled(): boolean | undefined;
 
 	/** Sets the label.
@@ -238,7 +238,7 @@ export abstract class LabelImageWidget extends zul.Widget {
 		return this._eimg;
 	}
 
-	protected _updateHoverImage(inHover?: boolean): void {
+	public _updateHoverImage(inHover?: boolean): void {
 		var n = this.getImageNode(),
 			img = inHover ? this._hoverImage : this._image;
 		if (n && this._hoverImage) {

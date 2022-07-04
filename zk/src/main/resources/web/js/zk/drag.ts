@@ -36,7 +36,7 @@ export interface DraggableOptions {
 	delay: number;
 	fireOnMove: boolean;
 	reverteffect(dg: Draggable, offset: Offset): void;
-	revert(dg: Draggable, offset: Offset, evt: Event): boolean;
+	revert: boolean | ((dg: Draggable, offset: Offset, evt: Event) => boolean);
 	endeffect(dg: Draggable, evt?: Event): void;
 	starteffect(dg: Draggable, evt?: Event): void;
 	endghosting(dg: Draggable, node: HTMLElement): void;
@@ -203,6 +203,8 @@ export class Draggable extends zk.Object {
 	declare public orgScrlTop?: number;
 	declare private _clone?: Node | null;
 	declare public _orgcursor?: string; // zk.Widget.prototype.uncloneDrag_
+	declare public _zszofs?: number; // zul.mesh.HeaderWidget
+	declare public _zmin?: number; // zul.mesh.HeaderWidget
 	
 	private static _drags: Draggable[] = [];
 	/** The control object for this draggable.

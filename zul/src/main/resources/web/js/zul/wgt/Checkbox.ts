@@ -33,7 +33,7 @@ function _shallIgnore(evt: zk.Event): boolean | undefined {
 export class Checkbox extends zul.LabelImageWidget {
 	//_tabindex: 0,
 	private _checked = false;
-	public override _disabled = false;
+	public override _disabled?: boolean = false;
 	private _name?: string;
 	private _value?: string;
 	private _indeterminate?: boolean;
@@ -42,14 +42,14 @@ export class Checkbox extends zul.LabelImageWidget {
 	 * <p>Default: false.
 	 * @return boolean
 	 */
-	public isDisabled(): boolean {
+	public isDisabled(): boolean | undefined {
 		return this._disabled;
 	}
 
 	/** Sets whether it is disabled.
 	 * @param boolean disabled
 	 */
-	public setDisabled(v: boolean, opts?: Record<string, boolean>): this {
+	public setDisabled(v: boolean | undefined, opts?: Record<string, boolean>): this {
 		const o = this._disabled;
 		
 		if (opts && opts.adbs)
@@ -71,7 +71,7 @@ export class Checkbox extends zul.LabelImageWidget {
 		if (o !== v || (opts && opts.force)) {
 			var n = this.$n('real') as HTMLInputElement;
 			if (n) {
-				n.disabled = v;
+				n.disabled = v!;
 				jq(this.$n()!).toggleClass(this.$s(this.getMoldPrefix_() + 'disabled'), v);
 				if (!this._isDefaultMold()) {
 					this._setTabIndexForMold();
@@ -423,7 +423,7 @@ export class Checkbox extends zul.LabelImageWidget {
 		return this.$n('cnt');
 	}
 
-	public override shallIgnoreClick_(): boolean {
+	public override shallIgnoreClick_(): boolean | undefined {
 		return this.isDisabled();
 	}
 
