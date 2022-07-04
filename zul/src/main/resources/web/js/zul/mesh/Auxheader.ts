@@ -16,6 +16,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * An auxiliary header.
  * <p>Default {@link #getZclass}: z-auxheader.
  */
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+@zk.WrapClass('zul.mesh.Auxheader')
 export abstract class Auxheader extends zul.mesh.HeaderWidget {
 	private _colspan = 1;
 	private _rowspan = 1;
@@ -84,4 +87,3 @@ export abstract class Auxheader extends zul.mesh.HeaderWidget {
 		return s;
 	}
 }
-zul.mesh.Auxheader = zk.regClass(Auxheader);

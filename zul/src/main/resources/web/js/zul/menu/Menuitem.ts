@@ -34,6 +34,7 @@ function _cleanUpld(wgt: zul.menu.Menuitem): void {
  *
  * <p>Default {@link #getZclass}: z-menuitem.
  */
+@zk.WrapClass('zul.menu.Menuitem')
 export class Menuitem extends zul.LabelImageWidget {
 	// Parent could be null as asserted in _doMouseEnter
 	public override parent!: zul.menu.Menupopup | null;
@@ -579,4 +580,3 @@ export class Menuitem extends zul.LabelImageWidget {
 			this._uplder.sync();
 	}
 }
-zul.menu.Menuitem = zk.regClass(Menuitem);

@@ -91,6 +91,7 @@ function _activateNextMenu(menu: zul.menu.Menu): void {
  *
  * <p>Default {@link #getZclass}: z-menupopup.
  */
+@zk.WrapClass('zul.menu.Menupopup')
 export class Menupopup extends zul.wgt.Popup {
 	public override parent!: zul.menu.Menu | null;
 	public override firstChild!: zul.menu.Menuitem | null;
@@ -576,5 +577,4 @@ export class Menupopup extends zul.wgt.Popup {
 		}
 	}
 }
-zul.menu.Menupopup = zk.regClass(Menupopup);
 export let _nOpen = 0;

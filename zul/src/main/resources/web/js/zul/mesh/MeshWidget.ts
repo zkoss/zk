@@ -440,6 +440,9 @@ export interface BodyWidgetIterator {
  *  @see zul.sel.Tree
  *  @see zul.sel.Listbox
  */
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+@zk.WrapClass('zul.mesh.MeshWidget')
 export abstract class MeshWidget extends zul.Widget {
 	public _rows = 0;
 	private _pagingPosition = 'bottom';
@@ -2317,7 +2320,6 @@ export abstract class MeshWidget extends zul.Widget {
 		return this.WIDTH0;
 	}
 }
-zul.mesh.MeshWidget = zk.regClass(MeshWidget);
 
 /** @class zul.mesh.Scrollbar
  * @import zk.Widget

@@ -15,6 +15,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 /**
  * A skeletal implementation for a sortable widget.
  */
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+@zk.WrapClass('zul.mesh.SortWidget')
 export abstract class SortWidget extends zul.mesh.HeaderWidget {
 	public override parent!: zul.mesh.ColumnMenuWidget | null;
 	protected override _sortDirection: zul.mesh.SortDirection = 'natural';
@@ -354,4 +357,3 @@ export abstract class SortWidget extends zul.mesh.HeaderWidget {
 		}
 	}
 }
-zul.mesh.SortWidget = zk.regClass(SortWidget);
