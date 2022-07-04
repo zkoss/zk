@@ -16,6 +16,10 @@ idea {
 	}
 }
 
+allprojects {
+	apply plugin: 'com.github.node-gradle.node'
+}
+
 def zkcmlDir = "$rootDir/../zkcml"
 def resources = 'src/main/resources'
 def codegen = 'codegen/resources'
@@ -79,10 +83,6 @@ subprojects {
 			exec {
 				commandLine "$rootDir/node_modules/.bin/gulp", 'build:single', "--src=$projectDir/$resources/web/js", "--dest=$projectDir/$codegen/web/js"
 			}
-			def tsconfigDir = project.file('tsconfig.json').exists() ? projectDir : rootDir
-			exec {
-				commandLine "$rootDir/node_modules/.bin/tsc", '--noEmit', '--project',  tsconfigDir
-			}
 		}
 	}
 
@@ -104,14 +104,23 @@ subprojects {
 		toolVersion '8.44'
 	}
 
-	// eslint
-	task jscheck(type: Exec) {
-		workingDir = "$rootDir"
-		def eslintDir = project.file(".eslintrc.json").exists() ? projectDir : rootDir;
-		// `--quiet` to silence warning. Thus, only errors will be reported.
-		commandLine "$rootDir/bin/jscheck", "$rootDir", "$project.name/$resources", "--config=$eslintDir/.eslintrc.json", "--ignore-path=$rootDir/.eslintignore", "--quiet", "--no-error-on-unmatched-pattern"
+	task tscheck(type: NpmTask) {
+		enabled = project.file(".eslintrc.json").exists()
+		workingDir = rootDir
+		args =['run', 'type-check', '--', '--project', "$projectDir"]
 	}
-	check.dependsOn(jscheck)
+
+	// eslint
+	task jscheck(type: NpmTask) {
+		workingDir = rootDir
+		def eslintDir = project.file(".eslintrc.json").exists() ? projectDir : rootDir;
+		args =['run', 'lint', '--', "$projectDir/$resources/web/js", "--config=$eslintDir/.eslintrc.json", "--ignore-path=$rootDir/.eslintignore"]
+	}
+
+	check {
+		dependsOn(tscheck)
+		dependsOn(jscheck)
+	}
 
 	// Compile LESS
 	task compileLess() {
