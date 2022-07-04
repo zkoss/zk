@@ -94,6 +94,7 @@ zul.inp.RoundUtl = RoundUtl;
 &lt;?script content="zk.afterLoad('zul.inp',function(){zul.inp.InputWidget.onChangingDelay=1000;})"?&gt;
 </code></pre>
  */
+@zk.WrapClass('zul.inp.InputWidget')
 export class InputWidget<ValueType> extends zul.Widget {
 	private _maxlength = 0;
 	private _cols = 0;
@@ -1302,7 +1303,6 @@ export class InputWidget<ValueType> extends zul.Widget {
 		}
 	}
 }
-zul.inp.InputWidget = zk.regClass(InputWidget);
 
 /** @class zul.inp.InputCtrl
  * @import zk.Widget

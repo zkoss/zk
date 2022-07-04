@@ -43,6 +43,7 @@ var LEGAL_CHARS = 'ahKHksmz',
 	HOUR3_FIELD = 7,
 	globallocalizedSymbols: Record<string, zk.LocalizedSymbols> = {};
 
+@zk.WrapClass('zul.db.Timebox')
 export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 	private _buttonVisible = true;
 	public override readonly _format = 'HH:mm';
@@ -816,8 +817,8 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 		}
 	}
 }
-zul.db.Timebox = zk.regClass(Timebox);
 
+@zk.WrapClass('zul.inp.TimeHandler')
 export class TimeHandler extends zk.Object {
 	public maxsize = 59;
 	public minsize = 0;
@@ -1118,8 +1119,8 @@ export class TimeHandler extends zk.Object {
 		return text;
 	}
 }
-zul.inp.TimeHandler = zk.regClass(TimeHandler);
 
+@zk.WrapClass('zul.inp.HourInDayHandler')
 export class HourInDayHandler extends zul.inp.TimeHandler {
 	public override maxsize = 23;
 	public override minsize = 0;
@@ -1140,8 +1141,8 @@ export class HourInDayHandler extends zul.inp.TimeHandler {
 		return date;
 	}
 }
-zul.inp.HourInDayHandler = zk.regClass(HourInDayHandler);
 
+@zk.WrapClass('zul.inp.HourInDayHandler2')
 export class HourInDayHandler2 extends zul.inp.TimeHandler {
 	public override maxsize = 24;
 	public override minsize = 1;
@@ -1166,8 +1167,8 @@ export class HourInDayHandler2 extends zul.inp.TimeHandler {
 		return date;
 	}
 }
-zul.inp.HourInDayHandler2 = zk.regClass(HourInDayHandler2);
 
+@zk.WrapClass('zul.inp.HourHandler')
 export class HourHandler extends zul.inp.TimeHandler {
 	public override maxsize = 12;
 	public override minsize = 1;
@@ -1193,8 +1194,8 @@ export class HourHandler extends zul.inp.TimeHandler {
 		return date;
 	}
 }
-zul.inp.HourHandler = zk.regClass(HourHandler);
 
+@zk.WrapClass('zul.inp.HourHandler2')
 export class HourHandler2 extends zul.inp.TimeHandler {
 	public override maxsize = 11;
 	public override minsize = 0;
@@ -1217,8 +1218,8 @@ export class HourHandler2 extends zul.inp.TimeHandler {
 		return date;
 	}
 }
-zul.inp.HourHandler2 = zk.regClass(HourHandler2);
 
+@zk.WrapClass('zul.inp.MinuteHandler')
 export class MinuteHandler extends zul.inp.TimeHandler {
 	public override format(date?: DateImpl | null): string {
 		var singleLen = this.digits == 1;
@@ -1236,8 +1237,8 @@ export class MinuteHandler extends zul.inp.TimeHandler {
 		return date;
 	}
 }
-zul.inp.MinuteHandler = zk.regClass(MinuteHandler);
 
+@zk.WrapClass('zul.inp.SecondHandler')
 export class SecondHandler extends zul.inp.TimeHandler {
 	public override format(date?: DateImpl | null): string {
 		var singleLen = this.digits == 1;
@@ -1255,8 +1256,8 @@ export class SecondHandler extends zul.inp.TimeHandler {
 		return date;
 	}
 }
-zul.inp.SecondHandler = zk.regClass(SecondHandler);
 
+@zk.WrapClass('zul.inp.AMPMHandler')
 export class AMPMHandler extends zul.inp.TimeHandler {
 	public override format(date?: DateImpl | null): string {
 		var APM = this.wgt._localizedSymbols ? this.wgt._localizedSymbols.APM! : zk.APM;
@@ -1325,4 +1326,3 @@ export class AMPMHandler extends zul.inp.TimeHandler {
 		return zk.parseInt(this.getText(val).trim());
 	}
 }
-zul.inp.AMPMHandler = zk.regClass(AMPMHandler);

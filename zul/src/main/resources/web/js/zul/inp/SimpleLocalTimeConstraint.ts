@@ -17,6 +17,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * @disable(zkgwt)
  * @since 9.0.0
  */
+@zk.WrapClass('zul.inp.SimpleLocalTimeConstraint')
 export class SimpleLocalTimeConstraint extends zul.inp.SimpleConstraint {
 	public readonly format = 'HHmmss';
 	private _wgt: zul.db.Timebox;
@@ -93,4 +94,3 @@ export class SimpleLocalTimeConstraint extends zul.inp.SimpleConstraint {
 					'<= ' + new zk.fmt.Calendar().formatDate(this._end!, format));
 	}
 }
-zul.inp.SimpleLocalTimeConstraint = zk.regClass(SimpleLocalTimeConstraint);

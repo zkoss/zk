@@ -16,6 +16,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * A north region of a border layout.
  * <p>Default {@link #getZclass}: z-north.
  */
+@zk.WrapClass('zul.layout.North')
 export class North extends zul.layout.LayoutRegion {
 	public _sumFlexHeight = true; //indicate shall add this flex height for borderlayout. @See _fixMinFlex in widget.js
 	public override sanchor = 't';
@@ -71,5 +72,3 @@ export class North extends zul.layout.LayoutRegion {
 		};
 	}
 }
-
-zul.layout.North = zk.regClass(North);

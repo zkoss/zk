@@ -18,6 +18,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
  * as {@link Div}, but {@link Div} doesn't implement IdSpace.
  * In other words, {@link Div} won't affect the uniqueness of identifiers.
  */
+@zk.WrapClass('zul.wgt.Div')
 export class Div extends zul.Widget {
 	private _align?: string;
 
@@ -54,4 +55,3 @@ export class Div extends zul.Widget {
 		return align != null ? attr + ' align="' + align + '"' : attr;
 	}
 }
-zul.wgt.Div = zk.regClass(Div);

@@ -36,6 +36,7 @@ export interface NotificationOptions {
  * A notification widget.
  * @since 6.0.1
  */
+@zk.WrapClass('zul.wgt.Notification')
 export class Notification extends zul.wgt.Popup {
 	protected override _keepVisible = true;
 	private _closable?: boolean;
@@ -300,4 +301,3 @@ export class Notification extends zul.wgt.Popup {
 			}, dur);
 	}
 }
-zul.wgt.Notification = zk.regClass(Notification);

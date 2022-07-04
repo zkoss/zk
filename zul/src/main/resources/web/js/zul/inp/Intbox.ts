@@ -17,6 +17,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>Default {@link #getZclass}: z-intbox.
  *
  */
+@zk.WrapClass('zul.inp.Intbox')
 export class Intbox extends zul.inp.NumberInputWidget<number> {
 	/** Returns the value in int. If null, zero is returned.
 	 * @return int
@@ -52,4 +53,3 @@ export class Intbox extends zul.inp.NumberInputWidget<number> {
 					: value != null ? '' + value : '';
 	}
 }
-zul.inp.Intbox = zk.regClass(Intbox);

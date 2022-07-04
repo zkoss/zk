@@ -16,6 +16,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * An edit box for holding an integer.
  * <p>Default {@link #getZclass}: z-longbox.
  */
+@zk.WrapClass('zul.inp.Longbox')
 export class Longbox extends zul.inp.NumberInputWidget<zk.Long> {
 	//bug #2997037, cannot enter large long integer into longbox
 	protected override coerceFromString_(value: string | null | undefined): zul.inp.CoerceFromStringResult | zk.Long | null {
@@ -66,4 +67,3 @@ export class Longbox extends zul.inp.NumberInputWidget<zk.Long> {
 		return val ? new zk.Long(val) : val as '' | 0;
 	}
 }
-zul.inp.Longbox = zk.regClass(Longbox);

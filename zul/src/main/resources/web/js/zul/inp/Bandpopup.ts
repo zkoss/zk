@@ -21,6 +21,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  *
  * <p>z-class: z-bandpopup
  */
+@zk.WrapClass('zul.inp.Bandpopup')
 export class Bandpopup extends zul.Widget {
 	private _shallClosePopup?: boolean;
 
@@ -79,4 +80,3 @@ export class Bandpopup extends zul.Widget {
 		super.doClick_(evt, popupOnly);
 	}
 }
-zul.inp.Bandpopup = zk.regClass(Bandpopup);

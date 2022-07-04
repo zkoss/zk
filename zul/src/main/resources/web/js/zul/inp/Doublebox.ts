@@ -16,6 +16,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * An edit box for holding an float point value (double).
  * <p>Default {@link #getZclass}: z-doublebox.
  */
+@zk.WrapClass('zul.inp.Doublebox')
 export class Doublebox extends zul.inp.NumberInputWidget<number> {
 	protected override coerceFromString_(value: string | null | undefined): zul.inp.CoerceFromStringResult | number | null {
 		if (!value) return null;
@@ -92,4 +93,3 @@ export class Doublebox extends zul.inp.NumberInputWidget<number> {
 		//supports scientific expression such as 1e2
 	}
 }
-zul.inp.Doublebox = zk.regClass(Doublebox);

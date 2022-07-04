@@ -18,6 +18,7 @@ var globallocalizedSymbols: Record<string, zk.LocalizedSymbols> = {},
 	_quotePattern = /'/g, // move pattern string here to avoid jsdoc failure
 	_innerDateFormat = 'yyyy/MM/dd ';
 
+@zk.WrapClass('zul.db.Datebox')
 export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 	private _buttonVisible = true;
 	private _lenient = true;
@@ -925,8 +926,8 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 		return o.join(':');
 	}
 }
-zul.db.Datebox = zk.regClass(Datebox);
 
+@zk.WrapClass('zul.db.CalendarPop')
 export class CalendarPop extends zul.db.Calendar {
 	public override parent!: Datebox;
 	private _shadow?: zk.eff.Shadow | null;
@@ -1235,8 +1236,8 @@ export class CalendarPop extends zul.db.Calendar {
 		return (d1 == d2) || (d1 && d2 && d1.getTime() == d2.getTime());
 	}
 }
-zul.db.CalendarPop = zk.regClass(CalendarPop);
 
+@zk.WrapClass('zul.db.CalendarTime')
 export class CalendarTime extends zul.db.Timebox {
 	public override parent!: Datebox;
 
@@ -1268,7 +1269,6 @@ export class CalendarTime extends zul.db.Timebox {
 		evt.stop();
 	}
 }
-zul.db.CalendarTime = zk.regClass(CalendarTime);
 
 /** @class zul.db.DateboxCtrl
  * @import zk.Widget

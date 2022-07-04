@@ -28,6 +28,7 @@ export interface OpenOptions {
 /**
  * A skeletal implementation for a combo widget.
  */
+@zk.WrapClass('zul.inp.ComboWidget')
 export class ComboWidget<ValueType> extends zul.inp.InputWidget<ValueType> {
 	private _buttonVisible = true;
 	protected _iconSclass: string | null = null;
@@ -815,4 +816,3 @@ export class ComboWidget<ValueType> extends zul.inp.InputWidget<ValueType> {
 
 	public static $redraw = ComboWidget.prototype.redraw_;
 }
-zul.inp.ComboWidget = zk.regClass(ComboWidget);

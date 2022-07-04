@@ -24,6 +24,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  *
  * <p>Default {@link #getZclass}: z-center.
  */
+@zk.WrapClass('zul.layout.Center')
 export class Center extends zul.layout.LayoutRegion {
 	public _sumFlexWidth = true; //indicate shall add this flex width for borderlayout. @See _fixMinFlex in widget.js
 	public _maxFlexHeight = true;  //indicate shall check if the maximum flex height for borderlayout. @See _fixMinFlex in widget.js
@@ -150,5 +151,3 @@ export class Center extends zul.layout.LayoutRegion {
 		return zul.layout.Borderlayout.CENTER;
 	}
 }
-
-zul.layout.Center = zk.regClass(Center);

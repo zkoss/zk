@@ -15,7 +15,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 /**
  * A skeletal implementation for an input box with format.
  */
- export class FormatWidget<ValueType> extends zul.inp.InputWidget<ValueType> {
+@zk.WrapClass('zul.inp.FormatWidget')
+export class FormatWidget<ValueType> extends zul.inp.InputWidget<ValueType> {
 	public _format?: string;
 	public _shortcut?: string | null;
 
@@ -53,4 +54,3 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		return upd;
 	}
 }
-zul.inp.FormatWidget = zk.regClass(FormatWidget);

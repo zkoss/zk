@@ -24,6 +24,7 @@ zk.load('zul.lang', function () {
  * A skeletal implementation for number-type input box.
  * @since 5.0.8
  */
+@zk.WrapClass('zul.inp.NumberInputWidget')
 export class NumberInputWidget<ValueType> extends zul.inp.FormatWidget<ValueType> {
 	protected _rounding?: number;
 	public _localizedSymbols?: zk.LocalizedSymbols;
@@ -128,4 +129,3 @@ export class NumberInputWidget<ValueType> extends zul.inp.FormatWidget<ValueType
 		return attr;
 	}
 }
-zul.inp.NumberInputWidget = zk.regClass(NumberInputWidget);

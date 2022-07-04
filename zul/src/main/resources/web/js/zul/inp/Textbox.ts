@@ -16,6 +16,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * A textbox.
  * <p>Default {@link #getZclass}: z-textbox.
  */
+@zk.WrapClass('zul.inp.Textbox')
 export class Textbox extends zul.inp.InputWidget<string> {
 	public override _value = '';
 	private _rows = 1;
@@ -150,4 +151,3 @@ export class Textbox extends zul.inp.InputWidget<string> {
 		super.doKeyDown_(evt);
 	}
 }
-zul.inp.Textbox = zk.regClass(Textbox);

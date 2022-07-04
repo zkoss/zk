@@ -17,6 +17,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  *
  * <p>Default {@link #getZclass}: z-progressmeter.
  */
+@zk.WrapClass('zul.wgt.Progressmeter')
 export class Progressmeter extends zul.Widget {
 	private _value = 0;
 	private _indeterminate = false;
@@ -112,4 +113,3 @@ export class Progressmeter extends zul.Widget {
 		return scls;
 	}
 }
-zul.wgt.Progressmeter = zk.regClass(Progressmeter);

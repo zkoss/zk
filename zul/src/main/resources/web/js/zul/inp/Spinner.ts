@@ -17,6 +17,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  *
  * <p>Default {@link #getZclass}: z-spinner.
  */
+@zk.WrapClass('zul.inp.Spinner')
 export class Spinner extends zul.inp.NumberInputWidget<number> {
 	private _step = 1;
 	private _buttonVisible = true;
@@ -298,4 +299,3 @@ export class Spinner extends zul.inp.NumberInputWidget<number> {
 		return 'z-icon-angle-down';
 	}
 }
-zul.inp.Spinner = zk.regClass(Spinner);

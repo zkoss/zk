@@ -16,6 +16,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * An edit box for holding BigDecimal.
  * <p>Default {@link #getZclass}: z-decimalbox.
  */
+@zk.WrapClass('zul.inp.Decimalbox')
 export class Decimalbox extends zul.inp.NumberInputWidget<zk.BigDecimal> {
 	private _scale?: number;
 
@@ -72,4 +73,3 @@ export class Decimalbox extends zul.inp.NumberInputWidget<zk.BigDecimal> {
 			+ (symbols ? symbols : zk).DECIMAL; //not support scientific expression
 	}
 }
-zul.inp.Decimalbox = zk.regClass(Decimalbox);

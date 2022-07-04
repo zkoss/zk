@@ -18,6 +18,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
  *
  * <p>Default {@link #getZclass}: z-label.
  */
+@zk.WrapClass('zul.wgt.Label')
 export class Label extends zul.Widget {
 	private _value = '';
 	private _maxlength = 0;
@@ -148,4 +149,3 @@ export class Label extends zul.Widget {
 		return o;
 	}
 }
-zul.wgt.Label = zk.regClass(Label);

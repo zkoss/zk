@@ -25,5 +25,5 @@ it will be useful, but WITHOUT ANY WARRANTY.
  *  @see zul.tab.Tabpanel
  *
  */
+@zk.WrapClass('zul.ContainerWidget')
 export class ContainerWidget extends zul.Widget {}
-zul.ContainerWidget = zk.regClass(ContainerWidget);

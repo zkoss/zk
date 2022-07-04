@@ -24,6 +24,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * @author ashish
  * @since 6.0.0
  */
+@zk.WrapClass('zul.layout.Absolutechildren')
 export class Absolutechildren extends zul.Widget {
     private _x = 0;
     private _y = 0;
@@ -98,4 +99,3 @@ export class Absolutechildren extends zul.Widget {
 		this._rePositionBoth();
 	}
 }
-zul.layout.Absolutechildren = zk.regClass(Absolutechildren);

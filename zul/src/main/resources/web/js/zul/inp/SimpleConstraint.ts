@@ -32,6 +32,7 @@ export type SimpleConstraintErrorMessages = Record<string, string | undefined>
  * <p>Depending on the component (such as {@link Intbox} and {@link zul.db.Datebox}).
  * @disable(zkgwt)
  */
+@zk.WrapClass('zul.inp.SimpleConstraint')
 export class SimpleConstraint extends zk.Object {
 	private _finishParseCst = true;
 	private _regex?: RegExp;
@@ -41,7 +42,6 @@ export class SimpleConstraint extends zk.Object {
 	private _cst?: string;
 	public serverValidate?: boolean;
 	protected _cstArr!: string[];
-	protected lazyInit_ = (): void => {'';};
 
 	/** Constructor.
 	 * @param Object a
@@ -58,18 +58,6 @@ export class SimpleConstraint extends zk.Object {
 			this._cstArr = [];
 			this._cst = a;
 			this._finishParseCst = false;
-
-			// Fix the ES6 "extends" lifecycle issue for B50-3053313.zul that the subclass's parseConstraint_(), SimpleDataConstraint,
-			// uses its own member fields, which are not ready in the super's constructor.
-			// So we make a lazyInit_() function for SimpleDataConstraint to be invoked later when
-			// the super class, SimpleConstraint, is constructed.
-			// Note: be aware of that all the subclasses of SimpleConstraint should follow
-			// the same limitation to invoke the lazyInit_() correctly.
-			if (this.get$Class().name == 'SimpleConstraint') {
-				this._init(a);
-			} else {
-				this.lazyInit_ = () => this._init(a);
-			}
 		} else {
 			this._flags = typeof a == 'number' ? this._cvtNum(a) : a as SimpleConstraintFlags || {};
 			this._regex = typeof b == 'string' ? new RegExp(b, 'g') : b;
@@ -84,6 +72,12 @@ export class SimpleConstraint extends zk.Object {
 
 			if (this._flags.SERVER)
 				this.serverValidate = true;
+		}
+	}
+
+	public override afterCreated_(a: unknown, b?: RegExp | string, c?: string): void {
+		if (typeof a == 'string') {
+			this._init(a);
 		}
 	}
 
@@ -322,4 +316,3 @@ export class SimpleConstraint extends zk.Object {
 		this._finishParseCst = false;
 	}
 }
-zul.inp.SimpleConstraint = zk.regClass(SimpleConstraint);
