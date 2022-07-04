@@ -18,6 +18,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  *
  * <p>Default: {@link #getCmargins()} is "0,0,0,0"</p>
  */
+@zk.WrapClass('zul.layout.East')
 export class East extends zul.layout.LayoutRegion {
 	public _sumFlexWidth = true; //indicate shall add this flex width for borderlayout. @See _fixMinFlex in widget.js
 	public _maxFlexHeight = true; //indicate shall check if the maximum flex height for borderlayout. @See _fixMinFlex in widget.js
@@ -77,5 +78,3 @@ export class East extends zul.layout.LayoutRegion {
 		};
 	}
 }
-
-zul.layout.East = zk.regClass(East);

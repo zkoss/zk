@@ -22,6 +22,7 @@ var _dirMap = {
 /**
  * A error message box that is displayed as a popup.
  */
+@zk.WrapClass('zul.inp.Errorbox')
 export class Errorbox extends zul.wgt.Notification {
 	public override parent: zul.inp.InputWidget<unknown> | null;
 	public _defaultPos = 'end_before';
@@ -342,4 +343,3 @@ export class Errorbox extends zul.wgt.Notification {
 			zk(el).redoCSS();
 	}
 }
-zul.inp.Errorbox = zk.regClass(Errorbox);

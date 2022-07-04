@@ -84,6 +84,7 @@ zk.Macro = widget.Macro;
 zk.Service = widget.Service;
 zk.Skipper = widget.Skipper;
 zk.NoDOM = widget.NoDOM;
+zk.WrapClass = widget.WrapClass;
 
 
 window.zkreg = widget.zkreg;

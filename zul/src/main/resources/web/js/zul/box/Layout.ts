@@ -16,6 +16,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * A skeleton of Vlayout and Hlayout.
  * @since 5.0.4
  */
+@zk.WrapClass('zul.box.Layout')
 export class Layout extends zul.Widget {
 	private _spacing = '5px';
 	private _shallSize = false;
@@ -518,4 +519,3 @@ export class Layout extends zul.Widget {
 		}
 	}
 }
-zul.box.Layout = zk.regClass(Layout);

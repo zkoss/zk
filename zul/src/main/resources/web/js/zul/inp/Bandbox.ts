@@ -21,6 +21,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  *
  * <p>Default {@link #getZclass}: z-bandbox.
  */
+@zk.WrapClass('zul.inp.Bandbox')
 export class Bandbox<ValueType> extends zul.inp.ComboWidget<ValueType> {
 	protected override _iconSclass = 'z-icon-search';
 
@@ -99,4 +100,3 @@ export class Bandbox<ValueType> extends zul.inp.ComboWidget<ValueType> {
 		if (!(target != this.getInputNode() && target != this.$n('btn'))) super.doFocus_(evt);
 	}
 }
-zul.inp.Bandbox = zk.regClass(Bandbox);

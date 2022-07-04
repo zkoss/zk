@@ -21,5 +21,5 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * @author peterkuo
  * @since 6.0.0
  */
+@zk.WrapClass('zul.layout.Anchorlayout')
 export class Anchorlayout extends zul.Widget {}
-zul.layout.Anchorlayout = zk.regClass(Anchorlayout);

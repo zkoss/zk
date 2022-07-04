@@ -123,8 +123,12 @@ function newClass<T>(superclass): T {
 		// if not differed by 1, it could be another instance with the same zk.$extends() widget.
 		// for example in B50-ZK-441.zul
 		if (____ === undefined || ____ - 1 < this.___s) {
-			// eslint-disable-next-line no-console
-		// 	this.$oid = ++_oid;
+
+			// call afterCreated_() for ES6 class here
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+			// @ts-ignore
+			this.afterCreated_.apply(_this, arguments);
+
 			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			// @ts-ignore
 			this.$init.apply(_this, arguments);
@@ -1750,6 +1754,10 @@ export abstract class ZKObject {
 				for (var nm in props)
 					this['set'](nm, props[nm]);
 		}
+	}
+
+	public afterCreated_(props?: Record<string, unknown> | typeof zkac): void {
+		// empty
 	}
 	/** Specifies a function that shall be called after the object is initialized,
 	 * i.e., after {@link #$init} is called. This method can be called only during the execution of {@link #$init}.

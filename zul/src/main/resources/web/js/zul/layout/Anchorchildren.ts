@@ -20,6 +20,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * @author peterkuo
  * @since 6.0.0
  */
+@zk.WrapClass('zul.layout.Anchorchildren')
 export class Anchorchildren extends zul.Widget {
     private _anchor?: string;
 
@@ -91,4 +92,3 @@ export class Anchorchildren extends zul.Widget {
 		}
 	}
 }
-zul.layout.Anchorchildren = zk.regClass(Anchorchildren);

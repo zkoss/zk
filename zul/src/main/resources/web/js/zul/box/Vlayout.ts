@@ -17,6 +17,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>Default {@link #getZclass}: z-vlayout.
  * @since 5.0.4
  */
+@zk.WrapClass('zul.box.Vlayout')
 export class Vlayout extends zul.box.Layout {
     protected override isVertical_(): boolean {
 		return true;
@@ -26,4 +27,3 @@ export class Vlayout extends zul.box.Layout {
 		return 'column';
 	}
 }
-zul.box.Vlayout = zk.regClass(Vlayout);

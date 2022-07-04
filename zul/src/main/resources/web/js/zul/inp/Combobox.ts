@@ -28,6 +28,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  *
  * @see Comboitem
  */
+@zk.WrapClass('zul.inp.Combobox')
 export class Combobox<ValueType> extends zul.inp.ComboWidget<ValueType> {
 	private _autocomplete = true;
 	private _instantSelect = true;
@@ -621,4 +622,3 @@ export class Combobox<ValueType> extends zul.inp.ComboWidget<ValueType> {
 		return result;
 	}
 }
-zul.inp.Combobox = zk.regClass(Combobox);

@@ -16,6 +16,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * A simple date constraint.
  * @disable(zkgwt)
  */
+@zk.WrapClass('zul.inp.SimpleDateConstraint')
 export class SimpleDateConstraint extends zul.inp.SimpleConstraint {
 	public readonly format = 'yyyyMMdd';
 	private _wgt: zul.db.Datebox;
@@ -31,10 +32,9 @@ export class SimpleDateConstraint extends zul.inp.SimpleConstraint {
 	 * @since 5.0.8
 	 */
 	public constructor(a: unknown, wgt: zul.db.Datebox) {
-		super(a); // FIXME: super was originally called at the end of the constructor
+		super(a);
 		this._wgt = wgt;
 		this._localizedSymbols = wgt._localizedSymbols;
-		this.lazyInit_(); // call it after all member fields are ready.
 	}
 
 	protected override parseConstraint_(constraint: string): void {
@@ -95,4 +95,3 @@ export class SimpleDateConstraint extends zul.inp.SimpleConstraint {
 					'<= ' + new zk.fmt.Calendar().formatDate(this._end!, format));
 	}
 }
-zul.inp.SimpleDateConstraint = zk.regClass(SimpleDateConstraint);

@@ -2,6 +2,7 @@
  * A simple double spinner constraint.
  * @disable(zkgwt)
  */
+@zk.WrapClass('zul.inp.SimpleDoubleSpinnerConstraint')
 export class SimpleDoubleSpinnerConstraint extends zul.inp.SimpleConstraint {
 	public _min?: number;
 	public _max?: number;
@@ -70,4 +71,3 @@ export class SimpleDoubleSpinnerConstraint extends zul.inp.SimpleConstraint {
 			return result;
 	}
 }
-zul.inp.SimpleDoubleSpinnerConstraint = zk.regClass(SimpleDoubleSpinnerConstraint);

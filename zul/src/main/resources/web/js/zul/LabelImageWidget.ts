@@ -15,6 +15,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 /**
  * A skeletal implementation for ZUL widgets that support both label and image.
  */
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+@zk.WrapClass('zul.LabelImageWidget')
 export abstract class LabelImageWidget extends zul.Widget {
 	private _label = '';
 	protected _iconSclass?: string;
@@ -252,4 +255,3 @@ export abstract class LabelImageWidget extends zul.Widget {
 		super.clearCache();
 	}
 }
-zul.LabelImageWidget = zk.regClass(LabelImageWidget);

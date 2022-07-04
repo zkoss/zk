@@ -13,6 +13,7 @@ module.exports = function (api) {
 	        ['@babel/plugin-transform-typescript', {
 		        'allowDeclareFields': true
 	        }],
+	        ["@babel/plugin-proposal-decorators", { "legacy": true }],
             '@babel/plugin-proposal-class-properties',
             '@babel/plugin-proposal-object-rest-spread',
 			'remove-import-export',
