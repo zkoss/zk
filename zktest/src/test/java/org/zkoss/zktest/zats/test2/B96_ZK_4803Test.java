@@ -39,6 +39,8 @@ public class B96_ZK_4803Test extends WebDriverTestCase {
 	private void test(String zulPath) {
 		connect(zulPath);
 
+		waitResponse();
+
 		click(jq("@button:eq(1)"));
 		waitResponse();
 		double periodB = getPeriod();

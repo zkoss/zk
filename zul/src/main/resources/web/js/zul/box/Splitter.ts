@@ -94,6 +94,7 @@ function _setOpen(wgt: Splitter, open: boolean, opts?: {sendOnOpen?: boolean}): 
  *  <p>Default {@link #getZclass}: z-splitter.
  *
  */
+@zk.WrapClass('zul.box.Splitter')
 export class Splitter extends zul.Widget {
 	declare public parent: zul.box.Box | null;
 	private _collapse = 'none';
@@ -543,5 +544,3 @@ export class Splitter extends zul.Widget {
 		if (fl) fl[0].style.tableLayout = fl[1];
 	}
 }
-
-zul.box.Splitter = zk.regClass(Splitter);

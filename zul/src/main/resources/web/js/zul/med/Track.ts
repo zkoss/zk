@@ -18,6 +18,7 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
  * @author rudyhuang
  * @since 9.5.0
  */
+@zk.WrapClass('zul.med.Track')
 export class Track extends zul.Widget {
 	private _default?: boolean;
 	private _kind?: string;
@@ -174,4 +175,3 @@ export class Track extends zul.Widget {
 		return attr;
 	}
 }
-zul.med.Track = zk.regClass(Track);

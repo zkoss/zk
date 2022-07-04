@@ -43,6 +43,7 @@ export interface PositionInfo {
  *
  * <p>Default {@link #getZclass}: z-popup.
  */
+@zk.WrapClass('zul.wgt.Popup')
 export class Popup extends zul.Widget {
 	public override _visible = false;
 	protected _fakeParent?: zk.Widget | null;
@@ -523,4 +524,3 @@ export class Popup extends zul.Widget {
 		return [p, [dim.left + this._adjustLeft!, dim.top + this._adjustTop!], null, {dodgeRef: false}];
 	}
 }
-zul.wgt.Popup = zk.regClass(Popup);

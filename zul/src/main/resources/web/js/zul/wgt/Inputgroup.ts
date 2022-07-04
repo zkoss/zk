@@ -29,6 +29,7 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
  * @since 9.0.0
  * @author charlesqiu, rudyhuang
  */
+@zk.WrapClass('zul.wgt.Inputgroup')
 export class Inputgroup extends zul.Widget {
 	private _vertical = false;
 
@@ -99,4 +100,3 @@ export class Inputgroup extends zul.Widget {
 		if (!opts.out) return out.join('');
 	}
 }
-zul.wgt.Inputgroup = zk.regClass(Inputgroup);

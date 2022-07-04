@@ -138,13 +138,13 @@ function _parseParamFunc(event: zk.Event | undefined, funcBody: string): number 
 		return zk.parseInt(funcBody);
 	}
 }
-
 export type ParsedCtlKeys = Record<number, boolean>[];
 
 /** The base class for ZUL widget.
  * <p>The corresponding Java class is org.zkoss.zul.impl.XulElement.
  * <p>If a widget has a client attribute 'scrollable', it will listen <code>onScroll</code> event.
  */
+@zk.WrapClass('zul.Widget')
 export class Widget extends zk.Widget {
 	private _context?: string;
 	private _popup?: string;
@@ -793,4 +793,3 @@ export class Widget extends zk.Widget {
 		return 'at_pointer';
 	}
 }
-zul.Widget = zk.regClass(Widget);

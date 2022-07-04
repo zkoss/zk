@@ -22,6 +22,7 @@ export interface SliderPosition {
  * A slider.
  *  <p>Default {@link #getZclass}: z-slider.
  */
+@zk.WrapClass('zul.inp.Slider')
 export class Slider extends zul.Widget {
 	private _orient = 'horizontal';
 	private _curpos = 0;
@@ -705,4 +706,3 @@ export class Slider extends zul.Widget {
 		return (!wgt.isDecimal() || step != -1) ? step : 0.1;
 	}
 }
-zul.inp.Slider = zk.regClass(Slider);

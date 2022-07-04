@@ -16,6 +16,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * A south region of a border layout.
  * <p>Default {@link #getZclass}: z-south.
  */
+@zk.WrapClass('zul.layout.South')
 export class South extends zul.layout.LayoutRegion {
 	public _sumFlexHeight = true; //indicate shall add this flex height for borderlayout. @See _fixMinFlex in widget.js
 	protected override _cmargins = [0, 0, 0, 0];
@@ -73,5 +74,3 @@ export class South extends zul.layout.LayoutRegion {
 		};
 	}
 }
-
-zul.layout.South = zk.regClass(South);

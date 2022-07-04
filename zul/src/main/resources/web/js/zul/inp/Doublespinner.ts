@@ -44,6 +44,7 @@ function _updateFixedDigits(wgt: Doublespinner, val?: number): void {
  * <p>Default {@link #getZclass}: z-doublespinner.
  * @since 5.0.6
  */
+@zk.WrapClass('zul.inp.Doublespinner')
 export class Doublespinner extends zul.inp.NumberInputWidget<number> {
 	public _step = 1;
 	private _buttonVisible = true;
@@ -382,4 +383,3 @@ export class Doublespinner extends zul.inp.NumberInputWidget<number> {
 		return 'z-icon-angle-down';
 	}
 }
-zul.inp.Doublespinner = zk.regClass(Doublespinner);

@@ -53,6 +53,7 @@ export interface ScrollbarOptions {
  * A Scrollbar used to replace browser native scrollbar on Mesh Element to
  * navigate the content, such as Grid/Listbox/Tree.
  */
+@zk.WrapClass('zul.Scrollbar')
 export class Scrollbar extends zk.Object {
 	/** The container object for this scrolling that user can scroll the whole content
 	 * @type DOMElement
@@ -899,4 +900,3 @@ export class Scrollbar extends zk.Object {
 		jq(cave).append(out);
 	}
 }
-zul.Scrollbar = zk.regClass(Scrollbar);

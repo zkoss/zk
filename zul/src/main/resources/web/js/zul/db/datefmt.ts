@@ -106,6 +106,7 @@ function dayOfWeekInMonth(d: DateImpl): string {
 }
 
 // a proxy of Date object for leap day on Thai locale - B60-ZK-1010
+@zk.WrapClass('zul.fmt.LeapDay')
 class LeapDay extends zk.Object {
 	private _date: DateImpl;
 	private _offset?: number;
@@ -616,6 +617,7 @@ zk.fmt.Date = DateFmt;
  * <p>By default the year offset is specified from server if any.</p>
  * @since 5.0.1
  */
+@zk.WrapClass('zk.fmt.Calendar')
 export class Calendar extends zk.Object {
 	private _offset = zk.YDELTA;
 	private _date?: DateImpl | null;
@@ -706,4 +708,3 @@ export class Calendar extends zk.Object {
 		return newVal.getHours() != ((val.getHours() + 1) % 24) ? newVal : val;
 	}
 }
-zk.fmt.Calendar = zk.regClass(Calendar);
