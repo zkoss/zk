@@ -1,10 +1,7 @@
 export * as box from './box';
 export * as db from './db';
 // export * as fud from './fud';
-// export * as grid from './grid';
-export declare namespace grid {
-    export import Row = zul.Widget; // zk/domtouch
-}
+export * as grid from './grid';
 export * as inp from './inp';
 // export * as lang from './lang';
 export * as layout from './layout';

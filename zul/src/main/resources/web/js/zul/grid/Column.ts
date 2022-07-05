@@ -1,4 +1,4 @@
-/* Column.js
+/* Column.ts
 
 	Purpose:
 

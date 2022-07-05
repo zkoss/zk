@@ -1,4 +1,4 @@
-/* Footer.js
+/* Footer.ts
 
 	Purpose:
 
