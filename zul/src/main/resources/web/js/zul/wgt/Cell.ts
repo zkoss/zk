@@ -1,4 +1,4 @@
-/* Cell.js
+/* Cell.ts
 
 	Purpose:
 
