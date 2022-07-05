@@ -691,9 +691,8 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 		// ignore delayed rerendering case, like Bug ZK-2281
 		if (wgt.desktop) {
 			if (zUtl.isImageLoading() || zk.clientinfo) {
-				var f = arguments.callee;
-				setTimeout(function () {
-					return f(wgt, bfsz);
+				setTimeout(() => {
+					return this.fireSized(wgt, bfsz);
 				}, 20);
 				return;
 			}
