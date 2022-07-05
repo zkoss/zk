@@ -16,6 +16,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * A HTML optgroup tag.
  * @since 8.6.0
  */
+@zk.WrapClass('zul.sel.Optgroup')
 export class Optgroup extends zul.Widget<HTMLOptGroupElement> {
 	public override parent!: zul.sel.Select | null;
 	public override firstChild!: zul.sel.Option | null;
@@ -106,4 +107,3 @@ export class Optgroup extends zul.Widget<HTMLOptGroupElement> {
 		return attr;
 	}
 }
-zul.sel.Optgroup = zk.regClass(Optgroup);

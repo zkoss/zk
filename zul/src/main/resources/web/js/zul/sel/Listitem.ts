@@ -35,6 +35,7 @@ function updateImg(drag: zk.Draggable): void {
  *
  * <p>Default {@link #getZclass}: z-listitem
  */
+@zk.WrapClass('zul.sel.Listitem')
 export class Listitem extends zul.sel.ItemWidget {
 	// Parent could be null as asserted by `getListgroup`.
 	public override parent!: zul.sel.Listbox | null;
@@ -187,4 +188,3 @@ export class Listitem extends zul.sel.ItemWidget {
 		return true;
 	}
 }
-zul.sel.Listitem = zk.regClass(Listitem);

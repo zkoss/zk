@@ -16,6 +16,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * A treecols.
  * <p>Default {@link #getZclass}: z-treecols
  */
+@zk.WrapClass('zul.sel.Treecols')
 export class Treecols extends zul.mesh.HeadWidget {
 	public override parent!: zul.sel.Tree | null;
 	public override firstChild!: zul.sel.Treecol | null;
@@ -43,4 +44,3 @@ export class Treecols extends zul.mesh.HeadWidget {
 		return true;
 	}
 }
-zul.sel.Treecols = zk.regClass(Treecols);

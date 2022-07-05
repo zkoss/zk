@@ -58,6 +58,7 @@ function _sort0(treechildren: zul.sel.Treechildren, col: number, dir: zul.mesh.S
  * A treecol.
  * <p>Default {@link #getZclass}: z-treecol
  */
+@zk.WrapClass('zul.sel.Treecol')
 export class Treecol extends zul.mesh.SortWidget {
 	public override parent!: zul.sel.Treecols | null;
 	public override nextSibling!: zul.sel.Treecol | null;
@@ -230,4 +231,3 @@ export class Treecol extends zul.mesh.SortWidget {
 		super.doClick_(evt, popupOnly);
 	}
 }
-zul.sel.Treecol = zk.regClass(Treecol);

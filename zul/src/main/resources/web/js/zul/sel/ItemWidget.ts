@@ -21,6 +21,7 @@ function _isListgroupfoot(w: ItemWidget): boolean {
 /**
  * The item widget for {@link Treeitem} and {@link Listitem}
  */
+@zk.WrapClass('zul.sel.ItemWidget')
 export class ItemWidget extends zul.Widget<HTMLTableRowElement> {
 	public override nextSibling!: zul.sel.ItemWidget | null;
 	public override previousSibling!: zul.sel.ItemWidget | null;
@@ -426,4 +427,3 @@ export class ItemWidget extends zul.Widget<HTMLTableRowElement> {
 		}
 	}
 }
-zul.sel.ItemWidget = zk.regClass(ItemWidget);

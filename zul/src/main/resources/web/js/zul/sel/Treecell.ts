@@ -21,6 +21,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  *
  * <p>Default {@link #getZclass}: z-treecell
  */
+@zk.WrapClass('zul.sel.Treecell')
 export class Treecell extends zul.LabelImageWidget<HTMLTableCellElement> {
 	public override parent!: zul.sel.Treerow | null;
 	public override nextSibling!: zul.sel.Treecell | null;
@@ -301,4 +302,3 @@ export class Treecell extends zul.LabelImageWidget<HTMLTableCellElement> {
 		out.push('<td', this.domAttrs_({domClass: true}), ' class="z-renderdefer"></td>');
 	}
 }
-zul.sel.Treecell = zk.regClass(Treecell);

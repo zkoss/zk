@@ -20,6 +20,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>Note: {@link Treecell} also accepts children.
  * <p>Default {@link #getZclass}: z-treefooter
  */
+@zk.WrapClass('zul.sel.Treefooter')
 export class Treefooter extends zul.mesh.FooterWidget {
 	// NOTE: The parent of Treefooter should be Treefoot, but Treefoot is not a HeadWidget.
 	// public override parent!: zul.sel.Treefoot | null;
@@ -56,4 +57,3 @@ export class Treefooter extends zul.mesh.FooterWidget {
 		return zUtl.encodeXML(this.getLabel(), {maxlength: this.getMaxlength()});
 	}
 }
-zul.sel.Treefooter = zk.regClass(Treefooter);

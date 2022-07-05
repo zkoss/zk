@@ -71,6 +71,7 @@ function _isListgroupfoot(w: zul.sel.ItemWidget): boolean {
 	return zk.isLoaded('zkex.sel') && w instanceof zkex.sel.Listgroupfoot;
 }
 
+@zk.WrapClass('zul.sel.SelectWidget')
 export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	public override firstChild!: zul.sel.ItemWidget | null;
 	public override lastChild!: zul.sel.ItemWidget | null;
@@ -1397,4 +1398,3 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		newwgt._focusItem = _fixReplace(this._focusItem);
 	}
 }
-zul.sel.SelectWidget = zk.regClass(SelectWidget);
