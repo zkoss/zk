@@ -1,4 +1,4 @@
-/* Treefooter.js
+/* Treefooter.ts
 
 	Purpose:
 
@@ -20,20 +20,25 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>Note: {@link Treecell} also accepts children.
  * <p>Default {@link #getZclass}: z-treefooter
  */
-zul.sel.Treefooter = zk.$extends(zul.mesh.FooterWidget, {
+export class Treefooter extends zul.mesh.FooterWidget {
+	// NOTE: The parent of Treefooter should be Treefoot, but Treefoot is not a HeadWidget.
+	// public override parent!: zul.sel.Treefoot | null;
+
 	/** Returns the tree that this belongs to.
 	 * @return Tree
 	 */
-	getTree: function () {
-		return this.getMeshWidget();
-	},
+	public getTree(): zul.sel.Tree | null | undefined {
+		return this.getMeshWidget() as zul.sel.Tree | null | undefined;
+	}
+
 	/** Returns the tree header that is in the same column as
 	 * this footer, or null if not available.
 	 * @return Treecol
 	 */
-	getTreecol: function () {
-		return this.getHeaderWidget();
-	},
+	public getTreecol(): zul.sel.Treecol | null | undefined {
+		return this.getHeaderWidget() as zul.sel.Treecol | null | undefined;
+	}
+
 	/** Returns the maximal length for this cell.
 	 * It is the same as the correponding {@link #getTreecol}'s
 	 * {@link Treecol#getMaxlength}.
@@ -41,12 +46,14 @@ zul.sel.Treefooter = zk.$extends(zul.mesh.FooterWidget, {
 	 * @return int
 	 * @since 5.0.5
 	 */
-	getMaxlength: function () {
+	public getMaxlength(): number {
 		var tc = this.getTreecol();
-		return tc ? tc.getMaxlength() : 0;
-	},
+		return tc ? tc.getMaxlength()! : 0;
+	}
+
 	//@Override
-	domLabel_: function () {
+	protected override domLabel_(): string {
 		return zUtl.encodeXML(this.getLabel(), {maxlength: this.getMaxlength()});
 	}
-});
+}
+zul.sel.Treefooter = zk.regClass(Treefooter);

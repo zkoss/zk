@@ -1,4 +1,4 @@
-/* Treefoot.js
+/* Treefoot.ts
 
 	Purpose:
 
@@ -18,24 +18,29 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>Like {@link Treecols}, each tree has at most one {@link Treefoot}.
  * <p>Default {@link #getZclass}: z-treefoot
  */
-zul.sel.Treefoot = zk.$extends(zul.Widget, {
+export class Treefoot extends zul.Widget {
+	public override parent!: zul.sel.Tree | null;
 	/** Returns the tree that it belongs to.
 	 * @return Tree
 	 */
-	getTree: function () {
+	public getTree(): zul.sel.Tree | null {
 		return this.parent;
-	},
-	//bug #3014664
-	setVflex: function (v) { //vflex ignored for Treefoot
-		v = false;
-		this.$super(zul.sel.Treefoot, 'setVflex', v);
-	},
-	//bug #3014664
-	setHflex: function (v) { //hflex ignored for Treefoot
-		v = false;
-		this.$super(zul.sel.Treefoot, 'setHflex', v);
-	},
-	deferRedrawHTML_: function (out) {
-		out.push('<tr', this.domAttrs_({domClass: 1}), ' class="z-renderdefer"></tr>');
 	}
-});
+
+	//bug #3014664
+	public override setVflex(v: boolean | string | null | undefined): void { //vflex ignored for Treefoot
+		v = false;
+		super.setVflex(v);
+	}
+
+	//bug #3014664
+	public override setHflex(v: boolean | string | null | undefined): void { //hflex ignored for Treefoot
+		v = false;
+		super.setHflex(v);
+	}
+
+	protected override deferRedrawHTML_(out: string[]): void {
+		out.push('<tr', this.domAttrs_({domClass: true}), ' class="z-renderdefer"></tr>');
+	}
+}
+zul.sel.Treefoot = zk.regClass(Treefoot);

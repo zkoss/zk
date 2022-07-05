@@ -1,4 +1,4 @@
-/* Treecol.js
+/* Treecol.ts
 
 	Purpose:
 
@@ -12,70 +12,83 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-(function () {
-	function _updCells(tch, jcol) {
-		if (tch)
-			for (var w = tch.firstChild, tr; w; w = w.nextSibling) {
-				if ((tr = w.treerow) && jcol < tr.nChildren)
-					tr.getChildAt(jcol).rerender();
+function _updCells(tch: zul.sel.Treechildren | null | undefined, jcol: number): void {
+	if (tch)
+		for (let w = tch.firstChild; w; w = w.nextSibling) {
+			const tr = w.treerow;
+			if (tr && jcol < tr.nChildren)
+				tr.getChildAt(jcol)!.rerender();
 
-				_updCells(w.treechildren, jcol); //recursive
+			_updCells(w.treechildren, jcol); //recursive
+		}
+}
+
+type Comparator = (a: zul.mesh.SortableWidget, b: zul.mesh.SortableWidget, isNumber: boolean) => number
+function _sort0(treechildren: zul.sel.Treechildren, col: number, dir: zul.mesh.SortDirection, sorting: Comparator, isNumber: boolean): void {
+	interface Data {
+		wgt: zul.sel.Treecell;
+		index: number;
+	}
+	var d: Data[] = [];
+	for (var i = 0, z = 0, w = treechildren.firstChild; w; w = w.nextSibling, z++) {
+		if (w.treechildren)
+			_sort0(w.treechildren, col, dir, sorting, isNumber);
+		for (var k = 0, cell = w.getFirstCell(); cell; cell = cell.nextSibling, k++)
+			if (k == col) {
+				d[i++] = {
+					wgt: cell,
+					index: z
+				};
 			}
 	}
-
-	function _sort0(treechildren, col, dir, sorting, isNumber) {
-		var d = [];
-		for (var i = 0, z = 0, w = treechildren.firstChild; w; w = w.nextSibling, z++) {
-			if (w.treechildren)
-				_sort0(w.treechildren, col, dir, sorting, isNumber);
-			for (var k = 0, cell = w.getFirstCell(); cell; cell = cell.nextSibling, k++)
-				if (k == col) {
-					d[i++] = {
-						wgt: cell,
-						index: z
-					};
-				}
+	var dsc = dir == 'ascending' ? -1 : 1;
+	d.sort(function (a, b) {
+		var v = sorting(a.wgt, b.wgt, isNumber) * dsc;
+		if (v == 0) {
+			v = (a.index < b.index ? -1 : 1);
 		}
-		var dsc = dir == 'ascending' ? -1 : 1;
-		d.sort(function (a, b) {
-			var v = sorting(a.wgt, b.wgt, isNumber) * dsc;
-			if (v == 0) {
-				v = (a.index < b.index ? -1 : 1);
-			}
-			return v;
-		});
-		for (var i = 0, k = d.length; i < k; i++) {
-			treechildren.appendChild(d[i].wgt.parent.parent);
-		}
+		return v;
+	});
+	for (var i = 0, k = d.length; i < k; i++) {
+		treechildren.appendChild(d[i].wgt.parent!.parent!);
 	}
+}
 
 /**
  * A treecol.
  * <p>Default {@link #getZclass}: z-treecol
  */
-zul.sel.Treecol = zk.$extends(zul.mesh.SortWidget, {
+export class Treecol extends zul.mesh.SortWidget {
+	public override parent!: zul.sel.Treecols | null;
+	public override nextSibling!: zul.sel.Treecol | null;
+	public override previousSibling!: zul.sel.Treecol | null;
+	private _maxlength?: number;
+
 	/** Returns the tree that it belongs to.
 	 * @return Tree
 	 */
-	getTree: function () {
+	public getTree(): zul.sel.Tree | null {
 		return this.parent ? this.parent.parent : null;
-	},
+	}
+
 	/** Returns the mesh body that this belongs to.
 	 * @since 5.0.6
 	 * @return Tree
 	 */
-	getMeshBody: function () {
+	public getMeshBody(): zul.sel.Treechildren | null | undefined {
 		var tree = this.getTree();
 		return tree ? tree.treechildren : null;
-	},
-	checkClientSort_: function (ascending) {
-		var tree;
+	}
+
+	protected override checkClientSort_(ascending: boolean): boolean {
+		var tree: zul.sel.Tree | null;
 		return !(!this.getMeshBody() || !(tree = this.getTree()) || ('paging' == tree._mold))
-				&& this.$supers('checkClientSort_', arguments);
-	},
-	replaceCavedChildrenInOrder_: function (ascending) {
-		var mesh = this.getMeshWidget(),
-			body = this.getMeshBody(),
+				&& super.checkClientSort_(ascending);
+	}
+
+	protected override replaceCavedChildrenInOrder_(ascending: boolean): void {
+		var mesh = this.getMeshWidget()!,
+			body = this.getMeshBody()!,
 			desktop = body.desktop;
 		try {
 			body.unbind();
@@ -87,31 +100,40 @@ zul.sel.Treecol = zk.$extends(zul.mesh.SortWidget, {
 			mesh._syncingbodyrows = true;
 			try {
 				mesh.clearCache();
-				jq(mesh.$n('rows')).replaceWith(body.redrawHTML_());
+				jq(mesh.$n_('rows')).replaceWith(body.redrawHTML_());
 				body.bind(desktop);
 				mesh._bindDomNode();
 			} finally {
 				mesh._syncingbodyrows = old;
 			}
 		}
-	},
-	$define: {
-		/** Returns the maximal length of each item's label.
-		 * @return int
-		 */
-		/** Sets the maximal length of each item's label.
-		 * @param int maxlength
-		 */
-		maxlength: [function (v) {
-			return !v || v < 0 ? 0 : v;
-		}, function () {
+	}
+
+	/** Returns the maximal length of each item's label.
+	 * @return int
+	 */
+	public getMaxlength(): number | undefined {
+		return this._maxlength;
+	}
+
+	/** Sets the maximal length of each item's label.
+	 * @param int maxlength
+	 */
+	public setMaxlength(maxlength: number, opts?: Record<string, boolean>): this {
+		const o = this._maxlength, v = maxlength;
+		this._maxlength = maxlength = !v || v < 0 ? 0 : v;
+
+		if (o !== maxlength || (opts && opts.force)) {
 			if (this.desktop) {
 				this.rerender();
 				this.updateCells_();
 			}
-		}]
-	},
-	updateCells_: function () {
+		}
+
+		return this;
+	}
+
+	protected updateCells_(): void {
 		var tree = this.getTree();
 		if (tree) {
 			var jcol = this.getChildIndex(),
@@ -120,62 +142,71 @@ zul.sel.Treecol = zk.$extends(zul.mesh.SortWidget, {
 			_updCells(tree.treechildren, jcol);
 
 			if (tf && jcol < tf.nChildren)
-				tf.getChildAt(jcol).rerender();
+				tf.getChildAt(jcol)!.rerender();
 		}
-	},
-	bind_: function () {
-		this.$supers(zul.sel.Treecol, 'bind_', arguments);
-		var n, cm;
-		if (n = this.$n())
+	}
+
+	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+		super.bind_(desktop, skipper, after);
+		const n = this.$n();
+		if (n)
 			this.domListen_(n, 'onMouseOver', '_doSortMouseEvt')
 				.domListen_(n, 'onMouseOut', '_doSortMouseEvt');
-		if (cm = this.$n('cm')) {
+		const cm = this.$n('cm');
+		if (cm) {
 			var tree = this.getTree();
 			if (tree) tree._headercm = cm;
 			this.domListen_(cm, 'onClick', '_doCheckmarkClick');
 		}
-	},
-	unbind_: function () {
-		var n, cm;
-		if (n = this.$n())
+	}
+
+	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+		const n = this.$n();
+		if (n)
 			this.domUnlisten_(n, 'onMouseOver', '_doSortMouseEvt')
 				.domUnlisten_(n, 'onMouseOut', '_doSortMouseEvt');
-		if (cm = this.$n('cm')) {
-			var tree = this.getTree();
+		const cm = this.$n('cm');
+		if (cm) {
+			const tree = this.getTree();
 			if (tree) tree._headercm = null;
 			this._checked = null;
 			this.domUnlisten_(cm, 'onClick', '_doCheckmarkClick');
 		}
-		this.$supers(zul.sel.Treecol, 'unbind_', arguments);
-	},
-	_doSortMouseEvt: function (evt) {
+		super.unbind_(skipper, after, keepRod);
+	}
+
+	public _doSortMouseEvt(evt: zk.Event): void {
 		var sort = this.getSortAscending();
 		if (sort != 'none')
-			jq(this.$n())[evt.name == 'onMouseOver' ? 'addClass' : 'removeClass'](this.getZclass() + '-sort-over');
-	},
+			jq(this.$n_())[evt.name == 'onMouseOver' ? 'addClass' : 'removeClass'](this.getZclass() + '-sort-over');
+	}
+
 	//@Override
-	domContent_: function () {
-		var s = this.$supers('domContent_', arguments),
-			tree = this.getTree();
+	protected override domContent_(): string {
+		var s = super.domContent_(),
+			tree = this.getTree()!;
 		if (this._hasCheckbox())
 			s = '<span id="' + this.uuid + '-cm" class="' + this.$s('checkable')
 				+ (tree.$$selectAll ? ' ' + this.$s('checked') : '') + '"><i class="' + this.$s('icon') + ' z-icon-check"></i></span>'
 				+ (s ? '&nbsp;' + s : '');
 		return s;
-	},
-	_hasCheckbox: function () {
+	}
+
+	private _hasCheckbox(): boolean | undefined {
 		var tree = this.getTree();
-		return tree != null && this.parent.firstChild == this
+		return tree != null && this.parent!.firstChild == this
 			&& tree._checkmark && tree._multiple && !tree._tree$noSelectAll;
-	},
+	}
+
 	//@Override
-	domLabel_: function () {
+	protected override domLabel_(): string {
 		return zUtl.encodeXML(this.getLabel(), {maxlength: this._maxlength});
-	},
-	_doCheckmarkClick: function (evt) {
+	}
+
+	public _doCheckmarkClick(evt: zk.Event<zk.EventMetaData>): void {
 		this._checked = !this._checked;
-		var tree = this.getTree(),
-			cm = this.$n('cm'),
+		var tree = this.getTree()!,
+			cm = this.$n_('cm'),
 			$n = jq(cm);
 		if (this._checked) {
 			$n.addClass(this.$s('checked'));
@@ -185,18 +216,18 @@ zul.sel.Treecol = zk.$extends(zul.mesh.SortWidget, {
 			tree._select(null, evt);
 		}
 		tree.fire('onCheckSelectAll', this._checked, {toServer: true});
-	},
-	doClick_: function (evt) {
+	}
+
+	public override doClick_(evt: zk.Event, popupOnly?: boolean): void {
 		var tree = this.getTree(),
 			cm = this.$n('cm');
 		if (tree && tree._checkmark) {
-			var n = evt.domTarget;
+			var n = evt.domTarget!;
 			if (n == cm || n.parentNode == cm) {
 				return;
 			}
 		}
-		this.$supers('doClick_', arguments);
+		super.doClick_(evt, popupOnly);
 	}
-});
-
-})();
+}
+zul.sel.Treecol = zk.regClass(Treecol);

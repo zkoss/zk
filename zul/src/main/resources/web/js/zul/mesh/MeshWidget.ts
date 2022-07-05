@@ -488,9 +488,9 @@ export abstract class MeshWidget extends zul.Widget {
 	private _lastDevicePixelRatio?: number;
 	private _adjustScrollTopLater?: boolean;
 	private _shallSize?: boolean;
-	private _syncingbodyrows?: boolean;
+	public _syncingbodyrows?: boolean;
 	private _shallClearTableWidth?: boolean;
-	private _shallShowScrollbar?: boolean;
+	protected _shallShowScrollbar?: boolean;
 	declare public _syncEmpty?: () => void; // zul.mesh.ColumnMenuWidget
 
 	public constructor() {
@@ -507,9 +507,6 @@ export abstract class MeshWidget extends zul.Widget {
 	protected abstract getHeadWidgetClass(): typeof zul.mesh.HeadWidget;
 	public abstract getBodyWidgetIterator(opts?: Record<string, unknown>): ItemIterator;
 	public abstract itemIterator(opts?: Record<string, unknown>): ItemIterator;
-	protected abstract _getFirstItemIndex(): number;
-	protected abstract _getLastItemIndex(): number;
-	public abstract hasGroup(): boolean;
 
 	/**
 	 * Returns the rows. Zero means no limitation.
@@ -1153,7 +1150,7 @@ export abstract class MeshWidget extends zul.Widget {
 		}
 	}
 
-	private _bindDomNode(): void {
+	public _bindDomNode(): void {
 		this.ehead = this.$n('head');
 		this.eheadtbl = this.$n('headtbl');
 		this.ebody = this.$n('body');
@@ -1714,12 +1711,12 @@ export abstract class MeshWidget extends zul.Widget {
 		this.heads.push(child);
 	}
 
-	protected override onChildRemoved_(child: zul.mesh.HeadWidget): void {
+	protected override onChildRemoved_(child: zk.Widget): void {
 		super.onChildRemoved_(child);
 
-		if (child == this.head) {
+		if (child == this.head) { // If true, child is guaranteed to be a HeadWidget
 			this._minWd = this.head = null;
-			this.heads.$remove(child);
+			this.heads.$remove(child as zul.mesh.HeadWidget);
 		} else if (child instanceof zul.mesh.Auxhead)
 			this.heads.$remove(child);
 		else if (child instanceof zul.mesh.Frozen)
@@ -2214,7 +2211,16 @@ export abstract class MeshWidget extends zul.Widget {
 	 * @param double scrollRatio the scroll ratio
 	 */
 	protected _scrollToIndex(index: number, scrollRatio?: number): void {
+		// NOTE: _scrollToIndex will only be called by Grid and Listbox, and both of them
+		// implements _getFirstItemIndex and _getLastItemIndex. Thus, @ts-ignore is safe.
+
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// @ts-ignore
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
 		var firstItemIndex = this._getFirstItemIndex(),
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// @ts-ignore
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
 			lastItemIndex = this._getLastItemIndex(),
 			body = this.ebody!;
 		this._targetIndex = index;

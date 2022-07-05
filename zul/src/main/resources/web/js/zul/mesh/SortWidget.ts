@@ -21,12 +21,11 @@ export interface SortableWidget extends zk.Widget {
  * A skeletal implementation for a sortable widget.
  */
 export abstract class SortWidget extends zul.mesh.HeaderWidget {
-	public override parent!: zul.mesh.ColumnMenuWidget | null;
 	protected override _sortDirection: zul.mesh.SortDirection = 'natural';
 	protected _sortAscending = 'none';
 	protected _sortDescending = 'none';
 	
-	public abstract getMeshBody(): zk.Widget | null;
+	public abstract getMeshBody(): zk.Widget | null | undefined;
 
 	/** Returns the sort direction.
 	 * <p>Default: "natural".
@@ -331,7 +330,7 @@ export abstract class SortWidget extends zul.mesh.HeaderWidget {
 				var ofs = zk(btn).revisedOffset(),
 					asc = this.getSortAscending() != 'none',
 					desc = this.getSortDescending() != 'none',
-					mw = this.getMeshWidget()!;
+					mw = this.getMeshWidget() as zul.sel.Listbox;
 				if (pp instanceof zul.mesh.ColumnMenupopup) {
 					pp.getAscitem()!.setVisible(asc);
 					pp.getDescitem()!.setVisible(desc);
@@ -351,7 +350,8 @@ export abstract class SortWidget extends zul.mesh.HeaderWidget {
 					if (sep)
 						sep.setVisible((asc || desc));
 				} else {
-					pp.listen({onOpen: [this.parent, this.parent!._onMenuPopup]});
+					// In general, parent is not zul.mesh.ColumnMenuWidget, but it is here.
+					pp.listen({onOpen: [this.parent, (this.parent as zul.mesh.ColumnMenuWidget)._onMenuPopup]});
 				}
 				pp.open(btn, [ofs[0], ofs[1] + btn.offsetHeight - 4], null, {sendOnOpen: true});
 			}

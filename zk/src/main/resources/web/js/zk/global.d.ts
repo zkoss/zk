@@ -246,6 +246,7 @@ declare namespace zk {
 	type DomClassOptions = import('./widget').DomClassOptions;
 	type DomStyleOptions = import('./widget').DomStyleOptions;
 	type DomVisibleOptions = import('./widget').DomVisibleOptions;
+	type RealVisibleOptions = import('./widget').RealVisibleOptions;
 	type EventMetaData = import('./dom').EventMetaData;
 	type EventMouseData = import('./dom').EventMouseData;
 	type EventKeyData = import('./dom').EventKeyData;

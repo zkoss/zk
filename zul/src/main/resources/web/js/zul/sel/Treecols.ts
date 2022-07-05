@@ -1,4 +1,4 @@
-/* Treecols.js
+/* Treecols.ts
 
 	Purpose:
 
@@ -16,17 +16,24 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * A treecols.
  * <p>Default {@link #getZclass}: z-treecols
  */
-zul.sel.Treecols = zk.$extends(zul.mesh.HeadWidget, {
+export class Treecols extends zul.mesh.HeadWidget {
+	public override parent!: zul.sel.Tree | null;
+	public override firstChild!: zul.sel.Treecol | null;
+	public override lastChild!: zul.sel.Treecol | null;
+
 	/** Returns the tree that it belongs to.
 	 * @return Tree
 	 */
-	getTree: function () {
+	public getTree(): zul.sel.Tree | null {
 		return this.parent;
-	},
-	setVisible: function (visible) {
-		if (this._visible != visible) {
-			this.$supers('setVisible', arguments);
-			this.getTree().rerender();
-		}
 	}
-});
+
+	public override setVisible(visible: boolean, opts?: Record<string, boolean>): this {
+		if (this._visible != visible) {
+			super.setVisible(visible, opts);
+			this.getTree()!.rerender();
+		}
+		return this;
+	}
+}
+zul.sel.Treecols = zk.regClass(Treecols);
