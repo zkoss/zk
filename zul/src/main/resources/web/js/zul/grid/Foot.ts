@@ -1,4 +1,4 @@
-/* Foot.js
+/* Foot.ts
 
 	Purpose:
 

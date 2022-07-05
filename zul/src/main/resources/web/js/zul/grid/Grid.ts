@@ -1,4 +1,4 @@
-/* Grid.js
+/* Grid.ts
 
 	Purpose:
 
