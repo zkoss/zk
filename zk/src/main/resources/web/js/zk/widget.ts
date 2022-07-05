@@ -661,15 +661,12 @@ const _dragoptions: DraggableOptions = {
 };
 
 export function WrapClass(pkg: string) {
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore
-	// eslint-disable-next-line @typescript-eslint/ban-types
-	return function _WrapClass<T extends {new(...args: never[]): {}}>(constr: T) {
+	return function _WrapClass<T extends typeof zk.Object>(constr: T) {
 		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-ignore
 		const s = class extends constr {
-			// eslint-disable-next-line @typescript-eslint/explicit-member-accessibility
-			constructor(...args: never[]) {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			public constructor(...args: any[]) {
 				super(...args);
 				if (this['afterCreated_'] && this['className'] == pkg) {
 					this['afterCreated_'](...args);
@@ -685,11 +682,11 @@ export function WrapClass(pkg: string) {
 				context = context[pkges[i]];
 			}
 			let run = function (context: object): void {
-				constr.prototype.className = pkg;
+				(constr.prototype as zk.Widget).className = pkg;
 				for (let i = 0, j = pkges.length - 1; i < j; i++) {
 					context = context[pkges[i]];
 				}
-				context[pkges[pkges.length - 1]] = zk.regClass(s as unknown as typeof ZKObject);
+				context[pkges[pkges.length - 1]] = zk.regClass(s);
 			};
 			if (!context) {
 				PKG.afterLoad(pkges.slice(0, pkges.length - 1).join('.'), function () {

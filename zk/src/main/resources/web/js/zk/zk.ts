@@ -124,13 +124,10 @@ function newClass<T>(superclass): T {
 		if (____ === undefined || ____ - 1 < this.___s) {
 
 			// call afterCreated_() for ES6 class here
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-ignore
-			this.afterCreated_.apply(_this, arguments);
+			this.afterCreated_.apply(_this, arguments as never);
 
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-ignore
-			this.$init.apply(_this, arguments);
+			this.$init.apply(_this, arguments as never);
+
 		//
 			var ais = _this._$ais;
 			if (ais) {
@@ -1736,7 +1733,8 @@ export abstract class ZKObject {
 
 	declare public static $oid;
 
-	public constructor(..._rest: never[]/* for override compatibility */) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	public constructor(..._rest: any[]/* for override compatibility */) {
 		this.$oid = ++_oid;
 	}
 
@@ -1746,7 +1744,7 @@ export abstract class ZKObject {
 	 * @see #afterInit
 	 * @deprecated as of 10.0 released. Using ES6 {@code constructor} instead.
 	 */
-	protected $init(props?: Record<string, unknown> | typeof zkac): void {
+	public $init(props?: Record<string, unknown> | typeof zkac): void {
 		//zkac is a token used by create() in mount.js for optimizing performance
 		if (props !== zkac) {
 			//if props.$oid, it must be an object other than {} so ignore
@@ -1754,6 +1752,10 @@ export abstract class ZKObject {
 				for (var nm in props)
 					this['set'](nm, props[nm]);
 		}
+	}
+
+	public afterCreated_(props?: Record<string, unknown> | typeof zkac): void {
+		// empty
 	}
 
 	/**

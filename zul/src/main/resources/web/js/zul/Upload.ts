@@ -615,6 +615,7 @@ function _initUM(uplder: Uploader, flnm: string): void {
 		 * Default file upload manager to manage the uploading files in a panel.
 		 * Users can add/delete the file upon the panel.
 		 */
+		@zk.WrapClass('zul.UploadManager')
 		class UploadManager extends zul.wgt.Popup {
 			private _files: Record<string, zul.wgt.Div>;
 			public constructor() {
@@ -722,7 +723,6 @@ function _initUM(uplder: Uploader, flnm: string): void {
 				});
 			}
 		}
-		zul.UploadManager = zk.regClass(UploadManager);
 		_addUM(uplder, flnm);
 	});
 }
