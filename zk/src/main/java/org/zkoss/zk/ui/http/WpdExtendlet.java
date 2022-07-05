@@ -309,7 +309,7 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 		}
 		StringBuilder preScriptBuilder = new StringBuilder();
 		if (zk) {
-//			preScriptBuilder.append("if(!window.zk){\n");
+			preScriptBuilder.append("if(!window.zk){\n");
 			//may be loaded multiple times because specified in lang.xml
 		} else if (!aaas) {
 			depends = root.getAttributeValue("depends");
@@ -445,7 +445,7 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 			final WebApp wapp = getWebApp();
 			if (wapp != null)
 				writeAppInfo(reqctx, out, wapp, sourceMapManager);
-//			appendPostJsScript(out, sourceMapManager, "}"); //end of if(window.zk)
+			appendPostJsScript(out, sourceMapManager, "}"); //end of if(window.zk)
 			writeHost(wc, out, wapp, reqctx, sourceMapManager);
 		} else if (aaas) {
 			writeHost(wc, out, getWebApp(), reqctx, sourceMapManager);
