@@ -332,20 +332,24 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 		else
 			sourceMapManager.setPreScript(preStr);
 
+		final boolean moldonly = "true".equals(root.getAttributeValue("moldonly"));
 		final Map<String, String[]> moldInfos = new HashMap<>();
 		for (Iterator it = root.getElements().iterator(); it.hasNext();) {
 			final Element el = (Element) it.next();
 			final String elnm = el.getName();
 			if ("widget".equals(elnm)) {
 				final String wgtnm = IDOMs.getRequiredAttributeValue(el, "name");
-				final String jspath = wgtnm + ".js"; //eg: /js/zul/wgt/Div.js
-				if (sourceMapManager != null)
-					sourceMapManager.startJsCursor(jspath);
-				if (!writeResource(reqctx, out, jspath, dir, false, sourceMapManager)) {
-					log.error("Widget " + wgtnm + ": " + jspath + " not found, " + el.getLocator() + ", " + path);
+				final boolean retainFileContent = !moldonly || "true".equals(el.getAttributeValue("retainFileContent"));
+				if (retainFileContent) {
+					final String jspath = wgtnm + ".js"; //eg: /js/zul/wgt/Div.js
 					if (sourceMapManager != null)
-						sourceMapManager.closeJsCursor(out);
-					continue;
+						sourceMapManager.startJsCursor(jspath);
+					if (!writeResource(reqctx, out, jspath, dir, false, sourceMapManager)) {
+						log.error("Widget " + wgtnm + ": " + jspath + " not found, " + el.getLocator() + ", " + path);
+						if (sourceMapManager != null)
+							sourceMapManager.closeJsCursor(out);
+						continue;
+					}
 				}
 
 				final String wgtflnm = name + "." + wgtnm;
@@ -401,7 +405,8 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 			} else if ("script".equals(elnm)) {
 				String browser = el.getAttributeValue("browser");
 				String jspath = el.getAttributeValue("src");
-				if (jspath != null && jspath.length() > 0) {
+				final boolean retainFileContent = !moldonly || "true".equals(el.getAttributeValue("retainFileContent"));
+				if (jspath != null && jspath.length() > 0 && retainFileContent) {
 					if (sourceMapManager != null)
 						sourceMapManager.startJsCursor(jspath);
 					if (wc != null && (browser != null || jspath.indexOf('*') >= 0)) {

@@ -1,7 +1,6 @@
 const path = require('path');
 var webpack = require('webpack');
 // var CircularDependencyPlugin = require('circular-dependency-plugin');
-// var ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 module.exports = {
 	resolve: {
@@ -30,7 +29,6 @@ module.exports = {
 	},
 
 	plugins: [
-		// new ForkTsCheckerWebpackPlugin(),
 		new webpack.IgnorePlugin({
 			resourceRegExp: /^\.\/locale$/
 		}),
