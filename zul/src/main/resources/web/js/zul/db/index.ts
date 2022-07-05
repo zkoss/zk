@@ -1,3 +1,4 @@
+export default {};
 import './datefmt'; // Side-effect-only import to register zk.fmt members
 import './Timebox'; // Side-effect-only import to register zul.inp members
 export { Timebox } from './Timebox'; // Expose Timebox via zul.db
