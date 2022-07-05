@@ -20,6 +20,7 @@ export interface SortableWidget extends zk.Widget {
 /**
  * A skeletal implementation for a sortable widget.
  */
+@zk.WrapClass('zul.mesh.SortWidget')
 export abstract class SortWidget extends zul.mesh.HeaderWidget {
 	protected override _sortDirection: zul.mesh.SortDirection = 'natural';
 	protected _sortAscending = 'none';
@@ -359,4 +360,3 @@ export abstract class SortWidget extends zul.mesh.HeaderWidget {
 		}
 	}
 }
-zul.mesh.SortWidget = zk.regClass(SortWidget);

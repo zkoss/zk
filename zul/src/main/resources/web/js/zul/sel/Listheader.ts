@@ -24,6 +24,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * </ol>
  * <p>Default {@link #getZclass}: z-listheader.
  */
+@zk.WrapClass('zul.sel.Listheader')
 export class Listheader extends zul.mesh.SortWidget {
 	public override parent!: zul.sel.Listhead | null;
 	private _maxlength?: number;
@@ -335,4 +336,3 @@ export class Listheader extends zul.mesh.SortWidget {
 		return Math.ceil(contentWidth + $cv.padBorderWidth() + zk(this.$n()).padBorderWidth());
 	}
 }
-zul.sel.Listheader = zk.regClass(Listheader);

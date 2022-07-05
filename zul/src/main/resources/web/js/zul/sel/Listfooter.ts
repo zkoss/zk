@@ -20,6 +20,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>Note: {@link Listcell} also accepts children.
  * <p>Default {@link #getZclass}: z-listfooter.
  */
+@zk.WrapClass('zul.sel.Listfooter')
 export class Listfooter extends zul.mesh.FooterWidget {
 	/** Returns the listbox that this belongs to.
 	 * @return Listbox
@@ -56,4 +57,3 @@ export class Listfooter extends zul.mesh.FooterWidget {
 		return zUtl.encodeXML(this.getLabel(), {maxlength: this.getMaxlength()});
 	}
 }
-zul.sel.Listfooter = zk.regClass(Listfooter);

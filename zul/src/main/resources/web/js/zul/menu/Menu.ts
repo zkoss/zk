@@ -73,6 +73,7 @@ function _prevVisibleMenu(menu: zul.menu.Menu): zul.menu.Menu {
  *
  * <p>Default {@link #getZclass}: z-mean.
  */
+@zk.WrapClass('zul.menu.Menu')
 export class Menu extends zul.LabelImageWidget implements zul.LabelImageWidgetWithDisable {
 	// parent could be null as asserted in getMenubar
 	public override parent!: zul.menu.Menubar | null;
@@ -620,8 +621,8 @@ export class Menu extends zul.LabelImageWidget implements zul.LabelImageWidgetWi
 		out.push('<li', this.domAttrs_({domClass: true}), ' class="z-renderdefer"></li>');
 	}
 }
-zul.menu.Menu = zk.regClass(Menu);
 
+@zk.WrapClass('zul.menu.ContentHandler')
 export class ContentHandler extends zk.Object {
 	private _wgt: Menu;
 	private _content?: string;
@@ -744,4 +745,3 @@ export class ContentHandler extends zk.Object {
 		return wgt.isVertical_() ? 'end_before' : 'after_start';
 	}
 }
-zul.menu.ContentHandler = zk.regClass(ContentHandler);

@@ -440,6 +440,7 @@ export interface ItemIterator {
  *  @see zul.sel.Tree
  *  @see zul.sel.Listbox
  */
+@zk.WrapClass('zul.mesh.MeshWidget')
 export abstract class MeshWidget extends zul.Widget {
 	public _rows = 0;
 	private _pagingPosition = 'bottom';
@@ -2320,7 +2321,6 @@ export abstract class MeshWidget extends zul.Widget {
 		return this.WIDTH0;
 	}
 }
-zul.mesh.MeshWidget = zk.regClass(MeshWidget);
 
 /** @class zul.mesh.Scrollbar
  * @import zk.Widget

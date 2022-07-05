@@ -18,6 +18,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>Non XUL element.
  * <p>Default {@link #getZclass}: z-auxhead.
  */
+@zk.WrapClass('zul.mesh.Auxhead')
 export class Auxhead extends zul.mesh.HeadWidget {
 	protected override bind_(desktop: zk.Desktop | null | undefined, skipper: zk.Skipper | null | undefined, after: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
@@ -36,4 +37,3 @@ export class Auxhead extends zul.mesh.HeadWidget {
 		}
 	}
 }
-zul.mesh.Auxhead = zk.regClass(Auxhead);

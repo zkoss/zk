@@ -16,6 +16,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * A treerow.
  * <p>Default {@link #getZclass}: z-treerow
  */
+@zk.WrapClass('zul.sel.Treerow')
 export class Treerow extends zul.Widget<HTMLTableRowElement> {
 	public override parent!: zul.sel.Treeitem | null;
 	public override firstChild!: zul.sel.Treecell | null;
@@ -143,4 +144,3 @@ export class Treerow extends zul.Widget<HTMLTableRowElement> {
 		}
 	}
 }
-zul.sel.Treerow = zk.regClass(Treerow);

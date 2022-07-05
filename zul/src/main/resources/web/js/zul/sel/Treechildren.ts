@@ -33,6 +33,7 @@ function _syncFrozen(wgt: zul.sel.Treechildren): void {
 		frozen._syncFrozen();
 }
 
+@zk.WrapClass('zul.sel.Treechildren')
 export class Treechildren extends zul.Widget {
 	public override parent!: zul.sel.Tree | zul.sel.Treeitem | null;
 	public override firstChild!: zul.sel.Treeitem | null;
@@ -296,4 +297,3 @@ export class Treechildren extends zul.Widget {
 		child.bind(desktop, skipper);
 	}
 }
-zul.sel.Treechildren = zk.regClass(Treechildren);

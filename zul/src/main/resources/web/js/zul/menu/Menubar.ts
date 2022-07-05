@@ -29,6 +29,7 @@ function _closeOnOut(menubar: zul.menu.Menubar): void {
  *
  * <p>Default {@link #getZclass}: z-menubar
  */
+@zk.WrapClass('zul.menu.Menubar')
 export class Menubar extends zul.Widget {
 	public override firstChild!: zul.menu.Menu | null;
 	public override lastChild!: zul.menu.Menu | null;
@@ -435,4 +436,3 @@ export class Menubar extends zul.Widget {
 			&& !wgt.isDisabled();
 	}
 }
-zul.menu.Menubar = zk.regClass(Menubar);

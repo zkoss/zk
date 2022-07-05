@@ -18,6 +18,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>Like {@link Treecols}, each tree has at most one {@link Treefoot}.
  * <p>Default {@link #getZclass}: z-treefoot
  */
+@zk.WrapClass('zul.sel.Treefoot')
 export class Treefoot extends zul.Widget {
 	public override parent!: zul.sel.Tree | null;
 	/** Returns the tree that it belongs to.
@@ -43,4 +44,3 @@ export class Treefoot extends zul.Widget {
 		out.push('<tr', this.domAttrs_({domClass: true}), ' class="z-renderdefer"></tr>');
 	}
 }
-zul.sel.Treefoot = zk.regClass(Treefoot);

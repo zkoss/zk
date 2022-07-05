@@ -18,6 +18,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>Like {@link Listhead}, each listbox has at most one {@link Listfoot}.
  * <p>Default {@link #getZclass}: z-listfoot
  */
+@zk.WrapClass('zul.sel.Listfoot')
 export class Listfoot extends zul.Widget {
 	public override parent!: zul.sel.Listbox | null;
 	/** Returns the list box that it belongs to.
@@ -43,4 +44,3 @@ export class Listfoot extends zul.Widget {
 		out.push('<tr', this.domAttrs_({domClass: true}), ' class="z-renderdefer"></tr>');
 	}
 }
-zul.sel.Listfoot = zk.regClass(Listfoot);

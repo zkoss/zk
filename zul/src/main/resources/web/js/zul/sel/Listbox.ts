@@ -39,6 +39,7 @@ function _fixForEmpty(wgt: zul.sel.Listbox): void {
 	wgt._shallFixEmpty = false;
 }
 
+@zk.WrapClass('zul.sel.Listbox')
 export class Listbox extends zul.sel.SelectWidget {
 	// public override firstChild!: zul.sel.Listitem | null;
 	// public override lastChild!: zul.sel.Listitem | null;
@@ -594,12 +595,12 @@ export class Listbox extends zul.sel.SelectWidget {
 		});
 	}
 }
-zul.sel.Listbox = zk.regClass(Listbox);
 
 /**
  * The listitem iterator.
  * @disable(zkgwt)
  */
+@zk.WrapClass('zul.sel.ItemIter')
 export class ItemIter extends zk.Object implements zul.mesh.ItemIterator {
 	public box: zul.sel.Listbox;
 	public opts?: Record<string, unknown>;
@@ -650,4 +651,3 @@ export class ItemIter extends zk.Object implements zul.mesh.ItemIterator {
 		return p;
 	}
 }
-zul.sel.ItemIter = zk.regClass(ItemIter);

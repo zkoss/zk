@@ -15,6 +15,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 /**
  * A HTML select tag.
  */
+@zk.WrapClass('zul.sel.Select')
 export class Select extends zul.Widget<HTMLSelectElement> {
 	public _selectedIndex = -1;
 	private _rows = 0;
@@ -466,4 +467,3 @@ export class Select extends zul.Widget<HTMLSelectElement> {
 		});
 	}
 }
-zul.sel.Select = zk.regClass(Select);

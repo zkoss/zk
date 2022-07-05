@@ -15,6 +15,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 /**
  * A HTML option tag.
  */
+@zk.WrapClass('zul.sel.Option')
 export class Option extends zul.Widget<HTMLOptionElement> {
 	// Parent could be null as asserted by `focus`.
 	public override parent!: zul.sel.Select | null; // FIXME: could parent be optgroup?
@@ -206,4 +207,3 @@ export class Option extends zul.Widget<HTMLOptionElement> {
 		}
 	}
 }
-zul.sel.Option = zk.regClass(Option);

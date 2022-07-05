@@ -23,6 +23,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  *
  * <p>Default {@link #getZclass}: z-tree.
  */
+@zk.WrapClass('zul.sel.Tree')
 export class Tree extends zul.sel.SelectWidget {
 	public override _selItems!: zul.sel.Treeitem[]; // initialized in super constructor
 	public override _scrollbar: zul.Scrollbar | null = null;
@@ -407,10 +408,11 @@ export class Tree extends zul.sel.SelectWidget {
 		return false;
 	}
 }
-zul.sel.Tree = zk.regClass(Tree);
+
 /**
  * Tree item iterator.
  */
+@zk.WrapClass('zul.sel.TreeItemIter')
 export class TreeItemIter extends zk.Object implements zul.mesh.ItemIterator {
 	public tree: Tree;
 	public opts?: Record<string, unknown>;
@@ -456,4 +458,3 @@ export class TreeItemIter extends zk.Object implements zul.mesh.ItemIterator {
 		return this.items![this.cur!++];
 	}
 }
-zul.sel.TreeItemIter = zk.regClass(TreeItemIter);

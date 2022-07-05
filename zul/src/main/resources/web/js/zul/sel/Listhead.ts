@@ -17,6 +17,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  *
  *  <p>Default {@link #getZclass}: z-listhead.
  */
+@zk.WrapClass('zul.sel.Listhead')
 export class Listhead extends zul.mesh.ColumnMenuWidget {
 	public override parent!: zul.sel.Listbox | null;
 	/** Returns the listbox that this belongs to.
@@ -30,4 +31,3 @@ export class Listhead extends zul.mesh.ColumnMenuWidget {
 		return 'zkex.sel';
 	}
 }
-zul.sel.Listhead = zk.regClass(Listhead);

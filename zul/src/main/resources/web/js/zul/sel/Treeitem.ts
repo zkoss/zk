@@ -88,6 +88,7 @@ function _compareTreePath(thisPath: number[], itemPath: number[]): 1 | -1 {
  * </ol>
  *
  */
+@zk.WrapClass('zul.sel.Treeitem')
 export class Treeitem extends zul.sel.ItemWidget {
 	public override parent!: zul.sel.Treechildren | null;
 	public override firstChild!: zul.sel.Treerow | zul.sel.Treechildren | null;
@@ -531,4 +532,3 @@ export class Treeitem extends zul.sel.ItemWidget {
 			}
 	}
 }
-zul.sel.Treeitem = zk.regClass(Treeitem);

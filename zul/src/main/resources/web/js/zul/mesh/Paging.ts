@@ -35,6 +35,7 @@ export interface PagingFocusInfo {
  *
  * <p>Default {@link #getZclass}: z-paging.
  */
+@zk.WrapClass('zul.mesh.Paging')
 export class Paging extends zul.Widget {
 	public override parent!: zul.mesh.MeshWidget | null;
 	private _pageSize = 20;
@@ -790,4 +791,3 @@ export class Paging extends zul.Widget {
 		wgt._doAfterGo(postfix, btnIdx);
 	}
 }
-zul.mesh.Paging = zk.regClass(Paging);

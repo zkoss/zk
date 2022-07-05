@@ -58,6 +58,7 @@ function _onSizeLater(wgt: Frozen): void {
  * A frozen component to represent a frozen column or row in grid, like MS Excel.
  * <p>Default {@link #getZclass}: z-frozen.
  */
+@zk.WrapClass('zul.mesh.Frozen')
 export class Frozen extends zul.Widget {
 	// Parent could be null because it's checked in `Frozen.prototype.syncScroll`.
 	public override parent!: zul.mesh.MeshWidget | null;
@@ -480,4 +481,3 @@ export class Frozen extends zul.Widget {
 		}
 	}
 }
-zul.mesh.Frozen = zk.regClass(Frozen);

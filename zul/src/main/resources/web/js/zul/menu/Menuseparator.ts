@@ -17,6 +17,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  *
  *<p>Default {@link #getZclass}: z-menuseparator.
  */
+@zk.WrapClass('zul.menu.Menuseparator')
 export class Menuseparator extends zul.Widget {
 	/** Returns whether parent is a {@link Menupopup}
 	 * @return boolean
@@ -41,4 +42,3 @@ export class Menuseparator extends zul.Widget {
 		super.doMouseOver_(evt);
 	}
 }
-zul.menu.Menuseparator = zk.regClass(Menuseparator);

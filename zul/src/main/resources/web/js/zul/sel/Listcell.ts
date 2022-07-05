@@ -23,6 +23,7 @@ function _isListgroupfoot(wgt: zk.Widget): boolean {
  *
  * <p>Default {@link #getZclass}: z-listcell
  */
+@zk.WrapClass('zul.sel.Listcell')
 export class Listcell extends zul.LabelImageWidget<HTMLTableCellElement> {
 	// Parent could be null as asserted by `bindChildren_`.
 	public override parent!: zul.sel.Listitem | null;
@@ -248,4 +249,3 @@ export class Listcell extends zul.LabelImageWidget<HTMLTableCellElement> {
 		out.push('<td', this.domAttrs_({domClass: true}), ' class="z-renderdefer"></td>');
 	}
 }
-zul.sel.Listcell = zk.regClass(Listcell);
