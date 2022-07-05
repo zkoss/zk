@@ -11,7 +11,9 @@
 Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 -->
 
-<package name="zul.sel" language="xul/html" depends="zul.mesh">
+<package name="zul.sel" language="xul/html" depends="zul.mesh" moldonly="true">
+	<script src="index.js" retainFileContent="true"/>
+
 	<script src="SelectWidget.js" jsdoc="true"/>
 	<script src="ItemWidget.js" jsdoc="true"/>
 	<widget name="Listbox"/>

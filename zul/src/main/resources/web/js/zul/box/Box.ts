@@ -99,7 +99,7 @@ function _fixTd(this: zul.box.Box): void {
 
 @zk.WrapClass('zul.box.Box')
 export class Box extends zul.Widget {
-	protected override _mold = 'vertical';
+	public override _mold = 'vertical';
 	private _align = 'start';
 	private _pack = 'start';
 	private _sizedByContent = true;

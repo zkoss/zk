@@ -790,7 +790,7 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends ZKObject
 	declare public static molds;
 
 	public _visible?: boolean = true;
-	protected _mold = 'default';
+	public _mold = 'default';
 	protected _style: zk.StringFieldValue;
 	public _renderdefer = -1;
 
@@ -3084,7 +3084,7 @@ function () {
 	 * @param DOMElement n the DOM element to match the widget.
 	 * @since 5.0.3
 	 */
-	public getOldWidget_(n: HTMLElement | string): Widget | null {
+	public getOldWidget_(n: HTMLElement | string): Widget | null | undefined {
 		return Widget.$(n, {strict: true});
 	}
 

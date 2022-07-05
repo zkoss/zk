@@ -83,7 +83,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	private _anchorTop = 0;
 	private _anchorLeft = 0;
 	protected _isSelecting = true;
-	private _startRow: zul.sel.ItemWidget | null = null;
+	private _startRow: zul.sel.ItemWidget | null | undefined = null;
 	public nonselectableTags?: string;
 	public _checkmark?: boolean;
 	public _multiple?: boolean;
@@ -102,13 +102,11 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	public _headercm?: HTMLElement | null;
 	private _$services?: Record<string, zk.Callable[] | null>;
 	public groupSelect?: boolean;
-	private _shallSyncFocus?: boolean | zul.sel.ItemWidget;
+	protected _shallSyncFocus?: boolean | zul.sel.ItemWidget;
 	public _shallSyncCM?: boolean;
 	protected _itemForSelect?: zul.sel.ItemWidget;
 	private _disableSelection_?: boolean;
 	declare public static shallSyncSelInView?: Record<string, boolean>;
-
-	public abstract stripe(): this | undefined
 
 	public constructor() {
 		super(); // FIXME: params?
@@ -164,7 +162,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 
 		if (o !== multiple || (opts && opts.force)) {
 			if (!this._multiple && this._selItems.length) {
-				var item = this.getSelectedItem();
+				var item = this.getSelectedItem()!;
 				for (var it: zul.sel.ItemWidget | undefined; (it = this._selItems.pop());)
 					if (it != item) {
 						if (!this._checkmark)
@@ -377,7 +375,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	 * Returns the selected item.
 	 * @return ItemWidget
 	 */
-	public getSelectedItem(): zul.sel.ItemWidget {
+	public getSelectedItem(): zul.sel.ItemWidget | undefined {
 		return this._selItems[0];
 	}
 
@@ -484,7 +482,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 			this.setSelectedIndex(this.indexOfItem(item));
 	}
 
-	private _addItemToSelection(item: zul.sel.ItemWidget): void {
+	protected _addItemToSelection(item: zul.sel.ItemWidget): void {
 		if (!item.isSelected()) {
 			if (!this._multiple) {
 				this._selectedIndex = this.indexOfItem(item);
@@ -499,7 +497,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		}
 	}
 
-	private _removeItemFromSelection(item: zul.sel.ItemWidget): void {
+	protected _removeItemFromSelection(item: zul.sel.ItemWidget): void {
 		if (item.isSelected()) {
 			if (!this._multiple) {
 				this.clearSelection();
@@ -778,7 +776,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 			return true;
 
 		var row = this._focusItem || this.getSelectedItem(),
-			data = evt.data as zk.EventKeyData,
+			data = evt.data!,
 			shift = data.shiftKey, ctrl = (data.ctrlKey || data.metaKey);
 		if (shift && !this._multiple)
 			shift = false; //OK to
@@ -883,9 +881,9 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 					}
 					break;
 				}
-				var r = zk.Widget.$<zul.sel.ItemWidget>(nrow)!;
+				var r = zk.Widget.$<zul.sel.Treerow | zul.sel.ItemWidget>(nrow)!;
 				if (r instanceof zul.sel.Treerow)
-					r = r.parent as unknown as zul.sel.ItemWidget; // FIXME: type of parent is inconsistent
+					r = r.parent!;
 				if (!r.isDisabled() && r.isSelectable()) {
 					// F85-ZK-3507
 					if (shift) this._toggleSelect(r, endless ? this._getToSelFlag(r, this._startRow!, step) : true, evt);
@@ -934,10 +932,10 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		return _beforeChildKey(this, evt) || _afterChildKey(evt);
 	}
 
-	private _doLeft(row: zul.sel.ItemWidget): void {
+	protected _doLeft(row: zul.sel.ItemWidget): void {
 		// An empty default implementation.
 	}
-	private _doRight(row: zul.sel.ItemWidget): void {
+	protected _doRight(row: zul.sel.ItemWidget): void {
 		// An empty default implementation.
 	}
 
@@ -1139,7 +1137,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	 * Ignored if null.
 	 * @since 5.0.5
 	 */
-	public fireOnSelect(ref: zk.Widget | null, evt: zk.Event<zk.EventMetaData>): void {
+	public fireOnSelect(ref: zk.Widget | null | undefined, evt: zk.Event<zk.EventMetaData>): void {
 		var data: zul.sel.ItemWidget[] = [];
 
 		for (var it = this.getSelectedItems(), len = it.length, j = 0; j < len; j++)
@@ -1321,7 +1319,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	//@Override
 	public override onResponse(ctl: zk.ZWatchController, opts: {rtags: {selectAll?}}): void {
 		if (this._shallSyncFocus) {
-			var child = this._shallSyncFocus;
+			var child: zul.sel.ItemWidget | true | undefined = this._shallSyncFocus;
 
 			// Bug ZK-2901
 			if (child && child === true) { // called by Tree.js
@@ -1372,7 +1370,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	}
 
 	//@Override
-	protected override onChildRemoved_(child: zul.mesh.HeadWidget): void {
+	protected override onChildRemoved_(child: zk.Widget): void {
 		super.onChildRemoved_(child);
 		var selItems = this._selItems, len;
 		if (this.desktop && (len = selItems.length) && child instanceof zul.sel.ItemWidget)
@@ -1380,14 +1378,14 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		//	Bug ZK-1473: when using template to render listbox,
 		//   the item will be remove but current this._focusItem still remain,
 		//   disable it to prevent keyboard navigation jump back to top
-		if (this._focusItem == child as never) { // FIXME: condition always because types don't overlap
+		if (this._focusItem == child) { // If true, child is guaranteed to be an ItemWidget
 			this._focusItem = null;
 			// Bug in test case ZK-2534, we need to resync the lastSelectedItem if onBlur event is not triggered.
 			this._lastSelectedItem = this._focusItem;
 
 			//ZK-2804: the first selected item may be removed in rod when
 			//select multiple items with shift key
-			this._itemForSelect = child as never; // FIXME: Same problem as in the `if` condition.
+			this._itemForSelect = child as zul.sel.ItemWidget;
 		}
 	}
 

@@ -48,7 +48,7 @@ export class Listcell extends zul.LabelImageWidget<HTMLTableCellElement> {
 	// change colspan to span since ZK 10.0.0
 	public setSpan(v: number, opts?: Record<string, boolean>): this {
 		const o = this._span;
-		this._span = v = Math.min(v, 1);
+		this._span = v = Math.max(v, 1);
 
 		if (o !== v || (opts && opts.force)) {
 			var n = this.$n();

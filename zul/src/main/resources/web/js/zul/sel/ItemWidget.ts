@@ -22,13 +22,8 @@ function _isListgroupfoot(w: ItemWidget): boolean {
  * The item widget for {@link Treeitem} and {@link Listitem}
  */
 export class ItemWidget extends zul.Widget<HTMLTableRowElement> {
-	// Parent could be null as asserted in `afterParentChanged_`.
-	public override parent!: zul.sel.SelectWidget | null;
 	public override nextSibling!: zul.sel.ItemWidget | null;
 	public override previousSibling!: zul.sel.ItemWidget | null;
-	// Children are Treecells or Listcells. See `getLabel`.
-	public override firstChild!: zul.LabelImageWidget | null;
-	public override lastChild!: zul.LabelImageWidget | null;
 	private _selectable = true;
 	private _checkable?: boolean;
 	private _disabled?: boolean;
@@ -155,7 +150,7 @@ export class ItemWidget extends zul.Widget<HTMLTableRowElement> {
 		this._selected = selected;
 
 		if (n) {
-			jq(n)[selected ? 'addClass' : 'removeClass'](this.$s('selected'));
+			jq(n)[selected ? 'addClass' : 'removeClass'](this.$s('selected')!);
 			this._updHeaderCM();
 		}
 	}
@@ -165,7 +160,8 @@ export class ItemWidget extends zul.Widget<HTMLTableRowElement> {
 	 * @return String
 	 */
 	public getLabel(): string | null {
-		return this.firstChild ? this.firstChild.getLabel() : null;
+		// Note: Only Listitem uses this method. Treeitem overrides this method.
+		return this.firstChild ? (this.firstChild as zul.sel.Listcell).getLabel() : null;
 	}
 
 	/** Returns whether it is selected.
@@ -190,7 +186,7 @@ export class ItemWidget extends zul.Widget<HTMLTableRowElement> {
 	 * @return zul.mesh.MeshWidget
 	 */
 	public getMeshWidget(): zul.sel.SelectWidget | null {
-		return this.parent;
+		return this.parent as zul.sel.SelectWidget | null;
 	}
 
 	protected _getVisibleChild(row: HTMLTableRowElement): HTMLElement {
@@ -204,7 +200,8 @@ export class ItemWidget extends zul.Widget<HTMLTableRowElement> {
 		if (this._visible != visible) { // not to use isVisible()
 			super.setVisible(visible);
 			if (this.isStripeable_()) {
-				var p = this.getMeshWidget();
+				// Only Listbox is stripeable.
+				var p = this.getMeshWidget() as zul.sel.Listbox | null;
 				if (p) p.stripe();
 			}
 		}
@@ -239,7 +236,7 @@ export class ItemWidget extends zul.Widget<HTMLTableRowElement> {
 		var n = this.$n(),
 			mesh = this.getMeshWidget();
 		if (n) {
-			var cls = this.$s('focus'),
+			var cls = this.$s('focus')!,
 				last = mesh ? mesh._focusItem : null,
 				lastn;
 			// ZK-3077: focus out the last focused item first (for draggable issue)
@@ -256,7 +253,7 @@ export class ItemWidget extends zul.Widget<HTMLTableRowElement> {
 	public _doFocusOut(): void {
 		var n = this.$n();
 		if (n) {
-			var cls = this.$s('focus');
+			var cls = this.$s('focus')!;
 			jq(n).removeClass(cls);
 			jq(n.cells).removeClass(cls);
 		}
@@ -271,7 +268,7 @@ export class ItemWidget extends zul.Widget<HTMLTableRowElement> {
 			}
 
 			var headerWgt = zk.Widget.$<zul.mesh.HeaderWidget>(box._headercm)!,
-				zcls = headerWgt.$s('checked'),
+				zcls = headerWgt.$s('checked')!,
 				$headercm = jq(box._headercm);
 
 			// only update for user's selection or sharable model case (ZK-2969 test case)
