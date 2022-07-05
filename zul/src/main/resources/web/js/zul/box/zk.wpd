@@ -11,7 +11,9 @@
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 -->
 
-<package name="zul.box" language="xul/html" depends="zul,zul.wgt">
+<package name="zul.box" language="xul/html" depends="zul,zul.wgt" moldonly="true">
+	<script src="index.js" retainFileContent="true"/>
+
 	<script src="Layout.js" jsdoc="true"/>
 	
 	<widget name="Box"/>

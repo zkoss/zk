@@ -1,3 +1,4 @@
+export default {};
 export * from './InputWidget'; // jsdoc="true"
 export * from './Errorbox';
 export * from './SimpleConstraint'; // jsdoc="true"
