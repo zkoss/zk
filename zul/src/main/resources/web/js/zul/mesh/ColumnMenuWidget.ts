@@ -273,7 +273,11 @@ export class ColumnMenupopup extends zul.menu.Menupopup {
 	 */
 	public constructor(opts: {columns: zul.mesh.ColumnMenuWidget}) {
 		super(opts);
-		this._init(); // FIXME: originally invoked by `afterInit`
+	}
+
+	public override afterCreated_(opts: {columns: zul.mesh.ColumnMenuWidget}): void {
+		super.afterCreated_(opts);
+		this._init();
 	}
 
 	/** Returns the  menuitem with ascending label
