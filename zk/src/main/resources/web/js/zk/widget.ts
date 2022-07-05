@@ -15,6 +15,7 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 import {default as zk, ZKObject} from './zk';
+import {default as PKG} from './pkg';
 import type {Mask, Effect} from './effect';
 import {JQZK, zjq} from './dom';
 import type {DraggableOptions, Draggable} from './drag';
@@ -659,6 +660,46 @@ const _dragoptions: DraggableOptions = {
 	zIndex: 88800
 };
 
+export function WrapClass(pkg: string) {
+	return function _WrapClass<T extends typeof zk.Object>(constr: T) {
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// @ts-ignore
+		const s = class extends constr {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			public constructor(...args: any[]) {
+				super(...args);
+				if (this['afterCreated_'] && this['className'] == pkg) {
+					this['afterCreated_'](...args);
+				}
+			}
+		};
+
+		let pkges = pkg.split('.'),
+			context = window;
+		// ignore zk module
+		if (pkges[0] != 'zk' || pkges.length > 2) {
+			for (let i = 0, j = pkges.length - 1; i < j && context; i++) {
+				context = context[pkges[i]];
+			}
+			let run = function (context: object): void {
+				(constr.prototype as zk.Widget).className = pkg;
+				for (let i = 0, j = pkges.length - 1; i < j; i++) {
+					context = context[pkges[i]];
+				}
+				context[pkges[pkges.length - 1]] = zk.regClass(s);
+			};
+			if (!context) {
+				PKG.afterLoad(pkges.slice(0, pkges.length - 1).join('.'), function () {
+					run(window);
+				});
+			} else {
+				run(window);
+			}
+		}
+		return s;
+	};
+}
+
 /** A widget, i.e., an UI object.
  * Each component running at the server is associated with a widget
  * running at the client.
@@ -713,7 +754,6 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends ZKObject
 	declare private _binding;
 	declare public rawId;
 	declare private _$service;
-	declare private _tooltiptex;
 	declare protected childReplacing_;
 	declare private _userZIndex;
 	declare private _zIndex;
@@ -900,7 +940,9 @@ new zul.wnd.Window({
 		this._subnodes = {}; //store sub nodes for widget(domId, domNode)
 		this.effects_ = {};
 		this._subzcls = {}; // cache the zclass + subclass name, like zclass + '-hover'
+	}
 
+	public override afterCreated_(props?: Record<string, unknown> | typeof zkac): void {
 		//zkac is a token used by create() in mount.js for optimizing performance
 		if (props !== zkac) {
 			//if props.$oid, it must be an object other than {} so ignore
@@ -1105,10 +1147,10 @@ new zul.wnd.Window({
 	 */
 	public setTooltiptext(tooltiptext: string): void {
 		if (this._tooltiptext != tooltiptext) {
-			this._tooltiptex = tooltiptext;
+			this._tooltiptext = tooltiptext;
 			var n = this.$n();
 			// ZK-676 , ZK-752
-			if (n) n.title = this._tooltiptex || '';
+			if (n) n.title = this._tooltiptext || '';
 		}
 	}
 	/** Returns the tooltip text of this widget.
@@ -5902,6 +5944,7 @@ zk._wgtutl = _wgtutl;
  * @disable(zkgwt)
 */
 // zk scope
+@WrapClass('zk.Page')
 export class Page extends Widget {
 	declare public _applyMask?: Mask | null;
 	//a virtual node that might have no DOM node and must be handled specially
@@ -5960,6 +6003,7 @@ export class Page extends Widget {
 
 // zk scope;
 //a fake page used in circumstance that a page is not available ({@link #getPage})
+@WrapClass('zk.Body')
 export class Body extends Page {
 	public constructor(dt: Desktop) {
 		super({});
@@ -5978,6 +6022,7 @@ export class Body extends Page {
  * @disable(zkgwt)
  */
 // zk scope
+@WrapClass('zk.Native')
 export class Native extends Widget {
 	declare public prolog;
 	declare public domExtraAttrs;
@@ -6077,6 +6122,7 @@ export class Native extends Widget {
  * It is used mainly to represent the macro componet created at the server.
  */
 // zk scope
+@WrapClass('zk.Macro')
 export class Macro extends Widget {
 	declare public _fellows;
 	/** The class name (<code>zk.Macro</code>).
@@ -6180,7 +6226,8 @@ function _fixCommandName(prefix: string, cmd: string, opts: EventOptions, prop: 
  * @since 8.0.0
  */
 // zk scope
-export class Service extends Object {
+@WrapClass('zk.Service')
+export class Service extends ZKObject {
 	declare private _aftercmd;
 	declare private _lastcmd: zk.StringFieldValue;
 
@@ -6299,6 +6346,7 @@ rerender: function (skipper) {
  * @disable(zkgwt)
  */
 // zk scope
+@WrapClass('zk.Skipper')
 export class Skipper extends ZKObject {
 	/** Returns whether the specified child widget will be skipped by {@link #skip}.
 	 * <p>Default: returns if wgt.caption != child. In other words, it skip all children except the caption.

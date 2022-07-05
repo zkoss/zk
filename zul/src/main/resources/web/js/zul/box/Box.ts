@@ -97,6 +97,7 @@ function _fixTd(this: zul.box.Box): void {
 	}
 }
 
+@zk.WrapClass('zul.box.Box')
 export class Box extends zul.Widget {
 	public override _mold = 'vertical';
 	private _align = 'start';
@@ -965,4 +966,3 @@ export class Box extends zul.Widget {
 		return v ? 'start' == v ? 'left' : 'end' == v ? 'right' : v : null;
 	}
 }
-zul.box.Box = zk.regClass(Box);

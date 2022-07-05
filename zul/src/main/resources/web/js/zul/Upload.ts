@@ -86,6 +86,7 @@ if (zk.opera) { //opera only
 
 /** Helper class for implementing the fileupload.
  */
+@zk.WrapClass('zul.Upload')
 export class Upload extends zk.Object {
 	public sid = 0;
 	public uploaders: Record<string, Uploader>;
@@ -375,12 +376,12 @@ export class Upload extends zk.Object {
 
 	public static files: Uploader[] = [];
 }
-zul.Upload = zk.regClass(Upload);
 /**
  * Default file uploader for the upload widget.
  * <p> One upload widget can have multi-instance of uploader to upload multiple
  * files at the same time.
  */
+@zk.WrapClass('zul.Uploader')
 export class Uploader extends zk.Object {
 	public id: string;
 	public flnm: string;
@@ -590,7 +591,6 @@ export class Uploader extends zk.Object {
 		}
 	}
 }
-zul.Uploader = zk.regClass(Uploader);
 
 // default UploadViewer
 function _addUM(uplder: Uploader, _flnm: string): void {
@@ -615,6 +615,7 @@ function _initUM(uplder: Uploader, flnm: string): void {
 		 * Default file upload manager to manage the uploading files in a panel.
 		 * Users can add/delete the file upon the panel.
 		 */
+		@zk.WrapClass('zul.UploadManager')
 		class UploadManager extends zul.wgt.Popup {
 			private _files: Record<string, zul.wgt.Div>;
 			public constructor() {
@@ -722,7 +723,6 @@ function _initUM(uplder: Uploader, flnm: string): void {
 				});
 			}
 		}
-		zul.UploadManager = zk.regClass(UploadManager);
 		_addUM(uplder, flnm);
 	});
 }
@@ -741,6 +741,7 @@ export declare class UploadManager extends zul.wgt.Popup {
 /**
  * Default file viewer to see the upload status.
  */
+@zk.WrapClass('zul.UploadViewer')
 export class UploadViewer extends zk.Object {
 	private _uplder: Uploader;
 	public static flman: UploadManager;
@@ -779,4 +780,3 @@ export class UploadViewer extends zk.Object {
 			flman.removeFile(this._uplder);
 	}
 }
-zul.UploadViewer = zk.regClass(UploadViewer);

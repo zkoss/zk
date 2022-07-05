@@ -374,6 +374,7 @@ export interface CalendarOnChangeData {
 	shallClose: boolean;
 	shiftView: boolean;
 }
+@zk.WrapClass('zul.db.Calendar')
 export class Calendar extends zul.Widget {
 	public _view = 'day';
 	public _minyear = 1900; //"day", "month", "year", "decade",
@@ -1345,4 +1346,3 @@ export class Calendar extends zul.Widget {
 		zk(n).focus();
 	};
 }
-zul.db.Calendar = zk.regClass(Calendar);

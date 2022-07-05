@@ -31,6 +31,7 @@ function _cleanUpld(wgt: zul.wgt.Button): void {
  * A button.
  * <p>Default {@link #getZclass}: z-button.
  */
+@zk.WrapClass('zul.wgt.Button')
 export class Button extends zul.LabelImageWidget<HTMLButtonElement> implements zul.LabelImageWidgetWithAutodisable {
 	private _orient = 'horizontal';
 	private _dir = 'normal';
@@ -441,9 +442,9 @@ export class Button extends zul.LabelImageWidget<HTMLButtonElement> implements z
 		return this.isDisabled();
 	}
 }
-zul.wgt.Button = zk.regClass(Button);
 
 //handle autodisabled buttons
+@zk.WrapClass('zul.wgt.ADBS')
 export class ADBS extends zk.Object {
 	private _ads: zul.LabelImageWidgetWithAutodisable[];
 	public constructor(ads: zul.LabelImageWidgetWithAutodisable[]) {
@@ -509,4 +510,3 @@ export class ADBS extends zk.Object {
 		}
 	}
 }
-zul.wgt.ADBS = zk.regClass(ADBS);

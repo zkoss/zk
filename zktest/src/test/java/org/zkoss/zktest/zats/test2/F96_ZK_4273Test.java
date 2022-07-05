@@ -57,7 +57,7 @@ public class F96_ZK_4273Test extends WebDriverTestCase {
 	public void testColorboxMenuRoot() {
 		connect();
 
-		click(jq("@menu:contains(Color)"));
+		click(jq("@menubar > @menu > .z-menu-text:contains(Color)"));
 		waitResponse();
 		final JQuery colorboxPopup = jq(".z-menu-popup.z-colorpalette-popup");
 		Assert.assertTrue("Popup should be visible", colorboxPopup.isVisible());

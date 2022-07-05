@@ -22,6 +22,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * @author ashish
  * @since 6.0.0
  */
+@zk.WrapClass('zul.layout.Absolutelayout')
 export class Absolutelayout extends zul.Widget {
     public static redraw(this: zk.Widget, out: string[]): void {
 		out.push('<div ', this.domAttrs_(), '>');
@@ -30,4 +31,3 @@ export class Absolutelayout extends zul.Widget {
 		out.push('</div>');
 	}
 }
-zul.layout.Absolutelayout = zk.regClass(Absolutelayout);

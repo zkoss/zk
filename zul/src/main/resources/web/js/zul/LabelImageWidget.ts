@@ -31,6 +31,7 @@ export interface LabelImageWidgetWithAutodisable extends LabelImageWidgetWithDis
 /**
  * A skeletal implementation for ZUL widgets that support both label and image.
  */
+@zk.WrapClass('zul.LabelImageWidget')
 export abstract class LabelImageWidget<TElement extends HTMLElement = HTMLElement> extends zul.Widget<TElement> {
 	private _label = '';
 	protected _iconSclass?: string;
@@ -259,4 +260,3 @@ export abstract class LabelImageWidget<TElement extends HTMLElement = HTMLElemen
 		super.clearCache();
 	}
 }
-zul.LabelImageWidget = zk.regClass(LabelImageWidget);

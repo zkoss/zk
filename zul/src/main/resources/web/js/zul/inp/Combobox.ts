@@ -28,6 +28,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  *
  * @see Comboitem
  */
+@zk.WrapClass('zul.inp.Combobox')
 export class Combobox extends zul.inp.ComboWidget {
 	public override firstChild!: zul.inp.Comboitem | null;
 	public override lastChild!: zul.inp.Comboitem | null;
@@ -623,4 +624,3 @@ export class Combobox extends zul.inp.ComboWidget {
 		return result;
 	}
 }
-zul.inp.Combobox = zk.regClass(Combobox);

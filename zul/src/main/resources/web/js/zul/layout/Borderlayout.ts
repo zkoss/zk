@@ -74,6 +74,7 @@ function _getRegionSize(wgt?: zul.layout.LayoutRegion, hor?: boolean, ext?: bool
  * <p>Default {@link #getZclass}: z-borderlayout.
  *
  */
+@zk.WrapClass('zul.layout.Borderlayout')
 export class Borderlayout extends zul.Widget {
 	public north?: zul.layout.North;
 	public south?: zul.layout.South;
@@ -377,5 +378,3 @@ export class Borderlayout extends zul.Widget {
 	 */
 	public static CENTER = 'center' as const;
 }
-
-zul.layout.Borderlayout = zk.regClass(Borderlayout);

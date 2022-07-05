@@ -46,6 +46,7 @@ export interface LayoutRegionAmbit {
  * <p>
  * Events:<br/> onOpen, onSize, onSlide.<br/>
  */
+@zk.WrapClass('zul.layout.LayoutRegion')
 export class LayoutRegion extends zul.Widget {
 	public override parent!: zul.layout.Borderlayout | null;
 	public _open = true;
@@ -1437,5 +1438,3 @@ export class LayoutRegion extends zul.Widget {
 		return jq('#zk_layoutghost')[0];
 	}
 }
-
-zul.layout.LayoutRegion = zk.regClass(LayoutRegion);

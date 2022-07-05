@@ -21,6 +21,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  *
  * @see Combobox
  */
+@zk.WrapClass('zul.inp.Comboitem')
 export class Comboitem extends zul.LabelImageWidget implements zul.LabelImageWidgetWithDisable {
 	public override parent!: zul.inp.Combobox;
 	public override nextSibling!: zul.inp.Comboitem | null;
@@ -161,4 +162,3 @@ export class Comboitem extends zul.LabelImageWidget implements zul.LabelImageWid
 		out.push('<li', this.domAttrs_({domClass: true}), ' class="z-renderdefer"></li>');
 	}
 }
-zul.inp.Comboitem = zk.regClass(Comboitem);

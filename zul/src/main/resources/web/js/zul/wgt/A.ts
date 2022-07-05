@@ -19,6 +19,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * The same as HTML A tag.
  * <p>Default {@link #getZclass}: z-a.
  */
+@zk.WrapClass('zul.wgt.A')
 export class A extends zul.LabelImageWidget<HTMLAnchorElement> implements zul.LabelImageWidgetWithAutodisable {
 	private _dir = 'normal';
 	private _href?: string;
@@ -272,4 +273,3 @@ export class A extends zul.LabelImageWidget<HTMLAnchorElement> implements zul.La
 			// Unlike DOM, we don't propagate to parent (so do not call $supers)
 	}
 }
-zul.wgt.A = zk.regClass(A);

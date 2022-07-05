@@ -15,6 +15,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 /**
  * The same as HTML SPAN tag.
  */
+@zk.WrapClass('zul.wgt.Span')
 export class Span extends zul.Widget {
 }
-zul.wgt.Span = zk.regClass(Span);

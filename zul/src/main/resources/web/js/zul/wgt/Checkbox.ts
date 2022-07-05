@@ -29,6 +29,7 @@ function _shallIgnore(evt: zk.Event): boolean | undefined {
  * is checked or unchecked by user.</li>
  * </ol>
  */
+@zk.WrapClass('zul.wgt.Checkbox')
 export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidgetWithDisable {
 	//_tabindex: 0,
 	private _checked = false;
@@ -500,4 +501,3 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 		}
 	}
 }
-zul.wgt.Checkbox = zk.regClass(Checkbox);

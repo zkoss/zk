@@ -17,6 +17,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>Default {@link #getZclass}: z-hlayout.
  * @since 5.0.4
  */
+@zk.WrapClass('zul.box.Hlayout')
 export class Hlayout extends zul.box.Layout {
 	private _valign = 'top';
 	private _beforeSizeWidth?: number;
@@ -122,4 +123,3 @@ export class Hlayout extends zul.box.Layout {
 		}
 	}
 }
-zul.box.Hlayout = zk.regClass(Hlayout);

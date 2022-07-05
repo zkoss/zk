@@ -21,6 +21,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  *
  * <p>Default {@link #getZclass}: z-bandbox.
  */
+@zk.WrapClass('zul.inp.Bandbox')
 export class Bandbox extends zul.inp.ComboWidget {
 	public override firstChild!: zul.inp.Bandpopup | null;
 	public override lastChild!: zul.inp.Bandpopup | null;
@@ -101,4 +102,3 @@ export class Bandbox extends zul.inp.ComboWidget {
 		if (!(target != this.getInputNode() && target != this.$n('btn'))) super.doFocus_(evt);
 	}
 }
-zul.inp.Bandbox = zk.regClass(Bandbox);
