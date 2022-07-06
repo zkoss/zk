@@ -1,4 +1,4 @@
-/* Panelchildren.js
+/* Panelchildren.ts
 
 	Purpose:
 

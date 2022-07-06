@@ -1,4 +1,4 @@
-/* Window.js
+/* Window.ts
 
 	Purpose:
 

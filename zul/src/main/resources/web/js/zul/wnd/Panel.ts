@@ -1,4 +1,4 @@
-/* Panel.js
+/* Panel.ts
 
 	Purpose:
 
