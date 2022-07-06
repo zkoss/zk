@@ -358,7 +358,7 @@ function _cpCellWd(wgt: MeshWidget): void {
 	var ncols = dst.cells.length,
 		src: HTMLTableRowElement | null | undefined,
 		maxnc = 0;
-	for (var j = 0, it = wgt.getBodyWidgetIterator({skipHidden: true}), w: zk.Widget | null | undefined; (w = it.next());) {
+	for (var j = 0, it = wgt.getBodyWidgetIterator({skipHidden: true}), w: zul.mesh.Item | null | undefined; (w = it.next());) {
 		if (!w._loaded || w.z_rod)
 			continue;
 
@@ -430,9 +430,14 @@ function unlistenOnFitSize(wgt: MeshWidget): void {
 	}
 }
 
-export interface ItemIterator {
+export interface Item extends zul.Widget<HTMLTableRowElement> {
+	_loaded?: boolean;
+	_index?: number;
+}
+
+export interface ItemIterator<TItem extends zul.mesh.Item = zul.mesh.Item> {
 	hasNext(): boolean;
-	next(): zul.sel.ItemWidget | null | undefined;
+	next(): TItem | null | undefined;
 }
 /**
  *  A skeletal implementation for a mesh widget.
@@ -478,7 +483,7 @@ export abstract class MeshWidget extends zul.Widget {
 	public paging?: zul.mesh.Paging | null;
 	public heads: zul.mesh.HeadWidget[];
 	public head?: zul.mesh.HeadWidget | null;
-	public foot?: null; // FIXME: Tentative. See `zul.mesh.Frozen.prototype._doScrollNow`.
+	public foot?: zul.grid.Foot | null;
 	private _visiRows?: number;
 	public _wsbak?: string;
 	private _targetIndex?: number;
@@ -494,7 +499,10 @@ export abstract class MeshWidget extends zul.Widget {
 	public _syncingbodyrows?: boolean;
 	private _shallClearTableWidth?: boolean;
 	protected _shallShowScrollbar?: boolean;
-	declare public _syncEmpty?: () => void; // zul.mesh.ColumnMenuWidget
+
+	public _syncEmpty(): void {
+		// Empty on purpose. To be inherited.
+	}
 
 	public constructor() {
 		super(); // FIXME: arguments?
@@ -507,7 +515,7 @@ export abstract class MeshWidget extends zul.Widget {
 	public _currentLeft = 0;
 	public _nativebar = true;
 
-	protected abstract getHeadWidgetClass(): typeof zul.mesh.HeadWidget;
+	public abstract getHeadWidgetClass(): typeof zul.mesh.HeadWidget;
 	public abstract getBodyWidgetIterator(opts?: Record<string, unknown>): ItemIterator;
 	public abstract itemIterator(opts?: Record<string, unknown>): ItemIterator;
 
@@ -1316,7 +1324,7 @@ export abstract class MeshWidget extends zul.Widget {
 			max = min + this.ebody!.offsetHeight;
 		if (min == 0 && max == 0) return; //ZK-2796: Uncessary onRender command triggered when setting tabbox's maximalHeight attribute to true
 		for (var j = 0, it = this.getBodyWidgetIterator({skipHidden: true}),
-				len = rows.length, w: zk.Widget | null | undefined; (w = it.next()) && j < len; j++) {
+				len = rows.length, w: zul.mesh.Item | null | undefined; (w = it.next()) && j < len; j++) {
 			if (!w._loaded) {
 				//B70-ZK-2589: w and rows[j] belongs to different widget,
 				//w shouldn't depend on rows[j], origin -> row = rows[j];
@@ -1490,7 +1498,7 @@ export abstract class MeshWidget extends zul.Widget {
 		this._calcHgh();
 	}
 
-	protected _afterCalcSize(): void {
+	public _afterCalcSize(): void {
 		var isCSSFlex = this._cssflex && this.isChildrenFlex();
 		if (this._ebodyScrollPos) {
 			// ZK-2046: Restore ebody scroll position after calculated size.
@@ -1693,7 +1701,7 @@ export abstract class MeshWidget extends zul.Widget {
 	}
 
 	//super//
-	protected override onChildAdded_(child: zul.mesh.HeadWidget): void {
+	protected override onChildAdded_(child: zk.Widget): void {
 		super.onChildAdded_(child);
 
 		if (child instanceof this.getHeadWidgetClass()) {
@@ -1701,7 +1709,7 @@ export abstract class MeshWidget extends zul.Widget {
 			this._minWd = null;
 			// TODO: remove the type assertion below. Should be unnecessary, but tsc infers it
 			// to be `never` which is not wrong.
-		} else if (!((child as zul.mesh.HeadWidget) instanceof zul.mesh.Auxhead))
+		} else if (!(child instanceof zul.mesh.Auxhead))
 			return;
 
 		var nsib = child.nextSibling;
@@ -1771,8 +1779,8 @@ export abstract class MeshWidget extends zul.Widget {
 	}
 
 	public _clearCachedSize(): void {
-		var n: HTMLElement | null | undefined;
-		if (n = this.$n())
+		const n = this.$n();
+		if (n)
 			n._lastsz = this._minWd = null;
 	}
 

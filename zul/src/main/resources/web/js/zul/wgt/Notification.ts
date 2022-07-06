@@ -23,13 +23,14 @@ var _iconMap = {
 		'l': 'left',
 		'r': 'right'
 	} as const;
+export type NotificationType = keyof typeof _iconMap;
 
 export interface NotificationOptions {
 	ref?: zk.Widget;
 	pos?: string;
 	off?: zk.Offset;
 	dur?: number;
-	type?: string; // Specifically: keyof typeof _iconMap; but zk/au/showNotification uses string
+	type?: zul.wgt.NotificationType;
 	closable?: boolean;
 }
 /**
@@ -64,7 +65,7 @@ export class Notification extends zul.wgt.Popup {
 		out.push('<div', this.domAttrs_(), '>');
 		if (this._ref) //output arrow if reference exist
 			out.push('<div id="', uuid, '-p" class="', this.$s('pointer'), '"></div>');
-		out.push('<i id="', uuid, '-icon" class="', icon, ' ', (_iconMap[this._type!] as string), '"></i>');
+		out.push('<i id="', uuid, '-icon" class="', icon, ' ', (_iconMap[this._type!]), '"></i>');
 		out.push('<div id="', uuid, '-cave" class="', this.$s('content'), '">',
 				this._msg, '</div>');
 		if (this._closable)

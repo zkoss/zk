@@ -22,9 +22,13 @@ function _isListgroupfoot(w: ItemWidget): boolean {
  * The item widget for {@link Treeitem} and {@link Listitem}
  */
 @zk.WrapClass('zul.sel.ItemWidget')
-export class ItemWidget extends zul.Widget<HTMLTableRowElement> {
+export class ItemWidget extends zul.Widget<HTMLTableRowElement> implements zul.mesh.Item {
 	public override nextSibling!: zul.sel.ItemWidget | null;
 	public override previousSibling!: zul.sel.ItemWidget | null;
+
+	public _loaded?: boolean;
+	public _index?: number;
+
 	private _selectable = true;
 	private _checkable?: boolean;
 	private _disabled?: boolean;

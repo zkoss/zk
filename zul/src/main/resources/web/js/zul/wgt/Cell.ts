@@ -20,93 +20,148 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * @import zul.grid.*
  * @import zul.box.*
  */
-zul.wgt.Cell = zk.$extends(zul.Widget, {
-	_colspan: 1,
-	_rowspan: 1,
-	_rowType: 0,
-	_boxType: 1,
+@zk.WrapClass('zul.wgt.Cell')
+export class Cell extends zul.Widget<HTMLTableCellElement> {
+	private _colspan = 1;
+	private _rowspan = 1;
+	private _rowType = 0;
+	private _boxType = 1;
+	private _align?: string;
+	private _valign?: string;
+	public _headerVisible?: boolean;
 
-	$define: {
-		/** Returns number of columns to span.
-		 * Default: 1.
-		 * @return int
-		 */
-		/** Sets the number of columns to span.
-		 * <p>It is the same as the colspan attribute of HTML TD tag.
-		 * @param int colspan
-		 */
-		colspan: function (v) {
+	/** Returns number of columns to span.
+	 * Default: 1.
+	 * @return int
+	 */
+	public getColspan(): number {
+		return this._colspan;
+	}
+
+	/** Sets the number of columns to span.
+	 * <p>It is the same as the colspan attribute of HTML TD tag.
+	 * @param int colspan
+	 */
+	public setColspan(v: number, opts?: Record<string, boolean>): this {
+		const o = this._colspan;
+		this._colspan = v;
+
+		if (o !== v || (opts && opts.force)) {
 			var n = this.$n();
 			if (n)
 				n.colSpan = v;
-		},
-		/** Returns number of rows to span.
-		 * Default: 1.
-		 * @return int
-		 */
-		/** Sets the number of rows to span.
-		 * <p>It is the same as the rowspan attribute of HTML TD tag.
-		 * @param int rowspan
-		 */
-		rowspan: function (v) {
+		}
+
+		return this;
+	}
+
+	/** Returns number of rows to span.
+	 * Default: 1.
+	 * @return int
+	 */
+	public getRowspan(): number {
+		return this._rowspan;
+	}
+
+	/** Sets the number of rows to span.
+	 * <p>It is the same as the rowspan attribute of HTML TD tag.
+	 * @param int rowspan
+	 */
+	public setRowspan(v: number, opts?: Record<string, boolean>): this {
+		const o = this._rowspan;
+		this._rowspan = v;
+
+		if (o !== v || (opts && opts.force)) {
 			var n = this.$n();
 			if (n)
 				n.rowSpan = v;
-		},
-		/** Returns the horizontal alignment.
-		 * <p>Default: null (system default: left unless CSS specified).
-		 * @return String
-		 */
-		/** Sets the horizontal alignment.
-		 * @param String align
-		 */
-		align: function (v) {
+		}
+
+		return this;
+	}
+
+	/** Returns the horizontal alignment.
+	 * <p>Default: null (system default: left unless CSS specified).
+	 * @return String
+	 */
+	public getAlign(): string | undefined {
+		return this._align;
+	}
+
+	/** Sets the horizontal alignment.
+	 * @param String align
+	 */
+	public setAlign(v: string, opts?: Record<string, boolean>): this {
+		const o = this._align;
+		this._align = v;
+
+		if (o !== v || (opts && opts.force)) {
 			var n = this.$n();
 			if (n)
 				n.align = v;
-		},
-		/** Returns the vertical alignment.
-		 * <p>Default: null (system default: top).
-		 * @return String
-		 */
-		/** Sets the vertical alignment of this grid.
-		 * @param String valign
-		 */
-		valign: function (v) {
+		}
+
+		return this;
+	}
+
+	/** Returns the vertical alignment.
+	 * <p>Default: null (system default: top).
+	 * @return String
+	 */
+	public getValign(): string | undefined {
+		return this._valign;
+	}
+
+	/** Sets the vertical alignment of this grid.
+	 * @param String valign
+	 */
+	public setValign(v: string, opts?: Record<string, boolean>): this {
+		const o = this._valign;
+		this._valign = v;
+
+		if (o !== v || (opts && opts.force)) {
 			var n = this.$n();
 			if (n)
-				n.valign = v;
+				n.vAlign = v;
 		}
-	},
-	_getParentType: function () {
-		var isRow = zk.isLoaded('zul.grid') && this.parent.$instanceof(zul.grid.Row);
+
+		return this;
+	}
+
+	private _getParentType(): number | null {
+		var isRow = zk.isLoaded('zul.grid') && this.parent instanceof zul.grid.Row;
 		if (!isRow) {
-			return zk.isLoaded('zul.box') && this.parent.$instanceof(zul.box.Box) ?
+			return zk.isLoaded('zul.box') && this.parent instanceof zul.box.Box ?
 					this._boxType : null;
 		}
 		return this._rowType;
-	},
-	_getRowAttrs: function () {
-		return this.parent._childAttrs(this, this.getChildIndex());
-	},
-	_getBoxAttrs: function () {
-		return this.parent._childInnerAttrs(this);
-	},
-	_colHtmlPre: function () {
+	}
+
+	private _getRowAttrs(): string {
+		return (this.parent as zul.grid.Row)._childAttrs(this, this.getChildIndex());
+	}
+
+	private _getBoxAttrs(): string {
+		return (this.parent as zul.box.Box)._childInnerAttrs(this);
+	}
+
+	public _colHtmlPre(): string {
 		var s = '',
 			p = this.parent;
-		if (zk.isLoaded('zkex.grid') && p.$instanceof(zkex.grid.Group) && this == p.firstChild)
+		if (zk.isLoaded('zkex.grid') && p instanceof zkex.grid.Group && this == p.firstChild)
 			s += p.domContent_();
 		return s;
-	},
-	domClass_: function (no) {
-		var scls = this.$supers('domClass_', arguments);
+	}
+
+	protected override domClass_(no?: zk.DomClassOptions): string {
+		var scls = super.domClass_(no);
 		if (this._getParentType() == this._rowType) {
 			if (this._headerVisible === false) scls += ' ' + this.$s('hidden-column');
 		}
 		return scls;
-	},
-	domStyle_: function (no) {
+	}
+
+	protected override domStyle_(no?: zk.DomStyleOptions): string {
 		var style = '';
 		if (this._align)
 			style += ' text-align:' + this._align + ';';
@@ -114,17 +169,19 @@ zul.wgt.Cell = zk.$extends(zul.Widget, {
 			style += ' vertical-align:' + this._valign + ';';
 		if (this._getParentType() == this._rowType && this._headerVisible === false)
 			no = zk.copy(no, {visible: true});
-		return this.$supers('domStyle_', [no]) + style;
-	},
+		return super.domStyle_(no) + style;
+	}
+
 	//super//
-	domAttrs_: function (no) {
-		var s = this.$supers('domAttrs_', arguments), v;
+	public override domAttrs_(no?: zk.DomAttrsOptions): string {
+		var s = super.domAttrs_(no), v;
 		if ((v = this._colspan) != 1)
 			s += ' colspan="' + v + '"';
 		if ((v = this._rowspan) != 1)
 			s += ' rowspan="' + v + '"';
 
-		var m1, m2 = zUtl.parseMap(s, ' ', '"');
+		var m1: Record<string, string> | undefined,
+			m2 = zUtl.parseMap(s, ' ', '"');
 		switch (this._getParentType()) {
 		case this._rowType:
 			m1 = zUtl.parseMap(this._getRowAttrs(), ' ', '"');
@@ -135,8 +192,8 @@ zul.wgt.Cell = zk.$extends(zul.Widget, {
 		}
 		if (m1) {
 			//Bug ZK-1349: merge user style and row style instead of override
-			var s1 = m1.style,
-				s2 = m2.style,
+			var s1: string | Record<string, string> = m1.style,
+				s2: string | Record<string, string> = m2.style,
 				style;
 			if (s1 && s2) {
 				s1 = zUtl.parseMap(s1.replace(/"/g, '').replace(/:/g, '='), ';');
@@ -148,19 +205,22 @@ zul.wgt.Cell = zk.$extends(zul.Widget, {
 			if (style)
 				m1.style = '"' + style + '"';
 		}
-		return ' ' + zUtl.mapToString(m1);
-	},
-	setVisible: function (visible) {
-		this.$supers('setVisible', arguments);
+		return ' ' + zUtl.mapToString(m1!); // FIXME: m1 could be undefined
+	}
+
+	public override setVisible(visible: boolean | undefined): void {
+		super.setVisible(visible);
 		// B65-ZK-2015: redoCSS in IE10 to make sure component will show when visible is true
 		if (zk.ie10_ && visible)
 			zk(this.$n()).redoCSS();
 
-	},
-	deferRedrawHTML_: function (out) {
-		out.push('<td', this.domAttrs_({domClass: 1}), ' class="z-renderdefer"></td>');
-	},
-	getFlexContainer_: function () {
+	}
+
+	protected override deferRedrawHTML_(out: string[]): void {
+		out.push('<td', this.domAttrs_({domClass: true}), ' class="z-renderdefer"></td>');
+	}
+
+	public override getFlexContainer_(): HTMLElement | null | undefined {
 		return null;
 	}
-});
+}

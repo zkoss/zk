@@ -50,6 +50,7 @@ export class Paging extends zul.Widget {
 	private _meshWidget?: zul.mesh.MeshWidget | null;
 	private static _autoFocusInfo: PagingFocusInfo | null;
 	private _lastIsWide?: boolean;
+	private _navWidth?: number;
 
 	/** Sets the total number of items.
 	 * @param int totalSize
@@ -768,7 +769,7 @@ export class Paging extends zul.Widget {
 		});
 	}
 
-	private static _getNavWidth(node: Node, wgt: zk.Widget): number {
+	private static _getNavWidth(node: Node, wgt: zul.mesh.Paging): number {
 		if (wgt._navWidth)
 			return wgt._navWidth;
 
