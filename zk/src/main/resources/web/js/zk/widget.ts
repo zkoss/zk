@@ -668,8 +668,11 @@ export function WrapClass(pkg: string) {
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			public constructor(...args: any[]) {
 				super(...args);
-				if (this['afterCreated_'] && this['className'] == pkg) {
-					this['afterCreated_'](...args);
+				if (this['className'] == pkg) {
+					// call old ZK widget $init(), which uses zk.override() to
+					// override an ES6 class
+					this.$init(...args);
+					this.afterCreated_(...args);
 				}
 			}
 		};
