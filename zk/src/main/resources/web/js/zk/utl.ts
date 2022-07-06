@@ -111,7 +111,7 @@ export interface ZUtl {
 	isImageLoading(): boolean;
 	loadImage(url: string): void;
 	mapToString(map: Record<string, string>, assign?: string, separator?: string): string;
-	parseMap(text: string, separator?: string, quote?: string): {[key: string]: string};
+	parseMap(text: string, separator?: string, quote?: string): Record<string, string>;
 	progressbox(id: string, msg: string, mask?: boolean, icon?: string | null, opts?: Partial<ProgressboxOptions>): void;
 	stringToInts(text: string | null, defaultValue: number): number[] | null;
 	today(fmt: boolean | string, tz?: string): DateImpl;

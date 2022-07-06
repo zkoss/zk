@@ -94,6 +94,12 @@ interface JQueryStatic {
 	isReady: boolean; // expose jQuery undocumented property
 	
 	<U, T extends HTMLElement = HTMLElement>(selector: T | U, zk: ZKStatic): JQuery<T>;
+	/* This overload above delegates to the following two. Separately, they can't accept an otherwise valid first argument of union type: `string | HTMLElement`.
+	 * <TElement extends HTMLElement = HTMLElement>(html: JQuery.htmlString, ownerDocument_attributes?: Document | JQuery.PlainObject): JQuery<TElement>;
+	 * <T extends Element>(element_elementArray: T | ArrayLike<T>): JQuery<T>;
+	 */
+	<T extends HTMLElement = HTMLElement>(html: string | T): JQuery<T>;
+
 	
 	// This specialization for the "empty string literal" is good, as it will always null.
 	$$(id: '', subId?: string): null;
@@ -342,6 +348,16 @@ declare namespace zkex {
 			public getIconCloseClass_(): string;
 		}
 		class Listgroupfoot extends zul.sel.Listitem {} // zul.sel.ItemWidget
+	}
+	namespace grid {
+		class Group extends zul.grid.Row { // zul.grid.Rows
+			public domContent_(): string
+			public isOpen(): boolean
+		}
+		class Groupfoot extends zul.grid.Row { // zul.grid.Rows
+		}
+		class Detail extends zul.Widget { // zul.grid.Rows
+		}
 	}
 }
 declare var zkmax: Record<string, unknown>;

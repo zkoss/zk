@@ -24,30 +24,35 @@ it will be useful, but WITHOUT ANY WARRANTY.
  *
  * <p>Default {@link #getZclass}: z-column.
  */
-zul.grid.Column = zk.$extends(zul.mesh.SortWidget, {
+@zk.WrapClass('zul.grid.Column')
+export class Column extends zul.mesh.SortWidget {
+	public override parent!: zul.grid.Columns | null;
+
 	/** Returns the grid that contains this column.
 	 * @return zul.grid.Grid
 	 */
-	getGrid: function () {
+	public getGrid(): zul.grid.Grid | null {
 		return this.parent ? this.parent.parent : null;
-	},
+	}
 
-	$init: function () {
-		this.$supers('$init', arguments);
+	public constructor() {
+		super(); // FIXME: params?
 		this.listen({onGroup: this}, -1000);
-	},
+	}
+
 	/** Returns the rows of the grid that contains this column.
 	 * @return zul.grid.Rows
 	 */
-	getMeshBody: function () {
+	public getMeshBody(): zul.grid.Rows | null | undefined {
 		var grid = this.getGrid();
 		return grid ? grid.rows : null;
-	},
-	checkClientSort_: function (ascending) {
-		var body;
-		return !(!(body = this.getMeshBody()) || body.hasGroup())
-			&& this.$supers('checkClientSort_', arguments);
-	},
+	}
+
+	protected override checkClientSort_(ascending: boolean): boolean {
+		const body = this.getMeshBody();
+		return !(!body || body.hasGroup()) && super.checkClientSort_(ascending);
+	}
+
 	/** Groups and sorts the rows ({@link Row}) based on
 	 * {@link #getSortAscending}.
 	 * If the corresponding comparator is not set, it returns false
@@ -59,7 +64,7 @@ zul.grid.Column = zk.$extends(zul.mesh.SortWidget, {
 	 * @param zk.Event evt the event causes the group
 	 * @return boolean whether the rows are grouped.
 	 */
-	group: function (ascending, evt) {
+	public group(ascending: boolean, evt: zk.Event): boolean {
 		var dir = this.getSortDirection();
 		if (ascending) {
 			if ('ascending' == dir) return false;
@@ -85,7 +90,7 @@ zul.grid.Column = zk.$extends(zul.mesh.SortWidget, {
 		evt.stop();
 
 		var desktop = body.desktop,
-			node = body.$n();
+			node = body.$n_();
 		try {
 			body.unbind();
 			if (body.hasGroup()) {
@@ -93,8 +98,13 @@ zul.grid.Column = zk.$extends(zul.mesh.SortWidget, {
 					body.removeChild(gs[len]);
 			}
 
-			var d = [], col = this.getChildIndex();
-			for (var i = 0, z = 0, it = mesh.getBodyWidgetIterator(), w; (w = it.next()); z++)
+			interface Data {
+				wgt: zk.Widget;
+				index: number;
+			}
+			var d: Data[] = [],
+				col = this.getChildIndex();
+			for (var i = 0, z = 0, it = mesh.getBodyWidgetIterator(), w: zul.mesh.Item | null | undefined; (w = it.next()); z++)
 				for (var k = 0, cell = w.firstChild; cell; cell = cell.nextSibling, k++)
 					if (k == col) {
 						d[i++] = {
@@ -118,19 +128,20 @@ zul.grid.Column = zk.$extends(zul.mesh.SortWidget, {
 			for (;body.firstChild;)
 				body.removeChild(body.firstChild);
 
-			for (var previous, row, index = this.getChildIndex(), i = 0, k = d.length; i < k; i++) {
-				row = d[i];
+			for (var previous: Data | undefined, index = this.getChildIndex(), i = 0, k = d.length; i < k; i++) {
+				const row = d[i];
 				if (!previous || fn(previous.wgt, row.wgt, isNumber) != 0) {
 					//new group
-					var group, cell = row.wgt.parent.getChildAt(index);
-					if (cell && cell.$instanceof(zul.wgt.Label)) {
+					let group: zkex.grid.Group,
+						cell = row.wgt.parent!.getChildAt(index);
+					if (cell && cell instanceof zul.wgt.Label) {
 						group = new zkex.grid.Group();
 						group.appendChild(new zul.wgt.Label({
 							value: cell.getValue()
 						}));
 					} else {
-						var cc = cell.firstChild;
-						if (cc && cc.$instanceof(zul.wgt.Label)) {
+						var cc = cell!.firstChild;
+						if (cc && cc instanceof zul.wgt.Label) {
 							group = new zkex.grid.Group();
 							group.appendChild(new zul.wgt.Label({
 								value: cc.getValue()
@@ -144,7 +155,7 @@ zul.grid.Column = zk.$extends(zul.mesh.SortWidget, {
 					}
 					body.appendChild(group);
 				}
-				body.appendChild(row.wgt.parent);
+				body.appendChild(row.wgt.parent!);
 				previous = row;
 			}
 			this._fixDirection(ascending);
@@ -152,23 +163,27 @@ zul.grid.Column = zk.$extends(zul.mesh.SortWidget, {
 			body.replaceHTML(node, desktop);
 		}
 		return true;
-	},
-	setLabel: function (label) {
-		this.$supers('setLabel', arguments);
+	}
+
+	public override setLabel(label: string, opts?: Record<string, boolean>): this {
+		super.setLabel(label, opts);
 		if (this.parent)
 			this.parent._syncColMenu();
-	},
-	setVisible: function (visible) {
+		return this;
+	}
+
+	public override setVisible(visible: boolean): void {
 		if (this.isVisible() != visible) {
-			this.$supers('setVisible', arguments);
+			super.setVisible(visible);
 			if (this.parent)
 				this.parent._syncColMenu();
 		}
-	},
+	}
+
 	/** It invokes {@link #group} to group list items and maintain
 	 * {@link #getSortDirection}.
 	 */
-	onGroup: function (evt) {
+	public onGroup(evt: zk.Event): void {
 		var dir = this.getSortDirection();
 		if ('ascending' == dir)
 			this.group(false, evt);
@@ -176,36 +191,40 @@ zul.grid.Column = zk.$extends(zul.mesh.SortWidget, {
 			this.group(true, evt);
 		else if (!this.group(true, evt))
 			this.group(false, evt);
-	},
-	bind_: function () {
-		this.$supers(zul.grid.Column, 'bind_', arguments);
-		var n = this.$n();
+	}
+
+	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+		super.bind_(desktop, skipper, after);
+		var n = this.$n_();
 		this.domListen_(n, 'onMouseOver')
 			.domListen_(n, 'onMouseOut');
 		var btn = this.$n('btn');
 		if (btn)
 			this.domListen_(btn, 'onClick', '_doMenuClick');
-	},
-	unbind_: function () {
-		var n = this.$n();
+	}
+
+	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+		var n = this.$n_();
 		this.domUnlisten_(n, 'onMouseOver')
 			.domUnlisten_(n, 'onMouseOut');
 		var btn = this.$n('btn');
 		if (btn)
 			this.domUnlisten_(btn, 'onClick', '_doMenuClick');
-		this.$supers(zul.grid.Column, 'unbind_', arguments);
-	},
-	_doMouseOver: function (evt) {
+		super.unbind_(skipper, after, keepRod);
+	}
+
+	public _doMouseOver(evt: zk.Event): void {
 		if (this.isSortable_()
-				|| (this.parent._menupopup && this.parent._menupopup != 'none'))
-			jq(this.$n()).addClass(this.$s('hover'));
-	},
-	_doMouseOut: function (evt) {
+				|| (this.parent!._menupopup && this.parent!._menupopup != 'none'))
+			jq(this.$n_()).addClass(this.$s('hover'));
+	}
+
+	public _doMouseOut(evt: zk.Event): void {
 		if (this.isSortable_()
-				|| (this.parent._menupopup && this.parent._menupopup != 'none')) {
-			var $n = jq(this.$n());
+				|| (this.parent!._menupopup && this.parent!._menupopup != 'none')) {
+			var $n = jq(this.$n_());
 			if (!$n.hasClass(this.$s('visited')))
 				$n.removeClass(this.$s('hover'));
 		}
 	}
-});
+}

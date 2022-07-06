@@ -16,24 +16,29 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * Defines a set of footers ({@link Footer}) for a grid ({@link Grid}).
  * <p>Default {@link #getZclass}: z-foot.
  */
-zul.grid.Foot = zk.$extends(zul.Widget, {
+@zk.WrapClass('zul.grid.Foot')
+export class Foot extends zul.Widget {
+	public override parent!: zul.grid.Grid | null;
 	/** Returns the grid that contains this column.
 	 * @return zul.grid.Grid
 	 */
-	getGrid: function () {
+	public getGrid(): zul.grid.Grid | null {
 		return this.parent;
-	},
-	//bug #3014664
-	setVflex: function (v) { //vflex ignored for grid Foot
-		v = false;
-		this.$super(zul.grid.Foot, 'setVflex', v);
-	},
-	//bug #3014664
-	setHflex: function (v) { //hflex ignored for grid Foot
-		v = false;
-		this.$super(zul.grid.Foot, 'setHflex', v);
-	},
-	deferRedrawHTML_: function (out) {
-		out.push('<tr', this.domAttrs_({domClass: 1}), ' class="z-renderdefer"></tr>');
 	}
-});
+
+	//bug #3014664
+	public override setVflex(v: boolean | string | null | undefined): void { //vflex ignored for grid Foot
+		v = false;
+		super.setVflex(v);
+	}
+
+	//bug #3014664
+	public override setHflex(v: boolean | string | null | undefined): void { //hflex ignored for grid Foot
+		v = false;
+		super.setHflex(v);
+	}
+
+	protected override deferRedrawHTML_(out: string[]): void {
+		out.push('<tr', this.domAttrs_({domClass: true}), ' class="z-renderdefer"></tr>');
+	}
+}

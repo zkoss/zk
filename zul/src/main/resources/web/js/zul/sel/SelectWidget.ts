@@ -109,6 +109,9 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	private _disableSelection_?: boolean;
 	declare public static shallSyncSelInView?: Record<string, boolean>;
 
+	public abstract override getBodyWidgetIterator(opts?: Record<string, unknown>): zul.mesh.ItemIterator<zul.sel.ItemWidget>;
+	public abstract override itemIterator(opts?: Record<string, unknown>): zul.mesh.ItemIterator<zul.sel.ItemWidget>;
+
 	public constructor() {
 		super(); // FIXME: params?
 		this._selItems = [];
@@ -440,7 +443,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		this._calcHgh();
 	}
 
-	protected override _afterCalcSize(): void {
+	public override _afterCalcSize(): void {
 		// Bug 279925
 		if (zk.ie9) {
 			this.$n_('a').style.display = this._oldCSS!;
@@ -1362,7 +1365,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		super.onResponse(ctl, opts);
 	}
 
-	protected override onChildAdded_(child: zul.mesh.HeadWidget): void {
+	protected override onChildAdded_(child: zk.Widget): void {
 		super.onChildAdded_(child);
 		if (this.desktop) {
 			if (child instanceof zul.sel.ItemWidget && child.isSelected())

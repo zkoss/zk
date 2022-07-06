@@ -68,7 +68,7 @@ export interface AUCommand0 {
 	moveBy: typeof window.moveBy;
 	moveTo: typeof window.moveTo;
 	cfmClose(msg: string): void;
-	showNotification(msg: string, type: string, pid: string, ref: Widget,
+	showNotification(msg: string, type: zul.wgt.NotificationType, pid: string, ref: Widget,
 					 pos: string, off: zk.Offset, dur: number, closable: boolean): void;
 	showBusy(uuid: string, msg?: string): void;
 	clearBusy(uuid: string | null): void;
@@ -1732,7 +1732,7 @@ zAu.ajaxErrorHandler = function (req, status, statusText, ajaxReqTries) {
 		 * @param int dur the duration of notification
 		 * @param boolean closable the close button of notification
 		 */
-		showNotification(msg: string, type: string, pid: string, ref: Widget,
+		showNotification(msg: string, type: zul.wgt.NotificationType, pid: string, ref: Widget,
 						 pos: string, off: zk.Offset, dur: number, closable: boolean): void {
 			var notif = zk.load('zul.wgt') ? zul.wgt.Notification : null; // in zul
 			if (notif) {

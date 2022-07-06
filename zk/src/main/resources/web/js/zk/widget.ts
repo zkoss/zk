@@ -714,9 +714,6 @@ export function WrapClass(pkg: string) {
 export class Widget<TElement extends HTMLElement = HTMLElement> extends ZKObject {
 	declare public $button?: boolean; // zul/sel/SelectWidget _isButton
 	declare public $inputWidget?: boolean; // zul/sel/SelectWidget _isInputWidget
-	declare public _loaded?: boolean; // zul.mesh.MeshWidget
-	declare public _index?: number; // zul.mesh.MeshWidget
-	declare public _navWidth?: number; // zul.mesh.Paging
 	declare public _uplder?: zul.Upload | null;
 	declare public _autodisable_self?: boolean;
 	declare public _uploading?: boolean;
@@ -3001,8 +2998,8 @@ function () {
 			var oldwgt = this.getOldWidget_(n);
 			if (oldwgt) oldwgt.unbind(skipper); //unbind first (w/o removal)
 			else if (this.z_rod) this.get$Class<typeof Widget>()._unbindrod(this); //possible (if replace directly)
-			jq(n as string).replaceWith(this.redrawHTML_(skipper, _trim_));
-			this.bind(desktop as Desktop, skipper);
+			jq(n).replaceWith(this.redrawHTML_(skipper, _trim_));
+			this.bind(desktop, skipper);
 		}
 
 		if (!skipper) {
@@ -3156,7 +3153,7 @@ function () {
 		} else if (this.shallChildROD_(child))
 			this.get$Class<typeof Widget>()._unbindrod(child); //possible (e.g., Errorbox: jq().replaceWith)
 
-		jq(n as string).replaceWith(child.redrawHTML_(skipper, _trim_));
+		jq(n).replaceWith(child.redrawHTML_(skipper, _trim_));
 		if (skipInfo) {
 			skipper?.restore(child, skipInfo);
 		}
@@ -4777,7 +4774,7 @@ wgt.setListeners({
 	 * @see #doMouseUp_
 	 * @see #doTooltipOut_
 	 */
-	protected doMouseOut_(evt): void {
+	protected doMouseOut_(evt: Event): void {
 		if (!this.fireX(evt).stopped) {
 			var p = this.parent;
 			if (p) p.doMouseOut_(evt);

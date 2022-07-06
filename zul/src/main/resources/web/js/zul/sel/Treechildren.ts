@@ -270,7 +270,7 @@ export class Treechildren extends zul.Widget {
 			this.getTree()!._syncSize();
 	}
 
-	protected override replaceChildHTML_(child: zk.Widget, n: HTMLElement, desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, _trim_?: boolean): void {
+	protected override replaceChildHTML_(child: zk.Widget, n: HTMLElement | string, desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, _trim_?: boolean): void {
 		var oldwgt = child.getOldWidget_(n);
 		if (oldwgt) oldwgt.unbind(skipper); //unbind first (w/o removal)
 		else if (this.shallChildROD_(child))

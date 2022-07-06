@@ -1,7 +1,6 @@
 // export * from './ButtonRenderer'; // jsdoc="true"
 export * from './A';
-// export * from './Cell';
-export import Cell = zul.Widget; // zul/box/Box
+export * from './Cell';
 export * from './Div';
 export * from './Span';
 // export * from './Idspace';

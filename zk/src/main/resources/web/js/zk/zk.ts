@@ -2164,6 +2164,9 @@ interface ZKVars {
 
 	// ./effect
 	useStackup?: string | boolean;
+
+	// zul.grid.Row.prototype.setStyle
+	_rowTime?: number;
 }
 
 declare namespace _zk {

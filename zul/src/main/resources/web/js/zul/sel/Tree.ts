@@ -315,7 +315,7 @@ export class Tree extends zul.sel.SelectWidget {
 	 * @return zul.sel.TreeItemIter
 	 * @disable(zkgwt)
 	 */
-	public itemIterator(opts?: Record<string, unknown>): zul.mesh.ItemIterator {
+	public itemIterator(opts?: Record<string, unknown>): zul.sel.TreeItemIter {
 		return new zul.sel.TreeItemIter(this, opts);
 	}
 
@@ -453,7 +453,7 @@ export class TreeItemIter extends zk.Object implements zul.mesh.ItemIterator {
 	 *
 	 * @return Treeitem the next element in the iteration.
 	 */
-	public next(): zul.sel.Treeitem {
+	public next(): zul.sel.Treeitem | null | undefined {
 		this._init();
 		return this.items![this.cur!++];
 	}

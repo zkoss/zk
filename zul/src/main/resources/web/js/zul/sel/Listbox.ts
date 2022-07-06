@@ -471,7 +471,7 @@ export class Listbox extends zul.sel.SelectWidget {
 		out.push('>', this._emptyMessage!, '</div></td></tr></tbody>');
 	}
 
-	protected override replaceChildHTML_(child: zk.Widget, n: HTMLElement, desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, _trim_?: boolean): void {
+	protected override replaceChildHTML_(child: zk.Widget, n: HTMLElement | string, desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, _trim_?: boolean): void {
 		if (child._renderdefer) {
 			var scOdd = this.getOddRowSclass(),
 				isOdd = jq(n).hasClass(scOdd); // supers will change this result, we need to cache it
@@ -482,9 +482,6 @@ export class Listbox extends zul.sel.SelectWidget {
 			super.replaceChildHTML_(child, n, desktop, skipper, _trim_);
 	}
 
-	// this function used for Listbox, Listhead
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore: super defines it as optional property but we want it to be a member here
 	public override _syncEmpty(): void {
 		this._shallFixEmpty = true;
 	}

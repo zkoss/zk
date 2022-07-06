@@ -137,7 +137,7 @@ export class Listheader extends zul.mesh.SortWidget {
 			}
 			var d: Data[] = [],
 				col = this.getChildIndex();
-			for (var i = 0, z = 0, it = mesh.getBodyWidgetIterator(), w: zul.sel.ItemWidget | null | undefined; (w = it.next()); z++)
+			for (var i = 0, z = 0, it = mesh.getBodyWidgetIterator(), w: zk.Widget | null | undefined; (w = it.next()); z++)
 				for (var k = 0, cell: zk.Widget | null = w.firstChild; cell; cell = cell.nextSibling, k++)
 					if (k == col) {
 						d[i++] = {
