@@ -1745,6 +1745,7 @@ export abstract class ZKObject {
 	 * <p>Default: it does nothing so the subclass needs not to copy back
 	 * (also harmless to call back).
 	 * @see #afterInit
+	 * @deprecated as of 10.0 released. Using ES6 {@code constructor} instead.
 	 */
 	protected $init(props?: Record<string, unknown> | typeof zkac): void {
 		//zkac is a token used by create() in mount.js for optimizing performance
@@ -1756,9 +1757,16 @@ export abstract class ZKObject {
 		}
 	}
 
+	/**
+	 * This function is called after the object is initialized and all its member
+	 * fields are ready to use.
+	 * @param props Map the properties passed by constructor.
+	 * @since 10.0
+	 */
 	public afterCreated_(props?: Record<string, unknown> | typeof zkac): void {
 		// empty
 	}
+
 	/** Specifies a function that shall be called after the object is initialized,
 	 * i.e., after {@link #$init} is called. This method can be called only during the execution of {@link #$init}.
 	 * <p>It is an advance feature that is used to allow a base class to do something that needs to wait for all deriving classes have been initialized.
@@ -1771,6 +1779,7 @@ export abstract class ZKObject {
 	</ul>
 	 * @param Function func the function to register for execution later
 	 * @see #$init
+	 * @deprecated as of 10.0 released. Using {@link #afterCreated_()} instead.
 	 */
 	protected afterInit(func: Callable): void {
 		(this._$ais = this._$ais || []).unshift(func); //reverse
