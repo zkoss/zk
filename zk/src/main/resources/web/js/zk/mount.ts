@@ -32,7 +32,7 @@ window.zkpb = function (pguid: string, dtid: string, contextURI: string, updateU
 		resourceURI = updateURI;
 	}
 	window.zkx([0, pguid,
-		Object.assign(props, {
+		Object.assign(props ?? {}, {
 			dt: dtid,
 			cu: contextURI,
 			uu: updateURI,
