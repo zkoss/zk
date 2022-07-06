@@ -99,7 +99,7 @@ function _fixTd(this: zul.box.Box): void {
 
 @zk.WrapClass('zul.box.Box')
 export class Box extends zul.Widget {
-	protected override _mold = 'vertical';
+	public override _mold = 'vertical';
 	private _align = 'start';
 	private _pack = 'start';
 	private _sizedByContent = true;
@@ -382,7 +382,7 @@ export class Box extends zul.Widget {
 		if (before) {
 			jq(this._chdextr(before)!).before(this.encloseChildHTML_(child)!);
 		} else {
-			var n = this.$n('real') as HTMLTableElement, tbs = n.tBodies;
+			var n = this.$n<HTMLTableElement>('real')!, tbs = n.tBodies;
 			if (!tbs || !tbs.length)
 				n.appendChild(document.createElement('tbody'));
 			jq(this.isVertical() ? tbs[0] : tbs[0].rows[0]).append(

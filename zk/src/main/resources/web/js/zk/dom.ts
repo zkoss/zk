@@ -13,7 +13,6 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 import {default as zk} from './zk';
-import type {Callable, DOMFieldValue} from './types';
 import type {Widget} from './widget';
 import type {Event as ZKEvent} from './evt';
 
@@ -106,7 +105,7 @@ export interface JQZK {
 	revisedHeight(size: number, excludeMargin?: boolean): number;
 	revisedOffset(ofs?: zk.Offset): zk.Offset;
 	revisedWidth(size: number, excludeMargin?: boolean): number;
-	scrollIntoView(parent?: Element): this;
+	scrollIntoView(parent?: Element | null): this;
 	scrollOffset(): zk.Offset;
 	scrollTo(): this;
 	select(timeout?: number): boolean;
@@ -129,7 +128,7 @@ export interface JQZK {
 
 export interface ZJQ {
 	_sfKeys: Record<string, number>;
-	_evt: {fix?: Callable};
+	_evt: {fix?: zk.Callable};
 	eventTypes: {[key: string]: string};
 	src0: string;
 
@@ -2235,7 +2234,7 @@ Object.assign(jq, {
 	 * @return boolean if p is an ancesotor of c.
 	 * @see zUtl#isAncestor
 	 */
-	isAncestor: function (p: DOMFieldValue, c: DOMFieldValue): boolean {
+	isAncestor: function (p: zk.DOMFieldValue, c: zk.DOMFieldValue): boolean {
 		if (!p) return true;
 		for (; c; c = zk(c).vparentNode(true))
 			if (p == c)
@@ -2803,7 +2802,7 @@ export interface EventMouseData extends EventMetaData {
 	pageY: number | undefined;
 }
 export interface EventKeyData extends EventMetaData {
-	keyCode: number | undefined;
+	keyCode: string | number | undefined;
 	charCode: number | undefined;
 	key: string | undefined;
 }

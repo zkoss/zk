@@ -15,10 +15,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 /**
  * A skeletal implementation for a footer.
  */
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 @zk.WrapClass('zul.mesh.FooterWidget')
-export abstract class FooterWidget extends zul.LabelImageWidget {
+export abstract class FooterWidget extends zul.LabelImageWidget<HTMLTableCellElement> {
 	public override parent!: zul.mesh.HeadWidget | null;
 	private _span = 1;
 	private _align?: string;
@@ -41,7 +39,7 @@ export abstract class FooterWidget extends zul.LabelImageWidget {
 		this._span = v;
 
 		if (o !== v || (opts && opts.force)) {
-			var n = this.$n() as HTMLTableCellElement | null | undefined;
+			var n = this.$n();
 			if (n) n.colSpan = v;
 		}
 
@@ -64,7 +62,7 @@ export abstract class FooterWidget extends zul.LabelImageWidget {
 		this._align = v;
 
 		if (o !== v || (opts && opts.force)) {
-			var n = this.$n() as HTMLTableCellElement | null | undefined;
+			var n = this.$n();
 			if (n) n.align = v;
 		}
 
@@ -87,7 +85,7 @@ export abstract class FooterWidget extends zul.LabelImageWidget {
 		this._valign = v;
 
 		if (o !== v || (opts && opts.force)) {
-			var n = this.$n() as HTMLTableCellElement | null | undefined;
+			var n = this.$n();
 			if (n) n.vAlign = v;
 		}
 

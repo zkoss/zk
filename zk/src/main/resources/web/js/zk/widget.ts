@@ -16,19 +16,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 import {default as zk, ZKObject} from './zk';
 import {default as PKG} from './pkg';
-
-import {
-	Callable,
-	cast,
-	NumberFieldValue,
-	Offset,
-	StringFieldValue
-} from './types';
 import type {Mask, Effect} from './effect';
 import {JQZK, zjq} from './dom';
 import type {DraggableOptions, Draggable} from './drag';
 import type {Event, EventOptions} from './evt';
-import {BooleanFieldValue, DOMFieldValue} from './types';
 import {zWatch} from './evt';
 import zFlex, {type FlexOrient} from './flex';
 import type { SPush } from './cpsp/serverpush';
@@ -80,7 +71,7 @@ var _binds: Record<string, Widget> = {}, //{uuid, wgt}: bind but no node
 	_hidden: HTMLElement[] = [], //_autohide
 	_noChildCallback, _noParentCallback, //used by removeChild/appendChild/insertBefore
 	_syncdt, //timer ID to sync destkops
-	_rdque: Widget[] = [], _rdtid: NumberFieldValue, //async rerender's queue and timeout ID
+	_rdque: Widget[] = [], _rdtid: zk.NumberFieldValue, //async rerender's queue and timeout ID
 	_ignCanActivate, //whether canActivate always returns true
 	REGEX_DQUOT = /"/g; //jsdoc can't handle it correctly, so we have to put here
 
@@ -281,7 +272,7 @@ function _dragCtl(wgt: Widget, invoke?: boolean): boolean {
 }
 
 //backup current focus
-type CurrentFocusInfo = {focus: Widget; range: Offset | null} | null;
+type CurrentFocusInfo = {focus: Widget; range: zk.Offset | null} | null;
 function _bkFocus(wgt: Widget): CurrentFocusInfo {
 	var cf = zk.currentFocus;
 	if (cf && zUtl.isAncestor(wgt, cf)) {
@@ -395,21 +386,21 @@ export let DnD = { //for easy overriding
 	},
 	/** Returns the widget to drop to.
 	 * @param zk.Draggable drag the draggable controller
-	 * @param Offset pt the mouse pointer's position.
+	 * @param zk.Offset pt the mouse pointer's position.
 	 * @param jq.Event evt the DOM event
 	 * @return zk.Widget
 	 */
-	getDrop(drag, pt: Offset, evt: Event): Widget | null {
+	getDrop(drag, pt: zk.Offset, evt: Event): Widget | null {
 		var wgt = this.getDropTarget(evt, drag);
 		return wgt ? wgt.getDrop_(drag.control) : null;
 	},
 	/** Ghost the DOM element being dragged.
 	 * @param zk.Draggable drag the draggable controller
-	 * @param Offset ofs the offset of the returned element (left/top)
+	 * @param zk.Offset ofs the offset of the returned element (left/top)
 	 * @param String msg the message to show inside the returned element
 	 * @return DOMElement the element representing what is being dragged
 	 */
-	ghost(drag, ofs: Offset, msg?: string): HTMLElement {
+	ghost(drag: zk.Draggable, ofs: zk.Offset, msg?: string): HTMLElement {
 		if (msg != null) {
 			if (msg)
 				msg = '<span class="z-drop-text">' + msg + '</span>';
@@ -420,7 +411,7 @@ export let DnD = { //for easy overriding
 			return jq('#zk_ddghost')[0];
 		}
 
-		var dgelm = jq(drag.node).clone()[0];
+		var dgelm = jq(drag.node!).clone()[0];
 		dgelm.id = 'zk_ddghost';
 		zk.copy(dgelm.style, {
 			position: 'absolute', left: ofs[0] + 'px', top: ofs[1] + 'px'
@@ -440,7 +431,7 @@ function DD_cleanLastDrop(drag): void {
 		drag._lastDropTo = null;
 	}
 }
-function DD_pointer(evt: Event, height: number): Offset {
+function DD_pointer(evt: Event, height: number): zk.Offset {
 	return [evt.pageX + 7, evt.pageY + 5];
 }
 function DD_enddrag(drag, evt: Event): void {
@@ -660,7 +651,7 @@ function _markCache(cache, visited, visible: boolean): boolean {
 	return visible;
 }
 
-const _dragoptions: Partial<DraggableOptions> = {
+const _dragoptions: DraggableOptions = {
 	starteffect: zk.$void, //see bug #1886342
 	endeffect: DD_enddrag, change: DD_dragging,
 	ghosting: DD_ghosting, endghosting: DD_endghosting,
@@ -670,15 +661,12 @@ const _dragoptions: Partial<DraggableOptions> = {
 };
 
 export function WrapClass(pkg: string) {
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore
-	// eslint-disable-next-line @typescript-eslint/ban-types
-	return function _WrapClass<T extends {new(...args: never[]): {}}>(constr: T) {
+	return function _WrapClass<T extends typeof zk.Object>(constr: T) {
 		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-ignore
 		const s = class extends constr {
-			// eslint-disable-next-line @typescript-eslint/explicit-member-accessibility
-			constructor(...args: never[]) {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			public constructor(...args: any[]) {
 				super(...args);
 				if (this['afterCreated_'] && this['className'] == pkg) {
 					this['afterCreated_'](...args);
@@ -694,11 +682,11 @@ export function WrapClass(pkg: string) {
 				context = context[pkges[i]];
 			}
 			let run = function (context: object): void {
-				constr.prototype.className = pkg;
+				(constr.prototype as zk.Widget).className = pkg;
 				for (let i = 0, j = pkges.length - 1; i < j; i++) {
 					context = context[pkges[i]];
 				}
-				context[pkges[pkges.length - 1]] = zk.regClass(s as unknown as typeof ZKObject);
+				context[pkges[pkges.length - 1]] = zk.regClass(s);
 			};
 			if (!context) {
 				PKG.afterLoad(pkges.slice(0, pkges.length - 1).join('.'), function () {
@@ -723,8 +711,9 @@ export function WrapClass(pkg: string) {
  * @disable(zkgwt)
  */
 // zk scope
-@WrapClass('zk.Widget')
-export class Widget extends ZKObject {
+export class Widget<TElement extends HTMLElement = HTMLElement> extends ZKObject {
+	declare public $button?: boolean; // zul/sel/SelectWidget _isButton
+	declare public $inputWidget?: boolean; // zul/sel/SelectWidget _isInputWidget
 	declare public _loaded?: boolean; // zul.mesh.MeshWidget
 	declare public _index?: number; // zul.mesh.MeshWidget
 	declare public _navWidth?: number; // zul.mesh.Paging
@@ -742,7 +731,7 @@ export class Widget extends ZKObject {
 
 	declare public z_rod?: boolean | number;
 	declare public _rodKid?: boolean;
-	declare public _node: DOMFieldValue;
+	declare public _node?: TElement | null;
 	declare public _nodeSolved;
 	declare public _rmAftAnm;
 	declare public _$evproxs;
@@ -754,8 +743,8 @@ export class Widget extends ZKObject {
 	declare public _cssFlexApplied;
 	declare public _beforeSizeHasScroll;
 	declare public doAfterProcessRerenderArgs;
-	declare public _vflex: StringFieldValue | boolean;
-	declare public _hflex: StringFieldValue | boolean;
+	declare public _vflex: zk.StringFieldValue | boolean;
+	declare public _hflex: zk.StringFieldValue | boolean;
 	declare public _flexFixed;
 	declare public _nvflex?: number;
 	declare public _nhflex?: number;
@@ -772,22 +761,22 @@ export class Widget extends ZKObject {
 	declare protected _drag: Draggable | null;
 	declare private _preWidth;
 	declare private _preHeight;
-	declare private _action: StringFieldValue;
-	declare protected _tabindex: NumberFieldValue;
-	declare private _draggable: StringFieldValue;
+	declare private _action: zk.StringFieldValue;
+	declare protected _tabindex: zk.NumberFieldValue;
+	declare public _draggable: zk.StringFieldValue;
 	declare private _asaps: Record<string, unknown>;
 	declare private _lsns: Record<string, unknown & {priority: number}[]>;
 	declare private _bklsns: Record<string, unknown>;
 	declare protected _subnodes: Record<string, HTMLElement | string | null | undefined>;
 	declare private _subzcls: Record<string, string>;
-	declare private _sclass: StringFieldValue;
-	declare protected _zclass: StringFieldValue;
-	declare public _width: StringFieldValue;
-	declare public _height: StringFieldValue;
-	declare private _left: StringFieldValue;
-	declare private _top: StringFieldValue;
-	declare public _tooltiptext: StringFieldValue;
-	declare private _droppable: StringFieldValue;
+	declare private _sclass: zk.StringFieldValue;
+	declare protected _zclass: zk.StringFieldValue;
+	declare public _width: zk.StringFieldValue;
+	declare public _height: zk.StringFieldValue;
+	declare private _left: zk.StringFieldValue;
+	declare private _top: zk.StringFieldValue;
+	declare public _tooltiptext: zk.StringFieldValue;
+	declare private _droppable: zk.StringFieldValue;
 	declare private _dropTypes: string[] | null;
 	declare private _fitSizeListened: boolean | undefined;
 
@@ -797,9 +786,9 @@ export class Widget extends ZKObject {
 	declare public static molds;
 
 	public _visible?: boolean = true;
-	protected _mold = 'default';
-	protected _style: StringFieldValue;
-	private _renderdefer = -1;
+	public _mold = 'default';
+	protected _style: zk.StringFieldValue;
+	public _renderdefer = -1;
 
 	public _cssflex = true;
 
@@ -850,7 +839,7 @@ export class Widget extends ZKObject {
 	 * @type String
 	 * @since 6.0.0
 	 */
-	public autag: StringFieldValue = null;
+	public autag: zk.StringFieldValue = null;
 
 	private _floating = false;
 
@@ -889,7 +878,7 @@ export class Widget extends ZKObject {
 	 * <p>To change the value, use {@link #setId}.
 	 * @type String the ID
 	 */
-	public id: StringFieldValue;
+	public id: zk.StringFieldValue;
 	/** Whether this widget has a peer component (readonly).
 	 * It is set if a widget is created automatically to represent a component
 	 ( at the server. On the other hand, it is false if a widget is created
@@ -1008,7 +997,7 @@ new zul.wnd.Window({
 	 * @see #getSclass
 	 * @see #getZclass
 	 */
-	public getStyle(): StringFieldValue {
+	public getStyle(): zk.StringFieldValue {
 		return this._style;
 	}
 
@@ -1035,7 +1024,7 @@ new zul.wnd.Window({
 	 * @see #getZclass
 	 * @see #getStyle
 	 */
-	public getSclass(): StringFieldValue {
+	public getSclass(): zk.StringFieldValue {
 		return this._sclass;
 	}
 
@@ -1087,7 +1076,7 @@ new zul.wnd.Window({
 	 * @return String
 	 * @see #getHeight
 	 */
-	public getWidth(): StringFieldValue {
+	public getWidth(): zk.StringFieldValue {
 		return this._width;
 	}
 	/** Sets the height of this widget.
@@ -1107,7 +1096,7 @@ new zul.wnd.Window({
 	 * @return String
 	 * @see #getWidth
 	 */
-	public getHeight(): StringFieldValue {
+	public getHeight(): zk.StringFieldValue {
 		return this._height;
 	}
 
@@ -1127,7 +1116,7 @@ new zul.wnd.Window({
 	 * @return String
 	 * @see #getTop
 	 */
-	public getLeft(): StringFieldValue {
+	public getLeft(): zk.StringFieldValue {
 		return this._left;
 	}
 
@@ -1149,7 +1138,7 @@ new zul.wnd.Window({
 	 * @return String
 	 * @see #getLeft
 	 */
-	public getTop(): StringFieldValue {
+	public getTop(): zk.StringFieldValue {
 		return this._top;
 	}
 	/** Sets the tooltip text of this widget.
@@ -1167,7 +1156,7 @@ new zul.wnd.Window({
 	/** Returns the tooltip text of this widget.
 	 * @return String
 	 */
-	public getTooltiptext(): StringFieldValue {
+	public getTooltiptext(): zk.StringFieldValue {
 		return this._tooltiptext;
 	}
 
@@ -1179,7 +1168,7 @@ new zul.wnd.Window({
 	 * @param String droppable "false", null or "" to denote not-droppable; "true" for accepting any draggable types; a list of identifiers, separated by comma for identifiers of draggables this widget accept (to be dropped in).
 	 * @return zk.Widget this widget
 	 */
-	public setDroppable(droppable: StringFieldValue): void {
+	public setDroppable(droppable: zk.StringFieldValue): void {
 		droppable = droppable && 'false' != droppable ? droppable : null;
 		if (this._droppable != droppable) {
 			this._droppable = droppable;
@@ -1197,7 +1186,7 @@ new zul.wnd.Window({
 	/** Returns the identifier, or a list of identifiers of a droppable type for this widget, or null if not droppable.
 	 * @return String
 	 */
-	public getDroppable(): StringFieldValue {
+	public getDroppable(): zk.StringFieldValue {
 		return this._droppable;
 	}
 
@@ -1225,7 +1214,7 @@ new zul.wnd.Window({
 	 * @see #getVflex
 	 * @param String flex the vertical flex hint.
 	 */
-	public setVflex(vflex: StringFieldValue | boolean): void {
+	public setVflex(vflex: zk.StringFieldValue | boolean): void {
 		if (this._vflex != vflex) {
 			this._vflex = vflex;
 			this.setVflex_(vflex);
@@ -1242,10 +1231,10 @@ new zul.wnd.Window({
 	 * @see #setVflex
 	 * @return String vertical flex hint of this widget.
 	 */
-	public getVflex(): StringFieldValue | boolean {
+	public getVflex(): zk.StringFieldValue | boolean {
 		return this._vflex;
 	}
-	public isVflex(): StringFieldValue | boolean {
+	public isVflex(): zk.StringFieldValue | boolean {
 		return this.getVflex();
 	}
 
@@ -1273,7 +1262,7 @@ new zul.wnd.Window({
 	 * @see #setVflex
 	 * @see #getHflex
 	 */
-	public setHflex(hflex: StringFieldValue | boolean): void {
+	public setHflex(hflex: zk.StringFieldValue | boolean): void {
 		if (this._hflex != hflex) {
 			this._hflex = hflex;
 			this.setHflex_(hflex);
@@ -1290,10 +1279,10 @@ new zul.wnd.Window({
 	 * @return String horizontal flex hint of this widget.
 	 * @see #setHflex
 	 */
-	public getHflex(): StringFieldValue | boolean {
+	public getHflex(): zk.StringFieldValue | boolean {
 		return this._hflex;
 	}
-	public isHflex(): StringFieldValue | boolean {
+	public isHflex(): zk.StringFieldValue | boolean {
 		return this.getHflex();
 	}
 	/** Returns the number of milliseconds before rendering this component
@@ -1333,7 +1322,7 @@ new zul.wnd.Window({
 	 * @return String the client-side action
 	 * @since 5.0.6
 	 */
-	public getAction(): StringFieldValue {
+	public getAction(): zk.StringFieldValue {
 		return this._action;
 	}
 
@@ -1351,7 +1340,7 @@ new zul.wnd.Window({
 	 * @param String action the client-side action
 	 * @since 5.0.6
 	 */
-	public setAction(action: StringFieldValue): void {
+	public setAction(action: zk.StringFieldValue): void {
 		if (this._action != action) {
 			this._action = action;
 			if (action) {
@@ -1385,7 +1374,7 @@ new zul.wnd.Window({
 	 * @return int
 	 * @since 8.0.2
 	 */
-	public getTabindex(): NumberFieldValue {
+	public getTabindex(): zk.NumberFieldValue {
 		return this._tabindex;
 	}
 	/** Sets the tab order of this component.
@@ -1430,7 +1419,7 @@ new zul.wnd.Window({
 		}
 	}
 
-	public setHflex_(v: StringFieldValue | boolean): void {
+	public setHflex_(v: zk.StringFieldValue | boolean): void {
 		this._nhflex = (true === v || 'true' == v) ? 1 : v == 'min' ? -65500 : zk.parseInt(v);
 		if (this._nhflex < 0 && v != 'min')
 			this._nhflex = 0;
@@ -1455,7 +1444,7 @@ new zul.wnd.Window({
 		}
 	}
 
-	public setVflex_(v: StringFieldValue | boolean): void {
+	public setVflex_(v: zk.StringFieldValue | boolean): void {
 		this._nvflex = (true === v || 'true' == v) ? 1 : v == 'min' ? -65500 : zk.parseInt(v);
 		if (this._nvflex < 0 && v != 'min')
 			this._nvflex = 0;
@@ -1499,7 +1488,7 @@ new zul.wnd.Window({
 	 * The identifier could be anything but empty and "false".
 	 * @param String draggable "false", "" or null to denote non-draggable; "true" for draggable with anonymous identifier; others for an identifier of draggable.
 	 */
-	public setDraggable(draggable: StringFieldValue): void {
+	public setDraggable(draggable: zk.StringFieldValue): void {
 		if (!draggable && draggable != null) draggable = 'false'; //null means default
 		this._draggable = draggable;
 
@@ -1565,14 +1554,14 @@ wgt.$f().main.setTitle("foo");
 	 * It is the same as {@link #id}.
 	 * @return String the ID
 	 */
-	public getId(): StringFieldValue {
+	public getId(): zk.StringFieldValue {
 		return this.id;
 	}
 
 	/** Sets the identifier of this widget.
 	 * @param String id the identifier to assigned to.
 	 */
-	public setId(id: StringFieldValue): void {
+	public setId(id: zk.StringFieldValue): void {
 		if (id != this.id) {
 			if (this.id) {
 				_rmIdSpace(this);
@@ -2027,7 +2016,7 @@ wgt.$f().main.setTitle("foo");
 			zk.currentFocus = null;
 		}
 
-		let node: DOMFieldValue = this.$n(),
+		let node: zk.DOMFieldValue = this.$n(),
 			p = this.parent, shallReplace,
 			dt = newwgt.desktop || this.desktop;
 		if (this.z_rod) {
@@ -2230,7 +2219,7 @@ wgt.$f().main.setTitle("foo");
 	 * @see jqzk#isVisible
 	 * @see #setVisible
 	 */
-	public isVisible(strict?: boolean): BooleanFieldValue {
+	public isVisible(strict?: boolean): zk.BooleanFieldValue {
 		var visible = this._visible;
 		if (!strict || !visible)
 			return visible;
@@ -2255,7 +2244,7 @@ wgt.$f().main.setTitle("foo");
 			var p = this.parent, ocvCalled;
 			if (this.desktop) {
 				var parentVisible = !p || p.isRealVisible(),
-					node = this.$n() as HTMLElement,
+					node = this.$n()!,
 					floating = this._floating;
 
 				if (!parentVisible) {
@@ -2530,7 +2519,7 @@ wgt.$f().main.setTitle("foo");
 		if (this._floating != floating) {
 			if (floating) {
 				//parent first
-				var inf = {widget: this, node: opts && opts.node ? opts.node : this.$n() as HTMLElement},
+				var inf = {widget: this, node: opts && opts.node ? opts.node : this.$n()!},
 					bindLevel = this.bindLevel;
 				for (var j = _floatings.length; ;) {
 					if (--j < 0) {
@@ -2748,7 +2737,7 @@ redraw: function (out) {
 	protected updateDomStyle_(): void {
 		if (this.desktop) {
 			var s = jq.parseStyle(this.domStyle_()),
-				n = this.$n() as HTMLElement;
+				n = this.$n()!;
 			// B50-3355680: size is potentially affected when setStyle
 			if (!s.width && this._hflex)
 				s.width = n.style.width;
@@ -2960,7 +2949,7 @@ function () {
 	 * @return String the tooltiptext
 	 * @since 5.0.2
 	 */
-	protected domTooltiptext_(): StringFieldValue {
+	protected domTooltiptext_(): zk.StringFieldValue {
 		return this.getTooltiptext();
 	}
 
@@ -2970,7 +2959,7 @@ function () {
 	 * @see #getTextNode
 	 * @return String the CSS style that are related to text (string).
 	 */
-	protected domTextStyleAttr_(): StringFieldValue {
+	protected domTextStyleAttr_(): zk.StringFieldValue {
 		var s = this.getStyle();
 		return s ? zUtl.appendAttr('style', jq.filterTextStyle(s)) : s;
 	}
@@ -3044,7 +3033,7 @@ function () {
 	 * @param DOMElement n the DOM element to match the widget.
 	 * @since 5.0.3
 	 */
-	public getOldWidget_(n: HTMLElement | string): Widget | null {
+	public getOldWidget_(n: HTMLElement | string): Widget | null | undefined {
 		return Widget.$(n, {strict: true});
 	}
 
@@ -3306,6 +3295,7 @@ function () {
 	 * @return DOMElement
 	 * @see #$n(String)
 	 */
+	public $n(): TElement | null | undefined
 	/** Returns the child element of the DOM element(s) that this widget is bound to.
 	 * This method assumes the ID of the child element the concatenation of
 	 * {@link #uuid}, -, and subId. For example,
@@ -3316,7 +3306,8 @@ function () {
 	 * @return DOMElement
 	 * @see #$n()
 	 */
-	public $n(subId?: string): DOMFieldValue {
+	public $n<T extends HTMLElement = HTMLElement>(subId: string | undefined): T | null | undefined
+	public $n(subId?: string): zk.DOMFieldValue {
 		if (subId) {
 			let n = this._subnodes[subId];
 			if (!n && this.desktop) {
@@ -3327,7 +3318,7 @@ function () {
 		}
 		let n = this._node;
 		if (!n && this.desktop && !this._nodeSolved) {
-			this._node = n = jq(this.uuid, zk)[0];
+			this._node = n = jq<string, TElement>(this.uuid, zk)[0];
 			this._nodeSolved = true;
 		}
 		return n;
@@ -3339,6 +3330,7 @@ function () {
 	 * @see #$n_(String)
 	 * @since 10.0
 	 */
+	public $n_(): TElement
 	/** Returns the child element of the DOM element(s) that this widget is bound to.
 	 *  (Never null)
 	 * @param String subId the sub ID of the child element
@@ -3346,6 +3338,7 @@ function () {
 	 * @see #$n_()
 	 * @since 10.0
 	 */
+	public $n_<T extends HTMLElement = HTMLElement>(subId: string | undefined): T
 	public $n_(subId?: string): HTMLElement {
 		let n = this.$n(subId);
 		if (n == null) {
@@ -3578,7 +3571,7 @@ bind_: function (desktop, skipper, after) {
 					self.bindDoubleTap_();
 					self.bindTapHold_();
 				}, 300);
-			} as Callable);
+			} as zk.Callable);
 		}
 	}
 
@@ -3700,7 +3693,7 @@ unbind_: function (skipper, after) {
 	public setFlexSize_(sz: zk.FlexSize, isFlexMin?: boolean): void {
 		if (this._cssflex && this.parent && this.parent.getFlexContainer_() != null && !isFlexMin)
 			return;
-		var n = this.$n() as HTMLElement,
+		var n = this.$n()!,
 			zkn = zk(n);
 		if (sz.height !== undefined) {
 			if (sz.height == 'auto')
@@ -3760,7 +3753,7 @@ unbind_: function (skipper, after) {
 		return false;
 	}
 
-	public beforeMinFlex_(attr: zk.FlexOrient): NumberFieldValue { //'w' for width or 'h' for height
+	public beforeMinFlex_(attr: zk.FlexOrient): zk.NumberFieldValue { //'w' for width or 'h' for height
 		//to be overridden, before calculate my minimum flex
 		return undefined;
 	}
@@ -3882,7 +3875,7 @@ unbind_: function (skipper, after) {
 	}
 
 	protected resetSize_(orient: zk.FlexOrient): void {
-		var n = this.$n() as HTMLElement,
+		var n = this.$n()!,
 			hasScroll = this._beforeSizeHasScroll;
 		if (hasScroll || (hasScroll == null && (n.scrollTop || n.scrollLeft))) // keep the scroll status, the issue also happens (not only IE8) if trigger by resize browser window.
 			return;// do nothing Bug ZK-1885: scrollable div (with vflex) and tooltip
@@ -3950,7 +3943,7 @@ unbind_: function (skipper, after) {
 	 * @param Map map the default implementation
 	 * @return Map
 	 */
-	public getDragOptions_(map: Partial<DraggableOptions>): Partial<DraggableOptions> {
+	public getDragOptions_(map: DraggableOptions): DraggableOptions {
 		return map;
 	}
 
@@ -4031,10 +4024,10 @@ unbind_: function (skipper, after) {
 	 * <p>You rarely need to override this method, unless you want a different visual effect.
 	 * @see #uncloneDrag_
 	 * @param zk.Draggable drag the draggable controller
-	 * @param Offset ofs the offset of the returned element (left/top)
+	 * @param zk.Offset ofs the offset of the returned element (left/top)
 	 * @return DOMElement the clone
 	 */
-	protected cloneDrag_(drag: Draggable, ofs: Offset): HTMLElement {
+	protected cloneDrag_(drag: Draggable, ofs: zk.Offset): HTMLElement {
 		//See also bug 1783363 and 1766244
 
 		var msg = this.getDragMessage_();
@@ -4068,7 +4061,7 @@ unbind_: function (skipper, after) {
 	 */
 	public onAfterSize(): void {
 		if (this.desktop && this.isListen('onAfterSize')) {
-			var n = this.$n() as HTMLElement, // ZK-5089: don't use "this.getCaveNode()" here
+			var n = this.$n()!, // ZK-5089: don't use "this.getCaveNode()" here
 				width = n.offsetWidth,
 				height = n.offsetHeight;
 			if (this._preWidth != width || this._preHeight != height) {
@@ -5083,7 +5076,7 @@ _doFooSelect: function (evt) {
 	 * @return zk.Widget this widget
 	 * @see #domUnlisten_
 	 */
-	public domListen_(n: HTMLElement, evtnm: string, fn?: string | Callable, keyword?: string): this {
+	public domListen_(n: HTMLElement, evtnm: string, fn?: string | zk.Callable, keyword?: string): this {
 		if (!this.$weave) {
 			var inf = _domEvtInf(this, evtnm, fn, keyword);
 			jq(n, zk).on(inf[0], inf[1]);
@@ -5107,7 +5100,7 @@ _doFooSelect: function (evt) {
 	 * @return zk.Widget this widget
 	 * @see #domListen_
 	 */
-	public domUnlisten_(n: HTMLElement, evtnm: string, fn?: string | Callable, keyword?: string): this {
+	public domUnlisten_(n: HTMLElement, evtnm: string, fn?: string | zk.Callable, keyword?: string): this {
 		if (!this.$weave) {
 			var inf = _domEvtInf(this, evtnm, fn, keyword);
 			jq(n, zk).off(inf[0], inf[1]);
@@ -5145,11 +5138,11 @@ _doFooSelect: function (evt) {
 	 * related to this widget.
 	 * @param int x the X coordinate related to the browser window
 	 * @param int y the Y coordinate related to the browser window
-	 * @return Offset the coordinate related to this widget (i.e., [0, 0] is
+	 * @return zk.Offset the coordinate related to this widget (i.e., [0, 0] is
 	 * the left-top corner of the widget).
 	 * @since 5.0.2
 	 */
-	public fromPageCoord(x: number, y: number): Offset {
+	public fromPageCoord(x: number, y: number): zk.Offset {
 		var ofs = zk(this).revisedOffset();
 		return [x - ofs[0], y - ofs[1]];
 	}
@@ -5204,7 +5197,7 @@ _doFooSelect: function (evt) {
 	}
 
 	// internal use only in zkmax package
-	protected getDomEvtInf_(wgt: Widget, evtnm: string, fn: Callable, keyword?: string): [string, JQueryEventHandler] {
+	protected getDomEvtInf_(wgt: Widget, evtnm: string, fn: zk.Callable, keyword?: string): [string, JQueryEventHandler] {
 		return _domEvtInf(wgt, evtnm, fn, keyword);
 	}
 
@@ -5318,7 +5311,7 @@ _doFooSelect: function (evt) {
 								return wgt;
 
 							var n2 = wgt.$n();
-							if (n2 && jq.isAncestor(n2, n as DOMFieldValue))
+							if (n2 && jq.isAncestor(n2, n as zk.DOMFieldValue))
 								return wgt;
 						}
 					}
@@ -5585,7 +5578,7 @@ zk.Widget.getClass('combobox');
 		if (gs)
 			gs.push(wgt);
 		else
-			_globals[wgt.id as string] = cast([wgt]);
+			_globals[wgt.id as string] = [wgt];
 	}
 	public static _unbindrod(wgt: Widget, nest?: boolean, keepRod?: boolean): void {
 		this._unbind0(wgt);
@@ -5721,10 +5714,10 @@ export class Desktop extends Widget {
 	 */
 	public requestPath: string | undefined;
 
-	public updateURI: StringFieldValue;
-	public resourceURI: StringFieldValue;
-	public contextURI: StringFieldValue;
-	public stateless: BooleanFieldValue;
+	public updateURI: zk.StringFieldValue;
+	public resourceURI: zk.StringFieldValue;
+	public contextURI: zk.StringFieldValue;
+	public stateless: zk.BooleanFieldValue;
 
 	/** Constructor
 	 * @param String dtid the ID of the desktop
@@ -6017,7 +6010,7 @@ export class Body extends Page {
 		this.desktop = dt;
 	}
 
-	public override $n(subId?: StringFieldValue): HTMLElement | null {
+	public override $n(subId?: zk.StringFieldValue): HTMLElement | null {
 		return subId ? null : document.body;
 	}
 
@@ -6050,7 +6043,7 @@ export class Native extends Widget {
 	public override widgetName = 'native';
 	//rawId: true, (Bug 3358505: it cannot be rawId)
 
-	public override $n(subId?: string): DOMFieldValue {
+	public override $n(subId?: string): zk.DOMFieldValue {
 		return !subId && this.id ? document.getElementById(this.id) :
 			super.$n(subId); // Bug ZK-606/607
 	}
@@ -6236,7 +6229,7 @@ function _fixCommandName(prefix: string, cmd: string, opts: EventOptions, prop: 
 @WrapClass('zk.Service')
 export class Service extends ZKObject {
 	declare private _aftercmd;
-	declare private _lastcmd: StringFieldValue;
+	declare private _lastcmd: zk.StringFieldValue;
 
 	public $view: Widget | null;
 	public $currentTarget: Widget | null;
@@ -6252,7 +6245,7 @@ export class Service extends ZKObject {
 	 * @param String command the name of the command
 	 * @param Function func the function to execute
 	 */
-	public after(cmd: string | Callable, fn: Callable): this {
+	public after(cmd: string | zk.Callable, fn: zk.Callable): this {
 		if (!fn && jq.isFunction(cmd)) {
 			fn = cmd;
 			cmd = this._lastcmd as string;
@@ -6272,7 +6265,7 @@ export class Service extends ZKObject {
 	 * @param String command the name of the command
 	 * @param Function func the function to execute
 	 */
-	public unAfter(cmd: string, fn: Callable): Service {
+	public unAfter(cmd: string, fn: zk.Callable): Service {
 		var ac = this._aftercmd[cmd];
 		for (var j = ac ? ac.length : 0; j--;) {
 			if (ac[j] == fn)
@@ -6408,7 +6401,7 @@ Object skip(zk.Widget wgt);
 	 * @param Object inf the object being returned by {@link #skip}.
 	 * It depends on how a skipper is implemented. It is usually to carry the information about what are skipped
 	 */
-	public restore(wgt: Widget, skip: DOMFieldValue): void {
+	public restore(wgt: Widget, skip: zk.DOMFieldValue): void {
 		if (skip) {
 			var loc = jq(skip.id, zk)[0];
 			for (var el; el = skip.firstChild;) {
@@ -6589,7 +6582,7 @@ export let NoDOM: ThisType<NoDOMInterface> = {
 		return this._oldWgt;
 	},
 	replaceHTML(n: HTMLElement, desktop: Desktop | null, skipper: Skipper
-						   , _trim_?: boolean, _callback_?: Callable | Callable[]): void {
+						   , _trim_?: boolean, _callback_?: zk.Callable | zk.Callable[]): void {
 		if (this.getMold() == 'nodom') {
 			var context = this.$getInterceptorContext$();
 			if (!desktop) {
@@ -6632,7 +6625,7 @@ export let NoDOM: ThisType<NoDOMInterface> = {
 			newwgt._oldWgt = this;
 		}
 	},
-	$n(subId: StringFieldValue): DOMFieldValue {
+	$n(subId: zk.StringFieldValue): zk.DOMFieldValue {
 		if (!subId && this.getMold() == 'nodom') {
 			var context = this.$getInterceptorContext$(),
 				n = this._node;

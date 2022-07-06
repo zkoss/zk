@@ -1,4 +1,4 @@
-/* Listheader.js
+/* Listheader.ts
 
 	Purpose:
 
@@ -24,53 +24,67 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * </ol>
  * <p>Default {@link #getZclass}: z-listheader.
  */
-zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
+@zk.WrapClass('zul.sel.Listheader')
+export class Listheader extends zul.mesh.SortWidget {
+	public override parent!: zul.sel.Listhead | null;
+	private _maxlength?: number;
+
 	/** Returns the listbox that this belongs to.
 	 * @return Listbox
 	 */
-	getListbox: _zkf = function () {
+	public getListbox(): zul.sel.Listbox | null {
 		return this.parent ? this.parent.parent : null;
-	},
+	}
 
-	$init: function () {
-		this.$supers('$init', arguments);
+	public constructor() {
+		super(); // FIXME: params?
 		this.listen({onGroup: this}, -1000);
-	},
+	}
+
 	/** Returns the mesh body that this belongs to.
 	 * @return Listbox
 	 */
-	getMeshBody: _zkf,
-	checkClientSort_: function (ascending) {
-		var body;
-		return !(!(body = this.getMeshBody()) || body.hasGroup())
-				&& this.$supers('checkClientSort_', arguments);
-	},
-	$define: {
-		/** Returns the maximal length of each item's label.
-		 * Default: 0 (no limit).
-		 * @return int
-		 */
-		/** Sets the maximal length of each item's label.
-		 * @param int maxlength
-		 */
-		maxlength: [function (v) {
-			return !v || v < 0 ? 0 : v;
-		}, function () {
+	public getMeshBody = Listheader.prototype.getListbox;
+
+	protected override checkClientSort_(ascending: boolean): boolean {
+		const body = this.getMeshBody();
+		return !(!body || body.hasGroup())
+				&& super.checkClientSort_(ascending);
+	}
+
+	/** Returns the maximal length of each item's label.
+	 * Default: 0 (no limit).
+	 * @return int
+	 */
+	public getMaxlength(): number | undefined {
+		return this._maxlength;
+	}
+
+	/** Sets the maximal length of each item's label.
+	 * @param int maxlength
+	 */
+	public setMaxlength(v: number, opts?: Record<string, boolean>): this {
+		const o = this._maxlength;
+		this._maxlength = v = !v || v < 0 ? 0 : v;
+
+		if (o !== v || (opts && opts.force)) {
 			if (this.desktop) {
 				this.rerender();
 				this.updateCells_();
 			}
-		}]
-	},
+		}
+
+		return this;
+	}
 
 	//B70-ZK-1816, also add in zk 8, ZK-2660
-	setVisible: function (visible) {
+	public override setVisible(visible: boolean): void {
 		if (this.isVisible() != visible) {
-			this.$supers('setVisible', arguments);
+			super.setVisible(visible);
 			if (this.desktop)
 				this.smartUpdate('visible', visible);
 		}
-	},
+	}
 
 	/** Groups and sorts the items ({@link Listitem}) based on
 	 * {@link #getSortAscending}.
@@ -84,7 +98,7 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 	 * @return boolean whether the items are grouped.
 	 * @since 6.5.0
 	 */
-	group: function (ascending, evt) {
+	public group(ascending: boolean, evt: zk.Event): boolean {
 		var dir = this.getSortDirection();
 		if (ascending) {
 			if ('ascending' == dir) return false;
@@ -109,7 +123,7 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 		evt.stop();
 
 		var desktop = body.desktop,
-			node = body.$n();
+			node = body.$n_();
 		try {
 			body.unbind();
 			if (body.hasGroup()) {
@@ -117,9 +131,14 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 					body.removeChild(gs[len]);
 			}
 
-			var d = [], col = this.getChildIndex();
-			for (var i = 0, z = 0, it = mesh.getBodyWidgetIterator(), w; (w = it.next()); z++)
-				for (var k = 0, cell = w.firstChild; cell; cell = cell.nextSibling, k++)
+			interface Data {
+				wgt: zk.Widget;
+				index: number;
+			}
+			var d: Data[] = [],
+				col = this.getChildIndex();
+			for (var i = 0, z = 0, it = mesh.getBodyWidgetIterator(), w: zul.sel.ItemWidget | null | undefined; (w = it.next()); z++)
+				for (var k = 0, cell: zk.Widget | null = w.firstChild; cell; cell = cell.nextSibling, k++)
 					if (k == col) {
 						d[i++] = {
 							wgt: cell,
@@ -142,11 +161,12 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 			for (var item = body.firstItem; item; item = body.nextItem(item))
 				body.removeChild(item);
 
-			for (var previous, row, index = this.getChildIndex(), i = 0, k = d.length; i < k; i++) {
+			for (var previous: Data | undefined, row: Data, index = this.getChildIndex(), i = 0, k = d.length; i < k; i++) {
 				row = d[i];
 				if (!previous || fn(previous.wgt, row.wgt, isNumber) != 0) {
 					//new group
-					var group, cell = row.wgt.parent.getChildAt(index);
+					let group!: zkex.sel.Listgroup,
+						cell = row.wgt.parent!.getChildAt<zul.sel.Listcell>(index);
 					if (cell) {
 						if (cell.getLabel()) {
 							group = new zkex.sel.Listgroup({
@@ -154,7 +174,7 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 							});
 						} else {
 							var cc = cell.firstChild;
-							if (cc && cc.$instanceof(zul.wgt.Label)) {
+							if (cc && cc instanceof zul.wgt.Label) {
 								group = new zkex.sel.Listgroup({
 									label: cc.getValue()
 								});
@@ -167,7 +187,7 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 					}
 					body.appendChild(group);
 				}
-				body.appendChild(row.wgt.parent);
+				body.appendChild(row.wgt.parent!);
 				previous = row;
 			}
 			this._fixDirection(ascending);
@@ -175,12 +195,13 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 			body.replaceHTML(node, desktop);
 		}
 		return true;
-	},
+	}
+
 	/** It invokes {@link #group} to group list items and maintain
 	 * {@link #getSortDirection}.
 	 * @since 6.5.0
 	 */
-	onGroup: function (evt) {
+	public onGroup(evt: zk.Event): void {
 		var dir = this.getSortDirection();
 		if ('ascending' == dir)
 			this.group(false, evt);
@@ -188,27 +209,30 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 			this.group(true, evt);
 		else if (!this.group(true, evt))
 			this.group(false, evt);
-	},
+	}
+
 	/**
 	 * Updates the cells according to the listheader
 	 */
-	updateCells_: function () {
+	protected updateCells_(): void {
 		var box = this.getListbox();
 		if (box == null || box.getMold() == 'select')
 			return;
 
-		var jcol = this.getChildIndex(), w;
+		var jcol = this.getChildIndex(),
+			w: zul.sel.ItemWidget | zul.sel.Listfoot | null | undefined;
 		for (var it = box.getBodyWidgetIterator(); (w = it.next());)
 			if (jcol < w.nChildren)
-				w.getChildAt(jcol).rerender();
+				w.getChildAt(jcol)!.rerender();
 
 		w = box.listfoot;
 		if (w && jcol < w.nChildren)
-			w.getChildAt(jcol).rerender();
-	},
+			w.getChildAt(jcol)!.rerender();
+	}
+
 	//super//
-	bind_: function () {
-		this.$supers(zul.sel.Listheader, 'bind_', arguments);
+	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+		super.bind_(desktop, skipper, after);
 		var cm = this.$n('cm'),
 			n = this.$n();
 		if (cm) {
@@ -222,8 +246,9 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 		var btn = this.$n('btn');
 		if (btn)
 			this.domListen_(btn, 'onClick', '_doMenuClick');
-	},
-	unbind_: function () {
+	}
+
+	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		var cm = this.$n('cm'),
 			n = this.$n();
 		if (cm) {
@@ -238,23 +263,26 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 		var btn = this.$n('btn');
 		if (btn)
 			this.domUnlisten_(btn, 'onClick', '_doMenuClick');
-		this.$supers(zul.sel.Listheader, 'unbind_', arguments);
-	},
-	_doMouseOver: function (evt) {
-		if (this.isSortable_() || (this.parent._menupopup && this.parent._menupopup != 'none'))
-			jq(this.$n()).addClass(this.$s('hover'));
-	},
-	_doMouseOut: function (evt) {
-		if (this.isSortable_() || (this.parent._menupopup && this.parent._menupopup != 'none')) {
-			var $n = jq(this.$n());
+		super.unbind_(skipper, after, keepRod);
+	}
+
+	public _doMouseOver(evt: zk.Event): void {
+		if (this.isSortable_() || (this.parent!._menupopup && this.parent!._menupopup != 'none'))
+			jq(this.$n_()).addClass(this.$s('hover'));
+	}
+
+	public _doMouseOut(evt: zk.Event): void {
+		if (this.isSortable_() || (this.parent!._menupopup && this.parent!._menupopup != 'none')) {
+			var $n = jq(this.$n_());
 			if (!$n.hasClass(this.$s('visited')))
 				$n.removeClass(this.$s('hover'));
 		}
-	},
-	_doClick: function (evt) {
+	}
+
+	public _doClick(evt: zk.Event<zk.EventMetaData>): void {
 		this._checked = !this._checked;
-		var box = this.getListbox(),
-			cm = this.$n('cm'),
+		var box = this.getListbox()!,
+			cm = this.$n_('cm'),
 			$n = jq(cm);
 		if (this._checked) {
 			$n.addClass(this.$s('checked'));
@@ -264,42 +292,47 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 			box._select(null, evt);
 		}
 		box.fire('onCheckSelectAll', this._checked, {toServer: true});
-	},
+	}
+
 	//@Override
-	doClick_: function (evt) {
+	public override doClick_(evt: zk.Event, popupOnly?: boolean): void {
 		var box = this.getListbox(),
 			cm = this.$n('cm');
 		if (box && box._checkmark) {
-			var n = evt.domTarget;
+			var n = evt.domTarget!;
 			if (n == cm || n.parentNode == cm) //may click on font-awesome element
 				return; //ignore it (to avoid sort or other activity)
 		}
-		this.$supers('doClick_', arguments);
-	},
+		super.doClick_(evt, popupOnly);
+	}
+
 	//@Override
-	domContent_: function () {
-		var s = this.$supers('domContent_', arguments),
-			box = this.getListbox();
+	protected override domContent_(): string {
+		var s = super.domContent_(),
+			box = this.getListbox()!;
 		if (this._hasCheckbox())
 			s = '<span id="' + this.uuid + '-cm" class="' + this.$s('checkable')
 				+ (box.$$selectAll ? ' ' + this.$s('checked') : '') + '"><i class="' + this.$s('icon') + ' z-icon-check"></i></span>'
 				+ (s ? '&nbsp;' + s : '');
 		return s;
-	},
-	_hasCheckbox: function () {
+	}
+
+	private _hasCheckbox(): boolean | undefined {
 		var box = this.getListbox();
-		return box != null && this.parent.firstChild == this
+		return box != null && this.parent!.firstChild == this
 			&& box._checkmark && box._multiple && !box._listbox$noSelectAll;  // B50-ZK-873
-	},
+	}
+
 	//@Override
-	domLabel_: function () {
+	public override domLabel_(): string {
 		return zUtl.encodeXML(this.getLabel(), {maxlength: this._maxlength});
-	},
+	}
+
 	//@Override
-	getContentWidth_: function () {
+	public override getContentWidth_(): number {
 		var $cv = zk(this.$n('cave')),
 			isTextOnly = !this.nChildren && !this._iconSclass && !this._hasCheckbox(),
 			contentWidth = isTextOnly ? $cv.textWidth() : $cv.textSize()[0];
 		return Math.ceil(contentWidth + $cv.padBorderWidth() + zk(this.$n()).padBorderWidth());
 	}
-});
+}

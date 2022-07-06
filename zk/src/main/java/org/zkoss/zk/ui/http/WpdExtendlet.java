@@ -338,14 +338,17 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 			final String elnm = el.getName();
 			if ("widget".equals(elnm)) {
 				final String wgtnm = IDOMs.getRequiredAttributeValue(el, "name");
-				final String jspath = wgtnm + ".js"; //eg: /js/zul/wgt/Div.js
-				if (sourceMapManager != null)
-					sourceMapManager.startJsCursor(jspath);
-				if (!writeResource(reqctx, out, jspath, dir, false, sourceMapManager)) {
-					log.error("Widget " + wgtnm + ": " + jspath + " not found, " + el.getLocator() + ", " + path);
+				final boolean moldOnly = "true".equals(el.getAttributeValue("moldOnly"));
+				if (!moldOnly) {
+					final String jspath = wgtnm + ".js"; //eg: /js/zul/wgt/Div.js
 					if (sourceMapManager != null)
-						sourceMapManager.closeJsCursor(out);
-					continue;
+						sourceMapManager.startJsCursor(jspath);
+					if (!writeResource(reqctx, out, jspath, dir, false, sourceMapManager)) {
+						log.error("Widget " + wgtnm + ": " + jspath + " not found, " + el.getLocator() + ", " + path);
+						if (sourceMapManager != null)
+							sourceMapManager.closeJsCursor(out);
+						continue;
+					}
 				}
 
 				final String wgtflnm = name + "." + wgtnm;

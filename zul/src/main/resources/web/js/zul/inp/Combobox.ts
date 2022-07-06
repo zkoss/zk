@@ -29,15 +29,17 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * @see Comboitem
  */
 @zk.WrapClass('zul.inp.Combobox')
-export class Combobox<ValueType> extends zul.inp.ComboWidget<ValueType> {
+export class Combobox extends zul.inp.ComboWidget {
+	public override firstChild!: zul.inp.Comboitem | null;
+	public override lastChild!: zul.inp.Comboitem | null;
 	private _autocomplete = true;
 	private _instantSelect = true;
 	protected override _iconSclass = 'z-icon-caret-down';
 	private _emptySearchMessage?: string;
 	private _shallRedoCss?: boolean | null;
 	private _initSelIndex?: number | null;
-	private _sel?: zul.LabelImageWidget | null;
-	private _lastsel?: zul.LabelImageWidget | null;
+	private _sel?: zul.inp.Comboitem | null;
+	private _lastsel?: zul.inp.Comboitem | null;
 	private _autoCompleteSuppressed?: boolean;
 	private _bDel?: boolean | null;
 	private _initSelUuid?: string | null;
@@ -126,7 +128,7 @@ export class Combobox<ValueType> extends zul.inp.ComboWidget<ValueType> {
 
 	public override onResponse(ctl: zk.ZWatchController, opts: zul.inp.ResponseOptions): void {
 		// Bug ZK-2960: need to wait until the animation is finished before calling super
-		var args = arguments as unknown as Parameters<Combobox<ValueType>['onResponse']>;
+		var args = arguments as unknown as Parameters<Combobox['onResponse']>;
 		if (this.isOpen() && jq(this.getPopupNode_()!).is(':animated')) {
 			var self = this;
 			setTimeout(function () {if (self.desktop) self.onResponse.apply(self, args);}, 50);
@@ -157,11 +159,11 @@ export class Combobox<ValueType> extends zul.inp.ComboWidget<ValueType> {
 		if (this.desktop) {
 			if (!this._sel || v != this._sel.uuid) {
 				var oldSel = this._sel,
-					sel: zul.LabelImageWidget | undefined;
+					sel: zul.inp.Comboitem | undefined;
 				this._sel = this._lastsel = null;
-				var w = zk.$(v);
+				var w = zk.$<zul.inp.Comboitem>(v);
 				if (w)
-					sel = w as zul.LabelImageWidget;
+					sel = w;
 				this._hiliteOpt(oldSel, this._sel = sel);
 				this._lastsel = sel;
 			}
@@ -203,7 +205,7 @@ export class Combobox<ValueType> extends zul.inp.ComboWidget<ValueType> {
 		}
 	}
 
-	public override setValue(val: ValueType, fromServer?: boolean): void {
+	public override setValue(val: string, fromServer?: boolean): void {
 		super.setValue(val, fromServer);
 		this._reIndex();
 		this.valueEnter_ = null; // reset bug #3014660
@@ -218,7 +220,7 @@ export class Combobox<ValueType> extends zul.inp.ComboWidget<ValueType> {
 				if (n) jq(n).removeClass(this._sel.$s('selected'));
 			}
 			this._sel = this._lastsel = null;
-			for (var w = this.firstChild as zul.LabelImageWidget | null; w; w = w.nextSibling as zul.LabelImageWidget | null) {
+			for (var w = this.firstChild; w; w = w.nextSibling) {
 				if (value == w.getLabel()) {
 					this._sel = w;
 					break;
@@ -236,22 +238,22 @@ export class Combobox<ValueType> extends zul.inp.ComboWidget<ValueType> {
 			(cst ? cst._errmsg['STRICT'] ? cst._errmsg['STRICT'] : '' : '') || msgzul.VALUE_NOT_MATCHED;
 	}
 
-	private _findItem(val: string, strict?: boolean): zul.LabelImageWidget | null | undefined {
+	private _findItem(val: string, strict?: boolean): zul.inp.Comboitem | null | undefined {
 		return this._findItem0(val, strict);
 	}
 
-	private _findItem0(val: string, strict?: boolean, startswith?: boolean, excluding?: boolean): zul.LabelImageWidget | null | undefined {
+	private _findItem0(val: string, strict?: boolean, startswith?: boolean, excluding?: boolean): zul.inp.Comboitem | null | undefined {
 		var fchild = this.firstChild;
 		if (fchild && val) {
 			val = val.toLowerCase();
-			var sel: zk.Widget | null | undefined = this._sel;
+			var sel = this._sel;
 			if (!sel || sel.parent != this) sel = fchild;
 
-			for (var item = (excluding ? sel.nextSibling ? sel.nextSibling : fchild : sel) as zul.LabelImageWidget | null; ;) {
-				if ((!strict || !item!.isDisabled()) && item!.isVisible()
-				&& (startswith ? item!.getLabel().toLowerCase().startsWith(val) : val == item!.getLabel().toLowerCase()))
+			for (var item: zul.inp.Comboitem | null = excluding ? sel.nextSibling ? sel.nextSibling : fchild : sel; ;) {
+				if ((!strict || !item.isDisabled()) && item.isVisible()
+				&& (startswith ? item.getLabel().toLowerCase().startsWith(val) : val == item.getLabel().toLowerCase()))
 					return item;
-				if (!(item = item!.nextSibling as zul.LabelImageWidget | null)) item = fchild as zul.LabelImageWidget;
+				if (!(item = item.nextSibling)) item = fchild;
 				if (item == sel) break;
 			}
 		}
@@ -263,7 +265,7 @@ export class Combobox<ValueType> extends zul.inp.ComboWidget<ValueType> {
 				this._isStrict() || (opts && opts.strict)), opts);
 	}
 
-	private _hilite2(sel?: zul.LabelImageWidget | null, opts?: Record<string, unknown>): void {
+	private _hilite2(sel?: zul.inp.Comboitem | null, opts?: Record<string, unknown>): void {
 		opts = opts || {};
 
 		var oldsel = this._sel;
@@ -302,7 +304,7 @@ export class Combobox<ValueType> extends zul.inp.ComboWidget<ValueType> {
 			super.updateChange_();
 	}
 
-	private _hiliteOpt(oldTarget?: zk.Widget | null, newTarget?: zul.LabelImageWidget | null): void {
+	private _hiliteOpt(oldTarget?: zk.Widget | null, newTarget?: zul.inp.Comboitem | null): void {
 		if (oldTarget && oldTarget.parent == this) {
 			var n = oldTarget.$n();
 			if (n)
@@ -335,8 +337,8 @@ export class Combobox<ValueType> extends zul.inp.ComboWidget<ValueType> {
 	private _updnSel(evt: zk.Event, bUp?: boolean): void {
 		var inp = this.getInputNode()!,
 			val = inp.value,
-			sel: zul.LabelImageWidget | null | undefined,
-			looseSel: zul.LabelImageWidget | null | undefined;
+			sel: zul.inp.Comboitem | null | undefined,
+			looseSel: zul.inp.Comboitem | null | undefined;
 		// ZK-2200: the empty combo item should work
 		if (val || this._sel) {
 			val = val.toLowerCase();
@@ -350,7 +352,7 @@ export class Combobox<ValueType> extends zul.inp.ComboWidget<ValueType> {
 			}
 
 			//Note: we always assume strict when handling up/dn
-			for (var item: zul.LabelImageWidget | null = beg; ;) {
+			for (var item: zul.inp.Comboitem | null = beg; ;) {
 				if (!item!.isDisabled() && item!.isVisible()) {
 					var label = item!.getLabel().toLowerCase();
 					if (val == label) {
@@ -383,7 +385,7 @@ export class Combobox<ValueType> extends zul.inp.ComboWidget<ValueType> {
 		}
 
 		if (sel)
-			zk(sel).scrollIntoView(this.$n('pp')!);
+			zk(sel).scrollIntoView(this.$n('pp'));
 
 		//B70-ZK-2548: fire onChange event to notify server the current value
 		var highlightOnly = !this._instantSelect && this._open;
@@ -391,10 +393,10 @@ export class Combobox<ValueType> extends zul.inp.ComboWidget<ValueType> {
 		evt.stop();
 	}
 
-	private _next(item: zul.LabelImageWidget | null, bUp?: boolean): zul.LabelImageWidget | null {
-		function getVisibleItemOnly(item: zul.LabelImageWidget, bUp?: boolean, including?: boolean): zul.LabelImageWidget | null {
-			var next: 'previousSibling' | 'nextSibling' = bUp ? 'previousSibling' : 'nextSibling';
-			for (var n = including ? item : item[next] as zul.LabelImageWidget | null; n; n = n[next] as zul.LabelImageWidget | null)
+	private _next(item: zul.inp.Comboitem | null, bUp?: boolean): zul.inp.Comboitem | null {
+		function getVisibleItemOnly(item: zul.inp.Comboitem, bUp?: boolean, including?: boolean): zul.inp.Comboitem | null {
+			var next = bUp ? 'previousSibling' as const : 'nextSibling' as const;
+			for (var n = including ? item : item[next]; n; n = n[next])
 				if (!n.isDisabled() && n.isVisible()) // ZK-1728: check if the item is visible
 					return n;
 			return null;
@@ -402,10 +404,10 @@ export class Combobox<ValueType> extends zul.inp.ComboWidget<ValueType> {
 		if (item)
 			item = getVisibleItemOnly(item, bUp);
 		return item ? item : getVisibleItemOnly(
-				(bUp ? this.firstChild : this.lastChild) as zul.LabelImageWidget, !bUp, true);
+				(bUp ? this.firstChild! : this.lastChild!), !bUp, true);
 	}
 
-	public _select(sel: zul.LabelImageWidget | null, opts: Record<string, unknown>): void {
+	public _select(sel: zul.inp.Comboitem | null, opts: Record<string, unknown>): void {
 		var inp = this.getInputNode()!,
 			val = inp.value = sel ? sel.getLabel() : '';
 		this.valueSel_ = val;
@@ -484,7 +486,7 @@ export class Combobox<ValueType> extends zul.inp.ComboWidget<ValueType> {
 		|| ofs[0] != val.length || ofs[0] != ofs[1]) //not at end
 			return this._hilite({strict: true});
 
-		var sel: zul.LabelImageWidget | null | undefined = this._findItem(val, true);
+		var sel = this._findItem(val, true);
 		if (sel || bDel || !this._autocomplete) {
 			// ZK-2024: the value should have same case with selected label if autocomplete is enabled
 			if (sel && sel.getLabel().toLowerCase().startsWith(val.toLowerCase()) && this._autocomplete)
@@ -495,18 +497,18 @@ export class Combobox<ValueType> extends zul.inp.ComboWidget<ValueType> {
 		//autocomplete
 		val = val.toLowerCase();
 		sel = this._sel;
-		if (!sel || sel.parent != this) sel = fchild as zul.LabelImageWidget;
+		if (!sel || sel.parent != this) sel = fchild;
 
-		for (var item = sel as zul.LabelImageWidget | null; ;) {
-			if (!item!.isDisabled() && item!.isVisible()
-			&& item!.getLabel().toLowerCase().startsWith(val)) {
-				inp.value = item!.getLabel();
+		for (var item: zul.inp.Comboitem | null = sel; ;) {
+			if (!item.isDisabled() && item.isVisible()
+			&& item.getLabel().toLowerCase().startsWith(val)) {
+				inp.value = item.getLabel();
 				zk(inp).setSelectionRange(val.length, inp.value.length);
 				this._hilite2(item);
 				return;
 			}
 
-			if (!(item = item!.nextSibling as zul.LabelImageWidget | null)) item = fchild as zul.LabelImageWidget;
+			if (!(item = item.nextSibling)) item = fchild;
 			if (item == sel) {
 				this._hilite2(); //not found
 				return;
@@ -591,7 +593,7 @@ export class Combobox<ValueType> extends zul.inp.ComboWidget<ValueType> {
 		// B50-ZK-568: Combobox does not scroll to selected item
 		// shall do after slide down
 		if (visible && this._lastsel)
-			zk(this._lastsel).scrollIntoView(this.$n('pp')!);
+			zk(this._lastsel).scrollIntoView(this.$n('pp'));
 		super.afterAnima_(visible);
 	}
 

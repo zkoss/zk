@@ -14,7 +14,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 import {default as zk, ZKObject} from './zk';
 import type {Widget} from './widget';
-import {Callable} from './types';
 
 export interface EventOptions {
 	implicit?: boolean;
@@ -93,7 +92,8 @@ export interface EventStopOptions {
  * </table>
  * @disable(zkgwt)
  */
-export class Event extends ZKObject {
+export class Event<TData = unknown> extends ZKObject {
+	public itemSelected?: boolean; // zul.sel.ItemWidget.prototype.doSelect_
 	public tooltipped?: boolean; // zul.Widget.prototype.doTooltipOver_
 	public contextSelected?: boolean; // zul.Widget.prototype.doClick_
 
@@ -165,7 +165,7 @@ onClick: function (evt) {
 	 * <p>Refer to <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/Communication/AU_Requests/Server-side_Processing">ZK Client-side Reference: AU Requests: Server-side Processing</a>.
 	 * @type Object
 	 */
-	public data: unknown | null;
+	public data?: TData | null;
 	/** The options (never null).
 	 * <p>Allowed properties:
 	 * <ul>
@@ -217,7 +217,7 @@ onClick: function (evt) {
 	 * @param Map opts [optional] the options. Refer to {@link #opts}
 	 * @param jq.Event domEvent [optional] the DOM event that causes this widget event.
 	 */
-	public constructor(target: Widget | null | undefined, name: string, data?: unknown, opts?: EventOptions | null, domEvent?: JQuery.TriggeredEvent) { // FIXME: TriggeredEvent missing type parameters
+	public constructor(target: Widget | null | undefined, name: string, data?: TData, opts?: EventOptions | null, domEvent?: JQuery.TriggeredEvent) { // FIXME: TriggeredEvent missing type parameters
 		super();
 		this.currentTarget = this.target = target;
 		this.name = name;
@@ -297,24 +297,24 @@ evt.stop({progagation:true,revoke:true}); //revoke the event propagation
 	}
 }
 export interface ClientActivity {
-	_onSyncScroll: {_onSyncScroll} | [unknown, Callable];
-	_beforeSizeForRead: {_beforeSizeForRead} | [unknown, Callable];
-	beforeSize: {beforeSize} | [unknown, Callable];
-	afterSize: {afterSize} | [unknown, Callable];
-	onBindLevelChange: {onBindLevelChange} | [unknown, Callable];
-	onBindLevelMove: {onBindLevelMove: Callable} | [unknown, Callable];
-	onFitSize: {onFitSize} | [unknown, Callable];
-	onHide: {onHide} | [unknown, Callable];
-	onFloatUp: {onFloatUp} | [unknown, Callable];
-	onResponse: {onResponse} | [unknown, Callable];
-	onCommandReady: {onCommandReady} | [unknown, Callable];
-	onRestore: {onRestore} | [unknown, Callable];
-	onScroll: {onScroll} | [unknown, Callable];
-	onSend: {onSend} | [unknown, Callable];
-	onSize: {onSize} | [unknown, Callable];
-	onShow: {onShow} | [unknown, Callable];
-	onVParent: {onVParent} | [unknown, Callable];
-	onMove: {onMove} | [unknown, Callable];
+	_onSyncScroll: {_onSyncScroll} | [unknown, zk.Callable];
+	_beforeSizeForRead: {_beforeSizeForRead} | [unknown, zk.Callable];
+	beforeSize: {beforeSize} | [unknown, zk.Callable];
+	afterSize: {afterSize} | [unknown, zk.Callable];
+	onBindLevelChange: {onBindLevelChange} | [unknown, zk.Callable];
+	onBindLevelMove: {onBindLevelMove: zk.Callable} | [unknown, zk.Callable];
+	onFitSize: {onFitSize} | [unknown, zk.Callable];
+	onHide: {onHide} | [unknown, zk.Callable];
+	onFloatUp: {onFloatUp} | [unknown, zk.Callable];
+	onResponse: {onResponse} | [unknown, zk.Callable];
+	onCommandReady: {onCommandReady} | [unknown, zk.Callable];
+	onRestore: {onRestore} | [unknown, zk.Callable];
+	onScroll: {onScroll} | [unknown, zk.Callable];
+	onSend: {onSend} | [unknown, zk.Callable];
+	onSize: {onSize} | [unknown, zk.Callable];
+	onShow: {onShow} | [unknown, zk.Callable];
+	onVParent: {onVParent} | [unknown, zk.Callable];
+	onMove: {onMove} | [unknown, zk.Callable];
 }
 
 export interface FireOptions {
@@ -564,7 +564,7 @@ zWatch.listen({onSend: ml})
 
 <p>The watch listener is added in the parent-first sequence if it has a method called getParent, or a member called parent (a typical example is {@link Widget}). Thus, the parent will be called before its children, if they are all registered to the same action.
  */
-export const zWatch: ZWatch & {onBindLevelMove: Callable} = {
+export const zWatch: ZWatch & {onBindLevelMove: zk.Callable} = {
 	/** Registers watch listener(s). For example,
 <pre><code>
 zWatch.listen({

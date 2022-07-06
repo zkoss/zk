@@ -1,3 +1,4 @@
+export default {};
 export * from './Borderlayout';
 export * from './LayoutRegion';
 export * from './North';

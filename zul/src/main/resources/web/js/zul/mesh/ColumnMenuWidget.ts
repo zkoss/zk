@@ -16,8 +16,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * A skeletal implementation for a column menu widget.
  * @since 6.5.0
  */
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 @zk.WrapClass('zul.mesh.ColumnMenuWidget')
 export abstract class ColumnMenuWidget extends zul.mesh.HeadWidget {
 	public override _menupopup = 'none';
@@ -238,7 +236,7 @@ export abstract class ColumnMenuWidget extends zul.mesh.HeadWidget {
 		if (mesh) mesh._syncEmpty!();
 	}
 
-	public getGroupPackage_(): '' { // FIXME: orignally, `zk.$void`
+	public getGroupPackage_(): string { // FIXME: orignally, `zk.$void`
 		return '';
 	}
 

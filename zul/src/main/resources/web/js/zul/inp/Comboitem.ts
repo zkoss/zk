@@ -22,12 +22,16 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * @see Combobox
  */
 @zk.WrapClass('zul.inp.Comboitem')
-export class Comboitem extends zul.LabelImageWidget {
-	public override parent!: zul.inp.Combobox<never>;
+export class Comboitem extends zul.LabelImageWidget implements zul.LabelImageWidgetWithDisable {
+	public override parent!: zul.inp.Combobox;
+	public override nextSibling!: zul.inp.Comboitem | null;
+	public override previousSibling!: zul.inp.Comboitem | null;
 	public _maxFlexWidth = true; //ZK-5044
 	private _description?: string;
 	private _content?: string;
 	declare private _value: unknown;
+	public _disabled?: boolean;
+	public _autodisable?: string;
 
 	/** Returns whether it is disabled.
 	 * <p>Default: false.

@@ -1,3 +1,4 @@
+export default {};
 export * from './MeshWidget'; // jsdoc="true"
 export * from './HeadWidget'; // jsdoc="true"
 export * from './ColumnMenuWidget'; // jsdoc="true"

@@ -16,7 +16,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 import {default as zk} from './zk';
 import {default as pkg} from './pkg';
 import {Event, zWatch} from './evt';
-import {Callable, cast} from './types';
 import {default as zAu} from './au';
 import {zjq} from './dom';
 
@@ -631,7 +630,7 @@ export function zkdh(name: string, script: string): void {
 jq(function () {
 	var Widget = zk.Widget,
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		_bfUploads: Array<Callable> = cast([]),
+		_bfUploads: Array<zk.Callable> = [],
 		_reszInf = {},
 		_subevts = { //additonal invocation
 			onClick: 'doSelect_',

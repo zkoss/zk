@@ -1,7 +1,6 @@
 const path = require('path');
 var webpack = require('webpack');
 // var CircularDependencyPlugin = require('circular-dependency-plugin');
-var ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 module.exports = {
 	resolve: {
@@ -9,7 +8,20 @@ module.exports = {
 	},
 
 	module: {
-		rules: [{ test: /\.(ts|js)x?$/, loader: 'ts-loader', exclude: /node_modules/ }],
+		rules: [
+			{
+				test: /\.(ts|js)x?$/,
+				exclude: /node_modules/,
+				use: [
+					{
+						loader: 'ts-loader',
+						options: {
+							transpileOnly: true,
+						},
+					},
+				],
+			},
+		],
 	},
 	externals: {
 		'jquery': 'jq', // for jquery.transit.js
@@ -17,7 +29,6 @@ module.exports = {
 	},
 
 	plugins: [
-		new ForkTsCheckerWebpackPlugin(),
 		new webpack.IgnorePlugin({
 			resourceRegExp: /^\.\/locale$/
 		}),

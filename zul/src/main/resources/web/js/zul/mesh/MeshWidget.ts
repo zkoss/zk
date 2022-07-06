@@ -340,7 +340,7 @@ function _getMinWd(wgt: MeshWidget): number {
 function _getSigRow(wgt: MeshWidget): HTMLTableRowElement | undefined {
 	// scan for tr with largest number of td children
 	var rw = wgt.getBodyWidgetIterator().next(),
-		tr = rw ? rw.$n() as HTMLTableRowElement | null | undefined : null;
+		tr = rw ? rw.$n() : null;
 	if (!tr)
 		return;
 	for (var maxtr = tr, len: number, max = maxtr.cells.length; tr; tr = tr.nextSibling as HTMLTableRowElement | null)
@@ -358,7 +358,7 @@ function _cpCellWd(wgt: MeshWidget): void {
 	var ncols = dst.cells.length,
 		src: HTMLTableRowElement | null | undefined,
 		maxnc = 0;
-	for (var j = 0, it = wgt.getBodyWidgetIterator({skipHidden: true}), w: zk.Widget; (w = it.next());) {
+	for (var j = 0, it = wgt.getBodyWidgetIterator({skipHidden: true}), w: zk.Widget | null | undefined; (w = it.next());) {
 		if (!w._loaded || w.z_rod)
 			continue;
 
@@ -430,9 +430,9 @@ function unlistenOnFitSize(wgt: MeshWidget): void {
 	}
 }
 
-export interface BodyWidgetIterator {
+export interface ItemIterator {
 	hasNext(): boolean;
-	next(): zk.Widget;
+	next(): zul.sel.ItemWidget | null | undefined;
 }
 /**
  *  A skeletal implementation for a mesh widget.
@@ -440,8 +440,6 @@ export interface BodyWidgetIterator {
  *  @see zul.sel.Tree
  *  @see zul.sel.Listbox
  */
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 @zk.WrapClass('zul.mesh.MeshWidget')
 export abstract class MeshWidget extends zul.Widget {
 	public _rows = 0;
@@ -452,8 +450,8 @@ export abstract class MeshWidget extends zul.Widget {
 	public _span?: string | boolean;
 	private _nspan?: number;
 	private _autopaging: boolean | undefined;
-	private _model: boolean | undefined;
-	private _paginal?: zul.mesh.Paging;
+	public _model: boolean | undefined;
+	protected _paginal?: zul.mesh.Paging;
 	private _pendOnRender?: boolean;
 	private _ebodyScrollPos?: null | { l: number; t: number };
 	// Types established from inspecting https://www.zkoss.org/zkdemo/grid/header_and_footer
@@ -473,9 +471,9 @@ export abstract class MeshWidget extends zul.Widget {
 	public efootrows?: HTMLTableSectionElement | null;
 
 	public efrozen?: HTMLElement | null;
-	public frozen?: zul.mesh.Frozen;
+	public frozen?: zul.mesh.Frozen | null;
 
-	public paging?: zul.mesh.Paging;
+	public paging?: zul.mesh.Paging | null;
 	public heads: zul.mesh.HeadWidget[];
 	public head?: zul.mesh.HeadWidget | null;
 	public foot?: null; // FIXME: Tentative. See `zul.mesh.Frozen.prototype._doScrollNow`.
@@ -486,15 +484,15 @@ export abstract class MeshWidget extends zul.Widget {
 	private _bottomBoundary?: number;
 	private _topBoundary?: number;
 	public _rowsOnFitSize?: boolean;
-	public _scrollbar?: zul.Scrollbar;
+	public _scrollbar?: zul.Scrollbar | null;
 	private _cachehgh?: number;
 	private _lastDevicePixelRatio?: number;
 	private _adjustScrollTopLater?: boolean;
 	private _shallSize?: boolean;
-	private _syncingbodyrows?: boolean;
+	public _syncingbodyrows?: boolean;
 	private _shallClearTableWidth?: boolean;
-	private _shallShowScrollbar?: boolean;
-	public _syncEmpty?: () => void; // zul.mesh.ColumnMenuWidget
+	protected _shallShowScrollbar?: boolean;
+	declare public _syncEmpty?: () => void; // zul.mesh.ColumnMenuWidget
 
 	public constructor() {
 		super(); // FIXME: arguments?
@@ -503,15 +501,13 @@ export abstract class MeshWidget extends zul.Widget {
 
 	// `zul.mesh.prototype.HeadWidget.onColSize` could assign `_innerWidth` a number
 	public _innerWidth = '100%';
-	private _currentTop = 0;
+	protected _currentTop = 0;
 	public _currentLeft = 0;
 	public _nativebar = true;
 
 	protected abstract getHeadWidgetClass(): typeof zul.mesh.HeadWidget;
-	public abstract getBodyWidgetIterator(opts?: Record<string, unknown>): BodyWidgetIterator;
-	protected abstract _getFirstItemIndex(): number;
-	protected abstract _getLastItemIndex(): number;
-	public abstract hasGroup(): boolean;
+	public abstract getBodyWidgetIterator(opts?: Record<string, unknown>): ItemIterator;
+	public abstract itemIterator(opts?: Record<string, unknown>): ItemIterator;
 
 	/**
 	 * Returns the rows. Zero means no limitation.
@@ -892,7 +888,7 @@ export abstract class MeshWidget extends zul.Widget {
 		//B50-3178977 navigating the input in hiddin column.
 		var td = this.ehdfaker ? this.ehdfaker.childNodes[index] as HTMLTableCellElement | undefined : null,
 			frozen = this.frozen,
-			bar: zul.Scrollbar | undefined;
+			bar: zul.Scrollbar | null | undefined;
 		if (td && frozen && (ignoreWidth || zk.parseInt(td.style.width) == 0)
 			&& (index = index - frozen.getColumns()!) >= 0) {
 			if (this._nativebar) {
@@ -982,7 +978,8 @@ export abstract class MeshWidget extends zul.Widget {
 		}
 	}
 
-	public onResponse(): void {
+	// These paramters are not used. They exist for the sake of inheritance.
+	public onResponse(ctl?: zk.ZWatchController, opts?: Record<string, unknown>): void {
 		if (this._shallSize) {
 			if (this._shallClearTableWidth) {
 				this._clearTableWidth();
@@ -993,7 +990,7 @@ export abstract class MeshWidget extends zul.Widget {
 		}
 	}
 
-	public _syncSize(shallClearTableWidth: boolean): void {
+	public _syncSize(shallClearTableWidth?: boolean): void {
 		// fixed for F50-3025422.zul on ZTL
 		if (this.desktop) {
 			this._shallSize = true;
@@ -1153,13 +1150,8 @@ export abstract class MeshWidget extends zul.Widget {
 			this._afterCalcSize();
 		}
 	}
-	
-	// TODO: should move this signature to super
-	public override $n<T extends HTMLElement>(subId?: string): T | null | undefined {
-		return super.$n(subId) as T | null | undefined;
-	}
 
-	private _bindDomNode(): void {
+	public _bindDomNode(): void {
 		this.ehead = this.$n('head');
 		this.eheadtbl = this.$n('headtbl');
 		this.ebody = this.$n('body');
@@ -1175,10 +1167,10 @@ export abstract class MeshWidget extends zul.Widget {
 
 		if (this.ehead) {
 			this.eheadrows = this.$n('headrows');
-			this.ehdfaker = this.head!.$n('hdfaker') as HTMLTableColElement | null | undefined;
-			this.ebdfaker = this.head!.$n('bdfaker') as HTMLTableColElement | null | undefined;
+			this.ehdfaker = this.head!.$n('hdfaker');
+			this.ebdfaker = this.head!.$n('bdfaker');
 			if (this.efoot)
-				this.eftfaker = this.head!.$n('ftfaker') as HTMLTableColElement | null | undefined;
+				this.eftfaker = this.head!.$n('ftfaker');
 		}
 		if (this.efoot)
 			this.efootrows = this.$n('footrows');
@@ -1276,7 +1268,7 @@ export abstract class MeshWidget extends zul.Widget {
 
 	private _timeoutId: number | null = null;
 
-	private _fireOnScrollPos(time?: number): void { //overriden in zkmax
+	protected _fireOnScrollPos(time?: number): void { //overriden in zkmax
 		clearTimeout(this._timeoutId!);
 		this._timeoutId = setTimeout(this.proxy(this._onScrollPos), time! >= 0 ? time : 300);
 	}
@@ -1322,7 +1314,7 @@ export abstract class MeshWidget extends zul.Widget {
 			max = min + this.ebody!.offsetHeight;
 		if (min == 0 && max == 0) return; //ZK-2796: Uncessary onRender command triggered when setting tabbox's maximalHeight attribute to true
 		for (var j = 0, it = this.getBodyWidgetIterator({skipHidden: true}),
-				len = rows.length, w: zk.Widget; (w = it.next()) && j < len; j++) {
+				len = rows.length, w: zk.Widget | null | undefined; (w = it.next()) && j < len; j++) {
 			if (!w._loaded) {
 				//B70-ZK-2589: w and rows[j] belongs to different widget,
 				//w shouldn't depend on rows[j], origin -> row = rows[j];
@@ -1487,7 +1479,7 @@ export abstract class MeshWidget extends zul.Widget {
 		this._afterCalcSize();
 	}
 
-	private _beforeCalcSize(): void {
+	protected _beforeCalcSize(): void {
 		var ebody = this.ebody!;
 		if (!this._nativebar && (ebody.scrollLeft || ebody.scrollTop)) {
 			// ZK-2046: Keep ebody scroll position before calculated size, _setHgh would reset it to 0.
@@ -1496,7 +1488,7 @@ export abstract class MeshWidget extends zul.Widget {
 		this._calcHgh();
 	}
 
-	private _afterCalcSize(): void {
+	protected _afterCalcSize(): void {
 		var isCSSFlex = this._cssflex && this.isChildrenFlex();
 		if (this._ebodyScrollPos) {
 			// ZK-2046: Restore ebody scroll position after calculated size.
@@ -1720,12 +1712,12 @@ export abstract class MeshWidget extends zul.Widget {
 		this.heads.push(child);
 	}
 
-	protected override onChildRemoved_(child: zul.mesh.HeadWidget): void {
+	protected override onChildRemoved_(child: zk.Widget): void {
 		super.onChildRemoved_(child);
 
-		if (child == this.head) {
+		if (child == this.head) { // If true, child is guaranteed to be a HeadWidget
 			this._minWd = this.head = null;
-			this.heads.$remove(child);
+			this.heads.$remove(child as zul.mesh.HeadWidget);
 		} else if (child instanceof zul.mesh.Auxhead)
 			this.heads.$remove(child);
 		else if (child instanceof zul.mesh.Frozen)
@@ -2055,7 +2047,7 @@ export abstract class MeshWidget extends zul.Widget {
 			jq('#' + tbody.id + '-fakeRow').remove();
 	} // for Grid.js and Listbox.js
 
-	protected refreshBar_(showBar: boolean, scrollToTop: boolean): void {
+	protected refreshBar_(showBar?: boolean, scrollToTop?: boolean): void {
 		var bar = this._scrollbar;
 		if (bar) {
 			// ZK-355: Keep scroll position before sync scrollbar size
@@ -2084,7 +2076,7 @@ export abstract class MeshWidget extends zul.Widget {
 			this._calcHgh();
 	}
 
-	private _calcHgh(): void {
+	protected _calcHgh(): void {
 		var rows: ArrayLike<HTMLTableRowElement> = this.ebodyrows ? this.ebodyrows.rows : [],
 			n = this.$n_(),
 			hgh: string | number = n.style.height,
@@ -2191,7 +2183,7 @@ export abstract class MeshWidget extends zul.Widget {
 	}
 
 	/* Returns the real # of rows (aka., real size). */
-	private _visibleRows(v: number): number | undefined {
+	protected _visibleRows(v?: number): number | undefined {
 		if ('number' == typeof v) {
 			this._visiRows = v;
 		} else
@@ -2219,8 +2211,17 @@ export abstract class MeshWidget extends zul.Widget {
 	 * @param int index the index of item
 	 * @param double scrollRatio the scroll ratio
 	 */
-	private _scrollToIndex(index: number, scrollRatio?: number): void {
+	protected _scrollToIndex(index: number, scrollRatio?: number): void {
+		// NOTE: _scrollToIndex will only be called by Grid and Listbox, and both of them
+		// implements _getFirstItemIndex and _getLastItemIndex. Thus, @ts-ignore is safe.
+
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// @ts-ignore
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
 		var firstItemIndex = this._getFirstItemIndex(),
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// @ts-ignore
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
 			lastItemIndex = this._getLastItemIndex(),
 			body = this.ebody!;
 		this._targetIndex = index;
@@ -2229,7 +2230,7 @@ export abstract class MeshWidget extends zul.Widget {
 		if (index >= firstItemIndex && index <= lastItemIndex) {
 			var itemIterator = this.getBodyWidgetIterator();
 			while (itemIterator.hasNext()) {
-				var item = itemIterator.next();
+				var item = itemIterator.next()!;
 				if (item._index == index) {
 					item.$n_().scrollIntoView(true);
 					this._keepScroll = false;

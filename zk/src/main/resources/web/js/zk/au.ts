@@ -16,8 +16,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 import {default as zk} from './zk';
 import type {Event as ZKEvent} from './evt';
 import {Desktop, Widget} from './widget';
-import type {Callable, Offset} from './types';
-import {cast} from './types';
 import {Effect, Mask} from './effect';
 import {DateImpl} from './dateImpl';
 
@@ -58,7 +56,7 @@ export interface AUCommand0 {
 	log: typeof zk.log;
 	script(script: string): void;
 	echo(dtid: string): void;
-	echoGx: Callable;
+	echoGx: zk.Callable;
 	clientInfo(dtid?: string): void;
 	visibilityChange(dtid?: string): void;
 	download(url: string): void;
@@ -71,7 +69,7 @@ export interface AUCommand0 {
 	moveTo: typeof window.moveTo;
 	cfmClose(msg: string): void;
 	showNotification(msg: string, type: string, pid: string, ref: Widget,
-					 pos: string, off: Offset, dur: number, closable: boolean): void;
+					 pos: string, off: zk.Offset, dur: number, closable: boolean): void;
 	showBusy(uuid: string, msg?: string): void;
 	clearBusy(uuid: string | null): void;
 }
@@ -123,7 +121,7 @@ export interface AUEngine {
 	ajaxReqResend(reqInf: AuRequestInfo, timeout?: number): void;
 	beforeSend(uri: string, aureq: ZKEvent, dt?: Desktop): string;
 	confirmRetry(msgCode: string, msg2?: string): boolean;
-	createWidgets(codes: unknown[], fn: (wgts: Widget[]) => void, filter?: (wgt: Widget) => Widget | null): void;
+	createWidgets(codes: ArrayLike<unknown>[], fn: (wgts: Widget[]) => void, filter?: (wgt: Widget) => Widget | null): void;
 	doCmds(dtid: string, rs: unknown[]): void;
 	encode(j: number, aureq: ZKEvent, dt: Desktop): string;
 	getAuRequests(dt: Desktop): ZKEvent[];
@@ -150,7 +148,7 @@ export interface AUEngine {
 	wrongValue_(wgt: Widget, msg: string | false): void;
 }
 var _perrURIs = {}, //server-push error URI
-	_onErrs: Array<ErrorHandler> = cast([]), //onError functions
+	_onErrs: Array<ErrorHandler> = [], //onError functions
 	cmdsQue: AuCommands[] = [], //response commands in XML
 	sendPending, responseId,
 	doCmdFns: (() => void)[] = [],
@@ -751,7 +749,7 @@ let zAu: AUEngine = {
 	 * @since 5.0.5
 	 */
 	doCmds: function (dtid, rs) {
-		var cmds: AuCommands = cast([]);
+		var cmds: AuCommands = [];
 		cmds.dt = zk.Desktop.$(dtid);
 		pushCmds(cmds, rs);
 		zAu._doCmds();
@@ -1152,7 +1150,7 @@ zAu.beforeSend = function (uri, req, dt) {
 		var wgts: Widget[] = [], len = codes.length;
 		if (len > 0) {
 			for (var j = 0; j < len; ++j)
-				window.zkx_(codes[j] as Parameters<Window['zkx_']>[0], function (newwgt) {
+				window.zkx_(codes[j], function (newwgt) {
 					wgts.push(newwgt);
 					if (wgts.length == len)
 						fn(wgts);
@@ -1268,7 +1266,7 @@ zAu.beforeSend = function (uri, req, dt) {
 		}
 		return false;
 	},
-	_respException: function (req: Response & {abort?: Callable}, reqInf, e) {
+	_respException: function (req: Response & {abort?: zk.Callable}, reqInf, e) {
 		if (!window['zAu'])
 			return true; //the doc has been unloaded
 
@@ -1311,7 +1309,7 @@ zAu.beforeSend = function (uri, req, dt) {
 			return false; //invalid
 		}
 
-		var cmds: AuCommands = cast([]);
+		var cmds: AuCommands = [];
 		cmds.rtags = reqInf.rtags;
 		if (zk.pfmeter) {
 			cmds.dt = dt;
@@ -1735,7 +1733,7 @@ zAu.ajaxErrorHandler = function (req, status, statusText, ajaxReqTries) {
 		 * @param boolean closable the close button of notification
 		 */
 		showNotification(msg: string, type: string, pid: string, ref: Widget,
-						 pos: string, off: Offset, dur: number, closable: boolean): void {
+						 pos: string, off: zk.Offset, dur: number, closable: boolean): void {
 			var notif = zk.load('zul.wgt') ? zul.wgt.Notification : null; // in zul
 			if (notif) {
 				var opts = {

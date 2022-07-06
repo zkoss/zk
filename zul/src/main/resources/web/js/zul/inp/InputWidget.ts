@@ -95,7 +95,7 @@ zul.inp.RoundUtl = RoundUtl;
 </code></pre>
  */
 @zk.WrapClass('zul.inp.InputWidget')
-export class InputWidget<ValueType> extends zul.Widget {
+export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElement> {
 	private _maxlength = 0;
 	private _cols = 0;
 	//_tabindex: 0,
@@ -574,7 +574,7 @@ export class InputWidget<ValueType> extends zul.Widget {
 	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 	// @ts-ignore
 	public override getInputNode(): HTMLInputElement | null | undefined {
-		return (this.$n('real') || this.$n()) as HTMLInputElement | null | undefined;
+		return this.$n('real') || this.$n();
 	}
 
 	public override getTextNode(): HTMLInputElement | null | undefined {

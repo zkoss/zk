@@ -1,3 +1,4 @@
+export default {};
 export * from './Menubar';
 export * from './Menu';
 export * from './Menuitem';

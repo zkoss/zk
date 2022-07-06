@@ -12,19 +12,18 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-import {Callable, cast} from './types';
 import {default as zk} from './zk';
 
 var _loaded = {'zk': true}, //loaded
-	_xloadings: Array<string> = cast([]), //loading (exclude loaded)
-	_loadedsemis: Array<string> = cast([]), //loaded but not inited
-	_afterLoadFronts: Array<Callable> = cast([]),
-	_afterLoads: Array<Callable> = cast([]),
+	_xloadings: Array<string> = [], //loading (exclude loaded)
+	_loadedsemis: Array<string> = [], //loaded but not inited
+	_afterLoadFronts: Array<zk.Callable> = [],
+	_afterLoads: Array<zk.Callable> = [],
 	_afterPkgLoad = {}, //after pkg loaded
 	_pkgdepend = {},
 	_pkgver = {},
 	_pkghosts = {}/*package host*/,
-	_defhost: Array<string> = cast([])/*default host*/,
+	_defhost: Array<string> = []/*default host*/,
 	_loading = Object.assign({'zul.lang': true}, _loaded); //loading (include loaded)
 
 //We don't use e.onload since Safari doesn't support t
@@ -345,7 +344,7 @@ let _pkg = { //internal utility
 				var src = scs[j].src;
 				if (src)
 					if (src.startsWith(host)) {
-						_defhost = cast([host, hostRes]);
+						_defhost = [host, hostRes];
 						break;
 					} else if (src.indexOf('/zk.wpd') >= 0)
 						break;

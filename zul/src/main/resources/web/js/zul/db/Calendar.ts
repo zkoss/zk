@@ -1104,8 +1104,8 @@ export class Calendar extends zul.Widget {
 
 			_updateArrow(this);
 
-			var anc: HTMLAnchorElement | null | undefined;
-			if (anc = this.getAnchor_())
+			var anc = this.getAnchor_();
+			if (anc)
 				this._doFocus(anc, true);
 
 		} else if (force) {
@@ -1264,7 +1264,7 @@ export class Calendar extends zul.Widget {
 
 			if (v < 0) v += 7;
 			for (var j = 0, cur = -v + 1; j < 6; ++j) {
-				var week = this.$n('w' + j) as HTMLTableRowElement | null | undefined;
+				var week = this.$n<HTMLTableRowElement>('w' + j);
 				if (week != null) {
 					for (var k = 0; k < 7; ++k, ++cur) {
 						v = cur <= 0 ? prev + cur : cur <= last ? cur : cur - last;
@@ -1309,7 +1309,7 @@ export class Calendar extends zul.Widget {
 			var isMon = this._view == 'month',
 				field = isMon ? 'm' : 'y',
 				index = isMon ? m : y % 10 + 1,
-				node;
+				node: HTMLElement | null | undefined;
 
 			$mid.find('.' + seldClass).removeClass(seldClass);
 
@@ -1331,7 +1331,7 @@ export class Calendar extends zul.Widget {
 	}
 
 	protected getAnchor_(): HTMLAnchorElement | null | undefined {
-		return this.$n('a') as HTMLAnchorElement | null | undefined;
+		return this.$n('a');
 	}
 
 	// Bug 2936994, fixed unnecessary setting scrollTop

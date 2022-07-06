@@ -50,8 +50,8 @@ function _getRegionSize(wgt?: zul.layout.LayoutRegion, hor?: boolean, ext?: bool
 	if (!wgt)
 		return 0;
 	var n = wgt.$n_('real')!,
-		sz = hor ? 'offsetWidth' : 'offsetHeight',
-		sum = n[sz] as number;
+		sz = hor ? 'offsetWidth' as const : 'offsetHeight' as const,
+		sum = n[sz];
 	if (ext) {
 		var cn = wgt.$n('colled'),
 			sn = wgt.$n('split');
@@ -110,9 +110,9 @@ export class Borderlayout extends zul.Widget {
 	}
 
 	//-- super --//
-	protected override onChildAdded_(child: zk.Widget): void {
+	protected override onChildAdded_(child: zul.layout.LayoutRegion): void {
 		super.onChildAdded_(child);
-		switch ((child as zul.layout.LayoutRegion).getPosition()) {
+		switch (child.getPosition()) {
 			case Borderlayout.NORTH:
 				this.north = child as zul.layout.North;
 				break;
@@ -319,9 +319,9 @@ export class Borderlayout extends zul.Widget {
 
 			// Bug: B50-3201762: Borderlayout flex has issue with listbox hflex in IE 6
 			if (fchild) { // B50-ZK-198: always need cave height
-				var cv;
-				if (cv = wgt.$n('cave'))
-					(cv as HTMLElement).style.height = jq.px0(ambit.h - $el.padBorderHeight());
+				const cv = wgt.$n('cave');
+				if (cv)
+					cv.style.height = jq.px0(ambit.h - $el.padBorderHeight());
 			}
 			bs.height = jq.px0(ambit.h - $el.padBorderHeight());
 			if (wgt._nativebar && wgt.isAutoscroll()) {
@@ -333,7 +333,7 @@ export class Borderlayout extends zul.Widget {
 		}
 	}
 
-	private _ignoreResize(el: HTMLElement & { _lastSize?: {width; height} }, w: number, h: number): boolean {
+	private _ignoreResize(el: HTMLElement, w: number, h: number): boolean {
 		if (el._lastSize && el._lastSize.width == w && el._lastSize.height == h) {
 			return true;
 		}
@@ -352,29 +352,29 @@ export class Borderlayout extends zul.Widget {
 	 * The north layout constraint (top of container).
 	 * @type String
 	 */
-	public static NORTH = 'north';
+	public static NORTH = 'north' as const;
 
 	/**
 	 * The south layout constraint (bottom of container).
 	 * @type String
 	 */
-	public static SOUTH = 'south';
+	public static SOUTH = 'south' as const;
 
 	/**
 	 * The east layout constraint (right side of container).
 	 * @type String
 	 */
-	public static EAST = 'east';
+	public static EAST = 'east' as const;
 
 	/**
 	 * The west layout constraint (left side of container).
 	 * @type String
 	 */
-	public static WEST = 'west';
+	public static WEST = 'west' as const;
 
 	/**
 	 * The center layout constraint (middle of container).
 	 * @type String
 	 */
-	public static CENTER = 'center';
+	public static CENTER = 'center' as const;
 }

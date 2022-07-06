@@ -237,12 +237,9 @@ export class Frozen extends zul.Widget {
 			phead = p.head,
 			firstHdcell: HTMLElement | null;
 		if (p._nativebar && phead) {
-			interface HTMLElementWithOptionalCells extends HTMLElement {
-				cells?: HTMLTableRowElement['cells'];
-			}
 			//B70-ZK-2558: frozen will onSize before other columns,
 			//so there might be no any column in the beginning
-			var n = phead.$n() as HTMLElementWithOptionalCells | null | undefined;
+			var n = phead.$n() as (HTMLElement & Partial<Pick<HTMLTableRowElement, 'cells'>>) | null | undefined;
 			firstHdcell = n ? (n.cells ? n.cells[0] : null) : null;
 			//B70-ZK-2463: if firstHdcell is not undefined
 			if (firstHdcell) {
@@ -354,7 +351,7 @@ export class Frozen extends zul.Widget {
 			// set fixed size
 			var totalCols = mesh.head.nChildren,
 				// B70-ZK-2071: Use mesh.head to get columns.
-				hdcells = (mesh.head.$n_() as HTMLTableRowElement).cells,
+				hdcells = mesh.head.$n_().cells,
 				hdcol = mesh.ehdfaker!.firstChild,
 				ftrows = mesh.foot ? mesh.efootrows : null,
 				ftcells = ftrows ? ftrows.rows[0].cells : null;

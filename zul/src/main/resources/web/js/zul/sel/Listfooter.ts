@@ -1,4 +1,4 @@
-/* Listfooter.js
+/* Listfooter.ts
 
 	Purpose:
 
@@ -20,21 +20,23 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>Note: {@link Listcell} also accepts children.
  * <p>Default {@link #getZclass}: z-listfooter.
  */
-zul.sel.Listfooter = zk.$extends(zul.mesh.FooterWidget, {
-
+@zk.WrapClass('zul.sel.Listfooter')
+export class Listfooter extends zul.mesh.FooterWidget {
 	/** Returns the listbox that this belongs to.
 	 * @return Listbox
 	 */
-	getListbox: function () {
-		return this.getMeshWidget();
-	},
+	public getListbox(): zul.sel.Listbox | null | undefined { // FIXME: solve with <parent>
+		return this.getMeshWidget() as zul.sel.Listbox | null | undefined;
+	}
+
 	/** Returns the list header that is in the same column as
 	 * this footer, or null if not available.
 	 * @return Listheader
 	 */
-	getListheader: function () {
-		return this.getHeaderWidget();
-	},
+	public getListheader(): zul.sel.Listheader | null | undefined { // FIXME: solve with <parent>
+		return this.getHeaderWidget() as zul.sel.Listheader | null | undefined;
+	}
+
 	/** Returns the maximal length for this cell.
 	 * If listbox's mold is "select", it is the same as
 	 * {@link Select#getMaxlength}
@@ -45,12 +47,13 @@ zul.sel.Listfooter = zk.$extends(zul.mesh.FooterWidget, {
 	 * @return int
 	 * @since 5.0.5
 	 */
-	getMaxlength: function () {
+	public getMaxlength(): number | undefined {
 		var lc = this.getListheader();
 		return lc ? lc.getMaxlength() : 0;
-	},
+	}
+
 	//@Override
-	domLabel_: function () {
+	protected override domLabel_(): string {
 		return zUtl.encodeXML(this.getLabel(), {maxlength: this.getMaxlength()});
 	}
-});
+}

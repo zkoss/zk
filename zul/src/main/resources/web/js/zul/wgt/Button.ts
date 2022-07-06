@@ -32,7 +32,7 @@ function _cleanUpld(wgt: zul.wgt.Button): void {
  * <p>Default {@link #getZclass}: z-button.
  */
 @zk.WrapClass('zul.wgt.Button')
-export class Button extends zul.LabelImageWidget {
+export class Button extends zul.LabelImageWidget<HTMLButtonElement> implements zul.LabelImageWidgetWithAutodisable {
 	private _orient = 'horizontal';
 	private _dir = 'normal';
 	private _type = 'button';
@@ -40,6 +40,9 @@ export class Button extends zul.LabelImageWidget {
 	private _target?: string;
 	public _upload?: string;
 	private _delayFocus?: boolean | null;
+	public _disabled?: boolean;
+	public _adbs?: boolean;
+	public _autodisable?: string;
 
 	/** Returns the href that the browser shall jump to, if an user clicks
 	 * this button.
@@ -315,7 +318,7 @@ export class Button extends zul.LabelImageWidget {
 	//super//
 	public override focus_(timeout?: number): boolean {
 		// Bug ZK-1295 and ZK-2935: Disabled buttons cannot regain focus by re-enabling and then setting focus
-		let btn = this.$n() as HTMLButtonElement;
+		const btn = this.$n();
 		if (btn && btn.disabled) {
 			if (!this._delayFocus) {
 				this._delayFocus = true;
@@ -443,14 +446,14 @@ export class Button extends zul.LabelImageWidget {
 //handle autodisabled buttons
 @zk.WrapClass('zul.wgt.ADBS')
 export class ADBS extends zk.Object {
-	private _ads: zul.LabelImageWidget[];
-	public constructor(ads: zul.LabelImageWidget[]) {
+	private _ads: zul.LabelImageWidgetWithAutodisable[];
+	public constructor(ads: zul.LabelImageWidgetWithAutodisable[]) {
 		super();
 		this._ads = ads;
 	}
 
 	public onResponse(): void {
-		for (var ads = this._ads, ad: zul.LabelImageWidget | undefined; ad = ads.shift();) {
+		for (var ads = this._ads, ad: zul.LabelImageWidgetWithAutodisable | undefined; ad = ads.shift();) {
 			// B60-ZK-1176: distinguish from other usages
 			ad.setDisabled(false, {adbs: false, skip: true});
 			if (zk.chrome) ad.domListen_(ad.$n()!, 'onBlur', 'doBlur_'); //ZK-2739: prevent chrome fire onBlur event after autodisabled
@@ -462,20 +465,20 @@ export class ADBS extends zk.Object {
 	/* Disable Targets and re-enable after response
 	 * @param zk.Widget wgt
 	 */
-	public static autodisable(wgt: zul.LabelImageWidget): void {
+	public static autodisable(wgt: zul.LabelImageWidgetWithAutodisable): void {
 		var ads: string[] | string | undefined = wgt._autodisable,
-			aded: zul.LabelImageWidget[] | undefined,
+			aded: zul.LabelImageWidgetWithAutodisable[] | undefined,
 			uplder: zul.Upload | null | undefined;
 		if (ads) {
 			if (zk.chrome) wgt.domUnlisten_(wgt.$n()!, 'onBlur', 'doBlur_'); //ZK-2739: prevent chrome fire onBlur event after autodisabled
 			ads = ads.split(',');
 			for (var j = ads.length; j--;) {
-				var ad: string | zul.LabelImageWidget | null = ads[j].trim();
+				var ad: string | zul.LabelImageWidgetWithAutodisable | null = ads[j].trim();
 				if (ad) {
 					var perm = ad.charAt(0) == '+';
 					if (perm)
 						ad = ad.substring(1);
-					ad = 'self' == ad ? wgt : wgt.$f(ad) as zul.LabelImageWidget;
+					ad = 'self' == ad ? wgt : wgt.$f(ad) as zul.LabelImageWidgetWithAutodisable;
 					//B50-3304877: autodisable and Upload
 					if (ad == wgt) { //backup uploader before disable
 						uplder = wgt._uplder;
@@ -496,7 +499,7 @@ export class ADBS extends zk.Object {
 			}
 		}
 		if (aded) {
-			let adbs = new zul.wgt.ADBS(aded);
+			const adbs = new zul.wgt.ADBS(aded);
 			if (uplder) {
 				uplder._aded = adbs;
 				wgt._uplder = uplder;//zul.Upload.sendResult came on it.

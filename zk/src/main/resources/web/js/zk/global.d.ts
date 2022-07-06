@@ -221,14 +221,21 @@ declare var zUtl: import('./utl').ZUtl;
 declare var zKeys: typeof import('./keys').zKeys;
 
 declare namespace zk {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	type Callable = (...arg: any[]) => unknown;
+	type StringFieldValue = string | null | undefined;
+	type BooleanFieldValue = boolean | null | undefined;
+	type NumberFieldValue = number | null | undefined;
+	type DOMFieldValue = HTMLElement | null | undefined;
+	type Offset = [number, number];
+
 	type Object = import('./zk').ZKObject;
-	type Offset = import('./types').Offset;
 	type Desktop = import('./widget').Desktop;
 	type Widget = import('./widget').Widget;
 	type BigDecimal = import('./math').BigDecimal;
 	type JQZK = import('./dom').JQZK;
 
-	type Event = import('./evt').Event;
+	type Event<TData = unknown> = import('./evt').Event<TData>;
 	type Skipper = import('./widget').Skipper;
 	type Dimension = import('./dom').Dimension;
 	type PositionOptions = import('./dom').PositionOptions;
@@ -239,7 +246,10 @@ declare namespace zk {
 	type DomClassOptions = import('./widget').DomClassOptions;
 	type DomStyleOptions = import('./widget').DomStyleOptions;
 	type DomVisibleOptions = import('./widget').DomVisibleOptions;
+	type RealVisibleOptions = import('./widget').RealVisibleOptions;
 	type EventMetaData = import('./dom').EventMetaData;
+	type EventMouseData = import('./dom').EventMouseData;
+	type EventKeyData = import('./dom').EventKeyData;
 	type FlexOrient = import('./flex').FlexOrient;
 	type FlexSize = import('./flex').FlexSize;
 	type Draggable = import('./drag').Draggable;
@@ -323,6 +333,15 @@ declare namespace zkex {
 			// TODO: maybe the type of wgt can be narrowed to zul.menu.Menu
 			public constructor(wgt: zk.Widget, content: string)
 		}
+	}
+	namespace sel {
+		class Listgroup extends zul.sel.Listitem { // zul.sel.ItemWidget
+			public _open: boolean; // is initialized to true
+			public isOpen(): boolean;
+			public getIconOpenClass_(): string;
+			public getIconCloseClass_(): string;
+		}
+		class Listgroupfoot extends zul.sel.Listitem {} // zul.sel.ItemWidget
 	}
 }
 declare var zkmax: Record<string, unknown>;

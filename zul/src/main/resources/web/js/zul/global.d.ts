@@ -11,12 +11,7 @@ export * as layout from './layout';
 export * as med from './med';
 export * as menu from './menu';
 export * as mesh from './mesh';
-// export * as sel from './sel';
-export declare namespace sel {
-    export import ItemWidget = zul.Widget; // zk/dom
-    export import Listitem = zul.sel.ItemWidget; // zk/domtouch
-    export import Treerow = zul.Widget; // zk/domtouch
-}
+export * as sel from './sel';
 // export * as tab from './tab';
 // export * as utl from './utl';
 export * as wgt from './wgt';
@@ -29,9 +24,13 @@ export as namespace zul;
 
 declare global {
 	interface HTMLElement {
-		_lastsz?: null | {
-			height: number;
+		_lastsz?: null | { // zul/mesh
 			width: number;
+			height: number;
+		};
+		_lastSize?: null | { // zul/layout
+			width: number;
+			height: number;
 		};
 	}
     const msgzul: Record<
@@ -41,6 +40,7 @@ declare global {
 	| 'GRID_ASC' // zul/mesh/ColumnMenuWidget
 	| 'GRID_DESC' // zul/mesh/ColumnMenuWidget
 	| 'GRID_GROUP' // zul/mesh/ColumnMenuWidget
+	| 'GRID_OTHER' // zul/sel/Listheader
 	| 'GRID_UNGROUP' // zul/mesh/ColumnMenuWidget
 	| 'ILLEGAL_VALUE'
 	| 'INTEGER_REQUIRED' // zul/inp/Intbox

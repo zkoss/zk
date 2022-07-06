@@ -460,7 +460,7 @@ export class Uploader extends zk.Object {
 				}
 			});
 			//B50-3304877: autodisable and Upload
-			zul.wgt.ADBS.autodisable(wgt as zul.LabelImageWidget);
+			zul.wgt.ADBS.autodisable(wgt as zul.LabelImageWidgetWithAutodisable); // FIXME: type of `wgt` should be made more explicit
 			return true;
 		}
 		return false;
@@ -615,6 +615,7 @@ function _initUM(uplder: Uploader, flnm: string): void {
 		 * Default file upload manager to manage the uploading files in a panel.
 		 * Users can add/delete the file upon the panel.
 		 */
+		// @zk.WrapClass('zul.UploadManager')
 		class UploadManager extends zul.wgt.Popup {
 			private _files: Record<string, zul.wgt.Div>;
 			public constructor() {
@@ -727,7 +728,6 @@ function _initUM(uplder: Uploader, flnm: string): void {
 	});
 }
 
-@zk.WrapClass('zul.UploadManager')
 export declare class UploadManager extends zul.wgt.Popup {
 	public override onFloatUp(_ctl: zk.ZWatchController): void
 	public getFileItem(id: string): zul.wgt.Div

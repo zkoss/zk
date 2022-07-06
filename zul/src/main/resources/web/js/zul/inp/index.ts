@@ -1,3 +1,4 @@
+export default {};
 export * from './InputWidget'; // jsdoc="true"
 export * from './Errorbox';
 export * from './SimpleConstraint'; // jsdoc="true"
@@ -22,5 +23,5 @@ export * from './Spinner';
 export * from './Doublespinner';
 export declare let validating: boolean | undefined; // zul.inp.InputWidget
 
-// TimeboxInp has to be DTS to prevent bundling, see zul/db/Timebox
-export * from './TimeboxInp'; // Re-export *declarations*
+// Re-export classes in `zul/db/Timebox` under the name `zul.inp`.
+export * from './TimeboxInp';

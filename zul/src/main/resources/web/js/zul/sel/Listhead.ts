@@ -1,4 +1,4 @@
-/* Listhead.js
+/* Listhead.ts
 
 	Purpose:
 
@@ -17,14 +17,17 @@ it will be useful, but WITHOUT ANY WARRANTY.
  *
  *  <p>Default {@link #getZclass}: z-listhead.
  */
-zul.sel.Listhead = zk.$extends(zul.mesh.ColumnMenuWidget, {
+@zk.WrapClass('zul.sel.Listhead')
+export class Listhead extends zul.mesh.ColumnMenuWidget {
+	public override parent!: zul.sel.Listbox | null;
 	/** Returns the listbox that this belongs to.
 	 * @return Listbox
 	 */
-	getListbox: function () {
+	public getListbox(): zul.sel.Listbox | null {
 		return this.parent;
-	},
-	getGroupPackage_: function () {
+	}
+
+	public override getGroupPackage_(): string {
 		return 'zkex.sel';
 	}
-});
+}

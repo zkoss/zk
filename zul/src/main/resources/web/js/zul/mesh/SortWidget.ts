@@ -12,19 +12,21 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+export interface SortableWidget extends zk.Widget {
+	getLabel?(): string | undefined;
+	getValue?(): unknown;
+}
+
 /**
  * A skeletal implementation for a sortable widget.
  */
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 @zk.WrapClass('zul.mesh.SortWidget')
 export abstract class SortWidget extends zul.mesh.HeaderWidget {
-	public override parent!: zul.mesh.ColumnMenuWidget | null;
 	protected override _sortDirection: zul.mesh.SortDirection = 'natural';
-	private _sortAscending = 'none';
-	private _sortDescending = 'none';
+	protected _sortAscending = 'none';
+	protected _sortDescending = 'none';
 	
-	public abstract getMeshBody(): zk.Widget;
+	public abstract getMeshBody(): zk.Widget | null | undefined;
 
 	/** Returns the sort direction.
 	 * <p>Default: "natural".
@@ -206,7 +208,7 @@ export abstract class SortWidget extends zul.mesh.HeaderWidget {
 	 */
 	protected replaceCavedChildrenInOrder_(ascending: boolean): void {
 		var mesh = this.getMeshWidget()!,
-			body = this.getMeshBody(),
+			body = this.getMeshBody()!,
 			dir = this.getSortDirection(),
 			sorter = ascending ? this._sortAscending : this._sortDescending,
 			desktop = body.desktop,
@@ -218,7 +220,7 @@ export abstract class SortWidget extends zul.mesh.HeaderWidget {
 				index: number;
 			}
 			var d: Data[] = [], col = this.getChildIndex();
-			for (var i = 0, z = 0, it = mesh.getBodyWidgetIterator(), w: zk.Widget; (w = it.next()); z++)
+			for (var i = 0, z = 0, it = mesh.getBodyWidgetIterator(), w: zk.Widget | null | undefined; (w = it.next()); z++)
 				for (var k = 0, cell = w.firstChild; cell; cell = cell.nextSibling, k++)
 					if (k == col) {
 						d[i++] = {
@@ -229,7 +231,7 @@ export abstract class SortWidget extends zul.mesh.HeaderWidget {
 
 			var dsc = dir == 'ascending' ? -1 : 1, fn = this.sorting, isNumber = sorter == 'client(number)';
 			d.sort(function (a, b) {
-				var v = fn(a.wgt as never, b.wgt as never, isNumber) * dsc;
+				var v = fn(a.wgt, b.wgt, isNumber) * dsc;
 				if (v == 0) {
 					v = (a.index < b.index ? -1 : 1);
 				}
@@ -252,25 +254,25 @@ export abstract class SortWidget extends zul.mesh.HeaderWidget {
 	 * @param boolean isNumber
 	 * @return int
 	 */
-	public sorting(a: {getLabel?(): never; getValue?(): never}, b: {getLabel?(): never; getValue?(): never}, isNumber: boolean): number {
+	public sorting(a: zul.mesh.SortableWidget, b: zul.mesh.SortableWidget, isNumber: boolean): number {
 		var v1: never, v2: never;
 		if (typeof a.getLabel == 'function')
-			v1 = a.getLabel();
+			v1 = a.getLabel() as never;
 		else if (typeof a.getValue == 'function')
-			v1 = a.getValue();
+			v1 = a.getValue() as never;
 		else v1 = a as never;
 
 		if (typeof b.getLabel == 'function')
-			v2 = b.getLabel();
+			v2 = b.getLabel() as never;
 		else if (typeof b.getValue == 'function')
-			v2 = b.getValue();
+			v2 = b.getValue() as never;
 		else v2 = b as never;
 
 		if (isNumber) return v1 - v2;
 		return v1 > v2 ? 1 : (v1 < v2 ? -1 : 0);
 	}
 
-	private _fixDirection(ascending: boolean): void {
+	protected _fixDirection(ascending: boolean): void {
 		//maintain
 		var direction: zul.mesh.SortDirection = ascending ? 'ascending' : 'descending';
 		for (var w = this.parent!.firstChild; w; w = w.nextSibling)
@@ -315,7 +317,7 @@ export abstract class SortWidget extends zul.mesh.HeaderWidget {
 	public _doMenuClick(evt: JQuery.Event): void {
 		if (this.parent!._menupopup && this.parent!._menupopup != 'none') {
 			var pp: string | zul.menu.Menupopup = this.parent!._menupopup,
-				btn = this.$n_('btn') as HTMLAnchorElement;
+				btn = this.$n_('btn');
 
 			//for not removing hover effect when moving mouse on menupopup
 			jq(this.$n_()).addClass(this.$s('visited'));
@@ -329,7 +331,7 @@ export abstract class SortWidget extends zul.mesh.HeaderWidget {
 				var ofs = zk(btn).revisedOffset(),
 					asc = this.getSortAscending() != 'none',
 					desc = this.getSortDescending() != 'none',
-					mw = this.getMeshWidget()!;
+					mw = this.getMeshWidget() as zul.sel.Listbox;
 				if (pp instanceof zul.mesh.ColumnMenupopup) {
 					pp.getAscitem()!.setVisible(asc);
 					pp.getDescitem()!.setVisible(desc);
@@ -349,7 +351,8 @@ export abstract class SortWidget extends zul.mesh.HeaderWidget {
 					if (sep)
 						sep.setVisible((asc || desc));
 				} else {
-					pp.listen({onOpen: [this.parent, this.parent!._onMenuPopup]});
+					// In general, parent is not zul.mesh.ColumnMenuWidget, but it is here.
+					pp.listen({onOpen: [this.parent, (this.parent as zul.mesh.ColumnMenuWidget)._onMenuPopup]});
 				}
 				pp.open(btn, [ofs[0], ofs[1] + btn.offsetHeight - 4], null, {sendOnOpen: true});
 			}

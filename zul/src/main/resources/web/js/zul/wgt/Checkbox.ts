@@ -30,10 +30,12 @@ function _shallIgnore(evt: zk.Event): boolean | undefined {
  * </ol>
  */
 @zk.WrapClass('zul.wgt.Checkbox')
-export class Checkbox extends zul.LabelImageWidget {
+export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidgetWithDisable {
 	//_tabindex: 0,
 	private _checked = false;
-	public override _disabled?: boolean = false;
+	public _disabled?: boolean = false; // disabled by default
+	public _adbs?: boolean;
+	public _autodisable?: string;
 	private _name?: string;
 	private _value?: string;
 	private _indeterminate?: boolean;

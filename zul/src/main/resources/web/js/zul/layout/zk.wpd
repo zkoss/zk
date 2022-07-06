@@ -12,15 +12,16 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 -->
 
 <package name="zul.layout" language="xul/html" depends="zul">
-	<widget name="Borderlayout"/>
-	<widget name="LayoutRegion"/>
-	<widget name="North"/>
-	<widget name="South"/>
-	<widget name="Center"/>
-	<widget name="East"/>
-	<widget name="West"/>
-	<widget name="Absolutelayout"/>
-	<widget name="Absolutechildren"/>
-	<widget name="Anchorlayout"/>
-	<widget name="Anchorchildren"/>
+	<script src="index.js"/>
+	<widget name="Borderlayout" moldOnly="true"/>
+	<widget name="LayoutRegion" moldOnly="true"/>
+	<widget name="North" moldOnly="true"/>
+	<widget name="South" moldOnly="true"/>
+	<widget name="Center" moldOnly="true"/>
+	<widget name="East" moldOnly="true"/>
+	<widget name="West" moldOnly="true"/>
+	<widget name="Absolutelayout" moldOnly="true"/>
+	<widget name="Absolutechildren" moldOnly="true"/>
+	<widget name="Anchorlayout" moldOnly="true"/>
+	<widget name="Anchorchildren" moldOnly="true"/>
 </package>
