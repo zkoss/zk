@@ -788,7 +788,7 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends ZKObject
 	public _visible?: boolean = true;
 	public _mold = 'default';
 	protected _style: zk.StringFieldValue;
-	public _renderdefer = -1;
+	public _renderdefer?;
 
 	public _cssflex = true;
 
@@ -1292,7 +1292,7 @@ new zul.wnd.Window({
 	 * @since 5.0.2
 	 */
 	public getRenderdefer(): number {
-		return this._renderdefer;
+		return this._renderdefer === undefined ? -1 : this._renderdefer;
 	}
 
 	/** Sets the number of milliseconds before rendering this component
