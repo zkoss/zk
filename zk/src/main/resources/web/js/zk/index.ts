@@ -33,13 +33,15 @@ declare global {
 	interface Window {
 		zk: ZKStatic;
 		zFlex: typeof zFlex;
+		$: typeof jq;
+		jQuery: typeof jq;
 	}
 }
 // export first for following js to use
 window.zk = zk;
 
 window.zjq = zjq;
-
+window.$ = window.jQuery = jq;
 if (zk.gecko) {
 	require('./domgecko');
 } else if (zk.safari) {
