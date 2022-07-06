@@ -11,14 +11,14 @@
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 -->
 
-<package name="zul.grid" language="xul/html" depends="zul.mesh" moldonly="true">
-	<script src="index.js" retainFileContent="true"/>
+<package name="zul.grid" language="xul/html" depends="zul.mesh">
+	<script src="index.js"/>
 
-	<widget name="Column"/>
-	<widget name="Columns"/>
-	<widget name="Grid"/>
-	<widget name="Row"/>
-	<widget name="Rows"/>
-	<widget name="Foot"/>
-	<widget name="Footer"/>
+	<widget name="Column" moldOnly="true"/>
+	<widget name="Columns" moldOnly="true"/>
+	<widget name="Grid" moldOnly="true"/>
+	<widget name="Row" moldOnly="true"/>
+	<widget name="Rows" moldOnly="true"/>
+	<widget name="Foot" moldOnly="true"/>
+	<widget name="Footer" moldOnly="true"/>
 </package>
