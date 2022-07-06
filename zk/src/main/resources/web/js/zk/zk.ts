@@ -127,7 +127,7 @@ function newClass<T>(superclass): T {
 			this.afterCreated_.apply(_this, arguments as never);
 
 			this.$init.apply(_this, arguments as never);
-		//
+
 			var ais = _this._$ais;
 			if (ais) {
 				this._$ais = null;
@@ -1902,7 +1902,7 @@ foo.MyClass = zk.$extends(foo.MySuper, {
 		if (typeof nm != 'string') { //zk.Class assumed
 			let method;
 			var old = supers[args as string], p; //args is method's name
-			if (!(p = nm.prototype._$super) || !(method = p[args as string])) //nm is zk.Class
+			if (!(p = nm.prototype._$super || Object.getPrototypeOf(nm.prototype)) || !(method = p[args as string])) //nm is zk.Class
 				throw args + ' not in superclass'; //args is the method name
 
 			supers[args as string] = p;
