@@ -154,10 +154,6 @@ require('./ext/focus-options-polyfill.js');
 zk.mm = require('./ext/moment.js');
 require('./ext/moment-timezone-with-data.js');
 
-//
-// <function class="org.zkoss.zk.ui.http.Wpds"
-// signature="java.lang.String outMomentTimezoneJavascript()"/>
-
 // register Widgets
 zkreg('zk.Page', true);
 
