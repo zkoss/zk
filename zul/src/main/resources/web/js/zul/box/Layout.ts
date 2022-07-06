@@ -153,7 +153,7 @@ export class Layout extends zul.Widget {
 		if (spc && spc != 'auto') {
 			oo.push(' style="', !child.isVisible() ? 'display:none;' : ''); //Bug ZK-1650: set chdex display style according to child widget
 			var next = child.nextSibling; //Bug ZK-1526: popup should not consider spacing
-			if (next && !next.$instanceof(zul.wgt.Popup) && !child.$instanceof(zul.wgt.Popup))
+			if (next && !(next instanceof zul.wgt.Popup) && !(child instanceof zul.wgt.Popup))
 				oo.push('padding-', vert ? 'bottom:' : 'right:', spc);
 			oo.push('"');
 		}

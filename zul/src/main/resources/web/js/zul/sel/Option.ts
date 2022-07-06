@@ -175,7 +175,7 @@ export class Option extends zul.Widget<HTMLOptionElement> {
 		var parent = this.parent, ret = -1;
 		if (parent) {
 			for (var w = parent.firstChild; w; w = w.nextSibling) {
-				if (w.$instanceof(zul.sel.Option)) {
+				if (w instanceof zul.sel.Option) {
 					ret++;
 					if (w == this) break;
 				}

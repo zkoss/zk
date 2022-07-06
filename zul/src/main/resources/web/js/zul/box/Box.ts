@@ -60,7 +60,7 @@ function _fixTd(this: zul.box.Box): void {
 								c.style.width = oldwidth;
 						}
 					}
-					if (!child.$instanceof(zul.wgt.Cell) && this._nhflex) {
+					if (!(child instanceof zul.wgt.Cell) && this._nhflex) {
 						var chdex = child.$n('chdex');
 						chdex!.style.width = '';
 					}
@@ -78,7 +78,7 @@ function _fixTd(this: zul.box.Box): void {
 								c.style.height = oldheight;
 						}
 					}
-					if (!child.$instanceof(zul.wgt.Cell) && this._nvflex) {
+					if (!(child instanceof zul.wgt.Cell) && this._nvflex) {
 						var chdex = child.$n('chdex');
 						chdex!.style.height = '';
 					}
@@ -349,7 +349,7 @@ export class Box extends zul.Widget {
 	protected override replaceChildHTML_(child: zk.Widget, en: HTMLElement | string, desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, _trim_?: boolean): void {
 		super.replaceChildHTML_(child, en, desktop, skipper, _trim_);
 		this._fixChildDomVisible(child, child._visible);
-		if (child.$instanceof(zul.box.Splitter)) {
+		if (child instanceof zul.box.Splitter) {
 			var n = this._chdextr(child);
 			if (n) {
 				n.style.height = '';
@@ -410,7 +410,7 @@ export class Box extends zul.Widget {
 	 */
 	protected encloseChildHTML_(child: zk.Widget, prefixSpace?: boolean, out?: string[]): string | void {
 		var oo: string[] = [],
-			isCell = child.$instanceof(zul.wgt.Cell);
+			isCell = child instanceof zul.wgt.Cell;
 		if (this.isVertical()) {
 			oo.push('<tr id="', child.uuid, '-chdex"',
 				this._childOuterAttrs(child), '>');
@@ -441,7 +441,7 @@ export class Box extends zul.Widget {
 				oo.push('</td>');
 		}
 		var next = child.nextSibling; //Bug ZK-1526: popup should not consider spacing
-		if (next && !next.$instanceof(zul.wgt.Popup))
+		if (next && !(next instanceof zul.wgt.Popup))
 			oo.push(_spacingHTML(this, child));
 		else if (prefixSpace) {
 			var pre = child.previousSibling;
@@ -462,7 +462,7 @@ export class Box extends zul.Widget {
 		if (!zk.mounting) {// ignore for the loading time
 			if (vert) {
 				for (var kid = this.firstChild; kid; kid = kid.nextSibling) {
-					if (szes && !kid.$instanceof(zul.box.Splitter) && !kid.$instanceof(zul.wgt.Cell))
+					if (szes && !(kid instanceof zul.box.Splitter) && !(kid instanceof zul.wgt.Cell))
 						++k;
 					if (kid._nvflex && kid.getVflex() != 'min') {
 						kid.setFlexSize_({height: '', width: ''});
@@ -480,7 +480,7 @@ export class Box extends zul.Widget {
 				}
 			} else {
 				for (var kid = this.firstChild; kid; kid = kid.nextSibling) {
-					if (szes && !kid.$instanceof(zul.box.Splitter) && !kid.$instanceof(zul.wgt.Cell))
+					if (szes && !(kid instanceof zul.box.Splitter) && !(kid instanceof zul.wgt.Cell))
 						++k;
 					if (kid._nhflex && kid.getHflex() != 'min') {
 						kid.setFlexSize_({height: '', width: ''});
@@ -528,7 +528,7 @@ export class Box extends zul.Widget {
 		szes = this._sizes;
 		if (vert) {
 			for (var kid = this.firstChild; kid; kid = kid.nextSibling) {
-				if (szes && !kid.$instanceof(zul.box.Splitter) && !kid.$instanceof(zul.wgt.Cell))
+				if (szes && !(kid instanceof zul.box.Splitter) && !(kid instanceof zul.wgt.Cell))
 					++k;
 				if (kid._nvflex && kid.getVflex() != 'min') {
 					var chdex = kid.$n('chdex');
@@ -542,7 +542,7 @@ export class Box extends zul.Widget {
 			}
 		} else {
 			for (var kid = this.firstChild; kid; kid = kid.nextSibling) {
-				if (szes && !kid.$instanceof(zul.box.Splitter) && !kid.$instanceof(zul.wgt.Cell))
+				if (szes && !(kid instanceof zul.box.Splitter) && !(kid instanceof zul.wgt.Cell))
 					++k;
 				if (kid._nhflex && kid.getHflex() != 'min') {
 					var chdex = kid.$n('chdex');
@@ -620,7 +620,7 @@ export class Box extends zul.Widget {
 					boxFlexSize = this._hflexsz,
 					clearWidth = zk.chrome && boxFlexSize;
 
-				if (szes && cwgt && !cwgt.$instanceof(zul.box.Splitter) && !cwgt.$instanceof(zul.wgt.Cell)) {
+				if (szes && cwgt && !(cwgt instanceof zul.box.Splitter) && !(cwgt instanceof zul.wgt.Cell)) {
 					++k;
 					if (k < szes.length && szes[k] && ((vert && !cwgt._nvflex) || (!vert && !cwgt._nhflex))) {
 						c = xc;
@@ -683,7 +683,7 @@ export class Box extends zul.Widget {
 			cwgt.setFlexSize_({height: isz - minus});
 			cwgt._vflexsz = vsz - minus;
 
-			if (!cwgt.$instanceof(zul.wgt.Cell)) {
+			if (!(cwgt instanceof zul.wgt.Cell)) {
 				// no need to subtract padding and border for border-box mode
 				chdex.style.height = jq.px0(vsz - $chdex.marginHeight());
 			}
@@ -703,7 +703,7 @@ export class Box extends zul.Widget {
 			cwgt.setFlexSize_({height: isz - minus});
 			cwgt._vflexsz = lastsz - minus;
 
-			if (!cwgt.$instanceof(zul.wgt.Cell)) {
+			if (!(cwgt instanceof zul.wgt.Cell)) {
 				// no need to subtract padding and border for border-box mode
 				chdex.style.height = jq.px0(lastsz - $chdex.marginHeight());
 			}
@@ -723,7 +723,7 @@ export class Box extends zul.Widget {
 			cwgt.setFlexSize_({width: hsz - minus});
 			cwgt._hflexsz = hsz - minus;
 
-			if (!cwgt.$instanceof(zul.wgt.Cell)) {
+			if (!(cwgt instanceof zul.wgt.Cell)) {
 				// no need to subtract padding and border for border-box mode
 				chdex.style.width = jq.px0(hsz - $chdex.marginWidth());
 			}
@@ -740,7 +740,7 @@ export class Box extends zul.Widget {
 			cwgt.setFlexSize_({width: lastsz - minus});
 			cwgt._hflexsz = lastsz - minus;
 
-			if (!cwgt.$instanceof(zul.wgt.Cell)) {
+			if (!(cwgt instanceof zul.wgt.Cell)) {
 				// no need to subtract padding and border for border-box mode
 				chdex.style.width = jq.px0(lastsz - $chdex.marginWidth());
 			}
@@ -755,7 +755,7 @@ export class Box extends zul.Widget {
 
 	private _childOuterAttrs(child: zk.Widget): string {
 		var html = '';
-		if (child.$instanceof(zul.box.Splitter))
+		if (child instanceof zul.box.Splitter)
 			html = ' class="' + child.$s('outer') + '"';
 		else if (this.isVertical()) {
 			if (this._isStretchPack()) {
@@ -772,7 +772,7 @@ export class Box extends zul.Widget {
 	public _childInnerAttrs(child: zk.Widget): string {
 		var html = '',
 			vert = this.isVertical();
-		if (child.$instanceof(zul.box.Splitter))
+		if (child instanceof zul.box.Splitter)
 			return '';
 				//spliter's display handled in _childOuterAttrs
 
@@ -789,7 +789,7 @@ export class Box extends zul.Widget {
 					style = (vert ? 'height:' : 'width:') + szes[j];
 					break;
 				}
-				if (!c.$instanceof(zul.box.Splitter))
+				if (!(c instanceof zul.box.Splitter))
 					++j;
 			}
 		}

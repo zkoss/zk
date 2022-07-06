@@ -310,8 +310,8 @@ export class Splitter extends zul.Widget {
         //1. find the topmost box
         var box;
         for (var p: null | zk.Widget = this; p = p.parent;)
-            if (p.$instanceof(zul.box.Box))
-                box = p;
+		if (p instanceof zul.box.Box)
+        	        box = p;
 
         if (box) Splitter._fixKidSplts(box);
         else this._fixsz();
