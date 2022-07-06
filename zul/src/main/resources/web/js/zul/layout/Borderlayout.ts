@@ -279,14 +279,14 @@ export class Borderlayout extends zul.Widget {
 			//Bug ZK-1406: resize body after onSize if it is visible but is not open
 			var real = wgt.$n('real');
 			if (real && zk(real).isVisible()) {
-				var isSouch = wgt.$instanceof(zul.layout.South),
-					isEast = wgt.$instanceof(zul.layout.East);
-				if (isSouch || wgt.$instanceof(zul.layout.North)) {
+				var isSouch = wgt instanceof zul.layout.South,
+					isEast = wgt instanceof zul.layout.East;
+				if (isSouch || wgt instanceof zul.layout.North) {
 					ambit.h = real.offsetHeight;
 					if (isSouch)
 						real.style.top = jq.px(ambit.y - ambit.h);
 				}
-				if (isEast || wgt.$instanceof(zul.layout.West)) {
+				if (isEast || wgt instanceof zul.layout.West) {
 					ambit.w = real.offsetWidth;
 					if (isEast)
 						real.style.left = jq.px(ambit.x - ambit.w);
@@ -309,7 +309,7 @@ export class Borderlayout extends zul.Widget {
 			el.style.width = jq.px0(ambit.w);
 			var contentWidth = $el.contentWidth();
 			//ZK-2750, prevent parent region grows up infinitely
-			if ((wgt.$instanceof(zul.layout.West) || wgt.$instanceof(zul.layout.East)) && !wgt._width && !wgt._hflex)
+			if ((wgt instanceof zul.layout.West || wgt instanceof zul.layout.East) && !wgt._width && !wgt._hflex)
 				contentWidth++; // B50-ZK-641: text wrap in IE
 			bs.width = jq.px0(contentWidth);
 

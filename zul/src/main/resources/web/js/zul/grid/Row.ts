@@ -398,7 +398,9 @@ export class Row extends zul.Widget<HTMLTableRowElement> implements zul.mesh.Ite
 		var cls = super.domClass_(no),
 			grid = this.getGrid(),
 			sclass: string;
-		if (grid && jq(this.$n_()).hasClass(sclass = grid.getOddRowSclass()))
+		// NOTE: It has always been the case that the following `this.$n()` possibly
+		// returns null or undefined.
+		if (grid && jq(this.$n()!).hasClass(sclass = grid.getOddRowSclass()))
 			return cls + ' ' + sclass;
 		return cls;
 	}

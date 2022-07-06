@@ -89,8 +89,8 @@ export class Inputgroup extends zul.Widget {
 	protected encloseChildHTML_(opts: {child: zk.Widget; out?: string[]}): string | undefined {
 		const out = opts.out || new zk.Buffer<string>(),
 			w = opts.child;
-		if (!w.$instanceof(zul.wgt.Button) && !w.$instanceof(zul.wgt.Toolbarbutton)
-				&& (!zul.inp || !w.$instanceof(zul.inp.InputWidget))) {
+		if (!(w instanceof zul.wgt.Button) && !(w instanceof zul.wgt.Toolbarbutton)
+				&& (!zul.inp || !(w instanceof zul.inp.InputWidget))) {
 			out.push('<div id="', w.uuid, '-chdex" class="', this.$s('text'), '">');
 			w.redraw(out);
 			out.push('</div>');
