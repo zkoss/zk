@@ -11,28 +11,25 @@
 Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 -->
 
-<package name="zul.sel" language="xul/html" depends="zul.mesh" moldonly="true">
-	<script src="index.js" retainFileContent="true"/>
-
-	<script src="SelectWidget.js" jsdoc="true"/>
-	<script src="ItemWidget.js" jsdoc="true"/>
-	<widget name="Listbox"/>
-	<widget name="Listitem"/>
-	<widget name="Listcell"/>
-	<widget name="Listhead"/>
-	<widget name="Listheader"/>
-	<widget name="Listfoot"/>
-	<widget name="Listfooter"/>
-	<widget name="Option"/>
-	<widget name="Optgroup"/>
-	<widget name="Select"/>
-	<widget name="Tree"/>
-	<widget name="Treecol"/>
-	<widget name="Treecols"/>
-	<widget name="Treechildren"/>
-	<widget name="Treeitem"/>
-	<widget name="Treerow"/>
-	<widget name="Treecell"/>
-	<widget name="Treefoot"/>
-	<widget name="Treefooter"/>
+<package name="zul.sel" language="xul/html" depends="zul.mesh">
+	<script src="index.js"/>
+	<widget name="Listbox" moldOnly="true"/>
+	<widget name="Listitem" moldOnly="true"/>
+	<widget name="Listcell" moldOnly="true"/>
+	<widget name="Listhead" moldOnly="true"/>
+	<widget name="Listheader" moldOnly="true"/>
+	<widget name="Listfoot" moldOnly="true"/>
+	<widget name="Listfooter" moldOnly="true"/>
+	<widget name="Option" moldOnly="true"/>
+	<widget name="Optgroup" moldOnly="true"/>
+	<widget name="Select" moldOnly="true"/>
+	<widget name="Tree" moldOnly="true"/>
+	<widget name="Treecol" moldOnly="true"/>
+	<widget name="Treecols" moldOnly="true"/>
+	<widget name="Treechildren" moldOnly="true"/>
+	<widget name="Treeitem" moldOnly="true"/>
+	<widget name="Treerow" moldOnly="true"/>
+	<widget name="Treecell" moldOnly="true"/>
+	<widget name="Treefoot" moldOnly="true"/>
+	<widget name="Treefooter" moldOnly="true"/>
 </package>

@@ -11,18 +11,10 @@
 Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 -->
 
-<package name="zul.mesh" language="xul/html" depends="zul,zul.menu" moldonly="true">
-	<script src="index.js" retainFileContent="true"/>
-
-	<script src="MeshWidget.js" jsdoc="true"/>
-	<script src="HeadWidget.js" jsdoc="true"/>
-	<script src="ColumnMenuWidget.js" jsdoc="true"/>
-	<script src="HeaderWidget.js" jsdoc="true"/>
-	<script src="SortWidget.js" jsdoc="true"/>
-	<script src="FooterWidget.js" jsdoc="true"/>
-
-	<widget name="Paging"/>	
-	<widget name="Auxhead"/>
-	<widget name="Auxheader"/>
-	<widget name="Frozen"/>
+<package name="zul.mesh" language="xul/html" depends="zul,zul.menu">
+	<script src="index.js"/>
+	<widget name="Paging" moldOnly="true"/>	
+	<widget name="Auxhead" moldOnly="true"/>
+	<widget name="Auxheader" moldOnly="true"/>
+	<widget name="Frozen" moldOnly="true"/>
 </package>

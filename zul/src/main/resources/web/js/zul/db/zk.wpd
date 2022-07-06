@@ -11,11 +11,9 @@
 Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 -->
 
-<package name="zul.db" language="xul/html" depends="zk.fmt,zul.inp" moldonly="true">
-	<script src="index.js" retainFileContent="true"/>
-
-	<script src="datefmt.js"/>
-	<widget name="Timebox"/>
-	<widget name="Calendar"/>
-	<widget name="Datebox"/>
+<package name="zul.db" language="xul/html" depends="zk.fmt,zul.inp">
+	<script src="index.js"/>
+	<widget name="Timebox" moldOnly="true"/>
+	<widget name="Calendar" moldOnly="true"/>
+	<widget name="Datebox" moldOnly="true"/>
 </package>

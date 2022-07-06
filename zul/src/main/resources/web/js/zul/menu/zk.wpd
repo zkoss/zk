@@ -11,12 +11,11 @@
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 -->
 
-<package name="zul.menu" language="xul/html" depends="zul.wgt" moldonly="true">
-	<script src="index.js" retainFileContent="true"/>
-
-	<widget name="Menubar"/>
-	<widget name="Menu"/>
-	<widget name="Menuitem"/>
-	<widget name="Menuseparator"/>
-	<widget name="Menupopup"/>
+<package name="zul.menu" language="xul/html" depends="zul.wgt">
+	<script src="index.js"/>
+	<widget name="Menubar" moldOnly="true"/>
+	<widget name="Menu" moldOnly="true"/>
+	<widget name="Menuitem" moldOnly="true"/>
+	<widget name="Menuseparator" moldOnly="true"/>
+	<widget name="Menupopup" moldOnly="true"/>
 </package>
