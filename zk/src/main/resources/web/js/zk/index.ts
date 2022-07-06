@@ -43,7 +43,7 @@ declare global {
 window.zk = zk;
 
 window.zjq = zjq;
-
+window.$ = window.jQuery = jq;
 if (zk.gecko) {
 	require('./domgecko');
 } else if (zk.safari) {
