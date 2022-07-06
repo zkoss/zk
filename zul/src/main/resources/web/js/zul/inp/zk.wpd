@@ -11,30 +11,19 @@
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 -->
 
-<package name="zul.inp" language="xul/html" depends="zul.wgt,zul.lang,zk.fmt" moldonly="true">
-	<script src="index.js" retainFileContent="true"/>
-
-	<script src="InputWidget.js" jsdoc="true"/>
-	<widget name="Errorbox"/>
-	<script src="SimpleConstraint.js" jsdoc="true"/>
-	<script src="SimpleSpinnerConstraint.js" jsdoc="true"/>
-	<script src="SimpleDoubleSpinnerConstraint.js" jsdoc="true"/>
-	<script src="SimpleDateConstraint.js" jsdoc="true"/>
-	<script src="SimpleLocalTimeConstraint.js" jsdoc="true"/>
-
-	<widget name="Textbox"/>
-	<script src="FormatWidget.js" jsdoc="true"/>
-	<script src="NumberInputWidget.js" jsdoc="true"/>
-	<widget name="Intbox"/>
-	<widget name="Longbox"/>
-	<widget name="Doublebox"/>
-	<widget name="Decimalbox"/>
-	<script src="ComboWidget.js" jsdoc="true"/>
-	<widget name="Combobox"/>
-	<widget name="Comboitem"/>
-	<widget name="Bandbox"/>
-	<widget name="Bandpopup"/>
-	<widget name="Slider"/>
-	<widget name="Spinner"/>
-	<widget name="Doublespinner"/>
+<package name="zul.inp" language="xul/html" depends="zul.wgt,zul.lang,zk.fmt">
+	<script src="index.js"/>
+	<widget name="Errorbox" moldOnly="true"/>
+	<widget name="Textbox" moldOnly="true"/>
+	<widget name="Intbox" moldOnly="true"/>
+	<widget name="Longbox" moldOnly="true"/>
+	<widget name="Doublebox" moldOnly="true"/>
+	<widget name="Decimalbox" moldOnly="true"/>
+	<widget name="Combobox" moldOnly="true"/>
+	<widget name="Comboitem" moldOnly="true"/>
+	<widget name="Bandbox" moldOnly="true"/>
+	<widget name="Bandpopup" moldOnly="true"/>
+	<widget name="Slider" moldOnly="true"/>
+	<widget name="Spinner" moldOnly="true"/>
+	<widget name="Doublespinner" moldOnly="true"/>
 </package>
