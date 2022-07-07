@@ -127,7 +127,7 @@ function newClass<T>(superclass): T {
 			this.afterCreated_.apply(_this, arguments as never);
 
 			this.$init.apply(_this, arguments as never);
-		//
+
 			var ais = _this._$ais;
 			if (ais) {
 				this._$ais = null;
@@ -1744,13 +1744,7 @@ export abstract class ZKObject {
 	 * @deprecated as of 10.0 released. Using ES6 {@code constructor} instead.
 	 */
 	public $init(props?: Record<string, unknown> | typeof zkac): void {
-		//zkac is a token used by create() in mount.js for optimizing performance
-		if (props !== zkac) {
-			//if props.$oid, it must be an object other than {} so ignore
-			if (props && typeof props == 'object' && !props.$oid)
-				for (var nm in props)
-					this['set'](nm, props[nm]);
-		}
+		// empty for subclass to override
 	}
 
 	/**
@@ -1760,7 +1754,7 @@ export abstract class ZKObject {
 	 * @since 10.0
 	 */
 	public afterCreated_(props?: Record<string, unknown> | typeof zkac): void {
-		// empty
+		// empty for subclass to override
 	}
 
 	/** Specifies a function that shall be called after the object is initialized,
@@ -1908,7 +1902,7 @@ foo.MyClass = zk.$extends(foo.MySuper, {
 		if (typeof nm != 'string') { //zk.Class assumed
 			let method;
 			var old = supers[args as string], p; //args is method's name
-			if (!(p = nm.prototype._$super) || !(method = p[args as string])) //nm is zk.Class
+			if (!(p = nm.prototype._$super || Object.getPrototypeOf(nm.prototype)) || !(method = p[args as string])) //nm is zk.Class
 				throw args + ' not in superclass'; //args is the method name
 
 			supers[args as string] = p;

@@ -12,5 +12,15 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 -->
 
 <package name="zk">
+	<script>window.zk = {}</script>
+	// before index.js
+	<function class="org.zkoss.zk.ui.http.Wpds"
+			  signature="java.lang.String outLibraryPropertyJavaScript()"/>
+
 	<script src="index.js"/>
+
+	<function class="org.zkoss.zul.impl.Utils"
+        signature="java.lang.String outFeature()"/>
+	<function class="org.zkoss.zk.ui.http.Wpds"
+		signature="java.lang.String outMomentTimezoneJavascript()"/>
 </package>

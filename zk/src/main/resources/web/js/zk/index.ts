@@ -33,13 +33,19 @@ declare global {
 	interface Window {
 		zk: ZKStatic;
 		zFlex: typeof zFlex;
+		$: typeof jq;
+		jQuery: typeof jq;
 	}
 }
 // export first for following js to use
+let oldZK = window.zk; // setting from Java side
 window.zk = zk;
+zk.copy(window.zk, oldZK);
 
 window.zjq = zjq;
-
+if (!window.jQuery) {
+	window.$ = window.jQuery = jq;
+}
 if (zk.gecko) {
 	require('./domgecko');
 } else if (zk.safari) {
@@ -55,11 +61,6 @@ window.$eval = function (s: string): unknown {
 	return eval(s);
 };
 
-/*
-TODO:
-	<function class="org.zkoss.zk.ui.http.Wpds"
-			  signature="java.lang.String outLibraryPropertyJavaScript()"/>
- */
 zk.Event = Event;
 
 window.zWatch = zWatch;
@@ -153,10 +154,6 @@ require('./ext/focus-options-polyfill.js');
 // workaround for webpack with ./ext/moment-timezone-with-data.js
 zk.mm = require('./ext/moment.js');
 require('./ext/moment-timezone-with-data.js');
-
-//
-// <function class="org.zkoss.zk.ui.http.Wpds"
-// signature="java.lang.String outMomentTimezoneJavascript()"/>
 
 // register Widgets
 zkreg('zk.Page', true);
