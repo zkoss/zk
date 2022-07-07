@@ -56,13 +56,13 @@ public class B96_ZK_4821Test extends WebDriverTestCase {
 	private void clickOnPartTest(JQuery checkboxPart, boolean onContent) {
 		Widget checkbox = checkboxPart.toWidget();
 		String state = checkbox.get("state");
-		String disabled = checkbox.get("disabled");
+		boolean disabled = checkbox.is("disabled");
 		String mold = checkbox.get("mold");
 		if (!onContent && ("switch".equals(mold) || "toggle".equals(mold)))
 			checkboxPart = jq(checkbox.$n("mold")); // click on switch or toggle instead input
 		click(checkboxPart);
 		waitResponse();
-		if ("true".equals(disabled))
+		if (disabled)
 			Assert.assertEquals("state shall not change while click on disabled checkbox", state, checkbox.get("state"));
 		else
 			Assert.assertNotEquals("state shall change while click on normal checkbox", state, checkbox.get("state"));
