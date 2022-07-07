@@ -1,4 +1,4 @@
-/* Caption.js
+/* Caption.ts
 
 	Purpose:
 
