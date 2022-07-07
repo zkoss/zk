@@ -57,11 +57,6 @@ window.$eval = function (s: string): unknown {
 	return eval(s);
 };
 
-/*
-TODO:
-	<function class="org.zkoss.zk.ui.http.Wpds"
-			  signature="java.lang.String outLibraryPropertyJavaScript()"/>
- */
 zk.Event = Event;
 
 window.zWatch = zWatch;
