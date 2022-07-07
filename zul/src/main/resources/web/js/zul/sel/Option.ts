@@ -189,9 +189,10 @@ export class Option extends zul.Widget<HTMLOptionElement> {
 	}
 
 	public override domAttrs_(no?: zk.DomAttrsOptions): string {
-		var value = this.getValue();
+		var value = this.getValue(),
+			shallRenderValue = value && this.parent && this.parent.getName();
 		return super.domAttrs_(no) + (this.isDisabled() ? ' disabled="disabled"' : '')
-			+ (this.isSelected() ? ' selected="selected"' : '') + (value ? ' value="' + value + '"' : '');
+			+ (this.isSelected() ? ' selected="selected"' : '') + (shallRenderValue ? ' value="' + value + '"' : '');
 	}
 
 	public override replaceWidget(newwgt: zul.sel.Option, skipper?: zk.Skipper): void {
