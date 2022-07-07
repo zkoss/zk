@@ -40,7 +40,9 @@ declare global {
 	}
 }
 // export first for following js to us
+let oldZK = window.zk; // setting from Java side
 window.zk = zk;
+zk.copy(window.zk, oldZK);
 
 window.zjq = zjq;
 if (!window.jQuery) {
