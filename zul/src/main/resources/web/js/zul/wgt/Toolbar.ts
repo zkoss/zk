@@ -1,4 +1,4 @@
-/* Toolbar.js
+/* Toolbar.ts
 
 	Purpose:
 
