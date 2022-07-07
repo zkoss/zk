@@ -1,4 +1,4 @@
-{
+module.exports = {
   "root": true,
   "parser": "@typescript-eslint/parser",
   "plugins": [
@@ -18,7 +18,8 @@
         "*.ts"
       ],
       "parserOptions": {
-        "project": "./zk/tsconfig.json"
+        "tsconfigRootDir": __dirname,
+        "project": "./tsconfig.json"
       },
       "rules": {
         // Recommended

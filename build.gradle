@@ -106,7 +106,7 @@ subprojects {
 	}
 
 	task tscheck(type: NpmTask) {
-		enabled = project.file(".eslintrc.json").exists()
+		enabled = project.file(".eslintrc.js").exists()
 		workingDir = rootDir
 		args =['run', 'type-check', '--', '--project', "$projectDir"]
 	}
@@ -114,8 +114,8 @@ subprojects {
 	// eslint
 	task jscheck(type: NpmTask) {
 		workingDir = rootDir
-		def eslintDir = project.file(".eslintrc.json").exists() ? projectDir : rootDir;
-		args =['run', 'lint', '--', "$projectDir/$resources/web/js", "--config=$eslintDir/.eslintrc.json", "--ignore-path=$rootDir/.eslintignore"]
+		def eslintDir = project.file(".eslintrc.js").exists() ? projectDir : rootDir;
+		args =['run', 'lint', '--', "$projectDir/$resources/web/js", "--config=$eslintDir/.eslintrc.js", "--ignore-path=$rootDir/.eslintignore"]
 	}
 
 	check {
