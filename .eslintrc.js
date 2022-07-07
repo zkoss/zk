@@ -1,4 +1,4 @@
-{
+module.exports = {
   "parser": "@typescript-eslint/parser",
   "plugins": [
     "@typescript-eslint"
@@ -51,7 +51,7 @@
   },
   "rules": {
     // Recommended
-    "for-direction": "error",
+    'for-direction': "error",
     "getter-return": "error",
     "no-async-promise-executor": "error",
     "no-compare-neg-zero": "error",

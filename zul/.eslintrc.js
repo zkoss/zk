@@ -1,4 +1,4 @@
-{
+module.exports = {
   "root": true,
   "parser": "@typescript-eslint/parser",
   "plugins": [
@@ -8,7 +8,7 @@
     "ecmaVersion": 5,
     "sourceType": "script",
     "ecmaFeatures": {},
-    "tsconfigRootDir": "./zul",
+    "tsconfigRootDir": __dirname,
     "project": "./tsconfig.json"
   },
   "env": {
