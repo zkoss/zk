@@ -1,4 +1,4 @@
-/* Radiogroup.js
+/* Radiogroup.ts
 
 	Purpose:
 

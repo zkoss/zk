@@ -12,10 +12,7 @@ export * as sel from './sel';
 // export * as tab from './tab';
 // export * as utl from './utl';
 export * as wgt from './wgt';
-// export * as wnd from './wnd';
-export declare namespace wnd { // zk/flex
-    export import Panelchildren = zul.ContainerWidget;
-}
+export * as wnd from './wnd';
 export * from '.';
 export as namespace zul;
 

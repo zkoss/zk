@@ -1,4 +1,4 @@
-/* Groupbox.js
+/* Groupbox.ts
 
 	Purpose:
 

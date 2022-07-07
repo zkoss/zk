@@ -148,7 +148,7 @@ export abstract class LabelImageWidget<TElement extends HTMLElement = HTMLElemen
 	 * label and/or image to the DOM tree.
 	 * Default: invoke {@link zk.Widget#rerender} to redraw and re-bind.
 	 */
-	protected updateDomContent_(): void {
+	public updateDomContent_(): void {
 		this.rerender();
 	}
 

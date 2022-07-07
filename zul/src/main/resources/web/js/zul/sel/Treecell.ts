@@ -292,7 +292,7 @@ export class Treecell extends zul.LabelImageWidget<HTMLTableCellElement> {
 		return scls;
 	}
 
-	protected override updateDomContent_(): void {
+	public override updateDomContent_(): void {
 		super.updateDomContent_();
 		if (this.parent)
 			this.parent.clearCache();
