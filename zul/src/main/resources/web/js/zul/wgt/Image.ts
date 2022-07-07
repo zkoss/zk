@@ -1,4 +1,4 @@
-/* Image.js
+/* Image.ts
 
 	Purpose:
 
