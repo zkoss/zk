@@ -1,4 +1,4 @@
-/* Radio.js
+/* Radio.ts
 
 	Purpose:
 
