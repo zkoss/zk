@@ -1,4 +1,4 @@
-/* Style.js
+/* Style.ts
 
 	Purpose:
 
@@ -21,53 +21,91 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * Note: if the src and content properties are both set, the later one overrides
  * the previous one.
  */
-zul.utl.Style = zk.$extends(zk.Widget, {
-	$define: {
-		/**
-		 * Returns the URI of an external style sheet.
-		 * <p>
-		 * Default: null.
-		 *
-		 * @return String
-		 */
-		/**
-		 * Sets the URI of an external style sheet.
-		 * <p>Calling this method implies setContent(null).
-		 * @param String src the URI of an external style sheet
-		 */
-		src: function () {
-			this._content = null;
-			this.rerender();
-		},
-		/**
-		 * Returns the content of this style tag.
-		 * @return String
-		 * @since 5.0.8
-		 */
-		/**
-		 * Sets the content of this style tag.
-		 * <p>Calling this method implies setSrc(null).
-		 * @param String content the content of this style tag.
-		 */
-		content: function () {
-			this._src = null;
-			this.rerender();
-		},
-		/**
-		 * Returns the media dependencies for this style sheet.
-		 * <p>Default: null
-		 * <p>Refer to <a href="http://www.w3.org/TR/CSS2/media.html">media-depedent style sheet</a> for details.
-		 * @return String
-		 * @since 5.0.3
-		 */
-		/**
-		 * Sets the media dependencies for this style sheet.
-		 * @param String media the media of this style sheet.
-		 * @since 5.0.3
-		 */
-		media: function (v) {
-			var n = this.$n('real');
-			if (n) n.media = v;
-		}
+@zk.WrapClass('zul.utl.Style')
+export class Style extends zk.Widget {
+	private _src?: string;
+	private _content?: string;
+	private _media?: string;
+
+	/**
+	 * Returns the URI of an external style sheet.
+	 * <p>
+	 * Default: null.
+	 *
+	 * @return String
+	 */
+	public getSrc(): string | undefined {
+		return this._src;
 	}
-});
+
+	/**
+	 * Sets the URI of an external style sheet.
+	 * <p>Calling this method implies setContent(null).
+	 * @param String src the URI of an external style sheet
+	 */
+	public setSrc(src: string, opts?: Record<string, boolean>): this {
+		const o = this._src;
+		this._src = src;
+
+		if (o !== src || (opts && opts.force)) {
+			delete this._content;
+			this.rerender();
+		}
+
+		return this;
+	}
+
+	/**
+	 * Returns the content of this style tag.
+	 * @return String
+	 * @since 5.0.8
+	 */
+	public getContent(): string | undefined {
+		return this._content;
+	}
+
+	/**
+	 * Sets the content of this style tag.
+	 * <p>Calling this method implies setSrc(null).
+	 * @param String content the content of this style tag.
+	 */
+	public setContent(content: string, opts?: Record<string, boolean>): this {
+		const o = this._content;
+		this._content = content;
+
+		if (o !== content || (opts && opts.force)) {
+			delete this._src;
+			this.rerender();
+		}
+
+		return this;
+	}
+
+	/**
+	 * Returns the media dependencies for this style sheet.
+	 * <p>Default: null
+	 * <p>Refer to <a href="http://www.w3.org/TR/CSS2/media.html">media-depedent style sheet</a> for details.
+	 * @return String
+	 * @since 5.0.3
+	 */
+	public getMedia(): string | undefined {
+		return this._media;
+	}
+
+	/**
+	 * Sets the media dependencies for this style sheet.
+	 * @param String media the media of this style sheet.
+	 * @since 5.0.3
+	 */
+	public setMedia(media: string, opts?: Record<string, boolean>): this {
+		const o = this._media;
+		this._media = media;
+
+		if (o !== media || (opts && opts.force)) {
+			var n = this.$n('real');
+			if (n) (n as HTMLStyleElement).media = media;
+		}
+
+		return this;
+	}
+}
