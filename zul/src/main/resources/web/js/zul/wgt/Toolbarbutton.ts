@@ -1,4 +1,4 @@
-/* Toolbarbutton.js
+/* Toolbarbutton.ts
 
 	Purpose:
 
