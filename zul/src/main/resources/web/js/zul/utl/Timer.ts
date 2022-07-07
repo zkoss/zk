@@ -1,4 +1,4 @@
-/* Timer.js
+/* Timer.ts
 
 	Purpose:
 
@@ -20,58 +20,102 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>Notice that the timer won't fire any event until it is attached
  * to a page.
  */
-zul.utl.Timer = zk.$extends(zk.Widget, {
-	_running: true,
-	_delay: 0,
+@zk.WrapClass('zul.utl.Timer')
+export class Timer extends zk.Widget {
+	private _running = true;
+	private _delay = 0;
+	private _repeats = false;
+	private _iid?: number;
+	private _tid?: number;
 
-	$define: {
-		/** Returns whether the timer shall send Event repeatly.
-		 * <p>Default: false.
-		 * @return boolean
-		 */
-		/** Sets whether the timer shall send Event repeatly.
-		 * @param boolean repeats
-		 */
-		repeats: _zkf = function () {
+	/** Returns whether the timer shall send Event repeatly.
+	 * <p>Default: false.
+	 * @return boolean
+	 */
+	public isRepeats(): boolean {
+		return this._repeats;
+	}
+
+	/** Sets whether the timer shall send Event repeatly.
+	 * @param boolean repeats
+	 */
+	public setRepeats(repeats: boolean, opts?: Record<string, boolean>): this {
+		const o = this._repeats;
+		this._repeats = repeats;
+
+		if (o !== repeats || (opts && opts.force)) {
 			if (this.desktop) this._sync();
-		},
-		/** Returns the delay, the number of milliseconds between
-		 * successive action events.
-		 * <p>Default: 0 (immediately).
-		 * @return int
-		 */
-		/** Sets the delay, the number of milliseconds between
-		 * successive action events.
-		 * @param int delay
-		 */
-		delay: _zkf,
-		/** Returns whether this timer is running.
-		 * <p>Default: true.
-		 * @see #play
-		 * @see #stop
-		 * @return boolean
-		 */
-		/** Start or stops the timer.
-		 * @param boolean running
-		 */
-		running: _zkf
-	},
+		}
+
+		return this;
+	}
+
+	/** Returns the delay, the number of milliseconds between
+	 * successive action events.
+	 * <p>Default: 0 (immediately).
+	 * @return int
+	 */
+	public getDelay(): number {
+		return this._delay;
+	}
+
+	/** Sets the delay, the number of milliseconds between
+	 * successive action events.
+	 * @param int delay
+	 */
+	public setDelay(delay: number, opts?: Record<string, boolean>): this {
+		const o = this._delay;
+		this._delay = delay;
+
+		if (o !== delay || (opts && opts.force)) {
+			if (this.desktop) this._sync();
+		}
+
+		return this;
+	}
+
+	/** Returns whether this timer is running.
+	 * <p>Default: true.
+	 * @see #play
+	 * @see #stop
+	 * @return boolean
+	 */
+	public isRunning(): boolean {
+		return this._running;
+	}
+
+	/** Start or stops the timer.
+	 * @param boolean running
+	 */
+	public setRunning(running: boolean, opts?: Record<string, boolean>): this {
+		const o = this._running;
+		this._running = running;
+
+		if (o !== running || (opts && opts.force)) {
+			if (this.desktop) this._sync();
+		}
+
+		return this;
+	}
+
 	/** Starts the timer.
 	 */
-	play: function () {
+	public play(): void {
 		this.setRunning(true);
-	},
+	}
+
 	/** Stops the timer.
 	 */
-	stop: function () {
+	public stop(): void {
 		this.setRunning(false);
-	},
+	}
 
-	_sync: function () {
+	private _sync(): void {
 		this._stop();
 		this._play();
-	},
-	_play: function () {
+	}
+
+	private _play(): void {
 		if (this._running) {
 			var fn = this.proxy(this._tmfn);
 			if (this._repeats) {
@@ -80,41 +124,49 @@ zul.utl.Timer = zk.$extends(zk.Widget, {
 			} else
 				this._tid = setTimeout(fn, this._delay);
 		}
-	},
-	_stop: function () {
+	}
+
+	private _stop(): void {
 		var id = this._iid;
 		if (id) {
-			this._iid = null;
+			delete this._iid;
 			clearInterval(id);
 		}
 		id = this._tid;
 		if (id) {
-			this._tid = null;
+			delete this._tid;
 			clearTimeout(id);
 		}
-		zAu.unError(this.proxy(this._onErr));
-	},
-	_onErr: function (req, errCode) {
+		zAu.unError(this._onErr.bind(this));
+	}
+
+	private _onErr(req: unknown, errCode: number): boolean {
 		if (errCode == 410 || errCode == 404 || errCode == 405)
 			this._stop();
-	},
-	_tmfn: function () {
+		return false;
+	}
+
+	private _tmfn(): void {
 		if (!this._repeats) this._running = false;
-		this.fire('onTimer', null, {ignorable: true,
-				rtags: {onTimer: 1} // Bug ZK-2720 only timer-keep-alive should reset the timeout
-			});
-	},
+		this.fire('onTimer', null, {
+			ignorable: true,
+			rtags: {onTimer: 1} // Bug ZK-2720 only timer-keep-alive should reset the timeout
+		});
+	}
 
 	//super//
-	redraw: function () {
-	},
-	bind_: function () {
-		this.$supers(zul.utl.Timer, 'bind_', arguments);
+	public override redraw(out: Array<string>, skipper?: zk.Skipper | null): void {
+		// empty
+	}
+
+	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+		super.bind_(desktop, skipper, after);
 		this._visible = false; //Bug ZK-1516: no DOM element widget should always return false.
 		if (this._running) this._play();
-	},
-	unbind_: function () {
-		this._stop();
-		this.$supers(zul.utl.Timer, 'unbind_', arguments);
 	}
-});
+
+	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+		this._stop();
+		super.unbind_(skipper, after, keepRod);
+	}
+}
