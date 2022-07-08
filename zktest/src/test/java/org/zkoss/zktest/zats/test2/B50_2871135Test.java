@@ -24,7 +24,7 @@ public class B50_2871135Test extends WebDriverTestCase {
 	public void test() {
 		connect();
 
-		rightClick(jq("@label"));
+		rightClick(jq("@label:visible"));
 		sleep(1000); // can't use waitResponse since the loading mask might not go away if this bug exists
 
 		Assert.assertTrue(jq("@popup").isVisible());
