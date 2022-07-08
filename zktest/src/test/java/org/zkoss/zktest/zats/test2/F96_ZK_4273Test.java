@@ -13,17 +13,15 @@ package org.zkoss.zktest.zats.test2;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.experimental.categories.Category;
 import org.openqa.selenium.Keys;
 
 import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.wcag.WcagTestOnly;
 import org.zkoss.zktest.zats.ztl.JQuery;
 
 /**
  * @author rudyhuang
  */
-@Category(WcagTestOnly.class)
+//@Category(WcagTestOnly.class)
 public class F96_ZK_4273Test extends WebDriverTestCase {
 	@Test
 	public void testColorbox() {
@@ -57,7 +55,7 @@ public class F96_ZK_4273Test extends WebDriverTestCase {
 	public void testColorboxMenuRoot() {
 		connect();
 
-		click(jq("@menu:contains(Color)"));
+		click(jq("@menubar > @menu > .z-menu-text:contains(Color)"));
 		waitResponse();
 		final JQuery colorboxPopup = jq(".z-menu-popup.z-colorpalette-popup");
 		Assert.assertTrue("Popup should be visible", colorboxPopup.isVisible());
