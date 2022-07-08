@@ -15,8 +15,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 /**
  * A fileupload widget is the same as {@link zul.wgt.Button}
  */
-zul.wgt.Fileupload = zk.$extends(zul.wgt.Button, {
-	getZclass: function () { // keep the button's zclass
+@zk.WrapClass('zul.wgt.Fileupload')
+export class Fileupload extends zul.wgt.Button {
+	public override getZclass(): string { // keep the button's zclass
 		return this._zclass == null ? 'z-button' : this._zclass;
 	}
-});
+}
