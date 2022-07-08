@@ -10,6 +10,10 @@ export * as menu from './menu';
 export * as mesh from './mesh';
 export * as sel from './sel';
 // export * as tab from './tab';
+export declare namespace tab {
+	class Tabbox extends zul.Widget { // zul.wgt.Toolbar
+	}
+}
 // export * as utl from './utl';
 export * as wgt from './wgt';
 export * as wnd from './wnd';
@@ -59,7 +63,10 @@ declare global {
 	| 'OK' // zul/dom
 	| 'OUT_OF_RANGE_SEPARATOR' // zul/inp/SimpleLocalTimeConstraint
 	| 'OUT_OF_RANGE'
+	| 'PANEL_COLLAPSE' // zul/wnd/Panel
 	| 'PANEL_EXPAND' // zul/inp/ComboWidget
+	| 'PANEL_MAXIMIZE' // zul/wnd/Panel
+	| 'PANEL_RESTORE' // zul/wnd/Panel
 	| 'PREV' // zul/inp/Intbox
 	| 'UNKNOWN_TYPE'
 	| 'UPLOAD_ERROR_EXCEED_MAXSIZE' // zul/Upload

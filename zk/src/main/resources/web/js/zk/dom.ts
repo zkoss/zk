@@ -53,7 +53,7 @@ export interface JQZK {
 	borderHeight(): number;
 	borderWidth(): number;
 	cellIndex(): number;
-	center(flags?: string): this;
+	center(flags?: string | null): this;
 	cleanVisibility(): JQuery;
 	clearStyles(): this;
 	clientHeightDoubleValue(): number;

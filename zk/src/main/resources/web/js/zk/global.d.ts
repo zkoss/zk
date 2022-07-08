@@ -263,7 +263,9 @@ declare namespace zk {
 	type Long = import('./math').Long;
 	namespace eff {
 		type Mask = import('./effect').Mask;
+		type FullMask = import('./effect').FullMask
 		type Shadow = import('./effect').Shadow;
+		type EffectStackupOptions = import('./effect').EffectStackupOptions;
 	}
 	namespace fmt {
 		type Calendar = typeof zk.fmt.Calendar;
@@ -360,7 +362,19 @@ declare namespace zkex {
 		}
 	}
 }
-declare var zkmax: Record<string, unknown>;
+
+declare namespace zkmax {
+	namespace layout {
+		class Portallayout extends zul.Widget { // zul.wnd.Panel
+			public getMaximizedMode(): string
+			public isVertical(): boolean
+		}
+		class Portalchildren extends zul.Widget { // zul.wnd.Panel
+			public override parent: zkmax.layout.Portallayout | null;
+		}
+	}
+}
+
 declare var zWs: zk.Websocket;
 declare var zkbind: zk.ZKBind;
 

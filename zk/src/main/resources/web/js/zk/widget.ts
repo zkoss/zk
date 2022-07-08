@@ -59,6 +59,7 @@ export interface DomAttrsOptions extends DomStyleOptions, DomClassOptions {
 	tooltiptext?: boolean;
 	tabindex?: boolean;
 	text?: boolean; // zul.inp.InputWidget.prototype.domAttrs_
+	content?: boolean; // zul.wgt.Image
 }
 
 var _binds: Record<string, Widget> = {}, //{uuid, wgt}: bind but no node
@@ -756,9 +757,9 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends ZKObject
 	declare private _$service;
 	declare protected childReplacing_;
 	declare private _userZIndex;
-	declare private _zIndex;
+	declare public _zIndex: number | string;
 	declare private z_isDataHandlerBound;
-	declare protected _drag: Draggable | null;
+	declare public _drag: Draggable | null;
 	declare private _preWidth;
 	declare private _preHeight;
 	declare private _action: zk.StringFieldValue;
@@ -773,8 +774,8 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends ZKObject
 	declare protected _zclass: zk.StringFieldValue;
 	declare public _width: zk.StringFieldValue;
 	declare public _height: zk.StringFieldValue;
-	declare private _left: zk.StringFieldValue;
-	declare private _top: zk.StringFieldValue;
+	declare public _left: zk.StringFieldValue;
+	declare public _top: zk.StringFieldValue;
 	declare public _tooltiptext: zk.StringFieldValue;
 	declare private _droppable: zk.StringFieldValue;
 	declare private _dropTypes: string[] | null;
@@ -1948,7 +1949,7 @@ wgt.$f().main.setTitle("foo");
 			this.get$Class<typeof Widget>()._unbindrod(child);
 
 			// Bug ZK-454
-			jq(child.uuid as string, zk).remove();
+			jq(child.uuid, zk).remove();
 		} else if (child.desktop)
 			this.removeChildHTML_(child, ignoreDom);
 
@@ -2022,7 +2023,7 @@ wgt.$f().main.setTitle("foo");
 		if (this.z_rod) {
 			this.get$Class<typeof Widget>()._unbindrod(this);
 			if (!(shallReplace = (dt = dt || (p ? p.desktop : p))
-			&& (node = document.getElementById(this.uuid as string))))
+			&& (node = document.getElementById(this.uuid))))
 				this.get$Class<typeof Widget>()._bindrod(newwgt);
 		} else
 			shallReplace = dt;
@@ -2036,7 +2037,7 @@ wgt.$f().main.setTitle("foo");
 			if (node) newwgt.replaceHTML(node, dt, skipper, true, callback);
 			else {
 				this.unbind();
-				newwgt.bind(dt as Desktop);
+				newwgt.bind(dt);
 			}
 
 			_fixBindLevel(newwgt, p ? p.bindLevel + 1 : 0);
@@ -2173,7 +2174,7 @@ wgt.$f().main.setTitle("foo");
 			return false;
 
 		while (wgt) {
-			if (cache && (ck = wgt.uuid) && (ck = cache[ck as string]) !== undefined)
+			if (cache && (ck = wgt.uuid) && (ck = cache[ck]) !== undefined)
 				return _markCache(cache, visited, ck);
 
 			if (cache)
@@ -2480,7 +2481,7 @@ wgt.$f().main.setTitle("foo");
 	 * @since 5.0.3
 	 * @see #setFloating_
 	 */
-	public getFloatZIndex_(node): number {
+	public getFloatZIndex_(node: HTMLElement): number | string {
 		return node != this.$n() ? node.style.zIndex : this._zIndex;
 	}
 
@@ -2544,18 +2545,18 @@ wgt.$f().main.setTitle("foo");
 	/** Returns the Z index.
 	 * @return int
 	 */
-	public getZIndex(): number {
+	public getZIndex(): number | string {
 		return this._zIndex;
 	}
-	public getZindex(): number {
-		return this.getZIndex();
+	public getZindex(): number | string {
+		return this._zIndex;
 	}
 
 	/** Sets the Z index.
 	 * @param int zIndex the Z index to assign to
 	 * @param Map opts if opts.fire is specified the onZIndex event will be triggered. If opts.floatZIndex is false, represent it is not from setFloatZIndex, so the userZIndex may be true.
 	 */
-	public setZIndex(zIndex: number, opts: Partial<{ floatZIndex: boolean; fire: boolean }>): void {
+	public setZIndex(zIndex: number | string, opts: Partial<{ floatZIndex: boolean; fire: boolean }>): void {
 		if (opts && opts.floatZIndex && this._userZIndex)
 			return;
 		if (!opts || !opts.floatZIndex)
@@ -2566,7 +2567,7 @@ wgt.$f().main.setTitle("foo");
 			this._zIndex = zIndex;
 			var n = this.$n();
 			if (n) {
-				n.style.zIndex = zIndex >= 0 ? (zIndex as unknown as string) : '';
+				n.style.zIndex = zIndex >= 0 ? (zIndex as string) : '';
 				if (opts && opts.fire) this.fire('onZIndex', (zIndex > 0 || zIndex === 0) ? zIndex : -1, {ignorable: true});
 			}
 		}
@@ -2668,7 +2669,7 @@ redraw: function (out) {
 		if ((delay = this._renderdefer) >= 0) {
 			if (!this._norenderdefer) {
 				this.z_rod = this['_z$rd'] = true;
-				this.deferRedrawHTML_(out as string[]);
+				this.deferRedrawHTML_(out!);
 				out = null; //to free memory
 
 				var wgt = this;
@@ -3738,17 +3739,17 @@ unbind_: function (skipper, after) {
 	}
 
 	// @since 7.0.1
-	public afterChildMinFlexChanged_(kid: Widget, attr: string): void { //attr 'w' for width or 'h' for height
+	public afterChildMinFlexChanged_(kid: Widget, attr: zk.FlexOrient): void { //attr 'w' for width or 'h' for height
 		//to be overridden, after each of my children fix the minimum flex (both width and height),
 		// only if when myself is not in min flex.
 	}
 
-	public ignoreFlexSize_(attr: string): boolean { //'w' for width or 'h' for height calculation
+	public ignoreFlexSize_(attr: zk.FlexOrient): boolean { //'w' for width or 'h' for height calculation
 		//to be overridden, whether ignore widget dimension in vflex/hflex calculation
 		return false;
 	}
 
-	public ignoreChildNodeOffset_(attr: string): boolean { //'w' for width or 'h' for height calculation
+	public ignoreChildNodeOffset_(attr: zk.FlexOrient): boolean { //'w' for width or 'h' for height calculation
 		//to be overridden, whether ignore child node offset in vflex/hflex calculation
 		return false;
 	}
@@ -3782,7 +3783,7 @@ unbind_: function (skipper, after) {
 
 	// to overridden this method have to fix the IE9 issue (ZK-483)
 	// you can just add 1 px more for the offsetWidth
-	public getChildMinSize_(attr: string, wgt: Widget): number { //'w' for width or 'h' for height
+	public getChildMinSize_(attr: FlexOrient, wgt: Widget): number { //'w' for width or 'h' for height
 		if (attr == 'w') {
 			// feature #ZK-314: zjq.minWidth function return extra 1px in IE9/10/11
 			var wd = zjq.minWidth(wgt);
@@ -4053,7 +4054,8 @@ unbind_: function (skipper, after) {
 
 	//Feature ZK-1672: provide empty onSize function if the widget is listened to onAfterSize
 	//	but the widget is never listened to onSize event
-	public onSize(): void {}
+	// The parameter `ctl` is required by zul.wnd.Panel but no one else.
+	public onSize(ctl?: zk.ZWatchController/*For zul.wnd.Panel only*/): void {}
 
 	/**
 	 * Called to fire the onAfterSize event.
@@ -5293,7 +5295,7 @@ _doFooSelect: function (evt) {
 
 		opts = opts || {};
 		if (opts.exact)
-			return _binds[n!['id'] as string] as T;
+			return _binds[n!['id']] as T;
 
 		for (; n; n = zk(n).vparentNode(true)) {
 			try {
@@ -5569,16 +5571,16 @@ zk.Widget.getClass('combobox');
 			this._bindrod(child);
 	}
 	public static _bind0(wgt: Widget): void { //always called no matter ROD or not
-		_binds[wgt.uuid as string] = wgt;
+		_binds[wgt.uuid] = wgt;
 		if (wgt.id)
 			this._addGlobal(wgt);
 	}
 	public static _addGlobal(wgt: Widget): void { //note: wgt.id must be checked before calling this method
-		var gs = _globals[wgt.id as string];
+		var gs = _globals[wgt.id!];
 		if (gs)
 			gs.push(wgt);
 		else
-			_globals[wgt.id as string] = [wgt];
+			_globals[wgt.id!] = [wgt];
 	}
 	public static _unbindrod(wgt: Widget, nest?: boolean, keepRod?: boolean): void {
 		this._unbind0(wgt);
@@ -5597,16 +5599,16 @@ zk.Widget.getClass('combobox');
 	public static _unbind0(wgt: Widget): void {
 		if (wgt.id)
 			this._rmGlobal(wgt);
-		delete _binds[wgt.uuid as string];
+		delete _binds[wgt.uuid];
 		wgt.desktop = null;
 		wgt.clearCache();
 	}
 
 	public static _rmGlobal(wgt: Widget): void {
-		var gs = _globals[wgt.id as string];
+		var gs = _globals[wgt.id!];
 		if (gs) {
 			gs.$remove(wgt);
-			if (!gs.length) delete _globals[wgt.id as string];
+			if (!gs.length) delete _globals[wgt.id!];
 		}
 	}
 	public static readonly _TARGET = '__target__'; // used for storing the query widget target
@@ -5653,7 +5655,7 @@ export class RefWidget extends Widget {
 	 */
 	public override widgetName = 'refWidget';
 	protected override bind_(): void {
-		var w = Widget.$(this.uuid as string);
+		var w = Widget.$(this.uuid);
 		if (!w) {
 			zk.error('RefWidget not found: ' + this.uuid);
 			return;
@@ -5855,7 +5857,7 @@ export class Desktop extends Widget {
 	public static destroy(desktop: zk.Desktop | null): void {
 		if (desktop != null) {
 			zAu._rmDesktop(desktop);
-			delete zk.Desktop.all[desktop.id as string];
+			delete zk.Desktop.all[desktop.id!];
 			--zk.Desktop._ndt;
 		}
 	}
@@ -6248,7 +6250,7 @@ export class Service extends ZKObject {
 	public after(cmd: string | zk.Callable, fn: zk.Callable): this {
 		if (!fn && jq.isFunction(cmd)) {
 			fn = cmd;
-			cmd = this._lastcmd as string;
+			cmd = this._lastcmd!;
 		}
 
 		if (typeof cmd === 'string') {
@@ -6401,7 +6403,7 @@ Object skip(zk.Widget wgt);
 	 * @param Object inf the object being returned by {@link #skip}.
 	 * It depends on how a skipper is implemented. It is usually to carry the information about what are skipped
 	 */
-	public restore(wgt: Widget, skip: zk.DOMFieldValue): void {
+	public restore(wgt: Widget, skip: HTMLElement | null | undefined): void {
 		if (skip) {
 			var loc = jq(skip.id, zk)[0];
 			for (var el; el = skip.firstChild;) {
@@ -6474,7 +6476,7 @@ export let NoDOM: ThisType<NoDOMInterface> = {
 					} else {
 						var lastChildNode = lastChild.$n();
 						if (!lastChildNode)
-							lastChildNode = jq(lastChild.uuid as string, zk)[0];
+							lastChildNode = jq(lastChild.uuid, zk)[0];
 						if (lastChildNode)
 							endNode = lastChildNode;
 					}

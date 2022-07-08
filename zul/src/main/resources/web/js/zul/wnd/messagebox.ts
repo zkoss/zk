@@ -1,8 +1,8 @@
-zul.wnd.Messagebox = {
-	onBind: function (label, minWidth) {
-		var win = label.$o(),
-			outer = win.$n(),
-			msgbox = label.$n().parentElement,
+export let Messagebox = {
+	onBind(label: zk.Widget, minWidth: number): void {
+		var win = label.$o()!,
+			outer = win.$n()!,
+			msgbox = label.$n_().parentElement!,
 			outerOrigWd = outer.offsetWidth;
 
 		if (minWidth) {
@@ -19,3 +19,4 @@ zul.wnd.Messagebox = {
 		win.onSize();
 	}
 };
+zul.wnd.Messagebox = Messagebox;
