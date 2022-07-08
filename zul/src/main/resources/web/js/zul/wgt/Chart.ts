@@ -15,5 +15,5 @@ it will be useful, but WITHOUT ANY WARRANTY.
 /**
  * The generic chart component.
  */
-zul.wgt.Chart = zk.$extends(zul.wgt.Imagemap, {
-});
+@zk.WrapClass('zul.wgt.Chart')
+export class Chart extends zul.wgt.Imagemap {}
