@@ -21,33 +21,46 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * the embedded HTML tags. Thus, you can specify the style
  * ({@link #getStyle}), tooltip {@link #getTooltip} and so on.
  */
-zul.wgt.Html = zk.$extends(zul.Widget, {
-	_content: '',
-	$define: {
-		/** Returns the embedded content (i.e., HTML tags).
-		 * <p>Default: empty ("").
-		 * <p>Deriving class can override it to return whatever it wants
-		 * other than null.
-		 * @return String
-		 */
-		/** Sets the embedded content (i.e., HTML tags).
-		 * @param String content
-		 */
-		content: function (v) {
+@zk.WrapClass('zul.wgt.Html')
+export class Html extends zul.Widget<HTMLHtmlElement> {
+	private _content = '';
+
+	/** Returns the embedded content (i.e., HTML tags).
+	 * <p>Default: empty ("").
+	 * <p>Deriving class can override it to return whatever it wants
+	 * other than null.
+	 * @return String
+	 */
+	public getContent(): string {
+		return this._content;
+	}
+
+	/** Sets the embedded content (i.e., HTML tags).
+	 * @param String content
+	 */
+	public setContent(v: string, opts?: Record<string, boolean>): this {
+		const o = this._content;
+		this._content = v;
+
+		if (o !== v || (opts && opts.force)) {
 			var n = this.$n();
 			if (n) n.innerHTML = v || '';
 		}
-	},
-	bind_: function () {
-		this.$supers(zul.wgt.Html, 'bind_', arguments);
-		if (jq.isArray(this._content)) //zk().detachChildren() is used
-			for (var ctn = this._content, n = this.$n(), j = 0; j < ctn.length; ++j)
-				n.appendChild(ctn[j]);
-	},
-	unbind_: function () {
-		if (jq.isArray(this._content)) //zk().detachChildren() is used
-			for (var n = this.$n(); n.firstChild;)
-				n.removeChild(n.firstChild);
-		this.$supers(zul.wgt.Html, 'unbind_', arguments);
+
+		return this;
 	}
-});
+
+	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+		super.bind_(desktop, skipper, after);
+		if (jq.isArray(this._content)) //zk().detachChildren() is used
+			for (var ctn = this._content, n = this.$n_(), j = 0; j < ctn.length; ++j)
+				n.appendChild(ctn[j]);
+	}
+
+	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+		if (jq.isArray(this._content)) //zk().detachChildren() is used
+			for (var n = this.$n_(); n.firstChild;)
+				n.removeChild(n.firstChild);
+		super.unbind_(skipper, after, keepRod);
+	}
+}
