@@ -1892,7 +1892,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 						}
 					}
 				sz = Math.ceil(sz && h ? (hgh * sz) / h : hgh / this._headHgh(20));
-				this._visibleRows(sz);
+				this._setOrGetVisibleRows(sz);
 				hgh -= (this.efoot ? this.efoot.offsetHeight : 0);
 				//bug# 3036398: frozen scrollbar disappear when listbox with vflex="1"
 				hgh -= (this.efrozen && this._nativebar ? this.efrozen.offsetHeight : 0);
@@ -1937,7 +1937,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 
 				nRows = Math.round((hgh - diff) / rowhgh);
 			}
-			this._visibleRows(nRows);
+			this._setOrGetVisibleRows(nRows);
 		}
 
 		if (nRows) {
@@ -1962,7 +1962,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		}
 	},
 	/* Returns the real # of rows (aka., real size). */
-	_visibleRows: function (v) {
+	_setOrGetVisibleRows: function (v) {
 		if ('number' == typeof v) {
 			this._visiRows = v;
 		} else

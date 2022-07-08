@@ -691,7 +691,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 					});
 				return;
 			}
-			step = this._visibleRows();
+			step = this._setOrGetVisibleRows();
 			if (step == 0)
 				step = this.getPageSize() || 20;
 			if (data.keyCode == 33)
