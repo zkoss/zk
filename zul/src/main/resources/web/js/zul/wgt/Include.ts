@@ -1,4 +1,4 @@
-/* Include.js
+/* Include.ts
 
 	Purpose:
 

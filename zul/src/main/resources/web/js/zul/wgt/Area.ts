@@ -1,4 +1,4 @@
-/* Area.js
+/* Area.ts
 
 	Purpose:
 

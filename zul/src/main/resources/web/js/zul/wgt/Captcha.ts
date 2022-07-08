@@ -1,4 +1,4 @@
-/* Captcha.js
+/* Captcha.ts
 
 	Purpose:
 

@@ -1,4 +1,4 @@
-/* ButtonRenderer.js
+/* ButtonRenderer.ts
 
 	Purpose:
 

@@ -1,4 +1,4 @@
-/* Imagemap.js
+/* Imagemap.ts
 
 	Purpose:
 

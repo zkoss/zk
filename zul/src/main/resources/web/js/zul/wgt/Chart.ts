@@ -1,4 +1,4 @@
-/* Chart.js
+/* Chart.ts
 
 	Purpose:
 

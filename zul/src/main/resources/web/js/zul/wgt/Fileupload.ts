@@ -1,4 +1,4 @@
-/* Fileupload.js
+/* Fileupload.ts
 
 	Purpose:
 
