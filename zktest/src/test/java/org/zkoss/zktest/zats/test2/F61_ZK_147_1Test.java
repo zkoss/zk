@@ -30,7 +30,7 @@ public class F61_ZK_147_1Test extends WebDriverTestCase {
 		verifyGroupUngroup(jq("@column:eq(1)"), true, true, true, false);
 		verifyGroupUngroup(jq("@column:eq(0)"), true, true, true, false);
 
-		click(jq("@menuitem:contains(Group)"));
+		click(jq("@menuitem:contains(Group):visible"));
 		waitResponse();
 		Assert.assertEquals(2, jq("@grid:first @group").length());
 
@@ -39,7 +39,7 @@ public class F61_ZK_147_1Test extends WebDriverTestCase {
 		verifyGroupUngroup(jq("@column:eq(1)"), false, true, true, true);
 		verifyGroupUngroup(jq("@column:eq(0)"), false, true, true, true);
 
-		click(jq("@menuitem:contains(Ungroup)"));
+		click(jq("@menuitem:contains(Ungroup):visible"));
 		waitResponse();
 		Assert.assertEquals(0, jq("@grid:first @group").length());
 
@@ -59,7 +59,7 @@ public class F61_ZK_147_1Test extends WebDriverTestCase {
 		verifyGroupUngroup(jq("@grid:eq(1) @column:eq(1)"), true, true, true, false);
 		verifyGroupUngroup(jq("@grid:eq(1) @column:eq(0)"), true, true, true, true);
 
-		click(jq("@menuitem:contains(Ungroup)"));
+		click(jq("@menuitem:contains(Ungroup):visible"));
 		waitResponse();
 		Assert.assertEquals(0, jq("@grid:eq(1) @group").length());
 
@@ -70,7 +70,7 @@ public class F61_ZK_147_1Test extends WebDriverTestCase {
 		verifyGroupUngroup(jq("@grid:eq(1) @column:eq(1)"), true, false, true, false);
 		verifyGroupUngroup(jq("@grid:eq(1) @column:eq(0)"), true, true, true, false);
 
-		click(jq("@menuitem:contains(Group)"));
+		click(jq("@menuitem:contains(Group):visible"));
 		waitResponse();
 		Assert.assertEquals(2, jq("@grid:eq(1) @group").length());
 	}

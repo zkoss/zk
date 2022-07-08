@@ -27,6 +27,6 @@ public class B100_ZK_5120Test extends WebDriverTestCase {
 		waitResponse();
 		type(jq(".z-combobox-input"), "a");
 		waitResponse();
-		Assert.assertEquals("No suggestions", jq(".z-combobox-emptySearchMessage").text());
+		Assert.assertEquals("No suggestions", jq(".z-combobox-empty-search-message").text());
 	}
 }
