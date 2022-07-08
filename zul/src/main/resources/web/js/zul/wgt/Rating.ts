@@ -1,4 +1,4 @@
-/* Rating.js
+/* Rating.ts
 
 	Purpose:
 
