@@ -15,5 +15,5 @@ it will be useful, but WITHOUT ANY WARRANTY.
 /**
  * The generic captcha component.
  */
-zul.wgt.Captcha = zk.$extends(zul.wgt.Image, {
-});
+@zk.WrapClass('zul.wgt.Captcha')
+export class Captcha extends zul.wgt.Image {}
