@@ -1,4 +1,4 @@
-/* Panelchildren.js
+/* Panelchildren.ts
 
 	Purpose:
 
@@ -20,21 +20,29 @@ it will be useful, but WITHOUT ANY WARRANTY.
  *
  * <p>Default {@link #getZclass}: z-panelchildren.
  */
-zul.wnd.Panelchildren = zk.$extends(zul.ContainerWidget, {
+@zk.WrapClass('zul.wnd.Panelchildren')
+export class Panelchildren extends zul.ContainerWidget {
+	public override parent!: zul.wnd.Panel;
+
 	/**
 	 * This method is unsupported. Please use {@link zul.wnd.Panel#setHeight(String)} instead.
 	 * @param String height
 	 */
-	setHeight: zk.$void,      // readonly
+	public override setHeight(height: string | null): void {
+		// Empty on purpose. Shoudn't do anything.
+	}
+
 	/**
 	 * This method is unsupported. Please use {@link zul.wnd.Panel#setWidth(String)} instead.
 	 * @param String width
 	 */
-	setWidth: zk.$void,       // readonly
+	public override setWidth(width: string | null): void { // readonly
+		// Empty on purpose. Shoudn't do anything.
+	}
 
 	// super
-	domClass_: function (no) {
-		var scls = this.$supers('domClass_', arguments);
+	protected override domClass_(no?: zk.DomClassOptions): string {
+		var scls = super.domClass_(no);
 		if (!no || !no.zclass) {
 			var zcls = this.getZclass(),
 				added = !this.parent.getTitle() && !this.parent.caption ?
@@ -44,10 +52,11 @@ zul.wnd.Panelchildren = zk.$extends(zul.ContainerWidget, {
 			if (added) scls += (scls ? ' ' : '') + added;
 		}
 		return scls;
-	},
-	updateDomStyle_: function () {
-		this.$supers('updateDomStyle_', arguments);
+	}
+
+	protected override updateDomStyle_(): void {
+		super.updateDomStyle_();
 		if (this.desktop)
 			zUtl.fireSized(this.parent);
 	}
-});
+}

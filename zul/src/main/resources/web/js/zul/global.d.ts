@@ -1,10 +1,7 @@
 export * as box from './box';
 export * as db from './db';
 // export * as fud from './fud';
-// export * as grid from './grid';
-export declare namespace grid {
-    export import Row = zul.Widget; // zk/domtouch
-}
+export * as grid from './grid';
 export * as inp from './inp';
 // export * as lang from './lang';
 export * as layout from './layout';
@@ -13,12 +10,13 @@ export * as menu from './menu';
 export * as mesh from './mesh';
 export * as sel from './sel';
 // export * as tab from './tab';
+export declare namespace tab {
+	class Tabbox extends zul.Widget { // zul.wgt.Toolbar
+	}
+}
 // export * as utl from './utl';
 export * as wgt from './wgt';
-// export * as wnd from './wnd';
-export declare namespace wnd { // zk/flex
-    export import Panelchildren = zul.ContainerWidget;
-}
+export * as wnd from './wnd';
 export * from '.';
 export as namespace zul;
 
@@ -65,7 +63,10 @@ declare global {
 	| 'OK' // zul/dom
 	| 'OUT_OF_RANGE_SEPARATOR' // zul/inp/SimpleLocalTimeConstraint
 	| 'OUT_OF_RANGE'
+	| 'PANEL_COLLAPSE' // zul/wnd/Panel
 	| 'PANEL_EXPAND' // zul/inp/ComboWidget
+	| 'PANEL_MAXIMIZE' // zul/wnd/Panel
+	| 'PANEL_RESTORE' // zul/wnd/Panel
 	| 'PREV' // zul/inp/Intbox
 	| 'UNKNOWN_TYPE'
 	| 'UPLOAD_ERROR_EXCEED_MAXSIZE' // zul/Upload

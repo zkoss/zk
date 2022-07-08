@@ -730,7 +730,7 @@ export class LayoutRegion extends zul.Widget {
 		if (this.isFlex())
 			_setFirstChildFlex(this, false);
 
-		if (child.$instanceof(zul.layout.Borderlayout)) {
+		if (child instanceof zul.layout.Borderlayout) {
 			this._flex = false;
 			jq(this.$n_()).removeClass(this.$s('nested'));
 		}

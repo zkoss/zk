@@ -1,4 +1,4 @@
-/* Footer.js
+/* Footer.ts
 
 	Purpose:
 
@@ -19,19 +19,20 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>Unlike {@link Column}, you could place any child in a grid footer.
  * <p>Default {@link #getZclass}: z-footer.
  */
-zul.grid.Footer = zk.$extends(zul.mesh.FooterWidget, {
-
+@zk.WrapClass('zul.grid.Footer')
+export class Footer extends zul.mesh.FooterWidget {
 	/** Returns the grid that this belongs to.
 	 * @return zul.grid.Grid
 	 */
-	getGrid: function () {
-		return this.getMeshWidget();
-	},
+	public getGrid(): zul.grid.Grid | null | undefined {
+		return this.getMeshWidget() as zul.grid.Grid | null | undefined;
+	}
+
 	/** Returns the column that is in the same column as
 	 * this footer, or null if not available.
 	 * @return zul.grid.Column
 	 */
-	getColumn: function () {
-		return this.getHeaderWidget();
+	public getColumn(): zul.grid.Column | null | undefined {
+		return this.getHeaderWidget() as zul.grid.Column | null | undefined;
 	}
-});
+}

@@ -32,7 +32,7 @@ function _shallIgnore(evt: zk.Event): boolean | undefined {
 @zk.WrapClass('zul.wgt.Checkbox')
 export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidgetWithDisable {
 	//_tabindex: 0,
-	private _checked = false;
+	protected _checked = false;
 	public _disabled?: boolean = false; // disabled by default
 	public _adbs?: boolean;
 	public _autodisable?: string;
@@ -196,7 +196,7 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 		this._value = v;
 
 		if (o !== v || (opts && opts.force)) {
-			var n = this.$n('real') as HTMLInputElement;
+			var n = this.$n<HTMLInputElement>('real');
 			if (n) n.value = v || '';
 		}
 
@@ -382,7 +382,7 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 				this.nextState_();
 				this.fireOnCheck_(this.getState());
 			} else {
-				var real = this.$n('real') as HTMLInputElement,
+				var real = this.$n_<HTMLInputElement>('real'),
 					checked = real.checked;
 				if (checked != this._checked) { //changed
 					this.setChecked(checked); //so Radio has a chance to override it
@@ -397,11 +397,8 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 				super.doClick_(evt, popupOnly);
 
 				// B85-ZK-3866: do extra click, if it's a radio
-				if (this.$instanceof(zul.wgt.Radio)) {
-					var rg = (this as unknown as zul.wgt.Radio).getRadiogroup();
-					if (rg) {
-						rg.doClick_(evt);
-					}
+				if (this instanceof zul.wgt.Radio) {
+					this.getRadiogroup()?.doClick_(evt);
 				}
 			}
 		}

@@ -1,4 +1,4 @@
-/* Radio.js
+/* Radio.ts
 
 	Purpose:
 
@@ -27,8 +27,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * </ol>
  *
  */
-zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
-	_attachExternal: null,
+@zk.WrapClass('zul.wgt.Radio')
+export class Radio extends zul.wgt.Checkbox {
+	private _attachExternal: boolean | null = null;
+	private _group?: zul.wgt.Radiogroup | null;
+
 	/** Returns {@link Radiogroup} that this radio button belongs to.
 	 * It is the nearest ancestor {@link Radiogroup}.
 	 * In other words, it searches up the parent, parent's parent
@@ -37,25 +40,26 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 	 * If not, this radio itself is a group.
 	 * @return Radiogroup
 	 */
-	getRadiogroup: function (parent) {
+	public getRadiogroup(parent?: zk.Widget): zul.wgt.Radiogroup | null {
 		if (!parent && this._group)
 			return this._group;
 		var wgt = parent || this.parent;
 		for (; wgt; wgt = wgt.parent)
-			if (wgt.$instanceof(zul.wgt.Radiogroup)) return wgt;
+			if (wgt instanceof zul.wgt.Radiogroup) return wgt;
 		return null;
-	},
+	}
+
 	/** Sets {@link Radiogroup} that this radio button belongs to.
 	 * The radio automatically belongs to the nearest ancestral radiogroup.
 	 * Use this method only if the radio group is not one of its ancestors.
 	 * @param Radiogroup group the radio group, or null to dis-associate
 	 * @since 5.0.4
 	 */
-	setRadiogroup: function (group) {
+	public setRadiogroup(group: zul.wgt.Radiogroup | string | null): void {
 		var old = this._group;
 		// for zephyr to support set radiogroup by id
 		if (typeof group == 'string')
-			group = zk.$('$' + group);
+			group = zk.$<zul.wgt.Radiogroup>('$' + group);
 		if (old !== group) {
 			if (old && this._attachExternal) old._rmExtern(this);
 			this._group = group;
@@ -65,36 +69,39 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 			}
 			this._fixName();
 		}
-	},
-	bind_: function () {
-		this.$supers(zul.wgt.Radio, 'bind_', arguments);
+	}
+
+	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+		super.bind_(desktop, skipper, after);
 		if (this._group && this.desktop && !this._attachExternal) {
 			this._group._addExtern(this);
 			this._attachExternal = true;
 		}
-	},
-	unbind_: function () {
+	}
+
+	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		if (this._group && this._attachExternal) {
 			this._group._rmExtern(this);
 			this._attachExternal = false;
 		}
-		this.$supers(zul.wgt.Radio, 'unbind_', arguments);
-	},
+		super.unbind_(skipper, after, keepRod);
+	}
+
 	/** Sets the radio is checked and unchecked the others in the same radio
 	 * group ({@link Radiogroup}
 	 * @param boolean checked
 	 * @return Radio
 	 * @disable(zkgwt)
 	 */
-	setChecked: _zkf = function (checked) {
+	public override setChecked(checked: boolean, opts?: Record<string, boolean>): this {
 		if (checked != this._checked) {
 			this._checked = checked;
-			var n = this.$n('real');
+			var n = this.$n<HTMLInputElement>('real');
 			if (n) {
 				n.checked = checked || false;
 				checked ? jq(n).attr('checked', 'checked') : jq(n).removeAttr('checked');
 				this.clearStateClassName_();
-				jq(this.$n()).addClass(this.getClassNameByState_());
+				jq(this.$n_()).addClass(this.getClassNameByState_());
 				// Bug ZK-622
 				if (!n.checked)
 					jq(n).removeAttr('checked');
@@ -105,13 +112,13 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 					if (checked) {
 						for (var items = group.getItems(), i = items.length; i--;) {
 							if (items[i] != this) {
-								var item = items[i].$n('real');
+								var item = items[i].$n<HTMLInputElement>('real');
 								if (item) {
 									item.checked = false;
 									jq(item).removeAttr('checked');
 								}
 								items[i].clearStateClassName_();
-								jq(items[i].$n()).addClass(this.$s(this.getMoldPrefix_() + 'off'));
+								jq(items[i].$n_()).addClass(this.$s(this.getMoldPrefix_() + 'off'));
 								items[i]._checked = false;
 							}
 						}
@@ -121,22 +128,27 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 			}
 		}
 		return this;
-	},
+	}
+
 	/** Sets whether it is selected.
 	 * <p>Don't override this. Override {@link #setChecked} instead.
 	 * <p>The same as {@link #setChecked}.
 	 * @param boolean selected
 	 * @return Radio
 	 */
-	setSelected: _zkf,
+	public setSelected(checked: boolean, opts?: Record<string, boolean>): this {
+		return this.setChecked(checked, opts);
+	}
+
 	/** Returns whether it is selected.
 	 * <p>Default: false.
 	 * <p>Don't override this. Override {@link #isChecked} instead.
 	 * @return boolean
 	 */
-	isSelected: function () {
+	public isSelected(): boolean {
 		return this.isChecked();
-	},
+	}
+
 	/** Returns the name of this radio button.
 	 * <p>Don't use this method if your application is purely based
 	 * on ZK's event-driven model.
@@ -144,27 +156,29 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 	 * to be the same as its parent's name ({@link Radiogroup#getName}).
 	 * @return String
 	 */
-	getName: function () {
+	public override getName(): string | undefined {
 		var group = this.getRadiogroup();
 		return group != null ? group.getName() : this.uuid;
-	},
-	_fixName: function () {
-		var n = this.$n('real');
+	}
+
+	private _fixName(): void {
+		var n = this.$n<HTMLInputElement>('real');
 		if (n)
-			n.name = this.getName();
-	},
-	beforeParentChanged_: function (newParent) {
+			n.name = this.getName()!;
+	}
+
+	public override beforeParentChanged_(newParent: zk.Widget | null): void {
 		var oldGroup = this.getRadiogroup(),
 			newGroup = newParent ? this.getRadiogroup(newParent) : null;
 		if (oldGroup != newGroup || !newParent) {
-			if (oldGroup && oldGroup.$instanceof(zul.wgt.Radiogroup)) {
+			if (oldGroup && oldGroup instanceof zul.wgt.Radiogroup) {
 				oldGroup._fixOnRemove(this);
 				if (this._attachExternal) {
 					oldGroup._rmExtern(this);
 					this._attachExternal = false;
 				}
 			}
-			if (newGroup && newGroup.$instanceof(zul.wgt.Radiogroup)) {
+			if (newGroup && newGroup instanceof zul.wgt.Radiogroup) {
 				if (!this._attachExternal && newGroup == this._group) {
 					newGroup._addExtern(this);
 					this._attachExternal = true;
@@ -172,9 +186,10 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 				newGroup._fixOnAdd(this);
 			}
 		}
-		this.$supers('beforeParentChanged_', arguments);
-	},
-	fireOnCheck_: function (checked) {
+		super.beforeParentChanged_(newParent);
+	}
+
+	protected override fireOnCheck_(checked: boolean | null): void {
 		// if Radiogroup listens to onCheck, we shall fire the event too.
 		var group = this.getRadiogroup();
 		this.fire('onCheck', checked);
@@ -184,4 +199,4 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 			group.fire('onCheck', checked);
 		}
 	}
-});
+}

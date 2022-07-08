@@ -1,4 +1,4 @@
-/* Columns.js
+/* Columns.ts
 
 	Purpose:
 
@@ -17,38 +17,44 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * Each child of a columns element should be a {@link Column} element.
  * <p>Default {@link #getZclass}: z-columns.
  */
-zul.grid.Columns = zk.$extends(zul.mesh.ColumnMenuWidget, {
+@zk.WrapClass('zul.grid.Columns')
+export class Columns extends zul.mesh.ColumnMenuWidget {
+	public override parent!: zul.grid.Grid | null;
 
 	/** Returns the grid that contains this columns.
 	 * @return zul.grid.Grid
 	 */
-	getGrid: function () {
+	public getGrid(): zul.grid.Grid | null {
 		return this.parent;
-	},
-	rerender: function () {
+	}
+
+	public override rerender(skipper?: zk.Skipper | number | null): this {
 		if (this.desktop) {
 			if (this.parent)
 				this.parent.rerender();
 			else
-				this.$supers('rerender', arguments);
+				super.rerender(skipper);
 		}
 		return this;
-	},
-	getGroupPackage_: function () {
+	}
+
+	public override getGroupPackage_(): string {
 		return 'zkex.grid';
-	},
+	}
+
 	//@Override
-	shallFireSizedLaterWhenAddChd_: function () {
+	protected override shallFireSizedLaterWhenAddChd_(): boolean {
 		zWatch.listen({
 			onCommandReady: this
 		});
 		return true;
-	},
+	}
+
 	// ZK-4008
-	onCommandReady: function () {
+	public onCommandReady(): void {
 		zUtl.fireSized(this);
 		zWatch.unlisten({
 			onCommandReady: this
 		});
 	}
-});
+}

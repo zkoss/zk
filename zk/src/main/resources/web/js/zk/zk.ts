@@ -346,7 +346,7 @@ _zk.currentFocus = null as Widget | null;
 /** The topmost modal window, or null if no modal window at all.
  * @type zul.wnd.Window
  */
-_zk.currentModal = null as Widget | null;
+_zk.currentModal = null as zul.wnd.Window | null;
 /** The number of widget packages (i.e., JavaScript files) being loaded
  * (and not yet complete).
  * <p>When the JavaScript files of widgets are loading, you shall not create
@@ -2158,6 +2158,9 @@ interface ZKVars {
 
 	// ./effect
 	useStackup?: string | boolean;
+
+	// zul.grid.Row.prototype.setStyle
+	_rowTime?: number;
 }
 
 declare namespace _zk {

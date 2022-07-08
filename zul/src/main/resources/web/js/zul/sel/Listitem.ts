@@ -102,7 +102,7 @@ export class Listitem extends zul.sel.ItemWidget {
 
 	//super//
 	protected override domStyle_(no?: zk.DomStyleOptions): string {
-		if (_isPE() && (this.$instanceof(zkex.sel.Listgroup) || this.$instanceof(zkex.sel.Listgroupfoot))
+		if (_isPE() && (this instanceof zkex.sel.Listgroup || this instanceof zkex.sel.Listgroupfoot)
 				|| (no && no.visible))
 			return super.domStyle_(no);
 

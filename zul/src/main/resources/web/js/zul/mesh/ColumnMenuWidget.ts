@@ -146,7 +146,7 @@ export abstract class ColumnMenuWidget extends zul.mesh.HeadWidget {
 			this.syncColMenu();
 	}
 
-	private _syncColMenu(): void {
+	public _syncColMenu(): void {
 		this._shallColMenu = true;
 	}
 
@@ -222,18 +222,14 @@ export abstract class ColumnMenuWidget extends zul.mesh.HeadWidget {
 	protected override onChildAdded_(child: zul.mesh.HeaderWidget): void {
 		super.onChildAdded_(child);
 		this._syncColMenu();
-		var mesh = this.getMeshWidget();
-		if (mesh && mesh._syncEmpty)
-			mesh._syncEmpty();
+		this.getMeshWidget()?._syncEmpty();
 	}
 
 	protected override onChildRemoved_(child: zul.mesh.HeaderWidget): void {
 		super.onChildRemoved_(child);
 		if (!this.childReplacing_)
 			this._syncColMenu();
-		var mesh = this.getMeshWidget();
-		// FIXME: _syncEmpty was checked for existence in onChildAdded_ but not here
-		if (mesh) mesh._syncEmpty!();
+		this.getMeshWidget()?._syncEmpty();
 	}
 
 	public getGroupPackage_(): string { // FIXME: orignally, `zk.$void`

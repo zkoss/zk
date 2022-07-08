@@ -1,4 +1,4 @@
-/* Caption.js
+/* Caption.ts
 
 	Purpose:
 
@@ -19,18 +19,22 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>Default {@link #getZclass}: z-caption.
  *
  */
-zul.wgt.Caption = zk.$extends(zul.LabelImageWidget, {
-	$define: {
-	},
+@zk.WrapClass('zul.wgt.Caption')
+export class Caption extends zul.LabelImageWidget<HTMLDivElement> {
+	// NOTE: parent could be null as asserted in domCon
+	// In essence, parent is `zul.wnd.Window | zul.wnd.Panel | zul.wgt.Groupbox`.
+	public override parent!: null | zk.Widget & Partial<zul.wnd.Panel>;
 	//super//
-	domDependent_: true, //DOM content depends on parent
-	rerender: function () {
+	protected domDependent_ = true;
+
+	public override rerender(skipper?: zk.Skipper | number | null): void {
 		var p = this.parent;
 		if (p)
 			p.clearCache(); // B50-ZK-244
-		this.$supers('rerender', arguments);
-	},
-	domContent_: function () {
+		super.rerender(skipper);
+	}
+
+	protected override domContent_(): string {
 		var label = this.getLabel(),
 			img = this.getImage(),
 			title = this.parent ? this.parent._title : '',
@@ -42,8 +46,9 @@ zul.wgt.Caption = zk.$extends(zul.LabelImageWidget, {
 		if (!img) img = iconSclass;
 		else img = '<img id="' + this.uuid + '-img" src="' + img + '" class="' + this.$s('image') + '" alt="" aria-hidden="true" />' + (iconSclass ? ' ' + iconSclass : '');
 		return label ? img + ' ' + '<span class="' + this.$s('label') + '">' + label + '</span>' : img;
-	},
-	updateDomContent_: function () {
+	}
+
+	public override updateDomContent_(): void {
 		var cnt = this.domContent_(),
 		dn = this.$n('cave');
 		if (dn) {
@@ -51,85 +56,98 @@ zul.wgt.Caption = zk.$extends(zul.LabelImageWidget, {
 			if (this.firstChild) {
 				firstWgtDom = this.firstChild.$n();
 			}
-			for (var child = dn.firstChild, nextChild; child && child !== firstWgtDom; child = nextChild) {
+			for (var child = dn.firstChild, nextChild: ChildNode | null; child && child !== firstWgtDom; child = nextChild) {
 				nextChild = child.nextSibling;
 				jq(child).remove();
 			}
 			this.clearCache(); //B70-ZK-2370: clearCache after remove dom content
 			jq(dn).prepend(cnt ? cnt : '&nbsp;');
 		}
-	},
-	domClass_: function (no) {
-		var sc = this.$supers('domClass_', arguments),
+	}
+
+	protected override domClass_(no?: zk.DomClassOptions): string {
+		var sc = super.domClass_(no),
 			parent = this.parent;
 
-		if (!parent.$instanceof(zul.wgt.Groupbox))
+		if (!(parent instanceof zul.wgt.Groupbox))
 			return sc;
 
 		return sc + (parent._closable ? '' : ' ' + this.$s('readonly'));
-	},
-	doClick_: function () {
-		if (this.parent.$instanceof(zul.wgt.Groupbox) && this.parent.isClosable())
+	}
+
+	public override doClick_(evt: zk.Event, popupOnly?: boolean): void {
+		if (this.parent instanceof zul.wgt.Groupbox && this.parent.isClosable())
 			this.parent.setOpen(!this.parent.isOpen());
-		this.$supers('doClick_', arguments);
-	},
+		super.doClick_(evt, popupOnly);
+	}
+
 	//private//
-	_getBlank: function () {
+	public _getBlank(): string {
 		return '&nbsp;';
-	},
+	}
+
 	/** Whether to generate a collapsible button (determined by parent only). */
-	_isCollapsibleVisible: function () {
-		var parent = this.parent;
+	private _isCollapsibleVisible(): boolean | undefined {
+		var parent = this.parent!;
 		return parent.isCollapsible && parent.getCollapseOpenIconClass_ && parent.isCollapsible();
-	},
+	}
+
 	/** Whether to generate a close button (determined by parent only). */
-	_isCloseVisible: function () {
-		var parent = this.parent;
+	private _isCloseVisible(): boolean | undefined {
+		var parent = this.parent!;
 		return parent.isClosable && parent.getClosableIconClass_ && parent.isClosable();
-	},
+	}
+
 	/** Whether to generate a minimize button (determined by parent only). */
-	_isMinimizeVisible: function () {
-		var parent = this.parent;
+	private _isMinimizeVisible(): boolean | undefined {
+		var parent = this.parent!;
 		return parent.isMinimizable && parent.getMinimizableIconClass_ && parent.isMinimizable();
-	},
+	}
+
 	/** Whether to generate a maximize button (determined by parent only). */
-	_isMaximizeVisible: function () {
-		var parent = this.parent;
+	private _isMaximizeVisible(): boolean | undefined {
+		var parent = this.parent!;
 		return parent.isMaximizable && parent.getMaximizableIconClass_ && parent.isMaximizable();
-	},
-	beforeMinFlex_: function (o) { // Fixed for B50-3343388.zul
+	}
+
+	public override beforeMinFlex_(o: zk.FlexOrient): number | null | undefined { // Fixed for B50-3343388.zul
+		// FIXME: Div has no property width. Setting it in the console has no effect.
+		// Dead code?
 		if (o == 'w')
-			this.$n().width = '';
-	},
+			(this.$n_() as HTMLElement & {width?: string}).width = '';
+		return undefined;
+	}
+
 	// override for the bug ZK-1799
-	setFlexSizeW_: function (n, zkn, width, isFlexMin) {
+	protected override setFlexSizeW_(n: HTMLElement, zkn: zk.JQZK, width: number, isFlexMin?: boolean): void {
 		if (isFlexMin) {
 			if (this._isCloseVisible()) {
-				var close = this.parent.$n('close');
+				var close = this.parent!.$n_('close');
 				width += close.offsetWidth + zk(close).marginWidth();
 			}
 			if (this._isMaximizeVisible()) {
-				var max = this.parent.$n('max');
+				var max = this.parent!.$n_('max');
 				width += max.offsetWidth + zk(max).marginWidth();
 			}
 			if (this._isMinimizeVisible()) {
-				var min = this.parent.$n('min');
+				var min = this.parent!.$n_('min');
 				width += min.offsetWidth + zk(min).marginWidth();
 			}
 			if (this._isCollapsibleVisible()) {
-				var exp = this.parent.$n('exp');
+				var exp = this.parent!.$n_('exp');
 				width += exp.offsetWidth + zk(exp).marginWidth();
 			}
 		}
-		this.$supers('setFlexSizeW_', arguments);
-	},
+		super.setFlexSizeW_(n, zkn, width, isFlexMin);
+	}
+
 	// override
 	// ZK-786
-	getImageNode: function () {
+	public override getImageNode(): HTMLImageElement | null | undefined {
 		if (!this._eimg && this._image) {
-			var n = this.$n('img');
+			var n = this.$n<HTMLImageElement>('img');
 			if (n) this._eimg = n;
 		}
 		return this._eimg;
 	}
-});
+}
