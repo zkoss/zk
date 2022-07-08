@@ -93,6 +93,7 @@ export interface EventStopOptions {
  * @disable(zkgwt)
  */
 export class Event<TData = unknown> extends ZKObject {
+	public keys?: zul.wnd.Dimension; // zul.wnd.Window
 	public itemSelected?: boolean; // zul.sel.ItemWidget.prototype.doSelect_
 	public tooltipped?: boolean; // zul.Widget.prototype.doTooltipOver_
 	public contextSelected?: boolean; // zul.Widget.prototype.doClick_

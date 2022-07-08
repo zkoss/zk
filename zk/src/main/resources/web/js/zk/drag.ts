@@ -46,7 +46,7 @@ export interface DraggableOptions {
 	handle?: HTMLElement;
 	scroll?: DraggableScrollOptions | HTMLElement | Window;
 	overlay?: boolean;
-	ghosting?: zk.Callable;
+	ghosting?(dg: zk.Draggable, ofs: zk.Offset, evt: zk.Event): HTMLElement | undefined;
 	stackup?: boolean;
 	zIndex?: number;
 	snap?: ((dg: Draggable, offset: zk.Offset) => zk.Offset) | zk.Offset;
@@ -204,6 +204,19 @@ export class Draggable extends zk.Object {
 	declare public _orgcursor?: string; // zk.Widget.prototype.uncloneDrag_
 	declare public _zszofs?: number; // zul.mesh.HeaderWidget
 	declare public _zmin?: number; // zul.mesh.HeaderWidget
+	// zul.wnd.{Window, Panel}
+	declare public _wndoffs?: zk.Offset;
+	declare public z_szofs?: null | {top: string; left: string; width: string; height: string};
+	declare public z_dir?: number;
+	declare public z_orgzi?: string;
+	declare public z_box?: {
+		top: number;
+		left: number;
+		height: number;
+		width: number;
+		minHeight: number;
+		minWidth: number;
+	};
 	
 	private static _drags: Draggable[] = [];
 	/** The control object for this draggable.

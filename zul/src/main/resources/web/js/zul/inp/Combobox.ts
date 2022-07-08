@@ -614,7 +614,7 @@ export class Combobox extends zul.inp.ComboWidget {
 	}
 
 	// ZK-5044 (touch enable)
-	public override getChildMinSize_(attr: string, wgt: zul.LabelImageWidget): number {
+	public override getChildMinSize_(attr: zk.FlexOrient, wgt: zul.LabelImageWidget): number {
 		const result = super.getChildMinSize_(attr, wgt);
 		if (attr == 'w' && result == 0) {
 			// use label instead

@@ -33,7 +33,7 @@ export interface EffectStackupOptions {
 
 export interface EffectFullMaskOptions extends EffectStackupOptions {
 	mask?: HTMLElement;
-	anchor?: HTMLElement;
+	anchor?: HTMLElement | null;
 	id?: string;
 	zIndex?: number;
 	visible?: boolean;
