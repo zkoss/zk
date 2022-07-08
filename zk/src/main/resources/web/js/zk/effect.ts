@@ -266,7 +266,7 @@ zk.eff.Mask = zk.$extends(zk.Object, {
 			anchor = opts.anchor,
 			$anchor = zk(anchor);
 
-		if (!anchor) {
+		if (!anchor || !this.mask) {
 			var optsId = opts.id;
 			opts.anchor = anchor = jq('#' + optsId.substring(0, optsId.indexOf('-')))[0];
 			$anchor = zk(anchor);
