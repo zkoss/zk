@@ -38,6 +38,7 @@ export interface EventOptions {
 		onprogress(event): void;
 		onload(evemt): void;
 	};
+	ctl?: boolean; // zul.Imagemap.onclick
 }
 
 export interface EventStopOptions {

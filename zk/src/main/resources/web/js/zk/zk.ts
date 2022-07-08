@@ -1471,17 +1471,17 @@ open: function () {
 }
 });
 </code></pre>
-	* <p>In the interceptor function, you could call this.$getInterceptorContext$() to get the context object.
-	* The context object has several properties, it would help you the deal with the interceptor:
-	* <ul>
-	* <li>context.stop - whether to call the original method in the widget.</li>
-	* <li>context.result - the return value of the widget function.</li>
-	* <li>context.args - the original arguments in the function of widget, you could update it for calling the original method.</li>
-	* </ul>
-	* @param Class targetClass the destination object to override
-	* @param Object interceptor the interceptor map corresponds to the widget methods
-	* @since 8.0.3
-	*/
+ * <p>In the interceptor function, you could call this.$getInterceptorContext$() to get the context object.
+ * The context object has several properties, it would help you the deal with the interceptor:
+ * <ul>
+ * <li>context.stop - whether to call the original method in the widget.</li>
+ * <li>context.result - the return value of the widget function.</li>
+ * <li>context.args - the original arguments in the function of widget, you could update it for calling the original method.</li>
+ * </ul>
+ * @param Class targetClass the destination object to override
+ * @param Object interceptor the interceptor map corresponds to the widget methods
+ * @since 8.0.3
+ */
 _zk.$intercepts = function (targetClass, interceptor): void {
 	if (!targetClass)
 		throw 'unknown targetClass';
@@ -2161,6 +2161,9 @@ interface ZKVars {
 
 	// zul.grid.Row.prototype.setStyle
 	_rowTime?: number;
+
+	// zul.Imagemap
+	IMAGEMAP_DONE_URI?: string;
 }
 
 declare namespace _zk {

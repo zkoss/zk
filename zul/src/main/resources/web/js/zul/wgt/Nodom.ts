@@ -16,10 +16,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * A no-dom widget with comment scope
  * @since 8.0.3
  */
-zul.wgt.Nodom = zk.$extends(zk.Widget, {
-	z_virnd: true,
-	getMold: function () {
+@zk.WrapClass('zul.wgt.Nodom')
+export class Nodom extends zk.Widget {
+	public z_virnd = true;
+
+	public override getMold(): string {
 		return 'nodom';
 	}
-});
+}
 zk.$intercepts(zul.wgt.Nodom, zk.NoDOM);
