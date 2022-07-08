@@ -701,13 +701,13 @@ public class Combobox extends Textbox {
 	/** Drops down or closes the list of combo items ({@link Comboitem}.
 	 * only works while visible
 	 * @since 3.0.1
-	 * @see #open
-	 * @see #close
 	 */
 	public void setOpen(boolean open) {
-		if (_open != open) {
-			_open = open;
-			smartUpdate("open", open);
+		if (isVisible()) {
+			if (_open != open) {
+				_open = open;
+				smartUpdate("open", open);
+			}
 		}
 	}
 

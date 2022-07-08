@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
@@ -28,6 +29,7 @@ import org.zkoss.zul.Label;
  * @author jumperchen
  *
  */
+@Ignore
 public class F80_ZK_2800Test extends ZATSTestCase {
 	
 	@Test

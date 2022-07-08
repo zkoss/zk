@@ -32,9 +32,9 @@ public class MenubarTest extends WcagTestCase {
 	public void testVertical() {
 		connect();
 
-		click(jq("@menu:contains(Menu B):last"));
+		click(jq(".z-menubar-vertical @menu:contains(Menu B)"));
 		waitResponse();
-		click(jq("@menu:contains(Menu BC):last"));
+		click(jq(".z-menubar-vertical @menu:contains(Menu BC)"));
 		waitResponse();
 		verifyA11y();
 	}

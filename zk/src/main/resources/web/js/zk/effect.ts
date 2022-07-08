@@ -344,7 +344,7 @@ export class Mask extends zk.Object implements Effect {
 			anchor = opts.anchor,
 			$anchor = zk(anchor);
 
-		if (!anchor) {
+		if (!anchor || !this.mask) {
 			var optsId = opts.id!;
 			opts.anchor = anchor = jq('#' + optsId.substring(0, optsId.indexOf('-')))[0];
 			$anchor = zk(anchor);

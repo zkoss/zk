@@ -2113,7 +2113,7 @@ export abstract class MeshWidget extends zul.Widget {
 						}
 					}
 				sz = Math.ceil(sz && h ? (hgh * sz) / h : hgh / this._headHgh(20));
-				this._visibleRows(sz);
+				this._setOrGetVisibleRows(sz);
 				hgh -= (this.efoot ? this.efoot.offsetHeight : 0);
 				//bug# 3036398: frozen scrollbar disappear when listbox with vflex="1"
 				hgh -= (this.efrozen && this._nativebar ? this.efrozen.offsetHeight : 0);
@@ -2165,7 +2165,7 @@ export abstract class MeshWidget extends zul.Widget {
 
 				nRows = Math.round((hgh - diff) / rowhgh);
 			}
-			this._visibleRows(nRows);
+			this._setOrGetVisibleRows(nRows);
 		}
 
 		if (nRows) {
@@ -2191,7 +2191,7 @@ export abstract class MeshWidget extends zul.Widget {
 	}
 
 	/* Returns the real # of rows (aka., real size). */
-	protected _visibleRows(v?: number): number | undefined {
+	protected _setOrGetVisibleRows(v?: number): number | undefined {
 		if ('number' == typeof v) {
 			this._visiRows = v;
 		} else

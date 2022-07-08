@@ -30,14 +30,14 @@ public class F80_ZK_3176Test extends WebDriverTestCase{
         JQuery menu = jq("@menu").eq(1);
         click(menu);
         waitResponse();
-        JQuery menuPopup = jq("@menupopup");
+        JQuery menuPopup = jq("@menupopup:visible");
         Assert.assertFalse(menuPopup.isVisible());
 
         click(jq("@button").eq(0));
         waitResponse();
         click(menu);
         waitResponse();
-        menuPopup = jq("@menupopup");
+        menuPopup = jq("@menupopup:visible");
         Assert.assertTrue(menuPopup.isVisible());
 
         JQuery subMenu = menuPopup.find("@menu");
