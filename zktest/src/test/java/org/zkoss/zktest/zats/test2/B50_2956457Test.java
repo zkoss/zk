@@ -83,7 +83,7 @@ public class B50_2956457Test extends WebDriverTestCase {
 		waitResponse();
 
 		Assert.assertTrue(jq("@menuitem:contains(More)").isVisible());
-		Assert.assertFalse(jq("@menuitem:contains(Great)").exists());
+		Assert.assertFalse(jq("@menuitem:contains(Great)").isVisible());
 
 		click(jq("@menu:contains(Sort)"));
 		Assert.assertTrue(jq("@menuitem:contains(Great)").isVisible());
