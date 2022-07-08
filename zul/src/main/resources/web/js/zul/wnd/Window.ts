@@ -418,7 +418,7 @@ export class Window extends zul.ContainerWidget {
 	public _sizer?: zk.Draggable | null;
 	private _maximizable?: boolean;
 	private _minimizable?: boolean;
-	private _maximized?: boolean;
+	public _maximized?: boolean;
 	private _minimized?: boolean;
 	public _notSendMaximize?: boolean;
 	public _lastSize?: null | { l?: string; t?: string; w?: string; h?: string };

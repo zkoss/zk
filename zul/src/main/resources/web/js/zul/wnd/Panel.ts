@@ -54,7 +54,7 @@ export interface Dimension {
 export class Panel extends zul.Widget {
 	private _border = 'none';
 	public _title = '';
-	private _open = true;
+	public _open = true;
 	private _minheight = 100;
 	private _minwidth = 200;
 	protected override _tabindex = 0;
