@@ -64,8 +64,10 @@ declare global {
 	| 'OUT_OF_RANGE_SEPARATOR' // zul/inp/SimpleLocalTimeConstraint
 	| 'OUT_OF_RANGE'
 	| 'PANEL_COLLAPSE' // zul/wnd/Panel
+	| 'PANEL_CLOSE' // zul/wgt/ButtonRenderer
 	| 'PANEL_EXPAND' // zul/inp/ComboWidget
 	| 'PANEL_MAXIMIZE' // zul/wnd/Panel
+	| 'PANEL_MINIMIZE' // zul/wgt/ButtonRenderer
 	| 'PANEL_RESTORE' // zul/wnd/Panel
 	| 'PREV' // zul/inp/Intbox
 	| 'UNKNOWN_TYPE'
