@@ -1,4 +1,4 @@
-/* dom.js
+/* dom.ts
 
 	Purpose:
 
