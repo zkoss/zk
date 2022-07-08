@@ -18,163 +18,235 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * @author jumperchen
  * @since 6.0.0
  */
-zul.wgt.Selectbox = zk.$extends(zul.Widget, {
-	$define: {
-		/**
-		 * Returns the index of the selected item (-1 if no one is selected).
-		 * @return int
-		 */
-		/**
-		 * Selects the item with the given index.
-		 * @param int selectedIndex
-		 */
-		selectedIndex: function (selectedIndex) {
+@zk.WrapClass('zul.wgt.Selectbox')
+export class Selectbox extends zul.Widget<HTMLSelectElement> {
+	private _selectedIndex?: number;
+	private _disabled?: boolean;
+	private _multiple?: boolean;
+	private _maxlength?: number;
+	private _selectedIndexes?: number[];
+	private _name?: string;
+
+	/**
+	 * Returns the index of the selected item (-1 if no one is selected).
+	 * @return int
+	 */
+	public getSelectedIndex(): number | undefined {
+		return this._selectedIndex;
+	}
+
+	/**
+	 * Selects the item with the given index.
+	 * @param int selectedIndex
+	 */
+	public setSelectedIndex(selectedIndex: number, opts?: Record<string, boolean>): this {
+		const o = this._selectedIndex;
+		this._selectedIndex = selectedIndex;
+
+		if (o !== selectedIndex || (opts && opts.force)) {
 			var n = this.$n();
 			if (n)
 				n.selectedIndex = selectedIndex;
-		},
-		/**
-		 * Returns whether it is disabled.
-		 * <p>
-		 * Default: false.
-		 * @return boolean
-		 */
-		/**
-		 * Sets whether it is disabled.
-		 * @param boolean disabled
-		 */
-		disabled: function (disabled) {
-			var n = this.$n();
-			if (n) n.disabled = disabled ? 'disabled' : '';
-		},
-		/**
-		 * Returns whether it is multiple selections.
-		 * <p>
-		 * Default: false.
-		 * @return boolean
-		 * @since 10.0.0 for Zephyr
-		 */
-		/**
-		 * Sets whether multiple selections are allowed.
-		 * @param boolean multiple
-		 * @since 10.0.0 for Zephyr
-		 */
-		multiple: function (multiple) {
-			var n = this.$n();
-			if (n) n.multiple = multiple ? 'multiple' : '';
-		},
-		/**
-		 * Returns the maximal length of each item's label.
-		 * @return int
-		 * @since 10.0.0 for Zephyr
-		 */
-		/**
-		 * Sets the maximal length of each option's label.
-		 * @param int maxlength
-		 * @since 10.0.0 for Zephyr
-		 */
-		maxlength: function () {
-			this.rerender();
-		},
+		}
 
-		/**
-		 * Returns all the selected indexes or null if no selections.
-		 * @return int[] selectedIndexes
-		 * @since 10.0.0 for Zephyr
-		 */
-		/**
-		 * Sets all the selected indexes.
-		 * @param int[] selectedIndexes
-		 * @since 10.0.0 for Zephyr
-		 */
-		selectedIndexes: (function () {
-			function doSelection(options, selectedIndexes) {
-				selectedIndexes = selectedIndexes || [];
-				var bucket = [];
-				for (var j of selectedIndexes) {
-					bucket[j] = true;
-				}
-				for (var i = 0, j = options.length; i < j; i++) {
-					options[i].selected = bucket[i];
+		return this;
+	}
+
+	/**
+	 * Returns whether it is disabled.
+	 * <p>
+	 * Default: false.
+	 * @return boolean
+	 */
+	public isDisabled(): boolean | undefined {
+		return this._disabled;
+	}
+
+	/**
+	 * Sets whether it is disabled.
+	 * @param boolean disabled
+	 */
+	public setDisabled(disabled: boolean, opts?: Record<string, boolean>): this {
+		const o = this._disabled;
+		this._disabled = disabled;
+
+		if (o !== disabled || (opts && opts.force)) {
+			var n = this.$n();
+			if (n) n.disabled = disabled;
+		}
+
+		return this;
+	}
+
+	/**
+	 * Returns whether it is multiple selections.
+	 * <p>
+	 * Default: false.
+	 * @return boolean
+	 * @since 10.0.0 for Zephyr
+	 */
+	public isMultiple(): boolean | undefined {
+		return this._multiple;
+	}
+
+	/**
+	 * Sets whether multiple selections are allowed.
+	 * @param boolean multiple
+	 * @since 10.0.0 for Zephyr
+	 */
+	public setMultiple(multiple: boolean, opts?: Record<string, boolean>): this {
+		const o = this._multiple;
+		this._multiple = multiple;
+
+		if (o !== multiple || (opts && opts.force)) {
+			var n = this.$n();
+			if (n) n.multiple = multiple;
+		}
+
+		return this;
+	}
+
+	/**
+	 * Returns the maximal length of each item's label.
+	 * @return int
+	 * @since 10.0.0 for Zephyr
+	 */
+	public getMaxlength(): number | undefined {
+		return this._maxlength;
+	}
+
+	/**
+	 * Sets the maximal length of each option's label.
+	 * @param int maxlength
+	 * @since 10.0.0 for Zephyr
+	 */
+	public setMaxlength(maxlength: number, opts?: Record<string, boolean>): this {
+		const o = this._maxlength;
+		this._maxlength = maxlength;
+
+		if (o !== maxlength || (opts && opts.force)) {
+			this.rerender();
+		}
+
+		return this;
+	}
+
+	/**
+	 * Returns all the selected indexes or null if no selections.
+	 * @return int[] selectedIndexes
+	 * @since 10.0.0 for Zephyr
+	 */
+	public getSelectedIndexes(): number[] | undefined {
+		return this._selectedIndexes;
+	}
+
+	/**
+	 * Sets all the selected indexes.
+	 * @param int[] selectedIndexes
+	 * @since 10.0.0 for Zephyr
+	 */
+	public setSelectedIndexes(selectedIndexes: number[], opts?: Record<string, boolean>): this {
+		function doSelection(node: HTMLSelectElement, selectedIndexes: number[]): void {
+			node.selectedIndex = -1; // deselected all options
+			const options = node.options, n = options.length;
+			for (const i of selectedIndexes) {
+				if (i < n) {
+					options[i].selected = true;
 				}
 			}
-			return function (selectedIndexes) {
-				if (!this.isMultiple()) return;
-				if (this.desktop) {
-					var n = this.$n(),
-						options = n.options;
-					doSelection(options, selectedIndexes);
-				} else {
-					let self = this;
-					zk.afterMount(function () {
-						var n = self.$n(),
-							options = n.options;
-						doSelection(options, selectedIndexes);
-					});
-				}
-			};
-		})(),
-		/**
-		 * Returns the name of this component.
-		 * <p>
-		 * Default: null.
-		 * <p>
-		 * The name is used only to work with "legacy" Web application that handles
-		 * user's request by servlets. It works only with HTTP/HTML-based browsers.
-		 * It doesn't work with other kind of clients.
-		 * <p>
-		 * Don't use this method if your application is purely based on ZK's
-		 * event-driven model.
-		 * @return String
-		 */
-		/**
-		 * Sets the name of this component.
-		 * <p>
-		 * The name is used only to work with "legacy" Web application that handles
-		 * user's request by servlets. It works only with HTTP/HTML-based browsers.
-		 * It doesn't work with other kind of clients.
-		 * <p>
-		 * Don't use this method if your application is purely based on ZK's
-		 * event-driven model.
-		 *
-		 * @param String name
-		 *            the name of this component.
-		 */
-		name: function (name) {
+		}
+
+		const o = this._selectedIndexes;
+		this._selectedIndexes = selectedIndexes;
+
+		if (o !== selectedIndexes || (opts && opts.force)) {
+			if (!this.isMultiple()) return this;
+			if (this.desktop) {
+				doSelection(this.$n_(), selectedIndexes);
+			} else {
+				zk.afterMount(() => doSelection(this.$n_(), selectedIndexes));
+			}
+		}
+
+		return this;
+	}
+
+
+	/**
+	 * Returns the name of this component.
+	 * <p>
+	 * Default: null.
+	 * <p>
+	 * The name is used only to work with "legacy" Web application that handles
+	 * user's request by servlets. It works only with HTTP/HTML-based browsers.
+	 * It doesn't work with other kind of clients.
+	 * <p>
+	 * Don't use this method if your application is purely based on ZK's
+	 * event-driven model.
+	 * @return String
+	 */
+	public getName(): string | undefined {
+		return this._name;
+	}
+
+	/**
+	 * Sets the name of this component.
+	 * <p>
+	 * The name is used only to work with "legacy" Web application that handles
+	 * user's request by servlets. It works only with HTTP/HTML-based browsers.
+	 * It doesn't work with other kind of clients.
+	 * <p>
+	 * Don't use this method if your application is purely based on ZK's
+	 * event-driven model.
+	 *
+	 * @param String name
+	 *            the name of this component.
+	 */
+	public setName(name: string, opts?: Record<string, boolean>): this {
+		const o = this._name;
+		this._name = name;
+
+		if (o !== name || (opts && opts.force)) {
 			var n = this.$n();
 			if (n) n.name = name;
 		}
-	},
-	_fixSelIndex: function () {
-		if (this._selectedIndex < 0)
-			this.$n().selectedIndex = -1;
-	},
-	bind_: function () {
-		this.$supers(zul.wgt.Selectbox, 'bind_', arguments);
-		var n = this.$n();
+
+		return this;
+	}
+
+	private _fixSelIndex(): void {
+		if (this._selectedIndex! < 0)
+			this.$n_().selectedIndex = -1;
+	}
+
+	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+		super.bind_(desktop, skipper, after);
+		var n = this.$n_();
 		this.domListen_(n, 'onChange')
 			.domListen_(n, 'onFocus', 'doFocus_')
 			.domListen_(n, 'onBlur', 'doBlur_');
 
 		if (!zk.gecko) {
-			var fn = [this, this._fixSelIndex];
+			const fn: [zul.wgt.Selectbox, zk.Callable] = [this, this._fixSelIndex];
 			zWatch.listen({onRestore: fn, onVParent: fn});
 		}
 
 		this._fixSelIndex();
-	},
-	unbind_: function () {
-		var n = this.$n();
+	}
+
+	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+		var n = this.$n_();
 		this.domUnlisten_(n, 'onChange')
 			.domUnlisten_(n, 'onFocus', 'doFocus_')
-			.domUnlisten_(n, 'onBlur', 'doBlur_')
-			.$supers(zul.wgt.Selectbox, 'unbind_', arguments);
+			.domUnlisten_(n, 'onBlur', 'doBlur_');
+		super.unbind_(skipper, after, keepRod);
 
-		var fn = [this, this._fixSelIndex];
+		const fn: [zul.wgt.Selectbox, zk.Callable] = [this, this._fixSelIndex];
 		zWatch.unlisten({onRestore: fn, onVParent: fn});
-	},
-	_doChange: function (evt) {
-		var n = this.$n();
+	}
+
+	private _doChange(evt: zk.Event): void {
+		const n = this.$n_();
 		if (!this._multiple) {
 			var v = n.selectedIndex;
 			if (zk.opera) n.selectedIndex = v; //ZK-396: opera displays it wrong (while it is actually -1)
@@ -183,10 +255,10 @@ zul.wgt.Selectbox = zk.$extends(zul.Widget, {
 			this.setSelectedIndex(n.selectedIndex);
 			this.fire('onSelect', n.selectedIndex);
 		} else {
-			var n = this.$n(),
+			const n = this.$n_(),
 				opts = n.options,
-				selIndexes = [],
-				oldSelIndexes = this.getSelectedIndexes();
+				selIndexes: number[] = [],
+				oldSelIndexes = this.getSelectedIndexes()!;
 			for (var j = 0, ol = opts.length; j < ol; ++j) {
 				var opt = opts[j];
 				if (opt.selected) {
@@ -199,22 +271,25 @@ zul.wgt.Selectbox = zk.$extends(zul.Widget, {
 			this._selectedIndexes = selIndexes;
 			this.fire('onSelect', selIndexes);
 		}
-	},
+	}
+
 	//Bug 3304408: IE does not fire onchange
-	doBlur_: function (evt) {
+	protected override doBlur_(evt: zk.Event): void {
 		this._doChange(evt);
-		return this.$supers('doBlur_', arguments);
-	},
+		return super.doBlur_(evt);
+	}
+
 	//Bug 1756559: ctrl key shall fore it to be sent first
-	beforeCtrlKeys_: function (evt) {
+	protected override beforeCtrlKeys_(evt: zk.Event): void {
 		this._doChange(evt);
-	},
-	domAttrs_: function () {
-		var v;
-		return this.$supers('domAttrs_', arguments)
+	}
+
+	public override domAttrs_(no?: zk.DomAttrsOptions): string {
+		const index = this.getSelectedIndex()!, name = this.getName();
+		return super.domAttrs_(no)
 			+ (this.isDisabled() ? ' disabled="disabled"' : '')
-			+ ((v = this.getSelectedIndex()) > -1 ? ' selectedIndex="' + v + '"' : '')
-			+ ((v = this.getName()) ? ' name="' + v + '"' : '')
+			+ (index > -1 ? ' selectedIndex="' + index + '"' : '')
+			+ (name ? ' name="' + name + '"' : '')
 			+ (this._multiple ? ' multiple="multiple" style="height: auto; padding: 0;"' : '');
 	}
-});
+}
