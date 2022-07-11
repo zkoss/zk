@@ -325,7 +325,7 @@ export abstract class SortWidget extends zul.mesh.HeaderWidget {
 			if ((pp == 'auto' || pp == 'auto-keep') && this.parent!._mpop)
 				pp = this.parent!._mpop;
 			else
-				pp = this.$f(this.parent!._menupopup) as zul.menu.Menupopup;
+				pp = this.$f<zul.menu.Menupopup>(this.parent!._menupopup)!;
 
 			if (zul.menu.Menupopup.isInstance(pp)) {
 				var ofs = zk(btn).revisedOffset(),

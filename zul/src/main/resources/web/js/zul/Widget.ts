@@ -153,12 +153,16 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Widge
 	private _ctrlKeys?: string | null;
 	public _parsedCtlKeys?: ParsedCtlKeys | null;
 
+	public constructor(props?: Record<string, unknown> | typeof zkac) {
+		super(props);
+	}
+
 	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		// B70-ZK-2069: some widget need fire onScroll event, which has
 		// characteristic of container
 		if (jq(this.uuid, zk).data('scrollable')) { // Avoid caching $n() too early
-			this._doScrollableSyncScroll = zUtl.throttle(function (this: object) {
+			this._doScrollableSyncScroll = zUtl.throttle(function (this: zk.Object) {
 				if (jq(this).data('scrollable')) {
 					zWatch.fireDown('onScroll', this);
 					zWatch.fire('_onSyncScroll', this); // ZK-4408: for Popup only

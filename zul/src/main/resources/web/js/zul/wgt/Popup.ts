@@ -49,7 +49,7 @@ export class Popup extends zul.Widget {
 	public override _visible = false;
 	public _fakeParent?: zk.Widget | null;
 	public mask?: zk.eff.Mask | null;
-	protected _openInfo?: PositionArgs | null;
+	public _openInfo?: PositionArgs | null;
 	private _adjustLeft?: number | null;
 	private _adjustTop?: number | null;
 	protected _shallToggle?: boolean | null;

@@ -184,19 +184,19 @@ function _fixBindLevel(wgt: Widget, v: number): void {
 }
 
 function _addIdSpace(wgt: Widget): void {
-	if (wgt._fellows) wgt._fellows[wgt.id as string] = wgt;
+	if (wgt._fellows) wgt._fellows[wgt.id!] = wgt;
 	var p = wgt.parent;
 	if (p) {
 		p = p.$o();
-		if (p) p._fellows[wgt.id as string] = wgt;
+		if (p) p._fellows![wgt.id!] = wgt;
 	}
 }
 function _rmIdSpace(wgt: Widget): void {
-	if (wgt._fellows) delete wgt._fellows[wgt.id as string];
+	if (wgt._fellows) delete wgt._fellows[wgt.id!];
 	var p = wgt.parent;
 	if (p) {
 		p = p.$o();
-		if (p) delete p._fellows[wgt.id as string];
+		if (p) delete p._fellows![wgt.id!];
 	}
 }
 function _addIdSpaceDown(wgt: Widget): void {
@@ -206,7 +206,7 @@ function _addIdSpaceDown(wgt: Widget): void {
 		_addIdSpaceDown0(wgt, ow);
 }
 function _addIdSpaceDown0(wgt: Widget, owner: Widget): void {
-	if (wgt.id) owner._fellows[wgt.id] = wgt;
+	if (wgt.id) owner._fellows![wgt.id] = wgt;
 	if (!wgt._fellows)
 		for (let w = wgt.firstChild; w; w = w.nextSibling)
 			_addIdSpaceDown0(w, owner);
@@ -219,14 +219,14 @@ function _rmIdSpaceDown(wgt: Widget): void {
 }
 function _rmIdSpaceDown0(wgt: Widget, owner: Widget): void {
 	if (wgt.id)
-		delete owner._fellows[wgt.id];
+		delete owner._fellows![wgt.id];
 	if (!wgt._fellows)
 		for (let w = wgt.firstChild; w; w = w.nextSibling)
 			_rmIdSpaceDown0(w, owner);
 }
 //check if a desktop exists
 function _exists(wgt: Widget): boolean {
-	if (document.getElementById(wgt.uuid as string)) //don't use $n() since it caches
+	if (document.getElementById(wgt.uuid)) //don't use $n() since it caches
 		return true;
 
 	for (let w = wgt.firstChild; w; w = w.nextSibling)
@@ -391,9 +391,9 @@ export let DnD = { //for easy overriding
 	 * @param jq.Event evt the DOM event
 	 * @return zk.Widget
 	 */
-	getDrop(drag, pt: zk.Offset, evt: Event): Widget | null {
+	getDrop(drag: zk.Draggable, pt: zk.Offset, evt: Event): Widget | null {
 		var wgt = this.getDropTarget(evt, drag);
-		return wgt ? wgt.getDrop_(drag.control) : null;
+		return wgt ? wgt.getDrop_(drag.control!) : null;
 	},
 	/** Ghost the DOM element being dragged.
 	 * @param zk.Draggable drag the draggable controller
@@ -476,20 +476,20 @@ function DD_dragging(drag, pt, evt: Event): void {
 	if (zk.mobile)
 		zk(drag.node).redoCSS();
 }
-function DD_ghosting(drag, ofs: zk.Offset, evt: Event): HTMLElement {
-	return drag.control.cloneDrag_(drag, DD_pointer(evt, jq(drag.node).height() || 0));
+function DD_ghosting(drag: zk.Draggable, ofs: zk.Offset, evt: Event): HTMLElement {
+	return drag.control!.cloneDrag_(drag, DD_pointer(evt, jq(drag.node!).height() || 0));
 }
-function DD_endghosting(drag, origin): void {
-	drag.control.uncloneDrag_(drag);
+function DD_endghosting(drag: zk.Draggable, origin: HTMLElement): void {
+	drag.control!.uncloneDrag_(drag);
 	drag._dragImg = null;
 }
-function DD_constraint(drag, pt, evt: Event): zk.Offset {
-	return DD_pointer(evt, jq(drag.node).height() || 0);
+function DD_constraint(drag: zk.Draggable, pt: zk.Offset, evt: Event): zk.Offset {
+	return DD_pointer(evt, jq(drag.node!).height() || 0);
 }
-function DD_ignoredrag(drag, pt, evt: Event): boolean {
+function DD_ignoredrag(drag: zk.Draggable, pt: zk.Offset, evt: Event): boolean {
 	//ZK 824:Textbox dragging issue with Listitem
 	//since 5.0.11,6.0.0 introduce evt,drag to the wgt.ignoreDrag_() to provide more information.
-	return drag.control.ignoreDrag_(pt, evt, drag);
+	return drag.control!.ignoreDrag_(pt, evt, drag);
 }
 
 function _topnode(n: HTMLElement): HTMLElement | null {
@@ -736,7 +736,7 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends ZKObject
 	declare public _nodeSolved;
 	declare public _rmAftAnm;
 	declare public _$evproxs;
-	declare public _fellows;
+	declare public _fellows?: Record<string, zk.Widget>;
 	declare public _norenderdefer;
 	declare public _rerendering;
 	declare public domExtraAttrs;
@@ -1525,6 +1525,7 @@ wgt.$f().main.setTitle("foo");
 	 * @return Map the map of all fellows.
 	 * @since 5.0.2
 	 */
+	public $f(): Record<string, Widget> | undefined
 	/** Returns the fellow of the specified ID of the ID space that this widget belongs to. It returns null if not found.
 	 * @param String id the widget's ID ({@link #id})
 	 * @return zk.Widget
@@ -1536,14 +1537,16 @@ wgt.$f().main.setTitle("foo");
 	 * If omitted, it won't search all ID spaces.
 	 * @return zk.Widget
 	 */
-	public $f(id: string, global?: boolean): Widget | null {
+	public $f<T extends Widget = Widget>(id: string, global?: boolean): T | null
+	public $f(id?: string, global?: boolean): Record<string, Widget> | Widget | null | undefined {
 		var f = this.$o();
 		if (!arguments.length)
 			return f ? f._fellows : {};
-		for (var ids = id.split('/'), j = 0, len = ids.length; j < len; ++j) {
+		// If `argumens.length` is not zero, `id` is guaranteed to be a string.
+		for (var ids = id!.split('/'), j = 0, len = ids.length; j < len; ++j) {
 			id = ids[j];
 			if (id) {
-				if (f) f = f._fellows[id];
+				if (f) f = f._fellows![id];
 				if (!f && global) f = _globals[id]?.[0];
 				if (!f || zk.spaceless) break;
 				global = false;
@@ -3952,10 +3955,10 @@ unbind_: function (skipper, after) {
 	 * <p>Default: it always returns false.
 	 * If the location that an user can drag is static, override {@link #getDragNode},
 	 * which is easier to implement.
-	 * @param zk.Draggable pt
+	 * @param zk.Offset pt
 	 * @return boolean whether to ignore
 	 */
-	protected ignoreDrag_(pt: Draggable): boolean {
+	public ignoreDrag_(pt: zk.Offset, evt?: zk.Event, drag?: zk.Draggable): boolean {
 		return false;
 	}
 
@@ -4028,7 +4031,7 @@ unbind_: function (skipper, after) {
 	 * @param zk.Offset ofs the offset of the returned element (left/top)
 	 * @return DOMElement the clone
 	 */
-	protected cloneDrag_(drag: Draggable, ofs: zk.Offset): HTMLElement {
+	public cloneDrag_(drag: Draggable, ofs: zk.Offset): HTMLElement {
 		//See also bug 1783363 and 1766244
 
 		var msg = this.getDragMessage_();
@@ -4046,7 +4049,7 @@ unbind_: function (skipper, after) {
 	/** Undo the visual effect created by {@link #cloneDrag_}.
 	 * @param zk.Draggable drag the draggable controller
 	 */
-	protected uncloneDrag_(drag: Draggable): void {
+	public uncloneDrag_(drag: Draggable): void {
 		document.body.style.cursor = drag._orgcursor || '';
 
 		jq(this.getDragNode()).removeClass('z-dragged');

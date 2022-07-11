@@ -1,11 +1,11 @@
-/* Captcha.js
+/* Chart.ts
 
 	Purpose:
 
 	Description:
 
 	History:
-		Fri Mar 27 14:53:11     2009, Created by tomyeh
+		Thu Mar 26 16:11:12     2009, Created by tomyeh
 
 Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
@@ -13,7 +13,7 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 /**
- * The generic captcha component.
+ * The generic chart component.
  */
-zul.wgt.Captcha = zk.$extends(zul.wgt.Image, {
-});
+@zk.WrapClass('zul.wgt.Chart')
+export class Chart extends zul.wgt.Imagemap {}

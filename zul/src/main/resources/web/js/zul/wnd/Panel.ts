@@ -54,7 +54,7 @@ export interface Dimension {
 export class Panel extends zul.Widget {
 	private _border = 'none';
 	public _title = '';
-	private _open = true;
+	public _open = true;
 	private _minheight = 100;
 	private _minwidth = 200;
 	protected override _tabindex = 0;
@@ -1078,7 +1078,7 @@ export class Panel extends zul.Widget {
 			this.setTopmost();
 	}
 
-	private _initMove(cmp: void): void {
+	private _initMove(): void {
 		var handle = this.$n('head');
 		if (handle && !this._drag) {
 			jq(handle).addClass(this.$s('header-move'));

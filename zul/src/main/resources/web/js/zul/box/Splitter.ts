@@ -337,7 +337,7 @@ export class Splitter extends zul.Widget {
 	}
 
 	//drag
-	private static _ignoresizing(draggable: SplitterDraggable, pointer: [number, number], evt: zk.Event): boolean {
+	private static _ignoresizing(draggable: SplitterDraggable, pointer: zk.Offset, evt: zk.Event): boolean {
 		var wgt = draggable.control as Splitter;
 		if (!wgt._open || wgt.$n('icon') == evt.domTarget) return true;
 
@@ -482,8 +482,8 @@ export class Splitter extends zul.Widget {
 			runPrev.style[fd] = prevClientFd + 'px'; //count on clientFd
 	}
 
-	protected static _snap(draggable: SplitterDraggable, pos: [number, number]): [number, number] {
-		var run = draggable.run! as Required<SplitterDraggable.Run>,
+	protected static _snap(draggable: SplitterDraggable, pos: zk.Offset): zk.Offset {
+		var run = draggable.run as Required<SplitterDraggable.Run>,
 			wgt = draggable.control as Splitter,
 			x = pos[0], y = pos[1];
 		if (wgt.isVertical()) {
@@ -506,12 +506,12 @@ export class Splitter extends zul.Widget {
 		return [x, y];
 	}
 
-	public static _next(n: HTMLElement): HTMLTableRowElement {
-		return jq(n).next().next()[0] as HTMLTableRowElement;
+	public static _next(n: HTMLElement): HTMLTableRowElement | undefined {
+		return jq(n).next().next()[0] as HTMLTableRowElement | undefined;
 	}
 
-	public static _prev(n: HTMLElement): HTMLTableRowElement {
-		return jq(n).prev().prev()[0] as HTMLTableRowElement;
+	public static _prev(n: HTMLElement): HTMLTableRowElement | undefined {
+		return jq(n).prev().prev()[0] as HTMLTableRowElement | undefined;
 	}
 
 	protected static _fixKidSplts(wgt: null | zk.Widget): void {

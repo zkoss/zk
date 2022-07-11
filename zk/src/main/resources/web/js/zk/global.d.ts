@@ -132,7 +132,7 @@ interface JQueryStatic {
 	isAncestor(p: HTMLElement | null | undefined, c: HTMLElement | null | undefined): boolean;
 	isOverlapped(ofs1: zk.Offset, dim1: zk.Offset, ofs2: zk.Offset, dim2: zk.Offset, tolerant?: number): boolean;
 	j2d(s: string): Date;
-	newFrame(id: string, src?: string, style?: string | null): HTMLIFrameElement;
+	newFrame(id: string, src?: string | null, style?: string | null): HTMLIFrameElement;
 	newHidden(nm: string, val: string, parent?: Node): HTMLInputElement;
 	newStackup(el: Node | null, id: string, anchor?: Node): HTMLIFrameElement;
 	nodeName(el: Node): string;

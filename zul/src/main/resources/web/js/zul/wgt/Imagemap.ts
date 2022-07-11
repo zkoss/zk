@@ -1,4 +1,4 @@
-/* Imagemap.js
+/* Imagemap.ts
 
 	Purpose:
 
@@ -15,21 +15,47 @@ it will be useful, but WITHOUT ANY WARRANTY.
 /**
  * An image map.
  */
-zul.wgt.Imagemap = zk.$extends(zul.wgt.Image, {
-	$define: {
-		width: function (v) { // B50-ZK-478
+@zk.WrapClass('zul.wgt.Imagemap')
+export class Imagemap extends zul.wgt.Image {
+	public static _doneURI?: string;
+	public static _stamp?: number;
+
+	public override getWidth(): string | null | undefined {
+		return this._width;
+	}
+
+	public override setWidth(v: string, opts?: Record<string, boolean>): this {
+		const o = this._width;
+		this._width = v;
+
+		if (o !== v || (opts && opts.force)) { // B50-ZK-478
 			var n = this.getImageNode();
 			if (n)
 				n.style.width = v;
-		},
-		height: function (v) { // B50-ZK-478
+		}
+
+		return this;
+	}
+
+	public override getHeight(): string | null | undefined {
+		return this._height;
+	}
+
+	public override setHeight(v: string, opts?: Record<string, boolean>): this {
+		const o = this._height;
+		this._height = v;
+
+		if (o !== v || (opts && opts.force)) { // B50-ZK-478
 			var n = this.getImageNode();
 			if (n)
 				n.style.height = v;
 		}
-	},
-	bind_: function () {
-		this.$supers(zul.wgt.Imagemap, 'bind_', arguments);
+
+		return this;
+	}
+
+	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+		super.bind_(desktop, skipper, after);
 
 		if (!jq('#zk_hfr_')[0])
 			jq.newFrame('zk_hfr_', null,
@@ -37,33 +63,37 @@ zul.wgt.Imagemap = zk.$extends(zul.wgt.Image, {
 					: null/*invisible*/);
 			//creates a hidden frame. However, in safari, we cannot use invisible frame
 			//otherwise, safari will open a new window
-	},
+	}
 
-	//super//
-	getImageNode: function () {
+	public override getImageNode(): HTMLImageElement | null | undefined {
 		return this.$n('real');
-	},
-	getCaveNode: function () {
+	}
+
+	public override getCaveNode(): HTMLElement | null | undefined {
 		return this.$n('map');
-	},
-	onChildAdded_: function () {
-		this.$supers('onChildAdded_', arguments);
+	}
+
+	protected override onChildAdded_(child: zk.Widget): void {
+		super.onChildAdded_(child);
 		if (this.desktop && this.firstChild == this.lastChild) //first child
 			this._fixchd(true);
-	},
-	onChildRemoved_: function () {
-		this.$supers('onChildRemoved_', arguments);
+	}
+
+	protected override onChildRemoved_(child: zk.Widget): void {
+		super.onChildRemoved_(child);
 		if (this.desktop && !this.firstChild) //remove last
 			this._fixchd(false);
-	},
-	_fixchd: function (bArea) {
+	}
+
+	private _fixchd(bArea: boolean): void {
 		var mapid = this.uuid + '-map',
-			img = this.getImageNode();
+			img = this.getImageNode()!;
 		img.useMap = bArea ? '#' + mapid : '';
 		img.isMap = !bArea;
-	},
-	contentAttrs_: function () {
-		var attr = this.$supers('contentAttrs_', arguments),
+	}
+
+	protected override contentAttrs_(): string {
+		var attr = super.contentAttrs_(),
 			w = this._width,
 			h = this._height;
 		if (w || h) { // B50-ZK-478
@@ -76,25 +106,25 @@ zul.wgt.Imagemap = zk.$extends(zul.wgt.Image, {
 		}
 		return attr + (this.firstChild ? ' usemap="#' + this.uuid + '-map"' :
 			' ismap="ismap"');
-	},
+	}
 
 	//@Override
-	fromPageCoord: function (x, y) {
+	public override fromPageCoord(x: number, y: number): zk.Offset {
 		//2997402: Imagemap rightclick/doubleclick wrong coordinates
 		var ofs = zk(this.getImageNode()).revisedOffset();
 		return [x - ofs[0], y - ofs[1]];
-	},
+	}
 
-	_doneURI: function () {
+	public _doneURI(): string {
 		var Imagemap = zul.wgt.Imagemap,
 			url = Imagemap._doneURI;
 		return url ? url :
 			Imagemap._doneURI = zk.IMAGEMAP_DONE_URI ? zk.IMAGEMAP_DONE_URI :
 				zk.ajaxURI('/web/zul/html/imagemap-done.html', {desktop: this.desktop, au: true});
 	}
-}, {
+
 	/** Called by imagemap-done.html. */
-	onclick: function (href) {
+	public static onclick(href: string): void {
 		if (zul.wgt.Imagemap._toofast()) return;
 
 		var j = href.indexOf('?');
@@ -114,8 +144,9 @@ zul.wgt.Imagemap = zk.$extends(zul.wgt.Image, {
 			x: zk.parseInt(href.substring(k, j)),
 			y: zk.parseInt(href.substring(j + 1))
 		}, {ctl: true});
-	},
-	_toofast: function () {
+	}
+
+	public static _toofast(): boolean {
 		if (zk.gecko) { //bug 1510374
 			var Imagemap = zul.wgt.Imagemap,
 				now = jq.now();
@@ -125,4 +156,4 @@ zul.wgt.Imagemap = zk.$extends(zul.wgt.Image, {
 		}
 		return false;
 	}
-});
+}

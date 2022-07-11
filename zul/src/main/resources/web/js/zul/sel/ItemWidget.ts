@@ -310,7 +310,7 @@ export class ItemWidget extends zul.Widget<HTMLTableRowElement> implements zul.m
 
 	// override it because msg cut in getDragMessage_,
 	// do not want cut again here, and change _dragImg to array
-	protected override cloneDrag_(drag: zk.Draggable, ofs: zk.Offset): HTMLElement {
+	public override cloneDrag_(drag: zk.Draggable, ofs: zk.Offset): HTMLElement {
 		//See also bug 1783363 and 1766244
 		var msg = this.getDragMessage_(),
 			dgelm = zk.DnD.ghost(drag, ofs, msg);

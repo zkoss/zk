@@ -418,7 +418,7 @@ export class Window extends zul.ContainerWidget {
 	public _sizer?: zk.Draggable | null;
 	private _maximizable?: boolean;
 	private _minimizable?: boolean;
-	private _maximized?: boolean;
+	public _maximized?: boolean;
 	private _minimized?: boolean;
 	public _notSendMaximize?: boolean;
 	public _lastSize?: null | { l?: string; t?: string; w?: string; h?: string };
@@ -434,8 +434,8 @@ export class Window extends zul.ContainerWidget {
 	public _lastfocus?: zk.Widget | null;
 	public _offset?: zk.Offset;
 
-	public constructor() {
-		super();
+	public constructor(props: Record<string, unknown>) {
+		super(props);
 		this._fellows = {};
 		this._lastSize = {};
 		// NOTE: Prior to TS migration, super is called after _fellows/_lastSize
