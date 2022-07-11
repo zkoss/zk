@@ -1,4 +1,4 @@
-/* FileuploadDlg.js
+/* FileuploadDlg.ts
 
 	Purpose:
 
