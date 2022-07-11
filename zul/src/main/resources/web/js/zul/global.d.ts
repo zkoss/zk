@@ -1,6 +1,6 @@
 export * as box from './box';
 export * as db from './db';
-// export * as fud from './fud';
+export * as fud from './fud';
 export * as grid from './grid';
 export * as inp from './inp';
 export * as layout from './layout';

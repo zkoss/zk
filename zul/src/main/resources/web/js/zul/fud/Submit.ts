@@ -1,4 +1,4 @@
-/* Submit.js
+/* Submit.ts
 
 	Purpose:
 
