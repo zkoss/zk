@@ -158,7 +158,7 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Widge
 		// B70-ZK-2069: some widget need fire onScroll event, which has
 		// characteristic of container
 		if (jq(this.uuid, zk).data('scrollable')) { // Avoid caching $n() too early
-			this._doScrollableSyncScroll = zUtl.throttle(function (this: object) {
+			this._doScrollableSyncScroll = zUtl.throttle(function (this: zk.Object) {
 				if (jq(this).data('scrollable')) {
 					zWatch.fireDown('onScroll', this);
 					zWatch.fire('_onSyncScroll', this); // ZK-4408: for Popup only

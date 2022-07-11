@@ -1,3 +1,4 @@
+export default {};
 export * from './ButtonRenderer'; // jsdoc="true"
 export * from './A';
 export * from './Cell';

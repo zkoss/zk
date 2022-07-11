@@ -12,65 +12,63 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-(function () {
-	//called when user mouseout some element,
-	//for prevent duplicate state change
-	function _setCloseTimer (wgt) {
-		if (!wgt._tidclose)
-			wgt._tidclose = setTimeout(function () {
-				if (!wgt._bover) {
-					if (wgt._autodrop && wgt.isOpen())
-						wgt.close({sendOnOpen: true});
-				}
-				wgt._tidclose = null;
-			}, 200);
-	}
-
-	function _fireOnOpen (wgt, opts, o) {
-		jq(wgt.$n()).toggleClass(wgt.$s('open'), o);
-		if (opts && opts.sendOnOpen)
-			wgt.fire('onOpen', {open: o, value: wgt.getLabel()}, {rtags: {onOpen: 1}});
-	}
-	// called by open method
-	function _attachPopup(wgt, bListen) {
-		// just attach if not attached
-		if (!wgt._oldppclose) {
-			var pp = wgt.firstChild;
-			if (pp) {
-				var $pp = jq(pp),
-					wd = jq(wgt).width();
-				if ($pp.width() < wd) {
-					$pp.width(wd - zk(pp).padBorderWidth());
-
-					// popup onShow()
-					pp.fire(pp.firstChild);
-					var openInfo = pp._openInfo;
-					if (openInfo) {
-						pp.position.apply(pp, openInfo);
-						// B50-ZK-391
-						// should keep openInfo, maybe used in onResponse later.
-					}
-				}
+//called when user mouseout some element,
+//for prevent duplicate state change
+function _setCloseTimer(wgt: zul.wgt.Combobutton): void {
+	if (!wgt._tidclose)
+		wgt._tidclose = setTimeout(function () {
+			if (!wgt._bover) {
+				if (wgt._autodrop && wgt.isOpen())
+					wgt.close({sendOnOpen: true});
 			}
-			wgt._oldppclose = pp.close;
-			// listen to onmouseover and onmouseout events of popup child
-			if (bListen)
-				wgt.domListen_(pp, 'onMouseOver')
-					.domListen_(pp, 'onMouseOut');
+			wgt._tidclose = null;
+		}, 200);
+}
 
-			// override close function of popup widget for clear objects
-			pp.close = function (opts) {
-				wgt._oldppclose.apply(pp, arguments);
-				_fireOnOpen(wgt, opts, false);
+function _fireOnOpen(wgt: zul.wgt.Combobutton, opts: zul.wgt.PopupOptions, o: boolean): void {
+	jq(wgt.$n_()).toggleClass(wgt.$s('open'), o);
+	if (opts && opts.sendOnOpen)
+		wgt.fire('onOpen', {open: o, value: wgt.getLabel()}, {rtags: {onOpen: 1}});
+}
+// called by open method
+function _attachPopup(wgt: zul.wgt.Combobutton, bListen: boolean): void {
+	const pp = wgt.firstChild;
+	// just attach if not attached
+	if (!wgt._oldppclose && pp) {
+		const $pp = jq(pp),
+			wd = jq(wgt).width()!;
+		if ($pp.width()! < wd) {
+			$pp.width(wd - zk(pp).padBorderWidth());
 
-				if (bListen)
-					wgt.domUnlisten_(pp, 'onMouseOver')
-						.domUnlisten_(pp, 'onMouseOut');
-				pp.close = wgt._oldppclose;
-				delete wgt._oldppclose;
-			};
+			// If the width of combobutton is larger than that of its popup, resize the popup and its children.
+			zWatch.fireDown('onSize', pp);
+			const openInfo = pp._openInfo;
+			if (openInfo) {
+				pp.position.apply(pp, openInfo);
+				// B50-ZK-391
+				// should keep openInfo, maybe used in onResponse later.
+			}
 		}
+		wgt._oldppclose = pp.close;
+		// listen to onmouseover and onmouseout events of popup child
+		if (bListen)
+			wgt.domListen_(pp.$n_(), 'onMouseOver')
+				.domListen_(pp.$n_(), 'onMouseOut');
+
+		// override close function of popup widget for clear objects
+		pp.close = function (opts: zul.wgt.PopupOptions) {
+			wgt._oldppclose!.call(pp, opts);
+			_fireOnOpen(wgt, opts, false);
+
+			if (bListen)
+				wgt.domUnlisten_(pp.$n_(), 'onMouseOver')
+					.domUnlisten_(pp.$n_(), 'onMouseOut');
+			pp.close = wgt._oldppclose!;
+			delete wgt._oldppclose;
+		};
 	}
+}
+
 /**
  * A combo button. A combo button consists of a button ({@link zul.wgt.Combobutton}) and
  * a popup window ({@link zul.wgt.Popup}).
@@ -78,38 +76,66 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * @since 6.0.0
  * <p>Default {@link #getZclass}: z-combobutton.
  */
-zul.wgt.Combobutton = zk.$extends(zul.wgt.Button, {
-	$define: {
-		/** Returns whether to automatically drop the list if users is changing
-		 * this text box.
-		 * <p>Default: false.
-		 * @return boolean
-		 */
-		/** Sets whether to automatically drop the list if users is changing
-		 * this text box.
-		 * @param boolean autodrop
-		 */
-		autodrop: null,
-		/** Returns whether it is disabled.
-		 * <p>Default: false.
-		 * @return boolean
-		 */
-		/** Sets whether it is disabled.
-		 * If disabled is true, user cannot tab into the element.
-		 * @param boolean disabled
-		 */
-		disabled: function (v) {
+@zk.WrapClass('zul.wgt.Combobutton')
+export class Combobutton extends zul.wgt.Button {
+	public override firstChild!: zul.wgt.Popup | null;
+	public override lastChild!: zul.wgt.Popup | null;
+
+	public _autodrop?: boolean;
+	public _bover?: boolean;
+	public _tidclose?: number | null;
+	public _oldppclose?(opts?: zul.wgt.PopupOptions): void;
+
+	/** Returns whether to automatically drop the list if users is changing
+	 * this text box.
+	 * <p>Default: false.
+	 * @return boolean
+	 */
+	public isAutodrop(): boolean | undefined {
+		return this._autodrop;
+	}
+
+	/** Sets whether to automatically drop the list if users is changing
+	 * this text box.
+	 * @param boolean autodrop
+	 */
+	public setAutodrop(autodrop: boolean): this {
+		this._autodrop = autodrop;
+		return this;
+	}
+
+	/** Returns whether it is disabled.
+	 * <p>Default: false.
+	 * @return boolean
+	 */
+	public override isDisabled(): boolean | undefined {
+		return this._disabled;
+	}
+
+	/** Sets whether it is disabled.
+	 * If disabled is true, user cannot tab into the element.
+	 * @param boolean disabled
+	 */
+	public override setDisabled(v: boolean, opts?: Record<string, boolean>): this {
+		const o = this._disabled;
+		this._disabled = v;
+
+		if (o !== v || (opts && opts.force)) {
 			var n = this.$n();
 			if (n) {
 				jq(n).attr('disabled', v ? 'disabled' : null);
-				jq(n).attr('tabindex', v ? null : this._tabindex | 0);
+				jq(n).attr('tabindex', v ? null : this._tabindex! | 0);
 			}
 		}
-	},
-	getZclass: function () {
+
+		return this;
+	}
+
+	public override getZclass(): string {
 		return 'z-combobutton';
-	},
-	domContent_: function () {
+	}
+
+	protected override domContent_(): string {
 		var label = '<span id="' + this.uuid + '-txt" class="' + this.$s('text') + '">'
 			+ zUtl.encodeXML(this.getLabel()) + '</span>',
 			img = this.domImage_(),
@@ -122,27 +148,32 @@ zul.wgt.Combobutton = zk.$extends(zul.wgt.Button, {
 		var space = 'vertical' == this.getOrient() ? '<br/>' : ' ';
 		return this.getDir() == 'reverse' ?
 			label + space + img : img + space + label;
-	},
-	domImage_: function () {
+	}
+
+	protected override domImage_(): string {
 		var img = this._image;
 		return img ? '<img class="' + this.$s('image') + '" src="' + img + '" alt="" aria-hidden="true">' : '';
-	},
-	domClass_: function (no) {
-		var cls = this.$supers(zul.wgt.Combobutton, 'domClass_', arguments);
+	}
+
+	protected override domClass_(no?: zk.DomClassOptions): string {
+		var cls = super.domClass_(no);
 		if (!this._isDefault())
 			cls += ' z-combobutton-toolbar';
 		return cls;
-	},
-	_isDefault: function () {
+	}
+
+	private _isDefault(): boolean {
 		return this._mold == 'default';
-	},
+	}
+
 	/** Returns whether the list of combo items is open
 	 * @return boolean
 	 */
-	isOpen: function () {
+	public isOpen(): boolean | null | undefined {
 		var pp = this.firstChild;
 		return pp && pp.isOpen();
-	},
+	}
+
 	/** Drops down or closes the child popup ({@link zul.wgt.Popup})
 	 * ({@link zul.menu.Menupopup}, and fire onOpen if it is called with an Event.
 	 * @param boolean open
@@ -151,53 +182,57 @@ zul.wgt.Combobutton = zk.$extends(zul.wgt.Button, {
 	 * @see #open
 	 * @see #close
 	 */
-	setOpen: function (b, opts) {
+	public setOpen(b: boolean, opts?: zul.wgt.PopupOptions): void {
 		if (!this._disabled && !zk.animating())
 			// have to provide empty opts or menupopup will set sendOnOpen to true
 			this[b ? 'open' : 'close'](opts || {});
-	},
-	renderInner_: function (out) {
-		for (var w = this.firstChild; w; w = w.nextSibling)
+	}
+
+	protected renderInner_(out: string[]): void {
+		for (var w: zk.Widget | null = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
-	},
-	isTableLayout_: function () {
+	}
+
+	protected isTableLayout_(): boolean {
 		return true;
-	},
-	unbind_: function () {
-		var pp;
+	}
+
+	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+		var pp = this.firstChild?.$n();
 		// ZK-983
-		if ((pp = this.firstChild)
-			&& (pp = pp.$n()))
+		if (pp)
 			this.domUnlisten_(pp, 'onMouseOver')
 				.domUnlisten_(pp, 'onMouseOut');
-		this.$supers('unbind_', arguments);
-	},
-	doFocus_: function (evt) {
+		super.unbind_(skipper, after, keepRod);
+	}
+
+	protected override doFocus_(evt: zk.Event): void {
 		if (this == evt.target)
 			// not change style if mouse down in popup node
-			this.$supers('doFocus_', arguments);
-	},
+			super.doFocus_(evt);
+	}
 
 	/** Open the dropdown widget of the Combobutton.
 	 */
-	open: function (opts) {
+	public open(opts: zul.wgt.PopupOptions): void {
 		var pp = this.firstChild;
 		if (pp && !this.isOpen()) {
-			if (pp.$instanceof(zul.wgt.Popup)) {
+			if (pp instanceof zul.wgt.Popup) {
 				pp.open(this.uuid, null, 'after_start', opts);
 				_fireOnOpen(this, opts, true);
 			}
-			_attachPopup(this, !pp.$instanceof(zul.wgt.Menupopup));
+			_attachPopup(this, !(pp instanceof zul.menu.Menupopup));
 		}
-	},
+	}
+
 	/** Close the dropdown widget of the Combobutton.
 	 */
-	close: function (opts) {
+	public close(opts?: zul.wgt.PopupOptions): void {
 		if (this.isOpen())
-			this.firstChild.close(opts);
-	},
+			this.firstChild!.close(opts);
+	}
 
-	doClick_: function (evt) {
+	public override doClick_(evt: zk.Event): void {
 		var d = evt.domTarget;
 		// click will fired twice, one with dom target, another with undefined,
 		// see _fixClick in Button.js
@@ -209,45 +244,52 @@ zul.wgt.Combobutton = zk.$extends(zul.wgt.Button, {
 				if (this.$n('btn') == d || this.$n('icon') == d || !open)
 					this.setOpen(open, {sendOnOpen: true});
 				else
-					this.$supers('doClick_', arguments);
+					super.doClick_(evt);
 			}
 		}
-	},
-	doMouseDown_: function (evt) {
+	}
+
+	protected override doMouseDown_(evt: zk.Event): void {
 		if (this == evt.target)
 			// not change style if mouse down in popup node
-			this.$supers('doMouseDown_', arguments);
-	},
-	doMouseOver_: function (evt) {
+			super.doMouseDown_(evt);
+	}
+
+	protected override doMouseOver_(evt: zk.Event): void {
 		this._bover = true;
 		if (this == evt.target) {
 			var d = evt.domTarget;
 			// not change style and call open method if mouse over popup node
 			if (this._autodrop && (this.$n('btn') == d || this.$n('icon') == d) && !this.isOpen())
 				this.open({sendOnOpen: true});
-			this.$supers('doMouseOver_', arguments);
+			super.doMouseOver_(evt);
 		}
-	},
-	doMouseOut_: function (evt) {
+	}
+
+	protected override doMouseOut_(evt: zk.Event): void {
 		this._bover = false;
 		_setCloseTimer(this);
-		this.$supers('doMouseOut_', arguments);
-	},
-	_doMouseOver: function (evt) { //not zk.Widget.doMouseOver_
+		super.doMouseOut_(evt);
+	}
+
+	public _doMouseOver(evt: zk.Event): void { //not zk.Widget.doMouseOver_
 		// should not close popup if mouse out combobutton but over popup
 		this._bover = true;
-	},
-	_doMouseOut: function (evt) { //not zk.Widget.doMouseOut_
+	}
+
+	public _doMouseOut(evt: zk.Event): void { //not zk.Widget.doMouseOut_
 		// should close it if mouse out popup
 		this._bover = false;
 		_setCloseTimer(this);
-	},
-	doKeyDown_: function (evt) {
+	}
+
+	protected override doKeyDown_(evt: zk.Event): void {
 		this._doKeyDown(evt);
 		if (!evt.stopped)
-			this.$supers('doKeyDown_', arguments);
-	},
-	_doKeyDown: function (evt) { //support enter,space, arrow down, and escape
+			super.doKeyDown_(evt);
+	}
+
+	private _doKeyDown(evt: zk.Event): false | undefined { //support enter,space, arrow down, and escape
 		if (this.isDisabled()) {
 			return false;
 		}
@@ -259,36 +301,38 @@ zul.wgt.Combobutton = zk.$extends(zul.wgt.Button, {
 			this.fire('onClick');
 		} else if (keyCode == 27 && bOpen)
 			this.close();
-	},
-	focus_: function (timeout) { //support focus
+	}
+
+	public override focus_(timeout: number): boolean { //support focus
 		if (this.isDisabled())
 			return false;
 		if (!zk.focusBackFix || !this._upload) {
 			var self = this,
-				n = this.$n();
+				n = this.$n_();
 			zk.afterAnimate(function () {
 				try {
 					n.focus();
 					zk.currentFocus = self;
 					zjq.fixInput(n);
 				} catch (e) {
-					zk.debugLog(e.message || e);
+					zk.debugLog((e as Error).message || e as string);
 				}
 			}, timeout);
 		}
 		return true;
-	},
-	ignoreDescendantFloatUp_: function (des) {
-		return des && des.$instanceof(zul.wgt.Popup);
-	},
+	}
+
+	public override ignoreDescendantFloatUp_(des: zk.Widget): boolean {
+		return des && des instanceof zul.wgt.Popup;
+	}
+
 	// B60-ZK-1216
 	// Combobutton has problems with label-change if its popup did not close beforehand
 	// Override rerender should also work for the case of image-change
-	rerender: function (skipper) {
+	public override rerender(skipper?: zk.Skipper | number | null): void {
 		if (this.isOpen()) {
 			this.close();
 		}
-		this.$supers('rerender', arguments);
+		super.rerender(skipper);
 	}
-});
-})();
+}
