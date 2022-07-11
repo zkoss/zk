@@ -8,11 +8,7 @@ export * as med from './med';
 export * as menu from './menu';
 export * as mesh from './mesh';
 export * as sel from './sel';
-// export * as tab from './tab';
-export declare namespace tab {
-	class Tabbox extends zul.Widget { // zul.wgt.Toolbar
-	}
-}
+export * as tab from './tab';
 // export * as utl from './utl';
 export * as wgt from './wgt';
 export * as wnd from './wnd';
@@ -21,6 +17,7 @@ export as namespace zul;
 
 declare global {
 	interface HTMLElement {
+		_width?: string; // zul.tab.Tabs
 		_lastsz?: null | { // zul/mesh
 			width: number;
 			height: number;
