@@ -9,7 +9,7 @@ export * as menu from './menu';
 export * as mesh from './mesh';
 export * as sel from './sel';
 export * as tab from './tab';
-// export * as utl from './utl';
+export * as utl from './utl';
 export * as wgt from './wgt';
 export * as wnd from './wnd';
 export * from '.';
