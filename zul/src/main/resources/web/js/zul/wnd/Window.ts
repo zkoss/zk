@@ -434,8 +434,8 @@ export class Window extends zul.ContainerWidget {
 	public _lastfocus?: zk.Widget | null;
 	public _offset?: zk.Offset;
 
-	public constructor() {
-		super();
+	public constructor(props: Record<string, unknown>) {
+		super(props);
 		this._fellows = {};
 		this._lastSize = {};
 		// NOTE: Prior to TS migration, super is called after _fellows/_lastSize

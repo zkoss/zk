@@ -46,10 +46,10 @@ export interface DraggableOptions {
 	handle?: HTMLElement;
 	scroll?: DraggableScrollOptions | HTMLElement | Window;
 	overlay?: boolean;
-	ghosting?(dg: zk.Draggable, ofs: zk.Offset, evt: zk.Event): HTMLElement | undefined;
+	ghosting?(dg: Draggable, ofs: zk.Offset, evt: zk.Event): HTMLElement | undefined;
 	stackup?: boolean;
 	zIndex?: number;
-	snap?: ((dg: Draggable, offset: zk.Offset) => zk.Offset) | zk.Offset;
+	snap?: zk.Offset | ((dg: Draggable, offset: zk.Offset) => zk.Offset);
 }
 
 	var _dragging = {},
@@ -204,9 +204,15 @@ export class Draggable extends zk.Object {
 	declare public _orgcursor?: string; // zk.Widget.prototype.uncloneDrag_
 	declare public _zszofs?: number; // zul.mesh.HeaderWidget
 	declare public _zmin?: number; // zul.mesh.HeaderWidget
+
 	// zul.wnd.{Window, Panel}
 	declare public _wndoffs?: zk.Offset;
-	declare public z_szofs?: null | {top: string; left: string; width: string; height: string};
+	declare public z_szofs?: null | {
+		top: string;
+		left: string;
+		width: string;
+		height: string;
+	};
 	declare public z_dir?: number;
 	declare public z_orgzi?: string;
 	declare public z_box?: {
@@ -217,6 +223,29 @@ export class Draggable extends zk.Object {
 		minHeight: number;
 		minWidth: number;
 	};
+
+	// zul.layout.LayoutRegion
+	declare public _point?: zk.Offset | null;
+	declare public _rootoffs?: null | {
+		maxs: number;
+		left: number;
+		right: number;
+		top: number;
+		bottom: number;
+		mins: number;
+	};
+
+	// zul.WScroll
+	declare public _lastSteps: number;
+	declare public _timer: number;
+	declare public _epos?: HTMLElement | null;
+	declare public _scale: number;
+	declare public _endStep: number;
+	declare public _steps: number;
+	declare public _isVer: boolean;
+	declare public _start: number;
+	declare public _end: number;
+	declare public _lastPos?: number;
 	
 	private static _drags: Draggable[] = [];
 	/** The control object for this draggable.
@@ -398,6 +427,7 @@ String scroll; //DOM Element's ID</code></pre>
 	public opts: DraggableOptions;
 
 	public _dragImg?:
+		| null
 		| HTMLElement // zk.Widget.prototype.ghost
 		| JQuery<HTMLElement>; // zul/sel/ItemWidget and zul/sel/Listitem
 
@@ -645,7 +675,7 @@ String scroll; //DOM Element's ID</code></pre>
 			delete this._stackup;
 		}
 
-		var node = this.node as HTMLElement;
+		var node = this.node!;
 		if (this.opts.ghosting)
 			if (typeof this.opts.ghosting == 'function') {
 				if (this.opts.endghosting)
@@ -685,12 +715,12 @@ String scroll; //DOM Element's ID</code></pre>
 		if (this.opts.endeffect)
 			this.opts.endeffect(this, evt);
 
-		var wgt = this.control as Widget;
+		var wgt = this.control;
 		if (this.opts.fireOnMove && zk.Widget.isInstance(wgt)) {
 			if (d[0] != d2[0] || d[1] != d2[1]) {
 				wgt.fire('onMove', zk.copy({
-					left: (node as HTMLElement).style.left,
-					top: (node as HTMLElement).style.top
+					left: node.style.left,
+					top: node.style.top
 				}, evt.data), {ignorable: true});
 			}
 		}

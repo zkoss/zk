@@ -2168,6 +2168,8 @@ interface ZKVars {
 
 	// zul.Imagemap
 	IMAGEMAP_DONE_URI?: string;
+	// zul/dom
+	themeName?: string;
 }
 
 declare namespace _zk {

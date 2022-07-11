@@ -26,4 +26,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
  *
  */
 @zk.WrapClass('zul.ContainerWidget')
-export class ContainerWidget extends zul.Widget {}
+export class ContainerWidget extends zul.Widget {
+	public constructor(props?: Record<string, unknown> | typeof zkac) {
+		super(props);
+	}
+}

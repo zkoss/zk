@@ -1078,7 +1078,7 @@ export class Panel extends zul.Widget {
 			this.setTopmost();
 	}
 
-	private _initMove(cmp: void): void {
+	private _initMove(): void {
 		var handle = this.$n('head');
 		if (handle && !this._drag) {
 			jq(handle).addClass(this.$s('header-move'));

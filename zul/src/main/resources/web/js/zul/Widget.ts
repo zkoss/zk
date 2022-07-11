@@ -153,6 +153,10 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Widge
 	private _ctrlKeys?: string | null;
 	public _parsedCtlKeys?: ParsedCtlKeys | null;
 
+	public constructor(props?: Record<string, unknown> | typeof zkac) {
+		super(props);
+	}
+
 	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		// B70-ZK-2069: some widget need fire onScroll event, which has
