@@ -1216,7 +1216,7 @@ new zul.wnd.Window({
 	 * @see #getVflex
 	 * @param String flex the vertical flex hint.
 	 */
-	public setVflex(vflex: zk.StringFieldValue | boolean): void {
+	public setVflex(vflex: boolean | string | null | undefined): void {
 		if (this._vflex != vflex) {
 			this._vflex = vflex;
 			this.setVflex_(vflex);
@@ -1264,7 +1264,7 @@ new zul.wnd.Window({
 	 * @see #setVflex
 	 * @see #getHflex
 	 */
-	public setHflex(hflex: zk.StringFieldValue | boolean): void {
+	public setHflex(hflex: boolean | string | null | undefined): void {
 		if (this._hflex != hflex) {
 			this._hflex = hflex;
 			this.setHflex_(hflex);
