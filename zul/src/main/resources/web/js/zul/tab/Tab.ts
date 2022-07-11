@@ -14,130 +14,176 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
-(function () {
-
-	// ZK-886, called by unbind_ and rerender
-	// this._oldId used in tab.js
-	// this.$n() will be cleared during rerender
-	// but LinkedPanel.firstChild will not,
-	// the condition LinkedPanel.firstChild != this.$n()
-	// will get the wrong result
-	// delete it later for the invalidate() case
-	function _logId(wgt) {
-		if (!wgt._oldId) {
-			wgt._oldId = wgt.uuid;
-			setTimeout(function () {
-				delete wgt._oldId;
-			}, 0);
-		}
+// ZK-886, called by unbind_ and rerender
+// this._oldId used in tab.js
+// this.$n() will be cleared during rerender
+// but LinkedPanel.firstChild will not,
+// the condition LinkedPanel.firstChild != this.$n()
+// will get the wrong result
+// delete it later for the invalidate() case
+function _logId(wgt: zul.tab.Tab): void {
+	if (!wgt._oldId) {
+		wgt._oldId = wgt.uuid;
+		setTimeout(function () {
+			delete wgt._oldId;
+		}, 0);
 	}
+}
 /**
  * A tab.
  * <p>
  * Default {@link #getZclass}: z-tab.
  */
-zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
-	$init: function () {
-		this.$supers('$init', arguments);
+@zk.WrapClass('zul.tab.Tab')
+export class Tab extends zul.LabelImageWidget implements zul.LabelImageWidgetWithDisable {
+	public override parent!: zul.tab.Tabs | null;
+
+	public _oldId?: string;
+	private _closable?: boolean;
+	public _disabled?: boolean;
+
+	public constructor() {
+		super(); // FIXME: params?
 		this.listen({onClose: this}, -1000);
-	},
-	$define: {
-		/**
-		 * Returns whether this tab is closable. If closable, a button is displayed
-		 * and the onClose event is sent if an user clicks the button.
-		 * <p>
-		 * Default: false.
-		 * @return boolean
-		 */
-		/**
-		 * Sets whether this tab is closable. If closable, a button is displayed and
-		 * the onClose event is sent if an user clicks the button.
-		 * <p>
-		 * Default: false.
-		 * @param boolean closable
-		 */
-		closable: _zkf = function () {
+	}
+
+	/**
+	 * Returns whether this tab is closable. If closable, a button is displayed
+	 * and the onClose event is sent if an user clicks the button.
+	 * <p>
+	 * Default: false.
+	 * @return boolean
+	 */
+	public isClosable(): boolean | undefined {
+		return this._closable;
+	}
+
+	/**
+	 * Sets whether this tab is closable. If closable, a button is displayed and
+	 * the onClose event is sent if an user clicks the button.
+	 * <p>
+	 * Default: false.
+	 * @param boolean closable
+	 */
+	public setClosable(closable: boolean, opts?: Record<string, boolean>): this {
+		const o = this._closable;
+		this._closable = closable;
+
+		if (o !== closable || (opts && opts.force)) {
 			this.rerender();
-		},
-		image: function (v) {
-			if (v && this._preloadImag) zUtl.loadImage(v);
+		}
+
+		return this;
+	}
+
+	public override getImage(): string | undefined {
+		return this._image;
+	}
+
+	public override setImage(v: string, opts?: Record<string, boolean>): this {
+		const o = this._image;
+		this._image = v;
+
+		if (o !== v || (opts && opts.force)) {
+			if (v && this._preloadImage) zUtl.loadImage(v);
 			this.rerender();
-		},
-		/**
-		 * Returns whether this tab is disabled.
-		 * <p>
-		 * Default: false.
-		 * @return boolean
-		 */
-		/**
-		 * Sets whether this tab is disabled. If a tab is disabled, then it cann't
-		 * be selected or closed by user, but it still can be controlled by server
-		 * side program.
-		 * @param boolean disabled
-		 */
-		disabled: _zkf
-	},
+		}
+
+		return this;
+	}
+
+	/**
+	 * Returns whether this tab is disabled.
+	 * <p>
+	 * Default: false.
+	 * @return boolean
+	 */
+	public isDisabled(): boolean | undefined {
+		return this._disabled;
+	}
+
+	/**
+	 * Sets whether this tab is disabled. If a tab is disabled, then it cann't
+	 * be selected or closed by user, but it still can be controlled by server
+	 * side program.
+	 * @param boolean disabled
+	 */
+	public setDisabled(disabled: boolean, opts?: Record<string, boolean>): this {
+		const o = this._disabled;
+		this._disabled = disabled;
+
+		if (o !== disabled || (opts && opts.force)) {
+			this.rerender();
+		}
+
+		return this;
+	}
+
 	/**
 	 * Returns whether this tab is selected.
 	 * @return boolean
 	 */
-	isSelected: function () {
+	public isSelected(): boolean | null {
 		var tabbox = this.getTabbox();
 		return tabbox && tabbox.getSelectedTab() == this;
-	},
+	}
+
 	/**
 	 * Sets whether this tab is selected.
 	 * @param boolean selected
 	 */
-	setSelected: function (selected, fromServer) {
+	public setSelected(selected: boolean, fromServer?: boolean): void {
 		var tabbox = this.getTabbox();
 		if (tabbox && selected) {
 			tabbox.setSelectedTab(this, fromServer);
 		}
-	},
+	}
+
 	/**
 	 * Returns the tabbox owns this component.
-	 * @return Tabbox
+	 * @return zul.tab.Tabbox
 	 */
-	getTabbox: function () {
+	public getTabbox(): zul.tab.Tabbox | null {
 		return this.parent ? this.parent.parent : null;
-	},
+	}
+
 	/**
 	 * Returns the index of this panel, or -1 if it doesn't belong to any tabs.
 	 * @return int
 	 */
-	getIndex: function () {
+	public getIndex(): number {
 		return this.getChildIndex();
-	},
+	}
+
 	/**
 	 * Returns the panel associated with this tab.
-	 * @return Tabpanel
+	 * @return zul.tab.Tabpanel
 	 */
-	getLinkedPanel: function () {
-		var w;
-		return (w = this.getTabbox()) && (w = w.getTabpanels()) ?
-			w.getChildAt(this.getIndex()) : null;
-	},
-	_doCloseClick: function (evt) {
+	public getLinkedPanel(): zul.tab.Tabpanel | undefined {
+		return this.getTabbox()?.getTabpanels()?.getChildAt<zul.tab.Tabpanel>(this.getIndex());
+	}
+
+	public _doCloseClick(evt: zk.Event): void {
 		if (!this._disabled) {
 			this.fire('onClose');
 			evt.stop();
 		}
-	},
-	_sel: function (toSel, notify) {
+	}
+
+	public _sel(toSel: boolean, notify: boolean): void {
 		var tabbox = this.getTabbox();
 
 		/* ZK-1441
-		 * If tabbox is animating (end-user click different tabs quickly), ignore this action.
-		 */
+			* If tabbox is animating (end-user click different tabs quickly), ignore this action.
+			*/
 		if (!tabbox || tabbox._animating) return;
 
 		var panel = this.getLinkedPanel(),
 			inAccordion = tabbox.inAccordionMold();
 
 		if (toSel) {
-			var ps;
-			if (ps = tabbox.tabpanels) {
+			const ps = tabbox.tabpanels;
+			if (ps) {
 				if (ps._selPnl && ps._selPnl != panel) ps._selPnl._sel(false, inAccordion);
 				ps._selPnl = panel; //stored in tabpanels
 			}
@@ -161,64 +207,69 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 
 		if (toSel) {
 			if (tabbox.isVertical())
-				tabs._scrollcheck('vsel', this);
+				this.parent?._scrollcheck('vsel', this);
 			else if (!tabbox.inAccordionMold())
-				tabs._scrollcheck('sel', this);
+				this.parent?._scrollcheck('sel', this);
 		}
 
 		if (notify)
 			this.fire('onSelect', {items: [this], reference: this});
-	},
-	setHeight: function (height) {
-		this.$supers('setHeight', arguments);
+	}
+
+	public override setHeight(height: string | null): void {
+		super.setHeight(height);
 		if (this.desktop) {
 			this._calcHgh();
-			zUtl.fireSized(this.parent);
+			zUtl.fireSized(this.parent!);
 		}
-	},
-	setWidth: function (width) {
-		this.$supers('setWidth', arguments);
+	}
+
+	public override setWidth(width: string | null): void {
+		super.setWidth(width);
 		if (this.desktop)
-			zUtl.fireSized(this.parent);
-	},
-	_calcHgh: function () {
-		var tabbox = this.getTabbox();
+			zUtl.fireSized(this.parent!);
+	}
+
+	private _calcHgh(): void {
+		var tabbox = this.getTabbox()!;
 
 		if (!tabbox.isVertical()) {
 			var r = tabbox.$n('right'),
 				l = tabbox.$n('left'),
-				tb = tabbox.toolbar,
-				tabs = tabbox.tabs.$n(),
+				tb = tabbox.toolbar?.$n(),
+				tabs = tabbox.tabs!.$n(),
 				hgh = jq.px0(tabs ? tabs.offsetHeight : 0);
 
 			if (r && l) {
 				r.style.height = l.style.height = hgh;
 			}
-			if (tb && (tb = tb.$n())) {
+			if (tb) {
 				tb.style.height = hgh;
 			}
 		}
-	},
+	}
+
 	//protected
-	doClick_: function (evt) {
+	public override doClick_(evt: zk.Event, popupOnly?: boolean): void {
 		if (this._disabled) return;
 		/* ZK-1441
 		 * If tabbox is animating (end-user click different tabs quickly), ignore this action.
 		 */
-		var tabbox = this.getTabbox();
-		if (tabbox && tabbox._animating) return;
+		if (this.getTabbox()?._animating) return;
 		this.setSelected(true);
-		this.$supers('doClick_', arguments);
-	},
-	domClass_: function (no) {
-		var scls = this.$supers('domClass_', arguments);
+		super.doClick_(evt, popupOnly);
+	}
+
+	protected override domClass_(no?: zk.DomClassOptions): string {
+		var scls = super.domClass_(no);
 		if (!no || !no.zclass) {
 			if (this.isDisabled()) scls += ' ' + this.$s('disabled');
 			if (this.isSelected()) scls += ' ' + this.$s('selected');
 		}
 		return scls;
-	},
-	domContent_: function () {
+	}
+
+	protected override domContent_(): string {
 		var label = zUtl.encodeXML(this.getLabel()),
 			img = this.getImage(),
 			iconSclass = this.domIcon_();
@@ -231,19 +282,22 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 			img = '<img src="' + img + '" class="' + this.$s('image') + '" alt="" aria-hidden="true"/>'
 			+ (iconSclass ? ' ' + iconSclass : '');
 		return label ? img + ' ' + label : img;
-	},
+	}
+
 	//bug #3014664
-	setVflex: function (v) { //vflex ignored for Tab
+	public override setVflex(v: boolean | string | null | undefined): void { //vflex ignored for Tab
 		if (v != 'min') v = false;
-		this.$supers('setVflex', arguments);
-	},
+		super.setVflex(v);
+	}
+
 	//bug #3014664
-	setHflex: function (v) { //hflex ignored for Tab
+	public override setHflex(v: boolean | string | null | undefined): void { //hflex ignored for Tab
 		if (v != 'min') v = false;
-		this.$supers('setHflex', arguments);
-	},
-	bind_: function (desktop, skipper, after) {
-		this.$supers(zul.tab.Tab, 'bind_', arguments);
+		super.setHflex(v);
+	}
+
+	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+		super.bind_(desktop, skipper, after);
 		var closebtn = this.isClosable() ? this.$n('cls') : null;
 		if (closebtn) {
 			this.domListen_(closebtn, 'onClick', '_doCloseClick');
@@ -252,48 +306,52 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 			this._calcHgh();
 
 		//ZK-3016 make sure parent always do scrollCheck on child bind
-		this.parent._shallCheck = true;
-	},
-	unbind_: function () {
+		this.parent!._shallCheck = true;
+	}
+
+	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		var closebtn = this.$n('cls');
 		// ZK-886
 		_logId(this);
 		if (closebtn) {
 			this.domUnlisten_(closebtn, 'onClick', '_doCloseClick');
 		}
-		this.$supers(zul.tab.Tab, 'unbind_', arguments);
-	},
+		super.unbind_(skipper, after, keepRod);
+	}
+
 	//event handler//
-	onClose: function () {
-		if (this.getTabbox().inAccordionMold()) {
-			this.getTabbox()._syncSize();
+	public onClose(): void {
+		if (this.getTabbox()!.inAccordionMold()) {
+			this.getTabbox()!._syncSize();
 		}
-	},
-	deferRedrawHTML_: function (out) {
-		var tbx = this.getTabbox(),
-			tag = tbx.inAccordionMold() ? 'div' : 'li';
-		out.push('<', tag, this.domAttrs_({domClass: 1}), ' class="z-renderdefer"></', tag, '>');
-	},
-	rerender: function (skipper) {
+	}
+
+	protected override deferRedrawHTML_(out: string[]): void {
+		const tag = this.getTabbox()!.inAccordionMold() ? 'div' : 'li';
+		out.push('<', tag, this.domAttrs_({domClass: true}), ' class="z-renderdefer"></', tag, '>');
+	}
+
+	public override rerender(skipper?: number | zk.Skipper | null): void {
 		// ZK-886
 		if (this.desktop)
 			_logId(this);
-		this.$supers(zul.tab.Tab, 'rerender', arguments);
-	},
-	contentRenderer_: function (out) {
+		super.rerender(skipper);
+	}
+
+	protected contentRenderer_(out: string[]): void {
 		out.push('<span id="', this.uuid, '-cnt" class="', this.$s('text'), '">', this.domContent_(), '</span>');
 	}
-});
+}
 /** @class zul.tab.TabRenderer
  * The renderer used to render a Tab.
  * It is designed to be overriden
  * @since 5.0.5
  */
-zul.tab.TabRenderer = {
+export let TabRenderer = {
 	/** Check the Tab whether to render the frame
 	 */
-	isFrameRequired: function () {
+	isFrameRequired(): boolean {
 		return false;
 	}
 };
-})();
+zul.tab.TabRenderer = TabRenderer;

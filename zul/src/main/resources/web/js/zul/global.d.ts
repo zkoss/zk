@@ -17,6 +17,7 @@ export as namespace zul;
 
 declare global {
 	interface HTMLElement {
+		_width?: string; // zul.tab.Tabs
 		_lastsz?: null | { // zul/mesh
 			width: number;
 			height: number;
