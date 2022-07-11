@@ -28,5 +28,12 @@ zul.sel.Treecols = zk.$extends(zul.mesh.HeadWidget, {
 			this.$supers('setVisible', arguments);
 			this.getTree().rerender();
 		}
+	},
+	beforeChildAdded_: function (child, insertBefore) {
+		if (!child.$instanceof(zul.sel.Treecol)) {
+			zk.error('Unsupported child for treecols: ' + child.className);
+			return false;
+		}
+		return true;
 	}
 });

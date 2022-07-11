@@ -23,6 +23,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * @since 6.0.0
  */
 zul.layout.Absolutelayout = zk.$extends(zul.Widget, {
+	beforeChildAdded_: function (child, insertBefore) {
+		if (!child.$instanceof(zul.layout.Absolutechildren)) {
+			zk.error('Unsupported child for Absolutelayout: ' + child.className);
+			return false;
+		}
+		return true;
+	}
 }, {
 	redraw: function (out) {
 		out.push('<div ', this.domAttrs_(), '>');

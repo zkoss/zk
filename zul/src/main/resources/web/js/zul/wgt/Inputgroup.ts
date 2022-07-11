@@ -86,6 +86,13 @@ zul.wgt.Inputgroup = zk.$extends(zul.Widget, {
 			w.redraw(out);
 		}
 		if (!opts.out) return out.join('');
+	},
+	beforeChildAdded_(child, insertBefore) {
+		if (!child.$instanceof(zul.wgt.Label) && !child.$instanceof(zul.inp.InputWidget) && !child.$instanceof(zul.LabelImageWidget)) {
+			zk.error('Unsupported child for Inputgroup: ' + child.className);
+			return false;
+		}
+		return true;
 	}
 });
 })();

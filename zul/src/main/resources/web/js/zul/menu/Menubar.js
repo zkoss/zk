@@ -120,6 +120,13 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 	onSize: function () {
 		this._checkScrolling();
 	},
+	beforeChildAdded_: function (child, insertBefore) {
+		if (!child.$instanceof(zul.menu.Menu) && !child.$instanceof(zul.menu.Menuitem) && !child.$instanceof(zul.menu.Menuseparator)) {
+			zk.error('Unsupported child for menubar: ' + child.className);
+			return false;
+		}
+		return true;
+	},
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
 		this._checkScrolling();

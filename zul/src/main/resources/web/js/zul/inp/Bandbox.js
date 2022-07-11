@@ -87,5 +87,16 @@ zul.inp.Bandbox = zk.$extends(zul.inp.ComboWidget, {
 	doFocus_: function (evt) {
 		var target = evt.domTarget;
 		if (!(target != this.getInputNode() && target != this.$n('btn'))) this.$supers('doFocus_', arguments);
+	},
+	beforeChildAdded_: function (child, insertBefore) {
+		if (!child.$instanceof(zul.inp.Bandpopup)) {
+			zk.error('Unsupported child for Bandbox: ' + child.className);
+			return false;
+		}
+		if (this.firstChild) {
+			zk.error('At most one bandpopup is allowed, ' + this.className);
+			return false;
+		}
+		return true;
 	}
 });

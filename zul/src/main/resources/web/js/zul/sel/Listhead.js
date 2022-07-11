@@ -26,5 +26,12 @@ zul.sel.Listhead = zk.$extends(zul.mesh.ColumnMenuWidget, {
 	},
 	getGroupPackage_: function () {
 		return 'zkex.sel';
+	},
+	beforeChildAdded_: function (child, insertBefore) {
+		if (!child.$instanceof(zul.sel.Listheader)) {
+			zk.error('Unsupported child for listhead: ' + child.className);
+			return false;
+		}
+		return true;
 	}
 });

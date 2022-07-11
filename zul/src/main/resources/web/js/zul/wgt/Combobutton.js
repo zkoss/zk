@@ -289,6 +289,17 @@ zul.wgt.Combobutton = zk.$extends(zul.wgt.Button, {
 			this.close();
 		}
 		this.$supers('rerender', arguments);
+	},
+	beforeChildAdded_: function (child, insertBefore) {
+		if (!child.$instanceof(zul.wgt.Popup)) {
+			zk.error('Unsupported child for Combobutton: ' + child.className);
+			return false;
+		}
+		if (this.firstChild) {
+			zk.error('At most one popup is allowed, ' + this.className);
+			return false;
+		}
+		return true;
 	}
 });
 })();

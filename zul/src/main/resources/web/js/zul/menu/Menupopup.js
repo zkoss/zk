@@ -540,6 +540,13 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		}
 		return null;
 	},
+	beforeChildAdded_: function (child, insertBefore) {
+		if (!child.$instanceof(zul.menu.Menuitem) && !child.$instanceof(zul.menu.Menuseparator) && !child.$instanceof(zul.menu.Menu)) {
+			zk.error('Unsupported child for menupopup: ' + child.className);
+			return false;
+		}
+		return true;
+	}
 }, {
 	_rmActive: function (wgt) {
 		if (wgt.parent.$instanceof(zul.menu.Menu)) {

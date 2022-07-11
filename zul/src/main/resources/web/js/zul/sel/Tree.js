@@ -128,6 +128,51 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 	beforeChildReplaced_: function (oldc, newc) {
 		this._fixOnAdd(newc, true, true);
 	},
+	beforeChildAdded_: function (child, insertBefore) {
+		if (child.$instanceof(zul.sel.Treecols)) {
+			if (this.treecols && this.treecols != child) {
+				zk.error('Only one treecols is allowed: ' + this.className);
+				return false;
+			}
+		} else if (child.$instanceof(zul.sel.Treefoot)) {
+			if (this.treefoot && this.treefoot != child) {
+				zk.error('Only one treefoot is allowed: ' + this.className);
+				return false;
+			}
+		} else if (child.$instanceof(zul.mesh.Frozen)) {
+			if (this.frozen && this.frozen != child) {
+				zk.error('Only one frozen child is allowed: ' + this.className);
+				return false;
+			}
+		} else if (child.$instanceof(zul.sel.Treechildren)) {
+			if (this.treechildren && this.treechildren != child) {
+				zk.error('Only one treechildren is allowed: ' + this.className);
+				return false;
+			}
+		} else if (child.$instanceof(zul.mesh.Paging)) {
+			if (this.getPaginal()) {
+				zk.error('External paging cannot coexist with child paging, ' + this.className);
+				return false;
+			}
+			if (this.paging && this.paging != child) {
+				zk.error('Only one paging is allowed: ' + this.className);
+				return false;
+			}
+			if (this.getMold() != 'paging') {
+				zk.error('The child paging is allowed only in the paging mold, ' + this.className);
+				return false;
+			}
+		} else if (child.$instanceof(zul.grid.Foot)) {
+			if (this.foot && this.foot != child) {
+				zk.error('Only one foot child is allowed: ' + this.className);
+				return false;
+			}
+		} else if (!child.$instanceof(zul.mesh.Auxhead)) {
+			zk.error('Unsupported newChild: ' + child.className);
+			return false;
+		}
+		return true;
+	},
 	onChildRemoved_: function (child) {
 		this.$supers('onChildRemoved_', arguments);
 

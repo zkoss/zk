@@ -215,6 +215,13 @@ zul.med.Audio = zk.$extends(zul.Widget, {
 			}
 		}
 		return 'audio/' + type;
+	},
+	beforeChildAdded_: function (child, insertBefore) {
+		if (!child.$instanceof(zul.med.Track)) {
+			zk.error('Unsupported child for audio: ' + child.className);
+			return false;
+		}
+		return true;
 	}
 });
 })();

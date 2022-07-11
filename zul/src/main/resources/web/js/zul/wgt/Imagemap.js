@@ -46,6 +46,13 @@ zul.wgt.Imagemap = zk.$extends(zul.wgt.Image, {
 	getCaveNode: function () {
 		return this.$n('map');
 	},
+	beforeChildAdded_: function (child, insertBefore) {
+		if (!child.$instanceof(zul.wgt.Area)) {
+			zk.error('Unsupported child for imagemap: ' + child.className);
+			return false;
+		}
+		return true;
+	},
 	onChildAdded_: function () {
 		this.$supers('onChildAdded_', arguments);
 		if (this.desktop && this.firstChild == this.lastChild) //first child

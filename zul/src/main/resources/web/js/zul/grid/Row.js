@@ -265,6 +265,15 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 			style += ' vertical-align:' + this._valign + ';';
 		return group && !group.isOpen() ? style + 'display:none;' : style;
 	},
+	beforeChildAdded_: function (child, insertBefore) {
+		if (zk.isLoaded('zkex.grid') && child.$instanceof(zkex.grid.Detail)) {
+			if (this.detail && this.detail != child) {
+				zk.error('Only one detail is allowed: ' + this.className);
+				return false;
+			}
+		}
+		return true;
+	},
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
 		if (child.$instanceof(zul.grid.Detail))

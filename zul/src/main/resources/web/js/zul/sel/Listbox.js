@@ -533,6 +533,62 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 					return null; //ignore it since it is going to be removed
 			return wx;
 		});
+	},
+	beforeChildAdded_: function (child, insertBefore) {
+		if (!child.$instanceof(zkex.layout.Columnchildren)) {
+			zk.error('Unsupported child for Columnlayout: ' + child.className);
+			return false;
+		}
+		if (child.$instanceof(zul.sel.Listitem)) {
+			if (_isListgroup(child)) {
+				if (!this.hasGroup()) {
+					zk.error('Listgroupfoot cannot exist alone, you have to add a Listgroup first');
+					return false;
+				}
+				if (!insertBefore && this.lastChild.$instanceof(zkex.sel.Listgroupfoot)) {
+					zk.error('Only one Listgroupfoot is allowed per Listgroup');
+					return false;
+				}
+			}
+		} else if (child.$instanceof(zul.sel.Listhead)) {
+			if (this.listhead && this.listhead != child) {
+				zk.error('Only one listhead is allowed: ' + this.className);
+				return false;
+			}
+		} else if (child.$instanceof(zul.mesh.Frozen)) {
+			if (this.frozen && this.frozen != child) {
+				zk.error('Only one frozen child is allowed: ' + this.className);
+				return false;
+			}
+			if (this.inSelectMold()) {
+				zk.warn('Mold select ignores frozen');
+			}
+		} else if (child.$instanceof(zul.sel.Listfoot)) {
+			if (this.listfoot && this.listfoot != child) {
+				zk.error('Only one listfoot is allowed: ' + this.className);
+				return false;
+			}
+			if (this.inSelectMold()) {
+				zk.warn('Mold select ignores listfoot');
+			}
+		} else if (child.$instanceof(zul.mesh.Paging)) {
+			if (this.paging && this.paging != child) {
+				zk.error('Only one paging is allowed: ' + this.className);
+				return false;
+			}
+			if (this.getPaginal()) {
+				zk.error('External paging cannot coexist with child paging, ' + this.className);
+				return false;
+			}
+			if (this.getMold() != 'paging') {
+				zk.error('The child paging is allowed only in the paging mold, ' + this.className);
+				return false;
+			}
+		} else if (!child.$instanceof(zul.mesh.Auxhead)) {
+			zk.error('Unsupported child for Listbox: ' + child.className);
+			return false;
+		}
+		return true;
 	}
 });
 /**

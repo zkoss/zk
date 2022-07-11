@@ -1494,6 +1494,9 @@ wgt.$f().main.setTitle("foo");
 	 * @see #insertBefore
 	 */
 	appendChild: function (child, ignoreDom) {
+		if (!this.beforeChildAdded_(child)) {
+			return false;
+		}
 		if (child == this.lastChild)
 			return false;
 
@@ -1564,6 +1567,9 @@ wgt.$f().main.setTitle("foo");
 	 * @see #appendChild(zk.Widget)
 	 */
 	insertBefore: function (child, sibling, ignoreDom) {
+		if (!this.beforeChildAdded_(child, sibling)) {
+			return false;
+		}
 		if (!sibling || sibling.parent != this) {
 			this.insertingBefore_ = true;
 			try {
@@ -2048,6 +2054,20 @@ wgt.$f().main.setTitle("foo");
 		}
 		if (opts && opts.visibility)
 			n.style.visibility = visible ? 'visible' : 'hidden';
+	},
+	/** Called before adding a child.
+	 * If a widget accepts only certain types of children, it shall
+	 * override this method and return false for an illegal child.
+	 *
+	 * @param zk.Widget the child to be added (never null).
+	 * @param zk.Widget another child widget that the new child
+	 * will be inserted before it. If null, the new child will be the
+	 * last child.
+	 * @return boolean whether the widget was able to added.
+	 * @since 10.0.0
+	 */
+	beforeChildAdded_: function (child: zk.Widget, insertBefore?: zk.Widget) {
+		return true; //to be overridden
 	},
 	/** A callback called after a child has been added to this widget.
 	 * <p>Notice: when overriding this method, {@link #onChildReplaced_}

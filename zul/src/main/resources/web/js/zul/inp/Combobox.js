@@ -556,5 +556,12 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 			return zkn.textWidth(wgt.getLabel()) + zkn.padBorderWidth();
 		}
 		return result;
+	},
+	beforeChildAdded_: function (child, insertBefore) {
+		if (!child.$instanceof(zul.inp.Comboitem)) {
+			zk.error('Unsupported child for Combobox: ' + child.className);
+			return false;
+		}
+		return true;
 	}
 });

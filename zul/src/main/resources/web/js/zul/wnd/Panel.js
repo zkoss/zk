@@ -984,6 +984,47 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		}
 		return scls;
 	},
+	beforeChildAdded_: function (child, insertBefore) {
+		if (child.$instanceof(zul.wgt.Caption)) {
+			if (this.caption && this.caption != child) {
+				zk.error('Only one caption is allowed: ' + this.className);
+				return false;
+			}
+		} else if (insertBefore.$instanceof(zul.wgt.Caption)) {
+			zk.error('caption must be the first child, ' + this.className);
+			return false;
+		} else if (child.$instanceof(zul.wnd.Panelchildren)) {
+			if (this.panelchildren && this.panelchildren != child) {
+				zk.error('Only one panelchildren child is allowed: ' + this.className);
+				return false;
+			}
+		} else if (child.$instanceof(zul.wgt.Toolbar)) {
+			if (insertBefore.$instanceof(zul.wnd.Panelchildren) || (!insertBefore && this.nChildren == 0)) {
+				if (this.tbar && this.tbar != child) {
+					zk.error('Only one top toolbar child is allowed: ' + this.className);
+					return false;
+				}
+			} else if (!insertBefore || insertBefore == this.fbar) {
+				if (this.bbar != null && this.bbar != child) {
+					if (insertBefore != null && insertBefore == this.fbar) {
+						zk.error('Only one bottom toolbar child is allowed: ' + this.className);
+						return false;
+					}
+					if (this.fbar != null && this.fbar != child) {
+						zk.error('Only one foot toolbar child is allowed: ' + this.className);
+						return false;
+					}
+				}
+			} else {
+				zk.error('Only three toolbars child is allowed: ' + this.className);
+				return false;
+			}
+		} else {
+			zk.error('Unsupported child for Panel: ' + child.className);
+			return false;
+		}
+		return true;
+	},
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
 		if (child.$instanceof(zul.wgt.Caption))

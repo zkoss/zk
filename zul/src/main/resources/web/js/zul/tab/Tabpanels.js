@@ -60,6 +60,13 @@ zul.tab.Tabpanels = zk.$extends(zul.Widget, {
 		zWatch.unlisten({onResponse: this});
 		this.$supers(zul.tab.Tabpanels, 'unbind_', arguments);
 	},
+	beforeChildAdded_: function (child, insertBefore) {
+		if (!child.$instanceof(zul.tab.Tabpanel)) {
+			zk.error('Unsupported child for tabpanels: ' + child.className);
+			return false;
+		}
+		return true;
+	},
 	onChildRemoved_: function (child) {
 		this.$supers('onChildRemoved_', arguments);
 		this._shallSync = true;

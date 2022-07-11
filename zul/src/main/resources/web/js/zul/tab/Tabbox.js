@@ -384,6 +384,32 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 		if (this.desktop)
 			this._shallSize = true;
 	},
+	beforeChildAdded_: function (child, insertBefore) {
+		if (child.$instanceof(zul.wgt.Toolbar)) {
+			if (this.toolbar && this.toolbar != child) {
+				zk.error('Only one Toolbar is allowed: ' + this.className);
+				return false;
+			}
+			if (this.isVertical()) {
+				zk.error('Toolbar is allowed only when the tabbox is horizontal. ' + this.className);
+				return false;
+			}
+		} else if (child.$instanceof(zul.tab.Tabs)) {
+			if (this.tabs && this.tabs != child) {
+				zk.error('Only one tabs is allowed: ' + this.className);
+				return false;
+			}
+		} else if (child.$instanceof(zul.tab.Tabpanels)) {
+			if (this.tabpanels && this.tabpanels != child) {
+				zk.error('Only one tabpanels is allowed: ' + this.className);
+				return false;
+			}
+		} else {
+			zk.error('Unsupported child for tabbox: ' + child.className);
+			return false;
+		}
+		return true;
+	},
 	//super//
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);

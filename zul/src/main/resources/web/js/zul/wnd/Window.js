@@ -1091,6 +1091,18 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 			this._shallSize = true;
 		}
 	},
+	beforeChildAdded_: function (child, insertBefore) {
+		if (child.$instanceof(zul.wgt.Caption)) {
+			if (this.caption && this.caption != child) {
+				zk.error('Only one caption is allowed: ' + this.className);
+				return false;
+			}
+		} else if (insertBefore.$instanceof(zul.wgt.Caption)) {
+			zk.error('caption must be the first child: ' + this.className);
+			return false;
+		}
+		return true;
+	},
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
 		if (child.$instanceof(zul.wgt.Caption)) {

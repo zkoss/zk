@@ -282,6 +282,19 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	},
 	contentRenderer_: function (out) {
 		out.push('<span id="', this.uuid, '-cnt" class="', this.$s('text'), '">', this.domContent_(), '</span>');
+	},
+	beforeChildAdded_: function (child, insertBefore) {
+		let firstChild = this.firstChild;
+		if (child.$instanceof(zul.wgt.Caption)) { //caption is always the first child (if exist)
+			if (firstChild && firstChild.instanceof(zul.wgt.Caption) && firstChild != child) {
+				zk.error('Only one caption is allowed: ' + this.className);
+				return false;
+			}
+		} else if (!child.$instanceof(zul.wgt.Label)) {
+			zk.error('Only caption is allowed: ' + this.className);
+			return false;
+		}
+		return true;
 	}
 });
 /** @class zul.tab.TabRenderer

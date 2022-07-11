@@ -37,5 +37,12 @@ zul.sel.Treefoot = zk.$extends(zul.Widget, {
 	},
 	deferRedrawHTML_: function (out) {
 		out.push('<tr', this.domAttrs_({domClass: 1}), ' class="z-renderdefer"></tr>');
+	},
+	beforeChildAdded_: function (child, insertBefore) {
+		if (!child.$instanceof(zul.sel.Treefooter)) {
+			zk.error('Unsupported child for treefoot: ' + child.className);
+			return false;
+		}
+		return true;
 	}
 });

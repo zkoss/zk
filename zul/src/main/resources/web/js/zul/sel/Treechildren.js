@@ -85,6 +85,13 @@ zul.sel.Treechildren = zk.$extends(zul.Widget, {
 	isRealElement: function () {
 		return false; // fixed for ZK Client selector issue
 	},
+	beforeChildAdded_: function (child, insertBefore) {
+		if (!child.$instanceof(zul.sel.Treeitem)) {
+			zk.error('Unsupported child for treechildren: ' + child.className);
+			return false;
+		}
+		return true;
+	},
 	//@Override
 	insertBefore: function (child, sibling, ignoreDom) {
 		var oldsib = _prevsib(child);

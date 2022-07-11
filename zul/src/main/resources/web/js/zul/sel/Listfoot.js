@@ -37,5 +37,12 @@ zul.sel.Listfoot = zk.$extends(zul.Widget, {
 	},
 	deferRedrawHTML_: function (out) {
 		out.push('<tr', this.domAttrs_({domClass: 1}), ' class="z-renderdefer"></tr>');
+	},
+	beforeChildAdded_: function (child, insertBefore) {
+		if (!child.$instanceof(zul.sel.Listfooter)) {
+			zk.error('Unsupported child for listfoot: ' + child.className);
+			return false;
+		}
+		return true;
 	}
 });

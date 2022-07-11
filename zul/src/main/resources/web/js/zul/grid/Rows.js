@@ -129,6 +129,25 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 		}
 		this._shallStripe = false;
 	},
+	beforeChildAdded_: function (child, insertBefore) {
+		if (!child.$instanceof(zul.grid.Row)) {
+			zk.error('Unsupported child for rows: ' + child.className);
+			return false;
+		}
+		if (zk.isLoaded('zkex.grid') && child.$instanceof(zkex.grid.Groupfoot)) {
+			if (!this.hasGroup()) {
+				zk.error('Groupfoot cannot exist alone, you have to add a Group first, ' + this.className);
+				return false;
+			}
+			if (!insertBefore) {
+				if (this.lastChild && this.lastChild.$instanceof(zkex.grid.Groupfoot)) {
+					zk.error('Only one Groupfoot is allowed per Group, ' + this.className);
+					return false;
+				}
+			}
+		}
+		return true;
+	},
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
 		if (_isPE() && child.$instanceof(zkex.grid.Group))

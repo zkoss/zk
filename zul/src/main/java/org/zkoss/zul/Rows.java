@@ -279,7 +279,7 @@ public class Rows extends XulElement {
 				throw new UiException("Groupfoot cannot exist alone, you have to add a Group first");
 			if (refChild == null) {
 				if (getLastChild() instanceof Groupfoot)
-					throw new UiException("Only one Goupfooter is allowed per Group");
+					throw new UiException("Only one Groupfoot is allowed per Group");
 			}
 		}
 		super.beforeChildAdded(child, refChild);

@@ -56,6 +56,13 @@ zul.sel.Treerow = zk.$extends(zul.Widget, {
 		return ((this.parent && !this.parent._isRealVisible() && this.isVisible()) ?
 				'display:none;' : '') + this.$supers('domStyle_', arguments);
 	},
+	beforeChildAdded_: function (child, insertBefore) {
+		if (!child.$instanceof(zul.sel.Treecell)) {
+			zk.error('Unsupported child for tree row: ' + child.className);
+			return false;
+		}
+		return true;
+	},
 	//@Override
 	removeChild: function (child) {
 		for (var w = child.firstChild; w;) {

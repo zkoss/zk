@@ -33,5 +33,12 @@ zul.mesh.Auxhead = zk.$extends(zul.mesh.HeadWidget, {
 			for (var head = this.nextSibling; head && times != 0; head = head.nextSibling, times--)
 				jq(head.firstChild).addClass(this.$s('border'));
 		}
+	},
+	beforeChildAdded_: function (child, insertBefore) {
+		if (!child.$instanceof(zul.mesh.Auxheader)) {
+			zk.error('Unsupported child for Auxhead: ' + child.className);
+			return false;
+		}
+		return true;
 	}
 });

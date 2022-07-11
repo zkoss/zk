@@ -331,6 +331,23 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 	isRealElement: function () {
 		return false; // fixed for ZK Client selector issue
 	},
+	beforeChildAdded_: function (child, insertBefore) {
+		if (child.$instanceof(zul.sel.Treerow)) {
+			if (this.treerow && this.treerow != child) {
+				zk.error('Only one treerow is allowed: ' + this.className);
+				return false;
+			}
+		} else if (child.$instanceof(zul.sel.Treechildren)) {
+			if (this.treechildren && this.treechildren != child) {
+				zk.error('Only one treechildren is allowed: ' + this.className);
+				return false;
+			}
+		} else {
+			zk.error('Unsupported child for tree item: ' + child.className);
+			return false;
+		}
+		return true;
+	},
 	//@Override
 	insertBefore: function (child, sibling, ignoreDom) {
 		if (this.$super('insertBefore', child, sibling,

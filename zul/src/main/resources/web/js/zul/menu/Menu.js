@@ -188,6 +188,18 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		this._topmost = newParent && !(newParent.$instanceof(zul.menu.Menupopup));
 		this.$supers('beforeParentChanged_', arguments);
 	},
+	beforeChildAdded_: function (child, insertBefore) {
+		if (child.$instanceof(zul.menu.Menupopup)) {
+			if (this.menupopup && this.menupopup != child) {
+				zk.error('Only one menupopup is allowed: ' + this.className);
+				return false;
+			}
+		} else {
+			zk.error('Unsupported child for menu: ' + child.className);
+			return false;
+		}
+		return true;
+	},
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
 		if (child.$instanceof(zul.menu.Menupopup)) {

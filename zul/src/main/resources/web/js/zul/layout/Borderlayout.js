@@ -76,6 +76,39 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 	setResize: function () {
 		this.resize();
 	},
+	beforeChildAdded_: function (child, insertBefore) {
+		if (!child.$instanceof(zul.layout.LayoutRegion)) {
+			zk.error('Unsupported child for Borderlayout: ' + child.className);
+			return false;
+		}
+		if (child.$instanceof(zul.layout.North)) {
+			if (this.north != null && child != this.north) {
+				zk.error('Only one north child is allowed: ' + this.className);
+				return false;
+			}
+		} else if (child.$instanceof(zul.layout.South)) {
+			if (this.south != null && child != this.south) {
+				zk.error('Only one north child is allowed: ' + this.className);
+				return false;
+			}
+		} else if (child.$instanceof(zul.layout.West)) {
+			if (this.west != null && child != this.west) {
+				zk.error('Only one north child is allowed: ' + this.className);
+				return false;
+			}
+		} else if (child.$instanceof(zul.layout.East)) {
+			if (this.east != null && child != this.east) {
+				zk.error('Only one north child is allowed: ' + this.className);
+				return false;
+			}
+		} else if (child.$instanceof(zul.layout.Center)) {
+			if (this.center != null && child != this.center) {
+				zk.error('Only one north child is allowed: ' + this.className);
+				return false;
+			}
+		}
+		return true;
+	},
 	//-- super --//
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);

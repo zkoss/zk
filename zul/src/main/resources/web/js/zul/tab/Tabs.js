@@ -402,6 +402,13 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 			this._scrollcheck('init');
 		}
 	},
+	beforeChildAdded_: function (child, insertBefore) {
+		if (!child.$instanceof(zul.tab.Tab)) {
+			zk.error('Unsupported child for tabs: ' + child.className);
+			return false;
+		}
+		return true;
+	},
 	onChildRemoved_: function (child) {
 		var p = this.parent;
 		if (p && child == p._selTab) {

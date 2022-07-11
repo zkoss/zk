@@ -155,6 +155,47 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 		if (!_noSync) //bug#3301498: we have to sync even if child is rows
 			this._syncSize();  //sync-size required
 	},
+	beforeChildAdded_: function (child, insertBefore) {
+		if (child.$instanceof(zul.grid.Rows)) {
+			if (this.rows && this.rows != child) {
+				zk.error('Only one rows child is allowed: ' + this.className
+					+ '\nNote: rows is created automatically if live data');
+				return false;
+			}
+		} else if (child.$instanceof(zul.grid.Columns)) {
+			if (this.columns && this.columns != child) {
+				zk.error('Only one columns child is allowed: ' + this.className);
+				return false;
+			}
+		} else if (child.$instanceof(zul.mesh.Frozen)) {
+			if (this.frozen && this.frozen != child) {
+				zk.error('Only one frozen child is allowed: ' + this.className);
+				return false;
+			}
+		} else if (child.$instanceof(zul.mesh.Paging)) {
+			if (this.getPaginal()) {
+				zk.error('External paging cannot coexist with child paging, ' + this.className);
+				return false;
+			}
+			if (this.paging && this.paging != child) {
+				zk.error('Only one paging is allowed: ' + this.className);
+				return false;
+			}
+			if (this.getMold() != 'paging') {
+				zk.error('The child paging is allowed only in the paging mold, ' + this.className);
+				return false;
+			}
+		} else if (child.$instanceof(zul.grid.Foot)) {
+			if (this.foot && this.foot != child) {
+				zk.error('Only one foot child is allowed: ' + this.className);
+				return false;
+			}
+		} else if (!child.$instanceof(zul.mesh.Auxhead)) {
+			zk.error('Unsupported child for grid: ' + child.className);
+			return false;
+		}
+		return true;
+	},
 	onChildRemoved_: function (child) {
 		this.$supers('onChildRemoved_', arguments);
 
