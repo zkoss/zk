@@ -109,9 +109,9 @@ jq.alert = function (msg, opts) {
 						})
 					],
 					mode: opts!.mode || 'modal'
-				}),
-				p = (opts!.desktop || zk.Desktop.$())?.firstChild?.desktop;
-			if (p)
+				});
+			let p: zk.Widget | null = (opts!.desktop || zk.Desktop.$());
+			if (p && (p = p.firstChild) && p.desktop)
 				p.appendChild(wnd);
 			else
 				jq(document.body).append(wnd);
