@@ -1,4 +1,4 @@
-/* Tab.js
+/* Tab.ts
 
 {{IS_NOTE
 	Purpose:

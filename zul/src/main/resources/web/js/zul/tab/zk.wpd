@@ -12,9 +12,10 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 -->
 
 <package name="zul.tab" language="xul/html" depends="zul.wgt">
-	<widget name="Tabbox"/>
-	<widget name="Tabs"/>
-	<widget name="Tab"/>
-	<widget name="Tabpanels"/>
-	<widget name="Tabpanel"/>
+	<script src="index.js"/>
+	<widget name="Tabbox" moldOnly="true"/>
+	<widget name="Tabs" moldOnly="true"/>
+	<widget name="Tab" moldOnly="true"/>
+	<widget name="Tabpanels" moldOnly="true"/>
+	<widget name="Tabpanel" moldOnly="true"/>
 </package>

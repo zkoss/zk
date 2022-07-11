@@ -7,15 +7,8 @@ export * as layout from './layout';
 export * as med from './med';
 export * as menu from './menu';
 export * as mesh from './mesh';
-	export abstract class Frozen extends zk.Widget {
-		public _scrollScale: number;
-		public _doScroll(val: number): void;
-	}
-// export * as tab from './tab';
-export declare namespace tab {
-	class Tabbox extends zul.Widget { // zul.wgt.Toolbar
-	}
-}
+export * as sel from './sel';
+export * as tab from './tab';
 // export * as utl from './utl';
 export * as wgt from './wgt';
 export * as wnd from './wnd';

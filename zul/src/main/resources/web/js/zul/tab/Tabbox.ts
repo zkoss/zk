@@ -1,4 +1,4 @@
-/* Tabbox.js
+/* Tabbox.ts
 
 {{IS_NOTE
 	Purpose:
