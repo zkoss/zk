@@ -448,7 +448,7 @@ export abstract class HeaderWidget extends zul.LabelImageWidget<HTMLTableCellEle
 		super.doMouseOut_(evt);
 	}
 
-	protected override ignoreDrag_(pt: zk.Draggable): boolean {
+	public override ignoreDrag_(pt: zk.Offset): boolean {
 		if (this.parent!.isSizable()) {
 			var n = this.$n(),
 				ofs = zk(n).revisedOffset();

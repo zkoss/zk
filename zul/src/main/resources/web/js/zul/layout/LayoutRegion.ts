@@ -31,8 +31,6 @@ function _setFirstChildFlex(wgt: LayoutRegion, flex: boolean, ignoreMin?: boolea
 	}
 }
 
-declare type Pointer = [number, number];
-
 export interface LayoutRegionAmbit {
 	x: number;
 	y: number;
@@ -1297,7 +1295,7 @@ export class LayoutRegion extends zul.Widget {
 	}
 
 	//drag
-	private static _ignoredrag(dg: zk.Draggable & Partial<{ _rootoffs }>, _pointer: Pointer, evt: zk.Event): boolean {
+	private static _ignoredrag(dg: zk.Draggable, _pointer: zk.Offset, evt: zk.Event): boolean {
 		var target = evt.domTarget,
 			wgt = dg.control as LayoutRegion,
 			split = wgt.$n_('split');
@@ -1363,7 +1361,7 @@ export class LayoutRegion extends zul.Widget {
 		return true;
 	}
 
-	private static _endeffect(dg: zk.Draggable & { _point: Pointer | null; _rootoffs? }, evt: zk.Event): void {
+	private static _endeffect(dg: zk.Draggable, evt: zk.Event): void {
 		var wgt = dg.control as LayoutRegion;
 		if (wgt._isVertical())
 			wgt.setHeight(dg._point![1] + 'px');
@@ -1382,9 +1380,7 @@ export class LayoutRegion extends zul.Widget {
 		}, evt.data));
 	}
 
-	private static _snap(dg: zk.Draggable &
-		Partial<{ _point; _rootoffs: { maxs: number; left: number; right: number; top: number; bottom: number; mins: number }}>,
-						 pointer: Pointer): Pointer {
+	private static _snap(dg: zk.Draggable, pointer: zk.Offset): zk.Offset {
 		var wgt = dg.control as LayoutRegion,
 			x = pointer[0],
 			y = pointer[1],
@@ -1429,7 +1425,7 @@ export class LayoutRegion extends zul.Widget {
 		return [x, y];
 	}
 
-	private static _ghosting(dg: zk.Draggable, ofs: Pointer, evt: zk.Event): HTMLElement {
+	private static _ghosting(dg: zk.Draggable, ofs: zk.Offset, evt: zk.Event): HTMLElement {
 		var el = dg.node!, $el = zk(el);
 		jq(document.body).prepend('<div id="zk_layoutghost" class="z-splitter-ghost" style="font-size:0;line-height:0;background:#AAA;position:absolute;top:'
 			+ ofs[1] + 'px;left:' + ofs[0] + 'px;width:'

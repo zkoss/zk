@@ -56,8 +56,8 @@ export interface EffectActions {
 }
 export interface Effect {
 	destroy(): void;
-	hide(): void;
-	sync(): void;
+	hide?(): void;
+	sync?(): void;
 }
 
 export interface Eff {
@@ -266,7 +266,7 @@ eff.FullMask = FullMask;
 export class Mask extends zk.Object implements Effect {
 	declare public mask?: HTMLElement | null;
 	declare private _opts: EffectMaskOptions;
-	declare public __mask?: Effect;
+	declare public __mask?: Required<Effect>;
 	declare public wgt?: Widget & Pick<Mask, '__mask'> | null;
 
 	/** The constructor.

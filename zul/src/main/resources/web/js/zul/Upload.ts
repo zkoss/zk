@@ -690,8 +690,8 @@ function _initUM(uplder: Uploader, flnm: string): void {
 				var id = uplder.id,
 					prog = this.getFileItem(id);
 				if (!prog) return;
-				(prog.$f(id) as zul.wgt.Progressmeter).setValue(val);
-				(prog.$f(id + '_total') as zul.wgt.Label).setValue(total);
+				prog.$f<zul.wgt.Progressmeter>(id)!.setValue(val);
+				prog.$f<zul.wgt.Label>(id + '_total')!.setValue(total);
 			}
 
 			/**
