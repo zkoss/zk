@@ -1241,8 +1241,8 @@ export class Window extends zul.ContainerWidget {
 			if (!visible)
 				this.zsync();
 
-			var n = this.$n_();
 			if (this.isFloating_() && p && !p.isRealVisible()) {
+				var n = this.$n_();
 				if (this._visible && n.style.display == 'none') {
 					this.setDomVisible_(n, false, {visibility: true});
 					this.setDomVisible_(n, true, {display: true});
