@@ -1,4 +1,4 @@
-/* Flash.js
+/* Flash.ts
 
 	Purpose:
 

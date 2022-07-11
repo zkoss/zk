@@ -1,4 +1,4 @@
-/* Audio.js
+/* Audio.ts
 
 	Purpose:
 

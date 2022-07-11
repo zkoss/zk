@@ -1,4 +1,4 @@
-/* Applet.js
+/* Applet.ts
 
 	Purpose:
 
