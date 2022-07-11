@@ -338,7 +338,7 @@ export class Groupbox extends zul.ContainerWidget {
 
 	private _afterOpen(visible: boolean): void {
 		if (!visible && this._isDefault())
-			jq(this.$n_()).addClass(this.$s('collapsed'));
+			jq(this.$n()!).addClass(this.$s('collapsed'));
 
 		var p = this.parent;
 		if (p) {
