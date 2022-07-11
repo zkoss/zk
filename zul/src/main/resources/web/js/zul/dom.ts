@@ -110,8 +110,8 @@ jq.alert = function (msg, opts) {
 					],
 					mode: opts!.mode || 'modal'
 				}),
-				p = (opts!.desktop || zk.Desktop.$())?.firstChild?.desktop;
-			if (p)
+				p = (opts!.desktop || zk.Desktop.$())?.firstChild;
+			if (p?.desktop)
 				p.appendChild(wnd);
 			else
 				jq(document.body).append(wnd);
