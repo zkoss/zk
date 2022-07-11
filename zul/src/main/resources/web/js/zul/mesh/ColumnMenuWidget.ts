@@ -201,7 +201,7 @@ export abstract class ColumnMenuWidget extends zul.mesh.HeadWidget {
 		this._mref!.fire('onGroup', 'ascending' != this._mref!.getSortDirection(), {toServer: true});
 	}
 
-	public _onUngroup = zk.$void;
+	public _onUngroup(): void { '';}
 
 	public _onAsc(evt: zk.Event): void {
 		this._mref!.fire('onSort', true); // B50-ZK-266, always fire
