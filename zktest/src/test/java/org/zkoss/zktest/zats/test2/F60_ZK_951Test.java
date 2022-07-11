@@ -22,6 +22,7 @@ import org.zkoss.zktest.zats.WebDriverTestCase;
  * @author rudyhuang
  */
 public class F60_ZK_951Test extends WebDriverTestCase {
+
 	@Test
 	public void test() {
 		connect();
@@ -39,7 +40,7 @@ public class F60_ZK_951Test extends WebDriverTestCase {
 		Actions actions = getActions();
 		actions.clickAndHold(toElement(jq(".z-biglistbox-wscroll-horizontal .z-biglistbox-wscroll-body")))
 				.moveByOffset(200, 0)
-				.pause(1000)
+				.pause(1500)
 				.release()
 				.perform();
 		waitResponse();
@@ -47,7 +48,7 @@ public class F60_ZK_951Test extends WebDriverTestCase {
 
 		actions.clickAndHold(toElement(jq(".z-biglistbox-wscroll-vertical .z-biglistbox-wscroll-body")))
 				.moveByOffset(0, 200)
-				.pause(1000)
+				.pause(1500)
 				.release()
 				.perform();
 		waitResponse();
