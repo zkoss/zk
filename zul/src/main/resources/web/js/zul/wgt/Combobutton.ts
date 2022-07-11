@@ -221,7 +221,7 @@ export class Combobutton extends zul.wgt.Button {
 				pp.open(this.uuid, null, 'after_start', opts);
 				_fireOnOpen(this, opts, true);
 			}
-			_attachPopup(this, !(pp instanceof zul.menu.Menupopup));
+			_attachPopup(this, !(zul.menu && pp instanceof zul.menu.Menupopup));
 		}
 	}
 
