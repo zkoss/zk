@@ -1,4 +1,4 @@
-/* Tabpanels.js
+/* Tabpanels.ts
 
 {{IS_NOTE
 	Purpose:
