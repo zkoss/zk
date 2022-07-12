@@ -1,4 +1,4 @@
-/* Binder.js
+/* Binder.ts
 
 	Purpose:
 		

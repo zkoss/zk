@@ -279,34 +279,6 @@ declare namespace zk {
 		setRequestHeaders(key: string, value: string): void;
 	}
 
-	interface ZKBind {
-		$(n: string | HTMLElement | Event | JQuery.Event, opts?: BinderOptions): Binder | null;
-		Binder: BinderStatic;
-	}
-
-	interface BinderStatic {
-		new (wgt: Widget, target): Binder;
-		postCommand(dom: HTMLElement, command: string, args?: Record<string, unknown> | null,
-			opts?: EventOptions | null, timeout?: number): void;
-		postGlobalCommand(dom: HTMLElement, command: string, args?: Record<string, unknown> | null,
-			opts?: EventOptions | null, timeout?: number): void;
-	}
-
-	interface BinderOptions {
-		exact?: boolean;
-		strict?: boolean;
-		child?: boolean;
-	}
-
-	interface Binder extends zk.Object {
-		after(cmd: string, fn: (args?: Record<string, unknown>) => void): this;
-		unAfter(cmd: string, fn: (args?: Record<string, unknown>) => void): this;
-		destroy(): void;
-		command(cmd: string, args?: Record<string, unknown> | null, opts?: EventOptions | null, timeout?: number): this;
-		globalCommand(cmd: string, args?: Record<string, unknown> | null, opts?: EventOptions | null, timeout?: number): this;
-		upload(cmd: string, file: File): void;
-	}
-
 	interface LocalizedSymbols {
 		APM?: string[];
 		DECIMAL?: string;
@@ -376,7 +348,6 @@ declare namespace zkmax {
 }
 
 declare var zWs: zk.Websocket;
-declare var zkbind: zk.ZKBind;
 
 type ZKStatic = typeof import('./zk').default;
 declare var zk: ZKStatic;
