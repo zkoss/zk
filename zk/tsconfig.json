@@ -28,7 +28,8 @@
     "allowUmdGlobalAccess": true,
     "types": [
       "webpack-env",
-      "zul"
+      "zul",
+      "zkbind"
     ],
     "paths": {
       "@zul/*": [

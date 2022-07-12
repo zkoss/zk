@@ -62,6 +62,7 @@
   },
   "workspaces": [
     "zk",
-    "zul"
+    "zul",
+    "zkbind"
   ]
 }

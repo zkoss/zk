@@ -1,0 +1,8 @@
+{
+  "name": "zkbind",
+  "version": "0.1.0",
+  "description": "ZK binder",
+  "types": "./src/main/resources/web/js/zkbind/global.d.ts",
+  "author": "Potix",
+  "license": "LGPL-2.0-or-later"
+}

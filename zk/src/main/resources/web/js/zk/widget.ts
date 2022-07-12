@@ -716,8 +716,16 @@ export function WrapClass(pkg: string) {
  */
 // zk scope
 export class Widget<TElement extends HTMLElement = HTMLElement> extends ZKObject {
-	declare public $button?: boolean; // zul/sel/SelectWidget _isButton
-	declare public $inputWidget?: boolean; // zul/sel/SelectWidget _isInputWidget
+	// zkbind/Binder
+	declare public $binder?: () => zkbind.Binder | null;
+	declare public _$binder?: zkbind.Binder | null;
+	declare public $ZKBINDER$?: boolean;
+	declare public $ZKMATCHMEDIA$?: string[];
+
+	// zul/sel/SelectWidget
+	declare public $button?: boolean;
+	declare public $inputWidget?: boolean;
+
 	declare public _uplder?: zul.Upload | null;
 	declare public _autodisable_self?: boolean;
 	declare public _uploading?: boolean;
@@ -725,8 +733,6 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends ZKObject
 	declare public offsetWidth?;
 	declare public offsetHeight?;
 	declare public blankPreserved?: boolean;
-	// FIXME: _scrollbar?: any;
-	// FIXME: $binder(): zk.Binder | null;
 
 	declare public getInputNode?: () => HTMLInputElement | null | undefined;
 
@@ -5256,7 +5262,7 @@ _doFooSelect: function (evt) {
 	 * </ul>
 	 * @return zk.Widget
 	 */
-	public static $<T extends Widget>(n?: string | JQuery | JQuery.Event | Node | null | T,
+	public static $<T extends Widget>(n?: string | JQuery | JQuery.Event | zk.Event | Node | null | T,
 					opts?: Partial<{exact: boolean; strict: boolean; child: boolean}>): T | null {
 		if (n && n['zk'] && n['zk'].jq == n) //jq()
 			n = n[0];
