@@ -78,6 +78,7 @@ declare global {
 	| 'PANEL_RESTORE' // zul/wnd/Panel
 	| 'PREV' // zul/inp/Intbox
 	| 'UNKNOWN_TYPE'
+	| 'UPLOAD_CANCEL' // zul/fud/FileuploadDig
 	| 'UPLOAD_ERROR_EXCEED_MAXSIZE' // zul/Upload
 	| 'VALUE_NOT_MATCHED' // zul/inp/Combobox
 	| 'WS_HOME' // zul/WScroll
