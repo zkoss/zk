@@ -27,6 +27,17 @@ declare global {
 			height: number;
 		};
 	}
+
+	// HTMLMediaElement has the same properties just in different captilization
+	interface HTMLEmbedElement { // zul/med/Flash
+		movie: string;
+		wmode: string;
+		bgcolor: string;
+		quality: string;
+		autoplay: boolean | '';
+		loop: boolean | '';
+	}
+
     const msgzul: Record<
 	| 'DATE_REQUIRED'
 	| 'EMPTY_NOT_ALLOWED'
@@ -74,4 +85,85 @@ declare global {
 	| 'WS_NEXT' // zul/WScroll
 	| 'WS_END' // zul/WScroll
 	, string>;
+
+	// HTMLAppletElement is used by zul/med/Flash
+	// HTMLAppletElement is retrieved from microsoft/Typescript commit 9d443b76aac0832d7f3c890441264d39307fe31a
+	interface HTMLAppletElement extends HTMLElement {
+		/**
+		 * Retrieves a string of the URL where the object tag can be found. This is often the href of the document that the object is in, or the value set by a base element.
+		 */
+		BaseHref: string;
+		align: string;
+		/**
+		 * Sets or retrieves a text alternative to the graphic.
+		 */
+		alt: string;
+		/**
+		 * Gets or sets the optional alternative HTML script to execute if the object fails to load.
+		 */
+		altHtml: string;
+		/**
+		 * Sets or retrieves a character string that can be used to implement your own archive functionality for the object.
+		 */
+		archive: string;
+		border: string;
+		code: string;
+		/**
+		 * Sets or retrieves the URL of the component.
+		 */
+		codeBase: string;
+		/**
+		 * Sets or retrieves the Internet media type for the code associated with the object.
+		 */
+		codeType: string;
+		/**
+		 * Address of a pointer to the document this page or frame contains. If there is no document, then null will be returned.
+		 */
+		contentDocument: Document;
+		/**
+		 * Sets or retrieves the URL that references the data of the object.
+		 */
+		data: string;
+		/**
+		 * Sets or retrieves a character string that can be used to implement your own declare functionality for the object.
+		 */
+		declare: boolean;
+		form: HTMLFormElement;
+		/**
+		 * Sets or retrieves the height of the object.
+		 */
+		height: string;
+		hspace: number;
+		/**
+		 * Sets or retrieves the shape of the object.
+		 */
+		name: string;
+		object: string;
+		/**
+		 * Sets or retrieves a message to be displayed while an object is loading.
+		 */
+		standby: string;
+		/**
+		 * Returns the content type of the object.
+		 */
+		type: string;
+		/**
+		 * Sets or retrieves the URL, often with a bookmark extension (#name), to use as a client-side image map.
+		 */
+		useMap: string;
+		vspace: number;
+		width: number;
+		/*
+		 * The DOM interface HTMLAppletElement doesn't officially define the `mayscript`
+		 * attribute nor the `mayScript` attribute, as shown to be missing in
+		 * `https://www.w3.org/TR/DOM-Level-2-HTML/html.html#ID-31006348`, despite the
+		 * fact that netscape supports the `mayscript` attribute for the `<applet>` HTML
+		 * element.
+		 */
+		mayscript: boolean;
+	}
+	var HTMLAppletElement: {
+		prototype: HTMLAppletElement;
+		new(): HTMLAppletElement;
+	};
 }
