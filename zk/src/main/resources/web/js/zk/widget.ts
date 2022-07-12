@@ -1512,9 +1512,9 @@ new zul.wnd.Window({
 	 * returns itself.
 	 * @return zk.Widget
 	 */
-	public $o(): Widget | null {
+	public $o<T extends Widget = Widget>(): T | null {
 		for (var w: Widget | null = this; w; w = w.parent)
-			if (w._fellows) return w;
+			if (w._fellows) return w as T;
 		return null;
 	}
 

@@ -1,4 +1,4 @@
-/* Submit.js
+/* Submit.ts
 
 	Purpose:
 
@@ -14,34 +14,41 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
  * A Submit Button.
  *
  */
-zul.fud.Submit = zk.$extends(zul.wgt.Button, {
-	getZclass: function () { // keep the button's zclass
+@zk.WrapClass('zul.fud.Submit')
+export class Submit extends zul.wgt.Button {
+	public override nextSibling!: zk.Widget & { setDisabled(disabled: boolean) };
+	private _tmp?: number;
+
+	public override getZclass(): string { // keep the button's zclass
 		return this._zclass == null ? 'z-button' : this._zclass;
-	},
-	submit: function () {
-		var f = this.$f('fileupload'),
+	}
+
+	public submit(): void {
+		var f = this.$f('fileupload')!,
 			self = this;
-		function t() {
+		function t(): boolean {
 			if (zul.Upload.isFinish(f)) {
-				self.$o().submit();
+				self.$o<zul.fud.FileuploadDlg>()!.submit();
 				clearInterval(self._tmp);
 				self._tmp = undefined;
 				return true;
 			}
+			return false;
 		}
 		if (t()) return;
 		self._tmp = setInterval(t, 800);
 		this.setDisabled(true);
 		this.nextSibling.setDisabled(true);
 		if (zk.ie < 11)
-			this.$f('btns').rerender();
-	},
-	revert: function () {
+			this.$f('btns')!.rerender();
+	}
+
+	public revert(): void {
 		clearInterval(this._tmp);
 		this._tmp = undefined;
 		this.setDisabled(false);
 		this.nextSibling.setDisabled(false);
 		if (zk.ie < 11)
-			this.$f('btns').rerender();
+			this.$f('btns')!.rerender();
 	}
-});
+}
