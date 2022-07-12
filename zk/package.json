@@ -2,15 +2,11 @@
   "name": "zk",
   "version": "0.1.0",
   "description": "Core ZK frontend functionality",
-  "main": "codegen/resources/web/index.js",
-  "devDependencies": {
-    "zul": "^0.1.0"
-  },
-  "scripts": {},
-  "keywords": [
-    "zk"
-  ],
+  "types": "./src/main/resources/web/js/zk/global.d.ts",
   "author": "Potix",
   "license": "LGPL-2.0-or-later",
-  "types": "./src/main/resources/web/js/zk/global.d.ts"
+  "devDependencies": {
+    "zkbind": "^0.1.0",
+    "zul": "^0.1.0"
+  }
 }
