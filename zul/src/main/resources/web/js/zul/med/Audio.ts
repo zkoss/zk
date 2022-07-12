@@ -12,162 +12,250 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-(function () {
-	var _STOP = 0,
-		_PLAY = 1,
-		_PAUSE = 2,
-		_ENDED = 3;
+var _STOP = 0,
+	_PLAY = 1,
+	_PAUSE = 2,
+	_ENDED = 3;
 
-	function _invoke(wgt, fn) {
-		// Note: setSrc will rerender, so we need to delay the invocation of play
-		if (wgt._isUnbinded)
+function _invoke(wgt: zul.med.Audio, fn: 'pause' | 'play' | 'stop'): void {
+	// Note: setSrc will rerender, so we need to delay the invocation of play
+	if (wgt._isUnbinded)
+		_invoke2(wgt, fn);
+	else
+		setTimeout(function () {
 			_invoke2(wgt, fn);
-		else
-			setTimeout(function () {
-				_invoke2(wgt, fn);
-			}, 200);
-	}
-	function _invoke2(wgt, fn) {
-		var n = wgt.$n();
-		if (n) {
-			try {
-				if (fn === 'stop') {
-					n.pause();
-					n.currentTime = 0;
-					wgt._fireOnStateChange(_STOP);
-				} else
-					n[fn]();
-			} catch (e) {
-				// Do not show alert if the browser did not support the source format.
-				/* if (!wgt._isUnbinded)
-					jq.alert(msgzul.NO_AUDIO_SUPPORT + '\n' + e.message); */
-				zk.debugLog(e.message || e);
-			}
+		}, 200);
+}
+function _invoke2(wgt: zul.med.Audio, fn: 'pause' | 'play' | 'stop'): void {
+	var n = wgt.$n();
+	if (n) {
+		try {
+			if (fn === 'stop') {
+				n.pause();
+				n.currentTime = 0;
+				wgt._fireOnStateChange(_STOP);
+			} else
+				void n[fn]();
+		} catch (e) {
+			// Do not show alert if the browser did not support the source format.
+			/* if (!wgt._isUnbinded)
+				jq.alert(msgzul.NO_AUDIO_SUPPORT + '\n' + e.message); */
+			zk.debugLog((e as Error).message || e as string);
 		}
 	}
+}
 
-var Audio =
 /**
  * An audio clip.
  *
  * <p>An extension to XUL.
  * Only works for browsers supporting HTML5 audio tag (since ZK 7.0.0).
  */
-zul.med.Audio = zk.$extends(zul.Widget, {
-	$define: {
-		/** Returns the src.
-		 * <p>Default: null.
-		 * @return String
-		 */
-		/** Sets the src.
-		 * @param String src
-		 */
-		src: function () {
+@zk.WrapClass('zul.med.Audio')
+export class Audio extends zul.Widget<HTMLAudioElement> {
+	private _src?: string;
+	private _autoplay?: boolean;
+	private _preload?: string;
+	private _controls?: boolean;
+	private _loop?: boolean;
+	private _muted?: boolean;
+	public _isUnbinded?: boolean;
+
+	/** Returns the src.
+	 * <p>Default: null.
+	 * @return String
+	 */
+	public getSrc(): string | undefined {
+		return this._src;
+	}
+
+	/** Sets the src.
+	 * @param String src
+	 */
+	public setSrc(src: string, opts?: Record<string, boolean>): this {
+		const o = this._src;
+		this._src = src;
+
+		if (o !== src || (opts && opts.force)) {
 			this.rerender();
-		},
-		// for zephyr to treat as "src" attribute at client side
-		content: function (v) {
-			this.setSrc(v);
-		},
-		/** Returns whether to auto start playing the audio.
-		 * <p>Default: false.
-		 * @return boolean
-		 */
-		/** Sets whether to auto start playing the audio.
-		 * @param boolean autoplay
-		 */
-		autoplay: function (v) {
+		}
+
+		return this;
+	}
+
+	// for zephyr to treat as "src" attribute at client side
+	public getContent(): string | undefined {
+		return this.getSrc();
+	}
+
+	// for zephyr to treat as "src" attribute at client side
+	public setContent(src: string, opts?: Record<string, boolean>): this {
+		return this.setSrc(src, opts);
+	}
+
+	/** Returns whether to auto start playing the audio.
+	 * <p>Default: false.
+	 * @return boolean
+	 */
+	public isAutoplay(): boolean | undefined {
+		return this._autoplay;
+	}
+
+	/** Sets whether to auto start playing the audio.
+	 * @param boolean autoplay
+	 */
+	public setAutoplay(v: boolean, opts?: Record<string, boolean>): this {
+		const o = this._autoplay;
+		this._autoplay = v;
+
+		if (o !== v || (opts && opts.force)) {
 			var n = this.$n();
 			if (n) n.autoplay = v;
-		},
-		/** Returns whether and how the audio should be loaded.
-		 *
-		 * <p>Default: null.
-		 * @return String
-		 * @since 7.0.0
-		 */
-		/** Sets whether and how the audio should be loaded.
-		 * Refer to <a href="http://www.w3.org/TR/html5/embedded-content-0.html#attr-media-preload">Preload Attribute Description</a> for details.
-		 * @param String preload
-		 * @since 7.0.0
-		 */
-		preload: function (v) {
+		}
+
+		return this;
+	}
+
+	/** Returns whether and how the audio should be loaded.
+	 *
+	 * <p>Default: null.
+	 * @return String
+	 * @since 7.0.0
+	 */
+	public getPreload(): string | undefined {
+		return this._preload;
+	}
+
+	/** Sets whether and how the audio should be loaded.
+	 * Refer to <a href="http://www.w3.org/TR/html5/embedded-content-0.html#attr-media-preload">Preload Attribute Description</a> for details.
+	 * @param String preload
+	 * @since 7.0.0
+	 */
+	public setPreload(v: 'none' | 'metadata' | 'auto' | '', opts?: Record<string, boolean>): this {
+		const o = this._preload;
+		this._preload = v;
+
+		if (o !== v || (opts && opts.force)) {
 			var n = this.$n();
 			if (n && v !== undefined) n.preload = v;
-		},
-		/** Returns whether to display the audio controls.
-		 *
-		 * <p>Default: false.
-		 * @return boolean
-		 * @since 7.0.0
-		 */
-		/** Sets whether to display the audio controls.
-		 * @param boolean controls
-		 * @since 7.0.0
-		 */
-		controls: function (v) {
+		}
+
+		return this;
+	}
+
+	/** Returns whether to display the audio controls.
+	 *
+	 * <p>Default: false.
+	 * @return boolean
+	 * @since 7.0.0
+	 */
+	public isControls(): boolean | undefined {
+		return this._controls;
+	}
+
+	/** Sets whether to display the audio controls.
+	 * @param boolean controls
+	 * @since 7.0.0
+	 */
+	public setControls(v: boolean, opts?: Record<string, boolean>): this {
+		const o = this._controls;
+		this._controls = v;
+
+		if (o !== v || (opts && opts.force)) {
 			var n = this.$n();
 			if (n) n.controls = v;
-		},
-		/** Returns whether to play the audio repeatedly.
-		 * <p>Default: false.
-		 * @return boolean
-		 */
-		/** Sets whether to play the audio repeatedly.
-		 * @param boolean loop
-		 */
-		loop: function (v) {
+		}
+
+		return this;
+	}
+
+	/** Returns whether to play the audio repeatedly.
+	 * <p>Default: false.
+	 * @return boolean
+	 */
+	public isLoop(): boolean | undefined {
+		return this._loop;
+	}
+
+	/** Sets whether to play the audio repeatedly.
+	 * @param boolean loop
+	 */
+	public setLoop(v: boolean, opts?: Record<string, boolean>): this {
+		const o = this._loop;
+		this._loop = v;
+
+		if (o !== v || (opts && opts.force)) {
 			var n = this.$n();
 			if (n) n.loop = v;
-		},
-		/** Returns whether to mute the audio.
-		 *
-		 * <p>Default: false.
-		 * @return boolean
-		 * @since 7.0.0
-		 */
-		/** Sets whether to mute the audio.
-		 * @param boolean muted
-		 * @since 7.0.0
-		 */
-		muted: function (v) {
+		}
+
+		return this;
+	}
+
+	/** Returns whether to mute the audio.
+	 *
+	 * <p>Default: false.
+	 * @return boolean
+	 * @since 7.0.0
+	 */
+	public isMuted(): boolean | undefined {
+		return this._muted;
+	}
+
+	/** Sets whether to mute the audio.
+	 * @param boolean muted
+	 * @since 7.0.0
+	 */
+	public setMuted(v: boolean, opts?: Record<string, boolean>): this {
+		const o = this._muted;
+		this._muted = v;
+
+		if (o !== v || (opts && opts.force)) {
 			var n = this.$n();
 			if (n) n.muted = v;
 		}
-	},
+
+		return this;
+	}
+
 	/** Plays the audio at the client.
 	 */
-	play: function () {
+	public play(): void {
 		_invoke(this, 'play');
-	},
+	}
+
 	/** Stops the audio at the client.
 	 */
-	stop: function () {
+	public stop(): void {
 		_invoke(this, 'stop');
-	},
+	}
+
 	/** Pauses the audio at the client.
 	 */
-	pause: function () {
+	public pause(): void {
 		_invoke(this, 'pause');
-	},
-	bind_: function () {
-		this.$supers(Audio, 'bind_', arguments);
-		var n = this.$n();
+	}
+
+	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+		super.bind_(desktop, skipper, after);
+		const n = this.$n_();
 		n.addEventListener('play', this.proxy(this._audioOnPlay));
 		n.addEventListener('pause', this.proxy(this._audioOnPause));
 		n.addEventListener('ended', this.proxy(this._audioOnEnded));
-	},
-	unbind_: function () {
+	}
+
+	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		this._isUnbinded = true;
 		this.stop();
-		var n = this.$n();
+		const n = this.$n_();
 		n.removeEventListener('ended', this.proxy(this._audioOnEnded));
 		n.removeEventListener('pause', this.proxy(this._audioOnPause));
 		n.removeEventListener('play', this.proxy(this._audioOnPlay));
-		this.$supers(Audio, 'unbind_', arguments);
-	},
-	domAttrs_: function (no) {
-		var attr = this.$supers('domAttrs_', arguments);
+		super.unbind_(skipper, after, keepRod);
+	}
+
+	public override domAttrs_(no?: zk.DomAttrsOptions): string {
+		var attr = super.domAttrs_(no);
 		if (this._autoplay)
 			attr += ' autoplay';
 		if (this._preload !== undefined)
@@ -179,31 +267,37 @@ zul.med.Audio = zk.$extends(zul.Widget, {
 		if (this._muted)
 			attr += ' muted';
 		return attr;
-	},
-	domContent_: function () {
-		var src = this._src,
+	}
+
+	protected domContent_(): string {
+		var src = this._src!,
 			length = src.length,
 			result = '';
 		for (var i = 0; i < length; i++) {
 			result += '<source src="' + src[i] + '" type="' + this._MIMEtype(src[i]) + '">';
 		}
 		return result;
-	},
-	_audioOnPlay: function () {
+	}
+
+	private _audioOnPlay(): void {
 		this._fireOnStateChange(_PLAY);
-	},
-	_audioOnPause: function () {
-		if (this.$n().currentTime) {
+	}
+
+	private _audioOnPause(): void {
+		if (this.$n_().currentTime) {
 			this._fireOnStateChange(_PAUSE);
 		}
-	},
-	_audioOnEnded: function () {
+	}
+
+	private _audioOnEnded(): void {
 		this._fireOnStateChange(_ENDED);
-	},
-	_fireOnStateChange: function (state) {
+	}
+
+	public _fireOnStateChange(state: number): void {
 		this.fire('onStateChange', {state: state});
-	},
-	_MIMEtype: function (name) {
+	}
+
+	private _MIMEtype(name: string): string {
 		var start = name.lastIndexOf('.'),
 			type = 'wav';
 		if (start !== -1) {
@@ -216,5 +310,4 @@ zul.med.Audio = zk.$extends(zul.Widget, {
 		}
 		return 'audio/' + type;
 	}
-});
-})();
+}
