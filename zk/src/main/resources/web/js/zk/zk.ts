@@ -20,7 +20,7 @@ export type DataHandler = (wgt: Widget, val: unknown) => void;
 
 let _zkf;
 
-function _zk(sel?: string | Node | JQuery | JQuery.Event | Widget | null): zk.JQZK {
+function _zk(sel?: string | Node | JQuery | JQuery.Event | zk.Event | Widget | null): zk.JQZK {
 	return jq(sel, _zk as ZKStatic).zk;
 }
 
