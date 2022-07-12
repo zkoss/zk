@@ -286,7 +286,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	beforeChildAdded_: function (child, insertBefore) {
 		let firstChild = this.firstChild;
 		if (child.$instanceof(zul.wgt.Caption)) { //caption is always the first child (if exist)
-			if (firstChild && firstChild.instanceof(zul.wgt.Caption) && firstChild != child) {
+			if (firstChild && firstChild.$instanceof(zul.wgt.Caption) && firstChild != child) {
 				zk.error('Only one caption is allowed: ' + this.className);
 				return false;
 			}

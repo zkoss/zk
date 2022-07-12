@@ -990,7 +990,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 				zk.error('Only one caption is allowed: ' + this.className);
 				return false;
 			}
-		} else if (insertBefore.$instanceof(zul.wgt.Caption)) {
+		} else if (insertBefore && insertBefore.$instanceof(zul.wgt.Caption)) {
 			zk.error('caption must be the first child, ' + this.className);
 			return false;
 		} else if (child.$instanceof(zul.wnd.Panelchildren)) {

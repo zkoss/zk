@@ -162,11 +162,6 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 				zk.error('The child paging is allowed only in the paging mold, ' + this.className);
 				return false;
 			}
-		} else if (child.$instanceof(zul.grid.Foot)) {
-			if (this.foot && this.foot != child) {
-				zk.error('Only one foot child is allowed: ' + this.className);
-				return false;
-			}
 		} else if (!child.$instanceof(zul.mesh.Auxhead)) {
 			zk.error('Unsupported newChild: ' + child.className);
 			return false;

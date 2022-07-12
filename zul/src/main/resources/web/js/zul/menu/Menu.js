@@ -194,7 +194,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 				zk.error('Only one menupopup is allowed: ' + this.className);
 				return false;
 			}
-		} else {
+		} else if (!zk.load('zkex.inp') || (!child.$instanceof(zkex.inp.Colorpicker) && !child.$instanceof(zkex.inp.Colorpalette))) { // Colorpicker and Colorpalette are widget only
 			zk.error('Unsupported child for menu: ' + child.className);
 			return false;
 		}

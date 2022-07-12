@@ -535,12 +535,8 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		});
 	},
 	beforeChildAdded_: function (child, insertBefore) {
-		if (!child.$instanceof(zkex.layout.Columnchildren)) {
-			zk.error('Unsupported child for Columnlayout: ' + child.className);
-			return false;
-		}
 		if (child.$instanceof(zul.sel.Listitem)) {
-			if (_isListgroup(child)) {
+			if (zk.isLoaded('zkex.sel') && child.$instanceof(zkex.sel.Listgroupfoot)) {
 				if (!this.hasGroup()) {
 					zk.error('Listgroupfoot cannot exist alone, you have to add a Listgroup first');
 					return false;

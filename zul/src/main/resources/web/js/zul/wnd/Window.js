@@ -1097,7 +1097,7 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 				zk.error('Only one caption is allowed: ' + this.className);
 				return false;
 			}
-		} else if (insertBefore.$instanceof(zul.wgt.Caption)) {
+		} else if (insertBefore && insertBefore.$instanceof(zul.wgt.Caption)) {
 			zk.error('caption must be the first child: ' + this.className);
 			return false;
 		}
