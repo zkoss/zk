@@ -106,7 +106,7 @@ subprojects {
 	}
 
 	task tscheck(type: NpmTask) {
-		enabled = project.file(".eslintrc.js").exists()
+		enabled = project.file("tsconfig.json").exists()
 		workingDir = rootDir
 		args =['run', 'type-check', '--', '--project', "$projectDir"]
 	}
