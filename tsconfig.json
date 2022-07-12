@@ -5,24 +5,23 @@
     "lib": [
       "esnext",
       "dom",
-      "ScriptHost" // declare var ActiveXObject: (type: string) => void;
+      "ScriptHost" // ActiveObject
     ],
-    "moduleResolution": "node",
     "module": "commonjs",
     "allowJs": true,
     "noEmit": true, // type checking only
     "strict": true,
     "allowSyntheticDefaultImports": true,
-    //    "noFallthroughCasesInSwitch": true,
-    "useUnknownInCatchVariables": false,
-    //    "noImplicitReturns": true,
-    //    "noUnusedLocals": true,
-    "noImplicitAny": false, // leave this for js compatible
-    "forceConsistentCasingInFileNames": true,
     "allowUmdGlobalAccess": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": false, // leave this for js compatible,
+    "noImplicitOverride": true,
+    "noUnusedLocals": true,
+    "useUnknownInCatchVariables": false,
     "types": [
       "zk",
       "zul",
+      "zkbind",
       "webpack-env"
     ],
     "paths": {
@@ -32,7 +31,8 @@
     }
   },
   "include": [
-    "zk/src/main/resources/web/js/zk/*"
+    "zul/src/main/resources/web/js",
+    "zbind/src/main/resources/web/js"
   ],
   "exclude": [
     "node_modules",
