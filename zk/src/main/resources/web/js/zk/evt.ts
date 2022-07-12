@@ -39,6 +39,9 @@ export interface EventOptions {
 		onload(evemt): void;
 	};
 	ctl?: boolean; // zul.Imagemap.onclick
+	file?: File; // zkbind.Binder
+	duplicateIgnore?: boolean; // zkbind.Binder
+	repeatIgnore?: boolean; // zkbind.Binder
 }
 
 export interface EventStopOptions {
