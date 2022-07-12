@@ -86,7 +86,9 @@ export class Tabpanel extends zul.ContainerWidget {
 
 	public _sel(toSel: boolean, animation: boolean): void { //don't rename (zkmax counts on it)!!
 		var tabbox = this.getTabbox();
-		if (!tabbox) return; //Bug ZK-1808 removed tabpanel is no longer in hierarchy, and cannot be removed
+
+		// B95-ZK-4695.zul, the Tabpanel is removed so that its desktop should be null.
+		if (!tabbox || !this.desktop) return; //Bug ZK-1808 removed tabpanel is no longer in hierarchy, and cannot be removed
 		var accd = tabbox.inAccordionMold();
 
 		if (accd && animation) {
