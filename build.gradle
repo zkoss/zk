@@ -250,6 +250,11 @@ subprojects {
 	}
 }
 
+task tscheck(type: NpmTask) {
+	args =['run', 'type-check']
+}
+check.dependsOn(tscheck)
+
 // Version Check
 def fileCheck(file, regex) {
 	println "version check: ${file.path}"
