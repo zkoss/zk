@@ -32,7 +32,8 @@
   },
   "include": [
     "zul/src/main/resources/web/js",
-    "zbind/src/main/resources/web/js"
+    "zbind/src/main/resources/web/js",
+    "zhtml/src/main/resources/web/js"
   ],
   "exclude": [
     "node_modules",

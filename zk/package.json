@@ -6,6 +6,7 @@
   "author": "Potix",
   "license": "LGPL-2.0-or-later",
   "devDependencies": {
+    "zhtml": "^0.1.0",
     "zkbind": "^0.1.0",
     "zul": "^0.1.0"
   }
