@@ -1,4 +1,4 @@
-/* Text.js
+/* Text.ts
 
 	Purpose:
 		
