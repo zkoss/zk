@@ -14,7 +14,7 @@
 	</div>
 	<textarea>This shall not have <span>more</span></textarea>
 	<script>
-	zk.log("IE6/7? " + (zk.ie &lt; 8));
+	zk.log("IE6/7? " + (zk.ie < 8));
 	</script>
 </body>
 </html>
