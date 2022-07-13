@@ -11,12 +11,12 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
 */
 export class SPush extends zk.Object {
-	declare public desktop?: zk.Desktop;
-	declare public min?: number;
-	declare public max?: number;
-	declare public factor?: number;
-	declare public intv?: number | null;
-	public start(dt: zk.Desktop, min: number, max: number, factor: number): void {
+	declare desktop?: zk.Desktop;
+	declare min?: number;
+	declare max?: number;
+	declare factor?: number;
+	declare intv?: number | null;
+	start(dt: zk.Desktop, min: number, max: number, factor: number): void {
 		this.desktop = dt;
 		this.min = min > 0 ? min : 1000;
 		this.max = max > 0 ? max : 15000;
@@ -27,11 +27,11 @@ export class SPush extends zk.Object {
 
 		this.intv = setInterval(this.proxy(this._do), freq);
 	}
-	public stop(): void {
+	stop(): void {
 		clearInterval(this.intv!);
 		this.intv = null;
 	}
-	private _do(): void {
+	_do(): void {
 		if (!zAu.processing()) {
 			var doNow = !zAu.doneTime;
 			if (!doNow) {

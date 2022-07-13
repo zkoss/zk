@@ -25,7 +25,7 @@ export class Listfooter extends zul.mesh.FooterWidget {
 	/** Returns the listbox that this belongs to.
 	 * @return Listbox
 	 */
-	public getListbox(): zul.sel.Listbox | null | undefined { // FIXME: solve with <parent>
+	getListbox(): zul.sel.Listbox | null | undefined { // FIXME: solve with <parent>
 		return this.getMeshWidget() as zul.sel.Listbox | null | undefined;
 	}
 
@@ -33,7 +33,7 @@ export class Listfooter extends zul.mesh.FooterWidget {
 	 * this footer, or null if not available.
 	 * @return Listheader
 	 */
-	public getListheader(): zul.sel.Listheader | null | undefined { // FIXME: solve with <parent>
+	getListheader(): zul.sel.Listheader | null | undefined { // FIXME: solve with <parent>
 		return this.getHeaderWidget() as zul.sel.Listheader | null | undefined;
 	}
 
@@ -47,13 +47,13 @@ export class Listfooter extends zul.mesh.FooterWidget {
 	 * @return int
 	 * @since 5.0.5
 	 */
-	public getMaxlength(): number | undefined {
+	getMaxlength(): number | undefined {
 		var lc = this.getListheader();
 		return lc ? lc.getMaxlength() : 0;
 	}
 
 	//@Override
-	protected override domLabel_(): string {
+	override domLabel_(): string {
 		return zUtl.encodeXML(this.getLabel(), {maxlength: this.getMaxlength()});
 	}
 }

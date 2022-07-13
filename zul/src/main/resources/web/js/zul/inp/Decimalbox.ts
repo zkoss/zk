@@ -18,10 +18,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.inp.Decimalbox')
 export class Decimalbox extends zul.inp.NumberInputWidget<zk.BigDecimal> {
-	private _scale?: number;
+	_scale?: number;
 
 	// zk.def
-	public setScale(v: number): this {
+	setScale(v: number): this {
 		this._scale = v;
 		return this;
 	}
@@ -29,11 +29,11 @@ export class Decimalbox extends zul.inp.NumberInputWidget<zk.BigDecimal> {
 	/** Returns the precision scale.
 	 * @return int
 	 */
-	public getScale(): number | undefined {
+	getScale(): number | undefined {
 		return this._scale;
 	}
 
-	protected override coerceFromString_(value: string | null | undefined): zul.inp.CoerceFromStringResult | zk.BigDecimal | null {
+	override coerceFromString_(value: string | null | undefined): zul.inp.CoerceFromStringResult | zk.BigDecimal | null {
 		if (!value) return null;
 
 		var info = zk.fmt.Number.unformat(this._format!, value, false, this._localizedSymbols),
@@ -52,22 +52,22 @@ export class Decimalbox extends zul.inp.NumberInputWidget<zk.BigDecimal> {
 		return val;
 	}
 
-	protected override coerceToString_(value?: zk.BigDecimal | string | null): string {
+	override coerceToString_(value?: zk.BigDecimal | string | null): string {
 		var fmt = this._format;
 		return value != null ? typeof value == 'string' ? value :
 			fmt ? zk.fmt.Number.format(fmt, value.$toString(), this._rounding!, this._localizedSymbols)
 			: value.$toLocaleString() : '';
 	}
 
-	protected override marshall_(val: zk.BigDecimal | undefined): string | undefined {
+	override marshall_(val: zk.BigDecimal | undefined): string | undefined {
 		return val ? val.$toString() : val;
 	}
 
-	protected override unmarshall_(val: string | number): zk.BigDecimal | '' | 0 {
+	override unmarshall_(val: string | number): zk.BigDecimal | '' | 0 {
 		return val ? new zk.BigDecimal(val) : val as '' | 0;
 	}
 
-	protected override getAllowedKeys_(): string {
+	override getAllowedKeys_(): string {
 		var symbols = this._localizedSymbols;
 		return super.getAllowedKeys_()
 			+ (symbols ? symbols : zk).DECIMAL; //not support scientific expression

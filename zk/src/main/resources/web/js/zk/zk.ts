@@ -1724,16 +1724,16 @@ function getProxy(o, f) { //used by zk.Object
 export abstract class ZKObject {
 	// FIXME: $copyf: Class;
 	// FIXME: $copied: boolean;
-	declare public _$ais: zk.Callable[] | null;
-	declare public _$supers: Record<string, unknown>;
-	declare public _$proxies: WeakMap<object, unknown>;
-	declare public _$super;
-	declare public _importantEvts: {[key: string]: unknown};
+	declare _$ais: zk.Callable[] | null;
+	declare _$supers: Record<string, unknown>;
+	declare _$proxies: WeakMap<object, unknown>;
+	declare _$super;
+	declare _importantEvts: {[key: string]: unknown};
 
-	declare public static $oid;
+	declare static $oid;
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	public constructor(..._rest: any[]/* for override compatibility */) {
+	constructor(..._rest: any[]/* for override compatibility */) {
 		this.$oid = ++_oid;
 	}
 
@@ -1743,7 +1743,7 @@ export abstract class ZKObject {
 	 * @see #afterInit
 	 * @deprecated as of 10.0 released. Using ES6 {@code constructor} instead.
 	 */
-	public $init(props?: Record<string, unknown> | typeof zkac): void {
+	$init(props?: Record<string, unknown> | typeof zkac): void {
 		// empty for subclass to override
 	}
 
@@ -1753,7 +1753,7 @@ export abstract class ZKObject {
 	 * @param props Map the properties passed by constructor.
 	 * @since 10.0
 	 */
-	public afterCreated_(props?: Record<string, unknown> | typeof zkac): void {
+	afterCreated_(props?: Record<string, unknown> | typeof zkac): void {
 		// empty for subclass to override
 	}
 
@@ -1771,13 +1771,13 @@ export abstract class ZKObject {
 	 * @see #$init
 	 * @deprecated as of 10.0 released. Using {@link #afterCreated_()} instead.
 	 */
-	protected afterInit(func: zk.Callable): void {
+	afterInit(func: zk.Callable): void {
 		(this._$ais = this._$ais || []).unshift(func); //reverse
 	}
 	/** The class that this object belongs to.
 	 * @type zk.Class
 	 */
-	public get $class(): typeof ZKObject {
+	get $class(): typeof ZKObject {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		return this.constructor as any;
 	}
@@ -1787,7 +1787,7 @@ export abstract class ZKObject {
 	 * @type zk.Class
 	 * @since 10.0.0
 	 */
-	public get$Class<T extends typeof ZKObject>(): T {
+	get$Class<T extends typeof ZKObject>(): T {
 		return this.$class as T;
 	}
 
@@ -1798,7 +1798,7 @@ export abstract class ZKObject {
 	 * <p>Notice: zk.Class extends from zk.Object (so a class also has $oid)
 	 * @type int
 	 */
-	public $oid = 0;
+	$oid = 0;
 	/** Determines if this object is an instance of the class represented by the specified Class parameter.
 	 * Example:
 <pre><code>
@@ -1810,7 +1810,7 @@ if (obj.$instanceof(zul.wgt.Label, zul.wgt.Image)) {
 	 * @return boolean true if this object is an instance of the class
 	 */
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	public $instanceof<Ts extends any[]>(...klass: Ts): boolean {
+	$instanceof<Ts extends any[]>(...klass: Ts): boolean {
 		for (let k of klass) {
 			if (this instanceof k) {
 				return true;
@@ -1830,7 +1830,7 @@ multiply: function (n) {
 	 * @return Object the object being returned by the method of the superclass.
 	 * @see #$supers
 	 */
-	protected $super(mtd: string, ...args: unknown[]): unknown;
+	$super(mtd: string, ...args: unknown[]): unknown;
 	/** Invokes a method defined in the superclass with any number of arguments.
 	 * It is like Function's call() that takes any number of arguments.
 	 * <p>It is similar to {@link #$super(String, Object...)}, but
@@ -1853,8 +1853,8 @@ foo.MyClass = zk.$extends(foo.MySuper, {
 	 * @see #$supers
 	 * @since 5.0.2
 	 */
-	protected $super(klass: typeof ZKObject, mtd: string, ...args: unknown[]): unknown;
-	protected $super(klass: typeof ZKObject | string, mtd: string, ...args: unknown[]): unknown {
+	$super(klass: typeof ZKObject, mtd: string, ...args: unknown[]): unknown;
+	$super(klass: typeof ZKObject | string, mtd: string, ...args: unknown[]): unknown {
 		if (typeof klass != 'string') {
 			return this.$supers(klass, mtd, args);
 		}
@@ -1895,7 +1895,7 @@ foo.MyClass = zk.$extends(foo.MySuper, {
 	 * @see #$super
 	 * @since 5.0.2
 	 */
-	public $supers(nm: typeof ZKObject | string, args: string | unknown[], argx?: unknown[]): unknown {
+	$supers(nm: typeof ZKObject | string, args: string | unknown[], argx?: unknown[]): unknown {
 		var supers = this._$supers;
 		if (!supers) supers = this._$supers = {};
 
@@ -1964,12 +1964,12 @@ setInterval(wgt.doIt, 1000); //WRONG! doIt will not be called with wgt
 	* (that actually have <code>this</code> referencing to this object).
 	*/
 	// ref: https://github.com/Microsoft/TypeScript/pull/27028
-	public proxy<A extends unknown[], R>(func: (...args: A) => R): (...args: A) => R;
-	public proxy<A0, A extends unknown[], R>(func: (arg0: A0, ...args: A) => R): (arg0: A0, ...args: A) => R;
-	public proxy<A0, A1, A extends unknown[], R>(func: (arg0: A0, arg1: A1, ...args: A) => R): (arg0: A0, arg1: A1, ...args: A) => R;
-	public proxy<A0, A1, A2, A extends unknown[], R>(func: (arg0: A0, arg1: A1, arg2: A2, ...args: A) => R): (arg0: A0, arg1: A1, arg2: A2, ...args: A) => R;
-	public proxy<A0, A1, A2, A3, A extends unknown[], R>(func: (arg0: A0, arg1: A1, arg2: A2, arg3: A3, ...args: A) => R): (arg0: A0, arg1: A1, arg2: A2, arg3: A3, ...args: A) => R;
-	public proxy<AX, R>(func: (...args: AX[]) => R): (...args: AX[]) => R {
+	proxy<A extends unknown[], R>(func: (...args: A) => R): (...args: A) => R;
+	proxy<A0, A extends unknown[], R>(func: (arg0: A0, ...args: A) => R): (arg0: A0, ...args: A) => R;
+	proxy<A0, A1, A extends unknown[], R>(func: (arg0: A0, arg1: A1, ...args: A) => R): (arg0: A0, arg1: A1, ...args: A) => R;
+	proxy<A0, A1, A2, A extends unknown[], R>(func: (arg0: A0, arg1: A1, arg2: A2, ...args: A) => R): (arg0: A0, arg1: A1, arg2: A2, ...args: A) => R;
+	proxy<A0, A1, A2, A3, A extends unknown[], R>(func: (arg0: A0, arg1: A1, arg2: A2, arg3: A3, ...args: A) => R): (arg0: A0, arg1: A1, arg2: A2, arg3: A3, ...args: A) => R;
+	proxy<AX, R>(func: (...args: AX[]) => R): (...args: AX[]) => R {
 		var fps = this._$proxies, fp;
 		if (!fps) this._$proxies = fps = new WeakMap();
 		else if (fp = fps.get(func)) return fp;
@@ -1986,7 +1986,7 @@ if (klass.isInstance(obj)) {
 	 * @param Object o the object to check
 	 * @return boolean true if the object is an instance
 	 */
-	public static isInstance<T extends typeof ZKObject>(this: T, o: unknown): o is InstanceType<T> {
+	static isInstance<T extends typeof ZKObject>(this: T, o: unknown): o is InstanceType<T> {
 		return o instanceof ZKObject && o.$instanceof(this);
 	}
 	/** Determines if the class by this Class object is either the same as, or is a superclass of, the class represented by the specified Class parameter.
@@ -1998,13 +1998,13 @@ if (klass1.isAssignableFrom(klass2)) {
 	 * @param zk.Class cls the Class object to be checked, such as zk.Widget.
 	 * @return boolean true if assignable
 	 */
-	public static isAssignableFrom(cls: typeof ZKObject): boolean {
+	static isAssignableFrom(cls: typeof ZKObject): boolean {
 		return cls && (cls.prototype instanceof this || cls === this);
 	}
 }
 _zk.Object = ZKObject;
 export class ZKClass extends ZKObject {
-	declare public superclass;
+	declare superclass;
 } //regClass() requires zk.Class
 _zk.Class = ZKClass;
 
@@ -2012,9 +2012,9 @@ _zk.Class = ZKClass;
 var _erbx, _errcnt = 0;
 
 _zk._Erbx = class _Erbx extends ZKObject { //used in HTML tags
-	public id: string;
-	public dg: Draggable | undefined;
-	public constructor(msg: string) {
+	id: string;
+	dg: Draggable | undefined;
+	constructor(msg: string) {
 		super();
 		var id = 'zk_err',
 			$id = '#' + id,
@@ -2044,17 +2044,17 @@ _zk._Erbx = class _Erbx extends ZKObject { //used in HTML tags
 		}
 		jq($id).slideDown(1000);
 	}
-	public destroy(): void {
+	destroy(): void {
 		_erbx = null;
 		_errcnt = 0;
 		if (this.dg) this.dg.destroy();
 		jq('#' + this.id).remove();
 	}
-	public static redraw(): void {
+	static redraw(): void {
 		_zk.errorDismiss();
 		zAu.send(new zk.Event(null, 'redraw'));
 	}
-	public static push(msg: string): _Erbx | void {
+	static push(msg: string): _Erbx | void {
 		if (!_erbx)
 			return new _zk._Erbx(msg);
 
@@ -2066,7 +2066,7 @@ _zk._Erbx = class _Erbx extends ZKObject { //used in HTML tags
 		jq('#' + id + ' .newmessage')
 			.removeClass('newmessage').addClass('message').slideDown(600);
 	}
-	public static remove(): void {
+	static remove(): void {
 		if (_erbx) _erbx.destroy();
 	}
 };

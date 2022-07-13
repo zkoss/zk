@@ -52,39 +52,39 @@ export interface Dimension {
  */
 @zk.WrapClass('zul.wnd.Panel')
 export class Panel extends zul.Widget {
-	private _border = 'none';
-	public _title = '';
-	public _open = true;
-	private _minheight = 100;
-	private _minwidth = 200;
-	protected override _tabindex = 0;
-	public _nativebar = true;
-	public caption?: zul.wgt.Caption | null;
-	public panelchildren?: zul.wnd.Panelchildren | null;
-	public tbar?: zul.wgt.Toolbar | null;
-	public fbar?: zul.wgt.Toolbar | null;
-	public bbar?: zul.wgt.Toolbar | null;
-	private _tbar?: string;
-	private _bbar?: string;
-	private _fbar?: string;
-	private _skipper: zul.wnd.PanelSkipper;
-	private _sizable?: boolean;
-	private _movable?: boolean;
-	private _floatable?: boolean;
-	private _sizer?: zk.Draggable | null;
-	private _maximizable?: boolean;
-	private _minimizable?: boolean;
-	private _collapsible?: boolean;
-	private _closable?: boolean;
-	private _maximized?: boolean;
-	private _inWholeMode?: boolean;
-	private _oldNodeInfo?: NodeInfo | null;
-	private _lastSize?: null | { l: string; t: string; w: string; h: string };
-	private _minimized?: boolean;
-	private _shadow?: zk.eff.Shadow | null;
-	private _backupCursor?: string;
+	_border = 'none';
+	_title = '';
+	_open = true;
+	_minheight = 100;
+	_minwidth = 200;
+	override _tabindex = 0;
+	_nativebar = true;
+	caption?: zul.wgt.Caption | null;
+	panelchildren?: zul.wnd.Panelchildren | null;
+	tbar?: zul.wgt.Toolbar | null;
+	fbar?: zul.wgt.Toolbar | null;
+	bbar?: zul.wgt.Toolbar | null;
+	_tbar?: string;
+	_bbar?: string;
+	_fbar?: string;
+	_skipper: zul.wnd.PanelSkipper;
+	_sizable?: boolean;
+	_movable?: boolean;
+	_floatable?: boolean;
+	_sizer?: zk.Draggable | null;
+	_maximizable?: boolean;
+	_minimizable?: boolean;
+	_collapsible?: boolean;
+	_closable?: boolean;
+	_maximized?: boolean;
+	_inWholeMode?: boolean;
+	_oldNodeInfo?: NodeInfo | null;
+	_lastSize?: null | { l: string; t: string; w: string; h: string };
+	_minimized?: boolean;
+	_shadow?: zk.eff.Shadow | null;
+	_backupCursor?: string;
 
-	public constructor() {
+	constructor() {
 		super(); // FIXME: params?
 		this.listen({onMaximize: this, onClose: this, onMove: this, onSize: this.onSizeEvent}, -1000);
 		this._skipper = new zul.wnd.PanelSkipper(this);
@@ -97,7 +97,7 @@ export class Panel extends zul.Widget {
 	 * <p>Note: Only applies when {@link #isSizable()} = true.
 	 * @param int minheight
 	 */
-	public setMinheight(minheight: number): this { //TODO
+	setMinheight(minheight: number): this { //TODO
 		this._minheight = minheight;
 		return this;
 	}
@@ -107,7 +107,7 @@ export class Panel extends zul.Widget {
 	 * <p>Default: 100.
 	 * @return int
 	 */
-	public getMinheight(): number { //TODO
+	getMinheight(): number { //TODO
 		return this._minheight;
 	}
 
@@ -118,7 +118,7 @@ export class Panel extends zul.Widget {
 	 * <p>Note: Only applies when {@link #isSizable()} = true.
 	 * @param int minwidth
 	 */
-	public setMinwidth(minwidth: number): this { //TODO
+	setMinwidth(minwidth: number): this { //TODO
 		this._minwidth = minwidth;
 		return this;
 	}
@@ -128,7 +128,7 @@ export class Panel extends zul.Widget {
 	 * <p>Default: 200.
 	 * @return int
 	 */
-	public getMinwidth(): number { //TODO
+	getMinwidth(): number { //TODO
 		return this._minwidth;
 	}
 
@@ -137,7 +137,7 @@ export class Panel extends zul.Widget {
 	 * <p>Default: false.
 	 * @param boolean sizable
 	 */
-	public setSizable(sizable: boolean, opts?: Record<string, boolean>): this {
+	setSizable(sizable: boolean, opts?: Record<string, boolean>): this {
 		const o = this._sizable;
 		this._sizable = sizable;
 
@@ -158,7 +158,7 @@ export class Panel extends zul.Widget {
 	/** Returns whether the panel is sizable.
 	 * @return boolean
 	 */
-	public isSizable(): boolean | undefined {
+	isSizable(): boolean | undefined {
 		return this._sizable;
 	}
 
@@ -169,7 +169,7 @@ export class Panel extends zul.Widget {
 	 * <p>Note that this method only applied when {@link #isFloatable()} is true.
 	 * @param boolean movable
 	 */
-	public setMovable(movable: boolean, opts?: Record<string, boolean>): this {
+	setMovable(movable: boolean, opts?: Record<string, boolean>): this {
 		const o = this._movable;
 		this._movable = movable;
 
@@ -188,7 +188,7 @@ export class Panel extends zul.Widget {
 	 * <p>Default: false.
 	 * @return boolean
 	 */
-	public isMovable(): boolean | undefined {
+	isMovable(): boolean | undefined {
 		return this._movable;
 	}
 
@@ -204,7 +204,7 @@ export class Panel extends zul.Widget {
 	 * to the right edge of the viewport.
 	 * @param boolean floatable
 	 */
-	public setFloatable(floatable: boolean, opts?: Record<string, boolean>): this {
+	setFloatable(floatable: boolean, opts?: Record<string, boolean>): this {
 		const o = this._floatable;
 		this._floatable = floatable;
 
@@ -223,7 +223,7 @@ export class Panel extends zul.Widget {
 	 * <p>Default: false.
 	 * @return boolean
 	 */
-	public isFloatable(): boolean | undefined {
+	isFloatable(): boolean | undefined {
 		return this._floatable;
 	}
 
@@ -237,7 +237,7 @@ export class Panel extends zul.Widget {
 	 * <p>Note: the maximize button won't be displayed if no title or caption at all.
 	 * @param boolean maximizable
 	 */
-	public setMaximizable(maximizable: boolean, opts?: Record<string, boolean>): this {
+	setMaximizable(maximizable: boolean, opts?: Record<string, boolean>): this {
 		const o = this._maximizable;
 		this._maximizable = maximizable;
 
@@ -257,7 +257,7 @@ export class Panel extends zul.Widget {
 	 * <p>Default: false.
 	 * @return boolean
 	 */
-	public isMaximizable(): boolean | undefined {
+	isMaximizable(): boolean | undefined {
 		return this._maximizable;
 	}
 
@@ -272,7 +272,7 @@ export class Panel extends zul.Widget {
 	 * <p>Note: the maximize button won't be displayed if no title or caption at all.
 	 * @param boolean minimizable
 	 */
-	public setMinimizable(minimizable: boolean, opts?: Record<string, boolean>): this {
+	setMinimizable(minimizable: boolean, opts?: Record<string, boolean>): this {
 		const o = this._minimizable;
 		this._minimizable = minimizable;
 
@@ -292,7 +292,7 @@ export class Panel extends zul.Widget {
 	 * <p>Default: false.
 	 * @return boolean
 	 */
-	public isMinimizable(): boolean | undefined {
+	isMinimizable(): boolean | undefined {
 		return this._minimizable;
 	}
 
@@ -302,7 +302,7 @@ export class Panel extends zul.Widget {
 	 * <p>Note: the toggle button won't be displayed if no title or caption at all.
 	 * @param boolean collapsible
 	 */
-	public setCollapsible(collapsible: boolean, opts?: Record<string, boolean>): this {
+	setCollapsible(collapsible: boolean, opts?: Record<string, boolean>): this {
 		const o = this._collapsible;
 		this._collapsible = collapsible;
 
@@ -321,7 +321,7 @@ export class Panel extends zul.Widget {
 	 * <p>Default: false.
 	 * @return boolean
 	 */
-	public isCollapsible(): boolean | undefined {
+	isCollapsible(): boolean | undefined {
 		return this._collapsible;
 	}
 
@@ -335,7 +335,7 @@ export class Panel extends zul.Widget {
 	 * <p>Note: the close button won't be displayed if no title or caption at all.
 	 * @param boolean closable
 	 */
-	public setClosable(closable: boolean, opts?: Record<string, boolean>): this {
+	setClosable(closable: boolean, opts?: Record<string, boolean>): this {
 		const o = this._closable;
 		this._closable = closable;
 
@@ -353,7 +353,7 @@ export class Panel extends zul.Widget {
 	 * Returns whether to show a close button on the title bar.
 	 * @return boolean
 	 */
-	public isClosable(): boolean | undefined {
+	isClosable(): boolean | undefined {
 		return this._closable;
 	}
 
@@ -365,7 +365,7 @@ export class Panel extends zul.Widget {
 	 * <a href="http://books.zkoss.org/wiki/ZK_Component_Reference/Containers/Panel#Border">ZK Component Reference: Panel</a>.
 	 * @param String border the border. If null or "0", "none" is assumed.
 	 */
-	public setBorder(border: string, opts?: Record<string, boolean>): this {
+	setBorder(border: string, opts?: Record<string, boolean>): this {
 		const o = this._border;
 		this._border = border;
 
@@ -385,7 +385,7 @@ export class Panel extends zul.Widget {
 	 * <p>Default: "none".
 	 * @return String
 	 */
-	public getBorder(): string {
+	getBorder(): string {
 		return this._border;
 	}
 
@@ -393,7 +393,7 @@ export class Panel extends zul.Widget {
 	 * Sets the title.
 	 * @param String title
 	 */
-	public setTitle(title: string, opts?: Record<string, boolean>): this {
+	setTitle(title: string, opts?: Record<string, boolean>): this {
 		const o = this._title;
 		this._title = title;
 
@@ -420,7 +420,7 @@ export class Panel extends zul.Widget {
 	 * <p>Default: empty.
 	 * @return String
 	 */
-	public getTitle(): string {
+	getTitle(): string {
 		return this._title;
 	}
 
@@ -428,7 +428,7 @@ export class Panel extends zul.Widget {
 	 * Opens or closes this Panel.
 	 * @param boolean open
 	 */
-	public setOpen(open: boolean, fromServer?: boolean, opts?: Record<string, boolean>): this {
+	setOpen(open: boolean, fromServer?: boolean, opts?: Record<string, boolean>): this {
 		const o = this._open;
 		this._open = open;
 
@@ -466,7 +466,7 @@ export class Panel extends zul.Widget {
 	 * <p>Default: true.
 	 * @return boolean
 	 */
-	public isOpen(): boolean {
+	isOpen(): boolean {
 		return this._open;
 	}
 
@@ -481,7 +481,7 @@ export class Panel extends zul.Widget {
 	 * <p>Default: false.
 	 * @param boolean maximized
 	 */
-	public setMaximized(maximized: boolean, fromServer?: boolean, opts?: Record<string, boolean>): this {
+	setMaximized(maximized: boolean, fromServer?: boolean, opts?: Record<string, boolean>): this {
 		const o = this._maximized;
 		this._maximized = maximized;
 
@@ -640,7 +640,7 @@ export class Panel extends zul.Widget {
 	 * Returns whether the panel is maximized.
 	 * @return boolean
 	 */
-	public isMaximized(): boolean | undefined {
+	isMaximized(): boolean | undefined {
 		return this._maximized;
 	}
 
@@ -649,7 +649,7 @@ export class Panel extends zul.Widget {
 	 * <p>Default: false.
 	 * @param boolean minimized
 	 */
-	public setMinimized(minimized: boolean, fromServer?: boolean, opts?: Record<string, boolean>): this {
+	setMinimized(minimized: boolean, fromServer?: boolean, opts?: Record<string, boolean>): this {
 		const o = this._minimized;
 		this._minimized = minimized;
 
@@ -688,17 +688,17 @@ export class Panel extends zul.Widget {
 	 * <p>Default: false.
 	 * @return boolean
 	 */
-	public isMinimized(): boolean | undefined {
+	isMinimized(): boolean | undefined {
 		return this._minimized;
 	}
 
 	//server use only
-	public getTbar(): string | undefined {
+	getTbar(): string | undefined {
 		return this._tbar;
 	}
 
 	//server use only
-	public setTbar(val: string, opts?: Record<string, boolean>): this {
+	setTbar(val: string, opts?: Record<string, boolean>): this {
 		const o = this._tbar;
 		this._tbar = val;
 
@@ -715,12 +715,12 @@ export class Panel extends zul.Widget {
 	}
 
 	//server use only
-	public getBbar(): string | undefined {
+	getBbar(): string | undefined {
 		return this._bbar;
 	}
 
 	//server use only
-	public setBbar(val: string, opts?: Record<string, boolean>): this {
+	setBbar(val: string, opts?: Record<string, boolean>): this {
 		const o = this._bbar;
 		this._bbar = val;
 
@@ -737,12 +737,12 @@ export class Panel extends zul.Widget {
 	}
 
 	//server use only
-	public getFbar(): string | undefined {
+	getFbar(): string | undefined {
 		return this._fbar;
 	}
 
 	//server use only
-	public setFbar(val: string, opts?: Record<string, boolean>): this {
+	setFbar(val: string, opts?: Record<string, boolean>): this {
 		const o = this._fbar;
 		this._fbar = val;
 
@@ -759,7 +759,7 @@ export class Panel extends zul.Widget {
 	}
 
 	//super//
-	public override setVflex(vflex: boolean | string | null | undefined): void {
+	override setVflex(vflex: boolean | string | null | undefined): void {
 		super.setVflex(vflex);
 		if (this.desktop) {
 			if (this.panelchildren) {
@@ -768,7 +768,7 @@ export class Panel extends zul.Widget {
 		}
 	}
 
-	public override setHflex(hflex: boolean | string | null | undefined): void {
+	override setHflex(hflex: boolean | string | null | undefined): void {
 		super.setHflex(hflex);
 		if (this.desktop) {
 			if (this.panelchildren) {
@@ -777,7 +777,7 @@ export class Panel extends zul.Widget {
 		}
 	}
 
-	public override setVisible(visible: boolean | undefined): void {
+	override setVisible(visible: boolean | undefined): void {
 		if (this._visible != visible) {
 			if (this._maximized) {
 				this.setMaximized(false);
@@ -788,32 +788,32 @@ export class Panel extends zul.Widget {
 		}
 	}
 
-	public override setHeight(height: string | null): void {
+	override setHeight(height: string | null): void {
 		super.setHeight(height);
 		if (this.desktop)
 			zUtl.fireSized(this);
 	}
 
-	public override setWidth(width: string | null): void {
+	override setWidth(width: string | null): void {
 		super.setWidth(width);
 		if (this.desktop)
 			zUtl.fireSized(this);
 	}
 
-	public override setTop(top: string): void {
+	override setTop(top: string): void {
 		this._hideShadow();
 		super.setTop(top);
 		this.zsync();
 
 	}
 
-	public override setLeft(left: string): void {
+	override setLeft(left: string): void {
 		this._hideShadow();
 		super.setLeft(left);
 		this.zsync();
 	}
 
-	protected override updateDomStyle_(): void {
+	override updateDomStyle_(): void {
 		super.updateDomStyle_();
 		if (this.desktop)
 			zUtl.fireSized(this);
@@ -828,7 +828,7 @@ export class Panel extends zul.Widget {
 	 * @param zul.wgt.Toolbar toolbar
 	 * @return boolean
 	 */
-	public addToolbar(name: string, toolbar: zul.wgt.Toolbar): boolean {
+	addToolbar(name: string, toolbar: zul.wgt.Toolbar): boolean {
 		switch (name) {
 			case 'tbar':
 				this.tbar = toolbar;
@@ -845,17 +845,17 @@ export class Panel extends zul.Widget {
 	}
 
 	//event handler//
-	public onClose(): void {
+	onClose(): void {
 		if (!this.inServer || !this.isListen('onClose', {asapOnly: true})) //let server handle if in server
 			this.parent!.removeChild(this); //default: remove
 	}
 
-	public onMove(evt: zk.Event & zul.wnd.Dimension): void {
+	onMove(evt: zk.Event & zul.wnd.Dimension): void {
 		this._left = evt.left;
 		this._top = evt.top;
 	}
 
-	public onMaximize(evt: zk.Event<zul.wnd.Dimension>): void {
+	onMaximize(evt: zk.Event<zul.wnd.Dimension>): void {
 		var data = evt.data!;
 		this._top = data.top;
 		this._left = data.left;
@@ -863,7 +863,7 @@ export class Panel extends zul.Widget {
 		this._width = data.width;
 	}
 
-	public onSizeEvent(evt: zk.Event<zul.wnd.Dimension>): void {
+	onSizeEvent(evt: zk.Event<zul.wnd.Dimension>): void {
 		var data = evt.data!,
 			node = this.$n_(),
 			s = node.style;
@@ -894,14 +894,14 @@ export class Panel extends zul.Widget {
 		});
 	}
 
-	protected override setFlexSizeH_(n: HTMLElement, zkn: zk.JQZK, height: number, isFlexMin?: boolean): void {
+	override setFlexSizeH_(n: HTMLElement, zkn: zk.JQZK, height: number, isFlexMin?: boolean): void {
 		if (isFlexMin) {
 			height += this._titleHeight();
 		}
 		super.setFlexSizeH_(n, zkn, height, isFlexMin);
 	}
 
-	protected override setFlexSizeW_(n: HTMLElement, zkn: zk.JQZK, width: number, isFlexMin?: boolean): void {
+	override setFlexSizeW_(n: HTMLElement, zkn: zk.JQZK, width: number, isFlexMin?: boolean): void {
 		if (isFlexMin && this.caption) {
 			if (width == this.caption.$n_().offsetWidth) {
 				width += zk(this.$n('head')).padBorderWidth();
@@ -910,14 +910,14 @@ export class Panel extends zul.Widget {
 		super.setFlexSizeW_(n, zkn, width, isFlexMin);
 	}
 
-	public beforeSize(): void {
+	beforeSize(): void {
 		// Bug ZK-334: Tablelayout with hflex won't resize its width after resizing
 		// have to clear width here if not listen to flex
 		if (!this._flexListened)
 			this.$n_('body').style.width = '';
 	}
 
-	protected override resetSize_(orient: zk.FlexOrient): void {
+	override resetSize_(orient: zk.FlexOrient): void {
 		// Bug ZK-334: Tablelayout with hflex won't resize its width after resizing
 		// also reset the size of body
 		super.resetSize_(orient);
@@ -925,7 +925,7 @@ export class Panel extends zul.Widget {
 	}
 
 	//watch//
-	public override onSize(ctl: zk.ZWatchController): void {
+	override onSize(ctl: zk.ZWatchController): void {
 		function syncMaximized(wgt: zul.wnd.Panel): void {
 			if (!wgt._lastSize) return;
 			var node = wgt.$n_(),
@@ -965,11 +965,11 @@ export class Panel extends zul.Widget {
 		this.zsync();
 	}
 
-	public onHide(): void {
+	onHide(): void {
 		this._hideShadow();
 	}
 
-	private _fixHgh(ignoreRealVisible?: boolean): void { // TODO: should be handled by Panelchildren onSize already
+	_fixHgh(ignoreRealVisible?: boolean): void { // TODO: should be handled by Panelchildren onSize already
 		const pc = this.panelchildren;
 		if (!pc || pc.z_rod || (!ignoreRealVisible && !this.isRealVisible())) return;
 		var n = this.$n_(),
@@ -981,7 +981,7 @@ export class Panel extends zul.Widget {
 			body.style.height = jq.px0(this._offsetHeight(n));
 	}
 
-	private _fixWdh(): void { // TODO: should be handled by Panelchildren onSize already
+	_fixWdh(): void { // TODO: should be handled by Panelchildren onSize already
 		var pc = this.panelchildren;
 		if (!pc || pc.z_rod || !this.isRealVisible())
 			return;
@@ -994,22 +994,22 @@ export class Panel extends zul.Widget {
 	}
 
 	//whether rounded border is required
-	private _rounded(): boolean {
+	_rounded(): boolean {
 		return this._border.startsWith('rounded'); //rounded
 	}
 
 	//backward compatible with 5.0.6
-	public isFramable(): boolean {
+	isFramable(): boolean {
 		return this._rounded();
 	}
 
 	//whether inner border is required
-	public _bordered(): boolean {
+	_bordered(): boolean {
 		const v = this._border;
 		return v != 'none' && v != 'rounded';
 	}
 
-	private _offsetHeight(n: HTMLElement): number {
+	_offsetHeight(n: HTMLElement): number {
 		var tHeight = this._titleHeight(),
 			body = this.$n('body'),
 			h = zk(tHeight ? n : body).contentHeight() - this._titleHeight();
@@ -1025,12 +1025,12 @@ export class Panel extends zul.Widget {
 		return h;
 	}
 
-	private _titleHeight(): number {
+	_titleHeight(): number {
 		var head = this.getTitle() || this.caption ? this.$n('head') : null;
 		return head ? head.offsetHeight : 0;
 	}
 
-	public onFloatUp(ctl: zk.ZWatchController): void {
+	onFloatUp(ctl: zk.ZWatchController): void {
 		if (!this._visible || !this.isFloatable())
 			return; //just in case
 
@@ -1044,7 +1044,7 @@ export class Panel extends zul.Widget {
 		}
 	}
 
-	private _makeSizer(): void {
+	_makeSizer(): void {
 		if (!this._sizer) {
 			this.domListen_(this.$n_(), 'onMouseMove');
 			this.domListen_(this.$n_(), 'onMouseOut');
@@ -1060,7 +1060,7 @@ export class Panel extends zul.Widget {
 		}
 	}
 
-	private _initFloat(): void {
+	_initFloat(): void {
 		var n = this.$n_();
 		if (!n.style.top || !n.style.left) {
 			var xy = zk(n).revisedOffset();
@@ -1078,7 +1078,7 @@ export class Panel extends zul.Widget {
 			this.setTopmost();
 	}
 
-	private _initMove(): void {
+	_initMove(): void {
 		var handle = this.$n('head');
 		if (handle && !this._drag) {
 			jq(handle).addClass(this.$s('header-move'));
@@ -1090,7 +1090,7 @@ export class Panel extends zul.Widget {
 		}
 	}
 
-	public override zsync(opts?: Record<string, unknown>): void {
+	override zsync(opts?: Record<string, unknown>): void {
 		super.zsync(opts);
 
 		if (!this.isFloatable()) {
@@ -1113,12 +1113,12 @@ export class Panel extends zul.Widget {
 		}
 	}
 
-	private _hideShadow(): void {
+	_hideShadow(): void {
 		var shadow = this._shadow;
 		if (shadow) shadow.hide();
 	}
 
-	protected override afterAnima_(visible: boolean): void {
+	override afterAnima_(visible: boolean): void {
 		super.afterAnima_(visible);
 		var p = this.parent;
 		if (p) {
@@ -1142,7 +1142,7 @@ export class Panel extends zul.Widget {
 	}
 
 	//super//
-	protected override bind_(desktop: zk.Desktop | null | undefined, skipper: zk.Skipper | null | undefined, after: CallableFunction[]): void {
+	override bind_(desktop: zk.Desktop | null | undefined, skipper: zk.Skipper | null | undefined, after: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 
 		zWatch.listen({onSize: this, onHide: this});
@@ -1167,7 +1167,7 @@ export class Panel extends zul.Widget {
 		}
 	}
 
-	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		if (this._inWholeMode) {
 			var node = this.$n(),
 				oldinfo: NodeInfo | null | undefined;
@@ -1212,7 +1212,7 @@ export class Panel extends zul.Widget {
 		super.unbind_(skipper, after, keepRod);
 	}
 
-	public _doMouseMove(evt: zk.Event): void {
+	_doMouseMove(evt: zk.Event): void {
 		if (this._sizer && zUtl.isAncestor(this, evt.target!)) {
 			var n = this.$n_(),
 				c = Panel._insizer(n, zk(n).revisedOffset(), evt.pageX, evt.pageY),
@@ -1232,11 +1232,11 @@ export class Panel extends zul.Widget {
 		}
 	}
 
-	public _doMouseOut(evt: zk.Event): void {
+	_doMouseOut(evt: zk.Event): void {
 		this.$n_().style.cursor = this._backupCursor || '';
 	}
 
-	public override doClick_(evt: zk.Event, popupOnly?: boolean): void {
+	override doClick_(evt: zk.Event, popupOnly?: boolean): void {
 		var maxBtn = this.$n('max'),
 			minBtn = this.$n('min'),
 			n: HTMLElement | null = evt.domTarget!;
@@ -1268,7 +1268,7 @@ export class Panel extends zul.Widget {
 		evt.stop();
 	}
 
-	protected override domClass_(no?: zk.DomClassOptions): string {
+	override domClass_(no?: zk.DomClassOptions): string {
 		var scls = super.domClass_(no);
 		if (!no || !no.zclass) {
 			var added = this._bordered() ? '' : this.$s('noborder');
@@ -1285,7 +1285,7 @@ export class Panel extends zul.Widget {
 		return scls;
 	}
 
-	protected override onChildAdded_(child: zk.Widget): void {
+	override onChildAdded_(child: zk.Widget): void {
 		super.onChildAdded_(child);
 		if (child instanceof zul.wgt.Caption)
 			this.caption = child;
@@ -1304,7 +1304,7 @@ export class Panel extends zul.Widget {
 		this.rerender();
 	}
 
-	protected override onChildRemoved_(child: zk.Widget): void {
+	override onChildRemoved_(child: zk.Widget): void {
 		super.onChildRemoved_(child);
 		if (child == this.caption)
 			this.caption = null;
@@ -1320,14 +1320,14 @@ export class Panel extends zul.Widget {
 			this.rerender();
 	}
 
-	protected override onChildVisible_(child: zk.Widget): void {
+	override onChildVisible_(child: zk.Widget): void {
 		super.onChildVisible_(child);
 		if ((child == this.tbar || child == this.bbar || child == this.fbar) && this.$n())
 			this._fixHgh();
 	}
 
 	//@Override, Bug ZK-1524: caption children should not considered.
-	public override getChildMinSize_(attr: zk.FlexOrient, wgt: zk.Widget): number {
+	override getChildMinSize_(attr: zk.FlexOrient, wgt: zk.Widget): number {
 		var including = true;
 		if (wgt == this.caption) {
 			if (attr == 'w') {
@@ -1343,7 +1343,7 @@ export class Panel extends zul.Widget {
 		}
 	}
 
-	public override isExcludedHflex_(): boolean {
+	override isExcludedHflex_(): boolean {
 		if (zk.isLoaded('zkmax.layout') && this.parent instanceof zkmax.layout.Portalchildren) {
 			var p = this.parent;
 			if (p.parent)
@@ -1352,7 +1352,7 @@ export class Panel extends zul.Widget {
 		return false;
 	}
 
-	public override isExcludedVflex_(): boolean {
+	override isExcludedVflex_(): boolean {
 		if (zk.isLoaded('zkmax.layout') && this.parent instanceof zkmax.layout.Portalchildren) {
 			var p = this.parent;
 			if (p.parent)
@@ -1361,32 +1361,32 @@ export class Panel extends zul.Widget {
 		return false;
 	}
 
-	public getCollapseOpenIconClass_(): string {
+	getCollapseOpenIconClass_(): string {
 		return 'z-icon-angle-up';
 	}
 
-	public getCollapseCloseIconClass_(): string {
+	getCollapseCloseIconClass_(): string {
 		return 'z-icon-angle-down';
 	}
 
-	public getClosableIconClass_(): string {
+	getClosableIconClass_(): string {
 		return 'z-icon-times';
 	}
 
-	public getMaximizableIconClass_(): string {
+	getMaximizableIconClass_(): string {
 		return 'z-icon-expand';
 	}
 
-	public getMaximizedIconClass_(): string {
+	getMaximizedIconClass_(): string {
 		return 'z-icon-compress';
 	}
 
-	public getMinimizableIconClass_(): string {
+	getMinimizableIconClass_(): string {
 		return 'z-icon-minus';
 	}
 
 	//drag
-	public static _startmove(dg: zk.Draggable): void {
+	static _startmove(dg: zk.Draggable): void {
 		(dg.control as zul.wnd.Panel)._hideShadow();
 		//Bug #1568393: we have to change the percetage to the pixel.
 		var el = dg.node!;
@@ -1397,7 +1397,7 @@ export class Panel extends zul.Widget {
 		//zkau.closeFloats(cmp, handle);
 	}
 
-	public static _ignoremove(dg: zk.Draggable, pointer: zk.Offset, evt: zk.Event): boolean {
+	static _ignoremove(dg: zk.Draggable, pointer: zk.Offset, evt: zk.Event): boolean {
 		var wgt = dg.control!,
 			tar = evt.domTarget!;
 		if (!tar.id)
@@ -1413,19 +1413,19 @@ export class Panel extends zul.Widget {
 		return false;
 	}
 
-	public static _aftermove(dg: zk.Draggable, evt?: zk.Event): void {
+	static _aftermove(dg: zk.Draggable, evt?: zk.Event): void {
 		dg.control!.zsync();
 		var wgt = dg.control;
 		zk(wgt).redoCSS(-1, {'fixFontIcon': true});
 	}
 
 	// drag sizing
-	public static _startsizing = zul.wnd.Window._startsizing;
-	public static _ghostsizing = zul.wnd.Window._ghostsizing;
-	public static _endghostsizing = zul.wnd.Window._endghostsizing;
-	public static _insizer = zul.wnd.Window._insizer;
+	static _startsizing = zul.wnd.Window._startsizing;
+	static _ghostsizing = zul.wnd.Window._ghostsizing;
+	static _endghostsizing = zul.wnd.Window._endghostsizing;
+	static _insizer = zul.wnd.Window._insizer;
 
-	public static _ignoresizing(dg: zk.Draggable, pointer: zk.Offset, evt: zk.Event): boolean {
+	static _ignoresizing(dg: zk.Draggable, pointer: zk.Offset, evt: zk.Event): boolean {
 		var el = dg.node!,
 			wgt = dg.control as zul.wnd.Panel;
 
@@ -1447,21 +1447,21 @@ export class Panel extends zul.Widget {
 		return true;
 	}
 
-	public static _snapsizing = zul.wnd.Window._snapsizing;
-	public static _aftersizing = zul.wnd.Window._aftersizing;
-	public static _drawsizing = zul.wnd.Window._drawsizing;
+	static _snapsizing = zul.wnd.Window._snapsizing;
+	static _aftersizing = zul.wnd.Window._aftersizing;
+	static _drawsizing = zul.wnd.Window._drawsizing;
 }
 
 @zk.WrapClass('zul.wnd.PanelSkipper')
 export class PanelSkipper extends zk.Skipper {
-	private _p: zul.wnd.Panel;
+	_p: zul.wnd.Panel;
 
-	public constructor(p: zul.wnd.Panel) {
+	constructor(p: zul.wnd.Panel) {
 		super();
 		this._p = p;
 	}
 
-	public override skip(wgt: zk.Widget, skipId?: string): HTMLElement | undefined {
+	override skip(wgt: zk.Widget, skipId?: string): HTMLElement | undefined {
 		const skip = jq(skipId || (wgt.uuid + '-body'), zk)[0];
 		if (skip) {
 			skip.parentNode!.removeChild(skip);
@@ -1470,7 +1470,7 @@ export class PanelSkipper extends zk.Skipper {
 		}
 	}
 
-	public override restore(wgt: zk.Widget, skip: HTMLElement | null | undefined): void {
+	override restore(wgt: zk.Widget, skip: HTMLElement | null | undefined): void {
 		super.restore(wgt, skip);
 		this._p.zsync();
 	}

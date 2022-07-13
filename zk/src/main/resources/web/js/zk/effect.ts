@@ -97,12 +97,12 @@ let eff = {
 /** The shadow effect.
 */
 export class Shadow extends zk.Object implements Effect {
-	declare public wgt: Widget | null;
-	declare public node: HTMLElement | null;
-	declare public stackup?: HTMLIFrameElement | null;
-	declare public opts: EffectStackupOptions;
+	declare wgt: Widget | null;
+	declare node: HTMLElement | null;
+	declare stackup?: HTMLIFrameElement | null;
+	declare opts: EffectStackupOptions;
 
-	public constructor(element: HTMLElement, opts?: EffectStackupOptions) {
+	constructor(element: HTMLElement, opts?: EffectStackupOptions) {
 		super();
 		this.wgt = zk.Widget.$(element.id);
 		this.opts = eff._skuOpts(opts);
@@ -111,19 +111,19 @@ export class Shadow extends zk.Object implements Effect {
 		zWatch.listen({ onVParent: [this.node, eff._onVParent] });
 	}
 
-	public destroy(): void {
+	destroy(): void {
 		jq(this.stackup!).remove();
 		jq(this.node!).removeClass(this.wgt!.getZclass() + '-shadow');
 		zWatch.unlisten({ onVParent: [this.node, eff._onVParent] }); // ZK-2586
 		this.wgt = this.node = this.stackup = null;
 	}
 
-	public hide(): void {
+	hide(): void {
 		jq(this.stackup!).hide();
 		jq(this.node!).removeClass(this.wgt!.getZclass() + '-shadow');
 	}
 
-	public sync(): boolean {
+	sync(): boolean {
 		var node = this.node, $node = jq(node!);
 		if (!node || !$node.zk.isVisible(true)) {
 			if (this.opts.stackup && node) {
@@ -155,7 +155,7 @@ export class Shadow extends zk.Object implements Effect {
 		}
 		return true;
 	}
-	public getBottomElement(): zk.DOMFieldValue {
+	getBottomElement(): zk.DOMFieldValue {
 		return this.stackup;
 	}
 }
@@ -164,8 +164,8 @@ eff.Shadow = Shadow;
  * @disable(zkgwt)
  */
 export class FullMask extends zk.Object implements Effect {
-	declare public mask: HTMLElement | null;
-	declare public stackup?: HTMLIFrameElement | null;
+	declare mask: HTMLElement | null;
+	declare stackup?: HTMLIFrameElement | null;
 	
 	/** The constructor of the full mask object.
 	 * <p>To remove the full mask, invoke {@link #destroy}.
@@ -178,7 +178,7 @@ export class FullMask extends zk.Object implements Effect {
 	 * <li>boolean visible: whether it is visible</li>
 	 * </ul>
 	 */
-	public constructor(opts: EffectFullMaskOptions) {
+	constructor(opts: EffectFullMaskOptions) {
 		super();
 		opts = eff._skuOpts(opts);
 		var mask = this.mask = jq(opts.mask || [], zk)[0];
@@ -214,7 +214,7 @@ export class FullMask extends zk.Object implements Effect {
 	}
 	/** Removes the full mask. You can not access this object any more.
 	 */
-	public destroy(): void {
+	destroy(): void {
 		var mask = this.mask;
 		if (mask) {
 			jq(mask).off('click', jq.Event.stop)
@@ -226,14 +226,14 @@ export class FullMask extends zk.Object implements Effect {
 	/** Hide the full mask. Application developers rarely need to invoke this method.
 	 * Rather, use {@link #sync} to synchronized the visual states.
 	 */
-	public hide(): void {
+	hide(): void {
 		if (this.mask) this.mask.style.display = 'none';
 		if (this.stackup) this.stackup.style.display = 'none';
 	}
 	/** Synchronizes the visual states of the full mask with the specified element and the browser window.
 	 * The visual states include the visibility and Z Index.
 	 */
-	public sync(el?: HTMLElement): void {
+	sync(el?: HTMLElement): void {
 		if (el === undefined || !zk(el).isVisible(true)) {
 			this.hide();
 			return;
@@ -264,10 +264,10 @@ eff.FullMask = FullMask;
  * @disable(zkgwt)
  */
 export class Mask extends zk.Object implements Effect {
-	declare public mask?: HTMLElement | null;
-	declare private _opts: EffectMaskOptions;
-	declare public __mask?: Required<Effect>;
-	declare public wgt?: Widget & Pick<Mask, '__mask'> | null;
+	declare mask?: HTMLElement | null;
+	declare _opts: EffectMaskOptions;
+	declare __mask?: Required<Effect>;
+	declare wgt?: Widget & Pick<Mask, '__mask'> | null;
 
 	/** The constructor.
 	 * <p>To remove the mask, invoke {@link #destroy}.
@@ -278,7 +278,7 @@ export class Mask extends zk.Object implements Effect {
 	 * <li>String message - the message of the indicator, if any. null, Loading... is assumed.</li>
 	 * </ul>
 	 */
-	public constructor(opts?: EffectMaskOptions) {
+	constructor(opts?: EffectMaskOptions) {
 		super();
 		opts = opts || {};
 		var $anchor = zk(opts.anchor);
@@ -291,7 +291,7 @@ export class Mask extends zk.Object implements Effect {
 		this.sync();
 	}
 	//ZK-3118
-	public _draw(opts: EffectMaskOptions, $anchor: JQZK): void {
+	_draw(opts: EffectMaskOptions, $anchor: JQZK): void {
 		var maskId = opts.id || 'z_applymask',
 			progbox = jq(maskId, zk)[0];
 
@@ -330,16 +330,16 @@ export class Mask extends zk.Object implements Effect {
 	/** Hide the mask. Application developers rarely need to invoke this method.
 	 * Rather, use {@link #sync} to synchronized the visual states.
 	 */
-	public hide(): void {
+	hide(): void {
 		this.mask!.style.display = 'none';
 	}
-	public onHide(): void {
+	onHide(): void {
 		this.__mask!.hide();
 	}
 	/** Synchronizes the visual states of the mask with the specified element and the browser window.
 	 * The visual states include the visibility and Z Index.
 	 */
-	public sync(): void {
+	sync(): void {
 		var opts = this._opts,
 			anchor = opts.anchor,
 			$anchor = zk(anchor);
@@ -414,13 +414,13 @@ export class Mask extends zk.Object implements Effect {
 
 		this.mask!.style.visibility = '';
 	}
-	public onSize(): void {
+	onSize(): void {
 		this.__mask!.sync();
 	}
 
 	/** Removes the mask.
 	 */
-	public destroy(): void {
+	destroy(): void {
 		jq(this.mask!).remove();
 		if (this.wgt) {
 			zWatch.unlisten({onHide: [this.wgt, this.onHide], onSize: [this.wgt, this.onSize]});
@@ -485,15 +485,15 @@ eff.Actions = {
  * @since 9.5.0
  */
 export class KeyboardTrap extends zk.Object {
-	declare private _area: HTMLElement | null;
-	declare private _boundaryTop: HTMLDivElement | null;
-	declare private _boundaryBottom: HTMLDivElement | null;
+	declare _area: HTMLElement | null;
+	declare _boundaryTop: HTMLDivElement | null;
+	declare _boundaryBottom: HTMLDivElement | null;
 	/**
 	 * The constructor.
 	 * <p>To remove the trap, invoke {@link #destroy}.
 	 * @param DOMElement area which area should the focus be restricted.
 	 */
-	public constructor(area: HTMLElement) {
+	constructor(area: HTMLElement) {
 		super();
 		this._area = area;
 		this._boundaryTop = this._createBoundary('top');
@@ -501,7 +501,7 @@ export class KeyboardTrap extends zk.Object {
 		area.insertAdjacentElement('beforebegin', this._boundaryTop);
 		area.insertAdjacentElement('afterend', this._boundaryBottom);
 	}
-	private _createBoundary(id: string): HTMLDivElement {
+	_createBoundary(id: string): HTMLDivElement {
 		var boundary = document.createElement('div'),
 			self = this;
 		boundary.tabIndex = 0;
@@ -511,7 +511,7 @@ export class KeyboardTrap extends zk.Object {
 		});
 		return boundary;
 	}
-	private _handleFocus(id: string): void {
+	_handleFocus(id: string): void {
 		var focusableElements = (this._area as HTMLElement).querySelectorAll(
 			'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'),
 			focusableElementsCount = focusableElements.length,
@@ -523,21 +523,21 @@ export class KeyboardTrap extends zk.Object {
 			if (elem) (elem as HTMLElement).focus();
 		}
 	}
-	private _getFirstFocusableElement(elems: NodeListOf<Element>): Element | null {
+	_getFirstFocusableElement(elems: NodeListOf<Element>): Element | null {
 		var len = elems.length;
 		for (var i = 0; i < len; i++) {
 			if (this._isFocusable(elems[i])) return elems[i];
 		}
 		return null;
 	}
-	private _getLastFocusableElement(elems: NodeListOf<Element>): Element | null {
+	_getLastFocusableElement(elems: NodeListOf<Element>): Element | null {
 		var len = elems.length;
 		for (var i = len - 1; i >= 0; i--) {
 			if (this._isFocusable(elems[i])) return elems[i];
 		}
 		return null;
 	}
-	private _isFocusable(elem): boolean {
+	_isFocusable(elem): boolean {
 		return !(elem.disabled || elem.getAttribute('disabled')) // not disabled
 			&& (elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length); // visible
 	}
@@ -545,7 +545,7 @@ export class KeyboardTrap extends zk.Object {
 	 * Removes the keyboard trap.
 	 * You can not access this object any more.
 	 */
-	public destroy(): void {
+	destroy(): void {
 		var area = this._area;
 		if (area != null) {
 			var areaParent = area.parentNode;

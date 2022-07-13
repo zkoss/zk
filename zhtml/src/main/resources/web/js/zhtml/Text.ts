@@ -14,9 +14,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 @zk.WrapClass('zhtml.Text')
 export class Text extends zhtml.Widget {
-	private _value = '';
-	private _encode = true;
-	public idRequired?: boolean;
+	_value = '';
+	_encode = true;
+	idRequired?: boolean;
 
 	/** Returns whether to encode the text, such as converting &lt;
 	 * to &amp;lt;.
@@ -24,7 +24,7 @@ export class Text extends zhtml.Widget {
 	 * @return boolean
 	 * @since 5.0.8
 	 */
-	public isEncode(): boolean {
+	isEncode(): boolean {
 		return this._encode;
 	}
 
@@ -34,7 +34,7 @@ export class Text extends zhtml.Widget {
 	 * @param boolean encode whether to encode
 	 * @since 5.0.8
 	 */
-	public setEncode(encode: boolean, opts?: Record<string, boolean>): this {
+	setEncode(encode: boolean, opts?: Record<string, boolean>): this {
 		const o = this._encode;
 		this._encode = encode;
 
@@ -53,14 +53,14 @@ export class Text extends zhtml.Widget {
 	/** Returns the value of this label.
 	 * @return String
 	 */
-	public getValue(): string {
+	getValue(): string {
 		return this._value;
 	}
 
 	/** Sets the value of this label.
 	 * @param String label the label
 	 */
-	public setValue(label: string, opts?: Record<string, boolean>): this {
+	setValue(label: string, opts?: Record<string, boolean>): this {
 		const o = this._value;
 		this._value = label;
 
@@ -78,7 +78,7 @@ export class Text extends zhtml.Widget {
 
 	// ZK 7.5 enable to preserve the line break and comment into XHTML format
 	// so we need to skip them here.
-	private _checkContentRequired(val: string): boolean {
+	_checkContentRequired(val: string): boolean {
 		if (val) {
 			val = val.trim();
 			if (val && !(val.startsWith('<!--') && val.endsWith('-->')))
@@ -87,7 +87,7 @@ export class Text extends zhtml.Widget {
 		return false;
 	}
 
-	public override redraw(out: string[]): void {
+	override redraw(out: string[]): void {
 		var attrs = this.domAttrs_({id: true, zclass: true}),
 			val = this._value,
 			span = attrs || (this.idRequired && this._checkContentRequired(val));

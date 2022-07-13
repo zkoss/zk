@@ -33,16 +33,16 @@ function _cleanUpld(wgt: zul.wgt.Button): void {
  */
 @zk.WrapClass('zul.wgt.Button')
 export class Button extends zul.LabelImageWidget<HTMLButtonElement> implements zul.LabelImageWidgetWithAutodisable {
-	private _orient = 'horizontal';
-	private _dir = 'normal';
-	private _type = 'button';
-	private _href?: string;
-	private _target?: string;
-	public _upload?: string;
-	private _delayFocus?: boolean | null;
-	public _disabled?: boolean;
-	public _adbs?: boolean;
-	public _autodisable?: string;
+	_orient = 'horizontal';
+	_dir = 'normal';
+	_type = 'button';
+	_href?: string;
+	_target?: string;
+	_upload?: string;
+	_delayFocus?: boolean | null;
+	_disabled?: boolean;
+	_adbs?: boolean;
+	_autodisable?: string;
 
 	/** Returns the href that the browser shall jump to, if an user clicks
 	 * this button.
@@ -51,14 +51,14 @@ export class Button extends zul.LabelImageWidget<HTMLButtonElement> implements z
 	 * <p>If it is not null, the onClick event won't be sent.
 	 * @return String
 	 */
-	public getHref(): string | undefined {
+	getHref(): string | undefined {
 		return this._href;
 	}
 
 	/** Sets the href.
 	 * @param String href
 	 */
-	public setHref(href: string): this {
+	setHref(href: string): this {
 		this._href = href;
 		return this;
 	}
@@ -71,14 +71,14 @@ export class Button extends zul.LabelImageWidget<HTMLButtonElement> implements z
 	 * <p>Default: null.
 	 * @return String
 	 */
-	public getTarget(): string | undefined {
+	getTarget(): string | undefined {
 		return this._target;
 	}
 
 	/** Sets the target frame or window.
 	 * @param String target the name of the frame or window to hyperlink.
 	 */
-	public setTarget(target: string): this {
+	setTarget(target: string): this {
 		this._target = target;
 		return this;
 	}
@@ -87,14 +87,14 @@ export class Button extends zul.LabelImageWidget<HTMLButtonElement> implements z
 	 * <p>Default: "normal".
 	 * @return String
 	 */
-	public getDir(): string {
+	getDir(): string {
 		return this._dir;
 	}
 
 	/** Sets the direction.
 	 * @param String dir either "normal" or "reverse".
 	 */
-	public setDir(v: string, opts?: Record<string, boolean>): this {
+	setDir(v: string, opts?: Record<string, boolean>): this {
 		const o = this._dir;
 		this._dir = v;
 
@@ -109,14 +109,14 @@ export class Button extends zul.LabelImageWidget<HTMLButtonElement> implements z
 	 * <p>Default: "horizontal".
 	 * @return String
 	 */
-	public getOrient(): string {
+	getOrient(): string {
 		return this._orient;
 	}
 
 	/** Sets the orient.
 	 * @param String orient either "horizontal" or "vertical".
 	 */
-	public setOrient(v: string, opts?: Record<string, boolean>): this {
+	setOrient(v: string, opts?: Record<string, boolean>): this {
 		const o = this._orient;
 		this._orient = v;
 
@@ -131,14 +131,14 @@ export class Button extends zul.LabelImageWidget<HTMLButtonElement> implements z
 	 * <p>Default: "button".
 	 * @return String
 	 */
-	public getType(): string {
+	getType(): string {
 		return this._type;
 	}
 
 	/** Sets the button type.
 	 * @param String type either "button", "submit" or "reset".
 	 */
-	public setType(v: string, opts?: Record<string, boolean>): this {
+	setType(v: string, opts?: Record<string, boolean>): this {
 		const o = this._type;
 		this._type = v;
 
@@ -153,14 +153,14 @@ export class Button extends zul.LabelImageWidget<HTMLButtonElement> implements z
 	 * <p>Default: false.
 	 * @return boolean
 	 */
-	public isDisabled(): boolean | undefined {
+	isDisabled(): boolean | undefined {
 		return this._disabled;
 	}
 
 	/** Sets whether it is disabled.
 	 * @param boolean disabled
 	 */
-	public setDisabled(v: boolean | undefined, opts?: Record<string, boolean>): this {
+	setDisabled(v: boolean | undefined, opts?: Record<string, boolean>): this {
 		const o = this._disabled;
 
 		// B60-ZK-1176
@@ -208,7 +208,7 @@ export class Button extends zul.LabelImageWidget<HTMLButtonElement> implements z
 	 if (n)
 	 n.src = v || '';
 	 },*/
-	public setAutodisable(v: string): this {
+	setAutodisable(v: string): this {
 		this._autodisable = v;
 		return this;
 	}
@@ -251,7 +251,7 @@ export class Button extends zul.LabelImageWidget<HTMLButtonElement> implements z
 	 * <p>Default: null.
 	 * @return String
 	 */
-	public getAutodisable(): string | undefined {
+	getAutodisable(): string | undefined {
 		return this._autodisable;
 	}
 
@@ -259,7 +259,7 @@ export class Button extends zul.LabelImageWidget<HTMLButtonElement> implements z
 	 * Refer to {@link #setUpload} for more details.
 	 * @return String
 	 */
-	public getUpload(): string | undefined {
+	getUpload(): string | undefined {
 		return this._upload;
 	}
 
@@ -292,7 +292,7 @@ export class Button extends zul.LabelImageWidget<HTMLButtonElement> implements z
 	 * or null or "false" to disable the file download (and then
 	 * this button behaves like a normal button).
 	 */
-	public setUpload(v: string, opts?: Record<string, boolean>): this {
+	setUpload(v: string, opts?: Record<string, boolean>): this {
 		const o = this._upload;
 		this._upload = v;
 
@@ -311,12 +311,12 @@ export class Button extends zul.LabelImageWidget<HTMLButtonElement> implements z
 	 * Returns the file(s) belongs to this button if any.
 	 * @since 10.0.0
 	 */
-	public getFile(): FileList | null {
+	getFile(): FileList | null {
 		return this._uplder!.getFile();
 	}
 
 	//super//
-	public override focus_(timeout?: number): boolean {
+	override focus_(timeout?: number): boolean {
 		// Bug ZK-1295 and ZK-2935: Disabled buttons cannot regain focus by re-enabling and then setting focus
 		const btn = this.$n();
 		if (btn && btn.disabled) {
@@ -343,7 +343,7 @@ export class Button extends zul.LabelImageWidget<HTMLButtonElement> implements z
 		return true;
 	}
 
-	protected override domContent_(): string {
+	override domContent_(): string {
 		var label = zUtl.encodeXML(this.getLabel()),
 			img = this.getImage(),
 			iconSclass = this.domIcon_();
@@ -357,14 +357,14 @@ export class Button extends zul.LabelImageWidget<HTMLButtonElement> implements z
 			label + space + img : img + space + label;
 	}
 
-	public onShow(): void {
+	onShow(): void {
 		// ZK-2233: should sync upload position when button showed
 		if (this.$n() && !this._disabled && this._uplder) {
 			this._uplder.sync();
 		}
 	}
 
-	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 
 		var n = this.$n()!;
@@ -375,7 +375,7 @@ export class Button extends zul.LabelImageWidget<HTMLButtonElement> implements z
 		if (!this._disabled && this._upload) _initUpld(this);
 	}
 
-	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		_cleanUpld(this);
 
 		var n = this.$n()!;
@@ -386,7 +386,7 @@ export class Button extends zul.LabelImageWidget<HTMLButtonElement> implements z
 		super.unbind_(skipper, after, keepRod);
 	}
 
-	public override doClick_(evt: zk.Event): void {
+	override doClick_(evt: zk.Event): void {
 		if (!evt.domEvent) // mobile will trigger doClick twice
 			return;
 
@@ -418,7 +418,7 @@ export class Button extends zul.LabelImageWidget<HTMLButtonElement> implements z
 		//will fired)
 	}
 
-	public override setFlexSize_(sz: zk.FlexSize): void { //Bug #2870652
+	override setFlexSize_(sz: zk.FlexSize): void { //Bug #2870652
 		var n = this.$n()!;
 		if (sz.height !== undefined) {
 			if (sz.height == 'auto')
@@ -438,7 +438,7 @@ export class Button extends zul.LabelImageWidget<HTMLButtonElement> implements z
 		}
 	}
 
-	public override shallIgnoreClick_(_evt: zk.Event): boolean | undefined {
+	override shallIgnoreClick_(_evt: zk.Event): boolean | undefined {
 		return this.isDisabled();
 	}
 }
@@ -446,13 +446,13 @@ export class Button extends zul.LabelImageWidget<HTMLButtonElement> implements z
 //handle autodisabled buttons
 @zk.WrapClass('zul.wgt.ADBS')
 export class ADBS extends zk.Object {
-	private _ads: zul.LabelImageWidgetWithAutodisable[];
-	public constructor(ads: zul.LabelImageWidgetWithAutodisable[]) {
+	_ads: zul.LabelImageWidgetWithAutodisable[];
+	constructor(ads: zul.LabelImageWidgetWithAutodisable[]) {
 		super();
 		this._ads = ads;
 	}
 
-	public onResponse(): void {
+	onResponse(): void {
 		for (var ads = this._ads, ad: zul.LabelImageWidgetWithAutodisable | undefined; ad = ads.shift();) {
 			// B60-ZK-1176: distinguish from other usages
 			ad.setDisabled(false, {adbs: false, skip: true});
@@ -465,7 +465,7 @@ export class ADBS extends zk.Object {
 	/* Disable Targets and re-enable after response
 	 * @param zk.Widget wgt
 	 */
-	public static autodisable(wgt: zul.LabelImageWidgetWithAutodisable): void {
+	static autodisable(wgt: zul.LabelImageWidgetWithAutodisable): void {
 		var ads: string[] | string | undefined = wgt._autodisable,
 			aded: zul.LabelImageWidgetWithAutodisable[] | undefined,
 			uplder: zul.Upload | null | undefined;

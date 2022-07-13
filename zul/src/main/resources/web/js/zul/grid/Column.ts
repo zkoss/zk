@@ -26,16 +26,16 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.grid.Column')
 export class Column extends zul.mesh.SortWidget {
-	public override parent!: zul.grid.Columns | null;
+	override parent!: zul.grid.Columns | null;
 
 	/** Returns the grid that contains this column.
 	 * @return zul.grid.Grid
 	 */
-	public getGrid(): zul.grid.Grid | null {
+	getGrid(): zul.grid.Grid | null {
 		return this.parent ? this.parent.parent : null;
 	}
 
-	public constructor() {
+	constructor() {
 		super(); // FIXME: params?
 		this.listen({onGroup: this}, -1000);
 	}
@@ -43,12 +43,12 @@ export class Column extends zul.mesh.SortWidget {
 	/** Returns the rows of the grid that contains this column.
 	 * @return zul.grid.Rows
 	 */
-	public getMeshBody(): zul.grid.Rows | null | undefined {
+	getMeshBody(): zul.grid.Rows | null | undefined {
 		var grid = this.getGrid();
 		return grid ? grid.rows : null;
 	}
 
-	protected override checkClientSort_(ascending: boolean): boolean {
+	override checkClientSort_(ascending: boolean): boolean {
 		const body = this.getMeshBody();
 		return !(!body || body.hasGroup()) && super.checkClientSort_(ascending);
 	}
@@ -64,7 +64,7 @@ export class Column extends zul.mesh.SortWidget {
 	 * @param zk.Event evt the event causes the group
 	 * @return boolean whether the rows are grouped.
 	 */
-	public group(ascending: boolean, evt: zk.Event): boolean {
+	group(ascending: boolean, evt: zk.Event): boolean {
 		var dir = this.getSortDirection();
 		if (ascending) {
 			if ('ascending' == dir) return false;
@@ -165,14 +165,14 @@ export class Column extends zul.mesh.SortWidget {
 		return true;
 	}
 
-	public override setLabel(label: string, opts?: Record<string, boolean>): this {
+	override setLabel(label: string, opts?: Record<string, boolean>): this {
 		super.setLabel(label, opts);
 		if (this.parent)
 			this.parent._syncColMenu();
 		return this;
 	}
 
-	public override setVisible(visible: boolean): void {
+	override setVisible(visible: boolean): void {
 		if (this.isVisible() != visible) {
 			super.setVisible(visible);
 			if (this.parent)
@@ -183,7 +183,7 @@ export class Column extends zul.mesh.SortWidget {
 	/** It invokes {@link #group} to group list items and maintain
 	 * {@link #getSortDirection}.
 	 */
-	public onGroup(evt: zk.Event): void {
+	onGroup(evt: zk.Event): void {
 		var dir = this.getSortDirection();
 		if ('ascending' == dir)
 			this.group(false, evt);
@@ -193,7 +193,7 @@ export class Column extends zul.mesh.SortWidget {
 			this.group(false, evt);
 	}
 
-	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		var n = this.$n_();
 		this.domListen_(n, 'onMouseOver')
@@ -203,7 +203,7 @@ export class Column extends zul.mesh.SortWidget {
 			this.domListen_(btn, 'onClick', '_doMenuClick');
 	}
 
-	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		var n = this.$n_();
 		this.domUnlisten_(n, 'onMouseOver')
 			.domUnlisten_(n, 'onMouseOut');
@@ -213,13 +213,13 @@ export class Column extends zul.mesh.SortWidget {
 		super.unbind_(skipper, after, keepRod);
 	}
 
-	public _doMouseOver(evt: zk.Event): void {
+	_doMouseOver(evt: zk.Event): void {
 		if (this.isSortable_()
 				|| (this.parent!._menupopup && this.parent!._menupopup != 'none'))
 			jq(this.$n_()).addClass(this.$s('hover'));
 	}
 
-	public _doMouseOut(evt: zk.Event): void {
+	_doMouseOut(evt: zk.Event): void {
 		if (this.isSortable_()
 				|| (this.parent!._menupopup && this.parent!._menupopup != 'none')) {
 			var $n = jq(this.$n_());

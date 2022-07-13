@@ -27,17 +27,17 @@ function _syncFrozen(wgt: zul.grid.Rows): void {
 
 @zk.WrapClass('zul.grid.Rows')
 export class Rows extends zul.Widget<HTMLTableSectionElement> {
-	public override parent!: zul.grid.Grid | null;
-	public override firstChild!: zul.grid.Row | null;
-	public override lastChild!: zul.grid.Row | null;
+	override parent!: zul.grid.Grid | null;
+	override firstChild!: zul.grid.Row | null;
+	override lastChild!: zul.grid.Row | null;
 
-	private _visibleItemCount = 0;
-	private _groupsInfo: zkex.grid.Group[];
-	private _shallStripe?: boolean;
-	public _musout?: zul.grid.Row;
-	private _offset?: number;
+	_visibleItemCount = 0;
+	_groupsInfo: zkex.grid.Group[];
+	_shallStripe?: boolean;
+	_musout?: zul.grid.Row;
+	_offset?: number;
 
-	public constructor() {
+	constructor() {
 		super(); // FIXME: params?
 		this._groupsInfo = [];
 	}
@@ -45,11 +45,11 @@ export class Rows extends zul.Widget<HTMLTableSectionElement> {
 	/** Returns the number of visible descendant {@link Row}.
 	 * @return int
 	 */
-	public getVisibleItemCount(): number {
+	getVisibleItemCount(): number {
 		return this._visibleItemCount;
 	}
 
-	public setVisibleItemCount(v: number): this {
+	setVisibleItemCount(v: number): this {
 		this._visibleItemCount = v;
 		return this;
 	}
@@ -57,32 +57,32 @@ export class Rows extends zul.Widget<HTMLTableSectionElement> {
 	/** Returns the grid that contains this rows.
 	 * @return zul.grid.Grid
 	 */
-	public getGrid(): zul.grid.Grid | null {
+	getGrid(): zul.grid.Grid | null {
 		return this.parent;
 	}
 
 	/** Returns the number of groups.
 	 * @return int
 	 */
-	public getGroupCount(): number {
+	getGroupCount(): number {
 		return this._groupsInfo.length;
 	}
 
 	/** Returns a list of all {@link Group}.
 	 * @return Array
 	 */
-	public getGroups(): zkex.grid.Group[] {
+	getGroups(): zkex.grid.Group[] {
 		return this._groupsInfo.$clone();
 	}
 
 	/** Returns whether Group exists.
 	 * @return boolean
 	 */
-	public hasGroup(): boolean {
+	hasGroup(): boolean {
 		return this._groupsInfo.length !== 0;
 	}
 
-	protected override bind_(desktop: zk.Desktop | null | undefined, skipper: zk.Skipper | null | undefined, after: CallableFunction[]): void {
+	override bind_(desktop: zk.Desktop | null | undefined, skipper: zk.Skipper | null | undefined, after: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		var grid = this.getGrid();
 		if (grid) // bind ebodyrows for MeshWidget
@@ -95,12 +95,12 @@ export class Rows extends zul.Widget<HTMLTableSectionElement> {
 		});
 	}
 
-	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		zWatch.unlisten({onResponse: this});
 		super.unbind_(skipper, after, keepRod);
 	}
 
-	public onResponse(): void {
+	onResponse(): void {
 		if (this.desktop) {
 			if (this._shallStripe) { //since bind_(...after)
 				this.stripe();
@@ -110,7 +110,7 @@ export class Rows extends zul.Widget<HTMLTableSectionElement> {
 		}
 	}
 
-	protected override replaceChildHTML_(child: zk.Widget, n: HTMLElement | string, desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, _trim_?: boolean): void {
+	override replaceChildHTML_(child: zk.Widget, n: HTMLElement | string, desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, _trim_?: boolean): void {
 		if (child._renderdefer) {
 			var scOdd = this.getGrid()!.getOddRowSclass(),
 				isOdd = jq(n).hasClass(scOdd); // supers will change this result, we need to cache it
@@ -121,14 +121,14 @@ export class Rows extends zul.Widget<HTMLTableSectionElement> {
 			super.replaceChildHTML_(child, n, desktop, skipper, _trim_);
 	}
 
-	public _syncStripe(): void {
+	_syncStripe(): void {
 		this._shallStripe = true;
 	}
 
 	/**
 	 * Stripes the class for each row.
 	 */
-	public stripe(): void {
+	stripe(): void {
 		var grid = this.getGrid()!,
 			scOdd = grid.getOddRowSclass();
 		if (!scOdd) return;
@@ -148,7 +148,7 @@ export class Rows extends zul.Widget<HTMLTableSectionElement> {
 		this._shallStripe = false;
 	}
 
-	protected override onChildAdded_(child: zk.Widget): void {
+	override onChildAdded_(child: zk.Widget): void {
 		super.onChildAdded_(child);
 		if (_isPE() && child instanceof zkex.grid.Group)
 			this._groupsInfo.push(child);
@@ -166,7 +166,7 @@ export class Rows extends zul.Widget<HTMLTableSectionElement> {
 			g._syncSize();
 	}
 
-	protected override onChildRemoved_(child: zk.Widget): void {
+	override onChildRemoved_(child: zk.Widget): void {
 		super.onChildRemoved_(child);
 		if (_isPE() && child instanceof zkex.grid.Group)
 			this._groupsInfo.$remove(child);
@@ -177,7 +177,7 @@ export class Rows extends zul.Widget<HTMLTableSectionElement> {
 		if (g) g._syncEmpty();
 	}
 
-	protected override deferRedrawHTML_(out: string[]): void {
+	override deferRedrawHTML_(out: string[]): void {
 		out.push('<tbody', this.domAttrs_({domClass: true}), ' class="z-renderdefer"></tbody>');
 	}
 }

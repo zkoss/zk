@@ -18,24 +18,24 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.sel.Treerow')
 export class Treerow extends zul.Widget<HTMLTableRowElement> {
-	public override parent!: zul.sel.Treeitem | null;
-	public override firstChild!: zul.sel.Treecell | null;
-	public override lastChild!: zul.sel.Treecell | null;
-	public override nextSibling!: zul.sel.Treerow | zul.sel.Treechildren | null;
-	public override previousSibling!: zul.sel.Treerow | zul.sel.Treechildren | null;
-	private _shallCheckClearCache?: boolean;
+	override parent!: zul.sel.Treeitem | null;
+	override firstChild!: zul.sel.Treecell | null;
+	override lastChild!: zul.sel.Treecell | null;
+	override nextSibling!: zul.sel.Treerow | zul.sel.Treechildren | null;
+	override previousSibling!: zul.sel.Treerow | zul.sel.Treechildren | null;
+	_shallCheckClearCache?: boolean;
 
 	/** Returns the {@link Tree} instance containing this element.
 	 * @return Tree
 	 */
-	public getTree(): zul.sel.Tree | null {
+	getTree(): zul.sel.Tree | null {
 		return this.parent ? this.parent.getTree() : null;
 	}
 
 	/** Returns the level this cell is. The root is level 0.
 	 * @return int
 	 */
-	public getLevel(): number {
+	getLevel(): number {
 		return this.parent ? this.parent.getLevel() : 0;
 	}
 
@@ -43,11 +43,11 @@ export class Treerow extends zul.Widget<HTMLTableRowElement> {
 	 * {@link Treerow}.
 	 * @return Treechildren
 	 */
-	public getLinkedTreechildren(): zul.sel.Treechildren | null | undefined {
+	getLinkedTreechildren(): zul.sel.Treechildren | null | undefined {
 		return this.parent ? this.parent.treechildren : null;
 	}
 
-	protected override domClass_(no?: zk.DomClassOptions): string {
+	override domClass_(no?: zk.DomClassOptions): string {
 		var scls = super.domClass_(no),
 			p = this.parent;
 		if (p && (!no || !no.zclass)) {
@@ -59,19 +59,19 @@ export class Treerow extends zul.Widget<HTMLTableRowElement> {
 		return scls;
 	}
 
-	protected override domTooltiptext_(): string | null | undefined {
+	override domTooltiptext_(): string | null | undefined {
 		return this._tooltiptext || this.parent!._tooltiptext || this.parent!.parent!._tooltiptext;
 	}
 
 	//@Override
-	protected override domStyle_(no?: zk.DomStyleOptions): string {
+	override domStyle_(no?: zk.DomStyleOptions): string {
 		// patch the case that treerow is hidden by treeitem visibility
 		return ((this.parent && !this.parent._isRealVisible() && this.isVisible()) ?
 				'display:none;' : '') + super.domStyle_(no);
 	}
 
 	//@Override
-	public override removeChild(child: zk.Widget, ignoreDom?: boolean): boolean {
+	override removeChild(child: zk.Widget, ignoreDom?: boolean): boolean {
 		for (var w = child.firstChild; w;) {
 			var n = w.nextSibling; //remember, since remove will null the link
 			child.removeChild(w); //deep first
@@ -85,7 +85,7 @@ export class Treerow extends zul.Widget<HTMLTableRowElement> {
 	}
 
 	//@Override
-	public override doClick_(evt: zk.Event, popupOnly?: boolean): void {
+	override doClick_(evt: zk.Event, popupOnly?: boolean): void {
 		var ti = this.parent!,
 			tg = evt.domTarget;
 		if (tg == this.$n('open') || tg == this.$n('icon')) {
@@ -97,7 +97,7 @@ export class Treerow extends zul.Widget<HTMLTableRowElement> {
 	}
 
 	//@Override
-	public override scrollIntoView(): this {
+	override scrollIntoView(): this {
 		var bar = this.getTree()!._scrollbar;
 		if (bar) {
 			bar.syncSize();
@@ -108,33 +108,33 @@ export class Treerow extends zul.Widget<HTMLTableRowElement> {
 		return this;
 	}
 
-	protected override deferRedrawHTML_(out: string[]): void {
+	override deferRedrawHTML_(out: string[]): void {
 		out.push('<tr', this.domAttrs_({domClass: true}), ' class="z-renderdefer"></tr>');
 	}
 
-	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		zWatch.listen({onResponse: this});
 	}
 
-	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		zWatch.unlisten({onResponse: this});
 		super.unbind_(skipper, after, keepRod);
 	}
 
-	protected override onChildAdded_(child: zk.Widget): void {
+	override onChildAdded_(child: zk.Widget): void {
 		super.onChildAdded_(child);
 		// ZK-5107
 		this._shallCheckClearCache = true;
 	}
 
-	protected override onChildRemoved_(child: zk.Widget): void {
+	override onChildRemoved_(child: zk.Widget): void {
 		super.onChildRemoved_(child);
 		// ZK-5107
 		this._shallCheckClearCache = true;
 	}
 
-	public onResponse(): void {
+	onResponse(): void {
 		if (this._shallCheckClearCache) {
 			this._shallCheckClearCache = false;
 			let p = this.getTree();

@@ -61,22 +61,22 @@ function _onSizeLater(wgt: Frozen): void {
 @zk.WrapClass('zul.mesh.Frozen')
 export class Frozen extends zul.Widget {
 	// Parent could be null because it's checked in `Frozen.prototype.syncScroll`.
-	public override parent!: zul.mesh.MeshWidget | null;
-	public _start = 0;
-	public _scrollScale = 0;
-	public _smooth?: boolean;
-	public _columns?: number;
-	public _shallSyncScale?: boolean;
-	private _delayedScroll?: number | null;
-	private _lastScale?: number;
-	private _shallSync?: boolean;
+	override parent!: zul.mesh.MeshWidget | null;
+	_start = 0;
+	_scrollScale = 0;
+	_smooth?: boolean;
+	_columns?: number;
+	_shallSyncScale?: boolean;
+	_delayedScroll?: number | null;
+	_lastScale?: number;
+	_shallSync?: boolean;
 
 	/**
 	 * Returns the number of columns to freeze.
 	 * <p>Default: 0
 	 * @return int
 	 */
-	public getColumns(): number | undefined {
+	getColumns(): number | undefined {
 		return this._columns;
 	}
 
@@ -84,7 +84,7 @@ export class Frozen extends zul.Widget {
 	 * Sets the number of columns to freeze.(from left to right)
 	 * @param int columns positive only
 	 */
-	public setColumns(v: number, opts?: Record<string, boolean>): this {
+	setColumns(v: number, opts?: Record<string, boolean>): this {
 		const o = this._columns;
 		v = (v < 0 ? 0 : v);
 		this._columns = v;
@@ -106,7 +106,7 @@ export class Frozen extends zul.Widget {
 	 * <p>Default: 0
 	 * @return int
 	 */
-	public getStart(): number {
+	getStart(): number {
 		return this._start;
 	}
 
@@ -115,7 +115,7 @@ export class Frozen extends zul.Widget {
 	 * <p> Default: 0
 	 * @param int start the column number
 	 */
-	public setStart(start: number, opts?: Record<string, boolean>): this {
+	setStart(start: number, opts?: Record<string, boolean>): this {
 		const o = this._start;
 		this._start = start;
 
@@ -129,7 +129,7 @@ export class Frozen extends zul.Widget {
 	/**
 	 * Synchronizes the scrollbar according to {@link #getStart}.
 	 */
-	public syncScroll(): void {
+	syncScroll(): void {
 		var p = this.parent;
 		if (p && p._nativebar) {
 			var scroll = this.$n('scrollX');
@@ -141,7 +141,7 @@ export class Frozen extends zul.Widget {
 	/**
 	 * Synchronizes the scrollbar according to parent ebody scrollleft.
 	 */
-	public syncScrollByParentBody(): void {
+	syncScrollByParentBody(): void {
 		var p = this.parent,
 			ebody: HTMLDivElement | null | undefined,
 			l: number;
@@ -154,7 +154,7 @@ export class Frozen extends zul.Widget {
 		}
 	}
 
-	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		var p = this.parent!,
 			body = p.$n('body'),
@@ -187,7 +187,7 @@ export class Frozen extends zul.Widget {
 			jq(foot).addClass('z-word-nowrap');
 	}
 
-	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		var p = this.parent!,
 			body = p.$n('body'),
 			foot = p.$n('foot'),
@@ -213,7 +213,7 @@ export class Frozen extends zul.Widget {
 	}
 
 	// Bug ZK-2264, we should resync the variable of _scrollScale, which do the same as HeadWidget.js
-	public onResponse(): void {
+	onResponse(): void {
 		if (this.parent!._nativebar) {
 			// refix-ZK-3100455 : grid/listbox with frozen trigger "invalidate" should _syncFrozenNow
 			this._syncFrozenNow();
@@ -226,7 +226,7 @@ export class Frozen extends zul.Widget {
 		}
 	}
 
-	public override onSize(): void {
+	override onSize(): void {
 		if (!this._columns)
 			return;
 		var self = this;
@@ -256,11 +256,11 @@ export class Frozen extends zul.Widget {
 		});
 	}
 
-	public _syncFrozen(): void { //called by Rows, HeadWidget...
+	_syncFrozen(): void { //called by Rows, HeadWidget...
 		this._shallSync = true;
 	}
 
-	private _syncFrozenNow(): void {
+	_syncFrozenNow(): void {
 		var num = this._start;
 		if (this._shallSync && num)
 			this._doScrollNow(num, true);
@@ -268,7 +268,7 @@ export class Frozen extends zul.Widget {
 		this._shallSync = false;
 	}
 
-	public override beforeParentChanged_(p: zk.Widget | null): void {
+	override beforeParentChanged_(p: zk.Widget | null): void {
 		//bug B50-ZK-238
 		//ZK-2651: JS Error showed when clear grid children component that include frozen
 		if (this.desktop && this._lastScale) //if large then 0
@@ -277,7 +277,7 @@ export class Frozen extends zul.Widget {
 		super.beforeParentChanged_(p);
 	}
 
-	private _onScroll(evt: zk.Event): void {
+	_onScroll(evt: zk.Event): void {
 		if (!evt.data || !zk.currentFocus)
 			return;
 
@@ -307,7 +307,7 @@ export class Frozen extends zul.Widget {
 		evt.stop();
 	}
 
-	public _doHeadScroll(evt: zk.Event): void {
+	_doHeadScroll(evt: zk.Event): void {
 		var head = evt.domTarget!,
 			num = Math.ceil(head.scrollLeft / 50);
 		// ignore scrollLeft is 0
@@ -317,7 +317,7 @@ export class Frozen extends zul.Widget {
 		this._onScroll(evt);
 	}
 
-	public _doScroll(n: number): void {
+	_doScroll(n: number): void {
 		var p = this.parent!,
 			num: number;
 		if (p._nativebar)
@@ -339,7 +339,7 @@ export class Frozen extends zul.Widget {
 		}, 0);
 	}
 
-	public _doScrollNow(num: number, force?: boolean): void {
+	_doScrollNow(num: number, force?: boolean): void {
 		var totalWidth = 0,
 			mesh = this.parent!,
 			cnt = num,

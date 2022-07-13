@@ -37,28 +37,28 @@ function _cleanUpld(wgt: zul.menu.Menuitem): void {
 @zk.WrapClass('zul.menu.Menuitem')
 export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidgetWithAutodisable {
 	// Parent could be null as asserted in _doMouseEnter
-	public override parent!: zul.menu.Menupopup | null;
-	public override nextSibling!: zul.menu.Menuitem | null;
-	public override previousSibling!: zul.menu.Menuitem | null;
-	private _value = '';
-	public _upload?: string;
-	private _checkmark?: boolean;
-	private _checked?: boolean;
-	private _autocheck?: boolean;
-	private _target?: string;
-	private _topmost?: boolean | null;
-	public _col?: string;
-	private _href?: string;
-	public _disabled?: boolean;
-	public _adbs?: boolean;
-	public _autodisable?: string;
+	override parent!: zul.menu.Menupopup | null;
+	override nextSibling!: zul.menu.Menuitem | null;
+	override previousSibling!: zul.menu.Menuitem | null;
+	_value = '';
+	_upload?: string;
+	_checkmark?: boolean;
+	_checked?: boolean;
+	_autocheck?: boolean;
+	_target?: string;
+	_topmost?: boolean | null;
+	_col?: string;
+	_href?: string;
+	_disabled?: boolean;
+	_adbs?: boolean;
+	_autodisable?: string;
 
 	/** Returns whether the check mark shall be displayed in front
 	 * of each item.
 	 * <p>Default: false.
 	 * @return boolean
 	 */
-	public isCheckmark(): boolean | undefined {
+	isCheckmark(): boolean | undefined {
 		return this._checkmark;
 	}
 
@@ -66,7 +66,7 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 	 * of each item.
 	 * @param boolean checkmark
 	 */
-	public setCheckmark(checkmark: boolean, opts?: Record<string, boolean>): this {
+	setCheckmark(checkmark: boolean, opts?: Record<string, boolean>): this {
 		const o = this._checkmark;
 		this._checkmark = checkmark;
 
@@ -81,14 +81,14 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 	 * <p>Default: false.
 	 * @return boolean
 	 */
-	public isDisabled(): boolean | undefined {
+	isDisabled(): boolean | undefined {
 		return this._disabled;
 	}
 
 	/** Sets whether it is disabled.
 	 * @param boolean disabled
 	 */
-	public setDisabled(v: boolean | undefined, opts?: Record<string, boolean>): this {
+	setDisabled(v: boolean | undefined, opts?: Record<string, boolean>): this {
 		const o = this._disabled;
 
 		//B60-ZK-1176
@@ -121,14 +121,14 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 	 * specify the onClick handler.
 	 * @return String
 	 */
-	public getHref(): string | undefined {
+	getHref(): string | undefined {
 		return this._href;
 	}
 
 	/** Sets the href.
 	 * @param String href
 	 */
-	public setHref(href: string, opts?: Record<string, boolean>): this {
+	setHref(href: string, opts?: Record<string, boolean>): this {
 		const o = this._href;
 		this._href = href;
 
@@ -143,14 +143,14 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 	 * <p>Default: "".
 	 * @return String
 	 */
-	public getValue(): string {
+	getValue(): string {
 		return this._value;
 	}
 
 	/** Sets the value.
 	 * @param String value
 	 */
-	public setValue(value: string): this {
+	setValue(value: string): this {
 		this._value = value;
 		return this;
 	}
@@ -159,7 +159,7 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 	 * <p>Default: false.
 	 * @return boolean
 	 */
-	public isChecked(): boolean | undefined {
+	isChecked(): boolean | undefined {
 		return this._checked;
 	}
 
@@ -167,7 +167,7 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 	 * <p> This only applies when {@link #isCheckmark()} = true.
 	 * @param boolean checked
 	 */
-	public setChecked(checked: boolean, opts?: Record<string, boolean>): this {
+	setChecked(checked: boolean, opts?: Record<string, boolean>): this {
 		const o = this._checked;
 		this._checked = checked;
 
@@ -191,7 +191,7 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 	 * <p>Default: false.
 	 * @return boolean
 	 */
-	public isAutocheck(): boolean | undefined {
+	isAutocheck(): boolean | undefined {
 		return this._autocheck;
 	}
 
@@ -200,7 +200,7 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 	 * <p> This only applies when {@link #isCheckmark()} = true.
 	 * @param boolean autocheck
 	 */
-	public setAutocheck(autocheck: boolean): this {
+	setAutocheck(autocheck: boolean): this {
 		this._autocheck = autocheck;
 		return this;
 	}
@@ -211,14 +211,14 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 	 * <p>Default: null.
 	 * @return String
 	 */
-	public getTarget(): string | undefined {
+	getTarget(): string | undefined {
 		return this._target;
 	}
 
 	/** Sets the target frame or window.
 	 * @param String target the name of the frame or window to hyperlink.
 	 */
-	public setTarget(target: string, opts?: Record<string, boolean>): this {
+	setTarget(target: string, opts?: Record<string, boolean>): this {
 		const o = this._target;
 		this._target = target;
 
@@ -262,7 +262,7 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 		* @since 5.0.7
 		* @return String
 		*/
-	public getAutodisable(): string | undefined {
+	getAutodisable(): string | undefined {
 		return this._autodisable;
 	}
 
@@ -270,7 +270,7 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 	 * @since 5.0.7
 	 * @param String autodisable
 	 */
-	public setAutodisable(autodisable: string): this {
+	setAutodisable(autodisable: string): this {
 		this._autodisable = autodisable;
 		return this;
 	}
@@ -279,7 +279,7 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 	 * Refer to {@link #setUpload} for more details.
 	 * @return String
 	 */
-	public getUpload(): string | undefined {
+	getUpload(): string | undefined {
 		return this._upload;
 	}
 
@@ -292,7 +292,7 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 	 * or null or "false" to disable the file download (and then
 	 * this button behaves like a normal button).
 	 */
-	public setUpload(v: string, opts?: Record<string, boolean>): this {
+	setUpload(v: string, opts?: Record<string, boolean>): this {
 		const o = this._upload;
 		this._upload = v;
 
@@ -311,7 +311,7 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 	 * Returns the file(s) belongs to this button if any.
 	 * @since 10.0.0
 	 */
-	public getFile(): FileList | null | undefined {
+	getFile(): FileList | null | undefined {
 		return this._uplder?.getFile();
 	}
 
@@ -319,16 +319,16 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 	 * by another {@link Menupopup}.
 	 * @return boolean
 	 */
-	public isTopmost(): boolean | null | undefined {
+	isTopmost(): boolean | null | undefined {
 		return this._topmost;
 	}
 
-	public override beforeParentChanged_(newParent: zk.Widget | null): void {
+	override beforeParentChanged_(newParent: zk.Widget | null): void {
 		this._topmost = newParent && !(newParent instanceof zul.menu.Menupopup);
 		super.beforeParentChanged_(newParent);
 	}
 
-	protected override domClass_(no?: zk.DomClassOptions): string {
+	override domClass_(no?: zk.DomClassOptions): string {
 		var scls = super.domClass_(no);
 		if (!no || !no.zclass) {
 			var added = this.isDisabled() ? this.$s('disabled') : '';
@@ -340,7 +340,7 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 		return scls;
 	}
 
-	protected override domContent_(): string {
+	override domContent_(): string {
 		var label = '<span class="' + this.$s('text') + '">'
 					+ (zUtl.encodeXML(this.getLabel())) + '</span>',
 			icon = '<i class="' + this.$s('icon') + ' z-icon-check" aria-hidden="true"></i>',
@@ -364,21 +364,21 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 	/** Returns the {@link Menubar} that contains this menuitem, or null if not available.
 	 * @return zul.menu.Menubar
 	 */
-	public getMenubar(): zul.menu.Menubar | null {
+	getMenubar(): zul.menu.Menubar | null {
 		for (var p: zk.Widget | null = this.parent; p; p = p.parent)
 			if (p instanceof zul.menu.Menubar)
 				return p;
 		return null;
 	}
 
-	private _getRootMenu(): zul.menu.Menu | null {
+	_getRootMenu(): zul.menu.Menu | null {
 		for (var p: zk.Widget | null = this.parent; p; p = p.parent)
 			if (p instanceof zul.menu.Menu && p.isTopmost())
 				return p;
 		return null;
 	}
 
-	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 
 		if (!this.isDisabled()) {
@@ -393,7 +393,7 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 		}
 	}
 
-	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		if (!this.isDisabled()) {
 			if (this._upload) _cleanUpld(this);
 			var anc = this.$n_('a');
@@ -408,7 +408,7 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 		super.unbind_(skipper, after, keepRod);
 	}
 
-	public override doClick_(evt: zk.Event): void {
+	override doClick_(evt: zk.Event): void {
 		if (this._disabled)
 			evt.stop();
 		else {
@@ -489,7 +489,7 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 		}
 	}
 
-	protected override doKeyDown_(evt: zk.Event): void {
+	override doKeyDown_(evt: zk.Event): void {
 		if (this.isTopmost() && !this._disabled) {
 			var key = evt.key;
 			if (key == ' ' || key == 'Enter') {
@@ -500,16 +500,16 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 		super.doKeyDown_(evt);
 	}
 
-	private _canActivate(evt: zk.Event): boolean {
+	_canActivate(evt: zk.Event): boolean {
 		return !this.isDisabled() && (zk.ie < 11 || !this.isTopmost() || !!this._uplder
 				|| jq.isAncestor(this.$n('a'), evt.domTarget));
 	}
 
-	public _getUploadRef(): HTMLAnchorElement | null | undefined {
+	_getUploadRef(): HTMLAnchorElement | null | undefined {
 		return this.$n('a');
 	}
 
-	public _doMouseEnter(evt: MouseEvent): void {
+	_doMouseEnter(evt: MouseEvent): void {
 		var isTopmost = this.isTopmost();
 		if (zul.menu._nOpen || isTopmost)
 			zWatch.fire('onFloatUp', this); //notify all
@@ -520,20 +520,20 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 		}
 	}
 
-	public _doMouseLeave(evt: MouseEvent): void {
+	_doMouseLeave(evt: MouseEvent): void {
 		var isTopmost = this.isTopmost();
 		if (!isTopmost && !this._disabled) {
 			(this.$class as typeof Menuitem)._rmActive(this);
 		}
 	}
 
-	protected override deferRedrawHTML_(out: string[]): void {
+	override deferRedrawHTML_(out: string[]): void {
 		var tag = this.isTopmost() ? 'td' : 'li';
 		out.push('<', tag, this.domAttrs_({domClass: true}), ' class="z-renderdefer"></', tag, '>');
 	}
 
 	//@Override
-	public override getImageNode(): HTMLImageElement | null | undefined {
+	override getImageNode(): HTMLImageElement | null | undefined {
 		if (!this._eimg && (this._image || this._hoverImage)) {
 			var n = this.$n();
 			if (n)
@@ -543,22 +543,22 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 	}
 
 	// internal use only.
-	protected getAnchor_(): HTMLAnchorElement | null | undefined {
+	getAnchor_(): HTMLAnchorElement | null | undefined {
 		return this.$n('a');
 	}
 
-	public override focus_(timeout?: number): boolean {
+	override focus_(timeout?: number): boolean {
 		if (zk(this.getAnchor_()).focus(timeout)) {
 			return true;
 		}
 		return super.focus_(timeout);
 	}
 
-	public static _isActive(wgt: zk.Widget): boolean {
+	static _isActive(wgt: zk.Widget): boolean {
 		return jq(wgt.$n_()).hasClass(wgt.$s('hover'));
 	}
 
-	public static _addActive(wgt: zul.menu.Menuitem): void {
+	static _addActive(wgt: zul.menu.Menuitem): void {
 		var top = wgt.isTopmost();
 		jq(wgt.$n_()).addClass(wgt.$s('hover'));
 		if (!top) {
@@ -574,11 +574,11 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 		}
 	}
 
-	public static _rmActive(wgt: zk.Widget): JQuery {
+	static _rmActive(wgt: zk.Widget): JQuery {
 		return jq(wgt.$n_()).removeClass(wgt.$s('hover'));
 	}
 
-	public onShow(): void {
+	onShow(): void {
 		if (this._uplder)
 			this._uplder.sync();
 	}

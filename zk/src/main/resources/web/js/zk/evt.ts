@@ -97,40 +97,40 @@ export interface EventStopOptions {
  * @disable(zkgwt)
  */
 export class Event<TData = unknown> extends ZKObject {
-	public keys?: zul.wnd.Dimension; // zul.wnd.Window
-	public itemSelected?: boolean; // zul.sel.ItemWidget.prototype.doSelect_
-	public tooltipped?: boolean; // zul.Widget.prototype.doTooltipOver_
-	public contextSelected?: boolean; // zul.Widget.prototype.doClick_
+	keys?: zul.wnd.Dimension; // zul.wnd.Window
+	itemSelected?: boolean; // zul.sel.ItemWidget.prototype.doSelect_
+	tooltipped?: boolean; // zul.Widget.prototype.doTooltipOver_
+	contextSelected?: boolean; // zul.Widget.prototype.doClick_
 
 	// dom.ts#metaData
-	declare public which;
-	declare public metaKey: boolean;
-	declare public ctrlKey;
-	declare public altKey;
-	declare public shiftKey;
+	declare which;
+	declare metaKey: boolean;
+	declare ctrlKey;
+	declare altKey;
+	declare shiftKey;
 
 	// dom.ts#mouseData
-	declare public pageX: number;
-	declare public pageY: number;
+	declare pageX: number;
+	declare pageY: number;
 
 	// dom.ts#keyData
-	declare public key: string;
-	declare public keyCode: number;
-	declare public charCode;
+	declare key: string;
+	declare keyCode: number;
+	declare charCode;
 
-	public shallStop = false;
+	shallStop = false;
 
 	/** The target widget (readonly).
 	 * @type zk.Widget
 	 * @see #currentTarget
 	 */
-	public target?: Widget | null;
+	target?: Widget | null;
 	/** Indicates the target which is handling this event.
 	 * <p>By default, an event will be propagated to its parent, and this member tells which widget is handling it, while #target is the widget that the event is targeting.
 	 * @type zk.Widget
 	 * @see #target
 	 */
-	public currentTarget?: Widget | null;
+	currentTarget?: Widget | null;
 	/** The event name, such as 'onChange'.
 	 * The data which depends on the event. Here is the list of Event Data.
 	 * <p>However, if data is an instance of Map, its content is copied to the event instance. Thus, you can access them directly with the event instance as follows.
@@ -142,7 +142,7 @@ onClick: function (evt) {
 </code></pre>
 	 * @type String
 	 */
-	public name: string;
+	name: string;
 	/** The data which depends on the event. Here is the list of Event Data.
 	 * <p>Data can be any javascript Object. You can bring Number, String or JSON object to server side with it.
 	 * <p>The javascript JSON object will be transfered to org.zkoss.json.JSONObject at server side as the following:
@@ -170,7 +170,7 @@ onClick: function (evt) {
 	 * <p>Refer to <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/Communication/AU_Requests/Server-side_Processing">ZK Client-side Reference: AU Requests: Server-side Processing</a>.
 	 * @type Object
 	 */
-	public data?: TData | null;
+	data?: TData | null;
 	/** The options (never null).
 	 * <p>Allowed properties:
 	 * <ul>
@@ -184,36 +184,36 @@ onClick: function (evt) {
 	 * </ul>
 	 * @type Map
 	 */
-	public opts: EventOptions;
+	opts: EventOptions;
 	/** The DOM event that causes this widget event, or null if not available.
 	 * @type jq.Event
 	 */
-	public domEvent?: JQuery.TriggeredEvent;
+	domEvent?: JQuery.TriggeredEvent;
 	/** The DOM element that the event is targeting, or null if not available.
 	 * @type DOMElement
 	 */
-	public domTarget: HTMLElement|undefined;
+	domTarget: HTMLElement|undefined;
 	/** Indicates whether the event propagation is stopped.
 	 * @type boolean
 	 * @see #stop
 	 * @see #auStopped
 	 * @see #domStopped
 	 */
-	public stopped = false;
+	stopped = false;
 	/** Indicates whether to stop the sending of the AU request to the server.
 	 * @type boolean
 	 * @see #stop
 	 * @see #stopped
 	 * @see #domStopped
 	 */
-	public auStopped = false;
+	auStopped = false;
 	/** Indicates whether to stop the native DOM event.
 	 * @type boolean
 	 * @see #stop
 	 * @see #stopped
 	 * @see #auStopped
 	 */
-	public domStopped = false;
+	domStopped = false;
 
 	/** Constructor.
 	 * @param zk.Widget target the target widget.
@@ -222,7 +222,7 @@ onClick: function (evt) {
 	 * @param Map opts [optional] the options. Refer to {@link #opts}
 	 * @param jq.Event domEvent [optional] the DOM event that causes this widget event.
 	 */
-	public constructor(target: Widget | null | undefined, name: string, data?: TData, opts?: EventOptions | null, domEvent?: JQuery.TriggeredEvent) { // FIXME: TriggeredEvent missing type parameters
+	constructor(target: Widget | null | undefined, name: string, data?: TData, opts?: EventOptions | null, domEvent?: JQuery.TriggeredEvent) { // FIXME: TriggeredEvent missing type parameters
 		super();
 		this.currentTarget = this.target = target;
 		this.name = name;
@@ -237,7 +237,7 @@ onClick: function (evt) {
 	/** Adds the additions options to {@link #opts}.
 	 * @param Map opts a map of options to append to #opts
 	 */
-	public addOptions(opts: EventOptions): void {
+	addOptions(opts: EventOptions): void {
 		this.opts = Object.assign(this.opts, opts);
 	}
 	/** Stop the event propagation.
@@ -265,7 +265,7 @@ evt.stop({progagation:true,revoke:true}); //revoke the event propagation
 	In other words, to stop it, you have to specify the au option explicitly. </li>
 	</ul>
 	*/
-	public stop(opts?: EventStopOptions | null): void {
+	stop(opts?: EventStopOptions | null): void {
 		var b = !opts || !opts.revoke;
 		if (!opts || opts.propagation) this.stopped = b;
 		if (!opts || opts.dom) this.domStopped = b;
@@ -282,7 +282,7 @@ evt.stop({progagation:true,revoke:true}); //revoke the event propagation
 	 * @since 9.5.0
 	 * @see _global_.zKeys
 	 */
-	public isPressed(): boolean {
+	isPressed(): boolean {
 		var keyCount = 0,
 			result = true;
 		for (var i = 0, len = arguments.length; i < len; i++) {
@@ -345,12 +345,12 @@ var _visiEvts = {onFitSize: true, onSize: true, onShow: true, onHide: true, befo
 // `ZWatchController` was previously named `_Gun` and not exported.
 // To export this class, the variables above and functions below are pulled out from `zWatch` (exported later in this file).
 export class ZWatchController extends zk.Object {
-	public name: string;
-	public xinfs;
-	public args;
-	public origin: Widget;
-	public fns;
-	public constructor(name: string, xinfs, args, org: Widget, fns) {
+	name: string;
+	xinfs;
+	args;
+	origin: Widget;
+	fns;
+	constructor(name: string, xinfs, args, org: Widget, fns) {
 		super();
 		this.name = name;
 		this.xinfs = xinfs;
@@ -358,7 +358,7 @@ export class ZWatchController extends zk.Object {
 		this.origin = org;
 		this.fns = fns;
 	}
-	public fire(ref?: Widget | null): void {
+	fire(ref?: Widget | null): void {
 		var infs, xinf,
 			name = this.name,
 			xinfs = this.xinfs,
@@ -376,7 +376,7 @@ export class ZWatchController extends zk.Object {
 			while (xinf = xinfs.shift())
 				_invoke(name, xinf[1], xinf[0], args, fns);
 	}
-	public fireDown(ref: Widget): void {
+	fireDown(ref: Widget): void {
 		if (!ref || ref.bindLevel == null)
 			this.fire(ref);
 

@@ -90,21 +90,21 @@ function _compareTreePath(thisPath: number[], itemPath: number[]): 1 | -1 {
  */
 @zk.WrapClass('zul.sel.Treeitem')
 export class Treeitem extends zul.sel.ItemWidget {
-	public override parent!: zul.sel.Treechildren | null;
-	public override firstChild!: zul.sel.Treerow | zul.sel.Treechildren | null;
-	public override lastChild!: zul.sel.Treerow | zul.sel.Treechildren | null;
-	public override nextSibling!: zul.sel.Treeitem | null;
-	public override previousSibling!: zul.sel.Treeitem | null;
+	override parent!: zul.sel.Treechildren | null;
+	override firstChild!: zul.sel.Treerow | zul.sel.Treechildren | null;
+	override lastChild!: zul.sel.Treerow | zul.sel.Treechildren | null;
+	override nextSibling!: zul.sel.Treeitem | null;
+	override previousSibling!: zul.sel.Treeitem | null;
 
-	public _open = true;
-	public treerow?: zul.sel.Treerow | null;
-	public treechildren?: zul.sel.Treechildren | null;
+	_open = true;
+	treerow?: zul.sel.Treerow | null;
+	treechildren?: zul.sel.Treechildren | null;
 
 	/** Returns whether this container is open.
 	 * <p>Default: true.
 	 * @return boolean
 	 */
-	public isOpen(): boolean {
+	isOpen(): boolean {
 		return this._open;
 	}
 
@@ -112,7 +112,7 @@ export class Treeitem extends zul.sel.ItemWidget {
 	 * @param boolean open
 	 */
 	// FIXME: can a defSet generated setter accept more than one arguments before `opts`?
-	public setOpen(open: boolean, fromServer?: boolean, opts?: Record<string, boolean>): this {
+	setOpen(open: boolean, fromServer?: boolean, opts?: Record<string, boolean>): this {
 		const o = this._open;
 		this._open = open;
 
@@ -175,7 +175,7 @@ export class Treeitem extends zul.sel.ItemWidget {
 		return this;
 	}
 
-	private _showKids(open: boolean): void {
+	_showKids(open: boolean): void {
 		var tc = this.treechildren;
 		if (tc)
 			for (var w = tc.firstChild, vi = tc._isRealVisible(); w; w = w.nextSibling) {
@@ -187,7 +187,7 @@ export class Treeitem extends zul.sel.ItemWidget {
 			}
 	}
 
-	public override isStripeable_(): boolean {
+	override isStripeable_(): boolean {
 		return false;
 	}
 
@@ -195,7 +195,7 @@ export class Treeitem extends zul.sel.ItemWidget {
 	 * Returns the mesh widget. i.e. {@link Tree}
 	 * @return Tree
 	 */
-	public override getMeshWidget(): zul.sel.Tree | null {
+	override getMeshWidget(): zul.sel.Tree | null {
 		return this.parent ? this.parent.getTree() : null;
 	}
 
@@ -204,18 +204,18 @@ export class Treeitem extends zul.sel.ItemWidget {
 	 * @return Tree
 	 * @see #getMeshWidget
 	 */
-	public getTree = Treeitem.prototype.getMeshWidget;
+	getTree = Treeitem.prototype.getMeshWidget;
 
-	public override getZclass(): string {
+	override getZclass(): string {
 		// NOTE: Dead code. Treeitem is not rendered. A treerow is rendered instead,
 		// so this function will not be called.
 		if (this.treerow) return this.treerow.getZclass();
 		return '';
 	}
 
-	public override $n(): HTMLTableRowElement | null | undefined
-	public override $n(nm?: string): HTMLElement | null | undefined
-	public override $n(nm?: string): HTMLElement | null | undefined {
+	override $n(): HTMLTableRowElement | null | undefined
+	override $n(nm?: string): HTMLElement | null | undefined
+	override $n(nm?: string): HTMLElement | null | undefined {
 		if (this.treerow)
 			return nm ? this.treerow.$n(nm) : this.treerow.$n() || jq(this.treerow.uuid, zk)[0];
 		return null;
@@ -225,21 +225,21 @@ export class Treeitem extends zul.sel.ItemWidget {
 	 * which can have child elements.
 	 * @return boolean
 	 */
-	public isContainer(): boolean {
+	isContainer(): boolean {
 		return this.treechildren != null;
 	}
 
 	/** Returns whether this element contains no child elements.
 	 * @return boolean
 	 */
-	public isEmpty(): boolean {
+	isEmpty(): boolean {
 		return !this.treechildren || !this.treechildren.nChildren;
 	}
 
 	/** Returns the level this cell is. The root is level 0.
 	 * @return int
 	 */
-	public getLevel(): number {
+	getLevel(): number {
 		var level = 0;
 		for (var item: zul.sel.Tree | zul.sel.Treeitem | null = this; ; ++level) {
 			if (!item.parent)
@@ -256,7 +256,7 @@ export class Treeitem extends zul.sel.ItemWidget {
 	 * if no such cell.
 	 * @return String
 	 */
-	public override getLabel(): string | null {
+	override getLabel(): string | null {
 		var cell = this.getFirstCell();
 		return cell ? cell.getLabel() : null;
 	}
@@ -266,7 +266,7 @@ export class Treeitem extends zul.sel.ItemWidget {
 	 * <p>If it is not created, we automatically create it.
 	 * @param String label
 	 */
-	public setLabel(label: string): void {
+	setLabel(label: string): void {
 		this._autoFirstCell().setLabel(label);
 	}
 
@@ -274,11 +274,11 @@ export class Treeitem extends zul.sel.ItemWidget {
 	 * Returns the first treecell.
 	 * @return Treecell
 	 */
-	public getFirstCell(): zul.sel.Treecell | null {
+	getFirstCell(): zul.sel.Treecell | null {
 		return this.treerow ? this.treerow.firstChild : null;
 	}
 
-	private _autoFirstCell(): zul.sel.Treecell {
+	_autoFirstCell(): zul.sel.Treecell {
 		if (!this.treerow)
 			this.appendChild(new zul.sel.Treerow());
 
@@ -293,7 +293,7 @@ export class Treeitem extends zul.sel.ItemWidget {
 	/** Returns the image of the {@link Treecell} it contains.
 	 * @return String
 	 */
-	public getImage(): string | null | undefined {
+	getImage(): string | null | undefined {
 		var cell = this.getFirstCell();
 		return cell ? cell.getImage() : null;
 	}
@@ -304,7 +304,7 @@ export class Treeitem extends zul.sel.ItemWidget {
 	 * @param String image
 	 * @return Treeitem
 	 */
-	public setImage(image: string): this {
+	setImage(image: string): this {
 		this._autoFirstCell().setImage(image);
 		return this;
 	}
@@ -314,17 +314,17 @@ export class Treeitem extends zul.sel.ItemWidget {
 	 * The parent tree item is actually the grandparent if any.
 	 * @return Treeitem
 	 */
-	public getParentItem(): zul.sel.Treeitem | null {
+	getParentItem(): zul.sel.Treeitem | null {
 		const p = this.parent?.parent; // null/undefined are not instances of any Object
 		return p instanceof zul.sel.Treeitem ? p : null;
 	}
 
-	public _isRealVisible(): boolean | null | undefined {
+	_isRealVisible(): boolean | null | undefined {
 		const p = this.parent;
 		return this.isVisible() && p && p._isRealVisible();
 	}
 
-	private _isVisibleInTree(): boolean | undefined {
+	_isVisibleInTree(): boolean | undefined {
 		// used by Treecell#_isLastVisibleChild
 		if (!this.isVisible())
 			return;
@@ -338,7 +338,7 @@ export class Treeitem extends zul.sel.ItemWidget {
 		return p._isVisibleInTree(); // timing issue, does not concern open state
 	}
 
-	public override setVisible(visible: boolean | undefined): void {
+	override setVisible(visible: boolean | undefined): void {
 		if (this.isVisible() != visible) {
 			super.setVisible(visible);
 			if (this.treerow) this.treerow.setVisible(visible);
@@ -347,7 +347,7 @@ export class Treeitem extends zul.sel.ItemWidget {
 		}
 	}
 
-	public override beforeParentChanged_(newParent: zul.sel.Treechildren | null): void {
+	override beforeParentChanged_(newParent: zul.sel.Treechildren | null): void {
 		var oldtree = this.getTree();
 		if (oldtree)
 			oldtree._onTreeitemRemoved(this);
@@ -361,12 +361,12 @@ export class Treeitem extends zul.sel.ItemWidget {
 	}
 
 	//@Override
-	public override isRealElement(): boolean {
+	override isRealElement(): boolean {
 		return false; // fixed for ZK Client selector issue
 	}
 
 	//@Override
-	public override insertBefore(child: zk.Widget, sibling: zk.Widget | null | undefined, ignoreDom?: boolean): boolean {
+	override insertBefore(child: zk.Widget, sibling: zk.Widget | null | undefined, ignoreDom?: boolean): boolean {
 		if (super.insertBefore(child, sibling,
 		ignoreDom || (!this.z_rod && child instanceof zul.sel.Treechildren))) {
 			this._fixOnAdd(child, ignoreDom);
@@ -376,7 +376,7 @@ export class Treeitem extends zul.sel.ItemWidget {
 	}
 
 	//@Override
-	public override appendChild(child: zk.Widget, ignoreDom?: boolean): boolean {
+	override appendChild(child: zk.Widget, ignoreDom?: boolean): boolean {
 		if (super.appendChild(child,
 		ignoreDom || (!this.z_rod && child instanceof zul.sel.Treechildren))) {
 			if (!this.insertingBefore_)
@@ -386,7 +386,7 @@ export class Treeitem extends zul.sel.ItemWidget {
 		return false;
 	}
 
-	private _fixOnAdd(child: zk.Widget, ignoreDom?: boolean): void {
+	_fixOnAdd(child: zk.Widget, ignoreDom?: boolean): void {
 		if (child instanceof zul.sel.Treerow)
 			this.treerow = child;
 		else if (child instanceof zul.sel.Treechildren) {
@@ -396,7 +396,7 @@ export class Treeitem extends zul.sel.ItemWidget {
 		}
 	}
 
-	protected override onChildRemoved_(child: zk.Widget): void {
+	override onChildRemoved_(child: zk.Widget): void {
 		super.onChildRemoved_(child);
 		if (child == this.treerow) {
 			this.treerow = null;
@@ -407,7 +407,7 @@ export class Treeitem extends zul.sel.ItemWidget {
 		}
 	}
 
-	protected override onChildAdded_(child: zk.Widget): void {
+	override onChildAdded_(child: zk.Widget): void {
 		super.onChildAdded_(child);
 		if (this.childReplacing_) //called by onChildReplaced_
 			this._fixOnAdd(child, true);
@@ -415,7 +415,7 @@ export class Treeitem extends zul.sel.ItemWidget {
 			this._fixOnAdd(child, true); // fixed dynamically change treerow. B65-ZK-1608
 	}
 
-	public override removeHTML_(n: HTMLElement | HTMLElement[]): void {
+	override removeHTML_(n: HTMLElement | HTMLElement[]): void {
 		for (var w: zk.Widget | null = this.firstChild; w; w = w.nextSibling) {
 			const cn = w.$n();
 			if (cn)
@@ -424,21 +424,21 @@ export class Treeitem extends zul.sel.ItemWidget {
 		super.removeHTML_(n);
 	}
 
-	public override replaceWidget(newwgt: zul.sel.Treeitem, skipper?: zk.Skipper): void {
+	override replaceWidget(newwgt: zul.sel.Treeitem, skipper?: zk.Skipper): void {
 		zul.sel.Treeitem._syncSelItems(this, newwgt);
 		if (this.treechildren)
 			this.treechildren.detach();
 		super.replaceWidget(newwgt, skipper);
 	}
 
-	private _removeChildHTML(n: HTMLElement | string): void {
+	_removeChildHTML(n: HTMLElement | string): void {
 		for (var cn: HTMLElement | null | undefined, w = this.firstChild; w; w = w.nextSibling) {
 			if (w != this.treerow && (cn = w.$n()))
 				w.removeHTML_(cn);
 		}
 	}
 
-	private _renderChildHTML(childHTML: string): void {
+	_renderChildHTML(childHTML: string): void {
 		var tree = this.getTree()!,
 			erows = tree.ebodyrows;
 
@@ -477,7 +477,7 @@ export class Treeitem extends zul.sel.ItemWidget {
 		}
 	}
 
-	protected override insertChildHTML_(child: zk.Widget, before?: zk.Widget | null, desktop?: zk.Desktop | null): void {
+	override insertChildHTML_(child: zk.Widget, before?: zk.Widget | null, desktop?: zk.Desktop | null): void {
 		const nodeOfBefore = before ? before.getFirstNode_() : null;
 		if (nodeOfBefore)
 			jq(nodeOfBefore).before(child.redrawHTML_());
@@ -487,19 +487,19 @@ export class Treeitem extends zul.sel.ItemWidget {
 		child.bind(desktop);
 	}
 
-	public override getOldWidget_(n: HTMLElement | string): zk.Widget | null | undefined {
+	override getOldWidget_(n: HTMLElement | string): zk.Widget | null | undefined {
 		var old = super.getOldWidget_(n);
 		if (old && old instanceof zul.sel.Treerow)
 			return old.parent;
 		return old;
 	}
 
-	public override replaceHTML(n: HTMLElement | string, desktop: zk.Desktop | null, skipper?: zk.Skipper | null, _trim_?: boolean, _callback_?: CallableFunction[]): void {
+	override replaceHTML(n: HTMLElement | string, desktop: zk.Desktop | null, skipper?: zk.Skipper | null, _trim_?: boolean, _callback_?: CallableFunction[]): void {
 		this._removeChildHTML(n);
 		super.replaceHTML(n, desktop, skipper, _trim_, _callback_);
 	}
 
-	public _syncIcon(isRemoved?: boolean): void {
+	_syncIcon(isRemoved?: boolean): void {
 		if (this.desktop && this.treerow) {
 			const treecell = this.treerow.firstChild;
 			if (treecell)
@@ -510,7 +510,7 @@ export class Treeitem extends zul.sel.ItemWidget {
 	}
 
 	//@Override
-	public override compareItemPos_(item: zul.sel.Treeitem): number {
+	override compareItemPos_(item: zul.sel.Treeitem): number {
 		if (this == item)
 			return 0;
 		var tree = this.getTree();
@@ -518,7 +518,7 @@ export class Treeitem extends zul.sel.ItemWidget {
 	}
 
 	//package utiltiy: sync selected items for replaceWidget
-	public static _syncSelItems<T extends (zul.sel.Treeitem | zul.sel.Treechildren)>(oldwgt: T, newwgt: T): void {
+	static _syncSelItems<T extends (zul.sel.Treeitem | zul.sel.Treechildren)>(oldwgt: T, newwgt: T): void {
 		const items = oldwgt.getTree()?._selItems;
 		if (items)
 			if (oldwgt instanceof zul.sel.Treechildren) { // If true, newwgt would also be Treechildren.

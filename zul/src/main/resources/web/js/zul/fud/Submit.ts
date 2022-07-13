@@ -16,14 +16,14 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
  */
 @zk.WrapClass('zul.fud.Submit')
 export class Submit extends zul.wgt.Button {
-	public override nextSibling!: zk.Widget & { setDisabled(disabled: boolean) };
-	private _tmp?: number;
+	override nextSibling!: zk.Widget & { setDisabled(disabled: boolean) };
+	_tmp?: number;
 
-	public override getZclass(): string { // keep the button's zclass
+	override getZclass(): string { // keep the button's zclass
 		return this._zclass == null ? 'z-button' : this._zclass;
 	}
 
-	public submit(): void {
+	submit(): void {
 		var f = this.$f('fileupload')!,
 			self = this;
 		function t(): boolean {
@@ -43,7 +43,7 @@ export class Submit extends zul.wgt.Button {
 			this.$f('btns')!.rerender();
 	}
 
-	public revert(): void {
+	revert(): void {
 		clearInterval(this._tmp);
 		this._tmp = undefined;
 		this.setDisabled(false);

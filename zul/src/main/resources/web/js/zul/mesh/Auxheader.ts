@@ -18,14 +18,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.mesh.Auxheader')
 export abstract class Auxheader extends zul.mesh.HeaderWidget {
-	private _colspan = 1;
-	private _rowspan = 1;
+	_colspan = 1;
+	_rowspan = 1;
 
 	/** Returns number of columns to span this header.
 	 * Default: 1.
 	 * @return int
 	 */
-	public getColspan(): number {
+	getColspan(): number {
 		return this._colspan;
 	}
 
@@ -33,7 +33,7 @@ export abstract class Auxheader extends zul.mesh.HeaderWidget {
 	 * <p>It is the same as the colspan attribute of HTML TD tag.
 	 * @param int colspan
 	 */
-	public setColspan(v: number, opts?: Record<string, boolean>): this {
+	setColspan(v: number, opts?: Record<string, boolean>): this {
 		const o = this._colspan;
 		this._colspan = v;
 
@@ -52,7 +52,7 @@ export abstract class Auxheader extends zul.mesh.HeaderWidget {
 	 * Default: 1.
 	 * @return int
 	 */
-	public getRowspan(): number {
+	getRowspan(): number {
 		return this._rowspan;
 	}
 
@@ -60,7 +60,7 @@ export abstract class Auxheader extends zul.mesh.HeaderWidget {
 	 * <p>It is the same as the rowspan attribute of HTML TD tag.
 	 * @param int rowspan
 	 */
-	public setRowspan(v: number, opts?: Record<string, boolean>): this {
+	setRowspan(v: number, opts?: Record<string, boolean>): this {
 		const o = this._rowspan;
 		this._rowspan = v;
 
@@ -76,7 +76,7 @@ export abstract class Auxheader extends zul.mesh.HeaderWidget {
 	}
 
 	//super//
-	public override domAttrs_(no?: zk.DomAttrsOptions): string {
+	override domAttrs_(no?: zk.DomAttrsOptions): string {
 		var s = super.domAttrs_(no), v;
 		if ((v = this._colspan) != 1)
 			s += ' colspan="' + v + '"';

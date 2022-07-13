@@ -41,9 +41,9 @@ export interface SwipeOptions {
  * @disable(zkgwt)
  */
 export class Swipe extends zk.Object {
-	declare public widget: zk.Widget | null;
-	declare public opts;
-	declare public node: HTMLElement | null;
+	declare widget: zk.Widget | null;
+	declare opts;
+	declare node: HTMLElement | null;
 	/**
 	 * The Constructor.
 	 * @param Object widget the object for swipe.
@@ -58,7 +58,7 @@ export class Swipe extends zk.Object {
 	 * <li>int maxDisplacement: the maximum swipe displacement(pixel). When larger than maximum displacement, it is not a swipe action. Default: 75.</li>
 	 * </ul>
 	 */
-	public constructor(widget: Widget, node?: HTMLElement | null, opts?: Partial<SwipeOptions>) {
+	constructor(widget: Widget, node?: HTMLElement | null, opts?: Partial<SwipeOptions>) {
 		super();
 		this.widget = widget;
 		this.node = node = node ? jq(node, zk)[0] : widget['node'] || (widget.$n ? widget.$n() : null);
@@ -79,12 +79,12 @@ export class Swipe extends zk.Object {
 	 * Destroys this swipe-able object.
 	 * This method must be called to clean up, if you don't want to associate the swipe-able feature to a DOM element.
 	 */
-	public destroy(node: HTMLElement): void {
+	destroy(node: HTMLElement): void {
 		jq(node).off(startEvt, this.proxy(this._swipeStart));
 		this.widget = this.node = this.opts = null;
 	}
 
-	private _swipeStart(devt: JQuery.TriggeredEvent): void {
+	_swipeStart(devt: JQuery.TriggeredEvent): void {
 		var evt = devt.originalEvent as TouchEvent,
 			data = evt.touches ? evt.touches[0] : (evt as unknown as MouseEvent);
 
@@ -97,7 +97,7 @@ export class Swipe extends zk.Object {
 			.one(endEvt, this.proxy(this._swipeEnd) as unknown as false);
 	}
 
-	private _swipeMove(devt: JQuery.TriggeredEvent): void {
+	_swipeMove(devt: JQuery.TriggeredEvent): void {
 		if (!start) return;
 		var evt = devt.originalEvent as TouchEvent,
 			data = evt.touches ? evt.touches[0] : (evt as unknown as MouseEvent);
@@ -117,7 +117,7 @@ export class Swipe extends zk.Object {
 			evt.preventDefault();
 	}
 
-	private _swipeEnd(devt: JQuery.TriggeredEvent): void {
+	_swipeEnd(devt: JQuery.TriggeredEvent): void {
 		jq(this.node!).off(moveEvt, this.proxy(this._swipeMove));
 		if (start && stop) {
 			var dispX, dispY, dispT = stop.time - start.time, dir;

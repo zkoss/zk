@@ -34,23 +34,23 @@ function _fixForEmpty(wgt: zul.grid.Grid): void {
 
 @zk.WrapClass('zul.grid.Grid')
 export class Grid extends zul.mesh.MeshWidget {
-	public override _scrollbar: zul.Scrollbar | null = null;
-	private _emptyMessage?: string;
-	public rows?: zul.grid.Rows | null;
-	public columns?: zul.grid.Columns | null;
-	public _shallFixEmpty?: boolean;
-	private _scOddRow?: string | null;
+	override _scrollbar: zul.Scrollbar | null = null;
+	_emptyMessage?: string;
+	rows?: zul.grid.Rows | null;
+	columns?: zul.grid.Columns | null;
+	_shallFixEmpty?: boolean;
+	_scOddRow?: string | null;
 	// Prevent name clash with inherited method `_visibleRows`. Fortunately, Java
-	// calls its public setter, so this renaming is safe. See `renderProperties`
+	// calls its setter, so this renaming is safe. See `renderProperties`
 	// in `Grid.java`.
-	private _visibleRows_?: number;
+	_visibleRows_?: number;
 
 	/**
 	 * Returns the message to display when there are no items
 	 * @return String
 	 * @since 5.0.7
 	 */
-	public getEmptyMessage(): string | undefined {
+	getEmptyMessage(): string | undefined {
 		return this._emptyMessage;
 	}
 
@@ -59,7 +59,7 @@ export class Grid extends zul.mesh.MeshWidget {
 	 * @param String msg
 	 * @since 5.0.7
 	 */
-	public setEmptyMessage(msg: string, opts?: Record<string, boolean>): this {
+	setEmptyMessage(msg: string, opts?: Record<string, boolean>): this {
 		const o = this._emptyMessage;
 		this._emptyMessage = msg;
 
@@ -78,7 +78,7 @@ export class Grid extends zul.mesh.MeshWidget {
 		return this;
 	}
 
-	public getVisibleRows(): number | undefined {
+	getVisibleRows(): number | undefined {
 		return this._visibleRows_;
 	}
 
@@ -87,7 +87,7 @@ export class Grid extends zul.mesh.MeshWidget {
 	 * @param int rows
 	 * @since 10.0.0
 	 */
-	public setVisibleRows(rows: number, opts?: Record<string, boolean>): this {
+	setVisibleRows(rows: number, opts?: Record<string, boolean>): this {
 		const o = this._visibleRows_;
 		this._visibleRows_ = rows;
 
@@ -103,7 +103,7 @@ export class Grid extends zul.mesh.MeshWidget {
 	 * @param int col which column to fetch (starting at 0).
 	 * @return zk.Widget
 	 */
-	public getCell(row: number, col: number): zk.Widget | null | undefined {
+	getCell(row: number, col: number): zk.Widget | null | undefined {
 		const rows = this.rows;
 		if (!rows)
 			return null;
@@ -119,7 +119,7 @@ export class Grid extends zul.mesh.MeshWidget {
 	 * <p>Default: {@link #getZclass()}-odd.
 	 * @return String
 	 */
-	public getOddRowSclass(): string {
+	getOddRowSclass(): string {
 		return this._scOddRow == null ? this.$s('odd') : this._scOddRow;
 	}
 
@@ -129,7 +129,7 @@ export class Grid extends zul.mesh.MeshWidget {
 	 * classes.
 	 * @param String scls
 	 */
-	public setOddRowSclass(sclass: string): this {
+	setOddRowSclass(sclass: string): this {
 		const scls = sclass || null;
 		if (this._scOddRow != scls) {
 			this._scOddRow = scls;
@@ -140,14 +140,14 @@ export class Grid extends zul.mesh.MeshWidget {
 		return this;
 	}
 
-	public override rerender(skipper?: zk.Skipper | number | null): this {
+	override rerender(skipper?: zk.Skipper | number | null): this {
 		super.rerender(skipper);
 		if (this.rows)
 			this.rows._syncStripe();
 		return this;
 	}
 
-	public override insertBefore(child: zk.Widget, sibling: zk.Widget | null | undefined, ignoreDom?: boolean): boolean {
+	override insertBefore(child: zk.Widget, sibling: zk.Widget | null | undefined, ignoreDom?: boolean): boolean {
 		if (super.insertBefore(child, sibling, !this.z_rod)) {
 			this._fixOnAdd(child, ignoreDom, ignoreDom);
 			return true;
@@ -155,7 +155,7 @@ export class Grid extends zul.mesh.MeshWidget {
 		return false;
 	}
 
-	public override appendChild(child: zk.Widget, ignoreDom?: boolean): boolean {
+	override appendChild(child: zk.Widget, ignoreDom?: boolean): boolean {
 		if (super.appendChild(child, !this.z_rod)) {
 			if (!this.insertingBefore_)
 				this._fixOnAdd(child, ignoreDom, ignoreDom);
@@ -164,7 +164,7 @@ export class Grid extends zul.mesh.MeshWidget {
 		return false;
 	}
 
-	private _fixOnAdd(child: zk.Widget, ignoreDom?: boolean, _noSync?: boolean): void {
+	_fixOnAdd(child: zk.Widget, ignoreDom?: boolean, _noSync?: boolean): void {
 		if (child instanceof zul.grid.Rows) {
 			this.rows = child;
 			this._syncEmpty();
@@ -185,7 +185,7 @@ export class Grid extends zul.mesh.MeshWidget {
 			this._syncSize();  //sync-size required
 	}
 
-	protected override onChildRemoved_(child: zk.Widget): void {
+	override onChildRemoved_(child: zk.Widget): void {
 		super.onChildRemoved_(child);
 
 		var isRows;
@@ -215,7 +215,7 @@ export class Grid extends zul.mesh.MeshWidget {
 	 * @param Array out A array that contains html structure ,
 	 * 			it usually come from mold(redraw_).
 	 */
-	protected redrawEmpty_(out: string[]): void {
+	redrawEmpty_(out: string[]): void {
 		out.push('<tbody class="', this.$s('emptybody'), '"><tr><td id="',
 				this.uuid, '-empty" style="display:none">',
 				'<div id="', this.uuid, '-empty-content"');
@@ -224,7 +224,7 @@ export class Grid extends zul.mesh.MeshWidget {
 		out.push('>', this._emptyMessage!, '</div></td></tr></tbody>');
 	}
 
-	protected override bind_(desktop: zk.Desktop | null | undefined, skipper: zk.Skipper | null | undefined, after: CallableFunction[]): void {
+	override bind_(desktop: zk.Desktop | null | undefined, skipper: zk.Skipper | null | undefined, after: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		var w = this;
 		after.push(function () {
@@ -232,12 +232,12 @@ export class Grid extends zul.mesh.MeshWidget {
 		});
 	}
 
-	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		this.destroyBar_();
 		super.unbind_(skipper, after, keepRod);
 	}
 
-	public override onSize(): void {
+	override onSize(): void {
 		super.onSize();
 		var self = this,
 			canInitScrollbar = this.desktop && !this._nativebar;
@@ -254,7 +254,7 @@ export class Grid extends zul.mesh.MeshWidget {
 		}, 200);
 	}
 
-	protected destroyBar_(): void {
+	destroyBar_(): void {
 		var bar = this._scrollbar;
 		if (bar) {
 			bar.destroy();
@@ -262,7 +262,7 @@ export class Grid extends zul.mesh.MeshWidget {
 		}
 	}
 
-	public override onResponse(ctl?: zk.ZWatchController, opts?: Record<string, unknown>): void {
+	override onResponse(ctl?: zk.ZWatchController, opts?: Record<string, unknown>): void {
 		if (this.desktop) {
 			if (this._shallFixEmpty)
 				_fixForEmpty(this);
@@ -270,18 +270,18 @@ export class Grid extends zul.mesh.MeshWidget {
 		super.onResponse(ctl, opts);
 	}
 
-	public override _syncEmpty(): void {
+	override _syncEmpty(): void {
 		this._shallFixEmpty = true;
 	}
 
-	protected override onChildAdded_(child: zk.Widget): void {
+	override onChildAdded_(child: zk.Widget): void {
 		super.onChildAdded_(child);
 		if (this.childReplacing_) //called by onChildReplaced_
 			this._fixOnAdd(child, true); //_syncSize required
 		//else handled by insertBefore/appendChild
 	}
 
-	protected override insertChildHTML_(child: zk.Widget, before?: zk.Widget | null, desktop?: zk.Desktop | null): void {
+	override insertChildHTML_(child: zk.Widget, before?: zk.Widget | null, desktop?: zk.Desktop | null): void {
 		if (child instanceof zul.grid.Rows) {
 			this.rows = child;
 			var fakerows = this.$n('rows');
@@ -313,7 +313,7 @@ export class Grid extends zul.mesh.MeshWidget {
 	 * Returns the head widget class.
 	 * @return zul.grid.Columns
 	 */
-	public getHeadWidgetClass(): typeof zul.grid.Columns {
+	getHeadWidgetClass(): typeof zul.grid.Columns {
 		return zul.grid.Columns;
 	}
 
@@ -321,17 +321,17 @@ export class Grid extends zul.mesh.MeshWidget {
 	 * Returns the tree item iterator.
 	 * @return zul.grid.RowIter
 	 */
-	public getBodyWidgetIterator(opts?: Record<string, unknown>): zul.grid.RowIter {
+	getBodyWidgetIterator(opts?: Record<string, unknown>): zul.grid.RowIter {
 		return new zul.grid.RowIter(this, opts);
 	}
-	public itemIterator = Grid.prototype.getBodyWidgetIterator;
+	itemIterator = Grid.prototype.getBodyWidgetIterator;
 
 	/**
 	 * Returns whether the grid has group.
 	 * @since 6.5.0
 	 * @return boolean
 	 */
-	public hasGroup(): boolean | undefined {
+	hasGroup(): boolean | undefined {
 		return this.rows?.hasGroup();
 	}
 
@@ -341,18 +341,18 @@ export class Grid extends zul.mesh.MeshWidget {
 	 * @param double scrollRatio the scroll ratio
 	 * @since 8.5.2
 	 */
-	public scrollToIndex(index: number, scrollRatio: number): void {
+	scrollToIndex(index: number, scrollRatio: number): void {
 		var self = this;
 		void this.waitForRendered_().then(function () {
 			self._scrollToIndex(index, scrollRatio);
 		});
 	}
 
-	public _getFirstItemIndex(): number | undefined {
+	_getFirstItemIndex(): number | undefined {
 		return this.rows!.firstChild!._index;
 	}
 
-	public _getLastItemIndex(): number | undefined {
+	_getLastItemIndex(): number | undefined {
 		return this.rows!.lastChild!._index;
 	}
 }
@@ -363,21 +363,21 @@ export class Grid extends zul.mesh.MeshWidget {
  */
 @zk.WrapClass('zul.grid.RowIter')
 export class RowIter extends zk.Object implements zul.mesh.ItemIterator {
-	public grid: zul.grid.Grid;
-	public opts?: Record<string, unknown>;
-	private _isInit?: boolean;
-	public p?: zul.grid.Row | null;
+	grid: zul.grid.Grid;
+	opts?: Record<string, unknown>;
+	_isInit?: boolean;
+	p?: zul.grid.Row | null;
 
 	/** Constructor
 	 * @param Grid grid the widget that the iterator belongs to
 	 */
-	public constructor(grid: zul.grid.Grid, opts?: Record<string, unknown>) {
+	constructor(grid: zul.grid.Grid, opts?: Record<string, unknown>) {
 		super();
 		this.grid = grid;
 		this.opts = opts;
 	}
 
-	private _init(): void {
+	_init(): void {
 		if (!this._isInit) {
 			this._isInit = true;
 			var p = this.grid.rows ? this.grid.rows.firstChild : null;
@@ -391,7 +391,7 @@ export class RowIter extends zk.Object implements zul.mesh.ItemIterator {
 	* Returns <tt>true</tt> if the iteration has more elements
 	* @return boolean
 	*/
-	public hasNext(): boolean {
+	hasNext(): boolean {
 		this._init();
 		return !!this.p;
 	}
@@ -401,7 +401,7 @@ export class RowIter extends zk.Object implements zul.mesh.ItemIterator {
 	 *
 	 * @return Row the next element in the iteration.
 	 */
-	public next(): zul.grid.Row | null | undefined {
+	next(): zul.grid.Row | null | undefined {
 		this._init();
 		var p = this.p,
 			q = p ? p.nextSibling : null;

@@ -96,18 +96,18 @@ function _setOpen(wgt: Splitter, open: boolean, opts?: {sendOnOpen?: boolean}): 
  */
 @zk.WrapClass('zul.box.Splitter')
 export class Splitter extends zul.Widget {
-	public override parent!: zul.box.Box | null;
-	private _collapse = 'none';
-	public _open = true;
-	private _drag0: zk.Draggable | null = null;
-	private _shallClose?: boolean;
+	override parent!: zul.box.Box | null;
+	_collapse = 'none';
+	_open = true;
+	_drag0: zk.Draggable | null = null;
+	_shallClose?: boolean;
 
 	/** Opens or collapses the splitter.
 	 * Meaningful only if {@link #getCollapse} is not "none".
 	 * @param boolean open
 	 * @param Offset opts
 	 */
-	public setOpen(open: boolean, opts?: Record<string, boolean>): this {
+	setOpen(open: boolean, opts?: Record<string, boolean>): this {
 		const o = this._open;
 		this._open = open;
 
@@ -124,14 +124,14 @@ export class Splitter extends zul.Widget {
 	 * <p>Default: true.
 	 * @return boolean
 	 */
-	public isOpen(): boolean {
+	isOpen(): boolean {
 		return this._open;
 	}
 
 	/** Returns if it is a vertical box.
 	 * @return boolean
 	 */
-	public isVertical(): boolean {
+	isVertical(): boolean {
 		var p = this.parent;
 		return !p || p.isVertical();
 	}
@@ -140,7 +140,7 @@ export class Splitter extends zul.Widget {
 	 * It is the same as the parent's orientation ({@link Box#getOrient}).
 	 * @return String
 	 */
-	public getOrient(): string {
+	getOrient(): string {
 		var p = this.parent;
 		return p ? p.getOrient() : 'vertical';
 	}
@@ -148,14 +148,14 @@ export class Splitter extends zul.Widget {
 	/** Returns the collapse of this button.
 	 * @return String
 	 */
-	public getCollapse(): string {
+	getCollapse(): string {
 		return this._collapse;
 	}
 
 	/** Sets the collapse of this button.
 	 * @param String collapse
 	 */
-	public setCollapse(collapse: string): void {
+	setCollapse(collapse: string): void {
 		if (this._collapse != collapse) {
 			var bOpen = this._open;
 			if (!bOpen)
@@ -173,7 +173,7 @@ export class Splitter extends zul.Widget {
 	}
 
 	//super//
-	protected override domClass_(no?: Partial<zk.DomClassOptions>): string {
+	override domClass_(no?: Partial<zk.DomClassOptions>): string {
 		var sc = super.domClass_(no);
 		if (!no || !no.zclass) {
 			sc += ' ' + this.$s('vertical' == this.getOrient() ? 'vertical' : 'horizontal');
@@ -181,13 +181,13 @@ export class Splitter extends zul.Widget {
 		return sc;
 	}
 
-	public override setZclass(zclass: string): void {
+	override setZclass(zclass: string): void {
 		super.setZclass(zclass);
 		if (this.desktop)
 			this._fixDomClass(true);
 	}
 
-	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 
 		var box = this.parent;
@@ -222,7 +222,7 @@ export class Splitter extends zul.Widget {
 			//3077716: next sibling is not bound yet
 	}
 
-	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		zWatch.unlisten({onSize: this, beforeSize: this});
 
 		const btn = this.$n('btn');
@@ -236,7 +236,7 @@ export class Splitter extends zul.Widget {
 	}
 
 	/* Fixed DOM class for the enclosing TR/TD tag. */
-	private _fixDomClass(inner?: boolean): void {
+	_fixDomClass(inner?: boolean): void {
 		var node = this.$n()!,
 			p = node.parentNode;
 		if (p) {
@@ -249,11 +249,11 @@ export class Splitter extends zul.Widget {
 		if (inner) this._fixbtn();
 	}
 
-	public _fixNSDomClass(): void {
+	_fixNSDomClass(): void {
 		jq(this.$n()!)[this._open ? 'removeClass' : 'addClass'](this.$s('nosplitter'));
 	}
 
-	public _fixbtn(): void {
+	_fixbtn(): void {
 		var $btn = jq(this.$n('btn')!),
 			$icon = jq(this.$n('icon')!),
 			colps = this.getCollapse();
@@ -276,7 +276,7 @@ export class Splitter extends zul.Widget {
 		}
 	}
 
-	protected setBtnPos_(ver?: boolean): void {
+	setBtnPos_(ver?: boolean): void {
 		var btn = this.$n('btn')!,
 			node = this.$n()!;
 		if (ver)
@@ -285,7 +285,7 @@ export class Splitter extends zul.Widget {
 			btn.style.marginTop = ((node.offsetHeight - btn.offsetHeight) / 2) + 'px';
 	}
 
-	private _fixsz(): void {
+	_fixsz(): void {
 		if (!this.isRealVisible()) return;
 
 		var node = this.$n()!, pn = node.parentNode;
@@ -309,16 +309,16 @@ export class Splitter extends zul.Widget {
 		}
 	}
 
-	public override onSize(): void {
+	override onSize(): void {
 		this._fixsz();
 	}
 
-	public beforeSize(): void {
+	beforeSize(): void {
 		this.$n()!.style[this.isVertical() ? 'width' : 'height'] = '';
 		this.$n('btn')!.style[this.isVertical() ? 'margin-left' : 'margin-top'] = '';
 	}
 
-	public _fixszAll(): void {
+	_fixszAll(): void {
 		//1. find the topmost box
 		var box: zk.Widget | undefined;
 		for (var p: null | zk.Widget = this; p = p.parent;)
@@ -329,7 +329,7 @@ export class Splitter extends zul.Widget {
 		else this._fixsz();
 	}
 
-	public static onclick(evt: JQuery.Event): void {
+	static onclick(evt: JQuery.Event): void {
 		var wgt = zk.Widget.$<Splitter>(evt)!,
 			colps = wgt.getCollapse();
 		if (!colps || 'none' == colps) return; //nothing to do
@@ -337,7 +337,7 @@ export class Splitter extends zul.Widget {
 	}
 
 	//drag
-	private static _ignoresizing(draggable: SplitterDraggable, pointer: zk.Offset, evt: zk.Event): boolean {
+	static _ignoresizing(draggable: SplitterDraggable, pointer: zk.Offset, evt: zk.Event): boolean {
 		var wgt = draggable.control as Splitter;
 		if (!wgt._open || wgt.$n('icon') == evt.domTarget) return true;
 
@@ -353,7 +353,7 @@ export class Splitter extends zul.Widget {
 		return false;
 	}
 
-	private static _ghostsizing(draggable: zk.Draggable, ofs: number[], evt: zk.Event): HTMLElement {
+	static _ghostsizing(draggable: zk.Draggable, ofs: number[], evt: zk.Event): HTMLElement {
 		var $node = zk(draggable.node!.parentNode);
 		jq(document.body).append(
 			'<div id="zk_ddghost" class="z-splitter-ghost" style="font-size:0;line-height:0;background:#AAA;position:absolute;top:'
@@ -363,7 +363,7 @@ export class Splitter extends zul.Widget {
 		return jq('#zk_ddghost')[0];
 	}
 
-	private static _endDrag(draggable: SplitterDraggable): void {
+	static _endDrag(draggable: SplitterDraggable): void {
 		var wgt = draggable.control as Splitter,
 			vert = wgt.isVertical(),
 			flInfo = Splitter._fixLayout(wgt),
@@ -410,7 +410,7 @@ export class Splitter extends zul.Widget {
 		draggable.run = null;//free memory
 	}
 
-	protected static _doDragEndResize(
+	static _doDragEndResize(
 		vert: boolean,
 		wgts: [zk.Widget | null | undefined, zk.Widget | null | undefined], // loop requires exactly 2 elements
 		runPrev: HTMLElement,
@@ -482,7 +482,7 @@ export class Splitter extends zul.Widget {
 			runPrev.style[fd] = prevClientFd + 'px'; //count on clientFd
 	}
 
-	protected static _snap(draggable: SplitterDraggable, pos: zk.Offset): zk.Offset {
+	static _snap(draggable: SplitterDraggable, pos: zk.Offset): zk.Offset {
 		var run = draggable.run as Required<SplitterDraggable.Run>,
 			wgt = draggable.control as Splitter,
 			x = pos[0], y = pos[1];
@@ -506,15 +506,15 @@ export class Splitter extends zul.Widget {
 		return [x, y];
 	}
 
-	public static _next(n: HTMLElement): HTMLTableRowElement | undefined {
+	static _next(n: HTMLElement): HTMLTableRowElement | undefined {
 		return jq(n).next().next()[0] as HTMLTableRowElement | undefined;
 	}
 
-	public static _prev(n: HTMLElement): HTMLTableRowElement | undefined {
+	static _prev(n: HTMLElement): HTMLTableRowElement | undefined {
 		return jq(n).prev().prev()[0] as HTMLTableRowElement | undefined;
 	}
 
-	protected static _fixKidSplts(wgt: null | zk.Widget): void {
+	static _fixKidSplts(wgt: null | zk.Widget): void {
 		if (wgt && wgt.isVisible()) { //n might not be an element
 			if (wgt instanceof Splitter)
 				wgt._fixsz();
@@ -524,7 +524,7 @@ export class Splitter extends zul.Widget {
 		}
 	}
 
-	private static _fixLayout(wgt: zk.Widget): Fl | false | undefined {
+	static _fixLayout(wgt: zk.Widget): Fl | false | undefined {
 		if (!zk.opera) {
 			return false;
 		}
@@ -536,7 +536,7 @@ export class Splitter extends zul.Widget {
 		}
 	}
 
-	private static _unfixLayout(fl: Fl | false | undefined): false | undefined {
+	static _unfixLayout(fl: Fl | false | undefined): false | undefined {
 		if (!zk.opera) {
 			return false;
 		}

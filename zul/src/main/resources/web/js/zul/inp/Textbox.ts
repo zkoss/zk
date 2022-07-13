@@ -18,22 +18,22 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.inp.Textbox')
 export class Textbox extends zul.inp.InputWidget<string> {
-	public override _value = '';
-	private _rows = 1;
-	private _submitByEnter?: boolean;
+	override _value = '';
+	_rows = 1;
+	_submitByEnter?: boolean;
 
 	/** Returns whether it is multiline.
 	 * <p>Default: false.
 	 * @return boolean
 	 */
-	public override isMultiline(): boolean | undefined {
+	override isMultiline(): boolean | undefined {
 		return this._multiline;
 	}
 
 	/** Sets whether it is multiline.
 	 * @param boolean multiline
 	 */
-	public setMultiline(multiline: boolean, opts?: Record<string, boolean>): this {
+	setMultiline(multiline: boolean, opts?: Record<string, boolean>): this {
 		const o = this._multiline;
 		this._multiline = multiline;
 
@@ -50,7 +50,7 @@ export class Textbox extends zul.inp.InputWidget<string> {
 	 * <p>Default: false.
 	 * @return boolean
 	 */
-	public isTabbable(): boolean | undefined {
+	isTabbable(): boolean | undefined {
 		return this._tabbable;
 	}
 
@@ -60,7 +60,7 @@ export class Textbox extends zul.inp.InputWidget<string> {
 	 * <p>Default: false.
 	 * @param boolean tabbable
 	 */
-	public setTabbable(tabbable: boolean): this {
+	setTabbable(tabbable: boolean): this {
 		this._tabbable = tabbable;
 		return this;
 	}
@@ -69,14 +69,14 @@ export class Textbox extends zul.inp.InputWidget<string> {
 	 * <p>Default: 1.
 	 * @return int
 	 */
-	public getRows(): number {
+	getRows(): number {
 		return this._rows;
 	}
 
 	/** Sets the rows.
 	 * @param int rows
 	 */
-	public setRows(v: number, opts?: Record<string, boolean>): this {
+	setRows(v: number, opts?: Record<string, boolean>): this {
 		const o = this._rows;
 		this._rows = v;
 
@@ -97,7 +97,7 @@ export class Textbox extends zul.inp.InputWidget<string> {
 	 * <p>Default: text.
 	 * @return String
 	 */
-	public override getType(): string {
+	override getType(): string {
 		return this._type;
 	}
 
@@ -106,7 +106,7 @@ export class Textbox extends zul.inp.InputWidget<string> {
 	 * Unlike XUL, "timed" is redudant because it is enabled as long as
 	 * onChanging is added.
 	 */
-	public setType(type: string, opts?: Record<string, boolean>): this {
+	setType(type: string, opts?: Record<string, boolean>): this {
 		const o = this._type;
 		this._type = type;
 
@@ -123,27 +123,27 @@ export class Textbox extends zul.inp.InputWidget<string> {
 	 * <p>Default: false.
 	 * @return boolean
 	 */
-	public isSubmitByEnter(): boolean | undefined {
+	isSubmitByEnter(): boolean | undefined {
 		return this._submitByEnter;
 	}
 
 	/** Sets whether it is submitByEnter.
 	 * @param boolean submitByEnter
 	 */
-	public setSubmitByEnter(submitByEnter: boolean): this {
+	setSubmitByEnter(submitByEnter: boolean): this {
 		this._submitByEnter = submitByEnter;
 		return this;
 	}
 
 	//super//
-	protected override textAttrs_(): string {
+	override textAttrs_(): string {
 		var html = super.textAttrs_();
 		if (this._multiline)
 			html += ' rows="' + this._rows + '"';
 		return html;
 	}
 
-	protected override doKeyDown_(evt: zk.Event): void {
+	override doKeyDown_(evt: zk.Event): void {
 		if (evt.keyCode == 13 && this._submitByEnter && this._multiline && !evt.shiftKey) {
 			evt.stop();
 			this.fire('onOK');

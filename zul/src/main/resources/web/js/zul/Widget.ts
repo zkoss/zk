@@ -146,18 +146,18 @@ export type ParsedCtlKeys = Record<number, boolean>[];
  */
 @zk.WrapClass('zul.Widget')
 export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Widget<TElement> {
-	private _context?: string;
-	private _popup?: string;
-	private _doScrollableSyncScroll?: (() => void);
-	private _tooltip?: string;
-	private _ctrlKeys?: string | null;
-	public _parsedCtlKeys?: ParsedCtlKeys | null;
+	_context?: string;
+	_popup?: string;
+	_doScrollableSyncScroll?: (() => void);
+	_tooltip?: string;
+	_ctrlKeys?: string | null;
+	_parsedCtlKeys?: ParsedCtlKeys | null;
 
-	public constructor(props?: Record<string, unknown> | typeof zkac) {
+	constructor(props?: Record<string, unknown> | typeof zkac) {
 		super(props);
 	}
 
-	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		// B70-ZK-2069: some widget need fire onScroll event, which has
 		// characteristic of container
@@ -172,7 +172,7 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Widge
 		}
 	}
 
-	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		if (this._doScrollableSyncScroll) {
 			this.domUnlisten_(this.getCaveNode()!, 'onScroll', '_doScrollableSyncScroll');
 		}
@@ -185,7 +185,7 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Widge
 	 * <p>Default: null (no context menu).
 	 * @return String
 	 */
-	public getContext(): string | undefined {
+	getContext(): string | undefined {
 		return this._context;
 	}
 
@@ -247,7 +247,7 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Widge
 	 * @param zul.wgt.Popup context the popup widget.
 	 * @return zul.Widget
 	 */
-	public setContext(context: zul.wgt.Popup | string): this {
+	setContext(context: zul.wgt.Popup | string): this {
 		if (zk.Widget.isInstance(context))
 			context = 'uuid(' + context.uuid + ')';
 		this._context = context;
@@ -260,7 +260,7 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Widge
 	 * <p>Default: null (no popup).
 	 * @return String the ID of the popup widget
 	 */
-	public getPopup(): string | undefined {
+	getPopup(): string | undefined {
 		return this._popup;
 	}
 
@@ -322,7 +322,7 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Widge
 	 * @param zul.wgt.Popup popup the popup widget.
 	 * @return zul.Widget
 	 */
-	public setPopup(popup: zul.wgt.Popup | string): this {
+	setPopup(popup: zul.wgt.Popup | string): this {
 		if (zk.Widget.isInstance(popup))
 			popup = 'uuid(' + popup.uuid + ')';
 		this._popup = popup;
@@ -336,7 +336,7 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Widge
 	 * <p>Default: null (no tooltip).
 	 * @return String the ID of the popup widget
 	 */
-	public getTooltip(): string | undefined {
+	getTooltip(): string | undefined {
 		return this._tooltip;
 	}
 
@@ -400,7 +400,7 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Widge
 	 * @param zul.wgt.Popup popup the popup widget.
 	 * @return zul.Widget
 	 */
-	public setTooltip(tooltip: zul.wgt.Popup | string): this {
+	setTooltip(tooltip: zul.wgt.Popup | string): this {
 		if (zk.Widget.isInstance(tooltip))
 			tooltip = 'uuid(' + tooltip.uuid + ')';
 		this._tooltip = tooltip;
@@ -411,7 +411,7 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Widge
 	 * <p>Default: null.
 	 * @return String
 	 */
-	public getCtrlKeys(): string | null | undefined {
+	getCtrlKeys(): string | null | undefined {
 		return this._ctrlKeys;
 	}
 
@@ -468,7 +468,7 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Widge
 	 * @param String keys
 	 * @return zul.Widget
 	 */
-	public setCtrlKeys(keys: string): this | void {
+	setCtrlKeys(keys: string): this | void {
 		if (this._ctrlKeys == keys) return;
 		if (!keys) {
 			this._ctrlKeys = this._parsedCtlKeys = null;
@@ -548,7 +548,7 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Widge
 		return this;
 	}
 
-	private _parsePopParams(txt: string, event?: zk.Event): PopupParams {
+	_parsePopParams(txt: string, event?: zk.Event): PopupParams {
 		var params: {
 				id?: string;
 				position?: string;
@@ -589,7 +589,7 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Widge
 	}
 
 	//super//
-	public override doClick_(evt: zk.Event, popupOnly?: boolean): void {
+	override doClick_(evt: zk.Event, popupOnly?: boolean): void {
 		if (!this.shallIgnoreClick_(evt) && !evt.contextSelected) {
 			var params = this._popup ? this._parsePopParams(this._popup, evt) : {},
 				popup = this._smartFellow(params.id) as zul.wgt.Popup | null;
@@ -616,7 +616,7 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Widge
 			super.doClick_(evt); // super method doesn't accept a second parameter
 	}
 
-	protected override doRightClick_(evt: zk.Event): void {
+	override doRightClick_(evt: zk.Event): void {
 		if (!this.shallIgnoreClick_(evt) && !evt.contextSelected) {
 			var params = this._context ? this._parsePopParams(this._context, evt) : {},
 				ctx = this._smartFellow(params.id) as zul.wgt.Popup | null;
@@ -642,7 +642,7 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Widge
 		super.doRightClick_(evt);
 	}
 
-	protected override doTooltipOver_(evt: zk.Event): void {
+	override doTooltipOver_(evt: zk.Event): void {
 		if (!evt.tooltipped && _tt_beforeBegin(this)) {
 			var params = this._tooltip ? this._parsePopParams(this._tooltip) : {},
 				tip = this._smartFellow(params.id) as zul.wgt.Popup | null;
@@ -655,19 +655,19 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Widge
 		super.doTooltipOver_(evt);
 	}
 
-	protected override doTooltipOut_(evt: zk.Event): void {
+	override doTooltipOut_(evt: zk.Event): void {
 		_tt_end(this);
 		super.doTooltipOut_(evt);
 	}
 
-	private _smartFellow(id?: string | null): zk.Widget | null {
+	_smartFellow(id?: string | null): zk.Widget | null {
 		return id ? id.startsWith('uuid(') && id.endsWith(')') ?
 			zk.Widget.$(id.substring(5, id.length - 1)) :
 			this.$f(id, true) : null;
 	}
 
 	//B70-ZK-2435: catch key down event right now rather than propagate it
-	protected override doKeyDown_(evt: zk.Event): void {
+	override doKeyDown_(evt: zk.Event): void {
 		if (this.getCtrlKeys() || this.isListen('onOK') || this.isListen('onCancel')) {
 			//B70-ZK-2532: if afterKeyDown_ doesn't handle evt, then propagate to super
 			if (!this.afterKeyDown_(evt))
@@ -689,7 +689,7 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Widge
 	 * @return boolean true if the event has been processed
 	 * @see #setCtrlKeys
 	 */
-	protected afterKeyDown_(evt: zk.Event/*, simulated*/): boolean | undefined {
+	afterKeyDown_(evt: zk.Event/*, simulated*/): boolean | undefined {
 		var keyCode = evt.keyCode, evtnm = 'onCtrlKey', okcancel, commandKey = zk.mac && evt.metaKey;
 		switch (keyCode) {
 		case 13: { //ENTER
@@ -777,7 +777,7 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Widge
 	 * @return boolean if true, the widget want to abort the firing of the control
 	 * 		key. In other words, if true is returned, the control key is ignored.
 	 */
-	protected beforeCtrlKeys_(_evt: zk.Event): void {
+	beforeCtrlKeys_(_evt: zk.Event): void {
 		// empty on purpose
 	}
 
@@ -785,11 +785,11 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Widge
 	 * @return zk.Widget
 	 * @since 5.0.5
 	 */
-	public static getOpenTooltip(): zul.wgt.Popup | null {
+	static getOpenTooltip(): zul.wgt.Popup | null {
 		return _tt_tip && _tt_tip.isOpen() ? _tt_tip : null;
 	}
 
-	public static _getPopupPosition(params: PopupParams): string | null {
+	static _getPopupPosition(params: PopupParams): string | null {
 		if (params.position)
 			return params.position;
 		if ('x' in params || 'y' in params) // ZK-1655

@@ -18,14 +18,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
 @zk.WrapClass('zul.sel.Option')
 export class Option extends zul.Widget<HTMLOptionElement> {
 	// Parent could be null as asserted by `focus`.
-	public override parent!: zul.sel.Select | null; // FIXME: could parent be optgroup?
+	override parent!: zul.sel.Select | null; // FIXME: could parent be optgroup?
 	// The type of firstChild is determined by the comment in getLabel
-	public override firstChild!: zul.sel.Listcell | null;
-	public override lastChild!: zul.sel.Listcell | null;
-	public _selected = false;
-	private _disabled?: boolean;
-	private _value?: string;
-	private __updating__?: boolean;
+	override firstChild!: zul.sel.Listcell | null;
+	override lastChild!: zul.sel.Listcell | null;
+	_selected = false;
+	_disabled?: boolean;
+	_value?: string;
+	__updating__?: boolean;
 
 	/**
 	 * Returns whether it is disabled.
@@ -33,7 +33,7 @@ export class Option extends zul.Widget<HTMLOptionElement> {
 	 * Default: false.
 	 * @return boolean
 	 */
-	public isDisabled(): boolean | undefined {
+	isDisabled(): boolean | undefined {
 		return this._disabled;
 	}
 
@@ -41,7 +41,7 @@ export class Option extends zul.Widget<HTMLOptionElement> {
 	 * Sets whether it is disabled.
 	 * @param boolean disabled
 	 */
-	public setDisabled(disabled: boolean, opts?: Record<string, boolean>): this {
+	setDisabled(disabled: boolean, opts?: Record<string, boolean>): this {
 		const o = this._disabled;
 		this._disabled = disabled;
 
@@ -62,7 +62,7 @@ export class Option extends zul.Widget<HTMLOptionElement> {
 	 * value.
 	 * @return String
 	 */
-	public getValue(): string | undefined {
+	getValue(): string | undefined {
 		return this._value;
 	}
 
@@ -74,13 +74,13 @@ export class Option extends zul.Widget<HTMLOptionElement> {
 	 * the name attribute), it is better to specify a String-typed
 	 * value.
 	 */
-	public setValue(value: string): this {
+	setValue(value: string): this {
 		this._value = value;
 		return this;
 	}
 
 	//@Override
-	public override focus(timeout?: number): boolean {
+	override focus(timeout?: number): boolean {
 		var p = this.parent;
 		if (p) p.focus(timeout);
 		// NOTE: Returning false agrees with the original logic (returning nothing,
@@ -89,7 +89,7 @@ export class Option extends zul.Widget<HTMLOptionElement> {
 	}
 
 	//@Override
-	public override setVisible(visible: boolean | undefined, fromServer?: boolean): void {
+	override setVisible(visible: boolean | undefined, fromServer?: boolean): void {
 		if (this._visible != visible) {
 			this._visible = visible;
 			if (this.desktop)
@@ -100,7 +100,7 @@ export class Option extends zul.Widget<HTMLOptionElement> {
 	/** Sets whether it is selected.
 	 * @param boolean selected
 	 */
-	public setSelected(selected: boolean): void {
+	setSelected(selected: boolean): void {
 		if (this.__updating__) { // for B50-3012466.zul
 			delete this.__updating__;
 			return; //nothing to do for second loop triggered by this.parent.toggleItemSelection
@@ -118,7 +118,7 @@ export class Option extends zul.Widget<HTMLOptionElement> {
 		}
 	}
 
-	public _setSelectedDirectly(selected: boolean): void {
+	_setSelectedDirectly(selected: boolean): void {
 		var n = this.$n();
 		// Bug ZK-2285, ignore if the status is the same for IE's issue
 		if (n && n.selected != selected) {
@@ -131,7 +131,7 @@ export class Option extends zul.Widget<HTMLOptionElement> {
 	 * <p>Default: false.
 	 * @return boolean
 	 */
-	public isSelected(): boolean {
+	isSelected(): boolean {
 		return this._selected;
 	}
 
@@ -139,11 +139,11 @@ export class Option extends zul.Widget<HTMLOptionElement> {
 	 * if no such cell.
 	 * @return String
 	 */
-	public getLabel(): string | null {
+	getLabel(): string | null {
 		return this.firstChild ? this.firstChild.getLabel() : null;
 	}
 
-	public updateLabel_(): void {
+	updateLabel_(): void {
 		var n = this.$n();
 		if (n) jq(n).html(this.domLabel_());
 	}
@@ -152,18 +152,18 @@ export class Option extends zul.Widget<HTMLOptionElement> {
 	 * It is a shortcut of {@link Select#getMaxlength}.
 	 * @return int
 	 */
-	public getMaxlength(): number | undefined {
+	getMaxlength(): number | undefined {
 		return this.parent ? this.parent.getMaxlength() : 0;
 	}
 
-	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		//B60-ZK-1303: force update parent's selected index.
 		if (this.isSelected())
 			this.parent!._selectedIndex = this.getOptionIndex_();
 	}
 
-	public override doClick_(evt: zk.Event /*, popupOnly?: boolean */): void {
+	override doClick_(evt: zk.Event /*, popupOnly?: boolean */): void {
 		evt.stop(); // Eats the non-standard onclick event
 	}
 
@@ -171,7 +171,7 @@ export class Option extends zul.Widget<HTMLOptionElement> {
 	 * The index for option widget only , not including the listhead.etc
 	 * @since 6.0.1
 	 */
-	public getOptionIndex_(): number {
+	getOptionIndex_(): number {
 		var parent = this.parent, ret = -1;
 		if (parent) {
 			for (var w = parent.firstChild; w; w = w.nextSibling) {
@@ -184,23 +184,23 @@ export class Option extends zul.Widget<HTMLOptionElement> {
 		return ret;
 	}
 
-	public domLabel_(): string {
+	domLabel_(): string {
 		return zUtl.encodeXML(this.getLabel()!, {maxlength: this.getMaxlength()!});
 	}
 
-	public override domAttrs_(no?: zk.DomAttrsOptions): string {
+	override domAttrs_(no?: zk.DomAttrsOptions): string {
 		var value = this.getValue(),
 			shallRenderValue = value && this.parent && this.parent.getName();
 		return super.domAttrs_(no) + (this.isDisabled() ? ' disabled="disabled"' : '')
 			+ (this.isSelected() ? ' selected="selected"' : '') + (shallRenderValue ? ' value="' + value + '"' : '');
 	}
 
-	public override replaceWidget(newwgt: zul.sel.Option, skipper?: zk.Skipper): void {
+	override replaceWidget(newwgt: zul.sel.Option, skipper?: zk.Skipper): void {
 		this._syncItems(newwgt);
 		super.replaceWidget(newwgt, skipper);
 	}
 
-	private _syncItems(newwgt: zul.sel.Option): void {
+	_syncItems(newwgt: zul.sel.Option): void {
 		if (this.parent && this.isSelected()) {
 			var items = this.parent._selItems;
 			if (items && items.$remove(this))

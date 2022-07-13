@@ -19,13 +19,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.utl.Script')
 export class Script extends zk.Widget {
-	private _src?: string;
-    private _content?: string;
-	private _charset?: string;
-	private _srcrun?: boolean;
+	_src?: string;
+    _content?: string;
+	_charset?: string;
+	_srcrun?: boolean;
 	// eslint-disable-next-line @typescript-eslint/ban-types
-	private _fn?: Function;
-	private packages?: string;
+	_fn?: Function;
+	packages?: string;
 
     /** Returns the content of the script element.
      * By content we mean the JavaScript codes that will be enclosed
@@ -34,7 +34,7 @@ export class Script extends zk.Widget {
      * <p>Default: null.
      * @return String
      */
-    public getContent(): string | undefined {
+    getContent(): string | undefined {
         return this._content;
     }
 
@@ -43,7 +43,7 @@ export class Script extends zk.Widget {
      * by the HTML SCRIPT element.
      * @param String content
      */
-    public setContent(cnt: string, opts?: Record<string, boolean>): this {
+    setContent(cnt: string, opts?: Record<string, boolean>): this {
         const o = this._content;
         this._content = cnt;
 
@@ -63,7 +63,7 @@ export class Script extends zk.Widget {
      * <p>Default: null.
      * @return String
      */
-    public getSrc(): string | undefined {
+    getSrc(): string | undefined {
         return this._src;
     }
 
@@ -76,7 +76,7 @@ export class Script extends zk.Widget {
      *
      * @param String src the URI of the source that contains the script codes
      */
-    public setSrc(src: string, opts?: Record<string, boolean>): this {
+    setSrc(src: string, opts?: Record<string, boolean>): this {
         const o = this._src;
         this._src = src;
 
@@ -97,7 +97,7 @@ export class Script extends zk.Widget {
      * <p>Default: null.
      * @return String
      */
-    public getCharset(): string | undefined {
+    getCharset(): string | undefined {
         return this._charset;
     }
 
@@ -105,12 +105,12 @@ export class Script extends zk.Widget {
      * It is used with {@link #setSrc}.
      * @param String charset
      */
-    public setCharset(charset: string): this {
+    setCharset(charset: string): this {
         this._charset = charset;
         return this;
     }
 
-    private _exec(): void {
+    _exec(): void {
 		var pkgs = this.packages; //not visible to client (since meaningless)
 		if (!pkgs) return this._exec0();
 
@@ -123,7 +123,7 @@ export class Script extends zk.Widget {
 			this._exec0();
 	}
 
-    private _exec0(): void {
+    _exec0(): void {
 		var wgt = this, fn = this._fn;
 		if (fn) {
 			delete this._fn; //run only once
@@ -153,23 +153,23 @@ export class Script extends zk.Widget {
 		this._nodeSolved = true;
 	}
 
-	public override ignoreFlexSize_(attr: string): boolean {
+	override ignoreFlexSize_(attr: string): boolean {
 		// ZK-2248: ignore widget dimension in vflex/hflex calculation
 		return true;
 	}
 
     //super//
-	public override redraw(out: Array<string>, skipper?: zk.Skipper | null): void {
+	override redraw(out: Array<string>, skipper?: zk.Skipper | null): void {
 		// empty
 	}
 
-	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		this._visible = false; //Bug ZK-1516: no DOM element widget should always return false.
 		this._exec();
 	}
 
-	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		jq(this._node!).remove(); // ZK-4043: the script DOM is appended in body, a manual remove is needed.
 		super.unbind_(skipper, after, keepRod);
 	}
