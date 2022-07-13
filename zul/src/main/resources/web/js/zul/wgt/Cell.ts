@@ -22,19 +22,19 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.wgt.Cell')
 export class Cell extends zul.Widget<HTMLTableCellElement> {
-	private _colspan = 1;
-	private _rowspan = 1;
-	private _rowType = 0;
-	private _boxType = 1;
-	private _align?: string;
-	private _valign?: string;
-	public _headerVisible?: boolean;
+	_colspan = 1;
+	_rowspan = 1;
+	_rowType = 0;
+	_boxType = 1;
+	_align?: string;
+	_valign?: string;
+	_headerVisible?: boolean;
 
 	/** Returns number of columns to span.
 	 * Default: 1.
 	 * @return int
 	 */
-	public getColspan(): number {
+	getColspan(): number {
 		return this._colspan;
 	}
 
@@ -42,7 +42,7 @@ export class Cell extends zul.Widget<HTMLTableCellElement> {
 	 * <p>It is the same as the colspan attribute of HTML TD tag.
 	 * @param int colspan
 	 */
-	public setColspan(v: number, opts?: Record<string, boolean>): this {
+	setColspan(v: number, opts?: Record<string, boolean>): this {
 		const o = this._colspan;
 		this._colspan = v;
 
@@ -59,7 +59,7 @@ export class Cell extends zul.Widget<HTMLTableCellElement> {
 	 * Default: 1.
 	 * @return int
 	 */
-	public getRowspan(): number {
+	getRowspan(): number {
 		return this._rowspan;
 	}
 
@@ -67,7 +67,7 @@ export class Cell extends zul.Widget<HTMLTableCellElement> {
 	 * <p>It is the same as the rowspan attribute of HTML TD tag.
 	 * @param int rowspan
 	 */
-	public setRowspan(v: number, opts?: Record<string, boolean>): this {
+	setRowspan(v: number, opts?: Record<string, boolean>): this {
 		const o = this._rowspan;
 		this._rowspan = v;
 
@@ -84,14 +84,14 @@ export class Cell extends zul.Widget<HTMLTableCellElement> {
 	 * <p>Default: null (system default: left unless CSS specified).
 	 * @return String
 	 */
-	public getAlign(): string | undefined {
+	getAlign(): string | undefined {
 		return this._align;
 	}
 
 	/** Sets the horizontal alignment.
 	 * @param String align
 	 */
-	public setAlign(v: string, opts?: Record<string, boolean>): this {
+	setAlign(v: string, opts?: Record<string, boolean>): this {
 		const o = this._align;
 		this._align = v;
 
@@ -108,14 +108,14 @@ export class Cell extends zul.Widget<HTMLTableCellElement> {
 	 * <p>Default: null (system default: top).
 	 * @return String
 	 */
-	public getValign(): string | undefined {
+	getValign(): string | undefined {
 		return this._valign;
 	}
 
 	/** Sets the vertical alignment of this grid.
 	 * @param String valign
 	 */
-	public setValign(v: string, opts?: Record<string, boolean>): this {
+	setValign(v: string, opts?: Record<string, boolean>): this {
 		const o = this._valign;
 		this._valign = v;
 
@@ -128,7 +128,7 @@ export class Cell extends zul.Widget<HTMLTableCellElement> {
 		return this;
 	}
 
-	private _getParentType(): number | null {
+	_getParentType(): number | null {
 		var isRow = zk.isLoaded('zul.grid') && this.parent instanceof zul.grid.Row;
 		if (!isRow) {
 			return zk.isLoaded('zul.box') && this.parent instanceof zul.box.Box ?
@@ -137,15 +137,15 @@ export class Cell extends zul.Widget<HTMLTableCellElement> {
 		return this._rowType;
 	}
 
-	private _getRowAttrs(): string {
+	_getRowAttrs(): string {
 		return (this.parent as zul.grid.Row)._childAttrs(this, this.getChildIndex());
 	}
 
-	private _getBoxAttrs(): string {
+	_getBoxAttrs(): string {
 		return (this.parent as zul.box.Box)._childInnerAttrs(this);
 	}
 
-	public _colHtmlPre(): string {
+	_colHtmlPre(): string {
 		var s = '',
 			p = this.parent;
 		if (zk.isLoaded('zkex.grid') && p instanceof zkex.grid.Group && this == p.firstChild)
@@ -153,7 +153,7 @@ export class Cell extends zul.Widget<HTMLTableCellElement> {
 		return s;
 	}
 
-	protected override domClass_(no?: zk.DomClassOptions): string {
+	override domClass_(no?: zk.DomClassOptions): string {
 		var scls = super.domClass_(no);
 		if (this._getParentType() == this._rowType) {
 			if (this._headerVisible === false) scls += ' ' + this.$s('hidden-column');
@@ -161,7 +161,7 @@ export class Cell extends zul.Widget<HTMLTableCellElement> {
 		return scls;
 	}
 
-	protected override domStyle_(no?: zk.DomStyleOptions): string {
+	override domStyle_(no?: zk.DomStyleOptions): string {
 		var style = '';
 		if (this._align)
 			style += ' text-align:' + this._align + ';';
@@ -173,7 +173,7 @@ export class Cell extends zul.Widget<HTMLTableCellElement> {
 	}
 
 	//super//
-	public override domAttrs_(no?: zk.DomAttrsOptions): string {
+	override domAttrs_(no?: zk.DomAttrsOptions): string {
 		var s = super.domAttrs_(no), v;
 		if ((v = this._colspan) != 1)
 			s += ' colspan="' + v + '"';
@@ -208,7 +208,7 @@ export class Cell extends zul.Widget<HTMLTableCellElement> {
 		return ' ' + zUtl.mapToString(m1!); // FIXME: m1 could be undefined
 	}
 
-	public override setVisible(visible: boolean | undefined): void {
+	override setVisible(visible: boolean | undefined): void {
 		super.setVisible(visible);
 		// B65-ZK-2015: redoCSS in IE10 to make sure component will show when visible is true
 		if (zk.ie10_ && visible)
@@ -216,11 +216,11 @@ export class Cell extends zul.Widget<HTMLTableCellElement> {
 
 	}
 
-	protected override deferRedrawHTML_(out: string[]): void {
+	override deferRedrawHTML_(out: string[]): void {
 		out.push('<td', this.domAttrs_({domClass: true}), ' class="z-renderdefer"></td>');
 	}
 
-	public override getFlexContainer_(): HTMLElement | null | undefined {
+	override getFlexContainer_(): HTMLElement | null | undefined {
 		return null;
 	}
 }

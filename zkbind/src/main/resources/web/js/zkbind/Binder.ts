@@ -147,16 +147,16 @@ export interface MediaQueryListWithHandler {
  */
 @zk.WrapClass('zkbind.Binder')
 export class Binder extends zk.Object {
-	public _cookies?: string[] | null;
-	private _lastcmd?: string;
-	private _aftercmd: Record<string, zk.Callable[]> | null;
-	private _mediaQueryLists?: MediaQueryListWithHandler[] | null;
-	private _processingAfterCommand?: boolean;
-	public $view: zk.Widget | null;
-	private _toDoUnAftercmd: Record<string, CallableFunction[]>;
-	public $currentTarget: object | null;
+	_cookies?: string[] | null;
+	_lastcmd?: string;
+	_aftercmd: Record<string, zk.Callable[]> | null;
+	_mediaQueryLists?: MediaQueryListWithHandler[] | null;
+	_processingAfterCommand?: boolean;
+	$view: zk.Widget | null;
+	_toDoUnAftercmd: Record<string, CallableFunction[]>;
+	$currentTarget: object | null;
 
-	public constructor(widget: zk.Widget, currentTarget: object) {
+	constructor(widget: zk.Widget, currentTarget: object) {
 		super(); // FIXME: params?
 		this.$view = widget;
 		this.$currentTarget = currentTarget;
@@ -197,7 +197,7 @@ export class Binder extends zk.Object {
 	 * @param String command the name of the command
 	 * @param Function func the function to execute
 	 */
-	public after(cmd: string | zk.Callable, fn: zk.Callable): this {
+	after(cmd: string | zk.Callable, fn: zk.Callable): this {
 		if (!fn && jq.isFunction(cmd)) {
 			fn = cmd;
 			cmd = this._lastcmd!;
@@ -215,7 +215,7 @@ export class Binder extends zk.Object {
 	 * @param String command the name of the command
 	 * @param Function func the function to execute
 	 */
-	public unAfter(cmd: string, fn: CallableFunction): this {
+	unAfter(cmd: string, fn: CallableFunction): this {
 		var ac = this._aftercmd![cmd];
 		for (var j = ac ? ac.length : 0; j--;) {
 			if (ac[j] == fn) {
@@ -235,7 +235,7 @@ export class Binder extends zk.Object {
 	/**
 	 * Destroy this binder.
 	 */
-	public destroy(): void {
+	destroy(): void {
 		this._aftercmd = null;
 		if (this._mediaQueryLists != null) {
 			var mqls = this._mediaQueryLists;
@@ -257,7 +257,7 @@ export class Binder extends zk.Object {
 	 * @param Map opts a map of options to zk.Event, if any.
 	 * @param int timeout the time (milliseconds) to wait before sending the request.
 	 */
-	public command(cmd: string, args?: Record<string, unknown> | null, opts?: zk.EventOptions | null, timeout?: number): this {
+	command(cmd: string, args?: Record<string, unknown> | null, opts?: zk.EventOptions | null, timeout?: number): this {
 		var wgt = this.$view;
 		if (opts) {
 			if (opts.duplicateIgnore)
@@ -277,7 +277,7 @@ export class Binder extends zk.Object {
 	 * @param Map opts a map of options to zk.Event, if any.
 	 * @param int timeout the time (milliseconds) to wait before sending the request.
 	 */
-	public globalCommand(cmd: string, args?: Record<string, unknown> | null, opts?: zk.EventOptions | null, timeout?: number): this {
+	globalCommand(cmd: string, args?: Record<string, unknown> | null, opts?: zk.EventOptions | null, timeout?: number): this {
 		var wgt = this.$view;
 		if (opts) {
 			if (opts.duplicateIgnore)
@@ -290,7 +290,7 @@ export class Binder extends zk.Object {
 		return this;
 	}
 
-	public $doAfterCommand(cmd: string, args?: unknown[]): void {
+	$doAfterCommand(cmd: string, args?: unknown[]): void {
 		var ac = this._aftercmd![cmd],
 			tduac = this._toDoUnAftercmd[cmd];
 		this._processingAfterCommand = true; // ZK-4482
@@ -309,7 +309,7 @@ export class Binder extends zk.Object {
 	 * @param File file the file to upload. (the value should be a file type)
 	 * @since 9.0.1
 	 */
-	public upload(cmd: string, file: File): void {
+	upload(cmd: string, file: File): void {
 		this.$view!.fire('onBindCommandUpload$' + cmd, {cmd: cmd}, {file: file});
 	}
 
@@ -321,7 +321,7 @@ export class Binder extends zk.Object {
 	 * @param Map opts a map of options to zk.Event, if any.
 	 * @param int timeout the time (milliseconds) to wait before sending the request.
 	 */
-	public static postCommand(dom: HTMLElement, command: string, args?: Record<string, unknown> | null, opt?: zk.EventOptions | null, timeout?: number): void {
+	static postCommand(dom: HTMLElement, command: string, args?: Record<string, unknown> | null, opt?: zk.EventOptions | null, timeout?: number): void {
 		var w = zk.Widget.$(dom);
 		if (w) {
 			var binder = w.$binder!();
@@ -338,7 +338,7 @@ export class Binder extends zk.Object {
 	 * @param Map args the arguments for this command. (the value should be json type)
 	 * @param int timeout the time (milliseconds) to wait before sending the request.
 	 */
-	public static postGlobalCommand(dom: HTMLElement, command: string, args?: Record<string, unknown> | null, opt?: zk.EventOptions | null, timeout?: number): void {
+	static postGlobalCommand(dom: HTMLElement, command: string, args?: Record<string, unknown> | null, opt?: zk.EventOptions | null, timeout?: number): void {
 		var w = zk.Widget.$(dom);
 		if (w) {
 			var binder = w.$binder!();

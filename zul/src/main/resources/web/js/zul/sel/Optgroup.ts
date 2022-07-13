@@ -18,11 +18,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.sel.Optgroup')
 export class Optgroup extends zul.Widget<HTMLOptGroupElement> {
-	public override parent!: zul.sel.Select | null;
-	public override firstChild!: zul.sel.Option | null;
-	public override lastChild!: zul.sel.Option | null;
-	private _open = true;
-	private _disabled?: boolean;
+	override parent!: zul.sel.Select | null;
+	override firstChild!: zul.sel.Option | null;
+	override lastChild!: zul.sel.Option | null;
+	_open = true;
+	_disabled?: boolean;
 
 	/**
 	 * Returns whether it is disabled.
@@ -30,7 +30,7 @@ export class Optgroup extends zul.Widget<HTMLOptGroupElement> {
 	 * Default: false.
 	 * @return boolean
 	 */
-	public isDisabled(): boolean | undefined {
+	isDisabled(): boolean | undefined {
 		return this._disabled;
 	}
 
@@ -38,7 +38,7 @@ export class Optgroup extends zul.Widget<HTMLOptGroupElement> {
 	 * Sets whether it is disabled.
 	 * @param boolean disabled
 	 */
-	public setDisabled(disabled: boolean, opts?: Record<string, boolean>): this {
+	setDisabled(disabled: boolean, opts?: Record<string, boolean>): this {
 		const o = this._disabled;
 		this._disabled = disabled;
 
@@ -54,7 +54,7 @@ export class Optgroup extends zul.Widget<HTMLOptGroupElement> {
 	 * <p>Default: true.
 	 * @return boolean
 	 */
-	public isOpen(): boolean {
+	isOpen(): boolean {
 		return this._open;
 	}
 
@@ -62,7 +62,7 @@ export class Optgroup extends zul.Widget<HTMLOptGroupElement> {
 	 * @param boolean open
 	 */
 	// FIXME: can a defSet generated setter accept more than one arguments before `opts`?
-	public setOpen(open: boolean, fromServer: boolean, opts?: Record<string, boolean>): this {
+	setOpen(open: boolean, fromServer: boolean, opts?: Record<string, boolean>): this {
 		const o = this._open;
 		this._open = open;
 
@@ -78,17 +78,17 @@ export class Optgroup extends zul.Widget<HTMLOptGroupElement> {
 	 * if no such cell.
 	 * @return String
 	 */
-	public getLabel(): string | null {
+	getLabel(): string | null {
 		return this.firstChild ? this.firstChild.domLabel_() : null;
 	}
 
-	public updateLabel_(): void {
+	updateLabel_(): void {
 		var n = this.$n();
 		if (n) n.label = this.getLabel()!;
 	}
 
 	//@Override
-	public override setVisible(visible: boolean | undefined, fromServer?: boolean): void {
+	override setVisible(visible: boolean | undefined, fromServer?: boolean): void {
 		if (this._visible != visible) {
 			this._visible = visible;
 			if (this.desktop)
@@ -96,7 +96,7 @@ export class Optgroup extends zul.Widget<HTMLOptGroupElement> {
 		}
 	}
 
-	public override domAttrs_(no?: zk.DomAttrsOptions): string {
+	override domAttrs_(no?: zk.DomAttrsOptions): string {
 		var attr = super.domAttrs_(no),
 			label = this.getLabel(),
 			disabled = this.isDisabled();

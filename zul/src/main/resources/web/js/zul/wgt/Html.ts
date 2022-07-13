@@ -23,7 +23,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.wgt.Html')
 export class Html extends zul.Widget<HTMLHtmlElement> {
-	private _content = '';
+	_content = '';
 
 	/** Returns the embedded content (i.e., HTML tags).
 	 * <p>Default: empty ("").
@@ -31,14 +31,14 @@ export class Html extends zul.Widget<HTMLHtmlElement> {
 	 * other than null.
 	 * @return String
 	 */
-	public getContent(): string {
+	getContent(): string {
 		return this._content;
 	}
 
 	/** Sets the embedded content (i.e., HTML tags).
 	 * @param String content
 	 */
-	public setContent(v: string, opts?: Record<string, boolean>): this {
+	setContent(v: string, opts?: Record<string, boolean>): this {
 		const o = this._content;
 		this._content = v;
 
@@ -50,14 +50,14 @@ export class Html extends zul.Widget<HTMLHtmlElement> {
 		return this;
 	}
 
-	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		if (jq.isArray(this._content)) //zk().detachChildren() is used
 			for (var ctn = this._content, n = this.$n_(), j = 0; j < ctn.length; ++j)
 				n.appendChild(ctn[j]);
 	}
 
-	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		if (jq.isArray(this._content)) //zk().detachChildren() is used
 			for (var n = this.$n_(); n.firstChild;)
 				n.removeChild(n.firstChild);

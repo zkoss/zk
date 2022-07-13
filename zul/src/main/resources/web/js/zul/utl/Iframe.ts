@@ -25,16 +25,16 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.utl.Iframe')
 export class Iframe extends zul.Widget<HTMLIFrameElement> {
-	private _scrolling = 'auto';
-	private _src?: string;
-	private _align?: string;
-	private _name?: string;
-	private _autohide = false;
+	_scrolling = 'auto';
+	_src?: string;
+	_align?: string;
+	_name?: string;
+	_autohide = false;
 
 	/** Returns the src.
 	 * <p>Default: null.
 	 */
-	public getSrc(): string | undefined {
+	getSrc(): string | undefined {
 		return this._src;
 	}
 
@@ -42,7 +42,7 @@ export class Iframe extends zul.Widget<HTMLIFrameElement> {
 	 *
 	 * @param String src the source URL. If null or empty, nothing is included.
 	 */
-	public setSrc(src: string, opts?: Record<string, boolean>): this {
+	setSrc(src: string, opts?: Record<string, boolean>): this {
 		const o = this._src;
 		this._src = src;
 
@@ -60,7 +60,7 @@ export class Iframe extends zul.Widget<HTMLIFrameElement> {
 	 * @return String
 	 * @deprecated as of release 7.0.0, use CSS instead.
 	 */
-	public getScrolling(): string | null {
+	getScrolling(): string | null {
 		return this._scrolling;
 	}
 
@@ -70,7 +70,7 @@ export class Iframe extends zul.Widget<HTMLIFrameElement> {
 	 * If null, "auto" is assumed.
 	 * @deprecated as of release 7.0.0, use CSS instead.
 	 */
-	public setScrolling(scrolling: string, opts?: Record<string, boolean>): this {
+	setScrolling(scrolling: string, opts?: Record<string, boolean>): this {
 		const o = this._scrolling;
 		this._scrolling = scrolling;
 
@@ -94,7 +94,7 @@ export class Iframe extends zul.Widget<HTMLIFrameElement> {
 	 * @return String
 	 * @deprecated as of release 6.0.0, use CSS instead.
 	 */
-	public getAlign(): string | undefined {
+	getAlign(): string | undefined {
 		return this._align;
 	}
 
@@ -103,7 +103,7 @@ export class Iframe extends zul.Widget<HTMLIFrameElement> {
 	 * @param String align
 	 * @deprecated as of release 6.0.0, use CSS instead.
 	 */
-	public setAlign(align: string, opts?: Record<string, boolean>): this {
+	setAlign(align: string, opts?: Record<string, boolean>): this {
 		const o = this._align;
 		this._align = align;
 
@@ -119,14 +119,14 @@ export class Iframe extends zul.Widget<HTMLIFrameElement> {
 	 * <p>Default: null (use browser default).
 	 * @return String
 	 */
-	public getName(): string | undefined {
+	getName(): string | undefined {
 		return this._name;
 	}
 
 	/** Sets the frame name.
 	 * @param String name
 	 */
-	public setName(name: string, opts?: Record<string, boolean>): this {
+	setName(name: string, opts?: Record<string, boolean>): this {
 		const o = this._name;
 		this._name = name;
 
@@ -152,7 +152,7 @@ export class Iframe extends zul.Widget<HTMLIFrameElement> {
 	 * for more information.
 	 * @return boolean
 	 */
-	public isAutohide(): boolean {
+	isAutohide(): boolean {
 		return this._autohide;
 	}
 
@@ -160,7 +160,7 @@ export class Iframe extends zul.Widget<HTMLIFrameElement> {
 	 * a popup or dropdown is overlapped with it.
 	 * @param boolean autohide
 	 */
-	public setAutohide(autohide: boolean, opts?: Record<string, boolean>): this {
+	setAutohide(autohide: boolean, opts?: Record<string, boolean>): this {
 		const o = this._autohide;
 		this._autohide = autohide;
 
@@ -173,14 +173,14 @@ export class Iframe extends zul.Widget<HTMLIFrameElement> {
 	}
 
 	//super//
-	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		if (this._src) {
 			after?.push(() => {this.$n_().src = this._src!;});
 		}
 	}
 
-	public override domAttrs_(no?: zk.DomAttrsOptions): string {
+	override domAttrs_(no?: zk.DomAttrsOptions): string {
 		var attr = super.domAttrs_(no)
 				+ ' src="' + zjq.src0 + '" frameborder="0"',
 		v: string | undefined | boolean = this._scrolling;

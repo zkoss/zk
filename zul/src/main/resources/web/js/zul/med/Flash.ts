@@ -19,26 +19,26 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.med.Flash')
 export class Flash extends zul.Widget {
-	private _wmode = 'transparent';
-	private _quality = 'high';
-	private _autoplay = true;
-	private _loop = false;
-	private _version = '6,0,0,0';
-	private _src?: string;
-	private _bgcolor?: string;
+	_wmode = 'transparent';
+	_quality = 'high';
+	_autoplay = true;
+	_loop = false;
+	_version = '6,0,0,0';
+	_src?: string;
+	_bgcolor?: string;
 
 	/** Returns the expected version of the Flash player.
 	 * <p>Default: "6,0,0,0"
 	 * @return String
 	 */
-	public getVersion(): string {
+	getVersion(): string {
 		return this._version;
 	}
 
 	/** Sets the expected version of the Flash player.
 	 * @param String version
 	 */
-	public setVersion(version: string, opts?: Record<string, boolean>): this {
+	setVersion(version: string, opts?: Record<string, boolean>): this {
 		const o = this._version;
 		this._version = version;
 
@@ -52,7 +52,7 @@ export class Flash extends zul.Widget {
 	/** Gets the source path of Flash movie
 	 * @return  String the source path of Flash movie
 	 */
-	public getSrc(): string | undefined {
+	getSrc(): string | undefined {
 		return this._src;
 	}
 
@@ -60,7 +60,7 @@ export class Flash extends zul.Widget {
 	 * and redraw the component
 	 * @param String src
 	 */
-	public setSrc(v: string, opts?: Record<string, boolean>): this {
+	setSrc(v: string, opts?: Record<string, boolean>): this {
 		const o = this._src;
 		this._src = v;
 
@@ -76,7 +76,7 @@ export class Flash extends zul.Widget {
 	 * <p>Default: "transparent".
 	 * @return String the Window mode property of the Flash movie
 	 */
-	public getWmode(): string {
+	getWmode(): string {
 		return this._wmode;
 	}
 
@@ -84,7 +84,7 @@ export class Flash extends zul.Widget {
 	 * for transparency, layering, and positioning in the browser.
 	 * @param String wmode Possible values: window, opaque, transparent.
 	 */
-	public setWmode(wmode: string, opts?: Record<string, boolean>): this {
+	setWmode(wmode: string, opts?: Record<string, boolean>): this {
 		const o = this._wmode;
 		this._wmode = wmode;
 
@@ -100,14 +100,14 @@ export class Flash extends zul.Widget {
 	 * <p>Default: null (the system default)
 	 * @return String the background color of Flash movie,[ hexadecimal RGB value]
 	 */
-	public getBgcolor(): string | undefined {
+	getBgcolor(): string | undefined {
 		return this._bgcolor;
 	}
 
 	/** Sets the background color of Flash movie.
 	 * @param String bgcolor [ hexadecimal RGB value]
 	 */
-	public setBgcolor(v: string, opts?: Record<string, boolean>): this {
+	setBgcolor(v: string, opts?: Record<string, boolean>): this {
 		const o = this._bgcolor;
 		this._bgcolor = v;
 
@@ -123,14 +123,14 @@ export class Flash extends zul.Widget {
 	 * <p>Default: "high".
 	 * @return String the quality of the Flash movie
 	 */
-	public getQuality(): string {
+	getQuality(): string {
 		return this._quality;
 	}
 
 	/** Sets the quality of the Flash movie.
 	 * @param String quality the quality of the Flash movie.
 	 */
-	public setQuality(v: string, opts?: Record<string, boolean>): this {
+	setQuality(v: string, opts?: Record<string, boolean>): this {
 		const o = this._quality;
 		this._quality = v;
 
@@ -146,14 +146,14 @@ export class Flash extends zul.Widget {
 	 * <p>Default: true
 	 * @return boolean true if the Flash movie starts playing automatically
 	 */
-	public isAutoplay(): boolean {
+	isAutoplay(): boolean {
 		return this._autoplay;
 	}
 
 	/** Sets wether to play the Flash movie automatically.
 	 * @param boolean autoplay whether to play the Flash movie automatically
 	 */
-	public setAutoplay(autoplay: boolean, opts?: Record<string, boolean>): this {
+	setAutoplay(autoplay: boolean, opts?: Record<string, boolean>): this {
 		const o = this._autoplay;
 		this._autoplay = autoplay;
 
@@ -169,14 +169,14 @@ export class Flash extends zul.Widget {
 	 * <p>Default: false
 	 * @return boolean true if the Flash movie plays repeatly
 	 */
-	public isLoop(): boolean {
+	isLoop(): boolean {
 		return this._loop;
 	}
 
 	/** Sets whether the Flash movie plays repeatly
 	 * @param boolean loop
 	 */
-	public setLoop(v: boolean, opts?: Record<string, boolean>): this {
+	setLoop(v: boolean, opts?: Record<string, boolean>): this {
 		const o = this._loop;
 		this._loop = v;
 
@@ -188,26 +188,26 @@ export class Flash extends zul.Widget {
 		return this;
 	}
 
-	protected override doMouseDown_(e: zk.Event): void {
+	override doMouseDown_(e: zk.Event): void {
 		// Bug 3306281
 		if (zk.ie < 11)
 			this.fire('onClick', e.data, e.opts);
 		super.doMouseDown_(e);
 	}
 
-	public override setHeight(height: string | null): void {
+	override setHeight(height: string | null): void {
 		this._height = height;
 		var n = this._embedNode();
 		if (n) n.height = height ? height : '';
 	}
 
-	public override setWidth(width: string | null): void {
+	override setWidth(width: string | null): void {
 		this._width = width;
 		var n = this._embedNode();
 		if (n) n.width = width ? width : '';
 	}
 
-	private _embedNode(): HTMLEmbedElement | null | undefined {
+	_embedNode(): HTMLEmbedElement | null | undefined {
 		return this.$n('emb');
 	}
 }

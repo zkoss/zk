@@ -274,26 +274,26 @@ export class WScroll extends zk.Object {
 	 * @type Map
 	 */
 	//opts: null,
-	public opts: WScrollOptions;
-	public _gap = 0;
-	public control: HTMLElement;
-	public widget: zk.Widget & {_cols?: number};
-	public _scale!: number; // Initialized before use.
-	public _isVer: boolean;
-	public uid: string;
-	public zcls: string;
-	public anchor: HTMLElement;
+	opts: WScrollOptions;
+	_gap = 0;
+	control: HTMLElement;
+	widget: zk.Widget & {_cols?: number};
+	_scale!: number; // Initialized before use.
+	_isVer: boolean;
+	uid: string;
+	zcls: string;
+	anchor: HTMLElement;
 
 	// The following properties are initialized in _initDragdrop which is called
 	// by the constructor.
-	public node!: HTMLElement | null;
-	public edrag!: HTMLElement | null;
-	public edragBody!: ChildNode;
-	public epos!: HTMLElement | null;
-	public eend!: HTMLElement;
-	public drag!: zk.Draggable | null;
+	node!: HTMLElement | null;
+	edrag!: HTMLElement | null;
+	edragBody!: ChildNode;
+	epos!: HTMLElement | null;
+	eend!: HTMLElement;
+	drag!: zk.Draggable | null;
 
-	public constructor(control: HTMLElement, opts: WScrollOptions) {
+	constructor(control: HTMLElement, opts: WScrollOptions) {
 		super();
 		this.control = control;
 		this.opts = zk.$default(opts, {
@@ -322,7 +322,7 @@ export class WScroll extends zk.Object {
 	 * Syncs the scrolling area and control bar size.
 	 * @param Map opts the opts can override the initail opts data for resizing.
 	 */
-	public syncSize(opts?: Record<string, unknown>): void {
+	syncSize(opts?: Record<string, unknown>): void {
 		if (opts) {
 			this.opts = zk.copy(this.opts, opts);
 		}
@@ -403,7 +403,7 @@ export class WScroll extends zk.Object {
 		}
 	}
 
-	private _listenMouseEvent(): void {
+	_listenMouseEvent(): void {
 		if (this._isVer) {
 			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			// @ts-ignore: zk.Event is not completely compatible with JQueryMousewheelEventObject
@@ -423,7 +423,7 @@ export class WScroll extends zk.Object {
 		$drag.on('click', zk.$void);
 	}
 
-	private _unlistenMouseEvent(): void {
+	_unlistenMouseEvent(): void {
 		if (this._isVer)
 			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			// @ts-ignore: unmousewheel expects 0 arguments, but got 1
@@ -442,7 +442,7 @@ export class WScroll extends zk.Object {
 		$drag.off('click', zk.$void);
 	}
 
-	private _mouseOver(evt: zk.Event): void {
+	_mouseOver(evt: zk.Event): void {
 		var cls = evt.target!.className,
 			index = cls.lastIndexOf('-'),
 			key = cls.substring(index + 1),
@@ -466,7 +466,7 @@ export class WScroll extends zk.Object {
 		}
 	}
 
-	private _mouseOut(evt: zk.Event): void {
+	_mouseOut(evt: zk.Event): void {
 		var cls = evt.target!.className,
 			$drag = jq(this.edrag!);
 		$drag.removeClass(cls + '-over');
@@ -475,11 +475,11 @@ export class WScroll extends zk.Object {
 		}
 	}
 
-	private _mouseUp(evt: zk.Event): void {
+	_mouseUp(evt: zk.Event): void {
 		jq(this.edrag!).removeClass(evt.target!.className + '-clk');
 	}
 
-	private _mouseDown(evt: zk.Event): void {
+	_mouseDown(evt: zk.Event): void {
 		var cls = evt.target!.className,
 			index = cls.lastIndexOf('-'),
 			key = cls.substring(index + 1),
@@ -632,7 +632,7 @@ export class WScroll extends zk.Object {
 		this._syncButtonStatus();
 	}
 
-	private _mousewheelY(evt: zk.Event, delta: number, deltaX: number, deltaY: number): void {
+	_mousewheelY(evt: zk.Event, delta: number, deltaX: number, deltaY: number): void {
 		if (deltaY) {
 			evt.stop();
 			var opts = this.opts,
@@ -667,7 +667,7 @@ export class WScroll extends zk.Object {
 		}
 	}
 
-	private _mousewheelX(evt: zk.Event, delta: number, deltaX: number, deltaY: number): void {
+	_mousewheelX(evt: zk.Event, delta: number, deltaX: number, deltaY: number): void {
 		if (deltaX) {
 			evt.stop();
 			var opts = this.opts,
@@ -702,7 +702,7 @@ export class WScroll extends zk.Object {
 		}
 	}
 
-	private _initDragdrop(): void {
+	_initDragdrop(): void {
 		var orient = this._isVer ? 'v' : 'h',
 			uuid = this.uid + '-' + orient + 'bar';
 		this.node = jq(uuid, zk)[0];
@@ -730,14 +730,14 @@ export class WScroll extends zk.Object {
 		jq(this.epos).hide();
 	}
 
-	public destroy(): void {
+	destroy(): void {
 		this.drag!.destroy();
 		this._unlistenMouseEvent();
 		jq(this.node!).remove();
 		this.node = this.edrag = this.epos = this.drag = null;
 	}
 
-	public redraw(p: HTMLElement): void {
+	redraw(p: HTMLElement): void {
 		var orient = this._isVer ? 'v' : 'h',
 			ocls = this._isVer ? 'vertical' : 'horizontal',
 			uuid = this.uid + '-' + orient + 'bar',
@@ -755,7 +755,7 @@ export class WScroll extends zk.Object {
 			+ '</div>');
 	}
 
-	public _syncButtonStatus(): void {
+	_syncButtonStatus(): void {
 		var zcls = this.zcls + '-wscroll',
 			$drag = jq(this.edrag!),
 			opts = this.opts;
@@ -768,5 +768,5 @@ export class WScroll extends zk.Object {
 	 * For more details, please refer to jquery's easing plugin.
 	 * http://gsgd.co.uk/sandbox/jquery/easing/
 	 */
-	public static easing = easing;
+	static easing = easing;
 }

@@ -24,15 +24,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.layout.Absolutelayout')
 export class Absolutelayout extends zul.Widget {
-	beforeChildAdded_: function (child, insertBefore) {
-		if (!child.$instanceof(zul.layout.Absolutechildren)) {
-			zk.error('Unsupported child for Absolutelayout: ' + child.className);
-			return false;
-		}
-		return true;
-	}
-	
-	public static redraw(this: zk.Widget, out: string[]): void {
+    static redraw(this: zk.Widget, out: string[]): void {
 		out.push('<div ', this.domAttrs_(), '>');
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);

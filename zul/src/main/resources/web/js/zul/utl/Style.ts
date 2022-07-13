@@ -23,9 +23,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.utl.Style')
 export class Style extends zk.Widget {
-	private _src?: string;
-	private _content?: string;
-	private _media?: string;
+	_src?: string;
+	_content?: string;
+	_media?: string;
 
 	/**
 	 * Returns the URI of an external style sheet.
@@ -34,7 +34,7 @@ export class Style extends zk.Widget {
 	 *
 	 * @return String
 	 */
-	public getSrc(): string | undefined {
+	getSrc(): string | undefined {
 		return this._src;
 	}
 
@@ -43,7 +43,7 @@ export class Style extends zk.Widget {
 	 * <p>Calling this method implies setContent(null).
 	 * @param String src the URI of an external style sheet
 	 */
-	public setSrc(src: string, opts?: Record<string, boolean>): this {
+	setSrc(src: string, opts?: Record<string, boolean>): this {
 		const o = this._src;
 		this._src = src;
 
@@ -60,7 +60,7 @@ export class Style extends zk.Widget {
 	 * @return String
 	 * @since 5.0.8
 	 */
-	public getContent(): string | undefined {
+	getContent(): string | undefined {
 		return this._content;
 	}
 
@@ -69,7 +69,7 @@ export class Style extends zk.Widget {
 	 * <p>Calling this method implies setSrc(null).
 	 * @param String content the content of this style tag.
 	 */
-	public setContent(content: string, opts?: Record<string, boolean>): this {
+	setContent(content: string, opts?: Record<string, boolean>): this {
 		const o = this._content;
 		this._content = content;
 
@@ -88,7 +88,7 @@ export class Style extends zk.Widget {
 	 * @return String
 	 * @since 5.0.3
 	 */
-	public getMedia(): string | undefined {
+	getMedia(): string | undefined {
 		return this._media;
 	}
 
@@ -97,7 +97,7 @@ export class Style extends zk.Widget {
 	 * @param String media the media of this style sheet.
 	 * @since 5.0.3
 	 */
-	public setMedia(media: string, opts?: Record<string, boolean>): this {
+	setMedia(media: string, opts?: Record<string, boolean>): this {
 		const o = this._media;
 		this._media = media;
 

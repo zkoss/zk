@@ -46,25 +46,25 @@ function _updateFixedDigits(wgt: Doublespinner, val?: number): void {
  */
 @zk.WrapClass('zul.inp.Doublespinner')
 export class Doublespinner extends zul.inp.NumberInputWidget<number> {
-	public _step = 1;
-	private _buttonVisible = true;
-	public timerId?: number | null;
-	private _currentbtn?: HTMLElement | null;
-	private _min?: number;
-	private _max?: number;
-	public _fixedDigits?: number;
+	_step = 1;
+	_buttonVisible = true;
+	timerId?: number | null;
+	_currentbtn?: HTMLElement | null;
+	_min?: number;
+	_max?: number;
+	_fixedDigits?: number;
 
 	/** Return the step of double spinner
 	 * @return double
 	 */
-	public getStep(): number {
+	getStep(): number {
 		return this._step;
 	}
 
 	/** Set the step of dobule spinner
 	 * @param double step
 	 */
-	public setStep(v: number, opts?: Record<string, boolean>): this {
+	setStep(v: number, opts?: Record<string, boolean>): this {
 		const o = this._step;
 		this._step = v;
 
@@ -79,14 +79,14 @@ export class Doublespinner extends zul.inp.NumberInputWidget<number> {
 	 * <p>Default: true.
 	 * @return boolean
 	 */
-	public isButtonVisible(): boolean {
+	isButtonVisible(): boolean {
 		return this._buttonVisible;
 	}
 
 	/** Sets whether the button (on the right of the textbox) is visible.
 	 * @param boolean visible
 	 */
-	public setButtonVisible(v: boolean, opts?: Record<string, boolean>): this {
+	setButtonVisible(v: boolean, opts?: Record<string, boolean>): this {
 		const o = this._buttonVisible;
 		this._buttonVisible = v;
 
@@ -97,18 +97,18 @@ export class Doublespinner extends zul.inp.NumberInputWidget<number> {
 		return this;
 	}
 
-	public override inRoundedMold(): boolean {
+	override inRoundedMold(): boolean {
 		return true;
 	}
 
 	/** Returns the value in double. If null, zero is returned.
 	 * @return double
 	 */
-	public doubleValue(): number | undefined {
+	doubleValue(): number | undefined {
 		return super.getValue();
 	}
 
-	public override setConstraint(constr: string | null): void {
+	override setConstraint(constr: string | null): void {
 		if (typeof constr == 'string' && constr.charAt(0) != '['/*by server*/) {
 			var constraint = new zul.inp.SimpleDoubleSpinnerConstraint(constr);
 			this._min = constraint._min;
@@ -118,7 +118,7 @@ export class Doublespinner extends zul.inp.NumberInputWidget<number> {
 			super.setConstraint(constr);
 	}
 
-	protected override coerceFromString_(value: string | null | undefined): zul.inp.CoerceFromStringResult | number | null {//copy from doublebox
+	override coerceFromString_(value: string | null | undefined): zul.inp.CoerceFromStringResult | number | null {//copy from doublebox
 		// B50-3322816
 		if (!value) return null;
 
@@ -171,7 +171,7 @@ export class Doublespinner extends zul.inp.NumberInputWidget<number> {
 		return val;
 	}
 
-	protected override coerceToString_(value?: number | string | null): string {//copy from intbox
+	override coerceToString_(value?: number | string | null): string {//copy from intbox
 		var fmt = this._format,
 			DECIMAL = this._localizedSymbols ? this._localizedSymbols.DECIMAL : zk.DECIMAL;
 
@@ -190,10 +190,10 @@ export class Doublespinner extends zul.inp.NumberInputWidget<number> {
 				DECIMAL == '.' ? ('' + value) : ('' + value).replace('.', DECIMAL!);
 	}
 
-	public onHide = null; // FIXME: requires further observation
-	public validate = null; // FIXME: requires further observation
+	onHide = null; // FIXME: requires further observation
+	validate = null; // FIXME: requires further observation
 
-	protected override doKeyDown_(evt: zk.Event): void {
+	override doKeyDown_(evt: zk.Event): void {
 		var inp = this.getInputNode()!;
 		if (inp.disabled || inp.readOnly)
 			return;
@@ -213,13 +213,13 @@ export class Doublespinner extends zul.inp.NumberInputWidget<number> {
 		super.doKeyDown_(evt);
 	}
 
-	private _ondropbtnup(evt: zk.Event): void {
+	_ondropbtnup(evt: zk.Event): void {
 		this.domUnlisten_(document.body, 'onZMouseup', '_ondropbtnup');
 		this._stopAutoIncProc();
 		this._currentbtn = null;
 	}
 
-	public _btnDown(evt: zk.Event): void {
+	_btnDown(evt: zk.Event): void {
 		if (!this._buttonVisible || this._disabled) return;
 
 		var btn = this.$n('btn')!;
@@ -252,7 +252,7 @@ export class Doublespinner extends zul.inp.NumberInputWidget<number> {
 	/**
 	 * Sets bound value if the value out of range
 	 */
-	public checkValue(): void {
+	checkValue(): void {
 		var inp = this.getInputNode()!,
 			min = this._min,
 			max = this._max;
@@ -269,7 +269,7 @@ export class Doublespinner extends zul.inp.NumberInputWidget<number> {
 		}
 	}
 
-	public _btnUp(evt: zk.Event): void {
+	_btnUp(evt: zk.Event): void {
 		if (!this._buttonVisible || this._disabled || zk.dragging) return;
 
 		this._onChanging();
@@ -279,7 +279,7 @@ export class Doublespinner extends zul.inp.NumberInputWidget<number> {
 		inp.focus();
 	}
 
-	private _increase(asc: boolean): void {
+	_increase(asc: boolean): void {
 		var inp = this.getInputNode()!,
 			value = this.coerceFromString_(inp.value);
 
@@ -303,12 +303,12 @@ export class Doublespinner extends zul.inp.NumberInputWidget<number> {
 
 	}
 
-	public _clearValue(): boolean {
+	_clearValue(): boolean {
 		this.getInputNode()!.value = this._defRawVal = '';
 		return true;
 	}
 
-	private _startAutoIncProc(isup: boolean): void {
+	_startAutoIncProc(isup: boolean): void {
 		var widget = this;
 		if (this.timerId)
 			clearInterval(this.timerId);
@@ -317,7 +317,7 @@ export class Doublespinner extends zul.inp.NumberInputWidget<number> {
 		jq(this.$n('btn-' + (isup ? 'up' : 'down'))!).addClass(this.$s('active'));
 	}
 
-	private _stopAutoIncProc(): void {
+	_stopAutoIncProc(): void {
 		if (this.timerId)
 			clearTimeout(this.timerId);
 
@@ -325,32 +325,32 @@ export class Doublespinner extends zul.inp.NumberInputWidget<number> {
 		jq('.' + this.$s('icon'), this.$n('btn')!).removeClass(this.$s('active'));
 	}
 
-	protected override doFocus_(evt: zk.Event): void {
+	override doFocus_(evt: zk.Event): void {
 		super.doFocus_(evt);
 
 		zul.inp.RoundUtl.doFocus_(this);
 	}
 
-	protected override doBlur_(evt: zk.Event): void {
+	override doBlur_(evt: zk.Event): void {
 		super.doBlur_(evt);
 		zul.inp.RoundUtl.doBlur_(this);
 	}
 
-	protected override afterKeyDown_(evt: zk.Event, simulated?: boolean): boolean | undefined {
+	override afterKeyDown_(evt: zk.Event, simulated?: boolean): boolean | undefined {
 		if (!simulated && this._inplace)
 			jq(this.$n()!).toggleClass(this.getInplaceCSS(), evt.keyCode == 13 ? null! : false);
 
 		return super.afterKeyDown_(evt, simulated);
 	}
 
-	protected override getAllowedKeys_(): string {
+	override getAllowedKeys_(): string {
 		var symbols = this._localizedSymbols;
 		return super.getAllowedKeys_()
 			+ (symbols ? symbols : zk).DECIMAL + 'e';
 		//supports scientific expression such as 1e2
 	}
 
-	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 
 		var btn: HTMLElement | null | undefined;
@@ -361,7 +361,7 @@ export class Doublespinner extends zul.inp.NumberInputWidget<number> {
 		zWatch.listen({onSize: this});
 	}
 
-	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		if (this.timerId) {
 			clearTimeout(this.timerId);
 			this.timerId = null;
@@ -375,11 +375,11 @@ export class Doublespinner extends zul.inp.NumberInputWidget<number> {
 		super.unbind_(skipper, after, keepRod);
 	}
 
-	protected getBtnUpIconClass_(): string {
+	getBtnUpIconClass_(): string {
 		return 'z-icon-angle-up';
 	}
 
-	protected getBtnDownIconClass_(): string {
+	getBtnDownIconClass_(): string {
 		return 'z-icon-angle-down';
 	}
 }

@@ -37,18 +37,18 @@ function _syncFrozen(wgt: HeadWidget): void {
 @zk.WrapClass('zul.mesh.HeadWidget')
 export class HeadWidget extends zul.Widget<HTMLTableRowElement> {
 	// NOTE: Parent could be null because it is checked in `afterChildrenFlex_`.
-	public override parent!: zul.mesh.MeshWidget | null;
-	public override firstChild!: zul.mesh.HeaderWidget | null;
-	public override lastChild!: zul.mesh.HeaderWidget | null;
-	private _sizable?: boolean;
+	override parent!: zul.mesh.MeshWidget | null;
+	override firstChild!: zul.mesh.HeaderWidget | null;
+	override lastChild!: zul.mesh.HeaderWidget | null;
+	_sizable?: boolean;
 	// FIXME: The following three properties are never assigned.
-	public hdfaker!: HTMLTableColElement;
-	public bdfaker!: HTMLTableColElement;
-	public ftfaker!: HTMLTableColElement;
-	public _menupopup?: string;
-	public _mpop?: zul.menu.Menupopup | null;
+	hdfaker!: HTMLTableColElement;
+	bdfaker!: HTMLTableColElement;
+	ftfaker!: HTMLTableColElement;
+	_menupopup?: string;
+	_mpop?: zul.menu.Menupopup | null;
 
-	public constructor() {
+	constructor() {
 		super(); // FIXME: reconsider constructor params
 		this.listen({onColSize: this}, -1000);
 	}
@@ -56,7 +56,7 @@ export class HeadWidget extends zul.Widget<HTMLTableRowElement> {
 	/** Returns whether the width of the child column is sizable.
 	 * @return boolean
 	 */
-	public isSizable(): boolean | undefined {
+	isSizable(): boolean | undefined {
 		return this._sizable;
 	}
 
@@ -67,7 +67,7 @@ export class HeadWidget extends zul.Widget<HTMLTableRowElement> {
 	 * <p>Default: false.
 	 * @param boolean sizable
 	 */
-	public setSizable(sizable: boolean, opts?: Record<string, boolean>): this {
+	setSizable(sizable: boolean, opts?: Record<string, boolean>): this {
 		const o = this._sizable;
 		this._sizable = sizable;
 
@@ -78,11 +78,11 @@ export class HeadWidget extends zul.Widget<HTMLTableRowElement> {
 		return this;
 	}
 
-	public override isVisible(): boolean | undefined {
+	override isVisible(): boolean | undefined {
 		return this._visible;
 	}
 
-	public override setVisible(v: boolean, opts?: Record<string, boolean>): this {
+	override setVisible(v: boolean, opts?: Record<string, boolean>): this {
 		const o = this._visible;
 		this._visible = v;
 
@@ -107,7 +107,7 @@ export class HeadWidget extends zul.Widget<HTMLTableRowElement> {
 		return this;
 	}
 
-	public override removeChildHTML_(child: zul.mesh.HeaderWidget, ignoreDom?: boolean): void {
+	override removeChildHTML_(child: zul.mesh.HeaderWidget, ignoreDom?: boolean): void {
 		super.removeChildHTML_(child, ignoreDom);
 		if (!(this instanceof zul.mesh.Auxhead))
 			for (var fs = zul.mesh.HeaderWidget._faker, i = fs.length; i--;)
@@ -115,12 +115,12 @@ export class HeadWidget extends zul.Widget<HTMLTableRowElement> {
 	}
 
 	//bug #3014664
-	public override setVflex(v: string): void { //vflex ignored for Listhead/Columns/Treecols
+	override setVflex(v: string): void { //vflex ignored for Listhead/Columns/Treecols
 		super.setVflex(false);
 	}
 
 	//bug #3014664
-	public override setHflex(v: string): void { //hflex ignored for Listhead/Columns/Treecols
+	override setHflex(v: string): void { //hflex ignored for Listhead/Columns/Treecols
 		super.setHflex(false);
 	}
 
@@ -129,11 +129,11 @@ export class HeadWidget extends zul.Widget<HTMLTableRowElement> {
 	 * @return zul.mesh.MeshWidget
 	 * @since 5.0.5
 	 */
-	public getMeshWidget(): zul.mesh.MeshWidget | null {
+	getMeshWidget(): zul.mesh.MeshWidget | null {
 		return this.parent;
 	}
 
-	public onColSize(evt: zk.Event & {widths?: string[]}): void {
+	onColSize(evt: zk.Event & {widths?: string[]}): void {
 		var owner = this.parent!,
 			widths = evt.widths,
 			headWidth: string | 0 = 0;
@@ -148,7 +148,7 @@ export class HeadWidget extends zul.Widget<HTMLTableRowElement> {
 		owner.disableAutoSizing_(); // clear span and sizedByContent without rerender
 	}
 
-	protected override bind_(desktop: zk.Desktop | null | undefined, skipper: zk.Skipper | null | undefined, after: CallableFunction[]): void {
+	override bind_(desktop: zk.Desktop | null | undefined, skipper: zk.Skipper | null | undefined, after: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		var w = this;
 		after.push(function () {
@@ -156,14 +156,14 @@ export class HeadWidget extends zul.Widget<HTMLTableRowElement> {
 		});
 	}
 
-	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		jq(this.hdfaker).remove();
 		jq(this.bdfaker).remove();
 		jq(this.ftfaker).remove();
 		super.unbind_(skipper, after, keepRod);
 	}
 
-	protected override insertChildHTML_(child: zul.mesh.HeaderWidget, before?: zk.Widget | null, desktop?: zk.Desktop | null): void {
+	override insertChildHTML_(child: zul.mesh.HeaderWidget, before?: zk.Widget | null, desktop?: zk.Desktop | null): void {
 		//ZK-2461: ie8 will take head-bar as one of columns, and equalize the width with other normal heads
 		if (zk.ie9 && this.$n('bar')) {
 			this.$n_('bar').style.display = 'none';
@@ -171,7 +171,7 @@ export class HeadWidget extends zul.Widget<HTMLTableRowElement> {
 		super.insertChildHTML_(child, before, desktop);
 	}
 
-	protected override onChildAdded_(child: zul.mesh.HeaderWidget): void {
+	override onChildAdded_(child: zul.mesh.HeaderWidget): void {
 		super.onChildAdded_(child);
 		if (this.desktop) {
 			var _getWidth = zul.mesh.MeshWidget._getWidth,
@@ -257,7 +257,7 @@ export class HeadWidget extends zul.Widget<HTMLTableRowElement> {
 		}
 	}
 
-	protected override onChildRemoved_(child: zul.mesh.HeaderWidget): void {
+	override onChildRemoved_(child: zul.mesh.HeaderWidget): void {
 		super.onChildRemoved_(child);
 		if (this.desktop) {
 			if (!_fixOnChildChanged(this) && !this.childReplacing_
@@ -270,7 +270,7 @@ export class HeadWidget extends zul.Widget<HTMLTableRowElement> {
 		}
 	}
 
-	public override beforeChildrenFlex_(hwgt: zul.mesh.HeaderWidget): boolean { //HeaderWidget
+	override beforeChildrenFlex_(hwgt: zul.mesh.HeaderWidget): boolean { //HeaderWidget
 		if (hwgt && !hwgt._flexFixed) {
 			//bug #3033010
 			//clear associated hdfaker and bdfaker
@@ -292,7 +292,7 @@ export class HeadWidget extends zul.Widget<HTMLTableRowElement> {
 		return true;
 	}
 
-	public override afterChildrenFlex_(hwgt?: zul.mesh.HeaderWidget): void { //hflex in HeaderWidget
+	override afterChildrenFlex_(hwgt?: zul.mesh.HeaderWidget): void { //hflex in HeaderWidget
 		var wgt = this.parent!,
 			ebody = wgt.ebody!,
 			ehead = wgt.ehead,
@@ -395,22 +395,22 @@ export class HeadWidget extends zul.Widget<HTMLTableRowElement> {
 		}
 	}
 
-	protected override deferRedrawHTML_(out: string[]): void {
+	override deferRedrawHTML_(out: string[]): void {
 		out.push('<tr', this.domAttrs_({domClass: true}), ' class="z-renderdefer"></tr>');
 	}
 
-	protected override getFlexDirection_(): string {
+	override getFlexDirection_(): string {
 		return 'row';
 	}
 
-	public override afterClearFlex_(): void {
+	override afterClearFlex_(): void {
 		var mesh = this.parent!;
 		if (mesh._cssflex)
 			mesh.ehdfaker!.style.display = '';
 	}
 
 	//static
-	public static redraw(this: HeadWidget, out: string[]): void {
+	static redraw(this: HeadWidget, out: string[]): void {
 		out.push('<tr', this.domAttrs_(), ' style="text-align: left;">');
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);

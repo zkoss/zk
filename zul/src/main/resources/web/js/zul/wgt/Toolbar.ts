@@ -25,11 +25,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.wgt.Toolbar')
 export class Toolbar extends zul.Widget {
-	private _orient = 'horizontal';
-	private _align = 'start';
-	private _overflowPopupIconSclass = 'z-icon-ellipsis-h';
-	private _overflowPopup?: boolean;
-	private _open?: boolean;
+	_orient = 'horizontal';
+	_align = 'start';
+	_overflowPopupIconSclass = 'z-icon-ellipsis-h';
+	_overflowPopup?: boolean;
+	_open?: boolean;
 
 	/**
 	 * Returns the alignment of any children added to this toolbar. Valid values
@@ -37,7 +37,7 @@ export class Toolbar extends zul.Widget {
 	 * <p>Default: "start"
 	 * @return String
 	 */
-	public getAlign(): string {
+	getAlign(): string {
 		return this._align;
 	}
 
@@ -47,7 +47,7 @@ export class Toolbar extends zul.Widget {
 	 * <p>Default: "start", if null, "start" is assumed.
 	 * @param String align
 	 */
-	public setAlign(align: string, opts?: Record<string, boolean>): this {
+	setAlign(align: string, opts?: Record<string, boolean>): this {
 		const o = this._align;
 		this._align = align;
 
@@ -62,14 +62,14 @@ export class Toolbar extends zul.Widget {
 	 * <p>Default: "horizontal".
 	 * @return String
 	 */
-	public getOrient(): string {
+	getOrient(): string {
 		return this._orient;
 	}
 
 	/** Sets the orient.
 	 * @param String orient either "horizontal" or "vertical".
 	 */
-	public setOrient(orient: string, opts?: Record<string, boolean>): this {
+	setOrient(orient: string, opts?: Record<string, boolean>): this {
 		const o = this._orient;
 		this._orient = orient;
 
@@ -89,7 +89,7 @@ export class Toolbar extends zul.Widget {
 	 * @return boolean
 	 * @since 8.6.0
 	 */
-	public isOverflowPopup(): boolean | undefined {
+	isOverflowPopup(): boolean | undefined {
 		return this._overflowPopup;
 	}
 
@@ -101,7 +101,7 @@ export class Toolbar extends zul.Widget {
 	 * @param boolean overflowPopup whether toolbar has a button that shows a popup
 	 * @since 8.6.0
 	 */
-	public setOverflowPopup(overflowPopup: boolean, opts?: Record<string, boolean>): this {
+	setOverflowPopup(overflowPopup: boolean, opts?: Record<string, boolean>): this {
 		const o = this._overflowPopup;
 		this._overflowPopup = overflowPopup;
 
@@ -118,7 +118,7 @@ export class Toolbar extends zul.Widget {
 	 * @return String
 	 * @since 9.6.0
 	 */
-	public getOverflowPopupIconSclass(): string {
+	getOverflowPopupIconSclass(): string {
 		return this._overflowPopupIconSclass;
 	}
 
@@ -129,7 +129,7 @@ export class Toolbar extends zul.Widget {
 	 * @param String the overflow sclass name of overflow popup icon of this toolbar
 	 * @since 9.6.0
 	 */
-	public setOverflowPopupIconSclass(the: string, opts?: Record<string, boolean>): this {
+	setOverflowPopupIconSclass(the: string, opts?: Record<string, boolean>): this {
 		const o = this._overflowPopupIconSclass;
 		this._overflowPopupIconSclass = the;
 
@@ -142,7 +142,7 @@ export class Toolbar extends zul.Widget {
 		return this;
 	}
 
-	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		if (this.isOverflowPopup()) {
 			zWatch.listen({onFloatUp: this, onCommandReady: this, onSize: this});
@@ -150,7 +150,7 @@ export class Toolbar extends zul.Widget {
 		}
 	}
 
-	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		var popup = this.$n('pp');
 		if (popup) {
 			this.domUnlisten_(this.$n_('overflowpopup-button'), 'onClick', '_openPopup');
@@ -159,11 +159,11 @@ export class Toolbar extends zul.Widget {
 		super.unbind_(skipper, after, keepRod);
 	}
 
-	private _getOverflowPopupBtnClass(): string {
+	_getOverflowPopupBtnClass(): string {
 		return this.$s('overflowpopup-button') + ' ' + this.getOverflowPopupIconSclass() + ' z-icon-fw';
 	}
 
-	public _openPopup(evt: zk.Event): void {
+	_openPopup(evt: zk.Event): void {
 		if (this._open)
 			return;
 
@@ -177,16 +177,16 @@ export class Toolbar extends zul.Widget {
 		this._syncPopupPosition();
 	}
 
-	private _syncPopupPosition(): void {
+	_syncPopupPosition(): void {
 		zk(this.$n('pp')).position(this.$n_(), 'after_end');
 	}
 
-	public onFloatUp(ctl: zk.ZWatchController): void {
+	onFloatUp(ctl: zk.ZWatchController): void {
 		if (!zUtl.isAncestor(this, ctl.origin))
 			this._closePopup();
 	}
 
-	private _closePopup(): void {
+	_closePopup(): void {
 		if (!this._open)
 			return;
 
@@ -196,12 +196,12 @@ export class Toolbar extends zul.Widget {
 		this.setFloating_(false);
 	}
 
-	public onCommandReady(): void {
+	onCommandReady(): void {
 		if (this.desktop && this.isOverflowPopup())
 			this._adjustContent();
 	}
 
-	public override onSize(): void {
+	override onSize(): void {
 		super.onSize();
 		if (this.desktop && this.isOverflowPopup()) {
 			this._adjustContent();
@@ -210,7 +210,7 @@ export class Toolbar extends zul.Widget {
 		}
 	}
 
-	private _adjustContent(): void {
+	_adjustContent(): void {
 		if (zUtl.isImageLoading()) {
 			setTimeout(this.proxy(this._adjustContent), 20);
 			return;
@@ -262,7 +262,7 @@ export class Toolbar extends zul.Widget {
 	}
 
 	// super
-	protected override domClass_(no?: zk.DomClassOptions): string {
+	override domClass_(no?: zk.DomClassOptions): string {
 		var sc = super.domClass_(no);
 		if (!no || !no.zclass) {
 			var tabs = this.parent && zk.isLoaded('zul.tab') && this.parent instanceof zul.tab.Tabbox ? this.$s('tabs') : '';
@@ -281,7 +281,7 @@ export class Toolbar extends zul.Widget {
 
 	// Bug ZK-1706 issue: we have to expand the width of the content div when
 	// align="left", others won't support
-	protected override setFlexSizeW_(n: HTMLElement, zkn: zk.JQZK, width: number, isFlexMin?: boolean): void {
+	override setFlexSizeW_(n: HTMLElement, zkn: zk.JQZK, width: number, isFlexMin?: boolean): void {
 		super.setFlexSizeW_(n, zkn, width, isFlexMin);
 		if (!isFlexMin && this.getAlign() == 'start') {
 			var cave = this.$n('cave');
@@ -294,11 +294,11 @@ export class Toolbar extends zul.Widget {
 	 * Returns whether is in panel mold or not.
 	 * @return boolean
 	 */
-	public inPanelMold(): boolean {
+	inPanelMold(): boolean {
 		return this._mold == 'panel';
 	}
 
-	public override appendChild(child: zk.Widget, ignoreDom?: boolean): boolean {
+	override appendChild(child: zk.Widget, ignoreDom?: boolean): boolean {
 		super.appendChild(child, ignoreDom);
 		var popup = this.$n('pp');
 		if (popup && popup.children.length > 0)
@@ -306,7 +306,7 @@ export class Toolbar extends zul.Widget {
 		return false;
 	}
 
-	public override removeChild(child: zk.Widget, ignoreDom?: boolean): boolean {
+	override removeChild(child: zk.Widget, ignoreDom?: boolean): boolean {
 		var popupNode = this.$n('pp'),
 			childNode = child.$n();
 		if (popupNode && childNode) {
@@ -321,13 +321,13 @@ export class Toolbar extends zul.Widget {
 	}
 
 	// protected
-	protected override onChildAdded_(child: zk.Widget): void {
+	override onChildAdded_(child: zk.Widget): void {
 		super.onChildAdded_(child);
 		if (this.inPanelMold())
 			this.rerender();
 	}
 
-	protected override onChildRemoved_(child: zk.Widget): void {
+	override onChildRemoved_(child: zk.Widget): void {
 		super.onChildRemoved_(child);
 		if (!this.childReplacing_ && this.inPanelMold())
 			this.rerender();

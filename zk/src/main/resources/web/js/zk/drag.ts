@@ -182,40 +182,40 @@ export interface DraggableOptions {
  * @disable(zkgwt)
  */
 export class Draggable extends zk.Object {
-	declare private _isScrollChild?: boolean;
-	declare public delta: zk.Offset;
-	declare public dragging: boolean;
-	declare public _suicide?: boolean;
-	declare public dead?: boolean;
-	declare public lastScrolled?: Date;
-	declare public scrollSpeed: zk.Offset;
-	declare public offset: zk.Offset;
-	declare public scrollInterval?: number | null;
-	declare private _innerOfs: zk.Offset;
-	declare public stackup?: HTMLDivElement;
-	declare private _stackup?: HTMLIFrameElement;
-	declare public orgnode?: HTMLElement | null;
-	declare public z_scrl?: zk.Offset;
-	declare public z_orgpos?: string;
-	declare public orgZ?: number;
-	declare public orgScrlLeft?: number;
-	declare public orgScrlTop?: number;
-	declare private _clone?: Node | null;
-	declare public _orgcursor?: string; // zk.Widget.prototype.uncloneDrag_
-	declare public _zszofs?: number; // zul.mesh.HeaderWidget
-	declare public _zmin?: number; // zul.mesh.HeaderWidget
+	declare _isScrollChild?: boolean;
+	declare delta: zk.Offset;
+	declare dragging: boolean;
+	declare _suicide?: boolean;
+	declare dead?: boolean;
+	declare lastScrolled?: Date;
+	declare scrollSpeed: zk.Offset;
+	declare offset: zk.Offset;
+	declare scrollInterval?: number | null;
+	declare _innerOfs: zk.Offset;
+	declare stackup?: HTMLDivElement;
+	declare _stackup?: HTMLIFrameElement;
+	declare orgnode?: HTMLElement | null;
+	declare z_scrl?: zk.Offset;
+	declare z_orgpos?: string;
+	declare orgZ?: number;
+	declare orgScrlLeft?: number;
+	declare orgScrlTop?: number;
+	declare _clone?: Node | null;
+	declare _orgcursor?: string; // zk.Widget.prototype.uncloneDrag_
+	declare _zszofs?: number; // zul.mesh.HeaderWidget
+	declare _zmin?: number; // zul.mesh.HeaderWidget
 
 	// zul.wnd.{Window, Panel}
-	declare public _wndoffs?: zk.Offset;
-	declare public z_szofs?: null | {
+	declare _wndoffs?: zk.Offset;
+	declare z_szofs?: null | {
 		top: string;
 		left: string;
 		width: string;
 		height: string;
 	};
-	declare public z_dir?: number;
-	declare public z_orgzi?: string;
-	declare public z_box?: {
+	declare z_dir?: number;
+	declare z_orgzi?: string;
+	declare z_box?: {
 		top: number;
 		left: number;
 		height: number;
@@ -225,8 +225,8 @@ export class Draggable extends zk.Object {
 	};
 
 	// zul.layout.LayoutRegion
-	declare public _point?: zk.Offset | null;
-	declare public _rootoffs?: null | {
+	declare _point?: zk.Offset | null;
+	declare _rootoffs?: null | {
 		maxs: number;
 		left: number;
 		right: number;
@@ -236,32 +236,32 @@ export class Draggable extends zk.Object {
 	};
 
 	// zul.WScroll
-	declare public _lastSteps: number;
-	declare public _timer: number;
-	declare public _epos?: HTMLElement | null;
-	declare public _scale: number;
-	declare public _endStep: number;
-	declare public _steps: number;
-	declare public _isVer: boolean;
-	declare public _start: number;
-	declare public _end: number;
-	declare public _lastPos?: number;
+	declare _lastSteps: number;
+	declare _timer: number;
+	declare _epos?: HTMLElement | null;
+	declare _scale: number;
+	declare _endStep: number;
+	declare _steps: number;
+	declare _isVer: boolean;
+	declare _start: number;
+	declare _end: number;
+	declare _lastPos?: number;
 	
-	private static _drags: Draggable[] = [];
+	static _drags: Draggable[] = [];
 	/** The control object for this draggable.
 	 * @type Object
 	 */
-	public control: Widget | null = null;
+	control: Widget | null = null;
 	/** The DOM element that represents the handle that the user can
 	 * drag the whole element ({@link #node}.
 	 * It is either {@link #node} or a child element of it.
 	 * @type DOMElement
 	 */
-	public handle: Widget | HTMLElement | null;
+	handle: Widget | HTMLElement | null;
 	/** The DOM element that is draggable (the whole element).
 	 * @type DOMElement
 	 */
-	public node: HTMLElement | null;
+	node: HTMLElement | null;
 	/** The options of this draggable.
 	 * <h3>Allowed options</h3>
 	 * <blockquote>
@@ -424,9 +424,9 @@ String scroll; //DOM Element's ID</code></pre>
 	 * </blockquote>
 	 * @type Map
 	 */
-	public opts: DraggableOptions;
+	opts: DraggableOptions;
 
-	public _dragImg?:
+	_dragImg?:
 		| null
 		| HTMLElement // zk.Widget.prototype.ghost
 		| JQuery<HTMLElement>; // zul/sel/ItemWidget and zul/sel/Listitem
@@ -438,7 +438,7 @@ String scroll; //DOM Element's ID</code></pre>
 	 * If omitted and control is a widget, {@link zk.Widget#$n} is assumed.
 	 * @param Map opts [optional] options. Refer to {@link #opts} for allowed options.
 	 */
-	public constructor(control, node: HTMLElement | null, opts: DraggableOptions) {
+	constructor(control, node: HTMLElement | null, opts: DraggableOptions) {
 		super();
 		if (!_stackup) {
 		//IE: if we don't insert stackup at beginning, dragging is slow
@@ -495,7 +495,7 @@ String scroll; //DOM Element's ID</code></pre>
 	}
 	/** Destroys this draggable object. This method must be called to clean up, if you don't want to associate the draggable feature to a DOM element.
 	 */
-	public destroy(): void {
+	destroy(): void {
 		if (this.dragging) {
 			// Bug B50-3285142: Drag fails to clear up ghost when widget is detached
 			// destroy later
@@ -519,12 +519,12 @@ String scroll; //DOM Element's ID</code></pre>
 	}
 
 	/** [left, right] of this node. */
-	private _currentDelta(): zk.Offset {
+	_currentDelta(): zk.Offset {
 		var $node = jq(this.node!);
 		return [zk.parseInt($node.css('left')), zk.parseInt($node.css('top'))];
 	}
 
-	private _startDrag(evt: Event): void {
+	_startDrag(evt: Event): void {
 		zWatch.fire('onStartDrag', this, evt as unknown as FireOptions);
 
 		//disable selection
@@ -598,7 +598,7 @@ String scroll; //DOM Element's ID</code></pre>
 		if (this.opts.starteffect)
 			this.opts.starteffect(this, evt);
 	}
-	private _syncStackup(): void {
+	_syncStackup(): void {
 		if (this._stackup) {
 			var node = this.node,
 				st = this._stackup.style;
@@ -612,7 +612,7 @@ String scroll; //DOM Element's ID</code></pre>
 		}
 	}
 
-	public _updateDrag(pt, evt: Event): void {
+	_updateDrag(pt, evt: Event): void {
 		if (!this.dragging) {
 			let v = this.opts.initSensitivity;
 			if (v && pt[0] <= _initPt[0] + v && pt[0] >= _initPt[0] - v
@@ -657,7 +657,7 @@ String scroll; //DOM Element's ID</code></pre>
 		evt.stop();
 	}
 
-	private _finishDrag(evt: Event, success): void {
+	_finishDrag(evt: Event, success): void {
 		this.dragging = false;
 		if (this.stackup) {
 			jq(this.stackup).remove();
@@ -733,7 +733,7 @@ String scroll; //DOM Element's ID</code></pre>
 			//we have to reset it later since event is fired later (after onmouseup)
 	}
 
-	private _mousedown(devt: JQuery.TriggeredEvent): void {
+	_mousedown(devt: JQuery.TriggeredEvent): void {
 		var node = this.node,
 			evt = jq.Event.zk(devt),
 			target = devt.target;
@@ -771,14 +771,14 @@ String scroll; //DOM Element's ID</code></pre>
 			//simulate mousedown later (mount.js's invocation of ignoreMouseUp)
 		}
 	}
-	public _keypress(devt: JQuery.TriggeredEvent): void {
+	_keypress(devt: JQuery.TriggeredEvent): void {
 		if (devt.keyCode == 27) {
 			this._finishDrag(jq.Event.zk(devt), false);
 			devt.stop();
 		}
 	}
 
-	public _endDrag(evt: Event): void {
+	_endDrag(evt: Event): void {
 		if (this.dragging) {
 			this._stopScrolling();
 			this._finishDrag(evt, true);
@@ -787,7 +787,7 @@ String scroll; //DOM Element's ID</code></pre>
 			_deactivate();
 	}
 
-	private _draw(point: zk.Offset, evt?: Event): void {
+	_draw(point: zk.Offset, evt?: Event): void {
 		var node = this.node as HTMLElement,
 			$node = zk(node),
 			pos = $node.cmOffset(),
@@ -848,14 +848,14 @@ String scroll; //DOM Element's ID</code></pre>
 		if (style.visibility == 'hidden') style.visibility = ''; // fix gecko rendering
 	}
 
-	private _stopScrolling(): void {
+	_stopScrolling(): void {
 		if (this.scrollInterval) {
 			clearInterval(this.scrollInterval);
 			this.scrollInterval = null;
 			_lastScrlPt = null;
 		}
 	}
-	private _startScrolling(speed): void {
+	_startScrolling(speed): void {
 		if (speed[0] || speed[1]) {
 			let scrollSpeed = this.opts.scrollSpeed as number;
 			this.scrollSpeed = [speed[0] * scrollSpeed, speed[1] * scrollSpeed];
@@ -864,7 +864,7 @@ String scroll; //DOM Element's ID</code></pre>
 		}
 	}
 
-	private _scroll(): void {
+	_scroll(): void {
 		var current = new Date(),
 			delta = current.valueOf() - this.lastScrolled!.valueOf();
 		this.lastScrolled = current;
@@ -900,10 +900,10 @@ String scroll; //DOM Element's ID</code></pre>
 		}
 	}
 
-	private _updateInnerOfs(): void {
+	_updateInnerOfs(): void {
 		this._innerOfs = [jq.innerX(), jq.innerY()];
 	}
-	private _getWndScroll(w): Dimension {
+	_getWndScroll(w): Dimension {
 		var T, L, W, H,
 			doc = w.document,
 			de = doc.documentElement;
@@ -936,23 +936,23 @@ String scroll; //DOM Element's ID</code></pre>
 	 * @param zk.Offset ofs the offset of the dragging position
 	 * @return zk.Offset the offset after snapped
 	 */
-	protected snap_(pos: zk.Offset, opts): zk.Offset {
+	snap_(pos: zk.Offset, opts): zk.Offset {
 		if (!opts.snap && pos[1] < 0)
 			pos[1] = 0;
 		return pos;
 	}
 
-	public static ignoreMouseUp(): boolean { //called by mount
+	static ignoreMouseUp(): boolean { //called by mount
 		return zk.dragging ? true : _dnEvt;
 	}
-	public static ignoreClick(): boolean | undefined { //called by mount
+	static ignoreClick(): boolean | undefined { //called by mount
 		return zk.dragging;
 	}
 	/**
 	 * @deprecated since 8.0.2
 	 * not to remove the function for backward compatibility (just in case)
 	 */
-	public static ignoreStop(target: HTMLElement): boolean { //called by mount
+	static ignoreStop(target: HTMLElement): boolean { //called by mount
 		return false;
 	}
 }

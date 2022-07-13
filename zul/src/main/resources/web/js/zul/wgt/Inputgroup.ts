@@ -31,7 +31,7 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
  */
 @zk.WrapClass('zul.wgt.Inputgroup')
 export class Inputgroup extends zul.Widget {
-	private _vertical = false;
+	_vertical = false;
 
 	/**
 	 * Returns whether it is a vertical orientation.
@@ -39,7 +39,7 @@ export class Inputgroup extends zul.Widget {
 	 *
 	 * @return boolean whether it is a vertical orientation
 	 */
-	public isVertical(): boolean {
+	isVertical(): boolean {
 		return this._vertical;
 	}
 
@@ -47,7 +47,7 @@ export class Inputgroup extends zul.Widget {
 	 * Sets whether it is a vertical orientation.
 	 * @param boolean vertical whether it is a vertical orientation
 	 */
-	public setVertical(v: boolean, opts?: Record<string, boolean>): this {
+	setVertical(v: boolean, opts?: Record<string, boolean>): this {
 		const o = this._vertical;
 		this._vertical = v;
 
@@ -56,20 +56,21 @@ export class Inputgroup extends zul.Widget {
 				jq(this.$n()!).toggleClass(this.$s('vertical'), v);
 			}
 		}
+
 		return this;
 	}
 
 	// treat this as setVertical(boolean) for zephyr
-	setOrient(orient: string) {
+	setOrient(orient: string): this {
 		return this.setVertical(orient == 'vertical');
 	}
 
-	protected override domClass_(no?: Partial<zk.DomClassOptions>): string {
+	override domClass_(no?: zk.DomClassOptions): string {
 		let classes = super.domClass_(no);
 		return classes + (this._vertical ? ' ' + this.$s('vertical') : '');
 	}
 
-	protected override insertChildHTML_(child: zk.Widget, before?: zk.Widget | null, desktop?: zk.Desktop | null): void {
+	override insertChildHTML_(child: zk.Widget, before?: zk.Widget | null, desktop?: zk.Desktop | null): void {
 		if (before)
 			jq(before.$n('chdex') || before.$n()!).before(
 				this.encloseChildHTML_({child: child})!);
@@ -80,12 +81,12 @@ export class Inputgroup extends zul.Widget {
 		child.bind(desktop);
 	}
 
-	public override removeChildHTML_(child: zk.Widget, ignoreDom?: boolean): void {
+	override removeChildHTML_(child: zk.Widget, ignoreDom?: boolean): void {
 		super.removeChildHTML_(child, ignoreDom);
 		jq(child.uuid + '-chdex', zk).remove();
 	}
 
-	protected encloseChildHTML_(opts: {child: zk.Widget; out?: string[]}): string | undefined {
+	encloseChildHTML_(opts: {child: zk.Widget; out?: string[]}): string | undefined {
 		const out = opts.out || new zk.Buffer<string>(),
 			w = opts.child;
 		if (!(w instanceof zul.wgt.Button) && !(w instanceof zul.wgt.Toolbarbutton)
@@ -97,12 +98,5 @@ export class Inputgroup extends zul.Widget {
 			w.redraw(out);
 		}
 		if (!opts.out) return out.join('');
-	},
-	beforeChildAdded_(child, insertBefore) {
-		if (!child.$instanceof(zul.wgt.Label) && (!zk.isLoaded('zul.inp') || !child.$instanceof(zul.inp.InputWidget)) && !child.$instanceof(zul.LabelImageWidget)) {
-			zk.error('Unsupported child for Inputgroup: ' + child.className);
-			return false;
-		}
-		return true;
 	}
 }

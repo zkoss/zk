@@ -18,18 +18,18 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.sel.Treecols')
 export class Treecols extends zul.mesh.HeadWidget {
-	public override parent!: zul.sel.Tree | null;
-	public override firstChild!: zul.sel.Treecol | null;
-	public override lastChild!: zul.sel.Treecol | null;
+	override parent!: zul.sel.Tree | null;
+	override firstChild!: zul.sel.Treecol | null;
+	override lastChild!: zul.sel.Treecol | null;
 
 	/** Returns the tree that it belongs to.
 	 * @return Tree
 	 */
-	public getTree(): zul.sel.Tree | null {
+	getTree(): zul.sel.Tree | null {
 		return this.parent;
 	}
 
-	public override setVisible(visible: boolean, opts?: Record<string, boolean>): this {
+	override setVisible(visible: boolean, opts?: Record<string, boolean>): this {
 		if (this._visible != visible) {
 			super.setVisible(visible, opts);
 			this.getTree()!.rerender();

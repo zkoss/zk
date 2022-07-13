@@ -265,7 +265,6 @@ module.exports = {
             'allowHigherOrderFunctions': true
           }
         ],
-        '@typescript-eslint/explicit-member-accessibility': 'error',
         '@typescript-eslint/explicit-module-boundary-types': 'error',
         '@typescript-eslint/member-delimiter-style': 'error',
         '@typescript-eslint/naming-convention': [

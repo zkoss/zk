@@ -17,17 +17,17 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.sel.Select')
 export class Select extends zul.Widget<HTMLSelectElement> {
-	public _selectedIndex = -1;
-	private _rows = 0;
-	private _shouldRerenderFlag?: boolean;
-	public _selItems: zul.sel.Option[];
-	private _groupsInfo: zul.sel.Optgroup[];
-	private _multiple?: boolean;
-	private _disabled?: boolean;
-	private _name?: string;
-	private _maxlength?: number;
+	_selectedIndex = -1;
+	_rows = 0;
+	_shouldRerenderFlag?: boolean;
+	_selItems: zul.sel.Option[];
+	_groupsInfo: zul.sel.Optgroup[];
+	_multiple?: boolean;
+	_disabled?: boolean;
+	_name?: string;
+	_maxlength?: number;
 
-	public constructor() {
+	constructor() {
 		super(); // FIXME: params?
 		this._selItems = [];
 		this._groupsInfo = [];
@@ -39,7 +39,7 @@ export class Select extends zul.Widget<HTMLSelectElement> {
 	 * Default: false.
 	 * @return boolean
 	 */
-	public isMultiple(): boolean | undefined {
+	isMultiple(): boolean | undefined {
 		return this._multiple;
 	}
 
@@ -47,7 +47,7 @@ export class Select extends zul.Widget<HTMLSelectElement> {
 	 * Sets whether multiple selections are allowed.
 	 * @param boolean multiple
 	 */
-	public setMultiple(multiple: boolean, opts?: Record<string, boolean>): this {
+	setMultiple(multiple: boolean, opts?: Record<string, boolean>): this {
 		const o = this._multiple;
 		this._multiple = multiple;
 
@@ -65,7 +65,7 @@ export class Select extends zul.Widget<HTMLSelectElement> {
 	 * Default: false.
 	 * @return boolean
 	 */
-	public isDisabled(): boolean | undefined {
+	isDisabled(): boolean | undefined {
 		return this._disabled;
 	}
 
@@ -73,7 +73,7 @@ export class Select extends zul.Widget<HTMLSelectElement> {
 	 * Sets whether it is disabled.
 	 * @param boolean disabled
 	 */
-	public setDisabled(disabled: boolean, opts?: Record<string, boolean>): this {
+	setDisabled(disabled: boolean, opts?: Record<string, boolean>): this {
 		const o = this._disabled;
 		this._disabled = disabled;
 
@@ -89,7 +89,7 @@ export class Select extends zul.Widget<HTMLSelectElement> {
 	 * Returns the index of the selected item (-1 if no one is selected).
 	 * @return int
 	 */
-	public getSelectedIndex(): number {
+	getSelectedIndex(): number {
 		return this._selectedIndex;
 	}
 
@@ -98,7 +98,7 @@ export class Select extends zul.Widget<HTMLSelectElement> {
 	 * the given index.
 	 * @param int selectedIndex
 	 */
-	public setSelectedIndex(selectedIndex: number, opts?: Record<string, boolean>): this {
+	setSelectedIndex(selectedIndex: number, opts?: Record<string, boolean>): this {
 		const o = this._selectedIndex;
 		this._selectedIndex = selectedIndex;
 
@@ -145,7 +145,7 @@ export class Select extends zul.Widget<HTMLSelectElement> {
 	 * event-driven model.
 	 * @return String
 	 */
-	public getName(): string | undefined {
+	getName(): string | undefined {
 		return this._name;
 	}
 
@@ -162,7 +162,7 @@ export class Select extends zul.Widget<HTMLSelectElement> {
 	 * @param String name
 	 *            the name of this component.
 	 */
-	public setName(name: string, opts?: Record<string, boolean>): this {
+	setName(name: string, opts?: Record<string, boolean>): this {
 		const o = this._name;
 		this._name = name;
 
@@ -180,7 +180,7 @@ export class Select extends zul.Widget<HTMLSelectElement> {
 	 * Default: 0.
 	 * @return int
 	 */
-	public getRows(): number {
+	getRows(): number {
 		return this._rows;
 	}
 
@@ -191,7 +191,7 @@ export class Select extends zul.Widget<HTMLSelectElement> {
 	 * {@link #setRows} is ignored
 	 * @param int rows
 	 */
-	public setRows(rows: number, opts?: Record<string, boolean>): this {
+	setRows(rows: number, opts?: Record<string, boolean>): this {
 		const o = this._rows;
 		this._rows = rows;
 
@@ -207,7 +207,7 @@ export class Select extends zul.Widget<HTMLSelectElement> {
 	 * Returns the maximal length of each item's label.
 	 * @return int
 	 */
-	public getMaxlength(): number | undefined {
+	getMaxlength(): number | undefined {
 		return this._maxlength;
 	}
 
@@ -216,7 +216,7 @@ export class Select extends zul.Widget<HTMLSelectElement> {
 	 * @param int maxlength
 	 */
 	// FIXME: can a defSet generated setter accept more than one arguments before `opts`?
-	public setMaxlength(maxlength: number, fromServer: boolean, opts?: Record<string, boolean>): this {
+	setMaxlength(maxlength: number, fromServer: boolean, opts?: Record<string, boolean>): this {
 		const o = this._maxlength;
 		this._maxlength = maxlength;
 
@@ -229,7 +229,7 @@ export class Select extends zul.Widget<HTMLSelectElement> {
 	}
 
 	// ZK-2133: should sync all items
-	public setChgSel(val: string): void { //called from the server
+	setChgSel(val: string): void { //called from the server
 		var sels = {};
 		for (var j = 0; ;) {
 			var k = val.indexOf(',', j),
@@ -245,7 +245,7 @@ export class Select extends zul.Widget<HTMLSelectElement> {
 	/* Changes the selected status of an item without affecting other items
 	 * and return true if the status is really changed.
 	 */
-	private _changeSelect(option: zul.sel.Option, toSel: boolean): boolean {
+	_changeSelect(option: zul.sel.Option, toSel: boolean): boolean {
 		var changed = !!option.isSelected() != toSel;
 		if (changed) {
 			option.setSelected(toSel);
@@ -259,7 +259,7 @@ export class Select extends zul.Widget<HTMLSelectElement> {
 	 * are not affected, and retain their selected state.
 	 * @param Option item
 	 */
-	public toggleItemSelection(item: zul.sel.Option): void {
+	toggleItemSelection(item: zul.sel.Option): void {
 		if (item.isSelected()) this._removeItemFromSelection(item);
 		else this._addItemToSelection(item);
 	}
@@ -270,7 +270,7 @@ export class Select extends zul.Widget<HTMLSelectElement> {
 	 * @param Option item
 	 *            the item to select. If null, all items are deselected.
 	 */
-	public selectItem(item: zul.sel.Option): void {
+	selectItem(item: zul.sel.Option): void {
 		if (!item)
 			this.setSelectedIndex(-1);
 		else if (this._multiple || !item.isSelected()) {
@@ -281,7 +281,7 @@ export class Select extends zul.Widget<HTMLSelectElement> {
 		}
 	}
 
-	private _addItemToSelection(item: zul.sel.Option): void {
+	_addItemToSelection(item: zul.sel.Option): void {
 		if (!item.isSelected()) {
 			var multiple = this._multiple;
 			if (!multiple)
@@ -294,7 +294,7 @@ export class Select extends zul.Widget<HTMLSelectElement> {
 		}
 	}
 
-	private _removeItemFromSelection(item: zul.sel.Option): void {
+	_removeItemFromSelection(item: zul.sel.Option): void {
 		if (item.isSelected()) {
 			if (!this._multiple) {
 				this.clearSelection();
@@ -308,7 +308,7 @@ export class Select extends zul.Widget<HTMLSelectElement> {
 	/**
 	 * Clears the selection.
 	 */
-	public clearSelection(): void {
+	clearSelection(): void {
 		if (this._selItems.length) {
 			var item: zul.sel.Option | undefined;
 			for (;(item = this._selItems.pop());)
@@ -317,7 +317,7 @@ export class Select extends zul.Widget<HTMLSelectElement> {
 		}
 	}
 
-	public override domAttrs_(no?: zk.DomAttrsOptions): string {
+	override domAttrs_(no?: zk.DomAttrsOptions): string {
 		var v;
 		return super.domAttrs_(no)
 			+ (this.isDisabled() ? ' disabled="disabled"' : '')
@@ -327,7 +327,7 @@ export class Select extends zul.Widget<HTMLSelectElement> {
 			+ ((v = this.getName()) ? ' name="' + v + '"' : '');
 	}
 
-	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 
 		var n = this.$n_();
@@ -344,7 +344,7 @@ export class Select extends zul.Widget<HTMLSelectElement> {
 		this._fixSelIndex();
 	}
 
-	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		zWatch.unlisten({onCommandReady: this});
 		var n = this.$n_();
 		this.domUnlisten_(n, 'onChange')
@@ -356,12 +356,12 @@ export class Select extends zul.Widget<HTMLSelectElement> {
 		zWatch.unlisten({onRestore: fn, onVParent: fn});
 	}
 
-	private _fixSelIndex(): void {
+	_fixSelIndex(): void {
 		if (this._selectedIndex < 0)
 			this.$n_().selectedIndex = -1;
 	}
 
-	private _doChange(evt: zk.Event): void {
+	_doChange(evt: zk.Event): void {
 		var n = this.$n_(),
 			opts = n.options,
 			multiple = this._multiple,
@@ -397,37 +397,37 @@ export class Select extends zul.Widget<HTMLSelectElement> {
 		this.fire('onSelect', {items: data, reference: reference});
 	}
 
-	protected override doBlur_(evt: zk.Event): void {
+	override doBlur_(evt: zk.Event): void {
 		// Empty for override
 	}
 
 	//Bug 1756559: ctrl key shall fore it to be sent first
-	protected override beforeCtrlKeys_(evt: zk.Event): void {
+	override beforeCtrlKeys_(evt: zk.Event): void {
 		this._doChange(evt);
 	}
 
-	protected override onChildAdded_(child: zk.Widget): void {
+	override onChildAdded_(child: zk.Widget): void {
 		if (child instanceof zul.sel.Optgroup)
 			this._groupsInfo.push(child);
 		if (this.desktop)
 			this.requestRerender_(true);
 	}
 
-	protected override onChildRemoved_(child: zk.Widget): void {
+	override onChildRemoved_(child: zk.Widget): void {
 		if (child instanceof zul.sel.Optgroup)
 			this._groupsInfo.$remove(child);
 		if (this.desktop && !this.childReplacing_)
 			this.requestRerender_(true);
 	}
 
-	public requestRerender_(fromServer: boolean | undefined): void {
+	requestRerender_(fromServer: boolean | undefined): void {
 		if (fromServer)
 			this._shouldRerenderFlag = true;
 		else
 			this.rerender();
 	}
 
-	public onCommandReady(): void {
+	onCommandReady(): void {
 		if (this._shouldRerenderFlag) {
 			this._shouldRerenderFlag = false;
 			this.rerender();
@@ -438,7 +438,7 @@ export class Select extends zul.Widget<HTMLSelectElement> {
 	 * @return boolean
 	 * @since 8.6.0
 	 */
-	public hasGroup(): boolean {
+	hasGroup(): boolean {
 		return !!this._groupsInfo.length;
 	}
 
@@ -446,7 +446,7 @@ export class Select extends zul.Widget<HTMLSelectElement> {
 	 * @return int
 	 * @since 8.6.0
 	 */
-	public getGroupCount(): number {
+	getGroupCount(): number {
 		return this._groupsInfo.length;
 	}
 
@@ -454,11 +454,11 @@ export class Select extends zul.Widget<HTMLSelectElement> {
 	 * @return Array
 	 * @since 8.6.0
 	 */
-	public getGroups(): zul.sel.Optgroup[] {
+	getGroups(): zul.sel.Optgroup[] {
 		return this._groupsInfo.$clone();
 	}
 
-	protected setItemsInvalid_(wgts: ArrayLike<unknown>[]): void {
+	setItemsInvalid_(wgts: ArrayLike<unknown>[]): void {
 		var wgt = this;
 		zAu.createWidgets(wgts, function (ws) {
 			wgt.replaceCavedChildren_('', ws);

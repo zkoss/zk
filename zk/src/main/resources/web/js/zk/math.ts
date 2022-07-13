@@ -18,14 +18,14 @@ import {default as zk} from './zk';
  * @disable(zkgwt)
  */
 export class BigDecimal extends zk.Object {
-	private _precision = 0;
-	declare private _negative?: boolean;
-	declare private _dot?: boolean;
-	declare private _value: string;
+	_precision = 0;
+	declare _negative?: boolean;
+	declare _dot?: boolean;
+	declare _value: string;
 	/** Constructor.
 	 * @param Object value a number or a string
 	 */
-	public constructor(value: number | string) {
+	constructor(value: number | string) {
 		super();
 		value = value ? '' + value : '0';
 		var jdot = -1;
@@ -56,16 +56,16 @@ export class BigDecimal extends zk.Object {
 	 * <p>Default: 0
 	 * @return int
 	 */
-	public getPrecision(): number {
+	getPrecision(): number {
 		return this._precision;
 	}
 	/** Sets the precision
 	 * @param int precision the precision
 	 */
-	public setPrecision(precision: number): void {
+	setPrecision(precision: number): void {
 		this._precision = precision;
 	}
-	public $toNumber(): number {
+	$toNumber(): number {
 		var v = parseFloat(this._value), p;
 		if (this._negative)
 			v *= -1;
@@ -78,7 +78,7 @@ export class BigDecimal extends zk.Object {
 	 * instead.
 	 * @return String
 	 */
-	public $toString(): string { //toString is reserved keyword for IE
+	$toString(): string { //toString is reserved keyword for IE
 		if (this._value.length == 0) return '';
 		var j = this._value.length - this._precision,
 			valFixed = '';
@@ -90,7 +90,7 @@ export class BigDecimal extends zk.Object {
 	/** Returns a Locale-dependent string for this big decimal(for human's eye).
 	 * @return String
 	 */
-	public $toLocaleString(): string { //toLocaleString is reserved keyword for IE
+	$toLocaleString(): string { //toLocaleString is reserved keyword for IE
 		if (this._value.length == 0) return '';
 		var j = this._value.length - this._precision;
 		if (j <= 0) {
@@ -107,11 +107,11 @@ export class BigDecimal extends zk.Object {
  * @disable(zkgwt)
  */
 export class Long extends zk.Object {
-	declare private _value: string;
+	declare _value: string;
 	/** Constructor.
 	 * @param Object value a number or a string
 	 */
-	public constructor(value: number | string) {
+	constructor(value: number | string) {
 		super();
 	//Note: it shall work like parseInt:
 	//1) consider '.' rather than zkDecimal
@@ -137,7 +137,7 @@ export class Long extends zk.Object {
 	 * If zero, nothing changed.
 	 * @since 5.0.10.
 	 */
-	public scale(digits: number): void {
+	scale(digits: number): void {
 		var val = this._value || '',
 			n = val.length;
 		if (n)
@@ -148,7 +148,7 @@ export class Long extends zk.Object {
 			} else if (digits < 0)
 				this._value = (n += digits) <= 0 ? '0' : val.substring(0, n);
 	}
-	public $toNumber(): number {
+	$toNumber(): number {
 		return parseFloat(this._value);
 	}
 	/** Returns a string for this long integer
@@ -156,11 +156,11 @@ export class Long extends zk.Object {
 	 * instead.
 	 * @return String
 	 */
-	public $toString(): string { //toString is reserved keyword for IE
+	$toString(): string { //toString is reserved keyword for IE
 		return this._value;
 	}
 	/** Returns a Locale-dependent string for this long integer.
 	 * @return String
 	 */
-	public $toLocaleString = Long.prototype.$toString;
+	$toLocaleString = Long.prototype.$toString;
 }

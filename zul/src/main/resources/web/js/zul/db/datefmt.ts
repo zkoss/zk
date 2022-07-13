@@ -108,74 +108,74 @@ function dayOfWeekInMonth(d: DateImpl): string {
 // a proxy of Date object for leap day on Thai locale - B60-ZK-1010
 @zk.WrapClass('zul.fmt.LeapDay')
 class LeapDay extends zk.Object {
-	private _date: DateImpl;
-	private _offset?: number;
+	_date: DateImpl;
+	_offset?: number;
 
-	public constructor(date: DateImpl)
-	public constructor(y: number, m: number, d: number, hr: number, min: number, sec: number, msec: number, tz?: string)
-	public constructor(y: DateImpl | number, m?, d?, hr?, min?, sec?, msec?, tz?: string) {
+	constructor(date: DateImpl)
+	constructor(y: number, m: number, d: number, hr: number, min: number, sec: number, msec: number, tz?: string)
+	constructor(y: DateImpl | number, m?, d?, hr?, min?, sec?, msec?, tz?: string) {
 		super();
 		if (arguments.length > 1) {
 			this._date = Dates.newInstance([y as number, m, d, hr, min, sec, msec], tz);
 		} else
 			this._date = y as DateImpl;
 	}
-	public setOffset(v: number): void {
+	setOffset(v: number): void {
 		this._offset = v;
 	}
-	public setFullYear(val: number): void {
+	setFullYear(val: number): void {
 		// no need to subtract the._offset, the caller will handle
 		this._date.setFullYear(val);
 	}
-	public getFullYear(): number {
+	getFullYear(): number {
 		return this._date.getFullYear() + (this._offset || 0);
 	}
-	public getDate(): number {
+	getDate(): number {
 		return this._date.getDate();
 	}
-	public setDate(d: number): void {
+	setDate(d: number): void {
 		this._date.setDate(d);
 	}
-	public getDay(): number {
+	getDay(): number {
 		return this._date.getDay();
 	}
-	public getMonth(): number {
+	getMonth(): number {
 		return this._date.getMonth();
 	}
-	public setMonth(month: number): void {
+	setMonth(month: number): void {
 		this._date.setMonth(month);
 	}
-	public getHours(): number {
+	getHours(): number {
 		return this._date.getHours();
 	}
-	public setHours(h: number): void {
+	setHours(h: number): void {
 		this._date.setHours(h);
 	}
-	public getMinutes(): number {
+	getMinutes(): number {
 		return this._date.getMinutes();
 	}
-	public setMinutes(min: number): void {
+	setMinutes(min: number): void {
 		this._date.setMinutes(min);
 	}
-	public getSeconds(): number {
+	getSeconds(): number {
 		return this._date.getSeconds();
 	}
-	public setSeconds(s: number): void {
+	setSeconds(s: number): void {
 		this._date.setSeconds(s);
 	}
-	public getMilliseconds(): number {
+	getMilliseconds(): number {
 		return this._date.getMilliseconds();
 	}
-	public setMilliseconds(m: number): void {
+	setMilliseconds(m: number): void {
 		this._date.setMilliseconds(m);
 	}
-	public getTimezoneOffset(): number {
+	getTimezoneOffset(): number {
 		return this._date.getTimezoneOffset();
 	}
-	public getRealDate(): DateImpl {
+	getRealDate(): DateImpl {
 		return this._date;
 	}
-	public getTimeZone(): string {
+	getTimeZone(): string {
 		return this._date.getTimeZone();
 	}
 }
@@ -619,10 +619,10 @@ zk.fmt.Date = DateFmt;
  */
 @zk.WrapClass('zk.fmt.Calendar')
 export class Calendar extends zk.Object {
-	private _offset = zk.YDELTA;
-	private _date?: DateImpl | null;
+	_offset = zk.YDELTA;
+	_date?: DateImpl | null;
 
-	public constructor(date?: DateImpl | null, localizedSymbols?: zk.LocalizedSymbols) {
+	constructor(date?: DateImpl | null, localizedSymbols?: zk.LocalizedSymbols) {
 		super();
 		this._date = date;
 		if (localizedSymbols) {
@@ -631,23 +631,23 @@ export class Calendar extends zk.Object {
 		}
 	}
 
-	public getTime(): DateImpl | null | undefined {
+	getTime(): DateImpl | null | undefined {
 		return this._date;
 	}
 
-	public setTime(date: DateImpl): void {
+	setTime(date: DateImpl): void {
 		this._date = date;
 	}
 
-	public setYearOffset(val: number): void {
+	setYearOffset(val: number): void {
 		this._offset = val;
 	}
 
-	public getYearOffset(): number {
+	getYearOffset(): number {
 		return this._offset;
 	}
 
-	public formatDate(val: DateImpl, fmt?: string, localizedSymbols?: zk.LocalizedSymbols): string {
+	formatDate(val: DateImpl, fmt?: string, localizedSymbols?: zk.LocalizedSymbols): string {
 		var d: LeapDay | undefined;
 		if (localizedSymbols) {
 			var localeDateTimeFormat = new Intl.DateTimeFormat(localizedSymbols.LAN_TAG, {year: 'numeric'});
@@ -663,7 +663,7 @@ export class Calendar extends zk.Object {
 		return zk.fmt.Date.formatDate((d as DateImpl | undefined) || val, fmt, localizedSymbols);
 	}
 
-	public toUTCDate(): DateImpl | null | undefined {
+	toUTCDate(): DateImpl | null | undefined {
 		if (LeapDay.isInstance(this._date))
 		return this._date.getRealDate();
 		var d: DateImpl | null | undefined;
@@ -672,7 +672,7 @@ export class Calendar extends zk.Object {
 		return d;
 	}
 
-	public parseDate(
+	parseDate(
 		txt: string,
 		fmt: string,
 		strict?: boolean | null,
@@ -695,14 +695,14 @@ export class Calendar extends zk.Object {
 		return d;
 	}
 
-	public getYear(): number {
+	getYear(): number {
 		return this._date!.getFullYear();
 	}
 
 	// B70-ZK-2382: in Daylight Saving Time (DST), choose the last time at the end of this mechanism, it will display previous day.
 	// e.g. 2014/10/19 at Brasilia (UTC-03:00), it will show 2014/10/18 23:00:00
 	// so we need to increase a hour.
-	public escapeDSTConflict(val: DateImpl, tz?: string): DateImpl | undefined {
+	escapeDSTConflict(val: DateImpl, tz?: string): DateImpl | undefined {
 		if (!val) return;
 		var newVal = Dates.newInstance(val.getTime() + 3600000, tz); //plus 60*60*1000
 		return newVal.getHours() != ((val.getHours() + 1) % 24) ? newVal : val;

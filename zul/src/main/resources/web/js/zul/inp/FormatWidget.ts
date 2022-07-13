@@ -17,11 +17,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.inp.FormatWidget')
 export class FormatWidget<ValueType> extends zul.inp.InputWidget<ValueType> {
-	public _format?: string;
-	public _shortcut?: string | null;
+	_format?: string;
+	_shortcut?: string | null;
 
 	//zk.def
-	public setFormat(v: string, opts?: Record<string, boolean>): void {
+	setFormat(v: string, opts?: Record<string, boolean>): void {
 		const o = this._format;
 		this._format = v;
 
@@ -37,17 +37,17 @@ export class FormatWidget<ValueType> extends zul.inp.InputWidget<ValueType> {
 	 * <p>Default: null (used what is defined in the format sheet).
 	 * @return String
 	 */
-	public getFormat(): string | undefined {
+	getFormat(): string | undefined {
 		return this._format;
 	}
 
-	protected override doFocus_(evt: zk.Event): void {
+	override doFocus_(evt: zk.Event): void {
 		super.doFocus_(evt);
 		if (this._shortcut)
 			this.getInputNode()!.value = this._shortcut;
 	}
 
-	protected override updateChange_(clear?: boolean): boolean {
+	override updateChange_(clear?: boolean): boolean {
 		var upd = super.updateChange_();
 		if (clear)
 			delete this._shortcut;

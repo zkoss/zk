@@ -24,25 +24,25 @@ export interface SliderPosition {
  */
 @zk.WrapClass('zul.inp.Slider')
 export class Slider extends zul.Widget {
-	private _orient = 'horizontal';
-	private _curpos = 0;
-	private _minpos = 0;
-	private _maxpos = 100;
-	private _slidingtext = '{0}';
-	private _pageIncrement = -1;
-	private _step = -1;
-	private _mode = 'integer';
-	private _name?: string;
-	public efield?: HTMLInputElement | null;
-	public slidetip?: HTMLElement | null;
-	public static down_btn?: HTMLElement | null;
-	public slidepos?: number;
+	_orient = 'horizontal';
+	_curpos = 0;
+	_minpos = 0;
+	_maxpos = 100;
+	_slidingtext = '{0}';
+	_pageIncrement = -1;
+	_step = -1;
+	_mode = 'integer';
+	_name?: string;
+	efield?: HTMLInputElement | null;
+	slidetip?: HTMLElement | null;
+	static down_btn?: HTMLElement | null;
+	slidepos?: number;
 
 	/** Returns the orient.
 	 * <p>Default: "horizontal".
 	 * @return String
 	 */
-	public getOrient(): string {
+	getOrient(): string {
 		return this._orient;
 	}
 
@@ -50,7 +50,7 @@ export class Slider extends zul.Widget {
 	 * <p>Default : "horizontal"
 	 * @param String orient either "horizontal" or "vertical".
 	 */
-	public setOrient(orient: string, opts?: Record<string, boolean>): this {
+	setOrient(orient: string, opts?: Record<string, boolean>): this {
 		const o = this._orient;
 		this._orient = orient;
 
@@ -65,7 +65,7 @@ export class Slider extends zul.Widget {
 	 * <p>Default: 0.
 	 * @return double
 	 */
-	public getCurpos(): number {
+	getCurpos(): number {
 		return this._curpos;
 	}
 
@@ -74,7 +74,7 @@ export class Slider extends zul.Widget {
 	 * {@link #getMaxpos} is assumed.
 	 * @param double curpos
 	 */
-	public setCurpos(curpos: number, opts?: Record<string, boolean>): this {
+	setCurpos(curpos: number, opts?: Record<string, boolean>): this {
 		const o = this._curpos;
 		this._curpos = curpos;
 
@@ -91,14 +91,14 @@ export class Slider extends zul.Widget {
 	 * <p>Default: 0.
 	 * @return double (since 7.0.1)
 	 */
-	public getMinpos(): number {
+	getMinpos(): number {
 		return this._minpos;
 	}
 
 	/** Sets the minimum position of the slider.
 	 * @param double minpos (since 7.0.1)
 	 */
-	public setMinpos(minpos: number, opts?: Record<string, boolean>): this {
+	setMinpos(minpos: number, opts?: Record<string, boolean>): this {
 		const o = this._minpos;
 		this._minpos = minpos;
 
@@ -118,14 +118,14 @@ export class Slider extends zul.Widget {
 	 * <p>Default: 100.
 	 * @return double (since 7.0.1)
 	 */
-	public getMaxpos(): number {
+	getMaxpos(): number {
 		return this._maxpos;
 	}
 
 	/** Sets the maximum position of the slider.
 	 * @param double maxpos (since 7.0.1)
 	 */
-	public setMaxpos(maxpos: number, opts?: Record<string, boolean>): this {
+	setMaxpos(maxpos: number, opts?: Record<string, boolean>): this {
 		const o = this._maxpos;
 		this._maxpos = maxpos;
 
@@ -145,7 +145,7 @@ export class Slider extends zul.Widget {
 	 * <p>Default : "{0}"
 	 * @return String
 	 */
-	public getSlidingtext(): string | null {
+	getSlidingtext(): string | null {
 		return this._slidingtext;
 	}
 
@@ -153,7 +153,7 @@ export class Slider extends zul.Widget {
 	 * The syntax "{0}" will be replaced with the position at client side.
 	 * @param String slidingtext
 	 */
-	public setSlidingtext(slidingtext: string): this {
+	setSlidingtext(slidingtext: string): this {
 		this._slidingtext = slidingtext;
 		return this;
 	}
@@ -163,7 +163,7 @@ export class Slider extends zul.Widget {
 	 *
 	 * <p>Default: -1 (means it will scroll to the position the user clicks).
 	 */
-	public setPageIncrement(v: number): this {
+	setPageIncrement(v: number): this {
 		this._pageIncrement = v;
 		return this;
 	}
@@ -174,7 +174,7 @@ export class Slider extends zul.Widget {
 	 * @param double pginc the page increment. If negative, slider will scroll (since 7.0.1)
 	 * to the position that user clicks.
 	 */
-	public getPageIncrement(): number {
+	getPageIncrement(): number {
 		return this._pageIncrement;
 	}
 
@@ -182,7 +182,7 @@ export class Slider extends zul.Widget {
 	 * @return double
 	 * @since 7.0.1
 	 */
-	public getStep(): number {
+	getStep(): number {
 		return this._step;
 	}
 
@@ -192,7 +192,7 @@ export class Slider extends zul.Widget {
 	 * @param double step
 	 * @since 7.0.1
 	 */
-	public setStep(step: number, opts?: Record<string, boolean>): this {
+	setStep(step: number, opts?: Record<string, boolean>): this {
 		const o = this._step;
 		this._step = step;
 
@@ -213,7 +213,7 @@ export class Slider extends zul.Widget {
 	 * on ZK's event-driven model.
 	 * @return String
 	 */
-	public getName(): string | undefined {
+	getName(): string | undefined {
 		return this._name;
 	}
 
@@ -227,7 +227,7 @@ export class Slider extends zul.Widget {
 	 *
 	 * @param String name the name of this component.
 	 */
-	public setName(name: string, opts?: Record<string, boolean>): this {
+	setName(name: string, opts?: Record<string, boolean>): this {
 		const o = this._name;
 		this._name = name;
 
@@ -245,7 +245,7 @@ export class Slider extends zul.Widget {
 	 * @return String
 	 * @since 7.0.1
 	 */
-	public getMode(): string {
+	getMode(): string {
 		return this._mode;
 	}
 
@@ -255,7 +255,7 @@ export class Slider extends zul.Widget {
 	 * "integer", "decimal".
 	 * @since 7.0.1
 	 */
-	public setMode(name: string, opts?: Record<string, boolean>): this {
+	setMode(name: string, opts?: Record<string, boolean>): this {
 		const o = this._mode;
 		this._mode = name;
 
@@ -269,21 +269,21 @@ export class Slider extends zul.Widget {
 		return this;
 	}
 
-	public override setWidth(w: string | null): void {
+	override setWidth(w: string | null): void {
 		super.setWidth(w);
 		if (this.desktop && this._mold != 'knob') {
 			this.onSize();
 		}
 	}
 
-	public override setHeight(h: string | null): void {
+	override setHeight(h: string | null): void {
 		super.setHeight(h);
 		if (this.desktop && this._mold != 'knob') {
 			this.onSize();
 		}
 	}
 
-	protected override domClass_(no?: zk.DomClassOptions): string {
+	override domClass_(no?: zk.DomClassOptions): string {
 		var scls = super.domClass_(no);
 		if (this._mold == 'knob')
 			return scls;
@@ -301,7 +301,7 @@ export class Slider extends zul.Widget {
 		return scls;
 	}
 
-	protected onup_(evt: zk.Event): void {
+	onup_(evt: zk.Event): void {
 		var btn = zul.inp.Slider.down_btn,
 			widget: Slider | null | undefined;
 		if (btn) {
@@ -313,7 +313,7 @@ export class Slider extends zul.Widget {
 			jq(document).off('zmouseup', widget.onup_);
 	}
 
-	protected override doMouseDown_(evt: zk.Event): void {
+	override doMouseDown_(evt: zk.Event): void {
 		if (this._mold == 'knob') {
 			super.doMouseDown_(evt);
 			return;
@@ -323,7 +323,7 @@ export class Slider extends zul.Widget {
 		super.doMouseDown_(evt);
 	}
 
-	public override doClick_(evt: zk.Event, popupOnly?: boolean): void {
+	override doClick_(evt: zk.Event, popupOnly?: boolean): void {
 		if (this._mold == 'knob') {
 			super.doClick_(evt, popupOnly);
 			return;
@@ -378,7 +378,7 @@ export class Slider extends zul.Widget {
 		super.doClick_(evt, popupOnly);
 	}
 
-	private _makeDraggable(): void {
+	_makeDraggable(): void {
 		var opt: Partial<zk.DraggableOptions> = {
 			constraint: this._orient || 'horizontal',
 			starteffect: this._startDrag,
@@ -390,7 +390,7 @@ export class Slider extends zul.Widget {
 		this._drag = new zk.Draggable(this, this.$n_('btn'), opt);
 	}
 
-	private _snap(x: number, y: number): zk.Offset {
+	_snap(x: number, y: number): zk.Offset {
 		var btn = this.$n('btn'), ofs = zk(this.$n()).cmOffset();
 		ofs = zk(btn).toStyleOffset(ofs[0], ofs[1]);
 		if (x <= ofs[0]) {
@@ -410,7 +410,7 @@ export class Slider extends zul.Widget {
 		return [x, y];
 	}
 
-	private _startDrag(dg: zk.Draggable): void {
+	_startDrag(dg: zk.Draggable): void {
 		var widget = dg.control as Slider,
 			sclass = widget.getSclass();
 		widget.$n_('btn').title = ''; //to avoid annoying effect
@@ -433,7 +433,7 @@ export class Slider extends zul.Widget {
 		}
 	}
 
-	private _dragging(dg: zk.Draggable): void {
+	_dragging(dg: zk.Draggable): void {
 		var widget = dg.control as Slider,
 			isDecimal = widget.isDecimal(),
 			pos = widget._realpos();
@@ -447,7 +447,7 @@ export class Slider extends zul.Widget {
 		widget._fixPos();
 	}
 
-	private _endDrag(dg: zk.Draggable): void {
+	_endDrag(dg: zk.Draggable): void {
 		var widget = dg.control as Slider,
 			pos = widget._constraintPos(widget._realpos());
 
@@ -458,7 +458,7 @@ export class Slider extends zul.Widget {
 		widget.slidetip = null;
 	}
 
-	private _realpos(dg?: zk.Draggable): number {
+	_realpos(dg?: zk.Draggable): number {
 		var btnofs = zk(this.$n('btn')).revisedOffset(),
 			refofs = zk(this.$n()).revisedOffset(),
 			maxpos = this._maxpos,
@@ -480,7 +480,7 @@ export class Slider extends zul.Widget {
 			return this._curpos = (pos > 0 ? pos : 0) + minpos;
 	}
 
-	private _constraintPos(pos: number): number {
+	_constraintPos(pos: number): number {
 		var step = Slider._getStep(this),
 			max = this._maxpos;
 
@@ -492,7 +492,7 @@ export class Slider extends zul.Widget {
 		return pos;
 	}
 
-	private _getSteppedPos(pos: number): number {
+	_getSteppedPos(pos: number): number {
 		var minpos = this._minpos,
 			step = Slider._getStep(this),
 			mul = 1,
@@ -507,15 +507,15 @@ export class Slider extends zul.Widget {
 		return (pos - rmdPos + Math.round((rmdPos) / step) * step) / mul + minpos;
 	}
 
-	private _getWidth(): number {
+	_getWidth(): number {
 		return this.$n_().clientWidth - this.$n_('btn').offsetWidth;
 	}
 
-	private _getHeight(): number {
+	_getHeight(): number {
 		return this.$n_().clientHeight - this.$n_('btn').offsetHeight;
 	}
 
-	private _getStepOffset(): zk.Offset {
+	_getStepOffset(): zk.Offset {
 		var totalLen = this.isVertical() ? this._getHeight() : this._getWidth(),
 			step = Slider._getStep(this),
 			ofs: zk.Offset = [0, 0];
@@ -524,7 +524,7 @@ export class Slider extends zul.Widget {
 		return ofs;
 	}
 
-	private _fixSize(): void {
+	_fixSize(): void {
 		var n = this.$n_(),
 			btn = this.$n_('btn'),
 			inners = this.$n_('inner').style;
@@ -539,7 +539,7 @@ export class Slider extends zul.Widget {
 		}
 	}
 
-	private _fixPos(): void {
+	_fixPos(): void {
 		var btn = this.$n_('btn'),
 			vert = this.isVertical(),
 			newPos = jq.px0(Slider._getBtnNewPos(this));
@@ -549,7 +549,7 @@ export class Slider extends zul.Widget {
 			zk(this.slidetip).position(btn, vert ? 'end_before' : 'before_start');
 	}
 
-	private _fixStep(): void {
+	_fixStep(): void {
 		var step = Slider._getStep(this);
 		if (this._drag) {
 			if (step <= 0) {
@@ -560,7 +560,7 @@ export class Slider extends zul.Widget {
 		}
 	}
 
-	public override onSize(): void {
+	override onSize(): void {
 		this._fixSize();
 		this._fixPos();
 	}
@@ -568,21 +568,21 @@ export class Slider extends zul.Widget {
 	/** Return whether this widget in scale mold
 	 * @return boolean
 	 */
-	public inScaleMold(): boolean {
+	inScaleMold(): boolean {
 		return this.getMold() == 'scale';
 	}
 
 	/** Return whether this widget in sphere mold
 	 * @return boolean
 	 */
-	public inSphereMold(): boolean {
+	inSphereMold(): boolean {
 		return this.getMold() == 'sphere';
 	}
 
 	/** Returns whether it is a vertical slider.
 	 * @return boolean
 	 */
-	public isVertical(): boolean {
+	isVertical(): boolean {
 		return 'vertical' == this._orient;
 	}
 
@@ -590,11 +590,11 @@ export class Slider extends zul.Widget {
 	 * @return boolean
 	 * @since 7.0.1
 	 */
-	public isDecimal(): boolean {
+	isDecimal(): boolean {
 		return 'decimal' == this._mode;
 	}
 
-	public updateFormData(val: number): void {
+	updateFormData(val: number): void {
 		if (this._name) {
 			val = val || 0;
 			if (!this.efield)
@@ -604,7 +604,7 @@ export class Slider extends zul.Widget {
 		}
 	}
 
-	public onShow(): void {
+	onShow(): void {
 		//B70-ZK-2438
 		//retrieve snap again for whom is inside detail component
 		if (!this._drag) {
@@ -612,14 +612,14 @@ export class Slider extends zul.Widget {
 		}
 	}
 
-	public override setFlexSize_(sz: zk.FlexSize, isFlexMin?: boolean): void {
+	override setFlexSize_(sz: zk.FlexSize, isFlexMin?: boolean): void {
 		super.setFlexSize_(sz, isFlexMin);
 		if (this._mold != 'knob') {
 			this.onSize();
 		}
 	}
 
-	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		if (this._mold == 'knob')
 			return;
@@ -637,7 +637,7 @@ export class Slider extends zul.Widget {
 		this._fixPos();
 	}
 
-	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		if (this._mold == 'knob') {
 			super.unbind_(skipper, after, keepRod);
 			return;
@@ -656,18 +656,18 @@ export class Slider extends zul.Widget {
 		super.unbind_(skipper, after, keepRod);
 	}
 
-	private static _digitsAfterDecimal(v: number): number {
+	static _digitsAfterDecimal(v: number): number {
 		var vs = '' + v,
 			i = vs.indexOf('.');
 		return i < 0 ? 0 : vs.length - i - 1;
 	}
 
-	private static _roundDecimal(v: number, p: number): number {
+	static _roundDecimal(v: number, p: number): number {
 		var mul = Math.pow(10, p);
 		return Math.round(v * mul) / mul;
 	}
 
-	private static _getBtnNewPos(wgt: Slider): number {
+	static _getBtnNewPos(wgt: Slider): number {
 		var btn = wgt.$n_('btn'),
 			curpos = wgt._curpos,
 			isDecimal = wgt.isDecimal();
@@ -689,7 +689,7 @@ export class Slider extends zul.Widget {
 		return ofs[(isVertical ? 1 : 0)];
 	}
 
-	private static _getNextPos(wgt: Slider, offset: number | null): SliderPosition {
+	static _getNextPos(wgt: Slider, offset: number | null): SliderPosition {
 		var $btn = jq(wgt.$n_('btn')),
 			fum = wgt.isVertical() ? ['top', 'height'] as const : ['left', 'width'] as const,
 			newPosition: SliderPosition = {};
@@ -701,7 +701,7 @@ export class Slider extends zul.Widget {
 		return newPosition;
 	}
 
-	private static _getStep(wgt: Slider): number {
+	static _getStep(wgt: Slider): number {
 		var step = wgt._step;
 		return (!wgt.isDecimal() || step != -1) ? step : 0.1;
 	}

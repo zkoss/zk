@@ -20,18 +20,18 @@ it will be useful, but WITHOUT ANY WARRANTY.
 // @ts-ignore
 @zk.WrapClass('zul.mesh.ColumnMenuWidget')
 export abstract class ColumnMenuWidget extends zul.mesh.HeadWidget {
-	public override _menupopup = 'none';
-	private _columnshide = true;
-	private _columnsgroup = true;
-	public override _mpop?: zul.mesh.ColumnMenupopup | null;
-	private _shallColMenu?: boolean | null;
-	private _mref?: zul.mesh.HeaderWidget;
+	override _menupopup = 'none';
+	_columnshide = true;
+	_columnsgroup = true;
+	override _mpop?: zul.mesh.ColumnMenupopup | null;
+	_shallColMenu?: boolean | null;
+	_mref?: zul.mesh.HeaderWidget;
 
 	/** Returns whether to enable hiding of the widget with the header context menu.
 	 * <p>Default: true.
 	 * @return boolean
 	 */
-	public isColumnshide(): boolean {
+	isColumnshide(): boolean {
 		return this._columnshide;
 	}
 
@@ -39,7 +39,7 @@ export abstract class ColumnMenuWidget extends zul.mesh.HeadWidget {
 	 * <p>Note that it is only applied when {@link #getMenupopup()} is auto.
 	 * @param boolean columnshide
 	 */
-	public setColumnshide(columnshide: boolean, opts?: Record<string, boolean>): this {
+	setColumnshide(columnshide: boolean, opts?: Record<string, boolean>): this {
 		const o = this._columnshide;
 		this._columnshide = columnshide;
 
@@ -55,7 +55,7 @@ export abstract class ColumnMenuWidget extends zul.mesh.HeadWidget {
 	 * <p>Default: true.
 	 * @return boolean
 	 */
-	public isColumnsgroup(): boolean {
+	isColumnsgroup(): boolean {
 		return this._columnsgroup;
 	}
 
@@ -63,7 +63,7 @@ export abstract class ColumnMenuWidget extends zul.mesh.HeadWidget {
 	 * <p>Note that it is only applied when {@link #getMenupopup()} is auto.
 	 * @param boolean columnsgroup
 	 */
-	public setColumnsgroup(columnsgroup: boolean, opts?: Record<string, boolean>): this {
+	setColumnsgroup(columnsgroup: boolean, opts?: Record<string, boolean>): this {
 		const o = this._columnsgroup;
 		this._columnsgroup = columnsgroup;
 
@@ -81,7 +81,7 @@ export abstract class ColumnMenuWidget extends zul.mesh.HeadWidget {
 	 * <p>Default: none (a default menupoppup).
 	 * @return String
 	 */
-	public getMenupopup(): string {
+	getMenupopup(): string {
 		return this._menupopup;
 	}
 
@@ -109,7 +109,7 @@ export abstract class ColumnMenuWidget extends zul.mesh.HeadWidget {
 	 *  created automatically and keep the menupopup open after setting column visibility.
 	 * @see #setMenupopup(String)
 	 */
-	public setMenupopup(mpop: string, opts?: Record<string, boolean>): this {
+	setMenupopup(mpop: string, opts?: Record<string, boolean>): this {
 		const o = this._menupopup;
 		this._menupopup = mpop;
 
@@ -122,7 +122,7 @@ export abstract class ColumnMenuWidget extends zul.mesh.HeadWidget {
 		return this;
 	}
 
-	protected override bind_(desktop: zk.Desktop | null | undefined, skipper: zk.Skipper | null | undefined, after: CallableFunction[]): void {
+	override bind_(desktop: zk.Desktop | null | undefined, skipper: zk.Skipper | null | undefined, after: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		zWatch.listen({onResponse: this});
 		var w = this;
@@ -133,7 +133,7 @@ export abstract class ColumnMenuWidget extends zul.mesh.HeadWidget {
 		}
 	}
 
-	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		zWatch.unlisten({onResponse: this});
 		if (this._mpop) {
 			if (this._menupopup != 'auto-keep')
@@ -143,16 +143,16 @@ export abstract class ColumnMenuWidget extends zul.mesh.HeadWidget {
 		super.unbind_(skipper, after, keepRod);
 	}
 
-	public onResponse(): void {
+	onResponse(): void {
 		if (this._shallColMenu)
 			this.syncColMenu();
 	}
 
-	public _syncColMenu(): void {
+	_syncColMenu(): void {
 		this._shallColMenu = true;
 	}
 
-	private _initColMenu(): void {
+	_initColMenu(): void {
 		if (this._mpop)
 			this._mpop.parent!.removeChild(this._mpop);
 		this._mpop = new zul.mesh.ColumnMenupopup({columns: this});
@@ -166,13 +166,13 @@ export abstract class ColumnMenuWidget extends zul.mesh.HeadWidget {
 	 * You have to invoke this method only if you create this widget
 	 * at client and change the content of the column's menu.
 	 */
-	public syncColMenu(): void {
+	syncColMenu(): void {
 		this._shallColMenu = false;
 		if (this._mpop) //it shall do even if !this.desktop
 			this._mpop.syncColMenu();
 	}
 
-	public _onColVisi(evt: zk.Event): void {
+	_onColVisi(evt: zk.Event): void {
 		var item = evt.currentTarget as zul.menu.Menuitem,
 			pp = item.parent!;
 
@@ -195,7 +195,7 @@ export abstract class ColumnMenuWidget extends zul.mesh.HeadWidget {
 		}
 	}
 
-	public _onGroup(evt: zk.Event): void {
+	_onGroup(evt: zk.Event): void {
 		var ungroup: zul.menu.Menuitem | undefined;
 		if ((ungroup = (evt.target!.parent as zul.mesh.ColumnMenupopup)._ungroup))
 			ungroup.setVisible(true);
@@ -203,19 +203,19 @@ export abstract class ColumnMenuWidget extends zul.mesh.HeadWidget {
 		this._mref!.fire('onGroup', 'ascending' != this._mref!.getSortDirection(), {toServer: true});
 	}
 
-	public _onUngroup(evt: zk.Event): void {
+	_onUngroup(evt: zk.Event): void {
 		// Empty on purpose. To be overriden.
 	}
 
-	public _onAsc(evt: zk.Event): void {
+	_onAsc(evt: zk.Event): void {
 		this._mref!.fire('onSort', true); // B50-ZK-266, always fire
 	}
 
-	public _onDesc(evt: zk.Event): void {
+	_onDesc(evt: zk.Event): void {
 		this._mref!.fire('onSort', false); // B50-ZK-266, always fire
 	}
 
-	public _onMenuPopup(evt: zk.Event): void {
+	_onMenuPopup(evt: zk.Event): void {
 		var mref = this._mref;
 		if (mref)
 			jq(mref.$n_()).removeClass(mref.$s('visited')).removeClass(mref.$s('hover'));
@@ -223,24 +223,24 @@ export abstract class ColumnMenuWidget extends zul.mesh.HeadWidget {
 		this._mref = (evt.data as {reference: zul.mesh.HeaderWidget}).reference;
 	}
 
-	protected override onChildAdded_(child: zul.mesh.HeaderWidget): void {
+	override onChildAdded_(child: zul.mesh.HeaderWidget): void {
 		super.onChildAdded_(child);
 		this._syncColMenu();
 		this.getMeshWidget()?._syncEmpty();
 	}
 
-	protected override onChildRemoved_(child: zul.mesh.HeaderWidget): void {
+	override onChildRemoved_(child: zul.mesh.HeaderWidget): void {
 		super.onChildRemoved_(child);
 		if (!this.childReplacing_)
 			this._syncColMenu();
 		this.getMeshWidget()?._syncEmpty();
 	}
 
-	public getGroupPackage_(): string { // FIXME: orignally, `zk.$void`
+	getGroupPackage_(): string { // FIXME: orignally, `zk.$void`
 		return '';
 	}
 
-	protected override domClass_(no?: zk.DomClassOptions): string {
+	override domClass_(no?: zk.DomClassOptions): string {
 		var cls = '';
 		if (this._menupopup != 'none')
 			cls += this.$s('menupopup') + ' ';
@@ -254,28 +254,28 @@ export abstract class ColumnMenuWidget extends zul.mesh.HeadWidget {
  */
 @zk.WrapClass('zul.mesh.ColumnMenupopup')
 export class ColumnMenupopup extends zul.menu.Menupopup {
-	private _columns?: zul.mesh.ColumnMenuWidget;
-	private _asc?: zul.menu.Menuitem;
-	private _desc?: zul.menu.Menuitem;
-	private _group?: zul.menu.Menuitem;
-	public _ungroup?: zul.menu.Menuitem;
+	_columns?: zul.mesh.ColumnMenuWidget;
+	_asc?: zul.menu.Menuitem;
+	_desc?: zul.menu.Menuitem;
+	_group?: zul.menu.Menuitem;
+	_ungroup?: zul.menu.Menuitem;
 
-	public getColumns(): zul.mesh.ColumnMenuWidget | undefined {
+	getColumns(): zul.mesh.ColumnMenuWidget | undefined {
 		return this._columns;
 	}
 
-	public setColumns(v: zul.mesh.ColumnMenuWidget): this {
+	setColumns(v: zul.mesh.ColumnMenuWidget): this {
 		this._columns = v;
 		return this;
 	}
 
 	/** Constructor
 	 */
-	public constructor(opts: {columns: zul.mesh.ColumnMenuWidget}) {
+	constructor(opts: {columns: zul.mesh.ColumnMenuWidget}) {
 		super(opts);
 	}
 
-	public override afterCreated_(opts: {columns: zul.mesh.ColumnMenuWidget}): void {
+	override afterCreated_(opts: {columns: zul.mesh.ColumnMenuWidget}): void {
 		super.afterCreated_(opts);
 		this._init();
 	}
@@ -283,29 +283,29 @@ export class ColumnMenupopup extends zul.menu.Menupopup {
 	/** Returns the  menuitem with ascending label
 	 * @return zul.menu.Menuitem
 	 */
-	public getAscitem(): zul.menu.Menuitem | undefined {
+	getAscitem(): zul.menu.Menuitem | undefined {
 		return this._asc;
 	}
 
 	/** Returns the  menuitem with descending label
 	 * @return zul.menu.Menuitem
 	 */
-	public getDescitem(): zul.menu.Menuitem | undefined {
+	getDescitem(): zul.menu.Menuitem | undefined {
 		return this._desc;
 	}
 
 	/** Returns the  menuitem with group label
 	 * @return zul.menu.Menuitem
 	 */
-	public getGroupitem(): zul.menu.Menuitem | undefined {
+	getGroupitem(): zul.menu.Menuitem | undefined {
 		return this._group;
 	}
 
-	public getUngroupitem(): zul.menu.Menuitem | null {
+	getUngroupitem(): zul.menu.Menuitem | null {
 		return null;
 	}
 
-	private _init(): void {
+	_init(): void {
 		var w = this._columns!;
 
 		this.listen({onOpen: [w, w._onMenuPopup]});
@@ -347,7 +347,7 @@ export class ColumnMenupopup extends zul.menu.Menupopup {
 
 	/** Synchronizes the menu
 	 */
-	public syncColMenu(): void {
+	syncColMenu(): void {
 		var w = this._columns;
 		for (var c = this.lastChild, p: zul.menu.Menuitem | null; c != this._desc;) {
 			p = c!.previousSibling;

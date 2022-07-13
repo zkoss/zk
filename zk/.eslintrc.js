@@ -187,7 +187,6 @@ module.exports = {
             "allowHigherOrderFunctions": true
           }
         ],
-        "@typescript-eslint/explicit-member-accessibility": "error",
         "@typescript-eslint/member-delimiter-style": "error",
         "@typescript-eslint/naming-convention": [
           "error",
@@ -265,7 +264,6 @@ module.exports = {
         // "@typescript-eslint/explicit-module-boundary-types": "error" // TODO
         // "import/prefer-default-export": "off",
         // "@typescript-eslint/explicit-function-return-type": "error",
-        // "@typescript-eslint/explicit-member-accessibility": "error"
       }
     }
   ]

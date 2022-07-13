@@ -39,16 +39,16 @@ export interface NotificationOptions {
  */
 @zk.WrapClass('zul.wgt.Notification')
 export class Notification extends zul.wgt.Popup {
-	protected override _keepVisible = true;
-	private _closable?: boolean;
-	private _dur?: number;
-	private _nftPos?: string;
-	private _dir?: keyof typeof _dirMap | 'n';
-	private _ref?: zk.Widget;
-	private _msg: string;
-	private _type: NotificationOptions['type'];
+	override _keepVisible = true;
+	_closable?: boolean;
+	_dur?: number;
+	_nftPos?: string;
+	_dir?: keyof typeof _dirMap | 'n';
+	_ref?: zk.Widget;
+	_msg: string;
+	_type: NotificationOptions['type'];
 
-	public constructor(msg: string, opts: NotificationOptions) {
+	constructor(msg: string, opts: NotificationOptions) {
 		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-ignore
 		super(msg, opts); // FIXME: doesn't match zk.Widget.prototype.constructor
@@ -59,7 +59,7 @@ export class Notification extends zul.wgt.Popup {
 		this._closable = opts.closable;
 	}
 
-	public override redraw(out: string[]): void {
+	override redraw(out: string[]): void {
 		var uuid = this.uuid,
 			icon = this.$s('icon');
 		out.push('<div', this.domAttrs_(), '>');
@@ -74,7 +74,7 @@ export class Notification extends zul.wgt.Popup {
 		out.push('</div>'); // not encoded to support HTML
 	}
 
-	protected override domClass_(no?: zk.DomClassOptions): string {
+	override domClass_(no?: zk.DomClassOptions): string {
 		var type = this._type,
 			s = super.domClass_(no);
 		if (type)
@@ -82,7 +82,7 @@ export class Notification extends zul.wgt.Popup {
 		return s;
 	}
 
-	public override doClick_(evt: zk.Event, popupOnly?: boolean): void {
+	override doClick_(evt: zk.Event, popupOnly?: boolean): void {
 		var p = evt.domTarget;
 		if (p == this.$n('cls') || p == this.$n('clsIcon')) //may click on font-icon
 			this.close();
@@ -90,7 +90,7 @@ export class Notification extends zul.wgt.Popup {
 			super.doClick_(evt, popupOnly);
 	}
 
-	public override onFloatUp(ctl: zk.ZWatchController, opts: zk.FireOptions): void {
+	override onFloatUp(ctl: zk.ZWatchController, opts: zk.FireOptions): void {
 		if (opts && opts.triggerByFocus) //only mouse click should close notification
 			return;
 		if (!this.isVisible())
@@ -110,25 +110,25 @@ export class Notification extends zul.wgt.Popup {
 			this.close({sendOnOpen: true});
 	}
 
-	public override open(ref: zk.Widget, offset?: zk.Offset | null, position?: string | null, opts?: zul.wgt.PopupOptions | null): void {
+	override open(ref: zk.Widget, offset?: zk.Offset | null, position?: string | null, opts?: zul.wgt.PopupOptions | null): void {
 		super.open(ref, offset, position, opts);
 		this._fixarrow(ref); //ZK-1583: modify arrow position based on reference component
 		zk(this).redoCSS(-1, {'fixFontIcon': true});
 	}
 
-	public override position(ref: zk.Widget, offset?: zk.Offset | null, position?: string | null, opts?: zk.PositionOptions | null): void {
+	override position(ref: zk.Widget, offset?: zk.Offset | null, position?: string | null, opts?: zk.PositionOptions | null): void {
 		if (ref && !ref.$n())
 			return;
 		super.position(ref, offset, position, opts);
 		this._fixarrow(ref); //ZK-1583: modify arrow position based on reference component
 	}
 
-	protected override _posInfo(ref?: zul.wgt.Ref | null, offset?: zk.Offset | null, position?: string | null, opts?: zul.wgt.PopupOptions | null): zul.wgt.PositionInfo | undefined {
+	override _posInfo(ref?: zul.wgt.Ref | null, offset?: zk.Offset | null, position?: string | null, opts?: zul.wgt.PopupOptions | null): zul.wgt.PositionInfo | undefined {
 		this._fixPadding(position);
 		return super._posInfo(ref, offset, position, opts);
 	}
 
-	private _fixPadding(position: string | null | undefined): void {
+	_fixPadding(position: string | null | undefined): void {
 		var p = this.$n('p');
 		if (!p)
 			return;
@@ -184,7 +184,7 @@ export class Notification extends zul.wgt.Popup {
 		}
 	}
 
-	public _fixarrow(ref: zk.Widget): void {
+	_fixarrow(ref: zk.Widget): void {
 		var p = this.$n('p');
 		if (!p)
 			return;
@@ -227,21 +227,21 @@ export class Notification extends zul.wgt.Popup {
 		}
 	}
 
-	protected override openAnima_(ref?: zul.wgt.Ref | null, offset?: zk.Offset | null, position?: string | null, opts?: zul.wgt.PopupOptions | null): void {
+	override openAnima_(ref?: zul.wgt.Ref | null, offset?: zk.Offset | null, position?: string | null, opts?: zul.wgt.PopupOptions | null): void {
 		var self = this;
 		jq(this.$n()!).fadeIn(500, function () {
 			self.afterOpenAnima_(ref, offset, position, opts);
 		});
 	}
 
-	protected override closeAnima_(opts?: zul.wgt.PopupOptions): void {
+	override closeAnima_(opts?: zul.wgt.PopupOptions): void {
 		var self = this;
 		jq(this.$n()!).fadeOut(500, function () {
 			self.afterCloseAnima_(opts);
 		});
 	}
 
-	protected override afterCloseAnima_(opts?: zul.wgt.PopupOptions): void {
+	override afterCloseAnima_(opts?: zul.wgt.PopupOptions): void {
 		if (opts && opts.keepVisible) {
 			this.setVisible(false);
 			this.setFloating_(false);
@@ -252,11 +252,11 @@ export class Notification extends zul.wgt.Popup {
 		}
 	}
 
-	protected override getPositionArgs_(): zul.wgt.PositionArgs {
+	override getPositionArgs_(): zul.wgt.PositionArgs {
 		return [this._fakeParent, null, this._nftPos, null];
 	}
 
-	public override reposition(): void {
+	override reposition(): void {
 		super.reposition();
 		if (this._ref) this._fixarrow(this._ref);
 	}
@@ -265,7 +265,7 @@ export class Notification extends zul.wgt.Popup {
 	 * Shows a notification.
 	 * TODO
 	 */
-	public static show(msg: string, pid: string, opts: NotificationOptions): void {
+	static show(msg: string, pid: string, opts: NotificationOptions): void {
 		if (!opts)
 			opts = {};
 		var ref = opts.ref,

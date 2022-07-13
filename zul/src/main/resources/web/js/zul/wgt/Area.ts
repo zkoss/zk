@@ -17,14 +17,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.wgt.Area')
 export class Area extends zk.Widget<HTMLAreaElement> {
-	private _shape?: string;
-	private _coords?: string;
+	_shape?: string;
+	_coords?: string;
 
 	/** Returns the shape of this area.
 	 * <p>Default: null (means rectangle).
 	 * @return String
 	 */
-	public getShape(): string | undefined {
+	getShape(): string | undefined {
 		return this._shape;
 	}
 
@@ -33,7 +33,7 @@ export class Area extends zk.Widget<HTMLAreaElement> {
 	 * @param String shape the shape only allows one of
 	 * null, "rect", "rectangle", "circle", "circ", "ploygon", and "poly".
 	 */
-	public setShape(v: string, opts?: Record<string, boolean>): this {
+	setShape(v: string, opts?: Record<string, boolean>): this {
 		const o = this._shape;
 		this._shape = v;
 
@@ -49,7 +49,7 @@ export class Area extends zk.Widget<HTMLAreaElement> {
 	 * Returns the coordination of this area.
 	 * @return String
 	 */
-	public getCoords(): string | undefined {
+	getCoords(): string | undefined {
 		return this._coords;
 	}
 
@@ -69,7 +69,7 @@ export class Area extends zk.Widget<HTMLAreaElement> {
 	 * <p>Note: (0, 0) is the upper-left corner.
 	 * @param String coords
 	 */
-	public setCoords(v: string, opts?: Record<string, boolean>): this {
+	setCoords(v: string, opts?: Record<string, boolean>): this {
 		const o = this._coords;
 		this._coords = v;
 
@@ -82,7 +82,7 @@ export class Area extends zk.Widget<HTMLAreaElement> {
 		return this;
 	}
 
-	protected override doClick_(evt: zk.Event): void {
+	override doClick_(evt: zk.Event): void {
 		if (zul.wgt.Imagemap._toofast()) return;
 
 		var area = this.id || this.uuid;
@@ -90,7 +90,7 @@ export class Area extends zk.Widget<HTMLAreaElement> {
 		evt.stop();
 	}
 
-	public override domAttrs_(no?: zk.DomAttrsOptions): string {
+	override domAttrs_(no?: zk.DomAttrsOptions): string {
 		var attr = super.domAttrs_(no)
 			+ ' href="javascript:;"', v;
 		if (v = this._coords)

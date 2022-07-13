@@ -20,22 +20,22 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.sel.Listfoot')
 export class Listfoot extends zul.Widget {
-	public override parent!: zul.sel.Listbox | null;
+	override parent!: zul.sel.Listbox | null;
 	/** Returns the list box that it belongs to.
 	 * @return Listbox
 	 */
-	public getListbox(): zul.sel.Listbox | null {
+	getListbox(): zul.sel.Listbox | null {
 		return this.parent;
 	}
 
 	//bug #3014664
-	public override setVflex(v: boolean | string | null | undefined): void { //vflex ignored for Listfoot
+	override setVflex(v: boolean | string | null | undefined): void { //vflex ignored for Listfoot
 		v = false;
 		super.setVflex(v);
 	}
 
 	//bug #3014664
-	public override setHflex(v: boolean | string | null | undefined): void { //hflex ignored for Listfoot
+	override setHflex(v: boolean | string | null | undefined): void { //hflex ignored for Listfoot
 		v = false;
 		super.setHflex(v);
 	},
@@ -47,7 +47,7 @@ export class Listfoot extends zul.Widget {
 		return true;
 	}
 
-	protected override deferRedrawHTML_(out: string[]): void {
+	override deferRedrawHTML_(out: string[]): void {
 		out.push('<tr', this.domAttrs_({domClass: true}), ' class="z-renderdefer"></tr>');
 	}
 }

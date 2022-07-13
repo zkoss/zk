@@ -19,14 +19,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.wgt.Progressmeter')
 export class Progressmeter extends zul.Widget {
-	private _value = 0;
-	private _indeterminate = false;
-	private _indeterminateAnimation = false;
+	_value = 0;
+	_indeterminate = false;
+	_indeterminateAnimation = false;
 
 	/** Returns the current value of the progress meter.
 	 * @return int
 	 */
-	public getValue(): number {
+	getValue(): number {
 		return this._value;
 	}
 
@@ -34,7 +34,7 @@ export class Progressmeter extends zul.Widget {
 	 * <p>Range: 0~100.
 	 * @param int value
 	 */
-	public setValue(value: number, opts?: Record<string, boolean>): this {
+	setValue(value: number, opts?: Record<string, boolean>): this {
 		const o = this._value;
 		this._value = value;
 
@@ -49,14 +49,14 @@ export class Progressmeter extends zul.Widget {
 	/** Returns the indeterminate state of the progress meter.(default false)
 	 * @return boolean
 	 */
-	public isIndeterminate(): boolean {
+	isIndeterminate(): boolean {
 		return this._indeterminate;
 	}
 
 	/** Sets the indeterminate state of the progress meter.
 	 * @param boolean indeterminate
 	 */
-	public setIndeterminate(indeterminate: boolean, opts?: Record<string, boolean>): this {
+	setIndeterminate(indeterminate: boolean, opts?: Record<string, boolean>): this {
 		const o = this._indeterminate;
 		this._indeterminate = indeterminate;
 
@@ -70,7 +70,7 @@ export class Progressmeter extends zul.Widget {
 	}
 
 	//super//
-	private _fixImgWidth(): void {
+	_fixImgWidth(): void {
 		var n = this.$n(),
 			img = this.$n('img');
 		if (img) {
@@ -84,27 +84,27 @@ export class Progressmeter extends zul.Widget {
 		}
 	}
 
-	public override onSize(): void {
+	override onSize(): void {
 		this._fixImgWidth();
 	}
 
-	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {//after compose
+	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {//after compose
 		super.bind_(desktop, skipper, after);
 		this._fixImgWidth();
 		zWatch.listen({onSize: this});
 	}
 
-	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		zWatch.unlisten({onSize: this});
 		super.unbind_(skipper, after, keepRod);
 	}
 
-	public override setWidth(val: string | null): void {
+	override setWidth(val: string | null): void {
 		super.setWidth(val);
 		this._fixImgWidth();
 	}
 
-	protected override domClass_(no?: zk.DomClassOptions): string {
+	override domClass_(no?: zk.DomClassOptions): string {
 		var scls = super.domClass_(no);
 		if (!no || !no.zclass) {
 			if (this._indeterminate)

@@ -26,9 +26,9 @@ zk.load('zul.lang', function () {
  */
 @zk.WrapClass('zul.inp.NumberInputWidget')
 export class NumberInputWidget<ValueType> extends zul.inp.FormatWidget<ValueType> {
-	protected _rounding?: number;
-	public _localizedSymbols?: zk.LocalizedSymbols;
-	private _allowKeys?: string | null;
+	_rounding?: number;
+	_localizedSymbols?: zk.LocalizedSymbols;
+	_allowKeys?: string | null;
 
 	/** Returns the rounding mode.
 	 * <ul>
@@ -43,7 +43,7 @@ export class NumberInputWidget<ValueType> extends zul.inp.FormatWidget<ValueType
 	 * </ul>
 	 * @return int
 	 */
-	public getRounding(): number | undefined {
+	getRounding(): number | undefined {
 		return this._rounding;
 	}
 
@@ -60,16 +60,16 @@ export class NumberInputWidget<ValueType> extends zul.inp.FormatWidget<ValueType
 	 * </ul>
 	 * @param int rounding mode
 	 */
-	public setRounding(v: number): this {
+	setRounding(v: number): this {
 		this._rounding = v;
 		return this;
 	}
 
-	public getLocalizedSymbols(): zk.LocalizedSymbols | undefined {
+	getLocalizedSymbols(): zk.LocalizedSymbols | undefined {
 		return this._localizedSymbols;
 	}
 
-	public setLocalizedSymbols(val: string | undefined, opts?: Record<string, boolean>): this {
+	setLocalizedSymbols(val: string | undefined, opts?: Record<string, boolean>): this {
 		const o = this._localizedSymbols;
 
 		if (val) {
@@ -96,11 +96,11 @@ export class NumberInputWidget<ValueType> extends zul.inp.FormatWidget<ValueType
 	 * @return String
 	 * @since 5.0.8
 	 */
-	protected getAllowedKeys_(): string {
+	getAllowedKeys_(): string {
 		return this._allowKeys || _allowKeys;
 	}
 
-	protected override doKeyPress_(evt: zk.Event): void {
+	override doKeyPress_(evt: zk.Event): void {
 		//Bug ZK-1373: ALTGR + 3 key in Spanish keyboard is a combination of Ctrl + Alt + 3 for € sign.
 		if (evt.ctrlKey && evt.altKey)
 			evt.stop();
@@ -108,7 +108,7 @@ export class NumberInputWidget<ValueType> extends zul.inp.FormatWidget<ValueType
 			super.doKeyPress_(evt);
 	}
 
-	protected override doPaste_(evt: zk.Event): void {
+	override doPaste_(evt: zk.Event): void {
 		//Bug ZK-3838: add a paste event dealer
 		var inp = this.getInputNode(),
 			val = (evt.domEvent!.originalEvent as ClipboardEvent).clipboardData!.getData('text').trim();
@@ -118,11 +118,11 @@ export class NumberInputWidget<ValueType> extends zul.inp.FormatWidget<ValueType
 		super.doPaste_(evt);
 	}
 
-	public override getType(): string {
+	override getType(): string {
 		return this._type;
 	}
 
-	public override domAttrs_(no?: zk.DomAttrsOptions): string {
+	override domAttrs_(no?: zk.DomAttrsOptions): string {
 		var attr = super.domAttrs_(no);
 		if ((!no || !no.text) && zk.mobile)
 			attr += ' inputmode="decimal"';

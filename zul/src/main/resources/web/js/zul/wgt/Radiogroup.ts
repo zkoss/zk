@@ -91,13 +91,13 @@ function _redudant(group: zul.wgt.Radiogroup, radio: zul.wgt.Radio): boolean {
  */
 @zk.WrapClass('zul.wgt.Radiogroup')
 export class Radiogroup extends zul.Widget {
-	private _orient = 'horizontal';
-	private _jsel = -1;
-	private _name?: string;
-	private _disabled?: boolean;
-	public _externs: zul.wgt.Radio[];
+	_orient = 'horizontal';
+	_jsel = -1;
+	_name?: string;
+	_disabled?: boolean;
+	_externs: zul.wgt.Radio[];
 
-	public constructor() {
+	constructor() {
 		super(); // FIXME: params?
 		this._externs = [];
 	}
@@ -106,11 +106,11 @@ export class Radiogroup extends zul.Widget {
 	 * <p>Default: "horizontal".
 	 * @return String
 	 */
-	public getOrient(): string {
+	getOrient(): string {
 		return this._orient;
 	}
 
-	public setOrient(v: string, opts?: Record<string, boolean>): this {
+	setOrient(v: string, opts?: Record<string, boolean>): this {
 		const o = this._orient;
 		this._orient = v;
 
@@ -128,7 +128,7 @@ export class Radiogroup extends zul.Widget {
 	 * on ZK's event-driven model.
 	 * @return String
 	 */
-	public getName(): string | undefined {
+	getName(): string | undefined {
 		return this._name;
 	}
 
@@ -138,7 +138,7 @@ export class Radiogroup extends zul.Widget {
 	 * on ZK's event-driven model.
 	 * @param String name
 	 */
-	public setName(v: string, opts?: Record<string, boolean>): this {
+	setName(v: string, opts?: Record<string, boolean>): this {
 		const o = this._name;
 		this._name = v;
 
@@ -154,7 +154,7 @@ export class Radiogroup extends zul.Widget {
 	 * <p>Default: false.
 	 * @since 10.0.0
 	 */
-	public setDisabled(v: boolean, opts?: Record<string, boolean>): this {
+	setDisabled(v: boolean, opts?: Record<string, boolean>): this {
 		const o = this._disabled;
 		this._disabled = v;
 
@@ -173,7 +173,7 @@ export class Radiogroup extends zul.Widget {
 	 * <p>Default: false.
 	 * @since 10.0.0
 	 */
-	public isDisabled(): boolean | undefined {
+	isDisabled(): boolean | undefined {
 		return this._disabled;
 	}
 
@@ -181,28 +181,28 @@ export class Radiogroup extends zul.Widget {
 	 * @param int index
 	 * @return Radio
 	 */
-	public getItemAtIndex(index: number): zul.wgt.Radio | null | undefined {
+	getItemAtIndex(index: number): zul.wgt.Radio | null | undefined {
 		return index >= 0 ? _getAt(this, {value: 0}, index) : null;
 	}
 
 	/** Returns the number of radio buttons in this group.
 	 * @return int
 	 */
-	public getItemCount(): number {
+	getItemCount(): number {
 		return this.getItems().length;
 	}
 
 	/** Returns the all of radio buttons in this group.
 	 * @return Array
 	 */
-	public getItems(): zul.wgt.Radio[] {
+	getItems(): zul.wgt.Radio[] {
 		return _concatItem(this);
 	}
 
 	/** Returns the index of the selected radio button (-1 if no one is selected).
 	 * @return int
 	 */
-	public getSelectedIndex(): number {
+	getSelectedIndex(): number {
 		return this._jsel;
 	}
 
@@ -210,7 +210,7 @@ export class Radiogroup extends zul.Widget {
 	 * the radio button with the given index.
 	 * @param int selectedIndex
 	 */
-	public setSelectedIndex(jsel: number): void {
+	setSelectedIndex(jsel: number): void {
 		if (jsel < 0) jsel = -1;
 		if (this._jsel != jsel) {
 			this._jsel = jsel;
@@ -227,7 +227,7 @@ export class Radiogroup extends zul.Widget {
 	/** Returns the selected radio button.
 	 * @return Radio
 	 */
-	public getSelectedItem(): zul.wgt.Radio | null | undefined {
+	getSelectedItem(): zul.wgt.Radio | null | undefined {
 		return this._jsel >= 0 ? this.getItemAtIndex(this._jsel) : null;
 	}
 
@@ -235,14 +235,14 @@ export class Radiogroup extends zul.Widget {
 	 * the given radio button.
 	 * @param Radio selectedItem
 	 */
-	public setSelectedItem(item: zul.wgt.Radio | null): void {
+	setSelectedItem(item: zul.wgt.Radio | null): void {
 		if (item == null)
 			this.setSelectedIndex(-1);
 		else if (item instanceof zul.wgt.Radio)
 			item.setSelected(true);
 	}
 
-	public appendItem(label: string, value: string): zul.wgt.Radio {
+	appendItem(label: string, value: string): zul.wgt.Radio {
 		var item = new zul.wgt.Radio();
 		item.setLabel(label);
 		item.setValue(value);
@@ -255,7 +255,7 @@ export class Radiogroup extends zul.Widget {
 	 * @param int index
 	 * @return Radio the removed radio button.
 	 */
-	public removeItemAt(index: number): zul.wgt.Radio | null | undefined {
+	removeItemAt(index: number): zul.wgt.Radio | null | undefined {
 		var item = this.getItemAtIndex(index);
 		if (item && !this._rmExtern(item)) {
 			var p = item.parent;
@@ -264,12 +264,12 @@ export class Radiogroup extends zul.Widget {
 		return item;
 	}
 
-	/** private method */
-	public _fixSelectedIndex(): void {
+	/** method */
+	_fixSelectedIndex(): void {
 		this._jsel = _fixSelIndex(this, {value: 0});
 	}
 
-	public _fixOnAdd(child: zul.wgt.Radio): void {
+	_fixOnAdd(child: zul.wgt.Radio): void {
 		if (this._jsel >= 0 && child.isSelected()) {
 			child.setSelected(false); //it will call _fixSelectedIndex()
 		} else {
@@ -279,7 +279,7 @@ export class Radiogroup extends zul.Widget {
 		child.setDisabled(this.isDisabled());
 	}
 
-	public _fixOnRemove(child: zul.wgt.Radio): void {
+	_fixOnRemove(child: zul.wgt.Radio): void {
 		if (child.isSelected()) {
 			this._jsel = -1;
 		} else if (this._jsel > 0) { //excluding 0
@@ -287,13 +287,13 @@ export class Radiogroup extends zul.Widget {
 		}
 	}
 
-	public _addExtern(radio: zul.wgt.Radio): void {
+	_addExtern(radio: zul.wgt.Radio): void {
 		this._externs.push(radio);
 		if (!_redudant(this, radio))
 			this._fixOnAdd(radio);
 	}
 
-	public _rmExtern(radio: zul.wgt.Radio): boolean {
+	_rmExtern(radio: zul.wgt.Radio): boolean {
 		if (this._externs.$remove(radio)) {
 			if (!_redudant(this, radio))
 				this._fixOnRemove(radio);
@@ -303,7 +303,7 @@ export class Radiogroup extends zul.Widget {
 	}
 
 	// ZK-4989
-	protected override domClass_(no?: zk.DomClassOptions): string {
+	override domClass_(no?: zk.DomClassOptions): string {
 		var scls = super.domClass_(no);
 		if (!no || !no.zclass) {
 			let added = this.$s(this.getOrient());
@@ -312,17 +312,17 @@ export class Radiogroup extends zul.Widget {
 		return scls;
 	}
 
-	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		this.listen({onCheck: this});
 	}
 
-	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		this.unlisten({onCheck: this});
 		super.unbind_(skipper, after, keepRod);
 	}
 
-	public onCheck(evt: zk.Event): void {
+	onCheck(evt: zk.Event): void {
 		this._fixSelectedIndex();
 	}
 }

@@ -60,15 +60,15 @@ function _sort0(treechildren: zul.sel.Treechildren, col: number, dir: zul.mesh.S
  */
 @zk.WrapClass('zul.sel.Treecol')
 export class Treecol extends zul.mesh.SortWidget {
-	public override parent!: zul.sel.Treecols | null;
-	public override nextSibling!: zul.sel.Treecol | null;
-	public override previousSibling!: zul.sel.Treecol | null;
-	private _maxlength?: number;
+	override parent!: zul.sel.Treecols | null;
+	override nextSibling!: zul.sel.Treecol | null;
+	override previousSibling!: zul.sel.Treecol | null;
+	_maxlength?: number;
 
 	/** Returns the tree that it belongs to.
 	 * @return Tree
 	 */
-	public getTree(): zul.sel.Tree | null {
+	getTree(): zul.sel.Tree | null {
 		return this.parent ? this.parent.parent : null;
 	}
 
@@ -76,18 +76,18 @@ export class Treecol extends zul.mesh.SortWidget {
 	 * @since 5.0.6
 	 * @return Tree
 	 */
-	public getMeshBody(): zul.sel.Treechildren | null | undefined {
+	getMeshBody(): zul.sel.Treechildren | null | undefined {
 		var tree = this.getTree();
 		return tree ? tree.treechildren : null;
 	}
 
-	protected override checkClientSort_(ascending: boolean): boolean {
+	override checkClientSort_(ascending: boolean): boolean {
 		var tree: zul.sel.Tree | null;
 		return !(!this.getMeshBody() || !(tree = this.getTree()) || ('paging' == tree._mold))
 				&& super.checkClientSort_(ascending);
 	}
 
-	protected override replaceCavedChildrenInOrder_(ascending: boolean): void {
+	override replaceCavedChildrenInOrder_(ascending: boolean): void {
 		var mesh = this.getMeshWidget()!,
 			body = this.getMeshBody()!,
 			desktop = body.desktop;
@@ -113,14 +113,14 @@ export class Treecol extends zul.mesh.SortWidget {
 	/** Returns the maximal length of each item's label.
 	 * @return int
 	 */
-	public getMaxlength(): number | undefined {
+	getMaxlength(): number | undefined {
 		return this._maxlength;
 	}
 
 	/** Sets the maximal length of each item's label.
 	 * @param int maxlength
 	 */
-	public setMaxlength(maxlength: number, opts?: Record<string, boolean>): this {
+	setMaxlength(maxlength: number, opts?: Record<string, boolean>): this {
 		const o = this._maxlength, v = maxlength;
 		this._maxlength = maxlength = !v || v < 0 ? 0 : v;
 
@@ -134,7 +134,7 @@ export class Treecol extends zul.mesh.SortWidget {
 		return this;
 	}
 
-	protected updateCells_(): void {
+	updateCells_(): void {
 		var tree = this.getTree();
 		if (tree) {
 			var jcol = this.getChildIndex(),
@@ -147,7 +147,7 @@ export class Treecol extends zul.mesh.SortWidget {
 		}
 	}
 
-	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		const n = this.$n();
 		if (n)
@@ -161,7 +161,7 @@ export class Treecol extends zul.mesh.SortWidget {
 		}
 	}
 
-	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		const n = this.$n();
 		if (n)
 			this.domUnlisten_(n, 'onMouseOver', '_doSortMouseEvt')
@@ -176,14 +176,14 @@ export class Treecol extends zul.mesh.SortWidget {
 		super.unbind_(skipper, after, keepRod);
 	}
 
-	public _doSortMouseEvt(evt: zk.Event): void {
+	_doSortMouseEvt(evt: zk.Event): void {
 		var sort = this.getSortAscending();
 		if (sort != 'none')
 			jq(this.$n_())[evt.name == 'onMouseOver' ? 'addClass' : 'removeClass'](this.getZclass() + '-sort-over');
 	}
 
 	//@Override
-	protected override domContent_(): string {
+	override domContent_(): string {
 		var s = super.domContent_(),
 			tree = this.getTree()!;
 		if (this._hasCheckbox())
@@ -193,18 +193,18 @@ export class Treecol extends zul.mesh.SortWidget {
 		return s;
 	}
 
-	private _hasCheckbox(): boolean | undefined {
+	_hasCheckbox(): boolean | undefined {
 		var tree = this.getTree();
 		return tree != null && this.parent!.firstChild == this
 			&& tree._checkmark && tree._multiple && !tree._tree$noSelectAll;
 	}
 
 	//@Override
-	protected override domLabel_(): string {
+	override domLabel_(): string {
 		return zUtl.encodeXML(this.getLabel(), {maxlength: this._maxlength});
 	}
 
-	public _doCheckmarkClick(evt: zk.Event<zk.EventMetaData>): void {
+	_doCheckmarkClick(evt: zk.Event<zk.EventMetaData>): void {
 		this._checked = !this._checked;
 		var tree = this.getTree()!,
 			cm = this.$n_('cm'),
@@ -219,7 +219,7 @@ export class Treecol extends zul.mesh.SortWidget {
 		tree.fire('onCheckSelectAll', this._checked, {toServer: true});
 	}
 
-	public override doClick_(evt: zk.Event, popupOnly?: boolean): void {
+	override doClick_(evt: zk.Event, popupOnly?: boolean): void {
 		var tree = this.getTree(),
 			cm = this.$n('cm');
 		if (tree && tree._checkmark) {

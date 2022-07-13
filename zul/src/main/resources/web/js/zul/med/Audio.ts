@@ -53,26 +53,26 @@ function _invoke2(wgt: zul.med.Audio, fn: 'pause' | 'play' | 'stop'): void {
  */
 @zk.WrapClass('zul.med.Audio')
 export class Audio extends zul.Widget<HTMLAudioElement> {
-	private _src?: string;
-	private _autoplay?: boolean;
-	private _preload?: string;
-	private _controls?: boolean;
-	private _loop?: boolean;
-	private _muted?: boolean;
-	public _isUnbinded?: boolean;
+	_src?: string;
+	_autoplay?: boolean;
+	_preload?: string;
+	_controls?: boolean;
+	_loop?: boolean;
+	_muted?: boolean;
+	_isUnbinded?: boolean;
 
 	/** Returns the src.
 	 * <p>Default: null.
 	 * @return String
 	 */
-	public getSrc(): string | undefined {
+	getSrc(): string | undefined {
 		return this._src;
 	}
 
 	/** Sets the src.
 	 * @param String src
 	 */
-	public setSrc(src: string, opts?: Record<string, boolean>): this {
+	setSrc(src: string, opts?: Record<string, boolean>): this {
 		const o = this._src;
 		this._src = src;
 
@@ -84,12 +84,12 @@ export class Audio extends zul.Widget<HTMLAudioElement> {
 	}
 
 	// for zephyr to treat as "src" attribute at client side
-	public getContent(): string | undefined {
+	getContent(): string | undefined {
 		return this.getSrc();
 	}
 
 	// for zephyr to treat as "src" attribute at client side
-	public setContent(src: string, opts?: Record<string, boolean>): this {
+	setContent(src: string, opts?: Record<string, boolean>): this {
 		return this.setSrc(src, opts);
 	}
 
@@ -97,14 +97,14 @@ export class Audio extends zul.Widget<HTMLAudioElement> {
 	 * <p>Default: false.
 	 * @return boolean
 	 */
-	public isAutoplay(): boolean | undefined {
+	isAutoplay(): boolean | undefined {
 		return this._autoplay;
 	}
 
 	/** Sets whether to auto start playing the audio.
 	 * @param boolean autoplay
 	 */
-	public setAutoplay(v: boolean, opts?: Record<string, boolean>): this {
+	setAutoplay(v: boolean, opts?: Record<string, boolean>): this {
 		const o = this._autoplay;
 		this._autoplay = v;
 
@@ -122,7 +122,7 @@ export class Audio extends zul.Widget<HTMLAudioElement> {
 	 * @return String
 	 * @since 7.0.0
 	 */
-	public getPreload(): string | undefined {
+	getPreload(): string | undefined {
 		return this._preload;
 	}
 
@@ -131,7 +131,7 @@ export class Audio extends zul.Widget<HTMLAudioElement> {
 	 * @param String preload
 	 * @since 7.0.0
 	 */
-	public setPreload(v: 'none' | 'metadata' | 'auto' | '', opts?: Record<string, boolean>): this {
+	setPreload(v: 'none' | 'metadata' | 'auto' | '', opts?: Record<string, boolean>): this {
 		const o = this._preload;
 		this._preload = v;
 
@@ -149,7 +149,7 @@ export class Audio extends zul.Widget<HTMLAudioElement> {
 	 * @return boolean
 	 * @since 7.0.0
 	 */
-	public isControls(): boolean | undefined {
+	isControls(): boolean | undefined {
 		return this._controls;
 	}
 
@@ -157,7 +157,7 @@ export class Audio extends zul.Widget<HTMLAudioElement> {
 	 * @param boolean controls
 	 * @since 7.0.0
 	 */
-	public setControls(v: boolean, opts?: Record<string, boolean>): this {
+	setControls(v: boolean, opts?: Record<string, boolean>): this {
 		const o = this._controls;
 		this._controls = v;
 
@@ -173,14 +173,14 @@ export class Audio extends zul.Widget<HTMLAudioElement> {
 	 * <p>Default: false.
 	 * @return boolean
 	 */
-	public isLoop(): boolean | undefined {
+	isLoop(): boolean | undefined {
 		return this._loop;
 	}
 
 	/** Sets whether to play the audio repeatedly.
 	 * @param boolean loop
 	 */
-	public setLoop(v: boolean, opts?: Record<string, boolean>): this {
+	setLoop(v: boolean, opts?: Record<string, boolean>): this {
 		const o = this._loop;
 		this._loop = v;
 
@@ -198,7 +198,7 @@ export class Audio extends zul.Widget<HTMLAudioElement> {
 	 * @return boolean
 	 * @since 7.0.0
 	 */
-	public isMuted(): boolean | undefined {
+	isMuted(): boolean | undefined {
 		return this._muted;
 	}
 
@@ -206,7 +206,7 @@ export class Audio extends zul.Widget<HTMLAudioElement> {
 	 * @param boolean muted
 	 * @since 7.0.0
 	 */
-	public setMuted(v: boolean, opts?: Record<string, boolean>): this {
+	setMuted(v: boolean, opts?: Record<string, boolean>): this {
 		const o = this._muted;
 		this._muted = v;
 
@@ -220,23 +220,23 @@ export class Audio extends zul.Widget<HTMLAudioElement> {
 
 	/** Plays the audio at the client.
 	 */
-	public play(): void {
+	play(): void {
 		_invoke(this, 'play');
 	}
 
 	/** Stops the audio at the client.
 	 */
-	public stop(): void {
+	stop(): void {
 		_invoke(this, 'stop');
 	}
 
 	/** Pauses the audio at the client.
 	 */
-	public pause(): void {
+	pause(): void {
 		_invoke(this, 'pause');
 	}
 
-	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		const n = this.$n_();
 		n.addEventListener('play', this.proxy(this._audioOnPlay));
@@ -244,7 +244,7 @@ export class Audio extends zul.Widget<HTMLAudioElement> {
 		n.addEventListener('ended', this.proxy(this._audioOnEnded));
 	}
 
-	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		this._isUnbinded = true;
 		this.stop();
 		const n = this.$n_();
@@ -254,7 +254,7 @@ export class Audio extends zul.Widget<HTMLAudioElement> {
 		super.unbind_(skipper, after, keepRod);
 	}
 
-	public override domAttrs_(no?: zk.DomAttrsOptions): string {
+	override domAttrs_(no?: zk.DomAttrsOptions): string {
 		var attr = super.domAttrs_(no);
 		if (this._autoplay)
 			attr += ' autoplay';
@@ -269,7 +269,7 @@ export class Audio extends zul.Widget<HTMLAudioElement> {
 		return attr;
 	}
 
-	protected domContent_(): string {
+	domContent_(): string {
 		var src = this._src!,
 			length = src.length,
 			result = '';
@@ -279,25 +279,25 @@ export class Audio extends zul.Widget<HTMLAudioElement> {
 		return result;
 	}
 
-	private _audioOnPlay(): void {
+	_audioOnPlay(): void {
 		this._fireOnStateChange(_PLAY);
 	}
 
-	private _audioOnPause(): void {
+	_audioOnPause(): void {
 		if (this.$n_().currentTime) {
 			this._fireOnStateChange(_PAUSE);
 		}
 	}
 
-	private _audioOnEnded(): void {
+	_audioOnEnded(): void {
 		this._fireOnStateChange(_ENDED);
 	}
 
-	public _fireOnStateChange(state: number): void {
+	_fireOnStateChange(state: number): void {
 		this.fire('onStateChange', {state: state});
 	}
 
-	private _MIMEtype(name: string): string {
+	_MIMEtype(name: string): string {
 		var start = name.lastIndexOf('.'),
 			type = 'wav';
 		if (start !== -1) {

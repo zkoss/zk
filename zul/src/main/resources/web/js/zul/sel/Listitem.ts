@@ -38,16 +38,16 @@ function updateImg(drag: zk.Draggable): void {
 @zk.WrapClass('zul.sel.Listitem')
 export class Listitem extends zul.sel.ItemWidget {
 	// Parent could be null as asserted by `getListgroup`.
-	public override parent!: zul.sel.Listbox | null;
-	public override nextSibling!: zul.sel.Listitem | null;
-	public override previousSibling!: zul.sel.Listitem | null;
-	public override firstChild!: zul.sel.Listcell | null;
-	public override lastChild!: zul.sel.Listcell | null;
+	override parent!: zul.sel.Listbox | null;
+	override nextSibling!: zul.sel.Listitem | null;
+	override previousSibling!: zul.sel.Listitem | null;
+	override firstChild!: zul.sel.Listcell | null;
+	override lastChild!: zul.sel.Listcell | null;
 
 	/** Returns the list box that it belongs to.
 	 * @return Listbox
 	 */
-	public getListbox(): zul.sel.Listbox | null {
+	getListbox(): zul.sel.Listbox | null {
 		return this.parent;
 	}
 
@@ -55,7 +55,7 @@ export class Listitem extends zul.sel.ItemWidget {
 	 * Returns the listgroup that this item belongs to, or null.
 	 * @return zkex.sel.Listgroup
 	 */
-	public getListgroup(): zkex.sel.Listgroup | null {
+	getListgroup(): zkex.sel.Listgroup | null {
 		// TODO: this performance is not good.
 		if (_isPE() && this.parent && this.parent.hasGroup())
 			for (var w: zul.sel.Listitem | null = this; w; w = w.previousSibling)
@@ -70,12 +70,12 @@ export class Listitem extends zul.sel.ItemWidget {
 	 * <p>If it is not created, we automatically create it.
 	 * @param String label
 	 */
-	public setLabel(val: string): void {
+	setLabel(val: string): void {
 		this._autoFirstCell().setLabel(val);
 	}
 
 	// replace the origional DD_dragging
-	public override getDragOptions_(map: zk.DraggableOptions): zk.DraggableOptions {
+	override getDragOptions_(map: zk.DraggableOptions): zk.DraggableOptions {
 		var old = map.change!;
 		map.change = function (drag, pt, evt) {
 			old(drag, pt, evt);
@@ -90,18 +90,18 @@ export class Listitem extends zul.sel.ItemWidget {
 	 * <p>If it is not created, we automatically create it.
 	 * @param String image
 	 */
-	public setImage(val: string): void {
+	setImage(val: string): void {
 		this._autoFirstCell().setImage(val);
 	}
 
-	private _autoFirstCell(): zul.sel.Listcell {
+	_autoFirstCell(): zul.sel.Listcell {
 		if (!this.firstChild)
 			this.appendChild(new zul.sel.Listcell());
 		return this.firstChild!; // guaranteed to exists because appended in the previous line
 	}
 
 	//super//
-	protected override domStyle_(no?: zk.DomStyleOptions): string {
+	override domStyle_(no?: zk.DomStyleOptions): string {
 		if (_isPE() && (this instanceof zkex.sel.Listgroup || this instanceof zkex.sel.Listgroupfoot)
 				|| (no && no.visible))
 			return super.domStyle_(no);
@@ -111,7 +111,7 @@ export class Listitem extends zul.sel.ItemWidget {
 		return group && !group.isOpen() ? style + 'display:none;' : style;
 	}
 
-	protected override domClass_(no?: zk.DomClassOptions): string {
+	override domClass_(no?: zk.DomClassOptions): string {
 		var cls = super.domClass_(no),
 			list = this.getListbox(),
 			sclass: string;
@@ -121,12 +121,12 @@ export class Listitem extends zul.sel.ItemWidget {
 		return cls;
 	}
 
-	public override replaceWidget(newwgt: zul.sel.Listitem, skipper?: zk.Skipper): void {
+	override replaceWidget(newwgt: zul.sel.Listitem, skipper?: zk.Skipper): void {
 		this._syncListitems(newwgt);
 		super.replaceWidget(newwgt, skipper);
 	}
 
-	public override scrollIntoView(): this {
+	override scrollIntoView(): this {
 		var bar = this.getListbox()!._scrollbar;
 		if (bar) {
 			bar.syncSize();
@@ -137,7 +137,7 @@ export class Listitem extends zul.sel.ItemWidget {
 		return this;
 	}
 
-	private _syncListitems(newwgt: zul.sel.Listitem): void {
+	_syncListitems(newwgt: zul.sel.Listitem): void {
 		var box: zul.sel.Listbox | null;
 		if (box = this.getListbox()) {
 			if (box.firstItem!.uuid == newwgt.uuid)
@@ -156,13 +156,13 @@ export class Listitem extends zul.sel.ItemWidget {
 	}
 
 	//@Override
-	public override compareItemPos_(item: zul.sel.Listitem): number {
+	override compareItemPos_(item: zul.sel.Listitem): number {
 		var thisIndex = this._index!, itemIndex = item._index!;
 		return thisIndex == itemIndex ? 0 : thisIndex > itemIndex ? -1 : 1;
 	}
 
 	//@Override
-	protected override shallFireSizedLaterWhenAddChd_(): boolean {
+	override shallFireSizedLaterWhenAddChd_(): boolean {
 		if (this.getListbox()!._model == 'group' as unknown) { // FIXME: inconsistent type
 			zWatch.listen({
 					onCommandReady: this
@@ -174,7 +174,7 @@ export class Listitem extends zul.sel.ItemWidget {
 	}
 
 	// ZK-3733
-	public onCommandReady(ctl: zk.ZWatchController): void {
+	onCommandReady(ctl: zk.ZWatchController): void {
 		zUtl.fireSized(this);
 		zWatch.unlisten({
 			onCommandReady: this

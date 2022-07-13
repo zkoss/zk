@@ -16,13 +16,13 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
  */
 @zk.WrapClass('zul.fud.FileuploadDlg')
 export class FileuploadDlg extends zul.wnd.Window {
-	public max?: number;
+	max?: number;
 
-	public override getZclass(): string { // keep the window's zclass
+	override getZclass(): string { // keep the window's zclass
 		return this._zclass == null ? 'z-window' : this._zclass;
 	}
 
-	public cancel(sendToServer?: boolean): void {
+	cancel(sendToServer?: boolean): void {
 		var fu = this.$f('fileupload');
 		if (fu) {
 			fu._uplder!.destroy();
@@ -33,7 +33,7 @@ export class FileuploadDlg extends zul.wnd.Window {
 		}
 	}
 
-	public submit(): void {
+	submit(): void {
 		this.cancel();
 		zAu.send(new zk.Event(this, 'onClose', true));
 		this.detach();
@@ -42,12 +42,12 @@ export class FileuploadDlg extends zul.wnd.Window {
 
 @zk.WrapClass('zul.fud.ModalFileViewer')
 export class ModalFileViewer extends zk.Object {
-	public updated: boolean | null = null;
-	private _finish?: boolean;
-	private _uplder: zul.Uploader;
-	public viewer?: HTMLElement;
+	updated: boolean | null = null;
+	_finish?: boolean;
+	_uplder: zul.Uploader;
+	viewer?: HTMLElement;
 
-	public constructor(uplder: zul.Uploader, filenm: string) {
+	constructor(uplder: zul.Uploader, filenm: string) {
 		super();
 		this._uplder = uplder;
 		filenm = filenm.replace(/\//g, '\\');
@@ -90,7 +90,7 @@ export class ModalFileViewer extends zk.Object {
 		});
 	}
 
-	public update(sent: number, total: number): void {
+	update(sent: number, total: number): void {
 		jq('#' + this._uplder.id + '-sent').html(Math.round((total / 1024) * sent / 100) + msgzk.KBYTES);
 		if (!this.updated) {
 			this.updated = true;
@@ -98,7 +98,7 @@ export class ModalFileViewer extends zk.Object {
 		}
 	}
 
-	public destroy(finish: boolean): void {
+	destroy(finish: boolean): void {
 		if (this._finish) return;
 		this._finish = finish;
 		if (!finish) jq(this.viewer!).remove();

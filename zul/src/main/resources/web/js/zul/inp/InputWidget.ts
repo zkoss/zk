@@ -96,38 +96,38 @@ zul.inp.RoundUtl = RoundUtl;
  */
 @zk.WrapClass('zul.inp.InputWidget')
 export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElement> {
-	private _maxlength = 0;
-	private _cols = 0;
+	_maxlength = 0;
+	_cols = 0;
 	//_tabindex: 0,
-	protected _type = 'text';
-	private _placeholder: string | null = null;
-	private _inputAttributes: Record<string, string> | null = null;
-	private _lastinputAttributes: Record<string, string> | null = null;
-	public _inplaceTimerId: number | null = null;
-	public _inplaceTimeout = 150;
-	public _inplaceIgnore = false;
+	_type = 'text';
+	_placeholder: string | null = null;
+	_inputAttributes: Record<string, string> | null = null;
+	_lastinputAttributes: Record<string, string> | null = null;
+	_inplaceTimerId: number | null = null;
+	_inplaceTimeout = 150;
+	_inplaceIgnore = false;
 
-	private _name?: string;
-	public _cst?: zul.inp.SimpleConstraint | string | null;
-	protected _reVald?: boolean;
-	protected valueEnter_?: string | null;
-	protected valueSel_?: string | null;
-	private _lastChg?: string;
-	private _errbox?: zul.inp.Errorbox | null;
-	public __ebox?: zul.inp.Errorbox;
-	private _tidChg?: number | null;
-	protected _multiline?: boolean;
-	protected _disabled?: boolean;
-	protected _readonly?: boolean;
-	public _value?: ValueType;
-	protected _errmsg?: string | null;
-	protected _defRawVal?: string;
-	private _lastKeyDown?: number | null;
-	protected _tabbable?: boolean;
-	private _instant?: boolean;
-	public _errorboxSclass?: string;
-	public _errorboxIconSclass?: string;
-	public _inplace?: boolean;
+	_name?: string;
+	_cst?: zul.inp.SimpleConstraint | string | null;
+	_reVald?: boolean;
+	valueEnter_?: string | null;
+	valueSel_?: string | null;
+	_lastChg?: string;
+	_errbox?: zul.inp.Errorbox | null;
+	__ebox?: zul.inp.Errorbox;
+	_tidChg?: number | null;
+	_multiline?: boolean;
+	_disabled?: boolean;
+	_readonly?: boolean;
+	_value?: ValueType;
+	_errmsg?: string | null;
+	_defRawVal?: string;
+	_lastKeyDown?: number | null;
+	_tabbable?: boolean;
+	_instant?: boolean;
+	_errorboxSclass?: string;
+	_errorboxIconSclass?: string;
+	_inplace?: boolean;
 
 	/** Returns the name of this component.
 	 * <p>Default: null.
@@ -139,7 +139,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	 * with other kind of clients.
 	 * @return String
 	 */
-	public getName(): string | undefined {
+	getName(): string | undefined {
 		return this._name;
 	}
 
@@ -153,7 +153,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	 *
 	 * @param String name the name of this component.
 	 */
-	public setName(name: string, opts?: Record<string, boolean>): this {
+	setName(name: string, opts?: Record<string, boolean>): this {
 		const o = this._name;
 		this._name = name;
 
@@ -170,14 +170,14 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	 * <p>Default: false.
 	 * @return boolean
 	 */
-	public isDisabled(): boolean | undefined {
+	isDisabled(): boolean | undefined {
 		return this._disabled;
 	}
 
 	/** Sets whether it is disabled.
 	 * @param boolean disabled
 	 */
-	public setDisabled(disabled: boolean, opts?: Record<string, boolean>): this {
+	setDisabled(disabled: boolean, opts?: Record<string, boolean>): this {
 		const o = this._disabled;
 		this._disabled = disabled;
 
@@ -198,14 +198,14 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	 * <p>Default: false.
 	 * @return boolean
 	 */
-	public isReadonly(): boolean | undefined {
+	isReadonly(): boolean | undefined {
 		return this._readonly;
 	}
 
 	/** Sets whether it is readonly.
 	 * @param boolean readonly
 	 */
-	public setReadonly(readonly: boolean, opts?: Record<string, boolean>): this {
+	setReadonly(readonly: boolean, opts?: Record<string, boolean>): this {
 		const o = this._readonly;
 		this._readonly = readonly;
 
@@ -229,14 +229,14 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	 * <p>Default: 0 (non-positive means the same as browser's default).
 	 * @return int
 	 */
-	public getCols(): number {
+	getCols(): number {
 		return this._cols;
 	}
 
 	/** Sets the cols.
 	 * @param int cols
 	 */
-	public setCols(cols: number, opts?: Record<string, boolean>): this {
+	setCols(cols: number, opts?: Record<string, boolean>): this {
 		const o = this._cols;
 		this._cols = cols;
 
@@ -263,14 +263,14 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	 * <p>Default: 0 (non-postive means unlimited).
 	 * @return int
 	 */
-	public getMaxlength(): number {
+	getMaxlength(): number {
 		return this._maxlength;
 	}
 
 	/** Sets the maxlength.
 	 * @param int maxlength
 	 */
-	public setMaxlength(maxlength: number, opts?: Record<string, boolean>): this {
+	setMaxlength(maxlength: number, opts?: Record<string, boolean>): this {
 		const o = this._maxlength;
 		this._maxlength = maxlength;
 
@@ -287,14 +287,14 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	 * <p>Default: 0 (means the same as browser's default).
 	 * @return int
 	 */
-	public override getTabindex(): number | null | undefined {
+	override getTabindex(): number | null | undefined {
 		return this._tabindex;
 	}
 
 	/** Sets the tab order of this component.
 	 * @param int tabindex
 	 */
-	public override setTabindex(tabindex: number, opts?: Record<string, boolean>): this {
+	override setTabindex(tabindex: number, opts?: Record<string, boolean>): this {
 		const o = this._tabindex;
 		this._tabindex = tabindex;
 
@@ -315,7 +315,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	 * <p>default: false.
 	 * @return boolean
 	 */
-	public isInplace(): boolean | undefined {
+	isInplace(): boolean | undefined {
 		return this._inplace;
 	}
 
@@ -323,7 +323,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	 * like a label.
 	 * @param boolean inplace
 	 */
-	public setInplace(inplace: boolean, opts?: Record<string, boolean>): this {
+	setInplace(inplace: boolean, opts?: Record<string, boolean>): this {
 		const o = this._inplace;
 		this._inplace = inplace;
 
@@ -339,7 +339,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	 * @since 6.5.0
 	 * @return String placeholder
 	 */
-	public getPlaceholder(): string | null {
+	getPlaceholder(): string | null {
 		return this._placeholder;
 	}
 
@@ -349,7 +349,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	 * @since 6.5.0
 	 * @param String placeholder
 	 */
-	public setPlaceholder(placeholder: string, opts?: Record<string, boolean>): this {
+	setPlaceholder(placeholder: string, opts?: Record<string, boolean>): this {
 		const o = this._placeholder;
 		this._placeholder = placeholder;
 
@@ -365,7 +365,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	 * @since 8.6.1
 	 * @return Map inputAttributes
 	 */
-	public getInputAttributes(): Record<string, string> | null {
+	getInputAttributes(): Record<string, string> | null {
 		return this._inputAttributes;
 	}
 
@@ -375,7 +375,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	 * @since 8.6.1
 	 * @param Map inputAttributes
 	 */
-	public setInputAttributes(inputAttributes: Record<string, string>, opts?: Record<string, boolean>): this {
+	setInputAttributes(inputAttributes: Record<string, string>, opts?: Record<string, boolean>): this {
 		const o = this._inputAttributes;
 		this._inputAttributes = inputAttributes;
 
@@ -402,7 +402,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	 * @return boolean
 	 * @since 6.0.0
 	 */
-	public isInstant(): boolean | undefined {
+	isInstant(): boolean | undefined {
 		return this._instant;
 	}
 
@@ -412,7 +412,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	 * @param boolean instant
 	 * @since 6.0.0
 	 */
-	public setInstant(instant: boolean): this {
+	setInstant(instant: boolean): this {
 		this._instant = instant;
 		return this;
 	}
@@ -422,7 +422,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	 * @return String
 	 * @since 8.0.1
 	 */
-	public getErrorboxSclass(): string | undefined {
+	getErrorboxSclass(): string | undefined {
 		return this._errorboxSclass;
 	}
 
@@ -431,7 +431,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	 * @param String errorboxSclass
 	 * @since 8.0.1
 	 */
-	public setErrorboxSclass(errorboxSclass: string): this {
+	setErrorboxSclass(errorboxSclass: string): this {
 		this._errorboxSclass = errorboxSclass;
 		return this;
 	}
@@ -441,7 +441,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	 * @return String
 	 * @since 8.0.1
 	 */
-	public getErrorboxIconSclass(): string | undefined {
+	getErrorboxIconSclass(): string | undefined {
 		return this._errorboxIconSclass;
 	}
 
@@ -450,7 +450,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	 * @param String errorboxIconSclass
 	 * @since 8.0.1
 	 */
-	public setErrorboxIconSclass(errorboxIconSclass: string): this {
+	setErrorboxIconSclass(errorboxIconSclass: string): this {
 		this._errorboxIconSclass = errorboxIconSclass;
 		return this;
 	}
@@ -458,7 +458,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	/** Returns the CSS style of inplace if inplace is not null
 	 * @return String
 	 */
-	public getInplaceCSS(): string {
+	getInplaceCSS(): string {
 		return this._inplace ? this.$s('inplace') : '';
 	}
 
@@ -467,7 +467,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	 * @param int end the ending index of the selection range (excluding).
 	 * 		In other words, the text between start and (end-1) is selected.
 	 */
-	public select(start: number, end: number): void {
+	select(start: number, end: number): void {
 		// bug ZK-1695: need to focus input and set selection range in Firefox
 		var inpNode = this.getInputNode();
 		if (inpNode) { // ZK-4538: can't be focused anyway unless rendered
@@ -485,7 +485,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	 * <p>Default: text.
 	 * @return String
 	 */
-	public getType(): string {
+	getType(): string {
 		return this._type;
 	}
 
@@ -493,7 +493,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	 * <p>Default: false.
 	 * @return boolean
 	 */
-	public isMultiline(): boolean | undefined {
+	isMultiline(): boolean | undefined {
 		return false;
 	}
 
@@ -502,7 +502,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	 * <p>Default: false, only combo component are true (@since 7.0.0)
 	 * @return boolean
 	 */
-	public inRoundedMold(): boolean {
+	inRoundedMold(): boolean {
 		return true;
 	}
 
@@ -511,7 +511,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	 * @return String
 	 * @since 5.0.5
 	 */
-	public getText(): string {
+	getText(): string {
 		return this.coerceToString_(this.getValue());
 	}
 
@@ -519,14 +519,14 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	 * @param String txt the text
 	 * @since 5.0.5
 	 */
-	public setText(txt: string): void {
+	setText(txt: string): void {
 		this.setValue(this.coerceFromString_(txt) as ValueType);
 	}
 
 	/** Returns the value in the String format.
 	 * @return String
 	 */
-	public getValue(): ValueType | undefined {
+	getValue(): ValueType | undefined {
 		return this._value;
 	}
 
@@ -538,7 +538,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	 * @param boolean fromServer whether it is called from the server.
 	 * The error message will be cleared if true
 	 */
-	public setValue(value: ValueType | number | string, fromServer?: boolean): void {
+	setValue(value: ValueType | number | string, fromServer?: boolean): void {
 		var vi: InputValidationResult<ValueType> | undefined;
 		// for zephyr to treat as "value" attribute from "_value" at client side
 		if (typeof value == 'number' || typeof value == 'string')
@@ -563,7 +563,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	}
 
 	//value object set from server(smartUpdate, renderProperites)
-	public set_value(value: string | number, fromServer?: boolean): void {
+	set_value(value: string | number, fromServer?: boolean): void {
 		this.setValue(this.unmarshall_(value), fromServer);
 	}
 
@@ -573,15 +573,15 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	// Super defines getInputNode as optional property (not a method), and super cannot be made abstract.
 	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 	// @ts-ignore
-	public override getInputNode(): HTMLInputElement | null | undefined {
+	override getInputNode(): HTMLInputElement | null | undefined {
 		return this.$n('real') || this.$n();
 	}
 
-	public override getTextNode(): HTMLInputElement | null | undefined {
+	override getTextNode(): HTMLInputElement | null | undefined {
 		return this.getInputNode();
 	}
 
-	public override domAttrs_(no?: zk.DomAttrsOptions): string {
+	override domAttrs_(no?: zk.DomAttrsOptions): string {
 		var attr = super.domAttrs_(no);
 		if (!no || !no.text)
 			attr += this.textAttrs_();
@@ -593,7 +593,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	 * is specified
 	 * @return String
 	 */
-	protected textAttrs_(): string {
+	textAttrs_(): string {
 		var html = '', v;
 		if (this.isMultiline()) {
 			v = this._cols;
@@ -626,11 +626,11 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		return html;
 	}
 
-	protected _onChanging(timeout?: number): void {
+	_onChanging(timeout?: number): void {
 		InputWidget._onChanging.call(this, timeout);
 	}
 
-	private _areaText(): string {
+	_areaText(): string {
 		return zUtl.encodeXML(this.coerceToString_(this._value));
 	}
 
@@ -638,7 +638,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	 * <p>Default: null (means no constraint all all).
 	 * @param String cst
 	 */
-	public setConstraint(cst: zul.inp.SimpleConstraint | string | null): void {
+	setConstraint(cst: zul.inp.SimpleConstraint | string | null): void {
 		if (typeof cst == 'string' && cst.charAt(0) != '['/*by server*/)
 			this._cst = new zul.inp.SimpleConstraint(cst);
 		else
@@ -650,11 +650,11 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	/** Returns the constraint, or null if no constraint at all.
 	 * @return zul.inp.SimpleConstraint
 	 */
-	public getConstraint(): zul.inp.SimpleConstraint | string | null | undefined {
+	getConstraint(): zul.inp.SimpleConstraint | string | null | undefined {
 		return this._cst;
 	}
 
-	protected override doFocus_(evt: zk.Event): void {
+	override doFocus_(evt: zk.Event): void {
 		super.doFocus_(evt);
 
 		var inp = this.getInputNode()!;
@@ -680,7 +680,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		}
 	}
 
-	protected override doBlur_(evt: zk.Event): void {
+	override doBlur_(evt: zk.Event): void {
 		InputWidget._stopOnChanging(this, true);
 		if (!zk.alerting && this.shallUpdate_(zk.currentFocus!)) {
 			this.updateChange_();
@@ -707,7 +707,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		this._lastKeyDown = null;
 	}
 
-	protected _doTouch(evt: zk.Event): boolean | undefined {
+	_doTouch(evt: zk.Event): boolean | undefined {
 		if (!zk.ios) {
 			return false;
 		}
@@ -716,7 +716,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		windowY = window.pageYOffset;
 	}
 
-	protected _doSelect(evt: zk.Event): void { //domListen_
+	_doSelect(evt: zk.Event): void { //domListen_
 		if (this.isListen('onSelection')) {
 			var inp = this.getInputNode()!,
 				sr = zk(inp).getSelectionRange(),
@@ -726,13 +726,13 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		}
 	}
 
-	protected _doMouseOver(): void {
+	_doMouseOver(): void {
 		if (this._disabled)
 			return;
 		jq(this.getInputNode()!).addClass(this.$s('hover'));
 	}
 
-	protected _doMouseOut(): void {
+	_doMouseOut(): void {
 		if (this._disabled)
 			return;
 		jq(this.getInputNode()!).removeClass(this.$s('hover'));
@@ -741,7 +741,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	/** Returns shall be update or not
 	 * @param zk.Widget focus
 	 */
-	protected shallUpdate_(focus: zk.Widget): boolean {
+	shallUpdate_(focus: zk.Widget): boolean {
 		return !focus || !zUtl.isAncestor(this, focus);
 	}
 
@@ -758,7 +758,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	 * @return String
 	 * @deprecated use getErrorMessage() instead.
 	 */
-	public getErrorMesssage(): string | null | undefined {
+	getErrorMesssage(): string | null | undefined {
 		return this.getErrorMessage();
 	}
 
@@ -774,7 +774,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	 * If the error message is set, we say this input is in the error mode.
 	 * @return String
 	 */
-	public getErrorMessage(): string | null | undefined {
+	getErrorMessage(): string | null | undefined {
 		return this._errmsg;
 	}
 
@@ -782,7 +782,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	 * <p>It is usually called by {@link zk.AuCmd0#wrongValue} (from the sever)
 	 * @param String msg the error message
 	 */
-	public setErrorMessage(msg: string): void {
+	setErrorMessage(msg: string): void {
 		this.clearErrorMessage(true, true);
 		this._markError(msg, null, true);
 	}
@@ -794,7 +794,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	 * @param boolean remainError whether the input widget remains in the
 	 * error status, if any, after the invocation.
 	 */
-	public clearErrorMessage(revalidate: boolean, remainError?: boolean): void {
+	clearErrorMessage(revalidate: boolean, remainError?: boolean): void {
 		var w = this._errbox;
 		if (w) {
 			this._errbox = null;
@@ -822,7 +822,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	 * @param String value the string to coerce from
 	 * @return String
 	 */
-	protected coerceFromString_(value: string | null | undefined): zul.inp.CoerceFromStringResult | ValueType | null | undefined {
+	coerceFromString_(value: string | null | undefined): zul.inp.CoerceFromStringResult | ValueType | null | undefined {
 		return value as unknown as ValueType;
 	}
 
@@ -837,11 +837,11 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	 * @param Object value the value that will be coerced to a string
 	 * @return String
 	 */
-	protected coerceToString_(value: ValueType | undefined): string {
+	coerceToString_(value: ValueType | undefined): string {
 		return (value as unknown as string | null | undefined) || '';
 	}
 
-	private _markError(msg: string, val: string | null, noOnError?: boolean): void {
+	_markError(msg: string, val: string | null, noOnError?: boolean): void {
 		this._errmsg = msg;
 
 		if (this.desktop) { //err not visible if not attached //B85-ZK-3321
@@ -869,7 +869,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	 * @param Object val a String, a number, or a date,the number or name of flag,
 	 * such as 'no positive", 0x0001.
 	 */
-	protected validate_(val: unknown): string | boolean | undefined {
+	validate_(val: unknown): string | boolean | undefined {
 		var cst: zul.inp.SimpleConstraint | string | null | undefined;
 		if (cst = this._cst) {
 			if (typeof cst == 'string') return false; //by server
@@ -879,7 +879,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		}
 	}
 
-	private _validate(value: string | ValueType | null | undefined): InputValidationResult<ValueType> {
+	_validate(value: string | ValueType | null | undefined): InputValidationResult<ValueType> {
 		zul.inp.validating = true;
 		try {
 			var val: typeof value | CoerceFromStringResult = value,
@@ -921,12 +921,12 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		}
 	}
 
-	private _sendClearingErrorEvent(val: unknown): void {
+	_sendClearingErrorEvent(val: unknown): void {
 		// ZK-4453 for easier overriding this behavior
 		this.fire('onError', {value: val});
 	}
 
-	public _shallIgnore(evt: zk.Event, keys: string): boolean | undefined {
+	_shallIgnore(evt: zk.Event, keys: string): boolean | undefined {
 		// ZK-1736 add metakey on mac
 		if (zk.mac && evt.metaKey)
 			return;
@@ -943,35 +943,35 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	 * @param String msg the error message
 	 * @see zul.inp.Errorbox#show
 	 */
-	protected showError_(msg: string): zul.inp.Errorbox {
+	showError_(msg: string): zul.inp.Errorbox {
 		var eb = new zul.inp.Errorbox(this, msg);
 		eb.show();
 		return eb;
 	}
 
-	public onShow(): void {
+	onShow(): void {
 		if (this.__ebox) {
 			this.setFloating_(true);
 			this.__ebox.show();
 		}
 	}
 
-	private _equalValue(a: ValueType | undefined, b: ValueType | undefined): boolean {
+	_equalValue(a: ValueType | undefined, b: ValueType | undefined): boolean {
 		return a == b || this.marshall_(a) == this.marshall_(b);
 	}
 
-	protected marshall_(val: ValueType | undefined): string | undefined {
+	marshall_(val: ValueType | undefined): string | undefined {
 		return val as never;
 	}
 
-	protected unmarshall_(val: string | number): ValueType | '' | 0 {
+	unmarshall_(val: string | number): ValueType | '' | 0 {
 		return val as never;
 	}
 
 	/** Updates the change to server by firing onChange if necessary.
 	 * @return boolean
 	 */
-	protected updateChange_(): boolean {
+	updateChange_(): boolean {
 		if (zul.inp.validating) return false; //avoid deadloop (when both focus and blur fields invalid)
 
 		var inp = this.getInputNode()!,
@@ -1020,12 +1020,12 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	 * @param Map opts [optional] the options. Refer to {@link zk.Event#opts}
 	 * @since 5.0.5
 	 */
-	public fireOnChange(opts?: zk.EventOptions): void {
+	fireOnChange(opts?: zk.EventOptions): void {
 		this.fire('onChange',
 			InputWidget._onChangeData(this, {value: this.marshall_(this.getValue())}), opts);
 	}
 
-	private _resetForm(): void {
+	_resetForm(): void {
 		var inp = this.getInputNode()!;
 		if (inp.value != inp.defaultValue) { //test if it will be reset
 			var wgt = this;
@@ -1035,7 +1035,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	}
 
 	//super//
-	public override focus_(timeout?: number): boolean {
+	override focus_(timeout?: number): boolean {
 		// ZK-2020: should give timeout for ie11
 		if (zk.ie11_ && !timeout)
 			timeout = 0;
@@ -1043,7 +1043,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		return true;
 	}
 
-	protected override domClass_(no?: zk.DomClassOptions): string {
+	override domClass_(no?: zk.DomClassOptions): string {
 		var sc = super.domClass_(no);
 		if ((!no || !no.zclass) && this._disabled)
 			sc += ' ' + this.$s('disabled');
@@ -1058,7 +1058,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		return sc;
 	}
 
-	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		var n: HTMLInputElement | HTMLFormElement | null = this.getInputNode()!;
 
@@ -1087,7 +1087,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		zWatch.listen({onShow: this});
 	}
 
-	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		zWatch.unlisten({onShow: this});
 		InputWidget._stopOnChanging(this);
 		this.clearErrorMessage(true);
@@ -1109,7 +1109,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		super.unbind_(skipper, after, keepRod);
 	}
 
-	protected doInput_(evt: zk.Event): void {
+	doInput_(evt: zk.Event): void {
 		//ZK-2757, fire onChange when native drag'n' drop in different browsers
 		var wgt = this;
 		//in IE, current focus changes after onInput event
@@ -1121,14 +1121,14 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		this._updateValue();
 	}
 
-	protected override resetSize_(orient: zk.FlexOrient): void {
+	override resetSize_(orient: zk.FlexOrient): void {
 		var n: HTMLInputElement | null | undefined;
 		if (this.$n() != (n = this.getInputNode()))
 			n!.style[orient == 'w' ? 'width' : 'height'] = '';
 		super.resetSize_(orient);
 	}
 
-	protected override doKeyDown_(evt: zk.Event): void {
+	override doKeyDown_(evt: zk.Event): void {
 		var keyCode = evt.keyCode;
 		this._lastKeyDown = keyCode;
 		if (this._readonly && keyCode == 8 && evt.target == this) {
@@ -1157,7 +1157,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		super.doKeyDown_(evt);
 	}
 
-	protected _updateValue(): void {
+	_updateValue(): void {
 		//Support maxlength for Textarea
 		if (this.isMultiline()) {
 			var maxlen = this._maxlength;
@@ -1172,12 +1172,12 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		this._startOnChanging();
 	}
 
-	private _startOnChanging(): void {
+	_startOnChanging(): void {
 		if (this.isListen('onChanging') || this._instant)
 			InputWidget._startOnChanging(this);
 	}
 
-	protected override afterKeyDown_(evt: zk.Event, simulated?: boolean): boolean | undefined {
+	override afterKeyDown_(evt: zk.Event, simulated?: boolean): boolean | undefined {
 		if (!simulated && this._inplace) {
 			if (!this._multiline && evt.keyCode == 13) {
 				var $inp = jq(this.getInputNode()!), inc = this.getInplaceCSS();
@@ -1190,11 +1190,11 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 			return super.afterKeyDown_(evt);
 	}
 
-	protected override beforeCtrlKeys_(evt: zk.Event): void {
+	override beforeCtrlKeys_(evt: zk.Event): void {
 		this.updateChange_();
 	}
 
-	public override shallIgnoreClick_(evt: zk.Event): boolean | undefined {
+	override shallIgnoreClick_(evt: zk.Event): boolean | undefined {
 		return this.isDisabled();
 	}
 
@@ -1205,7 +1205,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	 * @param String text the text to be inserted
 	 * @since 8.5.1
 	 */
-	public setInsertedText(text: string): void {
+	setInsertedText(text: string): void {
 		if (text) {
 			var inp = this.getInputNode();
 			if (inp) {
@@ -1232,7 +1232,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	 * @type int
 	 * @since 5.0.1
 	 */
-	public static onChangingDelay = 350;
+	static onChangingDelay = 350;
 
 	/** Whether to send at least one the onChanging event if it is listened
 	 * and the content is ever changed.
@@ -1240,15 +1240,15 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	 * @type boolean
 	 * @since 5.0.1
 	 */
-	public static onChangingForced = true;
+	static onChangingForced = true;
 
 	// for errorbox, datebox, combowidget
-	public static _isInView<T>(wgt: Pick<InputWidget<T>, 'getInputNode'>): boolean {
+	static _isInView<T>(wgt: Pick<InputWidget<T>, 'getInputNode'>): boolean {
 		var n = wgt.getInputNode();
 		return zk(n).isRealScrollIntoView(true);
 	}
 
-	private static _onChanging<T>(this: InputWidget<T>, timeout?: number): void {
+	static _onChanging<T>(this: InputWidget<T>, timeout?: number): void {
 		//Note: "this" is available here
 		if (this.desktop) {
 			var inp = this.getInputNode()!,
@@ -1266,19 +1266,19 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		}
 	}
 
-	private static _onChangeData<T>(wgt: InputWidget<T>, inf: Record<string, unknown>, selbk?: boolean): Record<string, unknown> {
+	static _onChangeData<T>(wgt: InputWidget<T>, inf: Record<string, unknown>, selbk?: boolean): Record<string, unknown> {
 		inf.start = zk(wgt.getInputNode()).getSelectionRange()[0];
 		if (selbk) inf.bySelectBack = true;
 		return inf;
 	}
 
-	private static _startOnChanging<T>(wgt: InputWidget<T>): void {
+	static _startOnChanging<T>(wgt: InputWidget<T>): void {
 		InputWidget._stopOnChanging(wgt);
 		wgt._tidChg = setTimeout(
 			wgt.proxy(InputWidget._onChanging), InputWidget.onChangingDelay);
 	}
 
-	private static _stopOnChanging<T>(wgt: InputWidget<T>, onBlur?: boolean): void {
+	static _stopOnChanging<T>(wgt: InputWidget<T>, onBlur?: boolean): void {
 		if (wgt._tidChg) {
 			clearTimeout(wgt._tidChg);
 			wgt._tidChg = null;
@@ -1292,11 +1292,11 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		}
 	}
 
-	private static _clearOnChanging<T>(wgt: InputWidget<T>): void {
+	static _clearOnChanging<T>(wgt: InputWidget<T>): void {
 		wgt.valueEnter_ = wgt.valueSel_ = null;
 	}
 
-	private static _clearInplaceTimeout<T>(widget: InputWidget<T>): void {
+	static _clearInplaceTimeout<T>(widget: InputWidget<T>): void {
 		if (widget._inplaceTimerId) {
 			clearTimeout(widget._inplaceTimerId);
 			widget._inplaceTimerId = null;

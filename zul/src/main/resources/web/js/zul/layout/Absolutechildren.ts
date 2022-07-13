@@ -26,15 +26,15 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.layout.Absolutechildren')
 export class Absolutechildren extends zul.Widget {
-    private _x = 0;
-    private _y = 0;
+    _x = 0;
+    _y = 0;
 
     /**
      * Sets current "x" position within parent container component.
      * <p>Default: 0
      * @param int x the x position
      */
-    public setX(x: number, opts?: Record<string, boolean>): this {
+    setX(x: number, opts?: Record<string, boolean>): this {
         const o = this._x;
         this._x = x;
 
@@ -51,7 +51,7 @@ export class Absolutechildren extends zul.Widget {
      * Returns the current "x" position within parent container component
      * @return int
      */
-    public getX(): number | null {
+    getX(): number | null {
         return this._x;
     }
 
@@ -60,7 +60,7 @@ export class Absolutechildren extends zul.Widget {
      * <p>Default: 0
      * @param int y the y position
      */
-    public setY(y: number, opts?: Record<string, boolean>): this {
+    setY(y: number, opts?: Record<string, boolean>): this {
         const o = this._y;
         this._y = y;
 
@@ -77,24 +77,24 @@ export class Absolutechildren extends zul.Widget {
      * Returns the current "y" position within parent container component
      * @return int
      */
-    public getY(): number | null {
+    getY(): number | null {
         return this._y;
     }
 
-    private _rePositionBoth(): void {
+    _rePositionBoth(): void {
 		this._rePositionX();
 		this._rePositionY();
 	}
 
-    private _rePositionX(): void {
+    _rePositionX(): void {
 		jq(this.$n()!).css('left', this._x);
 	}
 
-    private _rePositionY(): void {
+    _rePositionY(): void {
 		jq(this.$n()!).css('top', this._y);
 	}
 
-	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		this._rePositionBoth();
 	}

@@ -14,22 +14,22 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 @zk.WrapClass('zhtml.Widget')
 export class Widget extends zk.Widget<HTMLInputElement> {
-	public override rawId = true;
+	override rawId = true;
 
 	/** The class name (<code>zhtml.Widget</code>)
 	 * @type String
 	 */
-	public override className = 'zhtml.Widget';
+	override className = 'zhtml.Widget';
 
 	/** The widget name (<code>zhtml</code>).
 	 * @type String
 	 */
-	public override widgetName = 'zhtml';
+	override widgetName = 'zhtml';
 
-	protected _defChecked?: boolean;
-	protected _defValue?: string;
+	_defChecked?: boolean;
+	_defValue?: string;
 
-	public setDynamicProperty(prop: [string, string]): void {
+	setDynamicProperty(prop: [string, string]): void {
 		var n = this.$n();
 		if (n) {
 			var nm = prop[0], val = prop[1];
@@ -56,7 +56,7 @@ export class Widget extends zk.Widget<HTMLInputElement> {
 		}
 	}
 
-	protected override doClick_(wevt: zk.Event): void {
+	override doClick_(wevt: zk.Event): void {
 		var n = this.$n();
 		if (n) {
 			if (n.tagName != 'INPUT')
@@ -70,7 +70,7 @@ export class Widget extends zk.Widget<HTMLInputElement> {
 		}
 	}
 
-	private _doCheck(): void {
+	_doCheck(): void {
 		var n = this.$n();
 		if (n) {
 			var val = n.checked;
@@ -81,7 +81,7 @@ export class Widget extends zk.Widget<HTMLInputElement> {
 		}
 	}
 
-	public override redraw(out: string[]): void {
+	override redraw(out: string[]): void {
 		return zk.Native.$redraw(out);
 	}
 }

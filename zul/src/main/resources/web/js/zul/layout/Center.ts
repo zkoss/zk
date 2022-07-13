@@ -26,17 +26,17 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.layout.Center')
 export class Center extends zul.layout.LayoutRegion {
-	public _sumFlexWidth = true; //indicate shall add this flex width for borderlayout. @See _fixMinFlex in widget.js
-	public _maxFlexHeight = true;  //indicate shall check if the maximum flex height for borderlayout. @See _fixMinFlex in widget.js
-	protected override _slidable = false; //Center region can't be slided
-	protected override _closable = false; //Center region can't be closed
+	_sumFlexWidth = true; //indicate shall add this flex width for borderlayout. @See _fixMinFlex in widget.js
+	_maxFlexHeight = true;  //indicate shall check if the maximum flex height for borderlayout. @See _fixMinFlex in widget.js
+	override _slidable = false; //Center region can't be slided
+	override _closable = false; //Center region can't be closed
 
 	/**
 	 * The height can't be specified in this component because its height is
 	 * determined by other region components ({@link North} or {@link South}).
 	 * @param String height
 	 */
-	public override setHeight(height: string): this { // readonly
+	override setHeight(height: string): this { // readonly
 		return this;
 	}
 
@@ -45,7 +45,7 @@ export class Center extends zul.layout.LayoutRegion {
 	 * determined by other region components ({@link West} or {@link East}).
 	 * @param String width
 	 */
-	public override setWidth(width: string): this { // readonly
+	override setWidth(width: string): this { // readonly
 		return this;
 	}
 
@@ -53,7 +53,7 @@ export class Center extends zul.layout.LayoutRegion {
 	 * This component can't be hidden.
 	 * @param boolean visible
 	 */
-	public override setVisible(visible: boolean): this { // readonly
+	override setVisible(visible: boolean): this { // readonly
 		return this;
 	}
 
@@ -61,25 +61,25 @@ export class Center extends zul.layout.LayoutRegion {
 	 * The size can't be returned in this component.
 	 * @return String
 	 */
-	public getSize = zk.$void;     // readonly
+	getSize = zk.$void;     // readonly
 
 	/**
 	 * The size can't be specified in this component.
 	 * @param String size
 	 */
-	public setSize = zk.$void;        // readonly
+	setSize = zk.$void;        // readonly
 
 	/**
 	 * Center region can't be enabled the collapsed margin functionality.
 	 * @param String cmargins
 	 */
-	public override setCmargins = zk.$void;        // readonly
+	override setCmargins = zk.$void;        // readonly
 
 	/**
 	 * Center region can't be enabled the split functionality.
 	 * @param boolean splittable
 	 */
-	public override setSplittable(splittable: boolean, opts?: Record<string, boolean>): this {// readonly
+	override setSplittable(splittable: boolean, opts?: Record<string, boolean>): this {// readonly
 		return this;
 	}
 
@@ -87,7 +87,7 @@ export class Center extends zul.layout.LayoutRegion {
 	 * Center region can't be closed.
 	 * @param boolean open
 	 */
-	public override setOpen(open: boolean, opts?: Record<string, boolean>): this {// readonly
+	override setOpen(open: boolean, opts?: Record<string, boolean>): this {// readonly
 		return this;
 	}
 
@@ -95,7 +95,7 @@ export class Center extends zul.layout.LayoutRegion {
 	 * Center region can't be enabled the collapse functionality.
 	 * @param boolean collapsible
 	 */
-	public override setCollapsible(collapsible: boolean, opts?: Record<string, boolean>): this { // readonly
+	override setCollapsible(collapsible: boolean, opts?: Record<string, boolean>): this { // readonly
 		return this;
 	}
 
@@ -103,7 +103,7 @@ export class Center extends zul.layout.LayoutRegion {
 	 * Center region can't be enabled the maxsize.
 	 * @param int maxsize
 	 */
-	public override setMaxsize(maxsize: number): this {// readonly
+	override setMaxsize(maxsize: number): this {// readonly
 		return this;
 	}
 
@@ -111,7 +111,7 @@ export class Center extends zul.layout.LayoutRegion {
 	 * Center region can't be enabled the minsize.
 	 * @param int minsize
 	 */
-	public override setMinsize(minsize: number): this { // readonly
+	override setMinsize(minsize: number): this { // readonly
 		return this;
 	}
 
@@ -119,7 +119,7 @@ export class Center extends zul.layout.LayoutRegion {
 	 * Center region can't be slided.
 	 * @param boolean slide
 	 */
-	public override setSlide(slide: boolean, opts?: Record<string, boolean>): this { // readonly
+	override setSlide(slide: boolean, opts?: Record<string, boolean>): this { // readonly
 		return this;
 	}
 
@@ -127,7 +127,7 @@ export class Center extends zul.layout.LayoutRegion {
 	 * Center region can't be slided.
 	 * @param boolean slidable
 	 */
-	public override setSlidable(slidable: boolean): this { // readonly
+	override setSlidable(slidable: boolean): this { // readonly
 		return this;
 	}
 
@@ -135,19 +135,19 @@ export class Center extends zul.layout.LayoutRegion {
 	 * Center region can't be closed.
 	 * @param boolean closable
 	 */
-	public override setClosable(v: boolean, opts?: Record<string, boolean>): this { // readonly
+	override setClosable(v: boolean, opts?: Record<string, boolean>): this { // readonly
 		return this;
 	}
 
-	protected override doMouseOver_ = zk.$void;    // do nothing.
-	protected override doMouseOut_ = zk.$void;     // do nothing.
-	public override doClick_ = zk.$void;           // do nothing.
+	override doMouseOver_ = zk.$void;    // do nothing.
+	override doMouseOut_ = zk.$void;     // do nothing.
+	override doClick_ = zk.$void;           // do nothing.
 
 	/**
 	 * Returns {@link Borderlayout#CENTER}.
 	 * @return String
 	 */
-	public override getPosition(): string {
+	override getPosition(): string {
 		return zul.layout.Borderlayout.CENTER;
 	}
 }

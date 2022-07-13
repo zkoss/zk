@@ -23,18 +23,18 @@ it will be useful, but WITHOUT ANY WARRANTY.
 export class Caption extends zul.LabelImageWidget<HTMLDivElement> {
 	// NOTE: parent could be null as asserted in domCon
 	// In essence, parent is `zul.wnd.Window | zul.wnd.Panel | zul.wgt.Groupbox`.
-	public override parent!: null | zk.Widget & Partial<zul.wnd.Panel>;
+	override parent!: null | zk.Widget & Partial<zul.wnd.Panel>;
 	//super//
-	protected domDependent_ = true;
+	domDependent_ = true;
 
-	public override rerender(skipper?: zk.Skipper | number | null): void {
+	override rerender(skipper?: zk.Skipper | number | null): void {
 		var p = this.parent;
 		if (p)
 			p.clearCache(); // B50-ZK-244
 		super.rerender(skipper);
 	}
 
-	protected override domContent_(): string {
+	override domContent_(): string {
 		var label = this.getLabel(),
 			img = this.getImage(),
 			title = this.parent ? this.parent._title : '',
@@ -48,7 +48,7 @@ export class Caption extends zul.LabelImageWidget<HTMLDivElement> {
 		return label ? img + ' ' + '<span class="' + this.$s('label') + '">' + label + '</span>' : img;
 	}
 
-	public override updateDomContent_(): void {
+	override updateDomContent_(): void {
 		var cnt = this.domContent_(),
 		dn = this.$n('cave');
 		if (dn) {
@@ -65,7 +65,7 @@ export class Caption extends zul.LabelImageWidget<HTMLDivElement> {
 		}
 	}
 
-	protected override domClass_(no?: zk.DomClassOptions): string {
+	override domClass_(no?: zk.DomClassOptions): string {
 		var sc = super.domClass_(no),
 			parent = this.parent;
 
@@ -75,42 +75,42 @@ export class Caption extends zul.LabelImageWidget<HTMLDivElement> {
 		return sc + (parent._closable ? '' : ' ' + this.$s('readonly'));
 	}
 
-	public override doClick_(evt: zk.Event, popupOnly?: boolean): void {
+	override doClick_(evt: zk.Event, popupOnly?: boolean): void {
 		if (this.parent instanceof zul.wgt.Groupbox && this.parent.isClosable())
 			this.parent.setOpen(!this.parent.isOpen());
 		super.doClick_(evt, popupOnly);
 	}
 
 	//private//
-	public _getBlank(): string {
+	_getBlank(): string {
 		return '&nbsp;';
 	}
 
 	/** Whether to generate a collapsible button (determined by parent only). */
-	private _isCollapsibleVisible(): boolean | undefined {
+	_isCollapsibleVisible(): boolean | undefined {
 		var parent = this.parent!;
 		return parent.isCollapsible && parent.getCollapseOpenIconClass_ && parent.isCollapsible();
 	}
 
 	/** Whether to generate a close button (determined by parent only). */
-	private _isCloseVisible(): boolean | undefined {
+	_isCloseVisible(): boolean | undefined {
 		var parent = this.parent!;
 		return parent.isClosable && parent.getClosableIconClass_ && parent.isClosable();
 	}
 
 	/** Whether to generate a minimize button (determined by parent only). */
-	private _isMinimizeVisible(): boolean | undefined {
+	_isMinimizeVisible(): boolean | undefined {
 		var parent = this.parent!;
 		return parent.isMinimizable && parent.getMinimizableIconClass_ && parent.isMinimizable();
 	}
 
 	/** Whether to generate a maximize button (determined by parent only). */
-	private _isMaximizeVisible(): boolean | undefined {
+	_isMaximizeVisible(): boolean | undefined {
 		var parent = this.parent!;
 		return parent.isMaximizable && parent.getMaximizableIconClass_ && parent.isMaximizable();
 	}
 
-	public override beforeMinFlex_(o: zk.FlexOrient): number | null | undefined { // Fixed for B50-3343388.zul
+	override beforeMinFlex_(o: zk.FlexOrient): number | null | undefined { // Fixed for B50-3343388.zul
 		// FIXME: Div has no property width. Setting it in the console has no effect.
 		// Dead code?
 		if (o == 'w')
@@ -119,7 +119,7 @@ export class Caption extends zul.LabelImageWidget<HTMLDivElement> {
 	}
 
 	// override for the bug ZK-1799
-	protected override setFlexSizeW_(n: HTMLElement, zkn: zk.JQZK, width: number, isFlexMin?: boolean): void {
+	override setFlexSizeW_(n: HTMLElement, zkn: zk.JQZK, width: number, isFlexMin?: boolean): void {
 		if (isFlexMin) {
 			if (this._isCloseVisible()) {
 				var close = this.parent!.$n_('close');
@@ -143,7 +143,7 @@ export class Caption extends zul.LabelImageWidget<HTMLDivElement> {
 
 	// override
 	// ZK-786
-	public override getImageNode(): HTMLImageElement | null | undefined {
+	override getImageNode(): HTMLImageElement | null | undefined {
 		if (!this._eimg && this._image) {
 			var n = this.$n<HTMLImageElement>('img');
 			if (n) this._eimg = n;

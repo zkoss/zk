@@ -23,12 +23,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 @zk.WrapClass('zul.sel.Treefooter')
 export class Treefooter extends zul.mesh.FooterWidget {
 	// NOTE: The parent of Treefooter should be Treefoot, but Treefoot is not a HeadWidget.
-	// public override parent!: zul.sel.Treefoot | null;
+	// override parent!: zul.sel.Treefoot | null;
 
 	/** Returns the tree that this belongs to.
 	 * @return Tree
 	 */
-	public getTree(): zul.sel.Tree | null | undefined {
+	getTree(): zul.sel.Tree | null | undefined {
 		return this.getMeshWidget() as zul.sel.Tree | null | undefined;
 	}
 
@@ -36,7 +36,7 @@ export class Treefooter extends zul.mesh.FooterWidget {
 	 * this footer, or null if not available.
 	 * @return Treecol
 	 */
-	public getTreecol(): zul.sel.Treecol | null | undefined {
+	getTreecol(): zul.sel.Treecol | null | undefined {
 		return this.getHeaderWidget() as zul.sel.Treecol | null | undefined;
 	}
 
@@ -47,13 +47,13 @@ export class Treefooter extends zul.mesh.FooterWidget {
 	 * @return int
 	 * @since 5.0.5
 	 */
-	public getMaxlength(): number {
+	getMaxlength(): number {
 		var tc = this.getTreecol();
 		return tc ? tc.getMaxlength()! : 0;
 	}
 
 	//@Override
-	protected override domLabel_(): string {
+	override domLabel_(): string {
 		return zUtl.encodeXML(this.getLabel(), {maxlength: this.getMaxlength()});
 	}
 }

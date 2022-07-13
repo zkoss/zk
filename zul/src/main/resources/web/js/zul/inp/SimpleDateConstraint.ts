@@ -18,11 +18,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.inp.SimpleDateConstraint')
 export class SimpleDateConstraint extends zul.inp.SimpleConstraint {
-	public readonly format = 'yyyyMMdd';
-	private _wgt: zul.db.Datebox;
-	private _localizedSymbols?: zk.LocalizedSymbols;
-	private _beg?: DateImpl;
-	private _end?: DateImpl;
+	readonly format = 'yyyyMMdd';
+	_wgt: zul.db.Datebox;
+	_localizedSymbols?: zk.LocalizedSymbols;
+	_beg?: DateImpl;
+	_end?: DateImpl;
 
 	/** Constructor.
 	 * @param Object a
@@ -31,13 +31,13 @@ export class SimpleDateConstraint extends zul.inp.SimpleConstraint {
 	 * @param zk.Widget the datebox
 	 * @since 5.0.8
 	 */
-	public constructor(a: unknown, wgt: zul.db.Datebox) {
+	constructor(a: unknown, wgt: zul.db.Datebox) {
 		super(a);
 		this._wgt = wgt;
 		this._localizedSymbols = wgt._localizedSymbols;
 	}
 
-	protected override parseConstraint_(constraint: string): void {
+	override parseConstraint_(constraint: string): void {
 		var len = this.format.length + 1,
 			arr = this._cstArr,
 			wgt = this._wgt,
@@ -69,7 +69,7 @@ export class SimpleDateConstraint extends zul.inp.SimpleConstraint {
 		return super.parseConstraint_(constraint);
 	}
 
-	public override validate(wgt: zk.Widget, val: unknown): zul.inp.SimpleConstraintErrorMessages | string | undefined {
+	override validate(wgt: zk.Widget, val: unknown): zul.inp.SimpleConstraintErrorMessages | string | undefined {
 		var result = super.validate(wgt, val);
 		if (val instanceof window.DateImpl) {
 			var msg = this._errmsg,
@@ -85,7 +85,7 @@ export class SimpleDateConstraint extends zul.inp.SimpleConstraint {
 	/** Returns the message about out of range value
 	 * @return String
 	 */
-	public outOfRangeValue(): string {
+	outOfRangeValue(): string {
 		var format = this._wgt._format,
 			separator = msgzul.OUT_OF_RANGE_SEPARATOR ? ' ' + msgzul.OUT_OF_RANGE_SEPARATOR + ' ' : ' ~ ';
 		return msgzul.OUT_OF_RANGE + ': ' + (this._beg != null ? this._end != null ?

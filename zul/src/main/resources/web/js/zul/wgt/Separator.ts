@@ -27,21 +27,21 @@ let _shallFixPercent: (wgt: zul.wgt.Separator) => boolean =
  */
 @zk.WrapClass('zul.wgt.Separator')
 export class Separator extends zul.Widget {
-	public _orient = 'horizontal';
-	private _bar = false;
-	public _spacing?: string;
+	_orient = 'horizontal';
+	_bar = false;
+	_spacing?: string;
 
 	/** Returns the orient.
 	 * <p>Default: "horizontal".
 	 * @return String
 	 */
-	public getOrient(): string {
+	getOrient(): string {
 		return this._orient;
 	}
 	/** Sets the orient.
 	 * @param String orient either "horizontal" or "vertical".
 	 */
-	public setOrient(v: string, opts?: Record<string, boolean>): this {
+	setOrient(v: string, opts?: Record<string, boolean>): this {
 		const o = this._orient;
 		this._orient = v;
 		if (o !== v || (opts && opts.force)) {
@@ -53,13 +53,13 @@ export class Separator extends zul.Widget {
 	 * <p>Default: false
 	 * @return boolean
 	 */
-	public isBar(): boolean {
+	isBar(): boolean {
 		return this._bar;
 	}
 	/** Sets  whether to display a visual bar as the separator.
 	 * @param boolean bar
 	 */
-	public setBar(v: boolean, opts?: Record<string, boolean>): this {
+	setBar(v: boolean, opts?: Record<string, boolean>): this {
 		const o = this._bar;
 		this._bar = v;
 		if (o !== v || (opts && opts.force)) {
@@ -71,13 +71,13 @@ export class Separator extends zul.Widget {
 	 * <p>Default: null (depending on CSS).
 	 * @return String
 	 */
-	public getSpacing(): string | undefined {
+	getSpacing(): string | undefined {
 		return this._spacing;
 	}
 	/** Sets the spacing.
 	 * @param String spacing the spacing (such as "0", "5px", "3pt" or "1em")
 	 */
-	public setSpacing(v: string, opts?: Record<string, boolean>): this {
+	setSpacing(v: string, opts?: Record<string, boolean>): this {
 		const o = this._spacing;
 		this._spacing = v;
 		if (o !== v || (opts && opts.force)) {
@@ -89,18 +89,18 @@ export class Separator extends zul.Widget {
 	/** Returns whether it is a vertical separator.
 	 * @return boolean
 	 */
-	public isVertical(): boolean {
+	isVertical(): boolean {
 		return this._orient == 'vertical';
 	}
 
 	//super//
-	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 	}
-	public override getZclass(): string {
+	override getZclass(): string {
 		return 'z-separator';
 	}
-	protected override domClass_(no?: zk.DomClassOptions): string {
+	override domClass_(no?: zk.DomClassOptions): string {
 		var sc = super.domClass_(no),
 			bar = this.isBar();
 		if (!no || !no.zclass) {
@@ -109,7 +109,7 @@ export class Separator extends zul.Widget {
 		}
 		return sc;
 	}
-	protected override domStyle_(no?: zk.DomStyleOptions): string {
+	override domStyle_(no?: zk.DomStyleOptions): string {
 		var s = super.domStyle_(no);
 		if (!_shallFixPercent(this))
 			return s;
@@ -123,13 +123,13 @@ export class Separator extends zul.Widget {
 		return 'margin:' + (this.isVertical() ? '0 ' + percent : percent + ' 0')
 			+ ';' + s;
 	}
-	public override getWidth(): string | null | undefined {
+	override getWidth(): string | null | undefined {
 		let wd = super.getWidth();
 		return !this.isVertical() || (wd != null && wd.length > 0)
 			|| _shallFixPercent(this) ? wd : this._spacing;
 
 	}
-	public override getHeight(): string | null | undefined {
+	override getHeight(): string | null | undefined {
 		let hgh = super.getHeight();
 		return this.isVertical() || (hgh != null && hgh.length > 0)
 			|| _shallFixPercent(this) ? hgh : this._spacing;

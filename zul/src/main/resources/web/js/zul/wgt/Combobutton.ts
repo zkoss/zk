@@ -78,20 +78,20 @@ function _attachPopup(wgt: zul.wgt.Combobutton, bListen: boolean): void {
  */
 @zk.WrapClass('zul.wgt.Combobutton')
 export class Combobutton extends zul.wgt.Button {
-	public override firstChild!: zul.wgt.Popup | null;
-	public override lastChild!: zul.wgt.Popup | null;
+	override firstChild!: zul.wgt.Popup | null;
+	override lastChild!: zul.wgt.Popup | null;
 
-	public _autodrop?: boolean;
-	public _bover?: boolean;
-	public _tidclose?: number | null;
-	public _oldppclose?(opts?: zul.wgt.PopupOptions): void;
+	_autodrop?: boolean;
+	_bover?: boolean;
+	_tidclose?: number | null;
+	_oldppclose?(opts?: zul.wgt.PopupOptions): void;
 
 	/** Returns whether to automatically drop the list if users is changing
 	 * this text box.
 	 * <p>Default: false.
 	 * @return boolean
 	 */
-	public isAutodrop(): boolean | undefined {
+	isAutodrop(): boolean | undefined {
 		return this._autodrop;
 	}
 
@@ -99,7 +99,7 @@ export class Combobutton extends zul.wgt.Button {
 	 * this text box.
 	 * @param boolean autodrop
 	 */
-	public setAutodrop(autodrop: boolean): this {
+	setAutodrop(autodrop: boolean): this {
 		this._autodrop = autodrop;
 		return this;
 	}
@@ -108,7 +108,7 @@ export class Combobutton extends zul.wgt.Button {
 	 * <p>Default: false.
 	 * @return boolean
 	 */
-	public override isDisabled(): boolean | undefined {
+	override isDisabled(): boolean | undefined {
 		return this._disabled;
 	}
 
@@ -116,7 +116,7 @@ export class Combobutton extends zul.wgt.Button {
 	 * If disabled is true, user cannot tab into the element.
 	 * @param boolean disabled
 	 */
-	public override setDisabled(v: boolean, opts?: Record<string, boolean>): this {
+	override setDisabled(v: boolean, opts?: Record<string, boolean>): this {
 		const o = this._disabled;
 		this._disabled = v;
 
@@ -131,11 +131,11 @@ export class Combobutton extends zul.wgt.Button {
 		return this;
 	}
 
-	public override getZclass(): string {
+	override getZclass(): string {
 		return 'z-combobutton';
 	}
 
-	protected override domContent_(): string {
+	override domContent_(): string {
 		var label = '<span id="' + this.uuid + '-txt" class="' + this.$s('text') + '">'
 			+ zUtl.encodeXML(this.getLabel()) + '</span>',
 			img = this.domImage_(),
@@ -150,26 +150,26 @@ export class Combobutton extends zul.wgt.Button {
 			label + space + img : img + space + label;
 	}
 
-	protected override domImage_(): string {
+	override domImage_(): string {
 		var img = this._image;
 		return img ? '<img class="' + this.$s('image') + '" src="' + img + '" alt="" aria-hidden="true">' : '';
 	}
 
-	protected override domClass_(no?: zk.DomClassOptions): string {
+	override domClass_(no?: zk.DomClassOptions): string {
 		var cls = super.domClass_(no);
 		if (!this._isDefault())
 			cls += ' z-combobutton-toolbar';
 		return cls;
 	}
 
-	private _isDefault(): boolean {
+	_isDefault(): boolean {
 		return this._mold == 'default';
 	}
 
 	/** Returns whether the list of combo items is open
 	 * @return boolean
 	 */
-	public isOpen(): boolean | null | undefined {
+	isOpen(): boolean | null | undefined {
 		var pp = this.firstChild;
 		return pp && pp.isOpen();
 	}
@@ -182,22 +182,22 @@ export class Combobutton extends zul.wgt.Button {
 	 * @see #open
 	 * @see #close
 	 */
-	public setOpen(b: boolean, opts?: zul.wgt.PopupOptions): void {
+	setOpen(b: boolean, opts?: zul.wgt.PopupOptions): void {
 		if (!this._disabled && !zk.animating())
 			// have to provide empty opts or menupopup will set sendOnOpen to true
 			this[b ? 'open' : 'close'](opts || {});
 	}
 
-	protected renderInner_(out: string[]): void {
+	renderInner_(out: string[]): void {
 		for (var w: zk.Widget | null = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
 	}
 
-	protected isTableLayout_(): boolean {
+	isTableLayout_(): boolean {
 		return true;
 	}
 
-	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		var pp = this.firstChild?.$n();
 		// ZK-983
 		if (pp)
@@ -206,7 +206,7 @@ export class Combobutton extends zul.wgt.Button {
 		super.unbind_(skipper, after, keepRod);
 	}
 
-	protected override doFocus_(evt: zk.Event): void {
+	override doFocus_(evt: zk.Event): void {
 		if (this == evt.target)
 			// not change style if mouse down in popup node
 			super.doFocus_(evt);
@@ -214,7 +214,7 @@ export class Combobutton extends zul.wgt.Button {
 
 	/** Open the dropdown widget of the Combobutton.
 	 */
-	public open(opts: zul.wgt.PopupOptions): void {
+	open(opts: zul.wgt.PopupOptions): void {
 		var pp = this.firstChild;
 		if (pp && !this.isOpen()) {
 			if (pp instanceof zul.wgt.Popup) {
@@ -227,12 +227,12 @@ export class Combobutton extends zul.wgt.Button {
 
 	/** Close the dropdown widget of the Combobutton.
 	 */
-	public close(opts?: zul.wgt.PopupOptions): void {
+	close(opts?: zul.wgt.PopupOptions): void {
 		if (this.isOpen())
 			this.firstChild!.close(opts);
 	}
 
-	public override doClick_(evt: zk.Event): void {
+	override doClick_(evt: zk.Event): void {
 		var d = evt.domTarget;
 		// click will fired twice, one with dom target, another with undefined,
 		// see _fixClick in Button.js
@@ -249,13 +249,13 @@ export class Combobutton extends zul.wgt.Button {
 		}
 	}
 
-	protected override doMouseDown_(evt: zk.Event): void {
+	override doMouseDown_(evt: zk.Event): void {
 		if (this == evt.target)
 			// not change style if mouse down in popup node
 			super.doMouseDown_(evt);
 	}
 
-	protected override doMouseOver_(evt: zk.Event): void {
+	override doMouseOver_(evt: zk.Event): void {
 		this._bover = true;
 		if (this == evt.target) {
 			var d = evt.domTarget;
@@ -266,30 +266,30 @@ export class Combobutton extends zul.wgt.Button {
 		}
 	}
 
-	protected override doMouseOut_(evt: zk.Event): void {
+	override doMouseOut_(evt: zk.Event): void {
 		this._bover = false;
 		_setCloseTimer(this);
 		super.doMouseOut_(evt);
 	}
 
-	public _doMouseOver(evt: zk.Event): void { //not zk.Widget.doMouseOver_
+	_doMouseOver(evt: zk.Event): void { //not zk.Widget.doMouseOver_
 		// should not close popup if mouse out combobutton but over popup
 		this._bover = true;
 	}
 
-	public _doMouseOut(evt: zk.Event): void { //not zk.Widget.doMouseOut_
+	_doMouseOut(evt: zk.Event): void { //not zk.Widget.doMouseOut_
 		// should close it if mouse out popup
 		this._bover = false;
 		_setCloseTimer(this);
 	}
 
-	protected override doKeyDown_(evt: zk.Event): void {
+	override doKeyDown_(evt: zk.Event): void {
 		this._doKeyDown(evt);
 		if (!evt.stopped)
 			super.doKeyDown_(evt);
 	}
 
-	private _doKeyDown(evt: zk.Event): false | undefined { //support enter,space, arrow down, and escape
+	_doKeyDown(evt: zk.Event): false | undefined { //support enter,space, arrow down, and escape
 		if (this.isDisabled()) {
 			return false;
 		}
@@ -303,7 +303,7 @@ export class Combobutton extends zul.wgt.Button {
 			this.close();
 	}
 
-	public override focus_(timeout: number): boolean { //support focus
+	override focus_(timeout: number): boolean { //support focus
 		if (this.isDisabled())
 			return false;
 		if (!zk.focusBackFix || !this._upload) {
@@ -322,14 +322,14 @@ export class Combobutton extends zul.wgt.Button {
 		return true;
 	}
 
-	public override ignoreDescendantFloatUp_(des: zk.Widget): boolean {
+	override ignoreDescendantFloatUp_(des: zk.Widget): boolean {
 		return des && des instanceof zul.wgt.Popup;
 	}
 
 	// B60-ZK-1216
 	// Combobutton has problems with label-change if its popup did not close beforehand
 	// Override rerender should also work for the case of image-change
-	public override rerender(skipper?: zk.Skipper | number | null): void {
+	override rerender(skipper?: zk.Skipper | number | null): void {
 		if (this.isOpen()) {
 			this.close();
 		}

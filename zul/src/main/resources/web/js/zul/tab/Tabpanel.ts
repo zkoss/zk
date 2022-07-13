@@ -20,27 +20,27 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
  */
 @zk.WrapClass('zul.tab.Tabpanel')
 export class Tabpanel extends zul.ContainerWidget {
-	public override parent!: zul.tab.Tabpanels | null;
-	private _lastScrollTop?: number | null;
+	override parent!: zul.tab.Tabpanels | null;
+	_lastScrollTop?: number | null;
 
 	/** Returns the tabbox owns this component.
 	 * @return zul.tab.Tabbox
 	 */
-	public getTabbox(): zul.tab.Tabbox | null {
+	getTabbox(): zul.tab.Tabbox | null {
 		return this.parent ? this.parent.parent : null;
 	}
 
-	public override isVisible(strict?: boolean): boolean | null | undefined {
+	override isVisible(strict?: boolean): boolean | null | undefined {
 		return super.isVisible() && this.isSelected();
 	}
 
-	public override setVisible(visible: boolean | undefined): void {
+	override setVisible(visible: boolean | undefined): void {
 		super.setVisible(visible);
 		if (this.desktop && !this.isSelected()) //Bug ZK-1618: not show if current tabpanel is not selected
 			this.$n_().style.display = 'none';
 	}
 
-	protected override domClass_(no?: zk.DomClassOptions): string {
+	override domClass_(no?: zk.DomClassOptions): string {
 		var cls = super.domClass_(no),
 			tabbox = this.getTabbox()!;
 		if (tabbox.inAccordionMold())
@@ -51,7 +51,7 @@ export class Tabpanel extends zul.ContainerWidget {
 	/** Returns the tab associated with this tab panel.
 	 * @return zul.tab.Tab
 	 */
-	public getLinkedTab(): zul.tab.Tab | null | undefined {
+	getLinkedTab(): zul.tab.Tab | null | undefined {
 		var tabbox = this.getTabbox();
 		if (!tabbox) return null;
 
@@ -63,19 +63,19 @@ export class Tabpanel extends zul.ContainerWidget {
 	 * tabpanels.
 	 * @return int
 	 */
-	public getIndex(): number {
+	getIndex(): number {
 		return this.getChildIndex();
 	}
 
 	/** Returns whether this tab panel is selected.
 	 * @return boolean
 	 */
-	public isSelected(): boolean {
+	isSelected(): boolean {
 		return !!this.getLinkedTab()?.isSelected();
 	}
 
 	// Bug 3026669
-	public _changeSel(oldPanel: zul.tab.Tabpanel | null | undefined): void {
+	_changeSel(oldPanel: zul.tab.Tabpanel | null | undefined): void {
 		if (oldPanel) {
 			var cave = this.$n('cave'),
 				panel: HTMLElement | null | undefined;
@@ -84,7 +84,7 @@ export class Tabpanel extends zul.ContainerWidget {
 		}
 	}
 
-	public _sel(toSel: boolean, animation: boolean): void { //don't rename (zkmax counts on it)!!
+	_sel(toSel: boolean, animation: boolean): void { //don't rename (zkmax counts on it)!!
 		var tabbox = this.getTabbox();
 
 		// B95-ZK-4695.zul, the Tabpanel is removed so that its desktop should be null.
@@ -129,7 +129,7 @@ export class Tabpanel extends zul.ContainerWidget {
 	}
 
 	// Could return NaN. Should validate the return value before using it.
-	public getPanelContentHeight_(): number {
+	getPanelContentHeight_(): number {
 		// NOTE: Adding undefined to a number results in NaN. If any argument of
 		// Math.max is undefined, the result is NaN. Fortunately, zul.tab.Tabs.prototype._fixHgh
 		// validates the return value of this function before using it.
@@ -140,7 +140,7 @@ export class Tabpanel extends zul.ContainerWidget {
 		return Math.max(node?.offsetHeight as number, panelContentHeight); // B50-ZK-298: concern panel height
 	}
 
-	private _fixPanelHgh(): void {
+	_fixPanelHgh(): void {
 		var tabbox = this.getTabbox()!,
 			tbx = tabbox.$n_(),
 			hgh: string | number = tbx.style.height;
@@ -166,7 +166,7 @@ export class Tabpanel extends zul.ContainerWidget {
 		}
 	}
 
-	public override onSize(): void {
+	override onSize(): void {
 		var tabbox = this.getTabbox()!;
 		if (tabbox.inAccordionMold() && !zk(this.$n('cave')).isVisible())
 			return;
@@ -174,18 +174,18 @@ export class Tabpanel extends zul.ContainerWidget {
 	}
 
 	//bug #3014664
-	public override setVflex(v: boolean | string | null | undefined): void { //vflex ignored for Tabpanel
+	override setVflex(v: boolean | string | null | undefined): void { //vflex ignored for Tabpanel
 		if (v != 'min') v = false;
 		super.setVflex(v);
 	}
 
 	//bug #3014664
-	public override setHflex(v: boolean | string | null | undefined): void { //hflex ignored for Tabpanel
+	override setHflex(v: boolean | string | null | undefined): void { //hflex ignored for Tabpanel
 		if (v != 'min') v = false;
 		super.setHflex(v);
 	}
 
-	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		zWatch.listen({onSize: this});
 		// B50-ZK-660: Dynamically generated accordion tabs cannot be closed
@@ -205,7 +205,7 @@ export class Tabpanel extends zul.ContainerWidget {
 		}
 	}
 
-	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		zWatch.unlisten({onSize: this});
 		this._lastScrollTop = null;
 		super.unbind_(skipper, after, keepRod);

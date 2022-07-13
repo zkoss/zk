@@ -34,14 +34,14 @@ export type SimpleConstraintErrorMessages = Record<string, string | undefined>
  */
 @zk.WrapClass('zul.inp.SimpleConstraint')
 export class SimpleConstraint extends zk.Object {
-	private _finishParseCst = true;
-	private _regex?: RegExp;
-	public _flags: SimpleConstraintFlags;
-	public _pos?: string;
-	public _errmsg: SimpleConstraintErrorMessages;
-	private _cst?: string;
-	public serverValidate?: boolean;
-	protected _cstArr!: string[];
+	_finishParseCst = true;
+	_regex?: RegExp;
+	_flags: SimpleConstraintFlags;
+	_pos?: string;
+	_errmsg: SimpleConstraintErrorMessages;
+	_cst?: string;
+	serverValidate?: boolean;
+	_cstArr!: string[];
 
 	/** Constructor.
 	 * @param Object a
@@ -50,7 +50,7 @@ export class SimpleConstraint extends zk.Object {
 	 * @param String b the regular expression
 	 * @param String c the error message
 	 */
-	public constructor(a: unknown, b?: RegExp | string, c?: string) {
+	constructor(a: unknown, b?: RegExp | string, c?: string) {
 		super();
 		if (typeof a == 'string') {
 			this._flags = {};
@@ -75,13 +75,13 @@ export class SimpleConstraint extends zk.Object {
 		}
 	}
 
-	public override afterCreated_(a: unknown, b?: RegExp | string, c?: string): void {
+	override afterCreated_(a: unknown, b?: RegExp | string, c?: string): void {
 		if (typeof a == 'string') {
 			this._init(a);
 		}
 	}
 
-	private _init(cst: string): void {
+	_init(cst: string): void {
 		l_out:
 		for (var j = 0, k = 0, len = cst.length; k >= 0; j = k + 1) {
 			for (;; ++j) {
@@ -181,7 +181,7 @@ export class SimpleConstraint extends zk.Object {
 	 *
 	 * @return Object
 	 */
-	public getFlags(): SimpleConstraintFlags {
+	getFlags(): SimpleConstraintFlags {
 		return this._flags;
 	}
 
@@ -191,7 +191,7 @@ export class SimpleConstraint extends zk.Object {
 	 * <p>Deriving classes might override this to provide more constraints.
 	 * @param String cst
 	 */
-	protected parseConstraint_(cst: string): void {
+	parseConstraint_(cst: string): void {
 		var f = this._flags,
 			arr = this._cstArr,
 			bsCst = _baseConstraints[cst as keyof typeof _baseConstraints];
@@ -205,7 +205,7 @@ export class SimpleConstraint extends zk.Object {
 			zk.error('Unknown constraint: ' + cst);
 	}
 
-	private _cvtNum(v: number): SimpleConstraintFlags { //compatible with server side
+	_cvtNum(v: number): SimpleConstraintFlags { //compatible with server side
 		var f: SimpleConstraintFlags = {};
 		if (v & 1)
 			f.NO_POSITIVE = f.NO_FUTURE = true;
@@ -227,7 +227,7 @@ export class SimpleConstraint extends zk.Object {
 	 * @param Object val a String, a number, or a date, the number or name of flag,
 	 * such as "no positive", 0x0001.
 	 */
-	public validate(wgt: zk.Widget & {validateStrict?: SimpleConstraintValidateStrict}, val: unknown): SimpleConstraintErrorMessages | string | undefined {
+	validate(wgt: zk.Widget & {validateStrict?: SimpleConstraintValidateStrict}, val: unknown): SimpleConstraintErrorMessages | string | undefined {
 		if (!this._finishParseCst) {
 			this._cst && this._init(this._cst);
 			this._finishParseCst = true;
@@ -284,7 +284,7 @@ export class SimpleConstraint extends zk.Object {
 		if (!val && f.NO_EMPTY) return msg['NO_EMPTY'] || msgzul.EMPTY_NOT_ALLOWED;
 	}
 
-	private _msgNumDenied(): SimpleConstraintErrorMessages | string {
+	_msgNumDenied(): SimpleConstraintErrorMessages | string {
 		var f = this._flags,
 			msg = this._errmsg;
 		if (f.NO_POSITIVE)
@@ -298,7 +298,7 @@ export class SimpleConstraint extends zk.Object {
 		return msg || msgzul.ILLEGAL_VALUE;
 	}
 
-	private _msgDateDenied(): SimpleConstraintErrorMessages | string {
+	_msgDateDenied(): SimpleConstraintErrorMessages | string {
 		var f = this._flags,
 			msg = this._errmsg;
 		if (f.NO_FUTURE)
@@ -312,7 +312,7 @@ export class SimpleConstraint extends zk.Object {
 		return msg || msgzul.ILLEGAL_VALUE;
 	}
 
-	public reparseConstraint(): void {
+	reparseConstraint(): void {
 		this._finishParseCst = false;
 	}
 }

@@ -18,7 +18,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.inp.Doublebox')
 export class Doublebox extends zul.inp.NumberInputWidget<number> {
-	protected override coerceFromString_(value: string | null | undefined): zul.inp.CoerceFromStringResult | number | null {
+	override coerceFromString_(value: string | null | undefined): zul.inp.CoerceFromStringResult | number | null {
 		if (!value) return null;
 
 		var info = zk.fmt.Number.unformat(this._format!, value, false, this._localizedSymbols),
@@ -71,13 +71,13 @@ export class Doublebox extends zul.inp.NumberInputWidget<number> {
 		return val;
 	}
 
-	public _allzero(val: string): boolean {
+	_allzero(val: string): boolean {
 		for (var len = val.length; len-- > 0;)
 			if (val.charAt(len) != '0') return false;
 		return true;
 	}
 
-	protected override coerceToString_(value?: number | string | null): string {
+	override coerceToString_(value?: number | string | null): string {
 		var fmt = this._format,
 			symbols = this._localizedSymbols,
 			DECIMAL = (symbols ? symbols : zk).DECIMAL;
@@ -86,7 +86,7 @@ export class Doublebox extends zul.inp.NumberInputWidget<number> {
 			DECIMAL == '.' ? ('' + value) : ('' + value).replace('.', DECIMAL!);
 	}
 
-	protected override getAllowedKeys_(): string {
+	override getAllowedKeys_(): string {
 		var symbols = this._localizedSymbols;
 		return super.getAllowedKeys_()
 			+ (symbols ? symbols : zk).DECIMAL + 'e';

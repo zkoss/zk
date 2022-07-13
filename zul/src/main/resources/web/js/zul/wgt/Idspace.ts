@@ -18,7 +18,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.wgt.Idspace')
 export class Idspace extends zul.wgt.Div {
-	public constructor() {
+	constructor() {
 		super(); // FIXME: params?
 		this._fellows = {};
 		// NOTE: Prior to TS migration, super is called after `_fellows` is initialized.

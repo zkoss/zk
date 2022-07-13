@@ -18,19 +18,19 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
  */
 @zk.WrapClass('zul.wgt.Rating')
 export class Rating extends zul.Widget {
-	private _orient = 'horizontal';
-	private _rating = 0;
-	private _cancelable = true;
-	private _max = 5;
-	private _disabled = false;
-	private _iconSclass = 'z-icon-star';
-	private _readonly?: boolean;
+	_orient = 'horizontal';
+	_rating = 0;
+	_cancelable = true;
+	_max = 5;
+	_disabled = false;
+	_iconSclass = 'z-icon-star';
+	_readonly?: boolean;
 
 	/**
 	 * Sets the iconSclass.
 	 * @param String sclass
 	 */
-	public setIconSclass(sclass: string, opts?: Record<string, boolean>): this {
+	setIconSclass(sclass: string, opts?: Record<string, boolean>): this {
 		const o = this._iconSclass;
 		this._iconSclass = sclass;
 
@@ -47,7 +47,7 @@ export class Rating extends zul.Widget {
 	 * Returns the iconSclass.
 	 * @return String
 	 */
-	public getIconSclass(): string {
+	getIconSclass(): string {
 		return this._iconSclass;
 	}
 
@@ -55,7 +55,7 @@ export class Rating extends zul.Widget {
 	 * Sets the rating.
 	 * @param int rating
 	 */
-	public setRating(rating: number, opts?: Record<string, boolean>): this {
+	setRating(rating: number, opts?: Record<string, boolean>): this {
 		const o = this._rating;
 		this._rating = rating;
 
@@ -72,7 +72,7 @@ export class Rating extends zul.Widget {
 	 * Returns the rating.
 	 * @return int
 	 */
-	public getRating(): number {
+	getRating(): number {
 		return this._rating;
 	}
 
@@ -80,7 +80,7 @@ export class Rating extends zul.Widget {
 	 * Sets whether this widget is disabled
 	 * @param boolean disabled
 	 */
-	public setDisabled(disabled: boolean, opts?: Record<string, boolean>): this {
+	setDisabled(disabled: boolean, opts?: Record<string, boolean>): this {
 		const o = this._disabled;
 		this._disabled = disabled;
 
@@ -97,7 +97,7 @@ export class Rating extends zul.Widget {
 	 * Returns whether this widget is disabled
 	 * @return boolean
 	 */
-	public isDisabled(): boolean {
+	isDisabled(): boolean {
 		return this._disabled;
 	}
 
@@ -105,7 +105,7 @@ export class Rating extends zul.Widget {
 	 * Sets whether this widget is readonly
 	 * @param boolean readonly
 	 */
-	public setReadonly(readonly: boolean, opts?: Record<string, boolean>): this {
+	setReadonly(readonly: boolean, opts?: Record<string, boolean>): this {
 		const o = this._readonly;
 		this._readonly = readonly;
 
@@ -122,11 +122,11 @@ export class Rating extends zul.Widget {
 	 * Returns whether this widget is readonly
 	 * @return boolean
 	 */
-	public isReadonly(): boolean | undefined {
+	isReadonly(): boolean | undefined {
 		return this._readonly;
 	}
 
-	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		var wgt = this,
 			isVertical = 'vertical' == wgt._orient;
@@ -136,7 +136,7 @@ export class Rating extends zul.Widget {
 		});
 	}
 
-	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		var wgt = this;
 		jq(wgt).children().each(function () {
 			wgt.domUnlisten_(this, 'onMouseOver', '_doMouseOver').domUnlisten_(this, 'onMouseOut', '_doMouseOut');
@@ -144,7 +144,7 @@ export class Rating extends zul.Widget {
 		super.unbind_(skipper, after, keepRod);
 	}
 
-	protected override domClass_(no?: zk.DomClassOptions): string {
+	override domClass_(no?: zk.DomClassOptions): string {
 		var sc = super.domClass_(no);
 		if (!no || !no.zclass) {
 			sc += ' ' + this.$s(this._orient);
@@ -152,13 +152,13 @@ export class Rating extends zul.Widget {
 		return sc;
 	}
 
-	protected override doSelect_(evt: zk.Event): void {
+	override doSelect_(evt: zk.Event): void {
 		if (this._disabled || this._readonly)
 			return;
 		this._changeRating(evt);
 	}
 
-	private _changeRating(evt: zk.Event): void {
+	_changeRating(evt: zk.Event): void {
 		var rating = jq(evt.domTarget!).data('rate') as number,
 			isCanceling = this._cancelable && this._rating == rating;
 		jq(this).children().removeClass(this.$s('hover'));
@@ -166,19 +166,19 @@ export class Rating extends zul.Widget {
 		this.fire('onChange', {rating: this._rating});
 	}
 
-	public _doMouseOver(evt: zk.Event): void {
+	_doMouseOver(evt: zk.Event): void {
 		if (this._disabled || this._readonly)
 			return;
 		this._toggleClass('hover', jq(evt.domTarget!).data('rate') as number);
 	}
 
-	public _doMouseOut(evt: zk.Event): void {
+	_doMouseOut(evt: zk.Event): void {
 		if (this._disabled || this._readonly)
 			return;
 		jq(this).children().removeClass(this.$s('hover'));
 	}
 
-	private _toggleClass(name: string, rate: number): void {
+	_toggleClass(name: string, rate: number): void {
 		var wgt = this;
 		jq(wgt).children().each(function () {
 			var jqCh = jq(this);

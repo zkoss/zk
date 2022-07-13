@@ -22,11 +22,11 @@ export class Intbox extends zul.inp.NumberInputWidget<number> {
 	/** Returns the value in int. If null, zero is returned.
 	 * @return int
 	 */
-	public intValue(): number | undefined {
+	intValue(): number | undefined {
 		return super.getValue();
 	}
 
-	protected override coerceFromString_(value: string | null | undefined): zul.inp.CoerceFromStringResult | number | null {
+	override coerceFromString_(value: string | null | undefined): zul.inp.CoerceFromStringResult | number | null {
 		if (!value) return null;
 
 		var info = zk.fmt.Number.unformat(this._format!, value, false, this._localizedSymbols),
@@ -47,7 +47,7 @@ export class Intbox extends zul.inp.NumberInputWidget<number> {
 		return val;
 	}
 
-	protected override coerceToString_(value: unknown): string {
+	override coerceToString_(value: unknown): string {
 		var fmt = this._format;
 		return fmt ? zk.fmt.Number.format(fmt, value as string, this._rounding!, this._localizedSymbols)
 					: value != null ? '' + value : '';

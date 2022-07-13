@@ -19,16 +19,16 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.grid.Columns')
 export class Columns extends zul.mesh.ColumnMenuWidget {
-	public override parent!: zul.grid.Grid | null;
+	override parent!: zul.grid.Grid | null;
 
 	/** Returns the grid that contains this columns.
 	 * @return zul.grid.Grid
 	 */
-	public getGrid(): zul.grid.Grid | null {
+	getGrid(): zul.grid.Grid | null {
 		return this.parent;
 	}
 
-	public override rerender(skipper?: zk.Skipper | number | null): this {
+	override rerender(skipper?: zk.Skipper | number | null): this {
 		if (this.desktop) {
 			if (this.parent)
 				this.parent.rerender();
@@ -38,12 +38,12 @@ export class Columns extends zul.mesh.ColumnMenuWidget {
 		return this;
 	}
 
-	public override getGroupPackage_(): string {
+	override getGroupPackage_(): string {
 		return 'zkex.grid';
 	}
 
 	//@Override
-	protected override shallFireSizedLaterWhenAddChd_(): boolean {
+	override shallFireSizedLaterWhenAddChd_(): boolean {
 		zWatch.listen({
 			onCommandReady: this
 		});
@@ -51,7 +51,7 @@ export class Columns extends zul.mesh.ColumnMenuWidget {
 	}
 
 	// ZK-4008
-	public onCommandReady(): void {
+	onCommandReady(): void {
 		zUtl.fireSized(this);
 		zWatch.unlisten({
 			onCommandReady: this
