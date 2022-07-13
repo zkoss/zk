@@ -10,13 +10,28 @@
 Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 */
-zhtml.Content = zk.$extends(zhtml.Widget, {
-	$define: {
-		content: function () {
+@zk.WrapClass('zhtml.Content')
+export class Content extends zhtml.Widget {
+	private _content?: string;
+	public prolog?: string;
+	public epilog?: string;
+
+	public getContent(): string | undefined {
+		return this._content;
+	}
+
+	public setContent(v: string, opts?: Record<string, boolean>): this {
+		const o = this._content;
+		this._content = v;
+
+		if (o !== v || (opts && opts.force)) {
 			this.rerender();
 		}
-	},
-	redraw: function (out) {
+
+		return this;
+	}
+
+	public override redraw(out: string[]): void {
 		var s = this.prolog;
 		if (s) out.push(s);
 
@@ -26,4 +41,4 @@ zhtml.Content = zk.$extends(zhtml.Widget, {
 		s = this.epilog;
 		if (s) out.push(s);
 	}
-});
+}
