@@ -1,4 +1,4 @@
-/* Input.js
+/* Input.ts
 
 	Purpose:
 		
