@@ -12,8 +12,9 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 -->
 
 <package name="zul.med" language="xul/html" depends="zul">
-	<widget name="Applet"/>
-	<widget name="Audio"/>
-	<widget name="Flash"/>
-	<widget name="Track"/>
+	<script src="index.js"/>
+	<widget name="Applet" moldOnly="true"/>
+	<widget name="Audio" moldOnly="true"/>
+	<widget name="Flash" moldOnly="true"/>
+	<widget name="Track" moldOnly="true"/>
 </package>
