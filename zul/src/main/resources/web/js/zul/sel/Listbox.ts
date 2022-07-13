@@ -41,39 +41,39 @@ function _fixForEmpty(wgt: zul.sel.Listbox): void {
 
 @zk.WrapClass('zul.sel.Listbox')
 export class Listbox extends zul.sel.SelectWidget {
-	// public override firstChild!: zul.sel.Listitem | null;
-	// public override lastChild!: zul.sel.Listitem | null;
-	public _nrows = 0;
+	// override firstChild!: zul.sel.Listitem | null;
+	// override lastChild!: zul.sel.Listitem | null;
+	_nrows = 0;
 	/**
 	 * Whether to allow Listgroup to be selected
 	 * <p>Default: false
 	 * @since 5.0.7
 	 * @type boolean
 	 */
-	public override groupSelect = false;
-	public override _scrollbar?: zul.Scrollbar | null = null;
-	public firstItem?: zul.sel.Listitem | null;
-	public lastItem?: zul.sel.Listitem | null;
-	private _emptyMessage: string | null = null;
-	private _groupsInfo: zul.sel.Listitem[];
-	private _shallStripe?: boolean;
-	public _shallFixEmpty?: boolean;
-	private _scOddRow?: string | null;
-	private _shallScrollIntoView?: boolean;
-	private _listbox$shallUpdateScrollPos?: boolean;
-	private _listbox$shallSyncSelInView?: boolean;
-	public _listbox$noSelectAll?: boolean;
-	private _tmpScrollTop?: number | null;
-	public listhead?: zul.sel.Listhead | null;
-	public listfoot?: zul.sel.Listfoot | null;
-	private _offset?: number;
+	override groupSelect = false;
+	override _scrollbar?: zul.Scrollbar | null = null;
+	firstItem?: zul.sel.Listitem | null;
+	lastItem?: zul.sel.Listitem | null;
+	_emptyMessage: string | null = null;
+	_groupsInfo: zul.sel.Listitem[];
+	_shallStripe?: boolean;
+	_shallFixEmpty?: boolean;
+	_scOddRow?: string | null;
+	_shallScrollIntoView?: boolean;
+	_listbox$shallUpdateScrollPos?: boolean;
+	_listbox$shallSyncSelInView?: boolean;
+	_listbox$noSelectAll?: boolean;
+	_tmpScrollTop?: number | null;
+	listhead?: zul.sel.Listhead | null;
+	listfoot?: zul.sel.Listfoot | null;
+	_offset?: number;
 
 	/**
 	 * Returns the message to display when there are no items
 	 * @return String
 	 * @since 5.0.7
 	 */
-	public getEmptyMessage(): string | null {
+	getEmptyMessage(): string | null {
 		return this._emptyMessage;
 	}
 
@@ -82,7 +82,7 @@ export class Listbox extends zul.sel.SelectWidget {
 	 * @param String msg
 	 * @since 5.0.7
 	 */
-	public setEmptyMessage(msg: string, opts?: Record<string, boolean>): this {
+	setEmptyMessage(msg: string, opts?: Record<string, boolean>): this {
 		const o = this._emptyMessage;
 		this._emptyMessage = msg;
 
@@ -101,7 +101,7 @@ export class Listbox extends zul.sel.SelectWidget {
 		return this;
 	}
 
-	public constructor() {
+	constructor() {
 		super(); // FIXME: params?
 		this._groupsInfo = [];
 	}
@@ -110,7 +110,7 @@ export class Listbox extends zul.sel.SelectWidget {
 	 * Returns the number of listgroup
 	 * @return int
 	 */
-	public getGroupCount(): number {
+	getGroupCount(): number {
 		return this._groupsInfo.length;
 	}
 
@@ -118,7 +118,7 @@ export class Listbox extends zul.sel.SelectWidget {
 	 * Returns a list of all {@link Listgroup}.
 	 * @return Array
 	 */
-	public getGroups(): zul.sel.ItemWidget[] {
+	getGroups(): zul.sel.ItemWidget[] {
 		return this._groupsInfo.$clone();
 	}
 
@@ -126,7 +126,7 @@ export class Listbox extends zul.sel.SelectWidget {
 	 * Returns whether listgroup exists.
 	 * @return boolean
 	 */
-	public hasGroup(): boolean {
+	hasGroup(): boolean {
 		return !!this._groupsInfo.length;
 	}
 
@@ -135,7 +135,7 @@ export class Listbox extends zul.sel.SelectWidget {
 	 * @return Listitem
 	 * @param zk.Widget item
 	 */
-	public nextItem(p: zk.Widget | null): zul.sel.Listitem | null {
+	nextItem(p: zk.Widget | null): zul.sel.Listitem | null {
 		if (p)
 			while ((p = p.nextSibling) && !(p instanceof zul.sel.Listitem));
 		return p;
@@ -146,7 +146,7 @@ export class Listbox extends zul.sel.SelectWidget {
 	 * @return Listitem
 	 * @param zk.Widget item
 	 */
-	public previousItem(p: zk.Widget | null): zul.sel.Listitem | null {
+	previousItem(p: zk.Widget | null): zul.sel.Listitem | null {
 		if (p)
 			while ((p = p.previousSibling) && !(p instanceof zul.sel.Listitem));
 		return p;
@@ -158,7 +158,7 @@ export class Listbox extends zul.sel.SelectWidget {
 	 * Default: {@link #getZclass()}-odd.
 	 * @return String
 	 */
-	public getOddRowSclass(): string {
+	getOddRowSclass(): string {
 		return this._scOddRow == null ? this.$s('odd') : this._scOddRow;
 	}
 
@@ -169,7 +169,7 @@ export class Listbox extends zul.sel.SelectWidget {
 	 * @param String oddRowSclass
 	 * @return Listbox
 	 */
-	public setOddRowSclass(oddRowSclass: string): this {
+	setOddRowSclass(oddRowSclass: string): this {
 		const scls = oddRowSclass || null;
 		if (this._scOddRow != scls) {
 			this._scOddRow = scls;
@@ -187,12 +187,12 @@ export class Listbox extends zul.sel.SelectWidget {
 	 * Returns whether the HTML's select tag is used.
 	 * @return boolean
 	 */
-	public inSelectMold(): boolean {
+	inSelectMold(): boolean {
 		return 'select' == this.getMold();
 	}
 
 	// bug ZK-56 for non-ROD to scroll after onSize ready
-	public override onSize(): void {
+	override onSize(): void {
 		super.onSize();
 		var self = this,
 			canInitScrollbar = this.desktop && !this.inSelectMold() && !this._nativebar;
@@ -213,7 +213,7 @@ export class Listbox extends zul.sel.SelectWidget {
 		}, 300);
 	}
 
-	protected destroyBar_(): void {
+	destroyBar_(): void {
 		var bar = this._scrollbar;
 		if (bar) {
 			bar.destroy();
@@ -221,7 +221,7 @@ export class Listbox extends zul.sel.SelectWidget {
 		}
 	}
 
-	protected override bind_(desktop: zk.Desktop | null | undefined, skipper: zk.Skipper | null | undefined, after: CallableFunction[]): void {
+	override bind_(desktop: zk.Desktop | null | undefined, skipper: zk.Skipper | null | undefined, after: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after); //it might invoke replaceHTML and then call bind_ again
 		this._shallStripe = true;
 		var w = this;
@@ -237,13 +237,13 @@ export class Listbox extends zul.sel.SelectWidget {
 		zWatch.listen({onCommandReady: this}); //ZK-3152
 	}
 
-	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		zWatch.unlisten({onCommandReady: this}); //ZK-3152
 		this.destroyBar_();
 		super.unbind_(skipper, after, keepRod);
 	}
 
-	private _syncSelInView(): void {
+	_syncSelInView(): void {
 		if (this._shallScrollIntoView) {
 			// ZK-2971: should scroll when not in paging or in paging but operating with keyboard
 			// ZK-3103: if in paging mode, should also scroll when setting selected item/index
@@ -282,7 +282,7 @@ export class Listbox extends zul.sel.SelectWidget {
 		}
 	}
 
-	public override _doScroll(): void {
+	override _doScroll(): void {
 		// B50-ZK-56
 		// ebody.scrollTop will be reset after between fireOnRender and _doScroll after bind_
 		if (this._tmpScrollTop) {
@@ -292,13 +292,13 @@ export class Listbox extends zul.sel.SelectWidget {
 		super._doScroll();
 	}
 
-	public onCommandReady(): void {
+	onCommandReady(): void {
 		//ZK-3152: stripe here will be after all commands and before onResponse to avoid flickering
 		if (this._shallStripe)
 			this.stripe();
 	}
 
-	public override onResponse(ctl: zk.ZWatchController, opts: {rtags: {selectAll?}}): void {
+	override onResponse(ctl: zk.ZWatchController, opts: {rtags: {selectAll?}}): void {
 		if (this.desktop) {
 			//ZK-3152: no need to stripe here, already done in onCommandReady
 			if (this._shallFixEmpty)
@@ -307,7 +307,7 @@ export class Listbox extends zul.sel.SelectWidget {
 		super.onResponse(ctl, opts);
 	}
 
-	private _syncStripe(): void {
+	_syncStripe(): void {
 		this._shallStripe = true;
 	}
 
@@ -315,7 +315,7 @@ export class Listbox extends zul.sel.SelectWidget {
 	 * Stripes the class for each item.
 	 * @return Listbox
 	 */
-	public stripe(): this | undefined {
+	stripe(): this | undefined {
 		var scOdd = this.getOddRowSclass();
 		if (!scOdd) return;
 		var odd = this._offset! & 1,
@@ -331,17 +331,17 @@ export class Listbox extends zul.sel.SelectWidget {
 		return this;
 	}
 
-	public override rerender(skipper?: zk.Skipper | number | null): this {
+	override rerender(skipper?: zk.Skipper | number | null): this {
 		super.rerender(skipper);
 		this._syncStripe();
 		return this;
 	}
 
-	public override getCaveNode(): HTMLElement | null | undefined {
+	override getCaveNode(): HTMLElement | null | undefined {
 		return this.$n('rows') || this.$n('cave');
 	}
 
-	protected override insertChildHTML_(child: zk.Widget, before?: zk.Widget | null, desktop?: zk.Desktop | null): void {
+	override insertChildHTML_(child: zk.Widget, before?: zk.Widget | null, desktop?: zk.Desktop | null): void {
 		const nodeOfBefore = before && (!(child instanceof zul.sel.Listitem) || before instanceof zul.sel.Listitem) ? before.getFirstNode_() : null;
 		if (nodeOfBefore)
 			jq(nodeOfBefore).before(child.redrawHTML_());
@@ -350,7 +350,7 @@ export class Listbox extends zul.sel.SelectWidget {
 		child.bind(desktop);
 	}
 
-	public override insertBefore(child: zk.Widget, sibling: zk.Widget | null | undefined, ignoreDom?: boolean): boolean {
+	override insertBefore(child: zk.Widget, sibling: zk.Widget | null | undefined, ignoreDom?: boolean): boolean {
 		if (super.insertBefore(child, sibling,
 		ignoreDom || (!this.z_rod && !(child instanceof zul.sel.Listitem)))) {
 			this._fixOnAdd(child, ignoreDom);
@@ -359,7 +359,7 @@ export class Listbox extends zul.sel.SelectWidget {
 		return false;
 	}
 
-	public override appendChild(child: zk.Widget, ignoreDom?: boolean): boolean {
+	override appendChild(child: zk.Widget, ignoreDom?: boolean): boolean {
 		if (super.appendChild(child,
 		ignoreDom || (!this.z_rod && !(child instanceof zul.sel.Listitem)))) {
 			if (!this.insertingBefore_)
@@ -369,7 +369,7 @@ export class Listbox extends zul.sel.SelectWidget {
 		return false;
 	}
 
-	private _fixOnAdd(child: zk.Widget, ignoreDom: boolean | undefined, stripe?: boolean, ignoreAll?: boolean): this | undefined {
+	_fixOnAdd(child: zk.Widget, ignoreDom: boolean | undefined, stripe?: boolean, ignoreAll?: boolean): this | undefined {
 		var noRerender;
 		if (child instanceof zul.sel.Listitem) {
 			if (_isListgroup(child))
@@ -408,7 +408,7 @@ export class Listbox extends zul.sel.SelectWidget {
 		}
 	}
 
-	public override removeChild(child: zk.Widget, ignoreDom?: boolean): boolean {
+	override removeChild(child: zk.Widget, ignoreDom?: boolean): boolean {
 		if (super.removeChild(child, ignoreDom)) {
 			this._fixOnRemove(child, ignoreDom);
 			return true;
@@ -416,7 +416,7 @@ export class Listbox extends zul.sel.SelectWidget {
 		return false;
 	}
 
-	private _fixOnRemove(child: zk.Widget, ignoreDom: boolean | undefined): void {
+	_fixOnRemove(child: zk.Widget, ignoreDom: boolean | undefined): void {
 		var stripe;
 		if (child == this.listhead)
 			this.listhead = null;
@@ -462,7 +462,7 @@ export class Listbox extends zul.sel.SelectWidget {
 	 * @param Array out A array that contains html structure ,
 	 * 			it usually come from mold(redraw_).
 	 */
-	protected redrawEmpty_(out: string[]): void {
+	redrawEmpty_(out: string[]): void {
 		out.push('<tbody class="', this.$s('emptybody'), '"><tr><td id="',
 				this.uuid, '-empty" style="display:none">',
 				'<div id="', this.uuid, '-empty-content"');
@@ -471,7 +471,7 @@ export class Listbox extends zul.sel.SelectWidget {
 		out.push('>', this._emptyMessage!, '</div></td></tr></tbody>');
 	}
 
-	protected override replaceChildHTML_(child: zk.Widget, n: HTMLElement | string, desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, _trim_?: boolean): void {
+	override replaceChildHTML_(child: zk.Widget, n: HTMLElement | string, desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, _trim_?: boolean): void {
 		if (child._renderdefer) {
 			var scOdd = this.getOddRowSclass(),
 				isOdd = jq(n).hasClass(scOdd); // supers will change this result, we need to cache it
@@ -482,11 +482,11 @@ export class Listbox extends zul.sel.SelectWidget {
 			super.replaceChildHTML_(child, n, desktop, skipper, _trim_);
 	}
 
-	public override _syncEmpty(): void {
+	override _syncEmpty(): void {
 		this._shallFixEmpty = true;
 	}
 
-	protected override onChildReplaced_(oldc: zk.Widget | null | undefined, newc: zk.Widget | null | undefined): void {
+	override onChildReplaced_(oldc: zk.Widget | null | undefined, newc: zk.Widget | null | undefined): void {
 		super.onChildReplaced_(oldc, newc);
 
 		if (oldc) this._fixOnRemove(oldc, true);
@@ -504,7 +504,7 @@ export class Listbox extends zul.sel.SelectWidget {
 	 * Returns the head widget class
 	 * @return zul.sel.Listhead
 	 */
-	public getHeadWidgetClass(): typeof zul.sel.Listhead {
+	getHeadWidgetClass(): typeof zul.sel.Listhead {
 		return zul.sel.Listhead;
 	}
 
@@ -513,7 +513,7 @@ export class Listbox extends zul.sel.SelectWidget {
 	 * @return zul.sel.ItemIter
 	 * @disable(zkgwt)
 	 */
-	public itemIterator(opts?: Record<string, unknown>): zul.sel.ItemIter {
+	itemIterator(opts?: Record<string, unknown>): zul.sel.ItemIter {
 		return new zul.sel.ItemIter(this, opts);
 	}
 
@@ -522,9 +522,9 @@ export class Listbox extends zul.sel.SelectWidget {
 	 * @see #itemIterator
 	 * @disable(zkgwt)
 	 */
-	public getBodyWidgetIterator = Listbox.prototype.itemIterator;
+	getBodyWidgetIterator = Listbox.prototype.itemIterator;
 
-	public override _updHeaderCM(): void {
+	override _updHeaderCM(): void {
 		// B50-3322970: need to clear Listheader _check cache
 		var lh = this.listhead && this.listhead.firstChild;
 		if (this._headercm && this._multiple && lh)
@@ -532,7 +532,7 @@ export class Listbox extends zul.sel.SelectWidget {
 		super._updHeaderCM();
 	} // @Override F70-ZK-2433
 
-	protected override checkOnHighlightDisabled_(): boolean {
+	override checkOnHighlightDisabled_(): boolean {
 		if (this._selectOnHighlightDisabled) {
 			var selection = window.getSelection || document['selection'];
 			if (selection) {
@@ -548,22 +548,22 @@ export class Listbox extends zul.sel.SelectWidget {
 	 * @param double scrollRatio the scroll ratio
 	 * @since 8.5.2
 	 */
-	public scrollToIndex(index: number, scrollRatio: number): void {
+	scrollToIndex(index: number, scrollRatio: number): void {
 		var self = this;
 		void this.waitForRendered_().then(function () {
 			self._scrollToIndex(index, scrollRatio);
 		});
 	}
 
-	protected _getFirstItemIndex(): number {
+	_getFirstItemIndex(): number {
 		return this.firstItem!._index!;
 	}
 
-	protected _getLastItemIndex(): number {
+	_getLastItemIndex(): number {
 		return this.lastItem!._index!;
 	}
 
-	protected setItemsInvalid_(wgts: ArrayLike<unknown>[]): void {
+	setItemsInvalid_(wgts: ArrayLike<unknown>[]): void {
 		var wgt = this;
 		zAu.createWidgets(wgts, function (ws) {
 			if (wgt.$n('rows')) {
@@ -599,21 +599,21 @@ export class Listbox extends zul.sel.SelectWidget {
  */
 @zk.WrapClass('zul.sel.ItemIter')
 export class ItemIter extends zk.Object implements zul.mesh.ItemIterator {
-	public box: zul.sel.Listbox;
-	public opts?: Record<string, unknown>;
-	private _isInit?: boolean;
-	public p?: zul.sel.Listitem | null;
+	box: zul.sel.Listbox;
+	opts?: Record<string, unknown>;
+	_isInit?: boolean;
+	p?: zul.sel.Listitem | null;
 
 	/** Constructor
 	 * @param Listbox listbox the widget that the iterator belongs to
 	 */
-	public constructor(box: zul.sel.Listbox, opts?: Record<string, unknown>) {
+	constructor(box: zul.sel.Listbox, opts?: Record<string, unknown>) {
 		super();
 		this.box = box;
 		this.opts = opts;
 	}
 
-	private _init(): void {
+	_init(): void {
 		if (!this._isInit) {
 			this._isInit = true;
 			var p = this.box.firstItem;
@@ -627,7 +627,7 @@ export class ItemIter extends zk.Object implements zul.mesh.ItemIterator {
 	* Returns <tt>true</tt> if the iteration has more elements
 	* @return boolean
 	*/
-	public hasNext(): boolean {
+	hasNext(): boolean {
 		this._init();
 		return !!this.p;
 	}
@@ -637,7 +637,7 @@ export class ItemIter extends zk.Object implements zul.mesh.ItemIterator {
 	 *
 	 * @return Listitem the next element in the iteration.
 	 */
-	public next(): zul.sel.ItemWidget | null | undefined {
+	next(): zul.sel.ItemWidget | null | undefined {
 		this._init();
 		var p = this.p,
 			q = p ? p.parent!.nextItem(p) : null;

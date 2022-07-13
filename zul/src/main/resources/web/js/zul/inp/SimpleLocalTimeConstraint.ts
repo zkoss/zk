@@ -19,11 +19,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.inp.SimpleLocalTimeConstraint')
 export class SimpleLocalTimeConstraint extends zul.inp.SimpleConstraint {
-	public readonly format = 'HHmmss';
-	private _wgt: zul.db.Timebox;
-	private _localizedSymbols?: zk.LocalizedSymbols;
-	private _beg?: DateImpl;
-	private _end?: DateImpl;
+	readonly format = 'HHmmss';
+	_wgt: zul.db.Timebox;
+	_localizedSymbols?: zk.LocalizedSymbols;
+	_beg?: DateImpl;
+	_end?: DateImpl;
 	
 	/** Constructor.
 	 * @param Object a
@@ -31,13 +31,13 @@ export class SimpleLocalTimeConstraint extends zul.inp.SimpleConstraint {
 	 * such as "no positive", 0x0001.
 	 * @param zk.Widget the datebox
 	 */
-	public constructor(a: unknown, wgt: zul.db.Timebox) {
+	constructor(a: unknown, wgt: zul.db.Timebox) {
 		super(a);
 		this._wgt = wgt;
 		this._localizedSymbols = wgt._localizedSymbols;
 	}
 
-	protected override parseConstraint_(constraint: string): void {
+	override parseConstraint_(constraint: string): void {
 		var len = this.format.length + 1,
 			arr = this._cstArr,
 			wgt = this._wgt,
@@ -64,7 +64,7 @@ export class SimpleLocalTimeConstraint extends zul.inp.SimpleConstraint {
 		return super.parseConstraint_(constraint);
 	}
 
-	public override validate(wgt: zk.Widget, val: unknown): zul.inp.SimpleConstraintErrorMessages | string | undefined {
+	override validate(wgt: zk.Widget, val: unknown): zul.inp.SimpleConstraintErrorMessages | string | undefined {
 		var result = super.validate(wgt, val);
 		if (val instanceof DateImpl) {
 			var msg = this._errmsg,
@@ -77,14 +77,14 @@ export class SimpleLocalTimeConstraint extends zul.inp.SimpleConstraint {
 		return result;
 	}
 
-	private _getTime(val: DateImpl): number {
+	_getTime(val: DateImpl): number {
 		return val.getSeconds() + val.getMinutes() * 60 + val.getHours() * 3600;
 	}
 
 	/** Returns the message about out of range value
 	 * @return String
 	 */
-	public outOfRangeValue(): string {
+	outOfRangeValue(): string {
 		var format = this._wgt._format,
 			separator = msgzul.OUT_OF_RANGE_SEPARATOR ? ' ' + msgzul.OUT_OF_RANGE_SEPARATOR + ' ' : ' ~ ';
 		return msgzul.OUT_OF_RANGE + ': ' + (this._beg != null ? this._end != null ?

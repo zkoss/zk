@@ -17,16 +17,16 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.mesh.FooterWidget')
 export abstract class FooterWidget extends zul.LabelImageWidget<HTMLTableCellElement> {
-	public override parent!: zul.mesh.HeadWidget | null;
-	private _span = 1;
-	private _align?: string;
-	private _valign?: string;
+	override parent!: zul.mesh.HeadWidget | null;
+	_span = 1;
+	_align?: string;
+	_valign?: string;
 
 	/** Returns number of columns to span this footer.
 	 * Default: 1.
 	 * @return int
 	 */
-	public getSpan(): number {
+	getSpan(): number {
 		return this._span;
 	}
 
@@ -34,7 +34,7 @@ export abstract class FooterWidget extends zul.LabelImageWidget<HTMLTableCellEle
 	 * <p>It is the same as the colspan attribute of HTML TD tag.
 	 * @param int span
 	 */
-	public setSpan(v: number, opts?: Record<string, boolean>): this {
+	setSpan(v: number, opts?: Record<string, boolean>): this {
 		const o = this._span;
 		this._span = v;
 
@@ -50,14 +50,14 @@ export abstract class FooterWidget extends zul.LabelImageWidget<HTMLTableCellEle
 	 * <p>Default: null (system default: left unless CSS specified).
 	 * @return String
 	 */
-	public getAlign(): string | undefined {
+	getAlign(): string | undefined {
 		return this._align;
 	}
 
 	/** Sets the horizontal alignment of this footer.
 	 * @param String align
 	 */
-	public setAlign(v: string, opts?: Record<string, boolean>): this {
+	setAlign(v: string, opts?: Record<string, boolean>): this {
 		const o = this._align;
 		this._align = v;
 
@@ -73,14 +73,14 @@ export abstract class FooterWidget extends zul.LabelImageWidget<HTMLTableCellEle
 	 * <p>Default: null (system default: top).
 	 * @return String
 	 */
-	public getValign(): string | undefined {
+	getValign(): string | undefined {
 		return this._valign;
 	}
 
 	/** Sets the vertical alignment of this footer.
 	 * @param String valign
 	 */
-	public setValign(v: string, opts?: Record<string, boolean>): this {
+	setValign(v: string, opts?: Record<string, boolean>): this {
 		const o = this._valign;
 		this._valign = v;
 
@@ -96,7 +96,7 @@ export abstract class FooterWidget extends zul.LabelImageWidget<HTMLTableCellEle
 	 * Returns the mesh widget that this belongs to.
 	 * @return zul.mesh.MeshWidget
 	 */
-	public getMeshWidget(): zul.mesh.MeshWidget | null | undefined {
+	getMeshWidget(): zul.mesh.MeshWidget | null | undefined {
 		return this.parent ? this.parent.parent : null;
 	}
 
@@ -104,7 +104,7 @@ export abstract class FooterWidget extends zul.LabelImageWidget<HTMLTableCellEle
 	 * this footer, or null if not available.
 	 * @return zul.mesh.HeaderWidget
 	 */
-	public getHeaderWidget(): zul.mesh.HeaderWidget | null | undefined {
+	getHeaderWidget(): zul.mesh.HeaderWidget | null | undefined {
 		var meshWidget = this.getMeshWidget();
 		if (meshWidget) {
 			var cs = meshWidget.getHeadWidget();
@@ -115,7 +115,7 @@ export abstract class FooterWidget extends zul.LabelImageWidget<HTMLTableCellEle
 	}
 
 	//super
-	protected override domStyle_(no?: zk.DomStyleOptions): string {
+	override domStyle_(no?: zk.DomStyleOptions): string {
 		var style = '',
 			header = this.getHeaderWidget();
 		if (this._align)
@@ -130,12 +130,12 @@ export abstract class FooterWidget extends zul.LabelImageWidget<HTMLTableCellEle
 		return super.domStyle_(no) + style;
 	}
 
-	public override domAttrs_(no?: zk.DomAttrsOptions): string {
+	override domAttrs_(no?: zk.DomAttrsOptions): string {
 		return super.domAttrs_(no)
 			+ (this._span > 1 ? ' colspan="' + this._span + '"' : '');
 	}
 
-	protected override deferRedrawHTML_(out: string[]): void {
+	override deferRedrawHTML_(out: string[]): void {
 		out.push('<td', this.domAttrs_({domClass: true}), ' class="z-renderdefer"></td>');
 	}
 }

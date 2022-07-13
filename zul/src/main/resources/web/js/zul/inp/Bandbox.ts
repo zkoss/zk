@@ -23,12 +23,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.inp.Bandbox')
 export class Bandbox extends zul.inp.ComboWidget {
-	public override firstChild!: zul.inp.Bandpopup | null;
-	public override lastChild!: zul.inp.Bandpopup | null;
-	protected override _iconSclass = 'z-icon-search';
+	override firstChild!: zul.inp.Bandpopup | null;
+	override lastChild!: zul.inp.Bandpopup | null;
+	override _iconSclass = 'z-icon-search';
 
 	//super
-	protected override getPopupSize_(pp: HTMLElement): zul.inp.PopupSize {
+	override getPopupSize_(pp: HTMLElement): zul.inp.PopupSize {
 		var bp = this.firstChild, //bandpopup
 			w, h;
 		if (bp) {
@@ -38,11 +38,11 @@ export class Bandbox extends zul.inp.ComboWidget {
 		return [w || 'auto', h || 'auto'];
 	}
 
-	public override getCaveNode(): HTMLElement | null | undefined {
+	override getCaveNode(): HTMLElement | null | undefined {
 		return this.$n('pp') || this.$n();
 	}
 
-	protected override redrawpp_(out: string[]): void {
+	override redrawpp_(out: string[]): void {
 		var fc = this.firstChild;
 		out.push('<div id="', this.uuid, '-pp" class="', this.$s('popup'),
 		// tabindex=0 to prevent a11y scrollable popup issue, see https://dequeuniversity.com/rules/axe/3.5/scrollable-region-focusable?application=AxeChrome
@@ -54,7 +54,7 @@ export class Bandbox extends zul.inp.ComboWidget {
 		out.push('</div>');
 	}
 
-	public override open(opts?: zul.inp.OpenOptions): void {
+	override open(opts?: zul.inp.OpenOptions): void {
 		if (!this.firstChild) {
 			// ignore when <bandpopup> is absent, but event is still fired
 			if (opts && opts.sendOnOpen)
@@ -64,7 +64,7 @@ export class Bandbox extends zul.inp.ComboWidget {
 		super.open(opts);
 	}
 
-	protected override presize_(): boolean {
+	override presize_(): boolean {
 		var bp = this.firstChild;
 		if (bp && (bp._hflex == 'min' || bp._vflex == 'min')) {
 			zWatch.fireDown('onFitSize', bp, {reverse: true});
@@ -73,19 +73,19 @@ export class Bandbox extends zul.inp.ComboWidget {
 		return false;
 	}
 
-	protected override enterPressed_(evt: zk.Event): void {
+	override enterPressed_(evt: zk.Event): void {
 		//bug 3280506: do not close when children press enter.
 		if (evt.domTarget == this.getInputNode())
 			super.enterPressed_(evt);
 	}
 
-	protected override doKeyUp_(evt: zk.Event): void {
+	override doKeyUp_(evt: zk.Event): void {
 		//bug 3287082: do not fire onChanging when children typing.
 		if (evt.domTarget == this.getInputNode())
 			super.doKeyUp_(evt);
 	}
 
-	protected override _fixsz(ppofs: zul.inp.PopupSize): void {
+	override _fixsz(ppofs: zul.inp.PopupSize): void {
 		super._fixsz(ppofs);
 		var pp = this.getPopupNode_()!,
 			zkpp = zk(pp),
@@ -97,7 +97,7 @@ export class Bandbox extends zul.inp.ComboWidget {
 		}
 	}
 
-	protected override doFocus_(evt: zk.Event): void {
+	override doFocus_(evt: zk.Event): void {
 		var target = evt.domTarget;
 		if (!(target != this.getInputNode() && target != this.$n('btn'))) super.doFocus_(evt);
 	}

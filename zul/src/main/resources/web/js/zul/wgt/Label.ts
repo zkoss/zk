@@ -20,10 +20,10 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
  */
 @zk.WrapClass('zul.wgt.Label')
 export class Label extends zul.Widget {
-	private _value = '';
-	private _maxlength = 0;
-	private _multiline?: boolean;
-	private _pre?: boolean;
+	_value = '';
+	_maxlength = 0;
+	_multiline?: boolean;
+	_pre?: boolean;
 
 	/** Returns the value.
 	 * <p>Default: "".
@@ -31,14 +31,14 @@ export class Label extends zul.Widget {
 	 * other than null.
 	 * @return String
 	 */
-	public getValue(): string {
+	getValue(): string {
 		return this._value;
 	}
 
 	/** Sets the value.
 	 * @param String value
 	 */
-	public setValue(value: string, opts?: Record<string, boolean>): this {
+	setValue(value: string, opts?: Record<string, boolean>): this {
 		const o = this._value;
 		this._value = value;
 
@@ -54,7 +54,7 @@ export class Label extends zul.Widget {
 	 * begining of each line.
 	 * @return boolean
 	 */
-	public isMultiline(): boolean | undefined {
+	isMultiline(): boolean | undefined {
 		return this._multiline;
 	}
 
@@ -62,7 +62,7 @@ export class Label extends zul.Widget {
 	 * begining of each line.
 	 * @param boolean multiline
 	 */
-	public setMultiline(multiline: boolean, opts?: Record<string, boolean>): this {
+	setMultiline(multiline: boolean, opts?: Record<string, boolean>): this {
 		const o = this._multiline;
 		this._multiline = multiline;
 
@@ -86,7 +86,7 @@ export class Label extends zul.Widget {
 	 * In other words, <code>pre</code> implies <code>multiline</code>
 	 * @return boolean
 	 */
-	public isPre(): boolean | undefined {
+	isPre(): boolean | undefined {
 		return this._pre;
 	}
 
@@ -94,7 +94,7 @@ export class Label extends zul.Widget {
 	 * tab and new line.
 	 * @param boolean pre
 	 */
-	public setPre(pre: boolean, opts?: Record<string, boolean>): this {
+	setPre(pre: boolean, opts?: Record<string, boolean>): this {
 		const o = this._pre;
 		this._pre = pre;
 
@@ -110,14 +110,14 @@ export class Label extends zul.Widget {
 	 * <p>Default: 0 (means no limitation)
 	 * @return int
 	 */
-	public getMaxlength(): number {
+	getMaxlength(): number {
 		return this._maxlength;
 	}
 
 	/** Sets the maximal length of the label.
 	 * @param int maxlength
 	 */
-	public setMaxlength(maxlength: number, opts?: Record<string, boolean>): this {
+	setMaxlength(maxlength: number, opts?: Record<string, boolean>): this {
 		const o = this._maxlength;
 		this._maxlength = maxlength;
 
@@ -134,12 +134,12 @@ export class Label extends zul.Widget {
 	 * @see zUtl#encodeXML
 	 * @return String
 	 */
-	public getEncodedText(): string {
+	getEncodedText(): string {
 		return zUtl.encodeXML(this._value, {multiline: this._multiline, pre: this._pre, maxlength: this._maxlength});
 	}
 
 	// fix for HTML5 doctype that give a special gap between top and button
-	public override getMarginSize_(attr: zk.FlexOrient): number { //'w' for width or 'h' for height
+	override getMarginSize_(attr: zk.FlexOrient): number { //'w' for width or 'h' for height
 		var o = super.getMarginSize_(attr);
 		if (attr == 'h') {
 			var n = this.$n()!,

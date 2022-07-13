@@ -26,28 +26,28 @@ function _isListgroupfoot(wgt: zk.Widget): boolean {
 @zk.WrapClass('zul.sel.Listcell')
 export class Listcell extends zul.LabelImageWidget<HTMLTableCellElement> {
 	// Parent could be null as asserted by `bindChildren_`.
-	public override parent!: zul.sel.Listitem | null;
-	private _span = 1;
+	override parent!: zul.sel.Listitem | null;
+	_span = 1;
 
 	/** Returns number of columns to span this cell.
 	 * Default: 1.
 	 * @return int
 	 */
-	public getColspan = Listcell.prototype.getSpan;
+	getColspan = Listcell.prototype.getSpan;
 
 	/** Sets the number of columns to span this cell.
 	 * <p>It is the same as the colspan attribute of HTML TD tag.
 	 * @param int colspan
 	 */
-	public setColspan = Listcell.prototype.setSpan;
+	setColspan = Listcell.prototype.setSpan;
 
 	// change colspan to span since ZK 10.0.0
-	public getSpan(): number {
+	getSpan(): number {
 		return this._span;
 	}
 
 	// change colspan to span since ZK 10.0.0
-	public setSpan(v: number, opts?: Record<string, boolean>): this {
+	setSpan(v: number, opts?: Record<string, boolean>): this {
 		const o = this._span;
 		this._span = v = Math.max(v, 1);
 
@@ -59,7 +59,7 @@ export class Listcell extends zul.LabelImageWidget<HTMLTableCellElement> {
 		return this;
 	}
 
-	public override setLabel(label: string, opts?: Record<string, boolean>): this {
+	override setLabel(label: string, opts?: Record<string, boolean>): this {
 		super.setLabel(label, opts);
 		if (this.desktop) {
 			var p: zk.Widget = this.parent!;
@@ -74,13 +74,13 @@ export class Listcell extends zul.LabelImageWidget<HTMLTableCellElement> {
 	/** Returns the list box that it belongs to.
 	 * @return Listbox
 	 */
-	public getListbox(): zul.sel.Listbox | null {
+	getListbox(): zul.sel.Listbox | null {
 		var p = this.parent;
 		return p ? p.parent : null;
 	}
 
 	//super//
-	public override getTextNode(): HTMLElement | null | undefined {
+	override getTextNode(): HTMLElement | null | undefined {
 		return jq(this.$n_()).find('>div:first')[0];
 	}
 
@@ -93,7 +93,7 @@ export class Listcell extends zul.LabelImageWidget<HTMLTableCellElement> {
 	 * <p>Note: {@link Option#getMaxlength} is the same as {@link Select#getMaxlength}.
 	 * @return int
 	 */
-	public getMaxlength(): number | undefined {
+	getMaxlength(): number | undefined {
 		var box = this.getListbox();
 		if (!box) return 0;
 		if (box.getMold() == 'select') {
@@ -111,7 +111,7 @@ export class Listcell extends zul.LabelImageWidget<HTMLTableCellElement> {
 	 * this cell, or null if not available.
 	 * @return Listheader
 	 */
-	public getListheader(): zul.sel.Listheader | null | undefined {
+	getListheader(): zul.sel.Listheader | null | undefined {
 		var box = this.getListbox();
 		if (box && box.listhead) {
 			var j = this.getChildIndex();
@@ -121,17 +121,17 @@ export class Listcell extends zul.LabelImageWidget<HTMLTableCellElement> {
 		return null;
 	}
 
-	protected override domLabel_(): string {
+	override domLabel_(): string {
 		return zUtl.encodeXML(this.getLabel(), {maxlength: this.getMaxlength()});
 	}
 
-	protected override domContent_(): string {
+	override domContent_(): string {
 		var s1 = super.domContent_(),
 			s2 = this._colHtmlPre();
 		return s1 ? s2 ? s2 + '&nbsp;' + s1 : s1 : s2;
 	}
 
-	protected override domClass_(no?: zk.DomClassOptions): string {
+	override domClass_(no?: zk.DomClassOptions): string {
 		var scls = super.domClass_(no),
 			p = this.parent!,
 			head = this.getListheader();
@@ -144,7 +144,7 @@ export class Listcell extends zul.LabelImageWidget<HTMLTableCellElement> {
 		return scls;
 	}
 
-	private _colHtmlPre(): string {
+	_colHtmlPre(): string {
 		var s = '',
 			box = this.getListbox(),
 			p = this.parent!;
@@ -181,7 +181,7 @@ export class Listcell extends zul.LabelImageWidget<HTMLTableCellElement> {
 		return (!this.getImage() && !this.getLabel() && !this.firstChild) ? '&nbsp;' : '';
 	}
 
-	protected override doFocus_(evt: zk.Event): void {
+	override doFocus_(evt: zk.Event): void {
 		super.doFocus_(evt);
 		//sync frozen
 		var box = this.getListbox(),
@@ -191,7 +191,7 @@ export class Listcell extends zul.LabelImageWidget<HTMLTableCellElement> {
 			box!._moveToHidingFocusCell(node.cellIndex);
 	}
 
-	protected override doMouseOver_(evt: zk.Event): void {
+	override doMouseOver_(evt: zk.Event): void {
 		var n = this.$n();
 
 		// ZK-2136: all children should apply -moz-user-select: none
@@ -202,7 +202,7 @@ export class Listcell extends zul.LabelImageWidget<HTMLTableCellElement> {
 		super.doMouseOver_(evt);
 	}
 
-	protected override doMouseOut_(evt: zk.Event): void {
+	override doMouseOut_(evt: zk.Event): void {
 		var n = this.$n();
 
 		// ZK-2136: all children should apply -moz-user-select: none
@@ -213,13 +213,13 @@ export class Listcell extends zul.LabelImageWidget<HTMLTableCellElement> {
 		super.doMouseOut_(evt);
 	}
 
-	public override domAttrs_(no?: zk.DomAttrsOptions): string {
+	override domAttrs_(no?: zk.DomAttrsOptions): string {
 		return super.domAttrs_(no)
 			+ (this._span > 1 ? ' colspan="' + this._span + '"' : '');
 	}
 
 	//-- super --//
-	protected override domStyle_(no?: zk.DomStyleOptions): string {
+	override domStyle_(no?: zk.DomStyleOptions): string {
 		var style = '',
 			head = this.getListheader();
 		if (head) {
@@ -233,19 +233,19 @@ export class Listcell extends zul.LabelImageWidget<HTMLTableCellElement> {
 		return super.domStyle_(no) + style;
 	}
 
-	protected override bindChildren_(desktop?: zk.Desktop, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bindChildren_(desktop?: zk.Desktop, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
 		var p = this.parent;
 		if (!p || !(p instanceof zul.sel.Option || p instanceof zul.sel.Optgroup))
 			super.bindChildren_(desktop, skipper, after);
 	}
 
-	protected override unbindChildren_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbindChildren_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		var p = this.parent;
 		if (!p || !(p instanceof zul.sel.Option || p instanceof zul.sel.Optgroup))
 			super.unbindChildren_(skipper, after, keepRod);
 	}
 
-	protected override deferRedrawHTML_(out: string[]): void {
+	override deferRedrawHTML_(out: string[]): void {
 		out.push('<td', this.domAttrs_({domClass: true}), ' class="z-renderdefer"></td>');
 	}
 }

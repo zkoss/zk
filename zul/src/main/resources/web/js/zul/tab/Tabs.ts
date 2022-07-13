@@ -21,22 +21,22 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
  */
 @zk.WrapClass('zul.tab.Tabs')
 export class Tabs extends zul.Widget {
-	public override parent!: zul.tab.Tabbox;
+	override parent!: zul.tab.Tabbox;
 
-	public _tabsScrollLeft = 0;
-	public _tabsScrollTop = 0;
-	public _shallCheck?: boolean;
-	private _doingScroll?: Record<string, number>;
+	_tabsScrollLeft = 0;
+	_tabsScrollTop = 0;
+	_shallCheck?: boolean;
+	_doingScroll?: Record<string, number>;
 
 	/** Returns the tabbox owns this component.
 	 * @return zul.tab.Tabbox
 	 */
-	public getTabbox(): zul.tab.Tabbox {
+	getTabbox(): zul.tab.Tabbox {
 		return this.parent;
 	}
 
 	//@Override
-	public override getWidth(): string | null | undefined {
+	override getWidth(): string | null | undefined {
 		var wd = this._width;
 		if (!wd) {
 			var tabbox = this.getTabbox();
@@ -46,14 +46,14 @@ export class Tabs extends zul.Widget {
 		return wd;
 	}
 
-	public override onSize(): void {
+	override onSize(): void {
 		this._fixWidth(true); //ZK-2810: set height to tabbox when onSize (maybe setHeight or setWidth)
 
 		// Bug Z35-tabbox-004.zul, we need to check again.
 		this._scrollcheck('init');
 	}
 
-	public beforeSize(): void {
+	beforeSize(): void {
 		var tabbox = this.getTabbox(),
 			width = tabbox.getWidth(),
 			style = this.$n_().style;
@@ -67,7 +67,7 @@ export class Tabs extends zul.Widget {
 		}
 	}
 
-	protected override insertChildHTML_(child: zk.Widget, before?: zk.Widget | null, desktop?: zk.Desktop | null): void {
+	override insertChildHTML_(child: zk.Widget, before?: zk.Widget | null, desktop?: zk.Desktop | null): void {
 		var last = child.previousSibling,
 			out;
 		if (before)
@@ -88,28 +88,28 @@ export class Tabs extends zul.Widget {
 	}
 
 	//bug #3014664
-	public override setVflex(v: boolean | string | null | undefined): void { //vflex ignored for Tabs
+	override setVflex(v: boolean | string | null | undefined): void { //vflex ignored for Tabs
 		if (v != 'min') v = false;
 		super.setVflex(v);
 	}
 
 	//bug #3014664
-	public override setHflex(v: boolean | string | null | undefined): void { //hflex ignored for Tabs
+	override setHflex(v: boolean | string | null | undefined): void { //hflex ignored for Tabs
 		if (v != 'min') v = false;
 		super.setHflex(v);
 	}
 
-	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		zWatch.listen({onSize: this, onResponse: this, beforeSize: this});
 	}
 
-	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		zWatch.unlisten({onSize: this, onResponse: this, beforeSize: this});
 		super.unbind_(skipper, after, keepRod);
 	}
 
-	public _scrollcheck(way: string, tb?: zul.tab.Tab): void {
+	_scrollcheck(way: string, tb?: zul.tab.Tab): void {
 		this._shallCheck = false;
 		var tabbox = this.getTabbox();
 		if (!this.desktop
@@ -246,7 +246,7 @@ export class Tabs extends zul.Widget {
 		}
 	}
 
-	public _doScroll(to: string, move: number): void {
+	_doScroll(to: string, move: number): void {
 		if (!this._doingScroll)
 			this._doingScroll = {};
 		if (move <= 0 || this._doingScroll[to])
@@ -292,7 +292,7 @@ export class Tabs extends zul.Widget {
 		}, 10);
 	}
 
-	private _getArrowSize(): number {
+	_getArrowSize(): number {
 		var tabbox = this.getTabbox(),
 			isVer = tabbox.isVertical(),
 			btnA = isVer ? tabbox.$n('up') : tabbox.$n('left'),
@@ -304,7 +304,7 @@ export class Tabs extends zul.Widget {
 		return size;
 	}
 
-	private _showbutton(show: boolean): void {
+	_showbutton(show: boolean): void {
 		var tabbox = this.getTabbox();
 		if (tabbox.isTabscroll()) {
 			var cls = tabbox.$s('scroll');
@@ -323,7 +323,7 @@ export class Tabs extends zul.Widget {
 		}
 	}
 
-	public _fixWidth(toSel: boolean): void {
+	_fixWidth(toSel: boolean): void {
 		var tabs = this.$n_(),
 			tabbox = this.getTabbox(),
 			tbx = tabbox.$n_(),
@@ -372,7 +372,7 @@ export class Tabs extends zul.Widget {
 		}
 	}
 
-	private _fixHgh(toSel: boolean): void {
+	_fixHgh(toSel: boolean): void {
 		if (this.getTabbox()._scrolling) return;
 		var tabbox = this.getTabbox();
 		//fix tabpanels's height if tabbox's height is specified
@@ -420,13 +420,13 @@ export class Tabs extends zul.Widget {
 		}
 	}
 
-	public onResponse(): void {
+	onResponse(): void {
 		if (this._shallCheck) {
 			this._scrollcheck('init');
 		}
 	}
 
-	protected override onChildRemoved_(child: zk.Widget): void {
+	override onChildRemoved_(child: zk.Widget): void {
 		var p = this.parent;
 		if (p && child == p._selTab) {
 			p._selTab = null;
@@ -436,13 +436,13 @@ export class Tabs extends zul.Widget {
 		super.onChildRemoved_(child);
 	}
 
-	protected override onChildAdded_(child: zk.Widget): void {
+	override onChildAdded_(child: zk.Widget): void {
 		if (this.desktop)
 			this._shallCheck = true;
 		super.onChildAdded_(child);
 	}
 
-	protected override onChildVisible_(child: zk.Widget): void {
+	override onChildVisible_(child: zk.Widget): void {
 		if (this.desktop) {
 			var tabbox = this.getTabbox();
 			if (tabbox.inAccordionMold() && tabbox.getHeight()) {
@@ -452,17 +452,17 @@ export class Tabs extends zul.Widget {
 		super.onChildVisible_(child);
 	}
 
-	public override ignoreFlexSize_(attr: zk.FlexOrient): boolean {
+	override ignoreFlexSize_(attr: zk.FlexOrient): boolean {
 		var p = this.getTabbox();
 		return (p.isVertical() && 'h' == attr)
 			|| (p.isHorizontal() && 'w' == attr);
 	}
 
-	private _fixTabsScrollLeft(scrollLeft: number): void {
+	_fixTabsScrollLeft(scrollLeft: number): void {
 		this.$n_().scrollLeft = this._tabsScrollLeft = scrollLeft;
 	}
 
-	private _fixTabsScrollTop(scrollTop: number): void {
+	_fixTabsScrollTop(scrollTop: number): void {
 		this.$n_().scrollTop = this._tabsScrollTop = scrollTop;
 	}
 }

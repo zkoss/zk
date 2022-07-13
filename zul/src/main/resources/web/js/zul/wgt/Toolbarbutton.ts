@@ -39,25 +39,25 @@ function _cleanUpld(wgt: zul.wgt.Toolbarbutton): void {
  */
 @zk.WrapClass('zul.wgt.Toolbarbutton')
 export class Toolbarbutton extends zul.LabelImageWidget implements zul.LabelImageWidgetWithAutodisable {
-	public _adbs?: boolean;
-	public _disabled?: boolean;
-	public _autodisable?: string;
+	_adbs?: boolean;
+	_disabled?: boolean;
+	_autodisable?: string;
 
-	private _orient = 'horizontal';
-	private _dir = 'normal';
-	private _mode = 'default';
-	private _checked = false;
-	protected override _tabindex = 0;
-	private _type?: string;
-	private _href?: string;
-	private _target?: string;
-	public _upload?: string;
+	_orient = 'horizontal';
+	_dir = 'normal';
+	_mode = 'default';
+	_checked = false;
+	override _tabindex = 0;
+	_type?: string;
+	_href?: string;
+	_target?: string;
+	_upload?: string;
 
 	/**
 	 * Returns the mode.
 	 * @return String
 	 */
-	public getMode(): string | null {
+	getMode(): string | null {
 		return this._mode;
 	}
 
@@ -65,7 +65,7 @@ export class Toolbarbutton extends zul.LabelImageWidget implements zul.LabelImag
 	 * Sets the mode. (default/toggle)
 	 * @param String mode
 	 */
-	public setMode(mode: string, opts?: Record<string, boolean>): this {
+	setMode(mode: string, opts?: Record<string, boolean>): this {
 		const o = this._mode;
 		this._mode = mode;
 
@@ -80,14 +80,14 @@ export class Toolbarbutton extends zul.LabelImageWidget implements zul.LabelImag
 	 * <p>Default: false.
 	 * @return boolean
 	 */
-	public isChecked(): boolean {
+	isChecked(): boolean {
 		return this._checked;
 	}
 
 	/** Sets whether it is checked. (Note:It's only available in toggle mode.)
 	 * @param boolean val
 	 */
-	public setChecked(val: boolean, opts?: Record<string, boolean>): this {
+	setChecked(val: boolean, opts?: Record<string, boolean>): this {
 		const o = this._checked;
 		this._checked = val;
 
@@ -103,14 +103,14 @@ export class Toolbarbutton extends zul.LabelImageWidget implements zul.LabelImag
 	 * <p>Default: false.
 	 * @return boolean
 	 */
-	public isDisabled(): boolean | undefined {
+	isDisabled(): boolean | undefined {
 		return this._disabled;
 	}
 
 	/** Sets whether it is disabled.
 	 * @param boolean disabled
 	 */
-	public setDisabled(v: boolean, opts?: Record<string, boolean>): this {
+	setDisabled(v: boolean, opts?: Record<string, boolean>): this {
 		const o = this._disabled;
 
 		//B60-ZK-1176
@@ -158,14 +158,14 @@ export class Toolbarbutton extends zul.LabelImageWidget implements zul.LabelImag
 	 * <p>If it is not null, the onClick event won't be sent.
 	 * @return String
 	 */
-	public getHref(): string | undefined {
+	getHref(): string | undefined {
 		return this._href;
 	}
 
 	/** Sets the href.
 	 * @param String href
 	 */
-	public setHref(href: string): this {
+	setHref(href: string): this {
 		this._href = href;
 		return this;
 	}
@@ -178,14 +178,14 @@ export class Toolbarbutton extends zul.LabelImageWidget implements zul.LabelImag
 	 * <p>Default: null.
 	 * @return String
 	 */
-	public getTarget(): string | undefined {
+	getTarget(): string | undefined {
 		return this._target;
 	}
 
 	/** Sets the target frame or window.
 	 * @param String target the name of the frame or window to hyperlink.
 	 */
-	public setTarget(target: string): this {
+	setTarget(target: string): this {
 		this._target = target;
 		return this;
 	}
@@ -194,14 +194,14 @@ export class Toolbarbutton extends zul.LabelImageWidget implements zul.LabelImag
 	 * <p>Default: "normal".
 	 * @return String
 	 */
-	public getDir(): string {
+	getDir(): string {
 		return this._dir;
 	}
 
 	/** Sets the direction.
 	 * @param String dir either "normal" or "reverse".
 	 */
-	public setDir(dir: string, opts?: Record<string, boolean>): this {
+	setDir(dir: string, opts?: Record<string, boolean>): this {
 		const o = this._dir;
 		this._dir = dir;
 
@@ -216,14 +216,14 @@ export class Toolbarbutton extends zul.LabelImageWidget implements zul.LabelImag
 	 * <p>Default: "horizontal".
 	 * @return String
 	 */
-	public getOrient(): string {
+	getOrient(): string {
 		return this._orient;
 	}
 
 	/** Sets the orient.
 	 * @param String orient either "horizontal" or "vertical".
 	 */
-	public setOrient(orient: string, opts?: Record<string, boolean>): this {
+	setOrient(orient: string, opts?: Record<string, boolean>): this {
 		const o = this._orient;
 		this._orient = orient;
 
@@ -272,14 +272,14 @@ export class Toolbarbutton extends zul.LabelImageWidget implements zul.LabelImag
 	 * <p>Default: null.
 	 * @return String
 	 */
-	public getAutodisable(): string | undefined {
+	getAutodisable(): string | undefined {
 		return this._autodisable;
 	}
 
 	/** Sets whether to disable the button after the user clicks it.
 	 * @param String autodisable
 	 */
-	public setAutodisable(autodisable: string): this {
+	setAutodisable(autodisable: string): this {
 		this._autodisable = autodisable;
 		return this;
 	}
@@ -288,7 +288,7 @@ export class Toolbarbutton extends zul.LabelImageWidget implements zul.LabelImag
 	 * Refer to {@link #setUpload} for more details.
 	 * @return String
 	 */
-	public getUpload(): string | undefined {
+	getUpload(): string | undefined {
 		return this._upload;
 	}
 
@@ -321,7 +321,7 @@ export class Toolbarbutton extends zul.LabelImageWidget implements zul.LabelImag
 	 * or null or "false" to disable the file download (and then
 	 * this button behaves like a normal button).
 	 */
-	public setUpload(v: string, opts?: Record<string, boolean>): this {
+	setUpload(v: string, opts?: Record<string, boolean>): this {
 		const o = this._upload;
 		this._upload = v;
 
@@ -338,11 +338,11 @@ export class Toolbarbutton extends zul.LabelImageWidget implements zul.LabelImag
 	}
 
 	// super//
-	public override getTextNode(): HTMLElement | null | undefined {
+	override getTextNode(): HTMLElement | null | undefined {
 		return this.$n('cnt');
 	}
 
-	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		if (!this._disabled) {
 			var n = this.$n_();
@@ -352,7 +352,7 @@ export class Toolbarbutton extends zul.LabelImageWidget implements zul.LabelImag
 		if (!this._disabled && this._upload) _initUpld(this);
 	}
 
-	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		_cleanUpld(this);
 		var n = this.$n_();
 		this.domUnlisten_(n, 'onFocus', 'doFocus_')
@@ -361,7 +361,7 @@ export class Toolbarbutton extends zul.LabelImageWidget implements zul.LabelImag
 		super.unbind_(skipper, after, keepRod);
 	}
 
-	protected override domContent_(): string {
+	override domContent_(): string {
 		var label = zUtl.encodeXML(this.getLabel()), img = this.domImage_(),
 			iconSclass = this.domIcon_();
 		if (!img && !iconSclass)
@@ -374,7 +374,7 @@ export class Toolbarbutton extends zul.LabelImageWidget implements zul.LabelImag
 		return this.getDir() == 'reverse' ? label + space + img : img + space + label;
 	}
 
-	protected override domClass_(no?: zk.DomClassOptions): string {
+	override domClass_(no?: zk.DomClassOptions): string {
 		var scls = super.domClass_(no),
 			zcls = this.getZclass(),
 			nozcls = (!no || !no.zclass);
@@ -386,19 +386,19 @@ export class Toolbarbutton extends zul.LabelImageWidget implements zul.LabelImag
 		return scls;
 	}
 
-	public override domAttrs_(no?: zk.DomAttrsOptions): string {
+	override domAttrs_(no?: zk.DomAttrsOptions): string {
 		var attr = super.domAttrs_(no);
 		if (this._disabled)
 			attr += ' disabled="disabled"';
 		return attr;
 	}
 
-	public override onSize(): void {
+	override onSize(): void {
 		if (this._uplder)
 			this._uplder.sync();
 	}
 
-	public override doClick_(evt: zk.Event<zk.EventMetaData>, popupOnly?: boolean): void {
+	override doClick_(evt: zk.Event<zk.EventMetaData>, popupOnly?: boolean): void {
 		if (!this._disabled) {
 			if (!this._upload)
 				zul.wgt.ADBS.autodisable(this);
@@ -431,7 +431,7 @@ export class Toolbarbutton extends zul.LabelImageWidget implements zul.LabelImag
 		}
 	}
 
-	public override focus_(timeout: number): boolean {
+	override focus_(timeout: number): boolean {
 		if (this._tabindex != undefined || this._href || this._upload) {
 			var self = this,
 				n = this.$n_();

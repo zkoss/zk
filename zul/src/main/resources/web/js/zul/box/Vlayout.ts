@@ -19,11 +19,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.box.Vlayout')
 export class Vlayout extends zul.box.Layout {
-    protected override isVertical_(): boolean {
+    override isVertical_(): boolean {
 		return true;
 	}
 
-    protected override getFlexDirection_(): string {
+    override getFlexDirection_(): string {
 		return 'column';
 	}
 }

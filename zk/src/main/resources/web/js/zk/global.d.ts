@@ -311,22 +311,22 @@ declare namespace zkex {
 	namespace inp {
 		class ContentHandler extends zul.menu.ContentHandler { // zul.menu.Menu
 			// TODO: maybe the type of wgt can be narrowed to zul.menu.Menu
-			public constructor(wgt: zk.Widget, content: string)
+			constructor(wgt: zk.Widget, content: string)
 		}
 	}
 	namespace sel {
 		class Listgroup extends zul.sel.Listitem { // zul.sel.ItemWidget
-			public _open: boolean; // is initialized to true
-			public isOpen(): boolean;
-			public getIconOpenClass_(): string;
-			public getIconCloseClass_(): string;
+			_open: boolean; // is initialized to true
+			isOpen(): boolean;
+			getIconOpenClass_(): string;
+			getIconCloseClass_(): string;
 		}
 		class Listgroupfoot extends zul.sel.Listitem {} // zul.sel.ItemWidget
 	}
 	namespace grid {
 		class Group extends zul.grid.Row { // zul.grid.Rows
-			public domContent_(): string
-			public isOpen(): boolean
+			domContent_(): string
+			isOpen(): boolean
 		}
 		class Groupfoot extends zul.grid.Row { // zul.grid.Rows
 		}
@@ -338,11 +338,11 @@ declare namespace zkex {
 declare namespace zkmax {
 	namespace layout {
 		class Portallayout extends zul.Widget { // zul.wnd.Panel
-			public getMaximizedMode(): string
-			public isVertical(): boolean
+			getMaximizedMode(): string
+			isVertical(): boolean
 		}
 		class Portalchildren extends zul.Widget { // zul.wnd.Panel
-			public override parent: zkmax.layout.Portallayout | null;
+			override parent: zkmax.layout.Portallayout | null;
 		}
 	}
 }

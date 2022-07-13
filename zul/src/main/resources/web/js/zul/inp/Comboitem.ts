@@ -23,28 +23,28 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.inp.Comboitem')
 export class Comboitem extends zul.LabelImageWidget implements zul.LabelImageWidgetWithDisable {
-	public override parent!: zul.inp.Combobox;
-	public override nextSibling!: zul.inp.Comboitem | null;
-	public override previousSibling!: zul.inp.Comboitem | null;
-	public _maxFlexWidth = true; //ZK-5044
-	private _description?: string;
-	private _content?: string;
-	declare private _value: unknown;
-	public _disabled?: boolean;
-	public _autodisable?: string;
+	override parent!: zul.inp.Combobox;
+	override nextSibling!: zul.inp.Comboitem | null;
+	override previousSibling!: zul.inp.Comboitem | null;
+	_maxFlexWidth = true; //ZK-5044
+	_description?: string;
+	_content?: string;
+	declare _value: unknown;
+	_disabled?: boolean;
+	_autodisable?: string;
 
 	/** Returns whether it is disabled.
 	 * <p>Default: false.
 	 * @return boolean
 	 */
-	public isDisabled(): boolean | undefined {
+	isDisabled(): boolean | undefined {
 		return this._disabled;
 	}
 
 	/** Sets whether it is disabled.
 	 * @param boolean disabled
 	 */
-	public setDisabled(v: boolean, opts?: Record<string, boolean>): this {
+	setDisabled(v: boolean, opts?: Record<string, boolean>): this {
 		const o = this._disabled;
 		this._disabled = v;
 
@@ -67,14 +67,14 @@ export class Comboitem extends zul.LabelImageWidget implements zul.LabelImageWid
 	 * other than null.
 	 * @return String
 	 */
-	public getDescription(): string | undefined {
+	getDescription(): string | undefined {
 		return this._description;
 	}
 
 	/** Sets the description.
 	 * @param String desc
 	 */
-	public setDescription(desc: string, opts?: Record<string, boolean>): this {
+	setDescription(desc: string, opts?: Record<string, boolean>): this {
 		const o = this._description;
 		this._description = desc;
 
@@ -97,7 +97,7 @@ export class Comboitem extends zul.LabelImageWidget implements zul.LabelImageWid
 	 * @return String
 	 * @see #getDescription
 	 */
-	public getContent(): string | undefined {
+	getContent(): string | undefined {
 		return this._content;
 	}
 
@@ -108,7 +108,7 @@ export class Comboitem extends zul.LabelImageWidget implements zul.LabelImageWid
 	 * @param String content
 	 * @see #setDescription
 	 */
-	public setContent(content: string, opts?: Record<string, boolean>): this {
+	setContent(content: string, opts?: Record<string, boolean>): this {
 		const o = this._content;
 		this._content = content;
 
@@ -120,21 +120,21 @@ export class Comboitem extends zul.LabelImageWidget implements zul.LabelImageWid
 	}
 
 	// since 10.0.0 for Zephyr to use
-	public setValue(val: unknown): void {
+	setValue(val: unknown): void {
 		this._value = val;
 	}
 
 	// since 10.0.0 for Zephyr to use
-	public getValue(): unknown {
+	getValue(): unknown {
 		return this._value;
 	}
 
 	//super
-	protected override domLabel_(): string {
+	override domLabel_(): string {
 		return zUtl.encodeXML(this.getLabel(), {pre: true});
 	}
 
-	public override doClick_(evt: zk.Event, popupOnly?: boolean): void {
+	override doClick_(evt: zk.Event, popupOnly?: boolean): void {
 		if (!this._disabled) {
 
 			var cb = this.parent;
@@ -150,7 +150,7 @@ export class Comboitem extends zul.LabelImageWidget implements zul.LabelImageWid
 		}
 	}
 
-	protected override domClass_(no?: zk.DomClassOptions): string {
+	override domClass_(no?: zk.DomClassOptions): string {
 		var scls = super.domClass_(no);
 		if (this._disabled && (!no || !no.zclass)) {
 			scls += ' ' + this.$s('disabled');
@@ -158,7 +158,7 @@ export class Comboitem extends zul.LabelImageWidget implements zul.LabelImageWid
 		return scls;
 	}
 
-	protected override deferRedrawHTML_(out: string[]): void {
+	override deferRedrawHTML_(out: string[]): void {
 		out.push('<li', this.domAttrs_({domClass: true}), ' class="z-renderdefer"></li>');
 	}
 }

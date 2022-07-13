@@ -447,75 +447,75 @@ export interface ItemIterator<TItem extends zul.mesh.Item = zul.mesh.Item> {
  */
 @zk.WrapClass('zul.mesh.MeshWidget')
 export abstract class MeshWidget extends zul.Widget {
-	public _rows = 0;
-	private _pagingPosition = 'bottom';
-	public _prehgh = -1;
-	public _minWd: MeshWidth | null = null; //minimum width for each column
-	public _sizedByContent?: boolean;
-	public _span?: string | boolean;
-	private _nspan?: number;
-	private _autopaging: boolean | undefined;
-	public _model: boolean | undefined;
-	protected _paginal?: zul.mesh.Paging;
-	private _pendOnRender?: boolean;
-	private _ebodyScrollPos?: null | { l: number; t: number };
+	_rows = 0;
+	_pagingPosition = 'bottom';
+	_prehgh = -1;
+	_minWd: MeshWidth | null = null; //minimum width for each column
+	_sizedByContent?: boolean;
+	_span?: string | boolean;
+	_nspan?: number;
+	_autopaging: boolean | undefined;
+	_model: boolean | undefined;
+	_paginal?: zul.mesh.Paging;
+	_pendOnRender?: boolean;
+	_ebodyScrollPos?: null | { l: number; t: number };
 	// Types established from inspecting https://www.zkoss.org/zkdemo/grid/header_and_footer
-	public ehead?: HTMLDivElement | null;
-	public eheadtbl?: HTMLTableElement | null;
-	public ehdfaker?: HTMLTableColElement | null;
-	public eheadrows?: HTMLTableSectionElement | null;
+	ehead?: HTMLDivElement | null;
+	eheadtbl?: HTMLTableElement | null;
+	ehdfaker?: HTMLTableColElement | null;
+	eheadrows?: HTMLTableSectionElement | null;
 	// Types established from inspecting https://www.zkoss.org/zkdemo/grid/header_and_footer
-	public ebody?: HTMLDivElement | null;
-	public ebodytbl?: HTMLTableElement | null;
-	public ebdfaker?: HTMLTableColElement | null;
-	public ebodyrows?: HTMLTableSectionElement | null;
+	ebody?: HTMLDivElement | null;
+	ebodytbl?: HTMLTableElement | null;
+	ebdfaker?: HTMLTableColElement | null;
+	ebodyrows?: HTMLTableSectionElement | null;
 	// Types established from inspecting https://www.zkoss.org/zkdemo/grid/header_and_footer
-	public efoot?: HTMLDivElement | null;
-	public efoottbl?: HTMLTableElement | null;
-	public eftfaker?: HTMLTableColElement | null;
-	public efootrows?: HTMLTableSectionElement | null;
+	efoot?: HTMLDivElement | null;
+	efoottbl?: HTMLTableElement | null;
+	eftfaker?: HTMLTableColElement | null;
+	efootrows?: HTMLTableSectionElement | null;
 
-	public efrozen?: HTMLElement | null;
-	public frozen?: zul.mesh.Frozen | null;
+	efrozen?: HTMLElement | null;
+	frozen?: zul.mesh.Frozen | null;
 
-	public paging?: zul.mesh.Paging | null;
-	public heads: zul.mesh.HeadWidget[];
-	public head?: zul.mesh.HeadWidget | null;
-	public foot?: zul.grid.Foot | null;
-	private _visiRows?: number;
-	public _wsbak?: string;
-	private _targetIndex?: number;
-	private _keepScroll?: boolean;
-	private _bottomBoundary?: number;
-	private _topBoundary?: number;
-	public _rowsOnFitSize?: boolean;
-	public _scrollbar?: zul.Scrollbar | null;
-	private _cachehgh?: number;
-	private _lastDevicePixelRatio?: number;
-	private _adjustScrollTopLater?: boolean;
-	private _shallSize?: boolean;
-	public _syncingbodyrows?: boolean;
-	private _shallClearTableWidth?: boolean;
-	protected _shallShowScrollbar?: boolean;
+	paging?: zul.mesh.Paging | null;
+	heads: zul.mesh.HeadWidget[];
+	head?: zul.mesh.HeadWidget | null;
+	foot?: zul.grid.Foot | null;
+	_visiRows?: number;
+	_wsbak?: string;
+	_targetIndex?: number;
+	_keepScroll?: boolean;
+	_bottomBoundary?: number;
+	_topBoundary?: number;
+	_rowsOnFitSize?: boolean;
+	_scrollbar?: zul.Scrollbar | null;
+	_cachehgh?: number;
+	_lastDevicePixelRatio?: number;
+	_adjustScrollTopLater?: boolean;
+	_shallSize?: boolean;
+	_syncingbodyrows?: boolean;
+	_shallClearTableWidth?: boolean;
+	_shallShowScrollbar?: boolean;
 
-	public _syncEmpty(): void {
+	_syncEmpty(): void {
 		// Empty on purpose. To be inherited.
 	}
 
-	public constructor() {
+	constructor() {
 		super(); // FIXME: arguments?
 		this.heads = [];
 	}
 
 	// `zul.mesh.prototype.HeadWidget.onColSize` could assign `_innerWidth` a number
-	public _innerWidth = '100%';
-	protected _currentTop = 0;
-	public _currentLeft = 0;
-	public _nativebar = true;
+	_innerWidth = '100%';
+	_currentTop = 0;
+	_currentLeft = 0;
+	_nativebar = true;
 
-	public abstract getHeadWidgetClass(): typeof zul.mesh.HeadWidget;
-	public abstract getBodyWidgetIterator(opts?: Record<string, unknown>): ItemIterator;
-	public abstract itemIterator(opts?: Record<string, unknown>): ItemIterator;
+	abstract getHeadWidgetClass(): typeof zul.mesh.HeadWidget;
+	abstract getBodyWidgetIterator(opts?: Record<string, unknown>): ItemIterator;
+	abstract itemIterator(opts?: Record<string, unknown>): ItemIterator;
 
 	/**
 	 * Returns the rows. Zero means no limitation.
@@ -523,7 +523,7 @@ export abstract class MeshWidget extends zul.Widget {
 	 * Default: 0.
 	 * @return int
 	 */
-	public getRows(): number {
+	getRows(): number {
 		return this._rows;
 	}
 
@@ -534,7 +534,7 @@ export abstract class MeshWidget extends zul.Widget {
 	 * {@link #setRows} is ignored
 	 * @param int rows
 	 */
-	public setRows(rows: number, opts?: Record<string, boolean>): this {
+	setRows(rows: number, opts?: Record<string, boolean>): this {
 		const o = this._rows;
 		this._rows = rows;
 
@@ -555,7 +555,7 @@ export abstract class MeshWidget extends zul.Widget {
 	 * It is meaningless if the mold is not in "paging".
 	 * @return String
 	 */
-	public getPagingPosition(): string {
+	getPagingPosition(): string {
 		return this._pagingPosition;
 	}
 
@@ -565,7 +565,7 @@ export abstract class MeshWidget extends zul.Widget {
 	 * @param String pagingPosition how to position. It can only be "bottom" (the default), or
 	 * "top", or "both".
 	 */
-	public setPagingPosition(pagingPosition: string, opts?: Record<string, boolean>): this {
+	setPagingPosition(pagingPosition: string, opts?: Record<string, boolean>): this {
 		const o = this._pagingPosition;
 		this._pagingPosition = pagingPosition;
 
@@ -583,7 +583,7 @@ export abstract class MeshWidget extends zul.Widget {
 	 * @return boolean
 	 * @see #setSizedByContent
 	 */
-	public isSizedByContent(): boolean | undefined {
+	isSizedByContent(): boolean | undefined {
 		return this._sizedByContent;
 	}
 
@@ -598,7 +598,7 @@ export abstract class MeshWidget extends zul.Widget {
 	 * lang-addon.xml directly, it will then take higher priority.
 	 * @param boolean byContent
 	 */
-	public setSizedByContent(byContent: boolean, opts?: Record<string, boolean>): this {
+	setSizedByContent(byContent: boolean, opts?: Record<string, boolean>): this {
 		const o = this._sizedByContent;
 		this._sizedByContent = byContent;
 
@@ -616,10 +616,10 @@ export abstract class MeshWidget extends zul.Widget {
 	 * @since 5.0.6
 	 * @see #setSpan
 	 */
-	public getSpan(): string | boolean | undefined {
+	getSpan(): string | boolean | undefined {
 		return this._span;
 	}
-	public isSpan(): string | boolean | undefined {
+	isSpan(): string | boolean | undefined {
 		return this._span;
 	}
 
@@ -639,7 +639,7 @@ export abstract class MeshWidget extends zul.Widget {
 	 * @since 5.0.6
 	 * @see #getSpan
 	 */
-	public setSpan(v: string | boolean, opts?: Record<string, boolean>): this {
+	setSpan(v: string | boolean, opts?: Record<string, boolean>): this {
 		const o = this._span;
 		this._span = v;
 
@@ -665,7 +665,7 @@ export abstract class MeshWidget extends zul.Widget {
 	 * @return boolean
 	 * @see #setAutopaging
 	 */
-	public isAutopaging(): boolean | undefined {
+	isAutopaging(): boolean | undefined {
 		return this._autopaging;
 	}
 
@@ -676,7 +676,7 @@ export abstract class MeshWidget extends zul.Widget {
 	 * height of this widget dynamically.
 	 * @param boolean autopaging
 	 */
-	public setAutopaging(autopaging: boolean, opts?: Record<string, boolean>): this {
+	setAutopaging(autopaging: boolean, opts?: Record<string, boolean>): this {
 		const o = this._autopaging;
 		this._autopaging = autopaging;
 
@@ -691,11 +691,11 @@ export abstract class MeshWidget extends zul.Widget {
 	 * Returns whether the widget is in model mode or not.
 	 * @return boolean
 	 */
-	public isModel(): boolean | undefined {
+	isModel(): boolean | undefined {
 		return this._model;
 	}
 	// TODO: Used by grid. Should prefer the use of isModel
-	public getModel(): boolean | undefined {
+	getModel(): boolean | undefined {
 		return this._model;
 	}
 
@@ -703,7 +703,7 @@ export abstract class MeshWidget extends zul.Widget {
 	 * Sets whether the widget is in model mode.
 	 * @param boolean inModel
 	 */
-	public setModel(inModel: boolean): this {
+	setModel(inModel: boolean): this {
 		this._model = inModel;
 		return this;
 	}
@@ -715,7 +715,7 @@ export abstract class MeshWidget extends zul.Widget {
 	 * @see #setInnerWidth
 	 * @return String
 	 */
-	public getInnerWidth(): string {
+	getInnerWidth(): string {
 		return this._innerWidth;
 	}
 
@@ -735,7 +735,7 @@ export abstract class MeshWidget extends zul.Widget {
 	 *
 	 * @param String innerWidth the inner width. If null, "100%" is assumed.
 	 */
-	public setInnerWidth(v: string, opts?: Record<string, boolean>): this {
+	setInnerWidth(v: string, opts?: Record<string, boolean>): this {
 		const o = this._innerWidth;
 		this._innerWidth = v;
 
@@ -753,7 +753,7 @@ export abstract class MeshWidget extends zul.Widget {
 	 * Returns the external Paging widget, if any.
 	 * @return Paging
 	 */
-	public getPaginal(): zul.mesh.Paging | undefined {
+	getPaginal(): zul.mesh.Paging | undefined {
 		return this._paginal;
 	}
 
@@ -761,7 +761,7 @@ export abstract class MeshWidget extends zul.Widget {
 	 * Sets the external Paging widget.
 	 * @param Paging paging
 	 */
-	public setPaginal(newPaginal: zul.mesh.Paging): void {
+	setPaginal(newPaginal: zul.mesh.Paging): void {
 		if (this._paginal != newPaginal) {
 			if (this._paginal) {
 				this._paginal.setMeshWidget(null);
@@ -778,7 +778,7 @@ export abstract class MeshWidget extends zul.Widget {
 	 * @return int
 	 * @see Paging#getPageSize
 	 */
-	public getPageSize(): number {
+	getPageSize(): number {
 		var pgnl = this.getPagingChild();
 		return pgnl ? pgnl.getPageSize() : 0;
 	}
@@ -787,7 +787,7 @@ export abstract class MeshWidget extends zul.Widget {
 	 * @param int pageSize
 	 * @see Paging#setPageSize
 	 */
-	public setPageSize(pgsz: number): void {
+	setPageSize(pgsz: number): void {
 		var pgnl = this.getPagingChild();
 		if (pgnl)
 			pgnl.setPageSize(pgsz);
@@ -798,7 +798,7 @@ export abstract class MeshWidget extends zul.Widget {
 	 * @return int
 	 * @see Paging#getPageCount
 	 */
-	public getPageCount(): number {
+	getPageCount(): number {
 		var pgnl = this.getPagingChild();
 		return pgnl ? pgnl.getPageCount() : 1;
 	}
@@ -807,7 +807,7 @@ export abstract class MeshWidget extends zul.Widget {
 	 * @return int
 	 * @see Paging#getActivePage
 	 */
-	public getActivePage(): number {
+	getActivePage(): number {
 		var pgnl = this.getPagingChild();
 		return pgnl ? pgnl.getActivePage() : 0;
 	}
@@ -816,7 +816,7 @@ export abstract class MeshWidget extends zul.Widget {
 	 * @param int activePage
 	 * @see Paging#setActivePage
 	 */
-	public setActivePage(pg: number): void {
+	setActivePage(pg: number): void {
 		var pgnl = this.getPagingChild();
 		if (pgnl)
 			pgnl.setActivePage(pg);
@@ -826,15 +826,15 @@ export abstract class MeshWidget extends zul.Widget {
 	 * Returns whether the widget is in paging mold.
 	 * @return boolean
 	 */
-	public inPagingMold(): boolean {
+	inPagingMold(): boolean {
 		return 'paging' == this.getMold();
 	}
 
-	public getPagingChild(): zul.mesh.Paging | undefined {
+	getPagingChild(): zul.mesh.Paging | undefined {
 		return this.paging || this.getPaginal();
 	}
 
-	public override setHeight(height: string | null): void {
+	override setHeight(height: string | null): void {
 		super.setHeight(height);
 		if (this.desktop) {
 			this._setHgh(height);
@@ -842,7 +842,7 @@ export abstract class MeshWidget extends zul.Widget {
 		}
 	}
 
-	public override setWidth(width: string | null): void {
+	override setWidth(width: string | null): void {
 		super.setWidth(width);
 		if (this.eheadtbl) this.eheadtbl.style.width = '';
 		if (this.efoottbl) this.efoottbl.style.width = '';
@@ -850,7 +850,7 @@ export abstract class MeshWidget extends zul.Widget {
 			this.onSize();
 	}
 
-	public override setStyle(style: string): void {
+	override setStyle(style: string): void {
 		if (this._style != style) {
 			super.setStyle(style);
 			if (this.desktop)
@@ -863,7 +863,7 @@ export abstract class MeshWidget extends zul.Widget {
 	 * @return zul.mesh.HeadWidget
 	 * @since 5.0.4
 	 */
-	public getHeadWidget(): zul.mesh.HeadWidget | null | undefined {
+	getHeadWidget(): zul.mesh.HeadWidget | null | undefined {
 		return this.head;
 	}
 
@@ -873,7 +873,7 @@ export abstract class MeshWidget extends zul.Widget {
 	 * @return DOMElement the cell element.
 	 * @since 5.0.7
 	 */
-	public getFocusCell(el: HTMLElement): HTMLTableCellElement | undefined {
+	getFocusCell(el: HTMLElement): HTMLTableCellElement | undefined {
 		var td: HTMLTableCellElement | undefined;
 		// Note: `jq.each` is in general not the same as `jq().each` although it is in this case.
 		// But, only `jq.each` matches the definition in `jQuery.d.ts`.
@@ -892,7 +892,7 @@ export abstract class MeshWidget extends zul.Widget {
 		return td;
 	}
 
-	public _moveToHidingFocusCell(index: number, ignoreWidth?: boolean, notFocusBack?: boolean): void { //used in Row/Listcell and a11y frozen
+	_moveToHidingFocusCell(index: number, ignoreWidth?: boolean, notFocusBack?: boolean): void { //used in Row/Listcell and a11y frozen
 		//B50-3178977 navigating the input in hiddin column.
 		var td = this.ehdfaker ? this.ehdfaker.childNodes[index] as HTMLTableCellElement | undefined : null,
 			frozen = this.frozen,
@@ -909,20 +909,20 @@ export abstract class MeshWidget extends zul.Widget {
 		}
 	}
 
-	public _restoreFocus(): void { //used in Frozen
+	_restoreFocus(): void { //used in Frozen
 		if (_shallFocusBack && zk.currentFocus) {
 			_shallFocusBack = false;
 			zk.currentFocus.focus();
 		}
 	}
 
-	public disableAutoSizing_(): void {
+	disableAutoSizing_(): void {
 		this._span = false;
 		this._nspan = 0;
 		this._sizedByContent = false;
 	}
 
-	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 
 		this._bindDomNode();
@@ -946,7 +946,7 @@ export abstract class MeshWidget extends zul.Widget {
 		zWatch.listen({onSize: this, onResponse: this});
 	}
 
-	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		unlistenOnFitSize(this);
 		zWatch.unlisten({onSize: this, onResponse: this});
 		if (this.ehead) //sync scroll for input tab key scroll
@@ -960,7 +960,7 @@ export abstract class MeshWidget extends zul.Widget {
 		super.unbind_(skipper, after, keepRod);
 	}
 
-	public override clearCache(): void {
+	override clearCache(): void {
 		super.clearCache();
 		this.ebody = this.ehead = this.efoot = this.efrozen = this.ebodytbl
 			= this.eheadtbl = this.efoottbl = this.ebodyrows
@@ -974,7 +974,7 @@ export abstract class MeshWidget extends zul.Widget {
 	 * at client and add or remove children from this widget.
 	 * @since 5.0.8
 	 */
-	public syncSize(): void {
+	syncSize(): void {
 		if (this.desktop) {
 			this.clearCachedSize_();
 			if (this._hflex == 'min') {
@@ -987,7 +987,7 @@ export abstract class MeshWidget extends zul.Widget {
 	}
 
 	// These paramters are not used. They exist for the sake of inheritance.
-	public onResponse(ctl?: zk.ZWatchController, opts?: Record<string, unknown>): void {
+	onResponse(ctl?: zk.ZWatchController, opts?: Record<string, unknown>): void {
 		if (this._shallSize) {
 			if (this._shallClearTableWidth) {
 				this._clearTableWidth();
@@ -998,7 +998,7 @@ export abstract class MeshWidget extends zul.Widget {
 		}
 	}
 
-	public _syncSize(shallClearTableWidth?: boolean): void {
+	_syncSize(shallClearTableWidth?: boolean): void {
 		// fixed for F50-3025422.zul on ZTL
 		if (this.desktop) {
 			this._shallSize = true;
@@ -1006,7 +1006,7 @@ export abstract class MeshWidget extends zul.Widget {
 		}
 	}
 
-	private _clearTableWidth(): void {
+	_clearTableWidth(): void {
 		if (this.desktop) {
 			// clear table width
 			var hdtbl = this.eheadtbl,
@@ -1021,7 +1021,7 @@ export abstract class MeshWidget extends zul.Widget {
 		}
 	}
 
-	public _fixHeaders(force?: boolean): boolean | undefined { //used in HeadWidget
+	_fixHeaders(force?: boolean): boolean | undefined { //used in HeadWidget
 		if (this.head && this.ehead) {
 			if (this._cssflex && this.isChildrenFlex()) return;
 			var empty = true,
@@ -1078,7 +1078,7 @@ export abstract class MeshWidget extends zul.Widget {
 		}
 	}
 
-	public _adjFlexWd(): void { //used by HeadWidget
+	_adjFlexWd(): void { //used by HeadWidget
 		var head = this.head;
 		if (head) {
 			var hdfaker = this.ehdfaker!,
@@ -1159,7 +1159,7 @@ export abstract class MeshWidget extends zul.Widget {
 		}
 	}
 
-	public _bindDomNode(): void {
+	_bindDomNode(): void {
 		this.ehead = this.$n('head');
 		this.eheadtbl = this.$n('headtbl');
 		this.ebody = this.$n('body');
@@ -1184,7 +1184,7 @@ export abstract class MeshWidget extends zul.Widget {
 			this.efootrows = this.$n('footrows');
 	}
 
-	public override replaceHTML(n: HTMLElement | string, desktop: zk.Desktop | null, skipper?: zk.Skipper | null, _trim_?: boolean, _callback_?: CallableFunction[]): void { // tree outer
+	override replaceHTML(n: HTMLElement | string, desktop: zk.Desktop | null, skipper?: zk.Skipper | null, _trim_?: boolean, _callback_?: CallableFunction[]): void { // tree outer
 		var old = this._syncingbodyrows;
 		this._syncingbodyrows = true;
 		try {
@@ -1202,7 +1202,7 @@ export abstract class MeshWidget extends zul.Widget {
 		}
 	}
 
-	protected override replaceChildHTML_(child: zk.Widget, n: HTMLElement | string, desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, _trim_?: boolean): void { // rows outer
+	override replaceChildHTML_(child: zk.Widget, n: HTMLElement | string, desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, _trim_?: boolean): void { // rows outer
 		var old = this._syncingbodyrows;
 		this._syncingbodyrows = true;
 		try {
@@ -1212,14 +1212,14 @@ export abstract class MeshWidget extends zul.Widget {
 		}
 	}
 
-	public fireOnRender(timeout: number): void {
+	fireOnRender(timeout: number): void {
 		if (!this._pendOnRender) {
 			this._pendOnRender = true;
 			setTimeout(this.proxy(this._onRender), timeout ? timeout : 100);
 		}
 	}
 
-	public _doScroll(): void { //called zkmax, overriden in Listbox
+	_doScroll(): void { //called zkmax, overriden in Listbox
 		var t = zul.mesh.Scrollbar.getScrollPosV(this),
 			l = zul.mesh.Scrollbar.getScrollPosH(this),
 			hScrolled = l != this._currentLeft,
@@ -1260,7 +1260,7 @@ export abstract class MeshWidget extends zul.Widget {
 			this.frozen.syncScrollByParentBody();
 	}
 
-	protected _doSyncScroll(): void { //sync scroll for input tab key scroll
+	_doSyncScroll(): void { //sync scroll for input tab key scroll
 		var ehead = this.ehead,
 			ebody = this.ebody,
 			efoot = this.efoot;
@@ -1274,14 +1274,14 @@ export abstract class MeshWidget extends zul.Widget {
 		}
 	}
 
-	private _timeoutId: number | null = null;
+	_timeoutId: number | null = null;
 
-	protected _fireOnScrollPos(time?: number): void { //overriden in zkmax
+	_fireOnScrollPos(time?: number): void { //overriden in zkmax
 		clearTimeout(this._timeoutId!);
 		this._timeoutId = setTimeout(this.proxy(this._onScrollPos), time! >= 0 ? time : 300);
 	}
 
-	private _onScrollPos(): void {
+	_onScrollPos(): void {
 		// Bug ZK-414
 		if (this.ebody) {
 			this._currentTop = zul.mesh.Scrollbar.getScrollPosV(this);
@@ -1293,7 +1293,7 @@ export abstract class MeshWidget extends zul.Widget {
 		}
 	}
 
-	private _onRender(): true | undefined { //overriden in zkmax
+	_onRender(): true | undefined { //overriden in zkmax
 		if (!this.$n())
 			return; // the target may not exist. B50-ZK-963
 
@@ -1341,7 +1341,7 @@ export abstract class MeshWidget extends zul.Widget {
 		}
 	}
 
-	public override onSize(): void {
+	override onSize(): void {
 		var devicePixelRatio = zUtl.getDevicePixelRatio();
 		if (this.isRealVisible()) { // sometimes the caller is not zWatch
 			var n = this.$n_();
@@ -1376,7 +1376,7 @@ export abstract class MeshWidget extends zul.Widget {
 		}
 	}
 
-	private _vflexSize(): number {
+	_vflexSize(): number {
 		var n = this.$n(),
 			pgHgh = 0;
 		if (this.paging) {
@@ -1394,7 +1394,7 @@ export abstract class MeshWidget extends zul.Widget {
 				hgh - this.efrozen!.offsetHeight : hgh;
 	}
 
-	public override setFlexSize_(sz: zk.FlexSize, isFlexMin?: boolean): void {
+	override setFlexSize_(sz: zk.FlexSize, isFlexMin?: boolean): void {
 		if (this._cssflex && this.parent!.getFlexContainer_() != null && !isFlexMin)
 			return;
 		var n = this.$n_(),
@@ -1421,7 +1421,7 @@ export abstract class MeshWidget extends zul.Widget {
 	}
 
 	/* set the height. */
-	private _setHgh(hgh: string | null): void {
+	_setHgh(hgh: string | null): void {
 		var n = this.$n_(),
 			ebody = this.ebody!,
 			ebodyStyle = ebody.style;
@@ -1441,12 +1441,12 @@ export abstract class MeshWidget extends zul.Widget {
 		}
 	}
 
-	protected _ignoreHghExt(): boolean {
+	_ignoreHghExt(): boolean {
 		return false;
 	}
 
 	/** Calculates the size. */
-	public _calcSize(): void {
+	_calcSize(): void {
 		this._beforeCalcSize();
 		//Bug 1553937: wrong sibling location
 		//Otherwise,
@@ -1487,7 +1487,7 @@ export abstract class MeshWidget extends zul.Widget {
 		this._afterCalcSize();
 	}
 
-	protected _beforeCalcSize(): void {
+	_beforeCalcSize(): void {
 		var ebody = this.ebody!;
 		if (!this._nativebar && (ebody.scrollLeft || ebody.scrollTop)) {
 			// ZK-2046: Keep ebody scroll position before calculated size, _setHgh would reset it to 0.
@@ -1496,7 +1496,7 @@ export abstract class MeshWidget extends zul.Widget {
 		this._calcHgh();
 	}
 
-	public _afterCalcSize(): void {
+	_afterCalcSize(): void {
 		var isCSSFlex = this._cssflex && this.isChildrenFlex();
 		if (this._ebodyScrollPos) {
 			// ZK-2046: Restore ebody scroll position after calculated size.
@@ -1613,7 +1613,7 @@ export abstract class MeshWidget extends zul.Widget {
 		}
 	}
 
-	private _syncFaker(): void {
+	_syncFaker(): void {
 		var head = this.head;
 		if (!head || !this.desktop)
 			return;
@@ -1664,7 +1664,7 @@ export abstract class MeshWidget extends zul.Widget {
 	}
 
 	//return if all widths of columns are fixed (directly or indirectly)
-	public _isAllWidths(): boolean {
+	_isAllWidths(): boolean {
 		// ZK-2157: should skip if the mesh has no children
 		if (this.isSizedByContent() && this.ebodyrows && this.ebodyrows.firstChild)
 			return true;
@@ -1683,7 +1683,7 @@ export abstract class MeshWidget extends zul.Widget {
 		return allwidths;
 	}
 
-	protected domFaker_(out: string[], fakeId: string): void { //used by redraw
+	domFaker_(out: string[], fakeId: string): void { //used by redraw
 		var head = this.head!;
 		out.push('<colgroup id="', head.uuid, fakeId, '">');
 		for (var w = head.firstChild; w; w = w.nextSibling) {
@@ -1699,7 +1699,7 @@ export abstract class MeshWidget extends zul.Widget {
 	}
 
 	//super//
-	protected override onChildAdded_(child: zk.Widget): void {
+	override onChildAdded_(child: zk.Widget): void {
 		super.onChildAdded_(child);
 
 		if (child instanceof this.getHeadWidgetClass()) {
@@ -1720,7 +1720,7 @@ export abstract class MeshWidget extends zul.Widget {
 		this.heads.push(child);
 	}
 
-	protected override onChildRemoved_(child: zk.Widget): void {
+	override onChildRemoved_(child: zk.Widget): void {
 		super.onChildRemoved_(child);
 
 		if (child == this.head) { // If true, child is guaranteed to be a HeadWidget
@@ -1733,7 +1733,7 @@ export abstract class MeshWidget extends zul.Widget {
 	}
 
 	//bug# 3022669: listbox hflex="min" sizedByContent="true" not work
-	public override beforeMinFlex_(orient: zk.FlexOrient): number | null {
+	override beforeMinFlex_(orient: zk.FlexOrient): number | null {
 		if (this._hflexsz === undefined && orient == 'w' && this._width === undefined) {
 			if (this.isSizedByContent())
 				this._calcSize();
@@ -1750,7 +1750,7 @@ export abstract class MeshWidget extends zul.Widget {
 	}
 
 	// fixed for B50-3315594.zul
-	public override beforeParentMinFlex_(orient: zk.FlexOrient): void {
+	override beforeParentMinFlex_(orient: zk.FlexOrient): void {
 		if (orient == 'w') {
 			if (this.isSizedByContent())
 				this._calcSize();
@@ -1760,7 +1760,7 @@ export abstract class MeshWidget extends zul.Widget {
 			this._calcSize();
 	}
 
-	public override clearCachedSize_(): void {
+	override clearCachedSize_(): void {
 		super.clearCachedSize_();
 		this._clearCachedSize();
 
@@ -1776,19 +1776,19 @@ export abstract class MeshWidget extends zul.Widget {
 		}
 	}
 
-	public _clearCachedSize(): void {
+	_clearCachedSize(): void {
 		const n = this.$n();
 		if (n)
 			n._lastsz = this._minWd = null;
 	}
 
-	public _calcMinWds(): MeshWidth { //used in HeaderWidgets
+	_calcMinWds(): MeshWidth { //used in HeaderWidgets
 		if (!this._minWd)
 			this._minWd = _calcMinWd(this);
 		return this._minWd;
 	}
 
-	public _adjSpanWd(): void { //used in HeadWidgets
+	_adjSpanWd(): void { //used in HeadWidgets
 		if (!this._isAllWidths() || !this.isSpan())
 			return;
 		var hdfaker = this.ehdfaker,
@@ -1936,7 +1936,7 @@ export abstract class MeshWidget extends zul.Widget {
 			zk(this.$n()).redoCSS();
 	}
 
-	private _adjHeadWd(): void {
+	_adjHeadWd(): void {
 		var hdfaker = this.ehdfaker,
 			bdfaker = this.ebdfaker,
 			ftfaker = this.eftfaker;
@@ -2013,7 +2013,7 @@ export abstract class MeshWidget extends zul.Widget {
 		_adjMinWd(this);
 	}
 
-	public _getFirstRowCells(tbody: HTMLTableSectionElement | null | undefined): HTMLCollectionOf<HTMLTableCellElement> | undefined {
+	_getFirstRowCells(tbody: HTMLTableSectionElement | null | undefined): HTMLCollectionOf<HTMLTableCellElement> | undefined {
 		var rowsLength: number,
 			tbodyrows: HTMLCollectionOf<HTMLTableRowElement>;
 		if (tbody && (tbodyrows = tbody.rows) && (rowsLength = tbodyrows.length)) {
@@ -2050,12 +2050,12 @@ export abstract class MeshWidget extends zul.Widget {
 		}
 	}
 
-	public _deleteFakeRow(tbody: HTMLTableSectionElement | null | undefined): void {
+	_deleteFakeRow(tbody: HTMLTableSectionElement | null | undefined): void {
 		if (tbody)
 			jq('#' + tbody.id + '-fakeRow').remove();
 	} // for Grid.js and Listbox.js
 
-	protected refreshBar_(showBar?: boolean, scrollToTop?: boolean): void {
+	refreshBar_(showBar?: boolean, scrollToTop?: boolean): void {
 		var bar = this._scrollbar;
 		if (bar) {
 			// ZK-355: Keep scroll position before sync scrollbar size
@@ -2078,13 +2078,13 @@ export abstract class MeshWidget extends zul.Widget {
 		}
 	}
 
-	public onFitSize(): void {
+	onFitSize(): void {
 		// B50-ZK-598: when having rows, height needs to be determined when onFitSize
 		if (this._rows)
 			this._calcHgh();
 	}
 
-	protected _calcHgh(): void {
+	_calcHgh(): void {
 		var rows: ArrayLike<HTMLTableRowElement> = this.ebodyrows ? this.ebodyrows.rows : [],
 			n = this.$n_(),
 			hgh: string | number = n.style.height,
@@ -2191,7 +2191,7 @@ export abstract class MeshWidget extends zul.Widget {
 	}
 
 	/* Returns the real # of rows (aka., real size). */
-	protected _setOrGetVisibleRows(v?: number): number | undefined {
+	_setOrGetVisibleRows(v?: number): number | undefined {
 		if ('number' == typeof v) {
 			this._visiRows = v;
 		} else
@@ -2199,7 +2199,7 @@ export abstract class MeshWidget extends zul.Widget {
 	}
 
 	/* Height of the head row. If no header, defval is returned. */
-	private _headHgh(defVal: number, isExcludeAuxhead?: boolean): number {
+	_headHgh(defVal: number, isExcludeAuxhead?: boolean): number {
 		var headWidget = this.getHeadWidget(), //Bug ZK-1297: get head height exclude auxhead
 			head = this.ehead,
 			hgh = isExcludeAuxhead ? (headWidget ? headWidget.$n_().offsetHeight : 0) : (head ? head.offsetHeight : 0);
@@ -2219,7 +2219,7 @@ export abstract class MeshWidget extends zul.Widget {
 	 * @param int index the index of item
 	 * @param double scrollRatio the scroll ratio
 	 */
-	protected _scrollToIndex(index: number, scrollRatio?: number): void {
+	_scrollToIndex(index: number, scrollRatio?: number): void {
 		// NOTE: _scrollToIndex will only be called by Grid and Listbox, and both of them
 		// implements _getFirstItemIndex and _getLastItemIndex. Thus, @ts-ignore is safe.
 
@@ -2259,7 +2259,7 @@ export abstract class MeshWidget extends zul.Widget {
 		}
 	}
 
-	protected override getContentEdgeHeight_(height: number): number {
+	override getContentEdgeHeight_(height: number): number {
 		var height = super.getContentEdgeHeight_(height),
 			efoot = this.efoot;
 		if (efoot) {
@@ -2269,7 +2269,7 @@ export abstract class MeshWidget extends zul.Widget {
 		return height;
 	}
 
-	public override afterChildrenMinFlex_(o: zk.FlexOrient): void {
+	override afterChildrenMinFlex_(o: zk.FlexOrient): void {
 		var n = this.$n_();
 		if (o == 'h') {
 			n.style.height = jq.px0(Math.ceil(this._vflexsz!));
@@ -2277,7 +2277,7 @@ export abstract class MeshWidget extends zul.Widget {
 	}
 
 	//css flex
-	public isChildrenFlex(): boolean {
+	isChildrenFlex(): boolean {
 		if (this.head && this.ehead) {
 			for (var i = this.heads.length; i-- > 0;) {
 				var header = this.heads[i];
@@ -2291,7 +2291,7 @@ export abstract class MeshWidget extends zul.Widget {
 		return false;
 	}
 
-	protected waitForRendered_(): Promise<void> {
+	waitForRendered_(): Promise<void> {
 		var self = this;
 		return new Promise(function (resolve) {
 			(function callback () {
@@ -2303,7 +2303,7 @@ export abstract class MeshWidget extends zul.Widget {
 
 	// ZK-5028 for Treecols, Listhead, and Columns
 	//@Override
-	protected override shallFireSizedLaterWhenAddChd_(): boolean {
+	override shallFireSizedLaterWhenAddChd_(): boolean {
 		if (this._rerendering) {
 			zWatch.listen({
 				onResponse: [this, this._fixFireSizedLaterWhenAddChd]
@@ -2314,16 +2314,16 @@ export abstract class MeshWidget extends zul.Widget {
 	}
 
 	// ZK-5028 for Treecols, Listhead, and Columns
-	private _fixFireSizedLaterWhenAddChd(): void {
+	_fixFireSizedLaterWhenAddChd(): void {
 		zUtl.fireSized(this);
 		zWatch.unlisten({
 			onResponse: [this, this._fixFireSizedLaterWhenAddChd]
 		});
 	}
 
-	public static readonly WIDTH0 = zk.webkit ? '0.001px' : '0px';
+	static readonly WIDTH0 = zk.webkit ? '0.001px' : '0px';
 
-	public static _getWidth(wgt: zk.Widget, width: string | null | undefined): string | null | undefined {
+	static _getWidth(wgt: zk.Widget, width: string | null | undefined): string | null | undefined {
 		if (wgt.isVisible())
 			return width;
 		return this.WIDTH0;

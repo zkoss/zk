@@ -25,16 +25,16 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.med.Applet')
 export class Applet extends zul.Widget<HTMLAppletElement> {
-	private _code?: string;
-	private _codebase?: string;
-	private _archive?: string;
-	private _mayscript?: boolean;
-	private _params: Partial<HTMLAppletElement>;
-	private _align?: string;
-	private _hspace?: string;
-	private _vspace?: string;
+	_code?: string;
+	_codebase?: string;
+	_archive?: string;
+	_mayscript?: boolean;
+	_params: Partial<HTMLAppletElement>;
+	_align?: string;
+	_hspace?: string;
+	_vspace?: string;
 
-	public constructor() {
+	constructor() {
 		super(); // FIXME: params?
 		this._params = {};
 		// NOTE: Prior to TS migration, super is called after _params is initialized
@@ -45,14 +45,14 @@ export class Applet extends zul.Widget<HTMLAppletElement> {
 	/** Return the applet class to run.
 	 * @return String
 	 */
-	public getCode(): string | undefined {
+	getCode(): string | undefined {
 		return this._code;
 	}
 
 	/** Sets the applet class to run.
 	 * @param String code
 	 */
-	public setCode(code: string, opts?: Record<string, boolean>): this {
+	setCode(code: string, opts?: Record<string, boolean>): this {
 		const o = this._code;
 		this._code = code;
 
@@ -66,14 +66,14 @@ export class Applet extends zul.Widget<HTMLAppletElement> {
 	/** Return a relative base URL for applets specified in {@link #setCode} (URL).
 	 * @return String
 	 */
-	public getCodebase(): string | undefined {
+	getCodebase(): string | undefined {
 		return this._codebase;
 	}
 
 	/** Sets a relative base URL for applets specified in {@link #setCode} (URL).
 	 * @param String codebase
 	 */
-	public setCodebase(codebase: string, opts?: Record<string, boolean>): this {
+	setCodebase(codebase: string, opts?: Record<string, boolean>): this {
 		const o = this._codebase;
 		this._codebase = codebase;
 
@@ -88,7 +88,7 @@ export class Applet extends zul.Widget<HTMLAppletElement> {
 	 * @return String
 	 * @since 5.0.3
 	 */
-	public getArchive(): string | undefined {
+	getArchive(): string | undefined {
 		return this._archive;
 	}
 
@@ -96,7 +96,7 @@ export class Applet extends zul.Widget<HTMLAppletElement> {
 	 * @param String archive
 	 * @since 5.0.3
 	 */
-	public setArchive(archive: string, opts?: Record<string, boolean>): this {
+	setArchive(archive: string, opts?: Record<string, boolean>): this {
 		const o = this._archive;
 		this._archive = archive;
 
@@ -111,7 +111,7 @@ export class Applet extends zul.Widget<HTMLAppletElement> {
 	 * @return boolean
 	 * @since 5.0.3
 	 */
-	public isMayscript(): boolean | undefined {
+	isMayscript(): boolean | undefined {
 		return this._mayscript;
 	}
 
@@ -119,7 +119,7 @@ export class Applet extends zul.Widget<HTMLAppletElement> {
 	 * @param boolean mayscript
 	 * @since 5.0.3
 	 */
-	public setMayscript(v: boolean, opts?: Record<string, boolean>): this {
+	setMayscript(v: boolean, opts?: Record<string, boolean>): this {
 		const o = this._mayscript;
 		this._mayscript = v;
 
@@ -136,7 +136,7 @@ export class Applet extends zul.Widget<HTMLAppletElement> {
 	 * @return String
 	 * @since 5.0.3
 	 */
-	public getAlign(): string | undefined {
+	getAlign(): string | undefined {
 		return this._align;
 	}
 
@@ -144,7 +144,7 @@ export class Applet extends zul.Widget<HTMLAppletElement> {
 	 * @param String align
 	 * @since 5.0.3
 	 */
-	public setAlign(v: string, opts?: Record<string, boolean>): this {
+	setAlign(v: string, opts?: Record<string, boolean>): this {
 		const o = this._align;
 		this._align = v;
 
@@ -161,7 +161,7 @@ export class Applet extends zul.Widget<HTMLAppletElement> {
 	 * @return String
 	 * @since 5.0.3
 	 */
-	public getHspace(): string | undefined {
+	getHspace(): string | undefined {
 		return this._hspace;
 	}
 
@@ -169,7 +169,7 @@ export class Applet extends zul.Widget<HTMLAppletElement> {
 	 * @param String hspace
 	 * @since 5.0.3
 	 */
-	public setHspace(v: string, opts?: Record<string, boolean>): this {
+	setHspace(v: string, opts?: Record<string, boolean>): this {
 		const o = this._hspace;
 		this._hspace = v;
 
@@ -186,7 +186,7 @@ export class Applet extends zul.Widget<HTMLAppletElement> {
 	 * @return String
 	 * @since 5.0.3
 	 */
-	public getVspace(): string | undefined {
+	getVspace(): string | undefined {
 		return this._vspace;
 	}
 
@@ -194,7 +194,7 @@ export class Applet extends zul.Widget<HTMLAppletElement> {
 	 * @param String vspace
 	 * @since 5.0.3
 	 */
-	public setVspace(v: string, opts?: Record<string, boolean>): this {
+	setVspace(v: string, opts?: Record<string, boolean>): this {
 		const o = this._vspace;
 		this._vspace = v;
 
@@ -209,7 +209,7 @@ export class Applet extends zul.Widget<HTMLAppletElement> {
 
 	/** Invokes the function of the applet running at the client.
 	 */
-	public invoke(): void {
+	invoke(): void {
 		// Empty on purpose. To be overriden in the following static initialization block.
 	}
 	static {
@@ -268,7 +268,7 @@ export class Applet extends zul.Widget<HTMLAppletElement> {
 	 * @param String name
 	 * @return String
 	 */
-	public getField(name: string): string | null | undefined {
+	getField(name: string): string | null | undefined {
 		var n = this.$n();
 		return n ? n[name] as string | undefined : null;
 	}
@@ -277,7 +277,7 @@ export class Applet extends zul.Widget<HTMLAppletElement> {
 	 * @param String name
 	 * @param String value
 	 */
-	public setField(name: string, value: string): void {
+	setField(name: string, value: string): void {
 		var n = this.$n();
 		if (n)
 			try {
@@ -298,7 +298,7 @@ export class Applet extends zul.Widget<HTMLAppletElement> {
 	 * @param String nm
 	 * @param String val
 	 */
-	public setParam(nm: string, val: string): void {
+	setParam(nm: string, val: string): void {
 		if (arguments.length == 1) {
 			val = nm[1];
 			nm = nm[0];
@@ -314,11 +314,11 @@ export class Applet extends zul.Widget<HTMLAppletElement> {
 	 * values <code>value1, value2</code> respectively.
 	 * @since 5.0.4
 	 */
-	public setParams(m: Partial<HTMLAppletElement>): void {
+	setParams(m: Partial<HTMLAppletElement>): void {
 		this._params = m;
 	}
 
-	public override domAttrs_(no?: zk.DomAttrsOptions): string {
+	override domAttrs_(no?: zk.DomAttrsOptions): string {
 		return super.domAttrs_(no)
 				+ ' code="' + (this._code || '') + '"'
 				+ zUtl.appendAttr('codebase', this._codebase)
@@ -329,12 +329,12 @@ export class Applet extends zul.Widget<HTMLAppletElement> {
 				+ zUtl.appendAttr('mayscript', this._mayscript);
 	}
 
-	protected override domStyle_(no?: zk.DomStyleOptions): string {
+	override domStyle_(no?: zk.DomStyleOptions): string {
 		return super.domStyle_(no)
 			+ 'visibility:visible;'; //bug 2815049
 	}
 
-	public _outParamHtml(out: string[]): void {
+	_outParamHtml(out: string[]): void {
 		var params = this._params;
 		for (var nm in params)
 			out.push('<param name="', zUtl.encodeXML(nm), '" value="', zUtl.encodeXML(params[nm] as string), '"/>');

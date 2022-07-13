@@ -376,24 +376,24 @@ export interface CalendarOnChangeData {
 }
 @zk.WrapClass('zul.db.Calendar')
 export class Calendar extends zul.Widget {
-	public _view = 'day';
-	public _minyear = 1900; //"day", "month", "year", "decade",
-	public _maxyear = 2099;
-	public _beg?: DateImpl | null;
-	public _end?: DateImpl | null;
-	public _constraint?: string | null;
-	protected _localizedSymbols?: zk.LocalizedSymbols;
-	private _selectedValue?: DateImpl;
-	private _value?: DateImpl;
-	public _defaultTzone?: string;
-	private _name?: string;
-	private _weekOfYear?: boolean;
-	private _showTodayLink?: boolean;
-	public efield?: HTMLInputElement | null;
-	protected _fmt?: string;
-	private _todayLinkLabel?: string;
+	_view = 'day';
+	_minyear = 1900; //"day", "month", "year", "decade",
+	_maxyear = 2099;
+	_beg?: DateImpl | null;
+	_end?: DateImpl | null;
+	_constraint?: string | null;
+	_localizedSymbols?: zk.LocalizedSymbols;
+	_selectedValue?: DateImpl;
+	_value?: DateImpl;
+	_defaultTzone?: string;
+	_name?: string;
+	_weekOfYear?: boolean;
+	_showTodayLink?: boolean;
+	efield?: HTMLInputElement | null;
+	_fmt?: string;
+	_todayLinkLabel?: string;
 
-	public constructor() {
+	constructor() {
 		super();
 		this.listen({onChange: this}, -1000);
 	}
@@ -401,7 +401,7 @@ export class Calendar extends zul.Widget {
 	/** Assigns a value to this component.
 	 * @param Date value the date to assign. If null, today is assumed.
 	 */
-	public setValue(value: DateImpl, opts?: Record<string, boolean>): this {
+	setValue(value: DateImpl, opts?: Record<string, boolean>): this {
 		const o = this._value;
 		this._value = value;
 
@@ -419,14 +419,14 @@ export class Calendar extends zul.Widget {
 	/** Returns the value that is assigned to this component.
 	 * @return Date
 	 */
-	public getValue(): DateImpl | undefined {
+	getValue(): DateImpl | undefined {
 		return this._value;
 	}
 
 	/** Sets default time zone that this calendar belongs to.
 	 * @param String timezone the time zone's ID, such as "America/Los_Angeles".
 	 */
-	public setDefaultTzone(timezone: string): this {
+	setDefaultTzone(timezone: string): this {
 		this._defaultTzone = timezone;
 		return this;
 	}
@@ -434,7 +434,7 @@ export class Calendar extends zul.Widget {
 	/** Returns default time zone that this calendar belongs to.
 	 * @return String the time zone's ID, such as "America/Los_Angeles".
 	 */
-	public getDefaultTzone(): string | undefined {
+	getDefaultTzone(): string | undefined {
 		return this._defaultTzone;
 	}
 
@@ -450,7 +450,7 @@ export class Calendar extends zul.Widget {
 	 *
 	 * @param String constraint
 	 */
-	public setConstraint(constraint: string | null, opts?: Record<string, boolean>): this {
+	setConstraint(constraint: string | null, opts?: Record<string, boolean>): this {
 		const o = this._constraint;
 		this._constraint = constraint;
 
@@ -469,7 +469,7 @@ export class Calendar extends zul.Widget {
 	/** Returns the constraint of this component.
 	 * @return String
 	 */
-	public getConstraint(): string | null | undefined {
+	getConstraint(): string | null | undefined {
 		return this._constraint;
 	}
 
@@ -483,7 +483,7 @@ export class Calendar extends zul.Widget {
 	 *
 	 * @param String name the name of this component.
 	 */
-	public setName(name: string, opts?: Record<string, boolean>): this {
+	setName(name: string, opts?: Record<string, boolean>): this {
 		const o = this._name;
 		this._name = name;
 
@@ -505,7 +505,7 @@ export class Calendar extends zul.Widget {
 	 * <p>Default: null.
 	 * @return String
 	 */
-	public getName(): string | undefined {
+	getName(): string | undefined {
 		return this._name;
 	}
 
@@ -515,7 +515,7 @@ export class Calendar extends zul.Widget {
 	 * @since 6.5.0
 	 * @param boolean weekOfYear
 	 */
-	public setWeekOfYear(weekOfYear: boolean, opts?: Record<string, boolean>): this {
+	setWeekOfYear(weekOfYear: boolean, opts?: Record<string, boolean>): this {
 		const o = this._weekOfYear;
 		this._weekOfYear = weekOfYear;
 
@@ -533,7 +533,7 @@ export class Calendar extends zul.Widget {
 	 * @since 6.5.0
 	 * @return boolean
 	 */
-	public isWeekOfYear(): boolean | undefined {
+	isWeekOfYear(): boolean | undefined {
 		return this._weekOfYear;
 	}
 
@@ -542,7 +542,7 @@ export class Calendar extends zul.Widget {
 	 * @since 8.0.0
 	 * @param boolean showTodayLink
 	 */
-	public setShowTodayLink(showTodayLink: boolean, opts?: Record<string, boolean>): this {
+	setShowTodayLink(showTodayLink: boolean, opts?: Record<string, boolean>): this {
 		const o = this._showTodayLink;
 		this._showTodayLink = showTodayLink;
 
@@ -559,7 +559,7 @@ export class Calendar extends zul.Widget {
 	 * @since 8.0.0
 	 * @return boolean
 	 */
-	public isShowTodayLink(): boolean | undefined {
+	isShowTodayLink(): boolean | undefined {
 		return this._showTodayLink;
 	}
 
@@ -568,7 +568,7 @@ export class Calendar extends zul.Widget {
 	 * @since 8.0.4
 	 * @param String todayLinkLabel
 	 */
-	public setTodayLinkLabel(todayLinkLabel: string, opts?: Record<string, boolean>): this {
+	setTodayLinkLabel(todayLinkLabel: string, opts?: Record<string, boolean>): this {
 		const o = this._todayLinkLabel;
 		this._todayLinkLabel = todayLinkLabel;
 
@@ -584,7 +584,7 @@ export class Calendar extends zul.Widget {
 	 * @since 8.0.4
 	 * @return String
 	 */
-	public getTodayLinkLabel(): string | undefined {
+	getTodayLinkLabel(): string | undefined {
 		return this._todayLinkLabel;
 	}
 
@@ -592,7 +592,7 @@ export class Calendar extends zul.Widget {
 	 * A method for component getter symmetry, it will call getValue
 	 * @since 10.0.0
 	 */
-	public getValueInZonedDateTime(): DateImpl | undefined {
+	getValueInZonedDateTime(): DateImpl | undefined {
 		return this.getValue();
 	}
 
@@ -600,7 +600,7 @@ export class Calendar extends zul.Widget {
 	 * A method for component setter symmetry, it will call setValue
 	 * @since 10.0.0
 	 */
-	public setValueInZonedDateTime(value: DateImpl, opts?: Record<string, boolean>): void {
+	setValueInZonedDateTime(value: DateImpl, opts?: Record<string, boolean>): void {
 		this.setValue(value, opts);
 	}
 
@@ -608,7 +608,7 @@ export class Calendar extends zul.Widget {
 	 * A method for component getter symmetry, it will call getValue
 	 * @since 10.0.0
 	 */
-	public getValueInLocalDateTime(): DateImpl | undefined {
+	getValueInLocalDateTime(): DateImpl | undefined {
 		return this.getValue();
 	}
 
@@ -616,7 +616,7 @@ export class Calendar extends zul.Widget {
 	 * A method for component setter symmetry, it will call setValue
 	 * @since 10.0.0
 	 */
-	public setValueInLocalDateTime(value: DateImpl, opts?: Record<string, boolean>): void {
+	setValueInLocalDateTime(value: DateImpl, opts?: Record<string, boolean>): void {
 		this.setValue(value, opts);
 	}
 
@@ -624,7 +624,7 @@ export class Calendar extends zul.Widget {
 	 * A method for component getter symmetry, it will call getValue
 	 * @since 10.0.0
 	 */
-	public getValueInLocalDate(): DateImpl | undefined {
+	getValueInLocalDate(): DateImpl | undefined {
 		return this.getValue();
 	}
 
@@ -632,7 +632,7 @@ export class Calendar extends zul.Widget {
 	 * A method for component setter symmetry, it will call setValue
 	 * @since 10.0.0
 	 */
-	public setValueInLocalDate(value: DateImpl, opts?: Record<string, boolean>): void {
+	setValueInLocalDate(value: DateImpl, opts?: Record<string, boolean>): void {
 		this.setValue(value, opts);
 	}
 
@@ -640,7 +640,7 @@ export class Calendar extends zul.Widget {
 	 * A method for component getter symmetry, it will call getValue
 	 * @since 10.0.0
 	 */
-	public getValueInLocalTime(): DateImpl | undefined {
+	getValueInLocalTime(): DateImpl | undefined {
 		return this.getValue();
 	}
 
@@ -648,21 +648,21 @@ export class Calendar extends zul.Widget {
 	 * A method for component setter symmetry, it will call setValue
 	 * @since 10.0.0
 	 */
-	public setValueInLocalTime(value: DateImpl, opts?: Record<string, boolean>): void {
+	setValueInLocalTime(value: DateImpl, opts?: Record<string, boolean>): void {
 		this.setValue(value, opts);
 	}
 
 	//@Override
-	public override redraw(out: string[], skipper?: zk.Skipper | null): void {
+	override redraw(out: string[], skipper?: zk.Skipper | null): void {
 		Renderer.beforeRedraw(this);
 		super.redraw(out, skipper);
 	}
 
-	public onChange(evt: zk.Event): void {
+	onChange(evt: zk.Event): void {
 		this._updFormData((evt.data as {value: DateImpl}).value);
 	}
 
-	protected override doKeyDown_(evt: zk.Event): void {
+	override doKeyDown_(evt: zk.Event): void {
 		var keyCode = evt.keyCode,
 			ofs = keyCode == 37 ? -1 : keyCode == 39 ? 1 : keyCode == 38 ? -7 : keyCode == 40 ? 7 : 0;
 		if (ofs) {
@@ -678,7 +678,7 @@ export class Calendar extends zul.Widget {
 		}
 	}
 
-	protected setMinYear_(v: number): void {
+	setMinYear_(v: number): void {
 		if (v) {
 			var y = this.getTime().getFullYear();
 			this._minyear = v > y ? y : (v > 100 ? v : 100);
@@ -687,7 +687,7 @@ export class Calendar extends zul.Widget {
 		}
 	}
 
-	protected setMaxYear_(v: number): void {
+	setMaxYear_(v: number): void {
 		if (v) {
 			var y = this.getTime().getFullYear();
 			this._maxyear = v < y ? y : (v > this._minyear ? v : this._minyear);
@@ -696,7 +696,7 @@ export class Calendar extends zul.Widget {
 		}
 	}
 
-	private _shift(ofs: number, opts?: MarkCalOptions): void {
+	_shift(ofs: number, opts?: MarkCalOptions): void {
 		var oldTime = this.getTime(),
 			tz = _getTimeZone(this),
 			shiftTime = Dates.newInstance(oldTime.getTime(), tz),
@@ -766,7 +766,7 @@ export class Calendar extends zul.Widget {
 		}
 	}
 
-	public _fixConstraint(): void {
+	_fixConstraint(): void {
 		var constraint = this._constraint || '';
 		// ZK-4641: Datebox doesn't clean beginning and end at client when removing constraint
 		this._beg = null;
@@ -809,11 +809,11 @@ export class Calendar extends zul.Widget {
 	/** Returns the format of this component.
 	 * @return String
 	 */
-	public getFormat(): string {
+	getFormat(): string {
 		return this._fmt || 'yyyy/MM/dd';
 	}
 
-	private _updFormData(formData: DateImpl): void {
+	_updFormData(formData: DateImpl): void {
 		let val = new zk.fmt.Calendar().formatDate(formData, this.getFormat(), this._localizedSymbols);
 		if (this._name) {
 			val = val || '';
@@ -824,7 +824,7 @@ export class Calendar extends zul.Widget {
 		}
 	}
 
-	public override focus_(timeout: number): boolean {
+	override focus_(timeout: number): boolean {
 		if (this._view != 'decade')
 			this._markCal({timeout: timeout});
 		else {
@@ -835,7 +835,7 @@ export class Calendar extends zul.Widget {
 		return true;
 	}
 
-	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		var node = this.$n(),
 			title = this.$n('title'),
@@ -856,7 +856,7 @@ export class Calendar extends zul.Widget {
 		this._updFormData(this.getTime());
 	}
 
-	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		var node = this.$n(),
 			title = this.$n('title'),
 			mid = this.$n('mid'),
@@ -873,7 +873,7 @@ export class Calendar extends zul.Widget {
 		this.efield = null;
 	}
 
-	public override rerender(skipper?: zk.Skipper | number | null): void {
+	override rerender(skipper?: zk.Skipper | number | null): void {
 		if (this.desktop) {
 			var s = this.$n()!.style,
 				w = s.width,
@@ -886,7 +886,7 @@ export class Calendar extends zul.Widget {
 		}
 	}
 
-	public _clickArrow(evt: zk.Event): void {
+	_clickArrow(evt: zk.Event): void {
 		if (zk.animating()) return; // ignore
 		var node = jq.nodeName(evt.domTarget!, 'a') ? evt.domTarget
 					: jq(evt.domTarget!).parent('a')[0];
@@ -897,12 +897,12 @@ export class Calendar extends zul.Widget {
 		evt.stop();
 	}
 
-	public _clickToday(): void {
+	_clickToday(): void {
 		this.setValue(zUtl.today(!!this.parent, _getTimeZone(this)));
 		this._setView('day');
 	}
 
-	private _shiftView(ofs: number, disableAnima?: boolean): void {
+	_shiftView(ofs: number, disableAnima?: boolean): void {
 		switch (this._view) {
 		case 'day':
 			this._shiftDate('month', ofs);
@@ -925,7 +925,7 @@ export class Calendar extends zul.Widget {
 		}
 	}
 
-	public _doMousewheel(evt: zk.Event, intDelta: number): void {
+	_doMousewheel(evt: zk.Event, intDelta: number): void {
 		if (jq(this.$n(-intDelta > 0 ? 'right' : 'left')!).attr('disabled'))
 			return;
 		this._shiftView(intDelta > 0 ? -1 : 1, true);
@@ -936,11 +936,11 @@ export class Calendar extends zul.Widget {
 	 *  <p>returns today if value is null
 	 * @return Date
 	 */
-	public getTime(): DateImpl {
+	getTime(): DateImpl {
 		return this._value || zUtl.today(this.getFormat(), _getTimeZone(this));
 	}
 
-	protected _setTime(y: number | null, m?: number | null, d?: number, fireOnChange?: boolean): void {
+	_setTime(y: number | null, m?: number | null, d?: number, fireOnChange?: boolean): void {
 		var dateobj = this.getTime(),
 			year = y != null ? y : dateobj.getFullYear(),
 			month = m != null ? m : dateobj.getMonth(),
@@ -955,7 +955,7 @@ export class Calendar extends zul.Widget {
 	}
 
 	// calendar-ctrl.js will override this function
-	private _clickDate(evt: Pick<zk.Event, 'target' | 'domTarget' | 'stop'>): void {
+	_clickDate(evt: Pick<zk.Event, 'target' | 'domTarget' | 'stop'>): void {
 		var target = evt.domTarget as HTMLTableCellElement | null | undefined,
 			val: number;
 		for (; target; target = target.parentNode as HTMLTableCellElement | null)
@@ -975,7 +975,7 @@ export class Calendar extends zul.Widget {
 		evt.stop();
 	}
 
-	protected _chooseDate(target: HTMLTableCellElement | null | undefined, val: number): void {
+	_chooseDate(target: HTMLTableCellElement | null | undefined, val: number): void {
 		if (target && !jq(target).hasClass(this.$s('disabled'))) {
 			var cell = target,
 				dateobj = this.getTime();
@@ -1010,7 +1010,7 @@ export class Calendar extends zul.Widget {
 		}
 	}
 
-	private _shiftDate(opt: string, ofs: number, ignoreUpdate?: boolean): DateImpl {
+	_shiftDate(opt: string, ofs: number, ignoreUpdate?: boolean): DateImpl {
 		var dateobj = this.getTime(),
 			year = dateobj.getFullYear(),
 			month = dateobj.getMonth(),
@@ -1043,7 +1043,7 @@ export class Calendar extends zul.Widget {
 		return newTime;
 	}
 
-	public _changeView(evt: zk.Event): void {
+	_changeView(evt: zk.Event): void {
 		var tm = this.$n('tm'),
 			ty = this.$n('ty'),
 			tyd = this.$n('tyd'),
@@ -1065,7 +1065,7 @@ export class Calendar extends zul.Widget {
 		evt.stop();
 	}
 
-	protected _setView(view: string, force?: number): void {
+	_setView(view: string, force?: number): void {
 		// check whether to disable the arrow
 		function _updateArrow(wgt: zul.db.Calendar): void {
 			if (wgt.isOutOfRange(true)) {
@@ -1170,7 +1170,7 @@ export class Calendar extends zul.Widget {
 		}
 	}
 
-	public getLocalizedSymbols(): zk.LocalizedSymbols {
+	getLocalizedSymbols(): zk.LocalizedSymbols {
 		return this._localizedSymbols || {
 			DOW_1ST: zk.DOW_1ST,
 			MINDAYS: zk.MINDAYS,
@@ -1195,7 +1195,7 @@ export class Calendar extends zul.Widget {
 	 * @return boolean if true it means the date is out of range.
 	 * @since 6.5.3
 	 */
-	public isOutOfRange(left?: boolean, date?: Date): boolean {
+	isOutOfRange(left?: boolean, date?: Date): boolean {
 		var view = this._view,
 			val = date || this.getTime(),
 			y = val.getFullYear(),
@@ -1223,7 +1223,7 @@ export class Calendar extends zul.Widget {
 
 	}
 
-	protected _markCal(opts?: MarkCalOptions): void {
+	_markCal(opts?: MarkCalOptions): void {
 		this._markCal0(opts);
 		var anc: HTMLAnchorElement | null | undefined;
 		if ((anc = this.getAnchor_()) && (!opts || !opts.silent))
@@ -1231,7 +1231,7 @@ export class Calendar extends zul.Widget {
 	}
 
 	// calendar-ctrl.js will override this function
-	private _markCal0(opts?: MarkCalOptions): void {
+	_markCal0(opts?: MarkCalOptions): void {
 		var	seldate = this.getTime(),
 			m = seldate.getMonth(),
 			mid = this.$n('mid')!,
@@ -1319,23 +1319,23 @@ export class Calendar extends zul.Widget {
 		}
 	}
 
-	protected override domClass_(no?: zk.DomClassOptions): string {
+	override domClass_(no?: zk.DomClassOptions): string {
 		var cls = '';
 		if (this._weekOfYear)
 			cls += this.$s('wk') + ' ';
 		return cls + super.domClass_(no);
 	}
 
-	protected animationSpeed_(): 'slow' | 'fast' | number {
+	animationSpeed_(): 'slow' | 'fast' | number {
 		return zk(this).getAnimationSpeed('_default');
 	}
 
-	protected getAnchor_(): HTMLAnchorElement | null | undefined {
+	getAnchor_(): HTMLAnchorElement | null | undefined {
 		return this.$n('a');
 	}
 
 	// Bug 2936994, fixed unnecessary setting scrollTop
-	private _doFocus = zk.gecko ? function (n: HTMLElement, timeout?: number | boolean) {
+	_doFocus = zk.gecko ? function (n: HTMLElement, timeout?: number | boolean) {
 		if (timeout)
 			setTimeout(function () {
 				zk(n).focus();

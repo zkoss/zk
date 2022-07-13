@@ -99,19 +99,19 @@ function _fixTd(this: zul.box.Box): void {
 
 @zk.WrapClass('zul.box.Box')
 export class Box extends zul.Widget {
-	public override _mold = 'vertical';
-	private _align = 'start';
-	private _pack = 'start';
-	private _sizedByContent = true;
-	public _spacing?: string;
-	private _sizes?: string[];
-	private _widths?: string[];
-	public _splitterKid = false;
-	private _stretchPack?: boolean;
-	private _watchBound?: boolean;
-	private _pack2?: string | null;
-	private _watchTd?: boolean;
-	private _watchAlign?: boolean;
+	override _mold = 'vertical';
+	_align = 'start';
+	_pack = 'start';
+	_sizedByContent = true;
+	_spacing?: string;
+	_sizes?: string[];
+	_widths?: string[];
+	_splitterKid = false;
+	_stretchPack?: boolean;
+	_watchBound?: boolean;
+	_pack2?: string | null;
+	_watchTd?: boolean;
+	_watchAlign?: boolean;
 
 	/** Sets the alignment of cells of this box in the 'opposite' direction
 	 * (<i>start</i>, center, end, stretch).
@@ -121,7 +121,7 @@ export class Box extends zul.Widget {
 	 * If empty or null, the browser's default is used
 	 * (IE center and FF left, if vertical).
 	 */
-	public setAlign(align: string, opts?: Record<string, boolean>): this {
+	setAlign(align: string, opts?: Record<string, boolean>): this {
 		const o = this._align;
 		this._align = align;
 
@@ -163,7 +163,7 @@ export class Box extends zul.Widget {
 	 * <p>Default: start</p>
 	 * @return String
 	 */
-	public getAlign(): string {
+	getAlign(): string {
 		return this._align;
 	}
 
@@ -174,7 +174,7 @@ export class Box extends zul.Widget {
 	 * <i>stretch</i> option. If empty or null, it defaults to "stretch,start".
 	 * @see #getPack()
 	 */
-	public setPack(pack: string, opts?: Record<string, boolean>): this {
+	setPack(pack: string, opts?: Record<string, boolean>): this {
 		const o = this._pack;
 		this._pack = pack;
 
@@ -228,7 +228,7 @@ export class Box extends zul.Widget {
 	 * <p>Default: start.
 	 * @return String
 	 */
-	public getPack(): string {
+	getPack(): string {
 		return this._pack;
 	}
 
@@ -237,7 +237,7 @@ export class Box extends zul.Widget {
 	 * or null to use the default spacing
 	 * @see #getSpacing
 	 */
-	public setSpacing(spacing: string, opts?: Record<string, boolean>): this {
+	setSpacing(spacing: string, opts?: Record<string, boolean>): this {
 		const o = this._spacing;
 		this._spacing = spacing;
 
@@ -263,7 +263,7 @@ export class Box extends zul.Widget {
 	 * <p>Default: null (means to use the default spacing).
 	 * @return String
 	 */
-	public getSpacing(): string | undefined {
+	getSpacing(): string | undefined {
 		return this._spacing;
 	}
 
@@ -276,7 +276,7 @@ export class Box extends zul.Widget {
 	 * @param boolean byContent
 	 * @since 5.0.4
 	 */
-	public setSizedByContent(byContent: boolean, opts?: Record<string, boolean>): this {
+	setSizedByContent(byContent: boolean, opts?: Record<string, boolean>): this {
 		const o = this._sizedByContent;
 		this._sizedByContent = byContent;
 
@@ -293,15 +293,15 @@ export class Box extends zul.Widget {
 	 * @since 5.0.4
 	 * @return boolean
 	 */
-	public isSizedByContent(): boolean {
+	isSizedByContent(): boolean {
 		return this._sizedByContent;
 	}
 
-	public getWidths(): string[] | undefined {
+	getWidths(): string[] | undefined {
 		return this._widths;
 	}
 
-	public setWidths(val: string[], opts?: Record<string, boolean>): this {
+	setWidths(val: string[], opts?: Record<string, boolean>): this {
 		const o = this._widths;
 		this._widths = val;
 
@@ -313,40 +313,40 @@ export class Box extends zul.Widget {
 		return this;
 	}
 
-	public setHeights(val: string[]): void {
+	setHeights(val: string[]): void {
 		this.setWidths(val);
 	}
 
-	public getHeights(): string[] | undefined {
+	getHeights(): string[] | undefined {
 		return this.getWidths();
 	}
 
 	/** Returns whether it is a vertical box.
 	 * @return boolean
 	 */
-	public isVertical(): boolean {
+	isVertical(): boolean {
 		return 'vertical' == this._mold;
 	}
 
 	/** Returns the orient.
 	 * @return String
 	 */
-	public getOrient(): string {
+	getOrient(): string {
 		return this._mold;
 	}
 
 	//super//
-	public override getZclass(): string {
+	override getZclass(): string {
 		var zcs = this._zclass;
 		return zcs != null ? zcs : this.isVertical() ? 'z-vbox' : 'z-hbox';
 	}
 
-	protected override onChildVisible_(child: zk.Widget): void {
+	override onChildVisible_(child: zk.Widget): void {
 		super.onChildVisible_(child);
 		if (this.desktop) this._fixChildDomVisible(child, child._visible);
 	}
 
-	protected override replaceChildHTML_(child: zk.Widget, en: HTMLElement | string, desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, _trim_?: boolean): void {
+	override replaceChildHTML_(child: zk.Widget, en: HTMLElement | string, desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, _trim_?: boolean): void {
 		super.replaceChildHTML_(child, en, desktop, skipper, _trim_);
 		this._fixChildDomVisible(child, child._visible);
 		if (child instanceof zul.box.Splitter) {
@@ -359,7 +359,7 @@ export class Box extends zul.Widget {
 		}
 	}
 
-	public _fixChildDomVisible(child: zk.Widget, visible: boolean | undefined): void {
+	_fixChildDomVisible(child: zk.Widget, visible: boolean | undefined): void {
 		var n: zk.Widget | HTMLElement | null | undefined = this._chdextr(child);
 		if (n) n.style.display = visible ? '' : 'none';
 		n = child.$n('chdex2');
@@ -374,11 +374,11 @@ export class Box extends zul.Widget {
 		}
 	}
 
-	private _chdextr(child: zk.Widget): HTMLElement | null | undefined {
+	_chdextr(child: zk.Widget): HTMLElement | null | undefined {
 		return child.$n('chdex') || child.$n();
 	}
 
-	protected override insertChildHTML_(child: zk.Widget, before?: zk.Widget | null, desktop?: zk.Desktop | null): void {
+	override insertChildHTML_(child: zk.Widget, before?: zk.Widget | null, desktop?: zk.Desktop | null): void {
 		if (before) {
 			jq(this._chdextr(before)!).before(this.encloseChildHTML_(child)!);
 		} else {
@@ -391,7 +391,7 @@ export class Box extends zul.Widget {
 		child.bind(desktop);
 	}
 
-	public override removeChildHTML_(child: zk.Widget, ignoreDom?: boolean): void {
+	override removeChildHTML_(child: zk.Widget, ignoreDom?: boolean): void {
 		super.removeChildHTML_(child, ignoreDom);
 		jq(child.uuid + '-chdex', zk).remove();
 		jq(child.uuid + '-chdex2', zk).remove();
@@ -408,7 +408,7 @@ export class Box extends zul.Widget {
 	 * @param Array out an array of HTML fragments.
 	 * @return String
 	 */
-	protected encloseChildHTML_(child: zk.Widget, prefixSpace?: boolean, out?: string[]): string | void {
+	encloseChildHTML_(child: zk.Widget, prefixSpace?: boolean, out?: string[]): string | void {
 		var oo: string[] = [],
 			isCell = child instanceof zul.wgt.Cell;
 		if (this.isVertical()) {
@@ -454,7 +454,7 @@ export class Box extends zul.Widget {
 			out.push(oo[j]);
 	}
 
-	private _resetBoxSize(vert: boolean): void {
+	_resetBoxSize(vert: boolean): void {
 		var	vert = this.isVertical(),
 			k = -1,
 			szes = this._sizes;
@@ -501,7 +501,7 @@ export class Box extends zul.Widget {
 	}
 
 	//Bug ZK-1569: add minium 1px width on <td> to pass isWatchable_
-	public override afterResetChildSize_(): void {
+	override afterResetChildSize_(): void {
 		for (var kid = this.firstChild, vert = this.isVertical(); kid; kid = kid.nextSibling) {
 			// ZK-2231: kid may not bind to desktop yet (client rod enabled)
 			if (kid.desktop) {
@@ -513,7 +513,7 @@ export class Box extends zul.Widget {
 	}
 
 	//bug#3042306
-	protected override resetSize_(orient: zk.FlexOrient): void { //@Overrid zk.Widget#resetSize_, called when beforeSize
+	override resetSize_(orient: zk.FlexOrient): void { //@Overrid zk.Widget#resetSize_, called when beforeSize
 		super.resetSize_(orient);
 
 		// B85-ZK-3516: remove size of frame
@@ -557,7 +557,7 @@ export class Box extends zul.Widget {
 		}
 	}
 
-	private _getContentSize(): {height: number; width: number} {
+	_getContentSize(): {height: number; width: number} {
 		//bug 3010663: boxes do not resize when browser window is resized
 		var p = this.$n(),
 			zkp = zk(p),
@@ -572,7 +572,7 @@ export class Box extends zul.Widget {
 		return zkp ? {height: hgh, width: wdh} : {height: 0, width: 0};
 	}
 
-	public override beforeChildrenFlex_(child: zk.Widget): boolean {
+	override beforeChildrenFlex_(child: zk.Widget): boolean {
 		child._flexFixed = true;
 
 		let	vert = this.isVertical(),
@@ -753,7 +753,7 @@ export class Box extends zul.Widget {
 		return false; //to skip original _fixFlex
 	}
 
-	private _childOuterAttrs(child: zk.Widget): string {
+	_childOuterAttrs(child: zk.Widget): string {
 		var html = '';
 		if (child instanceof zul.box.Splitter)
 			html = ' class="' + child.$s('outer') + '"';
@@ -769,7 +769,7 @@ export class Box extends zul.Widget {
 		return html;
 	}
 
-	public _childInnerAttrs(child: zk.Widget): string {
+	_childInnerAttrs(child: zk.Widget): string {
 		var html = '',
 			vert = this.isVertical();
 		if (child instanceof zul.box.Splitter)
@@ -799,32 +799,32 @@ export class Box extends zul.Widget {
 		return style ? html + ' style="' + style + '"' : html;
 	}
 
-	private _isStretchPack(): boolean | undefined {
+	_isStretchPack(): boolean | undefined {
 		//when pack has specifies 'stretch' or there are splitter kids which
 		//implies pack='stretch'
 		return this._splitterKid || this._stretchPack;
 	}
 
-	public _isStretchAlign(): boolean {
+	_isStretchAlign(): boolean {
 		return this._align == 'stretch';
 	}
 
 	//called by Splitter
-	public _bindWatch(): void {
+	_bindWatch(): void {
 		if (!this._watchBound) {
 			this._watchBound = true;
 			zWatch.listen({onSize: this, onHide: this});
 		}
 	}
 
-	private _unbindWatch(): void {
+	_unbindWatch(): void {
 		if (this._watchBound) {
 			zWatch.unlisten({onSize: this, onHide: this});
 			delete this._watchBound;
 		}
 	}
 
-	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		this._bindFixTd();
 		if (this._isStretchAlign())
@@ -833,14 +833,14 @@ export class Box extends zul.Widget {
 			this._bindWatch();
 	}
 
-	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		this._unbindWatch();
 		this._unbindAlign();
 		this._unbindFixTd();
 		super.unbind_(skipper, after, keepRod);
 	}
 
-	private _bindAlign(): void {
+	_bindAlign(): void {
 		if (!this._watchAlign) {
 			this._watchAlign = true;
 			// eslint-disable-next-line @typescript-eslint/unbound-method
@@ -848,7 +848,7 @@ export class Box extends zul.Widget {
 		}
 	}
 
-	private _unbindAlign(): void {
+	_unbindAlign(): void {
 		if (this._watchAlign) {
 			// eslint-disable-next-line @typescript-eslint/unbound-method
 			zWatch.unlisten({onSize: [this, this._fixAlign], onHide: [this, this._fixAlign]});
@@ -856,7 +856,7 @@ export class Box extends zul.Widget {
 		}
 	}
 
-	private _fixAlign(): void {
+	_fixAlign(): void {
 		if (this._isStretchAlign()) {
 			var vert = this.isVertical(),
 				td = this.$n('frame')!,
@@ -875,21 +875,21 @@ export class Box extends zul.Widget {
 		}
 	}
 
-	private _bindFixTd(): void {
+	_bindFixTd(): void {
 		if (!this._watchTd) {
 			this._watchTd = true;
 			zWatch.listen({onSize: [this, _fixTd], onHide: [this, _fixTd]});
 		}
 	}
 
-	private _unbindFixTd(): void {
+	_unbindFixTd(): void {
 		if (this._watchTd) {
 			zWatch.unlisten({onSize: [this, _fixTd], onHide: [this, _fixTd]});
 			delete this._watchTd;
 		}
 	}
 
-	protected _configPack(): void {
+	_configPack(): void {
 		var w = this._pack;
 		if (w) {
 			var v = w.split(',');
@@ -907,7 +907,7 @@ export class Box extends zul.Widget {
 	}
 
 	//watch//
-	public override onSize(): void {
+	override onSize(): void {
 		if (!this._splitterKid) return; //only when there are splitter kids
 		var vert = this.isVertical(), real = this.$n('real') as HTMLTableElement;
 		real.style.height = real.style.width = '100%'; //there are splitter kids
@@ -948,21 +948,21 @@ export class Box extends zul.Widget {
 		}
 	}
 
-	public onHide(): void {
+	onHide(): void {
 		this.onSize();
 	}
 
-	public override getFlexContainer_(): HTMLElement | null | undefined {
+	override getFlexContainer_(): HTMLElement | null | undefined {
 		return null;
 	}
 
 	//static
-	public static _toValign(v: string | null): string | null {
+	static _toValign(v: string | null): string | null {
 		return v ? 'start' == v ? 'top' : 'center' == v ? 'middle' :
 			'end' == v ? 'bottom' : v : null;
 	}
 
-	public static _toHalign(v: string | null): string | null {
+	static _toHalign(v: string | null): string | null {
 		return v ? 'start' == v ? 'left' : 'end' == v ? 'right' : v : null;
 	}
 }

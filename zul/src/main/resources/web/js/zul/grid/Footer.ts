@@ -24,7 +24,7 @@ export class Footer extends zul.mesh.FooterWidget {
 	/** Returns the grid that this belongs to.
 	 * @return zul.grid.Grid
 	 */
-	public getGrid(): zul.grid.Grid | null | undefined {
+	getGrid(): zul.grid.Grid | null | undefined {
 		return this.getMeshWidget() as zul.grid.Grid | null | undefined;
 	}
 
@@ -32,7 +32,7 @@ export class Footer extends zul.mesh.FooterWidget {
 	 * this footer, or null if not available.
 	 * @return zul.grid.Column
 	 */
-	public getColumn(): zul.grid.Column | null | undefined {
+	getColumn(): zul.grid.Column | null | undefined {
 		return this.getHeaderWidget() as zul.grid.Column | null | undefined;
 	}
 }

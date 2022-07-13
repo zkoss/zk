@@ -20,18 +20,18 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
  */
 @zk.WrapClass('zul.med.Track')
 export class Track extends zul.Widget<HTMLTrackElement> {
-	private _default?: boolean;
-	private _kind?: string;
-	private _label?: string;
-	private _src?: string;
-	private _srclang?: string;
+	_default?: boolean;
+	_kind?: string;
+	_label?: string;
+	_src?: string;
+	_srclang?: string;
 
 	/**
 	 * Returns if this track should be enabled by default.
 	 * <p>Default: false.
 	 * @return boolean if this track should be enabled by default.
 	 */
-	public isDefault(): boolean | undefined {
+	isDefault(): boolean | undefined {
 		return this._default;
 	}
 
@@ -39,7 +39,7 @@ export class Track extends zul.Widget<HTMLTrackElement> {
 	 * Sets if this track should be enabled by default.
 	 * @param boolean isDefault if this track should be enabled by default.
 	 */
-	public setDefault(isDefault: boolean, opts?: Record<string, boolean>): this {
+	setDefault(isDefault: boolean, opts?: Record<string, boolean>): this {
 		const o = this._default;
 		this._default = isDefault;
 
@@ -56,7 +56,7 @@ export class Track extends zul.Widget<HTMLTrackElement> {
 	 * <p>Default: null.
 	 * @return String what kind of track it is.
 	 */
-	public getKind(): string | undefined {
+	getKind(): string | undefined {
 		return this._kind;
 	}
 
@@ -71,7 +71,7 @@ export class Track extends zul.Widget<HTMLTrackElement> {
 	 * </ul>
 	 * @param String kind what kind of track it is.
 	 */
-	public setKind(kind: string, opts?: Record<string, boolean>): this {
+	setKind(kind: string, opts?: Record<string, boolean>): this {
 		const o = this._kind;
 		this._kind = kind;
 
@@ -88,7 +88,7 @@ export class Track extends zul.Widget<HTMLTrackElement> {
 	 * <p>Default: null.
 	 * @return String a readable description of this track.
 	 */
-	public getLabel(): string | undefined {
+	getLabel(): string | undefined {
 		return this._label;
 	}
 
@@ -96,7 +96,7 @@ export class Track extends zul.Widget<HTMLTrackElement> {
 	 * Sets a readable description of this track.
 	 * @param String label a readable description of this track.
 	 */
-	public setLabel(label: string, opts?: Record<string, boolean>): this {
+	setLabel(label: string, opts?: Record<string, boolean>): this {
 		const o = this._label;
 		this._label = label;
 
@@ -113,7 +113,7 @@ export class Track extends zul.Widget<HTMLTrackElement> {
 	 * <p>Default: null.
 	 * @return String the source address of this track.
 	 */
-	public getSrc(): string | undefined {
+	getSrc(): string | undefined {
 		return this._src;
 	}
 
@@ -125,7 +125,7 @@ export class Track extends zul.Widget<HTMLTrackElement> {
 	 *
 	 * @param String src the source address of this track.
 	 */
-	public setSrc(src: string, opts?: Record<string, boolean>): this {
+	setSrc(src: string, opts?: Record<string, boolean>): this {
 		const o = this._src;
 		this._src = src;
 
@@ -142,7 +142,7 @@ export class Track extends zul.Widget<HTMLTrackElement> {
 	 * <p>Default: null.
 	 * @return String the language of the source.
 	 */
-	public getSrclang(): string | undefined {
+	getSrclang(): string | undefined {
 		return this._srclang;
 	}
 
@@ -152,7 +152,7 @@ export class Track extends zul.Widget<HTMLTrackElement> {
 	 * This attribute must be specified if kind is "subtitles".
 	 * @param String srclang the language of the source.
 	 */
-	public setSrclang(srclang: string, opts?: Record<string, boolean>): this {
+	setSrclang(srclang: string, opts?: Record<string, boolean>): this {
 		const o = this._srclang;
 		this._srclang = srclang;
 
@@ -164,7 +164,7 @@ export class Track extends zul.Widget<HTMLTrackElement> {
 		return this;
 	}
 
-	public override domAttrs_(no?: zk.DomAttrsOptions): string {
+	override domAttrs_(no?: zk.DomAttrsOptions): string {
 		let attr = super.domAttrs_(no)
 			+ zUtl.appendAttr('kind', this._kind)
 			+ zUtl.appendAttr('label', this._label)

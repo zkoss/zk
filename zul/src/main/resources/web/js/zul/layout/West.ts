@@ -21,17 +21,17 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.layout.West')
 export class West extends zul.layout.LayoutRegion {
-	public _sumFlexWidth = true; //indicate shall add this flex width for borderlayout. @See _fixMinFlex in widget.js
-	public _maxFlexHeight = true; //indicate shall check if the maximum flex height for borderlayout. @See _fixMinFlex in widget.js
-	public override sanchor = 'l';
-	protected override _cmargins = [0, 0, 0, 0];
+	_sumFlexWidth = true; //indicate shall add this flex width for borderlayout. @See _fixMinFlex in widget.js
+	_maxFlexHeight = true; //indicate shall check if the maximum flex height for borderlayout. @See _fixMinFlex in widget.js
+	override sanchor = 'l';
+	override _cmargins = [0, 0, 0, 0];
 
 	/**
 	 * The height can't be specified in this component because its height is
 	 * determined by other region components ({@link North} or {@link South}).
 	 * @param String height
 	 */
-	public override setHeight(height: string): this { // readonly
+	override setHeight(height: string): this { // readonly
 		return this;
 	}
 
@@ -39,7 +39,7 @@ export class West extends zul.layout.LayoutRegion {
 	 * Returns {@link Borderlayout#WEST}.
 	 * @return String
 	 */
-	public override getPosition(): string {
+	override getPosition(): string {
 		return zul.layout.Borderlayout.WEST;
 	}
 
@@ -48,7 +48,7 @@ export class West extends zul.layout.LayoutRegion {
 	 * {@link #getWidth()}.
 	 * @return String
 	 */
-	public getSize(): string | null | undefined {
+	getSize(): string | null | undefined {
 		return this.getWidth();
 	}
 
@@ -57,17 +57,17 @@ export class West extends zul.layout.LayoutRegion {
 	 * {@link #setWidth(String)}.
 	 * @param String size
 	 */
-	public setSize(size: string): this {
+	setSize(size: string): this {
 		return this.setWidth(size);
 	}
 
-	protected override _ambit2(ambit: zul.layout.LayoutRegionAmbit, mars: zk.Dimension, split: { offsetWidth; offsetHeight }): void {
+	override _ambit2(ambit: zul.layout.LayoutRegionAmbit, mars: zk.Dimension, split: { offsetWidth; offsetHeight }): void {
 		ambit.w += split.offsetWidth;
 		ambit.h = mars.height;
 		ambit.ts = ambit.x + ambit.w + (mars.width - mars.left); // total size;
 	}
 
-	protected override _reszSp2(ambit: zul.layout.LayoutRegionAmbit, split: { w; h }): Partial<{ left; top; width; height }> {
+	override _reszSp2(ambit: zul.layout.LayoutRegionAmbit, split: { w; h }): Partial<{ left; top; width; height }> {
 		ambit.w -= split.w;
 		return {
 			left: jq.px0(ambit.x + ambit.w),

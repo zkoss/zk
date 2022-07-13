@@ -11,10 +11,10 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 */
 @zk.WrapClass('zhtml.Input')
 export class Input extends zhtml.Widget {
-	public value?: string;
-	public start?: number;
+	value?: string;
+	start?: number;
 
-	public _doChange(evt: zk.Event): void {
+	_doChange(evt: zk.Event): void {
 		var n = this.$n();
 		if (n) {
 			var val = n.value;
@@ -25,17 +25,17 @@ export class Input extends zhtml.Widget {
 		}
 	}
 
-	private _onChangeData(val: string, selbak?): {value: string; start: number; marshal(): [string?, boolean?, number?]} {
+	_onChangeData(val: string, selbak?: boolean): {value: string; start: number; marshal(): [string?, boolean?, number?]} {
 		return {value: val,
 			start: zk(this.$n()).getSelectionRange()[0],
 			marshal: this._onChangeMarshal};
 	}
 
-	private _onChangeMarshal(): [string?, boolean?, number?] {
+	_onChangeMarshal(): [string?, boolean?, number?] {
 		return [this.value, false, this.start];
 	}
 
-	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		var n: HTMLInputElement | null | undefined;
 
@@ -49,7 +49,7 @@ export class Input extends zhtml.Widget {
 		}
 	}
 
-	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		if (this._defValue !== undefined)
 			this.domUnlisten_(this.$n_(), 'onChange');
 		super.unbind_(skipper, after, keepRod);

@@ -25,24 +25,24 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.sel.Tree')
 export class Tree extends zul.sel.SelectWidget {
-	public override _selItems!: zul.sel.Treeitem[]; // initialized in super constructor
-	public override _scrollbar: zul.Scrollbar | null = null;
-	public _barPos = null;
-	public treecols?: zul.sel.Treecols | null;
-	public treefoot?: zul.sel.Treefoot | null;
-	public treechildren?: zul.sel.Treechildren | null;
-	public _shallSyncFrozen?: boolean;
-	public _tree$noSelectAll?: boolean;
-	private _sel?: zul.sel.Treeitem | null;
-	public _fixhdwcnt?: number; // zul.sel.Treeitem.prototype.setOpen
-	public _fixhdoldwd?: number; // zul.sel.Treeitem.prototype.setOpen
+	override _selItems!: zul.sel.Treeitem[]; // initialized in super constructor
+	override _scrollbar: zul.Scrollbar | null = null;
+	_barPos = null;
+	treecols?: zul.sel.Treecols | null;
+	treefoot?: zul.sel.Treefoot | null;
+	treechildren?: zul.sel.Treechildren | null;
+	_shallSyncFrozen?: boolean;
+	_tree$noSelectAll?: boolean;
+	_sel?: zul.sel.Treeitem | null;
+	_fixhdwcnt?: number; // zul.sel.Treeitem.prototype.setOpen
+	_fixhdoldwd?: number; // zul.sel.Treeitem.prototype.setOpen
 
-	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		this.destroyBar_();
 		super.unbind_(skipper, after, keepRod);
 	}
 
-	public override onSize(): void {
+	override onSize(): void {
 		super.onSize();
 		var self = this,
 			frozen = this.frozen;
@@ -59,7 +59,7 @@ export class Tree extends zul.sel.SelectWidget {
 		}, 200);
 	}
 
-	protected override refreshBar_(showBar?: boolean, scrollToTop?: boolean): void {
+	override refreshBar_(showBar?: boolean, scrollToTop?: boolean): void {
 		var bar = this._scrollbar;
 		if (bar) {
 			var scrollPosition: {l: number; t: number} | null | undefined;
@@ -90,7 +90,7 @@ export class Tree extends zul.sel.SelectWidget {
 		}
 	}
 
-	protected destroyBar_(): void {
+	destroyBar_(): void {
 		var bar = this._scrollbar;
 		if (bar) {
 			bar.destroy();
@@ -101,14 +101,14 @@ export class Tree extends zul.sel.SelectWidget {
 	/**
 	 * clears the tree children.
 	 */
-	public override clear(): void {
+	override clear(): void {
 		if (!this.treechildren || !this.treechildren.nChildren)
 			return;
 		for (var w = this.treechildren.firstChild; w; w = w.nextSibling)
 			w.detach();
 	}
 
-	public override insertBefore(child: zk.Widget, sibling: zk.Widget | null | undefined, ignoreDom?: boolean): boolean {
+	override insertBefore(child: zk.Widget, sibling: zk.Widget | null | undefined, ignoreDom?: boolean): boolean {
 		if (super.insertBefore(child, sibling, !this.z_rod)) {
 			this._fixOnAdd(child, ignoreDom, ignoreDom);
 			return true;
@@ -116,7 +116,7 @@ export class Tree extends zul.sel.SelectWidget {
 		return false;
 	}
 
-	public override appendChild(child: zk.Widget, ignoreDom?: boolean): boolean {
+	override appendChild(child: zk.Widget, ignoreDom?: boolean): boolean {
 		if (super.appendChild(child, !this.z_rod)) {
 			if (!this.insertingBefore_)
 				this._fixOnAdd(child, ignoreDom, ignoreDom);
@@ -125,7 +125,7 @@ export class Tree extends zul.sel.SelectWidget {
 		return false;
 	}
 
-	private _fixOnAdd(child: zk.Widget, ignoreDom: boolean | undefined, _noSync?: boolean): void {
+	_fixOnAdd(child: zk.Widget, ignoreDom: boolean | undefined, _noSync?: boolean): void {
 		if (child instanceof zul.sel.Treecols)
 			this.treecols = child;
 		else if (child instanceof zul.sel.Treechildren) {
@@ -145,11 +145,11 @@ export class Tree extends zul.sel.SelectWidget {
 	}
 
 	// ZK-5050
-	protected override beforeChildReplaced_(oldc: zk.Widget, newc: zk.Widget): void {
+	override beforeChildReplaced_(oldc: zk.Widget, newc: zk.Widget): void {
 		this._fixOnAdd(newc, true, true);
 	}
 
-	protected override onChildRemoved_(child: zk.Widget): void {
+	override onChildRemoved_(child: zk.Widget): void {
 		super.onChildRemoved_(child);
 
 		if (child == this.treecols)
@@ -172,19 +172,19 @@ export class Tree extends zul.sel.SelectWidget {
 			this._syncSize();
 	}
 
-	protected override onChildAdded_(child: zul.mesh.HeadWidget): void {
+	override onChildAdded_(child: zul.mesh.HeadWidget): void {
 		super.onChildAdded_(child);
 		if (this.childReplacing_) //called by onChildReplaced_
 			this._fixOnAdd(child, true);
 		//else handled by insertBefore/appendChild
 	}
 
-	public _onTreeitemAdded(item: zul.sel.Treeitem): void {
+	_onTreeitemAdded(item: zul.sel.Treeitem): void {
 		this._fixNewChild(item);
 		this._onTreechildrenAdded(item.treechildren);
 	}
 
-	public _onTreeitemRemoved(item: zul.sel.Treeitem): void {
+	_onTreeitemRemoved(item: zul.sel.Treeitem): void {
 		var fixSel;
 		if (item.isSelected()) {
 			this._selItems.$remove(item);
@@ -203,7 +203,7 @@ export class Tree extends zul.sel.SelectWidget {
 		}
 	}
 
-	public _onTreechildrenAdded(tchs: zul.sel.Treechildren | null | undefined): void {
+	_onTreechildrenAdded(tchs: zul.sel.Treechildren | null | undefined): void {
 		if (!tchs || tchs.parent == this)
 			return; //the rest is already being processed by insertBefore
 
@@ -212,7 +212,7 @@ export class Tree extends zul.sel.SelectWidget {
 			if (items[j]) this._fixNewChild(items[j]);
 	}
 
-	public _onTreechildrenRemoved(tchs: zul.sel.Treechildren | null | undefined): void {
+	_onTreechildrenRemoved(tchs: zul.sel.Treechildren | null | undefined): void {
 		if (tchs == null || tchs.parent == this)
 			return; //already being processed by onChildRemoved
 
@@ -234,7 +234,7 @@ export class Tree extends zul.sel.SelectWidget {
 		if (fixSel) this._fixSelected();
 	}
 
-	private _fixNewChild(item: zul.sel.Treeitem): void {
+	_fixNewChild(item: zul.sel.Treeitem): void {
 		if (item.isSelected()) {
 			if (this._sel && !this._multiple) {
 				item._selected = false;
@@ -247,7 +247,7 @@ export class Tree extends zul.sel.SelectWidget {
 		}
 	}
 
-	private _fixSelectedSet(): void {
+	_fixSelectedSet(): void {
 		this._sel = null;
 		this._selItems = [];
 		for (var j = 0, items = this.getItems(), k = items.length; j < k; ++j) {
@@ -263,7 +263,7 @@ export class Tree extends zul.sel.SelectWidget {
 		}
 	}
 
-	private _fixSelected(): boolean {
+	_fixSelected(): boolean {
 		var sel: zul.sel.Treeitem | undefined;
 		switch (this._selItems.length) {
 		case 1:
@@ -287,7 +287,7 @@ export class Tree extends zul.sel.SelectWidget {
 		return false;
 	}
 
-	public _sizeOnOpen(): void {
+	_sizeOnOpen(): void {
 		this._shallShowScrollbar = true;
 		var cols = this.treecols, wd;
 		if (!cols || this.isSizedByContent() || this._hflex == 'min')
@@ -306,7 +306,7 @@ export class Tree extends zul.sel.SelectWidget {
 	 * Returns the head widget class. i.e. {@link Treecols}
 	 * @return zul.sel.Treecols
 	 */
-	public getHeadWidgetClass(): typeof zul.sel.Treecols {
+	getHeadWidgetClass(): typeof zul.sel.Treecols {
 		return zul.sel.Treecols;
 	}
 
@@ -315,7 +315,7 @@ export class Tree extends zul.sel.SelectWidget {
 	 * @return zul.sel.TreeItemIter
 	 * @disable(zkgwt)
 	 */
-	public itemIterator(opts?: Record<string, unknown>): zul.sel.TreeItemIter {
+	itemIterator(opts?: Record<string, unknown>): zul.sel.TreeItemIter {
 		return new zul.sel.TreeItemIter(this, opts);
 	}
 
@@ -325,9 +325,9 @@ export class Tree extends zul.sel.SelectWidget {
 	 * @see #itemIterator
 	 * @disable(zkgwt)
 	 */
-	public getBodyWidgetIterator = Tree.prototype.itemIterator;
+	getBodyWidgetIterator = Tree.prototype.itemIterator;
 
-	public override _updHeaderCM(): void {
+	override _updHeaderCM(): void {
 		const tc = this.treecols?.firstChild;
 		if (this._headercm && this._multiple && tc)
 			tc._checked = this._isAllSelected();
@@ -341,7 +341,7 @@ export class Tree extends zul.sel.SelectWidget {
 	 * is no good.
 	 * @return Array
 	 */
-	public getItems(opts?: Record<string, unknown>): zul.sel.Treeitem[] {
+	getItems(opts?: Record<string, unknown>): zul.sel.Treeitem[] {
 		return this.treechildren ? this.treechildren.getItems(null, opts) : [];
 	}
 
@@ -350,17 +350,17 @@ export class Tree extends zul.sel.SelectWidget {
 	 * <p>Note: the performance of this method is no good.
 	 * @return int
 	 */
-	public getItemCount(opts?: {skipHidden?: boolean}): number {
+	getItemCount(opts?: {skipHidden?: boolean}): number {
 		return this.treechildren != null ? this.treechildren.getItemCount(opts) : 0;
 	}
 
-	protected override _doLeft(row: zul.sel.Treeitem): void {
+	override _doLeft(row: zul.sel.Treeitem): void {
 		if (row.isOpen()) {
 			row.setOpen(false);
 		}
 	}
 
-	protected override _doRight(row: zul.sel.Treeitem): void {
+	override _doRight(row: zul.sel.Treeitem): void {
 		if (!row.isOpen()) {
 			row.setOpen(true);
 		}
@@ -373,7 +373,7 @@ export class Tree extends zul.sel.SelectWidget {
 	 * @param ItemWidget row the row about to be selected
 	 * @return boolean whether to ignore the selection
 	 */
-	protected override shallIgnoreSelect_(evt: zk.Event, row: zul.sel.ItemWidget): boolean {
+	override shallIgnoreSelect_(evt: zk.Event, row: zul.sel.ItemWidget): boolean {
 		var n = evt.domTarget;
 		if (n) {
 			var id = n.id;
@@ -383,22 +383,22 @@ export class Tree extends zul.sel.SelectWidget {
 		return false;
 	} // Bug ZK-2295
 
-	public override clearSelection(): void {
+	override clearSelection(): void {
 		super.clearSelection();
 		this._sel = null;
 	} // Bug ZK-2295
 
-	protected override _addItemToSelection(item: zul.sel.ItemWidget): void {
+	override _addItemToSelection(item: zul.sel.ItemWidget): void {
 		super._addItemToSelection(item);
 		this._sel = this._selItems[0]; // resync
 	} // Bug ZK-2295
 
-	protected override _removeItemFromSelection(item: zul.sel.ItemWidget): void {
+	override _removeItemFromSelection(item: zul.sel.ItemWidget): void {
 		super._removeItemFromSelection(item);
 		this._sel = this._selItems[0]; // resync
 	} // @Override F70-ZK-2433
 
-	protected override checkOnHighlightDisabled_(): boolean {
+	override checkOnHighlightDisabled_(): boolean {
 		if (this._selectOnHighlightDisabled) {
 			var selection = window.getSelection || document['selection'];
 			if (selection) {
@@ -414,23 +414,23 @@ export class Tree extends zul.sel.SelectWidget {
  */
 @zk.WrapClass('zul.sel.TreeItemIter')
 export class TreeItemIter extends zk.Object implements zul.mesh.ItemIterator {
-	public tree: Tree;
-	public opts?: Record<string, unknown>;
-	private _isInit?: boolean;
-	public cur?: number;
-	public items?: zul.sel.Treeitem[];
-	public length?: number;
+	tree: Tree;
+	opts?: Record<string, unknown>;
+	_isInit?: boolean;
+	cur?: number;
+	items?: zul.sel.Treeitem[];
+	length?: number;
 
 	/** Constructor
 	 * @param Tree tree the widget that the iterator belongs to
 	 */
-	public constructor(tree: zul.sel.Tree, opts?: Record<string, unknown>) {
+	constructor(tree: zul.sel.Tree, opts?: Record<string, unknown>) {
 		super();
 		this.tree = tree;
 		this.opts = opts;
 	}
 
-	private _init(): void {
+	_init(): void {
 		if (!this._isInit) {
 			this._isInit = true;
 			this.items = this.tree.getItems(this.opts);
@@ -443,7 +443,7 @@ export class TreeItemIter extends zk.Object implements zul.mesh.ItemIterator {
 	* Returns <tt>true</tt> if the iteration has more elements
 	* @return boolean
 	*/
-	public hasNext(): boolean {
+	hasNext(): boolean {
 		this._init();
 		return this.cur! < this.length!;
 	}
@@ -453,7 +453,7 @@ export class TreeItemIter extends zk.Object implements zul.mesh.ItemIterator {
 	 *
 	 * @return Treeitem the next element in the iteration.
 	 */
-	public next(): zul.sel.Treeitem | null | undefined {
+	next(): zul.sel.Treeitem | null | undefined {
 		this._init();
 		return this.items![this.cur!++];
 	}

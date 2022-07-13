@@ -35,46 +35,46 @@ function _syncSelectedPanels(panels: zul.tab.Tabpanels): void {
  */
 @zk.WrapClass('zul.tab.Tabpanels')
 export class Tabpanels extends zul.Widget {
-	public override parent!: zul.tab.Tabbox | null;
+	override parent!: zul.tab.Tabbox | null;
 
-	public _selPnl?: zul.tab.Tabpanel | null;
-	private _shallSync?: boolean;
+	_selPnl?: zul.tab.Tabpanel | null;
+	_shallSync?: boolean;
 
 	/** Returns the tabbox owns this component.
 	 * @return zul.tab.Tabbox
 	 */
-	public getTabbox(): zul.tab.Tabbox | null {
+	getTabbox(): zul.tab.Tabbox | null {
 		return this.parent;
 	}
 
 	//bug #3014664
-	public override setVflex(v: boolean | string | null | undefined): void { //vflex ignored for Tabpanels
+	override setVflex(v: boolean | string | null | undefined): void { //vflex ignored for Tabpanels
 		if (v != 'min') v = false;
 		super.setVflex(v);
 	}
 
 	//bug #3014664
-	public override setHflex(v: boolean | string | null | undefined): void { //hflex ignored for Tabpanels
+	override setHflex(v: boolean | string | null | undefined): void { //hflex ignored for Tabpanels
 		if (v != 'min') v = false;
 		super.setHflex(v);
 	}
 
-	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		zWatch.listen({onResponse: this});
 	}
 
-	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		zWatch.unlisten({onResponse: this});
 		super.unbind_(skipper, after, keepRod);
 	}
 
-	protected override onChildRemoved_(child: zk.Widget): void {
+	override onChildRemoved_(child: zk.Widget): void {
 		super.onChildRemoved_(child);
 		this._shallSync = true;
 	}
 
-	protected override onChildAdded_(child: zk.Widget): void {
+	override onChildAdded_(child: zk.Widget): void {
 		super.onChildAdded_(child);
 		// sync select status if tabbox not in accordion mold or
 		// the child cave is already visible
@@ -85,7 +85,7 @@ export class Tabpanels extends zul.Widget {
 			this._shallSync = true;
 	}
 
-	public onResponse(): void {
+	onResponse(): void {
 		//bug B65-ZK-1785 synchronize selection only once in the end after all removes have finished
 		if (this._shallSync) {
 			_syncSelectedPanels(this);

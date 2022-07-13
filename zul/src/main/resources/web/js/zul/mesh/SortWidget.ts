@@ -22,17 +22,17 @@ export interface SortableWidget extends zk.Widget {
  */
 @zk.WrapClass('zul.mesh.SortWidget')
 export abstract class SortWidget extends zul.mesh.HeaderWidget {
-	protected override _sortDirection: zul.mesh.SortDirection = 'natural';
-	protected _sortAscending = 'none';
-	protected _sortDescending = 'none';
+	override _sortDirection: zul.mesh.SortDirection = 'natural';
+	_sortAscending = 'none';
+	_sortDescending = 'none';
 	
-	public abstract getMeshBody(): zk.Widget | null | undefined;
+	abstract getMeshBody(): zk.Widget | null | undefined;
 
 	/** Returns the sort direction.
 	 * <p>Default: "natural".
 	 * @return String
 	 */
-	public getSortDirection(): zul.mesh.SortDirection {
+	getSortDirection(): zul.mesh.SortDirection {
 		return this._sortDirection;
 	}
 
@@ -46,7 +46,7 @@ export abstract class SortWidget extends zul.mesh.HeaderWidget {
 	 *
 	 * @param String sortDir one of "ascending", "descending" and "natural"
 	 */
-	public setSortDirection(v: zul.mesh.SortDirection, opts?: Record<string, boolean>): this {
+	setSortDirection(v: zul.mesh.SortDirection, opts?: Record<string, boolean>): this {
 		const o = this._sortDirection;
 		this._sortDirection = v;
 
@@ -70,7 +70,7 @@ export abstract class SortWidget extends zul.mesh.HeaderWidget {
 	/** Returns the ascending sorter, or null if not available.
 	 * @return String
 	 */
-	public getSortAscending(): string {
+	getSortAscending(): string {
 		return this._sortAscending;
 	}
 
@@ -78,7 +78,7 @@ export abstract class SortWidget extends zul.mesh.HeaderWidget {
 	 * no sorter for the ascending order.
 	 * @param String sortAscending
 	 */
-	public setSortAscending(v: string, opts?: Record<string, boolean>): this {
+	setSortAscending(v: string, opts?: Record<string, boolean>): this {
 		const o = this._sortAscending;
 		this._sortAscending = v;
 
@@ -98,7 +98,7 @@ export abstract class SortWidget extends zul.mesh.HeaderWidget {
 	/** Returns the descending sorter, or null if not available.
 	 * @return String
 	 */
-	public getSortDescending(): string {
+	getSortDescending(): string {
 		return this._sortDescending;
 	}
 
@@ -106,7 +106,7 @@ export abstract class SortWidget extends zul.mesh.HeaderWidget {
 	 * no sorter for the descending order.
 	 * @param String sortDescending
 	 */
-	public setSortDescending(v: string, opts?: Record<string, boolean>): this {
+	setSortDescending(v: string, opts?: Record<string, boolean>): this {
 		const o = this._sortDescending;
 		this._sortDescending = v;
 
@@ -123,7 +123,7 @@ export abstract class SortWidget extends zul.mesh.HeaderWidget {
 		return this;
 	}
 
-	public constructor() {
+	constructor() {
 		super(); // FIXME: params to be decided
 		this.listen({onSort: this}, -1000);
 	}
@@ -141,7 +141,7 @@ export abstract class SortWidget extends zul.mesh.HeaderWidget {
 	 * <p>Note: client sorting cannot work in model case.
 	 * @param String type
 	 */
-	public setSort(type: string): void {
+	setSort(type: string): void {
 		if (type && type.startsWith('client')) {
 			this.setSortAscending(type);
 			this.setSortDescending(type);
@@ -151,7 +151,7 @@ export abstract class SortWidget extends zul.mesh.HeaderWidget {
 		}
 	}
 
-	protected override isSortable_(): boolean {
+	override isSortable_(): boolean {
 		return this._sortAscending != 'none' || this._sortDescending != 'none';
 	}
 
@@ -162,7 +162,7 @@ export abstract class SortWidget extends zul.mesh.HeaderWidget {
 	 * @return boolean
 	 * @disable(zkgwt)
 	 */
-	public sort(ascending: boolean, evt: JQuery.Event): boolean {
+	sort(ascending: boolean, evt: JQuery.Event): boolean {
 		if (!this.checkClientSort_(ascending))
 			return false;
 
@@ -179,7 +179,7 @@ export abstract class SortWidget extends zul.mesh.HeaderWidget {
 	 * @since 5.0.6
 	 * @see #sort
 	 */
-	protected checkClientSort_(ascending: boolean): boolean {
+	checkClientSort_(ascending: boolean): boolean {
 		var dir = this.getSortDirection();
 		if (ascending) {
 			if ('ascending' == dir) return false;
@@ -206,7 +206,7 @@ export abstract class SortWidget extends zul.mesh.HeaderWidget {
 	 * @since 5.0.6
 	 * @see #sort
 	 */
-	protected replaceCavedChildrenInOrder_(ascending: boolean): void {
+	replaceCavedChildrenInOrder_(ascending: boolean): void {
 		var mesh = this.getMeshWidget()!,
 			body = this.getMeshBody()!,
 			dir = this.getSortDirection(),
@@ -254,7 +254,7 @@ export abstract class SortWidget extends zul.mesh.HeaderWidget {
 	 * @param boolean isNumber
 	 * @return int
 	 */
-	public sorting(a: zul.mesh.SortableWidget, b: zul.mesh.SortableWidget, isNumber: boolean): number {
+	sorting(a: zul.mesh.SortableWidget, b: zul.mesh.SortableWidget, isNumber: boolean): number {
 		var v1: never, v2: never;
 		if (typeof a.getLabel == 'function')
 			v1 = a.getLabel() as never;
@@ -272,14 +272,14 @@ export abstract class SortWidget extends zul.mesh.HeaderWidget {
 		return v1 > v2 ? 1 : (v1 < v2 ? -1 : 0);
 	}
 
-	protected _fixDirection(ascending: boolean): void {
+	_fixDirection(ascending: boolean): void {
 		//maintain
 		var direction: zul.mesh.SortDirection = ascending ? 'ascending' : 'descending';
 		for (var w = this.parent!.firstChild; w; w = w.nextSibling)
 			w.setSortDirection(w == this ? direction : 'natural');
 	}
 
-	public onSort(evt: JQuery.Event): void {
+	onSort(evt: JQuery.Event): void {
 		var dir = this.getSortDirection();
 		if ('ascending' == dir)
 			this.sort(false, evt);
@@ -289,7 +289,7 @@ export abstract class SortWidget extends zul.mesh.HeaderWidget {
 			this.sort(false, evt);
 	}
 
-	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		if (this._sortAscending != 'none' || this._sortDescending != 'none') {
 			var $n = jq(this.$n_()),
@@ -308,13 +308,13 @@ export abstract class SortWidget extends zul.mesh.HeaderWidget {
 		}
 	}
 
-	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		super.unbind_(skipper, after, keepRod);
 	}
 
-	protected getColumnMenuPopup_ = zk.$void;
+	getColumnMenuPopup_ = zk.$void;
 
-	public _doMenuClick(evt: JQuery.Event): void {
+	_doMenuClick(evt: JQuery.Event): void {
 		if (this.parent!._menupopup && this.parent!._menupopup != 'none') {
 			var pp: string | zul.menu.Menupopup = this.parent!._menupopup,
 				btn = this.$n_('btn');

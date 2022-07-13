@@ -35,13 +35,13 @@ function _syncFrozen(wgt: zul.sel.Treechildren): void {
 
 @zk.WrapClass('zul.sel.Treechildren')
 export class Treechildren extends zul.Widget {
-	public override parent!: zul.sel.Tree | zul.sel.Treeitem | null;
-	public override firstChild!: zul.sel.Treeitem | null;
-	public override lastChild!: zul.sel.Treeitem | null;
-	public override nextSibling!: zul.sel.Treerow | zul.sel.Treechildren | null;
-	public override previousSibling!: zul.sel.Treerow | zul.sel.Treechildren | null;
+	override parent!: zul.sel.Tree | zul.sel.Treeitem | null;
+	override firstChild!: zul.sel.Treeitem | null;
+	override lastChild!: zul.sel.Treeitem | null;
+	override nextSibling!: zul.sel.Treerow | zul.sel.Treechildren | null;
+	override previousSibling!: zul.sel.Treerow | zul.sel.Treechildren | null;
 
-	protected override bind_(desktop: zk.Desktop | null | undefined, skipper: zk.Skipper | null | undefined, after: CallableFunction[]): void {
+	override bind_(desktop: zk.Desktop | null | undefined, skipper: zk.Skipper | null | undefined, after: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		zWatch.listen({onResponse: this});
 		var w = this;
@@ -50,12 +50,12 @@ export class Treechildren extends zul.Widget {
 		});
 	}
 
-	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		zWatch.unlisten({onResponse: this});
 		super.unbind_(skipper, after, keepRod);
 	}
 
-	public onResponse(): void {
+	onResponse(): void {
 		if (this.desktop) {
 			var tree = this.getTree();
 			if (tree && tree.frozen) {
@@ -68,7 +68,7 @@ export class Treechildren extends zul.Widget {
 	/** Returns the {@link Tree} instance containing this element.
 	 * @return Tree
 	 */
-	public getTree(): zul.sel.Tree | null {
+	getTree(): zul.sel.Tree | null {
 		return this.isTopmost() ? this.parent as zul.sel.Tree : this.parent ? (this.parent as zul.sel.Treeitem).getTree() : null;
 	}
 
@@ -76,7 +76,7 @@ export class Treechildren extends zul.Widget {
 	 * this treechildren, or null if no such treerow.
 	 * @return Treerow
 	 */
-	public getLinkedTreerow(): zul.sel.Treerow | null | undefined {
+	getLinkedTreerow(): zul.sel.Treerow | null | undefined {
 		// optimised to assume the tree doesn't have treerow property
 		return this.parent ? (this.parent as zul.sel.Treeitem).treerow : null;
 	}
@@ -85,18 +85,18 @@ export class Treechildren extends zul.Widget {
 	 * @return boolean
 	 * @since 5.0.6
 	 */
-	public isTopmost(): boolean {
+	isTopmost(): boolean {
 		// null/undefined can only be instanceof null/undefined, respectively
 		return this.parent instanceof zul.sel.Tree;
 	}
 
 	//@Override
-	public override isRealElement(): boolean {
+	override isRealElement(): boolean {
 		return false; // fixed for ZK Client selector issue
 	}
 
 	//@Override
-	public override insertBefore(child: zul.sel.Treeitem, sibling: zk.Widget | null | undefined, ignoreDom?: boolean): boolean {
+	override insertBefore(child: zul.sel.Treeitem, sibling: zk.Widget | null | undefined, ignoreDom?: boolean): boolean {
 		var oldsib = _prevsib(child);
 		if (super.insertBefore(child, sibling, ignoreDom)) {
 			_fixOnAdd(oldsib, child, ignoreDom);
@@ -106,7 +106,7 @@ export class Treechildren extends zul.Widget {
 	}
 
 	//@Override
-	public override appendChild(child: zul.sel.Treeitem, ignoreDom?: boolean): boolean {
+	override appendChild(child: zul.sel.Treeitem, ignoreDom?: boolean): boolean {
 		var oldsib = _prevsib(child);
 		if (super.appendChild(child, ignoreDom)) {
 			if (!this.insertingBefore_)
@@ -116,7 +116,7 @@ export class Treechildren extends zul.Widget {
 		return false;
 	}
 
-	protected override insertChildHTML_(child: zk.Widget, before_?: zk.Widget | null, desktop?: zk.Desktop | null): void {
+	override insertChildHTML_(child: zk.Widget, before_?: zk.Widget | null, desktop?: zk.Desktop | null): void {
 		var ben: HTMLElement | null | undefined,
 			isTopmost = this.isTopmost(),
 			before: zk.Widget | HTMLElement | null | undefined = before_;
@@ -138,7 +138,7 @@ export class Treechildren extends zul.Widget {
 		child.bind(desktop);
 	}
 
-	public override getCaveNode(): HTMLElement | null | undefined {
+	override getCaveNode(): HTMLElement | null | undefined {
 		for (var w = this.lastChild; w; w = w.previousSibling) {
 			let cn = w.getCaveNode();
 			if (cn) {
@@ -154,11 +154,11 @@ export class Treechildren extends zul.Widget {
 	}
 
 	//@Override
-	public override isRealVisible(opts?: zk.RealVisibleOptions): boolean {
+	override isRealVisible(opts?: zk.RealVisibleOptions): boolean {
 		return !!this._isRealVisible() && super.isRealVisible(opts);
 	}
 
-	public _isRealVisible(): boolean | null | undefined {
+	_isRealVisible(): boolean | null | undefined {
 		const p = this.parent as zul.sel.Treeitem | null;
 		return this.isVisible() && (this.isTopmost() || (p && p.isOpen() && p._isRealVisible()));
 	}
@@ -171,7 +171,7 @@ export class Treechildren extends zul.Widget {
 	 * @param Array items
 	 * @return Array
 	 */
-	public getItems(items?: zul.sel.Treeitem[] | null, opts?: {skipHidden?: boolean}): zul.sel.Treeitem[] {
+	getItems(items?: zul.sel.Treeitem[] | null, opts?: {skipHidden?: boolean}): zul.sel.Treeitem[] {
 		items = items || [];
 		var skiphd = opts && opts.skipHidden;
 		for (var w = this.firstChild; w; w = w.nextSibling)
@@ -188,7 +188,7 @@ export class Treechildren extends zul.Widget {
 	 * <p>Note: the performance is no good.
 	 * @return int
 	 */
-	public getItemCount(opts?: {skipHidden?: boolean}): number {
+	getItemCount(opts?: {skipHidden?: boolean}): number {
 		var sz = 0,
 			skiphd = opts && opts.skipHidden;
 		for (var w = this.firstChild; w; w = w.nextSibling)
@@ -200,7 +200,7 @@ export class Treechildren extends zul.Widget {
 		return sz;
 	}
 
-	public override beforeParentChanged_(newParent: zul.sel.Tree | zul.sel.Treeitem | null): void {
+	override beforeParentChanged_(newParent: zul.sel.Tree | zul.sel.Treeitem | null): void {
 		var oldtree = this.getTree();
 		if (oldtree)
 			oldtree._onTreechildrenRemoved(this);
@@ -212,7 +212,7 @@ export class Treechildren extends zul.Widget {
 		super.beforeParentChanged_(newParent);
 	}
 
-	public override removeHTML_(n: HTMLElement | HTMLElement[]): void {
+	override removeHTML_(n: HTMLElement | HTMLElement[]): void {
 		for (var w = this.firstChild; w; w = w.nextSibling) {
 			const cn = w.$n();
 			if (cn)
@@ -221,7 +221,7 @@ export class Treechildren extends zul.Widget {
 		super.removeHTML_(n);
 	}
 
-	public override getOldWidget_(n: HTMLElement | string): zk.Widget | null | undefined {
+	override getOldWidget_(n: HTMLElement | string): zk.Widget | null | undefined {
 		var old = super.getOldWidget_(n);
 		if (old && old instanceof zul.sel.Treerow) {
 			var ti = old.parent;
@@ -233,7 +233,7 @@ export class Treechildren extends zul.Widget {
 	}
 
 	// FIXME: make this generic? Note that its super method is generic.
-	public override $n(nm?: string): HTMLElement | null | undefined {
+	override $n(nm?: string): HTMLElement | null | undefined {
 		if (this.isTopmost())
 			return this.getTree()!.$n('rows');
 
@@ -246,7 +246,7 @@ export class Treechildren extends zul.Widget {
 		return this.parent!.$n();
 	}
 
-	public override replaceWidget(newwgt: zul.sel.Treechildren, skipper?: zk.Skipper): void {
+	override replaceWidget(newwgt: zul.sel.Treechildren, skipper?: zk.Skipper): void {
 		while (this.firstChild != this.lastChild)
 			this.lastChild!.detach();
 
@@ -258,19 +258,19 @@ export class Treechildren extends zul.Widget {
 		super.replaceWidget(newwgt, skipper);
 	}
 
-	protected override onChildAdded_(child: zk.Widget): void {
+	override onChildAdded_(child: zk.Widget): void {
 		super.onChildAdded_(child);
 		if (this.desktop)
 			this.getTree()!._syncSize();
 	}
 
-	protected override onChildRemoved_(child: zk.Widget): void {
+	override onChildRemoved_(child: zk.Widget): void {
 		super.onChildRemoved_(child);
 		if (this.desktop)
 			this.getTree()!._syncSize();
 	}
 
-	protected override replaceChildHTML_(child: zk.Widget, n: HTMLElement | string, desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, _trim_?: boolean): void {
+	override replaceChildHTML_(child: zk.Widget, n: HTMLElement | string, desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, _trim_?: boolean): void {
 		var oldwgt = child.getOldWidget_(n);
 		if (oldwgt) oldwgt.unbind(skipper); //unbind first (w/o removal)
 		else if (this.shallChildROD_(child))

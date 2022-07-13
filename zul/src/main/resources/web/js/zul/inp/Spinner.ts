@@ -19,25 +19,25 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.inp.Spinner')
 export class Spinner extends zul.inp.NumberInputWidget<number> {
-	private _step = 1;
-	private _buttonVisible = true;
-	private _min?: number;
-	private _max?: number;
-	private _currentbtn?: HTMLElement | null;
-	private _noPreviousValue?: boolean;
-	public timerId?: number | null;
+	_step = 1;
+	_buttonVisible = true;
+	_min?: number;
+	_max?: number;
+	_currentbtn?: HTMLElement | null;
+	_noPreviousValue?: boolean;
+	timerId?: number | null;
 
 	/** Return the step of spinner
 	 * @return int
 	 */
-	public getStep(): number | null {
+	getStep(): number | null {
 		return this._step;
 	}
 
 	/** Set the step of spinner
 	 * @param int step
 	 */
-	public setStep(step: number, opts?: Record<string, boolean>): this {
+	setStep(step: number, opts?: Record<string, boolean>): this {
 		this._step = step;
 		return this;
 	}
@@ -46,14 +46,14 @@ export class Spinner extends zul.inp.NumberInputWidget<number> {
 	 * <p>Default: true.
 	 * @return boolean
 	 */
-	public isButtonVisible(): boolean {
+	isButtonVisible(): boolean {
 		return this._buttonVisible;
 	}
 
 	/** Sets whether the button (on the right of the textbox) is visible.
 	 * @param boolean visible
 	 */
-	public setButtonVisible(v: boolean, opts?: Record<string, boolean>): this {
+	setButtonVisible(v: boolean, opts?: Record<string, boolean>): this {
 		const o = this._buttonVisible;
 		this._buttonVisible = v;
 
@@ -64,18 +64,18 @@ export class Spinner extends zul.inp.NumberInputWidget<number> {
 		return this;
 	}
 
-	public override inRoundedMold(): boolean {
+	override inRoundedMold(): boolean {
 		return true;
 	}
 
 	/** Returns the value in int. If null, zero is returned.
 	 * @return int
 	 */
-	public intValue(): number | undefined {
+	intValue(): number | undefined {
 		return super.getValue();
 	}
 
-	public override setConstraint(constr: string): void {
+	override setConstraint(constr: string): void {
 		if (typeof constr == 'string' && constr.charAt(0) != '['/*by server*/) {
 			var constraint = new zul.inp.SimpleSpinnerConstraint(constr);
 			this._min = constraint._min;
@@ -85,7 +85,7 @@ export class Spinner extends zul.inp.NumberInputWidget<number> {
 			super.setConstraint(constr);
 	}
 
-	protected override coerceFromString_(value: string | null | undefined): zul.inp.CoerceFromStringResult | number | null {//copy from intbox
+	override coerceFromString_(value: string | null | undefined): zul.inp.CoerceFromStringResult | number | null {//copy from intbox
 		if (!value) return null;
 
 		var info = zk.fmt.Number.unformat(this._format!, value, false, this._localizedSymbols),
@@ -99,16 +99,16 @@ export class Spinner extends zul.inp.NumberInputWidget<number> {
 		return val;
 	}
 
-	protected override coerceToString_(value: unknown): string {//copy from intbox
+	override coerceToString_(value: unknown): string {//copy from intbox
 		var fmt = this._format;
 		return fmt ? zk.fmt.Number.format(fmt, value as string, this._rounding!, this._localizedSymbols)
 				: value != null ? '' + value : '';
 	}
 
-	public onHide = null;
-	public validate = null;
+	onHide = null;
+	validate = null;
 
-	protected override doKeyDown_(evt: zk.Event): void {
+	override doKeyDown_(evt: zk.Event): void {
 		var inp = this.getInputNode()!;
 		if (inp.disabled || inp.readOnly)
 			return;
@@ -128,13 +128,13 @@ export class Spinner extends zul.inp.NumberInputWidget<number> {
 		super.doKeyDown_(evt);
 	}
 
-	private _ondropbtnup(evt: zk.Event): void {
+	_ondropbtnup(evt: zk.Event): void {
 		this.domUnlisten_(document.body, 'onZMouseup', '_ondropbtnup');
 		this._stopAutoIncProc();
 		this._currentbtn = null;
 	}
 
-	public _btnDown(evt: zk.Event): void {
+	_btnDown(evt: zk.Event): void {
 		if (!this._buttonVisible || this._disabled) return;
 
 		var btn = this.$n_('btn');
@@ -167,7 +167,7 @@ export class Spinner extends zul.inp.NumberInputWidget<number> {
 	/**
 	 * Sets bound value if the value out of range
 	 */
-	public checkValue(): void {
+	checkValue(): void {
 		var inp = this.getInputNode()!,
 			min = this._min,
 			max = this._max;
@@ -185,7 +185,7 @@ export class Spinner extends zul.inp.NumberInputWidget<number> {
 		}
 	}
 
-	public _btnUp(evt: zk.Event): void {
+	_btnUp(evt: zk.Event): void {
 		if (!this._buttonVisible || this._disabled || zk.dragging) return;
 
 		this._onChanging();
@@ -195,7 +195,7 @@ export class Spinner extends zul.inp.NumberInputWidget<number> {
 		inp.focus();
 	}
 
-	private _increase(is_add: boolean): void {
+	_increase(is_add: boolean): void {
 		var inp = this.getInputNode()!,
 			value = this.coerceFromString_(inp.value), //ZK-1851 convert input value using pattern
 			result;
@@ -226,12 +226,12 @@ export class Spinner extends zul.inp.NumberInputWidget<number> {
 
 	}
 
-	public _clearValue(): boolean {
+	_clearValue(): boolean {
 		this.getInputNode()!.value = this._defRawVal = '';
 		return true;
 	}
 
-	private _startAutoIncProc(isup: boolean): void {
+	_startAutoIncProc(isup: boolean): void {
 		var widget = this;
 		if (this.timerId)
 			clearInterval(this.timerId);
@@ -240,7 +240,7 @@ export class Spinner extends zul.inp.NumberInputWidget<number> {
 		jq(this.$n_('btn-' + (isup ? 'up' : 'down'))).addClass(this.$s('active'));
 	}
 
-	private _stopAutoIncProc(): void {
+	_stopAutoIncProc(): void {
 		if (this.timerId)
 			clearTimeout(this.timerId);
 
@@ -248,25 +248,25 @@ export class Spinner extends zul.inp.NumberInputWidget<number> {
 		jq('.' + this.$s('icon'), this.$n_('btn')).removeClass(this.$s('active'));
 	}
 
-	protected override doFocus_(evt: zk.Event): void {
+	override doFocus_(evt: zk.Event): void {
 		super.doFocus_(evt);
 
 		zul.inp.RoundUtl.doFocus_(this);
 	}
 
-	protected override doBlur_(evt: zk.Event): void {
+	override doBlur_(evt: zk.Event): void {
 		super.doBlur_(evt);
 		zul.inp.RoundUtl.doBlur_(this);
 	}
 
-	protected override afterKeyDown_(evt: zk.Event, simulated?: boolean): boolean | undefined {
+	override afterKeyDown_(evt: zk.Event, simulated?: boolean): boolean | undefined {
 		if (!simulated && this._inplace)
 			jq(this.$n_()).toggleClass(this.getInplaceCSS(), evt.keyCode == 13 ? null! : false);
 
 		return super.afterKeyDown_(evt, simulated);
 	}
 
-	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {//after compose
+	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {//after compose
 		super.bind_(desktop, skipper, after);
 
 		var btn: HTMLElement | null | undefined;
@@ -277,7 +277,7 @@ export class Spinner extends zul.inp.NumberInputWidget<number> {
 		zWatch.listen({onSize: this});
 	}
 
-	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		if (this.timerId) {
 			clearTimeout(this.timerId);
 			this.timerId = null;
@@ -291,11 +291,11 @@ export class Spinner extends zul.inp.NumberInputWidget<number> {
 		super.unbind_(skipper, after, keepRod);
 	}
 
-	protected getBtnUpIconClass_(): string {
+	getBtnUpIconClass_(): string {
 		return 'z-icon-angle-up';
 	}
 
-	protected getBtnDownIconClass_(): string {
+	getBtnDownIconClass_(): string {
 		return 'z-icon-angle-down';
 	}
 }

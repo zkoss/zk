@@ -20,14 +20,14 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
  */
 @zk.WrapClass('zul.wgt.Div')
 export class Div extends zul.Widget {
-	private _align?: string;
+	_align?: string;
 
 	/** Returns the alignment.
 	 * <p>Default: null (use browser default).
 	 * @return String
 	 * @deprecated as of release 6.0.0, use CSS instead.
 	 */
-	public getAlign(): string | undefined {
+	getAlign(): string | undefined {
 		return this._align;
 	}
 
@@ -35,7 +35,7 @@ export class Div extends zul.Widget {
 	 * @param String align
 	 * @deprecated as of release 6.0.0, use CSS instead.
 	 */
-	public setAlign(v: string, opts?: Record<string, boolean>): this {
+	setAlign(v: string, opts?: Record<string, boolean>): this {
 		const o = this._align;
 		this._align = v;
 
@@ -49,7 +49,7 @@ export class Div extends zul.Widget {
 	}
 
 	//super//
-	public override domAttrs_(no?: zk.DomAttrsOptions): string {
+	override domAttrs_(no?: zk.DomAttrsOptions): string {
 		var align = this._align,
 			attr = super.domAttrs_(no);
 		return align != null ? attr + ' align="' + align + '"' : attr;

@@ -4,20 +4,20 @@
  */
 @zk.WrapClass('zul.inp.SimpleDoubleSpinnerConstraint')
 export class SimpleDoubleSpinnerConstraint extends zul.inp.SimpleConstraint {
-	public _min?: number;
-	public _max?: number;
+	_min?: number;
+	_max?: number;
 
 	/** Returns the minimum value.
 	 * @return double
 	 */
-	public getMin(): number | undefined {
+	getMin(): number | undefined {
 		return this._min;
 	}
 
 	/** Set the minimum value.
 	 * @param double min
 	 */
-	public setMin(min: number): this {
+	setMin(min: number): this {
 		this._min = min;
 		return this;
 	}
@@ -25,19 +25,19 @@ export class SimpleDoubleSpinnerConstraint extends zul.inp.SimpleConstraint {
 	/** Returns the maximum value.
 	 * @return double
 	 */
-	public getMax(): number | undefined {
+	getMax(): number | undefined {
 		return this._max;
 	}
 
 	/** Set the maximum value.
 	 * @param double max
 	 */
-	public setMax(max: number): this {
+	setMax(max: number): this {
 		this._max = max;
 		return this;
 	}
 
-	protected override parseConstraint_(cst: string): void {
+	override parseConstraint_(cst: string): void {
 		var cstList = cst.replace(/ +/g, ' ').split(/[, ]/),
 			len = cstList.length,
 		isSpinner;
@@ -55,7 +55,7 @@ export class SimpleDoubleSpinnerConstraint extends zul.inp.SimpleConstraint {
 			return super.parseConstraint_(cst);
 	}
 
-	public override validate(wgt: zk.Widget, val: unknown): string | zul.inp.SimpleConstraintErrorMessages | undefined {
+	override validate(wgt: zk.Widget, val: unknown): string | zul.inp.SimpleConstraintErrorMessages | undefined {
 		var result = super.validate(wgt, val);
 		switch (typeof val) {
 			case 'number':

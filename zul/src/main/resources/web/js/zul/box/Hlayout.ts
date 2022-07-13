@@ -19,11 +19,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.box.Hlayout')
 export class Hlayout extends zul.box.Layout {
-	private _valign = 'top';
-	private _beforeSizeWidth?: number;
+	_valign = 'top';
+	_beforeSizeWidth?: number;
 
 	/*zk.def*/
-	public setValign(v: string, opts?: Record<string, boolean>): this {
+	setValign(v: string, opts?: Record<string, boolean>): this {
 		const o = this._valign;
 		this._valign = v;
 
@@ -40,28 +40,28 @@ export class Hlayout extends zul.box.Layout {
 	 * "top", "middle", "bottom".
 	 * @since 6.0.0
 	 */
-	public getValign(): string {
+	getValign(): string {
 		return this._valign;
 	}
 
-	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		zWatch.listen({_beforeSizeForRead: this, beforeSize: this, onFitSize: this}); //ZK-4476
 	}
 
-	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		zWatch.unlisten({_beforeSizeForRead: this, beforeSize: this, onFitSize: this});
 		super.unbind_(skipper, after, keepRod);
 	}
 
-	protected override isVertical_(): boolean {
+	override isVertical_(): boolean {
 		return false;
 	}
 
 	// F60-ZK-537: Hlayout supports valign (top, middle and bottom),
 	// set vertical-align to children cause wrong layout on IE6,
 	// set it to parent directly
-	protected override domClass_(no?: Partial<zk.DomClassOptions>): string {
+	override domClass_(no?: Partial<zk.DomClassOptions>): string {
 		var clsnm = super.domClass_(no),
 			v;
 		if ((v = this._valign) == 'middle')
@@ -71,12 +71,12 @@ export class Hlayout extends zul.box.Layout {
 		return clsnm;
 	}
 
-	protected override getFlexDirection_(): string | null {
+	override getFlexDirection_(): string | null {
 		return 'row';
 	}
 
 	//ZK-4476
-	public _beforeSizeForRead(): void {
+	_beforeSizeForRead(): void {
 		var n = this.$n();
 		this._beforeSizeWidth = n ? n.offsetWidth : 0;
 		for (var xc: null | zk.Widget & Partial<{_beforeSizeWidth: number}> = this.firstChild; xc; xc = xc.nextSibling) {
@@ -85,7 +85,7 @@ export class Hlayout extends zul.box.Layout {
 		}
 	}
 
-	public beforeSize(): void {
+	beforeSize(): void {
 		var xc: null | zk.Widget & Partial<{_beforeSizeWidth: number}> = this.firstChild,
 			totalWdCached = this._beforeSizeWidth,
 			totalWd = totalWdCached != null ? totalWdCached : this.$n()!.offsetWidth,
@@ -115,7 +115,7 @@ export class Hlayout extends zul.box.Layout {
 		delete this._beforeSizeWidth;
 	}
 
-	public onFitSize(): void {
+	onFitSize(): void {
 		var xc = this.firstChild;
 		for (; xc; xc = xc.nextSibling) {
 			if (xc.isVisible() && !zk(xc).hasVParent())

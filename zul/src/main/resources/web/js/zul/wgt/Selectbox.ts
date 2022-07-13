@@ -20,18 +20,18 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.wgt.Selectbox')
 export class Selectbox extends zul.Widget<HTMLSelectElement> {
-	private _selectedIndex?: number;
-	private _disabled?: boolean;
-	private _multiple?: boolean;
-	private _maxlength?: number;
-	private _selectedIndexes?: number[];
-	private _name?: string;
+	_selectedIndex?: number;
+	_disabled?: boolean;
+	_multiple?: boolean;
+	_maxlength?: number;
+	_selectedIndexes?: number[];
+	_name?: string;
 
 	/**
 	 * Returns the index of the selected item (-1 if no one is selected).
 	 * @return int
 	 */
-	public getSelectedIndex(): number | undefined {
+	getSelectedIndex(): number | undefined {
 		return this._selectedIndex;
 	}
 
@@ -39,7 +39,7 @@ export class Selectbox extends zul.Widget<HTMLSelectElement> {
 	 * Selects the item with the given index.
 	 * @param int selectedIndex
 	 */
-	public setSelectedIndex(selectedIndex: number, opts?: Record<string, boolean>): this {
+	setSelectedIndex(selectedIndex: number, opts?: Record<string, boolean>): this {
 		const o = this._selectedIndex;
 		this._selectedIndex = selectedIndex;
 
@@ -58,7 +58,7 @@ export class Selectbox extends zul.Widget<HTMLSelectElement> {
 	 * Default: false.
 	 * @return boolean
 	 */
-	public isDisabled(): boolean | undefined {
+	isDisabled(): boolean | undefined {
 		return this._disabled;
 	}
 
@@ -66,7 +66,7 @@ export class Selectbox extends zul.Widget<HTMLSelectElement> {
 	 * Sets whether it is disabled.
 	 * @param boolean disabled
 	 */
-	public setDisabled(disabled: boolean, opts?: Record<string, boolean>): this {
+	setDisabled(disabled: boolean, opts?: Record<string, boolean>): this {
 		const o = this._disabled;
 		this._disabled = disabled;
 
@@ -85,7 +85,7 @@ export class Selectbox extends zul.Widget<HTMLSelectElement> {
 	 * @return boolean
 	 * @since 10.0.0 for Zephyr
 	 */
-	public isMultiple(): boolean | undefined {
+	isMultiple(): boolean | undefined {
 		return this._multiple;
 	}
 
@@ -94,7 +94,7 @@ export class Selectbox extends zul.Widget<HTMLSelectElement> {
 	 * @param boolean multiple
 	 * @since 10.0.0 for Zephyr
 	 */
-	public setMultiple(multiple: boolean, opts?: Record<string, boolean>): this {
+	setMultiple(multiple: boolean, opts?: Record<string, boolean>): this {
 		const o = this._multiple;
 		this._multiple = multiple;
 
@@ -111,7 +111,7 @@ export class Selectbox extends zul.Widget<HTMLSelectElement> {
 	 * @return int
 	 * @since 10.0.0 for Zephyr
 	 */
-	public getMaxlength(): number | undefined {
+	getMaxlength(): number | undefined {
 		return this._maxlength;
 	}
 
@@ -120,7 +120,7 @@ export class Selectbox extends zul.Widget<HTMLSelectElement> {
 	 * @param int maxlength
 	 * @since 10.0.0 for Zephyr
 	 */
-	public setMaxlength(maxlength: number, opts?: Record<string, boolean>): this {
+	setMaxlength(maxlength: number, opts?: Record<string, boolean>): this {
 		const o = this._maxlength;
 		this._maxlength = maxlength;
 
@@ -136,7 +136,7 @@ export class Selectbox extends zul.Widget<HTMLSelectElement> {
 	 * @return int[] selectedIndexes
 	 * @since 10.0.0 for Zephyr
 	 */
-	public getSelectedIndexes(): number[] | undefined {
+	getSelectedIndexes(): number[] | undefined {
 		return this._selectedIndexes;
 	}
 
@@ -145,7 +145,7 @@ export class Selectbox extends zul.Widget<HTMLSelectElement> {
 	 * @param int[] selectedIndexes
 	 * @since 10.0.0 for Zephyr
 	 */
-	public setSelectedIndexes(selectedIndexes: number[], opts?: Record<string, boolean>): this {
+	setSelectedIndexes(selectedIndexes: number[], opts?: Record<string, boolean>): this {
 		function doSelection(node: HTMLSelectElement, selectedIndexes: number[]): void {
 			node.selectedIndex = -1; // deselected all options
 			const options = node.options, n = options.length;
@@ -185,7 +185,7 @@ export class Selectbox extends zul.Widget<HTMLSelectElement> {
 	 * event-driven model.
 	 * @return String
 	 */
-	public getName(): string | undefined {
+	getName(): string | undefined {
 		return this._name;
 	}
 
@@ -202,7 +202,7 @@ export class Selectbox extends zul.Widget<HTMLSelectElement> {
 	 * @param String name
 	 *            the name of this component.
 	 */
-	public setName(name: string, opts?: Record<string, boolean>): this {
+	setName(name: string, opts?: Record<string, boolean>): this {
 		const o = this._name;
 		this._name = name;
 
@@ -214,12 +214,12 @@ export class Selectbox extends zul.Widget<HTMLSelectElement> {
 		return this;
 	}
 
-	private _fixSelIndex(): void {
+	_fixSelIndex(): void {
 		if (this._selectedIndex! < 0)
 			this.$n_().selectedIndex = -1;
 	}
 
-	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		var n = this.$n_();
 		this.domListen_(n, 'onChange')
@@ -234,7 +234,7 @@ export class Selectbox extends zul.Widget<HTMLSelectElement> {
 		this._fixSelIndex();
 	}
 
-	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		var n = this.$n_();
 		this.domUnlisten_(n, 'onChange')
 			.domUnlisten_(n, 'onFocus', 'doFocus_')
@@ -245,7 +245,7 @@ export class Selectbox extends zul.Widget<HTMLSelectElement> {
 		zWatch.unlisten({onRestore: fn, onVParent: fn});
 	}
 
-	private _doChange(evt: zk.Event): void {
+	_doChange(evt: zk.Event): void {
 		const n = this.$n_();
 		if (!this._multiple) {
 			var v = n.selectedIndex;
@@ -274,17 +274,17 @@ export class Selectbox extends zul.Widget<HTMLSelectElement> {
 	}
 
 	//Bug 3304408: IE does not fire onchange
-	protected override doBlur_(evt: zk.Event): void {
+	override doBlur_(evt: zk.Event): void {
 		this._doChange(evt);
 		return super.doBlur_(evt);
 	}
 
 	//Bug 1756559: ctrl key shall fore it to be sent first
-	protected override beforeCtrlKeys_(evt: zk.Event): void {
+	override beforeCtrlKeys_(evt: zk.Event): void {
 		this._doChange(evt);
 	}
 
-	public override domAttrs_(no?: zk.DomAttrsOptions): string {
+	override domAttrs_(no?: zk.DomAttrsOptions): string {
 		const index = this.getSelectedIndex()!, name = this.getName();
 		return super.domAttrs_(no)
 			+ (this.isDisabled() ? ' disabled="disabled"' : '')

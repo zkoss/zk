@@ -33,19 +33,19 @@ export interface LabelImageWidgetWithAutodisable extends LabelImageWidgetWithDis
  */
 @zk.WrapClass('zul.LabelImageWidget')
 export abstract class LabelImageWidget<TElement extends HTMLElement = HTMLElement> extends zul.Widget<TElement> {
-	private _label = '';
-	protected _iconSclass?: string;
-	protected _image?: string;
-	protected _hoverImage?: string;
-	protected _eimg?: HTMLImageElement | null;
-	protected _preloadImage?: boolean;
+	_label = '';
+	_iconSclass?: string;
+	_image?: string;
+	_hoverImage?: string;
+	_eimg?: HTMLImageElement | null;
+	_preloadImage?: boolean;
 
 	/** Sets the label.
 	 * <p>If label is changed, the whole component is invalidate.
 	 * Thus, you want to smart-update, you have to override {@link #updateDomContent_}.
 	 * @param String label
 	 */
-	public setLabel(label: string, opts?: Record<string, boolean>): this {
+	setLabel(label: string, opts?: Record<string, boolean>): this {
 		const o = this._label;
 		this._label = label;
 
@@ -61,7 +61,7 @@ export abstract class LabelImageWidget<TElement extends HTMLElement = HTMLElemen
 	 * <p>Default: "".
 	 * @return String
 	 */
-	public getLabel(): string {
+	getLabel(): string {
 		return this._label;
 	}
 
@@ -70,7 +70,7 @@ export abstract class LabelImageWidget<TElement extends HTMLElement = HTMLElemen
 	 * @param String iconSclass a CSS class name for the icon font
 	 * @since 7.0.0
 	 */
-	public setIconSclass(iconSclass: string, opts?: Record<string, boolean>): this {
+	setIconSclass(iconSclass: string, opts?: Record<string, boolean>): this {
 		const o = this._iconSclass;
 		this._iconSclass = iconSclass;
 
@@ -87,14 +87,14 @@ export abstract class LabelImageWidget<TElement extends HTMLElement = HTMLElemen
 	 * @return String iconSclass a CSS class name for the icon font
 	 * @since 7.0.0
 	 */
-	public getIconSclass(): string | undefined {
+	getIconSclass(): string | undefined {
 		return this._iconSclass;
 	}
 
 	/** Sets the image URI. The image would hide if src == null </p>
 	 * @param String image the URI of the image
 	 */
-	public setImage(v: string, opts?: Record<string, boolean>): this {
+	setImage(v: string, opts?: Record<string, boolean>): this {
 		const o = this._image;
 		this._image = v;
 
@@ -120,7 +120,7 @@ export abstract class LabelImageWidget<TElement extends HTMLElement = HTMLElemen
 	 * <p>Default: null.
 	 * @return String
 	 */
-	public getImage(): string | undefined {
+	getImage(): string | undefined {
 		return this._image;
 	}
 
@@ -128,7 +128,7 @@ export abstract class LabelImageWidget<TElement extends HTMLElement = HTMLElemen
 	 * The hover image is used when the mouse is moving over this component.
 	 * @param String src
 	 */
-	public setHoverImage(src: string): this {
+	setHoverImage(src: string): this {
 		this._hoverImage = src;
 		return this;
 	}
@@ -138,7 +138,7 @@ export abstract class LabelImageWidget<TElement extends HTMLElement = HTMLElemen
 	 * <p>Default: null.
 	 * @return String
 	 */
-	public getHoverImage(): string | undefined {
+	getHoverImage(): string | undefined {
 		return this._hoverImage;
 	}
 
@@ -148,7 +148,7 @@ export abstract class LabelImageWidget<TElement extends HTMLElement = HTMLElemen
 	 * label and/or image to the DOM tree.
 	 * Default: invoke {@link zk.Widget#rerender} to redraw and re-bind.
 	 */
-	public updateDomContent_(): void {
+	updateDomContent_(): void {
 		this.rerender();
 	}
 
@@ -156,7 +156,7 @@ export abstract class LabelImageWidget<TElement extends HTMLElement = HTMLElemen
 	 * Returns the HTML image content.
 	 * @return String
 	 */
-	protected domImage_(): string {
+	domImage_(): string {
 		var img = this._image;
 		return img ? '<img src="' + img + '" align="absmiddle" alt="" aria-hidden="true">' : '';
 	}
@@ -166,7 +166,7 @@ export abstract class LabelImageWidget<TElement extends HTMLElement = HTMLElemen
 	 * @return String
 	 * @since 7.0.0
 	 */
-	protected domIcon_(): string {
+	domIcon_(): string {
 		var icon = this.getIconSclass(), // use getIconSclass() to allow overriding
 			result = '';
 		//ZK-3636: Added simple support for stacked font awesome icons
@@ -194,7 +194,7 @@ export abstract class LabelImageWidget<TElement extends HTMLElement = HTMLElemen
 	 * @return String
 	 * @see zUtl#encodeXML
 	 */
-	protected domLabel_(): string {
+	domLabel_(): string {
 		return zUtl.encodeXML(this.getLabel());
 	}
 
@@ -205,7 +205,7 @@ export abstract class LabelImageWidget<TElement extends HTMLElement = HTMLElemen
 	 * @see #domImage_
 	 * @see #domLabel_
 	 */
-	protected domContent_(): string {
+	domContent_(): string {
 		var label = this.domLabel_(),
 			icon = this.domIcon_(),
 			img = this.domImage_();
@@ -221,12 +221,12 @@ export abstract class LabelImageWidget<TElement extends HTMLElement = HTMLElemen
 		}
 	}
 
-	protected override doMouseOver_(evt: zk.Event): void {
+	override doMouseOver_(evt: zk.Event): void {
 		this._updateHoverImage(true);
 		super.doMouseOver_(evt);
 	}
 
-	protected override doMouseOut_(evt: zk.Event): void {
+	override doMouseOut_(evt: zk.Event): void {
 		this._updateHoverImage();
 		super.doMouseOut_(evt);
 	}
@@ -235,7 +235,7 @@ export abstract class LabelImageWidget<TElement extends HTMLElement = HTMLElemen
 	 * Returns the image node if any.
 	 * @return DOMElement
 	 */
-	public getImageNode(): HTMLImageElement | null | undefined {
+	getImageNode(): HTMLImageElement | null | undefined {
 		if (!this._eimg && this._image) {
 			var n = this.$n();
 			if (n) this._eimg = jq(n).find<HTMLImageElement>('img:first')[0];
@@ -243,7 +243,7 @@ export abstract class LabelImageWidget<TElement extends HTMLElement = HTMLElemen
 		return this._eimg;
 	}
 
-	public _updateHoverImage(inHover?: boolean): void {
+	_updateHoverImage(inHover?: boolean): void {
 		var n = this.getImageNode(),
 			img = inHover ? this._hoverImage : this._image;
 		if (n && this._hoverImage) {
@@ -255,7 +255,7 @@ export abstract class LabelImageWidget<TElement extends HTMLElement = HTMLElemen
 	}
 
 	//@Override
-	public override clearCache(): void {
+	override clearCache(): void {
 		this._eimg = null;
 		super.clearCache();
 	}

@@ -22,7 +22,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.layout.Anchorchildren')
 export class Anchorchildren extends zul.Widget {
-    private _anchor?: string;
+    _anchor?: string;
 
     /**
      * Sets the width, height relative to parent, anchorlayout.
@@ -35,7 +35,7 @@ export class Anchorchildren extends zul.Widget {
      * "50%" means the width is 50% of parent, and the height is no assumed.
      * @param String anchor
      */
-    public setAnchor(anchor: string, opts?: Record<string, boolean>): this {
+    setAnchor(anchor: string, opts?: Record<string, boolean>): this {
         const o = this._anchor;
         this._anchor = anchor;
 
@@ -51,21 +51,21 @@ export class Anchorchildren extends zul.Widget {
      * Returns the anchor setting.
      * @return String
      */
-    public getAnchor(): string | undefined {
+    getAnchor(): string | undefined {
         return this._anchor;
     }
 
-	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		zWatch.listen({onSize: this});
 	}
 
-	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		zWatch.unlisten({onSize: this});
 		super.unbind_(skipper, after, keepRod);
 	}
 
-    public override onSize(): void {
+    override onSize(): void {
 		//calculate the height and width in pixel based on _anchor
 		var n = this.$n_(),
 			parentn = this.parent!.$n_(),

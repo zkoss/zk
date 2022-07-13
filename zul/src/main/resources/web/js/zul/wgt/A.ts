@@ -21,26 +21,26 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.wgt.A')
 export class A extends zul.LabelImageWidget<HTMLAnchorElement> implements zul.LabelImageWidgetWithAutodisable {
-	private _dir = 'normal';
-	private _href?: string;
-	private _target?: string;
-	public _disabled?: boolean;
-	public _adbs?: boolean;
-	public _autodisable?: string;
+	_dir = 'normal';
+	_href?: string;
+	_target?: string;
+	_disabled?: boolean;
+	_adbs?: boolean;
+	_autodisable?: string;
 	//_tabindex: 0,
 
 	/** Returns whether it is disabled.
 	 * <p>Default: false.
 	 * @return boolean
 	 */
-	public isDisabled(): boolean | undefined {
+	isDisabled(): boolean | undefined {
 		return this._disabled;
 	}
 
 	/** Sets whether it is disabled.
 	 * @param boolean disabled
 	 */
-	public setDisabled(v: boolean | undefined, opts?: Record<string, boolean>): this {
+	setDisabled(v: boolean | undefined, opts?: Record<string, boolean>): this {
 		const o = this._disabled;
 
 		// Refer from Button.js for the following changes
@@ -78,14 +78,14 @@ export class A extends zul.LabelImageWidget<HTMLAnchorElement> implements zul.La
 	 * <p>Default: "normal".
 	 * @return String
 	 */
-	public getDir(): string {
+	getDir(): string {
 		return this._dir;
 	}
 
 	/** Sets the direction.
 	 * @param String dir either "normal" or "reverse".
 	 */
-	public setDir(v: string, opts?: Record<string, boolean>): this {
+	setDir(v: string, opts?: Record<string, boolean>): this {
 		const o = this._dir;
 		this._dir = v;
 
@@ -104,14 +104,14 @@ export class A extends zul.LabelImageWidget<HTMLAnchorElement> implements zul.La
 	 * <p>If it is not null, the onClick event won't be sent.
 	 * @return String
 	 */
-	public getHref(): string | undefined {
+	getHref(): string | undefined {
 		return this._href;
 	}
 
 	/** Sets the href.
 	 * @param String href
 	 */
-	public setHref(v: string, opts?: Record<string, boolean>): this {
+	setHref(v: string, opts?: Record<string, boolean>): this {
 		const o = this._href;
 		this._href = v;
 
@@ -131,14 +131,14 @@ export class A extends zul.LabelImageWidget<HTMLAnchorElement> implements zul.La
 	 * <p>Default: null.
 	 * @return String
 	 */
-	public getTarget(): string | undefined {
+	getTarget(): string | undefined {
 		return this._target;
 	}
 
 	/** Sets the target frame or window.
 	 * @param String target the name of the frame or window to hyperlink.
 	 */
-	public setTarget(v: string, opts?: Record<string, boolean>): this {
+	setTarget(v: string, opts?: Record<string, boolean>): this {
 		const o = this._target;
 		this._target = v;
 
@@ -188,20 +188,20 @@ export class A extends zul.LabelImageWidget<HTMLAnchorElement> implements zul.La
 	 * <p>Default: null.
 	 * @return String
 	 */
-	public getAutodisable(): string | undefined {
+	getAutodisable(): string | undefined {
 		return this._autodisable;
 	}
 
 	/** Sets whether to disable the anchor after the user clicks it.
 	 * @param String autodisable
 	 */
-	public setAutodisable(autodisable: string): this {
+	setAutodisable(autodisable: string): this {
 		this._autodisable = autodisable;
 		return this;
 	}
 
 	// super//
-	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		if (!this._disabled) {
 			var n = this.$n()!;
@@ -210,7 +210,7 @@ export class A extends zul.LabelImageWidget<HTMLAnchorElement> implements zul.La
 		}
 	}
 
-	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		var n = this.$n()!;
 		this.domUnlisten_(n, 'onFocus', 'doFocus_')
 			.domUnlisten_(n, 'onBlur', 'doBlur_');
@@ -218,7 +218,7 @@ export class A extends zul.LabelImageWidget<HTMLAnchorElement> implements zul.La
 		super.unbind_(skipper, after, keepRod);
 	}
 
-	protected override domContent_(): string {
+	override domContent_(): string {
 		var label = zUtl.encodeXML(this.getLabel()),
 			img = this.domImage_(),
 			iconSclass = this.domIcon_();
@@ -232,7 +232,7 @@ export class A extends zul.LabelImageWidget<HTMLAnchorElement> implements zul.La
 		return this.getDir() == 'reverse' ? label + img : img + label;
 	}
 
-	public override domAttrs_(no?: zk.DomAttrsOptions): string {
+	override domAttrs_(no?: zk.DomAttrsOptions): string {
 		var attr = super.domAttrs_(no),
 			v: string | undefined;
 		if (v = this.getTarget())
@@ -246,7 +246,7 @@ export class A extends zul.LabelImageWidget<HTMLAnchorElement> implements zul.La
 		return attr;
 	}
 
-	public override doClick_(evt: zk.Event): void {
+	override doClick_(evt: zk.Event): void {
 		var href = this.getHref();
 		// ZK-2506: use iframe to open a 'mailto' href
 		if (href && href.toLowerCase().startsWith('mailto:')) {
