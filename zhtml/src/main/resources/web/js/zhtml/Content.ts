@@ -1,4 +1,4 @@
-/* Content.js
+/* Content.ts
 
 	Purpose:
 		
