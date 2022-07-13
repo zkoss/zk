@@ -9,10 +9,12 @@
 
 Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 */
-(function () {
+@zk.WrapClass('zhtml.Input')
+export class Input extends zhtml.Widget {
+	public value?: string;
+	public start?: number;
 
-zhtml.Input = zk.$extends(zhtml.Widget, {
-	_doChange: function (evt) {
+	public _doChange(evt: zk.Event): void {
 		var n = this.$n();
 		if (n) {
 			var val = n.value;
@@ -21,18 +23,21 @@ zhtml.Input = zk.$extends(zhtml.Widget, {
 				this.fire('onChange', this._onChangeData(val), null);
 			}
 		}
-	},
-	_onChangeData: function (val, selbak) {
+	}
+
+	private _onChangeData(val: string, selbak?): {value: string; start: number; marshal(): [string?, boolean?, number?]} {
 		return {value: val,
 			start: zk(this.$n()).getSelectionRange()[0],
 			marshal: this._onChangeMarshal};
-	},
-	_onChangeMarshal: function () {
+	}
+
+	private _onChangeMarshal(): [string?, boolean?, number?] {
 		return [this.value, false, this.start];
-	},
-	bind_: function () {
-		this.$supers(zhtml.Input, 'bind_', arguments);
-		var n;
+	}
+
+	protected override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+		super.bind_(desktop, skipper, after);
+		var n: HTMLInputElement | null | undefined;
 
 		if (this.isListen('onChange', {any: true}) && (n = this.$n())) {
 			this._defValue = n.value;
@@ -42,12 +47,11 @@ zhtml.Input = zk.$extends(zhtml.Widget, {
 			this._defChecked = n.checked;
 			this.domListen_(n, 'onCheck');
 		}
-	},
-	unbind_: function () {
-		if (this._defValue !== undefined)
-			this.domUnlisten_(this.$n(), 'onChange');
-		this.$supers(zhtml.Input, 'unbind_', arguments);
 	}
-});
 
-})();
+	protected override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+		if (this._defValue !== undefined)
+			this.domUnlisten_(this.$n_(), 'onChange');
+		super.unbind_(skipper, after, keepRod);
+	}
+}

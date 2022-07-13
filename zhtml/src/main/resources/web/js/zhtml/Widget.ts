@@ -12,18 +12,24 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zhtml.Widget = zk.$extends(zk.Widget, {
-	rawId: true,
+@zk.WrapClass('zhtml.Widget')
+export class Widget extends zk.Widget<HTMLInputElement> {
+	public override rawId = true;
+
 	/** The class name (<code>zhtml.Widget</code>)
 	 * @type String
 	 */
-	className: 'zhtml.Widget',
+	public override className = 'zhtml.Widget';
+
 	/** The widget name (<code>zhtml</code>).
 	 * @type String
 	 */
-	widgetName: 'zhtml',
+	public override widgetName = 'zhtml';
 
-	setDynamicProperty: function (prop) {
+	protected _defChecked?: boolean;
+	protected _defValue?: string;
+
+	public setDynamicProperty(prop: [string, string]): void {
 		var n = this.$n();
 		if (n) {
 			var nm = prop[0], val = prop[1];
@@ -48,12 +54,13 @@ zhtml.Widget = zk.$extends(zk.Widget, {
 				n[nm] = val;
 			}
 		}
-	},
-	doClick_: function (wevt) {
+	}
+
+	protected override doClick_(wevt: zk.Event): void {
 		var n = this.$n();
 		if (n) {
 			if (n.tagName != 'INPUT')
-				this.$supers('doClick_', arguments);
+				super.doClick_(wevt);
 			else if (!n.disabled) {
 				if (n.type == 'checkbox' || n.type == 'radio')
 					this._doCheck();
@@ -61,8 +68,9 @@ zhtml.Widget = zk.$extends(zk.Widget, {
 				this.fireX(wevt); //no propagation
 			}
 		}
-	},
-	_doCheck: function () {
+	}
+
+	private _doCheck(): void {
 		var n = this.$n();
 		if (n) {
 			var val = n.checked;
@@ -71,6 +79,9 @@ zhtml.Widget = zk.$extends(zk.Widget, {
 				this.fire('onCheck', val);
 			}
 		}
-	},
-	redraw: zk.Native.$redraw
-});
+	}
+
+	public override redraw(out: string[]): void {
+		return zk.Native.$redraw(out);
+	}
+}
