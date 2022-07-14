@@ -18,10 +18,17 @@
     "noImplicitOverride": true,
     "noUnusedLocals": true,
     "useUnknownInCatchVariables": false,
+    "typeRoots": [
+      "node_modules",
+      "node_modules/@types",
+      "../zkcml/node_modules"
+    ],
     "types": [
       "zk",
       "zul",
       "zkbind",
+      "zkmax",
+      "zkex",
       "webpack-env"
     ],
     "paths": {

@@ -882,7 +882,7 @@ open: function () {
  * @see #override(Function, Function)
  * @see #override(Object, String, Object)
  */
-function override<T, U>(dst: T, backup: Record<string, unknown>, src: U): T & U;
+function override<T, U>(dst: T, backup: Record<string, unknown>, src: U & ThisType<T & U>): T & U;
 /** Overrides a particular method.
  * The old method will be returned, and the caller could store it for
  * calling back. For example,
