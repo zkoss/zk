@@ -1,9 +1,18 @@
 module.exports = {
-	'root': true,
-	'env': {
-	  'browser': true
-	},
-	'overrides': [
+  'root': true,
+  'parser': '@typescript-eslint/parser',
+  'plugins': [
+    '@typescript-eslint'
+  ],
+  'parserOptions': {
+    'ecmaVersion': 5,
+    'sourceType': 'script',
+    'ecmaFeatures': {}
+  },
+  'env': {
+    'browser': true
+  },
+  'overrides': [
     {
       'files': [
         '*.js'
@@ -130,14 +139,7 @@ module.exports = {
       'files': [
         '*.ts'
       ],
-      'parser': '@typescript-eslint/parser',
-      'plugins': [
-        '@typescript-eslint'
-      ],
       'parserOptions': {
-        'ecmaVersion': 5,
-        'sourceType': 'script',
-        'ecmaFeatures': {},
         'project': './tsconfig.json'
       },
       'extends': [

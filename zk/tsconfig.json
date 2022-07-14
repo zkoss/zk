@@ -26,10 +26,17 @@
     // "exactOptionalPropertyTypes": true, // TODO
     "forceConsistentCasingInFileNames": true,
     "allowUmdGlobalAccess": true,
+    "typeRoots": [
+      "../node_modules",
+      "../node_modules/@types",
+      "../../zkcml/node_modules"
+    ],
     "types": [
-      "webpack-env",
       "zul",
-      "zkbind"
+      "zkbind",
+      "zkex",
+      "zkmax",
+      "webpack-env"
     ],
     "paths": {
       "@zul/*": [
