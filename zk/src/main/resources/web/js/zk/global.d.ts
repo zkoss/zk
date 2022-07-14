@@ -307,46 +307,6 @@ declare namespace zk {
 	}
 }
 
-declare namespace zkex {
-	namespace inp {
-		class ContentHandler extends zul.menu.ContentHandler { // zul.menu.Menu
-			// TODO: maybe the type of wgt can be narrowed to zul.menu.Menu
-			constructor(wgt: zk.Widget, content: string)
-		}
-	}
-	namespace sel {
-		class Listgroup extends zul.sel.Listitem { // zul.sel.ItemWidget
-			_open: boolean; // is initialized to true
-			isOpen(): boolean;
-			getIconOpenClass_(): string;
-			getIconCloseClass_(): string;
-		}
-		class Listgroupfoot extends zul.sel.Listitem {} // zul.sel.ItemWidget
-	}
-	namespace grid {
-		class Group extends zul.grid.Row { // zul.grid.Rows
-			domContent_(): string
-			isOpen(): boolean
-		}
-		class Groupfoot extends zul.grid.Row { // zul.grid.Rows
-		}
-		class Detail extends zul.Widget { // zul.grid.Rows
-		}
-	}
-}
-
-declare namespace zkmax {
-	namespace layout {
-		class Portallayout extends zul.Widget { // zul.wnd.Panel
-			getMaximizedMode(): string
-			isVertical(): boolean
-		}
-		class Portalchildren extends zul.Widget { // zul.wnd.Panel
-			override parent: zkmax.layout.Portallayout | null;
-		}
-	}
-}
-
 declare var zWs: zk.Websocket;
 
 type ZKStatic = typeof import('./zk').default;
