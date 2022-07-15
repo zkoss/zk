@@ -39,7 +39,7 @@ export abstract class SortWidget extends zul.mesh.HeaderWidget {
 	/** Sets the sort direction. This does not sort the data, it only serves
 	 * as an indicator as to how the widget is sorted.
 	 *
-	 * <p>If you use {@link #sort(String, jq.Event)} to sort rows,
+	 * <p>If you use {@link #sort(String, zk.Event)} to sort rows,
 	 * the sort direction is maintained automatically.
 	 * If you want to sort it in customized way, you have to set the
 	 * sort direction manually.
@@ -158,11 +158,11 @@ export abstract class SortWidget extends zul.mesh.HeaderWidget {
 	/**
 	 * Sorts the data.
 	 * @param String ascending
-	 * @param jq.Event evt
+	 * @param zk.Event evt
 	 * @return boolean
 	 * @disable(zkgwt)
 	 */
-	sort(ascending: boolean, evt: JQuery.Event): boolean {
+	sort(ascending: boolean, evt: zk.Event): boolean {
 		if (!this.checkClientSort_(ascending))
 			return false;
 
@@ -279,7 +279,7 @@ export abstract class SortWidget extends zul.mesh.HeaderWidget {
 			w.setSortDirection(w == this ? direction : 'natural');
 	}
 
-	onSort(evt: JQuery.Event): void {
+	onSort(evt: zk.Event): void {
 		var dir = this.getSortDirection();
 		if ('ascending' == dir)
 			this.sort(false, evt);
@@ -314,7 +314,7 @@ export abstract class SortWidget extends zul.mesh.HeaderWidget {
 
 	getColumnMenuPopup_ = zk.$void;
 
-	_doMenuClick(evt: JQuery.Event): void {
+	_doMenuClick(evt: zk.Event): void {
 		if (this.parent!._menupopup && this.parent!._menupopup != 'none') {
 			var pp: string | zul.menu.Menupopup = this.parent!._menupopup,
 				btn = this.$n_('btn');
