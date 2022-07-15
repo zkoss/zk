@@ -192,14 +192,7 @@ onClick: function (evt) {
 	/** The DOM element that the event is targeting, or null if not available.
 	 * @type DOMElement
 	 */
-	get domTarget(): HTMLElement {
-		return this._domTarget!;
-	}
-	set domTarget(target: HTMLElement) {
-		this._domTarget = target;
-	}
-	// internal use only.
-	private _domTarget?: HTMLElement;
+	domTarget!: HTMLElement;
 
 	/** Indicates whether the event propagation is stopped.
 	 * @type boolean
