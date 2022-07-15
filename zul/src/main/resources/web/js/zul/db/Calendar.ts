@@ -890,9 +890,9 @@ export class Calendar extends zul.Widget {
 		if (zk.animating()) return; // ignore
 		var node = jq.nodeName(evt.domTarget, 'a') ? evt.domTarget
 					: jq(evt.domTarget).parent('a')[0];
-		if (jq(node!).attr('disabled'))
+		if (jq(node).attr('disabled'))
 			return;
-		this._shiftView(jq(node!).hasClass(this.$s('left')) ? -1 : 1);
+		this._shiftView(jq(node).hasClass(this.$s('left')) ? -1 : 1);
 		//ZK-2679: prevent default behavior of clicking anchor
 		evt.stop();
 	}

@@ -87,7 +87,7 @@ function _endghostmove(dg: zk.Draggable, origin: HTMLElement): void {
 function _ignoremove(dg: zk.Draggable, pointer: zk.Offset, evt: zk.Event): boolean {
 	var el = dg.node!,
 		wgt = dg.control as zul.wnd.Window,
-		tar = evt.domTarget!;
+		tar = evt.domTarget;
 
 	if (!tar.id)
 		tar = tar.parentNode as HTMLElement;
