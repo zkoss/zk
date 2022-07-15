@@ -299,7 +299,7 @@ export class Listheader extends zul.mesh.SortWidget {
 		var box = this.getListbox(),
 			cm = this.$n('cm');
 		if (box && box._checkmark) {
-			var n = evt.domTarget!;
+			var n = evt.domTarget;
 			if (n == cm || n.parentNode == cm) //may click on font-awesome element
 				return; //ignore it (to avoid sort or other activity)
 		}

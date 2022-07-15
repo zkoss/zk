@@ -1239,7 +1239,7 @@ export class Panel extends zul.Widget {
 	override doClick_(evt: zk.Event, popupOnly?: boolean): void {
 		var maxBtn = this.$n('max'),
 			minBtn = this.$n('min'),
-			n: HTMLElement | null = evt.domTarget!;
+			n: HTMLElement | null = evt.domTarget;
 		if (!n.id)
 			n = n.parentNode as HTMLElement | null;
 		switch (n) {
@@ -1399,7 +1399,7 @@ export class Panel extends zul.Widget {
 
 	static _ignoremove(dg: zk.Draggable, pointer: zk.Offset, evt: zk.Event): boolean {
 		var wgt = dg.control!,
-			tar = evt.domTarget!;
+			tar = evt.domTarget;
 		if (!tar.id)
 			tar = tar.parentNode as HTMLElement;
 

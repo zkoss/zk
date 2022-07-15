@@ -939,7 +939,7 @@ export class LayoutRegion extends zul.Widget {
 	}
 
 	override doClick_(evt: zk.Event, popupOnly?: boolean): void {
-		var target = evt.domTarget!;
+		var target = evt.domTarget;
 		if (!target.id)
 			target = target.parentNode as HTMLElement;
 		switch (target) {

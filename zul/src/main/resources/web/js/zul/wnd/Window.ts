@@ -1487,7 +1487,7 @@ export class Window extends zul.ContainerWidget {
 	}
 
 	override doClick_(evt: zk.Event, popupOnly?: boolean): void {
-		var n: HTMLElement | null = evt.domTarget!;
+		var n: HTMLElement | null = evt.domTarget;
 		if (!n.id)
 			n = n.parentNode as HTMLElement | null;
 		if (n) { //If node does not exist, should propagation event directly

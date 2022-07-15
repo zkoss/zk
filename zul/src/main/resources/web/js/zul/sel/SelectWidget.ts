@@ -57,7 +57,7 @@ function _isInputWidget(evt: zk.Event): boolean { // B50-ZK-460
 		|| (zk.isLoaded('zul.inp') && evt.target instanceof zul.inp.InputWidget);
 }
 function _focusable(evt: zk.Event): boolean {
-	return (jq.nodeName(evt.domTarget!, 'input', 'textarea', 'button', 'select', 'option', 'a')
+	return (jq.nodeName(evt.domTarget, 'input', 'textarea', 'button', 'select', 'option', 'a')
 			&& !(evt.target instanceof zul.sel.SelectWidget))
 		|| _isButton(evt) || _isInputWidget(evt);
 }
@@ -674,7 +674,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		//However, FF won't fire onclick if dragging, so the spec is
 		//not to change selection if dragging (selected or not)
 		var alwaysSelect,
-			tg = evt.domTarget!,
+			tg = evt.domTarget,
 			cm = row.$n('cm'),
 			cmClicked = this._checkmark && (tg == cm || tg.parentNode == cm);
 		if (zk.dragging || (!cmClicked && (this._shallIgnore(evt, true)
@@ -743,7 +743,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 			case 32: //SPACE
 			case 36: //Home
 			case 35: //End
-				if (!jq.nodeName(evt.domTarget!, 'a'))
+				if (!jq.nodeName(evt.domTarget, 'a'))
 					this.focus();
 				if (evt.domTarget == this.$n('a')) {// for test tool.
 					if (evt.target == this) //try to avoid the condition inside the _doKeyDown()
@@ -756,7 +756,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		}
 
 		// disable item's content selection excluding input box and textarea
-		if (!jq.nodeName(evt.domTarget!, 'input', 'textarea')) {
+		if (!jq.nodeName(evt.domTarget, 'input', 'textarea')) {
 			this._disableSelection_ = true;
 			zk(this.$n()).disableSelection();
 		}
@@ -1162,7 +1162,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 				if (this._headercm && jq.isAncestor(this._headercm, evt.domTarget) && !checkSelectAll) {
 					keep = false;
 				} else {
-					var tg = evt.domTarget!,
+					var tg = evt.domTarget,
 						cm = ref && ref.$n('cm');
 					keep = (edata.ctrlKey || edata.metaKey) || edata.shiftKey
 							|| (this._checkmark && (!this._cdo || (tg == cm || tg.parentNode == cm) || checkSelectAll));

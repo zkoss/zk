@@ -888,8 +888,8 @@ export class Calendar extends zul.Widget {
 
 	_clickArrow(evt: zk.Event): void {
 		if (zk.animating()) return; // ignore
-		var node = jq.nodeName(evt.domTarget!, 'a') ? evt.domTarget
-					: jq(evt.domTarget!).parent('a')[0];
+		var node = jq.nodeName(evt.domTarget, 'a') ? evt.domTarget
+					: jq(evt.domTarget).parent('a')[0];
 		if (jq(node!).attr('disabled'))
 			return;
 		this._shiftView(jq(node!).hasClass(this.$s('left')) ? -1 : 1);
