@@ -553,18 +553,18 @@ export class Menupopup extends zul.wgt.Popup {
 	}
 
 	removeActive_(): void {
-		var currentActive = this._currentChild();
+		const currentActive = this._currentChild();
 		if (currentActive) {
-			(currentActive.$class as typeof zul.menu.Menuitem)._rmActive(currentActive);
+			(currentActive.$class as unknown as {_rmActive(wgt)})._rmActive(currentActive);
 			this._curIndex = -1;
 		}
 	}
 
-	_currentChild(): zul.menu.Menuitem | null {
-		var index = this._curIndex,
+	_currentChild(): zul.menu.Menuitem | zul.menu.Menu | null {
+		const index = this._curIndex,
 			$menubar = zul.menu.Menubar;
 		if (index >= 0) {
-			for (var w = this.firstChild, k = 0; w; w = w.nextSibling)
+			for (let w = this.firstChild, k = 0; w; w = w.nextSibling)
 				if ($menubar._isActiveItem(w) && k++ == index)
 					return w;
 		}
