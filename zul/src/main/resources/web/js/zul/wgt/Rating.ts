@@ -159,7 +159,7 @@ export class Rating extends zul.Widget {
 	}
 
 	_changeRating(evt: zk.Event): void {
-		var rating = jq(evt.domTarget!).data('rate') as number,
+		var rating = jq(evt.domTarget).data('rate') as number,
 			isCanceling = this._cancelable && this._rating == rating;
 		jq(this).children().removeClass(this.$s('hover'));
 		this.setRating(isCanceling ? 0 : rating);
@@ -169,7 +169,7 @@ export class Rating extends zul.Widget {
 	_doMouseOver(evt: zk.Event): void {
 		if (this._disabled || this._readonly)
 			return;
-		this._toggleClass('hover', jq(evt.domTarget!).data('rate') as number);
+		this._toggleClass('hover', jq(evt.domTarget).data('rate') as number);
 	}
 
 	_doMouseOut(evt: zk.Event): void {

@@ -374,9 +374,9 @@ export let DnD = { //for easy overriding
 	getDropTarget(evt: Event, drag?): Widget {
 		var wgt;
 		// Firefox's bug -  https://bugzilla.mozilla.org/show_bug.cgi?id=1259357
-		if ((zk.ff && jq(evt.domTarget!).css('overflow') !== 'visible') ||
+		if ((zk.ff && jq(evt.domTarget).css('overflow') !== 'visible') ||
 			// IE 9~11 and Edge may receive a wrong target when dragging with an Image.
-			(((zk.ie && zk.ie > 8) || zk.edge_legacy) && jq.nodeName(evt.domTarget!, 'img'))) {
+			(((zk.ie && zk.ie > 8) || zk.edge_legacy) && jq.nodeName(evt.domTarget, 'img'))) {
 			var n = document.elementFromPoint(evt.domEvent!.clientX || 0, evt.domEvent!.clientY || 0);
 			if (n)
 				wgt = zk.$(n);

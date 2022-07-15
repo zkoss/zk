@@ -308,7 +308,7 @@ export class Frozen extends zul.Widget {
 	}
 
 	_doHeadScroll(evt: zk.Event): void {
-		var head = evt.domTarget!,
+		var head = evt.domTarget,
 			num = Math.ceil(head.scrollLeft / 50);
 		// ignore scrollLeft is 0
 		if (!head.scrollLeft || this._lastScale == num)

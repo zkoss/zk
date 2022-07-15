@@ -360,7 +360,7 @@ export class ItemWidget extends zul.Widget<HTMLTableRowElement> implements zul.m
 		var mesh = this.getMeshWidget()!;
 
 		// disable item's content selection excluding input box and textarea
-		if (!jq.nodeName(evt.domTarget!, 'input', 'textarea')) {
+		if (!jq.nodeName(evt.domTarget, 'input', 'textarea')) {
 			this._disableSelection_ = true;
 			zk(mesh.$n()).disableSelection();
 		}

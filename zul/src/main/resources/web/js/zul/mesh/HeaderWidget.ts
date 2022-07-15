@@ -384,7 +384,7 @@ export abstract class HeaderWidget extends zul.LabelImageWidget<HTMLTableCellEle
 	}
 
 	override doClick_(evt: zk.Event, popupOnly?: boolean): void {
-		var tg = evt.domTarget!,
+		var tg = evt.domTarget,
 			wgt = zk.Widget.$(tg)!,
 			n = this.$n(),
 			ofs = this._dragsz ? zk(n).revisedOffset() : false,

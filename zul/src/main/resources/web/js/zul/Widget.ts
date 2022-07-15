@@ -693,7 +693,7 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Widge
 		var keyCode = evt.keyCode, evtnm = 'onCtrlKey', okcancel, commandKey = zk.mac && evt.metaKey;
 		switch (keyCode) {
 		case 13: { //ENTER
-			const target = evt.domTarget!, tn = jq.nodeName(target);
+			const target = evt.domTarget, tn = jq.nodeName(target);
 			if (tn == 'textarea' || (tn == 'button'
 			// if button's ID end with '-a' still fire onOK(Like Listbox and Menupopup)
 			&& (!target.id || !target.id.endsWith('-a')))
@@ -761,7 +761,7 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Widge
 		}, 0);
 
 		evt.stop();
-		if (jq.nodeName(evt.domTarget!, 'select'))
+		if (jq.nodeName(evt.domTarget, 'select'))
 			evt.stop({dom: true, revoke: true}); //Bug 1756559: don't stop DOM since it affects IE and Opera's SELECT's closing dropdown
 
 		return true; //handled

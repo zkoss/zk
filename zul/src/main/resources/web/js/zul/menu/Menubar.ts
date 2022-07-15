@@ -249,7 +249,7 @@ export class Menubar extends zul.Widget {
 	}
 
 	_doScroll(evt: zk.Event): void {
-		this._scroll(evt.domTarget == this.$n('left') || evt.domTarget!.parentNode == this.$n('left') ? 'left' : 'right');
+		this._scroll(evt.domTarget == this.$n('left') || evt.domTarget.parentNode == this.$n('left') ? 'left' : 'right');
 	}
 
 	_fixBodyScrollLeft(scrollLeft: number): void {

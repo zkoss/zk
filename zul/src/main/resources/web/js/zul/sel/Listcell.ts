@@ -196,7 +196,7 @@ export class Listcell extends zul.LabelImageWidget<HTMLTableCellElement> {
 
 		// ZK-2136: all children should apply -moz-user-select: none
 		if (n && zk.gecko && (this._draggable || this.parent!._draggable)
-				&& !jq.nodeName(evt.domTarget!, 'input', 'textarea')) {
+				&& !jq.nodeName(evt.domTarget, 'input', 'textarea')) {
 			jq(n).addClass('z-draggable-over');
 		}
 		super.doMouseOver_(evt);
@@ -207,7 +207,7 @@ export class Listcell extends zul.LabelImageWidget<HTMLTableCellElement> {
 
 		// ZK-2136: all children should apply -moz-user-select: none
 		if (n && zk.gecko && (this._draggable || this.parent!._draggable)
-				&& !jq.nodeName(evt.domTarget!, 'input', 'textarea')) {
+				&& !jq.nodeName(evt.domTarget, 'input', 'textarea')) {
 			jq(n).removeClass('z-draggable-over'); // Bug ZK-580
 		}
 		super.doMouseOut_(evt);

@@ -659,7 +659,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 
 		var inp = this.getInputNode()!;
 		this._lastChg = inp.value;
-		if (evt.domTarget!.tagName) { //Bug 2111900
+		if (evt.domTarget.tagName) { //Bug 2111900
 			if (this._inplace) {
 				jq(this.$n()!).removeClass(this.getInplaceCSS());
 				if (this._inplaceTimerId != null) {

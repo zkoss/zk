@@ -349,7 +349,7 @@ export class Row extends zul.Widget<HTMLTableRowElement> implements zul.mesh.Ite
 			frozen = grid ? grid.frozen : null,
 			tbody = grid && grid.rows ? grid.rows.$n() : null;
 		if (frozen && tbody) {
-			const tds = jq(evt.domTarget!).parents('td');
+			const tds = jq(evt.domTarget).parents('td');
 			for (var i = 0, j = tds.length; i < j; i++) {
 				const td = tds[i];
 				if (td.parentNode!.parentNode == tbody) {
@@ -368,7 +368,7 @@ export class Row extends zul.Widget<HTMLTableRowElement> implements zul.mesh.Ite
 
 		// ZK-2250: all children should apply -moz-user-select: none
 		if (n && zk.gecko && this._draggable
-				&& !jq.nodeName(evt.domTarget!, 'input', 'textarea')) {
+				&& !jq.nodeName(evt.domTarget, 'input', 'textarea')) {
 			jq(n).addClass('z-draggable-over');
 		}
 
@@ -387,7 +387,7 @@ export class Row extends zul.Widget<HTMLTableRowElement> implements zul.mesh.Ite
 
 		// ZK-2250: all children should unapply -moz-user-select: none
 		if (n && zk.gecko && this._draggable
-				&& !jq.nodeName(evt.domTarget!, 'input', 'textarea')) {
+				&& !jq.nodeName(evt.domTarget, 'input', 'textarea')) {
 			jq(n).removeClass('z-draggable-over');
 		}
 

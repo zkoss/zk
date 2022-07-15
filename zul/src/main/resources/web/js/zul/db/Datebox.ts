@@ -712,7 +712,7 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 	}
 
 	_doKeyDown(evt: zk.Event): void {
-		if (jq.nodeName(evt.domTarget!, 'option', 'select'))
+		if (jq.nodeName(evt.domTarget, 'option', 'select'))
 			return;
 
 		var keyCode = evt.keyCode,

@@ -223,7 +223,7 @@ export class Treecol extends zul.mesh.SortWidget {
 		var tree = this.getTree(),
 			cm = this.$n('cm');
 		if (tree && tree._checkmark) {
-			var n = evt.domTarget!;
+			var n = evt.domTarget;
 			if (n == cm || n.parentNode == cm) {
 				return;
 			}
