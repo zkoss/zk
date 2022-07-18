@@ -333,7 +333,7 @@ export interface FireOptions {
 
 export interface ZWatch {
 	fire(name: string, origin?: unknown, opts?: Partial<FireOptions>, ...vararg: unknown[]): void;
-	fireDown(name: string, origin?: zk.Object, opts?: Partial<FireOptions> | null, ...vararg: unknown[]): void;
+	fireDown(name: string, origin?: zk.Object | null, opts?: Partial<FireOptions> | null, ...vararg: unknown[]): void;
 	listen(infs: Partial<ClientActivity>): void;
 	unlisten(infs: Partial<ClientActivity>): void;
 	unlistenAll(name: string): void;
@@ -735,7 +735,7 @@ onX: function (ctl) {
 	* <li>timeout - how many miliseconds to wait before calling the listeners. If Omitted or negative, the listeners are invoked immediately.</li></ul>
 	* @param Object... vararg any number of arguments to pass to the listener. They will become the third, forth, and following arguments when the listener is called.
 	*/
-	fireDown(name: string, org?: zk.Object, opts?: Partial<FireOptions> | null, ...vararg: unknown[]): void {
+	fireDown(name: string, org?: zk.Object | null, opts?: Partial<FireOptions> | null, ...vararg: unknown[]): void {
 		_fire(name, org, zk.copy(opts, {down: true}), arguments);
 	},
 	onBindLevelMove(): void { //internal
