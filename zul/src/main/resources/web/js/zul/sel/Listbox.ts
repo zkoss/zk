@@ -55,7 +55,7 @@ export class Listbox extends zul.sel.SelectWidget {
 	firstItem?: zul.sel.Listitem | null;
 	lastItem?: zul.sel.Listitem | null;
 	_emptyMessage: string | null = null;
-	_groupsInfo: zul.sel.Listitem[];
+	_groupsInfo: zkex.sel.Listgroup[];
 	_shallStripe?: boolean;
 	_shallFixEmpty?: boolean;
 	_scOddRow?: string | null;
@@ -67,6 +67,7 @@ export class Listbox extends zul.sel.SelectWidget {
 	listhead?: zul.sel.Listhead | null;
 	listfoot?: zul.sel.Listfoot | null;
 	_offset?: number;
+	_listbox$rod?: boolean; // zkex/sel/Listgroup
 
 	/**
 	 * Returns the message to display when there are no items
@@ -118,7 +119,7 @@ export class Listbox extends zul.sel.SelectWidget {
 	 * Returns a list of all {@link Listgroup}.
 	 * @return Array
 	 */
-	getGroups(): zul.sel.ItemWidget[] {
+	getGroups(): zkex.sel.Listgroup[] {
 		return this._groupsInfo.$clone();
 	}
 
