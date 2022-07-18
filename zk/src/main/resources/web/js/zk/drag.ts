@@ -42,7 +42,7 @@ export interface DraggableOptions {
 	change?(dg: Draggable, offset: zk.Offset, evt?: Event): void;
 	constraint?: string | ((dg: Draggable, offset: zk.Offset, evt: Event) => zk.Offset);
 	draw?(dg: Draggable, offset: zk.Offset, evt: Event): void;
-	ignoredrag?(dg: Draggable, offset: zk.Offset, evt: Event): boolean;
+	ignoredrag?(dg: Draggable, offset?: zk.Offset, evt?: Event): boolean;
 	handle?: HTMLElement;
 	scroll?: DraggableScrollOptions | HTMLElement | Window;
 	overlay?: boolean;
