@@ -82,7 +82,7 @@ export class Menu extends zul.LabelImageWidget implements zul.LabelImageWidgetWi
 	// menupopup could be null as asserted in _doMouseEnter
 	menupopup?: zul.menu.Menupopup | null;
 	_content?: string;
-	_contentHandler?: ContentHandler;
+	_contentHandler?: zul.menu.ContentHandler | zkex.inp.ContentHandler;
 	_ignoreActive?: boolean;
 	_topmost?: boolean | null;
 	_disabled?: boolean;

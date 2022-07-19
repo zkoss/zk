@@ -98,7 +98,7 @@ export interface JQZK {
 	paddingHeight(): number;
 	paddingWidth(): number;
 	position(dim?: Dimension, where?: string | null, opts?: PositionOptions | null): this;
-	position(el?: Element, where?: string | null, opts?: PositionOptions | null): this;
+	position(el?: Element | null, where?: string | null, opts?: PositionOptions | null): this;
 	redoCSS(timeout?: number, opts?: Partial<RedoCSSOptions>): this;
 	redoSrc(): this;
 	relativize(): this;
