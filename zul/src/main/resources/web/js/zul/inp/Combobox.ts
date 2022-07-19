@@ -147,7 +147,7 @@ export class Combobox extends zul.inp.ComboWidget {
 		}
 		// B65-ZK-1990: Fix position of popup when it appears above the input, aligned to the left
 		if (this.isOpen() && this._shallSyncPopupPosition) {
-			zk(this.getPopupNode_()).position(this.getInputNode()!, 'before_start');
+			zk(this.getPopupNode_()).position(this.getInputNode(), 'before_start');
 			this._shallSyncPopupPosition = false;
 		}
 	}
