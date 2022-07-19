@@ -35,6 +35,9 @@ function _fixForEmpty(wgt: zul.grid.Grid): void {
 @zk.WrapClass('zul.grid.Grid')
 export class Grid extends zul.mesh.MeshWidget {
 	override _scrollbar: zul.Scrollbar | null = null;
+	_grid$rod?: boolean; // zkex.grid.Group
+	_fixhdwcnt?: number; // zkex.grid.Detail
+	_fixhdoldwd?: number; // zkex.grid.Detail
 	_emptyMessage?: string;
 	rows?: zul.grid.Rows | null;
 	columns?: zul.grid.Columns | null;
