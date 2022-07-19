@@ -5697,10 +5697,9 @@ export class RefWidget extends Widget {
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 export class Desktop extends Widget {
+	declare _cmsp?: zkex.cmsp.SPush | null;
 	declare _cpsp?: SPush | null;
 	declare static _dt: Desktop | null;
-	// FIXME: static isInstance(dtid: DesktopAccessor): boolean;
-	// FIXME: type DesktopAccessor = string | Widget | HTMLElement | null;
 	declare _aureqs: Event[];
 	declare _bpg: Body;
 	declare _pfDoneIds?: string | null;

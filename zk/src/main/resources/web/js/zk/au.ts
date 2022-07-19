@@ -55,7 +55,7 @@ export interface AUCommand0 {
 	title(title: string): void;
 	log: typeof zk.log;
 	script(script: string): void;
-	echo(dtid: string): void;
+	echo(dtid: string | zk.Desktop | null | undefined): void;
 	echoGx: zk.Callable;
 	clientInfo(dtid?: string): void;
 	visibilityChange(dtid?: string): void;
@@ -1563,7 +1563,7 @@ zAu.ajaxErrorHandler = function (req, status, statusText, ajaxReqTries) {
 		 * @see zk.AuCmd1#echo2
 		 * @see #echoGx
 		 */
-		echo(dtid: string): void {
+		echo(dtid: string | zk.Desktop | null | undefined): void {
 			var dt = zk.Desktop.$(dtid),
 				aureqs = dt ? zAu.getAuRequests(dt) : [];
 			// Bug ZK-2741
