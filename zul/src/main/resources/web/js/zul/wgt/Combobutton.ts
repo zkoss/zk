@@ -116,15 +116,15 @@ export class Combobutton extends zul.wgt.Button {
 	 * If disabled is true, user cannot tab into the element.
 	 * @param boolean disabled
 	 */
-	override setDisabled(v: boolean, opts?: Record<string, boolean>): this {
+	override setDisabled(disabled: boolean, opts?: Record<string, boolean>): this {
 		const o = this._disabled;
-		this._disabled = v;
+		this._disabled = disabled;
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== disabled || (opts && opts.force)) {
 			var n = this.$n();
 			if (n) {
-				jq(n).attr('disabled', v ? 'disabled' : null);
-				jq(n).attr('tabindex', v ? null : this._tabindex! | 0);
+				jq(n).attr('disabled', disabled ? 'disabled' : null);
+				jq(n).attr('tabindex', disabled ? null : this._tabindex! | 0);
 			}
 		}
 
@@ -182,10 +182,10 @@ export class Combobutton extends zul.wgt.Button {
 	 * @see #open
 	 * @see #close
 	 */
-	setOpen(b: boolean, opts?: zul.wgt.PopupOptions): void {
+	setOpen(open: boolean, opts?: zul.wgt.PopupOptions): void {
 		if (!this._disabled && !zk.animating())
 			// have to provide empty opts or menupopup will set sendOnOpen to true
-			this[b ? 'open' : 'close'](opts || {});
+			this[open ? 'open' : 'close'](opts || {});
 	}
 
 	renderInner_(out: string[]): void {

@@ -88,7 +88,7 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 	/** Sets whether it is disabled.
 	 * @param boolean disabled
 	 */
-	setDisabled(v: boolean | undefined, opts?: Record<string, boolean>): this {
+	setDisabled(disabled: boolean | undefined, opts?: Record<string, boolean>): this {
 		const o = this._disabled;
 
 		//B60-ZK-1176
@@ -99,17 +99,17 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 		else if (!opts || opts.adbs === undefined)
 			// called somewhere else (including server-side)
 			this._adbs = false;	// Stop autodisabling
-		if (!v) {
+		if (!disabled) {
 			if (this._adbs)
 			// autodisable is still active, enable allowed
 			this._adbs = false;
 			else if (opts && opts.adbs === false)
 			// ignore re-enable by autodisable mechanism
-			v = this._disabled;
+			disabled = this._disabled;
 		}
-		this._disabled = v;
+		this._disabled = disabled;
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== disabled || (opts && opts.force)) {
 			this.rerender(opts && opts.skip ? -1 : 0); //bind and unbind
 		}
 

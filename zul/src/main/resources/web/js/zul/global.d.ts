@@ -85,6 +85,30 @@ declare global {
 	| 'WS_PREV' // zul/WScroll
 	| 'WS_NEXT' // zul/WScroll
 	| 'WS_END' // zul/WScroll
+	| 'CURRENT_DESCRIPTION' // zul/mesh-a11y
+	| 'DETAILED_DESCRIPTION' // zul/mesh-a11y
+	| 'ITEMWIDGET_SELECTED' // zul/sel-a11y
+	| 'LISTBOX_SELECT_ALL' // zul/sel-a11y
+	| 'NOTIFICATION_INFO' // zul/wgt-a11y
+	| 'NOTIFICATION_WARNING' // zul/wgt-a11y
+	| 'NOTIFICATION_ERROR' // zul/wgt-a11y
+	| 'COLORBOX_PALETTE_BUTTON_LABEL' // zkex/inp-a11y
+	| 'COLORBOX_PICKER_BUTTON_LABEL' // zkex/inp-a11y
+	| 'COLORBOX_CURRENT_COLOR' // zkex/inp-a11y
+	| 'COLORBOX_COLOR_PALETTE' // zkex/inp-a11y
+	| 'COLORBOX_COLOR_PICKER' // zkex/inp-a11y
+	| 'COLORBOX_COLOR_R' // zkex/inp-a11y
+	| 'COLORBOX_COLOR_G' // zkex/inp-a11y
+	| 'COLORBOX_COLOR_B' // zkex/inp-a11y
+	| 'COLORBOX_HUE' // zkex/inp-a11y
+	| 'COLORBOX_SATURATION' // zkex/inp-a11y
+	| 'COLORBOX_VALUE' // zkex/inp-a11y
+	| 'COLORBOX_COLOR_HEX' // zkex/inp-a11y
+	| 'COLORBOX_COLOR_SPECTRUM_BAR' // zkex/inp-a11y
+	| 'COLORBOX_SELECT_COLOR_BUTTON' // zkex/inp-a11y
+	| 'COLORBOX_COLOR_FIELD' // zkex/inp-a11y
+	| 'CHOSENBOX_CREATE_MESSAGE' // zkmax/inp-a11y
+	| 'CHOSENBOX_SELECTION' // zkmax/inp-a11y
 	, string>;
 
 	// HTMLAppletElement is used by zul/med/Flash

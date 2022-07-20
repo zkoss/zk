@@ -706,7 +706,7 @@ export class Paging extends zul.Widget {
 		}
 	}
 
-	_doAfterGo(...rest: unknown[]): false { // previously, zk.$void
+	_doAfterGo(postfix: string, btnIndex?: number): false { // previously, zk.$void
 		return false;
 	}
 

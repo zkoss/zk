@@ -267,6 +267,7 @@ declare namespace zk {
 		type FullMask = import('./effect').FullMask
 		type Shadow = import('./effect').Shadow;
 		type EffectStackupOptions = import('./effect').EffectStackupOptions;
+		type KeyboardTrap = import('./effect').KeyboardTrap;
 	}
 	namespace fmt {
 		type Calendar = typeof zk.fmt.Calendar;

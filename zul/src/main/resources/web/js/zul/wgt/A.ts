@@ -40,7 +40,7 @@ export class A extends zul.LabelImageWidget<HTMLAnchorElement> implements zul.La
 	/** Sets whether it is disabled.
 	 * @param boolean disabled
 	 */
-	setDisabled(v: boolean | undefined, opts?: Record<string, boolean>): this {
+	setDisabled(disabled: boolean | undefined, opts?: Record<string, boolean>): this {
 		const o = this._disabled;
 
 		// Refer from Button.js for the following changes
@@ -52,20 +52,20 @@ export class A extends zul.LabelImageWidget<HTMLAnchorElement> implements zul.La
 		else if (!opts || opts.adbs === undefined)
 			// called somewhere else (including server-side)
 			this._adbs = false;	// Stop autodisabling
-		if (!v) {
+		if (!disabled) {
 			if (this._adbs) {
 				// autodisable is still active, allow enabling
 				this._adbs = false;
 			} else if (opts && opts.adbs === false)
 				// ignore re-enable by autodisable mechanism
-				v = this._disabled;
+				disabled = this._disabled;
 		}
-		this._disabled = v;
+		this._disabled = disabled;
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== disabled || (opts && opts.force)) {
 			var doDisable = (): void => {
 					if (this.desktop) {
-						jq(this.$n()!).attr('disabled', v ? 'disabled' : null); // use jQuery's attr() instead of dom.disabled for non-button element. Bug ZK-2146
+						jq(this.$n()!).attr('disabled', disabled ? 'disabled' : null); // use jQuery's attr() instead of dom.disabled for non-button element. Bug ZK-2146
 					}
 				};
 			doDisable();

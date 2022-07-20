@@ -51,7 +51,7 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 	/** Sets whether it is disabled.
 	 * @param boolean disabled
 	 */
-	setDisabled(v: boolean | undefined, opts?: Record<string, boolean>): this {
+	setDisabled(disabled: boolean | undefined, opts?: Record<string, boolean>): this {
 		const o = this._disabled;
 		
 		if (opts && opts.adbs)
@@ -60,21 +60,21 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 		else if (!opts || opts.adbs === undefined)
 			// called somewhere else (including server-side)
 			this._adbs = false;	// Stop autodisabling
-		if (!v) {
+		if (!disabled) {
 			if (this._adbs) {
 				// autodisable is still active, allow enabling
 				this._adbs = false;
 			} else if (opts && opts.adbs === false)
 				// ignore re-enable by autodisable mechanism
-				v = this._disabled;
+				disabled = this._disabled;
 		}
-		this._disabled = v;
+		this._disabled = disabled;
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== disabled || (opts && opts.force)) {
 			var n = this.$n('real') as HTMLInputElement;
 			if (n) {
-				n.disabled = v!;
-				jq(this.$n()!).toggleClass(this.$s(this.getMoldPrefix_() + 'disabled'), v);
+				n.disabled = disabled!;
+				jq(this.$n()!).toggleClass(this.$s(this.getMoldPrefix_() + 'disabled'), disabled);
 				if (!this._isDefaultMold()) {
 					this._setTabIndexForMold();
 				}
@@ -96,15 +96,15 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 	 * changing checked will set indeterminate to false.
 	 * @param boolean checked
 	 */
-	setChecked(v: boolean, opts?: Record<string, boolean>): this {
+	setChecked(checked: boolean, opts?: Record<string, boolean>): this {
 		const o = this._checked;
-		this._checked = v;
+		this._checked = checked;
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== checked || (opts && opts.force)) {
 			var n = this.$n('real');
 			if (n) {
 				//B70-ZK-2057: prop() method can access right property values;
-				jq(n).prop('checked', v);
+				jq(n).prop('checked', checked);
 
 				this.clearStateClassName_();
 				jq(this.$n()!).addClass(this.getClassNameByState_());

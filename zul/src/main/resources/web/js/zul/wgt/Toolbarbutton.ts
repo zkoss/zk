@@ -85,15 +85,15 @@ export class Toolbarbutton extends zul.LabelImageWidget implements zul.LabelImag
 	}
 
 	/** Sets whether it is checked. (Note:It's only available in toggle mode.)
-	 * @param boolean val
+	 * @param boolean checked
 	 */
-	setChecked(val: boolean, opts?: Record<string, boolean>): this {
+	setChecked(checked: boolean, opts?: Record<string, boolean>): this {
 		const o = this._checked;
-		this._checked = val;
+		this._checked = checked;
 
-		if (o !== val || (opts && opts.force)) {
+		if (o !== checked || (opts && opts.force)) {
 			if (this.desktop && this._mode == 'toggle')
-				jq(this.$n_())[val ? 'addClass' : 'removeClass'](this.$s('checked'));
+				jq(this.$n_())[checked ? 'addClass' : 'removeClass'](this.$s('checked'));
 		}
 
 		return this;
@@ -110,7 +110,7 @@ export class Toolbarbutton extends zul.LabelImageWidget implements zul.LabelImag
 	/** Sets whether it is disabled.
 	 * @param boolean disabled
 	 */
-	setDisabled(v: boolean, opts?: Record<string, boolean>): this {
+	setDisabled(disabled: boolean, opts?: Record<string, boolean>): this {
 		const o = this._disabled;
 
 		//B60-ZK-1176
@@ -121,24 +121,24 @@ export class Toolbarbutton extends zul.LabelImageWidget implements zul.LabelImag
 		else if (!opts || opts.adbs === undefined)
 			// called somewhere else (including server-side)
 			this._adbs = false;	// Stop autodisabling
-		if (!v) {
+		if (!disabled) {
 			if (this._adbs)
 				// autodisable is still active, enable allowed
 				this._adbs = false;
 			else if (opts && opts.adbs === false)
 				// ignore re-enable by autodisable mechanism
-				v = !!this._disabled;
+				disabled = !!this._disabled;
 		}
 
-		this._disabled = v;
+		this._disabled = disabled;
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== disabled || (opts && opts.force)) {
 			var self = this,
 				doDisable = function (): void {
 					if (self.desktop) {
-						jq(self.$n_()).attr('disabled', v); // use jQuery's attr() instead of dom.disabled for non-button element. Bug ZK-2146
+						jq(self.$n_()).attr('disabled', disabled); // use jQuery's attr() instead of dom.disabled for non-button element. Bug ZK-2146
 						if (self._upload)
-							v ? _cleanUpld(self) : _initUpld(self);
+							disabled ? _cleanUpld(self) : _initUpld(self);
 					}
 				};
 

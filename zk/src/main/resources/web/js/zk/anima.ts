@@ -111,10 +111,10 @@ export function animating(): boolean {
  * @since 5.0.6
  */
 zk.afterAnimate = afterAnimate;
-export function afterAnimate(fn: () => void, delay: number): boolean | void {
+export function afterAnimate(fn: () => void, delay?: number): boolean | void {
 	if (zk.animating())
 		_aftAnims.push(fn);
-	else if (delay < 0) {
+	else if (delay !== undefined && delay < 0) {
 		fn();
 		return true;
 	} else

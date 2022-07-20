@@ -18,7 +18,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
  */
 //zk.$package('zul.db');
 
-interface MarkCalOptions {
+export interface MarkCalOptions {
 	sameMonth?: boolean;
 	silent?: boolean;
 	timeout?: number;
