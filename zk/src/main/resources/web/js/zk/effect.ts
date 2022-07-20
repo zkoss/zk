@@ -606,11 +606,11 @@ jq(function () {
 		};
 		zk.override(zWatch, _callback = {}, {
 			fire: function (name) {
-				_callback.fire.apply(this, arguments);
+				_callback.fire.call(this, ...(arguments as unknown as []));
 				w2hide(name);
 			},
 			fireDown: function (name) {
-				_callback.fireDown.apply(this, arguments);
+				_callback.fireDown.call(this, ...(arguments as unknown as []));
 				w2hide(name);
 			}
 		});

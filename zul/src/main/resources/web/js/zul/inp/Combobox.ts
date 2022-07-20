@@ -128,10 +128,8 @@ export class Combobox extends zul.inp.ComboWidget {
 
 	override onResponse(ctl: zk.ZWatchController, opts: zul.inp.ResponseOptions): void {
 		// Bug ZK-2960: need to wait until the animation is finished before calling super
-		var args = arguments as unknown as Parameters<Combobox['onResponse']>;
 		if (this.isOpen() && jq(this.getPopupNode_()!).is(':animated')) {
-			var self = this;
-			setTimeout(function () {if (self.desktop) self.onResponse.apply(self, args);}, 50);
+			setTimeout(() => {if (this.desktop) this.onResponse(ctl, opts);}, 50);
 			return;
 		}
 		super.onResponse(ctl, opts);
@@ -140,7 +138,7 @@ export class Combobox extends zul.inp.ComboWidget {
 			this._shallRedoCss = null;
 		}
 		//ZK-3204 check popup position after onChanging
-		if (args[1] && args[1].rtags && args[1].rtags.onChanging && this.isOpen()) {
+		if (opts && opts.rtags && opts.rtags.onChanging && this.isOpen()) {
 			this._checkPopupPosition();
 			// F85-ZK-3827: Combobox empty search message
 			this._fixEmptySearchMessage();

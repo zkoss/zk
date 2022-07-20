@@ -92,7 +92,7 @@ function _createSuper(Derived): zk.Callable {
 		} else {
 			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			// @ts-ignore
-			result = Super.apply(this, arguments);
+			result = Super.call(this, ...arguments);
 		}
 		return result;
 	};
@@ -124,9 +124,9 @@ function newClass<T>(superclass): T {
 		if (____ === undefined || ____ - 1 < this.___s) {
 
 			// call afterCreated_() for ES6 class here
-			this.afterCreated_.apply(_this, arguments as never);
+			this.afterCreated_.call(_this, ...(arguments as never as []));
 
-			this.$init.apply(_this, arguments as never);
+			this.$init.call(_this, ...(arguments as never as []));
 
 			var ais = _this._$ais;
 			if (ais) {
@@ -174,7 +174,7 @@ function defSet01(nm: string, after: Setter): GeneratedSetter {
 		this[nm] = v;
 		if (o !== v || (opts && opts.force)) {
 			this['__fname__'] = nm.substring(1);
-			after.apply(this, arguments);
+			after.call(this, ...(arguments as never as []));
 			delete this['__fname__'];
 		}
 		return this;
@@ -183,7 +183,7 @@ function defSet01(nm: string, after: Setter): GeneratedSetter {
 function defSet10(nm: string, before: Setter): GeneratedSetter {
 	return function (/*v, opts*/) {
 		this['__fname__'] = nm.substring(1);
-		this[nm] = before.apply(this, arguments);
+		this[nm] = before.call(this, ...(arguments as never as []));
 		delete this['__fname__'];
 		return this;
 	};
@@ -192,9 +192,9 @@ function defSet11(nm: string, before: Setter, after: Setter): GeneratedSetter {
 	return function (v, opts) {
 		var o = this[nm];
 		this['__fname__'] = nm.substring(1);
-		this[nm] = v = before.apply(this, arguments);
+		this[nm] = v = before.call(this, ...(arguments as never as []));
 		if (o !== v || (opts && opts.force))
-			after.apply(this, arguments);
+			after.call(this, ...(arguments as never as []));
 		delete this['__fname__'];
 		return this;
 	};
@@ -571,7 +571,7 @@ doMouseDown_: function () {
 <pre><code>
 zk.copy(Array.prototoype, {
  $addAll: function (o) {
-  return this.push.apply(this, o);
+  return this.push(...o);
  }
 });
 </code></pre>
@@ -1513,8 +1513,8 @@ _zk.$intercepts = function (targetClass, interceptor): void {
 					var context = {stop: false, result: null, args: arguments},
 						arr = this._$$interceptorContext;
 					arr.push(context);
-					interceptor[nm].apply(this, arguments);
-					var result = context.stop ? context.result : oldFunc.apply(this, context.args);
+					interceptor[nm].call(this, ...(arguments as never as []));
+					var result = context.stop ? context.result : oldFunc.call(this, ...(context.args as unknown as []));
 					arr.splice(arr.indexOf(context), 1);
 					return result;
 				};
@@ -1704,12 +1704,6 @@ zk.Buffer = Array;
 	});
 } else {
 	_zk.Buffer = Array;
-}
-//zk.Object//
-function getProxy(o, f) { //used by zk.Object
-	return function () {
-			return f.apply(o, arguments);
-		};
 }
 
 /** @class zk.Object
@@ -1907,7 +1901,7 @@ foo.MyClass = zk.$extends(foo.MySuper, {
 
 			supers[args as string] = p;
 			try {
-				return method.apply(this, argx);
+				return method.call(this, ...argx as unknown as []);
 			} finally {
 				supers[args as string] = old; //restore
 			}
@@ -1939,7 +1933,7 @@ foo.MyClass = zk.$extends(foo.MySuper, {
 			throw nm + ' not in superclass';
 
 		try {
-			return m.apply(this, args);
+			return m.call(this, ...args as unknown as []);
 		} finally {
 			supers[nm] = old; //restore
 		}
@@ -1973,7 +1967,7 @@ setInterval(wgt.doIt, 1000); //WRONG! doIt will not be called with wgt
 		var fps = this._$proxies, fp;
 		if (!fps) this._$proxies = fps = new WeakMap();
 		else if (fp = fps.get(func)) return fp;
-		var fn = getProxy(this, func);
+		var fn = func.bind(this);
 		fps.set(func, fn);
 		return fn;
 	}

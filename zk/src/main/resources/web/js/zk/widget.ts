@@ -113,7 +113,7 @@ function _domEvtProxy(wgt: Widget, f: ZKEventHandler, evtnm: string, keyword?: s
 	return fn;
 }
 function _domEvtProxy0(wgt: Widget, f: ZKEventHandler, keyword?: string): JQueryEventHandler {
-	return function (evt) {
+	return function (evt, ...rest) {
 		var devt = evt, //make a copy since we will change evt (and arguments) in the following line
 			zkevt = jq.Event.zk(devt, wgt);
 		arguments[0] = zkevt; // change arguments[0]
@@ -146,8 +146,10 @@ function _domEvtProxy0(wgt: Widget, f: ZKEventHandler, keyword?: string): JQuery
 			args = [].slice.call(arguments);
 			args.push(keyword);
 		} else
-			args = arguments;
-		var ret = f.apply(wgt, args);
+			args = arguments as never;
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// @ts-ignore
+		var ret = f.call(wgt, ...args);
 		if (ret === undefined) ret = zkevt['returnValue'];
 		if (zkevt.domStopped) devt.stop();
 		if (zkevt.stopped && devt.originalEvent) devt.originalEvent['zkstopped'] = true;
@@ -2653,7 +2655,7 @@ out.push('</div>');
 				out.push(f);
 
 			if ((f = this.get$Class<typeof Widget>().molds) && (f = f[this._mold]))
-				return f.apply(this, arguments);
+				return f.call(this, ...(arguments as unknown as []));
 
 			zk.error('Mold ' + this._mold + ' not found in ' + this.className);
 		}
@@ -3139,12 +3141,12 @@ function () {
 	 * otherwise rerender will be invoked immediately.
 	 * @since 8.6.0
 	 */
-	rerenderLater_(...args: [skipper?: Skipper]): void {
-		var processPhase = zAu.processPhase;
+	rerenderLater_(skipper?: Skipper): void {
+		const processPhase = zAu.processPhase;
 		if (processPhase == 'setAttr' || processPhase == 'setAttrs') {
-			this.doAfterProcessRerenderArgs = args;
+			this.doAfterProcessRerenderArgs = arguments;
 		} else {
-			this.rerender.apply(this, args);
+			this.rerender(skipper);
 		}
 	}
 
@@ -6316,9 +6318,9 @@ export class Service extends ZKObject {
 		return this;
 	}
 	$doAfterCommand(cmd: string, args?: unknown[]): void {
-		var ac = this._aftercmd[cmd];
-		for (var i = 0, j = ac ? ac.length : 0; i < j; i++)
-			ac[i].apply(this, [args]);
+		const ac = this._aftercmd[cmd];
+		for (let i = 0, j = ac ? ac.length : 0; i < j; i++)
+			ac[i].call(this, args);
 	}
 }
 /** A skipper is an object working with {@link zk.Widget#rerender}

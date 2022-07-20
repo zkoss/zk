@@ -582,7 +582,7 @@ export function zkx_(args: ArrayLike<unknown>, stub, filter?): void {
 	_t0 = jq.now(); //so breathe() won't do unncessary delay
 	(args as unknown[])[1] = [stub, filter]; //assign stub as 2nd argument (see zkx)
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	window.zkx.apply(window, args as any); //args[2] (aucmds) must be null
+	window.zkx(...args as any); //args[2] (aucmds) must be null
 }
 
 //Run AU commands (used only with ZHTML)
@@ -598,7 +598,7 @@ export function zkmx(): void {
 	try {
 		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-ignore
-		zkx.apply(window, arguments);
+		zkx.call(window, ...arguments);
 	} finally {
 		window.zkme();
 	}
@@ -1003,7 +1003,7 @@ jq(function () {
 		if (_oldBfUnload) {
 			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			// @ts-ignore
-			var s = _oldBfUnload.apply(window, arguments);
+			var s = _oldBfUnload.call(window, ...arguments);
 			if (s) return s;
 		}
 

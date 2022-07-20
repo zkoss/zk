@@ -172,7 +172,8 @@ module.exports = {
         'no-var': 'off',
         'prefer-const': 'warn',
         'prefer-rest-params': 'warn',
-        'prefer-spread': 'warn',
+        'prefer-spread': 'error',
+        'no-useless-call': 'error',
         // Layout & Formatting
         'brace-style': [
           'error',

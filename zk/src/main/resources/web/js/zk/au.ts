@@ -242,7 +242,7 @@ function doProcess(cmd: string, data): void { //decoded
 			if (!fn)
 				return zAu.showError('ILLEGAL_RESPONSE', 'Unknown', cmd);
 		}
-		fn.apply(zAu, data);
+		fn.call(zAu, ...data);
 		zAu.processPhase = null;
 	}
 }
@@ -355,7 +355,7 @@ function doCmdsNow(cmds: AuCommands): boolean {
 		if (zAu.doAfterProcessWgts) {
 			zAu.doAfterProcessWgts.forEach(function (wgt) {
 				if (wgt.doAfterProcessRerenderArgs) {
-					wgt.rerender.apply(wgt, wgt.doAfterProcessRerenderArgs);
+					wgt.rerender(...wgt.doAfterProcessRerenderArgs);
 					wgt.doAfterProcessRerenderArgs = null;
 				}
 			});
@@ -2160,11 +2160,11 @@ zAu.ajaxErrorHandler = function (req, status, statusText, ajaxReqTries) {
 			for (var j = arguments.length; --j > 1;) //exclude wgt and func
 				args.unshift(arguments[j]);
 			if (wgt)
-				wgt[func].apply(wgt, args);
+				wgt[func](...args);
 			else {
 				var fn = zk.$import(func) as Function;
 				if (!fn) zk.error('not found: ' + func);
-				fn.apply(null, args);
+				fn.call(null, ...args);
 			}
 		},
 		/** Ask the client to echo back an AU request with the specified

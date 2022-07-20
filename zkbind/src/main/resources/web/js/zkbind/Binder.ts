@@ -29,17 +29,17 @@ zk.override(zk.Widget.prototype, _WidgetX, {
 		}
 		return null;
 	},
-	$afterCommand(this: zk.Widget, command: string, args?: unknown[]): void {
-		var binder = this.$binder!();
+	$afterCommand(command: string, args?: unknown[]): void {
+		const binder = this.$binder();
 		if (binder)
 			binder.$doAfterCommand(command, args);
 	},
-	unbind_(this: zk.Widget) {
+	unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
 		if (this._$binder) {
 			this._$binder.destroy();
 			this._$binder = null;
 		}
-		(_WidgetX as {unbind_: zk.Callable}).unbind_.apply(this, arguments as unknown as unknown[]);
+		_WidgetX.unbind_!.call(this, skipper, after, keepRod);
 	}
 });
 
@@ -295,7 +295,7 @@ export class Binder extends zk.Object {
 			tduac = this._toDoUnAftercmd[cmd];
 		this._processingAfterCommand = true; // ZK-4482
 		for (var i = 0, j = ac ? ac.length : 0; i < j; i++)
-			ac[i].apply(this, [args]);
+			ac[i].call(this, args);
 		this._processingAfterCommand = false;
 		for (var i = 0, j = tduac ? tduac.length : 0; i < j; i++) { // ZK-4482: do unAfter
 			this.unAfter(cmd, tduac[i]);

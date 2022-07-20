@@ -827,7 +827,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 			later = function (): void {
 				previous = Date.now();
 				timeout = null;
-				result = func.apply(context, args);
+				result = func.call(context, ...args);
 				if (!timeout) context = args = null;
 			};
 
@@ -844,7 +844,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 					timeout = null;
 				}
 				previous = now;
-				result = func.apply(context, args);
+				result = func.call(context, ...args);
 				if (!timeout) context = args = null;
 			} else if (!timeout) {
 				timeout = window.setTimeout(later, remaining);
@@ -878,7 +878,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 			} else {
 				timeout = null;
 				if (!immediate) {
-					result = func.apply(context, args);
+					result = func.call(context, ...args);
 					context = args = null;
 				}
 			}
@@ -891,7 +891,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 			var callNow = immediate && !timeout;
 			if (!timeout) timeout = setTimeout(later, wait);
 			if (callNow) {
-				result = func.apply(context, args);
+				result = func.call(context, ...args);
 				context = args = null;
 			}
 			return result;

@@ -893,7 +893,7 @@ String scroll; //DOM Element's ID</code></pre>
 		}
 
 		if (this.opts.change) {
-			var devt = window.event ? jq.event['fix'].apply(jq.event, window.event) : null,
+			var devt = window.event ? jq.event['fix'].call(jq.event, window.event) : null,
 				evt = devt ? jq.Event.zk(devt) : undefined;
 			this.opts.change(this,
 				evt ? [evt.pageX, evt.pageY] : _lastPt, evt);
