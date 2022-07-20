@@ -6,3 +6,4 @@
 **/ext/*
 @types
 *.config.js
+.eslintrc.js

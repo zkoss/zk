@@ -123,9 +123,9 @@ export class Tab extends zul.LabelImageWidget implements zul.LabelImageWidgetWit
 	 * Returns whether this tab is selected.
 	 * @return boolean
 	 */
-	isSelected(): boolean | null {
-		var tabbox = this.getTabbox();
-		return tabbox && tabbox.getSelectedTab() == this;
+	isSelected(): boolean {
+		const tabbox = this.getTabbox();
+		return tabbox?.getSelectedTab() == this;
 	}
 
 	/**

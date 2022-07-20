@@ -41,10 +41,10 @@ export class Separator extends zul.Widget {
 	/** Sets the orient.
 	 * @param String orient either "horizontal" or "vertical".
 	 */
-	setOrient(v: string, opts?: Record<string, boolean>): this {
+	setOrient(orient: string, opts?: Record<string, boolean>): this {
 		const o = this._orient;
-		this._orient = v;
-		if (o !== v || (opts && opts.force)) {
+		this._orient = orient;
+		if (o !== orient || (opts && opts.force)) {
 			this.updateDomClass_();
 		}
 		return this;

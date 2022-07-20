@@ -163,7 +163,7 @@ export class Toolbar extends zul.Widget {
 		return this.$s('overflowpopup-button') + ' ' + this.getOverflowPopupIconSclass() + ' z-icon-fw';
 	}
 
-	_openPopup(evt: zk.Event): void {
+	_openPopup(evt?: zk.Event): void {
 		if (this._open)
 			return;
 
