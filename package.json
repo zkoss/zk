@@ -64,6 +64,7 @@
     "zk",
     "zul",
     "zkbind",
-    "zhtml"
+    "zhtml",
+    "eslint-plugin-zk"
   ]
 }
