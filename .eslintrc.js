@@ -2,7 +2,8 @@ module.exports = {
   'root': true,
   'parser': '@typescript-eslint/parser',
   'plugins': [
-    '@typescript-eslint'
+    '@typescript-eslint',
+    'zk'
   ],
   'parserOptions': {
     'ecmaVersion': 5,
@@ -146,7 +147,8 @@ module.exports = {
         'eslint:recommended',
         'plugin:@typescript-eslint/recommended',
         'plugin:@typescript-eslint/recommended-requiring-type-checking',
-        'plugin:@typescript-eslint/strict'
+        'plugin:@typescript-eslint/strict',
+        'plugin:zk/recommended'
       ],
       'rules': { // Recommended
         // Possible Problems
