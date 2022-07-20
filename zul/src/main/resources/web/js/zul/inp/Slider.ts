@@ -269,18 +269,20 @@ export class Slider extends zul.Widget {
 		return this;
 	}
 
-	override setWidth(w: string | null): void {
+	override setWidth(w: string | null): this {
 		super.setWidth(w);
 		if (this.desktop && this._mold != 'knob') {
 			this.onSize();
 		}
+		return this;
 	}
 
-	override setHeight(h: string | null): void {
+	override setHeight(h: string | null): this {
 		super.setHeight(h);
 		if (this.desktop && this._mold != 'knob') {
 			this.onSize();
 		}
+		return this;
 	}
 
 	override domClass_(no?: zk.DomClassOptions): string {

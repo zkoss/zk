@@ -185,7 +185,7 @@ export class Combobox extends zul.inp.ComboWidget {
 	 * For internal use only.
 	 * Update the value of the input element in this component
 	 */
-	override setRepos(v: boolean): void {
+	override setRepos(v: boolean): this {
 		if (!this._repos && v) {
 			super.setRepos(v);
 			if (this.desktop) {
@@ -201,13 +201,15 @@ export class Combobox extends zul.inp.ComboWidget {
 				}
 			}
 		}
+		return this;
 	}
 
-	override setValue(val: string, fromServer?: boolean): void {
+	override setValue(val: string, fromServer?: boolean): this {
 		super.setValue(val, fromServer);
 		this._reIndex();
 		this.valueEnter_ = null; // reset bug #3014660
 		this._lastsel = this._sel; // ZK-1256, ZK-1276: set initial selected item
+		return this;
 	}
 
 	_reIndex(): void {

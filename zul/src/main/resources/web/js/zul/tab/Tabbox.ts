@@ -295,9 +295,10 @@ export class Tabbox extends zul.Widget {
 	 * Sets the selected index.
 	 * @param int index
 	 */
-	setSelectedIndex(index: number): void {
+	setSelectedIndex(index: number): this {
 		if (this.tabs)
 			this.setSelectedTab(this.tabs.getChildAt<zul.tab.Tab>(index));
+		return this;
 	}
 
 	/**
@@ -312,12 +313,13 @@ export class Tabbox extends zul.Widget {
 	 * Sets the selected tab panel.
 	 * @param Tabpanel panel
 	 */
-	setSelectedPanel(panel: zul.tab.Tabpanel | undefined): void {
+	setSelectedPanel(panel: zul.tab.Tabpanel | undefined): this {
 		if (panel && panel.getTabbox() != this)
-			return;
+			return this;
 		var tab = panel?.getLinkedTab();
 		if (tab)
 			this.setSelectedTab(tab);
+		return this;
 	}
 
 	/**
@@ -332,11 +334,12 @@ export class Tabbox extends zul.Widget {
 	 * Sets the selected tab.
 	 * @param tab zul.tab.Tab
 	 */
-	setSelectedTab(tab: zul.tab.Tab | undefined, fromServer?: boolean): void {
+	setSelectedTab(tab: zul.tab.Tab | undefined, fromServer?: boolean): this {
 		if (this._selTab != tab) {
 			this._setSel(tab, !fromServer);
 			this._selTab = tab;
 		}
+		return this;
 	}
 
 	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
@@ -507,16 +510,18 @@ export class Tabbox extends zul.Widget {
 			this.rerender();
 	}
 
-	override setWidth(width: string | null): void {
+	override setWidth(width: string | null): this {
 		super.setWidth(width);
 		if (this.desktop)
 			zUtl.fireSized(this, -1); //no beforeSize
+		return this;
 	}
 
-	override setHeight(height: string | null): void {
+	override setHeight(height: string | null): this {
 		super.setHeight(height);
 		if (this.desktop)
 			zUtl.fireSized(this, -1); //no beforeSize
+		return this;
 	}
 
 	_fixMaxHeight(): void {

@@ -88,12 +88,13 @@ export class Optgroup extends zul.Widget<HTMLOptGroupElement> {
 	}
 
 	//@Override
-	override setVisible(visible: boolean | undefined, fromServer?: boolean): void {
+	override setVisible(visible: boolean | undefined, fromServer?: boolean): this {
 		if (this._visible != visible) {
 			this._visible = visible;
 			if (this.desktop)
 				this.parent!.requestRerender_(fromServer);
 		}
+		return this;
 	}
 
 	override domAttrs_(no?: zk.DomAttrsOptions): string {

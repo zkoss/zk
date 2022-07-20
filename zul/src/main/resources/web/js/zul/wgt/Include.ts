@@ -64,8 +64,9 @@ export class Include extends zul.Widget {
 	 * @param String enclosing tag
 	 * @since 7.0.4
 	 */
-	setEnclosingTag(tag: string): void {
+	setEnclosingTag(tag: string): this {
 		this._enclosingTag = tag;
+		return this;
 	}
 
 	//super//

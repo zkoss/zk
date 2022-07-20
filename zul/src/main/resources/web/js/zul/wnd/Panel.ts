@@ -759,25 +759,27 @@ export class Panel extends zul.Widget {
 	}
 
 	//super//
-	override setVflex(vflex: boolean | string | null | undefined): void {
+	override setVflex(vflex: boolean | string | null | undefined): this {
 		super.setVflex(vflex);
 		if (this.desktop) {
 			if (this.panelchildren) {
 				this.panelchildren.setVflex(vflex);
 			}
 		}
+		return this;
 	}
 
-	override setHflex(hflex: boolean | string | null | undefined): void {
+	override setHflex(hflex: boolean | string | null | undefined): this {
 		super.setHflex(hflex);
 		if (this.desktop) {
 			if (this.panelchildren) {
 				this.panelchildren.setHflex(hflex);
 			}
 		}
+		return this;
 	}
 
-	override setVisible(visible: boolean | undefined): void {
+	override setVisible(visible: boolean | undefined): this {
 		if (this._visible != visible) {
 			if (this._maximized) {
 				this.setMaximized(false);
@@ -786,31 +788,35 @@ export class Panel extends zul.Widget {
 			}
 			super.setVisible(visible);
 		}
+		return this;
 	}
 
-	override setHeight(height: string | null): void {
+	override setHeight(height: string | null): this {
 		super.setHeight(height);
 		if (this.desktop)
 			zUtl.fireSized(this);
+		return this;
 	}
 
-	override setWidth(width: string | null): void {
+	override setWidth(width: string | null): this {
 		super.setWidth(width);
 		if (this.desktop)
 			zUtl.fireSized(this);
+		return this;
 	}
 
-	override setTop(top: string): void {
+	override setTop(top: string): this {
 		this._hideShadow();
 		super.setTop(top);
 		this.zsync();
-
+		return this;
 	}
 
-	override setLeft(left: string): void {
+	override setLeft(left: string): this {
 		this._hideShadow();
 		super.setLeft(left);
 		this.zsync();
+		return this;
 	}
 
 	override updateDomStyle_(): void {

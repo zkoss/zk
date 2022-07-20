@@ -277,14 +277,16 @@ export class Applet extends zul.Widget<HTMLAppletElement> {
 	 * @param String name
 	 * @param String value
 	 */
-	setField(name: string, value: string): void {
-		var n = this.$n();
-		if (n)
+	setField(name: string, value: string): this {
+		const n = this.$n();
+		if (n) {
 			try {
 				n[name] = value;
 			} catch (e) {
 				zk.error('Failed to set applet\'s field: ' + name + '\n' + (e as Error).message);
 			}
+		}
+		return this;
 	}
 
 	/** Sets the param. Notice that it is meaningful only if it is called
@@ -298,13 +300,14 @@ export class Applet extends zul.Widget<HTMLAppletElement> {
 	 * @param String nm
 	 * @param String val
 	 */
-	setParam(nm: string, val: string): void {
+	setParam(nm: string, val: string): this {
 		if (arguments.length == 1) {
 			val = nm[1];
 			nm = nm[0];
 		}
 		if (val != null) this._params[nm] = val;
 		else delete this._params[nm];
+		return this;
 	}
 
 	/** Sets the params map. It should only be called before redraw.
@@ -314,8 +317,9 @@ export class Applet extends zul.Widget<HTMLAppletElement> {
 	 * values <code>value1, value2</code> respectively.
 	 * @since 5.0.4
 	 */
-	setParams(m: Partial<HTMLAppletElement>): void {
+	setParams(m: Partial<HTMLAppletElement>): this {
 		this._params = m;
+		return this;
 	}
 
 	override domAttrs_(no?: zk.DomAttrsOptions): string {

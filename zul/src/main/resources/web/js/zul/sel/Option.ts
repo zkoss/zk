@@ -89,21 +89,22 @@ export class Option extends zul.Widget<HTMLOptionElement> {
 	}
 
 	//@Override
-	override setVisible(visible: boolean | undefined, fromServer?: boolean): void {
+	override setVisible(visible: boolean | undefined, fromServer?: boolean): this {
 		if (this._visible != visible) {
 			this._visible = visible;
 			if (this.desktop)
 				this.parent!.requestRerender_(fromServer);
 		}
+		return this;
 	}
 
 	/** Sets whether it is selected.
 	 * @param boolean selected
 	 */
-	setSelected(selected: boolean): void {
+	setSelected(selected: boolean): this {
 		if (this.__updating__) { // for B50-3012466.zul
 			delete this.__updating__;
-			return; //nothing to do for second loop triggered by this.parent.toggleItemSelection
+			return this; //nothing to do for second loop triggered by this.parent.toggleItemSelection
 		}
 		try {
 			selected = selected || false;
@@ -116,6 +117,7 @@ export class Option extends zul.Widget<HTMLOptionElement> {
 		} finally {
 			delete this.__updating__;
 		}
+		return this;
 	}
 
 	_setSelectedDirectly(selected: boolean): void {

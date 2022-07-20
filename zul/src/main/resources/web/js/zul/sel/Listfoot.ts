@@ -29,15 +29,15 @@ export class Listfoot extends zul.Widget {
 	}
 
 	//bug #3014664
-	override setVflex(v: boolean | string | null | undefined): void { //vflex ignored for Listfoot
+	override setVflex(v: boolean | string | null | undefined): this { //vflex ignored for Listfoot
 		v = false;
-		super.setVflex(v);
+		return super.setVflex(v);
 	}
 
 	//bug #3014664
-	override setHflex(v: boolean | string | null | undefined): void { //hflex ignored for Listfoot
+	override setHflex(v: boolean | string | null | undefined): this { //hflex ignored for Listfoot
 		v = false;
-		super.setHflex(v);
+		return super.setHflex(v);
 	}
 
 	override deferRedrawHTML_(out: string[]): void {

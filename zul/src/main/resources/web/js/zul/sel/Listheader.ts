@@ -78,12 +78,13 @@ export class Listheader extends zul.mesh.SortWidget {
 	}
 
 	//B70-ZK-1816, also add in zk 8, ZK-2660
-	override setVisible(visible: boolean): void {
+	override setVisible(visible: boolean): this {
 		if (this.isVisible() != visible) {
 			super.setVisible(visible);
 			if (this.desktop)
 				this.smartUpdate('visible', visible);
 		}
+		return this;
 	}
 
 	/** Groups and sorts the items ({@link Listitem}) based on

@@ -115,13 +115,13 @@ export class HeadWidget extends zul.Widget<HTMLTableRowElement> {
 	}
 
 	//bug #3014664
-	override setVflex(v: string): void { //vflex ignored for Listhead/Columns/Treecols
-		super.setVflex(false);
+	override setVflex(v: string): this { //vflex ignored for Listhead/Columns/Treecols
+		return super.setVflex(false);
 	}
 
 	//bug #3014664
-	override setHflex(v: string): void { //hflex ignored for Listhead/Columns/Treecols
-		super.setHflex(false);
+	override setHflex(v: string): this { //hflex ignored for Listhead/Columns/Treecols
+		return super.setHflex(false);
 	}
 
 	/**

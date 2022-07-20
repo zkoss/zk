@@ -106,9 +106,10 @@ export class Menubar extends zul.Widget {
 		return this;
 	}
 
-	override setWidth(width: string | null): void {
+	override setWidth(width: string | null): this {
 		super.setWidth(width);
 		this._checkScrolling();
+		return this;
 	}
 
 	override domClass_(no?: zk.DomClassOptions): string {

@@ -29,15 +29,15 @@ export class Treefoot extends zul.Widget {
 	}
 
 	//bug #3014664
-	override setVflex(v: boolean | string | null | undefined): void { //vflex ignored for Treefoot
+	override setVflex(v: boolean | string | null | undefined): this { //vflex ignored for Treefoot
 		v = false;
-		super.setVflex(v);
+		return super.setVflex(v);
 	}
 
 	//bug #3014664
-	override setHflex(v: boolean | string | null | undefined): void { //hflex ignored for Treefoot
+	override setHflex(v: boolean | string | null | undefined): this { //hflex ignored for Treefoot
 		v = false;
-		super.setHflex(v);
+		return super.setHflex(v);
 	}
 
 	override deferRedrawHTML_(out: string[]): void {

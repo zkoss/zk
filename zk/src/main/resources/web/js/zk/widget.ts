@@ -971,11 +971,12 @@ new zul.wnd.Window({
 	 * <p>Default: <code>default</code>
 	 * @param String mold the mold
 	 */
-	setMold(mold: string): void {
+	setMold(mold: string): this {
 		if (this._mold != mold) {
 			this._mold = mold;
 			this.rerender();
 		}
+		return this;
 	}
 
 	/** Returns this widget's mold. A mold is a template to render a widget.
@@ -993,11 +994,12 @@ new zul.wnd.Window({
 	 * @see #setSclass
 	 * @see #setZclass
 	 */
-	setStyle(style: string): void {
+	setStyle(style: string): this {
 		if (this._style != style) {
 			this._style = style;
 			this.updateDomStyle_();
 		}
+		return this;
 	}
 
 	/** Returns the CSS style of this widget
@@ -1020,11 +1022,12 @@ new zul.wnd.Window({
 	 * @see #setZclass
 	 * @see #setStyle
 	 */
-	setSclass(sclass: string): void {
+	setSclass(sclass: string): this {
 		if (this._sclass != sclass) {
 			this._sclass = sclass;
 			this.updateDomClass_();
 		}
+		return this;
 	}
 
 	/** Returns the CSS class of this widget.
@@ -1049,12 +1052,13 @@ new zul.wnd.Window({
 	 * @see #setSclass
 	 * @see #setStyle
 	 */
-	setZclass(zclass: string): void {
+	setZclass(zclass: string): this {
 		if (this._zclass != zclass) {
 			this._zclass = zclass;
 			this._subzcls = {}; // reset
 			this.rerender();
 		}
+		return this;
 	}
 
 	/** Returns the ZK Cascading Style class(es) for this widget.
@@ -1072,7 +1076,7 @@ new zul.wnd.Window({
 	 * @param String width the width. Remember to specify 'px', 'pt' or '%'.
 	 * An empty or null value means "auto"
 	 */
-	setWidth(width: string | null): void {
+	setWidth(width: string | null): this {
 		if (this._width != width) {
 			this._width = width;
 			if (!this._nhflex) {
@@ -1080,6 +1084,7 @@ new zul.wnd.Window({
 				if (n) n.style.width = width || '';
 			}
 		}
+		return this;
 	}
 	/** Returns the width of this widget.
 	 * @return String
@@ -1092,7 +1097,7 @@ new zul.wnd.Window({
 	 * @param String height the height. Remember to specify 'px', 'pt' or '%'.
 	 * An empty or null value means "auto"
 	 */
-	setHeight(height: string | null): void {
+	setHeight(height: string | null): this {
 		if (this._height != height) {
 			this._height = height;
 			if (!this._nvflex) {
@@ -1100,6 +1105,7 @@ new zul.wnd.Window({
 				if (n) n.style.height = height || '';
 			}
 		}
+		return this;
 	}
 	/** Returns the height of this widget.
 	 * @return String
@@ -1113,12 +1119,13 @@ new zul.wnd.Window({
 	 * @param String left the left. Remember to specify 'px', 'pt' or '%'.
 	 * An empty or null value means "auto"
 	 */
-	setLeft(left: string): void {
+	setLeft(left: string): this {
 		if (this._left != left) {
 			this._left = left;
 			var n = this.$n();
 			if (n) n.style.left = left || '';
 		}
+		return this;
 	}
 
 	/** Returns the left of this widget.
@@ -1135,12 +1142,13 @@ new zul.wnd.Window({
 	 * @param String top the top. Remember to specify 'px', 'pt' or '%'.
 	 * An empty or null value means "auto"
 	 */
-	setTop(top: string): void {
+	setTop(top: string): this {
 		if (this._top != top) {
 			this._top = top;
 			var n = this.$n();
 			if (n) n.style.top = top || '';
 		}
+		return this;
 	}
 
 	/** Returns the top of this widget.
@@ -1154,13 +1162,14 @@ new zul.wnd.Window({
 	 * <p>Default implementation of setTooltiptext: update the title attribute of {@link #$n}
 	 * @param String title the tooltip text
 	 */
-	setTooltiptext(tooltiptext: string): void {
+	setTooltiptext(tooltiptext: string): this {
 		if (this._tooltiptext != tooltiptext) {
 			this._tooltiptext = tooltiptext;
 			var n = this.$n();
 			// ZK-676 , ZK-752
 			if (n) n.title = this._tooltiptext || '';
 		}
+		return this;
 	}
 	/** Returns the tooltip text of this widget.
 	 * @return String
@@ -1177,20 +1186,21 @@ new zul.wnd.Window({
 	 * @param String droppable "false", null or "" to denote not-droppable; "true" for accepting any draggable types; a list of identifiers, separated by comma for identifiers of draggables this widget accept (to be dropped in).
 	 * @return zk.Widget this widget
 	 */
-	setDroppable(droppable: zk.StringFieldValue): void {
+	setDroppable(droppable: zk.StringFieldValue): this {
 		droppable = droppable && 'false' != droppable ? droppable : null;
 		if (this._droppable != droppable) {
 			this._droppable = droppable;
 
-			var dropTypes;
+			let dropTypes;
 			if (droppable && droppable != 'true') {
 				dropTypes = droppable.split(',');
-				for (var j = dropTypes.length; j--;)
+				for (let j = dropTypes.length; j--;)
 					if (!(dropTypes[j] = dropTypes[j].trim()))
 						dropTypes.splice(j, 1);
 			}
 			this._dropTypes = dropTypes;
 		}
+		return this;
 	}
 	/** Returns the identifier, or a list of identifiers of a droppable type for this widget, or null if not droppable.
 	 * @return String
@@ -1223,16 +1233,17 @@ new zul.wnd.Window({
 	 * @see #getVflex
 	 * @param String flex the vertical flex hint.
 	 */
-	setVflex(vflex: boolean | string | null | undefined): void {
+	setVflex(vflex: boolean | string | null | undefined): this {
 		if (this._vflex != vflex) {
 			this._vflex = vflex;
 			this.setVflex_(vflex);
 
-			var p;
+			let p;
 			if (this.desktop
 				&& (p = this.parent) && !p.isBinding()) //ZK-307
 				zUtl.fireSized(p, -1); //no beforeSize
 		}
+		return this;
 	}
 
 	/**
@@ -1271,7 +1282,7 @@ new zul.wnd.Window({
 	 * @see #setVflex
 	 * @see #getHflex
 	 */
-	setHflex(hflex: boolean | string | null | undefined): void {
+	setHflex(hflex: boolean | string | null | undefined): this {
 		if (this._hflex != hflex) {
 			this._hflex = hflex;
 			this.setHflex_(hflex);
@@ -1281,6 +1292,7 @@ new zul.wnd.Window({
 				&& (p = this.parent) && !p.isBinding()/*ZK-307*/)
 				zUtl.fireSized(p, -1); //no beforeSize
 		}
+		return this;
 	}
 
 	/**
@@ -1321,10 +1333,11 @@ new zul.wnd.Window({
 	 * all others are rendered).
 	 * @since 5.0.2
 	 */
-	setRenderdefer(renderdefer: number): void {
+	setRenderdefer(renderdefer: number): this {
 		if (this._renderdefer != renderdefer) {
 			this._renderdefer = renderdefer;
 		}
+		return this;
 	}
 
 	/** Returns the client-side action.
@@ -1349,7 +1362,7 @@ new zul.wnd.Window({
 	 * @param String action the client-side action
 	 * @since 5.0.6
 	 */
-	setAction(action: zk.StringFieldValue): void {
+	setAction(action: zk.StringFieldValue): this {
 		if (this._action != action) {
 			this._action = action;
 			if (action) {
@@ -1377,6 +1390,7 @@ new zul.wnd.Window({
 				}
 			}
 		}
+		return this;
 	}
 
 	/** Returns the tab order of this component.
@@ -1390,7 +1404,7 @@ new zul.wnd.Window({
 	 * @param int tabindex
 	 * @since 8.0.2
 	 */
-	setTabindex(tabindex: number): void {
+	setTabindex(tabindex: number): this {
 		if (this._tabindex != tabindex) {
 			this._tabindex = tabindex;
 
@@ -1402,6 +1416,7 @@ new zul.wnd.Window({
 					n.tabIndex = tabindex;
 			}
 		}
+		return this;
 	}
 
 	/** Returns whether using css flex in this component or not.
@@ -1419,13 +1434,14 @@ new zul.wnd.Window({
 	 * @param boolean enable css flex or not
 	 * @since 9.0.0
 	 */
-	setCssflex(cssflex: boolean): void {
+	setCssflex(cssflex: boolean): this {
 		if (this._cssflex != cssflex) {
 			this._cssflex = cssflex;
 			if (this.desktop) {
 				this.rerender();
 			}
 		}
+		return this;
 	}
 
 	setHflex_(v: zk.StringFieldValue | boolean): void {
@@ -1497,7 +1513,7 @@ new zul.wnd.Window({
 	 * The identifier could be anything but empty and "false".
 	 * @param String draggable "false", "" or null to denote non-draggable; "true" for draggable with anonymous identifier; others for an identifier of draggable.
 	 */
-	setDraggable(draggable: zk.StringFieldValue): void {
+	setDraggable(draggable: zk.StringFieldValue): this {
 		if (!draggable && draggable != null) draggable = 'false'; //null means default
 		this._draggable = draggable;
 
@@ -1505,6 +1521,7 @@ new zul.wnd.Window({
 			if (draggable && draggable != 'false') this.initDrag_();
 			else this.cleanDrag_();
 		}
+		return this;
 	}
 	/** Returns the identifier of a draggable type for this widget, or null if not draggable.
 	 * @return String
@@ -1573,7 +1590,7 @@ wgt.$f().main.setTitle("foo");
 	/** Sets the identifier of this widget.
 	 * @param String id the identifier to assigned to.
 	 */
-	setId(id: zk.StringFieldValue): void {
+	setId(id: zk.StringFieldValue): this {
 		if (id != this.id) {
 			if (this.id) {
 				_rmIdSpace(this);
@@ -1590,6 +1607,7 @@ wgt.$f().main.setTitle("foo");
 					this.get$Class<typeof Widget>()._addGlobal(this);
 			}
 		}
+		return this;
 	}
 
 	/** Sets a property.
@@ -1762,10 +1780,11 @@ wgt.$f().main.setTitle("foo");
 	 * Notice this method does NOT remove any existent child widget.
 	 * @param Array children an array of children ({@link zk.Widget}) to add
 	 */
-	setChildren(children: Widget[]): void {
+	setChildren(children: Widget[]): this {
 		if (children)
 			for (var j = 0, l = children.length; j < l;)
 				this.appendChild(children[j++]);
+		return this;
 	}
 
 	/** Append a child widget.
@@ -2249,7 +2268,7 @@ wgt.$f().main.setTitle("foo");
 	 * </ul>
 	 * @param boolean visible whether to be visible
 	 */
-	setVisible(visible: boolean | undefined): void {
+	setVisible(visible: boolean | undefined): this {
 		if (this._visible != visible) {
 			this._visible = visible;
 
@@ -2316,6 +2335,7 @@ wgt.$f().main.setTitle("foo");
 				//after setDomVisible_ and after onHide
 			jq.onSyncScroll(this);
 		}
+		return this;
 	}
 
 	/** Synchronizes a map of objects that are associated with this widget, and
@@ -2567,9 +2587,9 @@ wgt.$f().main.setTitle("foo");
 	 * @param int zIndex the Z index to assign to
 	 * @param Map opts if opts.fire is specified the onZIndex event will be triggered. If opts.floatZIndex is false, represent it is not from setFloatZIndex, so the userZIndex may be true.
 	 */
-	setZIndex(zIndex: number | string, opts: Partial<{ floatZIndex: boolean; fire: boolean }>): void {
+	setZIndex(zIndex: number | string, opts: Partial<{ floatZIndex: boolean; fire: boolean }>): this {
 		if (opts && opts.floatZIndex && this._userZIndex)
-			return;
+			return this;
 		if (!opts || !opts.floatZIndex)
 			this._userZIndex = true;
 		if (!zIndex)
@@ -2582,10 +2602,11 @@ wgt.$f().main.setTitle("foo");
 				if (opts && opts.fire) this.fire('onZIndex', (zIndex > 0 || zIndex === 0) ? zIndex : -1, {ignorable: true});
 			}
 		}
+		return this;
 	}
 
-	setZindex(zIndex: number, opts: Partial<{ floatZIndex: boolean; fire: boolean }>): void {
-		this.setZIndex(zIndex, opts);
+	setZindex(zIndex: number, opts: Partial<{ floatZIndex: boolean; fire: boolean }>): this {
+		return this.setZIndex(zIndex, opts);
 	}
 
 	/** Returns the scroll top of the associated DOM element of this widget.
@@ -2610,18 +2631,20 @@ wgt.$f().main.setTitle("foo");
 	 * <p>This method does nothing if this widget is not bound to a DOM element yet.
 	 * @param int the scroll top.
 	 */
-	setScrollTop(val: number): void {
+	setScrollTop(val: number): this {
 		var n = this.$n();
 		if (n) n.scrollTop = val;
+		return this;
 	}
 
 	/** Sets the scroll left of the associated DOM element of this widget.
 	 * <p>This method does nothing if this widget is not bound to a DOM element yet.
 	 * @param int the scroll top.
 	 */
-	setScrollLeft(val: number): void {
-		var n = this.$n();
+	setScrollLeft(val: number): this {
+		const n = this.$n();
 		if (n) n.scrollLeft = val;
+		return this;
 	}
 
 	/** Makes this widget visible in the browser window by scrolling ancestors up or down, if necessary.
@@ -4527,14 +4550,16 @@ wgt.setListeners({
 	 * If the value is a string, it will be converted to a {@link Function}.
 	 * Notice that the target is not {@link zk.Event#target}. Rather, it is <code>this</code> when the listener is called.
 	 */
-	setListeners(infs: Record<string, unknown & {priority: number}[]>): void {
+	setListeners(infs: Record<string, unknown & {priority: number}[]>): this {
 		for (var evt in infs)
 			this.setListener(evt, infs[evt]);
+		return this;
 	}
 	// since 8.0
-	setListeners0(infs: Record<string, unknown & {priority: number}[]>): void { //used by server
+	setListeners0(infs: Record<string, unknown & {priority: number}[]>): this { //used by server
 		for (var evt in infs)
 			this.setListener0(evt, infs[evt]);
+		return this;
 	}
 	/** Sets a listener that can be unlistened easily.
 	 * It is designed to be called from server.
@@ -4547,7 +4572,7 @@ wgt.setListeners({
 	 * while the second is the listener function
 	 * @see #setListeners
 	 */
-	setListener(inf: [string, unknown]): void;
+	setListener(inf: [string, unknown]): this;
 	/** Sets a listener
 	 * It is designed to be called from server.
 	 * For client-side programming, it is suggested to use {@link #listen}.
@@ -4562,8 +4587,8 @@ wgt.setListeners({
 	 * @see #setListeners
 	 * @see #listen
 	 */
-	setListener(evt: string, fn: unknown): void;
-	setListener(evt: string | [string, unknown], fn?: unknown): void { //used by server
+	setListener(evt: string, fn: unknown): this;
+	setListener(evt: string | [string, unknown], fn?: unknown): this { //used by server
 		if (jq.isArray(evt)) {
 			fn = evt[1];
 			evt = evt[0];
@@ -4582,9 +4607,10 @@ wgt.setListeners({
 				= typeof fn != 'function' ? new Function('var event=arguments[0];' + fn) : fn;
 			this.listen(inf);
 		}
+		return this;
 	}
 	// since 8.0, it won't unlisten the old function.
-	setListener0(evt: string | [string, unknown], fn: unknown): void { //used by server
+	setListener0(evt: string | [string, unknown], fn: unknown): this { //used by server
 		if (jq.isArray(evt)) {
 			fn = evt[1];
 			evt = evt[0];
@@ -4597,9 +4623,10 @@ wgt.setListeners({
 				= typeof fn != 'function' ? new Function('var event=arguments[0];' + fn) : fn;
 			this.listen(inf);
 		}
+		return this;
 	}
 
-	setOverride(nm: string | [string, unknown], val: unknown): void { //used by server (5.0.2)
+	setOverride(nm: string | [string, unknown], val: unknown): this { //used by server (5.0.2)
 		if (jq.isArray(nm)) {
 			val = nm[1];
 			nm = nm[0];
@@ -4615,11 +4642,13 @@ wgt.setListeners({
 			this[nm] = this[oldnm]; //restore
 			delete this[oldnm];
 		}
+		return this;
 	}
 
-	setOverrides(infs: {[key: string]: unknown}[]): void { //used by server
+	setOverrides(infs: {[key: string]: unknown}[]): this { //used by server
 		for (var nm in infs)
 			this.setOverride(nm, infs[nm]);
+		return this;
 	}
 
 	//ZK event handling//
@@ -5774,7 +5803,9 @@ export class Desktop extends Widget {
 	 * @param String id the ID
 	 * @return zk.Widget this widget
 	 */
-	override setId = zk.$void;
+	override setId(id: string): this {
+		return this;
+	}
 
 	//ZK-2663: Popup does not show up when its parent is native
 	override isRealVisible(): boolean {
@@ -6169,11 +6200,12 @@ export class Macro extends Widget {
 	 * @param String tag the tag name, such as div
 	 * @since 5.0.3
 	 */
-	setEnclosingTag(enclosingTag: string): void {
+	setEnclosingTag(enclosingTag: string): this {
 		if (this._enclosingTag != enclosingTag) {
 			this._enclosingTag = enclosingTag;
 			this.rerender();
 		}
+		return this;
 	}
 
 	/** Generates the HTML fragment for this macro component.

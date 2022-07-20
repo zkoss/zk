@@ -29,7 +29,7 @@ export class Widget extends zk.Widget<HTMLInputElement> {
 	_defChecked?: boolean;
 	_defValue?: string;
 
-	setDynamicProperty(prop: [string, string]): void {
+	setDynamicProperty(prop: [string, string]): this {
 		var n = this.$n();
 		if (n) {
 			var nm = prop[0], val = prop[1];
@@ -54,6 +54,7 @@ export class Widget extends zk.Widget<HTMLInputElement> {
 				n[nm] = val;
 			}
 		}
+		return this;
 	}
 
 	override doClick_(wevt: zk.Event): void {

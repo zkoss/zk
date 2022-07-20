@@ -73,7 +73,9 @@ export class Center extends zul.layout.LayoutRegion {
 	 * Center region can't be enabled the collapsed margin functionality.
 	 * @param String cmargins
 	 */
-	override setCmargins = zk.$void;        // readonly
+	override setCmargins(cmargins: string): this {        // readonly
+		return this;
+	}
 
 	/**
 	 * Center region can't be enabled the split functionality.

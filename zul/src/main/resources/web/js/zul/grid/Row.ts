@@ -123,12 +123,13 @@ export class Row extends zul.Widget<HTMLTableRowElement> implements zul.mesh.Ite
 		return this.parent ? this.parent.parent : null;
 	}
 
-	override setVisible(visible: boolean | undefined): void {
+	override setVisible(visible: boolean | undefined): this {
 		if (this.isVisible() != visible) {
 			super.setVisible(visible);
 			if (this.desktop && this.isStripeable_())
 				this.parent!._syncStripe();
 		}
+		return this;
 	}
 
 	/** Returns the spans, which is a list of numbers separated by comma.
@@ -146,11 +147,12 @@ export class Row extends zul.Widget<HTMLTableRowElement> implements zul.mesh.Ite
 	 * one column.
 	 * @param String spans
 	 */
-	setSpans(spans: string): void {
+	setSpans(spans: string): this {
 		if (this.getSpans() != spans) {
 			this._spans = zUtl.stringToInts(spans, 1);
 			this.rerender();
 		}
+		return this;
 	}
 
 	_getIndex(): number {
@@ -169,12 +171,13 @@ export class Row extends zul.Widget<HTMLTableRowElement> implements zul.mesh.Ite
 		return null;
 	}
 
-	override setStyle(style: string): void {
+	override setStyle(style: string): this {
 		if (this._style != style) {
 			if (!zk._rowTime) zk._rowTime = jq.now();
 			this._style = style;
 			this.rerender();
 		}
+		return this;
 	}
 
 	override rerender(skipper?: number | zk.Skipper | null): void {

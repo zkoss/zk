@@ -207,8 +207,8 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 	 * A method for component setter symmetry, it will call setValue
 	 * @since 10.0.0
 	 */
-	setValueInZonedDateTime(value: DateImpl, fromServer?: boolean): void {
-		this.setValue(value, fromServer);
+	setValueInZonedDateTime(value: DateImpl, fromServer?: boolean): this {
+		return this.setValue(value, fromServer);
 	}
 
 	/**
@@ -223,8 +223,8 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 	 * A method for component setter symmetry, it will call setValue
 	 * @since 10.0.0
 	 */
-	setValueInLocalDateTime(value: DateImpl, fromServer?: boolean): void {
-		this.setValue(value, fromServer);
+	setValueInLocalDateTime(value: DateImpl, fromServer?: boolean): this {
+		return this.setValue(value, fromServer);
 	}
 
 	/**
@@ -239,8 +239,8 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 	 * A method for component setter symmetry, it will call setValue
 	 * @since 10.0.0
 	 */
-	setValueInLocalDate(value: DateImpl, fromServer?: boolean): void {
-		this.setValue(value, fromServer);
+	setValueInLocalDate(value: DateImpl, fromServer?: boolean): this {
+		return this.setValue(value, fromServer);
 	}
 
 	/**
@@ -255,8 +255,8 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 	 * A method for component setter symmetry, it will call setValue
 	 * @since 10.0.0
 	 */
-	setValueInLocalTime(value: DateImpl, fromServer?: boolean): void {
-		this.setValue(value, fromServer);
+	setValueInLocalTime(value: DateImpl, fromServer?: boolean): this {
+		return this.setValue(value, fromServer);
 	}
 
 	/**
@@ -264,8 +264,8 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 	 * @param String timezone the time zone's ID, such as "America/Los_Angeles".
 	 * @deprecated Use {@link #setTimeZone(String)} instead.
 	 */
-	setTimezone(v: string): void {
-		this.setTimeZone(v);
+	setTimezone(v: string): this {
+		return this.setTimeZone(v);
 	}
 
 	/** Returns the time zone ID that this time box belongs to.
@@ -281,18 +281,18 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 		return true;
 	}
 
-	override setFormat(fmt: string, opts?: Record<string, boolean> | undefined): void {
+	override setFormat(fmt: string, opts?: Record<string, boolean> | undefined): this {
 		fmt = fmt ? fmt.replace(/'/g, '') : fmt;
 		Timebox._updFormat(this, fmt);
-		super.setFormat(fmt, opts);
+		return super.setFormat(fmt, opts);
 	}
 
-	override setValue(value: DateImpl, fromServer?: boolean): void {
+	override setValue(value: DateImpl, fromServer?: boolean): this {
 		var tz = this.getTimeZone();
 		if (tz && value) value.tz(tz);
 		if (fromServer && value === null) //Bug ZK-1322: if from server side, return empty string
 			this._changed = false;
-		super.setValue(value, fromServer);
+		return super.setValue(value, fromServer);
 	}
 
 	override coerceToString_(date?: DateImpl | null): string {

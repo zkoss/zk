@@ -120,8 +120,9 @@ export class Comboitem extends zul.LabelImageWidget implements zul.LabelImageWid
 	}
 
 	// since 10.0.0 for Zephyr to use
-	setValue(val: unknown): void {
+	setValue(val: unknown): this {
 		this._value = val;
+		return this;
 	}
 
 	// since 10.0.0 for Zephyr to use

@@ -138,7 +138,7 @@ export class ItemWidget extends zul.Widget<HTMLTableRowElement> implements zul.m
 	/** Sets whether it is selected.
 	 * @param boolean selected
 	 */
-	setSelected(selected: boolean): void {
+	setSelected(selected: boolean): this {
 		if (this._selected != selected) {
 			var box = this.getMeshWidget();
 			if (box)
@@ -146,6 +146,7 @@ export class ItemWidget extends zul.Widget<HTMLTableRowElement> implements zul.m
 
 			this._setSelectedDirectly(selected);
 		}
+		return this;
 	}
 
 	_setSelectedDirectly(selected: boolean): void {
@@ -201,7 +202,7 @@ export class ItemWidget extends zul.Widget<HTMLTableRowElement> implements zul.m
 	}
 
 	//super//
-	override setVisible(visible: boolean | undefined): void {
+	override setVisible(visible: boolean | undefined): this {
 		if (this._visible != visible) { // not to use isVisible()
 			super.setVisible(visible);
 			if (this.isStripeable_()) {
@@ -210,6 +211,7 @@ export class ItemWidget extends zul.Widget<HTMLTableRowElement> implements zul.m
 				if (p) p.stripe();
 			}
 		}
+		return this;
 	}
 
 	override domClass_(no?: zk.DomClassOptions): string {

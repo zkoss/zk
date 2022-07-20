@@ -34,10 +34,11 @@ export class Tabpanel extends zul.ContainerWidget {
 		return super.isVisible() && this.isSelected();
 	}
 
-	override setVisible(visible: boolean | undefined): void {
+	override setVisible(visible: boolean | undefined): this {
 		super.setVisible(visible);
 		if (this.desktop && !this.isSelected()) //Bug ZK-1618: not show if current tabpanel is not selected
 			this.$n_().style.display = 'none';
+		return this;
 	}
 
 	override domClass_(no?: zk.DomClassOptions): string {
@@ -174,15 +175,15 @@ export class Tabpanel extends zul.ContainerWidget {
 	}
 
 	//bug #3014664
-	override setVflex(v: boolean | string | null | undefined): void { //vflex ignored for Tabpanel
+	override setVflex(v: boolean | string | null | undefined): this { //vflex ignored for Tabpanel
 		if (v != 'min') v = false;
-		super.setVflex(v);
+		return super.setVflex(v);
 	}
 
 	//bug #3014664
-	override setHflex(v: boolean | string | null | undefined): void { //hflex ignored for Tabpanel
+	override setHflex(v: boolean | string | null | undefined): this { //hflex ignored for Tabpanel
 		if (v != 'min') v = false;
-		super.setHflex(v);
+		return super.setHflex(v);
 	}
 
 	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {

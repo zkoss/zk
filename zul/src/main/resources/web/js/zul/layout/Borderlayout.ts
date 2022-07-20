@@ -85,8 +85,9 @@ export class Borderlayout extends zul.Widget {
 	_isOnSize?: boolean;
 	_animationDisabled = false;
 
-	setResize(): void {
+	setResize(): this {
 		this.resize();
+		return this;
 	}
 
 	/**

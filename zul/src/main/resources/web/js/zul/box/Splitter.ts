@@ -155,7 +155,7 @@ export class Splitter extends zul.Widget {
 	/** Sets the collapse of this button.
 	 * @param String collapse
 	 */
-	setCollapse(collapse: string): void {
+	setCollapse(collapse: string): this {
 		if (this._collapse != collapse) {
 			var bOpen = this._open;
 			if (!bOpen)
@@ -170,6 +170,7 @@ export class Splitter extends zul.Widget {
 			if (!bOpen)
 				this.setOpen(false, {sendOnOpen: false});
 		}
+		return this;
 	}
 
 	//super//
@@ -181,10 +182,11 @@ export class Splitter extends zul.Widget {
 		return sc;
 	}
 
-	override setZclass(zclass: string): void {
+	override setZclass(zclass: string): this {
 		super.setZclass(zclass);
 		if (this.desktop)
 			this._fixDomClass(true);
+		return this;
 	}
 
 	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {

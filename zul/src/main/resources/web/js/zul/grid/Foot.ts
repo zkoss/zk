@@ -27,15 +27,15 @@ export class Foot extends zul.Widget {
 	}
 
 	//bug #3014664
-	override setVflex(v: boolean | string | null | undefined): void { //vflex ignored for grid Foot
+	override setVflex(v: boolean | string | null | undefined): this { //vflex ignored for grid Foot
 		v = false;
-		super.setVflex(v);
+		return super.setVflex(v);
 	}
 
 	//bug #3014664
-	override setHflex(v: boolean | string | null | undefined): void { //hflex ignored for grid Foot
+	override setHflex(v: boolean | string | null | undefined): this { //hflex ignored for grid Foot
 		v = false;
-		super.setHflex(v);
+		return super.setHflex(v);
 	}
 
 	override deferRedrawHTML_(out: string[]): void {

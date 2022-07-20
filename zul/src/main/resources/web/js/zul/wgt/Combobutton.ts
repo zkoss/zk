@@ -182,10 +182,11 @@ export class Combobutton extends zul.wgt.Button {
 	 * @see #open
 	 * @see #close
 	 */
-	setOpen(open: boolean, opts?: zul.wgt.PopupOptions): void {
+	setOpen(open: boolean, opts?: zul.wgt.PopupOptions): this {
 		if (!this._disabled && !zk.animating())
 			// have to provide empty opts or menupopup will set sendOnOpen to true
 			this[open ? 'open' : 'close'](opts || {});
+		return this;
 	}
 
 	renderInner_(out: string[]): void {

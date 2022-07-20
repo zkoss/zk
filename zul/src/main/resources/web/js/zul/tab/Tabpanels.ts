@@ -48,15 +48,15 @@ export class Tabpanels extends zul.Widget {
 	}
 
 	//bug #3014664
-	override setVflex(v: boolean | string | null | undefined): void { //vflex ignored for Tabpanels
+	override setVflex(v: boolean | string | null | undefined): this { //vflex ignored for Tabpanels
 		if (v != 'min') v = false;
-		super.setVflex(v);
+		return super.setVflex(v);
 	}
 
 	//bug #3014664
-	override setHflex(v: boolean | string | null | undefined): void { //hflex ignored for Tabpanels
+	override setHflex(v: boolean | string | null | undefined): this { //hflex ignored for Tabpanels
 		if (v != 'min') v = false;
-		super.setHflex(v);
+		return super.setHflex(v);
 	}
 
 	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {

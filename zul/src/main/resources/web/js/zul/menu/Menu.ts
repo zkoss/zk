@@ -635,11 +635,12 @@ export class ContentHandler extends zk.Object {
 		this._content = content;
 	}
 
-	setContent(content: string | undefined): void {
+	setContent(content: string | undefined): this {
 		if (this._content != content || !this._pp) {
 			this._content = content;
 			this._wgt.rerender();
 		}
+		return this;
 	}
 
 	redraw(out: string[]): void {

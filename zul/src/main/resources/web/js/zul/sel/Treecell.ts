@@ -33,8 +33,9 @@ export class Treecell extends zul.LabelImageWidget<HTMLTableCellElement> {
 	/**
 	 * The width can't be specified in this component.
 	 */
-	override setWidth(width: string | null): void {
+	override setWidth(width: string | null): this {
 		// This function simply does nothing.
+		return this;
 	}
 
 	/** Returns number of columns to span this cell.

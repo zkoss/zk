@@ -132,11 +132,12 @@ export class Tab extends zul.LabelImageWidget implements zul.LabelImageWidgetWit
 	 * Sets whether this tab is selected.
 	 * @param boolean selected
 	 */
-	setSelected(selected: boolean, fromServer?: boolean): void {
-		var tabbox = this.getTabbox();
+	setSelected(selected: boolean, fromServer?: boolean): this {
+		const tabbox = this.getTabbox();
 		if (tabbox && selected) {
 			tabbox.setSelectedTab(this, fromServer);
 		}
+		return this;
 	}
 
 	/**
@@ -216,18 +217,20 @@ export class Tab extends zul.LabelImageWidget implements zul.LabelImageWidgetWit
 			this.fire('onSelect', {items: [this], reference: this});
 	}
 
-	override setHeight(height: string | null): void {
+	override setHeight(height: string | null): this {
 		super.setHeight(height);
 		if (this.desktop) {
 			this._calcHgh();
 			zUtl.fireSized(this.parent!);
 		}
+		return this;
 	}
 
-	override setWidth(width: string | null): void {
+	override setWidth(width: string | null): this {
 		super.setWidth(width);
 		if (this.desktop)
 			zUtl.fireSized(this.parent!);
+		return this;
 	}
 
 	_calcHgh(): void {
@@ -285,15 +288,15 @@ export class Tab extends zul.LabelImageWidget implements zul.LabelImageWidgetWit
 	}
 
 	//bug #3014664
-	override setVflex(v: boolean | string | null | undefined): void { //vflex ignored for Tab
+	override setVflex(v: boolean | string | null | undefined): this { //vflex ignored for Tab
 		if (v != 'min') v = false;
-		super.setVflex(v);
+		return super.setVflex(v);
 	}
 
 	//bug #3014664
-	override setHflex(v: boolean | string | null | undefined): void { //hflex ignored for Tab
+	override setHflex(v: boolean | string | null | undefined): this { //hflex ignored for Tab
 		if (v != 'min') v = false;
-		super.setHflex(v);
+		return super.setHflex(v);
 	}
 
 	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {

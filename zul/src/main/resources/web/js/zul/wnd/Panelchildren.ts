@@ -28,16 +28,18 @@ export class Panelchildren extends zul.ContainerWidget {
 	 * This method is unsupported. Please use {@link zul.wnd.Panel#setHeight(String)} instead.
 	 * @param String height
 	 */
-	override setHeight(height: string | null): void {
+	override setHeight(height: string | null): this {
 		// Empty on purpose. Shoudn't do anything.
+		return this;
 	}
 
 	/**
 	 * This method is unsupported. Please use {@link zul.wnd.Panel#setWidth(String)} instead.
 	 * @param String width
 	 */
-	override setWidth(width: string | null): void { // readonly
+	override setWidth(width: string | null): this { // readonly
 		// Empty on purpose. Shoudn't do anything.
+		return this;
 	}
 
 	// super
