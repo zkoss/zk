@@ -26,6 +26,7 @@
     // "exactOptionalPropertyTypes": true, // TODO
     "forceConsistentCasingInFileNames": true,
     "allowUmdGlobalAccess": true,
+    "skipLibCheck": true,
     "typeRoots": [
       "../node_modules",
       "../node_modules/@types",

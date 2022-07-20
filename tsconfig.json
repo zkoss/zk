@@ -18,6 +18,7 @@
     "noImplicitOverride": true,
     "noUnusedLocals": true,
     "useUnknownInCatchVariables": false,
+    "skipLibCheck": true,
     "typeRoots": [
       "node_modules",
       "node_modules/@types",
