@@ -122,7 +122,7 @@ module.exports = {
         'key-spacing': 'error',
         'func-call-spacing': 'error',
         'one-var': ['error', 'consecutive'],
-        'space-before-function-paren': ['error', { 'named': 'ignore' } ],
+        'space-before-function-paren': ['error', { 'named': 'ignore' }],
         'space-in-parens': 'error',
         'semi': 'error',
         'space-infix-ops': 'error',
