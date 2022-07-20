@@ -55,7 +55,7 @@ export class Radio extends zul.wgt.Checkbox {
 	 * @param Radiogroup group the radio group, or null to dis-associate
 	 * @since 5.0.4
 	 */
-	setRadiogroup(group: zul.wgt.Radiogroup | string | null): void {
+	setRadiogroup(group: zul.wgt.Radiogroup | string | null): this {
 		var old = this._group;
 		// for zephyr to support set radiogroup by id
 		if (typeof group == 'string')
@@ -69,6 +69,7 @@ export class Radio extends zul.wgt.Checkbox {
 			}
 			this._fixName();
 		}
+		return this;
 	}
 
 	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {

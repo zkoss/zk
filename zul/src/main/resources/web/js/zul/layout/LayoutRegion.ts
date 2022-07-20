@@ -511,15 +511,15 @@ export class LayoutRegion extends zul.Widget {
 	}
 
 	//bug #3014664
-	override setVflex(v: string | null): void { //vflex ignored for LayoutRegion
+	override setVflex(v: string | null): this { //vflex ignored for LayoutRegion
 		if (v != 'min') v = 'false';
-		super.setVflex(v);
+		return super.setVflex(v);
 	}
 
 	//bug #3014664
-	override setHflex(v: string | null): void { //hflex ignored for LayoutRigion
+	override setHflex(v: string | null): this { //hflex ignored for LayoutRigion
 		if (v != 'min') v = 'false';
-		super.setHflex(v);
+		return super.setHflex(v);
 	}
 
 	/**
@@ -538,12 +538,13 @@ export class LayoutRegion extends zul.Widget {
 	 * "top,left,right,bottom"
 	 * @param String cmargins
 	 */
-	setCmargins(cmargins: string): void {
+	setCmargins(cmargins: string): this {
 		if (this.getCmargins() != cmargins) {
 			this._cmargins = zUtl.stringToInts(cmargins, 0)!;
 			if (this.parent && this.desktop)
 				this.parent.resize();
 		}
+		return this;
 	}
 
 	/**
@@ -569,12 +570,13 @@ export class LayoutRegion extends zul.Widget {
 	 * "top,left,right,bottom"
 	 * @param String margins
 	 */
-	setMargins(margins: string): void {
+	setMargins(margins: string): this {
 		if (this.getMargins() != margins) {
 			this._margins = zUtl.stringToInts(margins, 0)!;
 			if (this.parent && this.desktop)
 				this.parent.resize();
 		}
+		return this;
 	}
 
 	override domClass_(no?: zk.DomClassOptions): string {

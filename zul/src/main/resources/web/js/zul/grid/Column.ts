@@ -172,12 +172,13 @@ export class Column extends zul.mesh.SortWidget {
 		return this;
 	}
 
-	override setVisible(visible: boolean): void {
+	override setVisible(visible: boolean): this {
 		if (this.isVisible() != visible) {
 			super.setVisible(visible);
 			if (this.parent)
 				this.parent._syncColMenu();
 		}
+		return this;
 	}
 
 	/** It invokes {@link #group} to group list items and maintain

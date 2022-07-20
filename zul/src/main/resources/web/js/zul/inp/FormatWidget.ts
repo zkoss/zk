@@ -21,7 +21,7 @@ export class FormatWidget<ValueType> extends zul.inp.InputWidget<ValueType> {
 	_shortcut?: string | null;
 
 	//zk.def
-	setFormat(v: string, opts?: Record<string, boolean>): void {
+	setFormat(v: string, opts?: Record<string, boolean>): this {
 		const o = this._format;
 		this._format = v;
 
@@ -30,6 +30,7 @@ export class FormatWidget<ValueType> extends zul.inp.InputWidget<ValueType> {
 			if (inp)
 				inp.value = this.coerceToString_(this._value);
 		}
+		return this;
 	}
 
 	/** Returns the format.

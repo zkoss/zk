@@ -313,8 +313,8 @@ export class Box extends zul.Widget {
 		return this;
 	}
 
-	setHeights(val: string[]): void {
-		this.setWidths(val);
+	setHeights(val: string[]): this {
+		return this.setWidths(val);
 	}
 
 	getHeights(): string[] | undefined {

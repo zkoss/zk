@@ -75,7 +75,7 @@ export class Spinner extends zul.inp.NumberInputWidget<number> {
 		return super.getValue();
 	}
 
-	override setConstraint(constr: string): void {
+	override setConstraint(constr: string): this {
 		if (typeof constr == 'string' && constr.charAt(0) != '['/*by server*/) {
 			var constraint = new zul.inp.SimpleSpinnerConstraint(constr);
 			this._min = constraint._min;
@@ -83,6 +83,7 @@ export class Spinner extends zul.inp.NumberInputWidget<number> {
 			super.setConstraint(constraint);
 		} else
 			super.setConstraint(constr);
+		return this;
 	}
 
 	override coerceFromString_(value: string | null | undefined): zul.inp.CoerceFromStringResult | number | null {//copy from intbox

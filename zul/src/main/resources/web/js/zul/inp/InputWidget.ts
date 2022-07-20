@@ -519,8 +519,8 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	 * @param String txt the text
 	 * @since 5.0.5
 	 */
-	setText(txt: string): void {
-		this.setValue(this.coerceFromString_(txt) as ValueType);
+	setText(txt: string): this {
+		return this.setValue(this.coerceFromString_(txt) as ValueType);
 	}
 
 	/** Returns the value in the String format.
@@ -538,7 +538,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	 * @param boolean fromServer whether it is called from the server.
 	 * The error message will be cleared if true
 	 */
-	setValue(value: ValueType | number | string, fromServer?: boolean): void {
+	setValue(value: ValueType | number | string, fromServer?: boolean): this {
 		var vi: InputValidationResult<ValueType> | undefined;
 		// for zephyr to treat as "value" attribute from "_value" at client side
 		if (typeof value == 'number' || typeof value == 'string')
@@ -560,6 +560,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 			if (inp) //check if bind
 				this._defRawVal = this._lastChg = inp.value = value = this.coerceToString_(value as ValueType);
 		}
+		return this;
 	}
 
 	//value object set from server(smartUpdate, renderProperites)
@@ -638,13 +639,14 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	 * <p>Default: null (means no constraint all all).
 	 * @param String cst
 	 */
-	setConstraint(cst: zul.inp.SimpleConstraint | string | null): void {
+	setConstraint(cst: zul.inp.SimpleConstraint | string | null): this {
 		if (typeof cst == 'string' && cst.charAt(0) != '['/*by server*/)
 			this._cst = new zul.inp.SimpleConstraint(cst);
 		else
 			this._cst = cst as zul.inp.SimpleConstraint | null;
 		if (this._cst)
 			this._reVald = true; //revalidate required
+		return this;
 	}
 
 	/** Returns the constraint, or null if no constraint at all.
@@ -782,9 +784,10 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	 * <p>It is usually called by {@link zk.AuCmd0#wrongValue} (from the sever)
 	 * @param String msg the error message
 	 */
-	setErrorMessage(msg: string): void {
+	setErrorMessage(msg: string): this {
 		this.clearErrorMessage(true, true);
 		this._markError(msg, null, true);
+		return this;
 	}
 
 	/** Clears the error message and the error status.
@@ -1205,7 +1208,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	 * @param String text the text to be inserted
 	 * @since 8.5.1
 	 */
-	setInsertedText(text: string): void {
+	setInsertedText(text: string): this {
 		if (text) {
 			var inp = this.getInputNode();
 			if (inp) {
@@ -1223,6 +1226,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 				this.fireOnChange();
 			}
 		}
+		return this;
 	}
 
 	/** The delay for sending the onChanging event (unit: milliseconds).

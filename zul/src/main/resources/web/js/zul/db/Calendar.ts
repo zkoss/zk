@@ -600,8 +600,8 @@ export class Calendar extends zul.Widget {
 	 * A method for component setter symmetry, it will call setValue
 	 * @since 10.0.0
 	 */
-	setValueInZonedDateTime(value: DateImpl, opts?: Record<string, boolean>): void {
-		this.setValue(value, opts);
+	setValueInZonedDateTime(value: DateImpl, opts?: Record<string, boolean>): this {
+		return this.setValue(value, opts);
 	}
 
 	/**
@@ -616,8 +616,8 @@ export class Calendar extends zul.Widget {
 	 * A method for component setter symmetry, it will call setValue
 	 * @since 10.0.0
 	 */
-	setValueInLocalDateTime(value: DateImpl, opts?: Record<string, boolean>): void {
-		this.setValue(value, opts);
+	setValueInLocalDateTime(value: DateImpl, opts?: Record<string, boolean>): this {
+		return this.setValue(value, opts);
 	}
 
 	/**
@@ -632,8 +632,8 @@ export class Calendar extends zul.Widget {
 	 * A method for component setter symmetry, it will call setValue
 	 * @since 10.0.0
 	 */
-	setValueInLocalDate(value: DateImpl, opts?: Record<string, boolean>): void {
-		this.setValue(value, opts);
+	setValueInLocalDate(value: DateImpl, opts?: Record<string, boolean>): this {
+		return this.setValue(value, opts);
 	}
 
 	/**
@@ -648,8 +648,8 @@ export class Calendar extends zul.Widget {
 	 * A method for component setter symmetry, it will call setValue
 	 * @since 10.0.0
 	 */
-	setValueInLocalTime(value: DateImpl, opts?: Record<string, boolean>): void {
-		this.setValue(value, opts);
+	setValueInLocalTime(value: DateImpl, opts?: Record<string, boolean>): this {
+		return this.setValue(value, opts);
 	}
 
 	//@Override
@@ -940,7 +940,7 @@ export class Calendar extends zul.Widget {
 		return this._value || zUtl.today(this.getFormat(), _getTimeZone(this));
 	}
 
-	_setTime(y: number | null, m?: number | null, d?: number, fireOnChange?: boolean): void {
+	_setTime(y: number | null, m?: number | null, d?: number, fireOnChange?: boolean): this {
 		var dateobj = this.getTime(),
 			year = y != null ? y : dateobj.getFullYear(),
 			month = m != null ? m : dateobj.getMonth(),
@@ -952,6 +952,7 @@ export class Calendar extends zul.Widget {
 		this._selectedValue = val;
 		if (fireOnChange)
 			this.fire('onChange', {value: val});
+		return this;
 	}
 
 	// calendar-ctrl.js will override this function
@@ -1065,7 +1066,7 @@ export class Calendar extends zul.Widget {
 		evt.stop();
 	}
 
-	_setView(view: string, force?: number): void {
+	_setView(view: string, force?: number): this {
 		// check whether to disable the arrow
 		function _updateArrow(wgt: zul.db.Calendar): void {
 			if (wgt.isOutOfRange(true)) {
@@ -1168,6 +1169,7 @@ export class Calendar extends zul.Widget {
 
 			_updateArrow(this);
 		}
+		return this;
 	}
 
 	getLocalizedSymbols(): zk.LocalizedSymbols {

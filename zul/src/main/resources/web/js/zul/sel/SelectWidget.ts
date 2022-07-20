@@ -294,7 +294,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		return this;
 	}
 
-	setChgSel(val: string): void { //called from the server
+	setChgSel(val: string): this { //called from the server
 		var sels = {};
 		for (var j = 0; ;) {
 			var k = val.indexOf(',', j),
@@ -309,12 +309,13 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 
 		for (var it = this.getBodyWidgetIterator(), w: zul.sel.ItemWidget | null | undefined; (w = it.next());)
 			this._changeSelect(w, sels[w.uuid] == true);
+		return this;
 	}
 
-	setFocusIndex(index: number): void { // called from server
+	setFocusIndex(index: number): this { // called from server
 		// F60-ZK-715
 		if (index < 0)
-			return;
+			return this;
 		var self = this;
 		setTimeout(function () { // items not ready yet
 			var w: zul.sel.ItemWidget | null | undefined;
@@ -323,6 +324,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 					break;
 			self._focusItem = w;
 		});
+		return this;
 	}
 
 	updateFormData(): void {
@@ -351,7 +353,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	 * It is the same as {@link #selectItem}.
 	 * @param ItemWidget item
 	 */
-	setSelectedItem(item: zul.sel.ItemWidget): void {
+	setSelectedItem(item: zul.sel.ItemWidget): this {
 		if (!item)
 			this.clearSelection();
 		else {
@@ -373,6 +375,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 				this._currentLeft = this.ebody.scrollLeft;
 			}
 		}
+		return this;
 	}
 
 	/**
@@ -392,7 +395,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		return this._selItems.$clone();
 	}
 
-	override setHeight(height: string | null): void {
+	override setHeight(height: string | null): this {
 		if (!this._nvflex && this._height != height) {
 			this._height = height;
 			var n = this.$n();
@@ -401,16 +404,19 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 				this.onSize();
 			}
 		}
+		return this;
 	}
 
-	override setVflex(v: boolean | string | null | undefined): void {
+	override setVflex(v: boolean | string | null | undefined): this {
 		super.setVflex(v);
 		if (this.desktop) this.onSize();
+		return this;
 	}
 
-	override setHflex(v: boolean | string | null | undefined): void {
+	override setHflex(v: boolean | string | null | undefined): this {
 		super.setHflex(v);
 		if (this.desktop) this.onSize();
+		return this;
 	}
 
 	_getEbodyWd(): number {
@@ -1068,12 +1074,13 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	 * @param jq.Event evt
 	 * @disable(zkgwt)
 	 */
-	setSelectAll(notify: boolean, evt: zk.Event<zk.EventMetaData>): void {
+	setSelectAll(notify: boolean, evt: zk.Event<zk.EventMetaData>): this {
 		for (var it = this.getBodyWidgetIterator(), w: zul.sel.ItemWidget | null | undefined; (w = it.next());)
 			if (w._loaded && !w.isDisabled() && w.isSelectable())
 				this._changeSelect(w, true);
 		if (notify) // FIXME: why was the condition `notify && evt !== true`?
 			this.fireOnSelect(this.getSelectedItem(), evt);
+		return this;
 	}
 
 	/**

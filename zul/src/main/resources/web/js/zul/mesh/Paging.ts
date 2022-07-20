@@ -260,41 +260,48 @@ export class Paging extends zul.Widget {
 		return this;
 	}
 
-	override setStyle(style: string): void {
+	override setStyle(style: string): this {
 		super.setStyle(style);
 		_rerenderIfBothPaging(this);
+		return this;
 	}
 
-	override setSclass(sclass: string): void {
+	override setSclass(sclass: string): this {
 		super.setSclass(sclass);
 		_rerenderIfBothPaging(this);
+		return this;
 	}
 
-	override setWidth(width: string | null): void {
+	override setWidth(width: string | null): this {
 		super.setWidth(width);
 		_rerenderIfBothPaging(this);
 		if (this.desktop)
 			zUtl.fireSized(this, -1);
+		return this;
 	}
 
-	override setHeight(height: string | null): void {
+	override setHeight(height: string | null): this {
 		super.setHeight(height);
 		_rerenderIfBothPaging(this);
+		return this;
 	}
 
-	override setLeft(left: string): void {
+	override setLeft(left: string): this {
 		super.setLeft(left);
 		_rerenderIfBothPaging(this);
+		return this;
 	}
 
-	override setTop(top: string): void {
+	override setTop(top: string): this {
 		super.setTop(top);
 		_rerenderIfBothPaging(this);
+		return this;
 	}
 
-	override setTooltiptext(tooltiptext: string): void {
+	override setTooltiptext(tooltiptext: string): this {
 		super.setTooltiptext(tooltiptext);
 		_rerenderIfBothPaging(this);
+		return this;
 	}
 
 	override replaceHTML(n: HTMLElement | string, desktop: zk.Desktop | null, skipper?: zk.Skipper | null, _trim_?: boolean, _callback_?: CallableFunction[]): void {

@@ -208,12 +208,12 @@ export class Cell extends zul.Widget<HTMLTableCellElement> {
 		return ' ' + zUtl.mapToString(m1!); // FIXME: m1 could be undefined
 	}
 
-	override setVisible(visible: boolean | undefined): void {
+	override setVisible(visible: boolean | undefined): this {
 		super.setVisible(visible);
 		// B65-ZK-2015: redoCSS in IE10 to make sure component will show when visible is true
 		if (zk.ie10_ && visible)
 			zk(this.$n()).redoCSS();
-
+		return this;
 	}
 
 	override deferRedrawHTML_(out: string[]): void {

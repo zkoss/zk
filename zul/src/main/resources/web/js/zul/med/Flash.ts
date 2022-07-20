@@ -195,16 +195,18 @@ export class Flash extends zul.Widget {
 		super.doMouseDown_(e);
 	}
 
-	override setHeight(height: string | null): void {
+	override setHeight(height: string | null): this {
 		this._height = height;
-		var n = this._embedNode();
+		const n = this._embedNode();
 		if (n) n.height = height ? height : '';
+		return this;
 	}
 
-	override setWidth(width: string | null): void {
+	override setWidth(width: string | null): this {
 		this._width = width;
-		var n = this._embedNode();
+		const n = this._embedNode();
 		if (n) n.width = width ? width : '';
+		return this;
 	}
 
 	_embedNode(): HTMLEmbedElement | null | undefined {

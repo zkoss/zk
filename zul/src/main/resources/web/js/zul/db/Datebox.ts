@@ -529,8 +529,8 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 	 * A method for component setter symmetry, it will call setValue
 	 * @since 10.0.0
 	 */
-	setValueInZonedDateTime(value: DateImpl, fromServer?: boolean): void {
-		this.setValue(value, fromServer);
+	setValueInZonedDateTime(value: DateImpl, fromServer?: boolean): this {
+		return this.setValue(value, fromServer);
 	}
 
 	/**
@@ -545,8 +545,8 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 	 * A method for component setter symmetry, it will call setValue
 	 * @since 10.0.0
 	 */
-	setValueInLocalDateTime(value: DateImpl, fromServer?: boolean): void {
-		this.setValue(value, fromServer);
+	setValueInLocalDateTime(value: DateImpl, fromServer?: boolean): this {
+		return this.setValue(value, fromServer);
 	}
 
 	/**
@@ -561,8 +561,8 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 	 * A method for component setter symmetry, it will call setValue
 	 * @since 10.0.0
 	 */
-	setValueInLocalDate(value: DateImpl, fromServer?: boolean): void {
-		this.setValue(value, fromServer);
+	setValueInLocalDate(value: DateImpl, fromServer?: boolean): this {
+		return this.setValue(value, fromServer);
 	}
 
 	/**
@@ -577,8 +577,8 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 	 * A method for component setter symmetry, it will call setValue
 	 * @since 10.0.0
 	 */
-	setValueInLocalTime(value: DateImpl, fromServer?: boolean): void {
-		this.setValue(value, fromServer);
+	setValueInLocalTime(value: DateImpl, fromServer?: boolean): this {
+		return this.setValue(value, fromServer);
 	}
 
 	/**
@@ -594,7 +594,7 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 		return true;
 	}
 
-	_setTimeZonesIndex(): void {
+	_setTimeZonesIndex(): this {
 		var select = this.$n<HTMLSelectElement>('dtzones');
 		if (select && this._timeZone) {
 			var opts = jq(select).children('option');
@@ -602,6 +602,7 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 				if (opts[i].text == this._timeZone) select.selectedIndex = i;
 			}
 		}
+		return this;
 	}
 
 	override onSize(): void {
@@ -650,7 +651,7 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 
 	/** Drops down or closes the calendar to select a date.
 	 */
-	setOpen(open: boolean, _focus_: boolean): void {
+	setOpen(open: boolean, _focus_: boolean): this {
 		if (this.isRealVisible()) {
 			var pop: CalendarPop | undefined;
 			if (pop = this._pop) {
@@ -658,16 +659,17 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 				else pop.close(!_focus_);
 			}
 		}
+		return this;
 	}
 
 	isOpen(): boolean | undefined {
 		return this._pop && this._pop.isOpen();
 	}
 
-	override setValue(value: DateImpl, fromServer?: boolean): void {
+	override setValue(value: DateImpl, fromServer?: boolean): this {
 		var tz = this.getTimeZone();
 		if (tz && value) value.tz(tz);
-		super.setValue(value, fromServer);
+		return super.setValue(value, fromServer);
 	}
 
 	override coerceFromString_(val: string | null | undefined, pattern?: string): zul.inp.CoerceFromStringResult | DateImpl | null | undefined {
@@ -938,12 +940,14 @@ export class CalendarPop extends zul.db.Calendar {
 		this.listen({onChange: this}, -1000);
 	}
 
-	setFormat(fmt: string): void {
+	setFormat(fmt: string): this {
 		this._fmt = fmt;
+		return this;
 	}
 
-	setLocalizedSymbols(symbols?: zk.LocalizedSymbols): void {
+	setLocalizedSymbols(symbols?: zk.LocalizedSymbols): this {
 		this._localizedSymbols = symbols;
+		return this;
 	}
 
 	// ZK-2047: should sync shadow when shiftView
@@ -1160,7 +1164,7 @@ export class CalendarPop extends zul.db.Calendar {
 			db.domUnlisten_(select, 'onChange', '_doTimeZoneChange');
 	}
 
-	override _setView(val: string, force?: number): void {
+	override _setView(val: string, force?: number): this {
 		if (this.parent.getTimeFormat())
 			this.parent._tm.setVisible(val == 'day');
 		super._setView(val, force);
@@ -1169,10 +1173,8 @@ export class CalendarPop extends zul.db.Calendar {
 		if (zk.ie > 9) {
 			this.syncShadow();
 		}
-		// fix shadow ghost for ie9
-		if (zk.ie9_ && force) {
-			zk(this.parent.$n('pp')).redoCSS(500); // wait for animation
-		}
+
+		return this;
 	}
 
 	// ZK-2308

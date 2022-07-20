@@ -196,9 +196,10 @@ export class Groupbox extends zul.ContainerWidget {
 		out.push('</div>');
 	}
 
-	override setHeight(height: string | null): void {
+	override setHeight(height: string | null): this {
 		super.setHeight(height);
 		if (this.desktop) this._fixHgh();
+		return this;
 	}
 
 	_fixHgh(): void {

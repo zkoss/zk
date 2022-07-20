@@ -143,7 +143,7 @@ export abstract class SortWidget extends zul.mesh.HeaderWidget {
 	 * <p>Note: client sorting cannot work in model case.
 	 * @param String type
 	 */
-	setSort(type: string): void {
+	setSort(type: string): this {
 		if (type && type.startsWith('client')) {
 			this.setSortAscending(type);
 			this.setSortDescending(type);
@@ -151,6 +151,7 @@ export abstract class SortWidget extends zul.mesh.HeaderWidget {
 			this.setSortAscending('none');
 			this.setSortDescending('none');
 		}
+		return this;
 	}
 
 	override isSortable_(): boolean {

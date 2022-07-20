@@ -761,7 +761,7 @@ export abstract class MeshWidget extends zul.Widget {
 	 * Sets the external Paging widget.
 	 * @param Paging paging
 	 */
-	setPaginal(newPaginal: zul.mesh.Paging): void {
+	setPaginal(newPaginal: zul.mesh.Paging): this {
 		if (this._paginal != newPaginal) {
 			if (this._paginal) {
 				this._paginal.setMeshWidget(null);
@@ -772,6 +772,7 @@ export abstract class MeshWidget extends zul.Widget {
 				this._paginal.setMeshWidget(this);
 			}
 		}
+		return this;
 	}
 
 	/** Returns the page size, aka., the number rows per page.
@@ -787,10 +788,11 @@ export abstract class MeshWidget extends zul.Widget {
 	 * @param int pageSize
 	 * @see Paging#setPageSize
 	 */
-	setPageSize(pgsz: number): void {
-		var pgnl = this.getPagingChild();
+	setPageSize(pgsz: number): this {
+		const pgnl = this.getPagingChild();
 		if (pgnl)
 			pgnl.setPageSize(pgsz);
+		return this;
 	}
 
 	/** Returns the number of pages.
@@ -816,10 +818,11 @@ export abstract class MeshWidget extends zul.Widget {
 	 * @param int activePage
 	 * @see Paging#setActivePage
 	 */
-	setActivePage(pg: number): void {
-		var pgnl = this.getPagingChild();
+	setActivePage(pg: number): this {
+		const pgnl = this.getPagingChild();
 		if (pgnl)
 			pgnl.setActivePage(pg);
+		return this;
 	}
 
 	/**
@@ -834,28 +837,31 @@ export abstract class MeshWidget extends zul.Widget {
 		return this.paging || this.getPaginal();
 	}
 
-	override setHeight(height: string | null): void {
+	override setHeight(height: string | null): this {
 		super.setHeight(height);
 		if (this.desktop) {
 			this._setHgh(height);
 			this.onSize();
 		}
+		return this;
 	}
 
-	override setWidth(width: string | null): void {
+	override setWidth(width: string | null): this {
 		super.setWidth(width);
 		if (this.eheadtbl) this.eheadtbl.style.width = '';
 		if (this.efoottbl) this.efoottbl.style.width = '';
 		if (this.desktop)
 			this.onSize();
+		return this;
 	}
 
-	override setStyle(style: string): void {
+	override setStyle(style: string): this {
 		if (this._style != style) {
 			super.setStyle(style);
 			if (this.desktop)
 				this.onSize();
 		}
+		return this;
 	}
 
 	/**

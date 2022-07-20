@@ -229,7 +229,7 @@ export class Select extends zul.Widget<HTMLSelectElement> {
 	}
 
 	// ZK-2133: should sync all items
-	setChgSel(val: string): void { //called from the server
+	setChgSel(val: string): this { //called from the server
 		var sels = {};
 		for (var j = 0; ;) {
 			var k = val.indexOf(',', j),
@@ -240,6 +240,7 @@ export class Select extends zul.Widget<HTMLSelectElement> {
 		}
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			this._changeSelect(w as zul.sel.Option, sels[w.uuid] == true);
+		return this;
 	}
 
 	/* Changes the selected status of an item without affecting other items

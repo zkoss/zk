@@ -1217,7 +1217,7 @@ export class Window extends zul.ContainerWidget {
 	}
 
 	//super//
-	override setVisible(visible: boolean | undefined): void {
+	override setVisible(visible: boolean | undefined): this {
 		if (this._visible != visible) {
 			if (this._maximized) {
 				this.setMaximized(false);
@@ -1251,43 +1251,48 @@ export class Window extends zul.ContainerWidget {
 				}
 			}
 		}
+		return this;
 	}
 
-	override setHeight(height: string | null): void {
+	override setHeight(height: string | null): this {
 		super.setHeight(height);
 		if (this.desktop)
 			zUtl.fireSized(this);
 				// Note: IE6 is broken, because its offsetHeight doesn't update.
+		return this;
 	}
 
-	override setWidth(width: string | null): void {
+	override setWidth(width: string | null): this {
 		super.setWidth(width);
 		if (this.desktop)
 			zUtl.fireSized(this);
+		return this;
 	}
 
-	override setTop(top: string): void {
+	override setTop(top: string): this {
 		_hideShadow(this);
 		super.setTop(top);
 		this.zsync();
-
+		return this;
 	}
 
-	override setLeft(left: string): void {
+	override setLeft(left: string): this {
 		_hideShadow(this);
 		super.setLeft(left);
 		this.zsync();
+		return this;
 	}
 
-	override setZIndex(zIndex: number, opts: {floatZIndex?: boolean; fire?: boolean}): void {
-		var old = this._zIndex;
+	override setZIndex(zIndex: number, opts: {floatZIndex?: boolean; fire?: boolean}): this {
+		const old = this._zIndex;
 		super.setZIndex(zIndex, opts);
 		if (old != zIndex)
 			this.zsync();
+		return this;
 	}
 
-	override setZindex(zIndex: number, opts: {floatZIndex?: boolean; fire?: boolean}): void {
-		this.setZIndex(zIndex, opts);
+	override setZindex(zIndex: number, opts: {floatZIndex?: boolean; fire?: boolean}): this {
+		return this.setZIndex(zIndex, opts);
 	}
 
 	override focus_(timeout?: number): boolean {

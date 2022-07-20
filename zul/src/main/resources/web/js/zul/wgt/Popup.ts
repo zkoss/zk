@@ -65,7 +65,7 @@ export class Popup extends zul.Widget {
 	}
 
 	// a delegator for open() in zephyr.
-	setOpen(options: PositionArgs): void {
+	setOpen(options: PositionArgs): this {
 		if (this.desktop || this.z_rod) {
 			this.open(...options);
 		} else {
@@ -75,11 +75,12 @@ export class Popup extends zul.Widget {
 				}
 			});
 		}
+		return this;
 	}
 
 	// a delegator for close() in zephyr.
-	setClose(closed: boolean): void {
-		if (closed != this.isOpen()) return; // do nothing.
+	setClose(closed: boolean): this {
+		if (closed != this.isOpen()) return this; // do nothing.
 		if (this.desktop || this.z_rod) {
 			this.close();
 		} else {
@@ -89,6 +90,7 @@ export class Popup extends zul.Widget {
 				}
 			});
 		}
+		return this;
 	}
 
 	/**
@@ -494,16 +496,18 @@ export class Popup extends zul.Widget {
 		zk(this).redoCSS(-1, {'fixFontIcon': true});
 	}
 
-	override setHeight(height: string | null): void {
+	override setHeight(height: string | null): this {
 		super.setHeight(height);
 		if (this.desktop)
 			zUtl.fireShown(this);
+		return this;
 	}
 
-	override setWidth(width: string | null): void {
+	override setWidth(width: string | null): this {
 		super.setWidth(width);
 		if (this.desktop)
 			zWatch.fireDown('onShow', this);
+		return this;
 	}
 
 	prologHTML_(_out: string[]): void {

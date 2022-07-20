@@ -228,9 +228,10 @@ export class Menupopup extends zul.wgt.Popup {
 		return false;
 	}
 
-	override setTopmost(): void {
-		super.setTopmost();
+	override setTopmost(): number | void {
+		const result = super.setTopmost();
 		this.zsync();
+		return result;
 	}
 
 	override onFloatUp(ctl: zk.ZWatchController, opts: zk.FireOptions): void {
@@ -507,7 +508,7 @@ export class Menupopup extends zul.wgt.Popup {
 	 * @param int childIndex the index of menupopup children
 	 * @since 8.6.0
 	 */
-	setActive(childIndex: number): void {
+	setActive(childIndex: number): this {
 		if (childIndex >= 0 && childIndex < this.nChildren) {
 			var newCurrIndex = -1,
 				$menubar = zul.menu.Menubar;
@@ -527,6 +528,7 @@ export class Menupopup extends zul.wgt.Popup {
 				if (target) (target.$class as typeof zul.menu.Menuitem)._addActive(target);
 			}
 		}
+		return this;
 	}
 
 	// internal use only.

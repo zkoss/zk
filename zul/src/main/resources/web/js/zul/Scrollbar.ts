@@ -430,7 +430,7 @@ export class Scrollbar extends zk.Object {
 		return this.currentPos;
 	}
 
-	setBarPosition(start: number): void { //for Frozen use only
+	setBarPosition(start: number): this { //for Frozen use only
 		var frozen = this.widget.frozen;
 		if (frozen && this.needH) {
 			var step = this.hBarLimit / frozen._scrollScale,
@@ -438,6 +438,7 @@ export class Scrollbar extends zk.Object {
 			this._syncBarPosition('hor', barPos);
 			this._syncEmbedBarPosition('hor', barPos);
 		}
+		return this;
 	}
 
 	_checkBarRequired(): void {

@@ -111,9 +111,10 @@ export abstract class HeaderWidget extends zul.LabelImageWidget<HTMLTableCellEle
 		return this.isVisible() ? this._width : 0 as never;
 	}
 
-	override setWidth(w: string | null): void {
+	override setWidth(w: string | null): this {
 		this._width = w;
 		this.updateMesh_();
+		return this;
 	}
 
 	// Bug ZK-2401
@@ -227,7 +228,7 @@ export abstract class HeaderWidget extends zul.LabelImageWidget<HTMLTableCellEle
 		return false;
 	}
 
-	override setVisible(visible: boolean): void {
+	override setVisible(visible: boolean): this {
 		if (this.isVisible() != visible) {
 			super.setVisible(visible);
 			this.updateMesh_('visible', visible);
@@ -240,6 +241,7 @@ export abstract class HeaderWidget extends zul.LabelImageWidget<HTMLTableCellEle
 					width: this.isVisible() ? this._width : '-1'
 				}, null, 0);
 		}
+		return this;
 	}
 
 	override getTextNode(): HTMLElement | null | undefined {

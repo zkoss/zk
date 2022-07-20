@@ -70,8 +70,9 @@ export class Listitem extends zul.sel.ItemWidget {
 	 * <p>If it is not created, we automatically create it.
 	 * @param String label
 	 */
-	setLabel(val: string): void {
+	setLabel(val: string): this {
 		this._autoFirstCell().setLabel(val);
+		return this;
 	}
 
 	// replace the origional DD_dragging
@@ -90,8 +91,9 @@ export class Listitem extends zul.sel.ItemWidget {
 	 * <p>If it is not created, we automatically create it.
 	 * @param String image
 	 */
-	setImage(val: string): void {
+	setImage(val: string): this {
 		this._autoFirstCell().setImage(val);
+		return this;
 	}
 
 	_autoFirstCell(): zul.sel.Listcell {

@@ -139,7 +139,7 @@ export class Errorbox extends zul.wgt.Notification {
 
 	override setDomVisible_(node: HTMLElement, visible: boolean, opts?: zk.DomVisibleOptions): void {
 		super.setDomVisible_(node, visible, opts);
-		var stackup = this._stackup;
+		const stackup = this._stackup;
 		if (stackup) stackup.style.display = visible ? '' : 'none';
 	}
 

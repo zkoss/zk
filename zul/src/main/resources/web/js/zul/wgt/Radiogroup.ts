@@ -210,7 +210,7 @@ export class Radiogroup extends zul.Widget {
 	 * the radio button with the given index.
 	 * @param int selectedIndex
 	 */
-	setSelectedIndex(jsel: number): void {
+	setSelectedIndex(jsel: number): this {
 		if (jsel < 0) jsel = -1;
 		if (this._jsel != jsel) {
 			this._jsel = jsel;
@@ -222,6 +222,7 @@ export class Radiogroup extends zul.Widget {
 				}
 			}
 		}
+		return this;
 	}
 
 	/** Returns the selected radio button.
@@ -235,11 +236,12 @@ export class Radiogroup extends zul.Widget {
 	 * the given radio button.
 	 * @param Radio selectedItem
 	 */
-	setSelectedItem(item: zul.wgt.Radio | null): void {
+	setSelectedItem(item: zul.wgt.Radio | null): this {
 		if (item == null)
 			this.setSelectedIndex(-1);
 		else if (item instanceof zul.wgt.Radio)
 			item.setSelected(true);
+		return this;
 	}
 
 	appendItem(label: string, value: string): zul.wgt.Radio {

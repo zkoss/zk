@@ -266,8 +266,9 @@ export class Treeitem extends zul.sel.ItemWidget {
 	 * <p>If it is not created, we automatically create it.
 	 * @param String label
 	 */
-	setLabel(label: string): void {
+	setLabel(label: string): this {
 		this._autoFirstCell().setLabel(label);
+		return this;
 	}
 
 	/**
@@ -338,13 +339,14 @@ export class Treeitem extends zul.sel.ItemWidget {
 		return p._isVisibleInTree(); // timing issue, does not concern open state
 	}
 
-	override setVisible(visible: boolean | undefined): void {
+	override setVisible(visible: boolean | undefined): this {
 		if (this.isVisible() != visible) {
 			super.setVisible(visible);
 			if (this.treerow) this.treerow.setVisible(visible);
 			// Bug: B50-3293724
 			_showDOM(this, this._isRealVisible());
 		}
+		return this;
 	}
 
 	override beforeParentChanged_(newParent: zul.sel.Treechildren | null): void {

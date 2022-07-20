@@ -171,24 +171,26 @@ export class ComboWidget extends zul.inp.InputWidget<string> {
 		return this;
 	}
 
-	override setWidth(width: string | null): void {
+	override setWidth(width: string | null): this {
 		super.setWidth(width);
 		if (this.desktop) {
 			this.onSize();
 		}
+		return this;
 	}
 
 	/**
 	 * For internal use only.
 	 * Update the value of the input element in this component
 	 */
-	setRepos(v: boolean): void {
+	setRepos(v: boolean): this {
 		if (!this._repos && v) {
 			if (this.desktop) {
 				this._shallFixPopupDimension = true;
 			}
 			this._repos = false;
 		}
+		return this;
 	}
 
 	override onSize(): void {
@@ -266,18 +268,16 @@ export class ComboWidget extends zul.inp.InputWidget<string> {
 	 * @see #open
 	 * @see #close
 	 */
-	setOpen(open: boolean, opts: Record<string, unknown>): void {
-		var self = this;
+	setOpen(open: boolean, opts: Record<string, unknown>): this {
 		if (this.desktop) {
-			if (self.isRealVisible()) {
-				if (open) self.open(opts);
-				else self.close(opts);
+			if (this.isRealVisible()) {
+				if (open) this.open(opts);
+				else this.close(opts);
 			}
 		} else {
-			zk.afterMount(function () {
-				self.setOpen(open, opts);
-			});
+			zk.afterMount(() => this.setOpen(open, opts));
 		}
+		return this;
 	}
 
 	/** Returns whether the list of combo items is open
