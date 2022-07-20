@@ -90,15 +90,13 @@ public class Clients {
 		Executions.getCurrent().addAuResponse(key, response);
 	}
 
-	/** Asks the browser to confirm users whether to close the browser window.
+	/** Asks a browser to confirm users whether to leave the current page.
 	 *
-	 * <p>If an non-null (non-empty) string is set, the browser will show up
-	 * a confirmation dialog when an user tries to close the browser window,
-	 * or browse to another URL.
-	 * To reset (i.e., not showing any confirmation dialog), just call this
-	 * method again with null.
-	 *
-	 * @param mesg the message to show when confirming users.
+	 * <p>If a non-null (non-empty) string is passed, a browser will show up
+	 * its own confirmation dialog when a user tries to reload, close, or leave the current page.
+	 * To disable showing any confirmation dialog, just call this method again with null.
+	 * Check <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/beforeunload_event#compatibility_notes">MDN</a> for more info.
+	 * @param mesg all major browsers don't support showing a custom message. Pass a non-empty string to enable the confirmation dialog.
 	 * If null (default) or empty, users can close the browser window directly.
 	 */
 	public static final void confirmClose(String mesg) {
