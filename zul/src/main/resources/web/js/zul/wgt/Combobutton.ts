@@ -44,7 +44,7 @@ function _attachPopup(wgt: zul.wgt.Combobutton, bListen: boolean): void {
 			zWatch.fireDown('onSize', pp);
 			const openInfo = pp._openInfo;
 			if (openInfo) {
-				pp.position.apply(pp, openInfo);
+				pp.position(...openInfo);
 				// B50-ZK-391
 				// should keep openInfo, maybe used in onResponse later.
 			}

@@ -589,7 +589,7 @@ zk.override(jq.fn, _jq, /*prototype*/ {
 		if (zk.Widget && zk.Widget.isInstance(sel))
 			sel = sel.$n() || '#' + sel.uuid;
 		if (sel == '#') sel = ''; //ZK-4565, '#' is not allowed in jquery 3.5.0
-		var ret = _jq['init'].apply(this, [sel, ctx, ...rest]);
+		var ret = _jq['init'].call(this, sel, ctx, ...rest);
 		ret.zk = new zjq(ret);
 		return ret;
 	},
@@ -603,7 +603,7 @@ zk.override(jq.fn, _jq, /*prototype*/ {
 	 */
 	replaceWith: function (w, desktop, skipper) {
 		if (!zk.Widget.isInstance(w))
-			return _jq['replaceWith'].apply(this, arguments);
+			return _jq['replaceWith'].call(this, w, desktop, skipper);
 
 		var n = this[0];
 		if (n) w.replaceHTML(n, desktop, skipper);
@@ -615,7 +615,7 @@ zk.override(jq.fn, _jq, /*prototype*/ {
 		let args: [JQuery.TypeEventHandlers<HTMLElement, unknown, unknown, unknown>,
 			// eslint-disable-next-line @typescript-eslint/ban-types
 			string, unknown, Function, ...unknown[]] = [type, selector, data, fn, ...rest];
-		return this.zon.apply(this, args);
+		return this.zon(...args);
 	},
 	off: function (this: JQuery, type, selector, fn, ...rest) {
 		type = zjq.eventTypes[type] || type;
@@ -623,7 +623,7 @@ zk.override(jq.fn, _jq, /*prototype*/ {
 		let args: [JQuery.TriggeredEvent<HTMLElement>,
 			// eslint-disable-next-line @typescript-eslint/ban-types
 			string, Function, ...unknown[]] = [type, selector, fn, ...rest];
-		return this.zoff.apply(this, args);
+		return this.zoff(...args);
 	},
 	bind: function (this: JQuery, types, data, fn) {
 		return this.on(types, null, data, fn);
@@ -706,14 +706,14 @@ jq.each(['remove', 'empty', 'show', 'hide'], function (i, nm) {
 	jq.fn[nm] = function () {
 		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-ignore
-		return !this.selector && this[0] === document ? this : _jq[nm].apply(this, arguments);
+		return !this.selector && this[0] === document ? this : _jq[nm].call(this, ...arguments);
 	};
 });
 jq.each(['before', 'after', 'append', 'prepend'], function (i, nm) {
 	_jq[nm] = jq.fn[nm];
 	jq.fn[nm] = function (w, desktop) {
 		if (!zk.Widget.isInstance(w))
-			return _jq[nm].apply(this, arguments);
+			return _jq[nm].call(this, ...(arguments as unknown as []));
 
 		if (!this.length) return this;
 		if (!zk.Desktop._ndt) zk.stateless();

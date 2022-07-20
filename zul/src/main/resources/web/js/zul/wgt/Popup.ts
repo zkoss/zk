@@ -67,12 +67,11 @@ export class Popup extends zul.Widget {
 	// a delegator for open() in zephyr.
 	setOpen(options: PositionArgs): void {
 		if (this.desktop || this.z_rod) {
-			this.open.apply(this, options);
+			this.open(...options);
 		} else {
-			let self = this;
-			zk.afterMount(function () {
-				if (self.desktop || self.z_rod) {// just in case if removed.
-					self.open.apply(self, options);
+			zk.afterMount(() => {
+				if (this.desktop || this.z_rod) {// just in case if removed.
+					this.open(...options);
 				}
 			});
 		}
@@ -84,10 +83,9 @@ export class Popup extends zul.Widget {
 		if (this.desktop || this.z_rod) {
 			this.close();
 		} else {
-			let self = this;
-			zk.afterMount(function () {
-				if (self.desktop || self.z_rod) {
-					self.close();
+			zk.afterMount(() => {
+				if (this.desktop || this.z_rod) {
+					this.close();
 				}
 			});
 		}
@@ -214,9 +212,9 @@ export class Popup extends zul.Widget {
 		}
 
 		// resync position if the content is not calculated. Bug ZK-2257
-		var openInfo = this._openInfo;
+		const openInfo = this._openInfo;
 		if (openInfo) {
-			this.position.apply(this, openInfo);
+			this.position(...openInfo);
 			this._adjustOffsets(ref);
 		}
 		// B30-1819264 : should skip null
@@ -224,7 +222,7 @@ export class Popup extends zul.Widget {
 			if (!this._stackup)
 				this._stackup = jq.newStackup(node, node.id + '-stk');
 			else {
-				var dst: CSSStyleDeclaration, src: CSSStyleDeclaration;
+				let dst: CSSStyleDeclaration, src: CSSStyleDeclaration;
 				(dst = this._stackup.style).top = (src = node.style).top;
 				dst.left = src.left;
 				dst.zIndex = src.zIndex;
@@ -284,11 +282,11 @@ export class Popup extends zul.Widget {
 	_onSyncScroll(evt: zk.ZWatchController): void {
 		if (evt && (!this._fakeParent || zUtl.isAncestor(evt.origin, this._fakeParent))) {
 			if (this.isInView_()) {
-				var args = this.getPositionArgs_();
+				const args = this.getPositionArgs_();
 				if (!this.isOpen() && this._keepVisible) {
-					this.open.apply(this, args);
+					this.open(...args);
 				} else {
-					this.position.apply(this, args);
+					this.position(...args);
 				}
 			} else if (this.isOpen()) {
 				this.close({keepVisible: true});
@@ -336,7 +334,7 @@ export class Popup extends zul.Widget {
 		// B50-ZK-391: Tooltip loses "position=after_end" positioning if onOpen eventlistener added to popup
 		var openInfo = this._openInfo;
 		if (openInfo) {
-			this.position.apply(this, openInfo);
+			this.position(...openInfo);
 		}
 		zWatch.unlisten({onResponse: this});
 		this.mask = null;
@@ -477,7 +475,7 @@ export class Popup extends zul.Widget {
 	reposition(): void {
 		if (this._fakeParent) {
 			// B85-ZK-3606: reposition based on the current position of the item
-			this.position.apply(this, this.getPositionArgs_());
+			this.position(...this.getPositionArgs_());
 		} else {
 			var openInfo = this._openInfo;
 			//once opened

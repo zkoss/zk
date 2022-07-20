@@ -426,7 +426,7 @@ export class LayoutRegion extends zul.Widget {
 					afterAnima: LayoutRegion.afterSlideDown
 				});
 			} else {
-				if (nonAnima) LayoutRegion.afterSlideUp.apply(this, [this.$n_('real')]);
+				if (nonAnima) LayoutRegion.afterSlideUp.call(this, this.$n_('real'));
 				else {
 					zk(this.$n('real')).slideUp(this, {
 						anchor: this.sanchor,

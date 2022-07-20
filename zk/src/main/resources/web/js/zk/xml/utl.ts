@@ -28,22 +28,12 @@ export let Utl = {
 	 * @param Function callback
 	 * @return DOMElement
 	 */
-	// eslint-disable-next-line @typescript-eslint/ban-types
-	loadXML(url: string, callback: Function): DOMImplementation | XMLDocument {
-		var doc: DOMImplementation | XMLDocument = document.implementation;
-		if (doc && doc.createDocument) {
-			doc = doc.createDocument('', '', null); //FF, Safari, Opera
-			if (callback)
-				doc.onload = function () {callback(doc);};
-		} else {
-			doc = new ActiveXObject('Microsoft.XMLDOM');
-			if (callback)
-				doc['onreadystatechange'] = function () {
-					if (doc['readyState'] == 4) callback(doc);
-				};
-		}
-		if (!callback) doc['async'] = false;
-		doc['load'].apply(doc, url);
+	loadXML(url: string, callback: CallableFunction): DOMImplementation | XMLDocument {
+		const doc: XMLDocument & Partial<{load(url: string); async: boolean}> = document.implementation.createDocument('', '', null);
+		if (callback)
+			doc.onload = function () {callback(doc);};
+		if (!callback) doc.async = false;
+		doc.load!(url);
 		return doc;
 	},
 	/**

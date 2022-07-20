@@ -392,12 +392,12 @@ function _invoke(name, infs, o, args, fns): void {
 		if (fns)
 			fns.push([f, o]); //store it fns first
 		else
-			f.apply(o, args);
+			f.call(o, ...(args as []));
 	}
 	if (name == 'onSize') { //Feature ZK-1672: invoke onAfterSize after onSize
 		var after = o['onAfterSize'];
 		if (after)
-			after.apply(o, args);
+			after.call(o, ...args);
 	}
 }
 //Returns if c is visible
@@ -490,7 +490,7 @@ function _reversefns(fns, args): void {
 			if (--j < 0 || (oldp != (newp = fns[j][1].parent) && oldp)) {
 				for (i = j; ++i <= k;) {
 					f = fns[i];
-					f[0].apply(f[1], args);
+					f[0].call(f[1], ...args);
 				}
 				k = j;
 			}

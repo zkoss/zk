@@ -226,7 +226,7 @@ export class Applet extends zul.Widget<HTMLAppletElement> {
 					else if (len === 2)
 						func(arguments[1]);
 					else {
-						var args = Array.apply(null, arguments as unknown as unknown[]);
+						const args = [...arguments as unknown as []];
 						args.shift();
 						func(args);
 					}
@@ -246,7 +246,7 @@ export class Applet extends zul.Widget<HTMLAppletElement> {
 					return;
 				}
 				try {
-					var args: unknown[] = [],
+					const args: unknown[] = [],
 						arrayArg: unknown[] = [];
 					if (arguments.length < 3) {
 						if (arguments[1])
@@ -256,7 +256,7 @@ export class Applet extends zul.Widget<HTMLAppletElement> {
 							arrayArg.push(arguments[j++]);
 						args.push(arrayArg);
 					}
-					func.apply(n, args);
+					func.call(n, ...args);
 				} catch (e) {
 					zk.error('Failed to invoke applet\'s method: ' + fn + '\n' + (e as Error).message);
 				}

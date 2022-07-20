@@ -59,7 +59,7 @@ Object.assign(Array.prototype, {
 		return false;
 	},
 	$addAll(this: Array<unknown>, o): number {
-		return this.push.apply(this, o);
+		return this.push(...o);
 	},
 	$clone(this: Array<unknown>): Array<never> {
 		return [].concat(this as []);

@@ -127,7 +127,7 @@ export class Script extends zk.Widget {
 		var wgt = this, fn = this._fn;
 		if (fn) {
 			delete this._fn; //run only once
-			zk.afterMount(function () {fn!.apply(wgt);});
+			zk.afterMount(function () {fn!.call(wgt);});
 		}
 		if (this._src && !this._srcrun) {
 			this._srcrun = true; //run only once

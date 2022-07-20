@@ -31,7 +31,7 @@ export const Dates = {
 			m = zk.mm(param._moment);
 			tz = param._timezone;
 		} else if (param instanceof Array) { // [y, m, d, hr, min, sec, millisec]
-			var d = new Date(Date.UTC.apply(null, param));
+			var d = new Date(Date.UTC(...param));
 			if (param[0] < 100) d.setUTCFullYear(param[0]); //ZK-4292: incorrect year when the year is less than 100
 			m = zk.mm.tz([d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(),
 				d.getUTCHours(), d.getUTCMinutes(), d.getUTCSeconds(), d.getUTCMilliseconds()], tz);

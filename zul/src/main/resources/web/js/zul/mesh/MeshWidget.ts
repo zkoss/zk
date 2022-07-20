@@ -978,7 +978,7 @@ export abstract class MeshWidget extends zul.Widget {
 		if (this.desktop) {
 			this.clearCachedSize_();
 			if (this._hflex == 'min') {
-				zFlex.onFitSize.apply(this);
+				zFlex.onFitSize.call(this);
 			} else {
 				this._fixHeaders();
 			}

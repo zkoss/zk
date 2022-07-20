@@ -344,7 +344,7 @@ zk.override(jq.fn, _jq, {
 		} else {
 			let args: [JQuery.TypeEventHandlers<HTMLElement, unknown, unknown, unknown>,
 					string, unknown, Function, ...unknown[]] = [type, selector, data, fn, ...rest];
-			this.zon.apply(this, args); // Bug ZK-1142: recover back to latest domios.js
+			this.zon(...args); // Bug ZK-1142: recover back to latest domios.js
 		}
 		return this;
 	},
@@ -362,14 +362,14 @@ zk.override(jq.fn, _jq, {
 		} else {
 			let args: [JQuery.TriggeredEvent<HTMLElement>,
 				string, Function, ...unknown[]] = [type, selector, fn, ...rest];
-			this.zoff.apply(this, args); // Bug ZK-1142: recover back to latest domios.js
+			this.zoff(...args); // Bug ZK-1142: recover back to latest domios.js
 		}
 		return this;
 	}
 });
 zk.override(jq.Event.prototype, _jqEvent, {
 	stop: function (this: {touchEvent}) {
-		_jqEvent['stop'].apply(this);
+		_jqEvent['stop'].call(this);
 		var tEvt;
 		if ((tEvt = this.touchEvent)) {
 			if (tEvt.cancelable) tEvt.preventDefault();
