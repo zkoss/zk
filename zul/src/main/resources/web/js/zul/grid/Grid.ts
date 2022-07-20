@@ -22,7 +22,7 @@ function _fixForEmpty(wgt: zul.grid.Grid): void {
 		} else {
 			if (wgt.columns) {
 				for (var w = wgt.columns.firstChild; w; w = w.nextSibling)
-						colspan++;
+					colspan++;
 			}
 			empty.colSpan = colspan || 1;
 			// ZK-2365 table cell needs the "display:table-cell" when colspan is enable.
@@ -220,8 +220,8 @@ export class Grid extends zul.mesh.MeshWidget {
 	 */
 	redrawEmpty_(out: string[]): void {
 		out.push('<tbody class="', this.$s('emptybody'), '"><tr><td id="',
-				this.uuid, '-empty" style="display:none">',
-				'<div id="', this.uuid, '-empty-content"');
+			this.uuid, '-empty" style="display:none">',
+			'<div id="', this.uuid, '-empty-content"');
 		if (this._emptyMessage && this._emptyMessage.trim().length != 0)
 			out.push('class="', this.$s('emptybody-content'), '"');
 		out.push('>', this._emptyMessage!, '</div></td></tr></tbody>');
