@@ -66,17 +66,17 @@ export class Inputgroup extends zul.Widget {
 	}
 
 	override domClass_(no?: zk.DomClassOptions): string {
-		let classes = super.domClass_(no);
+		const classes = super.domClass_(no);
 		return classes + (this._vertical ? ' ' + this.$s('vertical') : '');
 	}
 
 	override insertChildHTML_(child: zk.Widget, before?: zk.Widget | null, desktop?: zk.Desktop | null): void {
 		if (before)
 			jq(before.$n('chdex') || before.$n()!).before(
-				this.encloseChildHTML_({child: child})!);
+				this.encloseChildHTML_({ child: child })!);
 		else
 			jq(this.getCaveNode()!).append(
-				this.encloseChildHTML_({child: child})!);
+				this.encloseChildHTML_({ child: child })!);
 
 		child.bind(desktop);
 	}
@@ -86,11 +86,11 @@ export class Inputgroup extends zul.Widget {
 		jq(child.uuid + '-chdex', zk).remove();
 	}
 
-	encloseChildHTML_(opts: {child: zk.Widget; out?: string[]}): string | undefined {
+	encloseChildHTML_(opts: { child: zk.Widget; out?: string[] }): string | undefined {
 		const out = opts.out || new zk.Buffer<string>(),
 			w = opts.child;
 		if (!(w instanceof zul.wgt.Button) && !(w instanceof zul.wgt.Toolbarbutton)
-				&& (!zul.inp || !(w instanceof zul.inp.InputWidget))) {
+			&& (!zul.inp || !(w instanceof zul.inp.InputWidget))) {
 			out.push('<div id="', w.uuid, '-chdex" class="', this.$s('text'), '">');
 			w.redraw(out);
 			out.push('</div>');
