@@ -5,7 +5,8 @@ export = {
 	configs: {
 		recommended: {
 			rules: {
-				'zk/noAccessModifier': 'error'
+				'zk/noAccessModifier': 'error',
+				'zk/noTopLevelScopingIIFE': 'error',
 			},
 		},
 	},
