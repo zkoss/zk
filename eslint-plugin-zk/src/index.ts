@@ -7,6 +7,7 @@ export = {
 			rules: {
 				'zk/noAccessModifier': 'error',
 				'zk/noTopLevelScopingIIFE': 'error',
+				'zk/preferNativeInstanceof': 'error',
 			},
 		},
 	},
