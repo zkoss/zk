@@ -83,6 +83,6 @@ export class Widget extends zk.Widget<HTMLInputElement> {
 	}
 
 	override redraw(out: string[]): void {
-		return zk.Native.$redraw(out);
+		return zk.Native.$redraw.call(this, out);
 	}
 }
