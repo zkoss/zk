@@ -6133,9 +6133,7 @@ export class Native extends Widget {
 		if (s) out.push(s);
 	}
 
-	static $redraw(out: string[]): void {
-		return Native.prototype.redraw(out);
-	}
+	static $redraw = Native.prototype.redraw;
 
 	static replaceScriptContent(str: string): string {
 		try {
