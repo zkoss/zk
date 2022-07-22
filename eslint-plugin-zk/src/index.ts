@@ -9,6 +9,7 @@ export = {
 				'zk/noTopLevelScopingIIFE': 'error',
 				'zk/preferNativeInstanceof': 'error',
 				'zk/preferNativeClass': 'error',
+				'zk/javaStyleSetterSignature': 'error',
 			},
 		},
 	},
