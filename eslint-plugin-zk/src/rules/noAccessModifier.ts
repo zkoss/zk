@@ -35,15 +35,15 @@ export const noAccessModifier = createRule({
 			if (!isValidAccessModifier(node.accessibility)) {
 				return;
 			}
+			const tokens = sourceCode.getTokens(node);
+			const i = tokens.findIndex(({ type, value }) =>
+				type === AST_TOKEN_TYPES.Keyword && isValidAccessModifier(value)
+			);
+			const modifier = tokens[i]!; // eslint-disable-line @typescript-eslint/no-non-null-assertion
 			context.report({
-				node,
+				loc: modifier.loc,
 				messageId: 'omitAccessModifier',
 				fix(fixer: TSESLint.RuleFixer): TSESLint.RuleFix {
-					const tokens = sourceCode.getTokens(node);
-					const i = tokens.findIndex(({ type, value }) =>
-						type === AST_TOKEN_TYPES.Keyword && isValidAccessModifier(value)
-					);
-					const modifier = tokens[i]!; // eslint-disable-line @typescript-eslint/no-non-null-assertion
 					const succeedingComment = sourceCode.getCommentsAfter(modifier);
 					// Beware that `tokens[i + 1]` will skip comments:
 					// protected /* blablabla */ foo()
