@@ -61,8 +61,16 @@ repositories {
 	mavenCentral()
 }
 
+task buildESLintPlugin(type: NpmTask) {
+	dependsOn npm_install
+	args = ['run', 'build', '-w', "eslint-plugin-zk"]
+}
+
 if (project.ext['gradleFrontendSkip'] == 'false') {
-	clean.dependsOn npm_install
+	clean {
+		dependsOn npm_install
+		dependsOn buildESLintPlugin
+	}
 	classes.dependsOn npm_install
 }
 
