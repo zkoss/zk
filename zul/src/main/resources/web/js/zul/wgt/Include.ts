@@ -92,13 +92,13 @@ export class Include extends zul.Widget {
 		}
 
 		const xcnt = this._xcnt;
-		if (jq.isArray(xcnt)) //array -> zk().detachChildren() used
+		if (Array.isArray(xcnt)) //array -> zk().detachChildren() used
 			for (var n = this.$n_(), j = 0; j < xcnt.length; ++j)
 				n.appendChild(xcnt[j]);
 	}
 
 	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
-		if (jq.isArray(this._xcnt)) //array -> zk().detachChildren() used
+		if (Array.isArray(this._xcnt)) //array -> zk().detachChildren() used
 			for (var n = this.$n_(); n.firstChild;)
 				n.removeChild(n.firstChild);
 		super.unbind_(skipper, after, keepRod);

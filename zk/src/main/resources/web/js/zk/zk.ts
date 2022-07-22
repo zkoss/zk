@@ -232,7 +232,7 @@ async function toLogMsg(ars: Array<Element | Widget> | IArguments, detailed): Pr
 	for (var j = 0, len = ars.length; j < len; j++) {
 		if (msg.length) msg.push(', ');
 		var ar = ars[j];
-		if (ar && (jq.isArray(ar) || ar.zk)) //ar.zk: jq(xx)
+		if (ar && (Array.isArray(ar) || ar.zk)) //ar.zk: jq(xx)
 			msg.push('[' + toLogMsg(ar, detailed) + ']');
 		else if (Widget && Widget.isInstance(ar))
 			msg.push(wgt2s(ar));
@@ -1027,7 +1027,7 @@ _zk.define = function (klass, props) {
 			nm2 = nm.charAt(0).toUpperCase() + nm.substring(1),
 			pt = klass.prototype,
 			after = props[nm], before = null;
-		if (jq.isArray(after)) {
+		if (Array.isArray(after)) {
 			before = after.length ? after[0] : null;
 			after = after.length > 1 ? after[1] : null;
 		}

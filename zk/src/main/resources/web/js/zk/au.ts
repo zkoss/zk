@@ -903,7 +903,7 @@ zAu.beforeSend = function (uri, req, dt) {
 			content += '&' + portlet2Namespace + 'uuid_' + j + '=' + target.uuid;
 
 		var data = aureq.data, dtype = typeof data;
-		if (dtype === 'string' || dtype === 'number' || dtype === 'boolean' || jq.isArray(data)) {
+		if (dtype === 'string' || dtype === 'number' || dtype === 'boolean' || Array.isArray(data)) {
 			data = {'': data};
 		}
 		if (data) {
@@ -1352,7 +1352,7 @@ zAu.beforeSend = function (uri, req, dt) {
 	/* @param zk.Widget target
 	 */
 	toJSON(target: Widget | null | undefined, data: {pageX?: number; pageY?: number; x?: number; y?: number} | unknown[]): string {
-		if (!jq.isArray(data)) {
+		if (!Array.isArray(data)) {
 			if (data.pageX != null && data.x == null) {
 				var ofs = target && target.desktop ? // B50-3336745: target may have been detached
 					target.fromPageCoord(data.pageX, data.pageY!) :
