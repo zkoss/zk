@@ -1,7 +1,7 @@
 import { noAccessModifier } from '@rules';
 import { typedRuleTester as ruleTester } from '../util';
 
-function omitAccessModifierError(line: number, column: number) {
+function omitAccessModifier(line: number, column: number) {
 	return {
 		messageId: 'omitAccessModifier' as const,
 		line,
@@ -32,10 +32,10 @@ class Test {
   readonly a?: boolean;
 }`,
 			errors: [
-				omitAccessModifierError(3, 3),
-				omitAccessModifierError(3, 22),
-				omitAccessModifierError(4, 3),
-				omitAccessModifierError(5, 3),
+				omitAccessModifier(3, 3),
+				omitAccessModifier(3, 22),
+				omitAccessModifier(4, 3),
+				omitAccessModifier(5, 3),
 			],
 		}
 	]
