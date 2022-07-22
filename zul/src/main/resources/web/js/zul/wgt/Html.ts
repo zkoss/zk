@@ -52,13 +52,13 @@ export class Html extends zul.Widget<HTMLHtmlElement> {
 
 	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
-		if (jq.isArray(this._content)) //zk().detachChildren() is used
+		if (Array.isArray(this._content)) //zk().detachChildren() is used
 			for (var ctn = this._content, n = this.$n_(), j = 0; j < ctn.length; ++j)
 				n.appendChild(ctn[j]);
 	}
 
 	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
-		if (jq.isArray(this._content)) //zk().detachChildren() is used
+		if (Array.isArray(this._content)) //zk().detachChildren() is used
 			for (var n = this.$n_(); n.firstChild;)
 				n.removeChild(n.firstChild);
 		super.unbind_(skipper, after, keepRod);

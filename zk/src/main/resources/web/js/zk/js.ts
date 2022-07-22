@@ -39,10 +39,10 @@ Object.assign(Array.prototype, {
 		return this.includes(o);
 	},
 	$equals(this: Array<unknown>, o): boolean {
-		if (jq.isArray(o) && o.length == this.length) {
+		if (Array.isArray(o) && o.length == this.length) {
 			for (var j = this.length; j--;) {
 				var e = this[j];
-				if (e != o[j] && (!jq.isArray(e) || !e.$equals(o[j])))
+				if (e != o[j] && (!Array.isArray(e) || !e.$equals(o[j])))
 					return false;
 			}
 			return true;
@@ -50,7 +50,7 @@ Object.assign(Array.prototype, {
 		return false;
 	},
 	$remove(this: Array<unknown>, o): boolean {
-		for (var ary = jq.isArray(o), j = 0, tl = this.length; j < tl; ++j) {
+		for (var ary = Array.isArray(o), j = 0, tl = this.length; j < tl; ++j) {
 			if (o == this[j] || (ary && o.$equals(this[j]))) {
 				this.splice(j, 1);
 				return true;

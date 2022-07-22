@@ -228,7 +228,7 @@ onClick: function (evt) {
 		this.currentTarget = this.target = target;
 		this.name = name;
 		this.data = data;
-		if (data && typeof data == 'object' && !jq.isArray(data))
+		if (data && typeof data == 'object' && !Array.isArray(data))
 			zk.$default(this, data);
 
 		this.opts = opts || {rtags: {}};
@@ -446,10 +446,10 @@ function _visiSubset(name, xinfs): Node[] {
 	return xinfs;
 }
 function _target(inf): Widget {
-	return jq.isArray(inf) ? inf[0] : inf;
+	return Array.isArray(inf) ? inf[0] : inf;
 }
 function _fn(inf, o, name): (() => void) {
-	var fn = jq.isArray(inf) ? inf[1] : o[name];
+	var fn = Array.isArray(inf) ? inf[1] : o[name];
 	if (!fn)
 		throw (o.className || o) + ':' + name + ' not found';
 	return fn;
@@ -529,10 +529,10 @@ function _fire(name, org, opts, vararg): void {
 //Feature ZK-1672: check if already listen to the same listener
 function _isListened(wts, inf): boolean {
 	if (wts) {
-		if (jq.isArray(inf)) {
+		if (Array.isArray(inf)) {
 			var isListen = false;
 			for (var i = wts.length; i > 0; i--) {
-				if (jq.isArray(wts[i]) && wts[i].$equals(inf)) {
+				if (Array.isArray(wts[i]) && wts[i].$equals(inf)) {
 					isListen = true;
 					break;
 				}

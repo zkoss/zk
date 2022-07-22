@@ -316,7 +316,7 @@ export class Popup extends zul.Widget {
 				}
 			} else
 				return {pos: position};
-		} else if (jq.isArray(offset)) {
+		} else if (Array.isArray(offset)) {
 			dim = {
 				left: zk.parseInt(offset[0]), top: zk.parseInt(offset[1]),
 				width: 0, height: 0

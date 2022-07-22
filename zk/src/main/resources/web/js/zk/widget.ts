@@ -3089,7 +3089,7 @@ function () {
 		}
 
 		if (!skipper) {
-			if (!jq.isArray(_callback_))
+			if (!Array.isArray(_callback_))
 				zUtl.fireSized(this);
 			else {
 				// for Bug ZK-2271, we delay this calculation
@@ -4490,7 +4490,7 @@ wgt.listen({
 		priority = priority ? priority : 0;
 		for (var evt in infs) {
 			var inf = infs[evt];
-			if (jq.isArray(inf)) inf = [inf[0] || this, inf[1]];
+			if (Array.isArray(inf)) inf = [inf[0] || this, inf[1]];
 			else if (typeof inf == 'function') inf = [this, inf];
 			else inf = [inf || this, null];
 			(inf as {priority: number}).priority = priority;
@@ -4533,7 +4533,7 @@ wgt.unlisten({
 				lsns = this._lsns[evt], lsn;
 			for (var j = lsns ? lsns.length : 0; j--;) {
 				lsn = lsns[j];
-				if (jq.isArray(inf)) inf = [inf[0] || this, inf[1]];
+				if (Array.isArray(inf)) inf = [inf[0] || this, inf[1]];
 				else if (typeof inf == 'function') inf = [this, inf];
 				else inf = [inf || this, null];
 				if (lsn[0] == (inf as Array<unknown>)[0] && lsn[1] == (inf as Array<unknown>)[1]) {
@@ -4637,7 +4637,7 @@ wgt.setListeners({
 	 */
 	setListener(evt: string, fn: unknown): this;
 	setListener(evt: string | [string, unknown], fn?: unknown): this { //used by server
-		if (jq.isArray(evt)) {
+		if (Array.isArray(evt)) {
 			fn = evt[1];
 			evt = evt[0];
 		}
@@ -4659,7 +4659,7 @@ wgt.setListeners({
 	}
 	// since 8.0, it won't unlisten the old function.
 	setListener0(evt: string | [string, unknown], fn: unknown): this { //used by server
-		if (jq.isArray(evt)) {
+		if (Array.isArray(evt)) {
 			fn = evt[1];
 			evt = evt[0];
 		}
@@ -4675,7 +4675,7 @@ wgt.setListeners({
 	}
 
 	setOverride(nm: string | [string, unknown], val: unknown): this { //used by server (5.0.2)
-		if (jq.isArray(nm)) {
+		if (Array.isArray(nm)) {
 			val = nm[1];
 			nm = nm[0];
 		}
@@ -6696,7 +6696,7 @@ export let NoDOM: ThisType<NoDOMInterface> = {
 			this.bind(desktop as Desktop, skipper);
 
 			if (!skipper) {
-				if (!jq.isArray(_callback_))
+				if (!Array.isArray(_callback_))
 					zUtl.fireSized(this);
 				else {
 					// for Bug ZK-2271, we delay this calculation
