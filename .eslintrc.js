@@ -150,7 +150,10 @@ module.exports = {
         'plugin:@typescript-eslint/strict',
         'plugin:zk/recommended'
       ],
-      'rules': { // Recommended
+      'rules': {
+        'zk/preferNativeInstanceof': 'warn',
+        'zk/javaStyleSetterSignature': 'warn',
+        // Recommended
         // Possible Problems
         'no-cond-assign': 'warn',
         'no-constant-condition': [
