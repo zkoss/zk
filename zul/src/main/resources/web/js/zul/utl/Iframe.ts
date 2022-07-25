@@ -60,7 +60,7 @@ export class Iframe extends zul.Widget<HTMLIFrameElement> {
 	 * @return String
 	 * @deprecated as of release 7.0.0, use CSS instead.
 	 */
-	getScrolling(): string | null {
+	getScrolling(): string | undefined {
 		return this._scrolling;
 	}
 
@@ -173,7 +173,7 @@ export class Iframe extends zul.Widget<HTMLIFrameElement> {
 	}
 
 	//super//
-	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		if (this._src) {
 			after?.push(() => {this.$n_().src = this._src!;});

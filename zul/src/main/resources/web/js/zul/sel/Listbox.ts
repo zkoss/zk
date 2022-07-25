@@ -51,21 +51,21 @@ export class Listbox extends zul.sel.SelectWidget {
 	 * @type boolean
 	 */
 	override groupSelect = false;
-	override _scrollbar?: zul.Scrollbar | null = null;
-	firstItem?: zul.sel.Listitem | null;
-	lastItem?: zul.sel.Listitem | null;
-	_emptyMessage: string | null = null;
+	override _scrollbar?: zul.Scrollbar = undefined;
+	firstItem?: zul.sel.Listitem;
+	lastItem?: zul.sel.Listitem;
+	_emptyMessage?: string = undefined;
 	_groupsInfo: zkex.sel.Listgroup[];
 	_shallStripe?: boolean;
 	_shallFixEmpty?: boolean;
-	_scOddRow?: string | null;
+	_scOddRow?: string;
 	_shallScrollIntoView?: boolean;
 	_listbox$shallUpdateScrollPos?: boolean;
 	_listbox$shallSyncSelInView?: boolean;
 	_listbox$noSelectAll?: boolean;
-	_tmpScrollTop?: number | null;
-	listhead?: zul.sel.Listhead | null;
-	listfoot?: zul.sel.Listfoot | null;
+	_tmpScrollTop?: number;
+	listhead?: zul.sel.Listhead;
+	listfoot?: zul.sel.Listfoot;
 	_offset?: number;
 	_listbox$rod?: boolean; // zkex/sel/Listgroup
 
@@ -74,7 +74,7 @@ export class Listbox extends zul.sel.SelectWidget {
 	 * @return String
 	 * @since 5.0.7
 	 */
-	getEmptyMessage(): string | null {
+	getEmptyMessage(): string | undefined {
 		return this._emptyMessage;
 	}
 
@@ -136,7 +136,7 @@ export class Listbox extends zul.sel.SelectWidget {
 	 * @return Listitem
 	 * @param zk.Widget item
 	 */
-	nextItem(p: zk.Widget | null): zul.sel.Listitem | null {
+	nextItem(p: zk.Widget | undefined): zul.sel.Listitem | undefined {
 		if (p)
 			while ((p = p.nextSibling) && !(p instanceof zul.sel.Listitem));
 		return p;
@@ -147,7 +147,7 @@ export class Listbox extends zul.sel.SelectWidget {
 	 * @return Listitem
 	 * @param zk.Widget item
 	 */
-	previousItem(p: zk.Widget | null): zul.sel.Listitem | null {
+	previousItem(p: zk.Widget | undefined): zul.sel.Listitem | undefined {
 		if (p)
 			while ((p = p.previousSibling) && !(p instanceof zul.sel.Listitem));
 		return p;
@@ -171,7 +171,7 @@ export class Listbox extends zul.sel.SelectWidget {
 	 * @return Listbox
 	 */
 	setOddRowSclass(oddRowSclass: string): this {
-		const scls = oddRowSclass || null;
+		const scls = oddRowSclass || undefined;
 		if (this._scOddRow != scls) {
 			this._scOddRow = scls;
 			var n = this.$n();
@@ -218,11 +218,11 @@ export class Listbox extends zul.sel.SelectWidget {
 		var bar = this._scrollbar;
 		if (bar) {
 			bar.destroy();
-			bar = this._scrollbar = null;
+			bar = this._scrollbar = undefined;
 		}
 	}
 
-	override bind_(desktop: zk.Desktop | null | undefined, skipper: zk.Skipper | null | undefined, after: CallableFunction[]): void {
+	override bind_(desktop: zk.Desktop | undefined, skipper: zk.Skipper | undefined, after: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after); //it might invoke replaceHTML and then call bind_ again
 		this._shallStripe = true;
 		var w = this;
@@ -238,7 +238,7 @@ export class Listbox extends zul.sel.SelectWidget {
 		zWatch.listen({onCommandReady: this}); //ZK-3152
 	}
 
-	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		zWatch.unlisten({onCommandReady: this}); //ZK-3152
 		this.destroyBar_();
 		super.unbind_(skipper, after, keepRod);
@@ -288,7 +288,7 @@ export class Listbox extends zul.sel.SelectWidget {
 		// ebody.scrollTop will be reset after between fireOnRender and _doScroll after bind_
 		if (this._tmpScrollTop) {
 			this.ebody!.scrollTop = this._tmpScrollTop;
-			this._tmpScrollTop = null;
+			this._tmpScrollTop = undefined;
 		}
 		super._doScroll();
 	}
@@ -322,7 +322,7 @@ export class Listbox extends zul.sel.SelectWidget {
 		var odd = this._offset! & 1,
 			even = !odd,
 			it = this.getBodyWidgetIterator();
-		for (var w: zul.sel.ItemWidget | null | undefined; w = it.next();) {
+		for (var w: zul.sel.ItemWidget | undefined; w = it.next();) {
 			if (w.isVisible() && w.isStripeable_()) {
 				jq(w)[even ? 'removeClass' : 'addClass'](scOdd);
 				even = !even;
@@ -332,18 +332,18 @@ export class Listbox extends zul.sel.SelectWidget {
 		return this;
 	}
 
-	override rerender(skipper?: zk.Skipper | number | null): this {
+	override rerender(skipper?: zk.Skipper | number): this {
 		super.rerender(skipper);
 		this._syncStripe();
 		return this;
 	}
 
-	override getCaveNode(): HTMLElement | null | undefined {
+	override getCaveNode(): HTMLElement | undefined {
 		return this.$n('rows') || this.$n('cave');
 	}
 
-	override insertChildHTML_(child: zk.Widget, before?: zk.Widget | null, desktop?: zk.Desktop | null): void {
-		const nodeOfBefore = before && (!(child instanceof zul.sel.Listitem) || before instanceof zul.sel.Listitem) ? before.getFirstNode_() : null;
+	override insertChildHTML_(child: zk.Widget, before?: zk.Widget, desktop?: zk.Desktop): void {
+		const nodeOfBefore = before && (!(child instanceof zul.sel.Listitem) || before instanceof zul.sel.Listitem) ? before.getFirstNode_() : undefined;
 		if (nodeOfBefore)
 			jq(nodeOfBefore).before(child.redrawHTML_());
 		else
@@ -351,7 +351,7 @@ export class Listbox extends zul.sel.SelectWidget {
 		child.bind(desktop);
 	}
 
-	override insertBefore(child: zk.Widget, sibling: zk.Widget | null | undefined, ignoreDom?: boolean): boolean {
+	override insertBefore(child: zk.Widget, sibling: zk.Widget | undefined, ignoreDom?: boolean): boolean {
 		if (super.insertBefore(child, sibling,
 		ignoreDom || (!this.z_rod && !(child instanceof zul.sel.Listitem)))) {
 			this._fixOnAdd(child, ignoreDom);
@@ -370,7 +370,7 @@ export class Listbox extends zul.sel.SelectWidget {
 		return false;
 	}
 
-	_fixOnAdd(child: zk.Widget, ignoreDom: boolean | undefined, stripe?: boolean, ignoreAll?: boolean): this | undefined {
+	_fixOnAdd(child: zk.Widget, ignoreDom?: boolean, stripe?: boolean, ignoreAll?: boolean): this | undefined {
 		var noRerender;
 		if (child instanceof zul.sel.Listitem) {
 			if (_isListgroup(child))
@@ -417,18 +417,18 @@ export class Listbox extends zul.sel.SelectWidget {
 		return false;
 	}
 
-	_fixOnRemove(child: zk.Widget, ignoreDom: boolean | undefined): void {
+	_fixOnRemove(child: zk.Widget, ignoreDom?: boolean): void {
 		var stripe;
 		if (child == this.listhead)
-			this.listhead = null;
+			this.listhead = undefined;
 		else if (child == this.paging) {
-			this.paging.setMeshWidget(null);
-			this.paging = null;
+			this.paging.setMeshWidget(undefined);
+			this.paging = undefined;
 		} else if (child == this.frozen) {
-			this.frozen = null;
+			this.frozen = undefined;
 			this.destroyBar_();
 		} else if (child == this.listfoot)
-			this.listfoot = null;
+			this.listfoot = undefined;
 		else if (!(child instanceof zul.mesh.Auxhead)) {
 			if (child == this.firstItem) {
 				for (var p = this.firstChild, Listitem = zul.sel.Listitem;
@@ -472,7 +472,7 @@ export class Listbox extends zul.sel.SelectWidget {
 		out.push('>', this._emptyMessage!, '</div></td></tr></tbody>');
 	}
 
-	override replaceChildHTML_(child: zk.Widget, n: HTMLElement | string, desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, _trim_?: boolean): void {
+	override replaceChildHTML_(child: zk.Widget, n: HTMLElement | string, desktop?: zk.Desktop, skipper?: zk.Skipper, _trim_?: boolean): void {
 		if (child._renderdefer) {
 			var scOdd = this.getOddRowSclass(),
 				isOdd = jq(n).hasClass(scOdd); // supers will change this result, we need to cache it
@@ -487,7 +487,7 @@ export class Listbox extends zul.sel.SelectWidget {
 		this._shallFixEmpty = true;
 	}
 
-	override onChildReplaced_(oldc: zk.Widget | null | undefined, newc: zk.Widget | null | undefined): void {
+	override onChildReplaced_(oldc: zk.Widget | undefined, newc: zk.Widget | undefined): void {
 		super.onChildReplaced_(oldc, newc);
 
 		if (oldc) this._fixOnRemove(oldc, true);
@@ -571,7 +571,7 @@ export class Listbox extends zul.sel.SelectWidget {
 				wgt.replaceCavedChildren_('rows', ws);
 			} else {
 				//remove all listitems
-				var fc: zul.sel.Listitem | null | undefined;
+				var fc: zul.sel.Listitem | undefined;
 				for (var item = wgt.firstItem; item;) {
 					// B60-ZK-1230: Only removes the first list item
 					var n = wgt.nextItem(item);
@@ -586,9 +586,9 @@ export class Listbox extends zul.sel.SelectWidget {
 					wgt.insertBefore(ws[j], fc, true); //no dom
 			}
 		}, function (wx) {
-			for (var w: zk.Widget | null = wx, p = wx; w; p = w, w = w.parent)
+			for (var w: zk.Widget | undefined = wx, p = wx; w; p = w, w = w.parent)
 				if (w == wgt && p instanceof zul.sel.Listitem)
-					return null; //ignore it since it is going to be removed
+					return undefined; //ignore it since it is going to be removed
 			return wx;
 		});
 	}
@@ -603,7 +603,7 @@ export class ItemIter extends zk.Object implements zul.mesh.ItemIterator {
 	box: zul.sel.Listbox;
 	opts?: Record<string, unknown>;
 	_isInit?: boolean;
-	p?: zul.sel.Listitem | null;
+	p?: zul.sel.Listitem;
 
 	/** Constructor
 	 * @param Listbox listbox the widget that the iterator belongs to
@@ -638,10 +638,10 @@ export class ItemIter extends zk.Object implements zul.mesh.ItemIterator {
 	 *
 	 * @return Listitem the next element in the iteration.
 	 */
-	next(): zul.sel.ItemWidget | null | undefined {
+	next(): zul.sel.ItemWidget | undefined {
 		this._init();
 		var p = this.p,
-			q = p ? p.parent!.nextItem(p) : null;
+			q = p ? p.parent!.nextItem(p) : undefined;
 		if (this.opts && this.opts.skipHidden)
 			for (; q && !q.isVisible(); q = q.parent!.nextItem(q)) { /* empty */ }
 		if (p)

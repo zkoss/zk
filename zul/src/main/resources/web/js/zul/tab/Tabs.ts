@@ -21,7 +21,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
  */
 @zk.WrapClass('zul.tab.Tabs')
 export class Tabs extends zul.Widget {
-	override parent!: zul.tab.Tabbox;
+	override parent!: zul.tab.Tabbox | undefined;
 
 	_tabsScrollLeft = 0;
 	_tabsScrollTop = 0;
@@ -31,12 +31,12 @@ export class Tabs extends zul.Widget {
 	/** Returns the tabbox owns this component.
 	 * @return zul.tab.Tabbox
 	 */
-	getTabbox(): zul.tab.Tabbox {
+	getTabbox(): zul.tab.Tabbox | undefined {
 		return this.parent;
 	}
 
 	//@Override
-	override getWidth(): string | null | undefined {
+	override getWidth(): string | undefined {
 		var wd = this._width;
 		if (!wd) {
 			var tabbox = this.getTabbox();
@@ -54,7 +54,7 @@ export class Tabs extends zul.Widget {
 	}
 
 	beforeSize(): void {
-		var tabbox = this.getTabbox(),
+		var tabbox = this.getTabbox()!,
 			width = tabbox.getWidth(),
 			style = this.$n_().style;
 		if ((!width || width.endsWith('%') || width == 'auto') && !tabbox.inAccordionMold() && !tabbox.isVertical()) {
@@ -67,7 +67,7 @@ export class Tabs extends zul.Widget {
 		}
 	}
 
-	override insertChildHTML_(child: zk.Widget, before?: zk.Widget | null, desktop?: zk.Desktop | null): void {
+	override insertChildHTML_(child: zk.Widget, before?: zk.Widget, desktop?: zk.Desktop): void {
 		var last = child.previousSibling,
 			out;
 		if (before)
@@ -88,30 +88,30 @@ export class Tabs extends zul.Widget {
 	}
 
 	//bug #3014664
-	override setVflex(v: boolean | string | null | undefined): this { //vflex ignored for Tabs
+	override setVflex(v: boolean | string | undefined): this { //vflex ignored for Tabs
 		if (v != 'min') v = false;
 		return super.setVflex(v);
 	}
 
 	//bug #3014664
-	override setHflex(v: boolean | string | null | undefined): this { //hflex ignored for Tabs
+	override setHflex(v: boolean | string | undefined): this { //hflex ignored for Tabs
 		if (v != 'min') v = false;
 		return super.setHflex(v);
 	}
 
-	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		zWatch.listen({onSize: this, onResponse: this, beforeSize: this});
 	}
 
-	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		zWatch.unlisten({onSize: this, onResponse: this, beforeSize: this});
 		super.unbind_(skipper, after, keepRod);
 	}
 
 	_scrollcheck(way: string, tb?: zul.tab.Tab): void {
 		this._shallCheck = false;
-		var tabbox = this.getTabbox();
+		var tabbox = this.getTabbox()!;
 		if (!this.desktop
 			|| (tabbox && (!tabbox.isRealVisible() || !tabbox.isTabscroll())))
 			return;
@@ -136,7 +136,7 @@ export class Tabs extends zul.Widget {
 				if (tabs.offsetHeight <= btnsize) return;
 
 				var sel = tabbox.getSelectedTab(),
-					node = tb ? tb.$n() : (sel ? sel.$n() : null),
+					node = tb ? tb.$n() : (sel ? sel.$n() : undefined),
 					nodeOffsetTop = node ? node.offsetTop : 0,
 					nodeOffsetHeight = node ? node.offsetHeight : 0;
 
@@ -179,7 +179,7 @@ export class Tabs extends zul.Widget {
 		} else if (!tabbox.inAccordionMold()) {
 			var cave = this.$n_('cave'),
 				sel = tabbox.getSelectedTab(),
-				node = tb ? tb.$n() : (sel ? sel.$n() : null),
+				node = tb ? tb.$n() : (sel ? sel.$n() : undefined),
 				nodeOffsetLeft = node ? node.offsetLeft : 0,
 				nodeOffsetWidth = node ? node.offsetWidth : 0,
 				tabsOffsetWidth = tabs.offsetWidth,
@@ -293,7 +293,7 @@ export class Tabs extends zul.Widget {
 	}
 
 	_getArrowSize(): number {
-		var tabbox = this.getTabbox(),
+		var tabbox = this.getTabbox()!,
 			isVer = tabbox.isVertical(),
 			btnA = isVer ? tabbox.$n('up') : tabbox.$n('left'),
 			btnB = isVer ? tabbox.$n('down') : tabbox.$n('right'),
@@ -305,7 +305,7 @@ export class Tabs extends zul.Widget {
 	}
 
 	_showbutton(show: boolean): void {
-		var tabbox = this.getTabbox();
+		var tabbox = this.getTabbox()!;
 		if (tabbox.isTabscroll()) {
 			var cls = tabbox.$s('scroll');
 			jq(tabbox).removeClass(cls);
@@ -325,7 +325,7 @@ export class Tabs extends zul.Widget {
 
 	_fixWidth(toSel: boolean): void {
 		var tabs = this.$n_(),
-			tabbox = this.getTabbox(),
+			tabbox = this.getTabbox()!,
 			tbx = tabbox.$n_(),
 			btnsize = tabbox._scrolling ? this._getArrowSize() : 0;
 		this._fixHgh(toSel); //ZK-2810: don't set height to tabbox when deselect
@@ -341,7 +341,7 @@ export class Tabs extends zul.Widget {
 			if (tbx.offsetWidth < btnsize)
 				return;
 			if (tabbox.isTabscroll()) {
-				var toolbar: zul.wgt.Toolbar | HTMLElement | null | undefined = tabbox.toolbar;
+				var toolbar: zul.wgt.Toolbar | HTMLElement | undefined = tabbox.toolbar;
 				if (toolbar)
 					toolbar = toolbar.$n();
 				if (!tbx.style.width) {
@@ -373,8 +373,8 @@ export class Tabs extends zul.Widget {
 	}
 
 	_fixHgh(toSel: boolean): void {
-		if (this.getTabbox()._scrolling) return;
-		var tabbox = this.getTabbox();
+		if (this.getTabbox()!._scrolling) return;
+		var tabbox = this.getTabbox()!;
 		//fix tabpanels's height if tabbox's height is specified
 		//Ignore accordion since its height is controlled by each tabpanel
 		if (tabbox.isVertical()) {
@@ -429,7 +429,7 @@ export class Tabs extends zul.Widget {
 	override onChildRemoved_(child: zk.Widget): void {
 		var p = this.parent;
 		if (p && child == p._selTab) {
-			p._selTab = null;
+			p._selTab = undefined;
 		}
 		if (this.desktop)
 			this._shallCheck = true;
@@ -444,7 +444,7 @@ export class Tabs extends zul.Widget {
 
 	override onChildVisible_(child: zk.Widget): void {
 		if (this.desktop) {
-			var tabbox = this.getTabbox();
+			var tabbox = this.getTabbox()!;
 			if (tabbox.inAccordionMold() && tabbox.getHeight()) {
 				tabbox.syncSize();
 			}
@@ -453,7 +453,7 @@ export class Tabs extends zul.Widget {
 	}
 
 	override ignoreFlexSize_(attr: zk.FlexOrient): boolean {
-		var p = this.getTabbox();
+		var p = this.getTabbox()!;
 		return (p.isVertical() && 'h' == attr)
 			|| (p.isHorizontal() && 'w' == attr);
 	}

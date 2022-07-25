@@ -17,7 +17,7 @@ function _isPE(): boolean {
 }
 // _dragImg changed to an array, update image node after original DD_dragging
 function updateImg(drag: zk.Draggable): void {
-	var dragImg = drag._dragImg as JQuery | null;
+	var dragImg = drag._dragImg as JQuery | undefined;
 	if (dragImg) {
 		// update drag image
 		var allow = jq(drag.node!).hasClass('z-drop-allow');
@@ -38,16 +38,16 @@ function updateImg(drag: zk.Draggable): void {
 @zk.WrapClass('zul.sel.Listitem')
 export class Listitem extends zul.sel.ItemWidget {
 	// Parent could be null as asserted by `getListgroup`.
-	override parent!: zul.sel.Listbox | null;
-	override nextSibling!: zul.sel.Listitem | null;
-	override previousSibling!: zul.sel.Listitem | null;
-	override firstChild!: zul.sel.Listcell | null;
-	override lastChild!: zul.sel.Listcell | null;
+	override parent!: zul.sel.Listbox | undefined;
+	override nextSibling!: zul.sel.Listitem | undefined;
+	override previousSibling!: zul.sel.Listitem | undefined;
+	override firstChild!: zul.sel.Listcell | undefined;
+	override lastChild!: zul.sel.Listcell | undefined;
 
 	/** Returns the list box that it belongs to.
 	 * @return Listbox
 	 */
-	getListbox(): zul.sel.Listbox | null {
+	getListbox(): zul.sel.Listbox | undefined {
 		return this.parent;
 	}
 
@@ -55,14 +55,14 @@ export class Listitem extends zul.sel.ItemWidget {
 	 * Returns the listgroup that this item belongs to, or null.
 	 * @return zkex.sel.Listgroup
 	 */
-	getListgroup(): zkex.sel.Listgroup | null {
+	getListgroup(): zkex.sel.Listgroup | undefined {
 		// TODO: this performance is not good.
 		if (_isPE() && this.parent && this.parent.hasGroup())
-			for (var w: zul.sel.Listitem | null = this; w; w = w.previousSibling)
+			for (var w: zul.sel.Listitem | undefined = this; w; w = w.previousSibling)
 				if (w instanceof zkex.sel.Listgroup)
 					return w;
 
-		return null;
+		return undefined;
 	}
 
 	/** Sets the label of the {@link Listcell} it contains.
@@ -140,7 +140,7 @@ export class Listitem extends zul.sel.ItemWidget {
 	}
 
 	_syncListitems(newwgt: zul.sel.Listitem): void {
-		var box: zul.sel.Listbox | null;
+		var box: zul.sel.Listbox | undefined;
 		if (box = this.getListbox()) {
 			if (box.firstItem!.uuid == newwgt.uuid)
 				box.firstItem = newwgt;

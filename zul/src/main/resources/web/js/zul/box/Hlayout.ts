@@ -44,12 +44,12 @@ export class Hlayout extends zul.box.Layout {
 		return this._valign;
 	}
 
-	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		zWatch.listen({_beforeSizeForRead: this, beforeSize: this, onFitSize: this}); //ZK-4476
 	}
 
-	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		zWatch.unlisten({_beforeSizeForRead: this, beforeSize: this, onFitSize: this});
 		super.unbind_(skipper, after, keepRod);
 	}
@@ -71,7 +71,7 @@ export class Hlayout extends zul.box.Layout {
 		return clsnm;
 	}
 
-	override getFlexDirection_(): string | null {
+	override getFlexDirection_(): string {
 		return 'row';
 	}
 
@@ -79,14 +79,14 @@ export class Hlayout extends zul.box.Layout {
 	_beforeSizeForRead(): void {
 		var n = this.$n();
 		this._beforeSizeWidth = n ? n.offsetWidth : 0;
-		for (var xc: null | zk.Widget & Partial<{_beforeSizeWidth: number}> = this.firstChild; xc; xc = xc.nextSibling) {
+		for (var xc: undefined | zk.Widget & Partial<{_beforeSizeWidth: number}> = this.firstChild; xc; xc = xc.nextSibling) {
 			n = xc.$n();
 			xc._beforeSizeWidth = n ? n.offsetWidth : 0;
 		}
 	}
 
 	beforeSize(): void {
-		var xc: null | zk.Widget & Partial<{_beforeSizeWidth: number}> = this.firstChild,
+		var xc: undefined | zk.Widget & Partial<{_beforeSizeWidth: number}> = this.firstChild,
 			totalWdCached = this._beforeSizeWidth,
 			totalWd = totalWdCached != null ? totalWdCached : this.$n()!.offsetWidth,
 			flexCnt = 0,

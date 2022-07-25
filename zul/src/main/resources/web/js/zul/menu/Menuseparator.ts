@@ -22,18 +22,18 @@ export class Menuseparator extends zul.Widget {
 	/** Returns whether parent is a {@link Menupopup}
 	 * @return boolean
 	 */
-	isPopup(): boolean | null {
-		return this.parent && this.parent instanceof zul.menu.Menupopup;
+	isPopup(): boolean {
+		return !!this.parent && this.parent instanceof zul.menu.Menupopup;
 	}
 
 	/** Returns the {@link Menubar} that contains this menuseparator, or null if not available.
 	 * @return zul.menu.Menubar
 	 */
-	getMenubar(): zul.menu.Menubar | null {
+	getMenubar(): zul.menu.Menubar | undefined {
 		for (var p = this.parent; p; p = p.parent)
 			if (p instanceof zul.menu.Menubar)
 				return p;
-		return null;
+		return undefined;
 	}
 
 	override doMouseOver_(evt: zk.Event): void {

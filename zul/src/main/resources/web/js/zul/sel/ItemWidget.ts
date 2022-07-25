@@ -23,8 +23,8 @@ function _isListgroupfoot(w: ItemWidget): boolean {
  */
 @zk.WrapClass('zul.sel.ItemWidget')
 export class ItemWidget extends zul.Widget<HTMLTableRowElement> implements zul.mesh.Item {
-	override nextSibling!: zul.sel.ItemWidget | null;
-	override previousSibling!: zul.sel.ItemWidget | null;
+	override nextSibling!: zul.sel.ItemWidget | undefined;
+	override previousSibling!: zul.sel.ItemWidget | undefined;
 
 	_loaded?: boolean;
 	_index?: number;
@@ -35,15 +35,15 @@ export class ItemWidget extends zul.Widget<HTMLTableRowElement> implements zul.m
 	_value?: string;
 	_selected?: boolean;
 	_shallCheckClearCache?: boolean;
-	_userSelection?: boolean | null;
+	_userSelection?: boolean;
 	_disableSelection_?: boolean;
 	_last?: number; // zul.sel.SelectWidget.prototype._doItemSelect
 
 	/** @deprecated As of release 8.0.0, please use {@link #isSelectable()}
 	 * @return boolean
 	 */
-	isCheckable(): boolean | undefined {
-		return this._checkable;
+	isCheckable(): boolean {
+		return !!this._checkable;
 	}
 
 	/** @deprecated As of release 8.0.0, please use {@link #setSelectable(boolean)}
@@ -90,8 +90,8 @@ export class ItemWidget extends zul.Widget<HTMLTableRowElement> implements zul.m
 	 * <p>Default: false.
 	 * @return boolean
 	 */
-	isDisabled(): boolean | undefined {
-		return this._disabled;
+	isDisabled(): boolean {
+		return !!this._disabled;
 	}
 
 	/** Sets whether it is disabled.
@@ -165,17 +165,17 @@ export class ItemWidget extends zul.Widget<HTMLTableRowElement> implements zul.m
 	 * if no such cell.
 	 * @return String
 	 */
-	getLabel(): string | null {
+	getLabel(): string | undefined {
 		// Note: Only Listitem uses this method. Treeitem overrides this method.
-		return this.firstChild ? (this.firstChild as zul.sel.Listcell).getLabel() : null;
+		return this.firstChild ? (this.firstChild as zul.sel.Listcell).getLabel() : undefined;
 	}
 
 	/** Returns whether it is selected.
 	 * <p>Default: false.
 	 * @return boolean
 	 */
-	isSelected(): boolean | undefined {
-		return this._selected;
+	isSelected(): boolean {
+		return !!this._selected;
 	}
 
 	/**
@@ -191,8 +191,8 @@ export class ItemWidget extends zul.Widget<HTMLTableRowElement> implements zul.m
 	 * Returns the mesh widget.
 	 * @return zul.mesh.MeshWidget
 	 */
-	getMeshWidget(): zul.sel.SelectWidget | null {
-		return this.parent as zul.sel.SelectWidget | null;
+	getMeshWidget(): zul.sel.SelectWidget | undefined {
+		return this.parent as zul.sel.SelectWidget | undefined;
 	}
 
 	_getVisibleChild(row: HTMLTableRowElement): HTMLElement {
@@ -202,12 +202,12 @@ export class ItemWidget extends zul.Widget<HTMLTableRowElement> implements zul.m
 	}
 
 	//super//
-	override setVisible(visible: boolean | undefined): this {
+	override setVisible(visible: boolean): this {
 		if (this._visible != visible) { // not to use isVisible()
 			super.setVisible(visible);
 			if (this.isStripeable_()) {
 				// Only Listbox is stripeable.
-				var p = this.getMeshWidget() as zul.sel.Listbox | null;
+				var p = this.getMeshWidget() as zul.sel.Listbox | undefined;
 				if (p) p.stripe();
 			}
 		}
@@ -244,7 +244,7 @@ export class ItemWidget extends zul.Widget<HTMLTableRowElement> implements zul.m
 			mesh = this.getMeshWidget();
 		if (n) {
 			var cls = this.$s('focus')!,
-				last = mesh ? mesh._focusItem : null,
+				last = mesh ? mesh._focusItem : undefined,
 				lastn;
 			// ZK-3077: focus out the last focused item first (for draggable issue)
 			if (last && (lastn = last.$n()))
@@ -267,7 +267,7 @@ export class ItemWidget extends zul.Widget<HTMLTableRowElement> implements zul.m
 	}
 
 	_updHeaderCM(bRemove?: boolean): void { //update header's checkmark
-		var box: zul.sel.SelectWidget | null;
+		var box: zul.sel.SelectWidget | undefined;
 		if ((box = this.getMeshWidget()) && box._headercm && box._multiple) {
 			if (bRemove) {
 				box._updHeaderCM();
@@ -326,7 +326,7 @@ export class ItemWidget extends zul.Widget<HTMLTableRowElement> implements zul.m
 	}
 
 	//@Override
-	override beforeParentChanged_(newp: zk.Widget | null): void {
+	override beforeParentChanged_(newp?: zk.Widget): void {
 		if (!newp) {//remove
 			var mesh = this.getMeshWidget();
 			if (mesh) mesh._shallSyncCM = true;
@@ -335,7 +335,7 @@ export class ItemWidget extends zul.Widget<HTMLTableRowElement> implements zul.m
 	}
 
 	//@Override
-	override afterParentChanged_(oldparent: zk.Widget | null): void {
+	override afterParentChanged_(oldparent?: zk.Widget): void {
 		if (this.parent) {//add
 			var mesh = this.getMeshWidget();
 			if (mesh) mesh._shallSyncCM = true;
@@ -354,7 +354,7 @@ export class ItemWidget extends zul.Widget<HTMLTableRowElement> implements zul.m
 			}
 			super.doSelect_(evt);
 		} finally {
-			this._userSelection = null;
+			this._userSelection = undefined;
 		}
 	}
 
@@ -397,16 +397,16 @@ export class ItemWidget extends zul.Widget<HTMLTableRowElement> implements zul.m
 		return 0;
 	}
 
-	override getFlexContainer_(): HTMLElement | null | undefined { //use old flex inside tr/td
-		return null;
+	override getFlexContainer_(): HTMLElement | undefined { //use old flex inside tr/td
+		return undefined;
 	}
 
-	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		zWatch.listen({onResponse: this});
 	}
 
-	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		zWatch.unlisten({onResponse: this});
 		super.unbind_(skipper, after, keepRod);
 	}

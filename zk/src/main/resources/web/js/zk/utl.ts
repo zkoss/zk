@@ -105,15 +105,15 @@ export interface ZUtl {
 	getWeekOfYear(year: number, month: number, date: number, firstDayOfWeek: number,
 				  minimalDaysInFirstWeek: number): number;
 	go(url: string, opts?: Partial<GoOptions>): void;
-	intsToString(ary: number[] | null): string;
-	isAncestor(p: Widget, c: Widget & {getParent?()}): boolean;
+	intsToString(ary: number[] | undefined): string;
+	isAncestor(p?: Widget, c?: Widget & {getParent?()}): boolean;
 	isChar(cc: string, opts: Partial<IsCharOptions>): boolean;
 	isImageLoading(): boolean;
 	loadImage(url: string): void;
 	mapToString(map: Record<string, string>, assign?: string, separator?: string): string;
 	parseMap(text: string, separator?: string, quote?: string): Record<string, string>;
-	progressbox(id: string, msg: string, mask?: boolean, icon?: string | null, opts?: Partial<ProgressboxOptions>): void;
-	stringToInts(text: string | null, defaultValue: number): number[] | null;
+	progressbox(id: string, msg: string, mask?: boolean, icon?: string, opts?: Partial<ProgressboxOptions>): void;
+	stringToInts(text: string | undefined, defaultValue: number): number[] | undefined;
 	today(fmt: boolean | string, tz?: string): DateImpl;
 	throttle<T, A extends unknown[], R>(func: (this: T, ...args: A) => R, wait: number):
 		(this: T, ...args: A) => R;
@@ -421,7 +421,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * @return boolean
 	 * @see jq#isAncestor
 	 */
-	isAncestor(p: Widget, c: Widget & {getParent?()}): boolean {
+	isAncestor(p?: Widget, c?: Widget & {getParent?()}): boolean {
 		if (!p) return true;
 		for (; c; c = c.getParent ? c.getParent() : c.parent)
 			if (p == c)
@@ -439,7 +439,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * Ignored if not specified.
 	 * @see #destroyProgressbox
 	 */
-	progressbox(id: string, msg: string, mask?: boolean, icon?: string | null, opts?: Partial<ProgressboxOptions>): void {
+	progressbox(id: string, msg: string, mask?: boolean, icon?: string, opts?: Partial<ProgressboxOptions>): void {
 		if (mask && zk.Page.contained.length) {
 			for (var c = zk.Page.contained.length, e = zk.Page.contained[--c]; e; e = zk.Page.contained[--c]) {
 				if (!e._applyMask)
@@ -542,7 +542,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 		for (var c = zk.Page.contained.length, e = zk.Page.contained[--c]; e; e = zk.Page.contained[--c])
 			if (e._applyMask) {
 				e._applyMask.destroy();
-				e._applyMask = null;
+				e._applyMask = undefined;
 			}
 	},
 
@@ -608,7 +608,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * @see #stringToInts
 	 * @deprecated Use {@code [].join()} instead.
 	 */
-	intsToString(ary: number[] | null): string {
+	intsToString(ary: number[] | undefined): string {
 		if (!ary) return '';
 		return ary.join();
 	},
@@ -620,9 +620,9 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * is not specified. For example, zUtl.stringToInts("1,,3", 2) returns [1, 2, 3].
 	 * @return int[]
 	 */
-	stringToInts(text: string | null, defaultValue: number): number[] | null {
+	stringToInts(text: string | undefined, defaultValue: number): number[] | undefined {
 		if (text == null)
-			return null;
+			return undefined;
 
 		var list: number[] = [];
 		for (var j = 0; ;) {
@@ -822,13 +822,13 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 */
 	throttle<T, A extends unknown[], R>(func: (this: T, ...args: A) => R, wait: number):
 				(this: T, ...args: A) => R {
-		var timeout: number | null, context, args, result,
+		var timeout: number | undefined, context, args, result,
 			previous = 0,
 			later = function (): void {
 				previous = Date.now();
-				timeout = null;
+				timeout = undefined;
 				result = func.call(context, ...args);
-				if (!timeout) context = args = null;
+				if (!timeout) context = args = undefined;
 			};
 
 		return function () {
@@ -841,11 +841,11 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 			if (remaining <= 0 || remaining > wait) {
 				if (timeout) {
 					clearTimeout(timeout);
-					timeout = null;
+					timeout = undefined;
 				}
 				previous = now;
 				result = func.call(context, ...args);
-				if (!timeout) context = args = null;
+				if (!timeout) context = args = undefined;
 			} else if (!timeout) {
 				timeout = window.setTimeout(later, remaining);
 			}
@@ -876,10 +876,10 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 			if (last < wait && last >= 0) {
 				timeout = setTimeout(later, wait - last);
 			} else {
-				timeout = null;
+				timeout = undefined;
 				if (!immediate) {
 					result = func.call(context, ...args);
-					context = args = null;
+					context = args = undefined;
 				}
 			}
 		}
@@ -892,7 +892,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 			if (!timeout) timeout = setTimeout(later, wait);
 			if (callNow) {
 				result = func.call(context, ...args);
-				context = args = null;
+				context = args = undefined;
 			}
 			return result;
 		};

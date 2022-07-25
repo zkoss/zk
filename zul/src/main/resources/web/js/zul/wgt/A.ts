@@ -33,14 +33,14 @@ export class A extends zul.LabelImageWidget<HTMLAnchorElement> implements zul.La
 	 * <p>Default: false.
 	 * @return boolean
 	 */
-	isDisabled(): boolean | undefined {
-		return this._disabled;
+	isDisabled(): boolean {
+		return !!this._disabled;
 	}
 
 	/** Sets whether it is disabled.
 	 * @param boolean disabled
 	 */
-	setDisabled(disabled: boolean | undefined, opts?: Record<string, boolean>): this {
+	setDisabled(disabled: boolean, opts?: Record<string, boolean>): this {
 		const o = this._disabled;
 
 		// Refer from Button.js for the following changes
@@ -58,7 +58,7 @@ export class A extends zul.LabelImageWidget<HTMLAnchorElement> implements zul.La
 				this._adbs = false;
 			} else if (opts && opts.adbs === false)
 				// ignore re-enable by autodisable mechanism
-				disabled = this._disabled;
+				disabled = !!this._disabled;
 		}
 		this._disabled = disabled;
 
@@ -201,7 +201,7 @@ export class A extends zul.LabelImageWidget<HTMLAnchorElement> implements zul.La
 	}
 
 	// super//
-	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		if (!this._disabled) {
 			var n = this.$n()!;
@@ -210,7 +210,7 @@ export class A extends zul.LabelImageWidget<HTMLAnchorElement> implements zul.La
 		}
 	}
 
-	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		var n = this.$n()!;
 		this.domUnlisten_(n, 'onFocus', 'doFocus_')
 			.domUnlisten_(n, 'onBlur', 'doBlur_');
@@ -250,7 +250,7 @@ export class A extends zul.LabelImageWidget<HTMLAnchorElement> implements zul.La
 		var href = this.getHref();
 		// ZK-2506: use iframe to open a 'mailto' href
 		if (href && href.toLowerCase().startsWith('mailto:')) {
-			var ifrm = jq.newFrame('mailtoFrame', href, null);
+			var ifrm = jq.newFrame('mailtoFrame', href, undefined);
 			if (zk.chrome) // ZK-3646: for chrome, it need to let iframe exist for a longer time.
 				setTimeout(() => { jq(ifrm).remove(); }, 100);
 			else

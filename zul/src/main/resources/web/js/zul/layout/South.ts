@@ -44,7 +44,7 @@ export class South extends zul.layout.LayoutRegion {
 	 * {@link #getHeight()}.
 	 * @return String
 	 */
-	getSize(): string | null | undefined {
+	getSize(): string | undefined {
 		return this.getHeight();
 	}
 

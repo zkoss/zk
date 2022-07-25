@@ -12,19 +12,19 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-function _getMenu(wgt: zk.Widget): zul.menu.Menu | null {
+function _getMenu(wgt: zk.Widget): zul.menu.Menu | undefined {
 	var p = wgt.parent;
-	return p instanceof zul.menu.Menu ? p : null;
+	return p instanceof zul.menu.Menu ? p : undefined;
 }
-function _getRootMenu(wgt: zul.menu.Menupopup): zul.menu.Menu | null {
-	for (var w: zk.Widget | null = wgt; w && (w = _getMenu(w)); w = w.parent) {
+function _getRootMenu(wgt: zul.menu.Menupopup): zul.menu.Menu | undefined {
+	for (var w: zk.Widget | undefined = wgt; w && (w = _getMenu(w)); w = w.parent) {
 		if ((w as zul.menu.Menu).isTopmost())
 			return w as zul.menu.Menu;
 	}
-	return null;
+	return undefined;
 }
 //child must be _currentChild()
-function _prevChild(popup: zul.menu.Menupopup, child: zk.Widget | null): zk.Widget | null {
+function _prevChild(popup: zul.menu.Menupopup, child: zk.Widget | undefined): zk.Widget | undefined {
 	var $menubar = zul.menu.Menubar;
 	if (child)
 		while (child = child.previousSibling)
@@ -43,7 +43,7 @@ function _prevChild(popup: zul.menu.Menupopup, child: zk.Widget | null): zk.Widg
 	return child;
 }
 //child must be _currentChild()
-function _nextChild(popup: zul.menu.Menupopup, child: zk.Widget | null): zk.Widget | null | undefined {
+function _nextChild(popup: zul.menu.Menupopup, child: zk.Widget | undefined): zk.Widget | undefined {
 	var $menubar = zul.menu.Menubar;
 	if (child)
 		while (child = child.nextSibling)
@@ -78,7 +78,7 @@ function _activateNextMenu(menu: zul.menu.Menu): void {
 		pp._shallClose = false;
 		if (!pp.isOpen()) {
 			menu.focus();
-			pp.open(null, null, null, {focusFirst: true, sendOnOpen: true, disableMask: true});
+			pp.open(undefined, undefined, undefined, {focusFirst: true, sendOnOpen: true, disableMask: true});
 		}
 	}
 	(menu.$class as typeof zul.menu.Menu)._addActive(menu);
@@ -93,13 +93,13 @@ function _activateNextMenu(menu: zul.menu.Menu): void {
  */
 @zk.WrapClass('zul.menu.Menupopup')
 export class Menupopup extends zul.wgt.Popup {
-	override parent!: zul.menu.Menu | null;
-	override firstChild!: zul.menu.Menuitem | null;
-	override lastChild!: zul.menu.Menuitem | null;
+	override parent!: zul.menu.Menu | undefined;
+	override firstChild!: zul.menu.Menuitem | undefined;
+	override lastChild!: zul.menu.Menuitem | undefined;
 	_curIndex = -1;
 	_keepOpen = false;
 	_shallClose?: boolean;
-	_shadow?: zk.eff.Shadow | null;
+	_shadow?: zk.eff.Shadow;
 	_reverseDirection?: boolean;
 
 	override zsync(opts?: Record<string, unknown>): void {
@@ -125,7 +125,7 @@ export class Menupopup extends zul.wgt.Popup {
 				mol = $m.offset()!.left,
 				nwd = $n.outerWidth()!,
 				mwd = $m.outerWidth()!,
-				mp: zk.Widget | null = menu.parent,
+				mp: zk.Widget | undefined = menu.parent,
 				mb = menu.getMenubar(),
 				ori = mb ? mb.getOrient() : '',
 				calculateToRight = false,
@@ -191,7 +191,7 @@ export class Menupopup extends zul.wgt.Popup {
 		super.close(opts);
 		jq(this.$n_()).hide(); // force to hide the element
 		this._hideShadow();
-		var menu: zul.menu.Menu | null;
+		var menu: zul.menu.Menu | undefined;
 		if ((menu = _getMenu(this)) && menu.isTopmost())
 			jq(menu.$n_()).removeClass(menu.$s('selected'));
 
@@ -199,10 +199,10 @@ export class Menupopup extends zul.wgt.Popup {
 		(this.$class as typeof Menupopup)._rmActive(this);
 	}
 
-	override open(ref?: zul.wgt.Ref | null, offset?: zk.Offset | null, position?: string | null, opts?: zul.wgt.PopupOptions | null): void {
+	override open(ref?: zul.wgt.Ref, offset?: zk.Offset, position?: string, opts?: zul.wgt.PopupOptions): void {
 		if (!this.isOpen())
 			zul.menu._nOpen++;
-		var menu: zul.menu.Menu | null;
+		var menu: zul.menu.Menu | undefined;
 		if (menu = _getMenu(this)) {
 			if (!offset) {
 				ref = menu.getAnchor_();
@@ -228,7 +228,7 @@ export class Menupopup extends zul.wgt.Popup {
 		return false;
 	}
 
-	override setTopmost(): number | void {
+	override setTopmost(): number {
 		const result = super.setTopmost();
 		this.zsync();
 		return result;
@@ -261,7 +261,7 @@ export class Menupopup extends zul.wgt.Popup {
 		}
 
 		// check if org belongs to the popup
-		for (var floatFound = false, wgt: zk.Widget | null = org; wgt; wgt = wgt.parent) {
+		for (var floatFound = false, wgt: zk.Widget | undefined = org; wgt; wgt = wgt.parent) {
 			if (wgt == this || ((wgt as zul.menu.Menu).menupopup == this && !this._shallClose)) {
 				if (!floatFound)
 					this.setTopmost();
@@ -272,7 +272,7 @@ export class Menupopup extends zul.wgt.Popup {
 
 		// check if the popup is one of org's children
 		if (org && org.ignoreDescendantFloatUp_(this)) {
-			for (var floatFound = false, wgt: zk.Widget | null = this; wgt = wgt.parent;) {
+			for (var floatFound = false, wgt: zk.Widget | undefined = this; wgt = wgt.parent;) {
 				if (wgt == org) {
 					if (this._shallClose)
 						break; //close it
@@ -308,7 +308,7 @@ export class Menupopup extends zul.wgt.Popup {
 		this._hideShadow();
 	}
 
-	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		zWatch.listen({onHide: this, onResponse: this});
 
@@ -318,13 +318,13 @@ export class Menupopup extends zul.wgt.Popup {
 		if (!zk.css3) jq.onzsync(this);
 	}
 
-	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		if (this.isOpen())
 			this.close();
 		if (this._shadow)
 			this._shadow.destroy();
 		if (!zk.css3) jq.unzsync(this);
-		this._shadow = null;
+		this._shadow = undefined;
 		zWatch.unlisten({onHide: this, onResponse: this});
 
 		var n = this.$n_();
@@ -345,8 +345,8 @@ export class Menupopup extends zul.wgt.Popup {
 	}
 
 	override doKeyDown_(evt: zk.Event): void {
-		var w: zk.Widget | null | undefined = this._currentChild(),
-			menu: zul.menu.Menu | null,
+		var w: zk.Widget | undefined = this._currentChild(),
+			menu: zul.menu.Menu | undefined,
 			keyCode = evt.keyCode;
 		switch (keyCode) {
 		case 38: //UP
@@ -367,7 +367,7 @@ export class Menupopup extends zul.wgt.Popup {
 			} else if (((menu = _getMenu(this))) && !menu.isTopmost()) {
 				this.close();
 				(menu.$class as typeof zul.menu.Menu)._addActive(menu);
-				const pp = menu.parent as unknown as zul.menu.Menupopup | null; // FIXME: type of pp is inconsistent
+				const pp = menu.parent as unknown as zul.menu.Menupopup | undefined; // FIXME: type of pp is inconsistent
 				if (pp) {
 					pp.focus();
 					pp._curIndex = _indexOfVisibleMenu(pp, menu);
@@ -474,15 +474,15 @@ export class Menupopup extends zul.wgt.Popup {
 	 * @return zul.menu.Menubar
 	 * @since 5.0.5
 	 */
-	getMenubar(): zul.menu.Menubar | null {
-		for (var p: zk.Widget | null = this.parent; p; p = p!.parent) {
+	getMenubar(): zul.menu.Menubar | undefined {
+		for (var p: zk.Widget | undefined = this.parent; p; p = p!.parent) {
 			if (p instanceof zul.menu.Menubar)
 				return p;
 			if (p instanceof zul.menu.Menu)
 				return p.getMenubar();
 			break; // not found
 		}
-		return null;
+		return undefined;
 	}
 
 	_doMouseEnter(evt: MouseEvent): void {
@@ -532,7 +532,7 @@ export class Menupopup extends zul.wgt.Popup {
 	}
 
 	// internal use only.
-	getAnchor_(): HTMLAnchorElement | null | undefined {
+	getAnchor_(): HTMLAnchorElement | undefined {
 		return this.$n('a');
 	}
 
@@ -562,7 +562,7 @@ export class Menupopup extends zul.wgt.Popup {
 		}
 	}
 
-	_currentChild(): zul.menu.Menuitem | zul.menu.Menu | null {
+	_currentChild(): zul.menu.Menuitem | zul.menu.Menu | undefined {
 		const index = this._curIndex,
 			$menubar = zul.menu.Menubar;
 		if (index >= 0) {
@@ -570,7 +570,7 @@ export class Menupopup extends zul.wgt.Popup {
 				if ($menubar._isActiveItem(w) && k++ == index)
 					return w;
 		}
-		return null;
+		return undefined;
 	}
 
 	static _rmActive(wgt: zk.Widget): void {

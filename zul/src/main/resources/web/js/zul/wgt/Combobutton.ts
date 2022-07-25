@@ -21,7 +21,7 @@ function _setCloseTimer(wgt: zul.wgt.Combobutton): void {
 				if (wgt._autodrop && wgt.isOpen())
 					wgt.close({sendOnOpen: true});
 			}
-			wgt._tidclose = null;
+			wgt._tidclose = undefined;
 		}, 200);
 }
 
@@ -78,12 +78,12 @@ function _attachPopup(wgt: zul.wgt.Combobutton, bListen: boolean): void {
  */
 @zk.WrapClass('zul.wgt.Combobutton')
 export class Combobutton extends zul.wgt.Button {
-	override firstChild!: zul.wgt.Popup | null;
-	override lastChild!: zul.wgt.Popup | null;
+	override firstChild!: zul.wgt.Popup | undefined;
+	override lastChild!: zul.wgt.Popup | undefined;
 
 	_autodrop?: boolean;
 	_bover?: boolean;
-	_tidclose?: number | null;
+	_tidclose?: number;
 	_oldppclose?(opts?: zul.wgt.PopupOptions): void;
 
 	/** Returns whether to automatically drop the list if users is changing
@@ -91,8 +91,8 @@ export class Combobutton extends zul.wgt.Button {
 	 * <p>Default: false.
 	 * @return boolean
 	 */
-	isAutodrop(): boolean | undefined {
-		return this._autodrop;
+	isAutodrop(): boolean {
+		return !!this._autodrop;
 	}
 
 	/** Sets whether to automatically drop the list if users is changing
@@ -108,8 +108,8 @@ export class Combobutton extends zul.wgt.Button {
 	 * <p>Default: false.
 	 * @return boolean
 	 */
-	override isDisabled(): boolean | undefined {
-		return this._disabled;
+	override isDisabled(): boolean {
+		return !!this._disabled;
 	}
 
 	/** Sets whether it is disabled.
@@ -169,9 +169,9 @@ export class Combobutton extends zul.wgt.Button {
 	/** Returns whether the list of combo items is open
 	 * @return boolean
 	 */
-	isOpen(): boolean | null | undefined {
+	isOpen(): boolean {
 		var pp = this.firstChild;
-		return pp && pp.isOpen();
+		return !!pp && pp.isOpen();
 	}
 
 	/** Drops down or closes the child popup ({@link zul.wgt.Popup})
@@ -190,7 +190,7 @@ export class Combobutton extends zul.wgt.Button {
 	}
 
 	renderInner_(out: string[]): void {
-		for (var w: zk.Widget | null = this.firstChild; w; w = w.nextSibling)
+		for (var w: zk.Widget | undefined = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
 	}
 
@@ -198,7 +198,7 @@ export class Combobutton extends zul.wgt.Button {
 		return true;
 	}
 
-	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		var pp = this.firstChild?.$n();
 		// ZK-983
 		if (pp)
@@ -219,7 +219,7 @@ export class Combobutton extends zul.wgt.Button {
 		var pp = this.firstChild;
 		if (pp && !this.isOpen()) {
 			if (pp instanceof zul.wgt.Popup) {
-				pp.open(this.uuid, null, 'after_start', opts);
+				pp.open(this.uuid, undefined, 'after_start', opts);
 				_fireOnOpen(this, opts, true);
 			}
 			_attachPopup(this, !(zul.menu && pp instanceof zul.menu.Menupopup));
@@ -330,7 +330,7 @@ export class Combobutton extends zul.wgt.Button {
 	// B60-ZK-1216
 	// Combobutton has problems with label-change if its popup did not close beforehand
 	// Override rerender should also work for the case of image-change
-	override rerender(skipper?: zk.Skipper | number | null): void {
+	override rerender(skipper?: zk.Skipper | number): void {
 		if (this.isOpen()) {
 			this.close();
 		}

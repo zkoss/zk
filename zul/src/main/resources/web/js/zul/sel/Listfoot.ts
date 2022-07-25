@@ -20,24 +20,24 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.sel.Listfoot')
 export class Listfoot extends zul.Widget {
-	override parent!: zul.sel.Listbox | null;
+	override parent!: zul.sel.Listbox | undefined;
 	/** Returns the list box that it belongs to.
 	 * @return Listbox
 	 */
-	getListbox(): zul.sel.Listbox | null {
+	getListbox(): zul.sel.Listbox | undefined {
 		return this.parent;
 	}
 
 	//bug #3014664
-	override setVflex(v: boolean | string | null | undefined): this { //vflex ignored for Listfoot
-		v = false;
-		return super.setVflex(v);
+	override setVflex(vflex?: boolean | string): this { //vflex ignored for Listfoot
+		vflex = false;
+		return super.setVflex(vflex);
 	}
 
 	//bug #3014664
-	override setHflex(v: boolean | string | null | undefined): this { //hflex ignored for Listfoot
-		v = false;
-		return super.setHflex(v);
+	override setHflex(hflex?: boolean | string): this { //hflex ignored for Listfoot
+		hflex = false;
+		return super.setHflex(hflex);
 	}
 
 	override deferRedrawHTML_(out: string[]): void {

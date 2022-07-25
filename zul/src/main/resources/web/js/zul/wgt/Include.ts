@@ -20,8 +20,8 @@ export class Include extends zul.Widget {
 	//F70-ZK-2455: a way to change enclosing tag
 	_enclosingTag = 'div';
 	_comment?: boolean;
-	_childjs?: (() => void) | null;
-	_xcnt?: HTMLElement[] | string | null;
+	_childjs?: (() => void);
+	_xcnt?: HTMLElement[] | string;
 
 	constructor() {
 		super(); // FIXME: params?
@@ -37,8 +37,8 @@ export class Include extends zul.Widget {
 	 *
 	 * @return boolean
 	 */
-	isComment(): boolean | undefined {
-		return this._comment;
+	isComment(): boolean {
+		return !!this._comment;
 	}
 
 	/** Sets  whether to generate the included content inside
@@ -82,12 +82,12 @@ export class Include extends zul.Widget {
 		return style;
 	}
 
-	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		const ctn = this._childjs;
 		if (ctn) {
 			ctn();
-			this._childjs = this._xcnt = null;
+			this._childjs = this._xcnt = undefined;
 				//only once since the content has been created as child widgets
 		}
 
@@ -97,7 +97,7 @@ export class Include extends zul.Widget {
 				n.appendChild(xcnt[j]);
 	}
 
-	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		if (Array.isArray(this._xcnt)) //array -> zk().detachChildren() used
 			for (var n = this.$n_(); n.firstChild;)
 				n.removeChild(n.firstChild);

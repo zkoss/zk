@@ -34,15 +34,15 @@ function _fixForEmpty(wgt: zul.grid.Grid): void {
 
 @zk.WrapClass('zul.grid.Grid')
 export class Grid extends zul.mesh.MeshWidget {
-	override _scrollbar: zul.Scrollbar | null = null;
+	override _scrollbar?: zul.Scrollbar;
 	_grid$rod?: boolean; // zkex.grid.Group
 	_fixhdwcnt?: number; // zkex.grid.Detail
 	_fixhdoldwd?: number; // zkex.grid.Detail
 	_emptyMessage?: string;
-	rows?: zul.grid.Rows | null;
-	columns?: zul.grid.Columns | null;
+	rows?: zul.grid.Rows;
+	columns?: zul.grid.Columns;
 	_shallFixEmpty?: boolean;
-	_scOddRow?: string | null;
+	_scOddRow?: string;
 	// Prevent name clash with inherited method `_visibleRows`. Fortunately, Java
 	// calls its setter, so this renaming is safe. See `renderProperties`
 	// in `Grid.java`.
@@ -106,16 +106,16 @@ export class Grid extends zul.mesh.MeshWidget {
 	 * @param int col which column to fetch (starting at 0).
 	 * @return zk.Widget
 	 */
-	getCell(row: number, col: number): zk.Widget | null | undefined {
+	getCell(row: number, col: number): zk.Widget | undefined {
 		const rows = this.rows;
 		if (!rows)
-			return null;
+			return undefined;
 
 		if (rows.nChildren <= row)
-			return null;
+			return undefined;
 
 		const gridRow = rows.getChildAt<zul.grid.Row>(row)!;
-		return gridRow.nChildren <= col ? null : gridRow.getChildAt(col);
+		return gridRow.nChildren <= col ? undefined : gridRow.getChildAt(col);
 	}
 
 	/** Returns the style class for the odd rows.
@@ -133,7 +133,7 @@ export class Grid extends zul.mesh.MeshWidget {
 	 * @param String scls
 	 */
 	setOddRowSclass(sclass: string): this {
-		const scls = sclass || null;
+		const scls = sclass;
 		if (this._scOddRow != scls) {
 			this._scOddRow = scls;
 			var n = this.$n();
@@ -143,14 +143,14 @@ export class Grid extends zul.mesh.MeshWidget {
 		return this;
 	}
 
-	override rerender(skipper?: zk.Skipper | number | null): this {
+	override rerender(skipper?: zk.Skipper | number): this {
 		super.rerender(skipper);
 		if (this.rows)
 			this.rows._syncStripe();
 		return this;
 	}
 
-	override insertBefore(child: zk.Widget, sibling: zk.Widget | null | undefined, ignoreDom?: boolean): boolean {
+	override insertBefore(child: zk.Widget, sibling: zk.Widget | undefined, ignoreDom?: boolean): boolean {
 		if (super.insertBefore(child, sibling, !this.z_rod)) {
 			this._fixOnAdd(child, ignoreDom, ignoreDom);
 			return true;
@@ -193,19 +193,19 @@ export class Grid extends zul.mesh.MeshWidget {
 
 		var isRows;
 		if (child == this.rows) {
-			this.rows = null;
+			this.rows = undefined;
 			isRows = true;
 			this._syncEmpty();
 		} else if (child == this.columns) {
-			this.columns = null;
+			this.columns = undefined;
 			this._syncEmpty();
 		} else if (child == this.foot)
-			this.foot = null;
+			this.foot = undefined;
 		else if (child == this.paging) {
-			this.paging.setMeshWidget(null);
-			this.paging = null;
+			this.paging.setMeshWidget(undefined);
+			this.paging = undefined;
 		} else if (child == this.frozen) {
-			this.frozen = null;
+			this.frozen = undefined;
 			this.destroyBar_();
 		}
 		if (!isRows && !this.childReplacing_) //not called by onChildReplaced_
@@ -227,7 +227,7 @@ export class Grid extends zul.mesh.MeshWidget {
 		out.push('>', this._emptyMessage!, '</div></td></tr></tbody>');
 	}
 
-	override bind_(desktop: zk.Desktop | null | undefined, skipper: zk.Skipper | null | undefined, after: CallableFunction[]): void {
+	override bind_(desktop: zk.Desktop | undefined, skipper: zk.Skipper | undefined, after: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		var w = this;
 		after.push(function () {
@@ -235,7 +235,7 @@ export class Grid extends zul.mesh.MeshWidget {
 		});
 	}
 
-	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		this.destroyBar_();
 		super.unbind_(skipper, after, keepRod);
 	}
@@ -261,7 +261,7 @@ export class Grid extends zul.mesh.MeshWidget {
 		var bar = this._scrollbar;
 		if (bar) {
 			bar.destroy();
-			bar = this._scrollbar = null;
+			bar = this._scrollbar = undefined;
 		}
 	}
 
@@ -284,7 +284,7 @@ export class Grid extends zul.mesh.MeshWidget {
 		//else handled by insertBefore/appendChild
 	}
 
-	override insertChildHTML_(child: zk.Widget, before?: zk.Widget | null, desktop?: zk.Desktop | null): void {
+	override insertChildHTML_(child: zk.Widget, before?: zk.Widget, desktop?: zk.Desktop): void {
 		if (child instanceof zul.grid.Rows) {
 			this.rows = child;
 			var fakerows = this.$n('rows');
@@ -334,8 +334,8 @@ export class Grid extends zul.mesh.MeshWidget {
 	 * @since 6.5.0
 	 * @return boolean
 	 */
-	hasGroup(): boolean | undefined {
-		return this.rows?.hasGroup();
+	hasGroup(): boolean {
+		return !!this.rows?.hasGroup();
 	}
 
 	/**
@@ -369,7 +369,7 @@ export class RowIter extends zk.Object implements zul.mesh.ItemIterator {
 	grid: zul.grid.Grid;
 	opts?: Record<string, unknown>;
 	_isInit?: boolean;
-	p?: zul.grid.Row | null;
+	p?: zul.grid.Row;
 
 	/** Constructor
 	 * @param Grid grid the widget that the iterator belongs to
@@ -383,7 +383,7 @@ export class RowIter extends zk.Object implements zul.mesh.ItemIterator {
 	_init(): void {
 		if (!this._isInit) {
 			this._isInit = true;
-			var p = this.grid.rows ? this.grid.rows.firstChild : null;
+			var p = this.grid.rows ? this.grid.rows.firstChild : undefined;
 			if (this.opts && this.opts.skipHidden)
 				for (; p && !p.isVisible(); p = p.nextSibling) { /* empty */ }
 			this.p = p;
@@ -404,10 +404,10 @@ export class RowIter extends zk.Object implements zul.mesh.ItemIterator {
 	 *
 	 * @return Row the next element in the iteration.
 	 */
-	next(): zul.grid.Row | null | undefined {
+	next(): zul.grid.Row | undefined {
 		this._init();
 		var p = this.p,
-			q = p ? p.nextSibling : null;
+			q = p ? p.nextSibling : undefined;
 		if (this.opts && this.opts.skipHidden)
 			for (; q && !q.isVisible(); q = q.nextSibling) { /* empty */ }
 		if (p)

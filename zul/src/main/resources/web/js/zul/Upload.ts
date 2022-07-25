@@ -65,7 +65,7 @@ function _onchange(this: ZKInputElement, _evt): void {
 
 if (zk.opera) { //opera only
 	var _syncQue: Upload[] = [],
-		_syncId: number | null,
+		_syncId: number | undefined,
 		_syncNow = function (): void {
 			for (var j = _syncQue.length; j--;)
 				_syncQue[j].sync();
@@ -79,7 +79,7 @@ if (zk.opera) { //opera only
 			_syncQue.$remove(upld);
 			if (_syncId && !_syncQue.length) {
 				clearInterval(_syncId);
-				_syncId = null;
+				_syncId = undefined;
 			}
 		};
 }
@@ -96,13 +96,13 @@ export class Upload extends zk.Object {
 	accept?: string;
 	isNative?: boolean;
 	_clsnm: string;
-	_wgt: zk.Widget | null;
-	_parent?: HTMLElement | null;
+	_wgt?: zk.Widget;
+	_parent?: HTMLElement;
 	_tooltiptext?: string;
 	_outer!: HTMLElement;
-	_inp!: HTMLElement | null;
+	_inp!: HTMLElement | undefined;
 	_formDetached: unknown;
-	_aded?: zul.wgt.ADBS | null;
+	_aded?: zul.wgt.ADBS;
 
 	/** Constructor
 	 * @param zk.Widget wgt the widget belongs to the file upload
@@ -112,7 +112,7 @@ export class Upload extends zk.Object {
 	 *      It contains upload options like maxsize, multiple, and so on.
 	 *      It specifies the widget class name of the fileupload.
 	 */
-	constructor(wgt: zk.Widget, parent: HTMLElement | null | undefined, option: string) {
+	constructor(wgt: zk.Widget, parent: HTMLElement | undefined, option: string) {
 		super();
 		this.uploaders = {};
 		this.suppressedErrors = [];
@@ -135,7 +135,7 @@ export class Upload extends zk.Object {
 				cls = attr;
 		}
 
-		this._clsnm = cls || '';
+		this._clsnm = cls ?? '';
 
 		this._wgt = wgt;
 
@@ -237,8 +237,8 @@ export class Upload extends zk.Object {
 			_rmSyncQue(this);
 
 		jq(this._outer).remove();
-		this._inp = null;
-		this._wgt = this._parent = null;
+		this._inp = undefined;
+		this._wgt = this._parent = undefined;
 		for (var v in this.uploaders) {
 			var uplder = this.uploaders[v];
 			if (uplder) {
@@ -272,12 +272,12 @@ export class Upload extends zk.Object {
 		_cancel(this, sid, true);
 	}
 
-	getFile(): FileList | null {
+	getFile(): FileList | undefined {
 		let uploader = this.uploaders[this.getKey(this.sid - 1)];
 		if (uploader) {
 			return uploader.getFile();
 		}
-		return null;
+		return undefined;
 	}
 
 	/**
@@ -385,11 +385,11 @@ export class Upload extends zk.Object {
 export class Uploader extends zk.Object {
 	id: string;
 	flnm: string;
-	_upload: Upload | null;
+	_upload?: Upload;
 	_form: HTMLFormElement | null;
 	_parent: HTMLElement | null;
 	_sid: number;
-	_wgt: zk.Widget | null;
+	_wgt?: zk.Widget;
 	viewer?: UploadViewer;
 	_echo?: boolean;
 	static _tmupload: boolean;
@@ -421,15 +421,15 @@ export class Uploader extends zk.Object {
 		this.viewer = viewer;
 	}
 
-	getFile(): FileList | null {
-		return this._form ? (this._form[0] as HTMLInputElement).files : null;
+	getFile(): FileList | undefined {
+		return this._form ? (this._form[0] as HTMLInputElement).files as FileList | undefined : undefined;
 	}
 
 	/**
 	 * Returns the widget which the uploader belongs to.
 	 * @return zk.Widget
 	 */
-	getWidget(): zk.Widget | null {
+	getWidget(): zk.Widget | undefined {
 		return this._wgt;
 	}
 
@@ -443,7 +443,8 @@ export class Uploader extends zk.Object {
 			jq(this._form.parentNode!).remove();
 			jq('#' + this.id + '_ifm').remove();
 		}
-		this._form = this._upload = this._wgt = null;
+		this._form = null;
+		this._upload = this._wgt = undefined;
 	}
 
 	/**
@@ -569,15 +570,15 @@ export class Uploader extends zk.Object {
 		this._echo = true;
 
 		//B50-3304877: autodisable and Upload
-		var wgt: zk.Widget | null,
-			upload: Upload | null,
-			aded: zul.wgt.ADBS | null | undefined,
+		var wgt: zk.Widget | undefined,
+			upload: Upload | undefined,
+			aded: zul.wgt.ADBS | undefined,
 			parent;
 		if ((wgt = this._wgt) && (upload = this._upload)
 			&& (aded = upload._aded)) {
-			wgt._uplder = null; // prevent destory during onResponse(sync disabled status by rerender will destory _uplder)
+			wgt._uplder = undefined; // prevent destory during onResponse(sync disabled status by rerender will destory _uplder)
 			aded.onResponse();
-			upload._aded = null;
+			upload._aded = undefined;
 
 			//restore uploader
 			wgt._uplder!.destroy();
@@ -716,8 +717,8 @@ function _initUM(uplder: Uploader, flnm: string): void {
 			 */
 			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			// @ts-ignore
-			override open(wgt: zk.Widget | null, position?: string): void {
-				super.open(wgt, null, position || 'after_start', {
+			override open(wgt?: zk.Widget, position?: string): void {
+				super.open(wgt, undefined, position || 'after_start', {
 					sendOnOpen: false,
 					disableMask: true
 				});
@@ -736,7 +737,7 @@ export declare class UploadManager extends zul.wgt.Popup {
 	removeFile(uplder: zul.Uploader): void
 	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 	// @ts-ignore
-	override open(wgt: zk.Widget | null, position?: string): void
+	override open(wgt: zk.Widget | undefined, position?: string): void
 }
 
 /**

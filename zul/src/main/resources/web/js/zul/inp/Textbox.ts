@@ -26,8 +26,8 @@ export class Textbox extends zul.inp.InputWidget<string> {
 	 * <p>Default: false.
 	 * @return boolean
 	 */
-	override isMultiline(): boolean | undefined {
-		return this._multiline;
+	override isMultiline(): boolean {
+		return !!this._multiline;
 	}
 
 	/** Sets whether it is multiline.
@@ -50,8 +50,8 @@ export class Textbox extends zul.inp.InputWidget<string> {
 	 * <p>Default: false.
 	 * @return boolean
 	 */
-	isTabbable(): boolean | undefined {
-		return this._tabbable;
+	isTabbable(): boolean {
+		return !!this._tabbable;
 	}
 
 	/** Sets whether TAB is allowed.
@@ -85,7 +85,7 @@ export class Textbox extends zul.inp.InputWidget<string> {
 				rows: number;
 			}
 			// FIXME: grid?
-			var inp = this.getInputNode() as ZULInputElement | null | undefined;
+			var inp = this.getInputNode() as ZULInputElement | undefined;
 			if (inp && this.isMultiline())
 				inp.rows = v;
 		}
@@ -123,8 +123,8 @@ export class Textbox extends zul.inp.InputWidget<string> {
 	 * <p>Default: false.
 	 * @return boolean
 	 */
-	isSubmitByEnter(): boolean | undefined {
-		return this._submitByEnter;
+	isSubmitByEnter(): boolean {
+		return !!this._submitByEnter;
 	}
 
 	/** Sets whether it is submitByEnter.

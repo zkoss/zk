@@ -51,7 +51,7 @@ export class Absolutechildren extends zul.Widget {
      * Returns the current "x" position within parent container component
      * @return int
      */
-    getX(): number | null {
+    getX(): number | undefined {
         return this._x;
     }
 
@@ -77,7 +77,7 @@ export class Absolutechildren extends zul.Widget {
      * Returns the current "y" position within parent container component
      * @return int
      */
-    getY(): number | null {
+    getY(): number | undefined {
         return this._y;
     }
 
@@ -94,7 +94,7 @@ export class Absolutechildren extends zul.Widget {
 		jq(this.$n()!).css('top', this._y);
 	}
 
-	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		this._rePositionBoth();
 	}

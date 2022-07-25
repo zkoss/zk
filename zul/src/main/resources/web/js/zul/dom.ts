@@ -110,7 +110,7 @@ jq.alert = function (msg, opts) {
 					],
 					mode: opts!.mode || 'modal'
 				});
-			let p: zk.Widget | null = (opts!.desktop || zk.Desktop.$());
+			let p: zk.Widget | undefined = (opts!.desktop || zk.Desktop.$());
 			if (p && (p = p.firstChild) && p.desktop)
 				p.appendChild(wnd);
 			else

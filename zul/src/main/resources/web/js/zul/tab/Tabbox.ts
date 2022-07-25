@@ -20,8 +20,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 // TabboxSkipper is only used in this file. No need to export TabboxSkipper.
 class TabboxSkipper extends zk.Skipper {
-	skipper?: zk.Skipper | null;
-	constructor(skipper?: zk.Skipper | null) {
+	skipper?: zk.Skipper;
+	constructor(skipper?: zk.Skipper) {
 		super();
 		this.skipper = skipper;
 	}
@@ -66,12 +66,12 @@ export class Tabbox extends zul.Widget {
 	_animating?: boolean = false;
 	_nativebar = true;
 	_panelSpacing?: string;
-	tabs?: zul.tab.Tabs | null;
-	tabpanels?: zul.tab.Tabpanels | null;
-	toolbar?: zul.wgt.Toolbar | null;
-	_selTab?: zul.tab.Tab | null;
+	tabs?: zul.tab.Tabs;
+	tabpanels?: zul.tab.Tabpanels;
+	toolbar?: zul.wgt.Toolbar;
+	_selTab?: zul.tab.Tab;
 	_scrolling?: boolean;
-	_toolbarWidth?: number | null;
+	_toolbarWidth?: number;
 	_shallSize?: boolean;
 
 	/**
@@ -193,7 +193,7 @@ export class Tabbox extends zul.Widget {
 	 * Returns the tabs that this tabbox owns.
 	 * @return zul.tab.Tabs
 	 */
-	getTabs(): zul.tab.Tabs | null | undefined {
+	getTabs(): zul.tab.Tabs | undefined {
 		return this.tabs;
 	}
 
@@ -201,7 +201,7 @@ export class Tabbox extends zul.Widget {
 	 * Returns the tabpanels that this tabbox owns.
 	 * @return zul.tab.Tabpanels
 	 */
-	getTabpanels(): zul.tab.Tabpanels | null | undefined {
+	getTabpanels(): zul.tab.Tabpanels | undefined {
 		return this.tabpanels;
 	}
 
@@ -209,7 +209,7 @@ export class Tabbox extends zul.Widget {
 	 * Returns the auxiliary toolbar that this tabbox owns.
 	 * @return zul.wgt.Toolbar
 	 */
-	getToolbar(): zul.wgt.Toolbar | null | undefined {
+	getToolbar(): zul.wgt.Toolbar | undefined {
 		return this.toolbar;
 	}
 
@@ -305,8 +305,8 @@ export class Tabbox extends zul.Widget {
 	 * Returns the selected tab panel.
 	 * @return Tabpanel
 	 */
-	getSelectedPanel(): zul.tab.Tabpanel | null | undefined {
-		return this._selTab ? this._selTab.getLinkedPanel() : null;
+	getSelectedPanel(): zul.tab.Tabpanel | undefined {
+		return this._selTab ? this._selTab.getLinkedPanel() : undefined;
 	}
 
 	/**
@@ -326,7 +326,7 @@ export class Tabbox extends zul.Widget {
 	 * Returns the selected tab.
 	 * @return zul.tab.Tab
 	 */
-	getSelectedTab(): zul.tab.Tab | null | undefined {
+	getSelectedTab(): zul.tab.Tab | undefined {
 		return this._selTab;
 	}
 
@@ -342,7 +342,7 @@ export class Tabbox extends zul.Widget {
 		return this;
 	}
 
-	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, new TabboxSkipper(skipper), after); // F61-ZK-970.zul
 
 		// used in Tabs.js
@@ -375,14 +375,14 @@ export class Tabbox extends zul.Widget {
 		});
 	}
 
-	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		zWatch.unlisten({onResponse: this});
 		for (var key = ['right', 'left', 'down', 'up'], le = key.length; le--;) {
 			const btn = this.$n(key[le]);
 			if (btn)
 				this.domUnlisten_(btn, 'onClick', '_doClick', key[le]);
 		}
-		this._toolbarWidth = null;
+		this._toolbarWidth = undefined;
 		super.unbind_(skipper, after, keepRod);
 	}
 
@@ -501,23 +501,23 @@ export class Tabbox extends zul.Widget {
 	override onChildRemoved_(child: zk.Widget): void {
 		super.onChildRemoved_(child);
 		if (child == this.toolbar)
-			this.toolbar = null;
+			this.toolbar = undefined;
 		else if (child == this.tabs)
-			this.tabs = null;
+			this.tabs = undefined;
 		else if (child == this.tabpanels)
-			this.tabpanels = null;
+			this.tabpanels = undefined;
 		if (!this.childReplacing_)
 			this.rerender();
 	}
 
-	override setWidth(width: string | null): this {
+	override setWidth(width?: string): this {
 		super.setWidth(width);
 		if (this.desktop)
 			zUtl.fireSized(this, -1); //no beforeSize
 		return this;
 	}
 
-	override setHeight(height: string | null): this {
+	override setHeight(height?: string): this {
 		super.setHeight(height);
 		if (this.desktop)
 			zUtl.fireSized(this, -1); //no beforeSize
@@ -531,7 +531,7 @@ export class Tabbox extends zul.Widget {
 				fc = pnls.firstChild;
 
 			for (var c = fc; c; c = c.nextSibling) {
-				var panel = c ? c.getCaveNode() : null;
+				var panel = c ? c.getCaveNode() : undefined;
 				if (!panel)
 					return;
 				else {

@@ -20,7 +20,7 @@ export class Imagemap extends zul.wgt.Image {
 	static _doneURI?: string;
 	static _stamp?: number;
 
-	override getWidth(): string | null | undefined {
+	override getWidth(): string | undefined {
 		return this._width;
 	}
 
@@ -37,7 +37,7 @@ export class Imagemap extends zul.wgt.Image {
 		return this;
 	}
 
-	override getHeight(): string | null | undefined {
+	override getHeight(): string | undefined {
 		return this._height;
 	}
 
@@ -54,22 +54,22 @@ export class Imagemap extends zul.wgt.Image {
 		return this;
 	}
 
-	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 
 		if (!jq('#zk_hfr_')[0])
-			jq.newFrame('zk_hfr_', null,
+			jq.newFrame('zk_hfr_', undefined,
 				zk.webkit ? 'position:absolute;top:-1000px;left:-1000px;width:0;height:0;display:inline'
-					: null/*invisible*/);
+					: undefined/*invisible*/);
 			//creates a hidden frame. However, in safari, we cannot use invisible frame
 			//otherwise, safari will open a new window
 	}
 
-	override getImageNode(): HTMLImageElement | null | undefined {
+	override getImageNode(): HTMLImageElement | undefined {
 		return this.$n('real');
 	}
 
-	override getCaveNode(): HTMLElement | null | undefined {
+	override getCaveNode(): HTMLElement | undefined {
 		return this.$n('map');
 	}
 

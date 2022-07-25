@@ -97,20 +97,20 @@ export class Audio extends zul.Widget<HTMLAudioElement> {
 	 * <p>Default: false.
 	 * @return boolean
 	 */
-	isAutoplay(): boolean | undefined {
-		return this._autoplay;
+	isAutoplay(): boolean {
+		return !!this._autoplay;
 	}
 
 	/** Sets whether to auto start playing the audio.
 	 * @param boolean autoplay
 	 */
-	setAutoplay(v: boolean, opts?: Record<string, boolean>): this {
+	setAutoplay(autoplay: boolean, opts?: Record<string, boolean>): this {
 		const o = this._autoplay;
-		this._autoplay = v;
+		this._autoplay = autoplay;
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== autoplay || (opts && opts.force)) {
 			var n = this.$n();
-			if (n) n.autoplay = v;
+			if (n) n.autoplay = autoplay;
 		}
 
 		return this;
@@ -149,21 +149,21 @@ export class Audio extends zul.Widget<HTMLAudioElement> {
 	 * @return boolean
 	 * @since 7.0.0
 	 */
-	isControls(): boolean | undefined {
-		return this._controls;
+	isControls(): boolean {
+		return !!this._controls;
 	}
 
 	/** Sets whether to display the audio controls.
 	 * @param boolean controls
 	 * @since 7.0.0
 	 */
-	setControls(v: boolean, opts?: Record<string, boolean>): this {
+	setControls(controls: boolean, opts?: Record<string, boolean>): this {
 		const o = this._controls;
-		this._controls = v;
+		this._controls = controls;
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== controls || (opts && opts.force)) {
 			var n = this.$n();
-			if (n) n.controls = v;
+			if (n) n.controls = controls;
 		}
 
 		return this;
@@ -173,20 +173,20 @@ export class Audio extends zul.Widget<HTMLAudioElement> {
 	 * <p>Default: false.
 	 * @return boolean
 	 */
-	isLoop(): boolean | undefined {
-		return this._loop;
+	isLoop(): boolean {
+		return !!this._loop;
 	}
 
 	/** Sets whether to play the audio repeatedly.
 	 * @param boolean loop
 	 */
-	setLoop(v: boolean, opts?: Record<string, boolean>): this {
+	setLoop(loop: boolean, opts?: Record<string, boolean>): this {
 		const o = this._loop;
-		this._loop = v;
+		this._loop = loop;
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== loop || (opts && opts.force)) {
 			var n = this.$n();
-			if (n) n.loop = v;
+			if (n) n.loop = loop;
 		}
 
 		return this;
@@ -198,21 +198,21 @@ export class Audio extends zul.Widget<HTMLAudioElement> {
 	 * @return boolean
 	 * @since 7.0.0
 	 */
-	isMuted(): boolean | undefined {
-		return this._muted;
+	isMuted(): boolean {
+		return !!this._muted;
 	}
 
 	/** Sets whether to mute the audio.
 	 * @param boolean muted
 	 * @since 7.0.0
 	 */
-	setMuted(v: boolean, opts?: Record<string, boolean>): this {
+	setMuted(muted: boolean, opts?: Record<string, boolean>): this {
 		const o = this._muted;
-		this._muted = v;
+		this._muted = muted;
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== muted || (opts && opts.force)) {
 			var n = this.$n();
-			if (n) n.muted = v;
+			if (n) n.muted = muted;
 		}
 
 		return this;
@@ -236,7 +236,7 @@ export class Audio extends zul.Widget<HTMLAudioElement> {
 		_invoke(this, 'pause');
 	}
 
-	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		const n = this.$n_();
 		n.addEventListener('play', this.proxy(this._audioOnPlay));
@@ -244,7 +244,7 @@ export class Audio extends zul.Widget<HTMLAudioElement> {
 		n.addEventListener('ended', this.proxy(this._audioOnEnded));
 	}
 
-	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		this._isUnbinded = true;
 		this.stop();
 		const n = this.$n_();

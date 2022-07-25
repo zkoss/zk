@@ -33,9 +33,9 @@ export class Slider extends zul.Widget {
 	_step = -1;
 	_mode = 'integer';
 	_name?: string;
-	efield?: HTMLInputElement | null;
-	slidetip?: HTMLElement | null;
-	static down_btn?: HTMLElement | null;
+	efield?: HTMLInputElement;
+	slidetip?: HTMLElement;
+	static down_btn?: HTMLElement;
 	slidepos?: number;
 
 	/** Returns the orient.
@@ -145,7 +145,7 @@ export class Slider extends zul.Widget {
 	 * <p>Default : "{0}"
 	 * @return String
 	 */
-	getSlidingtext(): string | null {
+	getSlidingtext(): string | undefined {
 		return this._slidingtext;
 	}
 
@@ -269,16 +269,16 @@ export class Slider extends zul.Widget {
 		return this;
 	}
 
-	override setWidth(w: string | null): this {
-		super.setWidth(w);
+	override setWidth(width?: string): this {
+		super.setWidth(width);
 		if (this.desktop && this._mold != 'knob') {
 			this.onSize();
 		}
 		return this;
 	}
 
-	override setHeight(h: string | null): this {
-		super.setHeight(h);
+	override setHeight(height?: string): this {
+		super.setHeight(height);
 		if (this.desktop && this._mold != 'knob') {
 			this.onSize();
 		}
@@ -305,12 +305,12 @@ export class Slider extends zul.Widget {
 
 	onup_(evt: zk.Event): void {
 		var btn = zul.inp.Slider.down_btn,
-			widget: Slider | null | undefined;
+			widget: Slider | undefined;
 		if (btn) {
 			widget = zk.Widget.$<Slider>(btn);
 		}
 
-		zul.inp.Slider.down_btn = null;
+		zul.inp.Slider.down_btn = undefined;
 		if (widget)
 			jq(document).off('zmouseup', widget.onup_);
 	}
@@ -338,7 +338,7 @@ export class Slider extends zul.Widget {
 			isVertical = this.isVertical(),
 			height = this._getHeight(),
 			width = this._getWidth(),
-			offset: number | null = isVertical ? evt.pageY - pos[1] : evt.pageX - pos[0];
+			offset: number | undefined = isVertical ? evt.pageY - pos[1] : evt.pageX - pos[0];
 
 		if (!$btn[0] || $btn.is(':animated')) return;
 
@@ -351,7 +351,7 @@ export class Slider extends zul.Widget {
 					to = (offset / total) * (this._maxpos - this._minpos);
 				this._curpos = this._getSteppedPos(to + this._curpos);
 			}
-			offset = null; // update by _curpos
+			offset = undefined; // update by _curpos
 		}
 		// B65-ZK-1884: Avoid button's animation out of range
 		// B86-ZK-4125: Vertical slider area is not aligned with button
@@ -457,7 +457,7 @@ export class Slider extends zul.Widget {
 
 		widget._fixPos();
 		jq(widget.slidetip!).remove();
-		widget.slidetip = null;
+		widget.slidetip = undefined;
 	}
 
 	_realpos(dg?: zk.Draggable): number {
@@ -621,7 +621,7 @@ export class Slider extends zul.Widget {
 		}
 	}
 
-	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		if (this._mold == 'knob')
 			return;
@@ -639,15 +639,15 @@ export class Slider extends zul.Widget {
 		this._fixPos();
 	}
 
-	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		if (this._mold == 'knob') {
 			super.unbind_(skipper, after, keepRod);
 			return;
 		}
-		this.efield = null;
+		this.efield = undefined;
 		if (this._drag) {
 			this._drag.destroy();
-			this._drag = null;
+			this._drag = undefined;
 		}
 
 		zWatch.unlisten({
@@ -691,7 +691,7 @@ export class Slider extends zul.Widget {
 		return ofs[(isVertical ? 1 : 0)];
 	}
 
-	static _getNextPos(wgt: Slider, offset: number | null): SliderPosition {
+	static _getNextPos(wgt: Slider, offset?: number): SliderPosition {
 		var $btn = jq(wgt.$n_('btn')),
 			fum = wgt.isVertical() ? ['top', 'height'] as const : ['left', 'width'] as const,
 			newPosition: SliderPosition = {};

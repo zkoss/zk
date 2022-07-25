@@ -21,7 +21,7 @@ import {DateImpl} from './dateImpl';
 
 export type ErrorHandler = (response: Response, errCode: number) => boolean;
 
-export type AjaxErrorHandler = (req: Response, status: number, statusText: string, ajaxReqTries?: number | null) => number;
+export type AjaxErrorHandler = (req: Response, status: number, statusText: string, ajaxReqTries?: number) => number;
 
 export interface AuCommand {
 	cmd: string;
@@ -30,8 +30,8 @@ export interface AuCommand {
 
 export interface AuCommands extends Array<AuCommand> {
 	rid?: number;
-	dt?: Desktop | null;
-	pfIds?: string | null;
+	dt?: Desktop;
+	pfIds?: string;
 	rtags?: Record<string, unknown>;
 }
 
@@ -45,7 +45,7 @@ export interface AuRequestInfo {
 	tmout: number;
 	rtags: Record<string, unknown>;
 	forceAjax: boolean;
-	uploadCallbacks: unknown[]|null;
+	uploadCallbacks?: unknown[];
 }
 export interface AUCommand0 {
 	bookmark(bk: string, replace: boolean): void;
@@ -55,8 +55,8 @@ export interface AUCommand0 {
 	title(title: string): void;
 	log: typeof zk.log;
 	script(script: string): void;
-	echo(dtid: string | zk.Desktop | null | undefined): void;
-	echoGx: zk.Callable;
+	echo(dtid?: string | zk.Desktop): void;
+	echoGx: CallableFunction;
 	clientInfo(dtid?: string): void;
 	visibilityChange(dtid?: string): void;
 	download(url: string): void;
@@ -71,39 +71,39 @@ export interface AUCommand0 {
 	showNotification(msg: string, type: zul.wgt.NotificationType, pid: string, ref: Widget,
 					 pos: string, off: zk.Offset, dur: number, closable: boolean): void;
 	showBusy(uuid: string, msg?: string): void;
-	clearBusy(uuid: string | null): void;
+	clearBusy(uuid?: string): void;
 }
 export interface AUCommand1 {
-	setAttr(wgt: Widget | null, nm: string, val: unknown): void;
+	setAttr(wgt: Widget | undefined, nm: string, val: unknown): void;
 	setAttrs(wgt: Widget, attrs: unknown[]): void;
 	outer(wgt: Widget, code: string): void;
 	addAft(wgt: Widget, ...codes: string[]): void;
 }
 export interface AUEngine {
-	ajaxReq: boolean | null;
-	ajaxReqInf: AuRequestInfo | null;
-	ajaxReqTries: number | null;
+	ajaxReq?: boolean;
+	ajaxReqInf?: AuRequestInfo;
+	ajaxReqTries?: number;
 	ajaxReqMaxCount: number;
 	ajaxSettings: JQuery.AjaxSettings;
 	ajaxErrorHandler?: AjaxErrorHandler;
 	cmd0: AUCommand0;
 	cmd1: AUCommand1;
 	disabledRequest?: boolean;
-	doAfterProcessWgts?: Widget[] | null;
+	doAfterProcessWgts?: Widget[];
 	doneTime?: number;
-	pendingReqInf: AuRequestInfo | null;
-	processPhase?: string | null;
+	pendingReqInf?: AuRequestInfo;
+	processPhase?: string;
 	sentTime?: number;
 	seqId: number;
 	_cInfoReg?: boolean;
-	_clientInfo?: Array<unknown> | null;
-	_errCode: string | number | null;
+	_clientInfo?: Array<unknown>;
+	_errCode?: string | number;
 	_errURIs: Record<string, string>;
 
 	_doCmds(sid?: number): void;
 	_fetch(input: RequestInfo, init?: RequestInit): Promise<Response>;
-	_pfdone(dt: Desktop, pfIds?: string | null): void;
-	_pfrecv(dt: Desktop, pfIds?: string | null): void;
+	_pfdone(dt: Desktop, pfIds?: string): void;
+	_pfrecv(dt: Desktop, pfIds?: string): void;
 	_pfsend(dt: Desktop, fetchOpts: RequestInit, completeOnly: boolean, forceAjax: boolean): void;
 	_onClientInfo(): void;
 	_onResponseReady(response: Response): void;
@@ -121,7 +121,7 @@ export interface AUEngine {
 	ajaxReqResend(reqInf: AuRequestInfo, timeout?: number): void;
 	beforeSend(uri: string, aureq: ZKEvent, dt?: Desktop): string;
 	confirmRetry(msgCode: string, msg2?: string): boolean;
-	createWidgets(codes: ArrayLike<unknown>[], fn: (wgts: Widget[]) => void, filter?: (wgt: Widget) => Widget | null): void;
+	createWidgets(codes: ArrayLike<unknown>[], fn: (wgts: Widget[]) => void, filter?: (wgt: Widget) => Widget | undefined): void;
 	doCmds(dtid: string, rs: unknown[]): void;
 	encode(j: number, aureq: ZKEvent, dt: Desktop): string;
 	getAuRequests(dt: Desktop): ZKEvent[];
@@ -129,8 +129,8 @@ export interface AUEngine {
 	getPushErrorURI(code: number): string;
 	onError(fn: ErrorHandler): void;
 	onResponseError(response: Response, errCode: number): boolean;
-	pfAddIds(dt: Desktop, prop: string, pfIds?: string | null): void;
-	pfGetIds(response: Response): string | null;
+	pfAddIds(dt: Desktop, prop: string, pfIds?: string): void;
+	pfGetIds(response: Response): string | undefined;
 	process(cmd: string, data: string): void;
 	processing(): boolean;
 	pushReqCmds(reqInf: AuRequestInfo, response: Response): boolean;
@@ -142,8 +142,8 @@ export interface AUEngine {
 	setPushErrorURI(code: number, uri: string): void;
 	setPushErrorURI(errors: {[code: number]: string}): void;
 	shallIgnoreESC(): boolean;
-	showError(msgCode: string, msg2?: string | null, cmd?: string | null, ex?: Error): void;
-	toJSON(target: Widget | null | undefined, data: unknown): string;
+	showError(msgCode: string, msg2?: string, cmd?: string, ex?: Error): void;
+	toJSON(target: Widget | undefined, data: unknown): string;
 	unError(fn: ErrorHandler): void;
 	wrongValue_(wgt: Widget, msg: string | false): void;
 }
@@ -243,14 +243,14 @@ function doProcess(cmd: string, data): void { //decoded
 				return zAu.showError('ILLEGAL_RESPONSE', 'Unknown', cmd);
 		}
 		fn.call(zAu, ...data);
-		zAu.processPhase = null;
+		zAu.processPhase = undefined;
 	}
 }
 
 function ajaxReqResend2(): void {
 	var reqInf = zAu.pendingReqInf;
 	if (reqInf) {
-		zAu.pendingReqInf = null;
+		zAu.pendingReqInf = undefined;
 		if (zAu.seqId == reqInf.sid)
 			ajaxSendNow(reqInf);
 	}
@@ -269,7 +269,7 @@ function ajaxSend(dt: zk.Desktop, aureq: ZKEvent, timeout?: number): void {
 	//call stack: echo2() -> send()
 	if (!dt) {
 		//original dt is decided by aureq.target.desktop, so start by it's parent.
-		var wgt: Widget | null | undefined = aureq.target!.parent;
+		var wgt: Widget | undefined = aureq.target!.parent;
 		while (!wgt?.desktop) {
 			wgt = wgt?.parent;
 		}
@@ -302,7 +302,7 @@ function ajaxSendNow(reqInf: AuRequestInfo): void {
 		if (fetchOpts.headers) {
 			fetchOpts.headers['ZK-Error-Report'] = zAu._errCode;
 		}
-		zAu._errCode = null;
+		zAu._errCode = undefined;
 	}
 
 	var forceAjax = reqInf.forceAjax;
@@ -324,7 +324,7 @@ function ajaxSendNow(reqInf: AuRequestInfo): void {
 		});
 		return response;
 	}).catch(function (e) {
-		zAu.ajaxReq = zAu.ajaxReqInf = null; // ZK-4775: should clear processing flag
+		zAu.ajaxReq = zAu.ajaxReqInf = undefined; // ZK-4775: should clear processing flag
 		if (!reqInf.ignorable && !zk.unloading) {
 			var msg = _exmsg(e);
 			zAu._errCode = '[Send] ' + msg;
@@ -348,7 +348,7 @@ function doCmdsNow(cmds: AuCommands): boolean {
 				doProcess(cmd!.cmd, cmd!.data);
 			} catch (e) {
 				zk.mounting = false; //make it able to proceed
-				zAu.showError('FAILED_TO_PROCESS', null, cmd!.cmd, e);
+				zAu.showError('FAILED_TO_PROCESS', undefined, cmd!.cmd, e);
 				if (!ex) ex = e;
 			}
 		}
@@ -356,10 +356,10 @@ function doCmdsNow(cmds: AuCommands): boolean {
 			zAu.doAfterProcessWgts.forEach(function (wgt) {
 				if (wgt.doAfterProcessRerenderArgs) {
 					wgt.rerender(...wgt.doAfterProcessRerenderArgs);
-					wgt.doAfterProcessRerenderArgs = null;
+					wgt.doAfterProcessRerenderArgs = undefined;
 				}
 			});
-			zAu.doAfterProcessWgts = null;
+			zAu.doAfterProcessWgts = undefined;
 		}
 	} finally {
 	//Bug #2871135, always fire since the client might send back empty
@@ -368,8 +368,8 @@ function doCmdsNow(cmds: AuCommands): boolean {
 			// sometimes onCommandReady and onResponse will be called during the widget mounting phase. (timing issue)
 			zk.afterMount(function () {
 				// Bug ZK-2516
-				zWatch.fire('onCommandReady', null, {timeout: -1, rtags: rtags}); //won't use setTimeout
-				zWatch.fire('onResponse', null, {timeout: 0, rtags: rtags}); //use setTimeout
+				zWatch.fire('onCommandReady', undefined, {timeout: -1, rtags: rtags}); //won't use setTimeout
+				zWatch.fire('onResponse', undefined, {timeout: 0, rtags: rtags}); //use setTimeout
 				if (rtags.onClientInfo) {
 					setTimeout(zk.endProcessing, 50); // always stop the processing
 					delete zk.clientinfo;
@@ -392,7 +392,7 @@ function fireClientInfo(): void {
 	zAu.cmd0.clientInfo();
 }
 function sendTimeout(): void {
-	zAu.send(new zk.Event(null, 'dummy', null, {ignorable: true, serverAlive: true, rtags: {isDummy: true}, forceAjax: true}));
+	zAu.send(new zk.Event(undefined, 'dummy', undefined, {ignorable: true, serverAlive: true, rtags: {isDummy: true}, forceAjax: true}));
 		//serverAlive: the server shall not ignore it if session timeout
 	zk.isTimeout = true; //ZK-3304: already timeout
 }
@@ -489,7 +489,7 @@ let zAu: AUEngine = {
 	_resetTimeout: function () { //called by mount.js
 		if (idTimeout) {
 			clearTimeout(idTimeout);
-			idTimeout = null;
+			idTimeout = undefined;
 		}
 		if (zk.timeout > 0)
 			idTimeout = setTimeout(sendTimeout, zk.timeout * 1000);
@@ -675,7 +675,7 @@ let zAu: AUEngine = {
 
 	//remove desktop (used in mount.js and wiget.js)
 	_rmDesktop: function (dt, dummy) {
-		var url = zk.ajaxURI(null, {desktop: dt, au: true}),
+		var url = zk.ajaxURI(undefined, {desktop: dt, au: true}),
 			data = jq.param({
 				dtid: dt.id,
 				cmd_0: dummy ? 'dummy' : 'rmDesktop',
@@ -963,9 +963,9 @@ zAu.beforeSend = function (uri, req, dt) {
 
 		//notify watches (fckez uses it to ensure its value is sent back correctly
 		try {
-			zWatch.fire('onSend', null, implicit);
+			zWatch.fire('onSend', undefined, implicit);
 		} catch (e) {
-			zAu.showError('FAILED_TO_SEND', null, null, e);
+			zAu.showError('FAILED_TO_SEND', undefined, undefined, e);
 		}
 
 		//decide ignorable
@@ -988,7 +988,7 @@ zAu.beforeSend = function (uri, req, dt) {
 		}
 		//Consider XML (Pros: ?, Cons: larger packet)
 		var content, rtags = {},
-			requri = uri || zk.ajaxURI(null, {desktop: dt, au: true}),
+			requri = uri || zk.ajaxURI(undefined, {desktop: dt, au: true}),
 			ws = typeof zWs != 'undefined' && zWs.ready;
 		if (!forceAjax && ws) {
 			content = {};
@@ -1117,14 +1117,14 @@ zAu.beforeSend = function (uri, req, dt) {
 			if (ws) {
 				zWs.setRequestHeaders('ZK-Client-Receive', ids);
 			}
-			dt['_pfRecvIds'] = null;
+			dt['_pfRecvIds'] = undefined;
 		}
 		if (ids = dt['_pfDoneIds']) {
 			if (fetchHeaders) fetchHeaders['ZK-Client-Complete'] = ids;
 			if (ws) {
 				zWs.setRequestHeaders('ZK-Client-Complete', ids);
 			}
-			dt['_pfDoneIds'] = null;
+			dt['_pfDoneIds'] = undefined;
 		}
 	},
 
@@ -1173,7 +1173,7 @@ zAu.beforeSend = function (uri, req, dt) {
 		var reqInf = zAu.ajaxReqInf, sid;
 		try {
 			if (response) {
-				zAu.ajaxReq = zAu.ajaxReqInf = null;
+				zAu.ajaxReq = zAu.ajaxReqInf = undefined;
 				if (zk.pfmeter) zAu._pfrecv(reqInf!.dt, zAu.pfGetIds(response));
 
 				sid = response.headers.get('ZK-SID');
@@ -1217,7 +1217,7 @@ zAu.beforeSend = function (uri, req, dt) {
 			//advance SID to avoid receive the same response twice
 			if (sid && ++zAu.seqId > 9999) zAu.seqId = 1;
 			zAu.ajaxReqTries = 0;
-			zAu.pendingReqInf = null;
+			zAu.pendingReqInf = undefined;
 		}
 		return false;
 	},
@@ -1266,11 +1266,11 @@ zAu.beforeSend = function (uri, req, dt) {
 		}
 		return false;
 	},
-	_respException: function (req: Response & {abort?: zk.Callable}, reqInf, e) {
+	_respException: function (req: Response & {abort?: CallableFunction}, reqInf, e) {
 		if (!window['zAu'])
 			return true; //the doc has been unloaded
 
-		zAu.ajaxReq = zAu.ajaxReqInf = null;
+		zAu.ajaxReq = zAu.ajaxReqInf = undefined;
 		try {
 			if (req && typeof req.abort == 'function') req.abort();
 		} catch (e2) {
@@ -1351,7 +1351,7 @@ zAu.beforeSend = function (uri, req, dt) {
 	},
 	/* @param zk.Widget target
 	 */
-	toJSON(target: Widget | null | undefined, data: {pageX?: number; pageY?: number; x?: number; y?: number} | unknown[]): string {
+	toJSON(target: Widget | undefined, data: {pageX?: number; pageY?: number; x?: number; y?: number} | unknown[]): string {
 		if (!Array.isArray(data)) {
 			if (data.pageX != null && data.x == null) {
 				var ofs = target && target.desktop ? // B50-3336745: target may have been detached
@@ -1375,23 +1375,23 @@ zAu.beforeSend = function (uri, req, dt) {
 		return jq.toJSON(data);
 	},
 	/* internal use only */
-	ajaxReq: null,
+	ajaxReq: undefined,
 	/* internal use only */
-	ajaxReqInf: null,
+	ajaxReqInf: undefined,
 	/* internal use only */
-	ajaxReqTries: null,
+	ajaxReqTries: undefined,
 	/* internal use only */
 	ajaxReqMaxCount: 300,
 	/* internal use only */
 	seqId: (jq.now() % 9999) + 1,
 	/* internal use only */
-	pendingReqInf: null,
-	_errCode: null,
+	pendingReqInf: undefined,
+	_errCode: undefined,
 	_errURIs: {},
 	//Perfomance Meter//
 	// Returns request IDs sent from the server separated by space.
-	pfGetIds: function (response) {
-		return response.headers.get('ZK-Client-Complete');
+	pfGetIds(response): string | undefined {
+		return response.headers.get('ZK-Client-Complete') as string | undefined;
 	},
 	pfAddIds: function (dt, prop, pfIds) {
 		if (pfIds && (pfIds = pfIds.trim())) {
@@ -1563,7 +1563,7 @@ zAu.ajaxErrorHandler = function (req, status, statusText, ajaxReqTries) {
 		 * @see zk.AuCmd1#echo2
 		 * @see #echoGx
 		 */
-		echo(dtid: string | zk.Desktop | null | undefined): void {
+		echo(dtid?: string | zk.Desktop): void {
 			var dt = zk.Desktop.$(dtid),
 				aureqs = dt ? zAu.getAuRequests(dt) : [];
 			// Bug ZK-2741
@@ -1573,7 +1573,7 @@ zAu.ajaxErrorHandler = function (req, status, statusText, ajaxReqTries) {
 					return; //no need to send more
 				}
 			}
-			zAu.send(new zk.Event(dt, 'dummy', null, {
+			zAu.send(new zk.Event(dt, 'dummy', undefined, {
 				ignorable: true,
 				rtags: {isDummy: true}
 			}));
@@ -1734,7 +1734,7 @@ zAu.ajaxErrorHandler = function (req, status, statusText, ajaxReqTries) {
 		 */
 		showNotification(msg: string, type: zul.wgt.NotificationType, pid: string, ref: Widget,
 						 pos: string, off: zk.Offset, dur: number, closable: boolean): void {
-			var notif = zk.load('zul.wgt') ? zul.wgt.Notification : null; // in zul
+			var notif = zk.load('zul.wgt') ? zul.wgt.Notification : undefined; // in zul
 			if (notif) {
 				var opts = {
 					ref: ref,
@@ -1761,18 +1761,18 @@ zAu.ajaxErrorHandler = function (req, status, statusText, ajaxReqTries) {
 		 * @param String msg the message.
 		 */
 		showBusy(uuid: string, msg?: string): void {
-			let uid: string | null = uuid;
+			let uid: string | undefined = uuid;
 			if (msg === undefined) {
 				msg = uuid;
-				uid = null;
+				uid = undefined;
 			}
 
 			zAu.cmd0.clearBusy(uid);
 
-			var w: Widget | null = uid ? Widget.$(uid) : null;
+			var w: Widget | undefined = uid ? Widget.$(uid) : undefined;
 			if (!uid) {
 				zk._prevFocus = zk.currentFocus;
-				zUtl.progressbox('zk_showBusy', msg || msgzk.PLEASE_WAIT, true, null, {busy: true});
+				zUtl.progressbox('zk_showBusy', msg || msgzk.PLEASE_WAIT, true, undefined, {busy: true});
 				jq('html').on('keydown', zk.$void);
 			} else if (w) {
 				zk.delayFunction(uid, function () {
@@ -1791,11 +1791,11 @@ zAu.ajaxErrorHandler = function (req, status, statusText, ajaxReqTries) {
 		 */
 		/** Removes the busy message covering the whole browser.
 		 */
-		clearBusy(uuid: string | null): void {
+		clearBusy(uuid?: string): void {
 			if (uuid) {
 				zk.delayFunction(uuid, function () {
 					var w = Widget.$(uuid),
-						efs = w ? w.effects_ : null;
+						efs = w ? w.effects_ : undefined;
 					if (efs && efs.showBusy) {
 						efs.showBusy.destroy();
 						delete efs.showBusy;
@@ -1805,7 +1805,7 @@ zAu.ajaxErrorHandler = function (req, status, statusText, ajaxReqTries) {
 				zUtl.destroyProgressbox('zk_showBusy', {busy: true}); //since user might want to show diff msg
 				if (zk._prevFocus) {
 					zk.currentFocus = zk._prevFocus;
-					zk._prevFocus = null;
+					zk._prevFocus = undefined;
 					var wgt = zk.currentFocus;
 					try {
 						zk._focusByClearBusy = true;
@@ -1967,7 +1967,7 @@ zAu.ajaxErrorHandler = function (req, status, statusText, ajaxReqTries) {
 		 * @param String name the name of the attribute
 		 * @param Object value the value of the attribute.
 		 */
-		setAttr(wgt: Widget | null, nm: string, val: unknown): void {
+		setAttr(wgt: Widget | undefined, nm: string, val: unknown): void {
 			if (wgt) { // server push may cause wgt is null in some case - zksandbox/#a1
 				if (nm == 'z$al') { //afterLoad
 					zk.afterLoad(function () {
@@ -1976,7 +1976,7 @@ zAu.ajaxErrorHandler = function (req, status, statusText, ajaxReqTries) {
 					});
 				} else {
 					// Bug ZK-2281, make sure the wgt is not in the rerendering queue.
-					wgt.rerenderNow_(null);
+					wgt.rerenderNow_(undefined);
 					wgt.set(nm, val, true); //3rd arg: fromServer
 				}
 			}
@@ -2009,7 +2009,7 @@ zAu.ajaxErrorHandler = function (req, status, statusText, ajaxReqTries) {
 			}, function (wx) {
 				for (var w = wx; w; w = w.parent)
 					if (w == wgt)
-						return null; //ignore it since it is going to be removed
+						return undefined; //ignore it since it is going to be removed
 				return wx;
 			});
 		},
@@ -2164,7 +2164,7 @@ zAu.ajaxErrorHandler = function (req, status, statusText, ajaxReqTries) {
 			else {
 				var fn = zk.$import(func) as Function;
 				if (!fn) zk.error('not found: ' + func);
-				fn.call(null, ...args);
+				fn.call(undefined, ...args);
 			}
 		},
 		/** Ask the client to echo back an AU request with the specified

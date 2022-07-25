@@ -13,18 +13,18 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 /** iZUML utilities.
  */
 //zk.$package('zk.zuml');
-function _innerText(node: HTMLElement): string | null {
+function _innerText(node: HTMLElement): string | undefined {
 	var txt = node.innerHTML,
 		j = txt.indexOf('<!--');
 	if (j >= 0)
 		txt = txt.substring(j + 4, txt.lastIndexOf('-->'));
 	txt = txt.trim();
-	return txt ? '<div>' + txt.trim() + '</div>' : null;
+	return txt ? '<div>' + txt.trim() + '</div>' : undefined;
 }
-function _aftCreate(wgt, cwgts, node, opts): null | zk.Widget | zk.Widget[] {
+function _aftCreate(wgt, cwgts, node, opts): undefined | zk.Widget | zk.Widget[] {
 	var c;
 	if (!wgt || !(c = wgt.firstChild))
-		return null;
+		return undefined;
 
 	do {
 		var sib = c.nextSibling;
@@ -124,7 +124,7 @@ function _create0(parent, e, args, cwgts): void {
 				_create(wgt, e, args, ws);
 				if (prolog && (ws = ws[0])) {
 					ws['prolog'] = prolog;
-					prolog = null;
+					prolog = undefined;
 				}
 			} else if (nt == 3) {
 				var txt = _eval(wgt, e.nodeValue, args);
@@ -186,10 +186,10 @@ export let Parser = {
 	 * @param Function fn the function to register for execution later
 	 * @return zk.Widget
 	 */
-	create(parent: zk.Widget | null, doc: string | Document, args, fn: Function): zk.Widget | zk.Widget[] {
+	create(parent: zk.Widget | undefined, doc: string | Document, args, fn: Function): zk.Widget | zk.Widget[] {
 		if (typeof args == 'function' && !fn) {
 			fn = args;
-			args = null;
+			args = undefined;
 		}
 
 		const root = (typeof doc == 'string' ? zk.xml.Utl.parseXML(doc) : doc).documentElement;
@@ -208,10 +208,10 @@ export let Parser = {
 	 * @param Function fn the function to register for execution later
 	 * @return zk.Widget
 	 */
-	createAt(nodeId: string, opts, args, fn: (w) => void): zk.Widget | zk.Widget[] | null | undefined {
+	createAt(nodeId: string, opts, args, fn: (w) => void): zk.Widget | zk.Widget[] | undefined {
 		if (typeof args == 'function' && !fn) {
 			fn = args;
-			args = null;
+			args = undefined;
 		}
 
 		let node = jq(nodeId)[0];
@@ -219,7 +219,7 @@ export let Parser = {
 		if (!txt) return;
 
 		var cwgts = [],
-			wgt = zk.zuml.Parser.create(null, txt, args,
+			wgt = zk.zuml.Parser.create(undefined, txt, args,
 				function (w) {
 					w = _aftCreate(w, cwgts, node, opts);
 					if (fn) fn(w);

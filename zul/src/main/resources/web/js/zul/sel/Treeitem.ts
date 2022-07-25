@@ -13,11 +13,11 @@ This program is distributed under LGPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 //test if a treexxx is closed or any parent treeitem is closed
-function _closed(treechildren: zul.sel.Treechildren | null): boolean {
+function _closed(treechildren: zul.sel.Treechildren | undefined): boolean {
 	interface WidgetWithOpen extends zk.Widget {
 		isOpen?(): boolean;
 	}
-	for (let ti: WidgetWithOpen | null = treechildren; ti && !(ti instanceof zul.sel.Tree); ti = ti.parent)
+	for (let ti: WidgetWithOpen | undefined = treechildren; ti && !(ti instanceof zul.sel.Tree); ti = ti.parent)
 		if (ti.isOpen && !ti.isOpen())
 			return true;
 	return false;
@@ -36,7 +36,7 @@ function _addSelItemsDown(items: zul.sel.Treeitem[], wgt: zul.sel.Treeitem): voi
 		_addSelItemsDown(items, w);
 }
 
-function _showDOM(wgt: zul.sel.Treeitem, visible: boolean | null | undefined): void {
+function _showDOM(wgt: zul.sel.Treeitem, visible: boolean): void {
 	const n = wgt.$n();
 	if (n)
 		n.style.display = visible ? '' : 'none';
@@ -45,9 +45,9 @@ function _showDOM(wgt: zul.sel.Treeitem, visible: boolean | null | undefined): v
 			_showDOM(w, visible);
 }
 
-function _getTreePath(tree: zul.sel.Tree | null, node: zul.sel.Treeitem | null): number[] {
+function _getTreePath(tree: zul.sel.Tree | undefined, node: zul.sel.Treeitem | undefined): number[] {
 	const paths: number[] = [];
-	for (let p: zk.Widget | null = node; p && p instanceof zul.sel.Treeitem; p = p.parent!.parent)
+	for (let p: zk.Widget | undefined = node; p && p instanceof zul.sel.Treeitem; p = p.parent!.parent)
 		paths.unshift(p.getChildIndex());
 	return paths;
 }
@@ -90,15 +90,15 @@ function _compareTreePath(thisPath: number[], itemPath: number[]): 1 | -1 {
  */
 @zk.WrapClass('zul.sel.Treeitem')
 export class Treeitem extends zul.sel.ItemWidget {
-	override parent!: zul.sel.Treechildren | null;
-	override firstChild!: zul.sel.Treerow | zul.sel.Treechildren | null;
-	override lastChild!: zul.sel.Treerow | zul.sel.Treechildren | null;
-	override nextSibling!: zul.sel.Treeitem | null;
-	override previousSibling!: zul.sel.Treeitem | null;
+	override parent!: zul.sel.Treechildren | undefined;
+	override firstChild!: zul.sel.Treerow | zul.sel.Treechildren | undefined;
+	override lastChild!: zul.sel.Treerow | zul.sel.Treechildren | undefined;
+	override nextSibling!: zul.sel.Treeitem | undefined;
+	override previousSibling!: zul.sel.Treeitem | undefined;
 
 	_open = true;
-	treerow?: zul.sel.Treerow | null;
-	treechildren?: zul.sel.Treechildren | null;
+	treerow?: zul.sel.Treerow | undefined;
+	treechildren?: zul.sel.Treechildren | undefined;
 
 	/** Returns whether this container is open.
 	 * <p>Default: true.
@@ -139,7 +139,7 @@ export class Treeitem extends zul.sel.ItemWidget {
 			}
 
 			var tree = this.getTree(),
-				ebodytbl = tree ? tree.ebodytbl : null,
+				ebodytbl = tree ? tree.ebodytbl : undefined,
 				oldwd = ebodytbl ? ebodytbl.clientWidth : 0; // ebodytbl shall not be null
 
 			if (!open)
@@ -195,8 +195,8 @@ export class Treeitem extends zul.sel.ItemWidget {
 	 * Returns the mesh widget. i.e. {@link Tree}
 	 * @return Tree
 	 */
-	override getMeshWidget(): zul.sel.Tree | null {
-		return this.parent ? this.parent.getTree() : null;
+	override getMeshWidget(): zul.sel.Tree | undefined {
+		return this.parent ? this.parent.getTree() : undefined;
 	}
 
 	/**
@@ -213,12 +213,12 @@ export class Treeitem extends zul.sel.ItemWidget {
 		return '';
 	}
 
-	override $n(): HTMLTableRowElement | null | undefined
-	override $n(nm?: string): HTMLElement | null | undefined
-	override $n(nm?: string): HTMLElement | null | undefined {
+	override $n(): HTMLTableRowElement | undefined
+	override $n(nm?: string): HTMLElement | undefined
+	override $n(nm?: string): HTMLElement | undefined {
 		if (this.treerow)
 			return nm ? this.treerow.$n(nm) : this.treerow.$n() || jq(this.treerow.uuid, zk)[0];
-		return null;
+		return undefined;
 	}
 
 	/** Returns whether the element is to act as a container
@@ -241,7 +241,7 @@ export class Treeitem extends zul.sel.ItemWidget {
 	 */
 	getLevel(): number {
 		var level = 0;
-		for (var item: zul.sel.Tree | zul.sel.Treeitem | null = this; ; ++level) {
+		for (var item: zul.sel.Tree | zul.sel.Treeitem | undefined = this; ; ++level) {
 			if (!item.parent)
 				break;
 
@@ -256,9 +256,9 @@ export class Treeitem extends zul.sel.ItemWidget {
 	 * if no such cell.
 	 * @return String
 	 */
-	override getLabel(): string | null {
+	override getLabel(): string | undefined {
 		var cell = this.getFirstCell();
-		return cell ? cell.getLabel() : null;
+		return cell ? cell.getLabel() : undefined;
 	}
 
 	/** Sets the label of the {@link Treecell} it contains.
@@ -275,8 +275,8 @@ export class Treeitem extends zul.sel.ItemWidget {
 	 * Returns the first treecell.
 	 * @return Treecell
 	 */
-	getFirstCell(): zul.sel.Treecell | null {
-		return this.treerow ? this.treerow.firstChild : null;
+	getFirstCell(): zul.sel.Treecell | undefined {
+		return this.treerow ? this.treerow.firstChild : undefined;
 	}
 
 	_autoFirstCell(): zul.sel.Treecell {
@@ -294,9 +294,9 @@ export class Treeitem extends zul.sel.ItemWidget {
 	/** Returns the image of the {@link Treecell} it contains.
 	 * @return String
 	 */
-	getImage(): string | null | undefined {
+	getImage(): string | undefined {
 		var cell = this.getFirstCell();
-		return cell ? cell.getImage() : null;
+		return cell ? cell.getImage() : undefined;
 	}
 
 	/** Sets the image of the {@link Treecell} it contains.
@@ -315,22 +315,22 @@ export class Treeitem extends zul.sel.ItemWidget {
 	 * The parent tree item is actually the grandparent if any.
 	 * @return Treeitem
 	 */
-	getParentItem(): zul.sel.Treeitem | null {
+	getParentItem(): zul.sel.Treeitem | undefined {
 		const p = this.parent?.parent; // null/undefined are not instances of any Object
-		return p instanceof zul.sel.Treeitem ? p : null;
+		return p instanceof zul.sel.Treeitem ? p : undefined;
 	}
 
-	_isRealVisible(): boolean | null | undefined {
+	_isRealVisible(): boolean {
 		const p = this.parent;
-		return this.isVisible() && p && p._isRealVisible();
+		return this.isVisible() && !!p && p._isRealVisible();
 	}
 
-	_isVisibleInTree(): boolean | undefined {
+	_isVisibleInTree(): boolean {
 		// used by Treecell#_isLastVisibleChild
 		if (!this.isVisible())
-			return;
+			return false;
 		var c = this.parent,
-			p: zul.sel.Tree | zul.sel.Treeitem | null;
+			p: zul.sel.Tree | zul.sel.Treeitem | undefined;
 		if (!c || !c.isVisible() || !(p = c.parent))
 			return false;
 		if (p instanceof zul.sel.Tree)
@@ -339,7 +339,7 @@ export class Treeitem extends zul.sel.ItemWidget {
 		return p._isVisibleInTree(); // timing issue, does not concern open state
 	}
 
-	override setVisible(visible: boolean | undefined): this {
+	override setVisible(visible: boolean): this {
 		if (this.isVisible() != visible) {
 			super.setVisible(visible);
 			if (this.treerow) this.treerow.setVisible(visible);
@@ -349,7 +349,7 @@ export class Treeitem extends zul.sel.ItemWidget {
 		return this;
 	}
 
-	override beforeParentChanged_(newParent: zul.sel.Treechildren | null): void {
+	override beforeParentChanged_(newParent?: zul.sel.Treechildren): void {
 		var oldtree = this.getTree();
 		if (oldtree)
 			oldtree._onTreeitemRemoved(this);
@@ -368,7 +368,7 @@ export class Treeitem extends zul.sel.ItemWidget {
 	}
 
 	//@Override
-	override insertBefore(child: zk.Widget, sibling: zk.Widget | null | undefined, ignoreDom?: boolean): boolean {
+	override insertBefore(child: zk.Widget, sibling: zk.Widget | undefined, ignoreDom?: boolean): boolean {
 		if (super.insertBefore(child, sibling,
 		ignoreDom || (!this.z_rod && child instanceof zul.sel.Treechildren))) {
 			this._fixOnAdd(child, ignoreDom);
@@ -401,9 +401,9 @@ export class Treeitem extends zul.sel.ItemWidget {
 	override onChildRemoved_(child: zk.Widget): void {
 		super.onChildRemoved_(child);
 		if (child == this.treerow) {
-			this.treerow = null;
+			this.treerow = undefined;
 		} else if (child == this.treechildren) {
-			this.treechildren = null;
+			this.treechildren = undefined;
 			if (!this.childReplacing_) //NOT called by onChildReplaced_
 				this._syncIcon(true); // remove the icon
 		}
@@ -418,7 +418,7 @@ export class Treeitem extends zul.sel.ItemWidget {
 	}
 
 	override removeHTML_(n: HTMLElement | HTMLElement[]): void {
-		for (var w: zk.Widget | null = this.firstChild; w; w = w.nextSibling) {
+		for (var w: zk.Widget | undefined = this.firstChild; w; w = w.nextSibling) {
 			const cn = w.$n();
 			if (cn)
 				w.removeHTML_(cn);
@@ -434,7 +434,7 @@ export class Treeitem extends zul.sel.ItemWidget {
 	}
 
 	_removeChildHTML(n: HTMLElement | string): void {
-		for (var cn: HTMLElement | null | undefined, w = this.firstChild; w; w = w.nextSibling) {
+		for (var cn: HTMLElement | undefined, w = this.firstChild; w; w = w.nextSibling) {
 			if (w != this.treerow && (cn = w.$n()))
 				w.removeHTML_(cn);
 		}
@@ -479,8 +479,8 @@ export class Treeitem extends zul.sel.ItemWidget {
 		}
 	}
 
-	override insertChildHTML_(child: zk.Widget, before?: zk.Widget | null, desktop?: zk.Desktop | null): void {
-		const nodeOfBefore = before ? before.getFirstNode_() : null;
+	override insertChildHTML_(child: zk.Widget, before?: zk.Widget, desktop?: zk.Desktop): void {
+		const nodeOfBefore = before ? before.getFirstNode_() : undefined;
 		if (nodeOfBefore)
 			jq(nodeOfBefore).before(child.redrawHTML_());
 		else
@@ -489,14 +489,14 @@ export class Treeitem extends zul.sel.ItemWidget {
 		child.bind(desktop);
 	}
 
-	override getOldWidget_(n: HTMLElement | string): zk.Widget | null | undefined {
+	override getOldWidget_(n: HTMLElement | string): zk.Widget | undefined {
 		var old = super.getOldWidget_(n);
 		if (old && old instanceof zul.sel.Treerow)
 			return old.parent;
 		return old;
 	}
 
-	override replaceHTML(n: HTMLElement | string, desktop: zk.Desktop | null, skipper?: zk.Skipper | null, _trim_?: boolean, _callback_?: CallableFunction[]): void {
+	override replaceHTML(n: HTMLElement | string, desktop: zk.Desktop, skipper?: zk.Skipper, _trim_?: boolean, _callback_?: CallableFunction[]): void {
 		this._removeChildHTML(n);
 		super.replaceHTML(n, desktop, skipper, _trim_, _callback_);
 	}

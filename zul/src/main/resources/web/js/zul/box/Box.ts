@@ -17,8 +17,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 //zk.$package('zul.box');
 
 // Returns if the spacing is 0.
-function _spacing0(spacing: string | null | undefined): boolean | null | undefined | '' {
-	return spacing && spacing.startsWith('0') && !zk.parseInt(spacing);
+function _spacing0(spacing?: string): boolean {
+	return !!spacing && spacing.startsWith('0') && !zk.parseInt(spacing);
 }
 function _spacingHTML(box: zul.box.Box, child: zk.Widget): string {
 	var oo = '',
@@ -109,7 +109,7 @@ export class Box extends zul.Widget {
 	_splitterKid = false;
 	_stretchPack?: boolean;
 	_watchBound?: boolean;
-	_pack2?: string | null;
+	_pack2?: string;
 	_watchTd?: boolean;
 	_watchAlign?: boolean;
 
@@ -346,7 +346,7 @@ export class Box extends zul.Widget {
 		if (this.desktop) this._fixChildDomVisible(child, child._visible);
 	}
 
-	override replaceChildHTML_(child: zk.Widget, en: HTMLElement | string, desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, _trim_?: boolean): void {
+	override replaceChildHTML_(child: zk.Widget, en: HTMLElement | string, desktop?: zk.Desktop, skipper?: zk.Skipper, _trim_?: boolean): void {
 		super.replaceChildHTML_(child, en, desktop, skipper, _trim_);
 		this._fixChildDomVisible(child, child._visible);
 		if (child instanceof zul.box.Splitter) {
@@ -359,8 +359,8 @@ export class Box extends zul.Widget {
 		}
 	}
 
-	_fixChildDomVisible(child: zk.Widget, visible: boolean | undefined): void {
-		var n: zk.Widget | HTMLElement | null | undefined = this._chdextr(child);
+	_fixChildDomVisible(child: zk.Widget, visible?: boolean): void {
+		var n: zk.Widget | HTMLElement | undefined = this._chdextr(child);
 		if (n) n.style.display = visible ? '' : 'none';
 		n = child.$n('chdex2');
 		if (n) n.style.display = visible && !_spacing0(this._spacing) ? '' : 'none';
@@ -374,11 +374,11 @@ export class Box extends zul.Widget {
 		}
 	}
 
-	_chdextr(child: zk.Widget): HTMLElement | null | undefined {
+	_chdextr(child: zk.Widget): HTMLElement | undefined {
 		return child.$n('chdex') || child.$n();
 	}
 
-	override insertChildHTML_(child: zk.Widget, before?: zk.Widget | null, desktop?: zk.Desktop | null): void {
+	override insertChildHTML_(child: zk.Widget, before?: zk.Widget, desktop?: zk.Desktop): void {
 		if (before) {
 			jq(this._chdextr(before)!).before(this.encloseChildHTML_(child)!);
 		} else {
@@ -395,7 +395,7 @@ export class Box extends zul.Widget {
 		super.removeChildHTML_(child, ignoreDom);
 		jq(child.uuid + '-chdex', zk).remove();
 		jq(child.uuid + '-chdex2', zk).remove();
-		var sib: zk.Widget | null;
+		var sib: zk.Widget | undefined;
 		if (this.lastChild == child && (sib = child.previousSibling)) //child is last
 			jq(sib.uuid + '-chdex2', zk).remove();
 	}
@@ -468,7 +468,7 @@ export class Box extends zul.Widget {
 						kid.setFlexSize_({height: '', width: ''});
 						var chdex = kid.$n('chdex');
 						if (chdex) {
-							var n: HTMLElement | null | undefined;
+							var n: HTMLElement | undefined;
 							if ((n = kid.$n()) && (n.scrollTop || n.scrollLeft)) {// keep the scroll status
 								// do nothing Bug ZK-1885: scrollable div (with vflex) and tooltip
 							} else {
@@ -486,7 +486,7 @@ export class Box extends zul.Widget {
 						kid.setFlexSize_({height: '', width: ''});
 						var chdex = kid.$n('chdex');
 						if (chdex) {
-							var n: HTMLElement | null | undefined;
+							var n: HTMLElement | undefined;
 							if ((n = kid.$n()) && (n.scrollTop || n.scrollLeft)) {// keep the scroll status
 								// do nothing Bug ZK-1885: scrollable div (with vflex) and tooltip
 							} else {
@@ -587,7 +587,7 @@ export class Box extends zul.Widget {
 			psz = this._getContentSize(),
 			hgh = psz.height,
 			wdh = psz.width,
-			xc = p!.firstChild as HTMLElement | null,
+			xc = p!.firstChild,
 			k = -1,
 			szes = this._sizes,
 			scrWdh;
@@ -604,8 +604,8 @@ export class Box extends zul.Widget {
 		if (zkp.hasHScroll()) //with horizontal scrollbar
 			hgh -= scrWdh || jq.scrollbarWidth();
 
-		for (; xc; xc = xc.nextSibling as HTMLElement | null) {
-			var c = xc.id && xc.id.endsWith('-chdex') ? vert ?
+		for (; xc; xc = xc.nextSibling) {
+			var c = (xc as HTMLElement).id?.endsWith('-chdex') ? vert ?
 					(xc.firstChild as HTMLElement).id ? xc.firstChild : (xc.firstChild as HTMLElement).firstChild : xc.firstChild : xc;
 
 			// B70-ZK-2390
@@ -616,7 +616,7 @@ export class Box extends zul.Widget {
 				fixedSize = false;
 			if (zkc.isVisible()) {
 				let j = (c as HTMLElement).id ? (c as HTMLElement).id.indexOf('-') : 1,
-					cwgt = j < 0 ? zk.Widget.$((c as HTMLElement).id) : null,
+					cwgt = j < 0 ? zk.Widget.$((c as HTMLElement).id) : undefined,
 					boxFlexSize = this._hflexsz,
 					clearWidth = zk.chrome && boxFlexSize;
 
@@ -631,8 +631,7 @@ export class Box extends zul.Widget {
 				if (clearWidth)
 					n.style.width = '';
 				var offhgh = fixedSize && vert ? zk.parseInt(szes![k]) :
-						zk.ie < 11 && xc.id && xc.id.endsWith('-chdex2') && xc.style.height && xc.style.height.endsWith('px') ?
-						zk.parseInt(xc.style.height) : zkc.offsetHeight(),
+						zkc.offsetHeight(),
 					offwdh = fixedSize && !vert ? zk.parseInt(szes![k]) : zkc.offsetWidth(),
 					cwdh = offwdh + zkc.marginWidth(),
 					chgh = offhgh + zkc.marginHeight();
@@ -799,10 +798,10 @@ export class Box extends zul.Widget {
 		return style ? html + ' style="' + style + '"' : html;
 	}
 
-	_isStretchPack(): boolean | undefined {
+	_isStretchPack(): boolean {
 		//when pack has specifies 'stretch' or there are splitter kids which
 		//implies pack='stretch'
-		return this._splitterKid || this._stretchPack;
+		return !!(this._splitterKid || this._stretchPack);
 	}
 
 	_isStretchAlign(): boolean {
@@ -824,7 +823,7 @@ export class Box extends zul.Widget {
 		}
 	}
 
-	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		this._bindFixTd();
 		if (this._isStretchAlign())
@@ -833,7 +832,7 @@ export class Box extends zul.Widget {
 			this._bindWatch();
 	}
 
-	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		this._unbindWatch();
 		this._unbindAlign();
 		this._unbindFixTd();
@@ -863,7 +862,7 @@ export class Box extends zul.Widget {
 				zktd = zk(td),
 				tdsz = vert ? zktd.revisedWidth(td.offsetWidth) : zktd.revisedHeight(td.offsetHeight);
 
-			for (var child = this.firstChild, c: HTMLElement | null | undefined; child; child = child.nextSibling) {
+			for (var child = this.firstChild, c: HTMLElement | undefined; child; child = child.nextSibling) {
 				if (child.isVisible() && (c = child.$n())) {
 					//20100120, Henri Chen: Strange! After set c.style.height/width, the margin is gone in safari/chrome
 					if (vert)
@@ -895,7 +894,7 @@ export class Box extends zul.Widget {
 			var v = w.split(',');
 			if (v[0].trim() == 'stretch') {
 				this._stretchPack = true;
-				this._pack2 = v.length > 1 ? v[1].trim() : null;
+				this._pack2 = v.length > 1 ? v[1].trim() : undefined;
 			} else {
 				this._stretchPack = v.length > 1 && v[1].trim() == 'stretch';
 				this._pack2 = v[0].trim();
@@ -952,17 +951,17 @@ export class Box extends zul.Widget {
 		this.onSize();
 	}
 
-	override getFlexContainer_(): HTMLElement | null | undefined {
-		return null;
+	override getFlexContainer_(): HTMLElement | undefined {
+		return undefined;
 	}
 
 	//static
-	static _toValign(v: string | null): string | null {
+	static _toValign(v?: string): string | undefined {
 		return v ? 'start' == v ? 'top' : 'center' == v ? 'middle' :
-			'end' == v ? 'bottom' : v : null;
+			'end' == v ? 'bottom' : v : undefined;
 	}
 
-	static _toHalign(v: string | null): string | null {
-		return v ? 'start' == v ? 'left' : 'end' == v ? 'right' : v : null;
+	static _toHalign(v?: string): string | undefined {
+		return v ? 'start' == v ? 'left' : 'end' == v ? 'right' : v : undefined;
 	}
 }

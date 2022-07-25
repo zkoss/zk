@@ -18,8 +18,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 export interface LabelImageWidgetWithDisable extends LabelImageWidget {
 	_adbs?: boolean;
 	_disabled?: boolean;
-	isDisabled(): boolean | undefined;
-	setDisabled(disabled: boolean | undefined, opts?: Record<string, boolean>): this;
+	isDisabled(): boolean;
+	setDisabled(disabled?: boolean, opts?: Record<string, boolean>): this;
 }
 
 export interface LabelImageWidgetWithAutodisable extends LabelImageWidgetWithDisable {
@@ -37,7 +37,7 @@ export abstract class LabelImageWidget<TElement extends HTMLElement = HTMLElemen
 	_iconSclass?: string;
 	_image?: string;
 	_hoverImage?: string;
-	_eimg?: HTMLImageElement | null;
+	_eimg?: HTMLImageElement;
 	_preloadImage?: boolean;
 
 	/** Sets the label.
@@ -235,7 +235,7 @@ export abstract class LabelImageWidget<TElement extends HTMLElement = HTMLElemen
 	 * Returns the image node if any.
 	 * @return DOMElement
 	 */
-	getImageNode(): HTMLImageElement | null | undefined {
+	getImageNode(): HTMLImageElement | undefined {
 		if (!this._eimg && this._image) {
 			var n = this.$n();
 			if (n) this._eimg = jq(n).find<HTMLImageElement>('img:first')[0];
@@ -256,7 +256,7 @@ export abstract class LabelImageWidget<TElement extends HTMLElement = HTMLElemen
 
 	//@Override
 	override clearCache(): void {
-		this._eimg = null;
+		this._eimg = undefined;
 		super.clearCache();
 	}
 }

@@ -33,7 +33,7 @@ export interface EffectStackupOptions {
 
 export interface EffectFullMaskOptions extends EffectStackupOptions {
 	mask?: HTMLElement;
-	anchor?: HTMLElement | null;
+	anchor?: HTMLElement;
 	id?: string;
 	zIndex?: number;
 	visible?: boolean;
@@ -41,7 +41,7 @@ export interface EffectFullMaskOptions extends EffectStackupOptions {
 
 export interface EffectMaskOptions extends EffectStackupOptions {
 	id?: string;
-	anchor?: zk.DOMFieldValue;
+	anchor?: HTMLElement;
 	message?: string;
 	offset?: [number, number];
 	width?: number;
@@ -97,9 +97,9 @@ let eff = {
 /** The shadow effect.
 */
 export class Shadow extends zk.Object implements Effect {
-	declare wgt: Widget | null;
-	declare node: HTMLElement | null;
-	declare stackup?: HTMLIFrameElement | null;
+	declare wgt?: Widget;
+	declare node?: HTMLElement;
+	declare stackup?: HTMLIFrameElement;
 	declare opts: EffectStackupOptions;
 
 	constructor(element: HTMLElement, opts?: EffectStackupOptions) {
@@ -115,7 +115,7 @@ export class Shadow extends zk.Object implements Effect {
 		jq(this.stackup!).remove();
 		jq(this.node!).removeClass(this.wgt!.getZclass() + '-shadow');
 		zWatch.unlisten({ onVParent: [this.node, eff._onVParent] }); // ZK-2586
-		this.wgt = this.node = this.stackup = null;
+		this.wgt = this.node = this.stackup = undefined;
 	}
 
 	hide(): void {
@@ -155,7 +155,7 @@ export class Shadow extends zk.Object implements Effect {
 		}
 		return true;
 	}
-	getBottomElement(): zk.DOMFieldValue {
+	getBottomElement(): HTMLIFrameElement | undefined {
 		return this.stackup;
 	}
 }
@@ -164,8 +164,8 @@ eff.Shadow = Shadow;
  * @disable(zkgwt)
  */
 export class FullMask extends zk.Object implements Effect {
-	declare mask: HTMLElement | null;
-	declare stackup?: HTMLIFrameElement | null;
+	declare mask?: HTMLElement;
+	declare stackup?: HTMLIFrameElement;
 	
 	/** The constructor of the full mask object.
 	 * <p>To remove the full mask, invoke {@link #destroy}.
@@ -221,7 +221,7 @@ export class FullMask extends zk.Object implements Effect {
 				.remove();
 		}
 		jq(this.stackup!).remove();
-		this.mask = this.stackup = null;
+		this.mask = this.stackup = undefined;
 	}
 	/** Hide the full mask. Application developers rarely need to invoke this method.
 	 * Rather, use {@link #sync} to synchronized the visual states.
@@ -264,10 +264,10 @@ eff.FullMask = FullMask;
  * @disable(zkgwt)
  */
 export class Mask extends zk.Object implements Effect {
-	declare mask?: HTMLElement | null;
+	declare mask?: HTMLElement;
 	declare _opts: EffectMaskOptions;
 	declare __mask?: Required<Effect>;
-	declare wgt?: Widget & Pick<Mask, '__mask'> | null;
+	declare wgt?: Widget & Pick<Mask, '__mask'>;
 
 	/** The constructor.
 	 * <p>To remove the mask, invoke {@link #destroy}.
@@ -426,7 +426,7 @@ export class Mask extends zk.Object implements Effect {
 			zWatch.unlisten({onHide: [this.wgt, this.onHide], onSize: [this.wgt, this.onSize]});
 			delete this.wgt.__mask;
 		}
-		this.mask = this.wgt = null;
+		this.mask = this.wgt = undefined;
 	}
 }
 eff.Mask = Mask;
@@ -485,9 +485,9 @@ eff.Actions = {
  * @since 9.5.0
  */
 export class KeyboardTrap extends zk.Object {
-	declare _area: HTMLElement | null;
-	declare _boundaryTop: HTMLDivElement | null;
-	declare _boundaryBottom: HTMLDivElement | null;
+	declare _area?: HTMLElement;
+	declare _boundaryTop?: HTMLDivElement;
+	declare _boundaryBottom?: HTMLDivElement;
 	/**
 	 * The constructor.
 	 * <p>To remove the trap, invoke {@link #destroy}.
@@ -523,19 +523,19 @@ export class KeyboardTrap extends zk.Object {
 			if (elem) (elem as HTMLElement).focus();
 		}
 	}
-	_getFirstFocusableElement(elems: NodeListOf<Element>): Element | null {
+	_getFirstFocusableElement(elems: NodeListOf<Element>): Element | undefined {
 		var len = elems.length;
 		for (var i = 0; i < len; i++) {
 			if (this._isFocusable(elems[i])) return elems[i];
 		}
-		return null;
+		return undefined;
 	}
-	_getLastFocusableElement(elems: NodeListOf<Element>): Element | null {
+	_getLastFocusableElement(elems: NodeListOf<Element>): Element | undefined {
 		var len = elems.length;
 		for (var i = len - 1; i >= 0; i--) {
 			if (this._isFocusable(elems[i])) return elems[i];
 		}
-		return null;
+		return undefined;
 	}
 	_isFocusable(elem): boolean {
 		return !(elem.disabled || elem.getAttribute('disabled')) // not disabled
@@ -554,7 +554,7 @@ export class KeyboardTrap extends zk.Object {
 				areaParent.removeChild(this._boundaryBottom as HTMLElement);
 			}
 		}
-		this._area = this._boundaryTop = this._boundaryBottom = null;
+		this._area = this._boundaryTop = this._boundaryBottom = undefined;
 	}
 }
 eff.KeyboardTrap = KeyboardTrap;

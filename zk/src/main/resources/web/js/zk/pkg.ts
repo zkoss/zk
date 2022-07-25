@@ -15,15 +15,15 @@ it will be useful, but WITHOUT ANY WARRANTY.
 import {default as zk} from './zk';
 
 var _loaded = {'zk': true}, //loaded
-	_xloadings: Array<string> = [], //loading (exclude loaded)
-	_loadedsemis: Array<string> = [], //loaded but not inited
-	_afterLoadFronts: Array<zk.Callable> = [],
-	_afterLoads: Array<zk.Callable> = [],
+	_xloadings: string[] = [], //loading (exclude loaded)
+	_loadedsemis: string[] = [], //loaded but not inited
+	_afterLoadFronts: CallableFunction[] = [],
+	_afterLoads: CallableFunction[] = [],
 	_afterPkgLoad = {}, //after pkg loaded
 	_pkgdepend = {},
 	_pkgver = {},
 	_pkghosts = {}/*package host*/,
-	_defhost: Array<string> = []/*default host*/,
+	_defhost: string[] = []/*default host*/,
 	_loading = Object.assign({'zul.lang': true}, _loaded); //loading (include loaded)
 
 //We don't use e.onload since Safari doesn't support t
@@ -134,7 +134,7 @@ let _pkg = { //internal utility
 				throw 'At most one function allowed';
 			else {
 				func = dt as () => void;
-				dt = null;
+				dt = undefined;
 			}
 		}
 

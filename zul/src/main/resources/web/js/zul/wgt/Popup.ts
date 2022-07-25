@@ -25,14 +25,14 @@ export interface PopupOptions extends zk.PositionOptions {
 }
 // Offset can be null in zul.inp.Errorbox.prototype.getPositionArgs_
 export type PositionArgs = [
-	Ref | null | undefined,
-	zk.Offset | null | undefined,
-	string | null | undefined,
-	PopupOptions | null | undefined
+	Ref | undefined,
+	zk.Offset | undefined,
+	string | undefined,
+	PopupOptions | undefined
 ]
 export interface PositionInfo {
 	dim?: zk.Dimension;
-	pos?: string | null;
+	pos?: string;
 }
 
 /**
@@ -47,20 +47,20 @@ export interface PositionInfo {
 @zk.WrapClass('zul.wgt.Popup')
 export class Popup extends zul.Widget {
 	override _visible = false;
-	_fakeParent?: zk.Widget | null;
-	mask?: zk.eff.Mask | null;
-	_openInfo?: PositionArgs | null;
-	_adjustLeft?: number | null;
-	_adjustTop?: number | null;
-	_shallToggle?: boolean | null;
-	_keepVisible?: boolean | null;
-	_stackup?: HTMLIFrameElement | null;
+	_fakeParent?: zk.Widget;
+	mask?: zk.eff.Mask;
+	_openInfo?: PositionArgs;
+	_adjustLeft?: number;
+	_adjustTop?: number;
+	_shallToggle?: boolean;
+	_keepVisible?: boolean;
+	_stackup?: HTMLIFrameElement;
 
 	/**
 	 * Returns whether the popup is visible.
 	 * @return boolean
 	 */
-	isOpen(): boolean | null | undefined {
+	isOpen(): boolean {
 		return this.isVisible();
 	}
 
@@ -147,7 +147,7 @@ export class Popup extends zul.Widget {
 	 *  element.
 	 *  @see #open(zk.Widget, Offset, String, Map)
 	 */
-	open(ref?: Ref | null, offset?: zk.Offset | null, position?: string | null, opts?: PopupOptions | null): void {
+	open(ref?: Ref, offset?: zk.Offset, position?: string, opts?: PopupOptions): void {
 		this._fakeParent = zk.$(ref);
 		var posInfo = this._posInfo(ref, offset, position),
 			node = this.$n(),
@@ -181,14 +181,14 @@ export class Popup extends zul.Widget {
 	 * opening effect. afterOpenAnima_ needs to be called after the effect.
 	 * @since 6.0.1
 	 */
-	openAnima_(ref?: Ref | null, offset?: zk.Offset | null, position?: string | null, opts?: PopupOptions | null): void {
+	openAnima_(ref?: Ref, offset?: zk.Offset, position?: string, opts?: PopupOptions): void {
 		this.afterOpenAnima_(ref, offset, position, opts);
 	}
 
 	/** The handling after the opening effect of popup.
 	 * @since 6.0.1
 	 */
-	afterOpenAnima_(ref?: Ref | null, _offset?: zk.Offset | null, _position?: string | null, opts?: PopupOptions | null): void {
+	afterOpenAnima_(ref?: Ref, _offset?: zk.Offset, _position?: string, opts?: PopupOptions): void {
 		var node = this.$n(),
 			sendOnOpen = opts && opts.sendOnOpen;
 		// B85-ZK-3606: for adjusting popup position
@@ -237,7 +237,7 @@ export class Popup extends zul.Widget {
 		jq(node!).addClass(this.$s('open'));
 	}
 
-	_adjustOffsets(ref: zk.Widget | null): void {
+	_adjustOffsets(ref?: zk.Widget): void {
 		if (ref && ref.desktop && this.desktop) {
 			var refDim = zk(ref).dimension(true),
 				thisDim = zk(this).dimension(true);
@@ -272,7 +272,7 @@ export class Popup extends zul.Widget {
 	 * @param Map opts a map of addition options.<br/>
 	 * Allowed values: refer to {@link jqzk#position(Dimension,String,Map)}.
 	 */
-	position(ref?: Ref | null, offset?: zk.Offset | null, position?: string | null, opts?: zk.PositionOptions | null): void {
+	position(ref?: Ref, offset?: zk.Offset, position?: string, opts?: zk.PositionOptions): void {
 		var posInfo = this._posInfo(ref, offset, position);
 		if (posInfo)
 			zk(this.$n()).position(posInfo.dim, posInfo.pos, opts);
@@ -296,7 +296,7 @@ export class Popup extends zul.Widget {
 		}
 	}
 
-	_posInfo(ref?: Ref | null, offset?: zk.Offset | null, position?: string | null, _opts?: PopupOptions | null): PositionInfo | undefined {
+	_posInfo(ref?: Ref, offset?: zk.Offset, position?: string, _opts?: PopupOptions): PositionInfo | undefined {
 		var pos: string | undefined,
 			dim: zk.Dimension | undefined;
 
@@ -339,7 +339,7 @@ export class Popup extends zul.Widget {
 			this.position(...openInfo);
 		}
 		zWatch.unlisten({onResponse: this});
-		this.mask = null;
+		this.mask = undefined;
 	}
 
 	/**
@@ -378,7 +378,7 @@ export class Popup extends zul.Widget {
 		// remove visible flag
 		if (!opts || !opts.keepVisible) {
 			this._keepVisible = false;
-			this._fakeParent = null;
+			this._fakeParent = undefined;
 		}
 	}
 
@@ -425,8 +425,8 @@ export class Popup extends zul.Widget {
 	_doFloatUp(ctl: zk.ZWatchController): void {
 		if (!this.isVisible())
 			return;
-		var wgt: zk.Widget | null = ctl.origin;
-		for (var floatFound: boolean | undefined; wgt; wgt = wgt.parent) {
+		var wgt: zk.Widget | undefined = ctl.origin;
+		for (var floatFound = false; wgt; wgt = wgt.parent) {
 			if (wgt == this) {
 				if (!floatFound)
 					this.setTopmost();
@@ -447,21 +447,21 @@ export class Popup extends zul.Widget {
 		}
 	}
 
-	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		zWatch.listen({onFloatUp: this, onShow: this, afterSize: this, _onSyncScroll: this});
 		this.setFloating_(true);
 	}
 
-	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		zk(this.$n()).undoVParent(); //Bug 3079480
 		if (this._stackup) {
 			jq(this._stackup).remove();
-			this._stackup = null;
+			this._stackup = undefined;
 		}
 		if (this._openInfo)
-			this._openInfo = null;
-		this._shallToggle = null;
+			this._openInfo = undefined;
+		this._shallToggle = undefined;
 		zWatch.unlisten({onFloatUp: this, onShow: this, afterSize: this, _onSyncScroll: this});
 		this.setFloating_(false);
 		super.unbind_(skipper, after, keepRod);
@@ -496,14 +496,14 @@ export class Popup extends zul.Widget {
 		zk(this).redoCSS(-1, {'fixFontIcon': true});
 	}
 
-	override setHeight(height: string | null): this {
+	override setHeight(height?: string): this {
 		super.setHeight(height);
 		if (this.desktop)
 			zUtl.fireShown(this);
 		return this;
 	}
 
-	override setWidth(width: string | null): this {
+	override setWidth(width?: string): this {
 		super.setWidth(width);
 		if (this.desktop)
 			zWatch.fireDown('onShow', this);
@@ -524,6 +524,6 @@ export class Popup extends zul.Widget {
 
 	getPositionArgs_(): PositionArgs {
 		var p = this._fakeParent, dim = zk(p).dimension(true);
-		return [p, [dim.left + this._adjustLeft!, dim.top + this._adjustTop!], null, {dodgeRef: false}];
+		return [p, [dim.left + this._adjustLeft!, dim.top + this._adjustTop!], undefined, {dodgeRef: false}];
 	}
 }

@@ -18,14 +18,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.sel.Treecols')
 export class Treecols extends zul.mesh.HeadWidget {
-	override parent!: zul.sel.Tree | null;
-	override firstChild!: zul.sel.Treecol | null;
-	override lastChild!: zul.sel.Treecol | null;
+	override parent!: zul.sel.Tree | undefined;
+	override firstChild!: zul.sel.Treecol | undefined;
+	override lastChild!: zul.sel.Treecol | undefined;
 
 	/** Returns the tree that it belongs to.
 	 * @return Tree
 	 */
-	getTree(): zul.sel.Tree | null {
+	getTree(): zul.sel.Tree | undefined {
 		return this.parent;
 	}
 

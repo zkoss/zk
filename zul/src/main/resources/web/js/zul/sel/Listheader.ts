@@ -26,14 +26,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.sel.Listheader')
 export class Listheader extends zul.mesh.SortWidget {
-	override parent!: zul.sel.Listhead | null;
+	override parent!: zul.sel.Listhead | undefined;
 	_maxlength?: number;
 
 	/** Returns the listbox that this belongs to.
 	 * @return Listbox
 	 */
-	getListbox(): zul.sel.Listbox | null {
-		return this.parent ? this.parent.parent : null;
+	getListbox(): zul.sel.Listbox | undefined {
+		return this.parent ? this.parent.parent : undefined;
 	}
 
 	constructor() {
@@ -138,8 +138,8 @@ export class Listheader extends zul.mesh.SortWidget {
 			}
 			var d: Data[] = [],
 				col = this.getChildIndex();
-			for (var i = 0, z = 0, it = mesh.getBodyWidgetIterator(), w: zk.Widget | null | undefined; (w = it.next()); z++)
-				for (var k = 0, cell: zk.Widget | null = w.firstChild; cell; cell = cell.nextSibling, k++)
+			for (var i = 0, z = 0, it = mesh.getBodyWidgetIterator(), w: zk.Widget | undefined; (w = it.next()); z++)
+				for (var k = 0, cell: zk.Widget | undefined = w.firstChild; cell; cell = cell.nextSibling, k++)
 					if (k == col) {
 						d[i++] = {
 							wgt: cell,
@@ -221,7 +221,7 @@ export class Listheader extends zul.mesh.SortWidget {
 			return;
 
 		var jcol = this.getChildIndex(),
-			w: zul.sel.ItemWidget | zul.sel.Listfoot | null | undefined;
+			w: zul.sel.ItemWidget | zul.sel.Listfoot | undefined;
 		for (var it = box.getBodyWidgetIterator(); (w = it.next());)
 			if (jcol < w.nChildren)
 				w.getChildAt(jcol)!.rerender();
@@ -232,7 +232,7 @@ export class Listheader extends zul.mesh.SortWidget {
 	}
 
 	//super//
-	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		var cm = this.$n('cm'),
 			n = this.$n();
@@ -249,13 +249,13 @@ export class Listheader extends zul.mesh.SortWidget {
 			this.domListen_(btn, 'onClick', '_doMenuClick');
 	}
 
-	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		var cm = this.$n('cm'),
 			n = this.$n();
 		if (cm) {
 			var box = this.getListbox();
-			if (box) box._headercm = null;
-			this._checked = null;
+			if (box) box._headercm = undefined;
+			this._checked = undefined;
 			this.domUnlisten_(cm, 'onClick', '_doClick');
 		}
 		if (n)
@@ -290,7 +290,7 @@ export class Listheader extends zul.mesh.SortWidget {
 			box.selectAll(true, evt);
 		} else {
 			$n.removeClass(this.$s('checked'));
-			box._select(null, evt);
+			box._select(undefined, evt);
 		}
 		box.fire('onCheckSelectAll', this._checked, {toServer: true});
 	}
@@ -318,10 +318,10 @@ export class Listheader extends zul.mesh.SortWidget {
 		return s;
 	}
 
-	_hasCheckbox(): boolean | undefined {
+	_hasCheckbox(): boolean {
 		var box = this.getListbox();
-		return box != null && this.parent!.firstChild == this
-			&& box._checkmark && box._multiple && !box._listbox$noSelectAll;  // B50-ZK-873
+		return !!(box != null && this.parent!.firstChild == this
+			&& box._checkmark && box._multiple && !box._listbox$noSelectAll);  // B50-ZK-873
 	}
 
 	//@Override

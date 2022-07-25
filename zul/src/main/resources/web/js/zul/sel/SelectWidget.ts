@@ -15,7 +15,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 /** The selectable widgets, such as listbox and tree.
  */
 //zk.$package('zul.sel');
-function _beforeChildKey(wgt: SelectWidget, evt: zk.Event): boolean | undefined {
+function _beforeChildKey(wgt: SelectWidget, evt: zk.Event): boolean {
 	return zAu.processing() || wgt._shallIgnore(evt);
 }
 function _afterChildKey(evt: zk.Event<zk.EventKeyData>): boolean {
@@ -61,8 +61,8 @@ function _focusable(evt: zk.Event): boolean {
 			&& !(evt.target instanceof zul.sel.SelectWidget))
 		|| _isButton(evt) || _isInputWidget(evt);
 }
-function _fixReplace(w: zul.sel.ItemWidget | null | undefined): zul.sel.ItemWidget | null {
-	return w && w.uuid ? zk.Widget.$<zul.sel.ItemWidget>(w.uuid) : null;
+function _fixReplace(w: zul.sel.ItemWidget | undefined): zul.sel.ItemWidget | undefined {
+	return w && w.uuid ? zk.Widget.$<zul.sel.ItemWidget>(w.uuid) : undefined;
 }
 function _isListgroup(w: zul.sel.ItemWidget): boolean {
 	return zk.isLoaded('zkex.sel') && w instanceof zkex.sel.Listgroup;
@@ -73,8 +73,8 @@ function _isListgroupfoot(w: zul.sel.ItemWidget): boolean {
 
 @zk.WrapClass('zul.sel.SelectWidget')
 export abstract class SelectWidget extends zul.mesh.MeshWidget {
-	override firstChild!: zul.sel.ItemWidget | null;
-	override lastChild!: zul.sel.ItemWidget | null;
+	override firstChild!: zul.sel.ItemWidget | undefined;
+	override lastChild!: zul.sel.ItemWidget | undefined;
 	/** Whether to change a list item selection on right click
 	 * <p>Default: true (unless the server changes the setting)
 	 * @since 5.0.5
@@ -84,13 +84,13 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	_anchorTop = 0;
 	_anchorLeft = 0;
 	_isSelecting = true;
-	_startRow: zul.sel.ItemWidget | null | undefined = null;
+	_startRow?: zul.sel.ItemWidget = undefined;
 	nonselectableTags?: string;
 	_checkmark?: boolean;
 	_multiple?: boolean;
 	_selItems: zul.sel.ItemWidget[];
-	_focusItem?: zul.sel.ItemWidget | null;
-	efield?: HTMLElement | null;
+	_focusItem?: zul.sel.ItemWidget;
+	efield?: HTMLElement;
 	_selectedIndex?: number;
 	_name?: string;
 	_selectOnHighlightDisabled?: boolean;
@@ -98,10 +98,10 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	_cdo?: boolean;
 	$$selectAll?: boolean;
 	_oldCSS?: string;
-	_lastSelectedItem?: zul.sel.ItemWidget | null;
+	_lastSelectedItem?: zul.sel.ItemWidget;
 	_nUpdHeaderCM?: number;
-	_headercm?: HTMLElement | null;
-	_$services?: Record<string, zk.Callable[] | null>;
+	_headercm?: HTMLElement;
+	_$services?: Record<string, CallableFunction[] | undefined>;
 	groupSelect?: boolean;
 	_shallSyncFocus?: boolean | zul.sel.ItemWidget;
 	_shallSyncCM?: boolean;
@@ -123,8 +123,8 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	 * Default: false.
 	 * @return boolean
 	 */
-	isCheckmark(): boolean | undefined {
-		return this._checkmark;
+	isCheckmark(): boolean {
+		return !!this._checkmark;
 	}
 
 	/**
@@ -152,8 +152,8 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	 * Default: false.
 	 * @return boolean
 	 */
-	isMultiple(): boolean | undefined {
-		return this._multiple;
+	isMultiple(): boolean {
+		return !!this._multiple;
 	}
 
 	/**
@@ -207,7 +207,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 			this.clearSelection();
 			this._selectedIndex = selected;
 			if (selected > -1) {
-				var w: zul.sel.ItemWidget | null | undefined;
+				var w: zul.sel.ItemWidget | undefined;
 				for (var it = this.getBodyWidgetIterator(); selected-- >= 0;)
 					w = it.next();
 				if (w) {
@@ -270,8 +270,8 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		return this;
 	}
 
-	getSelectOnHighlightDisabled(): boolean | undefined {
-		return this._selectOnHighlightDisabled;
+	getSelectOnHighlightDisabled(): boolean {
+		return !!this._selectOnHighlightDisabled;
 	}
 
 	setSelectOnHighlightDisabled(v: boolean): this {
@@ -279,8 +279,8 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		return this;
 	}
 
-	getCheckmarkDeselectOther(): boolean | undefined {
-		return this._checkmarkDeselectOther;
+	getCheckmarkDeselectOther(): boolean {
+		return !!this._checkmarkDeselectOther;
 	}
 
 	setCheckmarkDeselectOther(cdo: boolean, opts?: Record<string, boolean>): this {
@@ -307,7 +307,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		// reset $$selectAll
 		this.$$selectAll = undefined;
 
-		for (var it = this.getBodyWidgetIterator(), w: zul.sel.ItemWidget | null | undefined; (w = it.next());)
+		for (var it = this.getBodyWidgetIterator(), w: zul.sel.ItemWidget | undefined; (w = it.next());)
 			this._changeSelect(w, sels[w.uuid] == true);
 		return this;
 	}
@@ -318,7 +318,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 			return this;
 		var self = this;
 		setTimeout(function () { // items not ready yet
-			var w: zul.sel.ItemWidget | null | undefined;
+			var w: zul.sel.ItemWidget | undefined;
 			for (var it = self.getBodyWidgetIterator(); (w = it.next()) && index--;)
 				if (!it.hasNext())
 					break;
@@ -343,7 +343,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 			jq(this.efield).append(data);
 		} else if (this.efield) {
 			jq(this.efield).remove();
-			this.efield = null;
+			this.efield = undefined;
 		}
 	}
 
@@ -395,7 +395,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		return this._selItems.$clone();
 	}
 
-	override setHeight(height: string | null): this {
+	override setHeight(height?: string): this {
 		if (!this._nvflex && this._height != height) {
 			this._height = height;
 			var n = this.$n();
@@ -407,14 +407,14 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		return this;
 	}
 
-	override setVflex(v: boolean | string | null | undefined): this {
-		super.setVflex(v);
+	override setVflex(vflex?: boolean | string): this {
+		super.setVflex(vflex);
 		if (this.desktop) this.onSize();
 		return this;
 	}
 
-	override setHflex(v: boolean | string | null | undefined): this {
-		super.setHflex(v);
+	override setHflex(hflex?: boolean | string): this {
+		super.setHflex(hflex);
 		if (this.desktop) this.onSize();
 		return this;
 	}
@@ -529,7 +529,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 			this._updHeaderCM();
 		} else {
 			//Bug ZK-3528: should reset _focusItem after clearing selected item
-			this._focusItem = null;
+			this._focusItem = undefined;
 			//Bug ZK-1834: should reset Focus Element after clearing selected item
 			this._anchorTop = this._anchorLeft = 0;
 			this._syncFocus();
@@ -538,10 +538,10 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 
 	//super
 	override focus_(timeout?: number): boolean {
-		var btn: HTMLAnchorElement | null | undefined;
+		var btn: HTMLAnchorElement | undefined;
 		if (btn = this.$n('a')) {
 			if (this._focusItem) {
-				for (var it = this.getBodyWidgetIterator(), w: zul.sel.ItemWidget | null | undefined; (w = it.next());)
+				for (var it = this.getBodyWidgetIterator(), w: zul.sel.ItemWidget | undefined; (w = it.next());)
 					if (this._isFocus(w)) {
 						w.focus_(timeout);
 						break;
@@ -571,7 +571,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		zk(btn).focus(timeout);
 	}
 
-	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		var btn = this.$n('a');
 		if (btn)
@@ -582,7 +582,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		this._updHeaderCM();
 	}
 
-	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		var btn = this.$n('a');
 		if (btn)
 			this.domUnlisten_(btn, 'onFocus', 'doFocus_')
@@ -593,7 +593,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 
 	override clearCache(): void {
 		super.clearCache();
-		this.efield = null;
+		this.efield = undefined;
 	}
 
 	override doFocus_(evt: zk.Event): void {
@@ -607,7 +607,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 			this._lastSelectedItem = this._focusItem;
 			this._focusItem._doFocusOut();
 		}
-		this._focusItem = null;
+		this._focusItem = undefined;
 		super.doBlur_(evt);
 	}
 
@@ -628,7 +628,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	}
 
 	//@param bSel whether it is called by _doItemSelect
-	_shallIgnore(evt: zk.Event, bSel?: string | boolean): boolean | undefined { // move this function in the widget for override
+	_shallIgnore(evt: zk.Event, bSel?: string | boolean): boolean { // move this function in the widget for override
 		// F70-ZK-2433
 		if (this.checkOnHighlightDisabled_())
 			return true;
@@ -652,7 +652,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 
 			if (typeof (bSel = this.nonselectableTags) == 'string') {
 				if (!bSel)
-					return; //not ignore
+					return false; //not ignore
 				if (bSel == '*')
 					return true;
 
@@ -781,7 +781,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		super.doKeyUp_(evt);
 	}
 
-	_doKeyDown(evt: zk.Event<zk.EventKeyData>): boolean | undefined { //called by listener of this widget and ItemWidget
+	_doKeyDown(evt: zk.Event<zk.EventKeyData>): boolean { //called by listener of this widget and ItemWidget
 		if (_beforeChildKey(this, evt))
 			return true;
 
@@ -793,7 +793,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 
 		// F85-ZK-3507
 		if (this._startRow && !shift && this._multiple)
-			this._startRow = null;
+			this._startRow = undefined;
 		else if (!this._startRow && shift)
 			this._startRow = row;
 
@@ -818,7 +818,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 						shift: !shift || !this._multiple ? 0 :
 							data.keyCode == 33 ? this.getPageSize() : -this.getPageSize()
 					});
-				return;
+				return false;
 			}
 			step = this._setOrGetVisibleRows()!;
 			if (step == 0)
@@ -859,14 +859,14 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 				// and deselect item when moving inwards
 				this._toggleSelect(row, this._getToSelFlag(row, this._startRow!, step), evt);
 			}
-			var nrow: Node | null | undefined = row ? row.$n() : null;
+			var nrow: Node | null | undefined = row ? row.$n() : undefined;
 			for (;;) {
 				if (!nrow) { // no focused/selected item yet
 					var w = this.getBodyWidgetIterator().next();
 					if (w)
 						nrow = w.$n(); // F60-ZK-423: first row
 					else
-						return; // empty
+						return false; // empty
 				} else
 					nrow = step > 0 ? nrow.nextSibling : nrow.previousSibling;
 
@@ -950,7 +950,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	}
 
 	/* maintain the offset of the focus proxy*/
-	_syncFocus(row?: zul.sel.ItemWidget | null): void {
+	_syncFocus(row?: zul.sel.ItemWidget): void {
 		var focusEl = this.$n('a');
 		if (!focusEl) //Bug ZK-1480: widget may not rendered when ROD enabled
 			return;
@@ -959,7 +959,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 			oldTop = this._anchorTop,
 			oldLeft = this._anchorLeft,
 			offs: zk.Offset,
-			n: HTMLElement | null | undefined;
+			n: HTMLElement | undefined;
 		if (row && (n = row.$n())) {
 			offs = zk(n).revisedOffset();
 			offs = this._toStyleOffset(focusEl, offs[0] + this.ebody!.scrollLeft, offs[1]);
@@ -999,7 +999,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	}
 
 	/* Selects an item, notify server and change focus if necessary. */
-	_select(row: zul.sel.ItemWidget | null, evt: zk.Event<zk.EventMetaData>, skipFocus?: boolean): void {
+	_select(row: zul.sel.ItemWidget | undefined, evt: zk.Event<zk.EventMetaData>, skipFocus?: boolean): void {
 		if (this._selectOne(row, skipFocus)) {
 			//notify server
 			this.fireOnSelect(row, evt);
@@ -1037,7 +1037,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 					lastSelected = item;
 			}
 		}
-		for (var it = this.getBodyWidgetIterator(), si = this.getSelectedItem(), w: zul.sel.ItemWidget | null | undefined; (w = it.next());) {
+		for (var it = this.getBodyWidgetIterator(), si = this.getSelectedItem(), w: zul.sel.ItemWidget | undefined; (w = it.next());) {
 			if (w.isDisabled() || !w.isSelectable()) continue; // Bug: 2030986
 			if (focusfound) {
 				this._changeSelect(w, true);
@@ -1075,7 +1075,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	 * @disable(zkgwt)
 	 */
 	setSelectAll(notify: boolean, evt: zk.Event<zk.EventMetaData>): this {
-		for (var it = this.getBodyWidgetIterator(), w: zul.sel.ItemWidget | null | undefined; (w = it.next());)
+		for (var it = this.getBodyWidgetIterator(), w: zul.sel.ItemWidget | undefined; (w = it.next());)
 			if (w._loaded && !w.isDisabled() && w.isSelectable())
 				this._changeSelect(w, true);
 		if (notify) // FIXME: why was the condition `notify && evt !== true`?
@@ -1094,7 +1094,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	/* Selects one and deselect others, and return whehter any changes.
 	 * It won't notify the server.
 	 */
-	_selectOne(row: zul.sel.ItemWidget | null, skipFocus: boolean | undefined): boolean {
+	_selectOne(row?: zul.sel.ItemWidget, skipFocus?: boolean): boolean {
 		var selItem = this.getSelectedItem();
 		if (this._multiple) {
 			if (row) this._unsetFocusExcept(row);
@@ -1148,7 +1148,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	 * Ignored if null.
 	 * @since 5.0.5
 	 */
-	fireOnSelect(ref: zk.Widget | null | undefined, evt: zk.Event<zk.EventMetaData>): void {
+	fireOnSelect(ref: zk.Widget | undefined, evt: zk.Event<zk.EventMetaData>): void {
 		var data: zul.sel.ItemWidget[] = [];
 
 		for (var it = this.getSelectedItems(), len = it.length, j = 0; j < len; j++)
@@ -1156,7 +1156,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 				data.push(it[j]);
 
 		var edata: zk.EventMetaData | undefined,
-			keep: boolean | undefined = true,
+			keep = true,
 			checkSelectAll = false;
 		if (this._multiple && this._headercm) {
 			checkSelectAll = jq(this._headercm).hasClass(zk.Widget.$(this._headercm)!.$s('checked'));
@@ -1171,8 +1171,8 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 				} else {
 					var tg = evt.domTarget,
 						cm = ref && ref.$n('cm');
-					keep = (edata.ctrlKey || edata.metaKey) || edata.shiftKey
-							|| (this._checkmark && (!this._cdo || (tg == cm || tg.parentNode == cm) || checkSelectAll));
+					keep = !((edata.ctrlKey || edata.metaKey) || edata.shiftKey
+							|| (this._checkmark && (!this._cdo || (tg == cm || tg.parentNode == cm) || checkSelectAll)));
 				}
 			}
 		}
@@ -1227,7 +1227,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	/* Cleans selected except the specified one, and returns any selected status
 	 * is changed.
 	 */
-	_unsetSelectAllExcept(row: zul.sel.ItemWidget | null): boolean {
+	_unsetSelectAllExcept(row?: zul.sel.ItemWidget): boolean {
 		this.$$selectAll = undefined;
 		var changed = false;
 		for (var it = this.getSelectedItems(), j = it.length; j--;) {
@@ -1242,7 +1242,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	_unsetFocusExcept(row: zul.sel.ItemWidget): void {
 		if (this._focusItem && this._focusItem != row) {
 			this._setFocus(this._focusItem, false);
-			this._focusItem = null;
+			this._focusItem = undefined;
 		}
 	}
 
@@ -1255,7 +1255,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		}
 	}
 
-	$fireService(evtName: string, data: unknown, callback: zk.Callable): void {
+	$fireService(evtName: string, data: unknown, callback: CallableFunction): void {
 		if (!this._$services) {
 			this._$services = {};
 		}
@@ -1270,9 +1270,9 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		var s = this._$services && this._$services[evtName];
 		if (s) {
 			while (s.length)
-				s.shift()!.call(this, data);
+				s.shift()!.bind(this)(data);
 
-			this._$services![evtName] = null;
+			this._$services![evtName] = undefined;
 		}
 	}
 
@@ -1294,7 +1294,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		}
 		if (this._model) {
 			if (!this.$hasService('onUpdateSelectAll')) {
-				this.$fireService('onUpdateSelectAll', null, function (this: SelectWidget, v: boolean) {
+				this.$fireService('onUpdateSelectAll', undefined, function (this: SelectWidget, v: boolean) {
 					if (this.desktop && this._headercm && this._multiple) {
 						var headerWgt = zk.Widget.$<zul.mesh.HeaderWidget>(this._headercm)!,
 							zcls = headerWgt.getZclass() + '-checked',
@@ -1313,7 +1313,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		}
 
 		var isGroupSelect = this.groupSelect;
-		for (var it = this.getBodyWidgetIterator({skipHidden: true}), w: zul.sel.ItemWidget | null | undefined; (w = it.next());) {
+		for (var it = this.getBodyWidgetIterator({skipHidden: true}), w: zul.sel.ItemWidget | undefined; (w = it.next());) {
 			//Bug ZK-1998: skip listgroup and listgroupfoot widget if groupSelect is false
 			if ((_isListgroup(w) || _isListgroupfoot(w)) && !isGroupSelect)
 				continue;
@@ -1390,7 +1390,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		//   the item will be remove but current this._focusItem still remain,
 		//   disable it to prevent keyboard navigation jump back to top
 		if (this._focusItem == child) { // If true, child is guaranteed to be an ItemWidget
-			this._focusItem = null;
+			this._focusItem = undefined;
 			// Bug in test case ZK-2534, we need to resync the lastSelectedItem if onBlur event is not triggered.
 			this._lastSelectedItem = this._focusItem;
 

@@ -18,7 +18,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 @zk.WrapClass('zul.inp.FormatWidget')
 export class FormatWidget<ValueType> extends zul.inp.InputWidget<ValueType> {
 	_format?: string;
-	_shortcut?: string | null;
+	_shortcut?: string;
 
 	//zk.def
 	setFormat(v: string, opts?: Record<string, boolean>): this {

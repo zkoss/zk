@@ -16,8 +16,8 @@ var _WidgetX: Partial<zk.Widget> = {},
 	_initDefault = _portrait[window.orientation] as boolean | undefined; //default orientation
 
 zk.override(zk.Widget.prototype, _WidgetX, {
-	$binder(this: zk.Widget): zkbind.Binder | null {
-		var w: zk.Widget | null = this;
+	$binder(this: zk.Widget): zkbind.Binder | undefined {
+		var w: zk.Widget | undefined = this;
 		for (; w; w = w.parent) {
 			if (w.$ZKBINDER$)
 				break;
@@ -27,17 +27,17 @@ zk.override(zk.Widget.prototype, _WidgetX, {
 				w._$binder = new zkbind.Binder(w, this);
 			return w._$binder;
 		}
-		return null;
+		return undefined;
 	},
 	$afterCommand(command: string, args?: unknown[]): void {
 		const binder = this.$binder();
 		if (binder)
 			binder.$doAfterCommand(command, args);
 	},
-	unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		if (this._$binder) {
 			this._$binder.destroy();
-			this._$binder = null;
+			this._$binder = undefined;
 		}
 		_WidgetX.unbind_!.call(this, skipper, after, keepRod);
 	}
@@ -85,7 +85,7 @@ export interface BinderOptions {
  */
 //$: function () {}
 //@};
-export function $(n: string | HTMLElement | zk.Event | JQuery.Event, opts?: BinderOptions): Binder | null | undefined {
+export function $(n: string | HTMLElement | zk.Event | JQuery.Event, opts?: BinderOptions): Binder | undefined {
 	var widget = zk.Widget.$(n, opts);
 	if (widget)
 		return widget.$binder!();
@@ -147,14 +147,14 @@ export interface MediaQueryListWithHandler {
  */
 @zk.WrapClass('zkbind.Binder')
 export class Binder extends zk.Object {
-	_cookies?: string[] | null;
+	_cookies?: string[];
 	_lastcmd?: string;
-	_aftercmd: Record<string, zk.Callable[]> | null;
-	_mediaQueryLists?: MediaQueryListWithHandler[] | null;
+	_aftercmd?: Record<string, CallableFunction[]>;
+	_mediaQueryLists?: MediaQueryListWithHandler[];
 	_processingAfterCommand?: boolean;
-	$view: zk.Widget | null;
+	$view?: zk.Widget;
 	_toDoUnAftercmd: Record<string, CallableFunction[]>;
-	$currentTarget: object | null;
+	$currentTarget?: object;
 
 	constructor(widget: zk.Widget, currentTarget: object) {
 		super(); // FIXME: params?
@@ -197,7 +197,7 @@ export class Binder extends zk.Object {
 	 * @param String command the name of the command
 	 * @param Function func the function to execute
 	 */
-	after(cmd: string | zk.Callable, fn: zk.Callable): this {
+	after(cmd: string | CallableFunction, fn: CallableFunction): this {
 		if (!fn && jq.isFunction(cmd)) {
 			fn = cmd;
 			cmd = this._lastcmd!;
@@ -236,18 +236,18 @@ export class Binder extends zk.Object {
 	 * Destroy this binder.
 	 */
 	destroy(): void {
-		this._aftercmd = null;
+		this._aftercmd = undefined;
 		if (this._mediaQueryLists != null) {
 			var mqls = this._mediaQueryLists;
 			// eslint-disable-next-line @typescript-eslint/prefer-for-of
 			for (var i = 0; i < mqls.length; i++) {
 				mqls[i].mql.removeListener(mqls[i].handler);
 			}
-			this._mediaQueryLists = null;
-			this._cookies = null;
+			this._mediaQueryLists = undefined;
+			this._cookies = undefined;
 		}
-		this.$view = null;
-		this.$currentTarget = null;
+		this.$view = undefined;
+		this.$currentTarget = undefined;
 	}
 
 	/**
@@ -257,7 +257,7 @@ export class Binder extends zk.Object {
 	 * @param Map opts a map of options to zk.Event, if any.
 	 * @param int timeout the time (milliseconds) to wait before sending the request.
 	 */
-	command(cmd: string, args?: Record<string, unknown> | null, opts?: zk.EventOptions | null, timeout?: number): this {
+	command(cmd: string, args?: Record<string, unknown>, opts?: zk.EventOptions, timeout?: number): this {
 		var wgt = this.$view;
 		if (opts) {
 			if (opts.duplicateIgnore)
@@ -277,7 +277,7 @@ export class Binder extends zk.Object {
 	 * @param Map opts a map of options to zk.Event, if any.
 	 * @param int timeout the time (milliseconds) to wait before sending the request.
 	 */
-	globalCommand(cmd: string, args?: Record<string, unknown> | null, opts?: zk.EventOptions | null, timeout?: number): this {
+	globalCommand(cmd: string, args?: Record<string, unknown>, opts?: zk.EventOptions, timeout?: number): this {
 		var wgt = this.$view;
 		if (opts) {
 			if (opts.duplicateIgnore)
@@ -295,7 +295,7 @@ export class Binder extends zk.Object {
 			tduac = this._toDoUnAftercmd[cmd];
 		this._processingAfterCommand = true; // ZK-4482
 		for (var i = 0, j = ac ? ac.length : 0; i < j; i++)
-			ac[i].call(this, args);
+			ac[i].bind(this)(args);
 		this._processingAfterCommand = false;
 		for (var i = 0, j = tduac ? tduac.length : 0; i < j; i++) { // ZK-4482: do unAfter
 			this.unAfter(cmd, tduac[i]);
@@ -321,7 +321,7 @@ export class Binder extends zk.Object {
 	 * @param Map opts a map of options to zk.Event, if any.
 	 * @param int timeout the time (milliseconds) to wait before sending the request.
 	 */
-	static postCommand(dom: HTMLElement, command: string, args?: Record<string, unknown> | null, opt?: zk.EventOptions | null, timeout?: number): void {
+	static postCommand(dom: HTMLElement, command: string, args?: Record<string, unknown>, opt?: zk.EventOptions, timeout?: number): void {
 		var w = zk.Widget.$(dom);
 		if (w) {
 			var binder = w.$binder!();
@@ -338,7 +338,7 @@ export class Binder extends zk.Object {
 	 * @param Map args the arguments for this command. (the value should be json type)
 	 * @param int timeout the time (milliseconds) to wait before sending the request.
 	 */
-	static postGlobalCommand(dom: HTMLElement, command: string, args?: Record<string, unknown> | null, opt?: zk.EventOptions | null, timeout?: number): void {
+	static postGlobalCommand(dom: HTMLElement, command: string, args?: Record<string, unknown>, opt?: zk.EventOptions, timeout?: number): void {
 		var w = zk.Widget.$(dom);
 		if (w) {
 			var binder = w.$binder!();

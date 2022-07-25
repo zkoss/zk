@@ -31,8 +31,8 @@ export class Track extends zul.Widget<HTMLTrackElement> {
 	 * <p>Default: false.
 	 * @return boolean if this track should be enabled by default.
 	 */
-	isDefault(): boolean | undefined {
-		return this._default;
+	isDefault(): boolean {
+		return !!this._default;
 	}
 
 	/**

@@ -48,7 +48,7 @@ export class West extends zul.layout.LayoutRegion {
 	 * {@link #getWidth()}.
 	 * @return String
 	 */
-	getSize(): string | null | undefined {
+	getSize(): string | undefined {
 		return this.getWidth();
 	}
 

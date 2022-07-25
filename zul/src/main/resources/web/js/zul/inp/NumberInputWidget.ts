@@ -28,7 +28,7 @@ zk.load('zul.lang', function () {
 export class NumberInputWidget<ValueType> extends zul.inp.FormatWidget<ValueType> {
 	_rounding?: number;
 	_localizedSymbols?: zk.LocalizedSymbols;
-	_allowKeys?: string | null;
+	_allowKeys?: string;
 
 	/** Returns the rounding mode.
 	 * <ul>
@@ -85,7 +85,7 @@ export class NumberInputWidget<ValueType> extends zul.inp.FormatWidget<ValueType
 			var symbols = this._localizedSymbols;
 			this._allowKeys = symbols ?
 				'0123456789' + symbols.MINUS + symbols.PERCENT
-				+ (zk.groupingDenied ? '' : symbols.GROUPING) : null;
+				+ (zk.groupingDenied ? '' : symbols.GROUPING) : undefined;
 			this.rerender();
 		}
 
@@ -97,7 +97,7 @@ export class NumberInputWidget<ValueType> extends zul.inp.FormatWidget<ValueType
 	 * @since 5.0.8
 	 */
 	getAllowedKeys_(): string {
-		return this._allowKeys || _allowKeys;
+		return this._allowKeys ?? _allowKeys;
 	}
 
 	override doKeyPress_(evt: zk.Event): void {

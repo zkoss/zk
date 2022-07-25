@@ -159,17 +159,17 @@ export class Script extends zk.Widget {
 	}
 
     //super//
-	override redraw(out: Array<string>, skipper?: zk.Skipper | null): void {
+	override redraw(out: Array<string>, skipper?: zk.Skipper): void {
 		// empty
 	}
 
-	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		this._visible = false; //Bug ZK-1516: no DOM element widget should always return false.
 		this._exec();
 	}
 
-	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		jq(this._node!).remove(); // ZK-4043: the script DOM is appended in body, a manual remove is needed.
 		super.unbind_(skipper, after, keepRod);
 	}

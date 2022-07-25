@@ -28,7 +28,7 @@ zk.historystate = {
 			state: event.state,
 			url: location.href
 		};
-		zAu.send(new zk.Event(null, 'onHistoryPopState', data, {implicit: true}), 1);
+		zAu.send(new zk.Event(undefined, 'onHistoryPopState', data, {implicit: true}), 1);
 		if (zk.bmk.checkBookmark)
 			zk.bmk.checkBookmark();
 	},

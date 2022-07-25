@@ -38,26 +38,26 @@ export class Html extends zul.Widget<HTMLHtmlElement> {
 	/** Sets the embedded content (i.e., HTML tags).
 	 * @param String content
 	 */
-	setContent(v: string, opts?: Record<string, boolean>): this {
+	setContent(content: string, opts?: Record<string, boolean>): this {
 		const o = this._content;
-		this._content = v;
+		this._content = content;
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== content || (opts && opts.force)) {
 			var n = this.$n();
-			if (n) n.innerHTML = v || '';
+			if (n) n.innerHTML = content || '';
 		}
 
 		return this;
 	}
 
-	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		if (Array.isArray(this._content)) //zk().detachChildren() is used
 			for (var ctn = this._content, n = this.$n_(), j = 0; j < ctn.length; ++j)
 				n.appendChild(ctn[j]);
 	}
 
-	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		if (Array.isArray(this._content)) //zk().detachChildren() is used
 			for (var n = this.$n_(); n.firstChild;)
 				n.removeChild(n.firstChild);

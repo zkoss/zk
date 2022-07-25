@@ -53,11 +53,11 @@ export class Layout extends zul.Widget {
 		return this._spacing;
 	}
 
-	_chdextr(child: zk.Widget): HTMLElement | null | undefined {
+	_chdextr(child: zk.Widget): HTMLElement | undefined {
 		return child.$n('chdex') || child.$n();
 	}
 
-	override insertChildHTML_(child: zk.Widget, before?: zk.Widget | null, desktop?: zk.Desktop | null): void {
+	override insertChildHTML_(child: zk.Widget, before?: zk.Widget, desktop?: zk.Desktop): void {
 		if (before)
 			jq(this._chdextr(before)!).before(this.encloseChildHTML_(child));
 		else {
@@ -69,12 +69,12 @@ export class Layout extends zul.Widget {
 		child.bind(desktop);
 	}
 
-	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		zWatch.listen({onResponse: this});
 	}
 
-	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		zWatch.unlisten({onResponse: this});
 		super.unbind_(skipper, after, keepRod);
 	}
@@ -164,7 +164,7 @@ export class Layout extends zul.Widget {
 		if (!out) {
 			return oo.join('');
 		} else {
-			let output = oo.join('');
+			const output = oo.join('');
 			out.push(output);
 			return output;
 		}
@@ -186,7 +186,7 @@ export class Layout extends zul.Widget {
 			if (chdex) {
 				//ZK-1679: clear height only vflex != min, clear width only hflex != min
 				if (vert && kid._nvflex && kid.getVflex() != 'min') {
-					var n: HTMLElement | null | undefined;
+					var n: HTMLElement | undefined;
 					if ((n = kid.$n()) && (n.scrollTop || n.scrollLeft)) { // keep the scroll status
 						// do nothing Bug ZK-1885: scrollable div (with vflex) and tooltip
 					} else {
@@ -196,7 +196,7 @@ export class Layout extends zul.Widget {
 						chdex.style.height = '';
 				}
 				if (!vert && kid._nhflex && kid.getHflex() != 'min') {
-					var n: HTMLElement | null | undefined;
+					var n: HTMLElement | undefined;
 					if ((n = kid.$n()) && (n.scrollTop || n.scrollLeft)) { // keep the scroll status
 						// do nothing Bug ZK-1885: scrollable div (with vflex) and tooltip
 					} else {
@@ -345,7 +345,7 @@ export class Layout extends zul.Widget {
 					} else {
 						vflexs.push(cwgt);
 						if (vert) {
-							vflexsz += cwgt._nvflex as number;
+							vflexsz += cwgt._nvflex!;
 
 							//bug#3157031: remove chdex's padding, border, margin
 							hgh = hgh - zkxc.marginHeight();
@@ -386,7 +386,7 @@ export class Layout extends zul.Widget {
 		var lastsz = hgh > 0 ? hgh : 0;
 		while (vflexs.length > 1) {
 			var cwgt = vflexs.shift()!,
-				vsz = (vert ? (cwgt._nvflex as number * hgh / vflexsz) : hgh) | 0, //cast to integer
+				vsz = (vert ? (cwgt._nvflex! * hgh / vflexsz) : hgh) | 0, //cast to integer
 				offtop = cwgt.$n()!.offsetTop,
 				isz = vsz - ((zk.ie < 11 && offtop > 0) ? (offtop * 2) : 0),
 				chdex = cwgt.$n('chdex')!,

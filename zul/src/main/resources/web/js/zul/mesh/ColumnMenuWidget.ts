@@ -21,8 +21,8 @@ export abstract class ColumnMenuWidget extends zul.mesh.HeadWidget {
 	override _menupopup = 'none';
 	_columnshide = true;
 	_columnsgroup = true;
-	override _mpop?: zul.mesh.ColumnMenupopup | null;
-	_shallColMenu?: boolean | null;
+	override _mpop?: zul.mesh.ColumnMenupopup;
+	_shallColMenu?: boolean;
 	_mref?: zul.mesh.HeaderWidget;
 
 	/** Returns whether to enable hiding of the widget with the header context menu.
@@ -113,14 +113,14 @@ export abstract class ColumnMenuWidget extends zul.mesh.HeadWidget {
 
 		if (o !== mpop || (opts && opts.force)) {
 			if (this._menupopup != 'auto' && this._menupopup != 'auto-keep')
-				this._mpop = null;
+				this._mpop = undefined;
 			this.rerender();
 		}
 
 		return this;
 	}
 
-	override bind_(desktop: zk.Desktop | null | undefined, skipper: zk.Skipper | null | undefined, after: CallableFunction[]): void {
+	override bind_(desktop: zk.Desktop | undefined, skipper: zk.Skipper | undefined, after: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		zWatch.listen({onResponse: this});
 		var w = this;
@@ -131,12 +131,12 @@ export abstract class ColumnMenuWidget extends zul.mesh.HeadWidget {
 		}
 	}
 
-	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		zWatch.unlisten({onResponse: this});
 		if (this._mpop) {
 			if (this._menupopup != 'auto-keep')
 				this._mpop.parent!.removeChild(this._mpop);
-			this._shallColMenu = this._mpop = null;
+			this._shallColMenu = this._mpop = undefined;
 		}
 		super.unbind_(skipper, after, keepRod);
 	}
@@ -299,8 +299,8 @@ export class ColumnMenupopup extends zul.menu.Menupopup {
 		return this._group;
 	}
 
-	getUngroupitem(): zul.menu.Menuitem | null {
-		return null;
+	getUngroupitem(): zul.menu.Menuitem | undefined {
+		return undefined;
 	}
 
 	_init(): void {
@@ -347,7 +347,7 @@ export class ColumnMenupopup extends zul.menu.Menupopup {
 	 */
 	syncColMenu(): void {
 		var w = this._columns;
-		for (var c = this.lastChild, p: zul.menu.Menuitem | null; c != this._desc;) {
+		for (var c = this.lastChild, p: zul.menu.Menuitem | undefined; c != this._desc;) {
 			p = c!.previousSibling;
 			this.removeChild(c!);
 			c = p;

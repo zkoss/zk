@@ -23,18 +23,18 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.inp.Bandpopup')
 export class Bandpopup extends zul.Widget {
-	override parent!: zul.inp.Bandbox | null;
-	override nextSibling!: zul.inp.Bandpopup | null;
-	override previousSibling!: zul.inp.Bandpopup | null;
+	override parent!: zul.inp.Bandbox | undefined;
+	override nextSibling!: zul.inp.Bandpopup | undefined;
+	override previousSibling!: zul.inp.Bandpopup | undefined;
 	_shallClosePopup?: boolean;
 
-	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		jq(this.$n()!).on('focusin', this.proxy(this._focusin))
 			.on('focusout', this.proxy(this._focusout));
 	}
 
-	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		jq(this.$n()!).off('focusout', this.proxy(this._focusout))
 			.off('focusin', this.proxy(this._focusin));
 		super.unbind_(skipper, after, keepRod);

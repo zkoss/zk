@@ -59,11 +59,11 @@ export class Panel extends zul.Widget {
 	_minwidth = 200;
 	override _tabindex = 0;
 	_nativebar = true;
-	caption?: zul.wgt.Caption | null;
-	panelchildren?: zul.wnd.Panelchildren | null;
-	tbar?: zul.wgt.Toolbar | null;
-	fbar?: zul.wgt.Toolbar | null;
-	bbar?: zul.wgt.Toolbar | null;
+	caption?: zul.wgt.Caption;
+	panelchildren?: zul.wnd.Panelchildren;
+	tbar?: zul.wgt.Toolbar;
+	fbar?: zul.wgt.Toolbar;
+	bbar?: zul.wgt.Toolbar;
 	_tbar?: string;
 	_bbar?: string;
 	_fbar?: string;
@@ -71,17 +71,17 @@ export class Panel extends zul.Widget {
 	_sizable?: boolean;
 	_movable?: boolean;
 	_floatable?: boolean;
-	_sizer?: zk.Draggable | null;
+	_sizer?: zk.Draggable;
 	_maximizable?: boolean;
 	_minimizable?: boolean;
 	_collapsible?: boolean;
 	_closable?: boolean;
 	_maximized?: boolean;
 	_inWholeMode?: boolean;
-	_oldNodeInfo?: NodeInfo | null;
-	_lastSize?: null | { l: string; t: string; w: string; h: string };
+	_oldNodeInfo?: NodeInfo;
+	_lastSize?: { l: string; t: string; w: string; h: string };
 	_minimized?: boolean;
-	_shadow?: zk.eff.Shadow | null;
+	_shadow?: zk.eff.Shadow;
 	_backupCursor?: string;
 
 	constructor() {
@@ -147,7 +147,7 @@ export class Panel extends zul.Widget {
 					this._makeSizer();
 				else if (this._sizer) {
 					this._sizer.destroy();
-					this._sizer = null;
+					this._sizer = undefined;
 				}
 			}
 		}
@@ -158,8 +158,8 @@ export class Panel extends zul.Widget {
 	/** Returns whether the panel is sizable.
 	 * @return boolean
 	 */
-	isSizable(): boolean | undefined {
-		return this._sizable;
+	isSizable(): boolean {
+		return !!this._sizable;
 	}
 
 	/**
@@ -188,8 +188,8 @@ export class Panel extends zul.Widget {
 	 * <p>Default: false.
 	 * @return boolean
 	 */
-	isMovable(): boolean | undefined {
-		return this._movable;
+	isMovable(): boolean {
+		return !!this._movable;
 	}
 
 	/**
@@ -223,8 +223,8 @@ export class Panel extends zul.Widget {
 	 * <p>Default: false.
 	 * @return boolean
 	 */
-	isFloatable(): boolean | undefined {
-		return this._floatable;
+	isFloatable(): boolean {
+		return !!this._floatable;
 	}
 
 	/**
@@ -257,8 +257,8 @@ export class Panel extends zul.Widget {
 	 * <p>Default: false.
 	 * @return boolean
 	 */
-	isMaximizable(): boolean | undefined {
-		return this._maximizable;
+	isMaximizable(): boolean {
+		return !!this._maximizable;
 	}
 
 	/**
@@ -292,8 +292,8 @@ export class Panel extends zul.Widget {
 	 * <p>Default: false.
 	 * @return boolean
 	 */
-	isMinimizable(): boolean | undefined {
-		return this._minimizable;
+	isMinimizable(): boolean {
+		return !!this._minimizable;
 	}
 
 	/**
@@ -321,8 +321,8 @@ export class Panel extends zul.Widget {
 	 * <p>Default: false.
 	 * @return boolean
 	 */
-	isCollapsible(): boolean | undefined {
-		return this._collapsible;
+	isCollapsible(): boolean {
+		return !!this._collapsible;
 	}
 
 	/**
@@ -353,8 +353,8 @@ export class Panel extends zul.Widget {
 	 * Returns whether to show a close button on the title bar.
 	 * @return boolean
 	 */
-	isClosable(): boolean | undefined {
-		return this._closable;
+	isClosable(): boolean {
+		return !!this._closable;
 	}
 
 	/**
@@ -512,7 +512,7 @@ export class Panel extends zul.Widget {
 						sh = $op.zk.clientHeightDoubleValue();
 
 					if (zk.isLoaded('zkmax.layout') && this.parent instanceof zkmax.layout.Portalchildren) {
-						var layout = this.parent.parent!;
+						var layout = this.parent.parent;
 						if (layout.getMaximizedMode() == 'whole') {
 							this._inWholeMode = true;
 							var p = layout.$n_(), ps = p.style;
@@ -582,7 +582,7 @@ export class Panel extends zul.Widget {
 						s.top = this._lastSize.t;
 						s.width = this._lastSize.w;
 						s.height = this._lastSize.h;
-						this._lastSize = null;
+						this._lastSize = undefined;
 					}
 					l = s.left;
 					t = s.top;
@@ -593,7 +593,7 @@ export class Panel extends zul.Widget {
 						var body = this.$n('body');
 						if (body) body.style.display = 'none';
 					}
-					var body = this.panelchildren ? this.panelchildren.$n() : null;
+					var body = this.panelchildren ? this.panelchildren.$n() : undefined;
 					if (body)
 						body.style.width = body.style.height = '';
 
@@ -610,7 +610,7 @@ export class Panel extends zul.Widget {
 						(p.parentNode as HTMLElement).scrollTop = oldinfo ? oldinfo._scrollTop : 0;
 						if (oldinfo && oldinfo._pheight)
 							p.style.height = '';
-						this._oldNodeInfo = null;
+						this._oldNodeInfo = undefined;
 						this._inWholeMode = false;
 					}
 				}
@@ -640,8 +640,8 @@ export class Panel extends zul.Widget {
 	 * Returns whether the panel is maximized.
 	 * @return boolean
 	 */
-	isMaximized(): boolean | undefined {
-		return this._maximized;
+	isMaximized(): boolean {
+		return !!this._maximized;
 	}
 
 	/**
@@ -688,8 +688,8 @@ export class Panel extends zul.Widget {
 	 * <p>Default: false.
 	 * @return boolean
 	 */
-	isMinimized(): boolean | undefined {
-		return this._minimized;
+	isMinimized(): boolean {
+		return !!this._minimized;
 	}
 
 	//server use only
@@ -705,9 +705,9 @@ export class Panel extends zul.Widget {
 		if (o !== val || (opts && opts.force)) {
 			this.tbar = zk.Widget.$<zul.wgt.Toolbar>(val);
 			if (this.bbar == this.tbar)
-				this.bbar = null;
+				this.bbar = undefined;
 			if (this.fbar == this.tbar)
-				this.fbar = null;
+				this.fbar = undefined;
 			this.rerender();
 		}
 
@@ -727,9 +727,9 @@ export class Panel extends zul.Widget {
 		if (o !== val || (opts && opts.force)) {
 			this.bbar = zk.Widget.$<zul.wgt.Toolbar>(val);
 			if (this.tbar == this.bbar)
-				this.tbar = null;
+				this.tbar = undefined;
 			if (this.fbar == this.bbar)
-				this.fbar = null;
+				this.fbar = undefined;
 			this.rerender();
 		}
 
@@ -749,9 +749,9 @@ export class Panel extends zul.Widget {
 		if (o !== val || (opts && opts.force)) {
 			this.fbar = zk.Widget.$<zul.wgt.Toolbar>(val);
 			if (this.tbar == this.fbar)
-				this.tbar = null;
+				this.tbar = undefined;
 			if (this.bbar == this.fbar)
-				this.bbar = null;
+				this.bbar = undefined;
 			this.rerender();
 		}
 
@@ -759,7 +759,7 @@ export class Panel extends zul.Widget {
 	}
 
 	//super//
-	override setVflex(vflex: boolean | string | null | undefined): this {
+	override setVflex(vflex: boolean | string | undefined): this {
 		super.setVflex(vflex);
 		if (this.desktop) {
 			if (this.panelchildren) {
@@ -769,7 +769,7 @@ export class Panel extends zul.Widget {
 		return this;
 	}
 
-	override setHflex(hflex: boolean | string | null | undefined): this {
+	override setHflex(hflex: boolean | string | undefined): this {
 		super.setHflex(hflex);
 		if (this.desktop) {
 			if (this.panelchildren) {
@@ -779,7 +779,7 @@ export class Panel extends zul.Widget {
 		return this;
 	}
 
-	override setVisible(visible: boolean | undefined): this {
+	override setVisible(visible: boolean): this {
 		if (this._visible != visible) {
 			if (this._maximized) {
 				this.setMaximized(false);
@@ -791,14 +791,14 @@ export class Panel extends zul.Widget {
 		return this;
 	}
 
-	override setHeight(height: string | null): this {
+	override setHeight(height?: string): this {
 		super.setHeight(height);
 		if (this.desktop)
 			zUtl.fireSized(this);
 		return this;
 	}
 
-	override setWidth(width: string | null): this {
+	override setWidth(width?: string): this {
 		super.setWidth(width);
 		if (this.desktop)
 			zUtl.fireSized(this);
@@ -1022,9 +1022,9 @@ export class Panel extends zul.Widget {
 		if (tHeight)
 			h -= zk(body).padBorderHeight();
 
-		var tb = this.tbar ? this.$n('tb') : null,
-			bb = this.bbar ? this.$n('bb') : null,
-			fb = this.fbar ? this.$n('fb') : null;
+		var tb = this.tbar ? this.$n('tb') : undefined,
+			bb = this.bbar ? this.$n('bb') : undefined,
+			fb = this.fbar ? this.$n('fb') : undefined;
 		if (tb) h -= tb.offsetHeight;
 		if (bb) h -= bb.offsetHeight;
 		if (fb) h -= fb.offsetHeight;
@@ -1032,7 +1032,7 @@ export class Panel extends zul.Widget {
 	}
 
 	_titleHeight(): number {
-		var head = this.getTitle() || this.caption ? this.$n('head') : null;
+		var head = this.getTitle() || this.caption ? this.$n('head') : undefined;
 		return head ? head.offsetHeight : 0;
 	}
 
@@ -1040,7 +1040,7 @@ export class Panel extends zul.Widget {
 		if (!this._visible || !this.isFloatable())
 			return; //just in case
 
-		for (var wgt: zk.Widget | null = ctl.origin; wgt; wgt = wgt.parent) {
+		for (var wgt: zk.Widget | undefined = ctl.origin; wgt; wgt = wgt.parent) {
 			if (wgt == this) {
 				this.setTopmost();
 				return;
@@ -1054,7 +1054,7 @@ export class Panel extends zul.Widget {
 		if (!this._sizer) {
 			this.domListen_(this.$n_(), 'onMouseMove');
 			this.domListen_(this.$n_(), 'onMouseOut');
-			this._sizer = new zk.Draggable(this, null, {
+			this._sizer = new zk.Draggable(this, undefined, {
 				stackup: true,
 				draw: Panel._drawsizing,
 				snap: Panel._snapsizing,
@@ -1088,7 +1088,7 @@ export class Panel extends zul.Widget {
 		var handle = this.$n('head');
 		if (handle && !this._drag) {
 			jq(handle).addClass(this.$s('header-move'));
-			this._drag = new zk.Draggable(this, null, {
+			this._drag = new zk.Draggable(this, undefined, {
 				handle: handle, stackup: true,
 				starteffect: Panel._startmove,
 				ignoredrag: Panel._ignoremove,
@@ -1102,7 +1102,7 @@ export class Panel extends zul.Widget {
 		if (!this.isFloatable()) {
 			if (this._shadow) {
 				this._shadow.destroy();
-				this._shadow = null;
+				this._shadow = undefined;
 			}
 		} else {
 			var body = this.$n('body');
@@ -1148,7 +1148,7 @@ export class Panel extends zul.Widget {
 	}
 
 	//super//
-	override bind_(desktop: zk.Desktop | null | undefined, skipper: zk.Skipper | null | undefined, after: CallableFunction[]): void {
+	override bind_(desktop: zk.Desktop | undefined, skipper: zk.Skipper | undefined, after: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 
 		zWatch.listen({onSize: this, onHide: this});
@@ -1173,10 +1173,10 @@ export class Panel extends zul.Widget {
 		}
 	}
 
-	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		if (this._inWholeMode) {
 			var node = this.$n(),
-				oldinfo: NodeInfo | null | undefined;
+				oldinfo: NodeInfo | undefined;
 
 			// ZK-1951, ZK-2045: Page becomes blank after detaching a modal window having an iframe loaded with PDF in IE > 9
 			// A workaround is to hide the iframe before remove
@@ -1202,16 +1202,16 @@ export class Panel extends zul.Widget {
 
 		if (this._shadow) {
 			this._shadow.destroy();
-			this._shadow = null;
+			this._shadow = undefined;
 		}
 		if (this._drag) {
 			this._drag.destroy();
-			this._drag = null;
+			this._drag = undefined;
 		}
 		// Bug ZK-1467: Resizable panels inside portallayout loses resizability after move
 		if (this._sizer) {
 			this._sizer.destroy();
-			this._sizer = null;
+			this._sizer = undefined;
 		}
 		this.domUnlisten_(this.$n_(), 'onMouseMove');
 		this.domUnlisten_(this.$n_(), 'onMouseOut');
@@ -1219,7 +1219,7 @@ export class Panel extends zul.Widget {
 	}
 
 	_doMouseMove(evt: zk.Event): void {
-		if (this._sizer && zUtl.isAncestor(this, evt.target!)) {
+		if (this._sizer && zUtl.isAncestor(this, evt.target)) {
 			var n = this.$n_(),
 				c = Panel._insizer(n, zk(n).revisedOffset(), evt.pageX, evt.pageY),
 				handle = this.isMovable() ? this.$n('head') : false;
@@ -1232,7 +1232,7 @@ export class Panel extends zul.Widget {
 					c == 7 ? 'w-resize' : 'nw-resize';
 				if (handle) jq(handle).removeClass(this.$s('header-move'));
 			} else {
-				n.style.cursor = this._backupCursor || '';
+				n.style.cursor = this._backupCursor ?? '';
 				if (handle) jq(handle).addClass(this.$s('header-move'));
 			}
 		}
@@ -1313,15 +1313,15 @@ export class Panel extends zul.Widget {
 	override onChildRemoved_(child: zk.Widget): void {
 		super.onChildRemoved_(child);
 		if (child == this.caption)
-			this.caption = null;
+			this.caption = undefined;
 		else if (child == this.panelchildren)
-			this.panelchildren = null;
+			this.panelchildren = undefined;
 		else if (child == this.tbar)
-			this.tbar = null;
+			this.tbar = undefined;
 		else if (child == this.bbar)
-			this.bbar = null;
+			this.bbar = undefined;
 		else if (child == this.fbar)
-			this.fbar = null;
+			this.fbar = undefined;
 		if (!this.childReplacing_)
 			this.rerender();
 	}
@@ -1476,7 +1476,7 @@ export class PanelSkipper extends zk.Skipper {
 		}
 	}
 
-	override restore(wgt: zk.Widget, skip: HTMLElement | null | undefined): void {
+	override restore(wgt: zk.Widget, skip: HTMLElement | undefined): void {
 		super.restore(wgt, skip);
 		this._p.zsync();
 	}

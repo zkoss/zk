@@ -20,7 +20,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.mesh.Auxhead')
 export class Auxhead extends zul.mesh.HeadWidget {
-	override bind_(desktop: zk.Desktop | null | undefined, skipper: zk.Skipper | null | undefined, after: CallableFunction[]): void {
+	override bind_(desktop: zk.Desktop | undefined, skipper: zk.Skipper | undefined, after: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		// B50-3306729: the first header should have border-left when the first column is covered with other header
 		this.fixBorder_();

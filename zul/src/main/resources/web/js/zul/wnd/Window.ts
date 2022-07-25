@@ -19,7 +19,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 export type WindowMode = 'embedded' | 'overlapped' | 'popup' | 'modal' | 'highlighted';
 
 var _modals: zul.wnd.Window[] = [],
-	_lastfocus: zk.Widget | null;
+	_lastfocus: zk.Widget | undefined;
 
 function _syncMaximized(wgt: zul.wnd.Window): void {
 	if (!wgt._lastSize) return;
@@ -117,10 +117,10 @@ function _aftermove(dg: zk.Draggable, evt: zk.Event<zul.wnd.Dimension>): void {
 	// Bug for ZK-385 clear position value after move
 	// ZK-4007: shouldn't clear position if nocenter
 	if (wgt._position && wgt._position != 'parent' && wgt._position != 'nocenter') {
-		wgt._position = null;
+		wgt._position = undefined;
 	}
 	wgt.zsync();
-	wgt._fireOnMove(evt.data!);
+	wgt._fireOnMove(evt.data);
 	zk(wgt).redoCSS(-1, {'fixFontIcon': true});
 }
 
@@ -167,7 +167,7 @@ function _doModal(wgt: zul.wnd.Window): void {
 	wgt.setTopmost();
 
 	if (!wgt._mask) {
-		var anchor = wgt._shadowWgt ? wgt._shadowWgt.getBottomElement() : null;
+		var anchor = wgt._shadowWgt ? wgt._shadowWgt.getBottomElement() : undefined;
 		wgt._mask = new zk.eff.FullMask({
 			id: wgt.uuid + '-mask',
 			anchor: anchor ? anchor : wgt.$n(),
@@ -197,7 +197,7 @@ function _markModal(wgt: zul.wnd.Window): void {
 	//2) setVisible might use animation
 	setTimeout(function () {
 		zk.afterAnimate(function () {
-			if (!zUtl.isAncestor(wgt, zk.currentFocus!)) {
+			if (!zUtl.isAncestor(wgt, zk.currentFocus)) {
 				if (zk.ie9_)
 					wgt.focus(100);
 				else
@@ -212,7 +212,7 @@ function _unmarkModal(wgt: zul.wnd.Window): void {
 		var wnd = zk.currentModal = _modals[0],
 			fc = wnd ? wnd._lastfocus : _lastfocus;
 		if (!wnd)
-			_lastfocus = null;
+			_lastfocus = undefined;
 		if (!fc || !fc.desktop)
 			fc = wnd;
 		if (fc) {
@@ -223,7 +223,7 @@ function _unmarkModal(wgt: zul.wnd.Window): void {
 				// use 0 instead of 10, otherwise it will cause this bug 1936366
 		}
 	}
-	wgt._lastfocus = null;
+	wgt._lastfocus = undefined;
 }
 /* Must be called before calling makeVParent. */
 function _posByParent(wgt: zul.wnd.Window): void {
@@ -257,7 +257,7 @@ function _updDomOuter(wgt: zul.wnd.Window, opts?: {sendOnMaximize?: boolean}): v
 			}
 		}
 		// NOTE: At this point, unbind_ would have set _updDOFocus to a zk.Widget.
-		const cf = wgt._updDOFocus as unknown as zk.Widget | null | undefined;
+		const cf = wgt._updDOFocus as unknown as zk.Widget | undefined;
 		if (cf) //asked by unbind_
 			cf.focus(10);
 	} finally {
@@ -321,7 +321,7 @@ function _makeSizer(wgt: zul.wnd.Window): void {
 	if (!wgt._sizer) {
 		wgt.domListen_(wgt.$n_(), 'onMouseMove');
 		wgt.domListen_(wgt.$n_(), 'onMouseOut');
-		wgt._sizer = new zk.Draggable(wgt, null, {
+		wgt._sizer = new zk.Draggable(wgt, undefined, {
 			stackup: true,
 			overlay: true, // ZK-817
 			draw: Window._drawsizing,
@@ -338,7 +338,7 @@ function _makeFloat(wgt: zul.wnd.Window): void {
 	var handle = wgt.$n('cap');
 	if (handle && !wgt._drag) {
 		jq(handle).addClass(wgt.getZclass() + '-header-move');
-		wgt._drag = new zk.Draggable(wgt, null, {
+		wgt._drag = new zk.Draggable(wgt, undefined, {
 			handle: handle, stackup: true,
 			fireOnMove: false,
 			starteffect: Window._startmove,
@@ -411,27 +411,27 @@ export class Window extends zul.ContainerWidget {
 	override _tabindex = 0;
 	_nativebar = true;
 	_title?: string;
-	caption?: zul.wgt.Caption | null;
+	caption?: zul.wgt.Caption;
 	_skipper: zul.wnd.Skipper;
 	_closable?: boolean;
 	_sizable?: boolean;
-	_sizer?: zk.Draggable | null;
+	_sizer?: zk.Draggable;
 	_maximizable?: boolean;
 	_minimizable?: boolean;
 	_maximized?: boolean;
 	_minimized?: boolean;
 	_notSendMaximize?: boolean;
-	_lastSize?: null | { l?: string; t?: string; w?: string; h?: string };
+	_lastSize?: { l?: string; t?: string; w?: string; h?: string };
 	_contentStyle?: string;
 	_contentSclass?: string;
-	_position?: string | null;
-	_shadowWgt?: zk.eff.Shadow | null;
-	_mask?: zk.eff.FullMask | null;
+	_position?: string;
+	_shadowWgt?: zk.eff.Shadow;
+	_mask?: zk.eff.FullMask;
 	_shallSize?: boolean;
-	_anchor?: HTMLElement | null;
+	_anchor?: HTMLElement;
 	_backupCursor?: string;
-	_updDOFocus?: zk.Widget | boolean | null;
-	_lastfocus?: zk.Widget | null;
+	_updDOFocus?: zk.Widget | boolean;
+	_lastfocus?: zk.Widget;
 	_offset?: zk.Offset;
 
 	constructor(props: Record<string, unknown>) {
@@ -552,8 +552,8 @@ export class Window extends zul.ContainerWidget {
 	 * Returns whether to show a close button on the title bar.
 	 * @return boolean
 	 */
-	isClosable(): boolean | undefined {
-		return this._closable;
+	isClosable(): boolean {
+		return !!this._closable;
 	}
 
 	/** Sets whether the window is sizable.
@@ -571,7 +571,7 @@ export class Window extends zul.ContainerWidget {
 					_makeSizer(this);
 				else if (this._sizer) {
 					this._sizer.destroy();
-					this._sizer = null;
+					this._sizer = undefined;
 				}
 			}
 		}
@@ -582,8 +582,8 @@ export class Window extends zul.ContainerWidget {
 	/** Returns whether the window is sizable.
 	 * @return boolean
 	 */
-	isSizable(): boolean | undefined {
-		return this._sizable;
+	isSizable(): boolean {
+		return !!this._sizable;
 	}
 
 	/**
@@ -613,8 +613,8 @@ export class Window extends zul.ContainerWidget {
 	 * <p>Default: false.
 	 * @return boolean
 	 */
-	isMaximizable(): boolean | undefined {
-		return this._maximizable;
+	isMaximizable(): boolean {
+		return !!this._maximizable;
 	}
 
 	/**
@@ -645,8 +645,8 @@ export class Window extends zul.ContainerWidget {
 	 * <p>Default: false.
 	 * @return boolean
 	 */
-	isMinimizable(): boolean | undefined {
-		return this._minimizable;
+	isMinimizable(): boolean {
+		return !!this._minimizable;
 	}
 
 	/**
@@ -713,7 +713,7 @@ export class Window extends zul.ContainerWidget {
 						s.top = this._lastSize.t!;
 						s.width = this._lastSize.w!;
 						s.height = this._lastSize.h!;
-						this._lastSize = null;
+						this._lastSize = undefined;
 					}
 					l = s.left;
 					t = s.top;
@@ -751,8 +751,8 @@ export class Window extends zul.ContainerWidget {
 	 * Returns whether the window is maximized.
 	 * @return boolean
 	 */
-	isMaximized(): boolean | undefined {
-		return this._maximized;
+	isMaximized(): boolean {
+		return !!this._maximized;
 	}
 
 	/**
@@ -801,8 +801,8 @@ export class Window extends zul.ContainerWidget {
 	 * <p>Default: false.
 	 * @return boolean
 	 */
-	isMinimized(): boolean | undefined {
-		return this._minimized;
+	isMinimized(): boolean {
+		return !!this._minimized;
 	}
 
 	/**
@@ -896,7 +896,7 @@ export class Window extends zul.ContainerWidget {
 	 * assumed. If modal or highlighted, it is centered.
 	 * @return String
 	 */
-	getPosition(): string | null | undefined {
+	getPosition(): string | undefined {
 		return this._position;
 	}
 
@@ -956,7 +956,7 @@ export class Window extends zul.ContainerWidget {
 				this.zsync();
 			} else if (this._shadowWgt) {
 				this._shadowWgt.destroy();
-				this._shadowWgt = null;
+				this._shadowWgt = undefined;
 			}
 		}
 
@@ -967,7 +967,7 @@ export class Window extends zul.ContainerWidget {
 	 * window. It is meaningless if it is an embedded window.
 	 * @return boolean
 	 */
-	isShadow(): boolean | null {
+	isShadow(): boolean {
 		return this._shadow;
 	}
 
@@ -1023,7 +1023,7 @@ export class Window extends zul.ContainerWidget {
 			if (this._mode == 'embedded') {
 				if (this._shadowWgt) {
 					this._shadowWgt.destroy();
-					this._shadowWgt = null;
+					this._shadowWgt = undefined;
 				}
 			} else if (this._shadow) {
 				if (!this._shadowWgt)
@@ -1159,7 +1159,7 @@ export class Window extends zul.ContainerWidget {
 		if (!this._visible || this._mode == 'embedded' || this._mask)
 			return; //just in case
 
-		var wgt: zk.Widget | null = ctl.origin;
+		var wgt: zk.Widget | undefined = ctl.origin;
 		if (this._mode == 'popup') {
 			for (let floatFound = false; wgt; wgt = wgt.parent) {
 				if (wgt == this) {
@@ -1202,7 +1202,7 @@ export class Window extends zul.ContainerWidget {
 	}
 
 	_titleHeight(): number {
-		var cap = this.getTitle() || this.caption ? this.$n('cap') : null;
+		var cap = this.getTitle() || this.caption ? this.$n('cap') : undefined;
 		return cap ? cap.offsetHeight : 0;
 	}
 
@@ -1217,7 +1217,7 @@ export class Window extends zul.ContainerWidget {
 	}
 
 	//super//
-	override setVisible(visible: boolean | undefined): this {
+	override setVisible(visible: boolean): this {
 		if (this._visible != visible) {
 			if (this._maximized) {
 				this.setMaximized(false);
@@ -1254,7 +1254,7 @@ export class Window extends zul.ContainerWidget {
 		return this;
 	}
 
-	override setHeight(height: string | null): this {
+	override setHeight(height?: string): this {
 		super.setHeight(height);
 		if (this.desktop)
 			zUtl.fireSized(this);
@@ -1262,7 +1262,7 @@ export class Window extends zul.ContainerWidget {
 		return this;
 	}
 
-	override setWidth(width: string | null): this {
+	override setWidth(width?: string): this {
 		super.setWidth(width);
 		if (this.desktop)
 			zUtl.fireSized(this);
@@ -1347,7 +1347,7 @@ export class Window extends zul.ContainerWidget {
 	override onChildRemoved_(child: zk.Widget): void {
 		super.onChildRemoved_(child);
 		if (child == this.caption) {
-			this.caption = null;
+			this.caption = undefined;
 			this.rerender(this._skipper); // B50-ZK-275
 		}
 		if (this.desktop) {
@@ -1355,7 +1355,7 @@ export class Window extends zul.ContainerWidget {
 		}
 	}
 
-	override insertChildHTML_(child: zk.Widget, before?: zk.Widget | null, desktop?: zk.Desktop | null): void {
+	override insertChildHTML_(child: zk.Widget, before?: zk.Widget, desktop?: zk.Desktop): void {
 		if (!(child instanceof zul.wgt.Caption)) // B50-ZK-275
 			super.insertChildHTML_(child, before, desktop);
 	}
@@ -1369,7 +1369,7 @@ export class Window extends zul.ContainerWidget {
 		return style;
 	}
 
-	override bind_(desktop: zk.Desktop | null | undefined, skipper: zk.Skipper | null | undefined, after: CallableFunction[]): void {
+	override bind_(desktop: zk.Desktop | undefined, skipper: zk.Skipper | undefined, after: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 
 		var mode = this._mode;
@@ -1414,7 +1414,7 @@ export class Window extends zul.ContainerWidget {
 		super.detach();
 	}
 
-	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		var node = this.$n_();
 		zk(node).beforeHideOnUnbind();
 		node.style.visibility = 'hidden'; //avoid unpleasant effect
@@ -1424,22 +1424,22 @@ export class Window extends zul.ContainerWidget {
 		//we don't check this._mode here since it might be already changed
 		if (this._shadowWgt) {
 			this._shadowWgt.destroy();
-			this._shadowWgt = null;
+			this._shadowWgt = undefined;
 		}
 		if (this._drag) {
 			this._drag.destroy();
-			this._drag = null;
+			this._drag = undefined;
 		}
 		if (this._sizer) {
 			this._sizer.destroy();
-			this._sizer = null;
+			this._sizer = undefined;
 		}
 
 		if (this._mask) {
 			if (this._anchor)
-				this._anchor = null;
+				this._anchor = undefined;
 			this._mask.destroy();
-			this._mask = null;
+			this._mask = undefined;
 		}
 
 		// ZK-1951, ZK-2045: Page becomes blank after detaching a modal window having an iframe loaded with PDF in IE > 9
@@ -1492,9 +1492,9 @@ export class Window extends zul.ContainerWidget {
 	}
 
 	override doClick_(evt: zk.Event, popupOnly?: boolean): void {
-		var n: HTMLElement | null = evt.domTarget;
+		var n: HTMLElement | undefined = evt.domTarget;
 		if (!n.id)
-			n = n.parentNode as HTMLElement | null;
+			n = n.parentNode as HTMLElement | undefined;
 		if (n) { //If node does not exist, should propagation event directly
 			switch (n) {
 			case this.$n('close'):
@@ -1694,10 +1694,10 @@ export class Window extends zul.ContainerWidget {
 	static _aftersizing(dg: zk.Draggable, evt: zk.Event): void {
 		var wgt = dg.control!,
 			data = dg.z_szofs;
-		if (wgt._hflex) wgt.setHflex_(null);
-		if (wgt._vflex) wgt.setVflex_(null);
+		if (wgt._hflex) wgt.setHflex_();
+		if (wgt._vflex) wgt.setVflex_();
 		wgt.fire('onSize', zk.copy(data, evt.keys), {ignorable: true});
-		dg.z_szofs = null;
+		dg.z_szofs = undefined;
 	}
 
 	static _drawsizing(dg: zk.Draggable, pointer: zk.Offset, evt: zk.Event): void {
@@ -1752,7 +1752,7 @@ export class Skipper extends zk.Skipper {
 		this._w = wnd;
 	}
 
-	override restore(wgt: zk.Widget, skip: HTMLElement | null | undefined): void {
+	override restore(wgt: zk.Widget, skip: HTMLElement | undefined): void {
 		super.restore(wgt, skip);
 		var w = this._w;
 		if (w._mode != 'embedded') {

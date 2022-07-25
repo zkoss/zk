@@ -36,7 +36,7 @@ function _logId(wgt: zul.tab.Tab): void {
  */
 @zk.WrapClass('zul.tab.Tab')
 export class Tab extends zul.LabelImageWidget implements zul.LabelImageWidgetWithDisable {
-	override parent!: zul.tab.Tabs | null;
+	override parent!: zul.tab.Tabs | undefined;
 
 	_oldId?: string;
 	_closable?: boolean;
@@ -54,8 +54,8 @@ export class Tab extends zul.LabelImageWidget implements zul.LabelImageWidgetWit
 	 * Default: false.
 	 * @return boolean
 	 */
-	isClosable(): boolean | undefined {
-		return this._closable;
+	isClosable(): boolean {
+		return !!this._closable;
 	}
 
 	/**
@@ -98,8 +98,8 @@ export class Tab extends zul.LabelImageWidget implements zul.LabelImageWidgetWit
 	 * Default: false.
 	 * @return boolean
 	 */
-	isDisabled(): boolean | undefined {
-		return this._disabled;
+	isDisabled(): boolean {
+		return !!this._disabled;
 	}
 
 	/**
@@ -144,8 +144,8 @@ export class Tab extends zul.LabelImageWidget implements zul.LabelImageWidgetWit
 	 * Returns the tabbox owns this component.
 	 * @return zul.tab.Tabbox
 	 */
-	getTabbox(): zul.tab.Tabbox | null {
-		return this.parent ? this.parent.parent : null;
+	getTabbox(): zul.tab.Tabbox | undefined {
+		return this.parent ? this.parent.parent : undefined;
 	}
 
 	/**
@@ -217,7 +217,7 @@ export class Tab extends zul.LabelImageWidget implements zul.LabelImageWidgetWit
 			this.fire('onSelect', {items: [this], reference: this});
 	}
 
-	override setHeight(height: string | null): this {
+	override setHeight(height: string | undefined): this {
 		super.setHeight(height);
 		if (this.desktop) {
 			this._calcHgh();
@@ -226,7 +226,7 @@ export class Tab extends zul.LabelImageWidget implements zul.LabelImageWidgetWit
 		return this;
 	}
 
-	override setWidth(width: string | null): this {
+	override setWidth(width: string | undefined): this {
 		super.setWidth(width);
 		if (this.desktop)
 			zUtl.fireSized(this.parent!);
@@ -288,20 +288,20 @@ export class Tab extends zul.LabelImageWidget implements zul.LabelImageWidgetWit
 	}
 
 	//bug #3014664
-	override setVflex(v: boolean | string | null | undefined): this { //vflex ignored for Tab
+	override setVflex(v: boolean | string | undefined): this { //vflex ignored for Tab
 		if (v != 'min') v = false;
 		return super.setVflex(v);
 	}
 
 	//bug #3014664
-	override setHflex(v: boolean | string | null | undefined): this { //hflex ignored for Tab
+	override setHflex(v: boolean | string | undefined): this { //hflex ignored for Tab
 		if (v != 'min') v = false;
 		return super.setHflex(v);
 	}
 
-	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
-		var closebtn = this.isClosable() ? this.$n('cls') : null;
+		var closebtn = this.isClosable() ? this.$n('cls') : undefined;
 		if (closebtn) {
 			this.domListen_(closebtn, 'onClick', '_doCloseClick');
 		}
@@ -312,7 +312,7 @@ export class Tab extends zul.LabelImageWidget implements zul.LabelImageWidgetWit
 		this.parent!._shallCheck = true;
 	}
 
-	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		var closebtn = this.$n('cls');
 		// ZK-886
 		_logId(this);
@@ -334,7 +334,7 @@ export class Tab extends zul.LabelImageWidget implements zul.LabelImageWidgetWit
 		out.push('<', tag, this.domAttrs_({domClass: true}), ' class="z-renderdefer"></', tag, '>');
 	}
 
-	override rerender(skipper?: number | zk.Skipper | null): void {
+	override rerender(skipper?: number | zk.Skipper): void {
 		// ZK-886
 		if (this.desktop)
 			_logId(this);

@@ -23,11 +23,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 export class Caption extends zul.LabelImageWidget<HTMLDivElement> {
 	// NOTE: parent could be null as asserted in domCon
 	// In essence, parent is `zul.wnd.Window | zul.wnd.Panel | zul.wgt.Groupbox`.
-	override parent!: null | zk.Widget & Partial<zul.wnd.Panel>;
+	override parent!: zk.Widget & Partial<zul.wnd.Panel> | undefined;
 	//super//
 	domDependent_ = true;
 
-	override rerender(skipper?: zk.Skipper | number | null): void {
+	override rerender(skipper?: zk.Skipper | number): void {
 		var p = this.parent;
 		if (p)
 			p.clearCache(); // B50-ZK-244
@@ -87,30 +87,30 @@ export class Caption extends zul.LabelImageWidget<HTMLDivElement> {
 	}
 
 	/** Whether to generate a collapsible button (determined by parent only). */
-	_isCollapsibleVisible(): boolean | undefined {
+	_isCollapsibleVisible(): boolean {
 		var parent = this.parent!;
-		return parent.isCollapsible && parent.getCollapseOpenIconClass_ && parent.isCollapsible();
+		return !!(parent.isCollapsible && parent.getCollapseOpenIconClass_ && parent.isCollapsible());
 	}
 
 	/** Whether to generate a close button (determined by parent only). */
-	_isCloseVisible(): boolean | undefined {
+	_isCloseVisible(): boolean {
 		var parent = this.parent!;
-		return parent.isClosable && parent.getClosableIconClass_ && parent.isClosable();
+		return !!(parent.isClosable && parent.getClosableIconClass_ && parent.isClosable());
 	}
 
 	/** Whether to generate a minimize button (determined by parent only). */
-	_isMinimizeVisible(): boolean | undefined {
+	_isMinimizeVisible(): boolean {
 		var parent = this.parent!;
-		return parent.isMinimizable && parent.getMinimizableIconClass_ && parent.isMinimizable();
+		return !!(parent.isMinimizable && parent.getMinimizableIconClass_ && parent.isMinimizable());
 	}
 
 	/** Whether to generate a maximize button (determined by parent only). */
-	_isMaximizeVisible(): boolean | undefined {
+	_isMaximizeVisible(): boolean {
 		var parent = this.parent!;
-		return parent.isMaximizable && parent.getMaximizableIconClass_ && parent.isMaximizable();
+		return !!(parent.isMaximizable && parent.getMaximizableIconClass_ && parent.isMaximizable());
 	}
 
-	override beforeMinFlex_(o: zk.FlexOrient): number | null | undefined { // Fixed for B50-3343388.zul
+	override beforeMinFlex_(o: zk.FlexOrient): number | undefined { // Fixed for B50-3343388.zul
 		// FIXME: Div has no property width. Setting it in the console has no effect.
 		// Dead code?
 		if (o == 'w')
@@ -143,7 +143,7 @@ export class Caption extends zul.LabelImageWidget<HTMLDivElement> {
 
 	// override
 	// ZK-786
-	override getImageNode(): HTMLImageElement | null | undefined {
+	override getImageNode(): HTMLImageElement | undefined {
 		if (!this._eimg && this._image) {
 			var n = this.$n<HTMLImageElement>('img');
 			if (n) this._eimg = n;

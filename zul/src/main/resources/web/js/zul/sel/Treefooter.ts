@@ -28,16 +28,16 @@ export class Treefooter extends zul.mesh.FooterWidget {
 	/** Returns the tree that this belongs to.
 	 * @return Tree
 	 */
-	getTree(): zul.sel.Tree | null | undefined {
-		return this.getMeshWidget() as zul.sel.Tree | null | undefined;
+	getTree(): zul.sel.Tree | undefined {
+		return this.getMeshWidget() as zul.sel.Tree | undefined;
 	}
 
 	/** Returns the tree header that is in the same column as
 	 * this footer, or null if not available.
 	 * @return Treecol
 	 */
-	getTreecol(): zul.sel.Treecol | null | undefined {
-		return this.getHeaderWidget() as zul.sel.Treecol | null | undefined;
+	getTreecol(): zul.sel.Treecol | undefined {
+		return this.getHeaderWidget() as zul.sel.Treecol | undefined;
 	}
 
 	/** Returns the maximal length for this cell.

@@ -15,7 +15,7 @@ export class SPush extends zk.Object {
 	declare min?: number;
 	declare max?: number;
 	declare factor?: number;
-	declare intv?: number | null;
+	declare intv?: number;
 	start(dt: zk.Desktop, min: number, max: number, factor: number): void {
 		this.desktop = dt;
 		this.min = min > 0 ? min : 1000;
@@ -29,7 +29,7 @@ export class SPush extends zk.Object {
 	}
 	stop(): void {
 		clearInterval(this.intv!);
-		this.intv = null;
+		this.intv = undefined;
 	}
 	_do(): void {
 		if (!zAu.processing()) {
@@ -45,7 +45,7 @@ export class SPush extends zk.Object {
 			}
 
 			if (doNow)
-				zAu.send(new zk.Event(this.desktop, 'dummy', null, {ignorable: true, rtags: {isDummy: true}}));
+				zAu.send(new zk.Event(this.desktop, 'dummy', undefined, {ignorable: true, rtags: {isDummy: true}}));
 		}
 	}
 }
@@ -62,6 +62,6 @@ export function stop(dtid: string): void {
 	var dt = zk.Desktop.$(dtid);
 	if (dt && dt._cpsp) {
 		dt._cpsp.stop();
-		dt._cpsp = null;
+		dt._cpsp = undefined;
 	}
 }

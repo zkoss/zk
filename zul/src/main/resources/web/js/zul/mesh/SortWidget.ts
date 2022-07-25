@@ -26,7 +26,7 @@ export abstract class SortWidget extends zul.mesh.HeaderWidget {
 	_sortAscending = 'none';
 	_sortDescending = 'none';
 	
-	abstract getMeshBody(): zk.Widget | null | undefined;
+	abstract getMeshBody(): zk.Widget | undefined;
 
 	/** Returns the sort direction.
 	 * <p>Default: "natural".
@@ -221,7 +221,7 @@ export abstract class SortWidget extends zul.mesh.HeaderWidget {
 				index: number;
 			}
 			var d: Data[] = [], col = this.getChildIndex();
-			for (var i = 0, z = 0, it = mesh.getBodyWidgetIterator(), w: zk.Widget | null | undefined; (w = it.next()); z++)
+			for (var i = 0, z = 0, it = mesh.getBodyWidgetIterator(), w: zk.Widget | undefined; (w = it.next()); z++)
 				for (var k = 0, cell = w.firstChild; cell; cell = cell.nextSibling, k++)
 					if (k == col) {
 						d[i++] = {
@@ -290,7 +290,7 @@ export abstract class SortWidget extends zul.mesh.HeaderWidget {
 			this.sort(false, evt);
 	}
 
-	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		if (this._sortAscending != 'none' || this._sortDescending != 'none') {
 			var $n = jq(this.$n_()),
@@ -309,7 +309,7 @@ export abstract class SortWidget extends zul.mesh.HeaderWidget {
 		}
 	}
 
-	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		super.unbind_(skipper, after, keepRod);
 	}
 
@@ -355,7 +355,7 @@ export abstract class SortWidget extends zul.mesh.HeaderWidget {
 					// In general, parent is not zul.mesh.ColumnMenuWidget, but it is here.
 					pp.listen({onOpen: [this.parent, (this.parent as zul.mesh.ColumnMenuWidget)._onMenuPopup]});
 				}
-				pp.open(btn, [ofs[0], ofs[1] + btn.offsetHeight - 4], null, {sendOnOpen: true});
+				pp.open(btn, [ofs[0], ofs[1] + btn.offsetHeight - 4], undefined, {sendOnOpen: true});
 			}
 			evt.stop(); // avoid onSort event.
 		}

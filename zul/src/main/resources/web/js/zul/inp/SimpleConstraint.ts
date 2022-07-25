@@ -24,7 +24,7 @@ var _posAllowed = [
 	} as const;
 
 export type SimpleConstraintFlags = Partial<Record<typeof _baseConstraints[keyof typeof _baseConstraints], boolean>>
-export type SimpleConstraintValidateStrict = (val: string) => string | null;
+export type SimpleConstraintValidateStrict = (val: string) => string | undefined;
 export type SimpleConstraintErrorMessages = Record<string, string | undefined>
 
 /**

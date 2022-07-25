@@ -20,24 +20,24 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.sel.Treefoot')
 export class Treefoot extends zul.Widget {
-	override parent!: zul.sel.Tree | null;
+	override parent!: zul.sel.Tree | undefined;
 	/** Returns the tree that it belongs to.
 	 * @return Tree
 	 */
-	getTree(): zul.sel.Tree | null {
+	getTree(): zul.sel.Tree | undefined {
 		return this.parent;
 	}
 
 	//bug #3014664
-	override setVflex(v: boolean | string | null | undefined): this { //vflex ignored for Treefoot
-		v = false;
-		return super.setVflex(v);
+	override setVflex(vflex?: boolean | string): this { //vflex ignored for Treefoot
+		vflex = false;
+		return super.setVflex(vflex);
 	}
 
 	//bug #3014664
-	override setHflex(v: boolean | string | null | undefined): this { //hflex ignored for Treefoot
-		v = false;
-		return super.setHflex(v);
+	override setHflex(hflex: boolean | string): this { //hflex ignored for Treefoot
+		hflex = false;
+		return super.setHflex(hflex);
 	}
 
 	override deferRedrawHTML_(out: string[]): void {

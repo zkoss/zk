@@ -20,8 +20,8 @@ import {default as zAu} from './au';
 import {zjq} from './dom';
 
 //define a package and returns the package info (used in WpdExtendlet)
-window.zkpi = function (nm: string, wv: boolean): Record<string, unknown> | null {
-	return pkg.isLoaded(nm) ? null : {n: nm, p: zk.$package(nm, false, wv)};
+window.zkpi = function (nm: string, wv: boolean): Record<string, unknown> | undefined {
+	return pkg.isLoaded(nm) ? undefined : {n: nm, p: zk.$package(nm, false, wv)};
 };
 
 //ZK JSP: page creation (backward compatible)
@@ -101,7 +101,7 @@ var Widget = zk.Widget,
 	_aftMounts: (() => void)[] = [], //afterMount
 	_aftResizes: (() => void)[] = [], //afterResize
 	_mntctx = {}, //the context
-	_paci: Pcai | null = {s: 0, e: -1, f0: [], f1: []}, //for handling page's AU responses
+	_paci: Pcai | undefined = {s: 0, e: -1, f0: [], f1: []}, //for handling page's AU responses
 	_t0 = jq.now();
 
 //Issue of handling page's AU responses
@@ -122,11 +122,11 @@ jq(function () {
 	if (!_paci) return;
 	_paci.i = window.setInterval(function () {
 		var stateless;
-		if (_paci != null && ((zk.booted && !zk.mounting) || (stateless = _stateless())))
+		if (_paci != undefined && ((zk.booted && !zk.mounting) || (stateless = _stateless())))
 			if (stateless || _paci.s == _paci.e) { //done
 				clearInterval(_paci.i);
 				var fs = _paci.f0.concat(_paci.f1);
-				_paci = null;
+				_paci = undefined;
 				for (var f; (f = fs.shift());)
 					f();
 			} else
@@ -352,7 +352,7 @@ function mtAU(): void {
 				};
 			}
 		try {
-			wgt = create(null, inf[1]);
+			wgt = create(undefined, inf[1]);
 		} finally {
 			if (filter && _wgt_$) Widget.$ = _wgt_$;
 		}
@@ -394,7 +394,7 @@ function doAuCmds(cmds): void {
 /* create the widget tree. */
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function create(parent: zk.Widget | null, wi: any[], ignoreDom?: boolean): zk.Widget {
+function create(parent: zk.Widget | undefined, wi: any[], ignoreDom?: boolean): zk.Widget {
 	var wgt, stub, v,
 		type = wi[0],
 		uuid = wi[1],
@@ -523,7 +523,7 @@ export function zkdt(dtid?: string, contextURI?: string, updateURI?: string, res
 // wi[4] = children
 // wi[5] = mold
 window.zkx = zkx;
-export function zkx(wi?: unknown[], extra?: string | null, aucmds?: string | null, js?: string): void { //extra is either delay (BL) or [stub, filter] (AU)
+export function zkx(wi?: unknown[], extra?: string, aucmds?: string, js?: string): void { //extra is either delay (BL) or [stub, filter] (AU)
 	zk.mounting = true;
 
 	try {
@@ -534,7 +534,7 @@ export function zkx(wi?: unknown[], extra?: string | null, aucmds?: string | nul
 			delay = extra;
 			if (wi) {
 				extra = aucmds;
-				aucmds = null;
+				aucmds = undefined;
 			}
 			mount = mtBL;
 			infs = _crInfBL0;
@@ -615,7 +615,7 @@ export function zkmb(bindOnly?: boolean): void {
 //end of mounting
 window.zkme = zkme;
 export function zkme(): void {
-	_mntctx['curdt'] = null;
+	_mntctx['curdt'] = undefined;
 	_mntctx['bindOnly'] = false;
 }
 
@@ -630,7 +630,7 @@ export function zkdh(name: string, script: string): void {
 jq(function () {
 	var Widget = zk.Widget,
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		_bfUploads: Array<zk.Callable> = [],
+		_bfUploads: CallableFunction[] = [],
 		_reszInf = {},
 		_subevts = { //additonal invocation
 			onClick: 'doSelect_',
@@ -654,7 +654,7 @@ jq(function () {
 	 * <li>remove: whether to remove instead of add.</li>
 	 * </ul>
 	 */
-	zk.beforeUnload = function (fn: () => string | null, opts?: {remove: boolean}): void { //part of zk
+	zk.beforeUnload = function (fn: () => string | undefined, opts?: {remove: boolean}): void { //part of zk
 		if (opts && opts.remove) _bfUploads.$remove(fn);
 		else _bfUploads.push(fn);
 	};
@@ -722,7 +722,7 @@ jq(function () {
 			return;
 		}
 
-		_reszInf['time'] = null; //handled
+		_reszInf['time'] = undefined; //handled
 		_reszInf['lastTime'] = now + 1000;
 		//ignore following for a while if processing (in slow machine)
 
@@ -732,7 +732,7 @@ jq(function () {
 		try {
 			zWatch.fire('_beforeSizeForRead'); //notify all
 			zWatch.fire('beforeSize'); //notify all
-			zWatch.fire('onFitSize', null, {reverse: true}); //notify all
+			zWatch.fire('onFitSize', undefined, {reverse: true}); //notify all
 			zWatch.fire('onSize'); //notify all
 			zWatch.fire('afterSize'); //notify all
 			_reszInf['lastTime'] = jq.now() + 8;
@@ -765,7 +765,7 @@ jq(function () {
 	jq(document)
 		.keydown(function (evt) {
 			var wgt = Widget.$(evt, {child: true}) as zk.Widget & {afterKeyDown_?},
-				wevt = new zk.Event(wgt, 'onKeyDown', evt.keyData(), null, evt);
+				wevt = new zk.Event(wgt, 'onKeyDown', evt.keyData(), undefined, evt);
 			if (wgt) {
 				_doEvt(wevt);
 				if (!wevt.stopped && wgt.afterKeyDown_) {
@@ -782,19 +782,19 @@ jq(function () {
 		})
 		.keyup(function (evt) {
 			var wgt = zk.keyCapture;
-			if (wgt) zk.keyCapture = null;
+			if (wgt) zk.keyCapture = undefined;
 			else wgt = Widget.$(evt, {child: true});
-			_doEvt(new zk.Event(wgt, 'onKeyUp', evt.keyData(), null, evt));
+			_doEvt(new zk.Event(wgt, 'onKeyUp', evt.keyData(), undefined, evt));
 		})
 		.keypress(function (evt) {
 			var wgt = zk.keyCapture;
 			if (!wgt) wgt = Widget.$(evt, {child: true});
-			_doEvt(new zk.Event(wgt, 'onKeyPress', evt.keyData(), null, evt));
+			_doEvt(new zk.Event(wgt, 'onKeyPress', evt.keyData(), undefined, evt));
 		})
 		.on('paste', function (evt) {
 			var wgt = zk.keyCapture;
 			if (!wgt) wgt = Widget.$(evt, {child: true});
-			_doEvt(new zk.Event(wgt, 'onPaste', evt.keyData(), null, evt));
+			_doEvt(new zk.Event(wgt, 'onPaste', evt.keyData(), undefined, evt));
 		})
 		.on('zcontextmenu', function (evt) {
 			//ios: zcontextmenu shall be listened first,
@@ -821,7 +821,7 @@ jq(function () {
 			}
 			var wgt = Widget.$(evt, {child: true});
 			_docMouseDown(
-				new zk.Event(wgt, 'onMouseDown', evt.mouseData(), null, evt),
+				new zk.Event(wgt, 'onMouseDown', evt.mouseData(), undefined, evt),
 				wgt);
 		})
 		.on('zmouseup', function (evt) {
@@ -830,13 +830,13 @@ jq(function () {
 				return; //ignore
 
 			if (e != null) {
-				_docMouseDown(e, null, true); //simulate mousedown
+				_docMouseDown(e, undefined, true); //simulate mousedown
 			}
 
 			wgt = zk.mouseCapture;
-			if (wgt) zk.mouseCapture = null;
+			if (wgt) zk.mouseCapture = undefined;
 			else wgt = Widget.$(evt, {child: true});
-			_doEvt(new zk.Event(wgt, 'onMouseUp', evt.mouseData(), null, evt));
+			_doEvt(new zk.Event(wgt, 'onMouseUp', evt.mouseData(), undefined, evt));
 		})
 		.on('zmousemove', function (evt) {
 			zk.currentPointer[0] = evt.pageX || 0;
@@ -844,7 +844,7 @@ jq(function () {
 
 			var wgt = zk.mouseCapture;
 			if (!wgt) wgt = Widget.$(evt, {child: true});
-			_doEvt(new zk.Event(wgt, 'onMouseMove', evt.mouseData(), null, evt));
+			_doEvt(new zk.Event(wgt, 'onMouseMove', evt.mouseData(), undefined, evt));
 		})
 		.mouseover(function (evt) {
 			if (zk.mobile) return; // unsupported on touch device for better performance
@@ -902,7 +902,7 @@ jq(function () {
 					return; //not from Clients.evalJavascript
 				lastCheckPos = checkPos;
 			}
-			zAu.send(new zk.Event(null, 'onScriptError', {
+			zAu.send(new zk.Event(undefined, 'onScriptError', {
 				message: errorMsg,
 				stack: stack
 			}));

@@ -31,14 +31,14 @@ export interface OpenOptions {
 @zk.WrapClass('zul.inp.ComboWidget')
 export class ComboWidget extends zul.inp.InputWidget<string> {
 	_buttonVisible = true;
-	_iconSclass: string | null = null;
+	_iconSclass?: string;
 	_autodrop?: boolean;
 	_popupWidth?: string;
 	_shallFixPopupDimension?: boolean;
 	_repos?: boolean;
 	_open?: boolean;
 	_shallSyncPopupPosition?: boolean;
-	_shadow?: zk.eff.Shadow | null;
+	_shadow?: zk.eff.Shadow;
 	_windowX?: number;
 	_windowY?: number;
 
@@ -53,12 +53,12 @@ export class ComboWidget extends zul.inp.InputWidget<string> {
 	/** Sets whether the button (on the right of the textbox) is visible.
 	 * @param boolean visible
 	 */
-	setButtonVisible(v: boolean, opts?: Record<string, boolean>): this {
+	setButtonVisible(buttonVisible: boolean, opts?: Record<string, boolean>): this {
 		const o = this._buttonVisible;
-		this._buttonVisible = v;
+		this._buttonVisible = buttonVisible;
 
-		if (o !== v || (opts && opts.force)) {
-			zul.inp.RoundUtl.buttonVisible(this, v);
+		if (o !== buttonVisible || (opts && opts.force)) {
+			zul.inp.RoundUtl.buttonVisible(this, buttonVisible);
 		}
 
 		return this;
@@ -69,8 +69,8 @@ export class ComboWidget extends zul.inp.InputWidget<string> {
 	 * <p>Default: false.
 	 * @return boolean
 	 */
-	isAutodrop(): boolean | undefined {
-		return this._autodrop;
+	isAutodrop(): boolean {
+		return !!this._autodrop;
 	}
 
 	/** Sets whether to automatically drop the list if users is changing
@@ -98,11 +98,11 @@ export class ComboWidget extends zul.inp.InputWidget<string> {
 	 * @param String width of the popup of this component
 	 * @since 8.0.3
 	 */
-	setPopupWidth(v: string, opts?: Record<string, boolean>): this {
+	setPopupWidth(popupWidth: string, opts?: Record<string, boolean>): this {
 		const o = this._popupWidth;
-		this._popupWidth = v;
+		this._popupWidth = popupWidth;
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== popupWidth || (opts && opts.force)) {
 			if (this._open) {
 				var pp = this.getPopupNode_(),
 					pp2 = this.getPopupNode_(true);
@@ -149,7 +149,7 @@ export class ComboWidget extends zul.inp.InputWidget<string> {
 	 * Returns the iconSclass name of this ComboWidget.
 	 * @return String the iconSclass name
 	 */
-	getIconSclass(): string | null {
+	getIconSclass(): string | undefined {
 		return this._iconSclass;
 	}
 
@@ -171,7 +171,7 @@ export class ComboWidget extends zul.inp.InputWidget<string> {
 		return this;
 	}
 
-	override setWidth(width: string | null): this {
+	override setWidth(width?: string): this {
 		super.setWidth(width);
 		if (this.desktop) {
 			this.onSize();
@@ -218,7 +218,7 @@ export class ComboWidget extends zul.inp.InputWidget<string> {
 				jq(this.getInputNode()!).addClass(inplace);
 				jq(n).addClass(inplace);
 				this.onSize();
-				n.style.width = this.getWidth() || '';
+				n.style.width = this.getWidth() ?? '';
 			}
 		}
 	}
@@ -227,8 +227,7 @@ export class ComboWidget extends zul.inp.InputWidget<string> {
 		if ((this._shallFixPopupDimension || opts.rtags.onOpen || opts.rtags.onChanging) && this.isOpen()) {
 			// ZK-2192: Only need to determine if popup is animating
 			if (jq(this.getPopupNode_()!).is(':animated')) {
-				var self = this;
-				setTimeout(function () {if (self.desktop) self.onResponse(ctl, opts);}, 50);
+				setTimeout(() => {if (this.desktop) this.onResponse(ctl, opts);}, 50);
 				return;
 			}
 			this._shallFixPopupDimension = false;
@@ -242,13 +241,13 @@ export class ComboWidget extends zul.inp.InputWidget<string> {
 				this._fixsz(pz);
 			} finally {
 				// Bug ZK-2294, restore the scroll position
-				pp.scrollTop = scrollPos.Top || 0;
-				pp.scrollLeft = scrollPos.left || 0;
+				pp.scrollTop = scrollPos.Top ?? 0;
+				pp.scrollLeft = scrollPos.left ?? 0;
 			}
 		}
 	}
 
-	onScroll(wgt: zk.Widget | null): void {
+	onScroll(wgt?: zk.Widget): void {
 		if (this.isOpen()) {
 			// ZK-1552: fix the position of popup when scroll
 			if (wgt) {
@@ -283,8 +282,8 @@ export class ComboWidget extends zul.inp.InputWidget<string> {
 	/** Returns whether the list of combo items is open
 	 * @return boolean
 	 */
-	isOpen(): boolean | undefined {
-		return this._open;
+	isOpen(): boolean {
+		return !!this._open;
 	}
 
 	/** Drops down the list of combo items ({@link Comboitem}.
@@ -370,7 +369,7 @@ export class ComboWidget extends zul.inp.InputWidget<string> {
 		jqpp.addClass(openClass);
 	}
 
-	_getPopupSize(pp: HTMLElement, pp2?: HTMLElement | null): PopupSize {
+	_getPopupSize(pp: HTMLElement, pp2?: HTMLElement): PopupSize {
 		var ppofs = this.getPopupSize_(pp);
 		pp.style.width = ppofs[0];
 		pp.style.height = 'auto';
@@ -421,12 +420,12 @@ export class ComboWidget extends zul.inp.InputWidget<string> {
 		$pp.position(inp, vPosition + '_' + hPosition, opts);
 	}
 
-	_fixFfWhileBothScrollbar(pp: HTMLElement, pp2?: HTMLElement & Partial<Pick<HTMLTableElement, 'rows'>> | null): void {
+	_fixFfWhileBothScrollbar(pp: HTMLElement, pp2?: HTMLElement & Partial<Pick<HTMLTableElement, 'rows'>>): void {
 		//FF issue:
 		//If both horz and vert scrollbar are visible:
 		//a row might be hidden by the horz bar.
 		if (zk.gecko) {
-			var rows = pp2 ? pp2.rows : null;
+			var rows = pp2 ? pp2.rows : undefined;
 			if (rows) {
 				var gap = pp.offsetHeight - pp.clientHeight;
 				if (gap > 10 && pp.offsetHeight < 150) { //scrollbar
@@ -515,7 +514,7 @@ export class ComboWidget extends zul.inp.InputWidget<string> {
 	 * @return DOMElement
 	 * @since 5.0.4
 	 */
-	getPopupNode_(inner?: boolean): HTMLElement | null | undefined {
+	getPopupNode_(inner?: boolean): HTMLElement | undefined {
 		return inner ? this.$n('cave') : this.$n('pp');
 	}
 
@@ -552,7 +551,7 @@ export class ComboWidget extends zul.inp.InputWidget<string> {
 
 		if (this._shadow) {
 			this._shadow.destroy();
-			this._shadow = null;
+			this._shadow = undefined;
 		}
 
 		if (opts && opts.sendOnOpen)
@@ -651,7 +650,7 @@ export class ComboWidget extends zul.inp.InputWidget<string> {
 		// empty on purpose
 	}
 
-	override afterKeyDown_(evt: zk.Event, simulated?: boolean): boolean | undefined {
+	override afterKeyDown_(evt: zk.Event, simulated?: boolean): boolean {
 		if (!simulated && this._inplace)
 			jq(this.$n_()).toggleClass(this.getInplaceCSS(), evt.keyCode == 13 ? null! : false);
 
@@ -663,9 +662,9 @@ export class ComboWidget extends zul.inp.InputWidget<string> {
 			this.open({sendOnOpen: true});
 	}
 
-	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
-		var btn: HTMLElement | null | undefined;
+		var btn: HTMLElement | undefined;
 
 		if (btn = this.$n('btn')) {
 			this.domListen_(btn, zk.android ? 'onTouchstart' : 'onClick', '_doBtnClick');
@@ -678,7 +677,7 @@ export class ComboWidget extends zul.inp.InputWidget<string> {
 		if (!zk.css3) jq.onzsync(this);
 	}
 
-	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		this.close();
 
 		var btn = this.$n('btn');
@@ -712,7 +711,7 @@ export class ComboWidget extends zul.inp.InputWidget<string> {
 			this._windowY = window.pageYOffset;
 		}
 		// Bug ZK-2544, B70-ZK-2849
-		evt.stop((this._open ? {propagation: 1 as unknown as boolean} : null));
+		evt.stop((this._open ? {propagation: 1 as unknown as boolean} : undefined));
 	}
 
 	_doBtnMouseDown(evt: zk.Event): void {

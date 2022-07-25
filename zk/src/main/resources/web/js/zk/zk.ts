@@ -78,7 +78,7 @@ function _inherits(subClass, superClass): void {
 	if (superClass) Object.setPrototypeOf(subClass, superClass);
 }
 
-function _createSuper(Derived): zk.Callable {
+function _createSuper(Derived): CallableFunction {
 	var hasNativeReflectConstruct = _isNativeReflectConstruct();
 	return function _createSuperInternal() {
 		var Super = Object.getPrototypeOf(Derived),
@@ -114,7 +114,7 @@ function newClass<T>(superclass): T {
 
 		this._$super.____ = superclass.$oid ? (superclass.$oid + 1) : ___s++;
 		// call super constructor refer to babel
-		let _this = _super.call(this) as ZKObject;
+		let _this = _super.bind(this)() as ZKObject;
 
 		// Note: we cannot use Object.assign() here, because some prototype property may not be copied.
 		_zk.copy(_this, Object.getPrototypeOf(this));
@@ -130,9 +130,9 @@ function newClass<T>(superclass): T {
 
 			var ais = _this._$ais;
 			if (ais) {
-				this._$ais = null;
+				this._$ais = undefined;
 				for (var j = ais.length; j--;)
-					ais[j].call(_this);
+					ais[j].bind(_this)();
 			}
 		}
 
@@ -203,14 +203,14 @@ function defSet11(nm: string, before: Setter, after: Setter): GeneratedSetter {
 function showprgbInit(): void {
 	//don't use jq() since it will be queued after others
 	if (jq.isReady || zk.Page.contained.length)
-		_showprgb(true, _zk.pi ? 'z-initing' : null);
+		_showprgb(true, _zk.pi ? 'z-initing' : undefined);
 	else
 		setTimeout(showprgbInit, 10);
 }
 function showprgb(): void { //When passed to FF's setTimeout, 1st argument is not null
 	_showprgb(_zk.processMask);
 }
-function _showprgb(mask: boolean | undefined, icon?: string | null): void {
+function _showprgb(mask?: boolean, icon?: string): void {
 	let $jq;
 	if (_zk.processing
 	&& !($jq = jq('#zk_proc')).length && !jq('#zk_showBusy').length) {
@@ -270,7 +270,7 @@ function doLog(): void {
 		}
 		console.value += _logmsg;
 		console.scrollTop = console.scrollHeight;
-		_logmsg = null;
+		_logmsg = undefined;
 	}
 }
 
@@ -342,11 +342,11 @@ _zk.currentPointer = [0, 0] as zk.Offset;
 /** The widget that gains the focus now, or null if no one gains focus now.
  * @type Widget
  */
-_zk.currentFocus = null as Widget | null;
+_zk.currentFocus = undefined as Widget | undefined;
 /** The topmost modal window, or null if no modal window at all.
  * @type zul.wnd.Window
  */
-_zk.currentModal = null as zul.wnd.Window | null;
+_zk.currentModal = undefined as zul.wnd.Window | undefined;
 /** The number of widget packages (i.e., JavaScript files) being loaded
  * (and not yet complete).
  * <p>When the JavaScript files of widgets are loading, you shall not create
@@ -549,7 +549,7 @@ doKeyDown_: function () {
 	 * @type Widget
 	 */
 	//keyCapture: null,
-	export let keyCapture: Widget | null;
+	export let keyCapture: Widget | undefined;
 	/** The widget that captures the mouse events.
 	 * Used to specify a widget that shall receive the following the onMouseMove and onMouseUp events, no matter what widget the event occurs on.
 <pre><code>
@@ -563,13 +563,13 @@ doMouseDown_: function () {
 	 * @type Widget
 	 */
 	//mouseCapture: null,
-	export let mouseCapture: Widget | null;
+	export let mouseCapture: Widget | undefined;
 }
 
 /** Copies a map of properties (or options) from one object to another.
  * Example: extending Array
 <pre><code>
-zk.copy(Array.prototoype, {
+zk.copy(Array.prototype, {
  $addAll: function (o) {
   return this.push(...o);
  }
@@ -696,7 +696,7 @@ zk.$import('zul.sel.Listbox', function (cls) {new cls();});
  * @see #$import(String)
  * @see #load
  */
-_zk.$import = function (name: string, fn?: zk.Callable): unknown {
+_zk.$import = function (name: string, fn?: CallableFunction): unknown {
 	var last;
 	if (last = _caches[name]) {
 		if (fn) fn(last);
@@ -1026,10 +1026,10 @@ _zk.define = function (klass, props) {
 		var nm1 = '_' + nm,
 			nm2 = nm.charAt(0).toUpperCase() + nm.substring(1),
 			pt = klass.prototype,
-			after = props[nm], before = null;
+			after = props[nm], before = undefined;
 		if (Array.isArray(after)) {
-			before = after.length ? after[0] : null;
-			after = after.length > 1 ? after[1] : null;
+			before = after.length ? after[0] : undefined;
+			after = after.length > 1 ? after[1] : undefined;
 		}
 		pt['set' + nm2] = before ?
 			after ? defSet11(nm1, before, after) : defSet10(nm1, before) :
@@ -1050,7 +1050,7 @@ _zk.$void = function (): false {return false;};
  * @param int b represent the base of the number in the string. 10 is assumed if omitted.
  * @return int the integer
  */
-_zk.parseInt = function (v: string | number | boolean | null | undefined, b?: number): number {
+_zk.parseInt = function (v: string | number | boolean | undefined, b?: number): number {
 	return v && !isNaN(v = parseInt(v as string, b || 10)) ? v : 0;
 };
 /** Parses a string to a floating number.
@@ -1123,7 +1123,7 @@ _zk._set = function (o, name: string, value, extra?): void { //called by widget.
 		o['set' + name.charAt(0).toUpperCase() + name.substring(1)],
 		name, value, extra);
 };
-_zk._set2 = function (o, mtd, name: string | null, value, extra?): void { //called by widget.js (better performance)
+_zk._set2 = function (o, mtd, name: string | undefined, value, extra?): void { //called by widget.js (better performance)
 	if (mtd) {
 		if (extra !== undefined)
 			mtd.call(o, value, extra);
@@ -1227,7 +1227,7 @@ _zk._noESC = 0; //# of disableESC being called (also used by mount.js)
 	*/
 _zk.error = function (msg: string, silent?: boolean): void {
 	if (!silent) {
-		zAu.send(new zk.Event(null, 'error', {message: msg}, {ignorable: true}), 800);
+		zAu.send(new zk.Event(undefined, 'error', {message: msg}, {ignorable: true}), 800);
 	}
 	_zk._Erbx.push(msg);
 };
@@ -1308,8 +1308,8 @@ _zk.stamp = function (nm?: string, noAutoLog?: boolean): void {
 	* </ul>
 	* @return String the encoded URI
 	*/
-_zk.ajaxURI = function (uri: string | null, opts): string {
-	var ctx = zk.Desktop.$(opts ? opts.desktop : null),
+_zk.ajaxURI = function (uri: string | undefined, opts): string {
+	var ctx = zk.Desktop.$(opts ? opts.desktop : undefined),
 		au = opts && opts.au,
 		res = opts && opts.resource,
 		uriPrefix,
@@ -1510,7 +1510,7 @@ _zk.$intercepts = function (targetClass, interceptor): void {
 			}
 			(function (nm, oldFunc) {
 				targetpt[nm] = function () {
-					var context = {stop: false, result: null, args: arguments},
+					var context = {stop: false, result: undefined, args: arguments},
 						arr = this._$$interceptorContext;
 					arr.push(context);
 					interceptor[nm].call(this, ...(arguments as never as []));
@@ -1718,7 +1718,7 @@ zk.Buffer = Array;
 export abstract class ZKObject {
 	// FIXME: $copyf: Class;
 	// FIXME: $copied: boolean;
-	declare _$ais: zk.Callable[] | null;
+	declare _$ais?: CallableFunction[];
 	declare _$supers: Record<string, unknown>;
 	declare _$proxies: WeakMap<object, unknown>;
 	declare _$super;
@@ -1765,7 +1765,7 @@ export abstract class ZKObject {
 	 * @see #$init
 	 * @deprecated as of 10.0 released. Using {@link #afterCreated_()} instead.
 	 */
-	afterInit(func: zk.Callable): void {
+	afterInit(func: CallableFunction): void {
 		(this._$ais = this._$ais || []).unshift(func); //reverse
 	}
 	/** The class that this object belongs to.
@@ -2007,7 +2007,7 @@ var _erbx, _errcnt = 0;
 
 _zk._Erbx = class _Erbx extends ZKObject { //used in HTML tags
 	id: string;
-	dg: Draggable | undefined;
+	dg?: Draggable;
 	constructor(msg: string) {
 		super();
 		var id = 'zk_err',
@@ -2029,7 +2029,7 @@ _zk._Erbx = class _Erbx extends ZKObject { //used in HTML tags
 		this.id = id;
 		try {
 			var n;
-			this.dg = new zk.Draggable(null, n = jq($id)[0], {
+			this.dg = new zk.Draggable(undefined, n = jq($id)[0], {
 				handle: jq($id + '-p')[0], zIndex: n.style.zIndex,
 				starteffect: _zk.$void,
 				endeffect: _zk.$void});
@@ -2039,14 +2039,14 @@ _zk._Erbx = class _Erbx extends ZKObject { //used in HTML tags
 		jq($id).slideDown(1000);
 	}
 	destroy(): void {
-		_erbx = null;
+		_erbx = undefined;
 		_errcnt = 0;
 		if (this.dg) this.dg.destroy();
 		jq('#' + this.id).remove();
 	}
 	static redraw(): void {
 		_zk.errorDismiss();
-		zAu.send(new zk.Event(null, 'redraw'));
+		zAu.send(new zk.Event(undefined, 'redraw'));
 	}
 	static push(msg: string): _Erbx | void {
 		if (!_erbx)
@@ -2105,7 +2105,7 @@ interface ZKVars {
 	_focusByClearBusy: boolean;
 
 	// ./mount
-	beforeUnload(fn: () => string | null, opts?: {remove: boolean}): void;
+	beforeUnload(fn: () => string | undefined, opts?: {remove: boolean}): void;
 	feature: {
 		standard?: boolean;
 		pe?: boolean;
@@ -2148,7 +2148,7 @@ interface ZKVars {
 	_avoidRod?: boolean;
 
 	// ./dom
-	_prevFocus?: zk.Widget | null;
+	_prevFocus?: zk.Widget;
 
 	// ./effect
 	useStackup?: string | boolean;
@@ -2167,9 +2167,9 @@ declare namespace _zk {
 	export let pi: number | undefined;
 	export let processMask: boolean | undefined;
 	export let debugJS: boolean | undefined;
-	export let updateURI: string | null | undefined;
-	export let resourceURI: string | null | undefined;
-	export let contextURI: string | null | undefined;
+	export let updateURI: string | undefined;
+	export let resourceURI: string | undefined;
+	export let contextURI: string | undefined;
 	export let dataHandlers: Record<string, string | DataHandler> | undefined;
 
 	// not used in ./zk

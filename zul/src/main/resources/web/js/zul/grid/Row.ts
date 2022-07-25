@@ -29,9 +29,9 @@ var _isPE = (function () {
  */
 @zk.WrapClass('zul.grid.Row')
 export class Row extends zul.Widget<HTMLTableRowElement> implements zul.mesh.Item {
-	override parent!: zul.grid.Rows | null;
-	override nextSibling!: zul.grid.Row | null;
-	override previousSibling!: zul.grid.Row | null;
+	override parent!: zul.grid.Rows | undefined;
+	override nextSibling!: zul.grid.Row | undefined;
+	override previousSibling!: zul.grid.Row | undefined;
 
 	_loaded?: boolean;
 	_index?: number;
@@ -39,8 +39,8 @@ export class Row extends zul.Widget<HTMLTableRowElement> implements zul.mesh.Ite
 	_align?: string;
 	_nowrap?: boolean;
 	_valign?: string;
-	_spans?: number[] | null;
-	detail?: zkex.grid.Detail | null;
+	_spans?: number[];
+	detail?: zkex.grid.Detail;
 	_musin?: boolean;
 
 	/** Returns the horizontal alignment of the whole row.
@@ -71,8 +71,8 @@ export class Row extends zul.Widget<HTMLTableRowElement> implements zul.mesh.Ite
 	 * <p>Default: null (system default: wrap).
 	 * @return boolean
 	 */
-	isNowrap(): boolean | undefined {
-		return this._nowrap;
+	isNowrap(): boolean {
+		return !!this._nowrap;
 	}
 
 	/** Sets the nowrap.
@@ -119,11 +119,11 @@ export class Row extends zul.Widget<HTMLTableRowElement> implements zul.mesh.Ite
 	/** Returns the grid that contains this row.
 	 * @return zul.grid.Grid
 	 */
-	getGrid(): zul.grid.Grid | null {
-		return this.parent ? this.parent.parent : null;
+	getGrid(): zul.grid.Grid | undefined {
+		return this.parent ? this.parent.parent : undefined;
 	}
 
-	override setVisible(visible: boolean | undefined): this {
+	override setVisible(visible: boolean): this {
 		if (this.isVisible() != visible) {
 			super.setVisible(visible);
 			if (this.desktop && this.isStripeable_())
@@ -137,7 +137,7 @@ export class Row extends zul.Widget<HTMLTableRowElement> implements zul.mesh.Ite
 	 * @return String
 	 */
 	getSpans(): string {
-		return zUtl.intsToString(this._spans!);
+		return zUtl.intsToString(this._spans);
 	}
 
 	/** Sets the spans, which is a list of numbers separated by comma.
@@ -162,13 +162,13 @@ export class Row extends zul.Widget<HTMLTableRowElement> implements zul.mesh.Ite
 	/** Returns the group that this row belongs to, or null.
 	 * @return zkex.grid.Group
 	 */
-	getGroup(): zkex.grid.Group | null {
+	getGroup(): zkex.grid.Group | undefined {
 		// TODO: this performance is not good.
 		if (_isPE() && this.parent && this.parent.hasGroup())
-			for (var w: zul.grid.Row | null = this; w; w = w.previousSibling)
+			for (var w: zul.grid.Row | undefined = this; w; w = w.previousSibling)
 				if (w instanceof zkex.grid.Group) return w;
 
-		return null;
+		return undefined;
 	}
 
 	override setStyle(style: string): this {
@@ -180,7 +180,7 @@ export class Row extends zul.Widget<HTMLTableRowElement> implements zul.mesh.Ite
 		return this;
 	}
 
-	override rerender(skipper?: number | zk.Skipper | null): void {
+	override rerender(skipper?: number | zk.Skipper): void {
 		if (this.desktop) {
 			super.rerender(skipper);
 			if (this.parent)
@@ -188,7 +188,7 @@ export class Row extends zul.Widget<HTMLTableRowElement> implements zul.mesh.Ite
 		}
 	}
 
-	override getSclass(): string | null | undefined {
+	override getSclass(): string | undefined {
 		var sclass = super.getSclass();
 		if (sclass != null)
 			return sclass;
@@ -212,7 +212,7 @@ export class Row extends zul.Widget<HTMLTableRowElement> implements zul.mesh.Ite
 		return this;
 	}
 
-	override insertChildHTML_(child: zk.Widget, before?: zk.Widget | null, desktop?: zk.Desktop | null): void {
+	override insertChildHTML_(child: zk.Widget, before?: zk.Widget, desktop?: zk.Desktop): void {
 		var childHTML = this.encloseChildHTML_({
 				child: child,
 				index: child.getChildIndex(),
@@ -342,15 +342,15 @@ export class Row extends zul.Widget<HTMLTableRowElement> implements zul.mesh.Ite
 	override onChildRemoved_(child: zk.Widget): void {
 		super.onChildRemoved_(child);
 		if (child == this.detail)
-			this.detail = null;
+			this.detail = undefined;
 	}
 
 	override doFocus_(evt: zk.Event): void {
 		super.doFocus_(evt);
 		//sync frozen
 		var grid = this.getGrid(),
-			frozen = grid ? grid.frozen : null,
-			tbody = grid && grid.rows ? grid.rows.$n() : null;
+			frozen = grid ? grid.frozen : undefined,
+			tbody = grid && grid.rows ? grid.rows.$n() : undefined;
 		if (frozen && tbody) {
 			const tds = jq(evt.domTarget).parents('td');
 			for (var i = 0, j = tds.length; i < j; i++) {
@@ -412,7 +412,7 @@ export class Row extends zul.Widget<HTMLTableRowElement> implements zul.mesh.Ite
 		out.push('<tr', this.domAttrs_({domClass: true}), ' class="z-renderdefer"></tr>');
 	}
 
-	override getFlexContainer_(): HTMLElement | null | undefined { //use old flex inside tr/td
-		return null;
+	override getFlexContainer_(): HTMLElement | undefined { //use old flex inside tr/td
+		return undefined;
 	}
 }

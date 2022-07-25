@@ -88,19 +88,19 @@ export class Progressmeter extends zul.Widget {
 		this._fixImgWidth();
 	}
 
-	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {//after compose
+	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {//after compose
 		super.bind_(desktop, skipper, after);
 		this._fixImgWidth();
 		zWatch.listen({onSize: this});
 	}
 
-	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		zWatch.unlisten({onSize: this});
 		super.unbind_(skipper, after, keepRod);
 	}
 
-	override setWidth(val: string | null): this {
-		super.setWidth(val);
+	override setWidth(width?: string): this {
+		super.setWidth(width);
 		this._fixImgWidth();
 		return this;
 	}

@@ -55,11 +55,11 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 	_localizedSymbols?: zk.LocalizedSymbols;
 	_changed?: boolean;
 	type?: number;
-	timerId?: number | null;
+	timerId?: number;
 	lastPos?: number;
 	_lastPos?: number;
-	_constraint?: string | null;
-	_currentbtn?: HTMLElement | null;
+	_constraint?: string;
+	_currentbtn?: HTMLElement;
 
 	constructor() {
 		super();
@@ -164,7 +164,7 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 	 * <p>Default: null (means no constraint all all).
 	 * @param String cst
 	 */
-	override setConstraint(cst: string | null, opts?: Record<string, boolean>): this {
+	override setConstraint(cst?: string, opts?: Record<string, boolean>): this {
 		const o = this._constraint;
 		this._constraint = cst;
 
@@ -172,7 +172,7 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 			if (typeof cst == 'string' && cst.charAt(0) != '['/*by server*/)
 				this._cst = new zul.inp.SimpleLocalTimeConstraint(cst, this);
 			else
-				this._cst = cst as null;
+				this._cst = cst;
 			if (this._cst)
 				this._reVald = true; //revalidate required
 			// FIXME: never assigned
@@ -191,7 +191,7 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 	// Signature doesn't match super method
 	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 	// @ts-ignore
-	override getConstraint(): string | null | undefined {
+	override getConstraint(): string | undefined {
 		return this._constraint;
 	}
 
@@ -295,7 +295,7 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 		return super.setValue(value, fromServer);
 	}
 
-	override coerceToString_(date?: DateImpl | null): string {
+	override coerceToString_(date?: DateImpl): string {
 		if (!this._changed && !date && arguments.length) return '';
 		var out = '', th: TimeHandler, text: string, offset: number | boolean;
 		for (var i = 0, f = this._fmthdler, l = f.length; i < l; i++) {
@@ -310,7 +310,7 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 		return out;
 	}
 
-	override coerceFromString_(val: string | null | undefined): DateImpl | null | undefined {
+	override coerceFromString_(val: string | undefined): DateImpl | undefined {
 		var unf = Timebox._unformater,
 			tz = this.getTimeZone();
 		if (unf && jq.isFunction(unf)) {
@@ -320,7 +320,7 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 				return cusv;
 			}
 		}
-		if (!val) return null;
+		if (!val) return undefined;
 
 		// F65-ZK-1825: use this._value instead of "today"
 		// We cannot use this._value in this case, which won't trigger onChange
@@ -369,8 +369,8 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 			inp.value = this.coerceToString_(this._value);
 	}
 
-	onHide = null;
-	validate = null;
+	onHide = undefined;
+	validate = undefined;
 
 	override doClick_(evt: zk.Event, popupOnly?: boolean): void {
 		if (evt.domTarget == this.getInputNode())
@@ -492,7 +492,7 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 	_ondropbtnup(evt: zk.Event): void {
 		this.domUnlisten_(document.body, 'onZMouseup', '_ondropbtnup');
 		this._stopAutoIncProc();
-		this._currentbtn = null;
+		this._currentbtn = undefined;
 	}
 
 	_btnDown(evt: zk.Event): void { // TODO: format the value first
@@ -645,8 +645,8 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 		if (this.timerId)
 			clearTimeout(this.timerId);
 		// this.currentStep = this.defaultStep; // FIXME: both properties are not initialized
-		this.timerId = null;
-		jq('.' + this.$s('icon'), this.$n('btn')!).removeClass(this.$s('active'));
+		this.timerId = undefined;
+		jq('.' + this.$s('icon'), this.$n('btn')).removeClass(this.$s('active'));
 	}
 
 	override doFocus_(evt: zk.Event): void {
@@ -678,16 +678,16 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 		zul.inp.RoundUtl.doBlur_(this);
 	}
 
-	override afterKeyDown_(evt: zk.Event, simulated?: boolean): boolean | undefined {
+	override afterKeyDown_(evt: zk.Event, simulated?: boolean): boolean {
 		if (!simulated && this._inplace)
 			jq(this.$n_()).toggleClass(this.getInplaceCSS(), evt.keyCode == 13 ? null! : false);
 
 		return super.afterKeyDown_(evt, simulated);
 	}
 
-	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
-		var btn: HTMLElement | null | undefined;
+		var btn: HTMLElement | undefined;
 
 		if (zk.android && zk.chrome)
 			this.domListen_(this.getInputNode()!, 'onBeforeInput', '_doBeforeInput');
@@ -697,10 +697,10 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 		zWatch.listen({onSize: this});
 	}
 
-	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		if (this.timerId) {
 			clearTimeout(this.timerId);
-			this.timerId = null;
+			this.timerId = undefined;
 		}
 		zWatch.unlisten({onSize: this});
 		var btn = this.$n('btn');
@@ -836,7 +836,7 @@ export class TimeHandler extends zk.Object {
 		this.wgt = wgt;
 	}
 
-	format(date?: DateImpl | null): string {
+	format(date?: DateImpl): string {
 		return '00';
 	}
 
@@ -1125,7 +1125,7 @@ export class HourInDayHandler extends zul.inp.TimeHandler {
 	override maxsize = 23;
 	override minsize = 0;
 
-	override format(date?: DateImpl | null): string {
+	override format(date?: DateImpl): string {
 		var singleLen = this.digits == 1;
 		if (!date) return singleLen ? '0' : '00';
 		else {
@@ -1147,7 +1147,7 @@ export class HourInDayHandler2 extends zul.inp.TimeHandler {
 	override maxsize = 24;
 	override minsize = 1;
 
-	override format(date?: DateImpl | null): string {
+	override format(date?: DateImpl): string {
 		if (!date) return '24';
 		else {
 			var h: number | string = date.getHours();
@@ -1173,7 +1173,7 @@ export class HourHandler extends zul.inp.TimeHandler {
 	override maxsize = 12;
 	override minsize = 1;
 
-	override format(date?: DateImpl | null): string {
+	override format(date?: DateImpl): string {
 		if (!date) return '12';
 		else {
 			var h: number | string = date.getHours();
@@ -1200,7 +1200,7 @@ export class HourHandler2 extends zul.inp.TimeHandler {
 	override maxsize = 11;
 	override minsize = 0;
 
-	override format(date?: DateImpl | null): string {
+	override format(date?: DateImpl): string {
 		var singleLen = this.digits == 1;
 		if (!date) return singleLen ? '0' : '00';
 		else {
@@ -1221,7 +1221,7 @@ export class HourHandler2 extends zul.inp.TimeHandler {
 
 @zk.WrapClass('zul.inp.MinuteHandler')
 export class MinuteHandler extends zul.inp.TimeHandler {
-	override format(date?: DateImpl | null): string {
+	override format(date?: DateImpl): string {
 		var singleLen = this.digits == 1;
 		if (!date) return singleLen ? '0' : '00';
 		else {
@@ -1240,7 +1240,7 @@ export class MinuteHandler extends zul.inp.TimeHandler {
 
 @zk.WrapClass('zul.inp.SecondHandler')
 export class SecondHandler extends zul.inp.TimeHandler {
-	override format(date?: DateImpl | null): string {
+	override format(date?: DateImpl): string {
 		var singleLen = this.digits == 1;
 		if (!date) return singleLen ? '0' : '00';
 		else {
@@ -1259,7 +1259,7 @@ export class SecondHandler extends zul.inp.TimeHandler {
 
 @zk.WrapClass('zul.inp.AMPMHandler')
 export class AMPMHandler extends zul.inp.TimeHandler {
-	override format(date?: DateImpl | null): string {
+	override format(date?: DateImpl): string {
 		var APM = this.wgt._localizedSymbols ? this.wgt._localizedSymbols.APM! : zk.APM;
 		if (!date)
 			return APM[0];

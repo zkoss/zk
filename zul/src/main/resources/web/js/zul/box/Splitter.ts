@@ -15,14 +15,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 export type Fl = [HTMLElement, string];
 export interface SplitterDraggable extends zk.Draggable {
-	run?: SplitterDraggable.Run | null;
+	run?: SplitterDraggable.Run;
 }
 declare namespace SplitterDraggable {
 	export interface Run {
 		prev?: HTMLTableRowElement;
 		next?: HTMLTableRowElement;
-		prevwgt?: zk.Widget | null;
-		nextwgt?: zk.Widget | null;
+		prevwgt?: zk.Widget;
+		nextwgt?: zk.Widget;
 		z_offset?: zk.Offset;
 		z_point?: [number, number];
 	}
@@ -44,7 +44,7 @@ function _setOpen(wgt: Splitter, open: boolean, opts?: {sendOnOpen?: boolean}): 
 			zWatch.fireDown('onHide', sibwgt);
 
 		sibwgt.setDomVisible_(sib, open);
-		sibwgt.parent!._fixChildDomVisible(sibwgt, open);
+		sibwgt.parent._fixChildDomVisible(sibwgt, open);
 
 		var c = vert && sib.cells.length ? sib.cells[0] : sib;
 		diff = zk.parseInt(c.style[fd]);
@@ -96,10 +96,10 @@ function _setOpen(wgt: Splitter, open: boolean, opts?: {sendOnOpen?: boolean}): 
  */
 @zk.WrapClass('zul.box.Splitter')
 export class Splitter extends zul.Widget {
-	override parent!: zul.box.Box | null;
+	override parent!: zul.box.Box;
 	_collapse = 'none';
 	_open = true;
-	_drag0: zk.Draggable | null = null;
+	_drag0?: zk.Draggable;
 	_shallClose?: boolean;
 
 	/** Opens or collapses the splitter.
@@ -189,7 +189,7 @@ export class Splitter extends zul.Widget {
 		return this;
 	}
 
-	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 
 		var box = this.parent;
@@ -224,7 +224,7 @@ export class Splitter extends zul.Widget {
 			//3077716: next sibling is not bound yet
 	}
 
-	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		zWatch.unlisten({onSize: this, beforeSize: this});
 
 		const btn = this.$n('btn');
@@ -233,7 +233,7 @@ export class Splitter extends zul.Widget {
 		}
 
 		this._drag0!.destroy();
-		this._drag0 = null;
+		this._drag0 = undefined;
 		super.unbind_(skipper, after, keepRod);
 	}
 
@@ -323,7 +323,7 @@ export class Splitter extends zul.Widget {
 	_fixszAll(): void {
 		//1. find the topmost box
 		var box: zk.Widget | undefined;
-		for (var p: null | zk.Widget = this; p = p.parent;)
+		for (var p: undefined | zk.Widget = this; p = p.parent;)
 			if (p instanceof zul.box.Box)
 				box = p;
 
@@ -409,12 +409,12 @@ export class Splitter extends zul.Widget {
 
 		wgt._fixszAll();
 			//fix all splitter's size because table might be with %
-		draggable.run = null;//free memory
+		draggable.run = undefined;//free memory
 	}
 
 	static _doDragEndResize(
 		vert: boolean,
-		wgts: [zk.Widget | null | undefined, zk.Widget | null | undefined], // loop requires exactly 2 elements
+		wgts: [zk.Widget | undefined, zk.Widget | undefined], // loop requires exactly 2 elements
 		runPrev: HTMLElement,
 		runNext: HTMLElement,
 		diff: number,
@@ -434,7 +434,7 @@ export class Splitter extends zul.Widget {
 			totalFd = s + s2;
 
 		//F70-ZK-112: clear flex once splitter is moved, that is, make splitter resizeable
-		for (var i = 0, w: zk.Widget | null | undefined; i < 2; i++) {
+		for (var i = 0, w: zk.Widget | undefined; i < 2; i++) {
 			if (w = wgts[i]) {
 				if (w.getHflex()) {
 					w.setHflex('false');
@@ -461,7 +461,7 @@ export class Splitter extends zul.Widget {
 		else
 			runPrev.style.overflow = 'hidden';
 
-		for (var i = 0, w: zk.Widget | null | undefined; i < 2; i++) {
+		for (var i = 0, w: zk.Widget | undefined; i < 2; i++) {
 			w = wgts[i];
 			if (w && hflexReset[i]) {
 				// eslint-disable-next-line @typescript-eslint/no-unsafe-call
@@ -516,7 +516,7 @@ export class Splitter extends zul.Widget {
 		return jq(n).prev().prev()[0] as HTMLTableRowElement | undefined;
 	}
 
-	static _fixKidSplts(wgt: null | zk.Widget): void {
+	static _fixKidSplts(wgt?: zk.Widget): void {
 		if (wgt && wgt.isVisible()) { //n might not be an element
 			if (wgt instanceof Splitter)
 				wgt._fixsz();

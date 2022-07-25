@@ -41,9 +41,9 @@ export interface SwipeOptions {
  * @disable(zkgwt)
  */
 export class Swipe extends zk.Object {
-	declare widget: zk.Widget | null;
+	declare widget?: zk.Widget;
 	declare opts;
-	declare node: HTMLElement | null;
+	declare node?: HTMLElement;
 	/**
 	 * The Constructor.
 	 * @param Object widget the object for swipe.
@@ -58,10 +58,10 @@ export class Swipe extends zk.Object {
 	 * <li>int maxDisplacement: the maximum swipe displacement(pixel). When larger than maximum displacement, it is not a swipe action. Default: 75.</li>
 	 * </ul>
 	 */
-	constructor(widget: Widget, node?: HTMLElement | null, opts?: Partial<SwipeOptions>) {
+	constructor(widget: Widget, node?: HTMLElement, opts?: Partial<SwipeOptions>) {
 		super();
 		this.widget = widget;
-		this.node = node = node ? jq(node, zk)[0] : widget['node'] || (widget.$n ? widget.$n() : null);
+		this.node = node = node ? jq(node, zk)[0] : widget['node'] || (widget.$n ? widget.$n() : undefined);
 		if (!node)
 			throw 'Handle required for ' + widget;
 
@@ -81,7 +81,7 @@ export class Swipe extends zk.Object {
 	 */
 	destroy(node: HTMLElement): void {
 		jq(node).off(startEvt, this.proxy(this._swipeStart));
-		this.widget = this.node = this.opts = null;
+		this.widget = this.node = this.opts = undefined;
 	}
 
 	_swipeStart(devt: JQuery.TriggeredEvent): void {
@@ -144,7 +144,7 @@ export class Swipe extends zk.Object {
 					{start: start, stop: stop, dir: dir}, devt));
 		}
 		// eslint-disable-next-line no-global-assign
-		start = stop = null;
+		start = stop = undefined;
 	}
 }
 zk.Swipe = Swipe;

@@ -89,8 +89,8 @@ export class Toolbar extends zul.Widget {
 	 * @return boolean
 	 * @since 8.6.0
 	 */
-	isOverflowPopup(): boolean | undefined {
-		return this._overflowPopup;
+	isOverflowPopup(): boolean {
+		return !!this._overflowPopup;
 	}
 
 	/**
@@ -142,7 +142,7 @@ export class Toolbar extends zul.Widget {
 		return this;
 	}
 
-	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		if (this.isOverflowPopup()) {
 			zWatch.listen({onFloatUp: this, onCommandReady: this, onSize: this});
@@ -150,7 +150,7 @@ export class Toolbar extends zul.Widget {
 		}
 	}
 
-	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		var popup = this.$n('pp');
 		if (popup) {
 			this.domUnlisten_(this.$n_('overflowpopup-button'), 'onClick', '_openPopup');

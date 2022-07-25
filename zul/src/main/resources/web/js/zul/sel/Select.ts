@@ -39,8 +39,8 @@ export class Select extends zul.Widget<HTMLSelectElement> {
 	 * Default: false.
 	 * @return boolean
 	 */
-	isMultiple(): boolean | undefined {
-		return this._multiple;
+	isMultiple(): boolean {
+		return !!this._multiple;
 	}
 
 	/**
@@ -65,8 +65,8 @@ export class Select extends zul.Widget<HTMLSelectElement> {
 	 * Default: false.
 	 * @return boolean
 	 */
-	isDisabled(): boolean | undefined {
-		return this._disabled;
+	isDisabled(): boolean {
+		return !!this._disabled;
 	}
 
 	/**
@@ -105,7 +105,7 @@ export class Select extends zul.Widget<HTMLSelectElement> {
 		if (o !== selectedIndex || (opts && opts.force)) {
 			var i = 0,
 				j = 0,
-				w: zk.Widget | null,
+				w: zk.Widget | undefined,
 				n = this.$n();
 			this.clearSelection();
 			// B50-ZK-989: original skipFixIndex way gives wrong value for this._selectedIndex
@@ -328,7 +328,7 @@ export class Select extends zul.Widget<HTMLSelectElement> {
 			+ ((v = this.getName()) ? ' name="' + v + '"' : '');
 	}
 
-	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 
 		var n = this.$n_();
@@ -337,7 +337,7 @@ export class Select extends zul.Widget<HTMLSelectElement> {
 			.domListen_(n, 'onBlur', 'doBlur_');
 
 		if (!zk.gecko) {
-			var fn: [unknown, zk.Callable] = [this, this._fixSelIndex];
+			var fn: [unknown, CallableFunction] = [this, this._fixSelIndex];
 			zWatch.listen({onRestore: fn, onVParent: fn});
 		}
 		zWatch.listen({onCommandReady: this});
@@ -345,7 +345,7 @@ export class Select extends zul.Widget<HTMLSelectElement> {
 		this._fixSelIndex();
 	}
 
-	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		zWatch.unlisten({onCommandReady: this});
 		var n = this.$n_();
 		this.domUnlisten_(n, 'onChange')
@@ -353,7 +353,7 @@ export class Select extends zul.Widget<HTMLSelectElement> {
 			.domUnlisten_(n, 'onBlur', 'doBlur_');
 		super.unbind_(skipper, after, keepRod);
 
-		var fn: [unknown, zk.Callable] = [this, this._fixSelIndex];
+		var fn: [unknown, CallableFunction] = [this, this._fixSelIndex];
 		zWatch.unlisten({onRestore: fn, onVParent: fn});
 	}
 
@@ -421,7 +421,7 @@ export class Select extends zul.Widget<HTMLSelectElement> {
 			this.requestRerender_(true);
 	}
 
-	requestRerender_(fromServer: boolean | undefined): void {
+	requestRerender_(fromServer?: boolean): void {
 		if (fromServer)
 			this._shouldRerenderFlag = true;
 		else

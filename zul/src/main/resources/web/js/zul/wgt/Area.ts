@@ -33,13 +33,13 @@ export class Area extends zk.Widget<HTMLAreaElement> {
 	 * @param String shape the shape only allows one of
 	 * null, "rect", "rectangle", "circle", "circ", "ploygon", and "poly".
 	 */
-	setShape(v: string, opts?: Record<string, boolean>): this {
+	setShape(shape: string, opts?: Record<string, boolean>): this {
 		const o = this._shape;
-		this._shape = v;
+		this._shape = shape;
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== shape || (opts && opts.force)) {
 			var n = this.$n();
-			if (n) n.shape = v || '';
+			if (n) n.shape = shape || '';
 		}
 
 		return this;
@@ -69,14 +69,14 @@ export class Area extends zk.Widget<HTMLAreaElement> {
 	 * <p>Note: (0, 0) is the upper-left corner.
 	 * @param String coords
 	 */
-	setCoords(v: string, opts?: Record<string, boolean>): this {
+	setCoords(coords: string, opts?: Record<string, boolean>): this {
 		const o = this._coords;
-		this._coords = v;
+		this._coords = coords;
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== coords || (opts && opts.force)) {
 			// ZK-1892 rename the argument
 			var n = this.$n();
-			if (n) n.coords = v || '';
+			if (n) n.coords = coords || '';
 		}
 
 		return this;

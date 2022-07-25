@@ -21,7 +21,7 @@ export * from './Bandpopup';
 export * from './Slider';
 export * from './Spinner';
 export * from './Doublespinner';
-export declare let validating: boolean | undefined; // zul.inp.InputWidget
+export declare let validating: boolean; // zul.inp.InputWidget
 
 // Re-export classes in `zul/db/Timebox` under the name `zul.inp`.
 export * from './TimeboxInp';

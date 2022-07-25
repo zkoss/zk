@@ -18,10 +18,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 @zk.WrapClass('zul.sel.Option')
 export class Option extends zul.Widget<HTMLOptionElement> {
 	// Parent could be null as asserted by `focus`.
-	override parent!: zul.sel.Select | null; // FIXME: could parent be optgroup?
+	override parent!: zul.sel.Select | undefined; // FIXME: could parent be optgroup?
 	// The type of firstChild is determined by the comment in getLabel
-	override firstChild!: zul.sel.Listcell | null;
-	override lastChild!: zul.sel.Listcell | null;
+	override firstChild!: zul.sel.Listcell | undefined;
+	override lastChild!: zul.sel.Listcell | undefined;
 	_selected = false;
 	_disabled?: boolean;
 	_value?: string;
@@ -33,8 +33,8 @@ export class Option extends zul.Widget<HTMLOptionElement> {
 	 * Default: false.
 	 * @return boolean
 	 */
-	isDisabled(): boolean | undefined {
-		return this._disabled;
+	isDisabled(): boolean {
+		return !!this._disabled;
 	}
 
 	/**
@@ -89,7 +89,7 @@ export class Option extends zul.Widget<HTMLOptionElement> {
 	}
 
 	//@Override
-	override setVisible(visible: boolean | undefined, fromServer?: boolean): this {
+	override setVisible(visible: boolean, fromServer?: boolean): this {
 		if (this._visible != visible) {
 			this._visible = visible;
 			if (this.desktop)
@@ -141,8 +141,8 @@ export class Option extends zul.Widget<HTMLOptionElement> {
 	 * if no such cell.
 	 * @return String
 	 */
-	getLabel(): string | null {
-		return this.firstChild ? this.firstChild.getLabel() : null;
+	getLabel(): string | undefined {
+		return this.firstChild ? this.firstChild.getLabel() : undefined;
 	}
 
 	updateLabel_(): void {
@@ -158,7 +158,7 @@ export class Option extends zul.Widget<HTMLOptionElement> {
 		return this.parent ? this.parent.getMaxlength() : 0;
 	}
 
-	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		//B60-ZK-1303: force update parent's selected index.
 		if (this.isSelected())

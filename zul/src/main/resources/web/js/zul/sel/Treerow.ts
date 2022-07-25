@@ -18,18 +18,18 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.sel.Treerow')
 export class Treerow extends zul.Widget<HTMLTableRowElement> {
-	override parent!: zul.sel.Treeitem | null;
-	override firstChild!: zul.sel.Treecell | null;
-	override lastChild!: zul.sel.Treecell | null;
-	override nextSibling!: zul.sel.Treerow | zul.sel.Treechildren | null;
-	override previousSibling!: zul.sel.Treerow | zul.sel.Treechildren | null;
+	override parent!: zul.sel.Treeitem | undefined;
+	override firstChild!: zul.sel.Treecell | undefined;
+	override lastChild!: zul.sel.Treecell | undefined;
+	override nextSibling!: zul.sel.Treerow | zul.sel.Treechildren | undefined;
+	override previousSibling!: zul.sel.Treerow | zul.sel.Treechildren | undefined;
 	_shallCheckClearCache?: boolean;
 
 	/** Returns the {@link Tree} instance containing this element.
 	 * @return Tree
 	 */
-	getTree(): zul.sel.Tree | null {
-		return this.parent ? this.parent.getTree() : null;
+	getTree(): zul.sel.Tree | undefined {
+		return this.parent ? this.parent.getTree() : undefined;
 	}
 
 	/** Returns the level this cell is. The root is level 0.
@@ -43,8 +43,8 @@ export class Treerow extends zul.Widget<HTMLTableRowElement> {
 	 * {@link Treerow}.
 	 * @return Treechildren
 	 */
-	getLinkedTreechildren(): zul.sel.Treechildren | null | undefined {
-		return this.parent ? this.parent.treechildren : null;
+	getLinkedTreechildren(): zul.sel.Treechildren | undefined {
+		return this.parent ? this.parent.treechildren : undefined;
 	}
 
 	override domClass_(no?: zk.DomClassOptions): string {
@@ -59,7 +59,7 @@ export class Treerow extends zul.Widget<HTMLTableRowElement> {
 		return scls;
 	}
 
-	override domTooltiptext_(): string | null | undefined {
+	override domTooltiptext_(): string | undefined {
 		return this._tooltiptext || this.parent!._tooltiptext || this.parent!.parent!._tooltiptext;
 	}
 
@@ -112,12 +112,12 @@ export class Treerow extends zul.Widget<HTMLTableRowElement> {
 		out.push('<tr', this.domAttrs_({domClass: true}), ' class="z-renderdefer"></tr>');
 	}
 
-	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		zWatch.listen({onResponse: this});
 	}
 
-	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		zWatch.unlisten({onResponse: this});
 		super.unbind_(skipper, after, keepRod);
 	}

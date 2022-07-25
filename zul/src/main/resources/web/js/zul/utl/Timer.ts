@@ -148,24 +148,24 @@ export class Timer extends zk.Widget {
 
 	_tmfn(): void {
 		if (!this._repeats) this._running = false;
-		this.fire('onTimer', null, {
+		this.fire('onTimer', undefined, {
 			ignorable: true,
 			rtags: {onTimer: 1} // Bug ZK-2720 only timer-keep-alive should reset the timeout
 		});
 	}
 
 	//super//
-	override redraw(out: Array<string>, skipper?: zk.Skipper | null): void {
+	override redraw(out: Array<string>, skipper?: zk.Skipper): void {
 		// empty
 	}
 
-	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		this._visible = false; //Bug ZK-1516: no DOM element widget should always return false.
 		if (this._running) this._play();
 	}
 
-	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		this._stop();
 		super.unbind_(skipper, after, keepRod);
 	}

@@ -26,7 +26,7 @@ function _isListgroupfoot(wgt: zk.Widget): boolean {
 @zk.WrapClass('zul.sel.Listcell')
 export class Listcell extends zul.LabelImageWidget<HTMLTableCellElement> {
 	// Parent could be null as asserted by `bindChildren_`.
-	override parent!: zul.sel.Listitem | null;
+	override parent!: zul.sel.Listitem | undefined;
 	_span = 1;
 
 	/** Returns number of columns to span this cell.
@@ -74,13 +74,13 @@ export class Listcell extends zul.LabelImageWidget<HTMLTableCellElement> {
 	/** Returns the list box that it belongs to.
 	 * @return Listbox
 	 */
-	getListbox(): zul.sel.Listbox | null {
+	getListbox(): zul.sel.Listbox | undefined {
 		var p = this.parent;
-		return p ? p.parent : null;
+		return p ? p.parent : undefined;
 	}
 
 	//super//
-	override getTextNode(): HTMLElement | null | undefined {
+	override getTextNode(): HTMLElement | undefined {
 		return jq(this.$n_()).find('>div:first')[0];
 	}
 
@@ -111,14 +111,14 @@ export class Listcell extends zul.LabelImageWidget<HTMLTableCellElement> {
 	 * this cell, or null if not available.
 	 * @return Listheader
 	 */
-	getListheader(): zul.sel.Listheader | null | undefined {
+	getListheader(): zul.sel.Listheader | undefined {
 		var box = this.getListbox();
 		if (box && box.listhead) {
 			var j = this.getChildIndex();
 			if (j < box.listhead.nChildren)
 				return box.listhead.getChildAt<zul.sel.Listheader>(j);
 		}
-		return null;
+		return undefined;
 	}
 
 	override domLabel_(): string {
@@ -185,7 +185,7 @@ export class Listcell extends zul.LabelImageWidget<HTMLTableCellElement> {
 		super.doFocus_(evt);
 		//sync frozen
 		var box = this.getListbox(),
-			frozen = box ? box.frozen : null,
+			frozen = box ? box.frozen : undefined,
 			node = this.$n();
 		if (frozen && node) // NOTE: non-null frozen implies non-null box
 			box!._moveToHidingFocusCell(node.cellIndex);
@@ -233,13 +233,13 @@ export class Listcell extends zul.LabelImageWidget<HTMLTableCellElement> {
 		return super.domStyle_(no) + style;
 	}
 
-	override bindChildren_(desktop?: zk.Desktop, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bindChildren_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		var p = this.parent;
 		if (!p || !(p instanceof zul.sel.Option || p instanceof zul.sel.Optgroup))
 			super.bindChildren_(desktop, skipper, after);
 	}
 
-	override unbindChildren_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbindChildren_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		var p = this.parent;
 		if (!p || !(p instanceof zul.sel.Option || p instanceof zul.sel.Optgroup))
 			super.unbindChildren_(skipper, after, keepRod);

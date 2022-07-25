@@ -35,14 +35,14 @@ export class Div extends zul.Widget {
 	 * @param String align
 	 * @deprecated as of release 6.0.0, use CSS instead.
 	 */
-	setAlign(v: string, opts?: Record<string, boolean>): this {
+	setAlign(align: string, opts?: Record<string, boolean>): this {
 		const o = this._align;
-		this._align = v;
+		this._align = align;
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== align || (opts && opts.force)) {
 			var n = this.$n();
 			if (n)
-				(n as HTMLDivElement).align = v;
+				(n as HTMLDivElement).align = align;
 		}
 
 		return this;

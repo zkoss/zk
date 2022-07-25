@@ -95,8 +95,8 @@ export class Notification extends zul.wgt.Popup {
 			return;
 		if (!this.isVisible())
 			return;
-		var wgt: zk.Widget | null = ctl.origin;
-		for (var floatFound: boolean | undefined; wgt; wgt = wgt.parent) {
+		var wgt: zk.Widget | undefined = ctl.origin;
+		for (var floatFound = false; wgt; wgt = wgt.parent) {
 			if (wgt == this) {
 				if (!floatFound)
 					this.setTopmost();
@@ -104,31 +104,31 @@ export class Notification extends zul.wgt.Popup {
 			}
 			if (wgt == this.parent && wgt.ignoreDescendantFloatUp_(this))
 				return;
-			floatFound = floatFound || wgt.isFloating_();
+			floatFound = floatFound ?? wgt.isFloating_();
 		}
 		if (!this._closable && this._dur! <= 0)
 			this.close({sendOnOpen: true});
 	}
 
-	override open(ref: zk.Widget, offset?: zk.Offset | null, position?: string | null, opts?: zul.wgt.PopupOptions | null): void {
+	override open(ref: zk.Widget, offset?: zk.Offset, position?: string, opts?: zul.wgt.PopupOptions): void {
 		super.open(ref, offset, position, opts);
 		this._fixarrow(ref); //ZK-1583: modify arrow position based on reference component
 		zk(this).redoCSS(-1, {'fixFontIcon': true});
 	}
 
-	override position(ref: zk.Widget, offset?: zk.Offset | null, position?: string | null, opts?: zk.PositionOptions | null): void {
+	override position(ref: zk.Widget, offset?: zk.Offset, position?: string, opts?: zk.PositionOptions): void {
 		if (ref && !ref.$n())
 			return;
 		super.position(ref, offset, position, opts);
 		this._fixarrow(ref); //ZK-1583: modify arrow position based on reference component
 	}
 
-	override _posInfo(ref?: zul.wgt.Ref | null, offset?: zk.Offset | null, position?: string | null, opts?: zul.wgt.PopupOptions | null): zul.wgt.PositionInfo | undefined {
+	override _posInfo(ref?: zul.wgt.Ref, offset?: zk.Offset, position?: string, opts?: zul.wgt.PopupOptions): zul.wgt.PositionInfo | undefined {
 		this._fixPadding(position);
 		return super._posInfo(ref, offset, position, opts);
 	}
 
-	_fixPadding(position: string | null | undefined): void {
+	_fixPadding(position?: string): void {
 		var p = this.$n('p');
 		if (!p)
 			return;
@@ -227,7 +227,7 @@ export class Notification extends zul.wgt.Popup {
 		}
 	}
 
-	override openAnima_(ref?: zul.wgt.Ref | null, offset?: zk.Offset | null, position?: string | null, opts?: zul.wgt.PopupOptions | null): void {
+	override openAnima_(ref?: zul.wgt.Ref, offset?: zk.Offset, position?: string, opts?: zul.wgt.PopupOptions): void {
 		var self = this;
 		jq(this.$n()!).fadeIn(500, function () {
 			self.afterOpenAnima_(ref, offset, position, opts);
@@ -253,7 +253,7 @@ export class Notification extends zul.wgt.Popup {
 	}
 
 	override getPositionArgs_(): zul.wgt.PositionArgs {
-		return [this._fakeParent, null, this._nftPos, null];
+		return [this._fakeParent, undefined, this._nftPos, undefined];
 	}
 
 	override reposition(): void {
@@ -273,7 +273,7 @@ export class Notification extends zul.wgt.Popup {
 			dur = opts.dur,
 			ntf = new zul.wgt.Notification(msg, opts),
 			off = opts.off,
-			n: HTMLElement | null | undefined,
+			n: HTMLElement | undefined,
 			isInView = true;
 
 		if (ref) {

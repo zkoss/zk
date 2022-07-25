@@ -19,11 +19,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.sel.Listhead')
 export class Listhead extends zul.mesh.ColumnMenuWidget {
-	override parent!: zul.sel.Listbox | null;
+	override parent!: zul.sel.Listbox | undefined;
 	/** Returns the listbox that this belongs to.
 	 * @return Listbox
 	 */
-	getListbox(): zul.sel.Listbox | null {
+	getListbox(): zul.sel.Listbox | undefined {
 		return this.parent;
 	}
 

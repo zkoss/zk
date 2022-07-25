@@ -17,7 +17,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.mesh.FooterWidget')
 export abstract class FooterWidget extends zul.LabelImageWidget<HTMLTableCellElement> {
-	override parent!: zul.mesh.HeadWidget | null;
+	override parent!: zul.mesh.HeadWidget | undefined;
 	_span = 1;
 	_align?: string;
 	_valign?: string;
@@ -96,22 +96,22 @@ export abstract class FooterWidget extends zul.LabelImageWidget<HTMLTableCellEle
 	 * Returns the mesh widget that this belongs to.
 	 * @return zul.mesh.MeshWidget
 	 */
-	getMeshWidget(): zul.mesh.MeshWidget | null | undefined {
-		return this.parent ? this.parent.parent : null;
+	getMeshWidget(): zul.mesh.MeshWidget | undefined {
+		return this.parent ? this.parent.parent : undefined;
 	}
 
 	/** Returns the column that is in the same column as
 	 * this footer, or null if not available.
 	 * @return zul.mesh.HeaderWidget
 	 */
-	getHeaderWidget(): zul.mesh.HeaderWidget | null | undefined {
+	getHeaderWidget(): zul.mesh.HeaderWidget | undefined {
 		var meshWidget = this.getMeshWidget();
 		if (meshWidget) {
 			var cs = meshWidget.getHeadWidget();
 			if (cs)
 				return cs.getChildAt<zul.mesh.HeaderWidget>(this.getChildIndex());
 		}
-		return null;
+		return undefined;
 	}
 
 	//super

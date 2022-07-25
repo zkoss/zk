@@ -102,14 +102,14 @@ interface JQueryStatic {
 
 	
 	// This specialization for the "empty string literal" is good, as it will always null.
-	$$(id: '', subId?: string): null;
+	$$(id: '', subId?: string): undefined;
 	// NodeListOf<HTMLElement> is not the same as NodeList. NodeList will give incorrect "this" type
 	// for the <callback> of `jq(<selector>).each(<callback>)` in `zul.mesh.Paging._callWgtDoAfterGo`.
 	// Furthermore, `document.getElementsByName` is defined to return `NodeListOf<HTMLElement>`.
 	// Also, we shouldn't rule out the possibility of returning null in this overload, for an
 	// empty string of type "string" will not match an empty string of type "empty string literal".
 	// See this demo: https://bit.ly/3n7R7p2
-	$$(id: string, subId?: string): NodeListOf<HTMLElement> | null;
+	$$(id: string, subId?: string): NodeListOf<HTMLElement> | undefined;
 	$$<T>(id: T, subId?: string): T;
 
 	alert(msg: string, opts?: Partial<zk.AlertOptions>): void;
@@ -124,24 +124,24 @@ interface JQueryStatic {
 	filterTextStyle(style: string, plus?: string[]): string;
 	filterTextStyle(style: {[key: string]: unknown}, plus?: string[]): {[key: string]: unknown};
 	focusOut(): void;
-	head(): HTMLElement | null;
+	head(): HTMLElement | undefined;
 	innerHeight(): number;
 	innerWidth(): number;
 	innerX(): number;
 	innerY(): number;
-	isAncestor(p: HTMLElement | null | undefined, c: HTMLElement | null | undefined): boolean;
+	isAncestor(p: HTMLElement | undefined, c: HTMLElement | undefined): boolean;
 	isOverlapped(ofs1: zk.Offset, dim1: zk.Offset, ofs2: zk.Offset, dim2: zk.Offset, tolerant?: number): boolean;
 	j2d(s: string): Date;
-	newFrame(id: string, src?: string | null, style?: string | null): HTMLIFrameElement;
+	newFrame(id: string, src?: string, style?: string): HTMLIFrameElement;
 	newHidden(nm: string, val: string, parent?: Node): HTMLInputElement;
-	newStackup(el: Node | null, id: string, anchor?: Node): HTMLIFrameElement;
+	newStackup(el: Node | undefined, id: string, anchor?: Node): HTMLIFrameElement;
 	nodeName(el: Node): string;
 	nodeName(el: Node, ...tag: string[]): boolean;
 	onSyncScroll(wgt): void;
 	onzsync(obj): void;
 	parseStyle(style: string): {[key: string]: string};
 	px(v: number): string;
-	px0(v: number | null | undefined): string;
+	px0(v: number | undefined): string;
 	scrollbarWidth(): number;
 	toJSON(obj, replace?: (key, value) => unknown): string;
 	uaMatch(ua: string): { browser: string; version: string };
@@ -177,7 +177,7 @@ interface Window {
 	zkopt: typeof import('./widget').zkopt;
 	onIframeURLChange: typeof import('./au').onIframeURLChange;
 	zkpe: import('./zk').$void;
-	zkpi(nm: string, wv: boolean): Record<string, unknown> | null;
+	zkpi(nm: string, wv: boolean): Record<string, unknown> | undefined;
 	zkpb(pguid: string, dtid: string, contextURI: string, updateURI: string, resourceURI: string, reqURI: string, props: Record<string, string>): void;
 	zkver(ver: string, build: string, ctxURI: string, updURI: string, modVers: Record<string, string>, opts: Record<string, unknown>): void;
 	zkmld(wgtcls: Record<string, unknown>, molds: Record<string, (() => void)>): void;
@@ -227,12 +227,6 @@ declare var zUtl: import('./utl').ZUtl;
 declare var zKeys: typeof import('./keys').zKeys;
 
 declare namespace zk {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	type Callable = (...arg: any[]) => unknown;
-	type StringFieldValue = string | null | undefined;
-	type BooleanFieldValue = boolean | null | undefined;
-	type NumberFieldValue = number | null | undefined;
-	type DOMFieldValue = HTMLElement | null | undefined;
 	type Offset = [number, number];
 
 	type Object = import('./zk').ZKObject;

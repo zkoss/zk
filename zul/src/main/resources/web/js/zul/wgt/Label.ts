@@ -54,8 +54,8 @@ export class Label extends zul.Widget {
 	 * begining of each line.
 	 * @return boolean
 	 */
-	isMultiline(): boolean | undefined {
-		return this._multiline;
+	isMultiline(): boolean {
+		return !!this._multiline;
 	}
 
 	/** Sets whether to preserve the new line and the white spaces at the
@@ -86,8 +86,8 @@ export class Label extends zul.Widget {
 	 * In other words, <code>pre</code> implies <code>multiline</code>
 	 * @return boolean
 	 */
-	isPre(): boolean | undefined {
-		return this._pre;
+	isPre(): boolean {
+		return !!this._pre;
 	}
 
 	/** Sets whether to preserve the white spaces, such as space,
