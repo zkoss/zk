@@ -173,16 +173,16 @@ export class Radiogroup extends zul.Widget {
 	 * <p>Default: false.
 	 * @since 10.0.0
 	 */
-	isDisabled(): boolean | undefined {
-		return this._disabled;
+	isDisabled(): boolean {
+		return !!this._disabled;
 	}
 
 	/** Returns the radio button at the specified index.
 	 * @param int index
 	 * @return Radio
 	 */
-	getItemAtIndex(index: number): zul.wgt.Radio | null | undefined {
-		return index >= 0 ? _getAt(this, {value: 0}, index) : null;
+	getItemAtIndex(index: number): zul.wgt.Radio | undefined {
+		return index >= 0 ? _getAt(this, {value: 0}, index) : undefined;
 	}
 
 	/** Returns the number of radio buttons in this group.
@@ -228,15 +228,15 @@ export class Radiogroup extends zul.Widget {
 	/** Returns the selected radio button.
 	 * @return Radio
 	 */
-	getSelectedItem(): zul.wgt.Radio | null | undefined {
-		return this._jsel >= 0 ? this.getItemAtIndex(this._jsel) : null;
+	getSelectedItem(): zul.wgt.Radio | undefined {
+		return this._jsel >= 0 ? this.getItemAtIndex(this._jsel) : undefined;
 	}
 
 	/**  Deselects all of the currently selected radio buttons and selects
 	 * the given radio button.
 	 * @param Radio selectedItem
 	 */
-	setSelectedItem(item: zul.wgt.Radio | null): this {
+	setSelectedItem(item?: zul.wgt.Radio): this {
 		if (item == null)
 			this.setSelectedIndex(-1);
 		else if (item instanceof zul.wgt.Radio)
@@ -257,7 +257,7 @@ export class Radiogroup extends zul.Widget {
 	 * @param int index
 	 * @return Radio the removed radio button.
 	 */
-	removeItemAt(index: number): zul.wgt.Radio | null | undefined {
+	removeItemAt(index: number): zul.wgt.Radio | undefined {
 		var item = this.getItemAtIndex(index);
 		if (item && !this._rmExtern(item)) {
 			var p = item.parent;
@@ -314,12 +314,12 @@ export class Radiogroup extends zul.Widget {
 		return scls;
 	}
 
-	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		this.listen({onCheck: this});
 	}
 
-	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		this.unlisten({onCheck: this});
 		super.unbind_(skipper, after, keepRod);
 	}

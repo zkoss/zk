@@ -94,7 +94,7 @@ export class Separator extends zul.Widget {
 	}
 
 	//super//
-	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 	}
 	override getZclass(): string {
@@ -123,13 +123,13 @@ export class Separator extends zul.Widget {
 		return 'margin:' + (this.isVertical() ? '0 ' + percent : percent + ' 0')
 			+ ';' + s;
 	}
-	override getWidth(): string | null | undefined {
+	override getWidth(): string | undefined {
 		let wd = super.getWidth();
 		return !this.isVertical() || (wd != null && wd.length > 0)
 			|| _shallFixPercent(this) ? wd : this._spacing;
 
 	}
-	override getHeight(): string | null | undefined {
+	override getHeight(): string | undefined {
 		let hgh = super.getHeight();
 		return this.isVertical() || (hgh != null && hgh.length > 0)
 			|| _shallFixPercent(this) ? hgh : this._spacing;

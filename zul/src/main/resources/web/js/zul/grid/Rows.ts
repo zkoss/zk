@@ -20,16 +20,16 @@ var _isPE = (function () {
 })();
 function _syncFrozen(wgt: zul.grid.Rows): void {
 	var grid = wgt.getGrid(),
-		frozen: zul.mesh.Frozen | null | undefined;
+		frozen: zul.mesh.Frozen | undefined;
 	if (grid && grid._nativebar && (frozen = grid.frozen))
 		frozen._syncFrozen();
 }
 
 @zk.WrapClass('zul.grid.Rows')
 export class Rows extends zul.Widget<HTMLTableSectionElement> {
-	override parent!: zul.grid.Grid | null;
-	override firstChild!: zul.grid.Row | null;
-	override lastChild!: zul.grid.Row | null;
+	override parent!: zul.grid.Grid | undefined;
+	override firstChild!: zul.grid.Row | undefined;
+	override lastChild!: zul.grid.Row | undefined;
 
 	_visibleItemCount = 0;
 	_groupsInfo: zkex.grid.Group[];
@@ -57,7 +57,7 @@ export class Rows extends zul.Widget<HTMLTableSectionElement> {
 	/** Returns the grid that contains this rows.
 	 * @return zul.grid.Grid
 	 */
-	getGrid(): zul.grid.Grid | null {
+	getGrid(): zul.grid.Grid | undefined {
 		return this.parent;
 	}
 
@@ -82,7 +82,7 @@ export class Rows extends zul.Widget<HTMLTableSectionElement> {
 		return this._groupsInfo.length !== 0;
 	}
 
-	override bind_(desktop: zk.Desktop | null | undefined, skipper: zk.Skipper | null | undefined, after: CallableFunction[]): void {
+	override bind_(desktop: zk.Desktop | undefined, skipper: zk.Skipper | undefined, after: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		var grid = this.getGrid();
 		if (grid) // bind ebodyrows for MeshWidget
@@ -95,7 +95,7 @@ export class Rows extends zul.Widget<HTMLTableSectionElement> {
 		});
 	}
 
-	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		zWatch.unlisten({onResponse: this});
 		super.unbind_(skipper, after, keepRod);
 	}
@@ -110,7 +110,7 @@ export class Rows extends zul.Widget<HTMLTableSectionElement> {
 		}
 	}
 
-	override replaceChildHTML_(child: zk.Widget, n: HTMLElement | string, desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, _trim_?: boolean): void {
+	override replaceChildHTML_(child: zk.Widget, n: HTMLElement | string, desktop?: zk.Desktop, skipper?: zk.Skipper, _trim_?: boolean): void {
 		if (child._renderdefer) {
 			var scOdd = this.getGrid()!.getOddRowSclass(),
 				isOdd = jq(n).hasClass(scOdd); // supers will change this result, we need to cache it

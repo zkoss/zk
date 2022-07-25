@@ -18,24 +18,24 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.grid.Foot')
 export class Foot extends zul.Widget {
-	override parent!: zul.grid.Grid | null;
+	override parent!: zul.grid.Grid | undefined;
 	/** Returns the grid that contains this column.
 	 * @return zul.grid.Grid
 	 */
-	getGrid(): zul.grid.Grid | null {
+	getGrid(): zul.grid.Grid | undefined {
 		return this.parent;
 	}
 
 	//bug #3014664
-	override setVflex(v: boolean | string | null | undefined): this { //vflex ignored for grid Foot
-		v = false;
-		return super.setVflex(v);
+	override setVflex(vflex: boolean | string | undefined): this { //vflex ignored for grid Foot
+		vflex = false;
+		return super.setVflex(vflex);
 	}
 
 	//bug #3014664
-	override setHflex(v: boolean | string | null | undefined): this { //hflex ignored for grid Foot
-		v = false;
-		return super.setHflex(v);
+	override setHflex(hflex: boolean | string | undefined): this { //hflex ignored for grid Foot
+		hflex = false;
+		return super.setHflex(hflex);
 	}
 
 	override deferRedrawHTML_(out: string[]): void {

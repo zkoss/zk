@@ -18,8 +18,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.inp.Doublebox')
 export class Doublebox extends zul.inp.NumberInputWidget<number> {
-	override coerceFromString_(value: string | null | undefined): zul.inp.CoerceFromStringResult | number | null {
-		if (!value) return null;
+	override coerceFromString_(value: string | undefined): zul.inp.CoerceFromStringResult | number | undefined {
+		if (!value) return undefined;
 
 		var info = zk.fmt.Number.unformat(this._format!, value, false, this._localizedSymbols),
 			raw = info.raw,
@@ -77,7 +77,7 @@ export class Doublebox extends zul.inp.NumberInputWidget<number> {
 		return true;
 	}
 
-	override coerceToString_(value?: number | string | null): string {
+	override coerceToString_(value?: number | string): string {
 		var fmt = this._format,
 			symbols = this._localizedSymbols,
 			DECIMAL = (symbols ? symbols : zk).DECIMAL;

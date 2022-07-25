@@ -24,15 +24,15 @@ export class Footer extends zul.mesh.FooterWidget {
 	/** Returns the grid that this belongs to.
 	 * @return zul.grid.Grid
 	 */
-	getGrid(): zul.grid.Grid | null | undefined {
-		return this.getMeshWidget() as zul.grid.Grid | null | undefined;
+	getGrid(): zul.grid.Grid | undefined {
+		return this.getMeshWidget() as zul.grid.Grid | undefined;
 	}
 
 	/** Returns the column that is in the same column as
 	 * this footer, or null if not available.
 	 * @return zul.grid.Column
 	 */
-	getColumn(): zul.grid.Column | null | undefined {
-		return this.getHeaderWidget() as zul.grid.Column | null | undefined;
+	getColumn(): zul.grid.Column | undefined {
+		return this.getHeaderWidget() as zul.grid.Column | undefined;
 	}
 }

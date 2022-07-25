@@ -46,8 +46,8 @@ export class SimpleDateConstraint extends zul.inp.SimpleConstraint {
 			var j = constraint.indexOf('and', 7);
 			if (j < 0 && zk.debugJS)
 				zk.error('Unknown constraint: ' + constraint);
-			this._beg = new zk.fmt.Calendar(null, this._localizedSymbols).parseDate(constraint.substring(7, j), this.format, null, null, null, tz);
-			this._end = new zk.fmt.Calendar(null, this._localizedSymbols).parseDate(constraint.substring(j + 3, j + 3 + len), this.format, null, null, null, tz);
+			this._beg = new zk.fmt.Calendar(undefined, this._localizedSymbols).parseDate(constraint.substring(7, j), this.format, undefined, undefined, undefined, tz);
+			this._end = new zk.fmt.Calendar(undefined, this._localizedSymbols).parseDate(constraint.substring(j + 3, j + 3 + len), this.format, undefined, undefined, undefined, tz);
 			if (this._beg!.getTime() > this._end!.getTime()) {
 				var d = this._beg;
 				this._beg = this._end;
@@ -58,11 +58,11 @@ export class SimpleDateConstraint extends zul.inp.SimpleConstraint {
 			this._end!.setHours(0, 0, 0, 0);
 			arr[arr.length] = 'between';
 		} else if (constraint.startsWith('before') && !constraint.startsWith('before_')) {
-			this._end = new zk.fmt.Calendar(null, this._localizedSymbols).parseDate(constraint.substring(6, 6 + len), this.format, null, null, null, tz);
+			this._end = new zk.fmt.Calendar(undefined, this._localizedSymbols).parseDate(constraint.substring(6, 6 + len), this.format, undefined, undefined, undefined, tz);
 			this._end!.setHours(0, 0, 0, 0);
 			arr[arr.length] = 'before';
 		} else if (constraint.startsWith('after') && !constraint.startsWith('after_')) {
-			this._beg = new zk.fmt.Calendar(null, this._localizedSymbols).parseDate(constraint.substring(5, 5 + len), this.format, null, null, null, tz);
+			this._beg = new zk.fmt.Calendar(undefined, this._localizedSymbols).parseDate(constraint.substring(5, 5 + len), this.format, undefined, undefined, undefined, tz);
 			this._beg!.setHours(0, 0, 0, 0);
 			arr[arr.length] = 'after';
 		}
@@ -89,7 +89,7 @@ export class SimpleDateConstraint extends zul.inp.SimpleConstraint {
 		var format = this._wgt._format,
 			separator = msgzul.OUT_OF_RANGE_SEPARATOR ? ' ' + msgzul.OUT_OF_RANGE_SEPARATOR + ' ' : ' ~ ';
 		return msgzul.OUT_OF_RANGE + ': ' + (this._beg != null ? this._end != null ?
-				new zk.fmt.Calendar(null, this._localizedSymbols).formatDate(this._beg, format) + separator
+				new zk.fmt.Calendar(undefined, this._localizedSymbols).formatDate(this._beg, format) + separator
 					+ new zk.fmt.Calendar().formatDate(this._end, format) :
 					'>= ' + new zk.fmt.Calendar().formatDate(this._beg, format) :
 					'<= ' + new zk.fmt.Calendar().formatDate(this._end!, format));

@@ -14,7 +14,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 function _rerenderIfBothPaging(wgt: Paging): true | undefined {
 	if (wgt.isBothPaging()) {
-		wgt.parent!.rerender();
+		wgt.parent.rerender();
 		return true;
 	}
 }
@@ -37,18 +37,18 @@ export interface PagingFocusInfo {
  */
 @zk.WrapClass('zul.mesh.Paging')
 export class Paging extends zul.Widget {
-	override parent!: zul.mesh.MeshWidget | null;
+	override parent!: zul.mesh.MeshWidget;
 	_pageSize = 20;
 	_totalSize = 0;
 	_pageCount = 1;
 	_activePage = 0;
 	_pageIncrement = zk.mobile ? 5 : 10;
 	_showFirstLast = true;
-	_detailed?: boolean;
+	_detailed = false;
 	_autohide?: boolean;
 	_disabled?: boolean;
-	_meshWidget?: zul.mesh.MeshWidget | null;
-	static _autoFocusInfo: PagingFocusInfo | null;
+	_meshWidget?: zul.mesh.MeshWidget;
+	static _autoFocusInfo?: PagingFocusInfo;
 	_lastIsWide?: boolean;
 	_navWidth?: number;
 
@@ -109,7 +109,7 @@ export class Paging extends zul.Widget {
 	/** Returns whether to show the detailed info, such as {@link #getTotalSize}.
 	 * @return boolean
 	 */
-	isDetailed(): boolean | undefined {
+	isDetailed(): boolean {
 		return this._detailed;
 	}
 
@@ -199,8 +199,8 @@ export class Paging extends zul.Widget {
 	 * Default: false.
 	 * @return boolean
 	 */
-	isAutohide(): boolean | undefined {
-		return this._autohide;
+	isAutohide(): boolean {
+		return !!this._autohide;
 	}
 
 	/**
@@ -224,8 +224,8 @@ export class Paging extends zul.Widget {
 	 * @return boolean
 	 * @since 8.0.3
 	 */
-	isDisabled(): boolean | undefined {
-		return this._disabled;
+	isDisabled(): boolean {
+		return !!this._disabled;
 	}
 
 	/** Sets whether it is disabled.
@@ -247,7 +247,7 @@ export class Paging extends zul.Widget {
 	 * @return zul.mesh.MeshWidget
 	 * @since 10.0.0
 	 */
-	getMeshWidget(): zul.mesh.MeshWidget | null | undefined {
+	getMeshWidget(): zul.mesh.MeshWidget | undefined {
 		return this._meshWidget;
 	}
 
@@ -255,8 +255,8 @@ export class Paging extends zul.Widget {
 	 * @param zul.mesh.MeshWidget meshWidget
 	 * @since 10.0.0
 	 */
-	setMeshWidget(v: zul.mesh.MeshWidget | null): this {
-		this._meshWidget = v;
+	setMeshWidget(meshWidget?: zul.mesh.MeshWidget): this {
+		this._meshWidget = meshWidget;
 		return this;
 	}
 
@@ -272,7 +272,7 @@ export class Paging extends zul.Widget {
 		return this;
 	}
 
-	override setWidth(width: string | null): this {
+	override setWidth(width?: string): this {
 		super.setWidth(width);
 		_rerenderIfBothPaging(this);
 		if (this.desktop)
@@ -280,7 +280,7 @@ export class Paging extends zul.Widget {
 		return this;
 	}
 
-	override setHeight(height: string | null): this {
+	override setHeight(height?: string): this {
 		super.setHeight(height);
 		_rerenderIfBothPaging(this);
 		return this;
@@ -304,7 +304,7 @@ export class Paging extends zul.Widget {
 		return this;
 	}
 
-	override replaceHTML(n: HTMLElement | string, desktop: zk.Desktop | null, skipper?: zk.Skipper | null, _trim_?: boolean, _callback_?: CallableFunction[]): void {
+	override replaceHTML(n: HTMLElement | string, desktop: zk.Desktop | undefined, skipper?: zk.Skipper, _trim_?: boolean, _callback_?: CallableFunction[]): void {
 		if (!_rerenderIfBothPaging(this))
 		super.replaceHTML(n, desktop, skipper, _trim_, _callback_);
 	}
@@ -313,8 +313,8 @@ export class Paging extends zul.Widget {
 	 * Returns whether the paging is in both mold. i.e. Top and Bottom
 	 * @return boolean
 	 */
-	isBothPaging(): boolean | null | undefined {
-		return this.parent && this.parent.getPagingPosition
+	isBothPaging(): boolean {
+		return !!this.parent && this.parent.getPagingPosition
 					&& 'both' == this.parent.getPagingPosition();
 	}
 
@@ -353,16 +353,15 @@ export class Paging extends zul.Widget {
 
 					// Bug 2931951
 					if (this.parent instanceof zul.mesh.MeshWidget) {
-						var self = this;
 						// Bug ZK-2624
-						setTimeout(function () {
-							if (self.desktop) {
-								var n = self.parent!.$n();
+						setTimeout(() => {
+							if (this.desktop) {
+								const n = this.parent.$n();
 
 								// reset and recalculate
 								if (n && n._lastsz) {
-									n._lastsz = null;
-									self.parent!.onSize();
+									n._lastsz = undefined;
+									this.parent.onSize();
 								}
 							}
 						});
@@ -464,12 +463,12 @@ export class Paging extends zul.Widget {
 		return cls + added;
 	}
 
-	override isVisible(strict?: boolean): boolean | null | undefined {
-		var visible = super.isVisible(strict);
+	override isVisible(strict?: boolean): boolean {
+		const visible = super.isVisible(strict);
 		return visible && (this.getPageCount() > 1 || !this._autohide);
 	}
 
-	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		zWatch.listen({onSize: this});
 		var uuid = this.uuid,
@@ -519,15 +518,15 @@ export class Paging extends zul.Widget {
 				zinp = zk(input[focusInfo.inpIdx!]);
 			zinp.focus();
 			zinp.setSelectionRange(pos[0], pos[1]);
-			zul.mesh.Paging._autoFocusInfo = null;
+			zul.mesh.Paging._autoFocusInfo = undefined;
 		}
 
 		//remove second id
 		if (this.isBothPaging())
-			jq(this.parent!.$n_('pgib')).find('.' + this.$s())[0].id = '';
+			jq(this.parent.$n_('pgib')).find('.' + this.$s())[0].id = '';
 	}
 
-	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		var uuid = this.uuid;
 		if (this.getMold() == 'os') {
 			var btns = jq.$$(uuid, 'button')!;

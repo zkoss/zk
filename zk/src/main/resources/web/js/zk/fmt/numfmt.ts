@@ -53,13 +53,13 @@ function compareHalf(valStr, ri): number {
 	}
 	return result;
 }
-function preDigit(valStr, ri): string | null {
+function preDigit(valStr, ri): string | undefined {
 	for (var j = ri; --j >= 0;) {
 		var ch = valStr.charAt(j);
 		if (ch >= '0' && ch <= '9')
 			return ch;
 	}
-	return null;
+	return undefined;
 }
 
 interface Efmt {

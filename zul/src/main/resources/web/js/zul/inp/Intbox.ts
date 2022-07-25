@@ -26,8 +26,8 @@ export class Intbox extends zul.inp.NumberInputWidget<number> {
 		return super.getValue();
 	}
 
-	override coerceFromString_(value: string | null | undefined): zul.inp.CoerceFromStringResult | number | null {
-		if (!value) return null;
+	override coerceFromString_(value: string | undefined): zul.inp.CoerceFromStringResult | number | undefined {
+		if (!value) return undefined;
 
 		var info = zk.fmt.Number.unformat(this._format!, value, false, this._localizedSymbols),
 			val = parseInt(info.raw, 10),

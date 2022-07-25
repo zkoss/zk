@@ -26,13 +26,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.grid.Column')
 export class Column extends zul.mesh.SortWidget {
-	override parent!: zul.grid.Columns | null;
+	override parent!: zul.grid.Columns | undefined;
 
 	/** Returns the grid that contains this column.
 	 * @return zul.grid.Grid
 	 */
-	getGrid(): zul.grid.Grid | null {
-		return this.parent ? this.parent.parent : null;
+	getGrid(): zul.grid.Grid | undefined {
+		return this.parent ? this.parent.parent : undefined;
 	}
 
 	constructor() {
@@ -43,9 +43,9 @@ export class Column extends zul.mesh.SortWidget {
 	/** Returns the rows of the grid that contains this column.
 	 * @return zul.grid.Rows
 	 */
-	getMeshBody(): zul.grid.Rows | null | undefined {
+	getMeshBody(): zul.grid.Rows | undefined {
 		var grid = this.getGrid();
-		return grid ? grid.rows : null;
+		return grid ? grid.rows : undefined;
 	}
 
 	override checkClientSort_(ascending: boolean): boolean {
@@ -104,7 +104,7 @@ export class Column extends zul.mesh.SortWidget {
 			}
 			var d: Data[] = [],
 				col = this.getChildIndex();
-			for (var i = 0, z = 0, it = mesh.getBodyWidgetIterator(), w: zul.mesh.Item | null | undefined; (w = it.next()); z++)
+			for (var i = 0, z = 0, it = mesh.getBodyWidgetIterator(), w: zul.mesh.Item | undefined; (w = it.next()); z++)
 				for (var k = 0, cell = w.firstChild; cell; cell = cell.nextSibling, k++)
 					if (k == col) {
 						d[i++] = {
@@ -194,7 +194,7 @@ export class Column extends zul.mesh.SortWidget {
 			this.group(false, evt);
 	}
 
-	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		var n = this.$n_();
 		this.domListen_(n, 'onMouseOver')
@@ -204,7 +204,7 @@ export class Column extends zul.mesh.SortWidget {
 			this.domListen_(btn, 'onClick', '_doMenuClick');
 	}
 
-	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		var n = this.$n_();
 		this.domUnlisten_(n, 'onMouseOver')
 			.domUnlisten_(n, 'onMouseOut');

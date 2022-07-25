@@ -70,7 +70,7 @@ export class Inputgroup extends zul.Widget {
 		return classes + (this._vertical ? ' ' + this.$s('vertical') : '');
 	}
 
-	override insertChildHTML_(child: zk.Widget, before?: zk.Widget | null, desktop?: zk.Desktop | null): void {
+	override insertChildHTML_(child: zk.Widget, before?: zk.Widget, desktop?: zk.Desktop): void {
 		if (before)
 			jq(before.$n('chdex') || before.$n()!).before(
 				this.encloseChildHTML_({ child: child })!);

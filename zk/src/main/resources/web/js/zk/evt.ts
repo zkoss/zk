@@ -124,13 +124,13 @@ export class Event<TData = unknown> extends ZKObject {
 	 * @type zk.Widget
 	 * @see #currentTarget
 	 */
-	target?: Widget | null;
+	target?: Widget;
 	/** Indicates the target which is handling this event.
 	 * <p>By default, an event will be propagated to its parent, and this member tells which widget is handling it, while #target is the widget that the event is targeting.
 	 * @type zk.Widget
 	 * @see #target
 	 */
-	currentTarget?: Widget | null;
+	currentTarget?: Widget;
 	/** The event name, such as 'onChange'.
 	 * The data which depends on the event. Here is the list of Event Data.
 	 * <p>However, if data is an instance of Map, its content is copied to the event instance. Thus, you can access them directly with the event instance as follows.
@@ -170,7 +170,7 @@ onClick: function (evt) {
 	 * <p>Refer to <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/Communication/AU_Requests/Server-side_Processing">ZK Client-side Reference: AU Requests: Server-side Processing</a>.
 	 * @type Object
 	 */
-	data?: TData | null;
+	data?: TData;
 	/** The options (never null).
 	 * <p>Allowed properties:
 	 * <ul>
@@ -223,7 +223,7 @@ onClick: function (evt) {
 	 * @param Map opts [optional] the options. Refer to {@link #opts}
 	 * @param jq.Event domEvent [optional] the DOM event that causes this widget event.
 	 */
-	constructor(target: Widget | null | undefined, name: string, data?: TData, opts?: EventOptions | null, domEvent?: JQuery.TriggeredEvent) { // FIXME: TriggeredEvent missing type parameters
+	constructor(target: Widget | undefined, name: string, data?: TData, opts?: EventOptions, domEvent?: JQuery.TriggeredEvent) { // FIXME: TriggeredEvent missing type parameters
 		super();
 		this.currentTarget = this.target = target;
 		this.name = name;
@@ -266,7 +266,7 @@ evt.stop({progagation:true,revoke:true}); //revoke the event propagation
 	In other words, to stop it, you have to specify the au option explicitly. </li>
 	</ul>
 	*/
-	stop(opts?: EventStopOptions | null): void {
+	stop(opts?: EventStopOptions): void {
 		var b = !opts || !opts.revoke;
 		if (!opts || opts.propagation) this.stopped = b;
 		if (!opts || opts.dom) this.domStopped = b;
@@ -303,24 +303,24 @@ evt.stop({progagation:true,revoke:true}); //revoke the event propagation
 	}
 }
 export interface ClientActivity {
-	_onSyncScroll: {_onSyncScroll} | [unknown, zk.Callable];
-	_beforeSizeForRead: {_beforeSizeForRead} | [unknown, zk.Callable];
-	beforeSize: {beforeSize} | [unknown, zk.Callable];
-	afterSize: {afterSize} | [unknown, zk.Callable];
-	onBindLevelChange: {onBindLevelChange} | [unknown, zk.Callable];
-	onBindLevelMove: {onBindLevelMove: zk.Callable} | [unknown, zk.Callable];
-	onFitSize: {onFitSize} | [unknown, zk.Callable];
-	onHide: {onHide} | [unknown, zk.Callable];
-	onFloatUp: {onFloatUp} | [unknown, zk.Callable];
-	onResponse: {onResponse} | [unknown, zk.Callable];
-	onCommandReady: {onCommandReady} | [unknown, zk.Callable];
-	onRestore: {onRestore} | [unknown, zk.Callable];
-	onScroll: {onScroll} | [unknown, zk.Callable];
-	onSend: {onSend} | [unknown, zk.Callable];
-	onSize: {onSize} | [unknown, zk.Callable];
-	onShow: {onShow} | [unknown, zk.Callable];
-	onVParent: {onVParent} | [unknown, zk.Callable];
-	onMove: {onMove} | [unknown, zk.Callable];
+	_onSyncScroll: {_onSyncScroll} | [unknown, CallableFunction];
+	_beforeSizeForRead: {_beforeSizeForRead} | [unknown, CallableFunction];
+	beforeSize: {beforeSize} | [unknown, CallableFunction];
+	afterSize: {afterSize} | [unknown, CallableFunction];
+	onBindLevelChange: {onBindLevelChange} | [unknown, CallableFunction];
+	onBindLevelMove: {onBindLevelMove} | [unknown, CallableFunction];
+	onFitSize: {onFitSize} | [unknown, CallableFunction];
+	onHide: {onHide} | [unknown, CallableFunction];
+	onFloatUp: {onFloatUp} | [unknown, CallableFunction];
+	onResponse: {onResponse} | [unknown, CallableFunction];
+	onCommandReady: {onCommandReady} | [unknown, CallableFunction];
+	onRestore: {onRestore} | [unknown, CallableFunction];
+	onScroll: {onScroll} | [unknown, CallableFunction];
+	onSend: {onSend} | [unknown, CallableFunction];
+	onSize: {onSize} | [unknown, CallableFunction];
+	onShow: {onShow} | [unknown, CallableFunction];
+	onVParent: {onVParent} | [unknown, CallableFunction];
+	onMove: {onMove} | [unknown, CallableFunction];
 }
 
 export interface FireOptions {
@@ -333,7 +333,7 @@ export interface FireOptions {
 
 export interface ZWatch {
 	fire(name: string, origin?: unknown, opts?: Partial<FireOptions>, ...vararg: unknown[]): void;
-	fireDown(name: string, origin?: zk.Object | null, opts?: Partial<FireOptions> | null, ...vararg: unknown[]): void;
+	fireDown(name: string, origin?: zk.Object, opts?: Partial<FireOptions>, ...vararg: unknown[]): void;
 	listen(infs: Partial<ClientActivity>): void;
 	unlisten(infs: Partial<ClientActivity>): void;
 	unlistenAll(name: string): void;
@@ -359,7 +359,7 @@ export class ZWatchController extends zk.Object {
 		this.origin = org;
 		this.fns = fns;
 	}
-	fire(ref?: Widget | null): void {
+	fire(ref?: Widget): void {
 		var infs, xinf,
 			name = this.name,
 			xinfs = this.xinfs,
@@ -504,7 +504,7 @@ function _fire(name, org, opts, vararg): void {
 		if (down) _sync();
 
 		var args: unknown[] = [],
-			fns = opts && opts.reverse ? [] : null,
+			fns = opts && opts.reverse ? [] : undefined,
 			gun = new ZWatchController(name,
 				down ? _visiChildSubset(name, wts, org) : _visiSubset(name, wts),
 				args, org, fns);
@@ -570,7 +570,7 @@ zWatch.listen({onSend: ml})
 
 <p>The watch listener is added in the parent-first sequence if it has a method called getParent, or a member called parent (a typical example is {@link Widget}). Thus, the parent will be called before its children, if they are all registered to the same action.
  */
-export const zWatch: ZWatch & {onBindLevelMove: zk.Callable} = {
+export const zWatch: ZWatch & {onBindLevelMove: CallableFunction} = {
 	/** Registers watch listener(s). For example,
 <pre><code>
 zWatch.listen({
@@ -735,7 +735,7 @@ onX: function (ctl) {
 	* <li>timeout - how many miliseconds to wait before calling the listeners. If Omitted or negative, the listeners are invoked immediately.</li></ul>
 	* @param Object... vararg any number of arguments to pass to the listener. They will become the third, forth, and following arguments when the listener is called.
 	*/
-	fireDown(name: string, org?: zk.Object | null, opts?: Partial<FireOptions> | null, ...vararg: unknown[]): void {
+	fireDown(name: string, org?: zk.Object, opts?: Partial<FireOptions>, ...vararg: unknown[]): void {
 		_fire(name, org, zk.copy(opts, {down: true}), arguments);
 	},
 	onBindLevelMove(): void { //internal

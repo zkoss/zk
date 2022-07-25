@@ -42,7 +42,7 @@ export class FileuploadDlg extends zul.wnd.Window {
 
 @zk.WrapClass('zul.fud.ModalFileViewer')
 export class ModalFileViewer extends zk.Object {
-	updated: boolean | null = null;
+	updated?: boolean;
 	_finish?: boolean;
 	_uplder: zul.Uploader;
 	viewer?: HTMLElement;
@@ -54,10 +54,9 @@ export class ModalFileViewer extends zk.Object {
 		filenm = filenm.substring(filenm.lastIndexOf('\\') + 1, filenm.length);
 
 		var id = uplder.id,
-			self = this,
 			wgt = uplder.getWidget()!,
 			uploaded = wgt.$f('uploaded')!,
-			max = wgt.$o<zul.fud.FileuploadDlg>()!.max || 0, //max is stored in FileuploadDlg (i.e., $o())
+			max = wgt.$o<zul.fud.FileuploadDlg>()!.max ?? 0, //max is stored in FileuploadDlg (i.e., $o())
 			uri = zk.ajaxURI('/web/zk/img/progress2.gif', {resource: true}),
 			html = '<div id="' + id + '" style="min-height:16px;background:#F4F8FF;border: 1px solid #99AABD;font-family:'
 			+ 'arial,sans-serif;font-size: 11px;padding: 2px;'
@@ -75,14 +74,14 @@ export class ModalFileViewer extends zk.Object {
 			uploaded.$f('fileupload')!.setVisible(false); // B50-ZK-340: need to skip rerender
 
 		this.viewer = jq('#' + id)[0];
-		jq('#' + id + '-cancel').click(function () {
+		jq('#' + id + '-cancel').click(() => {
 			wgt.$f<zul.fud.Submit>('submit')!.revert();
-			if (!self._finish) uplder.cancel();
+			if (!this._finish) uplder.cancel();
 			else {
 				var $n = jq('#' + id),
 					index = $n.parent().children().index($n[0]);
 				zAu.send(new zk.Event(wgt.$o(), 'onRemove', index));
-				jq(self.viewer!).remove();
+				jq(this.viewer!).remove();
 			}
 
 			if (max > 0 && max > uploaded.$n_().childNodes.length)

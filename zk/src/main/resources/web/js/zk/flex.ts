@@ -86,7 +86,7 @@ function _isSameBaseline(ref, cur, vertical): boolean {
 }
 
 function _fixMinFlex(isVflex?): ((wgt: Widget, wgtn: HTMLElement, o: FlexOrient,
-								  min: zk.NumberFieldValue) => number) {
+								  min?: number) => number) {
 	let flexsz, sizePos, flex, offsetPos, marginPos, maxFlexPos, sumFlexPos,
 		index, contentPos;
 	if (isVflex) {
@@ -110,7 +110,7 @@ function _fixMinFlex(isVflex?): ((wgt: Widget, wgtn: HTMLElement, o: FlexOrient,
 		index = 0;
 		contentPos = 'getContentEdgeWidth_';
 	}
-	return function (wgt: Widget, wgtn: HTMLElement, o: FlexOrient, min: zk.NumberFieldValue) {
+	return function (wgt: Widget, wgtn: HTMLElement, o: FlexOrient, min?: number) {
 		if (wgt[flexsz] === undefined) { //cached?
 			let cwgt = wgt.firstChild, //bug #2928109
 				n = wgtn,
@@ -126,7 +126,7 @@ function _fixMinFlex(isVflex?): ((wgt: Widget, wgtn: HTMLElement, o: FlexOrient,
 				let totalsz = 0,
 					vmax = 0;
 				if (cwgt && cwgt.desktop) { //try child widgets, bug ZK-1575: should check if child widget is bind to desktop
-					let first: Widget | null = cwgt,
+					let first: Widget | undefined = cwgt,
 						refDim;
 
 					// ZK-2248: ignore widget dimension in vflex/hflex calculation
@@ -188,7 +188,7 @@ function _fixMinFlex(isVflex?): ((wgt: Widget, wgtn: HTMLElement, o: FlexOrient,
 								sz = 0;
 							if (ignore) {
 								for (let el = c.firstChild; el; el = el.nextSibling) {
-									let txt = el && el.nodeType == 3 ? el.nodeValue : null,
+									let txt = el && el.nodeType == 3 ? el.nodeValue : undefined,
 										zel;
 									if (txt) {
 										const dim = zkc.textSize(txt);

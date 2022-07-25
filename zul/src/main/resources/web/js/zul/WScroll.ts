@@ -82,7 +82,7 @@ function starteffect(dg: zk.Draggable): void {
 		}
 		dg._end -= dg.node!.offsetWidth - ctrl._gap;
 	}
-	jq(dg._epos!).show().delay(200).fadeIn(500);
+	jq(dg._epos).show().delay(200).fadeIn(500);
 
 	if (dg._timer) {
 		clearTimeout(dg._timer);
@@ -286,12 +286,12 @@ export class WScroll extends zk.Object {
 
 	// The following properties are initialized in _initDragdrop which is called
 	// by the constructor.
-	node!: HTMLElement | null;
-	edrag!: HTMLElement | null;
+	node!: HTMLElement;
+	edrag!: HTMLElement;
 	edragBody!: ChildNode;
-	epos!: HTMLElement | null;
+	epos!: HTMLElement;
 	eend!: HTMLElement;
-	drag!: zk.Draggable | null;
+	drag!: zk.Draggable;
 
 	constructor(control: HTMLElement, opts: WScrollOptions) {
 		super();
@@ -313,7 +313,7 @@ export class WScroll extends zk.Object {
 		this.redraw(this.anchor);
 		this._initDragdrop();
 		this._listenMouseEvent();
-		if (this.opts.syncSize !== false)
+		if (this.opts.syncSize)
 			this.syncSize();
 		this._syncButtonStatus();
 	}
@@ -326,7 +326,7 @@ export class WScroll extends zk.Object {
 		if (opts) {
 			this.opts = zk.copy(this.opts, opts);
 		}
-		this.edrag!.style.display = '';
+		this.edrag.style.display = '';
 		if (this._isVer) {
 			const opts = this.opts,
 				top = opts.startPosition,
@@ -334,17 +334,17 @@ export class WScroll extends zk.Object {
 				view = opts.viewport,
 				end = opts.endStep,
 				rest = end - view,
-				edragHeight = this.edrag!.offsetHeight - this._gap;
+				edragHeight = this.edrag.offsetHeight - this._gap;
 			let vsize = opts.viewportSize;
 			if (rest <= 0) {
-				this.eend.style.display = this.edrag!.style.display = 'none';
+				this.eend.style.display = this.edrag.style.display = 'none';
 				if (typeof this.opts.onScrollY == 'function')
 					this.opts.onScrollY.call(this.widget, opts.offset); //reset scrolling
 				return;
 			}
 			vsize -= edragHeight;
 			if (vsize > rest) {
-				this.epos!.style.height = edragHeight + 'px';
+				this.epos.style.height = edragHeight + 'px';
 				this._scale = 1;
 				var es = this.eend.style;
 				es.display = '';
@@ -352,17 +352,17 @@ export class WScroll extends zk.Object {
 			} else {
 				var rate = vsize / rest,
 					height = Math.max(edragHeight * rate, 5);
-				this.epos!.style.height = height + 'px';
+				this.epos.style.height = height + 'px';
 				this._scale = rate;
 				this.eend.style.display = 'none'; // no end point
 				if (vsize < 10)
-					this.edrag!.style.display = 'none';
+					this.edrag.style.display = 'none';
 			}
 			var top1 = top + (this._scale * start),
 				top2 = top + vsize;
 			if (top1 > top2)
 				top1 = top2;
-			this.epos!.style.top = this.edrag!.style.top = top1 + 'px';
+			this.epos.style.top = this.edrag.style.top = top1 + 'px';
 		} else {
 			const opts = this.opts,
 				left = opts.startPosition,
@@ -370,17 +370,17 @@ export class WScroll extends zk.Object {
 				view = opts.viewport,
 				end = opts.endStep,
 				rest = end - view,
-				edragWidth = this.edrag!.offsetWidth - this._gap;
+				edragWidth = this.edrag.offsetWidth - this._gap;
 			let vsize = opts.viewportSize;
 			if (rest <= 0) {
-				this.eend.style.display = this.edrag!.style.display = 'none';
+				this.eend.style.display = this.edrag.style.display = 'none';
 				if (typeof this.opts.onScrollX == 'function')
 					this.opts.onScrollX.call(this.widget, opts.offset); //reset scrolling
 				return;
 			}
 			vsize -= edragWidth;
 			if (vsize > rest) {
-				this.epos!.style.width = edragWidth + 'px';
+				this.epos.style.width = edragWidth + 'px';
 				this._scale = 1;
 				var es = this.eend.style;
 				es.display = '';
@@ -388,33 +388,33 @@ export class WScroll extends zk.Object {
 			} else {
 				var rate = vsize / rest,
 					width = Math.max(edragWidth * rate, 5);
-				this.epos!.style.width = width + 'px';
+				this.epos.style.width = width + 'px';
 				this._scale = rate;
 				this.eend.style.display = 'none'; // no end point
 				if (vsize < 10)
-					this.edrag!.style.display = 'none';
+					this.edrag.style.display = 'none';
 			}
 
 			var left1 = left + (this._scale * start),
 				left2 = left + vsize;
 			if (left1 > left2)
 				left1 = left2;
-			this.epos!.style.left = this.edrag!.style.left = left1 + 'px';
+			this.epos.style.left = this.edrag.style.left = left1 + 'px';
 		}
 	}
 
 	_listenMouseEvent(): void {
 		if (this._isVer) {
 			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-ignore: zk.Event is not completely compatible with JQueryMousewheelEventObject
+			// @ts-expect-error: zk.Event is not completely compatible with JQueryMousewheelEventObject
 			jq(this.control).mousewheel(this._mousewheelY.bind(this));
 		} else if (!(zk.ie < 11) || !zk.opera) { // ie and opera unsupported
 			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-ignore: zk.Event is not completely compatible with JQueryMousewheelEventObject
+			// @ts-expect-error: zk.Event is not completely compatible with JQueryMousewheelEventObject
 			jq(this.control).mousewheel(this._mousewheelX.bind(this));
 		}
 
-		var $drag = jq(this.edrag!);
+		var $drag = jq(this.edrag);
 		$drag.children('div')
 			.on('mouseover', this._mouseOver.bind(this))
 			.on('mouseout', this._mouseOut.bind(this))
@@ -426,14 +426,14 @@ export class WScroll extends zk.Object {
 	_unlistenMouseEvent(): void {
 		if (this._isVer)
 			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-ignore: unmousewheel expects 0 arguments, but got 1
+			// @ts-expect-error: unmousewheel expects 0 arguments, but got 1
 			jq(this.control).unmousewheel(this._mousewheelY.bind(this));
 		else if (!(zk.ie < 11) || !zk.opera) // ie and opera unsupported
 			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-ignore: unmousewheel expects 0 arguments, but got 1
+			// @ts-expect-error: unmousewheel expects 0 arguments, but got 1
 			jq(this.control).unmousewheel(this._mousewheelX.bind(this));
 
-		var $drag = jq(this.edrag!);
+		var $drag = jq(this.edrag);
 		$drag.children('div')
 			.off('mouseover', this._mouseOver.bind(this))
 			.off('mouseout', this._mouseOut.bind(this))
@@ -446,7 +446,7 @@ export class WScroll extends zk.Object {
 		var cls = evt.target!.className,
 			index = cls.lastIndexOf('-'),
 			key = cls.substring(index + 1),
-			$drag = jq(this.edrag!);
+			$drag = jq(this.edrag);
 		if ($drag.hasClass(cls + '-clk')) {
 			$drag.removeClass(cls + '-clk');
 		}
@@ -468,7 +468,7 @@ export class WScroll extends zk.Object {
 
 	_mouseOut(evt: zk.Event): void {
 		var cls = evt.target!.className,
-			$drag = jq(this.edrag!);
+			$drag = jq(this.edrag);
 		$drag.removeClass(cls + '-over');
 		if ($drag.hasClass(cls + '-clk')) {
 			$drag.removeClass(cls + '-clk');
@@ -476,14 +476,14 @@ export class WScroll extends zk.Object {
 	}
 
 	_mouseUp(evt: zk.Event): void {
-		jq(this.edrag!).removeClass(evt.target!.className + '-clk');
+		jq(this.edrag).removeClass(evt.target!.className + '-clk');
 	}
 
 	_mouseDown(evt: zk.Event): void {
 		var cls = evt.target!.className,
 			index = cls.lastIndexOf('-'),
 			key = cls.substring(index + 1),
-			$drag = jq(this.edrag!);
+			$drag = jq(this.edrag);
 		if (!$drag.hasClass(cls + '-over') && !zk.mobile) //no mouse over for mobile
 			return;// disable
 
@@ -496,13 +496,13 @@ export class WScroll extends zk.Object {
 				opts.startStep = 0;
 				if (this._isVer) {
 					const moving = opts.startPosition + 'px';
-					this.epos!.style.top = moving;
+					this.epos.style.top = moving;
 					$drag.animate({top: moving}, 500);
 					if (typeof this.opts.onScrollY == 'function')
 						this.opts.onScrollY.call(this.widget, opts.startStep + opts.offset);
 				} else {
 					const moving = opts.startPosition + 'px';
-					this.epos!.style.left = moving;
+					this.epos.style.left = moving;
 					$drag.animate({left: moving}, 500);
 					if (typeof this.opts.onScrollX == 'function')
 						this.opts.onScrollX.call(this.widget, opts.startStep + opts.offset);
@@ -521,13 +521,13 @@ export class WScroll extends zk.Object {
 					} else {
 						end = opts.viewportSize + opts.startPosition;
 					}
-					end -= this.edrag!.offsetHeight - this._gap;
+					end -= this.edrag.offsetHeight - this._gap;
 
-					this.epos!.style.top = move + 'px';
+					this.epos.style.top = move + 'px';
 					if (end < move) {
-						this.edrag!.style.top = end + 'px';
+						this.edrag.style.top = end + 'px';
 					} else {
-						this.edrag!.style.top = move + 'px';
+						this.edrag.style.top = move + 'px';
 					}
 					if (typeof this.opts.onScrollY == 'function')
 						this.opts.onScrollY.call(this.widget, opts.startStep + opts.offset);
@@ -538,13 +538,13 @@ export class WScroll extends zk.Object {
 					} else {
 						end = opts.viewportSize + opts.startPosition;
 					}
-					end -= this.edrag!.offsetWidth - this._gap;
+					end -= this.edrag.offsetWidth - this._gap;
 
-					this.epos!.style.left = move + 'px';
+					this.epos.style.left = move + 'px';
 					if (end < move) {
-						this.edrag!.style.left = end + 'px';
+						this.edrag.style.left = end + 'px';
 					} else {
-						this.edrag!.style.left = move + 'px';
+						this.edrag.style.left = move + 'px';
 					}
 
 					if (typeof this.opts.onScrollX == 'function')
@@ -566,13 +566,13 @@ export class WScroll extends zk.Object {
 					} else {
 						end = opts.viewportSize + opts.startPosition;
 					}
-					end -= this.edrag!.offsetHeight - this._gap;
+					end -= this.edrag.offsetHeight - this._gap;
 
-					this.epos!.style.top = move + 'px';
+					this.epos.style.top = move + 'px';
 					if (end < move) {
-						this.edrag!.style.top = end + 'px';
+						this.edrag.style.top = end + 'px';
 					} else {
-						this.edrag!.style.top = move + 'px';
+						this.edrag.style.top = move + 'px';
 					}
 					if (typeof this.opts.onScrollY == 'function')
 						this.opts.onScrollY.call(this.widget, opts.startStep + opts.offset);
@@ -583,13 +583,13 @@ export class WScroll extends zk.Object {
 					} else {
 						end = opts.viewportSize + opts.startPosition;
 					}
-					end -= this.edrag!.offsetWidth - this._gap;
+					end -= this.edrag.offsetWidth - this._gap;
 
-					this.epos!.style.left = move + 'px';
+					this.epos.style.left = move + 'px';
 					if (end < move) {
-						this.edrag!.style.left = end + 'px';
+						this.edrag.style.left = end + 'px';
 					} else {
-						this.edrag!.style.left = move + 'px';
+						this.edrag.style.left = move + 'px';
 					}
 
 					if (typeof this.opts.onScrollX == 'function')
@@ -605,22 +605,22 @@ export class WScroll extends zk.Object {
 				if (this._isVer) {
 					let moving: number;
 					if (zk(this.eend).isVisible()) {
-						moving = this.eend.offsetTop - (this.edrag!.offsetHeight - this._gap);
+						moving = this.eend.offsetTop - (this.edrag.offsetHeight - this._gap);
 					} else {
-						moving = opts.startPosition + opts.viewportSize - (this.edrag!.offsetHeight - this._gap);
+						moving = opts.startPosition + opts.viewportSize - (this.edrag.offsetHeight - this._gap);
 					}
-					this.epos!.style.top = moving as unknown as string;
+					this.epos.style.top = moving as unknown as string;
 					$drag.animate({top: moving}, 500);
 					if (typeof this.opts.onScrollY == 'function')
 						this.opts.onScrollY.call(this.widget, opts.startStep + opts.offset);
 				} else {
 					let moving: number;
 					if (zk(this.eend).isVisible()) {
-						moving = this.eend.offsetLeft - (this.edrag!.offsetWidth - this._gap);
+						moving = this.eend.offsetLeft - (this.edrag.offsetWidth - this._gap);
 					} else {
-						moving = opts.startPosition + opts.viewportSize - (this.edrag!.offsetWidth - this._gap);
+						moving = opts.startPosition + opts.viewportSize - (this.edrag.offsetWidth - this._gap);
 					}
-					this.epos!.style.left = moving as unknown as string;
+					this.epos.style.left = moving as unknown as string;
 					$drag.animate({left: moving}, 500);
 					if (typeof this.opts.onScrollX == 'function')
 						this.opts.onScrollX.call(this.widget, opts.startStep + opts.offset);
@@ -653,14 +653,14 @@ export class WScroll extends zk.Object {
 				return;// nothing changed
 
 			var moving = opts.startPosition + (opts.startStep * scale),
-				end = zk(this.eend).isVisible() ? this.eend.offsetTop - (this.edrag!.offsetHeight - this._gap)
-							: opts.startPosition + opts.viewportSize - (this.edrag!.offsetHeight - this._gap);
-			this.epos!.style.top = moving + 'px';
+				end = zk(this.eend).isVisible() ? this.eend.offsetTop - (this.edrag.offsetHeight - this._gap)
+							: opts.startPosition + opts.viewportSize - (this.edrag.offsetHeight - this._gap);
+			this.epos.style.top = moving + 'px';
 
 			if (moving > end)
 				moving = end;
 
-			this.edrag!.style.top = moving + 'px';
+			this.edrag.style.top = moving + 'px';
 			if (typeof this.opts.onScrollY == 'function')
 				this.opts.onScrollY.call(this.widget, opts.startStep + opts.offset);
 			this._syncButtonStatus();
@@ -688,14 +688,14 @@ export class WScroll extends zk.Object {
 				return;// nothing changed
 
 			var moving = opts.startPosition + (opts.startStep * scale),
-				end = zk(this.eend).isVisible() ? this.eend.offsetLeft - (this.edrag!.offsetWidth - this._gap)
-							: opts.startPosition + opts.viewportSize - (this.edrag!.offsetWidth - this._gap);
-			this.epos!.style.left = moving + 'px';
+				end = zk(this.eend).isVisible() ? this.eend.offsetLeft - (this.edrag.offsetWidth - this._gap)
+							: opts.startPosition + opts.viewportSize - (this.edrag.offsetWidth - this._gap);
+			this.epos.style.left = moving + 'px';
 
 			if (moving > end)
 				moving = end;
 
-			this.edrag!.style.left = moving + 'px';
+			this.edrag.style.left = moving + 'px';
 			if (typeof this.opts.onScrollX == 'function')
 				this.opts.onScrollX.call(this.widget, opts.startStep + opts.offset);
 			this._syncButtonStatus();
@@ -731,10 +731,12 @@ export class WScroll extends zk.Object {
 	}
 
 	destroy(): void {
-		this.drag!.destroy();
+		this.drag.destroy();
 		this._unlistenMouseEvent();
-		jq(this.node!).remove();
-		this.node = this.edrag = this.epos = this.drag = null;
+		jq(this.node).remove();
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// @ts-expect-error
+		this.node = this.edrag = this.epos = this.drag = undefined;
 	}
 
 	redraw(p: HTMLElement): void {
@@ -757,7 +759,7 @@ export class WScroll extends zk.Object {
 
 	_syncButtonStatus(): void {
 		var zcls = this.zcls + '-wscroll',
-			$drag = jq(this.edrag!),
+			$drag = jq(this.edrag),
 			opts = this.opts;
 		$drag.toggleClass(zcls + '-head', opts.startStep == 0);
 		$drag.toggleClass(zcls + '-tail', opts.startStep == opts.endStep - opts.viewport);

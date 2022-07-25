@@ -161,7 +161,7 @@ export class Image extends zul.Widget<HTMLImageElement> {
 	 * Returns the image node if any.
 	 * @return DOMElement
 	 */
-	getImageNode(): HTMLImageElement | null | undefined {
+	getImageNode(): HTMLImageElement | undefined {
 		return this.$n();
 	}
 

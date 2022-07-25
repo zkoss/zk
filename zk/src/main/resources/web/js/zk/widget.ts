@@ -72,12 +72,12 @@ var _binds: Record<string, Widget> = {}, //{uuid, wgt}: bind but no node
 	_hidden: HTMLElement[] = [], //_autohide
 	_noChildCallback, _noParentCallback, //used by removeChild/appendChild/insertBefore
 	_syncdt, //timer ID to sync destkops
-	_rdque: Widget[] = [], _rdtid: zk.NumberFieldValue, //async rerender's queue and timeout ID
+	_rdque: Widget[] = [], _rdtid: number | undefined, //async rerender's queue and timeout ID
 	_ignCanActivate, //whether canActivate always returns true
 	REGEX_DQUOT = /"/g; //jsdoc can't handle it correctly, so we have to put here
 
 //Check if el is a prolog
-function _isProlog(el: Node | null): boolean {
+function _isProlog(el: Node | null/*must be null here*/): boolean {
 	return !!el && el.nodeType == 3 //textnode
 		&& !el.nodeValue?.trim().length;
 }
@@ -85,8 +85,7 @@ function _isProlog(el: Node | null): boolean {
 //Event Handling//
 // eslint-disable-next-line no-undef
 type JQueryEventHandler = (evt: JQuery.TriggeredEvent, ...args: unknown[]) => unknown;
-type ZKEventHandler = (evt: Event, ...args: unknown[]) => unknown;
-function _domEvtInf(wgt: Widget, evtnm: string, fn?: string | ZKEventHandler, keyword?: string): [string, JQueryEventHandler] { //proxy event listener
+function _domEvtInf(wgt: Widget, evtnm: string, fn?: string | CallableFunction, keyword?: string): [string, JQueryEventHandler] { //proxy event listener
 	if (typeof fn != 'function') {
 		if (!fn && !(fn = _domevtfnm[evtnm]))
 			_domevtfnm[evtnm] = fn = '_do' + evtnm.substring(2);
@@ -100,9 +99,9 @@ function _domEvtInf(wgt: Widget, evtnm: string, fn?: string | ZKEventHandler, ke
 	var domn = _domevtnm[evtnm];
 	if (!domn)
 		domn = _domevtnm[evtnm] = evtnm.substring(2).toLowerCase();
-	return [domn, _domEvtProxy(wgt, fn as ZKEventHandler, evtnm, keyword)];
+	return [domn, _domEvtProxy(wgt, fn as CallableFunction, evtnm, keyword)];
 }
-function _domEvtProxy(wgt: Widget, f: ZKEventHandler, evtnm: string, keyword?: string): JQueryEventHandler {
+function _domEvtProxy(wgt: Widget, f: CallableFunction, evtnm: string, keyword?: string): JQueryEventHandler {
 	var fps = wgt._$evproxs, fp;
 	if (!fps) wgt._$evproxs = fps = new WeakMap();
 	if (keyword)
@@ -112,7 +111,7 @@ function _domEvtProxy(wgt: Widget, f: ZKEventHandler, evtnm: string, keyword?: s
 	fps.set(f, fn);
 	return fn;
 }
-function _domEvtProxy0(wgt: Widget, f: ZKEventHandler, keyword?: string): JQueryEventHandler {
+function _domEvtProxy0(wgt: Widget, f: CallableFunction, keyword?: string): JQueryEventHandler {
 	return function (evt, ...rest) {
 		var devt = evt, //make a copy since we will change evt (and arguments) in the following line
 			zkevt = jq.Event.zk(devt, wgt);
@@ -131,7 +130,7 @@ function _domEvtProxy0(wgt: Widget, f: ZKEventHandler, keyword?: string): JQuery
 		case 'blur':
 			//due to mimicMouseDown_ called, zk.currentFocus already corrected,
 			//so we clear it only if caused by other case
-			if (!zk._cfByMD) zk.currentFocus = null;
+			if (!zk._cfByMD) zk.currentFocus = undefined;
 			break;
 		case 'click':
 		case 'dblclick':
@@ -163,7 +162,7 @@ function _unlink(wgt: Widget, child: Widget): void {
 	else wgt.firstChild = n;
 	if (n) n.previousSibling = p;
 	else wgt.lastChild = p;
-	child.nextSibling = child.previousSibling = child.parent = null;
+	child.nextSibling = child.previousSibling = child.parent = undefined;
 
 	--wgt.nChildren;
 }
@@ -202,8 +201,8 @@ function _rmIdSpace(wgt: Widget): void {
 	}
 }
 function _addIdSpaceDown(wgt: Widget): void {
-	var ow = wgt.parent;
-	ow = ow ? ow.$o() : null;
+	let ow = wgt.parent;
+	ow = ow ? ow.$o() : undefined;
 	if (ow)
 		_addIdSpaceDown0(wgt, ow);
 }
@@ -214,8 +213,8 @@ function _addIdSpaceDown0(wgt: Widget, owner: Widget): void {
 			_addIdSpaceDown0(w, owner);
 }
 function _rmIdSpaceDown(wgt: Widget): void {
-	var ow = wgt.parent;
-	ow = ow ? ow.$o() : null;
+	let ow = wgt.parent;
+	ow = ow ? ow.$o() : undefined;
 	if (ow)
 		_rmIdSpaceDown0(wgt, ow);
 }
@@ -275,26 +274,26 @@ function _dragCtl(wgt: Widget, invoke?: boolean): boolean {
 }
 
 //backup current focus
-type CurrentFocusInfo = {focus: Widget; range: zk.Offset | null} | null;
+type CurrentFocusInfo = {focus: Widget; range?: zk.Offset} | undefined;
 function _bkFocus(wgt: Widget): CurrentFocusInfo {
 	var cf = zk.currentFocus;
 	if (cf && zUtl.isAncestor(wgt, cf)) {
-		zk.currentFocus = null;
+		zk.currentFocus = undefined;
 		return {focus: cf, range: _bkRange(cf)};
 	}
-	return null;
+	return undefined;
 }
-function _bkRange(wgt: Widget): [number, number] | null {
+function _bkRange(wgt: Widget): [number, number] | undefined {
 	if (zk.ie && zk.ie < 11 && zk.cfrg) { //Bug ZK-1377
 		var cfrg = zk.cfrg;
 		delete zk.cfrg;
 		return cfrg;
 	}
 	let input = wgt.getInputNode && wgt.getInputNode();
-	return input ? zk(input).getSelectionRange() : null;
+	return input ? zk(input).getSelectionRange() : undefined;
 }
 //restore focus
-function _rsFocus(cfi: CurrentFocusInfo): void {
+function _rsFocus(cfi?: CurrentFocusInfo): void {
 	var cf;
 	if (cfi && (cf = cfi.focus) && cf.desktop && !zk.currentFocus) {
 		_ignCanActivate = true;
@@ -393,9 +392,9 @@ export let DnD = { //for easy overriding
 	 * @param jq.Event evt the DOM event
 	 * @return zk.Widget
 	 */
-	getDrop(drag: zk.Draggable, pt: zk.Offset, evt: Event): Widget | null {
+	getDrop(drag: zk.Draggable, pt: zk.Offset, evt: Event): Widget | undefined {
 		var wgt = this.getDropTarget(evt, drag);
-		return wgt ? wgt.getDrop_(drag.control!) : null;
+		return wgt ? wgt.getDrop_(drag.control!) : undefined;
 	},
 	/** Ghost the DOM element being dragged.
 	 * @param zk.Draggable drag the draggable controller
@@ -428,10 +427,10 @@ function DD_cleanLastDrop(drag): void {
 	if (drag) {
 		var drop;
 		if (drop = drag._lastDrop) {
-			drag._lastDrop = null;
+			drag._lastDrop = undefined;
 			drop.dropEffect_();
 		}
-		drag._lastDropTo = null;
+		drag._lastDropTo = undefined;
 	}
 }
 function DD_pointer(evt: Event, height: number): zk.Offset {
@@ -483,7 +482,7 @@ function DD_ghosting(drag: zk.Draggable, ofs: zk.Offset, evt: Event): HTMLElemen
 }
 function DD_endghosting(drag: zk.Draggable, origin: HTMLElement): void {
 	drag.control!.uncloneDrag_(drag);
-	drag._dragImg = null;
+	drag._dragImg = undefined;
 }
 function DD_constraint(drag: zk.Draggable, pt: zk.Offset, evt: Event): zk.Offset {
 	return DD_pointer(evt, jq(drag.node!).height() || 0);
@@ -494,31 +493,31 @@ function DD_ignoredrag(drag: zk.Draggable, pt: zk.Offset, evt: Event): boolean {
 	return drag.control!.ignoreDrag_(pt, evt, drag);
 }
 
-function _topnode(n: HTMLElement): HTMLElement | null {
+function _topnode(n: HTMLElement): HTMLElement | undefined {
 	let curr: HTMLElement | null = n;
 	for (var body = document.body; curr && curr != body; curr = curr.parentElement) { //no need to check vparentNode
 		var position = jq(curr).css('position');
 		if (position == 'absolute' || position == 'relative')
 			return curr;
 	}
-	return null;
+	return undefined;
 }
-function _zIndex(n: HTMLElement | null): number {
+function _zIndex(n: HTMLElement | undefined): number {
 	return n ? zk.parseInt(n.style.zIndex) : 0;
 }
 
-function _getFirstNodeDown(wgt: Widget): HTMLElement | null {
-	var n = wgt.$n();
+function _getFirstNodeDown(wgt: Widget): HTMLElement | undefined {
+	let n = wgt.$n();
 	if (n) return n;
-	for (var w = wgt.firstChild; w; w = w.nextSibling) {
+	for (let w = wgt.firstChild; w; w = w.nextSibling) {
 		n = w.getFirstNode_();
 		if (n) return n;
 	}
-	return null;
+	return undefined;
 }
 //Returns if the specified widget's visibility depends the self widget.
 function _floatVisibleDependent(self: Widget, wgt: Widget): boolean {
-	for (let w: Widget | null = wgt; w; w = w.parent) {
+	for (let w: Widget | undefined = wgt; w; w = w.parent) {
 		if (w == self) return true;
 		else if (!w.isVisible()) break;
 	}
@@ -575,7 +574,7 @@ function _doDeferRender(wgt: Widget & {_z$rd?}): void {
 	if (wgt._z$rd) { //might be redrawn by forcerender
 		delete wgt._z$rd;
 		wgt._norenderdefer = true;
-		wgt.replaceHTML('#' + wgt.uuid, wgt.parent ? wgt.parent.desktop : null, null, true);
+		wgt.replaceHTML('#' + wgt.uuid, wgt?.parent?.desktop, undefined, true);
 		if (wgt.parent)
 			wgt.parent.onChildRenderDefer_(wgt);
 	}
@@ -590,7 +589,7 @@ function _rerender(wgt: Widget, timeout: number): void {
 	_rdtid = window.setTimeout(_rerender0, timeout);
 }
 function _rerender0(): void {
-	_rdtid = null;
+	_rdtid = undefined;
 	l_out:
 	for (var wgt; wgt = _rdque.shift();) {
 		if (!wgt.desktop) {
@@ -610,7 +609,7 @@ function _rerender0(): void {
 	}
 }
 /* Bug ZK-2281 */
-function _rerenderNow(wgt: Widget, skipper?: Skipper | null): void {
+function _rerenderNow(wgt: Widget, skipper?: Skipper | undefined): void {
 	var rdque: Widget[] = [];
 	for (var j = _rdque.length; j--;)
 		if (zUtl.isAncestor(wgt, _rdque[j])) {// if wgt's children or itself is in a rerender queue
@@ -621,7 +620,7 @@ function _rerenderNow(wgt: Widget, skipper?: Skipper | null): void {
 	// just in case
 	if (!_rdque.length && _rdtid) {
 		clearTimeout(_rdtid);
-		_rdtid = null;
+		_rdtid = undefined;
 	}
 
 	l_out2:
@@ -639,7 +638,7 @@ function _rerenderNow(wgt: Widget, skipper?: Skipper | null): void {
 			w.rerender(-1);
 		}
 }
-function _rerenderDone(wgt: Widget, skipper?: Skipper | null/* Bug ZK-1463 */): void {
+function _rerenderDone(wgt: Widget, skipper?: Skipper | undefined/* Bug ZK-1463 */): void {
 	for (var j = _rdque.length; j--;)
 		if (zUtl.isAncestor(wgt, _rdque[j])) {
 			if (!skipper || !skipper.skipped(wgt, _rdque[j]))
@@ -720,8 +719,8 @@ export function WrapClass(pkg: string) {
 @WrapClass('zk.Widget')
 export class Widget<TElement extends HTMLElement = HTMLElement> extends ZKObject {
 	// zkbind/Binder
-	declare $binder?: () => zkbind.Binder | null;
-	declare _$binder?: zkbind.Binder | null;
+	declare $binder?: () => zkbind.Binder;
+	declare _$binder?: zkbind.Binder;
 	declare $ZKBINDER$?: boolean;
 	declare $ZKMATCHMEDIA$?: string[];
 
@@ -729,7 +728,7 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends ZKObject
 	declare $button?: boolean;
 	declare $inputWidget?: boolean;
 
-	declare _uplder?: zul.Upload | null;
+	declare _uplder?: zul.Upload;
 	declare _autodisable_self?: boolean;
 	declare _uploading?: boolean;
 
@@ -737,11 +736,11 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends ZKObject
 	declare offsetHeight?;
 	declare blankPreserved?: boolean;
 
-	declare getInputNode?: () => HTMLInputElement | null | undefined;
+	declare getInputNode?: () => HTMLInputElement | undefined;
 
 	declare z_rod?: boolean | number;
 	declare _rodKid?: boolean;
-	declare _node?: TElement | null;
+	declare _node?: TElement;
 	declare _nodeSolved;
 	declare _rmAftAnm;
 	declare _$evproxs;
@@ -753,8 +752,8 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends ZKObject
 	declare _cssFlexApplied;
 	declare _beforeSizeHasScroll;
 	declare doAfterProcessRerenderArgs;
-	declare _vflex: zk.StringFieldValue | boolean;
-	declare _hflex: zk.StringFieldValue | boolean;
+	declare _vflex?: string | boolean;
+	declare _hflex?: string | boolean;
 	declare _flexFixed;
 	declare _nvflex?: number;
 	declare _nhflex?: number;
@@ -768,36 +767,36 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends ZKObject
 	declare _userZIndex;
 	declare _zIndex: number | string;
 	declare z_isDataHandlerBound;
-	declare _drag: Draggable | null;
+	declare _drag?: Draggable;
 	declare _preWidth;
 	declare _preHeight;
-	declare _action: zk.StringFieldValue;
-	declare _tabindex: zk.NumberFieldValue;
-	declare _draggable: zk.StringFieldValue;
+	declare _action?: string;
+	declare _tabindex?: number;
+	declare _draggable?: string;
 	declare _asaps: Record<string, unknown>;
 	declare _lsns: Record<string, unknown & {priority: number}[]>;
 	declare _bklsns: Record<string, unknown>;
-	declare _subnodes: Record<string, HTMLElement | string | null | undefined>;
+	declare _subnodes: Record<string, HTMLElement | string | undefined>;
 	declare _subzcls: Record<string, string>;
-	declare _sclass: zk.StringFieldValue;
-	declare _zclass: zk.StringFieldValue;
-	declare _width: zk.StringFieldValue;
-	declare _height: zk.StringFieldValue;
-	declare _left: zk.StringFieldValue;
-	declare _top: zk.StringFieldValue;
-	declare _tooltiptext: zk.StringFieldValue;
-	declare _droppable: zk.StringFieldValue;
-	declare _dropTypes: string[] | null;
-	declare _fitSizeListened: boolean | undefined;
+	declare _sclass?: string;
+	declare _zclass?: string;
+	declare _width?: string;
+	declare _height?: string;
+	declare _left?: string;
+	declare _top?: string;
+	declare _tooltiptext?: string;
+	declare _droppable?: string;
+	declare _dropTypes?: string[];
+	declare _fitSizeListened: boolean;
 
 	declare static _importantEvts;
 	declare static _duplicateIgnoreEvts;
 	declare static _repeatIgnoreEvts;
 	declare static molds;
 
-	_visible?: boolean = true;
+	_visible = true;
 	_mold = 'default';
-	_style: zk.StringFieldValue;
+	_style?: string;
 	_renderdefer?;
 
 	_cssflex = true;
@@ -849,7 +848,7 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends ZKObject
 	 * @type String
 	 * @since 6.0.0
 	 */
-	autag: zk.StringFieldValue = null;
+	autag?: string;
 
 	_floating = false;
 
@@ -857,24 +856,24 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends ZKObject
 	 * @see #getChildAt
 	 * @type zk.Widget
 	 */
-	firstChild: null | Widget = null;
+	firstChild?: Widget;
 	/** The last child, or null if no child at all (readonly).
 	 * @see #getChildAt
 	 * @type zk.Widget
 	 */
-	lastChild: null | Widget = null;
+	lastChild?: Widget;
 	/** The parent, or null if this widget has no parent (readonly).
 	 * @type zk.Widget
 	 */
-	parent: null | Widget = null;
+	parent?: Widget;
 	/** The next sibling, or null if this widget is the last child (readonly).
 	 * @type zk.Widget
 	 */
-	nextSibling: null | Widget = null;
+	nextSibling?: Widget;
 	/** The previous sibling, or null if this widget is the first child (readonly).
 	 * @type zk.Widget
 	 */
-	previousSibling: null | Widget = null;
+	previousSibling?: Widget;
 	/** The desktop that this widget belongs to (readonly).
 	 * It is set when it is bound to the DOM tree.
 	 * <p>Notice it is always non-null if bound to the DOM tree, while
@@ -882,13 +881,13 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends ZKObject
 	 * <p>It is readonly, and set automatically when {@link #bind_} is called.
 	 * @type zk.Desktop
 	 */
-	desktop: null | Desktop = null;
+	desktop?: Desktop;
 	/** The identifier of this widget, or null if not assigned (readonly).
 	 * It is the same as {@link #getId}.
 	 * <p>To change the value, use {@link #setId}.
 	 * @type String the ID
 	 */
-	id: zk.StringFieldValue;
+	id?: string;
 	/** Whether this widget has a peer component (readonly).
 	 * It is set if a widget is created automatically to represent a component
 	 ( at the server. On the other hand, it is false if a widget is created
@@ -927,7 +926,7 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends ZKObject
 	 * In other words, it is called in the Design Mode if $weave is not null.
 	 * @type Object
 	 */
-	$weave = null;
+	$weave = undefined;
 
 	/** The constructor.
 	 * For example,
@@ -1009,7 +1008,7 @@ new zul.wnd.Window({
 	 * @see #getSclass
 	 * @see #getZclass
 	 */
-	getStyle(): zk.StringFieldValue {
+	getStyle(): string | undefined {
 		return this._style;
 	}
 
@@ -1037,7 +1036,7 @@ new zul.wnd.Window({
 	 * @see #getZclass
 	 * @see #getStyle
 	 */
-	getSclass(): zk.StringFieldValue {
+	getSclass(): string | undefined {
 		return this._sclass;
 	}
 
@@ -1077,7 +1076,7 @@ new zul.wnd.Window({
 	 * @param String width the width. Remember to specify 'px', 'pt' or '%'.
 	 * An empty or null value means "auto"
 	 */
-	setWidth(width: string | null): this {
+	setWidth(width?: string): this {
 		if (this._width != width) {
 			this._width = width;
 			if (!this._nhflex) {
@@ -1091,14 +1090,14 @@ new zul.wnd.Window({
 	 * @return String
 	 * @see #getHeight
 	 */
-	getWidth(): zk.StringFieldValue {
+	getWidth(): string | undefined {
 		return this._width;
 	}
 	/** Sets the height of this widget.
 	 * @param String height the height. Remember to specify 'px', 'pt' or '%'.
 	 * An empty or null value means "auto"
 	 */
-	setHeight(height: string | null): this {
+	setHeight(height?: string): this {
 		if (this._height != height) {
 			this._height = height;
 			if (!this._nvflex) {
@@ -1112,7 +1111,7 @@ new zul.wnd.Window({
 	 * @return String
 	 * @see #getWidth
 	 */
-	getHeight(): zk.StringFieldValue {
+	getHeight(): string | undefined {
 		return this._height;
 	}
 
@@ -1133,7 +1132,7 @@ new zul.wnd.Window({
 	 * @return String
 	 * @see #getTop
 	 */
-	getLeft(): zk.StringFieldValue {
+	getLeft(): string | undefined {
 		return this._left;
 	}
 
@@ -1156,7 +1155,7 @@ new zul.wnd.Window({
 	 * @return String
 	 * @see #getLeft
 	 */
-	getTop(): zk.StringFieldValue {
+	getTop(): string | undefined {
 		return this._top;
 	}
 	/** Sets the tooltip text of this widget.
@@ -1175,7 +1174,7 @@ new zul.wnd.Window({
 	/** Returns the tooltip text of this widget.
 	 * @return String
 	 */
-	getTooltiptext(): zk.StringFieldValue {
+	getTooltiptext(): string | undefined {
 		return this._tooltiptext;
 	}
 
@@ -1187,8 +1186,8 @@ new zul.wnd.Window({
 	 * @param String droppable "false", null or "" to denote not-droppable; "true" for accepting any draggable types; a list of identifiers, separated by comma for identifiers of draggables this widget accept (to be dropped in).
 	 * @return zk.Widget this widget
 	 */
-	setDroppable(droppable: zk.StringFieldValue): this {
-		droppable = droppable && 'false' != droppable ? droppable : null;
+	setDroppable(droppable?: string): this {
+		droppable = droppable && 'false' != droppable ? droppable : undefined;
 		if (this._droppable != droppable) {
 			this._droppable = droppable;
 
@@ -1206,7 +1205,7 @@ new zul.wnd.Window({
 	/** Returns the identifier, or a list of identifiers of a droppable type for this widget, or null if not droppable.
 	 * @return String
 	 */
-	getDroppable(): zk.StringFieldValue {
+	getDroppable(): string | undefined {
 		return this._droppable;
 	}
 
@@ -1234,7 +1233,7 @@ new zul.wnd.Window({
 	 * @see #getVflex
 	 * @param String flex the vertical flex hint.
 	 */
-	setVflex(vflex: boolean | string | null | undefined): this {
+	setVflex(vflex?: boolean | string): this {
 		if (this._vflex != vflex) {
 			this._vflex = vflex;
 			this.setVflex_(vflex);
@@ -1252,10 +1251,10 @@ new zul.wnd.Window({
 	 * @see #setVflex
 	 * @return String vertical flex hint of this widget.
 	 */
-	getVflex(): zk.StringFieldValue | boolean {
+	getVflex(): string | boolean | undefined {
 		return this._vflex;
 	}
-	isVflex(): zk.StringFieldValue | boolean {
+	isVflex(): string | boolean | undefined {
 		return this.getVflex();
 	}
 
@@ -1283,7 +1282,7 @@ new zul.wnd.Window({
 	 * @see #setVflex
 	 * @see #getHflex
 	 */
-	setHflex(hflex: boolean | string | null | undefined): this {
+	setHflex(hflex?: boolean | string): this {
 		if (this._hflex != hflex) {
 			this._hflex = hflex;
 			this.setHflex_(hflex);
@@ -1301,10 +1300,10 @@ new zul.wnd.Window({
 	 * @return String horizontal flex hint of this widget.
 	 * @see #setHflex
 	 */
-	getHflex(): zk.StringFieldValue | boolean {
+	getHflex(): string | boolean | undefined {
 		return this._hflex;
 	}
-	isHflex(): zk.StringFieldValue | boolean {
+	isHflex(): string | boolean | undefined {
 		return this.getHflex();
 	}
 	/** Returns the number of milliseconds before rendering this component
@@ -1345,7 +1344,7 @@ new zul.wnd.Window({
 	 * @return String the client-side action
 	 * @since 5.0.6
 	 */
-	getAction(): zk.StringFieldValue {
+	getAction(): string | undefined {
 		return this._action;
 	}
 
@@ -1363,7 +1362,7 @@ new zul.wnd.Window({
 	 * @param String action the client-side action
 	 * @since 5.0.6
 	 */
-	setAction(action: zk.StringFieldValue): this {
+	setAction(action?: string): this {
 		if (this._action != action) {
 			this._action = action;
 			if (action) {
@@ -1398,7 +1397,7 @@ new zul.wnd.Window({
 	 * @return int
 	 * @since 8.0.2
 	 */
-	getTabindex(): zk.NumberFieldValue {
+	getTabindex(): number | undefined {
 		return this._tabindex;
 	}
 	/** Sets the tab order of this component.
@@ -1445,9 +1444,9 @@ new zul.wnd.Window({
 		return this;
 	}
 
-	setHflex_(v: zk.StringFieldValue | boolean): void {
-		this._nhflex = (true === v || 'true' == v) ? 1 : v == 'min' ? -65500 : zk.parseInt(v);
-		if (this._nhflex < 0 && v != 'min')
+	setHflex_(hflex?: string | boolean): void {
+		this._nhflex = (true === hflex || 'true' == hflex) ? 1 : hflex == 'min' ? -65500 : zk.parseInt(hflex);
+		if (this._nhflex < 0 && hflex != 'min')
 			this._nhflex = 0;
 		if (this.desktop) { //ZK-1784 only update the components style when it is attached to desktop
 							//checking on (_binds[this.uuid] === this) as before does not work when
@@ -1470,9 +1469,9 @@ new zul.wnd.Window({
 		}
 	}
 
-	setVflex_(v: zk.StringFieldValue | boolean): void {
-		this._nvflex = (true === v || 'true' == v) ? 1 : v == 'min' ? -65500 : zk.parseInt(v);
-		if (this._nvflex < 0 && v != 'min')
+	setVflex_(vflex?: string | boolean): void {
+		this._nvflex = (true === vflex || 'true' == vflex) ? 1 : vflex == 'min' ? -65500 : zk.parseInt(vflex);
+		if (this._nvflex < 0 && vflex != 'min')
 			this._nvflex = 0;
 		if (this.desktop) {
 			if (this._cssflex && this._nvflex <= 0) // min or no flex
@@ -1502,7 +1501,7 @@ new zul.wnd.Window({
 	afterAnima_(visible: boolean): void {
 		var fn;
 		if (fn = this._rmAftAnm) {
-			this._rmAftAnm = null;
+			this._rmAftAnm = undefined;
 			fn();
 		}
 	}
@@ -1514,7 +1513,7 @@ new zul.wnd.Window({
 	 * The identifier could be anything but empty and "false".
 	 * @param String draggable "false", "" or null to denote non-draggable; "true" for draggable with anonymous identifier; others for an identifier of draggable.
 	 */
-	setDraggable(draggable: zk.StringFieldValue): this {
+	setDraggable(draggable?: string): this {
 		if (!draggable && draggable != null) draggable = 'false'; //null means default
 		this._draggable = draggable;
 
@@ -1538,10 +1537,10 @@ new zul.wnd.Window({
 	 * returns itself.
 	 * @return zk.Widget
 	 */
-	$o<T extends Widget = Widget>(): T | null {
-		for (var w: Widget | null = this; w; w = w.parent)
+	$o<T extends Widget = Widget>(): T | undefined {
+		for (let w: Widget | undefined = this; w; w = w.parent)
 			if (w._fellows) return w as T;
-		return null;
+		return undefined;
 	}
 
 	/** Returns the map of all fellows of this widget.
@@ -1563,8 +1562,8 @@ wgt.$f().main.setTitle("foo");
 	 * If omitted, it won't search all ID spaces.
 	 * @return zk.Widget
 	 */
-	$f<T extends Widget = Widget>(id: string, global?: boolean): T | null
-	$f(id?: string, global?: boolean): Record<string, Widget> | Widget | null | undefined {
+	$f<T extends Widget = Widget>(id: string, global?: boolean): T | undefined
+	$f(id?: string, global?: boolean): Record<string, Widget> | Widget | undefined {
 		var f = this.$o();
 		if (!arguments.length)
 			return f ? f._fellows : {};
@@ -1584,14 +1583,14 @@ wgt.$f().main.setTitle("foo");
 	 * It is the same as {@link #id}.
 	 * @return String the ID
 	 */
-	getId(): zk.StringFieldValue {
+	getId(): string | undefined {
 		return this.id;
 	}
 
 	/** Sets the identifier of this widget.
 	 * @param String id the identifier to assigned to.
 	 */
-	setId(id: zk.StringFieldValue): this {
+	setId(id?: string): this {
 		if (id != this.id) {
 			if (this.id) {
 				_rmIdSpace(this);
@@ -1667,7 +1666,7 @@ wgt.$f().main.setTitle("foo");
 				setter.func = function (wgt: Widget, nm, val, extra) {
 					var result = wgt._setServerListener(nm, val);
 					if (!result)
-						zk._set2(wgt, null, nm, val, extra);
+						zk._set2(wgt, undefined, nm, val, extra);
 					return wgt;
 				};
 			} else if (cc == 'o' && name.charAt(1) == 'n'
@@ -1681,10 +1680,10 @@ wgt.$f().main.setTitle("foo");
 					var fun;
 					if (fun = wgt[setter.name]) {
 						//to optimize the performance we check the method first (most common)
-						zk._set2(wgt, fun, null, val, extra);
+						zk._set2(wgt, fun, undefined, val, extra);
 						return wgt;
 					}
-					zk._set2(wgt, null, nm, val, extra);
+					zk._set2(wgt, undefined, nm, val, extra);
 					return wgt;
 				};
 			}
@@ -1859,7 +1858,7 @@ wgt.$f().main.setTitle("foo");
 				this.get$Class<typeof Widget>()._bindrod(child);
 			else {
 				var dt = this.desktop;
-				if (dt) this.insertChildHTML_(child, null, dt);
+				if (dt) this.insertChildHTML_(child, undefined, dt);
 			}
 		}
 
@@ -1895,7 +1894,7 @@ wgt.$f().main.setTitle("foo");
 	 * @return boolean whether the widget was added successfully. It returns false if the child is always the last child ({@link #lastChild}).
 	 * @see #appendChild(zk.Widget)
 	 */
-	insertBefore(child: Widget, sibling: Widget | null | undefined, ignoreDom?: boolean): boolean {
+	insertBefore(child: Widget, sibling?: Widget, ignoreDom?: boolean): boolean {
 		if (!this.beforeChildAdded_(child, sibling)) {
 			return false;
 		}
@@ -1991,7 +1990,7 @@ wgt.$f().main.setTitle("foo");
 			this.removeChildHTML_(child, ignoreDom);
 
 		if (!_noParentCallback)
-			child.beforeParentChanged_(null);
+			child.beforeParentChanged_(undefined);
 
 		_unlink(this, child);
 
@@ -2013,7 +2012,7 @@ wgt.$f().main.setTitle("foo");
 		else {
 			var cf = zk.currentFocus;
 			if (cf && zUtl.isAncestor(this, cf))
-				zk.currentFocus = null;
+				zk.currentFocus = undefined;
 			var n = this.$n();
 			if (n) {
 				this.unbind();
@@ -2051,10 +2050,10 @@ wgt.$f().main.setTitle("foo");
 		if (cf && zUtl.isAncestor(this, cf)) {
 			cfid = cf.uuid;
 			cfrg = _bkRange(cf);
-			zk.currentFocus = null;
+			zk.currentFocus = undefined;
 		}
 
-		let node: zk.DOMFieldValue = this.$n(),
+		let node: HTMLElement | null | undefined = this.$n(),
 			p = this.parent, shallReplace,
 			dt = newwgt.desktop || this.desktop;
 		if (this.z_rod) {
@@ -2084,7 +2083,7 @@ wgt.$f().main.setTitle("foo");
 		if (p)
 			p.onChildReplaced_(this, newwgt);
 
-		this.parent = this.nextSibling = this.previousSibling = null;
+		this.parent = this.nextSibling = this.previousSibling = undefined;
 
 		// For Bug ZK-2271, we delay the fireSized calculation after p.onChilReplaced_,
 		// because the sub-nodes mapping are not getting up to date.
@@ -2169,7 +2168,7 @@ wgt.$f().main.setTitle("foo");
 	 * @see #onChildRemoved_
 	 * @see #afterParentChanged_
 	 */
-	beforeParentChanged_(newparent: Widget | null): void {
+	beforeParentChanged_(newparent?: Widget): void {
 	}
 
 	/** A callback called after the parent has been changed.
@@ -2178,7 +2177,7 @@ wgt.$f().main.setTitle("foo");
 	 * @since 5.0.4
 	 * @see #beforeParentChanged_
 	 */
-	afterParentChanged_(oldparent: Widget | null): void {
+	afterParentChanged_(oldparent?: Widget): void {
 	}
 
 	/** Returns if this widget is really visible, i.e., all ancestor widget and itself are visible.
@@ -2204,7 +2203,7 @@ wgt.$f().main.setTitle("foo");
 	isRealVisible(opts?: RealVisibleOptions): boolean {
 		var dom = opts && opts.dom,
 			cache = opts && opts.cache, visited: Widget[] = [], ck,
-			wgt: Widget | null = this;
+			wgt: Widget | undefined = this;
 
 		//Bug ZK-1692: widget may not bind or render yet.
 		if (!wgt.desktop)
@@ -2257,12 +2256,12 @@ wgt.$f().main.setTitle("foo");
 	 * @see jqzk#isVisible
 	 * @see #setVisible
 	 */
-	isVisible(strict?: boolean): zk.BooleanFieldValue {
-		var visible = this._visible;
+	isVisible(strict?: boolean): boolean {
+		const visible = this._visible;
 		if (!strict || !visible)
-			return visible;
-		var n = this.$n();
-		return n && zk(n).isVisible(); //ZK-1692: widget may not bind or render yet
+			return visible as boolean;
+		const n = this.$n();
+		return !!(n && zk(n).isVisible()); //ZK-1692: widget may not bind or render yet
 	}
 
 	/** Sets whether this widget is visible.
@@ -2275,7 +2274,7 @@ wgt.$f().main.setTitle("foo");
 	 * </ul>
 	 * @param boolean visible whether to be visible
 	 */
-	setVisible(visible: boolean | undefined): this {
+	setVisible(visible: boolean): this {
 		if (this._visible != visible) {
 			this._visible = visible;
 
@@ -2418,7 +2417,7 @@ wgt.$f().main.setTitle("foo");
 	 * <li>visibility - Modify n.style.visibility</li>
 	 * </ul>
 	 */
-	setDomVisible_(n: HTMLElement, visible: boolean | undefined, opts?: DomVisibleOptions): void {
+	setDomVisible_(n: HTMLElement, visible: boolean, opts?: DomVisibleOptions): void {
 		if (!opts || opts.display) {
 			var act;
 			if (act = this.actions_[visible ? 'show' : 'hide'])
@@ -2479,7 +2478,7 @@ wgt.$f().main.setTitle("foo");
 	 * @param zk.Widget oldc the old child (being removed). Note: it might be null.
 	 * @param zk.Widget newc the new child (being added). Note: it might be null.
 	 */
-	onChildReplaced_(oldc: Widget | null | undefined, newc: Widget | null | undefined): void {
+	onChildReplaced_(oldc: Widget | undefined, newc: Widget | undefined): void {
 		this.childReplacing_ = true;
 		try {
 			if (oldc) this.onChildRemoved_(oldc);
@@ -2517,14 +2516,14 @@ wgt.$f().main.setTitle("foo");
 	 * @return int the new value of z-index of the topmost floating window, -1 if this widget and none of its ancestors is floating or not bound to the DOM tree.
 	 * @see #setFloating_
 	 */
-	setTopmost(): number | void {
+	setTopmost(): number {
 		if (!this.desktop || this._userZIndex) return -1;
 
-		for (var wgt: Widget | null = this; wgt; wgt = wgt.parent)
+		for (let wgt: Widget | undefined = this; wgt; wgt = wgt.parent)
 			if (wgt._floating) {
-				var zi = _topZIndex(wgt);
-				for (var j = 0, fl = _floatings.length; j < fl; ++j) { //from child to parent
-					var w = _floatings[j].widget,
+				let zi = _topZIndex(wgt);
+				for (let j = 0, fl = _floatings.length; j < fl; ++j) { //from child to parent
+					const w = _floatings[j].widget,
 						n = _floatings[j].node;
 					if (wgt == w)
 						w.setFloatZIndex_(n, zi); //must be hit before any parent
@@ -2570,7 +2569,7 @@ wgt.$f().main.setTitle("foo");
 	 * @see #isFloating_
 	 */
 	getTopWidget(): Widget | undefined {
-		for (var wgt: Widget | null = this; wgt; wgt = wgt.parent)
+		for (var wgt: Widget | undefined = this; wgt; wgt = wgt.parent)
 			if (wgt._floating)
 				return wgt;
 	}
@@ -2719,7 +2718,7 @@ out.push('</div>');
 	 * @param Array out an array to output HTML fragments.
 	 * Technically it can be anything that has the method called <code>push</code>
 	 */
-	redraw(out: Array<string>, skipper?: Skipper | null): void {
+	redraw(out: Array<string>, skipper?: Skipper): void {
 		if (!this.deferRedraw_(out)) {
 			var f;
 			if (f = this['prolog'])
@@ -2746,13 +2745,13 @@ redraw: function (out) {
 	 * @param Array out an array to output the HTML fragments.
 	 * @since 5.0.2
 	 */
-	deferRedraw_(out: Array<string> | null): boolean {
+	deferRedraw_(out: Array<string> | undefined): boolean {
 		var delay;
 		if ((delay = this._renderdefer) >= 0) {
 			if (!this._norenderdefer) {
 				this.z_rod = this['_z$rd'] = true;
 				this.deferRedrawHTML_(out!);
-				out = null; //to free memory
+				out = undefined; //to free memory
 
 				var wgt = this;
 				setTimeout(function () {_doDeferRender(wgt);}, delay);
@@ -2857,8 +2856,8 @@ redraw: function (out) {
 	 * @see #domTextStyleAttr_
 	 * @see #updateDomStyle_
 	 */
-	getTextNode(): HTMLElement | null | undefined {
-		return null;
+	getTextNode(): HTMLElement | undefined {
+		return undefined;
 	}
 
 	/** Returns the style used for the DOM element of this widget.
@@ -3032,7 +3031,7 @@ function () {
 	 * @return String the tooltiptext
 	 * @since 5.0.2
 	 */
-	domTooltiptext_(): zk.StringFieldValue {
+	domTooltiptext_(): string | undefined {
 		return this.getTooltiptext();
 	}
 
@@ -3042,8 +3041,8 @@ function () {
 	 * @see #getTextNode
 	 * @return String the CSS style that are related to text (string).
 	 */
-	domTextStyleAttr_(): zk.StringFieldValue {
-		var s = this.getStyle();
+	domTextStyleAttr_(): string | undefined {
+		const s = this.getStyle();
 		return s ? zUtl.appendAttr('style', jq.filterTextStyle(s)) : s;
 	}
 
@@ -3071,13 +3070,13 @@ function () {
 	 * @see #replaceWidget
 	 * @see _global_.jq#replaceWith
 	 */
-	replaceHTML(n: HTMLElement | string, desktop: Desktop | null, skipper?: Skipper | null, _trim_?: boolean, _callback_?: CallableFunction[]): void {
+	replaceHTML(n: HTMLElement | string, desktop?: Desktop, skipper?: Skipper, _trim_?: boolean, _callback_?: CallableFunction[]): void {
 		if (!desktop) {
 			desktop = this.desktop;
 			if (!zk.Desktop._ndt) zk.stateless();
 		}
 
-		var cfi = skipper ? null : _bkFocus(this),
+		var cfi = skipper ? undefined : _bkFocus(this),
 			p = this.parent;
 		if (p) p.replaceChildHTML_(this, n, desktop, skipper, _trim_);
 		else {
@@ -3116,7 +3115,7 @@ function () {
 	 * @param DOMElement n the DOM element to match the widget.
 	 * @since 5.0.3
 	 */
-	getOldWidget_(n: HTMLElement | string): Widget | null | undefined {
+	getOldWidget_(n: HTMLElement | string): Widget | undefined {
 		return Widget.$(n, {strict: true});
 	}
 
@@ -3125,7 +3124,7 @@ function () {
 	 * @param boolean trim whether to trim the HTML content before replacing
 	 * @return String the HTML fragment
 	 */
-	redrawHTML_(skipper?: Skipper | null, trim?: boolean): string {
+	redrawHTML_(skipper?: Skipper, trim?: boolean): string {
 		var out = new zk.Buffer(); // Due to the side-effect of B65-ZK-1628, we remove the optimization of the array's join() for chrome.
 		this.redraw(out, skipper);
 		var html = out.join('');
@@ -3165,14 +3164,14 @@ function () {
 	 * immediately. If not specified, 0 is assumed (since ZK 6).
 	 * @since 5.0.4
 	 */
-	rerender(skipper?: Skipper | number | null): void {
+	rerender(skipper?: Skipper | number): void {
 		if (this.desktop) {
 			if (!skipper || skipper > 0) { //default: 0
 				_rerender(this, typeof skipper === 'number' ? skipper : 0);
 				return;
 			}
 			if (skipper < 0)
-				skipper = null; //negative -> immediately
+				skipper = undefined; //negative -> immediately
 
 			var n = this.$n();
 			if (n) {
@@ -3186,7 +3185,7 @@ function () {
 						if (skipInfo) {
 							var cfi = _bkFocus(this);
 
-							this.replaceHTML(n, null, skipper, true);
+							this.replaceHTML(n, undefined, skipper, true);
 
 							skipper.restore(this, skipInfo);
 
@@ -3199,7 +3198,7 @@ function () {
 					}
 
 					if (!skipInfo)
-						this.replaceHTML(n, null, null, true);
+						this.replaceHTML(n, undefined, undefined, true);
 				} finally {
 					delete zk._avoidRod;
 				}
@@ -3230,12 +3229,12 @@ function () {
 	 * If null, it is decided automatically ( such as the current value of {@link #desktop} or the first desktop)
 	 * @param zk.Skipper skipper it is used only if it is called by {@link #rerender}
 	 */
-	replaceChildHTML_(child: Widget, n: HTMLElement | string, desktop?: Desktop | null, skipper?: Skipper | null, _trim_?: boolean): void {
+	replaceChildHTML_(child: Widget, n: HTMLElement | string, desktop?: Desktop, skipper?: Skipper, _trim_?: boolean): void {
 		var oldwgt = child.getOldWidget_(n),
 			skipInfo;
 		if (oldwgt) {
 			oldwgt.unbind(skipper); //unbind first (w/o removal)
-			skipInfo = skipper ? skipper.skip(oldwgt) : null;
+			skipInfo = skipper ? skipper.skip(oldwgt) : undefined;
 		} else if (this.shallChildROD_(child))
 			this.get$Class<typeof Widget>()._unbindrod(child); //possible (e.g., Errorbox: jq().replaceWith)
 
@@ -3257,9 +3256,9 @@ function () {
 	 * @param zk.Desktop desktop
 	 * @see #getCaveNode
 	 */
-	insertChildHTML_(child: Widget, before?: Widget | null, desktop?: Desktop | null): void {
+	insertChildHTML_(child: Widget, before?: Widget, desktop?: Desktop): void {
 		var ben, html = child.redrawHTML_(),
-			before0: Widget | HTMLElement | null | undefined = before;
+			before0: Widget | HTMLElement | undefined = before;
 		if (before0) {
 			if (before0 instanceof Native) { //native.$n() is usually null
 				ben = before0.previousSibling;
@@ -3277,11 +3276,11 @@ function () {
 			before0 = (before0 as Widget).getFirstNode_();
 		}
 		if (!before0)
-			for (var w: Widget | null = this; ;) {
+			for (let w: Widget | undefined = this; ;) {
 				ben = w.getCaveNode();
 				if (ben) break;
 
-				var w2 = w.nextSibling;
+				let w2 = w.nextSibling;
 				if (w2 && (before0 = w2.getFirstNode_()))
 					break;
 
@@ -3292,7 +3291,7 @@ function () {
 			}
 
 		if (before0) {
-			var sib = (before0 as HTMLElement).previousSibling;
+			let sib = (before0 as HTMLElement).previousSibling;
 			if (_isProlog(sib)) before0 = sib as HTMLElement;
 			jq(before0).before(html);
 		} else
@@ -3307,7 +3306,7 @@ function () {
 	 * @see #insertChildHTML_
 	 * @return DOMElement
 	 */
-	getCaveNode(): HTMLElement | null | undefined {
+	getCaveNode(): HTMLElement | undefined {
 		return this.$n('cave') || this.$n();
 	}
 	/** Returns the first DOM element of this widget.
@@ -3318,8 +3317,8 @@ function () {
 	 * @return DOMElement
 	 */
 	getFirstNode_(): HTMLElement | undefined {
-		for (var w: Widget | null = this; w; w = w.nextSibling) {
-			var n = _getFirstNodeDown(w);
+		for (let w: Widget | undefined = this; w; w = w.nextSibling) {
+			const n = _getFirstNodeDown(w);
 			if (n) return n;
 		}
 	}
@@ -3336,7 +3335,7 @@ function () {
 	removeChildHTML_(child: Widget, ignoreDom?: boolean): void {
 		var cf = zk.currentFocus;
 		if (cf && zUtl.isAncestor(child, cf))
-			zk.currentFocus = null;
+			zk.currentFocus = undefined;
 
 		var n = child.$n(), ary: HTMLElement[] = [];
 		if (n) {
@@ -3378,7 +3377,7 @@ function () {
 	 * @return DOMElement
 	 * @see #$n(String)
 	 */
-	$n(): TElement | null | undefined
+	$n(): TElement | undefined
 	/** Returns the child element of the DOM element(s) that this widget is bound to.
 	 * This method assumes the ID of the child element the concatenation of
 	 * {@link #uuid}, -, and subId. For example,
@@ -3389,22 +3388,22 @@ function () {
 	 * @return DOMElement
 	 * @see #$n()
 	 */
-	$n<T extends HTMLElement = HTMLElement>(subId: string | undefined): T | null | undefined
-	$n(subId?: string): zk.DOMFieldValue {
+	$n<T extends HTMLElement = HTMLElement>(subId?: string): T | undefined
+	$n(subId?: string): TElement | undefined {
 		if (subId) {
 			let n = this._subnodes[subId];
 			if (!n && this.desktop) {
 				n = jq(this.uuid + '-' + subId, zk)[0];
 				this._subnodes[subId] = n ? n : 'n/a';
 			}
-			return n == 'n/a' ? null : n as HTMLElement;
+			return n == 'n/a' ? undefined : n as TElement;
 		}
 		let n = this._node;
 		if (!n && this.desktop && !this._nodeSolved) {
 			this._node = n = jq<string, TElement>(this.uuid, zk)[0];
 			this._nodeSolved = true;
 		}
-		return n;
+		return n as TElement;
 	}
 
 	/**
@@ -3435,8 +3434,8 @@ function () {
 	 * @since 8.0.0
 	 * @return zk.Service
 	 */
-	$service(): Service | null {
-		var w: Widget | null = this;
+	$service(): Service | undefined {
+		let w: Widget | undefined = this;
 		for (; w; w = w.parent) {
 			if (w['$ZKAUS$'])
 				break;
@@ -3446,7 +3445,7 @@ function () {
 				w._$service = new zk.Service(w, this);
 			return w._$service;
 		}
-		return null;
+		return undefined;
 	}
 
 	$afterCommand(command: string, args?: unknown[]): void {
@@ -3486,7 +3485,7 @@ function () {
 
 	/** Clears the cached nodes (by {@link #$n}). */
 	clearCache(): void {
-		this._node = null;
+		this._node = undefined;
 		this._subnodes = {};
 		this._nodeSolved = false;
 	}
@@ -3513,7 +3512,7 @@ function () {
 	 */
 	isBinding(): boolean {
 		if (this.desktop)
-			for (var w: Widget | null = this; w; w = w.parent)
+			for (var w: Widget | undefined = this; w; w = w.parent)
 				if (w._binding)
 					return true;
 		return false;
@@ -3524,7 +3523,7 @@ function () {
 	 * @param zk.Skipper skipper [optional] used if {@link #rerender} is called with a non-null skipper.
 	 * @since 7.0.2
 	 */
-	rerenderNow_(skipper?: Skipper | null): void { // for Bug ZK-2281 and others life cycle issues when the dom of children of itself is undefined.
+	rerenderNow_(skipper?: Skipper): void { // for Bug ZK-2281 and others life cycle issues when the dom of children of itself is undefined.
 		_rerenderNow(this, skipper);
 	}
 
@@ -3544,7 +3543,7 @@ function () {
 	 * @param zk.Skipper skipper [optional] used if {@link #rerender} is called with a non-null skipper.
 	 * @return zk.Widget this widget
 	 */
-	bind(desktop?: Desktop | null, skipper?: Skipper | null): this {
+	bind(desktop?: Desktop, skipper?: Skipper): this {
 		this._binding = true;
 
 		_rerenderDone(this, skipper); //cancel pending async rerender
@@ -3577,10 +3576,10 @@ function () {
 	 * @param boolean keepRod [optional] used if the ROD flag needs to be kept.
 	 * @return zk.Widget this widget
 	 */
-	unbind(skipper?: Skipper | null, keepRod?: boolean): this {
+	unbind(skipper?: Skipper, keepRod?: boolean): this {
 		if (this._$service) {
 			this._$service.destroy();
-			this._$service = null;
+			this._$service = undefined;
 		}
 		_rerenderDone(this, skipper); //cancel pending async rerender
 		if (this.z_rod)
@@ -3621,10 +3620,10 @@ bind_: function (desktop, skipper, after) {
 }
 </code></pre>
 	 */
-	bind_(desktop?: Desktop | null, skipper?: Skipper | null, after?: CallableFunction[]): void {
+	bind_(desktop?: Desktop, skipper?: Skipper, after?: CallableFunction[]): void {
 		this.get$Class<typeof Widget>()._bind0(this);
 
-		this.desktop = desktop || (desktop = zk.Desktop.$(this.parent));
+		this.desktop = desktop ?? (desktop = zk.Desktop.$(this.parent));
 
 		var p = this.parent, v;
 		this.bindLevel = p ? p.bindLevel + 1 : 0;
@@ -3654,7 +3653,7 @@ bind_: function (desktop, skipper, after) {
 					self.bindDoubleTap_();
 					self.bindTapHold_();
 				}, 300);
-			} as zk.Callable);
+			});
 		}
 	}
 
@@ -3666,14 +3665,14 @@ bind_: function (desktop, skipper, after) {
 	 * @param Array after an array of function ({@link Function}) that will be invoked after {@link #bind_} has been called. For example,
 	 * @since 5.0.5
 	 */
-	bindChildren_(desktop?: Desktop, skipper?: Skipper | null, after?: CallableFunction[]): void {
+	bindChildren_(desktop?: Desktop, skipper?: Skipper, after?: CallableFunction[]): void {
 		for (var child = this.firstChild, nxt; child; child = nxt) {
 			nxt = child.nextSibling;
 				//we have to store first since RefWidget will replace widget
 
 			if (!skipper || !skipper.skipped(this, child)) {
 				if (child.z_rod) this.get$Class<typeof Widget>()._bindrod(child);
-				else child.bind_(desktop, null, after); //don't pass skipper
+				else child.bind_(desktop, undefined, after); //don't pass skipper
 			}
 		}
 	}
@@ -3704,7 +3703,7 @@ unbind_: function (skipper, after) {
 </code></pre>
 	 * @param boolean keepRod [optional] used if the ROD flag needs to be kept.
 	 */
-	unbind_(skipper?: Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	unbind_(skipper?: Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		this.get$Class<typeof Widget>()._unbind0(this);
 		_unlistenFlex(this);
 
@@ -3741,7 +3740,7 @@ unbind_: function (skipper, after) {
 	 * @param boolean keepRod [optional] used if the ROD flag needs to be kept.
 	 * @since 5.0.5
 	 */
-	unbindChildren_(skipper?: Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	unbindChildren_(skipper?: Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		for (var child = this.firstChild, nxt; child; child = nxt) {
 			nxt = child.nextSibling; //just in case
 
@@ -3749,7 +3748,7 @@ unbind_: function (skipper, after) {
 			if (!skipper || !skipper.skipped(this, child)) {
 				if (child.z_rod) this.get$Class<typeof Widget>()._unbindrod(child, keepRod);
 				else if (child.desktop) {
-					child.unbind_(null, after, keepRod); //don't pass skipper
+					child.unbind_(undefined, after, keepRod); //don't pass skipper
 					//Bug ZK-1596: native will be transfer to stub in EE, store the widget for used in mount.js
 					if (child.$instanceof(zk.Native))
 						zAu._storeStub(child);
@@ -3836,7 +3835,7 @@ unbind_: function (skipper, after) {
 		return false;
 	}
 
-	beforeMinFlex_(attr: zk.FlexOrient): zk.NumberFieldValue { //'w' for width or 'h' for height
+	beforeMinFlex_(attr: zk.FlexOrient): number | undefined { //'w' for width or 'h' for height
 		//to be overridden, before calculate my minimum flex
 		return undefined;
 	}
@@ -3965,13 +3964,13 @@ unbind_: function (skipper, after) {
 		n.style[orient == 'w' ? 'width' : 'height'] = '';
 	}
 
-	getFlexContainer_(): HTMLElement | null | undefined {
+	getFlexContainer_(): HTMLElement | undefined {
 		return this.getCaveNode();
 	}
 
-	getFlexDirection_(): string | null { // if it is null, by default it would check this display is block or not
+	getFlexDirection_(): string | undefined { // if it is null, by default it would check this display is block or not
 		//to be overridden
-		return null;
+		return undefined;
 	}
 
 	afterClearFlex_(): void {
@@ -4004,7 +4003,7 @@ unbind_: function (skipper, after) {
 			if (zk.ie9 && (n = this.getDragNode()) && jq.nodeName(n, 'img'))
 				jq(n).off('mousedown', zk.$void);
 
-			this._drag = null;
+			this._drag = undefined;
 			drag.destroy();
 		}
 	}
@@ -4047,9 +4046,9 @@ unbind_: function (skipper, after) {
 	 * @param zk.Widget dragged - the widget being dragged (never null).
 	 * @return zk.Widget the widget to drop to.
 	 */
-	getDrop_(dragged: Widget): Widget | null {
+	getDrop_(dragged: Widget): Widget | undefined {
 		if (this == dragged) {
-			return null; //non-matched if the same target. Bug for ZK-1565
+			return undefined; //non-matched if the same target. Bug for ZK-1565
 		} else {
 			var dropType = this._droppable,
 				dragType = dragged._draggable;
@@ -4062,7 +4061,7 @@ unbind_: function (skipper, after) {
 				}
 			}
 		}
-		return this.parent ? this.parent.getDrop_(dragged) : null;
+		return this.parent ? this.parent.getDrop_(dragged) : undefined;
 	}
 
 	/** Called to have some visual effect when the user is dragging a widget over this widget and this widget is droppable.
@@ -4437,7 +4436,7 @@ focus_: function (timeout) {
 	 * @return boolean whether to ignore it
 	 * @since 5.0.1
 	 */
-	shallIgnoreClick_(evt: Event): boolean | undefined {
+	shallIgnoreClick_(evt: Event): boolean {
 		return false;
 	}
 
@@ -4458,7 +4457,7 @@ focus_: function (timeout) {
 	 * @see #fire
 	 * @see #listen
 	 */
-	fire(evtnm: string, data?: unknown, opts?: EventOptions | null, timeout?: number): Event {
+	fire(evtnm: string, data?: unknown, opts?: EventOptions, timeout?: number): Event {
 		return this.fireX(new zk.Event(this, evtnm, data, opts), timeout);
 	}
 
@@ -4492,7 +4491,7 @@ wgt.listen({
 			var inf = infs[evt];
 			if (Array.isArray(inf)) inf = [inf[0] || this, inf[1]];
 			else if (typeof inf == 'function') inf = [this, inf];
-			else inf = [inf || this, null];
+			else inf = [inf || this, undefined];
 			(inf as {priority: number}).priority = priority;
 
 			var lsns = this._lsns[evt];
@@ -4535,7 +4534,7 @@ wgt.unlisten({
 				lsn = lsns[j];
 				if (Array.isArray(inf)) inf = [inf[0] || this, inf[1]];
 				else if (typeof inf == 'function') inf = [this, inf];
-				else inf = [inf || this, null];
+				else inf = [inf || this, undefined];
 				if (lsn[0] == (inf as Array<unknown>)[0] && lsn[1] == (inf as Array<unknown>)[1]) {
 					lsns.splice(j, 1);
 					continue l_out;
@@ -5166,7 +5165,7 @@ _doFooSelect: function (evt) {
 	 * @return zk.Widget this widget
 	 * @see #domUnlisten_
 	 */
-	domListen_(n: HTMLElement, evtnm: string, fn?: string | zk.Callable, keyword?: string): this {
+	domListen_(n: HTMLElement, evtnm: string, fn?: string | CallableFunction, keyword?: string): this {
 		if (!this.$weave) {
 			var inf = _domEvtInf(this, evtnm, fn, keyword);
 			jq(n, zk).on(inf[0], inf[1]);
@@ -5190,7 +5189,7 @@ _doFooSelect: function (evt) {
 	 * @return zk.Widget this widget
 	 * @see #domListen_
 	 */
-	domUnlisten_(n: HTMLElement, evtnm: string, fn?: string | zk.Callable, keyword?: string): this {
+	domUnlisten_(n: HTMLElement, evtnm: string, fn?: string | CallableFunction, keyword?: string): this {
 		if (!this.$weave) {
 			var inf = _domEvtInf(this, evtnm, fn, keyword);
 			jq(n, zk).off(inf[0], inf[1]);
@@ -5220,7 +5219,7 @@ _doFooSelect: function (evt) {
 	unlistenOnFitSize_(): void {
 		if (this._fitSizeListened) {
 			zWatch.unlisten({onFitSize: [this, zFlex.onFitSize]});
-			delete this._fitSizeListened;
+			this._fitSizeListened = false;
 		}
 	}
 
@@ -5247,7 +5246,7 @@ _doFooSelect: function (evt) {
 	 * @return boolean
 	 * @since 5.0.3
 	 */
-	isWatchable_(name: string, p: Widget, cache?: Record<string, unknown>): boolean | null | undefined {
+	isWatchable_(name: string, p: Widget, cache?: Record<string, unknown>): boolean {
 		//if onShow, we don't check visibility since window uses it for
 		//non-embedded window that becomes invisible because of its parent
 		var strict = name != 'onShow', wgt;
@@ -5287,7 +5286,7 @@ _doFooSelect: function (evt) {
 	}
 
 	// internal use only in zkmax package
-	getDomEvtInf_(wgt: Widget, evtnm: string, fn: zk.Callable, keyword?: string): [string, JQueryEventHandler] {
+	getDomEvtInf_(wgt: Widget, evtnm: string, fn: CallableFunction, keyword?: string): [string, JQueryEventHandler] {
 		return _domEvtInf(wgt, evtnm, fn, keyword);
 	}
 
@@ -5342,18 +5341,18 @@ _doFooSelect: function (evt) {
 	 * @return zk.Widget
 	 */
 	static $<T extends Widget>(n?: string | JQuery | JQuery.Event | zk.Event | Node | null | T,
-					opts?: Partial<{exact: boolean; strict: boolean; child: boolean}>): T | null {
+					opts?: Partial<{exact: boolean; strict: boolean; child: boolean}>): T | undefined {
 		if (n && n['zk'] && n['zk'].jq == n) //jq()
 			n = n[0];
 
 		if (!n)
-			return null;
+			return undefined;
 
 		if (Widget.isInstance(n)) {
 			return n;
 		}
 
-		var wgt, id;
+		let wgt, id;
 		if (typeof n == 'string') {
 			//Don't look for DOM (there might be some non-ZK node with same ID)
 			let query = n;
@@ -5363,11 +5362,11 @@ _doFooSelect: function (evt) {
 				if ((id = n.charAt(0)) == '#') n = n.substring(1);
 				else if (id == '$') {
 					id = _globals[n.substring(1)];
-					return id ? id[0] : null;
+					return id ? id[0] : undefined;
 				}
 				wgt = _binds[n]; //try first (since ZHTML might use -)
 				if (!wgt)
-					wgt = (id = n.indexOf('-')) >= 0 ? _binds[n.substring(0, id)] : null;
+					wgt = (id = n.indexOf('-')) >= 0 ? _binds[n.substring(0, id)] : undefined;
 			}
 
 			if (!wgt)
@@ -5377,7 +5376,7 @@ _doFooSelect: function (evt) {
 
 		if (!n['nodeType']) { //n could be an event (skip Element)
 			var e1, e2;
-			n = ((e1 = n['originalEvent']) ? e1.z$target : null)
+			n = ((e1 = n['originalEvent']) ? e1.z$target : undefined)
 				|| ((e1 = n['target']) && (e2 = e1.z$proxy) ? e2 : e1) || n; //check DOM event first
 		}
 
@@ -5401,7 +5400,7 @@ _doFooSelect: function (evt) {
 								return wgt;
 
 							var n2 = wgt.$n();
-							if (n2 && jq.isAncestor(n2, n as zk.DOMFieldValue))
+							if (n2 && jq.isAncestor(n2, n as HTMLElement))
 								return wgt;
 						}
 					}
@@ -5412,7 +5411,7 @@ _doFooSelect: function (evt) {
 			if (opts.strict)
 				break;
 		}
-		return null;
+		return undefined;
 	}
 
 	/** Called to mimic the mouse down event fired by the browser.
@@ -5438,7 +5437,7 @@ _doFooSelect: function (evt) {
 				zk._prevFocus = zk.currentFocus;
 				zk.currentFocus = wgt;
 				zk._cfByMD = true;
-				setTimeout(function () {zk._cfByMD = false; zk._prevFocus = null;}, 0);
+				setTimeout(function () {zk._cfByMD = false; zk._prevFocus = undefined;}, 0);
 					//turn it off later since onBlur_ needs it
 			}
 		}
@@ -5465,7 +5464,7 @@ _doFooSelect: function (evt) {
 				// force rod to render before query.
 				if (!n && _w.z_rod) {
 					var parent = _w;
-					for (var p: zk.Widget|null = _w; p != null; p = p.parent) {
+					for (var p: zk.Widget | undefined = _w; p; p = p.parent) {
 						if (p.z_rod || p._rodKid) {
 							parent = p;
 						} else {
@@ -5490,8 +5489,8 @@ _doFooSelect: function (evt) {
 			// fixed the order of the component that have been changed dynamically.
 			// (Bug in B30-1892446.ztl, B50-3095549.ztl, and B50-3131173.ztl)
 			els.sort(function (a, b) {
-				var w1: Widget | null = a.w,
-					w2: Widget | null = b.w;
+				var w1: Widget | undefined = a.w,
+					w2: Widget | undefined = b.w;
 				// We have to compare each ancestor to make the result as CSS selector.
 				// The performance is bad but it is only used for testing purpose.
 				if (w1.bindLevel < w2.bindLevel) {
@@ -5688,7 +5687,7 @@ zk.Widget.getClass('combobox');
 		if (wgt.id)
 			this._rmGlobal(wgt);
 		delete _binds[wgt.uuid];
-		wgt.desktop = null;
+		wgt.desktop = undefined;
 		wgt.clearCache();
 	}
 
@@ -5754,7 +5753,7 @@ export class RefWidget extends Widget {
 			_unlink(p, w); //unlink only
 
 		_replaceLink(this, w);
-		this.parent = this.nextSibling = this.previousSibling = null;
+		this.parent = this.nextSibling = this.previousSibling = undefined;
 
 		_addIdSpaceDown(w); //add again since parent is changed
 
@@ -5776,13 +5775,13 @@ export class RefWidget extends Widget {
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 export class Desktop extends Widget {
-	declare _cmsp?: zkex.cmsp.SPush | null;
-	declare _cpsp?: SPush | null;
-	declare static _dt: Desktop | null;
+	declare _cmsp?: zkex.cmsp.SPush;
+	declare _cpsp?: SPush;
+	declare static _dt?: Desktop;
 	declare _aureqs: Event[];
 	declare _bpg: Body;
-	declare _pfDoneIds?: string | null;
-	declare _pfRecvIds?: string | null;
+	declare _pfDoneIds?: string;
+	declare _pfRecvIds?: string;
 	declare obsolete?: boolean;
 
 	//a virtual node that might have no DOM node and must be handled specially
@@ -5803,10 +5802,10 @@ export class Desktop extends Widget {
 	 */
 	requestPath: string | undefined;
 
-	updateURI: zk.StringFieldValue;
-	resourceURI: zk.StringFieldValue;
-	contextURI: zk.StringFieldValue;
-	stateless: zk.BooleanFieldValue;
+	updateURI?: string;
+	resourceURI?: string;
+	contextURI?: string;
+	stateless?: boolean;
 
 	/** Constructor
 	 * @param String dtid the ID of the desktop
@@ -5866,33 +5865,33 @@ export class Desktop extends Widget {
 	 * If not specified, the default desktop is assumed.
 	 * @return zk.Desktop
 	 */
-	static override $<T extends Desktop>(dtid: T): T
-	static override $(dtid?: string | Widget | HTMLElement | null): Desktop | null
-	static override $<T extends Desktop>(dtid?: string | T | null): T | Desktop | null {
-		var w: T | Desktop | Widget | null;
+	static override $<T extends Desktop>(dtid: T): T | undefined
+	static override $(dtid?: string | Widget | HTMLElement): Desktop | undefined
+	static override $<T extends Desktop>(dtid?: string | T): T | undefined {
+		let w: T | Widget | undefined;
 		if (dtid) {
 			if (Desktop.isInstance(dtid))
 				return dtid;
 
 			w = Desktop.all[dtid];
 			if (w)
-				return w as Desktop;
+				return w as T;
 
 			w = Widget.$(dtid);
 			for (; w; w = w.parent) {
 				if (w.desktop)
-					return w.desktop;
+					return w.desktop as T;
 				if (w instanceof Desktop)
-					return w;
+					return w as T;
 			}
-			return null;
+			return undefined;
 		}
 
 		if (w = Desktop._dt)
-			return w as Desktop;
+			return w as T;
 		for (dtid in Desktop.all)
-			return Desktop.all[dtid];
-		return null;
+			return Desktop.all[dtid] as T;
+		return undefined;
 	}
 
 	/** A map of all desktops (readonly).
@@ -5907,17 +5906,17 @@ export class Desktop extends Widget {
 	 * @param int timeout how many miliseconds to wait before doing the synchronization
 	 * @return zk.Desktop the first desktop, or null if no desktop at all.
 	 */
-	static sync(timeout?: number): Desktop | null {
+	static sync(timeout?: number): Desktop | undefined {
 		var dts = Desktop.all, dt: Desktop;
 
 		if (_syncdt) {
 			clearTimeout(_syncdt);
-			_syncdt = null;
+			_syncdt = undefined;
 		}
 
 		if (timeout as number >= 0) // (undefined >= 0) is false
 			_syncdt = setTimeout(function () {
-				_syncdt = null;
+				_syncdt = undefined;
 				Desktop.sync();
 			}, timeout); //Liferay on IE will create widgets later
 		else {
@@ -5926,7 +5925,7 @@ export class Desktop extends Widget {
 					delete dts[dtid];
 					--Desktop._ndt;
 					if (Desktop._dt == dt)
-						Desktop._dt = null;
+						Desktop._dt = undefined;
 					zAu._rmDesktop(dt);
 				}
 
@@ -5943,7 +5942,7 @@ export class Desktop extends Widget {
 	 * @param Desktop zk desktop
 	 * @since 9.6.2
 	 */
-	static destroy(desktop: zk.Desktop | null): void {
+	static destroy(desktop?: zk.Desktop): void {
 		if (desktop != null) {
 			zAu._rmDesktop(desktop);
 			delete zk.Desktop.all[desktop.id!];
@@ -5973,14 +5972,14 @@ export let _wgtutl = { //internal utilities
 	//kids: whehter to move children of from to
 	replace(from: Widget, to: Widget, kids: boolean): void { //called by mount.js
 		_replaceLink(from, to);
-		from.parent = from.nextSibling = from.previousSibling = null;
+		from.parent = from.nextSibling = from.previousSibling = undefined;
 
 		if (kids) {
 			to.lastChild = from.lastChild;
 			for (var p = to.firstChild = from.firstChild; p; p = p.nextSibling)
 				p.parent = to;
 			to.nChildren = from.nChildren;
-			from.firstChild = from.lastChild = null;
+			from.firstChild = from.lastChild = undefined;
 			from.nChildren = 0;
 		}
 		from.nChildren = 0;
@@ -6037,7 +6036,7 @@ zk._wgtutl = _wgtutl;
 // zk scope
 @WrapClass('zk.Page')
 export class Page extends Widget {
-	declare _applyMask?: Mask | null;
+	declare _applyMask?: Mask;
 	//a virtual node that might have no DOM node and must be handled specially
 	z_virnd = true;
 
@@ -6101,8 +6100,8 @@ export class Body extends Page {
 		this.desktop = dt;
 	}
 
-	override $n(subId?: zk.StringFieldValue): HTMLElement | null {
-		return subId ? null : document.body;
+	override $n(subId?: string): HTMLElement | undefined {
+		return subId ? undefined : document.body;
 	}
 
 	override redraw = zk.$void;
@@ -6134,8 +6133,8 @@ export class Native extends Widget {
 	override widgetName = 'native';
 	//rawId: true, (Bug 3358505: it cannot be rawId)
 
-	override $n(subId?: string): zk.DOMFieldValue {
-		return !subId && this.id ? document.getElementById(this.id) :
+	override $n(subId?: string): HTMLElement | undefined {
+		return !subId && this.id ? document.getElementById(this.id) as HTMLElement | undefined :
 			super.$n(subId); // Bug ZK-606/607
 	}
 	override redraw(out: string[]): void {
@@ -6298,12 +6297,12 @@ export class Macro extends Widget {
 // window scope
 export const zkservice = {
 	$(n: string | JQuery | HTMLElement | Widget,
-		opts?: Partial<{exact: boolean; strict: boolean; child: boolean}>): Service | null {
+		opts?: Partial<{exact: boolean; strict: boolean; child: boolean}>): Service | undefined {
 		var widget = zk.Widget.$(n, opts);
 		if (widget)
 			return widget.$service();
 		zk.error('Not found ZK Service with [' + n + ']');
-		return null;
+		return undefined;
 	}
 };
 function _fixCommandName(prefix: string, cmd: string, opts: EventOptions, prop: string): void {
@@ -6321,10 +6320,10 @@ function _fixCommandName(prefix: string, cmd: string, opts: EventOptions, prop: 
 @WrapClass('zk.Service')
 export class Service extends ZKObject {
 	declare _aftercmd;
-	declare _lastcmd: zk.StringFieldValue;
+	declare _lastcmd?: string;
 
-	$view: Widget | null;
-	$currentTarget: Widget | null;
+	$view?: Widget;
+	$currentTarget?: Widget;
 	constructor(widget: Widget, currentTarget: Widget) {
 		super();
 		this.$view = widget;
@@ -6337,7 +6336,7 @@ export class Service extends ZKObject {
 	 * @param String command the name of the command
 	 * @param Function func the function to execute
 	 */
-	after(cmd: string | zk.Callable, fn: zk.Callable): this {
+	after(cmd: string | CallableFunction, fn: CallableFunction): this {
 		if (!fn && jq.isFunction(cmd)) {
 			fn = cmd;
 			cmd = this._lastcmd!;
@@ -6357,7 +6356,7 @@ export class Service extends ZKObject {
 	 * @param String command the name of the command
 	 * @param Function func the function to execute
 	 */
-	unAfter(cmd: string, fn: zk.Callable): Service {
+	unAfter(cmd: string, fn: CallableFunction): Service {
 		var ac = this._aftercmd[cmd];
 		for (var j = ac ? ac.length : 0; j--;) {
 			if (ac[j] == fn)
@@ -6370,12 +6369,12 @@ export class Service extends ZKObject {
 	 * Destroy this binder.
 	 */
 	destroy(): void {
-		this._aftercmd = null;
-		this.$view = null;
-		this.$currentTarget = null;
+		this._aftercmd = undefined;
+		this.$view = undefined;
+		this.$currentTarget = undefined;
 	}
 
-	/**
+	/**ð
 	 * Post a command to the service
 	 * @param String command the name of the command
 	 * @param Array args the arguments for this command. (the value should be json type)
@@ -6493,7 +6492,7 @@ Object skip(zk.Widget wgt);
 	 * @param Object inf the object being returned by {@link #skip}.
 	 * It depends on how a skipper is implemented. It is usually to carry the information about what are skipped
 	 */
-	restore(wgt: Widget, skip: HTMLElement | null | undefined): void {
+	restore(wgt: Widget, skip: HTMLElement | undefined): void {
 		if (skip) {
 			var loc = jq(skip.id, zk)[0];
 			for (var el; el = skip.firstChild;) {
@@ -6593,7 +6592,7 @@ export let NoDOM: ThisType<NoDOMInterface> = {
 		if (this.getMold() == 'nodom') {
 			var context = this.$getInterceptorContext$(),
 				//clear the dom between start node and end node
-				node = this._startNode ? this._startNode.nextSibling : null,
+				node = this._startNode ? this._startNode.nextSibling : undefined,
 				next;
 			while (node && node != this._endNode) {
 				next = node.nextSibling;
@@ -6655,7 +6654,7 @@ export let NoDOM: ThisType<NoDOMInterface> = {
 			else {
 				var cf = zk.currentFocus;
 				if (cf && zUtl.isAncestor(this, cf))
-					zk.currentFocus = null;
+					zk.currentFocus = undefined;
 				var n = this.$n();
 				if (n) {
 					this.removeHTML_(n);
@@ -6673,8 +6672,8 @@ export let NoDOM: ThisType<NoDOMInterface> = {
 		}
 		return this._oldWgt;
 	},
-	replaceHTML(n: HTMLElement, desktop: Desktop | null, skipper: Skipper
-						   , _trim_?: boolean, _callback_?: zk.Callable | zk.Callable[]): void {
+	replaceHTML(n: HTMLElement, desktop: Desktop | undefined, skipper: Skipper
+						   , _trim_?: boolean, _callback_?: CallableFunction | CallableFunction[]): void {
 		if (this.getMold() == 'nodom') {
 			var context = this.$getInterceptorContext$();
 			if (!desktop) {
@@ -6717,7 +6716,7 @@ export let NoDOM: ThisType<NoDOMInterface> = {
 			newwgt._oldWgt = this;
 		}
 	},
-	$n(subId: zk.StringFieldValue): zk.DOMFieldValue {
+	$n(subId?: string): HTMLElement | undefined {
 		if (!subId && this.getMold() == 'nodom') {
 			var context = this.$getInterceptorContext$(),
 				n = this._node;

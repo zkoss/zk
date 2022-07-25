@@ -23,9 +23,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.sel.Treecell')
 export class Treecell extends zul.LabelImageWidget<HTMLTableCellElement> {
-	override parent!: zul.sel.Treerow | null;
-	override nextSibling!: zul.sel.Treecell | null;
-	override previousSibling!: zul.sel.Treecell | null;
+	override parent!: zul.sel.Treerow | undefined;
+	override nextSibling!: zul.sel.Treecell | undefined;
+	override previousSibling!: zul.sel.Treecell | undefined;
 
 	_colspan = 1;
 	_clearCache?: boolean;
@@ -33,7 +33,7 @@ export class Treecell extends zul.LabelImageWidget<HTMLTableCellElement> {
 	/**
 	 * The width can't be specified in this component.
 	 */
-	override setWidth(width: string | null): this {
+	override setWidth(width?: string): this {
 		// This function simply does nothing.
 		return this;
 	}
@@ -65,8 +65,8 @@ export class Treecell extends zul.LabelImageWidget<HTMLTableCellElement> {
 	/** Return the tree that owns this cell.
 	 * @return Tree
 	 */
-	getTree(): zul.sel.Tree | null {
-		return this.parent ? this.parent.getTree() : null;
+	getTree(): zul.sel.Tree | undefined {
+		return this.parent ? this.parent.getTree() : undefined;
 	}
 
 	override domStyle_(no?: zk.DomStyleOptions): string {
@@ -84,14 +84,14 @@ export class Treecell extends zul.LabelImageWidget<HTMLTableCellElement> {
 	/** Returns the tree col associated with this cell, or null if not available.
 	 * @return Treecol
 	 */
-	getTreecol(): zul.sel.Treecol | null | undefined {
+	getTreecol(): zul.sel.Treecol | undefined {
 		var tree = this.getTree();
 		if (tree && tree.treecols) {
 			var j = this.getChildIndex();
 			if (j < tree.treecols.nChildren)
 				return tree.treecols.getChildAt<zul.sel.Treecol>(j);
 		}
-		return null;
+		return undefined;
 	}
 
 	/** Returns the level this cell is. The root is level 0.
@@ -113,7 +113,7 @@ export class Treecell extends zul.LabelImageWidget<HTMLTableCellElement> {
 		return zUtl.encodeXML(this.getLabel(), {maxlength: this.getMaxlength()});
 	}
 
-	override getTextNode(): HTMLElement | null | undefined {
+	override getTextNode(): HTMLElement | undefined {
 		return this.getCaveNode();
 	}
 
@@ -123,7 +123,7 @@ export class Treecell extends zul.LabelImageWidget<HTMLTableCellElement> {
 		return s1 ? s2 ? s2 + '<span class="' + this.$s('text') + '">' + s1 + '</span>' : s1 : s2;
 	}
 
-	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		if (this._clearCache) { // B60-ZK-1348
 			this._clearCache = false;
@@ -160,8 +160,8 @@ export class Treecell extends zul.LabelImageWidget<HTMLTableCellElement> {
 		super.doFocus_(evt);
 		//sync frozen
 		var tree = this.getTree(),
-			frozen = tree ? tree.frozen : null,
-			tbody = tree && tree.treechildren ? tree.treechildren.$n() : null;
+			frozen = tree ? tree.frozen : undefined,
+			tbody = tree && tree.treechildren ? tree.treechildren.$n() : undefined;
 		if (frozen && tbody) {
 			const tds = jq(evt.domTarget).parents('td');
 			for (let i = 0, j = tds.length; i < j; i++) {
@@ -175,7 +175,7 @@ export class Treecell extends zul.LabelImageWidget<HTMLTableCellElement> {
 	}
 
 	_syncIcon(isRemoved?: boolean): void {
-		this.rerender(isRemoved ? -1 : null);
+		this.rerender(isRemoved ? -1 : undefined);
 		if (this.parent) {
 			this._clearCache = true;
 		}
@@ -223,11 +223,11 @@ export class Treecell extends zul.LabelImageWidget<HTMLTableCellElement> {
 		}
 	}
 
-	_getTreeitems(item: zul.sel.Treeitem, tree: zul.sel.Tree | null): zul.sel.Treeitem[] {
+	_getTreeitems(item: zul.sel.Treeitem, tree: zul.sel.Tree | undefined): zul.sel.Treeitem[] {
 		var pitems: zul.sel.Treeitem[] = [],
-			p: zul.sel.Treeitem | zul.sel.Tree | null = item;
+			p: zul.sel.Treeitem | zul.sel.Tree | undefined = item;
 		for (;;) {
-			const tch: zul.sel.Treechildren | null = (p as zul.sel.Treeitem).parent;
+			const tch: zul.sel.Treechildren | undefined = (p as zul.sel.Treeitem).parent;
 			if (!tch)
 				break;
 			p = tch.parent;
@@ -274,9 +274,9 @@ export class Treecell extends zul.LabelImageWidget<HTMLTableCellElement> {
 		return 'z-icon-caret-right';
 	}
 
-	override getWidth(): string | null | undefined {
+	override getWidth(): string | undefined {
 		var col = this.getTreecol();
-		return col ? col.getWidth() : null;
+		return col ? col.getWidth() : undefined;
 	}
 
 	override domAttrs_(no?: zk.DomAttrsOptions): string {

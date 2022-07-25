@@ -18,9 +18,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.sel.Optgroup')
 export class Optgroup extends zul.Widget<HTMLOptGroupElement> {
-	override parent!: zul.sel.Select | null;
-	override firstChild!: zul.sel.Option | null;
-	override lastChild!: zul.sel.Option | null;
+	override parent!: zul.sel.Select | undefined;
+	override firstChild!: zul.sel.Option | undefined;
+	override lastChild!: zul.sel.Option | undefined;
 	_open = true;
 	_disabled?: boolean;
 
@@ -30,8 +30,8 @@ export class Optgroup extends zul.Widget<HTMLOptGroupElement> {
 	 * Default: false.
 	 * @return boolean
 	 */
-	isDisabled(): boolean | undefined {
-		return this._disabled;
+	isDisabled(): boolean {
+		return !!this._disabled;
 	}
 
 	/**
@@ -78,8 +78,8 @@ export class Optgroup extends zul.Widget<HTMLOptGroupElement> {
 	 * if no such cell.
 	 * @return String
 	 */
-	getLabel(): string | null {
-		return this.firstChild ? this.firstChild.domLabel_() : null;
+	getLabel(): string | undefined {
+		return this.firstChild ? this.firstChild.domLabel_() : undefined;
 	}
 
 	updateLabel_(): void {
@@ -88,7 +88,7 @@ export class Optgroup extends zul.Widget<HTMLOptGroupElement> {
 	}
 
 	//@Override
-	override setVisible(visible: boolean | undefined, fromServer?: boolean): this {
+	override setVisible(visible: boolean, fromServer?: boolean): this {
 		if (this._visible != visible) {
 			this._visible = visible;
 			if (this.desktop)

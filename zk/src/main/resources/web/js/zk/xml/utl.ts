@@ -29,7 +29,7 @@ export let Utl = {
 	 * @return DOMElement
 	 */
 	loadXML(url: string, callback: CallableFunction): DOMImplementation | XMLDocument {
-		const doc: XMLDocument & Partial<{load(url: string); async: boolean}> = document.implementation.createDocument('', '', null);
+		const doc: XMLDocument & Partial<{load(url: string); async: boolean}> = document.implementation.createDocument('', '', undefined);
 		if (callback)
 			doc.onload = function () {callback(doc);};
 		if (!callback) doc.async = false;

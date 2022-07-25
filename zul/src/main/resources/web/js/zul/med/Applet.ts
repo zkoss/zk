@@ -111,22 +111,22 @@ export class Applet extends zul.Widget<HTMLAppletElement> {
 	 * @return boolean
 	 * @since 5.0.3
 	 */
-	isMayscript(): boolean | undefined {
-		return this._mayscript;
+	isMayscript(): boolean {
+		return !!this._mayscript;
 	}
 
 	/** Sets whether the applet is allowed to access the scripting object.
 	 * @param boolean mayscript
 	 * @since 5.0.3
 	 */
-	setMayscript(v: boolean, opts?: Record<string, boolean>): this {
+	setMayscript(mayscript: boolean, opts?: Record<string, boolean>): this {
 		const o = this._mayscript;
-		this._mayscript = v;
+		this._mayscript = mayscript;
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== mayscript || (opts && opts.force)) {
 			const n = this.$n();
 			if (n)
-				n.mayscript = v; // Use of non-standard `mayscript` attribute
+				n.mayscript = mayscript; // Use of non-standard `mayscript` attribute
 		}
 
 		return this;
@@ -268,9 +268,9 @@ export class Applet extends zul.Widget<HTMLAppletElement> {
 	 * @param String name
 	 * @return String
 	 */
-	getField(name: string): string | null | undefined {
+	getField(name: string): string | undefined {
 		var n = this.$n();
-		return n ? n[name] as string | undefined : null;
+		return n ? n[name] as string | undefined : undefined;
 	}
 
 	/** Sets the value of the specified filed.

@@ -128,11 +128,11 @@ export class Cell extends zul.Widget<HTMLTableCellElement> {
 		return this;
 	}
 
-	_getParentType(): number | null {
+	_getParentType(): number | undefined {
 		var isRow = zk.isLoaded('zul.grid') && this.parent instanceof zul.grid.Row;
 		if (!isRow) {
 			return zk.isLoaded('zul.box') && this.parent instanceof zul.box.Box ?
-					this._boxType : null;
+					this._boxType : undefined;
 		}
 		return this._rowType;
 	}
@@ -208,7 +208,7 @@ export class Cell extends zul.Widget<HTMLTableCellElement> {
 		return ' ' + zUtl.mapToString(m1!); // FIXME: m1 could be undefined
 	}
 
-	override setVisible(visible: boolean | undefined): this {
+	override setVisible(visible: boolean): this {
 		super.setVisible(visible);
 		// B65-ZK-2015: redoCSS in IE10 to make sure component will show when visible is true
 		if (zk.ie10_ && visible)
@@ -220,7 +220,7 @@ export class Cell extends zul.Widget<HTMLTableCellElement> {
 		out.push('<td', this.domAttrs_({domClass: true}), ' class="z-renderdefer"></td>');
 	}
 
-	override getFlexContainer_(): HTMLElement | null | undefined {
-		return null;
+	override getFlexContainer_(): HTMLElement | undefined {
+		return undefined;
 	}
 }

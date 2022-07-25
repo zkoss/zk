@@ -128,7 +128,7 @@ export interface JQZK {
 
 export interface ZJQ {
 	_sfKeys: Record<string, number>;
-	_evt: {fix?: zk.Callable};
+	_evt: {fix?: CallableFunction};
 	eventTypes: {[key: string]: string};
 	src0: string;
 
@@ -2234,7 +2234,7 @@ Object.assign(jq, {
 	 * @return boolean if p is an ancesotor of c.
 	 * @see zUtl#isAncestor
 	 */
-	isAncestor: function (p: zk.DOMFieldValue, c: zk.DOMFieldValue): boolean {
+	isAncestor: function (p?: HTMLElement, c?: HTMLElement): boolean {
 		if (!p) return true;
 		for (; c; c = zk(c).vparentNode(true))
 			if (p == c)
@@ -2930,9 +2930,9 @@ export const _JQEventStatic = {
 	 * can be resolved from the event (<code>zk.Widget.$(evt)</code>)
 	 * @return zk.Event the ZK event
 	 */
-	zk(evt: JQuery.TriggeredEvent, wgt?: Widget | null): ZKEvent {
+	zk(evt: JQuery.TriggeredEvent, wgt?: Widget): ZKEvent {
 		var type = evt.type,
-			target = zk.Widget.$(evt) || wgt,
+			target = zk.Widget.$(evt) ?? wgt,
 			data;
 
 		if (type.startsWith('mouse')) {

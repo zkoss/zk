@@ -12,7 +12,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-function _updCells(tch: zul.sel.Treechildren | null | undefined, jcol: number): void {
+function _updCells(tch: zul.sel.Treechildren | undefined, jcol: number): void {
 	if (tch)
 		for (let w = tch.firstChild; w; w = w.nextSibling) {
 			const tr = w.treerow;
@@ -60,29 +60,29 @@ function _sort0(treechildren: zul.sel.Treechildren, col: number, dir: zul.mesh.S
  */
 @zk.WrapClass('zul.sel.Treecol')
 export class Treecol extends zul.mesh.SortWidget {
-	override parent!: zul.sel.Treecols | null;
-	override nextSibling!: zul.sel.Treecol | null;
-	override previousSibling!: zul.sel.Treecol | null;
+	override parent!: zul.sel.Treecols | undefined;
+	override nextSibling!: zul.sel.Treecol | undefined;
+	override previousSibling!: zul.sel.Treecol | undefined;
 	_maxlength?: number;
 
 	/** Returns the tree that it belongs to.
 	 * @return Tree
 	 */
-	getTree(): zul.sel.Tree | null {
-		return this.parent ? this.parent.parent : null;
+	getTree(): zul.sel.Tree | undefined {
+		return this.parent ? this.parent.parent : undefined;
 	}
 
 	/** Returns the mesh body that this belongs to.
 	 * @since 5.0.6
 	 * @return Tree
 	 */
-	getMeshBody(): zul.sel.Treechildren | null | undefined {
+	getMeshBody(): zul.sel.Treechildren | undefined {
 		var tree = this.getTree();
-		return tree ? tree.treechildren : null;
+		return tree ? tree.treechildren : undefined;
 	}
 
 	override checkClientSort_(ascending: boolean): boolean {
-		var tree: zul.sel.Tree | null;
+		var tree: zul.sel.Tree | undefined;
 		return !(!this.getMeshBody() || !(tree = this.getTree()) || ('paging' == tree._mold))
 				&& super.checkClientSort_(ascending);
 	}
@@ -147,7 +147,7 @@ export class Treecol extends zul.mesh.SortWidget {
 		}
 	}
 
-	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		const n = this.$n();
 		if (n)
@@ -161,7 +161,7 @@ export class Treecol extends zul.mesh.SortWidget {
 		}
 	}
 
-	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		const n = this.$n();
 		if (n)
 			this.domUnlisten_(n, 'onMouseOver', '_doSortMouseEvt')
@@ -169,8 +169,8 @@ export class Treecol extends zul.mesh.SortWidget {
 		const cm = this.$n('cm');
 		if (cm) {
 			const tree = this.getTree();
-			if (tree) tree._headercm = null;
-			this._checked = null;
+			if (tree) tree._headercm = undefined;
+			this._checked = undefined;
 			this.domUnlisten_(cm, 'onClick', '_doCheckmarkClick');
 		}
 		super.unbind_(skipper, after, keepRod);
@@ -193,10 +193,10 @@ export class Treecol extends zul.mesh.SortWidget {
 		return s;
 	}
 
-	_hasCheckbox(): boolean | undefined {
+	_hasCheckbox(): boolean {
 		var tree = this.getTree();
-		return tree != null && this.parent!.firstChild == this
-			&& tree._checkmark && tree._multiple && !tree._tree$noSelectAll;
+		return !!(tree != null && this.parent!.firstChild == this
+			&& tree._checkmark && tree._multiple && !tree._tree$noSelectAll);
 	}
 
 	//@Override
@@ -214,7 +214,7 @@ export class Treecol extends zul.mesh.SortWidget {
 			tree.selectAll(true, evt);
 		} else {
 			$n.removeClass(this.$s('checked'));
-			tree._select(null, evt);
+			tree._select(undefined, evt);
 		}
 		tree.fire('onCheckSelectAll', this._checked, {toServer: true});
 	}

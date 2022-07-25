@@ -24,35 +24,35 @@ it will be useful, but WITHOUT ANY WARRANTY.
 @zk.WrapClass('zul.inp.Comboitem')
 export class Comboitem extends zul.LabelImageWidget implements zul.LabelImageWidgetWithDisable {
 	override parent!: zul.inp.Combobox;
-	override nextSibling!: zul.inp.Comboitem | null;
-	override previousSibling!: zul.inp.Comboitem | null;
+	override nextSibling!: zul.inp.Comboitem | undefined;
+	override previousSibling!: zul.inp.Comboitem | undefined;
 	_maxFlexWidth = true; //ZK-5044
 	_description?: string;
 	_content?: string;
 	declare _value: unknown;
-	_disabled?: boolean;
+	_disabled = false;
 	_autodisable?: string;
 
 	/** Returns whether it is disabled.
 	 * <p>Default: false.
 	 * @return boolean
 	 */
-	isDisabled(): boolean | undefined {
+	isDisabled(): boolean {
 		return this._disabled;
 	}
 
 	/** Sets whether it is disabled.
 	 * @param boolean disabled
 	 */
-	setDisabled(v: boolean, opts?: Record<string, boolean>): this {
+	setDisabled(disabled: boolean, opts?: Record<string, boolean>): this {
 		const o = this._disabled;
-		this._disabled = v;
+		this._disabled = disabled;
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== disabled || (opts && opts.force)) {
 			var n = this.$n();
 			if (n) {
 				var disd = this.$s('disabled');
-				v ? jq(n).addClass(disd) : jq(n).removeClass(disd);
+				disabled ? jq(n).addClass(disd) : jq(n).removeClass(disd);
 			}
 		}
 

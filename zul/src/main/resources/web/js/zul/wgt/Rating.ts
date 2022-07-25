@@ -122,11 +122,11 @@ export class Rating extends zul.Widget {
 	 * Returns whether this widget is readonly
 	 * @return boolean
 	 */
-	isReadonly(): boolean | undefined {
-		return this._readonly;
+	isReadonly(): boolean {
+		return !!this._readonly;
 	}
 
-	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		var wgt = this,
 			isVertical = 'vertical' == wgt._orient;
@@ -136,7 +136,7 @@ export class Rating extends zul.Widget {
 		});
 	}
 
-	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		var wgt = this;
 		jq(wgt).children().each(function () {
 			wgt.domUnlisten_(this, 'onMouseOver', '_doMouseOver').domUnlisten_(this, 'onMouseOut', '_doMouseOut');

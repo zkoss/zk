@@ -33,8 +33,8 @@ export class Decimalbox extends zul.inp.NumberInputWidget<zk.BigDecimal> {
 		return this._scale;
 	}
 
-	override coerceFromString_(value: string | null | undefined): zul.inp.CoerceFromStringResult | zk.BigDecimal | null {
-		if (!value) return null;
+	override coerceFromString_(value: string | undefined): zul.inp.CoerceFromStringResult | zk.BigDecimal | undefined {
+		if (!value) return undefined;
 
 		var info = zk.fmt.Number.unformat(this._format!, value, false, this._localizedSymbols),
 			val = new zk.BigDecimal(info.raw),
@@ -52,7 +52,7 @@ export class Decimalbox extends zul.inp.NumberInputWidget<zk.BigDecimal> {
 		return val;
 	}
 
-	override coerceToString_(value?: zk.BigDecimal | string | null): string {
+	override coerceToString_(value?: zk.BigDecimal | string): string {
 		var fmt = this._format;
 		return value != null ? typeof value == 'string' ? value :
 			fmt ? zk.fmt.Number.format(fmt, value.$toString(), this._rounding!, this._localizedSymbols)

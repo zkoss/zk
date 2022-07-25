@@ -24,19 +24,18 @@ export class Submit extends zul.wgt.Button {
 	}
 
 	submit(): void {
-		var f = this.$f('fileupload')!,
-			self = this;
-		function t(): boolean {
-			if (zul.Upload.isFinish(f)) {
-				self.$o<zul.fud.FileuploadDlg>()!.submit();
-				clearInterval(self._tmp);
-				self._tmp = undefined;
-				return true;
-			}
-			return false;
-		}
+		const f = this.$f('fileupload')!,
+			t = (): boolean => {
+				if (zul.Upload.isFinish(f)) {
+					this.$o<zul.fud.FileuploadDlg>()!.submit();
+					clearInterval(this._tmp);
+					this._tmp = undefined;
+					return true;
+				}
+				return false;
+			};
 		if (t()) return;
-		self._tmp = setInterval(t, 800);
+		this._tmp = setInterval(t, 800);
 		this.setDisabled(true);
 		this.nextSibling.setDisabled(true);
 		if (zk.ie < 11)

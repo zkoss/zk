@@ -42,7 +42,7 @@ function _calcMinWd(wgt: MeshWidget): MeshWidth {
 		bdfaker = wgt.ebdfaker,
 		ftfaker = wgt.eftfaker,
 		head = wgt.head,
-		headn = head ? head.$n() : null,
+		headn = head ? head.$n() : undefined,
 		hdfakerws: string[] = [],
 		bdfakerws: string[] = [],
 		ftfakerws: string[] = [],
@@ -60,7 +60,7 @@ function _calcMinWd(wgt: MeshWidget): MeshWidth {
 		var headcol = hdfaker!.firstChild,
 			headcell = headn.firstChild;
 		for (var i = 0; headcol; headcol = headcol.nextSibling, i++) {
-			var headcave = headcell ? headcell.firstChild : null;
+			var headcave = headcell ? headcell.firstChild : undefined;
 			if (!headcave)
 				continue;
 			hdfakerws[i] = (headcol as HTMLElement).style.width;
@@ -86,7 +86,7 @@ function _calcMinWd(wgt: MeshWidget): MeshWidth {
 		if (ftfaker) {
 			var footcol = ftfaker.firstChild,
 				ftrows = wgt.efootrows,
-				ftcells = ftrows ? ftrows.rows[0].cells : null;
+				ftcells = ftrows ? ftrows.rows[0].cells : undefined;
 			for (var i = 0; footcol; footcol = footcol.nextSibling) {
 				if (ftcells && ftcells[i])
 					ftcells[i].style.width = ''; // reset it
@@ -117,11 +117,11 @@ function _calcMinWd(wgt: MeshWidget): MeshWidth {
 	var wds: number[] = [],
 		width = 0,
 		len = head ? head.nChildren : 0,
-		w = head ? head.firstChild : null,
+		w = head ? head.firstChild : undefined,
 		headWgt = wgt.getHeadWidget();
 	if (bdfaker && w) {
 		var bodycells = wgt._getFirstRowCells(wgt.ebodyrows),
-			footcells = ftfaker ? wgt._getFirstRowCells(wgt.efootrows) : null;
+			footcells = ftfaker ? wgt._getFirstRowCells(wgt.efootrows) : undefined;
 
 		for (var i = 0; i < len; i++) {
 			var wd = bodycells && bodycells[i] ? bodycells[i].offsetWidth : 0,
@@ -184,7 +184,7 @@ function _calcMinWd(wgt: MeshWidget): MeshWidth {
 		var headcol = hdfaker!.firstChild,
 			headcell = headn.firstChild;
 		for (var i = 0; headcol; headcol = headcol.nextSibling, i++) {
-			var headcave = headcell ? headcell.firstChild : null;
+			var headcave = headcell ? headcell.firstChild : undefined;
 			if (!headcave)
 				continue;
 			(headcol as HTMLElement).style.width = hdfakerws[i];
@@ -248,10 +248,10 @@ function _fixBodyMinWd(wgt: MeshWidget, fixMesh?: boolean): void {
 		}
 	}
 }
-function _fixPageSize(wgt: MeshWidget, rows: HTMLCollectionOf<HTMLTableRowElement>): boolean | undefined {
+function _fixPageSize(wgt: MeshWidget, rows: HTMLCollectionOf<HTMLTableRowElement>): boolean {
 	var ebody = wgt.ebody;
 	if (!ebody)
-		return; //not ready yet
+		return false; //not ready yet
 	var max = ebody.offsetHeight;
 	if (zk(ebody).hasHScroll()) //with horizontal scrollbar
 		max -= jq.scrollbarWidth();
@@ -297,6 +297,7 @@ function _fixPageSize(wgt: MeshWidget, rows: HTMLCollectionOf<HTMLTableRowElemen
 			return true;
 		}
 	}
+	return false;
 }
 function _adjMinWd(wgt: MeshWidget): void {
 	if (wgt._hflex == 'min') {
@@ -358,7 +359,7 @@ function _cpCellWd(wgt: MeshWidget): void {
 	var ncols = dst.cells.length,
 		src: HTMLTableRowElement | null | undefined,
 		maxnc = 0;
-	for (var j = 0, it = wgt.getBodyWidgetIterator({skipHidden: true}), w: zul.mesh.Item | null | undefined; (w = it.next());) {
+	for (var j = 0, it = wgt.getBodyWidgetIterator({skipHidden: true}), w: zul.mesh.Item | undefined; (w = it.next());) {
 		if (!w._loaded || w.z_rod)
 			continue;
 
@@ -372,7 +373,7 @@ function _cpCellWd(wgt: MeshWidget): void {
 			break;
 		}
 		if (nc > maxnc) {
-			src = valid ? row : null;
+			src = valid ? row : undefined;
 			maxnc = nc;
 		} else if (nc == maxnc && !src && valid) {
 			src = row;
@@ -437,7 +438,7 @@ export interface Item extends zul.Widget<HTMLTableRowElement> {
 
 export interface ItemIterator<TItem extends zul.mesh.Item = zul.mesh.Item> {
 	hasNext(): boolean;
-	next(): TItem | null | undefined;
+	next(): TItem | undefined;
 }
 /**
  *  A skeletal implementation for a mesh widget.
@@ -450,38 +451,38 @@ export abstract class MeshWidget extends zul.Widget {
 	_rows = 0;
 	_pagingPosition = 'bottom';
 	_prehgh = -1;
-	_minWd: MeshWidth | null = null; //minimum width for each column
+	_minWd?: MeshWidth; //minimum width for each column
 	_sizedByContent?: boolean;
 	_span?: string | boolean;
 	_nspan?: number;
-	_autopaging: boolean | undefined;
-	_model: boolean | undefined;
+	_autopaging?: boolean;
+	_model?: boolean;
 	_paginal?: zul.mesh.Paging;
 	_pendOnRender?: boolean;
-	_ebodyScrollPos?: null | { l: number; t: number };
+	_ebodyScrollPos?: { l: number; t: number };
 	// Types established from inspecting https://www.zkoss.org/zkdemo/grid/header_and_footer
-	ehead?: HTMLDivElement | null;
-	eheadtbl?: HTMLTableElement | null;
-	ehdfaker?: HTMLTableColElement | null;
-	eheadrows?: HTMLTableSectionElement | null;
+	ehead?: HTMLDivElement;
+	eheadtbl?: HTMLTableElement;
+	ehdfaker?: HTMLTableColElement;
+	eheadrows?: HTMLTableSectionElement;
 	// Types established from inspecting https://www.zkoss.org/zkdemo/grid/header_and_footer
-	ebody?: HTMLDivElement | null;
-	ebodytbl?: HTMLTableElement | null;
-	ebdfaker?: HTMLTableColElement | null;
-	ebodyrows?: HTMLTableSectionElement | null;
+	ebody?: HTMLDivElement;
+	ebodytbl?: HTMLTableElement;
+	ebdfaker?: HTMLTableColElement;
+	ebodyrows?: HTMLTableSectionElement;
 	// Types established from inspecting https://www.zkoss.org/zkdemo/grid/header_and_footer
-	efoot?: HTMLDivElement | null;
-	efoottbl?: HTMLTableElement | null;
-	eftfaker?: HTMLTableColElement | null;
-	efootrows?: HTMLTableSectionElement | null;
+	efoot?: HTMLDivElement;
+	efoottbl?: HTMLTableElement;
+	eftfaker?: HTMLTableColElement;
+	efootrows?: HTMLTableSectionElement;
 
-	efrozen?: HTMLElement | null;
-	frozen?: zul.mesh.Frozen | null;
+	efrozen?: HTMLElement;
+	frozen?: zul.mesh.Frozen;
 
-	paging?: zul.mesh.Paging | null;
+	paging?: zul.mesh.Paging;
 	heads: zul.mesh.HeadWidget[];
-	head?: zul.mesh.HeadWidget | null;
-	foot?: zul.grid.Foot | null;
+	head?: zul.mesh.HeadWidget;
+	foot?: zul.grid.Foot;
 	_visiRows?: number;
 	_wsbak?: string;
 	_targetIndex?: number;
@@ -489,7 +490,7 @@ export abstract class MeshWidget extends zul.Widget {
 	_bottomBoundary?: number;
 	_topBoundary?: number;
 	_rowsOnFitSize?: boolean;
-	_scrollbar?: zul.Scrollbar | null;
+	_scrollbar?: zul.Scrollbar;
 	_cachehgh?: number;
 	_lastDevicePixelRatio?: number;
 	_adjustScrollTopLater?: boolean;
@@ -542,7 +543,7 @@ export abstract class MeshWidget extends zul.Widget {
 			listenOnFitSize(this);
 			var n = this.$n();
 			if (n) {
-				n._lastsz = null;
+				n._lastsz = undefined;
 				this.onSize();
 			}
 		}
@@ -583,8 +584,8 @@ export abstract class MeshWidget extends zul.Widget {
 	 * @return boolean
 	 * @see #setSizedByContent
 	 */
-	isSizedByContent(): boolean | undefined {
-		return this._sizedByContent;
+	isSizedByContent(): boolean {
+		return !!this._sizedByContent;
 	}
 
 	/**
@@ -665,8 +666,8 @@ export abstract class MeshWidget extends zul.Widget {
 	 * @return boolean
 	 * @see #setAutopaging
 	 */
-	isAutopaging(): boolean | undefined {
-		return this._autopaging;
+	isAutopaging(): boolean {
+		return !!this._autopaging;
 	}
 
 	/**
@@ -691,12 +692,12 @@ export abstract class MeshWidget extends zul.Widget {
 	 * Returns whether the widget is in model mode or not.
 	 * @return boolean
 	 */
-	isModel(): boolean | undefined {
-		return this._model;
+	isModel(): boolean {
+		return !!this._model;
 	}
 	// TODO: Used by grid. Should prefer the use of isModel
-	getModel(): boolean | undefined {
-		return this._model;
+	getModel(): boolean {
+		return !!this._model;
 	}
 
 	/**
@@ -764,7 +765,7 @@ export abstract class MeshWidget extends zul.Widget {
 	setPaginal(newPaginal: zul.mesh.Paging): this {
 		if (this._paginal != newPaginal) {
 			if (this._paginal) {
-				this._paginal.setMeshWidget(null);
+				this._paginal.setMeshWidget();
 			}
 			this._paginal = newPaginal;
 
@@ -837,7 +838,7 @@ export abstract class MeshWidget extends zul.Widget {
 		return this.paging || this.getPaginal();
 	}
 
-	override setHeight(height: string | null): this {
+	override setHeight(height?: string): this {
 		super.setHeight(height);
 		if (this.desktop) {
 			this._setHgh(height);
@@ -846,7 +847,7 @@ export abstract class MeshWidget extends zul.Widget {
 		return this;
 	}
 
-	override setWidth(width: string | null): this {
+	override setWidth(width?: string): this {
 		super.setWidth(width);
 		if (this.eheadtbl) this.eheadtbl.style.width = '';
 		if (this.efoottbl) this.efoottbl.style.width = '';
@@ -869,7 +870,7 @@ export abstract class MeshWidget extends zul.Widget {
 	 * @return zul.mesh.HeadWidget
 	 * @since 5.0.4
 	 */
-	getHeadWidget(): zul.mesh.HeadWidget | null | undefined {
+	getHeadWidget(): zul.mesh.HeadWidget | undefined {
 		return this.head;
 	}
 
@@ -900,9 +901,9 @@ export abstract class MeshWidget extends zul.Widget {
 
 	_moveToHidingFocusCell(index: number, ignoreWidth?: boolean, notFocusBack?: boolean): void { //used in Row/Listcell and a11y frozen
 		//B50-3178977 navigating the input in hiddin column.
-		var td = this.ehdfaker ? this.ehdfaker.childNodes[index] as HTMLTableCellElement | undefined : null,
+		var td = this.ehdfaker ? this.ehdfaker.childNodes[index] as HTMLTableCellElement | undefined : undefined,
 			frozen = this.frozen,
-			bar: zul.Scrollbar | null | undefined;
+			bar: zul.Scrollbar | undefined;
 		if (td && frozen && (ignoreWidth || zk.parseInt(td.style.width) == 0)
 			&& (index = index - frozen.getColumns()!) >= 0) {
 			if (this._nativebar) {
@@ -928,7 +929,7 @@ export abstract class MeshWidget extends zul.Widget {
 		this._sizedByContent = false;
 	}
 
-	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 
 		this._bindDomNode();
@@ -952,7 +953,7 @@ export abstract class MeshWidget extends zul.Widget {
 		zWatch.listen({onSize: this, onResponse: this});
 	}
 
-	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		unlistenOnFitSize(this);
 		zWatch.unlisten({onSize: this, onResponse: this});
 		if (this.ehead) //sync scroll for input tab key scroll
@@ -970,7 +971,7 @@ export abstract class MeshWidget extends zul.Widget {
 		super.clearCache();
 		this.ebody = this.ehead = this.efoot = this.efrozen = this.ebodytbl
 			= this.eheadtbl = this.efoottbl = this.ebodyrows
-			= this.ehdfaker = this.ebdfaker = null;
+			= this.ehdfaker = this.ebdfaker = undefined;
 	}
 
 	/** Synchronizes the size immediately.
@@ -1027,9 +1028,9 @@ export abstract class MeshWidget extends zul.Widget {
 		}
 	}
 
-	_fixHeaders(force?: boolean): boolean | undefined { //used in HeadWidget
+	_fixHeaders(force?: boolean): boolean { //used in HeadWidget
 		if (this.head && this.ehead) {
-			if (this._cssflex && this.isChildrenFlex()) return;
+			if (this._cssflex && this.isChildrenFlex()) return false;
 			var empty = true,
 				flex = false,
 				shouldFix = false,
@@ -1082,6 +1083,7 @@ export abstract class MeshWidget extends zul.Widget {
 			}
 			return shouldFix || old != this.ehead.style.display;
 		}
+		return false;
 	}
 
 	_adjFlexWd(): void { //used by HeadWidget
@@ -1092,7 +1094,7 @@ export abstract class MeshWidget extends zul.Widget {
 				hdcol = hdfaker.firstChild,
 				bdcol = bdfaker.firstChild,
 				ftfaker = this.eftfaker,
-				ftcol: ChildNode | null | undefined;
+				ftcol: ChildNode | null = null;
 
 
 			if (ftfaker)
@@ -1190,7 +1192,7 @@ export abstract class MeshWidget extends zul.Widget {
 			this.efootrows = this.$n('footrows');
 	}
 
-	override replaceHTML(n: HTMLElement | string, desktop: zk.Desktop | null, skipper?: zk.Skipper | null, _trim_?: boolean, _callback_?: CallableFunction[]): void { // tree outer
+	override replaceHTML(n: HTMLElement | string, desktop?: zk.Desktop, skipper?: zk.Skipper, _trim_?: boolean, _callback_?: CallableFunction[]): void { // tree outer
 		var old = this._syncingbodyrows;
 		this._syncingbodyrows = true;
 		try {
@@ -1208,7 +1210,7 @@ export abstract class MeshWidget extends zul.Widget {
 		}
 	}
 
-	override replaceChildHTML_(child: zk.Widget, n: HTMLElement | string, desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, _trim_?: boolean): void { // rows outer
+	override replaceChildHTML_(child: zk.Widget, n: HTMLElement | string, desktop?: zk.Desktop, skipper?: zk.Skipper, _trim_?: boolean): void { // rows outer
 		var old = this._syncingbodyrows;
 		this._syncingbodyrows = true;
 		try {
@@ -1280,10 +1282,10 @@ export abstract class MeshWidget extends zul.Widget {
 		}
 	}
 
-	_timeoutId: number | null = null;
+	_timeoutId: number | undefined;
 
 	_fireOnScrollPos(time?: number): void { //overriden in zkmax
-		clearTimeout(this._timeoutId!);
+		clearTimeout(this._timeoutId);
 		this._timeoutId = setTimeout(this.proxy(this._onScrollPos), time! >= 0 ? time : 300);
 	}
 
@@ -1309,7 +1311,7 @@ export abstract class MeshWidget extends zul.Widget {
 			return true;
 		}
 
-		var rows = this.ebodyrows ? this.ebodyrows.rows : null;
+		var rows = this.ebodyrows ? this.ebodyrows.rows : undefined;
 		if (this.inPagingMold() && this._autopaging && rows && rows.length)
 			if (_fixPageSize(this, rows))
 				return; //need to reload with new page size
@@ -1328,7 +1330,7 @@ export abstract class MeshWidget extends zul.Widget {
 			max = min + this.ebody!.offsetHeight;
 		if (min == 0 && max == 0) return; //ZK-2796: Uncessary onRender command triggered when setting tabbox's maximalHeight attribute to true
 		for (var j = 0, it = this.getBodyWidgetIterator({skipHidden: true}),
-				len = rows.length, w: zul.mesh.Item | null | undefined; (w = it.next()) && j < len; j++) {
+				len = rows.length, w: zul.mesh.Item | undefined; (w = it.next()) && j < len; j++) {
 			if (!w._loaded) {
 				//B70-ZK-2589: w and rows[j] belongs to different widget,
 				//w shouldn't depend on rows[j], origin -> row = rows[j];
@@ -1427,7 +1429,7 @@ export abstract class MeshWidget extends zul.Widget {
 	}
 
 	/* set the height. */
-	_setHgh(hgh: string | null): void {
+	_setHgh(hgh?: string): void {
 		var n = this.$n_(),
 			ebody = this.ebody!,
 			ebodyStyle = ebody.style;
@@ -1508,7 +1510,7 @@ export abstract class MeshWidget extends zul.Widget {
 			// ZK-2046: Restore ebody scroll position after calculated size.
 			this.ebody!.scrollLeft = this._ebodyScrollPos.l;
 			this.ebody!.scrollTop = this._ebodyScrollPos.t;
-			this._ebodyScrollPos = null;
+			this._ebodyScrollPos = undefined;
 		}
 		// Set style width to table to avoid colgroup width not working
 		// because of width attribute (width="100%") on table
@@ -1516,9 +1518,9 @@ export abstract class MeshWidget extends zul.Widget {
 			head = this.head,
 			ebody = this.ebody,
 			ebodyrows = this.ebodyrows,
-			hdfakerbar = head ? head.$n('hdfaker-bar') : null,
-			hdbar = head ? jq(this).find('.' + head.$s('bar'))[0] : null,
-			ftfakerbar = this.eftfaker ? this.head!.$n('ftfaker-bar') : null,
+			hdfakerbar = head ? head.$n('hdfaker-bar') : undefined,
+			hdbar = head ? jq(this).find('.' + head.$s('bar'))[0] : undefined,
+			ftfakerbar = this.eftfaker ? this.head!.$n('ftfaker-bar') : undefined,
 			scrollbarWidth = jq.scrollbarWidth(),
 			hasVScroll = zk(ebody).hasVScroll(),
 			hasHScroll = zk(ebody).hasHScroll();
@@ -1710,7 +1712,7 @@ export abstract class MeshWidget extends zul.Widget {
 
 		if (child instanceof this.getHeadWidgetClass()) {
 			this.head = child;
-			this._minWd = null;
+			this._minWd = undefined;
 			// TODO: remove the type assertion below. Should be unnecessary, but tsc infers it
 			// to be `never` which is not wrong.
 		} else if (!(child instanceof zul.mesh.Auxhead))
@@ -1730,16 +1732,16 @@ export abstract class MeshWidget extends zul.Widget {
 		super.onChildRemoved_(child);
 
 		if (child == this.head) { // If true, child is guaranteed to be a HeadWidget
-			this._minWd = this.head = null;
+			this._minWd = this.head = undefined;
 			this.heads.$remove(child as zul.mesh.HeadWidget);
 		} else if (child instanceof zul.mesh.Auxhead)
 			this.heads.$remove(child);
 		else if (child instanceof zul.mesh.Frozen)
-			this.efrozen = null;
+			this.efrozen = undefined;
 	}
 
 	//bug# 3022669: listbox hflex="min" sizedByContent="true" not work
-	override beforeMinFlex_(orient: zk.FlexOrient): number | null {
+	override beforeMinFlex_(orient: zk.FlexOrient): number | undefined {
 		if (this._hflexsz === undefined && orient == 'w' && this._width === undefined) {
 			if (this.isSizedByContent())
 				this._calcSize();
@@ -1747,12 +1749,12 @@ export abstract class MeshWidget extends zul.Widget {
 				this._fixHeaders(true);/* B50-3315594.zul */
 				for (var w = this.head.firstChild; w; w = w.nextSibling)
 					if (w._hflex == 'min' && w._hflexsz === undefined) //header hflex="min" not done yet!
-						return null;
+						return undefined;
 			}
 			_fixBodyMinWd(this); // sized by content without header
 			return _getMinWd(this); //grid.invalidate() with hflex="min" must maintain the width
 		}
-		return null;
+		return undefined;
 	}
 
 	// fixed for B50-3315594.zul
@@ -1785,7 +1787,7 @@ export abstract class MeshWidget extends zul.Widget {
 	_clearCachedSize(): void {
 		const n = this.$n();
 		if (n)
-			n._lastsz = this._minWd = null;
+			n._lastsz = this._minWd = undefined;
 	}
 
 	_calcMinWds(): MeshWidth { //used in HeaderWidgets
@@ -1831,7 +1833,7 @@ export abstract class MeshWidget extends zul.Widget {
 			temphdcol = temphdcol!.nextSibling;
 		}
 
-		var	ftcol = ftfaker ? ftfaker.firstChild : null,
+		var	ftcol = ftfaker ? ftfaker.firstChild : undefined,
 			total = this.ebody!.clientWidth,
 			extSum = total - width,
 			count = total,
@@ -1971,7 +1973,7 @@ export abstract class MeshWidget extends zul.Widget {
 			width = minWd.width,
 			hdcol = hdfaker.firstChild,
 			bdcol = bdfaker.firstChild,
-			ftcol = ftfaker ? ftfaker.firstChild : null,
+			ftcol = ftfaker ? ftfaker.firstChild : undefined,
 			hwgt = this.head!.firstChild,
 			notVisibleWidth = MeshWidget.WIDTH0;
 
@@ -2019,7 +2021,7 @@ export abstract class MeshWidget extends zul.Widget {
 		_adjMinWd(this);
 	}
 
-	_getFirstRowCells(tbody: HTMLTableSectionElement | null | undefined): HTMLCollectionOf<HTMLTableCellElement> | undefined {
+	_getFirstRowCells(tbody: HTMLTableSectionElement | undefined): HTMLCollectionOf<HTMLTableCellElement> | undefined {
 		var rowsLength: number,
 			tbodyrows: HTMLCollectionOf<HTMLTableRowElement>;
 		if (tbody && (tbodyrows = tbody.rows) && (rowsLength = tbodyrows.length)) {
@@ -2044,19 +2046,19 @@ export abstract class MeshWidget extends zul.Widget {
 			if (ncols == length)
 				return cells;
 			else {
-				var out: string | null = '';
+				var out: string | undefined = '';
 				out += '<tr id="' + tbody.id + '-fakeRow" style="visibility:hidden;height:0">';
 				for (var i = 0; i < ncols; i++)
 					out += '<td></td>';
 				out += '</tr>';
 				jq(tbodyrows[0]).before(out);
-				out = null;
+				out = undefined;
 				return tbodyrows[0].cells;
 			}
 		}
 	}
 
-	_deleteFakeRow(tbody: HTMLTableSectionElement | null | undefined): void {
+	_deleteFakeRow(tbody: HTMLTableSectionElement | undefined): void {
 		if (tbody)
 			jq('#' + tbody.id + '-fakeRow').remove();
 	} // for Grid.js and Listbox.js
@@ -2165,7 +2167,7 @@ export abstract class MeshWidget extends zul.Widget {
 				}
 				if (hgh < 25) hgh = 25;
 
-				var rowhgh = firstVisiRow ? zk(firstVisiRow).offsetHeight() : null;
+				var rowhgh = firstVisiRow ? zk(firstVisiRow).offsetHeight() : undefined;
 				if (!rowhgh)
 					rowhgh = this._headHgh(20);
 
@@ -2329,7 +2331,7 @@ export abstract class MeshWidget extends zul.Widget {
 
 	static readonly WIDTH0 = zk.webkit ? '0.001px' : '0px';
 
-	static _getWidth(wgt: zk.Widget, width: string | null | undefined): string | null | undefined {
+	static _getWidth(wgt: zk.Widget, width: string | undefined): string | undefined {
 		if (wgt.isVisible())
 			return width;
 		return this.WIDTH0;

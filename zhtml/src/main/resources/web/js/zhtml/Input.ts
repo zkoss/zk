@@ -20,7 +20,7 @@ export class Input extends zhtml.Widget {
 			var val = n.value;
 			if (val != this._defValue) {
 				this._defValue = val;
-				this.fire('onChange', this._onChangeData(val), null);
+				this.fire('onChange', this._onChangeData(val));
 			}
 		}
 	}
@@ -35,7 +35,7 @@ export class Input extends zhtml.Widget {
 		return [this.value, false, this.start];
 	}
 
-	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		var n: HTMLInputElement | null | undefined;
 
@@ -49,7 +49,7 @@ export class Input extends zhtml.Widget {
 		}
 	}
 
-	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		if (this._defValue !== undefined)
 			this.domUnlisten_(this.$n_(), 'onChange');
 		super.unbind_(skipper, after, keepRod);

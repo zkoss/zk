@@ -28,7 +28,7 @@ export class Groupbox extends zul.ContainerWidget {
 	_contentStyle?: string;
 	_contentSclass?: string;
 	_title?: string;
-	caption?: zul.wgt.Caption | null;
+	caption?: zul.wgt.Caption;
 
 	/** Opens or closes this groupbox.
 	 * @param boolean open
@@ -196,7 +196,7 @@ export class Groupbox extends zul.ContainerWidget {
 		out.push('</div>');
 	}
 
-	override setHeight(height: string | null): this {
+	override setHeight(height?: string): this {
 		super.setHeight(height);
 		if (this.desktop) this._fixHgh();
 		return this;
@@ -268,15 +268,15 @@ export class Groupbox extends zul.ContainerWidget {
 		return !!cap?.focus_(timeout);
 	}
 
-	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		zWatch.listen({onSize: this});
-		var tt: HTMLElement | null | undefined;
+		var tt: HTMLElement | undefined;
 		if (this.getTitle() && (tt = this.$n('title')))
 			this.domListen_(tt, 'onClick', '_doTitleClick');
 	}
 
-	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		zWatch.unlisten({onSize: this});
 		const tt = this.$n('title');
 		if (tt)
@@ -301,7 +301,7 @@ export class Groupbox extends zul.ContainerWidget {
 	override onChildRemoved_(child: zk.Widget): void {
 		super.onChildRemoved_(child);
 		if (child == this.caption) {
-			this.caption = null;
+			this.caption = undefined;
 			this.rerender();
 		}
 	}

@@ -13,7 +13,7 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 function _parseTextToArray(txt: string, fmt: string): string[] | undefined {
-	if (fmt.indexOf('\'') > -1) //Bug ZK-1341: 'long+medium' format with single quote in zh_TW locale failed to parse AM/PM
+	if (fmt.includes('\'')) //Bug ZK-1341: 'long+medium' format with single quote in zh_TW locale failed to parse AM/PM
 		fmt = fmt.replace(/'/g, '');
 	var ts: string[] = [],
 		mindex = fmt.indexOf('MMM'),
@@ -186,9 +186,9 @@ let DateFmt = {
 	parseDate(
 		txt: string,
 		fmt: string,
-		nonLenient?: boolean | null,
-		refval?: DateImpl | null,
-		localizedSymbols?: zk.LocalizedSymbols | null,
+		nonLenient?: boolean,
+		refval?: DateImpl,
+		localizedSymbols?: zk.LocalizedSymbols,
 		tz?: string,
 		strictDate?: boolean
 	): DateImpl | undefined {
@@ -227,7 +227,7 @@ let DateFmt = {
 			isNumber = !regexp.test(txt),
 			eras = localizedSymbols.ERAS,
 			era: zk.LocalizedSymbols.ErasElementType | undefined,
-			eraKey: string | null | undefined;
+			eraKey: string | undefined;
 
 		if (hasG && txt && eras) { // ZK-4745: parsing era for specific calendar system
 			eraKey = this._findEraKey(txt, eras);
@@ -604,8 +604,8 @@ let DateFmt = {
 			localeDateString = date.toLocaleDateString(langTag, {era: 'short', day: 'numeric'});
 		return localeDateString.split(' ')[0];
 	},
-	_findEraKey(txt: string, eras: zk.LocalizedSymbols['ERAS']): string | null { // override
-		return null;
+	_findEraKey(txt: string, eras: zk.LocalizedSymbols['ERAS']): string | undefined { // override
+		return undefined;
 	}
 };
 export { DateFmt as Date };
@@ -620,9 +620,9 @@ zk.fmt.Date = DateFmt;
 @zk.WrapClass('zk.fmt.Calendar')
 export class Calendar extends zk.Object {
 	_offset = zk.YDELTA;
-	_date?: DateImpl | null;
+	_date?: DateImpl;
 
-	constructor(date?: DateImpl | null, localizedSymbols?: zk.LocalizedSymbols) {
+	constructor(date?: DateImpl, localizedSymbols?: zk.LocalizedSymbols) {
 		super();
 		this._date = date;
 		if (localizedSymbols) {
@@ -631,7 +631,7 @@ export class Calendar extends zk.Object {
 		}
 	}
 
-	getTime(): DateImpl | null | undefined {
+	getTime(): DateImpl | undefined {
 		return this._date;
 	}
 
@@ -663,10 +663,10 @@ export class Calendar extends zk.Object {
 		return zk.fmt.Date.formatDate((d as DateImpl | undefined) || val, fmt, localizedSymbols);
 	}
 
-	toUTCDate(): DateImpl | null | undefined {
+	toUTCDate(): DateImpl | undefined {
 		if (LeapDay.isInstance(this._date))
 		return this._date.getRealDate();
-		var d: DateImpl | null | undefined;
+		var d: DateImpl | undefined;
 		if ((d = this._date) && this._offset)
 			d = Dates.newInstance(d);
 		return d;
@@ -675,9 +675,9 @@ export class Calendar extends zk.Object {
 	parseDate(
 		txt: string,
 		fmt: string,
-		strict?: boolean | null,
-		refval?: DateImpl | null,
-		localizedSymbols?: zk.LocalizedSymbols | null,
+		strict?: boolean,
+		refval?: DateImpl,
+		localizedSymbols?: zk.LocalizedSymbols,
 		tz?: string,
 		strictDate?: boolean
 	): DateImpl | undefined {
@@ -688,7 +688,7 @@ export class Calendar extends zk.Object {
 		}
 
 		if (this._offset && fmt) {
-			if (LeapDay.isInstance(d)) {
+			if (d instanceof LeapDay) {
 				return d.getRealDate();
 			}
 		}

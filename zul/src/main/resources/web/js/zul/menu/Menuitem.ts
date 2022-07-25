@@ -20,10 +20,10 @@ function _initUpld(wgt: zul.menu.Menuitem): void {
 }
 
 function _cleanUpld(wgt: zul.menu.Menuitem): void {
-	var v: zul.Upload | null | undefined;
+	var v: zul.Upload | undefined;
 	if (v = wgt._uplder) {
 		zWatch.unlisten({onShow: wgt});
-		wgt._uplder = null;
+		wgt._uplder = undefined;
 		v.destroy();
 	}
 }
@@ -37,19 +37,19 @@ function _cleanUpld(wgt: zul.menu.Menuitem): void {
 @zk.WrapClass('zul.menu.Menuitem')
 export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidgetWithAutodisable {
 	// Parent could be null as asserted in _doMouseEnter
-	override parent!: zul.menu.Menupopup | null;
-	override nextSibling!: zul.menu.Menuitem | null;
-	override previousSibling!: zul.menu.Menuitem | null;
+	override parent!: zul.menu.Menupopup | undefined;
+	override nextSibling!: zul.menu.Menuitem | undefined;
+	override previousSibling!: zul.menu.Menuitem | undefined;
 	_value = '';
 	_upload?: string;
 	_checkmark?: boolean;
 	_checked?: boolean;
 	_autocheck?: boolean;
 	_target?: string;
-	_topmost?: boolean | null;
+	_topmost = false;
 	_col?: string;
 	_href?: string;
-	_disabled?: boolean;
+	_disabled = false;
 	_adbs?: boolean;
 	_autodisable?: string;
 
@@ -58,8 +58,8 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 	 * <p>Default: false.
 	 * @return boolean
 	 */
-	isCheckmark(): boolean | undefined {
-		return this._checkmark;
+	isCheckmark(): boolean {
+		return !!this._checkmark;
 	}
 
 	/** Sets whether the check mark shall be displayed in front
@@ -81,14 +81,14 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 	 * <p>Default: false.
 	 * @return boolean
 	 */
-	isDisabled(): boolean | undefined {
+	isDisabled(): boolean {
 		return this._disabled;
 	}
 
 	/** Sets whether it is disabled.
 	 * @param boolean disabled
 	 */
-	setDisabled(disabled: boolean | undefined, opts?: Record<string, boolean>): this {
+	setDisabled(disabled: boolean, opts?: Record<string, boolean>): this {
 		const o = this._disabled;
 
 		//B60-ZK-1176
@@ -107,7 +107,7 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 			// ignore re-enable by autodisable mechanism
 			disabled = this._disabled;
 		}
-		this._disabled = disabled;
+		this._disabled = !!disabled;
 
 		if (o !== disabled || (opts && opts.force)) {
 			this.rerender(opts && opts.skip ? -1 : 0); //bind and unbind
@@ -159,8 +159,8 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 	 * <p>Default: false.
 	 * @return boolean
 	 */
-	isChecked(): boolean | undefined {
-		return this._checked;
+	isChecked(): boolean {
+		return !!this._checked;
 	}
 
 	/** Sets whether it is checked.
@@ -191,8 +191,8 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 	 * <p>Default: false.
 	 * @return boolean
 	 */
-	isAutocheck(): boolean | undefined {
-		return this._autocheck;
+	isAutocheck(): boolean {
+		return !!this._autocheck;
 	}
 
 	/** Sets whether the menuitem check mark will update each time
@@ -311,7 +311,7 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 	 * Returns the file(s) belongs to this button if any.
 	 * @since 10.0.0
 	 */
-	getFile(): FileList | null | undefined {
+	getFile(): FileList | undefined {
 		return this._uplder?.getFile();
 	}
 
@@ -319,12 +319,12 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 	 * by another {@link Menupopup}.
 	 * @return boolean
 	 */
-	isTopmost(): boolean | null | undefined {
+	isTopmost(): boolean {
 		return this._topmost;
 	}
 
-	override beforeParentChanged_(newParent: zk.Widget | null): void {
-		this._topmost = newParent && !(newParent instanceof zul.menu.Menupopup);
+	override beforeParentChanged_(newParent?: zk.Widget): void {
+		this._topmost = !!newParent && !(newParent instanceof zul.menu.Menupopup);
 		super.beforeParentChanged_(newParent);
 	}
 
@@ -364,21 +364,21 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 	/** Returns the {@link Menubar} that contains this menuitem, or null if not available.
 	 * @return zul.menu.Menubar
 	 */
-	getMenubar(): zul.menu.Menubar | null {
-		for (var p: zk.Widget | null = this.parent; p; p = p.parent)
+	getMenubar(): zul.menu.Menubar | undefined {
+		for (var p: zk.Widget | undefined = this.parent; p; p = p.parent)
 			if (p instanceof zul.menu.Menubar)
 				return p;
-		return null;
+		return undefined;
 	}
 
-	_getRootMenu(): zul.menu.Menu | null {
-		for (var p: zk.Widget | null = this.parent; p; p = p.parent)
+	_getRootMenu(): zul.menu.Menu | undefined {
+		for (var p: zk.Widget | undefined = this.parent; p; p = p.parent)
 			if (p instanceof zul.menu.Menu && p.isTopmost())
 				return p;
-		return null;
+		return undefined;
 	}
 
-	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 
 		if (!this.isDisabled()) {
@@ -393,7 +393,7 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 		}
 	}
 
-	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		if (!this.isDisabled()) {
 			if (this._upload) _cleanUpld(this);
 			var anc = this.$n_('a');
@@ -433,7 +433,7 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 				if (!this._upload) //if upload=true, it won't fire onbeforeunload in IE <= 10
 					evt.stop(); //if we stop evt when upload=true, it won't open upload window in IE <= 10
 			} else if (anc.href.toLowerCase().startsWith('mailto:')) { // ZK-2506
-				var ifrm = jq.newFrame('mailtoFrame', anc.href, null);
+				var ifrm = jq.newFrame('mailtoFrame', anc.href, undefined);
 				jq(ifrm).remove();
 				evt.stop();
 			} else {
@@ -449,8 +449,8 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 				}
 			}
 			if (!topmost) {
-				var ref: zk.Widget | null | undefined = null;
-				for (var p: zk.Widget | null = this.parent; p; p = p.parent) {
+				var ref: zk.Widget | undefined;
+				for (var p: zk.Widget | undefined = this.parent; p; p = p.parent) {
 					if (p instanceof zul.menu.Menupopup) {
 						// if close the popup before choosing a file, the file chooser can't be triggered.
 						if (!p.isOpen() || this._uplder || p._keepOpen /*Bug #2911385 && !this._popup*/)
@@ -481,7 +481,7 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 				}
 			}
 
-			var menubar: zul.menu.Menubar | null;
+			var menubar: zul.menu.Menubar | undefined;
 			if (zk.webkit && (menubar = this.getMenubar()) && menubar._autodrop)
 				menubar._noFloatUp = true;
 				//_noFloatUp used in Menu.js to fix Bug 1852304
@@ -505,7 +505,7 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 				|| jq.isAncestor(this.$n('a'), evt.domTarget));
 	}
 
-	_getUploadRef(): HTMLAnchorElement | null | undefined {
+	_getUploadRef(): HTMLAnchorElement | undefined {
 		return this.$n('a');
 	}
 
@@ -533,17 +533,17 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 	}
 
 	//@Override
-	override getImageNode(): HTMLImageElement | null | undefined {
+	override getImageNode(): HTMLImageElement | undefined {
 		if (!this._eimg && (this._image || this._hoverImage)) {
 			var n = this.$n();
 			if (n)
-				this._eimg = this.$n_('a').firstChild as HTMLImageElement | null;
+				this._eimg = this.$n_('a').firstChild as HTMLImageElement | undefined;
 		}
 		return this._eimg;
 	}
 
 	// internal use only.
-	getAnchor_(): HTMLAnchorElement | null | undefined {
+	getAnchor_(): HTMLAnchorElement | undefined {
 		return this.$n('a');
 	}
 

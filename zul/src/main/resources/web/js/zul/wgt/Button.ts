@@ -16,13 +16,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 function _initUpld(wgt: zul.wgt.Button): void {
 	var v: string | undefined;
 	if (v = wgt._upload)
-		wgt._uplder = new zul.Upload(wgt, null, v);
+		wgt._uplder = new zul.Upload(wgt, undefined, v);
 }
 
 function _cleanUpld(wgt: zul.wgt.Button): void {
-	var v: zul.Upload | null | undefined;
+	var v: zul.Upload | undefined;
 	if (v = wgt._uplder) {
-		wgt._uplder = null;
+		wgt._uplder = undefined;
 		v.destroy();
 	}
 }
@@ -39,7 +39,7 @@ export class Button extends zul.LabelImageWidget<HTMLButtonElement> implements z
 	_href?: string;
 	_target?: string;
 	_upload?: string;
-	_delayFocus?: boolean | null;
+	_delayFocus?: boolean;
 	_disabled?: boolean;
 	_adbs?: boolean;
 	_autodisable?: string;
@@ -153,14 +153,14 @@ export class Button extends zul.LabelImageWidget<HTMLButtonElement> implements z
 	 * <p>Default: false.
 	 * @return boolean
 	 */
-	isDisabled(): boolean | undefined {
-		return this._disabled;
+	isDisabled(): boolean {
+		return !!this._disabled;
 	}
 
 	/** Sets whether it is disabled.
 	 * @param boolean disabled
 	 */
-	setDisabled(v: boolean | undefined, opts?: Record<string, boolean>): this {
+	setDisabled(v: boolean, opts?: Record<string, boolean>): this {
 		const o = this._disabled;
 
 		// B60-ZK-1176
@@ -177,7 +177,7 @@ export class Button extends zul.LabelImageWidget<HTMLButtonElement> implements z
 				this._adbs = false;
 			} else if (opts && opts.adbs === false)
 				// ignore re-enable by autodisable mechanism
-				v = this._disabled;
+				v = !!this._disabled;
 		}
 		this._disabled = v;
 
@@ -208,8 +208,8 @@ export class Button extends zul.LabelImageWidget<HTMLButtonElement> implements z
 	 if (n)
 	 n.src = v || '';
 	 },*/
-	setAutodisable(v: string): this {
-		this._autodisable = v;
+	setAutodisable(autodisable: string): this {
+		this._autodisable = autodisable;
 		return this;
 	}
 
@@ -292,15 +292,15 @@ export class Button extends zul.LabelImageWidget<HTMLButtonElement> implements z
 	 * or null or "false" to disable the file download (and then
 	 * this button behaves like a normal button).
 	 */
-	setUpload(v: string, opts?: Record<string, boolean>): this {
+	setUpload(upload: string, opts?: Record<string, boolean>): this {
 		const o = this._upload;
-		this._upload = v;
+		this._upload = upload;
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== upload || (opts && opts.force)) {
 			var n = this.$n();
 			if (n && !this._disabled) {
 				_cleanUpld(this);
-				if (v && v != 'false') _initUpld(this);
+				if (upload && upload != 'false') _initUpld(this);
 			}
 		}
 
@@ -311,7 +311,7 @@ export class Button extends zul.LabelImageWidget<HTMLButtonElement> implements z
 	 * Returns the file(s) belongs to this button if any.
 	 * @since 10.0.0
 	 */
-	getFile(): FileList | null {
+	getFile(): FileList | undefined {
 		return this._uplder!.getFile();
 	}
 
@@ -330,7 +330,7 @@ export class Button extends zul.LabelImageWidget<HTMLButtonElement> implements z
 							zk(this.$n()).focus(timeout);
 						}
 					}
-					this._delayFocus = null;
+					this._delayFocus = undefined;
 				}, 0);
 			}
 			return false;
@@ -364,7 +364,7 @@ export class Button extends zul.LabelImageWidget<HTMLButtonElement> implements z
 		}
 	}
 
-	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 
 		var n = this.$n()!;
@@ -375,7 +375,7 @@ export class Button extends zul.LabelImageWidget<HTMLButtonElement> implements z
 		if (!this._disabled && this._upload) _initUpld(this);
 	}
 
-	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		_cleanUpld(this);
 
 		var n = this.$n()!;
@@ -405,7 +405,7 @@ export class Button extends zul.LabelImageWidget<HTMLButtonElement> implements z
 				if (href) {
 					// ZK-2506: use iframe to open a 'mailto' href
 					if (isMailTo) {
-						var ifrm = jq.newFrame('mailtoFrame', href, null);
+						var ifrm = jq.newFrame('mailtoFrame', href, undefined);
 						jq(ifrm).remove();
 					} else {
 						zUtl.go(href, {target: this._target || ((evt.data as zk.EventMetaData).ctrlKey ? '_blank' : '')});
@@ -438,7 +438,7 @@ export class Button extends zul.LabelImageWidget<HTMLButtonElement> implements z
 		}
 	}
 
-	override shallIgnoreClick_(_evt: zk.Event): boolean | undefined {
+	override shallIgnoreClick_(_evt: zk.Event): boolean {
 		return this.isDisabled();
 	}
 }
@@ -468,12 +468,12 @@ export class ADBS extends zk.Object {
 	static autodisable(wgt: zul.LabelImageWidgetWithAutodisable): void {
 		var ads: string[] | string | undefined = wgt._autodisable,
 			aded: zul.LabelImageWidgetWithAutodisable[] | undefined,
-			uplder: zul.Upload | null | undefined;
+			uplder: zul.Upload | undefined;
 		if (ads) {
 			if (zk.chrome) wgt.domUnlisten_(wgt.$n()!, 'onBlur', 'doBlur_'); //ZK-2739: prevent chrome fire onBlur event after autodisabled
 			ads = ads.split(',');
 			for (var j = ads.length; j--;) {
-				var ad: string | zul.LabelImageWidgetWithAutodisable | null = ads[j].trim();
+				var ad: string | zul.LabelImageWidgetWithAutodisable | undefined = ads[j].trim();
 				if (ad) {
 					var perm = ad.charAt(0) == '+';
 					if (perm)
@@ -482,7 +482,7 @@ export class ADBS extends zk.Object {
 					//B50-3304877: autodisable and Upload
 					if (ad == wgt) { //backup uploader before disable
 						uplder = wgt._uplder;
-						wgt._uplder = null;
+						wgt._uplder = undefined;
 						wgt._autodisable_self = true;
 					}
 					if (ad && !ad._disabled) {

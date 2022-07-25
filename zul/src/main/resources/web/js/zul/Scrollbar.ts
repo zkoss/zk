@@ -94,14 +94,14 @@ export class Scrollbar extends zk.Object {
 	 * @type Map
 	 */
 		//opts: null,
-	_pos: zk.Offset | null = null;
-	_barPos: zk.Offset | null = null;
-	_pressTimer: number | null = null;
+	_pos?: zk.Offset = undefined;
+	_barPos?: zk.Offset = undefined;
+	_pressTimer?: number = undefined;
 	cave: HTMLElement;
 	scroller: HTMLElement;
 	widget: zk.Widget & {frozen?: zul.mesh.Frozen};
 	uid: string;
-	currentPos: Position | null;
+	currentPos?: Position;
 	opts: ScrollbarOptions;
 	dragging?: boolean;
 	needV?: boolean;
@@ -118,7 +118,7 @@ export class Scrollbar extends zk.Object {
 		return jq(this.uid + '-' + id, zk)[0];
 	}
 
-	constructor(cave: HTMLElement | null | undefined, scroller: HTMLElement | null | undefined, opts: Partial<ScrollbarOptions>) {
+	constructor(cave: HTMLElement | undefined, scroller: HTMLElement | undefined, opts: Partial<ScrollbarOptions>) {
 		super();
 		if (!cave || !scroller)
 			throw 'Both wrapper and scroller dom element are required to generate scrollbar';
@@ -177,15 +177,15 @@ export class Scrollbar extends zk.Object {
 			if (vembed)
 				jq(vembed).remove();
 		}
-		this._pos = this._barPos = this.currentPos = null;
+		this._pos = this._barPos = this.currentPos = undefined;
 	}
 
-	hasVScroll(): boolean | undefined {
-		return this.needV;
+	hasVScroll(): boolean {
+		return !!this.needV;
 	}
 
-	hasHScroll(): boolean | undefined {
-		return this.needH;
+	hasHScroll(): boolean {
+		return !!this.needH;
 	}
 
 	syncSize(showScrollbar?: boolean): void {
@@ -426,7 +426,7 @@ export class Scrollbar extends zk.Object {
 			return false;
 	}
 
-	getCurrentPosition(): Position | null {
+	getCurrentPosition(): Position | undefined {
 		return this.currentPos;
 	}
 
@@ -575,7 +575,7 @@ export class Scrollbar extends zk.Object {
 	_dragStart(evt: JQuery.DragStartEvent): void {
 		if (this._pressTimer) { //just in case
 			clearInterval(this._pressTimer);
-			this._pressTimer = null;
+			this._pressTimer = undefined;
 		}
 		evt.preventDefault();
 		var self = this,
@@ -703,14 +703,14 @@ export class Scrollbar extends zk.Object {
 	}
 
 	_mouseUp(evt: JQuery.MouseUpEvent): void {
-		clearInterval(this._pressTimer!);
-		this._pressTimer = null;
+		clearInterval(this._pressTimer);
+		this._pressTimer = undefined;
 	}
 
 	_mouseDown(evt: JQuery.MouseDownEvent<never, never, HTMLElement>): void {
 		if (this._pressTimer) {
 			clearInterval(this._pressTimer);
-			this._pressTimer = null;
+			this._pressTimer = undefined;
 		}
 		var target = evt.currentTarget,
 			hRail = this.$n('hor-rail'),
@@ -738,16 +738,15 @@ export class Scrollbar extends zk.Object {
 				barPos = isHor ? this._barPos![0] : this._barPos![1],
 				pointlimit = point * ratio,
 				rstep = step * 10;
-			self = this;
 
 			if (frozen) {
 				point = _setScrollPos(point, 0, hBarLimit);
-				self._syncBarPosition('hor', point);
-				self._syncEmbedBarPosition('hor', point);
+				this._syncBarPosition('hor', point);
+				this._syncEmbedBarPosition('hor', point);
 				frozen._doScroll(point / step);
 			} else {
 				//setInterval for long press on scroll rail
-				self._pressTimer = setInterval(function () {
+				this._pressTimer = setInterval(() => {
 					var isLeftDown = point > barPos,
 						min: number,
 						max: number,
@@ -763,35 +762,34 @@ export class Scrollbar extends zk.Object {
 					pos = _setScrollPos(pos, min, max);
 					bPos = pos / ratio;
 					if (pos == pointlimit || pos <= min || pos >= max) {
-						clearInterval(self._pressTimer!);
-						self._pressTimer = null;
+						clearInterval(this._pressTimer);
+						this._pressTimer = undefined;
 					}
 					//sync position
-					self._syncPosition(orient, pos);
-					self._syncBarPosition(orient, bPos);
-					self._syncEmbedBarPosition(orient, pos + bPos);
+					this._syncPosition(orient, pos);
+					this._syncBarPosition(orient, bPos);
+					this._syncEmbedBarPosition(orient, pos + bPos);
 					//onScrollEnd callback
-					self._onScrollEnd();
+					this._onScrollEnd();
 				}, 50);
 			}
 		}
 		//click on arrows
 		if (target == left || target == right || target == up || target == down) {
-			var self = this,
-				isHor = target == left || target == right,
+			var isHor = target == left || target == right,
 				orient = isHor ? 'hor' : 'ver',
-				limit = isHor ? self.hLimit : self.vLimit,
-				ratio = isHor ? self.hRatio : self.vRatio,
-				pos = isHor ? self._pos![0] : self._pos![1],
-				barPos = self._barPos![0];
+				limit = isHor ? this.hLimit : this.vLimit,
+				ratio = isHor ? this.hRatio : this.vRatio,
+				pos = isHor ? this._pos![0] : this._pos![1],
+				barPos = this._barPos![0];
 
 			//setInterval for long press on arrow button
-			self._pressTimer = setInterval(function () {
+			this._pressTimer = setInterval(() => {
 				if (frozen && isHor) { //Frozen Mesh
 					barPos += (target == left ? -step : step);
 					barPos = _setScrollPos(barPos, 0, hBarLimit);
-					self._syncBarPosition(orient, barPos);
-					self._syncEmbedBarPosition(orient, barPos);
+					this._syncBarPosition(orient, barPos);
+					this._syncEmbedBarPosition(orient, barPos);
 					frozen._doScroll(barPos / step);
 				} else {
 					//horizontal scroll
@@ -803,11 +801,11 @@ export class Scrollbar extends zk.Object {
 					pos = _setScrollPos(pos, 0, limit);
 					barPos = pos / ratio;
 					//sync position
-					self._syncPosition(orient, pos);
-					self._syncBarPosition(orient, barPos);
-					self._syncEmbedBarPosition(orient, pos + barPos);
+					this._syncPosition(orient, pos);
+					this._syncBarPosition(orient, barPos);
+					this._syncEmbedBarPosition(orient, pos + barPos);
 					//onScrollEnd callback
-					self._onScrollEnd();
+					this._onScrollEnd();
 				}
 			}, 50);
 		}

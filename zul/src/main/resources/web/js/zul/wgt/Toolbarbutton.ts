@@ -16,14 +16,14 @@ function _initUpld(wgt: zul.wgt.Toolbarbutton): void {
 	zWatch.listen({onSize: wgt});
 	const v = wgt._upload;
 	if (v)
-		wgt._uplder = new zul.Upload(wgt, null, v);
+		wgt._uplder = new zul.Upload(wgt, undefined, v);
 }
 
 function _cleanUpld(wgt: zul.wgt.Toolbarbutton): void {
 	const v = wgt._uplder;
 	if (v) {
 		zWatch.unlisten({onSize: wgt});
-		wgt._uplder = null;
+		wgt._uplder = undefined;
 		v.destroy();
 	}
 }
@@ -57,7 +57,7 @@ export class Toolbarbutton extends zul.LabelImageWidget implements zul.LabelImag
 	 * Returns the mode.
 	 * @return String
 	 */
-	getMode(): string | null {
+	getMode(): string | undefined {
 		return this._mode;
 	}
 
@@ -103,8 +103,8 @@ export class Toolbarbutton extends zul.LabelImageWidget implements zul.LabelImag
 	 * <p>Default: false.
 	 * @return boolean
 	 */
-	isDisabled(): boolean | undefined {
-		return this._disabled;
+	isDisabled(): boolean {
+		return !!this._disabled;
 	}
 
 	/** Sets whether it is disabled.
@@ -338,11 +338,11 @@ export class Toolbarbutton extends zul.LabelImageWidget implements zul.LabelImag
 	}
 
 	// super//
-	override getTextNode(): HTMLElement | null | undefined {
+	override getTextNode(): HTMLElement | undefined {
 		return this.$n('cnt');
 	}
 
-	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		if (!this._disabled) {
 			var n = this.$n_();
@@ -352,7 +352,7 @@ export class Toolbarbutton extends zul.LabelImageWidget implements zul.LabelImag
 		if (!this._disabled && this._upload) _initUpld(this);
 	}
 
-	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		_cleanUpld(this);
 		var n = this.$n_();
 		this.domUnlisten_(n, 'onFocus', 'doFocus_')
@@ -414,7 +414,7 @@ export class Toolbarbutton extends zul.LabelImageWidget implements zul.LabelImag
 				if (href) {
 					// ZK-2506: use iframe to open a 'mailto' href
 					if (isMailTo) {
-						var ifrm = jq.newFrame('mailtoFrame', href, null);
+						var ifrm = jq.newFrame('mailtoFrame', href, undefined);
 						jq(ifrm).remove();
 					} else {
 						zUtl.go(href, {target: this._target || (evt.data!.ctrlKey ? '_blank' : '')});

@@ -23,8 +23,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.inp.Bandbox')
 export class Bandbox extends zul.inp.ComboWidget {
-	override firstChild!: zul.inp.Bandpopup | null;
-	override lastChild!: zul.inp.Bandpopup | null;
+	override firstChild!: zul.inp.Bandpopup | undefined;
+	override lastChild!: zul.inp.Bandpopup | undefined;
 	override _iconSclass = 'z-icon-search';
 
 	//super
@@ -38,8 +38,8 @@ export class Bandbox extends zul.inp.ComboWidget {
 		return [w || 'auto', h || 'auto'];
 	}
 
-	override getCaveNode(): HTMLElement | null | undefined {
-		return this.$n('pp') || this.$n();
+	override getCaveNode(): HTMLElement | undefined {
+		return this.$n('pp') ?? this.$n();
 	}
 
 	override redrawpp_(out: string[]): void {

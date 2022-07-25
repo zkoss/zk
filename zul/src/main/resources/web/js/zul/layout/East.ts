@@ -47,7 +47,7 @@ export class East extends zul.layout.LayoutRegion {
 	 * {@link #getWidth()}.
 	 * @return String
 	 */
-	getSize(): string | null | undefined {
+	getSize(): string | undefined {
 		// Bug ZK-1490: Cannot find 'getWidth' method in widget.js
 		return this.getWidth();
 	}

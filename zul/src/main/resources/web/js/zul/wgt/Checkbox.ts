@@ -14,10 +14,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 
 //Two onclick are fired if clicking on label, so ignore it if so
-function _shallIgnore(evt: zk.Event): boolean | undefined {
+function _shallIgnore(evt: zk.Event): boolean {
 	var v = evt.domEvent;
 	// B96-ZK-4821: shall ignore if target is not the real input checkbox (label or span)
-	return v && !jq.nodeName(v.target as Node, 'input');
+	return !!(v && !jq.nodeName(v.target as Node, 'input'));
 }
 
 /**
@@ -44,14 +44,14 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 	 * <p>Default: false.
 	 * @return boolean
 	 */
-	isDisabled(): boolean | undefined {
-		return this._disabled;
+	isDisabled(): boolean {
+		return !!this._disabled;
 	}
 
 	/** Sets whether it is disabled.
 	 * @param boolean disabled
 	 */
-	setDisabled(disabled: boolean | undefined, opts?: Record<string, boolean>): this {
+	setDisabled(disabled: boolean, opts?: Record<string, boolean>): this {
 		const o = this._disabled;
 		
 		if (opts && opts.adbs)
@@ -66,7 +66,7 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 				this._adbs = false;
 			} else if (opts && opts.adbs === false)
 				// ignore re-enable by autodisable mechanism
-				disabled = this._disabled;
+				disabled = !!this._disabled;
 		}
 		this._disabled = disabled;
 
@@ -154,7 +154,7 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 	 * <p>Default: -1 (means the same as browser's default).
 	 * @return int
 	 */
-	override getTabindex(): number | null | undefined {
+	override getTabindex(): number | undefined {
 		return this._tabindex;
 	}
 
@@ -260,8 +260,8 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 	 * @return boolean
 	 * @since 8.6.0
 	 */
-	isIndeterminate(): boolean | undefined {
-		return this._indeterminate;
+	isIndeterminate(): boolean {
+		return !!this._indeterminate;
 	}
 
 	/**
@@ -293,9 +293,9 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 	 * @return Boolean
 	 * @since 9.0.0
 	 */
-	getState(): boolean | null {
+	getState(): boolean {
 		if (this.isIndeterminate())
-			return null;
+			return false;
 		else
 			return this.isChecked();
 	}
@@ -308,7 +308,7 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 
 	contentAttrs_(): string {
 		var html = '',
-			v: string | undefined | number | null; // cannot use this._name for radio
+			v: string | undefined | number; // cannot use this._name for radio
 		if (v = this.getName())
 			html += ` name="${v}"`;
 		if (this._disabled)
@@ -326,7 +326,7 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 		return '';
 	}
 
-	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 
 		var n = this.$n('real') as HTMLInputElement,
@@ -346,7 +346,7 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 		this._setTabIndexForMold();
 	}
 
-	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		var n = this.$n('real')!,
 			mold = this.$n('mold')!;
 
@@ -409,7 +409,7 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 			evt.stop();
 	}
 
-	fireOnCheck_(checked: boolean | null): void {
+	fireOnCheck_(checked: boolean): void {
 		this.fire('onCheck', checked);
 	}
 
@@ -418,11 +418,11 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 			super.beforeSendAU_(wgt, evt);
 	}
 
-	override getTextNode(): HTMLElement | null | undefined {
+	override getTextNode(): HTMLElement | undefined {
 		return this.$n('cnt');
 	}
 
-	override shallIgnoreClick_(): boolean | undefined {
+	override shallIgnoreClick_(): boolean {
 		return this.isDisabled();
 	}
 

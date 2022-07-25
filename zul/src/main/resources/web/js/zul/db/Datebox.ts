@@ -32,15 +32,15 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 	// Debugger in ZKDemo shows that both properties are created and agree.
 	// However, the server should expect `_timeZone`.
 	_timeZone?: string;
-	_constraint?: string | null;
+	_constraint?: string;
 	_displayedTimeZones?: string;
-	_dtzones?: string[] | null;
+	_dtzones?: string[];
 	_unformater?: string;
 	_weekOfYear?: boolean;
 	_showTodayLink?: boolean;
 	_todayLinkLabel?: string;
 	_defaultDateTime?: DateImpl;
-	_refDate?: DateImpl | null;
+	_refDate?: DateImpl;
 	_timeZonesReadonly?: boolean;
 	static _unformater?: zul.db.Unformater;
 	localizedFormat?: string;
@@ -169,7 +169,7 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 	 * <p>Default: null (means no constraint all all).
 	 * @param String cst
 	 */
-	override setConstraint(cst: string | null, opts?: Record<string, boolean>): this {
+	override setConstraint(cst: string | undefined, opts?: Record<string, boolean>): this {
 		const o = this._constraint;
 		this._constraint = cst;
 
@@ -177,7 +177,7 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 			if (typeof cst == 'string' && cst.charAt(0) != '['/*by server*/)
 				this._cst = new zul.inp.SimpleDateConstraint(cst, this);
 			else
-				this._cst = cst as null;
+				this._cst = cst as undefined;
 			if (this._cst)
 				this._reVald = true; //revalidate required
 			if (this._pop) {
@@ -192,7 +192,7 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 	/** Returns the constraint, or null if no constraint at all.
 	 * @return String
 	 */
-	override getConstraint(): string | null | undefined {
+	override getConstraint(): string | undefined {
 		return this._constraint;
 	}
 
@@ -244,8 +244,8 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 	 * If readonly, the user cannot change the time zone at the client.
 	 * @return boolean
 	 */
-	isTimeZonesReadonly(): boolean | undefined {
-		return this._timeZonesReadonly;
+	isTimeZonesReadonly(): boolean {
+		return !!this._timeZonesReadonly;
 	}
 
 	/** Sets a catenation of a list of the time zones' ID, separated by comma,
@@ -258,7 +258,7 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 		this._displayedTimeZones = dtzones;
 
 		if (o !== dtzones || (opts && opts.force)) {
-			this._dtzones = dtzones ? dtzones.split(',') : null;
+			this._dtzones = dtzones ? dtzones.split(',') : undefined;
 		}
 
 		return this;
@@ -317,7 +317,7 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 	 * inputs must match this object's format.
 	 * @return boolean
 	 */
-	isLenient(): boolean | null {
+	isLenient(): boolean {
 		return this._lenient;
 	}
 
@@ -371,8 +371,8 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 	 * @since 6.5.0
 	 * @return boolean
 	 */
-	isWeekOfYear(): boolean | undefined {
-		return this._weekOfYear;
+	isWeekOfYear(): boolean {
+		return !!this._weekOfYear;
 	}
 
 	/**
@@ -399,8 +399,8 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 	 * @since 8.0.0
 	 * @return boolean
 	 */
-	isShowTodayLink(): boolean | undefined {
-		return this._showTodayLink;
+	isShowTodayLink(): boolean {
+		return !!this._showTodayLink;
 	}
 
 	/**
@@ -662,8 +662,8 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 		return this;
 	}
 
-	isOpen(): boolean | undefined {
-		return this._pop && this._pop.isOpen();
+	isOpen(): boolean {
+		return !!this._pop && this._pop.isOpen();
 	}
 
 	override setValue(value: DateImpl, fromServer?: boolean): this {
@@ -672,7 +672,7 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 		return super.setValue(value, fromServer);
 	}
 
-	override coerceFromString_(val: string | null | undefined, pattern?: string): zul.inp.CoerceFromStringResult | DateImpl | null | undefined {
+	override coerceFromString_(val: string | undefined, pattern?: string): zul.inp.CoerceFromStringResult | DateImpl | undefined {
 		var unf = Datebox._unformater,
 			tz = this.getTimeZone();
 		if (unf && jq.isFunction(unf)) {
@@ -686,14 +686,14 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 			var refDate = this._refDate || this._value,
 				format = this.getFormat()!,
 				d = new zk.fmt.Calendar().parseDate(val, pattern || format, !this._lenient, refDate, this._localizedSymbols, tz, this._strictDate);
-			this._refDate = null;
+			this._refDate = undefined;
 			if (!d) return {error: zk.fmt.Text.format(msgzul.DATE_REQUIRED + (this.localizedFormat!.replace(_quotePattern, '')))};
 			// B70-ZK-2382 escape shouldn't be used in format including hour
 			if (!format.match(/[HkKh]/))
 				d = new zk.fmt.Calendar().escapeDSTConflict(d, tz);
 			return d;
 		}
-		return null;
+		return undefined;
 	}
 
 	override coerceToString_(val: DateImpl | undefined, pattern?: string): string {
@@ -780,16 +780,16 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 		evt.stop();
 	}
 
-	override afterKeyDown_(evt: zk.Event, simulated?: boolean): boolean | undefined {
+	override afterKeyDown_(evt: zk.Event, simulated?: boolean): boolean {
 		if (!simulated && this._inplace)
-			jq(this.$n_()).toggleClass(this.getInplaceCSS(), evt.keyCode == 13 ? null! : false);
+			jq(this.$n_()).toggleClass(this.getInplaceCSS(), evt.keyCode == 13 ? true : false);
 
 		return super.afterKeyDown_(evt, simulated);
 	}
 
-	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
-		var btn: HTMLElement | null | undefined;
+		var btn: HTMLElement | undefined;
 
 		if (btn = this.$n('btn')) {
 			this.domListen_(btn, zk.android ? 'onTouchstart' : 'onClick', '_doBtnClick');
@@ -800,8 +800,8 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 		this._pop.setFormat(this.getDateFormat());
 	}
 
-	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
-		var btn: CalendarPop | HTMLElement | null | undefined;
+	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
+		var btn: CalendarPop | HTMLElement | undefined;
 		if (btn = this._pop)
 			btn.close(true);
 
@@ -820,7 +820,7 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 		if (!this._disabled)
 			this.setOpen(!jq(this.$n_('pp')).zk.isVisible(), zul.db.DateboxCtrl.isPreservedFocus(this));
 		// Bug ZK-2544, B70-ZK-2849
-		evt.stop((this._pop && this._pop._open ? {propagation: true} : null));
+		evt.stop((this._pop && this._pop._open ? {propagation: true} : undefined));
 	}
 
 	_doBtnMouseDown(): void {
@@ -932,7 +932,7 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 @zk.WrapClass('zul.db.CalendarPop')
 export class CalendarPop extends zul.db.Calendar {
 	override parent!: Datebox;
-	_shadow?: zk.eff.Shadow | null;
+	_shadow?: zk.eff.Shadow;
 	_open?: CalendarPop;
 
 	constructor() {
@@ -951,7 +951,7 @@ export class CalendarPop extends zul.db.Calendar {
 	}
 
 	// ZK-2047: should sync shadow when shiftView
-	override rerender(skipper?: number | zk.Skipper | null): void {
+	override rerender(skipper?: number | zk.Skipper): void {
 		super.rerender(skipper);
 		if (this.desktop) this.syncShadow();
 	}
@@ -983,7 +983,7 @@ export class CalendarPop extends zul.db.Calendar {
 		if (this._shadow) {
 			// B65-ZK-1904: Make shadow behavior the same as ComboWidget
 			this._shadow.destroy();
-			this._shadow = null;
+			this._shadow = undefined;
 		}
 		pp.style.display = 'none';
 		pp.className = db.$s('popup');
@@ -1130,19 +1130,19 @@ export class CalendarPop extends zul.db.Calendar {
 		}
 	}
 
-	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		this._bindTimezoneEvt();
 
 		zWatch.listen({onFloatUp: this});
 	}
 
-	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		zWatch.unlisten({onFloatUp: this});
 		this._unbindfTimezoneEvt();
 		if (this._shadow) {
 			this._shadow.destroy();
-			this._shadow = null;
+			this._shadow = undefined;
 		}
 		super.unbind_(skipper, after, keepRod);
 	}
@@ -1189,7 +1189,7 @@ export class CalendarPop extends zul.db.Calendar {
 		return zk(this.parent).getAnimationSpeed('_default');
 	}
 
-	override _chooseDate(target: HTMLTableCellElement | null | undefined, val: number): void {
+	override _chooseDate(target: HTMLTableCellElement | undefined, val: number): void {
 		var db = this.parent,
 			selectLevel = db._selectLevel;
 		if (target && !jq(target).hasClass(this.$s('disabled'))) {
@@ -1198,8 +1198,8 @@ export class CalendarPop extends zul.db.Calendar {
 			switch (this._view) {
 				case 'day':
 					var oldTime = this.getTime();
-					this._setTime(null, cell._monofs != null && cell._monofs != 0 ?
-						dateobj.getMonth() + cell._monofs : null, val, true /*fire onChange */);
+					this._setTime(undefined, cell._monofs != null && cell._monofs != 0 ?
+						dateobj.getMonth() + cell._monofs : undefined, val, true /*fire onChange */);
 					var newTime = this.getTime();
 					if (oldTime.getYear() == newTime.getYear()
 						&& oldTime.getMonth() == newTime.getMonth()) {
@@ -1211,10 +1211,10 @@ export class CalendarPop extends zul.db.Calendar {
 					break;
 				case 'month':
 					if (selectLevel == 'month') {
-						this._setTime(null, val, 1, true);
+						this._setTime(undefined, val, 1, true);
 						break;
 					}
-					this._setTime(null, val);
+					this._setTime(undefined, val);
 					this._setView('day');
 					break;
 				case 'year':
@@ -1234,8 +1234,8 @@ export class CalendarPop extends zul.db.Calendar {
 		}
 	}
 
-	static _equalDate(d1: DateImpl | undefined, d2: DateImpl | undefined): boolean | undefined {
-		return (d1 == d2) || (d1 && d2 && d1.getTime() == d2.getTime());
+	static _equalDate(d1: DateImpl | undefined, d2: DateImpl | undefined): boolean {
+		return !!((d1 == d2) || (d1 && d2 && d1.getTime() == d2.getTime()));
 	}
 }
 

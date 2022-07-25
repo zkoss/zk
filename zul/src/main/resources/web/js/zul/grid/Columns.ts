@@ -19,16 +19,16 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.grid.Columns')
 export class Columns extends zul.mesh.ColumnMenuWidget {
-	override parent!: zul.grid.Grid | null;
+	override parent!: zul.grid.Grid | undefined;
 
 	/** Returns the grid that contains this columns.
 	 * @return zul.grid.Grid
 	 */
-	getGrid(): zul.grid.Grid | null {
+	getGrid(): zul.grid.Grid | undefined {
 		return this.parent;
 	}
 
-	override rerender(skipper?: zk.Skipper | number | null): this {
+	override rerender(skipper?: zk.Skipper | number): this {
 		if (this.desktop) {
 			if (this.parent)
 				this.parent.rerender();

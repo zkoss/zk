@@ -29,7 +29,7 @@ function checkBookmark(): void {
 	const nm = getBookmark();
 	if (nm != _curbk) {
 		_curbk = nm;
-		zAu.send(new zk.Event(null, 'onBookmarkChange', nm), 1);
+		zAu.send(new zk.Event(undefined, 'onBookmarkChange', nm), 1);
 		zk.bmk.onURLChange();
 	}
 }
@@ -61,8 +61,8 @@ function _bookmark(nm: string, replace: boolean): void {
 	}
 }
 
-let _startCheck: (() => void) | null = function () {
-	_startCheck = null;
+let _startCheck: (() => void) | undefined = function () {
+	_startCheck = undefined;
 	checkBookmark();
 	jq(window).on('hashchange', checkBookmark);
 	// Kept for a workaround that history.pushState() never causes a hashchange event to be fired

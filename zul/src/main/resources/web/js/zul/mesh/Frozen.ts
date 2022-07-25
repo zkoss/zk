@@ -61,13 +61,13 @@ function _onSizeLater(wgt: Frozen): void {
 @zk.WrapClass('zul.mesh.Frozen')
 export class Frozen extends zul.Widget {
 	// Parent could be null because it's checked in `Frozen.prototype.syncScroll`.
-	override parent!: zul.mesh.MeshWidget | null;
+	override parent!: zul.mesh.MeshWidget | undefined;
 	_start = 0;
 	_scrollScale = 0;
 	_smooth?: boolean;
 	_columns?: number;
 	_shallSyncScale?: boolean;
-	_delayedScroll?: number | null;
+	_delayedScroll?: number;
 	_lastScale?: number;
 	_shallSync?: boolean;
 
@@ -143,7 +143,7 @@ export class Frozen extends zul.Widget {
 	 */
 	syncScrollByParentBody(): void {
 		var p = this.parent,
-			ebody: HTMLDivElement | null | undefined,
+			ebody: HTMLDivElement | undefined,
 			l: number;
 		if (p && p._nativebar && (ebody = p.ebody) && (l = ebody.scrollLeft) > 0) {
 			var scroll = this.$n('scrollX');
@@ -154,7 +154,7 @@ export class Frozen extends zul.Widget {
 		}
 	}
 
-	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		var p = this.parent!,
 			body = p.$n('body'),
@@ -187,7 +187,7 @@ export class Frozen extends zul.Widget {
 			jq(foot).addClass('z-word-nowrap');
 	}
 
-	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		var p = this.parent!,
 			body = p.$n('body'),
 			foot = p.$n('foot'),
@@ -235,12 +235,12 @@ export class Frozen extends zul.Widget {
 		//B70-ZK-2129: prevent height changed by scrolling
 		var p = this.parent!,
 			phead = p.head,
-			firstHdcell: HTMLElement | null;
+			firstHdcell: HTMLElement | undefined;
 		if (p._nativebar && phead) {
 			//B70-ZK-2558: frozen will onSize before other columns,
 			//so there might be no any column in the beginning
-			var n = phead.$n() as (HTMLElement & Partial<Pick<HTMLTableRowElement, 'cells'>>) | null | undefined;
-			firstHdcell = n ? (n.cells ? n.cells[0] : null) : null;
+			var n = phead.$n() as (HTMLElement & Partial<Pick<HTMLTableRowElement, 'cells'>>) | undefined;
+			firstHdcell = n ? (n.cells ? n.cells[0] : undefined) : undefined;
 			//B70-ZK-2463: if firstHdcell is not undefined
 			if (firstHdcell) {
 				const fhcs = firstHdcell.style;
@@ -268,7 +268,7 @@ export class Frozen extends zul.Widget {
 		this._shallSync = false;
 	}
 
-	override beforeParentChanged_(p: zk.Widget | null): void {
+	override beforeParentChanged_(p: zk.Widget | undefined): void {
 		//bug B50-ZK-238
 		//ZK-2651: JS Error showed when clear grid children component that include frozen
 		if (this.desktop && this._lastScale) //if large then 0
@@ -335,7 +335,7 @@ export class Frozen extends zul.Widget {
 			self._doScrollNow(num);
 			self.smartUpdate('start', num);
 			self._start = num;
-			self._delayedScroll = null;
+			self._delayedScroll = undefined;
 		}, 0);
 	}
 
@@ -353,10 +353,10 @@ export class Frozen extends zul.Widget {
 				// B70-ZK-2071: Use mesh.head to get columns.
 				hdcells = mesh.head.$n_().cells,
 				hdcol = mesh.ehdfaker!.firstChild,
-				ftrows = mesh.foot ? mesh.efootrows : null,
-				ftcells = ftrows ? ftrows.rows[0].cells : null;
+				ftrows = mesh.foot ? mesh.efootrows : undefined,
+				ftcells = ftrows ? ftrows.rows[0].cells : undefined;
 
-			for (var faker: HTMLElement | null | undefined, i = 0; hdcol && i < totalCols; hdcol = hdcol.nextSibling, i++) {
+			for (var faker: HTMLElement | undefined, i = 0; hdcol && i < totalCols; hdcol = hdcol.nextSibling, i++) {
 				if ((hdcol as HTMLElement).style.width.indexOf('px') == -1) {
 					var sw = (hdcol as HTMLElement).style.width = jq.px0(hdcells[i].offsetWidth),
 						wgt = zk.Widget.$(hdcol)!;
@@ -374,14 +374,15 @@ export class Frozen extends zul.Widget {
 				index: number;
 				width?: string;
 			}
-			var updateBatch: Update[] = [];
+			var updateBatch: Update[] = [], isVisible = false;
 			// B70-ZK-2071: Use mesh.head to get column.
-			for (var i = c, faker: HTMLElement | null | undefined; i < totalCols; i++) {
+			for (var i = c, faker: HTMLElement | undefined; i < totalCols; i++) {
 				var n = hdcells[i],
 					hdWgt = zk.Widget.$<zul.mesh.HeaderWidget>(n)!,
-					isVisible = hdWgt && hdWgt.isVisible(),
 					shallUpdate = false,
 					cellWidth: string | undefined;
+
+				isVisible = hdWgt && hdWgt.isVisible();
 
 				//ZK-2776, once a column is hidden, there is an additional style
 				if (!hdWgt.isVisible())
@@ -399,7 +400,7 @@ export class Frozen extends zul.Widget {
 						// if the column is visible.
 						if ((wd > 1) && (faker = jq('#' + n.id + '-hdfaker')[0]) && faker.style.width)
 							cellWidth = faker.style.width;
-						hdWgt._origWd = null;
+						hdWgt._origWd = undefined;
 						shallUpdate = true;
 					}
 				} else if (force ||
@@ -457,9 +458,9 @@ export class Frozen extends zul.Widget {
 		// transpilation to "if statements" is as bloat as it currently is.
 		// Set style width to table to avoid colgroup width not working
 		// because of width attribute (width="100%") on table
-		var headtbl: HTMLTableElement | null | undefined,
-			bodytbl: HTMLTableElement | null | undefined,
-			foottbl: HTMLTableElement | null | undefined;
+		var headtbl: HTMLTableElement | undefined,
+			bodytbl: HTMLTableElement | undefined,
+			foottbl: HTMLTableElement | undefined;
 		if (headtbl = mesh.eheadtbl)
 			headtbl.style.width = jq.px(totalWidth);
 		if (bodytbl = mesh.ebodytbl)

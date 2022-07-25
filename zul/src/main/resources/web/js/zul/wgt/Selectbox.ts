@@ -58,8 +58,8 @@ export class Selectbox extends zul.Widget<HTMLSelectElement> {
 	 * Default: false.
 	 * @return boolean
 	 */
-	isDisabled(): boolean | undefined {
-		return this._disabled;
+	isDisabled(): boolean {
+		return !!this._disabled;
 	}
 
 	/**
@@ -85,8 +85,8 @@ export class Selectbox extends zul.Widget<HTMLSelectElement> {
 	 * @return boolean
 	 * @since 10.0.0 for Zephyr
 	 */
-	isMultiple(): boolean | undefined {
-		return this._multiple;
+	isMultiple(): boolean {
+		return !!this._multiple;
 	}
 
 	/**
@@ -219,7 +219,7 @@ export class Selectbox extends zul.Widget<HTMLSelectElement> {
 			this.$n_().selectedIndex = -1;
 	}
 
-	override bind_(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null, after?: CallableFunction[]): void {
+	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		var n = this.$n_();
 		this.domListen_(n, 'onChange')
@@ -227,21 +227,21 @@ export class Selectbox extends zul.Widget<HTMLSelectElement> {
 			.domListen_(n, 'onBlur', 'doBlur_');
 
 		if (!zk.gecko) {
-			const fn: [zul.wgt.Selectbox, zk.Callable] = [this, this._fixSelIndex];
+			const fn: [zul.wgt.Selectbox, CallableFunction] = [this, this._fixSelIndex];
 			zWatch.listen({onRestore: fn, onVParent: fn});
 		}
 
 		this._fixSelIndex();
 	}
 
-	override unbind_(skipper?: zk.Skipper | null, after?: CallableFunction[], keepRod?: boolean): void {
+	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		var n = this.$n_();
 		this.domUnlisten_(n, 'onChange')
 			.domUnlisten_(n, 'onFocus', 'doFocus_')
 			.domUnlisten_(n, 'onBlur', 'doBlur_');
 		super.unbind_(skipper, after, keepRod);
 
-		const fn: [zul.wgt.Selectbox, zk.Callable] = [this, this._fixSelIndex];
+		const fn: [zul.wgt.Selectbox, CallableFunction] = [this, this._fixSelIndex];
 		zWatch.unlisten({onRestore: fn, onVParent: fn});
 	}
 
