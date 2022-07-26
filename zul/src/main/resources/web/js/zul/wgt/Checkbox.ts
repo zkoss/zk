@@ -293,9 +293,10 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 	 * @return Boolean
 	 * @since 9.0.0
 	 */
-	getState(): boolean {
+	// eslint-disable-next-line zk/preferStrictBooleanType
+	getState(): boolean | undefined {
 		if (this.isIndeterminate())
-			return false;
+			return undefined;
 		else
 			return this.isChecked();
 	}
@@ -408,8 +409,8 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 		if (this.isDisabled())
 			evt.stop();
 	}
-
-	fireOnCheck_(checked: boolean): void {
+	// eslint-disable-next-line zk/preferStrictBooleanType
+	fireOnCheck_(checked: boolean | undefined): void {
 		this.fire('onCheck', checked);
 	}
 
