@@ -386,8 +386,8 @@ export class Uploader extends zk.Object {
 	id: string;
 	flnm: string;
 	_upload?: Upload;
-	_form: HTMLFormElement | null;
-	_parent: HTMLElement | null;
+	_form: HTMLFormElement | undefined;
+	_parent: HTMLElement | undefined;
 	_sid: number;
 	_wgt?: zk.Widget;
 	viewer?: UploadViewer;
@@ -407,7 +407,7 @@ export class Uploader extends zk.Object {
 		this.flnm = flnm;
 		this._upload = upload;
 		this._form = form;
-		this._parent = form.parentNode as HTMLElement | null;
+		this._parent = form.parentNode as HTMLElement | undefined;
 		this._sid = upload.sid;
 		this._wgt = upload._wgt;
 
@@ -443,7 +443,7 @@ export class Uploader extends zk.Object {
 			jq(this._form.parentNode!).remove();
 			jq('#' + this.id + '_ifm').remove();
 		}
-		this._form = null;
+		this._form = undefined;
 		this._upload = this._wgt = undefined;
 	}
 

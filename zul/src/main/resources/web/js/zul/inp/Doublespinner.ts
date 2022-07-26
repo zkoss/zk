@@ -339,7 +339,7 @@ export class Doublespinner extends zul.inp.NumberInputWidget<number> {
 
 	override afterKeyDown_(evt: zk.Event, simulated?: boolean): boolean {
 		if (!simulated && this._inplace)
-			jq(this.$n()!).toggleClass(this.getInplaceCSS(), evt.keyCode == 13 ? null! : false);
+			jq(this.$n()!).toggleClass(this.getInplaceCSS(), evt.keyCode == 13);
 
 		return super.afterKeyDown_(evt, simulated);
 	}
