@@ -37,7 +37,7 @@ export class Input extends zhtml.Widget {
 
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
-		var n: HTMLInputElement | null | undefined;
+		var n: HTMLInputElement | undefined;
 
 		if (this.isListen('onChange', {any: true}) && (n = this.$n())) {
 			this._defValue = n.value;

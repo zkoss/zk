@@ -25,16 +25,16 @@ export class Listfooter extends zul.mesh.FooterWidget {
 	/** Returns the listbox that this belongs to.
 	 * @return Listbox
 	 */
-	getListbox(): zul.sel.Listbox | null | undefined { // FIXME: solve with <parent>
-		return this.getMeshWidget() as zul.sel.Listbox | null | undefined;
+	getListbox(): zul.sel.Listbox | undefined { // FIXME: solve with <parent>
+		return this.getMeshWidget() as zul.sel.Listbox | undefined;
 	}
 
 	/** Returns the list header that is in the same column as
 	 * this footer, or null if not available.
 	 * @return Listheader
 	 */
-	getListheader(): zul.sel.Listheader | null | undefined { // FIXME: solve with <parent>
-		return this.getHeaderWidget() as zul.sel.Listheader | null | undefined;
+	getListheader(): zul.sel.Listheader | undefined { // FIXME: solve with <parent>
+		return this.getHeaderWidget() as zul.sel.Listheader | undefined;
 	}
 
 	/** Returns the maximal length for this cell.

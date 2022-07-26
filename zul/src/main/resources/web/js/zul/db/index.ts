@@ -7,4 +7,4 @@ export * from './Datebox';
 
 // Unformater is used by zul.db.Timebox and zul.db.Datebox. Its signature is found at
 // https://blog.zkoss.org/2011/11/06/zk-6-0-new-feature-highlight-part-3-dateboxtimebox-input-shortcut/
-export type Unformater = (val?: string | null) => DateImpl | null;
+export type Unformater = (val?: string) => DateImpl | undefined;

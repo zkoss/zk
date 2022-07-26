@@ -512,7 +512,7 @@ export class Panel extends zul.Widget {
 						sh = $op.zk.clientHeightDoubleValue();
 
 					if (zk.isLoaded('zkmax.layout') && this.parent instanceof zkmax.layout.Portalchildren) {
-						var layout = this.parent.parent;
+						var layout = this.parent.parent!;
 						if (layout.getMaximizedMode() == 'whole') {
 							this._inWholeMode = true;
 							var p = layout.$n_(), ps = p.style;

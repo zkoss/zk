@@ -290,7 +290,7 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 	override setValue(value: DateImpl, fromServer?: boolean): this {
 		var tz = this.getTimeZone();
 		if (tz && value) value.tz(tz);
-		if (fromServer && value === null) //Bug ZK-1322: if from server side, return empty string
+		if (fromServer && value == null) //Bug ZK-1322: if from server side, return empty string
 			this._changed = false;
 		return super.setValue(value, fromServer);
 	}
@@ -680,7 +680,7 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 
 	override afterKeyDown_(evt: zk.Event, simulated?: boolean): boolean {
 		if (!simulated && this._inplace)
-			jq(this.$n_()).toggleClass(this.getInplaceCSS(), evt.keyCode == 13 ? null! : false);
+			jq(this.$n_()).toggleClass(this.getInplaceCSS(), evt.keyCode == 13);
 
 		return super.afterKeyDown_(evt, simulated);
 	}

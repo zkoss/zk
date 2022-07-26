@@ -119,7 +119,7 @@ export class Menu extends zul.LabelImageWidget implements zul.LabelImageWidgetWi
 			if (!this._contentHandler) {
 				if (zk.feature.pe) {
 					var self = this;
-					zk.load('zkex.inp', null, function () {
+					zk.load('zkex.inp', undefined, function () {
 						self._contentHandler = new zkex.inp.ContentHandler(self, content);
 					});
 					return this;
