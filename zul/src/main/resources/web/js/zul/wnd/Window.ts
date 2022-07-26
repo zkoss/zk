@@ -1553,6 +1553,7 @@ export class Window extends zul.ContainerWidget {
 
 			var p = this.$n_(),
 				fc = this.caption,
+				// eslint-disable-next-line zk/noNull
 				c: Node | null | undefined = fc ? fc.$n() : p.firstChild,
 				zkp = zk(p),
 				w = zkp.padBorderWidth();

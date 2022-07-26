@@ -638,11 +638,13 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 
 		if (bSel) {
 			try {
+				// eslint-disable-next-line zk/noNull
 				var el: HTMLElement | null = evt.domTarget;
 				if (el) //Not use jq.isAncestor since it calls vparentNode
 					for (;;) {
 						if (el.id == this.uuid) //listbox
 							break;
+						// eslint-disable-next-line zk/noNull
 						if (!(el = el.parentNode as HTMLElement | null))
 							return true; //vparent
 					}
@@ -859,6 +861,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 				// and deselect item when moving inwards
 				this._toggleSelect(row, this._getToSelFlag(row, this._startRow!, step), evt);
 			}
+			// eslint-disable-next-line zk/noNull
 			var nrow: Node | null | undefined = row ? row.$n() : undefined;
 			for (;;) {
 				if (!nrow) { // no focused/selected item yet

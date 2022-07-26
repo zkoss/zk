@@ -54,6 +54,7 @@ function getButtons(opts: Record<string, unknown>): zul.wgt.Button[] {
 	var btns: zul.wgt.Button[] = [];
 	for (var nm in opts) {
 		var f = opts[nm];
+		// eslint-disable-next-line zk/noNull
 		btns.push(newButton(nm, typeof f == 'function' ? f : null));
 	}
 	if (!btns.length)

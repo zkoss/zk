@@ -228,6 +228,7 @@ function _fixBodyMinWd(wgt: MeshWidget, fixMesh?: boolean): void {
 	if (!wgt.head && (meshmin || sbc)) {
 		var bdw = zk(wgt.$n()).padBorderWidth(),
 			wd = _getMinWd(wgt) + bdw, // has to call _getMinWd first so wgt._minWd will be available
+			// eslint-disable-next-line zk/noNull
 			tr: ChildNode | null = wgt.ebodytbl!,
 			wds = wgt._minWd!.wds,
 			wlen = wds.length;
@@ -235,6 +236,7 @@ function _fixBodyMinWd(wgt: MeshWidget, fixMesh?: boolean): void {
 			wgt.setFlexSize_({width: wd}, true);
 		if (!(tr = tr.firstChild) || !(tr = tr.firstChild))
 			return; // no first tr
+		// eslint-disable-next-line zk/noNull
 		for (var c: ChildNode | null = tr.firstChild, i = 0; c && (i < wlen); c = c.nextSibling)
 			(c as HTMLElement).style.width = jq.px(wds[i++]);
 		if (sbc && !meshmin) {
@@ -341,9 +343,11 @@ function _getMinWd(wgt: MeshWidget): number {
 function _getSigRow(wgt: MeshWidget): HTMLTableRowElement | undefined {
 	// scan for tr with largest number of td children
 	var rw = wgt.getBodyWidgetIterator().next(),
+		// eslint-disable-next-line zk/noNull
 		tr = rw ? rw.$n() : null;
 	if (!tr)
 		return;
+	// eslint-disable-next-line zk/noNull
 	for (var maxtr = tr, len: number, max = maxtr.cells.length; tr; tr = tr.nextSibling as HTMLTableRowElement | null)
 		if ((len = tr.cells.length) > max) {
 			maxtr = tr;
@@ -357,6 +361,7 @@ function _cpCellWd(wgt: MeshWidget): void {
 	if (!dst || !srcrows || !srcrows.length || !dst.cells.length)
 		return;
 	var ncols = dst.cells.length,
+		// eslint-disable-next-line zk/noNull
 		src: HTMLTableRowElement | null | undefined,
 		maxnc = 0;
 	for (var j = 0, it = wgt.getBodyWidgetIterator({skipHidden: true}), w: zul.mesh.Item | undefined; (w = it.next());) {
@@ -1094,6 +1099,7 @@ export abstract class MeshWidget extends zul.Widget {
 				hdcol = hdfaker.firstChild,
 				bdcol = bdfaker.firstChild,
 				ftfaker = this.eftfaker,
+				// eslint-disable-next-line zk/noNull
 				ftcol: ChildNode | null = null;
 
 

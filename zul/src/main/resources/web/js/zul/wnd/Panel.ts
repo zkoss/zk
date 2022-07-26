@@ -1245,8 +1245,10 @@ export class Panel extends zul.Widget {
 	override doClick_(evt: zk.Event, popupOnly?: boolean): void {
 		var maxBtn = this.$n('max'),
 			minBtn = this.$n('min'),
+			// eslint-disable-next-line zk/noNull
 			n: HTMLElement | null = evt.domTarget;
 		if (!n.id)
+			// eslint-disable-next-line zk/noNull
 			n = n.parentNode as HTMLElement | null;
 		switch (n) {
 		case this.$n('close'):

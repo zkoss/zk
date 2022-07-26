@@ -56,6 +56,7 @@ export class Caption extends zul.LabelImageWidget<HTMLDivElement> {
 			if (this.firstChild) {
 				firstWgtDom = this.firstChild.$n();
 			}
+			// eslint-disable-next-line zk/noNull
 			for (var child = dn.firstChild, nextChild: ChildNode | null; child && child !== firstWgtDom; child = nextChild) {
 				nextChild = child.nextSibling;
 				jq(child).remove();

@@ -10,6 +10,7 @@ export = {
 				'zk/preferNativeInstanceof': 'error',
 				'zk/preferNativeClass': 'error',
 				'zk/javaStyleSetterSignature': 'error',
+				'zk/noNull': 'error',
 			},
 		},
 	},
