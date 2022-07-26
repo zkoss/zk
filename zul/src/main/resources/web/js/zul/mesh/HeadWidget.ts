@@ -347,6 +347,7 @@ export class HeadWidget extends zul.Widget<HTMLTableRowElement> {
 				var bdfaker = wgt.ebdfaker!,
 					ftfaker = wgt.eftfaker,
 					bdcol = bdfaker.firstChild,
+					// eslint-disable-next-line zk/noNull
 					ftcol: ChildNode | null | undefined,
 					width0 = zul.mesh.MeshWidget.WIDTH0;
 				if (ftfaker)

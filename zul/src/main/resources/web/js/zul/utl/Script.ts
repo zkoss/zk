@@ -137,6 +137,7 @@ export class Script extends zk.Widget {
 			e.charset = this._charset ?? 'UTF-8';
 			e.src = this._src;
 			var n = this.$n(),
+				// eslint-disable-next-line zk/noNull
 				nextSib: ChildNode | null = null;
 			if (n) {
 				nextSib = n.nextSibling;
