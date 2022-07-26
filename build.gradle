@@ -114,6 +114,7 @@ subprojects {
 	}
 
 	task tscheck(type: NpmTask) {
+		setOnlyIf { project.ext['gradleFrontendSkip'] == 'false' }
 		enabled = project.file("tsconfig.json").exists()
 		workingDir = rootDir
 		args =['run', 'type-check', '--', '--project', "$projectDir"]
@@ -121,6 +122,7 @@ subprojects {
 
 	// eslint
 	task jscheck(type: NpmTask) {
+		setOnlyIf { project.ext['gradleFrontendSkip'] == 'false' }
 		workingDir = rootDir
 		def eslintDir = project.file(".eslintrc.js").exists() ? projectDir : rootDir;
 		args =['run', 'lint', '--', "$projectDir/$resources/web/js", "--config=$eslintDir/.eslintrc.js", "--ignore-path=$rootDir/.eslintignore"]
@@ -268,6 +270,7 @@ subprojects {
 }
 
 task tscheck(type: NpmTask) {
+	setOnlyIf { project.ext['gradleFrontendSkip'] == 'false' }
 	args =['run', 'type-check']
 }
 check.dependsOn(tscheck)
