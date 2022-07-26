@@ -461,7 +461,7 @@ export abstract class MeshWidget extends zul.Widget {
 	_span?: string | boolean;
 	_nspan?: number;
 	_autopaging?: boolean;
-	_model?: boolean;
+	_model?: boolean | string;
 	_paginal?: zul.mesh.Paging;
 	_pendOnRender?: boolean;
 	_ebodyScrollPos?: { l: number; t: number };
@@ -701,8 +701,8 @@ export abstract class MeshWidget extends zul.Widget {
 		return !!this._model;
 	}
 	// TODO: Used by grid. Should prefer the use of isModel
-	getModel(): boolean {
-		return !!this._model;
+	getModel(): boolean | string | undefined {
+		return this._model; // it could be "group" for groups model
 	}
 
 	/**
