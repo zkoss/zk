@@ -11,6 +11,7 @@ export = {
 				'zk/preferNativeClass': 'error',
 				'zk/javaStyleSetterSignature': 'error',
 				'zk/noNull': 'error',
+				'zk/preferStrictBooleanType': 'error',
 			},
 		},
 	},

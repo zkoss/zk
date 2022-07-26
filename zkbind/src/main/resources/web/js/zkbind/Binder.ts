@@ -13,6 +13,7 @@ var _WidgetX: Partial<zk.Widget> = {},
 	_zkMatchMediaRegexPattern = /ZKMatchMedia=([^;]*)/,
 	_portrait: Record<string | number, boolean> = {'0': true, '180': true}, //default portrait definition
 	_initLandscape = jq.innerWidth() > jq.innerHeight(), // initial orientation is landscape or not
+	// eslint-disable-next-line zk/preferStrictBooleanType
 	_initDefault = _portrait[window.orientation] as boolean | undefined; //default orientation
 
 zk.override(zk.Widget.prototype, _WidgetX, {

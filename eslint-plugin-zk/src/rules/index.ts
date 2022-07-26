@@ -4,3 +4,4 @@ export * from './preferNativeInstanceof';
 export * from './preferNativeClass';
 export * from './javaStyleSetterSignature';
 export * from './noNull';
+export * from './preferStrictBooleanType';
