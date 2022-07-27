@@ -16,11 +16,6 @@ Copyright (c) 2005, 2006 Thomas Fuchs (http://script.aculo.us, http://mir.aculo.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-import {default as zk} from './zk';
-import type {Widget} from './widget';
-import {type FireOptions, zWatch, type Event} from './evt';
-import type { Dimension } from './dom';
-
 export interface DraggableScrollOptions {
 	scrollTo(left: number, top: number): void;
 	scrollLeft: number;
@@ -35,14 +30,14 @@ export interface DraggableOptions {
 	delay?: number;
 	fireOnMove?: boolean;
 	reverteffect?(dg: Draggable, offset: zk.Offset): void;
-	revert?: boolean | ((dg: Draggable, offset: zk.Offset, evt: Event) => boolean);
-	endeffect?(dg: Draggable, evt?: Event): void;
-	starteffect?(dg: Draggable, evt?: Event): void;
+	revert?: boolean | ((dg: Draggable, offset: zk.Offset, evt: zk.Event) => boolean);
+	endeffect?(dg: Draggable, evt?: zk.Event): void;
+	starteffect?(dg: Draggable, evt?: zk.Event): void;
 	endghosting?(dg: Draggable, node: HTMLElement): void;
-	change?(dg: Draggable, offset: zk.Offset, evt?: Event): void;
-	constraint?: string | ((dg: Draggable, offset: zk.Offset, evt: Event) => zk.Offset);
-	draw?(dg: Draggable, offset: zk.Offset, evt: Event): void;
-	ignoredrag?(dg: Draggable, offset?: zk.Offset, evt?: Event): boolean;
+	change?(dg: Draggable, offset: zk.Offset, evt?: zk.Event): void;
+	constraint?: string | ((dg: Draggable, offset: zk.Offset, evt: zk.Event) => zk.Offset);
+	draw?(dg: Draggable, offset: zk.Offset, evt: zk.Event): void;
+	ignoredrag?(dg: Draggable, offset?: zk.Offset, evt?: zk.Event): boolean;
 	handle?: HTMLElement;
 	scroll?: DraggableScrollOptions | HTMLElement | Window;
 	overlay?: boolean;
@@ -251,13 +246,13 @@ export class Draggable extends zk.Object {
 	/** The control object for this draggable.
 	 * @type Object
 	 */
-	control?: Widget;
+	control?: zk.Widget;
 	/** The DOM element that represents the handle that the user can
 	 * drag the whole element ({@link #node}.
 	 * It is either {@link #node} or a child element of it.
 	 * @type DOMElement
 	 */
-	handle?: Widget | HTMLElement;
+	handle?: zk.Widget | HTMLElement;
 	/** The DOM element that is draggable (the whole element).
 	 * @type DOMElement
 	 */
@@ -522,8 +517,8 @@ String scroll; //DOM Element's ID</code></pre>
 		return [zk.parseInt($node.css('left')), zk.parseInt($node.css('top'))];
 	}
 
-	_startDrag(evt: Event): void {
-		zWatch.fire('onStartDrag', this, evt as unknown as FireOptions);
+	_startDrag(evt: zk.Event): void {
+		zWatch.fire('onStartDrag', this, evt as unknown as zk.FireOptions);
 
 		//disable selection
 		zk(document.body).disableSelection(); // Bug #1820433
@@ -610,7 +605,7 @@ String scroll; //DOM Element's ID</code></pre>
 		}
 	}
 
-	_updateDrag(pt, evt: Event): void {
+	_updateDrag(pt, evt: zk.Event): void {
 		if (!this.dragging) {
 			let v = this.opts.initSensitivity;
 			if (v && pt[0] <= _initPt[0] + v && pt[0] >= _initPt[0] - v
@@ -655,7 +650,7 @@ String scroll; //DOM Element's ID</code></pre>
 		evt.stop();
 	}
 
-	_finishDrag(evt: Event, success): void {
+	_finishDrag(evt: zk.Event, success): void {
 		this.dragging = false;
 		if (this.stackup) {
 			jq(this.stackup).remove();
@@ -726,7 +721,7 @@ String scroll; //DOM Element's ID</code></pre>
 		var self = this;
 		setTimeout(function () {
 			zk.dragging = false;
-			zWatch.fire('onEndDrag', self, evt as unknown as FireOptions);
+			zWatch.fire('onEndDrag', self, evt as unknown as zk.FireOptions);
 		}, zk.ios ? 500 : 0);
 			//we have to reset it later since event is fired later (after onmouseup)
 	}
@@ -776,7 +771,7 @@ String scroll; //DOM Element's ID</code></pre>
 		}
 	}
 
-	_endDrag(evt: Event): void {
+	_endDrag(evt: zk.Event): void {
 		if (this.dragging) {
 			this._stopScrolling();
 			this._finishDrag(evt, true);
@@ -785,7 +780,7 @@ String scroll; //DOM Element's ID</code></pre>
 			_deactivate();
 	}
 
-	_draw(point: zk.Offset, evt?: Event): void {
+	_draw(point: zk.Offset, evt?: zk.Event): void {
 		var node = this.node as HTMLElement,
 			$node = zk(node),
 			pos = $node.cmOffset(),
@@ -901,7 +896,7 @@ String scroll; //DOM Element's ID</code></pre>
 	_updateInnerOfs(): void {
 		this._innerOfs = [jq.innerX(), jq.innerY()];
 	}
-	_getWndScroll(w): Dimension {
+	_getWndScroll(w): zk.Dimension {
 		var T, L, W, H,
 			doc = w.document,
 			de = doc.documentElement;

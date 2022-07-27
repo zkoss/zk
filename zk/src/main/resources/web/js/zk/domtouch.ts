@@ -12,11 +12,6 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-import {default as zk} from './zk';
-import {zjq} from './dom';
-import {Widget} from './widget';
-import {Event} from './evt';
-
 function _createMouseEvent (type, button, changedTouch, ofs): MouseEvent {
 	if (!ofs)
 		ofs = {sx: 0, sy: 0, cx: 0, cy: 0};
@@ -143,8 +138,8 @@ function _removeEventFunction(elem, type, fn): boolean {
 	return false;
 }
 var _xWidget = {};
-zk.override(Widget.prototype, _xWidget, {
-	bindSwipe_: function (this: Widget & {_swipe}) {
+zk.override(zk.Widget.prototype, _xWidget, {
+	bindSwipe_: function (this: zk.Widget & {_swipe}) {
 		var node = this.$n();
 		if (this.isListen('onSwipe') || jq(node!).data('swipeable'))
 			this._swipe = new zk.Swipe(this, node);
@@ -177,7 +172,7 @@ zk.override(Widget.prototype, _xWidget, {
 				.off('touchend', this.proxy(this._dblTapEnd));
 		}
 	},
-	_dblTapStart: function (this: zk.Widget & {_tapValid; _tapTimeout; _lastTap; _startTap(wgt: Widget); _dbTap}, evt) {
+	_dblTapStart: function (this: zk.Widget & {_tapValid; _tapTimeout; _lastTap; _startTap(wgt: zk.Widget); _dbTap}, evt) {
 		var tevt = evt.originalEvent;
 		if (tevt.touches.length > 1) return;
 		if (!this._tapValid) {

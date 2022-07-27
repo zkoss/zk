@@ -16,11 +16,6 @@ Copyright (c) 2005, 2006 Thomas Fuchs (http://script.aculo.us, http://mir.aculo.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-import {default as zk} from './zk';
-import {type JQZK, type SlideOptions} from './dom';
-import {zWatch} from './evt';
-import type {Widget} from './widget';
-
 var _defSKUOpts, _useSKU;
 
 export interface EffectStackupOptions {
@@ -49,10 +44,10 @@ export interface EffectMaskOptions extends EffectStackupOptions {
 }
 
 export interface EffectActions {
-	slideDown(n: HTMLElement, opts?: Partial<SlideOptions>): void;
-	slideUp(n: HTMLElement, opts?: Partial<SlideOptions>): void;
-	slideIn(n: HTMLElement, opts?: Partial<SlideOptions>): void;
-	slideOut(n: HTMLElement, opts?: Partial<SlideOptions>): void;
+	slideDown(n: HTMLElement, opts?: Partial<zk.SlideOptions>): void;
+	slideUp(n: HTMLElement, opts?: Partial<zk.SlideOptions>): void;
+	slideIn(n: HTMLElement, opts?: Partial<zk.SlideOptions>): void;
+	slideOut(n: HTMLElement, opts?: Partial<zk.SlideOptions>): void;
 }
 export interface Effect {
 	destroy(): void;
@@ -97,7 +92,7 @@ let eff = {
 /** The shadow effect.
 */
 export class Shadow extends zk.Object implements Effect {
-	declare wgt?: Widget;
+	declare wgt?: zk.Widget;
 	declare node?: HTMLElement;
 	declare stackup?: HTMLIFrameElement;
 	declare opts: EffectStackupOptions;
@@ -267,7 +262,7 @@ export class Mask extends zk.Object implements Effect {
 	declare mask?: HTMLElement;
 	declare _opts: EffectMaskOptions;
 	declare __mask?: Required<Effect>;
-	declare wgt?: Widget & Pick<Mask, '__mask'>;
+	declare wgt?: zk.Widget & Pick<Mask, '__mask'>;
 
 	/** The constructor.
 	 * <p>To remove the mask, invoke {@link #destroy}.
@@ -291,7 +286,7 @@ export class Mask extends zk.Object implements Effect {
 		this.sync();
 	}
 	//ZK-3118
-	_draw(opts: EffectMaskOptions, $anchor: JQZK): void {
+	_draw(opts: EffectMaskOptions, $anchor: zk.JQZK): void {
 		var maskId = opts.id || 'z_applymask',
 			progbox = jq(maskId, zk)[0];
 
@@ -446,7 +441,7 @@ eff.Actions = {
 	 * <li><code>duration</code>: how many milliseconds to slide down</li>
 	 * </ul>
 	 */
-	slideDown: function (this: Widget, n, opts) {
+	slideDown: function (this: zk.Widget, n, opts) {
 		zk(n).slideDown(this, opts);
 	},
 	/** Slides up to hide this widget.
@@ -456,7 +451,7 @@ eff.Actions = {
 	 * <li><code>duration</code>: how many milliseconds to slide up</li>
 	 * </ul>
 	 */
-	slideUp: function (this: Widget, n, opts) {
+	slideUp: function (this: zk.Widget, n, opts) {
 		zk(n).slideUp(this, opts);
 	},
 	/** Slides in to display this widget.
@@ -466,7 +461,7 @@ eff.Actions = {
 	 * <li><code>duration</code>: how many milliseconds to slide in</li>
 	 * </ul>
 	 */
-	slideIn: function (this: Widget, n, opts) {
+	slideIn: function (this: zk.Widget, n, opts) {
 		zk(n).slideIn(this, opts);
 	},
 	/** Slides out to hide this widget.
@@ -476,7 +471,7 @@ eff.Actions = {
 	 * <li><code>duration</code>: how many milliseconds to slide out</li>
 	 * </ul>
 	 */
-	slideOut: function (this: Widget, n, opts) {
+	slideOut: function (this: zk.Widget, n, opts) {
 		zk(n).slideOut(this, opts);
 	}
 };

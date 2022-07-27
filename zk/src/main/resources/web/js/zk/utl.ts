@@ -13,9 +13,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-import {default as zk} from './zk';
-import {type Widget} from './widget';
-
 var _decs = {lt: '<', gt: '>', amp: '&', quot: '"'},
 	_encs = {};
 for (var v in _decs)
@@ -41,7 +38,7 @@ function _frames(ary, w): void {
  * FUTRE: consider to have zk.Widget.beforeSize to clean up _hflexsz and
  * this method considers only if _hflex is min
  */
-function _onSizeTarget(wgt): Widget {
+function _onSizeTarget(wgt): zk.Widget {
 	var r1 = wgt, p1 = r1,
 		j1 = -1;
 	for (; p1 && p1._hflex == 'min'; p1 = p1.parent) {
@@ -97,8 +94,8 @@ export interface ZUtl {
 	destroyProgressbox(id: string, opts?: Partial<ProgressboxOptions>): void;
 	encodeXML(txt: string, opts?: EncodeXmlOptions): string;
 	encodeXMLAttribute(txt: string): string;
-	fireShown(wgt: Widget, bfsz?: number): void;
-	fireSized(wgt: Widget, bfsz?: number): void;
+	fireShown(wgt: zk.Widget, bfsz?: number): void;
+	fireSized(wgt: zk.Widget, bfsz?: number): void;
 	frames(w: Window): Window[];
 	getDevicePixelRatio(): number;
 	getUserMedia(constraints: MediaStreamConstraints): Promise<MediaStream>;
@@ -106,7 +103,7 @@ export interface ZUtl {
 				  minimalDaysInFirstWeek: number): number;
 	go(url: string, opts?: Partial<GoOptions>): void;
 	intsToString(ary: number[] | undefined): string;
-	isAncestor(p?: Widget, c?: Widget & {getParent?()}): boolean;
+	isAncestor(p?: zk.Widget, c?: zk.Widget & {getParent?()}): boolean;
 	isChar(cc: string, opts: Partial<IsCharOptions>): boolean;
 	isImageLoading(): boolean;
 	loadImage(url: string): void;
@@ -421,7 +418,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * @return boolean
 	 * @see jq#isAncestor
 	 */
-	isAncestor(p?: Widget, c?: Widget & {getParent?()}): boolean {
+	isAncestor(p?: zk.Widget, c?: zk.Widget & {getParent?()}): boolean {
 		if (!p) return true;
 		for (; c; c = c.getParent ? c.getParent() : c.parent)
 			if (p == c)
@@ -687,7 +684,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * </ul>
 	 * @since 5.0.8
 	 */
-	fireSized(wgt: Widget, bfsz?: number): void {
+	fireSized(wgt: zk.Widget, bfsz?: number): void {
 		// ignore delayed rerendering case, like Bug ZK-2281
 		if (wgt.desktop) {
 			if (zUtl.isImageLoading() || zk.clientinfo) {
@@ -717,7 +714,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * </ul>
 	 * @since 5.0.8
 	 */
-	fireShown(wgt: Widget, bfsz?: number): void {
+	fireShown(wgt: zk.Widget, bfsz?: number): void {
 		zWatch.fireDown('onShow', wgt);
 		zUtl.fireSized(wgt, bfsz);
 	},

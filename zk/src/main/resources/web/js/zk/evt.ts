@@ -12,9 +12,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	This program is distributed under LGPL Version 2.1 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
-import {default as zk, ZKObject} from './zk';
-import type {Widget} from './widget';
-
 export interface EventOptions {
 	implicit?: boolean;
 	ignorable?: boolean;
@@ -93,7 +90,7 @@ export interface EventStopOptions {
  * </table>
  * @disable(zkgwt)
  */
-export class Event<TData = unknown> extends ZKObject {
+export class Event<TData = unknown> extends zk.Object {
 	keys?: zul.wnd.Dimension; // zul.wnd.Window
 	itemSelected?: boolean; // zul.sel.ItemWidget.prototype.doSelect_
 	tooltipped?: boolean; // zul.Widget.prototype.doTooltipOver_
@@ -121,13 +118,13 @@ export class Event<TData = unknown> extends ZKObject {
 	 * @type zk.Widget
 	 * @see #currentTarget
 	 */
-	target?: Widget;
+	target?: zk.Widget;
 	/** Indicates the target which is handling this event.
 	 * <p>By default, an event will be propagated to its parent, and this member tells which widget is handling it, while #target is the widget that the event is targeting.
 	 * @type zk.Widget
 	 * @see #target
 	 */
-	currentTarget?: Widget;
+	currentTarget?: zk.Widget;
 	/** The event name, such as 'onChange'.
 	 * The data which depends on the event. Here is the list of Event Data.
 	 * <p>However, if data is an instance of Map, its content is copied to the event instance. Thus, you can access them directly with the event instance as follows.
@@ -220,7 +217,7 @@ onClick: function (evt) {
 	 * @param Map opts [optional] the options. Refer to {@link #opts}
 	 * @param jq.Event domEvent [optional] the DOM event that causes this widget event.
 	 */
-	constructor(target: Widget | undefined, name: string, data?: TData, opts?: EventOptions, domEvent?: JQuery.TriggeredEvent) { // FIXME: TriggeredEvent missing type parameters
+	constructor(target: zk.Widget | undefined, name: string, data?: TData, opts?: EventOptions, domEvent?: JQuery.TriggeredEvent) { // FIXME: TriggeredEvent missing type parameters
 		super();
 		this.currentTarget = this.target = target;
 		this.name = name;
@@ -346,9 +343,9 @@ export class ZWatchController extends zk.Object {
 	name: string;
 	xinfs;
 	args;
-	origin: Widget;
+	origin: zk.Widget;
 	fns;
-	constructor(name: string, xinfs, args, org: Widget, fns) {
+	constructor(name: string, xinfs, args, org: zk.Widget, fns) {
 		super();
 		this.name = name;
 		this.xinfs = xinfs;
@@ -356,7 +353,7 @@ export class ZWatchController extends zk.Object {
 		this.origin = org;
 		this.fns = fns;
 	}
-	fire(ref?: Widget): void {
+	fire(ref?: zk.Widget): void {
 		var infs, xinf,
 			name = this.name,
 			xinfs = this.xinfs,
@@ -374,7 +371,7 @@ export class ZWatchController extends zk.Object {
 			while (xinf = xinfs.shift())
 				_invoke(name, xinf[1], xinf[0], args, fns);
 	}
-	fireDown(ref: Widget): void {
+	fireDown(ref: zk.Widget): void {
 		if (!ref || ref.bindLevel == null)
 			this.fire(ref);
 
@@ -442,7 +439,7 @@ function _visiSubset(name, xinfs): Node[] {
 				xinfs.splice(j, 1);
 	return xinfs;
 }
-function _target(inf): Widget {
+function _target(inf): zk.Widget {
 	return Array.isArray(inf) ? inf[0] : inf;
 }
 function _fn(inf, o, name): (() => void) {

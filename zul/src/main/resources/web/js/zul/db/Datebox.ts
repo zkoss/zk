@@ -1186,7 +1186,7 @@ export class CalendarPop extends zul.db.Calendar {
 	}
 
 	override animationSpeed_(): number | 'slow' | 'fast' {
-		return zk(this.parent).getAnimationSpeed('_default');
+		return zk(this.parent).getAnimationSpeed();
 	}
 
 	override _chooseDate(target: HTMLTableCellElement | undefined, val: number): void {

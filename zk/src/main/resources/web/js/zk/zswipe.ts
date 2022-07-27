@@ -9,17 +9,13 @@
 
 Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 */
-import {default as zk} from './zk';
-import {Event as ZKEvent} from './evt';
-import {Widget} from './widget';
-
 let hastouch = 'ontouchstart' in window,
 	startEvt = hastouch ? 'touchstart' : 'mousedown',
 	moveEvt = hastouch ? 'touchmove' : 'mousemove',
 	endEvt = hastouch ? 'touchend' : 'mouseup',
 	start, stop;
 
-function _doEvt(wevt: ZKEvent): void {
+function _doEvt(wevt: zk.Event): void {
 	var wgt = wevt.target;
 	if (wgt && !wgt.$weave) {
 		var en = wevt.name;
@@ -58,7 +54,7 @@ export class Swipe extends zk.Object {
 	 * <li>int maxDisplacement: the maximum swipe displacement(pixel). When larger than maximum displacement, it is not a swipe action. Default: 75.</li>
 	 * </ul>
 	 */
-	constructor(widget: Widget, node?: HTMLElement, opts?: Partial<SwipeOptions>) {
+	constructor(widget: zk.Widget, node?: HTMLElement, opts?: Partial<SwipeOptions>) {
 		super();
 		this.widget = widget;
 		this.node = node = node ? jq(node, zk)[0] : widget['node'] || (widget.$n ? widget.$n() : undefined);

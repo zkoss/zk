@@ -12,8 +12,6 @@ Copyright (C) 2017 Potix Corporation. All Rights Reserved.
 	This program is distributed under LGPL Version 2.1 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
-import {default as zk} from './zk';
-
 let popped = ('state' in window.history),
 	initialURL = location.href;
 

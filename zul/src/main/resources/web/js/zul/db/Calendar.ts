@@ -1329,7 +1329,7 @@ export class Calendar extends zul.Widget {
 	}
 
 	animationSpeed_(): 'slow' | 'fast' | number {
-		return zk(this).getAnimationSpeed('_default');
+		return zk(this).getAnimationSpeed();
 	}
 
 	getAnchor_(): HTMLAnchorElement | undefined {

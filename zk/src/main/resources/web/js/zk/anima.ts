@@ -12,14 +12,10 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-import {default as zk} from './zk';
-import {zjq, type JQZK} from './dom';
-import {type Widget} from './widget';
-
 export interface Anima {
 	anima: string;
 	el: HTMLElement;
-	wgt: Widget;
+	wgt: zk.Widget;
 	opts: Record<string, unknown>;
 }
 
@@ -56,26 +52,26 @@ function _doAnique(id: string): void {
 	}
 }
 
-function _saveProp(self: JQZK, set: string[]): JQZK {
+function _saveProp(self: zk.JQZK, set: string[]): zk.JQZK {
 	var ele = self.jq;
 	for (var i = set.length; i--;)
 		if (set[i] !== null) ele.data('zk.cache.' + set[i], ele[0].style[set[i]]);
 	return self;
 }
-function _restoreProp(self: JQZK, set: string[]): JQZK {
+function _restoreProp(self: zk.JQZK, set: string[]): zk.JQZK {
 	var ele = self.jq;
 	for (var i = set.length; i--;)
 		if (set[i] !== null) ele.css(set[i], ele.data('zk.cache.' + set[i]));
 	return self;
 }
-function _checkAnimated(self: JQZK, wgt: zk.Widget, opts, anima): boolean {
+function _checkAnimated(self: zk.JQZK, wgt: zk.Widget, opts, anima): boolean {
 	if (self.jq.is(':animated')) {
 		_addAnique(wgt.uuid, {el: self.jq[0], wgt: wgt, opts: opts, anima: anima});
 		return true;
 	}
 	return false;
 }
-function _checkPosition(self: JQZK, css: Record<string, string>): JQZK {
+function _checkPosition(self: zk.JQZK, css: Record<string, string>): zk.JQZK {
 	var pos = self.jq.css('position');
 	if (!pos || pos == 'static')
 		css.position = 'relative';
@@ -126,7 +122,7 @@ zk._anique = _anique;
 
 /** @partial jqzk
  */
-Object.assign(zjq.prototype, {
+export class JQZKEx extends zk.JQZK {
 	/**
 	 * Get the value of animation speed assigned through client attribute "data-animationspeed"
 	 * @param Object defaultValue [optional] default value if widget doesn't have this attribute.
@@ -142,7 +138,7 @@ Object.assign(zjq.prototype, {
 	 * @return Object this value will be Integer or String.
 	 * @since 7.0.3
 	 */
-	getAnimationSpeed: function (this: JQZK, defaultValue) {
+	getAnimationSpeed(defaultValue?: 'slow' | 'fast' | number): 'slow' | 'fast' | number {
 		var animationSpeed = jq(this.$().$n()!).closest('[data-animationspeed]').data('animationspeed'),
 			jqSpeed = jq.fx['speeds'];
 
@@ -153,8 +149,8 @@ Object.assign(zjq.prototype, {
 				animationSpeed = parseInt(animationSpeed);
 		}
 
-		return typeof animationSpeed === 'number' && !isNaN(animationSpeed) ? animationSpeed : (defaultValue === 0 ? 0 : defaultValue || jqSpeed._default);
-	},
+		return typeof animationSpeed === 'number' && !isNaN(animationSpeed) ? animationSpeed : (defaultValue === 0 ? 0 : defaultValue || jqSpeed._default as number);
+	}
 	/** Slides down (show) of the matched DOM element(s).
 	 * @param Widget wgt the widget that owns the DOM element
 	 * @param Map opts the options. Ignored if not specified.
@@ -172,7 +168,7 @@ Object.assign(zjq.prototype, {
 	 * <dd>The function to invoke after the animation.</dd>
 	 * </dl>
 	 */
-	slideDown: function (this: JQZK, wgt, opts) {
+	slideDown(wgt: zk.Widget, opts?: Partial<zk.SlideOptions>): this {
 		if (_checkAnimated(this, wgt, opts, 'slideDown'))
 			return this;
 
@@ -208,12 +204,14 @@ Object.assign(zjq.prototype, {
 			break;
 		}
 
-		return this._createWrapper(this.defaultAnimaOpts(wgt, opts, prop, true).jq)
+		this._createWrapper(this.defaultAnimaOpts(wgt, opts, prop, true).jq)
+			// eslint-disable-next-line @typescript-eslint/consistent-type-assertions
 			.css(css).show().animate(anima, {
 			queue: false, easing: opts.easing, duration: this.getAnimationSpeed(opts.duration === 0 ? 0 : opts.duration || 250),
 			always: opts.afterAnima
-		});
-	},
+		} as JQuery.EffectsOptions<HTMLElement>);
+		return this;
+	}
 	/** Slides up (hide) of the matched DOM element(s).
 	 * @param Widget wgt the widget that owns the DOM element
 	 * @param Map opts the options. Ignored if not specified.
@@ -231,7 +229,7 @@ Object.assign(zjq.prototype, {
 	 * <dd>The function to invoke after the animation.</dd>
 	 * </dl>
 	 */
-	slideUp: function (this: JQZK, wgt, opts) {
+	slideUp(wgt: zk.Widget, opts?: Partial<zk.SlideOptions>): this {
 		if (_checkAnimated(this, wgt, opts, 'slideUp'))
 			return this;
 
@@ -263,12 +261,14 @@ Object.assign(zjq.prototype, {
 			break;
 		}
 
-		return this._createWrapper(this.defaultAnimaOpts(wgt, opts, prop).jq)
+		this._createWrapper(this.defaultAnimaOpts(wgt, opts, prop).jq)
+			// eslint-disable-next-line @typescript-eslint/consistent-type-assertions
 			.css(css).animate(anima, {
 			queue: false, easing: opts.easing, duration: this.getAnimationSpeed(opts.duration === 0 ? 0 : opts.duration || 250),
 			always: opts.afterAnima
-		});
-	},
+		} as JQuery.EffectsOptions<HTMLElement>);
+		return this;
+	}
 	/** Slides out (hide) of the matched DOM element(s).
 	 * @param Widget wgt the widget that owns the DOM element
 	 * @param Map opts the options. Ignored if not specified.
@@ -286,7 +286,7 @@ Object.assign(zjq.prototype, {
 	 * <dd>The function to invoke after the animation.</dd>
 	 * </dl>
 	 */
-	slideOut: function (this: JQZK, wgt, opts) {
+	slideOut(wgt: zk.Widget, opts?: Partial<zk.SlideOptions>): this {
 		if (_checkAnimated(this, wgt, opts, 'slideOut'))
 			return this;
 
@@ -314,12 +314,14 @@ Object.assign(zjq.prototype, {
 			break;
 		}
 
-		return this._createWrapper(this.defaultAnimaOpts(wgt, opts, prop).jq)
+		this._createWrapper(this.defaultAnimaOpts(wgt, opts, prop).jq)
+			// eslint-disable-next-line @typescript-eslint/consistent-type-assertions
 			.css(css).animate(anima, {
 			queue: false, easing: opts.easing, duration: this.getAnimationSpeed(opts.duration === 0 ? 0 : opts.duration || 350),
 			always: opts.afterAnima
-		});
-	},
+		} as JQuery.EffectsOptions<HTMLElement>);
+		return this;
+	}
 	/** Slides in (show) of the matched DOM element(s).
 	 * @param Widget wgt the widget that owns the DOM element
 	 * @param Map opts the options. Ignored if not specified.
@@ -337,7 +339,7 @@ Object.assign(zjq.prototype, {
 	 * <dd>The function to invoke after the animation.</dd>
 	 * </dl>
 	 */
-	slideIn: function (this: JQZK, wgt, opts) {
+	slideIn(wgt: zk.Widget, opts?: Partial<zk.SlideOptions>): this {
 		if (_checkAnimated(this, wgt, opts, 'slideIn'))
 			return this;
 
@@ -369,15 +371,17 @@ Object.assign(zjq.prototype, {
 			break;
 		}
 
-		return this._createWrapper(this.defaultAnimaOpts(wgt, opts, prop, true).jq)
+		this._createWrapper(this.defaultAnimaOpts(wgt, opts, prop, true).jq)
+			// eslint-disable-next-line @typescript-eslint/consistent-type-assertions
 			.css(css).show().animate(anima, {
 			queue: false, easing: opts.easing, duration: this.getAnimationSpeed(opts.duration === 0 ? 0 : opts.duration || 350),
 			always: opts.afterAnima
-		});
-	},
-	_updateProp: function (this: JQZK, prop) { //used by Bandpopup.js
+		} as JQuery.EffectsOptions<HTMLElement>);
+		return this;
+	}
+	_updateProp(prop: string[]): void { //used by Bandpopup.js
 		_saveProp(this, prop);
-	},
+	}
 	/** Initializes the animation with the default effect, such as
 	 * firing the onSize watch.
 	 * <p>Example:<br/>
@@ -391,7 +395,7 @@ Object.assign(zjq.prototype, {
 	 * @return jqzk
 	 * @since 5.0.6
 	 */
-	defaultAnimaOpts: function (this: JQZK, wgt, opts, prop, visible) {
+	defaultAnimaOpts(wgt: zk.Widget, opts: Partial<zk.SlideOptions>, prop: string[], visible?: boolean): this {
 		var self = this;
 		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-ignore
@@ -420,17 +424,17 @@ Object.assign(zjq.prototype, {
 				self.jq.hide();
 			}
 			if (aftfn) aftfn.call(wgt, self.jq[0]);
-			wgt.afterAnima_(visible);
+			wgt.afterAnima_(!!visible);
 			setTimeout(function () {
 				_doAnique(wgt.uuid);
 			});
 		};
 		return this;
-	},
+	}
 	// Wraps the content of a element with an inner wrapper that copies position properties to avoid jumpy animation.
 	// The methods are borrowed from jquery-ui ui/effect.js, MIT license.
-	_createWrapper: function (element) {
-		// If the element is already wrapped, return it
+	_createWrapper(element: JQuery): JQuery {
+	// If the element is already wrapped, return it
 		var wrapped = element.children('.ui-effects-wrapper');
 		if (wrapped.length) {
 			return element;
@@ -481,8 +485,8 @@ Object.assign(zjq.prototype, {
 			margin: 0,
 			padding: 0
 		});
-	},
-	_removeWrapper: function (element) {
+	}
+	_removeWrapper(element: JQuery): JQuery {
 		var active = document.activeElement,
 			wrapped = element.children('.ui-effects-wrapper');
 		if (wrapped.length) {
@@ -494,4 +498,4 @@ Object.assign(zjq.prototype, {
 		}
 		return element;
 	}
-});
+}

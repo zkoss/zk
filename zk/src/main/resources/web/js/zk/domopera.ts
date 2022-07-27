@@ -12,10 +12,8 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-import {type JQZK, zjq} from './dom';
-
 Object.assign(zjq.prototype, {
-	scrollOffset: function (this: JQZK) {
+	scrollOffset: function (this: zk.JQZK) {
 		//Fix opera bug (see the page function)
 		// If tag is "img" or "tr", the "div" element's scrollTop should be ignored.
 		// Because the offsetTop of element "img" or "tr" is excluded its scrollTop.
