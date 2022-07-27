@@ -16,18 +16,6 @@ import './crashmsg';
 import './ext/jquery';
 import {default as zk} from './zk';
 import './js';
-import {zjq} from './dom';
-import {Event, zWatch} from './evt';
-import './anima';
-import {Draggable} from './drag';
-import eff from './effect';
-import * as math from './math';
-import {zUtl} from './utl';
-import {zKeys} from './keys';
-import * as widget from './widget';
-import * as zAu from './au';
-import {default as zFlex} from './flex';
-import {zkreg} from './widget';
 
 declare global {
 	interface Window {
@@ -42,7 +30,8 @@ let oldZK = window.zk; // setting from Java side
 window.zk = zk;
 zk.copy(window.zk, oldZK);
 
-window.zjq = zjq;
+zk.JQZK = require('./dom').JQZK;
+window.zjq = require('./anima').JQZKEx;
 if (!window.jQuery) {
 	window.$ = window.jQuery = jq;
 }
@@ -61,18 +50,21 @@ window.$eval = function (s: string): unknown {
 	return eval(s);
 };
 
-zk.Event = Event;
+var evt = require('./evt');
+zk.Event = evt.Event;
+window.zWatch = evt.zWatch;
 
-window.zWatch = zWatch;
+zk.Draggable = require('./drag').Draggable;
+zk.eff = require('./effect');
 
-zk.Draggable = Draggable;
-zk.eff = eff;
+var math = require('./math');
 zk.BigDecimal = math.BigDecimal;
 zk.Long = math.Long;
 
-window.zUtl = zUtl;
-window.zKeys = zKeys;
+window.zUtl = require('./utl').zUtl;
+window.zKeys = require('./keys').zKeys;
 
+var widget = require('./widget');
 zk.DnD = widget.DnD;
 zk.Widget = widget.Widget;
 zk.$ = widget.$;
@@ -92,21 +84,20 @@ window.zkreg = widget.zkreg;
 window.zkservice = widget.zkservice;
 window.zkopt = widget.zkopt;
 
-let pkg = require('./pkg').default;
-
-zk.setLoaded = pkg.setLoaded;
-zk.setScriptLoaded = pkg.setScriptLoaded;
-zk.isLoaded = pkg.isLoaded;
-zk.load = pkg.load;
-zk._load = pkg._load;
-zk.loadScript = pkg.loadScript;
-zk.loadCSS = pkg.loadCSS;
-zk.getVersion = pkg.getVersion;
-zk.setVersion = pkg.setVersion;
-zk.depends = pkg.depends;
-zk.afterLoad = pkg.afterLoad;
-zk.getHost = pkg.getHost;
-zk.setHost = pkg.setHost;
+zk.copy(zk, require('./pkg').pkg);
+// zk.setLoaded = pkg.setLoaded;
+// zk.setScriptLoaded = pkg.setScriptLoaded;
+// zk.isLoaded = pkg.isLoaded;
+// zk.load = pkg.load;
+// zk._load = pkg._load;
+// zk.loadScript = pkg.loadScript;
+// zk.loadCSS = pkg.loadCSS;
+// zk.getVersion = pkg.getVersion;
+// zk.setVersion = pkg.setVersion;
+// zk.depends = pkg.depends;
+// zk.afterLoad = pkg.afterLoad;
+// zk.getHost = pkg.getHost;
+// zk.setHost = pkg.setHost;
 
 require('./mount');
 
@@ -120,13 +111,13 @@ if (!Promise) {
 
 // workaround for FileUpload with fetch() API.
 require('./ext/fetch.js');
-
-window.zAu = zAu.default;
+var zAu = require('./au');
+window.zAu = zAu.zAu;
 zk.afterAuResponse = zAu.afterAuResponse;
 zk.doAfterAuResponse = zAu.doAfterAuResponse;
 window.onIframeURLChange = zAu.onIframeURLChange;
 
-window.zFlex = zFlex;
+window.zFlex = require('./flex').zFlex;
 
 zk.touchEnabled = zk.touchEnabled !== false && (!!zk.mobile || navigator.maxTouchPoints > 0);
 zk.tabletUIEnabled = zk.tabletUIEnabled !== false && !!zk.mobile;

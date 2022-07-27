@@ -13,15 +13,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	This program is distributed under LGPL Version 2.1 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
-import {default as zk} from './zk';
-import {default as pkg} from './pkg';
-import {Event, zWatch} from './evt';
-import {default as zAu} from './au';
-import {zjq} from './dom';
-
 //define a package and returns the package info (used in WpdExtendlet)
 window.zkpi = function (nm: string, wv: boolean): Record<string, unknown> | undefined {
-	return pkg.isLoaded(nm) ? undefined : {n: nm, p: zk.$package(nm, false, wv)};
+	return zk.isLoaded(nm) ? undefined : {n: nm, p: zk.$package(nm, false, wv)};
 };
 
 //ZK JSP: page creation (backward compatible)
@@ -659,7 +653,7 @@ jq(function () {
 		else _bfUploads.push(fn);
 	};
 
-	function _doEvt(wevt: Event): void {
+	function _doEvt(wevt: zk.Event): void {
 		var wgt = wevt.target;
 		if (wgt && !wgt['$weave']) {
 			var en = wevt.name,

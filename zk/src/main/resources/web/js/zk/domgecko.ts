@@ -10,10 +10,8 @@
 Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 
 */
-import {type JQZK, zjq} from './dom';
-
 Object.assign(zjq.prototype, {
-	beforeHideOnUnbind: function (this: JQZK) { //Bug 3076384
+	beforeHideOnUnbind: function (this: zk.JQZK) { //Bug 3076384
 		return this.jq.each(function () {
 			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			// @ts-ignore

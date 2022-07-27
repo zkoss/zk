@@ -13,12 +13,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	This program is distributed under LGPL Version 2.1 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
-import {default as zk} from './zk';
-import type {Event as ZKEvent} from './evt';
-import {Desktop, Widget} from './widget';
-import {Effect, Mask} from './effect';
-import {DateImpl} from './dateImpl';
-
 export type ErrorHandler = (response: Response, errCode: number) => boolean;
 
 export type AjaxErrorHandler = (req: Response, status: number, statusText: string, ajaxReqTries?: number) => number;
@@ -30,7 +24,7 @@ export interface AuCommand {
 
 export interface AuCommands extends Array<AuCommand> {
 	rid?: number;
-	dt?: Desktop;
+	dt?: zk.Desktop;
 	pfIds?: string;
 	rtags?: Record<string, unknown>;
 }
@@ -38,7 +32,7 @@ export interface AuCommands extends Array<AuCommand> {
 export interface AuRequestInfo {
 	sid: number;
 	uri: string;
-	dt: Desktop;
+	dt: zk.Desktop;
 	content: string|FormData;
 	implicit: boolean;
 	ignorable: boolean;
@@ -68,16 +62,16 @@ export interface AUCommand0 {
 	moveBy: typeof window.moveBy;
 	moveTo: typeof window.moveTo;
 	cfmClose(msg: string): void;
-	showNotification(msg: string, type: zul.wgt.NotificationType, pid: string, ref: Widget,
+	showNotification(msg: string, type: zul.wgt.NotificationType, pid: string, ref: zk.Widget,
 					 pos: string, off: zk.Offset, dur: number, closable: boolean): void;
 	showBusy(uuid: string, msg?: string): void;
 	clearBusy(uuid?: string): void;
 }
 export interface AUCommand1 {
-	setAttr(wgt: Widget | undefined, nm: string, val: unknown): void;
-	setAttrs(wgt: Widget, attrs: unknown[]): void;
-	outer(wgt: Widget, code: string): void;
-	addAft(wgt: Widget, ...codes: string[]): void;
+	setAttr(wgt: zk.Widget | undefined, nm: string, val: unknown): void;
+	setAttrs(wgt: zk.Widget, attrs: unknown[]): void;
+	outer(wgt: zk.Widget, code: string): void;
+	addAft(wgt: zk.Widget, ...codes: string[]): void;
 }
 export interface AUEngine {
 	ajaxReq?: boolean;
@@ -89,7 +83,7 @@ export interface AUEngine {
 	cmd0: AUCommand0;
 	cmd1: AUCommand1;
 	disabledRequest?: boolean;
-	doAfterProcessWgts?: Widget[];
+	doAfterProcessWgts?: zk.Widget[];
 	doneTime?: number;
 	pendingReqInf?: AuRequestInfo;
 	processPhase?: string;
@@ -102,50 +96,50 @@ export interface AUEngine {
 
 	_doCmds(sid?: number): void;
 	_fetch(input: RequestInfo, init?: RequestInit): Promise<Response>;
-	_pfdone(dt: Desktop, pfIds?: string): void;
-	_pfrecv(dt: Desktop, pfIds?: string): void;
-	_pfsend(dt: Desktop, fetchOpts: RequestInit, completeOnly: boolean, forceAjax: boolean): void;
+	_pfdone(dt: zk.Desktop, pfIds?: string): void;
+	_pfrecv(dt: zk.Desktop, pfIds?: string): void;
+	_pfsend(dt: zk.Desktop, fetchOpts: RequestInit, completeOnly: boolean, forceAjax: boolean): void;
 	_onClientInfo(): void;
 	_onResponseReady(response: Response): void;
 	_onVisibilityChange(): void;
 	_respException(response: Response, reqInf: AuRequestInfo, e: Error): boolean;
 	_respFailure(response: Response, reqInf: AuRequestInfo, rstatus: number): boolean;
 	_respSuccess(response: Response, reqInf: AuRequestInfo, sid: number): boolean;
-	_rmDesktop(dt: Desktop, dummy?: boolean): void;
+	_rmDesktop(dt: zk.Desktop, dummy?: boolean): void;
 	_rmDesktopAjax(url: string, data: string, headers: Record<string, string>): void;
 	_resetTimeout(): void;
-	_storeStub(wgt: Widget): void;
-	_wgt$(uuid: string): Widget;
-	addAuRequest(dt: Desktop, aureq: ZKEvent): void;
+	_storeStub(wgt: zk.Widget): void;
+	_wgt$(uuid: string): zk.Widget;
+	addAuRequest(dt: zk.Desktop, aureq: zk.Event): void;
 	afterResponse(sid?: number): void;
 	ajaxReqResend(reqInf: AuRequestInfo, timeout?: number): void;
-	beforeSend(uri: string, aureq: ZKEvent, dt?: Desktop): string;
+	beforeSend(uri: string, aureq: zk.Event, dt?: zk.Desktop): string;
 	confirmRetry(msgCode: string, msg2?: string): boolean;
-	createWidgets(codes: ArrayLike<unknown>[], fn: (wgts: Widget[]) => void, filter?: (wgt: Widget) => Widget | undefined): void;
+	createWidgets(codes: ArrayLike<unknown>[], fn: (wgts: zk.Widget[]) => void, filter?: (wgt: zk.Widget) => zk.Widget | undefined): void;
 	doCmds(dtid: string, rs: unknown[]): void;
-	encode(j: number, aureq: ZKEvent, dt: Desktop): string;
-	getAuRequests(dt: Desktop): ZKEvent[];
+	encode(j: number, aureq: zk.Event, dt: zk.Desktop): string;
+	getAuRequests(dt: zk.Desktop): zk.Event[];
 	getErrorURI(code: number): string;
 	getPushErrorURI(code: number): string;
 	onError(fn: ErrorHandler): void;
 	onResponseError(response: Response, errCode: number): boolean;
-	pfAddIds(dt: Desktop, prop: string, pfIds?: string): void;
+	pfAddIds(dt: zk.Desktop, prop: string, pfIds?: string): void;
 	pfGetIds(response: Response): string | undefined;
 	process(cmd: string, data: string): void;
 	processing(): boolean;
 	pushReqCmds(reqInf: AuRequestInfo, response: Response): boolean;
-	send(aureq: ZKEvent, timeout?: number): void;
-	sendAhead(aureq: ZKEvent, timeout?: number): void;
-	sendNow(dt: Desktop): boolean;
+	send(aureq: zk.Event, timeout?: number): void;
+	sendAhead(aureq: zk.Event, timeout?: number): void;
+	sendNow(dt: zk.Desktop): boolean;
 	setErrorURI(code: number, uri: string): void;
 	setErrorURI(errors: {[code: number]: string}): void;
 	setPushErrorURI(code: number, uri: string): void;
 	setPushErrorURI(errors: {[code: number]: string}): void;
 	shallIgnoreESC(): boolean;
 	showError(msgCode: string, msg2?: string, cmd?: string, ex?: Error): void;
-	toJSON(target: Widget | undefined, data: unknown): string;
+	toJSON(target: zk.Widget | undefined, data: unknown): string;
 	unError(fn: ErrorHandler): void;
-	wrongValue_(wgt: Widget, msg: string | false): void;
+	wrongValue_(wgt: zk.Widget, msg: string | false): void;
 }
 var _perrURIs = {}, //server-push error URI
 	_onErrs: Array<ErrorHandler> = [], //onError functions
@@ -154,7 +148,7 @@ var _perrURIs = {}, //server-push error URI
 	doCmdFns: (() => void)[] = [],
 	idTimeout, //timer ID for automatica timeout
 	pfIndex = 0, //performance meter index
-	_detached: Widget[] & {wgts?: Record<string, Widget>} = [], //used for resolving #stub/#stubs in mount.js (it stores detached widgets in this AU)
+	_detached: zk.Widget[] & {wgts?: Record<string, zk.Widget>} = [], //used for resolving #stub/#stubs in mount.js (it stores detached widgets in this AU)
 	_portrait: Record<string, boolean> = {'0': true, '180': true}, //default portrait definition
 	_initLandscape = jq.innerWidth() > jq.innerHeight(), // initial orientation is landscape or not
 	_initDefault = _portrait[window.orientation], //default orientation
@@ -192,14 +186,14 @@ function pushCmds(cmds: AuCommands, rs): void {
 function dataNotReady(cmd: string, data): boolean {
 	for (var j = data.length, id, w; j--;)
 		if (id = data[j] && data[j].$u) {
-			if (!(w = Widget.$(id))) { //not ready
+			if (!(w = zk.Widget.$(id))) { //not ready
 				var processFn = function (): void {
-					if (zk._crWgtUuids.indexOf(id) != -1 && !Widget.$(id)) {
+					if (zk._crWgtUuids.indexOf(id) != -1 && !zk.Widget.$(id)) {
 						zk.afterMount(processFn, 0);
 					} else {
 						do {
 							if (id = data[j] && data[j].$u)
-								data[j] = Widget.$(id);
+								data[j] = zk.Widget.$(id);
 						} while (j--);
 						doProcess(cmd, data);
 					}
@@ -222,7 +216,7 @@ function doProcess(cmd: string, data): void { //decoded
 			if (!data.length)
 				return zAu.showError('ILLEGAL_RESPONSE', 'uuid required', cmd);
 
-			data[0] = Widget.$(data[0]); //might be null (such as rm)
+			data[0] = zk.Widget.$(data[0]); //might be null (such as rm)
 
 			// Bug ZK-2827
 			if (!data[0] && cmd != 'invoke' && cmd != 'addChd' /*Bug ZK-2839*/) {
@@ -264,12 +258,12 @@ function _exmsg(e: Error): string {
 	return msg + (m2 ? ' (' + m2.substring(1) + ')' : m2);
 }
 
-function ajaxSend(dt: zk.Desktop, aureq: ZKEvent, timeout?: number): void {
+function ajaxSend(dt: zk.Desktop, aureq: zk.Event, timeout?: number): void {
 	//ZK-1523: dt(desktop) could be null, so search the desktop from target's parent.
 	//call stack: echo2() -> send()
 	if (!dt) {
 		//original dt is decided by aureq.target.desktop, so start by it's parent.
-		var wgt: Widget | undefined = aureq.target!.parent;
+		var wgt: zk.Widget | undefined = aureq.target!.parent;
 		while (!wgt?.desktop) {
 			wgt = wgt?.parent;
 		}
@@ -383,7 +377,7 @@ function doCmdsNow(cmds: AuCommands): boolean {
 		throw ex;
 	return true;
 }
-function _asBodyChild(child: Widget): void {
+function _asBodyChild(child: zk.Widget): void {
 	jq(document.body).append(child);
 }
 
@@ -398,20 +392,20 @@ function sendTimeout(): void {
 }
 
 //store all widgets into a map
-function _wgt2map(wgt: Widget, map: Record<string, Widget>): void {
+function _wgt2map(wgt: zk.Widget, map: Record<string, zk.Widget>): void {
 	map[wgt.uuid] = wgt;
 	for (var child = wgt.firstChild; child; child = child.nextSibling)
 		_wgt2map(child, map);
 }
 
-function _beforeAction(wgt: Widget, actnm: string): unknown {
+function _beforeAction(wgt: zk.Widget, actnm: string): unknown {
 	var act;
 	if (wgt.isVisible() && (act = wgt.actions_[actnm])) {
 		wgt['z$display'] = 'none'; //control zk.Widget.domAttrs_
 		return act;
 	}
 }
-function _afterAction(wgt: Widget, act): boolean {
+function _afterAction(wgt: zk.Widget, act): boolean {
 	if (act) {
 		delete wgt['z$display'];
 		act[0].call(wgt, wgt.$n(), act[1]);
@@ -482,7 +476,8 @@ function _deconstructPacket(data, buffers): unknown {
  * The AU Engine used to send the AU requests to the server and to process
  * the AU responses.
  */
-let zAu: AUEngine = {
+// window scope
+export let zAu: AUEngine = {
 	disabledRequest: false,
 	_cInfoReg: false,
 	_fetch: window.fetch.bind(window),
@@ -641,7 +636,7 @@ let zAu: AUEngine = {
 
 		var t = aureq.target;
 		if (t) {
-			ajaxSend(t instanceof Desktop ? t : t.desktop!, aureq, timeout);
+			ajaxSend(t instanceof zk.Desktop ? t : t.desktop!, aureq, timeout);
 		} else {
 			var dts = zk.Desktop.all;
 			for (var dtid in dts)
@@ -656,10 +651,10 @@ let zAu: AUEngine = {
 	 * If negative, the request is assumed to be implicit, i.e., no message will
 	 * be shown if an error occurs.
 	 */
-	sendAhead: function (aureq: ZKEvent, timeout = 0) {
+	sendAhead: function (aureq: zk.Event, timeout = 0) {
 		const t = aureq.target;
 		if (t) {
-			const dt = t instanceof Desktop ? t as Desktop : t.desktop as Desktop;
+			const dt = t instanceof zk.Desktop ? t as zk.Desktop : t.desktop as zk.Desktop;
 			zAu.getAuRequests(dt).unshift(aureq);
 			ajaxSend2(dt, timeout);
 		} else {
@@ -1147,7 +1142,7 @@ zAu.beforeSend = function (uri, req, dt) {
 	 */
 	createWidgets: function (codes, fn, filter) {
 		//bug #3005632: Listbox fails to replace with empty model if in ROD mode
-		var wgts: Widget[] = [], len = codes.length;
+		var wgts: zk.Widget[] = [], len = codes.length;
 		if (len > 0) {
 			for (var j = 0; j < len; ++j)
 				window.zkx_(codes[j], function (newwgt) {
@@ -1351,7 +1346,7 @@ zAu.beforeSend = function (uri, req, dt) {
 	},
 	/* @param zk.Widget target
 	 */
-	toJSON(target: Widget | undefined, data: {pageX?: number; pageY?: number; x?: number; y?: number} | unknown[]): string {
+	toJSON(target: zk.Widget | undefined, data: {pageX?: number; pageY?: number; x?: number; y?: number} | unknown[]): string {
 		if (!Array.isArray(data)) {
 			if (data.pageX != null && data.x == null) {
 				var ofs = target && target.desktop ? // B50-3336745: target may have been detached
@@ -1732,7 +1727,7 @@ zAu.ajaxErrorHandler = function (req, status, statusText, ajaxReqTries) {
 		 * @param int dur the duration of notification
 		 * @param boolean closable the close button of notification
 		 */
-		showNotification(msg: string, type: zul.wgt.NotificationType, pid: string, ref: Widget,
+		showNotification(msg: string, type: zul.wgt.NotificationType, pid: string, ref: zk.Widget,
 						 pos: string, off: zk.Offset, dur: number, closable: boolean): void {
 			var notif = zk.load('zul.wgt') ? zul.wgt.Notification : undefined; // in zul
 			if (notif) {
@@ -1769,7 +1764,7 @@ zAu.ajaxErrorHandler = function (req, status, statusText, ajaxReqTries) {
 
 			zAu.cmd0.clearBusy(uid);
 
-			var w: Widget | undefined = uid ? Widget.$(uid) : undefined;
+			var w: zk.Widget | undefined = uid ? zk.Widget.$(uid) : undefined;
 			if (!uid) {
 				zk._prevFocus = zk.currentFocus;
 				zUtl.progressbox('zk_showBusy', msg || msgzk.PLEASE_WAIT, true, undefined, {busy: true});
@@ -1777,11 +1772,11 @@ zAu.ajaxErrorHandler = function (req, status, statusText, ajaxReqTries) {
 			} else if (w) {
 				zk.delayFunction(uid, function () {
 					if (w) {
-						(w.effects_ as Record<string, Effect>).showBusy = new Mask({
+						(w.effects_ as Record<string, zk.eff.Effect>).showBusy = new zk.eff.Mask({
 							id: w.uuid + '-shby',
 							anchor: w.$n(),
 							message: msg
-						}) as Effect;
+						});
 					}
 				});
 			}
@@ -1794,7 +1789,7 @@ zAu.ajaxErrorHandler = function (req, status, statusText, ajaxReqTries) {
 		clearBusy(uuid?: string): void {
 			if (uuid) {
 				zk.delayFunction(uuid, function () {
-					var w = Widget.$(uuid),
+					var w = zk.Widget.$(uuid),
 						efs = w ? w.effects_ : undefined;
 					if (efs && efs.showBusy) {
 						efs.showBusy.destroy();
@@ -1826,7 +1821,7 @@ zAu.ajaxErrorHandler = function (req, status, statusText, ajaxReqTries) {
 		 */
 		clearWrongValue: function () {
 			for (var i = arguments.length; i--;) {
-				var wgt = Widget.$(arguments[i]);
+				var wgt = zk.Widget.$(arguments[i]);
 				if (wgt) {
 					var toClearErrMsg = function (w) {
 						return function () {
@@ -1851,7 +1846,7 @@ zAu.ajaxErrorHandler = function (req, status, statusText, ajaxReqTries) {
 			var args = arguments;
 			for (var i = 0, len = args.length - 1; i < len; i += 2) {
 				var uuid = args[i], msg = args[i + 1],
-					wgt = Widget.$(uuid);
+					wgt = zk.Widget.$(uuid);
 				if (wgt) {
 					//ZK-2687: create a closure to record the current wgt
 					var toSetErrMsg = function (w, m) {
@@ -1879,7 +1874,7 @@ zAu.ajaxErrorHandler = function (req, status, statusText, ajaxReqTries) {
 		 */
 		submit: function (id) {
 			setTimeout(function () {
-				var n = Widget.$(id) as {submit?};
+				var n = zk.Widget.$(id) as {submit?};
 				if (n && n.submit)
 					n.submit();
 				else
@@ -1891,7 +1886,7 @@ zAu.ajaxErrorHandler = function (req, status, statusText, ajaxReqTries) {
 		 */
 		scrollIntoView: function (id) {
 			if (!id) return;
-			var w = Widget.$(id);
+			var w = zk.Widget.$(id);
 			if (w) {
 				zk.delayFunction(w.uuid, function () {
 					w?.scrollIntoView();
@@ -1967,7 +1962,7 @@ zAu.ajaxErrorHandler = function (req, status, statusText, ajaxReqTries) {
 		 * @param String name the name of the attribute
 		 * @param Object value the value of the attribute.
 		 */
-		setAttr(wgt: Widget | undefined, nm: string, val: unknown): void {
+		setAttr(wgt: zk.Widget | undefined, nm: string, val: unknown): void {
 			if (wgt) { // server push may cause wgt is null in some case - zksandbox/#a1
 				if (nm == 'z$al') { //afterLoad
 					zk.afterLoad(function () {
@@ -1987,7 +1982,7 @@ zAu.ajaxErrorHandler = function (req, status, statusText, ajaxReqTries) {
 		 * @param Array attrs an array of [name1, value1, name2, value2, ...]
 		 * @since 9.0.1
 		 */
-		setAttrs(wgt: Widget, attrs: unknown[]): void {
+		setAttrs(wgt: zk.Widget, attrs: unknown[]): void {
 			if (wgt) { // server push may cause wgt is null in some case - zksandbox/#a1
 				var setAttr = zAu.cmd1.setAttr,
 					attrsLength = attrs.length;
@@ -2001,7 +1996,7 @@ zAu.ajaxErrorHandler = function (req, status, statusText, ajaxReqTries) {
 		 * @param zk.Widget wgt the old widget to be replaced
 		 * @param String code the JavaScript code snippet to generate new widget(s).
 		 */
-		outer(wgt: Widget, code: string): void {
+		outer(wgt: zk.Widget, code: string): void {
 			window.zkx_(code, function (newwgt) {
 				var act = _beforeAction(newwgt, 'invalidate');
 				wgt.replaceWidget(newwgt);
@@ -2023,7 +2018,7 @@ zAu.ajaxErrorHandler = function (req, status, statusText, ajaxReqTries) {
 		 * @param zk.Widget wgt the existent widget that new widget(s) will be inserted after
 		 * @param String... codes the JavaScript code snippet to generate new widget(s).
 		 */
-		addAft(wgt: Widget, ...codes: string[]): void {
+		addAft(wgt: zk.Widget, ...codes: string[]): void {
 			let p = wgt.parent,
 				fn = function (child): void {
 					var act = _beforeAction(child, 'show');
@@ -2047,7 +2042,7 @@ zAu.ajaxErrorHandler = function (req, status, statusText, ajaxReqTries) {
 
 			if (p && !p.z_rod)
 				zk.afterMount(function () {
-					zUtl.fireSized(p as Widget);
+					zUtl.fireSized(p as zk.Widget);
 				}, -1);
 		},
 		/** Adds the widget(s) generated by evaluating the specified JavaScript code snippet
@@ -2227,6 +2222,3 @@ export function onIframeURLChange(uuid: string, url: string): void { //doc in js
 		if (wgt) wgt.fire('onURIChange', url);
 	}
 }
-
-// window scope
-export default zAu;

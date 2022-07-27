@@ -12,9 +12,6 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-import {type JQZK, zjq} from './dom';
-import {default as zk} from './zk';
-
 Object.assign(zjq, {
 	_fixCSS: function (el) {
 		//we have to preserve scrollTop
@@ -32,7 +29,7 @@ Object.assign(zjq, {
 });
 var _bkZjq = {};
 Object.assign(zjq.prototype, {
-	beforeHideOnUnbind: function (this: JQZK) { //Bug 3076384 (though i cannot reproduce in chrome/safari)
+	beforeHideOnUnbind: function (this: zk.JQZK) { //Bug 3076384 (though i cannot reproduce in chrome/safari)
 		return this.jq.each(function () {
 			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			// @ts-ignore

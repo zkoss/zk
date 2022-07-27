@@ -250,13 +250,13 @@ interface Window {
 	zkme: typeof import('./mount').zkme;
 	zkdh: typeof import('./mount').zkdh;
 }
-declare var zjq: typeof import('./dom').zjq;
+declare var zjq: typeof import('./anima').JQZKEx;
 declare var zkac: typeof import('./mount').zkac;
 declare function $eval(x: string): unknown;
 declare var zkreg: typeof import('./widget').zkreg;
 declare var zDebug: import('./zk').ZKObject;
-declare var zAu: typeof import('./au').default;
-declare var zFlex: typeof import('./flex').default;
+declare var zAu: typeof import('./au').zAu;
+declare var zFlex: typeof import('./flex').zFlex;
 declare var msgzk: Record<
 	| 'NOT_FOUND'
 	| 'UNSUPPORTED'
@@ -291,12 +291,13 @@ declare namespace zk {
 	type Desktop = import('./widget').Desktop;
 	type Widget = import('./widget').Widget;
 	type BigDecimal = import('./math').BigDecimal;
-	type JQZK = import('./dom').JQZK;
+	type JQZK = import('./anima').JQZKEx;
 
 	type Event<TData = unknown> = import('./evt').Event<TData>;
 	type Skipper = import('./widget').Skipper;
 	type Dimension = import('./dom').Dimension;
 	type PositionOptions = import('./dom').PositionOptions;
+	type SlideOptions = import('./dom').SlideOptions;
 	type ZWatchController = import('./evt').ZWatchController;
 	type FireOptions = import('./evt').FireOptions;
 	type EventOptions = import('./evt').EventOptions;
@@ -317,6 +318,7 @@ declare namespace zk {
 		type Mask = import('./effect').Mask;
 		type FullMask = import('./effect').FullMask
 		type Shadow = import('./effect').Shadow;
+		type Effect = import('./effect').Effect;
 		type EffectStackupOptions = import('./effect').EffectStackupOptions;
 		type KeyboardTrap = import('./effect').KeyboardTrap;
 	}
@@ -357,6 +359,9 @@ declare namespace zk {
 			firstYear: number;
 			direction: number;
 		}
+	}
+	namespace cpsp {
+		type SPush = import('cpsp/index').SPush;
 	}
 }
 

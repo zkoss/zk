@@ -13,14 +13,11 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-import {type Draggable} from './drag';
-import {type Widget} from './widget';
-
-export type DataHandler = (wgt: Widget, val: unknown) => void;
+export type DataHandler = (wgt: zk.Widget, val: unknown) => void;
 
 let _zkf;
 
-function _zk(sel?: string | Node | JQuery | JQuery.Event | zk.Event | Widget | null): zk.JQZK {
+function _zk(sel?: string | Node | JQuery | JQuery.Event | zk.Event | zk.Widget | null): zk.JQZK {
 	return jq(sel, _zk as ZKStatic).zk;
 }
 
@@ -37,7 +34,7 @@ _zk.copy = function<T, U> (dst: T, src: U, backup?: object): T & U {
 
 type Getter = Function; // eslint-disable-line @typescript-eslint/ban-types
 type Setter = Function; // eslint-disable-line @typescript-eslint/ban-types
-type GeneratedSetter = (this: Widget, v: unknown, opts: Partial<{ force: boolean }>) => Widget;
+type GeneratedSetter = (this: zk.Widget, v: unknown, opts: Partial<{ force: boolean }>) => zk.Widget;
 
 var _oid = 0,
 	_statelesscnt = 0,
@@ -222,11 +219,11 @@ function _showprgb(mask?: boolean, icon?: string): void {
 		}
 	}
 }
-function wgt2s(w: Widget): string {
+function wgt2s(w: zk.Widget): string {
 	var s = w.widgetName;
 	return s + (w.id ? '$' + w.id : '') + '#' + w.uuid + '$' + w.$oid;
 }
-async function toLogMsg(ars: Array<Element | Widget> | IArguments, detailed): Promise<string> {
+async function toLogMsg(ars: Array<Element | zk.Widget> | IArguments, detailed): Promise<string> {
 	let {Widget} = await import('./widget'); // avoid circular dependence
 	var msg: string[] = [];
 	for (var j = 0, len = ars.length; j < len; j++) {
@@ -342,7 +339,7 @@ _zk.currentPointer = [0, 0] as zk.Offset;
 /** The widget that gains the focus now, or null if no one gains focus now.
  * @type Widget
  */
-_zk.currentFocus = undefined as Widget | undefined;
+_zk.currentFocus = undefined as zk.Widget | undefined;
 /** The topmost modal window, or null if no modal window at all.
  * @type zul.wnd.Window
  */
@@ -549,7 +546,7 @@ doKeyDown_: function () {
 	 * @type Widget
 	 */
 	//keyCapture: null,
-	export let keyCapture: Widget | undefined;
+	export let keyCapture: zk.Widget | undefined;
 	/** The widget that captures the mouse events.
 	 * Used to specify a widget that shall receive the following the onMouseMove and onMouseUp events, no matter what widget the event occurs on.
 <pre><code>
@@ -563,7 +560,7 @@ doMouseDown_: function () {
 	 * @type Widget
 	 */
 	//mouseCapture: null,
-	export let mouseCapture: Widget | undefined;
+	export let mouseCapture: zk.Widget | undefined;
 }
 
 /** Copies a map of properties (or options) from one object to another.
@@ -1438,7 +1435,7 @@ _zk.getDataHandler = function (name: string) {
 					dataHandlerService = w._$binder;
 					break;
 				} else if (w['$ZKAUS$']) {
-					if (!w._$service) w._$service = new zk.Service(w, this as unknown as Widget);
+					if (!w._$service) w._$service = new zk.Service(w, this as unknown as zk.Widget);
 					dataHandlerService = w._$service;
 					break;
 				}
@@ -1682,9 +1679,7 @@ zk.Buffer = Array;
 		this['out'] = '';
 	} as ArrayConstructor;
 
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore
-	_zk.Buffer.prototype = new Array;
+	(_zk.Buffer as Function).prototype = new Array;
 	Object.assign(_zk.Buffer.prototype, {
 		push: function () {
 			for (var i = 0, j = arguments.length; i < j; i++)
@@ -2007,7 +2002,7 @@ var _erbx, _errcnt = 0;
 
 _zk._Erbx = class _Erbx extends ZKObject { //used in HTML tags
 	id: string;
-	dg?: Draggable;
+	dg?: zk.Draggable;
 	constructor(msg: string) {
 		super();
 		var id = 'zk_err',
@@ -2074,7 +2069,7 @@ const zk = _zk as typeof _zk & ZKVars
 	& typeof import('./evt')
 	& typeof import('./math')
 	& typeof import('./mount')
-	& typeof import('./pkg').default
+	& typeof import('./pkg').pkg
 	& typeof import('./widget')
 	& typeof import('./zswipe');
 export default zk;

@@ -14,8 +14,6 @@ Copyright (C) 2017 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-import {default as zk} from './zk';
-
 export const Dates = {
 	newInstance(param?: number | DateImpl | Parameters<DateConstructor['UTC']>, tz?: string): DateImpl {
 		var m;

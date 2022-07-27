@@ -12,9 +12,6 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-import {default as zk} from './zk';
-import type {Widget} from './widget';
-
 export type FlexOrient = 'w' | 'h';
 export interface FlexSize {
 	width?: string | number;
@@ -85,7 +82,7 @@ function _isSameBaseline(ref, cur, vertical): boolean {
 	}
 }
 
-function _fixMinFlex(isVflex?): ((wgt: Widget, wgtn: HTMLElement, o: FlexOrient,
+function _fixMinFlex(isVflex?): ((wgt: zk.Widget, wgtn: HTMLElement, o: FlexOrient,
 								  min?: number) => number) {
 	let flexsz, sizePos, flex, offsetPos, marginPos, maxFlexPos, sumFlexPos,
 		index, contentPos;
@@ -110,7 +107,7 @@ function _fixMinFlex(isVflex?): ((wgt: Widget, wgtn: HTMLElement, o: FlexOrient,
 		index = 0;
 		contentPos = 'getContentEdgeWidth_';
 	}
-	return function (wgt: Widget, wgtn: HTMLElement, o: FlexOrient, min?: number) {
+	return function (wgt: zk.Widget, wgtn: HTMLElement, o: FlexOrient, min?: number) {
 		if (wgt[flexsz] === undefined) { //cached?
 			let cwgt = wgt.firstChild, //bug #2928109
 				n = wgtn,
@@ -126,7 +123,7 @@ function _fixMinFlex(isVflex?): ((wgt: Widget, wgtn: HTMLElement, o: FlexOrient,
 				let totalsz = 0,
 					vmax = 0;
 				if (cwgt && cwgt.desktop) { //try child widgets, bug ZK-1575: should check if child widget is bind to desktop
-					let first: Widget | undefined = cwgt,
+					let first: zk.Widget | undefined = cwgt,
 						refDim;
 
 					// ZK-2248: ignore widget dimension in vflex/hflex calculation
@@ -266,24 +263,25 @@ function _zero(): 0 {
 }
 
 interface MinFlexInfo {
-	wgt: Widget;
+	wgt: zk.Widget;
 	wgtn: HTMLElement;
 	orient: FlexOrient;
 }
 
-let zFlex = { //static methods
+// window scope
+export let zFlex = { //static methods
 	/**
 	 * beforeSize for read was created to prevent tremendous forced reflows
 	 * as a result of doing both read and write in beforeSize.
 	 * @since 9.5.1
 	 */
-	beforeSizeForRead(this: Widget): void {
+	beforeSizeForRead(this: zk.Widget): void {
 		const wgt = this,
 			n = wgt.$n();
 		// ZK-4154 prevent from forced reflow
 		wgt._beforeSizeHasScroll = n && (n.scrollTop || n.scrollLeft);
 	},
-	beforeSize(this: Widget, ctl, opts, cleanup: boolean): void {
+	beforeSize(this: zk.Widget, ctl, opts, cleanup: boolean): void {
 		let wgt = this, p;
 		if (cleanup)
 			wgt.clearCachedSize_();
@@ -308,16 +306,16 @@ let zFlex = { //static methods
 		}
 	},
 
-	beforeSizeClearCachedSize(this: Widget, ctl, opts, cleanup: boolean): void {
+	beforeSizeClearCachedSize(this: zk.Widget, ctl, opts, cleanup: boolean): void {
 		const wgt = this;
 		if (cleanup)
 			wgt.clearCachedSize_();
 	},
 
-	onSize(this: Widget): void {
+	onSize(this: zk.Widget): void {
 		zFlex.fixFlex(this);
 	},
-	fixFlex(wgt: Widget): void {
+	fixFlex(wgt: zk.Widget): void {
 		let hflexWgt;
 		if (wgt._flexFixed || (!wgt._nvflex && !wgt._nhflex)) { //other vflex/hflex sibliing has done it!
 			delete wgt._flexFixed;
@@ -337,9 +335,9 @@ let zFlex = { //static methods
 		wgt._flexFixed = true;
 
 		let pretxt = false, //pre node is a text node
-			vflexs: Widget[] = [],
+			vflexs: zk.Widget[] = [],
 			vflexsz = 0,
-			hflexs: Widget[] = [],
+			hflexs: zk.Widget[] = [],
 			hflexsz = 0,
 			p = wgt.$n()?.parentNode as HTMLElement,
 			zkp = zk(p),
@@ -347,7 +345,7 @@ let zFlex = { //static methods
 			hgh = psz.height,
 			wdh = psz.width,
 			c = p.firstElementChild as HTMLElement,
-			vflexsRe: Widget[] = [],
+			vflexsRe: zk.Widget[] = [],
 			hasVScroll = zkp.hasVScroll(),
 			hasHScroll = zkp.hasHScroll(),
 			meshBodyHasVScroll = false,
@@ -521,7 +519,7 @@ let zFlex = { //static methods
 		wgt.parent.afterChildrenFlex_(wgt);
 		wgt._flexFixed = false;
 	},
-	onFitSize(this: Widget): void {
+	onFitSize(this: zk.Widget): void {
 		const wgt = this,
 			c = wgt.$n();
 		if (c && zk(c).isVisible()) {
@@ -533,11 +531,11 @@ let zFlex = { //static methods
 				zFlex.fixMinFlex(wgt, c, 'h');
 		}
 	},
-	fixMinFlex(wgt: Widget, wgtn: HTMLElement, o: FlexOrient): number {
+	fixMinFlex(wgt: zk.Widget, wgtn: HTMLElement, o: FlexOrient): number {
 		//find the max size of all children
 		return (o == 'h' ? _fixMinVflex : o == 'w' ? _fixMinHflex : _zero)(wgt, wgtn, o, wgt.beforeMinFlex_(o));
 	},
-	applyCSSFlex(this: Widget): void {
+	applyCSSFlex(this: zk.Widget): void {
 		let wgt = this;
 		if (!wgt._nvflex && !wgt._nhflex)
 			return;
@@ -688,7 +686,7 @@ let zFlex = { //static methods
 			flexD = pwgt!.getFlexDirection_(),
 			isRow = 'row' == flexD,
 			fccs: HTMLElement[] = [],
-			cwgts: Widget[] = [],
+			cwgts: zk.Widget[] = [],
 			checkColumn = flexD == null,
 			toColumn = false;
 
@@ -722,5 +720,3 @@ let zFlex = { //static methods
 			return {isFlexRow: isRow, flexContainerChildren: fccs, childrenWidgets: cwgts};
 		}
 	};
-// window scope
-export default zFlex;

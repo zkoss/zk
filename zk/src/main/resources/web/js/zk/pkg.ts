@@ -12,8 +12,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-import {default as zk} from './zk';
-
 var _loaded = {'zk': true}, //loaded
 	_xloadings: string[] = [], //loading (exclude loaded)
 	_loadedsemis: string[] = [], //loaded but not inited
@@ -51,7 +49,7 @@ function updCnt(): number {
 }
 /** @partial zk
 */
-let _pkg = { //internal utility
+export let pkg = { //internal utility
 	setLoaded(pkg: string, wait?: boolean): void { //internal
 		_xloadings.$remove(pkg);
 		_loading[pkg] = true;
@@ -353,5 +351,3 @@ let _pkg = { //internal utility
 			_pkghosts[pkgs[j]] = [host, hostRes];
 	}
 };
-
-export default _pkg;
