@@ -1337,14 +1337,10 @@ export class Calendar extends zul.Widget {
 	}
 
 	// Bug 2936994, fixed unnecessary setting scrollTop
-	_doFocus = zk.gecko ? function (n: HTMLElement, timeout?: number | boolean) {
-		if (timeout)
-			setTimeout(function () {
-				zk(n).focus();
-			});
+	_doFocus(n: HTMLElement, timeout?: number | boolean): void {
+		if (zk.gecko && timeout)
+			setTimeout(() => zk(n).focus()); // FIXME: missing timeout argument?
 		else
 			zk(n).focus();
-	} : function (n: HTMLElement) {
-		zk(n).focus();
-	};
+	}
 }
