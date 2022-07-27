@@ -75,7 +75,7 @@ function _isProlog(el: Node | null/*must be null here*/): boolean {
 //Event Handling//
 // eslint-disable-next-line no-undef
 type JQueryEventHandler = (evt: JQuery.TriggeredEvent, ...args: unknown[]) => unknown;
-function _domEvtInf(wgt: zk.Widget, evtnm: string, fn?: string | CallableFunction, keyword?: string): [string, JQueryEventHandler] { //proxy event listener
+function _domEvtInf(wgt: Widget, evtnm: string, fn?: string | CallableFunction, keyword?: unknown): [string, JQueryEventHandler] { //proxy event listener
 	if (typeof fn != 'function') {
 		if (!fn && !(fn = _domevtfnm[evtnm]))
 			_domevtfnm[evtnm] = fn = '_do' + evtnm.substring(2);
@@ -91,7 +91,7 @@ function _domEvtInf(wgt: zk.Widget, evtnm: string, fn?: string | CallableFunctio
 		domn = _domevtnm[evtnm] = evtnm.substring(2).toLowerCase();
 	return [domn, _domEvtProxy(wgt, fn as CallableFunction, evtnm, keyword)];
 }
-function _domEvtProxy(wgt: zk.Widget, f: CallableFunction, evtnm: string, keyword?: string): JQueryEventHandler {
+function _domEvtProxy(wgt: Widget, f: CallableFunction, evtnm: string, keyword?: unknown): JQueryEventHandler {
 	var fps = wgt._$evproxs, fp;
 	if (!fps) wgt._$evproxs = fps = new WeakMap();
 	if (keyword)
@@ -101,7 +101,7 @@ function _domEvtProxy(wgt: zk.Widget, f: CallableFunction, evtnm: string, keywor
 	fps.set(f, fn);
 	return fn;
 }
-function _domEvtProxy0(wgt: zk.Widget, f: CallableFunction, keyword?: string): JQueryEventHandler {
+function _domEvtProxy0(wgt: Widget, f: CallableFunction, keyword?: unknown): JQueryEventHandler {
 	return function (evt, ...rest) {
 		var devt = evt, //make a copy since we will change evt (and arguments) in the following line
 			zkevt = jq.Event.zk(devt, wgt);
@@ -708,6 +708,8 @@ export function WrapClass(pkg: string) {
 // zk scope
 @WrapClass('zk.Widget')
 export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Object {
+	declare z_virnd?: boolean;
+
 	// zkbind/Binder
 	declare $binder?: () => zkbind.Binder;
 	declare _$binder?: zkbind.Binder;
@@ -2206,7 +2208,7 @@ wgt.$f().main.setTitle("foo");
 			if (cache)
 				visited.push(wgt);
 
-			if (dom && !wgt['z_virnd']) { //z_virnd implies zk.Native, zk.Page and zk.Desktop
+			if (dom && !wgt.z_virnd) { //z_virnd implies zk.Native, zk.Page and zk.Desktop
 			//Except native, we have to assume it is invsibile if $n() is null
 			//Example, tabs in the accordion mold (case: zktest/test2 in IE)
 			//Alertinative is to introduce another isVisibleXxx but not worth
@@ -5155,7 +5157,7 @@ _doFooSelect: function (evt) {
 	 * @return zk.Widget this widget
 	 * @see #domUnlisten_
 	 */
-	domListen_(n: HTMLElement, evtnm: string, fn?: string | CallableFunction, keyword?: string): this {
+	domListen_(n: HTMLElement, evtnm: string, fn?: string | CallableFunction, keyword?: unknown): this {
 		if (!this.$weave) {
 			var inf = _domEvtInf(this, evtnm, fn, keyword);
 			jq(n, zk).on(inf[0], inf[1]);
@@ -5179,7 +5181,7 @@ _doFooSelect: function (evt) {
 	 * @return zk.Widget this widget
 	 * @see #domListen_
 	 */
-	domUnlisten_(n: HTMLElement, evtnm: string, fn?: string | CallableFunction, keyword?: string): this {
+	domUnlisten_(n: HTMLElement, evtnm: string, fn?: string | CallableFunction, keyword?: unknown): this {
 		if (!this.$weave) {
 			var inf = _domEvtInf(this, evtnm, fn, keyword);
 			jq(n, zk).off(inf[0], inf[1]);
@@ -5775,7 +5777,7 @@ export class Desktop extends Widget {
 	declare obsolete?: boolean;
 
 	//a virtual node that might have no DOM node and must be handled specially
-	z_virnd = true;
+	override z_virnd = true;
 
 	override bindLevel = 0;
 	/** The class name (<code>zk.Desktop</code>).
@@ -6028,7 +6030,7 @@ zk._wgtutl = _wgtutl;
 export class Page extends Widget {
 	declare _applyMask?: zk.eff.Mask;
 	//a virtual node that might have no DOM node and must be handled specially
-	z_virnd = true;
+	override z_virnd = true;
 
 	override _style = 'width:100%;height:100%';
 	/** The class name (<code>zk.Page</code>).
@@ -6110,7 +6112,7 @@ export class Native extends Widget {
 	declare value;
 
 	//a virtual node that might have no DOM node and must be handled specially
-	z_virnd = true;
+	override z_virnd = true;
 
 	/** The class name (<code>zk.Native</code>)
 	 * @type String

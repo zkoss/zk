@@ -18,7 +18,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.wgt.Nodom')
 export class Nodom extends zk.Widget {
-	z_virnd = true;
+	override z_virnd = true;
 
 	override getMold(): string {
 		return 'nodom';
