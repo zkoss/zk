@@ -61,13 +61,13 @@ export class Center extends zul.layout.LayoutRegion {
 	 * The size can't be returned in this component.
 	 * @return String
 	 */
-	getSize = zk.$void;     // readonly
+	getSizegetSize(): string | undefined { return; } // readonly
 
 	/**
 	 * The size can't be specified in this component.
 	 * @param String size
 	 */
-	setSize = zk.$void;        // readonly
+	setSize(size: string): this { return this;} // readonly
 
 	/**
 	 * Center region can't be enabled the collapsed margin functionality.
@@ -141,9 +141,9 @@ export class Center extends zul.layout.LayoutRegion {
 		return this;
 	}
 
-	override doMouseOver_ = zk.$void;    // do nothing.
-	override doMouseOut_ = zk.$void;     // do nothing.
-	override doClick_ = zk.$void;           // do nothing.
+	override doMouseOver_(evt: zk.Event): void { return; }    // do nothing.
+	override doMouseOut_(evt: zk.Event): void { return; }     // do nothing.
+	override doClick_(evt: zk.Event): void { return; }        // do nothing.
 
 	/**
 	 * Returns {@link Borderlayout#CENTER}.
