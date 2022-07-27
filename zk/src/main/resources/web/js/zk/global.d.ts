@@ -84,6 +84,62 @@ declare namespace JQuery {
 	interface Effects {
 		speeds: Record<string, number>;
 	}
+
+	interface EventExtensions {
+		/*
+		fix: function(originalEvent) {
+			return originalEvent[jQuery.expando] ?
+				originalEvent :
+				new jQuery.Event(originalEvent);
+		},
+		*/
+		fix(originalEvent: globalThis.Event): JQuery.TriggeredEvent;
+
+		/* JS source code copied from https://stackoverflow.com/a/50344996
+		jQuery.event.mouseHooks = {
+			props: ( "button buttons clientX clientY fromElement offsetX offsetY " +
+				"pageX pageY screenX screenY toElement" ).split( " " ),
+			filter: function( event, original ) {
+				var body, eventDoc, doc,
+					button = original.button,
+					fromElement = original.fromElement;
+
+				// Calculate pageX/Y if missing and clientX/Y available
+				if ( event.pageX == null && original.clientX != null ) {
+					eventDoc = event.target.ownerDocument || document;
+					doc = eventDoc.documentElement;
+					body = eventDoc.body;
+
+					event.pageX = original.clientX +
+						( doc && doc.scrollLeft || body && body.scrollLeft || 0 ) -
+						( doc && doc.clientLeft || body && body.clientLeft || 0 );
+					event.pageY = original.clientY +
+						( doc && doc.scrollTop  || body && body.scrollTop  || 0 ) -
+						( doc && doc.clientTop  || body && body.clientTop  || 0 );
+				}
+
+				// Add relatedTarget, if necessary
+				if ( !event.relatedTarget && fromElement ) {
+					event.relatedTarget = fromElement === event.target ?
+						original.toElement :
+						fromElement;
+				}
+
+				// Add which for click: 1 === left; 2 === middle; 3 === right
+				// Note: button is not normalized, so don't use it
+				if ( !event.which && button !== undefined ) {
+					event.which = ( button & 1 ? 1 : ( button & 2 ? 3 : ( button & 4 ? 2 : 0 ) ) );
+				}
+
+				return event;
+			}
+		};
+		*/
+		mouseHooks: {
+			props: string[];
+			filter<T extends JQuery.Event>(event: T, original: globalThis.Event): T;
+		};
+	}
 }
 
 interface JQueryStatic {
@@ -92,7 +148,7 @@ interface JQueryStatic {
 	margins: {l: string; r: string; t: string; b: string};
 	paddings: {l: string; r: string; t: string; b: string};
 	isReady: boolean; // expose jQuery undocumented property
-	
+
 	<U, T extends HTMLElement = HTMLElement>(selector: T | U, zk: ZKStatic): JQuery<T>;
 	/* This overload above delegates to the following two. Separately, they can't accept an otherwise valid first argument of union type: `string | HTMLElement`.
 	 * <TElement extends HTMLElement = HTMLElement>(html: JQuery.htmlString, ownerDocument_attributes?: Document | JQuery.PlainObject): JQuery<TElement>;
@@ -100,7 +156,9 @@ interface JQueryStatic {
 	 */
 	<T extends HTMLElement = HTMLElement>(html: string | T): JQuery<T>;
 
-	
+	// Accept "readonly" array.
+	inArray<T>(value: T, array: readonly T[], fromIndex?: number): number;
+
 	// This specialization for the "empty string literal" is good, as it will always null.
 	$$(id: '', subId?: string): undefined;
 	// NodeListOf<HTMLElement> is not the same as NodeList. NodeList will give incorrect "this" type

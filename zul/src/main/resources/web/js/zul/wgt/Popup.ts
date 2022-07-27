@@ -407,7 +407,7 @@ export class Popup extends zul.Widget {
 		jq(node).removeClass(this.$s('open'));
 	}
 
-	onFloatUp(ctl: zk.ZWatchController, opts: zk.FireOptions): void {
+	onFloatUp(ctl: zk.ZWatchController, opts?: zk.FireOptions): void {
 		this._keepVisible = false;
 		if (!this.isVisible())
 			return;
