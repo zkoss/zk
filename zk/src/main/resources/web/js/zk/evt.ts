@@ -34,10 +34,7 @@ export interface EventOptions {
 		coords: [number, number];
 	};
 	dir?: string;
-	uploadCallback?: { // zul.Uploader.prototype.start
-		onprogress(event): void;
-		onload(evemt): void;
-	};
+	uploadCallback?: Partial<Pick<XMLHttpRequestEventTarget, `on${keyof XMLHttpRequestEventTargetEventMap}`>>;
 	ctl?: boolean; // zul.Imagemap.onclick
 	file?: File; // zkbind.Binder
 	duplicateIgnore?: boolean; // zkbind.Binder

@@ -641,7 +641,7 @@ let zAu: AUEngine = {
 
 		var t = aureq.target;
 		if (t) {
-			ajaxSend(t instanceof Desktop ? t as Desktop : t.desktop as Desktop, aureq, timeout);
+			ajaxSend(t instanceof Desktop ? t : t.desktop!, aureq, timeout);
 		} else {
 			var dts = zk.Desktop.all;
 			for (var dtid in dts)
