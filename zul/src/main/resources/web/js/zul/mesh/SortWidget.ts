@@ -313,7 +313,7 @@ export abstract class SortWidget extends zul.mesh.HeaderWidget {
 		super.unbind_(skipper, after, keepRod);
 	}
 
-	getColumnMenuPopup_ = zk.$void;
+	getColumnMenuPopup_(): unknown { return; }
 
 	_doMenuClick(evt: zk.Event): void {
 		if (this.parent!._menupopup && this.parent!._menupopup != 'none') {

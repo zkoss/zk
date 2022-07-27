@@ -12,6 +12,7 @@ export = {
 				'zk/javaStyleSetterSignature': 'error',
 				'zk/noNull': 'error',
 				'zk/preferStrictBooleanType': 'error',
+				'zk/noPropertyFunction': 'error',
 			},
 		},
 	},

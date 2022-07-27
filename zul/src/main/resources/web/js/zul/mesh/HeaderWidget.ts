@@ -464,8 +464,8 @@ export abstract class HeaderWidget extends zul.LabelImageWidget<HTMLTableCellEle
 		return true;
 	}
 
-	override listenOnFitSize_ = zk.$void; // skip flex
-	override unlistenOnFitSize_ = zk.$void;
+	override listenOnFitSize_(): void { return; } // skip flex
+	override unlistenOnFitSize_(): void { return; }
 
 	//@Override to find the minimum width of listheader
 	override beforeMinFlex_(o: zk.FlexOrient): number | undefined {
