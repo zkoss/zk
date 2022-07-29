@@ -12,6 +12,7 @@ Copyright (C) 2022 Potix Corporation. All Rights Reserved.
 import { AST_NODE_TYPES, TSESTree } from '@typescript-eslint/utils';
 import { createRule } from '../util';
 
+const visitedNode: Record<string, boolean> = {};
 export const noNull = createRule({
 	name: 'noNull',
 	meta: {
@@ -56,11 +57,15 @@ export const noNull = createRule({
 				if (node.raw === 'null') {
 					let parent = node.parent;
 					while (parent) {
+						if (visitedNode[parent.range.toString()]) {
+							return; // already saw
+						}
 						if (parent?.type === AST_NODE_TYPES.CallExpression) {
 							const callee = parent.callee;
 							if (callee.type === AST_NODE_TYPES.MemberExpression
 								&& callee.property.type == AST_NODE_TYPES.Identifier) {
 								if (callee.property.name === 'attr') {
+									visitedNode[parent.range.toString()] = true;
 									// ignore for .attr(key, null);
 									return;
 								}
