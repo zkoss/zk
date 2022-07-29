@@ -727,7 +727,7 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Objec
 	declare offsetHeight?;
 	declare blankPreserved?: boolean;
 
-	declare getInputNode?: () => HTMLInputElement | undefined;
+	getInputNode?(): HTMLInputElement | undefined;
 
 	declare z_rod?: boolean | number;
 	declare _rodKid?: boolean;
@@ -5716,8 +5716,6 @@ export class RefWidget extends Widget {
  * @disable(zkgwt)
  */
 // zk scope
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 export class Desktop extends Widget {
 	declare _cmsp?: zkex.cmsp.SPush;
 	declare _cpsp?: zk.cpsp.SPush;

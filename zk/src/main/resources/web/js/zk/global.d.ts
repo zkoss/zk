@@ -56,7 +56,7 @@ interface JQuery {
 		...args: unknown[]
 	): this;
 	zoff(event?: JQuery.TriggeredEvent<HTMLElement>,
-		 selector?: JQuery.Selector,
+		selector?: JQuery.Selector,
 		delegateEventFunc?: Function,
 		...args: unknown[]): this;
 	after(widget: zk.Widget, dt?: zk.Desktop): this;
@@ -219,7 +219,7 @@ interface String {
 interface Array<T> {
 	$indexOf(o: T): number;
 	$contains(o: T): boolean;
-	$equals(o: Record<string, unknown>): boolean;
+	$equals(o: unknown): boolean;
 	$remove(o: T): boolean;
 	$addAll(o: T[]): number;
 	$clone(): T[];
@@ -252,7 +252,7 @@ interface Window {
 }
 declare var zjq: typeof import('./anima').JQZKEx;
 declare var zkac: typeof import('./mount').zkac;
-declare function $eval(x: string): unknown;
+declare function $eval<T>(x: unknown): T | undefined;
 declare var zkreg: typeof import('./widget').zkreg;
 declare var zDebug: import('./zk').ZKObject;
 declare var zAu: typeof import('./au').zAu;
@@ -323,7 +323,7 @@ declare namespace zk {
 		type KeyboardTrap = import('./effect').KeyboardTrap;
 	}
 	namespace fmt {
-		type Calendar = typeof zk.fmt.Calendar;
+		type Calendar = InstanceType<typeof zk.fmt.Calendar>;
 	}
 
 	interface Websocket {

@@ -43,7 +43,7 @@ export interface AuRequestInfo {
 }
 export interface AUCommand0 {
 	bookmark(bk: string, replace: boolean): void;
-	obsolete(dtid: string, msg: string): void;
+	obsolete(dtid: string, msg: string): unknown;
 	alert(msg: string, title: string, icon: string, disabledAuRequest: boolean): void;
 	redirect(url: string, target?: string): void;
 	title(title: string): void;
@@ -1462,12 +1462,12 @@ zAu.ajaxErrorHandler = function (req, status, statusText, ajaxReqTries) {
 		 * @param String dtid the desktop UUID
 		 * @param String msg the error message
 		 */
-		obsolete(dtid: string, msg: string): void {
-			var v = zk.Desktop.$(dtid) as zk.Desktop;
+		obsolete(dtid: string, msg: string): unknown {
+			var v = zk.Desktop.$(dtid);
 			if (v) v['obsolete'] = true;
 
 			if (msg.startsWith('script:'))
-				return $eval(msg.substring(7)) as void;
+				return $eval(msg.substring(7));
 
 			// ZK-2397: prevent from showing reload dialog again while browser is reloading
 			if (zk._isReloadingInObsolete)

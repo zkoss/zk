@@ -27,7 +27,6 @@ zk.load('zul.lang', function () {
 @zk.WrapClass('zul.inp.NumberInputWidget')
 export class NumberInputWidget<ValueType> extends zul.inp.FormatWidget<ValueType> {
 	_rounding?: number;
-	_localizedSymbols?: zk.LocalizedSymbols;
 	_allowKeys?: string;
 
 	/** Returns the rounding mode.
