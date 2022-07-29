@@ -571,9 +571,6 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	/** Returns the input node of this widget
 	 * @return DOMElement
 	 */
-	// Super defines getInputNode as optional property (not a method), and super cannot be made abstract.
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore
 	override getInputNode(): HTMLInputElement | undefined {
 		return this.$n('real') ?? this.$n();
 	}
@@ -935,7 +932,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		if (zk.mac && evt.metaKey)
 			return false;
 		else {
-			var code = (zk.ie < 11 || zk.opera) ? evt.keyCode : evt.charCode as number;
+			const code = (zk.ie < 11 || zk.opera) ? evt.keyCode : evt.charCode!;
 			if (!evt.altKey && !evt.ctrlKey && _keyIgnorable(code) && keys.indexOf(String.fromCharCode(code)) < 0) {
 				evt.stop();
 				return true;

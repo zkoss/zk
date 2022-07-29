@@ -52,7 +52,6 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 	_timeZone?: string;
 	_unformater?: string;
 	static _unformater?: zul.db.Unformater;
-	_localizedSymbols?: zk.LocalizedSymbols;
 	_changed?: boolean;
 	type?: number;
 	timerId?: number;
@@ -100,7 +99,7 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 	 * @return String the time zone's ID, such as "America/Los_Angeles".
 	 * @since 9.0.0
 	 */
-	getTimeZone(): string | undefined {
+	override getTimeZone(): string | undefined {
 		return this._timeZone;
 	}
 
@@ -188,9 +187,6 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 	/** Returns the constraint, or null if no constraint at all.
 	 * @return String
 	 */
-	// Signature doesn't match super method
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore
 	override getConstraint(): string | undefined {
 		return this._constraint;
 	}

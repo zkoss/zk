@@ -27,7 +27,6 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 	_closePopupOnTimezoneChange = true;
 	_pop: CalendarPop;
 	_tm: CalendarTime;
-	_localizedSymbols?: zk.LocalizedSymbols;
 	// defSet will generate `_timeZone` but actually `_timezone` is used in code.
 	// Debugger in ZKDemo shows that both properties are created and agree.
 	// However, the server should expect `_timeZone`.
@@ -220,7 +219,7 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 	/** Returns the time zone that this date box belongs to.
 	 * @return String the time zone's ID, such as "America/Los_Angeles".
 	 */
-	getTimeZone(): string | undefined {
+	override getTimeZone(): string | undefined {
 		return this._timeZone;
 	}
 
