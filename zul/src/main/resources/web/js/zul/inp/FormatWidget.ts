@@ -19,6 +19,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 export class FormatWidget<ValueType> extends zul.inp.InputWidget<ValueType> {
 	_format?: string;
 	_shortcut?: string;
+	_localizedSymbols?: zk.LocalizedSymbols;
+	getTimeZone?(): string | undefined;
 
 	//zk.def
 	setFormat(v: string, opts?: Record<string, boolean>): this {

@@ -117,9 +117,6 @@ export class Errorbox extends zul.wgt.Notification {
 		super.unbind_(skipper, after, keepRod);
 	}
 
-	// Super defines getInputNode as optional property (not a method), and super cannot be made abstract.
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore
 	override getInputNode(): HTMLInputElement | undefined {
 		return this.parent ? this.parent.$n() : undefined;
 	}
