@@ -180,12 +180,12 @@ function ignoredrag(dg: zk.Draggable, p: zk.Offset, evt: zk.Event): boolean {
 }
 
 export interface WScrollOptions {
-	orient: string;
+	orient: 'vertical' | 'horizontal';
 	startPosition: number;
 	startStep: number;
 	offset: number;
 
-	anchor?: HTMLElement;
+	anchor?: HTMLElement | null; // eslint-disable-line zk/noNull
 	viewport: number;
 	endStep: number;
 	viewportSize: number;
