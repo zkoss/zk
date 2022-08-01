@@ -243,7 +243,12 @@ export class Draggable extends zk.Object {
 	declare _start: number;
 	declare _end: number;
 	declare _lastPos?: number;
-	
+
+	// zkmax.big.Biglistbox
+	declare _step: number;
+	declare _diff: number;
+	declare _ghost: HTMLElement;
+
 	static _drags: Draggable[] = [];
 	/** The control object for this draggable.
 	 * @type Object
