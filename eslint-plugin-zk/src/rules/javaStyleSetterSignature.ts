@@ -22,7 +22,7 @@ export const javaStyleSetterSignature = createRule({
 		function checkJavaStyleSetter(node: TSESTree.MethodDefinition | TSESTree.TSAbstractMethodDefinition) {
 			const { key, value: functionExpression } = node;
 			if (key.type !== AST_NODE_TYPES.Identifier ||
-				!key.name.startsWith('set')
+				!key.name.startsWith('set') || key.name.length <= 3
 			) {
 				return;
 			}
