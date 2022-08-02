@@ -28,32 +28,37 @@ export const javaStyleSetterSignature = createRule({
 			}
 
 			const { returnType, body, params } = functionExpression;
-			if (!returnType) {
-				// Return type annotation is missing.
-				let signatureTail: TSESTree.Node | TSESTree.Token = functionExpression;
-				if (body) {
-					// A function singature must contain a right parenthesis.
-					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-					signatureTail = sourceCode.getTokenBefore(body,
-						token => token.type === AST_TOKEN_TYPES.Punctuator && token.value === ')'
-					)!;
+			if (!key.name.endsWith('_')) { // ignore protected method
+				if (!returnType) {
+					// Return type annotation is missing.
+					let signatureTail: TSESTree.Node | TSESTree.Token = functionExpression;
+					if (body) {
+						// A function singature must contain a right parenthesis.
+						// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+						signatureTail = sourceCode.getTokenBefore(body,
+							token => token.type === AST_TOKEN_TYPES.Punctuator && token.value === ')'
+						)!;
+					}
+					context.report({
+						loc: {
+							start: node.loc.start,
+							end: signatureTail.loc.end
+						},
+						messageId: 'setterReturnThis',
+						fix(fixer) {
+							return fixer.insertTextAfter(signatureTail, ': this');
+						}
+					});
+				} else if (returnType.typeAnnotation.type !== AST_NODE_TYPES.TSThisType) {
+					// Replace existing return type annotation.
+					context.report({
+						loc: returnType.loc,
+						messageId: 'setterReturnThis',
+						fix(fixer) {
+							return fixer.replaceText(returnType, ': this');
+						}
+					});
 				}
-				context.report({
-					loc: { start: node.loc.start, end: signatureTail.loc.end },
-					messageId: 'setterReturnThis',
-					fix(fixer) {
-						return fixer.insertTextAfter(signatureTail, ': this');
-					}
-				});
-			} else if (returnType.typeAnnotation.type !== AST_NODE_TYPES.TSThisType) {
-				// Replace existing return type annotation.
-				context.report({
-					loc: returnType.loc,
-					messageId: 'setterReturnThis',
-					fix(fixer) {
-						return fixer.replaceText(returnType, ': this');
-					}
-				});
 			}
 
 			if (params.length > 0) {
@@ -67,7 +72,11 @@ export const javaStyleSetterSignature = createRule({
 				// setEnglishName
 				//    ^ -> set to lower case
 				// ^^^ -> remove
-				const newParamName = key.name[3]!.toLowerCase() + key.name.slice(4);
+				const newParamName1 = key.name[3]!.toLowerCase() + key.name.slice(4);
+				if (oldParamName === newParamName1) {
+					return;
+				}
+				const newParamName = newParamName1.replace('_', '');
 				if (oldParamName === newParamName) {
 					return;
 				}
