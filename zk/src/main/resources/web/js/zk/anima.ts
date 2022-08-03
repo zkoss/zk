@@ -499,3 +499,4 @@ export class JQZKEx extends zk.JQZK {
 		return element;
 	}
 }
+window.zjq = JQZKEx;

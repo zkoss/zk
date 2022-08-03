@@ -162,3 +162,5 @@ export class Long extends zk.Object {
 	 */
 	$toLocaleString = Long.prototype.$toString;
 }
+zk.BigDecimal = BigDecimal;
+zk.Long = Long;

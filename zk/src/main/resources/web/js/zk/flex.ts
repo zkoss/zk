@@ -725,3 +725,4 @@ export const zFlex = { //static methods
 		};
 	}
 };
+window.zFlex = zFlex;

@@ -6774,3 +6774,20 @@ export function zkopt(opts: Record<string, unknown>): void {
 		}
 	}
 }
+zk.DnD = DnD;
+zk.Widget = Widget;
+zk.$ = $;
+zk.RefWidget = RefWidget;
+zk.Desktop = Desktop;
+zk.Page = Page;
+zk.Body = Body;
+zk.Native = Native;
+zk.Macro = Macro;
+zk.Service = Service;
+zk.Skipper = Skipper;
+zk.NoDOM = NoDOM;
+zk.WrapClass = WrapClass;
+
+window.zkreg = zkreg;
+window.zkservice = zkservice;
+window.zkopt = zkopt;

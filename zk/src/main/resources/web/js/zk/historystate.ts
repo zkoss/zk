@@ -12,6 +12,7 @@ Copyright (C) 2017 Potix Corporation. All Rights Reserved.
 	This program is distributed under LGPL Version 2.1 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
+export default {};
 let popped = ('state' in window.history);
 const initialURL = location.href;
 

@@ -2116,3 +2116,7 @@ export function onIframeURLChange(uuid: string, url: string): void { //doc in js
 		if (wgt) wgt.fire('onURIChange', url);
 	}
 }
+window.zAu = zAu;
+zk.afterAuResponse = afterAuResponse;
+zk.doAfterAuResponse = doAfterAuResponse;
+window.onIframeURLChange = onIframeURLChange;

@@ -347,3 +347,4 @@ export class pkg { //internal utility
 			_pkghosts[pkgs[j]] = [host, hostRes];
 	}
 }
+zk.copy(zk, pkg);

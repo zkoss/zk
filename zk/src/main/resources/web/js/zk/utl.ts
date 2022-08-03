@@ -891,3 +891,4 @@ function _loadImage(url: string): void {
 	img.onerror = img.onload = f;
 	img.src = url;
 }
+window.zUtl = zUtl;
