@@ -741,3 +741,5 @@ onX: function (ctl) {
 	}
 }
 zWatch.listen({onBindLevelMove: zWatch});
+zk.Event = Event;
+window.zWatch = zWatch;

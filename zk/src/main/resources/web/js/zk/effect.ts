@@ -607,3 +607,4 @@ jq(function () {
 }); //jq
 
 export default Eff;
+zk.eff = Eff;

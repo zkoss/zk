@@ -726,6 +726,7 @@ export const zFlex = { //static methods
 	}
 };
 
+window.zFlex = zFlex;
 let _xWidget = {};
 zk.override(zk.Widget.prototype, _xWidget, {
 	domClass_: function (this: zk.Widget) {

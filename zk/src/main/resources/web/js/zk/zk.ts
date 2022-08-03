@@ -2223,3 +2223,4 @@ declare namespace _zk {
 	export const TDYS: number;
 	export const YDELTA: number;
 }
+window.zk = zk;

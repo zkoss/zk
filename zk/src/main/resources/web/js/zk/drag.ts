@@ -951,3 +951,4 @@ String scroll; //DOM Element's ID</code></pre>
 		return false;
 	}
 }
+zk.Draggable = Draggable;
