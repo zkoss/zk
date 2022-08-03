@@ -183,8 +183,8 @@ export class ComboWidget extends zul.inp.InputWidget<string> {
 	 * For internal use only.
 	 * Update the value of the input element in this component
 	 */
-	setRepos(v: boolean): this {
-		if (!this._repos && v) {
+	setRepos(repos: boolean): this {
+		if (!this._repos && repos) {
 			if (this.desktop) {
 				this._shallFixPopupDimension = true;
 			}
@@ -202,7 +202,7 @@ export class ComboWidget extends zul.inp.InputWidget<string> {
 	}
 
 	onFloatUp(ctl: zk.ZWatchController): void {
-		if ((!this._inplace && !this.isOpen()) || jq(this.getPopupNode_()!).is(':animated'))
+		if ((!this._inplace && !this.isOpen()) || jq(this.getPopupNode_()).is(':animated'))
 			return;
 		var wgt = ctl.origin;
 		if (!zUtl.isAncestor(this, wgt)) {
@@ -215,7 +215,7 @@ export class ComboWidget extends zul.inp.InputWidget<string> {
 				if (jq(n).hasClass(inplace)) return;
 
 				n.style.width = jq.px0(zk(n).revisedWidth(n.offsetWidth));
-				jq(this.getInputNode()!).addClass(inplace);
+				jq(this.getInputNode()).addClass(inplace);
 				jq(n).addClass(inplace);
 				this.onSize();
 				n.style.width = this.getWidth() ?? '';
@@ -226,7 +226,7 @@ export class ComboWidget extends zul.inp.InputWidget<string> {
 	onResponse(ctl: zk.ZWatchController, opts: ResponseOptions): void {
 		if ((this._shallFixPopupDimension || opts.rtags.onOpen || opts.rtags.onChanging) && this.isOpen()) {
 			// ZK-2192: Only need to determine if popup is animating
-			if (jq(this.getPopupNode_()!).is(':animated')) {
+			if (jq(this.getPopupNode_()).is(':animated')) {
 				setTimeout(() => {if (this.desktop) this.onResponse(ctl, opts);}, 50);
 				return;
 			}
@@ -489,7 +489,7 @@ export class ComboWidget extends zul.inp.InputWidget<string> {
 		pp.style.display = 'none';
 	}
 
-	override zsync(opts?: Record<string, unknown>): void {
+	override zsync(opts?: zk.Object): void {
 		super.zsync(opts);
 		if (!zk.css3 && this.isOpen() && this._shadow)
 			this._shadow.sync();
@@ -528,7 +528,7 @@ export class ComboWidget extends zul.inp.InputWidget<string> {
 		if (this._inplace) this._inplaceIgnore = false;
 		var self = this;
 		// ZK-2192: Only need to determine if popup is animating
-		if (jq(this.getPopupNode_()!).is(':animated')) {
+		if (jq(this.getPopupNode_()).is(':animated')) {
 			setTimeout(function () {if (self.desktop) self.close(opts);}, 50);
 			return;
 		}
@@ -559,7 +559,7 @@ export class ComboWidget extends zul.inp.InputWidget<string> {
 
 		//remove extra CSS class
 		var openClass = this.$s('open');
-		jq(this.$n()!).removeClass(openClass);
+		jq(this.$n()).removeClass(openClass);
 		jq(pp).removeClass(openClass);
 	}
 
@@ -702,7 +702,7 @@ export class ComboWidget extends zul.inp.InputWidget<string> {
 		this._inplaceIgnore = false;
 		if (!this._buttonVisible) return;
 		// ZK-2192: Only need to determine if popup is animating
-		if (!this._disabled && !jq(this.getPopupNode_()!).is(':animated')) {
+		if (!this._disabled && !jq(this.getPopupNode_()).is(':animated')) {
 			if (this._open) this.close({focus: zul.inp.InputCtrl.isPreservedFocus(this), sendOnOpen: true});
 			else this.open({focus: zul.inp.InputCtrl.isPreservedFocus(this), sendOnOpen: true});
 		}

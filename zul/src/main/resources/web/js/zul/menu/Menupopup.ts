@@ -102,7 +102,7 @@ export class Menupopup extends zul.wgt.Popup {
 	_shadow?: zk.eff.Shadow;
 	_reverseDirection?: boolean;
 
-	override zsync(opts?: Record<string, unknown>): void {
+	override zsync(opts?: zk.Object): void {
 		super.zsync(opts);
 
 		if (!this._shadow)
@@ -261,18 +261,18 @@ export class Menupopup extends zul.wgt.Popup {
 		}
 
 		// check if org belongs to the popup
-		for (var floatFound = false, wgt: zk.Widget | undefined = org; wgt; wgt = wgt.parent) {
+		for (var floatFound = false, wgt: zk.Object | zk.Widget | undefined = org; wgt; wgt = (wgt as zk.Widget).parent) {
 			if (wgt == this || ((wgt as zul.menu.Menu).menupopup == this && !this._shallClose)) {
 				if (!floatFound)
 					this.setTopmost();
 				return;
 			}
-			floatFound = floatFound || wgt.isFloating_();
+			floatFound = floatFound || (wgt as zk.Widget).isFloating_();
 		}
 
 		// check if the popup is one of org's children
-		if (org && org.ignoreDescendantFloatUp_(this)) {
-			for (var floatFound = false, wgt: zk.Widget | undefined = this; wgt = wgt.parent;) {
+		if (org instanceof zk.Widget && org.ignoreDescendantFloatUp_(this)) {
+			for (var floatFound = false, wgt: zk.Object | zk.Widget | undefined = this; wgt = (wgt as zk.Widget).parent;) {
 				if (wgt == org) {
 					if (this._shallClose)
 						break; //close it
@@ -280,7 +280,7 @@ export class Menupopup extends zul.wgt.Popup {
 						this.setTopmost();
 					return;
 				}
-				floatFound = floatFound || wgt.isFloating_();
+				floatFound = floatFound || (wgt as zk.Widget).isFloating_();
 			}
 
 			//No need to check _lastTarget since we have to close any other open menupopup
@@ -452,7 +452,7 @@ export class Menupopup extends zul.wgt.Popup {
 			var root = _getRootMenu(this);
 			if (root) {
 				// a trick way to jump to the next menu.
-				root.focus_(undefined, zk.ie < 11);
+				root.focus_(undefined, false);
 			}
 			this.close();
 			break;

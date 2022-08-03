@@ -83,19 +83,19 @@ export class Listbox extends zul.sel.SelectWidget {
 	 * @param String msg
 	 * @since 5.0.7
 	 */
-	setEmptyMessage(msg: string, opts?: Record<string, boolean>): this {
+	setEmptyMessage(emptyMessage: string, opts?: Record<string, boolean>): this {
 		const o = this._emptyMessage;
-		this._emptyMessage = msg;
+		this._emptyMessage = emptyMessage;
 
-		if (o !== msg || (opts && opts.force)) {
+		if (o !== emptyMessage || (opts && opts.force)) {
 			if (this.desktop) {
 				var emptyContentDiv = jq(this.$n_('empty-content')),
 					emptyContentClz = this.$s('emptybody-content');
-				if (msg && msg.trim().length != 0)
+				if (emptyMessage && emptyMessage.trim().length != 0)
 					emptyContentDiv.addClass(emptyContentClz);
 				else
 					emptyContentDiv.removeClass(emptyContentClz);
-				emptyContentDiv.html(msg);
+				emptyContentDiv.html(emptyMessage);
 			}
 		}
 
@@ -347,7 +347,7 @@ export class Listbox extends zul.sel.SelectWidget {
 		if (nodeOfBefore)
 			jq(nodeOfBefore).before(child.redrawHTML_());
 		else
-			jq(this.getCaveNode()!).append(child.redrawHTML_());
+			jq(this.getCaveNode()).append(child.redrawHTML_());
 		child.bind(desktop);
 	}
 
@@ -535,10 +535,7 @@ export class Listbox extends zul.sel.SelectWidget {
 
 	override checkOnHighlightDisabled_(): boolean {
 		if (this._selectOnHighlightDisabled) {
-			var selection = window.getSelection || document['selection'];
-			if (selection) {
-				return selection()!.toString().length > 0;
-			}
+			window.getSelection()!.toString().length > 0;
 		}
 		return false;
 	}
@@ -564,9 +561,9 @@ export class Listbox extends zul.sel.SelectWidget {
 		return this.lastItem!._index!;
 	}
 
-	setItemsInvalid_(wgts: ArrayLike<unknown>[]): void {
+	setItemsInvalid_(itemsInvalid_: ArrayLike<unknown>[]): void {
 		var wgt = this;
-		zAu.createWidgets(wgts, function (ws) {
+		zAu.createWidgets(itemsInvalid_, function (ws) {
 			if (wgt.$n('rows')) {
 				wgt.replaceCavedChildren_('rows', ws);
 			} else {

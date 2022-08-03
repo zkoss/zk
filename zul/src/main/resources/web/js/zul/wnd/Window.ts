@@ -45,7 +45,7 @@ function _startmove(dg: zk.Draggable): void {
 	//ZK-1309: Add a flag to identify is dragging or not in onFloatUp()
 	//ZK-1662: refix ZK-1309
 	//dg.control._isDragging = true;
-	zWatch.fire('onFloatUp', dg.control); //notify all
+	zWatch.fire('onFloatUp', dg.control!); //notify all
 }
 function _ghostmove(dg: zk.Draggable, ofs: zk.Offset, evt: zk.Event): HTMLElement {
 	var wnd = dg.control as zul.wnd.Window,
@@ -82,7 +82,7 @@ function _endghostmove(dg: zk.Draggable, origin: HTMLElement): void {
 	origin.style.left = jq.px(origin.offsetLeft + el.offsetLeft - dg._wndoffs![0]);
 
 	document.body.style.cursor = '';
-	zWatch.fire('onMove'); //Bug ZK-1372: hide applet when overlapped
+	zWatch.fire('onMove', undefined!); //Bug ZK-1372: hide applet when overlapped
 }
 function _ignoremove(dg: zk.Draggable, pointer: zk.Offset, evt: zk.Event): boolean {
 	var el = dg.node!,
@@ -175,7 +175,7 @@ function _doModal(wgt: zul.wnd.Window): void {
 			zIndex: wgt._zIndex as number,
 			visible: realVisible
 		});
-		var tag = zk.ie < 11 ? 'a' : 'button';
+		var tag = 'button';
 		jq('#' + wgt.uuid + '-mask').append('<' + tag + ' id="' + wgt.uuid + '-mask-a" style="top:0;left:0" onclick="return false;" href="javascript:;" class="z-focus-a" aria-hidden="true" tabindex="-1"></' + tag + '>');
 		wgt._anchor = jq('#' + wgt.uuid + '-mask-a')[0];
 	}
@@ -346,7 +346,7 @@ function _makeFloat(wgt: zul.wnd.Window): void {
 			endghosting: Window._endghostmove,
 			ignoredrag: Window._ignoremove,
 			endeffect: Window._aftermove,
-			zIndex: 99999 //Bug 2929590
+			zIndex: '99999' //Bug 2929590
 		});
 	}
 }
@@ -1017,7 +1017,7 @@ export class Window extends zul.ContainerWidget {
 		this.zsync();
 	}
 
-	override zsync(opts?: Record<string, unknown>): void {
+	override zsync(opts?: zk.Object): void {
 		super.zsync(opts);
 		if (this.desktop) {
 			if (this._mode == 'embedded') {
@@ -1159,7 +1159,7 @@ export class Window extends zul.ContainerWidget {
 		if (!this._visible || this._mode == 'embedded' || this._mask)
 			return; //just in case
 
-		var wgt: zk.Widget | undefined = ctl.origin;
+		var wgt: zk.Widget | undefined = ctl.origin as zk.Widget | undefined;
 		if (this._mode == 'popup') {
 			for (let floatFound = false; wgt; wgt = wgt.parent) {
 				if (wgt == this) {
@@ -1406,7 +1406,7 @@ export class Window extends zul.ContainerWidget {
 		// at console. It should unbind ckeditor before remove it. Put here can works well on every browser.
 		this.unbindChildren_();
 		// ZK-2247: remove iframe to prevent load twice
-		if (zk.ie > 8 || zk.chrome) {
+		if (zk.ie11 || zk.chrome) {
 			var $jq = jq(this.$n_()).find('iframe');
 			if ($jq.length)
 				$jq.hide().remove();
@@ -1444,7 +1444,7 @@ export class Window extends zul.ContainerWidget {
 
 		// ZK-1951, ZK-2045: Page becomes blank after detaching a modal window having an iframe loaded with PDF in IE > 9
 		// A workaround is to hide the iframe before remove
-		if (zk.ie > 9) {
+		if (zk.ie11) {
 			var $jq = jq(this.$n_()).find('iframe');
 			if ($jq.length)
 				$jq.hide().remove();
@@ -1605,7 +1605,7 @@ export class Window extends zul.ContainerWidget {
 	// drag sizing (also referenced by Panel.js)
 	static _startsizing(dg: zk.Draggable, evt?: zk.Event): void {
 		_hideShadow(dg.control as zul.wnd.Window); //ZK-3877: startsizing is the better event to hideShadow
-		zWatch.fire('onFloatUp', dg.control); //notify all
+		zWatch.fire('onFloatUp', dg.control!); //notify all
 	}
 
 	static _snapsizing(dg: zk.Draggable, pos: zk.Offset): zk.Offset {
@@ -1693,10 +1693,10 @@ export class Window extends zul.ContainerWidget {
 	}
 
 	static _aftersizing(dg: zk.Draggable, evt: zk.Event): void {
-		var wgt = dg.control!,
+		var wgt = dg.control as zk.Widget,
 			data = dg.z_szofs;
-		if (wgt._hflex) wgt.setHflex_();
-		if (wgt._vflex) wgt.setVflex_();
+		if (wgt._hflex) wgt.setHflex_(undefined);
+		if (wgt._vflex) wgt.setVflex_(undefined);
 		wgt.fire('onSize', zk.copy(data, evt.keys), {ignorable: true});
 		dg.z_szofs = undefined;
 	}

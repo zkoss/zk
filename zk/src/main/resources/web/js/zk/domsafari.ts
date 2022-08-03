@@ -13,7 +13,7 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 Object.assign(zjq, {
-	_fixCSS: function (el) {
+	_fixCSS(el: HTMLElement): void {
 		//we have to preserve scrollTop
 		//Test case: test2/B50-ZK-373.zul and test2/B50-3315594.zul
 		var old = el.style.display,
@@ -27,17 +27,16 @@ Object.assign(zjq, {
 		el.scrollLeft = lft;
 	}
 });
-var _bkZjq = {};
-Object.assign(zjq.prototype, {
-	beforeHideOnUnbind: function (this: zk.JQZK) { //Bug 3076384 (though i cannot reproduce in chrome/safari)
-		return this.jq.each(function () {
+Object.assign<zk.JQZK, Partial<zk.JQZK>>(zjq.prototype, {
+	beforeHideOnUnbind(): unknown { //Bug 3076384 (though i cannot reproduce in chrome/safari)
+		return this.jq!.each(function () {
 			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			// @ts-ignore
 			for (var ns = this.getElementsByTagName('iframe'), j = ns.length; j--;)
 				ns[j].src = zjq.src0;
 		});
 	},
-}, _bkZjq);
+});
 
 zjq._sfKeys = {
 	25: 9,     // SHIFT-TAB
@@ -52,9 +51,9 @@ zjq._sfKeys = {
 	63277: 34  // pgdn
 };
 zk.override(jq.event, zjq._evt = {}, {
-	fix: function (evt, ...rest) {
-		evt = zjq._evt.fix!.bind(this)(...(arguments as unknown as []));
-		var v = zjq._sfKeys[evt.keyCode];
+	fix(evt: JQuery.Event, ...rest) {
+		evt = zjq._evt.fix!.bind(this)(...(arguments as unknown as [])) as JQuery.Event;
+		var v = zjq._sfKeys[evt.keyCode!];
 		if (v) evt.keyCode = v;
 		return evt;
 	}

@@ -137,7 +137,7 @@ function _calcMinWd(wgt: MeshWidget): MeshWidth {
 				wd = ftwd;
 			wds[i] = wd;
 			// Bug ZK-2772 don't plus one when frozen exists.
-			if (!wgt.frozen && (zk.ff! > 4 || zk.ie > 8 || zk.safari)) // firefox4 & IE9, 10, 11 & safari still cause break line in case B50-3147926 column 1
+			if (!wgt.frozen && (zk.ff! > 4 || zk.ie11 || zk.safari)) // firefox4 & IE9, 10, 11 & safari still cause break line in case B50-3147926 column 1
 				++wds[i];
 			width += wds[i]; // using wds[i] instead of wd for B50-3183172.zul
 			if (w)
@@ -154,7 +154,7 @@ function _calcMinWd(wgt: MeshWidget): MeshWidth {
 				wds[i] = wd;
 
 				// Bug ZK-2772 don't plus one when frozen exists.
-				if (!wgt.frozen && (zk.ff! > 4 || zk.ie > 8)) // firefox4 & IE9, 10, 11 still cause break line in case B50-3147926 column 1
+				if (!wgt.frozen && (zk.ff! > 4 || zk.ie11)) // firefox4 & IE9, 10, 11 still cause break line in case B50-3147926 column 1
 					++wds[i];
 				width += wds[i]; // using wds[i] instead of wd for B50-3183172.zul
 			}
@@ -2167,10 +2167,6 @@ export abstract class MeshWidget extends zul.Widget {
 				// but `this._vflexSize(n.style.height)` wasn't cleaned up until now.
 				hgh = this._vflexSize();
 
-				if (zk.ie < 11 && this._cachehgh != hgh) {
-					hgh -= 1; // need to display the bottom border.
-					this._cachehgh = hgh;
-				}
 				if (hgh < 25) hgh = 25;
 
 				var rowhgh = firstVisiRow ? zk(firstVisiRow).offsetHeight() : undefined;

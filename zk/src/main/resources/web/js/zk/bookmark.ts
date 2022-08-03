@@ -26,12 +26,12 @@ function checkBookmark(): void {
 	const nm = getBookmark();
 	if (nm != _curbk) {
 		_curbk = nm;
-		zAu.send(new zk.Event(undefined, 'onBookmarkChange', nm), 1);
+		zAu.send(new zk.Event(undefined!, 'onBookmarkChange', nm), 1);
 		zk.bmk.onURLChange();
 	}
 }
 
-function _simplifyURL(url): string {
+function _simplifyURL(url: string): string {
 	let j = url.lastIndexOf(';');
 	if (j >= 0) url = url.substring(0, j);
 	j = url.lastIndexOf('#');
@@ -128,7 +128,7 @@ zk.bmk = {
 				$ifr.attr('z_xurl', url);
 			}
 		} catch (e) { //due to JS sandbox, we cannot access if not from same host
-			zk.debugLog(e.message || e);
+			zk.debugLog((e as Error).message ?? e);
 		}
 	}
 };

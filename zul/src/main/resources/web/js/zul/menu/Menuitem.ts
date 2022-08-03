@@ -437,11 +437,6 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 				jq(ifrm).remove();
 				evt.stop();
 			} else {
-				if (zk.ie < 11 && topmost && this.$n_().id != anc.id)
-					zUtl.go(anc.href, {target: anc.target});
-					// Bug #1886352 and #2154611
-					//Note: we cannot eat onclick. or, <a> won't work
-
 				if (zk.gecko && topmost && this.$n_().id != anc.id) {
 					zUtl.go(anc.href, {target: anc.target});
 					evt.stop();
@@ -501,7 +496,7 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 	}
 
 	_canActivate(evt: zk.Event): boolean {
-		return !this.isDisabled() && (zk.ie < 11 || !this.isTopmost() || !!this._uplder
+		return !this.isDisabled() && (!this.isTopmost() || !!this._uplder
 				|| jq.isAncestor(this.$n('a'), evt.domTarget));
 	}
 

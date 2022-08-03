@@ -30,12 +30,12 @@ export class Bandpopup extends zul.Widget {
 
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
-		jq(this.$n()!).on('focusin', this.proxy(this._focusin))
+		jq(this.$n()).on('focusin', this.proxy(this._focusin))
 			.on('focusout', this.proxy(this._focusout));
 	}
 
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
-		jq(this.$n()!).off('focusout', this.proxy(this._focusout))
+		jq(this.$n()).off('focusout', this.proxy(this._focusout))
 			.off('focusin', this.proxy(this._focusin));
 		super.unbind_(skipper, after, keepRod);
 	}

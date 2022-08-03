@@ -20,10 +20,10 @@ var _defaultSymbols = {
 	MINUS: zk.MINUS
 };
 
-function down(valStr, ri): string {
+function down(valStr: string, ri: number): string {
 	return valStr.substring(0, ri);
 }
-function up(valStr, ri): string {
+function up(valStr: string, ri: number): string {
 	var k = 1, val = '';
 	for (var j = ri; k && --j >= 0;) {
 		var ch = valStr.charAt(j);
@@ -40,8 +40,8 @@ function up(valStr, ri): string {
 		val = valStr.substring(0, j) + val;
 	return k ? '1' + val : val;
 }
-function compareHalf(valStr, ri): number {
-	var result,
+function compareHalf(valStr: string, ri: number): number | undefined {
+	var result: number | undefined,
 		base = 5;
 	for (var j = ri, len = valStr.length; j < len; ++j) {
 		result = parseInt(valStr.charAt(j)) - base;
@@ -53,7 +53,7 @@ function compareHalf(valStr, ri): number {
 	}
 	return result;
 }
-function preDigit(valStr, ri): string | undefined {
+function preDigit(valStr: string, ri: number): string | undefined {
 	for (var j = ri; --j >= 0;) {
 		var ch = valStr.charAt(j);
 		if (ch >= '0' && ch <= '9')
@@ -153,15 +153,15 @@ export let Number = {
 			case 3: //FLOOR
 				valStr = !minus ? down(valStr, ri) : up(valStr, ri);
 				break;
-			case 4: //HALF_UP
-				var r = compareHalf(valStr, ri);
-				valStr = r < 0 ? down(valStr, ri) : up(valStr, ri);
+			case 4: {//HALF_UP
+				const r = compareHalf(valStr, ri);
+				valStr = r != null && r < 0 ? down(valStr, ri) : up(valStr, ri);
 				break;
-			case 5: //HALF_DOWN
-				var r = compareHalf(valStr, ri);
-				valStr = r > 0 ? up(valStr, ri) : down(valStr, ri);
+			} case 5: {//HALF_DOWN
+				const r = compareHalf(valStr, ri);
+				valStr = r != null && r > 0 ? up(valStr, ri) : down(valStr, ri);
 				break;
-			case 6: //HALF_EVEN
+			} case 6: //HALF_EVEN
 				//fallthrough
 			default:
 				var r = compareHalf(valStr, ri);
@@ -169,7 +169,7 @@ export let Number = {
 					var evenChar = preDigit(valStr, ri);
 					valStr = evenChar && (parseInt(evenChar) & 1) ? up(valStr, ri) : down(valStr, ri);
 				} else
-					valStr = r < 0 ? down(valStr, ri) : up(valStr, ri);
+					valStr = r != null && r < 0 ? down(valStr, ri) : up(valStr, ri);
 		}
 		return valStr;
 	},
@@ -398,7 +398,7 @@ export let Number = {
 		}
 		return ret;
 	},
-	unformat(fmt: string, val: string, ignoreLocale: boolean, localizedSymbols?: zk.LocalizedSymbols) {
+	unformat(fmt: string, val: string, ignoreLocale: boolean, localizedSymbols?: zk.LocalizedSymbols): {raw: string; divscale: number} {
 		if (!val) return {raw: val, divscale: 0};
 
 		// localized symbols
@@ -413,7 +413,7 @@ export let Number = {
 		var divscale = 0, //the second element
 			minus,
 			sb: string | undefined,
-			cc,
+			cc: string,
 			ignore,
 			zkMinus = ignoreLocale ? '-' : localizedSymbols.MINUS,
 			zkDecimal = ignoreLocale ? '.' : localizedSymbols.DECIMAL, //bug #2932443, no format and German Locale
@@ -464,7 +464,7 @@ export let Number = {
 
 		//remove leading 0
 		//keep the zero after the decimal point (to preserve precision)
-		for (var j = 0, k, len: number = sb.length; j < len; ++j) {
+		for (var j = 0, k: number | undefined, len: number = sb.length; j < len; ++j) {
 			cc = sb.charAt(j);
 			if (cc > '0' && cc <= '9') {
 				if (k !== undefined)

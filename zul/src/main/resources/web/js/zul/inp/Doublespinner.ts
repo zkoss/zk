@@ -64,11 +64,11 @@ export class Doublespinner extends zul.inp.NumberInputWidget<number> {
 	/** Set the step of dobule spinner
 	 * @param double step
 	 */
-	setStep(v: number, opts?: Record<string, boolean>): this {
+	setStep(step: number, opts?: Record<string, boolean>): this {
 		const o = this._step;
-		this._step = v;
+		this._step = step;
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== step || (opts && opts.force)) {
 			_updateFixedDigits(this);
 		}
 
@@ -86,12 +86,12 @@ export class Doublespinner extends zul.inp.NumberInputWidget<number> {
 	/** Sets whether the button (on the right of the textbox) is visible.
 	 * @param boolean visible
 	 */
-	setButtonVisible(v: boolean, opts?: Record<string, boolean>): this {
+	setButtonVisible(buttonVisible: boolean, opts?: Record<string, boolean>): this {
 		const o = this._buttonVisible;
-		this._buttonVisible = v;
+		this._buttonVisible = buttonVisible;
 
-		if (o !== v || (opts && opts.force)) {
-			zul.inp.RoundUtl.buttonVisible(this, v);
+		if (o !== buttonVisible || (opts && opts.force)) {
+			zul.inp.RoundUtl.buttonVisible(this, buttonVisible);
 		}
 
 		return this;
@@ -108,14 +108,14 @@ export class Doublespinner extends zul.inp.NumberInputWidget<number> {
 		return super.getValue();
 	}
 
-	override setConstraint(constr?: string): this {
-		if (typeof constr == 'string' && constr.charAt(0) != '['/*by server*/) {
-			var constraint = new zul.inp.SimpleDoubleSpinnerConstraint(constr);
-			this._min = constraint._min;
-			this._max = constraint._max;
-			super.setConstraint(constraint);
+	override setConstraint(constraint: string): this {
+		if (typeof constraint == 'string' && !constraint.startsWith('[')/*by server*/) {
+			var simpleDoubleSpinnerConstraint = new zul.inp.SimpleDoubleSpinnerConstraint(constraint);
+			this._min = simpleDoubleSpinnerConstraint._min;
+			this._max = simpleDoubleSpinnerConstraint._max;
+			super.setConstraint(simpleDoubleSpinnerConstraint);
 		} else
-			super.setConstraint(constr);
+			super.setConstraint(constraint);
 		return this;
 	}
 
@@ -130,7 +130,7 @@ export class Doublespinner extends zul.inp.NumberInputWidget<number> {
 			valind = valstr.indexOf('.'),
 			rawind = raw.indexOf('.');
 
-		if (isNaN(val) || valstr.indexOf('e') < 0) {
+		if (isNaN(val) || !valstr.includes('e')) {
 			if (rawind == 0) {
 				raw = '0' + raw;
 				++rawind;
@@ -158,7 +158,7 @@ export class Doublespinner extends zul.inp.NumberInputWidget<number> {
 					valstr += '0';
 			}
 
-			if (isNaN(val) || (raw != valstr && raw != '-' + valstr && raw.indexOf('e') < 0)) { //1e2: assumes OK
+			if (isNaN(val) || (raw != valstr && raw != '-' + valstr && !raw.includes('e'))) { //1e2: assumes OK
 				if (!isNaN(val) && raw != valstr) //Bug ZK-1218: show Illegal value instead if input is number but too long
 					return {error: zk.fmt.Text.format(msgzul.ILLEGAL_VALUE)};
 				return {error: zk.fmt.Text.format(msgzul.NUMBER_REQUIRED, value)};
@@ -315,7 +315,7 @@ export class Doublespinner extends zul.inp.NumberInputWidget<number> {
 			clearInterval(this.timerId);
 
 		this.timerId = setInterval(function () {widget._increase(isup);}, 200);
-		jq(this.$n('btn-' + (isup ? 'up' : 'down'))!).addClass(this.$s('active'));
+		jq(this.$n('btn-' + (isup ? 'up' : 'down'))).addClass(this.$s('active'));
 	}
 
 	_stopAutoIncProc(): void {
@@ -339,7 +339,7 @@ export class Doublespinner extends zul.inp.NumberInputWidget<number> {
 
 	override afterKeyDown_(evt: zk.Event, simulated?: boolean): boolean {
 		if (!simulated && this._inplace)
-			jq(this.$n()!).toggleClass(this.getInplaceCSS(), evt.keyCode == 13);
+			jq(this.$n()).toggleClass(this.getInplaceCSS(), evt.keyCode == 13);
 
 		return super.afterKeyDown_(evt, simulated);
 	}

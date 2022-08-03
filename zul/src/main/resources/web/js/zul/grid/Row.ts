@@ -236,7 +236,7 @@ export class Row extends zul.Widget<HTMLTableRowElement> implements zul.mesh.Ite
 	 * @return String
 	 */
 	encloseChildHTML_(opts: {out?: string[]; child: zk.Widget; index: number; zclass: string; visible?: boolean}): string | undefined {
-		var out = opts.out || new zk.Buffer<string>(),
+		var out = opts.out || new zk.Buffer(),
 			child = opts.child;
 
 		if (child instanceof zul.wgt.Cell)
@@ -403,7 +403,7 @@ export class Row extends zul.Widget<HTMLTableRowElement> implements zul.mesh.Ite
 			sclass: string;
 		// NOTE: It has always been the case that the following `this.$n()` possibly
 		// returns null or undefined.
-		if (grid && jq(this.$n()!).hasClass(sclass = grid.getOddRowSclass()))
+		if (grid && jq(this.$n()).hasClass(sclass = grid.getOddRowSclass()))
 			return cls + ' ' + sclass;
 		return cls;
 	}

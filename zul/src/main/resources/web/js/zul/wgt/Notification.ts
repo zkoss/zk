@@ -50,7 +50,7 @@ export class Notification extends zul.wgt.Popup {
 
 	constructor(msg: string, opts: NotificationOptions) {
 		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-ignore
+		// @ts-expect-error
 		super(msg, opts); // FIXME: doesn't match zk.Widget.prototype.constructor
 		this._msg = msg;
 		this._type = opts.type;
@@ -95,7 +95,7 @@ export class Notification extends zul.wgt.Popup {
 			return;
 		if (!this.isVisible())
 			return;
-		var wgt: zk.Widget | undefined = ctl.origin;
+		var wgt: zk.Widget | undefined = ctl.origin as zk.Widget | undefined;
 		for (var floatFound = false; wgt; wgt = wgt.parent) {
 			if (wgt == this) {
 				if (!floatFound)
@@ -229,14 +229,14 @@ export class Notification extends zul.wgt.Popup {
 
 	override openAnima_(ref?: zul.wgt.Ref, offset?: zk.Offset, position?: string, opts?: zul.wgt.PopupOptions): void {
 		var self = this;
-		jq(this.$n()!).fadeIn(500, function () {
+		jq(this.$n()).fadeIn(500, function () {
 			self.afterOpenAnima_(ref, offset, position, opts);
 		});
 	}
 
 	override closeAnima_(opts?: zul.wgt.PopupOptions): void {
 		var self = this;
-		jq(this.$n()!).fadeOut(500, function () {
+		jq(this.$n()).fadeOut(500, function () {
 			self.afterCloseAnima_(opts);
 		});
 	}

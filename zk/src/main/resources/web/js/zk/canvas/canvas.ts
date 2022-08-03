@@ -19,8 +19,6 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
  *</code></pre>
  */
 //zk.$package('zk.canvas');
-var _init = (zk.ie && zk.ie < 11) ? function (el) {window['G_vmlCanvasManager'].initElement(el);} : zk.$void;
-
 /** @class zk.canvas.Canvas
  * Utilities to create and manipulate the canvas element.
  * @since 5.0.2
@@ -50,7 +48,6 @@ export let Canvas = {
 		var el = document.createElement('canvas');
 		if (width) el.width = zk.parseInt(width);
 		if (height) el.height = zk.parseInt(height);
-		_init(el);
 		return el;
 	}
 };

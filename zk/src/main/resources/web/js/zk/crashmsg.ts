@@ -18,7 +18,16 @@
 
 Copyright (C)  Potix Corporation. All Rights Reserved.
 */
-window['zkInitCrashTimer'] = setTimeout(function () {
+export default {};
+declare global {
+	interface Window {
+		zkInitCrashTimer: number | undefined;
+		zkShowCrashMessage: undefined | CallableFunction;
+		zkInitCrashTimeout: number;
+	}
+}
+
+window.zkInitCrashTimer = setTimeout(function () {
 	var zkErrorCode,
 		z_runonce = document.querySelectorAll('.z-runonce')[0],
 		zk_proc = document.getElementById('zk_proc'),
@@ -41,8 +50,8 @@ window['zkInitCrashTimer'] = setTimeout(function () {
 				zkErrorCode = 5;
 		}
 		
-		if (!window['zkShowCrashMessage']) {
-			window['zkShowCrashMessage'] = function () {
+		if (!window.zkShowCrashMessage) {
+			window.zkShowCrashMessage = function () {
 				var style = '<style> a:visited {color: white;} </style>',
 					div = '<div style="background: rgb(35,48,64); text-align: center; color: white; position: absolute; \
 						top: 0; left: 0; right: 0; bottom: 0; margin: auto; width: 50%; height: 300px; font-size: 20px;">',
@@ -76,6 +85,6 @@ window['zkInitCrashTimer'] = setTimeout(function () {
 				body.innerHTML = div;
 			};
 		}
-		window['zkShowCrashMessage'](zkErrorCode);
+		window.zkShowCrashMessage(zkErrorCode);
 	}
-}, window['zkInitCrashTimeout'] >= 0 ? window['zkInitCrashTimeout'] * 1000 : 60000);
+}, window.zkInitCrashTimeout >= 0 ? window.zkInitCrashTimeout * 1000 : 60000);

@@ -344,7 +344,7 @@ export class Menubar extends zul.Widget {
 	}
 
 	encloseChildHTML_(opts: {child: zk.Widget; vertical: boolean; out?: string[]}): string | undefined {
-		var out = opts.out || new zk.Buffer<string>(),
+		var out = opts.out || new zk.Buffer(),
 			child = opts.child;
 		child.redraw(out);
 		if (!opts.out) return out.join('');

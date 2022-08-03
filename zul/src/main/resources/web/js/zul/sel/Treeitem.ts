@@ -491,7 +491,7 @@ export class Treeitem extends zul.sel.ItemWidget {
 			else
 				jq(erows).append(childHTML);
 		} else {
-			jq(erows!).append(childHTML);
+			jq(erows).append(childHTML);
 		}
 	}
 

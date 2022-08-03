@@ -186,7 +186,7 @@ export class Errorbox extends zul.wgt.Notification {
 	}
 
 	override onFloatUp(ctl: zk.ZWatchController): void {
-		var wgt = ctl.origin;
+		var wgt = ctl.origin as zk.Widget | undefined;
 		if (wgt == this) {
 			this.setTopmost();
 			return;

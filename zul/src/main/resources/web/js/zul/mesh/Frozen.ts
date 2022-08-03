@@ -299,10 +299,7 @@ export class Frozen extends zul.Widget {
 				}
 			};
 		if (p) {
-			if (zk.ie < 11)
-				setTimeout(fn, 0);
-			else
-				fn();
+			fn();
 		}
 		evt.stop();
 	}

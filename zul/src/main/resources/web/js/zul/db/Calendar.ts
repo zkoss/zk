@@ -105,9 +105,9 @@ export let Renderer = {
 		if ((constraint = cal._constraint) && typeof constraint == 'string') {
 
 			// Bug ID: 3106676
-			if ((constraint.indexOf('no past') > -1 && (+d - +today) / 86400000 < 0)
-				|| (constraint.indexOf('no future') > -1 && (+today - +d) / 86400000 < 0)
-				|| (constraint.indexOf('no today') > -1 && +today - +d == 0))
+			if ((constraint.includes('no past') && (+d - +today) / 86400000 < 0)
+				|| (constraint.includes('no future') && (+today - +d) / 86400000 < 0)
+				|| (constraint.includes('no today') && +today - +d == 0))
 					return true;
 		}
 
@@ -426,8 +426,8 @@ export class Calendar extends zul.Widget {
 	/** Sets default time zone that this calendar belongs to.
 	 * @param String timezone the time zone's ID, such as "America/Los_Angeles".
 	 */
-	setDefaultTzone(timezone: string): this {
-		this._defaultTzone = timezone;
+	setDefaultTzone(defaultTzone: string): this {
+		this._defaultTzone = defaultTzone;
 		return this;
 	}
 
@@ -600,8 +600,8 @@ export class Calendar extends zul.Widget {
 	 * A method for component setter symmetry, it will call setValue
 	 * @since 10.0.0
 	 */
-	setValueInZonedDateTime(value: DateImpl, opts?: Record<string, boolean>): this {
-		return this.setValue(value, opts);
+	setValueInZonedDateTime(valueInZonedDateTime: DateImpl, opts?: Record<string, boolean>): this {
+		return this.setValue(valueInZonedDateTime, opts);
 	}
 
 	/**
@@ -616,8 +616,8 @@ export class Calendar extends zul.Widget {
 	 * A method for component setter symmetry, it will call setValue
 	 * @since 10.0.0
 	 */
-	setValueInLocalDateTime(value: DateImpl, opts?: Record<string, boolean>): this {
-		return this.setValue(value, opts);
+	setValueInLocalDateTime(valueInLocalDateTime: DateImpl, opts?: Record<string, boolean>): this {
+		return this.setValue(valueInLocalDateTime, opts);
 	}
 
 	/**
@@ -632,8 +632,8 @@ export class Calendar extends zul.Widget {
 	 * A method for component setter symmetry, it will call setValue
 	 * @since 10.0.0
 	 */
-	setValueInLocalDate(value: DateImpl, opts?: Record<string, boolean>): this {
-		return this.setValue(value, opts);
+	setValueInLocalDate(valueInLocalDate: DateImpl, opts?: Record<string, boolean>): this {
+		return this.setValue(valueInLocalDate, opts);
 	}
 
 	/**
@@ -648,8 +648,8 @@ export class Calendar extends zul.Widget {
 	 * A method for component setter symmetry, it will call setValue
 	 * @since 10.0.0
 	 */
-	setValueInLocalTime(value: DateImpl, opts?: Record<string, boolean>): this {
-		return this.setValue(value, opts);
+	setValueInLocalTime(valueInLocalTime: DateImpl, opts?: Record<string, boolean>): this {
+		return this.setValue(valueInLocalTime, opts);
 	}
 
 	//@Override
@@ -672,25 +672,25 @@ export class Calendar extends zul.Widget {
 			// pass a fake event
 			this._clickDate({
 				target: this,
-				domTarget: jq(this.$n('mid')!).find('.' + this.$s('selected'))[0],
+				domTarget: jq(this.$n('mid')).find('.' + this.$s('selected'))[0],
 				stop: zk.$void
 			});
 		}
 	}
 
-	setMinYear_(v: number): void {
-		if (v) {
+	setMinYear_(minYear_: number): void {
+		if (minYear_) {
 			var y = this.getTime().getFullYear();
-			this._minyear = v > y ? y : (v > 100 ? v : 100);
+			this._minyear = minYear_ > y ? y : (minYear_ > 100 ? minYear_ : 100);
 		} else {
 			this._minyear = 1900;
 		}
 	}
 
-	setMaxYear_(v: number): void {
-		if (v) {
+	setMaxYear_(maxYear_: number): void {
+		if (maxYear_) {
 			var y = this.getTime().getFullYear();
-			this._maxyear = v < y ? y : (v > this._minyear ? v : this._minyear);
+			this._maxyear = maxYear_ < y ? y : (maxYear_ > this._minyear ? maxYear_ : this._minyear);
 		} else {
 			this._maxyear = 2099;
 		}
@@ -926,7 +926,7 @@ export class Calendar extends zul.Widget {
 	}
 
 	_doMousewheel(evt: zk.Event, intDelta: number): void {
-		if (jq(this.$n(-intDelta > 0 ? 'right' : 'left')!).attr('disabled'))
+		if (jq(this.$n(-intDelta > 0 ? 'right' : 'left')).attr('disabled'))
 			return;
 		this._shiftView(intDelta > 0 ? -1 : 1, true);
 		evt.stop();
@@ -1070,14 +1070,14 @@ export class Calendar extends zul.Widget {
 		// check whether to disable the arrow
 		function _updateArrow(wgt: zul.db.Calendar): void {
 			if (wgt.isOutOfRange(true)) {
-				jq(wgt.$n('left')!).attr('disabled', 'disabled');
+				jq(wgt.$n('left')).attr('disabled', 'disabled');
 			} else {
-				jq(wgt.$n('left')!).removeAttr('disabled');
+				jq(wgt.$n('left')).removeAttr('disabled');
 			}
 			if (wgt.isOutOfRange()) {
-				jq(wgt.$n('right')!).attr('disabled', 'disabled');
+				jq(wgt.$n('right')).attr('disabled', 'disabled');
 			} else {
-				jq(wgt.$n('right')!).removeAttr('disabled');
+				jq(wgt.$n('right')).removeAttr('disabled');
 			}
 		}
 		type ComputedView = (wgt: zul.db.Calendar, out: string[], localizedSymbols: zk.LocalizedSymbols) => void;
@@ -1085,12 +1085,12 @@ export class Calendar extends zul.Widget {
 		if (this._view != view) {
 			this._view = view;
 
-			var out = new zk.Buffer<string>(),
+			var out = new zk.Buffer(),
 				localizedSymbols = this.getLocalizedSymbols();
 
 			(Renderer[view + 'View'] as ComputedView)(this, out, localizedSymbols);
 
-			jq(this.$n('mid')!).after(out.join('')).remove();
+			jq(this.$n('mid')).after(out.join('')).remove();
 
 			var after = [];
 			// unlisten event
@@ -1100,8 +1100,8 @@ export class Calendar extends zul.Widget {
 
 			out = []; // reset
 			Renderer.titleHTML(this, out, localizedSymbols);
-			jq(this.$n('title')!).html(out.join(''));
-			jq(this.$n('mid')!).transition({scale: 0}, 0).transition({scale: 1}, this.animationSpeed_() as number);
+			jq(this.$n('title')).html(out.join(''));
+			jq(this.$n('mid')).transition({scale: 0}, 0).transition({scale: 1}, this.animationSpeed_() as number);
 
 			_updateArrow(this);
 
@@ -1118,7 +1118,7 @@ export class Calendar extends zul.Widget {
 				x = width * -1,
 				self = this,
 				animaCSS = this.$s('anima'),
-				todayBtn = this.isShowTodayLink() ? jq(this.$n('today')!).parent() : undefined;
+				todayBtn = this.isShowTodayLink() ? jq(this.$n('today')).parent() : undefined;
 
 			if (todayBtn) todayBtn.is(':hidden') && todayBtn.css('display', 'none');
 
@@ -1161,7 +1161,7 @@ export class Calendar extends zul.Widget {
 					self.domListen_(newMid, 'onClick', '_clickDate');
 					var out = []; // reset
 					Renderer.titleHTML(self, out, localizedSymbols);
-					jq(self.$n('title')!).html(out.join(''));
+					jq(self.$n('title')).html(out.join(''));
 					self.clearCache();
 					if (todayBtn) todayBtn.css('display', '');
 				}

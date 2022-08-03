@@ -420,7 +420,7 @@ export class LayoutRegion extends zul.Widget {
 					this.$n_('btn').style.display = 'none';
 				s.visibility = '';
 				s.display = 'none';
-				jq(this.$n()!).addClass(this.$s('slide'));
+				jq(this.$n()).addClass(this.$s('slide'));
 				zk(real).slideDown(this, {
 					anchor: this.sanchor,
 					afterAnima: LayoutRegion.afterSlideDown
@@ -488,9 +488,9 @@ export class LayoutRegion extends zul.Widget {
 
 		if (o !== closable || (opts && opts.force)) {
 			if (this.desktop && this._collapsible) {
-				jq(this.$n('btn')!).toggle(closable);
-				jq(this.$n('btned')!).toggle(closable);
-				jq(this.$n('splitbtn')!).toggleClass(this.$s('splitter-button-disabled'), !closable);
+				jq(this.$n('btn')).toggle(closable);
+				jq(this.$n('btned')).toggle(closable);
+				jq(this.$n('splitbtn')).toggleClass(this.$s('splitter-button-disabled'), !closable);
 			}
 		}
 
@@ -705,7 +705,7 @@ export class LayoutRegion extends zul.Widget {
 		super.onChildAdded_(child);
 		if (child instanceof zul.layout.Borderlayout) {
 			this._flex = true;
-			jq(this.$n()!).addClass(this.$s('nested'));
+			jq(this.$n()).addClass(this.$s('nested'));
 		}
 
 		// Bug for B36-2841185.zul, resync flex="true"
@@ -766,7 +766,7 @@ export class LayoutRegion extends zul.Widget {
 					constraint: vert ? 'vertical' : 'horizontal',
 					ghosting: LR._ghosting,
 					snap: LR._snap,
-					zIndex: 12000,
+					zIndex: '12000',
 					overlay: true,
 					initSensitivity: 0,
 					ignoredrag: LR._ignoredrag,
@@ -778,13 +778,13 @@ export class LayoutRegion extends zul.Widget {
 						real = this.$n('real');
 					if (colled)
 						jq(colled).show();
-					jq(real!).hide();
+					jq(real).hide();
 				}
 
 				if (!this._visible) {
 					var colled = this.$n('colled'),
 						real = this.$n('real');
-					jq(real!).hide();
+					jq(real).hide();
 					if (colled)
 						jq(colled).hide();
 				}

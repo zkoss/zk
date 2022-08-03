@@ -20,7 +20,7 @@ function updateImg(drag: zk.Draggable): void {
 	var dragImg = drag._dragImg as JQuery | undefined;
 	if (dragImg) {
 		// update drag image
-		var allow = jq(drag.node!).hasClass('z-drop-allow');
+		var allow = jq(drag.node).hasClass('z-drop-allow');
 		// eslint-disable-next-line @typescript-eslint/prefer-for-of
 		for (var len = 0; len < dragImg.length; len++) {
 			if (allow)
@@ -70,8 +70,8 @@ export class Listitem extends zul.sel.ItemWidget {
 	 * <p>If it is not created, we automatically create it.
 	 * @param String label
 	 */
-	setLabel(val: string): this {
-		this._autoFirstCell().setLabel(val);
+	setLabel(label: string): this {
+		this._autoFirstCell().setLabel(label);
 		return this;
 	}
 
@@ -91,8 +91,8 @@ export class Listitem extends zul.sel.ItemWidget {
 	 * <p>If it is not created, we automatically create it.
 	 * @param String image
 	 */
-	setImage(val: string): this {
-		this._autoFirstCell().setImage(val);
+	setImage(image: string): this {
+		this._autoFirstCell().setImage(image);
 		return this;
 	}
 
@@ -118,7 +118,7 @@ export class Listitem extends zul.sel.ItemWidget {
 			list = this.getListbox(),
 			sclass: string;
 		// NOTE: The following `this.$n()` could be null. This behavior is verified on old code.
-		if (list && jq(this.$n()!).hasClass(sclass = list.getOddRowSclass()))
+		if (list && jq(this.$n()).hasClass(sclass = list.getOddRowSclass()))
 			return cls + ' ' + sclass;
 		return cls;
 	}

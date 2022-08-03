@@ -37,7 +37,7 @@ export interface RedoCSSOptions {
 	selector: string;
 }
 
-var _jq = {}, //original jQuery
+var _jq: Partial<JQueryStatic> = {}, //original jQuery
 	//refer to http://www.w3schools.com/css/css_text.asp
 	_txtStyles = [
 		'font-family', 'font-size', 'font-weight', 'font-style',
@@ -46,28 +46,29 @@ var _jq = {}, //original jQuery
 		'direction', 'word-spacing', 'white-space'],
 	_txtFontStyles = ['font-style', 'font-variant', 'font-weight', 'font-size', 'font-family'],
 	_txtStyles2 = ['color', 'background-color', 'background'],
-	_zsyncs: zk.Widget[] = [],
+	_zsyncs: ZSyncObject[] = [],
 	_pendzsync = 0,
 	_vpId = 0, //id for virtual parent's reference node
-	_sbwDiv; //scrollbarWidth
+	_sbwDiv: undefined | HTMLDivElement & {_value?: number}; //scrollbarWidth
 
-function _overflowElement(self, recursive): [HTMLElement, HTMLElement][] {
-	var el = self.jq[0],
+function _overflowElement(self: JQZK, recursive): [HTMLElement, HTMLElement][] {
+	// eslint-disable-next-line zk/noNull
+	var el: Node | undefined | null = self.jq[0],
 		te, le, oels: [HTMLElement, HTMLElement][] = [];
 	do {
 		if (!te) {
-			if (el == DocRoot() || el.style.overflow == 'auto' || el.style.overflowY == 'auto' || jq(el).css('overflow-y') == 'auto')
+			if (el == DocRoot() || (el as HTMLElement).style.overflow == 'auto' || (el as HTMLElement).style.overflowY == 'auto' || jq(el).css('overflow-y') == 'auto')
 				te = el;
 		}
 		if (!le) {
-			if (el == DocRoot() || el.style.overflow == 'auto' || el.style.overflowX == 'auto' || jq(el).css('overflow-x') == 'auto')
+			if (el == DocRoot() || (el as HTMLElement).style.overflow == 'auto' || (el as HTMLElement).style.overflowX == 'auto' || jq(el).css('overflow-x') == 'auto')
 				le = el;
 		}
 		if (te && le) {
-			oels.push([le, te]);
+			oels.push([le as HTMLElement, te as HTMLElement]);
 			if (!recursive)
 				break;
-			te = le = null;
+			te = le = undefined;
 		}
 		el = el.parentNode;
 	} while (el && (el != document));
@@ -79,6 +80,7 @@ function _ofsParent(el: HTMLElement): HTMLElement {
 	if (el.offsetParent) return el.offsetParent as HTMLElement;
 	if (el == document.body) return el;
 
+	// eslint-disable-next-line zk/noNull
 	let curr: HTMLElement | null = el;
 	while ((curr = curr.parentElement) && curr != document.body)
 		if (curr.style && jq(curr).css('position') != 'static') //in IE, style might not be available
@@ -86,7 +88,7 @@ function _ofsParent(el: HTMLElement): HTMLElement {
 
 	return document.body;
 }
-function _zsync(org): void {
+function _zsync(org: zk.Object): void {
 	if (--_pendzsync <= 0)
 		for (var j = _zsyncs.length; j--;)
 			_zsyncs[j].zsync(org);
@@ -100,7 +102,7 @@ function _focus(n: HTMLElement): void {
 
 			zjq.fixInput(n);
 		} catch (e) {
-			zk.debugLog(e.message || e);
+			zk.debugLog((e as Error).message ?? e);
 		}
 	}, -1); //FF cannot change focus to a DOM element being animated
 }
@@ -108,7 +110,7 @@ function _select(n: HTMLInputElement | HTMLTextAreaElement): void {
 	try {
 		n.select();
 	} catch (e) {
-		zk.debugLog(e.message || e);
+		zk.debugLog((e as Error).message ?? e);
 	}
 }
 
@@ -136,8 +138,9 @@ function _ensel(this: HTMLElement): void {
 		$this.off('selectstart', zk.$void);
 }
 
-type scrollIntoViewInfo = { oft: zk.Offset; h: number; w: number; el: HTMLElement } | undefined;
-function _scrlIntoView(outer: HTMLElement, inner: HTMLElement, info: scrollIntoViewInfo, excludeHorizontal: boolean): scrollIntoViewInfo {
+type ScrollIntoViewInfo = { oft: zk.Offset; h: number; w: number; el: HTMLElement } | undefined;
+// eslint-disable-next-line zk/noNull
+function _scrlIntoView(outer: HTMLElement | null, inner: HTMLElement | null, info: ScrollIntoViewInfo | undefined, excludeHorizontal: boolean): ScrollIntoViewInfo {
 	if (outer && inner) {
 		var ooft = zk(outer).revisedOffset(),
 			ioft = info ? info.oft : zk(inner).revisedOffset(),
@@ -245,7 +248,7 @@ function _posOffset(el: HTMLElement): zk.Offset {
 	} while (el);
 	return [l, t];
 }
-function _addOfsToDim($this: JQZK, dim, revised?: boolean): Dimension {
+function _addOfsToDim($this: JQZK, dim: Partial<zk.Dimension>, revised?: boolean): zk.Dimension {
 	if (revised) {
 		var ofs = $this.revisedOffset();
 		dim.left = ofs[0];
@@ -254,18 +257,18 @@ function _addOfsToDim($this: JQZK, dim, revised?: boolean): Dimension {
 		dim.left = $this.offsetLeft();
 		dim.top = $this.offsetTop();
 	}
-	return dim;
+	return dim as zk.Dimension;
 }
 
 //redoCSS
 var _rdcss: HTMLElement[] = [];
 function _redoCSS0(): void {
 	if (_rdcss.length) {
-		for (var el; el = _rdcss.pop();)
+		for (var el: HTMLElement | undefined; el = _rdcss.pop();)
 			try {
 				zjq._fixCSS(el);
 			} catch (e) {
-				zk.debugLog(e.message || e);
+				zk.debugLog((e as Error).message ?? e);
 			}
 
 		// just in case
@@ -278,6 +281,7 @@ var isHTML5DocType = (function () {
 	var html5;
 	return function (): boolean {
 		if (html5 === undefined) {
+			// eslint-disable-next-line zk/noNull
 			if (document.doctype === null) return false;
 
 			var node = document.doctype,
@@ -288,20 +292,21 @@ var isHTML5DocType = (function () {
 
 			html5 = doctype_string === '<!DOCTYPE html>';
 		}
-		return html5;
+		return !!html5;
 	};
 })();
 
 // cache
 let _txtStylesCamel: string[] = [],
+	// eslint-disable-next-line zk/noNull
 	_txtSizDiv: HTMLElement | null,
 	_defaultStyle = 'left:-1000px;top:-1000px;position:absolute;visibility:hidden;border:none;display:none;',
-	_cache = {};
+	_cache: Record<string, zk.Offset | undefined> = {};
 
 // refix ZK-2371
 // eslint-disable-next-line one-var
 var DocRoot = (function () {
-	var docRoot,
+	var docRoot: undefined | HTMLElement,
 		// document.body may not be initiated.
 		initDocRoot = function (): HTMLElement {
 			return docRoot = (zk.safari || zk.opera) ? document.body : document.documentElement;
@@ -366,6 +371,7 @@ export class JQZK {
 	 * @return boolean whether the first matched element is really visible.
 	 */
 	isRealVisible(strict?: boolean): boolean {
+		// eslint-disable-next-line zk/noNull
 		var n: HTMLElement | null = this.jq[0];
 		return n && this.isVisible(strict) && (n.offsetWidth > 0 || n.offsetHeight > 0
 			|| (!n.firstChild
@@ -397,6 +403,7 @@ export class JQZK {
 		return this;
 	}
 	_scrollIntoView(parent?: Element | boolean): this {
+		// eslint-disable-next-line zk/noNull
 		var n: HTMLElement | null = this.jq[0];
 		if (n) {
 			var real = jq('#' + n.id + '-real')[0];
@@ -430,8 +437,9 @@ export class JQZK {
 
 				if (isAbsolute) {
 					let parent1 = parent || document.documentElement;
-					for (let p: HTMLElement | null | undefined = n, c; (p = p?.parentElement) && n != parent1; n = p)
-						c = _scrlIntoView(p, n as HTMLElement, c, true);
+					// eslint-disable-next-line zk/noNull
+					for (let p: HTMLElement | null = n, c: undefined | ScrollIntoViewInfo; (p = p.parentElement) && n != parent1; n = p)
+						c = _scrlIntoView(p, n, c, true);
 				} else {
 					// use browser's scrollIntoView() method instead of ours for F70-ZK-1924.zul
 					zk.delayFunction(this.$().uuid, function () {
@@ -454,18 +462,18 @@ export class JQZK {
 		var desktop = wgt.desktop,
 			p = wgt.parent,
 			n = this.jq[0],
-			bar,
+			bar: undefined | zul.Scrollbar,
 			inView = true;
 
 		// ZK-2069: check whether the input is shown in parents' viewport.
 		while (p && p != desktop) {
-			bar = p['_scrollbar'];
+			bar = p['_scrollbar'] as undefined | zul.Scrollbar;
 			if (bar && (bar.hasVScroll() || bar.hasHScroll())) {
 				inView = bar.isScrollIntoView(n);
 				if (!inView)
 					return inView;
 			}
-			bar = null;
+			bar = undefined;
 			p = p.parent;
 		}
 		// ZK-2069: should check native and fake scrollbar case
@@ -476,7 +484,7 @@ export class JQZK {
 	 * @return boolean if false, it means the element is not shown.
 	 * @since 6.5.2
 	 */
-	isScrollIntoView(this: JQZK, recursive?: boolean): boolean {// ZK-2069: can check whether the element is shown in parents' viewport.
+	isScrollIntoView(recursive?: boolean): boolean {// ZK-2069: can check whether the element is shown in parents' viewport.
 		var vOffset = this.viewportOffset(),
 			x = vOffset[0],
 			y = vOffset[1],
@@ -511,11 +519,11 @@ export class JQZK {
 	 * @since 5.0.8
 	 */
 	hasVScroll(): boolean {
-		var w;
+		var w: zk.Widget & {_scrollbar?: zul.Scrollbar} | undefined;
 		if ((w = this.$()) && w._scrollbar) {// support a fake scrollbar
 			return w._scrollbar.hasVScroll();
 		}
-		var n, scrollbarWidth = 0; //zk-3938: if zoom-in, the scrollbarWidth will be smaller than 11.
+		var n: undefined | HTMLElement, scrollbarWidth = 0; //zk-3938: if zoom-in, the scrollbarWidth will be smaller than 11.
 		if (n = this.jq[0]) {
 			var borderWidth = Math.round(jq.css(n, 'borderLeftWidth', true))
 				+ Math.round(jq.css(n, 'borderRightWidth', true));
@@ -528,11 +536,11 @@ export class JQZK {
 	 * @since 5.0.8
 	 */
 	hasHScroll(): boolean {
-		var w;
+		var w: zk.Widget & {_scrollbar?: zul.Scrollbar} | undefined;
 		if ((w = this.$()) && w._scrollbar) {// support a fake scrollbar
 			return w._scrollbar.hasHScroll();
 		}
-		var n, scrollbarHeight = 0; //zk-3938: if zoom-in, the scrollbarHeight will be smaller than 11.
+		var n: undefined | HTMLElement, scrollbarHeight = 0; //zk-3938: if zoom-in, the scrollbarHeight will be smaller than 11.
 		if (n = this.jq[0]) {
 			var borderHeight = Math.round(jq.css(n, 'borderTopWidth', true))
 				+ Math.round(jq.css(n, 'borderBottomWidth', true));
@@ -548,7 +556,7 @@ export class JQZK {
 	 * @return boolean true if they are overlapped.
 	 */
 	isOverlapped(el: HTMLElement, tolerant?: number): boolean {
-		var n;
+		var n: undefined | HTMLElement;
 		if (n = this.jq[0])
 			return jq.isOverlapped(
 				// use revisedOffset instead of cmOffset for body's scroll issue
@@ -597,7 +605,7 @@ export class JQZK {
 		var el = this.jq[0];
 		if (!ofs) {
 			if (el.getBoundingClientRect) { // IE and FF3
-				var elst, oldvisi;
+				var elst: undefined | CSSStyleDeclaration, oldvisi: undefined | string;
 				if (zk.ie && zk.ie < 11 && el.style.display == 'none') {
 					//When popup a window in an iframe, getBoundingClientRect not correct (test case: B36-2851102.zul within iframe)
 					oldvisi = (elst = el.style).visibility;
@@ -611,7 +619,7 @@ export class JQZK {
 
 				if (elst) {
 					elst.display = 'none';
-					elst.visibility = oldvisi;
+					elst.visibility = oldvisi!;
 				}
 				// fix float number issue for ZTL B50-3298164
 				b[0] = Math.ceil(b[0]);
@@ -759,12 +767,14 @@ export class JQZK {
 		var el = this.jq[0],
 			parent = el.parentElement,
 			hgh = parent ? zk(parent).clientHeightDoubleValue() : 0,
-			zkp;
+			zkp: undefined | zk.JQZK;
+		// eslint-disable-next-line zk/noNull
 		for (let p: Element | null = el.previousElementSibling; p; p = p.previousElementSibling) {
 			zkp = zk(p);
 			if (zkp.isVisible())
 				hgh -= zkp.offsetHeightDoubleValue();
 		}
+		// eslint-disable-next-line zk/noNull
 		for (let p: Element | null = el.nextElementSibling; p; p = p.nextElementSibling) {
 			zkp = zk(p);
 			if (zkp.isVisible())
@@ -879,7 +889,7 @@ export class JQZK {
 		if (x < left) x = left;
 		if (y < top) y = top;
 
-		var ofs = this.toStyleOffset(x, y);
+		var ofs = this.toStyleOffset(x as number, y as number);
 
 		if (!skipx) el.style.left = jq.px(ofs[0]);
 		if (!skipy) el.style.top = jq.px(ofs[1]);
@@ -945,7 +955,6 @@ export class JQZK {
 
 		if (dim instanceof Element) //DOM element
 			dim = zk(dim).dimension(true);
-		dim = dim as Dimension;
 		var x = dim.left, y = dim.top,
 			wd = this.dimension(), hgh = wd.height, //only width and height
 			wdh = wd.width;
@@ -1099,6 +1108,7 @@ export class JQZK {
 	 * @see #revisedOffset
 	 */
 	scrollOffset(): zk.Offset {
+		// eslint-disable-next-line zk/noNull
 		var el: HTMLElement | null = this.jq[0],
 			t = 0, l = 0;
 		while (el) {
@@ -1142,7 +1152,7 @@ export class JQZK {
 	$<T extends zk.Widget>(): T {
 		let e = this.jq[0];
 		if (e) {
-			let target = e[zk.Widget._TARGET];
+			let target = e[zk.Widget._TARGET] as T;
 			if (target) {
 				// reset all query targets, if any
 				let len = this.jq.length;
@@ -1204,7 +1214,7 @@ export class JQZK {
 			var rect = n.getBoundingClientRect();
 			width = rect.width || rect.right - rect.left;
 		}
-		return Math.max(width, n.offsetWidth);
+		return Math.max(width as number, n.offsetWidth);
 	}
 	/** Returns the offset height. It is similar to el.offsetHeight, except it solves some browser's bug or limitation.
 	 * @return int the offset height
@@ -1286,6 +1296,7 @@ export class JQZK {
 	 * @see #scrollOffset
 	 */
 	viewportOffset(): zk.Offset {
+		// eslint-disable-next-line zk/noNull
 		var t = 0, l = 0, el: HTMLElement | null = this.jq[0], p = el;
 		while (p) {
 			t += p.offsetTop || 0;
@@ -1328,7 +1339,7 @@ export class JQZK {
 			newStyle += _txtStyles[j] + ':' + jq.css(nm) + ';';
 		}
 
-		var result,
+		var result: undefined | zk.Offset,
 			key = newStyle + text;
 		if (!(result = _cache[key])) {
 			// ZK-2181: remove name attritube to prevent the radio has wrong status
@@ -1351,8 +1362,8 @@ export class JQZK {
 	textWidth(text?: string): number {
 		var $obj = this.jq;
 		text = text || $obj[0].textContent || '';
-		var canvas = this.textWidth['canvas'] || (this.textWidth['canvas'] = document.createElement('canvas')),
-			context = canvas.getContext('2d'),
+		var canvas: HTMLCanvasElement = this.textWidth['canvas'] as undefined | HTMLCanvasElement ?? (this.textWidth['canvas'] = document.createElement('canvas')),
+			context = canvas.getContext('2d')!,
 			fontStyles = $obj.css(_txtFontStyles),
 			newFont = '';
 		jq.each(fontStyles, function (prop, val) {
@@ -1415,10 +1426,10 @@ export class JQZK {
 	 * @return jqzk this object
 	 */
 	redoSrc(): this {
-		for (var j = this.jq.length; j--;) {
-			var el = this.jq[j],
-				src;
-			src = el['src'];
+		for (let j = this.jq.length; j--;) {
+			let el = this.jq[j],
+				src: string | undefined;
+			src = el['src'] as string | undefined;
 			el['src'] = zjq.src0;
 			el['src'] = src;
 		}
@@ -1435,11 +1446,11 @@ export class JQZK {
 	vparentNode(real?: boolean): HTMLElement | undefined {
 		var el = this.jq[0];
 		if (el) {
-			var v = el['z_vp']; //might be empty
+			var v = el['z_vp'] as undefined | HTMLElement; //might be empty
 			if (v) return jq('#' + v)[0];
-			v = el['z_vpagt'];
+			v = el['z_vpagt'] as undefined | HTMLElement;
 			if (v && (v = jq('#' + v)[0]))
-				return v.parentNode;
+				return v.parentNode as HTMLElement | undefined;
 			if (real)
 				return el.parentNode as HTMLElement | undefined;
 		}
@@ -1488,13 +1499,13 @@ export class JQZK {
 	undoVParent(): this {
 		if (this.hasVParent()) {
 			var el = this.jq[0],
-				p = el['z_vp'],
-				agt = el['z_vpagt'],
+				p = el['z_vp'] as undefined | HTMLElement,
+				agt = el['z_vpagt'] as string | HTMLElement,
 				$agt = jq('#' + agt);
-			el['z_vp'] = el['z_vpagt'] = null;
+			el['z_vp'] = el['z_vpagt'] = undefined;
 			agt = $agt[0];
 
-			p = p ? jq('#' + p)[0] : agt ? agt.parentNode : null;
+			p = (p ? jq('#' + p)[0] : agt ? agt.parentNode : undefined) as undefined | HTMLElement;
 			if (p) {
 
 				// Bug 3049181
@@ -1506,17 +1517,17 @@ export class JQZK {
 				} else
 					p.appendChild(el);
 
-				var cf, p, a;
+				var cf: undefined | zk.Widget, parentWidget: undefined | zk.Widget, a: undefined | HTMLElement;
 				// ZK-851
 				if ((zk.ff || zk.opera) && (cf = zk._prevFocus)
-					&& (p = zk.Widget.$(el)) && zUtl.isAncestor(p, cf)) {
+					&& (parentWidget = zk.Widget.$(el)) && zUtl.isAncestor(parentWidget, cf)) {
 					if (cf.getInputNode)
 						jq(cf.getInputNode()).trigger('blur');
 					else if ((a = cf.$n('a')) // ZK-1955
 						&& jq.nodeName(a, 'button', 'input', 'textarea', 'a', 'select', 'iframe'))
 						jq(a).trigger('blur');
 					else if (cf.$instanceof(zul.wgt['Button'])) // ZK-1324: Trendy button inside bandbox popup doesn't lose focus when popup is closed
-						jq(cf.$n('btn') || cf.$n()).trigger('blur');
+						jq(cf.$n('btn') ?? cf.$n()).trigger('blur');
 				}
 			}
 		}
@@ -1530,14 +1541,14 @@ export class JQZK {
 	hasVParent(): boolean {
 		//Fix Bug ZK-2434, consider virtual element
 		var el = this.jq[0];
-		return el && (el['z_vp'] || el['z_vpagt']);
+		return !!(el && (el['z_vp'] || el['z_vpagt']));
 	}
 
 	/** Fixes DOM elements when a widget's unbind_ is called
 	 * and it will hide the DOM element (display="none" or visibility="hidden").
 	 * <p>For firefox, it has to reset the src attribute of iframe (Bug 3076384)
 	 */
-	beforeHideOnUnbind = zk.$void;
+	beforeHideOnUnbind(): unknown { return; }
 
 	//focus/select//
 	/** Sets the focus to the first matched element.
@@ -1588,24 +1599,9 @@ export class JQZK {
 	 * @see #select
 	 */
 	getSelectionRange(): zk.Offset {
-		var inp = this.jq[0] as HTMLInputElement;
+		const inp = this.jq[0] as HTMLInputElement;
 		try {
-			if (document['selection'] != null && inp.selectionStart === undefined) { //IE
-				var range = document['selection'].createRange(),
-					rangetwo = inp['createTextRange'](),
-					stored_range;
-				if (inp.type.toLowerCase() == 'text') {
-					stored_range = rangetwo.duplicate();
-				} else {
-					stored_range = range.duplicate();
-					stored_range.moveToElementText(inp);
-				}
-				stored_range.setEndPoint('EndToEnd', range);
-				var start = stored_range.text.length - range.text.length;
-				return [start, start + range.text.length];
-			} else { //Gecko
-				return [inp.selectionStart || 0, inp.selectionEnd || 0];
-			}
+			return [inp.selectionStart || 0, inp.selectionEnd || 0];
 		} catch (e) {
 			return [0, 0];
 		}
@@ -1690,7 +1686,7 @@ export class JQZK {
 		if (embed) {
 			var val: HTMLElement[] = [], n;
 			while (n = embed.firstChild) {
-				val.push(n);
+				val.push(n as HTMLElement);
 				embed.removeChild(n);
 			}
 			return val;
@@ -1706,7 +1702,7 @@ export class JQZK {
 		var $jq = this.jq,
 			len = $jq.length,
 			types = ['text', 'password', 'number', 'tel', 'url', 'email'];
-		for (var j = len, tag, n; j--;)
+		for (var j = len, tag, n: undefined | HTMLElement & {type?}; j--;)
 			if ((tag = jq.nodeName(n = $jq[j])) != 'textarea'
 				&& (tag != 'input' || (jq.inArray(n.type, types) == -1)))
 				return false;
@@ -1722,13 +1718,13 @@ export class JQZK {
 	static fixInput(el: Element): void { //ZK-3237: including domie.js for IE 11 will have many side effects
 		if (zk.ie11_) return;
 		try {
-			var $n = zk(el), pos;
+			var $n = zk(el), pos: zk.Offset;
 			if ($n.isInput()) {
 				pos = $n.getSelectionRange();
 				$n.setSelectionRange(pos[0], pos[1]);
 			}
 		} catch (e) {
-			zk.debugLog(e.message || e);
+			zk.debugLog((e as Error).message ?? e);
 		}
 	}
 	static _fixCSS(el: HTMLElement): void { //overriden in domie.js , domsafari.js , domopera.js
@@ -1753,7 +1749,7 @@ export class JQZK {
 
 	//The source URI used for iframe (to avoid HTTPS's displaying nonsecure issue)
 	static src0 = ''; //an empty src; overriden in domie.js
-	static eventTypes = {
+	static eventTypes: Record<string, string | undefined> = {
 		zmousedown: 'mousedown',
 		zmouseup: 'mouseup',
 		zmousemove: 'mousemove',
@@ -1899,7 +1895,7 @@ zk.override(jq.fn, _jq, /*prototype*/ {
 	 */
 	//zk: null,
 
-	init: function (sel, ctx, ...rest: unknown[]) {
+	init(sel, ctx, ...rest: unknown[]): JQuery {
 		if (ctx === zk) {
 			if (typeof sel == 'string'
 			&& zUtl.isChar(sel.charAt(0), {digit: 1, upper: 1, lower: 1, '_': 1})) {
@@ -1908,19 +1904,19 @@ zk.override(jq.fn, _jq, /*prototype*/ {
 					var ret = jq(el || []);
 					ret['context'] = document;
 					ret['selector'] = '#' + sel;
-					ret.zk = new zjq(ret) as zk.JQZK;
+					ret.zk = new zjq(ret);
 					return ret;
 				}
 				sel = '#' + sel;
 			}
-			ctx = null;
+			ctx = undefined;
 		}
 		if (zk.Widget && zk.Widget.isInstance(sel))
 			sel = sel.$n() || '#' + sel.uuid;
 		if (sel == '#') sel = ''; //ZK-4565, '#' is not allowed in jquery 3.5.0
-		var ret = _jq['init'].call(this, sel, ctx, ...rest);
-		ret.zk = new zjq(ret) as zk.JQZK;
-		return ret;
+		const ret1 = (_jq['init'] as CallableFunction).bind(this)(sel, ctx, ...rest) as JQuery;
+		ret1.zk = new zjq(ret1);
+		return ret1;
 	},
 	/** Replaces the match elements with the specified HTML, DOM or {@link Widget}.
 	 * We extends <a href="http://docs.jquery.com/Manipulation/replaceWith">jQuery's replaceWith</a>
@@ -1930,37 +1926,31 @@ zk.override(jq.fn, _jq, /*prototype*/ {
 	 * @param Skipper skipper the skipper. It is optional.
 	 * @return jq the jq object matching the DOM element after replaced
 	 */
-	replaceWith: function (w, desktop, skipper) {
-		if (!zk.Widget.isInstance(w))
-			return _jq['replaceWith'].call(this, w, desktop, skipper);
+	replaceWith(w: zk.Widget | unknown, desktop: zk.Desktop, skipper: zk.Skipper): JQuery {
+		if (!(w instanceof zk.Widget))
+			return (_jq['replaceWith'] as CallableFunction).bind(this)(w, desktop, skipper) as JQuery;
 
 		var n = this[0];
 		if (n) w.replaceHTML(n, desktop, skipper);
 		return this;
 	},
-	on: function (this: JQuery, type, selector, data, fn, ...rest) {
+	on(type: string, selector: string | undefined, data, fn: CallableFunction, ...rest: unknown[]): JQuery {
+		type = zjq.eventTypes[type] ?? type;
+		const args = [type, selector, data, fn, ...rest];
+		// eslint-disable-next-line prefer-spread
+		return this.zon.apply(this, args as never);
+	},
+	off(type: string, selector: string | undefined, fn: CallableFunction, ...rest: unknown[]): JQuery {
 		type = zjq.eventTypes[type] || type;
-		// eslint-disable-next-line no-undef
-		let args: [JQuery.TypeEventHandlers<HTMLElement, unknown, unknown, unknown>,
-			// eslint-disable-next-line @typescript-eslint/ban-types
-			string, unknown, Function, ...unknown[]] = [type, selector, data, fn, ...rest];
-		return this.zon(...args);
+		let args = [type, selector, fn, ...rest];
+		// eslint-disable-next-line prefer-spread
+		return this.zoff.apply(this, args as never);
 	},
-	off: function (this: JQuery, type, selector, fn, ...rest) {
-		type = zjq.eventTypes[type] || type;
-		// eslint-disable-next-line no-undef
-		let args: [JQuery.TriggeredEvent<HTMLElement>,
-			// eslint-disable-next-line @typescript-eslint/ban-types
-			string, Function, ...unknown[]] = [type, selector, fn, ...rest];
-		return this.zoff(...args);
+	bind(types: string, data: unknown, fn: CallableFunction): JQuery {
+		return this.on(types, undefined, data, fn);
 	},
-	bind: function (this: JQuery, types, data, fn) {
-		return this.on(types, null, data, fn);
-	},
-	unbind: function (types, fn) {
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-ignore: copied from jQuery itself
-		return this.off(types, null, fn);
+	unbind: function (types: string, fn: CallableFunction): JQuery {
+		return this.off(types, undefined, fn);
 	}
 	/** Removes all matched elements from the DOM.
 	 * <p>Unlike <a href="http://docs.jquery.com/Manipulation/remove">jQuery</a>,
@@ -2028,29 +2018,28 @@ zk.override(jq.fn, _jq, /*prototype*/ {
 	 */
 	//prepend: function () {}
 });
-jq.fn['init'].prototype = jq.fn;
+(jq.fn['init'] as NewableFunction).prototype = jq.fn;
 
 jq.each(['remove', 'empty', 'show', 'hide'], function (i, nm) {
-	_jq[nm] = jq.fn[nm];
-	jq.fn[nm] = function () {
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-ignore
-		return !this.selector && this[0] === document ? this : _jq[nm].call(this, ...arguments);
+	_jq[nm] = jq.fn[nm] as CallableFunction;
+	jq.fn[nm] = function (): JQuery {
+		return !this.selector && this[0] === document as unknown as HTMLElement ? this :
+			(_jq[nm] as CallableFunction).bind(this)(...arguments as unknown as []) as JQuery;
 	};
 });
 jq.each(['before', 'after', 'append', 'prepend'], function (i, nm) {
-	_jq[nm] = jq.fn[nm];
-	jq.fn[nm] = function (w, desktop) {
-		if (!zk.Widget.isInstance(w))
-			return _jq[nm].call(this, ...(arguments as unknown as []));
+	_jq[nm] = jq.fn[nm] as CallableFunction;
+	jq.fn[nm] = function (w: zk.Widget | unknown, desktop: zk.Desktop): JQuery {
+		if (!(w instanceof zk.Widget))
+			return (_jq[nm] as CallableFunction).bind(this)(...(arguments as unknown as [])) as JQuery;
 
 		if (!this.length) return this;
 		if (!zk.Desktop._ndt) zk.stateless();
 
-		var ret = _jq[nm].call(this, w.redrawHTML_());
+		var ret = (_jq[nm] as CallableFunction).bind(this)(w.redrawHTML_()) as JQuery;
 		if (!w.z_rod) {
 			w.bind(desktop);
-			zUtl.fireSized(w);
+			zUtl.fireSized(w as zk.Widget);
 		}
 		return ret;
 	};
@@ -2073,13 +2062,13 @@ Object.assign(jq, {
 	 * @return boolean if the node name is the same as one of the specified names.
 	 * @since 5.0.1
 	 */
-	nodeName: function (el) {
+	nodeName(el?: Element, ...tags: string[]): boolean {
 		var tag = el && el.nodeName ? el.nodeName.toLowerCase() : '',
 			j = arguments.length;
 		if (j <= 1)
-			return tag;
+			return !!tag;
 		while (--j)
-			if (tag == arguments[j].toLowerCase())
+			if (tag == (arguments[j] as string).toLowerCase())
 				return true;
 		return false;// don't remove this line, texts are highlighted when SHIFT-click listitems (because of IE's onselect depends on it)
 	},
@@ -2090,8 +2079,8 @@ Object.assign(jq, {
 	 * @return String the integer with string.
 	 * @see #px0
 	 */
-	px: function (v) {
-		return (v || 0) + 'px';
+	px(v: number): string {
+		return (v ?? 0) + 'px';
 	},
 	/** Converting an integer a string ending with "px".
 	 * <p>Unlike {@link #px}, this method assumes 0 if v is negative.
@@ -2100,8 +2089,8 @@ Object.assign(jq, {
 	 * @return String the integer with string.
 	 * @see #px
 	 */
-	px0: function (v) {
-		return Math.max(v || 0, 0) + 'px';
+	px0(v?: number): string {
+		return Math.max(v ?? 0, 0) + 'px';
 	},
 
 	/** Returns an array of {@link DOMElement} that matches.
@@ -2113,9 +2102,8 @@ Object.assign(jq, {
 	 * @param String subId [Optional] the identifier of the sub-element.
 	 * Example, <code>jq.$$('_u_12', 'cave');</code>.
 	 */
-	$$: function (id, subId) {
-		return typeof id == 'string' ?
-			id ? document.getElementsByName(id + (subId ? '-' + subId : '')) : null : id;
+	$$(id: string, subId?: string): NodeListOf<HTMLElement> {
+		return document.getElementsByName(id + (subId ? '-' + subId : ''));
 	},
 
 	/** Tests if one element (p) is an ancestor of another (c).
@@ -2127,7 +2115,7 @@ Object.assign(jq, {
 	 * @return boolean if p is an ancesotor of c.
 	 * @see zUtl#isAncestor
 	 */
-	isAncestor: function (p?: HTMLElement, c?: HTMLElement): boolean {
+	isAncestor(p?: HTMLElement, c?: HTMLElement): boolean {
 		if (!p) return true;
 		for (; c; c = zk(c).vparentNode(true))
 			if (p == c)
@@ -2137,14 +2125,14 @@ Object.assign(jq, {
 	/** Returns the X coordination of the visible part of the browser window.
 	 * @return int
 	 */
-	innerX: function () {
+	innerX(): number {
 		return Math.round(window.pageXOffset
 			|| DocRoot().scrollLeft || 0); //ZK-2633: browser might return decimal number
 	},
 	/** Returns the Y coordination of the visible part of the browser window.
 	 * @return int
 	 */
-	innerY: function () {
+	innerY(): number {
 		return Math.round(window.pageYOffset
 			|| DocRoot().scrollTop || 0); //ZK-2633: browser might return decimal number
 	},
@@ -2152,15 +2140,15 @@ Object.assign(jq, {
 	 * It is the same as jq(window).width().
 	 * @return int
 	 */
-	innerWidth: function () {
-		return jq(window).width();
+	innerWidth(): number {
+		return jq(window).width()!;
 	},
 	/** Returns the height of the viewport (visible part) of the browser window.
 	 * It is the same as jq(window).height().
 	 * @return int
 	 */
-	innerHeight: function () {
-		return jq(window).height();
+	innerHeight(): number {
+		return jq(window).height()!;
 	},
 
 	/** A map of the margin style names: {l: 'margin-left', t: 'margin-top'...}.
@@ -2191,14 +2179,14 @@ Object.assign(jq, {
 	/** Returns the width of the scrollbar
 	 * @return int
 	 */
-	scrollbarWidth: function () {
+	scrollbarWidth(): number {
 		var devicePixelRatio = zUtl.getDevicePixelRatio(),
 			body = document.body;
 		if (this['_lastDevicePixelRatio'] != devicePixelRatio) {
 			this['_lastDevicePixelRatio'] = devicePixelRatio;
 			if (_sbwDiv) {
 				body.removeChild(_sbwDiv);
-				_sbwDiv = null;
+				_sbwDiv = undefined;
 			}
 		}
 		if (!_sbwDiv) {
@@ -2207,7 +2195,7 @@ Object.assign(jq, {
 			_sbwDiv.appendChild(document.createElement('div'));
 			body.appendChild(_sbwDiv);
 		}
-		return _sbwDiv._value || (_sbwDiv._value = _sbwDiv.getBoundingClientRect().width - _sbwDiv.firstChild.getBoundingClientRect().width);
+		return _sbwDiv._value ?? (_sbwDiv._value = _sbwDiv.getBoundingClientRect().width - _sbwDiv.firstElementChild!.getBoundingClientRect().width);
 	},
 	/** Returns if the specified rectangles are overlapped with each other.
 	 * @param Offset ofs1 the offset of the first rectangle
@@ -2224,7 +2212,7 @@ Object.assign(jq, {
 	 * @param int the tolerant value for the calculation
 	 * @return boolean
 	 */
-	isOverlapped: function (ofs1, dim1, ofs2, dim2, tolerant) {
+	isOverlapped(ofs1: zk.Offset, dim1: zk.Offset, ofs2: zk.Offset, dim2: zk.Offset, tolerant?: number): boolean {
 		var o1x1 = ofs1[0], o1x2 = dim1[0] + o1x1,
 			o1y1 = ofs1[1], o1y2 = dim1[1] + o1y1,
 			o2x1 = ofs2[0], o2x2 = dim2[0] + o2x1,
@@ -2245,17 +2233,13 @@ Object.assign(jq, {
 	 * @see jqzk#disableSelection
 	 * @return boolean whether it is cleared successfully
 	 */
-	clearSelection: function () {
+	clearSelection(): boolean {
 		try {
-			if (window['getSelection']) {
-				let sel = window.getSelection();
-				if (zk.webkit) sel?.collapse(null);
-				else sel?.removeAllRanges();
-			} else if (document['selection']) {
-				let sel = document['selection'];
-				if (sel.empty) sel.empty();
-				else if (sel.clear) sel.clear();
-			}
+			let sel = window.getSelection();
+			// eslint-disable-next-line zk/noNull
+			if (zk.webkit) sel?.collapse(null);
+			else sel?.removeAllRanges();
+
 			return true;
 		} catch (e) {
 			return false;
@@ -2286,7 +2270,7 @@ jq.filterTextStyle({width:"100px", fontSize: "10pt"});
 	 * include, such as <code>['width', 'height']</code>. Ignored if not specified or null.
 	 * @return Map the text-related styles
 	 */
-	filterTextStyle: function (style, plus) {
+	filterTextStyle(style: Record<string, string> | string, plus?: string[]): Record<string, string> | string {
 		if (typeof style == 'string') {
 			let ts = '';
 			if (style)
@@ -2303,7 +2287,7 @@ jq.filterTextStyle({width:"100px", fontSize: "10pt"});
 			return ts;
 		}
 
-		let ts = {};
+		let ts: Record<string, string> = {};
 		for (var nm in style)
 			if (_txtStyles.$contains(nm) || _txtStyles2.$contains(nm)
 			|| (plus && plus.$contains(nm)))
@@ -2316,7 +2300,7 @@ jq.filterTextStyle({width:"100px", fontSize: "10pt"});
 	 * @param String style the style to parse
 	 * @return Map a map of styles (name, value)
 	 */
-	parseStyle: function (style) {
+	parseStyle(style: string): {[key: string]: string} {
 		var map = {};
 		if (style) {
 			var dummy = document.createElement('div');
@@ -2336,7 +2320,7 @@ jq.filterTextStyle({width:"100px", fontSize: "10pt"});
 	 * @param String style the CSS style. Ingored if omitted.
 	 * @return DOMElement
 	 */
-	newFrame: function (id, src, style) {
+	newFrame(id: string, src?: string, style?: string): HTMLIFrameElement {
 		if (!src) src = zjq.src0;
 			//IE: prevent secure/nonsecure warning with HTTPS
 
@@ -2344,7 +2328,7 @@ jq.filterTextStyle({width:"100px", fontSize: "10pt"});
 		if (style == null) style = 'display:none';
 		html += ' style="' + style + '"></iframe>';
 		jq(document.body).append(html);
-		return zk(id).jq[0];
+		return zk(id).jq[0] as HTMLIFrameElement;
 	},
 	/** Creates a 'stackup' (actually, an iframe) that makes an element
 	 * (with position:absolute) shown above others.
@@ -2363,10 +2347,10 @@ jq.filterTextStyle({width:"100px", fontSize: "10pt"});
 	 * (i.e., anchor will become the next sibling of the stackup, so anchor will be on top of the stackup if z-index is the same). If omitted, el is assumed.
 	 * @return DOMElement
 	 */
-	newStackup: function (el, id, anchor?) {
+	newStackup(el: HTMLElement | undefined, id: string, anchor?: Node): HTMLIFrameElement {
 		el = jq(el || [], zk)[0];
 		var ifr = document.createElement('iframe');
-		ifr.id = id || (el ? el.id + '-ifrstk' : 'z_ifrstk');
+		ifr.id = id ?? (el ? el.id + '-ifrstk' : 'z_ifrstk');
 		ifr.style.cssText = 'position:absolute;overflow:hidden;opacity:0;width:0;height:0;border:none;filter:alpha(opacity=0)';
 		ifr.setAttribute('aria-hidden', 'true');
 		ifr.tabIndex = -1;
@@ -2377,7 +2361,7 @@ jq.filterTextStyle({width:"100px", fontSize: "10pt"});
 			ifr.style.top = el.style.top;
 			ifr.style.left = el.style.left;
 			ifr.style.zIndex = el.style.zIndex;
-			el.parentNode.insertBefore(ifr, anchor || el);
+			el.parentNode!.insertBefore(ifr, anchor || el);
 		}
 		return ifr;
 	},
@@ -2387,7 +2371,7 @@ jq.filterTextStyle({width:"100px", fontSize: "10pt"});
 	 * @param DOMElement parent the parent node. Ignored if not specified.
 	 * @return DOMElement
 	 */
-	newHidden: function (nm, val, parent) {
+	newHidden(nm: string, val: string, parent?: Node): HTMLInputElement {
 		var inp = document.createElement('input');
 		inp.type = 'hidden';
 		inp.name = nm;
@@ -2400,7 +2384,7 @@ jq.filterTextStyle({width:"100px", fontSize: "10pt"});
 	 * @return DOMElement the head element
 	 * @since 5.0.1
 	 */
-	head: function () {
+	head(): HTMLElement | undefined {
 		return document.getElementsByTagName('head')[0] || document.documentElement;
 	},
 
@@ -2410,7 +2394,7 @@ jq.filterTextStyle({width:"100px", fontSize: "10pt"});
 	 * <p>It is strongly suggested to use this method instead of <code>window.confirm</code>.
 	 * @return boolean whether the Yes button is pressed
 	 */
-	confirm: function (msg) {
+	confirm(msg: string): boolean {
 		zk.alerting = true;
 		try {
 			return confirm(msg); // eslint-disable-line no-alert
@@ -2418,7 +2402,7 @@ jq.filterTextStyle({width:"100px", fontSize: "10pt"});
 			try {
 				zk.alerting = false;
 			} catch (e) {
-				zk.debugLog(e.message || e);
+				zk.debugLog((e as Error).message ?? e);
 			} //doc might be unloaded
 		}
 	},
@@ -2486,7 +2470,7 @@ You can add your own labels by puttingit to <code>msgzul</code>.
 </td></tr>
 </table>
 	 */
-	alert: function (msg) {
+	alert(msg: string, opts?: Partial<zk.AlertOptions>): void {
 		zk.alerting = true;
 		try {
 			alert(msg); // eslint-disable-line no-alert
@@ -2494,7 +2478,7 @@ You can add your own labels by puttingit to <code>msgzul</code>.
 			try {
 				zk.alerting = false;
 			} catch (e) {
-				zk.debugLog(e.message || e);
+				zk.debugLog((e as Error).message ?? e);
 			} //doc might be unloaded
 		}
 	},
@@ -2506,7 +2490,7 @@ You can add your own labels by puttingit to <code>msgzul</code>.
 	 * @see #unzsync
 	 * @since 5.0.1
 	 */
-	onzsync: function (obj) {
+	onzsync(obj: ZSyncObject): void {
 		_zsyncs.unshift(obj);
 	},
 	/** To unregister one object for the <code>zsync</code> invocation.
@@ -2517,7 +2501,7 @@ You can add your own labels by puttingit to <code>msgzul</code>.
 	 * @see #onzsync
 	 * @since 5.0.1
 	 */
-	unzsync: function (obj) {
+	unzsync(obj: ZSyncObject): void {
 		_zsyncs.$remove(obj);
 	},
 	/** To invoke the <code>zsync</code> method of the registered objects.
@@ -2545,7 +2529,7 @@ this._syncShadow(); //synchronize shadow
 	 * <p>Notice that it is better not to use the absolute position for any child element, so the browser will maintain the position for you.
 	 * After all, it runs faster and zsync won't be called if some 3rd-party library is used to create DOM element directly (without ZK).
 	 */
-	zsync: function (org) {
+	zsync(org: zk.Object): void {
 		++_pendzsync;
 		setTimeout(function () {_zsync(org);}, 50);
 	},
@@ -2556,9 +2540,7 @@ this._syncShadow(); //synchronize shadow
 	 * because it has no effect for browsers other than IE.
 	 * @since 5.0.1
 	 */
-	focusOut: (zk.ie && zk.ie < 11) ? function () {
-		window.focus();
-	} : function () {
+	focusOut(): void {
 		var a = jq('#z_focusOut')[0];
 		if (!a) {
 			// for Chrome and Safari, we can't set "display:none;"
@@ -2637,7 +2619,7 @@ text = jq.toJSON([new Date()], function (key, value) {
 	 * @since 5.0.5
 	 */
 	//j2d: function () {}
-	_syncScroll: {},
+	_syncScroll: <Record<string, zk.Widget>> {},
 	/** To register one object for the <code>doSyncScroll</code> invocation.
 	 * For example,
 	 * <pre><code>onSyncScroll();</code></pre>
@@ -2646,7 +2628,7 @@ text = jq.toJSON([new Date()], function (key, value) {
 	 * @see #unSyncScroll
 	 * @since 6.5.0
 	 */
-	onSyncScroll: function (wgt) {
+	onSyncScroll(wgt: zk.Widget): void {
 		var sync = this['_syncScroll'];
 		if (!sync[wgt.uuid])
 			sync[wgt.uuid] = wgt;
@@ -2660,7 +2642,7 @@ text = jq.toJSON([new Date()], function (key, value) {
 	 * @see #unSyncScroll
 	 * @since 6.5.0
 	 */
-	doSyncScroll: function () {
+	doSyncScroll(): void {
 		var sync = this['_syncScroll'];
 		for (var id in sync) {
 			sync[id].doResizeScroll_();
@@ -2675,8 +2657,8 @@ text = jq.toJSON([new Date()], function (key, value) {
 	 * @see #onSyncScroll
 	 * @since 6.5.0
 	 */
-	unSyncScroll: function (wgt) {
-		delete this['_syncScroll'][wgt.id];
+	unSyncScroll(wgt: zk.Widget): void {
+		delete this['_syncScroll'][wgt.uuid];
 	}
 });
 
@@ -2785,19 +2767,17 @@ export const _JQEventStatic = {
 	 * @param DOMElement el the target element
 	 * @param String evtnm the name of the event
 	 */
-	fire: document.createEvent ? function (el, evtnm) {
+	fire(el: HTMLElement, evtnm: string): void {
 		var evt = document.createEvent('HTMLEvents');
 		evt.initEvent(evtnm, false, false);
 		el.dispatchEvent(evt);
-	} : function (el, evtnm) {
-		el.fireEvent('on' + evtnm);
 	},
 	/** Stops the event propagation of the specified event.
 	 * It is usually used as the event listener, such as
 	 * <pre><code>jq(el).mousemove(jq.Event.stop)</code></pre>
 	 * @param jq.Event evt the event.
 	 */
-	stop(evt: JQuery.Event) {
+	stop(evt: JQuery.Event): void {
 		evt.stop();
 	},
 	/** Returns only the properties that are meta data, such as altKey, ctrlKey, shiftKey, metaKey and which.
@@ -2844,7 +2824,7 @@ export const _JQEventStatic = {
 				data = (evt as JQuery.MouseEventBase).mouseData();
 			type = type.charAt(0).toUpperCase() + type.substring(1);
 		}
-		return new zk.Event(target, 'on' + type, data, {}, evt);
+		return new zk.Event(target!, 'on' + type, data, {}, evt);
 	}
 };
 Object.assign(jq.Event, _JQEventStatic);
@@ -2888,3 +2868,4 @@ export function delayFunction(uuid: string, func: () => void, opts?: Partial<{ t
 		}
 	}
 }
+zk.JQZK = JQZK;

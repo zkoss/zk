@@ -15,7 +15,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 export let Text = {
 	format(msg: string, ...rest: (string|number)[]): string {
 		var i = 0, sb = '';
-		for (var j = 0, len = msg.length, cc, k; j < len; ++j) {
+		for (var j = 0, len = msg.length, cc, k: number; j < len; ++j) {
 			cc = msg.charAt(j);
 			if (cc == '\\') {
 				if (++j >= len) break;

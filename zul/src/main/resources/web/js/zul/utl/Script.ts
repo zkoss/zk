@@ -43,13 +43,13 @@ export class Script extends zk.Widget {
      * by the HTML SCRIPT element.
      * @param String content
      */
-    setContent(cnt: string, opts?: Record<string, boolean>): this {
+    setContent(content: string, opts?: Record<string, boolean>): this {
         const o = this._content;
-        this._content = cnt;
+        this._content = content;
 
-        if (o !== cnt || (opts && opts.force)) {
-			if (cnt) {
-				this._fn = typeof cnt == 'function' ? cnt : new Function(cnt);
+        if (o !== content || (opts && opts.force)) {
+			if (content) {
+				this._fn = typeof content == 'function' ? content : new Function(content);
 				if (this.desktop) //check parent since no this.$n()
 					this._exec();
 			} else
@@ -160,7 +160,7 @@ export class Script extends zk.Widget {
 	}
 
     //super//
-	override redraw(out: Array<string>, skipper?: zk.Skipper): void {
+	override redraw(out: string[], skipper?: zk.Skipper): void {
 		// empty
 	}
 
@@ -171,7 +171,7 @@ export class Script extends zk.Widget {
 	}
 
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
-		jq(this._node!).remove(); // ZK-4043: the script DOM is appended in body, a manual remove is needed.
+		jq(this._node).remove(); // ZK-4043: the script DOM is appended in body, a manual remove is needed.
 		super.unbind_(skipper, after, keepRod);
 	}
 }
