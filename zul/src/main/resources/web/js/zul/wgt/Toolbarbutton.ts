@@ -113,6 +113,9 @@ export class Toolbarbutton extends zul.LabelImageWidget implements zul.LabelImag
 	setDisabled(disabled: boolean, opts?: Record<string, boolean>): this {
 		const o = this._disabled;
 
+		// eslint-disable-next-line zk/preferStrictBooleanType
+		let value: boolean | undefined = disabled;
+
 		//B60-ZK-1176
 		// Autodisable should not re-enable when setDisabled(true) is called during onClick
 		if (opts && opts.adbs)
@@ -121,24 +124,24 @@ export class Toolbarbutton extends zul.LabelImageWidget implements zul.LabelImag
 		else if (!opts || opts.adbs === undefined)
 			// called somewhere else (including server-side)
 			this._adbs = false;	// Stop autodisabling
-		if (!disabled) {
+		if (!value) {
 			if (this._adbs)
 				// autodisable is still active, enable allowed
 				this._adbs = false;
 			else if (opts && opts.adbs === false)
 				// ignore re-enable by autodisable mechanism
-				disabled = !!this._disabled;
+				value = this._disabled;
 		}
 
-		this._disabled = disabled;
+		this._disabled = value;
 
-		if (o !== disabled || (opts && opts.force)) {
+		if (o !== value || (opts && opts.force)) {
 			var self = this,
 				doDisable = function (): void {
 					if (self.desktop) {
-						jq(self.$n_()).attr('disabled', disabled); // use jQuery's attr() instead of dom.disabled for non-button element. Bug ZK-2146
+						jq(self.$n_()).attr('disabled', value ? 'disabled' : null); // use jQuery's attr() instead of dom.disabled for non-button element. Bug ZK-2146
 						if (self._upload)
-							disabled ? _cleanUpld(self) : _initUpld(self);
+							value ? _cleanUpld(self) : _initUpld(self);
 					}
 				};
 

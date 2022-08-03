@@ -49,7 +49,7 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 	_topmost = false;
 	_col?: string;
 	_href?: string;
-	_disabled = false;
+	_disabled?: boolean;
 	_adbs?: boolean;
 	_autodisable?: string;
 
@@ -82,7 +82,7 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 	 * @return boolean
 	 */
 	isDisabled(): boolean {
-		return this._disabled;
+		return !!this._disabled;
 	}
 
 	/** Sets whether it is disabled.
@@ -90,6 +90,9 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 	 */
 	setDisabled(disabled: boolean, opts?: Record<string, boolean>): this {
 		const o = this._disabled;
+
+		// eslint-disable-next-line zk/preferStrictBooleanType
+		let value: boolean | undefined = disabled;
 
 		//B60-ZK-1176
 		// Autodisable should not re-enable when setDisabled(true) is called during onClick
@@ -99,17 +102,17 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 		else if (!opts || opts.adbs === undefined)
 			// called somewhere else (including server-side)
 			this._adbs = false;	// Stop autodisabling
-		if (!disabled) {
+		if (!value) {
 			if (this._adbs)
 			// autodisable is still active, enable allowed
 			this._adbs = false;
 			else if (opts && opts.adbs === false)
 			// ignore re-enable by autodisable mechanism
-			disabled = this._disabled;
+			value = this._disabled;
 		}
-		this._disabled = !!disabled;
+		this._disabled = value;
 
-		if (o !== disabled || (opts && opts.force)) {
+		if (o !== value || (opts && opts.force)) {
 			this.rerender(opts && opts.skip ? -1 : 0); //bind and unbind
 		}
 

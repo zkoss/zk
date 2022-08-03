@@ -161,7 +161,10 @@ export class Button extends zul.LabelImageWidget<HTMLButtonElement> implements z
 	 * @param boolean disabled
 	 */
 	setDisabled(disabled: boolean, opts?: Record<string, boolean>): this {
-		const o = this._disabled;
+		const oldDisabled = this._disabled;
+
+		// eslint-disable-next-line zk/preferStrictBooleanType
+		let value: boolean | undefined = disabled;
 
 		// B60-ZK-1176
 		// Autodisable should not re-enable when setDisabled(true) is called during onClick
@@ -171,23 +174,23 @@ export class Button extends zul.LabelImageWidget<HTMLButtonElement> implements z
 		else if (!opts || opts.adbs === undefined)
 			// called somewhere else (including server-side)
 			this._adbs = false;	// Stop autodisabling
-		if (!disabled) {
+		if (!value) {
 			if (this._adbs) {
 				// autodisable is still active, allow enabling
 				this._adbs = false;
-			} else if (opts && !opts.adbs)
+			} else if (opts && opts.adbs === false)
 				// ignore re-enable by autodisable mechanism
-				disabled = !!this._disabled;
+				value = this._disabled;
 		}
-		this._disabled = disabled;
+		this._disabled = value;
 
-		if (o !== disabled || (opts && opts.force)) {
+		if (oldDisabled !== value || (opts && opts.force)) {
 			var doDisable = (): void => {
 					if (this.desktop) {
-						jq(this.$n()).attr('disabled', disabled ? 'disabled' : null); // use jQuery's attr() instead of dom.disabled for non-button element. Bug ZK-2146
+						jq(this.$n()).attr('disabled', value ? 'disabled' : null); // use jQuery's attr() instead of dom.disabled for non-button element. Bug ZK-2146
 						// B70-ZK-2059: Initialize or clear upload when disabled attribute changes.
 						if (this._upload)
-							disabled ? _cleanUpld(this) : _initUpld(this);
+							value ? _cleanUpld(this) : _initUpld(this);
 					}
 				};
 
