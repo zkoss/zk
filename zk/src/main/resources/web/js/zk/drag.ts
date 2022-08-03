@@ -442,7 +442,7 @@ String scroll; //DOM Element's ID</code></pre>
 		}
 
 		this.control = control;
-		this.node = node ? jq(node, zk)[0] : control && (control.node || (control instanceof zk.Widget ? control.$n() as HTMLElement | undefined : undefined));
+		this.node = node = node ? jq(node, zk)[0] : control && (control.node || (control instanceof zk.Widget ? control.$n() as HTMLElement | undefined : undefined));
 		if (!this.node)
 			throw 'Handle required for ' + control;
 
