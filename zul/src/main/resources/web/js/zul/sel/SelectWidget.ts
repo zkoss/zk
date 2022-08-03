@@ -1073,11 +1073,11 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	 * @param jq.Event evt
 	 * @disable(zkgwt)
 	 */
-	setSelectAll(selectAll: boolean, evt: zk.Event<zk.EventMetaData>): this {
+	setSelectAll(selectAll: boolean, evt: zk.Event<zk.EventMetaData> | boolean): this {
 		for (var it = this.getBodyWidgetIterator(), w: zul.sel.ItemWidget | undefined; (w = it.next());)
 			if (w._loaded && !w.isDisabled() && w.isSelectable())
 				this._changeSelect(w, true);
-		if (selectAll) // FIXME: why was the condition `notify && evt !== true`?
+		if (selectAll && evt instanceof zk.Event)
 			this.fireOnSelect(this.getSelectedItem(), evt);
 		return this;
 	}
