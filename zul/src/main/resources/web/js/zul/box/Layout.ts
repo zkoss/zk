@@ -59,9 +59,9 @@ export class Layout extends zul.Widget {
 
 	override insertChildHTML_(child: zk.Widget, before?: zk.Widget, desktop?: zk.Desktop): void {
 		if (before)
-			jq(this._chdextr(before)!).before(this.encloseChildHTML_(child));
+			jq(this._chdextr(before)).before(this.encloseChildHTML_(child));
 		else {
-			var jqn = jq(this.$n()!),
+			var jqn = jq(this.$n()),
 			spc = this._spacing;
 			jqn.children('div:last-child').css('padding-' + (this.isVertical_() ? 'bottom' : 'right'), (spc && spc != 'auto') ? spc : '');
 			jqn.append(this.encloseChildHTML_(child));
@@ -135,7 +135,7 @@ export class Layout extends zul.Widget {
 		super.removeChildHTML_(child, ignoreDom);
 		jq(child.uuid + '-chdex', zk).remove();
 		if (this._spacing != 'auto' && this.lastChild == child)
-			jq(this.$n()!).children('div:last-child').css('padding-' + (this.isVertical_() ? 'bottom' : 'right'), '');
+			jq(this.$n()).children('div:last-child').css('padding-' + (this.isVertical_() ? 'bottom' : 'right'), '');
 	}
 
 	/** Enclose child with HTML tag such as DIV,
@@ -145,7 +145,7 @@ export class Layout extends zul.Widget {
 	 * @return String
 	 */
 	encloseChildHTML_(child: zk.Widget, out?: string[]): string {
-		var oo = new zk.Buffer<string>(),
+		var oo = new zk.Buffer(),
 			vert = this.isVertical_(),
 			spc = this._spacing;
 
@@ -387,8 +387,7 @@ export class Layout extends zul.Widget {
 		while (vflexs.length > 1) {
 			var cwgt = vflexs.shift()!,
 				vsz = (vert ? (cwgt._nvflex! * hgh / vflexsz) : hgh) | 0, //cast to integer
-				offtop = cwgt.$n()!.offsetTop,
-				isz = vsz - ((zk.ie < 11 && offtop > 0) ? (offtop * 2) : 0),
+				isz = vsz,
 				chdex = cwgt.$n('chdex')!,
 				minus = zk(chdex).padBorderHeight();
 
@@ -403,8 +402,7 @@ export class Layout extends zul.Widget {
 		//last one with vflex
 		if (vflexs.length) {
 			var cwgt = vflexs.shift()!,
-				offtop = cwgt.$n()!.offsetTop,
-				isz = lastsz - ((zk.ie < 11 && offtop > 0) ? (offtop * 2) : 0),
+				isz = lastsz,
 				chdex = cwgt.$n('chdex')!,
 				minus = zk(chdex).padBorderHeight();
 
@@ -498,7 +496,7 @@ export class Layout extends zul.Widget {
 				}
 
 				// IE9+ bug ZK-483
-				if ((zk.ie > 8) && this._hflexsz)
+				if (zk.ie11 && this._hflexsz)
 					total = Math.max(this._hflexsz, total);
 
 				n.style.width = jq.px0(total);
@@ -511,7 +509,7 @@ export class Layout extends zul.Widget {
 				}
 
 				// IE9+ bug ZK-483
-				if ((zk.ie > 8) && this._hflexsz)
+				if (zk.ie11 && this._hflexsz)
 					max = Math.max(this._hflexsz, max);
 
 				n.style.width = jq.px0(max);

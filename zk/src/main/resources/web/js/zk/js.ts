@@ -51,14 +51,14 @@ Object.assign(Array.prototype, {
 	},
 	$remove(this: Array<unknown>, o): boolean {
 		for (var ary = Array.isArray(o), j = 0, tl = this.length; j < tl; ++j) {
-			if (o == this[j] || (ary && o.$equals(this[j]))) {
+			if (o == this[j] || (ary && (o as []).$equals(this[j]))) {
 				this.splice(j, 1);
 				return true;
 			}
 		}
 		return false;
 	},
-	$addAll(this: Array<unknown>, o): number {
+	$addAll(this: Array<unknown>, o: unknown[]): number {
 		return this.push(...o);
 	},
 	$clone(this: Array<unknown>): Array<never> {

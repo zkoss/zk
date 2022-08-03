@@ -44,20 +44,20 @@ interface JQuery {
 	selector?: string; // expose
 	zk: zk.JQZK;
 
-	on(selector: string, func: Function): this;
-	on(selector: string, data: unknown, func: Function): this;
-	off(selector: string, func: Function): this;
-	off(selector: string, data: unknown, func: Function): this;
+	on(selector: string, func: CallableFunction): this;
+	on(selector: string, data: unknown, func: CallableFunction): this;
+	off(selector: string, func: CallableFunction): this;
+	off(selector: string, data: unknown, func: CallableFunction): this;
 	zon<TData>(
 		events: JQuery.TypeEventHandlers<HTMLElement, TData, never, never>,
 		selector: JQuery.Selector,
 		data: TData,
-		delegateEventFunc: Function,
+		delegateEventFunc: CallableFunction,
 		...args: unknown[]
 	): this;
 	zoff(event?: JQuery.TriggeredEvent<HTMLElement>,
 		 selector?: JQuery.Selector,
-		delegateEventFunc?: Function,
+		delegateEventFunc?: CallableFunction,
 		...args: unknown[]): this;
 	after(widget: zk.Widget, dt?: zk.Desktop): this;
 	append(widget: zk.Widget, dt?: zk.Desktop): this;
@@ -67,6 +67,9 @@ interface JQuery {
 
 	// Used extensively in zul.mesh.Paging
 	attr(attributeName: 'disabled', value: boolean);
+
+	// fix JQuery.unmousewheel() type error.
+	unmousewheel(handler: JQueryMousewheel.JQueryMousewheelEventHandler): JQuery;
 }
 
 declare namespace JQ {
@@ -142,6 +145,10 @@ declare namespace JQuery {
 	}
 }
 
+interface ZSyncObject {
+	zsync(opts?: zk.Object): void;
+}
+
 interface JQueryStatic {
 	borders: {l: string; r: string; t: string; b: string};
 	browser: zk.BrowserOptions;
@@ -154,13 +161,11 @@ interface JQueryStatic {
 	 * <TElement extends HTMLElement = HTMLElement>(html: JQuery.htmlString, ownerDocument_attributes?: Document | JQuery.PlainObject): JQuery<TElement>;
 	 * <T extends Element>(element_elementArray: T | ArrayLike<T>): JQuery<T>;
 	 */
-	<T extends HTMLElement = HTMLElement>(html: string | T): JQuery<T>;
+	<T extends HTMLElement = HTMLElement>(html?: string | T): JQuery<T>;
 
 	// Accept "readonly" array.
 	inArray<T>(value: T, array: readonly T[], fromIndex?: number): number;
 
-	// This specialization for the "empty string literal" is good, as it will always null.
-	$$(id: '', subId?: string): undefined;
 	// NodeListOf<HTMLElement> is not the same as NodeList. NodeList will give incorrect "this" type
 	// for the <callback> of `jq(<selector>).each(<callback>)` in `zul.mesh.Paging._callWgtDoAfterGo`.
 	// Furthermore, `document.getElementsByName` is defined to return `NodeListOf<HTMLElement>`.
@@ -168,7 +173,6 @@ interface JQueryStatic {
 	// empty string of type "string" will not match an empty string of type "empty string literal".
 	// See this demo: https://bit.ly/3n7R7p2
 	$$(id: string, subId?: string): NodeListOf<HTMLElement> | undefined;
-	$$<T>(id: T, subId?: string): T;
 
 	alert(msg: string, opts?: Partial<zk.AlertOptions>): void;
 	clearSelection(): boolean;
@@ -180,7 +184,7 @@ interface JQueryStatic {
 	doSyncScroll(): void;
 	evalJSON(s: string): unknown;
 	filterTextStyle(style: string, plus?: string[]): string;
-	filterTextStyle(style: {[key: string]: unknown}, plus?: string[]): {[key: string]: unknown};
+	filterTextStyle(style: Record<string, string>, plus?: string[]): Record<string, string>;
 	focusOut(): void;
 	head(): HTMLElement | undefined;
 	innerHeight(): number;
@@ -194,18 +198,18 @@ interface JQueryStatic {
 	newHidden(nm: string, val: string, parent?: Node): HTMLInputElement;
 	newStackup(el: Node | undefined, id: string, anchor?: Node): HTMLIFrameElement;
 	nodeName(el: Node): string;
-	nodeName(el: Node, ...tag: string[]): boolean;
-	onSyncScroll(wgt): void;
-	onzsync(obj): void;
+	nodeName(el: Node, ...tags: string[]): boolean;
+	onSyncScroll(wgt: zk.Widget): void;
+	onzsync(obj: ZSyncObject): void;
 	parseStyle(style: string): {[key: string]: string};
 	px(v: number): string;
 	px0(v: number | undefined): string;
 	scrollbarWidth(): number;
 	toJSON(obj, replace?: (key, value) => unknown): string;
 	uaMatch(ua: string): { browser: string; version: string };
-	unSyncScroll(wgt): void;
-	unzsync(obj): void;
-	zsync(org): void;
+	unSyncScroll(wgt: zk.Widget): void;
+	unzsync(obj: ZSyncObject): void;
+	zsync(org: zk.Object): void;
 }
 
 declare var jq: JQueryStatic;
@@ -219,7 +223,7 @@ interface String {
 interface Array<T> {
 	$indexOf(o: T): number;
 	$contains(o: T): boolean;
-	$equals(o: Record<string, unknown>): boolean;
+	$equals(o: unknown[] | unknown): boolean;
 	$remove(o: T): boolean;
 	$addAll(o: T[]): number;
 	$clone(): T[];
@@ -280,8 +284,8 @@ declare var msgzk: Record<
 	| 'CAUSE'
 	| 'LOADING'
 	, string>;
-declare var zWatch: import('./evt').ZWatch;
-declare var zUtl: import('./utl').ZUtl;
+declare var zWatch: typeof import('./evt').zWatch;
+declare var zUtl: typeof import('./utl').zUtl;
 declare var zKeys: typeof import('./keys').zKeys;
 
 declare namespace zk {
@@ -290,6 +294,7 @@ declare namespace zk {
 	type Object = import('./zk').ZKObject;
 	type Desktop = import('./widget').Desktop;
 	type Widget = import('./widget').Widget;
+	type Service = import('./widget').Service;
 	type BigDecimal = import('./math').BigDecimal;
 	type JQZK = import('./anima').JQZKEx;
 
@@ -306,6 +311,7 @@ declare namespace zk {
 	type DomStyleOptions = import('./widget').DomStyleOptions;
 	type DomVisibleOptions = import('./widget').DomVisibleOptions;
 	type RealVisibleOptions = import('./widget').RealVisibleOptions;
+	type MinFlexInfo = import('./widget').MinFlexInfo;
 	type EventMetaData = import('./dom').EventMetaData;
 	type EventMouseData = import('./dom').EventMouseData;
 	type EventKeyData = import('./dom').EventKeyData;
@@ -314,6 +320,7 @@ declare namespace zk {
 	type Draggable = import('./drag').Draggable;
 	type DraggableOptions = import('./drag').DraggableOptions;
 	type Long = import('./math').Long;
+	type Swipe = import('./zswipe').Swipe;
 	namespace eff {
 		type Mask = import('./effect').Mask;
 		type FullMask = import('./effect').FullMask

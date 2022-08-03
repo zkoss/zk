@@ -13,7 +13,6 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 @zk.WrapClass('zhtml.Content')
 export class Content extends zhtml.Widget {
 	_content?: string;
-	prolog?: string;
 	epilog?: string;
 
 	getContent(): string | undefined {

@@ -27,7 +27,7 @@ function _initUploader(o: Upload, form: HTMLFormElement, val: string): void {
 }
 function _start(o: Upload, form: HTMLFormElement, val: string): void { //start upload
 	// delete old upload temp file, if it's not uploaded yet.
-	let oldKey = o.getKey(o.sid - 1),
+	const oldKey = o.getKey(o.sid - 1),
 		oldUploader = o.uploaders[oldKey];
 
 	if (oldUploader && oldUploader.isStart && !zk.processing) {
@@ -158,13 +158,12 @@ export class Upload extends zk.Object {
 				inp = outer.firstChild!.firstChild as HTMLElement,
 				refof = zk(ref).revisedOffset(),
 				outerof = jq(outer).css({top: '0', left: '0'}).zk.revisedOffset(),
-				st = outer.style,
-				shouldHack = zk.ie < 11; // ZK-4589: hidden file upload input obstructing other widgets
+				st = outer.style;
 			st.top = (refof[1] - outerof[1]) + 'px';
 			st.left = (refof[0] - outerof[0]) + 'px';
 
-			inp.style.height = (shouldHack ? ref.offsetHeight : '0') + 'px';
-			inp.style.width = (shouldHack ? ref.offsetWidth : '0') + 'px'; // ZK-4222: Replace deprecated CSS property clip:rect(...)
+			inp.style.height = '0px';
+			inp.style.width = '0px'; // ZK-4222: Replace deprecated CSS property clip:rect(...)
 		}
 	}
 
@@ -211,22 +210,13 @@ export class Upload extends zk.Object {
 		inp._ctrl = this;
 
 		jq(inp).change(_onchange);
-
-		//ZK-2471 refix
-		if (zk.ie <= 10) {
-			jq(inp).hover(function () {
-				jq(wgt).addClass('z-upload-hover');
-			}, function () {
-				jq(wgt).removeClass('z-upload-hover');
-			});
-		}
 	}
 
 	/**
 	 * trigger file input's click to open file dialog
 	 */
 	openFileDialog(): void {
-		jq(this._inp!).click();
+		jq(this._inp).click();
 	}
 
 	/**
@@ -273,7 +263,7 @@ export class Upload extends zk.Object {
 	}
 
 	getFile(): FileList | undefined {
-		let uploader = this.uploaders[this.getKey(this.sid - 1)];
+		const uploader = this.uploaders[this.getKey(this.sid - 1)];
 		if (uploader) {
 			return uploader.getFile();
 		}
@@ -297,7 +287,7 @@ export class Upload extends zk.Object {
 				msg = msg.replace(matched[0], '');
 				errorType = matched[1];
 			}
-			if (!errorType || suppressedErrors.indexOf(errorType) === -1) {
+			if (!errorType || !suppressedErrors.includes(errorType)) {
 				jq.alert(msg, {desktop: wgt.desktop!, icon: 'ERROR'});
 			}
 			zul.Upload.close(uuid, sid);
@@ -325,7 +315,7 @@ export class Upload extends zk.Object {
 		var wgt = zk.Widget.$(uuid);
 		if (!wgt || !wgt._uplder) return;
 		wgt._uplder.finish(sid);
-		zAu.send(new zk.Event(wgt.desktop, 'updateResult', {
+		zAu.send(new zk.Event(wgt.desktop!, 'updateResult', {
 			contentId: contentId,
 			wid: wgt.uuid,
 			sid: sid
@@ -716,7 +706,7 @@ function _initUM(uplder: Uploader, flnm: string): void {
 			 * @param String position the position where the file manager is located
 			 */
 			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-ignore
+			// @ts-expect-error
 			override open(wgt?: zk.Widget, position?: string): void {
 				super.open(wgt, undefined, position || 'after_start', {
 					sendOnOpen: false,
@@ -736,7 +726,7 @@ export declare class UploadManager extends zul.wgt.Popup {
 	updateFile(uplder: zul.Uploader, val: number, total: string): void
 	removeFile(uplder: zul.Uploader): void
 	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore
+	// @ts-expect-error
 	override open(wgt: zk.Widget | undefined, position?: string): void
 }
 

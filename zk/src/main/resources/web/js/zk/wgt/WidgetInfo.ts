@@ -47,7 +47,7 @@ export let WidgetInfo = {
 	 * @return String the class name, such as zul.inp.Textbox
 	 */
 	getClassName(wgtnm: string): string {
-		return _wgtInfs[wgtnm];
+		return _wgtInfs[wgtnm] as string;
 	},
 	/** Registers an arry of widget information.
 	 * @param Array infs an array of widget class names. For example,
@@ -72,7 +72,7 @@ export let WidgetInfo = {
 	loadAll(f: () => void, weave: boolean): void {
 		var pkgmap = {}, pkgs: string[] = [];
 		for (var w in _wgtInfs) {
-			var clsnm = _wgtInfs[w];
+			var clsnm = _wgtInfs[w] as string;
 			pkgmap[clsnm.substring(0, clsnm.lastIndexOf('.'))] = true;
 		}
 		for (var w in pkgmap)

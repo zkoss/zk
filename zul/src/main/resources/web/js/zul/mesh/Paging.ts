@@ -398,7 +398,7 @@ export class Paging extends zul.Widget {
 	}
 
 	_innerTags(): string {
-		var out = new zk.Buffer<string>(),
+		var out = new zk.Buffer(),
 			pinc = this.getPageIncrement(),
 			pcount = this.getPageCount(),
 			acp = this.getActivePage(),

@@ -34,7 +34,7 @@ export const Dates = {
 			m = zk.mm.tz([d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(),
 				d.getUTCHours(), d.getUTCMinutes(), d.getUTCSeconds(), d.getUTCMilliseconds()], tz);
 		}
-		return new DateImpl(m, tz);
+		return new DateImpl(m as Moment, tz);
 	}
 };
 window.Dates = Dates;
@@ -204,7 +204,7 @@ export class DateImpl {
 	toISOString(): string {
 		return '';
 	}
-	toJSON(key): string {
+	toJSON(key: never): string {
 		return '';
 	}
 }

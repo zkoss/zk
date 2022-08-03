@@ -56,7 +56,7 @@ export class A extends zul.LabelImageWidget<HTMLAnchorElement> implements zul.La
 			if (this._adbs) {
 				// autodisable is still active, allow enabling
 				this._adbs = false;
-			} else if (opts && opts.adbs === false)
+			} else if (opts && !opts.adbs)
 				// ignore re-enable by autodisable mechanism
 				disabled = !!this._disabled;
 		}
@@ -65,7 +65,7 @@ export class A extends zul.LabelImageWidget<HTMLAnchorElement> implements zul.La
 		if (o !== disabled || (opts && opts.force)) {
 			var doDisable = (): void => {
 					if (this.desktop) {
-						jq(this.$n()!).attr('disabled', disabled ? 'disabled' : null); // use jQuery's attr() instead of dom.disabled for non-button element. Bug ZK-2146
+						jq(this.$n()).attr('disabled', disabled ? 'disabled' : null); // use jQuery's attr() instead of dom.disabled for non-button element. Bug ZK-2146
 					}
 				};
 			doDisable();
@@ -85,11 +85,11 @@ export class A extends zul.LabelImageWidget<HTMLAnchorElement> implements zul.La
 	/** Sets the direction.
 	 * @param String dir either "normal" or "reverse".
 	 */
-	setDir(v: string, opts?: Record<string, boolean>): this {
+	setDir(dir: string, opts?: Record<string, boolean>): this {
 		const o = this._dir;
-		this._dir = v;
+		this._dir = dir;
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== dir || (opts && opts.force)) {
 			var n = this.$n();
 			if (n) n.innerHTML = this.domContent_();
 		}
@@ -111,13 +111,13 @@ export class A extends zul.LabelImageWidget<HTMLAnchorElement> implements zul.La
 	/** Sets the href.
 	 * @param String href
 	 */
-	setHref(v: string, opts?: Record<string, boolean>): this {
+	setHref(href: string, opts?: Record<string, boolean>): this {
 		const o = this._href;
-		this._href = v;
+		this._href = href;
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== href || (opts && opts.force)) {
 			var n = this.$n();
-			if (n) n.href = v || '';
+			if (n) n.href = href || '';
 		}
 
 		return this;
@@ -138,13 +138,13 @@ export class A extends zul.LabelImageWidget<HTMLAnchorElement> implements zul.La
 	/** Sets the target frame or window.
 	 * @param String target the name of the frame or window to hyperlink.
 	 */
-	setTarget(v: string, opts?: Record<string, boolean>): this {
+	setTarget(target: string, opts?: Record<string, boolean>): this {
 		const o = this._target;
-		this._target = v;
+		this._target = target;
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== target || (opts && opts.force)) {
 			var n = this.$n();
-			if (n) n.target = v || '';
+			if (n) n.target = target || '';
 		}
 
 		return this;

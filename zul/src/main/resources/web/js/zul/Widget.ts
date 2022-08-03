@@ -117,7 +117,7 @@ function _tt_close_(): void {
 		// TooltipOver event will open the tooltip again...
 		// If mouse pointer still overlapped on tooltip, do not close.
 		// IE10: Bug ZK-1519, Chrome: Bug ZK-3583
-		var $tip = jq(tip.$n()!),
+		var $tip = jq(tip.$n()),
 			$tipOff = $tip.offset()!,
 			pointer = zk.currentPointer;
 		if ((pointer[0] >= $tipOff.left && pointer[0] <= ($tipOff.left + $tip.width()!))
@@ -689,7 +689,7 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Widge
 	 * @return boolean true if the event has been processed
 	 * @see #setCtrlKeys
 	 */
-	afterKeyDown_(evt: zk.Event/*, simulated*/): boolean {
+	afterKeyDown_(evt: zk.Event, simulated?: boolean): boolean {
 		var keyCode = evt.keyCode, evtnm = 'onCtrlKey', okcancel, commandKey = zk.mac && evt.metaKey;
 		switch (keyCode) {
 		case 13: { //ENTER
@@ -752,7 +752,7 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Widge
 			interface WidgetBeforeCtrlKeys extends zk.Widget {
 				beforeCtrlKeys_?: Widget['beforeCtrlKeys_'];
 			}
-			for (var w: WidgetBeforeCtrlKeys = target!; ; w = w.parent!) {
+			for (var w: WidgetBeforeCtrlKeys = target; ; w = w.parent!) {
 				if (w.beforeCtrlKeys_ && w.beforeCtrlKeys_(evt) as undefined)
 					return;
 				if (w == wgt) break;

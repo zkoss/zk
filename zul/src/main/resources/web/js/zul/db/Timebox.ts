@@ -638,7 +638,7 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 				zk(self.getInputNode()).setSelectionRange(self._lastPos, self._lastPos);
 			self[fn]();
 		}, 300);
-		jq(this.$n('btn-' + (up ? 'up' : 'down'))!).addClass(this.$s('active'));
+		jq(this.$n('btn-' + (up ? 'up' : 'down'))).addClass(this.$s('active'));
 	}
 
 	_stopAutoIncProc(): void {

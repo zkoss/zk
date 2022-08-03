@@ -47,13 +47,13 @@ export class Inputgroup extends zul.Widget {
 	 * Sets whether it is a vertical orientation.
 	 * @param boolean vertical whether it is a vertical orientation
 	 */
-	setVertical(v: boolean, opts?: Record<string, boolean>): this {
+	setVertical(vertical: boolean, opts?: Record<string, boolean>): this {
 		const o = this._vertical;
-		this._vertical = v;
+		this._vertical = vertical;
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== vertical || (opts && opts.force)) {
 			if (this.desktop) {
-				jq(this.$n()!).toggleClass(this.$s('vertical'), v);
+				jq(this.$n()).toggleClass(this.$s('vertical'), vertical);
 			}
 		}
 
@@ -75,7 +75,7 @@ export class Inputgroup extends zul.Widget {
 			jq(before.$n('chdex') || before.$n()!).before(
 				this.encloseChildHTML_({ child: child })!);
 		else
-			jq(this.getCaveNode()!).append(
+			jq(this.getCaveNode()).append(
 				this.encloseChildHTML_({ child: child })!);
 
 		child.bind(desktop);
@@ -87,7 +87,7 @@ export class Inputgroup extends zul.Widget {
 	}
 
 	encloseChildHTML_(opts: { child: zk.Widget; out?: string[] }): string | undefined {
-		const out = opts.out || new zk.Buffer<string>(),
+		const out = opts.out || new zk.Buffer(),
 			w = opts.child;
 		if (!(w instanceof zul.wgt.Button) && !(w instanceof zul.wgt.Toolbarbutton)
 			&& (!zul.inp || !(w instanceof zul.inp.InputWidget))) {

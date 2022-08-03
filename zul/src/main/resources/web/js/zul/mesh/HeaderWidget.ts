@@ -33,7 +33,7 @@ export abstract class HeaderWidget extends zul.LabelImageWidget<HTMLTableCellEle
 	_checked?: boolean; // zul.sel.SelectWidget.prototype._isAllSelected
 	_sortDirection!: SortDirection;
 	abstract getSortDirection(): SortDirection;
-	abstract setSortDirection(direction: SortDirection, opts?: Record<string, boolean>): this;
+	abstract setSortDirection(sortDirection: SortDirection, opts?: Record<string, boolean>): this;
 
 	/** Returns the horizontal alignment of this column.
 	 * <p>Default: null (system default: left unless CSS specified).
@@ -46,12 +46,12 @@ export abstract class HeaderWidget extends zul.LabelImageWidget<HTMLTableCellEle
 	/** Sets the horizontal alignment of this column.
 	 * @param String align
 	 */
-	setAlign(v: string, opts?: Record<string, boolean>): this {
+	setAlign(align: string, opts?: Record<string, boolean>): this {
 		const o = this._align;
-		this._align = v;
+		this._align = align;
 
-		if (o !== v || (opts && opts.force)) {
-			this.adjustDOMAlign_('align', v);
+		if (o !== align || (opts && opts.force)) {
+			this.adjustDOMAlign_('align', align);
 		}
 
 		return this;
@@ -68,12 +68,12 @@ export abstract class HeaderWidget extends zul.LabelImageWidget<HTMLTableCellEle
 	/** Sets the vertical alignment of this grid.
 	 * @param String valign
 	 */
-	setValign(v: string, opts?: Record<string, boolean>): this {
+	setValign(valign: string, opts?: Record<string, boolean>): this {
 		const o = this._valign;
-		this._valign = v;
+		this._valign = valign;
 
-		if (o !== v || (opts && opts.force)) {
-			this.adjustDOMAlign_('valign', v);
+		if (o !== valign || (opts && opts.force)) {
+			this.adjustDOMAlign_('valign', valign);
 		}
 
 		return this;
@@ -83,11 +83,11 @@ export abstract class HeaderWidget extends zul.LabelImageWidget<HTMLTableCellEle
 		return this._height;
 	}
 
-	override setHeight(v: string, opts?: Record<string, boolean>): this {
+	override setHeight(height: string, opts?: Record<string, boolean>): this {
 		const o = this._height;
-		this._height = v;
+		this._height = height;
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== height || (opts && opts.force)) {
 			this.updateMesh_();
 		}
 
@@ -169,20 +169,19 @@ export abstract class HeaderWidget extends zul.LabelImageWidget<HTMLTableCellEle
 		}
 	}
 
-	override setFlexSize_(sz: zk.FlexSize, isFlexMin?: boolean): zk.FlexSize | undefined {
+	override setFlexSize_(flexSize_: zk.FlexSize, isFlexMin?: boolean): void {
 		if (this._cssflex && this.parent!.getFlexContainer_() != null && !isFlexMin)
 			return;
-		if ((sz.width !== undefined && sz.width != 'auto' && sz.width != '') || sz.width as unknown == 0) { //JavaScript deems 0 == ''
+		if ((flexSize_.width !== undefined && flexSize_.width != 'auto' && flexSize_.width != '') || flexSize_.width as unknown == 0) { //JavaScript deems 0 == ''
 			//remember the value in _hflexWidth and use it when rerender(@see #domStyle_)
 			//for faker column, so don't use revisedWidth().
 			//updated: need to concern inner padding due to wgt.getContentEdgeWidth_()
 			//spec in flex.js
 			var rvw = this._hflex == 'min' && this.firstChild && this.isRealVisible() ? // B50-ZK-394
-					zk(this.$n('cave')).revisedWidth(sz.width as number) : sz.width as number;
+					zk(this.$n('cave')).revisedWidth(flexSize_.width as number) : flexSize_.width as number;
 			this._hflexWidth = rvw;
-			return {width: rvw};
 		} else
-			super.setFlexSize_(sz, isFlexMin);
+			super.setFlexSize_(flexSize_, isFlexMin);
 	}
 
 	override getContentEdgeHeight_(): number {
@@ -254,7 +253,7 @@ export abstract class HeaderWidget extends zul.LabelImageWidget<HTMLTableCellEle
 			width0 = zul.mesh.MeshWidget.WIDTH0;
 		if (mesh) {
 			var $n = jq(this.$n_()),
-				$faker = jq(this.$n('hdfaker')!), // `this.$n('hdfaker')` can be null. Musn't use `this.$n_('hdfaker')`.
+				$faker = jq(this.$n('hdfaker')), // `this.$n('hdfaker')` can be null. Musn't use `this.$n_('hdfaker')`.
 				w = this.getWidth();
 			if (mesh._cssflex && mesh.isChildrenFlex && mesh.isChildrenFlex()) { //skip not MeshWidget
 				if (!this.isVisible()) {
@@ -302,7 +301,7 @@ export abstract class HeaderWidget extends zul.LabelImageWidget<HTMLTableCellEle
 				endghosting: HeaderWidget._endghostsizing,
 				snap: HeaderWidget._snapsizing,
 				ignoredrag: HeaderWidget._ignoresizing,
-				zIndex: 99999, // Bug: B50-3285153
+				zIndex: '99999', // Bug: B50-3285153
 				endeffect: HeaderWidget._aftersizing
 			});
 		}
@@ -390,12 +389,7 @@ export abstract class HeaderWidget extends zul.LabelImageWidget<HTMLTableCellEle
 			wgt = zk.Widget.$(tg)!,
 			n = this.$n(),
 			ofs = this._dragsz ? zk(n).revisedOffset() : false,
-			btn = wgt.$n('btn'),
 			ignoreSort = false;
-
-		//IE will trigger doClick during closing menupopup
-		if (zk.ie < 11 && btn && !zk(btn).isRealVisible())
-			ignoreSort = true;
 
 		if (!zk.dragging && (wgt == this || (wgt instanceof zul.wgt.Label))
 				&& this.isSortable_() && !jq.nodeName(tg, 'input')
@@ -497,15 +491,6 @@ export abstract class HeaderWidget extends zul.LabelImageWidget<HTMLTableCellEle
 			p = mw.$n(),
 			zkp = p ? zk(p) : undefined;
 		if (zkp) {
-			// Bug #3255116
-			if (mw.ebody) {
-				if (zk.ie < 11) { //Related bugs: ZK-890 and ZK-242
-					if (mw.ebodytbl && !mw.ebodytbl.width) {
-						mw.ebodytbl.width = '100%';
-						// reset the width for IE
-					}
-				}
-			}
 			return {
 				height: zkp.contentHeight(),
 				width: zkp.contentWidth()
@@ -566,7 +551,7 @@ export abstract class HeaderWidget extends zul.LabelImageWidget<HTMLTableCellEle
 	}
 
 	static _snapsizing(dg: zk.Draggable, pointer: zk.Offset): zk.Offset {
-		var n = dg.control!.$n(),
+		var n = (dg.control as zk.Widget).$n(),
 			$n = zk(n),
 			ofs = $n.viewportOffset(),
 			sofs = $n.scrollOffset(),
@@ -607,7 +592,7 @@ export abstract class HeaderWidget extends zul.LabelImageWidget<HTMLTableCellEle
 		for (var w = mesh.head!.firstChild, i = 0; w; w = w.nextSibling, i++) {
 			var stylew = hdcols[i].style.width,
 				origWd = w._origWd, // ZK-1022: get original width if it is shrinked by Frozen.js#_doScrollNow
-				isFixedWidth = stylew && stylew.indexOf('%') < 0;
+				isFixedWidth = stylew && !stylew.includes('%');
 
 			if (origWd) {
 				if (isFixedWidth && zk.parseFloat(stylew) > 1) {
@@ -629,7 +614,7 @@ export abstract class HeaderWidget extends zul.LabelImageWidget<HTMLTableCellEle
 			// reset hflex, Bug ZK-2772 - Misaligned Grid columns
 			var wdInt = zk.parseInt(wds[i]);
 			if (mesh._cssflex && mesh.isChildrenFlex()) {
-				zFlex.clearCSSFlex(this, 'h', true);
+				zFlex.clearCSSFlex(w, 'h', true);
 			} else if (w._hflexWidth) {
 				w.setHflex_();
 				w._hflexWidth = undefined;

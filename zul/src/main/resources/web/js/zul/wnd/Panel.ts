@@ -442,13 +442,13 @@ export class Panel extends zul.Widget {
 					if (open) {
 						jq(node).removeClass(this.$s('collapsed'));
 						// `exp` might not exist
-						jq(this.$n('exp')!).attr('title', msgzul.PANEL_COLLAPSE)
+						jq(this.$n('exp')).attr('title', msgzul.PANEL_COLLAPSE)
 						.children('.' + down).removeClass(down).addClass(up);
 						$body.zk.slideDown(this);
 					} else {
 						// `exp` might not exist
 						jq(node).addClass(this.$s('collapsed'));
-						jq(this.$n('exp')!).attr('title', msgzul.PANEL_EXPAND)
+						jq(this.$n('exp')).attr('title', msgzul.PANEL_EXPAND)
 						.children('.' + up).removeClass(up).addClass(down);
 						this._hideShadow();
 						$body.zk.slideUp(this);
@@ -698,12 +698,12 @@ export class Panel extends zul.Widget {
 	}
 
 	//server use only
-	setTbar(val: string, opts?: Record<string, boolean>): this {
+	setTbar(tbar: string, opts?: Record<string, boolean>): this {
 		const o = this._tbar;
-		this._tbar = val;
+		this._tbar = tbar;
 
-		if (o !== val || (opts && opts.force)) {
-			this.tbar = zk.Widget.$<zul.wgt.Toolbar>(val);
+		if (o !== tbar || (opts && opts.force)) {
+			this.tbar = zk.Widget.$<zul.wgt.Toolbar>(tbar);
 			if (this.bbar == this.tbar)
 				this.bbar = undefined;
 			if (this.fbar == this.tbar)
@@ -720,12 +720,12 @@ export class Panel extends zul.Widget {
 	}
 
 	//server use only
-	setBbar(val: string, opts?: Record<string, boolean>): this {
+	setBbar(bbar: string, opts?: Record<string, boolean>): this {
 		const o = this._bbar;
-		this._bbar = val;
+		this._bbar = bbar;
 
-		if (o !== val || (opts && opts.force)) {
-			this.bbar = zk.Widget.$<zul.wgt.Toolbar>(val);
+		if (o !== bbar || (opts && opts.force)) {
+			this.bbar = zk.Widget.$<zul.wgt.Toolbar>(bbar);
 			if (this.tbar == this.bbar)
 				this.tbar = undefined;
 			if (this.fbar == this.bbar)
@@ -742,12 +742,12 @@ export class Panel extends zul.Widget {
 	}
 
 	//server use only
-	setFbar(val: string, opts?: Record<string, boolean>): this {
+	setFbar(fbar: string, opts?: Record<string, boolean>): this {
 		const o = this._fbar;
-		this._fbar = val;
+		this._fbar = fbar;
 
-		if (o !== val || (opts && opts.force)) {
-			this.fbar = zk.Widget.$<zul.wgt.Toolbar>(val);
+		if (o !== fbar || (opts && opts.force)) {
+			this.fbar = zk.Widget.$<zul.wgt.Toolbar>(fbar);
 			if (this.tbar == this.fbar)
 				this.tbar = undefined;
 			if (this.bbar == this.fbar)
@@ -900,20 +900,20 @@ export class Panel extends zul.Widget {
 		});
 	}
 
-	override setFlexSizeH_(n: HTMLElement, zkn: zk.JQZK, height: number, isFlexMin?: boolean): void {
+	override setFlexSizeH_(flexSizeH_: HTMLElement, zkn: zk.JQZK, height: number, isFlexMin?: boolean): void {
 		if (isFlexMin) {
 			height += this._titleHeight();
 		}
-		super.setFlexSizeH_(n, zkn, height, isFlexMin);
+		super.setFlexSizeH_(flexSizeH_, zkn, height, isFlexMin);
 	}
 
-	override setFlexSizeW_(n: HTMLElement, zkn: zk.JQZK, width: number, isFlexMin?: boolean): void {
+	override setFlexSizeW_(flexSizeW_: HTMLElement, zkn: zk.JQZK, width: number, isFlexMin?: boolean): void {
 		if (isFlexMin && this.caption) {
 			if (width == this.caption.$n_().offsetWidth) {
 				width += zk(this.$n('head')).padBorderWidth();
 			}
 		}
-		super.setFlexSizeW_(n, zkn, width, isFlexMin);
+		super.setFlexSizeW_(flexSizeW_, zkn, width, isFlexMin);
 	}
 
 	beforeSize(): void {
@@ -1040,7 +1040,7 @@ export class Panel extends zul.Widget {
 		if (!this._visible || !this.isFloatable())
 			return; //just in case
 
-		for (var wgt: zk.Widget | undefined = ctl.origin; wgt; wgt = wgt.parent) {
+		for (var wgt: zk.Widget | undefined = ctl.origin as zk.Widget | undefined; wgt; wgt = wgt.parent) {
 			if (wgt == this) {
 				this.setTopmost();
 				return;
@@ -1096,7 +1096,7 @@ export class Panel extends zul.Widget {
 		}
 	}
 
-	override zsync(opts?: Record<string, unknown>): void {
+	override zsync(opts?: zk.Object): void {
 		super.zsync(opts);
 
 		if (!this.isFloatable()) {
@@ -1180,7 +1180,7 @@ export class Panel extends zul.Widget {
 
 			// ZK-1951, ZK-2045: Page becomes blank after detaching a modal window having an iframe loaded with PDF in IE > 9
 			// A workaround is to hide the iframe before remove
-			if (zk.ie > 9) {
+			if (zk.ie11) {
 				var $jq = jq(this.$n_()).find('iframe');
 				if ($jq.length)
 					$jq.hide().remove();
@@ -1398,15 +1398,15 @@ export class Panel extends zul.Widget {
 		(dg.control as zul.wnd.Panel)._hideShadow();
 		//Bug #1568393: we have to change the percetage to the pixel.
 		var el = dg.node!;
-		if (el.style.top && el.style.top.indexOf('%') >= 0)
+		if (el.style.top && el.style.top.includes('%'))
 				el.style.top = el.offsetTop + 'px';
-		if (el.style.left && el.style.left.indexOf('%') >= 0)
+		if (el.style.left && el.style.left.includes('%'))
 				el.style.left = el.offsetLeft + 'px';
 		//zkau.closeFloats(cmp, handle);
 	}
 
 	static _ignoremove(dg: zk.Draggable, pointer: zk.Offset, evt: zk.Event): boolean {
-		var wgt = dg.control!,
+		var wgt = dg.control as zk.Widget,
 			tar = evt.domTarget;
 		if (!tar.id)
 			tar = tar.parentNode as HTMLElement;
@@ -1422,8 +1422,8 @@ export class Panel extends zul.Widget {
 	}
 
 	static _aftermove(dg: zk.Draggable, evt?: zk.Event): void {
-		dg.control!.zsync();
-		var wgt = dg.control;
+		var wgt = (dg.control as zk.Widget);
+		wgt.zsync();
 		zk(wgt).redoCSS(-1, {'fixFontIcon': true});
 	}
 

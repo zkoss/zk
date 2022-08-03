@@ -188,13 +188,6 @@ export class Flash extends zul.Widget {
 		return this;
 	}
 
-	override doMouseDown_(e: zk.Event): void {
-		// Bug 3306281
-		if (zk.ie < 11)
-			this.fire('onClick', e.data, e.opts);
-		super.doMouseDown_(e);
-	}
-
 	override setHeight(height?: string): this {
 		this._height = height;
 		const n = this._embedNode();

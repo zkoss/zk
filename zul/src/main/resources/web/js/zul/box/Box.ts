@@ -380,7 +380,7 @@ export class Box extends zul.Widget {
 
 	override insertChildHTML_(child: zk.Widget, before?: zk.Widget, desktop?: zk.Desktop): void {
 		if (before) {
-			jq(this._chdextr(before)!).before(this.encloseChildHTML_(child)!);
+			jq(this._chdextr(before)).before(this.encloseChildHTML_(child)!);
 		} else {
 			var n = this.$n<HTMLTableElement>('real')!, tbs = n.tBodies;
 			if (!tbs || !tbs.length)
@@ -868,7 +868,7 @@ export class Box extends zul.Widget {
 					if (vert)
 						c.style.width = zk(c).revisedWidth(tdsz, !zk.webkit) + 'px';
 					else
-						c.style.height = zk(c).revisedHeight(tdsz - ((zk.ie < 11 && c.offsetTop > 0) ? (c.offsetTop * 2) : 0), !zk.webkit) + 'px';
+						c.style.height = zk(c).revisedHeight(tdsz, !zk.webkit) + 'px';
 				}
 			}
 		}

@@ -107,11 +107,11 @@ export abstract class ColumnMenuWidget extends zul.mesh.HeadWidget {
 	 *  created automatically and keep the menupopup open after setting column visibility.
 	 * @see #setMenupopup(String)
 	 */
-	setMenupopup(mpop: string, opts?: Record<string, boolean>): this {
+	setMenupopup(menupopup: string, opts?: Record<string, boolean>): this {
 		const o = this._menupopup;
-		this._menupopup = mpop;
+		this._menupopup = menupopup;
 
-		if (o !== mpop || (opts && opts.force)) {
+		if (o !== menupopup || (opts && opts.force)) {
 			if (this._menupopup != 'auto' && this._menupopup != 'auto-keep')
 				this._mpop = undefined;
 			this.rerender();
@@ -195,7 +195,7 @@ export abstract class ColumnMenuWidget extends zul.mesh.HeadWidget {
 
 	_onGroup(evt: zk.Event): void {
 		var ungroup: zul.menu.Menuitem | undefined;
-		if ((ungroup = (evt.target!.parent as zul.mesh.ColumnMenupopup)._ungroup))
+		if ((ungroup = (evt.target.parent as zul.mesh.ColumnMenupopup)._ungroup))
 			ungroup.setVisible(true);
 		//since 6.5.0 onGroup is not listened anymore, always fire event to server
 		this._mref!.fire('onGroup', 'ascending' != this._mref!.getSortDirection(), {toServer: true});
@@ -262,8 +262,8 @@ export class ColumnMenupopup extends zul.menu.Menupopup {
 		return this._columns;
 	}
 
-	setColumns(v: zul.mesh.ColumnMenuWidget): this {
-		this._columns = v;
+	setColumns(columns: zul.mesh.ColumnMenuWidget): this {
+		this._columns = columns;
 		return this;
 	}
 

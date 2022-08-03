@@ -241,7 +241,7 @@ export class Borderlayout extends zul.Widget {
 				_ambit[rs[j]]!(ambit, center, width, height);
 				this._resizeWgt(region, ambit); //might recursive back
 				var directionToCalculate: 'width' | 'height' = region._isVertical() ? 'width' : 'height';
-				jq(region.$n('title')!).width((jq(region.$n('colled')!)[directionToCalculate]() as number) - ((jq(region.$n('btned')!)[directionToCalculate]()) as number));
+				jq(region.$n('title')).width((jq(region.$n('colled'))[directionToCalculate]()!) - (jq(region.$n('btned'))[directionToCalculate]()!));
 			}
 		}
 		if (this.center && zk(this.center.$n()).isVisible()) {

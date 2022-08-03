@@ -17,18 +17,21 @@ export interface EventOptions {
 	ignorable?: boolean;
 	toServer?: boolean;
 	uri?: string;
+	down?: boolean;
+	timeout?: number;
 	defer?: boolean;
 	serverAlive?: boolean;
 	forceAjax?: boolean;
 	sendAhead?: boolean;
-	rtags?: {[key: string]: unknown};
+	reverse?: boolean;
+	rtags?: Record<string, unknown>;
 	start?: {
 		time: number | Date;
-		coords: [number, number];
+		coords: zk.Offset;
 	};
 	stop?: {
 		time: number | Date;
-		coords: [number, number];
+		coords: zk.Offset;
 	};
 	dir?: string;
 	uploadCallback?: Partial<Pick<XMLHttpRequestEventTarget, `on${keyof XMLHttpRequestEventTargetEventMap}`>>;
@@ -97,7 +100,7 @@ export class Event<TData = unknown> extends zk.Object {
 	contextSelected?: boolean; // zul.Widget.prototype.doClick_
 
 	// dom.ts#metaData
-	declare which;
+	declare which: number;
 	declare metaKey: boolean;
 	declare ctrlKey;
 	declare altKey;
@@ -118,13 +121,13 @@ export class Event<TData = unknown> extends zk.Object {
 	 * @type zk.Widget
 	 * @see #currentTarget
 	 */
-	target?: zk.Widget;
+	target!: zk.Widget;
 	/** Indicates the target which is handling this event.
 	 * <p>By default, an event will be propagated to its parent, and this member tells which widget is handling it, while #target is the widget that the event is targeting.
 	 * @type zk.Widget
 	 * @see #target
 	 */
-	currentTarget?: zk.Widget;
+	currentTarget!: zk.Widget;
 	/** The event name, such as 'onChange'.
 	 * The data which depends on the event. Here is the list of Event Data.
 	 * <p>However, if data is an instance of Map, its content is copied to the event instance. Thus, you can access them directly with the event instance as follows.
@@ -217,7 +220,7 @@ onClick: function (evt) {
 	 * @param Map opts [optional] the options. Refer to {@link #opts}
 	 * @param jq.Event domEvent [optional] the DOM event that causes this widget event.
 	 */
-	constructor(target: zk.Widget | undefined, name: string, data?: TData, opts?: EventOptions, domEvent?: JQuery.TriggeredEvent) { // FIXME: TriggeredEvent missing type parameters
+	constructor(target: zk.Widget, name: string, data?: TData, opts?: EventOptions, domEvent?: JQuery.TriggeredEvent) { // FIXME: TriggeredEvent missing type parameters
 		super();
 		this.currentTarget = this.target = target;
 		this.name = name;
@@ -225,9 +228,9 @@ onClick: function (evt) {
 		if (data && typeof data == 'object' && !Array.isArray(data))
 			zk.$default(this, data);
 
-		this.opts = opts || {rtags: {}};
+		this.opts = opts ?? {rtags: {}};
 		if (this.domEvent = domEvent)
-			this.domTarget = domEvent.target;
+			this.domTarget = domEvent.target as HTMLElement;
 	}
 	/** Adds the additions options to {@link #opts}.
 	 * @param Map opts a map of options to append to #opts
@@ -278,10 +281,10 @@ evt.stop({progagation:true,revoke:true}); //revoke the event propagation
 	 * @see _global_.zKeys
 	 */
 	isPressed(): boolean {
-		var keyCount = 0,
+		let keyCount = 0,
 			result = true;
 		for (var i = 0, len = arguments.length; i < len; i++) {
-			var arg = arguments[i];
+			var arg = arguments[i] as string;
 			if (arg != zKeys.META && arg != zKeys.ALT && arg != zKeys.CONTROL && arg != zKeys.SHIFT) {
 				keyCount++;
 				if (keyCount > 1)
@@ -322,30 +325,25 @@ export interface FireOptions {
 	timeout: number;
 	triggerByFocus: boolean;
 	triggerByClick: number;
-	rtags: {[key: string]: unknown};
+	rtags: Record<string, unknown>;
 }
 
-export interface ZWatch {
-	fire(name: string, origin?: unknown, opts?: Partial<FireOptions>, ...vararg: unknown[]): void;
-	fireDown(name: string, origin?: zk.Object, opts?: Partial<FireOptions>, ...vararg: unknown[]): void;
-	listen(infs: Partial<ClientActivity>): void;
-	unlisten(infs: Partial<ClientActivity>): void;
-	unlistenAll(name: string): void;
-}
+type WatchInfo = [zk.Widget, (zk.Widget | [zk.Widget, CallableFunction])[]];
+let _visiEvts = {onFitSize: true, onSize: true, onShow: true, onHide: true, beforeSize: true, afterSize: true},
+	_watches: Record<string, WatchInfo[]> = {}, //Map(watch-name, [object, [watches..]]) [0]: obj, [1]: [inf]
+	_dirty: boolean;
 
-var _visiEvts = {onFitSize: true, onSize: true, onShow: true, onHide: true, beforeSize: true, afterSize: true},
-	_watches = {}, //Map(watch-name, [object, [watches..]]) [0]: obj, [1]: [inf]
-	_dirty;
 // See `ctl.orign` of `zul.wgt.Popup.prototype.onFloatUp`.
 // `ZWatchController` was previously named `_Gun` and not exported.
 // To export this class, the variables above and functions below are pulled out from `zWatch` (exported later in this file).
 export class ZWatchController extends zk.Object {
 	name: string;
-	xinfs;
-	args;
-	origin: zk.Widget;
-	fns;
-	constructor(name: string, xinfs, args, org: zk.Widget, fns) {
+	xinfs: WatchInfo[];
+	args: unknown[];
+	origin: zk.Object;
+	fns?: [CallableFunction, zk.Widget][];
+
+	constructor(name: string, xinfs: WatchInfo[], args: unknown[], org: zk.Object, fns?: [CallableFunction, zk.Widget][]) {
 		super();
 		this.name = name;
 		this.xinfs = xinfs;
@@ -354,7 +352,7 @@ export class ZWatchController extends zk.Object {
 		this.fns = fns;
 	}
 	fire(ref?: zk.Widget): void {
-		var infs, xinf,
+		let infs: (zk.Widget | [zk.Widget, CallableFunction])[] | undefined, xinf: WatchInfo | undefined,
 			name = this.name,
 			xinfs = this.xinfs,
 			args = this.args,
@@ -380,58 +378,60 @@ export class ZWatchController extends zk.Object {
 	}
 }
 
-function _invoke(name, infs, o, args, fns): void {
-	for (var j = 0, l = infs.length; j < l;) {
-		var f = _fn(infs[j++], o, name);
+function _invoke(name: string, infs: (zk.Widget | [zk.Widget, CallableFunction])[], o: zk.Widget, args: unknown[], fns?: [CallableFunction, zk.Widget][]): void {
+	for (let j = 0, l = infs.length; j < l;) {
+		const f = _fn(infs[j++], o, name);
+
 		if (fns)
 			fns.push([f, o]); //store it fns first
 		else
-			f.call(o, ...(args as []));
+			f.bind(o)(...(args as []));
 	}
 	if (name == 'onSize') { //Feature ZK-1672: invoke onAfterSize after onSize
-		var after = o['onAfterSize'];
+		var after = o.onAfterSize;
 		if (after)
-			after.call(o, ...args);
+			after.call(o, ...(args as []));
 	}
 }
 //Returns if c is visible
-function _visible(name, c): boolean {
-	return c.isWatchable_ && c.isWatchable_(name); //in future, c might not be a widget
+function _visible(name: string, c: zk.Widget): boolean {
+	return !!(c.isWatchable_ && c.isWatchable_(name)); //in future, c might not be a widget
 }
 //Returns if c is a visible child of p (assuming p is visible)
-function _visibleChild(name, p, c, cache): boolean {
-	for (var w = c; w; w = w.parent)
+function _visibleChild(name: string, p: zk.Widget, c: zk.Widget, cache: Record<string, unknown>): boolean {
+	for (let w: zk.Widget | undefined = c; w; w = w.parent)
 		if (p == w) //yes, c is a child of p
 			return !cache || c.isWatchable_(name, p, cache);
 	return false;
 }
 //Returns subset of xinfs that are visible and childrens of p
-function _visiChildSubset(name, xinfs, p, remove?): Node[] {
-	var found: Node[] = [], bindLevel = p.bindLevel,
-		cache = _visiEvts[name] && {}, pvisible;
-	if (p.isWatchable_) //in future, w might not be a widget
-		for (var j = xinfs.length; j--;) {
-			var xinf = xinfs[j],
+function _visiChildSubset(name: string, xinfs: WatchInfo[], p: zk.Object & {bindLevel?: number}, remove?: boolean): WatchInfo[] {
+	let found: WatchInfo[] = [], bindLevel = p.bindLevel,
+		cache = _visiEvts[name] ? {} : false, pvisible;
+	if (p instanceof zk.Widget) {//in future, w might not be a widget
+		for (let j = xinfs.length; j--;) {
+			const xinf = xinfs[j],
 				o = xinf[0],
-				diff = bindLevel > o.bindLevel;
+				diff = bindLevel ? bindLevel > o.bindLevel : false;
 			if (diff) //neither ancestor, nor this (nor sibling)
 				break;
 
 			if (!pvisible && cache) { //not cached yet
-				if (!(pvisible = _visible(name, p))) //check p first (since _visibleChild checks only o)
+				if (!(pvisible = _visible(name, p as never))) //check p first (since _visibleChild checks only o)
 					break; //p is NOT visible
 				cache[p.uuid] = true; //cache result to speed up _visiChild
 			}
 
-			if (_visibleChild(name, p, o, cache)) {
+			if (_visibleChild(name, p as never, o, cache)) {
 				if (remove)
 					xinfs.splice(j, 1);
 				found.unshift(xinf); //parent first
 			}
 		}
+	}
 	return found;
 }
-function _visiSubset(name, xinfs): Node[] {
+function _visiSubset(name: string, xinfs: WatchInfo[]): WatchInfo[] {
 	xinfs = xinfs.$clone(); //make a copy since unlisten might happen
 	if (_visiEvts[name])
 		for (var j = xinfs.length; j--;)
@@ -439,11 +439,11 @@ function _visiSubset(name, xinfs): Node[] {
 				xinfs.splice(j, 1);
 	return xinfs;
 }
-function _target(inf): zk.Widget {
+function _target(inf: zk.Widget | [zk.Widget, CallableFunction]): zk.Widget {
 	return Array.isArray(inf) ? inf[0] : inf;
 }
-function _fn(inf, o, name): (() => void) {
-	var fn = Array.isArray(inf) ? inf[1] : o[name];
+function _fn(inf, o: zk.Widget, name: string): CallableFunction {
+	const fn = (Array.isArray(inf) ? inf[1] : o[name]) as undefined | CallableFunction;
 	if (!fn)
 		throw (o.className || o) + ':' + name + ' not found';
 	return fn;
@@ -458,14 +458,15 @@ function _sync(): void {
 			wts.sort(_cmpLevel);
 	}
 }
-function _bindLevel(a): number {
-	return (a = a.bindLevel) == null || isNaN(a) ? -1 : a;
+function _bindLevel(a: {bindLevel?: number}): number {
+	let a1;
+	return (a1 = a.bindLevel) == null || isNaN(a1 as number) ? -1 : a1 as number;
 }
-function _cmpLevel(a, b): number {
+function _cmpLevel(a: WatchInfo, b: WatchInfo): number {
 	return _bindLevel(a[0]) - _bindLevel(b[0]);
 }
 zk._zsyncFns = _zsyncFns;
-export function _zsyncFns(name: string, org: unknown): void {
+export function _zsyncFns(name: string, org: zk.Object): void {
 	if (name == 'onSize' || name == 'onShow' || name == 'onHide') {
 		jq.zsync(org);
 		if (name == 'onSize')
@@ -475,30 +476,30 @@ export function _zsyncFns(name: string, org: unknown): void {
 		jq.doSyncScroll();
 }
 //invoke fns in the reverse order
-function _reversefns(fns, args): void {
+function _reversefns(fns: undefined | [CallableFunction, zk.Widget][], args: unknown[]): void {
 	if (fns)
 		//we group methods together if their parents are the same
 		//then we invoke them in the normal order (not reverse), s.t.,
 		//child invokes firsd, but also superclass invoked first (first register, first call if same object)
-		for (var j = fns.length, k = j - 1, i, f, oldp, newp; j >= 0;) {
+		for (var j = fns.length, k = j - 1, i: number, f: [CallableFunction, zk.Widget], oldp: undefined | zk.Widget, newp: undefined | zk.Widget; j >= 0;) {
 			if (--j < 0 || (oldp != (newp = fns[j][1].parent) && oldp)) {
 				for (i = j; ++i <= k;) {
 					f = fns[i];
-					f[0].call(f[1], ...args);
+					f[0].bind(f[1])(...args);
 				}
 				k = j;
 			}
 			oldp = newp;
 		}
 }
-function _fire(name, org, opts, vararg): void {
-	var wts = _watches[name];
+function _fire(name: string, org: zk.Object & {bindLevel?}, opts: EventOptions | undefined | unknown, vararg: IArguments): void {
+	const wts = _watches[name];
 	if (wts && wts.length) {
-		var down = opts && opts.down && org.bindLevel != null;
+		const down = opts && (opts as EventOptions).down && org.bindLevel != null;
 		if (down) _sync();
 
-		var args: unknown[] = [],
-			fns = opts && opts.reverse ? [] : undefined,
+		const args: unknown[] = [],
+			fns = opts && (opts as EventOptions).reverse ? [] : undefined,
 			gun = new ZWatchController(name,
 				down ? _visiChildSubset(name, wts, org) : _visiSubset(name, wts),
 				args, org, fns);
@@ -506,12 +507,12 @@ function _fire(name, org, opts, vararg): void {
 		for (var j = 2, l = vararg.length; j < l;) //skip name and origin
 			args.push(vararg[j++]);
 
-		if (opts && opts.timeout >= 0)
+		if (opts && (opts as EventOptions).timeout != null && (opts as EventOptions).timeout! >= 0)
 			setTimeout(function () {
 				gun.fire();
 				_reversefns(fns, args);
 				zk._zsyncFns(name, org);
-			}, opts.timeout);
+			}, (opts as EventOptions).timeout);
 		else {
 			gun.fire();
 			_reversefns(fns, args);
@@ -521,12 +522,12 @@ function _fire(name, org, opts, vararg): void {
 		zk._zsyncFns(name, org);
 }
 //Feature ZK-1672: check if already listen to the same listener
-function _isListened(wts, inf): boolean {
+function _isListened(wts: unknown[] | undefined, inf: unknown): boolean {
 	if (wts) {
 		if (Array.isArray(inf)) {
-			var isListen = false;
-			for (var i = wts.length; i > 0; i--) {
-				if (Array.isArray(wts[i]) && wts[i].$equals(inf)) {
+			let isListen = false;
+			for (let i = wts.length; i > 0; i--) {
+				if (Array.isArray(wts[i]) && (wts[i] as []).$equals(inf)) {
 					isListen = true;
 					break;
 				}
@@ -564,7 +565,7 @@ zWatch.listen({onSend: ml})
 
 <p>The watch listener is added in the parent-first sequence if it has a method called getParent, or a member called parent (a typical example is {@link Widget}). Thus, the parent will be called before its children, if they are all registered to the same action.
  */
-export const zWatch: ZWatch & {onBindLevelMove: CallableFunction} = {
+export class zWatch {
 	/** Registers watch listener(s). For example,
 <pre><code>
 zWatch.listen({
@@ -575,14 +576,15 @@ zWatch.listen({
 </code></pre>
 	* <p>As shown above, each key of the infs map is the watch name, and each value is the target against which the watch listener will be called, or a two-element array, where the first element is the target and the second the listener function. For example, zWatch({onSize: foo}) will cause foo.onSize to be called when onSize is fired. The arguments passed are the same as {@link #fire}/{@link #fireDown}.
 	* <p>Note: the order is parent-first (if the watch has a method called getParent or a member called parent), so the invocation ({@link #fire}) is from the parent to the child if both are registered.
-	* @param Map infs a map of the watch listeners. Each key of the map is the the watch name, and each value is the target or a two-element array, where the first element is the target and the second the listener function. It assumes the target implements the method with the same name as the watch name. In addition, when the method is called, this references to the target.
+	* @param Map infs a map of the watch listeners. Each key of the map is the watch name, and each value is the target or a two-element array, where the first element is the target and the second the listener function. It assumes the target implements the method with the same name as the watch name. In addition, when the method is called, this references to the target.
 	*/
-	listen(infs: Partial<ClientActivity>): void {
-		for (var name in infs) {
-			var wts = _watches[name],
-				inf = infs[name],
+	static listen(infs: Partial<ClientActivity>): void {
+		for (const name in infs) {
+			const wts = _watches[name],
+				inf = infs[name] as zk.Widget | [zk.Widget, CallableFunction],
 				o = _target(inf),
-				xinf = [o, [inf]];
+				xinf: WatchInfo = [o, [inf]];
+
 			if (wts) {
 				var bindLevel = o.bindLevel;
 				if (bindLevel != null) {
@@ -616,15 +618,15 @@ zWatch.listen({
 				_watches[name] = [xinf];
 			}
 		}
-	},
+	}
 	/** Removes watch listener(s).
 	 * @param Map infs a map of watch listeners. Each key is the watch name, and each value is the target or or a two-element array, where the first element is the target and the second the listener function.
 	 */
-	unlisten(infs: Partial<ClientActivity>): void {
+	static unlisten(infs: Partial<ClientActivity>): void {
 		for (var name in infs) {
 			var wts = _watches[name];
 			if (wts) {
-				var inf = infs[name],
+				const inf = infs[name] as zk.Widget | [zk.Widget, CallableFunction],
 					o = _target(inf);
 				for (var j = wts.length; j--;)
 					// ZK-3605 might failed to remove listener because we remove in reverse order
@@ -637,13 +639,13 @@ zWatch.listen({
 					}
 			}
 		}
-	},
+	}
 	/** Removes all listener of the specified watch.
 	 * @param String name the watch name, such as onShow
 	 */
-	unlistenAll(name): void {
+	static unlistenAll(name: keyof ClientActivity): void {
 		delete _watches[name];
-	},
+	}
 	/** Fires an watch that invokes all listeners of the watch.
 	 * <p>For example, zWatch.fire('onX', null, 'a', 123) will cause
 	 * ml.onX(ctl, 'a', 123) being called -- assuming ml is a listener of onX.
@@ -670,7 +672,7 @@ onX: function (ctl) {
 }
 </code></pre>
 	* @param String name the watch name, such as onFloatUp.
-	* @param Object origin [optional] the origin (optional).
+	* @param Object origin the origin (optional).
 	* It could be anything and it will become the origin member of the special controller (the first argument of the listener)
 	* @param Map opts [optional] options:
 	* <ul>
@@ -681,9 +683,9 @@ onX: function (ctl) {
 	* <li>timeout - how many miliseconds to wait before calling the listeners. If Omitted or negative, the listeners are invoked immediately.</li>
 	* @param Object... vararg any number of arguments to pass to the listener. They will become the second, third and following arguments when the listener is called.
 	*/
-	fire(name: string, org?: unknown, opts?: Partial<FireOptions>): void {
+	static fire(name: string, org: zk.Object, opts?: Partial<FireOptions> | unknown): void {
 		_fire(name, org, opts, arguments);
-	},
+	}
 	/** Fires an watch but invokes only the listeners that are a descendant of the specified origin.
 	 * <p>By descendant we mean the watch listener is the same or an descendant of the specified origin. In other words, if the specified origin is not the ancestor of a watch listener, the listener won't be called.
 	 *
@@ -719,7 +721,7 @@ onX: function (ctl) {
 </code></pre>
 	* <p>It is useful if a listener depends some of its children's listeners to complete (notice that the parent's listener is, by default, called first). For example, when onSize of a widget is called, it might want some of its children's onSiz to be called first (so he can have their updated size).
 	* @param String name the watch name, such as onShow.
-	* @param Object origin [optional] the reference object used to decide what listeners to invoke (required). Notice, unlike {@link #fire}, it cannot be null. It will become the origin member of the controller (i.e., the first argument when the listener is called).
+	* @param Object origin the reference object used to decide what listeners to invoke (required). Notice, unlike {@link #fire}, it cannot be null. It will become the origin member of the controller (i.e., the first argument when the listener is called).
 	* @param Map opts [optional] options:
 	* <ul>
 	*<li>reverse - whether to reverse the execution order.
@@ -729,11 +731,11 @@ onX: function (ctl) {
 	* <li>timeout - how many miliseconds to wait before calling the listeners. If Omitted or negative, the listeners are invoked immediately.</li></ul>
 	* @param Object... vararg any number of arguments to pass to the listener. They will become the third, forth, and following arguments when the listener is called.
 	*/
-	fireDown(name: string, org?: zk.Object, opts?: Partial<FireOptions>, ...vararg: unknown[]): void {
+	static fireDown(name: string, org: zk.Object, opts?: Partial<FireOptions>, ...vararg: unknown[]): void {
 		_fire(name, org, zk.copy(opts, {down: true}), arguments);
-	},
-	onBindLevelMove(): void { //internal
+	}
+	static onBindLevelMove(): void { //internal
 		_dirty = true;
 	}
-};
+}
 zWatch.listen({onBindLevelMove: zWatch});

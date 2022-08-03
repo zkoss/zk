@@ -38,8 +38,6 @@ export class Submit extends zul.wgt.Button {
 		this._tmp = setInterval(t, 800);
 		this.setDisabled(true);
 		this.nextSibling.setDisabled(true);
-		if (zk.ie < 11)
-			this.$f('btns')!.rerender();
 	}
 
 	revert(): void {
@@ -47,7 +45,5 @@ export class Submit extends zul.wgt.Button {
 		this._tmp = undefined;
 		this.setDisabled(false);
 		this.nextSibling.setDisabled(false);
-		if (zk.ie < 11)
-			this.$f('btns')!.rerender();
 	}
 }

@@ -1,6 +1,9 @@
 /* eslint @typescript-eslint/no-require-imports: 0,
 			 no-undef: 0,
-		   @typescript-eslint/no-var-requires: 0*/
+		   @typescript-eslint/no-var-requires: 0,
+		   @typescript-eslint/no-unsafe-member-access: 0,
+		   @typescript-eslint/no-unsafe-assignment: 0
+*/
 /* index.ts
 
 	Purpose:
@@ -30,7 +33,7 @@ let oldZK = window.zk; // setting from Java side
 window.zk = zk;
 zk.copy(window.zk, oldZK);
 
-zk.JQZK = require('./dom').JQZK;
+require('./dom');
 window.zjq = require('./anima').JQZKEx;
 if (!window.jQuery) {
 	window.$ = window.jQuery = jq;

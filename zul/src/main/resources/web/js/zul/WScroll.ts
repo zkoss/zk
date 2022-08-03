@@ -159,21 +159,21 @@ function endeffect(dg: zk.Draggable): void {
 		end = dg._end;
 		if (move > end)
 			move = end;
-		jq(dg.node!).animate({top: move + 'px'}, 400, 'swing');
+		jq(dg.node).animate({top: move + 'px'}, 400, 'swing');
 
 	} else {
 		move = zk.parseInt(dg._epos!.style.left);
 		end = dg._end;
 		if (move > end)
 			move = end;
-		jq(dg.node!).animate({left: move + 'px'}, 400, 'swing');
+		jq(dg.node).animate({left: move + 'px'}, 400, 'swing');
 
 	}
 	ctrl.opts.startStep = dg._steps;
 	ctrl._syncButtonStatus();
-	var $jq = jq(dg._epos!),
+	var $jq = jq(dg._epos),
 		old = $jq.css('opacity'); // fix old IE version
-	jq(dg._epos!).delay(300).fadeOut(500).css('opacity', old);
+	jq(dg._epos).delay(300).fadeOut(500).css('opacity', old);
 }
 function ignoredrag(dg: zk.Draggable, p: zk.Offset, evt: zk.Event): boolean {
 	return (dg.control as unknown as WScroll).edragBody != evt.domTarget;
@@ -408,7 +408,7 @@ export class WScroll extends zk.Object {
 			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			// @ts-expect-error: zk.Event is not completely compatible with JQueryMousewheelEventObject
 			jq(this.control).mousewheel(this._mousewheelY.bind(this));
-		} else if (!(zk.ie < 11) || !zk.opera) { // ie and opera unsupported
+		} else if (!zk.opera) { // ie and opera unsupported
 			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			// @ts-expect-error: zk.Event is not completely compatible with JQueryMousewheelEventObject
 			jq(this.control).mousewheel(this._mousewheelX.bind(this));
@@ -428,7 +428,7 @@ export class WScroll extends zk.Object {
 			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			// @ts-expect-error: unmousewheel expects 0 arguments, but got 1
 			jq(this.control).unmousewheel(this._mousewheelY.bind(this));
-		else if (!(zk.ie < 11) || !zk.opera) // ie and opera unsupported
+		else if (!zk.opera) // ie and opera unsupported
 			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			// @ts-expect-error: unmousewheel expects 0 arguments, but got 1
 			jq(this.control).unmousewheel(this._mousewheelX.bind(this));
@@ -443,7 +443,7 @@ export class WScroll extends zk.Object {
 	}
 
 	_mouseOver(evt: zk.Event): void {
-		var cls = evt.target!.className,
+		var cls = evt.target.className,
 			index = cls.lastIndexOf('-'),
 			key = cls.substring(index + 1),
 			$drag = jq(this.edrag);
@@ -467,7 +467,7 @@ export class WScroll extends zk.Object {
 	}
 
 	_mouseOut(evt: zk.Event): void {
-		var cls = evt.target!.className,
+		var cls = evt.target.className,
 			$drag = jq(this.edrag);
 		$drag.removeClass(cls + '-over');
 		if ($drag.hasClass(cls + '-clk')) {
@@ -476,11 +476,11 @@ export class WScroll extends zk.Object {
 	}
 
 	_mouseUp(evt: zk.Event): void {
-		jq(this.edrag).removeClass(evt.target!.className + '-clk');
+		jq(this.edrag).removeClass(evt.target.className + '-clk');
 	}
 
 	_mouseDown(evt: zk.Event): void {
-		var cls = evt.target!.className,
+		var cls = evt.target.className,
 			index = cls.lastIndexOf('-'),
 			key = cls.substring(index + 1),
 			$drag = jq(this.edrag);
@@ -723,7 +723,7 @@ export class WScroll extends zk.Object {
 			constraint: this._isVer ? 'vertical' : 'horizontal',
 			snap: snap,
 			starteffect: starteffect,
-			zIndex: 12000,
+			zIndex: '12000',
 			ignoredrag: ignoredrag,
 			endeffect: endeffect
 		});
