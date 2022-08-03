@@ -320,15 +320,15 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	/** A shortcut of <code>' cellpadding="0" cellspacing="0" border="0"'</code>.
 	 * @type String
 	 */
-	static cellps0: ' cellpadding="0" cellspacing="0" border="0"';
+	static cellps0 = ' cellpadding="0" cellspacing="0" border="0"';
 	/** A shortcut of <code>'&lt;img style="height:0;width:0"/&gt;'</code>.
 	 * @type String
 	 */
-	static img0: '<img style="height:0;width:0" aria-hidden="true"/>';
+	static img0 = '<img style="height:0;width:0" aria-hidden="true"/>';
 	/** A shortcut of <code>'&lt;i style="height:0;width:0"/&gt;'</code>.
 	 * @type String
 	 */
-	static i0: '<i style="height:0;width:0"></i>';
+	static i0 = '<i style="height:0;width:0"></i>';
 	/** Returns today.
 	 * @param boolean full if true, returns the full time,
 	 * else only returns year, month, and day.
