@@ -2223,4 +2223,7 @@ declare namespace _zk {
 	export const TDYS: number;
 	export const YDELTA: number;
 }
+// export first for following js to use
+let oldZK = window.zk; // setting from Java side
 window.zk = zk;
+zk.copy(window.zk, oldZK);
