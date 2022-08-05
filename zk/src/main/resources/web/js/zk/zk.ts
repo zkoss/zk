@@ -22,8 +22,8 @@ export type DataHandler = (wgt: zk.Widget, val: unknown) => void;
 
 let _zkf;
 
-function _zk(sel?: string | Node | JQuery | JQuery.Event | zk.Event | zk.Widget | null): zk.JQZK { // eslint-disable-line zk/noNull
-	return jq(sel, _zk as ZKStatic).zk;
+function _zk(sel?: string | Node | JQuery | JQuery.Event | zk.Event | zk.Widget | null): zjq { // eslint-disable-line zk/noNull
+	return jq(sel, _zk).zk;
 }
 
 export interface AjaxURIOptions {
@@ -34,8 +34,7 @@ export interface AjaxURIOptions {
 }
 // Note: we cannot use Object.assign() here, because some prototype property may not be copied.
 _zk.copy = function<T, U> (dst: T, src: U, backup?: Record<string, unknown>): T & U {
-	// eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-	dst = dst || ({} as T);
+	dst ||= {} as T;
 	for (var p in src) {
 		if (backup) backup[p as string] = dst[p as string];
 		dst[p as string] = src[p];
@@ -1999,10 +1998,13 @@ if (klass1.isAssignableFrom(klass2)) {
 	}
 }
 _zk.Object = ZKObject;
-export class ZKClass extends ZKObject {
-	declare superclass;
-} //regClass() requires zk.Class
-_zk.Class = ZKClass;
+namespace _zk {
+	export type Object = ZKObject;
+	// This namespace is not "declared". Thus, `Class` will be assigned to `_zk` automatically.
+	export class Class extends ZKObject {
+		declare superclass;
+	} //regClass() requires zk.Class
+}
 
 //error box//
 var _erbx, _errcnt = 0;
@@ -2067,101 +2069,67 @@ _zk._Erbx = class _Erbx extends ZKObject { //used in HTML tags
 	}
 };
 
-const zk = _zk as typeof _zk & ZKVars
-	& typeof import('./anima')
-	& typeof import('./au')
-	& typeof import('./dom')
-	& typeof import('./drag')
-	& typeof import('./effect')
-	& typeof import('./evt')
-	& typeof import('./math')
-	& typeof import('./mount')
-	& typeof import('./pkg').pkg
-	& typeof import('./widget')
-	& typeof import('./zswipe');
-export default zk;
+export default _zk;
 
 export type $void = typeof _zk.$void;
 
-interface ZKVars {
-	mm: typeof import('moment');
-	eff: typeof import('./effect').default;
-	gapi: typeof import('./gapi/gapi');
-	wgt: typeof import('./wgt/WidgetInfo');
-	xml: typeof import('./xml/utl');
-	zuml: typeof import('./zuml/Parser');
-	fmt: typeof import('./fmt/msgfmt')
-		& typeof import('./fmt/numfmt')
-		& typeof import('@zul/db/datefmt');
-	canvas: typeof import('./canvas/canvas');
-	cpsp: typeof import('./cpsp/serverpush');
-
+declare namespace _zk {
 	// ./au
-	_isReloadingInObsolete?: boolean;
-	timerAlive?: boolean;
-	portlet2Data?: Record<string, {namespace: string; resourceURL: string}>;
-	ausending: boolean;
-	xhrWithCredentials: boolean;
-	isTimeout: boolean;
-	visibilitychange: boolean;
-	_focusByClearBusy: boolean;
+	export let _isReloadingInObsolete: boolean;
+	export let timerAlive: boolean;
+	export let portlet2Data: Record<string, { namespace: string; resourceURL: string }> | undefined;
+	export let ausending: boolean;
+	export let xhrWithCredentials: boolean;
+	export let isTimeout: boolean;
+	export let visibilitychange: boolean;
+	export let _focusByClearBusy: boolean;
 
 	// ./mount
-	beforeUnload(fn: () => string | undefined, opts?: {remove: boolean}): void;
-	feature: {
+	export function beforeUnload(fn: () => string | undefined, opts?: {remove: boolean}): void;
+	export let feature: {
 		standard?: boolean;
 		pe?: boolean;
 		ee?: boolean;
 	};
-	clientinfo?: Record<string, unknown>;
-	pfmeter: boolean;
-	_crWgtUuids: string[];
-	focusBackFix?: boolean;
-	scriptErrorHandlerEnabled?: boolean;
-	scriptErrorHandlerRegistered?: boolean;
-	scriptErrorHandler?: ((evt) => void);
-	rmDesktoping?: boolean;
-	keepDesktop?: boolean;
-	skipBfUnload?: boolean;
-	confirmClose?: string;
-	
-	 // ./bookmark
-	bmk: {
-		checkBookmark(): void;
-		bookmark(nm: string, replace: boolean): void;
-		onIframeLoaded(src: string): void;
-		onURLChange(): void;
-	};
+	export let clientinfo: Record<string, unknown> | undefined;
+	export let pfmeter: boolean;
+	export let _crWgtUuids: string[];
+	// eslint-disable-next-line zk/preferStrictBooleanType
+	export let focusBackFix: boolean | undefined; // Must be optional (have undefined as type) do be deleted.
+	export let scriptErrorHandlerEnabled: boolean;
+	export let scriptErrorHandlerRegistered: boolean;
+	export let scriptErrorHandler: ((evt) => void) | undefined;
+	export let rmDesktoping: boolean;
+	export let keepDesktop: boolean;
+	export let skipBfUnload: boolean;
+	export let confirmClose: string | undefined;
 
 	// ./drag
-	dragging?: boolean;
+	export let dragging: boolean;
 	
 	// ./widget
-	timeout: number;
-	groupingDenied?: boolean;
-	progPos?: string;
-	historystate: {
-		enabled: boolean;
-		onPopState(event: PopStateEvent): void;
-		register(): void;
-	};
-	_cfByMD?: boolean;
-	cfrg?: [number, number];
-	_avoidRod?: boolean;
+	export let timeout: number;
+	export let groupingDenied: boolean;
+	export let progPos: string | undefined;
+	export let _cfByMD: boolean;
+	export let cfrg: [number, number] | undefined;
+	// eslint-disable-next-line zk/preferStrictBooleanType
+	export let _avoidRod: boolean | undefined;
 
 	// ./dom
-	_prevFocus?: zk.Widget;
+	export let _prevFocus: zk.Widget | undefined;
 
 	// ./effect
-	useStackup?: string | boolean;
+	export let useStackup: string | boolean | undefined;
 
 	// zul.grid.Row.prototype.setStyle
-	_rowTime?: number;
+	export let _rowTime: number | undefined;
 
 	// zul.Imagemap
-	IMAGEMAP_DONE_URI?: string;
+	export let IMAGEMAP_DONE_URI: string | undefined;
+
 	// zul/dom
-	themeName?: string;
+	export let themeName: string | undefined;
 }
 
 declare namespace _zk {
@@ -2219,7 +2187,5 @@ declare namespace _zk {
 	export const TDYS: number;
 	export const YDELTA: number;
 }
-// export first for following js to use
-let oldZK = window.zk; // setting from Java side
-window.zk = zk;
-zk.copy(window.zk, oldZK);
+
+window.zk = _zk.copy(_zk, window.zk); // setting from Java side

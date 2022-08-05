@@ -13,11 +13,11 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 export interface SlideOptions {
-	anchor: string;
-	easing: string;
-	duration: number;
-	beforeAnima: (self: zk.JQZK) => void;
-	afterAnima: (node: HTMLElement) => void; // zul/inp/ComboWidget
+	anchor?: string;
+	easing?: string;
+	duration?: number;
+	beforeAnima?(self: zk.JQZK): void;
+	afterAnima?(node: HTMLElement): void; // zul/inp/ComboWidget
 }
 
 export interface Dimension {
@@ -2470,7 +2470,7 @@ You can add your own labels by puttingit to <code>msgzul</code>.
 </td></tr>
 </table>
 	 */
-	alert(msg: string, opts?: Partial<zk.AlertOptions>): void {
+	alert(msg: string, opts?: zk.AlertOptions): void {
 		zk.alerting = true;
 		try {
 			alert(msg); // eslint-disable-line no-alert

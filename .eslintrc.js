@@ -296,13 +296,7 @@ module.exports = {
         ],
         '@typescript-eslint/no-explicit-any': 'error',
         '@typescript-eslint/no-implied-eval': 'warn',
-        '@typescript-eslint/no-namespace': [
-          'error',
-          {
-            'allowDeclarations': true,
-            'allowDefinitionFiles': true
-          }
-        ],
+        '@typescript-eslint/no-namespace': 'off',
         '@typescript-eslint/no-non-null-asserted-nullish-coalescing': 'off',
         '@typescript-eslint/no-non-null-asserted-optional-chain': 'off',
         '@typescript-eslint/no-non-null-assertion': 'off',

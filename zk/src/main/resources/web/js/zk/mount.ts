@@ -12,70 +12,72 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	This program is distributed under LGPL Version 2.1 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
-//define a package and returns the package info (used in WpdExtendlet)
-window.zkpi = function (nm: string, wv: boolean): Record<string, unknown> | undefined {
-	return zk.isLoaded(nm) ? undefined : {n: nm, p: zk.$package(nm, false, wv)};
-};
-
-//ZK JSP: page creation (backward compatible)
-window.zkpb = function (pguid: string, dtid: string, contextURI: string, updateURI: string, resourceURI: string, reqURI: string, props: Record<string, string>): void {
-	if (props === undefined && typeof reqURI !== 'string') { //ZK-4827: for backward compatible (other addons, ex. zuljsp)
-		props = reqURI;
-		reqURI = resourceURI;
-		resourceURI = updateURI;
+export namespace mount_global {
+	//define a package and returns the package info (used in WpdExtendlet)
+	export function zkpi(nm: string, wv: boolean): Record<string, unknown> | undefined {
+		return zk.isLoaded(nm) ? undefined : {n: nm, p: zk.$package(nm, false, wv)};
 	}
-	window.zkx([0, pguid,
-		Object.assign(props ?? {}, {
-			dt: dtid,
-			cu: contextURI,
-			uu: updateURI,
-			rsu: resourceURI,
-			ru: reqURI
-		}), {}, []]);
-};
 
-//ZK JSP (useless; backward compatible)
-window.zkpe = zk.$void;
+	//ZK JSP: page creation (backward compatible)
+	export function zkpb(pguid: string, dtid: string, contextURI: string, updateURI: string, resourceURI: string, reqURI: string, props: Record<string, string>): void {
+		if (props === undefined && typeof reqURI !== 'string') { //ZK-4827: for backward compatible (other addons, ex. zuljsp)
+			props = reqURI;
+			reqURI = resourceURI;
+			resourceURI = updateURI;
+		}
+		window.zkx([0, pguid,
+			Object.assign(props ?? {}, {
+				dt: dtid,
+				cu: contextURI,
+				uu: updateURI,
+				rsu: resourceURI,
+				ru: reqURI
+			}), {}, []]);
+	}
 
-//Initializes with version and options
-window.zkver = function (ver: string, build: string, ctxURI: string, updURI: string, modVers: Record<string, string>, opts: Record<string, unknown>): void {
-	zk.version = ver;
-	zk.build = build;
-	zk.contextURI = ctxURI;
-	zk.updateURI = updURI;
+	//ZK JSP (useless; backward compatible)
+	export const zkpe = zk.$void;
 
-	for (var nm in modVers)
-		zk.setVersion(nm, modVers[nm]);
+	//Initializes with version and options
+	export function zkver(ver: string, build: string, ctxURI: string, updURI: string, modVers: Record<string, string>, opts: Record<string, unknown>): void {
+		zk.version = ver;
+		zk.build = build;
+		zk.contextURI = ctxURI;
+		zk.updateURI = updURI;
 
-	if (!zk.feature)
-		zk.feature = {standard: true};
-	window.zkopt(opts);
-};
+		for (var nm in modVers)
+			zk.setVersion(nm, modVers[nm]);
 
-//Define a mold
-window.zkmld = function (wgtcls: Record<string, unknown>, molds: Record<string, (() => void)>): void {
-	if (!wgtcls.$oid) {
-		zk.afterLoad(function () {
-			window.zkmld(wgtcls, molds);
+		if (!zk.feature)
+			zk.feature = {standard: true};
+		window.zkopt(opts);
+	}
+
+	//Define a mold
+	export function zkmld(wgtcls: Record<string, unknown>, molds: Record<string, (() => void)>): void {
+		if (!wgtcls.$oid) {
+			zk.afterLoad(function () {
+				window.zkmld(wgtcls, molds);
+			});
+			return;
+		}
+
+		var ms = wgtcls['molds'] = {};
+		for (var nm in molds) {
+			var fn = molds[nm];
+			ms[nm] = typeof fn == 'function' ? fn : fn[0]['molds'][fn[1]];
+		}
+	}
+
+	//Run Ajax-as-a-service's main
+	export function zkamn(pkg: string, fn: (() => void)): void {
+		zk.load(pkg, function () {
+			setTimeout(function () {
+				zk.afterMount(fn);
+			}, 20);
 		});
-		return;
 	}
-
-	var ms = wgtcls['molds'] = {};
-	for (var nm in molds) {
-		var fn = molds[nm];
-		ms[nm] = typeof fn == 'function' ? fn : fn[0]['molds'][fn[1]];
-	}
-};
-
-//Run Ajax-as-a-service's main
-window.zkamn = function (pkg: string, fn: (() => void)): void {
-	zk.load(pkg, function () {
-		setTimeout(function () {
-			zk.afterMount(fn);
-		}, 20);
-	});
-};
+}
 
 interface Pcai {
 	s: number;
@@ -508,133 +510,127 @@ function breathe(fn: CallableFunction): boolean {
 	return false;
 }
 
-//define a desktop
-window.zkdt = zkdt;
-export function zkdt(dtid?: string, contextURI?: string, updateURI?: string, resourceURI?: string, reqURI?: string): zk.Desktop {
-	var dt = zk.Desktop.$(dtid);
-	if (dt == null) {
-		dt = new zk.Desktop(dtid!, contextURI, updateURI, resourceURI, reqURI);
-		if (zk.pfmeter) zAu._pfrecv(dt, dtid);
-	} else {
-		if (updateURI != null) dt.updateURI = updateURI;
-		if (resourceURI != null) dt.resourceURI = resourceURI;
-		if (contextURI != null) dt.contextURI = contextURI;
-		if (reqURI != null) dt.requestPath = reqURI;
-	}
-	_mntctx['curdt'] = dt;
-	return dt;
-}
-
-//widget creations
-// wi's index meaning
-// wi[0] = widget type
-// wi[1] = uuid
-// wi[2] = widget properties
-// wi[3] = shadow properties - since ZK 8.0.0
-// wi[4] = children
-// wi[5] = mold
-window.zkx = zkx;
-export function zkx(wi?: WidgetInfo, extra?: ExtraInfo, aucmds?: AuCmds, js?: string): void { //extra is either delay (BL) or [stub, filter] (AU)
-	zk.mounting = true;
-
-	try {
-		if (js) jq.globalEval(js);
-
-		var mount = mtAU, infs = _crInfAU0, delay, owner: string | zk.Widget | undefined;
-		if (!extra || !extra.length) { //if 2nd argument not stub, it must be BL (see zkx_)
-			delay = extra;
-			if (wi) {
-				extra = aucmds;
-				aucmds = undefined;
-			}
-			mount = mtBL;
-			infs = _crInfBL0;
-		} //else assert(!aucmds); //no aucmds if AU
-
-		if (wi) {
-			if (wi[0] === 0) { //page
-				var props = wi[2],
-					dtid = zk.cut(props, 'dt') as string | undefined,
-					cu = zk.cut(props, 'cu') as string | undefined,
-					uu = zk.cut(props, 'uu') as string | undefined,
-					rsu = zk.cut(props, 'rsu') as string | undefined,
-					ru = zk.cut(props, 'ru') as string | undefined;
-				window.zkdt(dtid, cu, uu, rsu, ru);
-				if (owner = zk.cut(props, 'ow') as string)
-					owner = zk.Widget.$(owner) as zk.Widget;
-			}
-
-			infs.push([_curdt(), wi, _mntctx.bindOnly, owner as zk.Widget | undefined, extra]);
-			if (!zk._crWgtUuids) zk._crWgtUuids = [];
-			zk._crWgtUuids.push(wi[1]);
-			//extra is [stub-fn, filter] if AU,  aucmds if BL
-			mountpkg(infs);
+export namespace mount_global {
+	//define a desktop
+	export function zkdt(dtid?: string, contextURI?: string, updateURI?: string, resourceURI?: string, reqURI?: string): zk.Desktop {
+		var dt = zk.Desktop.$(dtid);
+		if (dt == null) {
+			dt = new zk.Desktop(dtid!, contextURI, updateURI, resourceURI, reqURI);
+			if (zk.pfmeter) zAu._pfrecv(dt, dtid);
+		} else {
+			if (updateURI != null) dt.updateURI = updateURI;
+			if (resourceURI != null) dt.resourceURI = resourceURI;
+			if (contextURI != null) dt.contextURI = contextURI;
+			if (reqURI != null) dt.requestPath = reqURI;
 		}
-
-		if (delay)
-			setTimeout(mount, 0); //Bug 2983792 (delay until non-defer script evaluated)
-		else if (!breathe(mount)) //give the browser a chance to breathe
-			mount();
-
-		doAuCmds(aucmds);
-	} catch (e) {
-		zk.mounting = false;
-		zk.error('Failed to mount: ' + ((e as Error).message ?? e));
-		setTimeout(function () {
-			throw e;
-		}, 0);
+		_mntctx['curdt'] = dt;
+		return dt;
 	}
-}
 
-//widget creation called by au.js
-//args: [wi] (a single element array containing wi)
-window.zkx_ = zkx_;
-export function zkx_(args: ArrayLike<unknown>, stub: unknown, filter?: CallableFunction): void {
-	_t0 = Date.now(); //so breathe() won't do unncessary delay
-	(args as unknown[])[1] = [stub, filter]; //assign stub as 2nd argument (see zkx)
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	window.zkx(...args as unknown as []); //args[2] (aucmds) must be null
-}
+	//widget creations
+	// wi's index meaning
+	// wi[0] = widget type
+	// wi[1] = uuid
+	// wi[2] = widget properties
+	// wi[3] = shadow properties - since ZK 8.0.0
+	// wi[4] = children
+	// wi[5] = mold
+	export function zkx(wi?: WidgetInfo, extra?: ExtraInfo, aucmds?: AuCmds, js?: string): void { //extra is either delay (BL) or [stub, filter] (AU)
+		zk.mounting = true;
 
-//Run AU commands (used only with ZHTML)
-window.zkac = zkac;
-export function zkac(): void {
-	doAuCmds(arguments as never);
-}
+		try {
+			if (js) jq.globalEval(js);
 
-//mount and zkx (BL)
-window.zkmx = zkmx;
-export function zkmx(): void {
-	window.zkmb();
-	try {
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-ignore
-		zkx.call(window, ...arguments);
-	} finally {
-		window.zkme();
+			var mount = mtAU, infs = _crInfAU0, delay, owner: string | zk.Widget | undefined;
+			if (!extra || !extra.length) { //if 2nd argument not stub, it must be BL (see zkx_)
+				delay = extra;
+				if (wi) {
+					extra = aucmds;
+					aucmds = undefined;
+				}
+				mount = mtBL;
+				infs = _crInfBL0;
+			} //else assert(!aucmds); //no aucmds if AU
+
+			if (wi) {
+				if (wi[0] === 0) { //page
+					var props = wi[2],
+						dtid = zk.cut(props, 'dt') as string | undefined,
+						cu = zk.cut(props, 'cu') as string | undefined,
+						uu = zk.cut(props, 'uu') as string | undefined,
+						rsu = zk.cut(props, 'rsu') as string | undefined,
+						ru = zk.cut(props, 'ru') as string | undefined;
+					window.zkdt(dtid, cu, uu, rsu, ru);
+					if (owner = zk.cut(props, 'ow') as string)
+						owner = zk.Widget.$(owner) as zk.Widget;
+				}
+
+				infs.push([_curdt(), wi, _mntctx.bindOnly, owner as zk.Widget | undefined, extra]);
+				if (!zk._crWgtUuids) zk._crWgtUuids = [];
+				zk._crWgtUuids.push(wi[1]);
+				//extra is [stub-fn, filter] if AU,  aucmds if BL
+				mountpkg(infs);
+			}
+
+			if (delay)
+				setTimeout(mount, 0); //Bug 2983792 (delay until non-defer script evaluated)
+			else if (!breathe(mount)) //give the browser a chance to breathe
+				mount();
+
+			doAuCmds(aucmds);
+		} catch (e) {
+			zk.mounting = false;
+			zk.error('Failed to mount: ' + ((e as Error).message ?? e));
+			setTimeout(function () {
+				throw e;
+			}, 0);
+		}
 	}
-}
 
-//begin of mounting
-window.zkmb = zkmb;
-export function zkmb(bindOnly?: boolean): void {
-	_mntctx.bindOnly = bindOnly;
-	var t = 390 - (Date.now() - _t0);
-	zk.startProcessing(t > 0 ? t : 0);
-}
+	//widget creation called by au.js
+	//args: [wi] (a single element array containing wi)
+	export function zkx_(args: ArrayLike<unknown>, stub: unknown, filter?: CallableFunction): void {
+		_t0 = Date.now(); //so breathe() won't do unncessary delay
+		(args as unknown[])[1] = [stub, filter]; //assign stub as 2nd argument (see zkx)
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		window.zkx(...args as unknown as []); //args[2] (aucmds) must be null
+	}
 
-//end of mounting
-window.zkme = zkme;
-export function zkme(): void {
-	_mntctx['curdt'] = undefined;
-	_mntctx['bindOnly'] = false;
-}
+	//Run AU commands (used only with ZHTML)
+	export function zkac(): void {
+		doAuCmds(arguments as never);
+	}
 
-// window scope
-// register data-attributres handler (since 8.0.0
-window.zkdh = zkdh;
-export function zkdh(name: string, script: string): void {
-	zk.addDataHandler('data-' + name, script);
+	//mount and zkx (BL)
+	export function zkmx(): void {
+		window.zkmb();
+		try {
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+			// @ts-ignore
+			zkx.call(window, ...arguments);
+		} finally {
+			window.zkme();
+		}
+	}
+
+	//begin of mounting
+	export function zkmb(bindOnly?: boolean): void {
+		_mntctx.bindOnly = bindOnly;
+		var t = 390 - (Date.now() - _t0);
+		zk.startProcessing(t > 0 ? t : 0);
+	}
+
+	//end of mounting
+	export function zkme(): void {
+		_mntctx['curdt'] = undefined;
+		_mntctx['bindOnly'] = false;
+	}
+
+	// window scope
+	// register data-attributres handler (since 8.0.0
+	export function zkdh(name: string, script: string): void {
+		zk.addDataHandler('data-' + name, script);
+	}
 }
 
 //Event Handler//
@@ -1034,3 +1030,5 @@ jq(function () {
 	//clean up the runonce script. otherwise, it might be run again if
 	//the script element is moved
 }); //jq()
+
+zk.copy(window, mount_global);
