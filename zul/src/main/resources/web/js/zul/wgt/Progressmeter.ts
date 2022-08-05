@@ -62,7 +62,7 @@ export class Progressmeter extends zul.Widget {
 
 		if (o !== indeterminate || (opts && opts.force)) {
 			if (this.$n()) {
-				jq(this.$n()!).toggleClass(this.$s('indeterminate'), indeterminate);
+				jq(this.$n()).toggleClass(this.$s('indeterminate'), indeterminate);
 			}
 		}
 

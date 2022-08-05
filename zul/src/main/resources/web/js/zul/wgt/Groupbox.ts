@@ -230,15 +230,15 @@ export class Groupbox extends zul.ContainerWidget {
 	}
 
 	// B60-ZK-562: Groupbox vflex=min is wrong
-	override setFlexSizeH_(n: HTMLElement, zkn: zk.JQZK, height: number, isFlexMin?: boolean): void {
+	override setFlexSizeH_(flexSizeH: HTMLElement, zkn: zk.JQZK, height: number, isFlexMin?: boolean): void {
 		if (isFlexMin && (this.caption || this._title)) {
 			// B60-ZK-562
 			height = this._isDefault() ? parseInt(jq(this).css('padding-top')) : 0;
-			for (var c = n.firstChild; c; c = c.nextSibling)
+			for (var c = flexSizeH.firstChild; c; c = c.nextSibling)
 				height += jq(c).outerHeight()!;
 		}
 
-		super.setFlexSizeH_(n, zkn, height, isFlexMin);
+		super.setFlexSizeH_(flexSizeH, zkn, height, isFlexMin);
 	}
 
 	//watch//
@@ -339,7 +339,7 @@ export class Groupbox extends zul.ContainerWidget {
 
 	_afterOpen(visible: boolean): void {
 		if (!visible && this._isDefault())
-			jq(this.$n()!).addClass(this.$s('collapsed'));
+			jq(this.$n()).addClass(this.$s('collapsed'));
 
 		var p = this.parent;
 		if (p) {

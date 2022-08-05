@@ -28,7 +28,7 @@ export class SPush extends zk.Object {
 		this.intv = setInterval(this.proxy(this._do), freq);
 	}
 	stop(): void {
-		clearInterval(this.intv!);
+		clearInterval(this.intv);
 		this.intv = undefined;
 	}
 	_do(): void {
@@ -45,7 +45,7 @@ export class SPush extends zk.Object {
 			}
 
 			if (doNow)
-				zAu.send(new zk.Event(this.desktop, 'dummy', undefined, {ignorable: true, rtags: {isDummy: true}}));
+				zAu.send(new zk.Event(this.desktop!, 'dummy', undefined, {ignorable: true, rtags: {isDummy: true}}));
 		}
 	}
 }
@@ -54,13 +54,13 @@ zk.cpsp.SPush = SPush;
 zk.cpsp.start = start;
 export function start(dtid: string, min: number, max: number, factor: number): void {
 	var dt = zk.Desktop.$(dtid);
-	if (dt!._cpsp) dt!._cpsp.stop();
-	(dt!._cpsp = new zk.cpsp.SPush()).start(dt!, min, max, factor);
+	if (dt._cpsp instanceof zk.cpsp.SPush) dt._cpsp.stop();
+	(dt._cpsp = new zk.cpsp.SPush()).start(dt, min, max, factor);
 }
 zk.cpsp.stop = stop;
 export function stop(dtid: string): void {
 	var dt = zk.Desktop.$(dtid);
-	if (dt && dt._cpsp) {
+	if (dt && dt._cpsp instanceof zk.cpsp.SPush) {
 		dt._cpsp.stop();
 		dt._cpsp = undefined;
 	}

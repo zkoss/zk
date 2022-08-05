@@ -52,7 +52,7 @@ export let RoundUtl = {
 			// eslint-disable-next-line @typescript-eslint/no-unsafe-call
 			jq(n)[fnm](wgt.$s('disabled'));
 			// eslint-disable-next-line @typescript-eslint/no-unsafe-call
-			jq(wgt.getInputNode()!)[fnm](wgt.$s('input-full'));
+			jq(wgt.getInputNode())[fnm](wgt.$s('input-full'));
 		}
 	},
 	// @since 7.0.0
@@ -73,7 +73,7 @@ export let RoundUtl = {
 				wgt._inplaceTimerId = undefined;
 			}
 			wgt._inplaceTimerId = setTimeout(function () {
-				if (wgt.desktop) jq(wgt.$n()!).addClass(wgt.getInplaceCSS());
+				if (wgt.desktop) jq(wgt.$n()).addClass(wgt.getInplaceCSS());
 			}, wgt._inplaceTimeout);
 			wgt.onSize();
 			// should not clear node width if hflex is true
@@ -187,7 +187,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 				inp.disabled = disabled;
 				var fnm = disabled ? 'addClass' : 'removeClass';
 				// eslint-disable-next-line @typescript-eslint/no-unsafe-call
-				jq(this.$n()!)[fnm](this.$s('disabled'));
+				jq(this.$n())[fnm](this.$s('disabled'));
 			}
 		}
 
@@ -218,7 +218,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 
 				inp.readOnly = readonly;
 				// eslint-disable-next-line @typescript-eslint/no-unsafe-call
-				jq(this.$n()!)[fnm](this.$s('readonly')); //Merge breeze
+				jq(this.$n())[fnm](this.$s('readonly')); //Merge breeze
 			}
 		}
 
@@ -519,8 +519,8 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	 * @param String txt the text
 	 * @since 5.0.5
 	 */
-	setText(txt: string): this {
-		return this.setValue(this.coerceFromString_(txt) as ValueType);
+	setText(text: string): this {
+		return this.setValue(this.coerceFromString_(text) as ValueType);
 	}
 
 	/** Returns the value in the String format.
@@ -564,13 +564,16 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	}
 
 	//value object set from server(smartUpdate, renderProperites)
-	set_value(value: string | number, fromServer?: boolean): void {
-		this.setValue(this.unmarshall_(value), fromServer);
+	set_value(_value: string | number, fromServer?: boolean): void {
+		this.setValue(this.unmarshall_(_value), fromServer);
 	}
 
 	/** Returns the input node of this widget
 	 * @return DOMElement
 	 */
+	// Super defines getInputNode as optional property (not a method), and super cannot be made abstract.
+	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+	// @ts-expect-error
 	override getInputNode(): HTMLInputElement | undefined {
 		return this.$n('real') ?? this.$n();
 	}
@@ -636,11 +639,11 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	 * <p>Default: null (means no constraint all all).
 	 * @param String cst
 	 */
-	setConstraint(cst: zul.inp.SimpleConstraint | string | undefined): this {
-		if (typeof cst == 'string' && cst.charAt(0) != '['/*by server*/)
-			this._cst = new zul.inp.SimpleConstraint(cst);
+	setConstraint(constraint: zul.inp.SimpleConstraint | string | undefined): this {
+		if (typeof constraint == 'string' && !constraint.startsWith('[')/*by server*/)
+			this._cst = new zul.inp.SimpleConstraint(constraint);
 		else
-			this._cst = cst as zul.inp.SimpleConstraint | undefined;
+			this._cst = constraint as zul.inp.SimpleConstraint | undefined;
 		if (this._cst)
 			this._reVald = true; //revalidate required
 		return this;
@@ -660,7 +663,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		this._lastChg = inp.value;
 		if (evt.domTarget.tagName) { //Bug 2111900
 			if (this._inplace) {
-				jq(this.$n()!).removeClass(this.getInplaceCSS());
+				jq(this.$n()).removeClass(this.getInplaceCSS());
 				if (this._inplaceTimerId != null) {
 					clearTimeout(this._inplaceTimerId);
 					this._inplaceTimerId = undefined;
@@ -690,13 +693,13 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 			if (!this._inplaceIgnore) {
 				var self = this;
 				self._inplaceTimerId = setTimeout(function () {
-					if (self.desktop) jq(self.$n()!).addClass(self.getInplaceCSS());
+					if (self.desktop) jq(self.$n()).addClass(self.getInplaceCSS());
 				}, self._inplaceTimeout);
 			}
 		}
 
 		//B65-ZK-1285: scroll window object back when virtual keyboard closed on ipad
-		if (zk.ios && jq(this.$n()!).data('fixscrollposition')) { //only scroll back when data-fixScrollPosition attribute is applied
+		if (zk.ios && jq(this.$n()).data('fixscrollposition')) { //only scroll back when data-fixScrollPosition attribute is applied
 			var x = window.pageXOffset,
 				y = window.pageYOffset;
 
@@ -729,13 +732,13 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	_doMouseOver(): void {
 		if (this._disabled)
 			return;
-		jq(this.getInputNode()!).addClass(this.$s('hover'));
+		jq(this.getInputNode()).addClass(this.$s('hover'));
 	}
 
 	_doMouseOut(): void {
 		if (this._disabled)
 			return;
-		jq(this.getInputNode()!).removeClass(this.$s('hover'));
+		jq(this.getInputNode()).removeClass(this.$s('hover'));
 	}
 
 	/** Returns shall be update or not
@@ -782,9 +785,9 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	 * <p>It is usually called by {@link zk.AuCmd0#wrongValue} (from the sever)
 	 * @param String msg the error message
 	 */
-	setErrorMessage(msg: string): this {
+	setErrorMessage(errorMessage: string): this {
 		this.clearErrorMessage(true, true);
-		this._markError(msg, undefined, true);
+		this._markError(errorMessage, undefined, true);
 		return this;
 	}
 
@@ -803,7 +806,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		}
 		if (!remainError) {
 			this._errmsg = undefined;
-			jq(this.getInputNode()!).removeClass(this.$s('invalid'));
+			jq(this.getInputNode()).removeClass(this.$s('invalid'));
 
 		}
 		if (revalidate)
@@ -846,7 +849,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		this._errmsg = msg;
 
 		if (this.desktop) { //err not visible if not attached //B85-ZK-3321
-			jq(this.getInputNode()!).addClass(this.$s('invalid'));
+			jq(this.getInputNode()).addClass(this.$s('invalid'));
 			
 			interface CustomConstraint extends zul.inp.SimpleConstraint {
 				showCustomError?: (inp: InputWidget<ValueType>, msg: string) => boolean;
@@ -932,8 +935,8 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		if (zk.mac && evt.metaKey)
 			return false;
 		else {
-			const code = (zk.ie < 11 || zk.opera) ? evt.keyCode : evt.charCode!;
-			if (!evt.altKey && !evt.ctrlKey && _keyIgnorable(code) && keys.indexOf(String.fromCharCode(code)) < 0) {
+			var code = zk.opera ? evt.keyCode : evt.charCode as number;
+			if (!evt.altKey && !evt.ctrlKey && _keyIgnorable(code) && !keys.includes(String.fromCharCode(code))) {
 				evt.stop();
 				return true;
 			}
@@ -1182,11 +1185,11 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	override afterKeyDown_(evt: zk.Event, simulated?: boolean): boolean {
 		if (!simulated && this._inplace) {
 			if (!this._multiline && evt.keyCode == 13) {
-				var $inp = jq(this.getInputNode()!), inc = this.getInplaceCSS();
+				var $inp = jq(this.getInputNode()), inc = this.getInplaceCSS();
 				if ($inp.toggleClass(inc).hasClass(inc))
 					$inp.zk.setSelectionRange(0, $inp[0].value.length);
 			} else
-				jq(this.getInputNode()!).removeClass(this.getInplaceCSS());
+				jq(this.getInputNode()).removeClass(this.getInplaceCSS());
 		}
 		if (evt.keyCode != 13 || !this.isMultiline())
 			return super.afterKeyDown_(evt);
@@ -1208,8 +1211,8 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	 * @param String text the text to be inserted
 	 * @since 8.5.1
 	 */
-	setInsertedText(text: string): this {
-		if (text) {
+	setInsertedText(insertedText: string): this {
+		if (insertedText) {
 			var inp = this.getInputNode();
 			if (inp) {
 				var zkinp = zk(inp);
@@ -1220,8 +1223,8 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 					txt = this.getText(),
 					before = txt.substring(0, caretPos),
 					after = txt.substring(caretPos);
-				caretPos += text.length;
-				this.setText(before + text + after);
+				caretPos += insertedText.length;
+				this.setText(before + insertedText + after);
 				this.select(caretPos, caretPos);
 				this.fireOnChange();
 			}
@@ -1341,7 +1344,7 @@ export let InputCtrl = {
 	 * @return boolean
 	 */
 	isIgnoredDragForErrorbox(dg: zk.Draggable, pointer: zk.Offset, evt: zk.Event): boolean {
-		var c = dg.control!.$n_('c');
+		var c = (dg.control as zk.Widget).$n_('c');
 		return evt.domTarget == c && jq(c).hasClass('z-errbox-close-over');
 	}
 };

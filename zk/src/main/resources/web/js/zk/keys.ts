@@ -831,3 +831,4 @@ export const zKeys = Object.freeze({
 	 */
 	NUMPAD9: '9'
 } as const);
+window.zKeys = zKeys;

@@ -65,13 +65,13 @@ export class Popup extends zul.Widget {
 	}
 
 	// a delegator for open() in zephyr.
-	setOpen(options: PositionArgs): this {
+	setOpen(open: PositionArgs): this {
 		if (this.desktop || this.z_rod) {
-			this.open(...options);
+			this.open(...open);
 		} else {
 			zk.afterMount(() => {
 				if (this.desktop || this.z_rod) {// just in case if removed.
-					this.open(...options);
+					this.open(...open);
 				}
 			});
 		}
@@ -79,8 +79,8 @@ export class Popup extends zul.Widget {
 	}
 
 	// a delegator for close() in zephyr.
-	setClose(closed: boolean): this {
-		if (closed != this.isOpen()) return this; // do nothing.
+	setClose(close: boolean): this {
+		if (close != this.isOpen()) return this; // do nothing.
 		if (this.desktop || this.z_rod) {
 			this.close();
 		} else {
@@ -151,7 +151,7 @@ export class Popup extends zul.Widget {
 		this._fakeParent = zk.$(ref);
 		var posInfo = this._posInfo(ref, offset, position),
 			node = this.$n(),
-			$n = jq(node!);
+			$n = jq(node);
 
 		// the top is depend on children's height, if child will re-size after onSize/onShow,
 		// popup need to re-position top after children height has calculated.
@@ -234,7 +234,7 @@ export class Popup extends zul.Widget {
 
 		if (sendOnOpen) this.fire('onOpen', {open: true, reference: ref});
 		//add extra CSS class for easy customize
-		jq(node!).addClass(this.$s('open'));
+		jq(node).addClass(this.$s('open'));
 	}
 
 	_adjustOffsets(ref?: zk.Widget): void {
@@ -306,7 +306,7 @@ export class Popup extends zul.Widget {
 					ref = zk.Widget.$(ref);
 
 				if (ref) {
-					var refn = zul.Widget.isInstance(ref) ? ref.$n() : ref;
+					var refn = (ref instanceof zul.Widget) ? ref.$n() as HTMLElement | undefined : ref;
 					// B65-ZK-1934: Make sure refn is not null
 					if (refn) {
 						pos = position;
@@ -362,7 +362,7 @@ export class Popup extends zul.Widget {
 				var n = zk.currentFocus.getInputNode ? zk.currentFocus.getInputNode() : zk.currentFocus.$n();
 				if (jq.nodeName(n!, 'input')) {
 					if ((zk.ff || zk.safari) && jq.isAncestor(this.$n(), n)) {
-						jq(n!).blur(); // trigger a missing blur event.
+						jq(n).blur(); // trigger a missing blur event.
 					} else if (zk.ie && document.activeElement !== n) {
 						//ZK-3244 popup miss focus on input on IE
 						zk(n).focus();
@@ -425,7 +425,7 @@ export class Popup extends zul.Widget {
 	_doFloatUp(ctl: zk.ZWatchController): void {
 		if (!this.isVisible())
 			return;
-		var wgt: zk.Widget | undefined = ctl.origin;
+		var wgt: zk.Widget | undefined = ctl.origin as zk.Widget | undefined;
 		for (var floatFound = false; wgt; wgt = wgt.parent) {
 			if (wgt == this) {
 				if (!floatFound)
@@ -440,8 +440,8 @@ export class Popup extends zul.Widget {
 	}
 
 	// ZK-2990: should also change the zIndex of the stackup of the widget
-	override setFloatZIndex_(node: HTMLElement, zi: number): void {
-		super.setFloatZIndex_(node, zi);
+	override setFloatZIndex_(floatZIndex_: HTMLElement, zi: number): void {
+		super.setFloatZIndex_(floatZIndex_, zi);
 		if (this._stackup) {
 			this._stackup.style.zIndex = zi as unknown as string;
 		}
@@ -485,7 +485,7 @@ export class Popup extends zul.Widget {
 				//openInfo: ref, offset, position, opts
 				var posInfo = this._posInfo(openInfo[0], openInfo[1], openInfo[2]);
 				if (posInfo)
-					jq(this.$n()!).zk.position(posInfo.dim, posInfo.pos, openInfo[3]);
+					jq(this.$n()).zk.position(posInfo.dim, posInfo.pos, openInfo[3]);
 			}
 		}
 	}

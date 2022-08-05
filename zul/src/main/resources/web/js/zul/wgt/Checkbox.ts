@@ -74,7 +74,7 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 			var n = this.$n('real') as HTMLInputElement;
 			if (n) {
 				n.disabled = disabled!;
-				jq(this.$n()!).toggleClass(this.$s(this.getMoldPrefix_() + 'disabled'), disabled);
+				jq(this.$n()).toggleClass(this.$s(this.getMoldPrefix_() + 'disabled'), disabled);
 				if (!this._isDefaultMold()) {
 					this._setTabIndexForMold();
 				}
@@ -107,7 +107,7 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 				jq(n).prop('checked', checked);
 
 				this.clearStateClassName_();
-				jq(this.$n()!).addClass(this.getClassNameByState_());
+				jq(this.$n()).addClass(this.getClassNameByState_());
 			}
 		}
 
@@ -280,7 +280,7 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 				jq(n).prop('indeterminate', v);
 				if (!this._isDefaultMold()) {
 					this.clearStateClassName_();
-					jq(this.$n()!).addClass(this.getClassNameByState_());
+					jq(this.$n()).addClass(this.getClassNameByState_());
 				}
 			}
 		}
@@ -475,7 +475,7 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 	}
 
 	clearStateClassName_(): void {
-		let n = jq(this.$n()!),
+		let n = jq(this.$n()),
 			moldPrefix = this.getMoldPrefix_();
 		if (n) {
 			n.removeClass(this.$s(moldPrefix + 'off'))

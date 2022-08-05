@@ -17,10 +17,10 @@ var _loaded = {'zk': true}, //loaded
 	_loadedsemis: string[] = [], //loaded but not inited
 	_afterLoadFronts: CallableFunction[] = [],
 	_afterLoads: CallableFunction[] = [],
-	_afterPkgLoad = {}, //after pkg loaded
-	_pkgdepend = {},
-	_pkgver = {},
-	_pkghosts = {}/*package host*/,
+	_afterPkgLoad: Record<string, CallableFunction[]> = {}, //after pkg loaded
+	_pkgdepend: Record<string, string[]> = {},
+	_pkgver: Record<string, string> = {},
+	_pkghosts: Record<string, string[]> = {}/*package host*/,
 	_defhost: string[] = []/*default host*/,
 	_loading = Object.assign({'zul.lang': true}, _loaded); //loading (include loaded)
 
@@ -35,8 +35,8 @@ function markLoading(nm: string): void {
 		zk.disableESC();
 	}
 }
-function doEnd(afs, wait?): void {
-	for (var fn; fn = afs.shift();) {
+function doEnd(afs: CallableFunction[], wait?): void {
+	for (var fn: undefined | CallableFunction; fn = afs.shift();) {
 		if (updCnt() || (wait && _loadedsemis.length)) {
 			afs.unshift(fn);
 			return;
@@ -49,8 +49,8 @@ function updCnt(): number {
 }
 /** @partial zk
 */
-export let pkg = { //internal utility
-	setLoaded(pkg: string, wait?: boolean): void { //internal
+export class pkg { //internal utility
+	static setLoaded(pkg: string, wait?: boolean): void { //internal
 		_xloadings.$remove(pkg);
 		_loading[pkg] = true;
 
@@ -69,7 +69,7 @@ export let pkg = { //internal utility
 			var deps = _pkgdepend[pkg];
 			if (deps) {
 				delete _pkgdepend[pkg];
-				for (var pn; pn = deps.unshift();)
+				for (var pn: string | undefined; pn = deps.shift();)
 					zk.load(pn);
 			}
 		}
@@ -78,21 +78,21 @@ export let pkg = { //internal utility
 			try {
 				zk.enableESC();
 			} catch (ex) {
-				zk.debugLog(ex.message || ex);
+				zk.debugLog((ex as Error).message ?? ex);
 			}
 			doEnd(_afterLoadFronts);
 			doEnd(_afterLoads, 1);
 		}
-	},
+	}
 	/** Notify ZK that the name of the JavaScript file is loaded.
 	 * This method is designed to be used with {@link #loadScript}, such
 	 * that ZK Client knows if a JavaScript file is loaded.
 	 * @param String name the name of the JavaScript file.
 	 * It must be the same as the one passed to {@link #loadScript}.
 	 */
-	setScriptLoaded(name: string): void {//_zkf,
+	static setScriptLoaded(name: string): void {//_zkf,
 		this.setLoaded(name);
-	},
+	}
 
 	/** Tests if a package is loaded (or being loaded).
 	 * @param String pkg the package name
@@ -101,9 +101,9 @@ export let pkg = { //internal utility
 	 * @return boolean true if loaded
 	 * @see #load
 	 */
-	isLoaded(pkg: string, loading?: boolean): boolean {
-		return (loading && _loading[pkg]) || _loaded[pkg];
-	},
+	static isLoaded(pkg: string, loading?: boolean): boolean {
+		return !!((loading && _loading[pkg]) || _loaded[pkg]);
+	}
 	/** Loads the specified package(s). This method is called automatically when mounting the peer widgets. However, if an application developer wants to access JavaScript packages that are not loaded, he has to invoke this method.
 	 * <p>The loading of a package is asynchronous, so you cannot create the widget immediately. Rather, use the <code>func</code> argument, func, or use #afterLoad to execute.
 	<pre><code>
@@ -123,10 +123,7 @@ export let pkg = { //internal utility
 	 * @return boolean true if all required packages are loaded
 	 * @see #load(String, Function)
 	 */
-	// FIXME: load(pkg: string, dt: any, func: Function): boolean;
-	// FIXME: load(pkg: string, func: Function): boolean;
-	// FIXME: load(pkg: string): boolean;
-	load(pkg: string, dt?: unknown, func?: () => void): boolean {
+	static load(pkg: string, dt?: zk.Desktop | CallableFunction, func?: CallableFunction): boolean {
 		if (typeof dt == 'function') {
 			if (func)
 				throw 'At most one function allowed';
@@ -145,8 +142,8 @@ export let pkg = { //internal utility
 				loading = true;
 		}
 		return !loading;
-	},
-	_load(pkg: string, dt: unknown) { //called by mount.js (better performance)
+	}
+	static _load(pkg: string, dt?: zk.Desktop): boolean { //called by mount.js (better performance)
 		if (!pkg || _loading[pkg])
 			return !zk.loading && !_loadedsemis.length;
 			//since pkg might be loading (-> return false)
@@ -167,7 +164,7 @@ export let pkg = { //internal utility
 		e.src = uri;
 		jq.head()?.appendChild(e);
 		return false;
-	},
+	}
 
 	/** Loads a JavaScript file.
 	 * @param String src the URL of the JavaScript file.
@@ -181,10 +178,10 @@ export let pkg = { //internal utility
 	 * @param boolean force the script to be loaded. (no matter it is loading or loaded)
 	 * @return zk
 	 */
-	loadScript(src: string, name?: string, charset?: string, force?: boolean) { // FIXME: return ZKCoreUtilityStatic;
+	static loadScript(src: string, name?: string, charset?: string, force?: boolean): typeof this { // FIXME: return ZKCoreUtilityStatic;
 		if (name) {
 			if (!force && zk.isLoaded(name, true))
-				return;
+				return this;
 			markLoading(name);
 		}
 
@@ -194,7 +191,7 @@ export let pkg = { //internal utility
 		e.src = src;
 		jq.head()?.appendChild(e);
 		return this;
-	},
+	}
 	/** Loads a CSS file.
 	 * @param String href the URL of the CSS file.
 	 * @param String id the identifier. Ignored if not specified.
@@ -202,7 +199,7 @@ export let pkg = { //internal utility
 	 * @since 5.0.4
 	 * @return zk
 	 */
-	loadCSS(href: string, id?: string, media?: string) {
+	static loadCSS(href: string, id?: string, media?: string): typeof this {
 		var ln = document.createElement('link');
 		if (id) ln.id = id;
 		ln.rel = 'stylesheet';
@@ -211,24 +208,25 @@ export let pkg = { //internal utility
 		if (media) ln.media = media;
 		jq.head()?.appendChild(ln);
 		return this;
-	},
+	}
 
 	/** Returns the version of the specified package, or null if not available.
 	 * @param String pkg the package name
 	 * @return String the version
 	 */
-	getVersion(pkg: string): string | undefined {
-		for (var ver; pkg; pkg = pkg.substring(0, pkg.lastIndexOf('.')))
+	static getVersion(pkg: string): string | undefined {
+		for (var ver: string | undefined; pkg; pkg = pkg.substring(0, pkg.lastIndexOf('.')))
 			if (ver = _pkgver[pkg])
 				return ver;
-	},
+		return undefined;
+	}
 	/** Sets the version of the specified package.
 	 * @param String pkg the package name
 	 * @param String ver the version
 	 */
-	setVersion(pkg: string, ver: string): void {
+	static setVersion(pkg: string, ver: string): void {
 		_pkgver[pkg] = ver;
-	},
+	}
 	/** Declare a package that must be loaded when loading another package.
 	 * <p>Notice that it doesn't guarantee the loading order of the two packages. Thus, it is better to do in #afterLoad if a code snippet depends on both packages.
 	 * @param String a the name of the package that depends another package. In other words, calling #loading against this package will cause dependedPkgnn being loaded.
@@ -236,7 +234,7 @@ export let pkg = { //internal utility
 	 * In other words, it reads "a depends on b".
 	 * @see #afterLoad
 	 */
-	depends(a: string, b: string): void {
+	static depends(a: string, b: string): void {
 		if (a && b) {//a depends on b
 			if (_loaded[a])
 				zk.load(b);
@@ -245,7 +243,7 @@ export let pkg = { //internal utility
 				else _pkgdepend[a] = [b];
 			}
 		}
-	},
+	}
 
 	/** Declares a function that shall be executed after all requested packages are loaded (i.e., {@link #loading} is 0).
 	 * If all packages has been loaded, the function is executed immediately
@@ -273,9 +271,7 @@ export let pkg = { //internal utility
 	 * @see #depends
 	 * @see #load
 	 */
-	// FIXME: afterLoad(func: () => void): boolean;
-	// FIXME: afterLoad(pkgs: string, func: () => void, front?: boolean): void;
-	afterLoad(a: string | (() => void), b?: () => void, front?: boolean): boolean | void {
+	static afterLoad(a: string | CallableFunction, b?: CallableFunction, front?: boolean): boolean | void {
 		if (typeof a == 'string') {
 			if (!b) return true;
 
@@ -311,7 +307,7 @@ export let pkg = { //internal utility
 			a(); //note: we cannot use jq(a); otherwise, user cannot use it embedded script (test: zk light's helloword.html)
 			return true;
 		}
-	},
+	}
 	/** Returns the URI of the server (so called host) for the specified package.
 	 * <p>ZK Client Engine loads the packages from the same server that returns the HTML page.
 	 * If a package might be loaded from a different server, you can invoke #setHost to specify it and then #getHost will return the correct URL for the specified package.
@@ -321,12 +317,12 @@ export let pkg = { //internal utility
 	 * @return String the URI
 	 * @see #setHost
 	 */
-	getHost(pkg: string, js: boolean): string {
+	static getHost(pkg: string, js: boolean): string {
 		for (var p in _pkghosts)
 			if (pkg.startsWith(p))
 				return _pkghosts[p][js ? 1 : 0];
 		return _defhost[js ? 1 : 0];
-	},
+	}
 	/** Defines the URL of the host for serving the specified packages.
 	 * @param String host the host, such as http://www.zkoss.org.
 	 * @param String resURI the resource URI, such as /zkdemo/zkau,
@@ -334,7 +330,7 @@ export let pkg = { //internal utility
 	 * @param Array pkgs an array of pckage names (String)
 	 * @see #getHost
 	 */
-	setHost(host: string, resURI: string, pkgs: string[]): void {
+	static setHost(host: string, resURI: string, pkgs: string[]): void {
 		var hostRes = host + resURI;
 		if (!_defhost.length)
 			for (var scs = document.getElementsByTagName('script'), j = 0, len = scs.length;
@@ -350,4 +346,5 @@ export let pkg = { //internal utility
 		for (var j = 0; j < pkgs.length; ++j)
 			_pkghosts[pkgs[j]] = [host, hostRes];
 	}
-};
+}
+zk.copy(zk, pkg);

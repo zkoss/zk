@@ -46,10 +46,13 @@ export let Utl = {
 			return (new DOMParser()).parseFromString(text, 'text/xml');
 			//FF, Safar, Opera
 	
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 		var doc = new ActiveXObject('Microsoft.XMLDOM'); //IE
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 		doc.async = false;
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
 		doc.loadXML(text);
-		return doc;
+		return doc as XMLDocument;
 	},
 	/** Renames the type embedded in an URL
 	 * For example,
@@ -89,6 +92,7 @@ zk.xml.Utl.renType("/zkdemo/img/whatever-off.gif", "on");
 	 */
 	getElementValue(el: HTMLElement): string {
 		var txt = '';
+		// eslint-disable-next-line zk/noNull
 		for (let target: Element | null = el.firstElementChild; target; target = target.nextElementSibling)
 			if (target['data']) txt += target['data'];
 		return txt;

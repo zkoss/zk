@@ -48,12 +48,12 @@ function _updHeaderCM(box: SelectWidget): void { //update header's checkmark
 	}
 }
 function _isButton(evt: zk.Event): boolean {
-	return evt.target!.$button //for extension, it makes a widget as a button
+	return evt.target.$button //for extension, it makes a widget as a button
 		|| (zk.isLoaded('zul.wgt')
 		&& (evt.target instanceof zul.wgt.Button || evt.target instanceof zul.wgt.Toolbarbutton));
 }
 function _isInputWidget(evt: zk.Event): boolean { // B50-ZK-460
-	return evt.target!.$inputWidget //for extension, it makes a widget as a input widget
+	return evt.target.$inputWidget //for extension, it makes a widget as a input widget
 		|| (zk.isLoaded('zul.inp') && evt.target instanceof zul.inp.InputWidget);
 }
 function _focusable(evt: zk.Event): boolean {
@@ -274,8 +274,8 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		return !!this._selectOnHighlightDisabled;
 	}
 
-	setSelectOnHighlightDisabled(v: boolean): this {
-		this._selectOnHighlightDisabled = v;
+	setSelectOnHighlightDisabled(selectOnHighlightDisabled: boolean): this {
+		this._selectOnHighlightDisabled = selectOnHighlightDisabled;
 		return this;
 	}
 
@@ -283,22 +283,22 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		return !!this._checkmarkDeselectOther;
 	}
 
-	setCheckmarkDeselectOther(cdo: boolean, opts?: Record<string, boolean>): this {
+	setCheckmarkDeselectOther(checkmarkDeselectOther: boolean, opts?: Record<string, boolean>): this {
 		const o = this._checkmarkDeselectOther;
-		this._checkmarkDeselectOther = cdo;
+		this._checkmarkDeselectOther = checkmarkDeselectOther;
 
-		if (o !== cdo || (opts && opts.force)) {
-			this._cdo = cdo; // backward compatible
+		if (o !== checkmarkDeselectOther || (opts && opts.force)) {
+			this._cdo = checkmarkDeselectOther; // backward compatible
 		}
 
 		return this;
 	}
 
-	setChgSel(val: string): this { //called from the server
+	setChgSel(chgSel: string): this { //called from the server
 		var sels = {};
 		for (var j = 0; ;) {
-			var k = val.indexOf(',', j),
-				s = (k >= 0 ? val.substring(j, k) : val.substring(j)).trim();
+			var k = chgSel.indexOf(',', j),
+				s = (k >= 0 ? chgSel.substring(j, k) : chgSel.substring(j)).trim();
 			if (s) sels[s] = true;
 			if (k < 0) break;
 			j = k + 1;
@@ -312,14 +312,14 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		return this;
 	}
 
-	setFocusIndex(index: number): this { // called from server
+	setFocusIndex(focusIndex: number): this { // called from server
 		// F60-ZK-715
-		if (index < 0)
+		if (focusIndex < 0)
 			return this;
 		var self = this;
 		setTimeout(function () { // items not ready yet
 			var w: zul.sel.ItemWidget | undefined;
-			for (var it = self.getBodyWidgetIterator(); (w = it.next()) && index--;)
+			for (var it = self.getBodyWidgetIterator(); (w = it.next()) && focusIndex--;)
 				if (!it.hasNext())
 					break;
 			self._focusItem = w;
@@ -330,7 +330,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	updateFormData(): void {
 		if (this._name) {
 			if (!this.efield)
-				this.efield = jq(this.$n()!).append('<div style="display:none;"></div>').find('> div:last-child')[0];
+				this.efield = jq(this.$n()).append('<div style="display:none;"></div>').find('> div:last-child')[0];
 
 			jq(this.efield).children().remove();
 
@@ -353,20 +353,20 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	 * It is the same as {@link #selectItem}.
 	 * @param ItemWidget item
 	 */
-	setSelectedItem(item: zul.sel.ItemWidget): this {
-		if (!item)
+	setSelectedItem(selectedItem: zul.sel.ItemWidget): this {
+		if (!selectedItem)
 			this.clearSelection();
 		else {
 			var isMultiSelected = this._selItems.length > 1;
-			this._selectOne(item, true);
+			this._selectOne(selectedItem, true);
 
 			// refix ZK-1483: do not have to scroll selected item into view when multiple items are selected
 			if (!isMultiSelected) {
 				var bar = this._scrollbar;
 				if (bar)
-					bar.scrollToElement(item.$n_());
+					bar.scrollToElement(selectedItem.$n_());
 				if (this._nativebar)
-					zk(item).scrollIntoView(this.ebody);
+					zk(selectedItem).scrollIntoView(this.ebody);
 			}
 
 			if ((zk.edge_legacy || zk.ff! >= 4 || zk.ie == 10) && this.ebody && this._nativebar) { // B50-ZK-293: FF5 misses to fire onScroll
@@ -441,10 +441,6 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 			this._oldCSS = anchor.style.display;
 			anchor.style.display = 'none';
 		}
-
-		//Bug in B30-1926094-1.zul
-		if (zk.ie < 11)
-			this._syncFocus(this._focusItem);
 
 		this._calcHgh();
 	}
@@ -633,7 +629,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		if (this.checkOnHighlightDisabled_())
 			return true;
 
-		if (!evt.domTarget || !evt.target!.canActivate())
+		if (!evt.domTarget || !evt.target.canActivate())
 			return true;
 
 		if (bSel) {
@@ -660,11 +656,11 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 
 				var tn = jq.nodeName(evt.domTarget),
 					bInpBtn = tn == 'input' && (evt.domTarget as HTMLInputElement).type.toLowerCase() == 'button';
-				if (bSel.indexOf(tn) < 0) {
-					return bSel.indexOf('button') >= 0
+				if (!bSel.includes(tn)) {
+					return bSel.includes('button')
 						&& (_isButton(evt) || bInpBtn);
 				}
-				return !bInpBtn || bSel.indexOf('button') >= 0;
+				return !bInpBtn || bSel.includes('button');
 			}
 		}
 
@@ -1077,11 +1073,11 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	 * @param jq.Event evt
 	 * @disable(zkgwt)
 	 */
-	setSelectAll(notify: boolean, evt: zk.Event<zk.EventMetaData>): this {
+	setSelectAll(selectAll: boolean, evt: zk.Event<zk.EventMetaData> | boolean): this {
 		for (var it = this.getBodyWidgetIterator(), w: zul.sel.ItemWidget | undefined; (w = it.next());)
 			if (w._loaded && !w.isDisabled() && w.isSelectable())
 				this._changeSelect(w, true);
-		if (notify) // FIXME: why was the condition `notify && evt !== true`?
+		if (selectAll && evt instanceof zk.Event)
 			this.fireOnSelect(this.getSelectedItem(), evt);
 		return this;
 	}

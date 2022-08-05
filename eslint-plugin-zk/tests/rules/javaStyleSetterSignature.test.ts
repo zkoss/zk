@@ -83,6 +83,7 @@ class Test {
     this._open = v;
   }
   setDisabled(disabled): this {}
+  setFlexSizeH_(flexSizeH: HTMLElement, zkn: zk.JQZK, height: number, isFlexMin?: boolean): void {}
 }
 abstract class Test2 {
   abstract setAutodisabled(v: boolean | undefined): this
@@ -100,6 +101,7 @@ class Test {
     this._open = open;
   }
   setDisabled(disabled): this {}
+  setFlexSizeH_(flexSizeH: HTMLElement, zkn: zk.JQZK, height: number, isFlexMin?: boolean): void {}
 }
 abstract class Test2 {
   abstract setAutodisabled(autodisabled: boolean | undefined): this
@@ -108,7 +110,7 @@ abstract class Test2 {
 			errors: [
 				setterSuggestiveParameter(3, 11),
 				setterSuggestiveParameter(9, 11),
-				setterSuggestiveParameter(15, 28),
+				setterSuggestiveParameter(16, 28),
 			],
 		}
 	]

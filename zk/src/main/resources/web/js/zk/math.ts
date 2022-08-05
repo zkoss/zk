@@ -68,7 +68,7 @@ export class BigDecimal extends zk.Object {
 		if (this._negative)
 			v *= -1;
 		if (p = this._precision)
-			v /= Math.pow(10, p);
+			v /= Math.pow(10, p as number);
 		return v;
 	}
 	/** Returns a string for this big decimal (per the original form).
@@ -162,3 +162,5 @@ export class Long extends zk.Object {
 	 */
 	$toLocaleString = Long.prototype.$toString;
 }
+zk.BigDecimal = BigDecimal;
+zk.Long = Long;

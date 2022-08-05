@@ -94,16 +94,16 @@ export abstract class LabelImageWidget<TElement extends HTMLElement = HTMLElemen
 	/** Sets the image URI. The image would hide if src == null </p>
 	 * @param String image the URI of the image
 	 */
-	setImage(v: string, opts?: Record<string, boolean>): this {
+	setImage(image: string, opts?: Record<string, boolean>): this {
 		const o = this._image;
-		this._image = v;
+		this._image = image;
 
-		if (o !== v || (opts && opts.force)) {
-			if (v && this._preloadImage) zUtl.loadImage(v);
+		if (o !== image || (opts && opts.force)) {
+			if (image && this._preloadImage) zUtl.loadImage(image);
 			var n = this.getImageNode(),
-				jqn = jq(n!);
+				jqn = jq(n);
 			if (n) {
-				var img = v || '';
+				var img = image || '';
 				if (jq.nodeName(n, 'img')) // ZK-1100
 					n.src = img;
 				else
@@ -128,8 +128,8 @@ export abstract class LabelImageWidget<TElement extends HTMLElement = HTMLElemen
 	 * The hover image is used when the mouse is moving over this component.
 	 * @param String src
 	 */
-	setHoverImage(src: string): this {
-		this._hoverImage = src;
+	setHoverImage(hoverImage: string): this {
+		this._hoverImage = hoverImage;
 		return this;
 	}
 

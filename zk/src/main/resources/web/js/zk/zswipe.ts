@@ -13,14 +13,15 @@ let hastouch = 'ontouchstart' in window,
 	startEvt = hastouch ? 'touchstart' : 'mousedown',
 	moveEvt = hastouch ? 'touchmove' : 'mousemove',
 	endEvt = hastouch ? 'touchend' : 'mouseup',
-	start, stop;
+	start: {coords: zk.Offset; time: number} | undefined,
+	stop: {coords: zk.Offset; time: number} | undefined;
 
 function _doEvt(wevt: zk.Event): void {
 	var wgt = wevt.target;
 	if (wgt && !wgt.$weave) {
 		var en = wevt.name;
 		if (!wevt.stopped)
-			wgt['do' + en.substring(2) + '_'].call(wgt, wevt);
+			(wgt['do' + en.substring(2) + '_'] as CallableFunction)(wevt);
 //	no need to stop the event for domtouch.js
 //			if (wevt.domStopped)
 //				wevt.domEvent.stop();
@@ -38,8 +39,8 @@ export interface SwipeOptions {
  */
 export class Swipe extends zk.Object {
 	declare widget?: zk.Widget;
-	declare opts;
 	declare node?: HTMLElement;
+	declare opts?: SwipeOptions;
 	/**
 	 * The Constructor.
 	 * @param Object widget the object for swipe.
@@ -57,8 +58,8 @@ export class Swipe extends zk.Object {
 	constructor(widget: zk.Widget, node?: HTMLElement, opts?: Partial<SwipeOptions>) {
 		super();
 		this.widget = widget;
-		this.node = node = node ? jq(node, zk)[0] : widget['node'] || (widget.$n ? widget.$n() : undefined);
-		if (!node)
+		this.node = node ? jq(node, zk)[0] as HTMLElement | undefined : widget['node'] as HTMLElement | undefined || (widget.$n ? widget.$n() : undefined);
+		if (!this.node)
 			throw 'Handle required for ' + widget;
 
 		this.opts = zk.$default(opts, {
@@ -68,7 +69,7 @@ export class Swipe extends zk.Object {
 			maxDisplacement: 75
 		});
 
-		jq(this.node!).on(startEvt, this.proxy(this._swipeStart));
+		jq(this.node).on(startEvt, this.proxy(this._swipeStart));
 	}
 
 	/**
@@ -88,7 +89,7 @@ export class Swipe extends zk.Object {
 			time: evt.timeStamp || Date.now(),
 			coords: [data.pageX, data.pageY]
 		};
-		jq(this.node!)
+		jq(this.node)
 			.on(moveEvt, this.proxy(this._swipeMove) as unknown as false)
 			.one(endEvt, this.proxy(this._swipeEnd) as unknown as false);
 	}
@@ -108,15 +109,16 @@ export class Swipe extends zk.Object {
 		// prevent scrolling when displacement is larger than scrollThreshold
 		var dispX = Math.abs(start.coords[0] - stop.coords[0]),
 			dispY = Math.abs(start.coords[1] - stop.coords[1]),
-			scrollThreshold = this.opts.scrollThreshold;
+			scrollThreshold = this.opts!.scrollThreshold;
 		if (dispX > scrollThreshold || dispY > scrollThreshold)
 			evt.preventDefault();
 	}
 
 	_swipeEnd(devt: JQuery.TriggeredEvent): void {
-		jq(this.node!).off(moveEvt, this.proxy(this._swipeMove));
-		if (start && stop) {
-			var dispX, dispY, dispT = stop.time - start.time, dir;
+		jq(this.node).off(moveEvt, this.proxy(this._swipeMove));
+		if (start && stop && this.opts) {
+			var dispX: number | undefined, dispY: number | undefined,
+				dispT = stop.time - start.time, dir: string | undefined;
 
 			if (dispT < this.opts.duration) {
 				var deltaX = start.coords[0] - stop.coords[0],

@@ -266,7 +266,7 @@ export class Binder extends zk.Object {
 			if (opts.repeatIgnore)
 				_fixCommandName('onBindCommand$', cmd, opts, 'repeatIgnore');
 		}
-		zAu.send(new zk.Event(wgt, 'onBindCommand$' + cmd, {cmd: cmd, args: args}, zk.copy({toServer: true}, opts)), timeout != undefined ? timeout : 38);
+		zAu.send(new zk.Event(wgt!, 'onBindCommand$' + cmd, {cmd: cmd, args: args}, zk.copy({toServer: true}, opts)), timeout != undefined ? timeout : 38);
 		this._lastcmd = cmd;
 		return this;
 	}
@@ -286,7 +286,7 @@ export class Binder extends zk.Object {
 			if (opts.repeatIgnore)
 				_fixCommandName('onBindGlobalCommand$', cmd, opts, 'repeatIgnore');
 		}
-		zAu.send(new zk.Event(wgt, 'onBindGlobalCommand$' + cmd, {cmd: cmd, args: args}, zk.copy({toServer: true}, opts)), timeout != undefined ? timeout : 38);
+		zAu.send(new zk.Event(wgt!, 'onBindGlobalCommand$' + cmd, {cmd: cmd, args: args}, zk.copy({toServer: true}, opts)), timeout != undefined ? timeout : 38);
 		this._lastcmd = cmd;
 		return this;
 	}

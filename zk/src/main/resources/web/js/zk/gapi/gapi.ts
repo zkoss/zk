@@ -29,46 +29,58 @@ it will be useful, but WITHOUT ANY WARRANTY.
 export let GOOGLE_API_LOADING_TIMEOUT = 10000; //default to ten seconds
 zk.gapi.GOOGLE_API_LOADING_TIMEOUT = GOOGLE_API_LOADING_TIMEOUT;
 zk.gapi.loadAPIs = loadAPIs;
+
+interface GAPIOptions {
+	condition: CallableFunction;
+	callback: CallableFunction;
+	message: string;
+	inittime?: number;
+	timeout?: number;
+	_mask?: zk.eff.Mask;
+}
+
 export function loadAPIs(wgt: zk.Widget, callback: () => void, msg: string, timeout: number): void {
-	var opts = {};
-	opts['condition'] = function () {return window['google'] && window['google'].load;};
-	opts['callback'] = function () {callback(); delete zk.gapi['LOADING'];};
-	opts['message'] = msg;
-	if (!opts['condition']()) {
+	var opts: Partial<GAPIOptions> = {};
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+	opts.condition = function (): boolean {return !!(window['google'] && window['google'].load);};
+	opts.callback = function () {callback(); delete zk.gapi['LOADING'];};
+	opts.message = msg;
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-call
+	if (!opts.condition()) {
 		zk.gapi.waitUntil(wgt, opts);
 		if (!zk.gapi['LOADING']) { //avoid double loading Google Ajax APIs
 			zk.gapi['LOADING'] = true;
-			if (!opts['condition'])
+			if (!opts.condition)
 				zk.loadScript('http://www.google.com/jsapi?key=' + zk['googleAPIkey']);
 		}
 	} else
 		callback();
 }
 zk.gapi.waitUntil = waitUntil;
-export function waitUntil(wgt: zk.Widget, opts): void {
+export function waitUntil(wgt: zk.Widget, opts: Partial<GAPIOptions>): void {
 	opts.inittime = opts.inittime || new Date().getTime();
 	opts.timeout = opts.timeout || zk.gapi.GOOGLE_API_LOADING_TIMEOUT;
 	initMask(wgt, opts);
 	_waitUntil(wgt, opts);
 }
-function _waitUntil(wgt, opts): void {
-	if (!opts.condition()) {
+function _waitUntil(wgt, opts: Partial<GAPIOptions>): void {
+	if (!opts.condition!()) {
 		var timestamp0 = new Date().getTime();
-		if ((timestamp0 - opts.inittime) < opts.timeout) {
+		if ((timestamp0 - opts.inittime!) < opts.timeout!) {
 			setTimeout(function () {_waitUntil(wgt, opts);}, 100);
 			return;
 		}
 	}
-	opts.callback();
+	opts.callback!();
 	clearMask(wgt, opts);
 }
-function initMask(wgt, opts): void {
+function initMask(wgt: zk.Widget, opts: Partial<GAPIOptions>): void {
 	var opt = {};
 	opt['anchor'] = wgt;
 	if (opts.message) opt['message'] = opts.message;
 	opts['_mask'] = new zk.eff.Mask(opt);
 }
-function clearMask(wgt, opts): void {
+function clearMask(wgt, opts: {_mask?: {destroy()}}): void {
 	if (opts._mask)
 		opts._mask.destroy();
 }

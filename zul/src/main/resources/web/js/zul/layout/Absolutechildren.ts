@@ -87,11 +87,11 @@ export class Absolutechildren extends zul.Widget {
 	}
 
     _rePositionX(): void {
-		jq(this.$n()!).css('left', this._x);
+		jq(this.$n()).css('left', this._x);
 	}
 
     _rePositionY(): void {
-		jq(this.$n()!).css('top', this._y);
+		jq(this.$n()).css('top', this._y);
 	}
 
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {

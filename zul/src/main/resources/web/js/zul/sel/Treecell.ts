@@ -185,7 +185,7 @@ export class Treecell extends zul.LabelImageWidget<HTMLTableCellElement> {
 		if (this.parent!.firstChild == this) {
 			var item = this.parent!.parent!,
 				tree = item.getTree(),
-				sb = new zk.Buffer<string>();
+				sb = new zk.Buffer();
 			if (tree) {
 				if (tree.isCheckmark()) {
 					var chkable = item.isSelectable(),

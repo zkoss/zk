@@ -1,4 +1,6 @@
 /* global MediaStreamConstraints:readonly */
+// eslint-disable-next-line @typescript-eslint/triple-slash-reference
+/// <reference types="webrtc" />
 /* util.ts
 
 	Purpose:
@@ -13,12 +15,18 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+declare global {
+	interface Screen {
+		deviceXDPI: number;
+		logicalXDPI: number;
+	}
+}
 var _decs = {lt: '<', gt: '>', amp: '&', quot: '"'},
-	_encs = {};
+	_encs: Partial<Record<keyof typeof _decs, string>> = {};
 for (var v in _decs)
-	_encs[_decs[v]] = v;
+	_encs[_decs[v] as string] = v;
 
-function _pathname(url): string {
+function _pathname(url: string): string {
 	var j = url.indexOf('//');
 	if (j > 0) {
 		j = url.indexOf('/', j + 2);
@@ -27,19 +35,50 @@ function _pathname(url): string {
 	return '';
 }
 
-function _frames(ary, w): void {
+function _frames(ary: Window[], w: Window): void {
 	//Note: the access of frames is allowed for any window (even if it connects other website)
 	ary.push(w);
 	for (var fs = w.frames, j = 0, l = fs.length; j < l; ++j)
 		_frames(ary, fs[j]);
 }
+
+// The following escape map implementation is referred from Underscore.js 1.8.3
+// which is under MIT license
+// List of HTML entities for escaping.
+var escapeMap = {
+		'&': '&amp;',
+		'<': '&lt;',
+		'>': '&gt;',
+		'"': '&quot;',
+		"'": '&#x27;',
+		'`': '&#x60;'
+	},
+	// Functions for escaping and unescaping strings to/from HTML interpolation.
+	escaper = function (match: string): string {
+		return escapeMap[match] as string;
+	},
+	// Regexes for identifying a key that needs to be escaped
+	sourceAttr = '(?:"|\'|`)',
+	source = '(?:&|<|>|"|\'|`)',
+	testAttrRegexp = RegExp(sourceAttr),
+	testRegexp = RegExp(source),
+	replaceAttrRegexp = RegExp(sourceAttr, 'g'),
+	replaceRegexp = RegExp(source, 'g');
+
+function _encodeXMLAttr0(string: string): string {
+	return testAttrRegexp.test(string) ? string.replace(replaceAttrRegexp, escaper) : string;
+}
+function _encodeXML0(string: string): string {
+	return testRegexp.test(string) ? string.replace(replaceRegexp, escaper) : string;
+}
+
 /* Returns the onSize target of the given widget.
  * The following code is dirty since it checks _hflexsz (which is implementation)
  * FUTRE: consider to have zk.Widget.beforeSize to clean up _hflexsz and
  * this method considers only if _hflex is min
  */
-function _onSizeTarget(wgt): zk.Widget {
-	var r1 = wgt, p1 = r1,
+function _onSizeTarget(wgt: zk.Widget): zk.Widget {
+	var r1 = wgt, p1: zk.Widget | undefined = r1,
 		j1 = -1;
 	for (; p1 && p1._hflex == 'min'; p1 = p1.parent) {
 		delete p1._hflexsz;
@@ -49,7 +88,7 @@ function _onSizeTarget(wgt): zk.Widget {
 			break;
 	}
 
-	var r2 = wgt, p2 = r2,
+	var r2 = wgt, p2: zk.Widget | undefined = r2,
 		j2 = -1;
 	for (; p2 && p2._vflex == 'min'; p2 = p2.parent) {
 		delete p2._vflexsz;
@@ -83,41 +122,6 @@ export interface GoOptions {
 	target: string;
 	overwrite: boolean;
 }
-export interface ZUtl {
-	cellps0: string;
-	i0: string;
-	img0: string;
-
-	appendAttr(nm: string, val: unknown, force?: boolean): string;
-	convertDataURLtoBlob(dataURL: string): Blob;
-	decodeXML(txt: string): string;
-	destroyProgressbox(id: string, opts?: Partial<ProgressboxOptions>): void;
-	encodeXML(txt: string, opts?: EncodeXmlOptions): string;
-	encodeXMLAttribute(txt: string): string;
-	fireShown(wgt: zk.Widget, bfsz?: number): void;
-	fireSized(wgt: zk.Widget, bfsz?: number): void;
-	frames(w: Window): Window[];
-	getDevicePixelRatio(): number;
-	getUserMedia(constraints: MediaStreamConstraints): Promise<MediaStream>;
-	getWeekOfYear(year: number, month: number, date: number, firstDayOfWeek: number,
-				  minimalDaysInFirstWeek: number): number;
-	go(url: string, opts?: Partial<GoOptions>): void;
-	intsToString(ary: number[] | undefined): string;
-	isAncestor(p?: zk.Widget, c?: zk.Widget & {getParent?()}): boolean;
-	isChar(cc: string, opts: Partial<IsCharOptions>): boolean;
-	isImageLoading(): boolean;
-	loadImage(url: string): void;
-	mapToString(map: Record<string, string>, assign?: string, separator?: string): string;
-	parseMap(text: string, separator?: string, quote?: string): Record<string, string>;
-	progressbox(id: string, msg: string, mask?: boolean, icon?: string, opts?: Partial<ProgressboxOptions>): void;
-	stringToInts(text: string | undefined, defaultValue: number): number[] | undefined;
-	today(fmt: boolean | string, tz?: string): DateImpl;
-	throttle<T, A extends unknown[], R>(func: (this: T, ...args: A) => R, wait: number):
-		(this: T, ...args: A) => R;
-	debounce<T, A extends unknown[], R>(func: (this: T, ...args: A) => R, wait: number,
-										immediate?: boolean): (this: T, ...args: A) => R;
-	isEqualObject(a: unknown, b: unknown): boolean;
-}
 /** @class zUtl
  * @import zk.Widget
  * @import zk.xml.Utl
@@ -125,7 +129,7 @@ export interface ZUtl {
  * <p>For more utilities, refer to {@link Utl}.
  */
 // window scope
-export const zUtl: ZUtl = { //static methods
+export class zUtl { //static methods
 	//Character
 	/**
 	 * Returns whether the character is according to its opts.
@@ -167,13 +171,13 @@ export const zUtl: ZUtl = { //static methods
 </table>
 	 * @return boolean
 	 */
-	isChar(cc: string, opts: Partial<IsCharOptions>): boolean {
+	static isChar(cc: string, opts: Partial<IsCharOptions>): boolean {
 		return !!((opts.digit && cc >= '0' && cc <= '9')
 			|| (opts.upper && cc >= 'A' && cc <= 'Z')
 			|| (opts.lower && cc >= 'a' && cc <= 'z')
 			|| (opts.whitespace && (cc == ' ' || cc == '\t' || cc == '\n' || cc == '\r'))
 			|| opts[cc]);
-	},
+	}
 
 	//HTML/XML
 	/** Parses the specifie text into a map.
@@ -188,14 +192,14 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * @param String quote the quote to handle. Ignored if omitted.
 	 * @return Map the map
 	 */
-	parseMap(text: string, separator?: string, quote?: string): {[key: string]: string} {
+	static parseMap(text: string, separator?: string, quote?: string): Record<string, string> {
 		var map = {};
 		if (text) {
 			var ps = text.split(separator || ',');
 			if (quote) {
 				var tmp: string[] = [],
 					re = new RegExp(quote, 'g'),
-					key = '', t, pair;
+					key = '', t, pair: RegExpMatchArray | null; // eslint-disable-line zk/noNull
 				while ((t = ps.shift()) !== undefined) {
 					if ((pair = (key += t).match(re)) && pair.length != 1) {
 						if (key)
@@ -214,41 +218,17 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 			}
 		}
 		return map;
-	},
+	}
 	/** Encodes the string to a valid XML attribute string.
 	 * Refer to {@link Utl} for more XML utilities.
 	 * @param String txt the text to encode
 	 * @return String the encoded text.
 	 * @since 8.0.0
 	 */
-	encodeXMLAttribute: (function () {
-
-		// The following escape map implementation is referred from Underscore.js 1.8.3
-		// which is under MIT license
-		// List of HTML entities for escaping.
-		var escapeMap = {
-				'"': '&quot;',
-				"'": '&#x27;',
-				'`': '&#x60;'
-			},
-			// Functions for escaping and unescaping strings to/from HTML interpolation.
-			escaper = function (match): string {
-				return escapeMap[match];
-			},
-			// Regexes for identifying a key that needs to be escaped
-			source = '(?:"|\'|`)',
-			testRegexp = RegExp(source),
-			replaceRegexp = RegExp(source, 'g');
-
-		function _encodeXML0(string): string {
-			return testRegexp.test(string) ? string.replace(replaceRegexp, escaper) : string;
-		}
-
-		return function (txt: string): string {
-			txt = txt != null ? String(txt) : '';
-			return _encodeXML0(txt);
-		};
-	})(),
+	static encodeXMLAttribute(txt: string): string {
+		txt = txt != null ? String(txt) : '';
+		return _encodeXMLAttr0(txt);
+	}
 	/** Encodes the string to a valid XML string.
 	 * Refer to {@link Utl} for more XML utilities.
 	 * @param String txt the text to encode
@@ -260,85 +240,58 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * </ul>
 	 * @return String the encoded text.
 	 */
-	encodeXML: (function () {
+	static encodeXML(txt: string, opts?: EncodeXmlOptions): string {
+		txt = txt != null ? String(txt) : '';
 
-		// The following escape map implementation is referred from Underscore.js 1.8.3
-		// which is under MIT license
-		// List of HTML entities for escaping.
-		var escapeMap = {
-				'&': '&amp;',
-				'<': '&lt;',
-				'>': '&gt;',
-				'"': '&quot;',
-				"'": '&#x27;',
-				'`': '&#x60;'
-			},
-			// Functions for escaping and unescaping strings to/from HTML interpolation.
-			escaper = function (match): string {
-				return escapeMap[match];
-			},
-			// Regexes for identifying a key that needs to be escaped
-			source = '(?:&|<|>|"|\'|`)',
-			testRegexp = RegExp(source),
-			replaceRegexp = RegExp(source, 'g');
+		if (!opts) // speed up the replacement.
+			return _encodeXML0(txt);
 
-		function _encodeXML0(string): string {
-			return testRegexp.test(string) ? string.replace(replaceRegexp, escaper) : string;
+		var tl = txt.length,
+			pre = opts && opts.pre,
+			multiline = pre || (opts && opts.multiline),
+			maxlength = opts ? opts.maxlength : 0;
+
+		if (!multiline && maxlength && tl > maxlength) {
+			var j = maxlength;
+			while (j > 0 && txt.charAt(j - 1) == ' ')
+				--j;
+			opts.maxlength = 0; //no limit
+			return zUtl.encodeXML(txt.substring(0, j) + '...', opts);
 		}
 
-		return function (txt: string, opts?: EncodeXmlOptions): string {
-			txt = txt != null ? String(txt) : '';
-
-			if (!opts) // speed up the replacement.
-				return _encodeXML0(txt);
-
-			var tl = txt.length,
-				pre = opts && opts.pre,
-				multiline = pre || (opts && opts.multiline),
-				maxlength = opts ? opts.maxlength : 0;
-
-			if (!multiline && maxlength && tl > maxlength) {
-				var j = maxlength;
-				while (j > 0 && txt.charAt(j - 1) == ' ')
-					--j;
-				opts.maxlength = 0; //no limit
-				return zUtl.encodeXML(txt.substring(0, j) + '...', opts);
-			}
-
-			var out = '', k = 0, enc;
-			if (multiline || pre) {
-				for (let j = 0; j < tl; ++j) {
-					var cc = txt.charAt(j);
-					if (enc = _encs[cc]) {
-						out += txt.substring(k, j) + '&' + enc + ';';
-						k = j + 1;
-					} else if (multiline && cc == '\n') {
-						out += txt.substring(k, j) + '<br/>\n';
-						k = j + 1;
-					} else if (pre && (cc == ' ' || cc == '\t')) {
-						out += txt.substring(k, j) + '&nbsp;';
-						if (cc == '\t')
-							out += '&nbsp;&nbsp;&nbsp;';
-						k = j + 1;
-					}
+		var out = '', k = 0, enc;
+		if (multiline || pre) {
+			for (let j = 0; j < tl; ++j) {
+				var cc = txt.charAt(j);
+				if (enc = _encs[cc] as undefined | string) {
+					out += txt.substring(k, j) + '&' + enc + ';';
+					k = j + 1;
+				} else if (multiline && cc == '\n') {
+					out += txt.substring(k, j) + '<br/>\n';
+					k = j + 1;
+				} else if (pre && (cc == ' ' || cc == '\t')) {
+					out += txt.substring(k, j) + '&nbsp;';
+					if (cc == '\t')
+						out += '&nbsp;&nbsp;&nbsp;';
+					k = j + 1;
 				}
-			} else {
-				// fixed B65-ZK-1836 that opt may be an empty object.
-				return _encodeXML0(txt);
 			}
+		} else {
+			// fixed B65-ZK-1836 that opt may be an empty object.
+			return _encodeXML0(txt);
+		}
 
-			if (!k) return txt;
-			if (k < tl)
-				out += txt.substring(k);
-			return out;
-		};
-	})(),
+		if (!k) return txt;
+		if (k < tl)
+			out += txt.substring(k);
+		return out;
+	}
 	/** Decodes the XML string into a normal string.
 	 * For example, &amp;lt; is convert to &lt;
 	 * @param String txt the text to decode
 	 * @return String the decoded string
 	 */
-	decodeXML(txt: string): string {
+	static decodeXML(txt: string): string {
 		var out = '';
 		if (!txt) return out;
 
@@ -352,7 +305,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 						String.fromCharCode(txt.charAt(j + 2).toLowerCase() == 'x' ?
 							parseInt(txt.substring(j + 3, l), 16) :
 							parseInt(txt.substring(j + 2, l), 10)) :
-						_decs[txt.substring(j + 1, l)];
+						_decs[txt.substring(j + 1, l)] as never;
 					if (dec) {
 						out += txt.substring(k, j) + dec;
 						k = (j = l) + 1;
@@ -362,20 +315,20 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 		}
 		return !k ? txt :
 			k < tl ? out + txt.substring(k) : out;
-	},
+	}
 
 	/** A shortcut of <code>' cellpadding="0" cellspacing="0" border="0"'</code>.
 	 * @type String
 	 */
-	cellps0: ' cellpadding="0" cellspacing="0" border="0"',
+	static cellps0 = ' cellpadding="0" cellspacing="0" border="0"';
 	/** A shortcut of <code>'&lt;img style="height:0;width:0"/&gt;'</code>.
 	 * @type String
 	 */
-	img0: '<img style="height:0;width:0" aria-hidden="true"/>',
+	static img0 = '<img style="height:0;width:0" aria-hidden="true"/>';
 	/** A shortcut of <code>'&lt;i style="height:0;width:0"/&gt;'</code>.
 	 * @type String
 	 */
-	i0: '<i style="height:0;width:0"></i>',
+	static i0 = '<i style="height:0;width:0"></i>';
 	/** Returns today.
 	 * @param boolean full if true, returns the full time,
 	 * else only returns year, month, and day.
@@ -391,19 +344,19 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * @return zk.DateImpl
 	 * @since 5.0.6
 	 */
-	today(fmt: boolean | string, tz?: string): DateImpl {
+	static today(fmt: boolean | string, tz?: string): DateImpl {
 		var d = window.Dates.newInstance().tz(tz), hr = 0, min = 0, sec = 0, msec = 0;
 		if (typeof fmt == 'string') {
 			var fmt0 = fmt.toLowerCase();
-			if (fmt0.indexOf('h') >= 0 || fmt0.indexOf('k') >= 0) hr = d.getHours();
-			if (fmt.indexOf('m') >= 0) min = d.getMinutes();
-			if (fmt.indexOf('s') >= 0) sec = d.getSeconds();
-			if (fmt.indexOf('S') >= 0) msec = d.getMilliseconds();
+			if (fmt0.includes('h') || fmt0.includes('k')) hr = d.getHours();
+			if (fmt.includes('m')) min = d.getMinutes();
+			if (fmt.includes('s')) sec = d.getSeconds();
+			if (fmt.includes('S')) msec = d.getMilliseconds();
 		} else if (fmt)
 			return d;
 		return window.Dates.newInstance([d.getFullYear(), d.getMonth(), d.getDate(),
 			hr, min, sec, msec], tz);
-	},
+	}
 	/** Returns if one is ancestor of the other.
 	 * It assumes the object has either a method called <code>getParent</code>
 	 * or a field called <code>parent</code>.
@@ -418,13 +371,14 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * @return boolean
 	 * @see jq#isAncestor
 	 */
-	isAncestor(p?: zk.Widget, c?: zk.Widget & {getParent?()}): boolean {
+	static isAncestor(p?: zk.Object, c?: zk.Object & {getParent?(): zk.Widget}): boolean
+	static isAncestor(p?: zk.Widget, c?: zk.Widget & {getParent?(): zk.Widget}): boolean {
 		if (!p) return true;
 		for (; c; c = c.getParent ? c.getParent() : c.parent)
 			if (p == c)
 				return true;
 		return false;
-	},
+	}
 
 	//progress//
 	/** Creates a message box to indicate something is being processed
@@ -436,7 +390,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * Ignored if not specified.
 	 * @see #destroyProgressbox
 	 */
-	progressbox(id: string, msg: string, mask?: boolean, icon?: string, opts?: Partial<ProgressboxOptions>): void {
+	static progressbox(id: string, msg: string, mask?: boolean, icon?: string, opts?: Partial<ProgressboxOptions>): void {
 		if (mask && zk.Page.contained.length) {
 			for (var c = zk.Page.contained.length, e = zk.Page.contained[--c]; e; e = zk.Page.contained[--c]) {
 				if (!e._applyMask)
@@ -469,7 +423,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 		jq(document.body).append(html + '</div>');
 
 		var $n = jq(id, zk),
-			n = $n[0],
+			n: HTMLElement & {z_mask?} = $n[0],
 			$txt = jq(idtxt, zk),
 			txt = $txt[0],
 			st = txt.style;
@@ -478,7 +432,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 			var zIndex: string | number = $txt.css('z-index');
 			if (zIndex == 'auto' || typeof zIndex === 'string')
 				zIndex = 1;
-			n['z_mask'] = new zk.eff.FullMask!({
+			n.z_mask = new zk.eff.FullMask({
 				mask: jq(idmsk, zk)[0],
 				zIndex: zIndex - 1
 			});
@@ -491,26 +445,26 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 		} else {
 			var pos = zk.progPos;
 			if (pos) {
-				var left,
-					top,
+				var left: number,
+					top: number,
 					width = jq.innerWidth(),
 					height = jq.innerHeight(),
 					wdgap = width - zk(txt).offsetWidth(),
 					hghgap = height - zk(txt).offsetHeight();
 
-				if (pos.indexOf('mouse') >= 0) {
+				if (pos.includes('mouse')) {
 					var offset = zk.currentPointer;
 					left = offset[0] + 10;
 					top = offset[1] + 10;
 				} else {
-					if (pos.indexOf('left') >= 0) left = x;
-					else if (pos.indexOf('right') >= 0)	left = x + wdgap - 1;
-					else if (pos.indexOf('center') >= 0) left = x + wdgap / 2;
+					if (pos.includes('left')) left = x;
+					else if (pos.includes('right'))	left = x + wdgap - 1;
+					else if (pos.includes('center')) left = x + wdgap / 2;
 					else left = 0;
 
-					if (pos.indexOf('top') >= 0) top = y;
-					else if (pos.indexOf('bottom') >= 0) top = y + hghgap - 1;
-					else if (pos.indexOf('center') >= 0) top = y + hghgap / 2;
+					if (pos.includes('top')) top = y;
+					else if (pos.includes('bottom')) top = y + hghgap - 1;
+					else if (pos.includes('center')) top = y + hghgap / 2;
 					else top = 0;
 
 					left = left < x ? x : left;
@@ -522,16 +476,18 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 		}
 
 		$n.zk.cleanVisibility();
-	},
+	}
 	/** Removes the message box created by {@link #progressbox}.
 	 * @param String id the ID of the DOM element of the message box
 	 */
-	destroyProgressbox(id: string, opts?: Partial<ProgressboxOptions>): void {
+	static destroyProgressbox(id: string, opts?: Partial<ProgressboxOptions>): void {
 		if (opts && opts.busy && --zk.busy < 0)
 			zk.busy = 0;
-		var $n = jq(id, zk), n;
+		var $n = jq(id, zk), n: HTMLElement & {z_mask?: zk.eff.Effect} | zk.eff.Effect;
 		if ($n.length) {
-			if (n = $n[0]['z_mask']) n.destroy();
+			if (n = ($n[0] as {z_mask?: zk.eff.Effect}).z_mask as never) {
+				(n as zk.eff.Effect).destroy();
+			}
 			$n.remove();
 			jq('html').off('keydown', zk.$void);
 		}
@@ -541,7 +497,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 				e._applyMask.destroy();
 				e._applyMask = undefined;
 			}
-	},
+	}
 
 	//HTTP//
 	/** Navigates to the specified URL.
@@ -556,7 +512,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * If true, the new page replaces the previous page's position in the history list.</li>
 	 * </ul>
 	 */
-	go(url: string, opts?: Partial<GoOptions>): void {
+	static go(url: string, opts?: Partial<GoOptions>): void {
 		opts = opts || {};
 		if (opts.target) {
 			open(url, opts.target);
@@ -582,7 +538,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 			}
 			location.reload();
 		}
-	},
+	}
 
 	/** Returns all descendant frames of the given window.
 	 * <p>To retrieve all, invoke <code>zUtl.frames(top)</code>.
@@ -592,11 +548,11 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * @return Array
 	 * @since 5.0.4
 	 */
-	frames(w: Window): Window[] {
+	static frames(w: Window): Window[] {
 		var ary: Window[] = [];
 		_frames(ary, w);
 		return ary;
-	},
+	}
 
 	/** Converts an integer array to a string.
 	 * @param int[] ary the integer array to convert.
@@ -605,10 +561,10 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * @see #stringToInts
 	 * @deprecated Use {@code [].join()} instead.
 	 */
-	intsToString(ary: number[] | undefined): string {
+	static intsToString(ary: number[] | undefined): string {
 		if (!ary) return '';
 		return ary.join();
-	},
+	}
 	/** Converts a string separated by comma to an array of integers.
 	 * @see #intsToString
 	 * @param String text the string to convert.
@@ -617,7 +573,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * is not specified. For example, zUtl.stringToInts("1,,3", 2) returns [1, 2, 3].
 	 * @return int[]
 	 */
-	stringToInts(text: string | undefined, defaultValue: number): number[] | undefined {
+	static stringToInts(text: string | undefined, defaultValue: number): number[] | undefined {
 		if (text == null)
 			return undefined;
 
@@ -635,7 +591,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 			j = k + 1;
 		}
 		return list;
-	},
+	}
 	/** Converts a map to a string
 	 * @see #intsToString
 	 * @param Map map the map to convert
@@ -643,7 +599,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * @param String separator the symbol for separator. If omitted, ',' is assumed.
 	 * @return String
 	 */
-	mapToString(map: Record<string, string>, assign?: string, separator?: string): string {
+	static mapToString(map: Record<string, string>, assign?: string, separator?: string): string {
 		assign = assign || '=';
 		separator = separator || ' ';
 		var out: string[] = [];
@@ -651,7 +607,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 			out.push(separator, v, assign, map[v]);
 		out[0] = '';
 		return out.join('');
-	},
+	}
 	/** Appends an attribute.
 	 * Notice that the attribute won't be appended if val is empty or false.
 	 * In other words, it is equivalent to<br/>
@@ -670,9 +626,9 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * If false (or omitted), it is the same as {@link #appendAttr(String, Object)}.
 	 * @since 5.0.3
 	 */
-	appendAttr(nm: string, val: unknown, force?: boolean): string {
+	static appendAttr(nm: string, val: unknown, force?: boolean): string {
 		return val || force ? ' ' + nm + '="' + val + '"' : '';
-	},
+	}
 	/** Fires beforeSize, onFitSize, onSize and afterSize
 	 * @param Widget wgt the widget which the zWatch event will be fired against.
 	 * @param int bfsz the beforeSize mode:
@@ -684,7 +640,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * </ul>
 	 * @since 5.0.8
 	 */
-	fireSized(wgt: zk.Widget, bfsz?: number): void {
+	static fireSized(wgt: zk.Widget, bfsz?: number): void {
 		// ignore delayed rerendering case, like Bug ZK-2281
 		if (wgt.desktop) {
 			if (zUtl.isImageLoading() || zk.clientinfo) {
@@ -702,7 +658,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 			zWatch.fireDown('onSize', wgt);
 			zWatch.fireDown('afterSize', wgt);
 		}
-	},
+	}
 	/** Fires beforeSize, onShow, onFitSize, onSize and afterSize
 	 * @param Widget wgt the widget which the zWatch event will be fired against.
 	 * @param int bfsz the beforeSize mode:
@@ -714,48 +670,48 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * </ul>
 	 * @since 5.0.8
 	 */
-	fireShown(wgt: zk.Widget, bfsz?: number): void {
+	static fireShown(wgt: zk.Widget, bfsz?: number): void {
 		zWatch.fireDown('onShow', wgt);
 		zUtl.fireSized(wgt, bfsz);
-	},
+	}
 	/**
 	 * Loads an image before ZK client engine to calculate the widget's layout.
 	 * @param String url the loading image's localation
 	 * @since 6.0.0
 	 */
-	loadImage(url: string): void {
+	static loadImage(url: string): void {
 		if (!_imgMap[url]) {
 			_imgMap[url] = true;
 			_loadImage(url);
 		}
-	},
+	}
 	/**
 	 * Checks whether all the loading images are finish.
 	 * @see #loadImage
 	 * @since 6.0.0
 	 */
-	isImageLoading(): boolean {
+	static isImageLoading(): boolean {
 		for (var _n in _imgMap)
 			return true;
 		return false;
-	},
+	}
 	/**
 	 * Get week numbers of year for a specific date
 	 * @since 8.5.1
 	 */
-	getWeekOfYear(year: number, month: number, date: number, firstDayOfWeek: number,
+	static getWeekOfYear(year: number, month: number, date: number, firstDayOfWeek: number,
 				  minimalDaysInFirstWeek: number): number {
 		var d = window.Dates.newInstance([year, month, date, 0, 0, 0, 0], 'UTC'),
 			day = d.getDay();
 		d.setDate(date - minimalDaysInFirstWeek + firstDayOfWeek - (firstDayOfWeek > day ? day : day - 7));
 		var yearStart = window.Dates.newInstance([d.getFullYear(), 0, 1], 'UTC');
 		return Math.ceil(((d.valueOf() - yearStart.valueOf()) / 86400000 + 1) / 7);
-	},
+	}
 	/**
 	 * Converts the dataURL to Blob object.
 	 * This function is not supported in IE9 and below.
 	 */
-	convertDataURLtoBlob(dataURL: string): Blob {
+	static convertDataURLtoBlob(dataURL: string): Blob {
 		var byteString = window.atob(dataURL.split(',')[1]),
 			mimeString = dataURL.split(',')[0].split(':')[1].split(';')[0],
 			len = byteString.length,
@@ -767,16 +723,16 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 		}
 
 		return new Blob([arrayBuffer], {type: mimeString});
-	},
+	}
 	/**
 	 * Returns the ratio of the resolution in physical pixels to the resolution in CSS pixels for the current display device.
 	 * For more information, please visit https://developer.mozilla.org/en-US/docs/Web/API/Window/devicePixelRatio
 	 * @return double the devicePixelRatio
 	 * @since 8.6.0
 	 */
-	getDevicePixelRatio(): number {
-		return window.devicePixelRatio || window.screen['deviceXDPI'] / window.screen['logicalXDPI'];
-	},
+	static getDevicePixelRatio(): number {
+		return window.devicePixelRatio || window.screen.deviceXDPI / window.screen.logicalXDPI;
+	}
 	/**
 	 * Returns the Promise whose fulfillment handler receives a MediaStream object when the requested media has successfully been obtained.
 	 * Note: this function may returns a Promise that is rejected, if this browser not support getUserMedia.
@@ -786,12 +742,10 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * @return Promise
 	 * @since 8.6.1
 	 */
-	// eslint-disable-next-line no-undef
-	getUserMedia(constraints: MediaStreamConstraints): Promise<MediaStream> {
-		var polyfillGUM = function (constraints?, success?, error?): Promise<MediaStream> {
-			var getUserMedia = navigator['getUserMedia'] || navigator['webkitGetUserMedia'] ||
-				navigator['mozGetUserMedia'] || navigator['msGetUserMedia'] ||
-				navigator['oGetUserMedia'];
+	static getUserMedia(constraints: MediaStreamConstraints): Promise<MediaStream> {
+		var polyfillGUM = function (constraints: MediaStreamConstraints, success?, error?): Promise<MediaStream> {
+			var getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia ||
+				navigator.mozGetUserMedia || navigator.msGetUserMedia;
 			if (!getUserMedia)
 				return Promise.reject(new Error('Cannot polyfill getUserMedia'));
 			return new Promise(function (success, error) {
@@ -800,11 +754,11 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 		};
 
 		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-ignore: assign to read only property(mediaDevices) for polyfill
-		if (navigator.mediaDevices === undefined) navigator['mediaDevices'] = {};
+		// @ts-expect-error: assign to read only property(mediaDevices) for polyfill
+		if (navigator.mediaDevices === undefined) navigator.mediaDevices = {};
 		if (navigator.mediaDevices.getUserMedia === undefined) navigator.mediaDevices.getUserMedia = polyfillGUM;
 		return navigator.mediaDevices.getUserMedia(constraints);
-	},
+	}
 	/**
 	 * Creates and returns a new, throttled version of the passed function, that,
 	 * when invoked repeatedly, will only actually call the original function at most once per every wait milliseconds.
@@ -817,22 +771,20 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * @return Function a new, throttled version of the passed function
 	 * @since 9.6.0
 	 */
-	throttle<T, A extends unknown[], R>(func: (this: T, ...args: A) => R, wait: number):
+	static throttle<T, A extends unknown[], R>(func: (this: T, ...args: A) => R, wait: number):
 				(this: T, ...args: A) => R {
 		var timeout: number | undefined, context, args, result,
 			previous = 0,
 			later = function (): void {
 				previous = Date.now();
 				timeout = undefined;
-				result = func.call(context, ...args);
+				result = func.call(context as T, ...args as A);
 				if (!timeout) context = args = undefined;
 			};
 
-		return function () {
+		return function (): R {
 			var now = Date.now(),
 				remaining = wait - (now - previous);
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-ignore
 			context = this;
 			args = arguments;
 			if (remaining <= 0 || remaining > wait) {
@@ -841,14 +793,14 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 					timeout = undefined;
 				}
 				previous = now;
-				result = func.call(context, ...args);
+				result = func.call(context as T, ...args as A);
 				if (!timeout) context = args = undefined;
 			} else if (!timeout) {
 				timeout = window.setTimeout(later, remaining);
 			}
-			return result;
+			return result as R;
 		};
-	},
+	}
 	/**
 	 * Creates and returns a new debounced version of the passed function
 	 * which will postpone its execution until after wait milliseconds have elapsed since the last time it was invoked.
@@ -862,7 +814,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * @return Function a new debounced version of the passed function
 	 * @since 9.6.0
 	 */
-	debounce<T, A extends unknown[], R>(func: (this: T, ...args: A) => R, wait: number,
+	static debounce<T, A extends unknown[], R>(func: (this: T, ...args: A) => R, wait: number,
 									immediate?: boolean): (this: T, ...args: A) => R {
 		var timeout, args, context, timestamp, result;
 		if (null == wait) wait = 100;
@@ -875,27 +827,27 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 			} else {
 				timeout = undefined;
 				if (!immediate) {
-					result = func.call(context, ...args);
+					result = func.call(context as T, ...args as A);
 					context = args = undefined;
 				}
 			}
 		}
 
-		var debounced = function (this): any { // eslint-disable-line @typescript-eslint/no-explicit-any
-			context = this;
+		var debounced = function (this): R {
+			context = this as T;
 			args = arguments;
 			timestamp = Date.now();
 			var callNow = immediate && !timeout;
 			if (!timeout) timeout = setTimeout(later, wait);
 			if (callNow) {
-				result = func.call(context, ...args);
+				result = func.call(context as T, ...args as A);
 				context = args = undefined;
 			}
-			return result;
+			return result as R;
 		};
 
 		return debounced;
-	},
+	}
 	/**
 	 * Check if the two objects has the same value
 	 * ref: undersore isEqual
@@ -904,7 +856,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * @return boolean the two object is the same or not
 	 * @since 10.0.0
 	 */
-	isEqualObject(a: unknown, b: unknown): boolean {
+	static isEqualObject(a: unknown, b: unknown): boolean {
 		// Identical objects are equal. `0 === -0`, but they aren't identical.
 		// See the [Harmony `egal` proposal](http://wiki.ecmascript.org/doku.php?id=harmony:egal).
 		if (a === b) return a !== 0 || 1 / (a as number) === 1 / (b as number);
@@ -913,7 +865,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 		// `NaN`s are equivalent, but non-reflexive.
 		if (a !== a) return b !== b;
 		// Exhaust primitive checks
-		let type = typeof a;
+		const type = typeof a;
 		if (type !== 'function' && type !== 'object' && typeof b != 'object') return false;
 
 		const keys = Object.keys(a as Record<string, unknown>);
@@ -928,10 +880,10 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 		}
 		return true;
 	}
-};
+}
 
 var _imgMap = {};
-function _loadImage(url): void {
+function _loadImage(url: string): void {
 	var img = new Image(),
 		f = function (): void {
 			delete _imgMap[url];
@@ -939,3 +891,4 @@ function _loadImage(url): void {
 	img.onerror = img.onload = f;
 	img.src = url;
 }
+window.zUtl = zUtl;

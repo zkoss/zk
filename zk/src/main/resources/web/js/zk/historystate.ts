@@ -12,21 +12,22 @@ Copyright (C) 2017 Potix Corporation. All Rights Reserved.
 	This program is distributed under LGPL Version 2.1 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
-let popped = ('state' in window.history),
-	initialURL = location.href;
+export default {};
+let popped = ('state' in window.history);
+const initialURL = location.href;
 
 zk.historystate = {
 	enabled: true,
 	onPopState(event: PopStateEvent): void {
-		var initialPop = !popped && location.href == initialURL;
+		const initialPop = !popped && location.href == initialURL;
 		popped = true;
 		if (initialPop) return;
 
 		var data = {
-			state: event.state,
+			state: event.state as never,
 			url: location.href
 		};
-		zAu.send(new zk.Event(undefined, 'onHistoryPopState', data, {implicit: true}), 1);
+		zAu.send(new zk.Event(zk.Desktop._dt!, 'onHistoryPopState', data, {implicit: true}), 1);
 		if (zk.bmk.checkBookmark)
 			zk.bmk.checkBookmark();
 	},

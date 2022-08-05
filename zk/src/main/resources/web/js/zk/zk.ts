@@ -13,16 +13,27 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+declare global {
+	interface Window {
+		zkInitCrashTimer: number | undefined;
+	}
+}
 export type DataHandler = (wgt: zk.Widget, val: unknown) => void;
 
 let _zkf;
 
-function _zk(sel?: string | Node | JQuery | JQuery.Event | zk.Event | zk.Widget | null): zk.JQZK {
+function _zk(sel?: string | Node | JQuery | JQuery.Event | zk.Event | zk.Widget | null): zk.JQZK { // eslint-disable-line zk/noNull
 	return jq(sel, _zk as ZKStatic).zk;
 }
 
+export interface AjaxURIOptions {
+	desktop: zk.Desktop;
+	au: boolean;
+	resource: boolean;
+	ignoreSession: boolean;
+}
 // Note: we cannot use Object.assign() here, because some prototype property may not be copied.
-_zk.copy = function<T, U> (dst: T, src: U, backup?: object): T & U {
+_zk.copy = function<T, U> (dst: T, src: U, backup?: Record<string, unknown>): T & U {
 	// eslint-disable-next-line @typescript-eslint/consistent-type-assertions
 	dst = dst || ({} as T);
 	for (var p in src) {
@@ -41,7 +52,7 @@ var _oid = 0,
 	_logmsg,
 	_stamps: {n: string; t: number}[] = [],
 	_t0 = jq.now(),
-	_procq = {}; // Bug ZK-3053
+	_procq: Record<number, number | undefined> = {}; // Bug ZK-3053
 
 function _isNativeReflectConstruct(): boolean {
 	if (typeof Reflect === 'undefined' || !Reflect.construct)
@@ -51,24 +62,25 @@ function _isNativeReflectConstruct(): boolean {
 	if (typeof Proxy === 'function')
 		return true;
 	try {
-		Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function (): void {}));
+		Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function (): void { return; }));
 		return true;
 	} catch (e) {
 		return false;
 	}
 }
-
-function _inherits(subClass, superClass): void {
+// eslint-disable-next-line zk/noNull
+function _inherits(subClass: NewableFunction, superClass: NewableFunction | null): void {
+	// eslint-disable-next-line zk/noNull
 	if (typeof superClass !== 'function' && superClass !== null) {
 		throw new TypeError('Super expression must either be null or a function');
 	}
-	subClass.prototype = Object.create(superClass && superClass.prototype, {
+	subClass.prototype = Object.create(superClass && superClass.prototype as never, {
 		constructor: {
 			value: subClass,
 			writable: true,
 			configurable: true
 		}
-	});
+	}) as never;
 	Object.defineProperty(subClass, 'prototype', {
 		writable: false
 	});
@@ -76,28 +88,28 @@ function _inherits(subClass, superClass): void {
 }
 
 function _createSuper(Derived): CallableFunction {
-	var hasNativeReflectConstruct = _isNativeReflectConstruct();
-	return function _createSuperInternal() {
-		var Super = Object.getPrototypeOf(Derived),
-			result;
+	const hasNativeReflectConstruct = _isNativeReflectConstruct();
+	return function _createSuperInternal(): NewableFunction {
+		var Super = Object.getPrototypeOf(Derived) as CallableFunction,
+			result: NewableFunction;
 		if (hasNativeReflectConstruct) {
 
 			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			// @ts-ignore
-			var NewTarget = Object.getPrototypeOf(this).constructor;
-			result = Reflect.construct(Super, arguments, NewTarget);
+			var NewTarget = (Object.getPrototypeOf(this as never) as object).constructor as never;
+			result = Reflect.construct(Super, arguments, NewTarget) as never;
 		} else {
 			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			// @ts-ignore
-			result = Super.call(this, ...arguments);
+			result = Super.bind(this as object)(...arguments) as NewableFunction;
 		}
 		return result;
 	};
 }
 // the "___s" is the sequence number of the "this" instance to check its "_$super" order
 var ___s = 1;
-function newClass<T>(superclass): T {
-	var init = function (this: ZKObject & {___s? ; ____?}): object {
+function newClass<T>(superclass: { $oid?: number }): T {
+	var init = function (this: ZKObject & {___s?: number ; ____?: number}): object {
 		// For B95-ZK-4320.zul, the ___s is always differed by 1, so we use
 		// "superclass.$oid" to distinguish whether is the same inherited class or not.
 		// For example,
@@ -109,6 +121,7 @@ function newClass<T>(superclass): T {
 		this.___s = superclass.$oid ?? ___s;
 		let ____ = this.____;
 
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 		this._$super.____ = superclass.$oid ? (superclass.$oid + 1) : ___s++;
 		// call super constructor refer to babel
 		let _this = _super.bind(this)() as ZKObject;
@@ -133,6 +146,7 @@ function newClass<T>(superclass): T {
 			}
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 		delete this._$super.____;
 		delete this.___s;
 
@@ -142,12 +156,10 @@ function newClass<T>(superclass): T {
 		return _this as object;
 	};
 
-	_inherits(init, superclass);
+	_inherits(init as never, superclass as never);
 	var _super = _createSuper(init);
 	_super['class'] = superclass;
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore
-	return init;
+	return init as unknown as T;
 }
 function regClass<S extends typeof ZKObject>(jclass: S): S {
 	var oid = jclass.$oid = ++_oid;
@@ -167,7 +179,7 @@ function defSet00(nm: string): GeneratedSetter {
 }
 function defSet01(nm: string, after: Setter): GeneratedSetter {
 	return function (v, opts) {
-		var o = this[nm];
+		var o = this[nm] as never;
 		this[nm] = v;
 		if (o !== v || (opts && opts.force)) {
 			this['__fname__'] = nm.substring(1);
@@ -180,16 +192,16 @@ function defSet01(nm: string, after: Setter): GeneratedSetter {
 function defSet10(nm: string, before: Setter): GeneratedSetter {
 	return function (/*v, opts*/) {
 		this['__fname__'] = nm.substring(1);
-		this[nm] = before.call(this, ...(arguments as never as []));
+		this[nm] = before.call(this, ...(arguments as never as [])) as never;
 		delete this['__fname__'];
 		return this;
 	};
 }
 function defSet11(nm: string, before: Setter, after: Setter): GeneratedSetter {
 	return function (v, opts) {
-		var o = this[nm];
+		var o = this[nm] as never;
 		this['__fname__'] = nm.substring(1);
-		this[nm] = v = before.call(this, ...(arguments as never as []));
+		this[nm] = v = before.call(this, ...(arguments as never as [])) as never;
 		if (o !== v || (opts && opts.force))
 			after.call(this, ...(arguments as never as []));
 		delete this['__fname__'];
@@ -208,7 +220,7 @@ function showprgb(): void { //When passed to FF's setTimeout, 1st argument is no
 	_showprgb(_zk.processMask);
 }
 function _showprgb(mask?: boolean, icon?: string): void {
-	let $jq;
+	let $jq: undefined | JQuery;
 	if (_zk.processing
 	&& !($jq = jq('#zk_proc')).length && !jq('#zk_showBusy').length) {
 		zUtl.progressbox('zk_proc', window.msgzk ? msgzk.PLEASE_WAIT : 'Processing...', mask, icon);
@@ -223,24 +235,23 @@ function wgt2s(w: zk.Widget): string {
 	var s = w.widgetName;
 	return s + (w.id ? '$' + w.id : '') + '#' + w.uuid + '$' + w.$oid;
 }
-async function toLogMsg(ars: Array<Element | zk.Widget> | IArguments, detailed): Promise<string> {
-	let {Widget} = await import('./widget'); // avoid circular dependence
+function toLogMsg(ars: Array<Element | zk.Widget> | JQuery | IArguments, detailed): string {
 	var msg: string[] = [];
 	for (var j = 0, len = ars.length; j < len; j++) {
 		if (msg.length) msg.push(', ');
-		var ar = ars[j];
-		if (ar && (Array.isArray(ar) || ar.zk)) //ar.zk: jq(xx)
-			msg.push('[' + toLogMsg(ar, detailed) + ']');
-		else if (Widget && Widget.isInstance(ar))
+		var ar = ars[j] as undefined | Array<Element | zk.Widget> | JQuery | Node;
+		if (ar && (Array.isArray(ar) || (ar as JQuery).zk)) //ar.zk: jq(xx)
+			msg.push('[' + toLogMsg(ar as Exclude<typeof ar, Node | undefined>, detailed) + ']');
+		else if (ar instanceof zk.Widget)
 			msg.push(wgt2s(ar));
-		else if (ar && ar.nodeType) {
-			var w = Widget && Widget.$(ar);
-			if (w) msg.push(jq.nodeName(ar), (ar != w.$n() ? '#' + ar.id + '.' + ar.className : ''), ':', wgt2s(w));
-			else msg.push(jq.nodeName(ar), '#', ar.id);
-		} else if (detailed && ar && (typeof ar == 'object') && !ar.nodeType) {
+		else if (ar && ar instanceof Node) {
+			var w = zk.Widget.$(ar);
+			if (w) msg.push(jq.nodeName(ar), (ar != w.$n() ? '#' + (ar as HTMLElement).id + '.' + (ar as HTMLElement).className : ''), ':', wgt2s(w));
+			else msg.push(jq.nodeName(ar), '#', (ar as HTMLElement).id);
+		} else if (detailed && ar && (typeof ar == 'object') && !(ar instanceof Node)) {
 			var s = ['{\n'];
 			for (var v in ar)
-				s.push(v, ':', ar[v], ',\n');
+				s.push(v, ':', ar[v] as never, ',\n');
 			if (s[s.length - 1] == ',\n')
 				s.pop();
 			s.push('\n}');
@@ -279,8 +290,12 @@ function _stampout(): void {
 	_zk.stamp('ending');
 	_zk.stamp();
 }
-
-let _caches = {};
+interface R<T> {
+	[keys: string]: T;
+}
+type UnknownProps = R<UnknownValues>;
+type UnknownValues = unknown | R<UnknownProps>;
+let _caches: UnknownProps = {};
 
 /** @class zk
  * @import zk.Package
@@ -303,7 +318,7 @@ _zk.classes = {} as Record<number, unknown>;
  * @since 5.0.9
  */
 _zk.isClass = function (cls: unknown): boolean {
-	return cls != null && ((cls as Function).prototype instanceof ZKObject);
+	return cls != null && ((cls as NewableFunction).prototype instanceof ZKObject);
 };
 /** Returns whether the given JS object is a ZK object ({@link zk.Object}).
  * @param Object o the object to test whether it is a ZK object
@@ -432,7 +447,7 @@ declare namespace _zk {
 	 * @type Double
 	 */
 	//ie: null,
-	export let ie: number;
+	export let ie: number | undefined;
 	/** Returns the browser's version as double (only the first two part of the version, such as 8)
 	 * if the browser is Internet Explorer, or null if not.
 	 * <p>Notice that this is the browser's version, which might not be the
@@ -614,8 +629,8 @@ try {
  * @return Object the value.
  * @since 5.0.2
  */
-_zk.cut = function (props: Record<string, unknown>, nm: string): object | undefined {
-	var v;
+_zk.cut = function <T> (props: Record<string, T>, nm: string): T | undefined {
+	var v: T | undefined;
 	if (props) {
 		v = props[nm];
 		delete props[nm];
@@ -641,10 +656,10 @@ _zk.cut = function (props: Record<string, unknown>, nm: string): object | undefi
  * @see #load
  */
 _zk.$package = function (name: string, end?: boolean, wv?: boolean): unknown { //end used only by WpdExtendlet
-	for (var j = 0, ref = window; ;) {
+	for (var j = 0, ref: Record<string, unknown> | Window = window; ;) {
 		var k = name.indexOf('.', j),
 			nm = k >= 0 ? name.substring(j, k) : name.substring(j),
-			nxt = ref[nm], newpkg;
+			nxt = ref[nm] as undefined | Record<string, unknown>, newpkg;
 		if (newpkg = !nxt) nxt = ref[nm] = {};
 		if (k < 0) {
 			if (newpkg && end !== false) zk.setLoaded(name);
@@ -699,10 +714,10 @@ _zk.$import = function (name: string, fn?: CallableFunction): unknown {
 		if (fn) fn(last);
 		return last;
 	}
-	for (var j = 0, ref: unknown = window; ;) {
+	for (var j = 0, ref: Window | UnknownProps = window; ;) {
 		var k = name.indexOf('.', j),
 			nm = k >= 0 ? name.substring(j, k) : name.substring(j),
-			nxt = (ref as Record<string, unknown>)[nm];
+			nxt = ref[nm] as UnknownProps;
 		if (k < 0 || !nxt) {
 			if (fn) {
 				if (nxt) fn(nxt);
@@ -798,7 +813,7 @@ _zk.$extends = function<S extends typeof ZKObject, D, D2> (superclass: S,
 	var superpt = superclass.prototype,
 		jclass = newClass<typeof ZKObject>(superclass),
 		thispt = jclass.prototype,
-		define = members['$define'];
+		define = members['$define'] as never;
 
 	if (define)	{
 		delete members['$define'];
@@ -924,8 +939,8 @@ function override<T extends () => void, U> (dst: T, backup: Record<string, unkno
 		dst = backup as T;
 		return old;
 	case 'string':
-		dst['$' + backup] = dst[backup];
-		dst[backup as string] = src;
+		dst['$' + backup] = dst[backup] as never;
+		dst[backup] = src;
 		return dst;
 	}
 	for (var nm in src) {
@@ -1018,12 +1033,12 @@ wgt.setSomething(somevalue, {force:true});
  * @see #$extends
  * @return Class the class being defined
  */
-_zk.define = function (klass, props) {
+_zk.define = function (klass: NewableFunction, props: Record<string, CallableFunction[] | CallableFunction>) {
 	for (var nm in props) {
 		var nm1 = '_' + nm,
 			nm2 = nm.charAt(0).toUpperCase() + nm.substring(1),
-			pt = klass.prototype,
-			after = props[nm], before = undefined;
+			pt = klass.prototype as object,
+			after: CallableFunction[] | CallableFunction | undefined = props[nm], before: CallableFunction | undefined = undefined;
 		if (Array.isArray(after)) {
 			before = after.length ? after[0] : undefined;
 			after = after.length > 1 ? after[1] : undefined;
@@ -1101,33 +1116,34 @@ dst["mike"] = src.getMike();
  * @since 5.0.3
  * @see #copy
  */
-function set<T, U>(dst: T, src: U, props: string[], ignoreUndefined: boolean): T;
-function set<T, U>(o: T, name: string | U, value, extra): T {
+function set<T extends zk.Object, U>(dst: T, src: U, props: string[], ignoreUndefined: boolean): T;
+function set<T extends zk.Object, U>(o: T, name: string | U, value: unknown[] | unknown, extra): T {
 	if (typeof name == 'string') {
 		_zk._set(o, name, value, extra);
-	} else //o: dst, name: src, value: props
-		for (var j = 0, len = value.length, m, n; j < len;) {
-			n = value[j++];
-			m = name['get' + n.charAt(0).toUpperCase() + n.substring(1)];
+	} else if (Array.isArray(value)) {//o: dst, name: src, value: props
+		for (var j = 0, len = value.length, m: undefined | CallableFunction, n: string; j < len;) {
+			n = value[j++] as string;
+			m = name['get' + n.charAt(0).toUpperCase() + n.substring(1)] as undefined | CallableFunction;
 			if (!extra || m || name[n] !== undefined) //extra: ignoreUndefined in this case
-				_zk._set(o, n, m ? m.call(name) : name[n]);
+				_zk._set(o, n, m ? m.bind(name)() : name[n]);
 		}
+	}
 	return o;
 }
 _zk.set = set;
-_zk._set = function (o, name: string, value, extra?): void { //called by widget.js (better performance)
+_zk._set = function (o: zk.Object, name: string, value, extra?): void { //called by widget.js (better performance)
 	_zk._set2(o,
-		o['set' + name.charAt(0).toUpperCase() + name.substring(1)],
+		o['set' + name.charAt(0).toUpperCase() + name.substring(1)] as never,
 		name, value, extra);
 };
-_zk._set2 = function (o, mtd, name: string | undefined, value, extra?): void { //called by widget.js (better performance)
+_zk._set2 = function (o: zk.Object, mtd: CallableFunction | undefined, name: string | undefined, value, extra?): void { //called by widget.js (better performance)
 	if (mtd) {
 		if (extra !== undefined)
-			mtd.call(o, value, extra);
+			mtd.bind(o)(value, extra);
 		else
-			mtd.call(o, value);
+			mtd.bind(o)(value);
 	} else
-		o[name as string] = value;
+		o[name as string] = value as never;
 };
 /** Retrieves a value from the specified property.
  * <p>For example, <code>zk.get(obj, "x")</code>:<br/>
@@ -1137,16 +1153,16 @@ _zk._set2 = function (o, mtd, name: string | undefined, value, extra?): void { /
 <pre><code>
 zk.get(o, 'value');
 </code></pre>
-	* @param Object o the object to retreive value from
+	* @param Object o the object to retrieve value from
 	* @param String name the name
 	* @return Object the value of the property
 	*/
-_zk.get = function (o, name: string) {
+_zk.get = function (o: zk.Object, name: string): unknown {
 	var nm = name.charAt(0).toUpperCase() + name.substring(1),
-		m = o['get' + nm];
-	if (m) return m.call(o);
-	m = o['is' + nm];
-	if (m) return m.call(o);
+		m = o['get' + nm] as undefined | CallableFunction;
+	if (m) return m.bind(o)();
+	m = o['is' + nm] as undefined | CallableFunction;
+	if (m) return m.bind(o)();
 	return o[name];
 };
 
@@ -1178,16 +1194,16 @@ zk.endProcessing();
 </code></pre>
 	* @see #startProcessing
 	*/
-_zk.endProcessing = function (pid?: number /* internal use only */): void {
+_zk.endProcessing = function (pid?: number | string /* internal use only */): void {
 	//F70-ZK-2495: delete init crash timer once endProcessing is called
-	let crashTimer = window['zkInitCrashTimer'];
+	let crashTimer = window.zkInitCrashTimer;
 	if (crashTimer) {
 		clearTimeout(crashTimer);
-		window['zkInitCrashTimer'] = false;
+		window.zkInitCrashTimer = undefined;
 	}
 	_zk.processing = false;
 	if (pid) {
-		var t = _procq[pid];
+		var t = _procq[pid] as never;
 		if (t) {
 			clearTimeout(t);
 		}
@@ -1224,7 +1240,7 @@ _zk._noESC = 0; //# of disableESC being called (also used by mount.js)
 	*/
 _zk.error = function (msg: string, silent?: boolean): void {
 	if (!silent) {
-		zAu.send(new zk.Event(undefined, 'error', {message: msg}, {ignorable: true}), 800);
+		zAu.send(new zk.Event(zk.Desktop._dt!, 'error', {message: msg}, {ignorable: true}), 800);
 	}
 	_zk._Erbx.push(msg);
 };
@@ -1256,11 +1272,12 @@ zk.log('value is", value);
 	* @see #stamp(String, boolean)
 	*/
 _zk.log = function (detailed): void {
-	toLogMsg(
+	const msg = toLogMsg(
 		(detailed !== _zk) ? arguments :
 			[].slice.call(arguments, 1)
 		, (detailed === _zk)
-	).then(msg => _logmsg = (_logmsg ? _logmsg + msg : msg) + '\n');
+	);
+	_logmsg = (_logmsg ? _logmsg + msg : msg) + '\n';
 	setTimeout(function () {jq(doLog);}, 300);
 };
 /** Make a time stamp for this momemt; used for performance tuning.
@@ -1281,10 +1298,10 @@ _zk.stamp = function (nm?: string, noAutoLog?: boolean): void {
 	if (nm) {
 		if (!noAutoLog && !_stamps.length)
 			setTimeout(_stampout, 0);
-		_stamps.push({n: nm, t: jq.now()});
+		_stamps.push({n: nm, t: Date.now()});
 	} else if (_stamps.length) {
 		var t0 = _t0;
-		for (var inf; (inf = _stamps.shift());) {
+		for (var inf: undefined | {n: string ; t: number}; (inf = _stamps.shift());) {
 			_zk.log(inf.n + ': ' + (inf.t - _t0));
 			_t0 = inf.t;
 		}
@@ -1305,11 +1322,11 @@ _zk.stamp = function (nm?: string, noAutoLog?: boolean): void {
 	* </ul>
 	* @return String the encoded URI
 	*/
-_zk.ajaxURI = function (uri: string | undefined, opts): string {
+_zk.ajaxURI = function (uri: string | undefined, opts?: Partial<AjaxURIOptions>): string {
 	var ctx = zk.Desktop.$(opts ? opts.desktop : undefined),
 		au = opts && opts.au,
 		res = opts && opts.resource,
-		uriPrefix,
+		uriPrefix: string | undefined,
 		base = ctx || _zk;
 
 	if (au) {
@@ -1327,6 +1344,8 @@ _zk.ajaxURI = function (uri: string | undefined, opts): string {
 		if (uri)
 			uri = '/' + uri; //non-au supports relative path
 	}
+
+	uriPrefix = uriPrefix!;
 
 	var j = uriPrefix.indexOf(';'), //ZK-1668: may have multiple semicolon in the URL
 		k = uriPrefix.lastIndexOf('?');
@@ -1361,10 +1380,10 @@ _zk.ajaxURI = function (uri: string | undefined, opts): string {
  * @return String the encoded resource URI
  * @since 9.0.0
  */
-_zk.ajaxResourceURI = function (uri: string, version?: string, opts?: Record<string, unknown>): string {
+_zk.ajaxResourceURI = function (uri: string, version?: string, opts?: Partial<AjaxURIOptions>): string {
 	if (uri.charAt(0) != '/')
 		uri = '/' + uri;
-	opts = opts || {};
+	opts = opts ?? {} as AjaxURIOptions;
 	opts['resource'] = true;
 	version = version || _zk.build;
 	if (version) uri = '/web/_zv' + version + uri;
@@ -1380,7 +1399,7 @@ _zk.ajaxResourceURI = function (uri: string, version?: string, opts?: Record<str
  * @return Desktop the stateless desktop being created
  */
 _zk.stateless = function (dtid?: string, contextURI?: string, updateURI?: string, resourceURI?: string, reqURI?: string) {
-	var Desktop = zk.Desktop, dt;
+	var Desktop = zk.Desktop, dt: undefined | zk.Desktop;
 	dtid = dtid || ('z_auto' + _statelesscnt++);
 	dt = Desktop.all[dtid];
 	if (dt && !dt.stateless) throw 'Desktop conflict';
@@ -1408,8 +1427,8 @@ _zk.addDataHandler = function (name: string, script: string): void {
  * @return boolean ture if existing.
  * @since 8.0
  */
-_zk.hasDataHandler = function (name: string): boolean | undefined {
-	return _zk.dataHandlers && !!_zk.dataHandlers[name];
+_zk.hasDataHandler = function (name: string): boolean {
+	return !!(_zk.dataHandlers && _zk.dataHandlers[name]);
 };
 /**
  * Returns the dataHandler from the given name
@@ -1418,17 +1437,17 @@ _zk.hasDataHandler = function (name: string): boolean | undefined {
  */
 _zk.getDataHandler = function (name: string) {
 	if (_zk.hasDataHandler(name)) {
-		return {run: function (wgt, dataValue) {
+		return {run: function (wgt: zk.Widget, dataValue: string | unknown) {
 			var fun = _zk.dataHandlers![name];
 			if (typeof fun !== 'function')
 				fun = jq.evalJSON(fun) as DataHandler;
 			try {
-				dataValue = jq.parseJSON(dataValue);
+				dataValue = JSON.parse(dataValue as never);
 			} catch (e) {
-				_zk.debugLog(e.message || e);
+				_zk.debugLog((e as Error).message ?? e);
 			}
-			var dataHandlerService,
-				w = wgt;
+			var dataHandlerService: undefined | zk.Service | zkbind.Binder,
+				w: zk.Widget | undefined = wgt;
 			for (; w; w = w.parent) {
 				if (w['$ZKBINDER$']) {
 					if (!w._$binder) w._$binder = new zkbind.Binder(w, this);
@@ -1442,14 +1461,14 @@ _zk.getDataHandler = function (name: string) {
 			}
 			if (w && dataHandlerService) {
 				jq.extend(this, dataHandlerService);
-				var oldCommand = this['command'],
+				var oldCommand = this['command'] as CallableFunction,
 					subName = name.indexOf('data-') == 0 ? name.substring(5) : name;
 				this['command'] = function () {
-					oldCommand.call(this, subName + arguments[0], arguments[1]);
+					oldCommand.bind(this)(subName + arguments[0], arguments[1]);
 				};
-				var oldAfter = this['after'];
+				var oldAfter = this['after'] as CallableFunction;
 				this['after'] = function () {
-					oldAfter.call(this, subName + arguments[0], arguments[1]);
+					oldAfter.bind(this)(subName + arguments[0], arguments[1]);
 				};
 			}
 			fun.call(this, wgt, dataValue);
@@ -1479,21 +1498,11 @@ open: function () {
  * @param Object interceptor the interceptor map corresponds to the widget methods
  * @since 8.0.3
  */
-_zk.$intercepts = function (targetClass, interceptor): void {
+_zk.$intercepts = function (targetClass: typeof zk.Object, interceptor: Record<string, CallableFunction> | object): void {
 	if (!targetClass)
 		throw 'unknown targetClass';
 	if (!interceptor)
 		throw 'unknown interceptor';
-
-	if (targetClass && targetClass.$copied === false) {
-		var f = targetClass.$copyf;
-		targetClass.$copyf = function () {
-			f();
-			targetClass.$copied = true;
-			_zk.$intercepts(targetClass, interceptor);
-		};
-		return;
-	}
 
 	var targetpt = targetClass.prototype;
 	for (var nm in interceptor) {
@@ -1501,21 +1510,21 @@ _zk.$intercepts = function (targetClass, interceptor): void {
 			//init interceptor function
 			if (!targetpt['$getInterceptorContext$']) {
 				targetpt['_$$interceptorContext'] = [];
-				targetpt['$getInterceptorContext$'] = function () {
+				targetpt['$getInterceptorContext$'] = function (this: zk.Widget & {_$$interceptorContext: []}) {
 					return this._$$interceptorContext[this._$$interceptorContext.length - 1];
 				};
 			}
-			(function (nm, oldFunc) {
-				targetpt[nm] = function () {
+			(function (nm: string, oldFunc: CallableFunction) {
+				targetpt[nm] = function (this: zk.Widget & {_$$interceptorContext: unknown[]}): unknown {
 					var context = {stop: false, result: undefined, args: arguments},
 						arr = this._$$interceptorContext;
 					arr.push(context);
-					interceptor[nm].call(this, ...(arguments as never as []));
-					var result = context.stop ? context.result : oldFunc.call(this, ...(context.args as unknown as []));
+					(interceptor[nm] as CallableFunction).bind(this)(...(arguments as unknown as []));
+					var result = context.stop ? context.result : oldFunc.bind(this)(...(context.args as unknown as [])) as never;
 					arr.splice(arr.indexOf(context), 1);
 					return result;
 				};
-			})(nm, targetpt[nm]);
+			})(nm, targetpt[nm] as CallableFunction);
 		}
 	}
 };
@@ -1566,7 +1575,7 @@ let browser = jq.browser,
 	agent = _zk.agent = navigator.userAgent.toLowerCase(),
 	// ZK-4451: iOS 13 safari ipad pretend itself as MacOS
 	isTouchableMacIntel = navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 0,
-	iosver;
+	iosver: undefined | number | RegExpMatchArray | null; // eslint-disable-line zk/noNull
 _zk.opera = browser.opera && _ver(browser.version);
 _zk.ff = _zk.gecko = browser.mozilla
 	&& (agent.indexOf('trident') < 0) && _ver(browser.version);
@@ -1618,7 +1627,7 @@ if (_zk.ff) {
 		_zk.iex = ie11;
 
 	if (_zk.iex) {
-		_zk.ie = document['documentMode'] || _zk.iex;
+		_zk.ie = (document['documentMode'] || _zk.iex) as undefined | number;
 		if (_zk.ie) {
 			// zk.ien: the version n or later but less than 11
 			if (_zk.ie < 11 && _zk.ie >= 9) {
@@ -1675,30 +1684,32 @@ zk.Buffer = Array;
 	 * </p>
 	 * @since 8.0.0
 	 */
-	_zk.Buffer = function<T> (this: T[]) {
-		this['out'] = '';
-	} as ArrayConstructor;
-
-	(_zk.Buffer as Function).prototype = new Array;
-	Object.assign(_zk.Buffer.prototype, {
-		push: function () {
+	class Buffer extends Array<string> {
+		out: string;
+		constructor() {
+			super();
+			this.out = '';
+		}
+		override push(...items: string[]): number {
 			for (var i = 0, j = arguments.length; i < j; i++)
-				if (arguments[i] != null || arguments[i] != undefined)
-					this['out'] += arguments[i];
-		},
-		join: function (str) {
+			if (arguments[i] != null || arguments[i] != undefined)
+			this.out += arguments[i];
+			return this.length;
+		}
+		override join(str): string {
 			if (str)
 				throw 'Wrong usage here! Please run the script `zk.Buffer = Array;` instead.';
-			return this['out'];
-		},
-		shift: _zkf = function () {throw 'Wrong usage here! Please run the script `zk.Buffer = Array;` instead.';},
-		unshift: _zkf,
-		pop: _zkf,
-		slice: _zkf,
-		sort: _zkf
-	});
+			return this.out;
+		}
+		override shift = _zkf = function () {throw 'Wrong usage here! Please run the script `zk.Buffer = Array;` instead.';};
+		override unshift = _zkf as never;
+		override pop = _zkf as never;
+		override slice = _zkf as never;
+		override sort = _zkf as never;
+	}
+	_zk.Buffer = Buffer;
 } else {
-	_zk.Buffer = Array;
+	_zk.Buffer = Array<string>;
 }
 
 /** @class zk.Object
@@ -1711,8 +1722,6 @@ zk.Buffer = Array;
 // to accept abstract classes in the face of a concrete ZKObject, e.g., omit
 // `new` property from `typeof ZKObject` then intersect with `{abstract new() => T}`.
 export abstract class ZKObject {
-	// FIXME: $copyf: Class;
-	// FIXME: $copied: boolean;
 	declare _$ais?: CallableFunction[];
 	declare _$supers: Record<string, unknown>;
 	declare _$proxies: WeakMap<object, unknown>;
@@ -1767,8 +1776,7 @@ export abstract class ZKObject {
 	 * @type zk.Class
 	 */
 	get $class(): typeof ZKObject {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		return this.constructor as any;
+		return this.constructor as never;
 	}
 
 	/**
@@ -1889,26 +1897,25 @@ foo.MyClass = zk.$extends(foo.MySuper, {
 		if (!supers) supers = this._$supers = {};
 
 		if (typeof nm != 'string') { //zk.Class assumed
-			let method;
-			var old = supers[args as string], p; //args is method's name
-			if (!(p = nm.prototype._$super || Object.getPrototypeOf(nm.prototype)) || !(method = p[args as string])) //nm is zk.Class
+			let method: CallableFunction, old = supers[args as string], p: object; //args is method's name
+			if (!(p = nm.prototype._$super as never || Object.getPrototypeOf(nm.prototype)) || !(method = p[args as string] as never)) //nm is zk.Class
 				throw args + ' not in superclass'; //args is the method name
 
 			supers[args as string] = p;
 			try {
-				return method.call(this, ...argx as unknown as []);
+				return method.bind(this)(...argx as unknown as []);
 			} finally {
 				supers[args as string] = old; //restore
 			}
 		}
 
 		//locate method
-		var old = supers[nm], m, p, oldmtd;
+		var old = supers[nm], m: undefined | CallableFunction, p: object & { _$super?: object }, oldmtd: CallableFunction;
 		if (old) {
-			oldmtd = (old as object)[nm];
-			p = old;
+			oldmtd = (old as object)[nm] as never;
+			p = old as never;
 		} else {
-			oldmtd = this[nm];
+			oldmtd = this[nm] as never;
 			p = this;
 		}
 		// In the following two cases, we have to examine `Object.getPrototypeOf`.
@@ -1917,9 +1924,9 @@ foo.MyClass = zk.$extends(foo.MySuper, {
 		//    `$supers`, as in `zkcml/zkmax/listbox-rod/fireOnRender`.
 		// Furthermore, for ZK classes created with `zk.$extends` to work as usual,
 		// we need to prioritize `_$supers`.
-		while (p = (p._$super || Object.getPrototypeOf(p)))
+		while (p = (p._$super as never || Object.getPrototypeOf(p)))
 			if (oldmtd != p[nm]) {
-				m = p[nm];
+				m = p[nm] as never;
 				if (m) supers[nm] = p;
 				break;
 			}
@@ -1928,7 +1935,7 @@ foo.MyClass = zk.$extends(foo.MySuper, {
 			throw nm + ' not in superclass';
 
 		try {
-			return m.call(this, ...args as unknown as []);
+			return m.bind(this)(...args as unknown as []);
 		} finally {
 			supers[nm] = old; //restore
 		}
@@ -1959,9 +1966,9 @@ setInterval(wgt.doIt, 1000); //WRONG! doIt will not be called with wgt
 	proxy<A0, A1, A2, A extends unknown[], R>(func: (arg0: A0, arg1: A1, arg2: A2, ...args: A) => R): (arg0: A0, arg1: A1, arg2: A2, ...args: A) => R;
 	proxy<A0, A1, A2, A3, A extends unknown[], R>(func: (arg0: A0, arg1: A1, arg2: A2, arg3: A3, ...args: A) => R): (arg0: A0, arg1: A1, arg2: A2, arg3: A3, ...args: A) => R;
 	proxy<AX, R>(func: (...args: AX[]) => R): (...args: AX[]) => R {
-		var fps = this._$proxies, fp;
+		var fps = this._$proxies, fp: R | undefined;
 		if (!fps) this._$proxies = fps = new WeakMap();
-		else if (fp = fps.get(func)) return fp;
+		else if (fp = fps.get(func) as never) return fp;
 		var fn = func.bind(this);
 		fps.set(func, fn);
 		return fn;
@@ -2023,13 +2030,13 @@ _zk._Erbx = class _Erbx extends ZKObject { //used in HTML tags
 		_erbx = this;
 		this.id = id;
 		try {
-			var n;
+			var n: HTMLElement;
 			this.dg = new zk.Draggable(undefined, n = jq($id)[0], {
 				handle: jq($id + '-p')[0], zIndex: n.style.zIndex,
 				starteffect: _zk.$void,
 				endeffect: _zk.$void});
 		} catch (e) {
-			_zk.debugLog(e.message || e);
+			_zk.debugLog((e as Error).message ?? e);
 		}
 		jq($id).slideDown(1000);
 	}
@@ -2041,13 +2048,13 @@ _zk._Erbx = class _Erbx extends ZKObject { //used in HTML tags
 	}
 	static redraw(): void {
 		_zk.errorDismiss();
-		zAu.send(new zk.Event(undefined, 'redraw'));
+		zAu.send(new zk.Event(zk.Desktop._dt!, 'redraw'));
 	}
 	static push(msg: string): _Erbx | void {
 		if (!_erbx)
 			return new _zk._Erbx(msg);
 
-		var id = _erbx.id;
+		var id = (_erbx as _Erbx).id;
 		jq('#' + id + ' .errornumbers')
 			.html(++_errcnt + ' Errors');
 		jq('#' + id + ' .messages')
@@ -2056,7 +2063,7 @@ _zk._Erbx = class _Erbx extends ZKObject { //used in HTML tags
 			.removeClass('newmessage').addClass('message').slideDown(600);
 	}
 	static remove(): void {
-		if (_erbx) _erbx.destroy();
+		if (_erbx) (_erbx as _Erbx).destroy();
 	}
 };
 
@@ -2160,7 +2167,9 @@ interface ZKVars {
 declare namespace _zk {
 	// used in this file and accessed via _zk
 	export let pi: number | undefined;
+	// eslint-disable-next-line zk/preferStrictBooleanType
 	export let processMask: boolean | undefined;
+	// eslint-disable-next-line zk/preferStrictBooleanType
 	export let debugJS: boolean | undefined;
 	export let updateURI: string | undefined;
 	export let resourceURI: string | undefined;
@@ -2168,18 +2177,31 @@ declare namespace _zk {
 	export let dataHandlers: Record<string, string | DataHandler> | undefined;
 
 	// not used in ./zk
+	// eslint-disable-next-line zk/preferStrictBooleanType
 	export let ie6: boolean | undefined;
+	// eslint-disable-next-line zk/preferStrictBooleanType
 	export let ie6_: boolean | undefined;
+	// eslint-disable-next-line zk/preferStrictBooleanType
 	export let ie7: boolean | undefined;
+	// eslint-disable-next-line zk/preferStrictBooleanType
 	export let ie7_: boolean | undefined;
+	// eslint-disable-next-line zk/preferStrictBooleanType
 	export let ie8: boolean | undefined;
+	// eslint-disable-next-line zk/preferStrictBooleanType
 	export let ie8_: boolean | undefined;
+	// eslint-disable-next-line zk/preferStrictBooleanType
 	export let ie8c: boolean | undefined;
+	// eslint-disable-next-line zk/preferStrictBooleanType
 	export let ie9: boolean | undefined;
+	// eslint-disable-next-line zk/preferStrictBooleanType
 	export let ie9_: boolean | undefined;
+	// eslint-disable-next-line zk/preferStrictBooleanType
 	export let ie10: boolean | undefined;
+	// eslint-disable-next-line zk/preferStrictBooleanType
 	export let ie10_: boolean | undefined;
+	// eslint-disable-next-line zk/preferStrictBooleanType
 	export let ie11: boolean | undefined;
+	// eslint-disable-next-line zk/preferStrictBooleanType
 	export let ie11_: boolean | undefined;
 
 	// zul/db/datefmt
@@ -2197,3 +2219,7 @@ declare namespace _zk {
 	export const TDYS: number;
 	export const YDELTA: number;
 }
+// export first for following js to use
+let oldZK = window.zk; // setting from Java side
+window.zk = zk;
+zk.copy(window.zk, oldZK);

@@ -88,14 +88,14 @@ export class Combobox extends zul.inp.ComboWidget {
 	 * @param String msg
 	 * @since 8.5.1
 	 */
-	setEmptySearchMessage(v: string, opts?: Record<string, boolean>): this {
+	setEmptySearchMessage(emptySearchMessage: string, opts?: Record<string, boolean>): this {
 		const o = this._emptySearchMessage;
-		this._emptySearchMessage = v;
+		this._emptySearchMessage = emptySearchMessage;
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== emptySearchMessage || (opts && opts.force)) {
 			var msg = this.$n('empty-search-message');
-			if (v && msg && v != jq(msg).text()) {
-				jq(msg).text(v);
+			if (emptySearchMessage && msg && emptySearchMessage != jq(msg).text()) {
+				jq(msg).text(emptySearchMessage);
 			}
 		}
 
@@ -128,7 +128,7 @@ export class Combobox extends zul.inp.ComboWidget {
 
 	override onResponse(ctl: zk.ZWatchController, opts: zul.inp.ResponseOptions): void {
 		// Bug ZK-2960: need to wait until the animation is finished before calling super
-		if (this.isOpen() && jq(this.getPopupNode_()!).is(':animated')) {
+		if (this.isOpen() && jq(this.getPopupNode_()).is(':animated')) {
 			setTimeout(() => {if (this.desktop) this.onResponse(ctl, opts);}, 50);
 			return;
 		}
@@ -153,30 +153,30 @@ export class Combobox extends zul.inp.ComboWidget {
 	/**
 	*  For internal use only
 	*/
-	setSelectedItemUuid_(v: string): void {
+	setSelectedItemUuid_(selectedItemUuid_: string): void {
 		if (this.desktop) {
-			if (!this._sel || v != this._sel.uuid) {
+			if (!this._sel || selectedItemUuid_ != this._sel.uuid) {
 				var oldSel = this._sel,
 					sel: zul.inp.Comboitem | undefined;
 				this._sel = this._lastsel = undefined;
-				var w = zk.$<zul.inp.Comboitem>(v);
+				var w = zk.$<zul.inp.Comboitem>(selectedItemUuid_);
 				if (w)
 					sel = w;
 				this._hiliteOpt(oldSel, this._sel = sel);
 				this._lastsel = sel;
 			}
 		} else
-			this._initSelUuid = v;
+			this._initSelUuid = selectedItemUuid_;
 	}
 
 	// since 10.0.0 for Zephyr to use
-	setSelectedIndex_(selectedIndex: number): void {
-		if (selectedIndex >= 0) {
+	setSelectedIndex_(selectedIndex_: number): void {
+		if (selectedIndex_ >= 0) {
 			if (this.desktop) {
-				const selectedItem = this.getChildAt(selectedIndex);
+				const selectedItem = this.getChildAt(selectedIndex_);
 				this.setSelectedItemUuid_(selectedItem!.uuid);
 			} else {
-				this._initSelIndex = selectedIndex;
+				this._initSelIndex = selectedIndex_;
 			}
 		}
 	}
@@ -185,9 +185,9 @@ export class Combobox extends zul.inp.ComboWidget {
 	 * For internal use only.
 	 * Update the value of the input element in this component
 	 */
-	override setRepos(v: boolean): this {
-		if (!this._repos && v) {
-			super.setRepos(v);
+	override setRepos(repos: boolean): this {
+		if (!this._repos && repos) {
+			super.setRepos(repos);
 			if (this.desktop) {
 				this._typeahead(this._bDel);
 				this._bDel = false;
@@ -204,8 +204,8 @@ export class Combobox extends zul.inp.ComboWidget {
 		return this;
 	}
 
-	override setValue(val: string, fromServer?: boolean): this {
-		super.setValue(val, fromServer);
+	override setValue(value: string, fromServer?: boolean): this {
+		super.setValue(value, fromServer);
 		this._reIndex();
 		this.valueEnter_ = undefined; // reset bug #3014660
 		this._lastsel = this._sel; // ZK-1256, ZK-1276: set initial selected item
@@ -235,7 +235,7 @@ export class Combobox extends zul.inp.ComboWidget {
 	validateStrict(val: string): string | undefined {
 		var cst = this._cst as zul.inp.SimpleConstraint | undefined;
 		return this._findItem(val, true) ? undefined :
-			(cst ? cst._errmsg['STRICT'] ? cst._errmsg['STRICT'] : '' : '') || msgzul.VALUE_NOT_MATCHED;
+			(cst ? cst._errmsg.STRICT ? cst._errmsg.STRICT : '' : '') || msgzul.VALUE_NOT_MATCHED;
 	}
 
 	_findItem(val: string, strict?: boolean): zul.inp.Comboitem | undefined {
@@ -312,7 +312,7 @@ export class Combobox extends zul.inp.ComboWidget {
 		}
 
 		if (newTarget && !newTarget.isDisabled())
-			jq(newTarget.$n()!).addClass(newTarget.$s('selected'));
+			jq(newTarget.$n()).addClass(newTarget.$s('selected'));
 	}
 
 	_isStrict(): boolean {
@@ -608,7 +608,7 @@ export class Combobox extends zul.inp.ComboWidget {
 
 	_fixEmptySearchMessage(): void {
 		if (this._emptySearchMessage) {
-			jq(this.$n('empty-search-message')!).toggleClass(
+			jq(this.$n('empty-search-message')).toggleClass(
 				this.$s('empty-search-message-hidden'), this.nChildren > 0);
 		}
 	}

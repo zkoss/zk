@@ -16,15 +16,15 @@ export interface Anima {
 	anima: string;
 	el: HTMLElement;
 	wgt: zk.Widget;
-	opts: Record<string, unknown>;
+	opts?: Partial<zk.SlideOptions>;
 }
 
-var _aftAnims: (() => void)[] = [], //used zk.afterAnimate
+var _aftAnims: CallableFunction[] = [], //used zk.afterAnimate
 	_jqstop = jq.fx.stop;
 
 jq.fx.stop = function () {
 	_jqstop();
-	for (var fn; fn = _aftAnims.shift();)
+	for (var fn: undefined | CallableFunction; fn = _aftAnims.shift();)
 		fn();
 };
 
@@ -37,13 +37,13 @@ function _addAnique(id: string, data: Anima): void {
 function _doAnique(id: string): void {
 	var ary = zk._anique[id];
 	if (ary) {
-		var al = ary.length, data;
+		var al = ary.length, data: Anima | undefined;
 		while (data = ary.shift()) {
 			if (jq(data.el).is(':animated')) {
 				ary.unshift(data);
 				break;
 			}
-			zk(data.el)[data.anima](data.wgt, data.opts);
+			(zk(data.el)[data.anima] as CallableFunction)(data.wgt, data.opts);
 			al--;
 		}
 
@@ -53,18 +53,18 @@ function _doAnique(id: string): void {
 }
 
 function _saveProp(self: zk.JQZK, set: string[]): zk.JQZK {
-	var ele = self.jq;
+	const ele = self.jq;
 	for (var i = set.length; i--;)
-		if (set[i] !== null) ele.data('zk.cache.' + set[i], ele[0].style[set[i]]);
+		if (set[i] != null) ele.data('zk.cache.' + set[i], ele[0].style[set[i]] as string);
 	return self;
 }
 function _restoreProp(self: zk.JQZK, set: string[]): zk.JQZK {
 	var ele = self.jq;
 	for (var i = set.length; i--;)
-		if (set[i] !== null) ele.css(set[i], ele.data('zk.cache.' + set[i]));
+		if (set[i] != null) ele.css(set[i], ele.data('zk.cache.' + set[i]) as string);
 	return self;
 }
-function _checkAnimated(self: zk.JQZK, wgt: zk.Widget, opts, anima): boolean {
+function _checkAnimated(self: zk.JQZK, wgt: zk.Widget, opts: Partial<zk.SlideOptions> | undefined, anima: string): boolean {
 	if (self.jq.is(':animated')) {
 		_addAnique(wgt.uuid, {el: self.jq[0], wgt: wgt, opts: opts, anima: anima});
 		return true;
@@ -139,8 +139,8 @@ export class JQZKEx extends zk.JQZK {
 	 * @since 7.0.3
 	 */
 	getAnimationSpeed(defaultValue?: 'slow' | 'fast' | number): 'slow' | 'fast' | number {
-		var animationSpeed = jq(this.$().$n()!).closest('[data-animationspeed]').data('animationspeed'),
-			jqSpeed = jq.fx['speeds'];
+		var animationSpeed = jq(this.$().$n()).closest('[data-animationspeed]').data('animationspeed') as string | number,
+			jqSpeed = jq.fx.speeds;
 
 		if (typeof animationSpeed === 'string') {
 			if (jqSpeed[animationSpeed])
@@ -149,7 +149,7 @@ export class JQZKEx extends zk.JQZK {
 				animationSpeed = parseInt(animationSpeed);
 		}
 
-		return typeof animationSpeed === 'number' && !isNaN(animationSpeed) ? animationSpeed : (defaultValue === 0 ? 0 : defaultValue || jqSpeed._default as number);
+		return typeof animationSpeed === 'number' && !isNaN(animationSpeed) ? animationSpeed : (defaultValue === 0 ? 0 : defaultValue || jqSpeed._default);
 	}
 	/** Slides down (show) of the matched DOM element(s).
 	 * @param Widget wgt the widget that owns the DOM element
@@ -398,7 +398,7 @@ export class JQZKEx extends zk.JQZK {
 	defaultAnimaOpts(wgt: zk.Widget, opts: Partial<zk.SlideOptions>, prop: string[], visible?: boolean): this {
 		var self = this;
 		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-ignore
+		// @ts-expect-error
 		jq.timers.push(function () {
 			if (!visible)
 				zWatch.fireDown('onHide', wgt);
@@ -468,7 +468,7 @@ export class JQZKEx extends zk.JQZK {
 
 		try {
 			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-ignore
+			// @ts-expect-error
 			active.id;
 		} catch (e) {
 			active = document.body;
@@ -499,3 +499,4 @@ export class JQZKEx extends zk.JQZK {
 		return element;
 	}
 }
+window.zjq = JQZKEx;

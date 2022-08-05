@@ -1,4 +1,3 @@
-/* global NodeListOf:readonly */
 /* effect.ts
 
 	Purpose:
@@ -16,7 +15,7 @@ Copyright (c) 2005, 2006 Thomas Fuchs (http://script.aculo.us, http://mir.aculo.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-var _defSKUOpts, _useSKU;
+var _defSKUOpts: {stackup: boolean}, _useSKU;
 
 export interface EffectStackupOptions {
 	stackup?: boolean;
@@ -55,40 +54,33 @@ export interface Effect {
 	sync?(): void;
 }
 
-export interface Eff {
-	shallStackup(): boolean;
-	_skuOpts<T extends EffectStackupOptions>(opts?: EffectStackupOptions): T;
-	_onVParent(evt, opts?): void;
-
-	Shadow: typeof Shadow;
-	FullMask: typeof FullMask;
-	Mask: typeof Mask;
-	Actions: EffectActions;
-	KeyboardTrap: typeof KeyboardTrap;
-}
-
 /** The effects, such as mask and shadow.
  */
 //zk.$package('zk.eff');
 // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-let eff = {
-	shallStackup: function () {
-		return _useSKU;
-	},
-	_skuOpts<T extends EffectStackupOptions>(opts?: EffectStackupOptions): T {
+class Eff {
+	static shallStackup(): boolean {
+		return !!_useSKU;
+	}
+	static _skuOpts<T extends EffectStackupOptions>(opts?: EffectStackupOptions): T {
 		return zk.$default(opts,
-			_defSKUOpts || (_defSKUOpts = {stackup: eff.shallStackup()}));
-	},
+			_defSKUOpts ?? (_defSKUOpts = {stackup: Eff.shallStackup()})) as T;
+	}
 	// ZK-1904: stackup should be moved from wgt to document.body
-	_onVParent: function (evt, opts) {
-		var sdw, stackup;
+	static _onVParent(evt: zk.Event, opts: {shadow?: {node: HTMLElement; stackup: HTMLElement}}): void {
+		var sdw: undefined | {node: HTMLElement; stackup: HTMLElement}, stackup;
 		if (opts && (sdw = opts.shadow) && (stackup = sdw.stackup)) {
 			var $stk = jq(stackup);
 			if ($stk.parent()[0] != document.body)
 				$stk.insertBefore(sdw.node);
 		}
 	}
-} as Omit<Eff, 'destroy'>;
+	static Shadow: typeof Shadow;
+	static FullMask: typeof FullMask;
+	static Mask: typeof Mask;
+	static Actions: EffectActions;
+	static KeyboardTrap: typeof KeyboardTrap;
+}
 /** The shadow effect.
 */
 export class Shadow extends zk.Object implements Effect {
@@ -100,26 +92,26 @@ export class Shadow extends zk.Object implements Effect {
 	constructor(element: HTMLElement, opts?: EffectStackupOptions) {
 		super();
 		this.wgt = zk.Widget.$(element.id);
-		this.opts = eff._skuOpts(opts);
+		this.opts = Eff._skuOpts(opts);
 		this.node = element;
 		// ZK-1904: listen onVParent
-		zWatch.listen({ onVParent: [this.node, eff._onVParent] });
+		zWatch.listen({ onVParent: [this.node, Eff._onVParent] });
 	}
 
 	destroy(): void {
-		jq(this.stackup!).remove();
-		jq(this.node!).removeClass(this.wgt!.getZclass() + '-shadow');
-		zWatch.unlisten({ onVParent: [this.node, eff._onVParent] }); // ZK-2586
+		jq(this.stackup).remove();
+		jq(this.node).removeClass(this.wgt!.getZclass() + '-shadow');
+		zWatch.unlisten({ onVParent: [this.node, Eff._onVParent] }); // ZK-2586
 		this.wgt = this.node = this.stackup = undefined;
 	}
 
 	hide(): void {
-		jq(this.stackup!).hide();
-		jq(this.node!).removeClass(this.wgt!.getZclass() + '-shadow');
+		jq(this.stackup).hide();
+		jq(this.node).removeClass(this.wgt!.getZclass() + '-shadow');
 	}
 
 	sync(): boolean {
-		var node = this.node, $node = jq(node!);
+		var node = this.node, $node = jq(node);
 		if (!node || !$node.zk.isVisible(true)) {
 			if (this.opts.stackup && node) {
 				if (!this.stackup)
@@ -154,7 +146,7 @@ export class Shadow extends zk.Object implements Effect {
 		return this.stackup;
 	}
 }
-eff.Shadow = Shadow;
+Eff.Shadow = Shadow;
 /** A mask covers the browser window fully.
  * @disable(zkgwt)
  */
@@ -175,7 +167,7 @@ export class FullMask extends zk.Object implements Effect {
 	 */
 	constructor(opts: EffectFullMaskOptions) {
 		super();
-		opts = eff._skuOpts(opts);
+		opts = Eff._skuOpts(opts);
 		var mask = this.mask = jq(opts.mask || [], zk)[0];
 		if (this.mask) {
 			if (opts.anchor)
@@ -215,7 +207,7 @@ export class FullMask extends zk.Object implements Effect {
 			jq(mask).off('click', jq.Event.stop)
 				.remove();
 		}
-		jq(this.stackup!).remove();
+		jq(this.stackup).remove();
 		this.mask = this.stackup = undefined;
 	}
 	/** Hide the full mask. Application developers rarely need to invoke this method.
@@ -254,7 +246,7 @@ export class FullMask extends zk.Object implements Effect {
 		}
 	}
 }
-eff.FullMask = FullMask;
+Eff.FullMask = FullMask;
 /** Applies the mask over the specified element to indicate it is busy.
  * @disable(zkgwt)
  */
@@ -367,9 +359,9 @@ export class Mask extends zk.Object implements Effect {
 		var body = document.body,
 			html = body.parentNode,
 			// eslint-disable-next-line no-undef
-			rleaf: JQuery<HTMLElement> = $anchor.jq,
+			rleaf: JQuery = $anchor.jq,
 			zi: string | number = 'auto',
-			zic, zicv;
+			zic: string, zicv: number;
 		// find the highest non-static node with non-auto z-index
 		for (var offp = rleaf.offsetParent(); offp[0] != body && offp[0] != html; offp = offp.offsetParent()) {
 			if ((zic = offp.css('z-index')) && zic != 'auto') {
@@ -378,6 +370,7 @@ export class Mask extends zk.Object implements Effect {
 			}
 		}
 		// grab the maximum along the chain of nodes
+		// eslint-disable-next-line zk/noNull
 		for (var n: HTMLElement | null = rleaf[0]; n && n.style; n = n.parentElement) {
 			//Chrome and Safari only, HTML tag's zIndex value is empty
 			if (n.tagName == 'HTML' && zk.webkit)
@@ -416,7 +409,7 @@ export class Mask extends zk.Object implements Effect {
 	/** Removes the mask.
 	 */
 	destroy(): void {
-		jq(this.mask!).remove();
+		jq(this.mask).remove();
 		if (this.wgt) {
 			zWatch.unlisten({onHide: [this.wgt, this.onHide], onSize: [this.wgt, this.onSize]});
 			delete this.wgt.__mask;
@@ -424,8 +417,8 @@ export class Mask extends zk.Object implements Effect {
 		this.mask = this.wgt = undefined;
 	}
 }
-eff.Mask = Mask;
-/** @class zk.eff.Actions
+Eff.Mask = Mask;
+/** @class zk.Eff.Actions
  * A collection of actions that can be used with {@link zk.Widget#setAction}.
  * <p>The signature of an action must be as follows:<br>
  * <code>function ({@link DOMElement} n, {@link Map} opts) {}</code>
@@ -433,7 +426,7 @@ eff.Mask = Mask;
  * <code>this</code> references to the widget.
  * @since 5.0.6
  */
-eff.Actions = {
+Eff.Actions = {
 	/** Slides down to display this widget.
 	 * @param DOMElement n the node to display
 	 * @param Map opts the options. Allowed options:
@@ -507,7 +500,7 @@ export class KeyboardTrap extends zk.Object {
 		return boundary;
 	}
 	_handleFocus(id: string): void {
-		var focusableElements = (this._area as HTMLElement).querySelectorAll(
+		var focusableElements = (this._area!).querySelectorAll(
 			'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'),
 			focusableElementsCount = focusableElements.length,
 			isTop = id == 'top';
@@ -521,20 +514,20 @@ export class KeyboardTrap extends zk.Object {
 	_getFirstFocusableElement(elems: NodeListOf<Element>): Element | undefined {
 		var len = elems.length;
 		for (var i = 0; i < len; i++) {
-			if (this._isFocusable(elems[i])) return elems[i];
+			if (this._isFocusable(elems[i] as HTMLElement)) return elems[i];
 		}
 		return undefined;
 	}
 	_getLastFocusableElement(elems: NodeListOf<Element>): Element | undefined {
 		var len = elems.length;
 		for (var i = len - 1; i >= 0; i--) {
-			if (this._isFocusable(elems[i])) return elems[i];
+			if (this._isFocusable(elems[i] as HTMLElement)) return elems[i];
 		}
 		return undefined;
 	}
-	_isFocusable(elem): boolean {
+	_isFocusable(elem: HTMLElement & {disabled?: boolean}): boolean {
 		return !(elem.disabled || elem.getAttribute('disabled')) // not disabled
-			&& (elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length); // visible
+			&& !!(elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length); // visible
 	}
 	/**
 	 * Removes the keyboard trap.
@@ -552,13 +545,13 @@ export class KeyboardTrap extends zk.Object {
 		this._area = this._boundaryTop = this._boundaryBottom = undefined;
 	}
 }
-eff.KeyboardTrap = KeyboardTrap;
+Eff.KeyboardTrap = KeyboardTrap;
 
 jq(function () {
 	//Handle zk.useStackup
-	var _lastFloat, _autohideCnt = 0, _callback;
+	var _lastFloat, _autohideCnt = 0, _shallUse = false, _callback: Partial<typeof zWatch>;
 
-	function _onFloatUp(ctl): void {
+	function _onFloatUp(ctl: {origin?: zk.Widget}): void {
 		var wgt = ctl.origin;
 		++_autohideCnt;
 		setTimeout(function () {
@@ -582,17 +575,17 @@ jq(function () {
 	}
 
 	_useSKU = zk.useStackup;
-	if (_useSKU == 'auto' || (_callback = _useSKU == 'auto/gecko')) {
-		if (zk.gecko && _callback)
+	if (_useSKU == 'auto' || (_shallUse = _useSKU == 'auto/gecko')) {
+		if (zk.gecko && _shallUse)
 			_useSKU = false;
 		else {
-			_callback = zk.webkit || zk.opera;
-			_useSKU = !_callback || zk.ie; // ZK-1748 should include all ie
+			_shallUse = !!(zk.webkit || zk.opera);
+			_useSKU = !_shallUse || zk.ie; // ZK-1748 should include all ie
 		}
 	} else if (_useSKU == null)
 		_useSKU = zk.ie; // ZK-1748 should include all ie
 
-	//if (_callback) { all browser should support autohide
+	//if (_shallUse) { all browser should support autohide
 		var w2hide = function (name): void {
 			if (name == 'onSize' || name == 'onMove'
 			|| name == 'onShow' || name == 'onHide'
@@ -600,12 +593,12 @@ jq(function () {
 				_autohide();
 		};
 		zk.override(zWatch, _callback = {}, {
-			fire: function (name) {
-				_callback.fire.call(this, ...(arguments as unknown as []));
+			fire(name: string, origin: zk.Object, opts?: Partial<zk.FireOptions> | unknown, ...vararg: unknown[]): void {
+				_callback.fire!.call(this, name, origin, opts, ...vararg as []);
 				w2hide(name);
 			},
-			fireDown: function (name) {
-				_callback.fireDown.call(this, ...(arguments as unknown as []));
+			fireDown(name: string, origin: zk.Object, opts?: Partial<zk.FireOptions>, ...vararg: unknown[]): void {
+				_callback.fireDown!.call(this, name, origin, opts, ...vararg);
 				w2hide(name);
 			}
 		});
@@ -613,4 +606,5 @@ jq(function () {
 	// }
 }); //jq
 
-export default eff;
+export default Eff;
+zk.eff = Eff;

@@ -62,7 +62,7 @@ function _setOpen(wgt: Splitter, open: boolean, opts?: {sendOnOpen?: boolean}): 
 		var c = vert && sib2.cells.length ? sib2.cells[0] : sib2,
 			sz = c.style[fd];
 		//ZK-1879: set width only if it has width originally
-		if (sz && sz.indexOf('px') > -1) {
+		if (sz && sz.includes('px')) {
 			diff = zk.parseInt(c.style[fd]) + (open ? -diff : diff);
 			if (diff < 0) diff = 0;
 			c.style[fd] = diff + 'px';
@@ -203,7 +203,7 @@ export class Splitter extends zul.Widget {
 		var node = this.$n()!;
 
 		if (!this.$weave) {
-			var $btn = jq(this.$n('btn')!);
+			var $btn = jq(this.$n('btn'));
 			$btn.on('click', Splitter.onclick);
 		}
 
@@ -214,7 +214,7 @@ export class Splitter extends zul.Widget {
 			ignoredrag: Splitter._ignoresizing,
 			ghosting: Splitter._ghostsizing,
 			overlay: true,
-			zIndex: 12000,
+			zIndex: '12000',
 			initSensitivity: 0,
 			snap: Splitter._snap,
 			endeffect: Splitter._endDrag});
@@ -252,12 +252,12 @@ export class Splitter extends zul.Widget {
 	}
 
 	_fixNSDomClass(): void {
-		jq(this.$n()!)[this._open ? 'removeClass' : 'addClass'](this.$s('nosplitter'));
+		jq(this.$n())[this._open ? 'removeClass' : 'addClass'](this.$s('nosplitter'));
 	}
 
 	_fixbtn(): void {
-		var $btn = jq(this.$n('btn')!),
-			$icon = jq(this.$n('icon')!),
+		var $btn = jq(this.$n('btn')),
+			$icon = jq(this.$n('icon')),
 			colps = this.getCollapse();
 		if (!colps || 'none' == colps) {
 			$btn.addClass(this.$s('button-disabled'));
@@ -267,10 +267,10 @@ export class Splitter extends zul.Widget {
 			if (!this._open) before = !before;
 
 			if (this.isVertical()) {
-				jq(this.$n('icon')!).removeClass(before ? 'z-icon-caret-down' : 'z-icon-caret-up')
+				jq(this.$n('icon')).removeClass(before ? 'z-icon-caret-down' : 'z-icon-caret-up')
 					.addClass(before ? 'z-icon-caret-up' : 'z-icon-caret-down');
 			} else {
-				jq(this.$n('icon')!).removeClass(before ? 'z-icon-caret-right' : 'z-icon-caret-left')
+				jq(this.$n('icon')).removeClass(before ? 'z-icon-caret-right' : 'z-icon-caret-left')
 					.addClass(before ? 'z-icon-caret-left' : 'z-icon-caret-right');
 			}
 			$btn.removeClass(this.$s('button-disabled'));
@@ -278,10 +278,10 @@ export class Splitter extends zul.Widget {
 		}
 	}
 
-	setBtnPos_(ver?: boolean): void {
+	setBtnPos_(btnPos_?: boolean): void {
 		var btn = this.$n('btn')!,
 			node = this.$n()!;
-		if (ver)
+		if (btnPos_)
 			btn.style.marginLeft = ((node.offsetWidth - btn.offsetWidth) / 2) + 'px';
 		else
 			btn.style.marginTop = ((node.offsetHeight - btn.offsetHeight) / 2) + 'px';

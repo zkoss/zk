@@ -94,11 +94,11 @@ export class Button extends zul.LabelImageWidget<HTMLButtonElement> implements z
 	/** Sets the direction.
 	 * @param String dir either "normal" or "reverse".
 	 */
-	setDir(v: string, opts?: Record<string, boolean>): this {
+	setDir(dir: string, opts?: Record<string, boolean>): this {
 		const o = this._dir;
-		this._dir = v;
+		this._dir = dir;
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== dir || (opts && opts.force)) {
 			this.updateDomContent_();
 		}
 
@@ -116,11 +116,11 @@ export class Button extends zul.LabelImageWidget<HTMLButtonElement> implements z
 	/** Sets the orient.
 	 * @param String orient either "horizontal" or "vertical".
 	 */
-	setOrient(v: string, opts?: Record<string, boolean>): this {
+	setOrient(orient: string, opts?: Record<string, boolean>): this {
 		const o = this._orient;
-		this._orient = v;
+		this._orient = orient;
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== orient || (opts && opts.force)) {
 			this.updateDomContent_();
 		}
 
@@ -138,11 +138,11 @@ export class Button extends zul.LabelImageWidget<HTMLButtonElement> implements z
 	/** Sets the button type.
 	 * @param String type either "button", "submit" or "reset".
 	 */
-	setType(v: string, opts?: Record<string, boolean>): this {
+	setType(type: string, opts?: Record<string, boolean>): this {
 		const o = this._type;
-		this._type = v;
+		this._type = type;
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== type || (opts && opts.force)) {
 			this.updateDomContent_();
 		}
 
@@ -160,8 +160,11 @@ export class Button extends zul.LabelImageWidget<HTMLButtonElement> implements z
 	/** Sets whether it is disabled.
 	 * @param boolean disabled
 	 */
-	setDisabled(v: boolean, opts?: Record<string, boolean>): this {
-		const o = this._disabled;
+	setDisabled(disabled: boolean, opts?: Record<string, boolean>): this {
+		const oldDisabled = this._disabled;
+
+		// eslint-disable-next-line zk/preferStrictBooleanType
+		let value: boolean | undefined = disabled;
 
 		// B60-ZK-1176
 		// Autodisable should not re-enable when setDisabled(true) is called during onClick
@@ -171,23 +174,23 @@ export class Button extends zul.LabelImageWidget<HTMLButtonElement> implements z
 		else if (!opts || opts.adbs === undefined)
 			// called somewhere else (including server-side)
 			this._adbs = false;	// Stop autodisabling
-		if (!v) {
+		if (!value) {
 			if (this._adbs) {
 				// autodisable is still active, allow enabling
 				this._adbs = false;
 			} else if (opts && opts.adbs === false)
 				// ignore re-enable by autodisable mechanism
-				v = !!this._disabled;
+				value = this._disabled;
 		}
-		this._disabled = v;
+		this._disabled = value;
 
-		if (o !== v || (opts && opts.force)) {
+		if (oldDisabled !== value || (opts && opts.force)) {
 			var doDisable = (): void => {
 					if (this.desktop) {
-						jq(this.$n()!).attr('disabled', v ? 'disabled' : null); // use jQuery's attr() instead of dom.disabled for non-button element. Bug ZK-2146
+						jq(this.$n()).attr('disabled', value ? 'disabled' : null); // use jQuery's attr() instead of dom.disabled for non-button element. Bug ZK-2146
 						// B70-ZK-2059: Initialize or clear upload when disabled attribute changes.
 						if (this._upload)
-							v ? _cleanUpld(this) : _initUpld(this);
+							value ? _cleanUpld(this) : _initUpld(this);
 					}
 				};
 
@@ -418,21 +421,21 @@ export class Button extends zul.LabelImageWidget<HTMLButtonElement> implements z
 		//will fired)
 	}
 
-	override setFlexSize_(sz: zk.FlexSize): void { //Bug #2870652
+	override setFlexSize_(flexSize_: zk.FlexSize): void { //Bug #2870652
 		var n = this.$n()!;
-		if (sz.height !== undefined) {
-			if (sz.height == 'auto')
+		if (flexSize_.height !== undefined) {
+			if (flexSize_.height == 'auto')
 				n.style.height = '';
-			else if (sz.height != '')
-				n.style.height = jq.px0(parseInt(sz.height as string));
+			else if (flexSize_.height != '')
+				n.style.height = jq.px0(parseInt(flexSize_.height as string));
 			else
 				n.style.height = this._height ? this._height : '';
 		}
-		if (sz.width !== undefined) {
-			if (sz.width == 'auto')
+		if (flexSize_.width !== undefined) {
+			if (flexSize_.width == 'auto')
 				n.style.width = '';
-			else if (sz.width != '')
-				n.style.width = jq.px0(parseInt(sz.width as string));
+			else if (flexSize_.width != '')
+				n.style.width = jq.px0(parseInt(flexSize_.width as string));
 			else
 				n.style.width = this._width ? this._width : '';
 		}
@@ -475,7 +478,7 @@ export class ADBS extends zk.Object {
 			for (var j = ads.length; j--;) {
 				var ad: string | zul.LabelImageWidgetWithAutodisable | undefined = ads[j].trim();
 				if (ad) {
-					var perm = ad.charAt(0) == '+';
+					var perm = ad.startsWith('+');
 					if (perm)
 						ad = ad.substring(1);
 					ad = 'self' == ad ? wgt : wgt.$f(ad) as zul.LabelImageWidgetWithAutodisable;

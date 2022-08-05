@@ -497,14 +497,10 @@ export class Scrollbar extends zk.Object {
 			arrow1 = self.$n(orient + (isH ? '-left' : '-up')),
 			arrow2 = self.$n(orient + (isH ? '-right' : '-down'));
 
-		if (isH && (!(zk.ie < 11) || !zk.opera)) {//IE and Opera does not support mouse wheel
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-ignore
-			jq(cave).mousewheel(self.proxy(self._mousewheelX));
+		if (isH && !zk.opera) {//IE and Opera does not support mouse wheel
+			jq(cave).mousewheel(self._mousewheelX.bind(self) as never);
 		} else {
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-ignore
-			jq(cave).mousewheel(self.proxy(self._mousewheelY));
+			jq(cave).mousewheel(self._mousewheelY.bind(self) as never);
 		}
 
 		jq(bar).click(zk.$void);
@@ -530,14 +526,10 @@ export class Scrollbar extends zk.Object {
 			arrow1 = self.$n(orient + (isH ? '-left' : '-up')),
 			arrow2 = self.$n(orient + (isH ? '-right' : '-down'));
 
-		if (isH && (!(zk.ie < 11) || !zk.opera)) {//IE and Opera does not support mouse wheel
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-ignore
-			jq(cave).unmousewheel(self.proxy(self._mousewheelX));
+		if (isH && !zk.opera) {//IE and Opera does not support mouse wheel
+			jq(cave).unmousewheel(self._mousewheelX.bind(self) as never);
 		} else {
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-ignore
-			jq(cave).unmousewheel(self.proxy(self._mousewheelY));
+			jq(cave).unmousewheel(self._mousewheelY.bind(self) as never);
 		}
 
 		jq(bar).off('click', zk.$void);

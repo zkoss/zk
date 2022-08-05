@@ -163,8 +163,8 @@ export class Slider extends zul.Widget {
 	 *
 	 * <p>Default: -1 (means it will scroll to the position the user clicks).
 	 */
-	setPageIncrement(v: number): this {
-		this._pageIncrement = v;
+	setPageIncrement(pageIncrement: number): this {
+		this._pageIncrement = pageIncrement;
 		return this;
 	}
 
@@ -255,11 +255,11 @@ export class Slider extends zul.Widget {
 	 * "integer", "decimal".
 	 * @since 7.0.1
 	 */
-	setMode(name: string, opts?: Record<string, boolean>): this {
+	setMode(mode: string, opts?: Record<string, boolean>): this {
 		const o = this._mode;
-		this._mode = name;
+		this._mode = mode;
 
-		if (o !== name || (opts && opts.force)) {
+		if (o !== mode || (opts && opts.force)) {
 			this._fixStep();
 			if (this.desktop) {
 				this._fixPos();
@@ -456,7 +456,7 @@ export class Slider extends zul.Widget {
 		widget.fire('onScroll', widget.isDecimal() ? {decimal: pos} : pos);
 
 		widget._fixPos();
-		jq(widget.slidetip!).remove();
+		jq(widget.slidetip).remove();
 		widget.slidetip = undefined;
 	}
 
@@ -614,8 +614,8 @@ export class Slider extends zul.Widget {
 		}
 	}
 
-	override setFlexSize_(sz: zk.FlexSize, isFlexMin?: boolean): void {
-		super.setFlexSize_(sz, isFlexMin);
+	override setFlexSize_(flexSize_: zk.FlexSize, isFlexMin?: boolean): void {
+		super.setFlexSize_(flexSize_, isFlexMin);
 		if (this._mold != 'knob') {
 			this.onSize();
 		}

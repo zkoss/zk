@@ -79,7 +79,7 @@ export class Tabs extends zul.Widget {
 			if (edge)
 				jq(edge).before(out = child.redrawHTML_());
 			else
-				jq(this.getCaveNode()!).append(out = child.redrawHTML_());
+				jq(this.getCaveNode()).append(out = child.redrawHTML_());
 		}
 		// ZK-5009, if out is empty, ignore for bind()
 		if (out) {
@@ -88,15 +88,15 @@ export class Tabs extends zul.Widget {
 	}
 
 	//bug #3014664
-	override setVflex(v: boolean | string | undefined): this { //vflex ignored for Tabs
-		if (v != 'min') v = false;
-		return super.setVflex(v);
+	override setVflex(vflex: boolean | string | undefined): this { //vflex ignored for Tabs
+		if (vflex != 'min') vflex = false;
+		return super.setVflex(vflex);
 	}
 
 	//bug #3014664
-	override setHflex(v: boolean | string | undefined): this { //hflex ignored for Tabs
-		if (v != 'min') v = false;
-		return super.setHflex(v);
+	override setHflex(hflex: boolean | string | undefined): this { //hflex ignored for Tabs
+		if (hflex != 'min') hflex = false;
+		return super.setHflex(hflex);
 	}
 
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {

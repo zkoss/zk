@@ -80,8 +80,8 @@ export class ModalFileViewer extends zk.Object {
 			else {
 				var $n = jq('#' + id),
 					index = $n.parent().children().index($n[0]);
-				zAu.send(new zk.Event(wgt.$o(), 'onRemove', index));
-				jq(this.viewer!).remove();
+				zAu.send(new zk.Event(wgt.$o()!, 'onRemove', index));
+				jq(this.viewer).remove();
 			}
 
 			if (max > 0 && max > uploaded.$n_().childNodes.length)
@@ -100,7 +100,7 @@ export class ModalFileViewer extends zk.Object {
 	destroy(finish: boolean): void {
 		if (this._finish) return;
 		this._finish = finish;
-		if (!finish) jq(this.viewer!).remove();
+		if (!finish) jq(this.viewer).remove();
 		else {
 			jq('#' + this._uplder.id + '-sent').parent().remove();
 			(jq('#' + this._uplder.id)[0].firstChild as HTMLImageElement).src = zk.ajaxURI('/web/zk/img/attachment.gif', {resource: true});
