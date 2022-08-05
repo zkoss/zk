@@ -344,7 +344,6 @@ export namespace eff {
 			// non-static node with non-auto z-index.
 			var body = document.body,
 				html = body.parentNode,
-				// eslint-disable-next-line no-undef
 				rleaf: JQuery = $anchor.jq,
 				zi: string | number = 'auto',
 				zic: string, zicv: number;

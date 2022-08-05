@@ -1,4 +1,3 @@
-/* global MediaStreamConstraints:readonly */
 // eslint-disable-next-line @typescript-eslint/triple-slash-reference
 /// <reference types="webrtc" />
 /* util.ts
@@ -754,7 +753,6 @@ export namespace utl_global {
 				});
 			};
 
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			// @ts-expect-error: assign to read only property(mediaDevices) for polyfill
 			if (navigator.mediaDevices === undefined) navigator.mediaDevices = {};
 			if (navigator.mediaDevices.getUserMedia === undefined) navigator.mediaDevices.getUserMedia = polyfillGUM;

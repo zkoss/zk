@@ -40,12 +40,17 @@ interface GAPIOptions {
 }
 
 export function loadAPIs(wgt: zk.Widget, callback: () => void, msg: string, timeout: number): void {
-	var opts: Partial<GAPIOptions> = {};
-	// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-	opts.condition = function (): boolean {return !!(window['google'] && window['google'].load);};
-	opts.callback = function () {callback(); delete zk.gapi['LOADING'];};
-	opts.message = msg;
-	// eslint-disable-next-line @typescript-eslint/no-unsafe-call
+	var opts = {
+		condition(): boolean {
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+			return !!(window['google'] && window['google'].load);
+		},
+		callback(): void {
+			callback();
+			delete zk.gapi['LOADING'];
+		},
+		message: msg,
+	};
 	if (!opts.condition()) {
 		zk.gapi.waitUntil(wgt, opts);
 		if (!zk.gapi['LOADING']) { //avoid double loading Google Ajax APIs

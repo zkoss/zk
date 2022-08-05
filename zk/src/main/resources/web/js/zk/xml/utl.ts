@@ -46,13 +46,14 @@ export let Utl = {
 			return (new DOMParser()).parseFromString(text, 'text/xml');
 			//FF, Safar, Opera
 	
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-		var doc = new ActiveXObject('Microsoft.XMLDOM'); //IE
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+		interface Doc extends XMLDocument {
+			async: boolean;
+			loadXML(text: string): void;
+		}
+		var doc = new ActiveXObject('Microsoft.XMLDOM') as Doc; //IE
 		doc.async = false;
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
 		doc.loadXML(text);
-		return doc as XMLDocument;
+		return doc;
 	},
 	/** Renames the type embedded in an URL
 	 * For example,

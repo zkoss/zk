@@ -345,10 +345,10 @@ zk.override(jq.fn, _jq, {
 					selector = undefined;
 				}
 			}
-			if (_storeEventFunction(this[0], evtType, data, fn as never))
-				this.zon(evtType as never, selector as never, data, delegateEventFunc);
+			if (_storeEventFunction(this[0], evtType, data, fn as CallableFunction))
+				this.zon(evtType, selector as string, data, delegateEventFunc);
 		} else {
-			this.zon(type as never, selector as never, data, fn as never, ...rest); // Bug ZK-1142: recover back to latest domios.js
+			this.zon(type, selector as string, data, fn as CallableFunction, ...rest); // Bug ZK-1142: recover back to latest domios.js
 		}
 		return this;
 	},
@@ -362,9 +362,9 @@ zk.override(jq.fn, _jq, {
 				selector = undefined;
 			}
 			if (_removeEventFunction(this[0], evtType, fn as never))
-				this.zoff(evtType as never, selector as never, delegateEventFunc);
+				this.zoff(evtType, selector as string, delegateEventFunc);
 		} else {
-			this.zoff(type as never, selector as never, fn as never, ...rest); // Bug ZK-1142: recover back to latest domios.js
+			this.zoff(type, selector as string, fn as never, ...rest); // Bug ZK-1142: recover back to latest domios.js
 		}
 		return this;
 	}

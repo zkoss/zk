@@ -398,14 +398,12 @@ export namespace anima_global {
 		 */
 		defaultAnimaOpts(wgt: zk.Widget, opts: zk.SlideOptions, prop: string[], visible?: boolean): this {
 			var self = this;
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-expect-error
 			jq.timers.push(function () {
 				if (!visible)
 					zWatch.fireDown('onHide', wgt);
 				if (opts.beforeAnima)
 					opts.beforeAnima.call(wgt, self);
-			});
+			} as JQuery.TickFunction<HTMLElement>);
 
 			var aftfn = opts.afterAnima;
 			opts.afterAnima = function () {
@@ -465,15 +463,7 @@ export namespace anima_global {
 				wrapper = jq('<div></div>')
 					.addClass('ui-effects-wrapper')
 					.css(props),
-				active = document.activeElement;
-
-			try {
-				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-				// @ts-expect-error
-				active.id;
-			} catch (e) {
-				active = document.body;
-			}
+				active = document.activeElement ?? document.body;
 
 			element.wrapInner(wrapper);
 

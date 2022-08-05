@@ -49,9 +49,8 @@ export class Notification extends zul.wgt.Popup {
 	_type: NotificationOptions['type'];
 
 	constructor(msg: string, opts: NotificationOptions) {
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-expect-error
-		super(msg, opts); // FIXME: doesn't match zk.Widget.prototype.constructor
+		// @ts-expect-error: doesn't match zk.Widget.prototype.constructor
+		super(msg, opts);
 		this._msg = msg;
 		this._type = opts.type;
 		this._ref = opts.ref;
