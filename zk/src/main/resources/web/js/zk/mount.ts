@@ -290,11 +290,6 @@ function mtBL0(): void {
 			return;
 		}
 
-		if (zk.ie && zk.ie < 11 && !jq.isReady) {//3055849: ie6/ie7 has to wait until isReady (tonyq reported ie8 has similar issue)
-			jq(mtBL0);
-			return;
-		}
-
 		var inf = _crInfBL1.shift();
 		if (!inf) break;
 
@@ -813,8 +808,6 @@ jq(function () {
 
 			var wgt = Widget.$(evt, {child: true});
 			if (wgt) {
-				if (zk.ie && zk.ie < 11)
-					evt.which = 3;
 				var wevt = new zk.Event(wgt, 'onRightClick', evt.mouseData(), {}, evt);
 				_doEvt(wevt);
 				if (wevt.domStopped)
@@ -935,7 +928,7 @@ jq(function () {
 		if ((_reszInf['lastTime'] && now < _reszInf['lastTime']) || _reszInf['inResize'])
 			return; //ignore resize for a while (since onSize might trigger onsize)
 
-		var delay = (zk.ie && zk.ie < 11) || zk.android ? 250 : 50;
+		var delay = zk.android ? 250 : 50;
 		_reszInf['time'] = now + delay - 1; //handle it later
 		setTimeout(_docResize, delay);
 

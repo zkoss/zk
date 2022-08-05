@@ -73,13 +73,11 @@ function _isSameBaseline(ref: zk.Dimension & {_hgh?: number; _wdh?: number}, cur
 	if (vertical) {
 		hgh = ref._hgh ?? (ref._hgh = ref.top + ref.height);
 		wdh = ref._wdh ?? (ref._wdh = ref.left + ref.width);
-		return !(zk.ie == 10) ? cur.top >= hgh || cur.left < wdh :
-			Math.round(cur.top) >= hgh || Math.round(cur.left) < wdh;
+		return cur.top >= hgh || cur.left < wdh;
 	} else {
 		hgh = ref._hgh ?? (ref._hgh = ref.top + ref.height);
 		wdh = ref._wdh ?? (ref._wdh = ref.left + ref.width);
-		return !(zk.ie == 10) ? cur.left >= wdh || cur.top < hgh :
-			Math.round(cur.left) >= wdh || Math.round(cur.top) < hgh;
+		return cur.left >= wdh || cur.top < hgh;
 	}
 }
 
