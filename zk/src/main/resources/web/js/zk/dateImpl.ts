@@ -117,8 +117,8 @@ export namespace dateImpl_global {
 		getYear(): number {
 			return this._getTzMoment().year() - 1900;
 		}
-		setDate(v: number): number {
-			return this._getTzMoment().date(v).valueOf();
+		setDate(date: number): number {
+			return this._getTzMoment().date(date).valueOf();
 		}
 		setFullYear(y: number, m?: number, d?: number): number {
 			var mt = this._getTzMoment();
@@ -141,45 +141,45 @@ export namespace dateImpl_global {
 			}
 			return mt.valueOf();
 		}
-		setMilliseconds(v: number): number {
-			return this._getTzMoment().millisecond(v).valueOf();
+		setMilliseconds(milliseconds: number): number {
+			return this._getTzMoment().millisecond(milliseconds).valueOf();
 		}
-		setMinutes(v: number): number {
-			return this._getTzMoment().minute(v).valueOf();
+		setMinutes(minutes: number): number {
+			return this._getTzMoment().minute(minutes).valueOf();
 		}
-		setMonth(v: number): number {
-			return this._getTzMoment().month(v).valueOf();
+		setMonth(month: number): number {
+			return this._getTzMoment().month(month).valueOf();
 		}
-		setSeconds(v: number): number {
-			return this._getTzMoment().second(v).valueOf();
+		setSeconds(seconds: number): number {
+			return this._getTzMoment().second(seconds).valueOf();
 		}
-		setTime(v: number): number {
-			this._moment = zk.mm(v);
+		setTime(time: number): number {
+			this._moment = zk.mm(time);
 			return this._moment.valueOf();
 		}
-		setUTCDate(v: number): number {
-			return this._getUTCMoment().date(v).valueOf();
+		setUTCDate(uTCDate: number): number {
+			return this._getUTCMoment().date(uTCDate).valueOf();
 		}
-		setUTCFullYear(v: number): number {
-			return this._getUTCMoment().year(v).valueOf();
+		setUTCFullYear(uTCFullYear: number): number {
+			return this._getUTCMoment().year(uTCFullYear).valueOf();
 		}
-		setUTCHours(v: number): number {
-			return this._getUTCMoment().hour(v).valueOf();
+		setUTCHours(uTCHours: number): number {
+			return this._getUTCMoment().hour(uTCHours).valueOf();
 		}
-		setUTCMilliseconds(v: number): number {
-			return this._getUTCMoment().millisecond(v).valueOf();
+		setUTCMilliseconds(uTCMilliseconds: number): number {
+			return this._getUTCMoment().millisecond(uTCMilliseconds).valueOf();
 		}
-		setUTCMinutes(v: number): number {
-			return this._getUTCMoment().minute(v).valueOf();
+		setUTCMinutes(uTCMinutes: number): number {
+			return this._getUTCMoment().minute(uTCMinutes).valueOf();
 		}
-		setUTCMonth(v: number): number {
-			return this._getUTCMoment().month(v).valueOf();
+		setUTCMonth(uTCMonth: number): number {
+			return this._getUTCMoment().month(uTCMonth).valueOf();
 		}
-		setUTCSeconds(v: number): number {
-			return this._getUTCMoment().second(v).valueOf();
+		setUTCSeconds(uTCSeconds: number): number {
+			return this._getUTCMoment().second(uTCSeconds).valueOf();
 		}
-		setYear(v: number): number {
-			return this._getTzMoment().year(v).valueOf();
+		setYear(year: number): number {
+			return this._getTzMoment().year(year).valueOf();
 		}
 		toString(): string {
 			return this._getTzMoment().toString();
