@@ -484,7 +484,6 @@ export class Uploader extends zk.Object {
 				maxKB = Math.round(maxBytes / 1024),
 				sizeMB = Math.round(sizeKB / 1024),
 				maxMB = Math.round(maxKB / 1024),
-				// eslint-disable-next-line @typescript-eslint/unbound-method
 				formatFileSize = zk.fmt.Text.formatFileSize,
 				errorMessage = zk.fmt.Text.format(msgzul.UPLOAD_ERROR_EXCEED_MAXSIZE,
 					formatFileSize(sizeBytes), formatFileSize(maxBytes), sizeBytes, maxBytes,
@@ -705,8 +704,7 @@ function _initUM(uplder: Uploader, flnm: string): void {
 			 * @param zk.Widget wgt the wgt where the file manager is shown
 			 * @param String position the position where the file manager is located
 			 */
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-expect-error
+			// @ts-expect-error: signature doesn't match that of super
 			override open(wgt?: zk.Widget, position?: string): void {
 				super.open(wgt, undefined, position || 'after_start', {
 					sendOnOpen: false,
@@ -725,8 +723,7 @@ export declare class UploadManager extends zul.wgt.Popup {
 	addFile(uplder: zul.Uploader): zul.wgt.Div
 	updateFile(uplder: zul.Uploader, val: number, total: string): void
 	removeFile(uplder: zul.Uploader): void
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-expect-error
+	// @ts-expect-error: signature doesn't match that of super
 	override open(wgt: zk.Widget | undefined, position?: string): void
 }
 
@@ -757,7 +754,7 @@ export class UploadViewer extends zk.Object {
 		var flman = zul.UploadViewer.flman;
 		if (flman) {
 			if (!flman.isOpen())
-					flman.open(this._uplder.getWidget()); // eslint-disable-line @typescript-eslint/no-unsafe-call
+				flman.open(this._uplder.getWidget());
 			const acc = msgzk.FILE_SIZE + Math.round(total / 1024) + msgzk.KBYTES;
 			flman.updateFile(this._uplder, sent, acc);
 		}

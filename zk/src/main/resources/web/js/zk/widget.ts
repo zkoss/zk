@@ -120,7 +120,6 @@ function _isProlog(el: Node | null): boolean { // eslint-disable-line zk/noNull
 }
 
 //Event Handling//
-// eslint-disable-next-line no-undef
 type JQueryEventHandler = (evt: JQuery.TriggeredEvent, ...args: unknown[]) => unknown;
 function _domEvtInf(wgt: Widget, evtnm: string, fn?: string | CallableFunction, keyword?: unknown): [string, JQueryEventHandler] { //proxy event listener
 	if (typeof fn != 'function') {
@@ -183,8 +182,7 @@ function _domEvtProxy0(wgt: Widget, f: CallableFunction, keyword?: unknown): JQu
 			args.push(keyword);
 		} else
 			args = arguments as never;
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-expect-error
+		// @ts-expect-error: trouble assigning `wgt` as `this` param for `f`
 		var ret = f.call(wgt, ...args);
 		if (ret === undefined) ret = (zkevt as {returnValue?}).returnValue;
 		if (zkevt.domStopped) devt.stop();
@@ -697,9 +695,7 @@ const _dragoptions: zk.DraggableOptions = {
 
 export function WrapClass(pkg: string) {
 	return function _WrapClass<T extends typeof zk.Object>(constr: T): T {
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-expect-error
-		const subclass = class extends constr {
+		abstract class subclass extends constr {
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			constructor(...args: any[]) {
 				super(...args as []);
@@ -710,7 +706,7 @@ export function WrapClass(pkg: string) {
 					this.afterCreated_(...args as []);
 				}
 			}
-		};
+		}
 
 		let pkges = pkg.split('.'),
 			context = window;

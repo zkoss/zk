@@ -405,11 +405,9 @@ export class WScroll extends zk.Object {
 
 	_listenMouseEvent(): void {
 		if (this._isVer) {
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			// @ts-expect-error: zk.Event is not completely compatible with JQueryMousewheelEventObject
 			jq(this.control).mousewheel(this._mousewheelY.bind(this));
 		} else if (!zk.opera) { // ie and opera unsupported
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			// @ts-expect-error: zk.Event is not completely compatible with JQueryMousewheelEventObject
 			jq(this.control).mousewheel(this._mousewheelX.bind(this));
 		}
@@ -425,11 +423,9 @@ export class WScroll extends zk.Object {
 
 	_unlistenMouseEvent(): void {
 		if (this._isVer)
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			// @ts-expect-error: unmousewheel expects 0 arguments, but got 1
 			jq(this.control).unmousewheel(this._mousewheelY.bind(this));
 		else if (!zk.opera) // ie and opera unsupported
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			// @ts-expect-error: unmousewheel expects 0 arguments, but got 1
 			jq(this.control).unmousewheel(this._mousewheelX.bind(this));
 
@@ -734,8 +730,7 @@ export class WScroll extends zk.Object {
 		this.drag.destroy();
 		this._unlistenMouseEvent();
 		jq(this.node).remove();
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-expect-error
+		// @ts-expect-error: these variables should only become undefined after destroy
 		this.node = this.edrag = this.epos = this.drag = undefined;
 	}
 

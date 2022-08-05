@@ -88,19 +88,14 @@ function _inherits(subClass: NewableFunction, superClass: NewableFunction | null
 
 function _createSuper(Derived): CallableFunction {
 	const hasNativeReflectConstruct = _isNativeReflectConstruct();
-	return function _createSuperInternal(): NewableFunction {
-		var Super = Object.getPrototypeOf(Derived) as CallableFunction,
+	return function _createSuperInternal(this: object, ...args: unknown[]): NewableFunction {
+		var Super = Object.getPrototypeOf(Derived) as typeof _createSuperInternal,
 			result: NewableFunction;
 		if (hasNativeReflectConstruct) {
-
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-ignore
-			var NewTarget = (Object.getPrototypeOf(this as never) as object).constructor as never;
-			result = Reflect.construct(Super, arguments, NewTarget) as never;
+			var NewTarget = (Object.getPrototypeOf(this) as object).constructor;
+			result = Reflect.construct(Super, args, NewTarget) as NewableFunction;
 		} else {
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-ignore
-			result = Super.bind(this as object)(...arguments) as NewableFunction;
+			result = Super.apply(this, args);
 		}
 		return result;
 	};
@@ -310,7 +305,6 @@ let _caches: UnknownProps = {};
 /** A map of all classes, {@code Map<int oid, zk.Class cls>}.
  * @since 5.0.8
  */
-// eslint-disable-next-line @typescript-eslint/consistent-type-assertions
 _zk.classes = {} as Record<number, unknown>;
 /** Returns if the given JS object is a class ({@link zk.Class}).
  * @param Object cls the object to test whether it is a class (aka., a  ZK class)
@@ -823,7 +817,6 @@ _zk.$extends = function<S extends typeof ZKObject, D, D2> (superclass: S,
 	// Object.setPrototypeOf(jclass, superclass);
 
 	// simulate Class extends.
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	// var _init = function (this: any): void { this.constructor = jclass; };
 	// 	_init.prototype = superclass.prototype;
 	// 	jclass.prototype = new _init();
@@ -855,7 +848,6 @@ opts = zk.$default(opts, {timeout: 100, max: true});
  * @see #copy
  */
 _zk.$default = function<T, U> (opts: T, defaults: U): T & U {
-	// eslint-disable-next-line @typescript-eslint/consistent-type-assertions
 	opts = opts || ({} as T);
 	for (var p in defaults)
 		if (opts[p as string] === undefined)
@@ -1725,7 +1717,7 @@ export abstract class ZKObject {
 	declare _$supers: Record<string, unknown>;
 	declare _$proxies: WeakMap<object, unknown>;
 	declare _$super;
-	declare _importantEvts: {[key: string]: unknown};
+	declare _importantEvts: Record<string, unknown>;
 
 	declare static $oid;
 

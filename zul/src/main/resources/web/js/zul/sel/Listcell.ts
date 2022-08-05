@@ -97,10 +97,8 @@ export class Listcell extends zul.LabelImageWidget<HTMLTableCellElement> {
 		var box = this.getListbox();
 		if (!box) return 0;
 		if (box.getMold() == 'select') {
-			// FIXME: This is likely dead code and Listbox doesn't have getMaxlength.
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-ignore
-			// eslint-disable-next-line
+			// @ts-expect-error: This is likely dead code and Listbox doesn't have getMaxlength.
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-call
 			return box.getMaxlength();
 		}
 		var lc = this.getListheader();

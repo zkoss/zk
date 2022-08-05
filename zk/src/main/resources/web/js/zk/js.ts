@@ -1,4 +1,3 @@
-/* eslint-disable one-var */
 /* js.ts
 
 	Purpose:

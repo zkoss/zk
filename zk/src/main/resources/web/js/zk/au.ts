@@ -180,7 +180,6 @@ function ajaxSend2(dt: zk.Desktop, timeout?: number): void {
 		setTimeout(function () {zAu.sendNow(dt);}, timeout);
 }
 function ajaxSendNow(reqInf: AuRequestInfo): void {
-	// eslint-disable-next-line no-undef
 	var fetchOpts: RequestInit = {
 		credentials: 'same-origin',
 		method: 'POST',
@@ -355,8 +354,7 @@ function _deconstructPacket(data: ArrayBufferView | unknown & {buffer?} | undefi
 			!(data instanceof DateImpl) && !(data instanceof zk.Widget)) {
 		const newData = {};
 		for (const key in data) {
-			// eslint-disable-next-line no-prototype-builtins
-			if (data.hasOwnProperty(key)) {
+			if (Object.prototype.hasOwnProperty.call(data, key)) {
 				newData[key] = _deconstructPacket(data[key] as never, buffers);
 			}
 		}
@@ -1351,7 +1349,6 @@ export namespace au_global {
 		 * sent from the server.
 		 * @see zAu#cmd0
 		 */
-		// eslint-disable-next-line @typescript-eslint/consistent-type-assertions
 		static cmd0 = class AUCommand0 { //no uuid at all
 			/** Sets a bookmark
 			 * @param String bk the bookmark
@@ -1848,7 +1845,6 @@ export namespace au_global {
 		 * sent from the server.
 		 * @see zAu#cmd1
 		 */
-		// eslint-disable-next-line @typescript-eslint/consistent-type-assertions
 		static cmd1 = class AUCommand1 {
 			/** Sets the attribute of a widget.
 			 * @param zk.Widget wgt the widget

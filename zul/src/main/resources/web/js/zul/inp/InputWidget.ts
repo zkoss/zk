@@ -48,10 +48,8 @@ export let RoundUtl = {
 	buttonVisible<T>(wgt: InputWidget<T>, v: boolean): void {
 		var n = wgt.$n('btn');
 		if (n) {
-			var fnm = v ? 'removeClass' : 'addClass';
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-call
+			var fnm = v ? 'removeClass' as const : 'addClass' as const;
 			jq(n)[fnm](wgt.$s('disabled'));
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-call
 			jq(wgt.getInputNode())[fnm](wgt.$s('input-full'));
 		}
 	},
@@ -185,8 +183,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 			var inp = this.getInputNode();
 			if (inp) { //check if bind
 				inp.disabled = disabled;
-				var fnm = disabled ? 'addClass' : 'removeClass';
-				// eslint-disable-next-line @typescript-eslint/no-unsafe-call
+				var fnm = disabled ? 'addClass' as const : 'removeClass' as const;
 				jq(this.$n())[fnm](this.$s('disabled'));
 			}
 		}
@@ -214,10 +211,9 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 			if (inp) {
 				_fixInput(this);
 
-				var fnm = readonly ? 'addClass' : 'removeClass';
+				var fnm = readonly ? 'addClass' as const : 'removeClass' as const;
 
 				inp.readOnly = readonly;
-				// eslint-disable-next-line @typescript-eslint/no-unsafe-call
 				jq(this.$n())[fnm](this.$s('readonly')); //Merge breeze
 			}
 		}
@@ -571,9 +567,6 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	/** Returns the input node of this widget
 	 * @return DOMElement
 	 */
-	// Super defines getInputNode as optional property (not a method), and super cannot be made abstract.
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-expect-error
 	override getInputNode(): HTMLInputElement | undefined {
 		return this.$n('real') ?? this.$n();
 	}

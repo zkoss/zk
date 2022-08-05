@@ -759,7 +759,6 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 				index.push(new zul.inp.SecondHandler([start, end], SECOND_FIELD, wgt));
 				break;
 			case 'z':
-				// eslint-disable-next-line @typescript-eslint/consistent-type-assertions
 				index.push({index: [i, i], format: (function (text) {
 					return function () {
 						return text;
@@ -778,7 +777,6 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 						break;
 					}
 				}
-				// eslint-disable-next-line @typescript-eslint/consistent-type-assertions
 				index.push({index: [start, end], format: (function (text) {
 					return function () {
 						return text;
