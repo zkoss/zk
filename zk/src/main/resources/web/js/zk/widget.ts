@@ -861,7 +861,10 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Objec
 	 * @see #widgetName
 	 * @type String
 	 */
-	className = 'zk.Widget';
+	declare className: string;
+	static {
+		this.prototype.className = 'zk.Widget';
+	}
 	/** The widget name of the widget.
 	 * It is the same as <code>this.className.substring(this.className.lastIndexOf('.') + 1).toLowerCase()</code>.
 	 * For example, if {@link #className} is zul.wnd.Window, then
@@ -872,7 +875,10 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Objec
 	 * @type String
 	 * @since 5.0.2
 	 */
-	widgetName = 'widget';
+	declare widgetName: string;
+	static {
+		this.prototype.widgetName = 'widget';
+	}
 	/** The AU tag of this widget.
 	 * The AU tag tag is used to tag the AU requests sent by the peer widget.
 	 * For instance, if the AU tag is <code>xxx,yyy</code> and the desktop's
@@ -975,8 +981,6 @@ new zul.wnd.Window({
 	 */
 	constructor(props?: Record<string, unknown> | typeof zkac) {
 		super();
-		this.className = (this.constructor.prototype as zk.Widget).className ?? 'widget';
-		this.widgetName = (this.constructor.prototype as zk.Widget).widgetName ?? 'widget';
 		this._asaps = {}; //event listened at server
 		this._lsns = {}; //listeners(evtnm,listener)
 		this._bklsns = {}; //backup for listeners by setListeners
