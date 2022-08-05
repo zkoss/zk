@@ -38,7 +38,7 @@ export class Text extends zhtml.Widget {
 		const o = this._encode;
 		this._encode = encode;
 
-		if (o !== encode || (opts && opts.force)) {
+		if (o !== encode || opts?.force) {
 			var n = this.$n();
 			if (n) {
 				var val = this._value;
@@ -64,7 +64,7 @@ export class Text extends zhtml.Widget {
 		const o = this._value;
 		this._value = label;
 
-		if (o !== label || (opts && opts.force)) {
+		if (o !== label || opts?.force) {
 			var n = this.$n();
 			if (n) {
 				var val = this._value;

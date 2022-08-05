@@ -1982,7 +1982,7 @@ if (klass.isInstance(obj)) {
 	 * @return boolean true if the object is an instance
 	 */
 	static isInstance<T extends typeof ZKObject>(this: T, o: unknown): o is InstanceType<T> {
-		return o instanceof ZKObject && o.$instanceof(this);
+		return o instanceof ZKObject && o instanceof this;
 	}
 	/** Determines if the class by this Class object is either the same as, or is a superclass of, the class represented by the specified Class parameter.
 	 * Example:

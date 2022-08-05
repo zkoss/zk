@@ -60,8 +60,9 @@ export class BigDecimal extends zk.Object {
 	/** Sets the precision
 	 * @param int precision the precision
 	 */
-	setPrecision(precision: number): void {
+	setPrecision(precision: number): this {
 		this._precision = precision;
+		return this;
 	}
 	$toNumber(): number {
 		var v = parseFloat(this._value), p;
