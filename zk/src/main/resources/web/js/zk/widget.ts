@@ -776,7 +776,7 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Objec
 	declare offsetHeight?;
 	declare blankPreserved?: boolean;
 
-	declare getInputNode?: () => HTMLInputElement | undefined;
+	getInputNode?(): HTMLInputElement | undefined;
 
 	declare z_rod?: boolean | number;
 	declare _z$rd?: boolean;

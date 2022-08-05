@@ -63,11 +63,12 @@ if (zk.gecko) {
 	require('./domopera');
 }
 
-window.$eval = function (s: string): unknown {
+window.$eval = function<T> (s: unknown): T | undefined {
 	//1. jq.globalEval() seems have memory leak problem, so use eval()
 	//2. we cannot use eval() directly since compressor won't shorten names
 	// eslint-disable-next-line no-eval
-	return eval(s);
+	return eval(s as string); // WARN: conisder https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval#never_use_eval!
+	// Despite the official TS definition for `eval`, `eval` can actually accept anything.
 };
 
 // var evt = require('./evt');

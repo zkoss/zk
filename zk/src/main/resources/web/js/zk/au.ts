@@ -40,6 +40,106 @@ export interface AuRequestInfo {
 	forceAjax: boolean;
 	uploadCallbacks?: unknown[];
 }
+export interface AUCommand0 {
+	bookmark(bk: string, replace: boolean): void;
+	obsolete(dtid: string, msg: string): unknown;
+	alert(msg: string, title: string, icon: string, disabledAuRequest: boolean): void;
+	redirect(url: string, target?: string): void;
+	title(title: string): void;
+	log: typeof zk.log;
+	script(script: string): void;
+	echo(dtid?: string | zk.Desktop): void;
+	echoGx: CallableFunction;
+	clientInfo(dtid?: string): void;
+	visibilityChange(dtid?: string): void;
+	download(url: string): void;
+	print: typeof window.print;
+	scrollBy: typeof window.scrollBy;
+	scrollTo: typeof window.scrollTo;
+	resizeBy: typeof window.resizeBy;
+	resizeTo: typeof window.resizeTo;
+	moveBy: typeof window.moveBy;
+	moveTo: typeof window.moveTo;
+	cfmClose(msg: string): void;
+	showNotification(msg: string, type: zul.wgt.NotificationType, pid: string, ref: zk.Widget,
+					 pos: string, off: zk.Offset, dur: number, closable: boolean): void;
+	showBusy(uuid: string, msg?: string): void;
+	clearBusy(uuid?: string): void;
+}
+export interface AUCommand1 {
+	setAttr(wgt: zk.Widget | undefined, nm: string, val: unknown): void;
+	setAttrs(wgt: zk.Widget, attrs: unknown[]): void;
+	outer(wgt: zk.Widget, code: string): void;
+	addAft(wgt: zk.Widget, ...codes: string[]): void;
+}
+export interface AUEngine {
+	ajaxReq?: boolean;
+	ajaxReqInf?: AuRequestInfo;
+	ajaxReqTries?: number;
+	ajaxReqMaxCount: number;
+	ajaxSettings: JQuery.AjaxSettings;
+	ajaxErrorHandler?: AjaxErrorHandler;
+	cmd0: AUCommand0;
+	cmd1: AUCommand1;
+	disabledRequest?: boolean;
+	doAfterProcessWgts?: zk.Widget[];
+	doneTime?: number;
+	pendingReqInf?: AuRequestInfo;
+	processPhase?: string;
+	sentTime?: number;
+	seqId: number;
+	_cInfoReg?: boolean;
+	_clientInfo?: Array<unknown>;
+	_errCode?: string | number;
+	_errURIs: Record<string, string>;
+
+	_doCmds(sid?: number): void;
+	_fetch(input: RequestInfo, init?: RequestInit): Promise<Response>;
+	_pfdone(dt: zk.Desktop, pfIds?: string): void;
+	_pfrecv(dt: zk.Desktop, pfIds?: string): void;
+	_pfsend(dt: zk.Desktop, fetchOpts: RequestInit, completeOnly: boolean, forceAjax: boolean): void;
+	_onClientInfo(): void;
+	_onResponseReady(response: Response): void;
+	_onVisibilityChange(): void;
+	_respException(response: Response, reqInf: AuRequestInfo, e: Error): boolean;
+	_respFailure(response: Response, reqInf: AuRequestInfo, rstatus: number): boolean;
+	_respSuccess(response: Response, reqInf: AuRequestInfo, sid: number): boolean;
+	_rmDesktop(dt: zk.Desktop, dummy?: boolean): void;
+	_rmDesktopAjax(url: string, data: string, headers: Record<string, string>): void;
+	_resetTimeout(): void;
+	_storeStub(wgt: zk.Widget): void;
+	_wgt$(uuid: string): zk.Widget;
+	addAuRequest(dt: zk.Desktop, aureq: zk.Event): void;
+	afterResponse(sid?: number): void;
+	ajaxReqResend(reqInf: AuRequestInfo, timeout?: number): void;
+	beforeSend(uri: string, aureq: zk.Event, dt?: zk.Desktop): string;
+	confirmRetry(msgCode: string, msg2?: string): boolean;
+	createWidgets(codes: ArrayLike<unknown>[], fn: (wgts: zk.Widget[]) => void, filter?: (wgt: zk.Widget) => zk.Widget | undefined): void;
+	doCmds(dtid: string, rs: unknown[]): void;
+	encode(j: number, aureq: zk.Event, dt: zk.Desktop): string;
+	getAuRequests(dt: zk.Desktop): zk.Event[];
+	getErrorURI(code: number): string;
+	getPushErrorURI(code: number): string;
+	onError(fn: ErrorHandler): void;
+	onResponseError(response: Response, errCode: number): boolean;
+	pfAddIds(dt: zk.Desktop, prop: string, pfIds?: string): void;
+	pfGetIds(response: Response): string | undefined;
+	process(cmd: string, data: string): void;
+	processing(): boolean;
+	pushReqCmds(reqInf: AuRequestInfo, response: Response): boolean;
+	send(aureq: zk.Event, timeout?: number): void;
+	sendAhead(aureq: zk.Event, timeout?: number): void;
+	sendNow(dt: zk.Desktop): boolean;
+	setErrorURI(code: number, uri: string): void;
+	setErrorURI(errors: {[code: number]: string}): void;
+	setPushErrorURI(code: number, uri: string): void;
+	setPushErrorURI(errors: {[code: number]: string}): void;
+	shallIgnoreESC(): boolean;
+	showError(msgCode: string, msg2?: string, cmd?: string, ex?: Error): void;
+	toJSON(target: zk.Widget | undefined, data: unknown): string;
+	unError(fn: ErrorHandler): void;
+	wrongValue_(wgt: zk.Widget, msg: string | false): void;
+}
 var _perrURIs: Record<string, string> = {}, //server-push error URI
 	_onErrs: ErrorHandler[] = [], //onError functions
 	cmdsQue: AuCommands[] = [], //response commands in XML
@@ -1370,7 +1470,7 @@ zAu.ajaxErrorHandler = function (req, status, statusText, ajaxReqTries) {
 			if (v) v.obsolete = true;
 
 			if (msg.startsWith('script:'))
-				return $eval(msg.substring(7)) as void;
+				return $eval(msg.substring(7));
 
 			// ZK-2397: prevent from showing reload dialog again while browser is reloading
 			if (zk._isReloadingInObsolete)

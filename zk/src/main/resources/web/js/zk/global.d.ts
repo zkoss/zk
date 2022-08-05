@@ -256,7 +256,7 @@ interface Window {
 }
 declare var zjq: typeof import('./anima').JQZKEx;
 declare var zkac: typeof import('./mount').zkac;
-declare function $eval(x: string): unknown;
+declare function $eval<T>(x: unknown): T | undefined;
 declare var zkreg: typeof import('./widget').zkreg;
 declare var zDebug: import('./zk').ZKObject;
 declare var zAu: typeof import('./au').zAu;
@@ -330,7 +330,7 @@ declare namespace zk {
 		type KeyboardTrap = import('./effect').KeyboardTrap;
 	}
 	namespace fmt {
-		type Calendar = typeof zk.fmt.Calendar;
+		type Calendar = InstanceType<typeof zk.fmt.Calendar>;
 	}
 
 	interface Websocket {

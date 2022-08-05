@@ -100,11 +100,11 @@ export class Event<TData = unknown> extends zk.Object {
 	contextSelected?: boolean; // zul.Widget.prototype.doClick_
 
 	// dom.ts#metaData
-	declare which: number;
+	declare which: number; // non-standard. Tested in zkmax.Chosenbox.prototype.doKeyPress_
 	declare metaKey: boolean;
 	declare ctrlKey;
 	declare altKey;
-	declare shiftKey;
+	declare shiftKey: boolean;
 
 	// dom.ts#mouseData
 	declare pageX: number;
@@ -112,8 +112,10 @@ export class Event<TData = unknown> extends zk.Object {
 
 	// dom.ts#keyData
 	declare key: string;
-	declare keyCode: number;
-	declare charCode;
+	// ECMAScript is deprecating `keyCode`; see https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/keyCode
+	// However, ZK uses this field.
+	declare keyCode: number; // Tested in zkmax.Chosenbox.prototype.doKeyPress_, but assumed to exist everywhere else.
+	declare charCode?: number; // non-standard. Tested in zkmax.Chosenbox.prototype.doKeyPress_
 
 	shallStop = false;
 
