@@ -21,6 +21,11 @@ ruleTester.run('javaStyleSetterSignature', javaStyleSetterSignature, {
 	valid: [`
 class A {
   set open(v: boolean) {}
+  set(v: string): void {}
+  set_(v: number): void {}
+  static set(v: string): void {}
+  static set_(v: number): void {}
+  static setEnglishName(v: string): void {}
 }
 `, `
 let a = {

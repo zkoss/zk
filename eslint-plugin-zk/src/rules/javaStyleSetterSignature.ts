@@ -21,14 +21,18 @@ export const javaStyleSetterSignature = createRule({
 		const sourceCode = context.getSourceCode();
 		function checkJavaStyleSetter(node: TSESTree.MethodDefinition | TSESTree.TSAbstractMethodDefinition) {
 			const { key, value: functionExpression } = node;
-			if (key.type !== AST_NODE_TYPES.Identifier ||
-				!key.name.startsWith('set') || key.name.length <= 3
-			) {
+			if (node.static || key.type !== AST_NODE_TYPES.Identifier) {
+				return;
+			}
+
+			const isProtected = key.name.endsWith('_'),
+				methodName = isProtected ? key.name.slice(0, -1) : key.name;
+			if (methodName === 'set' || !methodName.startsWith('set')) {
 				return;
 			}
 
 			const { returnType, body, params } = functionExpression;
-			if (!key.name.endsWith('_')) { // ignore protected method
+			if (!isProtected) {
 				if (!returnType) {
 					// Return type annotation is missing.
 					let signatureTail: TSESTree.Node | TSESTree.Token = functionExpression;
@@ -72,11 +76,10 @@ export const javaStyleSetterSignature = createRule({
 				// setEnglishName
 				//    ^ -> set to lower case
 				// ^^^ -> remove
-				const newParamName1 = key.name[3]!.toLowerCase() + key.name.slice(4);
-				if (oldParamName === newParamName1) {
-					return;
-				}
-				const newParamName = newParamName1.replace('_', '');
+
+				// If `methodName.length === 3`, the function would have already returned.
+				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+				const newParamName = methodName[3]!.toLowerCase() + methodName.slice(4);
 				if (oldParamName === newParamName) {
 					return;
 				}
