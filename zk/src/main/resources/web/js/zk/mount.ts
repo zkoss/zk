@@ -398,7 +398,6 @@ function doAuCmds(cmds?: AuCmds): void {
 
 /* create the widget tree. */
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function create(parent: zk.Widget | undefined, wi: WidgetInfo, ignoreDom?: boolean): zk.Widget {
 	let nm;
 	var wgt: zk.Widget, stub: boolean, v: string,
@@ -587,7 +586,6 @@ export namespace mount_global {
 	export function zkx_(args: ArrayLike<unknown>, stub: unknown, filter?: CallableFunction): void {
 		_t0 = Date.now(); //so breathe() won't do unncessary delay
 		(args as unknown[])[1] = [stub, filter]; //assign stub as 2nd argument (see zkx)
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		window.zkx(...args as unknown as []); //args[2] (aucmds) must be null
 	}
 
@@ -597,12 +595,10 @@ export namespace mount_global {
 	}
 
 	//mount and zkx (BL)
-	export function zkmx(): void {
+	export function zkmx(wi?: WidgetInfo, extra?: ExtraInfo, aucmds?: AuCmds, js?: string): void {
 		window.zkmb();
 		try {
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-ignore
-			zkx.call(window, ...arguments);
+			zkx.call(window, wi, extra, aucmds, js);
 		} finally {
 			window.zkme();
 		}
@@ -631,7 +627,6 @@ export namespace mount_global {
 //Event Handler//
 jq(function () {
 	var Widget = zk.Widget,
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		_bfUploads: CallableFunction[] = [],
 		_reszInf = {},
 		_subevts = { //additonal invocation
@@ -986,7 +981,7 @@ jq(function () {
 	}
 
 	var _oldBfUnload = window.onbeforeunload;
-	window.onbeforeunload = function () {
+	window.onbeforeunload = function (ev: BeforeUnloadEvent) {
 		if (!zk.skipBfUnload) {
 			if (zk.confirmClose) {
 				setTimeout(function () { //If user click 'cancel', the disabledRequest should be false. Ref: https://stackoverflow.com/questions/4650692/
@@ -996,15 +991,13 @@ jq(function () {
 			}
 
 			for (var j = 0; j < _bfUploads.length; ++j) {
-				var s = _bfUploads[j]() as never;
+				var s = _bfUploads[j]() as unknown;
 				if (s) return s;
 			}
 		}
 
 		if (_oldBfUnload) {
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-ignore
-			var s = _oldBfUnload.call(window, ...arguments) as never;
+			var s = _oldBfUnload.call(window, ev) as unknown;
 			if (s) return s;
 		}
 

@@ -44,8 +44,9 @@ Object.assign(zjq, {
 			top = el.scrollTop,
 			lft = el.scrollLeft;
 		el.style.display = 'none'; //force redraw
-		// eslint-disable-next-line no-empty
-		if (el.offsetWidth) {} //force recalc
+		if (el.offsetWidth) {
+			//force recalc
+		}
 		el.style.display = old;
 		el.scrollTop = top;
 		el.scrollLeft = lft;

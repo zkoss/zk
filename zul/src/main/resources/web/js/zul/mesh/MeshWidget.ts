@@ -2231,14 +2231,12 @@ export abstract class MeshWidget extends zul.Widget {
 	 */
 	_scrollToIndex(index: number, scrollRatio?: number): void {
 		// NOTE: _scrollToIndex will only be called by Grid and Listbox, and both of them
-		// implements _getFirstItemIndex and _getLastItemIndex. Thus, @ts-ignore is safe.
+		// implements _getFirstItemIndex and _getLastItemIndex.
 
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-ignore
+		// @ts-expect-error: calling `_getFirstItemIndex` is safe in `_scrollToIndex`
 		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
 		var firstItemIndex = this._getFirstItemIndex(),
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-ignore
+		// @ts-expect-error: calling `_getLastItemIndex` is safe in `_scrollToIndex`
 		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
 			lastItemIndex = this._getLastItemIndex(),
 			body = this.ebody!;

@@ -20,8 +20,9 @@ Object.assign(zjq, {
 			top = el.scrollTop,
 			lft = el.scrollLeft;
 		el.style.display = 'none'; //force redraw
-		// eslint-disable-next-line no-empty
-		if (el.offsetWidth) {} //force recalc
+		if (el.offsetWidth) {
+			//force recalc
+		}
 		el.style.display = old;
 		el.scrollTop = top;
 		el.scrollLeft = lft;
@@ -30,8 +31,6 @@ Object.assign(zjq, {
 Object.assign<zk.JQZK, Partial<zk.JQZK>>(zjq.prototype, {
 	beforeHideOnUnbind(): unknown { //Bug 3076384 (though i cannot reproduce in chrome/safari)
 		return this.jq!.each(function () {
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-ignore
 			for (var ns = this.getElementsByTagName('iframe'), j = ns.length; j--;)
 				ns[j].src = zjq.src0;
 		});

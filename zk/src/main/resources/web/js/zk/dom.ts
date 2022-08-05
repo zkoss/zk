@@ -304,7 +304,6 @@ let _txtStylesCamel: string[] = [],
 	_cache: Record<string, zk.Offset | undefined> = {};
 
 // refix ZK-2371
-// eslint-disable-next-line one-var
 var DocRoot = (function () {
 	var docRoot: undefined | HTMLElement,
 		// document.body may not be initiated.
@@ -1929,15 +1928,11 @@ zk.override(jq.fn, _jq, /*prototype*/ {
 	},
 	on(type: string, selector: string | undefined, data, fn: CallableFunction, ...rest: unknown[]): JQuery {
 		type = zjq.eventTypes[type] ?? type;
-		const args = [type, selector, data, fn, ...rest];
-		// eslint-disable-next-line prefer-spread
-		return this.zon.apply(this, args as never);
+		return this.zon(type, selector, data, fn, ...rest);
 	},
 	off(type: string, selector: string | undefined, fn: CallableFunction, ...rest: unknown[]): JQuery {
 		type = zjq.eventTypes[type] || type;
-		let args = [type, selector, fn, ...rest];
-		// eslint-disable-next-line prefer-spread
-		return this.zoff.apply(this, args as never);
+		return this.zoff(type, selector, fn, ...rest);
 	},
 	bind(types: string, data: unknown, fn: CallableFunction): JQuery {
 		return this.on(types, undefined, data, fn);

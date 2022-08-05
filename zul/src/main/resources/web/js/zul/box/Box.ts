@@ -842,14 +842,12 @@ export class Box extends zul.Widget {
 	_bindAlign(): void {
 		if (!this._watchAlign) {
 			this._watchAlign = true;
-			// eslint-disable-next-line @typescript-eslint/unbound-method
 			zWatch.listen({onSize: [this, this._fixAlign], onHide: [this, this._fixAlign]});
 		}
 	}
 
 	_unbindAlign(): void {
 		if (this._watchAlign) {
-			// eslint-disable-next-line @typescript-eslint/unbound-method
 			zWatch.unlisten({onSize: [this, this._fixAlign], onHide: [this, this._fixAlign]});
 			delete this._watchAlign;
 		}

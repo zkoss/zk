@@ -1,5 +1,4 @@
-/* eslint-disable one-var */
-/* eslint-disable @typescript-eslint/triple-slash-reference */
+/* eslint-disable one-var, @typescript-eslint/triple-slash-reference */
 /* globals.d.ts
 
 	Purpose:
@@ -52,13 +51,13 @@ declare global {
 		off(selector: string, func: CallableFunction): this;
 		off(selector: string, data: unknown, func: CallableFunction): this;
 		zon<TData>(
-			events: JQuery.TypeEventHandlers<HTMLElement, TData, never, never>,
-			selector: JQuery.Selector,
+			events: JQuery.TypeEventHandlers<HTMLElement, TData, never, never> | string,
+			selector?: JQuery.Selector,
 			data: TData,
 			delegateEventFunc: CallableFunction,
 			...args: unknown[]
 		): this;
-		zoff(event?: JQuery.TriggeredEvent<HTMLElement>,
+		zoff(event?: JQuery.TriggeredEvent<HTMLElement> | string,
 			selector?: JQuery.Selector,
 			delegateEventFunc?: CallableFunction,
 			...args: unknown[]): this;
