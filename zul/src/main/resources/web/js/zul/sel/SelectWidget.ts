@@ -369,7 +369,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 					zk(selectedItem).scrollIntoView(this.ebody);
 			}
 
-			if ((zk.edge_legacy || zk.ff! >= 4 || zk.ie == 10) && this.ebody && this._nativebar) { // B50-ZK-293: FF5 misses to fire onScroll
+			if ((zk.edge_legacy || zk.ff! >= 4) && this.ebody && this._nativebar) { // B50-ZK-293: FF5 misses to fire onScroll
 				// B50-ZK-440: ebody can be null when ROD
 				this._currentTop = this.ebody.scrollTop;
 				this._currentLeft = this.ebody.scrollLeft;

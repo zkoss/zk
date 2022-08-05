@@ -405,7 +405,7 @@ export class Toolbarbutton extends zul.LabelImageWidget implements zul.LabelImag
 		if (!this._disabled) {
 			if (!this._upload)
 				zul.wgt.ADBS.autodisable(this);
-			else if (!zk.ie || zk.ie > 10) // ZK-2471
+			else
 				this._uplder!.openFileDialog();
 
 			this.fireX(evt);
