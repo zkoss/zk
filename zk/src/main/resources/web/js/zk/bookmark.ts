@@ -12,7 +12,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	This program is distributed under LGPL Version 2.1 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
-export default {};
 let _curbk = '', _initbk = '';
 
 function getBookmark(): string {
@@ -70,8 +69,8 @@ let _startCheck: (() => void) | undefined = function () {
 };
 zk._apac(_startCheck); //see mount.js (after page AU cmds)
 
-zk.bmk = {
-	checkBookmark: checkBookmark,
+export let bmk = {
+	checkBookmark,
 	/** Sets a bookmark that user can use forward and back buttons */
 	bookmark(nm: string, replace: boolean): void {
 		if (_startCheck)
@@ -80,12 +79,9 @@ zk.bmk = {
 			(zk.bmk.bookmark = _bookmark)(nm, replace);
 	},
 	/** called when bookmark.html is loaded*/
-	onIframeLoaded: zk.ie && zk.ie < 11 ? function (src: string): void {
-		const j = src.indexOf('?'),
-			nm = j >= 0 ? src.substring(j + 1) : '';
-		location.hash = nm ? /*zk.safari ? nm:*/ '#' + nm : '';
-		checkBookmark();
-	} : zk.$void,
+	onIframeLoaded(src: string): void {
+		// This method shouldn't do anything.
+	},
 
 	/** check if URL is changed */
 	onURLChange(): void { //called by mount.js
@@ -124,8 +120,8 @@ zk.bmk = {
 				}
 			}
 
-			if (parent['onIframeURLChange'] && $ifr.attr('z_xurl') != url) {
-				parent['onIframeURLChange'](ifr.id, url);
+			if (parent.onIframeURLChange && $ifr.attr('z_xurl') != url) {
+				parent.onIframeURLChange(ifr.id, url);
 				$ifr.attr('z_xurl', url);
 			}
 		} catch (e) { //due to JS sandbox, we cannot access if not from same host
@@ -133,3 +129,4 @@ zk.bmk = {
 		}
 	}
 };
+zk.bmk = bmk;
