@@ -418,10 +418,8 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 			if (!this._canActivate(evt)) return;
 			if (!this._upload)
 				zul.wgt.ADBS.autodisable(this);
-			else if (!zk.ie || zk.ie > 10) {// ZK-2471
-				if (!zk.chrome || (evt.domTarget as HTMLInputElement).type != 'file') //ZK-3089
-					this._uplder!.openFileDialog();
-			}
+			else if (!zk.chrome || (evt.domTarget as HTMLInputElement).type != 'file') //ZK-3089
+				this._uplder!.openFileDialog();
 
 			var topmost = this.isTopmost(),
 				anc = this.$n_<HTMLAnchorElement>('a');

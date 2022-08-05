@@ -605,15 +605,8 @@ export class JQZK {
 		var el = this.jq[0];
 		if (!ofs) {
 			if (el.getBoundingClientRect) { // IE and FF3
-				var elst: undefined | CSSStyleDeclaration, oldvisi: undefined | string;
-				if (zk.ie && zk.ie < 11 && el.style.display == 'none') {
-					//When popup a window in an iframe, getBoundingClientRect not correct (test case: B36-2851102.zul within iframe)
-					oldvisi = (elst = el.style).visibility;
-					elst.visibility = 'hidden';
-					elst.display = '';
-				}
-
-				var rect = el.getBoundingClientRect(),
+				var elst: undefined | CSSStyleDeclaration, oldvisi: undefined | string,
+					rect = el.getBoundingClientRect(),
 					b = [rect.left + jq.innerX() - el.ownerDocument.documentElement.clientLeft,
 						rect.top + jq.innerY() - el.ownerDocument.documentElement.clientTop] as zk.Offset;
 

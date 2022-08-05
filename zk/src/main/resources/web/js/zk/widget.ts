@@ -321,11 +321,6 @@ function _bkFocus(wgt: zk.Widget): CurrentFocusInfo {
 	return undefined;
 }
 function _bkRange(wgt: zk.Widget): zk.Offset | undefined {
-	if (zk.ie && zk.ie < 11 && zk.cfrg) { //Bug ZK-1377
-		var cfrg = zk.cfrg;
-		delete zk.cfrg;
-		return cfrg;
-	}
 	const input = wgt.getInputNode && wgt.getInputNode();
 	return input ? zk(input).getSelectionRange() : undefined;
 }
@@ -414,7 +409,7 @@ export var DnD = class { //for easy overriding
 		// Firefox's bug -  https://bugzilla.mozilla.org/show_bug.cgi?id=1259357
 		if ((zk.ff && jq(evt.domTarget).css('overflow') !== 'visible') ||
 			// IE 9~11 and Edge may receive a wrong target when dragging with an Image.
-			(((zk.ie && zk.ie > 8) || zk.edge_legacy) && jq.nodeName(evt.domTarget, 'img'))) {
+			((zk.ie || zk.edge_legacy) && jq.nodeName(evt.domTarget, 'img'))) {
 			var n = document.elementFromPoint(evt.domEvent!.clientX || 0, evt.domEvent!.clientY || 0);
 			if (n)
 				wgt = zk.$(n);
@@ -3836,7 +3831,7 @@ unbind_: function (skipper, after) {
 		if (attr == 'w') {
 			// feature #ZK-314: zjq.minWidth function return extra 1px in IE9/10/11
 			var wd = zjq.minWidth(wgt);
-			if (zk.ie && zk.ie > 8 && zk.isLoaded('zul.wgt') && (wgt instanceof zul.wgt.Image)) {
+			if (zk.ie && zk.isLoaded('zul.wgt') && (wgt instanceof zul.wgt.Image)) {
 				wd = zk(wgt).offsetWidth();
 			}
 			return wd;
@@ -6444,9 +6439,6 @@ Object skip(zk.Widget wgt);
 		if (skip && skip.firstChild) {
 			var cf = zk.currentFocus,
 				iscf = cf && cf.getInputNode;
-
-			if (iscf && zk.ie && zk.ie < 11) //Bug ZK-1377 IE will lost input selection range after remove node
-				zk.cfrg = zk(cf!.getInputNode!()).getSelectionRange();
 
 			skip.parentNode?.removeChild(skip);
 				//don't use jq to remove, since it unlisten events
