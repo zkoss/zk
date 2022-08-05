@@ -1,4 +1,3 @@
-/*global zkreg*/
 /* widget.ts
 
 	Purpose:
@@ -5689,8 +5688,9 @@ zk.Widget.getClass('combobox');
 // zk scope
 export var $ = Widget.$;
 
-// window scope
-export const zkreg = Widget.register; //a shortcut for WPD loader
+export namespace widget_global {
+	export const zkreg = Widget.register; //a shortcut for WPD loader
+}
 
 /** A reference widget. It is used as a temporary widget that will be
  * replaced with a real widget when {@link #bind_} is called.
@@ -6263,17 +6263,19 @@ export class Macro extends Widget {
  * @return zk.Service
  * @since 8.0.0
  */
-// window scope
-export const zkservice = {
-	$(n: string | JQuery | HTMLElement | Widget,
-		opts?: Partial<{exact: boolean; strict: boolean; child: boolean}>): Service | undefined {
-		var widget = zk.Widget.$(n, opts);
-		if (widget)
-			return widget.$service();
-		zk.error('Not found ZK Service with [' + n + ']');
-		return undefined;
-	}
-};
+
+export namespace widget_global {
+	export const zkservice = {
+		$(n: string | JQuery | HTMLElement | Widget,
+			opts?: Partial<{exact: boolean; strict: boolean; child: boolean}>): Service | undefined {
+			var widget = zk.Widget.$(n, opts);
+			if (widget)
+				return widget.$service();
+			zk.error('Not found ZK Service with [' + n + ']');
+			return undefined;
+		}
+	};
+}
 function _fixCommandName(prefix: string, cmd: string, opts: zk.EventOptions, prop: string): void {
 	if (opts[prop]) {
 		var ignores = {};
@@ -6740,37 +6742,38 @@ export var NoDOM = class NoDOM {
 		return true;
 	}
 };
-//Extra//
-export function zkopt(opts: Record<string, unknown>): void {
-	for (var nm in opts) {
-		var val = opts[nm];
-		switch (nm) {
-		case 'pd': zk.procDelay = val as number; break;
-		case 'td': zk.tipDelay = val as number; break;
-		case 'art': zk.resendTimeout = val as number; break;
-		case 'dj': zk.debugJS = val as boolean; break;
-		case 'kd': zk.keepDesktop = val as boolean; break;
-		case 'pf': zk.pfmeter = val as boolean; break;
-		case 'ta': zk.timerAlive = val as boolean; break;
-		case 'gd': zk.groupingDenied = val as boolean; break;
-		case 'to':
-			zk.timeout = val as number;
-			zAu._resetTimeout();
-			break;
-		case 'ed':
-			switch (val) {
-			case 'e':
-				zk.feature.ee = true;
-				//fallthrough
-			case 'p':
-				zk.feature.pe = true;
+export namespace widget_global {
+	export function zkopt(opts: Record<string, unknown>): void {
+		for (var nm in opts) {
+			var val = opts[nm];
+			switch (nm) {
+			case 'pd': zk.procDelay = val as number; break;
+			case 'td': zk.tipDelay = val as number; break;
+			case 'art': zk.resendTimeout = val as number; break;
+			case 'dj': zk.debugJS = val as boolean; break;
+			case 'kd': zk.keepDesktop = val as boolean; break;
+			case 'pf': zk.pfmeter = val as boolean; break;
+			case 'ta': zk.timerAlive = val as boolean; break;
+			case 'gd': zk.groupingDenied = val as boolean; break;
+			case 'to':
+				zk.timeout = val as number;
+				zAu._resetTimeout();
+				break;
+			case 'ed':
+				switch (val) {
+				case 'e':
+					zk.feature.ee = true;
+					//fallthrough
+				case 'p':
+					zk.feature.pe = true;
+				}
+				break;
+			case 'eu': zAu.setErrorURI(val as number); break;
+			case 'ppos': zk.progPos = val as string; break;
+			case 'hs': zk.historystate.enabled = val as boolean; break;
+			case 'eup': zAu.setPushErrorURI(val as number); break;
+			case 'resURI': zk.resourceURI = val as string;
 			}
-			break;
-		case 'eu': zAu.setErrorURI(val as number); break;
-		case 'ppos': zk.progPos = val as string; break;
-		case 'hs': zk.historystate.enabled = val as boolean; break;
-		case 'eup': zAu.setPushErrorURI(val as number); break;
-		case 'resURI': zk.resourceURI = val as string;
 		}
 	}
 }
@@ -6788,6 +6791,4 @@ zk.Skipper = Skipper;
 zk.NoDOM = NoDOM;
 zk.WrapClass = WrapClass;
 
-window.zkreg = zkreg;
-window.zkservice = zkservice;
-window.zkopt = zkopt;
+zk.copy(window, widget_global);
