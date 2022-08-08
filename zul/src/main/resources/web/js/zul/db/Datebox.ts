@@ -932,7 +932,7 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 export class CalendarPop extends zul.db.Calendar {
 	override parent!: Datebox;
 	_shadow?: zk.eff.Shadow;
-	_open?: CalendarPop;
+	_open?: boolean;
 
 	constructor() {
 		super();

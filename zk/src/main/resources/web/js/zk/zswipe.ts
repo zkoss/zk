@@ -33,6 +33,11 @@ export interface SwipeOptions {
 	minDisplacement: number;
 	maxDisplacement: number;
 }
+export interface SwipeEventOptions extends zk.EventOptions {
+	start: {coords: zk.Offset; time: number};
+	stop: {coords: zk.Offset; time: number};
+	dir: 'left' | 'right' | 'up' | 'down';
+}
 /**
  * A swipe object used to make a DOM element swipe-able.
  * @disable(zkgwt)
@@ -118,7 +123,7 @@ export class Swipe extends zk.Object {
 		jq(this.node).off(moveEvt, this.proxy(this._swipeMove));
 		if (start && stop && this.opts) {
 			var dispX: number | undefined, dispY: number | undefined,
-				dispT = stop.time - start.time, dir: string | undefined;
+				dispT = stop.time - start.time, dir: 'left' | 'right' | 'up' | 'down' | undefined;
 
 			if (dispT < this.opts.duration) {
 				var deltaX = start.coords[0] - stop.coords[0],

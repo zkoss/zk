@@ -76,18 +76,18 @@ export class Textbox extends zul.inp.InputWidget<string> {
 	/** Sets the rows.
 	 * @param int rows
 	 */
-	setRows(v: number, opts?: Record<string, boolean>): this {
+	setRows(rows: number, opts?: Record<string, boolean>): this {
 		const o = this._rows;
-		this._rows = v;
+		this._rows = rows;
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== rows || (opts && opts.force)) {
 			interface ZULInputElement extends HTMLInputElement {
 				rows: number;
 			}
 			// FIXME: grid?
 			var inp = this.getInputNode() as ZULInputElement | undefined;
 			if (inp && this.isMultiline())
-				inp.rows = v;
+				inp.rows = rows;
 		}
 
 		return this;
