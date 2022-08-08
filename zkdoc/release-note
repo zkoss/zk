@@ -10,6 +10,7 @@ ZK 10.0.0
   ZK-5120: Combobox smart update emptySearchMessage doesn't work
   ZK-5138: Grid row setAlign not work after rendered
   ZK-5145: Chosenbox smart update emptyMessage doesn't work
+  ZK-5217: Timepicker error in Mobile touch
 
 * Upgrade Notes
   + Layout.java (Vlayout and Hlayout) are extended from XulElement since ZK 10.0.0

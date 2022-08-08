@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?script content="zk.tabletUIEnabled = true;"?>
+<!--
+B100-ZK-5217.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Aug 08 2022 10:30:24 AM, Created by JamesChu
+Copyright (C) 2022 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		(Test only in mobile/tablet)
+		1. open timepicker and scroll down to select time
+		2. open again. No js error and scroll to the selected time.
+	</label>
+	<vlayout viewModel='@id("vm") @init("org.zkoss.zktest.test2.F80_ZK_2707VM")'>
+		<hlayout>
+			<label value="HH:mm" />
+			<timepicker format="HH:mm" value="@bind(vm.time)" width="200px"/>
+		</hlayout>
+		<hlayout>
+			<label value="HH:mm a" />
+			<timepicker format="HH:mm a" value="@bind(vm.time)" min="@load(vm.min)" width="200px" interval="@load(vm.interval)" />
+		</hlayout>
+		<hlayout>
+			<label value="HH:mm:ss" />
+			<timepicker format="HH:mm:ss" value="@bind(vm.time)" min="@load(vm.min)" max="@load(vm.max)" width="200px" interval="@load(vm.interval)" />
+		</hlayout>
+		<hlayout>
+			<label value="HH:mm:ss a" />
+			<timepicker format="HH:mm:ss a" value="@bind(vm.time)" width="200px" interval="@load(vm.interval)" />
+		</hlayout>
+		<hlayout>
+			<label value="hh:mm:ss a" />
+			<timepicker format="hh:mm:ss a" value="@bind(vm.time)" width="200px" interval="@load(vm.interval)" />
+		</hlayout>
+		<button label="change min time" onClick="@command('change_min')" />
+		<button label="change max time" onClick="@command('change_max')" />
+		<button label="change interval" onClick="@command('change_interval')" />
+	</vlayout>
+</zk>
