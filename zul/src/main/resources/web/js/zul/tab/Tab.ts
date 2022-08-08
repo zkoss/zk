@@ -171,7 +171,7 @@ export class Tab extends zul.LabelImageWidget implements zul.LabelImageWidgetWit
 		}
 	}
 
-	_sel(toSel: boolean, notify: boolean): void {
+	_sel(toSel: boolean, notify?: boolean): void {
 		var tabbox = this.getTabbox();
 
 		/* ZK-1441

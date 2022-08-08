@@ -68,6 +68,7 @@ declare global {
 	| 'NO_ZERO'
 	| 'NUMBER_REQUIRED' // zul/inp/Decimalbox
 	| 'OK' // zul/dom
+	| 'CANCEL' // touch/timebox-touch
 	| 'OUT_OF_RANGE_SEPARATOR' // zul/inp/SimpleLocalTimeConstraint
 	| 'OUT_OF_RANGE'
 	| 'PANEL_COLLAPSE' // zul/wnd/Panel

@@ -267,7 +267,7 @@ export class ComboWidget extends zul.inp.InputWidget<string> {
 	 * @see #open
 	 * @see #close
 	 */
-	setOpen(open: boolean, opts: Record<string, unknown>): this {
+	setOpen(open: boolean, opts?: Record<string, unknown>): this {
 		if (this.desktop) {
 			if (this.isRealVisible()) {
 				if (open) this.open(opts);
