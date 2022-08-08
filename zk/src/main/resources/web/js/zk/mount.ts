@@ -171,7 +171,7 @@ export function _apac(fn: () => void, _which_?: string): void {
 //afterMount: function () {}
 //@};
 zk.afterMount = afterMount;
-export function afterMount(fn: () => void, delay?: number): boolean { //part of zk
+export function afterMount(fn?: () => void, delay?: number): boolean { //part of zk
 	if (fn) {
 		if (!jq.isReady)
 			jq(function () {
