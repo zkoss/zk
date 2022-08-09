@@ -125,8 +125,6 @@ public class RichletFilter implements Filter {
 				try {
 					if (process(sess, reg, resp, path, true))
 						return; // done
-				} catch (Throwable ex) {
-					// pass
 				} finally {
 					I18Ns.cleanup(request, old);
 				}
