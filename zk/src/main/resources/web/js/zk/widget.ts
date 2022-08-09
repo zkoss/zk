@@ -2008,6 +2008,34 @@ wgt.$f().main.setTitle("foo");
 		}
 		return this;
 	},
+	/**
+	 * Returns the focus set by {@link #setFocus(boolean)}.
+	 * <p>Note: it simply returns what is passed to {@link #setFocus(boolean)}.
+	 * <p>Default: {@code false}
+	 * @since ZK 10.0.0
+	 */
+	isFocus: function () {
+		return this._focus;
+	},
+	/**
+	 * Sets the focus on this widget.
+	 * @param boolean focus True to focus on this widget.
+	 * @since ZK 10.0.0
+	 */
+	setFocus: function (focus) {
+		if (this._focus != focus) {
+			this._focus = focus;
+			if (focus) {
+				if (this.desktop) {
+					zAu.cmd1.focus(this);
+				} else {
+					zk.afterMount(() => {
+						zAu.cmd1.focus(this);
+					});
+				}
+			}
+		}
+	},
 	/** Synchronizes a map of objects that are associated with this widget, and
 	 * they shall be resized when the size of this widget is changed.
 	 * <p>It is useful to sync the layout, such as shadow, mask
