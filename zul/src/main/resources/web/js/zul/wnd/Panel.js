@@ -999,7 +999,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 				return false;
 			}
 		} else if (child.$instanceof(zul.wgt.Toolbar)) {
-			if (insertBefore.$instanceof(zul.wnd.Panelchildren) || (!insertBefore && this.nChildren == 0)) {
+			if (insertBefore && insertBefore.$instanceof(zul.wnd.Panelchildren) || (!insertBefore && this.nChildren == 0)) {
 				if (this.tbar && this.tbar != child) {
 					zk.error('Only one top toolbar child is allowed: ' + this.className);
 					return false;
