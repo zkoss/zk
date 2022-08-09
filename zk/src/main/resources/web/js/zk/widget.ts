@@ -3735,37 +3735,37 @@ unbind_: function (skipper, after) {
 		else _binds[uuid] = this;
 	}
 
-	setFlexSize_(flexSize_: zk.FlexSize, isFlexMin?: boolean): void {
+	setFlexSize_(flexSize: zk.FlexSize, isFlexMin?: boolean): void {
 		if (this._cssflex && this.parent && this.parent.getFlexContainer_() != null && !isFlexMin)
 			return;
 		var n = this.$n()!,
 			zkn = zk(n);
-		if (flexSize_.height !== undefined) {
-			if (flexSize_.height == 'auto')
+		if (flexSize.height !== undefined) {
+			if (flexSize.height == 'auto')
 				n.style.height = '';
-			else if (flexSize_.height != '' || (typeof flexSize_.height === 'number' && flexSize_.height === 0 && !this.isFloating_())) //bug #2943174, #2979776, ZK-1159, ZK-1358
-				this.setFlexSizeH_(n, zkn, flexSize_.height as number, isFlexMin);
+			else if (flexSize.height != '' || (typeof flexSize.height === 'number' && flexSize.height === 0 && !this.isFloating_())) //bug #2943174, #2979776, ZK-1159, ZK-1358
+				this.setFlexSizeH_(n, zkn, flexSize.height as number, isFlexMin);
 			else
 				n.style.height = this._height || '';
 		}
-		if (flexSize_.width !== undefined) {
-			if (flexSize_.width == 'auto')
+		if (flexSize.width !== undefined) {
+			if (flexSize.width == 'auto')
 				n.style.width = '';
-			else if (flexSize_.width != '' || (typeof flexSize_.width === 'number' && flexSize_.width === 0 && !this.isFloating_())) //bug #2943174, #2979776, ZK-1159, ZK-1358
-				this.setFlexSizeW_(n, zkn, flexSize_.width as number, isFlexMin);
+			else if (flexSize.width != '' || (typeof flexSize.width === 'number' && flexSize.width === 0 && !this.isFloating_())) //bug #2943174, #2979776, ZK-1159, ZK-1358
+				this.setFlexSizeW_(n, zkn, flexSize.width as number, isFlexMin);
 			else
 				n.style.width = this._width || '';
 		}
 	}
 
-	setFlexSizeH_(flexSizeH_: HTMLElement, zkn: zk.JQZK, height: number, isFlexMin?: boolean): void {
+	setFlexSizeH_(flexSizeH: HTMLElement, zkn: zk.JQZK, height: number, isFlexMin?: boolean): void {
 		// excluding margin for F50-3000873.zul and B50-3285635.zul
-		flexSizeH_.style.height = jq.px0(height - (!isFlexMin ? zkn.marginHeight() : 0));
+		flexSizeH.style.height = jq.px0(height - (!isFlexMin ? zkn.marginHeight() : 0));
 	}
 
-	setFlexSizeW_(flexSizeW_: HTMLElement, zkn: zk.JQZK, width: number, isFlexMin?: boolean): void {
+	setFlexSizeW_(flexSizeW: HTMLElement, zkn: zk.JQZK, width: number, isFlexMin?: boolean): void {
 		// excluding margin for F50-3000873.zul and B50-3285635.zul
-		flexSizeW_.style.width = jq.px0(width - (!isFlexMin ? zkn.marginWidth() : 0));
+		flexSizeW.style.width = jq.px0(width - (!isFlexMin ? zkn.marginWidth() : 0));
 	}
 
 	// ZK-5050
@@ -5126,7 +5126,7 @@ _doFooSelect: function (evt) {
 	 * @return zk.Widget this widget
 	 * @see #domUnlisten_
 	 */
-	domListen_(n: HTMLElement, evtnm: string, fn?: string | CallableFunction, keyword?: unknown): this {
+	domListen_(n: HTMLElement | JQuery, evtnm: string, fn?: string | CallableFunction, keyword?: unknown): this {
 		if (!this.$weave) {
 			var inf = _domEvtInf(this, evtnm, fn, keyword);
 			jq(n, zk).on(inf[0], inf[1]);
@@ -5150,7 +5150,7 @@ _doFooSelect: function (evt) {
 	 * @return zk.Widget this widget
 	 * @see #domListen_
 	 */
-	domUnlisten_(n: HTMLElement, evtnm: string, fn?: string | CallableFunction, keyword?: unknown): this {
+	domUnlisten_(n: HTMLElement | JQuery, evtnm: string, fn?: string | CallableFunction, keyword?: unknown): this {
 		if (!this.$weave) {
 			var inf = _domEvtInf(this, evtnm, fn, keyword);
 			jq(n, zk).off(inf[0], inf[1]);
