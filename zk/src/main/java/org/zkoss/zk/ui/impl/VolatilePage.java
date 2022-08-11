@@ -37,6 +37,6 @@ public class VolatilePage extends PageImpl {
 	}
 
 	public String toString() {
-		return "vlatile" + super.toString();
+		return "volatile" + super.toString();
 	}
 }
