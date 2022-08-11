@@ -88,6 +88,11 @@ public class Tabpanel extends XulElement {
 		return super.isVisible() && isSelected();
 	}
 
+	// used for zephyr API to get real visible state.
+	private boolean isRawVisible() {
+		return super.isVisible();
+	}
+
 	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Tabpanels))
 			throw new UiException("Wrong parent: " + parent);
