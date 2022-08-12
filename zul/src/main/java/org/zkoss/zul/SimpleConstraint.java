@@ -515,4 +515,12 @@ public class SimpleConstraint implements Constraint, ClientConstraint, java.io.S
 	public String getClientPackages() {
 		return null;
 	}
+
+	/**
+	 * Returns the raw value
+	 * @since 10.0.0
+	 */
+	public String getRawValue() {
+		return _raw;
+	}
 }

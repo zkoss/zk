@@ -534,6 +534,18 @@ public abstract class InputElement extends XulElement implements Constrainted, R
 		return _auxinf != null ? _auxinf.constr : null;
 	}
 
+	/**
+	 * Returns the raw constraint string value if any.
+	 * @since 10.0.0
+	 */
+	public String getConstraintString() {
+		Constraint constraint = getConstraint();
+		if (constraint instanceof SimpleConstraint) {
+			return ((SimpleConstraint) constraint).getRawValue();
+		}
+		return null;
+	}
+
 	/** Returns the value in the targeting type.
 	 * It is used by the deriving class to implement the getValue method.
 	 * For example, {@link org.zkoss.zul.Intbox#getValue} is the same
