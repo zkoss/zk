@@ -212,8 +212,7 @@ public class Paging extends XulElement implements Paginal {
 	}
 
 	public String getZclass() {
-		String added = "os".equals(getMold()) ? "-os" : "";
-		return _zclass == null ? "z-paging" + added : _zclass;
+		return _zclass == null ? "z-paging" : _zclass;
 	}
 
 	// -- Component --//

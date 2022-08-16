@@ -110,7 +110,7 @@ public class Groupbox extends XulElement {
 	}
 
 	public String getZclass() {
-		return _zclass == null ? "default".equals(getMold()) ? "z-groupbox" : "z-groupbox-3d" : _zclass;
+		return _zclass == null ? "z-groupbox" : _zclass;
 	}
 
 	/** Returns the CSS style for the content block of the groupbox.
