@@ -852,7 +852,7 @@ zAu.beforeSend = function (uri, req, dt) {
 		} else {
 			content = '';
 		}
-		let files = [], uploadCallbacks: unknown[] = [];
+		let files = [], uploadCallbacks: unknown[] = [], lasturi = requri;
 		for (let j = 0, aureq; aureq = es.shift(); ++j) {
 			if ((aureq.opts || {}).uri != uri) {
 				es.unshift(aureq);
@@ -862,12 +862,12 @@ zAu.beforeSend = function (uri, req, dt) {
 			let oldRequri = zAu.beforeSend(requri, aureq, dt);
 
 			// split the different request for the different ReqUri for zephyr
-			if (j > 0 && oldRequri != requri) {
+			if (j > 0 && oldRequri != lasturi) {
 				es.unshift(aureq);
 				sendPending = true;
 				break;
 			}
-			requri = oldRequri;
+			lasturi = oldRequri;
 
 			aureq.data = _deconstructPacket(aureq.data, files);
 
@@ -886,6 +886,7 @@ zAu.beforeSend = function (uri, req, dt) {
 			}
 			zk.copy(rtags, (aureq.opts || {}).rtags);
 		}
+		requri = lasturi;
 		// B65-ZK-2210: get resourceURL by desktop id
 		if (zk.portlet2Data && zk.portlet2Data[dt.id]) {
 			requri = zk.portlet2Data[dt.id].resourceURL;
