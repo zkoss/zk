@@ -161,7 +161,7 @@ public class Treeitem extends XulElement implements org.zkoss.zk.ui.ext.Disable 
 	 * @since 7.0.0
 	 */
 	public boolean isRendered() {
-		return _rendered;
+		return _rendered || (getTree() != null && getTree().getModel() == null);
 	}
 
 	// Component developer use only. (since 7.0.0)
@@ -668,7 +668,7 @@ public class Treeitem extends XulElement implements org.zkoss.zk.ui.ext.Disable 
 		if (!isSelectable())
 			renderer.render("checkable", false);
 		render(renderer, "_loadedChildren", isLoaded());
-		render(renderer, "_loaded", isRendered() ? true : (getTree() != null ? getTree().getModel() == null : false));
+		render(renderer, "_loaded", isRendered());
 
 		if (_value instanceof String)
 			render(renderer, "value", _value);
