@@ -283,15 +283,15 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 					changed = true;
 				}
 				if (v) {
-					data.push(opt.id);
-					if (!reference) reference = opt.id;
+					data.push(o);
+					if (!reference) reference = o;
 				}
 			} else {
 				if (o && o._selected != v && v) { // found the newly selected one
 					this._addItemToSelection(o); //will clear other selection first
 					changed = true;
-					data.push(opt.id);
-					reference = opt.id;
+					data.push(o);
+					reference = o;
 					break;
 				}
 			}
