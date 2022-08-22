@@ -35,6 +35,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
@@ -606,7 +607,8 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 					break;
 				}
 			}
-			_uuid = exec == null ? ANONYMOUS_ID + _anonymousId++ : nextUuid(exec.getDesktop());
+			// avoid duplicating uuid in zephyr cloud mode
+			_uuid = exec == null ? ANONYMOUS_ID + (UUID.randomUUID().toString().split("-")[0]) + _anonymousId++ : nextUuid(exec.getDesktop());
 			//OK to race for _anonymousId (since ok to be the same)
 		}
 		return _uuid;
