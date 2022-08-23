@@ -76,6 +76,9 @@ function _getRegionSize(wgt?: zul.layout.LayoutRegion, hor?: boolean, ext?: bool
  */
 @zk.WrapClass('zul.layout.Borderlayout')
 export class Borderlayout extends zul.Widget {
+	override firstChild?: zul.layout.LayoutRegion;
+	override lastChild?: zul.layout.LayoutRegion;
+
 	north?: zul.layout.North;
 	south?: zul.layout.South;
 	center?: zul.layout.Center;
@@ -151,11 +154,11 @@ export class Borderlayout extends zul.Widget {
 
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
-		zWatch.listen({onSize: this, onCommandReady: this});
+		zWatch.listen({ onSize: this, onCommandReady: this });
 	}
 
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
-		zWatch.unlisten({onSize: this, onCommandReady: this});
+		zWatch.unlisten({ onSize: this, onCommandReady: this });
 		super.unbind_(skipper, after, keepRod);
 	}
 
@@ -212,10 +215,10 @@ export class Borderlayout extends zul.Widget {
 				&& ((region._nvflex && region._vflexsz === undefined)
 					|| (region._nhflex && region._hflexsz === undefined)))
 				return;	//region size unknown, border cannot _resize() now,
-						   //return and keep this._isOnSize true
-						   //onSize event will be fired to region later, and region will
-						   //call back to _resize() via afterChildrenFlex_() when it resolve
-						   //itself the vflex and hflex
+			//return and keep this._isOnSize true
+			//onSize event will be fired to region later, and region will
+			//call back to _resize() via afterChildrenFlex_() when it resolve
+			//itself the vflex and hflex
 		}
 
 		var el = this.$n_(),
@@ -340,7 +343,7 @@ export class Borderlayout extends zul.Widget {
 		}
 
 		// store fot next time to check
-		el._lastSize = {width: w, height: h};
+		el._lastSize = { width: w, height: h };
 		return false;
 	}
 
@@ -353,29 +356,29 @@ export class Borderlayout extends zul.Widget {
 	 * The north layout constraint (top of container).
 	 * @type String
 	 */
-	static NORTH = 'north' as const;
+	static readonly NORTH = 'north';
 
 	/**
 	 * The south layout constraint (bottom of container).
 	 * @type String
 	 */
-	static SOUTH = 'south' as const;
+	static readonly SOUTH = 'south';
 
 	/**
 	 * The east layout constraint (right side of container).
 	 * @type String
 	 */
-	static EAST = 'east' as const;
+	static readonly EAST = 'east';
 
 	/**
 	 * The west layout constraint (left side of container).
 	 * @type String
 	 */
-	static WEST = 'west' as const;
+	static readonly WEST = 'west';
 
 	/**
 	 * The center layout constraint (middle of container).
 	 * @type String
 	 */
-	static CENTER = 'center' as const;
+	static readonly CENTER = 'center';
 }

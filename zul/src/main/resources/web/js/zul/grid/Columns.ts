@@ -19,7 +19,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.grid.Columns')
 export class Columns extends zul.mesh.ColumnMenuWidget {
-	override parent!: zul.grid.Grid | undefined;
+	override parent?: zul.grid.Grid;
 
 	/** Returns the grid that contains this columns.
 	 * @return zul.grid.Grid

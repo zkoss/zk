@@ -50,10 +50,10 @@ zjq._sfKeys = {
 	63277: 34  // pgdn
 };
 zk.override(jq.event, zjq._evt = {}, {
-	fix(evt: JQuery.Event, ...rest) {
-		evt = zjq._evt.fix!.bind(this)(...(arguments as unknown as [])) as JQuery.Event;
-		var v = zjq._sfKeys[evt.keyCode!];
-		if (v) evt.keyCode = v;
-		return evt;
+	fix(evt: Event, ...rest: unknown[]): JQuery.TriggeredEvent {
+		const jevt = zjq._evt.fix.call(this, evt, ...rest) as JQuery.KeyboardEventBase;
+		var v = zjq._sfKeys[jevt.keyCode];
+		if (v) jevt.keyCode = v;
+		return jevt;
 	}
 });

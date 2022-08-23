@@ -20,17 +20,17 @@ function _beforeChildKey(wgt: SelectWidget, evt: zk.Event): boolean {
 }
 function _afterChildKey(evt: zk.Event<zk.EventKeyData>): boolean {
 	switch (evt.data!.keyCode) {
-	case 33: //PgUp
-	case 34: //PgDn
-	case 38: //UP
-	case 40: //DOWN
-	case 37: //LEFT
-	case 39: //RIGHT
-	case 32: //SPACE
-	case 36: //Home
-	case 35: //End
-		evt.stop();
-		return false;
+		case 33: //PgUp
+		case 34: //PgDn
+		case 38: //UP
+		case 40: //DOWN
+		case 37: //LEFT
+		case 39: //RIGHT
+		case 32: //SPACE
+		case 36: //Home
+		case 35: //End
+			evt.stop();
+			return false;
 	}
 	return true;
 }
@@ -48,21 +48,21 @@ function _updHeaderCM(box: SelectWidget): void { //update header's checkmark
 	}
 }
 function _isButton(evt: zk.Event): boolean {
-	return evt.target.$button //for extension, it makes a widget as a button
+	return evt.target!.$button //for extension, it makes a widget as a button
 		|| (zk.isLoaded('zul.wgt')
-		&& (evt.target instanceof zul.wgt.Button || evt.target instanceof zul.wgt.Toolbarbutton));
+			&& (evt.target instanceof zul.wgt.Button || evt.target instanceof zul.wgt.Toolbarbutton));
 }
 function _isInputWidget(evt: zk.Event): boolean { // B50-ZK-460
-	return evt.target.$inputWidget //for extension, it makes a widget as a input widget
+	return evt.target!.$inputWidget //for extension, it makes a widget as a input widget
 		|| (zk.isLoaded('zul.inp') && evt.target instanceof zul.inp.InputWidget);
 }
 function _focusable(evt: zk.Event): boolean {
 	return (jq.nodeName(evt.domTarget, 'input', 'textarea', 'button', 'select', 'option', 'a')
-			&& !(evt.target instanceof zul.sel.SelectWidget))
+		&& !(evt.target instanceof zul.sel.SelectWidget))
 		|| _isButton(evt) || _isInputWidget(evt);
 }
 function _fixReplace(w: zul.sel.ItemWidget | undefined): zul.sel.ItemWidget | undefined {
-	return w && w.uuid ? zk.Widget.$<zul.sel.ItemWidget>(w.uuid) : undefined;
+	return w?.uuid ? zk.Widget.$<zul.sel.ItemWidget>(w.uuid) : undefined;
 }
 function _isListgroup(w: zul.sel.ItemWidget): boolean {
 	return zk.isLoaded('zkex.sel') && w instanceof zkex.sel.Listgroup;
@@ -138,7 +138,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		const o = this._checkmark;
 		this._checkmark = checkmark;
 
-		if (o !== checkmark || (opts && opts.force)) {
+		if (o !== checkmark || opts?.force) {
 			if (this.desktop)
 				this.rerenderLater_();
 		}
@@ -164,7 +164,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		const o = this._multiple;
 		this._multiple = multiple;
 
-		if (o !== multiple || (opts && opts.force)) {
+		if (o !== multiple || opts?.force) {
 			if (!this._multiple && this._selItems.length) {
 				var item = this.getSelectedItem()!;
 				for (var it: zul.sel.ItemWidget | undefined; (it = this._selItems.pop());)
@@ -202,7 +202,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		selectedIndex = v < -1 || (!v && v !== 0) ? -1 : v;
 		this._selectedIndex = selectedIndex;
 
-		if (o !== selectedIndex || (opts && opts.force)) {
+		if (o !== selectedIndex || opts?.force) {
 			var selected = this._selectedIndex;
 			this.clearSelection();
 			this._selectedIndex = selected;
@@ -263,7 +263,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		const o = this._name;
 		this._name = name;
 
-		if (o !== name || (opts && opts.force)) {
+		if (o !== name || opts?.force) {
 			if (this.desktop) this.updateFormData();
 		}
 
@@ -287,7 +287,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		const o = this._checkmarkDeselectOther;
 		this._checkmarkDeselectOther = checkmarkDeselectOther;
 
-		if (o !== checkmarkDeselectOther || (opts && opts.force)) {
+		if (o !== checkmarkDeselectOther || opts?.force) {
 			this._cdo = checkmarkDeselectOther; // backward compatible
 		}
 
@@ -316,13 +316,12 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		// F60-ZK-715
 		if (focusIndex < 0)
 			return this;
-		var self = this;
-		setTimeout(function () { // items not ready yet
+		setTimeout(() => { // items not ready yet
 			var w: zul.sel.ItemWidget | undefined;
-			for (var it = self.getBodyWidgetIterator(); (w = it.next()) && focusIndex--;)
+			for (var it = this.getBodyWidgetIterator(); (w = it.next()) && focusIndex--;)
 				if (!it.hasNext())
 					break;
-			self._focusItem = w;
+			this._focusItem = w;
 		});
 		return this;
 	}
@@ -353,7 +352,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	 * It is the same as {@link #selectItem}.
 	 * @param ItemWidget item
 	 */
-	setSelectedItem(selectedItem: zul.sel.ItemWidget): this {
+	setSelectedItem(selectedItem?: zul.sel.ItemWidget): this {
 		if (!selectedItem)
 			this.clearSelection();
 		else {
@@ -400,7 +399,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 			this._height = height;
 			var n = this.$n();
 			if (n) {
-				n.style.height = height || '';
+				n.style.height = height ?? '';
 				this.onSize();
 			}
 		}
@@ -427,7 +426,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 
 		//Bug 1659601: we cannot do it in init(); or, IE failed!
 		var tblwd = zk.opera && this.ebody!.offsetHeight == 0 ? // B50-ZK-269
-				this.ebody!.offsetWidth : this.ebody!.clientWidth;
+			this.ebody!.offsetWidth : this.ebody!.clientWidth;
 
 		if (zk.webkit)
 			anchor.style.display = '';
@@ -481,7 +480,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	 * @param ItemWidget item
 	 *            the item to select. If null, all items are deselected.
 	 */
-	selectItem(item: zul.sel.ItemWidget): void {
+	selectItem(item?: zul.sel.ItemWidget): void {
 		if (!item)
 			this.setSelectedIndex(-1);
 		else if (this._multiple || !item.isSelected())
@@ -534,8 +533,8 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 
 	//super
 	override focus_(timeout?: number): boolean {
-		var btn: HTMLAnchorElement | undefined;
-		if (btn = this.$n('a')) {
+		var btn = this.$n<HTMLAnchorElement>('a');
+		if (btn) {
 			if (this._focusItem) {
 				for (var it = this.getBodyWidgetIterator(), w: zul.sel.ItemWidget | undefined; (w = it.next());)
 					if (this._isFocus(w)) {
@@ -550,12 +549,12 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 					// table height
 					var offsetTop = this.ebody!.scrollHeight;
 					if (this._currentTop > offsetTop)
-						btn.style.top = offsetTop + 'px';
+						btn.style.top = `${offsetTop}px`;
 					else
-						btn.style.top = this._currentTop + 'px';
+						btn.style.top = `${this._currentTop}px`;
 				}
 				if (this._currentLeft)
-					btn.style.left = this._currentLeft + 'px';
+					btn.style.left = `${this._currentLeft}px`;
 			}
 			this.focusA_(btn, timeout);
 			return true;
@@ -593,7 +592,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	}
 
 	override doFocus_(evt: zk.Event): void {
-		var row	= this._focusItem || this._lastSelectedItem;
+		var row = this._focusItem ?? this._lastSelectedItem;
 		if (row) row._doFocusIn();
 		super.doFocus_(evt);
 	}
@@ -629,7 +628,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		if (this.checkOnHighlightDisabled_())
 			return true;
 
-		if (!evt.domTarget || !evt.target.canActivate())
+		if (!evt.domTarget || !evt.target!.canActivate())
 			return true;
 
 		if (bSel) {
@@ -637,7 +636,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 				// eslint-disable-next-line zk/noNull
 				var el: HTMLElement | null = evt.domTarget;
 				if (el) //Not use jq.isAncestor since it calls vparentNode
-					for (;;) {
+					for (; ;) {
 						if (el.id == this.uuid) //listbox
 							break;
 						// eslint-disable-next-line zk/noNull
@@ -682,14 +681,14 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 			cm = row.$n('cm'),
 			cmClicked = this._checkmark && (tg == cm || tg.parentNode == cm);
 		if (zk.dragging || (!cmClicked && (this._shallIgnore(evt, true)
-		|| ((alwaysSelect = this.shallIgnoreSelect_(evt, row))
-			&& !(alwaysSelect = alwaysSelect < 0)))))
+			|| ((alwaysSelect = this.shallIgnoreSelect_(evt, row))
+				&& !(alwaysSelect = alwaysSelect < 0)))))
 			return;
 
 		var skipFocus = _focusable(evt); //skip focus if evt is on a focusable element
 		if (this._checkmark
-		&& !evt.data!.shiftKey && !(evt.data!.ctrlKey || evt.data!.metaKey)
-		&& (!this._cdo || cmClicked)) {
+			&& !evt.data!.shiftKey && !(evt.data!.ctrlKey || evt.data!.metaKey)
+			&& (!this._cdo || cmClicked)) {
 			// Bug 2997034
 			this._syncFocus(row);
 
@@ -700,9 +699,9 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 			} else
 				this._select(row, evt, skipFocus);
 		} else {
-		//Bug 1650540: double click as select again
-		//Note: we don't handle if clicking on checkmark, since FF always
-		//toggle and it causes incosistency
+			//Bug 1650540: double click as select again
+			//Note: we don't handle if clicking on checkmark, since FF always
+			//toggle and it causes incosistency
 			if ((zk.gecko || zk.webkit) && row.isListen('onDoubleClick')) {
 				var now = jq.now(), last = row._last;
 				row._last = now;
@@ -730,32 +729,32 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	}
 
 	/* Handles keydown sent to the body. */
-	override doKeyDown_(evt: zk.Event<zk.EventKeyData>): false | undefined {
+	override doKeyDown_(evt: zk.Event<zk.EventKeyData>): void {
 		if (!this._shallIgnore(evt)) {
 
-		// Note: We don't intercept body's onfocus to gain focus back to anchor.
-		// Otherwise, it cause scroll problem on IE:
-		// When user clicks on the scrollbar, it scrolls first and call onfocus,
-		// then it will scroll back to the focus because _focusToAnc is called
+			// Note: We don't intercept body's onfocus to gain focus back to anchor.
+			// Otherwise, it cause scroll problem on IE:
+			// When user clicks on the scrollbar, it scrolls first and call onfocus,
+			// then it will scroll back to the focus because _focusToAnc is called
 			switch (evt.data!.keyCode) {
-			case 33: //PgUp
-			case 34: //PgDn
-			case 38: //UP
-			case 40: //DOWN
-			case 37: //LEFT
-			case 39: //RIGHT
-			case 32: //SPACE
-			case 36: //Home
-			case 35: //End
-				if (!jq.nodeName(evt.domTarget, 'a'))
-					this.focus();
-				if (evt.domTarget == this.$n('a')) {// for test tool.
-					if (evt.target == this) //try to avoid the condition inside the _doKeyDown()
-						evt.target = this._focusItem || this.getSelectedItem() || this;
-					this._doKeyDown(evt);
-				}
-				evt.stop();
-				return false;
+				case 33: //PgUp
+				case 34: //PgDn
+				case 38: //UP
+				case 40: //DOWN
+				case 37: //LEFT
+				case 39: //RIGHT
+				case 32: //SPACE
+				case 36: //Home
+				case 35: //End
+					if (!jq.nodeName(evt.domTarget, 'a'))
+						this.focus();
+					if (evt.domTarget == this.$n('a')) {// for test tool.
+						if (evt.target == this) //try to avoid the condition inside the _doKeyDown()
+							evt.target = this._focusItem || this.getSelectedItem() || this;
+						this._doKeyDown(evt);
+					}
+					evt.stop();
+					return;
 			}
 		}
 
@@ -766,7 +765,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		}
 		// Feature #1978624
 		if (evt.target == this) //try to give to the focus item
-			evt.target = this._focusItem || this.getSelectedItem() || this;
+			evt.target = this._focusItem ?? this.getSelectedItem() ?? this;
 		super.doKeyDown_(evt);
 	}
 
@@ -775,7 +774,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 			this._disableSelection_ = false;
 			zk(this.$n()).enableSelection();
 		}
-		evt.stop({propagation: true});
+		evt.stop({ propagation: true });
 		super.doKeyUp_(evt);
 	}
 
@@ -783,7 +782,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		if (_beforeChildKey(this, evt))
 			return true;
 
-		var row = this._focusItem || this.getSelectedItem(),
+		var row = this._focusItem ?? this.getSelectedItem(),
 			data = evt.data!,
 			shift = data.shiftKey, ctrl = (data.ctrlKey || data.metaKey);
 		if (shift && !this._multiple)
@@ -803,63 +802,63 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		if (zk.webkit && typeof data.keyCode == 'string')
 			data.keyCode = zk.parseInt(data.keyCode);
 		switch (data.keyCode) {
-		case 33: //PgUp
-		case 34: //PgDn
-			var pgnl = this.paging || this._paginal;
-			if (row && pgnl && !pgnl.isDisabled()) { // F60-ZK-715
-				var npg = this.getActivePage() + (data.keyCode == 33 ? -1 : 1);
-				// TODO: concern ctrl
-				if (npg > -1 && npg < this.getPageCount())
-					this.fire('onAcrossPage', {
-						page: npg,
-						offset: this.indexOfItem(row),
-						shift: !shift || !this._multiple ? 0 :
-							data.keyCode == 33 ? this.getPageSize() : -this.getPageSize()
-					});
-				return false;
-			}
-			step = this._setOrGetVisibleRows()!;
-			if (step == 0)
-				step = this.getPageSize() || 20;
-			if (data.keyCode == 33)
-				step = -step;
-			break;
-		case 38: //UP
-		case 40: //DOWN
-			step = data.keyCode == 40 ? 1 : -1;
-			break;
-		case 32: //SPACE
-			if (row) {
-				if (this._multiple)
-					this._toggleSelect(row, !row.isSelected(), evt);
-				else
-					this._select(row, evt);
-			}
-			break;
-		case 36: //Home
-		case 35: //End
-			step = data.keyCode == 35 ? 1 : -1;
-			endless = true;
-			break;
-		case 37: //LEFT
-			if (row)
-				this._doLeft(row);
-			break;
-		case 39: //RIGHT
-			if (row)
-				this._doRight(row);
-			break;
+			case 33: //PgUp
+			case 34: //PgDn
+				var pgnl = this.paging ?? this._paginal;
+				if (row && pgnl && !pgnl.isDisabled()) { // F60-ZK-715
+					var npg = this.getActivePage() + (data.keyCode == 33 ? -1 : 1);
+					// TODO: concern ctrl
+					if (npg > -1 && npg < this.getPageCount())
+						this.fire('onAcrossPage', {
+							page: npg,
+							offset: this.indexOfItem(row),
+							shift: !shift || !this._multiple ? 0 :
+								data.keyCode == 33 ? this.getPageSize() : -this.getPageSize()
+						});
+					return false;
+				}
+				step = this._setOrGetVisibleRows()!;
+				if (step == 0)
+					step = this.getPageSize() || 20;
+				if (data.keyCode == 33)
+					step = -step;
+				break;
+			case 38: //UP
+			case 40: //DOWN
+				step = data.keyCode == 40 ? 1 : -1;
+				break;
+			case 32: //SPACE
+				if (row) {
+					if (this._multiple)
+						this._toggleSelect(row, !row.isSelected(), evt);
+					else
+						this._select(row, evt);
+				}
+				break;
+			case 36: //Home
+			case 35: //End
+				step = data.keyCode == 35 ? 1 : -1;
+				endless = true;
+				break;
+			case 37: //LEFT
+				if (row)
+					this._doLeft(row);
+				break;
+			case 39: //RIGHT
+				if (row)
+					this._doRight(row);
+				break;
 		}
 
 		if (step > 0 || (step < 0 && row)) {
 			if (row && shift && !row.isDisabled() && row.isSelectable()) { // Bug ZK-1715: not select item if disabled.
 				// F85-ZK-3507: shift + up/down: select item when moving outwards,
 				// and deselect item when moving inwards
-				this._toggleSelect(row, this._getToSelFlag(row, this._startRow!, step), evt);
+				this._toggleSelect(row, this._getToSelFlag(row, this._startRow, step), evt);
 			}
 			// eslint-disable-next-line zk/noNull
 			var nrow: Node | null | undefined = row ? row.$n() : undefined;
-			for (;;) {
+			for (; ;) {
 				if (!nrow) { // no focused/selected item yet
 					var w = this.getBodyWidgetIterator().next();
 					if (w)
@@ -872,7 +871,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 				if (!nrow) { // F60-ZK-715: across to next/previous page if any
 					if (endless)
 						break; // ignore Home/End key
-					var pg = this.paging || this._paginal,
+					var pg = this.paging ?? this._paginal,
 						pnum: number;
 					if (pg && !pg.isDisabled()) {
 						pnum = pg.getActivePage();
@@ -895,7 +894,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 					r = r.parent!;
 				if (!r.isDisabled() && r.isSelectable()) {
 					// F85-ZK-3507
-					if (shift) this._toggleSelect(r, endless ? this._getToSelFlag(r, this._startRow!, step) : true, evt);
+					if (shift) this._toggleSelect(r, endless ? this._getToSelFlag(r, this._startRow, step) : true, evt);
 
 					if (zk(nrow).isVisible()) {
 						// ZK-2971: save last row even when pressing shift
@@ -930,7 +929,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		return _afterChildKey(evt);
 	}
 
-	_getToSelFlag(row: zul.sel.ItemWidget, startRow: zul.sel.ItemWidget, step: number): boolean { // F85-ZK-3507
+	_getToSelFlag(row: zul.sel.ItemWidget, startRow: zul.sel.ItemWidget | undefined, step: number): boolean { // F85-ZK-3507
 		if (!startRow)
 			return true;
 		var pos = startRow.compareItemPos_(row);
@@ -971,16 +970,16 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 			//if _anchorTop/_anchorLeft is the same , just ignore the event.
 			this._anchorTop = offs[1];
 			this._anchorLeft = offs[0];
-			this.fire('onAnchorPos', {top: this._anchorTop, left: this._anchorLeft});
+			this.fire('onAnchorPos', { top: this._anchorTop, left: this._anchorLeft });
 		}
 
-		focusElStyle.top = this._anchorTop + 'px';
-		focusElStyle.left = this._anchorLeft + 'px';
+		focusElStyle.top = `${this._anchorTop}px`;
+		focusElStyle.left = `${this._anchorLeft}px`;
 	}
 
 	_toStyleOffset(el: HTMLElement, x: number, y: number): zk.Offset {
 		var ofs1 = zk(el).revisedOffset(),
-		x2 = zk.parseFloat(el.style.left), y2 = zk.parseFloat(el.style.top);
+			x2 = zk.parseFloat(el.style.left), y2 = zk.parseFloat(el.style.top);
 		return [x - ofs1[0] + x2, y - ofs1[1] + y2];
 	}
 
@@ -1017,7 +1016,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 
 		var focusfound = false, rowfound = false,
 			// ZK-1096: this._lastSelectedItem is only updated when doBlur
-			lastSelected = this._focusItem || this._lastSelectedItem!;
+			lastSelected = this._focusItem ?? this._lastSelectedItem!;
 		//Bugfix: if lastSelected is no longer selected, look for closest selected item as starting point
 		if (!lastSelected.isSelected()) {
 			var rowIndex = this.indexOfItem(row),
@@ -1147,7 +1146,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	 * Ignored if null.
 	 * @since 5.0.5
 	 */
-	fireOnSelect(ref: zk.Widget | undefined, evt: zk.Event<zk.EventMetaData>): void {
+	fireOnSelect(ref: zk.Widget | undefined, evt?: zk.Event<zk.EventMetaData>): void {
 		var data: zul.sel.ItemWidget[] = [];
 
 		for (var it = this.getSelectedItems(), len = it.length, j = 0; j < len; j++)
@@ -1169,21 +1168,21 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 					keep = false;
 				} else {
 					var tg = evt.domTarget,
-						cm = ref && ref.$n('cm');
+						cm = ref?.$n('cm');
 					keep = !((edata.ctrlKey || edata.metaKey) || edata.shiftKey
-							|| (this._checkmark && (!this._cdo || (tg == cm || tg.parentNode == cm) || checkSelectAll)));
+						|| (this._checkmark && (!this._cdo || (tg == cm || tg.parentNode == cm) || checkSelectAll)));
 				}
 			}
 		}
 
 		this.fire('onSelect',
-			zk.copy({items: data, reference: ref, clearFirst: !keep, selectAll: checkSelectAll}, edata),
-			{rtags: {selectAll: checkSelectAll}, toServer: !!this._model});
+			zk.copy({ items: data, reference: ref, clearFirst: !keep, selectAll: checkSelectAll }, edata),
+			{ rtags: { selectAll: checkSelectAll }, toServer: !!this._model });
 	}
 
 	/* Changes the specified row as focused. */
 	_focus(row: zul.sel.ItemWidget): void {
-		if (this.canActivate({checkOnly: true})) {
+		if (this.canActivate({ checkOnly: true })) {
 			this._unsetFocusExcept(row);
 			this._setFocus(row, true);
 		}
@@ -1215,7 +1214,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 
 				if (!this.paging && zk.gecko)
 					this.fireOnRender(5);
-					//Firefox doesn't call onscroll when we moving by cursor, so...
+				//Firefox doesn't call onscroll when we moving by cursor, so...
 			}
 		}
 		if (!bFocus)
@@ -1247,10 +1246,8 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 
 	_updHeaderCM(): void { //update header's checkmark
 		if (this._headercm && this._multiple) {
-			var box = this,
-				v: number;
-			this._nUpdHeaderCM = (v = this._nUpdHeaderCM!) > 0 ? v + 1 : 1;
-			setTimeout(function () {_updHeaderCM(box);}, 100); //do it in batch
+			this._nUpdHeaderCM = Math.max(0, this._nUpdHeaderCM!) + 1;
+			setTimeout(() => _updHeaderCM(this), 100); //do it in batch
 		}
 	}
 
@@ -1262,11 +1259,11 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 			this._$services[evtName] = [];
 		}
 		this._$services[evtName]!.push(callback);
-		this.fire(evtName, data, {toServer: true}, 250);
+		this.fire(evtName, data, { toServer: true }, 250);
 	}
 
 	$doService(evtName: string, data: unknown): void {
-		var s = this._$services && this._$services[evtName];
+		var s = this._$services?.[evtName];
 		if (s) {
 			while (s.length)
 				s.shift()!.bind(this)(data);
@@ -1276,7 +1273,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	}
 
 	$hasService(evtName: string): boolean {
-		return !!(this._$services && this._$services[evtName]);
+		return !!this._$services?.[evtName];
 	}
 
 	_isAllSelected(): boolean {
@@ -1312,7 +1309,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		}
 
 		var isGroupSelect = this.groupSelect;
-		for (var it = this.getBodyWidgetIterator({skipHidden: true}), w: zul.sel.ItemWidget | undefined; (w = it.next());) {
+		for (var it = this.getBodyWidgetIterator({ skipHidden: true }), w: zul.sel.ItemWidget | undefined; (w = it.next());) {
 			//Bug ZK-1998: skip listgroup and listgroupfoot widget if groupSelect is false
 			if ((_isListgroup(w) || _isListgroupfoot(w)) && !isGroupSelect)
 				continue;
@@ -1327,14 +1324,14 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	}
 
 	//@Override
-	override onResponse(ctl: zk.ZWatchController, opts: {rtags: {selectAll?}}): void {
+	override onResponse(ctl: zk.ZWatchController, opts: { rtags: { selectAll?} }): void {
 		if (this._shallSyncFocus) {
 			var child: zul.sel.ItemWidget | true | undefined = this._shallSyncFocus;
 
 			// Bug ZK-2901
 			if (child && child === true) { // called by Tree.js
 				this._anchorTop = this._anchorLeft = 0;
-				jq(this.$n_('a')).css({top: 0, left: 0});
+				jq(this.$n_('a')).css({ top: 0, left: 0 });
 			} else {
 
 				// 1. Bug ZK-1473: when using template to render listbox,

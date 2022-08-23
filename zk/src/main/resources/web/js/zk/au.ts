@@ -12,19 +12,19 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	This program is distributed under LGPL Version 2.1 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
-export type ErrorHandler = (response: Response, errCode: number) => boolean;
+export type ErrorHandler = (response: AuResponse, errCode: number | string) => boolean;
 
 export type AjaxErrorHandler = (req: Response, status: number, statusText: string, ajaxReqTries?: number) => number;
 
 export interface AuCommand {
 	cmd: string;
-	data: ({$u?: string} & zk.Widget | undefined)[]; // command-specific
+	data: ({ $u?: string } & zk.Widget | undefined)[]; // command-specific
 }
 
 export interface AuCommands extends Array<AuCommand> {
 	rid?: string | number;
 	dt?: zk.Desktop;
-	pfIds?: string;
+	pfIds?: string | null; // eslint-disable-line zk/noNull
 	rtags?: Record<string, unknown>;
 }
 
@@ -32,14 +32,33 @@ export interface AuRequestInfo {
 	sid: number;
 	uri: string;
 	dt: zk.Desktop;
-	content: string|FormData;
+	content: string | FormData;
 	implicit: boolean;
 	ignorable: boolean;
 	tmout: number;
 	rtags: Record<string, unknown>;
 	forceAjax: boolean;
 	uploadCallbacks?: unknown[];
+	header?: Record<string, string>;
+	$ZKWS_ECHO$?: boolean;
 }
+
+declare global {
+	interface Response {
+		/** @see {@link XMLHttpRequest.responseText} */
+		responseText?: string;
+	}
+}
+export interface AuResponse extends Partial<Pick<XMLHttpRequest,
+	| 'responseText'
+	| 'readyState'
+	| 'status'
+	| 'statusText'
+>> {
+	/** @see {@link Response.headers} */
+	readonly headers: Pick<Headers, 'get'>;
+}
+
 var _perrURIs: Record<string, string> = {}, //server-push error URI
 	_onErrs: ErrorHandler[] = [], //onError functions
 	cmdsQue: AuCommands[] = [], //response commands in XML
@@ -47,8 +66,8 @@ var _perrURIs: Record<string, string> = {}, //server-push error URI
 	doCmdFns: (() => void)[] = [],
 	idTimeout: undefined | number, //timer ID for automatica timeout
 	pfIndex = 0, //performance meter index
-	_detached: zk.Widget[] & {wgts?: Record<string, zk.Widget>} = [], //used for resolving #stub/#stubs in mount.js (it stores detached widgets in this AU)
-	_portrait: Record<string, boolean> = {'0': true, '180': true}, //default portrait definition
+	_detached: zk.Widget[] & { wgts?: Record<string, zk.Widget> } = [], //used for resolving #stub/#stubs in mount.js (it stores detached widgets in this AU)
+	_portrait: Record<string, boolean> = { '0': true, '180': true }, //default portrait definition
 	_initLandscape = jq.innerWidth() > jq.innerHeight(), // initial orientation is landscape or not
 	_initDefault = _portrait[window.orientation], //default orientation
 	_aftAuResp: (() => void)[] = []; //store callbacks to be triggered when au is back
@@ -59,14 +78,14 @@ function checkProgressing(sid?: string): void {
 		_detached = []; //clean up
 		if (!zk.clientinfo)
 			zk.endProcessing(sid);
-			//setTimeout(zk.endProcessing, 50);
-			// using a timeout to stop the processing after doing onSize in the fireSized() method of the Utl.js
-			//Bug ZK-1505: using timeout cause progress bar disapper such as Thread.sleep(1000) case, so revert it back
+		//setTimeout(zk.endProcessing, 50);
+		// using a timeout to stop the processing after doing onSize in the fireSized() method of the Utl.js
+		//Bug ZK-1505: using timeout cause progress bar disapper such as Thread.sleep(1000) case, so revert it back
 
 		zAu.doneTime = Date.now();
 	}
 }
-function pushCmds(cmds: AuCommands, rs: [string, ({$u?: string} & zk.Widget | undefined)[]][]): void {
+function pushCmds(cmds: AuCommands, rs: [string, ({ $u?: string } & zk.Widget | undefined)[]][]): void {
 	for (var j = 0, rl = rs ? rs.length : 0; j < rl; ++j) {
 		var r = rs[j],
 			cmd = r[0],
@@ -77,12 +96,12 @@ function pushCmds(cmds: AuCommands, rs: [string, ({$u?: string} & zk.Widget | un
 			continue;
 		}
 
-		cmds.push({cmd: cmd, data: data || []});
+		cmds.push({ cmd: cmd, data: data || [] });
 	}
 
 	cmdsQue.push(cmds);
 }
-function dataNotReady(cmd: string, data: ({$u?: string} & zk.Widget | undefined)[]): boolean {
+function dataNotReady(cmd: string, data: ({ $u?: string } & zk.Widget | undefined)[]): boolean {
 	for (var j = data.length, id: string | undefined, w: zk.Widget | undefined; j--;)
 		if (id = data[j] && data[j]!.$u) {
 			if (!(w = zk.Widget.$(id))) { //not ready
@@ -104,7 +123,7 @@ function dataNotReady(cmd: string, data: ({$u?: string} & zk.Widget | undefined)
 		}
 	return false;
 }
-function doProcess(cmd: string, data: ({$u?: string} & zk.Widget | undefined)[]): void { //decoded
+function doProcess(cmd: string, data: ({ $u?: string } & zk.Widget | undefined)[]): void { //decoded
 	if (!dataNotReady(cmd, data)) {
 		if (!zAu.processPhase) {
 			zAu.processPhase = cmd;
@@ -151,9 +170,9 @@ function ajaxReqResend2(): void {
 function _exmsg(e: Error): string {
 	var msg = e.message || e, m2 = '';
 	if (e.name) m2 = ' ' + e.name;
-//		if (e.fileName) m2 += " " +e.fileName;
-//		if (e.lineNumber) m2 += ":" +e.lineNumber;
-//		if (e.stack) m2 += " " +e.stack;
+	//		if (e.fileName) m2 += " " +e.fileName;
+	//		if (e.lineNumber) m2 += ":" +e.lineNumber;
+	//		if (e.stack) m2 += " " +e.stack;
 	return msg + (m2 ? ' (' + m2.substring(1) + ')' : m2);
 }
 
@@ -162,7 +181,7 @@ function ajaxSend(dt: zk.Desktop, aureq: zk.Event, timeout?: number): void {
 	//call stack: echo2() -> send()
 	if (!dt) {
 		//original dt is decided by aureq.target.desktop, so start by it's parent.
-		var wgt: zk.Widget | undefined = aureq.target.parent;
+		var wgt: zk.Widget | undefined = aureq.target!.parent;
 		while (!wgt?.desktop) {
 			wgt = wgt?.parent;
 		}
@@ -172,18 +191,18 @@ function ajaxSend(dt: zk.Desktop, aureq: zk.Event, timeout?: number): void {
 	zAu.addAuRequest(dt, aureq);
 
 	ajaxSend2(dt, timeout);
-		//Note: we don't send immediately (Bug 1593674)
+	//Note: we don't send immediately (Bug 1593674)
 }
 function ajaxSend2(dt: zk.Desktop, timeout?: number): void {
 	if (!timeout) timeout = 0;
 	if (dt && timeout >= 0)
-		setTimeout(function () {zAu.sendNow(dt);}, timeout);
+		setTimeout(function () { zAu.sendNow(dt); }, timeout);
 }
 function ajaxSendNow(reqInf: AuRequestInfo): void {
 	var fetchOpts: RequestInit = {
 		credentials: 'same-origin',
 		method: 'POST',
-		headers: reqInf.content instanceof FormData ? {'ZK-SID': '' + reqInf.sid} : {'Content-Type': zAu.ajaxSettings.contentType, 'ZK-SID': '' + reqInf.sid},
+		headers: reqInf.content instanceof FormData ? { 'ZK-SID': '' + reqInf.sid } : { 'Content-Type': zAu.ajaxSettings.contentType, 'ZK-SID': '' + reqInf.sid },
 		body: reqInf.content
 	};
 	zAu.sentTime = Date.now(); //used by server-push (cpsp)
@@ -200,7 +219,8 @@ function ajaxSendNow(reqInf: AuRequestInfo): void {
 	var forceAjax = reqInf.forceAjax;
 	if (zk.pfmeter) zAu._pfsend(reqInf.dt, fetchOpts, false, forceAjax);
 
-	zAu.ajaxReq = true; // processing flag
+	// FIXME: Assigning `true` to `zAu.ajaxReq` is potentially problematic.
+	zAu.ajaxReq = true as unknown as XMLHttpRequest; // processing flag
 	zAu.ajaxReqInf = reqInf;
 
 	if (!forceAjax && typeof zWs != 'undefined' && zWs.ready) {
@@ -209,21 +229,21 @@ function ajaxSendNow(reqInf: AuRequestInfo): void {
 	}
 
 	zAu._fetch(reqInf.uri, fetchOpts)
-	.then(function (response: Response & {responseText?: string}) {
-		return response.text().then(function (responseText) {
-			response.responseText = responseText;
-			zAu._onResponseReady(response);
-		});
-	}).catch(function (e: Error) {
-		zAu.ajaxReq = zAu.ajaxReqInf = undefined; // ZK-4775: should clear processing flag
-		if (!reqInf.ignorable && !zk.unloading) {
-			var msg = _exmsg(e);
-			zAu._errCode = '[Send] ' + msg;
-			if (zAu.confirmRetry('FAILED_TO_SEND', msg)) {
-				zAu.ajaxReqResend(reqInf);
+		.then(function (response: Response) {
+			return response.text().then(function (responseText) {
+				response.responseText = responseText;
+				zAu._onResponseReady(response);
+			});
+		}).catch(function (e: Error) {
+			zAu.ajaxReq = zAu.ajaxReqInf = undefined; // ZK-4775: should clear processing flag
+			if (!reqInf.ignorable && !zk.unloading) {
+				var msg = _exmsg(e);
+				zAu._errCode = '[Send] ' + msg;
+				if (zAu.confirmRetry('FAILED_TO_SEND', msg)) {
+					zAu.ajaxReqResend(reqInf);
+				}
 			}
-		}
-	});
+		});
 
 	if (!reqInf.implicit)
 		zk.startProcessing(zk.procDelay, reqInf.sid); //wait a moment to avoid annoying
@@ -253,14 +273,14 @@ function doCmdsNow(cmds: AuCommands): boolean {
 			zAu.doAfterProcessWgts = undefined;
 		}
 	} finally {
-	//Bug #2871135, always fire since the client might send back empty
+		//Bug #2871135, always fire since the client might send back empty
 		if (!cmds || !cmds.length) {
 			// ZK-3288, If the wpd file of new created widget was never loaded,
 			// sometimes onCommandReady and onResponse will be called during the widget mounting phase. (timing issue)
 			zk.afterMount(function () {
 				// Bug ZK-2516
-				zWatch.fire('onCommandReady', undefined!, {timeout: -1, rtags: rtags}); //won't use setTimeout
-				zWatch.fire('onResponse', undefined!, {timeout: 0, rtags: rtags}); //use setTimeout
+				zWatch.fire('onCommandReady', undefined!, { timeout: -1, rtags: rtags }); //won't use setTimeout
+				zWatch.fire('onResponse', undefined!, { timeout: 0, rtags: rtags }); //use setTimeout
 				if (rtags.onClientInfo) {
 					setTimeout(zk.endProcessing, 50); // always stop the processing
 					delete zk.clientinfo;
@@ -283,8 +303,8 @@ function fireClientInfo(): void {
 	zAu.cmd0.clientInfo();
 }
 function sendTimeout(): void {
-	zAu.send(new zk.Event(zk.Desktop._dt!, 'dummy', undefined, {ignorable: true, serverAlive: true, rtags: {isDummy: true}, forceAjax: true}));
-		//serverAlive: the server shall not ignore it if session timeout
+	zAu.send(new zk.Event(zk.Desktop._dt, 'dummy', undefined, { ignorable: true, serverAlive: true, rtags: { isDummy: true }, forceAjax: true }));
+	//serverAlive: the server shall not ignore it if session timeout
 	zk.isTimeout = true; //ZK-3304: already timeout
 }
 
@@ -313,7 +333,7 @@ function _afterAction(wgt: zk.Widget, act: [CallableFunction, unknown]): boolean
 
 // refer to socket.io
 const _withNativeArrayBuffer = typeof ArrayBuffer === 'function',
-	isView = (obj: ArrayBufferView | unknown & {buffer?}): boolean => {
+	isView = (obj: ArrayBufferView | unknown & { buffer?}): boolean => {
 		return typeof ArrayBuffer.isView === 'function'
 			? ArrayBuffer.isView(obj)
 			: obj.buffer instanceof ArrayBuffer;
@@ -325,13 +345,13 @@ const _withNativeArrayBuffer = typeof ArrayBuffer === 'function',
 	_withNativeFile = typeof File === 'function' ||
 		(typeof File !== 'undefined' &&
 			toString.call(File) === '[object FileConstructor]');
-function _isBinary(obj: ArrayBufferView | unknown & {buffer?}): boolean {
+function _isBinary(obj: ArrayBufferView | unknown & { buffer?}): boolean {
 	return ((_withNativeArrayBuffer && (obj instanceof ArrayBuffer || isView(obj))) ||
 		(_withNativeBlob && obj instanceof Blob) ||
 		(_withNativeFile && obj instanceof File));
 }
 
-function _deconstructPacket(data: ArrayBufferView | unknown & {buffer?} | undefined, buffers: unknown[]): unknown {
+function _deconstructPacket(data: ArrayBufferView | unknown & { buffer?} | undefined, buffers: unknown[]): unknown {
 	if (!data) return data;
 
 	if (_isBinary(data)) {
@@ -351,7 +371,7 @@ function _deconstructPacket(data: ArrayBufferView | unknown & {buffer?} | undefi
 		}
 		return newData as never;
 	} else if (typeof data === 'object' && !(data instanceof Date) &&
-			!(data instanceof DateImpl) && !(data instanceof zk.Widget)) {
+		!(data instanceof DateImpl) && !(data instanceof zk.Widget)) {
 		const newData = {};
 		for (const key in data) {
 			if (Object.prototype.hasOwnProperty.call(data, key)) {
@@ -373,18 +393,18 @@ function _deconstructPacket(data: ArrayBufferView | unknown & {buffer?} | undefi
  * the AU responses.
  */
 export namespace au_global {
-	export class zAu {
-		static disabledRequest = false;
-		static _cInfoReg = false;
-		static _fetch = window.fetch.bind(window);
-		static doneTime: number;
-		static sentTime: number;
-		static doAfterProcessWgts?: zk.Widget[];
-		static ajaxErrorHandler?: AjaxErrorHandler;
-		static processPhase?: string;
-		static _clientInfo: unknown[];
+	export namespace zAu {
+		export var disabledRequest = false;
+		export var _cInfoReg = false;
+		export var _fetch = window.fetch.bind(window);
+		export let doneTime: number;
+		export let sentTime: number;
+		export let doAfterProcessWgts: zk.Widget[] | undefined;
+		export let ajaxErrorHandler: AjaxErrorHandler | undefined;
+		export let processPhase: string | undefined;
+		export let _clientInfo: unknown[];
 
-		static _resetTimeout(): void { //called by mount.js
+		export function _resetTimeout(): void { //called by mount.js
 			if (idTimeout) {
 				clearTimeout(idTimeout);
 				idTimeout = undefined;
@@ -392,24 +412,24 @@ export namespace au_global {
 			if (zk.timeout > 0)
 				idTimeout = setTimeout(sendTimeout, zk.timeout * 1000);
 		}
-		static _onClientInfo(): void { //Called by mount.js when onReSize
+		export function _onClientInfo(): void { //Called by mount.js when onReSize
 			if (zAu._cInfoReg) setTimeout(fireClientInfo, 20);
 			//we cannot pass zAu.cmd0.clientInfo directly
 			//otherwise, FF will pass 1 as the firt argument,
 			//i.e., it is equivalent to zAu.cmd0.clientInfo(1)
 		}
 		//Used by mount.js to search widget being detached in this AU
-		static _wgt$(uuid: string): zk.Widget {
+		export function _wgt$(uuid: string): zk.Widget {
 			var map = _detached.wgts = _detached.wgts || {}, wgt: undefined | zk.Widget;
 			while (wgt = _detached.shift())
 				_wgt2map(wgt, map);
 			return map[uuid];
 		}
-		static _onVisibilityChange(): void { //Called by mount.js when page visibility changed
+		export function _onVisibilityChange(): void { //Called by mount.js when page visibility changed
 			if (zk.visibilitychange) zAu.cmd0.visibilityChange();
 		}
 		//Bug ZK-1596: native will be transfer to stub in EE, store the widget for used in mount.js
-		static _storeStub(wgt?: zk.Widget): void {
+		export function _storeStub(wgt?: zk.Widget): void {
 			if (wgt)
 				_detached.push(wgt);
 		}
@@ -431,14 +451,14 @@ export namespace au_global {
 		 * @see #unError
 		 * @see #confirmRetry
 		 */
-		static onError(fn: ErrorHandler): void {
+		export function onError(fn: ErrorHandler): void {
 			_onErrs.push(fn);
 		}
 		/** Unregister a listener for handling errors.
 		 * @since 5.0.4
 		 * @see #onError
 		 */
-		static unError(fn: ErrorHandler): void {
+		export function unError(fn: ErrorHandler): void {
 			_onErrs.$remove(fn);
 		}
 
@@ -447,7 +467,7 @@ export namespace au_global {
 		 * @param String msg2 the additional message. Ignored if not specified or null.
 		 * @return boolean whether to retry
 		 */
-		static confirmRetry(msgCode: string, msg2?: string): boolean {
+		export function confirmRetry(msgCode: string, msg2?: string): boolean {
 			var msg = msgzk[msgCode] as string;
 			return jq.confirm((msg ? msg : msgCode) + '\n' + msgzk.TRY_AGAIN + (msg2 ? '\n\n(' + msg2 + ')' : ''));
 		}
@@ -458,7 +478,7 @@ export namespace au_global {
 		 * @param String cmd the command causing the problem. Ignored if not specified or null.
 		 * @param Throwable ex the exception
 		 */
-		static showError(msgCode: string, msg2?: string, cmd?: string, ex?: Error): void {
+		export function showError(msgCode: string, msg2?: string, cmd?: string, ex?: Error): void {
 			var msg = msgzk[msgCode] as string;
 			zk.error((msg ? msg : msgCode) + '\n' + (msg2 ? msg2 + ': ' : '') + (cmd || '')
 				+ (ex ? '\n' + _exmsg(ex) : ''));
@@ -467,7 +487,7 @@ export namespace au_global {
 		 * @param int code the error code
 		 * @return String the URI.
 		 */
-		static getErrorURI(code: number): string | undefined {
+		export function getErrorURI(code: number): string | undefined {
 			return zAu._errURIs['' + code];
 		}
 		/** Sets the URI for the specified error.
@@ -478,18 +498,18 @@ export namespace au_global {
 		 * @param Map errors A map of errors where the key is the error code (int),
 		 * while the value is the URI (String).
 		 */
-		static setErrorURI(code: number | Record<number | string, string>, uri?: string): void {
+		export function setErrorURI(code: number | Record<number | string, string>, uri?: string): void {
 			if (arguments.length == 1) {
 				for (var c in code as Record<number | string, string>)
 					zAu.setErrorURI(parseInt(c), code[c] as string);
 			} else
-				zAu._errURIs['' + code] = uri as string;
+				zAu._errURIs['' + code] = uri!;
 		}
 		/** Sets the URI for the server-push related error.
 		 * @param int code the error code
 		 * @return String the URI.
 		 */
-		static getPushErrorURI(code: number): string {
+		export function getPushErrorURI(code: number): string {
 			return _perrURIs['' + code];
 		}
 		/** Sets the URI for the server-push related error.
@@ -500,13 +520,13 @@ export namespace au_global {
 		 * @param Map errors A map of errors where the key is the error code (int),
 		 * while the value is the URI (String).
 		 */
-		static setPushErrorURI(code: number | Record<number | string, string>, uri?: string): void {
+		export function setPushErrorURI(code: number | Record<number | string, string>, uri?: string): void {
 			if (arguments.length == 1) {
 				for (var c in code as Record<number | string, string>)
 					zAu.setPushErrorURI(parseInt(c), code[c] as string);
 				return;
 			}
-			_perrURIs['' + code] = uri as string;
+			_perrURIs['' + code] = uri!;
 		}
 
 		////Ajax Send////
@@ -514,7 +534,7 @@ export namespace au_global {
 		 * such as mounting the widgets, processing the AU responses and on.
 		 * @return boolean whether ZK Client Engine is busy
 		 */
-		static processing(): boolean {
+		export function processing(): boolean {
 			return zk.mounting || !!cmdsQue.length || !!zAu.ajaxReq || !!zAu.pendingReqInf;
 		}
 
@@ -528,20 +548,21 @@ export namespace au_global {
 		 * If negative, the request is assumed to be implicit, i.e., no message will
 		 * be shown if an error occurs.
 		 */
-		static send(aureq: zk.Event, timeout = 0): void {
+		export function send(aureq: zk.Event, timeout = 0): void {
 			//ZK-2790: when unload event is triggered, the desktop is destroyed
 			//we shouldn't send request back to server
 			if (zk.unloading && zk.rmDesktoping) //it's safer to check if both zk.unloading and zk.rmDesktoping are true
 				return;
 
 			if (timeout < 0)
-				aureq.opts = zk.copy(aureq.opts, {defer: true});
+				aureq.opts = zk.copy(aureq.opts, { defer: true });
 
 			var t = aureq.target;
 			if (t && t !== zk.Desktop._dt) {
 				ajaxSend(t instanceof zk.Desktop ? t : t.desktop!, aureq, timeout);
 			} else {
 				var dts = zk.Desktop.all;
+				aureq.target = undefined!;
 				for (var dtid in dts)
 					ajaxSend(dts[dtid], aureq, timeout);
 			}
@@ -554,7 +575,7 @@ export namespace au_global {
 		 * If negative, the request is assumed to be implicit, i.e., no message will
 		 * be shown if an error occurs.
 		 */
-		static sendAhead(aureq: zk.Event, timeout = 0): void {
+		export function sendAhead(aureq: zk.Event, timeout = 0): void {
 			const t = aureq.target;
 			if (t) {
 				const dt = t instanceof zk.Desktop ? t : t.desktop!;
@@ -572,8 +593,8 @@ export namespace au_global {
 		}
 
 		//remove desktop (used in mount.js and wiget.js)
-		static _rmDesktop(dt: zk.Desktop, dummy?: boolean): void {
-			var url = zk.ajaxURI(undefined, {desktop: dt, au: true}),
+		export function _rmDesktop(dt: zk.Desktop, dummy?: boolean): void {
+			var url = zk.ajaxURI(undefined, { desktop: dt, au: true }),
 				data = jq.param({
 					dtid: dt.id,
 					cmd_0: dummy ? 'dummy' : 'rmDesktop',
@@ -597,18 +618,18 @@ export namespace au_global {
 						params.append(key, headers[key] as string);
 				}
 				navigator.sendBeacon(url, zk.chrome // https://crbug.com/747787
-					? new Blob([params.toString()], {type: 'application/x-www-form-urlencoded'})
+					? new Blob([params.toString()], { type: 'application/x-www-form-urlencoded' })
 					: params
 				);
 			} else {
-				this._rmDesktopAjax(url, data, headers);
+				zAu._rmDesktopAjax(url, data, headers);
 			}
 			// B65-ZK-2210: clean up portlet2 data when desktop removed.
 			if (!dummy && zk.portlet2Data && zk.portlet2Data[dt.id!]) {
 				delete zk.portlet2Data[dt.id!];
 			}
 		}
-		static _rmDesktopAjax(url: string, data: string, headers: Record<string, string>): void {
+		export function _rmDesktopAjax(url: string, data: string, headers: Record<string, string>): void {
 			void jq.ajax(zk.$default({
 				url: url,
 				data: data,
@@ -631,14 +652,14 @@ export namespace au_global {
 		 * @param String cmd the command, such as echo
 		 * @param String data the data in a JSON string.
 		 */
-		static process(cmd: string, data: string): void {
+		export function process(cmd: string, data: string): void {
 			doProcess(cmd, (data ? jq.evalJSON(data) : []) as never);
 		}
 		/** Returns whether to ignore the ESC keystroke.
 		 * It returns true if ZK Client Engine is sending an AU request
 		 * @return boolean
 		 */
-		static shallIgnoreESC(): boolean {
+		export function shallIgnoreESC(): boolean {
 			return !!zAu.ajaxReq;
 		}
 		/** Process the specified commands.
@@ -646,13 +667,13 @@ export namespace au_global {
 		 * @param Array rs a list of responses
 		 * @since 5.0.5
 		 */
-		static doCmds(dtid: string, rs: [string, ({$u?: string} & zk.Widget | undefined)[]][]): void {
+		export function doCmds(dtid: string, rs: [string, ({ $u?: string } & zk.Widget | undefined)[]][]): void {
 			var cmds: AuCommands = [];
 			cmds.dt = zk.Desktop.$(dtid);
 			pushCmds(cmds, rs);
 			zAu._doCmds();
 		}
-		static _doCmds(sid?: string): void { //called by mount.js, too
+		export function _doCmds(sid?: string): void { //called by mount.js, too
 			for (var fn: (() => void) | undefined; fn = doCmdFns.shift();)
 				fn();
 
@@ -747,13 +768,13 @@ export namespace au_global {
 		* @return String the AU's request URI.
 		* @since 5.0.2
 		*/
-		static beforeSend(uri: string, aureq: zk.Event, dt?: zk.Desktop): string {
+		export function beforeSend(uri: string, aureq: zk.Event, dt?: zk.Desktop): string {
 			var target: zk.Widget | undefined, tag: string | undefined;
 			if ((target = aureq.target) && (tag = target.autag)) {
 				tag = '/' + encodeURIComponent(tag);
 				if (!uri.includes('/_/')) {
 					var v: undefined | zk.Desktop | string = target.desktop;
-					if ((v = v ? v.requestPath : '') && v.charAt(0) != '/')
+					if ((v = v ? v.requestPath : '') && !v.startsWith('/'))
 						v = '/' + v; //just in case
 					tag = '/_' + v + tag;
 				}
@@ -781,7 +802,7 @@ export namespace au_global {
 		 * @return String the content of the AU request.
 		 * @since 5.0.4
 		 */
-		static encode(j: number, aureq: zk.Event, dt: zk.Desktop): string {
+		export function encode(j: number, aureq: zk.Event, dt: zk.Desktop): string {
 			var target = aureq.target,
 				opts = aureq.opts || {},
 				portlet2Namespace = '';
@@ -802,7 +823,7 @@ export namespace au_global {
 
 			var data = aureq.data, dtype = typeof data;
 			if (dtype === 'string' || dtype === 'number' || dtype === 'boolean' || Array.isArray(data)) {
-				data = {'': data};
+				data = { '': data };
 			}
 			if (data) {
 				content += '&' + portlet2Namespace + 'data_' + j + '=' + encodeURIComponent(zAu.toJSON(target, data as never));
@@ -815,7 +836,7 @@ export namespace au_global {
 		 * @return boolean whether it is sent successfully. If it has to wait
 		 * for other condition, this method returns false.
 		 */
-		static sendNow(dt: zk.Desktop): boolean {
+		export function sendNow(dt: zk.Desktop): boolean {
 			if (zAu.disabledRequest) {
 				if (zk.processing)
 					zk.endProcessing();
@@ -886,7 +907,7 @@ export namespace au_global {
 			}
 			//Consider XML (Pros: ?, Cons: larger packet)
 			var content: Record<string, unknown> | string | FormData, rtags = {},
-				requri = uri || zk.ajaxURI(undefined, {desktop: dt, au: true}),
+				requri = uri || zk.ajaxURI(undefined, { desktop: dt, au: true }),
 				ws = typeof zWs != 'undefined' && zWs.ready;
 			if (!forceAjax && ws) {
 				content = {};
@@ -965,7 +986,7 @@ export namespace au_global {
 		 * @param Event aureq the request.
 		 * @since 7.0.3
 		 */
-		static addAuRequest(dt: zk.Desktop, aureq: zk.Event): void {
+		export function addAuRequest(dt: zk.Desktop, aureq: zk.Event): void {
 			if (!dt.obsolete)
 				dt._aureqs.push(aureq);
 		}
@@ -974,13 +995,13 @@ export namespace au_global {
 		 * @return Array an array of {@link Event}
 		 * @since 7.0.3
 		 */
-		static getAuRequests(dt: zk.Desktop): zk.Event[] {
+		export function getAuRequests(dt: zk.Desktop): zk.Event[] {
 			return dt._aureqs;
 		}
 		/** A map of Ajax default setting used to send the AU requests.
 		 * @type Map
 		 */
-		static ajaxSettings = zk.$default({
+		export const ajaxSettings = zk.$default({
 			global: false,
 			//cache: false, //no need to turn off cache since server sends NO-CACHE
 			contentType: 'application/x-www-form-urlencoded;charset=UTF-8'
@@ -988,17 +1009,19 @@ export namespace au_global {
 
 		// Adds performance request IDs that have been processed completely.
 		// Called by moun.js, too
-		static _pfrecv(dt: zk.Desktop, pfIds?: string): void {
+		// eslint-disable-next-line zk/noNull
+		export function _pfrecv(dt: zk.Desktop, pfIds?: string | null): void {
 			zAu.pfAddIds(dt, '_pfRecvIds', pfIds);
 		}
 		// Adds performance request IDs that have been processed completely.
 		// Called by moun.js, too
-		static _pfdone(dt: zk.Desktop, pfIds?: string): void {
+		// eslint-disable-next-line zk/noNull
+		export function _pfdone(dt: zk.Desktop, pfIds?: string | null): void {
 			zAu.pfAddIds(dt, '_pfDoneIds', pfIds);
 		}
 		// Sets performance rquest IDs to the request's header
 		// Called by moun.js, too
-		static _pfsend(dt: zk.Desktop, fetchOpts: RequestInit, completeOnly: boolean, forceAjax: boolean): void {
+		export function _pfsend(dt: zk.Desktop, fetchOpts: RequestInit, completeOnly: boolean, forceAjax: boolean): void {
 			var ws = !forceAjax && typeof zWs != 'undefined' && zWs.ready,
 				fetchHeaders = fetchOpts.headers;
 			if (!completeOnly) {
@@ -1043,7 +1066,7 @@ export namespace au_global {
 		 * Ignored if null
 		 * @since 5.0.2
 		 */
-		static createWidgets(codes: ArrayLike<unknown>[], fn: (wgts: zk.Widget[]) => void, filter?: (wgt: zk.Widget) => zk.Widget | undefined): void {
+		export function createWidgets(codes: ArrayLike<unknown>[], fn: (wgts: zk.Widget[]) => void, filter?: (wgt: zk.Widget) => zk.Widget | undefined): void {
 			//bug #3005632: Listbox fails to replace with empty model if in ROD mode
 			var wgts: zk.Widget[] = [], len = codes.length;
 			if (len > 0) {
@@ -1062,12 +1085,12 @@ export namespace au_global {
 		* <p>wrongValue_(wgt, msg): show an error message
 		* <p>wrongValue_(wgt, false): clear an error message
 		*/
-		static wrongValue_(wgt: zk.Widget, msg: string | false): void {
+		export function wrongValue_(wgt: zk.Widget, msg: string | false): void {
 			if (msg !== false)
 				jq.alert(msg);
 		}
 		// Called when the response is received from fetch.
-		static _onResponseReady(response: Response): void {
+		export function _onResponseReady(response: Response): void {
 			var reqInf = zAu.ajaxReqInf, sid: string | undefined;
 			try {
 				if (response) {
@@ -1090,7 +1113,7 @@ export namespace au_global {
 
 			zAu.afterResponse(sid);
 		}
-		static _respSuccess(response: Response, reqInf: AuRequestInfo, sid: string | number): boolean {
+		export function _respSuccess(response: Response, reqInf: AuRequestInfo, sid: string | number): boolean {
 			if (sid && sid != zAu.seqId) {
 				zAu._errCode = 'ZK-SID ' + (sid ? 'mismatch' : 'required');
 				zAu.afterResponse(); //continue the pending request if any
@@ -1120,7 +1143,7 @@ export namespace au_global {
 			}
 			return false;
 		}
-		static _respFailure(response: Response, reqInf: AuRequestInfo, rstatus: number): boolean {
+		export function _respFailure(response: Response, reqInf: AuRequestInfo, rstatus: number): boolean {
 			var eru = zAu._errURIs['' + rstatus];
 			if (typeof eru == 'string') {
 				zUtl.go(eru);
@@ -1165,7 +1188,7 @@ export namespace au_global {
 			}
 			return false;
 		}
-		static _respException(reqInf: AuRequestInfo, e: Error): boolean {
+		export function _respException(reqInf: AuRequestInfo, e: Error): boolean {
 			if (!window.zAu)
 				return true; //the doc has been unloaded
 
@@ -1195,7 +1218,7 @@ export namespace au_global {
 		 */
 		//cmd1: null, //jsdoc
 
-		static pushReqCmds(reqInf: AuRequestInfo, response: Response & {responseText?: string}): boolean {
+		export function pushReqCmds(reqInf: AuRequestInfo, response: AuResponse): boolean {
 			var dt = reqInf.dt,
 				rt = response.responseText;
 			if (!rt) {
@@ -1210,7 +1233,7 @@ export namespace au_global {
 				cmds.pfIds = zAu.pfGetIds(response);
 			}
 
-			var json: {rid?: string; rs?: []};
+			var json: { rid?: string; rs?: [] };
 			try {
 				json = jq.evalJSON(rt) as never;
 			} catch (e) {
@@ -1234,7 +1257,7 @@ export namespace au_global {
 		}
 
 		/* internal use only */
-		static afterResponse(sid?: string): void {
+		export function afterResponse(sid?: string): void {
 			zAu._doCmds(sid); //invokes checkProgressing
 
 			//handle pending ajax send
@@ -1247,64 +1270,73 @@ export namespace au_global {
 		}
 		/* @param zk.Widget target
 		*/
-		static toJSON(target: zk.Widget | undefined, data: {pageX?: number; pageY?: number; x?: number; y?: number} | unknown[]): string {
+		export function toJSON(
+			target: zk.Widget | undefined,
+			data: // `pageX` and `pageY` should co-exist
+				| { pageX: number; pageY: number; x?: number; y?: number; z$dateKeys?: string[] }
+				| { pageX?: undefined; pageY?: undefined; x?: number; y?: number; z$dateKeys?: string[] }
+				| unknown[]
+		): string {
 			if (!Array.isArray(data)) {
-				if (data.pageX != null && data.x == null) {
-					var ofs = target && target.desktop ? // B50-3336745: target may have been detached
-						target.fromPageCoord(data.pageX, data.pageY!) :
-						[data.pageX, data.pageY];
-					data.x = ofs[0];
-					data.y = ofs[1];
+				const { pageX, pageY, x } = data;
+				if (pageX != null && x == null) {
+					[data.x, data.y] = target?.desktop ? // B50-3336745: target may have been detached
+						target.fromPageCoord(pageX, pageY) : [pageX, pageY];
 				}
 
-				var v: Date | DateImpl | undefined,
-					dateKeys: string[] = [];
-				for (var n in data) {
-					if ((v = data[n] as DateImpl | undefined) instanceof DateImpl) {
+				const dateKeys: string[] = [];
+				for (const n in data) {
+					const v = data[n] as unknown;
+					if (v instanceof DateImpl) {
 						data[n] = jq.d2j(v);
 						dateKeys.push(n);
 					}
 				}
 				if (dateKeys.length != 0)
-					(data as {z$dateKeys}).z$dateKeys = dateKeys;
+					data.z$dateKeys = dateKeys;
 			}
 			return jq.toJSON(data);
 		}
 		/* internal use only */
-		static ajaxReq?: boolean;
+		export let ajaxReq: XMLHttpRequest | undefined;
 		/* internal use only */
-		static ajaxReqInf?: AuRequestInfo;
+		export let ajaxReqInf: AuRequestInfo | undefined;
 		/* internal use only */
-		declare static ajaxReqTries: number;
+		export let ajaxReqTries: number;
 		/* internal use only */
-		static ajaxReqMaxCount = 300;
+		export const ajaxReqMaxCount = 300;
 		/* internal use only */
-		static seqId = (Date.now() % 9999) + 1;
+		export var seqId = (Date.now() % 9999) + 1;
 		/* internal use only */
-		static pendingReqInf?: AuRequestInfo;
-		static _errCode?: string | number;
-		static _errURIs: Record<string, string> = {};
+		export let pendingReqInf: AuRequestInfo | undefined;
+		export let _errCode: string | number | undefined;
+		export const _errURIs: Record<string, string> = {};
 		//Perfomance Meter//
 		// Returns request IDs sent from the server separated by space.
-		static pfGetIds(response: Response): string | undefined {
-			return response.headers.get('ZK-Client-Complete') as string | undefined;
+		// eslint-disable-next-line zk/noNull
+		export function pfGetIds(response: AuResponse): string | null {
+			return response.headers.get('ZK-Client-Complete');
 		}
-		static pfAddIds(dt: zk.Desktop, prop: string, pfIds?: string): void {
-			if (pfIds && (pfIds = pfIds.trim())) {
-				var s = pfIds + '=' + Math.round(jq.now());
-				if (dt[prop]) dt[prop] += ',' + s;
-				else dt[prop] = s;
+		// eslint-disable-next-line zk/noNull
+		export function pfAddIds(dt: zk.Desktop, prop: string, pfIds?: string | null): void {
+			pfIds = pfIds?.trim();
+			if (pfIds) {
+				const s = `${pfIds}=${Math.round(jq.now())}`;
+				if (dt[prop])
+					dt[prop] += ',' + s;
+				else
+					dt[prop] = s;
 			}
 		}
-		static ajaxReqResend(reqInf: AuRequestInfo, timeout?: number): void {
+		export function ajaxReqResend(reqInf: AuRequestInfo, timeout?: number): void {
 			if (zAu.seqId == reqInf.sid) {//skip if the response was recived
 				zAu.pendingReqInf = reqInf; //store as a pending request info
-				setTimeout(ajaxReqResend2, timeout ? timeout : 0);
+				setTimeout(ajaxReqResend2, timeout ?? 0);
 			}
 		}
-		static onResponseError(response: Response, errCode: number): boolean {
+		export function onResponseError(response: AuResponse, errCode: number | string): boolean {
 			//$clone first since it might add or remove onError
-			for (var errs = _onErrs.$clone(), fn: undefined | CallableFunction; fn = errs.shift();)
+			for (var errs = _onErrs.$clone(), fn: undefined | ErrorHandler; fn = errs.shift();)
 				if (fn(response, errCode))
 					return true; //ignored
 			return false;
@@ -1312,7 +1344,7 @@ export namespace au_global {
 
 		/** @partial zAu
 		 */
-	//@{
+		//@{
 		/** Implements this function to be called if the request fails.
 		 * The function receives four arguments: The XHR (XMLHttpRequest) object,
 		 * a number describing the status of the request, a string describing the text
@@ -1341,28 +1373,28 @@ export namespace au_global {
 		* @since 6.5.2
 		*/
 		//ajaxErrorHandler: function () {}
-	//@};
+		//@};
 
-	//Commands//
+		//Commands//
 		/** @class zk.AuCmd0
 		 * The AU command handler for processes commands not related to widgets,
 		 * sent from the server.
 		 * @see zAu#cmd0
 		 */
-		static cmd0 = class AUCommand0 { //no uuid at all
+		export namespace cmd0 { //no uuid at all
 			/** Sets a bookmark
 			 * @param String bk the bookmark
 			 * @param boolean replace if true, it will replace the bookmark without creating
 			 * 		a new one history.
 			 */
-			static bookmark(bk: string, replace: boolean): void {
+			export function bookmark(bk: string, replace: boolean): void {
 				zk.bmk.bookmark(bk, replace);
 			}
 			/** Shows an error to indicate the desktop is timeout.
 			 * @param String dtid the desktop UUID
 			 * @param String msg the error message
 			 */
-			static obsolete(dtid: string, msg: string): void {
+			export function obsolete(dtid: string, msg: string): void {
 				var v = zk.Desktop.$(dtid);
 				if (v) v.obsolete = true;
 
@@ -1394,19 +1426,19 @@ export namespace au_global {
 			 * For widget's error message, use {@link #wrongValue} instead.
 			 * @param String msg the error message
 			 */
-			static alert(msg: string, title: string, icon: string, disabledAuRequest: boolean): void {
+			export function alert(msg: string, title: string, icon: string, disabledAuRequest: boolean): void {
 				if (disabledAuRequest)
 					zAu.disabledRequest = true;
-				jq.alert(msg, {icon: icon || 'ERROR', title: title});
+				jq.alert(msg, { icon: icon || 'ERROR', title: title });
 			}
 			/** Redirects to the specified URL.
 			 * @param String url the URL to redirect to
 			 * @param String target [optional] the window name to show the content
 			 * of the URL. If omitted, it will replace the current content.
 			 */
-			static redirect(url: string, target?: string): void {
+			export function redirect(url: string, target?: string): void {
 				try {
-					zUtl.go(url, {target: target});
+					zUtl.go(url, { target: target });
 
 					// '#' for bookmark change only, Bug ZK-2874
 					var idx: number;
@@ -1431,18 +1463,18 @@ export namespace au_global {
 			/** Changes the brower window's titile.
 			 * @param String title the new title
 			 */
-			static title(title: string): void {
+			export function title(title: string): void {
 				document.title = title;
 			}
 			/** Logs the message.
 			 * @param String msg the message to log
 			 * @since 5.0.8
 			 */
-			static log = zk.log;
+			export const log = zk.log;
 			/** Executes the JavaScript.
 			 * @param String script the JavaScript code snippet to execute
 			 */
-			static script(script: string): void {
+			export function script(script: string): void {
 				const scriptErrorHandler = zk.scriptErrorHandler;
 				if (scriptErrorHandler && !zk.scriptErrorHandlerRegistered) {
 					zk.scriptErrorHandlerRegistered = true;
@@ -1458,7 +1490,7 @@ export namespace au_global {
 			 * @see zk.AuCmd1#echo2
 			 * @see #echoGx
 			 */
-			static echo(dtid?: string | zk.Desktop): void {
+			export function echo(dtid?: string | zk.Desktop): void {
 				var dt = zk.Desktop.$(dtid),
 					aureqs = dt ? zAu.getAuRequests(dt) : [];
 				// Bug ZK-2741
@@ -1470,7 +1502,7 @@ export namespace au_global {
 				}
 				zAu.send(new zk.Event(dt, 'dummy', undefined, {
 					ignorable: true,
-					rtags: {isDummy: true}
+					rtags: { isDummy: true }
 				}));
 			}
 			/** Ask the client to echo back globally.
@@ -1482,13 +1514,13 @@ export namespace au_global {
 			 * @param String... any number of desktop IDs.
 			 * @since 5.0.4
 			 */
-			static echoGx(evtnm: string, data: unknown, ...args: string[]): void { return; }
+			export function echoGx(evtnm: string, data: unknown, ...args: string[]): void { return; }
 
 			/** Asks the client information.
 			 * The client will reply the information in the <code>onClientInfo</code> response.
 			 * @param String dtid the desktop ID ({@link zk.Desktop}).
 			 */
-			static clientInfo(dtid?: string): void {
+			export function clientInfo(dtid?: string): void {
 				zAu._cInfoReg = true;
 				var orient = '',
 					dpr = 1;
@@ -1496,7 +1528,7 @@ export namespace au_global {
 				if (zk.mobile) {
 					//change default portrait definition because landscape is the default orientation for this device/browser.
 					if ((_initLandscape && _initDefault) || (!_initLandscape && !_initDefault))
-						_portrait = {'-90': true, '90': true};
+						_portrait = { '-90': true, '90': true };
 
 					orient = _portrait[window.orientation] ? 'portrait' : 'landscape';
 				} else {
@@ -1507,9 +1539,9 @@ export namespace au_global {
 					dpr = window.devicePixelRatio;
 
 				var clientInfo = [new Date().getTimezoneOffset(),
-						screen.width, screen.height, screen.colorDepth,
-						jq.innerWidth(), jq.innerHeight(), jq.innerX(), jq.innerY(), dpr.toFixed(1), orient,
-						zk.mm.tz.guess()],
+				screen.width, screen.height, screen.colorDepth,
+				jq.innerWidth(), jq.innerHeight(), jq.innerX(), jq.innerY(), dpr.toFixed(1), orient,
+				zk.mm.tz.guess()],
 					oldClientInfo = zAu._clientInfo;
 
 				// ZK-3181: only send when value changed
@@ -1528,9 +1560,9 @@ export namespace au_global {
 				zAu._clientInfo = clientInfo;
 				zAu.send(new zk.Event(zk.Desktop.$(dtid), 'onClientInfo',
 					zAu._clientInfo,
-					{implicit: true, rtags: {onClientInfo: 1}}));
+					{ implicit: true, rtags: { onClientInfo: 1 } }));
 			}
-			static visibilityChange(dtid?: string): void {
+			export function visibilityChange(dtid?: string): void {
 				var hidden = !!(document.hidden || document[zk.vendor_ + 'Hidden']),
 					visibilityState = document.visibilityState || document[zk.vendor_ + 'VisibilityState'];
 
@@ -1538,12 +1570,12 @@ export namespace au_global {
 					{
 						hidden: hidden,
 						visibilityState: visibilityState
-					}, {implicit: true, ignorable: true}));
+					}, { implicit: true, ignorable: true }));
 			}
 			/** Asks the client to download the resource at the specified URL.
 			 * @param String url the URL to download from
 			 */
-			static download(url: string): void {
+			export function download(url: string): void {
 				if (url) {
 					var ifr: HTMLIFrameElement = jq('#zk_download')[0] as HTMLIFrameElement,
 						ie = zk.ie,
@@ -1569,42 +1601,42 @@ export namespace au_global {
 			}
 			/** Prints the content of the browser window.
 			 */
-			static print = window.print;
+			export const print = window.print;
 			/** Scrolls the content of the browser window.
 			 * @param int x the offset (difference) in the X coordinate (horizontally) (pixels)
 			 * @param int y the offset in the Y coordinate (vertically) (pixels)
 			 */
-			static scrollBy = window.scrollBy;
+			export const scrollBy = window.scrollBy;
 			/** Scrolls the contents of the browser window to the specified location.
 			 * @param int x the X coordinate to scroll to (pixels)
 			 * @param int y the Y coordinate to scroll to (pixels)
 			 */
-			static scrollTo = window.scrollTo;
+			export const scrollTo = window.scrollTo;
 			/** Resizes the browser window.
 			 * @param int x the number of pixels to increase/decrease (pixels)
 			 * @param int y the number of pixels to increase/decrease (pixels)
 			 */
-			static resizeBy = window.resizeBy;
+			export const resizeBy = window.resizeBy;
 			/** Resizes the browser window to the specified size.
 			 * @param int x the required width (pixels)
 			 * @param int y the required height (pixels)
 			 */
-			static resizeTo = window.resizeTo;
+			export const resizeTo = window.resizeTo;
 			/** Moves the browser window.
 			 * @param int x the number of pixels to move in the X coordinate
 			 * @param int y the number of pixels to move in the Y coordinate
 			 */
-			static moveBy = window.moveBy;
+			export const moveBy = window.moveBy;
 			/** Moves the browser window to the specified location
 			 * @param int x the left (pixels)
 			 * @param int y the top (pixels)
 			 */
-			static moveTo = window.moveTo;
+			export const moveTo = window.moveTo;
 			/** Sets the message used to confirm the user when he is closing
 			 * the browser window.
 			 * @param String msg the message to show in the confirm dialog
 			 */
-			static cfmClose(msg: string): void {
+			export function cfmClose(msg: string): void {
 				zk.confirmClose = msg;
 			}
 			/** Shows a notification popup.
@@ -1617,8 +1649,8 @@ export namespace au_global {
 			 * @param int dur the duration of notification
 			 * @param boolean closable the close button of notification
 			 */
-			static showNotification(msg: string, type: zul.wgt.NotificationType, pid: string, ref: zk.Widget,
-							pos: string, off: zk.Offset, dur: number, closable: boolean): void {
+			export function showNotification(msg: string, type: zul.wgt.NotificationType, pid: string, ref: zk.Widget,
+				pos: string, off: zk.Offset, dur: number, closable: boolean): void {
 				var notif = zk.load('zul.wgt') ? zul.wgt.Notification : undefined; // in zul
 				if (notif) {
 					var opts = {
@@ -1645,7 +1677,7 @@ export namespace au_global {
 			/** Shows the busy message covering the whole browser window.
 			 * @param String msg the message.
 			 */
-			static showBusy(uuid: string, msg?: string): void {
+			export function showBusy(uuid: string, msg?: string): void {
 				let uid: string | undefined = uuid;
 				if (msg === undefined) {
 					msg = uuid;
@@ -1657,7 +1689,7 @@ export namespace au_global {
 				var w: zk.Widget | undefined = uid ? zk.Widget.$(uid) : undefined;
 				if (!uid) {
 					zk._prevFocus = zk.currentFocus;
-					zUtl.progressbox('zk_showBusy', msg || msgzk.PLEASE_WAIT, true, undefined, {busy: true});
+					zUtl.progressbox('zk_showBusy', msg || msgzk.PLEASE_WAIT, true, undefined, { busy: true });
 					jq('html').on('keydown', zk.$void);
 				} else if (w) {
 					zk.delayFunction(uid, function () {
@@ -1676,7 +1708,7 @@ export namespace au_global {
 			 */
 			/** Removes the busy message covering the whole browser.
 			 */
-			static clearBusy(uuid?: string): void {
+			export function clearBusy(uuid?: string): void {
 				if (uuid) {
 					zk.delayFunction(uuid, function () {
 						var w = zk.Widget.$(uuid),
@@ -1687,7 +1719,7 @@ export namespace au_global {
 						}
 					});
 				} else {
-					zUtl.destroyProgressbox('zk_showBusy', {busy: true}); //since user might want to show diff msg
+					zUtl.destroyProgressbox('zk_showBusy', { busy: true }); //since user might want to show diff msg
 					if (zk._prevFocus) {
 						zk.currentFocus = zk._prevFocus;
 						zk._prevFocus = undefined;
@@ -1709,11 +1741,11 @@ export namespace au_global {
 			 * @param String... any number of UUID of widgets.
 			 * @see #wrongValue
 			 */
-			static clearWrongValue(): void {
+			export function clearWrongValue(): void {
 				for (var i = arguments.length; i--;) {
 					var wgt = zk.Widget.$(arguments[i]) as zk.Widget | undefined;
 					if (wgt) {
-						var toClearErrMsg = function (w: zk.Widget & {clearErrorMessage?()}) {
+						var toClearErrMsg = function (w: zk.Widget & { clearErrorMessage?() }) {
 							return function () {
 								if (w.clearErrorMessage) w.clearErrorMessage();
 								else zAu.wrongValue_(w, false);
@@ -1732,14 +1764,14 @@ export namespace au_global {
 			 * The third is UUID, then the fourth the error message, and so on.
 			 * @see #clearWrongValue
 			 */
-			static wrongValue(): void {
+			export function wrongValue(): void {
 				var args = arguments;
 				for (var i = 0, len = args.length - 1; i < len; i += 2) {
 					var uuid = args[i] as string, msg = args[i + 1] as string,
 						wgt = zk.Widget.$(uuid);
 					if (wgt) {
 						//ZK-2687: create a closure to record the current wgt
-						var toSetErrMsg = function (w: zk.Widget & {setErrorMessage?(m: string)}, m: string) {
+						var toSetErrMsg = function (w: zk.Widget & { setErrorMessage?(m: string) }, m: string) {
 							return function () {
 								zk.afterAnimate(function () {
 									if (w.setErrorMessage) w.setErrorMessage(m);
@@ -1762,9 +1794,9 @@ export namespace au_global {
 			 * the FROM element).
 			 * @param String id the UUID of the widget, or the ID of the FORM element.
 			 */
-			static submit(id: string): void {
+			export function submit(id: string): void {
 				setTimeout(function () {
-					var n = zk.Widget.$(id) as {submit?()};
+					var n = zk.Widget.$(id) as { submit?() };
 					if (n && n.submit)
 						n.submit();
 					else
@@ -1774,7 +1806,7 @@ export namespace au_global {
 			/** Scrolls the widget or an DOM element into the view
 			 * @param String id the UUID of the widget, or the ID of the DOM element.
 			 */
-			static scrollIntoView(id: string): void {
+			export function scrollIntoView(id: string): void {
 				if (!id) return;
 				var w = zk.Widget.$(id);
 				if (w) {
@@ -1797,7 +1829,7 @@ export namespace au_global {
 			 * @param boolean once true means the JavaScript file will be cached.
 			 * @since 8.0.0
 			 */
-			static loadScript(url: string, callback: CallableFunction | string, once: boolean): void {
+			export function loadScript(url: string, callback: CallableFunction | string, once: boolean): void {
 				void jq.ajax({
 					dataType: 'script',
 					cache: once,
@@ -1815,7 +1847,7 @@ export namespace au_global {
 			 * @param String media the media attribute. Ignored if not specified.
 			 * @since 8.0.0
 			 */
-			static loadCSS = zk.loadCSS;
+			export const loadCSS = zk.loadCSS;
 			/** Pushes or replaces a history state.
 			 * @param boolean replace if true, it will replace the current history without creating a new one.
 			 * @param Object state a state object.
@@ -1823,7 +1855,7 @@ export namespace au_global {
 			 * @param String url the new history entry's URL. Ignored if not specified.
 			 * @since 8.5.0
 			 */
-			static historyState(replace: boolean, state: object, title: string, url: string): void {
+			export function historyState(replace: boolean, state: object, title: string, url: string): void {
 				if (replace && window.history.replaceState)
 					window.history.replaceState(state, title, url);
 				if (!replace && window.history.pushState)
@@ -1832,26 +1864,26 @@ export namespace au_global {
 			/** Ask the client to sync all the errorboxes and its reference widget position on the desktop.
 			 * @since 8.5.2
 			 */
-			static syncAllErrorbox(): void {
+			export function syncAllErrorbox(): void {
 				jq('.z-errorbox').toArray().forEach(function (ebox) {
 					var wgt = jq(ebox).zk.$<zul.inp.Errorbox>();
 					wgt.reposition();
 					wgt._fixarrow();
 				});
 			}
-		};
+		}
 		/** @class zk.AuCmd1
 		 * The AU command handler for processes commands related to widgets,
 		 * sent from the server.
 		 * @see zAu#cmd1
 		 */
-		static cmd1 = class AUCommand1 {
+		export namespace cmd1 {
 			/** Sets the attribute of a widget.
 			 * @param zk.Widget wgt the widget
 			 * @param String name the name of the attribute
 			 * @param Object value the value of the attribute.
 			 */
-			static setAttr(wgt: zk.Widget | undefined, nm: string, val: unknown): void {
+			export function setAttr(wgt: zk.Widget | undefined, nm: string, val: unknown): void {
 				if (wgt) { // server push may cause wgt is null in some case - zksandbox/#a1
 					if (nm == 'z$al') { //afterLoad
 						zk.afterLoad(function () {
@@ -1871,7 +1903,7 @@ export namespace au_global {
 			 * @param Array attrs an array of [name1, value1, name2, value2, ...]
 			 * @since 9.0.1
 			 */
-			static setAttrs(wgt: zk.Widget, attrs: unknown[]): void {
+			export function setAttrs(wgt: zk.Widget, attrs: unknown[]): void {
 				if (wgt) { // server push may cause wgt is null in some case - zksandbox/#a1
 					var setAttr = zAu.cmd1.setAttr,
 						attrsLength = attrs.length;
@@ -1885,7 +1917,7 @@ export namespace au_global {
 			 * @param zk.Widget wgt the old widget to be replaced
 			 * @param String code the JavaScript code snippet to generate new widget(s).
 			 */
-			static outer(wgt: zk.Widget, code: string): void {
+			export function outer(wgt: zk.Widget, code: string): void {
 				window.zkx_(code, function (newwgt: zk.Widget) {
 					var act = _beforeAction(newwgt, 'invalidate') as never;
 					wgt.replaceWidget(newwgt);
@@ -1907,7 +1939,7 @@ export namespace au_global {
 			 * @param zk.Widget wgt the existent widget that new widget(s) will be inserted after
 			 * @param String... codes the JavaScript code snippet to generate new widget(s).
 			 */
-			static addAft(wgt: zk.Widget, ...codes: string[]): void {
+			export function addAft(wgt: zk.Widget, ...codes: string[]): void {
 				const p = wgt.parent,
 					fn = function (child: zk.Widget): void {
 						var act = _beforeAction(child, 'show') as never;
@@ -1939,7 +1971,7 @@ export namespace au_global {
 			 * @param zk.Widget wgt the existent widget that new widget(s) will be inserted before
 			 * @param String... codes the JavaScript code snippet to generate new widget(s).
 			 */
-			static addBfr(wgt: zk.Widget, ...rargs: string[]): void {
+			export function addBfr(wgt: zk.Widget, ...rargs: string[]): void {
 				var p = wgt.parent!,
 					fn = function (child: zk.Widget): void {
 						var act = _beforeAction(child, 'show') as never;
@@ -1959,7 +1991,7 @@ export namespace au_global {
 			 * @param zk.Widget wgt the existent widget that will become the parent of new widget(s)
 			 * @param String... codes the JavaScript code snippet to generate new widget(s).
 			 */
-			static addChd(wgt: zk.Widget, ...rargs: string[]): void {
+			export function addChd(wgt: zk.Widget, ...rargs: string[]): void {
 				if (wgt) {
 					var fn = function (child: zk.Widget): void {
 						var act = _beforeAction(child, 'show') as never;
@@ -1984,7 +2016,7 @@ export namespace au_global {
 			/** Removes the widget.
 			 * @param zk.Widget wgt the widget to remove
 			 */
-			static rm(wgt: zk.Widget): void {
+			export function rm(wgt: zk.Widget): void {
 				if (wgt) {
 					wgt.detach();
 					_detached.push(wgt); //used by mount.js
@@ -1995,7 +2027,7 @@ export namespace au_global {
 			 * @param String newId the new UUID
 			 * @since 5.0.3
 			 */
-			static uuid(wgt: zk.Widget, newId: string): void {
+			export function uuid(wgt: zk.Widget, newId: string): void {
 				if (wgt)
 					zk._wgtutl.setUuid(wgt, newId); //see widget.js
 			}
@@ -2005,7 +2037,7 @@ export namespace au_global {
 			 * this method. In other words, it has no effect if the widget doesn't support it.
 			 * @param zk.Widget wgt the widget.
 			 */
-			static focus(wgt: zk.Widget): void {
+			export function focus(wgt: zk.Widget): void {
 				if (wgt) {
 					// bug in ZK-2195, the focus command executed after window's doModal() for IE
 					// so we have to do the same as that code in Window.js
@@ -2027,7 +2059,7 @@ export namespace au_global {
 			 * @param int end the ending index of the selection range (excluding).
 			 * 		In other words, the text between start and (end-1) is selected.
 			 */
-			static select(wgt: zk.Widget & {select?(s, e)}, s: number, e: number): void {
+			export function select(wgt: zk.Widget & { select?(s, e) }, s: number, e: number): void {
 				if (wgt.select) wgt.select(s, e);
 			}
 			/** Invokes the specified method of the specified widget.
@@ -2039,7 +2071,7 @@ export namespace au_global {
 			 * @param Object... vararg any number of arguments passed to the function
 			 * invocation.
 			 */
-			static invoke(wgt: zk.Widget, func: string, ...rargs: unknown[]): void {
+			export function invoke(wgt: zk.Widget, func: string, ...rargs: unknown[]): void {
 				var args: unknown[] = [];
 				for (var j = arguments.length; --j > 1;) //exclude wgt and func
 					args.unshift(arguments[j]);
@@ -2059,39 +2091,39 @@ export namespace au_global {
 			 * @see zk.AuCmd0#echo
 			 * @see zk.AuCmd0#echoGx
 			 */
-			static echo2(wgt: zk.Widget, evtnm: string, data: unknown): void {
+			export function echo2(wgt: zk.Widget, evtnm: string, data: unknown): void {
 				zAu.send(new zk.Event(wgt, 'echo',
-					data != null ? [evtnm, data] : [evtnm], {ignorable: true}));
+					data != null ? [evtnm, data] : [evtnm], { ignorable: true }));
 			}
 			/** Ask the client to re-cacluate the size of the given widget.
 			 * @param zk.Widget wgt the widget to resize
 			 * @since 5.0.8
 			 */
-			static resizeWgt(wgt: zk.Widget): void {
+			export function resizeWgt(wgt: zk.Widget): void {
 				zUtl.fireSized(wgt, 1); //force cleanup
 			}
 			/** Ask the client to sync a target widget and its errorbox position.
 			 * @param zk.Widget wgt the widget
 			 * @since 8.5.2
 			 */
-			static syncErrorbox(wgt: zul.inp.InputWidget): void {
+			export function syncErrorbox(wgt: zul.inp.InputWidget): void {
 				if (wgt._errbox) {
 					wgt._errbox.reposition();
 					wgt._errbox._fixarrow();
 				}
 			}
-		};
+		}
 	}
 }
 /** @partial zk
  */
 //@{
-	/** Adds a function that will be executed after onResponse events are done.
-	 * That means, after au responses, the function added in the afterAuResponse() will be invoked
-	 * @param Function fn the function to execute after au responses
-	 * @since 7.0.6
-	 */
-	//afterAuResponse: function () {}
+/** Adds a function that will be executed after onResponse events are done.
+ * That means, after au responses, the function added in the afterAuResponse() will be invoked
+ * @param Function fn the function to execute after au responses
+ * @since 7.0.6
+ */
+//afterAuResponse: function () {}
 //@};
 zk.afterAuResponse = afterAuResponse;
 export function afterAuResponse(fn: () => void): void {

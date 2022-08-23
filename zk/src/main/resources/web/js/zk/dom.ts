@@ -37,9 +37,7 @@ export interface RedoCSSOptions {
 	selector: string;
 }
 
-var _jq: Partial<JQueryStatic> = {}, //original jQuery
-	//refer to http://www.w3schools.com/css/css_text.asp
-	_txtStyles = [
+var _txtStyles = [ //refer to http://www.w3schools.com/css/css_text.asp
 		'font-family', 'font-size', 'font-weight', 'font-style',
 		'letter-spacing', 'line-height', 'text-align', 'text-decoration',
 		'text-indent', 'text-shadow', 'text-transform', 'text-overflow',
@@ -1751,7 +1749,7 @@ export class JQZK {
 
 	// used in domsafari.ts
 	declare static _sfKeys: Record<number, number>;
-	declare static _evt: Record<'fix' | string, CallableFunction>;
+	declare static _evt: Record<'fix' | string, Function>; // eslint-disable-line @typescript-eslint/ban-types
 }
 jq.fn['zon'] = jq.fn.on;
 jq.fn['zoff'] = jq.fn.off;
@@ -1880,7 +1878,7 @@ jq.fn['zoff'] = jq.fn.off;
  *
  * @author tomyeh
  */
-zk.override(jq.fn, _jq, /*prototype*/ {
+var _jq /** original jQuery */ = zk.augment(jq.fn, {
 	/** The associated instance of {@link jqzk} that
 	 * provides additional utilities to <a href="http://docs.jquery.com/Main_Page" target="jq">jQuery</a>.
 	 * @type jqzk
@@ -1918,6 +1916,7 @@ zk.override(jq.fn, _jq, /*prototype*/ {
 	 * @param Skipper skipper the skipper. It is optional.
 	 * @return jq the jq object matching the DOM element after replaced
 	 */
+	// @ts-expect-error: incompatible with the signature in the original jQuery
 	replaceWith(w: zk.Widget | unknown, desktop: zk.Desktop, skipper: zk.Skipper): JQuery {
 		if (!(w instanceof zk.Widget))
 			return (_jq['replaceWith'] as CallableFunction).bind(this)(w, desktop, skipper) as JQuery;
@@ -1926,17 +1925,21 @@ zk.override(jq.fn, _jq, /*prototype*/ {
 		if (n) w.replaceHTML(n, desktop, skipper);
 		return this;
 	},
+	// @ts-expect-error: incompatible with the signature in the original jQuery
 	on(type: string, selector: string | undefined, data, fn: CallableFunction, ...rest: unknown[]): JQuery {
 		type = zjq.eventTypes[type] ?? type;
 		return this.zon(type, selector, data, fn, ...rest);
 	},
+	// @ts-expect-error: incompatible with the signature in the original jQuery
 	off(type: string, selector: string | undefined, fn: CallableFunction, ...rest: unknown[]): JQuery {
 		type = zjq.eventTypes[type] || type;
 		return this.zoff(type, selector, fn, ...rest);
 	},
+	// @ts-expect-error: incompatible with the signature in the original jQuery
 	bind(types: string, data: unknown, fn: CallableFunction): JQuery {
 		return this.on(types, undefined, data, fn);
 	},
+	// @ts-expect-error: incompatible with the signature in the original jQuery
 	unbind: function (types: string, fn: CallableFunction): JQuery {
 		return this.off(types, undefined, fn);
 	}
@@ -2812,7 +2815,7 @@ export const _JQEventStatic = {
 				data = (evt as JQuery.MouseEventBase).mouseData();
 			type = type.charAt(0).toUpperCase() + type.substring(1);
 		}
-		return new zk.Event(target!, 'on' + type, data, {}, evt);
+		return new zk.Event(target, 'on' + type, data, {}, evt);
 	}
 };
 Object.assign(jq.Event, _JQEventStatic);

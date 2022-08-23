@@ -19,9 +19,12 @@ export type SortDirection = 'ascending' | 'descending' | 'natural';
 @zk.WrapClass('zul.mesh.HeaderWidget')
 export abstract class HeaderWidget extends zul.LabelImageWidget<HTMLTableCellElement> {
 	// NOTE: parent can be null, as `getMeshWidget` asserts
-	override parent!: zul.mesh.HeadWidget | undefined;
-	override nextSibling!: zul.mesh.HeaderWidget | undefined;
-	override previousSibling!: zul.mesh.HeaderWidget | undefined;
+	override parent?: zul.mesh.HeadWidget;
+	override nextSibling?: zul.mesh.HeaderWidget;
+	override previousSibling?: zul.mesh.HeaderWidget;
+	declare _colspan?: number;
+	declare _rowspan?: number;
+
 	_sumWidth = true; // FIXME: never used
 	_align?: string;
 	_valign?: string;
@@ -50,7 +53,7 @@ export abstract class HeaderWidget extends zul.LabelImageWidget<HTMLTableCellEle
 		const o = this._align;
 		this._align = align;
 
-		if (o !== align || (opts && opts.force)) {
+		if (o !== align || opts?.force) {
 			this.adjustDOMAlign_('align', align);
 		}
 
@@ -72,7 +75,7 @@ export abstract class HeaderWidget extends zul.LabelImageWidget<HTMLTableCellEle
 		const o = this._valign;
 		this._valign = valign;
 
-		if (o !== valign || (opts && opts.force)) {
+		if (o !== valign || opts?.force) {
 			this.adjustDOMAlign_('valign', valign);
 		}
 
@@ -87,7 +90,7 @@ export abstract class HeaderWidget extends zul.LabelImageWidget<HTMLTableCellEle
 		const o = this._height;
 		this._height = height;
 
-		if (o !== height || (opts && opts.force)) {
+		if (o !== height || opts?.force) {
 			this.updateMesh_();
 		}
 
@@ -169,19 +172,19 @@ export abstract class HeaderWidget extends zul.LabelImageWidget<HTMLTableCellEle
 		}
 	}
 
-	override setFlexSize_(flexSize_: zk.FlexSize, isFlexMin?: boolean): void {
+	override setFlexSize_(flexSize: zk.FlexSize, isFlexMin?: boolean): void {
 		if (this._cssflex && this.parent!.getFlexContainer_() != null && !isFlexMin)
 			return;
-		if ((flexSize_.width !== undefined && flexSize_.width != 'auto' && flexSize_.width != '') || flexSize_.width as unknown == 0) { //JavaScript deems 0 == ''
+		if ((flexSize.width !== undefined && flexSize.width != 'auto' && flexSize.width != '') || flexSize.width as unknown == 0) { //JavaScript deems 0 == ''
 			//remember the value in _hflexWidth and use it when rerender(@see #domStyle_)
 			//for faker column, so don't use revisedWidth().
 			//updated: need to concern inner padding due to wgt.getContentEdgeWidth_()
 			//spec in flex.js
 			var rvw = this._hflex == 'min' && this.firstChild && this.isRealVisible() ? // B50-ZK-394
-					zk(this.$n('cave')).revisedWidth(flexSize_.width as number) : flexSize_.width as number;
+				zk(this.$n('cave')).revisedWidth(flexSize.width as number) : flexSize.width as number;
 			this._hflexWidth = rvw;
 		} else
-			super.setFlexSize_(flexSize_, isFlexMin);
+			super.setFlexSize_(flexSize, isFlexMin);
 	}
 
 	override getContentEdgeHeight_(): number {
@@ -195,10 +198,10 @@ export abstract class HeaderWidget extends zul.LabelImageWidget<HTMLTableCellEle
 	override domStyle_(no?: zk.DomStyleOptions): string {
 		var style = '';
 		if (this._hflexWidth) { //handle hflex
-			style = 'width: ' + this._hflexWidth + 'px;';
+			style = `width: ${this._hflexWidth}px;`;
 
 			if (no) no.width = true;
-			else no = {width: true};
+			else no = { width: true };
 		}
 		if (this._align)
 			style += 'text-align:' + this._align + ';';
@@ -231,7 +234,7 @@ export abstract class HeaderWidget extends zul.LabelImageWidget<HTMLTableCellEle
 			this.updateMesh_('visible', visible);
 			//ZK-3332 update server side component width
 			var mesh = this.getMeshWidget();
-			if (mesh && mesh.desktop && !this._hflexWidth && this.getWidth())
+			if (mesh?.desktop && !this._hflexWidth && this.getWidth())
 				this.parent!.fire('onColSize', {
 					index: zk(this.$n()).cellIndex(),
 					column: this,
@@ -328,7 +331,7 @@ export abstract class HeaderWidget extends zul.LabelImageWidget<HTMLTableCellEle
 
 	_createFaker(n: HTMLElement, postfix: string): HTMLTableColElement {
 		var _getWidth = zul.mesh.MeshWidget._getWidth,
-			wd = _getWidth(this, this._hflexWidth ? this._hflexWidth + 'px' : this.getWidth()),
+			wd = _getWidth(this, this._hflexWidth ? `${this._hflexWidth}px` : this.getWidth()),
 			t = document.createElement('col'),
 			frozen = this.getMeshWidget()!.frozen;
 		wd = wd ? 'width: ' + wd + ';' : '';
@@ -388,18 +391,17 @@ export abstract class HeaderWidget extends zul.LabelImageWidget<HTMLTableCellEle
 		var tg = evt.domTarget,
 			wgt = zk.Widget.$(tg)!,
 			n = this.$n(),
-			ofs = this._dragsz ? zk(n).revisedOffset() : false,
-			ignoreSort = false;
+			ofs = this._dragsz ? zk(n).revisedOffset() : false;
 
 		if (!zk.dragging && (wgt == this || (wgt instanceof zul.wgt.Label))
-				&& this.isSortable_() && !jq.nodeName(tg, 'input')
-				&& (!this._dragsz || !this._insizer(evt.pageX - ofs[0]))
-				&& !ignoreSort) {
+			&& this.isSortable_() && !jq.nodeName(tg, 'input')
+			&& (!this._dragsz || !this._insizer(evt.pageX - ofs[0]))
+		) {
 			this.fire('onSort', 'ascending' != this.getSortDirection()); // B50-ZK-266
 			evt.stop();
 		} else {
 			if (jq.nodeName(tg, 'input'))
-				evt.stop({propagation: true});
+				evt.stop({ propagation: true });
 			super.doClick_(evt, popupOnly);
 		}
 	}
@@ -417,7 +419,7 @@ export abstract class HeaderWidget extends zul.LabelImageWidget<HTMLTableCellEle
 				var sz = mesh._minWd!.wds[cIndex];
 				// NOTE: `{control: this, _zszofs: sz}` has intended behavior but is a poor hack.
 				// TODO: Should refactor `{control: this, _zszofs: sz}` to match `zk.Draggable`.
-				HeaderWidget._aftersizing({control: this, _zszofs: sz} as unknown as zk.Draggable, evt);
+				HeaderWidget._aftersizing({ control: this, _zszofs: sz } as unknown as zk.Draggable, evt);
 			} else
 				super.doDoubleClick_(evt);
 		} else
@@ -479,13 +481,11 @@ export abstract class HeaderWidget extends zul.LabelImageWidget<HTMLTableCellEle
 
 	override clearCachedSize_(): void {
 		super.clearCachedSize_();
-		var mw: zul.mesh.MeshWidget | undefined;
-		if (mw = this.getMeshWidget())
-			mw._clearCachedSize();
+		this.getMeshWidget()?._clearCachedSize();
 	}
 
 	//@Override to get width/height of MeshWidget
-	override getParentSize_(): {height: number; width: number} {
+	override getParentSize_(): { height: number; width: number } {
 		//to be overridden
 		var mw = this.getMeshWidget()!,
 			p = mw.$n(),
@@ -497,7 +497,7 @@ export abstract class HeaderWidget extends zul.LabelImageWidget<HTMLTableCellEle
 			};
 		}
 		// NOTE: originally `{}`
-		return {height: 0, width: 0};
+		return { height: 0, width: 0 };
 	}
 
 	override isWatchable_(name: string, p: zk.Widget, cache?: Record<string, unknown>): boolean {
@@ -513,7 +513,7 @@ export abstract class HeaderWidget extends zul.LabelImageWidget<HTMLTableCellEle
 	}
 
 	override deferRedrawHTML_(out: string[]): void {
-		out.push('<th', this.domAttrs_({domClass: true}), ' class="z-renderdefer"></th>');
+		out.push('<th', this.domAttrs_({ domClass: true }), ' class="z-renderdefer"></th>');
 	}
 
 	override afterClearFlex_(): void {
@@ -667,7 +667,7 @@ export abstract class HeaderWidget extends zul.LabelImageWidget<HTMLTableCellEle
 	static redraw(this: HeaderWidget, out: string[]): void {
 		var uuid = this.uuid,
 			label = this.domContent_();
-		out.push('<th', this.domAttrs_({width: true}), ' role="columnheader"><div id="',
+		out.push('<th', this.domAttrs_({ width: true }), ' role="columnheader"><div id="',
 			uuid, '-cave" class="', this.$s('content'), '"',
 			this.domTextStyleAttr_()!, '><div class="', this.$s('sorticon'),
 			'"><i id="', uuid, '-sort-icon" aria-hidden="true"></i></div>',

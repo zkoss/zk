@@ -41,7 +41,7 @@ export abstract class ColumnMenuWidget extends zul.mesh.HeadWidget {
 		const o = this._columnshide;
 		this._columnshide = columnshide;
 
-		if (o !== columnshide || (opts && opts.force)) {
+		if (o !== columnshide || opts?.force) {
 			if (this.desktop)
 				this._initColMenu();
 		}
@@ -65,7 +65,7 @@ export abstract class ColumnMenuWidget extends zul.mesh.HeadWidget {
 		const o = this._columnsgroup;
 		this._columnsgroup = columnsgroup;
 
-		if (o !== columnsgroup || (opts && opts.force)) {
+		if (o !== columnsgroup || opts?.force) {
 			if (this.desktop)
 				this._initColMenu();
 		}
@@ -111,7 +111,7 @@ export abstract class ColumnMenuWidget extends zul.mesh.HeadWidget {
 		const o = this._menupopup;
 		this._menupopup = menupopup;
 
-		if (o !== menupopup || (opts && opts.force)) {
+		if (o !== menupopup || opts?.force) {
 			if (this._menupopup != 'auto' && this._menupopup != 'auto-keep')
 				this._mpop = undefined;
 			this.rerender();
@@ -122,7 +122,7 @@ export abstract class ColumnMenuWidget extends zul.mesh.HeadWidget {
 
 	override bind_(desktop: zk.Desktop | undefined, skipper: zk.Skipper | undefined, after: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
-		zWatch.listen({onResponse: this});
+		zWatch.listen({ onResponse: this });
 		var w = this;
 		if (this._menupopup == 'auto' || this._menupopup == 'auto-keep') {
 			after.push(function () {
@@ -132,7 +132,7 @@ export abstract class ColumnMenuWidget extends zul.mesh.HeadWidget {
 	}
 
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
-		zWatch.unlisten({onResponse: this});
+		zWatch.unlisten({ onResponse: this });
 		if (this._mpop) {
 			if (this._menupopup != 'auto-keep')
 				this._mpop.parent!.removeChild(this._mpop);
@@ -153,7 +153,7 @@ export abstract class ColumnMenuWidget extends zul.mesh.HeadWidget {
 	_initColMenu(): void {
 		if (this._mpop)
 			this._mpop.parent!.removeChild(this._mpop);
-		this._mpop = new zul.mesh.ColumnMenupopup({columns: this});
+		this._mpop = new zul.mesh.ColumnMenupopup({ columns: this });
 		if (this._menupopup == 'auto-keep')
 			this._mpop._keepOpen = true; //ZK-4059: prevent menupopup closed after menuitem doClick
 	}
@@ -175,7 +175,7 @@ export abstract class ColumnMenuWidget extends zul.mesh.HeadWidget {
 			pp = item.parent!;
 
 		if (this._menupopup != 'auto-keep')
-			pp.close({sendOnOpen: true});
+			pp.close({ sendOnOpen: true });
 		var checked = 0;
 		for (var w = pp.firstChild; w; w = w.nextSibling) {
 			if (w instanceof zul.menu.Menuitem && w.isChecked())
@@ -187,18 +187,16 @@ export abstract class ColumnMenuWidget extends zul.mesh.HeadWidget {
 		var col = zk.Widget.$(item._col);
 		if (col && col.parent == this) {
 			var mesh = this.getMeshWidget();
-			if (mesh && mesh.isSizedByContent())
+			if (mesh?.isSizedByContent())
 				mesh.clearCachedSize_(); //Bug ZK-1315: clear cached size before column show/hide
 			col.setVisible(item.isChecked());
 		}
 	}
 
 	_onGroup(evt: zk.Event): void {
-		var ungroup: zul.menu.Menuitem | undefined;
-		if ((ungroup = (evt.target.parent as zul.mesh.ColumnMenupopup)._ungroup))
-			ungroup.setVisible(true);
+		(evt.target!.parent as zul.mesh.ColumnMenupopup)._ungroup?.setVisible(true);
 		//since 6.5.0 onGroup is not listened anymore, always fire event to server
-		this._mref!.fire('onGroup', 'ascending' != this._mref!.getSortDirection(), {toServer: true});
+		this._mref!.fire('onGroup', 'ascending' != this._mref!.getSortDirection(), { toServer: true });
 	}
 
 	_onUngroup(evt: zk.Event): void {
@@ -218,7 +216,7 @@ export abstract class ColumnMenuWidget extends zul.mesh.HeadWidget {
 		if (mref)
 			jq(mref.$n_()).removeClass(mref.$s('visited')).removeClass(mref.$s('hover'));
 
-		this._mref = (evt.data as {reference: zul.mesh.HeaderWidget}).reference;
+		this._mref = (evt.data as { reference: zul.mesh.HeaderWidget }).reference;
 	}
 
 	override onChildAdded_(child: zul.mesh.HeaderWidget): void {
@@ -269,11 +267,11 @@ export class ColumnMenupopup extends zul.menu.Menupopup {
 
 	/** Constructor
 	 */
-	constructor(opts: {columns: zul.mesh.ColumnMenuWidget}) {
+	constructor(opts: { columns: zul.mesh.ColumnMenuWidget }) {
 		super(opts);
 	}
 
-	override afterCreated_(opts: {columns: zul.mesh.ColumnMenuWidget}): void {
+	override afterCreated_(opts: { columns: zul.mesh.ColumnMenuWidget }): void {
 		super.afterCreated_(opts);
 		this._init();
 	}
@@ -306,37 +304,37 @@ export class ColumnMenupopup extends zul.menu.Menupopup {
 	_init(): void {
 		var w = this._columns!;
 
-		this.listen({onOpen: [w, w._onMenuPopup]});
+		this.listen({ onOpen: [w, w._onMenuPopup] });
 
 		if (zk.feature.pe && w.isColumnsgroup()) {
 			if (!zk.isLoaded(w.getGroupPackage_()))
 				zk.load(w.getGroupPackage_());
 			var group = new zul.menu.Menuitem({
-					label: msgzul.GRID_GROUP, visible: false
-				});
+				label: msgzul.GRID_GROUP, visible: false
+			});
 			group.setSclass(w.$s('menugrouping'));
-			group.listen({onClick: [w, w._onGroup]});
+			group.listen({ onClick: [w, w._onGroup] });
 			this.appendChild(group);
 			this._group = group;
 			if (zk.feature.ee) {
 				var ungroup = new zul.menu.Menuitem({
-						label: msgzul.GRID_UNGROUP, visible: false
-					});
+					label: msgzul.GRID_UNGROUP, visible: false
+				});
 				ungroup.setSclass(w.$s('menuungrouping'));
-				ungroup.listen({onClick: [w, w._onUngroup]});
+				ungroup.listen({ onClick: [w, w._onUngroup] });
 				this.appendChild(ungroup);
 				this._ungroup = ungroup;
 			}
 		}
-		var asc = new zul.menu.Menuitem({label: msgzul.GRID_ASC});
+		var asc = new zul.menu.Menuitem({ label: msgzul.GRID_ASC });
 		asc.setSclass(w.$s('menuascending'));
-		asc.listen({onClick: [w, w._onAsc]});
+		asc.listen({ onClick: [w, w._onAsc] });
 		this._asc = asc;
 		this.appendChild(asc);
 
-		var desc = new zul.menu.Menuitem({label: msgzul.GRID_DESC});
+		var desc = new zul.menu.Menuitem({ label: msgzul.GRID_DESC });
 		desc.setSclass(w.$s('menudescending'));
-		desc.listen({onClick: [w, w._onDesc]});
+		desc.listen({ onClick: [w, w._onDesc] });
 		this._desc = desc;
 		this.appendChild(desc);
 		this.syncColMenu();
@@ -352,7 +350,7 @@ export class ColumnMenupopup extends zul.menu.Menupopup {
 			this.removeChild(c!);
 			c = p;
 		}
-		if (w && w.isColumnshide()) {
+		if (w?.isColumnshide()) {
 			var sep = new zul.menu.Menuseparator();
 			this.appendChild(sep);
 			for (let c = w.firstChild; c; c = c.nextSibling) {
@@ -363,7 +361,7 @@ export class ColumnMenupopup extends zul.menu.Menupopup {
 					checked: c.isVisible()
 				});
 				item._col = c.uuid;
-				item.listen({onClick: [w, w._onColVisi]});
+				item.listen({ onClick: [w, w._onColVisi] });
 				this.appendChild(item);
 			}
 		}

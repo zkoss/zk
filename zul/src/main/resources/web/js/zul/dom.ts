@@ -127,7 +127,7 @@ jq.alert = function (msg, opts) {
 		}
 	});
 };
-zAu.wrongValue_ = function (wgt: zul.inp.InputWidget, msg: string | false): void {
+zAu.wrongValue_ = function (wgt: zk.Widget, msg: string | false): void {
 	var efs = wgt.effects_!;
 	if (efs.errMesg) {
 		efs.errMesg.destroy();
@@ -137,7 +137,7 @@ zAu.wrongValue_ = function (wgt: zul.inp.InputWidget, msg: string | false): void
 		efs.errMesg = {destroy: zk.$void};
 		zk.load('zul.inp', function () {
 			if (efs.errMesg) //not destroyed yet
-				(efs.errMesg = new zul.inp.Errorbox(wgt, msg)).show();
+				(efs.errMesg = new zul.inp.Errorbox(wgt as zul.inp.InputWidget, msg)).show();
 		});
 	}
 };

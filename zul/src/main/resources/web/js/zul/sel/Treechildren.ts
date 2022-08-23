@@ -29,36 +29,34 @@ function _fixOnAdd(oldsib: zul.sel.Treeitem | undefined, child: zul.sel.Treeitem
 function _syncFrozen(wgt: zul.sel.Treechildren): void {
 	var tree = wgt.getTree(),
 		frozen: zul.mesh.Frozen | undefined;
-	if (tree && tree._nativebar && (frozen = tree.frozen))
+	if (tree?._nativebar && (frozen = tree.frozen))
 		frozen._syncFrozen();
 }
 
 @zk.WrapClass('zul.sel.Treechildren')
 export class Treechildren extends zul.Widget {
-	override parent!: zul.sel.Tree | zul.sel.Treeitem | undefined;
-	override firstChild!: zul.sel.Treeitem | undefined;
-	override lastChild!: zul.sel.Treeitem | undefined;
-	override nextSibling!: zul.sel.Treerow | zul.sel.Treechildren | undefined;
-	override previousSibling!: zul.sel.Treerow | zul.sel.Treechildren | undefined;
+	override parent?: zul.sel.Tree | zul.sel.Treeitem;
+	override firstChild?: zul.sel.Treeitem;
+	override lastChild?: zul.sel.Treeitem;
+	override nextSibling?: zul.sel.Treerow | zul.sel.Treechildren;
+	override previousSibling?: zul.sel.Treerow | zul.sel.Treechildren;
 
 	override bind_(desktop: zk.Desktop | undefined, skipper: zk.Skipper | undefined, after: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
-		zWatch.listen({onResponse: this});
-		var w = this;
-		after.push(function () {
-			_syncFrozen(w);
-		});
+		zWatch.listen({ onResponse: this });
+
+		after.push(() => _syncFrozen(this));
 	}
 
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
-		zWatch.unlisten({onResponse: this});
+		zWatch.unlisten({ onResponse: this });
 		super.unbind_(skipper, after, keepRod);
 	}
 
 	onResponse(): void {
 		if (this.desktop) {
 			var tree = this.getTree();
-			if (tree && tree.frozen) {
+			if (tree?.frozen) {
 				tree._shallSyncFrozen = true;
 				tree.onSize();
 			}
@@ -123,7 +121,7 @@ export class Treechildren extends zul.Widget {
 		if (before)
 			before = before.$n() ? before.getFirstNode_() : undefined; //Bug ZK-1424: fine tune performance when open with rod
 		if (!before && !isTopmost)
-			ben = this.getCaveNode() || this.parent!.getCaveNode();
+			ben = this.getCaveNode() ?? this.parent!.getCaveNode();
 
 		if (before)
 			jq(before).before(child.redrawHTML_());
@@ -160,7 +158,7 @@ export class Treechildren extends zul.Widget {
 
 	_isRealVisible(): boolean {
 		const p = this.parent as zul.sel.Treeitem | undefined;
-		return this.isVisible() && !!(this.isTopmost() || (p && p.isOpen() && p._isRealVisible()));
+		return this.isVisible() && !!(this.isTopmost() || (p?.isOpen() && p._isRealVisible()));
 	}
 
 	/** Returns a readonly list of all descending {@link Treeitem}
@@ -171,9 +169,9 @@ export class Treechildren extends zul.Widget {
 	 * @param Array items
 	 * @return Array
 	 */
-	getItems(items?: zul.sel.Treeitem[], opts?: {skipHidden?: boolean}): zul.sel.Treeitem[] {
-		items = items || [];
-		var skiphd = opts && opts.skipHidden;
+	getItems(items?: zul.sel.Treeitem[], opts?: { skipHidden?: boolean }): zul.sel.Treeitem[] {
+		items = items ?? [];
+		var skiphd = opts?.skipHidden;
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			if (!skiphd || w.isVisible()) {
 				items.push(w);
@@ -188,9 +186,9 @@ export class Treechildren extends zul.Widget {
 	 * <p>Note: the performance is no good.
 	 * @return int
 	 */
-	getItemCount(opts?: {skipHidden?: boolean}): number {
+	getItemCount(opts?: { skipHidden?: boolean }): number {
 		var sz = 0,
-			skiphd = opts && opts.skipHidden;
+			skiphd = opts?.skipHidden;
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			if (!skiphd || w.isVisible()) {
 				sz++;
@@ -233,7 +231,7 @@ export class Treechildren extends zul.Widget {
 	}
 
 	// FIXME: make this generic? Note that its super method is generic.
-	override $n(nm?: string): HTMLElement | undefined {
+	override $n<T extends HTMLElement>(nm?: string): T | undefined {
 		if (this.isTopmost())
 			return this.getTree()!.$n('rows');
 
@@ -243,15 +241,14 @@ export class Treechildren extends zul.Widget {
 		// we use parent.$n() instead here to prevent this issue, and from the
 		// other part of the implementation in Treechildren.js seems not to
 		// depend on this.$n() if isTopmost() is returned with false
-		return this.parent!.$n();
+		return this.parent!.$n() as T | undefined;
 	}
 
 	override replaceWidget(newwgt: zul.sel.Treechildren, skipper?: zk.Skipper): void {
 		while (this.firstChild != this.lastChild)
 			this.lastChild!.detach();
 
-		if (this.firstChild && this.firstChild.treechildren)
-			this.firstChild.treechildren.detach();
+		this.firstChild?.treechildren?.detach();
 
 		zul.sel.Treeitem._syncSelItems(this, newwgt);
 
