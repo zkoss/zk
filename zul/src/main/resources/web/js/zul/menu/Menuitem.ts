@@ -13,16 +13,16 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 function _initUpld(wgt: zul.menu.Menuitem): void {
-	zWatch.listen({onShow: wgt});
-	var v: string | undefined;
-	if (v = wgt._upload)
+	zWatch.listen({ onShow: wgt });
+	var v = wgt._upload;
+	if (v)
 		wgt._uplder = new zul.Upload(wgt, wgt._getUploadRef(), v);
 }
 
 function _cleanUpld(wgt: zul.menu.Menuitem): void {
-	var v: zul.Upload | undefined;
-	if (v = wgt._uplder) {
-		zWatch.unlisten({onShow: wgt});
+	var v = wgt._uplder;
+	if (v) {
+		zWatch.unlisten({ onShow: wgt });
 		wgt._uplder = undefined;
 		v.destroy();
 	}
@@ -70,7 +70,7 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 		const o = this._checkmark;
 		this._checkmark = checkmark;
 
-		if (o !== checkmark || (opts && opts.force)) {
+		if (o !== checkmark || opts?.force) {
 			this.rerender();
 		}
 
@@ -96,7 +96,7 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 
 		//B60-ZK-1176
 		// Autodisable should not re-enable when setDisabled(true) is called during onClick
-		if (opts && opts.adbs)
+		if (opts?.adbs)
 			// called from zul.wgt.ADBS.autodisable
 			this._adbs = true;	// Start autodisabling
 		else if (!opts || opts.adbs === undefined)
@@ -104,16 +104,16 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 			this._adbs = false;	// Stop autodisabling
 		if (!value) {
 			if (this._adbs)
-			// autodisable is still active, enable allowed
-			this._adbs = false;
-			else if (opts && opts.adbs === false)
-			// ignore re-enable by autodisable mechanism
-			value = this._disabled;
+				// autodisable is still active, enable allowed
+				this._adbs = false;
+			else if (opts && !opts.adbs)
+				// ignore re-enable by autodisable mechanism
+				value = this._disabled;
 		}
 		this._disabled = value;
 
-		if (o !== value || (opts && opts.force)) {
-			this.rerender(opts && opts.skip ? -1 : 0); //bind and unbind
+		if (o !== value || opts?.force) {
+			this.rerender(opts?.skip ? -1 : 0); //bind and unbind
 		}
 
 		return this;
@@ -135,7 +135,7 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 		const o = this._href;
 		this._href = href;
 
-		if (o !== href || (opts && opts.force)) {
+		if (o !== href || opts?.force) {
 			this.rerender();
 		}
 
@@ -174,7 +174,7 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 		const o = this._checked;
 		this._checked = checked;
 
-		if (o !== checked || (opts && opts.force)) {
+		if (o !== checked || opts?.force) {
 			if (checked)
 				this._checkmark = checked;
 			var n = this.$n();
@@ -225,7 +225,7 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 		const o = this._target;
 		this._target = target;
 
-		if (o !== target || (opts && opts.force)) {
+		if (o !== target || opts?.force) {
 			var anc = this.$n<HTMLAnchorElement>('a');
 			if (anc) {
 				if (this.isTopmost())
@@ -295,15 +295,15 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 	 * or null or "false" to disable the file download (and then
 	 * this button behaves like a normal button).
 	 */
-	setUpload(v: string, opts?: Record<string, boolean>): this {
+	setUpload(upload: string, opts?: Record<string, boolean>): this {
 		const o = this._upload;
-		this._upload = v;
+		this._upload = upload;
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== upload || opts?.force) {
 			var n = this.$n();
 			if (n) {
 				_cleanUpld(this);
-				if (v && v != 'false') _initUpld(this);
+				if (upload && upload != 'false') _initUpld(this);
 			}
 		}
 
@@ -337,7 +337,7 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 			var added = this.isDisabled() ? this.$s('disabled') : '';
 			if (added) scls += (scls ? ' ' : '') + added;
 			added = (!this.getImage() && this.isCheckmark()) ?
-						this.$s('checkable') + (this.isChecked() ? ' ' + this.$s('checked') : '') : '';
+				this.$s('checkable') + (this.isChecked() ? ' ' + this.$s('checked') : '') : '';
 			if (added) scls += (scls ? ' ' : '') + added;
 		}
 		return scls;
@@ -345,7 +345,7 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 
 	override domContent_(): string {
 		var label = '<span class="' + this.$s('text') + '">'
-					+ (zUtl.encodeXML(this.getLabel())) + '</span>',
+			+ (zUtl.encodeXML(this.getLabel())) + '</span>',
 			icon = '<i class="' + this.$s('icon') + ' z-icon-check" aria-hidden="true"></i>',
 			img = this.getImage(),
 			iconSclass = this.domIcon_();
@@ -411,7 +411,7 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 		super.unbind_(skipper, after, keepRod);
 	}
 
-	override doClick_(evt: zk.Event): void {
+	override doClick_(evt: zk.Event, popupOnly?: boolean /* For inheritance */): void {
 		if (this._disabled)
 			evt.stop();
 		else {
@@ -439,7 +439,7 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 				evt.stop();
 			} else {
 				if (zk.gecko && topmost && this.$n_().id != anc.id) {
-					zUtl.go(anc.href, {target: anc.target});
+					zUtl.go(anc.href, { target: anc.target });
 					evt.stop();
 					// Bug #2154611 we shall eat the onclick event, if it is FF3.
 				}
@@ -453,7 +453,7 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 							break;
 						this._updateHoverImage(); // remove hover image
 						ref = p._fakeParent;
-						p.close({sendOnOpen: true});
+						p.close({ sendOnOpen: true });
 					} else if (!(p instanceof zul.menu.Menu)) //either menubar or non-menu*
 						break;
 					else
@@ -480,7 +480,7 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 			var menubar: zul.menu.Menubar | undefined;
 			if (zk.webkit && (menubar = this.getMenubar()) && menubar._autodrop)
 				menubar._noFloatUp = true;
-				//_noFloatUp used in Menu.js to fix Bug 1852304
+			//_noFloatUp used in Menu.js to fix Bug 1852304
 			super.doClick_(evt, true);
 		}
 	}
@@ -498,7 +498,7 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 
 	_canActivate(evt: zk.Event): boolean {
 		return !this.isDisabled() && (!this.isTopmost() || !!this._uplder
-				|| jq.isAncestor(this.$n('a'), evt.domTarget));
+			|| jq.isAncestor(this.$n('a'), evt.domTarget));
 	}
 
 	_getUploadRef(): HTMLAnchorElement | undefined {
@@ -525,7 +525,7 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 
 	override deferRedrawHTML_(out: string[]): void {
 		var tag = this.isTopmost() ? 'td' : 'li';
-		out.push('<', tag, this.domAttrs_({domClass: true}), ' class="z-renderdefer"></', tag, '>');
+		out.push('<', tag, this.domAttrs_({ domClass: true }), ' class="z-renderdefer"></', tag, '>');
 	}
 
 	//@Override

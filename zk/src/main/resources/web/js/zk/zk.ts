@@ -1,4 +1,3 @@
-/* global Reflect: readonly */
 /* zk.ts
 
 	Purpose:
@@ -19,8 +18,6 @@ declare global {
 	}
 }
 export type DataHandler = (wgt: zk.Widget, val: unknown) => void;
-
-let _zkf;
 
 function _zk(sel?: string | Node | JQuery | JQuery.Event | zk.Event | zk.Widget | null): zjq { // eslint-disable-line zk/noNull
 	return jq(sel, _zk).zk;
@@ -885,7 +882,7 @@ open: function () {
  * @see #override(Function, Function)
  * @see #override(Object, String, Object)
  */
-function override<T, U>(dst: T, backup: Record<string, unknown>, src: U & ThisType<T & U>): T & U;
+function override<T, U>(dst: T, backup: Record<string, unknown>, src: U & Partial<T> & ThisType<T & U>): T & U;
 /** Overrides a particular method.
  * The old method will be returned, and the caller could store it for
  * calling back. For example,
@@ -941,6 +938,42 @@ function override<T extends () => void, U> (dst: T, backup: Record<string, unkno
 	return dst;
 }
 _zk.override = override;
+
+/** Replaces existing properties and add new properties.
+ * It is similar to {@link #override}, except
+ * <ol>
+ * <li>It preserves the overwritten members (methods or data) in the return
+ * value.</li>
+ * <li>It handles the class extensions ({@link #$extends}) well.
+ * For example, the members of all deriving classes will be overriden too,
+ * if necessary.</li>
+ * <li>Overlapping properties must have identical types.</li>
+ * </ol>
+ * <p>Example,
+<pre><code>
+var _xCombobox = zk.augment(zul.inp.Combobox.prototype, {
+redrawpp_: function (out) {
+	if (!_redrawpp(this, out))
+		_xCombobox.redrawpp_.apply(this, arguments); //call the original method
+},
+open: function () {
+	_renderpp(this);
+	_xCombobox.open.apply(this, arguments); //call the original method
+}
+});
+</code></pre>
+ * @param Object dst the destination object to override
+ * @param Object src the source map providing the new members
+ * @return Object the backup object
+ */
+_zk.augment = function<D extends Pick<S, keyof D & keyof S>, S> (dst: D, src: S & Pick<D, keyof D & keyof S> & ThisType<D & S>) {
+	const backup = {} as Pick<D, keyof D & keyof S>;
+	for (const nm in src) {
+		backup[nm] = dst[nm as keyof D];
+		dst[nm] = src[nm as keyof S];
+	}
+	return backup;
+};
 
 /** Defines the setter and getter methods.
  * <p>Notice that you rarely need to invoke this method directly. Rather, you can specify them in a property named $define, when calling #$extends.
@@ -1231,7 +1264,7 @@ _zk._noESC = 0; //# of disableESC being called (also used by mount.js)
 	*/
 _zk.error = function (msg: string, silent?: boolean): void {
 	if (!silent) {
-		zAu.send(new zk.Event(zk.Desktop._dt!, 'error', {message: msg}, {ignorable: true}), 800);
+		zAu.send(new zk.Event(zk.Desktop._dt, 'error', {message: msg}, {ignorable: true}), 800);
 	}
 	_zk._Erbx.push(msg);
 };
@@ -1579,22 +1612,22 @@ _zk.safari = browser.webkit && !_zk.chrome; // safari only
 _zk.edge_legacy = _zk.webkit && _zk.chrome && ((iosver = agent.indexOf('edge')) >= 0 && _ver(agent.substring(iosver + 5)));
 _zk.edge = _zk.webkit && _zk.chrome && ((iosver = agent.indexOf('edg/')) >= 0 && agent.substring(iosver + 4));
 
-_zk.ios = ((_zk.webkit && /iphone|ipad|ipod/.test(agent) && (
+_zk.ios = (_zk.webkit && /iphone|ipad|ipod/.test(agent) && (
 	//ZK-2245: add version info to zk.ios
 	(iosver = agent.match(/version\/\d/)) && iosver[0].replace('version/', '')
 	|| // ZK-2888, in iphone with chrome, it may not have version attribute.
 	(iosver = agent.match(/ os \d/)) && iosver[0].replace(' os ', '')))
 	|| // ZK-4451: iOS 13 safari ipad pretend itself as MacOS
-	(_zk.safari && isTouchableMacIntel)) as string | boolean;
+	(_zk.safari && isTouchableMacIntel);
 _zk.mac = !_zk.ios && agent.indexOf('mac') >= 0;
 
-_zk.ipad = ((_zk.webkit && /ipad/.test(agent) && (
+_zk.ipad = (_zk.webkit && /ipad/.test(agent) && (
 	//ZK-2245: add version info to zk.ios
 	(iosver = agent.match(/version\/\d/)) && iosver[0].replace('version/', '')
 	|| // ZK-2888, in iphone with chrome, it may not have version attribute.
 	(iosver = agent.match(/ os \d/)) && iosver[0].replace(' os ', '')))
 	|| // ZK-4451: iOS 13 safari ipad pretend itself as MacOS
-	(_zk.safari && isTouchableMacIntel)) as string | boolean;
+	(_zk.safari && isTouchableMacIntel);
 
 _zk.android = agent.indexOf('android') >= 0;
 _zk.mobile = _zk.ios || _zk.android;
@@ -1681,27 +1714,42 @@ zk.Buffer = Array;
 			super();
 			this.out = '';
 		}
-		override push(...items: string[]): number {
-			for (var i = 0, j = arguments.length; i < j; i++)
-			if (arguments[i] != null || arguments[i] != undefined)
-			this.out += arguments[i];
+		override push(...items: (string | null | undefined)[]): number {
+			for (const item of items) {
+				if (item != null) {
+					this.out += item;
+				}
+			}
 			return this.length;
 		}
-		override join(str): string {
-			if (str)
+		override join(separator?: string): string {
+			if (separator)
 				throw 'Wrong usage here! Please run the script `zk.Buffer = Array;` instead.';
 			return this.out;
 		}
-		override shift = _zkf = function () {throw 'Wrong usage here! Please run the script `zk.Buffer = Array;` instead.';};
-		override unshift = _zkf as never;
-		override pop = _zkf as never;
-		override slice = _zkf as never;
-		override sort = _zkf as never;
+		override shift(): string | undefined {
+			throw 'Wrong usage here! Please run the script `zk.Buffer = Array;` instead.';
+		}
+		override unshift(...items: string[]): number {
+			throw 'Wrong usage here! Please run the script `zk.Buffer = Array;` instead.';
+		}
+		override pop(): string | undefined {
+			throw 'Wrong usage here! Please run the script `zk.Buffer = Array;` instead.';
+		}
+		override slice(start?: number | undefined, end?: number | undefined): string[] {
+			throw 'Wrong usage here! Please run the script `zk.Buffer = Array;` instead.';
+		}
+		override sort(compareFn?: ((a: string, b: string) => number) | undefined): this {
+			throw 'Wrong usage here! Please run the script `zk.Buffer = Array;` instead.';
+		}
 	}
 	_zk.Buffer = Buffer;
 } else {
 	_zk.Buffer = Array<string>;
 }
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type PickFunction<T, K extends keyof T> = T[K] extends ((...args: any) => any) ? T[K] : never;
 
 /** @class zk.Object
  * The root of the class hierarchy.
@@ -1798,8 +1846,8 @@ if (obj.$instanceof(zul.wgt.Label, zul.wgt.Image)) {
 	 * @return boolean true if this object is an instance of the class
 	 */
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	$instanceof<Ts extends any[]>(...klass: Ts): boolean {
-		for (let k of klass) {
+	$instanceof(...klass: any[]): boolean {
+		for (const k of klass) {
 			if (this instanceof k) {
 				return true;
 			}
@@ -1818,7 +1866,7 @@ multiply: function (n) {
 	 * @return Object the object being returned by the method of the superclass.
 	 * @see #$supers
 	 */
-	$super(mtd: string, ...args: unknown[]): unknown;
+	$super<M extends keyof this & string, F extends PickFunction<this, M>>(mtd: M, ...args: Parameters<F>): ReturnType<F>
 	/** Invokes a method defined in the superclass with any number of arguments.
 	 * It is like Function's call() that takes any number of arguments.
 	 * <p>It is similar to {@link #$super(String, Object...)}, but
@@ -1841,12 +1889,13 @@ foo.MyClass = zk.$extends(foo.MySuper, {
 	 * @see #$supers
 	 * @since 5.0.2
 	 */
-	$super(klass: typeof ZKObject, mtd: string, ...args: unknown[]): unknown;
-	$super(klass: typeof ZKObject | string, mtd: string, ...args: unknown[]): unknown {
-		if (typeof klass != 'string') {
-			return this.$supers(klass, mtd, args);
+	$super<M extends keyof this & string, F extends PickFunction<this, M>>(klass: typeof ZKObject, mtd: M, ...args: Parameters<F>): ReturnType<F>
+	$super<M extends keyof this & string>(a: typeof ZKObject | M, b?: unknown, ...c: unknown[]): unknown {
+		type Params = Parameters<PickFunction<this, M>>;
+		if (typeof a == 'string') {
+			return this.$supers(a, [b, ...c] as Params) as unknown;
 		}
-		return this.$supers(klass, [mtd, ...args]);
+		return this.$supers(a, b as M, c as Params) as unknown;
 	}
 	/** Invokes a method defined in the superclass with an array of arguments. It is like Function's apply() that takes an array of arguments.
 	 * <p>Example:
@@ -1861,6 +1910,7 @@ multiply: function () {
 	 * @return Object the object being returned by the method of the superclass.
 	 * @see #$super
 	 */
+	$supers<M extends keyof this & string, F extends PickFunction<this, M>>(nm: M, args: Parameters<F>): ReturnType<F>
 	/** Invokes a method defined in the superclass with an array of arguments. It is like Function's apply() that takes an array of arguments.
 	 * <p>It is similar to {@link #$supers(String, Array)}, but
 	 * this method works even if the superclass calls back the same member method.
@@ -1883,25 +1933,31 @@ foo.MyClass = zk.$extends(foo.MySuper, {
 	 * @see #$super
 	 * @since 5.0.2
 	 */
+	$supers<M extends keyof this & string, F extends PickFunction<this, M>>(klass: typeof ZKObject, nm: M, args: Parameters<F>): ReturnType<F>
 	$supers(nm: typeof ZKObject | string, args: string | unknown[], argx?: unknown[]): unknown {
 		var supers = this._$supers;
 		if (!supers) supers = this._$supers = {};
 
 		if (typeof nm != 'string') { //zk.Class assumed
-			let method: CallableFunction, old = supers[args as string], p: object; //args is method's name
+			let method: Function, // eslint-disable-line @typescript-eslint/ban-types
+				old = supers[args as string], //args is method's name
+				p: object; //args is method's name
 			if (!(p = nm.prototype._$super as never || Object.getPrototypeOf(nm.prototype)) || !(method = p[args as string] as never)) //nm is zk.Class
 				throw args + ' not in superclass'; //args is the method name
 
 			supers[args as string] = p;
 			try {
-				return method.bind(this)(...argx as unknown as []);
+				return method.apply(this, argx) as unknown;
 			} finally {
 				supers[args as string] = old; //restore
 			}
 		}
 
 		//locate method
-		var old = supers[nm], m: undefined | CallableFunction, p: object & { _$super?: object }, oldmtd: CallableFunction;
+		var old = supers[nm],
+			m: undefined | Function, // eslint-disable-line @typescript-eslint/ban-types
+			p: object & { _$super?: object },
+			oldmtd: CallableFunction;
 		if (old) {
 			oldmtd = (old as object)[nm] as never;
 			p = old as never;
@@ -1926,7 +1982,7 @@ foo.MyClass = zk.$extends(foo.MySuper, {
 			throw nm + ' not in superclass';
 
 		try {
-			return m.bind(this)(...args as unknown as []);
+			return m.apply(this, args) as unknown;
 		} finally {
 			supers[nm] = old; //restore
 		}
@@ -2030,7 +2086,7 @@ _zk._Erbx = class _Erbx extends ZKObject { //used in HTML tags
 				starteffect: _zk.$void,
 				endeffect: _zk.$void});
 		} catch (e) {
-			_zk.debugLog((e as Error).message ?? e);
+			_zk.debugLog((e as Error).message || e as string);
 		}
 		jq($id).slideDown(1000);
 	}
@@ -2042,9 +2098,9 @@ _zk._Erbx = class _Erbx extends ZKObject { //used in HTML tags
 	}
 	static redraw(): void {
 		_zk.errorDismiss();
-		zAu.send(new zk.Event(zk.Desktop._dt!, 'redraw'));
+		zAu.send(new zk.Event(zk.Desktop._dt, 'redraw'));
 	}
-	static push(msg: string): _Erbx | void {
+	static push(msg: string): _Erbx | undefined {
 		if (!_erbx)
 			return new _zk._Erbx(msg);
 

@@ -33,8 +33,17 @@
       "webpack-env"
     ],
     "paths": {
+      "@zk/*": [
+        "./zk/src/main/resources/web/js/zk/*"
+      ],
       "@zul/*": [
         "./zul/src/main/resources/web/js/zul/*"
+      ],
+      "@zkex/*": [
+        "../zkcml/zkex/src/main/resources/web/js/zkex/*"
+      ],
+      "@zkmax/*": [
+        "../zkcml/zkmax/src/main/resources/web/js/zkmax/*"
       ]
     }
   },

@@ -19,7 +19,7 @@ function _setCloseTimer(wgt: zul.wgt.Combobutton): void {
 		wgt._tidclose = setTimeout(function () {
 			if (!wgt._bover) {
 				if (wgt._autodrop && wgt.isOpen())
-					wgt.close({sendOnOpen: true});
+					wgt.close({ sendOnOpen: true });
 			}
 			wgt._tidclose = undefined;
 		}, 200);
@@ -28,7 +28,7 @@ function _setCloseTimer(wgt: zul.wgt.Combobutton): void {
 function _fireOnOpen(wgt: zul.wgt.Combobutton, opts: zul.wgt.PopupOptions, o: boolean): void {
 	jq(wgt.$n_()).toggleClass(wgt.$s('open'), o);
 	if (opts && opts.sendOnOpen)
-		wgt.fire('onOpen', {open: o, value: wgt.getLabel()}, {rtags: {onOpen: 1}});
+		wgt.fire('onOpen', { open: o, value: wgt.getLabel() }, { rtags: { onOpen: 1 } });
 }
 // called by open method
 function _attachPopup(wgt: zul.wgt.Combobutton, bListen: boolean): void {
@@ -243,7 +243,7 @@ export class Combobutton extends zul.wgt.Button {
 			var open = !this.isOpen();
 			if (this == evt.target) {
 				if (this.$n('btn') == d || this.$n('icon') == d || !open)
-					this.setOpen(open, {sendOnOpen: true});
+					this.setOpen(open, { sendOnOpen: true });
 				else
 					super.doClick_(evt);
 			}
@@ -262,7 +262,7 @@ export class Combobutton extends zul.wgt.Button {
 			var d = evt.domTarget;
 			// not change style and call open method if mouse over popup node
 			if (this._autodrop && (this.$n('btn') == d || this.$n('icon') == d) && !this.isOpen())
-				this.open({sendOnOpen: true});
+				this.open({ sendOnOpen: true });
 			super.doMouseOver_(evt);
 		}
 	}
@@ -297,7 +297,7 @@ export class Combobutton extends zul.wgt.Button {
 		var keyCode = evt.keyCode,
 			bOpen = this.isOpen();
 		if (keyCode == 40 && !bOpen)
-			this.open({sendOnOpen: true});
+			this.open({ sendOnOpen: true });
 		else if (keyCode == 13 || keyCode == 32) {
 			this.fire('onClick');
 		} else if (keyCode == 27 && bOpen)
@@ -330,10 +330,10 @@ export class Combobutton extends zul.wgt.Button {
 	// B60-ZK-1216
 	// Combobutton has problems with label-change if its popup did not close beforehand
 	// Override rerender should also work for the case of image-change
-	override rerender(skipper?: zk.Skipper | number): void {
+	override rerender(skipper?: zk.Skipper | number): this {
 		if (this.isOpen()) {
 			this.close();
 		}
-		super.rerender(skipper);
+		return super.rerender(skipper);
 	}
 }

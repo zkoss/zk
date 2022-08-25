@@ -315,7 +315,7 @@ export class Upload extends zk.Object {
 		var wgt = zk.Widget.$(uuid);
 		if (!wgt || !wgt._uplder) return;
 		wgt._uplder.finish(sid);
-		zAu.send(new zk.Event(wgt.desktop!, 'updateResult', {
+		zAu.send(new zk.Event(wgt.desktop, 'updateResult', {
 			contentId: contentId,
 			wid: wgt.uuid,
 			sid: sid
