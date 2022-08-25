@@ -92,7 +92,7 @@ export class Combobox extends zul.inp.ComboWidget {
 		const o = this._emptySearchMessage;
 		this._emptySearchMessage = emptySearchMessage;
 
-		if (o !== emptySearchMessage || (opts && opts.force)) {
+		if (o !== emptySearchMessage || opts?.force) {
 			var msg = this.$n('empty-search-message');
 			if (emptySearchMessage && msg && emptySearchMessage != jq(msg).text()) {
 				jq(msg).text(emptySearchMessage);
@@ -129,7 +129,10 @@ export class Combobox extends zul.inp.ComboWidget {
 	override onResponse(ctl: zk.ZWatchController, opts: zul.inp.ResponseOptions): void {
 		// Bug ZK-2960: need to wait until the animation is finished before calling super
 		if (this.isOpen() && jq(this.getPopupNode_()).is(':animated')) {
-			setTimeout(() => {if (this.desktop) this.onResponse(ctl, opts);}, 50);
+			setTimeout(() => {
+				if (this.desktop)
+					this.onResponse(ctl, opts);
+			}, 50);
 			return;
 		}
 		super.onResponse(ctl, opts);
@@ -153,30 +156,30 @@ export class Combobox extends zul.inp.ComboWidget {
 	/**
 	*  For internal use only
 	*/
-	setSelectedItemUuid_(selectedItemUuid_: string): void {
+	setSelectedItemUuid_(selectedItemUuid: string): void {
 		if (this.desktop) {
-			if (!this._sel || selectedItemUuid_ != this._sel.uuid) {
+			if (!this._sel || selectedItemUuid != this._sel.uuid) {
 				var oldSel = this._sel,
 					sel: zul.inp.Comboitem | undefined;
 				this._sel = this._lastsel = undefined;
-				var w = zk.$<zul.inp.Comboitem>(selectedItemUuid_);
+				var w = zk.$<zul.inp.Comboitem>(selectedItemUuid);
 				if (w)
 					sel = w;
 				this._hiliteOpt(oldSel, this._sel = sel);
 				this._lastsel = sel;
 			}
 		} else
-			this._initSelUuid = selectedItemUuid_;
+			this._initSelUuid = selectedItemUuid;
 	}
 
 	// since 10.0.0 for Zephyr to use
-	setSelectedIndex_(selectedIndex_: number): void {
-		if (selectedIndex_ >= 0) {
+	setSelectedIndex_(selectedIndex: number): void {
+		if (selectedIndex >= 0) {
 			if (this.desktop) {
-				const selectedItem = this.getChildAt(selectedIndex_);
+				const selectedItem = this.getChildAt(selectedIndex);
 				this.setSelectedItemUuid_(selectedItem!.uuid);
 			} else {
-				this._initSelIndex = selectedIndex_;
+				this._initSelIndex = selectedIndex;
 			}
 		}
 	}
@@ -251,7 +254,7 @@ export class Combobox extends zul.inp.ComboWidget {
 
 			for (var item: zul.inp.Comboitem | undefined = excluding ? sel.nextSibling ? sel.nextSibling : fchild : sel; ;) {
 				if ((!strict || !item.isDisabled()) && item.isVisible()
-				&& (startswith ? item.getLabel().toLowerCase().startsWith(val) : val == item.getLabel().toLowerCase()))
+					&& (startswith ? item.getLabel().toLowerCase().startsWith(val) : val == item.getLabel().toLowerCase()))
 					return item;
 				if (!(item = item.nextSibling)) item = fchild;
 				if (item == sel) break;
@@ -261,8 +264,12 @@ export class Combobox extends zul.inp.ComboWidget {
 
 	_hilite(opts?: Record<string, boolean>): void {
 		this._hilite2(
-			this._findItem(this.valueEnter_ = this.getInputNode()!.value,
-				this._isStrict() || (opts && opts.strict)), opts);
+			this._findItem(
+				this.valueEnter_ = this.getInputNode()!.value,
+				this._isStrict() || opts?.strict
+			),
+			opts
+		);
 	}
 
 	_hilite2(sel?: zul.inp.Comboitem, opts?: Record<string, unknown>): void {
@@ -295,7 +302,7 @@ export class Combobox extends zul.inp.ComboWidget {
 			if (opts.sendOnChange)
 				super.updateChange_();
 
-			this.fire('onSelect', {items: sel ? [sel] : [], reference: sel, prevSeld: oldsel});
+			this.fire('onSelect', { items: sel ? [sel] : [], reference: sel, prevSeld: oldsel });
 			this._lastsel = sel;
 			//spec change (diff from zk 3): onSelect fired after onChange
 			//purpose: onSelect can retrieve the value correctly
@@ -316,12 +323,12 @@ export class Combobox extends zul.inp.ComboWidget {
 	}
 
 	_isStrict(): boolean {
-		var strict = this.getConstraint() as zul.inp.SimpleConstraint;
-		return !!(strict && strict._flags && strict._flags.STRICT);
+		var strict = this.getConstraint() as Partial<zul.inp.SimpleConstraint> | undefined;
+		return !!strict?._flags?.STRICT;
 	}
 
 	//super
-	override open(opts: Record<string, unknown>): void {
+	override open(opts?: zul.inp.OpenOptions): void {
 		super.open(opts);
 		this._hilite(); //after _open is set
 	}
@@ -389,7 +396,7 @@ export class Combobox extends zul.inp.ComboWidget {
 
 		//B70-ZK-2548: fire onChange event to notify server the current value
 		var highlightOnly = !this._instantSelect && this._open;
-		this._select(sel, highlightOnly ? {} : {sendOnSelect: true, sendOnChange: true});
+		this._select(sel, highlightOnly ? {} : { sendOnSelect: true, sendOnChange: true });
 		evt.stop();
 	}
 
@@ -404,7 +411,7 @@ export class Combobox extends zul.inp.ComboWidget {
 		if (item)
 			item = getVisibleItemOnly(item, bUp);
 		return item ? item : getVisibleItemOnly(
-				(bUp ? this.firstChild! : this.lastChild!), !bUp, true);
+			(bUp ? this.firstChild! : this.lastChild!), !bUp, true);
 	}
 
 	_select(sel: zul.inp.Comboitem | undefined, opts: Record<string, unknown>): void {
@@ -430,26 +437,26 @@ export class Combobox extends zul.inp.ComboWidget {
 		this._bDel = keyCode == 8 /*BS*/ || keyCode == 46; /*DEL*/
 		if (this._readonly)
 			switch (keyCode) {
-			case 35://End
-			case 36://Home
-				this._hilite2();
-				this.getInputNode()!.value = '';
+				case 35://End
+				case 36://Home
+					this._hilite2();
+					this.getInputNode()!.value = '';
 				//fall through
-			case 37://Left
-			case 39://Right
-				this._updnSel(evt, keyCode == 37 || keyCode == 35);
-				break;
-			case 8://Backspace
-				evt.stop();
-				break;
-			default:
-				//B70-ZK-2590: dealing with numpad keyDown, only 0~9
-				if (keyCode >= 96 && keyCode <= 105)
-					keyCode -= 48;
-				var v = String.fromCharCode(keyCode);
-				var sel = this._findItem0(v, true, true, !!this._sel);
-				if (sel)
-					this._select(sel, {sendOnSelect: true});
+				case 37://Left
+				case 39://Right
+					this._updnSel(evt, keyCode == 37 || keyCode == 35);
+					break;
+				case 8://Backspace
+					evt.stop();
+					break;
+				default:
+					//B70-ZK-2590: dealing with numpad keyDown, only 0~9
+					if (keyCode >= 96 && keyCode <= 105)
+						keyCode -= 48;
+					var v = String.fromCharCode(keyCode);
+					var sel = this._findItem0(v, true, true, !!this._sel);
+					if (sel)
+						this._select(sel, { sendOnSelect: true });
 			}
 	}
 
@@ -483,13 +490,13 @@ export class Combobox extends zul.inp.ComboWidget {
 			fchild = this.firstChild;
 		this.valueEnter_ = val;
 		if (!val || !fchild
-		|| ofs[0] != val.length || ofs[0] != ofs[1]) //not at end
-			return this._hilite({strict: true});
+			|| ofs[0] != val.length || ofs[0] != ofs[1]) //not at end
+			return this._hilite({ strict: true });
 
 		var sel = this._findItem(val, true);
 		if (sel || bDel || !this._autocomplete) {
 			// ZK-2024: the value should have same case with selected label if autocomplete is enabled
-			if (sel && sel.getLabel().toLowerCase().startsWith(val.toLowerCase()) && this._autocomplete)
+			if (sel?.getLabel().toLowerCase().startsWith(val.toLowerCase()) && this._autocomplete)
 				inp.value = sel.getLabel();
 			return this._hilite2(sel);
 		}
@@ -501,7 +508,7 @@ export class Combobox extends zul.inp.ComboWidget {
 
 		for (var item: zul.inp.Comboitem | undefined = sel; ;) {
 			if (!item.isDisabled() && item.isVisible()
-			&& item.getLabel().toLowerCase().startsWith(val)) {
+				&& item.getLabel().toLowerCase().startsWith(val)) {
 				inp.value = item.getLabel();
 				zk(inp).setSelectionRange(val.length, inp.value.length);
 				this._hilite2(item);
@@ -519,7 +526,7 @@ export class Combobox extends zul.inp.ComboWidget {
 	override updateChange_(): boolean {
 		var chng = this._value != this.getInputNode()!.value as unknown; // B50-ZK-297
 		if (chng) {
-			this._hilite({sendOnSelect: true, sendOnChange: true, noSelectRange: true});
+			this._hilite({ sendOnSelect: true, sendOnChange: true, noSelectRange: true });
 			return true;
 		}
 		this.valueEnter_ = undefined;
@@ -530,7 +537,7 @@ export class Combobox extends zul.inp.ComboWidget {
 		super.bind_(desktop, skipper, after);
 		// Bug ZK-403
 		if (this.isListen('onOpen'))
-			this.listen({onChanging: zk.$void}, -1000);
+			this.listen({ onChanging: zk.$void }, -1000);
 		// Bug ZK-1256, ZK-1276: set initial selected item
 		if (this._initSelUuid) {
 			this.setSelectedItemUuid_(this._initSelUuid);
@@ -552,7 +559,7 @@ export class Combobox extends zul.inp.ComboWidget {
 			.domUnlisten_(input, 'onCompositionstart', '_doCompositionstart');
 		// Bug ZK-403
 		if (this.isListen('onOpen'))
-			this.unlisten({onChanging: zk.$void});
+			this.unlisten({ onChanging: zk.$void });
 		super.unbind_(skipper, after, keepRod);
 	}
 
@@ -571,14 +578,14 @@ export class Combobox extends zul.inp.ComboWidget {
 		var uuid = this.uuid,
 			msg = this._emptySearchMessage;
 		out.push('<div id="', uuid, '-pp" class="', this.$s('popup'),
-		// tabindex=0 to prevent a11y scrollable popup issue, see https://dequeuniversity.com/rules/axe/3.5/scrollable-region-focusable?application=AxeChrome
-		' ', this.getSclass()!, '" style="display:none" tabindex="0">');
+			// tabindex=0 to prevent a11y scrollable popup issue, see https://dequeuniversity.com/rules/axe/3.5/scrollable-region-focusable?application=AxeChrome
+			' ', this.getSclass()!, '" style="display:none" tabindex="0">');
 
 		// F85-ZK-3827: Combobox empty search message
 		if (msg) {
 			out.push('<div id="', uuid, '-empty-search-message" class="',
-			this.$s('empty-search-message'), ' ', this.$s('empty-search-message-hidden'),
-			'">', msg, '</div>');
+				this.$s('empty-search-message'), ' ', this.$s('empty-search-message-hidden'),
+				'">', msg, '</div>');
 		}
 
 		out.push('<ul id="', uuid, '-cave" class="', this.$s('content'), '" >');

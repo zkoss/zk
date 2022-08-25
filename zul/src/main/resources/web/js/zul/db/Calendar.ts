@@ -60,8 +60,8 @@ export let Renderer = {
 	 * @return String the HTML fragment
 	 * @since 5.0.3
 	 */
-	cellHTML(cal: zul.db.Calendar, y: number, m: number, day: number, monthofs: number): number {
-		return day;
+	cellHTML(cal: zul.db.Calendar, y: number, m: number, day: number, monthofs: number): string {
+		return String(day);
 	},
 	/**
 	 * Returns the label of a date cell.
@@ -128,7 +128,7 @@ export let Renderer = {
 	 * @since 6.5.0
 	 */
 	labelOfWeekOfYear(wgt: zul.db.Calendar, val: number): string {
-		return val as unknown as string;
+		return String(val);
 	},
 	/**
 	 * Generates the title of the week of year.
@@ -873,7 +873,7 @@ export class Calendar extends zul.Widget {
 		this.efield = undefined;
 	}
 
-	override rerender(skipper?: zk.Skipper | number): void {
+	override rerender(skipper?: zk.Skipper | number): this {
 		if (this.desktop) {
 			var s = this.$n()!.style,
 				w = s.width,
@@ -884,6 +884,7 @@ export class Calendar extends zul.Widget {
 			s.height = h;
 			return result;
 		}
+		return this;
 	}
 
 	_clickArrow(evt: zk.Event): void {

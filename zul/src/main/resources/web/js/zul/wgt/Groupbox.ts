@@ -185,7 +185,7 @@ export class Groupbox extends zul.ContainerWidget {
 		return html;
 	}
 
-	_redrawCave(out: string[], skipper?: boolean): void { //reserve for customizing
+	_redrawCave(out: string[], skipper?: zk.Skipper): void { //reserve for customizing
 		out.push('<div id="', this.uuid, '-cave"', this._contentAttrs(), '>');
 
 		if (!skipper)

@@ -28,11 +28,11 @@ export interface PopupParams {
 
 //Tooltip
 var _tt_inf: {
-		tip: zul.wgt.Popup;
-		ref: zul.Widget;
-		params: PopupParams;
-		timer: number;
-	} | undefined,
+	tip: zul.wgt.Popup;
+	ref: zul.Widget;
+	params: PopupParams;
+	timer: number;
+} | undefined,
 	_tt_tmClosing: number | undefined,
 	_tt_tip: zul.wgt.Popup | undefined,
 	_tt_ref: zul.Widget | undefined;
@@ -83,7 +83,7 @@ function _tt_open_(event: zk.Event): undefined | void {
 	var inf = _tt_inf;
 	if (inf) {
 		_tt_tip = inf.tip,
-		_tt_ref = inf.ref;
+			_tt_ref = inf.ref;
 		_tt_inf = undefined;
 
 		var n = _tt_ref.$n();
@@ -468,96 +468,107 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Widge
 	 * @param String keys
 	 * @return zul.Widget
 	 */
-	setCtrlKeys(keys: string): this | void {
-		if (this._ctrlKeys == keys) return;
-		if (!keys) {
+	setCtrlKeys(ctrlKeys: string): this {
+		if (this._ctrlKeys == ctrlKeys) return this;
+		if (!ctrlKeys) {
 			this._ctrlKeys = this._parsedCtlKeys = undefined;
-			return;
+			return this;
 		}
 		//ext(#), ctrl(001), alt(010), ctrl + alt(011), shift(100), ctrl + shift(101), alt + shift(110), ctrl + alt + shift(111)
 		var parsed: ParsedCtlKeys = [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
 			which = 0;
-		for (var j = 0, len = keys.length; j < len; ++j) {
-			var cc = keys.charAt(j); //ext
+		for (var j = 0, len = ctrlKeys.length; j < len; ++j) {
+			var cc = ctrlKeys.charAt(j); //ext
 			switch (cc) {
-			case '^': //ctrl
-			case '@': //alt
-			case '$': //shift
-			case '%': //meta
-				var flag = cc == '^' ? 1 : cc == '@' ? 2 : cc == '$' ? 4 : 8;
-				if ((which & flag) != 0)
-					return _setCtrlKeysErr('Unexpected key combination: ' + keys);
-				else
-					which |= flag;
-				break;
-			case '#': {
-				var k = j + 1;
-				for (; k < len; ++k) {
-					var c2 = keys.charAt(k);
-					if ((c2 > 'Z' || c2 < 'A') && (c2 > 'z' || c2 < 'a')
-					&& (c2 > '9' || c2 < '0'))
-						break;
+				case '^': //ctrl
+				case '@': //alt
+				case '$': //shift
+				case '%': //meta
+					var flag = cc == '^' ? 1 : cc == '@' ? 2 : cc == '$' ? 4 : 8;
+					if ((which & flag) != 0) {
+						_setCtrlKeysErr('Unexpected key combination: ' + ctrlKeys);
+						return this;
+					} else
+						which |= flag;
+					break;
+				case '#': {
+					var k = j + 1;
+					for (; k < len; ++k) {
+						var c2 = ctrlKeys.charAt(k);
+						if ((c2 > 'Z' || c2 < 'A') && (c2 > 'z' || c2 < 'a')
+							&& (c2 > '9' || c2 < '0'))
+							break;
+					}
+					if (k == j + 1) {
+						_setCtrlKeysErr('Unexpected character # in ' + ctrlKeys);
+						return this;
+					}
+
+					let cc: number;
+					var s = ctrlKeys.substring(j + 1, k).toLowerCase();
+					if ('pgup' == s) cc = 33;
+					else if ('pgdn' == s) cc = 34;
+					else if ('end' == s) cc = 35;
+					else if ('home' == s) cc = 36;
+					else if ('left' == s) cc = 37;
+					else if ('up' == s) cc = 38;
+					else if ('right' == s) cc = 39;
+					else if ('down' == s) cc = 40;
+					else if ('ins' == s) cc = 45;
+					else if ('del' == s) cc = 46;
+					else if ('bak' == s) cc = 8;
+					else if ('tab' == s) cc = 9;
+					else if (s.length > 1 && s.startsWith('f')) {
+						var v = zk.parseInt(s.substring(1));
+						if (v == 0 || v > 12) {
+							_setCtrlKeysErr('Unsupported function key: #f' + v);
+							return this;
+						}
+						cc = 112 + v - 1;
+					} else {
+						_setCtrlKeysErr('Unknown #' + s + ' in ' + ctrlKeys);
+						return this;
+					}
+
+					parsed[which][cc] = true;
+					which = 0;
+					j = k - 1;
+					break;
 				}
-				if (k == j + 1)
-					return _setCtrlKeysErr('Unexpected character # in ' + keys);
-				
-				let cc: number;
-				var s = keys.substring(j + 1, k).toLowerCase();
-				if ('pgup' == s) cc = 33;
-				else if ('pgdn' == s) cc = 34;
-				else if ('end' == s) cc = 35;
-				else if ('home' == s) cc = 36;
-				else if ('left' == s) cc = 37;
-				else if ('up' == s) cc = 38;
-				else if ('right' == s) cc = 39;
-				else if ('down' == s) cc = 40;
-				else if ('ins' == s) cc = 45;
-				else if ('del' == s) cc = 46;
-				else if ('bak' == s) cc = 8;
-				else if ('tab' == s) cc = 9;
-				else if (s.length > 1 && s.charAt(0) == 'f') {
-					var v = zk.parseInt(s.substring(1));
-					if (v == 0 || v > 12)
-						return _setCtrlKeysErr('Unsupported function key: #f' + v);
-					cc = 112 + v - 1;
-				} else
-					return _setCtrlKeysErr('Unknown #' + s + ' in ' + keys);
+				default:
+					if (!which || ((cc > 'Z' || cc < 'A')
+						&& (cc > 'z' || cc < 'a') && (cc > '9' || cc < '0'))) {
+						_setCtrlKeysErr('Unexpected character ' + cc + ' in ' + ctrlKeys);
+						return this;
+					}
+					if (which == 4) {
+						_setCtrlKeysErr('$a - $z not supported (found in ' + ctrlKeys + '). Allowed: $#f1, $#home and so on.');
+						return this;
+					}
 
-				parsed[which][cc] = true;
-				which = 0;
-				j = k - 1;
-				break;
-			}
-			default:
-				if (!which || ((cc > 'Z' || cc < 'A')
-				&& (cc > 'z' || cc < 'a') && (cc > '9' || cc < '0')))
-					return _setCtrlKeysErr('Unexpected character ' + cc + ' in ' + keys);
-				if (which == 4)
-					return _setCtrlKeysErr('$a - $z not supported (found in ' + keys + '). Allowed: $#f1, $#home and so on.');
-
-				if (cc <= 'z' && cc >= 'a')
-					cc = cc.toUpperCase();
-				parsed[which][cc.charCodeAt(0)] = true;
-				which = 0;
-				break;
+					if (cc <= 'z' && cc >= 'a')
+						cc = cc.toUpperCase();
+					parsed[which][cc.charCodeAt(0)] = true;
+					which = 0;
+					break;
 			}
 		}
 
 		this._parsedCtlKeys = parsed;
-		this._ctrlKeys = keys;
+		this._ctrlKeys = ctrlKeys;
 		return this;
 	}
 
 	_parsePopParams(txt: string, event?: zk.Event): PopupParams {
 		var params: {
-				id?: string;
-				position?: string;
-				delay?: number | string;
-				ref?: zul.wgt.Ref | undefined;
-				x?: number | string;
-				y?: number | string;
-				type?: string;
-			} = {},
+			id?: string;
+			position?: string;
+			delay?: number | string;
+			ref?: zul.wgt.Ref | undefined;
+			x?: number | string;
+			y?: number | string;
+			type?: string;
+		} = {},
 			index = txt.indexOf(','),
 			start = txt.indexOf('='),
 			t = txt;
@@ -599,7 +610,7 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Widge
 				// to avoid a focus in IE, we have to pop up it later. for example, zksandbox/#t5
 				var self = this,
 					xy: zk.Offset = params.x !== undefined ? [params.x, params.y!]
-							: [evt.pageX, evt.pageY];
+						: [evt.pageX, evt.pageY];
 				// F70-ZK-2007: When type=toggle, close the popup
 				if (params.type && params.type == 'toggle' && popup.isOpen()) {
 					popup.close({sendOnOpen: true});
@@ -626,7 +637,7 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Widge
 				// to avoid a focus in IE, we have to pop up it later. for example, zksandbox/#t5
 				var self = this,
 					xy: zk.Offset = params.x !== undefined ? [params.x, params.y!]
-							: [evt.pageX, evt.pageY];
+						: [evt.pageX, evt.pageY];
 				// F70-ZK-2007: When type=toggle, close the popup
 				if (params.type && params.type == 'toggle' && ctx.isOpen()) {
 					ctx.close({sendOnOpen: true});
@@ -648,7 +659,7 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Widge
 				tip = this._smartFellow(params.id) as zul.wgt.Popup | undefined;
 			if (tip) {
 				evt.tooltipped = true;
-					//still call parent's doTooltipOver_ for better extensibility (though not necessary)
+				//still call parent's doTooltipOver_ for better extensibility (though not necessary)
 				_tt_begin(tip, this, params, evt);
 			}
 		}
@@ -692,34 +703,34 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Widge
 	afterKeyDown_(evt: zk.Event, simulated?: boolean): boolean {
 		var keyCode = evt.keyCode, evtnm = 'onCtrlKey', okcancel, commandKey = zk.mac && evt.metaKey;
 		switch (keyCode) {
-		case 13: { //ENTER
-			const target = evt.domTarget, tn = jq.nodeName(target);
-			if (tn == 'textarea' || (tn == 'button'
-			// if button's ID end with '-a' still fire onOK(Like Listbox and Menupopup)
-			&& (!target.id || !target.id.endsWith('-a')))
-			|| (tn == 'input' && (target as HTMLInputElement).type.toLowerCase() == 'button'))
-				return false; //don't change button's behavior (Bug 1556836)
-			okcancel = evtnm = 'onOK';
-			break;
-		}
-		case 27: //ESC
-			okcancel = evtnm = 'onCancel';
-			break;
-		case 16: //Shift
-		case 17: //Ctrl
-		case 18: //Alt
-			return false;
-		case 45: //Ins
-		case 46: //Del
-		case 8: //Backspace
-		case 9: //Tab
-			break;
-		default:
-			if ((keyCode >= 33 && keyCode <= 40) //PgUp, PgDn, End, Home, L, U, R, D
-			|| (keyCode >= 112 && keyCode <= 123) //F1: 112, F12: 123
-			|| evt.ctrlKey || evt.altKey || commandKey)
+			case 13: { //ENTER
+				const target = evt.domTarget, tn = jq.nodeName(target);
+				if (tn == 'textarea' || (tn == 'button'
+					// if button's ID end with '-a' still fire onOK(Like Listbox and Menupopup)
+					&& (!target.id || !target.id.endsWith('-a')))
+					|| (tn == 'input' && (target as HTMLInputElement).type.toLowerCase() == 'button'))
+					return false; //don't change button's behavior (Bug 1556836)
+				okcancel = evtnm = 'onOK';
 				break;
-			return false;
+			}
+			case 27: //ESC
+				okcancel = evtnm = 'onCancel';
+				break;
+			case 16: //Shift
+			case 17: //Ctrl
+			case 18: //Alt
+				return false;
+			case 45: //Ins
+			case 46: //Del
+			case 8: //Backspace
+			case 9: //Tab
+				break;
+			default:
+				if ((keyCode >= 33 && keyCode <= 40) //PgUp, PgDn, End, Home, L, U, R, D
+					|| (keyCode >= 112 && keyCode <= 123) //F1: 112, F12: 123
+					|| evt.ctrlKey || evt.altKey || commandKey)
+					break;
+				return false;
 		}
 
 		var target = evt.target,
@@ -750,10 +761,10 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Widge
 		//so we have to defer the firing of ctrl keys
 		setTimeout(function () {
 			interface WidgetBeforeCtrlKeys extends zk.Widget {
-				beforeCtrlKeys_?: Widget['beforeCtrlKeys_'];
+				beforeCtrlKeys_?(evt: zk.Event): unknown;
 			}
-			for (var w: WidgetBeforeCtrlKeys = target; ; w = w.parent!) {
-				if (w.beforeCtrlKeys_ && w.beforeCtrlKeys_(evt) as undefined)
+			for (var w: WidgetBeforeCtrlKeys = target!; ; w = w.parent!) {
+				if (w.beforeCtrlKeys_?.(evt))
 					return;
 				if (w == wgt) break;
 			}

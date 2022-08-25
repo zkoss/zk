@@ -23,7 +23,7 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 	_buttonVisible = true;
 	_lenient = true;
 	_strictDate = false;
-	_selectLevel = 'day';
+	_selectLevel: 'day' | 'month' | 'year' | 'decade' | 'today' = 'day';
 	_closePopupOnTimezoneChange = true;
 	_pop: CalendarPop;
 	_tm: CalendarTime;
@@ -47,7 +47,7 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 
 	constructor() {
 		super();
-		this.listen({onChange: this}, -1000);
+		this.listen({ onChange: this }, -1000);
 		this._pop = new zul.db.CalendarPop();
 		this._tm = new zul.db.CalendarTime();
 		this.appendChild(this._pop);
@@ -67,12 +67,12 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 	 * Sets whether the button (on the right of the textbox) is visible.
 	 * @param boolean visible
 	 */
-	setButtonVisible(v: boolean, opts?: Record<string, boolean>): this {
+	setButtonVisible(buttonVisible: boolean, opts?: Record<string, boolean>): this {
 		const o = this._buttonVisible;
-		this._buttonVisible = v;
+		this._buttonVisible = buttonVisible;
 
-		if (o !== v || (opts && opts.force)) {
-			zul.inp.RoundUtl.buttonVisible(this, v);
+		if (o !== buttonVisible || opts?.force) {
+			zul.inp.RoundUtl.buttonVisible(this, buttonVisible);
 		}
 
 		return this;
@@ -143,7 +143,7 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 		const o = this._format;
 		this._format = format;
 
-		if (o !== format || (opts && opts.force)) {
+		if (o !== format || opts?.force) {
 			if (this._pop) {
 				this._pop.setFormat(this._format);
 				if (this._value)
@@ -168,15 +168,15 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 	 * <p>Default: null (means no constraint all all).
 	 * @param String cst
 	 */
-	override setConstraint(cst: string | undefined, opts?: Record<string, boolean>): this {
+	override setConstraint(constraint: string | undefined, opts?: Record<string, boolean>): this {
 		const o = this._constraint;
-		this._constraint = cst;
+		this._constraint = constraint;
 
-		if (o !== cst || (opts && opts.force)) {
-			if (typeof cst == 'string' && cst.charAt(0) != '['/*by server*/)
-				this._cst = new zul.inp.SimpleDateConstraint(cst, this);
+		if (o !== constraint || opts?.force) {
+			if (typeof constraint == 'string' && !constraint.startsWith('[')/*by server*/)
+				this._cst = new zul.inp.SimpleDateConstraint(constraint, this);
 			else
-				this._cst = cst as undefined;
+				this._cst = constraint;
 			if (this._cst)
 				this._reVald = true; //revalidate required
 			if (this._pop) {
@@ -198,15 +198,15 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 	/** Sets the time zone that this date box belongs to.
 	 * @param String timezone the time zone's ID, such as "America/Los_Angeles".
 	 */
-	setTimeZone(timezone: string, opts?: Record<string, boolean>): this {
+	setTimeZone(timeZone: string, opts?: Record<string, boolean>): this {
 		const o = this._timeZone;
-		this._timeZone = timezone;
+		this._timeZone = timeZone;
 
-		if (o !== timezone || (opts && opts.force)) {
-			this._timeZone = timezone;
-			this._tm.setTimezone(timezone);
+		if (o !== timeZone || opts?.force) {
+			this._timeZone = timeZone;
+			this._tm.setTimezone(timeZone);
 			this._setTimeZonesIndex();
-			this._value && this._value.tz(timezone);
+			this._value?.tz(timeZone);
 			this._pop && this._pop._fixConstraint();
 			var cst = this._cst;
 			if (cst && cst instanceof zul.inp.SimpleConstraint)
@@ -227,13 +227,13 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 	 * If readonly, the user cannot change the time zone at the client.
 	 * @param boolean readonly
 	 */
-	setTimeZonesReadonly(readonly: boolean, opts?: Record<string, boolean>): this {
+	setTimeZonesReadonly(timeZonesReadonly: boolean, opts?: Record<string, boolean>): this {
 		const o = this._timeZonesReadonly;
-		this._timeZonesReadonly = readonly;
+		this._timeZonesReadonly = timeZonesReadonly;
 
-		if (o !== readonly || (opts && opts.force)) {
+		if (o !== timeZonesReadonly || opts?.force) {
 			var select = this.$n<HTMLSelectElement>('dtzones');
-			if (select) select.disabled = (readonly ? 'disabled' : '') as unknown as boolean;
+			if (select) select.disabled = timeZonesReadonly;
 		}
 
 		return this;
@@ -252,12 +252,12 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 	 * @param String dtzones a catenation of a list of the timezones' ID, such as
 	 * <code>"America/Los_Angeles,GMT+8"</code>
 	 */
-	setDisplayedTimeZones(dtzones: string, opts?: Record<string, boolean>): this {
+	setDisplayedTimeZones(displayedTimeZones: string, opts?: Record<string, boolean>): this {
 		const o = this._displayedTimeZones;
-		this._displayedTimeZones = dtzones;
+		this._displayedTimeZones = displayedTimeZones;
 
-		if (o !== dtzones || (opts && opts.force)) {
-			this._dtzones = dtzones ? dtzones.split(',') : undefined;
+		if (o !== displayedTimeZones || opts?.force) {
+			this._dtzones = displayedTimeZones ? displayedTimeZones.split(',') : undefined;
 		}
 
 		return this;
@@ -275,12 +275,12 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 	/** Sets the unformater function. This method is called from Server side.
 	 * @param String unf the unformater function
 	 */
-	setUnformater(unf: string, opts?: Record<string, boolean>): this {
+	setUnformater(unformater: string, opts?: Record<string, boolean>): this {
 		const o = this._unformater;
-		this._unformater = unf;
+		this._unformater = unformater;
 
-		if (o !== unf || (opts && opts.force)) {
-			eval('Datebox._unformater = ' + unf); // eslint-disable-line no-eval
+		if (o !== unformater || opts?.force) {
+			eval('Datebox._unformater = ' + unformater); // eslint-disable-line no-eval
 		}
 
 		return this;
@@ -324,16 +324,16 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 		return this._localizedSymbols;
 	}
 
-	setLocalizedSymbols(val: [string, zk.LocalizedSymbols], opts?: Record<string, boolean>): this {
+	setLocalizedSymbols(localizedSymbols?: [string, zk.LocalizedSymbols], opts?: Record<string, boolean>): this {
 		const o = this._localizedSymbols;
 
-		if (val) {
-			if (!globallocalizedSymbols[val[0]])
-				globallocalizedSymbols[val[0]] = val[1];
-			this._localizedSymbols = globallocalizedSymbols[val[0]];
+		if (localizedSymbols) {
+			if (!globallocalizedSymbols[localizedSymbols[0]])
+				globallocalizedSymbols[localizedSymbols[0]] = localizedSymbols[1];
+			this._localizedSymbols = globallocalizedSymbols[localizedSymbols[0]];
 		}
 
-		if (o !== val || (opts && opts.force)) {
+		if (o !== localizedSymbols || opts?.force) {
 
 			// in this case, we cannot use setLocalizedSymbols() for Timebox
 			if (this._tm)
@@ -351,13 +351,13 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 	 * @since 6.5.0
 	 * @param boolean weekOfYear
 	 */
-	setWeekOfYear(v: boolean, opts?: Record<string, boolean>): this {
+	setWeekOfYear(weekOfYear: boolean, opts?: Record<string, boolean>): this {
 		const o = this._weekOfYear;
-		this._weekOfYear = v;
+		this._weekOfYear = weekOfYear;
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== weekOfYear || opts?.force) {
 			if (this._pop)
-				this._pop.setWeekOfYear(v);
+				this._pop.setWeekOfYear(weekOfYear);
 		}
 
 		return this;
@@ -379,13 +379,13 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 	 * @since 8.0.0
 	 * @param boolean showTodayLink
 	 */
-	setShowTodayLink(v: boolean, opts?: Record<string, boolean>): this {
+	setShowTodayLink(showTodayLink: boolean, opts?: Record<string, boolean>): this {
 		const o = this._showTodayLink;
-		this._showTodayLink = v;
+		this._showTodayLink = showTodayLink;
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== showTodayLink || opts?.force) {
 			if (this._pop) {
-				this._pop.setShowTodayLink(v);
+				this._pop.setShowTodayLink(showTodayLink);
 			}
 		}
 
@@ -407,13 +407,13 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 	 * @since 8.0.4
 	 * @param String todayLinkLabel
 	 */
-	setTodayLinkLabel(v: string, opts?: Record<string, boolean>): this {
+	setTodayLinkLabel(todayLinkLabel: string, opts?: Record<string, boolean>): this {
 		const o = this._todayLinkLabel;
-		this._todayLinkLabel = v;
+		this._todayLinkLabel = todayLinkLabel;
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== todayLinkLabel || opts?.force) {
 			if (this._pop) {
-				this._pop.setTodayLinkLabel(v);
+				this._pop.setTodayLinkLabel(todayLinkLabel);
 			}
 		}
 
@@ -478,7 +478,7 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 	 * @param String selectLevel the level that a user can select
 	 * @since 9.5.1
 	 */
-	setSelectLevel(selectLevel: string): this {
+	setSelectLevel(selectLevel: 'day' | 'month' | 'year' | 'decade' | 'today'): this {
 		this._selectLevel = selectLevel;
 		return this;
 	}
@@ -528,8 +528,8 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 	 * A method for component setter symmetry, it will call setValue
 	 * @since 10.0.0
 	 */
-	setValueInZonedDateTime(value: DateImpl, fromServer?: boolean): this {
-		return this.setValue(value, fromServer);
+	setValueInZonedDateTime(valueInZonedDateTime: DateImpl, fromServer?: boolean): this {
+		return this.setValue(valueInZonedDateTime, fromServer);
 	}
 
 	/**
@@ -544,8 +544,8 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 	 * A method for component setter symmetry, it will call setValue
 	 * @since 10.0.0
 	 */
-	setValueInLocalDateTime(value: DateImpl, fromServer?: boolean): this {
-		return this.setValue(value, fromServer);
+	setValueInLocalDateTime(valueInLocalDateTime: DateImpl, fromServer?: boolean): this {
+		return this.setValue(valueInLocalDateTime, fromServer);
 	}
 
 	/**
@@ -560,8 +560,8 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 	 * A method for component setter symmetry, it will call setValue
 	 * @since 10.0.0
 	 */
-	setValueInLocalDate(value: DateImpl, fromServer?: boolean): this {
-		return this.setValue(value, fromServer);
+	setValueInLocalDate(valueInLocalDate: DateImpl, fromServer?: boolean): this {
+		return this.setValue(valueInLocalDate, fromServer);
 	}
 
 	/**
@@ -576,8 +576,8 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 	 * A method for component setter symmetry, it will call setValue
 	 * @since 10.0.0
 	 */
-	setValueInLocalTime(value: DateImpl, fromServer?: boolean): this {
-		return this.setValue(value, fromServer);
+	setValueInLocalTime(valueInLocalTime: DateImpl, fromServer?: boolean): this {
+		return this.setValue(valueInLocalTime, fromServer);
 	}
 
 	/**
@@ -613,7 +613,7 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 	 * @return String
 	 */
 	getTimeFormat(): string {
-	//Note: S (milliseconds not supported yet)
+		//Note: S (milliseconds not supported yet)
 		var fmt = this._format!,
 			aa = fmt.indexOf('a'),
 			hh = fmt.indexOf('h'),
@@ -652,8 +652,8 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 	 */
 	setOpen(open: boolean, _focus_: boolean): this {
 		if (this.isRealVisible()) {
-			var pop: CalendarPop | undefined;
-			if (pop = this._pop) {
+			var pop = this._pop;
+			if (pop) {
 				if (open) pop.open(!_focus_);
 				else pop.close(!_focus_);
 			}
@@ -686,7 +686,7 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 				format = this.getFormat()!,
 				d = new zk.fmt.Calendar().parseDate(val, pattern || format, !this._lenient, refDate, this._localizedSymbols, tz, this._strictDate);
 			this._refDate = undefined;
-			if (!d) return {error: zk.fmt.Text.format(msgzul.DATE_REQUIRED + (this.localizedFormat!.replace(_quotePattern, '')))};
+			if (!d) return { error: zk.fmt.Text.format(msgzul.DATE_REQUIRED + (this.localizedFormat!.replace(_quotePattern, ''))) };
 			// B70-ZK-2382 escape shouldn't be used in format including hour
 			if (!format.match(/[HkKh]/))
 				d = new zk.fmt.Calendar().escapeDSTConflict(d, tz);
@@ -735,7 +735,7 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 			else this._pop.open();
 
 			//FF: if we eat UP/DN, Alt+UP degenerate to Alt (select menubar)
-			var opts = {propagation: true};
+			var opts = { propagation: true };
 			evt.stop(opts);
 			return;
 		}
@@ -748,7 +748,7 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 		}
 
 		if (keyCode == 18 || keyCode == 27 || keyCode == 13
-		|| (keyCode >= 112 && keyCode <= 123)) //ALT, ESC, Enter, Fn
+			|| (keyCode >= 112 && keyCode <= 123)) //ALT, ESC, Enter, Fn
 			return; //ignore it (doc will handle it)
 
 		// ZK-2202: should not trigger too early when key code is ENTER
@@ -788,28 +788,29 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
-		var btn: HTMLElement | undefined;
+		var btn = this.$n('btn');
 
-		if (btn = this.$n('btn')) {
+		if (btn) {
 			this.domListen_(btn, zk.android ? 'onTouchstart' : 'onClick', '_doBtnClick');
 			if (this._inplace) this.domListen_(btn, 'onMouseDown', '_doBtnMouseDown');
 		}
 
-		zWatch.listen({onSize: this, onScroll: this, onShow: this});
+		zWatch.listen({ onSize: this, onScroll: this, onShow: this });
 		this._pop.setFormat(this.getDateFormat());
 	}
 
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
-		var btn: CalendarPop | HTMLElement | undefined;
-		if (btn = this._pop)
-			btn.close(true);
+		var pop = this._pop;
+		if (pop)
+			pop.close(true);
 
-		if (btn = this.$n('btn')) {
+		var btn = this.$n('btn');
+		if (btn) {
 			this.domUnlisten_(btn, zk.android ? 'onTouchstart' : 'onClick', '_doBtnClick');
 			if (this._inplace) this.domUnlisten_(btn, 'onMouseDown', '_doBtnMouseDown');
 		}
 
-		zWatch.unlisten({onSize: this, onScroll: this, onShow: this});
+		zWatch.unlisten({ onSize: this, onScroll: this, onShow: this });
 		super.unbind_(skipper, after, keepRod);
 	}
 
@@ -819,7 +820,7 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 		if (!this._disabled)
 			this.setOpen(!jq(this.$n_('pp')).zk.isVisible(), zul.db.DateboxCtrl.isPreservedFocus(this));
 		// Bug ZK-2544, B70-ZK-2849
-		evt.stop((this._pop && this._pop._open ? {propagation: true} : undefined));
+		evt.stop((this._pop && this._pop._open ? { propagation: true } : undefined));
 	}
 
 	_doBtnMouseDown(): void {
@@ -830,12 +831,12 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 		var select = this.$n_<HTMLSelectElement>('dtzones'),
 			timezone = select.value;
 		this.updateChange_();
-		this.fire('onTimeZoneChange', {timezone: timezone}, {toServer: true}, 150);
+		this.fire('onTimeZoneChange', { timezone: timezone }, { toServer: true }, 150);
 		if (this._pop && this._closePopupOnTimezoneChange) this._pop.close();
 	}
 
 	// NOTE: data value will become string after event handler
-	onChange(evt: zk.Event & {data: zul.db.CalendarOnChangeData}): void {
+	onChange(evt: zk.Event & { data: zul.db.CalendarOnChangeData }): void {
 		var data = evt.data,
 			inpValue = this.getInputNode()!.value;
 		if (this._pop)
@@ -843,11 +844,11 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 		// B50-ZK-631: Datebox format error message not shown with implements CustomConstraint
 		// pass input value to server for showCustomError
 		if (!data.value && inpValue
-				&& this.getFormat() && this._cst == '[c')
+			&& this.getFormat() && this._cst == '[c')
 			data.value = inpValue as unknown as DateImpl; // FIXME: type mismatch
 	}
 
-	onScroll(wgt: zk.Widget): void {
+	onScroll(wgt?: zk.Widget): void {
 		if (this.isOpen()) {
 			var pp = this._pop;
 			// ZK-1552: fix the position of popup when scroll
@@ -889,8 +890,8 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 		var timezones = this._dtzones;
 		if (timezones) {
 			out.push('<div class="', this.$s('timezone'), '">',
-					this.getTimeZoneLabel(),
-					'<select id="', this.uuid, '-dtzones">');
+				this.getTimeZoneLabel(),
+				'<select id="', this.uuid, '-dtzones">');
 			for (var i = 0, len = timezones.length; i < len; i++)
 				out.push('<option value="', timezones[i], '">', timezones[i], '</option>');
 			out.push('</select></div>');
@@ -912,7 +913,7 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 
 		if (pp) {
 			// dodgeRef is only ever tested for truthiness, and only here is it set to a non-boolean value.
-			zk(pp).position(n, db._position, {dodgeRef: n as unknown as boolean});
+			zk(pp).position(n, db._position, { dodgeRef: n as unknown as boolean });
 			db._pop.syncShadow();
 			if (!silent)
 				zk(inp).focus();
@@ -936,23 +937,24 @@ export class CalendarPop extends zul.db.Calendar {
 
 	constructor() {
 		super();
-		this.listen({onChange: this}, -1000);
+		this.listen({ onChange: this }, -1000);
 	}
 
-	setFormat(fmt: string): this {
-		this._fmt = fmt;
+	setFormat(format: string): this {
+		this._fmt = format;
 		return this;
 	}
 
-	setLocalizedSymbols(symbols?: zk.LocalizedSymbols): this {
-		this._localizedSymbols = symbols;
+	setLocalizedSymbols(localizedSymbols?: zk.LocalizedSymbols): this {
+		this._localizedSymbols = localizedSymbols;
 		return this;
 	}
 
 	// ZK-2047: should sync shadow when shiftView
-	override rerender(skipper?: number | zk.Skipper): void {
+	override rerender(skipper?: number | zk.Skipper): this {
 		super.rerender(skipper);
 		if (this.desktop) this.syncShadow();
+		return this;
 	}
 
 	close(silent?: boolean): void {
@@ -971,7 +973,7 @@ export class CalendarPop extends zul.db.Calendar {
 		try {
 			if ((zk.ff || zk.safari) && zk.currentFocus) {
 				var n = zk.currentFocus.getInputNode ?
-						zk.currentFocus.getInputNode()! : zk.currentFocus.$n_();
+					zk.currentFocus.getInputNode()! : zk.currentFocus.$n_();
 				if (jq.nodeName(n, 'input') && jq.isAncestor(pp, n)) // Bug ZK-2922, check ancestor first.
 					jq(n).blur(); // trigger a missing blur event.
 			}
@@ -1010,7 +1012,7 @@ export class CalendarPop extends zul.db.Calendar {
 		if (!dbn || !pp)
 			return;
 		if (db._inplace) db._inplaceIgnore = true;
-		db.setFloating_(true, {node: pp});
+		db.setFloating_(true, { node: pp });
 		zWatch.fire('onFloatUp', db); //notify all
 		var topZIndex = this.setTopmost();
 		this._setView(db._selectLevel);
@@ -1022,14 +1024,14 @@ export class CalendarPop extends zul.db.Calendar {
 		pp.style.width = 'auto'; //reset
 		pp.style.display = 'block';
 		pp.style.zIndex = (topZIndex > 0 ? topZIndex : 1) as unknown as string;
-		this.setDomVisible_(pp, true, {visibility: true});
+		this.setDomVisible_(pp, true, { visibility: true });
 
 		//FF: Bug 1486840
 		//IE: Bug 1766244 (after specifying position:relative to grid/tree/listbox)
 		jq(pp).zk.makeVParent();
 
 		if (pp.offsetWidth < dbn.offsetWidth) {
-			pp.style.width = dbn.offsetWidth + 'px';
+			pp.style.width = `${dbn.offsetWidth}px`;
 		} else {
 			var wd = jq.innerWidth() - 20;
 			if (wd < dbn.offsetWidth)
@@ -1064,11 +1066,12 @@ export class CalendarPop extends zul.db.Calendar {
 	syncShadow(): void {
 		if (!this._shadow)
 			this._shadow = new zk.eff.Shadow(this.parent.$n_('pp'), {
-				left: -4, right: 4, top: 2, bottom: 3});
+				left: -4, right: 4, top: 2, bottom: 3
+			});
 		this._shadow.sync();
 	}
 
-	override onChange(evt: zk.Event & {data: zul.db.CalendarOnChangeData}): void {
+	override onChange(evt: zk.Event & { data: zul.db.CalendarOnChangeData }): void {
 		var date: DateImpl | undefined = this.getTime(),
 			db = this.parent,
 			fmt = db.getTimeFormat(),
@@ -1093,8 +1096,8 @@ export class CalendarPop extends zul.db.Calendar {
 				date = cal.escapeDSTConflict(date, tz);
 		} else if (oldDate) {
 			date = Dates.newInstance([date.getFullYear(), date.getMonth(),
-				date.getDate(), oldDate.getHours(),
-				oldDate.getMinutes(), oldDate.getSeconds(), oldDate.getMilliseconds()], tz);
+			date.getDate(), oldDate.getHours(),
+			oldDate.getMinutes(), oldDate.getSeconds(), oldDate.getMilliseconds()], tz);
 			//Note: we cannot call setFullYear(), setMonth(), then setDate(),
 			//since Date object will adjust month if date larger than max one
 
@@ -1107,6 +1110,7 @@ export class CalendarPop extends zul.db.Calendar {
 		if (!evt.data.shiftView)
 			db.getInputNode()!.value = db.coerceToString_(date);
 
+		// eslint-disable-next-line @typescript-eslint/no-unnecessary-boolean-literal-compare
 		if (this._view == db._selectLevel && evt.data.shallClose !== false) {
 			this.close();
 
@@ -1133,11 +1137,11 @@ export class CalendarPop extends zul.db.Calendar {
 		super.bind_(desktop, skipper, after);
 		this._bindTimezoneEvt();
 
-		zWatch.listen({onFloatUp: this});
+		zWatch.listen({ onFloatUp: this });
 	}
 
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
-		zWatch.unlisten({onFloatUp: this});
+		zWatch.unlisten({ onFloatUp: this });
 		this._unbindfTimezoneEvt();
 		if (this._shadow) {
 			this._shadow.destroy();
@@ -1163,7 +1167,7 @@ export class CalendarPop extends zul.db.Calendar {
 			db.domUnlisten_(select, 'onChange', '_doTimeZoneChange');
 	}
 
-	override _setView(val: string, force?: number): this {
+	override _setView(val: 'day' | 'month' | 'year' | 'decade' | 'today', force?: number): this {
 		if (this.parent.getTimeFormat())
 			this.parent._tm.setVisible(val == 'day');
 		super._setView(val, force);
@@ -1202,7 +1206,7 @@ export class CalendarPop extends zul.db.Calendar {
 					var newTime = this.getTime();
 					if (oldTime.getYear() == newTime.getYear()
 						&& oldTime.getMonth() == newTime.getMonth()) {
-						this._markCal({sameMonth: true}); // optimize
+						this._markCal({ sameMonth: true }); // optimize
 					} else {
 						this.rerender(-1);
 						this.focus();
@@ -1244,10 +1248,10 @@ export class CalendarTime extends zul.db.Timebox {
 
 	constructor() {
 		super();
-		this.listen({onChanging: this}, -1000);
+		this.listen({ onChanging: this }, -1000);
 	}
 
-	onChanging(evt: zk.Event & {data: zul.db.CalendarOnChangeData}): void {
+	onChanging(evt: zk.Event & { data: zul.db.CalendarOnChangeData }): void {
 		var db = this.parent,
 			oldDate = db.getValue() || db._pop.getValue(),
 			// ZK-2382 we must do the conversion with date and time in the same time
@@ -1256,9 +1260,9 @@ export class CalendarTime extends zul.db.Timebox {
 			pattern = _innerDateFormat + db.getTimeFormat();
 
 		// add 'AM' by default, if pattern specified AMPM
-		dateTime += pattern.indexOf('a') > -1 ?
-				dateTime.indexOf('AM') < 0 && dateTime.indexOf('PM') < 0 ? 'AM' : '' : '';
-		var	date = db.coerceFromString_(dateTime, pattern);
+		dateTime += pattern.includes('a') ?
+			!dateTime.includes('AM') && !dateTime.includes('PM') ? 'AM' : '' : '';
+		var date = db.coerceFromString_(dateTime, pattern);
 
 		// do nothing if date converted from String is not a valid Date object e.g. dateTime = "2014/10/10 1 :  :     "
 		if (date instanceof DateImpl) {
@@ -1277,7 +1281,7 @@ export class CalendarTime extends zul.db.Timebox {
  * It is designed to be overriden
  * @since 6.5.0
  */
-export let DateboxCtrl = {
+export var DateboxCtrl = {
 	/**
 	 * Returns whether to preserve the focus state.
 	 * @param zk.Widget wgt a widget

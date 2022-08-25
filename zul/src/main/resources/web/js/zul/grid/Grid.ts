@@ -17,7 +17,7 @@ function _fixForEmpty(wgt: zul.grid.Grid): void {
 	if (wgt.desktop) {
 		var empty = wgt.$n_<HTMLTableCellElement>('empty'),
 			colspan = 0;
-		if (wgt.rows && wgt.rows.nChildren) {
+		if (wgt.rows?.nChildren) {
 			empty.style.display = 'none';
 		} else {
 			if (wgt.columns) {
@@ -34,7 +34,6 @@ function _fixForEmpty(wgt: zul.grid.Grid): void {
 
 @zk.WrapClass('zul.grid.Grid')
 export class Grid extends zul.mesh.MeshWidget {
-	override _scrollbar?: zul.Scrollbar;
 	_grid$rod?: boolean; // zkex.grid.Group
 	_fixhdwcnt?: number; // zkex.grid.Detail
 	_fixhdoldwd?: number; // zkex.grid.Detail
@@ -62,19 +61,19 @@ export class Grid extends zul.mesh.MeshWidget {
 	 * @param String msg
 	 * @since 5.0.7
 	 */
-	setEmptyMessage(msg: string, opts?: Record<string, boolean>): this {
+	setEmptyMessage(emptyMessage: string, opts?: Record<string, boolean>): this {
 		const o = this._emptyMessage;
-		this._emptyMessage = msg;
+		this._emptyMessage = emptyMessage;
 
-		if (o !== msg || (opts && opts.force)) {
+		if (o !== emptyMessage || opts?.force) {
 			if (this.desktop) {
 				var emptyContentDiv = jq(this.$n_('empty-content')),
 					emptyContentClz = this.$s('emptybody-content');
-				if (msg && msg.trim().length != 0)
+				if (emptyMessage && emptyMessage.trim().length != 0)
 					emptyContentDiv.addClass(emptyContentClz);
 				else
 					emptyContentDiv.removeClass(emptyContentClz);
-				emptyContentDiv.html(msg);
+				emptyContentDiv.html(emptyMessage);
 			}
 		}
 
@@ -90,12 +89,12 @@ export class Grid extends zul.mesh.MeshWidget {
 	 * @param int rows
 	 * @since 10.0.0
 	 */
-	setVisibleRows(rows: number, opts?: Record<string, boolean>): this {
+	setVisibleRows(visibleRows: number, opts?: Record<string, boolean>): this {
 		const o = this._visibleRows_;
-		this._visibleRows_ = rows;
+		this._visibleRows_ = visibleRows;
 
-		if (o !== rows || (opts && opts.force)) {
-			this.setRows(rows);
+		if (o !== visibleRows || opts?.force) {
+			this.setRows(visibleRows);
 		}
 
 		return this;
@@ -132,8 +131,8 @@ export class Grid extends zul.mesh.MeshWidget {
 	 * classes.
 	 * @param String scls
 	 */
-	setOddRowSclass(sclass: string): this {
-		const scls = sclass;
+	setOddRowSclass(oddRowSclass: string): this {
+		const scls = oddRowSclass;
 		if (this._scOddRow != scls) {
 			this._scOddRow = scls;
 			var n = this.$n();
@@ -229,9 +228,8 @@ export class Grid extends zul.mesh.MeshWidget {
 
 	override bind_(desktop: zk.Desktop | undefined, skipper: zk.Skipper | undefined, after: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
-		var w = this;
-		after.push(function () {
-			_fixForEmpty(w);
+		after.push(() => {
+			_fixForEmpty(this);
 		});
 	}
 
@@ -242,17 +240,16 @@ export class Grid extends zul.mesh.MeshWidget {
 
 	override onSize(): void {
 		super.onSize();
-		var self = this,
-			canInitScrollbar = this.desktop && !this._nativebar;
+		var canInitScrollbar = this.desktop && !this._nativebar;
 		// refix ZK-2840: only init scrollbar when height or vflex is set in mobile
 		if (!this._scrollbar && canInitScrollbar) {
 			if (!zk.mobile || (zk.mobile && (this.getHeight() || this.getVflex()))) {
 				this._scrollbar = zul.mesh.Scrollbar.init(this); // 1823278: should show scroll bar here
 			}
 		}
-		setTimeout(function () {
+		setTimeout(() => {
 			if (canInitScrollbar) {
-				self.refreshBar_();
+				this.refreshBar_();
 			}
 		}, 200);
 	}
@@ -345,9 +342,8 @@ export class Grid extends zul.mesh.MeshWidget {
 	 * @since 8.5.2
 	 */
 	scrollToIndex(index: number, scrollRatio: number): void {
-		var self = this;
-		void this.waitForRendered_().then(function () {
-			self._scrollToIndex(index, scrollRatio);
+		void this.waitForRendered_().then(() => {
+			this._scrollToIndex(index, scrollRatio);
 		});
 	}
 
@@ -384,7 +380,7 @@ export class RowIter extends zk.Object implements zul.mesh.ItemIterator {
 		if (!this._isInit) {
 			this._isInit = true;
 			var p = this.grid.rows ? this.grid.rows.firstChild : undefined;
-			if (this.opts && this.opts.skipHidden)
+			if (this.opts?.skipHidden)
 				for (; p && !p.isVisible(); p = p.nextSibling) { /* empty */ }
 			this.p = p;
 		}
@@ -408,7 +404,7 @@ export class RowIter extends zk.Object implements zul.mesh.ItemIterator {
 		this._init();
 		var p = this.p,
 			q = p ? p.nextSibling : undefined;
-		if (this.opts && this.opts.skipHidden)
+		if (this.opts?.skipHidden)
 			for (; q && !q.isVisible(); q = q.nextSibling) { /* empty */ }
 		if (p)
 			this.p = q;
