@@ -801,7 +801,7 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Objec
 	declare _preHeight;
 	declare _action?: string;
 	declare _tabindex?: number;
-	declare _draggable?: string;
+	declare _draggable?: string | boolean;
 	declare _asaps: Record<string, unknown>;
 	declare _lsns: Record<string, ({priority?: number} | [{priority?: number}, CallableFunction])[]>;
 	declare _bklsns: Record<string, unknown>;
@@ -814,7 +814,7 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Objec
 	declare _left?: string;
 	declare _top?: string;
 	declare _tooltiptext?: string;
-	declare _droppable?: string;
+	declare _droppable?: string | boolean;
 	declare _dropTypes?: string[];
 	declare _fitSizeListened: boolean;
 
@@ -1221,14 +1221,14 @@ new zul.wnd.Window({
 	 * @param String droppable "false", null or "" to denote not-droppable; "true" for accepting any draggable types; a list of identifiers, separated by comma for identifiers of draggables this widget accept (to be dropped in).
 	 * @return zk.Widget this widget
 	 */
-	setDroppable(droppable?: string): this {
+	setDroppable(droppable?: string | boolean /* boolean is for zkmax override */): this {
 		droppable = droppable && 'false' != droppable ? droppable : undefined;
 		if (this._droppable != droppable) {
 			this._droppable = droppable;
 
 			let dropTypes: string[] | undefined;
 			if (droppable && droppable != 'true') {
-				dropTypes = droppable.split(',');
+				dropTypes = (droppable as string).split(',');
 				for (let j = dropTypes.length; j--;)
 					if (!(dropTypes[j] = dropTypes[j].trim()))
 						dropTypes.splice(j, 1);
@@ -1240,7 +1240,7 @@ new zul.wnd.Window({
 	/** Returns the identifier, or a list of identifiers of a droppable type for this widget, or null if not droppable.
 	 * @return String
 	 */
-	getDroppable(): string | undefined {
+	getDroppable(): string | boolean | undefined {
 		return this._droppable;
 	}
 
@@ -1548,7 +1548,7 @@ new zul.wnd.Window({
 	 * The identifier could be anything but empty and "false".
 	 * @param String draggable "false", "" or null to denote non-draggable; "true" for draggable with anonymous identifier; others for an identifier of draggable.
 	 */
-	setDraggable(draggable?: string): this {
+	setDraggable(draggable?: string | boolean /* boolean is for zkmax override */): this {
 		if (!draggable && draggable != null) draggable = 'false'; //null means default
 		this._draggable = draggable;
 
@@ -1561,7 +1561,7 @@ new zul.wnd.Window({
 	/** Returns the identifier of a draggable type for this widget, or null if not draggable.
 	 * @return String
 	 */
-	getDraggable(): string {
+	getDraggable(): string | boolean {
 		var v = this._draggable;
 		return v ? v : _dragCtl(this) ? 'true' : 'false';
 	}
