@@ -48,12 +48,12 @@ function _updHeaderCM(box: SelectWidget): void { //update header's checkmark
 	}
 }
 function _isButton(evt: zk.Event): boolean {
-	return evt.target.$button //for extension, it makes a widget as a button
+	return evt.target!.$button //for extension, it makes a widget as a button
 		|| (zk.isLoaded('zul.wgt')
 			&& (evt.target instanceof zul.wgt.Button || evt.target instanceof zul.wgt.Toolbarbutton));
 }
 function _isInputWidget(evt: zk.Event): boolean { // B50-ZK-460
-	return evt.target.$inputWidget //for extension, it makes a widget as a input widget
+	return evt.target!.$inputWidget //for extension, it makes a widget as a input widget
 		|| (zk.isLoaded('zul.inp') && evt.target instanceof zul.inp.InputWidget);
 }
 function _focusable(evt: zk.Event): boolean {
@@ -628,7 +628,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		if (this.checkOnHighlightDisabled_())
 			return true;
 
-		if (!evt.domTarget || !evt.target.canActivate())
+		if (!evt.domTarget || !evt.target!.canActivate())
 			return true;
 
 		if (bSel) {
