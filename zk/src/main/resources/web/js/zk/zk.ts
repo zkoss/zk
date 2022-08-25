@@ -1096,7 +1096,7 @@ _zk.parseInt = function (v: string | number | boolean | undefined, b?: number): 
  * @return double the floating number
  * @since 5.0.2
  */
-_zk.parseFloat = function (v: string | number): number {
+_zk.parseFloat = function (v: string | number | boolean | undefined): number {
 	return v && !isNaN(v = parseFloat(v as string)) ? v : 0;
 };
 
