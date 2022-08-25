@@ -36,7 +36,7 @@ function _onSizeLater(wgt: Frozen): void {
 				totalcols -= 1;
 		}
 		for (var i = 0; i < columns; i++)
-				leftWidth += cells[i].offsetWidth;
+			leftWidth += cells[i].offsetWidth;
 
 		parent._deleteFakeRow(parent.eheadrows);
 
@@ -64,7 +64,7 @@ export class Frozen extends zul.Widget {
 	override parent!: zul.mesh.MeshWidget | undefined;
 	_start = 0;
 	_scrollScale = 0;
-	_smooth?: boolean;
+	_smooth: boolean | undefined; // eslint-disable-line zk/preferStrictBooleanType
 	_columns?: number;
 	_shallSyncScale?: boolean;
 	_delayedScroll?: number;
@@ -84,12 +84,12 @@ export class Frozen extends zul.Widget {
 	 * Sets the number of columns to freeze.(from left to right)
 	 * @param int columns positive only
 	 */
-	setColumns(v: number, opts?: Record<string, boolean>): this {
+	setColumns(columns: number, opts?: Record<string, boolean>): this {
 		const o = this._columns;
-		v = (v < 0 ? 0 : v);
-		this._columns = v;
+		columns = Math.max(0, columns);
+		this._columns = columns;
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== columns || opts?.force) {
 			if (this._columns) {
 				if (this.desktop) {
 					this.onSize();
@@ -119,7 +119,7 @@ export class Frozen extends zul.Widget {
 		const o = this._start;
 		this._start = start;
 
-		if (o !== start || (opts && opts.force)) {
+		if (o !== start || opts?.force) {
 			this.syncScroll();
 		}
 
@@ -130,8 +130,7 @@ export class Frozen extends zul.Widget {
 	 * Synchronizes the scrollbar according to {@link #getStart}.
 	 */
 	syncScroll(): void {
-		var p = this.parent;
-		if (p && p._nativebar) {
+		if (this.parent?._nativebar) {
 			var scroll = this.$n('scrollX');
 			if (scroll)
 				scroll.scrollLeft = this._start * 50;
@@ -145,7 +144,7 @@ export class Frozen extends zul.Widget {
 		var p = this.parent,
 			ebody: HTMLDivElement | undefined,
 			l: number;
-		if (p && p._nativebar && (ebody = p.ebody) && (l = ebody.scrollLeft) > 0) {
+		if (p?._nativebar && (ebody = p.ebody) && (l = ebody.scrollLeft) > 0) {
 			var scroll = this.$n('scrollX');
 			if (scroll) {
 				var scrollScale = l / (ebody.scrollWidth - ebody.clientWidth);
@@ -162,12 +161,12 @@ export class Frozen extends zul.Widget {
 
 		if (p._nativebar) {
 			//B70-ZK-2130: No need to reset when beforeSize, ZK-343 with native bar works fine too.
-			zWatch.listen({onSize: this});
+			zWatch.listen({ onSize: this });
 			var scroll = this.$n_('scrollX'),
 				scrollbarWidth = jq.scrollbarWidth();
 			// ZK-2583: native IE bug, add 1px in scroll div's height for workaround
 			this.$n_().style.height = this.$n_('cave').style.height = this.$n_('right').style.height = scroll.style.height
-					= (scroll.firstChild as HTMLElement).style.height = jq.px0(zk.ie ? scrollbarWidth + 1 : scrollbarWidth);
+				= (scroll.firstChild as HTMLElement).style.height = jq.px0(zk.ie ? scrollbarWidth + 1 : scrollbarWidth);
 			p._currentLeft = 0;
 			this.domListen_(scroll, 'onScroll');
 
@@ -180,7 +179,7 @@ export class Frozen extends zul.Widget {
 			this._shallSyncScale = true;
 		}
 		// refix-ZK-3100455 : grid/listbox with frozen trigger "invalidate" should _syncFrozenNow
-		zWatch.listen({onResponse: this});
+		zWatch.listen({ onResponse: this });
 		if (body)
 			jq(body).addClass('z-word-nowrap');
 		if (foot)
@@ -195,8 +194,8 @@ export class Frozen extends zul.Widget {
 
 		if (p._nativebar) {
 			this.domUnlisten_(this.$n_('scrollX'), 'onScroll');
-			p.unlisten({onScroll: this.proxy(this._onScroll)});
-			zWatch.unlisten({onSize: this});
+			p.unlisten({ onScroll: this.proxy(this._onScroll) });
+			zWatch.unlisten({ onSize: this });
 
 			if (head)
 				this.domUnlisten_(head, 'onScroll', '_doHeadScroll');
@@ -204,7 +203,7 @@ export class Frozen extends zul.Widget {
 			this._shallSyncScale = false;
 		}
 		// refix-ZK-3100455 : grid/listbox with frozen trigger "invalidate" should _syncFrozenNow
-		zWatch.unlisten({onResponse: this});
+		zWatch.unlisten({ onResponse: this });
 		if (body)
 			jq(body).removeClass('z-word-nowrap');
 		if (foot)
@@ -229,8 +228,7 @@ export class Frozen extends zul.Widget {
 	override onSize(): void {
 		if (!this._columns)
 			return;
-		var self = this;
-		self._syncFrozen(); // B65-ZK-1470
+		this._syncFrozen(); // B65-ZK-1470
 
 		//B70-ZK-2129: prevent height changed by scrolling
 		var p = this.parent!,
@@ -245,14 +243,14 @@ export class Frozen extends zul.Widget {
 			if (firstHdcell) {
 				const fhcs = firstHdcell.style;
 				if (!fhcs.height)
-					fhcs.height = firstHdcell.offsetHeight + 'px';
+					fhcs.height = `${firstHdcell.offsetHeight}px`;
 			}
 		}
 
 		// Bug 3218078, to do the sizing after the 'setAttr' command
-		setTimeout(function () {
-			_onSizeLater(self);
-			self._syncFrozenNow();
+		setTimeout(() => {
+			_onSizeLater(this);
+			this._syncFrozenNow();
 		});
 	}
 
@@ -283,14 +281,13 @@ export class Frozen extends zul.Widget {
 
 		var p = this.parent,
 			td: HTMLTableCellElement | undefined,
-			frozen = this,
-			fn = function (): void { // p shouldn't be null when fn is called
+			fn = (): void => { // p shouldn't be null when fn is called
 				var cf = zk.currentFocus;
 				if (cf) {
 					td = p!.getFocusCell(cf.$n_());
 					var index: number;
-					if (td && (index = td.cellIndex - frozen._columns!) >= 0) {
-						frozen.setStart(index);
+					if (td && (index = td.cellIndex - this._columns!) >= 0) {
+						this.setStart(index);
 						p!.ebody!.scrollLeft = 0;
 
 						if (p!.ehead)
@@ -323,16 +320,15 @@ export class Frozen extends zul.Widget {
 			num = Math.ceil(n);
 		if (this._lastScale == num)
 			return;
-		var self = this;
 		if (this._delayedScroll) {
 			clearTimeout(this._delayedScroll);
 		}
-		this._delayedScroll = setTimeout(function () {
-			self._lastScale = num;
-			self._doScrollNow(num);
-			self.smartUpdate('start', num);
-			self._start = num;
-			self._delayedScroll = undefined;
+		this._delayedScroll = setTimeout(() => {
+			this._lastScale = num;
+			this._doScrollNow(num);
+			this.smartUpdate('start', num);
+			this._start = num;
+			this._delayedScroll = undefined;
 		}, 0);
 	}
 
@@ -354,7 +350,7 @@ export class Frozen extends zul.Widget {
 				ftcells = ftrows ? ftrows.rows[0].cells : undefined;
 
 			for (var faker: HTMLElement | undefined, i = 0; hdcol && i < totalCols; hdcol = hdcol.nextSibling, i++) {
-				if ((hdcol as HTMLElement).style.width.indexOf('px') == -1) {
+				if (!(hdcol as HTMLElement).style.width.includes('px')) {
 					var sw = (hdcol as HTMLElement).style.width = jq.px0(hdcells[i].offsetWidth),
 						wgt = zk.Widget.$(hdcol)!;
 					if (!(wgt instanceof zul.mesh.HeadWidget)) {
@@ -387,8 +383,8 @@ export class Frozen extends zul.Widget {
 
 				if (cnt-- <= 0) { //show
 					var wd = isVisible ?
-							(zk.ie ? Math.max(jq(n).width()!, 0) : n.offsetWidth) // Bug ZK-2690
-							: 0;
+						(zk.ie ? Math.max(jq(n).width()!, 0) : n.offsetWidth) // Bug ZK-2690
+						: 0;
 					// ZK-2071: nativebar behavior should be same as fakebar
 					// ZK-4762: cellWidth should update while scroll into view
 					if (force || (wd < 2)) {
@@ -401,8 +397,8 @@ export class Frozen extends zul.Widget {
 						shallUpdate = true;
 					}
 				} else if (force ||
-							// Bug ZK-2690
-						((zk.ie ? Math.max(jq(n).width()!, 0) : n.offsetWidth) != 0)) { //hide
+					// Bug ZK-2690
+					((zk.ie ? Math.max(jq(n).width()!, 0) : n.offsetWidth) != 0)) { //hide
 					faker = jq('#' + n.id + '-hdfaker')[0];
 					//ZK-2776: consider faker's width first for layout consistent
 					if (faker.style.width && zk.parseInt(faker.style.width) > 1)
@@ -412,15 +408,15 @@ export class Frozen extends zul.Widget {
 				}
 
 				if (force || shallUpdate) {
-					updateBatch.push({node: n, index: i, width: cellWidth});
+					updateBatch.push({ node: n, index: i, width: cellWidth });
 				}
 			}
 
 			//hide the element without losing focus
-			jq(mesh).css({position: 'absolute', left: -9999});
+			jq(mesh).css({ position: 'absolute', left: -9999 });
 
 			var update: Update | undefined;
-			while (update = updateBatch.shift()) {
+			while ((update = updateBatch.shift())) {
 				const n = update.node,
 					cellWidth = update.width!,
 					i = update.index;
@@ -449,33 +445,19 @@ export class Frozen extends zul.Widget {
 			totalWidth += scrollbarWidth;
 
 			//hide the element without losing focus
-			jq(mesh).css({position: '', left: ''});
+			jq(mesh).css({ position: '', left: '' });
 		}
-		// TODO: The following lines could be refactored with optional chaining since
-		// transpilation to "if statements" is as bloat as it currently is.
-		// Set style width to table to avoid colgroup width not working
+		// NOTE: Set style width to table to avoid colgroup width not working
 		// because of width attribute (width="100%") on table
-		var headtbl: HTMLTableElement | undefined,
-			bodytbl: HTMLTableElement | undefined,
-			foottbl: HTMLTableElement | undefined;
-		if (headtbl = mesh.eheadtbl)
-			headtbl.style.width = jq.px(totalWidth);
-		if (bodytbl = mesh.ebodytbl)
-			bodytbl.style.width = jq.px(totalWidth - scrollbarWidth);
-		if (foottbl = mesh.efoottbl)
-			foottbl.style.width = jq.px(totalWidth);
+
+		const { eheadtbl, ebodytbl, efoottbl } = mesh;
+		if (eheadtbl)
+			eheadtbl.style.width = jq.px(totalWidth);
+		if (ebodytbl)
+			ebodytbl.style.width = jq.px(totalWidth - scrollbarWidth);
+		if (efoottbl)
+			efoottbl.style.width = jq.px(totalWidth);
 
 		mesh._restoreFocus();
-
-		// Bug ZK-601, Bug ZK-1572
-		if (zk.ie9_) {
-			const n = mesh.$n_();
-			n.className += ' ';
-			if (n.offsetHeight) {
-				// Empty on purpose.
-				// This is a trick for IE to recalculate its size by invoking `offsetHeight` or `offsetWidth`.
-			}
-			n.className.trim();
-		}
 	}
 }

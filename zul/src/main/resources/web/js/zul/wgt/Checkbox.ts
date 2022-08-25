@@ -15,11 +15,16 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 //Two onclick are fired if clicking on label, so ignore it if so
 function _shallIgnore(evt: zk.Event): boolean {
-	var v = evt.domEvent;
+	const v = evt.domEvent;
 	// B96-ZK-4821: shall ignore if target is not the real input checkbox (label or span)
 	return !!(v && !jq.nodeName(v.target as Node, 'input'));
 }
 
+export interface Checkbox {
+	$n(subId: 'real'): HTMLInputElement | undefined;
+	$n(subId: 'mold'): HTMLLabelElement | undefined;
+	$n<T extends HTMLElement = HTMLElement>(subId?: string): T | undefined;
+}
 /**
  * A checkbox.
  *
@@ -53,8 +58,8 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 	 */
 	setDisabled(disabled: boolean, opts?: Record<string, boolean>): this {
 		const o = this._disabled;
-		
-		if (opts && opts.adbs)
+
+		if (opts?.adbs)
 			// called from zul.wgt.ADBS.autodisable
 			this._adbs = true;	// Start autodisabling
 		else if (!opts || opts.adbs === undefined)
@@ -64,14 +69,15 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 			if (this._adbs) {
 				// autodisable is still active, allow enabling
 				this._adbs = false;
+				// eslint-disable-next-line @typescript-eslint/no-unnecessary-boolean-literal-compare
 			} else if (opts && opts.adbs === false)
 				// ignore re-enable by autodisable mechanism
 				disabled = !!this._disabled;
 		}
 		this._disabled = disabled;
 
-		if (o !== disabled || (opts && opts.force)) {
-			var n = this.$n('real') as HTMLInputElement;
+		if (o !== disabled || opts?.force) {
+			const n = this.$n('real');
 			if (n) {
 				n.disabled = disabled!;
 				jq(this.$n()).toggleClass(this.$s(this.getMoldPrefix_() + 'disabled'), disabled);
@@ -100,8 +106,8 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 		const o = this._checked;
 		this._checked = checked;
 
-		if (o !== checked || (opts && opts.force)) {
-			var n = this.$n('real');
+		if (o !== checked || opts?.force) {
+			const n = this.$n('real');
 			if (n) {
 				//B70-ZK-2057: prop() method can access right property values;
 				jq(n).prop('checked', checked);
@@ -138,13 +144,13 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 	 *
 	 * @param String name the name of this component.
 	 */
-	setName(v: string, opts?: Record<string, boolean>): this {
+	setName(name: string, opts?: Record<string, boolean>): this {
 		const o = this._name;
-		this._name = v;
+		this._name = name;
 
-		if (o !== v || (opts && opts.force)) {
-			var n = this.$n('real') as HTMLInputElement;
-			if (n) n.name = v || '';
+		if (o !== name || opts?.force) {
+			const n = this.$n('real');
+			if (n) n.name = name || '';
 		}
 
 		return this;
@@ -161,17 +167,17 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 	/** Sets the tab order of this component.
 	 * @param int tabindex
 	 */
-	override setTabindex(v: number, opts?: Record<string, boolean>): this {
+	override setTabindex(tabindex: number, opts?: Record<string, boolean>): this {
 		const o = this._tabindex;
-		this._tabindex = v;
+		this._tabindex = tabindex;
 
-		if (o !== v || (opts && opts.force)) {
-			var n = this.$n('real') as HTMLInputElement;
+		if (o !== tabindex || opts?.force) {
+			const n = this.$n('real');
 			if (n) {
-				if (v == null)
+				if (tabindex == null)
 					n.removeAttribute('tabindex');
 				else
-					n.tabIndex = v;
+					n.tabIndex = tabindex;
 			}
 		}
 
@@ -191,13 +197,13 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 	 * @param String value the value; If null, it is considered as empty.
 	 * @since 5.0.4
 	 */
-	setValue(v: string, opts?: Record<string, boolean>): this {
+	setValue(value: string, opts?: Record<string, boolean>): this {
 		const o = this._value;
-		this._value = v;
+		this._value = value;
 
-		if (o !== v || (opts && opts.force)) {
-			var n = this.$n<HTMLInputElement>('real');
-			if (n) n.value = v || '';
+		if (o !== value || opts?.force) {
+			const n = this.$n('real');
+			if (n) n.value = value || '';
 		}
 
 		return this;
@@ -270,14 +276,14 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 	 * @param boolean indeterminate whether checkbox is indeterminate
 	 * @since 8.6.0
 	 */
-	setIndeterminate(v: boolean, opts?: Record<string, boolean>): this {
+	setIndeterminate(indeterminate: boolean, opts?: Record<string, boolean>): this {
 		const o = this._indeterminate;
-		this._indeterminate = v;
+		this._indeterminate = indeterminate;
 
-		if (o !== v || (opts && opts.force)) {
-			var n = this.$n('real');
+		if (o !== indeterminate || opts?.force) {
+			const n = this.$n('real');
 			if (n) {
-				jq(n).prop('indeterminate', v);
+				jq(n).prop('indeterminate', indeterminate);
 				if (!this._isDefaultMold()) {
 					this.clearStateClassName_();
 					jq(this.$n()).addClass(this.getClassNameByState_());
@@ -308,19 +314,20 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 	}
 
 	contentAttrs_(): string {
-		var html = '',
-			v: string | undefined | number; // cannot use this._name for radio
-		if (v = this.getName())
-			html += ` name="${v}"`;
+		const out: string[] = [],
+			name = this.getName(); // cannot use this._name for radio
+		if (name)
+			out.push(`name="${name}"`);
 		if (this._disabled)
-			html += ' disabled="disabled"';
+			out.push('disabled="disabled"');
 		if (this._checked)
-			html += ' checked="checked"';
-		if (v = this._tabindex)
-			html += ` tabindex="${v}"`;
-		if (v = this.getValue())
-			html += ` value="${v}"`;
-		return html;
+			out.push('checked="checked"');
+		if (this._tabindex)
+			out.push(`tabindex="${this._tabindex}"`);
+		const value = this.getValue();
+		if (value)
+			out.push(`value="${value}"`);
+		return out.join(' ');
 	}
 
 	_moldA11yAttrs(): string {
@@ -330,36 +337,32 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 
-		var n = this.$n('real') as HTMLInputElement,
-			mold = this.$n('mold')!,
-			indeterminate = this.isIndeterminate();
+		const n = this.$n('real')!,
+			mold = this.$n('mold')!;
 
 		// Bug 2383106
-		if (n.checked != n.defaultChecked)
-			n.checked = n.defaultChecked;
-		if (indeterminate)
+		n.checked = n.defaultChecked;
+		if (this.isIndeterminate())
 			n.indeterminate = true;
 
 		this.domListen_(n, 'onFocus', 'doFocus_')
 			.domListen_(n, 'onBlur', 'doBlur_')
-			.domListen_(mold, 'onMouseDown', '_doMoldMouseDown');
-
-		this._setTabIndexForMold();
+			.domListen_(mold, 'onMouseDown', '_doMoldMouseDown')
+			._setTabIndexForMold();
 	}
 
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
-		var n = this.$n('real')!,
+		const n = this.$n('real')!,
 			mold = this.$n('mold')!;
 
 		this.domUnlisten_(mold, 'onMouseDown', '_doMoldMouseDown')
 			.domUnlisten_(n, 'onFocus', 'doFocus_')
-			.domUnlisten_(n, 'onBlur', 'doBlur_');
-
-		super.unbind_(skipper, after, keepRod);
+			.domUnlisten_(n, 'onBlur', 'doBlur_')
+			.unbind_(skipper, after, keepRod);
 	}
 
 	_setTabIndexForMold(): void {
-		var mold = this.$n('mold') as HTMLLabelElement;
+		const mold = this.$n('mold');
 		if (mold)
 			mold.tabIndex = this._canTabOnMold() ? 0 : -1;
 	}
@@ -383,7 +386,7 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 				this.nextState_();
 				this.fireOnCheck_(this.getState());
 			} else {
-				var real = this.$n_<HTMLInputElement>('real'),
+				const real = this.$n_<HTMLInputElement>('real'),
 					checked = real.checked;
 				if (checked != this._checked) { //changed
 					this.setChecked(checked); //so Radio has a chance to override it
@@ -394,7 +397,7 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 					zk(real).focus();
 
 				// B65-ZK-1837: should stop propagation
-				evt.stop({propagation: true});
+				evt.stop({ propagation: true });
 				super.doClick_(evt, popupOnly);
 
 				// B85-ZK-3866: do extra click, if it's a radio
@@ -428,16 +431,14 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 	}
 
 	override domClass_(no?: zk.DomClassOptions): string {
-		var cls = super.domClass_(no),
-			mold = this.getMold();
-
-		cls += ' ' + this.$s(mold);
-
-		cls += ' ' + this.getClassNameByState_();
+		const out = [
+			super.domClass_(no),
+			this.$s(this.getMold()),
+			this.getClassNameByState_()
+		];
 		if (this.isDisabled())
-			cls += ' ' + this.$s(this.getMoldPrefix_() + 'disabled');
-
-		return cls;
+			out.push(this.$s(this.getMoldPrefix_() + 'disabled'));
+		return out.join(' ');
 	}
 
 	_isDefaultMold(): boolean {
@@ -452,12 +453,10 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 		if (this._indeterminate) {
 			this.setIndeterminate(false);
 			this.setChecked(true);
+		} else if (this._checked) {
+			this.setChecked(false);
 		} else {
-			if (this._checked) {
-				this.setChecked(false);
-			} else {
-				this.setIndeterminate(true);
-			}
+			this.setIndeterminate(true);
 		}
 	}
 
@@ -466,7 +465,7 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 	}
 
 	getClassNameByState_(): string {
-		let moldPrefix = this.getMoldPrefix_();
+		const moldPrefix = this.getMoldPrefix_();
 		if (this._indeterminate) {
 			return this.$s(moldPrefix + 'indeterminate');
 		} else {
@@ -475,7 +474,7 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 	}
 
 	clearStateClassName_(): void {
-		let n = jq(this.$n()),
+		const n = jq(this.$n()),
 			moldPrefix = this.getMoldPrefix_();
 		if (n) {
 			n.removeClass(this.$s(moldPrefix + 'off'))
@@ -493,7 +492,7 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 				this.fireOnCheck_(this.getState());
 				return;
 			}
-			let checked = !this.isChecked();
+			const checked = !this.isChecked();
 			this.setChecked(checked);
 			this.fireOnCheck_(checked);
 		}

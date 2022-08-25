@@ -27,11 +27,11 @@ export class Caption extends zul.LabelImageWidget<HTMLDivElement> {
 	//super//
 	domDependent_ = true;
 
-	override rerender(skipper?: zk.Skipper | number): void {
+	override rerender(skipper?: zk.Skipper | number): this {
 		var p = this.parent;
 		if (p)
 			p.clearCache(); // B50-ZK-244
-		super.rerender(skipper);
+		return super.rerender(skipper);
 	}
 
 	override domContent_(): string {
@@ -50,7 +50,7 @@ export class Caption extends zul.LabelImageWidget<HTMLDivElement> {
 
 	override updateDomContent_(): void {
 		var cnt = this.domContent_(),
-		dn = this.$n('cave');
+			dn = this.$n('cave');
 		if (dn) {
 			var firstWgtDom;
 			if (this.firstChild) {
@@ -115,11 +115,12 @@ export class Caption extends zul.LabelImageWidget<HTMLDivElement> {
 		// FIXME: Div has no property width. Setting it in the console has no effect.
 		// Dead code?
 		if (o == 'w')
-			(this.$n_() as HTMLElement & {width?: string}).width = '';
+			(this.$n_() as HTMLElement & { width?: string }).width = '';
 		return undefined;
 	}
 
 	// override for the bug ZK-1799
+	// eslint-disable-next-line zk/javaStyleSetterSignature
 	override setFlexSizeW_(n: HTMLElement, zkn: zk.JQZK, width: number, isFlexMin?: boolean): void {
 		if (isFlexMin) {
 			if (this._isCloseVisible()) {

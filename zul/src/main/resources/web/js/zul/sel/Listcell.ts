@@ -26,7 +26,9 @@ function _isListgroupfoot(wgt: zk.Widget): boolean {
 @zk.WrapClass('zul.sel.Listcell')
 export class Listcell extends zul.LabelImageWidget<HTMLTableCellElement> {
 	// Parent could be null as asserted by `bindChildren_`.
-	override parent!: zul.sel.Listitem | undefined;
+	override parent?: zul.sel.Listitem;
+	override previousSibling?: zul.sel.Listcell;
+	override nextSibling?: zul.sel.Listcell;
 	_span = 1;
 
 	/** Returns number of columns to span this cell.
@@ -47,11 +49,11 @@ export class Listcell extends zul.LabelImageWidget<HTMLTableCellElement> {
 	}
 
 	// change colspan to span since ZK 10.0.0
-	setSpan(v: number, opts?: Record<string, boolean>): this {
+	setSpan(span: number, opts?: Record<string, boolean>): this {
 		const o = this._span;
-		this._span = v = Math.max(v, 1);
+		this._span = span = Math.max(span, 1);
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== span || opts?.force) {
 			var n = this.$n();
 			if (n) n.colSpan = this._span;
 		}
@@ -111,7 +113,7 @@ export class Listcell extends zul.LabelImageWidget<HTMLTableCellElement> {
 	 */
 	getListheader(): zul.sel.Listheader | undefined {
 		var box = this.getListbox();
-		if (box && box.listhead) {
+		if (box?.listhead) {
 			var j = this.getChildIndex();
 			if (j < box.listhead.nChildren)
 				return box.listhead.getChildAt<zul.sel.Listheader>(j);
@@ -120,7 +122,7 @@ export class Listcell extends zul.LabelImageWidget<HTMLTableCellElement> {
 	}
 
 	override domLabel_(): string {
-		return zUtl.encodeXML(this.getLabel(), {maxlength: this.getMaxlength()});
+		return zUtl.encodeXML(this.getLabel(), { maxlength: this.getMaxlength() });
 	}
 
 	override domContent_(): string {
@@ -151,7 +153,7 @@ export class Listcell extends zul.LabelImageWidget<HTMLTableCellElement> {
 			// insert checkmark
 			//B70-ZK-2053:make sure checkmark won't display on multiple listgroup
 			if (box.isCheckmark() && !_isListgroupfoot(p)
-					&& (!isGrp || (box.groupSelect && box.isMultiple()))) {
+				&& (!isGrp || (box.groupSelect && box.isMultiple()))) {
 				var chkable = p.isSelectable(),
 					multi = box.isMultiple();
 				s += '<span id="' + p.uuid + '-cm" class="' + p.$s('checkable')
@@ -170,8 +172,8 @@ export class Listcell extends zul.LabelImageWidget<HTMLTableCellElement> {
 			// insert toggle icon
 			if (_isListgroup(p)) { // For "type predicates" to work, isGrp cannot be used.
 				var cls = p._open ?
-						p.getIconOpenClass_() + ' ' + p.$s('icon-open') :
-						p.getIconCloseClass_() + ' ' + p.$s('icon-close');
+					p.getIconOpenClass_() + ' ' + p.$s('icon-open') :
+					p.getIconCloseClass_() + ' ' + p.$s('icon-close');
 				s += '<span id="' + p.uuid + '-img" class="' + p.$s('icon') + '"><i class="' + cls + '"></i></span>';
 			}
 			if (s) return s;
@@ -194,7 +196,7 @@ export class Listcell extends zul.LabelImageWidget<HTMLTableCellElement> {
 
 		// ZK-2136: all children should apply -moz-user-select: none
 		if (n && zk.gecko && (this._draggable || this.parent!._draggable)
-				&& !jq.nodeName(evt.domTarget, 'input', 'textarea')) {
+			&& !jq.nodeName(evt.domTarget, 'input', 'textarea')) {
 			jq(n).addClass('z-draggable-over');
 		}
 		super.doMouseOver_(evt);
@@ -205,7 +207,7 @@ export class Listcell extends zul.LabelImageWidget<HTMLTableCellElement> {
 
 		// ZK-2136: all children should apply -moz-user-select: none
 		if (n && zk.gecko && (this._draggable || this.parent!._draggable)
-				&& !jq.nodeName(evt.domTarget, 'input', 'textarea')) {
+			&& !jq.nodeName(evt.domTarget, 'input', 'textarea')) {
 			jq(n).removeClass('z-draggable-over'); // Bug ZK-580
 		}
 		super.doMouseOut_(evt);
@@ -213,7 +215,7 @@ export class Listcell extends zul.LabelImageWidget<HTMLTableCellElement> {
 
 	override domAttrs_(no?: zk.DomAttrsOptions): string {
 		return super.domAttrs_(no)
-			+ (this._span > 1 ? ' colspan="' + this._span + '"' : '');
+			+ (this._span > 1 ? ` colspan="${this._span}"` : '');
 	}
 
 	//-- super --//
@@ -226,7 +228,7 @@ export class Listcell extends zul.LabelImageWidget<HTMLTableCellElement> {
 			if (head._valign)
 				style += 'vertical-align:' + head._valign + ';';
 			if (!head.isVisible())
-				no = zk.copy(no, {visible: true});
+				no = zk.copy(no, { visible: true });
 		}
 		return super.domStyle_(no) + style;
 	}
@@ -244,6 +246,6 @@ export class Listcell extends zul.LabelImageWidget<HTMLTableCellElement> {
 	}
 
 	override deferRedrawHTML_(out: string[]): void {
-		out.push('<td', this.domAttrs_({domClass: true}), ' class="z-renderdefer"></td>');
+		out.push(`<td ${this.domAttrs_({ domClass: true })} class="z-renderdefer"></td>`);
 	}
 }

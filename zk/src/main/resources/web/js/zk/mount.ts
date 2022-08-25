@@ -781,17 +781,17 @@ jq(function () {
 			var wgt = zk.keyCapture;
 			if (wgt) zk.keyCapture = undefined;
 			else wgt = Widget.$(evt, {child: true});
-			_doEvt(new zk.Event(wgt!, 'onKeyUp', evt.keyData(), undefined, evt));
+			_doEvt(new zk.Event(wgt, 'onKeyUp', evt.keyData(), undefined, evt));
 		})
 		.keypress(function (evt) {
 			var wgt = zk.keyCapture;
 			if (!wgt) wgt = Widget.$(evt, {child: true});
-			_doEvt(new zk.Event(wgt!, 'onKeyPress', evt.keyData(), undefined, evt));
+			_doEvt(new zk.Event(wgt, 'onKeyPress', evt.keyData(), undefined, evt));
 		})
 		.on('paste', function (evt: JQuery.TriggeredEvent & {keyData()}) {
 			var wgt = zk.keyCapture;
 			if (!wgt) wgt = Widget.$(evt, {child: true});
-			_doEvt(new zk.Event(wgt!, 'onPaste', evt.keyData(), undefined, evt));
+			_doEvt(new zk.Event(wgt, 'onPaste', evt.keyData(), undefined, evt));
 		})
 		.on('zcontextmenu', function (evt: JQuery.MouseEventBase) {
 			//ios: zcontextmenu shall be listened first,
@@ -816,7 +816,7 @@ jq(function () {
 			}
 			var wgt = Widget.$(evt, {child: true});
 			_docMouseDown(
-				new zk.Event(wgt!, 'onMouseDown', evt.mouseData(), undefined, evt),
+				new zk.Event(wgt, 'onMouseDown', evt.mouseData(), undefined, evt),
 				wgt);
 		})
 		.on('zmouseup', function (evt: JQuery.MouseUpEvent) {
@@ -839,17 +839,17 @@ jq(function () {
 
 			var wgt = zk.mouseCapture;
 			if (!wgt) wgt = Widget.$(evt, {child: true});
-			_doEvt(new zk.Event(wgt!, 'onMouseMove', evt.mouseData(), undefined, evt));
+			_doEvt(new zk.Event(wgt, 'onMouseMove', evt.mouseData(), undefined, evt));
 		})
 		.mouseover(function (evt) {
 			if (zk.mobile) return; // unsupported on touch device for better performance
 			zk.currentPointer[0] = evt.pageX || 0;
 			zk.currentPointer[1] = evt.pageY || 0;
 
-			_doEvt(new zk.Event(Widget.$(evt, {child: true})!, 'onMouseOver', evt.mouseData(), {ignorable: true}, evt));
+			_doEvt(new zk.Event(Widget.$(evt, {child: true}), 'onMouseOver', evt.mouseData(), {ignorable: true}, evt));
 		})
 		.mouseout(function (evt) {
-			_doEvt(new zk.Event(Widget.$(evt, {child: true})!, 'onMouseOut', evt.mouseData(), {ignorable: true}, evt));
+			_doEvt(new zk.Event(Widget.$(evt, {child: true}), 'onMouseOut', evt.mouseData(), {ignorable: true}, evt));
 		})
 		.click(function (evt) {
 			if (zk.Draggable.ignoreClick()) return;
@@ -865,7 +865,7 @@ jq(function () {
 				zjq._fixClick(evt);
 
 				if (evt.which == 1)
-					_doEvt(new zk.Event(Widget.$(evt, {child: true})!,
+					_doEvt(new zk.Event(Widget.$(evt, {child: true}),
 						'onClick', evt.mouseData(), {}, evt));
 				//don't return anything. Otherwise, it replaces event.returnValue in IE (Bug 1541132)
 			}
@@ -897,7 +897,7 @@ jq(function () {
 					return; //not from Clients.evalJavascript
 				lastCheckPos = checkPos;
 			}
-			zAu.send(new zk.Event(zk.Desktop._dt!, 'onScriptError', {
+			zAu.send(new zk.Event(zk.Desktop._dt, 'onScriptError', {
 				message: errorMsg,
 				stack: stack
 			}));

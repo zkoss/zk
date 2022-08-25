@@ -9,15 +9,23 @@
 
 Copyright (C)  Potix Corporation. All Rights Reserved.
 */
-var _WidgetX: Partial<zk.Widget> = {},
-	_zkMatchMediaRegexPattern = /ZKMatchMedia=([^;]*)/,
-	_portrait: Record<string | number, boolean> = {'0': true, '180': true}, //default portrait definition
+var _zkMatchMediaRegexPattern = /ZKMatchMedia=([^;]*)/,
+	_portrait: Record<string | number, boolean> = { '0': true, '180': true }, //default portrait definition
 	_initLandscape = jq.innerWidth() > jq.innerHeight(), // initial orientation is landscape or not
 	// eslint-disable-next-line zk/preferStrictBooleanType
 	_initDefault = _portrait[window.orientation] as boolean | undefined; //default orientation
 
-zk.override(zk.Widget.prototype, _WidgetX, {
-	$binder(this: zk.Widget): zkbind.Binder | undefined {
+declare module '@zk/widget' {
+	interface Widget {
+		_$binder?: zkbind.Binder;
+		$ZKBINDER$?: boolean;
+		$ZKMATCHMEDIA$?: string[];
+		$binder(): zkbind.Binder | undefined;
+	}
+}
+const _WidgetX = zk.augment(zk.Widget.prototype, {
+	$binder(): zkbind.Binder | undefined {
+		// eslint-disable-next-line @typescript-eslint/no-this-alias
 		var w: zk.Widget | undefined = this;
 		for (; w; w = w.parent) {
 			if (w.$ZKBINDER$)
@@ -28,7 +36,7 @@ zk.override(zk.Widget.prototype, _WidgetX, {
 				w._$binder = new zkbind.Binder(w, this);
 			return w._$binder;
 		}
-		return undefined;
+		return;
 	},
 	$afterCommand(command: string, args?: unknown[]): void {
 		const binder = this.$binder();
@@ -40,7 +48,7 @@ zk.override(zk.Widget.prototype, _WidgetX, {
 			this._$binder.destroy();
 			this._$binder = undefined;
 		}
-		_WidgetX.unbind_!.call(this, skipper, after, keepRod);
+		_WidgetX.unbind_.call(this, skipper, after, keepRod);
 	}
 });
 
@@ -89,7 +97,7 @@ export interface BinderOptions {
 export function $(n: string | HTMLElement | zk.Event | JQuery.Event, opts?: BinderOptions): Binder | undefined {
 	var widget = zk.Widget.$(n, opts);
 	if (widget)
-		return widget.$binder!();
+		return widget.$binder();
 	zk.error('Not found ZK Binder with [' + n + ']');
 }
 zkbind.$ = $;
@@ -115,7 +123,7 @@ function _matchMedia(event: MediaQueryListEvent | MediaQueryList, binder: Binder
 			dpr = 1;
 		if (zk.mobile) {
 			if ((_initLandscape && _initDefault) || (!_initLandscape && !_initDefault))
-				_portrait = {'-90': true, '90': true};
+				_portrait = { '-90': true, '90': true };
 			orient = _portrait[window.orientation] ? 'portrait' : 'landscape';
 		} else {
 			orient = jq.innerWidth() > jq.innerHeight() ? 'landscape' : 'portrait';
@@ -124,9 +132,9 @@ function _matchMedia(event: MediaQueryListEvent | MediaQueryList, binder: Binder
 			dpr = window.devicePixelRatio;
 		// 16 is the length of string MATCHMEDIAVALUE_PREFIX in BinderCtrl.java
 		var ci = [new Date().getTimezoneOffset(), screen.width, screen.height, screen.colorDepth, jq.innerWidth(),
-				jq.innerHeight(), jq.innerX(), jq.innerY(), dpr.toFixed(1), orient, zk.mm.tz.guess(), event.matches, value.substring(16)];
+		jq.innerHeight(), jq.innerX(), jq.innerY(), dpr.toFixed(1), orient, zk.mm.tz.guess(), event.matches, value.substring(16)];
 		// $ZKCLIENTINFO$ refers to CLIENT_INFO string in BinderCtrl.java
-		binder.command(value, {'$ZKCLIENTINFO$': ci});
+		binder.command(value, { '$ZKCLIENTINFO$': ci });
 		if (!cookies.$contains(value)) cookies.push(value);
 		document.cookie = 'ZKMatchMedia=' + encodeRFC5987ValueChars(cookies);
 		document.cookie = 'ZKClientInfo=' + encodeRFC5987ValueChars(JSON.stringify(ci));
@@ -187,7 +195,7 @@ export class Binder extends zk.Object {
 					})(media);
 				mql.addListener(handler);
 				handler(mql);
-				mqls.push({mql: mql, handler: handler});
+				mqls.push({ mql: mql, handler: handler });
 			}
 			this._mediaQueryLists = mqls;
 		}
@@ -203,7 +211,7 @@ export class Binder extends zk.Object {
 			fn = cmd;
 			cmd = this._lastcmd!;
 		}
-			
+
 		var ac = this._aftercmd![cmd as string];
 		if (!ac) this._aftercmd![cmd as string] = [fn];
 		else
@@ -266,7 +274,7 @@ export class Binder extends zk.Object {
 			if (opts.repeatIgnore)
 				_fixCommandName('onBindCommand$', cmd, opts, 'repeatIgnore');
 		}
-		zAu.send(new zk.Event(wgt!, 'onBindCommand$' + cmd, {cmd: cmd, args: args}, zk.copy({toServer: true}, opts)), timeout != undefined ? timeout : 38);
+		zAu.send(new zk.Event(wgt, 'onBindCommand$' + cmd, { cmd: cmd, args: args }, zk.copy({ toServer: true }, opts)), timeout != undefined ? timeout : 38);
 		this._lastcmd = cmd;
 		return this;
 	}
@@ -286,7 +294,7 @@ export class Binder extends zk.Object {
 			if (opts.repeatIgnore)
 				_fixCommandName('onBindGlobalCommand$', cmd, opts, 'repeatIgnore');
 		}
-		zAu.send(new zk.Event(wgt!, 'onBindGlobalCommand$' + cmd, {cmd: cmd, args: args}, zk.copy({toServer: true}, opts)), timeout != undefined ? timeout : 38);
+		zAu.send(new zk.Event(wgt, 'onBindGlobalCommand$' + cmd, { cmd: cmd, args: args }, zk.copy({ toServer: true }, opts)), timeout != undefined ? timeout : 38);
 		this._lastcmd = cmd;
 		return this;
 	}
@@ -311,7 +319,7 @@ export class Binder extends zk.Object {
 	 * @since 9.0.1
 	 */
 	upload(cmd: string, file: File): void {
-		this.$view!.fire('onBindCommandUpload$' + cmd, {cmd: cmd}, {file: file});
+		this.$view!.fire('onBindCommandUpload$' + cmd, { cmd: cmd }, { file: file });
 	}
 
 	/**
@@ -325,7 +333,7 @@ export class Binder extends zk.Object {
 	static postCommand(dom: HTMLElement, command: string, args?: Record<string, unknown>, opt?: zk.EventOptions, timeout?: number): void {
 		var w = zk.Widget.$(dom);
 		if (w) {
-			var binder = w.$binder!();
+			var binder = w.$binder();
 			if (binder) {
 				binder.command(command, args, opt, timeout);
 			}
@@ -342,7 +350,7 @@ export class Binder extends zk.Object {
 	static postGlobalCommand(dom: HTMLElement, command: string, args?: Record<string, unknown>, opt?: zk.EventOptions, timeout?: number): void {
 		var w = zk.Widget.$(dom);
 		if (w) {
-			var binder = w.$binder!();
+			var binder = w.$binder();
 			if (binder) {
 				binder.globalCommand(command, args, opt, timeout);
 			}

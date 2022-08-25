@@ -80,7 +80,7 @@ export class ModalFileViewer extends zk.Object {
 			else {
 				var $n = jq('#' + id),
 					index = $n.parent().children().index($n[0]);
-				zAu.send(new zk.Event(wgt.$o()!, 'onRemove', index));
+				zAu.send(new zk.Event(wgt.$o(), 'onRemove', index));
 				jq(this.viewer).remove();
 			}
 

@@ -321,10 +321,10 @@ zk.override(zk.Widget.prototype, _xWidget, {
 		this._cancelHold!();
 	}
 });
-var _jq = {},
-	_jqEvent: Partial<JQuery.Event> = {},
+var _jqEvent: Partial<JQuery.Event> = {},
 	_jqEventSpecial = {};
-zk.override(jq.fn, _jq, {
+zk.augment(jq.fn, {
+	// @ts-expect-error: incompatible with the signature in the original jQuery
 	on: function (this: JQuery, type: string, selector, data: unknown, fn: unknown, ...rest: unknown[]) {
 		var evtType: string | undefined;
 		if ((evtType = zjq.eventTypes[type])) {
@@ -352,6 +352,7 @@ zk.override(jq.fn, _jq, {
 		}
 		return this;
 	},
+	// @ts-expect-error: incompatible with the signature in the original jQuery
 	off: function (this: JQuery, type: string, selector: unknown, fn: unknown, ...rest: unknown[]) {
 		var evtType: string | undefined;
 		if ((evtType = zjq.eventTypes[type])) {

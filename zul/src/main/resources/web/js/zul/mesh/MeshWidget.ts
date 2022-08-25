@@ -88,7 +88,7 @@ function _calcMinWd(wgt: MeshWidget): MeshWidth {
 				ftrows = wgt.efootrows,
 				ftcells = ftrows ? ftrows.rows[0].cells : undefined;
 			for (var i = 0; footcol; footcol = footcol.nextSibling) {
-				if (ftcells && ftcells[i])
+				if (ftcells?.[i])
 					ftcells[i].style.width = ''; // reset it
 
 				ftfakerws[i++] = (footcol as HTMLElement).style.width;
@@ -124,9 +124,9 @@ function _calcMinWd(wgt: MeshWidget): MeshWidth {
 			footcells = ftfaker ? wgt._getFirstRowCells(wgt.efootrows) : undefined;
 
 		for (var i = 0; i < len; i++) {
-			var wd = bodycells && bodycells[i] ? bodycells[i].offsetWidth : 0,
-				ftwd = footcells && footcells[i] && zk(footcells[i]).isVisible() ? footcells[i].offsetWidth : 0,
-				hdwd = w && w.isVisible() ? w.getContentWidth_() : 0,
+			var wd = bodycells?.[i] ? bodycells[i].offsetWidth : 0,
+				ftwd = footcells?.[i] && zk(footcells[i]).isVisible() ? footcells[i].offsetWidth : 0,
+				hdwd = w?.isVisible() ? w.getContentWidth_() : 0,
 				header: zk.Widget | undefined;
 
 			if ((header = headWgt!.getChildAt(i)) && header.getWidth())
@@ -147,8 +147,8 @@ function _calcMinWd(wgt: MeshWidget): MeshWidth {
 		if (ftfaker)
 			wgt._deleteFakeRow(wgt.efootrows);
 	} else {
-		var tr: HTMLTableRowElement | undefined;
-		if (tr = _getSigRow(wgt)) {
+		var tr = _getSigRow(wgt);
+		if (tr) {
 			for (var cells = tr.cells, i = cells.length; i--;) {
 				var wd = cells[i].offsetWidth;
 				wds[i] = wd;
@@ -170,15 +170,15 @@ function _calcMinWd(wgt: MeshWidget): MeshWidth {
 	}
 
 	if (wgt.eheadtbl && headn) {//restore headers widths
-		if (eheadtblw!.indexOf('%') < 0) { // once sized and consider faker bar
+		if (!eheadtblw!.includes('%')) { // once sized and consider faker bar
 			var $hdfakerbar = jq(wgt.head!.$n_('hdfaker')).find('[id*=hdfaker-bar]'),
 				hdfakerbar = $hdfakerbar[0];
 			if (hdfakerbar) eheadtblw = jq.px0(parseInt(eheadtblw!) + parseInt(hdfakerbar.style.width));
 			wgt.eheadtbl.style.width = eheadtblw!;
 		} else
-			wgt.eheadtbl.width = eheadtblw || '';
+			wgt.eheadtbl.width = eheadtblw ?? '';
 
-		wgt.eheadtbl.style.tableLayout = eheadtblfix || '';
+		wgt.eheadtbl.style.tableLayout = eheadtblfix ?? '';
 		if (zk.chrome)
 			wgt.eheadtbl.style.display = '';
 		var headcol = hdfaker!.firstChild,
@@ -195,8 +195,8 @@ function _calcMinWd(wgt: MeshWidget): MeshWidth {
 		}
 	}
 	if (wgt.efoottbl) {//restore footers widths
-		wgt.efoottbl.width = efoottblw || '';
-		wgt.efoottbl.style.tableLayout = efoottblfix || '';
+		wgt.efoottbl.width = efoottblw ?? '';
+		wgt.efoottbl.style.tableLayout = efoottblfix ?? '';
 		if (zk.chrome)
 			wgt.efoottbl.style.display = '';
 		if (ftfaker) {
@@ -206,8 +206,8 @@ function _calcMinWd(wgt: MeshWidget): MeshWidth {
 		}
 	}
 	if (wgt.ebodytbl) {//restore body fakers widths
-		wgt.ebodytbl.width = ebodytblw || '';
-		wgt.ebodytbl.style.tableLayout = ebodytblfix || '';
+		wgt.ebodytbl.width = ebodytblw ?? '';
+		wgt.ebodytbl.style.tableLayout = ebodytblfix ?? '';
 		if (zk.chrome)
 			wgt.ebodytbl.style.display = '';
 		if (bdfaker) {
@@ -219,7 +219,7 @@ function _calcMinWd(wgt: MeshWidget): MeshWidth {
 
 	if (wgtn)
 		wgtn.style.whiteSpace = ws;
-	return {width: width, wds: wds};
+	return { width: width, wds: wds };
 }
 function _fixBodyMinWd(wgt: MeshWidget, fixMesh?: boolean): void {
 	// effective only when there is no header
@@ -233,7 +233,7 @@ function _fixBodyMinWd(wgt: MeshWidget, fixMesh?: boolean): void {
 			wds = wgt._minWd!.wds,
 			wlen = wds.length;
 		if (fixMesh && meshmin)
-			wgt.setFlexSize_({width: wd}, true);
+			wgt.setFlexSize_({ width: wd }, true);
 		if (!(tr = tr.firstChild) || !(tr = tr.firstChild))
 			return; // no first tr
 		// eslint-disable-next-line zk/noNull
@@ -265,8 +265,8 @@ function _fixPageSize(wgt: MeshWidget, rows: HTMLCollectionOf<HTMLTableRowElemen
 		hgh = 0,
 		row: HTMLTableRowElement | undefined,
 		j = 0;
-	for (var it = wgt.getBodyWidgetIterator({skipHidden: true}),
-			len = rows.length; it.next() && j < len; j++) {
+	for (var it = wgt.getBodyWidgetIterator({ skipHidden: true }),
+		len = rows.length; it.next() && j < len; j++) {
 		row = rows[j];
 		var top: number | undefined = row.offsetTop - (row.offsetParent == etbparent ? etbtop : 0);
 		if (top > max) {
@@ -295,7 +295,7 @@ function _fixPageSize(wgt: MeshWidget, rows: HTMLCollectionOf<HTMLTableRowElemen
 		//enforce pageSize change
 		if (j == 0) j = 1; //at least one per page
 		if (j != wgt.getPageSize()) {
-			wgt.fire('onPageSize', {size: j});
+			wgt.fire('onPageSize', { size: j });
 			return true;
 		}
 	}
@@ -364,14 +364,14 @@ function _cpCellWd(wgt: MeshWidget): void {
 		// eslint-disable-next-line zk/noNull
 		src: HTMLTableRowElement | null | undefined,
 		maxnc = 0;
-	for (var j = 0, it = wgt.getBodyWidgetIterator({skipHidden: true}), w: zul.mesh.Item | undefined; (w = it.next());) {
+	for (var j = 0, it = wgt.getBodyWidgetIterator({ skipHidden: true }), w: zul.mesh.Item | undefined; (w = it.next());) {
 		if (!w._loaded || w.z_rod)
 			continue;
 
 		var row = srcrows[j++], $row = zk(row),
 			cells = row.cells, nc = $row.ncols(),
 			valid = cells.length == nc && $row.isVisible();
-			//skip with colspan and invisible
+		//skip with colspan and invisible
 		if (valid && nc >= ncols) {
 			maxnc = ncols;
 			src = row;
@@ -390,7 +390,7 @@ function _cpCellWd(wgt: MeshWidget): void {
 	if (fakeRow) { //the longest row containing colspan
 		src = document.createElement('TR') as HTMLTableRowElement;
 		src.style.height = '0px';
-			//Note: we cannot use display="none" (offsetWidth won't be right)
+		//Note: we cannot use display="none" (offsetWidth won't be right)
 		for (var j = 0; j < maxnc; ++j)
 			src.appendChild(document.createElement('TD'));
 		srcrows[0].parentNode!.appendChild(src);
@@ -407,31 +407,31 @@ function _cpCellWd(wgt: MeshWidget): void {
 			sum += s.offsetWidth;
 			d.style.width = zk(s).contentWidth() as unknown as string;
 		} else {
-			d.style.width = s.offsetWidth + 'px';
+			d.style.width = `${s.offsetWidth}px`;
 			if (maxnc > 1) { //don't handle single cell case (bug 1729739)
 				var v = s.offsetWidth - d.offsetWidth;
 				if (v != 0) {
 					v += s.offsetWidth;
 					if (v < 0) v = 0;
-					d.style.width = v + 'px';
+					d.style.width = `${v}px`;
 				}
 			}
 		}
 	}
 	if (zk.opera && wgt.isSizedByContent())
-		(dst.parentNode!.parentNode as HTMLElement).style.width = sum + 'px';
+		(dst.parentNode!.parentNode as HTMLElement).style.width = `${sum}px`;
 	if (fakeRow)
 		src!.parentNode!.removeChild(src!);
 }
 function listenOnFitSize(wgt: MeshWidget): void {
 	if (wgt._rows && !wgt._rowsOnFitSize) {
-		zWatch.listen({onFitSize: wgt});
+		zWatch.listen({ onFitSize: wgt });
 		wgt._rowsOnFitSize = true;
 	}
 }
 function unlistenOnFitSize(wgt: MeshWidget): void {
 	if (wgt._rowsOnFitSize) {
-		zWatch.unlisten({onFitSize: wgt});
+		zWatch.unlisten({ onFitSize: wgt });
 		delete wgt._rowsOnFitSize;
 	}
 }
@@ -544,7 +544,7 @@ export abstract class MeshWidget extends zul.Widget {
 		const o = this._rows;
 		this._rows = rows;
 
-		if (o !== rows || (opts && opts.force)) {
+		if (o !== rows || opts?.force) {
 			listenOnFitSize(this);
 			var n = this.$n();
 			if (n) {
@@ -575,7 +575,7 @@ export abstract class MeshWidget extends zul.Widget {
 		const o = this._pagingPosition;
 		this._pagingPosition = pagingPosition;
 
-		if (o !== pagingPosition || (opts && opts.force)) {
+		if (o !== pagingPosition || opts?.force) {
 			this.rerender();
 		}
 
@@ -604,11 +604,11 @@ export abstract class MeshWidget extends zul.Widget {
 	 * lang-addon.xml directly, it will then take higher priority.
 	 * @param boolean byContent
 	 */
-	setSizedByContent(byContent: boolean, opts?: Record<string, boolean>): this {
+	setSizedByContent(sizedByContent: boolean, opts?: Record<string, boolean>): this {
 		const o = this._sizedByContent;
-		this._sizedByContent = byContent;
+		this._sizedByContent = sizedByContent;
 
-		if (o !== byContent || (opts && opts.force)) {
+		if (o !== sizedByContent || opts?.force) {
 			this.rerender();
 		}
 
@@ -645,17 +645,17 @@ export abstract class MeshWidget extends zul.Widget {
 	 * @since 5.0.6
 	 * @see #getSpan
 	 */
-	setSpan(v: string | boolean, opts?: Record<string, boolean>): this {
+	setSpan(span: string | boolean, opts?: Record<string, boolean>): this {
 		const o = this._span;
-		this._span = v;
+		this._span = span;
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== span || opts?.force) {
 			//ZK-2776: if span="false", !isSpan() will return false, because "false" is string not boolean
-			var isTrue = true === v || 'true' == v,
-				isFalse = false === v || 'false' == v;
-			this._span = isTrue ? true : isFalse ? false : v;
+			var isTrue = true === span || 'true' == span,
+				isFalse = false === span || 'false' == span;
+			this._span = isTrue ? true : isFalse ? false : span;
 
-			var x = isTrue ? -65500 : isFalse ? 0 : (zk.parseInt(v) + 1);
+			var x = isTrue ? -65500 : isFalse ? 0 : (zk.parseInt(span) + 1);
 			this._nspan = x < 0 && x != -65500 ? 0 : x;
 			this.rerender();
 		}
@@ -686,7 +686,7 @@ export abstract class MeshWidget extends zul.Widget {
 		const o = this._autopaging;
 		this._autopaging = autopaging;
 
-		if (o !== autopaging || (opts && opts.force)) {
+		if (o !== autopaging || opts?.force) {
 			this.rerender();
 		}
 
@@ -709,8 +709,8 @@ export abstract class MeshWidget extends zul.Widget {
 	 * Sets whether the widget is in model mode.
 	 * @param boolean inModel
 	 */
-	setModel(inModel: boolean): this {
-		this._model = inModel;
+	setModel(model: boolean): this {
+		this._model = model;
 		return this;
 	}
 
@@ -741,15 +741,15 @@ export abstract class MeshWidget extends zul.Widget {
 	 *
 	 * @param String innerWidth the inner width. If null, "100%" is assumed.
 	 */
-	setInnerWidth(v: string, opts?: Record<string, boolean>): this {
+	setInnerWidth(innerWidth: string, opts?: Record<string, boolean>): this {
 		const o = this._innerWidth;
-		this._innerWidth = v;
+		this._innerWidth = innerWidth;
 
-		if (o !== v || (opts && opts.force)) {
-			if (v == null) this._innerWidth = v = '100%';
-			if (this.eheadtbl) this.eheadtbl.style.width = v;
-			if (this.ebodytbl) this.ebodytbl.style.width = v;
-			if (this.efoottbl) this.efoottbl.style.width = v;
+		if (o !== innerWidth || opts?.force) {
+			if (innerWidth == null) this._innerWidth = innerWidth = '100%';
+			if (this.eheadtbl) this.eheadtbl.style.width = innerWidth;
+			if (this.ebodytbl) this.ebodytbl.style.width = innerWidth;
+			if (this.efoottbl) this.efoottbl.style.width = innerWidth;
 		}
 
 		return this;
@@ -767,12 +767,12 @@ export abstract class MeshWidget extends zul.Widget {
 	 * Sets the external Paging widget.
 	 * @param Paging paging
 	 */
-	setPaginal(newPaginal: zul.mesh.Paging): this {
-		if (this._paginal != newPaginal) {
+	setPaginal(paginal?: zul.mesh.Paging): this {
+		if (this._paginal != paginal) {
 			if (this._paginal) {
 				this._paginal.setMeshWidget();
 			}
-			this._paginal = newPaginal;
+			this._paginal = paginal;
 
 			if (this._paginal) {
 				this._paginal.setMeshWidget(this);
@@ -794,10 +794,8 @@ export abstract class MeshWidget extends zul.Widget {
 	 * @param int pageSize
 	 * @see Paging#setPageSize
 	 */
-	setPageSize(pgsz: number): this {
-		const pgnl = this.getPagingChild();
-		if (pgnl)
-			pgnl.setPageSize(pgsz);
+	setPageSize(pageSize: number): this {
+		this.getPagingChild()?.setPageSize(pageSize);
 		return this;
 	}
 
@@ -807,8 +805,7 @@ export abstract class MeshWidget extends zul.Widget {
 	 * @see Paging#getPageCount
 	 */
 	getPageCount(): number {
-		var pgnl = this.getPagingChild();
-		return pgnl ? pgnl.getPageCount() : 1;
+		return this.getPagingChild()?.getPageCount() ?? 1;
 	}
 
 	/** Returns the active page (starting from 0).
@@ -824,10 +821,10 @@ export abstract class MeshWidget extends zul.Widget {
 	 * @param int activePage
 	 * @see Paging#setActivePage
 	 */
-	setActivePage(pg: number): this {
+	setActivePage(activePage: number): this {
 		const pgnl = this.getPagingChild();
 		if (pgnl)
-			pgnl.setActivePage(pg);
+			pgnl.setActivePage(activePage);
 		return this;
 	}
 
@@ -840,7 +837,7 @@ export abstract class MeshWidget extends zul.Widget {
 	}
 
 	getPagingChild(): zul.mesh.Paging | undefined {
-		return this.paging || this.getPaginal();
+		return this.paging ?? this.getPaginal();
 	}
 
 	override setHeight(height?: string): this {
@@ -907,13 +904,13 @@ export abstract class MeshWidget extends zul.Widget {
 	_moveToHidingFocusCell(index: number, ignoreWidth?: boolean, notFocusBack?: boolean): void { //used in Row/Listcell and a11y frozen
 		//B50-3178977 navigating the input in hiddin column.
 		var td = this.ehdfaker ? this.ehdfaker.childNodes[index] as HTMLTableCellElement | undefined : undefined,
-			frozen = this.frozen,
-			bar: zul.Scrollbar | undefined;
+			frozen = this.frozen;
 		if (td && frozen && (ignoreWidth || zk.parseInt(td.style.width) == 0)
 			&& (index = index - frozen.getColumns()!) >= 0) {
+			const bar = this._scrollbar;
 			if (this._nativebar) {
 				frozen.setStart(index);
-			} else if (bar = this._scrollbar) {
+			} else if (bar) {
 				frozen._doScrollNow(index);
 				bar.setBarPosition(index);
 			}
@@ -955,12 +952,12 @@ export abstract class MeshWidget extends zul.Widget {
 			if (this.efrozen && !zk.mobile)
 				jq(ebody).css('overflow-x', 'hidden'); // keep non line break
 		}
-		zWatch.listen({onSize: this, onResponse: this});
+		zWatch.listen({ onSize: this, onResponse: this });
 	}
 
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		unlistenOnFitSize(this);
-		zWatch.unlisten({onSize: this, onResponse: this});
+		zWatch.unlisten({ onSize: this, onResponse: this });
 		if (this.ehead) //sync scroll for input tab key scroll
 			this.domUnlisten_(this.ehead, 'onScroll', '_doSyncScroll');
 		var ebody = this.ebody;
@@ -1290,9 +1287,9 @@ export abstract class MeshWidget extends zul.Widget {
 
 	_timeoutId: number | undefined;
 
-	_fireOnScrollPos(time?: number): void { //overriden in zkmax
+	_fireOnScrollPos(time?: number, forceToScroll?: boolean /* overriden in zkmax */): void {
 		clearTimeout(this._timeoutId);
-		this._timeoutId = setTimeout(this.proxy(this._onScrollPos), time! >= 0 ? time : 300);
+		this._timeoutId = setTimeout(this._onScrollPos.bind(this), time! >= 0 ? time : 300);
 	}
 
 	_onScrollPos(): void {
@@ -1307,9 +1304,9 @@ export abstract class MeshWidget extends zul.Widget {
 		}
 	}
 
-	_onRender(): true | undefined { //overriden in zkmax
+	_onRender(): boolean { //overriden in zkmax
 		if (!this.$n())
-			return; // the target may not exist. B50-ZK-963
+			return false; // the target may not exist. B50-ZK-963
 
 		this._pendOnRender = false;
 		if (this._syncingbodyrows || zAu.processing()) { //wait if busy (it might run outer)
@@ -1320,23 +1317,25 @@ export abstract class MeshWidget extends zul.Widget {
 		var rows = this.ebodyrows ? this.ebodyrows.rows : undefined;
 		if (this.inPagingMold() && this._autopaging && rows && rows.length)
 			if (_fixPageSize(this, rows))
-				return; //need to reload with new page size
+				return false; //need to reload with new page size
 
 		if (zk.ie9 && (this._wsbak !== undefined)) { // B50-ZK-432
 			this.$n_().style.whiteSpace = this._wsbak;
 			delete this._wsbak;
 		}
 
-		if (!this.desktop || !this._model || !rows || !rows.length) return;
+		if (!this.desktop || !this._model || !rows || !rows.length)
+			return false;
 
 		//Note: we have to calculate from top to bottom because each row's
 		//height might diff (due to different content)
 		var items: zk.Widget[] = [],
 			min = zul.mesh.Scrollbar.getScrollPosV(this),
 			max = min + this.ebody!.offsetHeight;
-		if (min == 0 && max == 0) return; //ZK-2796: Uncessary onRender command triggered when setting tabbox's maximalHeight attribute to true
-		for (var j = 0, it = this.getBodyWidgetIterator({skipHidden: true}),
-				len = rows.length, w: zul.mesh.Item | undefined; (w = it.next()) && j < len; j++) {
+		if (min == 0 && max == 0)
+			return false; //ZK-2796: Uncessary onRender command triggered when setting tabbox's maximalHeight attribute to true
+		for (var j = 0, it = this.getBodyWidgetIterator({ skipHidden: true }),
+			len = rows.length, w: zul.mesh.Item | undefined; (w = it.next()) && j < len; j++) {
 			if (!w._loaded) {
 				//B70-ZK-2589: w and rows[j] belongs to different widget,
 				//w shouldn't depend on rows[j], origin -> row = rows[j];
@@ -1351,8 +1350,9 @@ export abstract class MeshWidget extends zul.Widget {
 			}
 		}
 		if (items.length) {
-			this.fire('onRender', {items: items}, {implicit: true});
+			this.fire('onRender', { items: items }, { implicit: true });
 		}
+		return false;
 	}
 
 	override onSize(): void {
@@ -1360,8 +1360,8 @@ export abstract class MeshWidget extends zul.Widget {
 		if (this.isRealVisible()) { // sometimes the caller is not zWatch
 			var n = this.$n_();
 			if (n._lastsz && n._lastsz.height == n.offsetHeight
-					&& n._lastsz.width == n.offsetWidth
-					&& this._lastDevicePixelRatio == devicePixelRatio) {
+				&& n._lastsz.width == n.offsetWidth
+				&& this._lastDevicePixelRatio == devicePixelRatio) {
 				this.fireOnRender(155); // force to render while using live grouping
 				return; // unchanged
 			}
@@ -1405,31 +1405,31 @@ export abstract class MeshWidget extends zul.Widget {
 			- (this.efoot ? this.efoot.offsetHeight : 0)
 			- pgHgh;
 		return this.frozen && this._nativebar ?
-				hgh - this.efrozen!.offsetHeight : hgh;
+			hgh - this.efrozen!.offsetHeight : hgh;
 	}
 
-	override setFlexSize_(sz: zk.FlexSize, isFlexMin?: boolean): void {
+	override setFlexSize_(flexSize: zk.FlexSize, isFlexMin?: boolean): void {
 		if (this._cssflex && this.parent!.getFlexContainer_() != null && !isFlexMin)
 			return;
 		var n = this.$n_(),
 			head = this.$n('head');
-		if (sz.height !== undefined) {
-			if (sz.height == 'auto') {
+		if (flexSize.height !== undefined) {
+			if (flexSize.height == 'auto') {
 				n.style.height = '';
 				if (head)
 					head.style.height = '';
 			} else {
-				return super.setFlexSize_(sz, isFlexMin);
+				return super.setFlexSize_(flexSize, isFlexMin);
 			}
 		}
-		if (sz.width !== undefined) {
-			if (sz.width == 'auto') {
+		if (flexSize.width !== undefined) {
+			if (flexSize.width == 'auto') {
 				if (this._hflex != 'min')
 					n.style.width = '';
 				if (head)
 					head.style.width = '';
 			} else {
-				return super.setFlexSize_(sz, isFlexMin);
+				return super.setFlexSize_(flexSize, isFlexMin);
 			}
 		}
 	}
@@ -1439,7 +1439,7 @@ export abstract class MeshWidget extends zul.Widget {
 		var n = this.$n_(),
 			ebody = this.ebody!,
 			ebodyStyle = ebody.style;
-		if (this.isVflex() || (hgh && hgh != 'auto' && hgh.indexOf('%') < 0)) {
+		if (this.isVflex() || (hgh && hgh != 'auto' && !hgh.includes('%'))) {
 			if (zk.webkit && ebodyStyle.height == jq.px(this._vflexSize()))
 				return; // Bug ZK-417, ignore to set the same size
 			ebodyStyle.height = ''; //allow browser adjusting to default size
@@ -1447,11 +1447,11 @@ export abstract class MeshWidget extends zul.Widget {
 			if (h < 0)
 				h = 0;
 			if (this._vflex != 'min')
-				ebodyStyle.height = h + 'px';
+				ebodyStyle.height = `${h}px`;
 		} else {
 			//Bug 1556099
 			ebodyStyle.height = '';
-			n.style.height = hgh as string;
+			n.style.height = hgh!;
 		}
 	}
 
@@ -1490,13 +1490,13 @@ export abstract class MeshWidget extends zul.Widget {
 		// should re-calculate height because
 		// the string height maybe changed after width changed.
 		if (sizedByContent
-				&& this.getRows && this.getRows() > 1
-				&& (typeof this._calcHgh == 'function')
-				&& this.ebody!.style.height) { // check only if height exists for F50-3000339.zul
+			&& this.getRows && this.getRows() > 1
+			&& (typeof this._calcHgh == 'function')
+			&& this.ebody!.style.height) { // check only if height exists for F50-3000339.zul
 			this._calcHgh(); // recalculate height again ZK-796
 		}
 
-		n._lastsz = {height: n.offsetHeight, width: n.offsetWidth}; // cache for the dirty resizing.
+		n._lastsz = { height: n.offsetHeight, width: n.offsetWidth }; // cache for the dirty resizing.
 
 		this._afterCalcSize();
 	}
@@ -1505,7 +1505,7 @@ export abstract class MeshWidget extends zul.Widget {
 		var ebody = this.ebody!;
 		if (!this._nativebar && (ebody.scrollLeft || ebody.scrollTop)) {
 			// ZK-2046: Keep ebody scroll position before calculated size, _setHgh would reset it to 0.
-			this._ebodyScrollPos = {l: ebody.scrollLeft, t: ebody.scrollTop};
+			this._ebodyScrollPos = { l: ebody.scrollLeft, t: ebody.scrollTop };
 		}
 		this._calcHgh();
 	}
@@ -1534,12 +1534,12 @@ export abstract class MeshWidget extends zul.Widget {
 		if (hasVScroll) {
 			if (hdfakerbar) {
 				if (isCSSFlex && hdbar)
-					hdbar.style.flex = '0 1 ' + scrollbarWidth + 'px';
+					hdbar.style.flex = `0 1 ${scrollbarWidth}px`;
 				else
-					hdfakerbar.style.width = scrollbarWidth + 'px';
+					hdfakerbar.style.width = `${scrollbarWidth}px`;
 			}
 			if (ftfakerbar)
-				ftfakerbar.style.width = scrollbarWidth + 'px';
+				ftfakerbar.style.width = `${scrollbarWidth}px`;
 		} else {
 			var zero = MeshWidget.WIDTH0;
 			//refix B70-ZK-2114: remove hdfakerbar when there is no native scrollbar
@@ -1579,16 +1579,17 @@ export abstract class MeshWidget extends zul.Widget {
 			if (hdtbl) {
 				var wd = 0;
 				for (var w = this.ehdfaker!.firstChild; w; w = w.nextSibling) {
-					if ((w as HTMLElement).style.display != 'none' && !(w as HTMLElement).id.endsWith('hdfaker-bar')) // B70-ZK-2307 and B70-ZK-2358
-						wd += zk.parseInt((w as HTMLElement).style.width);
+					const n = w as HTMLElement;
+					if (n.style.display != 'none' && !n.id.endsWith('hdfaker-bar')) // B70-ZK-2307 and B70-ZK-2358
+						wd += zk.parseInt(n.style.width);
 				}
 				if (wd > 0) { //ZK-2772, ZK-2903: only when hdfaker has width, set back to table
 					//ZK-3938: only adjust width in Chrome (ZK-4219: and safari), but zk.chrome returns true in Edge, we need to check !zk.edge
-					hdtbl.style.width = (hdfakerbar && hasVScroll && (zk.chrome || zk.safari) && !zk.edge_legacy) ? wd + scrollbarWidth + 'px' : wd + 'px';
+					hdtbl.style.width = (hdfakerbar && hasVScroll && (zk.chrome || zk.safari) && !zk.edge_legacy) ? `${wd + scrollbarWidth}px` : `${wd}px`;
 					if (bdtbl)
-						bdtbl.style.width = wd + 'px';
+						bdtbl.style.width = `${wd}px`;
 					if (fttbl)
-						fttbl.style.width = wd + 'px';
+						fttbl.style.width = `${wd}px`;
 				} else {
 					var hideTable = false;
 					for (var header = this.head!.firstChild; header; header = header.nextSibling) {
@@ -1638,7 +1639,7 @@ export abstract class MeshWidget extends zul.Widget {
 			oldTotalWidth = 0,
 			epsilon = 1;
 		for (var i = 0, header = head.firstChild!, hdcol = this.ehdfaker!.firstChild; i < totalCols;
-				header = header.nextSibling!, hdcol = hdcol!.nextSibling, i++) {
+			header = header.nextSibling!, hdcol = hdcol!.nextSibling, i++) {
 			var fakerStyleWidth = (hdcol as HTMLElement).style.width;
 			if (fakerStyleWidth == '')
 				return;
@@ -1655,7 +1656,7 @@ export abstract class MeshWidget extends zul.Widget {
 			return;
 
 		for (var i = 0, header = head.firstChild!, hdcol = this.ehdfaker!.firstChild; i < totalCols;
-				header = header.nextSibling!, hdcol = hdcol!.nextSibling, i++) {
+			header = header.nextSibling!, hdcol = hdcol!.nextSibling, i++) {
 			if (header.getWidth() || header.getHflex())
 				continue;
 
@@ -1684,24 +1685,21 @@ export abstract class MeshWidget extends zul.Widget {
 			return true;
 		if (!this.head)
 			return false;
-		var allwidths = true;
 		for (var w = this.head.firstChild; w; w = w.nextSibling) {
-			if (allwidths
-					&& (w._width == undefined || w._width.indexOf('px') <= 0)
-					&& (w._hflex != 'min' || w._hflexsz === undefined)
-					&& w.isVisible()) {
-				allwidths = false;
-				break;
+			if ((w._width == undefined || w._width.indexOf('px') <= 0)
+				&& (w._hflex != 'min' || w._hflexsz === undefined)
+				&& w.isVisible()) {
+				return false;
 			}
 		}
-		return allwidths;
+		return true;
 	}
 
 	domFaker_(out: string[], fakeId: string): void { //used by redraw
 		var head = this.head!;
 		out.push('<colgroup id="', head.uuid, fakeId, '">');
 		for (var w = head.firstChild; w; w = w.nextSibling) {
-			var wd = MeshWidget._getWidth(w, w._hflexWidth ? w._hflexWidth + 'px' : w.getWidth()),
+			var wd = MeshWidget._getWidth(w, w._hflexWidth ? `${w._hflexWidth}px` : w.getWidth()),
 				visibility = w.isVisible() ? '' : 'visibility: collapse;';
 			// B70-ZK-2036: Style width should end with 'px'.
 			wd = wd != null ? 'width: ' + wd + ';' : '';
@@ -1829,7 +1827,7 @@ export abstract class MeshWidget extends zul.Widget {
 
 				if (w._hflex == 'min')
 					wd = wds[i] = _minwds[i];
-				else if (wdh && wdh.endsWith('px'))
+				else if (wdh?.endsWith('px'))
 					wd = wds[i] = zk.parseInt(wdh);
 				else
 					wd = wds[i] = _minwds[i];
@@ -1839,18 +1837,18 @@ export abstract class MeshWidget extends zul.Widget {
 			temphdcol = temphdcol!.nextSibling;
 		}
 
-		var	ftcol = ftfaker ? ftfaker.firstChild : undefined,
+		var ftcol = ftfaker?.firstChild,
 			total = this.ebody!.clientWidth,
 			extSum = total - width,
 			count = total,
 			visj = -1,
 			tblWidth = 0; //refix B70-ZK-2394: should sync colgroup width with table width
 
-			//span to all columns
+		//span to all columns
 		if (this._nspan! < 0) {
 
 
-			var hasFrozenScrolled = this.frozen && this.frozen.getStart();
+			var hasFrozenScrolled = this.frozen?.getStart();
 			for (var i = 0; hdcol && i < hdlen; hdcol = hdcol.nextSibling, i++) {
 				// ZK-2222: should check visibility
 				if (!zk(hdcol).isVisible(true)) {
@@ -1937,11 +1935,11 @@ export abstract class MeshWidget extends zul.Widget {
 				fttbl = this.efoottbl;
 
 			if (hdtbl) {
-				hdtbl.style.width = tblWidth + 'px';
+				hdtbl.style.width = `${tblWidth}px`;
 				if (bdtbl)
-					bdtbl.style.width = tblWidth + 'px';
+					bdtbl.style.width = `${tblWidth}px`;
 				if (fttbl)
-					fttbl.style.width = tblWidth + 'px';
+					fttbl.style.width = `${tblWidth}px`;
 			}
 		}
 
@@ -2102,7 +2100,7 @@ export abstract class MeshWidget extends zul.Widget {
 		var rows: ArrayLike<HTMLTableRowElement> = this.ebodyrows ? this.ebodyrows.rows : [],
 			n = this.$n_(),
 			hgh: string | number = n.style.height,
-			isHgh = hgh && hgh != 'auto' && hgh.indexOf('%') < 0;
+			isHgh = hgh && hgh != 'auto' && !hgh.includes('%');
 		if (isHgh) {
 			hgh = zk.parseInt(hgh) - zk(n).padBorderHeight();
 			if (hgh) {
@@ -2110,28 +2108,28 @@ export abstract class MeshWidget extends zul.Widget {
 				if (hgh < 0) hgh = 0;
 				var sz = 0;
 				l_out:
-					for (var h, j = 0, rl = rows.length; j < rl; ++sz, ++j) {
-						//next visible row
-						var r: HTMLTableRowElement;
-						for (;; ++j) {//no need to check length again
-							if (j >= rl) break l_out;
-							r = rows[j];
-							if (zk(r).isVisible()) break;
-						}
-
-						var $r = zk(r);
-						h = $r.offsetTop() + $r.offsetHeight();
-						if (h >= hgh) {
-							if (h > hgh + 2) ++sz; //experimental
-							break;
-						}
+				for (var h, j = 0, rl = rows.length; j < rl; ++sz, ++j) {
+					//next visible row
+					var r: HTMLTableRowElement;
+					for (; ; ++j) {//no need to check length again
+						if (j >= rl) break l_out;
+						r = rows[j];
+						if (zk(r).isVisible()) break;
 					}
+
+					var $r = zk(r);
+					h = $r.offsetTop() + $r.offsetHeight();
+					if (h >= hgh) {
+						if (h > hgh + 2) ++sz; //experimental
+						break;
+					}
+				}
 				sz = Math.ceil(sz && h ? (hgh * sz) / h : hgh / this._headHgh(20));
 				this._setOrGetVisibleRows(sz);
 				hgh -= (this.efoot ? this.efoot.offsetHeight : 0);
 				//bug# 3036398: frozen scrollbar disappear when listbox with vflex="1"
 				hgh -= (this.efrozen && this._nativebar ? this.efrozen.offsetHeight : 0);
-				this.ebody!.style.height = (hgh < 0 ? 0 : hgh) + 'px';
+				this.ebody!.style.height = `${Math.max(hgh, 0)}px`;
 				return; //done
 			}
 		}
@@ -2191,7 +2189,7 @@ export abstract class MeshWidget extends zul.Widget {
 					hgh = Math.ceil((nRows * hgh) / nVisiRows);
 				}
 			}
-			this.ebody!.style.height = hgh + 'px';
+			this.ebody!.style.height = `${hgh}px`;
 		} else {
 			this.ebody!.style.height = '';
 			var focusEL = this.$n('a');
@@ -2236,8 +2234,8 @@ export abstract class MeshWidget extends zul.Widget {
 		// @ts-expect-error: calling `_getFirstItemIndex` is safe in `_scrollToIndex`
 		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
 		var firstItemIndex = this._getFirstItemIndex(),
-		// @ts-expect-error: calling `_getLastItemIndex` is safe in `_scrollToIndex`
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
+			// @ts-expect-error: calling `_getLastItemIndex` is safe in `_scrollToIndex`
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
 			lastItemIndex = this._getLastItemIndex(),
 			body = this.ebody!;
 		this._targetIndex = index;
@@ -2300,12 +2298,12 @@ export abstract class MeshWidget extends zul.Widget {
 	}
 
 	waitForRendered_(): Promise<void> {
-		var self = this;
-		return new Promise(function (resolve) {
-			(function callback () {
-				if (!self._pendOnRender) return resolve();
+		return new Promise(resolve => {
+			const callback = (): void => {
+				if (!this._pendOnRender) return resolve();
 				setTimeout(callback);
-			})();
+			};
+			callback();
 		});
 	}
 
@@ -2343,12 +2341,12 @@ export abstract class MeshWidget extends zul.Widget {
  * The extra Scrollbar for the MeshWidget.
  * @since 6.5.0
  */
-export let Scrollbar = {
+export var Scrollbar = {
 	/**
 	 * Initialize the scrollbar of MeshWidget.
 	 * @param zk.Widget wgt a widget
 	 */
-	init(wgt: zul.mesh.MeshWidget): zul.Scrollbar {
+	init(wgt: zul.mesh.MeshWidget): zul.Scrollbar | undefined /* zkmax-override could return undefined */ {
 		var embed = jq(wgt.$n_()).data('embedscrollbar') !== false, // change default value to true since 7.0.2
 			frozen = wgt.frozen,
 			startPositionX = 0;
@@ -2364,7 +2362,7 @@ export let Scrollbar = {
 				wgt._deleteFakeRow(wgt.eheadrows);
 			}
 		}
-		var scrollbar = new zul.Scrollbar(wgt.ebody, wgt.ebodytbl, {
+		return new zul.Scrollbar(wgt.ebody, wgt.ebodytbl, {
 			embed: embed,
 			startPositionX: startPositionX,
 			onSyncPosition: function () {
@@ -2384,7 +2382,6 @@ export let Scrollbar = {
 				wgt._doScroll();
 			}
 		});
-		return scrollbar;
 	},
 	/**
 	 * Return the vertical scroll position of the body element of given MeshWidget.

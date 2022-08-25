@@ -37,9 +37,11 @@ function _syncFrozen(wgt: HeadWidget): void {
 @zk.WrapClass('zul.mesh.HeadWidget')
 export class HeadWidget extends zul.Widget<HTMLTableRowElement> {
 	// NOTE: Parent could be null because it is checked in `afterChildrenFlex_`.
-	override parent!: zul.mesh.MeshWidget | undefined;
-	override firstChild!: zul.mesh.HeaderWidget | undefined;
-	override lastChild!: zul.mesh.HeaderWidget | undefined;
+	override parent?: zul.mesh.MeshWidget;
+	override firstChild?: zul.mesh.HeaderWidget;
+	override lastChild?: zul.mesh.HeaderWidget;
+	override previousSibling?: zul.mesh.HeadWidget;
+	override nextSibling?: zul.mesh.HeadWidget;
 	_sizable?: boolean;
 	// FIXME: The following three properties are never assigned.
 	hdfaker!: HTMLTableColElement;
@@ -50,7 +52,7 @@ export class HeadWidget extends zul.Widget<HTMLTableRowElement> {
 
 	constructor() {
 		super(); // FIXME: reconsider constructor params
-		this.listen({onColSize: this}, -1000);
+		this.listen({ onColSize: this }, -1000);
 	}
 
 	/** Returns whether the width of the child column is sizable.
@@ -97,8 +99,8 @@ export class HeadWidget extends zul.Widget<HTMLTableRowElement> {
 					var foot = mesh.$n('foot'),
 						pgib = mesh.$n('pgib'),
 						hgh = zk(mesh).contentHeight() - mesh.$n_('head').offsetHeight
-						- (foot ? foot.offsetHeight : 0) - (pgib ? pgib.offsetHeight : 0)
-						- (mesh._nativebar && mesh.frozen ? mesh.frozen.$n_().offsetHeight : 0);
+							- (foot ? foot.offsetHeight : 0) - (pgib ? pgib.offsetHeight : 0)
+							- (mesh._nativebar && mesh.frozen ? mesh.frozen.$n_().offsetHeight : 0);
 					mesh.ebody!.style.height = jq.px0(hgh);
 				}
 			}, 0);
@@ -133,7 +135,7 @@ export class HeadWidget extends zul.Widget<HTMLTableRowElement> {
 		return this.parent;
 	}
 
-	onColSize(evt: zk.Event & {widths?: string[]}): void {
+	onColSize(evt: zk.Event & { widths?: string[] }): void {
 		var owner = this.parent!,
 			widths = evt.widths,
 			headWidth: string | 0 = 0;
@@ -396,7 +398,7 @@ export class HeadWidget extends zul.Widget<HTMLTableRowElement> {
 	}
 
 	override deferRedrawHTML_(out: string[]): void {
-		out.push('<tr', this.domAttrs_({domClass: true}), ' class="z-renderdefer"></tr>');
+		out.push('<tr', this.domAttrs_({ domClass: true }), ' class="z-renderdefer"></tr>');
 	}
 
 	override getFlexDirection_(): string {

@@ -13,7 +13,7 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 function _initUpld(wgt: zul.wgt.Toolbarbutton): void {
-	zWatch.listen({onSize: wgt});
+	zWatch.listen({ onSize: wgt });
 	const v = wgt._upload;
 	if (v)
 		wgt._uplder = new zul.Upload(wgt, undefined, v);
@@ -22,7 +22,7 @@ function _initUpld(wgt: zul.wgt.Toolbarbutton): void {
 function _cleanUpld(wgt: zul.wgt.Toolbarbutton): void {
 	const v = wgt._uplder;
 	if (v) {
-		zWatch.unlisten({onSize: wgt});
+		zWatch.unlisten({ onSize: wgt });
 		wgt._uplder = undefined;
 		v.destroy();
 	}
@@ -69,7 +69,7 @@ export class Toolbarbutton extends zul.LabelImageWidget implements zul.LabelImag
 		const o = this._mode;
 		this._mode = mode;
 
-		if (o !== mode || (opts && opts.force)) {
+		if (o !== mode || opts?.force) {
 			this.rerender();
 		}
 
@@ -91,7 +91,7 @@ export class Toolbarbutton extends zul.LabelImageWidget implements zul.LabelImag
 		const o = this._checked;
 		this._checked = checked;
 
-		if (o !== checked || (opts && opts.force)) {
+		if (o !== checked || opts?.force) {
 			if (this.desktop && this._mode == 'toggle')
 				jq(this.$n_())[checked ? 'addClass' : 'removeClass'](this.$s('checked'));
 		}
@@ -118,7 +118,7 @@ export class Toolbarbutton extends zul.LabelImageWidget implements zul.LabelImag
 
 		//B60-ZK-1176
 		// Autodisable should not re-enable when setDisabled(true) is called during onClick
-		if (opts && opts.adbs)
+		if (opts?.adbs)
 			// called from zul.wgt.ADBS.autodisable
 			this._adbs = true;	// Start autodisabling
 		else if (!opts || opts.adbs === undefined)
@@ -128,6 +128,7 @@ export class Toolbarbutton extends zul.LabelImageWidget implements zul.LabelImag
 			if (this._adbs)
 				// autodisable is still active, enable allowed
 				this._adbs = false;
+			// eslint-disable-next-line @typescript-eslint/no-unnecessary-boolean-literal-compare
 			else if (opts && opts.adbs === false)
 				// ignore re-enable by autodisable mechanism
 				value = this._disabled;
@@ -135,15 +136,14 @@ export class Toolbarbutton extends zul.LabelImageWidget implements zul.LabelImag
 
 		this._disabled = value;
 
-		if (o !== value || (opts && opts.force)) {
-			var self = this,
-				doDisable = function (): void {
-					if (self.desktop) {
-						jq(self.$n_()).attr('disabled', value ? 'disabled' : null); // use jQuery's attr() instead of dom.disabled for non-button element. Bug ZK-2146
-						if (self._upload)
-							value ? _cleanUpld(self) : _initUpld(self);
-					}
-				};
+		if (o !== value || opts?.force) {
+			const doDisable = (): void => {
+				if (this.desktop) {
+					jq(this.$n_()).attr('disabled', value ? 'disabled' : null); // use jQuery's attr() instead of dom.disabled for non-button element. Bug ZK-2146
+					if (this._upload)
+						value ? _cleanUpld(this) : _initUpld(this);
+				}
+			};
 
 			if (this._type == 'submit')
 				setTimeout(doDisable, 50);
@@ -208,7 +208,7 @@ export class Toolbarbutton extends zul.LabelImageWidget implements zul.LabelImag
 		const o = this._dir;
 		this._dir = dir;
 
-		if (o !== dir || (opts && opts.force)) {
+		if (o !== dir || opts?.force) {
 			this.updateDomContent_();
 		}
 
@@ -230,7 +230,7 @@ export class Toolbarbutton extends zul.LabelImageWidget implements zul.LabelImag
 		const o = this._orient;
 		this._orient = orient;
 
-		if (o !== orient || (opts && opts.force)) {
+		if (o !== orient || opts?.force) {
 			this.updateDomContent_();
 		}
 
@@ -324,15 +324,15 @@ export class Toolbarbutton extends zul.LabelImageWidget implements zul.LabelImag
 	 * or null or "false" to disable the file download (and then
 	 * this button behaves like a normal button).
 	 */
-	setUpload(v: string, opts?: Record<string, boolean>): this {
+	setUpload(upload: string, opts?: Record<string, boolean>): this {
 		const o = this._upload;
-		this._upload = v;
+		this._upload = upload;
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== upload || opts?.force) {
 			var n = this.$n();
 			if (n) {
 				_cleanUpld(this);
-				if (v && v != 'false' && !this._disabled)
+				if (upload && upload != 'false' && !this._disabled)
 					_initUpld(this);
 			}
 		}
@@ -420,11 +420,11 @@ export class Toolbarbutton extends zul.LabelImageWidget implements zul.LabelImag
 						var ifrm = jq.newFrame('mailtoFrame', href, undefined);
 						jq(ifrm).remove();
 					} else {
-						zUtl.go(href, {target: this._target || (evt.data!.ctrlKey ? '_blank' : '')});
+						zUtl.go(href, { target: this._target || (evt.data!.ctrlKey ? '_blank' : '') });
 					}
 				}
 
-				this.$super('doClick_', evt, true);
+				super.doClick_(evt, true);
 
 				if (this._mode == 'toggle') {
 					this.setChecked(!this.isChecked());
@@ -436,12 +436,11 @@ export class Toolbarbutton extends zul.LabelImageWidget implements zul.LabelImag
 
 	override focus_(timeout: number): boolean {
 		if (this._tabindex != undefined || this._href || this._upload) {
-			var self = this,
-				n = this.$n_();
-			zk.afterAnimate(function () {
+			const n = this.$n_();
+			zk.afterAnimate(() => {
 				try {
 					n.focus();
-					zk.currentFocus = self;
+					zk.currentFocus = this;
 					zjq.fixInput(n);
 				} catch (e) {
 					zk.debugLog((e as Error).message || e as string);

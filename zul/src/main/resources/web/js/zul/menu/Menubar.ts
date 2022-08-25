@@ -39,7 +39,7 @@ export class Menubar extends zul.Widget {
 	_noFloatUp?: boolean;
 	_bOver?: boolean;
 	_autodrop?: boolean;
-	_scrollable?: boolean;
+	_scrollable: boolean | undefined; // eslint-disable-line zk/preferStrictBooleanType
 	_scrolling?: boolean;
 	_runId?: number;
 
@@ -58,7 +58,7 @@ export class Menubar extends zul.Widget {
 		const o = this._orient;
 		this._orient = orient;
 
-		if (o !== orient || (opts && opts.force)) {
+		if (o !== orient || opts?.force) {
 			this.rerender();
 		}
 
@@ -80,7 +80,7 @@ export class Menubar extends zul.Widget {
 		const o = this._scrollable;
 		this._scrollable = scrollable;
 
-		if (o !== scrollable || (opts && opts.force)) {
+		if (o !== scrollable || opts?.force) {
 			if (this.checkScrollable())
 				this.rerender();
 		}
@@ -128,7 +128,7 @@ export class Menubar extends zul.Widget {
 				this.domUnlisten_(left, 'onClick', '_doScroll')
 					.domUnlisten_(right, 'onClick', '_doScroll');
 			}
-			zWatch.unlisten({onSize: this});
+			zWatch.unlisten({ onSize: this });
 		}
 		var n = this.$n_();
 		n.removeEventListener('mouseleave', this.proxy(this._doMouseLeave));
@@ -150,7 +150,7 @@ export class Menubar extends zul.Widget {
 				this.domListen_(left, 'onClick', '_doScroll')
 					.domListen_(right, 'onClick', '_doScroll');
 			}
-			zWatch.listen({onSize: this});
+			zWatch.listen({ onSize: this });
 		}
 	}
 
@@ -200,7 +200,7 @@ export class Menubar extends zul.Widget {
 		else {
 			this._scrolling = false;
 			this._fixBodyScrollLeft(0);
-				//ZK-3094: Scrollable menubar body is not properly resized after container resizing.
+			//ZK-3094: Scrollable menubar body is not properly resized after container resizing.
 			body.style.width = '';
 		}
 		this._fixButtonPos(node);
@@ -212,7 +212,7 @@ export class Menubar extends zul.Widget {
 		}
 	}
 
-	_fixScrollPos(lastChild: HTMLElement): void {
+	_fixScrollPos(lastChild?: HTMLElement): void {
 		if (lastChild) {
 			var offsetLeft = lastChild.offsetLeft;
 			if (offsetLeft < this._bodyScrollLeft) {
@@ -259,8 +259,7 @@ export class Menubar extends zul.Widget {
 
 	_scroll(direction: string): void {
 		if (!this.checkScrollable() || this._runId) return;
-		var self = this,
-			body = this.$n_('body'),
+		var body = this.$n_('body'),
 			currScrollLeft = this._bodyScrollLeft,
 			children = jq(this.$n_('cave')).children().filter(':visible'),
 			childrenLen = children.length,
@@ -268,41 +267,41 @@ export class Menubar extends zul.Widget {
 
 		if (!childrenLen) return;
 		switch (direction) {
-		case 'left':
-			for (var i = 0; i < childrenLen; i++) {
-				// B50-ZK-381: Menu scrolling bug
-				// child width may be larger than body.offsetWidth
-				if (children[i].offsetLeft >= currScrollLeft
-					|| children[i].offsetLeft + (children[i].offsetWidth - body.offsetWidth) >= currScrollLeft) {
-					var preChild = children[i].previousSibling;
-					if (!preChild)	return;
-					movePos = (preChild as HTMLElement).offsetLeft;
-					if (isNaN(movePos)) return;
-					self._runId = setInterval(function () {
-						if (!self._moveTo(body, movePos)) {
-							self._afterMove();
-						}
-					}, 10);
-					return;
+			case 'left':
+				for (var i = 0; i < childrenLen; i++) {
+					// B50-ZK-381: Menu scrolling bug
+					// child width may be larger than body.offsetWidth
+					if (children[i].offsetLeft >= currScrollLeft
+						|| children[i].offsetLeft + (children[i].offsetWidth - body.offsetWidth) >= currScrollLeft) {
+						var preChild = children[i].previousSibling;
+						if (!preChild) return;
+						movePos = (preChild as HTMLElement).offsetLeft;
+						if (isNaN(movePos)) return;
+						this._runId = setInterval(() => {
+							if (!this._moveTo(body, movePos)) {
+								this._afterMove();
+							}
+						}, 10);
+						return;
+					}
 				}
-			}
-			break;
-		case 'right':
-			var currRight = currScrollLeft + body.offsetWidth;
-			for (var i = 0; i < childrenLen; i++) {
-				var currChildRight = children[i].offsetLeft + children[i].offsetWidth;
-				if (currChildRight > currRight) {
-					movePos = currScrollLeft + (currChildRight - currRight);
-					if (isNaN(movePos)) return;
-					self._runId = setInterval(function () {
-						if (!self._moveTo(body, movePos)) {
-							self._afterMove();
-						}
-					}, 10);
-					return;
+				break;
+			case 'right':
+				var currRight = currScrollLeft + body.offsetWidth;
+				for (var i = 0; i < childrenLen; i++) {
+					var currChildRight = children[i].offsetLeft + children[i].offsetWidth;
+					if (currChildRight > currRight) {
+						movePos = currScrollLeft + (currChildRight - currRight);
+						if (isNaN(movePos)) return;
+						this._runId = setInterval(() => {
+							if (!this._moveTo(body, movePos)) {
+								this._afterMove();
+							}
+						}, 10);
+						return;
+					}
 				}
-			}
-			break;
+				break;
 		}
 	}
 
@@ -329,11 +328,11 @@ export class Menubar extends zul.Widget {
 	override insertChildHTML_(child: zul.menu.Menu, before?: zk.Widget, desktop?: zk.Desktop): void {
 		var vert = this.isVertical();
 		if (before)
-			jq(before.$n('chdextr') || before.$n_()).before(
-				this.encloseChildHTML_({child: child, vertical: vert})!);
+			jq(before.$n('chdextr') ?? before.$n_()).before(
+				this.encloseChildHTML_({ child: child, vertical: vert })!);
 		else
 			jq(this.$n_('cave')).append(
-				this.encloseChildHTML_({child: child, vertical: vert})!);
+				this.encloseChildHTML_({ child: child, vertical: vert })!);
 
 		child.bind(desktop);
 	}
@@ -343,8 +342,8 @@ export class Menubar extends zul.Widget {
 		jq(child.$n_('chdextr')).remove();
 	}
 
-	encloseChildHTML_(opts: {child: zk.Widget; vertical: boolean; out?: string[]}): string | undefined {
-		var out = opts.out || new zk.Buffer(),
+	encloseChildHTML_(opts: { child: zk.Widget; vertical: boolean; out?: string[] }): string | undefined {
+		var out = opts.out ?? new zk.Buffer(),
 			child = opts.child;
 		child.redraw(out);
 		if (!opts.out) return out.join('');
@@ -352,9 +351,8 @@ export class Menubar extends zul.Widget {
 
 	//Closes all menupopup when mouse is moved out
 	_closeOnOut(): void {
-		var self = this;
-		if (self._autodrop && !zul.Widget.getOpenTooltip()) //dirty fix: don't auto close if tooltip shown
-			setTimeout(function () {_closeOnOut(self);}, 200);
+		if (this._autodrop && !zul.Widget.getOpenTooltip()) //dirty fix: don't auto close if tooltip shown
+			setTimeout(() => _closeOnOut(this), 200);
 	}
 
 	/**

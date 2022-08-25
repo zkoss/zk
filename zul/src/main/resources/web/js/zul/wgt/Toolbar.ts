@@ -12,6 +12,18 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+
+/**
+ * The interface {@link zul.wgt.ToolbarChild} deduced from `za11y/zul/wgt-a11y.ts`.
+ * According to {@link https://www.zkoss.org/wiki/ZK_Component_Reference/Essential_Components/Toolbar},
+ * children of {@link zul.wgt.Toolbar} are mainly {@link zul.wgt.Toolbarbutton}, but
+ * {@link zul.wgt.Button} and {@link zul.wgt.Space} are also possible.
+ */
+export interface ToolbarChild extends zul.Widget {
+	previousSibling?: ToolbarChild;
+	nextSibling?: ToolbarChild;
+	_disabled?: boolean;
+}
 /**
  * A toolbar.
  *
@@ -25,6 +37,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.wgt.Toolbar')
 export class Toolbar extends zul.Widget {
+	override firstChild?: ToolbarChild;
+	override lastChild?: ToolbarChild;
 	_orient = 'horizontal';
 	_align = 'start';
 	_overflowPopupIconSclass = 'z-icon-ellipsis-h';
@@ -51,7 +65,7 @@ export class Toolbar extends zul.Widget {
 		const o = this._align;
 		this._align = align;
 
-		if (o !== align || (opts && opts.force)) {
+		if (o !== align || opts?.force) {
 			this.rerender();
 		}
 
@@ -73,7 +87,7 @@ export class Toolbar extends zul.Widget {
 		const o = this._orient;
 		this._orient = orient;
 
-		if (o !== orient || (opts && opts.force)) {
+		if (o !== orient || opts?.force) {
 			this.rerender();
 		}
 
@@ -105,7 +119,7 @@ export class Toolbar extends zul.Widget {
 		const o = this._overflowPopup;
 		this._overflowPopup = overflowPopup;
 
-		if (o !== overflowPopup || (opts && opts.force)) {
+		if (o !== overflowPopup || opts?.force) {
 			this.rerender();
 		}
 
@@ -129,11 +143,11 @@ export class Toolbar extends zul.Widget {
 	 * @param String the overflow sclass name of overflow popup icon of this toolbar
 	 * @since 9.6.0
 	 */
-	setOverflowPopupIconSclass(the: string, opts?: Record<string, boolean>): this {
+	setOverflowPopupIconSclass(overflowPopupIconSclass: string, opts?: Record<string, boolean>): this {
 		const o = this._overflowPopupIconSclass;
-		this._overflowPopupIconSclass = the;
+		this._overflowPopupIconSclass = overflowPopupIconSclass;
 
-		if (o !== the || (opts && opts.force)) {
+		if (o !== overflowPopupIconSclass || opts?.force) {
 			var icon = this.$n('overflowpopup-button');
 			if (this.desktop && icon)
 				icon.className = this._getOverflowPopupBtnClass();
@@ -145,7 +159,7 @@ export class Toolbar extends zul.Widget {
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		if (this.isOverflowPopup()) {
-			zWatch.listen({onFloatUp: this, onCommandReady: this, onSize: this});
+			zWatch.listen({ onFloatUp: this, onCommandReady: this, onSize: this });
 			this.domListen_(this.$n_('overflowpopup-button'), 'onClick', '_openPopup');
 		}
 	}
@@ -154,7 +168,7 @@ export class Toolbar extends zul.Widget {
 		var popup = this.$n('pp');
 		if (popup) {
 			this.domUnlisten_(this.$n_('overflowpopup-button'), 'onClick', '_openPopup');
-			zWatch.unlisten({onFloatUp: this, onCommandReady: this, onSize: this});
+			zWatch.unlisten({ onFloatUp: this, onCommandReady: this, onSize: this });
 		}
 		super.unbind_(skipper, after, keepRod);
 	}
@@ -169,7 +183,7 @@ export class Toolbar extends zul.Widget {
 
 		this._open = true;
 		var popup = this.$n_('pp');
-		this.setFloating_(true, {node: popup});
+		this.setFloating_(true, { node: popup });
 		zWatch.fire('onFloatUp', this);
 		var topZIndex = this.setTopmost();
 		popup.style.zIndex = (topZIndex > 0 ? topZIndex : 1) as unknown as string;
@@ -281,6 +295,7 @@ export class Toolbar extends zul.Widget {
 
 	// Bug ZK-1706 issue: we have to expand the width of the content div when
 	// align="left", others won't support
+	// eslint-disable-next-line zk/javaStyleSetterSignature
 	override setFlexSizeW_(n: HTMLElement, zkn: zk.JQZK, width: number, isFlexMin?: boolean): void {
 		super.setFlexSizeW_(n, zkn, width, isFlexMin);
 		if (!isFlexMin && this.getAlign() == 'start') {

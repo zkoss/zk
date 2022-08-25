@@ -26,12 +26,14 @@ import { _JQEvent, _JQEventStatic } from './dom';
 import { anima_global } from './anima';
 import { dateImpl_global } from './dateImpl';
 import { widget_global } from './widget';
-import { au_global } from './au';
+import { au_global, AuRequestInfo } from './au';
 import { mount_global } from './mount';
 import { flex_global } from './flex';
 import { evt_global } from './evt';
 import { utl_global } from './utl';
 import { keys_global } from './keys';
+import * as websocket_global from '@zkmax/websocket';
+import moment_global from 'moment-timezone';
 
 // JQ should only be used in this file. Thus, it is not exported through zk or global.
 declare namespace JQ {
@@ -48,8 +50,10 @@ declare global {
 
 		on(selector: string, func: CallableFunction): this;
 		on(selector: string, data: unknown, func: CallableFunction): this;
+		on(type: string, selector: string | undefined, data: unknown, fn: CallableFunction, ...rest: unknown[]): this;
 		off(selector: string, func: CallableFunction): this;
 		off(selector: string, data: unknown, func: CallableFunction): this;
+		off(type: string, selector: unknown, fn: unknown, ...rest: unknown[]): this;
 		zon<TData>(
 			events: JQuery.TypeEventHandlers<HTMLElement, TData, never, never> | string,
 			selector?: JQuery.Selector,
@@ -75,9 +79,9 @@ declare global {
 	}
 
 	declare namespace JQuery {
-		interface Event extends Pick<JQ.Event, 'stop' | 'metaData'> {}
-		interface MouseEventBase extends Pick<JQ.Event, 'mouseData'> {}
-		interface KeyboardEventBase extends Pick<JQ.Event, 'keyData' | '_keyDataKey'> {}
+		interface Event extends Pick<JQ.Event, 'stop' | 'metaData'> { }
+		interface MouseEventBase extends Pick<JQ.Event, 'mouseData'> { }
+		interface KeyboardEventBase extends Pick<JQ.Event, 'keyData' | '_keyDataKey'> { }
 		interface EventStatic extends JQ.EventStatic {
 			<T extends object>(event: string | UIEvent, properties?: T): TriggeredEvent & T;
 		}
@@ -147,10 +151,10 @@ declare global {
 	}
 
 	interface JQueryStatic {
-		borders: {l: string; r: string; t: string; b: string};
+		borders: { l: string; r: string; t: string; b: string };
 		browser: BrowserOptions;
-		margins: {l: string; r: string; t: string; b: string};
-		paddings: {l: string; r: string; t: string; b: string};
+		margins: { l: string; r: string; t: string; b: string };
+		paddings: { l: string; r: string; t: string; b: string };
 		isReady: boolean; // expose jQuery undocumented property
 
 		<U, T extends HTMLElement = HTMLElement>(selector: T | U, zk: ZKStatic): JQuery<T>;
@@ -228,7 +232,7 @@ declare global {
 
 	type ZKStatic = typeof zk;
 
-	type Moment = import('moment-timezone').Moment;
+	export import Moment = moment_global.Moment;
 	export import DateImpl = dateImpl_global.DateImpl;
 	export import Dates = dateImpl_global.Dates;
 
@@ -264,7 +268,7 @@ declare global {
 
 	declare function $eval<T>(x: unknown): T | undefined;
 	declare var zDebug: zk.Object;
-	declare var zWs: Websocket;
+	export import zWs = websocket_global.zWs;
 
 	declare var msgzk: Record<
 		| 'NOT_FOUND'
@@ -322,13 +326,6 @@ export interface AlertOptions {
 	icon?: 'QUESTION' | 'EXCLAMATION' | 'INFORMATION' | 'ERROR' | 'none' | string;
 	button?: string | Record<string, unknown>;
 	desktop?: Desktop;
-}
-
-export interface Websocket {
-	readonly ready: boolean;
-	encode(j: number, aureq, dt: Desktop): Record<string, unknown>;
-	send(reqInf: import('./au').AuRequestInfo): void;
-	setRequestHeaders(key: string, value: string): void;
 }
 
 export interface LocalizedSymbols {

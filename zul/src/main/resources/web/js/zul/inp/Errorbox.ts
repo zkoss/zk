@@ -32,7 +32,7 @@ export class Errorbox extends zul.wgt.Notification {
 	__ebox?: Errorbox;
 
 	constructor(owner: zul.inp.InputWidget, msg: string) {
-		super(msg, {ref: owner});
+		super(msg, { ref: owner });
 		this.parent = owner;
 		this.parent.__ebox = this;
 		this.msg = msg;
@@ -56,16 +56,15 @@ export class Errorbox extends zul.wgt.Notification {
 			jq(document.body).append(this);
 
 		// Fixed IE6/7 issue in B50-2941554.zul
-		var self = this,
-			cstp = this.parent!._cst && (this.parent!._cst as zul.inp.SimpleConstraint)._pos;
+		var cstp = this.parent!._cst && (this.parent!._cst as zul.inp.SimpleConstraint)._pos;
 		// ZK-2069: show only if is in view //B85-ZK-3321
 		if (this.parent!.isRealVisible()) {
-			setTimeout(function () {
-				if (self.parent && zul.inp.InputWidget._isInView(self)) //Bug #3067998: if
-					self.open(self.parent, undefined, cstp || self._defaultPos, {dodgeRef: !cstp});
+			setTimeout(() => {
+				if (this.parent && zul.inp.InputWidget._isInView(this)) //Bug #3067998: if
+					this.open(this.parent, undefined, cstp || this._defaultPos, { dodgeRef: !cstp });
 			}, 50); // B36-2935398: add time
 		}
-		zWatch.listen({onHide: [this.parent, this.onParentHide]});
+		zWatch.listen({ onHide: [this.parent, this.onParentHide] });
 		return this;
 	}
 
@@ -74,7 +73,7 @@ export class Errorbox extends zul.wgt.Notification {
 	 */
 	destroy(): void {
 		if (this.parent) {
-			zWatch.unlisten({onHide: [this.parent, this.onParentHide]});
+			zWatch.unlisten({ onHide: [this.parent, this.onParentHide] });
 			delete this.parent.__ebox;
 		}
 		this.close();
@@ -99,7 +98,7 @@ export class Errorbox extends zul.wgt.Notification {
 			ignoredrag: Errorbox._ignoredrag,
 			change: Errorbox._change
 		});
-		zWatch.listen({onMove: this});
+		zWatch.listen({ onMove: this });
 	}
 
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
@@ -108,11 +107,11 @@ export class Errorbox extends zul.wgt.Notification {
 		this._drag = undefined;
 		if (drag)
 			drag.destroy();
-		zWatch.unlisten({onMove: this});
+		zWatch.unlisten({ onMove: this });
 
 		// just in case
 		if (this.parent)
-			zWatch.unlisten({onHide: [this.parent, this.onParentHide]});
+			zWatch.unlisten({ onHide: [this.parent, this.onParentHide] });
 
 		super.unbind_(skipper, after, keepRod);
 	}
@@ -134,8 +133,8 @@ export class Errorbox extends zul.wgt.Notification {
 			this._fixarrow();
 	}
 
-	override setDomVisible_(node: HTMLElement, visible: boolean, opts?: zk.DomVisibleOptions): void {
-		super.setDomVisible_(node, visible, opts);
+	override setDomVisible_(domVisible: HTMLElement, visible: boolean, opts?: zk.DomVisibleOptions): void {
+		super.setDomVisible_(domVisible, visible, opts);
 		const stackup = this._stackup;
 		if (stackup) stackup.style.display = visible ? '' : 'none';
 	}
@@ -164,7 +163,7 @@ export class Errorbox extends zul.wgt.Notification {
 	}
 
 	override afterCloseAnima_(opts?: zul.wgt.PopupOptions): void {
-		opts = zk.copy(opts, {keepVisible: true});
+		opts = zk.copy(opts, { keepVisible: true });
 		super.afterCloseAnima_(opts);
 	}
 
@@ -173,16 +172,16 @@ export class Errorbox extends zul.wgt.Notification {
 			icon = this.$s('icon'),
 			iconSclass = this.iconSclass;
 		out.push('<div', this.domAttrs_(), '><div id="', uuid, '-p" class="',
-				this.$s('pointer'), '"></div><i id="', uuid, '-icon" class="',
-				//ZK-2677 use either default or self-defined icon, do not rely on CSS overwrite
-				icon, ' ', iconSclass, '"></i><div id="', uuid,
-				'-cave" class="', this.$s('content'), '" title="',
-				(zUtl.encodeXML(msgzk.GOTO_ERROR_FIELD)), '">',
-				zUtl.encodeXML(this.msg, {multiline: true}),
-				'</div><div id="', uuid, '-cls" class="',
-				// Bug ZK-2952: added missing id for the "x" icon
-				this.$s('close'), '"><i id="', uuid, '-clsIcon" class="', icon,
-				' z-icon-times"></i></div></div>');
+			this.$s('pointer'), '"></div><i id="', uuid, '-icon" class="',
+			//ZK-2677 use either default or self-defined icon, do not rely on CSS overwrite
+			icon, ' ', iconSclass, '"></i><div id="', uuid,
+			'-cave" class="', this.$s('content'), '" title="',
+			(zUtl.encodeXML(msgzk.GOTO_ERROR_FIELD)), '">',
+			zUtl.encodeXML(this.msg, { multiline: true }),
+			'</div><div id="', uuid, '-cls" class="',
+			// Bug ZK-2952: added missing id for the "x" icon
+			this.$s('close'), '"><i id="', uuid, '-clsIcon" class="', icon,
+			' z-icon-times"></i></div></div>');
 	}
 
 	override onFloatUp(ctl: zk.ZWatchController): void {
@@ -194,6 +193,7 @@ export class Errorbox extends zul.wgt.Notification {
 		if (!wgt || wgt == this.parent || !this.isVisible())
 			return;
 
+		// eslint-disable-next-line @typescript-eslint/no-this-alias
 		var top1: zk.Widget | undefined = this,
 			top2: zk.Widget | undefined = wgt;
 		while ((top1 = top1.parent) && !top1.isFloating_())
@@ -213,8 +213,8 @@ export class Errorbox extends zul.wgt.Notification {
 			nodeofs = zk(node).cmOffset();
 
 		if (jq.isOverlapped(
-		elofs, [el.offsetWidth, el.offsetHeight],
-		nodeofs, [node.offsetWidth, node.offsetHeight])) {
+			elofs, [el.offsetWidth, el.offsetHeight],
+			nodeofs, [node.offsetWidth, node.offsetHeight])) {
 			var parent = this.parent!.$n_(),
 				ptofs = zk(parent).cmOffset(),
 				pthgh = parent.offsetHeight,
@@ -222,7 +222,7 @@ export class Errorbox extends zul.wgt.Notification {
 				y = elofs[1] + el.offsetHeight <= ptbtm ? ptbtm : ptofs[1] - node.offsetHeight,
 				/* we compare bottom because default is located below */
 				ofs = zk(node).toStyleOffset(0, y);
-			node.style.top = ofs[1] + 'px';
+			node.style.top = `${ofs[1]}px`;
 			this._fixarrow();
 		}
 	}
@@ -253,53 +253,53 @@ export class Errorbox extends zul.wgt.Notification {
 		if (dir == 'd' || dir == 'u') {
 			var md = (Math.max(dx, 0) + Math.min(node.offsetWidth + dx, parent.offsetWidth)) / 2 - dx - 6,
 				mx = node.offsetWidth - 11;
-			pointer.style.left = (md > mx ? mx : md < 1 ? 1 : md) + 'px';
+			pointer.style.left = `${md > mx ? mx : md < 1 ? 1 : md}px`;
 			if (dir == 'd') {
 				pointer.style.top = undefined as unknown as string;
 				pointer.style.bottom = '-4px';
-				s.paddingBottom = ph + 'px';
+				s.paddingBottom = `${ph}px`;
 			} else {
 				pointer.style.top = '-4px';
-				s.paddingTop = ph + 'px';
+				s.paddingTop = `${ph}px`;
 			}
 
 		} else if (dir == 'l' || dir == 'r') {
 			var md = (Math.max(dy, 0) + Math.min(node.offsetHeight + dy, parent.offsetHeight)) / 2 - dy - 6,
 				mx = node.offsetHeight - 11;
-			pointer.style.top = (md > mx ? mx : md < 1 ? 1 : md) + 'px';
+			pointer.style.top = `${md > mx ? mx : md < 1 ? 1 : md}px`;
 			if (dir == 'r') {
 				pointer.style.left = undefined as unknown as string;
 				pointer.style.right = '-4px';
-				s.paddingRight = pw + 'px';
+				s.paddingRight = `${pw}px`;
 			} else {
 				pointer.style.left = '-4px';
-				s.paddingLeft = pw + 'px';
+				s.paddingLeft = `${pw}px`;
 			}
 
 		} else {
 			var ps = pointer.style;
 			ps.left = ps.top = ps.right = ps.bottom = undefined as unknown as string;
 			switch (dir) {
-			case 'lu':
-				ps.left = '0px';
-				ps.top = '-4px';
-				s.paddingTop = ph + 'px';
-				break;
-			case 'ld':
-				ps.left = '0px';
-				ps.bottom = '-4px';
-				s.paddingBottom = ph + 'px';
-				break;
-			case 'ru':
-				ps.right = '0px';
-				ps.top = '-4px';
-				s.paddingTop = ph + 'px';
-				break;
-			case 'rd':
-				ps.right = '0px';
-				ps.bottom = '-4px';
-				s.paddingBottom = ph + 'px';
-				break;
+				case 'lu':
+					ps.left = '0px';
+					ps.top = '-4px';
+					s.paddingTop = `${ph}px`;
+					break;
+				case 'ld':
+					ps.left = '0px';
+					ps.bottom = '-4px';
+					s.paddingBottom = `${ph}px`;
+					break;
+				case 'ru':
+					ps.right = '0px';
+					ps.top = '-4px';
+					s.paddingTop = `${ph}px`;
+					break;
+				case 'rd':
+					ps.right = '0px';
+					ps.bottom = '-4px';
+					s.paddingBottom = `${ph}px`;
+					break;
 			}
 			dir = dir == 'ru' || dir == 'lu' ? 'u' : 'd';
 		}
@@ -314,7 +314,7 @@ export class Errorbox extends zul.wgt.Notification {
 
 	override getPositionArgs_(): zul.wgt.PositionArgs {
 		var p = this.parent, cstp = p ? p._cst && (p._cst as zul.inp.SimpleConstraint)._pos : false;
-		return [p, undefined, cstp || 'end_before', {dodgeRef: !cstp}];
+		return [p, undefined, cstp || 'end_before', { dodgeRef: !cstp }];
 	}
 
 	static _enddrag(dg: zk.Draggable): void {

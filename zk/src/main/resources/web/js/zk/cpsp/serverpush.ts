@@ -45,7 +45,7 @@ export class SPush extends zk.Object {
 			}
 
 			if (doNow)
-				zAu.send(new zk.Event(this.desktop!, 'dummy', undefined, {ignorable: true, rtags: {isDummy: true}}));
+				zAu.send(new zk.Event(this.desktop, 'dummy', undefined, {ignorable: true, rtags: {isDummy: true}}));
 		}
 	}
 }

@@ -439,7 +439,7 @@ export class WScroll extends zk.Object {
 	}
 
 	_mouseOver(evt: zk.Event): void {
-		var cls = evt.target.className,
+		var cls = evt.target!.className,
 			index = cls.lastIndexOf('-'),
 			key = cls.substring(index + 1),
 			$drag = jq(this.edrag);
@@ -447,23 +447,23 @@ export class WScroll extends zk.Object {
 			$drag.removeClass(cls + '-clk');
 		}
 		switch (key) {
-		case 'home':
-		case 'up':
-			if (this.opts.startStep > 0)
-				$drag.addClass(cls + '-over');
-			break;
-		case 'down':
-		case 'end':
-			var opts = this.opts;
-			if (opts.startStep < opts.endStep - opts.viewport) {
-				$drag.addClass(cls + '-over');
-			}
-			break;
+			case 'home':
+			case 'up':
+				if (this.opts.startStep > 0)
+					$drag.addClass(cls + '-over');
+				break;
+			case 'down':
+			case 'end':
+				var opts = this.opts;
+				if (opts.startStep < opts.endStep - opts.viewport) {
+					$drag.addClass(cls + '-over');
+				}
+				break;
 		}
 	}
 
 	_mouseOut(evt: zk.Event): void {
-		var cls = evt.target.className,
+		var cls = evt.target!.className,
 			$drag = jq(this.edrag);
 		$drag.removeClass(cls + '-over');
 		if ($drag.hasClass(cls + '-clk')) {
@@ -472,11 +472,11 @@ export class WScroll extends zk.Object {
 	}
 
 	_mouseUp(evt: zk.Event): void {
-		jq(this.edrag).removeClass(evt.target.className + '-clk');
+		jq(this.edrag).removeClass(evt.target!.className + '-clk');
 	}
 
 	_mouseDown(evt: zk.Event): void {
-		var cls = evt.target.className,
+		var cls = evt.target!.className,
 			index = cls.lastIndexOf('-'),
 			key = cls.substring(index + 1),
 			$drag = jq(this.edrag);
@@ -487,143 +487,143 @@ export class WScroll extends zk.Object {
 
 		var opts = this.opts;
 		switch (key) {
-		case 'home':
-			if (opts.startStep > 0) {
-				opts.startStep = 0;
-				if (this._isVer) {
-					const moving = opts.startPosition + 'px';
-					this.epos.style.top = moving;
+			case 'home':
+				if (opts.startStep > 0) {
+					opts.startStep = 0;
+					if (this._isVer) {
+						const moving = opts.startPosition + 'px';
+						this.epos.style.top = moving;
 					$drag.animate({top: moving}, 500);
-					if (typeof this.opts.onScrollY == 'function')
-						this.opts.onScrollY.call(this.widget, opts.startStep + opts.offset);
-				} else {
-					const moving = opts.startPosition + 'px';
-					this.epos.style.left = moving;
+						if (typeof this.opts.onScrollY == 'function')
+							this.opts.onScrollY.call(this.widget, opts.startStep + opts.offset);
+					} else {
+						const moving = opts.startPosition + 'px';
+						this.epos.style.left = moving;
 					$drag.animate({left: moving}, 500);
-					if (typeof this.opts.onScrollX == 'function')
-						this.opts.onScrollX.call(this.widget, opts.startStep + opts.offset);
-				}
-				$drag.removeClass(cls + '-over');
-			}
-			break;
-		case 'up':
-			if (opts.startStep > 0) {
-				opts.startStep -= 1;
-				var move = opts.startPosition + (opts.startStep * this._scale);
-				if (this._isVer) {
-					var end;
-					if (zk(this.eend).isVisible()) {
-						end = this.eend.offsetTop;
-					} else {
-						end = opts.viewportSize + opts.startPosition;
+						if (typeof this.opts.onScrollX == 'function')
+							this.opts.onScrollX.call(this.widget, opts.startStep + opts.offset);
 					}
-					end -= this.edrag.offsetHeight - this._gap;
-
-					this.epos.style.top = move + 'px';
-					if (end < move) {
-						this.edrag.style.top = end + 'px';
-					} else {
-						this.edrag.style.top = move + 'px';
-					}
-					if (typeof this.opts.onScrollY == 'function')
-						this.opts.onScrollY.call(this.widget, opts.startStep + opts.offset);
-				} else {
-					var end;
-					if (zk(this.eend).isVisible()) {
-						end = this.eend.offsetLeft;
-					} else {
-						end = opts.viewportSize + opts.startPosition;
-					}
-					end -= this.edrag.offsetWidth - this._gap;
-
-					this.epos.style.left = move + 'px';
-					if (end < move) {
-						this.edrag.style.left = end + 'px';
-					} else {
-						this.edrag.style.left = move + 'px';
-					}
-
-					if (typeof this.opts.onScrollX == 'function')
-						this.opts.onScrollX.call(this.widget, opts.startStep + opts.offset);
-				}
-
-				if (opts.startStep == 0)
 					$drag.removeClass(cls + '-over');
-			}
-			break;
-		case 'down':
-			if (opts.startStep < opts.endStep - opts.viewport) {
-				opts.startStep += 1;
-				var move = opts.startPosition + (opts.startStep * this._scale);
-				if (this._isVer) {
-					var end;
-					if (zk(this.eend).isVisible()) {
-						end = this.eend.offsetTop;
-					} else {
-						end = opts.viewportSize + opts.startPosition;
-					}
-					end -= this.edrag.offsetHeight - this._gap;
-
-					this.epos.style.top = move + 'px';
-					if (end < move) {
-						this.edrag.style.top = end + 'px';
-					} else {
-						this.edrag.style.top = move + 'px';
-					}
-					if (typeof this.opts.onScrollY == 'function')
-						this.opts.onScrollY.call(this.widget, opts.startStep + opts.offset);
-				} else {
-					var end;
-					if (zk(this.eend).isVisible()) {
-						end = this.eend.offsetLeft;
-					} else {
-						end = opts.viewportSize + opts.startPosition;
-					}
-					end -= this.edrag.offsetWidth - this._gap;
-
-					this.epos.style.left = move + 'px';
-					if (end < move) {
-						this.edrag.style.left = end + 'px';
-					} else {
-						this.edrag.style.left = move + 'px';
-					}
-
-					if (typeof this.opts.onScrollX == 'function')
-						this.opts.onScrollX.call(this.widget, opts.startStep + opts.offset);
 				}
-				if (opts.startStep == opts.endStep - opts.viewport)
-					$drag.removeClass(cls + '-over');
-			}
-			break;
-		case 'end':
-			if (opts.startStep < opts.endStep - opts.viewport) {
-				opts.startStep = opts.endStep - opts.viewport;
-				if (this._isVer) {
-					let moving: number;
-					if (zk(this.eend).isVisible()) {
-						moving = this.eend.offsetTop - (this.edrag.offsetHeight - this._gap);
+				break;
+			case 'up':
+				if (opts.startStep > 0) {
+					opts.startStep -= 1;
+					var move = opts.startPosition + (opts.startStep * this._scale);
+					if (this._isVer) {
+						var end;
+						if (zk(this.eend).isVisible()) {
+							end = this.eend.offsetTop;
+						} else {
+							end = opts.viewportSize + opts.startPosition;
+						}
+						end -= this.edrag.offsetHeight - this._gap;
+
+						this.epos.style.top = move + 'px';
+						if (end < move) {
+							this.edrag.style.top = end + 'px';
+						} else {
+							this.edrag.style.top = move + 'px';
+						}
+						if (typeof this.opts.onScrollY == 'function')
+							this.opts.onScrollY.call(this.widget, opts.startStep + opts.offset);
 					} else {
-						moving = opts.startPosition + opts.viewportSize - (this.edrag.offsetHeight - this._gap);
+						var end;
+						if (zk(this.eend).isVisible()) {
+							end = this.eend.offsetLeft;
+						} else {
+							end = opts.viewportSize + opts.startPosition;
+						}
+						end -= this.edrag.offsetWidth - this._gap;
+
+						this.epos.style.left = move + 'px';
+						if (end < move) {
+							this.edrag.style.left = end + 'px';
+						} else {
+							this.edrag.style.left = move + 'px';
+						}
+
+						if (typeof this.opts.onScrollX == 'function')
+							this.opts.onScrollX.call(this.widget, opts.startStep + opts.offset);
 					}
-					this.epos.style.top = moving as unknown as string;
+
+					if (opts.startStep == 0)
+						$drag.removeClass(cls + '-over');
+				}
+				break;
+			case 'down':
+				if (opts.startStep < opts.endStep - opts.viewport) {
+					opts.startStep += 1;
+					var move = opts.startPosition + (opts.startStep * this._scale);
+					if (this._isVer) {
+						var end;
+						if (zk(this.eend).isVisible()) {
+							end = this.eend.offsetTop;
+						} else {
+							end = opts.viewportSize + opts.startPosition;
+						}
+						end -= this.edrag.offsetHeight - this._gap;
+
+						this.epos.style.top = move + 'px';
+						if (end < move) {
+							this.edrag.style.top = end + 'px';
+						} else {
+							this.edrag.style.top = move + 'px';
+						}
+						if (typeof this.opts.onScrollY == 'function')
+							this.opts.onScrollY.call(this.widget, opts.startStep + opts.offset);
+					} else {
+						var end;
+						if (zk(this.eend).isVisible()) {
+							end = this.eend.offsetLeft;
+						} else {
+							end = opts.viewportSize + opts.startPosition;
+						}
+						end -= this.edrag.offsetWidth - this._gap;
+
+						this.epos.style.left = move + 'px';
+						if (end < move) {
+							this.edrag.style.left = end + 'px';
+						} else {
+							this.edrag.style.left = move + 'px';
+						}
+
+						if (typeof this.opts.onScrollX == 'function')
+							this.opts.onScrollX.call(this.widget, opts.startStep + opts.offset);
+					}
+					if (opts.startStep == opts.endStep - opts.viewport)
+						$drag.removeClass(cls + '-over');
+				}
+				break;
+			case 'end':
+				if (opts.startStep < opts.endStep - opts.viewport) {
+					opts.startStep = opts.endStep - opts.viewport;
+					if (this._isVer) {
+						let moving: number;
+						if (zk(this.eend).isVisible()) {
+							moving = this.eend.offsetTop - (this.edrag.offsetHeight - this._gap);
+						} else {
+							moving = opts.startPosition + opts.viewportSize - (this.edrag.offsetHeight - this._gap);
+						}
+						this.epos.style.top = moving as unknown as string;
 					$drag.animate({top: moving}, 500);
-					if (typeof this.opts.onScrollY == 'function')
-						this.opts.onScrollY.call(this.widget, opts.startStep + opts.offset);
-				} else {
-					let moving: number;
-					if (zk(this.eend).isVisible()) {
-						moving = this.eend.offsetLeft - (this.edrag.offsetWidth - this._gap);
+						if (typeof this.opts.onScrollY == 'function')
+							this.opts.onScrollY.call(this.widget, opts.startStep + opts.offset);
 					} else {
-						moving = opts.startPosition + opts.viewportSize - (this.edrag.offsetWidth - this._gap);
-					}
-					this.epos.style.left = moving as unknown as string;
+						let moving: number;
+						if (zk(this.eend).isVisible()) {
+							moving = this.eend.offsetLeft - (this.edrag.offsetWidth - this._gap);
+						} else {
+							moving = opts.startPosition + opts.viewportSize - (this.edrag.offsetWidth - this._gap);
+						}
+						this.epos.style.left = moving as unknown as string;
 					$drag.animate({left: moving}, 500);
-					if (typeof this.opts.onScrollX == 'function')
-						this.opts.onScrollX.call(this.widget, opts.startStep + opts.offset);
+						if (typeof this.opts.onScrollX == 'function')
+							this.opts.onScrollX.call(this.widget, opts.startStep + opts.offset);
+					}
+					$drag.removeClass(cls + '-over');
 				}
-				$drag.removeClass(cls + '-over');
-			}
-			break;
+				break;
 		}
 		this._syncButtonStatus();
 	}
@@ -650,7 +650,7 @@ export class WScroll extends zk.Object {
 
 			var moving = opts.startPosition + (opts.startStep * scale),
 				end = zk(this.eend).isVisible() ? this.eend.offsetTop - (this.edrag.offsetHeight - this._gap)
-							: opts.startPosition + opts.viewportSize - (this.edrag.offsetHeight - this._gap);
+					: opts.startPosition + opts.viewportSize - (this.edrag.offsetHeight - this._gap);
 			this.epos.style.top = moving + 'px';
 
 			if (moving > end)
@@ -685,7 +685,7 @@ export class WScroll extends zk.Object {
 
 			var moving = opts.startPosition + (opts.startStep * scale),
 				end = zk(this.eend).isVisible() ? this.eend.offsetLeft - (this.edrag.offsetWidth - this._gap)
-							: opts.startPosition + opts.viewportSize - (this.edrag.offsetWidth - this._gap);
+					: opts.startPosition + opts.viewportSize - (this.edrag.offsetWidth - this._gap);
 			this.epos.style.left = moving + 'px';
 
 			if (moving > end)
@@ -712,7 +712,7 @@ export class WScroll extends zk.Object {
 			old = s.display;
 		s.display = 'block';
 		this._gap = this._isVer ? this.edrag.offsetHeight - this.epos.offsetHeight
-					: this.edrag.offsetWidth - this.epos.offsetWidth;
+			: this.edrag.offsetWidth - this.epos.offsetWidth;
 		s.display = old;
 
 		this.drag = new zk.Draggable(this, this.edrag, {
@@ -740,15 +740,15 @@ export class WScroll extends zk.Object {
 			uuid = this.uid + '-' + orient + 'bar',
 			zcls = this.widget.$s('wscroll');
 		jq(p).append('<div id="' + uuid + '" class="' + zcls + '-' + ocls + '">'
-				+ '<div class="' + zcls + '-drag">'
-					+ '<div class="' + zcls + '-home" title="' + msgzul.WS_HOME + '"></div>'
-					+ '<div class="' + zcls + '-up" title="' + msgzul.WS_PREV + '"></div>'
-					+ '<div class="' + zcls + '-body"></div>'
-					+ '<div class="' + zcls + '-down" title="' + msgzul.WS_NEXT + '"></div>'
-					+ '<div class="' + zcls + '-end" title="' + msgzul.WS_END + '"></div>'
-				+ '</div>'
-				+ '<div class="' + zcls + '-pos"></div>'
-				+ '<div class="' + zcls + '-endbar"></div>'
+			+ '<div class="' + zcls + '-drag">'
+			+ '<div class="' + zcls + '-home" title="' + msgzul.WS_HOME + '"></div>'
+			+ '<div class="' + zcls + '-up" title="' + msgzul.WS_PREV + '"></div>'
+			+ '<div class="' + zcls + '-body"></div>'
+			+ '<div class="' + zcls + '-down" title="' + msgzul.WS_NEXT + '"></div>'
+			+ '<div class="' + zcls + '-end" title="' + msgzul.WS_END + '"></div>'
+			+ '</div>'
+			+ '<div class="' + zcls + '-pos"></div>'
+			+ '<div class="' + zcls + '-endbar"></div>'
 			+ '</div>');
 	}
 

@@ -43,7 +43,7 @@ export class Timer extends zk.Widget {
 		const o = this._repeats;
 		this._repeats = repeats;
 
-		if (o !== repeats || (opts && opts.force)) {
+		if (o !== repeats || opts?.force) {
 			if (this.desktop) this._sync();
 		}
 
@@ -67,7 +67,7 @@ export class Timer extends zk.Widget {
 		const o = this._delay;
 		this._delay = delay;
 
-		if (o !== delay || (opts && opts.force)) {
+		if (o !== delay || opts?.force) {
 			if (this.desktop) this._sync();
 		}
 
@@ -91,7 +91,7 @@ export class Timer extends zk.Widget {
 		const o = this._running;
 		this._running = running;
 
-		if (o !== running || (opts && opts.force)) {
+		if (o !== running || opts?.force) {
 			if (this.desktop) this._sync();
 		}
 
@@ -140,7 +140,7 @@ export class Timer extends zk.Widget {
 		zAu.unError(this._onErr.bind(this));
 	}
 
-	_onErr(req: unknown, errCode: number): boolean {
+	_onErr(req: unknown, errCode: number | string): boolean {
 		if (errCode == 410 || errCode == 404 || errCode == 405)
 			this._stop();
 		return false;
@@ -150,12 +150,12 @@ export class Timer extends zk.Widget {
 		if (!this._repeats) this._running = false;
 		this.fire('onTimer', undefined, {
 			ignorable: true,
-			rtags: {onTimer: 1} // Bug ZK-2720 only timer-keep-alive should reset the timeout
+			rtags: { onTimer: 1 } // Bug ZK-2720 only timer-keep-alive should reset the timeout
 		});
 	}
 
 	//super//
-	override redraw(out: Array<string>, skipper?: zk.Skipper): void {
+	override redraw(out: string[], skipper?: zk.Skipper): void {
 		// empty
 	}
 

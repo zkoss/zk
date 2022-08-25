@@ -85,7 +85,7 @@ export class Tabpanel extends zul.ContainerWidget {
 		}
 	}
 
-	_sel(toSel: boolean, animation: boolean): void { //don't rename (zkmax counts on it)!!
+	_sel(toSel: boolean, animation?: boolean): void { //don't rename (zkmax counts on it)!!
 		var tabbox = this.getTabbox();
 
 		// B95-ZK-4695.zul, the Tabpanel is removed so that its desktop should be null.

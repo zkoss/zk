@@ -22,7 +22,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.wnd.Panelchildren')
 export class Panelchildren extends zul.ContainerWidget {
-	override parent!: zul.wnd.Panel;
+	override parent?: zul.wnd.Panel;
 
 	/**
 	 * This method is unsupported. Please use {@link zul.wnd.Panel#setHeight(String)} instead.
@@ -44,21 +44,24 @@ export class Panelchildren extends zul.ContainerWidget {
 
 	// super
 	override domClass_(no?: zk.DomClassOptions): string {
-		var scls = super.domClass_(no);
-		if (!no || !no.zclass) {
-			var zcls = this.getZclass(),
-				added = !this.parent.getTitle() && !this.parent.caption ?
-				zcls + '-noheader' : '';
-			if (added) scls += (scls ? ' ' : '') + added;
-			added = this.parent._bordered() ? '' : zcls + '-noborder';
-			if (added) scls += (scls ? ' ' : '') + added;
+		const out: string[] = [],
+			scls = super.domClass_(no);
+		if (scls)
+			out.push(scls);
+		if (!no?.zclass) {
+			const zcls = this.getZclass(),
+				parent = this.parent!;
+			if (!parent.getTitle() && !parent.caption)
+				out.push(zcls + '-noheader');
+			if (!parent._bordered())
+				out.push(zcls + '-noborder');
 		}
-		return scls;
+		return out.join(' ');
 	}
 
 	override updateDomStyle_(): void {
 		super.updateDomStyle_();
 		if (this.desktop)
-			zUtl.fireSized(this.parent);
+			zUtl.fireSized(this.parent!);
 	}
 }

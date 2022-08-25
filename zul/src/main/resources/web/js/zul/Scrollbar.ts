@@ -327,7 +327,7 @@ export class Scrollbar extends zk.Object {
 		}
 	}
 
-	scrollTo(x: number, y: number): void {
+	scrollTo(x: number, y: number, time?: number /* Compatibility with IScroll */, relative?: boolean /* Compatibility with IScroll */): void {
 		if (this.needH) {
 			x = _setScrollPos(x, 0, this.hLimit);
 			var barPos = x / this.hRatio;

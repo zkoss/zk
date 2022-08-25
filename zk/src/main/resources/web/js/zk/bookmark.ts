@@ -26,7 +26,7 @@ function checkBookmark(): void {
 	const nm = getBookmark();
 	if (nm != _curbk) {
 		_curbk = nm;
-		zAu.send(new zk.Event(undefined!, 'onBookmarkChange', nm), 1);
+		zAu.send(new zk.Event(undefined, 'onBookmarkChange', nm), 1);
 		zk.bmk.onURLChange();
 	}
 }

@@ -26,7 +26,7 @@ export let historystate = {
 			state: event.state as never,
 			url: location.href
 		};
-		zAu.send(new zk.Event(zk.Desktop._dt!, 'onHistoryPopState', data, {implicit: true}), 1);
+		zAu.send(new zk.Event(zk.Desktop._dt, 'onHistoryPopState', data, {implicit: true}), 1);
 		if (zk.bmk.checkBookmark)
 			zk.bmk.checkBookmark();
 	},

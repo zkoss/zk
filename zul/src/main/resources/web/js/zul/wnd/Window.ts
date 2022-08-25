@@ -1695,8 +1695,8 @@ export class Window extends zul.ContainerWidget {
 	static _aftersizing(dg: zk.Draggable, evt: zk.Event): void {
 		var wgt = dg.control as zk.Widget,
 			data = dg.z_szofs;
-		if (wgt._hflex) wgt.setHflex_(undefined);
-		if (wgt._vflex) wgt.setVflex_(undefined);
+		if (wgt._hflex) wgt.setHflex_();
+		if (wgt._vflex) wgt.setVflex_();
 		wgt.fire('onSize', zk.copy(data, evt.keys), {ignorable: true});
 		dg.z_szofs = undefined;
 	}
