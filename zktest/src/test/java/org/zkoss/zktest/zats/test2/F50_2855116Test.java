@@ -11,10 +11,10 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -34,7 +34,7 @@ public class F50_2855116Test extends WebDriverTestCase {
 		try {
 			click(jq(String.format("@listitem:eq(%d) @button:first", index)));
 			waitResponse();
-			Assert.assertEquals(expectedValue, getMessageBoxContent());
+			Assertions.assertEquals(expectedValue, getMessageBoxContent());
 		} finally {
 			click(jq(".z-messagebox-button:contains(OK)"));
 			waitResponse();
@@ -42,7 +42,7 @@ public class F50_2855116Test extends WebDriverTestCase {
 		try {
 			click(jq(String.format("@listitem:eq(%d) @button:last", index)));
 			waitResponse();
-			Assert.assertEquals(expectedValue, getMessageBoxContent());
+			Assertions.assertEquals(expectedValue, getMessageBoxContent());
 		} finally {
 			click(jq(".z-messagebox-button:contains(OK)"));
 			waitResponse();

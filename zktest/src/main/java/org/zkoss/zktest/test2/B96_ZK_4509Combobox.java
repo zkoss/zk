@@ -11,15 +11,15 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.test2;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.AfterCompose;
 import org.zkoss.zul.Combobox;
 import org.zkoss.zul.ListModelList;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Composite for testing ZK 8 combobox where the model is set in an onOpen listener

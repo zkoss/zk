@@ -1,11 +1,12 @@
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class B85_ZK_3643Test extends WebDriverTestCase {
 	@Test
@@ -22,7 +23,7 @@ public class B85_ZK_3643Test extends WebDriverTestCase {
 		JQuery hdfakers = jq("col[id$=hdfaker]");
 		int listheadersLength = listheaders.length();
 		int hdfakersLength = hdfakers.length();
-		assertTrue("List header count must > 0", listheadersLength > 0);
-		assertEquals("<th> and <col> get out of synch", listheadersLength, hdfakersLength);
+		assertTrue(listheadersLength > 0, "List header count must > 0");
+		assertEquals(listheadersLength, hdfakersLength, "<th> and <col> get out of synch");
 	}
 }

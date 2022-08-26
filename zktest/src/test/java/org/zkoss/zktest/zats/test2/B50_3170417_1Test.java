@@ -11,10 +11,10 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 public class B50_3170417_1Test extends WebDriverTestCase {
 
@@ -28,11 +28,11 @@ public class B50_3170417_1Test extends WebDriverTestCase {
 		waitResponse();
 		click(jq(".z-treerow:eq(6)"));
 		waitResponse();
-		Assert.assertTrue(jq(".z-paging-info:contains([ 1 - 10 / 15 ])").exists());
+		Assertions.assertTrue(jq(".z-paging-info:contains([ 1 - 10 / 15 ])").exists());
 
 		click(jq(".z-button"));
 		waitResponse();
-		Assert.assertTrue(jq(".z-treerow:eq(6)").hasClass("z-treerow-selected"));
-		Assert.assertTrue(jq(".z-paging-info:contains([ 1 - 10 / 15 ])").exists());
+		Assertions.assertTrue(jq(".z-treerow:eq(6)").hasClass("z-treerow-selected"));
+		Assertions.assertTrue(jq(".z-paging-info:contains([ 1 - 10 / 15 ])").exists());
 	}
 }

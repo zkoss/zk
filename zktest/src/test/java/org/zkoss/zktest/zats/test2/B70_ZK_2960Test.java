@@ -11,13 +11,13 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.lessThan;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author rudyhuang
@@ -34,10 +34,10 @@ public class B70_ZK_2960Test extends WebDriverTestCase {
 		JQuery bottomItem = jq(String.format("@listitem:eq(%d)", itemVisibleCount - 1)).prev();
 		click(widget(bottomItem.find("@combobox:eq(0)")).$n("btn"));
 		waitResponse(true);
-		Assert.assertThat(jq(".z-combobox-popup.z-combobox-open").offsetTop(), lessThan(bottomItem.find("@combobox:eq(0)").offsetTop()));
+		assertThat(jq(".z-combobox-popup.z-combobox-open").offsetTop(), lessThan(bottomItem.find("@combobox:eq(0)").offsetTop()));
 
 		click(widget(bottomItem.find("@combobox:eq(1)")).$n("btn"));
 		waitResponse(true);
-		Assert.assertThat(jq(".z-combobox-popup.z-combobox-open").offsetTop(), lessThan(bottomItem.find("@combobox:eq(1)").offsetTop()));
+		assertThat(jq(".z-combobox-popup.z-combobox-open").offsetTop(), lessThan(bottomItem.find("@combobox:eq(1)").offsetTop()));
 	}
 }

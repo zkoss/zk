@@ -11,10 +11,10 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -27,7 +27,8 @@ public class B96_ZK_4906Test extends WebDriverTestCase {
 		mouseOver(jq("$menu1"));
 		mouseOver(jq("$menuitem1"));
 		mouseOver(jq("$menu3"));
-		Assert.assertTrue("the menupopup should be visible", jq("$menu3popup").isVisible());
+		Assertions.assertTrue(jq("$menu3popup").isVisible(),
+				"the menupopup should be visible");
 	}
 
 	@Test
@@ -39,6 +40,7 @@ public class B96_ZK_4906Test extends WebDriverTestCase {
 		mouseOver(jq("$menuitem4"));
 		mouseOver(jq("$menuitem5"));
 		mouseOver(jq("$menuitem7"));
-		Assert.assertTrue("the menupopup should be visible", jq("$menu1popup").isVisible());
+		Assertions.assertTrue(jq("$menu1popup").isVisible(),
+				"the menupopup should be visible");
 	}
 }

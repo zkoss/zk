@@ -11,12 +11,12 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.Element;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.Element;
 
 /**
  * @author rudyhuang
@@ -31,11 +31,11 @@ public class B90_ZK_4341Test extends WebDriverTestCase {
 		type(inp, "2019 01 01");
 		waitResponse();
 
-		Assert.assertEquals("2019 01 01", inp.get("value"));
+		Assertions.assertEquals("2019 01 01", inp.get("value"));
 
 		sendKeys(inp, Keys.ARROW_LEFT, Keys.SPACE);
 		waitResponse();
 
-		Assert.assertNotEquals("2019 01 01", inp.get("value"));
+		Assertions.assertNotEquals("2019 01 01", inp.get("value"));
 	}
 }

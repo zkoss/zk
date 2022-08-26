@@ -11,13 +11,14 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author rudyhuang
@@ -40,15 +41,15 @@ public class F70_ZK_2226Test extends WebDriverTestCase {
 		waitResponse();
 		int panel1WidthAfter = panel1.outerWidth();
 		int panel1HeightAfter = panel1.outerHeight();
-		Assert.assertThat(panel1WidthAfter, greaterThan(panel1Width));
-		Assert.assertEquals(panel1WidthAfter, jq("@panel:contains(Panel 2)").outerWidth());
+		assertThat(panel1WidthAfter, greaterThan(panel1Width));
+		Assertions.assertEquals(panel1WidthAfter, jq("@panel:contains(Panel 2)").outerWidth());
 
 		getActions().dragAndDrop(
 					toElement(panel1.find(".z-panel-header-move")),
 					toElement(jq("@panel:contains(Panel 3)")))
 				.perform();
 		waitResponse();
-		Assert.assertEquals(panel1WidthAfter, panel1.outerWidth());
-		Assert.assertEquals(panel1HeightAfter, panel1.outerHeight());
+		Assertions.assertEquals(panel1WidthAfter, panel1.outerWidth());
+		Assertions.assertEquals(panel1HeightAfter, panel1.outerHeight());
 	}
 }

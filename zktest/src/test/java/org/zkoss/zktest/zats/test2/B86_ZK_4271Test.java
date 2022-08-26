@@ -11,14 +11,15 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.endsWith;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
@@ -38,19 +39,19 @@ public class B86_ZK_4271Test extends ZATSTestCase {
 		ComponentAgent btn = desktop.query("button");
 		ComponentAgent menuitem = desktop.query("menuitem");
 		ComponentAgent dropupload = desktop.query("dropupload");
-		Assert.assertTrue(getUploadNative(btn));
-		Assert.assertTrue(getUploadNative(menuitem));
-		Assert.assertTrue(getUploadNative(dropupload));
+		Assertions.assertTrue(getUploadNative(btn));
+		Assertions.assertTrue(getUploadNative(menuitem));
+		Assertions.assertTrue(getUploadNative(dropupload));
 
 		UploadAgent uploadAgent = btn.as(UploadAgent.class);
 		uploadAgent.upload("test.txt", newContent(), "text/plain");
 		uploadAgent.finish();
-		Assert.assertThat(desktop.query("#result1").as(Label.class).getValue(), endsWith(", binary=true"));
+		assertThat(desktop.query("#result1").as(Label.class).getValue(), endsWith(", binary=true"));
 
 		UploadAgent uploadAgent2 = menuitem.as(UploadAgent.class);
 		uploadAgent2.upload("test.txt", newContent(), "text/plain");
 		uploadAgent2.finish();
-		Assert.assertThat(desktop.query("#result2").as(Label.class).getValue(), endsWith(", binary=true"));
+		assertThat(desktop.query("#result2").as(Label.class).getValue(), endsWith(", binary=true"));
 
 		// not support UploadAgent for dropupload for now
 	}

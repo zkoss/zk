@@ -11,12 +11,12 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class B80_ZK_3333Test extends WebDriverTestCase {
 
@@ -31,7 +31,7 @@ public class B80_ZK_3333Test extends WebDriverTestCase {
 		waitResponse();
 		click(jq(".z-button"));
 		waitResponse();
-		Assert.assertTrue(jq("$mid").text().contains("PROXY MSG : original messagess"));
-		Assert.assertEquals("original messagess", jq("$final").text());
+		Assertions.assertTrue(jq("$mid").text().contains("PROXY MSG : original messagess"));
+		Assertions.assertEquals("original messagess", jq("$final").text());
 	}
 }

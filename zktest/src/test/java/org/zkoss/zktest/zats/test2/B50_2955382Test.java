@@ -11,11 +11,11 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.interactions.Actions;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -32,6 +32,6 @@ public class B50_2955382Test extends WebDriverTestCase {
 			.moveToElement(driver.findElement(jq("@comboitem:eq(60)")))
 			.perform();
 		sleep(1000);
-		Assert.assertNotEquals(0, jq(".z-combobox-popup").scrollTop());
+		Assertions.assertNotEquals(0, jq(".z-combobox-popup").scrollTop());
 	}
 }

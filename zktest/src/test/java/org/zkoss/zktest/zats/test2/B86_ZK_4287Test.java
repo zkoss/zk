@@ -11,13 +11,13 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.not;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -29,6 +29,6 @@ public class B86_ZK_4287Test extends WebDriverTestCase {
 		waitResponse();
 
 		String src = jq("script[src$=\"zul.inp.wpd\"]").attr("src");
-		Assert.assertThat(src, not(endsWith("zkau/web/js/zul.inp.wpd")));
+		assertThat(src, not(endsWith("zkau/web/js/zul.inp.wpd")));
 	}
 }

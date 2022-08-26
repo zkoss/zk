@@ -11,12 +11,13 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
-import org.zkoss.zktest.zats.WebDriverTestCase;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 public class B86_ZK_4044Test extends WebDriverTestCase {
 	@Test
@@ -29,25 +30,17 @@ public class B86_ZK_4044Test extends WebDriverTestCase {
 		zoomOut(1);
 		click(jq("@button:contains(scrollRight)"));
 		waitResponse();
-		Assert.assertEquals(jq(".z-listheader").eq(8).positionLeft(), jq(".z-listcell").eq(8).positionLeft());
+		Assertions.assertEquals(jq(".z-listheader").eq(8).positionLeft(), jq(".z-listcell").eq(8).positionLeft());
 		zoomReset();
 		zoomIn(5);
 		click(jq("@button:contains(refresh)"));
 		waitResponse();
 		click(jq("@button:contains(scrollRight)"));
 		waitResponse();
-		Assert.assertEquals(jq(".z-listheader").eq(8).positionLeft(), jq(".z-listcell").eq(8).positionLeft());
+		Assertions.assertEquals(jq(".z-listheader").eq(8).positionLeft(), jq(".z-listcell").eq(8).positionLeft());
 		zoomReset();
 	}
-	
-	private boolean isMac() {
-		if (System.getProperty("os.name").startsWith("Mac")) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-	
+
 	private void zoomIn(int times) {
 		WebElement html = driver.findElement(By.tagName("html"));
 		for (int i = 0; i < times; i++) {

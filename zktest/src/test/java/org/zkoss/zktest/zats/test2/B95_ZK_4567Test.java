@@ -11,10 +11,11 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class B95_ZK_4567Test extends WebDriverTestCase {
 	@Test
@@ -31,8 +32,8 @@ public class B95_ZK_4567Test extends WebDriverTestCase {
 		int headScrollLeft = treeHead.scrollLeft();
 		click(orangeDiv);
 		waitResponse();
-		Assert.assertEquals("should not see the scroll position jumping.", headScrollLeft, treeHead.scrollLeft());
-		Assert.assertEquals("the server side Frozen start value should sync as scroll position.", "fz start: 3", getZKLog());
+		Assertions.assertEquals(headScrollLeft, treeHead.scrollLeft(), "should not see the scroll position jumping.");
+		Assertions.assertEquals("fz start: 3", getZKLog(), "the server side Frozen start value should sync as scroll position.");
 		closeZKLog();
 
 		// second scroll test
@@ -41,17 +42,17 @@ public class B95_ZK_4567Test extends WebDriverTestCase {
 		headScrollLeft = treeHead.scrollLeft();
 		click(orangeDiv);
 		waitResponse();
-		Assert.assertEquals("should not see the scroll position jumping.", headScrollLeft, treeHead.scrollLeft());
-		Assert.assertEquals("the server side Frozen start value should sync as scroll position.", "fz start: 8", getZKLog());
+		Assertions.assertEquals(headScrollLeft, treeHead.scrollLeft(), "should not see the scroll position jumping.");
+		Assertions.assertEquals( "fz start: 8", getZKLog(), "the server side Frozen start value should sync as scroll position.");
 		closeZKLog();
 
 		// setStart test
 		click(jq("@button").eq(0));
 		waitResponse();
-		Assert.assertEquals("the scroll(tree) position should be updated.", 5 * columnWidth, treeHead.scrollLeft());
-		Assert.assertEquals("the scroll(bar) position should be updated.", 5 * columnWidth, frozenInner.scrollLeft());
+		Assertions.assertEquals(5 * columnWidth, treeHead.scrollLeft(), "the scroll(tree) position should be updated.");
+		Assertions.assertEquals(5 * columnWidth, frozenInner.scrollLeft(), "the scroll(bar) position should be updated.");
 		click(orangeDiv);
 		waitResponse();
-		Assert.assertEquals("the server side Frozen start value should sync as scroll position.", "fz start: 5", getZKLog());
+		Assertions.assertEquals("fz start: 5", getZKLog(), "the server side Frozen start value should sync as scroll position.");
 	}
 }

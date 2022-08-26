@@ -14,9 +14,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 package org.zkoss.zktest.zats.test2;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.operation.PagingAgent;
@@ -41,21 +41,21 @@ public class B80_ZK_3173_tree_norodTest extends ZATSTestCase {
 		DesktopAgent desktop = connect();
 		Tree tree = desktop.query("#tree").as(Tree.class);
 		TreeModel model = tree.getModel();
-		assertEquals("active page out of sync", tree.getActivePage(), ((Pageable) model).getActivePage());
-		assertEquals("page count out of sync", tree.getPageCount(), ((Pageable) model).getPageCount());
+		assertEquals(tree.getActivePage(), ((Pageable) model).getActivePage(), "active page out of sync");
+		assertEquals(tree.getPageCount(), ((Pageable) model).getPageCount(), "page count out of sync");
 		
 		desktop.query("#add10Btn").click();
-		assertEquals("active page out of sync", tree.getActivePage(), ((Pageable) model).getActivePage());
-		assertEquals("page count out of sync", tree.getPageCount(), ((Pageable) model).getPageCount());
+		assertEquals(tree.getActivePage(), ((Pageable) model).getActivePage(), "active page out of sync");
+		assertEquals(tree.getPageCount(), ((Pageable) model).getPageCount(), "page count out of sync");
 		
 		PagingAgent paging = desktop.query("tree > paging").as(PagingAgent.class);
 		paging.moveTo(tree.getPageCount() - 1);
-		assertEquals("active page out of sync", tree.getActivePage(), ((Pageable) model).getActivePage());
-		assertEquals("page count out of sync", tree.getPageCount(), ((Pageable) model).getPageCount());
+		assertEquals(tree.getActivePage(), ((Pageable) model).getActivePage(), "active page out of sync");
+		assertEquals(tree.getPageCount(), ((Pageable) model).getPageCount(), "page count out of sync");
 		
 		desktop.query("#clearBtn").click();
-		assertEquals("active page out of sync", tree.getActivePage(), ((Pageable) model).getActivePage());
-		assertEquals("page count out of sync", tree.getPageCount(), ((Pageable) model).getPageCount());
+		assertEquals(tree.getActivePage(), ((Pageable) model).getActivePage(), "active page out of sync");
+		assertEquals(tree.getPageCount(), ((Pageable) model).getPageCount(), "page count out of sync");
 	}
 
 	/**
@@ -68,21 +68,21 @@ public class B80_ZK_3173_tree_norodTest extends ZATSTestCase {
 		DesktopAgent desktop = connect();
 		Tree tree = desktop.query("#tree").as(Tree.class);
 		TreeModel model = tree.getModel();
-		assertEquals("active page out of sync", tree.getActivePage(), ((Pageable) model).getActivePage());
-		assertEquals("page count out of sync", tree.getPageCount(), ((Pageable) model).getPageCount());
+		assertEquals(tree.getActivePage(), ((Pageable) model).getActivePage(), "active page out of sync");
+		assertEquals(tree.getPageCount(), ((Pageable) model).getPageCount(), "page count out of sync");
 		
 		desktop.query("#add10Btn").click();
-		assertEquals("active page out of sync", tree.getActivePage(), ((Pageable) model).getActivePage());
-		assertEquals("page count out of sync", tree.getPageCount(), ((Pageable) model).getPageCount());
+		assertEquals(tree.getActivePage(), ((Pageable) model).getActivePage(), "active page out of sync");
+		assertEquals(tree.getPageCount(), ((Pageable) model).getPageCount(), "page count out of sync");
 		
 		PagingAgent paging = desktop.query("tree > paging").as(PagingAgent.class);
 		paging.moveTo(tree.getPageCount() - 1);
-		assertEquals("active page out of sync", tree.getActivePage(), ((Pageable) model).getActivePage());
-		assertEquals("page count out of sync", tree.getPageCount(), ((Pageable) model).getPageCount());
+		assertEquals(tree.getActivePage(), ((Pageable) model).getActivePage(), "active page out of sync");
+		assertEquals(tree.getPageCount(), ((Pageable) model).getPageCount(), "page count out of sync");
 		
 		desktop.query("#remove1Btn").click();
-		assertEquals("active page out of sync", tree.getActivePage(), ((Pageable) model).getActivePage());
-		assertEquals("page count out of sync", tree.getPageCount(), ((Pageable) model).getPageCount());
+		assertEquals(tree.getActivePage(), ((Pageable) model).getActivePage(), "active page out of sync");
+		assertEquals(tree.getPageCount(), ((Pageable) model).getPageCount(), "page count out of sync");
 	}
 
 	/**
@@ -95,21 +95,21 @@ public class B80_ZK_3173_tree_norodTest extends ZATSTestCase {
 		DesktopAgent desktop = connect();
 		Tree tree = desktop.query("#tree").as(Tree.class);
 		TreeModel model = tree.getModel();
-		assertEquals("active page out of sync", tree.getActivePage(), ((Pageable) model).getActivePage());
-		assertEquals("page count out of sync", tree.getPageCount(), ((Pageable) model).getPageCount());
+		assertEquals(tree.getActivePage(), ((Pageable) model).getActivePage(), "active page out of sync");
+		assertEquals(tree.getPageCount(), ((Pageable) model).getPageCount(), "page count out of sync");
 		
 		desktop.query("#add10Btn").click();
-		assertEquals("active page out of sync", tree.getActivePage(), ((Pageable) model).getActivePage());
-		assertEquals("page count out of sync", tree.getPageCount(), ((Pageable) model).getPageCount());
+		assertEquals(tree.getActivePage(), ((Pageable) model).getActivePage(), "active page out of sync");
+		assertEquals(tree.getPageCount(), ((Pageable) model).getPageCount(), "page count out of sync");
 		
 		PagingAgent paging = desktop.query("tree > paging").as(PagingAgent.class);
 		paging.moveTo(tree.getPageCount() - 1);
-		assertEquals("active page out of sync", tree.getActivePage(), ((Pageable) model).getActivePage());
-		assertEquals("page count out of sync", tree.getPageCount(), ((Pageable) model).getPageCount());
+		assertEquals(tree.getActivePage(), ((Pageable) model).getActivePage(), "active page out of sync");
+		assertEquals(tree.getPageCount(), ((Pageable) model).getPageCount(), "page count out of sync");
 		
 		desktop.query("#set5Btn").click();
-		assertEquals("wrong tree active page", 3, tree.getActivePage());
-		assertEquals("wrong model active page", 3, ((Pageable) model).getActivePage());
-		assertEquals("page count out of sync", tree.getPageCount(), ((Pageable) model).getPageCount());
+		assertEquals(3, tree.getActivePage(), "wrong tree active page");
+		assertEquals(3, ((Pageable) model).getActivePage(), "wrong model active page");
+		assertEquals(tree.getPageCount(), ((Pageable) model).getPageCount(), "page count out of sync");
 	}
 }

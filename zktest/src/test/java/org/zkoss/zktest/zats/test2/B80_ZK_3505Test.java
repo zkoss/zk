@@ -1,16 +1,14 @@
 package org.zkoss.zktest.zats.test2;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Test;
-
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 public class B80_ZK_3505Test extends WebDriverTestCase {
 	@Test
@@ -28,11 +26,11 @@ public class B80_ZK_3505Test extends WebDriverTestCase {
 			html.sendKeys(Keys.TAB);
 			a += getEval("document.activeElement.id") + " ";
 		}
-		assertFalse("panel caption 1 should not be selected", a.contains(pn1captionid));
-		assertTrue("panel caption 2 should be selected", a.contains(pn2captionid));
-		assertFalse("groupbox caption 1 should not be selected", a.contains(gb1captionid));
-		assertTrue("groupbox caption 2 should be selected", a.contains(gb2captionid));
-		assertFalse("window caption 1 should not be selected", a.contains(wd1captionid));
-		assertTrue("window caption 2 should be selected", a.contains(wd2captionid));
+		assertFalse(a.contains(pn1captionid), "panel caption 1 should not be selected");
+		assertTrue(a.contains(pn2captionid), "panel caption 2 should be selected");
+		assertFalse(a.contains(gb1captionid), "groupbox caption 1 should not be selected");
+		assertTrue(a.contains(gb2captionid), "groupbox caption 2 should be selected");
+		assertFalse(a.contains(wd1captionid), "window caption 1 should not be selected");
+		assertTrue(a.contains(wd2captionid), "window caption 2 should be selected");
 	}
 }

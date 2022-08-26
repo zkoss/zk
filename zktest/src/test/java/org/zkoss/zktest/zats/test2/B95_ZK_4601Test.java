@@ -11,10 +11,10 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -26,17 +26,20 @@ public class B95_ZK_4601Test extends WebDriverTestCase {
 
 		click(jq("@button:contains(Select Tab C)"));
 		waitResponse(true);
-		Assert.assertTrue("Content C invisible",
-				jq("@tabpanel:eq(2) .z-tabpanel-content").isVisible());
+		Assertions.assertTrue(
+				jq("@tabpanel:eq(2) .z-tabpanel-content").isVisible(),
+				"Content C invisible");
 
 		click(jq("@button:contains(Select Tab B)"));
 		waitResponse(true);
-		Assert.assertTrue("Content B invisible",
-				jq("@tabpanel:eq(1) .z-tabpanel-content").isVisible());
+		Assertions.assertTrue(
+				jq("@tabpanel:eq(1) .z-tabpanel-content").isVisible(),
+				"Content B invisible");
 
 		click(jq("$tabC"));
 		waitResponse(true);
-		Assert.assertTrue("Content C invisible",
-				jq("@tabpanel:eq(2) .z-tabpanel-content").isVisible());
+		Assertions.assertTrue(
+				jq("@tabpanel:eq(2) .z-tabpanel-content").isVisible(),
+				"Content C invisible");
 	}
 }

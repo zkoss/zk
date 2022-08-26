@@ -13,11 +13,11 @@ package org.zkoss.zktest.zats.test2;
 
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
-import org.zkoss.zktest.zats.ztl.Widget;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
+import org.zkoss.test.webdriver.ztl.Widget;
 
 /**
  * @author rudyhuang

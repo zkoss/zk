@@ -13,11 +13,12 @@ package org.zkoss.zktest.zats.test2;
 
 import java.util.Collections;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
-import org.zkoss.zktest.zats.WebDriverTestCase;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 public class B95_ZK_4738Test extends WebDriverTestCase {
 	@Override
@@ -32,6 +33,7 @@ public class B95_ZK_4738Test extends WebDriverTestCase {
 		Actions act = new Actions(connect());
 		act.clickAndHold(toElement(jq(".box").eq(0))).moveToElement(toElement(jq(".box").eq(2))).release().perform();
 		waitResponse();
-		Assert.assertTrue("onDrop should be triggered", jq("@toast").exists());
+		Assertions.assertTrue(jq("@toast").exists(),
+				"onDrop should be triggered");
 	}
 }

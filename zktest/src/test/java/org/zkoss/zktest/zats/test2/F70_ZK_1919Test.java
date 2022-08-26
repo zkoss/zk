@@ -11,21 +11,21 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.ClassRule;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.zkoss.zktest.zats.ExternalZkXml;
-import org.zkoss.zktest.zats.ForkJVMTestOnly;
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
+
+import org.zkoss.test.webdriver.ExternalZkXml;
+import org.zkoss.test.webdriver.ForkJVMTestOnly;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
  */
-@Category(ForkJVMTestOnly.class)
+@ForkJVMTestOnly
 public class F70_ZK_1919Test extends WebDriverTestCase {
-	@ClassRule
+	@RegisterExtension
 	public static final ExternalZkXml CONFIG = new ExternalZkXml(F70_ZK_1919Test.class);
 
 	@Test
@@ -47,9 +47,9 @@ public class F70_ZK_1919Test extends WebDriverTestCase {
 	}
 
 	private void checkUuid(String uuidPage, String uuidWindow, String uuidButton, String uuidLabel) {
-		Assert.assertEquals(uuidPage, widget(jq("@page")).uuid());
-		Assert.assertEquals(uuidWindow, widget(jq("@window")).uuid());
-		Assert.assertEquals(uuidButton, widget(jq("@button")).uuid());
-		Assert.assertEquals(uuidLabel, widget(jq("@label")).uuid());
+		assertEquals(uuidPage, widget(jq("@page")).uuid());
+		assertEquals(uuidWindow, widget(jq("@window")).uuid());
+		assertEquals(uuidButton, widget(jq("@button")).uuid());
+		assertEquals(uuidLabel, widget(jq("@label")).uuid());
 	}
 }

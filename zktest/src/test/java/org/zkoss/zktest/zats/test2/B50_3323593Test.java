@@ -11,9 +11,10 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 public class B50_3323593Test extends WebDriverTestCase {
 	@Test
@@ -21,10 +22,10 @@ public class B50_3323593Test extends WebDriverTestCase {
 		connect();
 		click(jq(".z-timebox-up"));
 		waitResponse();
-		Assert.assertFalse(jq(".z-timebox-input").val().contains("z"));
+		Assertions.assertFalse(jq(".z-timebox-input").val().contains("z"));
 		
 		click(jq(".z-timebox-down"));
 		waitResponse();
-		Assert.assertFalse(jq(".z-timebox-input").val().contains("z"));
+		Assertions.assertFalse(jq(".z-timebox-input").val().contains("z"));
 	}
 }

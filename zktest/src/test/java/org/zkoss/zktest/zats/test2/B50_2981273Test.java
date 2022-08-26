@@ -1,20 +1,20 @@
 package org.zkoss.zktest.zats.test2;
 
-import static org.junit.Assert.*;
-
-import org.junit.Test;
-
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.Widget;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author jameschu
  */
 public class B50_2981273Test extends WebDriverTestCase {
-	@Test public void test() {
+	@Test
+	public void test() {
 		connect();
 		String date = jq(jq("$db").toWidget().$n("real")).val();
 		String year = date.substring(date.lastIndexOf(".") + 1);

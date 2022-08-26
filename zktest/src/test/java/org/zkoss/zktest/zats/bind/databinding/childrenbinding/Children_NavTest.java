@@ -11,26 +11,27 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.bind.databinding.childrenbinding;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 public class Children_NavTest extends WebDriverTestCase {
 	@Test
 	public void structureTest() {
 		connect("/bind/databinding/childrenbinding/children-nav.zul");
 
-		Assert.assertEquals(0, jq(".z-nav:contains(Item A)").length());
-		Assert.assertEquals(1, jq(".z-navitem:contains(Item A)").length());
+		Assertions.assertEquals(0, jq(".z-nav:contains(Item A)").length());
+		Assertions.assertEquals(1, jq(".z-navitem:contains(Item A)").length());
 
-		Assert.assertEquals(1, jq(".z-nav:contains(Item B)").length());
-		Assert.assertEquals(1, jq(".z-navitem:contains(Item B)").length());
+		Assertions.assertEquals(1, jq(".z-nav:contains(Item B)").length());
+		Assertions.assertEquals(1, jq(".z-navitem:contains(Item B)").length());
 
-		Assert.assertEquals(2, jq(".z-nav:contains(Item C)").length());
-		Assert.assertEquals(3, jq(".z-navitem:contains(Item C)").length());
+		Assertions.assertEquals(2, jq(".z-nav:contains(Item C)").length());
+		Assertions.assertEquals(3, jq(".z-navitem:contains(Item C)").length());
 
-		Assert.assertEquals(7, jq(".z-nav:contains(Item D)").length());
-		Assert.assertEquals(15, jq(".z-navitem:contains(Item D)").length());
+		Assertions.assertEquals(7, jq(".z-nav:contains(Item D)").length());
+		Assertions.assertEquals(15, jq(".z-navitem:contains(Item D)").length());
 
 		click(jq(".z-nav:contains(Item C)"));
 		waitResponse();
@@ -38,6 +39,6 @@ public class Children_NavTest extends WebDriverTestCase {
 		waitResponse();
 		click(jq(".z-navitem:contains(Item C_0_1)"));
 		waitResponse();
-		Assert.assertEquals("clicked " + jq(".z-navitem:contains(Item C_0_1)").text().trim(), jq("$msg").text());
+		Assertions.assertEquals("clicked " + jq(".z-navitem:contains(Item C_0_1)").text().trim(), jq("$msg").text());
 	}
 }

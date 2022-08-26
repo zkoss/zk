@@ -13,8 +13,8 @@ package org.zkoss.zktest.zats.test2;
 
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
@@ -29,6 +29,6 @@ public class F50_2816083Test extends ZATSTestCase {
 	public void test() {
 		DesktopAgent desktop = connect();
 		List<ComponentAgent> labels = desktop.queryAll("label");
-		Assert.assertEquals("mydiv vs div", labels.get(labels.size() - 1).as(Label.class).getValue());
+		Assertions.assertEquals("mydiv vs div", labels.get(labels.size() - 1).as(Label.class).getValue());
 	}
 }

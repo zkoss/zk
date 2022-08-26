@@ -11,10 +11,11 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class B96_ZK_4801Test extends WebDriverTestCase {
 	@Test
@@ -23,8 +24,9 @@ public class B96_ZK_4801Test extends WebDriverTestCase {
 		JQuery button = jq("@button");
 		click(button);
 		waitResponse();
-		Assert.assertFalse("google font shouldn't be added if atlantic theme is not active",
-			getZKLog().contains("fonts.googleapis.com/css?family=Open+Sans"));
+		Assertions.assertFalse(
+				getZKLog().contains("fonts.googleapis.com/css?family=Open+Sans"),
+				"google font shouldn't be added if atlantic theme is not active");
 		closeZKLog();
 
 
@@ -33,8 +35,9 @@ public class B96_ZK_4801Test extends WebDriverTestCase {
 			waitResponse();
 			click(button);
 			waitResponse();
-			Assert.assertTrue("google font should be added if atlantic theme is active",
-					getZKLog().contains("fonts.googleapis.com/css?family=Open+Sans"));
+			Assertions.assertTrue(
+					getZKLog().contains("fonts.googleapis.com/css?family=Open+Sans"),
+					"google font should be added if atlantic theme is active");
 		} finally {
 			click(jq(".z-a:contains(Default)"));
 			waitResponse();

@@ -11,17 +11,18 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author rudyhuang
  */
-//@Category(WcagTestOnly.class)
+@Tag("WcagTestOnly")
 public class F96_ZK_4273Test extends WebDriverTestCase {
 	@Test
 	public void testColorbox() {
@@ -31,10 +32,12 @@ public class F96_ZK_4273Test extends WebDriverTestCase {
 		click(colorbox);
 		waitResponse();
 		final JQuery colorboxPopup = jq(widget(colorbox).$n("pp"));
-		Assert.assertTrue("Popup should be visible", colorboxPopup.isVisible());
+		Assertions.assertTrue(colorboxPopup.isVisible(),
+				"Popup should be visible");
 
 		getActions().sendKeys(Keys.ARROW_DOWN, Keys.ARROW_RIGHT, Keys.ESCAPE).perform();
-		Assert.assertFalse("Popup should be invisible", colorboxPopup.isVisible());
+		Assertions.assertFalse(colorboxPopup.isVisible(),
+				"Popup should be invisible");
 	}
 
 	@Test
@@ -45,10 +48,12 @@ public class F96_ZK_4273Test extends WebDriverTestCase {
 		waitResponse();
 		getActions().sendKeys(Keys.ARROW_DOWN).sendKeys(Keys.ARROW_RIGHT).perform();
 		final JQuery colorboxPopup = jq(".z-menu-popup.z-colorpalette-popup");
-		Assert.assertTrue("Popup should be visible", colorboxPopup.isVisible());
+		Assertions.assertTrue(colorboxPopup.isVisible(),
+				"Popup should be visible");
 
 		getActions().sendKeys(Keys.ARROW_DOWN, Keys.ARROW_RIGHT, Keys.ESCAPE).perform();
-		Assert.assertFalse("Popup should be invisible", colorboxPopup.isVisible());
+		Assertions.assertFalse(colorboxPopup.isVisible(),
+				"Popup should be invisible");
 	}
 
 	@Test
@@ -58,9 +63,11 @@ public class F96_ZK_4273Test extends WebDriverTestCase {
 		click(jq("@menubar > @menu > .z-menu-text:contains(Color)"));
 		waitResponse();
 		final JQuery colorboxPopup = jq(".z-menu-popup.z-colorpalette-popup");
-		Assert.assertTrue("Popup should be visible", colorboxPopup.isVisible());
+		Assertions.assertTrue(colorboxPopup.isVisible(),
+				"Popup should be visible");
 
 		getActions().sendKeys(Keys.ARROW_DOWN, Keys.ARROW_RIGHT, Keys.ESCAPE).perform();
-		Assert.assertFalse("Popup should be invisible", colorboxPopup.isVisible());
+		Assertions.assertFalse(colorboxPopup.isVisible(),
+				"Popup should be invisible");
 	}
 }

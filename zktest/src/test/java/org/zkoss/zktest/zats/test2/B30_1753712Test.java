@@ -1,29 +1,30 @@
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.ClassRule;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
-import org.zkoss.zktest.zats.ExternalZkXml;
-import org.zkoss.zktest.zats.ForkJVMTestOnly;
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
+
+import org.zkoss.test.webdriver.ExternalZkXml;
+import org.zkoss.test.webdriver.ForkJVMTestOnly;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author jameschu
  */
-@Category(ForkJVMTestOnly.class)
+@ForkJVMTestOnly
 public class B30_1753712Test extends WebDriverTestCase {
-	@ClassRule
+	@RegisterExtension
 	public static final ExternalZkXml CONFIG = new ExternalZkXml(B30_1753712Test.class);
 
 	@Test
 	public void test() {
 		connect();
-		Assert.assertEquals("n/a", jq("$la").text());
+		assertEquals("n/a", jq("$la").text());
 		driver.navigate().refresh(); // trigger rmDesktop
 		sleep(1000);
 		waitResponse();
-		Assert.assertNotEquals("n/a", jq("$la").text());
+		assertNotEquals("n/a", jq("$la").text());
 	}
 }

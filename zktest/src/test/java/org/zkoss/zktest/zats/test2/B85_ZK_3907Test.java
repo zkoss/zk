@@ -18,8 +18,8 @@ import java.util.Locale;
 import javax.servlet.ServletRequest;
 
 import net.jcip.annotations.NotThreadSafe;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import org.zkoss.lang.Library;
@@ -34,8 +34,8 @@ public class B85_ZK_3907Test {
 		try {
 			Library.setProperty(Attributes.PREFERRED_LOCALE, "es_PY");
 			Locale l = getPreferredLocale(null, serverRequest);
-			Assert.assertEquals("es", l.getLanguage());
-			Assert.assertEquals("PY", l.getCountry());
+			Assertions.assertEquals("es", l.getLanguage());
+			Assertions.assertEquals("PY", l.getCountry());
 		} finally {
 			Library.setProperty(Attributes.PREFERRED_LOCALE, null);
 		}

@@ -11,8 +11,8 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.bind.comp;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.operation.OpenAgent;
@@ -29,9 +29,9 @@ public class GridTest extends ZATSTestCase {
 		final OpenAgent detail = desktop.query("detail").as(OpenAgent.class);
 		final Label detailOpen = desktop.query("#detailOpen").as(Label.class);
 		detail.open(true);
-		Assert.assertEquals("true", detailOpen.getValue());
+		Assertions.assertEquals("true", detailOpen.getValue());
 		detail.open(false);
-		Assert.assertEquals("false", detailOpen.getValue());
+		Assertions.assertEquals("false", detailOpen.getValue());
 	}
 
 	@Test
@@ -40,8 +40,8 @@ public class GridTest extends ZATSTestCase {
 		final OpenAgent group = desktop.query("group").as(OpenAgent.class);
 		final Label groupOpen = desktop.query("#groupOpen").as(Label.class);
 		group.open(true);
-		Assert.assertEquals("true", groupOpen.getValue());
+		Assertions.assertEquals("true", groupOpen.getValue());
 		group.open(false);
-		Assert.assertEquals("false", groupOpen.getValue());
+		Assertions.assertEquals("false", groupOpen.getValue());
 	}
 }

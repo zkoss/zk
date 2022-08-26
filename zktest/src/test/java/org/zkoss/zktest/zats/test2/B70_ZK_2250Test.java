@@ -11,11 +11,11 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.interactions.Actions;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -37,7 +37,7 @@ public class B70_ZK_2250Test extends WebDriverTestCase {
 				.moveToElement(toElement(jq("@grid ~ @div")))
 				.perform();
 		try {
-			Assert.assertTrue(jq("#zk_ddghost").hasClass("z-drop-allow"));
+			Assertions.assertTrue(jq("#zk_ddghost").hasClass("z-drop-allow"));
 		} finally {
 			actions.release().perform();
 		}

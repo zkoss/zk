@@ -11,17 +11,15 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
-
-import org.zkoss.zats.mimic.ComponentAgent;
-import org.zkoss.zats.mimic.DesktopAgent;
-import org.zkoss.zktest.zats.ZATSTestCase;
-import org.zkoss.zul.Button;
-import org.zkoss.zul.Label;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.zats.mimic.DesktopAgent;
+import org.zkoss.zktest.zats.ZATSTestCase;
+import org.zkoss.zul.Label;
 
 /**
  * @author jameschu
@@ -48,7 +46,7 @@ public class B85_ZK_3812Test extends ZATSTestCase {
 		labels.add(desktop.query("#h3 label").as(Label.class));
 		labels.add(desktop.query("#h4 label").as(Label.class));
 		for (int i = 0; i < labels.size(); i++) {
-			Assert.assertEquals(result, labels.get(i).getValue());
+			Assertions.assertEquals(result, labels.get(i).getValue());
 		}
 	}
 }

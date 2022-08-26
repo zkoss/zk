@@ -11,10 +11,10 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -30,12 +30,15 @@ public class B85_ZK_3330Test extends WebDriverTestCase {
 		int viewportHeight = jq("@tree").height();
 		int itemTop = Integer.parseInt(zk("$ti32").eval("offsetTop()"));
 		int scrollTop = jq("@tree .z-tree-body").scrollTop();
-		Assert.assertTrue("The scroll is still at the top position", scrollTop > 0);
+		Assertions.assertTrue(scrollTop > 0,
+				"The scroll is still at the top position");
 		assertInTheViewport(itemTop - scrollTop, 0, viewportHeight);
 	}
 
 	private void assertInTheViewport(int value, int smaller, int bigger) {
-		Assert.assertTrue(String.format("The value(%d) is smaller than %d", value, smaller), value >= smaller);
-		Assert.assertTrue(String.format("The value(%d) is bigger than %d", value, bigger), value <= bigger);
+		Assertions.assertTrue(value >= smaller,
+				String.format("The value(%d) is smaller than %d", value, smaller));
+		Assertions.assertTrue(value <= bigger,
+				String.format("The value(%d) is bigger than %d", value, bigger));
 	}
 }

@@ -11,17 +11,18 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import java.time.Duration;
 import java.util.Collections;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -39,9 +40,9 @@ public class B70_ZK_2963Test extends WebDriverTestCase {
 
 		click(jq("a:contains(Silvertail)"));
 		sleep(1000);
-		new WebDriverWait(driver, 3)
+		new WebDriverWait(driver, Duration.ofSeconds(3))
 				.until(ExpectedConditions.presenceOfElementLocated(By.className("z-page")));
-		Assert.assertEquals("current theme: silvertail", trim(jq("@label:last").text()));
-		Assert.assertEquals(Color.fromString("#eaeaea"), Color.fromString(jq("@window").css("backgroundColor")));
+		Assertions.assertEquals("current theme: silvertail", trim(jq("@label:last").text()));
+		Assertions.assertEquals(Color.fromString("#eaeaea"), Color.fromString(jq("@window").css("backgroundColor")));
 	}
 }

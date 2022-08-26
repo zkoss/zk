@@ -11,10 +11,11 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class B95_ZK_4628Test extends WebDriverTestCase {
 	@Test
@@ -30,25 +31,29 @@ public class B95_ZK_4628Test extends WebDriverTestCase {
 
 		click(button); // open popup
 		waitResponse();
-		Assert.assertTrue("should see popop opened", jq(".z-popup").isVisible());
+		Assertions.assertTrue(jq(".z-popup").isVisible(),
+				"should see popop opened");
 		if (haveOnOpenListener) {
-			Assert.assertTrue("should see onOpen in zk log", isZKLogAvailable());
+			Assertions.assertTrue(isZKLogAvailable(),
+					"should see onOpen in zk log");
 			closeZKLog();
 		}
 
 		click(button); // click again to toggle(close) popup
 		waitResponse();
-		Assert.assertFalse("should see popop closed", jq(".z-popup").isVisible());
+		Assertions.assertFalse(jq(".z-popup").isVisible(),
+				"should see popop closed");
 		if (haveOnOpenListener) {
-			Assert.assertEquals("should see only one onOpen in zk log", "onOpen", getZKLog());
+			Assertions.assertEquals("onOpen", getZKLog(), "should see only one onOpen in zk log");
 			closeZKLog();
 		}
 
 		click(button); // click again to toggle(open) popup
 		waitResponse();
-		Assert.assertTrue("should see popop opened", jq(".z-popup").isVisible());
+		Assertions.assertTrue(jq(".z-popup").isVisible(),
+				"should see popop opened");
 		if (haveOnOpenListener) {
-			Assert.assertEquals("should see only one onOpen in zk log", "onOpen", getZKLog());
+			Assertions.assertEquals("onOpen", getZKLog(), "should see only one onOpen in zk log");
 			closeZKLog();
 		}
 	}

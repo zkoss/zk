@@ -14,13 +14,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
+import org.junit.jupiter.api.Test;
+
 import org.zkoss.zats.ZatsException;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zktest.zats.ZATSTestCase;
-
-import static org.junit.Assert.fail;
-import static org.junit.Assert.assertTrue;
 
 /**
  * 

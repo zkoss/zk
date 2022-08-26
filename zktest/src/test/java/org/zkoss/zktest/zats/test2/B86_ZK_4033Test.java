@@ -13,11 +13,11 @@ package org.zkoss.zktest.zats.test2;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -35,6 +35,6 @@ public class B86_ZK_4033Test extends WebDriverTestCase {
 		waitResponse();
 
 		String errorMessage = jq("#zk_err .messagecontent").text();
-		Assert.assertThat(errorMessage, not(containsString("Failed to mount: group.getName is not a function")));
+		assertThat(errorMessage, not(containsString("Failed to mount: group.getName is not a function")));
 	}
 }

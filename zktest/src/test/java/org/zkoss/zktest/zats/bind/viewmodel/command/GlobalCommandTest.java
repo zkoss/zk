@@ -17,9 +17,9 @@ import static org.hamcrest.Matchers.startsWith;
 import java.util.List;
 
 import org.hamcrest.MatcherAssert;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zats.ZatsException;
 import org.zkoss.zats.mimic.DesktopAgent;
@@ -31,7 +31,7 @@ import org.zkoss.zktest.zats.ZATSTestCase;
 public class GlobalCommandTest extends ZATSTestCase {
 	private DesktopAgent desktop;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		desktop = connect("/bind/viewmodel/command/global-command.zul");
 	}
@@ -41,7 +41,7 @@ public class GlobalCommandTest extends ZATSTestCase {
 		desktop.query("#btnClean").click();
 
 		final List<String> zkLog = desktop.getZkLog();
-		Assert.assertEquals(2, zkLog.size());
+		Assertions.assertEquals(2, zkLog.size());
 		MatcherAssert.assertThat(zkLog, containsInAnyOrder("GlobalCommandVM clean!", "command1"));
 	}
 
@@ -50,7 +50,7 @@ public class GlobalCommandTest extends ZATSTestCase {
 		desktop.query("#btnUnknown").click();
 
 		final List<String> zkLog = desktop.getZkLog();
-		Assert.assertEquals(2, zkLog.size());
+		Assertions.assertEquals(2, zkLog.size());
 		MatcherAssert.assertThat(zkLog, containsInAnyOrder(
 				"[GlobalCommandVM] GlobalCommand [unknown] unknown!",
 				"[LocalCommandVM] GlobalCommand [unknown] unknown!"
@@ -60,7 +60,7 @@ public class GlobalCommandTest extends ZATSTestCase {
 	@Test
 	public void testDefaultDuplicated() {
 		final DesktopAgent desktop = connect("/bind/viewmodel/command/global-command-duplicated-default.zul");
-		Throwable t = Assert.assertThrows(ZatsException.class, () ->
+		Throwable t = Assertions.assertThrows(ZatsException.class, () ->
 				desktop.query("button").click());
 		MatcherAssert.assertThat(t.getMessage(), startsWith("there are more than one DefaultGlobalCommand method in class"));
 	}

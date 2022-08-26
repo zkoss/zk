@@ -11,9 +11,10 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 public class B85_ZK_3691Test extends WebDriverTestCase {
 	
@@ -25,7 +26,7 @@ public class B85_ZK_3691Test extends WebDriverTestCase {
 		waitResponse(true);
 		
 		for (String log : getZKLog().split("\n")) {
-			Assert.assertEquals("org.zkoss.zul.Listitem", log);
+			Assertions.assertEquals("org.zkoss.zul.Listitem", log);
 		}
 	}
 }

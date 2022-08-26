@@ -11,8 +11,8 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zktest.zats.ZATSTestCase;
@@ -31,9 +31,9 @@ public class B95_ZK_4613Test extends ZATSTestCase {
 		Label bind1 = desktop.query("#bind1").as(Label.class);
 		Label bind2 = desktop.query("#bind2").as(Label.class);
 
-		Assert.assertEquals("StaticField", el1.getValue());
-		Assert.assertEquals("StaticField", bind1.getValue());
-		Assert.assertEquals("StaticMethod", el2.getValue());
-		Assert.assertEquals("StaticMethod", bind2.getValue());
+		Assertions.assertEquals("StaticField", el1.getValue());
+		Assertions.assertEquals("StaticField", bind1.getValue());
+		Assertions.assertEquals("StaticMethod", el2.getValue());
+		Assertions.assertEquals("StaticMethod", bind2.getValue());
 	}
 }

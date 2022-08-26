@@ -13,8 +13,9 @@ package org.zkoss.zktest.zats.bind.advance;
 
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zktest.zats.ZATSTestCase;
@@ -27,7 +28,7 @@ public class DefaultParamTest extends ZATSTestCase {
 		List<ComponentAgent> buttons = desktop.queryAll("button");
 		buttons.get(0).click();
 		buttons.get(1).click();
-		Assert.assertArrayEquals(
+		Assertions.assertArrayEquals(
 			new String[] {
 				"test param: -1",
 				"test param: 2"
@@ -44,7 +45,7 @@ public class DefaultParamTest extends ZATSTestCase {
 		buttons.get(2).click();
 		// TODO: bug?
 		// buttons.get(3).click();
-		Assert.assertArrayEquals(
+		Assertions.assertArrayEquals(
 			new String[] {
 				"test param: -1"
 				// TODO: bug?

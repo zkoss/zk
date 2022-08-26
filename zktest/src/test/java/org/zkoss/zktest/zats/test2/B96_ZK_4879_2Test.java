@@ -11,13 +11,13 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.wcag.WcagTestOnly;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 
-@Category(WcagTestOnly.class)
+import org.zkoss.test.webdriver.WebDriverTestCase;
+
+@Tag("WcagTestOnly")
 public class B96_ZK_4879_2Test extends WebDriverTestCase {
 	@Test
 	public void test() {
@@ -26,34 +26,47 @@ public class B96_ZK_4879_2Test extends WebDriverTestCase {
 		
 		click(jq("$nav1"));
 		waitResponse();
-		Assert.assertTrue("the focus shall move to the navitem inside", jq("$navitem11").find(menuitemSelector).is(":focus"));
+		Assertions.assertTrue(
+				jq("$navitem11").find(menuitemSelector).is(":focus"),
+				"the focus shall move to the navitem inside");
 		
 		click(jq("$navitem2"));
 		waitResponse();
-		Assert.assertTrue("the focus shall move to navitem2", jq("$navitem2").find(menuitemSelector).is(":focus"));
+		Assertions.assertTrue(
+				jq("$navitem2").find(menuitemSelector).is(":focus"),
+				"the focus shall move to navitem2");
 		
 		click(jq("$nav1"));
 		waitResponse();
-		Assert.assertTrue("the focus shall move to the navitem inside", jq("$navitem11").find(menuitemSelector).is(":focus"));
+		Assertions.assertTrue(
+				jq("$navitem11").find(menuitemSelector).is(":focus"),
+				"the focus shall move to the navitem inside");
 		
 		click(jq("$navitem2"));
 		waitResponse();
-		Assert.assertTrue("the focus shall move to navitem2", jq("$navitem2").find(menuitemSelector).is(":focus"));
+		Assertions.assertTrue(
+				jq("$navitem2").find(menuitemSelector).is(":focus"),
+				"the focus shall move to navitem2");
 		
 		click(jq("$nav3"));
 		waitResponse();
-		Assert.assertTrue("the focus shall move to the nav/navitem you clicked.", jq("$nav3").find(menuitemSelector).is(":focus"));
+		Assertions.assertTrue(jq("$nav3").find(menuitemSelector).is(":focus"),
+				"the focus shall move to the nav/navitem you clicked.");
 		
 		click(jq("$navitem4"));
 		waitResponse();
-		Assert.assertTrue("the focus shall move to the nav/navitem you clicked.", jq("$navitem4").find(menuitemSelector).is(":focus"));
+		Assertions.assertTrue(
+				jq("$navitem4").find(menuitemSelector).is(":focus"),
+				"the focus shall move to the nav/navitem you clicked.");
 		
 		click(jq("$nav5"));
 		waitResponse();
-		Assert.assertTrue("the focus shall move to the nav/navitem you clicked.", jq("$nav5").find(menuitemSelector).is(":focus"));
+		Assertions.assertTrue(jq("$nav5").find(menuitemSelector).is(":focus"),
+				"the focus shall move to the nav/navitem you clicked.");
 		
 		click(jq("$nav6"));
 		waitResponse();
-		Assert.assertTrue("the focus shall move to the nav/navitem you clicked.", jq("$nav6").find(menuitemSelector).is(":focus"));
+		Assertions.assertTrue(jq("$nav6").find(menuitemSelector).is(":focus"),
+				"the focus shall move to the nav/navitem you clicked.");
 	}
 }

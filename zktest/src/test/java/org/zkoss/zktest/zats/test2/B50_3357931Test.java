@@ -11,9 +11,10 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 public class B50_3357931Test extends WebDriverTestCase {
 	@Test
@@ -23,6 +24,6 @@ public class B50_3357931Test extends WebDriverTestCase {
 		waitResponse();
 		click(jq(".z-vlayout-inner>.z-button"));
 		waitResponse();
-		Assert.assertNotEquals("A wrong value exception was caught!", jq(".z-window-content .z-label").text());
+		Assertions.assertNotEquals("A wrong value exception was caught!", jq(".z-window-content .z-label").text());
 	}
 }

@@ -11,10 +11,10 @@ Copyright (C) 2022 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author katherine
@@ -27,6 +27,6 @@ public class B100_ZK_5120Test extends WebDriverTestCase {
 		waitResponse();
 		type(jq(".z-combobox-input"), "a");
 		waitResponse();
-		Assert.assertEquals("No suggestions", jq(".z-combobox-empty-search-message").text());
+		Assertions.assertEquals("No suggestions", jq(".z-combobox-empty-search-message").text());
 	}
 }

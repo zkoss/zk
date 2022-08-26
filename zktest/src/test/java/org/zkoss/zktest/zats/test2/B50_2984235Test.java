@@ -11,10 +11,10 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -24,15 +24,15 @@ public class B50_2984235Test extends WebDriverTestCase {
 	public void test() {
 		connect();
 
-		Assert.assertFalse(jq("@popup").isVisible());
+		Assertions.assertFalse(jq("@popup").isVisible());
 		getActions().moveToElement(toElement(jq("@textbox")))
 				.pause(1000)
 				.perform();
-		Assert.assertTrue(jq("@popup").isVisible());
+		Assertions.assertTrue(jq("@popup").isVisible());
 
 		getActions().moveToElement(toElement(jq("@combobox")))
 				.pause(1000)
 				.perform();
-		Assert.assertTrue(jq("@popup").isVisible());
+		Assertions.assertTrue(jq("@popup").isVisible());
 	}
 }

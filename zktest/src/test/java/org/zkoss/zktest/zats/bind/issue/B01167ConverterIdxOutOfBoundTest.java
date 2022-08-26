@@ -1,10 +1,10 @@
 package org.zkoss.zktest.zats.bind.issue;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
 import org.zkoss.zats.ZatsException;
-import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zktest.zats.ZATSTestCase;
 
 public class B01167ConverterIdxOutOfBoundTest extends ZATSTestCase {

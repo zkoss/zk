@@ -11,14 +11,14 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.matchesRegex;
 
 import java.util.regex.Pattern;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -32,6 +32,6 @@ public class F50_3299234Test extends WebDriverTestCase {
 		waitResponse();
 
 		Pattern pattern = Pattern.compile("\\[<Textbox \\w{5,}#CA>, <Textbox \\w{5,}#TX>, <Textbox \\w{5,}#WA>] - \\[CA, TX, WA]");
-		Assert.assertThat(getMessageBoxContent(), matchesRegex(pattern));
+		assertThat(getMessageBoxContent(), matchesRegex(pattern));
 	}
 }

@@ -12,6 +12,8 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
@@ -30,11 +32,9 @@ import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.util.resource.Resource;
 import org.eclipse.jetty.webapp.WebAppContext;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
@@ -44,19 +44,19 @@ import org.springframework.session.Session;
 import org.springframework.session.SessionRepository;
 import org.springframework.session.web.http.SessionRepositoryFilter;
 
-import org.zkoss.zktest.zats.ExternalZkXml;
-import org.zkoss.zktest.zats.ForkJVMTestOnly;
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.ExternalZkXml;
+import org.zkoss.test.webdriver.ForkJVMTestOnly;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
  */
-@Category(ForkJVMTestOnly.class)
+@ForkJVMTestOnly
 public class B90_ZK_4381Test extends WebDriverTestCase {
-	@ClassRule
+	@RegisterExtension
 	public static final ExternalZkXml CONFIG = new ExternalZkXml("/test2/B86-ZK-4288-zk.xml");
 
-	@BeforeClass
+	@BeforeAll
 	public static void init() throws Exception {
 		Server server = new Server(new InetSocketAddress(getHost(), 0));
 
@@ -77,7 +77,7 @@ public class B90_ZK_4381Test extends WebDriverTestCase {
 
 		driver.manage().window().setSize(new Dimension(1000, 768));
 		waitResponse();
-		Assert.assertTrue(isZKLogAvailable());
+		assertTrue(isZKLogAvailable());
 	}
 
 	private static class B86_ZK_4288SessionRepository implements SessionRepository<Session> {

@@ -14,8 +14,9 @@ package org.zkoss.zktest.zats.test2;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 import org.zkoss.bind.proxy.ProxyHelper;
 
 /**
@@ -37,13 +38,13 @@ public class B80_ZK_2984Test {
 		Set<Pojo> selectedPojosProxy = complexPojoProxy.getSelectedPojos();
 		selectedPojosProxy.add(pojo200);
 
-		Assert.assertTrue(selectedPojosProxy.contains(pojo100));
-		Assert.assertTrue(selectedPojosProxy.contains(pojo200));
+		Assertions.assertTrue(selectedPojosProxy.contains(pojo100));
+		Assertions.assertTrue(selectedPojosProxy.contains(pojo200));
 
-		Assert.assertTrue(selectedPojosProxy.remove(pojo100));
-		Assert.assertFalse(selectedPojosProxy.contains(pojo100));
-		Assert.assertTrue(selectedPojosProxy.remove(pojo200));
-		Assert.assertFalse(selectedPojosProxy.contains(pojo200));
+		Assertions.assertTrue(selectedPojosProxy.remove(pojo100));
+		Assertions.assertFalse(selectedPojosProxy.contains(pojo100));
+		Assertions.assertTrue(selectedPojosProxy.remove(pojo200));
+		Assertions.assertFalse(selectedPojosProxy.contains(pojo200));
 	}
 
 

@@ -11,11 +11,11 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.interactions.Actions;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -31,14 +31,14 @@ public class F50_3306718Test extends WebDriverTestCase {
 					toElement(jq("@treecell:contains(Item 1)")))
 				.perform();
 		waitResponse();
-		Assert.assertTrue(jq("@treerow:contains(Item 2.1):first").is("@treerow:first"));
+		Assertions.assertTrue(jq("@treerow:contains(Item 2.1):first").is("@treerow:first"));
 
 		actions.dragAndDrop(
 					toElement(jq("@treecell:contains(Item 3)")),
 					toElement(jq("@treecell:contains(Item 2.1.2)")))
 				.perform();
 		waitResponse();
-		Assert.assertEquals(
+		Assertions.assertEquals(
 				toElement(jq("@treerow:contains(Item 2.1.2)")),
 				toElement(jq("@treerow:contains(Item 3)").next()));
 	}

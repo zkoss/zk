@@ -15,12 +15,12 @@ import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.lessThanOrEqualTo;
 
 import org.hamcrest.MatcherAssert;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
-import org.zkoss.zktest.zats.ztl.Widget;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
+import org.zkoss.test.webdriver.ztl.Widget;
 
 /**
  * @author rudyhuang
@@ -35,7 +35,7 @@ public class B96_ZK_4834Test extends WebDriverTestCase {
 
 		final Widget tree = widget("@tree");
 		final JQuery body = jq(tree.$n("body"));
-		Assert.assertEquals(240000, body.scrollTop());
+		Assertions.assertEquals(240000, body.scrollTop());
 		testItemInViewport(body, jq(tree.$n("cave")));
 	}
 
@@ -59,7 +59,7 @@ public class B96_ZK_4834Test extends WebDriverTestCase {
 
 		final Widget tree = widget("@tree");
 		final JQuery body = jq(tree.$n("body"));
-		Assert.assertEquals(220000, body.scrollTop());
+		Assertions.assertEquals(220000, body.scrollTop());
 		testItemInViewport(body, jq(tree.$n("cave")));
 	}
 }

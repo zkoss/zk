@@ -11,11 +11,11 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.ClientWidget;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.ClientWidget;
 
 public class B85_ZK_3838Test extends WebDriverTestCase {
 	@Test
@@ -36,6 +36,6 @@ public class B85_ZK_3838Test extends WebDriverTestCase {
 		paste();
 		waitResponse();
 		blur(jq("@intbox"));
-		Assert.assertEquals(expect, jq("@intbox").val());
+		Assertions.assertEquals(expect, jq("@intbox").val());
 	}
 }

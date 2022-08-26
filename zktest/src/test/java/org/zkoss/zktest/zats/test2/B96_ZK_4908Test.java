@@ -11,10 +11,11 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class B96_ZK_4908Test extends WebDriverTestCase {
 	@Test
@@ -27,12 +28,12 @@ public class B96_ZK_4908Test extends WebDriverTestCase {
 		waitResponse();
 		click(navitem2);
 		waitResponse();
-		Assert.assertFalse("nav1 shall close", nav1.hasClass("z-nav-open"));
+		Assertions.assertFalse(nav1.hasClass("z-nav-open"), "nav1 shall close");
 		// test if the navitem is already selected
 		click(nav1);
 		waitResponse();
 		click(navitem2);
 		waitResponse();
-		Assert.assertFalse("nav1 shall close", nav1.hasClass("z-nav-open"));
+		Assertions.assertFalse(nav1.hasClass("z-nav-open"), "nav1 shall close");
 	}
 }

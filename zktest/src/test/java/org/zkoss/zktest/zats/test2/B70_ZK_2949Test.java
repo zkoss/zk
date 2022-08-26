@@ -11,12 +11,12 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.interactions.Actions;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author rudyhuang
@@ -28,9 +28,9 @@ public class B70_ZK_2949Test extends WebDriverTestCase {
 	public void testMVVM() {
 		connect();
 		waitResponse(true);
-		Assert.assertTrue(jq("@grid:eq(0) @column:last").attr("style").contains("display: none"));
-		Assert.assertEquals(0, jq("@grid:eq(1) @column:last").width(), 1);
-		Assert.assertEquals(0, jq("@grid:eq(2) @column:last").width(), 1);
+		Assertions.assertTrue(jq("@grid:eq(0) @column:last").attr("style").contains("display: none"));
+		Assertions.assertEquals(0, jq("@grid:eq(1) @column:last").width(), 1);
+		Assertions.assertEquals(0, jq("@grid:eq(2) @column:last").width(), 1);
 
 		Actions actions = new Actions(driver);
 		resizeColumn(actions, jq("@grid:eq(0) @column:eq(0)"), 100);
@@ -41,9 +41,9 @@ public class B70_ZK_2949Test extends WebDriverTestCase {
 		click(jq("@button:contains(toggle flag (mvvm))"));
 		waitResponse();
 
-		Assert.assertTrue(jq("@grid:eq(0) @column:last").width() > 3);
-		Assert.assertTrue(jq("@grid:eq(1) @column:last").width() > 3);
-		Assert.assertTrue(jq("@grid:eq(2) @column:last").width() > 3);
+		Assertions.assertTrue(jq("@grid:eq(0) @column:last").width() > 3);
+		Assertions.assertTrue(jq("@grid:eq(1) @column:last").width() > 3);
+		Assertions.assertTrue(jq("@grid:eq(2) @column:last").width() > 3);
 
 		click(jq("@button:contains(invalidate 1st grid)"));
 		waitResponse();
@@ -51,14 +51,14 @@ public class B70_ZK_2949Test extends WebDriverTestCase {
 		waitResponse();
 		click(jq("@button:contains(toggle flag (mvvm))"));
 		waitResponse();
-		Assert.assertTrue(jq("@grid:eq(0) @column:contains(mvvm4)").width() > 3);
+		Assertions.assertTrue(jq("@grid:eq(0) @column:contains(mvvm4)").width() > 3);
 	}
 
 	@Test
 	public void testMVC() {
 		connect();
 
-		Assert.assertEquals(false, jq("@grid:last @column:last").isVisible());
+		Assertions.assertEquals(false, jq("@grid:last @column:last").isVisible());
 
 		Actions actions = new Actions(driver);
 		resizeColumn(actions, jq("@grid:last @column:eq(0)"), 100);
@@ -67,7 +67,7 @@ public class B70_ZK_2949Test extends WebDriverTestCase {
 		click(jq("@button:contains(toggle flag (mvc))"));
 		waitResponse();
 
-		Assert.assertTrue(jq("@grid:last @column:last").width() > 3);
+		Assertions.assertTrue(jq("@grid:last @column:last").width() > 3);
 	}
 
 	private void resizeColumn(Actions actions, JQuery col, int xOffset) {

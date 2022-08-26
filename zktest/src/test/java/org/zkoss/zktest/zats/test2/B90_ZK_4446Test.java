@@ -11,13 +11,14 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.ClientWidget;
-import org.zkoss.zktest.zats.ztl.JQuery;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.ClientWidget;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class B90_ZK_4446Test extends WebDriverTestCase {
 	@Test
@@ -34,10 +35,11 @@ public class B90_ZK_4446Test extends WebDriverTestCase {
 		waitResponse();
 		typeWithoutBlur(chosenboxInput, "AAA");
 		waitResponse(true);
-		Assert.assertFalse("re-creating the same item should not be possible", jq(".z-chosenbox-empty-creatable").isVisible());
+		Assertions.assertFalse(jq(".z-chosenbox-empty-creatable").isVisible(),
+				"re-creating the same item should not be possible");
 		sendKeys(chosenboxInput, Keys.ENTER);
 		waitResponse();
-		Assert.assertEquals("there should be only one item",1, jq(".z-chosenbox-item").length());
+		Assertions.assertEquals(1, jq(".z-chosenbox-item").length(), "there should be only one item");
 	}
 	
 	private void typeWithoutBlur(ClientWidget locator, String text) {

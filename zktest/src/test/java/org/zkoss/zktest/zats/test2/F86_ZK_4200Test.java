@@ -13,7 +13,8 @@ package org.zkoss.zktest.zats.test2;
 
 import java.util.concurrent.TimeUnit;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 
 import org.zkoss.zel.ImportHandler;
 
@@ -21,7 +22,8 @@ import org.zkoss.zel.ImportHandler;
  * @author rudyhuang
  */
 public class F86_ZK_4200Test {
-	@Test(timeout = 2000)
+	@Test
+	@Timeout(2)
 	public void test() {
 		for (int i = 0; i < 10; i++) {
 			testResolveVar("test", 4000);

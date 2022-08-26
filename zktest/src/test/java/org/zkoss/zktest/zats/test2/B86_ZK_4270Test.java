@@ -11,9 +11,10 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 public class B86_ZK_4270Test extends WebDriverTestCase {
 	@Test
@@ -23,17 +24,17 @@ public class B86_ZK_4270Test extends WebDriverTestCase {
 		waitResponse();
 		click(jq("@button").eq(2));
 		waitResponse();
-		Assert.assertTrue(hasError());
+		Assertions.assertTrue(hasError());
 		click(jq(".z-icon-times"));
 		waitResponse();
 		click(jq("@button").eq(1));
 		waitResponse();
 		click(jq("@button").eq(2));
 		waitResponse();
-		Assert.assertTrue(jq(".z-toolbar").exists());
+		Assertions.assertTrue(jq(".z-toolbar").exists());
 		click(jq("@button").eq(0));
 		waitResponse();
-		Assert.assertTrue(hasError());
-		Assert.assertFalse(isZKLogAvailable());
+		Assertions.assertTrue(hasError());
+		Assertions.assertFalse(isZKLogAvailable());
 	}
 }

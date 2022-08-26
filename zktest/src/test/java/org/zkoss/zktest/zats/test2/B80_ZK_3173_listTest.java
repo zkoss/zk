@@ -14,9 +14,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 package org.zkoss.zktest.zats.test2;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.operation.PagingAgent;
@@ -41,21 +41,21 @@ public class B80_ZK_3173_listTest extends ZATSTestCase {
 		DesktopAgent desktop = connect();
 		Listbox list = desktop.query("#list").as(Listbox.class);
 		ListModel model = list.getModel();
-		assertEquals("active page out of sync", list.getActivePage(), ((Pageable) model).getActivePage());
-		assertEquals("page count out of sync", list.getPageCount(), ((Pageable) model).getPageCount());
+		assertEquals(list.getActivePage(), ((Pageable) model).getActivePage(), "active page out of sync");
+		assertEquals(list.getPageCount(), ((Pageable) model).getPageCount(), "page count out of sync");
 
 		desktop.query("#add10Btn").click();
-		assertEquals("active page out of sync", list.getActivePage(), ((Pageable) model).getActivePage());
-		assertEquals("page count out of sync", list.getPageCount(), ((Pageable) model).getPageCount());
+		assertEquals(list.getActivePage(), ((Pageable) model).getActivePage(), "active page out of sync");
+		assertEquals(list.getPageCount(), ((Pageable) model).getPageCount(), "page count out of sync");
 
 		PagingAgent paging = desktop.query("listbox > paging").as(PagingAgent.class);
 		paging.moveTo(list.getPageCount() - 1);
-		assertEquals("active page out of sync", list.getActivePage(), ((Pageable) model).getActivePage());
-		assertEquals("page count out of sync", list.getPageCount(), ((Pageable) model).getPageCount());
+		assertEquals(list.getActivePage(), ((Pageable) model).getActivePage(), "active page out of sync");
+		assertEquals(list.getPageCount(), ((Pageable) model).getPageCount(), "page count out of sync");
 
 		desktop.query("#clearBtn").click();
-		assertEquals("active page out of sync", list.getActivePage(), ((Pageable) model).getActivePage());
-		assertEquals("page count out of sync", list.getPageCount(), ((Pageable) model).getPageCount());
+		assertEquals(list.getActivePage(), ((Pageable) model).getActivePage(), "active page out of sync");
+		assertEquals(list.getPageCount(), ((Pageable) model).getPageCount(), "page count out of sync");
 	}
 
 	/**
@@ -68,21 +68,21 @@ public class B80_ZK_3173_listTest extends ZATSTestCase {
 		DesktopAgent desktop = connect();
 		Listbox list = desktop.query("#list").as(Listbox.class);
 		ListModel model = list.getModel();
-		assertEquals("active page out of sync", list.getActivePage(), ((Pageable) model).getActivePage());
-		assertEquals("page count out of sync", list.getPageCount(), ((Pageable) model).getPageCount());
+		assertEquals(list.getActivePage(), ((Pageable) model).getActivePage(), "active page out of sync");
+		assertEquals(list.getPageCount(), ((Pageable) model).getPageCount(), "page count out of sync");
 
 		desktop.query("#add10Btn").click();
-		assertEquals("active page out of sync", list.getActivePage(), ((Pageable) model).getActivePage());
-		assertEquals("page count out of sync", list.getPageCount(), ((Pageable) model).getPageCount());
+		assertEquals(list.getActivePage(), ((Pageable) model).getActivePage(), "active page out of sync");
+		assertEquals(list.getPageCount(), ((Pageable) model).getPageCount(), "page count out of sync");
 
 		PagingAgent paging = desktop.query("listbox > paging").as(PagingAgent.class);
 		paging.moveTo(list.getPageCount() - 1);
-		assertEquals("active page out of sync", list.getActivePage(), ((Pageable) model).getActivePage());
-		assertEquals("page count out of sync", list.getPageCount(), ((Pageable) model).getPageCount());
+		assertEquals(list.getActivePage(), ((Pageable) model).getActivePage(), "active page out of sync");
+		assertEquals(list.getPageCount(), ((Pageable) model).getPageCount(), "page count out of sync");
 
 		desktop.query("#remove1Btn").click();
-		assertEquals("active page out of sync", list.getActivePage(), ((Pageable) model).getActivePage());
-		assertEquals("page count out of sync", list.getPageCount(), ((Pageable) model).getPageCount());
+		assertEquals(list.getActivePage(), ((Pageable) model).getActivePage(), "active page out of sync");
+		assertEquals(list.getPageCount(), ((Pageable) model).getPageCount(), "page count out of sync");
 	}
 
 	/**
@@ -95,21 +95,21 @@ public class B80_ZK_3173_listTest extends ZATSTestCase {
 		DesktopAgent desktop = connect();
 		Listbox list = desktop.query("#list").as(Listbox.class);
 		ListModel model = list.getModel();
-		assertEquals("active page out of sync", list.getActivePage(), ((Pageable) model).getActivePage());
-		assertEquals("page count out of sync", list.getPageCount(), ((Pageable) model).getPageCount());
+		assertEquals(list.getActivePage(), ((Pageable) model).getActivePage(), "active page out of sync");
+		assertEquals(list.getPageCount(), ((Pageable) model).getPageCount(), "page count out of sync");
 
 		desktop.query("#add10Btn").click();
-		assertEquals("active page out of sync", list.getActivePage(), ((Pageable) model).getActivePage());
-		assertEquals("page count out of sync", list.getPageCount(), ((Pageable) model).getPageCount());
+		assertEquals(list.getActivePage(), ((Pageable) model).getActivePage(), "active page out of sync");
+		assertEquals(list.getPageCount(), ((Pageable) model).getPageCount(), "page count out of sync");
 
 		PagingAgent paging = desktop.query("listbox > paging").as(PagingAgent.class);
 		paging.moveTo(list.getPageCount() - 1);
-		assertEquals("active page out of sync", list.getActivePage(), ((Pageable) model).getActivePage());
-		assertEquals("page count out of sync", list.getPageCount(), ((Pageable) model).getPageCount());
+		assertEquals(list.getActivePage(), ((Pageable) model).getActivePage(), "active page out of sync");
+		assertEquals(list.getPageCount(), ((Pageable) model).getPageCount(), "page count out of sync");
 
 		desktop.query("#set5Btn").click();
-		assertEquals("wrong list active page", 1, list.getActivePage());
-		assertEquals("wrong model active page", 1, ((Pageable) model).getActivePage());
-		assertEquals("page count out of sync", list.getPageCount(), ((Pageable) model).getPageCount());
+		assertEquals(1, list.getActivePage(), "wrong list active page");
+		assertEquals(1, ((Pageable) model).getActivePage(), "wrong model active page");
+		assertEquals(list.getPageCount(), ((Pageable) model).getPageCount(), "page count out of sync");
 	}
 }

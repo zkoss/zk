@@ -11,12 +11,12 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.wcag;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.interactions.Actions;
 
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author rudyhuang
@@ -76,6 +76,6 @@ public class DateboxTest extends WcagTestCase {
 				.sendKeys(Keys.TAB, Keys.TAB, Keys.TAB)
 				.perform();
 		waitResponse();
-		Assert.assertTrue(jq(widget("@datebox:eq(4)").$n("pp")).isVisible());
+		Assertions.assertTrue(jq(widget("@datebox:eq(4)").$n("pp")).isVisible());
 	}
 }

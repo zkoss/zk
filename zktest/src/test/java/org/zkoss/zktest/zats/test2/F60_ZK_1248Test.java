@@ -11,14 +11,14 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.lessThanOrEqualTo;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.interactions.Actions;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -42,7 +42,7 @@ public class F60_ZK_1248Test extends WebDriverTestCase {
 				.pause(1000)
 				.perform();
 		waitResponse();
-		Assert.assertThat(
+		assertThat(
 				jq("@menupopup:visible:last").offsetLeft() + jq("@menupopup:visible:last").width(),
 				lessThanOrEqualTo(jq("@menupopup:visible:first").offsetLeft())
 		);

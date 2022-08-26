@@ -11,9 +11,10 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author jameschu
@@ -24,6 +25,6 @@ public class B95_ZK_4621Test extends WebDriverTestCase {
 		connect();
 		click(jq("@button"));
 		waitResponse();
-		Assert.assertEquals("off", getZKLog());
+		Assertions.assertEquals("off", getZKLog());
 	}
 }

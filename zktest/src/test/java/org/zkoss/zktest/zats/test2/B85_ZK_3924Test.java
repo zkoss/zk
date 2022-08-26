@@ -11,9 +11,10 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 public class B85_ZK_3924Test extends WebDriverTestCase {
 	@Test
@@ -24,7 +25,7 @@ public class B85_ZK_3924Test extends WebDriverTestCase {
 		sleep(500);
 		click(jq(".z-icon-times"));
 		waitResponse();
-		Assert.assertFalse(isZKLogAvailable());
-		Assert.assertFalse(jq(".z-notification").exists());
+		Assertions.assertFalse(isZKLogAvailable());
+		Assertions.assertFalse(jq(".z-notification").exists());
 	}
 }

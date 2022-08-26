@@ -1,22 +1,23 @@
 package org.zkoss.zktest.zats.test2;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
-import org.zkoss.zktest.zats.ztl.Widget;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
+import org.zkoss.test.webdriver.ztl.Widget;
 
 /**
  * @author jameschu
  */
 public class B50_3053313Test extends WebDriverTestCase {
-	@Test public void test() {
+	@Test
+	public void test() {
 		connect();
 		Widget dtbx1 = jq("$dtbx1").toWidget();
 		Widget dtbx2 = jq("$dtbx2").toWidget();
@@ -54,14 +55,14 @@ public class B50_3053313Test extends WebDriverTestCase {
 		waitResponse();
 		dt1 = parseInt(jq(dtbx2.$n("pp"))
 				.find(".z-calendar-disabled").get(0).get("innerHTML"));
-		assertTrue("for second datebox, the only unselectable date should be today",
-				(dt1 == today) && (jq(dtbx2.$n("pp")).find(".z-calendar-disabled").length() == 1));
+		assertTrue((dt1 == today) && (jq(dtbx2.$n("pp")).find(".z-calendar-disabled").length() == 1),
+				"for second datebox, the only unselectable date should be today");
 
 		click(dtbx1.$n("btn"));
 		waitResponse();
 		dt1 = parseInt(jq(dtbx1.$n("pp"))
 				.find(".z-calendar-disabled").last().get(0).get("innerHTML"));
-		assertTrue("for first datebox, the last unselectable date should be yesterday",
-				(today - dt1 == 1) || ((today == 1) && (31 - dt1 <= 3)));
+		assertTrue(((today - dt1 == 1) || ((today == 1) && (31 - dt1 <= 3))),
+				"for first datebox, the last unselectable date should be yesterday");
 	}
 }

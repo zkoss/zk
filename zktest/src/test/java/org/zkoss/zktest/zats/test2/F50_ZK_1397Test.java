@@ -11,10 +11,10 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -24,7 +24,7 @@ public class F50_ZK_1397Test extends WebDriverTestCase {
 	public void test() {
 		connect();
 
-		Assert.assertTrue(widget("@treerow:contains(item b):eq(0)").$n("open").exists());
-		Assert.assertFalse(widget("@treerow:contains(item b):eq(1)").$n("open").exists());
+		Assertions.assertTrue(widget("@treerow:contains(item b):eq(0)").$n("open").exists());
+		Assertions.assertFalse(widget("@treerow:contains(item b):eq(1)").$n("open").exists());
 	}
 }

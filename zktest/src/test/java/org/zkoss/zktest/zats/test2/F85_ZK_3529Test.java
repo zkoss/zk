@@ -11,10 +11,10 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 public class F85_ZK_3529Test extends WebDriverTestCase {
 	@Test
@@ -22,7 +22,7 @@ public class F85_ZK_3529Test extends WebDriverTestCase {
 		connect();
 		String[] regions = {"east", "west", "south", "north"};
 		for (String region : regions) {
-			Assert.assertTrue(jq(".z-" + region + "-title").isVisible());
+			Assertions.assertTrue(jq(".z-" + region + "-title").isVisible());
 		}
 	}
 }

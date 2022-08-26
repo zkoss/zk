@@ -11,13 +11,13 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.interactions.Actions;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author rudyhuang
@@ -52,10 +52,10 @@ public class B70_ZK_2534_groupTest extends WebDriverTestCase {
 		JQuery next = lb.find("@paging .z-paging-next:not([disabled])");
 		do {
 			lb.find("@listitem").iterator()
-					.forEachRemaining(item -> Assert.assertTrue(item.hasClass("z-listitem-selected")));
+					.forEachRemaining(item -> Assertions.assertTrue(item.hasClass("z-listitem-selected")));
 			if (groupSelectable) {
 				lb.find("@listgroup").iterator()
-						.forEachRemaining(item -> Assert.assertTrue(item.hasClass("z-listgroup-selected")));
+						.forEachRemaining(item -> Assertions.assertTrue(item.hasClass("z-listgroup-selected")));
 			}
 		} while (isPageable(next));
 
@@ -64,7 +64,7 @@ public class B70_ZK_2534_groupTest extends WebDriverTestCase {
 
 		JQuery previous = lb.find("@paging .z-paging-previous:not([disabled])");
 		do {
-			Assert.assertFalse(lb.find(".z-listheader-checkable").hasClass("z-listheader-checked"));
+			Assertions.assertFalse(lb.find(".z-listheader-checkable").hasClass("z-listheader-checked"));
 		} while (isPageable(previous));
 	}
 
@@ -81,16 +81,16 @@ public class B70_ZK_2534_groupTest extends WebDriverTestCase {
 		}
 
 		lb.find("@listitem").iterator()
-				.forEachRemaining(item -> Assert.assertTrue(item.hasClass("z-listitem-selected")));
+				.forEachRemaining(item -> Assertions.assertTrue(item.hasClass("z-listitem-selected")));
 		if (groupSelectable) {
 			lb.find("@listgroup").iterator()
-					.forEachRemaining(item -> Assert.assertTrue(item.hasClass("z-listgroup-selected")));
+					.forEachRemaining(item -> Assertions.assertTrue(item.hasClass("z-listgroup-selected")));
 		}
 
 		click(lb.find("@listitem:last .z-listitem-checkable"));
 		body.scrollTop(0);
 		waitResponse();
-		Assert.assertFalse(lb.find(".z-listheader-checkable").hasClass("z-listheader-checked"));
+		Assertions.assertFalse(lb.find(".z-listheader-checkable").hasClass("z-listheader-checked"));
 	}
 
 	private boolean isPageable(JQuery control) {
@@ -119,12 +119,12 @@ public class B70_ZK_2534_groupTest extends WebDriverTestCase {
 				.keyUp(Keys.SHIFT)
 				.perform();
 		waitResponse();
-		Assert.assertTrue(lb.find(".z-listheader-checkable").hasClass("z-listheader-checked"));
+		Assertions.assertTrue(lb.find(".z-listheader-checkable").hasClass("z-listheader-checked"));
 
 		body.scrollTop(0);
 		waitResponse();
-		Assert.assertTrue(lb.find(".z-listheader-checkable").hasClass("z-listheader-checked"));
+		Assertions.assertTrue(lb.find(".z-listheader-checkable").hasClass("z-listheader-checked"));
 		String selectedClass = groupSelectable ? "z-listgroup-selected" : "z-listitem-selected";
-		Assert.assertTrue(firstSelectableRow.hasClass(selectedClass));
+		Assertions.assertTrue(firstSelectableRow.hasClass(selectedClass));
 	}
 }

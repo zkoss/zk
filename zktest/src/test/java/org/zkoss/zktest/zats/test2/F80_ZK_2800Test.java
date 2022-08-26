@@ -11,14 +11,17 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zk.ui.Component;
@@ -29,7 +32,7 @@ import org.zkoss.zul.Label;
  * @author jumperchen
  *
  */
-@Ignore
+@Disabled
 public class F80_ZK_2800Test extends ZATSTestCase {
 	
 	@Test
@@ -55,9 +58,11 @@ public class F80_ZK_2800Test extends ZATSTestCase {
 		int checkIndex = 0;
 		for (Component c : oldIntances) {
 			if (checkIndex == 2) {
-				assertFalse("The instance should not be the same!", result.getChild(checkIndex).getOwner() == c);
+				assertFalse(result.getChild(checkIndex).getOwner() == c,
+						"The instance should not be the same!");
 			} else {
-				assertTrue("The instance should be the same!", result.getChild(checkIndex).getOwner() == c);
+				assertTrue(result.getChild(checkIndex).getOwner() == c,
+						"The instance should be the same!");
 			}
 			checkIndex++;
 		}

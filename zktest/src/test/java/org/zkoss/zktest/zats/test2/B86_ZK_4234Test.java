@@ -11,9 +11,10 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 public class B86_ZK_4234Test extends WebDriverTestCase {
 	@Test
@@ -21,33 +22,33 @@ public class B86_ZK_4234Test extends WebDriverTestCase {
 		String customClass = "mycustom";
 		connect();
 		waitResponse();
-		Assert.assertTrue(jq("@bandbox").hasClass(customClass));
-		Assert.assertTrue(jq("@combobox").hasClass(customClass));
+		Assertions.assertTrue(jq("@bandbox").hasClass(customClass));
+		Assertions.assertTrue(jq("@combobox").hasClass(customClass));
 		click(jq(".z-bandbox-button"));
 		waitResponse();
-		Assert.assertTrue(jq(".z-bandbox-popup").hasClass(customClass));
+		Assertions.assertTrue(jq(".z-bandbox-popup").hasClass(customClass));
 		click(jq(".z-combobox-button"));
 		waitResponse();
-		Assert.assertTrue(jq(".z-combobox-popup").hasClass(customClass));
+		Assertions.assertTrue(jq(".z-combobox-popup").hasClass(customClass));
 		click(jq("@button:first"));
 		waitResponse();
-		Assert.assertFalse(jq("@bandbox").hasClass(customClass));
-		Assert.assertFalse(jq("@combobox").hasClass(customClass));
+		Assertions.assertFalse(jq("@bandbox").hasClass(customClass));
+		Assertions.assertFalse(jq("@combobox").hasClass(customClass));
 		click(jq(".z-bandbox-button"));
 		waitResponse();
-		Assert.assertFalse(jq(".z-bandbox-popup").hasClass(customClass));
+		Assertions.assertFalse(jq(".z-bandbox-popup").hasClass(customClass));
 		click(jq(".z-combobox-button"));
 		waitResponse();
-		Assert.assertFalse(jq(".z-combobox-popup").hasClass(customClass));
+		Assertions.assertFalse(jq(".z-combobox-popup").hasClass(customClass));
 		click(jq("@button:last"));
 		waitResponse();
-		Assert.assertTrue(jq("@bandbox").hasClass(customClass));
-		Assert.assertTrue(jq("@combobox").hasClass(customClass));
+		Assertions.assertTrue(jq("@bandbox").hasClass(customClass));
+		Assertions.assertTrue(jq("@combobox").hasClass(customClass));
 		click(jq(".z-bandbox-button"));
 		waitResponse();
-		Assert.assertTrue(jq(".z-bandbox-popup").hasClass(customClass));
+		Assertions.assertTrue(jq(".z-bandbox-popup").hasClass(customClass));
 		click(jq(".z-combobox-button"));
 		waitResponse();
-		Assert.assertTrue(jq(".z-combobox-popup").hasClass(customClass));
+		Assertions.assertTrue(jq(".z-combobox-popup").hasClass(customClass));
 	}
 }

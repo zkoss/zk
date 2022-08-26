@@ -13,13 +13,13 @@ package org.zkoss.zktest.zats.test2;
 
 import java.util.Collections;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.touch.TouchActions;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.Element;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.Element;
 
 public class B95_ZK_4719Test extends WebDriverTestCase {
 	@Override
@@ -36,7 +36,8 @@ public class B95_ZK_4719Test extends WebDriverTestCase {
 		try {
 			touchActions.singleTap(toElement(btn)).perform();
 			waitResponse();
-			Assert.assertTrue("should show calendar instead of time wheel.", jq(".z-calendar-text").exists());
+			Assertions.assertTrue(jq(".z-calendar-text").exists(),
+					"should show calendar instead of time wheel.");
 		} finally {
 			click(jq("@button")); // reset library property
 			waitResponse();

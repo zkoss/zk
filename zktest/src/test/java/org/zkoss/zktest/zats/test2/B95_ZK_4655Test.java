@@ -22,7 +22,8 @@ import java.util.Map;
 import javax.websocket.EndpointConfig;
 import javax.websocket.Session;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zk.ui.http.ZKWebSocket;
 
@@ -63,10 +64,12 @@ public class B95_ZK_4655Test {
 		ZKWebSocket.initZkDesktop(sessionMock, endpointConfigMock);
 	}
 
-	@Test(expected = IllegalStateException.class)
+	@Test
 	public void testNoArg() {
-		when(sessionMock.getRequestParameterMap()).thenReturn(Collections.emptyMap());
+		Assertions.assertThrows(IllegalStateException.class, () -> {
+			when(sessionMock.getRequestParameterMap()).thenReturn(Collections.emptyMap());
 
-		ZKWebSocket.initZkDesktop(sessionMock, endpointConfigMock);
+			ZKWebSocket.initZkDesktop(sessionMock, endpointConfigMock);
+		});
 	}
 }

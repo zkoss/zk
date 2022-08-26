@@ -11,8 +11,8 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.bind.viewmodel.init;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zktest.zats.ZATSTestCase;
@@ -25,6 +25,6 @@ public class InitWithParamTest extends ZATSTestCase {
 	public void test() {
 		final DesktopAgent desktop = connect("/bind/viewmodel/init/init-with-param.zul");
 		desktop.query("button").click();
-		Assert.assertEquals("test test2", desktop.getZkLog().get(0));
+		Assertions.assertEquals("test test2", desktop.getZkLog().get(0));
 	}
 }

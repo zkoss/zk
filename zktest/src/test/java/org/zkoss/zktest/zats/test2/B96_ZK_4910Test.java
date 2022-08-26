@@ -13,12 +13,12 @@ package org.zkoss.zktest.zats.test2;
 
 import java.util.Collections;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.chrome.ChromeOptions;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.Element;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.Element;
 
 /**
  * @author rudyhuang
@@ -40,6 +40,6 @@ public class B96_ZK_4910Test extends WebDriverTestCase {
 		waitResponse();
 		jq(treeBody).scrollTop(10000);
 		waitResponse();
-		Assert.assertEquals(10000, jq(treeBody).scrollTop());
+		Assertions.assertEquals(10000, jq(treeBody).scrollTop());
 	}
 }

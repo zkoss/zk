@@ -11,12 +11,13 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.lessThan;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -28,8 +29,8 @@ public class B50_2936064Test extends WebDriverTestCase {
 
 		click(jq("@button:contains(group1)"));
 		waitResponse();
-		Assert.assertFalse(jq("@group:contains(group1)").exists());
-		Assert.assertFalse(jq("@groupfoot:contains(groupfoot1)").exists());
+		Assertions.assertFalse(jq("@group:contains(group1)").exists());
+		Assertions.assertFalse(jq("@groupfoot:contains(groupfoot1)").exists());
 	}
 
 	@Test
@@ -40,12 +41,12 @@ public class B50_2936064Test extends WebDriverTestCase {
 
 		click(jq("@button:contains(groupfoot1)"));
 		waitResponse();
-		Assert.assertTrue(jq("@group:contains(group1)").exists());
-		Assert.assertFalse(jq("@groupfoot:contains(groupfoot1)").exists());
+		Assertions.assertTrue(jq("@group:contains(group1)").exists());
+		Assertions.assertFalse(jq("@groupfoot:contains(groupfoot1)").exists());
 
 		click(jq("@button:contains(group1)"));
 		waitResponse();
-		Assert.assertFalse(jq("@group:contains(group1)").exists());
-		Assert.assertThat("grid height should shrink", jq("@grid").outerHeight(), lessThan(gridHeight));
+		Assertions.assertFalse(jq("@group:contains(group1)").exists());
+		assertThat("grid height should shrink", jq("@grid").outerHeight(), lessThan(gridHeight));
 	}
 }

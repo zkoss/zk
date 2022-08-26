@@ -11,11 +11,11 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class B50_3094720Test extends WebDriverTestCase {
 
@@ -61,7 +61,7 @@ public class B50_3094720Test extends WebDriverTestCase {
 		for (int i = 0; i < length; i++) {
 			JQuery child = children.eq(i);
 			spacing = child.is(":last-child") ? "0px" : spacing;
-			Assert.assertEquals(spacing, child.css(css));
+			Assertions.assertEquals(spacing, child.css(css));
 		}
 	}
 }

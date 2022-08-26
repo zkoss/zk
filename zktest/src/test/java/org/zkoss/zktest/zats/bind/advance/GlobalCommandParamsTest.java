@@ -13,8 +13,9 @@ package org.zkoss.zktest.zats.bind.advance;
 
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zktest.zats.ZATSTestCase;
@@ -28,7 +29,7 @@ public class GlobalCommandParamsTest extends ZATSTestCase {
 		buttons.get(0).click();
 		buttons.get(1).click();
 		buttons.get(2).click();
-		Assert.assertArrayEquals(
+		Assertions.assertArrayEquals(
 			new String[] {
 				"GlobalCommand global1 executed: global1",
 				"Local Command local2 executed: local2",

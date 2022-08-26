@@ -1,15 +1,13 @@
 package org.zkoss.zktest.zats.bind.issue;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.util.List;
+import org.junit.jupiter.api.Test;
 
-import org.junit.Test;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zktest.zats.ZATSTestCase;
 import org.zkoss.zul.Label;
-import org.zkoss.zul.Textbox;
 
 public class F01026BindCustomAttrTest extends ZATSTestCase {
 	

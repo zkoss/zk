@@ -11,12 +11,12 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -33,6 +33,6 @@ public class B50_2918527Test extends WebDriverTestCase {
 
 		int leftAfter = jq("@textbox").offsetLeft();
 
-		Assert.assertThat("should move to center", leftAfter, greaterThan(left));
+		assertThat("should move to center", leftAfter, greaterThan(left));
 	}
 }

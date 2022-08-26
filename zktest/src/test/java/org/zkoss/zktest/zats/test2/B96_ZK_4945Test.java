@@ -11,8 +11,13 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 import org.zkoss.bind.impl.BinderImpl;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
@@ -20,10 +25,6 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.HtmlShadowElement;
 import org.zkoss.zkmax.bind.impl.AnnotateBinderEx;
 import org.zkoss.zktest.zats.ZATSTestCase;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 public class B96_ZK_4945Test extends ZATSTestCase {
 	private DesktopAgent desktopAgent;
@@ -43,8 +44,9 @@ public class B96_ZK_4945Test extends ZATSTestCase {
 		List<Integer> cacheSizeHistory = new ArrayList<>();
 		cacheSizeHistory.add(getFormIdCache().size());
 
-		Assert.assertArrayEquals("There should be no detached components in the cache", new Component[]{}, findDetachedComponentsInCache());
-		Assert.assertFalse("There should be no NULL values in the cache", getFormIdCache().values().contains(null));
+		Assertions.assertArrayEquals(new Component[]{}, findDetachedComponentsInCache(), "There should be no detached components in the cache");
+		Assertions.assertFalse(getFormIdCache().values().contains(null),
+				"There should be no NULL values in the cache");
 
 		// update the UI dynamically
 		for (int i = 0; i < 5; i++) {
@@ -55,16 +57,17 @@ public class B96_ZK_4945Test extends ZATSTestCase {
 		}
 
 		System.out.println(cacheSizeHistory);
-		Assert.assertArrayEquals("There should be no detached components in the cache", new Component[]{}, findDetachedComponentsInCache());
-		Assert.assertFalse("There should be no NULL values in the cache", getFormIdCache().values().contains(null));
+		Assertions.assertArrayEquals(new Component[]{}, findDetachedComponentsInCache(), "There should be no detached components in the cache");
+		Assertions.assertFalse(getFormIdCache().values().contains(null),
+				"There should be no NULL values in the cache");
 	}
 
 	private void switchType(String fromType, String toType) {
-		Assert.assertNotNull(nameLabel(fromType));
-		Assert.assertNull(nameLabel(toType));
+		Assertions.assertNotNull(nameLabel(fromType));
+		Assertions.assertNull(nameLabel(toType));
 		typeCombobox().input(toType);
-		Assert.assertNull(nameLabel(fromType));
-		Assert.assertNotNull(nameLabel(toType));
+		Assertions.assertNull(nameLabel(fromType));
+		Assertions.assertNotNull(nameLabel(toType));
 		System.out.println(getFormIdCache());
 	}
 

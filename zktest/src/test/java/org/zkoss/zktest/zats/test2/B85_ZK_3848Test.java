@@ -11,14 +11,13 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.StringContains.containsString;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,43 +27,45 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
-import org.powermock.core.classloader.annotations.PowerMockIgnore;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.zkoss.test.webdriver.ForkJVMTestOnly;
 import org.zkoss.util.resource.ClassLocator;
 
-@RunWith (PowerMockRunner.class)
-@PrepareForTest ({LoggerFactory.class})
-@PowerMockIgnore("jdk.internal.reflect.*")
+@ForkJVMTestOnly
 public class B85_ZK_3848Test {
 	private static Logger logger;
 	private static ClassLocator clToTest;
-	
-	@BeforeClass
-	public static void setUp() throws Exception {
-		mockStatic(LoggerFactory.class);
+
+	private static MockedStatic<LoggerFactory> utilities;
+
+	@BeforeAll
+	public static void setUp() {
+		utilities = Mockito.mockStatic(LoggerFactory.class);
 		logger = Mockito.mock(Logger.class);
-		when(LoggerFactory.getLogger(any(Class.class))).thenReturn(logger);
+		utilities.when(() -> LoggerFactory.getLogger(any(Class.class))).thenReturn(logger);
 		clToTest = new ClassLocator();
+	}
+	@AfterAll
+	public static void tearDown() {
+		utilities.close();
 	}
 	
 	@Test
 	public void test1() throws Exception {
 		File src = new File("src/test/java/org/zkoss/zktest/zats/test2/ZK3848_lang_addon_Test1.xml");
 		File dst = new File("build/resources/main/metainfo/zk/lang-addon.xml");
-		
+
 		String name = "metainfo/zk/lang-addon.xml";
 		String elName = "addon-name";
 		String elDepends = "depends";
-		
+
 		Path zkPath = dst.toPath().getParent();
 		if (!Files.exists(zkPath))
 			Files.createDirectories(zkPath);
@@ -73,7 +74,7 @@ public class B85_ZK_3848Test {
 		try {
 			clToTest.getDependentXMLResources(name, elName, elDepends);
 		} catch (Exception ex) {
-			Assert.assertThat(ex.getMessage(), containsString("you are extending component decimalbox which is defined in 'zkplus-legacy', 'zkbind', please define <depends> element"));
+			assertThat(ex.getMessage(), containsString("you are extending component decimalbox which is defined in 'zkplus-legacy', 'zkbind', please define <depends> element"));
 			throwError = true;
 		} finally {
 			Files.delete(dst.toPath());
@@ -88,13 +89,15 @@ public class B85_ZK_3848Test {
 
 	@Test
 	public void test2() throws IOException {
-		File src = new File("src/test/java/org/zkoss/zktest/zats/test2/ZK3848_lang_addon_Test2.xml");
-		File dst = new File("build/resources/main/metainfo/zk/lang-addon.xml");
-		
+		File src = new File(
+				"src/test/java/org/zkoss/zktest/zats/test2/ZK3848_lang_addon_Test2.xml");
+		File dst = new File(
+				"build/resources/main/metainfo/zk/lang-addon.xml");
+
 		String name = "metainfo/zk/lang-addon.xml";
 		String elName = "addon-name";
 		String elDepends = "depends";
-		
+
 		Path zkPath = dst.toPath().getParent();
 		if (!Files.exists(zkPath))
 			Files.createDirectories(zkPath);
@@ -110,8 +113,10 @@ public class B85_ZK_3848Test {
 		Files.copy(src.toPath(), dst.toPath(), StandardCopyOption.REPLACE_EXISTING);
 		try {
 			clToTest.getDependentXMLResources(name, elName, elDepends);
-			verify(logger, times(1)).warn(anyString(), anyString(), anyString(), anyString());
-			Assert.assertThat(results.get(0), containsString("you are extending component decimalbox which is defined in 'zkplus-legacy', 'zkbind', please define <depends> element"));
+			verify(logger, times(1)).warn(anyString(), anyString(),
+					anyString(), anyString());
+			assertThat(results.get(0), containsString(
+					"you are extending component decimalbox which is defined in 'zkplus-legacy', 'zkbind', please define <depends> element"));
 		} finally {
 			Files.delete(dst.toPath());
 			Path metainfoPath = zkPath.getParent();

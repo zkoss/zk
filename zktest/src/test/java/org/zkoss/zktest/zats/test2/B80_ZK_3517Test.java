@@ -11,17 +11,8 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.jupiter.api.Test;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import org.junit.Test;
-
-import org.zkoss.util.Locales;
-import org.zkoss.util.TimeZones;
-import org.zkoss.zktest.zats.WebDriverTestCase;
 import org.zkoss.zktest.zats.ZATSTestCase;
 
 /**

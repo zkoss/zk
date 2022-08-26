@@ -11,10 +11,10 @@ Copyright (C) 2017 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -30,13 +30,13 @@ public class B85_ZK_3303Test extends WebDriverTestCase {
 		click(jq("@button"));
 		waitResponse();
 
-		Assert.assertFalse(
-				"Root item shouldn't be selected.",
-				jq("@tree .z-treerow:first").hasClass("z-treerow-selected")
-		);
-		Assert.assertTrue(
-				"First child item should be selected.",
-				jq("@tree .z-treerow:eq(1)").hasClass("z-treerow-selected")
-		);
+		Assertions.assertFalse(
+				jq("@tree .z-treerow:first").hasClass("z-treerow-selected"),
+				"Root item shouldn't be selected."
+				);
+		Assertions.assertTrue(
+				jq("@tree .z-treerow:eq(1)").hasClass("z-treerow-selected"),
+				"First child item should be selected."
+				);
 	}
 }

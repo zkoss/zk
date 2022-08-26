@@ -11,16 +11,17 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import java.time.Duration;
 import java.util.function.Supplier;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author rudyhuang
@@ -52,7 +53,7 @@ public class F50_2943475Test extends WebDriverTestCase {
 
 	private void waitForPageReloaded() {
 		sleep(1000); // wait for redirection first
-		new WebDriverWait(driver, 5)
+		new WebDriverWait(driver, Duration.ofSeconds(5))
 				.until(ExpectedConditions.presenceOfElementLocated(By.className("z-page")));
 	}
 
@@ -61,7 +62,7 @@ public class F50_2943475Test extends WebDriverTestCase {
 	                                      Supplier<Integer> offsetTop) {
 		click(jq("@button"));
 		sleep(1000);
-		Assert.assertEquals(offsetLeft.get(), processing.offsetLeft(), 3);
-		Assert.assertEquals(offsetTop.get(), processing.offsetTop(), 3);
+		Assertions.assertEquals(offsetLeft.get(), processing.offsetLeft(), 3);
+		Assertions.assertEquals(offsetTop.get(), processing.offsetTop(), 3);
 	}
 }

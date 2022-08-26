@@ -11,12 +11,12 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author rudyhuang
@@ -49,7 +49,7 @@ public class F86_ZK_4185Test extends WebDriverTestCase {
 		waitResponse();
 		sendKeys(comboboxReal, Keys.ARROW_DOWN);
 		waitResponse();
-		Assert.assertEquals(6, getZKLog().split("\n").length); // 3x onChange + onSelect
+		Assertions.assertEquals(6, getZKLog().split("\n").length); // 3x onChange + onSelect
 	}
 
 	private void testInstantSelectOff() {
@@ -63,7 +63,7 @@ public class F86_ZK_4185Test extends WebDriverTestCase {
 		waitResponse();
 		sendKeys(comboboxReal, Keys.ENTER);
 		waitResponse();
-		Assert.assertEquals(2, getZKLog().split("\n").length); // onChange + onSelect
+		Assertions.assertEquals(2, getZKLog().split("\n").length); // onChange + onSelect
 	}
 
 	private void testInstantSelectOffCancel() {
@@ -78,11 +78,11 @@ public class F86_ZK_4185Test extends WebDriverTestCase {
 		waitResponse();
 		sendKeys(comboboxReal, Keys.ESCAPE);
 		waitResponse();
-		Assert.assertFalse("Shouldn't have any event", isZKLogAvailable());
-		Assert.assertEquals(origVal, comboboxReal.val());
+		Assertions.assertFalse(isZKLogAvailable(), "Shouldn't have any event");
+		Assertions.assertEquals(origVal, comboboxReal.val());
 
 		click(jq("@button:contains(Show selected)"));
 		waitResponse();
-		Assert.assertEquals(origVal, getZKLog());
+		Assertions.assertEquals(origVal, getZKLog());
 	}
 }

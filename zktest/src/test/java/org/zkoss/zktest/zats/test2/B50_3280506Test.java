@@ -11,11 +11,11 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 public class B50_3280506Test extends WebDriverTestCase {
 
@@ -28,7 +28,7 @@ public class B50_3280506Test extends WebDriverTestCase {
 		sendKeys(jq(".z-textbox"), Keys.ENTER);
 		waitResponse();
 
-		Assert.assertTrue(jq(".z-bandbox-popup").is(":visible"));
-		Assert.assertEquals("Fire on OK", jq(".z-label").text());
+		Assertions.assertTrue(jq(".z-bandbox-popup").is(":visible"));
+		Assertions.assertEquals("Fire on OK", jq(".z-label").text());
 	}
 }

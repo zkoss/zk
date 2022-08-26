@@ -1,8 +1,10 @@
 package org.zkoss.zktest.zats.bind.issue;
 
-import static org.junit.Assert.assertFalse;
 
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
+import org.junit.jupiter.api.Test;
+
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zktest.zats.ZATSTestCase;

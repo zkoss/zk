@@ -11,8 +11,10 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.bind.advance;
 
-import org.junit.Assert;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
+
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zktest.zats.ZATSTestCase;
@@ -27,10 +29,10 @@ public class BindingParamTest extends ZATSTestCase {
 		final ComponentAgent updateBtn = desktop.queryAll("row").get(0).queryAll("button").get(2);
 
 		indexBtn.click();
-		Assert.assertEquals("item index 2", msg.getValue());
+		assertEquals("item index 2", msg.getValue());
 
 		updateBtn.click();
-		Assert.assertEquals("updated item name to: AA", msg.getValue());
+		assertEquals("updated item name to: AA", msg.getValue());
 	}
 
 	@Test
@@ -41,9 +43,9 @@ public class BindingParamTest extends ZATSTestCase {
 		final ComponentAgent updateOmitBtn = desktop.queryAll("row").get(1).queryAll("button").get(3);
 
 		indexOmitBtn.click();
-		Assert.assertEquals("item index 3", msg.getValue());
+		assertEquals("item index 3", msg.getValue());
 
 		updateOmitBtn.click();
-		Assert.assertEquals("updated item name to: BB", msg.getValue());
+		assertEquals("updated item name to: BB", msg.getValue());
 	}
 }

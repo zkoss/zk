@@ -11,15 +11,13 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.interactions.Actions;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author jameschu
@@ -39,7 +37,7 @@ public class B65_ZK_1679Test extends WebDriverTestCase {
 				.release()
 				.perform();
 		waitResponse();
-		assertEquals("you should not see green background bar expand to window size", 50, jq(".z-hlayout").height(), 3);
-		assertEquals("you should not see green background bar expand to window size", 100, jq(".z-hlayout").width(), 3);
+		assertEquals(50, jq(".z-hlayout").height(), 3, "you should not see green background bar expand to window size");
+		assertEquals(100, jq(".z-hlayout").width(), 3, "you should not see green background bar expand to window size");
 	}
 }

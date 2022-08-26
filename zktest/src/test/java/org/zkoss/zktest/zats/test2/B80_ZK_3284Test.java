@@ -11,10 +11,10 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 public class B80_ZK_3284Test extends WebDriverTestCase {
 
@@ -24,9 +24,9 @@ public class B80_ZK_3284Test extends WebDriverTestCase {
 
 		click(jq(".z-bandbox-button"));
 		waitResponse();
-		Assert.assertEquals("bandbox focused", jq("$lb").text().trim());
+		Assertions.assertEquals("bandbox focused", jq("$lb").text().trim());
 		click(jq(".z-listitem"));
 		waitResponse();
-		Assert.assertEquals("bandbox focused", jq("$lb").text().trim());
+		Assertions.assertEquals("bandbox focused", jq("$lb").text().trim());
 	}
 }

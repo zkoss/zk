@@ -16,21 +16,20 @@ import static org.hamcrest.Matchers.greaterThan;
 import java.util.Collections;
 
 import org.hamcrest.MatcherAssert;
-import org.junit.ClassRule;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.openqa.selenium.chrome.ChromeOptions;
 
-import org.zkoss.zktest.zats.ExternalZkXml;
-import org.zkoss.zktest.zats.ForkJVMTestOnly;
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.ExternalZkXml;
+import org.zkoss.test.webdriver.ForkJVMTestOnly;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
  */
-@Category(ForkJVMTestOnly.class)
+@ForkJVMTestOnly
 public class B70_ZK_2773_1Test extends WebDriverTestCase {
-	@ClassRule
+	@RegisterExtension
 	public static final ExternalZkXml CONFIG = new ExternalZkXml("/test2/enable-tablet-ui-zk.xml");
 
 	@Override

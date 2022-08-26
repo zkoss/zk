@@ -11,11 +11,11 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author jameschu
@@ -34,7 +34,7 @@ public class B90_ZK_4361Test extends WebDriverTestCase {
 		waitResponse();
 		click(col.find(".z-borderlayout-icon"));
 		waitResponse();
-		Assert.assertFalse(jq("@window").isVisible());
+		Assertions.assertFalse(jq("@window").isVisible());
 
 		//case 2
 		click(showBtn);
@@ -47,6 +47,6 @@ public class B90_ZK_4361Test extends WebDriverTestCase {
 		waitResponse();
 		click(col.find(".z-borderlayout-icon"));
 		waitResponse();
-		Assert.assertTrue(jq("@window").isVisible());
+		Assertions.assertTrue(jq("@window").isVisible());
 	}
 }

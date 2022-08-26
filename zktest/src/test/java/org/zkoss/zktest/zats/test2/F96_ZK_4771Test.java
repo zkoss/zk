@@ -12,21 +12,20 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 package org.zkoss.zktest.zats.test2;
 
 import static org.hamcrest.Matchers.greaterThan;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import org.hamcrest.MatcherAssert;
-import org.junit.Assert;
-import org.junit.ClassRule;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 
-import org.zkoss.zktest.zats.ExternalZkXml;
-import org.zkoss.zktest.zats.ForkJVMTestOnly;
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.ExternalZkXml;
+import org.zkoss.test.webdriver.ForkJVMTestOnly;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
-@Category(ForkJVMTestOnly.class)
+@ForkJVMTestOnly
 public class F96_ZK_4771Test extends WebDriverTestCase {
-	@ClassRule
+	@RegisterExtension
 	public static final ExternalZkXml CONFIG = new ExternalZkXml("/test2/F96-ZK-4771-zk.xml");
 
 	@Test
@@ -61,9 +60,9 @@ public class F96_ZK_4771Test extends WebDriverTestCase {
 			else if (line.contains(testFileName))
 				testStyleIndex = i;
 		}
-		Assert.assertNotEquals("zk.wcs should be loaded", -1, wcsIndex);
-		Assert.assertNotEquals("tablet.css should be loaded", -1, tabletIndex);
-		Assert.assertNotEquals(testFileName + " should be loaded", -1, testStyleIndex);
+		assertNotEquals(-1, wcsIndex, "zk.wcs should be loaded");
+		assertNotEquals(-1, tabletIndex, "tablet.css should be loaded");
+		assertNotEquals(-1, testStyleIndex, testFileName + " should be loaded");
 
 		if ("F96-ZK-4771-Style2.css".equals(testFileName)) {
 			MatcherAssert.assertThat(

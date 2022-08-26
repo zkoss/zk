@@ -112,21 +112,18 @@ dependencies {
 	testImplementation 'org.jruby:jruby:1.1.2'
 	testImplementation 'org.python:jython:2.2.1'
 	testImplementation 'org.zkoss.zats:zats-mimic-ext:10.0.0-FL-2022070817'
-	testImplementation 'junit:junit:4.13.2'
-	testImplementation 'org.hamcrest:hamcrest:2.1'
 	testImplementation 'net.jcip:jcip-annotations:1.0'
-	testImplementation 'org.seleniumhq.selenium:selenium-java:3.141.59'
-	testImplementation 'xml-apis:xml-apis:1.4.01'
-	testImplementation 'io.github.bonigarcia:webdrivermanager:4.4.3'
-	testImplementation 'org.apache.commons:commons-compress:1.19'
-	testImplementation 'org.apache.commons:commons-lang3:3.8.1'
 	testImplementation 'com.deque.html.axe-core:selenium:4.2.2'
-	testImplementation 'org.powermock:powermock-module-junit4:1.7.3'
-	testImplementation 'org.powermock:powermock-api-mockito2:1.7.3'
 	testImplementation 'org.springframework.session:spring-session-core:2.1.6.RELEASE'
-	testImplementation 'org.eclipse.jetty:jetty-webapp:10.0.5'
-	testImplementation 'org.eclipse.jetty:apache-jsp:10.0.5'
-	testImplementation 'org.eclipse.jetty.websocket:websocket-javax-server:10.0.5'
+	testImplementation "org.junit.jupiter:junit-jupiter-api:$junitVersion"
+	testImplementation "org.mockito:mockito-inline:4.7.0"
+	testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
+	testImplementation 'org.eclipse.jetty.websocket:websocket-javax-server:10.0.11'
+	testImplementation 'org.eclipse.jetty:apache-jsp:10.0.11'
+	testImplementation 'org.junit.platform:junit-platform-launcher:1.9.0'
+	testImplementation 'xml-apis:xml-apis:1.4.01'
+	testImplementation 'org.zkoss.test:zk-webdriver:104.0.5112.101'
+
 	providedCompile 'javax.el:javax.el-api:2.2.5'
 	providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
 	providedCompile 'javax.websocket:javax.websocket-api:1.1'
@@ -145,9 +142,7 @@ sourceSets {
 }
 
 task testGroupForkJVMTestOnly(type: Test) {
-	useJUnit {
-		includeCategories 'org.zkoss.zktest.zats.ForkJVMTestOnly'
-	}
+
 	forkEvery = 1 // a new test process is started for every test class
 	if (project.hasProperty('maxParallelForks'))
 		maxParallelForks = project.maxParallelForks as int
@@ -155,13 +150,25 @@ task testGroupForkJVMTestOnly(type: Test) {
 		filter {
 			excludeTestsMatching('*.wcag.*')
 		}
+		useJUnitPlatform {
+			includeTags 'ForkJVMTestOnly'
+			excludeTags 'WcagTestOnly'
+		}
+	} else {
+		useJUnitPlatform {
+			includeTags 'ForkJVMTestOnly'
+		}
+	}
+	systemProperty "zkWebdriverContextPath", "/zktest"
+	systemProperty "zkWebdriverTestURLPackage", "org.zkoss.zktest.zats"
+
+	// a way to pass -Dtags=...
+	options {
+		systemProperties(System.getProperties())
 	}
 }
 
 test {
-	useJUnit {
-		excludeCategories 'org.zkoss.zktest.zats.ForkJVMTestOnly'
-	}
 	forkEvery = 0 // reuse the test process for all test classes
 	if (project.hasProperty('maxParallelForks'))
 		maxParallelForks = project.maxParallelForks as int
@@ -169,6 +176,20 @@ test {
 		filter {
 			excludeTestsMatching('*.wcag.*')
 		}
+		useJUnitPlatform {
+			excludeTags 'WcagTestOnly', 'ForkJVMTestOnly'
+		}
+	} else {
+		useJUnitPlatform {
+			excludeTags 'ForkJVMTestOnly'
+		}
+	}
+	systemProperty "zkWebdriverContextPath", "/zktest"
+	systemProperty "zkWebdriverTestURLPackage", "org.zkoss.zktest.zats"
+
+	// a way to pass -Dtags=...
+	options {
+		systemProperties(System.getProperties())
 	}
 }
 

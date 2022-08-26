@@ -11,11 +11,11 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class F85_ZK_3636Test extends WebDriverTestCase {
 
@@ -24,7 +24,7 @@ public class F85_ZK_3636Test extends WebDriverTestCase {
 		connect();
 
 		JQuery stack = jq(".z-button .z-icon-stack");
-		Assert.assertTrue(stack.find(".z-icon-home").exists());
-		Assert.assertTrue(stack.find(".z-icon-check").exists());
+		Assertions.assertTrue(stack.find(".z-icon-home").exists());
+		Assertions.assertTrue(stack.find(".z-icon-check").exists());
 	}
 }

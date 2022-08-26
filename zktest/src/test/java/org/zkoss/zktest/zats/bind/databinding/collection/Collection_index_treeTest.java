@@ -11,9 +11,10 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.bind.databinding.collection;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 public class Collection_index_treeTest extends WebDriverTestCase {
 	@Test
@@ -52,10 +53,10 @@ public class Collection_index_treeTest extends WebDriverTestCase {
 	private void checkIndex(String[] testString, int[] expectedIndex) {
 		int size = expectedIndex.length;
 		for (int i = 0; i < size; i++) {
-			Assert.assertEquals(testString[i], jq(".z-treerow").eq(i).find(".z-treecell:eq(1)").text().trim());
+			Assertions.assertEquals(testString[i], jq(".z-treerow").eq(i).find(".z-treecell:eq(1)").text().trim());
 			click(jq(".z-treerow").eq(i).find("@button:contains(Index)"));
 			waitResponse();
-			Assert.assertEquals("item index " + expectedIndex[i], jq("$msg").text());
+			Assertions.assertEquals("item index " + expectedIndex[i], jq("$msg").text());
 		}
 	}
 }

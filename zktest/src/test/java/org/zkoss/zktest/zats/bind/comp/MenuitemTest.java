@@ -11,8 +11,8 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.bind.comp;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
@@ -30,8 +30,8 @@ public class MenuitemTest extends ZATSTestCase {
 		final Label checked = desktop.query("window #checked").as(Label.class);
 
 		menuitem.check(true);
-		Assert.assertEquals("true", checked.getValue());
+		Assertions.assertEquals("true", checked.getValue());
 		menuitem.check(false);
-		Assert.assertEquals("false", checked.getValue());
+		Assertions.assertEquals("false", checked.getValue());
 	}
 }

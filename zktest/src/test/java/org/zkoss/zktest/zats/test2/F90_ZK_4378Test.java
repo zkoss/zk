@@ -11,12 +11,13 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.Element;
-import org.zkoss.zktest.zats.ztl.JQuery;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.Element;
+import org.zkoss.test.webdriver.ztl.JQuery;
 import org.zkoss.zul.Checkbox;
 
 public class F90_ZK_4378Test extends WebDriverTestCase {
@@ -67,7 +68,7 @@ public class F90_ZK_4378Test extends WebDriverTestCase {
 	private void clickButtonAndCheckLog(JQuery button, String expected) {
 		click(button);
 		waitResponse();
-		Assert.assertEquals(expected, getZKLog());
+		Assertions.assertEquals(expected, getZKLog());
 		closeZKLog();
 	}
 }

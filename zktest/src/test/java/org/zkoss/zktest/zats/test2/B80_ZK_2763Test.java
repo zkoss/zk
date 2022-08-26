@@ -14,13 +14,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 package org.zkoss.zktest.zats.test2;
 
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zktest.zats.ZATSTestCase;
@@ -48,10 +49,10 @@ public class B80_ZK_2763Test extends ZATSTestCase {
 			}
 			List<ComponentAgent> labelsAfterClick = desktop.queryAll("label");
 			//skip the first label again
-			Assert.assertFalse(oldValues.get(0).equals(labelsAfterClick.get(1).as(Label.class).getValue()));
-			Assert.assertFalse(oldValues.get(1).equals(labelsAfterClick.get(2).as(Label.class).getValue()));
-			Assert.assertFalse(oldValues.get(2).equals(labelsAfterClick.get(3).as(Label.class).getValue()));
-			Assert.assertTrue(oldValues.get(3).equals(labelsAfterClick.get(4).as(Label.class).getValue()));
+			Assertions.assertFalse(oldValues.get(0).equals(labelsAfterClick.get(1).as(Label.class).getValue()));
+			Assertions.assertFalse(oldValues.get(1).equals(labelsAfterClick.get(2).as(Label.class).getValue()));
+			Assertions.assertFalse(oldValues.get(2).equals(labelsAfterClick.get(3).as(Label.class).getValue()));
+			Assertions.assertTrue(oldValues.get(3).equals(labelsAfterClick.get(4).as(Label.class).getValue()));
 		} catch (Exception e) {
 			fail();
 		}

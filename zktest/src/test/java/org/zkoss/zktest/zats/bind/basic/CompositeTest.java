@@ -11,10 +11,11 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.bind.basic;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class CompositeTest extends WebDriverTestCase {
 	@Test
@@ -28,21 +29,21 @@ public class CompositeTest extends WebDriverTestCase {
 		JQuery l2 = jq("$l2");
 		JQuery l3 = jq("$l3");
 
-		Assert.assertEquals("Dennis", e1.text().trim());
-		Assert.assertEquals("Not work currently", "", e2.text().trim());
-		Assert.assertEquals("RD", e3.text().trim());
-		Assert.assertEquals("Dennis", l1.text().trim());
-		Assert.assertEquals("100", l2.text().trim());
-		Assert.assertEquals("RD", l3.text().trim());
+		Assertions.assertEquals("Dennis", e1.text().trim());
+		Assertions.assertEquals("", e2.text().trim(), "Not work currently");
+		Assertions.assertEquals("RD", e3.text().trim());
+		Assertions.assertEquals("Dennis", l1.text().trim());
+		Assertions.assertEquals("100", l2.text().trim());
+		Assertions.assertEquals("RD", l3.text().trim());
 
 		click(jq("@button:contains(reset)"));
 		waitResponse();
 
-		Assert.assertEquals("Lin", e1.text().trim());
-		Assert.assertEquals("Not work currently", "", e2.text().trim());
-		Assert.assertEquals("MVP", e3.text().trim());
-		Assert.assertEquals("Lin", l1.text().trim());
-		Assert.assertEquals("34", l2.text().trim());
-		Assert.assertEquals("MVP", l3.text().trim());
+		Assertions.assertEquals("Lin", e1.text().trim());
+		Assertions.assertEquals("", e2.text().trim(), "Not work currently");
+		Assertions.assertEquals("MVP", e3.text().trim());
+		Assertions.assertEquals("Lin", l1.text().trim());
+		Assertions.assertEquals("34", l2.text().trim());
+		Assertions.assertEquals("MVP", l3.text().trim());
 	}
 }

@@ -11,9 +11,10 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 public class Z35_spinner_003Test extends WebDriverTestCase {
 	@Test
@@ -22,17 +23,17 @@ public class Z35_spinner_003Test extends WebDriverTestCase {
 		waitResponse();
 		type(jq(".z-spinner-input"), "11");
 		waitResponse();
-		Assert.assertFalse(hasError());
+		Assertions.assertFalse(hasError());
 		type(jq(".z-spinner-input"), "-11");
 		waitResponse();
-		Assert.assertFalse(hasError());
+		Assertions.assertFalse(hasError());
 		click(jq("@button"));
 		waitResponse();
 		for (int i = 0; i < 6; i++) {
 			click(jq(".z-spinner-down"));
 			waitResponse();
 			if (i >= 4) {
-				Assert.assertEquals("-9", jq(".z-spinner-input").val());
+				Assertions.assertEquals("-9", jq(".z-spinner-input").val());
 			}
 		}
 		click(jq("@button"));
@@ -41,7 +42,7 @@ public class Z35_spinner_003Test extends WebDriverTestCase {
 			click(jq(".z-spinner-up"));
 			waitResponse();
 			if (i >= 3) {
-				Assert.assertEquals("9", jq(".z-spinner-input").val());
+				Assertions.assertEquals("9", jq(".z-spinner-input").val());
 			}
 		}
 	}

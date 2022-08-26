@@ -16,8 +16,8 @@ import static org.hamcrest.Matchers.startsWith;
 import java.util.List;
 
 import org.hamcrest.MatcherAssert;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zats.ZatsException;
 import org.zkoss.zats.mimic.ComponentAgent;
@@ -33,8 +33,8 @@ public class FlowCtrlTest extends ZATSTestCase {
 		final DesktopAgent desktop = connect("/bind/shadow/flowctrl-choose.zul");
 		final List<ComponentAgent> navitems = desktop.queryAll("#navbar > navitem");
 		final List<ComponentAgent> navs = desktop.queryAll("#navbar > nav");
-		Assert.assertEquals(4, navitems.size());
-		Assert.assertEquals(2, navs.size());
+		Assertions.assertEquals(4, navitems.size());
+		Assertions.assertEquals(2, navs.size());
 	}
 
 	@Test
@@ -42,13 +42,13 @@ public class FlowCtrlTest extends ZATSTestCase {
 		final DesktopAgent desktop = connect("/bind/shadow/flowctrl-if.zul");
 		final List<ComponentAgent> navitems = desktop.queryAll("#navbar > navitem");
 		final List<ComponentAgent> navs = desktop.queryAll("#navbar > nav");
-		Assert.assertEquals(4, navitems.size());
-		Assert.assertEquals(2, navs.size());
+		Assertions.assertEquals(4, navitems.size());
+		Assertions.assertEquals(2, navs.size());
 	}
 
 	@Test
 	public void testOtherwiseWrongUsage() {
-		Throwable t = Assert.assertThrows(ZatsException.class, () -> {
+		Throwable t = Assertions.assertThrows(ZatsException.class, () -> {
 			connect("/bind/shadow/flowctrl-otherwise-wrong.zul");
 		});
 		MatcherAssert.assertThat(t.getMessage(), startsWith("Unsupported parent for otherwise"));
@@ -56,7 +56,7 @@ public class FlowCtrlTest extends ZATSTestCase {
 
 	@Test
 	public void testWhenWrongUsage() {
-		Throwable t = Assert.assertThrows(ZatsException.class, () -> {
+		Throwable t = Assertions.assertThrows(ZatsException.class, () -> {
 			connect("/bind/shadow/flowctrl-when-wrong.zul");
 		});
 		MatcherAssert.assertThat(t.getMessage(), startsWith("Unsupported parent for when"));

@@ -13,8 +13,8 @@ package org.zkoss.zktest.zats.bind.shadow;
 
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
@@ -29,10 +29,10 @@ public class TemplateTest extends ZATSTestCase {
 		final DesktopAgent desktop = connect("/bind/shadow/template.zul");
 		final List<ComponentAgent> navitems = desktop.queryAll("#navbar > navitem");
 		final List<ComponentAgent> navs = desktop.queryAll("#navbar > nav");
-		Assert.assertEquals(4, navitems.size());
-		Assert.assertEquals(2, navs.size());
-		Assert.assertEquals(4, navs.get(0).getChildren().size());
-		Assert.assertEquals(3, navs.get(1).getChildren().size());
+		Assertions.assertEquals(4, navitems.size());
+		Assertions.assertEquals(2, navs.size());
+		Assertions.assertEquals(4, navs.get(0).getChildren().size());
+		Assertions.assertEquals(3, navs.get(1).getChildren().size());
 	}
 
 	@Test
@@ -40,10 +40,10 @@ public class TemplateTest extends ZATSTestCase {
 		final DesktopAgent desktop = connect("/bind/shadow/template-external.zul");
 		final List<ComponentAgent> navitems = desktop.queryAll("#navbar > navitem");
 		final List<ComponentAgent> navs = desktop.queryAll("#navbar > nav");
-		Assert.assertEquals(4, navitems.size());
-		Assert.assertEquals(2, navs.size());
-		Assert.assertEquals(4, navs.get(0).getChildren().size());
-		Assert.assertEquals(3, navs.get(1).getChildren().size());
+		Assertions.assertEquals(4, navitems.size());
+		Assertions.assertEquals(2, navs.size());
+		Assertions.assertEquals(4, navs.get(0).getChildren().size());
+		Assertions.assertEquals(3, navs.get(1).getChildren().size());
 	}
 
 	@Test
@@ -51,9 +51,9 @@ public class TemplateTest extends ZATSTestCase {
 		final DesktopAgent desktop = connect("/bind/shadow/template-src.zul");
 		final List<ComponentAgent> navitems = desktop.queryAll("#navbar > navitem");
 		final List<ComponentAgent> navs = desktop.queryAll("#navbar > nav");
-		Assert.assertEquals(4, navitems.size());
-		Assert.assertEquals(2, navs.size());
-		Assert.assertEquals(4, navs.get(0).getChildren().size());
-		Assert.assertEquals(3, navs.get(1).getChildren().size());
+		Assertions.assertEquals(4, navitems.size());
+		Assertions.assertEquals(2, navs.size());
+		Assertions.assertEquals(4, navs.get(0).getChildren().size());
+		Assertions.assertEquals(3, navs.get(1).getChildren().size());
 	}
 }

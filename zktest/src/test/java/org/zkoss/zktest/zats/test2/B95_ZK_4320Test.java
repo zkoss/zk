@@ -11,9 +11,10 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 public class B95_ZK_4320Test extends WebDriverTestCase {
 	@Test
@@ -25,7 +26,7 @@ public class B95_ZK_4320Test extends WebDriverTestCase {
 		int c10Width = jq("$c10").outerWidth();
 		click(jq("$c10"));
 		waitResponse();
-		Assert.assertEquals("column shouldn't move after sorting", c10Left, jq("$c10").offsetLeft());
-		Assert.assertEquals("column width shouldn't change after sorting", c10Width, jq("$c10").outerWidth());
+		Assertions.assertEquals(c10Left, jq("$c10").offsetLeft(), "column shouldn't move after sorting");
+		Assertions.assertEquals(c10Width, jq("$c10").outerWidth(), "column width shouldn't change after sorting");
 	}
 }

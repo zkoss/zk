@@ -13,13 +13,13 @@ package org.zkoss.zktest.zats.test2;
 
 import java.util.Collections;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.touch.TouchActions;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author rudyhuang
@@ -40,13 +40,13 @@ public class B60_ZK_1305Test extends WebDriverTestCase {
 		click(test0);
 		waitResponse();
 
-		Assert.assertEquals("select index: 0", jq("$lbl").text());
+		Assertions.assertEquals("select index: 0", jq("$lbl").text());
 
 		JQuery body = jq(".z-listbox-body");
 		new TouchActions(driver)
 				.scroll(toElement(body), 0, 100)
 				.perform();
 		waitResponse();
-		Assert.assertNotEquals(0, body.scrollTop());
+		Assertions.assertNotEquals(0, body.scrollTop());
 	}
 }

@@ -12,11 +12,11 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 package org.zkoss.zktest.zats.test2;
 
 import net.jcip.annotations.NotThreadSafe;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 @NotThreadSafe
 public class B50_3297864Test extends WebDriverTestCase {
@@ -34,7 +34,7 @@ public class B50_3297864Test extends WebDriverTestCase {
 			waitResponse();
 			click(jq("ol"));
 			waitResponse();
-			Assert.assertEquals("0,01", decimalbox.val());
+			Assertions.assertEquals("0,01", decimalbox.val());
 		} finally {
 			click(buttons.eq(1));
 			waitResponse();

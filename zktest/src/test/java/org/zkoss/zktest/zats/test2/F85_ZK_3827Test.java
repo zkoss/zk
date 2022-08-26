@@ -1,12 +1,12 @@
 package org.zkoss.zktest.zats.test2;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author bob peng
@@ -21,11 +21,12 @@ public class F85_ZK_3827Test extends WebDriverTestCase {
 		String typeString = "a";
 		type(jq("@combobox .z-combobox-input"), typeString);
 		waitResponse();
-		assertFalse("Error: EmptySearchMessage should disappear", msg.isVisible());
+		assertFalse(msg.isVisible(),
+				"Error: EmptySearchMessage should disappear");
 
 		typeString = "g";
 		type(jq("@combobox .z-combobox-input"), typeString);
 		waitResponse();
-		assertTrue("Error: EmptySearchMessage should appear", msg.isVisible());
+		assertTrue(msg.isVisible(), "Error: EmptySearchMessage should appear");
 	}
 }

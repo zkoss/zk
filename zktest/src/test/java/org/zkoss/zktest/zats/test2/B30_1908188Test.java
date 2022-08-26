@@ -14,11 +14,11 @@ package org.zkoss.zktest.zats.test2;
 import static org.hamcrest.Matchers.greaterThan;
 
 import org.hamcrest.MatcherAssert;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author rudyhuang
@@ -47,7 +47,7 @@ public class B30_1908188Test extends WebDriverTestCase {
 		waitResponse();
 		click(jq("@menuitem:eq(1)"));
 		waitResponse();
-		Assert.assertEquals("The popup must be at position (50,50)", 50, jq(".z-popup").positionLeft());
-		Assert.assertEquals("The popup must be at position (50,50)", 50, jq(".z-popup").positionTop());
+		Assertions.assertEquals(50, jq(".z-popup").positionLeft(), "The popup must be at position (50,50)");
+		Assertions.assertEquals(50, jq(".z-popup").positionTop(), "The popup must be at position (50,50)");
 	}
 }

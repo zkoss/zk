@@ -11,11 +11,11 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author rudyhuang
@@ -30,8 +30,8 @@ public class F65_ZK_1655Test extends WebDriverTestCase {
 		waitResponse();
 		JQuery yellowPP = jq("@popup");
 		// should see tooltip showed on 50px left of mouse pointer
-		Assert.assertEquals(yellowPP.positionTop(), yellow.offsetTop() + 100, 1);
-		Assert.assertEquals(yellowPP.positionLeft() + 50, yellow.offsetLeft() + 100, 1);
+		Assertions.assertEquals(yellowPP.positionTop(), yellow.offsetTop() + 100, 1);
+		Assertions.assertEquals(yellowPP.positionLeft() + 50, yellow.offsetLeft() + 100, 1);
 
 		JQuery pink = jq(".z-div[style*=pink]");
 		click(pink);
@@ -39,8 +39,8 @@ public class F65_ZK_1655Test extends WebDriverTestCase {
 		JQuery pinkPP = jq("@popup");
 
 		// should see tooltip showed on 20px down of mouse pointer
-		Assert.assertEquals(pinkPP.offsetTop() - 20, pink.offsetTop() + 100, 3);
-		Assert.assertEquals(pinkPP.offsetLeft(), pink.offsetLeft() + 100, 3);
+		Assertions.assertEquals(pinkPP.offsetTop() - 20, pink.offsetTop() + 100, 3);
+		Assertions.assertEquals(pinkPP.offsetLeft(), pink.offsetLeft() + 100, 3);
 
 		JQuery cyan = jq(".z-div[style*=cyan]");
 		mouseOver(cyan);
@@ -49,7 +49,7 @@ public class F65_ZK_1655Test extends WebDriverTestCase {
 		JQuery cyanPP = jq("@popup");
 
 		// should see tooltip showed on 40px right of mouse pointer
-		Assert.assertEquals(cyanPP.offsetTop(), cyan.offsetTop() + 100, 1);
-		Assert.assertEquals(cyanPP.offsetLeft() - 40, cyan.offsetLeft() + 100, 1);
+		Assertions.assertEquals(cyanPP.offsetTop(), cyan.offsetTop() + 100, 1);
+		Assertions.assertEquals(cyanPP.offsetLeft() - 40, cyan.offsetLeft() + 100, 1);
 	}
 }

@@ -13,11 +13,11 @@ package org.zkoss.zktest.zats.test2;
 
 import java.util.Collections;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.chrome.ChromeOptions;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -36,9 +36,9 @@ public class B96_ZK_4780Test extends WebDriverTestCase {
 		connect();
 
 		try {
-			Assert.assertEquals("0,5", jq("$db1").val());
-			Assert.assertEquals("0,5", jq("$db2 > .z-doublespinner-input").val());
-			Assert.assertEquals("0,5", jq("$db3").val());
+			Assertions.assertEquals("0,5", jq("$db1").val());
+			Assertions.assertEquals("0,5", jq("$db2 > .z-doublespinner-input").val());
+			Assertions.assertEquals("0,5", jq("$db3").val());
 		} finally {
 			click(jq("@button"));
 			waitResponse();

@@ -11,11 +11,12 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.interactions.Actions;
-import org.zkoss.zktest.zats.WebDriverTestCase;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 public class B50_ZK_591Test extends WebDriverTestCase {
 	@Test
@@ -26,19 +27,19 @@ public class B50_ZK_591Test extends WebDriverTestCase {
 		for (int i = 0; i < 4; i++) {
 			act.sendKeys(Keys.TAB).perform();
 			waitResponse();
-			Assert.assertEquals("This field may not be empty or contain only spaces.", jq(".z-errorbox").eq(i).text());
+			Assertions.assertEquals("This field may not be empty or contain only spaces.", jq(".z-errorbox").eq(i).text());
 		}
 		click(jq("@datebox").eq(0));
 		waitResponse();
 		act.sendKeys("Nov 11, 2011").sendKeys(Keys.TAB).perform();
 		waitResponse();
-		Assert.assertEquals(3, jq(".z-errorbox").length());
+		Assertions.assertEquals(3, jq(".z-errorbox").length());
 		
 		click(jq("@datebox").eq(1));
 		waitResponse();
 		act.sendKeys("Nov 11, 2011").sendKeys(Keys.TAB).perform();
 		waitResponse();
-		Assert.assertEquals(2, jq(".z-errorbox").length());
+		Assertions.assertEquals(2, jq(".z-errorbox").length());
 		
 		click(jq("@datebox").eq(0));
 		waitResponse();
@@ -48,8 +49,8 @@ public class B50_ZK_591Test extends WebDriverTestCase {
 		waitResponse();
 		act.sendKeys("Nov 10, 2011").sendKeys(Keys.TAB).perform();
 		waitResponse();
-		Assert.assertEquals(3, jq(".z-errorbox").length());
-		Assert.assertEquals("Out of range: >= Nov 11, 2011", jq(".z-errorbox").eq(2).text());
+		Assertions.assertEquals(3, jq(".z-errorbox").length());
+		Assertions.assertEquals("Out of range: >= Nov 11, 2011", jq(".z-errorbox").eq(2).text());
 		
 		driver.findElement(jq(".z-datebox-input").eq(1).toElement()).clear();
 		waitResponse();
@@ -57,18 +58,18 @@ public class B50_ZK_591Test extends WebDriverTestCase {
 		waitResponse();
 		act.sendKeys(Keys.TAB).sendKeys("Nov 10, 2011").sendKeys(Keys.TAB).perform();
 		waitResponse();
-		Assert.assertEquals("Out of range: >= Nov 11, 2011", jq(".z-errorbox").eq(3).text());
+		Assertions.assertEquals("Out of range: >= Nov 11, 2011", jq(".z-errorbox").eq(3).text());
 		
 		act.sendKeys("Nov 10, 2011").sendKeys(Keys.TAB).perform();
 		waitResponse();
-		Assert.assertEquals("Only date in the future or today is allowed", jq(".z-errorbox").eq(3).text());
+		Assertions.assertEquals("Only date in the future or today is allowed", jq(".z-errorbox").eq(3).text());
 		
 		act.sendKeys("Nov 10, 2011").sendKeys(Keys.TAB).perform();
 		waitResponse();
-		Assert.assertEquals("Only today is allowed", jq(".z-errorbox").eq(3).text());
+		Assertions.assertEquals("Only today is allowed", jq(".z-errorbox").eq(3).text());
 		
 		act.sendKeys("Nov 10, 2011").sendKeys(Keys.TAB).perform();
 		waitResponse();
-		Assert.assertEquals("Out of range: Dec 25, 2007 ~ Dec 27, 2007", jq(".z-errorbox").eq(4).text());
+		Assertions.assertEquals("Out of range: Dec 25, 2007 ~ Dec 27, 2007", jq(".z-errorbox").eq(4).text());
 	}
 }

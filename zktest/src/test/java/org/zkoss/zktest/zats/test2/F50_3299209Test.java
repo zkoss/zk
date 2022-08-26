@@ -11,10 +11,10 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -25,24 +25,24 @@ public class F50_3299209Test extends WebDriverTestCase {
 		connect();
 
 		click(jq("@menuitem:eq(0)"));
-		Assert.assertTrue(jq("@menuitem:eq(0) a").is("[disabled]"));
+		Assertions.assertTrue(jq("@menuitem:eq(0) a").is("[disabled]"));
 		waitResponse();
-		Assert.assertFalse(jq("@menuitem:eq(0) a").is("[disabled]"));
+		Assertions.assertFalse(jq("@menuitem:eq(0) a").is("[disabled]"));
 
 		click(jq("@menuitem:eq(1)"));
-		Assert.assertTrue(jq("@menuitem:eq(1) a").is("[disabled]"));
-		Assert.assertTrue(jq("@menuitem:eq(2) a").is("[disabled]"));
+		Assertions.assertTrue(jq("@menuitem:eq(1) a").is("[disabled]"));
+		Assertions.assertTrue(jq("@menuitem:eq(2) a").is("[disabled]"));
 		waitResponse();
-		Assert.assertFalse(jq("@menuitem:eq(1) a").is("[disabled]"));
-		Assert.assertTrue(jq("@menuitem:eq(2) a").is("[disabled]"));
+		Assertions.assertFalse(jq("@menuitem:eq(1) a").is("[disabled]"));
+		Assertions.assertTrue(jq("@menuitem:eq(2) a").is("[disabled]"));
 
 		click(jq("@menuitem:eq(3)"));
 		waitResponse();
 		click(jq("@menuitem:eq(2)"));
-		Assert.assertTrue(jq("@menuitem:eq(1) a").is("[disabled]"));
-		Assert.assertTrue(jq("@menuitem:eq(2) a").is("[disabled]"));
+		Assertions.assertTrue(jq("@menuitem:eq(1) a").is("[disabled]"));
+		Assertions.assertTrue(jq("@menuitem:eq(2) a").is("[disabled]"));
 		waitResponse();
-		Assert.assertTrue(jq("@menuitem:eq(1) a").is("[disabled]"));
-		Assert.assertFalse(jq("@menuitem:eq(2) a").is("[disabled]"));
+		Assertions.assertTrue(jq("@menuitem:eq(1) a").is("[disabled]"));
+		Assertions.assertFalse(jq("@menuitem:eq(2) a").is("[disabled]"));
 	}
 }

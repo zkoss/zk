@@ -15,8 +15,8 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
@@ -33,7 +33,7 @@ public class B86_ZK_4220Test extends ZATSTestCase {
 		DesktopAgent desktop = connect();
 
 		ComponentAgent btn = desktop.query("toolbarbutton");
-		Assert.assertTrue(getUploadNative(btn));
+		Assertions.assertTrue(getUploadNative(btn));
 
 		UploadAgent uploadAgent = btn.as(UploadAgent.class);
 		uploadAgent.upload("test.txt", newContent(), "text/plain");

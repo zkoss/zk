@@ -11,11 +11,11 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author rudyhuang
@@ -28,22 +28,22 @@ public class F61_ZK_120_1Test extends WebDriverTestCase {
 		openColumnMenu(jq("@listheader:eq(1)"));
 		click(jq("@menuitem:contains(Sort Ascending)"));
 		waitResponse();
-		Assert.assertEquals("Cod", jq("@listitem:first @listcell:eq(1)").text());
+		Assertions.assertEquals("Cod", jq("@listitem:first @listcell:eq(1)").text());
 
 		openColumnMenu(jq("@listheader:eq(1)"));
 		click(jq("@menuitem:contains(Sort Descending)"));
 		waitResponse();
-		Assert.assertEquals("Shrimp",jq("@listitem:first @listcell:eq(1)").text());
+		Assertions.assertEquals("Shrimp",jq("@listitem:first @listcell:eq(1)").text());
 
 		openColumnMenu(jq("@listheader:eq(1)"));
 		click(jq("@menuitem:contains(Group)"));
 		waitResponse();
-		Assert.assertEquals(13, jq("@listgroup").length());
+		Assertions.assertEquals(13, jq("@listgroup").length());
 
 		openColumnMenu(jq("@listheader:eq(1)"));
 		click(jq("@menuitem:contains(Category)"));
 		waitResponse();
-		Assert.assertEquals(0, jq("@listheader:contains(Category)").width());
+		Assertions.assertEquals(0, jq("@listheader:contains(Category)").width());
 	}
 
 	private void openColumnMenu(JQuery column) {

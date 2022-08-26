@@ -11,23 +11,22 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.ClassRule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 
-import org.junit.experimental.categories.Category;
+import org.zkoss.test.webdriver.ExternalZkXml;
+import org.zkoss.test.webdriver.ForkJVMTestOnly;
 import org.zkoss.zats.mimic.DesktopAgent;
-import org.zkoss.zktest.zats.ExternalZkXml;
-import org.zkoss.zktest.zats.ForkJVMTestOnly;
 import org.zkoss.zktest.zats.ZATSTestCase;
 
 /**
  * @author jameschu
  */
-@Category(ForkJVMTestOnly.class)
+@ForkJVMTestOnly
 public class F100_ZK_5024Test extends ZATSTestCase {
-	@ClassRule
+	@RegisterExtension
 	public static final ExternalZkXml CONFIG = new ExternalZkXml("/test2/F100-ZK-5024-zk.xml");
 
 	@Test

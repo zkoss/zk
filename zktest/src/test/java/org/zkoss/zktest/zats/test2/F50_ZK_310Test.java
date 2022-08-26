@@ -11,13 +11,14 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author rudyhuang
@@ -48,41 +49,41 @@ public class F50_ZK_310Test extends WebDriverTestCase {
 		click(jq("@button:contains(resize):first"));
 		waitResponse();
 
-		Assert.assertThat(getGridFirstColumnWidth("grid"), greaterThan(gridWidthBefore));
-		Assert.assertThat(getGridFirstColumnWidth("grid2"), greaterThan(grid2WidthBefore));
-		Assert.assertThat(getGridFirstColumnWidth("grid3"), greaterThan(grid3WidthBefore));
-		Assert.assertThat(getGridFirstColumnWidth("grid4"), greaterThan(grid4WidthBefore));
-		Assert.assertThat(getGridFirstColumnWidth("grid5"), greaterThan(grid5WidthBefore));
-		Assert.assertThat(getListboxFirstColumnWidth("listbox"), greaterThan(listboxWidthBefore));
-		Assert.assertThat(getListboxFirstColumnWidth("listbox2"), greaterThan(listbox2WidthBefore));
-		Assert.assertThat(getListboxFirstColumnWidth("listbox3"), greaterThan(listbox3WidthBefore));
-		Assert.assertThat(getListboxFirstColumnWidth("listbox4"), greaterThan(listbox4WidthBefore));
-		Assert.assertThat(getListboxFirstColumnWidth("listbox5"), greaterThan(listbox5WidthBefore));
-		Assert.assertThat(getTreeFirstColumnWidth("tree"), greaterThan(treeWidthBefore));
-		Assert.assertThat(getTreeFirstColumnWidth("tree2"), greaterThan(tree2WidthBefore));
-		Assert.assertThat(getTreeFirstColumnWidth("tree3"), greaterThan(tree3WidthBefore));
-		Assert.assertThat(getTreeFirstColumnWidth("tree4"), greaterThan(tree4WidthBefore));
-		Assert.assertThat(getTreeFirstColumnWidth("tree5"), greaterThan(tree5WidthBefore));
+		assertThat(getGridFirstColumnWidth("grid"), greaterThan(gridWidthBefore));
+		assertThat(getGridFirstColumnWidth("grid2"), greaterThan(grid2WidthBefore));
+		assertThat(getGridFirstColumnWidth("grid3"), greaterThan(grid3WidthBefore));
+		assertThat(getGridFirstColumnWidth("grid4"), greaterThan(grid4WidthBefore));
+		assertThat(getGridFirstColumnWidth("grid5"), greaterThan(grid5WidthBefore));
+		assertThat(getListboxFirstColumnWidth("listbox"), greaterThan(listboxWidthBefore));
+		assertThat(getListboxFirstColumnWidth("listbox2"), greaterThan(listbox2WidthBefore));
+		assertThat(getListboxFirstColumnWidth("listbox3"), greaterThan(listbox3WidthBefore));
+		assertThat(getListboxFirstColumnWidth("listbox4"), greaterThan(listbox4WidthBefore));
+		assertThat(getListboxFirstColumnWidth("listbox5"), greaterThan(listbox5WidthBefore));
+		assertThat(getTreeFirstColumnWidth("tree"), greaterThan(treeWidthBefore));
+		assertThat(getTreeFirstColumnWidth("tree2"), greaterThan(tree2WidthBefore));
+		assertThat(getTreeFirstColumnWidth("tree3"), greaterThan(tree3WidthBefore));
+		assertThat(getTreeFirstColumnWidth("tree4"), greaterThan(tree4WidthBefore));
+		assertThat(getTreeFirstColumnWidth("tree5"), greaterThan(tree5WidthBefore));
 
 		click(jq("@button:contains(remove last)"));
 		waitResponse();
 		click(jq("@button:contains(resize):first"));
 		waitResponse();
-		Assert.assertEquals(gridWidthBefore, getGridFirstColumnWidth("grid"));
-		Assert.assertEquals(grid2WidthBefore, getGridFirstColumnWidth("grid2"));
-		Assert.assertEquals(grid3WidthBefore, getGridFirstColumnWidth("grid3"));
-		Assert.assertEquals(grid4WidthBefore, getGridFirstColumnWidth("grid4"));
-		Assert.assertEquals(grid5WidthBefore, getGridFirstColumnWidth("grid5"));
-		Assert.assertEquals(listboxWidthBefore, getListboxFirstColumnWidth("listbox"));
-		Assert.assertEquals(listbox2WidthBefore, getListboxFirstColumnWidth("listbox2"));
-		Assert.assertEquals(listbox3WidthBefore, getListboxFirstColumnWidth("listbox3"));
-		Assert.assertEquals(listbox4WidthBefore, getListboxFirstColumnWidth("listbox4"));
-		Assert.assertEquals(listbox5WidthBefore, getListboxFirstColumnWidth("listbox5"));
-		Assert.assertEquals(treeWidthBefore, getTreeFirstColumnWidth("tree"));
-		Assert.assertEquals(tree5WidthBefore, getTreeFirstColumnWidth("tree2"), 1);
-		Assert.assertEquals(tree4WidthBefore, getTreeFirstColumnWidth("tree3"), 1);
-		Assert.assertEquals(tree3WidthBefore, getTreeFirstColumnWidth("tree4"), 1);
-		Assert.assertEquals(tree5WidthBefore, getTreeFirstColumnWidth("tree5"), 1);
+		Assertions.assertEquals(gridWidthBefore, getGridFirstColumnWidth("grid"));
+		Assertions.assertEquals(grid2WidthBefore, getGridFirstColumnWidth("grid2"));
+		Assertions.assertEquals(grid3WidthBefore, getGridFirstColumnWidth("grid3"));
+		Assertions.assertEquals(grid4WidthBefore, getGridFirstColumnWidth("grid4"));
+		Assertions.assertEquals(grid5WidthBefore, getGridFirstColumnWidth("grid5"));
+		Assertions.assertEquals(listboxWidthBefore, getListboxFirstColumnWidth("listbox"));
+		Assertions.assertEquals(listbox2WidthBefore, getListboxFirstColumnWidth("listbox2"));
+		Assertions.assertEquals(listbox3WidthBefore, getListboxFirstColumnWidth("listbox3"));
+		Assertions.assertEquals(listbox4WidthBefore, getListboxFirstColumnWidth("listbox4"));
+		Assertions.assertEquals(listbox5WidthBefore, getListboxFirstColumnWidth("listbox5"));
+		Assertions.assertEquals(treeWidthBefore, getTreeFirstColumnWidth("tree"));
+		Assertions.assertEquals(tree5WidthBefore, getTreeFirstColumnWidth("tree2"), 1);
+		Assertions.assertEquals(tree4WidthBefore, getTreeFirstColumnWidth("tree3"), 1);
+		Assertions.assertEquals(tree3WidthBefore, getTreeFirstColumnWidth("tree4"), 1);
+		Assertions.assertEquals(tree5WidthBefore, getTreeFirstColumnWidth("tree5"), 1);
 	}
 
 	private int getGridFirstColumnWidth(String id) {
@@ -105,10 +106,10 @@ public class F50_ZK_310Test extends WebDriverTestCase {
 		int width = innerDiv.outerWidth();
 		click(jq("@button:contains(enlarge)"));
 		waitResponse();
-		Assert.assertThat(innerDiv.outerWidth(), greaterThan(width));
+		assertThat(innerDiv.outerWidth(), greaterThan(width));
 
 		click(jq("@button:contains(resize back)"));
 		waitResponse();
-		Assert.assertEquals(width, innerDiv.outerWidth());
+		Assertions.assertEquals(width, innerDiv.outerWidth());
 	}
 }

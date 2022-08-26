@@ -11,16 +11,18 @@ Copyright (C) 2014 Potix Corporation. All Rights Reserved.
  */
 package org.zkoss.zktest.zats.zuti.simple;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
-import org.zkoss.zul.Label;
 import org.zkoss.zktest.zats.zuti.ZutiBasicTestCase;
 import org.zkoss.zktest.zats.zuti.verifier.NullShadowRoot;
+import org.zkoss.zul.Label;
 
 /**
  * @author jumperchen

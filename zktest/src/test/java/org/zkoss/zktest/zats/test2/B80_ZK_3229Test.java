@@ -7,8 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 import org.zkoss.bind.proxy.ProxyHelper;
 
 public class B80_ZK_3229Test {
@@ -23,21 +24,21 @@ public class B80_ZK_3229Test {
 		pojo.getTestMap().put(key1, VALUE1);
 		pojo.getTestMap().put(key2, VALUE2);
 
-		Assert.assertTrue(pojo.getTestMap().keySet().contains(key1));
-		Assert.assertTrue(pojo.getTestMap().keySet().contains(key2));
-		Assert.assertTrue(pojo.getTestMap().containsKey(key1));
-		Assert.assertTrue(pojo.getTestMap().containsKey(key2));
-		Assert.assertEquals(VALUE1, pojo.getTestMap().get(key1));
-		Assert.assertEquals(VALUE2, pojo.getTestMap().get(key2));
+		Assertions.assertTrue(pojo.getTestMap().keySet().contains(key1));
+		Assertions.assertTrue(pojo.getTestMap().keySet().contains(key2));
+		Assertions.assertTrue(pojo.getTestMap().containsKey(key1));
+		Assertions.assertTrue(pojo.getTestMap().containsKey(key2));
+		Assertions.assertEquals(VALUE1, pojo.getTestMap().get(key1));
+		Assertions.assertEquals(VALUE2, pojo.getTestMap().get(key2));
 		
 		Pojo pojoProxy = ProxyHelper.createProxyIfAny(pojo);
 
-		Assert.assertTrue(pojoProxy.getTestMap().keySet().contains(key1));
-		Assert.assertTrue(pojoProxy.getTestMap().keySet().contains(key2));
-		Assert.assertTrue(pojoProxy.getTestMap().containsKey(key1));
-		Assert.assertTrue(pojoProxy.getTestMap().containsKey(key2));
-		Assert.assertEquals(VALUE1, pojoProxy.getTestMap().get(key1));
-		Assert.assertEquals(VALUE2, pojoProxy.getTestMap().get(key2));
+		Assertions.assertTrue(pojoProxy.getTestMap().keySet().contains(key1));
+		Assertions.assertTrue(pojoProxy.getTestMap().keySet().contains(key2));
+		Assertions.assertTrue(pojoProxy.getTestMap().containsKey(key1));
+		Assertions.assertTrue(pojoProxy.getTestMap().containsKey(key2));
+		Assertions.assertEquals(VALUE1, pojoProxy.getTestMap().get(key1));
+		Assertions.assertEquals(VALUE2, pojoProxy.getTestMap().get(key2));
 	}
 
 	@Test
@@ -48,17 +49,17 @@ public class B80_ZK_3229Test {
 		pojo.getTestList().add(key1);
 		pojo.getTestList().add(key2);
 		
-		Assert.assertTrue(pojo.getTestList().contains(key1));
-		Assert.assertTrue(pojo.getTestList().contains(key2));
-		Assert.assertEquals(0, pojo.getTestList().indexOf(key1));
-		Assert.assertEquals(1, pojo.getTestList().indexOf(key2));
+		Assertions.assertTrue(pojo.getTestList().contains(key1));
+		Assertions.assertTrue(pojo.getTestList().contains(key2));
+		Assertions.assertEquals(0, pojo.getTestList().indexOf(key1));
+		Assertions.assertEquals(1, pojo.getTestList().indexOf(key2));
 		
 		Pojo pojoProxy = ProxyHelper.createProxyIfAny(pojo);
 		
-		Assert.assertTrue(pojoProxy.getTestList().contains(key1));
-		Assert.assertTrue(pojoProxy.getTestList().contains(key2));
-		Assert.assertEquals(0, pojoProxy.getTestList().indexOf(key1));
-		Assert.assertEquals(1, pojoProxy.getTestList().indexOf(key2));
+		Assertions.assertTrue(pojoProxy.getTestList().contains(key1));
+		Assertions.assertTrue(pojoProxy.getTestList().contains(key2));
+		Assertions.assertEquals(0, pojoProxy.getTestList().indexOf(key1));
+		Assertions.assertEquals(1, pojoProxy.getTestList().indexOf(key2));
 	}
 
 	@Test
@@ -69,18 +70,18 @@ public class B80_ZK_3229Test {
 		pojo.getTestSet().add(key1);
 		pojo.getTestSet().add(key2);
 		
-		Assert.assertTrue(pojo.getTestSet().contains(key1));
-		Assert.assertTrue(pojo.getTestSet().contains(key2));
+		Assertions.assertTrue(pojo.getTestSet().contains(key1));
+		Assertions.assertTrue(pojo.getTestSet().contains(key2));
 		
 		Pojo pojoProxy = ProxyHelper.createProxyIfAny(pojo);
 		
-		Assert.assertTrue(pojoProxy.getTestSet().contains(key1));
-		Assert.assertTrue(pojoProxy.getTestSet().contains(key2));
+		Assertions.assertTrue(pojoProxy.getTestSet().contains(key1));
+		Assertions.assertTrue(pojoProxy.getTestSet().contains(key2));
 		
-		Assert.assertTrue(pojoProxy.getTestSet().remove(key1));
-		Assert.assertTrue(pojoProxy.getTestSet().remove(key2));
-		Assert.assertFalse(pojoProxy.getTestSet().remove(key1));
-		Assert.assertFalse(pojoProxy.getTestSet().remove(key2));
+		Assertions.assertTrue(pojoProxy.getTestSet().remove(key1));
+		Assertions.assertTrue(pojoProxy.getTestSet().remove(key2));
+		Assertions.assertFalse(pojoProxy.getTestSet().remove(key1));
+		Assertions.assertFalse(pojoProxy.getTestSet().remove(key2));
 	}
 	
 	public static class Pojo {

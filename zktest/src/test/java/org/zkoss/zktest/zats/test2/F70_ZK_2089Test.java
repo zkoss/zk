@@ -11,15 +11,16 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.matchesRegex;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.support.ui.Select;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author rudyhuang
@@ -72,14 +73,14 @@ public class F70_ZK_2089Test extends WebDriverTestCase {
 		click(lb.find("@listitem:eq(0)"));
 		waitResponse();
 		if (isPagingMold && hasModel) // Spec: https://www.zkoss.org/wiki/ZK_Component_Reference/Events/SelectEvent#Get_the_Unselected_Items
-			Assert.assertEquals("Unselection items: []", jq(widget(lb).nextSibling()).text());
+			Assertions.assertEquals("Unselection items: []", jq(widget(lb).nextSibling()).text());
 		else
-			Assert.assertThat(jq(widget(lb).nextSibling()).text(), matchesRegex("Unselection items: \\[<Listitem \\w{5,}>]"));
+			assertThat(jq(widget(lb).nextSibling()).text(), matchesRegex("Unselection items: \\[<Listitem \\w{5,}>]"));
 
 		if (hasModel)
-			Assert.assertEquals("Unselection objects: [test1]", jq(widget(lb).nextSibling().nextSibling().nextSibling()).text());
+			Assertions.assertEquals("Unselection objects: [test1]", jq(widget(lb).nextSibling().nextSibling().nextSibling()).text());
 		else
-			Assert.assertEquals("Unselection objects: []", jq(widget(lb).nextSibling().nextSibling().nextSibling()).text());
+			Assertions.assertEquals("Unselection objects: []", jq(widget(lb).nextSibling().nextSibling().nextSibling()).text());
 	}
 
 	private void testTree(JQuery tr, boolean hasModel, boolean isPagingMold) {
@@ -93,14 +94,14 @@ public class F70_ZK_2089Test extends WebDriverTestCase {
 		click(tr.find("@treerow:eq(0)"));
 		waitResponse();
 		if (isPagingMold && hasModel) // Spec: https://www.zkoss.org/wiki/ZK_Component_Reference/Events/SelectEvent#Get_the_Unselected_Items
-			Assert.assertEquals("Unselection items: []", jq(widget(tr).nextSibling()).text());
+			Assertions.assertEquals("Unselection items: []", jq(widget(tr).nextSibling()).text());
 		else
-			Assert.assertThat(jq(widget(tr).nextSibling()).text(), matchesRegex("Unselection items: \\[<Treeitem \\w{5,}>]"));
+			assertThat(jq(widget(tr).nextSibling()).text(), matchesRegex("Unselection items: \\[<Treeitem \\w{5,}>]"));
 
 		if (hasModel)
-			Assert.assertEquals("Unselection objects: [test 1]", jq(widget(tr).nextSibling().nextSibling().nextSibling()).text());
+			Assertions.assertEquals("Unselection objects: [test 1]", jq(widget(tr).nextSibling().nextSibling().nextSibling()).text());
 		else
-			Assert.assertEquals("Unselection objects: []", jq(widget(tr).nextSibling().nextSibling().nextSibling()).text());
+			Assertions.assertEquals("Unselection objects: []", jq(widget(tr).nextSibling().nextSibling().nextSibling()).text());
 	}
 
 	private void testChosenbox(JQuery cb) {
@@ -111,8 +112,8 @@ public class F70_ZK_2089Test extends WebDriverTestCase {
 
 		click(jq(".z-chosenbox-item:eq(0) .z-chosenbox-delete"));
 		waitResponse();
-		Assert.assertEquals("Unselection items: []", jq(widget(cb).nextSibling()).text());
-		Assert.assertEquals("Unselection objects: [test1]", jq(widget(cb).nextSibling().nextSibling().nextSibling()).text());
+		Assertions.assertEquals("Unselection items: []", jq(widget(cb).nextSibling()).text());
+		Assertions.assertEquals("Unselection objects: [test1]", jq(widget(cb).nextSibling().nextSibling().nextSibling()).text());
 	}
 
 	private void testSelectbox(JQuery sb) {
@@ -121,14 +122,14 @@ public class F70_ZK_2089Test extends WebDriverTestCase {
 		waitResponse();
 		select.selectByVisibleText("test2");
 		waitResponse();
-		Assert.assertEquals("Unselection items: []", jq(widget(sb).nextSibling()).text());
-		Assert.assertEquals("Unselection objects: [test1]", jq(widget(sb).nextSibling().nextSibling().nextSibling()).text());
+		Assertions.assertEquals("Unselection items: []", jq(widget(sb).nextSibling()).text());
+		Assertions.assertEquals("Unselection objects: [test1]", jq(widget(sb).nextSibling().nextSibling().nextSibling()).text());
 	}
 
 	private void testCombobox(JQuery cb) {
 		selectComboitem(cb.toWidget(), 0);
 		selectComboitem(cb.toWidget(), 1);
-		Assert.assertThat(jq(widget(cb).nextSibling()).text(), matchesRegex("Unselection items: \\[<Comboitem \\w{5,}>]"));
-		Assert.assertEquals("Unselection objects: [test1]", jq(widget(cb).nextSibling().nextSibling().nextSibling()).text());
+		assertThat(jq(widget(cb).nextSibling()).text(), matchesRegex("Unselection items: \\[<Comboitem \\w{5,}>]"));
+		Assertions.assertEquals("Unselection objects: [test1]", jq(widget(cb).nextSibling().nextSibling().nextSibling()).text());
 	}
 }

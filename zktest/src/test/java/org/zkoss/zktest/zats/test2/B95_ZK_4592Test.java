@@ -11,9 +11,10 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 public class B95_ZK_4592Test extends WebDriverTestCase {
 	@Test
@@ -25,6 +26,7 @@ public class B95_ZK_4592Test extends WebDriverTestCase {
 
 		click(jq("$btn2"));
 		waitResponse();
-		Assert.assertTrue("btn2 should be clickable after the caochmark is detached", isZKLogAvailable());
+		Assertions.assertTrue(isZKLogAvailable(),
+				"btn2 should be clickable after the caochmark is detached");
 	}
 }

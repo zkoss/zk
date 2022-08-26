@@ -11,12 +11,12 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.interactions.Actions;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -51,21 +51,21 @@ public class F60_ZK_448Test extends WebDriverTestCase {
 		actions.sendKeys(Keys.RIGHT).perform();
 		waitResponse();
 		String color2 = jq(".z-colorpalette-input:visible").val();
-		Assert.assertNotEquals(color, color2);
+		Assertions.assertNotEquals(color, color2);
 
 		actions.sendKeys(Keys.DOWN).perform();
 		waitResponse();
 		String color3 = jq(".z-colorpalette-input:visible").val();
-		Assert.assertNotEquals(color2, color3);
+		Assertions.assertNotEquals(color2, color3);
 
 		actions.sendKeys(Keys.LEFT).perform();
 		waitResponse();
 		String color4 = jq(".z-colorpalette-input:visible").val();
-		Assert.assertNotEquals(color3, color4);
+		Assertions.assertNotEquals(color3, color4);
 
 		actions.sendKeys(Keys.UP).perform();
 		waitResponse();
 		String color5 = jq(".z-colorpalette-input:visible").val();
-		Assert.assertEquals(color, color5);
+		Assertions.assertEquals(color, color5);
 	}
 }

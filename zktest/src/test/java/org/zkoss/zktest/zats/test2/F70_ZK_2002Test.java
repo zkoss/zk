@@ -17,8 +17,8 @@ import static org.hamcrest.Matchers.startsWith;
 import java.util.List;
 
 import org.hamcrest.MatcherAssert;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
@@ -39,15 +39,15 @@ public class F70_ZK_2002Test extends ZATSTestCase {
 		final DesktopAgent desktop = connect();
 		final List<ComponentAgent> tabboxes = desktop.queryAll("tabbox");
 
-		Assert.assertEquals(0, tabboxes.get(0).as(Tabbox.class).getSelectedIndex());
-		Assert.assertEquals(1, tabboxes.get(1).as(Tabbox.class).getSelectedIndex());
+		Assertions.assertEquals(0, tabboxes.get(0).as(Tabbox.class).getSelectedIndex());
+		Assertions.assertEquals(1, tabboxes.get(1).as(Tabbox.class).getSelectedIndex());
 
 		final Tabbox tabbox3 = tabboxes.get(2).as(Tabbox.class);
-		Assert.assertEquals(2, tabbox3.getSelectedIndex());
+		Assertions.assertEquals(2, tabbox3.getSelectedIndex());
 		final Caption caption = tabbox3.getSelectedTab().getCaption();
-		Assert.assertNotNull("Should have a caption in a tab", caption);
+		Assertions.assertNotNull(caption, "Should have a caption in a tab");
 		MatcherAssert.assertThat("Should have a button in a caption", caption.getLastChild(), instanceOf(Button.class));
-		Assert.assertEquals("background:green", ((Div) tabbox3.getSelectedPanel().getFirstChild()).getStyle());
+		Assertions.assertEquals("background:green", ((Div) tabbox3.getSelectedPanel().getFirstChild()).getStyle());
 
 		final Tabbox tabbox4 = tabboxes.get(3).as(Tabbox.class);
 		MatcherAssert.assertThat(tabbox4.getSelectedTab().getLabel(), startsWith("New --"));
@@ -55,18 +55,18 @@ public class F70_ZK_2002Test extends ZATSTestCase {
 
 		final List<ComponentAgent> buttons = desktop.queryAll("hlayout ~ button");
 		buttons.get(0).click();
-		Assert.assertEquals(4, tabbox4.getTabs().getChildren().size());
-		Assert.assertEquals("New -- Tab4", ((Tab) tabbox4.getTabs().getLastChild()).getLabel());
+		Assertions.assertEquals(4, tabbox4.getTabs().getChildren().size());
+		Assertions.assertEquals("New -- Tab4", ((Tab) tabbox4.getTabs().getLastChild()).getLabel());
 		buttons.get(1).click();
-		Assert.assertEquals(3, tabbox4.getTabs().getChildren().size());
-		Assert.assertEquals("New -- Tab2", ((Tab) tabbox4.getTabs().getFirstChild()).getLabel());
+		Assertions.assertEquals(3, tabbox4.getTabs().getChildren().size());
+		Assertions.assertEquals("New -- Tab2", ((Tab) tabbox4.getTabs().getFirstChild()).getLabel());
 		buttons.get(2).click();
-		Assert.assertEquals(2, tabbox4.getTabs().getChildren().size());
-		Assert.assertEquals("New -- Model 1", ((Tab) tabbox4.getTabs().getFirstChild()).getLabel());
+		Assertions.assertEquals(2, tabbox4.getTabs().getChildren().size());
+		Assertions.assertEquals("New -- Model 1", ((Tab) tabbox4.getTabs().getFirstChild()).getLabel());
 		buttons.get(3).click();
-		Assert.assertEquals(1, tabbox4.getSelectedIndex());
+		Assertions.assertEquals(1, tabbox4.getSelectedIndex());
 		tabboxes.get(3).query("tab:first-child").select();
 		buttons.get(4).click();
-		Assert.assertEquals("[Model 1]", desktop.getZkLog().get(0));
+		Assertions.assertEquals("[Model 1]", desktop.getZkLog().get(0));
 	}
 }

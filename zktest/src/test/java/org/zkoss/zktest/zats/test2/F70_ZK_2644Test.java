@@ -11,11 +11,11 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -31,6 +31,6 @@ public class F70_ZK_2644Test extends WebDriverTestCase {
 		waitResponse();
 		getActions().keyDown(Keys.CONTROL).sendKeys("k").keyUp(Keys.CONTROL).perform();
 		waitResponse();
-		Assert.assertEquals("keydown", getZKLog());
+		Assertions.assertEquals("keydown", getZKLog());
 	}
 }

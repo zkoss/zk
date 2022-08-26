@@ -11,10 +11,11 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class F96_ZK_4863Test extends WebDriverTestCase {
 	@Test
@@ -35,23 +36,23 @@ public class F96_ZK_4863Test extends WebDriverTestCase {
 		waitResponse();
 		type(tbg, "aaa");
 		waitResponse();
-		Assert.assertTrue(hasError());
+		Assertions.assertTrue(hasError());
 		click(tbg);
 		waitResponse();
 		type(tbg, "AAA");
 		waitResponse();
-		Assert.assertFalse(hasError());
+		Assertions.assertFalse(hasError());
 		
 		// invalid flag(abc) test
 		click(jq("@button:contains(invalid flags)"));
 		waitResponse();
-		Assert.assertTrue(hasError());
+		Assertions.assertTrue(hasError());
 		click(jq(".z-icon-times")); // close error
 		waitResponse();
 		// unsupported flag(y) test
 		click(jq("@button:contains(unsupported flags)"));
 		waitResponse();
-		Assert.assertTrue(hasError());
+		Assertions.assertTrue(hasError());
 	}
 	
 	private void giuTextboxTest(String input, boolean errorExpected) {
@@ -62,12 +63,12 @@ public class F96_ZK_4863Test extends WebDriverTestCase {
 			type(textbox, input);
 			waitResponse();
 		}
-		if (errorExpected == true) { // shall see 8 errorbox
-			Assert.assertEquals(8, jq("@errorbox").length());
+		if (errorExpected) { // shall see 8 errorbox
+			Assertions.assertEquals(8, jq("@errorbox").length());
 		} else { // check server validation if client side pass
 			click(jq("@button:contains(server test)"));
 			waitResponse();
-			Assert.assertFalse(hasError());
+			Assertions.assertFalse(hasError());
 		}
 	}
 }

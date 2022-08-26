@@ -1,9 +1,10 @@
 package org.zkoss.zktest.zats.test2;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import org.zkoss.bind.annotation.Transient;
 import org.zkoss.bind.proxy.ProxyHelper;
 
@@ -11,7 +12,7 @@ public class B85_ZK_3556Test {
 
 	private PojoWithTransientField pojo;
 
-	@Before
+	@BeforeEach
 	public void setup() {
 		pojo = new PojoWithTransientField("Peter", "Test");
 	}

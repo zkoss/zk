@@ -14,12 +14,12 @@ package org.zkoss.zktest.zats.test2;
 import static org.hamcrest.Matchers.containsString;
 
 import org.hamcrest.MatcherAssert;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.chrome.ChromeOptions;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author rudyhuang
@@ -39,11 +39,11 @@ public class B96_ZK_4857Test extends WebDriverTestCase {
 		final JQuery target = jq("@div");
 		rightClick(target);
 		waitResponse();
-		Assert.assertTrue(jq("@menupopup").isVisible());
+		Assertions.assertTrue(jq("@menupopup").isVisible());
 
 		dblClick(target);
 		waitResponse();
-		Assert.assertTrue(isZKLogAvailable());
+		Assertions.assertTrue(isZKLogAvailable());
 		MatcherAssert.assertThat(getZKLog(), containsString("onDoubleClick"));
 	}
 }

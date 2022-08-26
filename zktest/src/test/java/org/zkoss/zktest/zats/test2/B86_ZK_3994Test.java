@@ -11,13 +11,13 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author rudyhuang
@@ -47,17 +47,17 @@ public class B86_ZK_3994Test extends WebDriverTestCase {
 	}
 
 	private void testMeshWidgetHide(String header, String column) {
-		assertEquals(header + " h1 should be invisible", 0, getWidth(jq(header + ":contains(h1)")));
-		assertNotEquals(header + " h2 should be visible", 0, getWidth(jq(header + ":contains(h2)")));
-		assertEquals(column + " c1 should be invisible", 0, getWidth(jq(column + ":contains(c1)")));
-		assertNotEquals(column + " c2 should be visible", 0, getWidth(jq(column + ":contains(c2)")));
+		assertEquals(0, getWidth(jq(header + ":contains(h1)")), header + " h1 should be invisible");
+		assertNotEquals(0, getWidth(jq(header + ":contains(h2)")), header + " h2 should be visible");
+		assertEquals(0, getWidth(jq(column + ":contains(c1)")), column + " c1 should be invisible");
+		assertNotEquals(0, getWidth(jq(column + ":contains(c2)")), column + " c2 should be visible");
 	}
 
 	private void testMeshWidgetShow(String header, String column) {
-		assertNotEquals(header + " h1 should be visible", 0, getWidth(jq(header + ":contains(h1)")));
-		assertNotEquals(header + " h2 should be visible", 0, getWidth(jq(header + ":contains(h2)")));
-		assertEquals(column + " c1 should be invisible", 0, getWidth(jq(column + ":contains(c1)")));
-		assertNotEquals(column + " c2 should be visible", 0, getWidth(jq(column + ":contains(c2)")));
+		assertNotEquals(0, getWidth(jq(header + ":contains(h1)")), header + " h1 should be visible");
+		assertNotEquals(0, getWidth(jq(header + ":contains(h2)")), header + " h2 should be visible");
+		assertEquals(0, getWidth(jq(column + ":contains(c1)")), column + " c1 should be invisible");
+		assertNotEquals(0, getWidth(jq(column + ":contains(c2)")), column + " c2 should be visible");
 	}
 
 	private int getWidth(JQuery elem) {

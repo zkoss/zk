@@ -11,10 +11,10 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 public class B86_ZK_4135Test extends WebDriverTestCase {
 	@Test
@@ -22,7 +22,7 @@ public class B86_ZK_4135Test extends WebDriverTestCase {
 		connect();
 		click(jq(".z-button").eq(1));
 		waitResponse();
-		Assert.assertFalse(jq(".z-frozen").exists());
-		Assert.assertFalse(isZKLogAvailable());
+		Assertions.assertFalse(jq(".z-frozen").exists());
+		Assertions.assertFalse(isZKLogAvailable());
 	}
 }

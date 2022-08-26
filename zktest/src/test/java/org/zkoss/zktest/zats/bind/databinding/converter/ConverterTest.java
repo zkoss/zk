@@ -10,17 +10,16 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.bind.databinding.converter;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.ClassRule;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 
+import org.zkoss.test.webdriver.ExternalZkXml;
+import org.zkoss.test.webdriver.ForkJVMTestOnly;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
-import org.zkoss.zktest.zats.ExternalZkXml;
-import org.zkoss.zktest.zats.ForkJVMTestOnly;
 import org.zkoss.zktest.zats.ZATSTestCase;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Textbox;
@@ -28,9 +27,9 @@ import org.zkoss.zul.Textbox;
 /**
  * @author jameschu
  */
-@Category(ForkJVMTestOnly.class)
+@ForkJVMTestOnly
 public class ConverterTest extends ZATSTestCase {
-	@ClassRule
+	@RegisterExtension
 	public static final ExternalZkXml CONFIG = new ExternalZkXml("/bind/databinding/converter/converter-zk.xml");
 
 	@Test
@@ -46,7 +45,7 @@ public class ConverterTest extends ZATSTestCase {
 		} catch (Exception e) {
 			exceptionOccur = true;
 		}
-		assertTrue("Should found a ParseException", exceptionOccur);
+		assertTrue(exceptionOccur, "Should found a ParseException");
 		exceptionOccur = false;
 		tb1_1Agent.input("2021/05/10");
 		Textbox tb1_1 = tb1_1Agent.as(Textbox.class);
@@ -59,7 +58,7 @@ public class ConverterTest extends ZATSTestCase {
 		} catch (Exception e) {
 			exceptionOccur = true;
 		}
-		assertTrue("Should found a ParseException", exceptionOccur);
+		assertTrue(exceptionOccur, "Should found a ParseException");
 		exceptionOccur = false;
 		tb1_2Agent.input("2021/05/09");
 		assertEquals("2021/05/09", msg1.getValue());

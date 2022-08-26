@@ -13,11 +13,11 @@ package org.zkoss.zktest.zats.test2;
 
 import java.util.Collections;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.chrome.ChromeOptions;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 public class B86_ZK_4201Test extends WebDriverTestCase {
 	@Override
@@ -34,6 +34,6 @@ public class B86_ZK_4201Test extends WebDriverTestCase {
 		waitResponse();
 		click(jq("@listcell:last"));
 		waitResponse();
-		Assert.assertNotEquals(0, jq(".z-listbox-body").scrollTop());
+		Assertions.assertNotEquals(0, jq(".z-listbox-body").scrollTop());
 	}
 }

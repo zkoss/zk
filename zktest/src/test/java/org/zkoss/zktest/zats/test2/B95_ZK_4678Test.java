@@ -13,11 +13,11 @@ package org.zkoss.zktest.zats.test2;
 
 import java.util.Collections;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.chrome.ChromeOptions;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -40,6 +40,6 @@ public class B95_ZK_4678Test extends WebDriverTestCase {
 				.dragAndDropBy(toElement(jq(".z-window-header-move")), 0, -100)
 				.perform();
 		assertNoJSError();
-		Assert.assertEquals(0, jq("html").scrollTop());
+		Assertions.assertEquals(0, jq("html").scrollTop());
 	}
 }

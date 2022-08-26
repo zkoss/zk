@@ -14,10 +14,10 @@ package org.zkoss.zktest.zats.test2;
 import static org.hamcrest.Matchers.containsString;
 
 import org.hamcrest.MatcherAssert;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -40,18 +40,18 @@ public class Z35_listgroup_0001Test extends WebDriverTestCase {
 		// data, head, foot
 		click(jq("@button:contains(data,head,foot)"));
 		waitResponse();
-		Assert.assertEquals("jq('tr.z-listgroupfoot').length(): ", 4, jq("tr.z-listgroupfoot").length());
+		Assertions.assertEquals(4, jq("tr.z-listgroupfoot").length(), "jq('tr.z-listgroupfoot').length(): ");
 
 		// not all foot
 		click(jq("@button:contains(not all foot)"));
 		waitResponse();
-		Assert.assertEquals("jq('tr.z-listgroupfoot').length(): ", 2, jq("tr.z-listgroupfoot").length());
+		Assertions.assertEquals(2, jq("tr.z-listgroupfoot").length(), "jq('tr.z-listgroupfoot').length(): ");
 		MatcherAssert.assertThat("jq('tr.z-listgroupfoot:eq(0)'): ", jq("tr.z-listgroupfoot:eq(0)").text(), containsString("A1"));
 
 		// not all foot 2
 		click(jq("@button:contains(not all foot 2)"));
 		waitResponse();
-		Assert.assertEquals("jq('tr.z-listgroupfoot').length(): ", 2, jq("tr.z-listgroupfoot").length());
+		Assertions.assertEquals(2, jq("tr.z-listgroupfoot").length(), "jq('tr.z-listgroupfoot').length(): ");
 		click(jq("tr.z-listgroup:eq(0)").toWidget().$n("img"));
 		waitResponse();
 		sleep(300);
@@ -60,11 +60,12 @@ public class Z35_listgroup_0001Test extends WebDriverTestCase {
 		// set Paging
 		click(jq("@button:contains(set Paging)"));
 		waitResponse();
-		Assert.assertTrue("Set paging failed", jq(".z-paging").exists());
+		Assertions.assertTrue(jq(".z-paging").exists(), "Set paging failed");
 
 		// invalidate
 		click(jq("@button:contains(invalidate)"));
 		waitResponse();
-		Assert.assertTrue("The screen cannot has any change after clicking invalidate", jq(".z-paging").exists());
+		Assertions.assertTrue(jq(".z-paging").exists(),
+				"The screen cannot has any change after clicking invalidate");
 	}
 }

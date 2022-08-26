@@ -11,10 +11,10 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -26,20 +26,20 @@ public class F61_ZK_969_1Test extends WebDriverTestCase {
 
 		click(jq("@button:eq(0)"));
 		waitResponse();
-		Assert.assertEquals("Center", jq(".z-center-header").text());
+		Assertions.assertEquals("Center", jq(".z-center-header").text());
 
 		click(jq("@button:eq(1)"));
 		waitResponse();
-		Assert.assertEquals("Center Label", jq(".z-center-body").text());
+		Assertions.assertEquals("Center Label", jq(".z-center-body").text());
 
 		click(jq("@button:eq(1)"));
 		waitResponse();
-		Assert.assertTrue(hasError());
+		Assertions.assertTrue(hasError());
 		click(jq(".z-messagebox-buttons .z-button"));
 		waitResponse();
 
 		click(jq("@button:eq(2)"));
 		waitResponse();
-		Assert.assertEquals("CenterTest", jq(".z-center-header").text());
+		Assertions.assertEquals("CenterTest", jq(".z-center-header").text());
 	}
 }

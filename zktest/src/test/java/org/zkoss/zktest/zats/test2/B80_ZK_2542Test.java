@@ -11,16 +11,17 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Method;
 import java.util.Collection;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.impl.BinderUtil;
 import org.zkoss.bind.sys.BinderCtrl;
@@ -35,7 +36,8 @@ import org.zkoss.zktest.zats.ZATSTestCase;
  * @author jumperchen
  */
 public class B80_ZK_2542Test extends ZATSTestCase {
-	@Test public void test() {
+	@Test
+	public void test() {
 		DesktopAgent desktop = connect();
 		ComponentAgent bind = desktop.query("#bind");
 		Binder binder = BinderUtil.getBinder(bind.getOwner());

@@ -11,21 +11,21 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.ClassRule;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.interactions.Actions;
 
-import org.zkoss.zktest.zats.ExternalZkXml;
-import org.zkoss.zktest.zats.ForkJVMTestOnly;
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.ExternalZkXml;
+import org.zkoss.test.webdriver.ForkJVMTestOnly;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
-@Category(ForkJVMTestOnly.class)
+@ForkJVMTestOnly
 public class F96_ZK_4524Test extends WebDriverTestCase {
-	@ClassRule
+	@RegisterExtension
 	public static final ExternalZkXml CONFIG = new ExternalZkXml("/test2/F96-4524-zk.xml");
 
 	@Test
@@ -36,10 +36,10 @@ public class F96_ZK_4524Test extends WebDriverTestCase {
 		click(jq("@button:eq(0)"));
 		waitResponse();
 		actions.sendKeys(Keys.TAB, "browser showBusy").perform();
-		Assert.assertEquals("", textbox1.val());
+		assertEquals("", textbox1.val());
 		sleep(3000);
 		sendKeys(textbox1, "browser showBusy");
-		Assert.assertEquals("browser showBusy", textbox1.val());
+		assertEquals("browser showBusy", textbox1.val());
 	}
 	@Test
 	public void testBrowserShowBusy() {
@@ -49,9 +49,9 @@ public class F96_ZK_4524Test extends WebDriverTestCase {
 		click(jq("@button:eq(1)"));
 		waitResponse();
 		actions.sendKeys(Keys.TAB, "browser showBusy").perform();
-		Assert.assertEquals("", textbox1.val());
+		assertEquals("", textbox1.val());
 		sleep(2000);
 		sendKeys(textbox1, "browser showBusy");
-		Assert.assertEquals("browser showBusy", textbox1.val());
+		assertEquals("browser showBusy", textbox1.val());
 	}
 }

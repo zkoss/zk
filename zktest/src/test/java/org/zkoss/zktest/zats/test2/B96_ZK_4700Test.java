@@ -11,9 +11,10 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 public class B96_ZK_4700Test extends WebDriverTestCase {
 	@Test
@@ -21,6 +22,6 @@ public class B96_ZK_4700Test extends WebDriverTestCase {
 		connect();
 		click(jq("@chosenbox:eq(1)").find(".z-chosenbox-inplace"));
 		waitResponse();
-		Assert.assertTrue(jq("@chosenbox:eq(0)").find(".z-chosenbox-item").hasClass("z-chosenbox-hide"));
+		Assertions.assertTrue(jq("@chosenbox:eq(0)").find(".z-chosenbox-item").hasClass("z-chosenbox-hide"));
 	}
 }

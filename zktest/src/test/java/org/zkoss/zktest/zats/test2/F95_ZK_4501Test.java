@@ -11,10 +11,10 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 public class F95_ZK_4501Test extends WebDriverTestCase {
 	@Test
@@ -28,10 +28,10 @@ public class F95_ZK_4501Test extends WebDriverTestCase {
 		
 		connect();
 		waitResponse();
-		Assert.assertEquals(initName, jq("@textbox").val());
-		Assert.assertEquals(initAge, jq("@intbox").val());
-		Assert.assertEquals(initName, jq("$fn").text());
-		Assert.assertEquals(initAge, jq("$fa").text());
+		Assertions.assertEquals(initName, jq("@textbox").val());
+		Assertions.assertEquals(initAge, jq("@intbox").val());
+		Assertions.assertEquals(initName, jq("$fn").text());
+		Assertions.assertEquals(initAge, jq("$fa").text());
 		
 		type(jq("@textbox"), editName);
 		waitResponse();
@@ -39,26 +39,26 @@ public class F95_ZK_4501Test extends WebDriverTestCase {
 		waitResponse();
 		click(jq("@label"));
 		waitResponse();
-		Assert.assertEquals(editName, jq("@textbox").val());
-		Assert.assertEquals(editAge, jq("@intbox").val());
-		Assert.assertEquals(editName, jq("$fn").text());
-		Assert.assertEquals(editAge, jq("$fa").text());
+		Assertions.assertEquals(editName, jq("@textbox").val());
+		Assertions.assertEquals(editAge, jq("@intbox").val());
+		Assertions.assertEquals(editName, jq("$fn").text());
+		Assertions.assertEquals(editAge, jq("$fa").text());
 		
 		click(jq("@button:contains(save)"));
 		waitResponse();
-		Assert.assertEquals(editName, jq("$on").text());
-		Assert.assertEquals(editAge, jq("$oa").text());
+		Assertions.assertEquals(editName, jq("$on").text());
+		Assertions.assertEquals(editAge, jq("$oa").text());
 		
 		click(jq("@button:contains(set data in form)"));
 		waitResponse();
-		Assert.assertEquals(setName, jq("@textbox").val());
-		Assert.assertEquals(setAge, jq("@intbox").val());
-		Assert.assertEquals(setName, jq("$fn").text());
-		Assert.assertEquals(setAge, jq("$fa").text());
+		Assertions.assertEquals(setName, jq("@textbox").val());
+		Assertions.assertEquals(setAge, jq("@intbox").val());
+		Assertions.assertEquals(setName, jq("$fn").text());
+		Assertions.assertEquals(setAge, jq("$fa").text());
 		
 		click(jq("@button:contains(save)"));
 		waitResponse();
-		Assert.assertEquals(setName, jq("$on").text());
-		Assert.assertEquals(setAge, jq("$oa").text());
+		Assertions.assertEquals(setName, jq("$on").text());
+		Assertions.assertEquals(setAge, jq("$oa").text());
 	}
 }

@@ -11,10 +11,11 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.bind.databinding.collection;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class Collection_template_treeTest extends WebDriverTestCase {
 	@Test
@@ -26,7 +27,7 @@ public class Collection_template_treeTest extends WebDriverTestCase {
 			String indexString = treerow.find(".z-treecell-content:eq(0)>.z-treecell-text").text();
 			String name = treerow.find(".z-treecell-content:eq(1)").text();
 			String template = treerow.find(".z-treecell-content:eq(3)").text();
-			Assert.assertEquals((name.startsWith("A") || "1".equals(indexString)) ? "Model1" : "Model2" , template);
+			Assertions.assertEquals((name.startsWith("A") || "1".equals(indexString)) ? "Model1" : "Model2" , template);
 		}
 	}
 }

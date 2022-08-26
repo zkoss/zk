@@ -11,8 +11,8 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.bind.viewmodel.notification;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zktest.zats.ZATSTestCase;
@@ -27,7 +27,7 @@ public class NotifyChangeTest extends ZATSTestCase {
 		final DesktopAgent desktop = connect("/bind/viewmodel/notification/notifychange-self.zul");
 		desktop.query("#date1").type("2021/05/01");
 		desktop.query("#date2").type("2021/05/08");
-		Assert.assertEquals("7", desktop.query("#dur").as(Label.class).getValue());
+		Assertions.assertEquals("7", desktop.query("#dur").as(Label.class).getValue());
 	}
 
 	@Test
@@ -35,6 +35,6 @@ public class NotifyChangeTest extends ZATSTestCase {
 		final DesktopAgent desktop = connect("/bind/viewmodel/notification/notifychange-asterisk.zul");
 		desktop.query("#date1").type("2021/05/01");
 		desktop.query("#date2").type("2021/05/08");
-		Assert.assertNotEquals("7", desktop.query("#dur").as(Label.class).getValue());
+		Assertions.assertNotEquals("7", desktop.query("#dur").as(Label.class).getValue());
 	}
 }

@@ -11,10 +11,11 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class B90_ZK_4409Test extends WebDriverTestCase {
 	@Test
@@ -34,7 +35,7 @@ public class B90_ZK_4409Test extends WebDriverTestCase {
 		JQuery jqDiv = jq("$div1");
 		int combobuttonOffsetBottom = jqCombobutton.offsetTop() - jqCombobutton.outerHeight();
 		int divOffsetBottom = jqDiv.offsetTop() - jqDiv.outerHeight();
-		Assert.assertEquals(combobuttonOffsetBottom, combobuttonOffsetBottom);
+		Assertions.assertEquals(combobuttonOffsetBottom, combobuttonOffsetBottom);
 	}
 
 	private void checkButtonsAlign() {
@@ -42,6 +43,6 @@ public class B90_ZK_4409Test extends WebDriverTestCase {
 		JQuery jqButton = jq("@button").eq(0);
 		int combobuttonHorizontalCenterline = jqCombobutton.offsetTop() + jqCombobutton.outerHeight() / 2;
 		int buttonHorizontalCenterline = jqButton.offsetTop() + jqButton.outerHeight() / 2;
-		Assert.assertEquals(combobuttonHorizontalCenterline, buttonHorizontalCenterline, 1);
+		Assertions.assertEquals(combobuttonHorizontalCenterline, buttonHorizontalCenterline, 1);
 	}
 }

@@ -14,11 +14,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 package org.zkoss.zktest.zats.test2;
 
+import java.lang.reflect.InvocationTargetException;
+
 import org.apache.commons.beanutils.BeanUtils;
 import org.easymock.EasyMock;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
@@ -28,10 +31,22 @@ import org.zkoss.zkmax.zul.Chosenbox;
 import org.zkoss.zkmax.zul.Navitem;
 import org.zkoss.zkmax.zul.Timepicker;
 import org.zkoss.zktest.zats.ZATSTestCase;
-import org.zkoss.zul.*;
+import org.zkoss.zul.Button;
+import org.zkoss.zul.Checkbox;
+import org.zkoss.zul.Combobox;
+import org.zkoss.zul.Combobutton;
+import org.zkoss.zul.Comboitem;
+import org.zkoss.zul.Datebox;
+import org.zkoss.zul.Listbox;
+import org.zkoss.zul.Menuitem;
+import org.zkoss.zul.Paging;
+import org.zkoss.zul.Radio;
+import org.zkoss.zul.Selectbox;
+import org.zkoss.zul.Textbox;
+import org.zkoss.zul.Timebox;
+import org.zkoss.zul.Toolbarbutton;
+import org.zkoss.zul.Treeitem;
 import org.zkoss.zul.event.ZulEvents;
-
-import java.lang.reflect.InvocationTargetException;
 
 /**
  * 
@@ -42,7 +57,7 @@ public class B80_ZK_3283Test extends ZATSTestCase {
 
 	private InaccessibleWidgetBlockService blockService;
 
-	@Before
+	@BeforeEach
 	public void setup() {
 		blockService = new InaccessibleWidgetBlockService();
 	}
@@ -164,13 +179,13 @@ public class B80_ZK_3283Test extends ZATSTestCase {
 	private void testComponent(Component comp, String eventName, boolean shouldBlock) throws IllegalAccessException, InvocationTargetException {
 		AuRequest auRequest = createMockAuRequest(comp, eventName);
 		if (shouldBlock) {
-			Assert.assertFalse("'" + eventName + "' should be allowed on enabled '" + comp, blockService.service(auRequest, false));
+			Assertions.assertFalse(blockService.service(auRequest, false), "'" + eventName + "' should be allowed on enabled '" + comp);
 			BeanUtils.setProperty(comp, "disabled", true);
-			Assert.assertTrue("'" + eventName + "' should be blocked on disabled  '" + comp, blockService.service(auRequest, false));
+			Assertions.assertTrue(blockService.service(auRequest, false), "'" + eventName + "' should be blocked on disabled  '" + comp);
 		} else {
-			Assert.assertFalse("'" + eventName + "' should be allowed on enabled '" + comp, blockService.service(auRequest, false));
+			Assertions.assertFalse(blockService.service(auRequest, false), "'" + eventName + "' should be allowed on enabled '" + comp);
 			BeanUtils.setProperty(comp, "disabled", true);
-			Assert.assertFalse("'" + eventName + "' should still be allowed on disabled  '" + comp, blockService.service(auRequest, false));
+			Assertions.assertFalse(blockService.service(auRequest, false), "'" + eventName + "' should still be allowed on disabled  '" + comp);
 		}
 	}
 

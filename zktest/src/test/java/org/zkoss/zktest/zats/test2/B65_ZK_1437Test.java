@@ -1,18 +1,17 @@
 package org.zkoss.zktest.zats.test2;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import org.junit.Test;
-
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class B65_ZK_1437Test extends WebDriverTestCase {
 	@Test
@@ -38,7 +37,7 @@ public class B65_ZK_1437Test extends WebDriverTestCase {
 			fail();
 			return;
 		}
-		assertTrue("window3's title was changed to current time", current.after(past));
-		assertTrue("should not see any error message.", !jq(".z-errorbox").exists());
+		assertTrue(current.after(past), "window3's title was changed to current time");
+		assertTrue(!jq(".z-errorbox").exists(), "should not see any error message.");
     }
 }

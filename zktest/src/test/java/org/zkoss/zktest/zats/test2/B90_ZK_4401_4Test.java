@@ -11,11 +11,11 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author jameschu
@@ -28,21 +28,21 @@ public class B90_ZK_4401_4Test extends WebDriverTestCase {
 		JQuery jqResultDiv = jq("@div");
 		click(jqBtn.eq(0));
 		waitResponse();
-		Assert.assertEquals("3", jqResultDiv.find("@label").eq(3).html().trim());
+		Assertions.assertEquals("3", jqResultDiv.find("@label").eq(3).html().trim());
 		click(jqBtn.eq(1));
 		waitResponse();
-		Assert.assertEquals("3.1", jqResultDiv.find("@label").eq(4).html().trim());
+		Assertions.assertEquals("3.1", jqResultDiv.find("@label").eq(4).html().trim());
 		click(jqBtn.eq(2));
 		waitResponse();
-		Assert.assertEquals("3.2", jqResultDiv.find("@label").last().prev().html().trim());
+		Assertions.assertEquals("3.2", jqResultDiv.find("@label").last().prev().html().trim());
 		click(jqBtn.eq(3));
 		waitResponse();
-		Assert.assertEquals("4", jqResultDiv.find("@label").last().prev().html().trim());
+		Assertions.assertEquals("4", jqResultDiv.find("@label").last().prev().html().trim());
 		click(jqBtn.eq(4));
 		waitResponse();
-		Assert.assertEquals("3.1.3", jqResultDiv.find("@label").eq(7).html().trim());
+		Assertions.assertEquals("3.1.3", jqResultDiv.find("@label").eq(7).html().trim());
 		click(jqBtn.eq(5));
 		waitResponse();
-		Assert.assertEquals("3.1.1.1", jqResultDiv.find("@label").eq(6).html().trim());
+		Assertions.assertEquals("3.1.1.1", jqResultDiv.find("@label").eq(6).html().trim());
 	}
 }

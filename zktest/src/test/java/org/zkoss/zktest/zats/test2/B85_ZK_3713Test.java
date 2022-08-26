@@ -13,8 +13,8 @@ package org.zkoss.zktest.zats.test2;
 
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
@@ -30,7 +30,7 @@ public class B85_ZK_3713Test extends ZATSTestCase {
 		DesktopAgent desktop = connect();
 		List<ComponentAgent> lbls = desktop.queryAll("hlayout label");
 
-		Assert.assertEquals("result bean[fieldVariable]: ", lbls.get(0).as(Label.class).getValue());
-		Assert.assertEquals("value1", lbls.get(1).as(Label.class).getValue());
+		Assertions.assertEquals("result bean[fieldVariable]: ", lbls.get(0).as(Label.class).getValue());
+		Assertions.assertEquals("value1", lbls.get(1).as(Label.class).getValue());
 	}
 }

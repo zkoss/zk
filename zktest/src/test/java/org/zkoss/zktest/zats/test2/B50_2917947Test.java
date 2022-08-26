@@ -11,14 +11,14 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.lessThan;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.interactions.Actions;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author rudyhuang
@@ -47,6 +47,6 @@ public class B50_2917947Test extends WebDriverTestCase {
 				.release()
 				.perform();
 		int colWidthAfter = col.outerWidth();
-		Assert.assertThat("resize failed", colWidthAfter, lessThan(colWidth));
+		assertThat("resize failed", colWidthAfter, lessThan(colWidth));
 	}
 }

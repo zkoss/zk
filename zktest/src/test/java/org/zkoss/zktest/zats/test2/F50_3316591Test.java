@@ -11,11 +11,11 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author rudyhuang
@@ -32,7 +32,7 @@ public class F50_3316591Test extends WebDriverTestCase {
 		click(jq("body"));
 		waitResponse();
 		JQuery errorbox = jq("@errorbox");
-		Assert.assertTrue(errorbox.isVisible());
+		Assertions.assertTrue(errorbox.isVisible());
 
 		click(jq("@radio:contains(Before_Start)"));
 		waitResponse();
@@ -76,57 +76,57 @@ public class F50_3316591Test extends WebDriverTestCase {
 
 		click(jq("@radio:contains(Overlap):first"));
 		waitResponse();
-		Assert.assertEquals(textbox.offsetTop(), errorbox.offsetTop(), 1);
-		Assert.assertEquals(textbox.offsetLeft(), errorbox.offsetLeft(), 1);
+		Assertions.assertEquals(textbox.offsetTop(), errorbox.offsetTop(), 1);
+		Assertions.assertEquals(textbox.offsetLeft(), errorbox.offsetLeft(), 1);
 
 		click(jq("@radio:contains(Overlap_end)"));
 		waitResponse();
-		Assert.assertEquals(textbox.offsetTop(), errorbox.offsetTop(), 1);
-		Assert.assertEquals(textbox.offsetLeft() + textbox.innerWidth(), errorbox.offsetLeft() + errorbox.innerWidth(), 1);
+		Assertions.assertEquals(textbox.offsetTop(), errorbox.offsetTop(), 1);
+		Assertions.assertEquals(textbox.offsetLeft() + textbox.innerWidth(), errorbox.offsetLeft() + errorbox.innerWidth(), 1);
 
 		click(jq("@radio:contains(Overlap_before)"));
 		waitResponse();
-		Assert.assertEquals(textbox.offsetTop() + textbox.innerHeight() + ARROW_PADDING, errorbox.offsetTop() + errorbox.innerHeight(), 1);
-		Assert.assertEquals(textbox.offsetLeft(), errorbox.offsetLeft(), 1);
+		Assertions.assertEquals(textbox.offsetTop() + textbox.innerHeight() + ARROW_PADDING, errorbox.offsetTop() + errorbox.innerHeight(), 1);
+		Assertions.assertEquals(textbox.offsetLeft(), errorbox.offsetLeft(), 1);
 
 		click(jq("@radio:contains(Overlap_after)"));
 		waitResponse();
-		Assert.assertEquals(textbox.offsetTop() + textbox.innerHeight() + ARROW_PADDING, errorbox.offsetTop() + errorbox.innerHeight(), 1);
-		Assert.assertEquals(textbox.offsetLeft() + textbox.innerWidth(), errorbox.offsetLeft() + errorbox.innerWidth(), 1);
+		Assertions.assertEquals(textbox.offsetTop() + textbox.innerHeight() + ARROW_PADDING, errorbox.offsetTop() + errorbox.innerHeight(), 1);
+		Assertions.assertEquals(textbox.offsetLeft() + textbox.innerWidth(), errorbox.offsetLeft() + errorbox.innerWidth(), 1);
 	}
 
 	private void checkBefore_(JQuery textbox, JQuery errorbox) {
-		Assert.assertEquals(textbox.offsetTop() - errorbox.innerHeight(), errorbox.offsetTop(), 1);
+		Assertions.assertEquals(textbox.offsetTop() - errorbox.innerHeight(), errorbox.offsetTop(), 1);
 	}
 
 	private void checkAfter_(JQuery textbox, JQuery errorbox) {
-		Assert.assertEquals(textbox.offsetTop() + textbox.innerHeight(), errorbox.offsetTop(), 1);
+		Assertions.assertEquals(textbox.offsetTop() + textbox.innerHeight(), errorbox.offsetTop(), 1);
 	}
 
 	private void checkStart_(JQuery textbox, JQuery errorbox) {
-		Assert.assertEquals(textbox.offsetLeft() - errorbox.innerWidth(), errorbox.offsetLeft(), 1);
+		Assertions.assertEquals(textbox.offsetLeft() - errorbox.innerWidth(), errorbox.offsetLeft(), 1);
 	}
 
 	private void checkEnd_(JQuery textbox, JQuery errorbox) {
-		Assert.assertEquals(textbox.offsetLeft() + textbox.innerWidth(), errorbox.offsetLeft(), 1);
+		Assertions.assertEquals(textbox.offsetLeft() + textbox.innerWidth(), errorbox.offsetLeft(), 1);
 	}
 
 	private void check_Before(JQuery textbox, JQuery errorbox) {
-		Assert.assertEquals(textbox.offsetTop(), errorbox.offsetTop(), 1);
+		Assertions.assertEquals(textbox.offsetTop(), errorbox.offsetTop(), 1);
 	}
 
 	private void check_After(JQuery textbox, JQuery errorbox) {
-		Assert.assertEquals(
+		Assertions.assertEquals(
 				textbox.offsetTop() + textbox.innerHeight(),
 				errorbox.offsetTop() + errorbox.innerHeight(), 1);
 	}
 
 	private void check_Start(JQuery textbox, JQuery errorbox) {
-		Assert.assertEquals(textbox.offsetLeft(), errorbox.offsetLeft(), 1);
+		Assertions.assertEquals(textbox.offsetLeft(), errorbox.offsetLeft(), 1);
 	}
 
 	private void check_End(JQuery textbox, JQuery errorbox) {
-		Assert.assertEquals(
+		Assertions.assertEquals(
 				textbox.offsetLeft() + textbox.innerWidth(),
 				errorbox.offsetLeft() + errorbox.innerWidth() , 1);
 	}

@@ -13,11 +13,11 @@ package org.zkoss.zktest.zats.test2;
 
 import java.util.logging.Level;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.logging.LogType;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -36,6 +36,6 @@ public class B50_3010936Test extends WebDriverTestCase {
 				.stream()
 				.filter(entry -> entry.getLevel().intValue() >= Level.SEVERE.intValue())
 				.findFirst()
-				.ifPresent(logEntry -> Assert.fail(logEntry.toString()));
+				.ifPresent(logEntry -> Assertions.fail(logEntry.toString()));
 	}
 }

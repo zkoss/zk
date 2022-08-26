@@ -11,15 +11,14 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class B80_ZK_3346Test extends WebDriverTestCase {
 
@@ -43,10 +42,10 @@ public class B80_ZK_3346Test extends WebDriverTestCase {
 		widgets.forEach(widget -> {
 			click(button);
 			waitResponse();
-			Assert.assertTrue(popup.isVisible());
+			Assertions.assertTrue(popup.isVisible());
 			click(widget);
 			waitResponse();
-			Assert.assertFalse(popup.isVisible());
+			Assertions.assertFalse(popup.isVisible());
 		});
 	}
 }

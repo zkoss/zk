@@ -11,11 +11,11 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author jumperchen
@@ -27,7 +27,7 @@ public class B96_ZK_5055Test extends WebDriverTestCase {
 		JQuery button = jq("@button");
 		click(button);
 		waitResponse();
-		Assert.assertEquals("OK",
+		Assertions.assertEquals("OK",
 				jq("$result").text());
 
 		try {
@@ -35,7 +35,7 @@ public class B96_ZK_5055Test extends WebDriverTestCase {
 			waitResponse();
 			click(button);
 			waitResponse();
-			Assert.assertEquals("OK",
+			Assertions.assertEquals("OK",
 					jq("$result").text());
 		} finally {
 			click(jq(".z-a:contains(Default)"));

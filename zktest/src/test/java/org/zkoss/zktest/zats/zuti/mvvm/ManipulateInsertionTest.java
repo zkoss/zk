@@ -11,24 +11,25 @@ Copyright (C) 2014 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.zuti.mvvm;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zk.ui.AbstractComponent;
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.HtmlShadowElement;
-import org.zkoss.zk.ui.ShadowElement;
-import org.zkoss.zul.Div;
-import org.zkoss.zul.Label;
 import org.zkoss.zktest.zats.zuti.ZutiBasicTestCase;
 import org.zkoss.zktest.zats.zuti.verifier.HierarchyVerifier;
+import org.zkoss.zul.Div;
+import org.zkoss.zul.Label;
 
 /**
  * @author jumperchen
@@ -66,7 +67,7 @@ public class ManipulateInsertionTest extends ZutiBasicTestCase {
 		assertTrue(host.getChildren().size() == 5);
 		
 		int total = getShadowSize(host);
-		assertEquals("Only 4 shadow element available", 4, total);
+		assertEquals(4, total, "Only 4 shadow element available");
 		AbstractComponent hostCmp = host.as(Div.class);
 		List<AbstractComponent> children = hostCmp.getChildren();
 		for (AbstractComponent cmp : children)
@@ -83,7 +84,7 @@ public class ManipulateInsertionTest extends ZutiBasicTestCase {
 			assertEquals(cmp.toString(), ((Label)cmp.getFirstChild()).getValue());
 		
 		total = getShadowSize(host);
-		assertEquals("Only 4 shadow element available", 4, total);
+		assertEquals(4, total, "Only 4 shadow element available");
 	}
 	
 	@Test

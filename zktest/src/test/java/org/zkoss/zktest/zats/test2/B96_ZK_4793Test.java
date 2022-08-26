@@ -1,7 +1,8 @@
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 import org.zkoss.zul.Tree;
 import org.zkoss.zul.Treechildren;
 import org.zkoss.zul.Treeitem;
@@ -28,24 +29,24 @@ public class B96_ZK_4793Test {
 		item_11.appendChild(item_11_children);
 		item_11_children.appendChild(item_111);
 
-		Assert.assertEquals(item_1, tree.renderItemByPath(new int[] {0}));
-		Assert.assertEquals(item_2, tree.renderItemByPath(new int[] {1}));
-		Assert.assertEquals(item_3, tree.renderItemByPath(new int[] {2}));
-		Assert.assertEquals(item_11, tree.renderItemByPath(new int[] {0, 0}));
-		Assert.assertEquals(item_111, tree.renderItemByPath(new int[] {0, 0, 0}));
+		Assertions.assertEquals(item_1, tree.renderItemByPath(new int[] {0}));
+		Assertions.assertEquals(item_2, tree.renderItemByPath(new int[] {1}));
+		Assertions.assertEquals(item_3, tree.renderItemByPath(new int[] {2}));
+		Assertions.assertEquals(item_11, tree.renderItemByPath(new int[] {0, 0}));
+		Assertions.assertEquals(item_111, tree.renderItemByPath(new int[] {0, 0, 0}));
 
-		Assert.assertNull("null for incorrect path", tree.renderItemByPath(new int[] {-1}));
-		Assert.assertNull("null for incorrect path", tree.renderItemByPath(new int[] {0, -1}));
-		Assert.assertNull("null for incorrect path", tree.renderItemByPath(new int[] {0, 0, -1}));
+		Assertions.assertNull(tree.renderItemByPath(new int[] {-1}), "null for incorrect path");
+		Assertions.assertNull(tree.renderItemByPath(new int[] {0, -1}), "null for incorrect path");
+		Assertions.assertNull(tree.renderItemByPath(new int[] {0, 0, -1}), "null for incorrect path");
 
-		Assert.assertNull("null for incorrect path", tree.renderItemByPath(new int[] {4}));
-		Assert.assertNull("null for incorrect path", tree.renderItemByPath(new int[] {0, 2}));
-		Assert.assertNull("null for incorrect path", tree.renderItemByPath(new int[] {0, 0, 2}));
-		Assert.assertNull("null for incorrect path", tree.renderItemByPath(new int[] {0, 0, 100}));
+		Assertions.assertNull(tree.renderItemByPath(new int[] {4}), "null for incorrect path");
+		Assertions.assertNull(tree.renderItemByPath(new int[] {0, 2}), "null for incorrect path");
+		Assertions.assertNull(tree.renderItemByPath(new int[] {0, 0, 2}), "null for incorrect path");
+		Assertions.assertNull(tree.renderItemByPath(new int[] {0, 0, 100}), "null for incorrect path");
 
 		//these 3 paths fail where the last index is just 1 greater than allowed
-		Assert.assertNull("null for incorrect path", tree.renderItemByPath(new int[] {3}));
-		Assert.assertNull("null for incorrect path", tree.renderItemByPath(new int[] {0, 0, 1}));
-		Assert.assertNull("null for incorrect path", tree.renderItemByPath(new int[] {0, 2}));
+		Assertions.assertNull(tree.renderItemByPath(new int[] {3}), "null for incorrect path");
+		Assertions.assertNull(tree.renderItemByPath(new int[] {0, 0, 1}), "null for incorrect path");
+		Assertions.assertNull(tree.renderItemByPath(new int[] {0, 2}), "null for incorrect path");
 	}
 }

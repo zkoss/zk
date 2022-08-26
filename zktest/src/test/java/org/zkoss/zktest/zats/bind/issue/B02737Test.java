@@ -11,9 +11,9 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.bind.issue;
 
-import junit.framework.Assert;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.junit.Test;
 import org.zkoss.bind.annotation.Transient;
 import org.zkoss.bind.proxy.FormProxyObject;
 import org.zkoss.bind.proxy.ProxyHelper;
@@ -30,21 +30,21 @@ public class B02737Test {
 		pojo.setHeight(45);
 		B02737Pojo proxy = ProxyHelper.createProxyIfAny(pojo);
 
-		Assert.assertEquals(50, proxy.getWidth());
-		Assert.assertEquals(45, proxy.getHeight());
-		Assert.assertEquals(2250, proxy.getAreal());
+		Assertions.assertEquals(50, proxy.getWidth());
+		Assertions.assertEquals(45, proxy.getHeight());
+		Assertions.assertEquals(2250, proxy.getAreal());
 
 		proxy.setHeight(100);
 		
-		Assert.assertEquals(50, proxy.getWidth());
-		Assert.assertEquals(100, proxy.getHeight());
-		Assert.assertEquals(5000, proxy.getAreal()); //expecting not to cache the purely calculated value (if no setter is present)
+		Assertions.assertEquals(50, proxy.getWidth());
+		Assertions.assertEquals(100, proxy.getHeight());
+		Assertions.assertEquals(5000, proxy.getAreal()); //expecting not to cache the purely calculated value (if no setter is present)
 		
 		((FormProxyObject)proxy).submitToOrigin(null);
 		
-		Assert.assertEquals(50, pojo.getWidth());
-		Assert.assertEquals(100, pojo.getHeight());
-		Assert.assertEquals(5000, pojo.getAreal()); //expecting not to cache the purely calculated value (if no setter is present)
+		Assertions.assertEquals(50, pojo.getWidth());
+		Assertions.assertEquals(100, pojo.getHeight());
+		Assertions.assertEquals(5000, pojo.getAreal()); //expecting not to cache the purely calculated value (if no setter is present)
 	}
 
 //	A limitation case, we cannot support the sub-delegator object
@@ -55,21 +55,21 @@ public class B02737Test {
 		pojo.setHeight(45);
 		B02737Pojo proxy = ProxyHelper.createProxyIfAny(pojo);
 
-		Assert.assertEquals(50, proxy.getWidth());
-		Assert.assertEquals(45, proxy.getHeight());
-		Assert.assertEquals(2250, proxy.getAreal());
+		Assertions.assertEquals(50, proxy.getWidth());
+		Assertions.assertEquals(45, proxy.getHeight());
+		Assertions.assertEquals(2250, proxy.getAreal());
 
 		proxy.getSubPojo().setWidth(100);
 		
-		Assert.assertEquals(100, proxy.getWidth());
-		Assert.assertEquals(45, proxy.getHeight());
-		Assert.assertEquals(4500, proxy.getAreal()); //expecting not to cache the purely calculated value (if no setter is present)
+		Assertions.assertEquals(100, proxy.getWidth());
+		Assertions.assertEquals(45, proxy.getHeight());
+		Assertions.assertEquals(4500, proxy.getAreal()); //expecting not to cache the purely calculated value (if no setter is present)
 		
 		((FormProxyObject)proxy).submitToOrigin(null);
 		
-		Assert.assertEquals(100, pojo.getWidth());
-		Assert.assertEquals(45, pojo.getHeight());
-		Assert.assertEquals(4500, pojo.getAreal()); //expecting not to cache the purely calculated value (if no setter is present)
+		Assertions.assertEquals(100, pojo.getWidth());
+		Assertions.assertEquals(45, pojo.getHeight());
+		Assertions.assertEquals(4500, pojo.getAreal()); //expecting not to cache the purely calculated value (if no setter is present)
 	}
 	public static class B02737Pojo {
 		private int height;

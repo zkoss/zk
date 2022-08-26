@@ -11,18 +11,21 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.not;
 
-import org.junit.Assert;
-import org.junit.Test;
+import java.time.Duration;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author rudyhuang
@@ -33,7 +36,7 @@ public class B50_2964214Test extends WebDriverTestCase {
 		connect();
 
 		waitResponse();
-		new WebDriverWait(driver, 5)
+		new WebDriverWait(driver, Duration.ofSeconds(5))
 				.until(ExpectedConditions.presenceOfElementLocated(jq("@ckeditor iframe")));
 		driver.switchTo().frame(toElement(jq("@ckeditor iframe")));
 		WebElement body = driver.findElement(By.tagName("body"));
@@ -46,7 +49,7 @@ public class B50_2964214Test extends WebDriverTestCase {
 		click(textbox);
 		waitResponse();
 
-		Assert.assertNotEquals("", textbox.val());
-		Assert.assertThat(textbox.val(), not(containsString("_cke_saved_href")));
+		Assertions.assertNotEquals("", textbox.val());
+		assertThat(textbox.val(), not(containsString("_cke_saved_href")));
 	}
 }

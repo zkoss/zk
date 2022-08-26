@@ -11,10 +11,10 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
-
 import java.util.List;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
@@ -33,6 +33,6 @@ public class B95_ZK_4685Test extends ZATSTestCase {
 		desktop.query("#closeBtn").click();
 		button.get(1).click();
 		desktop.query("#closeBtn").click();
-		Assert.assertEquals("[formContent.commonProp, formContent.prop1][formContent.commonProp, formContent.prop2]", desktop.query("#result").as(Label.class).getValue());
+		Assertions.assertEquals("[formContent.commonProp, formContent.prop1][formContent.commonProp, formContent.prop2]", desktop.query("#result").as(Label.class).getValue());
 	}
 }

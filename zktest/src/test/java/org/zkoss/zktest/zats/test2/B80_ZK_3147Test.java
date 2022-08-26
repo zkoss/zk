@@ -11,17 +11,18 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author james
  */
 public class B80_ZK_3147Test extends WebDriverTestCase {
-	@Test public void test() {
+	@Test
+	public void test() {
 		connect();
 		waitResponse();
 		assertEquals("true", getZKLog());

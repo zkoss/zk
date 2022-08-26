@@ -11,14 +11,14 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.WebDriver;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class B86_ZK_4041Test extends WebDriverTestCase {
 
@@ -30,13 +30,13 @@ public class B86_ZK_4041Test extends WebDriverTestCase {
 
 		click(menu);
 		waitResponse();
-		Assert.assertTrue(menuLocation.getY() < getMenupopupLocation().getY());
+		Assertions.assertTrue(menuLocation.getY() < getMenupopupLocation().getY());
 
 		click(jq(".z-button"));
 		waitResponse();
 		click(menu);
 		waitResponse();
-		Assert.assertTrue(menuLocation.getX() < getMenupopupLocation().getX());
+		Assertions.assertTrue(menuLocation.getX() < getMenupopupLocation().getX());
 		click(jq("body"));
 		waitResponse();
 
@@ -46,7 +46,7 @@ public class B86_ZK_4041Test extends WebDriverTestCase {
 
 		click(menu);
 		waitResponse();
-		Assert.assertTrue(menuLocation.getX() > getMenupopupLocation().getX());
+		Assertions.assertTrue(menuLocation.getX() > getMenupopupLocation().getX());
 	}
 
 	private Point getMenupopupLocation() {

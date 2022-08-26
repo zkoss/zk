@@ -14,18 +14,17 @@ package org.zkoss.zktest.zats.test2;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
-import org.junit.Assert;
-import org.junit.ClassRule;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 
-import org.zkoss.zktest.zats.ExternalZkXml;
-import org.zkoss.zktest.zats.ForkJVMTestOnly;
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.ExternalZkXml;
+import org.zkoss.test.webdriver.ForkJVMTestOnly;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
-@Category(ForkJVMTestOnly.class)
+@ForkJVMTestOnly
 public class B96_ZK_4789Test extends WebDriverTestCase {
-	@ClassRule
+	@RegisterExtension
 	public static final ExternalZkXml CONFIG = new ExternalZkXml("/test2/B96-ZK-4789-zk.xml");
 
 	@Test
@@ -37,7 +36,7 @@ public class B96_ZK_4789Test extends WebDriverTestCase {
 		driver.navigate().refresh(); // trigger rmDesktop
 		sleep(1000);
 		String println = outContent.toString().trim();
-		Assert.assertTrue("You should see Client recev in server console", println.contains("Client recev"));
-		Assert.assertTrue("You should see Client cmplt in server console", println.contains("Client cmplt"));
+		Assertions.assertTrue(println.contains("Client recev"), "You should see Client recev in server console");
+		Assertions.assertTrue(println.contains("Client cmplt"), "You should see Client cmplt in server console");
 	}
 }

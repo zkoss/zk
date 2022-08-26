@@ -11,10 +11,11 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class B95_ZK_4641Test extends WebDriverTestCase {
 	@Test
@@ -49,7 +50,7 @@ public class B95_ZK_4641Test extends WebDriverTestCase {
 		waitResponse();
 		click(jq("$test"));
 		waitResponse();
-		Assert.assertEquals("client side calendar begin and end should be updated/removed", expectedLog, getZKLog());
+		Assertions.assertEquals(expectedLog, getZKLog(), "client side calendar begin and end should be updated/removed");
 		closeZKLog();
 	}
 }

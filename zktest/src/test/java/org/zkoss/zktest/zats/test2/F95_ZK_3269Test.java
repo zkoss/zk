@@ -14,10 +14,10 @@ package org.zkoss.zktest.zats.test2;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -30,10 +30,12 @@ public class F95_ZK_3269Test extends WebDriverTestCase {
 		final Path uploadFile = Paths.get("src/main/webapp/test2/img/sun.jpg");
 		dropUploadFile(jq("@dropupload:eq(0)"), uploadFile);
 		waitResponse();
-		Assert.assertFalse("The size-exceeded message should be suppressed", hasError());
+		Assertions.assertFalse(hasError(),
+				"The size-exceeded message should be suppressed");
 
 		dropUploadFile(jq("@dropupload:eq(1)"), uploadFile);
 		waitResponse();
-		Assert.assertTrue("The size-exceeded message shouldn't be suppressed", hasError());
+		Assertions.assertTrue(hasError(),
+				"The size-exceeded message shouldn't be suppressed");
 	}
 }

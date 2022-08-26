@@ -14,9 +14,9 @@ package org.zkoss.zktest.zats.test2;
 import static org.hamcrest.Matchers.equalToIgnoringCase;
 
 import org.hamcrest.MatcherAssert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang

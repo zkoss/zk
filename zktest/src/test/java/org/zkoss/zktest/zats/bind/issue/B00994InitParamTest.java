@@ -1,16 +1,12 @@
 package org.zkoss.zktest.zats.bind.issue;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
-import org.zkoss.zats.mimic.Zats;
 import org.zkoss.zktest.zats.ZATSTestCase;
-import org.zkoss.zul.Include;
 import org.zkoss.zul.Label;
 
 public class B00994InitParamTest extends ZATSTestCase{

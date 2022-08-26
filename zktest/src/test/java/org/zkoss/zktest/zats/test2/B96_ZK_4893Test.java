@@ -11,8 +11,8 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zktest.zats.ZATSTestCase;
@@ -25,6 +25,6 @@ public class B96_ZK_4893Test extends ZATSTestCase {
 	@Test
 	public void test() {
 		final DesktopAgent desktop = connect();
-		Assert.assertEquals("true", desktop.query("#last3").as(Label.class).getValue());
+		Assertions.assertEquals("true", desktop.query("#last3").as(Label.class).getValue());
 	}
 }

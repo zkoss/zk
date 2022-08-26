@@ -13,10 +13,12 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 package org.zkoss.zktest.zats.test2;
-import org.junit.Assert;
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * 
@@ -30,19 +32,19 @@ public class F80_ZK_3176Test extends WebDriverTestCase{
         click(menu);
         waitResponse();
         JQuery menuPopup = jq("@menupopup:visible");
-        Assert.assertFalse(menuPopup.exists());
+        Assertions.assertFalse(menuPopup.exists());
 
         click(jq("@button").eq(0));
         waitResponse();
         click(menu);
         waitResponse();
         menuPopup = jq("@menupopup:visible");
-        Assert.assertTrue(menuPopup.exists());
+        Assertions.assertTrue(menuPopup.exists());
 
         JQuery subMenu = menuPopup.find("@menu");
         click(subMenu);
         waitResponse();
         menuPopup = jq("@menupopup:visible");
-        Assert.assertEquals(1, menuPopup.length());
+        Assertions.assertEquals(1, menuPopup.length());
     }
 }

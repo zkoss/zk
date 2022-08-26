@@ -24,7 +24,8 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,7 +38,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author rudyhuang
  */
-@RunWith(ReflectiveSuiteRunner.class)
+@ExtendWith(ReflectiveSuiteExtension.class)
 public class RunByTagsSuite {
 	private static final Logger LOG = LoggerFactory.getLogger(RunByTagsSuite.class);
 	private static final Class<?>[] EMPTY = {};
@@ -52,17 +53,20 @@ public class RunByTagsSuite {
 
 		final Set<String> tags = newSetFromCommaString(tagExpr);
 		try {
-			return parseProperties().entrySet()
-					.parallelStream()
+			Class[] classes = parseProperties().entrySet().parallelStream()
 					.filter(e -> RunByTagsSuite.filterByTags(e, tags))
 					.map(e -> RunByTagsSuite.toTestClass(e.getKey()))
-					.filter(Objects::nonNull)
-					.toArray(Class[]::new);
+					.filter(Objects::nonNull).toArray(Class[]::new);
+			LOG.info("Test cases: {}", classes.length);
+			return classes;
 		} catch (Throwable e) {
 			LOG.error("", e);
 			return EMPTY;
 		}
 	}
+
+	@Test
+	public void dummy() {}
 
 	private static Map<String, String> parseProperties() throws URISyntaxException, IOException {
 		final URL config = RunByTagsSuite.class.getResource("/test2/config.properties");

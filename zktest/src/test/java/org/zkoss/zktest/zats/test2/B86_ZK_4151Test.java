@@ -11,11 +11,12 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
-import org.zkoss.zktest.zats.WebDriverTestCase;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 public class B86_ZK_4151Test extends WebDriverTestCase {
 	@Test
@@ -34,6 +35,6 @@ public class B86_ZK_4151Test extends WebDriverTestCase {
 		act.moveToElement(row, 10, 10).clickAndHold().moveByOffset(20, 20).build().perform();
 		String dragmsg2 = jq(".z-drop-content").text();
 		
-		Assert.assertTrue(dragmsg1.equals(dragmsg2));
+		Assertions.assertTrue(dragmsg1.equals(dragmsg2));
 	}
 }

@@ -2,9 +2,9 @@ package org.zkoss.zktest.zats;
 
 import java.io.FileNotFoundException;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 
 import org.zkoss.zats.mimic.DefaultZatsEnvironment;
 import org.zkoss.zats.mimic.DesktopAgent;
@@ -13,18 +13,18 @@ import org.zkoss.zats.mimic.ZatsEnvironment;
 public abstract class ZATSTestCase {
 	protected static ZatsEnvironment env;
 	
-	@BeforeClass
+	@BeforeAll
 	public static void init() {
 		env = new DefaultZatsEnvironment("./src/main/webapp/WEB-INF", "/zktest");
 		env.init("./src/main/webapp");
 	}
 	
-	@AfterClass
+	@AfterAll
 	public static void end() {
 		env.destroy();
 	}
 	
-	@After
+	@AfterEach
 	public void after() {
 		env.cleanup();
 	}

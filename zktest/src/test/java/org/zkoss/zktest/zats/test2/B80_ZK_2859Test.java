@@ -14,9 +14,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * 
@@ -32,7 +33,7 @@ public class B80_ZK_2859Test extends WebDriverTestCase {
 		waitResponse(true);
 		click(jq(".z-tree-icon"));
 		waitResponse(true);
-		Assert.assertFalse("Not expecting to see exception here", jq(".z-messagebox").exists());
+		Assertions.assertFalse(jq(".z-messagebox").exists(), "Not expecting to see exception here");
 	}
 	
 	@Test
@@ -46,6 +47,6 @@ public class B80_ZK_2859Test extends WebDriverTestCase {
 		// go to previous page
 		click(jq(".z-paging-button.z-paging-previous"));
 		waitResponse(true);
-		Assert.assertFalse("Not expecting to see exception here", jq(".z-messagebox").exists());
+		Assertions.assertFalse(jq(".z-messagebox").exists(), "Not expecting to see exception here");
 	}
 }

@@ -11,16 +11,17 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.not;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.Element;
-import org.zkoss.zktest.zats.ztl.JQuery;
-import org.zkoss.zktest.zats.ztl.Widget;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.Element;
+import org.zkoss.test.webdriver.ztl.JQuery;
+import org.zkoss.test.webdriver.ztl.Widget;
 
 /**
  * @author rudyhuang
@@ -35,7 +36,7 @@ public class B86_ZK_4240Test extends WebDriverTestCase {
 		sleep(100);
 
 		int contentHeight = jq("@panelchildren:first").outerHeight();
-		Assert.assertThat(jq(panel.$n("body")).height(), not(greaterThan(contentHeight)));
+		assertThat(jq(panel.$n("body")).height(), not(greaterThan(contentHeight)));
 	}
 
 	@Test
@@ -50,6 +51,6 @@ public class B86_ZK_4240Test extends WebDriverTestCase {
 		JQuery tab99 = jq("@tab:contains(99)");
 		click(tab99);
 		waitResponse();
-		Assert.assertTrue(tab99.hasClass("z-tab-selected"));
+		Assertions.assertTrue(tab99.hasClass("z-tab-selected"));
 	}
 }

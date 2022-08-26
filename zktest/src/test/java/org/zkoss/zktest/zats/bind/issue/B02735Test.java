@@ -11,14 +11,9 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.bind.issue;
 
-import java.math.BigDecimal;
-import java.util.List;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import junit.framework.Assert;
-
-import org.junit.Test;
-import org.zkoss.bind.annotation.Immutable;
-import org.zkoss.bind.annotation.ImmutableElements;
 import org.zkoss.bind.proxy.ProxyHelper;
 
 /**
@@ -36,7 +31,7 @@ public class B02735Test {
 		//workaround call the setter with the original value first
 		//proxy.setState(pojo.getState());
 		
-		Assert.assertEquals(TaskState.NEW, proxy.getState());
+		Assertions.assertEquals(TaskState.NEW, proxy.getState());
 	}
 
 	public static enum TaskState {

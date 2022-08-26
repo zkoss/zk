@@ -11,8 +11,8 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
@@ -28,6 +28,6 @@ public class B85_ZK_3765Test extends ZATSTestCase {
 		desktop.queryAll("button").get(1).click();
 
 		ComponentAgent msgbox = desktop.query("window");
-		Assert.assertNotNull("The message box not popped up.", msgbox);
+		Assertions.assertNotNull(msgbox, "The message box not popped up.");
 	}
 }

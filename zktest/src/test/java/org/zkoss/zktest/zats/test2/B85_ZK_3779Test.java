@@ -13,10 +13,10 @@ package org.zkoss.zktest.zats.test2;
 
 import java.util.stream.IntStream;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 public class B85_ZK_3779Test extends WebDriverTestCase {
 
@@ -28,6 +28,6 @@ public class B85_ZK_3779Test extends WebDriverTestCase {
 			click(jq(".z-button"));
 			waitResponse();
 		});
-		Assert.assertFalse(isZKLogAvailable());
+		Assertions.assertFalse(isZKLogAvailable());
 	}
 }

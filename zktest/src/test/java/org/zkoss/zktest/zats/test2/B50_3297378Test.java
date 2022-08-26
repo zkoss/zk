@@ -11,11 +11,11 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class B50_3297378Test extends WebDriverTestCase {
 
@@ -26,8 +26,8 @@ public class B50_3297378Test extends WebDriverTestCase {
 		JQuery buttons = jq(".z-button");
 		click(buttons.eq(0));
 		waitResponse();
-		Assert.assertFalse(buttons.eq(0).is(":disabled"));
-		Assert.assertFalse(buttons.eq(1).is(":disabled"));
-		Assert.assertTrue(buttons.eq(2).is(":disabled"));
+		Assertions.assertFalse(buttons.eq(0).is(":disabled"));
+		Assertions.assertFalse(buttons.eq(1).is(":disabled"));
+		Assertions.assertTrue(buttons.eq(2).is(":disabled"));
 	}
 }

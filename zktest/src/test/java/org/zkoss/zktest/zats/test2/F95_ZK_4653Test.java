@@ -11,12 +11,12 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.interactions.Actions;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 public class F95_ZK_4653Test extends WebDriverTestCase {
 	@Test
@@ -29,12 +29,12 @@ public class F95_ZK_4653Test extends WebDriverTestCase {
 
 		actions.keyDown(Keys.ALT).keyUp(Keys.ALT).perform();
 		waitResponse();
-		Assert.assertTrue(getZKLog().contains("alt key is pressed"));
+		Assertions.assertTrue(getZKLog().contains("alt key is pressed"));
 		closeZKLog();
 
 		actions.sendKeys(Keys.SPACE).perform();
 		waitResponse();
-		Assert.assertFalse(getZKLog().contains("alt key is pressed"));
+		Assertions.assertFalse(getZKLog().contains("alt key is pressed"));
 		closeZKLog();
 
 		click(jq("@button").eq(1));
@@ -42,12 +42,12 @@ public class F95_ZK_4653Test extends WebDriverTestCase {
 
 		actions.sendKeys("a").perform();
 		waitResponse();
-		Assert.assertTrue(getZKLog().contains("a key is pressed"));
+		Assertions.assertTrue(getZKLog().contains("a key is pressed"));
 		closeZKLog();
 
 		actions.sendKeys(Keys.SPACE).perform();
 		waitResponse();
-		Assert.assertFalse(getZKLog().contains("a key is pressed"));
+		Assertions.assertFalse(getZKLog().contains("a key is pressed"));
 		closeZKLog();
 	}
 
@@ -62,12 +62,12 @@ public class F95_ZK_4653Test extends WebDriverTestCase {
 		// Modifier keys (like ctrl,shift etc) are not released with sendKeys
 		actions.keyDown(Keys.ALT).sendKeys(Keys.ARROW_DOWN).keyUp(Keys.ALT).perform();
 		waitResponse();
-		Assert.assertTrue(getZKLog().contains("alt + ArrowDown keys is pressed"));
+		Assertions.assertTrue(getZKLog().contains("alt + ArrowDown keys is pressed"));
 		closeZKLog();
 
 		actions.keyDown(Keys.ALT).sendKeys(Keys.ARROW_UP).keyUp(Keys.ALT).perform();
 		waitResponse();
-		Assert.assertFalse(getZKLog().contains("alt + ArrowDown keys is pressed"));
+		Assertions.assertFalse(getZKLog().contains("alt + ArrowDown keys is pressed"));
 		closeZKLog();
 
 		click(jq("@button").eq(3));
@@ -75,12 +75,12 @@ public class F95_ZK_4653Test extends WebDriverTestCase {
 
 		actions.keyDown(Keys.CONTROL).keyDown(Keys.ALT).sendKeys(Keys.ARROW_DOWN).keyUp(Keys.CONTROL).keyUp(Keys.ALT).perform();
 		waitResponse();
-		Assert.assertTrue(getZKLog().contains("ctrl + alt + ArrowDown is pressed"));
+		Assertions.assertTrue(getZKLog().contains("ctrl + alt + ArrowDown is pressed"));
 		closeZKLog();
 
 		actions.keyDown(Keys.CONTROL).keyDown(Keys.SHIFT).sendKeys(Keys.ARROW_DOWN).keyUp(Keys.CONTROL).keyUp(Keys.SHIFT).perform();
 		waitResponse();
-		Assert.assertFalse(getZKLog().contains("ctrl + alt + ArrowDown is pressed"));
+		Assertions.assertFalse(getZKLog().contains("ctrl + alt + ArrowDown is pressed"));
 		closeZKLog();
 
 		click(jq("@button").eq(4));
@@ -88,12 +88,12 @@ public class F95_ZK_4653Test extends WebDriverTestCase {
 
 		actions.keyDown(Keys.CONTROL).keyDown(Keys.META).sendKeys("a").keyUp(Keys.CONTROL).keyUp(Keys.META).perform();
 		waitResponse();
-		Assert.assertTrue(getZKLog().contains("ctrl + meta + a keys is pressed"));
+		Assertions.assertTrue(getZKLog().contains("ctrl + meta + a keys is pressed"));
 		closeZKLog();
 
 		actions.keyDown(Keys.CONTROL).keyDown(Keys.META).sendKeys("z").keyUp(Keys.CONTROL).keyUp(Keys.META).perform();
 		waitResponse();
-		Assert.assertFalse(getZKLog().contains("ctrl + meta + a keys is pressed"));
+		Assertions.assertFalse(getZKLog().contains("ctrl + meta + a keys is pressed"));
 		closeZKLog();
 	}
 
@@ -107,12 +107,12 @@ public class F95_ZK_4653Test extends WebDriverTestCase {
 
 		actions.sendKeys(Keys.chord(Keys.ARROW_UP, Keys.ARROW_DOWN)).perform();
 		waitResponse();
-		Assert.assertFalse(isZKLogAvailable());
+		Assertions.assertFalse(isZKLogAvailable());
 		closeZKLog();
 
 		actions.keyDown(Keys.ALT).sendKeys(Keys.ARROW_UP).keyUp(Keys.ALT).perform();
 		waitResponse();
-		Assert.assertFalse(isZKLogAvailable());
+		Assertions.assertFalse(isZKLogAvailable());
 		closeZKLog();
 	}
 }

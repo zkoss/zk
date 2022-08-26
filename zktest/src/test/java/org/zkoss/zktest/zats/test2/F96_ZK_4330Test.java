@@ -11,11 +11,11 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 
 public class F96_ZK_4330Test extends WebDriverTestCase {
@@ -32,10 +32,10 @@ public class F96_ZK_4330Test extends WebDriverTestCase {
 		checkVisibleUncheckedTreeItems(tree1);
 		checkVisibleUncheckedTreeItems(tree2);
 		checkVisibleUncheckedTreeItems(tree3);
-		Assert.assertFalse(tree1.find(".z-treecol-checkable").hasClass("z-treecol-checked"));
-		Assert.assertFalse(tree2.find(".z-treecol-checkable").hasClass("z-treecol-checked"));
+		Assertions.assertFalse(tree1.find(".z-treecol-checkable").hasClass("z-treecol-checked"));
+		Assertions.assertFalse(tree2.find(".z-treecol-checkable").hasClass("z-treecol-checked"));
 		// tree3 has no model, so it's considered as "select all"
-		Assert.assertTrue(tree3.find(".z-treecol-checkable").hasClass("z-treecol-checked"));
+		Assertions.assertTrue(tree3.find(".z-treecol-checkable").hasClass("z-treecol-checked"));
 
 		click(jq("@button:eq(6)"));
 		waitResponse();
@@ -44,9 +44,9 @@ public class F96_ZK_4330Test extends WebDriverTestCase {
 		checkVisibleUncheckedTreeItems(tree3);
 		click(selCountBtn);
 		waitResponse();
-		Assert.assertTrue(tree1.find(".z-treecol-checkable").hasClass("z-treecol-checked"));
-		Assert.assertTrue(tree2.find(".z-treecol-checkable").hasClass("z-treecol-checked"));
-		Assert.assertTrue(tree3.find(".z-treecol-checkable").hasClass("z-treecol-checked"));
+		Assertions.assertTrue(tree1.find(".z-treecol-checkable").hasClass("z-treecol-checked"));
+		Assertions.assertTrue(tree2.find(".z-treecol-checkable").hasClass("z-treecol-checked"));
+		Assertions.assertTrue(tree3.find(".z-treecol-checkable").hasClass("z-treecol-checked"));
 
 		click(deSelectAll);
 		waitResponse();
@@ -54,9 +54,9 @@ public class F96_ZK_4330Test extends WebDriverTestCase {
 		waitResponse();
 		click(selCountBtn);
 		waitResponse();
-		Assert.assertTrue(tree1.find(".z-treecol-checkable").hasClass("z-treecol-checked"));
-		Assert.assertTrue(tree3.find(".z-treecol-checkable").hasClass("z-treecol-checked"));
-		Assert.assertEquals("4, 60, 4\n4, 60, 4", getZKLog());
+		Assertions.assertTrue(tree1.find(".z-treecol-checkable").hasClass("z-treecol-checked"));
+		Assertions.assertTrue(tree3.find(".z-treecol-checkable").hasClass("z-treecol-checked"));
+		Assertions.assertEquals("4, 60, 4\n4, 60, 4", getZKLog());
 	}
 	@Test
 	public void testNestedItem() {
@@ -72,7 +72,7 @@ public class F96_ZK_4330Test extends WebDriverTestCase {
 		waitResponse();
 		click(tree1.find(".z-treerow-checkbox:eq(1)"));
 		waitResponse();
-		Assert.assertTrue(tree1.find(".z-treerow:eq(1)").hasClass("z-treerow-selected"));
+		Assertions.assertTrue(tree1.find(".z-treerow:eq(1)").hasClass("z-treerow-selected"));
 	}
 
 	private void checkVisibleUncheckedTreeItems(JQuery tree) {

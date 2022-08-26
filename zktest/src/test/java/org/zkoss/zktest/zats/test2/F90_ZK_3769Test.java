@@ -11,11 +11,11 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.Widget;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.Widget;
 
 /**
  * @author rudyhuang
@@ -47,7 +47,7 @@ public class F90_ZK_3769Test extends WebDriverTestCase {
 
 		click(db.$n("btn"));
 		waitResponse();
-		Assert.assertNotEquals(time, jq(db.$n("pp")).find(".z-timebox-input").val());
+		Assertions.assertNotEquals(time, jq(db.$n("pp")).find(".z-timebox-input").val());
 	}
 
 	private void checkDatebox(Widget db, String year, String month, String day, String time) {
@@ -55,10 +55,10 @@ public class F90_ZK_3769Test extends WebDriverTestCase {
 		waitResponse();
 
 		final Widget cal = widget("@calendar");
-		Assert.assertEquals(year, jq(cal.$n("ty")).text());
-		Assert.assertEquals(month, jq(cal.$n("tm")).text());
-		Assert.assertEquals(day, jq(cal.$n()).find(".z-calendar-selected").text());
-		Assert.assertEquals(time, jq(db.$n("pp")).find(".z-timebox-input").val());
+		Assertions.assertEquals(year, jq(cal.$n("ty")).text());
+		Assertions.assertEquals(month, jq(cal.$n("tm")).text());
+		Assertions.assertEquals(day, jq(cal.$n()).find(".z-calendar-selected").text());
+		Assertions.assertEquals(time, jq(db.$n("pp")).find(".z-timebox-input").val());
 
 		click(db.$n("btn"));
 		waitResponse();

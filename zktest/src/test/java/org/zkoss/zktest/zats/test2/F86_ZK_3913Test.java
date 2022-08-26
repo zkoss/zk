@@ -1,9 +1,9 @@
 package org.zkoss.zktest.zats.test2;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.awt.Image;
+import java.awt.*;
 import java.awt.image.PixelGrabber;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -12,10 +12,10 @@ import java.util.Base64;
 
 import javax.imageio.ImageIO;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class F86_ZK_3913Test extends WebDriverTestCase {
 	@Test
@@ -28,14 +28,16 @@ public class F86_ZK_3913Test extends WebDriverTestCase {
 		String data = canvasjq.toElement().eval("toDataURL()");
 		final Image expectedImage = fromDataURL(dataUrl);
 		final Image actualImage = fromDataURL(data);
-		assertTrue("image is different", compareImages(expectedImage, actualImage));
+		assertTrue(compareImages(expectedImage, actualImage),
+				"image is different");
 
 		click(jq("$act1"));
 		waitResponse();
 		data = canvasjq.toElement().eval("toDataURL()");
 		final Image expectedImage2 = fromDataURL(dataUrl2);
 		final Image actualImage2 = fromDataURL(data);
-		assertTrue("image is different", compareImages(expectedImage2, actualImage2));
+		assertTrue(compareImages(expectedImage2, actualImage2),
+				"image is different");
 	}
 
 	private Image fromDataURL(String dataUrl) throws IOException {

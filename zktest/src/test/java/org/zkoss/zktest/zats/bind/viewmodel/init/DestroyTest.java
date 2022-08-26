@@ -21,8 +21,8 @@ import java.util.logging.SimpleFormatter;
 import java.util.logging.StreamHandler;
 
 import org.hamcrest.MatcherAssert;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zktest.zats.ZATSTestCase;
 
@@ -33,7 +33,7 @@ public class DestroyTest extends ZATSTestCase {
 	@Test
 	public void testDestroy() {
 		connect("/bind/viewmodel/init/destroy.zul");
-		Assert.assertEquals("InitVM.cleanup was called\n", captureStdOut());
+		Assertions.assertEquals("InitVM.cleanup was called\n", captureStdOut());
 	}
 
 	private String captureStdOut() {
@@ -51,33 +51,33 @@ public class DestroyTest extends ZATSTestCase {
 	@Test
 	public void testDestroyChildOverrideSuper() {
 		connect("/bind/viewmodel/init/destroy-child-override-super.zul");
-		Assert.assertEquals("ChildInitOverrideVM.cleanup was called twice\n" +
+		Assertions.assertEquals("ChildInitOverrideVM.cleanup was called twice\n" +
 				"ChildInitOverrideVM.cleanup was called twice\n", captureStdOut());
 	}
 
 	@Test
 	public void testDestroyChildWithoutSuper() {
 		connect("/bind/viewmodel/init/destroy-child-without-super.zul");
-		Assert.assertEquals("ChildInitNoSuperVM.childDestroy was called\n", captureStdOut());
+		Assertions.assertEquals("ChildInitNoSuperVM.childDestroy was called\n", captureStdOut());
 	}
 
 	@Test
 	public void testDestroyChildWithSuper() {
 		connect("/bind/viewmodel/init/destroy-child-with-super.zul");
-		Assert.assertEquals("ChildInitSuperVM.childDestroy was called\n" +
+		Assertions.assertEquals("ChildInitSuperVM.childDestroy was called\n" +
 				"InitVM.cleanup was called\n", captureStdOut());
 	}
 
 	@Test
 	public void testDestroyChildWithSuperClass() {
 		connect("/bind/viewmodel/init/destroy-child-with-super-class.zul");
-		Assert.assertEquals("InitVM.cleanup was called\n", captureStdOut());
+		Assertions.assertEquals("InitVM.cleanup was called\n", captureStdOut());
 	}
 
 	@Test
 	public void testDestroyChildWithSuperNotExist() {
 		connect("/bind/viewmodel/init/destroy-child-with-super-notexist.zul");
-		Assert.assertEquals("ChildInitSuperNotExistVM.childDestroy was called\n", captureStdOut());
+		Assertions.assertEquals("ChildInitSuperNotExistVM.childDestroy was called\n", captureStdOut());
 	}
 
 	@Test

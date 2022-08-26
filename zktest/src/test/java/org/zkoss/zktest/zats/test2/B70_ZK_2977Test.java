@@ -11,10 +11,10 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -29,10 +29,10 @@ public class B70_ZK_2977Test extends WebDriverTestCase {
 		click(widget("@combobox:last").$n("btn"));
 		waitResponse();
 
-		Assert.assertTrue(jq("@combobox:last").offsetTop() < jq(".z-combobox-popup:visible").offsetTop());
+		Assertions.assertTrue(jq("@combobox:last").offsetTop() < jq(".z-combobox-popup:visible").offsetTop());
 
 		eval("window.scrollBy(0, -100)");
 		waitResponse();
-		Assert.assertTrue(jq("@combobox:last").offsetTop() < jq(".z-combobox-popup:visible").offsetTop());
+		Assertions.assertTrue(jq("@combobox:last").offsetTop() < jq(".z-combobox-popup:visible").offsetTop());
 	}
 }

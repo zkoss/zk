@@ -11,11 +11,11 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -34,28 +34,28 @@ public class F85_ZK_3624Test extends WebDriverTestCase {
 		waitResponse();
 
 		increase.run();
-		Assert.assertEquals("1", jq(".z-spinner-input").val());
+		Assertions.assertEquals("1", jq(".z-spinner-input").val());
 		clearSpinnerValue();
 
 		click(jq("@button:eq(1)"));
 		waitResponse();
 
 		increase.run();
-		Assert.assertEquals("2", jq(".z-spinner-input").val());
+		Assertions.assertEquals("2", jq(".z-spinner-input").val());
 		clearSpinnerValue();
 
 		click(jq("@button:eq(2)"));
 		waitResponse();
 
 		decrease.run();
-		Assert.assertEquals("-1", jq(".z-spinner-input").val());
+		Assertions.assertEquals("-1", jq(".z-spinner-input").val());
 		clearSpinnerValue();
 
 		click(jq("@button:eq(3)"));
 		waitResponse();
 
 		decrease.run();
-		Assert.assertEquals("-2", jq(".z-spinner-input").val());
+		Assertions.assertEquals("-2", jq(".z-spinner-input").val());
 		clearSpinnerValue();
 	}
 

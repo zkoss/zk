@@ -1,20 +1,22 @@
 package org.zkoss.zktest.zats.test2;
 
-import java.util.concurrent.TimeUnit;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
-import org.zkoss.zktest.zats.ztl.Widget;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.Widget;
 
-import static org.junit.Assert.*;
+
 
 /**
  * @author jameschu
  */
 public class B50_2970460Test extends WebDriverTestCase {
-	@Test public void test() {
+	@Test
+	public void test() {
 		connect();
 		Widget win = jq("$win").toWidget();
 		String t = win.get("top");

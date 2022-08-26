@@ -11,18 +11,21 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;
 
+import java.time.Duration;
+
 import org.apache.commons.lang.StringUtils;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -39,18 +42,18 @@ public class B80_ZK_3339Test extends WebDriverTestCase {
 		final Dimension size = driver.manage().window().getSize();
 		driver.manage().window().setSize(new Dimension(600, size.height));
 		waitResponse();
-		Assert.assertThat(getZKLog(), allOf(containsString("invoked m0"), containsString("invoked m1")));
+		assertThat(getZKLog(), allOf(containsString("invoked m0"), containsString("invoked m1")));
 
 		refreshPage();
 		waitResponse();
 		final String zkLog = getZKLog();
-		Assert.assertEquals(2, StringUtils.countMatches(zkLog, "invoked m0"));
-		Assert.assertEquals(2, StringUtils.countMatches(zkLog, "invoked m1"));
+		Assertions.assertEquals(2, StringUtils.countMatches(zkLog, "invoked m0"));
+		Assertions.assertEquals(2, StringUtils.countMatches(zkLog, "invoked m1"));
 	}
 
 	private void refreshPage() {
 		driver.navigate().refresh();
-		new WebDriverWait(driver, 3)
+		new WebDriverWait(driver, Duration.ofSeconds(3))
 				.until(ExpectedConditions.presenceOfElementLocated(By.className("z-page")));
 	}
 }

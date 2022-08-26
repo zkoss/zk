@@ -11,25 +11,25 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+
 import java.util.Collections;
 
-import org.junit.Assert;
-import org.junit.ClassRule;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.touch.TouchActions;
 
-import org.zkoss.zktest.zats.ExternalZkXml;
-import org.zkoss.zktest.zats.ForkJVMTestOnly;
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.ExternalZkXml;
+import org.zkoss.test.webdriver.ForkJVMTestOnly;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
  */
-@Category(ForkJVMTestOnly.class)
+@ForkJVMTestOnly
 public class Z60_Touch_011Test extends WebDriverTestCase {
-	@ClassRule
+	@RegisterExtension
 	public static final ExternalZkXml CONFIG = new ExternalZkXml("/test2/enable-tablet-ui-zk.xml");
 
 	@Override
@@ -48,7 +48,7 @@ public class Z60_Touch_011Test extends WebDriverTestCase {
 		waitResponse();
 		touchActions.scroll(toElement(jq("@grid")), 0 , 3000).perform();
 		waitResponse();
-		Assert.assertNotEquals(0, jq("@listbox .z-listbox-body").scrollTop());
-		Assert.assertNotEquals(0, jq("@grid .z-grid-body").scrollTop());
+		assertNotEquals(0, jq("@listbox .z-listbox-body").scrollTop());
+		assertNotEquals(0, jq("@grid .z-grid-body").scrollTop());
 	}
 }

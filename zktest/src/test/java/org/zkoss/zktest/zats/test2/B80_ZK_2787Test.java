@@ -11,14 +11,15 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertSame;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 import java.sql.Time;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
 import org.zkoss.bind.annotation.ImmutableFields;
 import org.zkoss.bind.proxy.ProxyHelper;
 import org.zkoss.zktest.zats.ZATSTestCase;

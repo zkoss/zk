@@ -14,18 +14,22 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
+
 /**
  * 
  * @author Sefi
  */
 public class B80_ZK_3106Test extends WebDriverTestCase {
-	@Test public void B80_ZK_3106Test(){
+	@Test
+	public void B80_ZK_3106Test(){
 		connect();
 		JQuery label = jq(".target");
-		assertTrue("should find label \"Test\"", label.exists());
+		assertTrue(label.exists(), "should find label \"Test\"");
 	}
 }

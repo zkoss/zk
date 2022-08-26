@@ -11,11 +11,11 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author rudyhuang
@@ -32,7 +32,7 @@ public class F35_1926069Test extends WebDriverTestCase {
 		waitResponse();
 		click(jq(".z-bandbox").toWidget().$n("btn"));
 		waitResponse();
-		Assert.assertEquals("abc,,true", inf2.text());
+		Assertions.assertEquals("abc,,true", inf2.text());
 
 		click(jq("@combobox"));
 		waitResponse();
@@ -40,6 +40,6 @@ public class F35_1926069Test extends WebDriverTestCase {
 		waitResponse();
 		click(jq(".z-combobox").toWidget().$n("btn"));
 		waitResponse();
-		Assert.assertEquals("xyz,,true", inf2.text());
+		Assertions.assertEquals("xyz,,true", inf2.text());
 	}
 }

@@ -11,10 +11,10 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -26,31 +26,31 @@ public class B50_2874709Test extends WebDriverTestCase {
 
 		click(jq(".z-treecell:contains(1) .z-tree-icon"));
 		waitResponse();
-		Assert.assertTrue("3 was expected", jq("@treecell:contains(3)").exists());
-		Assert.assertTrue("4 was expected", jq("@treecell:contains(4)").exists());
+		Assertions.assertTrue(jq("@treecell:contains(3)").exists(), "3 was expected");
+		Assertions.assertTrue(jq("@treecell:contains(4)").exists(), "4 was expected");
 
 		click(jq(".z-treecell:contains(4) .z-tree-icon"));
 		waitResponse();
-		Assert.assertTrue("9 was expected", jq("@treecell:contains(9)").exists());
+		Assertions.assertTrue(jq("@treecell:contains(9)").exists(), "9 was expected");
 
 		click(jq("@button"));
 		waitResponse();
-		Assert.assertEquals(2, jq("@treecell").length());
-		Assert.assertTrue("1 was expected", jq("@treecell:contains(1)").exists());
-		Assert.assertTrue("2 was expected", jq("@treecell:contains(2)").exists());
+		Assertions.assertEquals(2, jq("@treecell").length());
+		Assertions.assertTrue(jq("@treecell:contains(1)").exists(), "1 was expected");
+		Assertions.assertTrue(jq("@treecell:contains(2)").exists(), "2 was expected");
 
 		click(jq(".z-treecell:contains(1) .z-tree-icon"));
 		waitResponse();
-		Assert.assertTrue("3 was expected", jq("@treecell:contains(3)").exists());
-		Assert.assertTrue("4 was expected", jq("@treecell:contains(4)").exists());
+		Assertions.assertTrue(jq("@treecell:contains(3)").exists(), "3 was expected");
+		Assertions.assertTrue(jq("@treecell:contains(4)").exists(), "4 was expected");
 
 		click(jq(".z-treecell:contains(4) .z-tree-icon"));
 		waitResponse();
-		Assert.assertTrue("9 was expected", jq("@treecell:contains(9)").exists());
-		Assert.assertTrue("10 was expected", jq("@treecell:contains(10)").exists());
+		Assertions.assertTrue(jq("@treecell:contains(9)").exists(), "9 was expected");
+		Assertions.assertTrue(jq("@treecell:contains(10)").exists(), "10 was expected");
 
 		click(jq(".z-treecell:contains(9) .z-tree-icon"));
 		waitResponse();
-		Assert.assertTrue("19 was expected", jq("@treecell:contains(19)").exists());
+		Assertions.assertTrue(jq("@treecell:contains(19)").exists(), "19 was expected");
 	}
 }

@@ -11,10 +11,10 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -32,12 +32,13 @@ public class B85_ZK_3968Test extends WebDriverTestCase {
 		waitResponse();
 		String result2 = getZKLog();
 		closeZKLog();
-		Assert.assertNotEquals(result1, result2);
+		Assertions.assertNotEquals(result1, result2);
 
 		click(jq("@button:eq(1)"));
 		waitResponse();
 		click(jq("@button:eq(3)"));
 		waitResponse();
-		Assert.assertTrue("It should print out the results", isZKLogAvailable());
+		Assertions.assertTrue(isZKLogAvailable(),
+				"It should print out the results");
 	}
 }

@@ -11,13 +11,13 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.not;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -29,7 +29,7 @@ public class F90_ZK_4334Test extends WebDriverTestCase {
 		sleep(300);
 		waitResponse();
 
-		Assert.assertThat(jq("$tz").text(), containsString("GMT"));
-		Assert.assertThat(jq("$zid").text(), not(containsString("GMT")));
+		assertThat(jq("$tz").text(), containsString("GMT"));
+		assertThat(jq("$zid").text(), not(containsString("GMT")));
 	}
 }

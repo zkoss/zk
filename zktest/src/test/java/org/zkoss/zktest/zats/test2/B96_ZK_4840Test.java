@@ -11,9 +11,10 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 public class B96_ZK_4840Test extends WebDriverTestCase {
 	@Test
@@ -32,7 +33,7 @@ public class B96_ZK_4840Test extends WebDriverTestCase {
 			if (textOffsetLeft == -1)
 				textOffsetLeft = target;
 			else
-				Assert.assertEquals("you should see all the " + targetName + " with consistent text alignment", textOffsetLeft, target, 1);
+				Assertions.assertEquals(textOffsetLeft, target, 1, "you should see all the " + targetName + " with consistent text alignment");
 		}
 	}
 }

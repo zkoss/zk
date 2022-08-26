@@ -11,17 +11,18 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 public class B95_ZK_4585Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
 		int defaultTop = jq(".z-checkbox-content").eq(0).positionTop();
-		Assert.assertEquals("label of tristate mold is misaligned", defaultTop, jq(".z-checkbox-content").eq(1).positionTop(), 1);
-		Assert.assertEquals("label of switch mold is misaligned", defaultTop, jq(".z-checkbox-content").eq(2).positionTop(), 1);
-		Assert.assertEquals("label of toggle mold is misaligned", defaultTop, jq(".z-checkbox-content").eq(3).positionTop(), 1);
+		Assertions.assertEquals(defaultTop, jq(".z-checkbox-content").eq(1).positionTop(), 1, "label of tristate mold is misaligned");
+		Assertions.assertEquals(defaultTop, jq(".z-checkbox-content").eq(2).positionTop(), 1, "label of switch mold is misaligned");
+		Assertions.assertEquals(defaultTop, jq(".z-checkbox-content").eq(3).positionTop(), 1, "label of toggle mold is misaligned");
 	}
 }

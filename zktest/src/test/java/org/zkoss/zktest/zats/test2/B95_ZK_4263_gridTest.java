@@ -11,11 +11,11 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author rudyhuang
@@ -31,10 +31,12 @@ public class B95_ZK_4263_gridTest extends WebDriverTestCase {
 		final JQuery group = jq("@group:eq(0)");
 		click(widget(group).$n("img"));
 		waitResponse();
-		Assert.assertFalse("The group is still opened", group.hasClass("z-group-open"));
+		Assertions.assertFalse(group.hasClass("z-group-open"),
+				"The group is still opened");
 
 		click(widget(group).$n("img"));
 		waitResponse();
-		Assert.assertTrue("The group is still opened", group.hasClass("z-group-open"));
+		Assertions.assertTrue(group.hasClass("z-group-open"),
+				"The group is still opened");
 	}
 }

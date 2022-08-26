@@ -11,10 +11,10 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -27,11 +27,11 @@ public class B96_ZK_4387Test extends WebDriverTestCase {
 		click(jq("@button:contains(append)"));
 		waitResponse();
 		click(jq("@chosenbox"));
-		Assert.assertEquals("Append failed", "Moon", jq(".z-chosenbox-option:last").text());
+		Assertions.assertEquals("Moon", jq(".z-chosenbox-option:last").text(), "Append failed");
 
 		click(jq("@button:contains(prepend)"));
 		waitResponse();
 		click(jq("@chosenbox"));
-		Assert.assertEquals("Prepend failed", "Mars", jq(".z-chosenbox-option:first").text());
+		Assertions.assertEquals("Mars", jq(".z-chosenbox-option:first").text(), "Prepend failed");
 	}
 }

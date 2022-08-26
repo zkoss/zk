@@ -1,9 +1,12 @@
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
+
+
 
 /**
  * @author bob peng
@@ -12,7 +15,7 @@ public class B85_ZK_3723Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
-		assertEquals("Input type should be password", "password", jq(".z-combobox-input:eq(0)").attr("type"));
-		assertEquals("Input type should be password", "password", jq(".z-bandbox-input:eq(0)").attr("type"));
+		assertEquals("password", jq(".z-combobox-input:eq(0)").attr("type"), "Input type should be password");
+		assertEquals("password", jq(".z-bandbox-input:eq(0)").attr("type"), "Input type should be password");
 	}
 }

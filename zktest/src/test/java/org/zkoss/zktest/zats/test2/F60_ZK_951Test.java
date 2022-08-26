@@ -11,12 +11,12 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -34,7 +34,7 @@ public class F60_ZK_951Test extends WebDriverTestCase {
 		waitResponse();
 		new Select(toElement(jq("@selectbox:eq(3)"))).selectByVisibleText("10");
 		waitResponse();
-		Assert.assertEquals(10, jq(".z-biglistbox-body-frozen .z-biglistbox-row").length());
+		Assertions.assertEquals(10, jq(".z-biglistbox-body-frozen .z-biglistbox-row").length());
 
 		Actions actions = getActions();
 		actions.clickAndHold(toElement(jq(".z-biglistbox-wscroll-horizontal .z-biglistbox-wscroll-body")))
@@ -43,7 +43,7 @@ public class F60_ZK_951Test extends WebDriverTestCase {
 				.release()
 				.perform();
 		waitResponse();
-		Assert.assertNotEquals("Header x = 2", trim(jq(".z-biglistbox-header-leftmost:last").text()));
+		Assertions.assertNotEquals("Header x = 2", trim(jq(".z-biglistbox-header-leftmost:last").text()));
 
 		actions.clickAndHold(toElement(jq(".z-biglistbox-wscroll-vertical .z-biglistbox-wscroll-body")))
 				.moveByOffset(0, 200)
@@ -51,10 +51,10 @@ public class F60_ZK_951Test extends WebDriverTestCase {
 				.release()
 				.perform();
 		waitResponse();
-		Assert.assertNotEquals("y = 0", trim(jq(".z-biglistbox-row:first td:first").text()));
+		Assertions.assertNotEquals("y = 0", trim(jq(".z-biglistbox-row:first td:first").text()));
 
 		click(jq("@button"));
 		waitResponse();
-		Assert.assertFalse(hasError());
+		Assertions.assertFalse(hasError());
 	}
 }

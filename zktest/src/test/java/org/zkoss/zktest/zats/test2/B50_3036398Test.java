@@ -11,12 +11,12 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.lessThanOrEqualTo;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -28,6 +28,6 @@ public class B50_3036398Test extends WebDriverTestCase {
 
 		int frozenBottom = jq("@frozen").positionTop() + jq("@frozen").outerHeight();
 		int listboxBottom = jq("@listbox").positionTop() + jq("@listbox").outerHeight();
-		Assert.assertThat(frozenBottom, lessThanOrEqualTo(listboxBottom));
+		assertThat(frozenBottom, lessThanOrEqualTo(listboxBottom));
 	}
 }

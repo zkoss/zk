@@ -11,11 +11,11 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author rudyhuang
@@ -38,10 +38,10 @@ public class B90_ZK_4483Test extends WebDriverTestCase {
 		waitResponse();
 
 		JQuery mask = jq(".z-modal-mask");
-		Assert.assertEquals("fixed", mask.css("position"));
+		Assertions.assertEquals("fixed", mask.css("position"));
 
-		Assert.assertEquals("Busy mask not is covered",
+		Assertions.assertEquals(
 				jq("@window:last").positionTop(),
-				jq(".z-apply-mask").positionTop(), 2);
+				jq(".z-apply-mask").positionTop(), 2, "Busy mask not is covered");
 	}
 }

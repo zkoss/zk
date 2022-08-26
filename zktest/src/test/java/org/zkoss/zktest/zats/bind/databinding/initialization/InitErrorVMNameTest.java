@@ -10,7 +10,9 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.bind.databinding.initialization;
 
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zats.ZatsException;
 import org.zkoss.zktest.zats.ZATSTestCase;
@@ -19,8 +21,10 @@ import org.zkoss.zktest.zats.ZATSTestCase;
  * @author jameschu
  */
 public class InitErrorVMNameTest extends ZATSTestCase {
-	@Test(expected = ZatsException.class)
+	@Test
 	public void test() {
-		connect();
+		assertThrows(ZatsException.class, () -> {
+			connect();
+		});
 	}
 }

@@ -11,11 +11,12 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.interactions.Actions;
-import org.zkoss.zktest.zats.WebDriverTestCase;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 public class B50_ZK_475Test extends WebDriverTestCase {
 	@Test
@@ -28,7 +29,7 @@ public class B50_ZK_475Test extends WebDriverTestCase {
 		waitResponse();
 		act.sendKeys(Keys.TAB).perform();
 		waitResponse();
-		Assert.assertEquals("focus on 2nd textbox", getZKLog());
+		Assertions.assertEquals("focus on 2nd textbox", getZKLog());
 
 		click(jq(".z-bandbox-button:eq(1)"));
 		waitResponse();
@@ -36,6 +37,6 @@ public class B50_ZK_475Test extends WebDriverTestCase {
 		waitResponse();
 		act.sendKeys(Keys.TAB).perform();
 		waitResponse();
-		Assert.assertFalse(jq(".z-bandbox-open").exists());
+		Assertions.assertFalse(jq(".z-bandbox-open").exists());
 	}
 }

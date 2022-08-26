@@ -11,16 +11,16 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.startsWithIgnoringCase;
 
 import java.util.Collections;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.chrome.ChromeOptions;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author rudyhuang
@@ -43,7 +43,7 @@ public class B50_3052381Test extends WebDriverTestCase {
 		String[] lines = getZKLog().split("\n");
 		for (int i = 0, lineLen = lines.length; i < lineLen; i++) {
 			String week = weeks.eq((weekIndexStart + i) % 7).text();
-			Assert.assertThat(lines[i], startsWithIgnoringCase(week));
+			assertThat(lines[i], startsWithIgnoringCase(week));
 		}
 	}
 }

@@ -11,8 +11,8 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.wcag;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 
 /**
@@ -45,6 +45,6 @@ public class DrawerTest extends WcagTestCase {
 		waitResponse();
 		sendKeys(jq("@textbox"), Keys.ESCAPE);
 		waitResponse();
-		Assert.assertTrue(jq("@drawer").isVisible());
+		Assertions.assertTrue(jq("@drawer").isVisible());
 	}
 }

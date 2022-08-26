@@ -11,7 +11,8 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zats.ZatsException;
 import org.zkoss.zktest.zats.ZATSTestCase;
@@ -20,8 +21,8 @@ import org.zkoss.zktest.zats.ZATSTestCase;
  * @author jameschu
  */
 public class B70_ZK_2879Test extends ZATSTestCase {
-	@Test(expected = ZatsException.class)
+	@Test
 	public void test() {
-		connect();
+		Assertions.assertThrows(ZatsException.class, () -> connect());
 	}
 }

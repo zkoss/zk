@@ -11,7 +11,8 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zats.ZatsException;
 import org.zkoss.zats.mimic.DesktopAgent;
@@ -21,11 +22,13 @@ import org.zkoss.zktest.zats.ZATSTestCase;
  * @author rudyhuang
  */
 public class F95_ZK_4649_setterTest extends ZATSTestCase {
-	@Test(expected = ZatsException.class)
+	@Test
 	public void testShouldErrorIfSrclangIsEmpty() {
-		DesktopAgent desktop = connect();
+		Assertions.assertThrows(ZatsException.class, () -> {
+			DesktopAgent desktop = connect();
 
-		desktop.queryAll("button").get(0).click();
+			desktop.queryAll("button").get(0).click();
+		});
 	}
 
 	@Test

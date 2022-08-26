@@ -14,8 +14,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zktest.zats.ZATSTestCase;
@@ -31,6 +32,6 @@ public class B80_ZK_2789Test extends ZATSTestCase {
 		DesktopAgent desktop = connect();
 		ComponentAgent comboAgent = desktop.query("#cb1");
 		Combobox combobox = comboAgent.as(Combobox.class);
-		Assert.assertEquals("None", combobox.getItemAtIndex(0).getLabel());
+		Assertions.assertEquals("None", combobox.getItemAtIndex(0).getLabel());
 	}
 }

@@ -11,15 +11,15 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -37,7 +37,7 @@ public class B50_2960720Test extends WebDriverTestCase {
 
 		driver.switchTo().frame(toElement(jq("@ckeditor iframe")));
 		WebElement body = driver.findElement(By.tagName("body"));
-		Assert.assertThat(body.getText(), allOf(containsString("Jone"), containsString("Mary")));
+		assertThat(body.getText(), allOf(containsString("Jone"), containsString("Mary")));
 	}
 
 	private void waitForCkEditorReady(String ckeditorId, long timeoutMs) {

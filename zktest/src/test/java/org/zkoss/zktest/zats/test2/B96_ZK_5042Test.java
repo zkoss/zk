@@ -11,10 +11,10 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author jumperchen
@@ -30,7 +30,7 @@ public class B96_ZK_5042Test extends WebDriverTestCase {
 		//4. click "collapse" to close all tree nodes
 		//5. all nodes are close
 
-		Assert.assertEquals(0, jq(".z-tree-line").length());
+		Assertions.assertEquals(0, jq(".z-tree-line").length());
 
 		int scrollHeight = Integer.parseInt(jq(".z-tree-body").toElement().get("scrollHeight"));
 		jq(".z-tree-body").scrollTop(scrollHeight); // scroll to the end of the list
@@ -44,11 +44,11 @@ public class B96_ZK_5042Test extends WebDriverTestCase {
 
 		waitResponse();
 
-		Assert.assertTrue(100 < jq(".z-tree-line").length());
+		Assertions.assertTrue(100 < jq(".z-tree-line").length());
 
 		click(jq("@button:contains(collapse)"));
 		waitResponse();
-		Assert.assertEquals(0, jq(".z-tree-line").length());
+		Assertions.assertEquals(0, jq(".z-tree-line").length());
 	}
 
 	@Test
@@ -60,7 +60,7 @@ public class B96_ZK_5042Test extends WebDriverTestCase {
 		//3. click "collapse" to close all tree nodes
 		//4. all nodes are close
 
-		Assert.assertEquals(0, jq(".z-tree-line").length());
+		Assertions.assertEquals(0, jq(".z-tree-line").length());
 
 		click(jq("@button:contains(expand)"));
 		waitResponse();
@@ -69,11 +69,11 @@ public class B96_ZK_5042Test extends WebDriverTestCase {
 		jq(".z-tree-body").scrollTop(scrollHeight/2);
 		waitResponse();
 
-		Assert.assertTrue(100 < jq(".z-tree-line").length());
+		Assertions.assertTrue(100 < jq(".z-tree-line").length());
 
 		click(jq("@button:contains(collapse)"));
 		waitResponse();
-		Assert.assertEquals(0, jq(".z-tree-line").length());
+		Assertions.assertEquals(0, jq(".z-tree-line").length());
 	}
 
 	@Test
@@ -85,7 +85,7 @@ public class B96_ZK_5042Test extends WebDriverTestCase {
 		//3. click "collapse" to close all tree nodes
 		//4. all nodes are close
 
-		Assert.assertEquals(0, jq(".z-tree-line").length());
+		Assertions.assertEquals(0, jq(".z-tree-line").length());
 
 		click(jq("@button:contains(expand)"));
 		waitResponse();
@@ -94,11 +94,11 @@ public class B96_ZK_5042Test extends WebDriverTestCase {
 		jq(".z-tree-body").scrollTop(scrollHeight); // scroll to the end of the list
 		waitResponse();
 
-		Assert.assertTrue(100 < jq(".z-tree-line").length());
+		Assertions.assertTrue(100 < jq(".z-tree-line").length());
 
 		click(jq("@button:contains(collapse)"));
 		waitResponse();
-		Assert.assertEquals(0, jq(".z-tree-line").length());
+		Assertions.assertEquals(0, jq(".z-tree-line").length());
 	}
 
 	@Test
@@ -111,7 +111,7 @@ public class B96_ZK_5042Test extends WebDriverTestCase {
 		//4. all nodes are close
 		//5. test again from No1 ~ No4
 
-		Assert.assertEquals(0, jq(".z-tree-line").length());
+		Assertions.assertEquals(0, jq(".z-tree-line").length());
 
 		click(jq("@button:contains(expand)"));
 		waitResponse();
@@ -120,11 +120,11 @@ public class B96_ZK_5042Test extends WebDriverTestCase {
 		jq(".z-tree-body").scrollTop(scrollHeight); // scroll to the end of the list
 		waitResponse();
 
-		Assert.assertTrue(100 < jq(".z-tree-line").length());
+		Assertions.assertTrue(100 < jq(".z-tree-line").length());
 
 		click(jq("@button:contains(collapse)"));
 		waitResponse();
-		Assert.assertEquals(0, jq(".z-tree-line").length());
+		Assertions.assertEquals(0, jq(".z-tree-line").length());
 
 		click(jq("@button:contains(expand)"));
 		waitResponse();
@@ -133,10 +133,10 @@ public class B96_ZK_5042Test extends WebDriverTestCase {
 		jq(".z-tree-body").scrollTop(scrollHeight); // scroll to the end of the list
 		waitResponse();
 
-		Assert.assertEquals(100, jq(".z-tree-line").length());
+		Assertions.assertEquals(100, jq(".z-tree-line").length());
 
 		click(jq("@button:contains(collapse)"));
 		waitResponse();
-		Assert.assertEquals(0, jq(".z-tree-line").length());
+		Assertions.assertEquals(0, jq(".z-tree-line").length());
 	}
 }

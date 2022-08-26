@@ -16,11 +16,11 @@ package org.zkoss.zktest.zats.test2;
 
 import java.util.Iterator;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * 
@@ -37,7 +37,7 @@ public class B80_ZK_2969Test extends WebDriverTestCase {
 		String msg = getZKLog();
 		String onSelectMsg = msg.substring(msg.indexOf(":") + 1, msg.indexOf("onCheckSelectAll:")).trim();
 		String onCheckSelectAllMsg = msg.substring(msg.lastIndexOf(":") + 1).trim();
-		Assert.assertEquals(onSelectMsg, onCheckSelectAllMsg);
+		Assertions.assertEquals(onSelectMsg, onCheckSelectAllMsg);
 		
 		// clears the message
 		closeZKLog();
@@ -48,7 +48,7 @@ public class B80_ZK_2969Test extends WebDriverTestCase {
 		msg = getZKLog();
 		onSelectMsg = msg.substring(msg.indexOf(":") + 1, msg.indexOf("onCheckSelectAll:")).trim();
 		onCheckSelectAllMsg = msg.substring(msg.lastIndexOf(":") + 1).trim();
-		Assert.assertEquals(onSelectMsg, onCheckSelectAllMsg);
+		Assertions.assertEquals(onSelectMsg, onCheckSelectAllMsg);
 		
 		// check to select all and un-select item 2, then compare selected items from both listbox
 		click(jq(".z-listheader-checkable").eq(0));
@@ -66,7 +66,7 @@ public class B80_ZK_2969Test extends WebDriverTestCase {
 				iterPaging = jq(".z-listbox").eq(1).find(".z-listitem-selected").iterator();
 			}
 			JQuery p = iterPaging.next();
-			Assert.assertEquals(np.text(), p.text());
+			Assertions.assertEquals(np.text(), p.text());
 		}
 	}
 	
@@ -80,7 +80,7 @@ public class B80_ZK_2969Test extends WebDriverTestCase {
 		String msg = getZKLog();
 		String onSelectMsg = msg.substring(msg.indexOf(":") + 1, msg.indexOf("onCheckSelectAll:")).trim();
 		String onCheckSelectAllMsg = msg.substring(msg.lastIndexOf(":") + 1).trim();
-		Assert.assertEquals(onSelectMsg, onCheckSelectAllMsg);
+		Assertions.assertEquals(onSelectMsg, onCheckSelectAllMsg);
 		
 		// clears the message
 		closeZKLog();
@@ -91,7 +91,7 @@ public class B80_ZK_2969Test extends WebDriverTestCase {
 		msg = getZKLog();
 		onSelectMsg = msg.substring(msg.indexOf(":") + 1, msg.indexOf("onCheckSelectAll:")).trim();
 		onCheckSelectAllMsg = msg.substring(msg.lastIndexOf(":") + 1).trim();
-		Assert.assertEquals(onSelectMsg, onCheckSelectAllMsg);
+		Assertions.assertEquals(onSelectMsg, onCheckSelectAllMsg);
 		
 		// check to select all and un-select item 2, then compare selected items from both listbox
 		click(jq(".z-listheader-checkable").eq(1));
@@ -106,7 +106,7 @@ public class B80_ZK_2969Test extends WebDriverTestCase {
 				iterPaging = jq(".z-listbox").eq(1).find(".z-listitem-selected").iterator();
 			}
 			JQuery p = iterPaging.next();
-			Assert.assertEquals(np.text(), p.text());
+			Assertions.assertEquals(np.text(), p.text());
 		}
 	}
 }

@@ -11,10 +11,11 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class F86_ZK_3532Test extends WebDriverTestCase {
 	@Test
@@ -24,46 +25,46 @@ public class F86_ZK_3532Test extends WebDriverTestCase {
 		
 		click(jq("$btn1"));
 		waitResponse();
-		Assert.assertTrue(div1.hasClass("classA"));
+		Assertions.assertTrue(div1.hasClass("classA"));
 		
 		click(jq("$btn4"));
 		waitResponse();
-		Assert.assertTrue(div1.hasClass("classA"));
+		Assertions.assertTrue(div1.hasClass("classA"));
 		
 		click(jq("$btn2"));
 		waitResponse();
-		Assert.assertTrue(div1.hasClass("classA") && div1.hasClass("classB"));
+		Assertions.assertTrue(div1.hasClass("classA") && div1.hasClass("classB"));
 		
 		click(jq("$btn3"));
 		waitResponse();
-		Assert.assertTrue(!div1.hasClass("classA") && div1.hasClass("classB"));
+		Assertions.assertTrue(!div1.hasClass("classA") && div1.hasClass("classB"));
 		
 		click(jq("$btn4"));
 		waitResponse();
-		Assert.assertFalse(div1.hasClass("classB"));
+		Assertions.assertFalse(div1.hasClass("classB"));
 		
 		click(jq("$btn6"));
 		waitResponse();
-		Assert.assertTrue(div1.hasClass("classA") && div1.hasClass("classB") && div1.hasClass("classC"));
+		Assertions.assertTrue(div1.hasClass("classA") && div1.hasClass("classB") && div1.hasClass("classC"));
 		
 		click(jq("$btn5"));
 		waitResponse();
-		Assert.assertTrue(!div1.hasClass("classA") && !div1.hasClass("classB") && !div1.hasClass("classC"));
+		Assertions.assertTrue(!div1.hasClass("classA") && !div1.hasClass("classB") && !div1.hasClass("classC"));
 		
 		click(jq("$btn6"));
 		waitResponse();
 		click(jq("$btn7"));
 		waitResponse();
-		Assert.assertTrue(!div1.hasClass("classA") && !div1.hasClass("classB") && div1.hasClass("classC"));
+		Assertions.assertTrue(!div1.hasClass("classA") && !div1.hasClass("classB") && div1.hasClass("classC"));
 		
 		click(jq("$btn6"));
 		waitResponse();
 		click(jq("$btn8"));
 		waitResponse();
-		Assert.assertTrue(div1.hasClass("AAAAA") && div1.hasClass("A"));
+		Assertions.assertTrue(div1.hasClass("AAAAA") && div1.hasClass("A"));
 		
 		click(jq("$btn9"));
 		waitResponse();
-		Assert.assertTrue(div1.hasClass("AAAAA") && !div1.hasClass("A"));
+		Assertions.assertTrue(div1.hasClass("AAAAA") && !div1.hasClass("A"));
 	}
 }

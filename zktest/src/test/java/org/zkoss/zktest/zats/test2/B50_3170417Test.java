@@ -11,11 +11,11 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class B50_3170417Test extends WebDriverTestCase {
 
@@ -38,21 +38,21 @@ public class B50_3170417Test extends WebDriverTestCase {
 		JQuery openButton = getButtonByContent("open");
 
 		click(visibleButton);
-		Assert.assertFalse(treerow4.exists());
+		Assertions.assertFalse(treerow4.exists());
 
 		click(openButton);
 		click(visibleButton);
-		Assert.assertTrue(treerow4.is(":last-child"));
+		Assertions.assertTrue(treerow4.is(":last-child"));
 
 		click(visibleButton);
 		click(openButton);
 		click(visibleButton);
-		Assert.assertTrue(treerow4.exists());
-		Assert.assertTrue(treerow4.next().exists());
+		Assertions.assertTrue(treerow4.exists());
+		Assertions.assertTrue(treerow4.next().exists());
 	}
 
 	private void verifyPagingInfo() {
-		Assert.assertTrue(jq(".z-paging-info:contains([ 1 - 10 / 15 ])").exists());
+		Assertions.assertTrue(jq(".z-paging-info:contains([ 1 - 10 / 15 ])").exists());
 	}
 
 	private JQuery getTreeiconByContent(String content) {

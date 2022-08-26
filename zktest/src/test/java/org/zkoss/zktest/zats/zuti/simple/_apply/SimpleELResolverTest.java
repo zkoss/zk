@@ -11,8 +11,9 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.zuti.simple._apply;
 
-import junit.framework.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zktest.zats.zuti.ZutiBasicTestCase;
@@ -26,6 +27,6 @@ public class SimpleELResolverTest extends ZutiBasicTestCase {
 	public void test() {
 		DesktopAgent desktop = connect();
 		ComponentAgent window = desktop.query("window");
-		Assert.assertEquals(window.getFirstChild().<Textbox>getOwner().getValue(), "MyName");
+		Assertions.assertEquals(window.getFirstChild().<Textbox>getOwner().getValue(), "MyName");
 	}
 }

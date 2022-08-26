@@ -11,11 +11,11 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author rudyhuang
@@ -34,18 +34,18 @@ public class B50_3025339Test extends WebDriverTestCase {
 	private void handleTimebox(JQuery comp) {
 		click(widget(comp).$n("btn-up"));
 		waitResponse();
-		Assert.assertEquals("1:00:00 AM", comp.find("input").val());
+		Assertions.assertEquals("1:00:00 AM", comp.find("input").val());
 		click(widget(comp).$n("btn-down"));
 		waitResponse();
-		Assert.assertEquals("12:00:00 AM", comp.find("input").val());
+		Assertions.assertEquals("12:00:00 AM", comp.find("input").val());
 	}
 
 	private void handleSpinner(JQuery comp) {
 		click(widget(comp).$n("btn-up"));
 		waitResponse();
-		Assert.assertEquals("1", comp.find("input").val());
+		Assertions.assertEquals("1", comp.find("input").val());
 		click(widget(comp).$n("btn-down"));
 		waitResponse();
-		Assert.assertEquals("0", comp.find("input").val());
+		Assertions.assertEquals("0", comp.find("input").val());
 	}
 }

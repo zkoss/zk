@@ -1,12 +1,12 @@
 package org.zkoss.zktest.zats.test2;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zktest.zats.ZATSTestCase;
-import org.zkoss.zul.Div;
 import org.zkoss.zul.Label;
 
 public class F80_ZK_2508Test extends ZATSTestCase {

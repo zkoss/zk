@@ -11,11 +11,11 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.Element;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.Element;
 
 /**
  * @author rudyhuang
@@ -26,6 +26,6 @@ public class B90_ZK_4246Test extends WebDriverTestCase {
 		connect();
 
 		Element cave = widget("@grid").$n("cave");
-		Assert.assertNotEquals("hidden", jq(cave).css("visibility"));
+		Assertions.assertNotEquals("hidden", jq(cave).css("visibility"));
 	}
 }

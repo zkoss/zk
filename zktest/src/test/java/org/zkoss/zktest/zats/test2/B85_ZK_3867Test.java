@@ -11,17 +11,15 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Test;
-import org.zkoss.zats.mimic.ComponentAgent;
-import org.zkoss.zats.mimic.DesktopAgent;
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zktest.zats.ZATSTestCase;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.zats.mimic.ComponentAgent;
+import org.zkoss.zats.mimic.DesktopAgent;
+import org.zkoss.zktest.zats.ZATSTestCase;
 
 public class B85_ZK_3867Test extends ZATSTestCase {
 	@Test

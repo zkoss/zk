@@ -18,8 +18,8 @@ import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.io.Files;
 import org.zkoss.zk.ui.sys.DigestUtilsHelper;
@@ -32,11 +32,11 @@ public class B85_ZK_3347Test {
 	public void testMd5HexInputStream() throws Exception {
 		String expected;
 		try (InputStream in = getClassInputStream()) {
-			Assert.assertNotNull("This file stream can not be null! (Not compiled?)", in);
+			Assertions.assertNotNull(in, "This file stream can not be null! (Not compiled?)");
 			expected = bytesToHexString(hashMd5(in));
 		}
 		try (InputStream in = getClassInputStream()) {
-			Assert.assertEquals(expected, DigestUtilsHelper.md5Hex(in));
+			Assertions.assertEquals(expected, DigestUtilsHelper.md5Hex(in));
 		}
 	}
 

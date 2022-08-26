@@ -11,12 +11,12 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.Element;
-import org.zkoss.zktest.zats.ztl.Widget;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.Element;
+import org.zkoss.test.webdriver.ztl.Widget;
 
 /**
  * @author rudyhuang
@@ -64,13 +64,13 @@ public class F90_ZK_4347_constTest extends WebDriverTestCase {
 				.find(".z-calendar-cell:contains(11)")
 				.hasClass("z-calendar-disabled");
 		if (!btnDisabled)
-			Assert.assertTrue(hasError());
+			Assertions.assertTrue(hasError());
 		else
 			click(db.$n("btn")); // close popup
 
 		type(db.$n("real"), "");
 		sleep(100);
-		Assert.assertFalse(hasError()); // Ensure the previous error is cleaned
+		Assertions.assertFalse(hasError()); // Ensure the previous error is cleaned
 	}
 
 	private void testDateRange(Widget db) {
@@ -82,7 +82,7 @@ public class F90_ZK_4347_constTest extends WebDriverTestCase {
 		final boolean btnDisabled = jq(db.$n("pp"))
 				.find(".z-calendar-cell:contains(11)")
 				.hasClass("z-calendar-disabled");
-		Assert.assertTrue(btnDisabled);
+		Assertions.assertTrue(btnDisabled);
 
 		click(db.$n("btn")); // close popup
 	}
@@ -90,21 +90,21 @@ public class F90_ZK_4347_constTest extends WebDriverTestCase {
 	private void testDateRangeByServer(Widget db) {
 		click(db.nextSibling());
 		waitResponse();
-		Assert.assertTrue(hasError());
+		Assertions.assertTrue(hasError());
 
 		type(db.$n("real"), "");
 		sleep(100);
-		Assert.assertFalse(hasError());
+		Assertions.assertFalse(hasError());
 	}
 
 	private void testTimeRange(Widget tb) {
 		final Element inp = tb.$n("real");
 		typeTimebox(inp, "000000");
 		sleep(100);
-		Assert.assertTrue(hasError());
+		Assertions.assertTrue(hasError());
 
 		typeTimebox(inp, "150000");
-		Assert.assertFalse(hasError());
+		Assertions.assertFalse(hasError());
 	}
 
 	private void typeTimebox(Element inp, String text) {
@@ -119,24 +119,24 @@ public class F90_ZK_4347_constTest extends WebDriverTestCase {
 		waitResponse();
 		click(jq(tp.$n("cave")).find(".z-timepicker-option").first());
 		waitResponse();
-		Assert.assertTrue(hasError());
+		Assertions.assertTrue(hasError());
 
 		click(tp.$n("btn"));
 		waitResponse();
 		click(jq(tp.$n("cave")).find(".z-timepicker-option").eq(10));
 		waitResponse();
-		Assert.assertFalse(hasError());
+		Assertions.assertFalse(hasError());
 	}
 
 	private void testTimeBefore(Widget tb) {
 		final Element inp = tb.$n("real");
 		typeTimebox(inp, "210000");
 		sleep(100);
-		Assert.assertTrue(hasError());
+		Assertions.assertTrue(hasError());
 
 		typeTimebox(inp, "150000");
 		sleep(100);
-		Assert.assertFalse(hasError());
+		Assertions.assertFalse(hasError());
 	}
 
 	private void testTimeBeforeByPick(Widget tp) {
@@ -144,12 +144,12 @@ public class F90_ZK_4347_constTest extends WebDriverTestCase {
 		waitResponse();
 		click(jq(tp.$n("cave")).find(".z-timepicker-option").eq(20));
 		waitResponse();
-		Assert.assertTrue(hasError());
+		Assertions.assertTrue(hasError());
 
 		click(tp.$n("btn"));
 		waitResponse();
 		click(jq(tp.$n("cave")).find(".z-timepicker-option").eq(10));
 		waitResponse();
-		Assert.assertFalse(hasError());
+		Assertions.assertFalse(hasError());
 	}
 }

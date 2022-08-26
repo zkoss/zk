@@ -13,8 +13,8 @@ package org.zkoss.zktest.zats.test2;
 
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
@@ -29,11 +29,11 @@ public class B96_ZK_4897Test extends ZATSTestCase {
 	public void test() {
 		final DesktopAgent desktop = connect();
 		final List<ComponentAgent> list = desktop.query("#content").getChildren();
-		Assert.assertEquals(5, list.size());
-		Assert.assertEquals("1", list.get(0).as(Label.class).getValue());
-		Assert.assertEquals("2", list.get(1).as(Label.class).getValue());
-		Assert.assertEquals("3", list.get(2).as(Label.class).getValue());
-		Assert.assertEquals("4", list.get(3).as(Label.class).getValue());
-		Assert.assertEquals("5", list.get(4).as(Label.class).getValue());
+		Assertions.assertEquals(5, list.size());
+		Assertions.assertEquals("1", list.get(0).as(Label.class).getValue());
+		Assertions.assertEquals("2", list.get(1).as(Label.class).getValue());
+		Assertions.assertEquals("3", list.get(2).as(Label.class).getValue());
+		Assertions.assertEquals("4", list.get(3).as(Label.class).getValue());
+		Assertions.assertEquals("5", list.get(4).as(Label.class).getValue());
 	}
 }

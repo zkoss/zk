@@ -11,12 +11,12 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class B80_ZK_3017Test extends WebDriverTestCase {
 
@@ -32,8 +32,8 @@ public class B80_ZK_3017Test extends WebDriverTestCase {
 			click(label);
 			waitResponse();
 			JQuery errorbox = jq(".z-errorbox");
-			Assert.assertTrue(errorbox.exists());
-			Assert.assertEquals("myMsg", errorbox.find(".z-errorbox-content").text());
+			Assertions.assertTrue(errorbox.exists());
+			Assertions.assertEquals("myMsg", errorbox.find(".z-errorbox-content").text());
 			for (int j = 0; j < 6; j++) {
 				sendKeys(textbox, Keys.BACK_SPACE);
 				waitResponse();
@@ -42,7 +42,7 @@ public class B80_ZK_3017Test extends WebDriverTestCase {
 			waitResponse();
 			click(label);
 			waitResponse();
-			Assert.assertFalse(errorbox.exists());
+			Assertions.assertFalse(errorbox.exists());
 		}
 	}
 }

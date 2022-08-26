@@ -11,15 +11,14 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import java.math.BigInteger;
+import java.sql.Date;
 
-import junit.framework.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.bind.proxy.ProxyHelper;
 import org.zkoss.zktest.zats.zuti.ZutiBasicTestCase;
-
-import java.math.BigInteger;
-import java.sql.Date;
 
 /**
  * @author jameschu
@@ -36,10 +35,10 @@ public class F80_ZK_3134Test extends ZutiBasicTestCase {
 		object.setDate(new Date(now.getTime()));
 		ZK3107Object proxy = ProxyHelper.createProxyIfAny(object);
 		
-		Assert.assertSame(object.getCount(), proxy.getCount());
-		Assert.assertSame(object.getLength(), proxy.getLength());
-		Assert.assertSame(object.getPrice(), proxy.getPrice()); //ERROR and don't expect to create a proxy here
-		Assert.assertSame(object.getDate(), proxy.getDate()); //ERROR and don't expect to create a proxy here
+		Assertions.assertSame(object.getCount(), proxy.getCount());
+		Assertions.assertSame(object.getLength(), proxy.getLength());
+		Assertions.assertSame(object.getPrice(), proxy.getPrice()); //ERROR and don't expect to create a proxy here
+		Assertions.assertSame(object.getDate(), proxy.getDate()); //ERROR and don't expect to create a proxy here
 	}
 
 	public static class ZK3107Object {

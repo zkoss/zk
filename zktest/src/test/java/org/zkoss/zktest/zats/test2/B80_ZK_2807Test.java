@@ -15,8 +15,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zktest.zats.ZATSTestCase;
 import org.zkoss.zul.Grid;
@@ -40,7 +41,7 @@ public class B80_ZK_2807Test extends ZATSTestCase {
 			Label l = (Label)row.getLastChild();
 			before.add(l.getValue());
 		}
-		Assert.assertEquals(expectedBefore, before);
+		Assertions.assertEquals(expectedBefore, before);
 		
 		desktop.query("#btn1").click();
 		
@@ -52,6 +53,6 @@ public class B80_ZK_2807Test extends ZATSTestCase {
 			Label l = (Label)row.getLastChild();
 			after.add(l.getValue());
 		}
-		Assert.assertEquals(expectedAfter, after);
+		Assertions.assertEquals(expectedAfter, after);
 	}
 }

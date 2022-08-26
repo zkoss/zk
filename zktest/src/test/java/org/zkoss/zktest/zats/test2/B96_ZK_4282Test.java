@@ -11,10 +11,10 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -26,7 +26,7 @@ public class B96_ZK_4282Test extends WebDriverTestCase {
 
 		click(jq("$lb1-1 @listitem:eq(0)"));
 		waitResponse();
-		Assert.assertTrue(jq("$lb1-2 @listitem:eq(0)").hasClass("z-listitem-selected"));
+		Assertions.assertTrue(jq("$lb1-2 @listitem:eq(0)").hasClass("z-listitem-selected"));
 	}
 
 	@Test
@@ -35,6 +35,6 @@ public class B96_ZK_4282Test extends WebDriverTestCase {
 
 		click(jq("$lb2-1 @listitem:eq(0)"));
 		waitResponse();
-		Assert.assertTrue(jq("$lb2-2 @listitem:eq(0)").hasClass("z-listitem-selected"));
+		Assertions.assertTrue(jq("$lb2-2 @listitem:eq(0)").hasClass("z-listitem-selected"));
 	}
 }

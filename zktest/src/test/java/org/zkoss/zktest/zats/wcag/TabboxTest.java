@@ -11,11 +11,11 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.wcag;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author rudyhuang
@@ -41,7 +41,7 @@ public class TabboxTest extends WcagTestCase {
 
 		click(widget("@tab:contains(Tab H):eq(0)").$n("cls"));
 		waitResponse();
-		Assert.assertTrue(jq(".z-tab-selected:eq(0)").is(":focus"));
+		Assertions.assertTrue(jq(".z-tab-selected:eq(0)").is(":focus"));
 	}
 
 	@Test
@@ -53,6 +53,6 @@ public class TabboxTest extends WcagTestCase {
 		waitResponse(true);
 		sendKeys(tabH, Keys.DELETE);
 		waitResponse();
-		Assert.assertTrue(jq(".z-tab-selected:eq(0)").is(":focus"));
+		Assertions.assertTrue(jq(".z-tab-selected:eq(0)").is(":focus"));
 	}
 }

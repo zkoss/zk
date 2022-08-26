@@ -11,10 +11,11 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class B50_ZK_328Test extends WebDriverTestCase {
 	@Test
@@ -31,16 +32,16 @@ public class B50_ZK_328Test extends WebDriverTestCase {
 		JQuery panel1 = jq(".z-panel").eq(1);
 		JQuery pChildren1 = jq(".z-panelchildren").eq(1);
 		
-		Assert.assertEquals(maxHeight, panel0.outerHeight());
-		Assert.assertEquals(maxWidth, panel0.outerWidth());
+		Assertions.assertEquals(maxHeight, panel0.outerHeight());
+		Assertions.assertEquals(maxWidth, panel0.outerWidth());
 		int panelChildrenHeight = panel0.innerHeight() - jq(".z-panel-header").eq(0).outerHeight();
-		Assert.assertEquals(panelChildrenHeight, pChildren0.outerHeight());
-		Assert.assertEquals(panel0.innerWidth(), pChildren0.outerWidth());
+		Assertions.assertEquals(panelChildrenHeight, pChildren0.outerHeight());
+		Assertions.assertEquals(panel0.innerWidth(), pChildren0.outerWidth());
 		
-		Assert.assertEquals(maxHeight, panel1.outerHeight());
-		Assert.assertEquals(maxWidth, panel1.outerWidth());
+		Assertions.assertEquals(maxHeight, panel1.outerHeight());
+		Assertions.assertEquals(maxWidth, panel1.outerWidth());
 		panelChildrenHeight = panel1.innerHeight() - jq(".z-panel-header").eq(1).outerHeight();
-		Assert.assertEquals(panelChildrenHeight, pChildren1.outerHeight());
-		Assert.assertEquals(panel1.innerWidth(), pChildren1.outerWidth());
+		Assertions.assertEquals(panelChildrenHeight, pChildren1.outerHeight());
+		Assertions.assertEquals(panel1.innerWidth(), pChildren1.outerWidth());
 	}
 }

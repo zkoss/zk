@@ -11,10 +11,11 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class B50_ZK_275Test extends WebDriverTestCase {
 	@Test
@@ -26,19 +27,19 @@ public class B50_ZK_275Test extends WebDriverTestCase {
 		
 		click(jq("@button:contains(add Caption)"));
 		waitResponse();
-		Assert.assertTrue(jq(".z-caption").exists());
-		Assert.assertFalse(isZKLogAvailable());
+		Assertions.assertTrue(jq(".z-caption").exists());
+		Assertions.assertFalse(isZKLogAvailable());
 		
 		click(maxbutton);
 		waitResponse();
-		Assert.assertEquals(body.outerWidth(), zwindow.outerWidth());
-		Assert.assertEquals(body.outerHeight(), zwindow.outerHeight());
+		Assertions.assertEquals(body.outerWidth(), zwindow.outerWidth());
+		Assertions.assertEquals(body.outerHeight(), zwindow.outerHeight());
 		
 		click(maxbutton);
 		waitResponse();
 		click(jq("@button:contains(remove Caption)"));
 		waitResponse();
-		Assert.assertFalse(jq(".z-caption").exists());
-		Assert.assertFalse(isZKLogAvailable());
+		Assertions.assertFalse(jq(".z-caption").exists());
+		Assertions.assertFalse(isZKLogAvailable());
 	}
 }

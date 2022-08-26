@@ -11,11 +11,12 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.interactions.Actions;
-import org.zkoss.zktest.zats.WebDriverTestCase;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 public class B50_ZK_418Test extends WebDriverTestCase {
 	@Test
@@ -29,9 +30,9 @@ public class B50_ZK_418Test extends WebDriverTestCase {
 		act.keyUp(Keys.SHIFT).build().perform();
 		click(jq("@button:contains(t)"));
 		waitResponse();
-		Assert.assertEquals(5, jq(".z-messagebox").text().split(", ").length);
+		Assertions.assertEquals(5, jq(".z-messagebox").text().split(", ").length);
 		for (int i = 0; i < 5; i++) {
-			Assert.assertTrue(jq(".z-messagebox").text().split(", ")[i].contains(jq(".z-listitem-selected").eq(i).attr("id")));
+			Assertions.assertTrue(jq(".z-messagebox").text().split(", ")[i].contains(jq(".z-listitem-selected").eq(i).attr("id")));
 		}
 		click(jq("@button:contains(OK)"));
 		waitResponse();

@@ -11,8 +11,9 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.bind.advance;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zktest.zats.ZATSTestCase;
 
@@ -21,7 +22,7 @@ public class WiringSequenceTest extends ZATSTestCase {
 	public void test() {
 		DesktopAgent desktop = connect();
 
-		Assert.assertArrayEquals(
+		Assertions.assertArrayEquals(
 			new String[] {
 				"The variable resolver defined in the ZUML document."
 			},
@@ -33,7 +34,7 @@ public class WiringSequenceTest extends ZATSTestCase {
 	public void test2() {
 		DesktopAgent desktop = connect("/bind/advance/WiringSequence-2.zul");
 
-		Assert.assertArrayEquals(
+		Assertions.assertArrayEquals(
 			new String[] {
 				"The variable resolver annotated registered with the VariableResolver annotation."
 			},

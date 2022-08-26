@@ -16,8 +16,8 @@ import static org.hamcrest.Matchers.startsWith;
 import java.util.List;
 
 import org.hamcrest.MatcherAssert;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zats.ZatsException;
 import org.zkoss.zats.mimic.DesktopAgent;
@@ -33,7 +33,7 @@ public class InitTest extends ZATSTestCase {
 
 		desktop.query("button").click();
 		final List<String> zkLog = desktop.getZkLog();
-		Assert.assertEquals("InitVM.init was called\n", zkLog.get(0));
+		Assertions.assertEquals("InitVM.init was called\n", zkLog.get(0));
 	}
 
 	@Test
@@ -42,7 +42,7 @@ public class InitTest extends ZATSTestCase {
 
 		desktop.query("button").click();
 		final List<String> zkLog = desktop.getZkLog();
-		Assert.assertEquals("ChildInitOverrideVM.init was called twice\n" +
+		Assertions.assertEquals("ChildInitOverrideVM.init was called twice\n" +
 				"ChildInitOverrideVM.init was called twice\n", zkLog.get(0));
 	}
 
@@ -52,7 +52,7 @@ public class InitTest extends ZATSTestCase {
 
 		desktop.query("button").click();
 		final List<String> zkLog = desktop.getZkLog();
-		Assert.assertEquals("ChildInitNoSuperVM.childInit was called\n", zkLog.get(0));
+		Assertions.assertEquals("ChildInitNoSuperVM.childInit was called\n", zkLog.get(0));
 	}
 
 	@Test
@@ -61,7 +61,7 @@ public class InitTest extends ZATSTestCase {
 
 		desktop.query("button").click();
 		final List<String> zkLog = desktop.getZkLog();
-		Assert.assertEquals("InitVM.init was called\n" +
+		Assertions.assertEquals("InitVM.init was called\n" +
 				"ChildInitSuperVM.childInit was called\n", zkLog.get(0));
 	}
 
@@ -71,7 +71,7 @@ public class InitTest extends ZATSTestCase {
 
 		desktop.query("button").click();
 		final List<String> zkLog = desktop.getZkLog();
-		Assert.assertEquals("InitVM.init was called\n", zkLog.get(0));
+		Assertions.assertEquals("InitVM.init was called\n", zkLog.get(0));
 	}
 
 	@Test
@@ -80,12 +80,12 @@ public class InitTest extends ZATSTestCase {
 
 		desktop.query("button").click();
 		final List<String> zkLog = desktop.getZkLog();
-		Assert.assertEquals("ChildInitSuperNotExistVM.childInit was called\n", zkLog.get(0));
+		Assertions.assertEquals("ChildInitSuperNotExistVM.childInit was called\n", zkLog.get(0));
 	}
 
 	@Test
 	public void testMultipleInit() {
-		Throwable t = Assert.assertThrows(ZatsException.class, () ->
+		Throwable t = Assertions.assertThrows(ZatsException.class, () ->
 				connect("/bind/viewmodel/init/multiple-init.zul"));
 		MatcherAssert.assertThat(t.getMessage(), startsWith("more than one [@Init] in the class"));
 	}

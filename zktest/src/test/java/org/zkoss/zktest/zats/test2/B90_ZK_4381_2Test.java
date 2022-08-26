@@ -19,9 +19,9 @@ import java.io.ObjectOutputStream;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import org.zkoss.bind.annotation.Command;
@@ -39,7 +39,7 @@ import org.zkoss.zk.ui.sys.ExecutionsCtrl;
  * @author rudyhuang
  */
 public class B90_ZK_4381_2Test {
-	@Before
+	@BeforeEach
 	public void setUp() {
 		ExecutionsCtrl.setCurrent(mockExecution());
 	}
@@ -53,7 +53,7 @@ public class B90_ZK_4381_2Test {
 		return execution;
 	}
 
-	@After
+	@AfterEach
 	public void tearDown() {
 		ExecutionsCtrl.setCurrent(null);
 	}

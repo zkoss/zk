@@ -11,8 +11,9 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.bind.advance;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zktest.zats.ZATSTestCase;
 import org.zkoss.zul.Label;
@@ -35,32 +36,32 @@ public class ZKContextObjectParamTest extends ZATSTestCase {
 		Label sessionString = desktop.query("#sessionString").as(Label.class);
 		Label webAppName = desktop.query("#webAppName").as(Label.class);
 
-		Assert.assertNotEquals("", bindContextString.getValue());
-		Assert.assertNotEquals("", binderString.getValue());
-		Assert.assertEquals("null", eventName.getValue());
-		Assert.assertEquals("null", cmdName.getValue());
-		Assert.assertNotEquals("", executionString.getValue());
-		Assert.assertNotEquals("", idSpaceString.getValue());
-		Assert.assertNotEquals("", viewString.getValue());
-		Assert.assertNotEquals("", componentString.getValue());
-		Assert.assertNotEquals("", pageString.getValue());
-		Assert.assertNotEquals("", desktopString.getValue());
-		Assert.assertNotEquals("", sessionString.getValue());
-		Assert.assertNotEquals("", webAppName.getValue());
+		Assertions.assertNotEquals("", bindContextString.getValue());
+		Assertions.assertNotEquals("", binderString.getValue());
+		Assertions.assertEquals("null", eventName.getValue());
+		Assertions.assertEquals("null", cmdName.getValue());
+		Assertions.assertNotEquals("", executionString.getValue());
+		Assertions.assertNotEquals("", idSpaceString.getValue());
+		Assertions.assertNotEquals("", viewString.getValue());
+		Assertions.assertNotEquals("", componentString.getValue());
+		Assertions.assertNotEquals("", pageString.getValue());
+		Assertions.assertNotEquals("", desktopString.getValue());
+		Assertions.assertNotEquals("", sessionString.getValue());
+		Assertions.assertNotEquals("", webAppName.getValue());
 
 		desktop.query("button").click();
 
-		Assert.assertNotEquals("", bindContextString.getValue());
-		Assert.assertNotEquals("", binderString.getValue());
-		Assert.assertEquals("onClick", eventName.getValue());
-		Assert.assertEquals("show", cmdName.getValue());
-		Assert.assertNotEquals("", executionString.getValue());
-		Assert.assertNotEquals("", idSpaceString.getValue());
-		Assert.assertNotEquals("", viewString.getValue());
-		Assert.assertNotEquals("", componentString.getValue());
-		Assert.assertNotEquals("", pageString.getValue());
-		Assert.assertNotEquals("", desktopString.getValue());
-		Assert.assertNotEquals("", sessionString.getValue());
-		Assert.assertNotEquals("", webAppName.getValue());
+		Assertions.assertNotEquals("", bindContextString.getValue());
+		Assertions.assertNotEquals("", binderString.getValue());
+		Assertions.assertEquals("onClick", eventName.getValue());
+		Assertions.assertEquals("show", cmdName.getValue());
+		Assertions.assertNotEquals("", executionString.getValue());
+		Assertions.assertNotEquals("", idSpaceString.getValue());
+		Assertions.assertNotEquals("", viewString.getValue());
+		Assertions.assertNotEquals("", componentString.getValue());
+		Assertions.assertNotEquals("", pageString.getValue());
+		Assertions.assertNotEquals("", desktopString.getValue());
+		Assertions.assertNotEquals("", sessionString.getValue());
+		Assertions.assertNotEquals("", webAppName.getValue());
 	}
 }

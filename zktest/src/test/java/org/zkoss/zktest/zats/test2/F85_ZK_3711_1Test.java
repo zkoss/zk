@@ -11,8 +11,8 @@ Copyright (C) 2017 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zktest.zats.ZATSTestCase;
 
@@ -24,11 +24,11 @@ public class F85_ZK_3711_1Test extends ZATSTestCase {
 	public void testHistoryPopStateMoreThanOne() throws Exception {
 		try {
 			connect();
-			Assert.fail("Should throw an exception");
+			Assertions.fail("Should throw an exception");
 		} catch (Exception e) {
 			String message = e.getMessage();
 			if (!message.startsWith("more than one [@HistoryPopState]"))
-				Assert.fail("Unknown exception: " + message);
+				Assertions.fail("Unknown exception: " + message);
 		}
 	}
 }

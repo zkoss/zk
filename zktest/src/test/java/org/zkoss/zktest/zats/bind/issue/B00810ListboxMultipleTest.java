@@ -1,25 +1,19 @@
 package org.zkoss.zktest.zats.bind.issue;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
-import org.zkoss.zats.mimic.Zats;
 import org.zkoss.zats.mimic.operation.MultipleSelectAgent;
 import org.zkoss.zats.mimic.operation.SelectAgent;
 import org.zkoss.zktest.zats.ZATSTestCase;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Listbox;
-import org.zkoss.zul.Listcell;
-import org.zkoss.zul.Listgroup;
 import org.zkoss.zul.Listitem;
 
 public class B00810ListboxMultipleTest extends ZATSTestCase {

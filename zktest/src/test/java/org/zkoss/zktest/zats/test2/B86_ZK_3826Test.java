@@ -11,11 +11,11 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class B86_ZK_3826Test extends WebDriverTestCase {
 
@@ -36,15 +36,15 @@ public class B86_ZK_3826Test extends WebDriverTestCase {
 	private void testYearView() {
 		click(calenderTitle);
 		waitResponse();
-		Assert.assertEquals(getFirstCellText(), getStartYearInTitle());
-		Assert.assertEquals(getLastCellText(), getEndYearInTitle());
+		Assertions.assertEquals(getFirstCellText(), getStartYearInTitle());
+		Assertions.assertEquals(getLastCellText(), getEndYearInTitle());
 	}
 
 	private void testDecadeView() {
 		click(calenderTitle);
 		waitResponse();
-		Assert.assertEquals(getFirstCellText().split("-")[0].trim(), getStartYearInTitle());
-		Assert.assertEquals(getLastCellText().split("-")[1].trim(), getEndYearInTitle());
+		Assertions.assertEquals(getFirstCellText().split("-")[0].trim(), getStartYearInTitle());
+		Assertions.assertEquals(getLastCellText().split("-")[1].trim(), getEndYearInTitle());
 	}
 
 	private String getFirstCellText() {

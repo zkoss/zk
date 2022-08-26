@@ -11,17 +11,17 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
  */
 public class F95_ZK_4551Test extends WebDriverTestCase {
-	@Before
+	@BeforeEach
 	public void setUp() {
 		connect();
 	}
@@ -44,6 +44,6 @@ public class F95_ZK_4551Test extends WebDriverTestCase {
 	}
 
 	private void checkPopupPosition() {
-		Assert.assertEquals(jq("@textbox").offsetLeft(), jq("@popup").offsetLeft(), 2);
+		Assertions.assertEquals(jq("@textbox").offsetLeft(), jq("@popup").offsetLeft(), 2);
 	}
 }

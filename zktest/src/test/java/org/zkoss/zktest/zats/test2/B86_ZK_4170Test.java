@@ -11,11 +11,11 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class B86_ZK_4170Test extends WebDriverTestCase {
 
@@ -24,12 +24,12 @@ public class B86_ZK_4170Test extends WebDriverTestCase {
 		connect();
 		JQuery knobs = jq(".z-slider");
 		for (int i = 0; i < knobs.length(); i++) {
-			Assert.assertEquals(200, knobs.eq(i).width(), 2);
+			Assertions.assertEquals(200, knobs.eq(i).width(), 2);
 		}
 		click(jq(".z-button"));
 		waitResponse();
 		for (int i = 0; i < knobs.length(); i++) {
-			Assert.assertEquals(300, knobs.eq(i).height(), 2);
+			Assertions.assertEquals(300, knobs.eq(i).height(), 2);
 		}
 	}
 }

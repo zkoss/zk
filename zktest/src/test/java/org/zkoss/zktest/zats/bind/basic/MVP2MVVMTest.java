@@ -13,8 +13,8 @@ package org.zkoss.zktest.zats.bind.basic;
 
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
@@ -33,17 +33,17 @@ public class MVP2MVVMTest extends ZATSTestCase {
 		final Textbox textbox = desktop.query("window #mWinA #textA").as(Textbox.class);
 
 		buttonsOutside.get(0).click();
-		Assert.assertFalse(textbox.isDisabled());
+		Assertions.assertFalse(textbox.isDisabled());
 		buttonsOutside.get(0).click();
-		Assert.assertTrue(textbox.isDisabled());
+		Assertions.assertTrue(textbox.isDisabled());
 		buttonsOutside.get(1).click();
-		Assert.assertFalse(textbox.isDisabled());
+		Assertions.assertFalse(textbox.isDisabled());
 		buttonsOutside.get(1).click();
-		Assert.assertTrue(textbox.isDisabled());
+		Assertions.assertTrue(textbox.isDisabled());
 
 		buttonInside.click();
-		Assert.assertFalse(textbox.isDisabled());
+		Assertions.assertFalse(textbox.isDisabled());
 		buttonInside.click();
-		Assert.assertTrue(textbox.isDisabled());
+		Assertions.assertTrue(textbox.isDisabled());
 	}
 }

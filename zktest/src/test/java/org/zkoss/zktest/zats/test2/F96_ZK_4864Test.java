@@ -11,10 +11,11 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.support.ui.Select;
-import org.zkoss.zktest.zats.WebDriverTestCase;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 public class F96_ZK_4864Test extends WebDriverTestCase {
 	@Test
@@ -46,8 +47,9 @@ public class F96_ZK_4864Test extends WebDriverTestCase {
 		waitResponse();
 		boolean popupIsOpen = jq(".z-datebox-popup.z-datebox-open").exists();
 		if (shallClosePopup)
-			Assert.assertFalse("the datebox popup shall close", popupIsOpen);
+			Assertions.assertFalse(popupIsOpen, "the datebox popup shall close");
 		else
-			Assert.assertTrue("the datebox popup shall not close", popupIsOpen);
+			Assertions.assertTrue(popupIsOpen,
+					"the datebox popup shall not close");
 	}
 }

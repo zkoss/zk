@@ -11,12 +11,12 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.interactions.Actions;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -32,8 +32,8 @@ public class F55_ZK_416Test extends WebDriverTestCase {
 					toElement(jq("@listitem:contains(ZK Studio)")))
 				.perform();
 		waitResponse();
-		Assert.assertFalse(jq("$left @listitem:contains(ZK Forge)").exists());
-		Assert.assertTrue(jq("$right @listitem:contains(ZK Forge)").exists());
+		Assertions.assertFalse(jq("$left @listitem:contains(ZK Forge)").exists());
+		Assertions.assertTrue(jq("$right @listitem:contains(ZK Forge)").exists());
 
 		click(jq("@listitem:contains(ZK Mobile)"));
 		waitResponse();
@@ -42,8 +42,8 @@ public class F55_ZK_416Test extends WebDriverTestCase {
 					toElement(jq("@listitem:contains(ZK Studio)")))
 				.perform();
 		waitResponse();
-		Assert.assertFalse(jq("$left @listitem:contains(ZK Mobile)").exists());
-		Assert.assertTrue(jq("$right @listitem:contains(ZK Mobile)").exists());
+		Assertions.assertFalse(jq("$left @listitem:contains(ZK Mobile)").exists());
+		Assertions.assertTrue(jq("$right @listitem:contains(ZK Mobile)").exists());
 
 		click(jq("@listitem:contains(ZK GWT)"));
 		waitResponse();
@@ -52,10 +52,10 @@ public class F55_ZK_416Test extends WebDriverTestCase {
 					toElement(jq("@listitem:contains(ZK Studio)")))
 				.perform();
 		waitResponse();
-		Assert.assertFalse(jq("$left @listitem:contains(ZK GWT)").exists());
-		Assert.assertFalse(jq("$left @listitem:contains(ZK JSF)").exists());
-		Assert.assertTrue(jq("$right @listitem:contains(ZK GWT)").exists());
-		Assert.assertTrue(jq("$right @listitem:contains(ZK JSF)").exists());
+		Assertions.assertFalse(jq("$left @listitem:contains(ZK GWT)").exists());
+		Assertions.assertFalse(jq("$left @listitem:contains(ZK JSF)").exists());
+		Assertions.assertTrue(jq("$right @listitem:contains(ZK GWT)").exists());
+		Assertions.assertTrue(jq("$right @listitem:contains(ZK JSF)").exists());
 	}
 
 	@Test
@@ -74,10 +74,10 @@ public class F55_ZK_416Test extends WebDriverTestCase {
 						toElement(jq("@listitem:contains(ZK Studio)")))
 				.perform();
 		waitResponse();
-		Assert.assertFalse(jq("$left @listitem:contains(ZK Forge)").exists());
-		Assert.assertFalse(jq("$left @listitem:contains(ZK GWT)").exists());
-		Assert.assertTrue(jq("$right @listitem:contains(ZK Forge)").exists());
-		Assert.assertTrue(jq("$right @listitem:contains(ZK GWT)").exists());
+		Assertions.assertFalse(jq("$left @listitem:contains(ZK Forge)").exists());
+		Assertions.assertFalse(jq("$left @listitem:contains(ZK GWT)").exists());
+		Assertions.assertTrue(jq("$right @listitem:contains(ZK Forge)").exists());
+		Assertions.assertTrue(jq("$right @listitem:contains(ZK GWT)").exists());
 
 		click(jq("@listitem:contains(ZK Mobile)"));
 		waitResponse();
@@ -89,13 +89,13 @@ public class F55_ZK_416Test extends WebDriverTestCase {
 						toElement(jq("@listitem:contains(ZK Studio)")))
 				.perform();
 		waitResponse();
-		Assert.assertFalse(jq("$left @listitem:contains(ZK Mobile)").exists());
-		Assert.assertFalse(jq("$left @listitem:contains(ZK JSF)").exists());
-		Assert.assertFalse(jq("$left @listitem:contains(ZK JSP)").exists());
-		Assert.assertFalse(jq("$left @listitem:contains(ZK Spring)").exists());
-		Assert.assertTrue(jq("$right @listitem:contains(ZK Mobile)").exists());
-		Assert.assertTrue(jq("$right @listitem:contains(ZK JSF)").exists());
-		Assert.assertTrue(jq("$right @listitem:contains(ZK JSP)").exists());
-		Assert.assertTrue(jq("$right @listitem:contains(ZK Spring)").exists());
+		Assertions.assertFalse(jq("$left @listitem:contains(ZK Mobile)").exists());
+		Assertions.assertFalse(jq("$left @listitem:contains(ZK JSF)").exists());
+		Assertions.assertFalse(jq("$left @listitem:contains(ZK JSP)").exists());
+		Assertions.assertFalse(jq("$left @listitem:contains(ZK Spring)").exists());
+		Assertions.assertTrue(jq("$right @listitem:contains(ZK Mobile)").exists());
+		Assertions.assertTrue(jq("$right @listitem:contains(ZK JSF)").exists());
+		Assertions.assertTrue(jq("$right @listitem:contains(ZK JSP)").exists());
+		Assertions.assertTrue(jq("$right @listitem:contains(ZK Spring)").exists());
 	}
 }

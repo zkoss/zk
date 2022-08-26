@@ -11,14 +11,15 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import java.util.List;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zktest.zats.ZATSTestCase;
 import org.zkoss.zul.Radio;
-
-import java.util.List;
 
 public class F96_ZK_4810_2Test extends ZATSTestCase {
 	@Test
@@ -114,7 +115,7 @@ public class F96_ZK_4810_2Test extends ZATSTestCase {
 	
 	private void checkRadiosDisabled(List<ComponentAgent> radios, boolean expected) {
 		for (int i = 0, size = radios.size(); i < size; i++) {
-			Assert.assertEquals(expected, radios.get(i).as(Radio.class).isDisabled());
+			Assertions.assertEquals(expected, radios.get(i).as(Radio.class).isDisabled());
 		}
 	}
 }

@@ -11,10 +11,10 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -25,21 +25,21 @@ public class B86_ZK_4054Test extends WebDriverTestCase {
 		connect();
 
 		clickOpenButtons();
-		Assert.assertEquals("false\nfalse\nfalse", getZKLog());
+		Assertions.assertEquals("false\nfalse\nfalse", getZKLog());
 
 		click(jq("@button:contains(Toggle visible)"));
 		waitResponse();
 
 		closeZKLog();
 		clickOpenButtons();
-		Assert.assertEquals("true\ntrue\ntrue", getZKLog());
+		Assertions.assertEquals("true\ntrue\ntrue", getZKLog());
 
 		click(jq("@button:contains(Toggle visible)"));
 		waitResponse();
 
 		closeZKLog();
 		clickOpenButtons();
-		Assert.assertEquals("false\nfalse\nfalse", getZKLog());
+		Assertions.assertEquals("false\nfalse\nfalse", getZKLog());
 	}
 
 	private void clickOpenButtons() {

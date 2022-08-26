@@ -11,10 +11,11 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class B95_ZK_4660Test extends WebDriverTestCase {
 	@Test
@@ -42,8 +43,8 @@ public class B95_ZK_4660Test extends WebDriverTestCase {
 
 	private void checkSizeLog() {
 		String[] sizeLog = getZKLog().split("\n");
-		Assert.assertEquals("size shouldn't change after maximize", sizeLog[0], sizeLog[1]);
-		Assert.assertEquals("size shouldn't change after restore", sizeLog[0], sizeLog[2]);
+		Assertions.assertEquals(sizeLog[0], sizeLog[1], "size shouldn't change after maximize");
+		Assertions.assertEquals(sizeLog[0], sizeLog[2], "size shouldn't change after restore");
 		closeZKLog();
 	}
 }

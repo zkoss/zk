@@ -12,8 +12,8 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import static org.junit.Assert.fail;
-import static org.zkoss.zktest.zats.WebDriverTestCase.getStatusCode;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.zkoss.test.webdriver.WebDriverTestCase.getStatusCode;
 
 import java.net.InetSocketAddress;
 
@@ -24,9 +24,9 @@ import org.eclipse.jetty.util.resource.JarResource;
 import org.eclipse.jetty.util.resource.Resource;
 import org.eclipse.jetty.util.resource.ResourceCollection;
 import org.eclipse.jetty.webapp.WebAppContext;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 /**
  * @author jameschu
@@ -44,7 +44,7 @@ public class B80_ZK_3123Test {
 		return "127.0.0.1";
 	}
 
-	@BeforeClass
+	@BeforeAll
 	public static void init() throws Exception {
 		server = new Server(new InetSocketAddress(getHost(), 0));
 		final WebAppContext context = new WebAppContext();
@@ -65,7 +65,7 @@ public class B80_ZK_3123Test {
 		}
 	}
 
-	@AfterClass
+	@AfterAll
 	public static void end() throws Exception {
 		if (server != null) {
 			server.stop();

@@ -17,11 +17,11 @@ package org.zkoss.zktest.zats.test2;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.impl.Parser;
 import org.zkoss.zk.ui.select.impl.Token;
@@ -55,7 +55,8 @@ public class F80_ZK_2944Test extends ZATSTestCase {
 			// replace [, ], and " that comes from java toString() so that equals() can work
 			String parsed = parser.parse(tokens, source).toString().replaceAll("^\\[", "").replaceAll("\\]$", "").replaceAll("\"", "'");
 //			System.out.println(parsed);
-			Assert.assertTrue("Expecting: " + source + ", got: " + parsed, source.equals(parsed));
+			Assertions.assertTrue(source.equals(parsed),
+					"Expecting: " + source + ", got: " + parsed);
 		}
 	}
 	
@@ -150,13 +151,14 @@ public class F80_ZK_2944Test extends ZATSTestCase {
 		DesktopAgent desktop = connect();
 		Component parent = desktop.query("#parent").as(Div.class);
 		List<Component> comps = Selectors.find(parent, ":host");
-		Assert.assertTrue("expecting 3, got: " + comps.size(), comps.size() == 3);
-		Assert.assertTrue(comps.get(0).getClass().equals(Div.class));
-		Assert.assertTrue(comps.get(0).getId().equals("div1"));
-		Assert.assertTrue(comps.get(1).getClass().equals(Div.class));
-		Assert.assertTrue(comps.get(1).getId().equals("div2"));
-		Assert.assertTrue(comps.get(2).getClass().equals(Div.class));
-		Assert.assertTrue(comps.get(2).getId().equals("div3"));
+		Assertions.assertTrue(comps.size() == 3,
+				"expecting 3, got: " + comps.size());
+		Assertions.assertTrue(comps.get(0).getClass().equals(Div.class));
+		Assertions.assertTrue(comps.get(0).getId().equals("div1"));
+		Assertions.assertTrue(comps.get(1).getClass().equals(Div.class));
+		Assertions.assertTrue(comps.get(1).getId().equals("div2"));
+		Assertions.assertTrue(comps.get(2).getClass().equals(Div.class));
+		Assertions.assertTrue(comps.get(2).getId().equals("div3"));
 	}
 	
 	@Test
@@ -164,11 +166,12 @@ public class F80_ZK_2944Test extends ZATSTestCase {
 		DesktopAgent desktop = connect();
 		Component parent = desktop.query("#parent").as(Div.class);
 		List<Component> comps = Selectors.find(parent, ":host(.warning)");
-		Assert.assertTrue("expecting 2, got: " + comps.size(), comps.size() == 2);
-		Assert.assertTrue(comps.get(0).getClass().equals(Div.class));
-		Assert.assertTrue(comps.get(0).getId().equals("div1"));
-		Assert.assertTrue(comps.get(1).getClass().equals(Div.class));
-		Assert.assertTrue(comps.get(1).getId().equals("div3"));
+		Assertions.assertTrue(comps.size() == 2,
+				"expecting 2, got: " + comps.size());
+		Assertions.assertTrue(comps.get(0).getClass().equals(Div.class));
+		Assertions.assertTrue(comps.get(0).getId().equals("div1"));
+		Assertions.assertTrue(comps.get(1).getClass().equals(Div.class));
+		Assertions.assertTrue(comps.get(1).getId().equals("div3"));
 	}
 	
 	@Test
@@ -176,13 +179,14 @@ public class F80_ZK_2944Test extends ZATSTestCase {
 		DesktopAgent desktop = connect();
 		Component parent = desktop.query("#parent").as(Div.class);
 		List<Component> comps = Selectors.find(parent, ":host(div)");
-		Assert.assertTrue("expecting 3, got: " + comps.size(), comps.size() == 3);
-		Assert.assertTrue(comps.get(0).getClass().equals(Div.class));
-		Assert.assertTrue(comps.get(0).getId().equals("div1"));
-		Assert.assertTrue(comps.get(1).getClass().equals(Div.class));
-		Assert.assertTrue(comps.get(1).getId().equals("div2"));
-		Assert.assertTrue(comps.get(2).getClass().equals(Div.class));
-		Assert.assertTrue(comps.get(2).getId().equals("div3"));
+		Assertions.assertTrue(comps.size() == 3,
+				"expecting 3, got: " + comps.size());
+		Assertions.assertTrue(comps.get(0).getClass().equals(Div.class));
+		Assertions.assertTrue(comps.get(0).getId().equals("div1"));
+		Assertions.assertTrue(comps.get(1).getClass().equals(Div.class));
+		Assertions.assertTrue(comps.get(1).getId().equals("div2"));
+		Assertions.assertTrue(comps.get(2).getClass().equals(Div.class));
+		Assertions.assertTrue(comps.get(2).getId().equals("div3"));
 	}
 	
 	@Test
@@ -190,9 +194,10 @@ public class F80_ZK_2944Test extends ZATSTestCase {
 		DesktopAgent desktop = connect();
 		Component parent = desktop.query("#parent").as(Div.class);
 		List<Component> comps = Selectors.find(parent, ":host(#div1)");
-		Assert.assertTrue("expecting 1, got: " + comps.size(), comps.size() == 1);
-		Assert.assertTrue(comps.get(0).getClass().equals(Div.class));
-		Assert.assertTrue(comps.get(0).getId().equals("div1"));
+		Assertions.assertTrue(comps.size() == 1,
+				"expecting 1, got: " + comps.size());
+		Assertions.assertTrue(comps.get(0).getClass().equals(Div.class));
+		Assertions.assertTrue(comps.get(0).getId().equals("div1"));
 	}
 	
 	@Test
@@ -200,9 +205,10 @@ public class F80_ZK_2944Test extends ZATSTestCase {
 		DesktopAgent desktop = connect();
 		Component parent = desktop.query("#parent").as(Div.class);
 		List<Component> comps = Selectors.find(parent, ":host(#div1) #label2");
-		Assert.assertTrue("expecting 1, got: " + comps.size(), comps.size() == 1);
-		Assert.assertTrue(comps.get(0).getClass().equals(Label.class));
-		Assert.assertTrue(comps.get(0).getId().equals("label2"));
+		Assertions.assertTrue(comps.size() == 1,
+				"expecting 1, got: " + comps.size());
+		Assertions.assertTrue(comps.get(0).getClass().equals(Label.class));
+		Assertions.assertTrue(comps.get(0).getId().equals("label2"));
 	}
 	
 	// cannot select shadow element without ::shadow
@@ -211,7 +217,8 @@ public class F80_ZK_2944Test extends ZATSTestCase {
 		DesktopAgent desktop = connect();
 		Component parent = desktop.query("#parent").as(Div.class);
 		List<Component> comps = Selectors.find(parent, ":host(#div1) #if1");
-		Assert.assertTrue("expecting 0, got: " + comps.size(), comps.size() == 0);
+		Assertions.assertTrue(comps.size() == 0,
+				"expecting 0, got: " + comps.size());
 	}
 	
 	// cannot select non-shadow elements when shadow selector ::shadow appears
@@ -220,7 +227,8 @@ public class F80_ZK_2944Test extends ZATSTestCase {
 		DesktopAgent desktop = connect();
 		Component parent = desktop.query("#parent").as(Div.class);
 		List<Component> comps = Selectors.find(parent, ":host(#div1)::shadow #label1");
-		Assert.assertTrue("expecting 0, got: " + comps.size(), comps.size() == 0);
+		Assertions.assertTrue(comps.size() == 0,
+				"expecting 0, got: " + comps.size());
 	}
 	
 	// can select shadow element because the usage of ::shadow
@@ -229,9 +237,10 @@ public class F80_ZK_2944Test extends ZATSTestCase {
 		DesktopAgent desktop = connect();
 		Component parent = desktop.query("#parent").as(Div.class);
 		List<Component> comps = Selectors.find(parent, ":host(#div1)::shadow #if1");
-		Assert.assertTrue("expecting 1, got: " + comps.size(), comps.size() == 1);
-		Assert.assertTrue(comps.get(0).getClass().equals(If.class));
-		Assert.assertTrue(comps.get(0).getId().equals("if1"));
+		Assertions.assertTrue(comps.size() == 1,
+				"expecting 1, got: " + comps.size());
+		Assertions.assertTrue(comps.get(0).getClass().equals(If.class));
+		Assertions.assertTrue(comps.get(0).getId().equals("if1"));
 	}
 	
 	@Test
@@ -239,9 +248,10 @@ public class F80_ZK_2944Test extends ZATSTestCase {
 		DesktopAgent desktop = connect();
 		Component parent = desktop.query("#parent").as(Div.class);
 		List<Component> comps = Selectors.find(parent, "div::shadow#sh1");
-		Assert.assertTrue("expecting 1, got: " + comps.size(), comps.size() == 1);
-		Assert.assertTrue(comps.get(0).getClass().equals(Apply.class));
-		Assert.assertTrue(comps.get(0).getId().equals("sh1"));
+		Assertions.assertTrue(comps.size() == 1,
+				"expecting 1, got: " + comps.size());
+		Assertions.assertTrue(comps.get(0).getClass().equals(Apply.class));
+		Assertions.assertTrue(comps.get(0).getId().equals("sh1"));
 	}
 	
 	@Test
@@ -249,15 +259,16 @@ public class F80_ZK_2944Test extends ZATSTestCase {
 		DesktopAgent desktop = connect();
 		Component parent = desktop.query("#parent").as(Div.class);
 		List<Component> comps = Selectors.find(parent, "div > div::shadow");
-		Assert.assertTrue("expecting 4, got: " + comps.size(), comps.size() == 4);
-		Assert.assertTrue(comps.get(0).getClass().equals(Apply.class));
-		Assert.assertTrue(comps.get(0).getId().equals("sh1"));
-		Assert.assertTrue(comps.get(1).getClass().equals(Apply.class));
-		Assert.assertTrue(comps.get(1).getId().equals("sh2"));
-		Assert.assertTrue(comps.get(2).getClass().equals(Apply.class));
-		Assert.assertTrue(comps.get(2).getId().equals("sh3"));
-		Assert.assertTrue(comps.get(3).getClass().equals(Apply.class));
-		Assert.assertTrue(comps.get(3).getId().equals("sh4"));
+		Assertions.assertTrue(comps.size() == 4,
+				"expecting 4, got: " + comps.size());
+		Assertions.assertTrue(comps.get(0).getClass().equals(Apply.class));
+		Assertions.assertTrue(comps.get(0).getId().equals("sh1"));
+		Assertions.assertTrue(comps.get(1).getClass().equals(Apply.class));
+		Assertions.assertTrue(comps.get(1).getId().equals("sh2"));
+		Assertions.assertTrue(comps.get(2).getClass().equals(Apply.class));
+		Assertions.assertTrue(comps.get(2).getId().equals("sh3"));
+		Assertions.assertTrue(comps.get(3).getClass().equals(Apply.class));
+		Assertions.assertTrue(comps.get(3).getId().equals("sh4"));
 	}
 	
 	@Test
@@ -265,11 +276,12 @@ public class F80_ZK_2944Test extends ZATSTestCase {
 		DesktopAgent desktop = connect();
 		Component parent = desktop.query("#parent").as(Div.class);
 		List<Component> comps = Selectors.find(parent, "div div.warning::shadow");
-		Assert.assertTrue("expecting 2, got: " + comps.size(), comps.size() == 2);
-		Assert.assertTrue(comps.get(0).getClass().equals(Apply.class));
-		Assert.assertTrue(comps.get(0).getId().equals("sh1"));
-		Assert.assertTrue(comps.get(1).getClass().equals(Apply.class));
-		Assert.assertTrue(comps.get(1).getId().equals("sh4"));
+		Assertions.assertTrue(comps.size() == 2,
+				"expecting 2, got: " + comps.size());
+		Assertions.assertTrue(comps.get(0).getClass().equals(Apply.class));
+		Assertions.assertTrue(comps.get(0).getId().equals("sh1"));
+		Assertions.assertTrue(comps.get(1).getClass().equals(Apply.class));
+		Assertions.assertTrue(comps.get(1).getId().equals("sh4"));
 	}
 	
 	@Test
@@ -277,11 +289,12 @@ public class F80_ZK_2944Test extends ZATSTestCase {
 		DesktopAgent desktop = connect();
 		Component parent = desktop.query("#parent").as(Div.class);
 		List<Component> comps = Selectors.find(parent, "div.warning::shadow");
-		Assert.assertTrue("expecting 2, got: " + comps.size(), comps.size() == 2);
-		Assert.assertTrue(comps.get(0).getClass().equals(Apply.class));
-		Assert.assertTrue(comps.get(0).getId().equals("sh1"));
-		Assert.assertTrue(comps.get(1).getClass().equals(Apply.class));
-		Assert.assertTrue(comps.get(1).getId().equals("sh4"));
+		Assertions.assertTrue(comps.size() == 2,
+				"expecting 2, got: " + comps.size());
+		Assertions.assertTrue(comps.get(0).getClass().equals(Apply.class));
+		Assertions.assertTrue(comps.get(0).getId().equals("sh1"));
+		Assertions.assertTrue(comps.get(1).getClass().equals(Apply.class));
+		Assertions.assertTrue(comps.get(1).getId().equals("sh4"));
 	}
 	
 	@Test
@@ -289,15 +302,16 @@ public class F80_ZK_2944Test extends ZATSTestCase {
 		DesktopAgent desktop = connect();
 		Component parent = desktop.query("#parent").as(Div.class);
 		List<Component> comps = Selectors.find(parent, "div::shadow");
-		Assert.assertTrue("expecting 4, got: " + comps.size(), comps.size() == 4);
-		Assert.assertTrue(comps.get(0).getClass().equals(Apply.class));
-		Assert.assertTrue(comps.get(0).getId().equals("sh1"));
-		Assert.assertTrue(comps.get(1).getClass().equals(Apply.class));
-		Assert.assertTrue(comps.get(1).getId().equals("sh2"));
-		Assert.assertTrue(comps.get(2).getClass().equals(Apply.class));
-		Assert.assertTrue(comps.get(2).getId().equals("sh3"));
-		Assert.assertTrue(comps.get(3).getClass().equals(Apply.class));
-		Assert.assertTrue(comps.get(3).getId().equals("sh4"));
+		Assertions.assertTrue(comps.size() == 4,
+				"expecting 4, got: " + comps.size());
+		Assertions.assertTrue(comps.get(0).getClass().equals(Apply.class));
+		Assertions.assertTrue(comps.get(0).getId().equals("sh1"));
+		Assertions.assertTrue(comps.get(1).getClass().equals(Apply.class));
+		Assertions.assertTrue(comps.get(1).getId().equals("sh2"));
+		Assertions.assertTrue(comps.get(2).getClass().equals(Apply.class));
+		Assertions.assertTrue(comps.get(2).getId().equals("sh3"));
+		Assertions.assertTrue(comps.get(3).getClass().equals(Apply.class));
+		Assertions.assertTrue(comps.get(3).getId().equals("sh4"));
 	}
 	
 	
@@ -307,23 +321,24 @@ public class F80_ZK_2944Test extends ZATSTestCase {
 		DesktopAgent desktop = connect();
 		Component parent = desktop.query("#parent").as(Div.class);
 		List<Component> comps = Selectors.find(parent, "div > label");
-		Assert.assertTrue("expecting 8, got: " + comps.size(), comps.size() == 8);
-		Assert.assertTrue(comps.get(0).getClass().equals(Label.class));
-		Assert.assertTrue(comps.get(0).getId().equals("label1"));
-		Assert.assertTrue(comps.get(1).getClass().equals(Label.class));
-		Assert.assertTrue(comps.get(1).getId().equals("label2"));
-		Assert.assertTrue(comps.get(2).getClass().equals(Label.class));
-		Assert.assertTrue(comps.get(2).getId().equals("label3"));
-		Assert.assertTrue(comps.get(3).getClass().equals(Label.class));
-		Assert.assertTrue(comps.get(3).getId().equals("label4"));
-		Assert.assertTrue(comps.get(4).getClass().equals(Label.class));
-		Assert.assertTrue(comps.get(4).getId().equals("label5"));
-		Assert.assertTrue(comps.get(5).getClass().equals(Label.class));
-		Assert.assertTrue(comps.get(5).getId().equals("label6"));
-		Assert.assertTrue(comps.get(6).getClass().equals(Label.class));
-		Assert.assertTrue(comps.get(6).getId().equals("label7"));
-		Assert.assertTrue(comps.get(7).getClass().equals(Label.class));
-		Assert.assertTrue(comps.get(7).getId().equals("label8"));
+		Assertions.assertTrue(comps.size() == 8,
+				"expecting 8, got: " + comps.size());
+		Assertions.assertTrue(comps.get(0).getClass().equals(Label.class));
+		Assertions.assertTrue(comps.get(0).getId().equals("label1"));
+		Assertions.assertTrue(comps.get(1).getClass().equals(Label.class));
+		Assertions.assertTrue(comps.get(1).getId().equals("label2"));
+		Assertions.assertTrue(comps.get(2).getClass().equals(Label.class));
+		Assertions.assertTrue(comps.get(2).getId().equals("label3"));
+		Assertions.assertTrue(comps.get(3).getClass().equals(Label.class));
+		Assertions.assertTrue(comps.get(3).getId().equals("label4"));
+		Assertions.assertTrue(comps.get(4).getClass().equals(Label.class));
+		Assertions.assertTrue(comps.get(4).getId().equals("label5"));
+		Assertions.assertTrue(comps.get(5).getClass().equals(Label.class));
+		Assertions.assertTrue(comps.get(5).getId().equals("label6"));
+		Assertions.assertTrue(comps.get(6).getClass().equals(Label.class));
+		Assertions.assertTrue(comps.get(6).getId().equals("label7"));
+		Assertions.assertTrue(comps.get(7).getClass().equals(Label.class));
+		Assertions.assertTrue(comps.get(7).getId().equals("label8"));
 	}
 	
 	@Test
@@ -331,9 +346,10 @@ public class F80_ZK_2944Test extends ZATSTestCase {
 		DesktopAgent desktop = connect();
 		Component parent = desktop.query("#parent").as(Div.class);
 		List<Component> comps = Selectors.find(parent, "div::shadow #if1");
-		Assert.assertTrue("expecting 1, got: " + comps.size(), comps.size() == 1);
-		Assert.assertTrue(comps.get(0).getClass().equals(If.class));
-		Assert.assertTrue(comps.get(0).getId().equals("if1"));
+		Assertions.assertTrue(comps.size() == 1,
+				"expecting 1, got: " + comps.size());
+		Assertions.assertTrue(comps.get(0).getClass().equals(If.class));
+		Assertions.assertTrue(comps.get(0).getId().equals("if1"));
 	}
 	
 	@Test
@@ -341,7 +357,8 @@ public class F80_ZK_2944Test extends ZATSTestCase {
 		DesktopAgent desktop = connect();
 		Component parent = desktop.query("#parent").as(Div.class);
 		List<Component> comps = Selectors.find(parent, "div::shadow #label1");
-		Assert.assertTrue("expecting 0, got: " + comps.size(), comps.size() == 0);
+		Assertions.assertTrue(comps.size() == 0,
+				"expecting 0, got: " + comps.size());
 	}
 
 	@Test
@@ -349,9 +366,10 @@ public class F80_ZK_2944Test extends ZATSTestCase {
 		DesktopAgent desktop = connect();
 		Component parent = desktop.query("#parent").as(Div.class);
 		List<Component> comps = Selectors.find(parent, ":host(#div1)::shadow if");
-		Assert.assertTrue("expecting 1, got: " + comps.size(), comps.size() == 1);
-		Assert.assertTrue(comps.get(0).getClass().equals(If.class));
-		Assert.assertTrue(comps.get(0).getId().equals("if1"));
+		Assertions.assertTrue(comps.size() == 1,
+				"expecting 1, got: " + comps.size());
+		Assertions.assertTrue(comps.get(0).getClass().equals(If.class));
+		Assertions.assertTrue(comps.get(0).getId().equals("if1"));
 	}
 	
 	@Test
@@ -359,9 +377,10 @@ public class F80_ZK_2944Test extends ZATSTestCase {
 		DesktopAgent desktop = connect();
 		Component parent = desktop.query("#parent").as(Div.class);
 		List<Component> comps = Selectors.find(parent, ":host(div):nth-child(1)::shadow");
-		Assert.assertTrue("expecting 1, got: " + comps.size(), comps.size() == 1);
-		Assert.assertTrue(comps.get(0).getClass().equals(Apply.class));
-		Assert.assertTrue(comps.get(0).getId().equals("sh1"));
+		Assertions.assertTrue(comps.size() == 1,
+				"expecting 1, got: " + comps.size());
+		Assertions.assertTrue(comps.get(0).getClass().equals(Apply.class));
+		Assertions.assertTrue(comps.get(0).getId().equals("sh1"));
 	}
 	
 	@Test
@@ -369,9 +388,10 @@ public class F80_ZK_2944Test extends ZATSTestCase {
 		DesktopAgent desktop = connect();
 		Component parent = desktop.query("#parent").as(Div.class);
 		List<Component> comps = Selectors.find(parent, "#div1 #inner1");
-		Assert.assertTrue("expecting 1, got: " + comps.size(), comps.size() == 1);
-		Assert.assertTrue(comps.get(0).getClass().equals(Div.class));
-		Assert.assertTrue(comps.get(0).getId().equals("inner1"));
+		Assertions.assertTrue(comps.size() == 1,
+				"expecting 1, got: " + comps.size());
+		Assertions.assertTrue(comps.get(0).getClass().equals(Div.class));
+		Assertions.assertTrue(comps.get(0).getId().equals("inner1"));
 	}
 	
 	@Test
@@ -379,9 +399,10 @@ public class F80_ZK_2944Test extends ZATSTestCase {
 		DesktopAgent desktop = connect();
 		Component parent = desktop.query("#parent").as(Div.class);
 		List<Component> comps = Selectors.find(parent, "#parent > #div1 > div");
-		Assert.assertTrue("expecting 1, got: " + comps.size(), comps.size() == 1);
-		Assert.assertTrue(comps.get(0).getClass().equals(Div.class));
-		Assert.assertTrue(comps.get(0).getId().equals("inner1"));
+		Assertions.assertTrue(comps.size() == 1,
+				"expecting 1, got: " + comps.size());
+		Assertions.assertTrue(comps.get(0).getClass().equals(Div.class));
+		Assertions.assertTrue(comps.get(0).getId().equals("inner1"));
 	}
 	
 	@Test
@@ -389,9 +410,10 @@ public class F80_ZK_2944Test extends ZATSTestCase {
 		DesktopAgent desktop = connect();
 		Component parent = desktop.query("#parent").as(Div.class);
 		List<Component> comps = Selectors.find(parent, "#parent > div:nth-child(1) > div");
-		Assert.assertTrue("expecting 1, got: " + comps.size(), comps.size() == 1);
-		Assert.assertTrue(comps.get(0).getClass().equals(Div.class));
-		Assert.assertTrue(comps.get(0).getId().equals("inner1"));
+		Assertions.assertTrue(comps.size() == 1,
+				"expecting 1, got: " + comps.size());
+		Assertions.assertTrue(comps.get(0).getClass().equals(Div.class));
+		Assertions.assertTrue(comps.get(0).getId().equals("inner1"));
 	}
 	
 	@Test
@@ -399,17 +421,18 @@ public class F80_ZK_2944Test extends ZATSTestCase {
 		DesktopAgent desktop = connect();
 		Component parent = desktop.query("#parent").as(Div.class);
 		List<Component> comps = Selectors.find(parent, ":host(div)::shadow if");
-		Assert.assertTrue("expecting 5, got: " + comps.size(), comps.size() == 5);
-		Assert.assertTrue(comps.get(0).getClass().equals(If.class));
-		Assert.assertTrue(comps.get(0).getId().equals("if1"));
-		Assert.assertTrue(comps.get(1).getClass().equals(If.class));
-		Assert.assertTrue(comps.get(1).getId().equals("if2"));
-		Assert.assertTrue(comps.get(2).getClass().equals(If.class));
-		Assert.assertTrue(comps.get(2).getId().equals("if3"));
-		Assert.assertTrue(comps.get(3).getClass().equals(If.class));
-		Assert.assertTrue(comps.get(3).getId().equals("if4"));
-		Assert.assertTrue(comps.get(4).getClass().equals(If.class));
-		Assert.assertTrue(comps.get(4).getId().equals("if5"));
+		Assertions.assertTrue(comps.size() == 5,
+				"expecting 5, got: " + comps.size());
+		Assertions.assertTrue(comps.get(0).getClass().equals(If.class));
+		Assertions.assertTrue(comps.get(0).getId().equals("if1"));
+		Assertions.assertTrue(comps.get(1).getClass().equals(If.class));
+		Assertions.assertTrue(comps.get(1).getId().equals("if2"));
+		Assertions.assertTrue(comps.get(2).getClass().equals(If.class));
+		Assertions.assertTrue(comps.get(2).getId().equals("if3"));
+		Assertions.assertTrue(comps.get(3).getClass().equals(If.class));
+		Assertions.assertTrue(comps.get(3).getId().equals("if4"));
+		Assertions.assertTrue(comps.get(4).getClass().equals(If.class));
+		Assertions.assertTrue(comps.get(4).getId().equals("if5"));
 	}
 	
 	@Test
@@ -417,17 +440,18 @@ public class F80_ZK_2944Test extends ZATSTestCase {
 		DesktopAgent desktop = connect();
 		Component parent = desktop.query("#parent").as(Div.class);
 		List<Component> comps = Selectors.find(parent, "::shadow if");
-		Assert.assertTrue("expecting 5, got: " + comps.size(), comps.size() == 5);
-		Assert.assertTrue(comps.get(0).getClass().equals(If.class));
-		Assert.assertTrue(comps.get(0).getId().equals("if1"));
-		Assert.assertTrue(comps.get(1).getClass().equals(If.class));
-		Assert.assertTrue(comps.get(1).getId().equals("if2"));
-		Assert.assertTrue(comps.get(2).getClass().equals(If.class));
-		Assert.assertTrue(comps.get(2).getId().equals("if3"));
-		Assert.assertTrue(comps.get(3).getClass().equals(If.class));
-		Assert.assertTrue(comps.get(3).getId().equals("if4"));
-		Assert.assertTrue(comps.get(4).getClass().equals(If.class));
-		Assert.assertTrue(comps.get(4).getId().equals("if5"));
+		Assertions.assertTrue(comps.size() == 5,
+				"expecting 5, got: " + comps.size());
+		Assertions.assertTrue(comps.get(0).getClass().equals(If.class));
+		Assertions.assertTrue(comps.get(0).getId().equals("if1"));
+		Assertions.assertTrue(comps.get(1).getClass().equals(If.class));
+		Assertions.assertTrue(comps.get(1).getId().equals("if2"));
+		Assertions.assertTrue(comps.get(2).getClass().equals(If.class));
+		Assertions.assertTrue(comps.get(2).getId().equals("if3"));
+		Assertions.assertTrue(comps.get(3).getClass().equals(If.class));
+		Assertions.assertTrue(comps.get(3).getId().equals("if4"));
+		Assertions.assertTrue(comps.get(4).getClass().equals(If.class));
+		Assertions.assertTrue(comps.get(4).getId().equals("if5"));
 	}
 	
 	@Test
@@ -435,9 +459,10 @@ public class F80_ZK_2944Test extends ZATSTestCase {
 		DesktopAgent desktop = connect();
 		Component parent = desktop.query("#parent").as(Div.class);
 		List<Component> comps = Selectors.find(parent, "::shadow #if1");
-		Assert.assertTrue("expecting 1, got: " + comps.size(), comps.size() == 1);
-		Assert.assertTrue(comps.get(0).getClass().equals(If.class));
-		Assert.assertTrue(comps.get(0).getId().equals("if1"));
+		Assertions.assertTrue(comps.size() == 1,
+				"expecting 1, got: " + comps.size());
+		Assertions.assertTrue(comps.get(0).getClass().equals(If.class));
+		Assertions.assertTrue(comps.get(0).getId().equals("if1"));
 	}
 	
 	@Test
@@ -445,9 +470,10 @@ public class F80_ZK_2944Test extends ZATSTestCase {
 		DesktopAgent desktop = connect();
 		Component parent = desktop.query("#parent").as(Div.class);
 		List<Component> comps = Selectors.find(parent, "::shadow > #if1");
-		Assert.assertTrue("expecting 1, got: " + comps.size(), comps.size() == 1);
-		Assert.assertTrue(comps.get(0).getClass().equals(If.class));
-		Assert.assertTrue(comps.get(0).getId().equals("if1"));
+		Assertions.assertTrue(comps.size() == 1,
+				"expecting 1, got: " + comps.size());
+		Assertions.assertTrue(comps.get(0).getClass().equals(If.class));
+		Assertions.assertTrue(comps.get(0).getId().equals("if1"));
 	}
 	
 	@Test
@@ -455,9 +481,10 @@ public class F80_ZK_2944Test extends ZATSTestCase {
 		DesktopAgent desktop = connect();
 		Component parent = desktop.query("#parent").as(Div.class);
 		List<Component> comps = Selectors.find(parent, "::shadow#sh2 > #if2");
-		Assert.assertTrue("expecting 1, got: " + comps.size(), comps.size() == 1);
-		Assert.assertTrue(comps.get(0).getClass().equals(If.class));
-		Assert.assertTrue(comps.get(0).getId().equals("if2"));
+		Assertions.assertTrue(comps.size() == 1,
+				"expecting 1, got: " + comps.size());
+		Assertions.assertTrue(comps.get(0).getClass().equals(If.class));
+		Assertions.assertTrue(comps.get(0).getId().equals("if2"));
 	}
 	
 	@Test
@@ -465,17 +492,18 @@ public class F80_ZK_2944Test extends ZATSTestCase {
 		DesktopAgent desktop = connect();
 		Component parent = desktop.query("#parent").as(Div.class);
 		List<Component> comps = Selectors.find(parent, "::shadow > if");
-		Assert.assertTrue("expecting 5, got: " + comps.size(), comps.size() == 5);
-		Assert.assertTrue(comps.get(0).getClass().equals(If.class));
-		Assert.assertTrue(comps.get(0).getId().equals("if1"));
-		Assert.assertTrue(comps.get(1).getClass().equals(If.class));
-		Assert.assertTrue(comps.get(1).getId().equals("if2"));
-		Assert.assertTrue(comps.get(2).getClass().equals(If.class));
-		Assert.assertTrue(comps.get(2).getId().equals("if3"));
-		Assert.assertTrue(comps.get(3).getClass().equals(If.class));
-		Assert.assertTrue(comps.get(3).getId().equals("if4"));
-		Assert.assertTrue(comps.get(4).getClass().equals(If.class));
-		Assert.assertTrue(comps.get(4).getId().equals("if5"));
+		Assertions.assertTrue(comps.size() == 5,
+				"expecting 5, got: " + comps.size());
+		Assertions.assertTrue(comps.get(0).getClass().equals(If.class));
+		Assertions.assertTrue(comps.get(0).getId().equals("if1"));
+		Assertions.assertTrue(comps.get(1).getClass().equals(If.class));
+		Assertions.assertTrue(comps.get(1).getId().equals("if2"));
+		Assertions.assertTrue(comps.get(2).getClass().equals(If.class));
+		Assertions.assertTrue(comps.get(2).getId().equals("if3"));
+		Assertions.assertTrue(comps.get(3).getClass().equals(If.class));
+		Assertions.assertTrue(comps.get(3).getId().equals("if4"));
+		Assertions.assertTrue(comps.get(4).getClass().equals(If.class));
+		Assertions.assertTrue(comps.get(4).getId().equals("if5"));
 	}
 	
 	@Test
@@ -483,11 +511,12 @@ public class F80_ZK_2944Test extends ZATSTestCase {
 		DesktopAgent desktop = connect();
 		Component parent = desktop.query("#parent").as(Div.class);
 		List<Component> comps = Selectors.find(parent, "#div2::shadow");
-		Assert.assertTrue("expecting 2, got: " + comps.size(), comps.size() == 2);
-		Assert.assertTrue(comps.get(0).getClass().equals(Apply.class));
-		Assert.assertTrue(comps.get(0).getId().equals("sh2"));
-		Assert.assertTrue(comps.get(1).getClass().equals(Apply.class));
-		Assert.assertTrue(comps.get(1).getId().equals("sh3"));
+		Assertions.assertTrue(comps.size() == 2,
+				"expecting 2, got: " + comps.size());
+		Assertions.assertTrue(comps.get(0).getClass().equals(Apply.class));
+		Assertions.assertTrue(comps.get(0).getId().equals("sh2"));
+		Assertions.assertTrue(comps.get(1).getClass().equals(Apply.class));
+		Assertions.assertTrue(comps.get(1).getId().equals("sh3"));
 	}
 	
 	@Test
@@ -495,11 +524,12 @@ public class F80_ZK_2944Test extends ZATSTestCase {
 		DesktopAgent desktop = connect();
 		Component parent = desktop.query("#parent").as(Div.class);
 		List<Component> comps = Selectors.find(parent, ":host(#div2)::shadow");
-		Assert.assertTrue("expecting 2, got: " + comps.size(), comps.size() == 2);
-		Assert.assertTrue(comps.get(0).getClass().equals(Apply.class));
-		Assert.assertTrue(comps.get(0).getId().equals("sh2"));
-		Assert.assertTrue(comps.get(1).getClass().equals(Apply.class));
-		Assert.assertTrue(comps.get(1).getId().equals("sh3"));
+		Assertions.assertTrue(comps.size() == 2,
+				"expecting 2, got: " + comps.size());
+		Assertions.assertTrue(comps.get(0).getClass().equals(Apply.class));
+		Assertions.assertTrue(comps.get(0).getId().equals("sh2"));
+		Assertions.assertTrue(comps.get(1).getClass().equals(Apply.class));
+		Assertions.assertTrue(comps.get(1).getId().equals("sh3"));
 	}
 	
 	@Test
@@ -507,9 +537,10 @@ public class F80_ZK_2944Test extends ZATSTestCase {
 		DesktopAgent desktop = connect();
 		Component parent = desktop.query("#parent").as(Div.class);
 		List<Component> comps = Selectors.find(parent, "::shadow#sh2");
-		Assert.assertTrue("expecting 1, got: " + comps.size(), comps.size() == 1);
-		Assert.assertTrue(comps.get(0).getClass().equals(Apply.class));
-		Assert.assertTrue(comps.get(0).getId().equals("sh2"));
+		Assertions.assertTrue(comps.size() == 1,
+				"expecting 1, got: " + comps.size());
+		Assertions.assertTrue(comps.get(0).getClass().equals(Apply.class));
+		Assertions.assertTrue(comps.get(0).getId().equals("sh2"));
 	}
 	
 	@Test
@@ -517,9 +548,10 @@ public class F80_ZK_2944Test extends ZATSTestCase {
 		DesktopAgent desktop = connect();
 		Component parent = desktop.query("#parent").as(Div.class);
 		List<Component> comps = Selectors.find(parent, "::shadow#sh2 + apply");
-		Assert.assertTrue("expecting 1, got: " + comps.size(), comps.size() == 1);
-		Assert.assertTrue(comps.get(0).getClass().equals(Apply.class));
-		Assert.assertTrue(comps.get(0).getId().equals("sh3"));
+		Assertions.assertTrue(comps.size() == 1,
+				"expecting 1, got: " + comps.size());
+		Assertions.assertTrue(comps.get(0).getClass().equals(Apply.class));
+		Assertions.assertTrue(comps.get(0).getId().equals("sh3"));
 	}
 	
 	@Test
@@ -527,9 +559,10 @@ public class F80_ZK_2944Test extends ZATSTestCase {
 		DesktopAgent desktop = connect();
 		Component parent = desktop.query("#parent").as(Div.class);
 		List<Component> comps = Selectors.find(parent, "::shadow#sh2 ~ apply");
-		Assert.assertTrue("expecting 1, got: " + comps.size(), comps.size() == 1);
-		Assert.assertTrue(comps.get(0).getClass().equals(Apply.class));
-		Assert.assertTrue(comps.get(0).getId().equals("sh3"));
+		Assertions.assertTrue(comps.size() == 1,
+				"expecting 1, got: " + comps.size());
+		Assertions.assertTrue(comps.get(0).getClass().equals(Apply.class));
+		Assertions.assertTrue(comps.get(0).getId().equals("sh3"));
 	}
 	
 	@Test
@@ -537,15 +570,16 @@ public class F80_ZK_2944Test extends ZATSTestCase {
 		DesktopAgent desktop = connect();
 		Component parent = desktop.query("#parent").as(Div.class);
 		List<Component> comps = Selectors.find(parent, "::shadow");
-		Assert.assertTrue("expecting 4, got: " + comps.size(), comps.size() == 4);
-		Assert.assertTrue(comps.get(0).getClass().equals(Apply.class));
-		Assert.assertTrue(comps.get(0).getId().equals("sh1"));
-		Assert.assertTrue(comps.get(1).getClass().equals(Apply.class));
-		Assert.assertTrue(comps.get(1).getId().equals("sh2"));
-		Assert.assertTrue(comps.get(2).getClass().equals(Apply.class));
-		Assert.assertTrue(comps.get(2).getId().equals("sh3"));
-		Assert.assertTrue(comps.get(3).getClass().equals(Apply.class));
-		Assert.assertTrue(comps.get(3).getId().equals("sh4"));
+		Assertions.assertTrue(comps.size() == 4,
+				"expecting 4, got: " + comps.size());
+		Assertions.assertTrue(comps.get(0).getClass().equals(Apply.class));
+		Assertions.assertTrue(comps.get(0).getId().equals("sh1"));
+		Assertions.assertTrue(comps.get(1).getClass().equals(Apply.class));
+		Assertions.assertTrue(comps.get(1).getId().equals("sh2"));
+		Assertions.assertTrue(comps.get(2).getClass().equals(Apply.class));
+		Assertions.assertTrue(comps.get(2).getId().equals("sh3"));
+		Assertions.assertTrue(comps.get(3).getClass().equals(Apply.class));
+		Assertions.assertTrue(comps.get(3).getId().equals("sh4"));
 	}
 	
 	@Test
@@ -553,7 +587,8 @@ public class F80_ZK_2944Test extends ZATSTestCase {
 		DesktopAgent desktop = connect();
 		Component parent = desktop.query("#parent").as(Div.class);
 		List<Component> comps = Selectors.find(parent, "::shadow#sh2 > apply");
-		Assert.assertTrue("expecting 0, got: " + comps.size(), comps.size() == 0);
+		Assertions.assertTrue(comps.size() == 0,
+				"expecting 0, got: " + comps.size());
 	}
 	
 	@Test
@@ -561,7 +596,8 @@ public class F80_ZK_2944Test extends ZATSTestCase {
 		DesktopAgent desktop = connect();
 		Component parent = desktop.query("#parent").as(Div.class);
 		List<Component> comps = Selectors.find(parent, "::shadow#sh2 apply");
-		Assert.assertTrue("expecting 0, got: " + comps.size(), comps.size() == 0);
+		Assertions.assertTrue(comps.size() == 0,
+				"expecting 0, got: " + comps.size());
 	}
 	
 	@Test
@@ -569,9 +605,10 @@ public class F80_ZK_2944Test extends ZATSTestCase {
 		DesktopAgent desktop = connect();
 		Component parent = desktop.query("#parent").as(Div.class);
 		List<Component> comps = Selectors.find(parent, "#div1 + div");
-		Assert.assertTrue("expecting 1, got: " + comps.size(), comps.size() == 1);
-		Assert.assertTrue(comps.get(0).getClass().equals(Div.class));
-		Assert.assertTrue(comps.get(0).getId().equals("div2"));
+		Assertions.assertTrue(comps.size() == 1,
+				"expecting 1, got: " + comps.size());
+		Assertions.assertTrue(comps.get(0).getClass().equals(Div.class));
+		Assertions.assertTrue(comps.get(0).getId().equals("div2"));
 	}
 	
 	@Test
@@ -583,11 +620,12 @@ public class F80_ZK_2944Test extends ZATSTestCase {
 		for (Component comp : comps) {
 			sb.append(comp.getId() + ", ");
 		}
-		Assert.assertTrue("expecting 2, got: " + comps.size() + " => " + sb.toString(), comps.size() == 2);
-		Assert.assertTrue(comps.get(0).getClass().equals(Div.class));
-		Assert.assertTrue(comps.get(0).getId().equals("div2"));
-		Assert.assertTrue(comps.get(1).getClass().equals(Div.class));
-		Assert.assertTrue(comps.get(1).getId().equals("div3"));
+		Assertions.assertTrue(comps.size() == 2,
+				"expecting 2, got: " + comps.size() + " => " + sb.toString());
+		Assertions.assertTrue(comps.get(0).getClass().equals(Div.class));
+		Assertions.assertTrue(comps.get(0).getId().equals("div2"));
+		Assertions.assertTrue(comps.get(1).getClass().equals(Div.class));
+		Assertions.assertTrue(comps.get(1).getId().equals("div3"));
 	}
 	
 	@Test
@@ -595,19 +633,20 @@ public class F80_ZK_2944Test extends ZATSTestCase {
 		DesktopAgent desktop = connect();
 		Component parent = desktop.query("#parent").as(Div.class);
 		List<Component> comps = Selectors.find(parent, "#parent div");
-		Assert.assertTrue("expecting 6, got: " + comps.size(), comps.size() == 6);
-		Assert.assertTrue(comps.get(0).getClass().equals(Div.class));
-		Assert.assertTrue(comps.get(0).getId().equals("div1"));
-		Assert.assertTrue(comps.get(1).getClass().equals(Div.class));
-		Assert.assertTrue(comps.get(1).getId().equals("inner1"));
-		Assert.assertTrue(comps.get(2).getClass().equals(Div.class));
-		Assert.assertTrue(comps.get(2).getId().equals("div2"));
-		Assert.assertTrue(comps.get(3).getClass().equals(Div.class));
-		Assert.assertTrue(comps.get(3).getId().equals("inner2"));
-		Assert.assertTrue(comps.get(4).getClass().equals(Div.class));
-		Assert.assertTrue(comps.get(4).getId().equals("div3"));
-		Assert.assertTrue(comps.get(5).getClass().equals(Div.class));
-		Assert.assertTrue(comps.get(5).getId().equals("inner3"));
+		Assertions.assertTrue(comps.size() == 6,
+				"expecting 6, got: " + comps.size());
+		Assertions.assertTrue(comps.get(0).getClass().equals(Div.class));
+		Assertions.assertTrue(comps.get(0).getId().equals("div1"));
+		Assertions.assertTrue(comps.get(1).getClass().equals(Div.class));
+		Assertions.assertTrue(comps.get(1).getId().equals("inner1"));
+		Assertions.assertTrue(comps.get(2).getClass().equals(Div.class));
+		Assertions.assertTrue(comps.get(2).getId().equals("div2"));
+		Assertions.assertTrue(comps.get(3).getClass().equals(Div.class));
+		Assertions.assertTrue(comps.get(3).getId().equals("inner2"));
+		Assertions.assertTrue(comps.get(4).getClass().equals(Div.class));
+		Assertions.assertTrue(comps.get(4).getId().equals("div3"));
+		Assertions.assertTrue(comps.get(5).getClass().equals(Div.class));
+		Assertions.assertTrue(comps.get(5).getId().equals("inner3"));
 	}
 	
 	@Test
@@ -615,27 +654,29 @@ public class F80_ZK_2944Test extends ZATSTestCase {
 		DesktopAgent desktop = connect();
 		Component parent = desktop.query("#parent").as(Div.class);
 		List<Component> comps = Selectors.find(parent, "#parent div");
-		Assert.assertTrue("expecting 6, got: " + comps.size(), comps.size() == 6);
-		Assert.assertTrue(comps.get(0).getClass().equals(Div.class));
-		Assert.assertTrue(comps.get(0).getId().equals("div1"));
-		Assert.assertTrue(comps.get(1).getClass().equals(Div.class));
-		Assert.assertTrue(comps.get(1).getId().equals("inner1"));
-		Assert.assertTrue(comps.get(2).getClass().equals(Div.class));
-		Assert.assertTrue(comps.get(2).getId().equals("div2"));
-		Assert.assertTrue(comps.get(3).getClass().equals(Div.class));
-		Assert.assertTrue(comps.get(3).getId().equals("inner2"));
-		Assert.assertTrue(comps.get(4).getClass().equals(Div.class));
-		Assert.assertTrue(comps.get(4).getId().equals("div3"));
-		Assert.assertTrue(comps.get(5).getClass().equals(Div.class));
-		Assert.assertTrue(comps.get(5).getId().equals("inner3"));
+		Assertions.assertTrue(comps.size() == 6,
+				"expecting 6, got: " + comps.size());
+		Assertions.assertTrue(comps.get(0).getClass().equals(Div.class));
+		Assertions.assertTrue(comps.get(0).getId().equals("div1"));
+		Assertions.assertTrue(comps.get(1).getClass().equals(Div.class));
+		Assertions.assertTrue(comps.get(1).getId().equals("inner1"));
+		Assertions.assertTrue(comps.get(2).getClass().equals(Div.class));
+		Assertions.assertTrue(comps.get(2).getId().equals("div2"));
+		Assertions.assertTrue(comps.get(3).getClass().equals(Div.class));
+		Assertions.assertTrue(comps.get(3).getId().equals("inner2"));
+		Assertions.assertTrue(comps.get(4).getClass().equals(Div.class));
+		Assertions.assertTrue(comps.get(4).getId().equals("div3"));
+		Assertions.assertTrue(comps.get(5).getClass().equals(Div.class));
+		Assertions.assertTrue(comps.get(5).getId().equals("inner3"));
 	}
 	
 	@Test
 	public void testShadowIdOnly() {
 		DesktopAgent desktop = connect();
 		List<Component> comps = Selectors.find(desktop.query("#div2").as(Div.class), "#div2::shadow#sh2 #if3");
-		Assert.assertTrue("expecting 1, got: " + comps.size(), comps.size() == 1);
-		Assert.assertTrue(comps.get(0).getClass().equals(If.class));
-		Assert.assertTrue(comps.get(0).getId().equals("if3"));
+		Assertions.assertTrue(comps.size() == 1,
+				"expecting 1, got: " + comps.size());
+		Assertions.assertTrue(comps.get(0).getClass().equals(If.class));
+		Assertions.assertTrue(comps.get(0).getId().equals("if3"));
 	}
 }

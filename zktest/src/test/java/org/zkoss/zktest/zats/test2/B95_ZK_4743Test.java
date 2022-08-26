@@ -11,9 +11,10 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 public class B95_ZK_4743Test extends WebDriverTestCase {
 	@Test
@@ -35,7 +36,7 @@ public class B95_ZK_4743Test extends WebDriverTestCase {
 	private void clickTextboxAndCheck(int textboxIndex) {
 		click(jq("@textbox").eq(textboxIndex));
 		waitResponse();
-		Assert.assertEquals("head and body should stay sync.", jq(".z-listbox-header").scrollLeft(), jq(".z-listbox-body").scrollLeft());
-		Assert.assertEquals("scrollbar position and view position should stay sync.", jq(".z-listbox-body").scrollLeft(), jq(".z-frozen-inner").scrollLeft());
+		Assertions.assertEquals(jq(".z-listbox-header").scrollLeft(), jq(".z-listbox-body").scrollLeft(), "head and body should stay sync.");
+		Assertions.assertEquals(jq(".z-listbox-body").scrollLeft(), jq(".z-frozen-inner").scrollLeft(), "scrollbar position and view position should stay sync.");
 	}
 }

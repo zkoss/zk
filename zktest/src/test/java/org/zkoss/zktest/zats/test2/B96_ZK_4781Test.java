@@ -13,12 +13,12 @@ package org.zkoss.zktest.zats.test2;
 
 import java.util.Collections;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.chrome.ChromeOptions;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author rudyhuang
@@ -39,6 +39,6 @@ public class B96_ZK_4781Test extends WebDriverTestCase {
 		sendKeys(longbox, "1-2");
 		click(jq("@button"));
 		waitResponse();
-		Assert.assertTrue(jq("@errorbox").isVisible());
+		Assertions.assertTrue(jq("@errorbox").isVisible());
 	}
 }

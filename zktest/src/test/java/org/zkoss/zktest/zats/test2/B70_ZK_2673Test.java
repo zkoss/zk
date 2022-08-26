@@ -11,13 +11,13 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author rudyhuang
@@ -37,6 +37,6 @@ public class B70_ZK_2673Test extends WebDriverTestCase {
 		int origWidth = jq(".z-nav-popup").width();
 		click(navpp.eq(2));
 		waitResponse(true);
-		Assert.assertThat(jq(".z-nav-popup").width(), greaterThan(origWidth));
+		assertThat(jq(".z-nav-popup").width(), greaterThan(origWidth));
 	}
 }

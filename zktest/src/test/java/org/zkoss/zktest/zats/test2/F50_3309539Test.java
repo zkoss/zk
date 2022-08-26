@@ -11,11 +11,11 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author rudyhuang
@@ -39,13 +39,13 @@ public class F50_3309539Test extends WebDriverTestCase {
 
 		jq("@row:not(:first)").iterator().forEachRemaining(r -> {
 			String dateboxMedium = jq(r.find("@datebox:eq(0)").toWidget().$n("real")).val();
-			Assert.assertEquals(dateboxMediumTw, dateboxMedium);
+			Assertions.assertEquals(dateboxMediumTw, dateboxMedium);
 			String dateboxLong = jq(r.find("@datebox:eq(1)").toWidget().$n("real")).val();
-			Assert.assertEquals(dateboxLongTw, dateboxLong);
+			Assertions.assertEquals(dateboxLongTw, dateboxLong);
 			String timeboxMedium = jq(r.find("@timebox:eq(0)").toWidget().$n("real")).val();
-			Assert.assertEquals(timeboxMediumTw, timeboxMedium);
+			Assertions.assertEquals(timeboxMediumTw, timeboxMedium);
 			String timeboxLong = jq(r.find("@timebox:eq(1)").toWidget().$n("real")).val();
-			Assert.assertEquals(timeboxLongTw, timeboxLong);
+			Assertions.assertEquals(timeboxLongTw, timeboxLong);
 		});
 	}
 }

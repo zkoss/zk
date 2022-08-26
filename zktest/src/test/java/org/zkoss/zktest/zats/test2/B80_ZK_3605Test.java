@@ -11,13 +11,11 @@ Copyright (C) 2017 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.ZK;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.util.regex.Pattern;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author christopher
@@ -42,7 +40,7 @@ public class B80_ZK_3605Test extends WebDriverTestCase {
 
 		// should see the expected result, minus the trimmed new line chars
 		String expected = "onAnyWatch, A, p1\nonAnyWatch, B, p2\nonAnyWatch, C, p1";
-		assertEquals("should contain text from all three listeners", expected, getZKLog());
+		assertEquals(expected, getZKLog(), "should contain text from all three listeners");
 		closeZKLog();
 		waitResponse();
 
@@ -59,7 +57,8 @@ public class B80_ZK_3605Test extends WebDriverTestCase {
 		waitResponse();
 
 		// should not see anything in zklog
-		assertEquals("should not see any message in zk log", true, !isZKLogAvailable() || getZKLog().length() == 0);
+		assertEquals(true, !isZKLogAvailable() || getZKLog().length() == 0,
+				"should not see any message in zk log");
 	}
 
 	@Test
@@ -79,7 +78,7 @@ public class B80_ZK_3605Test extends WebDriverTestCase {
 
 		// should see the expected result, minus the trimmed new line chars
 		String expected = "onAnyWatch, A, p1\nonAnyWatch, B, p2\nonAnyWatch, C, p1";
-		assertEquals("should contain text from all three listeners", expected, getZKLog());
+		assertEquals(expected, getZKLog(), "should contain text from all three listeners");
 		closeZKLog();
 		waitResponse();
 
@@ -96,6 +95,7 @@ public class B80_ZK_3605Test extends WebDriverTestCase {
 		waitResponse();
 
 		// should not see anything in zklog
-		assertEquals("should not see any message in zk log", true, !isZKLogAvailable() || getZKLog().length() == 0);
+		assertEquals(true, !isZKLogAvailable() || getZKLog().length() == 0,
+				"should not see any message in zk log");
 	}
 }

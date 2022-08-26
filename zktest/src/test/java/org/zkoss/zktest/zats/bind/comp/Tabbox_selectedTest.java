@@ -13,8 +13,8 @@ package org.zkoss.zktest.zats.bind.comp;
 
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
@@ -34,11 +34,11 @@ public class Tabbox_selectedTest extends ZATSTestCase {
 		final Tabbox tabbox = desktop.query("#tabbox1").as(Tabbox.class);
 
 		listitems.get(0).select();
-		Assert.assertEquals(0, tabbox.getSelectedIndex());
+		Assertions.assertEquals(0, tabbox.getSelectedIndex());
 		listitems.get(1).select();
-		Assert.assertEquals(1, tabbox.getSelectedIndex());
+		Assertions.assertEquals(1, tabbox.getSelectedIndex());
 		desktop.queryAll("#tabbox1 tab").get(2).select();
-		Assert.assertEquals(1, listbox.getSelectedIndex()); // Won't change
+		Assertions.assertEquals(1, listbox.getSelectedIndex()); // Won't change
 	}
 
 	@Test
@@ -49,10 +49,10 @@ public class Tabbox_selectedTest extends ZATSTestCase {
 		final Tabbox tabbox = desktop.query("#tabbox2").as(Tabbox.class);
 
 		listitems.get(0).select();
-		Assert.assertEquals(0, tabbox.getSelectedIndex());
+		Assertions.assertEquals(0, tabbox.getSelectedIndex());
 		listitems.get(1).select();
-		Assert.assertEquals(1, tabbox.getSelectedIndex());
+		Assertions.assertEquals(1, tabbox.getSelectedIndex());
 		desktop.queryAll("#tabbox2 tab").get(2).select();
-		Assert.assertEquals(2, listbox.getSelectedIndex());
+		Assertions.assertEquals(2, listbox.getSelectedIndex());
 	}
 }

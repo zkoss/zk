@@ -11,10 +11,10 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 public class B96_ZK_4509Test extends WebDriverTestCase {
 	@Test
@@ -25,19 +25,19 @@ public class B96_ZK_4509Test extends WebDriverTestCase {
 		waitResponse();
 		click(jq(".z-comboitem:contains(2)"));
 		waitResponse();
-		Assert.assertEquals(20, jq(".z-listitem").length());
+		Assertions.assertEquals(20, jq(".z-listitem").length());
 
 		click(jq(".z-combobox-button"));
 		waitResponse();
 		click(jq(".z-comboitem:contains(3)"));
 		waitResponse();
-		Assert.assertEquals(0, jq(".z-listitem").length());
+		Assertions.assertEquals(0, jq(".z-listitem").length());
 
 		click(jq(".z-combobox-button"));
 		waitResponse();
 		click(jq(".z-comboitem:contains(2)"));
 		waitResponse();
-		Assert.assertEquals(20, jq(".z-listitem").length());
-		Assert.assertFalse(hasError());
+		Assertions.assertEquals(20, jq(".z-listitem").length());
+		Assertions.assertFalse(hasError());
 	}
 }

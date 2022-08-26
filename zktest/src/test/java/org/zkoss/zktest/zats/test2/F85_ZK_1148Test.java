@@ -11,9 +11,9 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
@@ -30,7 +30,7 @@ public class F85_ZK_1148Test extends ZATSTestCase {
 		ComponentAgent btn = wout.query("#delBtn");
 		btn.click();
 		ComponentAgent label = da.query("#resultLabel");
-		Assert.assertEquals("DestroyD DestroyC", label.as(Label.class).getValue().trim());
+		Assertions.assertEquals("DestroyD DestroyC", label.as(Label.class).getValue().trim());
 	}
 
 	@Test
@@ -39,7 +39,7 @@ public class F85_ZK_1148Test extends ZATSTestCase {
 		ComponentAgent btn = da.query("#delBtno");
 		btn.click();
 		ComponentAgent label = da.query("#resultLabel");
-		Assert.assertEquals("DestroyD DestroyC", label.as(Label.class).getValue().trim());
+		Assertions.assertEquals("DestroyD DestroyC", label.as(Label.class).getValue().trim());
 
 	}
 
@@ -49,7 +49,7 @@ public class F85_ZK_1148Test extends ZATSTestCase {
 		DesktopAgent da = connect();
 		da.destroy();
 		try {
-			Assert.assertEquals("DestroyD is called!DestroyC is called!IncludeVM is called!", F85_ZK_1148FileDealer.readMsg());
+			Assertions.assertEquals("DestroyD is called!DestroyC is called!IncludeVM is called!", F85_ZK_1148FileDealer.readMsg());
 		} finally {
 			F85_ZK_1148FileDealer.close();
 		}
@@ -63,13 +63,13 @@ public class F85_ZK_1148Test extends ZATSTestCase {
 		ComponentAgent btn = reloadWin.query("#reload");
 		btn.click();
 		try {
-			Assert.assertEquals("IncludeVM is called!", F85_ZK_1148FileDealer.readMsg());
+			Assertions.assertEquals("IncludeVM is called!", F85_ZK_1148FileDealer.readMsg());
 		} finally {
 			F85_ZK_1148FileDealer.close();
 		}
 	}
 
-	@AfterClass
+	@AfterAll
 	public static void cleanUp() {
 		F85_ZK_1148FileDealer.close();
 	}

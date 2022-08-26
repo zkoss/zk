@@ -11,8 +11,8 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zktest.zats.ZATSTestCase;
@@ -30,7 +30,8 @@ public class B95_ZK_4515Test extends ZATSTestCase {
 		desktop.queryAll("textbox").get(1).type("Sun");
 		desktop.queryAll("button").get(1).click();
 
-		Assert.assertTrue("The button should be disabled",
-				desktop.query("button").as(Button.class).isDisabled());
+		Assertions.assertTrue(
+				desktop.query("button").as(Button.class).isDisabled(),
+				"The button should be disabled");
 	}
 }

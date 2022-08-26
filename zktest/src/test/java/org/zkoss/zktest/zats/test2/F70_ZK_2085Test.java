@@ -11,11 +11,11 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -32,6 +32,6 @@ public class F70_ZK_2085Test extends WebDriverTestCase {
 				.moveByOffset(tickInPx * 4, 0)
 				.perform();
 		waitResponse();
-		Assert.assertEquals(10.2, Double.parseDouble(jq("@label:last").text()), 0.01);
+		Assertions.assertEquals(10.2, Double.parseDouble(jq("@label:last").text()), 0.01);
 	}
 }

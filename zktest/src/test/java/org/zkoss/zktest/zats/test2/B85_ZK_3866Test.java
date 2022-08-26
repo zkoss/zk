@@ -1,9 +1,12 @@
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
+
+
 
 /**
  * @author bob peng
@@ -25,7 +28,7 @@ public class B85_ZK_3866Test extends WebDriverTestCase {
 			// check the selected radio
 			String sel = jq("input[type=radio]:checked + label").html();
 			System.out.println("current selection: " + sel);
-			assertEquals("Error: selection not match", Integer.toString(i), sel);
+			assertEquals(Integer.toString(i), sel, "Error: selection not match");
 		}
 	}
 }

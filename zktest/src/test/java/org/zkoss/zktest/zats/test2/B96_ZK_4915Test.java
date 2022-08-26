@@ -11,10 +11,11 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class B96_ZK_4915Test extends WebDriverTestCase {
 	@Test
@@ -35,7 +36,7 @@ public class B96_ZK_4915Test extends WebDriverTestCase {
 		double iconMiddle = icon.offsetTop() + icon.height() / 2;
 
 		if (index < 2) // collapsed=false
-			Assert.assertEquals("text and badgeText should be vertical aligned", textMiddle, badgeMiddle, 2);
-		Assert.assertEquals("icon and badgeText should be vertical aligned", iconMiddle, badgeMiddle, 2);
+			Assertions.assertEquals(textMiddle, badgeMiddle, 2, "text and badgeText should be vertical aligned");
+		Assertions.assertEquals(iconMiddle, badgeMiddle, 2, "icon and badgeText should be vertical aligned");
 	}
 }

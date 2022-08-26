@@ -11,12 +11,11 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.python.parser.ast.Str;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class F86_ZK_3958Test extends WebDriverTestCase {
 	
@@ -33,7 +32,7 @@ public class F86_ZK_3958Test extends WebDriverTestCase {
 		String on = "-on";
 		
 		verifyClassChange(findButtonContains("Switch"), jq(switchMold + off));
-		Assert.assertFalse(jq(".z-checkbox > input").isVisible());
+		Assertions.assertFalse(jq(".z-checkbox > input").isVisible());
 		
 		verifyChecked("false");
 		
@@ -57,13 +56,13 @@ public class F86_ZK_3958Test extends WebDriverTestCase {
 	private void verifyClassChange(JQuery location, JQuery target) {
 		click(location);
 		waitResponse();
-		Assert.assertTrue(target.exists());
+		Assertions.assertTrue(target.exists());
 	}
 	
 	private void verifyChecked(String checked) {
 		click(isCheckedButton);
 		waitResponse();
-		Assert.assertEquals(checked, getZKLog());
+		Assertions.assertEquals(checked, getZKLog());
 		closeZKLog();
 		waitResponse();
 	}

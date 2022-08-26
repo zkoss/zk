@@ -11,11 +11,11 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -33,7 +33,7 @@ public class F95_ZK_4630Test extends WebDriverTestCase {
 
 		String shiftTab = Keys.chord(Keys.SHIFT, Keys.TAB);
 		getActions().sendKeys(shiftTab, shiftTab, shiftTab).perform();
-		Assert.assertEquals("false", getEval("document.activeElement === jq('@button').get(0)"));
+		Assertions.assertEquals("false", getEval("document.activeElement === jq('@button').get(0)"));
 	}
 
 	@Test
@@ -47,6 +47,6 @@ public class F95_ZK_4630Test extends WebDriverTestCase {
 		waitResponse();
 
 		getActions().sendKeys(Keys.TAB, Keys.TAB, Keys.TAB).perform();
-		Assert.assertEquals("true", getEval("document.activeElement === jq('.z-drawer-close').get(0)"));
+		Assertions.assertEquals("true", getEval("document.activeElement === jq('.z-drawer-close').get(0)"));
 	}
 }

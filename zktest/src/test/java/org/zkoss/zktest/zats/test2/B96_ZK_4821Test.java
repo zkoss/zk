@@ -11,12 +11,13 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.interactions.Actions;
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
-import org.zkoss.zktest.zats.ztl.Widget;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
+import org.zkoss.test.webdriver.ztl.Widget;
 
 public class B96_ZK_4821Test extends WebDriverTestCase {
 	@Test
@@ -50,7 +51,7 @@ public class B96_ZK_4821Test extends WebDriverTestCase {
 		String state = checkbox.toWidget().get("state");
 		act.moveToElement(toElement(checkbox), 0, checkbox.innerHeight() / 2).click().perform();
 		waitResponse();
-		Assert.assertEquals("state shall not change while click on border", state, checkbox.toWidget().get("state"));
+		Assertions.assertEquals(state, checkbox.toWidget().get("state"), "state shall not change while click on border");
 	}
 
 	private void clickOnPartTest(JQuery checkboxPart, boolean onContent) {
@@ -63,8 +64,8 @@ public class B96_ZK_4821Test extends WebDriverTestCase {
 		click(checkboxPart);
 		waitResponse();
 		if ("true".equals(disabled))
-			Assert.assertEquals("state shall not change while click on disabled checkbox", state, checkbox.get("state"));
+			Assertions.assertEquals(state, checkbox.get("state"), "state shall not change while click on disabled checkbox");
 		else
-			Assert.assertNotEquals("state shall change while click on normal checkbox", state, checkbox.get("state"));
+			Assertions.assertNotEquals(state, checkbox.get("state"), "state shall change while click on normal checkbox");
 	}
 }

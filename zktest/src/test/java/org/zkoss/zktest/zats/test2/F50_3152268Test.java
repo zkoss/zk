@@ -11,11 +11,11 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author rudyhuang
@@ -27,14 +27,14 @@ public class F50_3152268Test extends WebDriverTestCase {
 
 		crudTreeItem(jq("@treerow:eq(0)"), 1);
 		crudTreeItem(jq("@treerow:eq(0)"), 0);
-		Assert.assertEquals(4, jq("@treerow").length());
-		Assert.assertEquals("new treeitem 1", trimNbsp(jq("@treecell:eq(0)").text()));
+		Assertions.assertEquals(4, jq("@treerow").length());
+		Assertions.assertEquals("new treeitem 1", trimNbsp(jq("@treecell:eq(0)").text()));
 
 		crudTreeItem(jq("@treerow:eq(0)"), 2);
-		Assert.assertEquals("update treeitem 2", trimNbsp(jq("@treecell:eq(0)").text()));
+		Assertions.assertEquals("update treeitem 2", trimNbsp(jq("@treecell:eq(0)").text()));
 
 		crudTreeItem(jq("@treerow:eq(1)"), 3);
-		Assert.assertEquals(3, jq("@treerow").length());
+		Assertions.assertEquals(3, jq("@treerow").length());
 	}
 
 	private void crudTreeItem(JQuery treeitem, int menuitemIndex) {

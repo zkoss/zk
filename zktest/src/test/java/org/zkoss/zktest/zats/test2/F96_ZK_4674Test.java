@@ -11,9 +11,10 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 public class F96_ZK_4674Test extends WebDriverTestCase {
 	@Test
@@ -25,8 +26,9 @@ public class F96_ZK_4674Test extends WebDriverTestCase {
 			waitResponse();
 			click(jq("@button"));
 			waitResponse();
-			Assert.assertTrue("google font should be added with HTTPS",
-					getZKLog().contains("https://fonts.googleapis.com/css?family=Open+Sans"));
+			Assertions.assertTrue(
+					getZKLog().contains("https://fonts.googleapis.com/css?family=Open+Sans"),
+					"google font should be added with HTTPS");
 		} finally {
 			click(jq(".z-a:contains(Default)"));
 			waitResponse();

@@ -11,10 +11,11 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.interactions.Actions;
-import org.zkoss.zktest.zats.WebDriverTestCase;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 public class B86_ZK_4038Test extends WebDriverTestCase {
 	@Test
@@ -24,6 +25,6 @@ public class B86_ZK_4038Test extends WebDriverTestCase {
 		int startHeightSum = jq(".z-panel").eq(0).height() + jq(".z-panel").eq(1).height();
 		act.dragAndDropBy(toElement(jq(".z-splitter")), -100, 0).perform();
 		waitResponse();
-		Assert.assertEquals(startHeightSum, jq(".z-panel").eq(0).height() + jq(".z-panel").eq(1).height());
+		Assertions.assertEquals(startHeightSum, jq(".z-panel").eq(0).height() + jq(".z-panel").eq(1).height());
 	}
 }

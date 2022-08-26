@@ -11,10 +11,10 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -26,6 +26,6 @@ public class B86_ZK_3987Test extends WebDriverTestCase {
 
 		String color1 = jq("@row:eq(0) @label:last").css("color");
 		String color2 = jq("@row:eq(1) @label:last").css("color");
-		Assert.assertEquals("The color of two labels are different.", color1, color2);
+		Assertions.assertEquals(color1, color2, "The color of two labels are different.");
 	}
 }

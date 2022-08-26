@@ -11,9 +11,10 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 public class B86_ZK_3922Test extends WebDriverTestCase {
 	@Test
@@ -22,9 +23,9 @@ public class B86_ZK_3922Test extends WebDriverTestCase {
 		waitResponse();
 		type(jq("@textbox").eq(0), "xo");
 		waitResponse();
-		Assert.assertEquals("name may not start with 'X'", jq(".z-label").eq(2).text());
+		Assertions.assertEquals("name may not start with 'X'", jq(".z-label").eq(2).text());
 		type(jq("@textbox").eq(1), "123");
 		waitResponse();
-		Assert.assertEquals("name may not start with 'X'", jq(".z-label").eq(2).text());
+		Assertions.assertEquals("name may not start with 'X'", jq(".z-label").eq(2).text());
 	}
 }

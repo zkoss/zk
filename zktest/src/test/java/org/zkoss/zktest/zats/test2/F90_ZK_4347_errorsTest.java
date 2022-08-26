@@ -13,8 +13,8 @@ package org.zkoss.zktest.zats.test2;
 
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zats.ZatsException;
 import org.zkoss.zats.mimic.ComponentAgent;
@@ -38,7 +38,7 @@ public class F90_ZK_4347_errorsTest extends ZATSTestCase {
 	private void testSetter(ComponentAgent btn) {
 		try {
 			btn.click();
-			Assert.fail("Expected an UnsupportedOperationException");
+			Assertions.fail("Expected an UnsupportedOperationException");
 		} catch (ZatsException expected) {
 		}
 	}

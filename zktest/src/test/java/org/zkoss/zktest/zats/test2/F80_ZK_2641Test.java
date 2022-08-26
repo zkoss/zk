@@ -14,12 +14,12 @@ package org.zkoss.zktest.zats.test2;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author rudyhuang
@@ -35,7 +35,7 @@ public class F80_ZK_2641Test extends WebDriverTestCase {
 		waitResponse();
 		click(eBtn);
 		waitResponse();
-		Assert.assertEquals("no empty", jq(".z-errorbox-content").text());
+		Assertions.assertEquals("no empty", jq(".z-errorbox-content").text());
 
 		click(tb1);
 		waitResponse();
@@ -43,7 +43,7 @@ public class F80_ZK_2641Test extends WebDriverTestCase {
 		waitResponse();
 		click(eBtn);
 		waitResponse();
-		Assert.assertEquals("email only", jq(".z-errorbox-content").text());
+		Assertions.assertEquals("email only", jq(".z-errorbox-content").text());
 
 		JQuery ib = jq("@intbox");
 		waitResponse();
@@ -51,27 +51,27 @@ public class F80_ZK_2641Test extends WebDriverTestCase {
 		waitResponse();
 		click(eBtn);
 		waitResponse();
-		Assert.assertEquals("no neg", jq(".z-errorbox-content").eq(1).text());
+		Assertions.assertEquals("no neg", jq(".z-errorbox-content").eq(1).text());
 
 		click(ib);
 		sendKeys(ib, Keys.BACK_SPACE, Keys.BACK_SPACE, "1");
 		waitResponse();
 		click(eBtn);
 		waitResponse();
-		Assert.assertEquals("no pos", jq(".z-errorbox-content").eq(1).text());
+		Assertions.assertEquals("no pos", jq(".z-errorbox-content").eq(1).text());
 
 		JQuery ib2 = jq("@intbox").eq(1);
 		click(ib2);
 		waitResponse();
 		click(eBtn);
 		waitResponse();
-		Assert.assertEquals("no empty", jq(".z-errorbox-content").eq(2).text());
+		Assertions.assertEquals("no empty", jq(".z-errorbox-content").eq(2).text());
 
 		sendKeys(ib2, "0");
 		waitResponse();
 		click(eBtn);
 		waitResponse();
-		Assert.assertEquals("no zero", jq(".z-errorbox-content").eq(2).text());
+		Assertions.assertEquals("no zero", jq(".z-errorbox-content").eq(2).text());
 
 		JQuery db = jq(".z-datebox-input");
 		//get tomorrow's date
@@ -79,7 +79,7 @@ public class F80_ZK_2641Test extends WebDriverTestCase {
 		waitResponse();
 		click(eBtn);
 		waitResponse();
-		Assert.assertEquals("no empty", jq(".z-errorbox-content").eq(3).text());
+		Assertions.assertEquals("no empty", jq(".z-errorbox-content").eq(3).text());
 
 		String tomorrowStr = LocalDate.now()
 				.plusDays(1)
@@ -88,47 +88,47 @@ public class F80_ZK_2641Test extends WebDriverTestCase {
 		waitResponse();
 		click(eBtn);
 		waitResponse();
-		Assert.assertEquals("no future", jq(".z-errorbox-content").eq(3).text());
+		Assertions.assertEquals("no future", jq(".z-errorbox-content").eq(3).text());
 
 		JQuery db2 = jq(".z-datebox-input").eq(1);
 		sendKeys(db2, "20150415");
 		waitResponse();
 		click(eBtn);
 		waitResponse();
-		Assert.assertEquals("no before", jq(".z-errorbox-content").eq(4).text());
+		Assertions.assertEquals("no before", jq(".z-errorbox-content").eq(4).text());
 
 		click(db2);
 		sendKeys(db2, Keys.END, Keys.BACK_SPACE, Keys.BACK_SPACE, "21");
 		waitResponse();
 		click(eBtn);
 		waitResponse();
-		Assert.assertEquals("no after", jq(".z-errorbox-content").eq(4).text());
+		Assertions.assertEquals("no after", jq(".z-errorbox-content").eq(4).text());
 
 		JQuery db3 = jq(".z-datebox-input").eq(2);
 		click(db3);
 		waitResponse();
 		click(eBtn);
 		waitResponse();
-		Assert.assertEquals("no empty", jq(".z-errorbox-content").eq(5).text());
+		Assertions.assertEquals("no empty", jq(".z-errorbox-content").eq(5).text());
 
 		sendKeys(db3, "20150421");
 		waitResponse();
 		click(eBtn);
 		waitResponse();
-		Assert.assertEquals("between", jq(".z-errorbox-content").eq(5).text());
+		Assertions.assertEquals("between", jq(".z-errorbox-content").eq(5).text());
 
 		JQuery cb = jq(".z-combobox-input");
 		click(cb);
 		waitResponse();
 		click(eBtn);
 		waitResponse();
-		Assert.assertEquals("no empty", jq(".z-errorbox-content").eq(6).text());
+		Assertions.assertEquals("no empty", jq(".z-errorbox-content").eq(6).text());
 
 		sendKeys(cb, "a");
 		waitResponse();
 		click(eBtn);
 		waitResponse();
-		Assert.assertEquals("strict", jq(".z-errorbox-content").eq(6).text());
+		Assertions.assertEquals("strict", jq(".z-errorbox-content").eq(6).text());
 
 		JQuery ib3 = jq("@intbox").eq(2);
 		click(jq("@button").eq(1));
@@ -139,6 +139,6 @@ public class F80_ZK_2641Test extends WebDriverTestCase {
 		waitResponse();
 		click(eBtn);
 		waitResponse();
-		Assert.assertEquals("Only positive number or zero is allowed", jq(".z-errorbox-content").eq(7).text());
+		Assertions.assertEquals("Only positive number or zero is allowed", jq(".z-errorbox-content").eq(7).text());
 	}
 }

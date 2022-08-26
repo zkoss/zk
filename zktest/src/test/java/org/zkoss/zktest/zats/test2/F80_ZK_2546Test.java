@@ -11,14 +11,16 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.InputStream;
 import java.io.Reader;
 import java.util.Date;
+
 import javax.swing.*;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
 import org.zkoss.image.Image;
 import org.zkoss.zhtml.Li;
 import org.zkoss.zhtml.Text;
@@ -38,7 +40,8 @@ import org.zkoss.zul.Timebox;
  * @author jumperchen
  */
 public class F80_ZK_2546Test {
-	@Test public void testAbstractComponent() {
+	@Test
+	public void testAbstractComponent() {
 		Div d = new Div();
 
 		// test id

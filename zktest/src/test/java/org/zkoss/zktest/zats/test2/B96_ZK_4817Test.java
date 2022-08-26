@@ -13,13 +13,13 @@ package org.zkoss.zktest.zats.test2;
 
 import java.util.Collections;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.touch.TouchActions;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.Widget;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.Widget;
 
 /**
  * @author rudyhuang
@@ -41,21 +41,21 @@ public class B96_ZK_4817Test extends WebDriverTestCase {
 				.singleTap(toElement(listgroup.$n("img")))
 				.perform();
 		waitResponse();
-		Assert.assertFalse(jq(listgroup).hasClass("z-listgroup-selected"));
-		Assert.assertTrue(jq(listgroup).hasClass("z-listgroup-open"));
+		Assertions.assertFalse(jq(listgroup).hasClass("z-listgroup-selected"));
+		Assertions.assertTrue(jq(listgroup).hasClass("z-listgroup-open"));
 
 		final Widget group = widget("@group");
 		new TouchActions(driver)
 				.singleTap(toElement(group.$n("img")))
 				.perform();
 		waitResponse();
-		Assert.assertTrue(jq(group).hasClass("z-group-open"));
+		Assertions.assertTrue(jq(group).hasClass("z-group-open"));
 
 		final Widget detail = widget("@detail");
 		new TouchActions(driver)
 				.singleTap(toElement(detail.$n("icon")))
 				.perform();
 		waitResponse();
-		Assert.assertTrue(jq(detail.$n("chdextr")).hasClass("z-detail-open"));
+		Assertions.assertTrue(jq(detail.$n("chdextr")).hasClass("z-detail-open"));
 	}
 }

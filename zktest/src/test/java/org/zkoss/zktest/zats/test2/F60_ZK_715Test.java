@@ -11,13 +11,13 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.interactions.Actions;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author rudyhuang
@@ -40,18 +40,18 @@ public class F60_ZK_715Test extends WebDriverTestCase {
 		Actions actions = getActions();
 		actions.sendKeys(Keys.DOWN).perform();
 		waitResponse();
-		Assert.assertEquals("2", lb.find("@paging .z-paging-input").val());
+		Assertions.assertEquals("2", lb.find("@paging .z-paging-input").val());
 
 		actions.sendKeys(Keys.UP).perform();
 		waitResponse();
-		Assert.assertEquals("1", lb.find("@paging .z-paging-input").val());
+		Assertions.assertEquals("1", lb.find("@paging .z-paging-input").val());
 
 		actions.sendKeys(Keys.PAGE_DOWN).perform();
 		waitResponse();
-		Assert.assertEquals("2", lb.find("@paging .z-paging-input").val());
+		Assertions.assertEquals("2", lb.find("@paging .z-paging-input").val());
 
 		actions.sendKeys(Keys.PAGE_UP).perform();
 		waitResponse();
-		Assert.assertEquals("1", lb.find("@paging .z-paging-input").val());
+		Assertions.assertEquals("1", lb.find("@paging .z-paging-input").val());
 	}
 }

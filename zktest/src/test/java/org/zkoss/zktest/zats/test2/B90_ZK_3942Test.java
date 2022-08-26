@@ -11,10 +11,10 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -24,7 +24,7 @@ public class B90_ZK_3942Test extends WebDriverTestCase {
 	public void test() {
 		connect();
 		waitResponse();
-		Assert.assertFalse(jq(".z-apply-loading").exists());
-		Assert.assertEquals("onCreate\nonClientInfo", getZKLog());
+		Assertions.assertFalse(jq(".z-apply-loading").exists());
+		Assertions.assertEquals("onCreate\nonClientInfo", getZKLog());
 	}
 }

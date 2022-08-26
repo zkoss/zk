@@ -15,10 +15,10 @@ import java.time.chrono.ChronoLocalDate;
 import java.time.chrono.ThaiBuddhistChronology;
 import java.time.temporal.ChronoField;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -34,11 +34,11 @@ public class B86_ZK_4242Test extends WebDriverTestCase {
 		click(widget("@datebox:first").$n("btn"));
 		waitResponse();
 		String calendarYear = toElement(widget("@calendar:visible").$n("ty")).getText();
-		Assert.assertEquals(buddhistYear, calendarYear);
+		Assertions.assertEquals(buddhistYear, calendarYear);
 
 		click(widget("@datebox:eq(1)").$n("btn"));
 		waitResponse();
 		String calendarYear2 = toElement(widget("@calendar:visible").$n("ty")).getText();
-		Assert.assertEquals(buddhistYear, calendarYear2);
+		Assertions.assertEquals(buddhistYear, calendarYear2);
 	}
 }

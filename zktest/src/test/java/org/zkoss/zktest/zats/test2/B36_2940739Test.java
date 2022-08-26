@@ -14,11 +14,11 @@ package org.zkoss.zktest.zats.test2;
 import java.util.Collections;
 
 import net.jcip.annotations.NotThreadSafe;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.chrome.ChromeOptions;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -43,13 +43,13 @@ public class B36_2940739Test extends WebDriverTestCase {
 			waitResponse();
 			String yearMonth2 = jq(".z-datebox-popup.z-datebox-open .z-calendar-title").text();
 
-			Assert.assertEquals(yearMonth1, yearMonth2);
+			Assertions.assertEquals(yearMonth1, yearMonth2);
 
 			click(jq("@datebox:eq(1) > .z-datebox-button"));
 			waitResponse();
 			String yearMonth3 = jq(".z-datebox-popup.z-datebox-open .z-calendar-title").text();
 
-			Assert.assertEquals(yearMonth1, yearMonth3);
+			Assertions.assertEquals(yearMonth1, yearMonth3);
 		} finally {
 			click(jq("body"));
 			waitResponse();

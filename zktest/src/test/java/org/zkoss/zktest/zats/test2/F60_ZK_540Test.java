@@ -1,12 +1,13 @@
 package org.zkoss.zktest.zats.test2;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.support.ui.Select;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -22,12 +23,12 @@ public class F60_ZK_540Test extends WebDriverTestCase {
 
 		click(jq("@button"));
 		waitResponse();
-		Assert.assertTrue(jq("@notification").isVisible());
-		Assert.assertThat(jq("@notification .z-notification-content").html(), containsString("<span style=\"font-weight: bold\">HTML</span>"));
-		Assert.assertEquals(jq("@window").offsetLeft(), jq("@notification").offsetLeft(), 1);
-		Assert.assertEquals(jq("@window").offsetTop() - jq("@notification").outerHeight(), jq("@notification").offsetTop(), 1);
+		Assertions.assertTrue(jq("@notification").isVisible());
+		assertThat(jq("@notification .z-notification-content").html(), containsString("<span style=\"font-weight: bold\">HTML</span>"));
+		Assertions.assertEquals(jq("@window").offsetLeft(), jq("@notification").offsetLeft(), 1);
+		Assertions.assertEquals(jq("@window").offsetTop() - jq("@notification").outerHeight(), jq("@notification").offsetTop(), 1);
 
 		sleep(2000);
-		Assert.assertFalse(jq("@notification").isVisible());
+		Assertions.assertFalse(jq("@notification").isVisible());
 	}
 }

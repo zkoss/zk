@@ -11,10 +11,11 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.bind.databinding.collection;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class Collection_index_tabboxTest extends WebDriverTestCase {
 	@Test
@@ -56,20 +57,20 @@ public class Collection_index_tabboxTest extends WebDriverTestCase {
 
 	private void structureAndIndexCheck(JQuery outerTabs, JQuery outerTabpanels, String[] testString) {
 		int expectedSize = testString.length;
-		Assert.assertEquals("shall have " + expectedSize + " tab widgets left", expectedSize, outerTabs.length());
+		Assertions.assertEquals(expectedSize, outerTabs.length(), "shall have " + expectedSize + " tab widgets left");
 		JQuery msg = jq("$msg");
 		for (int i = 0; i < expectedSize; i++) {
 			JQuery targetTab = outerTabs.eq(i);
 			click(targetTab);
 			waitResponse();
 			JQuery targetTabpanel = outerTabpanels.eq(i);
-			Assert.assertEquals(testString[i], targetTab.text());
-			Assert.assertEquals("shall see 2 tab in the inner tabbox", 2, targetTabpanel.find(".z-tab").length());
+			Assertions.assertEquals(testString[i], targetTab.text());
+			Assertions.assertEquals(2, targetTabpanel.find(".z-tab").length(), "shall see 2 tab in the inner tabbox");
 
 			click(targetTabpanel.find("@button:contains(Index)"));
 			waitResponse();
 			// TODO: wait for ZK-4882 fixed
-			// Assert.assertEquals("item index " + i, msg.text());
+			// Assertions.assertEquals("item index " + i, msg.text());
 		}
 	}
 }

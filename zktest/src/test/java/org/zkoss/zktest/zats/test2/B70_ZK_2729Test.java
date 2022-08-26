@@ -14,10 +14,10 @@ package org.zkoss.zktest.zats.test2;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -40,6 +40,6 @@ public class B70_ZK_2729Test extends WebDriverTestCase {
 		int anchorOffsetTop = jq("@image").offsetTop();
 		eval(jq("@dropupload") + ".show()"); // Visible element has offsetTop
 		int dropUploadOffsetTop = jq("@dropupload").offsetTop();
-		Assert.assertEquals(anchorOffsetTop, dropUploadOffsetTop, 3);
+		Assertions.assertEquals(anchorOffsetTop, dropUploadOffsetTop, 3);
 	}
 }

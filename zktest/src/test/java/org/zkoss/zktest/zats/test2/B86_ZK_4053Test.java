@@ -11,8 +11,8 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
@@ -34,13 +34,15 @@ public class B86_ZK_4053Test extends ZATSTestCase {
 		Combobutton comp3 = desktop.query("combobutton").as(Combobutton.class);
 
 		desktop.queryAll("button[label$='open']").forEach(ComponentAgent::click);
-		Assert.assertTrue("The bandbox should be opened.", comp1.isOpen());
-		Assert.assertTrue("The combobox should be opened.", comp2.isOpen());
-		Assert.assertTrue("The combobutton should be opened.", comp3.isOpen());
+		Assertions.assertTrue(comp1.isOpen(), "The bandbox should be opened.");
+		Assertions.assertTrue(comp2.isOpen(), "The combobox should be opened.");
+		Assertions.assertTrue(comp3.isOpen(),
+				"The combobutton should be opened.");
 
 		desktop.queryAll("button[label$='close']").forEach(ComponentAgent::click);
-		Assert.assertFalse("The bandbox should be closed.", comp1.isOpen());
-		Assert.assertFalse("The combobox should be closed.", comp2.isOpen());
-		Assert.assertFalse("The combobutton should be closed.", comp3.isOpen());
+		Assertions.assertFalse(comp1.isOpen(), "The bandbox should be closed.");
+		Assertions.assertFalse(comp2.isOpen(), "The combobox should be closed.");
+		Assertions.assertFalse(comp3.isOpen(),
+				"The combobutton should be closed.");
 	}
 }

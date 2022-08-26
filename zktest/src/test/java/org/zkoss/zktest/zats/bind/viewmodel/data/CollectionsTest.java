@@ -13,9 +13,9 @@ package org.zkoss.zktest.zats.bind.viewmodel.data;
 
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
@@ -27,7 +27,7 @@ import org.zkoss.zktest.zats.ZATSTestCase;
 public class CollectionsTest extends ZATSTestCase {
 	private DesktopAgent desktop;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		desktop = connect("/bind/viewmodel/data/collections.zul");
 	}
@@ -37,9 +37,9 @@ public class CollectionsTest extends ZATSTestCase {
 		desktop.queryAll("#gL row").get(0).queryAll("button").get(0).click();
 		desktop.queryAll("#gS row").get(0).queryAll("button").get(0).click();
 		desktop.queryAll("#gM row").get(0).queryAll("button").get(0).click();
-		Assert.assertEquals(1, desktop.queryAll("#gL row").size());
-		Assert.assertEquals(1, desktop.queryAll("#gS row").size());
-		Assert.assertEquals(1, desktop.queryAll("#gM row").size());
+		Assertions.assertEquals(1, desktop.queryAll("#gL row").size());
+		Assertions.assertEquals(1, desktop.queryAll("#gS row").size());
+		Assertions.assertEquals(1, desktop.queryAll("#gM row").size());
 	}
 
 	@Test
@@ -47,9 +47,9 @@ public class CollectionsTest extends ZATSTestCase {
 		desktop.query("#addL").click();
 		desktop.query("#addS").click();
 		desktop.query("#addM").click();
-		Assert.assertEquals(3, desktop.queryAll("#gL row").size());
-		Assert.assertEquals(3, desktop.queryAll("#gS row").size());
-		Assert.assertEquals(3, desktop.queryAll("#gM row").size());
+		Assertions.assertEquals(3, desktop.queryAll("#gL row").size());
+		Assertions.assertEquals(3, desktop.queryAll("#gS row").size());
+		Assertions.assertEquals(3, desktop.queryAll("#gM row").size());
 	}
 
 	@Test
@@ -57,9 +57,9 @@ public class CollectionsTest extends ZATSTestCase {
 		inplaceEdit(desktop.queryAll("#gL row").get(0));
 		inplaceEdit(desktop.queryAll("#gS row").get(0));
 		inplaceEdit(desktop.queryAll("#gM row").get(0));
-		Assert.assertEquals("ZK, 9th Street", desktop.getZkLog().get(0));
-		Assert.assertEquals("ZK, 9th Street", desktop.getZkLog().get(1));
-		Assert.assertEquals("ZK, 9th Street", desktop.getZkLog().get(2));
+		Assertions.assertEquals("ZK, 9th Street", desktop.getZkLog().get(0));
+		Assertions.assertEquals("ZK, 9th Street", desktop.getZkLog().get(1));
+		Assertions.assertEquals("ZK, 9th Street", desktop.getZkLog().get(2));
 	}
 
 	private void inplaceEdit(ComponentAgent item) {

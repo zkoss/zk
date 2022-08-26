@@ -13,8 +13,9 @@ package org.zkoss.zktest.zats.zuti;
 
 import java.util.List;
 
-import org.junit.After;
-import org.junit.AfterClass;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
@@ -58,12 +59,12 @@ public class ZutiBasicTestCase extends ZATSTestCase {
 		}
 		return total;
 	}
-	@AfterClass
+	@AfterAll
 	public static void end() {
 		env.destroy();
 	}
 
-	@After
+	@AfterEach
 	public void after() {
 		env.cleanup();
 	}

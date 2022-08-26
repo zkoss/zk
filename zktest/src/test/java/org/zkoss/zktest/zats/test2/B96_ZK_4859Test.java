@@ -11,9 +11,9 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author jameschu
@@ -23,6 +23,6 @@ public class B96_ZK_4859Test extends WebDriverTestCase {
 	public void test() {
 		connect();
 		type(jq("@textbox"), "$z!t#d:");
-		waitResponse(); //no need to assert. If bug exists, there will be an UnhandledAlertException
+		waitResponse(); //no need to Assertions. If bug exists, there will be an UnhandledAlertException
 	}
 }

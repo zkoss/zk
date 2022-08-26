@@ -11,14 +11,17 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.zuti.complex;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zhtml.Text;
+import org.zkoss.zktest.zats.zuti.ZutiBasicTestCase;
+import org.zkoss.zktest.zats.zuti.verifier.HierarchyVerifier;
 import org.zkoss.zul.Checkbox;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.Groupbox;
@@ -26,8 +29,6 @@ import org.zkoss.zul.Hlayout;
 import org.zkoss.zul.Panel;
 import org.zkoss.zul.Vlayout;
 import org.zkoss.zul.Window;
-import org.zkoss.zktest.zats.zuti.ZutiBasicTestCase;
-import org.zkoss.zktest.zats.zuti.verifier.HierarchyVerifier;
 
 /**
  * @author jumperchen

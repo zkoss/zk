@@ -13,7 +13,8 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
 import org.zkoss.zktest.zats.ZATSTestCase;
 
 /**

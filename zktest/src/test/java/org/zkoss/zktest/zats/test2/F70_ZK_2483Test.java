@@ -11,13 +11,13 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.matchesRegex;
 
 import java.util.Iterator;
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
@@ -36,8 +36,8 @@ public class F70_ZK_2483Test extends ZATSTestCase {
 		while (iter.hasNext()) {
 			Label key = iter.next().as(Label.class);
 			Label value = iter.next().as(Label.class);
-			Assert.assertThat(key.getValue(), matchesRegex("key \\d+"));
-			Assert.assertThat(value.getValue(), matchesRegex("value \\d+"));
+			assertThat(key.getValue(), matchesRegex("key \\d+"));
+			assertThat(value.getValue(), matchesRegex("value \\d+"));
 		}
 	}
 }

@@ -11,21 +11,21 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.ClassRule;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.zkoss.zktest.zats.ExternalZkXml;
-import org.zkoss.zktest.zats.ForkJVMTestOnly;
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
+
+import org.zkoss.test.webdriver.ExternalZkXml;
+import org.zkoss.test.webdriver.ForkJVMTestOnly;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author jameschu
  */
-@Category(ForkJVMTestOnly.class)
+@ForkJVMTestOnly
 public class B90_ZK_4485Test extends WebDriverTestCase {
-	@ClassRule
+	@RegisterExtension
 	public static final ExternalZkXml CONFIG = new ExternalZkXml("/test2/B90-ZK-4485-zk.xml");
 
 	@Test
@@ -33,6 +33,6 @@ public class B90_ZK_4485Test extends WebDriverTestCase {
 		connect();
 		click(jq("@button"));
 		waitResponse();
-		Assert.assertEquals("true", getZKLog());
+		assertEquals("true", getZKLog());
 	}
 }

@@ -11,10 +11,11 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author jameschu
@@ -36,7 +37,7 @@ public class B95_ZK_4558Test extends WebDriverTestCase {
 		waitResponse();
 		click(jq("$btn1"));
 		waitResponse();
-		Assert.assertTrue(jq("$l1_header1").width() >= 1);
+		Assertions.assertTrue(jq("$l1_header1").width() >= 1);
 		// second listbox
 		h2 = jq("$l2_header2");
 		h2Width = h2.outerWidth();
@@ -48,6 +49,6 @@ public class B95_ZK_4558Test extends WebDriverTestCase {
 		waitResponse();
 		click(jq("$btn2"));
 		waitResponse();
-		Assert.assertTrue(jq("$l2_header1").width() >= 1);
+		Assertions.assertTrue(jq("$l2_header1").width() >= 1);
 	}
 }

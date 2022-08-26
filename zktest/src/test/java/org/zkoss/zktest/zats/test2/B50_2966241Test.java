@@ -11,10 +11,10 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -24,7 +24,7 @@ public class B50_2966241Test extends WebDriverTestCase {
 	public void test() {
 		connect();
 
-		Assert.assertEquals("OrderName - 3", jq("@combobox input").val());
+		Assertions.assertEquals("OrderName - 3", jq("@combobox input").val());
 
 		click(widget("@combobox").$n("btn"));
 		waitResponse();
@@ -32,7 +32,7 @@ public class B50_2966241Test extends WebDriverTestCase {
 		waitResponse();
 		click(widget("@combobox").$n("btn"));
 		waitResponse();
-		Assert.assertTrue(jq("@comboitem:eq(7)").hasClass("z-comboitem-selected"));
-		Assert.assertEquals("OrderName\u00A0-\u00A03", jq("@comboitem:eq(3)").text());
+		Assertions.assertTrue(jq("@comboitem:eq(7)").hasClass("z-comboitem-selected"));
+		Assertions.assertEquals("OrderName\u00A0-\u00A03", jq("@comboitem:eq(3)").text());
 	}
 }

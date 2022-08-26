@@ -11,12 +11,11 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.lang.Strings;
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class B90_ZK_4452Test extends WebDriverTestCase {
 	@Test
@@ -33,8 +32,8 @@ public class B90_ZK_4452Test extends WebDriverTestCase {
 	private void testErrorBtnStyle() {
 		click(jq("@button"));
 		waitResponse();
-		Assert.assertEquals(jq(".z-bandbox-invalid").css("border"), jq(".z-bandbox-button").css("border-left"));
-		Assert.assertEquals(jq(".z-combobox-invalid").css("border"), jq(".z-combobox-button").css("border-left"));
-		Assert.assertEquals(jq(".z-datebox-invalid").css("border"), jq(".z-datebox-button").css("border-left"));
+		Assertions.assertEquals(jq(".z-bandbox-invalid").css("border"), jq(".z-bandbox-button").css("border-left"));
+		Assertions.assertEquals(jq(".z-combobox-invalid").css("border"), jq(".z-combobox-button").css("border-left"));
+		Assertions.assertEquals(jq(".z-datebox-invalid").css("border"), jq(".z-datebox-button").css("border-left"));
 	}
 }

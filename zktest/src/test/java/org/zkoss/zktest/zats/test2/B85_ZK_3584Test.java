@@ -17,8 +17,8 @@ import static org.easymock.EasyMock.replay;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.web.servlet.http.Https;
 
@@ -34,8 +34,8 @@ public class B85_ZK_3584Test {
 		expect(hreq.getContextPath()).andReturn("/localhost").anyTimes();
 		replay(hreq);
 
-		Assert.assertEquals("https://localhost:8080/localhost", Https.getCompleteContext(hreq));
-		Assert.assertEquals("https://localhost:8080", Https.getCompleteServerName(hreq));
+		Assertions.assertEquals("https://localhost:8080/localhost", Https.getCompleteContext(hreq));
+		Assertions.assertEquals("https://localhost:8080", Https.getCompleteServerName(hreq));
 	}
 
 	@Test
@@ -46,7 +46,7 @@ public class B85_ZK_3584Test {
 		expect(hreq.getContextPath()).andReturn("/zktest").anyTimes();
 		replay(hreq);
 
-		Assert.assertEquals("https://localhost:8080/zktest", Https.getCompleteContext(hreq));
-		Assert.assertEquals("https://localhost:8080", Https.getCompleteServerName(hreq));
+		Assertions.assertEquals("https://localhost:8080/zktest", Https.getCompleteContext(hreq));
+		Assertions.assertEquals("https://localhost:8080", Https.getCompleteServerName(hreq));
 	}
 }

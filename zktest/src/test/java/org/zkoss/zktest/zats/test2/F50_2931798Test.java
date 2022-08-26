@@ -11,10 +11,10 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -26,24 +26,24 @@ public class F50_2931798Test extends WebDriverTestCase {
 
 		click(jq("@button:eq(0)"));
 		waitResponse();
-		Assert.assertTrue(jq(".z-apply-mask").isVisible());
+		Assertions.assertTrue(jq(".z-apply-mask").isVisible());
 
 		click(jq("@button:eq(1)"));
 		waitResponse();
-		Assert.assertFalse(jq(".z-apply-mask").isVisible());
+		Assertions.assertFalse(jq(".z-apply-mask").isVisible());
 
 		click(jq("@button:eq(0)"));
 		waitResponse();
 		click(jq("@button:eq(2)"));
 		waitResponse();
-		Assert.assertFalse(jq(".z-apply-mask").isVisible());
+		Assertions.assertFalse(jq(".z-apply-mask").isVisible());
 
 		click(jq("@button:eq(2)"));
 		waitResponse();
-		Assert.assertTrue(jq(".z-apply-mask").isVisible());
+		Assertions.assertTrue(jq(".z-apply-mask").isVisible());
 
 		click(jq("@button:last"));
 		waitResponse();
-		Assert.assertFalse(jq(".z-apply-mask").isVisible());
+		Assertions.assertFalse(jq(".z-apply-mask").isVisible());
 	}
 }

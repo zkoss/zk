@@ -11,6 +11,7 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.startsWith;
 
 import java.time.DayOfWeek;
@@ -19,11 +20,11 @@ import java.time.format.TextStyle;
 import java.util.Collections;
 import java.util.Locale;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.chrome.ChromeOptions;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -40,7 +41,7 @@ public class B70_ZK_2477Test extends WebDriverTestCase {
 	public void test() {
 		connect();
 		waitResponse();
-		Assert.assertEquals("ro_RO\nen", getZKLog());
+		Assertions.assertEquals("ro_RO\nen", getZKLog());
 
 		click(widget("@datebox").$n("btn"));
 		waitResponse();
@@ -53,7 +54,7 @@ public class B70_ZK_2477Test extends WebDriverTestCase {
 		int weekdayIndex = Integer.parseInt(jq("@calendar .z-calendar-selected").eval("index()"));
 		String weekdayLabel = jq("@calendar th").eq(weekdayIndex).text();
 
-		Assert.assertThat(jq(widget("@datebox").$n("real")).val(), startsWith(weekdayFull));
-		Assert.assertEquals(weekdayLabel, weekdayShort);
+		assertThat(jq(widget("@datebox").$n("real")).val(), startsWith(weekdayFull));
+		Assertions.assertEquals(weekdayLabel, weekdayShort);
 	}
 }

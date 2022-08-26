@@ -11,8 +11,8 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zkex.zul.Pdfviewer;
@@ -27,6 +27,6 @@ public class B95_ZK_4756Test extends ZATSTestCase {
 		final DesktopAgent desktop = connect();
 
 		final Pdfviewer pdfviewer = desktop.query("pdfviewer").as(Pdfviewer.class);
-		Assert.assertEquals(1, pdfviewer.getActivePage());
+		Assertions.assertEquals(1, pdfviewer.getActivePage());
 	}
 }

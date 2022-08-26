@@ -11,10 +11,11 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.bind.databinding.collection;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class Collection_template_tabboxTest extends WebDriverTestCase {
 	@Test
@@ -41,7 +42,7 @@ public class Collection_template_tabboxTest extends WebDriverTestCase {
 		int expectedSize = testString.length;
 		for (int i = 0; i < expectedSize; i++) {
 			JQuery targetTab = outerTabs.eq(i);
-			Assert.assertEquals(testString[i], targetTab.text());
+			Assertions.assertEquals(testString[i], targetTab.text());
 		}
 	}
 }

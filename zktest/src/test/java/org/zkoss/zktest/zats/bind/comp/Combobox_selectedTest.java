@@ -11,8 +11,8 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.bind.comp;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zktest.zats.ZATSTestCase;
@@ -28,13 +28,13 @@ public class Combobox_selectedTest extends ZATSTestCase {
 		final DesktopAgent desktop = connect();
 		final Listbox listbox = desktop.query("listbox").as(Listbox.class);
 		final Combobox combobox = desktop.query("combobox").as(Combobox.class);
-		Assert.assertEquals(1, listbox.getSelectedIndex());
-		Assert.assertEquals(1, combobox.getSelectedIndex());
+		Assertions.assertEquals(1, listbox.getSelectedIndex());
+		Assertions.assertEquals(1, combobox.getSelectedIndex());
 
 		desktop.queryAll("listbox > listitem").get(0).select();
-		Assert.assertEquals(0, combobox.getSelectedIndex());
+		Assertions.assertEquals(0, combobox.getSelectedIndex());
 
 		desktop.queryAll("combobox > comboitem").get(2).select();
-		Assert.assertEquals(2, listbox.getSelectedIndex());
+		Assertions.assertEquals(2, listbox.getSelectedIndex());
 	}
 }

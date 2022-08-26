@@ -11,12 +11,12 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.chrome.ChromeOptions;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author rudyhuang
@@ -41,7 +41,7 @@ public class B96_ZK_4835Test extends WebDriverTestCase {
 		final JQuery window = jq(".z-messagebox-window");
 		final int oldLeft = window.positionLeft();
 		dragdropTo(jq(".z-window-header-move"), 0, 0, 100, 0);
-		Assert.assertNotEquals("Mouse drag should be working", oldLeft, window.positionLeft());
+		Assertions.assertNotEquals(oldLeft, window.positionLeft(), "Mouse drag should be working");
 	}
 
 	@Test
@@ -51,11 +51,11 @@ public class B96_ZK_4835Test extends WebDriverTestCase {
 		final JQuery splitter = jq(".z-west-splitter");
 		final int oldLeft = splitter.positionLeft();
 		dragdropTo(splitter, 0, 0, 100, 0);
-		Assert.assertNotEquals("Mouse drag should be working", oldLeft, splitter.positionLeft());
+		Assertions.assertNotEquals(oldLeft, splitter.positionLeft(), "Mouse drag should be working");
 
 		final JQuery header = jq("@listheader");
 		final int oldWidth = header.outerWidth();
 		dragdropTo(header, oldWidth / 2 - DRAG_THRESHOLD, 0, 100, 0);
-		Assert.assertNotEquals("Mouse drag should be working", oldWidth, header.outerWidth());
+		Assertions.assertNotEquals(oldWidth, header.outerWidth(), "Mouse drag should be working");
 	}
 }

@@ -11,11 +11,11 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author rudyhuang
@@ -32,7 +32,7 @@ public class F61_ZK_147_1Test extends WebDriverTestCase {
 
 		click(jq("@menuitem:contains(Group):visible"));
 		waitResponse();
-		Assert.assertEquals(2, jq("@grid:first @group").length());
+		Assertions.assertEquals(2, jq("@grid:first @group").length());
 
 		verifyGroupUngroup(jq("@column:eq(3)"), false, true, true, true);
 		verifyGroupUngroup(jq("@column:eq(2)"), false, true, true, true);
@@ -41,7 +41,7 @@ public class F61_ZK_147_1Test extends WebDriverTestCase {
 
 		click(jq("@menuitem:contains(Ungroup):visible"));
 		waitResponse();
-		Assert.assertEquals(0, jq("@grid:first @group").length());
+		Assertions.assertEquals(0, jq("@grid:first @group").length());
 
 		verifyGroupUngroup(jq("@column:eq(3)"), true, true, true, false);
 		verifyGroupUngroup(jq("@column:eq(2)"), true, true, true, false);
@@ -61,7 +61,7 @@ public class F61_ZK_147_1Test extends WebDriverTestCase {
 
 		click(jq("@menuitem:contains(Ungroup):visible"));
 		waitResponse();
-		Assert.assertEquals(0, jq("@grid:eq(1) @group").length());
+		Assertions.assertEquals(0, jq("@grid:eq(1) @group").length());
 
 		// Step 9: every column has Group. In fact only first column has it.
 		verifyGroupUngroup(jq("@grid:eq(1) @column:eq(4)"), true, false, true, false);
@@ -72,7 +72,7 @@ public class F61_ZK_147_1Test extends WebDriverTestCase {
 
 		click(jq("@menuitem:contains(Group):visible"));
 		waitResponse();
-		Assert.assertEquals(2, jq("@grid:eq(1) @group").length());
+		Assertions.assertEquals(2, jq("@grid:eq(1) @group").length());
 	}
 
 	@Test
@@ -89,8 +89,8 @@ public class F61_ZK_147_1Test extends WebDriverTestCase {
 	private void verifyGroupUngroup(JQuery column, boolean verifyGroup, boolean groupVisible,
 	                                boolean verifyUngroup, boolean ungroupVisible) {
 		openColumnMenu(column);
-		if (verifyGroup) Assert.assertEquals(groupVisible, jq("@menuitem:contains(Group)").isVisible());
-		if (verifyUngroup) Assert.assertEquals(ungroupVisible, jq("@menuitem:contains(Ungroup)").isVisible());
+		if (verifyGroup) Assertions.assertEquals(groupVisible, jq("@menuitem:contains(Group)").isVisible());
+		if (verifyUngroup) Assertions.assertEquals(ungroupVisible, jq("@menuitem:contains(Ungroup)").isVisible());
 	}
 
 	private void openColumnMenu(JQuery column) {

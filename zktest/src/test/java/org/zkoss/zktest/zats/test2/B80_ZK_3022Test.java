@@ -14,12 +14,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zktest.zats.ZATSTestCase;
-
-import junit.framework.Assert;
 
 /**
  * 
@@ -32,10 +32,10 @@ public class B80_ZK_3022Test extends ZATSTestCase{
 		DesktopAgent desktop = connect();
 		ComponentAgent parent = desktop.query("#window");
 		//collapsed tree at init, with one item visible
-		Assert.assertEquals(1, parent.queryAll("treeitem").size());
+		Assertions.assertEquals(1, parent.queryAll("treeitem").size());
 		ComponentAgent btn = parent.query("#btn");
 		btn.click();
 		//expand all nodes, three nodes should be visible
-		Assert.assertEquals(3, parent.queryAll("treeitem").size());
+		Assertions.assertEquals(3, parent.queryAll("treeitem").size());
 	}
 }

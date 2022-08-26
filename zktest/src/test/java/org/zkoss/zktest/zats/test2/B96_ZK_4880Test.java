@@ -11,13 +11,13 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.hamcrest.MatcherAssert;
-import org.junit.Test;
-
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.hamcrest.Matchers.lessThanOrEqualTo;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.hamcrest.MatcherAssert;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author jameschu

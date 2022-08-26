@@ -39,7 +39,7 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
         zk.afterMount(function () {
             var outWid = jq('$layout').first().width();
 
-            zk.log(outWid == jq('@groupbox').last().outerWidth(true));
+            zk.log(Math.floor(outWid) == Math.floor(jq('@groupbox').last().outerWidth(true)));
         });
     ]]></script>
 </zk>

@@ -14,10 +14,10 @@ package org.zkoss.zktest.zats.test2;
 import java.io.FileNotFoundException;
 import java.nio.file.Paths;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -29,6 +29,6 @@ public class B86_ZK_4244Test extends WebDriverTestCase {
 
 		dropUploadFile(jq("@dropupload"), Paths.get("src/main/webapp/test2/img/sun.jpg"));
 		waitResponse();
-		Assert.assertFalse(isZKLogAvailable());
+		Assertions.assertFalse(isZKLogAvailable());
 	}
 }

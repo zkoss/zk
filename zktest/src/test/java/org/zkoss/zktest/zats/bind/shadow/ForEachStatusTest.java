@@ -13,8 +13,8 @@ package org.zkoss.zktest.zats.bind.shadow;
 
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
@@ -62,8 +62,7 @@ public class ForEachStatusTest extends ZATSTestCase {
 
 	private void checkData(List<ComponentAgent> rows, int columnIndex, String[] expected) {
 		for (int i = 0; i < rows.size(); i++) {
-			Assert.assertEquals("Error on row " + i + " col " + columnIndex,
-					expected[i], getLabelValue(rows.get(i).queryAll("label").get(columnIndex)));
+			Assertions.assertEquals(expected[i], getLabelValue(rows.get(i).queryAll("label").get(columnIndex)), "Error on row " + i + " col " + columnIndex);
 		}
 	}
 

@@ -11,11 +11,12 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.interactions.Actions;
-import org.zkoss.zktest.zats.WebDriverTestCase;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 public class B50_ZK_679Test extends WebDriverTestCase {
 	@Test
@@ -28,7 +29,7 @@ public class B50_ZK_679Test extends WebDriverTestCase {
 	}
 	
 	public void process(Actions act, Boolean deleteFirstLine) {
-		Assert.assertEquals("test", jq("@textbox").eq(0).val().trim());
+		Assertions.assertEquals("test", jq("@textbox").eq(0).val().trim());
 		click(jq("@textbox").eq(0));
 		waitResponse();
 		if (deleteFirstLine) {
@@ -38,12 +39,12 @@ public class B50_ZK_679Test extends WebDriverTestCase {
 		}
 		click(jq("@label:contains(label 1)"));
 		waitResponse();
-		Assert.assertEquals("changed times: 1", jq("@window @label:contains(changed)").text().trim());
+		Assertions.assertEquals("changed times: 1", jq("@window @label:contains(changed)").text().trim());
 		
 		click(jq("@button"));
 		waitResponse();
 		System.out.println(jq("@textbox:last").val());
-		Assert.assertEquals("test", jq("@textbox").eq(1).val().trim());
+		Assertions.assertEquals("test", jq("@textbox").eq(1).val().trim());
 		click(jq("@textbox").eq(1));
 		waitResponse();
 		if (deleteFirstLine) {
@@ -53,6 +54,6 @@ public class B50_ZK_679Test extends WebDriverTestCase {
 		}
 		click(jq("@label:contains(label 2)"));
 		waitResponse();
-		Assert.assertEquals("changed times: 2", jq("@window @label:contains(changed)").eq(1).text().trim());
+		Assertions.assertEquals("changed times: 2", jq("@window @label:contains(changed)").eq(1).text().trim());
 	}
 }

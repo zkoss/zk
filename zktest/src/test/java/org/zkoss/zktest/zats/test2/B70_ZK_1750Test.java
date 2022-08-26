@@ -12,11 +12,11 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 package org.zkoss.zktest.zats.test2;
 
 import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.zsoup.Zsoup;
 import org.zkoss.zsoup.nodes.Document;
 import org.zkoss.zsoup.nodes.Element;
@@ -35,9 +35,9 @@ public class B70_ZK_1750Test extends WebDriverTestCase {
 			String script = runonce.html();
 			if (!script.contains("zkmx("))
 				continue;
-			Assert.assertThat(script, containsString(",cu:'\\x2F"));
-			Assert.assertThat(script, containsString(",uu:'\\x2F"));
-			Assert.assertThat(script, containsString(",ru:'\\x2F"));
+			assertThat(script, containsString(",cu:'\\x2F"));
+			assertThat(script, containsString(",uu:'\\x2F"));
+			assertThat(script, containsString(",ru:'\\x2F"));
 		}
 	}
 }

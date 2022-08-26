@@ -11,11 +11,12 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.interactions.Actions;
-import org.zkoss.zktest.zats.WebDriverTestCase;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 public class B96_ZK_4597Test extends WebDriverTestCase {
 	@Test
@@ -26,7 +27,7 @@ public class B96_ZK_4597Test extends WebDriverTestCase {
 		click(jq("@textbox:eq(0)"));
 		action.sendKeys(Keys.TAB).perform();
 		waitResponse();
-		Assert.assertTrue(jq("@combobutton:eq(1)").is(":focus"));
+		Assertions.assertTrue(jq("@combobutton:eq(1)").is(":focus"));
 	}
 	@Test
 	public void testDynamic() {
@@ -38,6 +39,6 @@ public class B96_ZK_4597Test extends WebDriverTestCase {
 		click(jq("@textbox:eq(0)"));
 		action.sendKeys(Keys.TAB).perform();
 		waitResponse();
-		Assert.assertTrue(jq("@textbox:eq(1)").is(":focus"));
+		Assertions.assertTrue(jq("@textbox:eq(1)").is(":focus"));
 	}
 }

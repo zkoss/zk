@@ -2,11 +2,11 @@ package org.zkoss.zktest.zats.zuti.simple._foreach;
 
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
-import org.zkoss.zktest.zats.ZATSTestCase;
 import org.zkoss.zktest.zats.zuti.ZutiBasicTestCase;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.ListModelList;
@@ -43,11 +43,11 @@ public class ForEachRandomChangeTest extends ZutiBasicTestCase {
 
 	private void verifyModel(ListModelList<Integer> model, ComponentAgent testLabel, List<ComponentAgent> children) {
 		String testStepInfo = ", Iteration: " + iteration + " Seed:" + seed;
-		Assert.assertEquals("testLabel does not match model.toString()" + testStepInfo, model.toString(), testLabel.as(Label.class).getValue());
+		Assertions.assertEquals(model.toString(), testLabel.as(Label.class).getValue(), "testLabel does not match model.toString()" + testStepInfo);
 		int index = 0;
 		for (ComponentAgent componentAgent : children) {
 			String itemLabel = componentAgent.as(Label.class).getValue();
-			Assert.assertEquals("forEach item label mismatch at position:" + index + testStepInfo, model.get(index).toString(), itemLabel);
+			Assertions.assertEquals( model.get(index).toString(), itemLabel, "forEach item label mismatch at position:" + index + testStepInfo);
 			index++;
 		}
 	}

@@ -11,8 +11,8 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zktest.zats.ZATSTestCase;
@@ -32,6 +32,6 @@ public class F85_ZK_3684Test extends ZATSTestCase {
 
 	private void verify(String input, String text) {
 		desktop.query("textbox").type(input);
-		Assert.assertEquals(text, desktop.query("label").as(Label.class).getValue());
+		Assertions.assertEquals(text, desktop.query("label").as(Label.class).getValue());
 	}
 }

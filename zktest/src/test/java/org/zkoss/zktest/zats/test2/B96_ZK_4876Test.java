@@ -11,18 +11,19 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 public class B96_ZK_4876Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
 		String assertMessage = "The descendant component of the Columnlayout shall not receive \"white-space: no-wrap;\" from Columnlayout";
-		Assert.assertNotEquals(assertMessage, "nowrap", jq("$cc").css("white-space"));
-		Assert.assertNotEquals(assertMessage, "nowrap", jq("$l1").css("white-space"));
-		Assert.assertNotEquals(assertMessage, "nowrap", jq("$l2").css("white-space"));
-		Assert.assertNotEquals(assertMessage, "nowrap", jq("$l3").css("white-space"));
+		Assertions.assertNotEquals(assertMessage, "nowrap", jq("$cc").css("white-space"));
+		Assertions.assertNotEquals(assertMessage, "nowrap", jq("$l1").css("white-space"));
+		Assertions.assertNotEquals(assertMessage, "nowrap", jq("$l2").css("white-space"));
+		Assertions.assertNotEquals(assertMessage, "nowrap", jq("$l3").css("white-space"));
 	}
 }

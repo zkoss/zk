@@ -11,24 +11,25 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.interactions.Actions;
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class B50_ZK_280Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		Actions act = new Actions(connect());
 		JQuery menu = jq(".z-menu");
-		Assert.assertFalse(jq(".z-menupopup-open").eq(1).exists());
+		Assertions.assertFalse(jq(".z-menupopup-open").eq(1).exists());
 		
 		click(menu);
 		waitResponse();
 		act.moveToElement(toElement(jq(".z-menupopup-content").eq(0)), 2, 2).build().perform();
 		waitResponse();
-		Assert.assertTrue(jq(".z-menupopup-open").eq(1).exists());
+		Assertions.assertTrue(jq(".z-menupopup-open").eq(1).exists());
 		
 		click(jq(".z-label"));
 		waitResponse();
@@ -37,6 +38,6 @@ public class B50_ZK_280Test extends WebDriverTestCase {
 		waitResponse();
 		act.moveToElement(toElement(jq(".z-menupopup-content").eq(0)), 2, 2).build().perform();
 		waitResponse();
-		Assert.assertTrue(jq(".z-menupopup-open").eq(1).exists());
+		Assertions.assertTrue(jq(".z-menupopup-open").eq(1).exists());
 	}
 }

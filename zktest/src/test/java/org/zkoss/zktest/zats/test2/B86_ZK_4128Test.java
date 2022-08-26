@@ -11,8 +11,8 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zk.ui.Component;
@@ -27,6 +27,7 @@ public class B86_ZK_4128Test extends ZATSTestCase {
 		DesktopAgent desktop = connect();
 
 		Component mylb = desktop.query("#mylb").as(Component.class);
-		Assert.assertTrue("B86_ZK_4128Converter is not used.", mylb.hasAttribute("B86_ZK_4128Converter"));
+		Assertions.assertTrue(mylb.hasAttribute("B86_ZK_4128Converter"),
+				"B86_ZK_4128Converter is not used.");
 	}
 }

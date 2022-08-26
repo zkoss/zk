@@ -13,8 +13,8 @@ package org.zkoss.zktest.zats.bind.basic;
 
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
@@ -43,23 +43,23 @@ public class Reattachment_includeTest extends ZATSTestCase {
 		final Textbox t2 = desktop.query("#inc window #t2").as(Textbox.class);
 		final Textbox t3 = desktop.query("#inc window #t3").as(Textbox.class);
 		final Textbox t4 = desktop.query("#inc window #t4").as(Textbox.class);
-		Assert.assertEquals("A-Arg1", l1.getValue());
-		Assert.assertEquals("B-myarg1", l2.getValue());
-		Assert.assertEquals("", l3.getValue());
-		Assert.assertEquals("", l4.getValue());
-		Assert.assertEquals("A-Arg1", t1.getValue());
-		Assert.assertEquals("B-myarg1", t2.getValue());
-		Assert.assertEquals("A", t3.getValue());
-		Assert.assertEquals("A", t4.getValue());
+		Assertions.assertEquals("A-Arg1", l1.getValue());
+		Assertions.assertEquals("B-myarg1", l2.getValue());
+		Assertions.assertEquals("", l3.getValue());
+		Assertions.assertEquals("", l4.getValue());
+		Assertions.assertEquals("A-Arg1", t1.getValue());
+		Assertions.assertEquals("B-myarg1", t2.getValue());
+		Assertions.assertEquals("A", t3.getValue());
+		Assertions.assertEquals("A", t4.getValue());
 
 		desktop.query("#inc window #btn1").click();
-		Assert.assertEquals("ADennis-Arg1", l1.getValue());
-		Assert.assertEquals("BChen-myarg1", l2.getValue());
-		Assert.assertEquals("", l3.getValue());
-		Assert.assertEquals("", l4.getValue());
-		Assert.assertEquals("ADennis-Arg1", t1.getValue());
-		Assert.assertEquals("BChen-myarg1", t2.getValue());
-		Assert.assertEquals("ADennis", t3.getValue());
-		Assert.assertEquals("A", t4.getValue());
+		Assertions.assertEquals("ADennis-Arg1", l1.getValue());
+		Assertions.assertEquals("BChen-myarg1", l2.getValue());
+		Assertions.assertEquals("", l3.getValue());
+		Assertions.assertEquals("", l4.getValue());
+		Assertions.assertEquals("ADennis-Arg1", t1.getValue());
+		Assertions.assertEquals("BChen-myarg1", t2.getValue());
+		Assertions.assertEquals("ADennis", t3.getValue());
+		Assertions.assertEquals("A", t4.getValue());
 	}
 }

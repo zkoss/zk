@@ -11,8 +11,8 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.bind.comp;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.operation.OpenAgent;
@@ -30,8 +30,8 @@ public class GroupboxTest extends ZATSTestCase {
 		final Label openStatus = desktop.query("#openStatus").as(Label.class);
 
 		groupbox.open(true);
-		Assert.assertEquals("true", openStatus.getValue());
+		Assertions.assertEquals("true", openStatus.getValue());
 		groupbox.open(false);
-		Assert.assertEquals("false", openStatus.getValue());
+		Assertions.assertEquals("false", openStatus.getValue());
 	}
 }

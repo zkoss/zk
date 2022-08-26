@@ -12,13 +12,11 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 package org.zkoss.zktest.zats.bind.issue;
 
 import java.math.BigDecimal;
-import java.util.List;
 
-import junit.framework.Assert;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.junit.Test;
 import org.zkoss.bind.annotation.Immutable;
-import org.zkoss.bind.annotation.ImmutableElements;
 import org.zkoss.bind.proxy.ProxyHelper;
 
 /**
@@ -34,9 +32,9 @@ public class B02736Test {
 		pojo.setPrice(new BigDecimal("13.99"));
 		B02736Pojo proxy = ProxyHelper.createProxyIfAny(pojo);
 
-		Assert.assertSame(pojo.getCount(), proxy.getCount());
-		Assert.assertSame(pojo.getLength(), proxy.getLength());
-		Assert.assertSame(pojo.getPrice(), proxy.getPrice()); //ERROR and don't expect to create a proxy here
+		Assertions.assertSame(pojo.getCount(), proxy.getCount());
+		Assertions.assertSame(pojo.getLength(), proxy.getLength());
+		Assertions.assertSame(pojo.getPrice(), proxy.getPrice()); //ERROR and don't expect to create a proxy here
 	}
 
 	public static class B02736Pojo {

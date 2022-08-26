@@ -11,7 +11,9 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zul.SimpleDateConstraint;
 
@@ -36,8 +38,8 @@ public class B90_ZK_4519Test {
 		new SimpleDateConstraint("no today,between 20200302 and 20200308:should between 0020200302 and 0020200308, before 20200305:should before 0020200305");
 	}
 	
-	@Test(expected = UiException.class)
+	@Test
 	public void testBadComplexConstraintStringConstructor() {
-		new SimpleDateConstraint("no today,between 20200302 and 20200308:should between 20200302 and 20200308, before 120200305:should before 120200305");
+		Assertions.assertThrows(UiException.class, () -> new SimpleDateConstraint("no today,between 20200302 and 20200308:should between 20200302 and 20200308, before 120200305:should before 120200305"));
 	}
 }

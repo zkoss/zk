@@ -14,8 +14,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 import org.zkoss.lang.PotentialDeadLockException;
 import org.zkoss.zktest.zats.ZATSTestCase;
 
@@ -29,8 +30,8 @@ public class B80_ZK_3251Test extends ZATSTestCase{
         try {
             connect();
         } catch (PotentialDeadLockException e) {
-            Assert.fail();
+            Assertions.fail();
         }
-        Assert.assertTrue(true);
+        Assertions.assertTrue(true);
     }
 }

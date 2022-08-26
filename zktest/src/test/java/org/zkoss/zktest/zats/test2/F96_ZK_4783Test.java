@@ -11,10 +11,11 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class F96_ZK_4783Test extends WebDriverTestCase {
 	@Test
@@ -56,26 +57,26 @@ public class F96_ZK_4783Test extends WebDriverTestCase {
 		JQuery msgBoxViewport = jq(".z-messagebox-viewport");
 		click(jq("@button:contains(alert 1)"));
 		waitResponse();
-		Assert.assertTrue(Boolean.valueOf(zk(msgBoxViewport).eval("hasHScroll()")));
-		Assert.assertEquals(width, Integer.valueOf(msgBox.outerWidth()));
+		Assertions.assertTrue(Boolean.valueOf(zk(msgBoxViewport).eval("hasHScroll()")));
+		Assertions.assertEquals(width, Integer.valueOf(msgBox.outerWidth()));
 		click(msgBox.find("@button"));
 
 		click(jq("@button:contains(messagebox1)"));
 		waitResponse();
-		Assert.assertTrue(Boolean.valueOf(zk(msgBoxViewport).eval("hasHScroll()")));
-		Assert.assertEquals(width, Integer.valueOf(msgBox.outerWidth()));
+		Assertions.assertTrue(Boolean.valueOf(zk(msgBoxViewport).eval("hasHScroll()")));
+		Assertions.assertEquals(width, Integer.valueOf(msgBox.outerWidth()));
 		click(msgBox.find("@button"));
 
 		click(jq("@button:contains(alert 2)"));
 		waitResponse();
-		Assert.assertFalse(Boolean.valueOf(zk(msgBoxViewport).eval("hasHScroll()")));
-		Assert.assertEquals(width, Integer.valueOf(msgBox.outerWidth()));
+		Assertions.assertFalse(Boolean.valueOf(zk(msgBoxViewport).eval("hasHScroll()")));
+		Assertions.assertEquals(width, Integer.valueOf(msgBox.outerWidth()));
 		click(msgBox.find("@button"));
 
 		click(jq("@button:contains(messagebox2)"));
 		waitResponse();
-		Assert.assertFalse(Boolean.valueOf(zk(msgBoxViewport).eval("hasHScroll()")));
-		Assert.assertEquals(600, msgBox.outerWidth());
+		Assertions.assertFalse(Boolean.valueOf(zk(msgBoxViewport).eval("hasHScroll()")));
+		Assertions.assertEquals(600, msgBox.outerWidth());
 		click(msgBox.find("@button"));
 	}
 }

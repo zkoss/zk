@@ -11,8 +11,8 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.bind.basic;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
@@ -34,22 +34,22 @@ public class ModulizeTest extends ZATSTestCase {
 		final Label moduleAmount = desktop.query("window #moduleAmount").as(Label.class);
 
 		addModule1.click();
-		Assert.assertEquals("2", moduleCount.getValue());
-		Assert.assertEquals(2, desktop.queryAll("window tab").size());
+		Assertions.assertEquals("2", moduleCount.getValue());
+		Assertions.assertEquals(2, desktop.queryAll("window tab").size());
 
 		addModule2.click();
-		Assert.assertEquals("3", moduleCount.getValue());
-		Assert.assertEquals(3, desktop.queryAll("window tab").size());
+		Assertions.assertEquals("3", moduleCount.getValue());
+		Assertions.assertEquals(3, desktop.queryAll("window tab").size());
 
 		desktop.queryAll("window tab").get(2).as(CloseAgent.class).close();
-		Assert.assertEquals("2", moduleCount.getValue());
-		Assert.assertEquals(2, desktop.queryAll("window tab").size());
+		Assertions.assertEquals("2", moduleCount.getValue());
+		Assertions.assertEquals(2, desktop.queryAll("window tab").size());
 
 		// Try to decrease the amount by 100
 		final ComponentAgent defaultModule1Amount = desktop.query("window tabpanel:first-child window intbox");
 		final int moduleAmountValue = Integer.parseInt(moduleAmount.getValue());
 		int value = defaultModule1Amount.as(Intbox.class).getValue();
 		defaultModule1Amount.type(String.valueOf(value - 100));
-		Assert.assertEquals(String.valueOf(moduleAmountValue - 100), moduleAmount.getValue());
+		Assertions.assertEquals(String.valueOf(moduleAmountValue - 100), moduleAmount.getValue());
 	}
 }

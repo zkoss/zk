@@ -11,11 +11,11 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.interactions.Actions;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -39,6 +39,6 @@ public class B50_3052208Test extends WebDriverTestCase {
 
 	private void testMenu(Actions actions, int index) {
 		actions.moveToElement(toElement(jq("@menu:eq(" + index + ")"))).perform();
-		Assert.assertTrue(jq("@menupopup:eq(" + index + ")").isVisible());
+		Assertions.assertTrue(jq("@menupopup:eq(" + index + ")").isVisible());
 	}
 }

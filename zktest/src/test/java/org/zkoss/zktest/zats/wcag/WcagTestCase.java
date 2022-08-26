@@ -16,9 +16,9 @@ import java.util.Arrays;
 import com.deque.html.axecore.results.Results;
 import com.deque.html.axecore.selenium.AxeBuilder;
 import com.deque.html.axecore.selenium.AxeReporter;
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * A basic test case class for accessibility
@@ -44,7 +44,7 @@ public abstract class WcagTestCase extends WebDriverTestCase {
 				.disableRules(Arrays.asList("color-contrast"));
 		Results results = builder.analyze(driver);
 		if (!results.violationFree()) {
-			Assert.fail(AxeReporter.getReadableAxeResults("WCAG", driver, results.getViolations())
+			Assertions.fail(AxeReporter.getReadableAxeResults("WCAG", driver, results.getViolations())
 					? AxeReporter.getAxeResultString()
 					: null);
 		}

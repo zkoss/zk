@@ -11,18 +11,18 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
 import java.util.Locale;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
-import org.zkoss.zktest.zats.ztl.Widget;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
+import org.zkoss.test.webdriver.ztl.Widget;
 
 /**
  * @author jumperchen
@@ -35,7 +35,8 @@ public class B80_ZK_2964Test extends WebDriverTestCase {
 			.appendPattern("[a h:mm]")
 			.toFormatter(Locale.ENGLISH);
 
-	@Test public void testZK2964() throws DateTimeParseException {
+	@Test
+	public void testZK2964() throws DateTimeParseException {
 		connect();
 		JQuery dateboxes = jq("@datebox");
 		testTimeformat(widget(dateboxes.get(0)));

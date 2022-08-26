@@ -11,11 +11,11 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Dimension;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -39,18 +39,18 @@ public class B50_2870652Test extends WebDriverTestCase {
 	private void checkButtonFlex() {
 		int widthBtn1 = jq("@button:eq(0)").outerWidth();
 		int widthBtn2 = jq("@button:eq(1)").outerWidth();
-		Assert.assertEquals(widthBtn1 * 2.0, widthBtn2, 2);
+		Assertions.assertEquals(widthBtn1 * 2.0, widthBtn2, 2);
 
 		int topBtn1 = jq("@button:eq(0)").positionTop();
 		int topBtn2 = jq("@button:eq(1)").positionTop();
-		Assert.assertEquals(topBtn1, topBtn2);
+		Assertions.assertEquals(topBtn1, topBtn2);
 
 		int widthBtn3 = jq("@button:eq(2)").outerWidth();
 		int widthBtn4 = jq("@button:eq(3)").outerWidth();
-		Assert.assertEquals(widthBtn3 * 2.0, widthBtn4, 2);
+		Assertions.assertEquals(widthBtn3 * 2.0, widthBtn4, 2);
 
 		int topBtn3 = jq("@button:eq(2)").positionTop();
 		int topBtn4 = jq("@button:eq(3)").positionTop();
-		Assert.assertEquals(topBtn3, topBtn4);
+		Assertions.assertEquals(topBtn3, topBtn4);
 	}
 }

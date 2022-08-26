@@ -11,10 +11,8 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
-
-import java.util.List;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
@@ -30,13 +28,13 @@ public class B95_ZK_4722Test extends ZATSTestCase {
 		DesktopAgent desktop = connect();
 		ComponentAgent saveBtn = desktop.query("#save");
 		saveBtn.click();
-		Assert.assertEquals("4", desktop.query("#result").as(Label.class).getValue());
+		Assertions.assertEquals("4", desktop.query("#result").as(Label.class).getValue());
 		saveBtn.click();
-		Assert.assertEquals("4", desktop.query("#result").as(Label.class).getValue());
+		Assertions.assertEquals("4", desktop.query("#result").as(Label.class).getValue());
 		saveBtn.click();
-		Assert.assertEquals("4", desktop.query("#result").as(Label.class).getValue());
+		Assertions.assertEquals("4", desktop.query("#result").as(Label.class).getValue());
 		desktop.query("#detach").click();
 		saveBtn.click();
-		Assert.assertEquals("1", desktop.query("#result").as(Label.class).getValue());
+		Assertions.assertEquals("1", desktop.query("#result").as(Label.class).getValue());
 	}
 }

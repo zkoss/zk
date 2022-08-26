@@ -11,9 +11,10 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 public class B85_ZK_3950Test extends WebDriverTestCase {
 	@Test
@@ -22,11 +23,11 @@ public class B85_ZK_3950Test extends WebDriverTestCase {
 		waitResponse();
 		click(jq("@button"));
 		waitResponse();
-		Assert.assertEquals(jq("@tabbox").outerHeight(), jq(".z-tabpanels").outerHeight());
-		Assert.assertTrue(jq(".z-tab").eq(2).isVisible());
+		Assertions.assertEquals(jq("@tabbox").outerHeight(), jq(".z-tabpanels").outerHeight());
+		Assertions.assertTrue(jq(".z-tab").eq(2).isVisible());
 		click(jq("@button"));
 		waitResponse();
-		Assert.assertEquals(jq("@tabbox").outerHeight(), jq(".z-tabpanels").outerHeight());
-		Assert.assertFalse(jq(".z-tab").eq(2).isVisible());
+		Assertions.assertEquals(jq("@tabbox").outerHeight(), jq(".z-tabpanels").outerHeight());
+		Assertions.assertFalse(jq(".z-tab").eq(2).isVisible());
 	}
 }

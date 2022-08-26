@@ -11,14 +11,16 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.hamcrest.MatcherAssert;
 import static org.hamcrest.Matchers.lessThan;
-import org.junit.Assert;
-import org.junit.Test;
+
+import org.hamcrest.MatcherAssert;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.interactions.Actions;
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class B65_ZK_2409Test extends WebDriverTestCase {
 	@Test
@@ -35,12 +37,12 @@ public class B65_ZK_2409Test extends WebDriverTestCase {
 
 		act.sendKeys(Keys.NUMPAD0).perform();
 		waitResponse();
-		Assert.assertEquals("the popup should only have '00' left and appear selected", 1, jq(".z-comboitem-selected").length());
-		Assert.assertTrue("the popup should only have '00' left and appear selected", jq(".z-comboitem-selected").text().contains("00"));
+		Assertions.assertEquals(1, jq(".z-comboitem-selected").length(), "the popup should only have '00' left and appear selected");
+		Assertions.assertTrue(jq(".z-comboitem-selected").text().contains("00"), "the popup should only have '00' left and appear selected");
 
 		act.sendKeys(Keys.ENTER).perform();
 		waitResponse();
-		Assert.assertFalse("", comboboxPopup.exists());
+		Assertions.assertFalse(comboboxPopup.exists());
 
 		click(bottomCombobox);
 		waitResponse();

@@ -13,8 +13,8 @@ package org.zkoss.zktest.zats.bind.collection;
 
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
@@ -28,10 +28,10 @@ public class C1Test extends ZATSTestCase {
 	public void test() {
 		final DesktopAgent desktop = connect();
 		final ComponentAgent listbox = desktop.query("#contentListbox");
-		Assert.assertEquals(5, listbox.getChildren().size());
+		Assertions.assertEquals(5, listbox.getChildren().size());
 
 		final List<ComponentAgent> items = desktop.queryAll("#singleBox > comboitem");
 		items.get(1).select();
-		Assert.assertEquals(9, listbox.getChildren().size());
+		Assertions.assertEquals(9, listbox.getChildren().size());
 	}
 }

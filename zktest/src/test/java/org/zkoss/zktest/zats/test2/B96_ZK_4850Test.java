@@ -11,9 +11,10 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 public class B96_ZK_4850Test extends WebDriverTestCase {
 	@Test
@@ -38,6 +39,6 @@ public class B96_ZK_4850Test extends WebDriverTestCase {
 		click(jq(".z-paging-last"));
 		waitResponse();
 
-		Assert.assertEquals("should be able to navigate to the last page", "3", jq(".z-paging-input").val());
+		Assertions.assertEquals("3", jq(".z-paging-input").val(), "should be able to navigate to the last page");
 	}
 }

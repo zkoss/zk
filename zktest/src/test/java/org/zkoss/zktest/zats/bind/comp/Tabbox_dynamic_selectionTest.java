@@ -13,8 +13,8 @@ package org.zkoss.zktest.zats.bind.comp;
 
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
@@ -32,12 +32,12 @@ public class Tabbox_dynamic_selectionTest extends ZATSTestCase {
 		final Label selectedIndex = desktop.query("#selectedIndex").as(Label.class);
 
 		buttons.get(0).click();
-		Assert.assertEquals("1", selectedIndex.getValue());
+		Assertions.assertEquals("1", selectedIndex.getValue());
 		buttons.get(1).click();
-		Assert.assertEquals("3", selectedIndex.getValue());
+		Assertions.assertEquals("3", selectedIndex.getValue());
 
 		desktop.queryAll("#vbox1 tab").get(4).select();
-		Assert.assertEquals("4", selectedIndex.getValue());
+		Assertions.assertEquals("4", selectedIndex.getValue());
 	}
 
 	@Test
@@ -47,11 +47,11 @@ public class Tabbox_dynamic_selectionTest extends ZATSTestCase {
 		final Label selectedItem = desktop.query("#selectedItem").as(Label.class);
 
 		buttons.get(0).click();
-		Assert.assertEquals("Tab 1", selectedItem.getValue());
+		Assertions.assertEquals("Tab 1", selectedItem.getValue());
 		buttons.get(1).click();
-		Assert.assertEquals("Tab 3", selectedItem.getValue());
+		Assertions.assertEquals("Tab 3", selectedItem.getValue());
 
 		desktop.queryAll("#vbox2 tab").get(4).select();
-		Assert.assertEquals("Tab 4", selectedItem.getValue());
+		Assertions.assertEquals("Tab 4", selectedItem.getValue());
 	}
 }

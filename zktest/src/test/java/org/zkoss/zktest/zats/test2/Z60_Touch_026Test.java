@@ -13,23 +13,22 @@ package org.zkoss.zktest.zats.test2;
 
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.lessThan;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Collections;
 
 import org.hamcrest.MatcherAssert;
-import org.junit.Assert;
-import org.junit.ClassRule;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.openqa.selenium.chrome.ChromeOptions;
 
-import org.zkoss.zktest.zats.ExternalZkXml;
-import org.zkoss.zktest.zats.ForkJVMTestOnly;
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.ExternalZkXml;
+import org.zkoss.test.webdriver.ForkJVMTestOnly;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
-@Category(ForkJVMTestOnly.class)
+@ForkJVMTestOnly
 public class Z60_Touch_026Test extends WebDriverTestCase {
-	@ClassRule
+	@RegisterExtension
 	public static final ExternalZkXml CONFIG = new ExternalZkXml("/test2/enable-tablet-ui-zk.xml");
 
 	@Override
@@ -52,6 +51,6 @@ public class Z60_Touch_026Test extends WebDriverTestCase {
 		
 		click(jq("@button").eq(1));
 		waitResponse();
-		Assert.assertEquals(originScrollHeight, jq(".z-groupbox-content").scrollHeight());
+		assertEquals(originScrollHeight, jq(".z-groupbox-content").scrollHeight());
 	}
 }

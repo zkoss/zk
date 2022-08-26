@@ -16,8 +16,9 @@ package org.zkoss.zktest.zats.test2;
 
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.select.Selectors;
@@ -72,9 +73,10 @@ public class F80_ZK_2944_2Test extends ZATSTestCase {
 		DesktopAgent desktop = connect();
 		Component parent = desktop.query("#parent").as(Div.class);
 		List<Component> comps = Selectors.find(parent, ":host");
-		Assert.assertTrue("expecting 1, got: " + comps.size(), comps.size() == 1);
-		Assert.assertTrue(comps.get(0).getClass().equals(Div.class));
-		Assert.assertTrue(comps.get(0).getId().equals("host"));
+		Assertions.assertTrue(comps.size() == 1,
+				"expecting 1, got: " + comps.size());
+		Assertions.assertTrue(comps.get(0).getClass().equals(Div.class));
+		Assertions.assertTrue(comps.get(0).getId().equals("host"));
 	}
 	
 	@Test
@@ -82,13 +84,14 @@ public class F80_ZK_2944_2Test extends ZATSTestCase {
 		DesktopAgent desktop = connect();
 		Component parent = desktop.query("#parent").as(Div.class);
 		List<Component> comps = Selectors.find(parent, "::shadow");
-		Assert.assertTrue("expecting 3, got: " + comps.size(), comps.size() == 3);
-		Assert.assertTrue(comps.get(0).getClass().equals(If.class));
-		Assert.assertTrue(comps.get(0).getId().equals("if2"));
-		Assert.assertTrue(comps.get(1).getClass().equals(If.class));
-		Assert.assertTrue(comps.get(1).getId().equals("if5"));
-		Assert.assertTrue(comps.get(2).getClass().equals(If.class));
-		Assert.assertTrue(comps.get(2).getId().equals("if6"));
+		Assertions.assertTrue(comps.size() == 3,
+				"expecting 3, got: " + comps.size());
+		Assertions.assertTrue(comps.get(0).getClass().equals(If.class));
+		Assertions.assertTrue(comps.get(0).getId().equals("if2"));
+		Assertions.assertTrue(comps.get(1).getClass().equals(If.class));
+		Assertions.assertTrue(comps.get(1).getId().equals("if5"));
+		Assertions.assertTrue(comps.get(2).getClass().equals(If.class));
+		Assertions.assertTrue(comps.get(2).getId().equals("if6"));
 	}
 	
 	@Test
@@ -96,19 +99,20 @@ public class F80_ZK_2944_2Test extends ZATSTestCase {
 		DesktopAgent desktop = connect();
 		Component parent = desktop.query("#parent").as(Div.class);
 		List<Component> comps = Selectors.find(parent, ":host > label");
-		Assert.assertTrue("expecting 6, got: " + comps.size(), comps.size() == 6);
-		Assert.assertTrue(comps.get(0).getClass().equals(Label.class));
-		Assert.assertTrue(comps.get(0).getId().equals("lb1"));
-		Assert.assertTrue(comps.get(1).getClass().equals(Label.class));
-		Assert.assertTrue(comps.get(1).getId().equals("lb2"));
-		Assert.assertTrue(comps.get(2).getClass().equals(Label.class));
-		Assert.assertTrue(comps.get(2).getId().equals("lb3"));
-		Assert.assertTrue(comps.get(3).getClass().equals(Label.class));
-		Assert.assertTrue(comps.get(3).getId().equals("lb4"));
-		Assert.assertTrue(comps.get(4).getClass().equals(Label.class));
-		Assert.assertTrue(comps.get(4).getId().equals("lb5"));
-		Assert.assertTrue(comps.get(5).getClass().equals(Label.class));
-		Assert.assertTrue(comps.get(5).getId().equals("lb6"));
+		Assertions.assertTrue(comps.size() == 6,
+				"expecting 6, got: " + comps.size());
+		Assertions.assertTrue(comps.get(0).getClass().equals(Label.class));
+		Assertions.assertTrue(comps.get(0).getId().equals("lb1"));
+		Assertions.assertTrue(comps.get(1).getClass().equals(Label.class));
+		Assertions.assertTrue(comps.get(1).getId().equals("lb2"));
+		Assertions.assertTrue(comps.get(2).getClass().equals(Label.class));
+		Assertions.assertTrue(comps.get(2).getId().equals("lb3"));
+		Assertions.assertTrue(comps.get(3).getClass().equals(Label.class));
+		Assertions.assertTrue(comps.get(3).getId().equals("lb4"));
+		Assertions.assertTrue(comps.get(4).getClass().equals(Label.class));
+		Assertions.assertTrue(comps.get(4).getId().equals("lb5"));
+		Assertions.assertTrue(comps.get(5).getClass().equals(Label.class));
+		Assertions.assertTrue(comps.get(5).getId().equals("lb6"));
 	}
 	
 	@Test
@@ -116,7 +120,8 @@ public class F80_ZK_2944_2Test extends ZATSTestCase {
 		DesktopAgent desktop = connect();
 		Component parent = desktop.query("#parent").as(Div.class);
 		List<Component> comps = Selectors.find(parent, ":host::shadow > if > if > label");
-		Assert.assertTrue("expecting 0, got: " + comps.size(), comps.size() == 0);
+		Assertions.assertTrue(comps.size() == 0,
+				"expecting 0, got: " + comps.size());
 	}
 	
 	@Test
@@ -124,6 +129,7 @@ public class F80_ZK_2944_2Test extends ZATSTestCase {
 		DesktopAgent desktop = connect();
 		Component parent = desktop.query("#parent").as(Div.class);
 		List<Component> comps = Selectors.find(parent, "#host::shadow#if1");
-		Assert.assertTrue("expecting 0, got: " + comps.size(), comps.size() == 0);
+		Assertions.assertTrue(comps.size() == 0,
+				"expecting 0, got: " + comps.size());
 	}
 }

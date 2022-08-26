@@ -11,10 +11,10 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -32,7 +32,7 @@ public class B86_ZK_4172Test extends WebDriverTestCase {
 		int tPadHeight = getTopPadHeight();
 		click(jq("@button:eq(0)"));
 		waitResponse();
-		Assert.assertEquals("The height of topPad has been changed.", tPadHeight, getTopPadHeight());
+		Assertions.assertEquals(tPadHeight, getTopPadHeight(), "The height of topPad has been changed.");
 	}
 
 	@Test
@@ -47,7 +47,7 @@ public class B86_ZK_4172Test extends WebDriverTestCase {
 		int tPadHeight = getTopPadHeight();
 		click(jq("@button:eq(1)"));
 		waitResponse();
-		Assert.assertEquals("The height of topPad has been changed.", tPadHeight, getTopPadHeight());
+		Assertions.assertEquals(tPadHeight, getTopPadHeight(), "The height of topPad has been changed.");
 	}
 
 	@Test
@@ -62,7 +62,7 @@ public class B86_ZK_4172Test extends WebDriverTestCase {
 		int tPadHeight = getTopPadHeight();
 		click(jq("@button:eq(2)"));
 		waitResponse();
-		Assert.assertEquals("The height of topPad has been changed.", tPadHeight, getTopPadHeight());
+		Assertions.assertEquals(tPadHeight, getTopPadHeight(), "The height of topPad has been changed.");
 	}
 
 	private int getTopPadHeight() {

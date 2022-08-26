@@ -1,12 +1,10 @@
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertFalse;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 public class B86_ZK_4166Test extends WebDriverTestCase {
 	@Test

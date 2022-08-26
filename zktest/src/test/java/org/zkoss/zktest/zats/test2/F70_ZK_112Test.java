@@ -11,14 +11,14 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.lessThan;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author rudyhuang
@@ -35,12 +35,12 @@ public class F70_ZK_112Test extends WebDriverTestCase {
 		int oldWidth = jq(".z-vbox").width();
 		dragdropTo(vsplitter, 0, 10, 30, 0);
 		waitResponse();
-		Assert.assertThat(jq(".z-vbox").width(), greaterThan(oldWidth));
+		assertThat(jq(".z-vbox").width(), greaterThan(oldWidth));
 
 		JQuery hsplitter = jq("$s1");
 		int oldHeight = jq("@div:eq(0)").height();
 		dragdropTo(hsplitter, 10, 0, 0, -100);
 		waitResponse();
-		Assert.assertThat(jq("@div:eq(0)").height(), lessThan(oldHeight));
+		assertThat(jq("@div:eq(0)").height(), lessThan(oldHeight));
 	}
 }

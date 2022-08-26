@@ -11,12 +11,12 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
-import org.zkoss.zktest.zats.ztl.Widget;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
+import org.zkoss.test.webdriver.ztl.Widget;
 
 public class B96_ZK_4851Test extends WebDriverTestCase {
 	@Test
@@ -53,13 +53,13 @@ public class B96_ZK_4851Test extends WebDriverTestCase {
 		click(cal.find(".z-calendar-cell:contains(7):first")); // 7
 		waitResponse();
 
-		Assert.assertEquals("the datebox should display " + expectedDisplay, expectedDisplay, jq(datebox.$n("real")).val());
+		Assertions.assertEquals(expectedDisplay, jq(datebox.$n("real")).val(), "the datebox should display " + expectedDisplay);
 
 		click(datebox.$n("btn"));
 		waitResponse();
 
-		Assert.assertEquals("calendar should show the correct year and month which is 2021 Apr", "Apr 2021", jq("@calendar:visible .z-calendar-title").text());
-		Assert.assertEquals("calendar should select the correct day which is 7", "7", jq("@calendar:visible .z-calendar-selected").text());
+		Assertions.assertEquals("Apr 2021", jq("@calendar:visible .z-calendar-title").text(), "calendar should show the correct year and month which is 2021 Apr");
+		Assertions.assertEquals("7", jq("@calendar:visible .z-calendar-selected").text(), "calendar should select the correct day which is 7");
 
 		click(jq("@label")); // close calendar popup
 		waitResponse();

@@ -11,12 +11,14 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import static org.junit.Assert.assertNotEquals;
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 public class B86_ZK_4007Test extends WebDriverTestCase {
     @Test

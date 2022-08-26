@@ -13,8 +13,8 @@ package org.zkoss.zktest.zats.test2;
 
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zktest.zats.ZATSTestCase;
@@ -32,7 +32,7 @@ public class B96_ZK_4778Test extends ZATSTestCase {
 		desktop.query("#btnCheck").click();
 
 		final List<String> zkLog = desktop.getZkLog();
-		Assert.assertEquals("eq.isIdle(): true", zkLog.get(1));
+		Assertions.assertEquals("eq.isIdle(): true", zkLog.get(1));
 	}
 
 	@Test
@@ -44,7 +44,7 @@ public class B96_ZK_4778Test extends ZATSTestCase {
 		desktop.query("#btnCheck").click();
 
 		final List<String> zkLog = desktop.getZkLog();
-		Assert.assertEquals("eq.isIdle(): true", zkLog.get(1));
+		Assertions.assertEquals("eq.isIdle(): true", zkLog.get(1));
 	}
 
 	@Test
@@ -56,6 +56,6 @@ public class B96_ZK_4778Test extends ZATSTestCase {
 		desktop.query("#btnCheck").click();
 
 		final List<String> zkLog = desktop.getZkLog();
-		Assert.assertEquals("eq.isIdle(): true", zkLog.get(1));
+		Assertions.assertEquals("eq.isIdle(): true", zkLog.get(1));
 	}
 }

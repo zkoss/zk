@@ -11,7 +11,7 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.wcag;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class SelectboxTest extends WcagTestCase {
 	@Test

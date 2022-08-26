@@ -1,24 +1,25 @@
 package org.zkoss.zktest.zats.test2;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import org.junit.Test;
-
-import org.openqa.selenium.Keys;
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import org.junit.jupiter.api.Test;
+import org.openqa.selenium.Keys;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
+
 /**
  * @author jameschu
  */
 public class B36_2678340Test extends WebDriverTestCase {
-	@Test public void test() {
+	@Test
+	public void test() {
 		connect();
 		// Click upper button twice
 		click(jq(".z-timebox").toWidget().$n("btn-down"));
@@ -61,7 +62,7 @@ public class B36_2678340Test extends WebDriverTestCase {
 		int mm2 = calendar.get(Calendar.MINUTE);
 		int ss2 = calendar.get(Calendar.SECOND);
 
-		assertTrue("The time value should of the label should be equal to the timebox", hh1 == hh2 && mm1 == mm2 && ss1 == ss2);
+		assertTrue(hh1 == hh2 && mm1 == mm2 && ss1 == ss2, "The time value should of the label should be equal to the timebox");
 
 		// Click upper button again
 		click(jq(".z-timebox").toWidget().$n("btn-up"));
@@ -91,6 +92,6 @@ public class B36_2678340Test extends WebDriverTestCase {
 		mm2 = calendar.get(Calendar.MINUTE);
 		ss2 = calendar.get(Calendar.SECOND);
 
-		assertTrue("The time value should of the label should be equal to the timebox", hh1 == hh2 && mm1 == mm2 && ss1 == ss2);
+		assertTrue(hh1 == hh2 && mm1 == mm2 && ss1 == ss2, "The time value should of the label should be equal to the timebox");
 	}
 }

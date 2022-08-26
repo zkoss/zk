@@ -11,11 +11,11 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class F86_ZK_3179Test extends WebDriverTestCase {
 	@Test
@@ -25,19 +25,19 @@ public class F86_ZK_3179Test extends WebDriverTestCase {
 
 		click(jq("$setWidth200"));
 		waitResponse();
-		Assert.assertTrue(overflowButton.isVisible());
+		Assertions.assertTrue(overflowButton.isVisible());
 
 		click(overflowButton);
 		waitResponse();
-		Assert.assertTrue(getNumberOfPopupChildren() > 0);
-		Assert.assertEquals(6, getNumberOfToolbarChildren() + getNumberOfPopupChildren());
+		Assertions.assertTrue(getNumberOfPopupChildren() > 0);
+		Assertions.assertEquals(6, getNumberOfToolbarChildren() + getNumberOfPopupChildren());
 
 		click(jq("$resetWidth"));
 		waitResponse();
 		driver.manage().window().maximize();
 		waitResponse();
-		Assert.assertFalse(overflowButton.isVisible());
-		Assert.assertEquals(6, getNumberOfToolbarChildren());
+		Assertions.assertFalse(overflowButton.isVisible());
+		Assertions.assertEquals(6, getNumberOfToolbarChildren());
 	}
 
 	private int getNumberOfToolbarChildren() {

@@ -11,7 +11,8 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zktest.zats.ZATSTestCase;
 import org.zkoss.zul.Center;
@@ -23,18 +24,18 @@ import org.zkoss.zul.LayoutRegion;
 public class F85_ZK_3329_2Test extends ZATSTestCase {
 	private LayoutRegion center = new Center();
 
-	@Test(expected = UnsupportedOperationException.class)
+	@Test
 	public void testSlidable() {
-		center.setSlidable(true);
+		Assertions.assertThrows(UnsupportedOperationException.class, () -> center.setSlidable(true));
 	}
 
-	@Test(expected = UnsupportedOperationException.class)
+	@Test
 	public void testSlide() {
-		center.setSlide(true);
+		Assertions.assertThrows(UnsupportedOperationException.class, () -> center.setSlide(true));
 	}
 
-	@Test(expected = UnsupportedOperationException.class)
+	@Test
 	public void testClosable() {
-		center.setClosable(true);
+		Assertions.assertThrows(UnsupportedOperationException.class, () -> center.setClosable(true));
 	}
 }

@@ -11,10 +11,10 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -27,7 +27,8 @@ public class B96_ZK_4909Test extends WebDriverTestCase {
 		mouseOver(jq("$navitem2"));
 		click(jq("$navitem2"));
 		waitResponse();
-		Assert.assertFalse("the navpopup should be killed", jq(".z-nav-popup").exists());
+		Assertions.assertFalse(jq(".z-nav-popup").exists(),
+				"the navpopup should be killed");
 	}
 
 	@Test
@@ -38,6 +39,7 @@ public class B96_ZK_4909Test extends WebDriverTestCase {
 		waitResponse(true);
 		click(jq("$navitem4"));
 		waitResponse();
-		Assert.assertFalse("the navpopup should be killed", jq(".z-nav-popup").exists());
+		Assertions.assertFalse(jq(".z-nav-popup").exists(),
+				"the navpopup should be killed");
 	}
 }

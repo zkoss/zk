@@ -11,25 +11,25 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.Collections;
 
-import org.junit.Assert;
-import org.junit.ClassRule;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.openqa.selenium.chrome.ChromeOptions;
 
-import org.zkoss.zktest.zats.ExternalZkXml;
-import org.zkoss.zktest.zats.ForkJVMTestOnly;
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.Widget;
+import org.zkoss.test.webdriver.ExternalZkXml;
+import org.zkoss.test.webdriver.ForkJVMTestOnly;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.Widget;
 
 /**
  * @author rudyhuang
  */
-@Category(ForkJVMTestOnly.class)
+@ForkJVMTestOnly
 public class F96_ZK_4918Test extends WebDriverTestCase {
-	@ClassRule
+	@RegisterExtension
 	public static ExternalZkXml CONFIG = new ExternalZkXml(F96_ZK_4918Test.class);
 
 	@Override
@@ -42,14 +42,14 @@ public class F96_ZK_4918Test extends WebDriverTestCase {
 	public void test() {
 		connect();
 
-		Assert.assertEquals("false", jq("$touchEnabled").text());
+		assertEquals("false", jq("$touchEnabled").text());
 
 		final Widget win = widget("@window");
 		final int oldPositionTop = jq(win).positionTop();
 		final int oldPositionLeft = jq(win).positionLeft();
 		dragdropTo(win.$n("cap"), 0, 0, 100, 100);
-		Assert.assertEquals(oldPositionTop, jq(win).positionTop());
-		Assert.assertEquals(oldPositionLeft, jq(win).positionLeft());
+		assertEquals(oldPositionTop, jq(win).positionTop());
+		assertEquals(oldPositionLeft, jq(win).positionLeft());
 	}
 }
 

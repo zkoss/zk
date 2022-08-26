@@ -11,13 +11,13 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+
+
 
 public class B90_ZK_4473Test extends WebDriverTestCase {
 	@Test

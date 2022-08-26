@@ -13,8 +13,8 @@ package org.zkoss.zktest.zats.test2;
 
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
@@ -30,10 +30,10 @@ public class F95_ZK_4569Test extends ZATSTestCase {
 		List<ComponentAgent> btns = desktop.queryAll("button");
 		btns.forEach(ComponentAgent::click);
 		List<String> zkLog = desktop.getZkLog();
-		Assert.assertEquals(4, zkLog.size());
-		Assert.assertEquals("Clicked", zkLog.get(0));
-		Assert.assertEquals("Clicked", zkLog.get(1));
-		Assert.assertEquals("Clickedb", zkLog.get(2));
-		Assert.assertEquals("ClickedG", zkLog.get(3));
+		Assertions.assertEquals(4, zkLog.size());
+		Assertions.assertEquals("Clicked", zkLog.get(0));
+		Assertions.assertEquals("Clicked", zkLog.get(1));
+		Assertions.assertEquals("Clickedb", zkLog.get(2));
+		Assertions.assertEquals("ClickedG", zkLog.get(3));
 	}
 }

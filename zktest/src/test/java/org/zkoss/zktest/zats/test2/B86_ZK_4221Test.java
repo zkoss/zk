@@ -1,11 +1,12 @@
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.fail;
+
+import org.junit.jupiter.api.Test;
+
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zktest.zats.ZATSTestCase;
-
-import static junit.framework.TestCase.fail;
 
 /**
  * @author jameschu
@@ -21,6 +22,5 @@ public class B86_ZK_4221Test extends ZATSTestCase {
 		} catch (Exception e) {
 			fail();
 		}
-		return;
 	}
 }

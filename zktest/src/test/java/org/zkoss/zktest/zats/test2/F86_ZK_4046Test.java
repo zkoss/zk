@@ -17,10 +17,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -44,18 +44,18 @@ public class F86_ZK_4046Test extends WebDriverTestCase {
 		waitResponse();
 
 		String expected = "A message from zktest/src/main/webapp/WEB-INF/zk-label.properties";
-		Assert.assertEquals(expected, jq("$lbl1").text());
-		Assert.assertEquals(expected, jq("$lbl2").text());
-		Assert.assertEquals(expected, jq("$lbl3").text());
+		Assertions.assertEquals(expected, jq("$lbl1").text());
+		Assertions.assertEquals(expected, jq("$lbl2").text());
+		Assertions.assertEquals(expected, jq("$lbl3").text());
 
 		modifyZkLabel();
 		click(jq("@button:contains(Refresh)"));
 		waitResponse();
 
 		expected = "yoyoyo";
-		Assert.assertEquals(expected, jq("$lbl1").text());
-		Assert.assertEquals(expected, jq("$lbl2").text());
-		Assert.assertEquals(expected, jq("$lbl3").text());
+		Assertions.assertEquals(expected, jq("$lbl1").text());
+		Assertions.assertEquals(expected, jq("$lbl2").text());
+		Assertions.assertEquals(expected, jq("$lbl3").text());
 	}
 
 	private void modifyZkLabel() throws IOException {

@@ -1,16 +1,12 @@
 package org.zkoss.zktest.zats.bind.issue;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.jupiter.api.Test;
 
-import org.junit.Test;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.operation.InputAgent;
 import org.zkoss.zats.mimic.operation.SelectAgent;
 import org.zkoss.zktest.zats.ZATSTestCase;
-import org.zkoss.zul.Combobox;
-import org.zkoss.zul.Comboitem;
-import org.zkoss.zul.Label;
 
 public class B00992SubModelTest extends ZATSTestCase{
 	@Test

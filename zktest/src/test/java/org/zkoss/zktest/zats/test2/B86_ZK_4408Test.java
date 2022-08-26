@@ -11,10 +11,11 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class B86_ZK_4408Test extends WebDriverTestCase {
 	@Test
@@ -31,7 +32,7 @@ public class B86_ZK_4408Test extends WebDriverTestCase {
 		waitResponse(true);
 		click(jqBandboxButton);
 		waitResponse();
-		Assert.assertEquals("bandbox width should not change", bandboxWidth, jq(".z-bandbox").outerWidth());
+		Assertions.assertEquals(bandboxWidth, jq(".z-bandbox").outerWidth(), "bandbox width should not change");
 		
 		click(jqBtns.eq(1));
 		waitResponse(true);
@@ -39,6 +40,6 @@ public class B86_ZK_4408Test extends WebDriverTestCase {
 		waitResponse(true);
 		click(jqBandboxButton);
 		waitResponse();
-		Assert.assertTrue(jq(".z-bandbox-popup").isVisible());
+		Assertions.assertTrue(jq(".z-bandbox-popup").isVisible());
 	}
 }

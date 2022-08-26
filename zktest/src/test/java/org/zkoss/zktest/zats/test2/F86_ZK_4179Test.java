@@ -11,10 +11,10 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -26,18 +26,18 @@ public class F86_ZK_4179Test extends WebDriverTestCase {
 
 		click(jq("@button:eq(0)"));
 		waitResponse();
-		Assert.assertFalse("JavaScript exception", isZKLogAvailable());
+		Assertions.assertFalse(isZKLogAvailable(), "JavaScript exception");
 		click(jq("@button:eq(1)"));
 		waitResponse();
-		Assert.assertFalse("JavaScript exception", isZKLogAvailable());
+		Assertions.assertFalse(isZKLogAvailable(), "JavaScript exception");
 
 		driver.navigate().back();
 		waitResponse();
-		Assert.assertTrue("ZK onHistoryPopState error?", isZKLogAvailable());
+		Assertions.assertTrue(isZKLogAvailable(), "ZK onHistoryPopState error?");
 		closeZKLog();
 
 		driver.navigate().forward();
 		waitResponse();
-		Assert.assertTrue("ZK onHistoryPopState error?", isZKLogAvailable());
+		Assertions.assertTrue(isZKLogAvailable(), "ZK onHistoryPopState error?");
 	}
 }

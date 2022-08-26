@@ -13,11 +13,11 @@ package org.zkoss.zktest.zats.test2;
 
 import java.util.logging.Level;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.logging.LogType;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -32,11 +32,11 @@ public class B50_3022161Test extends WebDriverTestCase {
 		click(jq("@tab:last"));
 		waitResponse();
 
-		Assert.assertTrue(jq("@window").isVisible());
+		Assertions.assertTrue(jq("@window").isVisible());
 		driver.manage().logs().get(LogType.BROWSER).getAll()
 				.stream()
 				.filter(entry -> entry.getLevel().intValue() >= Level.SEVERE.intValue())
 				.findFirst()
-				.ifPresent(logEntry -> Assert.fail(logEntry.toString()));
+				.ifPresent(logEntry -> Assertions.fail(logEntry.toString()));
 	}
 }

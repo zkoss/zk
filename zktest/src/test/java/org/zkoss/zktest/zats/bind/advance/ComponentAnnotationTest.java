@@ -11,10 +11,11 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.bind.advance;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class ComponentAnnotationTest extends WebDriverTestCase {
 	@Test
@@ -37,11 +38,11 @@ public class ComponentAnnotationTest extends WebDriverTestCase {
 		click(jq(".z-label")); // blur
 		waitResponse();
 
-		Assert.assertEquals(expected, label.text());
-		Assert.assertEquals("red", custom0.text());
-		Assert.assertEquals(expected, custom1.text());
-		Assert.assertEquals(expected, custom2.text());
-		Assert.assertEquals(expected, custom3.text());
+		Assertions.assertEquals(expected, label.text());
+		Assertions.assertEquals("red", custom0.text());
+		Assertions.assertEquals(expected, custom1.text());
+		Assertions.assertEquals(expected, custom2.text());
+		Assertions.assertEquals(expected, custom3.text());
 
 		// test ComponentAnnotation on class
 		expected = "blue";
@@ -52,11 +53,11 @@ public class ComponentAnnotationTest extends WebDriverTestCase {
 		click(jq(".z-label")); // blur
 		waitResponse();
 
-		Assert.assertEquals(expected, label.text());
-		Assert.assertEquals(expected, custom0.text());
-		Assert.assertEquals(expected, custom1.text());
-		Assert.assertEquals(expected, custom2.text());
-		Assert.assertEquals(expected, custom3.text());
+		Assertions.assertEquals(expected, label.text());
+		Assertions.assertEquals(expected, custom0.text());
+		Assertions.assertEquals(expected, custom1.text());
+		Assertions.assertEquals(expected, custom2.text());
+		Assertions.assertEquals(expected, custom3.text());
 
 		// test ComponentAnnotation on getter
 		expected = "green";
@@ -67,11 +68,11 @@ public class ComponentAnnotationTest extends WebDriverTestCase {
 		click(jq(".z-label")); // blur
 		waitResponse();
 
-		Assert.assertEquals(expected, label.text());
-		Assert.assertEquals(expected, custom0.text());
-		Assert.assertEquals(expected, custom1.text());
-		Assert.assertEquals(expected, custom2.text());
-		Assert.assertEquals(expected, custom3.text());
+		Assertions.assertEquals(expected, label.text());
+		Assertions.assertEquals(expected, custom0.text());
+		Assertions.assertEquals(expected, custom1.text());
+		Assertions.assertEquals(expected, custom2.text());
+		Assertions.assertEquals(expected, custom3.text());
 
 		// test ComponentAnnotation on setter
 		expected = "purple";
@@ -82,10 +83,10 @@ public class ComponentAnnotationTest extends WebDriverTestCase {
 		click(jq(".z-label")); // blur
 		waitResponse();
 
-		Assert.assertEquals(expected, label.text());
-		Assert.assertEquals(expected, custom0.text());
-		Assert.assertEquals(expected, custom1.text());
-		Assert.assertEquals(expected, custom2.text());
-		Assert.assertEquals(expected, custom3.text());
+		Assertions.assertEquals(expected, label.text());
+		Assertions.assertEquals(expected, custom0.text());
+		Assertions.assertEquals(expected, custom1.text());
+		Assertions.assertEquals(expected, custom2.text());
+		Assertions.assertEquals(expected, custom3.text());
 	}
 }

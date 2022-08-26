@@ -11,12 +11,12 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.interactions.Actions;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class B80_ZK_3567Test extends WebDriverTestCase {
 
@@ -38,7 +38,7 @@ public class B80_ZK_3567Test extends WebDriverTestCase {
 	private void verify(Command command) {
 		command.execute();
 		waitResponse();
-		Assert.assertFalse(isZKLogAvailable());
+		Assertions.assertFalse(isZKLogAvailable());
 	}
 
 	interface Command {

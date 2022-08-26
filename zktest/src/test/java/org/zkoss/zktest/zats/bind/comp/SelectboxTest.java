@@ -11,12 +11,12 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.bind.comp;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.support.ui.Select;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author rudyhuang
@@ -30,10 +30,10 @@ public class SelectboxTest extends WebDriverTestCase {
 
 		select.selectByVisibleText("item04");
 		waitResponse();
-		Assert.assertEquals("3", $selected.text());
+		Assertions.assertEquals("3", $selected.text());
 
 		select.selectByVisibleText("item02");
 		waitResponse();
-		Assert.assertEquals("1", $selected.text());
+		Assertions.assertEquals("1", $selected.text());
 	}
 }

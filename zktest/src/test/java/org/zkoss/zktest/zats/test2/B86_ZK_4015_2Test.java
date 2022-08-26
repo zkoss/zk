@@ -11,13 +11,13 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.interactions.Actions;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author rudyhuang
@@ -38,11 +38,12 @@ public class B86_ZK_4015_2Test extends WebDriverTestCase {
 		JQuery btn = bandbox.find(".z-bandbox-button");
 		click(btn);
 		waitResponse();
-		Assert.assertTrue(bandbox.find("@bandpopup").isVisible());
+		Assertions.assertTrue(bandbox.find("@bandpopup").isVisible());
 
 		Actions actions = new Actions(driver);
 		actions.moveToElement(toElement(btn), xOffsetFromBtn, 0).click().perform();
 		waitResponse();
-		Assert.assertFalse("The popup didn't hide", bandbox.find("@bandpopup").isVisible());
+		Assertions.assertFalse(bandbox.find("@bandpopup").isVisible(),
+				"The popup didn't hide");
 	}
 }

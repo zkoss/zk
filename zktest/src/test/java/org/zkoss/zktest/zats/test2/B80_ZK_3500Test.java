@@ -11,12 +11,12 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class B80_ZK_3500Test extends WebDriverTestCase {
 
@@ -29,11 +29,11 @@ public class B80_ZK_3500Test extends WebDriverTestCase {
 		waitResponse();
 		sendKeys(input, Keys.ENTER);
 		waitResponse();
-		Assert.assertEquals("a", jq(".z-chosenbox-item-content:eq(0)").text());
+		Assertions.assertEquals("a", jq(".z-chosenbox-item-content:eq(0)").text());
 
 		sendKeys(input, "aa");
 		sendKeys(input, Keys.ENTER);
 		waitResponse();
-		Assert.assertEquals("aa", jq(".z-chosenbox-item-content:eq(1)").text());
+		Assertions.assertEquals("aa", jq(".z-chosenbox-item-content:eq(1)").text());
 	}
 }

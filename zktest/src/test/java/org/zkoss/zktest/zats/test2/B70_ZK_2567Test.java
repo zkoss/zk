@@ -1,9 +1,10 @@
 package org.zkoss.zktest.zats.test2;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
 import org.zkoss.zktest.zats.ZATSTestCase;
 
 public class B70_ZK_2567Test extends ZATSTestCase {

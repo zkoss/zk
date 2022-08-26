@@ -11,13 +11,13 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.interactions.Actions;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class F85_ZK_3507Test extends WebDriverTestCase {
 
@@ -34,16 +34,16 @@ public class F85_ZK_3507Test extends WebDriverTestCase {
 		waitResponse();
 
 		sendCombinedKey(Keys.DOWN);
-		Assert.assertEquals(2, selectedItems.length());
+		Assertions.assertEquals(2, selectedItems.length());
 
 		sendCombinedKey(Keys.UP);
-		Assert.assertEquals(1, selectedItems.length());
+		Assertions.assertEquals(1, selectedItems.length());
 
 		sendCombinedKey(Keys.END);
-		Assert.assertEquals(7, selectedItems.length());
+		Assertions.assertEquals(7, selectedItems.length());
 
 		sendCombinedKey(Keys.HOME);
-		Assert.assertEquals(1, selectedItems.length());
+		Assertions.assertEquals(1, selectedItems.length());
 	}
 
 	private void sendCombinedKey(Keys key) {

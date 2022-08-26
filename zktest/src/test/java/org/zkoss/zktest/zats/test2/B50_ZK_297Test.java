@@ -11,9 +11,10 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 public class B50_ZK_297Test extends WebDriverTestCase {
 	@Test
@@ -23,7 +24,7 @@ public class B50_ZK_297Test extends WebDriverTestCase {
 		waitResponse();
 		click(jq(".z-comboitem").eq(1));
 		waitResponse();
-		Assert.assertTrue(jq(".z-messagebox-window").exists());
+		Assertions.assertTrue(jq(".z-messagebox-window").exists());
 		
 		click(jq(".z-messagebox-button"));
 		waitResponse();
@@ -31,7 +32,7 @@ public class B50_ZK_297Test extends WebDriverTestCase {
 		waitResponse();
 		click(jq(".z-label"));
 		waitResponse();
-		Assert.assertFalse(jq(".z-messagebox-window").exists());
-		Assert.assertFalse(jq(".z-errorbox").exists());
+		Assertions.assertFalse(jq(".z-messagebox-window").exists());
+		Assertions.assertFalse(jq(".z-errorbox").exists());
 	}
 }

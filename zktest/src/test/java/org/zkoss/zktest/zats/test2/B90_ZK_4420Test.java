@@ -11,15 +11,15 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.lessThanOrEqualTo;
 import static org.hamcrest.Matchers.not;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
-import org.zkoss.zktest.zats.ztl.Widget;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
+import org.zkoss.test.webdriver.ztl.Widget;
 
 /**
  * @author rudyhuang
@@ -42,6 +42,6 @@ public class B90_ZK_4420Test extends WebDriverTestCase {
 
 	private void verifyLabelPositionBottom(Widget checkbox, int bottomPos) {
 		int diff = bottomPos - calculateBottomPos(jq(checkbox.$n("cnt")));
-		Assert.assertThat("The label was so close to bottom line", diff, not(lessThanOrEqualTo(5)));
+		assertThat("The label was so close to bottom line", diff, not(lessThanOrEqualTo(5)));
 	}
 }

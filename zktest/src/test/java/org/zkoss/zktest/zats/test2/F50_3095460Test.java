@@ -11,11 +11,11 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author rudyhuang
@@ -38,7 +38,7 @@ public class F50_3095460Test extends WebDriverTestCase {
 		JQuery columnsSpan = spanned.find("th");
 		JQuery columnsOrig = original.find("th");
 		for (int i = 0; i < 4; i++) {
-			Assert.assertTrue(columnsSpan.eq(i).width() > columnsOrig.eq(i).width());
+			Assertions.assertTrue(columnsSpan.eq(i).width() > columnsOrig.eq(i).width());
 		}
 	}
 
@@ -46,17 +46,17 @@ public class F50_3095460Test extends WebDriverTestCase {
 		JQuery columnsOrig = orig.find("th");
 		JQuery columnsFlex = flexed.find("th");
 		for (int i = 0; i < 4; i++) {
-			Assert.assertEquals(columnsFlex.eq(i).width(), columnsOrig.eq(i).width(), 2);
+			Assertions.assertEquals(columnsFlex.eq(i).width(), columnsOrig.eq(i).width(), 2);
 		}
 
-		Assert.assertEquals(flexed.width(), jq(widget(flexed).$n("head")).width(), 2);
+		Assertions.assertEquals(flexed.width(), jq(widget(flexed).$n("head")).width(), 2);
 	}
 
 	private void checkSame(JQuery mesh1, JQuery mesh2) {
 		JQuery columns1 = mesh1.find("th");
 		JQuery columns2 = mesh2.find("th");
 		for (int i = 0; i < 4; i++) {
-			Assert.assertEquals(columns1.eq(i).width(), columns2.eq(i).width(), 2);
+			Assertions.assertEquals(columns1.eq(i).width(), columns2.eq(i).width(), 2);
 		}
 	}
 }

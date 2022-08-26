@@ -11,14 +11,14 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.ClientWidget;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.ClientWidget;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author rudyhuang
@@ -36,17 +36,17 @@ public class F85_ZK_3329Test extends WebDriverTestCase {
 		JQuery slidableToggle = jq("@checkbox:contains(east slidable) > input");
 
 		clickAndWait(regionBar);
-		assertFalse("The slide should be hidden", slide.isVisible());
+		assertFalse(slide.isVisible(), "The slide should be hidden");
 		clickAndWait(btn);
 
 		clickAndWait(slideToggle);
-		assertTrue("The slide should be shown", slide.isVisible());
+		assertTrue(slide.isVisible(), "The slide should be shown");
 		clickAndWait(slideToggle);
-		assertFalse("The slide should be hidden", slide.isVisible());
+		assertFalse(slide.isVisible(), "The slide should be hidden");
 
 		clickAndWait(slidableToggle);
 		clickAndWait(regionBar);
-		assertTrue("The slide should be shown", slide.isVisible());
+		assertTrue(slide.isVisible(), "The slide should be shown");
 	}
 
 	private void clickAndWait(ClientWidget cw) {
@@ -66,36 +66,36 @@ public class F85_ZK_3329Test extends WebDriverTestCase {
 		JQuery closableToggle = jq("@checkbox:contains(west closable) > input");
 		JQuery splitterBtn = jq("$west .z-west-splitter-button");
 
-		assertFalse("The open button exists", btn.exists());
+		assertFalse(btn.exists(), "The open button exists");
 
 		clickAndWait(regionBar);
-		assertTrue("The slide should be shown", slide.isVisible());
+		assertTrue(slide.isVisible(), "The slide should be shown");
 		clickAndWait(regionBar);
-		assertFalse("The slide should be hidden", slide.isVisible());
+		assertFalse(slide.isVisible(), "The slide should be hidden");
 
 		clickAndWait(openToggle);
-		assertTrue("The region should be opened", real.isVisible());
-		assertFalse("The close button exists", btn.exists());
+		assertTrue(real.isVisible(), "The region should be opened");
+		assertFalse(btn.exists(), "The close button exists");
 
 		clickAndWait(openToggle);
-		assertFalse("The region should be closed", real.isVisible());
+		assertFalse(real.isVisible(), "The region should be closed");
 
 		clickAndWait(closableToggle);
 		clickAndWait(btn);
-		assertTrue("The region should be opened", real.isVisible());
+		assertTrue(real.isVisible(), "The region should be opened");
 
 		clickAndWait(closableToggle);
-		assertFalse("The close button exists", btn.exists());
-		assertTrue("The splitter button should be disabled",
-				splitterBtn.hasClass("z-west-splitter-button-disabled"));
+		assertFalse(btn.exists(), "The close button exists");
+		assertTrue(splitterBtn.hasClass("z-west-splitter-button-disabled"),
+				"The splitter button should be disabled");
 
 		clickAndWait(splitterBtn);
-		assertTrue("The region should remain opened", real.isVisible());
+		assertTrue(real.isVisible(), "The region should remain opened");
 
 		clickAndWait(closableToggle);
-		assertTrue("The close button should exist", btn.exists());
-		assertFalse("The splitter button should be enabled",
-				splitterBtn.hasClass("z-west-splitter-button-disabled"));
+		assertTrue(btn.exists(), "The close button should exist");
+		assertFalse(splitterBtn.hasClass("z-west-splitter-button-disabled"),
+				"The splitter button should be enabled");
 	}
 
 	@Test
@@ -135,10 +135,10 @@ public class F85_ZK_3329Test extends WebDriverTestCase {
 	}
 
 	private void shouldHaveShown(JQuery btn) {
-		assertTrue("button should be visible", btn.isVisible());
+		assertTrue(btn.isVisible(), "button should be visible");
 	}
 
 	private void shouldHaveHidden(JQuery btn) {
-		assertFalse("button should be invisible", btn.isVisible());
+		assertFalse(btn.isVisible(), "button should be invisible");
 	}
 }

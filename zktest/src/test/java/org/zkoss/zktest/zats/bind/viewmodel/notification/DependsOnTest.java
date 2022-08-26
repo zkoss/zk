@@ -11,8 +11,8 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.bind.viewmodel.notification;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zktest.zats.ZATSTestCase;
@@ -28,14 +28,14 @@ public class DependsOnTest extends ZATSTestCase {
 		final Label fullname = desktop.query("#fullname").as(Label.class);
 		final Label fn = desktop.query("#firstname").as(Label.class);
 		final Label ln = desktop.query("#lastname").as(Label.class);
-		Assert.assertEquals("John Smith", fullname.getValue());
-		Assert.assertEquals("John", fn.getValue());
-		Assert.assertEquals("Smith", ln.getValue());
+		Assertions.assertEquals("John Smith", fullname.getValue());
+		Assertions.assertEquals("John", fn.getValue());
+		Assertions.assertEquals("Smith", ln.getValue());
 
 		desktop.query("#fn").type("Tom");
 		desktop.query("#ln").type("Riddle");
-		Assert.assertEquals("Tom Riddle", fullname.getValue());
-		Assert.assertEquals("Tom", fn.getValue());
-		Assert.assertEquals("Riddle", ln.getValue());
+		Assertions.assertEquals("Tom Riddle", fullname.getValue());
+		Assertions.assertEquals("Tom", fn.getValue());
+		Assertions.assertEquals("Riddle", ln.getValue());
 	}
 }

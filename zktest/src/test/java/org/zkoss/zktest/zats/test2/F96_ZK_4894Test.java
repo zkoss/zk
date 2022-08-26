@@ -11,13 +11,13 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.Element;
-import org.zkoss.zktest.zats.ztl.JQuery;
-import org.zkoss.zktest.zats.ztl.Widget;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.Element;
+import org.zkoss.test.webdriver.ztl.JQuery;
+import org.zkoss.test.webdriver.ztl.Widget;
 
 /**
  * @author rudyhuang
@@ -37,7 +37,7 @@ public class F96_ZK_4894Test extends WebDriverTestCase {
 
 		jq("$content").scrollTop(200);
 		waitResponse();
-		Assert.assertNotEquals(oldTop, errorbox.offsetTop());
+		Assertions.assertNotEquals(oldTop, errorbox.offsetTop());
 	}
 
 	@Test
@@ -53,6 +53,6 @@ public class F96_ZK_4894Test extends WebDriverTestCase {
 
 		jq("$content").scrollTop(200);
 		waitResponse();
-		Assert.assertNotEquals(oldTop, jq(comboPopup).offsetTop());
+		Assertions.assertNotEquals(oldTop, jq(comboPopup).offsetTop());
 	}
 }

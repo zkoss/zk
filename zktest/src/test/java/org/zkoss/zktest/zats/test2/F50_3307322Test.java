@@ -11,11 +11,11 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -30,6 +30,6 @@ public class F50_3307322Test extends WebDriverTestCase {
 		sendKeys(jq("@textbox"), "aaa", Keys.BACK_SPACE);
 		waitResponse();
 
-		Assert.assertEquals("8", getMessageBoxContent());
+		Assertions.assertEquals("8", getMessageBoxContent());
 	}
 }

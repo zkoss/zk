@@ -11,8 +11,8 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.bind.viewmodel.notification;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zktest.zats.ZATSTestCase;
@@ -45,17 +45,17 @@ public class BasicTest extends ZATSTestCase {
 		final Integer oldId = id.getValue();
 		final String oldName = name.getValue();
 		final String oldCity = city.getValue();
-		Assert.assertNotEquals(null, oldId);
-		Assert.assertNotEquals("", oldName);
-		Assert.assertNotEquals("", oldCity);
+		Assertions.assertNotEquals(null, oldId);
+		Assertions.assertNotEquals("", oldName);
+		Assertions.assertNotEquals("", oldCity);
 
 		desktop.query("#rnd").click();
-		Assert.assertNotEquals(oldId, id.getValue());
-		Assert.assertNotEquals(oldName, name.getValue());
-		Assert.assertNotEquals(oldCity, city.getValue());
+		Assertions.assertNotEquals(oldId, id.getValue());
+		Assertions.assertNotEquals(oldName, name.getValue());
+		Assertions.assertNotEquals(oldCity, city.getValue());
 
 		desktop.query("#reset").click();
-		Assert.assertEquals("", name.getValue());
-		Assert.assertEquals("", city.getValue());
+		Assertions.assertEquals("", name.getValue());
+		Assertions.assertEquals("", city.getValue());
 	}
 }

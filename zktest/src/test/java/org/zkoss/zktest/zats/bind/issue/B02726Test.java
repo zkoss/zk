@@ -11,9 +11,10 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.bind.issue;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.fail;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
 import org.zkoss.bind.proxy.FormProxyObject;
 import org.zkoss.bind.proxy.ProxyHelper;
 

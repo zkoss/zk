@@ -11,11 +11,11 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.Widget;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.Widget;
 
 /**
  * @author rudyhuang
@@ -29,6 +29,6 @@ public class B50_2984382Test extends WebDriverTestCase {
 		click(combo.$n("btn"));
 		waitResponse(true);
 
-		Assert.assertEquals(jq("@combobox").offsetLeft(), jq(combo.$n("pp")).offsetLeft(), 1);
+		Assertions.assertEquals(jq("@combobox").offsetLeft(), jq(combo.$n("pp")).offsetLeft(), 1);
 	}
 }

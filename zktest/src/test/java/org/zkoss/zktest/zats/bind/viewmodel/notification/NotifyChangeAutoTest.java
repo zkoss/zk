@@ -11,8 +11,8 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.bind.viewmodel.notification;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zktest.zats.ZATSTestCase;
@@ -29,9 +29,9 @@ public class NotifyChangeAutoTest extends ZATSTestCase {
 		final Label fn = desktop.query("#firstname").as(Label.class);
 		final Label ln = desktop.query("#lastname").as(Label.class);
 		desktop.query("button").click();
-		Assert.assertNotEquals("John", fn.getValue());
-		Assert.assertNotEquals("Smith", ln.getValue());
-		Assert.assertEquals("John Smith", fullname.getValue()); // spec see ZK-4891
+		Assertions.assertNotEquals("John", fn.getValue());
+		Assertions.assertNotEquals("Smith", ln.getValue());
+		Assertions.assertEquals("John Smith", fullname.getValue()); // spec see ZK-4891
 	}
 
 	@Test
@@ -42,9 +42,9 @@ public class NotifyChangeAutoTest extends ZATSTestCase {
 			final Label fn = desktop.query("#firstname").as(Label.class);
 			final Label ln = desktop.query("#lastname").as(Label.class);
 			desktop.query("#rnd").click();
-			Assert.assertNotEquals("John", fn.getValue());
-			Assert.assertNotEquals("Smith", ln.getValue());
-			Assert.assertEquals("John Smith", fullname.getValue()); // spec see ZK-4891
+			Assertions.assertNotEquals("John", fn.getValue());
+			Assertions.assertNotEquals("Smith", ln.getValue());
+			Assertions.assertEquals("John Smith", fullname.getValue()); // spec see ZK-4891
 		} finally {
 			desktop.query("#restore").click();
 		}

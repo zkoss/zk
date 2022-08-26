@@ -11,16 +11,17 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.interactions.Actions;
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
-
 import java.time.LocalDate;
 import java.time.format.TextStyle;
 import java.util.Locale;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.interactions.Actions;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 
 public class B96_ZK_4543Test extends WebDriverTestCase {
@@ -45,15 +46,15 @@ public class B96_ZK_4543Test extends WebDriverTestCase {
 		waitResponse();
 		click(jq("@button:contains(c1)"));
 		waitResponse();
-		Assert.assertFalse(c1.find(".z-calendar-selected").exists());
-		Assert.assertFalse(jq("$lb1").text().contains(lastMonth));
+		Assertions.assertFalse(c1.find(".z-calendar-selected").exists());
+		Assertions.assertFalse(jq("$lb1").text().contains(lastMonth));
 
 		//go to next month
 		click(rightBtn);
 		waitResponse();
 		click(rightBtn);
 		waitResponse();
-		Assert.assertTrue(cell.hasClass("z-calendar-selected"));
+		Assertions.assertTrue(cell.hasClass("z-calendar-selected"));
 	}
 	@Test
 	public void testBetween() {
@@ -71,12 +72,12 @@ public class B96_ZK_4543Test extends WebDriverTestCase {
 		action.sendKeys(Keys.ARROW_RIGHT).perform();
 		click(jq("@button:contains(c2)"));
 		waitResponse();
-		Assert.assertTrue(jq("$lb2").text().contains("Sep 01"));
+		Assertions.assertTrue(jq("$lb2").text().contains("Sep 01"));
 
 		// go to 202110
 		click(rightBtn);
 		waitResponse();
-		Assert.assertFalse(c2.find(".z-calendar-selected").exists());
+		Assertions.assertFalse(c2.find(".z-calendar-selected").exists());
 	}
 	@Test
 	public void testNoFuture() {
@@ -97,22 +98,22 @@ public class B96_ZK_4543Test extends WebDriverTestCase {
 		waitResponse();
 		click(rightBtn);
 		waitResponse();
-		Assert.assertFalse(c3.find(".z-calendar-selected").exists());
+		Assertions.assertFalse(c3.find(".z-calendar-selected").exists());
 		click(jq("@button:contains(c3)"));
 		waitResponse();
-		Assert.assertFalse(jq("$lb3").text().contains(nextMonth));
+		Assertions.assertFalse(jq("$lb3").text().contains(nextMonth));
 
 		//go to previous month
 		click(leftBtn);
 		waitResponse();
 		click(leftBtn);
 		waitResponse();
-		Assert.assertTrue(cell.hasClass("z-calendar-selected"));
+		Assertions.assertTrue(cell.hasClass("z-calendar-selected"));
 	}
 	@Test
 	public void testNoToday() {
 		connect();
 		JQuery c4 = jq("@calendar:eq(4)");
-		Assert.assertFalse(c4.find(".z-calendar-selected").exists());
+		Assertions.assertFalse(c4.find(".z-calendar-selected").exists());
 	}
 }

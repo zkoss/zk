@@ -11,10 +11,11 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class B85_ZK_3861Test extends WebDriverTestCase {
 
@@ -43,10 +44,10 @@ public class B85_ZK_3861Test extends WebDriverTestCase {
 
 		click(buttons.eq(previousBtnIndex + 1));
 		waitResponse(true);
-		Assert.assertEquals(2, Integer.parseInt(pgiInput.val()));
+		Assertions.assertEquals(2, Integer.parseInt(pgiInput.val()));
 
 		click(buttons.eq(previousBtnIndex));
 		waitResponse(true);
-		Assert.assertEquals(1, Integer.parseInt(pgiInput.val()));
+		Assertions.assertEquals(1, Integer.parseInt(pgiInput.val()));
 	}
 }

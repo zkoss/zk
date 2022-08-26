@@ -11,8 +11,8 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
@@ -29,7 +29,7 @@ public class B86_ZK_4026Test extends ZATSTestCase {
 		btn.click();
 		lbl = da.query("#testLbl");
 		String uuid2 = lbl.getUuid();
-		Assert.assertEquals("The two uuid should be the same:", uuid1, uuid2);
+		Assertions.assertEquals(uuid1, uuid2, "The two uuid should be the same:");
 	}
 
 }

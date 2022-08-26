@@ -11,11 +11,12 @@ Copyright (C) 2014 Potix Corporation. All Rights Reserved.
  */
 package org.zkoss.zktest.zats.zuti.mvvm;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Map;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
 import org.zkoss.zats.mimic.AgentException;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
@@ -25,18 +26,14 @@ import org.zkoss.zats.mimic.impl.OperationAgentBuilder;
 import org.zkoss.zats.mimic.impl.OperationAgentManager;
 import org.zkoss.zats.mimic.impl.au.AuUtility;
 import org.zkoss.zats.mimic.impl.operation.AgentDelegator;
-import org.zkoss.zats.mimic.impl.operation.input.AbstractInputAgentBuilder;
-import org.zkoss.zats.mimic.operation.InputAgent;
 import org.zkoss.zats.mimic.operation.OperationAgent;
-import org.zkoss.zul.Textbox;
-import org.zkoss.zul.impl.InputElement;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.InputEvent;
 import org.zkoss.zk.ui.event.KeyEvent;
 import org.zkoss.zktest.zats.zuti.ZutiBasicTestCase;
-import org.zkoss.zktest.zats.zuti.mvvm.FormValidationTest.TypeInputAgentBuilder.InputAgentImpl;
 import org.zkoss.zktest.zats.zuti.verifier.HierarchyVerifier;
+import org.zkoss.zul.Textbox;
 
 /**
  * @author jumperchen

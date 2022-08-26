@@ -11,10 +11,11 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class Z35_listbox_0005Test extends WebDriverTestCase {
 	@Test
@@ -26,9 +27,9 @@ public class Z35_listbox_0005Test extends WebDriverTestCase {
 		waitResponse();
 		listbody.scrollTop(0);
 		waitResponse();
-		Assert.assertEquals(51, jq(".z-listitem").length());
+		Assertions.assertEquals(51, jq(".z-listitem").length());
 		for (int i = 0; i < jq("@listitem").length(); i++) {
-			Assert.assertTrue(jq("@listitem").eq(i).text().contains(String.valueOf(i)));
+			Assertions.assertTrue(jq("@listitem").eq(i).text().contains(String.valueOf(i)));
 		}
 	}
 }

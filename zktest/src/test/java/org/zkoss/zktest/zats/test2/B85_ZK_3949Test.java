@@ -11,10 +11,10 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 public class B85_ZK_3949Test extends WebDriverTestCase {
 	@Test
@@ -22,6 +22,6 @@ public class B85_ZK_3949Test extends WebDriverTestCase {
 		connect();
 		click(jq("$hidebtn"));
 		waitResponse();
-		Assert.assertFalse(jq("@caption").toWidget().$n("img").exists());
+		Assertions.assertFalse(jq("@caption").toWidget().$n("img").exists());
 	}
 }

@@ -1,12 +1,12 @@
 package org.zkoss.zktest.zats.test2;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class B50_ZK_640Test extends WebDriverTestCase {
 	@Test
@@ -15,7 +15,7 @@ public class B50_ZK_640Test extends WebDriverTestCase {
 		JQuery tbbOne = jq("$tbbOne");
 		JQuery tbbTwo = jq("$tbbTwo");
 
-		assertFalse("no extra space if image only", tbbOne.html().contains("&nbsp;"));
-		assertTrue("space exists between label and image", tbbTwo.html().contains("&nbsp;"));
+		assertFalse(tbbOne.html().contains("&nbsp;"), "no extra space if image only");
+		assertTrue(tbbTwo.html().contains("&nbsp;"), "space exists between label and image");
 	}
 }

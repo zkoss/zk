@@ -13,15 +13,16 @@ package org.zkoss.zktest.zats.test2;
 
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.startsWith;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.util.Collections;
 
 import net.jcip.annotations.NotThreadSafe;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.chrome.ChromeOptions;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -40,12 +41,12 @@ public class B85_ZK_3821Test extends WebDriverTestCase {
 		connect();
 		sleep(1500);
 
-		Assert.assertEquals("de_DE", jq("@label:last").text());
+		Assertions.assertEquals("de_DE", jq("@label:last").text());
 
 		click(jq("@button"));
 		waitResponse();
 
-		Assert.assertThat(
+		assertThat(
 				"The message is still in English!",
 				jq(".z-messagebox > @label").html(),
 				not(startsWith("The resource you request")));

@@ -11,8 +11,8 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
@@ -29,12 +29,12 @@ public class B50_2946917Test extends ZATSTestCase {
 		ComponentAgent main = desktop.query("#main");
 		ComponentAgent textbox = desktop.query("textbox");
 		textbox.type("");
-		Assert.assertEquals("validate 1", main.getLastChild().as(Label.class).getValue());
+		Assertions.assertEquals("validate 1", main.getLastChild().as(Label.class).getValue());
 
 		textbox.type("");
-		Assert.assertEquals("validate 1", main.getLastChild().as(Label.class).getValue());
+		Assertions.assertEquals("validate 1", main.getLastChild().as(Label.class).getValue());
 
 		textbox.type("zk");
-		Assert.assertEquals("validate 2", main.getLastChild().as(Label.class).getValue());
+		Assertions.assertEquals("validate 2", main.getLastChild().as(Label.class).getValue());
 	}
 }

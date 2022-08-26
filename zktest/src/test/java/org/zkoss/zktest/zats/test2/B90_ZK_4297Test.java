@@ -11,11 +11,11 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.support.Color;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -28,7 +28,7 @@ public class B90_ZK_4297Test extends WebDriverTestCase {
 		click(jq("@textbox"));
 		waitResponse();
 
-		Assert.assertNotEquals(
+		Assertions.assertNotEquals(
 			Color.fromString(jq("@listitem.z-listitem-selected").find("@listcell").css("backgroundColor")),
 			Color.fromString(jq("@listitem:eq(0)").find("@listcell").css("backgroundColor"))
 		);

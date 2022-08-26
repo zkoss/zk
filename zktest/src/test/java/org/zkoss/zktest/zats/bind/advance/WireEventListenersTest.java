@@ -11,8 +11,9 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.bind.advance;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zktest.zats.ZATSTestCase;
 
@@ -23,7 +24,7 @@ public class WireEventListenersTest extends ZATSTestCase {
 
 		desktop.query("button").click();
 
-		Assert.assertArrayEquals(
+		Assertions.assertArrayEquals(
 			new String[] {
 				"onClick"
 			},

@@ -1,11 +1,11 @@
 package org.zkoss.zktest.zats.test2;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class B50_3322795Test extends WebDriverTestCase {
 	@Test
@@ -17,16 +17,14 @@ public class B50_3322795Test extends WebDriverTestCase {
 			value += 1;
 			click(ds.toWidget().$n("btn-up"));
 			waitResponse();
-			assertEquals("the value change is 1 each time",
-					(value + ".7"), ds.toWidget().$n("real").get("value"));
+			assertEquals((value + ".7"), ds.toWidget().$n("real").get("value"), "the value change is 1 each time");
 		}
 
 		for (int j = 1; j <= 10; j++) {
 			value -= 1;
 			click(ds.toWidget().$n("btn-down"));
 			waitResponse();
-			assertEquals("the value change is 1 each time",
-					(value + ".7"), ds.toWidget().$n("real").get("value"));
+			assertEquals((value + ".7"), ds.toWidget().$n("real").get("value"), "the value change is 1 each time");
 		}
     }
 }

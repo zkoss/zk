@@ -11,16 +11,17 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 public class B85_ZK_3829Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
 		waitResponse();
-		Assert.assertEquals(1, jq(".z-label[style*=\"color: red\"]:contains(fails2)").length());
-		Assert.assertEquals(2, jq(".z-label[style*=\"color: red\"]:contains(fails)").length());
+		Assertions.assertEquals(1, jq(".z-label[style*=\"color: red\"]:contains(fails2)").length());
+		Assertions.assertEquals(2, jq(".z-label[style*=\"color: red\"]:contains(fails)").length());
 	}
 }

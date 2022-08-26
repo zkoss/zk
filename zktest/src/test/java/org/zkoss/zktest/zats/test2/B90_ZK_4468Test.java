@@ -11,8 +11,8 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zel.ImportHandler;
 
@@ -24,14 +24,14 @@ public class B90_ZK_4468Test {
 	public void testReImportAfterFailedResolve() {
 		ImportHandler importHandler = new ImportHandler();
 		String simpleName = B90_ZK_4468Test.class.getSimpleName();
-		Assert.assertNull(
-				"initially not imported class should resolved to null",
-				importHandler.resolveClass(simpleName));
+		Assertions.assertNull(
+				importHandler.resolveClass(simpleName),
+				"initially not imported class should resolved to null");
 
 		importHandler.importClass(B90_ZK_4468Test.class.getName());
-		Assert.assertEquals(
-				"after importing should be resolved",
+		Assertions.assertEquals(
 				B90_ZK_4468Test.class,
-				importHandler.resolveClass(simpleName));
+				importHandler.resolveClass(simpleName),
+				"after importing should be resolved");
 	}
 }

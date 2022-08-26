@@ -11,12 +11,12 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author rudyhuang
@@ -31,13 +31,13 @@ public class B95_ZK_4453Test extends WebDriverTestCase {
 		waitResponse();
 		sendKeys(intbox, "-1", Keys.TAB);
 		waitResponse();
-		Assert.assertTrue(getZKLog().startsWith("error: "));
+		Assertions.assertTrue(getZKLog().startsWith("error: "));
 		closeZKLog();
 
 		click(intbox);
 		waitResponse();
 		sendKeys(intbox, Keys.BACK_SPACE, Keys.BACK_SPACE, "1", Keys.TAB);
 		waitResponse();
-		Assert.assertFalse(isZKLogAvailable());
+		Assertions.assertFalse(isZKLogAvailable());
 	}
 }

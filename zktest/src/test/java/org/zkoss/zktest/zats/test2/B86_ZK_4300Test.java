@@ -11,14 +11,15 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
-import org.zkoss.zktest.zats.ztl.Widget;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
+import org.zkoss.test.webdriver.ztl.Widget;
 
 /**
  * @author rudyhuang
@@ -59,8 +60,8 @@ public class B86_ZK_4300Test extends WebDriverTestCase {
 		click(datebox.$n("btn"));
 		waitResponse();
 
-		Assert.assertEquals("1900", jq(cal.toWidget().$n("ty")).text());
-		Assert.assertThat(getZKLog(), containsString("1900"));
+		Assertions.assertEquals("1900", jq(cal.toWidget().$n("ty")).text());
+		assertThat(getZKLog(), containsString("1900"));
 		closeZKLog();
 	}
 }

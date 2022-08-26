@@ -11,9 +11,10 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 public class Z35_tabbox_201Test extends WebDriverTestCase {
 	@Test
@@ -27,10 +28,10 @@ public class Z35_tabbox_201Test extends WebDriverTestCase {
 			waitResponse();
 			click(jq(".z-tab").eq(49));
 			waitResponse();
-			Assert.assertFalse(hasError());
+			Assertions.assertFalse(hasError());
 		} catch (Exception e) {
 			e.printStackTrace();
-			Assert.fail();
+			Assertions.fail();
 		}
 	}
 }

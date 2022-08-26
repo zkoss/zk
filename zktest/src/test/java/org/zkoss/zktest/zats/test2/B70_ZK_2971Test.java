@@ -11,12 +11,12 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author rudyhuang
@@ -39,11 +39,11 @@ public class B70_ZK_2971Test extends WebDriverTestCase {
 		}
 		waitResponse();
 		JQuery body = lb.find(".z-listbox-body");
-		Assert.assertEquals(body.scrollHeight() - body.height(), body.scrollTop(), 1);
+		Assertions.assertEquals(body.scrollHeight() - body.height(), body.scrollTop(), 1);
 
 		sendKeys(lb.find(".z-focus-a"), Keys.DOWN);
 		waitResponse();
-		Assert.assertEquals(0, body.scrollTop());
+		Assertions.assertEquals(0, body.scrollTop());
 	}
 
 	@Test
@@ -62,7 +62,7 @@ public class B70_ZK_2971Test extends WebDriverTestCase {
 		sendKeys(lb.find(".z-focus-a"), Keys.chord(Keys.SHIFT, Keys.DOWN));
 		sendKeys(lb.find(".z-focus-a"), Keys.chord(Keys.SHIFT, Keys.DOWN));
 		waitResponse();
-		Assert.assertTrue(body.scrollTop() > scrollTop);
+		Assertions.assertTrue(body.scrollTop() > scrollTop);
 	}
 
 	@Test
@@ -83,7 +83,7 @@ public class B70_ZK_2971Test extends WebDriverTestCase {
 	private void testItemInViewport(JQuery lb, JQuery item) {
 		JQuery jqBody = lb.find(".z-listbox-body");
 		int itemTop = item.positionTop();
-		Assert.assertTrue(itemTop - jqBody.scrollTop() >= 0);
-		Assert.assertTrue(itemTop - jqBody.scrollTop() < jqBody.height());
+		Assertions.assertTrue(itemTop - jqBody.scrollTop() >= 0);
+		Assertions.assertTrue(itemTop - jqBody.scrollTop() < jqBody.height());
 	}
 }

@@ -11,10 +11,10 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -24,14 +24,14 @@ public class B86_ZK_4055Test extends WebDriverTestCase {
 	public void test() {
 		connect();
 
-		Assert.assertTrue(jq("#div1").exists());
-		Assert.assertTrue(jq("#div2").exists());
-		Assert.assertFalse(jq("#div3").exists());
-		Assert.assertTrue(jq("#div4").exists());
-		Assert.assertFalse(jq("#div5").exists());
+		Assertions.assertTrue(jq("#div1").exists());
+		Assertions.assertTrue(jq("#div2").exists());
+		Assertions.assertFalse(jq("#div3").exists());
+		Assertions.assertTrue(jq("#div4").exists());
+		Assertions.assertFalse(jq("#div5").exists());
 
-		Assert.assertTrue("Missing ZK label!", jq("#div1 > span").exists());
-		Assert.assertTrue("Missing ZK label!", jq("#div2 > span").exists());
-		Assert.assertTrue("Missing ZK label!", jq("#div4 > span").exists());
+		Assertions.assertTrue(jq("#div1 > span").exists(), "Missing ZK label!");
+		Assertions.assertTrue(jq("#div2 > span").exists(), "Missing ZK label!");
+		Assertions.assertTrue(jq("#div4 > span").exists(), "Missing ZK label!");
 	}
 }

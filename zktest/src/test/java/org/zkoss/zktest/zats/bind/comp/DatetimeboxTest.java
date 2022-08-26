@@ -13,8 +13,8 @@ package org.zkoss.zktest.zats.bind.comp;
 
 import java.text.SimpleDateFormat;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zktest.zats.ZATSTestCase;
@@ -33,9 +33,9 @@ public class DatetimeboxTest extends ZATSTestCase {
 		final SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm:ss a");
 
 		desktop.query("timebox").type("AM 11:11:11");
-		Assert.assertEquals("11:11:11 AM", timeFormat.format(datebox.getValue()));
+		Assertions.assertEquals("11:11:11 AM", timeFormat.format(datebox.getValue()));
 
 		desktop.query("datebox").type("2021/01/23 PM 06:05:04");
-		Assert.assertEquals("06:05:04 PM", timeFormat.format(timebox.getValue()));
+		Assertions.assertEquals("06:05:04 PM", timeFormat.format(timebox.getValue()));
 	}
 }

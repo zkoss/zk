@@ -12,8 +12,10 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 package org.zkoss.zktest.zats.bind.advance;
 
 import static org.hamcrest.Matchers.greaterThan;
+
 import org.hamcrest.MatcherAssert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
 import org.zkoss.zktest.zats.ZATSTestCase;
 
 public class PerformanceTest extends ZATSTestCase {

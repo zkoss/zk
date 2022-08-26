@@ -11,8 +11,8 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.bind.comp;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.operation.OpenAgent;
@@ -29,9 +29,9 @@ public class ComboboxTest extends ZATSTestCase {
 		final OpenAgent combobox = desktop.query("combobox").as(OpenAgent.class);
 		final Label open = desktop.query("#open").as(Label.class);
 		combobox.open(true);
-		Assert.assertEquals("true", open.getValue());
+		Assertions.assertEquals("true", open.getValue());
 
 		combobox.open(false);
-		Assert.assertEquals("false", open.getValue());
+		Assertions.assertEquals("false", open.getValue());
 	}
 }

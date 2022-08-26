@@ -11,10 +11,11 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class B85_ZK_3756Test extends WebDriverTestCase {
 	@Test
@@ -24,8 +25,8 @@ public class B85_ZK_3756Test extends WebDriverTestCase {
 		waitResponse();
 		JQuery inc1 = jq(".inc .z-label");
 		JQuery inc2 = jq(".inc2 .z-label");
-		Assert.assertEquals("included", inc1.text().trim());
-		Assert.assertEquals("included", inc2.text().trim());
+		Assertions.assertEquals("included", inc1.text().trim());
+		Assertions.assertEquals("included", inc2.text().trim());
 
 	}
 

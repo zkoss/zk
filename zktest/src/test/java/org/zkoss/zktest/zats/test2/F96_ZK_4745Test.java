@@ -13,11 +13,11 @@ package org.zkoss.zktest.zats.test2;
 
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.Element;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.Element;
 
 public class F96_ZK_4745Test extends WebDriverTestCase {
 	@Test
@@ -32,15 +32,15 @@ public class F96_ZK_4745Test extends WebDriverTestCase {
 		Element db3btn = widget("@datebox:eq(2)").$n("btn");
 
 		type(db1real, "民國110/03/13");
-		Assert.assertFalse(hasError());
+		Assertions.assertFalse(hasError());
 		checkDateboxCalendar(db1btn, "3月 民國110", "13");
 
 		type(db2real, "民國前 003-02-18");
-		Assert.assertFalse(hasError());
+		Assertions.assertFalse(hasError());
 		checkDateboxCalendar(db2btn, "2月 民國前3", "18");
 
 		type(db3real, "2022/01/01");
-		Assert.assertFalse(hasError());
+		Assertions.assertFalse(hasError());
 		checkDateboxCalendar(db3btn, "1月 民國111", "1");
 	}
 
@@ -53,15 +53,15 @@ public class F96_ZK_4745Test extends WebDriverTestCase {
 
 		click(jq("@button:eq(0)"));
 		waitResponse();
-		Assert.assertEquals("民國前007/01/01", db1real.get("value"));
-		Assert.assertEquals("民國前 007-01-01", db2real.get("value"));
-		Assert.assertEquals("1905/01/01", db3real.get("value"));
+		Assertions.assertEquals("民國前007/01/01", db1real.get("value"));
+		Assertions.assertEquals("民國前 007-01-01", db2real.get("value"));
+		Assertions.assertEquals("1905/01/01", db3real.get("value"));
 
 		click(jq("@button:eq(1)"));
 		waitResponse();
-		Assert.assertEquals("民國104/01/01", db1real.get("value"));
-		Assert.assertEquals("民國 104-01-01", db2real.get("value"));
-		Assert.assertEquals("2015/01/01", db3real.get("value"));
+		Assertions.assertEquals("民國104/01/01", db1real.get("value"));
+		Assertions.assertEquals("民國 104-01-01", db2real.get("value"));
+		Assertions.assertEquals("2015/01/01", db3real.get("value"));
 	}
 
 	@Test
@@ -71,7 +71,7 @@ public class F96_ZK_4745Test extends WebDriverTestCase {
 		Element db4btn = widget("@datebox:eq(3)").$n("btn");
 
 		type(db4real, "西元 2021-02-03");
-		Assert.assertFalse(hasError());
+		Assertions.assertFalse(hasError());
 		checkDateboxCalendar(db4btn, "2月 2021", "3");
 	}
 
@@ -82,11 +82,11 @@ public class F96_ZK_4745Test extends WebDriverTestCase {
 
 		click(jq("@button:eq(2)"));
 		waitResponse();
-		Assert.assertEquals("西元 1905-01-01", db4real.get("value"));
+		Assertions.assertEquals("西元 1905-01-01", db4real.get("value"));
 
 		click(jq("@button:eq(3)"));
 		waitResponse();
-		Assert.assertEquals("西元 2015-01-01", db4real.get("value"));
+		Assertions.assertEquals("西元 2015-01-01", db4real.get("value"));
 	}
 
 	@Test
@@ -96,7 +96,7 @@ public class F96_ZK_4745Test extends WebDriverTestCase {
 		Element db5btn = widget("@datebox:eq(4)").$n("btn");
 
 		type(db5real, "Before R.O.C. 002-02-07");
-		Assert.assertFalse(hasError());
+		Assertions.assertFalse(hasError());
 		checkDateboxCalendar(db5btn, "Feb Before R.O.C.2", "7");
 	}
 
@@ -107,7 +107,7 @@ public class F96_ZK_4745Test extends WebDriverTestCase {
 
 		click(jq("@button:eq(4)"));
 		waitResponse();
-		Assert.assertEquals("Before R.O.C. 007-01-01", db5real.get("value"));
+		Assertions.assertEquals("Before R.O.C. 007-01-01", db5real.get("value"));
 
 		click(jq("@button:eq(5)"));
 		waitResponse();
@@ -119,8 +119,8 @@ public class F96_ZK_4745Test extends WebDriverTestCase {
 		waitResponse();
 		String calendarTitle = jq(".z-calendar-title").last().text();
 		String currentDay = jq(".z-calendar-selected").last().text();
-		Assert.assertEquals(expectedTitle, calendarTitle);
-		Assert.assertEquals(expectedDay, currentDay);
+		Assertions.assertEquals(expectedTitle, calendarTitle);
+		Assertions.assertEquals(expectedDay, currentDay);
 		click(jq("@label"));
 		waitResponse();
 	}

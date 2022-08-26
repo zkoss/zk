@@ -11,10 +11,10 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -26,10 +26,10 @@ public class F61_ZK_1145Test extends WebDriverTestCase {
 
 		click(jq("@button"));
 		waitResponse();
-		Assert.assertTrue(jq("@notification").isVisible());
+		Assertions.assertTrue(jq("@notification").isVisible());
 
 		click(widget("@notification").$n("cls"));
 		waitResponse();
-		Assert.assertFalse(jq("@notification").isVisible());
+		Assertions.assertFalse(jq("@notification").isVisible());
 	}
 }

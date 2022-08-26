@@ -13,11 +13,11 @@ package org.zkoss.zktest.zats.test2;
 
 import java.util.Collections;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.chrome.ChromeOptions;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -38,12 +38,12 @@ public class B50_3003756Test extends WebDriverTestCase {
 		acceptLang.set("de-DE");
 		connect();
 
-		Assert.assertEquals("35,00", jq("@doublebox").val());
+		Assertions.assertEquals("35,00", jq("@doublebox").val());
 
 		click(jq("@button"));
 		waitResponse();
 
-		Assert.assertEquals("100,00", jq("@doublebox").val());
+		Assertions.assertEquals("100,00", jq("@doublebox").val());
 	}
 
 	@Test
@@ -51,11 +51,11 @@ public class B50_3003756Test extends WebDriverTestCase {
 		acceptLang.set("en-US");
 		connect();
 
-		Assert.assertEquals("35.00", jq("@doublebox").val());
+		Assertions.assertEquals("35.00", jq("@doublebox").val());
 
 		click(jq("@button"));
 		waitResponse();
 
-		Assert.assertEquals("100.00", jq("@doublebox").val());
+		Assertions.assertEquals("100.00", jq("@doublebox").val());
 	}
 }

@@ -11,11 +11,11 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -43,7 +43,7 @@ public class F90_ZK_4380_mvvmTest extends WebDriverTestCase {
 		click(jq("@button"));
 		waitResponse();
 
-		Assert.assertEquals("Asia / Java, Julia", getZKLog());
+		Assertions.assertEquals("Asia / Java, Julia", getZKLog());
 	}
 
 	@Test
@@ -64,6 +64,6 @@ public class F90_ZK_4380_mvvmTest extends WebDriverTestCase {
 		getActions().sendKeys(Keys.BACK_SPACE, "A").perform();
 		waitResponse();
 
-		Assert.assertEquals("Asia", jq(".z-searchbox-selected").text());
+		Assertions.assertEquals("Asia", jq(".z-searchbox-selected").text());
 	}
 }

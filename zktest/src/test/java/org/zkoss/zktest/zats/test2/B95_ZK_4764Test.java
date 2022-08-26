@@ -11,13 +11,10 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.wcag.WcagTestOnly;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author jameschu
@@ -30,7 +27,7 @@ public class B95_ZK_4764Test extends WebDriverTestCase {
 		connect();
 		waitResponse();
 		int $btn2 = jq("$btn2").width();
-		Assert.assertEquals(jq("$btn1").width(), $btn2, 1);
-		Assert.assertEquals($btn2, jq("$btn3").width(), 1);
+		Assertions.assertEquals(jq("$btn1").width(), $btn2, 1);
+		Assertions.assertEquals($btn2, jq("$btn3").width(), 1);
 	}
 }

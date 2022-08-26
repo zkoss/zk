@@ -13,8 +13,8 @@ package org.zkoss.zktest.zats.test2;
 
 import java.util.Map;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
@@ -39,19 +39,19 @@ public class B80_ZK_1987Test extends ZATSTestCase {
 		final Label result = desktop.query("window #result").as(Label.class);
 		final ComponentAgent comboAgent = desktop.query("combobox");
 		final Combobox combobox = comboAgent.as(Combobox.class);
-		Assert.assertEquals(1, combobox.getSelectedIndex());
+		Assertions.assertEquals(1, combobox.getSelectedIndex());
 
 		// should fire onChange to trigger save
 		fireOnChange(comboAgent, "bar", "foo");
 		comboAgent.getChild(2).select();
-		Assert.assertEquals("Element(id=3, label=bar)", result.getValue());
+		Assertions.assertEquals("Element(id=3, label=bar)", result.getValue());
 		fireOnChange(comboAgent, "foo", "bar");
 		comboAgent.getChild(1).select();
-		Assert.assertEquals("Element(id=2, label=foo)", result.getValue());
+		Assertions.assertEquals("Element(id=2, label=foo)", result.getValue());
 		comboAgent.getChild(0).select();
-		Assert.assertEquals("Element(id=1, label=foo)", result.getValue());
+		Assertions.assertEquals("Element(id=1, label=foo)", result.getValue());
 		comboAgent.getChild(1).select();
-		Assert.assertEquals("Element(id=2, label=foo)", result.getValue());
+		Assertions.assertEquals("Element(id=2, label=foo)", result.getValue());
 	}
 
 	private void fireOnChange(ComponentAgent target, String newVal, String oldVal) {

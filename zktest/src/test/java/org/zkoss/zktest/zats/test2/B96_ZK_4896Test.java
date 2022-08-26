@@ -14,8 +14,8 @@ package org.zkoss.zktest.zats.test2;
 import static org.hamcrest.Matchers.startsWith;
 
 import org.hamcrest.MatcherAssert;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zats.ZatsException;
 import org.zkoss.zktest.zats.ZATSTestCase;
@@ -26,7 +26,7 @@ import org.zkoss.zktest.zats.ZATSTestCase;
 public class B96_ZK_4896Test extends ZATSTestCase {
 	@Test
 	public void test() {
-		Throwable t = Assert.assertThrows(ZatsException.class, this::connect);
+		Throwable t = Assertions.assertThrows(ZatsException.class, this::connect);
 		MatcherAssert.assertThat(t.getMessage(), startsWith("Unsupported parent for when"));
 	}
 }

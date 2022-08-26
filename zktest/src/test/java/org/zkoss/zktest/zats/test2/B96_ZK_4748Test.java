@@ -11,11 +11,12 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.interactions.Actions;
-import org.zkoss.zktest.zats.WebDriverTestCase;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 public class B96_ZK_4748Test extends WebDriverTestCase {
 	@Test
@@ -28,12 +29,12 @@ public class B96_ZK_4748Test extends WebDriverTestCase {
 		waitResponse();
 		act.sendKeys(Keys.TAB).perform();
 		waitResponse();
-		Assert.assertEquals("focus on 2nd textbox", getZKLog());
-		Assert.assertTrue(jq(".z-bandbox-open").exists());
+		Assertions.assertEquals("focus on 2nd textbox", getZKLog());
+		Assertions.assertTrue(jq(".z-bandbox-open").exists());
 
 		act.sendKeys(Keys.TAB).perform();
 		waitResponse();
-		Assert.assertFalse(jq(".z-bandbox-open").exists());
+		Assertions.assertFalse(jq(".z-bandbox-open").exists());
 
 		click(jq(".z-bandbox-button:eq(1)"));
 		waitResponse();
@@ -41,20 +42,20 @@ public class B96_ZK_4748Test extends WebDriverTestCase {
 		waitResponse();
 		act.sendKeys(Keys.TAB).perform();
 		waitResponse();
-		Assert.assertFalse(jq(".z-bandbox-open").exists());
+		Assertions.assertFalse(jq(".z-bandbox-open").exists());
 
 		click(jq(".z-bandbox-button:eq(2)"));
 		waitResponse(true);
-		Assert.assertTrue(jq("@treecell:contains(level 1)").isVisible());
-		Assert.assertTrue(jq(".z-tree-close").exists());
+		Assertions.assertTrue(jq("@treecell:contains(level 1)").isVisible());
+		Assertions.assertTrue(jq(".z-tree-close").exists());
 		click(jq(".z-tree-icon"));
 		waitResponse();
-		Assert.assertTrue(jq(".z-tree-open").exists());
-		Assert.assertTrue(jq("@treecell:contains(level 2)").isVisible());
-		Assert.assertTrue(jq(".z-bandbox-open").exists());
+		Assertions.assertTrue(jq(".z-tree-open").exists());
+		Assertions.assertTrue(jq("@treecell:contains(level 2)").isVisible());
+		Assertions.assertTrue(jq(".z-bandbox-open").exists());
 
 		act.sendKeys(Keys.TAB).perform();
 		waitResponse();
-		Assert.assertFalse(jq(".z-bandbox-open").exists());
+		Assertions.assertFalse(jq(".z-bandbox-open").exists());
 	}
 }

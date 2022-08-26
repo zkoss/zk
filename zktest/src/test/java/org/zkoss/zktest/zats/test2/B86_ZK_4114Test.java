@@ -11,17 +11,17 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 public class B86_ZK_4114Test extends WebDriverTestCase {
 
 	@Test
 	public void test() {
 		connect();
-		Assert.assertEquals(jq(".z-orgnode:contains(Item1)").css("fontFamily"),
+		Assertions.assertEquals(jq(".z-orgnode:contains(Item1)").css("fontFamily"),
 				jq(".z-label:contains(Item2)").css("fontFamily"));
 	}
 }

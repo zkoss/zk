@@ -11,21 +11,22 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 public class B50_ZK_620aTest extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
 		waitResponse();
-		Assert.assertFalse(isZKLogAvailable());
+		Assertions.assertFalse(isZKLogAvailable());
 		click(jq("@tab:contains(Discovery)"));
 		waitResponse();
 		String zklog = getZKLog();
-		Assert.assertTrue(zklog.contains("beforeSize"));
-		Assert.assertTrue(zklog.contains("onFitSize"));
-		Assert.assertTrue(zklog.contains("onSize"));
+		Assertions.assertTrue(zklog.contains("beforeSize"));
+		Assertions.assertTrue(zklog.contains("onFitSize"));
+		Assertions.assertTrue(zklog.contains("onSize"));
 	}
 }

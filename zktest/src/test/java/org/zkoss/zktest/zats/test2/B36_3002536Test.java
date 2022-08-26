@@ -13,11 +13,11 @@ package org.zkoss.zktest.zats.test2;
 
 import java.util.Collections;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.chrome.ChromeOptions;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -41,8 +41,8 @@ public class B36_3002536Test extends WebDriverTestCase {
 		click(jq(".z-calendar-cell:contains(avr.)"));
 		waitResponse(true);
 
-		Assert.assertTrue(
-				"the date should be selected",
-				jq(".z-calendar-cell.z-calendar-selected").exists());
+		Assertions.assertTrue(
+				jq(".z-calendar-cell.z-calendar-selected").exists(),
+				"the date should be selected");
 	}
 }

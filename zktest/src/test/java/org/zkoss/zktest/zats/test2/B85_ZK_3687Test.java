@@ -11,10 +11,10 @@ Copyright (C) 2017 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author jameschu
@@ -24,14 +24,14 @@ public class B85_ZK_3687Test extends WebDriverTestCase {
 	public void test() throws Exception {
 		connect();
 		waitResponse();
-		Assert.assertEquals("loadedScript executed\nafterLoad: loadedScript", getZKLog());
+		Assertions.assertEquals("loadedScript executed\nafterLoad: loadedScript", getZKLog());
 		closeZKLog();
 		click(jq("@button").eq(0));
 		waitResponse();
-		Assert.assertEquals(true, getZKLog().contains("isLoaded"));
+		Assertions.assertEquals(true, getZKLog().contains("isLoaded"));
 		closeZKLog();
 		click(jq("@button").eq(1));
 		waitResponse();
-		Assert.assertEquals(false, isZKLogAvailable());
+		Assertions.assertEquals(false, isZKLogAvailable());
 	}
 }

@@ -11,19 +11,18 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.wcag.WcagTestOnly;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author jameschu
  */
 
-@Category(WcagTestOnly.class)
+@Tag("WcagTestOnly")
 public class B96_ZK_4813Test extends WebDriverTestCase {
 
 	@Test
@@ -33,10 +32,10 @@ public class B96_ZK_4813Test extends WebDriverTestCase {
 		JQuery jqSplitter = jq(".z-splitter");
 		click(jqSplitter);
 		waitResponse();
-		Assert.assertEquals("0", jqSplitter.attr("aria-valuenow"));
+		Assertions.assertEquals("0", jqSplitter.attr("aria-valuenow"));
 		jqSplitter = jq(".z-splitlayout-splitter");
 		click(jqSplitter);
 		waitResponse();
-		Assert.assertEquals("0", jqSplitter.attr("aria-valuenow"));
+		Assertions.assertEquals("0", jqSplitter.attr("aria-valuenow"));
 	}
 }

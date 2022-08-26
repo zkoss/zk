@@ -11,17 +11,19 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Test;
-import org.zkoss.zel.PropertyNotFoundException;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
+import org.junit.jupiter.api.Test;
+
 import org.zkoss.zktest.zats.ZATSTestCase;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 /**
  * @author sefi
  */
 public class B80_ZK_3182Test extends ZATSTestCase {
-	@Test public void test() {
+	@Test
+	public void test() {
 		try {
 			connect();
 		} catch (Exception e){

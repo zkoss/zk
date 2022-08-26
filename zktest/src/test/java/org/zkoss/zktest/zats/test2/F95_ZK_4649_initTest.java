@@ -11,7 +11,8 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zats.ZatsException;
 import org.zkoss.zktest.zats.ZATSTestCase;
@@ -20,8 +21,8 @@ import org.zkoss.zktest.zats.ZATSTestCase;
  * @author rudyhuang
  */
 public class F95_ZK_4649_initTest extends ZATSTestCase {
-	@Test(expected = ZatsException.class)
+	@Test
 	public void testShouldErrorIfSrclangIsEmpty() {
-		connect();
+		Assertions.assertThrows(ZatsException.class, () -> connect());
 	}
 }

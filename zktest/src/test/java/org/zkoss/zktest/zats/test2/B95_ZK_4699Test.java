@@ -11,10 +11,11 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class B95_ZK_4699Test extends WebDriverTestCase {
 	@Test
@@ -25,10 +26,13 @@ public class B95_ZK_4699Test extends WebDriverTestCase {
 
 		click(listitems.eq(0));
 		waitResponse();
-		Assert.assertTrue("first listitem should have focus style", listitems.eq(0).hasClass("z-listitem-focus"));
+		Assertions.assertTrue(listitems.eq(0).hasClass("z-listitem-focus"),
+				"first listitem should have focus style");
 		click(textboxs.eq(3));
 		waitResponse();
-		Assert.assertFalse("first listitem should not have focus style", listitems.eq(0).hasClass("z-listitem-focus"));
-		Assert.assertTrue("4th textbox should be focused", textboxs.eq(3).is(":focus"));
+		Assertions.assertFalse(listitems.eq(0).hasClass("z-listitem-focus"),
+				"first listitem should not have focus style");
+		Assertions.assertTrue(textboxs.eq(3).is(":focus"),
+				"4th textbox should be focused");
 	}
 }

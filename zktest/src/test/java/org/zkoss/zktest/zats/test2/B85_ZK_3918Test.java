@@ -11,10 +11,10 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 public class B85_ZK_3918Test extends WebDriverTestCase {
 	@Test
@@ -34,20 +34,20 @@ public class B85_ZK_3918Test extends WebDriverTestCase {
 		selectAll();
 		type(jq(".z-colorpalette-input"), "@GHIJKL");
 		waitResponse();
-		Assert.assertEquals("", jq(".z-colorpalette-input").val());
+		Assertions.assertEquals("", jq(".z-colorpalette-input").val());
 		
 		click(jq(".z-colorpalette-input"));
 		selectAll();
 		type(jq(".z-colorpalette-input"), "#123ABC");
 		waitResponse();
-		Assert.assertEquals("#123ABC", jq(".z-colorpalette-input").val());
+		Assertions.assertEquals("#123ABC", jq(".z-colorpalette-input").val());
 		
 		click(jq(".z-colorpalette-input"));
 		selectAll();
 		cut();
 		waitResponse();
-		Assert.assertEquals("", jq(".z-colorpalette-input").val());
+		Assertions.assertEquals("", jq(".z-colorpalette-input").val());
 		paste();
-		Assert.assertEquals("#123ABC", jq(".z-colorpalette-input").val());
+		Assertions.assertEquals("#123ABC", jq(".z-colorpalette-input").val());
 	}
 }

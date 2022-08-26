@@ -11,10 +11,11 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class B96_ZK_4888Test extends WebDriverTestCase {
 	private static final int DRAGGING_THRESHOLD = 5;
@@ -31,7 +32,7 @@ public class B96_ZK_4888Test extends WebDriverTestCase {
 		click(jq("@button:contains(Refresh)"));
 		waitResponse();
 		for(int i = 0;i < 6; i++) {
-			Assert.assertEquals(jq("@listheader").eq(i).width(), jq("@listitem:eq(0) @listcell").eq(i).width(), 1);
+			Assertions.assertEquals(jq("@listheader").eq(i).width(), jq("@listitem:eq(0) @listcell").eq(i).width(), 1);
 		}
 	}
 

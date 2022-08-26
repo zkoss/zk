@@ -11,26 +11,26 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.Collections;
 
-import org.junit.Assert;
-import org.junit.ClassRule;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.touch.TouchActions;
 
-import org.zkoss.zktest.zats.ExternalZkXml;
-import org.zkoss.zktest.zats.ForkJVMTestOnly;
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.Element;
+import org.zkoss.test.webdriver.ExternalZkXml;
+import org.zkoss.test.webdriver.ForkJVMTestOnly;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.Element;
 
 /**
  * @author rudyhuang
  */
-@Category(ForkJVMTestOnly.class)
+@ForkJVMTestOnly
 public class B70_ZK_2351Test extends WebDriverTestCase {
-	@ClassRule
+	@RegisterExtension
 	public static final ExternalZkXml CONFIG = new ExternalZkXml("/test2/enable-tablet-ui-zk.xml");
 
 	@Override
@@ -50,7 +50,7 @@ public class B70_ZK_2351Test extends WebDriverTestCase {
 		waitResponse();
 		touchActions.singleTap(toElement(btnUp)).perform();
 		waitResponse();
-		Assert.assertEquals("2", jq("@doublespinner:eq(0) input").val());
+		assertEquals("2", jq("@doublespinner:eq(0) input").val());
 
 		Element btnDown = widget("@doublespinner:eq(0)").$n("btn-down");
 		touchActions.singleTap(toElement(btnDown)).perform();
@@ -59,10 +59,10 @@ public class B70_ZK_2351Test extends WebDriverTestCase {
 		waitResponse();
 		touchActions.singleTap(toElement(btnDown)).perform();
 		waitResponse();
-		Assert.assertEquals("-1.0", jq("@doublespinner:eq(1) input").val());
+		assertEquals("-1.0", jq("@doublespinner:eq(1) input").val());
 
 		click(jq("@button"));
 		waitResponse();
-		Assert.assertEquals("1.1", jq("@doublespinner:eq(1) input").val());
+		assertEquals("1.1", jq("@doublespinner:eq(1) input").val());
 	}
 }

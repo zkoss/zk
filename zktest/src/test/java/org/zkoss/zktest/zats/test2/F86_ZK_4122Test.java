@@ -11,11 +11,11 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class F86_ZK_4122Test extends WebDriverTestCase {
 	private final static String orgchildrenClass = ".z-orgchildren";
@@ -25,36 +25,36 @@ public class F86_ZK_4122Test extends WebDriverTestCase {
 		connect();
 
 		JQuery orgchildren = findOrgitem("Item1").find(orgchildrenClass);
-		Assert.assertFalse(orgchildren.children().exists());
+		Assertions.assertFalse(orgchildren.children().exists());
 
 		click(findButton("appendOrgitem"));
 		waitResponse();
 		click(findButton("toggleItem1"));
 		waitResponse();
-		Assert.assertEquals(3, orgchildren.children().length());
+		Assertions.assertEquals(3, orgchildren.children().length());
 
 		JQuery item2 = findOrgitem("Item2");
 		orgchildren = item2.find(orgchildrenClass);
-		Assert.assertFalse(orgchildren.children().exists());
+		Assertions.assertFalse(orgchildren.children().exists());
 
 		JQuery icon = item2.find(".z-orgnode-icon");
 		click(icon);
 		waitResponse();
-		Assert.assertEquals(2, orgchildren.children().length());
+		Assertions.assertEquals(2, orgchildren.children().length());
 
 		click(icon);
 		waitResponse();
-		Assert.assertEquals(2, orgchildren.children().length());
-		Assert.assertFalse(orgchildren.isVisible());
+		Assertions.assertEquals(2, orgchildren.children().length());
+		Assertions.assertFalse(orgchildren.isVisible());
 
 		click(findButton("appendOrgchildren"));
 		waitResponse();
 		orgchildren = findOrgitem("Item5").find(orgchildrenClass);
-		Assert.assertFalse(orgchildren.children().exists());
+		Assertions.assertFalse(orgchildren.children().exists());
 
 		click(findButton("toggleItem5"));
 		waitResponse();
-		Assert.assertEquals(2, orgchildren.children().length());
+		Assertions.assertEquals(2, orgchildren.children().length());
 	}
 
 	private JQuery findOrgitem(String label) {

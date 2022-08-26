@@ -13,8 +13,8 @@ package org.zkoss.zktest.zats.bind.shadow;
 
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zats.ZatsException;
 import org.zkoss.zats.mimic.ComponentAgent;
@@ -29,30 +29,30 @@ public class ForeachTest extends ZATSTestCase {
 	public void testItems() {
 		final DesktopAgent desktop = connect("/bind/shadow/foreach-items.zul");
 		final List<ComponentAgent> navitems = desktop.queryAll("#navbar > navitem");
-		Assert.assertEquals(6, navitems.size());
+		Assertions.assertEquals(6, navitems.size());
 	}
 
 	@Test
 	public void testNumbers() {
 		final DesktopAgent desktop = connect("/bind/shadow/foreach-numbers.zul");
 		final ComponentAgent multiplicationTable = desktop.query("#multiplicationTable");
-		Assert.assertEquals(5, multiplicationTable.queryAll("vlayout").size());
-		Assert.assertEquals(50, multiplicationTable.queryAll("label").size());
+		Assertions.assertEquals(5, multiplicationTable.queryAll("vlayout").size());
+		Assertions.assertEquals(50, multiplicationTable.queryAll("label").size());
 	}
 
 	@Test
 	public void testNumbersStepMinus() {
-		Throwable t = Assert.assertThrows(ZatsException.class, () -> {
+		Throwable t = Assertions.assertThrows(ZatsException.class, () -> {
 			connect("/bind/shadow/foreach-numbers-step-minus.zul");
 		});
-		Assert.assertEquals(IllegalArgumentException.class, t.getCause().getClass());
+		Assertions.assertEquals(IllegalArgumentException.class, t.getCause().getClass());
 	}
 
 	@Test
 	public void testNumbersReverse() {
 		final DesktopAgent desktop = connect("/bind/shadow/foreach-numbers-reverse.zul");
 		final ComponentAgent multiplicationTable = desktop.query("#multiplicationTable");
-		Assert.assertEquals(5, multiplicationTable.queryAll("vlayout").size());
-		Assert.assertEquals(0, multiplicationTable.queryAll("label").size());
+		Assertions.assertEquals(5, multiplicationTable.queryAll("vlayout").size());
+		Assertions.assertEquals(0, multiplicationTable.queryAll("label").size());
 	}
 }

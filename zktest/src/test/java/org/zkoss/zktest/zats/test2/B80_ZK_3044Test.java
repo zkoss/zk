@@ -11,7 +11,7 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.awt.image.RenderedImage;
 import java.io.File;
@@ -24,21 +24,23 @@ import java.util.Locale;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
 import org.zkoss.image.AImage;
 import org.zkoss.image.Image;
 import org.zkoss.image.encoder.ImageEncoder;
 import org.zkoss.image.encoder.ImageEncoders;
 import org.zkoss.zul.Intbox;
 import org.zkoss.zul.Listcell;
-import org.zkoss.zul.Timebox;
 import org.zkoss.zul.Popup;
+import org.zkoss.zul.Timebox;
 
 /**
  * @author Sefi
  */
 public class B80_ZK_3044Test {
-    @Test public void testXulElement() {
+    @Test
+	public void testXulElement() {
         Timebox d = new Timebox();
         Popup popup = new Popup();
         String uuidstr = "uuid(" + popup.getUuid() + ")";

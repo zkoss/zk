@@ -11,11 +11,11 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author jameschu
@@ -30,7 +30,7 @@ public class B90_ZK_4443Test extends WebDriverTestCase {
 
 		for (int i = 0; i < 3; i++ ) {
 			int colWd = cols.eq(i).width();
-			Assert.assertEquals(auxheads.eq(i).width(), colWd, 2);
+			Assertions.assertEquals(auxheads.eq(i).width(), colWd, 2);
 			wds[i] = colWd;
 		}
 
@@ -38,13 +38,13 @@ public class B90_ZK_4443Test extends WebDriverTestCase {
 		waitResponse();
 
 		for (int i = 0; i < 3; i++ )
-			Assert.assertEquals(wds[i], cols.eq(i).width(), 2);
+			Assertions.assertEquals(wds[i], cols.eq(i).width(), 2);
 
 		click(jq("$movBtn"));
 		waitResponse();
 
 		auxheads = jq("$b").children();
 		for (int i = 0; i < 3; i++ )
-			Assert.assertEquals(auxheads.eq(i).width(), cols.eq(i).width(), 2);
+			Assertions.assertEquals(auxheads.eq(i).width(), cols.eq(i).width(), 2);
 	}
 }

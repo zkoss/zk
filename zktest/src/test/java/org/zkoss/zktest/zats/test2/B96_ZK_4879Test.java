@@ -11,14 +11,14 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.wcag.WcagTestOnly;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 
-@Category(WcagTestOnly.class)
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
+
+@Tag("WcagTestOnly")
 public class B96_ZK_4879Test extends WebDriverTestCase {
 	@Test
 	public void test() {
@@ -28,18 +28,23 @@ public class B96_ZK_4879Test extends WebDriverTestCase {
 
 		click(navs.eq(0));
 		waitResponse(true);
-		Assert.assertTrue("the focus shall stay at the nav you clicked", navs.eq(0).find(menuitemSelector).is(":focus"));
+		Assertions.assertTrue(navs.eq(0).find(menuitemSelector).is(":focus"),
+				"the focus shall stay at the nav you clicked");
 
 		click(navs.eq(1));
 		waitResponse(true);
-		Assert.assertTrue("the focus shall move to the nav you clicked", navs.eq(1).find(menuitemSelector).is(":focus"));
+		Assertions.assertTrue(navs.eq(1).find(menuitemSelector).is(":focus"),
+				"the focus shall move to the nav you clicked");
 
 		click(navs.eq(2));
 		waitResponse(true);
-		Assert.assertTrue("the focus shall move to the navitem inside", jq("@navitem").find(menuitemSelector).is(":focus"));
+		Assertions.assertTrue(
+				jq("@navitem").find(menuitemSelector).is(":focus"),
+				"the focus shall move to the navitem inside");
 
 		click(navs.eq(3));
 		waitResponse(true);
-		Assert.assertTrue("the focus shall move to the nav you clicked", navs.eq(3).find(menuitemSelector).is(":focus"));
+		Assertions.assertTrue(navs.eq(3).find(menuitemSelector).is(":focus"),
+				"the focus shall move to the nav you clicked");
 	}
 }

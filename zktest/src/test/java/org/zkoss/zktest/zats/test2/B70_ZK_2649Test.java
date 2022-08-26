@@ -11,10 +11,10 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -30,7 +30,7 @@ public class B70_ZK_2649Test extends WebDriverTestCase {
 		connect();
 		sleep(1000);
 
-		Assert.assertEquals(
+		Assertions.assertEquals(
 				"If you can see this, everything runs well.",
 				trim(jq("@label").text()));
 	}

@@ -13,8 +13,8 @@ package org.zkoss.zktest.zats.test2;
 
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zktest.zats.ZATSTestCase;
@@ -28,7 +28,7 @@ public class B95_ZK_4698Test extends ZATSTestCase {
 		DesktopAgent desktop = connect();
 		desktop.query("button").click();
 		List<String> zklog = desktop.getZkLog();
-		Assert.assertEquals(1, zklog.size());
-		Assert.assertEquals("myParam = my parameter value", zklog.get(0));
+		Assertions.assertEquals(1, zklog.size());
+		Assertions.assertEquals("myParam = my parameter value", zklog.get(0));
 	}
 }

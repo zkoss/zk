@@ -11,9 +11,10 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 public class F86_ZK_4111Test extends WebDriverTestCase {
 	@Test
@@ -43,29 +44,29 @@ public class F86_ZK_4111Test extends WebDriverTestCase {
 		checkAll("null", "autocorrect");
 		checkAll("null", "ccc");
 		//test String input
-		Assert.assertEquals("off", jq("$db > .z-datebox-input").attr("autocorrect"));
-		Assert.assertEquals("aa", jq("$db > .z-datebox-input").attr("aaa"));
+		Assertions.assertEquals("off", jq("$db > .z-datebox-input").attr("autocorrect"));
+		Assertions.assertEquals("aa", jq("$db > .z-datebox-input").attr("aaa"));
 		click(jq("$btnC"));
 		waitResponse();
-		Assert.assertEquals("true", jq("$db > .z-datebox-input").attr("spellcheck"));
+		Assertions.assertEquals("true", jq("$db > .z-datebox-input").attr("spellcheck"));
 		click(jq("$btnM"));
 		waitResponse();
-		Assert.assertEquals("true", jq("$bb > .z-bandbox-input").attr("spellcheck"));
-		Assert.assertEquals("ab", jq("$bb > .z-bandbox-input").attr("ab"));
+		Assertions.assertEquals("true", jq("$bb > .z-bandbox-input").attr("spellcheck"));
+		Assertions.assertEquals("ab", jq("$bb > .z-bandbox-input").attr("ab"));
 	}
 	
 	private void checkAll(String expected, String attrName) {
-		Assert.assertEquals(expected, jq(".z-bandbox-input").attr(attrName));
-		Assert.assertEquals(expected, jq(".z-combobox-input").attr(attrName));
-		Assert.assertEquals(expected, jq(".z-textbox").attr(attrName));
-		Assert.assertEquals(expected, jq(".z-datebox-input").attr(attrName));
-		Assert.assertEquals(expected, jq("$tb > .z-timebox-input").attr(attrName));
-		Assert.assertEquals(expected, jq(".z-timepicker-input").attr(attrName));
-		Assert.assertEquals(expected, jq(".z-decimalbox").attr(attrName));
-		Assert.assertEquals(expected, jq(".z-doublebox").attr(attrName));
-		Assert.assertEquals(expected, jq(".z-doublespinner-input").attr(attrName));
-		Assert.assertEquals(expected, jq(".z-bandbox-input").attr(attrName));
-		Assert.assertEquals(expected, jq(".z-intbox").attr(attrName));
-		Assert.assertEquals(expected, jq(".z-spinner-input").attr(attrName));
+		Assertions.assertEquals(expected, jq(".z-bandbox-input").attr(attrName));
+		Assertions.assertEquals(expected, jq(".z-combobox-input").attr(attrName));
+		Assertions.assertEquals(expected, jq(".z-textbox").attr(attrName));
+		Assertions.assertEquals(expected, jq(".z-datebox-input").attr(attrName));
+		Assertions.assertEquals(expected, jq("$tb > .z-timebox-input").attr(attrName));
+		Assertions.assertEquals(expected, jq(".z-timepicker-input").attr(attrName));
+		Assertions.assertEquals(expected, jq(".z-decimalbox").attr(attrName));
+		Assertions.assertEquals(expected, jq(".z-doublebox").attr(attrName));
+		Assertions.assertEquals(expected, jq(".z-doublespinner-input").attr(attrName));
+		Assertions.assertEquals(expected, jq(".z-bandbox-input").attr(attrName));
+		Assertions.assertEquals(expected, jq(".z-intbox").attr(attrName));
+		Assertions.assertEquals(expected, jq(".z-spinner-input").attr(attrName));
 	}
 }

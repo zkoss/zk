@@ -11,17 +11,18 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 public class B85_ZK_3895Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
 		waitResponse();
-		Assert.assertEquals("true", jq(".z-label").eq(10).text());
-		Assert.assertEquals("true", jq(".z-label").eq(13).text());
-		Assert.assertEquals("Tabbox1 is right: true\nTabbox2 is left: true", getZKLog());
+		Assertions.assertEquals("true", jq(".z-label").eq(10).text());
+		Assertions.assertEquals("true", jq(".z-label").eq(13).text());
+		Assertions.assertEquals("Tabbox1 is right: true\nTabbox2 is left: true", getZKLog());
 	}
 }

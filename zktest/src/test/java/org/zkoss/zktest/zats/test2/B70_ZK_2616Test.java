@@ -1,11 +1,11 @@
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriverException;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class B70_ZK_2616Test extends WebDriverTestCase {
 	@Test
@@ -22,6 +22,6 @@ public class B70_ZK_2616Test extends WebDriverTestCase {
 		sleep(2000);
 		waitResponse();
 		JQuery window = jq(".z-window-header");
-		Assert.assertTrue(!window.exists() || window.text().equals("Session Timeout"));
+		Assertions.assertTrue(!window.exists() || window.text().equals("Session Timeout"));
 	}
 }

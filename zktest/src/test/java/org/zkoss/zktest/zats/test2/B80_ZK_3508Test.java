@@ -11,23 +11,13 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import java.io.*;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
 
-import org.junit.Assert;
-import org.junit.Test;
+import java.io.IOException;
 
-import org.zkoss.zats.mimic.ComponentAgent;
-import org.zkoss.zats.mimic.DesktopAgent;
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zkmax.zul.Chosenbox;
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ZATSTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
-import org.zkoss.zul.Button;
-import org.zkoss.zul.Div;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotSame;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * 

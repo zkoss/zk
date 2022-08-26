@@ -13,8 +13,8 @@ package org.zkoss.zktest.zats.bind.comp;
 
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
@@ -34,14 +34,14 @@ public class TreeTest extends ZATSTestCase {
 		final Label selectedLabel = desktop.query("#selectedLabel").as(Label.class);
 
 		treeitem.get(1).select();
-		Assert.assertEquals("Root.1", selectedLabel.getValue());
+		Assertions.assertEquals("Root.1", selectedLabel.getValue());
 		treeitem.get(0).select();
-		Assert.assertEquals("Root.0", selectedLabel.getValue());
+		Assertions.assertEquals("Root.0", selectedLabel.getValue());
 
-		Assert.assertFalse(treeitem.get(0).as(Treeitem.class).isOpen());
-		Assert.assertFalse(treeitem.get(1).as(Treeitem.class).isOpen());
+		Assertions.assertFalse(treeitem.get(0).as(Treeitem.class).isOpen());
+		Assertions.assertFalse(treeitem.get(1).as(Treeitem.class).isOpen());
 		treeitem.get(0).as(OpenAgent.class).open(true);
-		Assert.assertTrue(treeitem.get(0).as(Treeitem.class).isOpen());
-		Assert.assertTrue(treeitem.get(1).as(Treeitem.class).isOpen());
+		Assertions.assertTrue(treeitem.get(0).as(Treeitem.class).isOpen());
+		Assertions.assertTrue(treeitem.get(1).as(Treeitem.class).isOpen());
 	}
 }

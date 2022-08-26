@@ -1,18 +1,15 @@
 package org.zkoss.zktest.zats.test2;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
-import org.zkoss.zats.mimic.operation.PagingAgent;
 import org.zkoss.zktest.zats.ZATSTestCase;
 import org.zkoss.zul.Group;
-import org.zkoss.zul.Groupfoot;
 import org.zkoss.zul.Label;
 
 public class B70_ZK_2555Test extends ZATSTestCase {

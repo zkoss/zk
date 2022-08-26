@@ -11,10 +11,11 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.bind.databinding.collection;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class Collection_template_dependenceTest extends WebDriverTestCase {
 	@Test
@@ -42,8 +43,8 @@ public class Collection_template_dependenceTest extends WebDriverTestCase {
 	private void checkTemplateDisplay(String[] expectedItemName, String[] expectedTemplateName) {
 		JQuery rows = jq(".z-row");
 		for (int i = 0; i < 5; i++) {
-			Assert.assertEquals(expectedItemName[i], rows.eq(i).find(".z-row-content:eq(0)").text());
-			Assert.assertEquals(expectedTemplateName[i], rows.eq(i).find(".z-row-content:eq(1)").text());
+			Assertions.assertEquals(expectedItemName[i], rows.eq(i).find(".z-row-content:eq(0)").text());
+			Assertions.assertEquals(expectedTemplateName[i], rows.eq(i).find(".z-row-content:eq(1)").text());
 		}
 	}
 }

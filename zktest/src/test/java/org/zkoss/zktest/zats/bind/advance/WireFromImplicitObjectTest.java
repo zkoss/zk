@@ -11,8 +11,9 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.bind.advance;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zktest.zats.ZATSTestCase;
 import org.zkoss.zul.Label;
@@ -22,10 +23,10 @@ public class WireFromImplicitObjectTest extends ZATSTestCase {
 	public void test() {
 		DesktopAgent desktop = connect();
 
-		Assert.assertNotEquals("", desktop.query("#page1").as(Label.class).getValue());
-		Assert.assertNotEquals("", desktop.query("#desktop1").as(Label.class).getValue());
-		Assert.assertNotEquals("", desktop.query("#sess").as(Label.class).getValue());
-		Assert.assertNotEquals("", desktop.query("#wapp").as(Label.class).getValue());
-		Assert.assertNotEquals("", desktop.query("#desktopScope").as(Label.class).getValue());
+		Assertions.assertNotEquals("", desktop.query("#page1").as(Label.class).getValue());
+		Assertions.assertNotEquals("", desktop.query("#desktop1").as(Label.class).getValue());
+		Assertions.assertNotEquals("", desktop.query("#sess").as(Label.class).getValue());
+		Assertions.assertNotEquals("", desktop.query("#wapp").as(Label.class).getValue());
+		Assertions.assertNotEquals("", desktop.query("#desktopScope").as(Label.class).getValue());
 	}
 }

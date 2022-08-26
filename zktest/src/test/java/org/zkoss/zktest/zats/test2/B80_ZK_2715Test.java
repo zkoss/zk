@@ -14,14 +14,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 package org.zkoss.zktest.zats.test2;
 
-import junit.framework.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zktest.zats.ZATSTestCase;
 import org.zkoss.zul.Tab;
-
-import java.util.List;
 
 /**
  * 
@@ -33,11 +32,11 @@ public class B80_ZK_2715Test extends ZATSTestCase{
         DesktopAgent desktop = connect();
         ComponentAgent button = desktop.query("button");
         ComponentAgent tab = desktop.queryAll("tab").get(0);
-        Assert.assertEquals("tab2", tab.as(Tab.class).getLabel());
+        Assertions.assertEquals("tab2", tab.as(Tab.class).getLabel());
         String uuid = desktop.queryAll("tab").get(1).getUuid();
         button.click();
         tab = desktop.queryAll("tab").get(1);
-        Assert.assertEquals("tab3", ((Tab) tab.as(Tab.class)).getLabel());
-        Assert.assertNotSame(uuid, tab.getUuid());
+        Assertions.assertEquals("tab3", ((Tab) tab.as(Tab.class)).getLabel());
+        Assertions.assertNotSame(uuid, tab.getUuid());
     }
 }

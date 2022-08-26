@@ -11,10 +11,11 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class B95_ZK_4606Test extends WebDriverTestCase {
 	@Test
@@ -29,25 +30,25 @@ public class B95_ZK_4606Test extends WebDriverTestCase {
 		click(headerCheckbox);
 		waitResponse();
 		
-		Assert.assertTrue(headerCheckbox.hasClass("z-listheader-checked"));
-		Assert.assertTrue(listItemOne.hasClass("z-listitem-selected"));
-		Assert.assertTrue(listItemTwo.hasClass("z-listitem-selected"));
-		Assert.assertTrue(listItemThree.hasClass("z-listitem-selected"));
+		Assertions.assertTrue(headerCheckbox.hasClass("z-listheader-checked"));
+		Assertions.assertTrue(listItemOne.hasClass("z-listitem-selected"));
+		Assertions.assertTrue(listItemTwo.hasClass("z-listitem-selected"));
+		Assertions.assertTrue(listItemThree.hasClass("z-listitem-selected"));
 		
 		click(listItemOne);
 		waitResponse();
 		
-		Assert.assertFalse(headerCheckbox.hasClass("z-listheader-checked"));
-		Assert.assertFalse(listItemOne.hasClass("z-listitem-selected"));
-		Assert.assertTrue(listItemTwo.hasClass("z-listitem-selected"));
-		Assert.assertTrue(listItemThree.hasClass("z-listitem-selected"));
+		Assertions.assertFalse(headerCheckbox.hasClass("z-listheader-checked"));
+		Assertions.assertFalse(listItemOne.hasClass("z-listitem-selected"));
+		Assertions.assertTrue(listItemTwo.hasClass("z-listitem-selected"));
+		Assertions.assertTrue(listItemThree.hasClass("z-listitem-selected"));
 		
 		click(headerCheckbox);
 		waitResponse();
 		
-		Assert.assertTrue(headerCheckbox.hasClass("z-listheader-checked"));
-		Assert.assertTrue(listItemOne.hasClass("z-listitem-selected"));
-		Assert.assertTrue(listItemTwo.hasClass("z-listitem-selected"));
-		Assert.assertTrue(listItemThree.hasClass("z-listitem-selected"));
+		Assertions.assertTrue(headerCheckbox.hasClass("z-listheader-checked"));
+		Assertions.assertTrue(listItemOne.hasClass("z-listitem-selected"));
+		Assertions.assertTrue(listItemTwo.hasClass("z-listitem-selected"));
+		Assertions.assertTrue(listItemThree.hasClass("z-listitem-selected"));
 	}
 }

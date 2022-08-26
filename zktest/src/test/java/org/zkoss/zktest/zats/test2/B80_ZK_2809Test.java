@@ -11,16 +11,18 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
 import org.zkoss.zktest.zats.ZATSTestCase;
 
 /**
  * @author jumperchen
  */
 public class B80_ZK_2809Test extends ZATSTestCase {
-	@Test public void testZK2809() {
+	@Test
+	public void testZK2809() {
 		try {
 			connect();
 		} catch (Exception e) {

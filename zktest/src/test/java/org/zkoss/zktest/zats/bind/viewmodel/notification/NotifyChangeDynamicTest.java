@@ -11,8 +11,8 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.bind.viewmodel.notification;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
@@ -32,14 +32,14 @@ public class NotifyChangeDynamicTest extends ZATSTestCase {
 		add.click();
 		add.click();
 		add.click();
-		Assert.assertEquals("15", current.getValue());
+		Assertions.assertEquals("15", current.getValue());
 
 		addNoNotify.click();
 		addNoNotify.click();
 		addNoNotify.click();
-		Assert.assertEquals("15", current.getValue());
+		Assertions.assertEquals("15", current.getValue());
 
 		add.click();
-		Assert.assertEquals("35", current.getValue());
+		Assertions.assertEquals("35", current.getValue());
 	}
 }

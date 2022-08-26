@@ -11,12 +11,13 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.lessThanOrEqualTo;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class B86_ZK_4353Test extends WebDriverTestCase {
 	@Test
@@ -32,7 +33,7 @@ public class B86_ZK_4353Test extends WebDriverTestCase {
 
 	private void checkNavImageSize() {
 		JQuery navImage = jq(".z-nav-image");
-		Assert.assertThat(navImage.height(), lessThanOrEqualTo(50));
-		Assert.assertThat(navImage.width(), lessThanOrEqualTo(50));
+		assertThat(navImage.height(), lessThanOrEqualTo(50));
+		assertThat(navImage.width(), lessThanOrEqualTo(50));
 	}
 }

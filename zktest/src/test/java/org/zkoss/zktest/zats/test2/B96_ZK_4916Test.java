@@ -11,9 +11,10 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 public class B96_ZK_4916Test extends WebDriverTestCase {
 	@Test
@@ -22,10 +23,10 @@ public class B96_ZK_4916Test extends WebDriverTestCase {
 
 		click(jq("@button:contains(foo)"));
 		waitResponse();
-		Assert.assertEquals("foo", jq(".z-tbeditor-editor").html());
+		Assertions.assertEquals("foo", jq(".z-tbeditor-editor").html());
 
 		click(jq("@button:contains(bar)"));
 		waitResponse();
-		Assert.assertEquals("bar", jq(".z-tbeditor-editor").html());
+		Assertions.assertEquals("bar", jq(".z-tbeditor-editor").html());
 	}
 }

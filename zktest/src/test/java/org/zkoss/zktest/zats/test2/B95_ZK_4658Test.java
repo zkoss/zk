@@ -13,8 +13,8 @@ package org.zkoss.zktest.zats.test2;
 
 import java.math.BigDecimal;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zul.Decimalbox;
 
@@ -38,6 +38,6 @@ public class B95_ZK_4658Test {
 		decimalbox.setConstraint("no negative");
 		BigDecimal value = new BigDecimal("300000.00");
 		decimalbox.setValue(value);
-		Assert.assertEquals(value, decimalbox.getValue());
+		Assertions.assertEquals(value, decimalbox.getValue());
 	}
 }

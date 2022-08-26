@@ -11,11 +11,11 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -28,9 +28,9 @@ public class B50_2956457Test extends WebDriverTestCase {
 		click(jq("@button:contains(Hello)"));
 		waitResponse();
 
-		Assert.assertEquals(0, driver.findElements(By.xpath("//*[text()=\"David1\"]")).size());
-		Assert.assertEquals(0, driver.findElements(By.xpath("//*[text()=\"Mary2\"]")).size());
-		Assert.assertEquals(0, driver.findElements(By.xpath("//*[text()=\"John3\"]")).size());
+		Assertions.assertEquals(0, driver.findElements(By.xpath("//*[text()=\"David1\"]")).size());
+		Assertions.assertEquals(0, driver.findElements(By.xpath("//*[text()=\"Mary2\"]")).size());
+		Assertions.assertEquals(0, driver.findElements(By.xpath("//*[text()=\"John3\"]")).size());
 	}
 
 	@Test
@@ -44,8 +44,8 @@ public class B50_2956457Test extends WebDriverTestCase {
 		click(jq("@button:contains(toggle)"));
 		waitResponse(true);
 
-		Assert.assertEquals("child before", jq("@grid").prev().text());
-		Assert.assertEquals("child after", jq("@grid").next().text());
+		Assertions.assertEquals("child before", jq("@grid").prev().text());
+		Assertions.assertEquals("child after", jq("@grid").next().text());
 	}
 
 	@Test
@@ -57,8 +57,8 @@ public class B50_2956457Test extends WebDriverTestCase {
 		click(widget("@treeitem").$n("open"));
 		waitResponse();
 
-		Assert.assertTrue(jq("@treeitem:contains(Microsoft)").isVisible());
-		Assert.assertTrue(jq("@treeitem:contains(IBM)").isVisible());
+		Assertions.assertTrue(jq("@treeitem:contains(Microsoft)").isVisible());
+		Assertions.assertTrue(jq("@treeitem:contains(IBM)").isVisible());
 	}
 
 	@Test
@@ -70,7 +70,7 @@ public class B50_2956457Test extends WebDriverTestCase {
 		click(widget("@bandbox").$n("btn"));
 		waitResponse();
 
-		Assert.assertTrue(jq(".z-bandpopup:contains(hi)").isVisible());
+		Assertions.assertTrue(jq(".z-bandpopup:contains(hi)").isVisible());
 	}
 
 	@Test
@@ -82,11 +82,11 @@ public class B50_2956457Test extends WebDriverTestCase {
 		rightClick(jq("@label:contains(hello)"));
 		waitResponse();
 
-		Assert.assertTrue(jq("@menuitem:contains(More)").isVisible());
-		Assert.assertFalse(jq("@menuitem:contains(Great)").isVisible());
+		Assertions.assertTrue(jq("@menuitem:contains(More)").isVisible());
+		Assertions.assertFalse(jq("@menuitem:contains(Great)").isVisible());
 
 		click(jq("@menu:contains(Sort)"));
-		Assert.assertTrue(jq("@menuitem:contains(Great)").isVisible());
+		Assertions.assertTrue(jq("@menuitem:contains(Great)").isVisible());
 	}
 
 	@Test
@@ -98,6 +98,6 @@ public class B50_2956457Test extends WebDriverTestCase {
 		click(jq("@label:contains(what happens)"));
 		waitResponse();
 
-		Assert.assertTrue(jq(".z-popup:contains(More and better)").isVisible());
+		Assertions.assertTrue(jq(".z-popup:contains(More and better)").isVisible());
 	}
 }

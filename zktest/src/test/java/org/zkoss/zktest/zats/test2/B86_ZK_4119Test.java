@@ -11,11 +11,11 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class B86_ZK_4119Test extends WebDriverTestCase {
 
@@ -30,7 +30,7 @@ public class B86_ZK_4119Test extends WebDriverTestCase {
 
 	private void testAlignment(JQuery headers, JQuery cells) {
 		for (int i = 0; i < headers.length(); i++) {
-			Assert.assertEquals(headers.eq(i).offsetLeft(), cells.eq(i).offsetLeft());
+			Assertions.assertEquals(headers.eq(i).offsetLeft(), cells.eq(i).offsetLeft());
 		}
 	}
 }

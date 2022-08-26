@@ -11,15 +11,16 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import java.util.List;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.operation.MultipleSelectAgent;
 import org.zkoss.zktest.zats.ZATSTestCase;
 import org.zkoss.zul.Label;
-
-import java.util.List;
 
 public class B85_ZK_3738Test extends ZATSTestCase {
 
@@ -31,7 +32,7 @@ public class B85_ZK_3738Test extends ZATSTestCase {
 		List<ComponentAgent> treeItems = desktop.queryAll("treeitem");
 		selectAllbtn.click();
 		treeItems.get(0).as(MultipleSelectAgent.class).deselect();
-		Assert.assertEquals("[1.1, 1.2, 2.1, 2.2, 2.3, 2, 3.1, 3]",label.as(Label.class).getValue());
+		Assertions.assertEquals("[1.1, 1.2, 2.1, 2.2, 2.3, 2, 3.1, 3]",label.as(Label.class).getValue());
 
 	}
 

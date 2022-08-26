@@ -11,10 +11,10 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -24,9 +24,9 @@ public class F50_2840886Test extends WebDriverTestCase {
 	public void test() {
 		connect();
 
-		Assert.assertEquals(jq("@grid @column:first").width(), jq("@grid @frozen .z-frozen-body").width(), 2);
+		Assertions.assertEquals(jq("@grid @column:first").width(), jq("@grid @frozen .z-frozen-body").width(), 2);
 
 		int first2ColumnWidth = jq("@listbox @listheader:eq(0)").width() + jq("@listbox @listheader:eq(1)").width();
-		Assert.assertEquals(first2ColumnWidth, jq("@listbox @frozen .z-frozen-body").width(), 2);
+		Assertions.assertEquals(first2ColumnWidth, jq("@listbox @frozen .z-frozen-body").width(), 2);
 	}
 }

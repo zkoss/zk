@@ -11,8 +11,8 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.bind.comp;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.operation.OpenAgent;
@@ -30,9 +30,9 @@ public class ListboxTest extends ZATSTestCase {
 		final Label open = desktop.query("#open").as(Label.class);
 
 		listgroup.open(true);
-		Assert.assertEquals("true", open.getValue());
+		Assertions.assertEquals("true", open.getValue());
 		listgroup.open(false);
-		Assert.assertEquals("false", open.getValue());
+		Assertions.assertEquals("false", open.getValue());
 	}
 
 	@Test
@@ -42,11 +42,11 @@ public class ListboxTest extends ZATSTestCase {
 		final Label selectedIndex = desktop.query("#indexLabel").as(Label.class);
 
 		desktop.queryAll("#listbox > listitem").get(0).select();
-		Assert.assertEquals("item01", selectedItem.getValue());
-		Assert.assertEquals("0", selectedIndex.getValue());
+		Assertions.assertEquals("item01", selectedItem.getValue());
+		Assertions.assertEquals("0", selectedIndex.getValue());
 
 		desktop.queryAll("#listbox > listitem").get(3).select();
-		Assert.assertEquals("item04", selectedItem.getValue());
-		Assert.assertEquals("3", selectedIndex.getValue());
+		Assertions.assertEquals("item04", selectedItem.getValue());
+		Assertions.assertEquals("3", selectedIndex.getValue());
 	}
 }

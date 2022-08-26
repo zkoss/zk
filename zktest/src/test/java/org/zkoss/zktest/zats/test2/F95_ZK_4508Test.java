@@ -11,12 +11,13 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.matchesRegex;
 
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
@@ -34,14 +35,14 @@ public class F95_ZK_4508Test extends ZATSTestCase {
 		btns.forEach(ComponentAgent::click);
 
 		List<String> zkLog = desktop.getZkLog();
-		Assert.assertEquals(8, zkLog.size());
-		Assert.assertEquals("BindingParam, Tom (Tom)!", zkLog.get(0));
-		Assert.assertEquals("HeaderParam, keep-alive (keep-alive)!", zkLog.get(1));
-		Assert.assertEquals("SelectorParam, main (btnSelector)!", zkLog.get(2));
-		Assert.assertEquals("ScopeParam, Tim (Tim)!", zkLog.get(3));
-		Assert.assertThat(zkLog.get(4), matchesRegex("CookieParam, ([\\w.]+?) \\(\\1\\)!"));
-		Assert.assertEquals("ExecutionParam, foo (foo)!", zkLog.get(5));
-		Assert.assertEquals("ExecutionArgParam, bar (bar)!", zkLog.get(6));
-		Assert.assertEquals("QueryParam, Tony (Tony)!", zkLog.get(7));
+		Assertions.assertEquals(8, zkLog.size());
+		Assertions.assertEquals("BindingParam, Tom (Tom)!", zkLog.get(0));
+		Assertions.assertEquals("HeaderParam, keep-alive (keep-alive)!", zkLog.get(1));
+		Assertions.assertEquals("SelectorParam, main (btnSelector)!", zkLog.get(2));
+		Assertions.assertEquals("ScopeParam, Tim (Tim)!", zkLog.get(3));
+		assertThat(zkLog.get(4), matchesRegex("CookieParam, ([\\w.]+?) \\(\\1\\)!"));
+		Assertions.assertEquals("ExecutionParam, foo (foo)!", zkLog.get(5));
+		Assertions.assertEquals("ExecutionArgParam, bar (bar)!", zkLog.get(6));
+		Assertions.assertEquals("QueryParam, Tony (Tony)!", zkLog.get(7));
 	}
 }

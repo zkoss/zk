@@ -1,12 +1,14 @@
 package org.zkoss.zktest.zats.test2;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Test;
+import java.time.Duration;
+
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author jameschu
@@ -15,7 +17,7 @@ public class B70_ZK_2747Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
-		new WebDriverWait(driver, 3)
+		new WebDriverWait(driver, Duration.ofSeconds(3))
 				.until(ExpectedConditions.presenceOfElementLocated(jq("#zk_showBusy")));
 
 		assertTrue(jq("#zk_showBusy").exists());

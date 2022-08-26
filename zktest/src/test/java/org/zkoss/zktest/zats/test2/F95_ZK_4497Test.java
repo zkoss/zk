@@ -11,12 +11,12 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author rudyhuang
@@ -41,7 +41,7 @@ public class F95_ZK_4497Test extends WebDriverTestCase {
 
 		click(jq("@button:eq(0)"));
 		waitResponse();
-		Assert.assertEquals(expectedLog, getZKLog());
+		Assertions.assertEquals(expectedLog, getZKLog());
 	}
 
 	@Test
@@ -65,7 +65,7 @@ public class F95_ZK_4497Test extends WebDriverTestCase {
 
 		click(jq("@button:eq(0)"));
 		waitResponse();
-		Assert.assertEquals("true", getZKLog());
+		Assertions.assertEquals("true", getZKLog());
 	}
 
 	@Test
@@ -90,10 +90,10 @@ public class F95_ZK_4497Test extends WebDriverTestCase {
 		waitResponse();
 		click(jq(".z-searchbox-item:eq(0)"));
 		waitResponse();
-		Assert.assertFalse(closeBtn.isVisible());
+		Assertions.assertFalse(closeBtn.isVisible());
 
 		click(jq("@searchbox"));
 		waitResponse();
-		Assert.assertTrue(closeBtn.isVisible());
+		Assertions.assertTrue(closeBtn.isVisible());
 	}
 }

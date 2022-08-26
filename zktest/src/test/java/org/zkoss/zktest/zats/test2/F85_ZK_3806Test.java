@@ -11,9 +11,9 @@ Copyright (C) 2017 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.bind.impl.ValidationMessagesImpl;
 import org.zkoss.bind.sys.ValidationMessages;
@@ -25,63 +25,63 @@ import org.zkoss.zul.Label;
 public class F85_ZK_3806Test {
 	private ValidationMessages vmsgs;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		this.vmsgs = new ValidationMessagesImpl();
 	}
 
 	@Test
 	public void testGetMessagesComponentAttr() {
-		Assert.assertNotNull(vmsgs.getMessages(new Label(), "value"));
+		Assertions.assertNotNull(vmsgs.getMessages(new Label(), "value"));
 	}
 
 	@Test
 	public void testGetMessagesComponent() {
-		Assert.assertNotNull(vmsgs.getMessages(new Label()));
+		Assertions.assertNotNull(vmsgs.getMessages(new Label()));
 	}
 
 	@Test
 	public void testGetMessages() {
-		Assert.assertNotNull(vmsgs.getMessages());
+		Assertions.assertNotNull(vmsgs.getMessages());
 	}
 
 	@Test
 	public void testGetKeyMessagesComponentKey() {
-		Assert.assertNotNull(vmsgs.getKeyMessages(new Label(), "err1"));
+		Assertions.assertNotNull(vmsgs.getKeyMessages(new Label(), "err1"));
 	}
 
 	@Test
 	public void testGetKeyMessagesKey() {
-		Assert.assertNotNull(vmsgs.getKeyMessages("err1"));
+		Assertions.assertNotNull(vmsgs.getKeyMessages("err1"));
 	}
 
 	@Test
 	public void testGetFieldValue() {
-		Assert.assertNull(vmsgs.getFieldValue("err1"));
+		Assertions.assertNull(vmsgs.getFieldValue("err1"));
 	}
 
 	@Test
 	public void testGetFieldValueComponent() {
-		Assert.assertNull(vmsgs.getFieldValue(new Label(), "err1"));
+		Assertions.assertNull(vmsgs.getFieldValue(new Label(), "err1"));
 	}
 
 	@Test
 	public void testGetFieldValues() {
-		Assert.assertNotNull(vmsgs.getFieldValues("err1"));
+		Assertions.assertNotNull(vmsgs.getFieldValues("err1"));
 	}
 
 	@Test
 	public void testGetFieldValuesComponent() {
-		Assert.assertNotNull(vmsgs.getFieldValues(new Label(), "err1"));
+		Assertions.assertNotNull(vmsgs.getFieldValues(new Label(), "err1"));
 	}
 
 	@Test
 	public void testGetAssociate() {
-		Assert.assertNull(vmsgs.getAssociate("test"));
+		Assertions.assertNull(vmsgs.getAssociate("test"));
 	}
 
 	@Test
 	public void testGetAssociates() {
-		Assert.assertNotNull(vmsgs.getAssociates("test"));
+		Assertions.assertNotNull(vmsgs.getAssociates("test"));
 	}
 }

@@ -11,15 +11,16 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.bind.basic;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 public class BookCRUDOuterTest extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect("/bind/basic/bookCrudOuter.zul");
 
-		Assert.assertEquals("include shall work", "ZK MVVM Book CRUD", jq(".z-include .z-window-header").text());
+		Assertions.assertEquals("ZK MVVM Book CRUD", jq(".z-include .z-window-header").text(), "include shall work");
 	}
 }

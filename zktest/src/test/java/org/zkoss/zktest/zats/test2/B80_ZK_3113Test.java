@@ -14,12 +14,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 package org.zkoss.zktest.zats.test2;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
 import org.zkoss.lang.Classes;
-import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.sys.PropertyAccess;
 import org.zkoss.zktest.zats.ZATSTestCase;
@@ -29,7 +29,8 @@ import org.zkoss.zul.Textbox;
  * @author Sefi
  */
 public class B80_ZK_3113Test extends ZATSTestCase {
-    @Test public void test() {
+    @Test
+	public void test() {
         try {
            	connect();
         } catch (Exception e){

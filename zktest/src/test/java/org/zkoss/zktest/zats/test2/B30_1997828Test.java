@@ -11,11 +11,11 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author rudyhuang
@@ -29,7 +29,7 @@ public class B30_1997828Test extends WebDriverTestCase {
 		waitResponse();
 
 		JQuery any = jq("$any");
-		Assert.assertTrue(any.exists());
-		Assert.assertTrue(any.isVisible());
+		Assertions.assertTrue(any.exists());
+		Assertions.assertTrue(any.isVisible());
 	}
 }

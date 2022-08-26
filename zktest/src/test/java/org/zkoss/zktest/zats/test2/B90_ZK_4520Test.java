@@ -11,10 +11,11 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class B90_ZK_4520Test extends WebDriverTestCase {
 	@Test
@@ -25,7 +26,6 @@ public class B90_ZK_4520Test extends WebDriverTestCase {
 		jq("$scrollbox").scrollTop(100);
 		waitResponse();
 		focus(textbox);
-		waitResponse();
 		blur(textbox);
 		waitResponse();
 		
@@ -33,6 +33,10 @@ public class B90_ZK_4520Test extends WebDriverTestCase {
 		int firstPosTop = errobox.positionTop();
 		click(jq("$redbox"));
 		waitResponse();
-		Assert.assertEquals(firstPosTop, errobox.positionTop());
+		Assertions.assertEquals(firstPosTop, errobox.positionTop());
+	}
+
+	protected boolean isHeadless() {
+		return false;
 	}
 }

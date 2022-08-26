@@ -11,10 +11,10 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -28,11 +28,11 @@ public class F60_ZK_701_GridTest extends WebDriverTestCase {
 		waitResponse();
 		click(jq("@button:eq(0)"));
 		waitResponse();
-		Assert.assertFalse(hasError());
+		Assertions.assertFalse(hasError());
 
 		click(widget("@group").$n("img"));
 		waitResponse();
-		Assert.assertTrue(jq("@group:first").hasClass("z-group-open"));
+		Assertions.assertTrue(jq("@group:first").hasClass("z-group-open"));
 	}
 
 	@Test
@@ -43,10 +43,10 @@ public class F60_ZK_701_GridTest extends WebDriverTestCase {
 		waitResponse();
 		click(jq("@button:eq(1)"));
 		waitResponse();
-		Assert.assertFalse(hasError());
+		Assertions.assertFalse(hasError());
 
 		click(widget("@group").$n("img"));
 		waitResponse();
-		Assert.assertTrue(jq("@group:first").hasClass("z-group-open"));
+		Assertions.assertTrue(jq("@group:first").hasClass("z-group-open"));
 	}
 }

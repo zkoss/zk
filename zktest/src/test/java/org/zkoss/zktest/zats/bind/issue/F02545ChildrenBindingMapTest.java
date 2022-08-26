@@ -10,10 +10,11 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.bind.issue;
 
-import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
@@ -34,6 +35,6 @@ public class F02545ChildrenBindingMapTest extends ZATSTestCase {
 		cbm1 = desktopAgent.query("#w #cbm1");
 		assertEquals(5, cbm1.getChildren().size());
 
-		assertTrue("Should be able to serialized", desktopAgent.query("#msg").as(Label.class).getValue().contains("done deserialize:"));
+		assertTrue(desktopAgent.query("#msg").as(Label.class).getValue().contains("done deserialize:"), "Should be able to serialized");
 	}
 }

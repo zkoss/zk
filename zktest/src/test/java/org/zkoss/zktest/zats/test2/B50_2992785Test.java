@@ -11,13 +11,13 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.matchesRegex;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Alert;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -41,6 +41,6 @@ public class B50_2992785Test extends WebDriverTestCase {
 		Alert alert = driver.switchTo().alert();
 		String id = alert.getText();
 		alert.accept();
-		Assert.assertThat(id, matchesRegex("\\w+"));
+		assertThat(id, matchesRegex("\\w+"));
 	}
 }

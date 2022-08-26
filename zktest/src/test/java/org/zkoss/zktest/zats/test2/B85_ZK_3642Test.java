@@ -11,8 +11,8 @@ Copyright (C) 2017 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zktest.zats.ZATSTestCase;
 
@@ -26,7 +26,7 @@ public class B85_ZK_3642Test extends ZATSTestCase {
 			connect();
 		} catch (Throwable e) {
 			e.printStackTrace();
-			Assert.fail("No exception allowed.");
+			Assertions.fail("No exception allowed.");
 		}
 	}
 }

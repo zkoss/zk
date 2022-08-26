@@ -11,11 +11,11 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author rudyhuang
@@ -38,8 +38,8 @@ public class B90_ZK_4389Test extends WebDriverTestCase {
 
 		click(groupbox.find("@button:visible"));
 		waitResponse();
-		Assert.assertEquals(1, groupbox.find("@button:visible").length());
-		Assert.assertEquals("Button2", groupbox.find("@button:visible").text());
+		Assertions.assertEquals(1, groupbox.find("@button:visible").length());
+		Assertions.assertEquals("Button2", groupbox.find("@button:visible").text());
 	}
 
 	private void checkNestedGroupboxDiv() {
@@ -49,8 +49,8 @@ public class B90_ZK_4389Test extends WebDriverTestCase {
 		waitResponse();
 
 		assertNoJSError();
-		Assert.assertEquals(2, jq("$gb1 @window").length());
-		Assert.assertEquals(2, jq("$gb1 @textbox").length());
+		Assertions.assertEquals(2, jq("$gb1 @window").length());
+		Assertions.assertEquals(2, jq("$gb1 @textbox").length());
 	}
 
 	private void checkNestedDivGroupbox() {
@@ -60,7 +60,7 @@ public class B90_ZK_4389Test extends WebDriverTestCase {
 		waitResponse(true);
 
 		assertNoJSError();
-		Assert.assertEquals(2, jq("$div2 @window").length());
-		Assert.assertEquals(2, jq("$div2 @textbox").length());
+		Assertions.assertEquals(2, jq("$div2 @window").length());
+		Assertions.assertEquals(2, jq("$div2 @textbox").length());
 	}
 }

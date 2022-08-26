@@ -11,10 +11,10 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
@@ -30,7 +30,7 @@ public class B80_ZK_2881Test extends WebDriverTestCase {
 		waitResponse();
 		click(jq("@listitem:eq(3)"));
 		waitResponse();
-		Assert.assertEquals(jq("@listitem:eq(3)").offsetTop(), driver.switchTo().activeElement().getLocation().getY(), 1);
+		Assertions.assertEquals(jq("@listitem:eq(3)").offsetTop(), driver.switchTo().activeElement().getLocation().getY(), 1);
 	}
 
 	@Test
@@ -43,6 +43,6 @@ public class B80_ZK_2881Test extends WebDriverTestCase {
 		waitResponse();
 		click(jq("@treerow:eq(3) @treecell"));
 		waitResponse();
-		Assert.assertEquals(jq("@treerow:eq(3)").offsetTop(), driver.switchTo().activeElement().getLocation().getY(), 1);
+		Assertions.assertEquals(jq("@treerow:eq(3)").offsetTop(), driver.switchTo().activeElement().getLocation().getY(), 1);
 	}
 }

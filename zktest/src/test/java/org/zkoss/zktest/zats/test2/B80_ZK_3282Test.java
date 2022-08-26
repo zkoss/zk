@@ -20,8 +20,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zkmax.zul.Chosenbox;
 import org.zkoss.zktest.zats.ZATSTestCase;
@@ -38,8 +39,8 @@ public class B80_ZK_3282Test extends ZATSTestCase{
 		Component componentIn = new Chosenbox();
 		componentIn.setId("test" + componentIn.getClass().getSimpleName());
 		Component componentOut = writeAndReadBack(componentIn);
-		Assert.assertEquals(componentIn.getClass(), componentOut.getClass());
-		Assert.assertEquals(componentIn.getId(), componentOut.getId());
+		Assertions.assertEquals(componentIn.getClass(), componentOut.getClass());
+		Assertions.assertEquals(componentIn.getId(), componentOut.getId());
 	}
 
 	private Component writeAndReadBack(Component component) throws IOException, ClassNotFoundException {

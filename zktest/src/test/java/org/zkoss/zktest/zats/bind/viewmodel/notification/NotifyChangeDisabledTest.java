@@ -14,9 +14,9 @@ package org.zkoss.zktest.zats.bind.viewmodel.notification;
 import static org.hamcrest.Matchers.is;
 
 import org.hamcrest.MatcherAssert;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zats.mimic.AgentException;
 import org.zkoss.zats.mimic.DesktopAgent;
@@ -29,7 +29,7 @@ import org.zkoss.zul.Label;
 public class NotifyChangeDisabledTest extends ZATSTestCase {
 	private DesktopAgent desktop;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		desktop = connect("/bind/viewmodel/notification/notifychange-disabled.zul");
 	}
@@ -37,14 +37,14 @@ public class NotifyChangeDisabledTest extends ZATSTestCase {
 	@Test
 	public void testNormalUsage() {
 		desktop.query("#inp0").type("ZK");
-		Assert.assertEquals("ZK", desktop.query("#val0").as(Label.class).getValue());
+		Assertions.assertEquals("ZK", desktop.query("#val0").as(Label.class).getValue());
 		desktop.query("#inp1").type("ZK");
-		Assert.assertNotEquals("ZK", desktop.query("#val1").as(Label.class).getValue());
+		Assertions.assertNotEquals("ZK", desktop.query("#val1").as(Label.class).getValue());
 	}
 
 	@Test
 	public void testIllegalUsage1() {
-		Throwable t = Assert.assertThrows(AgentException.class, () -> {
+		Throwable t = Assertions.assertThrows(AgentException.class, () -> {
 			desktop.query("#inp2").type("ZK");
 		});
 		MatcherAssert.assertThat(t.getCause().getMessage(), is("don't use interface" +
@@ -54,7 +54,7 @@ public class NotifyChangeDisabledTest extends ZATSTestCase {
 
 	@Test
 	public void testIllegalUsage2() {
-		Throwable t = Assert.assertThrows(AgentException.class, () -> {
+		Throwable t = Assertions.assertThrows(AgentException.class, () -> {
 			desktop.query("#inp3").type("ZK");
 		});
 		MatcherAssert.assertThat(t.getCause().getMessage(), is("don't use interface" +
