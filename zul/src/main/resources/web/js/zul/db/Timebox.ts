@@ -69,11 +69,11 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 		return this._timezoneAbbr;
 	}
 
-	setTimezoneAbbr(v: string, opts?: Record<string, boolean>): this {
+	setTimezoneAbbr(timezoneAbbr: string, opts?: Record<string, boolean>): this {
 		const o = this._timezoneAbbr;
-		this._timezoneAbbr = v;
+		this._timezoneAbbr = timezoneAbbr;
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== timezoneAbbr || opts?.force) {
 			Timebox._updFormat(this, this._format);
 		}
 
@@ -84,12 +84,12 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 	 * @param String timezone the time zone's ID, such as "America/Los_Angeles".
 	 * @since 9.0.0
 	 */
-	setTimeZone(v: string, opts?: Record<string, boolean>): this {
+	setTimeZone(timeZone: string, opts?: Record<string, boolean>): this {
 		const o = this._timeZone;
-		this._timeZone = v;
+		this._timeZone = timeZone;
 
-		if (o !== v || (opts && opts.force)) {
-			this._value && this._value.tz(v);
+		if (o !== timeZone || opts?.force) {
+			this._value?.tz(timeZone);
 		}
 
 		return this;
@@ -114,12 +114,12 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 	/** Sets whether the button (on the right of the textbox) is visible.
 	 * @param boolean buttonVisible
 	 */
-	setButtonVisible(v: boolean, opts?: Record<string, boolean>): this {
+	setButtonVisible(buttonVisible: boolean, opts?: Record<string, boolean>): this {
 		const o = this._buttonVisible;
-		this._buttonVisible = v;
+		this._buttonVisible = buttonVisible;
 
-		if (o !== v || (opts && opts.force)) {
-			zul.inp.RoundUtl.buttonVisible(this, v);
+		if (o !== buttonVisible || opts?.force) {
+			zul.inp.RoundUtl.buttonVisible(this, buttonVisible);
 		}
 
 		return this;
@@ -128,12 +128,12 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 	/** Sets the unformater function. This method is called from Server side.
 	 * @param String unf the unformater function
 	 */
-	setUnformater(unf: string, opts?: Record<string, boolean>): this {
+	setUnformater(unformater: string, opts?: Record<string, boolean>): this {
 		const o = this._unformater;
-		this._unformater = unf;
+		this._unformater = unformater;
 
-		if (o !== unf || (opts && opts.force)) {
-			eval('Timebox._unformater = ' + unf); // eslint-disable-line no-eval
+		if (o !== unformater || opts?.force) {
+			eval('Timebox._unformater = ' + unformater); // eslint-disable-line no-eval
 		}
 
 		return this;
@@ -150,11 +150,11 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 		return this._localizedSymbols;
 	}
 
-	setLocalizedSymbols(val: [string, zk.LocalizedSymbols]): this {
-		if (val) {
-			if (!globallocalizedSymbols[val[0]])
-				globallocalizedSymbols[val[0]] = val[1];
-			this._localizedSymbols = globallocalizedSymbols[val[0]];
+	setLocalizedSymbols(localizedSymbols?: [string, zk.LocalizedSymbols]): this {
+		if (localizedSymbols) {
+			if (!globallocalizedSymbols[localizedSymbols[0]])
+				globallocalizedSymbols[localizedSymbols[0]] = localizedSymbols[1];
+			this._localizedSymbols = globallocalizedSymbols[localizedSymbols[0]];
 		}
 		return this;
 	}
@@ -163,15 +163,15 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 	 * <p>Default: null (means no constraint all all).
 	 * @param String cst
 	 */
-	override setConstraint(cst?: string, opts?: Record<string, boolean>): this {
+	override setConstraint(constraint: string, opts?: Record<string, boolean>): this {
 		const o = this._constraint;
-		this._constraint = cst;
+		this._constraint = constraint;
 
-		if (o !== cst || (opts && opts.force)) {
-			if (typeof cst == 'string' && cst.charAt(0) != '['/*by server*/)
-				this._cst = new zul.inp.SimpleLocalTimeConstraint(cst, this);
+		if (o !== constraint || opts?.force) {
+			if (typeof constraint == 'string' && constraint.charAt(0) != '['/*by server*/)
+				this._cst = new zul.inp.SimpleLocalTimeConstraint(constraint, this);
 			else
-				this._cst = cst;
+				this._cst = constraint;
 			if (this._cst)
 				this._reVald = true; //revalidate required
 			// FIXME: never assigned
@@ -203,8 +203,8 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 	 * A method for component setter symmetry, it will call setValue
 	 * @since 10.0.0
 	 */
-	setValueInZonedDateTime(value: DateImpl, fromServer?: boolean): this {
-		return this.setValue(value, fromServer);
+	setValueInZonedDateTime(valueInZonedDateTime: DateImpl, fromServer?: boolean): this {
+		return this.setValue(valueInZonedDateTime, fromServer);
 	}
 
 	/**
@@ -219,8 +219,8 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 	 * A method for component setter symmetry, it will call setValue
 	 * @since 10.0.0
 	 */
-	setValueInLocalDateTime(value: DateImpl, fromServer?: boolean): this {
-		return this.setValue(value, fromServer);
+	setValueInLocalDateTime(valueInLocalDateTime: DateImpl, fromServer?: boolean): this {
+		return this.setValue(valueInLocalDateTime, fromServer);
 	}
 
 	/**
@@ -235,8 +235,8 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 	 * A method for component setter symmetry, it will call setValue
 	 * @since 10.0.0
 	 */
-	setValueInLocalDate(value: DateImpl, fromServer?: boolean): this {
-		return this.setValue(value, fromServer);
+	setValueInLocalDate(valueInLocalDate: DateImpl, fromServer?: boolean): this {
+		return this.setValue(valueInLocalDate, fromServer);
 	}
 
 	/**
@@ -251,8 +251,8 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 	 * A method for component setter symmetry, it will call setValue
 	 * @since 10.0.0
 	 */
-	setValueInLocalTime(value: DateImpl, fromServer?: boolean): this {
-		return this.setValue(value, fromServer);
+	setValueInLocalTime(valueInLocalTime: DateImpl, fromServer?: boolean): this {
+		return this.setValue(valueInLocalTime, fromServer);
 	}
 
 	/**
@@ -260,8 +260,8 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 	 * @param String timezone the time zone's ID, such as "America/Los_Angeles".
 	 * @deprecated Use {@link #setTimeZone(String)} instead.
 	 */
-	setTimezone(v: string): this {
-		return this.setTimeZone(v);
+	setTimezone(timezone: string): this {
+		return this.setTimeZone(timezone);
 	}
 
 	/** Returns the time zone ID that this time box belongs to.
@@ -277,10 +277,10 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 		return true;
 	}
 
-	override setFormat(fmt: string, opts?: Record<string, boolean> | undefined): this {
-		fmt = fmt ? fmt.replace(/'/g, '') : fmt;
-		Timebox._updFormat(this, fmt);
-		return super.setFormat(fmt, opts);
+	override setFormat(format: string, opts?: Record<string, boolean> | undefined): this {
+		format = format ? format.replace(/'/g, '') : format;
+		Timebox._updFormat(this, format);
+		return super.setFormat(format, opts);
 	}
 
 	override setValue(value: DateImpl, fromServer?: boolean): this {

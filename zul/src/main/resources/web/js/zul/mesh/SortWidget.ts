@@ -46,15 +46,15 @@ export abstract class SortWidget extends zul.mesh.HeaderWidget {
 	 *
 	 * @param String sortDir one of "ascending", "descending" and "natural"
 	 */
-	setSortDirection(v: zul.mesh.SortDirection, opts?: Record<string, boolean>): this {
+	setSortDirection(sortDirection: zul.mesh.SortDirection, opts?: Record<string, boolean>): this {
 		const o = this._sortDirection;
-		this._sortDirection = v;
+		this._sortDirection = sortDirection;
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== sortDirection || opts?.force) {
 			if (this.desktop) {
 				var $n = jq(this.$n_('sort-icon'));
 				$n.removeClass();
-				switch (v) {
+				switch (sortDirection) {
 				case 'ascending':
 					$n.addClass('z-icon-caret-up');
 					break;
@@ -78,13 +78,13 @@ export abstract class SortWidget extends zul.mesh.HeaderWidget {
 	 * no sorter for the ascending order.
 	 * @param String sortAscending
 	 */
-	setSortAscending(v: string, opts?: Record<string, boolean>): this {
+	setSortAscending(sortAscending: string, opts?: Record<string, boolean>): this {
 		const o = this._sortAscending;
-		this._sortAscending = v;
+		this._sortAscending = sortAscending;
 
-		if (o !== v || (opts && opts.force)) {
-			if (!v)
-				this._sortAscending = v = 'none';
+		if (o !== sortAscending || opts?.force) {
+			if (!sortAscending)
+				this._sortAscending = sortAscending = 'none';
 
 			if (this.desktop) {
 				this.setSortDirection('natural');
@@ -106,13 +106,13 @@ export abstract class SortWidget extends zul.mesh.HeaderWidget {
 	 * no sorter for the descending order.
 	 * @param String sortDescending
 	 */
-	setSortDescending(v: string, opts?: Record<string, boolean>): this {
+	setSortDescending(sortDescending: string, opts?: Record<string, boolean>): this {
 		const o = this._sortDescending;
-		this._sortDescending = v;
+		this._sortDescending = sortDescending;
 
-		if (o !== v || (opts && opts.force)) {
-			if (!v)
-				this._sortDescending = v = 'none';
+		if (o !== sortDescending || opts?.force) {
+			if (!sortDescending)
+				this._sortDescending = sortDescending = 'none';
 
 			if (this.desktop) {
 				this.setSortDirection('natural');
@@ -141,10 +141,10 @@ export abstract class SortWidget extends zul.mesh.HeaderWidget {
 	 * <p>Note: client sorting cannot work in model case.
 	 * @param String type
 	 */
-	setSort(type: string): this {
-		if (type && type.startsWith('client')) {
-			this.setSortAscending(type);
-			this.setSortDescending(type);
+	setSort(sort: string): this {
+		if (sort && sort.startsWith('client')) {
+			this.setSortAscending(sort);
+			this.setSortDescending(sort);
 		} else {
 			this.setSortAscending('none');
 			this.setSortDescending('none');
@@ -328,7 +328,7 @@ export abstract class SortWidget extends zul.mesh.HeaderWidget {
 			else
 				pp = this.$f<zul.menu.Menupopup>(this.parent!._menupopup)!;
 
-			if (zul.menu.Menupopup.isInstance(pp)) {
+			if (pp instanceof zul.menu.Menupopup) {
 				var ofs = zk(btn).revisedOffset(),
 					asc = this.getSortAscending() != 'none',
 					desc = this.getSortDescending() != 'none',

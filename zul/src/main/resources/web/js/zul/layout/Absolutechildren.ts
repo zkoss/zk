@@ -38,7 +38,7 @@ export class Absolutechildren extends zul.Widget {
         const o = this._x;
         this._x = x;
 
-        if (o !== x || (opts && opts.force)) {
+        if (o !== x || opts?.force) {
 			if (this.desktop) {
 				this._rePositionX();
 			}
@@ -64,7 +64,7 @@ export class Absolutechildren extends zul.Widget {
         const o = this._y;
         this._y = y;
 
-        if (o !== y || (opts && opts.force)) {
+        if (o !== y || opts?.force) {
 			if (this.desktop) {
 				this._rePositionY();
 			}

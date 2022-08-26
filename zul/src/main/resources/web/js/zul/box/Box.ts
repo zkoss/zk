@@ -125,7 +125,7 @@ export class Box extends zul.Widget {
 		const o = this._align;
 		this._align = align;
 
-		if (o !== align || (opts && opts.force)) {
+		if (o !== align || opts?.force) {
 			this.rerender(); //TODO: a better algoithm
 		}
 
@@ -178,7 +178,7 @@ export class Box extends zul.Widget {
 		const o = this._pack;
 		this._pack = pack;
 
-		if (o !== pack || (opts && opts.force)) {
+		if (o !== pack || opts?.force) {
 			this.rerender(); //TODO: a better algoithm
 		}
 
@@ -241,7 +241,7 @@ export class Box extends zul.Widget {
 		const o = this._spacing;
 		this._spacing = spacing;
 
-		if (o !== spacing || (opts && opts.force)) {
+		if (o !== spacing || opts?.force) {
 			this.rerender(); //TODO: a better algoithm
 		}
 
@@ -276,11 +276,11 @@ export class Box extends zul.Widget {
 	 * @param boolean byContent
 	 * @since 5.0.4
 	 */
-	setSizedByContent(byContent: boolean, opts?: Record<string, boolean>): this {
+	setSizedByContent(sizedByContent: boolean, opts?: Record<string, boolean>): this {
 		const o = this._sizedByContent;
-		this._sizedByContent = byContent;
+		this._sizedByContent = sizedByContent;
 
-		if (o !== byContent || (opts && opts.force)) {
+		if (o !== sizedByContent || opts?.force) {
 			this.rerender(); //TODO: a better algoithm
 		}
 
@@ -301,20 +301,20 @@ export class Box extends zul.Widget {
 		return this._widths;
 	}
 
-	setWidths(val: string[], opts?: Record<string, boolean>): this {
+	setWidths(widths: string[], opts?: Record<string, boolean>): this {
 		const o = this._widths;
-		this._widths = val;
+		this._widths = widths;
 
-		if (o !== val || (opts && opts.force)) {
-			this._sizes = val;
+		if (o !== widths || opts?.force) {
+			this._sizes = widths;
 			this.rerender();
 		}
 
 		return this;
 	}
 
-	setHeights(val: string[]): this {
-		return this.setWidths(val);
+	setHeights(heights: string[]): this {
+		return this.setWidths(heights);
 	}
 
 	getHeights(): string[] | undefined {

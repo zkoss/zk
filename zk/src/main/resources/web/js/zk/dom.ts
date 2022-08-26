@@ -1601,6 +1601,7 @@ export class JQZK {
 	 * @param int end the ending index of the selection rane (excluding). In other words, the text between start and (end-1) is selected.
 	 * @return jqzk this object
 	 */
+	// eslint-disable-next-line zk/javaStyleSetterSignature
 	setSelectionRange(start: number, end?: number): this {
 		var inp = this.jq[0] as HTMLInputElement,
 			len = inp.value ? inp.value.length : 0; //ZK-2805
@@ -1885,7 +1886,7 @@ var _jq /** original jQuery */ = zk.augment(jq.fn, {
 	 */
 	//zk: null,
 
-	init(sel, ctx, ...rest: unknown[]): JQuery {
+	init(sel: string | zk.Widget | HTMLElement, ctx, ...rest: unknown[]): JQuery {
 		if (ctx === zk) {
 			if (typeof sel == 'string'
 			&& zUtl.isChar(sel.charAt(0), {digit: 1, upper: 1, lower: 1, '_': 1})) {
@@ -1901,7 +1902,7 @@ var _jq /** original jQuery */ = zk.augment(jq.fn, {
 			}
 			ctx = undefined;
 		}
-		if (zk.Widget && zk.Widget.isInstance(sel))
+		if (zk.Widget && sel instanceof zk.Widget)
 			sel = sel.$n() || '#' + sel.uuid;
 		if (sel == '#') sel = ''; //ZK-4565, '#' is not allowed in jquery 3.5.0
 		const ret1 = (_jq['init'] as CallableFunction).bind(this)(sel, ctx, ...rest) as JQuery;

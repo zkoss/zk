@@ -42,7 +42,7 @@ export class Html extends zul.Widget<HTMLHtmlElement> {
 		const o = this._content;
 		this._content = content;
 
-		if (o !== content || (opts && opts.force)) {
+		if (o !== content || opts?.force) {
 			var n = this.$n();
 			if (n) n.innerHTML = content || '';
 		}

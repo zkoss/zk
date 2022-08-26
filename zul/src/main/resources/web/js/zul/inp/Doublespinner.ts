@@ -68,7 +68,7 @@ export class Doublespinner extends zul.inp.NumberInputWidget<number> {
 		const o = this._step;
 		this._step = step;
 
-		if (o !== step || (opts && opts.force)) {
+		if (o !== step || opts?.force) {
 			_updateFixedDigits(this);
 		}
 
@@ -90,7 +90,7 @@ export class Doublespinner extends zul.inp.NumberInputWidget<number> {
 		const o = this._buttonVisible;
 		this._buttonVisible = buttonVisible;
 
-		if (o !== buttonVisible || (opts && opts.force)) {
+		if (o !== buttonVisible || opts?.force) {
 			zul.inp.RoundUtl.buttonVisible(this, buttonVisible);
 		}
 

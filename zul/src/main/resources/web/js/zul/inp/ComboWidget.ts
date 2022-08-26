@@ -57,7 +57,7 @@ export class ComboWidget extends zul.inp.InputWidget<string> {
 		const o = this._buttonVisible;
 		this._buttonVisible = buttonVisible;
 
-		if (o !== buttonVisible || (opts && opts.force)) {
+		if (o !== buttonVisible || opts?.force) {
 			zul.inp.RoundUtl.buttonVisible(this, buttonVisible);
 		}
 
@@ -102,7 +102,7 @@ export class ComboWidget extends zul.inp.InputWidget<string> {
 		const o = this._popupWidth;
 		this._popupWidth = popupWidth;
 
-		if (o !== popupWidth || (opts && opts.force)) {
+		if (o !== popupWidth || opts?.force) {
 			if (this._open) {
 				var pp = this.getPopupNode_(),
 					pp2 = this.getPopupNode_(true);
@@ -136,7 +136,7 @@ export class ComboWidget extends zul.inp.InputWidget<string> {
 		const o = this._type;
 		this._type = type;
 
-		if (o !== type || (opts && opts.force)) {
+		if (o !== type || opts?.force) {
 			var inp = this.getInputNode();
 			if (inp)
 				inp.type = type;
@@ -162,7 +162,7 @@ export class ComboWidget extends zul.inp.InputWidget<string> {
 		const o = this._iconSclass;
 		this._iconSclass = iconSclass;
 
-		if (o !== iconSclass || (opts && opts.force)) {
+		if (o !== iconSclass || opts?.force) {
 			var icon = this.$n('icon');
 			if (this.desktop && icon)
 				icon.className = (this.$s('icon') + ' ' + iconSclass);

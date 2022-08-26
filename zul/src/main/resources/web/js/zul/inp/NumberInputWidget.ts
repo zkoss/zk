@@ -59,8 +59,8 @@ export class NumberInputWidget<ValueType> extends zul.inp.FormatWidget<ValueType
 	 * </ul>
 	 * @param int rounding mode
 	 */
-	setRounding(v: number): this {
-		this._rounding = v;
+	setRounding(rounding: number): this {
+		this._rounding = rounding;
 		return this;
 	}
 
@@ -68,19 +68,19 @@ export class NumberInputWidget<ValueType> extends zul.inp.FormatWidget<ValueType
 		return this._localizedSymbols;
 	}
 
-	setLocalizedSymbols(val: string | undefined, opts?: Record<string, boolean>): this {
+	setLocalizedSymbols(localizedSymbols?: string, opts?: Record<string, boolean>): this {
 		const o = this._localizedSymbols;
 
-		if (val) {
-			var ary = jq.evalJSON(val) as [string, zk.LocalizedSymbols];
+		if (localizedSymbols) {
+			var ary = jq.evalJSON(localizedSymbols) as [string, zk.LocalizedSymbols];
 			if (!globallocalizedSymbols[ary[0]])
 				globallocalizedSymbols[ary[0]] = ary[1];
 			this._localizedSymbols = globallocalizedSymbols[ary[0]];
 		} else {
-			this._localizedSymbols = val as undefined;
+			this._localizedSymbols = localizedSymbols as undefined;
 		}
 
-		if (o !== val || (opts && opts.force)) {
+		if (o !== localizedSymbols || opts?.force) {
 			var symbols = this._localizedSymbols;
 			this._allowKeys = symbols ?
 				'0123456789' + symbols.MINUS + symbols.PERCENT

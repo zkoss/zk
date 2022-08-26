@@ -30,11 +30,11 @@ export class Rating extends zul.Widget {
 	 * Sets the iconSclass.
 	 * @param String sclass
 	 */
-	setIconSclass(sclass: string, opts?: Record<string, boolean>): this {
+	setIconSclass(iconSclass: string, opts?: Record<string, boolean>): this {
 		const o = this._iconSclass;
-		this._iconSclass = sclass;
+		this._iconSclass = iconSclass;
 
-		if (o !== sclass || (opts && opts.force)) {
+		if (o !== iconSclass || opts?.force) {
 			if (this.desktop) {
 				this.rerender();
 			}
@@ -59,7 +59,7 @@ export class Rating extends zul.Widget {
 		const o = this._rating;
 		this._rating = rating;
 
-		if (o !== rating || (opts && opts.force)) {
+		if (o !== rating || opts?.force) {
 			if (this.desktop) {
 				this._toggleClass('selected', rating);
 			}
@@ -84,7 +84,7 @@ export class Rating extends zul.Widget {
 		const o = this._disabled;
 		this._disabled = disabled;
 
-		if (o !== disabled || (opts && opts.force)) {
+		if (o !== disabled || opts?.force) {
 			if (this.desktop) {
 				jq(this).children().toggleClass(this.$s('disabled'), disabled);
 			}
@@ -109,7 +109,7 @@ export class Rating extends zul.Widget {
 		const o = this._readonly;
 		this._readonly = readonly;
 
-		if (o !== readonly || (opts && opts.force)) {
+		if (o !== readonly || opts?.force) {
 			if (this.desktop) {
 				jq(this).children().toggleClass(this.$s('readonly'), readonly);
 			}

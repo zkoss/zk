@@ -23,11 +23,11 @@ export class Hlayout extends zul.box.Layout {
 	_beforeSizeWidth?: number;
 
 	/*zk.def*/
-	setValign(v: string, opts?: Record<string, boolean>): this {
+	setValign(valign: string, opts?: Record<string, boolean>): this {
 		const o = this._valign;
-		this._valign = v;
+		this._valign = valign;
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== valign || opts?.force) {
 			this.updateDomClass_();
 		}
 

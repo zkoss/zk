@@ -3758,14 +3758,16 @@ unbind_: function (skipper, after) {
 		}
 	}
 
-	setFlexSizeH_(flexSizeH: HTMLElement, zkn: zk.JQZK, height: number, isFlexMin?: boolean): void {
+	// eslint-disable-next-line zk/javaStyleSetterSignature
+	setFlexSizeH_(n: HTMLElement, zkn: zk.JQZK, height: number, isFlexMin?: boolean): void {
 		// excluding margin for F50-3000873.zul and B50-3285635.zul
-		flexSizeH.style.height = jq.px0(height - (!isFlexMin ? zkn.marginHeight() : 0));
+		n.style.height = jq.px0(height - (!isFlexMin ? zkn.marginHeight() : 0));
 	}
 
-	setFlexSizeW_(flexSizeW: HTMLElement, zkn: zk.JQZK, width: number, isFlexMin?: boolean): void {
+	// eslint-disable-next-line zk/javaStyleSetterSignature
+	setFlexSizeW_(n: HTMLElement, zkn: zk.JQZK, width: number, isFlexMin?: boolean): void {
 		// excluding margin for F50-3000873.zul and B50-3285635.zul
-		flexSizeW.style.width = jq.px0(width - (!isFlexMin ? zkn.marginWidth() : 0));
+		n.style.width = jq.px0(width - (!isFlexMin ? zkn.marginWidth() : 0));
 	}
 
 	// ZK-5050

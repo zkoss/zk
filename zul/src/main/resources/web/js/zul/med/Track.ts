@@ -39,11 +39,12 @@ export class Track extends zul.Widget<HTMLTrackElement> {
 	 * Sets if this track should be enabled by default.
 	 * @param boolean isDefault if this track should be enabled by default.
 	 */
+	// eslint-disable-next-line zk/javaStyleSetterSignature
 	setDefault(isDefault: boolean, opts?: Record<string, boolean>): this {
 		const o = this._default;
 		this._default = isDefault;
 
-		if (o !== isDefault || (opts && opts.force)) {
+		if (o !== isDefault || opts?.force) {
 			const n = this.$n();
 			if (n) n.default = isDefault;
 		}
@@ -75,7 +76,7 @@ export class Track extends zul.Widget<HTMLTrackElement> {
 		const o = this._kind;
 		this._kind = kind;
 
-		if (o !== kind || (opts && opts.force)) {
+		if (o !== kind || opts?.force) {
 			const n = this.$n();
 			if (n) n.kind = kind;
 		}
@@ -100,7 +101,7 @@ export class Track extends zul.Widget<HTMLTrackElement> {
 		const o = this._label;
 		this._label = label;
 
-		if (o !== label || (opts && opts.force)) {
+		if (o !== label || opts?.force) {
 			const n = this.$n();
 			if (n) n.label = label;
 		}
@@ -129,7 +130,7 @@ export class Track extends zul.Widget<HTMLTrackElement> {
 		const o = this._src;
 		this._src = src;
 
-		if (o !== src || (opts && opts.force)) {
+		if (o !== src || opts?.force) {
 			const n = this.$n();
 			if (n) n.src = src;
 		}
@@ -156,7 +157,7 @@ export class Track extends zul.Widget<HTMLTrackElement> {
 		const o = this._srclang;
 		this._srclang = srclang;
 
-		if (o !== srclang || (opts && opts.force)) {
+		if (o !== srclang || opts?.force) {
 			const n = this.$n();
 			if (n) n.srclang = srclang;
 		}

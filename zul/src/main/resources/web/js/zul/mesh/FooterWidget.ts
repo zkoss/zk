@@ -34,13 +34,13 @@ export abstract class FooterWidget extends zul.LabelImageWidget<HTMLTableCellEle
 	 * <p>It is the same as the colspan attribute of HTML TD tag.
 	 * @param int span
 	 */
-	setSpan(v: number, opts?: Record<string, boolean>): this {
+	setSpan(span: number, opts?: Record<string, boolean>): this {
 		const o = this._span;
-		this._span = v;
+		this._span = span;
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== span || opts?.force) {
 			var n = this.$n();
-			if (n) n.colSpan = v;
+			if (n) n.colSpan = span;
 		}
 
 		return this;
@@ -57,13 +57,13 @@ export abstract class FooterWidget extends zul.LabelImageWidget<HTMLTableCellEle
 	/** Sets the horizontal alignment of this footer.
 	 * @param String align
 	 */
-	setAlign(v: string, opts?: Record<string, boolean>): this {
+	setAlign(align: string, opts?: Record<string, boolean>): this {
 		const o = this._align;
-		this._align = v;
+		this._align = align;
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== align || opts?.force) {
 			var n = this.$n();
-			if (n) n.align = v;
+			if (n) n.align = align;
 		}
 
 		return this;
@@ -80,13 +80,13 @@ export abstract class FooterWidget extends zul.LabelImageWidget<HTMLTableCellEle
 	/** Sets the vertical alignment of this footer.
 	 * @param String valign
 	 */
-	setValign(v: string, opts?: Record<string, boolean>): this {
+	setValign(valign: string, opts?: Record<string, boolean>): this {
 		const o = this._valign;
-		this._valign = v;
+		this._valign = valign;
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== valign || opts?.force) {
 			var n = this.$n();
-			if (n) n.vAlign = v;
+			if (n) n.vAlign = valign;
 		}
 
 		return this;

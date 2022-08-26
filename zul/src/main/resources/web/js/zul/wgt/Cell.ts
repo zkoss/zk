@@ -42,14 +42,14 @@ export class Cell extends zul.Widget<HTMLTableCellElement> {
 	 * <p>It is the same as the colspan attribute of HTML TD tag.
 	 * @param int colspan
 	 */
-	setColspan(v: number, opts?: Record<string, boolean>): this {
+	setColspan(colspan: number, opts?: Record<string, boolean>): this {
 		const o = this._colspan;
-		this._colspan = v;
+		this._colspan = colspan;
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== colspan || opts?.force) {
 			var n = this.$n();
 			if (n)
-				n.colSpan = v;
+				n.colSpan = colspan;
 		}
 
 		return this;
@@ -67,14 +67,14 @@ export class Cell extends zul.Widget<HTMLTableCellElement> {
 	 * <p>It is the same as the rowspan attribute of HTML TD tag.
 	 * @param int rowspan
 	 */
-	setRowspan(v: number, opts?: Record<string, boolean>): this {
+	setRowspan(rowspan: number, opts?: Record<string, boolean>): this {
 		const o = this._rowspan;
-		this._rowspan = v;
+		this._rowspan = rowspan;
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== rowspan || opts?.force) {
 			var n = this.$n();
 			if (n)
-				n.rowSpan = v;
+				n.rowSpan = rowspan;
 		}
 
 		return this;
@@ -91,14 +91,14 @@ export class Cell extends zul.Widget<HTMLTableCellElement> {
 	/** Sets the horizontal alignment.
 	 * @param String align
 	 */
-	setAlign(v: string, opts?: Record<string, boolean>): this {
+	setAlign(align: string, opts?: Record<string, boolean>): this {
 		const o = this._align;
-		this._align = v;
+		this._align = align;
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== align || opts?.force) {
 			var n = this.$n();
 			if (n)
-				n.align = v;
+				n.align = align;
 		}
 
 		return this;
@@ -115,14 +115,14 @@ export class Cell extends zul.Widget<HTMLTableCellElement> {
 	/** Sets the vertical alignment of this grid.
 	 * @param String valign
 	 */
-	setValign(v: string, opts?: Record<string, boolean>): this {
+	setValign(valign: string, opts?: Record<string, boolean>): this {
 		const o = this._valign;
-		this._valign = v;
+		this._valign = valign;
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== valign || opts?.force) {
 			var n = this.$n();
 			if (n)
-				n.vAlign = v;
+				n.vAlign = valign;
 		}
 
 		return this;

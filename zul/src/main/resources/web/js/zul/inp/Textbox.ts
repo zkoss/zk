@@ -37,7 +37,7 @@ export class Textbox extends zul.inp.InputWidget<string> {
 		const o = this._multiline;
 		this._multiline = multiline;
 
-		if (o !== multiline || (opts && opts.force)) {
+		if (o !== multiline || opts?.force) {
 			this.rerender();
 		}
 
@@ -80,7 +80,7 @@ export class Textbox extends zul.inp.InputWidget<string> {
 		const o = this._rows;
 		this._rows = rows;
 
-		if (o !== rows || (opts && opts.force)) {
+		if (o !== rows || opts?.force) {
 			interface ZULInputElement extends HTMLInputElement {
 				rows: number;
 			}
@@ -110,7 +110,7 @@ export class Textbox extends zul.inp.InputWidget<string> {
 		const o = this._type;
 		this._type = type;
 
-		if (o !== type || (opts && opts.force)) {
+		if (o !== type || opts?.force) {
 			var inp = this.getInputNode();
 			if (inp)
 				inp.type = type;

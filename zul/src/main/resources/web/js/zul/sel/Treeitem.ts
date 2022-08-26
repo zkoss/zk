@@ -116,7 +116,7 @@ export class Treeitem extends zul.sel.ItemWidget {
 		const o = this._open;
 		this._open = open;
 
-		if (o !== open || (opts && opts.force)) {
+		if (o !== open || opts?.force) {
 			var img = this.$n('open'),
 				icon = this.$n('icon');
 			if (!img || _closed(this.parent)) {

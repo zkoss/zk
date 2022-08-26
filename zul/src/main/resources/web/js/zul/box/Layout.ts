@@ -32,7 +32,7 @@ export class Layout extends zul.Widget {
 		const o = this._spacing;
 		this._spacing = spacing;
 
-		if (o !== spacing || (opts && opts.force)) {
+		if (o !== spacing || opts?.force) {
 			var n = this.$n(),
 				vert = this.isVertical_(),
 				spc = this._spacing;
