@@ -13,13 +13,9 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 
-let _shallFixPercent: (wgt: zul.wgt.Separator) => boolean =
-	zk.gecko
-		? (wgt) => {
-			let s = wgt._spacing;
-			return s != null && s.endsWith('%');
-		}
-		: zk.$void;
+function _shallFixPercent(wgt: zul.wgt.Separator): boolean {
+	return !!(zk.gecko && wgt._spacing?.endsWith('%'));
+}
 
 /**
  * A separator.
@@ -44,7 +40,7 @@ export class Separator extends zul.Widget {
 	setOrient(orient: string, opts?: Record<string, boolean>): this {
 		const o = this._orient;
 		this._orient = orient;
-		if (o !== orient || (opts && opts.force)) {
+		if (o !== orient || opts?.force) {
 			this.updateDomClass_();
 		}
 		return this;
@@ -59,10 +55,10 @@ export class Separator extends zul.Widget {
 	/** Sets  whether to display a visual bar as the separator.
 	 * @param boolean bar
 	 */
-	setBar(v: boolean, opts?: Record<string, boolean>): this {
+	setBar(bar: boolean, opts?: Record<string, boolean>): this {
 		const o = this._bar;
-		this._bar = v;
-		if (o !== v || (opts && opts.force)) {
+		this._bar = bar;
+		if (o !== bar || opts?.force) {
 			this.updateDomClass_();
 		}
 		return this;
@@ -77,10 +73,10 @@ export class Separator extends zul.Widget {
 	/** Sets the spacing.
 	 * @param String spacing the spacing (such as "0", "5px", "3pt" or "1em")
 	 */
-	setSpacing(v: string, opts?: Record<string, boolean>): this {
+	setSpacing(spacing: string, opts?: Record<string, boolean>): this {
 		const o = this._spacing;
-		this._spacing = v;
-		if (o !== v || (opts && opts.force)) {
+		this._spacing = spacing;
+		if (o !== spacing || opts?.force) {
 			this.updateDomStyle_();
 		}
 		return this;
@@ -118,19 +114,19 @@ export class Separator extends zul.Widget {
 		var space = this._spacing!,
 			v = zk.parseInt(space.substring(0, space.length - 1).trim());
 		if (v <= 0) return s;
-		let percent = v >= 2 ? (v / 2) + '%' : '1%';
+		const percent = `${v >= 2 ? v / 2 : 1}%`;
 
 		return 'margin:' + (this.isVertical() ? '0 ' + percent : percent + ' 0')
 			+ ';' + s;
 	}
 	override getWidth(): string | undefined {
-		let wd = super.getWidth();
+		const wd = super.getWidth();
 		return !this.isVertical() || (wd != null && wd.length > 0)
 			|| _shallFixPercent(this) ? wd : this._spacing;
 
 	}
 	override getHeight(): string | undefined {
-		let hgh = super.getHeight();
+		const hgh = super.getHeight();
 		return this.isVertical() || (hgh != null && hgh.length > 0)
 			|| _shallFixPercent(this) ? hgh : this._spacing;
 	}

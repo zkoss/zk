@@ -37,14 +37,14 @@ export class Image extends zul.Widget<HTMLImageElement> {
 	/** Sets the source URI of the image.
 	 * @param String src the URI of the image source
 	 */
-	setSrc(v: string, opts?: Record<string, boolean>): this {
+	setSrc(src: string, opts?: Record<string, boolean>): this {
 		const o = this._src;
-		this._src = v;
+		this._src = src;
 
-		if (o !== v || (opts && opts.force)) {
-			if (v && this._preloadImage) zUtl.loadImage(v);
+		if (o !== src || opts?.force) {
+			if (src && this._preloadImage) zUtl.loadImage(src);
 			var n = this.getImageNode();
-			if (n) n.src = v || '';
+			if (n) n.src = src || '';
 		}
 
 		return this;
@@ -55,8 +55,8 @@ export class Image extends zul.Widget<HTMLImageElement> {
 		return this.getSrc();
 	}
 	// for zephyr to treat as "src" attribute at client side
-	setContent(v: string, opts?: Record<string, boolean>): this {
-		return this.setSrc(v, opts);
+	setContent(content: string, opts?: Record<string, boolean>): this {
+		return this.setSrc(content, opts);
 	}
 
 	/** Returns the URI of the hover image.
@@ -91,13 +91,13 @@ export class Image extends zul.Widget<HTMLImageElement> {
 	 * @param String align
 	 * @deprecated as of release 6.0.0, use CSS instead.
 	 */
-	setAlign(v: string, opts?: Record<string, boolean>): this {
+	setAlign(align: string, opts?: Record<string, boolean>): this {
 		const o = this._align;
-		this._align = v;
+		this._align = align;
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== align || opts?.force) {
 			var n = this.getImageNode();
-			if (n) n.align = v || '';
+			if (n) n.align = align || '';
 		}
 
 		return this;
@@ -118,13 +118,13 @@ export class Image extends zul.Widget<HTMLImageElement> {
 	 * @param String hspace
 	 * @deprecated as of release 6.0.0, use CSS instead.
 	 */
-	setHspace(v: string, opts?: Record<string, boolean>): this {
+	setHspace(hspace: string, opts?: Record<string, boolean>): this {
 		const o = this._hspace;
-		this._hspace = v;
+		this._hspace = hspace;
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== hspace || opts?.force) {
 			var n = this.getImageNode();
-			if (n) n.hspace = v as unknown as number;
+			if (n) n.hspace = hspace as unknown as number;
 		}
 
 		return this;
@@ -145,13 +145,13 @@ export class Image extends zul.Widget<HTMLImageElement> {
 	 * @param String vspace
 	 * @deprecated as of release 6.0.0, use CSS instead.
 	 */
-	setVspace(v: string, opts?: Record<string, boolean>): this {
+	setVspace(vspace: string, opts?: Record<string, boolean>): this {
 		const o = this._vspace;
-		this._vspace = v;
+		this._vspace = vspace;
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== vspace || opts?.force) {
 			var n = this.getImageNode();
-			if (n) n.vspace = v as unknown as number;
+			if (n) n.vspace = vspace as unknown as number;
 		}
 
 		return this;

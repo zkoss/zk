@@ -37,7 +37,7 @@ export class Groupbox extends zul.ContainerWidget {
 		const o = this._open;
 		this._open = open;
 
-		if (o !== open || (opts && opts.force)) {
+		if (o !== open || opts?.force) {
 			var node = this.$n();
 			if (node && this._closable) {
 				var caveNode = this.getCaveNode()!;
@@ -84,7 +84,7 @@ export class Groupbox extends zul.ContainerWidget {
 		const o = this._closable;
 		this._closable = closable;
 
-		if (o !== closable || (opts && opts.force)) {
+		if (o !== closable || opts?.force) {
 			this._updDomOuter();
 		}
 
@@ -109,7 +109,7 @@ export class Groupbox extends zul.ContainerWidget {
 		const o = this._contentStyle;
 		this._contentStyle = contentStyle;
 
-		if (o !== contentStyle || (opts && opts.force)) {
+		if (o !== contentStyle || opts?.force) {
 			this._updDomOuter();
 		}
 
@@ -131,7 +131,7 @@ export class Groupbox extends zul.ContainerWidget {
 		const o = this._contentSclass;
 		this._contentSclass = contentSclass;
 
-		if (o !== contentSclass || (opts && opts.force)) {
+		if (o !== contentSclass || opts?.force) {
 			this._updDomOuter();
 		}
 
@@ -154,7 +154,7 @@ export class Groupbox extends zul.ContainerWidget {
 		const o = this._title;
 		this._title = title;
 
-		if (o !== title || (opts && opts.force)) {
+		if (o !== title || opts?.force) {
 			this._updDomOuter();
 		}
 
@@ -230,15 +230,16 @@ export class Groupbox extends zul.ContainerWidget {
 	}
 
 	// B60-ZK-562: Groupbox vflex=min is wrong
-	override setFlexSizeH_(flexSizeH: HTMLElement, zkn: zk.JQZK, height: number, isFlexMin?: boolean): void {
+	// eslint-disable-next-line zk/javaStyleSetterSignature
+	override setFlexSizeH_(n: HTMLElement, zkn: zk.JQZK, height: number, isFlexMin?: boolean): void {
 		if (isFlexMin && (this.caption || this._title)) {
 			// B60-ZK-562
 			height = this._isDefault() ? parseInt(jq(this).css('padding-top')) : 0;
-			for (var c = flexSizeH.firstChild; c; c = c.nextSibling)
+			for (var c = n.firstChild; c; c = c.nextSibling)
 				height += jq(c).outerHeight()!;
 		}
 
-		super.setFlexSizeH_(flexSizeH, zkn, height, isFlexMin);
+		super.setFlexSizeH_(n, zkn, height, isFlexMin);
 	}
 
 	//watch//

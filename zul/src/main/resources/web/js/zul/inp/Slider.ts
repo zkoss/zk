@@ -54,7 +54,7 @@ export class Slider extends zul.Widget {
 		const o = this._orient;
 		this._orient = orient;
 
-		if (o !== orient || (opts && opts.force)) {
+		if (o !== orient || opts?.force) {
 			this.rerender();
 		}
 
@@ -78,7 +78,7 @@ export class Slider extends zul.Widget {
 		const o = this._curpos;
 		this._curpos = curpos;
 
-		if (o !== curpos || (opts && opts.force)) {
+		if (o !== curpos || opts?.force) {
 			if (this.desktop) {
 				this._fixPos();
 			}
@@ -102,7 +102,7 @@ export class Slider extends zul.Widget {
 		const o = this._minpos;
 		this._minpos = minpos;
 
-		if (o !== minpos || (opts && opts.force)) {
+		if (o !== minpos || opts?.force) {
 			if (this._curpos < minpos) {
 				this._curpos = minpos;
 			}
@@ -129,7 +129,7 @@ export class Slider extends zul.Widget {
 		const o = this._maxpos;
 		this._maxpos = maxpos;
 
-		if (o !== maxpos || (opts && opts.force)) {
+		if (o !== maxpos || opts?.force) {
 			if (this._curpos > maxpos) {
 				this._curpos = maxpos;
 			}
@@ -196,7 +196,7 @@ export class Slider extends zul.Widget {
 		const o = this._step;
 		this._step = step;
 
-		if (o !== step || (opts && opts.force)) {
+		if (o !== step || opts?.force) {
 			this._fixStep();
 		}
 
@@ -231,7 +231,7 @@ export class Slider extends zul.Widget {
 		const o = this._name;
 		this._name = name;
 
-		if (o !== name || (opts && opts.force)) {
+		if (o !== name || opts?.force) {
 			if (this.efield)
 				this.efield.name = this._name;
 		}
@@ -259,7 +259,7 @@ export class Slider extends zul.Widget {
 		const o = this._mode;
 		this._mode = mode;
 
-		if (o !== mode || (opts && opts.force)) {
+		if (o !== mode || opts?.force) {
 			this._fixStep();
 			if (this.desktop) {
 				this._fixPos();
@@ -614,8 +614,8 @@ export class Slider extends zul.Widget {
 		}
 	}
 
-	override setFlexSize_(flexSize_: zk.FlexSize, isFlexMin?: boolean): void {
-		super.setFlexSize_(flexSize_, isFlexMin);
+	override setFlexSize_(flexSize: zk.FlexSize, isFlexMin?: boolean): void {
+		super.setFlexSize_(flexSize, isFlexMin);
 		if (this._mold != 'knob') {
 			this.onSize();
 		}

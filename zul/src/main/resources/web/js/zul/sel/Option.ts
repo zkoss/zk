@@ -45,7 +45,7 @@ export class Option extends zul.Widget<HTMLOptionElement> {
 		const o = this._disabled;
 		this._disabled = disabled;
 
-		if (o !== disabled || (opts && opts.force)) {
+		if (o !== disabled || opts?.force) {
 			var n = this.$n();
 			if (n) n.disabled = (disabled ? 'disabled' : '') as unknown as boolean;
 		}

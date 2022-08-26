@@ -37,7 +37,7 @@ export class Area extends zk.Widget<HTMLAreaElement> {
 		const o = this._shape;
 		this._shape = shape;
 
-		if (o !== shape || (opts && opts.force)) {
+		if (o !== shape || opts?.force) {
 			var n = this.$n();
 			if (n) n.shape = shape || '';
 		}
@@ -73,7 +73,7 @@ export class Area extends zk.Widget<HTMLAreaElement> {
 		const o = this._coords;
 		this._coords = coords;
 
-		if (o !== coords || (opts && opts.force)) {
+		if (o !== coords || opts?.force) {
 			// ZK-1892 rename the argument
 			var n = this.$n();
 			if (n) n.coords = coords || '';

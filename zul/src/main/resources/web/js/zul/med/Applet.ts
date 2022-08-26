@@ -56,7 +56,7 @@ export class Applet extends zul.Widget<HTMLAppletElement> {
 		const o = this._code;
 		this._code = code;
 
-		if (o !== code || (opts && opts.force)) {
+		if (o !== code || opts?.force) {
 			this.rerender();
 		}
 
@@ -77,7 +77,7 @@ export class Applet extends zul.Widget<HTMLAppletElement> {
 		const o = this._codebase;
 		this._codebase = codebase;
 
-		if (o !== codebase || (opts && opts.force)) {
+		if (o !== codebase || opts?.force) {
 			this.rerender();
 		}
 
@@ -100,7 +100,7 @@ export class Applet extends zul.Widget<HTMLAppletElement> {
 		const o = this._archive;
 		this._archive = archive;
 
-		if (o !== archive || (opts && opts.force)) {
+		if (o !== archive || opts?.force) {
 			this.rerender();
 		}
 
@@ -123,7 +123,7 @@ export class Applet extends zul.Widget<HTMLAppletElement> {
 		const o = this._mayscript;
 		this._mayscript = mayscript;
 
-		if (o !== mayscript || (opts && opts.force)) {
+		if (o !== mayscript || opts?.force) {
 			const n = this.$n();
 			if (n)
 				n.mayscript = mayscript; // Use of non-standard `mayscript` attribute
@@ -144,14 +144,14 @@ export class Applet extends zul.Widget<HTMLAppletElement> {
 	 * @param String align
 	 * @since 5.0.3
 	 */
-	setAlign(v: string, opts?: Record<string, boolean>): this {
+	setAlign(align: string, opts?: Record<string, boolean>): this {
 		const o = this._align;
-		this._align = v;
+		this._align = align;
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== align || opts?.force) {
 			var n = this.$n();
 			if (n)
-				n.align = v;
+				n.align = align;
 		}
 
 		return this;
@@ -169,14 +169,14 @@ export class Applet extends zul.Widget<HTMLAppletElement> {
 	 * @param String hspace
 	 * @since 5.0.3
 	 */
-	setHspace(v: string, opts?: Record<string, boolean>): this {
+	setHspace(hspace: string, opts?: Record<string, boolean>): this {
 		const o = this._hspace;
-		this._hspace = v;
+		this._hspace = hspace;
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== hspace || opts?.force) {
 			var n = this.$n();
 			if (n)
-				n.hspace = v as unknown as number;
+				n.hspace = hspace as unknown as number;
 		}
 
 		return this;
@@ -194,14 +194,14 @@ export class Applet extends zul.Widget<HTMLAppletElement> {
 	 * @param String vspace
 	 * @since 5.0.3
 	 */
-	setVspace(v: string, opts?: Record<string, boolean>): this {
+	setVspace(vspace: string, opts?: Record<string, boolean>): this {
 		const o = this._vspace;
-		this._vspace = v;
+		this._vspace = vspace;
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== vspace || opts?.force) {
 			var n = this.$n();
 			if (n)
-				n.vspace = v as unknown as number;
+				n.vspace = vspace as unknown as number;
 		}
 
 		return this;
@@ -277,13 +277,13 @@ export class Applet extends zul.Widget<HTMLAppletElement> {
 	 * @param String name
 	 * @param String value
 	 */
-	setField(name: string, value: string): this {
+	setField(field: string, value: string): this {
 		const n = this.$n();
 		if (n) {
 			try {
-				n[name] = value;
+				n[field] = value;
 			} catch (e) {
-				zk.error('Failed to set applet\'s field: ' + name + '\n' + (e as Error).message);
+				zk.error('Failed to set applet\'s field: ' + field + '\n' + (e as Error).message);
 			}
 		}
 		return this;
@@ -300,13 +300,13 @@ export class Applet extends zul.Widget<HTMLAppletElement> {
 	 * @param String nm
 	 * @param String val
 	 */
-	setParam(nm: string, val: string): this {
+	setParam(param: string, val: string): this {
 		if (arguments.length == 1) {
-			val = nm[1];
-			nm = nm[0];
+			val = param[1];
+			param = param[0];
 		}
-		if (val != null) this._params[nm] = val;
-		else delete this._params[nm];
+		if (val != null) this._params[param] = val;
+		else delete this._params[param];
 		return this;
 	}
 
@@ -317,8 +317,8 @@ export class Applet extends zul.Widget<HTMLAppletElement> {
 	 * values <code>value1, value2</code> respectively.
 	 * @since 5.0.4
 	 */
-	setParams(m: Partial<HTMLAppletElement>): this {
-		this._params = m;
+	setParams(params: Partial<HTMLAppletElement>): this {
+		this._params = params;
 		return this;
 	}
 

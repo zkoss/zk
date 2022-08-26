@@ -55,16 +55,16 @@ export class Radio extends zul.wgt.Checkbox {
 	 * @param Radiogroup group the radio group, or null to dis-associate
 	 * @since 5.0.4
 	 */
-	setRadiogroup(group?: zul.wgt.Radiogroup | string): this {
+	setRadiogroup(radiogroup?: zul.wgt.Radiogroup | string): this {
 		var old = this._group;
 		// for zephyr to support set radiogroup by id
-		if (typeof group == 'string')
-			group = zk.$<zul.wgt.Radiogroup>('$' + group);
-		if (old !== group) {
+		if (typeof radiogroup == 'string')
+			radiogroup = zk.$<zul.wgt.Radiogroup>('$' + radiogroup);
+		if (old !== radiogroup) {
 			if (old && this._attachExternal) old._rmExtern(this);
-			this._group = group;
-			if (group && this.desktop) {
-				group._addExtern(this);
+			this._group = radiogroup;
+			if (radiogroup && this.desktop) {
+				radiogroup._addExtern(this);
 				this._attachExternal = true;
 			}
 			this._fixName();
@@ -137,8 +137,8 @@ export class Radio extends zul.wgt.Checkbox {
 	 * @param boolean selected
 	 * @return Radio
 	 */
-	setSelected(checked: boolean, opts?: Record<string, boolean>): this {
-		return this.setChecked(checked, opts);
+	setSelected(selected: boolean, opts?: Record<string, boolean>): this {
+		return this.setChecked(selected, opts);
 	}
 
 	/** Returns whether it is selected.

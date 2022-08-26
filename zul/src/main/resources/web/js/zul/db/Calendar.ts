@@ -40,7 +40,7 @@ function _newDate(year, month, day, bFix, tz?: string): DateImpl {
 
 function _getTimeZone(wgt: zul.db.Calendar): string | undefined {
 	var parent: TimeZoneWidget | undefined = wgt.parent,
-		tz = parent && parent.getTimeZone && parent.getTimeZone();
+		tz = parent?.getTimeZone?.();
 	return tz ? tz : wgt._defaultTzone;
 }
 
@@ -405,7 +405,7 @@ export class Calendar extends zul.Widget {
 		const o = this._value;
 		this._value = value;
 
-		if (o !== value || (opts && opts.force)) {
+		if (o !== value || opts?.force) {
 			var parent: TimeZoneWidget | undefined = this.parent;
 			if (!parent || !parent.getTimeZone) {
 				this._value.tz(this._defaultTzone);
@@ -454,7 +454,7 @@ export class Calendar extends zul.Widget {
 		const o = this._constraint;
 		this._constraint = constraint;
 
-		if (o !== constraint || (opts && opts.force)) {
+		if (o !== constraint || opts?.force) {
 			this._fixConstraint();
 			// ZK-3619, this method could be called when datebox opening the calendar,
 			// inServer means there is a calendar tag in zul file.
@@ -487,7 +487,7 @@ export class Calendar extends zul.Widget {
 		const o = this._name;
 		this._name = name;
 
-		if (o !== name || (opts && opts.force)) {
+		if (o !== name || opts?.force) {
 			if (this.efield)
 				this.efield.name = this._name;
 		}
@@ -519,7 +519,7 @@ export class Calendar extends zul.Widget {
 		const o = this._weekOfYear;
 		this._weekOfYear = weekOfYear;
 
-		if (o !== weekOfYear || (opts && opts.force)) {
+		if (o !== weekOfYear || opts?.force) {
 			if (this.desktop && zk.feature.ee)
 				this.rerender();
 		}
@@ -546,7 +546,7 @@ export class Calendar extends zul.Widget {
 		const o = this._showTodayLink;
 		this._showTodayLink = showTodayLink;
 
-		if (o !== showTodayLink || (opts && opts.force)) {
+		if (o !== showTodayLink || opts?.force) {
 			this.rerender();
 		}
 
@@ -572,7 +572,7 @@ export class Calendar extends zul.Widget {
 		const o = this._todayLinkLabel;
 		this._todayLinkLabel = todayLinkLabel;
 
-		if (o !== todayLinkLabel || (opts && opts.force)) {
+		if (o !== todayLinkLabel || opts?.force) {
 			this.rerender();
 		}
 
@@ -678,19 +678,19 @@ export class Calendar extends zul.Widget {
 		}
 	}
 
-	setMinYear_(minYear_: number): void {
-		if (minYear_) {
+	setMinYear_(minYear: number): void {
+		if (minYear) {
 			var y = this.getTime().getFullYear();
-			this._minyear = minYear_ > y ? y : (minYear_ > 100 ? minYear_ : 100);
+			this._minyear = minYear > y ? y : (minYear > 100 ? minYear : 100);
 		} else {
 			this._minyear = 1900;
 		}
 	}
 
-	setMaxYear_(maxYear_: number): void {
-		if (maxYear_) {
+	setMaxYear_(maxYear: number): void {
+		if (maxYear) {
 			var y = this.getTime().getFullYear();
-			this._maxyear = maxYear_ < y ? y : (maxYear_ > this._minyear ? maxYear_ : this._minyear);
+			this._maxyear = maxYear < y ? y : (maxYear > this._minyear ? maxYear : this._minyear);
 		} else {
 			this._maxyear = 2099;
 		}

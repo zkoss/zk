@@ -21,8 +21,8 @@ export class Decimalbox extends zul.inp.NumberInputWidget<zk.BigDecimal> {
 	_scale?: number;
 
 	// zk.def
-	setScale(v: number): this {
-		this._scale = v;
+	setScale(scale: number): this {
+		this._scale = scale;
 		return this;
 	}
 

@@ -48,7 +48,7 @@ export class Comboitem extends zul.LabelImageWidget implements zul.LabelImageWid
 		const o = this._disabled;
 		this._disabled = disabled;
 
-		if (o !== disabled || (opts && opts.force)) {
+		if (o !== disabled || opts?.force) {
 			var n = this.$n();
 			if (n) {
 				var disd = this.$s('disabled');
@@ -74,11 +74,11 @@ export class Comboitem extends zul.LabelImageWidget implements zul.LabelImageWid
 	/** Sets the description.
 	 * @param String desc
 	 */
-	setDescription(desc: string, opts?: Record<string, boolean>): this {
+	setDescription(description: string, opts?: Record<string, boolean>): this {
 		const o = this._description;
-		this._description = desc;
+		this._description = description;
 
-		if (o !== desc || (opts && opts.force)) {
+		if (o !== description || opts?.force) {
 			this.rerender();
 		}
 
@@ -112,7 +112,7 @@ export class Comboitem extends zul.LabelImageWidget implements zul.LabelImageWid
 		const o = this._content;
 		this._content = content;
 
-		if (o !== content || (opts && opts.force)) {
+		if (o !== content || opts?.force) {
 			this.rerender();
 		}
 
@@ -120,8 +120,8 @@ export class Comboitem extends zul.LabelImageWidget implements zul.LabelImageWid
 	}
 
 	// since 10.0.0 for Zephyr to use
-	setValue(val: unknown): this {
-		this._value = val;
+	setValue(value: unknown): this {
+		this._value = value;
 		return this;
 	}
 

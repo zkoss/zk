@@ -38,7 +38,7 @@ export class Progressmeter extends zul.Widget {
 		const o = this._value;
 		this._value = value;
 
-		if (o !== value || (opts && opts.force)) {
+		if (o !== value || opts?.force) {
 			if (this.$n())
 				this._fixImgWidth();
 		}
@@ -60,7 +60,7 @@ export class Progressmeter extends zul.Widget {
 		const o = this._indeterminate;
 		this._indeterminate = indeterminate;
 
-		if (o !== indeterminate || (opts && opts.force)) {
+		if (o !== indeterminate || opts?.force) {
 			if (this.$n()) {
 				jq(this.$n()).toggleClass(this.$s('indeterminate'), indeterminate);
 			}

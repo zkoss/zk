@@ -49,8 +49,8 @@ export class Rows extends zul.Widget<HTMLTableSectionElement> {
 		return this._visibleItemCount;
 	}
 
-	setVisibleItemCount(v: number): this {
-		this._visibleItemCount = v;
+	setVisibleItemCount(visibleItemCount: number): this {
+		this._visibleItemCount = visibleItemCount;
 		return this;
 	}
 

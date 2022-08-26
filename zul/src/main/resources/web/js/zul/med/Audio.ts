@@ -76,7 +76,7 @@ export class Audio extends zul.Widget<HTMLAudioElement> {
 		const o = this._src;
 		this._src = src;
 
-		if (o !== src || (opts && opts.force)) {
+		if (o !== src || opts?.force) {
 			this.rerender();
 		}
 
@@ -89,8 +89,8 @@ export class Audio extends zul.Widget<HTMLAudioElement> {
 	}
 
 	// for zephyr to treat as "src" attribute at client side
-	setContent(src: string, opts?: Record<string, boolean>): this {
-		return this.setSrc(src, opts);
+	setContent(content: string, opts?: Record<string, boolean>): this {
+		return this.setSrc(content, opts);
 	}
 
 	/** Returns whether to auto start playing the audio.
@@ -108,7 +108,7 @@ export class Audio extends zul.Widget<HTMLAudioElement> {
 		const o = this._autoplay;
 		this._autoplay = autoplay;
 
-		if (o !== autoplay || (opts && opts.force)) {
+		if (o !== autoplay || opts?.force) {
 			var n = this.$n();
 			if (n) n.autoplay = autoplay;
 		}
@@ -131,13 +131,13 @@ export class Audio extends zul.Widget<HTMLAudioElement> {
 	 * @param String preload
 	 * @since 7.0.0
 	 */
-	setPreload(v: 'none' | 'metadata' | 'auto' | '', opts?: Record<string, boolean>): this {
+	setPreload(preload: 'none' | 'metadata' | 'auto' | '', opts?: Record<string, boolean>): this {
 		const o = this._preload;
-		this._preload = v;
+		this._preload = preload;
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== preload || opts?.force) {
 			var n = this.$n();
-			if (n && v !== undefined) n.preload = v;
+			if (n && preload !== undefined) n.preload = preload;
 		}
 
 		return this;
@@ -161,7 +161,7 @@ export class Audio extends zul.Widget<HTMLAudioElement> {
 		const o = this._controls;
 		this._controls = controls;
 
-		if (o !== controls || (opts && opts.force)) {
+		if (o !== controls || opts?.force) {
 			var n = this.$n();
 			if (n) n.controls = controls;
 		}
@@ -184,7 +184,7 @@ export class Audio extends zul.Widget<HTMLAudioElement> {
 		const o = this._loop;
 		this._loop = loop;
 
-		if (o !== loop || (opts && opts.force)) {
+		if (o !== loop || opts?.force) {
 			var n = this.$n();
 			if (n) n.loop = loop;
 		}
@@ -210,7 +210,7 @@ export class Audio extends zul.Widget<HTMLAudioElement> {
 		const o = this._muted;
 		this._muted = muted;
 
-		if (o !== muted || (opts && opts.force)) {
+		if (o !== muted || opts?.force) {
 			var n = this.$n();
 			if (n) n.muted = muted;
 		}

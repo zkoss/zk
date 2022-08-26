@@ -111,7 +111,7 @@ export class Splitter extends zul.Widget {
 		const o = this._open;
 		this._open = open;
 
-		if (o !== open || (opts && opts.force)) {
+		if (o !== open || opts?.force) {
 			if (this.desktop)
 				_setOpen(this, open, opts);
 		}
@@ -278,10 +278,10 @@ export class Splitter extends zul.Widget {
 		}
 	}
 
-	setBtnPos_(btnPos_?: boolean): void {
+	setBtnPos_(btnPos?: boolean): void {
 		var btn = this.$n('btn')!,
 			node = this.$n()!;
-		if (btnPos_)
+		if (btnPos)
 			btn.style.marginLeft = ((node.offsetWidth - btn.offsetWidth) / 2) + 'px';
 		else
 			btn.style.marginTop = ((node.offsetHeight - btn.offsetHeight) / 2) + 'px';

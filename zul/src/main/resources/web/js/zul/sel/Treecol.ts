@@ -124,7 +124,7 @@ export class Treecol extends zul.mesh.SortWidget {
 		const o = this._maxlength, v = maxlength;
 		this._maxlength = maxlength = !v || v < 0 ? 0 : v;
 
-		if (o !== maxlength || (opts && opts.force)) {
+		if (o !== maxlength || opts?.force) {
 			if (this.desktop) {
 				this.rerender();
 				this.updateCells_();

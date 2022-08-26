@@ -65,7 +65,7 @@ export class A extends zul.LabelImageWidget<HTMLAnchorElement> implements zul.La
 		}
 		this._disabled = value;
 
-		if (o !== value || (opts && opts.force)) {
+		if (o !== value || opts?.force) {
 			var doDisable = (): void => {
 					if (this.desktop) {
 						jq(this.$n()).attr('disabled', value ? 'disabled' : null); // use jQuery's attr() instead of dom.disabled for non-button element. Bug ZK-2146
@@ -92,7 +92,7 @@ export class A extends zul.LabelImageWidget<HTMLAnchorElement> implements zul.La
 		const o = this._dir;
 		this._dir = dir;
 
-		if (o !== dir || (opts && opts.force)) {
+		if (o !== dir || opts?.force) {
 			var n = this.$n();
 			if (n) n.innerHTML = this.domContent_();
 		}
@@ -118,7 +118,7 @@ export class A extends zul.LabelImageWidget<HTMLAnchorElement> implements zul.La
 		const o = this._href;
 		this._href = href;
 
-		if (o !== href || (opts && opts.force)) {
+		if (o !== href || opts?.force) {
 			var n = this.$n();
 			if (n) n.href = href || '';
 		}
@@ -145,7 +145,7 @@ export class A extends zul.LabelImageWidget<HTMLAnchorElement> implements zul.La
 		const o = this._target;
 		this._target = target;
 
-		if (o !== target || (opts && opts.force)) {
+		if (o !== target || opts?.force) {
 			var n = this.$n();
 			if (n) n.target = target || '';
 		}

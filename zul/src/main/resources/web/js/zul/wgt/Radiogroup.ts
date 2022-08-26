@@ -110,11 +110,11 @@ export class Radiogroup extends zul.Widget {
 		return this._orient;
 	}
 
-	setOrient(v: string, opts?: Record<string, boolean>): this {
+	setOrient(orient: string, opts?: Record<string, boolean>): this {
 		const o = this._orient;
-		this._orient = v;
+		this._orient = orient;
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== orient || opts?.force) {
 			this.rerender();
 		}
 
@@ -138,13 +138,13 @@ export class Radiogroup extends zul.Widget {
 	 * on ZK's event-driven model.
 	 * @param String name
 	 */
-	setName(v: string, opts?: Record<string, boolean>): this {
+	setName(name: string, opts?: Record<string, boolean>): this {
 		const o = this._name;
-		this._name = v;
+		this._name = name;
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== name || opts?.force) {
 			for (var items = this.getItems(), i = items.length; i--;)
-				items[i].setName(v);
+				items[i].setName(name);
 		}
 
 		return this;
@@ -154,14 +154,14 @@ export class Radiogroup extends zul.Widget {
 	 * <p>Default: false.
 	 * @since 10.0.0
 	 */
-	setDisabled(v: boolean, opts?: Record<string, boolean>): this {
+	setDisabled(disabled: boolean, opts?: Record<string, boolean>): this {
 		const o = this._disabled;
-		this._disabled = v;
+		this._disabled = disabled;
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== disabled || opts?.force) {
 			this.getItems().forEach((r) => {
 				if (r.desktop) {
-					r.setDisabled(v);
+					r.setDisabled(disabled);
 				}
 			});
 		}
@@ -210,15 +210,15 @@ export class Radiogroup extends zul.Widget {
 	 * the radio button with the given index.
 	 * @param int selectedIndex
 	 */
-	setSelectedIndex(jsel: number): this {
-		if (jsel < 0) jsel = -1;
-		if (this._jsel != jsel) {
-			this._jsel = jsel;
+	setSelectedIndex(selectedIndex: number): this {
+		if (selectedIndex < 0) selectedIndex = -1;
+		if (this._jsel != selectedIndex) {
+			this._jsel = selectedIndex;
 			if (this.desktop) {
-				if (jsel < 0) {
+				if (selectedIndex < 0) {
 					this.getSelectedItem()!.setSelected(false);
 				} else {
-					this.getItemAtIndex(jsel)!.setSelected(true);
+					this.getItemAtIndex(selectedIndex)!.setSelected(true);
 				}
 			}
 		}
@@ -236,11 +236,11 @@ export class Radiogroup extends zul.Widget {
 	 * the given radio button.
 	 * @param Radio selectedItem
 	 */
-	setSelectedItem(item?: zul.wgt.Radio): this {
-		if (item == null)
+	setSelectedItem(selectedItem?: zul.wgt.Radio): this {
+		if (selectedItem == null)
 			this.setSelectedIndex(-1);
-		else if (item instanceof zul.wgt.Radio)
-			item.setSelected(true);
+		else if (selectedItem instanceof zul.wgt.Radio)
+			selectedItem.setSelected(true);
 		return this;
 	}
 
@@ -308,7 +308,7 @@ export class Radiogroup extends zul.Widget {
 	override domClass_(no?: zk.DomClassOptions): string {
 		var scls = super.domClass_(no);
 		if (!no || !no.zclass) {
-			let added = this.$s(this.getOrient());
+			const added = this.$s(this.getOrient());
 			if (added) scls += (scls ? ' ' : '') + added;
 		}
 		return scls;

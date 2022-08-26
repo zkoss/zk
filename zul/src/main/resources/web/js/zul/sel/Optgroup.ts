@@ -42,7 +42,7 @@ export class Optgroup extends zul.Widget<HTMLOptGroupElement> {
 		const o = this._disabled;
 		this._disabled = disabled;
 
-		if (o !== disabled || (opts && opts.force)) {
+		if (o !== disabled || opts?.force) {
 			var n = this.$n();
 			if (n) n.disabled = (disabled ? 'disabled' : '') as unknown as boolean;
 		}
@@ -66,7 +66,7 @@ export class Optgroup extends zul.Widget<HTMLOptGroupElement> {
 		const o = this._open;
 		this._open = open;
 
-		if (o !== open || (opts && opts.force)) {
+		if (o !== open || opts?.force) {
 			if (this.desktop)
 				this.parent!.requestRerender_(fromServer);
 		}

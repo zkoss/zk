@@ -175,15 +175,15 @@ export class Tabpanel extends zul.ContainerWidget {
 	}
 
 	//bug #3014664
-	override setVflex(v: boolean | string | undefined): this { //vflex ignored for Tabpanel
-		if (v != 'min') v = false;
-		return super.setVflex(v);
+	override setVflex(vflex: boolean | string | undefined): this { //vflex ignored for Tabpanel
+		if (vflex != 'min') vflex = false;
+		return super.setVflex(vflex);
 	}
 
 	//bug #3014664
-	override setHflex(v: boolean | string | undefined): this { //hflex ignored for Tabpanel
-		if (v != 'min') v = false;
-		return super.setHflex(v);
+	override setHflex(hflex: boolean | string | undefined): this { //hflex ignored for Tabpanel
+		if (hflex != 'min') hflex = false;
+		return super.setHflex(hflex);
 	}
 
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {

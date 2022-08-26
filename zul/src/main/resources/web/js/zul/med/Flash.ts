@@ -42,7 +42,7 @@ export class Flash extends zul.Widget {
 		const o = this._version;
 		this._version = version;
 
-		if (o !== version || (opts && opts.force)) {
+		if (o !== version || opts?.force) {
 			this.rerender();
 		}
 
@@ -60,13 +60,13 @@ export class Flash extends zul.Widget {
 	 * and redraw the component
 	 * @param String src
 	 */
-	setSrc(v: string, opts?: Record<string, boolean>): this {
+	setSrc(src: string, opts?: Record<string, boolean>): this {
 		const o = this._src;
-		this._src = v;
+		this._src = src;
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== src || opts?.force) {
 			var n = this._embedNode();
-			if (n) n.movie = n.src = v || ''; // Use of non-standard attribute `movie`
+			if (n) n.movie = n.src = src || ''; // Use of non-standard attribute `movie`
 		}
 
 		return this;
@@ -88,7 +88,7 @@ export class Flash extends zul.Widget {
 		const o = this._wmode;
 		this._wmode = wmode;
 
-		if (o !== wmode || (opts && opts.force)) {
+		if (o !== wmode || opts?.force) {
 			var n = this._embedNode();
 			if (n) n.wmode = wmode || ''; // Use of non-standard attribute `wmode`
 		}
@@ -107,13 +107,13 @@ export class Flash extends zul.Widget {
 	/** Sets the background color of Flash movie.
 	 * @param String bgcolor [ hexadecimal RGB value]
 	 */
-	setBgcolor(v: string, opts?: Record<string, boolean>): this {
+	setBgcolor(bgcolor: string, opts?: Record<string, boolean>): this {
 		const o = this._bgcolor;
-		this._bgcolor = v;
+		this._bgcolor = bgcolor;
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== bgcolor || opts?.force) {
 			var n = this._embedNode();
-			if (n) n.bgcolor = v || ''; // Use of non-standard attribute `bgcolor`
+			if (n) n.bgcolor = bgcolor || ''; // Use of non-standard attribute `bgcolor`
 		}
 
 		return this;
@@ -130,13 +130,13 @@ export class Flash extends zul.Widget {
 	/** Sets the quality of the Flash movie.
 	 * @param String quality the quality of the Flash movie.
 	 */
-	setQuality(v: string, opts?: Record<string, boolean>): this {
+	setQuality(quality: string, opts?: Record<string, boolean>): this {
 		const o = this._quality;
-		this._quality = v;
+		this._quality = quality;
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== quality || opts?.force) {
 			var n = this._embedNode();
-			if (n) n.quality = v || ''; // Use of non-standard attribute `quality`
+			if (n) n.quality = quality || ''; // Use of non-standard attribute `quality`
 		}
 
 		return this;
@@ -157,7 +157,7 @@ export class Flash extends zul.Widget {
 		const o = this._autoplay;
 		this._autoplay = autoplay;
 
-		if (o !== autoplay || (opts && opts.force)) {
+		if (o !== autoplay || opts?.force) {
 			var n = this._embedNode();
 			if (n) n.autoplay = autoplay || ''; // Use of non-standard attribute `autoplay`
 		}
@@ -176,13 +176,13 @@ export class Flash extends zul.Widget {
 	/** Sets whether the Flash movie plays repeatly
 	 * @param boolean loop
 	 */
-	setLoop(v: boolean, opts?: Record<string, boolean>): this {
+	setLoop(loop: boolean, opts?: Record<string, boolean>): this {
 		const o = this._loop;
-		this._loop = v;
+		this._loop = loop;
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== loop || opts?.force) {
 			var n = this._embedNode();
-			if (n) n.loop = v || ''; // Use of non-standard attribute `loop`
+			if (n) n.loop = loop || ''; // Use of non-standard attribute `loop`
 		}
 
 		return this;

@@ -151,8 +151,6 @@ module.exports = {
         'plugin:zk/recommended'
       ],
       'rules': {
-        'zk/preferNativeInstanceof': 'warn',
-        'zk/javaStyleSetterSignature': 'warn',
         // Recommended
         // Possible Problems
         'no-cond-assign': 'warn',

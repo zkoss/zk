@@ -23,11 +23,11 @@ export class FormatWidget<ValueType> extends zul.inp.InputWidget<ValueType> {
 	getTimeZone?(): string | undefined;
 
 	//zk.def
-	setFormat(v: string, opts?: Record<string, boolean>): this {
+	setFormat(format: string, opts?: Record<string, boolean>): this {
 		const o = this._format;
-		this._format = v;
+		this._format = format;
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== format || opts?.force) {
 			var inp = this.getInputNode();
 			if (inp)
 				inp.value = this.coerceToString_(this._value);

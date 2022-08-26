@@ -91,7 +91,7 @@ export class Tabbox extends zul.Widget {
 		const o = this._tabscroll;
 		this._tabscroll = tabscroll;
 
-		if (o !== tabscroll || (opts && opts.force)) {
+		if (o !== tabscroll || opts?.force) {
 			this.rerender();
 		}
 
@@ -122,7 +122,7 @@ export class Tabbox extends zul.Widget {
 		const o = this._orient;
 		this._orient = orient;
 
-		if (o !== orient || (opts && opts.force)) {
+		if (o !== orient || opts?.force) {
 			if (orient == 'horizontal')
 				this._orient = 'top';
 			else if (orient == 'vertical')
@@ -155,7 +155,7 @@ export class Tabbox extends zul.Widget {
 		const o = this._maximalHeight;
 		this._maximalHeight = maximalHeight;
 
-		if (o !== maximalHeight || (opts && opts.force)) {
+		if (o !== maximalHeight || opts?.force) {
 			this.rerender();
 		}
 
@@ -182,7 +182,7 @@ export class Tabbox extends zul.Widget {
 		const o = this._panelSpacing;
 		this._panelSpacing = panelSpacing;
 
-		if (o !== panelSpacing || (opts && opts.force)) {
+		if (o !== panelSpacing || opts?.force) {
 			this.rerender();
 		}
 
@@ -295,9 +295,9 @@ export class Tabbox extends zul.Widget {
 	 * Sets the selected index.
 	 * @param int index
 	 */
-	setSelectedIndex(index: number): this {
+	setSelectedIndex(selectedIndex: number): this {
 		if (this.tabs)
-			this.setSelectedTab(this.tabs.getChildAt<zul.tab.Tab>(index));
+			this.setSelectedTab(this.tabs.getChildAt<zul.tab.Tab>(selectedIndex));
 		return this;
 	}
 
@@ -313,10 +313,10 @@ export class Tabbox extends zul.Widget {
 	 * Sets the selected tab panel.
 	 * @param Tabpanel panel
 	 */
-	setSelectedPanel(panel: zul.tab.Tabpanel | undefined): this {
-		if (panel && panel.getTabbox() != this)
+	setSelectedPanel(selectedPanel: zul.tab.Tabpanel | undefined): this {
+		if (selectedPanel && selectedPanel.getTabbox() != this)
 			return this;
-		var tab = panel?.getLinkedTab();
+		var tab = selectedPanel?.getLinkedTab();
 		if (tab)
 			this.setSelectedTab(tab);
 		return this;
@@ -334,10 +334,10 @@ export class Tabbox extends zul.Widget {
 	 * Sets the selected tab.
 	 * @param tab zul.tab.Tab
 	 */
-	setSelectedTab(tab: zul.tab.Tab | undefined, fromServer?: boolean): this {
-		if (this._selTab != tab) {
-			this._setSel(tab, !fromServer);
-			this._selTab = tab;
+	setSelectedTab(selectedTab: zul.tab.Tab | undefined, fromServer?: boolean): this {
+		if (this._selTab != selectedTab) {
+			this._setSel(selectedTab, !fromServer);
+			this._selTab = selectedTab;
 		}
 		return this;
 	}

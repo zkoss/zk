@@ -169,10 +169,10 @@ function defSet00(nm: string): GeneratedSetter {
 	};
 }
 function defSet01(nm: string, after: Setter): GeneratedSetter {
-	return function (v, opts) {
+	return function (v, opts?: Record<string, boolean>) {
 		var o = this[nm] as never;
 		this[nm] = v;
-		if (o !== v || (opts && opts.force)) {
+		if (o !== v || opts?.force) {
 			this['__fname__'] = nm.substring(1);
 			after.call(this, ...(arguments as never as []));
 			delete this['__fname__'];
@@ -189,11 +189,11 @@ function defSet10(nm: string, before: Setter): GeneratedSetter {
 	};
 }
 function defSet11(nm: string, before: Setter, after: Setter): GeneratedSetter {
-	return function (v, opts) {
+	return function (v, opts?: Record<string, boolean>) {
 		var o = this[nm] as never;
 		this['__fname__'] = nm.substring(1);
 		this[nm] = v = before.call(this, ...(arguments as never as [])) as never;
-		if (o !== v || (opts && opts.force))
+		if (o !== v || opts?.force)
 			after.call(this, ...(arguments as never as []));
 		delete this['__fname__'];
 		return this;
@@ -1014,7 +1014,7 @@ will cause the setter to be equivalent to
 <pre><code>
 setDisabled: function (v, opts) {
   this._disabled = v;
-  if (this._disabled !== v || (opts && opts.force))
+  if (this._disabled !== v || opts?.force)
     if (this.desktop) this.rerender();
   return this;
 }
@@ -1041,7 +1041,7 @@ will cause the setter to equivalent to
 setDisabled: function (v) {
   v = v != null && v != false;
   this._disabled = v;
-  if (this._disabled !== v || (opts && opts.force))
+  if (this._disabled !== v || opts?.force)
     if (this.desktop) this.rerender();
   return this;
 }

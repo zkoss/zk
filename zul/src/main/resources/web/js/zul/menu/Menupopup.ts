@@ -228,6 +228,7 @@ export class Menupopup extends zul.wgt.Popup {
 		return false;
 	}
 
+	// eslint-disable-next-line zk/javaStyleSetterSignature
 	override setTopmost(): number {
 		const result = super.setTopmost();
 		this.zsync();
@@ -499,7 +500,7 @@ export class Menupopup extends zul.wgt.Popup {
 				menubar._closeOnOut();
 		}
 		// Don't remove if current active is menu (with a menupopup)
-		if (!zul.menu.Menu.isInstance(this._currentChild()))
+		if (!(this._currentChild() instanceof zul.menu.Menu))
 			this.removeActive_();
 	}
 
@@ -508,6 +509,7 @@ export class Menupopup extends zul.wgt.Popup {
 	 * @param int childIndex the index of menupopup children
 	 * @since 8.6.0
 	 */
+	// eslint-disable-next-line zk/javaStyleSetterSignature
 	setActive(childIndex: number): this {
 		if (childIndex >= 0 && childIndex < this.nChildren) {
 			var newCurrIndex = -1,

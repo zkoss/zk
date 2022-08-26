@@ -63,11 +63,11 @@ export class Listheader extends zul.mesh.SortWidget {
 	/** Sets the maximal length of each item's label.
 	 * @param int maxlength
 	 */
-	setMaxlength(v: number, opts?: Record<string, boolean>): this {
+	setMaxlength(maxlength: number, opts?: Record<string, boolean>): this {
 		const o = this._maxlength;
-		this._maxlength = v = !v || v < 0 ? 0 : v;
+		this._maxlength = maxlength = !maxlength || maxlength < 0 ? 0 : maxlength;
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== maxlength || opts?.force) {
 			if (this.desktop) {
 				this.rerender();
 				this.updateCells_();

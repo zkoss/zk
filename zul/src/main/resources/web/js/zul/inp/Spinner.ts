@@ -53,12 +53,12 @@ export class Spinner extends zul.inp.NumberInputWidget<number> {
 	/** Sets whether the button (on the right of the textbox) is visible.
 	 * @param boolean visible
 	 */
-	setButtonVisible(v: boolean, opts?: Record<string, boolean>): this {
+	setButtonVisible(buttonVisible: boolean, opts?: Record<string, boolean>): this {
 		const o = this._buttonVisible;
-		this._buttonVisible = v;
+		this._buttonVisible = buttonVisible;
 
-		if (o !== v || (opts && opts.force)) {
-			zul.inp.RoundUtl.buttonVisible(this, v);
+		if (o !== buttonVisible || opts?.force) {
+			zul.inp.RoundUtl.buttonVisible(this, buttonVisible);
 		}
 
 		return this;
@@ -75,14 +75,14 @@ export class Spinner extends zul.inp.NumberInputWidget<number> {
 		return super.getValue();
 	}
 
-	override setConstraint(constr: string): this {
-		if (typeof constr == 'string' && constr.charAt(0) != '['/*by server*/) {
-			var constraint = new zul.inp.SimpleSpinnerConstraint(constr);
-			this._min = constraint._min;
-			this._max = constraint._max;
-			super.setConstraint(constraint);
+	override setConstraint(constraint: string): this {
+		if (typeof constraint == 'string' && constraint.charAt(0) != '['/*by server*/) {
+			var spinnerConstraint = new zul.inp.SimpleSpinnerConstraint(constraint);
+			this._min = spinnerConstraint._min;
+			this._max = spinnerConstraint._max;
+			super.setConstraint(spinnerConstraint);
 		} else
-			super.setConstraint(constr);
+			super.setConstraint(constraint);
 		return this;
 	}
 

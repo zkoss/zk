@@ -53,7 +53,7 @@ export class ItemWidget extends zul.Widget<HTMLTableRowElement> implements zul.m
 		const o = this._checkable;
 		this._checkable = checkable;
 
-		if (o !== checkable || (opts && opts.force)) {
+		if (o !== checkable || opts?.force) {
 			this.setSelectable(checkable);
 		}
 
@@ -78,7 +78,7 @@ export class ItemWidget extends zul.Widget<HTMLTableRowElement> implements zul.m
 		const o = this._selectable;
 		this._selectable = selectable;
 
-		if (o !== selectable || (opts && opts.force)) {
+		if (o !== selectable || opts?.force) {
 			if (this.desktop)
 				this.rerender();
 		}
@@ -101,7 +101,7 @@ export class ItemWidget extends zul.Widget<HTMLTableRowElement> implements zul.m
 		const o = this._disabled;
 		this._disabled = disabled;
 
-		if (o !== disabled || (opts && opts.force)) {
+		if (o !== disabled || opts?.force) {
 			if (this.desktop)
 				this.rerender();
 		}
@@ -426,8 +426,7 @@ export class ItemWidget extends zul.Widget<HTMLTableRowElement> implements zul.m
 	onResponse(): void {
 		if (this._shallCheckClearCache) {
 			this._shallCheckClearCache = false;
-			let p = this.getMeshWidget();
-			if (p && p.isCheckmark()) {
+			if (this.getMeshWidget()?.isCheckmark()) {
 				this.clearCache();
 			}
 		}

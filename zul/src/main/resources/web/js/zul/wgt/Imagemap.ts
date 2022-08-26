@@ -24,14 +24,14 @@ export class Imagemap extends zul.wgt.Image {
 		return this._width;
 	}
 
-	override setWidth(v: string, opts?: Record<string, boolean>): this {
+	override setWidth(width: string, opts?: Record<string, boolean>): this {
 		const o = this._width;
-		this._width = v;
+		this._width = width;
 
-		if (o !== v || (opts && opts.force)) { // B50-ZK-478
+		if (o !== width || opts?.force) { // B50-ZK-478
 			var n = this.getImageNode();
 			if (n)
-				n.style.width = v;
+				n.style.width = width;
 		}
 
 		return this;
@@ -41,14 +41,14 @@ export class Imagemap extends zul.wgt.Image {
 		return this._height;
 	}
 
-	override setHeight(v: string, opts?: Record<string, boolean>): this {
+	override setHeight(height: string, opts?: Record<string, boolean>): this {
 		const o = this._height;
-		this._height = v;
+		this._height = height;
 
-		if (o !== v || (opts && opts.force)) { // B50-ZK-478
+		if (o !== height || opts?.force) { // B50-ZK-478
 			var n = this.getImageNode();
 			if (n)
-				n.style.height = v;
+				n.style.height = height;
 		}
 
 		return this;

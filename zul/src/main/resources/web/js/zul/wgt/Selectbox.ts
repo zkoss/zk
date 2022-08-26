@@ -43,7 +43,7 @@ export class Selectbox extends zul.Widget<HTMLSelectElement> {
 		const o = this._selectedIndex;
 		this._selectedIndex = selectedIndex;
 
-		if (o !== selectedIndex || (opts && opts.force)) {
+		if (o !== selectedIndex || opts?.force) {
 			var n = this.$n();
 			if (n)
 				n.selectedIndex = selectedIndex;
@@ -70,7 +70,7 @@ export class Selectbox extends zul.Widget<HTMLSelectElement> {
 		const o = this._disabled;
 		this._disabled = disabled;
 
-		if (o !== disabled || (opts && opts.force)) {
+		if (o !== disabled || opts?.force) {
 			var n = this.$n();
 			if (n) n.disabled = disabled;
 		}
@@ -98,7 +98,7 @@ export class Selectbox extends zul.Widget<HTMLSelectElement> {
 		const o = this._multiple;
 		this._multiple = multiple;
 
-		if (o !== multiple || (opts && opts.force)) {
+		if (o !== multiple || opts?.force) {
 			var n = this.$n();
 			if (n) n.multiple = multiple;
 		}
@@ -124,7 +124,7 @@ export class Selectbox extends zul.Widget<HTMLSelectElement> {
 		const o = this._maxlength;
 		this._maxlength = maxlength;
 
-		if (o !== maxlength || (opts && opts.force)) {
+		if (o !== maxlength || opts?.force) {
 			this.rerender();
 		}
 
@@ -159,7 +159,7 @@ export class Selectbox extends zul.Widget<HTMLSelectElement> {
 		const o = this._selectedIndexes;
 		this._selectedIndexes = selectedIndexes;
 
-		if (o !== selectedIndexes || (opts && opts.force)) {
+		if (o !== selectedIndexes || opts?.force) {
 			if (!this.isMultiple()) return this;
 			if (this.desktop) {
 				doSelection(this.$n_(), selectedIndexes);
@@ -206,7 +206,7 @@ export class Selectbox extends zul.Widget<HTMLSelectElement> {
 		const o = this._name;
 		this._name = name;
 
-		if (o !== name || (opts && opts.force)) {
+		if (o !== name || opts?.force) {
 			var n = this.$n();
 			if (n) n.name = name;
 		}
@@ -288,7 +288,7 @@ export class Selectbox extends zul.Widget<HTMLSelectElement> {
 		const index = this.getSelectedIndex()!, name = this.getName();
 		return super.domAttrs_(no)
 			+ (this.isDisabled() ? ' disabled="disabled"' : '')
-			+ (index > -1 ? ' selectedIndex="' + index + '"' : '')
+			+ (index > -1 ? ` selectedIndex="${index}"` : '')
 			+ (name ? ' name="' + name + '"' : '')
 			+ (this._multiple ? ' multiple="multiple" style="height: auto; padding: 0;"' : '');
 	}

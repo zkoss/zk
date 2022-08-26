@@ -137,7 +137,7 @@ export class Center extends zul.layout.LayoutRegion {
 	 * Center region can't be closed.
 	 * @param boolean closable
 	 */
-	override setClosable(v: boolean, opts?: Record<string, boolean>): this { // readonly
+	override setClosable(closable: boolean, opts?: Record<string, boolean>): this { // readonly
 		return this;
 	}
 

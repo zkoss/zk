@@ -51,7 +51,7 @@ export abstract class LabelImageWidget<TElement extends HTMLElement = HTMLElemen
 		const o = this._label;
 		this._label = label;
 
-		if (o !== label || (opts && opts.force)) {
+		if (o !== label || opts?.force) {
 			if (this.desktop)
 				this.updateDomContent_();
 		}
@@ -76,7 +76,7 @@ export abstract class LabelImageWidget<TElement extends HTMLElement = HTMLElemen
 		const o = this._iconSclass;
 		this._iconSclass = iconSclass;
 
-		if (o !== iconSclass || (opts && opts.force)) {
+		if (o !== iconSclass || opts?.force) {
 			if (this.desktop)
 				this.updateDomContent_();
 		}
@@ -100,7 +100,7 @@ export abstract class LabelImageWidget<TElement extends HTMLElement = HTMLElemen
 		const o = this._image;
 		this._image = image;
 
-		if (o !== image || (opts && opts.force)) {
+		if (o !== image || opts?.force) {
 			if (image && this._preloadImage) zUtl.loadImage(image);
 			var n = this.getImageNode(),
 				jqn = jq(n);

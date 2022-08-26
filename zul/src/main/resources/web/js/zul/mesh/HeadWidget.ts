@@ -73,7 +73,7 @@ export class HeadWidget extends zul.Widget<HTMLTableRowElement> {
 		const o = this._sizable;
 		this._sizable = sizable;
 
-		if (o !== sizable || (opts && opts.force)) {
+		if (o !== sizable || opts?.force) {
 			this.rerender();
 		}
 
@@ -84,11 +84,11 @@ export class HeadWidget extends zul.Widget<HTMLTableRowElement> {
 		return this._visible;
 	}
 
-	override setVisible(v: boolean, opts?: Record<string, boolean>): this {
+	override setVisible(visible: boolean, opts?: Record<string, boolean>): this {
 		const o = this._visible;
-		this._visible = v;
+		this._visible = visible;
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== visible || opts?.force) {
 			this.rerender();
 			var mesh = this.getMeshWidget();
 			setTimeout(function () {
@@ -117,12 +117,12 @@ export class HeadWidget extends zul.Widget<HTMLTableRowElement> {
 	}
 
 	//bug #3014664
-	override setVflex(v: string): this { //vflex ignored for Listhead/Columns/Treecols
+	override setVflex(vflex: string): this { //vflex ignored for Listhead/Columns/Treecols
 		return super.setVflex(false);
 	}
 
 	//bug #3014664
-	override setHflex(v: string): this { //hflex ignored for Listhead/Columns/Treecols
+	override setHflex(hflex: string): this { //hflex ignored for Listhead/Columns/Treecols
 		return super.setHflex(false);
 	}
 

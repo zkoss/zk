@@ -54,7 +54,7 @@ export class Treecell extends zul.LabelImageWidget<HTMLTableCellElement> {
 		const o = this._colspan;
 		this._colspan = colspan = Math.max(colspan, 1);
 
-		if (o !== colspan || (opts && opts.force)) {
+		if (o !== colspan || opts?.force) {
 			var n = this.$n();
 			if (n) n.colSpan = this._colspan;
 		}

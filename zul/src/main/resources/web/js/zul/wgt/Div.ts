@@ -39,7 +39,7 @@ export class Div extends zul.Widget {
 		const o = this._align;
 		this._align = align;
 
-		if (o !== align || (opts && opts.force)) {
+		if (o !== align || opts?.force) {
 			var n = this.$n();
 			if (n)
 				(n as HTMLDivElement).align = align;

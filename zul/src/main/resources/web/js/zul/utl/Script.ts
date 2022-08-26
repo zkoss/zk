@@ -47,7 +47,7 @@ export class Script extends zk.Widget {
         const o = this._content;
         this._content = content;
 
-        if (o !== content || (opts && opts.force)) {
+        if (o !== content || opts?.force) {
 			if (content) {
 				this._fn = typeof content == 'function' ? content : new Function(content);
 				if (this.desktop) //check parent since no this.$n()
@@ -80,7 +80,7 @@ export class Script extends zk.Widget {
         const o = this._src;
         this._src = src;
 
-        if (o !== src || (opts && opts.force)) {
+        if (o !== src || opts?.force) {
 			if (src) {
 				this._srcrun = false;
 				if (this.desktop)

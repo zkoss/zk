@@ -155,7 +155,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		const o = this._name;
 		this._name = name;
 
-		if (o !== name || (opts && opts.force)) {
+		if (o !== name || opts?.force) {
 			var inp = this.getInputNode();
 			if (inp) //check if bind
 				inp.name = name;
@@ -179,7 +179,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		const o = this._disabled;
 		this._disabled = disabled;
 
-		if (o !== disabled || (opts && opts.force)) {
+		if (o !== disabled || opts?.force) {
 			var inp = this.getInputNode();
 			if (inp) { //check if bind
 				inp.disabled = disabled;
@@ -206,7 +206,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		const o = this._readonly;
 		this._readonly = readonly;
 
-		if (o !== readonly || (opts && opts.force)) {
+		if (o !== readonly || opts?.force) {
 			var inp = this.getInputNode();
 			if (inp) {
 				_fixInput(this);
@@ -236,7 +236,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		const o = this._cols;
 		this._cols = cols;
 
-		if (o !== cols || (opts && opts.force)) {
+		if (o !== cols || opts?.force) {
 			var inp = this.getInputNode();
 			if (inp) {
 				if (cols != 0) {
@@ -270,7 +270,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		const o = this._maxlength;
 		this._maxlength = maxlength;
 
-		if (o !== maxlength || (opts && opts.force)) {
+		if (o !== maxlength || opts?.force) {
 			var inp = this.getInputNode();
 			if (inp && !this.isMultiline())
 				inp.maxLength = maxlength;
@@ -294,7 +294,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		const o = this._tabindex;
 		this._tabindex = tabindex;
 
-		if (o !== tabindex || (opts && opts.force)) {
+		if (o !== tabindex || opts?.force) {
 			var inp = this.getInputNode();
 			if (inp) {
 				if (tabindex == null)
@@ -323,7 +323,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		const o = this._inplace;
 		this._inplace = inplace;
 
-		if (o !== inplace || (opts && opts.force)) {
+		if (o !== inplace || opts?.force) {
 			this.rerender();
 		}
 
@@ -349,7 +349,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		const o = this._placeholder;
 		this._placeholder = placeholder;
 
-		if (o !== placeholder || (opts && opts.force)) {
+		if (o !== placeholder || opts?.force) {
 			this.rerender();
 		}
 
@@ -375,7 +375,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		const o = this._inputAttributes;
 		this._inputAttributes = inputAttributes;
 
-		if (o !== inputAttributes || (opts && opts.force)) {
+		if (o !== inputAttributes || opts?.force) {
 			if (this.desktop) {
 				var inpNode = this.getInputNode()!;
 				for (var key in this._lastinputAttributes) {
@@ -560,8 +560,9 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	}
 
 	//value object set from server(smartUpdate, renderProperites)
-	set_value(_value: string | number, fromServer?: boolean): void {
-		this.setValue(this.unmarshall_(_value), fromServer);
+	// eslint-disable-next-line zk/javaStyleSetterSignature
+	set_value(value: string | number, fromServer?: boolean): void {
+		this.setValue(this.unmarshall_(value), fromServer);
 	}
 
 	/** Returns the input node of this widget

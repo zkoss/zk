@@ -42,7 +42,7 @@ export class Label extends zul.Widget {
 		const o = this._value;
 		this._value = value;
 
-		if (o !== value || (opts && opts.force)) {
+		if (o !== value || opts?.force) {
 			var n = this.$n();
 			if (n) n.innerHTML = this.getEncodedText();
 		}
@@ -66,7 +66,7 @@ export class Label extends zul.Widget {
 		const o = this._multiline;
 		this._multiline = multiline;
 
-		if (o !== multiline || (opts && opts.force)) {
+		if (o !== multiline || opts?.force) {
 			var n = this.$n();
 			if (n) n.innerHTML = this.getEncodedText();
 		}
@@ -98,7 +98,7 @@ export class Label extends zul.Widget {
 		const o = this._pre;
 		this._pre = pre;
 
-		if (o !== pre || (opts && opts.force)) {
+		if (o !== pre || opts?.force) {
 			var n = this.$n();
 			if (n) n.innerHTML = this.getEncodedText();
 		}
@@ -121,7 +121,7 @@ export class Label extends zul.Widget {
 		const o = this._maxlength;
 		this._maxlength = maxlength;
 
-		if (o !== maxlength || (opts && opts.force)) {
+		if (o !== maxlength || opts?.force) {
 			var n = this.$n();
 			if (n) n.innerHTML = this.getEncodedText();
 		}
