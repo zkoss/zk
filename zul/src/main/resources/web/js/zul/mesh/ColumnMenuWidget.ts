@@ -194,7 +194,7 @@ export abstract class ColumnMenuWidget extends zul.mesh.HeadWidget {
 	}
 
 	_onGroup(evt: zk.Event): void {
-		(evt.target!.parent as zul.mesh.ColumnMenupopup)._ungroup?.setVisible(true);
+		(evt.target.parent as zul.mesh.ColumnMenupopup)._ungroup?.setVisible(true);
 		//since 6.5.0 onGroup is not listened anymore, always fire event to server
 		this._mref!.fire('onGroup', 'ascending' != this._mref!.getSortDirection(), { toServer: true });
 	}
