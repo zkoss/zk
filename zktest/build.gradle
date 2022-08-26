@@ -122,7 +122,7 @@ dependencies {
 	testImplementation 'org.eclipse.jetty:apache-jsp:10.0.11'
 	testImplementation 'org.junit.platform:junit-platform-launcher:1.9.0'
 	testImplementation 'xml-apis:xml-apis:1.4.01'
-	testImplementation 'org.zkoss.test:zk-webdriver:105.0.5173.0'
+	testImplementation 'org.zkoss.test:zk-webdriver:1.0.0'
 
 	providedCompile 'javax.el:javax.el-api:2.2.5'
 	providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
