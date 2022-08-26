@@ -21,6 +21,7 @@ ZK 10.0.0
   + Some z-class names are changed:
         z-combobox-emptySearchMessage -> z-combobox-empty-search-message
         z-combobox-emptySearchMessage-hidden -> z-combobox-empty-search-message-hidden
+  + Disable UUID recycle mechanism by default.
    --------
 
 ZK 9.6.3
