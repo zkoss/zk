@@ -35,8 +35,4 @@ public class B90_ZK_4520Test extends WebDriverTestCase {
 		waitResponse();
 		Assertions.assertEquals(firstPosTop, errobox.positionTop());
 	}
-
-	protected boolean isHeadless() {
-		return false;
-	}
 }
