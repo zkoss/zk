@@ -123,7 +123,8 @@ export class Event<TData = unknown> extends zk.Object {
 	 * @type zk.Widget
 	 * @see #currentTarget
 	 */
-	target?: zk.Widget;
+	target: zk.Widget;
+  
 	/** Indicates the target which is handling this event.
 	 * <p>By default, an event will be propagated to its parent, and this member tells which widget is handling it, while #target is the widget that the event is targeting.
 	 * @type zk.Widget
@@ -222,10 +223,11 @@ onClick: function (evt) {
 	 * @param Map opts [optional] the options. Refer to {@link #opts}
 	 * @param jq.Event domEvent [optional] the DOM event that causes this widget event.
 	 */
-	// There are 3 instances where `target` is set to `undefined`; search for `zk.Event(undefined`.
+	// NOTE: There are 3 instances where `target` is set to `undefined`, but these cases are rare; search for `zk.Event(undefined`.
 	constructor(target: zk.Widget | undefined, name: string, data?: TData, opts?: EventOptions, domEvent?: JQuery.TriggeredEvent) { // FIXME: TriggeredEvent missing type parameters
 		super();
-		this.currentTarget = this.target = target;
+		this.target = target!;
+		this.currentTarget = target;
 		this.name = name;
 		this.data = data;
 		if (data && typeof data == 'object' && !Array.isArray(data))

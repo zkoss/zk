@@ -39,7 +39,7 @@ export class Anchorchildren extends zul.Widget {
         const o = this._anchor;
         this._anchor = anchor;
 
-        if (o !== anchor || (opts && opts.force)) {
+        if (o !== anchor || opts?.force) {
 			if (this.desktop)
 				this.onSize();
 		}

@@ -763,7 +763,7 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Widge
 			interface WidgetBeforeCtrlKeys extends zk.Widget {
 				beforeCtrlKeys_?(evt: zk.Event): unknown;
 			}
-			for (var w: WidgetBeforeCtrlKeys = target!; ; w = w.parent!) {
+			for (var w: WidgetBeforeCtrlKeys = target; ; w = w.parent!) {
 				if (w.beforeCtrlKeys_?.(evt))
 					return;
 				if (w == wgt) break;

@@ -120,7 +120,7 @@ export class Combobutton extends zul.wgt.Button {
 		const o = this._disabled;
 		this._disabled = disabled;
 
-		if (o !== disabled || (opts && opts.force)) {
+		if (o !== disabled || opts?.force) {
 			var n = this.$n();
 			if (n) {
 				jq(n).attr('disabled', disabled ? 'disabled' : null);

@@ -47,7 +47,7 @@ export class Style extends zk.Widget {
 		const o = this._src;
 		this._src = src;
 
-		if (o !== src || (opts && opts.force)) {
+		if (o !== src || opts?.force) {
 			delete this._content;
 			this.rerender();
 		}
@@ -73,7 +73,7 @@ export class Style extends zk.Widget {
 		const o = this._content;
 		this._content = content;
 
-		if (o !== content || (opts && opts.force)) {
+		if (o !== content || opts?.force) {
 			delete this._src;
 			this.rerender();
 		}
@@ -101,7 +101,7 @@ export class Style extends zk.Widget {
 		const o = this._media;
 		this._media = media;
 
-		if (o !== media || (opts && opts.force)) {
+		if (o !== media || opts?.force) {
 			var n = this.$n('real');
 			if (n) (n as HTMLStyleElement).media = media;
 		}

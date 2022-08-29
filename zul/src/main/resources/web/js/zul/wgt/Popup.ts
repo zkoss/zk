@@ -440,8 +440,8 @@ export class Popup extends zul.Widget {
 	}
 
 	// ZK-2990: should also change the zIndex of the stackup of the widget
-	override setFloatZIndex_(floatZIndex_: HTMLElement, zi: number): void {
-		super.setFloatZIndex_(floatZIndex_, zi);
+	override setFloatZIndex_(floatZIndex: HTMLElement, zi: number): void {
+		super.setFloatZIndex_(floatZIndex, zi);
 		if (this._stackup) {
 			this._stackup.style.zIndex = zi as unknown as string;
 		}

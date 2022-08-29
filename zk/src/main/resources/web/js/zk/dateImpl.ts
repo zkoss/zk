@@ -117,9 +117,11 @@ export namespace dateImpl_global {
 		getYear(): number {
 			return this._getTzMoment().year() - 1900;
 		}
+		// eslint-disable-next-line zk/javaStyleSetterSignature
 		setDate(date: number): number {
 			return this._getTzMoment().date(date).valueOf();
 		}
+		// eslint-disable-next-line zk/javaStyleSetterSignature
 		setFullYear(y: number, m?: number, d?: number): number {
 			var mt = this._getTzMoment();
 			mt.year(y);
@@ -129,6 +131,7 @@ export namespace dateImpl_global {
 			}
 			return mt.valueOf();
 		}
+		// eslint-disable-next-line zk/javaStyleSetterSignature
 		setHours(hr: number, min?: number, sec?: number, msec?: number): number {
 			var mt = this._getTzMoment();
 			mt.hour(hr);
@@ -141,43 +144,56 @@ export namespace dateImpl_global {
 			}
 			return mt.valueOf();
 		}
+		// eslint-disable-next-line zk/javaStyleSetterSignature
 		setMilliseconds(milliseconds: number): number {
 			return this._getTzMoment().millisecond(milliseconds).valueOf();
 		}
+		// eslint-disable-next-line zk/javaStyleSetterSignature
 		setMinutes(minutes: number): number {
 			return this._getTzMoment().minute(minutes).valueOf();
 		}
+		// eslint-disable-next-line zk/javaStyleSetterSignature
 		setMonth(month: number): number {
 			return this._getTzMoment().month(month).valueOf();
 		}
+		// eslint-disable-next-line zk/javaStyleSetterSignature
 		setSeconds(seconds: number): number {
 			return this._getTzMoment().second(seconds).valueOf();
 		}
+		// eslint-disable-next-line zk/javaStyleSetterSignature
 		setTime(time: number): number {
 			this._moment = zk.mm(time);
 			return this._moment.valueOf();
 		}
+		// eslint-disable-next-line zk/javaStyleSetterSignature
 		setUTCDate(uTCDate: number): number {
 			return this._getUTCMoment().date(uTCDate).valueOf();
 		}
+		// eslint-disable-next-line zk/javaStyleSetterSignature
 		setUTCFullYear(uTCFullYear: number): number {
 			return this._getUTCMoment().year(uTCFullYear).valueOf();
 		}
+		// eslint-disable-next-line zk/javaStyleSetterSignature
 		setUTCHours(uTCHours: number): number {
 			return this._getUTCMoment().hour(uTCHours).valueOf();
 		}
+		// eslint-disable-next-line zk/javaStyleSetterSignature
 		setUTCMilliseconds(uTCMilliseconds: number): number {
 			return this._getUTCMoment().millisecond(uTCMilliseconds).valueOf();
 		}
+		// eslint-disable-next-line zk/javaStyleSetterSignature
 		setUTCMinutes(uTCMinutes: number): number {
 			return this._getUTCMoment().minute(uTCMinutes).valueOf();
 		}
+		// eslint-disable-next-line zk/javaStyleSetterSignature
 		setUTCMonth(uTCMonth: number): number {
 			return this._getUTCMoment().month(uTCMonth).valueOf();
 		}
+		// eslint-disable-next-line zk/javaStyleSetterSignature
 		setUTCSeconds(uTCSeconds: number): number {
 			return this._getUTCMoment().second(uTCSeconds).valueOf();
 		}
+		// eslint-disable-next-line zk/javaStyleSetterSignature
 		setYear(year: number): number {
 			return this._getTzMoment().year(year).valueOf();
 		}

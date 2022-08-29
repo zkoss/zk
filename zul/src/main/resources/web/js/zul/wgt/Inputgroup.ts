@@ -51,7 +51,7 @@ export class Inputgroup extends zul.Widget {
 		const o = this._vertical;
 		this._vertical = vertical;
 
-		if (o !== vertical || (opts && opts.force)) {
+		if (o !== vertical || opts?.force) {
 			if (this.desktop) {
 				jq(this.$n()).toggleClass(this.$s('vertical'), vertical);
 			}

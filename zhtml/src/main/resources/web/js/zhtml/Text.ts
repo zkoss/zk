@@ -60,6 +60,7 @@ export class Text extends zhtml.Widget {
 	/** Sets the value of this label.
 	 * @param String label the label
 	 */
+	// eslint-disable-next-line zk/javaStyleSetterSignature
 	setValue(label: string, opts?: Record<string, boolean>): this {
 		const o = this._value;
 		this._value = label;

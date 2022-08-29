@@ -29,10 +29,10 @@ export class Widget extends zk.Widget<HTMLInputElement> {
 	_defChecked?: boolean;
 	_defValue?: string;
 
-	setDynamicProperty(prop: [string, string]): this {
+	setDynamicProperty(dynamicProperty: [string, string]): this {
 		var n = this.$n();
 		if (n) {
-			var nm = prop[0], val = prop[1];
+			var nm = dynamicProperty[0], val = dynamicProperty[1];
 			switch (nm) {
 			case 'checked':
 				n.checked = this._defChecked = val != null;

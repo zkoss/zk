@@ -98,7 +98,7 @@ export class Button extends zul.LabelImageWidget<HTMLButtonElement> implements z
 		const o = this._dir;
 		this._dir = dir;
 
-		if (o !== dir || (opts && opts.force)) {
+		if (o !== dir || opts?.force) {
 			this.updateDomContent_();
 		}
 
@@ -120,7 +120,7 @@ export class Button extends zul.LabelImageWidget<HTMLButtonElement> implements z
 		const o = this._orient;
 		this._orient = orient;
 
-		if (o !== orient || (opts && opts.force)) {
+		if (o !== orient || opts?.force) {
 			this.updateDomContent_();
 		}
 
@@ -142,7 +142,7 @@ export class Button extends zul.LabelImageWidget<HTMLButtonElement> implements z
 		const o = this._type;
 		this._type = type;
 
-		if (o !== type || (opts && opts.force)) {
+		if (o !== type || opts?.force) {
 			this.updateDomContent_();
 		}
 
@@ -184,7 +184,7 @@ export class Button extends zul.LabelImageWidget<HTMLButtonElement> implements z
 		}
 		this._disabled = value;
 
-		if (oldDisabled !== value || (opts && opts.force)) {
+		if (oldDisabled !== value || opts?.force) {
 			var doDisable = (): void => {
 					if (this.desktop) {
 						jq(this.$n()).attr('disabled', value ? 'disabled' : null); // use jQuery's attr() instead of dom.disabled for non-button element. Bug ZK-2146
@@ -299,7 +299,7 @@ export class Button extends zul.LabelImageWidget<HTMLButtonElement> implements z
 		const o = this._upload;
 		this._upload = upload;
 
-		if (o !== upload || (opts && opts.force)) {
+		if (o !== upload || opts?.force) {
 			var n = this.$n();
 			if (n && !this._disabled) {
 				_cleanUpld(this);
@@ -421,21 +421,21 @@ export class Button extends zul.LabelImageWidget<HTMLButtonElement> implements z
 		//will fired)
 	}
 
-	override setFlexSize_(flexSize_: zk.FlexSize): void { //Bug #2870652
+	override setFlexSize_(flexSize: zk.FlexSize): void { //Bug #2870652
 		var n = this.$n()!;
-		if (flexSize_.height !== undefined) {
-			if (flexSize_.height == 'auto')
+		if (flexSize.height !== undefined) {
+			if (flexSize.height == 'auto')
 				n.style.height = '';
-			else if (flexSize_.height != '')
-				n.style.height = jq.px0(parseInt(flexSize_.height as string));
+			else if (flexSize.height != '')
+				n.style.height = jq.px0(parseInt(flexSize.height as string));
 			else
 				n.style.height = this._height ? this._height : '';
 		}
-		if (flexSize_.width !== undefined) {
-			if (flexSize_.width == 'auto')
+		if (flexSize.width !== undefined) {
+			if (flexSize.width == 'auto')
 				n.style.width = '';
-			else if (flexSize_.width != '')
-				n.style.width = jq.px0(parseInt(flexSize_.width as string));
+			else if (flexSize.width != '')
+				n.style.width = jq.px0(parseInt(flexSize.width as string));
 			else
 				n.style.width = this._width ? this._width : '';
 		}

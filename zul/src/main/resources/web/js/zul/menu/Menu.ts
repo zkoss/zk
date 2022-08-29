@@ -112,7 +112,7 @@ export class Menu extends zul.LabelImageWidget implements zul.LabelImageWidgetWi
 		const o = this._content;
 		this._content = content;
 
-		if (o !== content || (opts && opts.force)) {
+		if (o !== content || opts?.force) {
 			if (!content || content.length == 0)
 				return this;
 
@@ -149,7 +149,7 @@ export class Menu extends zul.LabelImageWidget implements zul.LabelImageWidgetWi
 		const o = this._disabled;
 		this._disabled = disabled;
 
-		if (o !== disabled || (opts && opts.force)) {
+		if (o !== disabled || opts?.force) {
 			if (!this.desktop)
 				return this;
 			if (disabled) {
@@ -170,12 +170,12 @@ export class Menu extends zul.LabelImageWidget implements zul.LabelImageWidgetWi
 		return this._image;
 	}
 
-	override setImage(v: string, opts?: Record<string, boolean>): this {
+	override setImage(image: string, opts?: Record<string, boolean>): this {
 		const o = this._image;
-		this._image = v;
+		this._image = image;
 
-		if (o !== v || (opts && opts.force)) {
-			if (v && this._preloadImage) zUtl.loadImage(v);
+		if (o !== image || opts?.force) {
+			if (image && this._preloadImage) zUtl.loadImage(image);
 			this.rerender();
 		}
 

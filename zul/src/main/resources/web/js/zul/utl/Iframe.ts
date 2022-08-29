@@ -46,7 +46,7 @@ export class Iframe extends zul.Widget<HTMLIFrameElement> {
 		const o = this._src;
 		this._src = src;
 
-		if (o !== src || (opts && opts.force)) {
+		if (o !== src || opts?.force) {
 			var n = this.$n();
 			if (n) n.src = src || '';
 		}
@@ -74,7 +74,7 @@ export class Iframe extends zul.Widget<HTMLIFrameElement> {
 		const o = this._scrolling;
 		this._scrolling = scrolling;
 
-		if (o !== scrolling || (opts && opts.force)) {
+		if (o !== scrolling || opts?.force) {
 			if (!scrolling) this._scrolling = scrolling = 'auto';
 			var n = this.$n();
 			if (n) {
@@ -107,7 +107,7 @@ export class Iframe extends zul.Widget<HTMLIFrameElement> {
 		const o = this._align;
 		this._align = align;
 
-		if (o !== align || (opts && opts.force)) {
+		if (o !== align || opts?.force) {
 			var n = this.$n();
 			if (n) n.align = align || '';
 		}
@@ -130,7 +130,7 @@ export class Iframe extends zul.Widget<HTMLIFrameElement> {
 		const o = this._name;
 		this._name = name;
 
-		if (o !== name || (opts && opts.force)) {
+		if (o !== name || opts?.force) {
 			var n = this.$n();
 			if (n) n.name = name || '';
 		}
@@ -164,7 +164,7 @@ export class Iframe extends zul.Widget<HTMLIFrameElement> {
 		const o = this._autohide;
 		this._autohide = autohide;
 
-		if (o !== autohide || (opts && opts.force)) {
+		if (o !== autohide || opts?.force) {
 			var n = this.$n();
 			if (n) jq(n).attr('z_autohide', autohide as unknown as string);
 		}

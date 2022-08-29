@@ -452,11 +452,11 @@ export class Window extends zul.ContainerWidget {
 	 * "embedded", "overlapped", "popup", "modal", "highlighted".
 	 * Note: it cannot be "modal". Use {@link #doModal} instead.
 	 */
-	setMode(v: WindowMode, opts?: Record<string, boolean>): this {
+	setMode(mode: WindowMode, opts?: Record<string, boolean>): this {
 		const o = this._mode;
-		this._mode = v;
+		this._mode = mode;
 
-		if (o !== v || (opts && opts.force)) {
+		if (o !== mode || opts?.force) {
 			_updDomOuter(this);
 		}
 
@@ -475,7 +475,7 @@ export class Window extends zul.ContainerWidget {
 		const o = this._title;
 		this._title = title;
 
-		if (o !== title || (opts && opts.force)) {
+		if (o !== title || opts?.force) {
 			if (this.caption)
 				this.caption.updateDomContent_(); // B50-ZK-313
 			else
@@ -506,7 +506,7 @@ export class Window extends zul.ContainerWidget {
 		const o = this._border;
 		this._border = border;
 
-		if (o !== border || (opts && opts.force)) {
+		if (o !== border || opts?.force) {
 			_updDomOuter(this);
 		}
 
@@ -541,7 +541,7 @@ export class Window extends zul.ContainerWidget {
 		const o = this._closable;
 		this._closable = closable;
 
-		if (o !== closable || (opts && opts.force)) {
+		if (o !== closable || opts?.force) {
 			_updDomOuter(this);
 		}
 
@@ -565,7 +565,7 @@ export class Window extends zul.ContainerWidget {
 		const o = this._sizable;
 		this._sizable = sizable;
 
-		if (o !== sizable || (opts && opts.force)) {
+		if (o !== sizable || opts?.force) {
 			if (this.desktop) {
 				if (sizable)
 					_makeSizer(this);
@@ -600,7 +600,7 @@ export class Window extends zul.ContainerWidget {
 		const o = this._maximizable;
 		this._maximizable = maximizable;
 
-		if (o !== maximizable || (opts && opts.force)) {
+		if (o !== maximizable || opts?.force) {
 			_updDomOuter(this);
 		}
 
@@ -632,7 +632,7 @@ export class Window extends zul.ContainerWidget {
 		const o = this._minimizable;
 		this._minimizable = minimizable;
 
-		if (o !== minimizable || (opts && opts.force)) {
+		if (o !== minimizable || opts?.force) {
 			_updDomOuter(this);
 		}
 
@@ -664,7 +664,7 @@ export class Window extends zul.ContainerWidget {
 		const o = this._maximized;
 		this._maximized = maximized;
 
-		if (o !== maximized || (opts && opts.force)) {
+		if (o !== maximized || opts?.force) {
 			var node = this.$n();
 			if (node) {
 				var isRealVisible = this.isRealVisible();
@@ -764,7 +764,7 @@ export class Window extends zul.ContainerWidget {
 		const o = this._minimized;
 		this._minimized = minimized;
 
-		if (o !== minimized || (opts && opts.force)) {
+		if (o !== minimized || opts?.force) {
 			if (this._maximized)
 				this.setMaximized(false);
 
@@ -814,7 +814,7 @@ export class Window extends zul.ContainerWidget {
 		const o = this._contentStyle;
 		this._contentStyle = contentStyle;
 
-		if (o !== contentStyle || (opts && opts.force)) {
+		if (o !== contentStyle || opts?.force) {
 			_updDomOuter(this);
 		}
 
@@ -837,7 +837,7 @@ export class Window extends zul.ContainerWidget {
 		const o = this._contentSclass;
 		this._contentSclass = contentSclass;
 
-		if (o !== contentSclass || (opts && opts.force)) {
+		if (o !== contentSclass || opts?.force) {
 			_updDomOuter(this);
 		}
 
@@ -877,11 +877,11 @@ export class Window extends zul.ContainerWidget {
 	 * <p>For example, "left,center" means to position it at the center of
 	 * the left edge.
 	 */
-	setPosition(pos: string, opts?: Record<string, boolean>): this {
+	setPosition(position: string, opts?: Record<string, boolean>): this {
 		const o = this._position;
-		this._position = pos;
+		this._position = position;
 
-		if (o !== pos || (opts && opts.force)) {
+		if (o !== position || opts?.force) {
 			_updDomPos(this, false, this._visible);
 		}
 
@@ -951,7 +951,7 @@ export class Window extends zul.ContainerWidget {
 		const o = this._shadow;
 		this._shadow = shadow;
 
-		if (o !== shadow || (opts && opts.force)) {
+		if (o !== shadow || opts?.force) {
 			if (this._shadow) {
 				this.zsync();
 			} else if (this._shadowWgt) {
@@ -1291,8 +1291,8 @@ export class Window extends zul.ContainerWidget {
 		return this;
 	}
 
-	override setZindex(zIndex: number, opts: {floatZIndex?: boolean; fire?: boolean}): this {
-		return this.setZIndex(zIndex, opts);
+	override setZindex(zindex: number, opts: {floatZIndex?: boolean; fire?: boolean}): this {
+		return this.setZIndex(zindex, opts);
 	}
 
 	override focus_(timeout?: number): boolean {
@@ -1303,7 +1303,7 @@ export class Window extends zul.ContainerWidget {
 				if (w.desktop && w != cap && w.focus_(timeout))
 					return true;
 		}
-		if (cap && cap.focus_(timeout)) {
+		if (cap?.focus_(timeout)) {
 			return true;
 		} else if (this._anchor) {
 			this._anchor.focus();
@@ -1573,6 +1573,7 @@ export class Window extends zul.ContainerWidget {
 		}
 	}
 
+	// eslint-disable-next-line zk/javaStyleSetterSignature
 	override setFlexSizeH_(n: HTMLElement, zkn: zk.JQZK, height: number, isFlexMin?: boolean): void {
 		if (isFlexMin) {
 			height += this._titleHeight();
@@ -1768,7 +1769,7 @@ export class Skipper extends zk.Skipper {
  * It is designed to be overriden
  * @since 5.0.5
  */
-export let WindowRenderer = {
+export var WindowRenderer = {
 	/** Returns whether to check the border's height.
 	 *
 	 * @param zul.wnd.Window wgt the window

@@ -51,7 +51,7 @@ export class Select extends zul.Widget<HTMLSelectElement> {
 		const o = this._multiple;
 		this._multiple = multiple;
 
-		if (o !== multiple || (opts && opts.force)) {
+		if (o !== multiple || opts?.force) {
 			var n = this.$n();
 			if (n) n.multiple = (multiple ? 'multiple' : '') as unknown as boolean;
 		}
@@ -77,7 +77,7 @@ export class Select extends zul.Widget<HTMLSelectElement> {
 		const o = this._disabled;
 		this._disabled = disabled;
 
-		if (o !== disabled || (opts && opts.force)) {
+		if (o !== disabled || opts?.force) {
 			var n = this.$n();
 			if (n) n.disabled = (disabled ? 'disabled' : '') as unknown as boolean;
 		}
@@ -102,7 +102,7 @@ export class Select extends zul.Widget<HTMLSelectElement> {
 		const o = this._selectedIndex;
 		this._selectedIndex = selectedIndex;
 
-		if (o !== selectedIndex || (opts && opts.force)) {
+		if (o !== selectedIndex || opts?.force) {
 			var i = 0,
 				j = 0,
 				w: zk.Widget | undefined,
@@ -166,7 +166,7 @@ export class Select extends zul.Widget<HTMLSelectElement> {
 		const o = this._name;
 		this._name = name;
 
-		if (o !== name || (opts && opts.force)) {
+		if (o !== name || opts?.force) {
 			var n = this.$n();
 			if (n) n.name = name;
 		}
@@ -195,7 +195,7 @@ export class Select extends zul.Widget<HTMLSelectElement> {
 		const o = this._rows;
 		this._rows = rows;
 
-		if (o !== rows || (opts && opts.force)) {
+		if (o !== rows || opts?.force) {
 			var n = this.$n();
 			if (n) n.size = rows;
 		}
@@ -220,7 +220,7 @@ export class Select extends zul.Widget<HTMLSelectElement> {
 		const o = this._maxlength;
 		this._maxlength = maxlength;
 
-		if (o !== maxlength || (opts && opts.force)) {
+		if (o !== maxlength || opts?.force) {
 			if (this.desktop)
 				this.requestRerender_(fromServer);
 		}
@@ -229,11 +229,11 @@ export class Select extends zul.Widget<HTMLSelectElement> {
 	}
 
 	// ZK-2133: should sync all items
-	setChgSel(val: string): this { //called from the server
+	setChgSel(chgSel: string): this { //called from the server
 		var sels = {};
 		for (var j = 0; ;) {
-			var k = val.indexOf(',', j),
-			s = (k >= 0 ? val.substring(j, k) : val.substring(j)).trim();
+			var k = chgSel.indexOf(',', j),
+			s = (k >= 0 ? chgSel.substring(j, k) : chgSel.substring(j)).trim();
 			if (s) sels[s] = true;
 			if (k < 0) break;
 			j = k + 1;
@@ -459,9 +459,9 @@ export class Select extends zul.Widget<HTMLSelectElement> {
 		return this._groupsInfo.$clone();
 	}
 
-	setItemsInvalid_(wgts: ArrayLike<unknown>[]): void {
+	setItemsInvalid_(itemsInvalid: ArrayLike<unknown>[]): void {
 		var wgt = this;
-		zAu.createWidgets(wgts, function (ws) {
+		zAu.createWidgets(itemsInvalid, function (ws) {
 			wgt.replaceCavedChildren_('', ws);
 		}, function (wx) {
 			return wx;
