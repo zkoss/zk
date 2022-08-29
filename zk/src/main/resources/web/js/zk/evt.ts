@@ -124,6 +124,7 @@ export class Event<TData = unknown> extends zk.Object {
 	 * @see #currentTarget
 	 */
 	target: zk.Widget;
+  
 	/** Indicates the target which is handling this event.
 	 * <p>By default, an event will be propagated to its parent, and this member tells which widget is handling it, while #target is the widget that the event is targeting.
 	 * @type zk.Widget
