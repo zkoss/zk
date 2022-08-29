@@ -573,13 +573,13 @@ export class Menupopup extends zul.wgt.Popup {
 					return w;
 		}
 		return undefined;
-	beforeChildAdded_: function (child, insertBefore) {
-		if (!child.$instanceof(zul.menu.Menuitem) && !child.$instanceof(zul.menu.Menuseparator) && !child.$instanceof(zul.menu.Menu)) {
+	}
+	override beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
+		if (!(child instanceof zul.menu.Menuitem) && !(child instanceof zul.menu.Menuseparator) && !(child instanceof zul.menu.Menu)) {
 			zk.error('Unsupported child for menupopup: ' + child.className);
 			return false;
 		}
 		return true;
-	}
 	}
 
 	static _rmActive(wgt: zk.Widget): void {

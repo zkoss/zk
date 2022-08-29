@@ -177,7 +177,7 @@ export class Combobox extends zul.inp.ComboWidget {
 		if (selectedIndex >= 0) {
 			if (this.desktop) {
 				const selectedItem = this.getChildAt(selectedIndex);
-		                this.setSelectedItemUuid_(selectedItem.uuid);
+				this.setSelectedItemUuid_(selectedItem!.uuid);
 			} else {
 				this._initSelIndex = selectedIndex;
 			}
@@ -629,9 +629,10 @@ export class Combobox extends zul.inp.ComboWidget {
 			return zkn.textWidth(wgt.getLabel()) + zkn.padBorderWidth();
 		}
 		return result;
-	},
-	beforeChildAdded_: function (child, insertBefore) {
-		if (!child.$instanceof(zul.inp.Comboitem)) {
+	}
+
+	override beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
+		if (!(child instanceof zul.inp.Comboitem)) {
 			zk.error('Unsupported child for Combobox: ' + child.className);
 			return false;
 		}

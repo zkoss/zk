@@ -100,7 +100,7 @@ export class Event<TData = unknown> extends zk.Object {
 	contextSelected?: boolean; // zul.Widget.prototype.doClick_
 
 	// dom.ts#metaData
-	declare which?: number; // non-standard. Tested in zkmax.Chosenbox.prototype.doKeyPress_
+	declare which: number; // non-standard. Tested in zkmax.Chosenbox.prototype.doKeyPress_
 	declare metaKey: boolean;
 	declare ctrlKey;
 	declare altKey;

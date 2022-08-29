@@ -165,6 +165,14 @@ export class Menubar extends zul.Widget {
 		this._checkScrolling();
 	}
 
+	override beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
+		if (!(child instanceof zul.menu.Menu) && !(child instanceof zul.menu.Menuitem) && !(child instanceof zul.menu.Menuseparator)) {
+			zk.error('Unsupported child for menubar: ' + child.className);
+			return false;
+		}
+		return true;
+	}
+
 	override onChildAdded_(child: zul.menu.Menu): void {
 		super.onChildAdded_(child);
 		this._checkScrolling();

@@ -16,8 +16,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * A skeletal implementation for a column menu widget.
  * @since 6.5.0
  */
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 @zk.WrapClass('zul.mesh.ColumnMenuWidget')
 export abstract class ColumnMenuWidget extends zul.mesh.HeadWidget {
 	override _menupopup = 'none';

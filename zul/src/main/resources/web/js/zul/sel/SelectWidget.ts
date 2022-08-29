@@ -48,12 +48,12 @@ function _updHeaderCM(box: SelectWidget): void { //update header's checkmark
 	}
 }
 function _isButton(evt: zk.Event): boolean {
-	return evt.target!.$button //for extension, it makes a widget as a button
+	return evt.target.$button //for extension, it makes a widget as a button
 		|| (zk.isLoaded('zul.wgt')
 			&& (evt.target instanceof zul.wgt.Button || evt.target instanceof zul.wgt.Toolbarbutton));
 }
 function _isInputWidget(evt: zk.Event): boolean { // B50-ZK-460
-	return evt.target!.$inputWidget //for extension, it makes a widget as a input widget
+	return evt.target.$inputWidget //for extension, it makes a widget as a input widget
 		|| (zk.isLoaded('zul.inp') && evt.target instanceof zul.inp.InputWidget);
 }
 function _focusable(evt: zk.Event): boolean {
@@ -628,7 +628,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		if (this.checkOnHighlightDisabled_())
 			return true;
 
-		if (!evt.domTarget || !evt.target!.canActivate())
+		if (!evt.domTarget || !evt.target.canActivate())
 			return true;
 
 		if (bSel) {
@@ -912,7 +912,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		if (lastrow) {
 			if (!shift) { // ZK-2971: already handled in the previous code block, ignore shift
 				if (ctrl)
-					this._focus(lastrow);
+					this._focus0(lastrow);
 				else
 					this._select(lastrow, evt);
 			}
@@ -1010,7 +1010,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	_selectUpto(row: zul.sel.ItemWidget, evt: zk.Event<zk.EventMetaData>, skipFocus: boolean): void {
 		if (row.isSelected()) {
 			if (!skipFocus)
-				this._focus(row);
+				this._focus0(row);
 			return; //nothing changed
 		}
 
@@ -1062,7 +1062,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		}
 
 		if (!skipFocus)
-			this._focus(row);
+			this._focus0(row);
 		this.fireOnSelect(row, evt);
 	}
 
@@ -1133,7 +1133,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		}
 
 		this._changeSelect(row, toSel);
-		if (!skipFocus) this._focus(row);
+		if (!skipFocus) this._focus0(row);
 
 		//notify server
 		this.fireOnSelect(row, evt);
@@ -1181,7 +1181,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	}
 
 	/* Changes the specified row as focused. */
-	_focus(row: zul.sel.ItemWidget): void {
+	_focus0(row: zul.sel.ItemWidget): void {
 		if (this.canActivate({ checkOnly: true })) {
 			this._unsetFocusExcept(row);
 			this._setFocus(row, true);

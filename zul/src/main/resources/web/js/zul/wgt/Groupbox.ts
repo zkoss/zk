@@ -291,6 +291,19 @@ export class Groupbox extends zul.ContainerWidget {
 		super.doClick_(evt, popupOnly);
 	}
 
+	override beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
+		if (child instanceof zul.wgt.Caption) {
+			if (this.caption && this.caption != child) {
+				zk.error('Only one caption is allowed: ' + this.className);
+				return false;
+			}
+		} else if (insertBefore instanceof zul.wgt.Caption) {
+			zk.error('caption must be the first child, ' + this.className);
+			return false;
+		}
+		return true;
+	}
+
 	override onChildAdded_(child: zk.Widget): void {
 		super.onChildAdded_(child);
 		if (child instanceof zul.wgt.Caption) {

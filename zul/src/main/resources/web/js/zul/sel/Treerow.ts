@@ -69,13 +69,14 @@ export class Treerow extends zul.Widget<HTMLTableRowElement> {
 		return ((this.parent && !this.parent._isRealVisible() && this.isVisible()) ?
 				'display:none;' : '') + super.domStyle_(no);
 	}
-	beforeChildAdded_: function (child, insertBefore) {
-		if (!child.$instanceof(zul.sel.Treecell)) {
+
+	override beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
+		if (!(child instanceof zul.sel.Treecell)) {
 			zk.error('Unsupported child for tree row: ' + child.className);
 			return false;
 		}
 		return true;
-	},
+	}
 	//@Override
 	override removeChild(child: zk.Widget, ignoreDom?: boolean): boolean {
 		for (var w = child.firstChild; w;) {

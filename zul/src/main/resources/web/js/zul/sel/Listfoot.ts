@@ -38,9 +38,10 @@ export class Listfoot extends zul.Widget {
 	override setHflex(hflex?: boolean | string): this { //hflex ignored for Listfoot
 		hflex = false;
 		return super.setHflex(hflex);
-	},
-	beforeChildAdded_: function (child, insertBefore) {
-		if (!child.$instanceof(zul.sel.Listfooter)) {
+	}
+
+	override beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
+		if (!(child instanceof zul.sel.Listfooter)) {
 			zk.error('Unsupported child for listfoot: ' + child.className);
 			return false;
 		}

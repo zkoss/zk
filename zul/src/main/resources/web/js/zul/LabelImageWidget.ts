@@ -31,8 +31,6 @@ export interface LabelImageWidgetWithAutodisable extends LabelImageWidgetWithDis
 /**
  * A skeletal implementation for ZUL widgets that support both label and image.
  */
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 @zk.WrapClass('zul.LabelImageWidget')
 export abstract class LabelImageWidget<TElement extends HTMLElement = HTMLElement> extends zul.Widget<TElement> {
 	_label = '';

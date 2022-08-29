@@ -41,10 +41,12 @@ export class Foot extends zul.Widget {
 	override deferRedrawHTML_(out: string[]): void {
 		out.push('<tr', this.domAttrs_({domClass: true}), ' class="z-renderdefer"></tr>');
 	}
-	beforeChildAdded_: function (child, insertBefore) {
-		if (!child.$instanceof(zul.grid.Footer)) {
+
+	override beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
+		if (!(child instanceof zul.grid.Footer)) {
 			zk.error('Unsupported child for foot: ' + child.className);
 			return false;
 		}
 		return true;
+	}
 }

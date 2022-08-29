@@ -484,8 +484,9 @@ export class Tabbox extends zul.Widget {
 		if (this.desktop)
 			this._shallSize = true;
 	}
-	beforeChildAdded_: function (child, insertBefore) {
-		if (child.$instanceof(zul.wgt.Toolbar)) {
+
+	override beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
+		if (child instanceof zul.wgt.Toolbar) {
 			if (this.toolbar && this.toolbar != child) {
 				zk.error('Only one Toolbar is allowed: ' + this.className);
 				return false;
@@ -494,12 +495,12 @@ export class Tabbox extends zul.Widget {
 				zk.error('Toolbar is allowed only when the tabbox is horizontal. ' + this.className);
 				return false;
 			}
-		} else if (child.$instanceof(zul.tab.Tabs)) {
+		} else if (child instanceof zul.tab.Tabs) {
 			if (this.tabs && this.tabs != child) {
 				zk.error('Only one tabs is allowed: ' + this.className);
 				return false;
 			}
-		} else if (child.$instanceof(zul.tab.Tabpanels)) {
+		} else if (child instanceof zul.tab.Tabpanels) {
 			if (this.tabpanels && this.tabpanels != child) {
 				zk.error('Only one tabpanels is allowed: ' + this.className);
 				return false;
@@ -509,7 +510,7 @@ export class Tabbox extends zul.Widget {
 			return false;
 		}
 		return true;
-	},
+	}
 	//super//
 	override onChildAdded_(child: zk.Widget): void {
 		super.onChildAdded_(child);

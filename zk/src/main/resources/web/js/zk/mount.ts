@@ -87,7 +87,6 @@ interface Pcai {
 	i?: number;
 }
 
-var _wgt_$ = zk.Widget.$, //the original zk.Widget.$
 interface MountContext {
 	curdt?: zk.Desktop;
 	bindOnly: boolean;
@@ -102,6 +101,8 @@ type AuCmds = string[];
 type ExtraInfo = [CallableFunction, CallableFunction] | AuCmds;
 type InfoBeforeLoad = [zk.Desktop, WidgetInfo, boolean | undefined, zk.Widget | undefined, ExtraInfo?] & {pked?};
 
+var Widget = zk.Widget,
+	_wgt_$ = Widget.$, //the original zk.Widget.$
 	_crInfBL0: InfoBeforeLoad[] = [], _crInfBL1: [zk.Desktop, zk.Widget, boolean | undefined, ExtraInfo?][] = [], //create info for BL
 	_crInfAU0: InfoBeforeLoad[] = [], //create info for AU
 	_aftMounts: (() => void)[] = [], //afterMount
@@ -358,7 +359,7 @@ function mtAU(): void {
 		try {
 			wgt = create(undefined, inf[1] as never);
 		} finally {
-				if (filter && _wgt_$) Widget.$ = _wgt_$;
+			if (filter && _wgt_$) Widget.$ = _wgt_$;
 		}
 		((inf[4] as ExtraInfo)[0] as CallableFunction)(wgt); //invoke stub
 

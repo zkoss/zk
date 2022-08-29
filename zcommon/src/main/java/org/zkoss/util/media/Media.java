@@ -75,16 +75,20 @@ public interface Media {
 	 */
 	public String getStringData();
 	/** Returns the raw data in InputStream.
-	 * The return object is implementation-specific, please check javadoc for its implementation class.
 	 *
-	 * @exception IllegalStateException if {@link #isBinary()} returns false.
+	 * <p>Note: it wraps {@link #getByteData} with ByteArrayInputStream
+	 * if it is in memory ({@link #inMemory} returns true).
+	 *
+	 * @exception IllegalStateException if {@link #isBinary} returns false.
 	 * @see #getReaderData
 	 */
 	public InputStream getStreamData();
 	/** Returns the raw data in Reader.
-	 * The return object is implementation-specific, please check javadoc for its implementation class.
 	 *
-	 * @exception IllegalStateException if {@link #isBinary()} returns true.
+	 * <p>Note: it wraps {@link #getStringData} with StringReader,
+	 * if it is in memory ({@link #inMemory} returns true).
+	 *
+	 * @exception IllegalStateException if {@link #isBinary} returns true.
 	 * @see #getStreamData
 	 */
 	public Reader getReaderData();

@@ -34,10 +34,11 @@ export class Treecols extends zul.mesh.HeadWidget {
 			super.setVisible(visible, opts);
 			this.getTree()!.rerender();
 		}
+		return this;
 	}
-	
-	beforeChildAdded_: function (child, insertBefore) {
-		if (!child.$instanceof(zul.sel.Treecol)) {
+
+	override beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
+		if (!(child instanceof zul.sel.Treecol)) {
 			zk.error('Unsupported child for treecols: ' + child.className);
 			return false;
 		}

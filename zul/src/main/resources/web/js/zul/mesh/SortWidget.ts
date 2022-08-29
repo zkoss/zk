@@ -20,8 +20,6 @@ export interface SortableWidget extends zk.Widget {
 /**
  * A skeletal implementation for a sortable widget.
  */
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 @zk.WrapClass('zul.mesh.SortWidget')
 export abstract class SortWidget extends zul.mesh.HeaderWidget {
 	override _sortDirection: zul.mesh.SortDirection = 'natural';

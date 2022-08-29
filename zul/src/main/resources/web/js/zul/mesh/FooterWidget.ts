@@ -15,8 +15,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 /**
  * A skeletal implementation for a footer.
  */
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 @zk.WrapClass('zul.mesh.FooterWidget')
 export abstract class FooterWidget extends zul.LabelImageWidget<HTMLTableCellElement> {
 	override parent!: zul.mesh.HeadWidget | undefined;

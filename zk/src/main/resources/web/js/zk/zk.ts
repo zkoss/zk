@@ -299,7 +299,7 @@ let _caches: UnknownProps = {};
  * <p>Refer to {@link jq} for DOM related utilities.
  */
 
-/** A map of all classes, Map<int oid, zk.Class cls>.
+/** A map of all classes, {@code Map<int oid, zk.Class cls>}.
  * @since 5.0.8
  */
 _zk.classes = {} as Record<number, unknown>;
@@ -633,7 +633,7 @@ _zk.cut = function <T> (props: Record<string, T>, nm: string): T | undefined {
  * It is similar to Java's package statement except it returns the package
  * object.
  * <p>Notice the package is usually defined automatically by use of
- * <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/Widget_Package_Descriptor>WPD</a>,
+ * <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/Widget_Package_Descriptor">WPD</a>,
  * so you're rarely need to use this method.
  *
  * <p>Example:
@@ -1782,10 +1782,6 @@ export abstract class ZKObject {
 	 */
 	$init(props?: Record<string, unknown> | typeof zkac): void {
 		// empty for subclass to override
-	}
-
-	public afterCreated_(props?: Record<string, unknown> | typeof zkac): void {
-		// empty
 	}
 
 	/**

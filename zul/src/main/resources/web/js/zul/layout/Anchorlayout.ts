@@ -22,9 +22,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * @since 6.0.0
  */
 @zk.WrapClass('zul.layout.Anchorlayout')
-export class Anchorlayout extends zul.Widget {}
-	beforeChildAdded_: function (child, insertBefore) {
-		if (!child.$instanceof(zul.layout.Anchorchildren)) {
+export class Anchorlayout extends zul.Widget {
+	override beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
+		if (!(child instanceof zul.layout.Anchorchildren)) {
 			zk.error('Unsupported child for Anchorlayout: ' + child.className);
 			return false;
 		}

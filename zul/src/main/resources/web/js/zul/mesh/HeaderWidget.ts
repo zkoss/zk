@@ -16,8 +16,6 @@ export type SortDirection = 'ascending' | 'descending' | 'natural';
 /**
  * A skeletal implementation for a header.
  */
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 @zk.WrapClass('zul.mesh.HeaderWidget')
 export abstract class HeaderWidget extends zul.LabelImageWidget<HTMLTableCellElement> {
 	// NOTE: parent can be null, as `getMeshWidget` asserts

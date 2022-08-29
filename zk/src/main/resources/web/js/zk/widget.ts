@@ -818,6 +818,7 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Objec
 	declare _droppable?: string | boolean;
 	declare _dropTypes?: string[];
 	declare _fitSizeListened: boolean;
+	declare _focus: boolean;
 
 	declare static _importantEvts?: Record<string, boolean>;
 	declare static _duplicateIgnoreEvts?: Record<string, boolean>;
@@ -2353,15 +2354,15 @@ wgt.$f().main.setTitle("foo");
 	 * <p>Default: {@code false}
 	 * @since ZK 10.0.0
 	 */
-	isFocus: function () {
+	isFocus(): boolean {
 		return this._focus;
-	},
+	}
 	/**
 	 * Sets the focus on this widget.
 	 * @param boolean focus True to focus on this widget.
 	 * @since ZK 10.0.0
 	 */
-	setFocus: function (focus) {
+	setFocus(focus: boolean): this {
 		if (this._focus != focus) {
 			this._focus = focus;
 			if (focus) {
@@ -2374,7 +2375,8 @@ wgt.$f().main.setTitle("foo");
 				}
 			}
 		}
-	},
+		return this;
+	}
 	/** Synchronizes a map of objects that are associated with this widget, and
 	 * they shall be resized when the size of this widget is changed.
 	 * <p>It is useful to sync the layout, such as shadow, mask
@@ -2442,9 +2444,9 @@ wgt.$f().main.setTitle("foo");
 	 * @return boolean whether the widget was able to added.
 	 * @since 10.0.0
 	 */
-	beforeChildAdded_: function (child: zk.Widget, insertBefore?: zk.Widget) {
+	beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
 		return true; //to be overridden
-	},
+	}
 	/** A callback called after a child has been added to this widget.
 	 * <p>Notice: when overriding this method, {@link #onChildReplaced_}
 	 * is usually required to override, too.
@@ -3806,14 +3808,17 @@ unbind_: function (skipper, after) {
 		}
 	}
 
-	setFlexSizeH_(flexSizeH: HTMLElement, zkn: zk.JQZK, height: number, isFlexMin?: boolean): void {
+
+	// eslint-disable-next-line zk/javaStyleSetterSignature
+	setFlexSizeH_(n: HTMLElement, zkn: zk.JQZK, height: number, isFlexMin?: boolean): void {
 		// excluding margin for F50-3000873.zul and B50-3285635.zul
-		flexSizeH.style.height = jq.px0(height - (!isFlexMin ? zkn.marginHeight() : 0));
+		n.style.height = jq.px0(height - (!isFlexMin ? zkn.marginHeight() : 0));
 	}
 
-	setFlexSizeW_(flexSizeW: HTMLElement, zkn: zk.JQZK, width: number, isFlexMin?: boolean): void {
+	// eslint-disable-next-line zk/javaStyleSetterSignature
+	setFlexSizeW_(n: HTMLElement, zkn: zk.JQZK, width: number, isFlexMin?: boolean): void {
 		// excluding margin for F50-3000873.zul and B50-3285635.zul
-		flexSizeW.style.width = jq.px0(width - (!isFlexMin ? zkn.marginWidth() : 0));
+		n.style.width = jq.px0(width - (!isFlexMin ? zkn.marginWidth() : 0));
 	}
 
 	// ZK-5050

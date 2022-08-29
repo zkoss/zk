@@ -338,6 +338,16 @@ export class Row extends zul.Widget<HTMLTableRowElement> implements zul.mesh.Ite
 		return group && !group.isOpen() ? style + 'display:none;' : style;
 	}
 
+	override beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
+		if (zk.isLoaded('zkex.grid') && child instanceof zkex.grid.Detail) {
+			if (this.detail && this.detail != child) {
+				zk.error('Only one detail is allowed: ' + this.className);
+				return false;
+			}
+		}
+		return true;
+	}
+
 	override onChildAdded_(child: zk.Widget): void {
 		super.onChildAdded_(child);
 		if (zk.isLoaded('zkex.grid') && child instanceof zkex.grid.Detail)

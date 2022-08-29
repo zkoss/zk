@@ -366,9 +366,9 @@ export class Select extends zul.Widget<HTMLSelectElement> {
 		var n = this.$n_(),
 			opts = n.options,
 			multiple = this._multiple,
-			data: string[] = [],
+			data: zul.sel.Option[] = [],
 			changed = false,
-			reference: string | undefined;
+			reference: zk.Widget | undefined;
 		for (var j = 0, ol = opts.length; j < ol; ++j) {
 			var opt = opts[j],
 				o = zk.Widget.$<zul.sel.Option>(opt.id),
@@ -379,7 +379,7 @@ export class Select extends zul.Widget<HTMLSelectElement> {
 					changed = true;
 				}
 				if (v) {
-					data.push(o);
+					data.push(o!);
 					if (!reference) reference = o;
 				}
 			} else {

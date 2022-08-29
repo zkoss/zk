@@ -725,11 +725,11 @@ export namespace flex_global {
 	};
 }
 zk.copy(window, flex_global);
-let _xWidget = {};
+const _xWidget: Partial<zk.Widget> = {};
 zk.override(zk.Widget.prototype, _xWidget, {
-	domClass_: function (this: zk.Widget) {
-		let domClass = _xWidget['domClass_'].apply(this, arguments),
-			n = this.$n();
+	domClass_(no?: zk.DomClassOptions): string {
+		let domClass = _xWidget.domClass_!.call(this, no),
+			n = this.$n() as HTMLElement | undefined;
 		if (n) {
 			let jqn = jq(n),
 				flexClasses = ['z-flex', 'z-flex-row', 'z-flex-column', 'z-flex-item'];

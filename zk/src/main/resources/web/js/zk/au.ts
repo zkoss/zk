@@ -61,7 +61,6 @@ export interface AuResponse extends Partial<Pick<XMLHttpRequest,
 
 var _perrURIs: Record<string, string> = {}, //server-push error URI
 	_onErrs: ErrorHandler[] = [], //onError functions
-	obsolete(dtid: string, msg: string): unknown;
 	cmdsQue: AuCommands[] = [], //response commands in XML
 	sendPending, responseId: string | number,
 	doCmdFns: (() => void)[] = [],
@@ -182,7 +181,7 @@ function ajaxSend(dt: zk.Desktop, aureq: zk.Event, timeout?: number): void {
 	//call stack: echo2() -> send()
 	if (!dt) {
 		//original dt is decided by aureq.target.desktop, so start by it's parent.
-		var wgt: zk.Widget | undefined = aureq.target!.parent;
+		var wgt: zk.Widget | undefined = aureq.target.parent;
 		while (!wgt?.desktop) {
 			wgt = wgt?.parent;
 		}
@@ -915,7 +914,8 @@ export namespace au_global {
 			} else {
 				content = '';
 			}
-		let files = [], uploadCallbacks: unknown[] = [], lasturi = requri;
+			const files = [], uploadCallbacks: unknown[] = [];
+			let lasturi = requri;
 			for (let j = 0, aureq: zk.Event | undefined; aureq = es.shift(); ++j) {
 				if ((aureq.opts || {}).uri != uri) {
 					es.unshift(aureq);
@@ -925,12 +925,12 @@ export namespace au_global {
 				const oldRequri = zAu.beforeSend(requri, aureq, dt);
 
 				// split the different request for the different ReqUri for zephyr
-			if (j > 0 && oldRequri != lasturi) {
+				if (j > 0 && oldRequri != lasturi) {
 					es.unshift(aureq);
 					sendPending = true;
 					break;
 				}
-			lasturi = oldRequri;
+				lasturi = oldRequri;
 
 				aureq.data = _deconstructPacket(aureq.data as never, files);
 
@@ -949,7 +949,7 @@ export namespace au_global {
 				}
 				zk.copy(rtags, (aureq.opts || {}).rtags);
 			}
-		requri = lasturi;
+			requri = lasturi;
 			// B65-ZK-2210: get resourceURL by desktop id
 			if (zk.portlet2Data && zk.portlet2Data[dt.id!]) {
 				requri = zk.portlet2Data[dt.id!].resourceURL;

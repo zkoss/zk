@@ -92,13 +92,15 @@ export class Treechildren extends zul.Widget {
 	override isRealElement(): boolean {
 		return false; // fixed for ZK Client selector issue
 	}
-	beforeChildAdded_: function (child, insertBefore) {
-		if (!child.$instanceof(zul.sel.Treeitem)) {
+
+	override beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
+		if (!(child instanceof zul.sel.Treeitem)) {
 			zk.error('Unsupported child for treechildren: ' + child.className);
 			return false;
 		}
 		return true;
-	},
+	}
+
 	//@Override
 	override insertBefore(child: zul.sel.Treeitem, sibling?: zk.Widget, ignoreDom?: boolean): boolean {
 		var oldsib = _prevsib(child);

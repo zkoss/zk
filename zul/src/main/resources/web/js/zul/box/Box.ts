@@ -713,7 +713,7 @@ export class Box extends zul.Widget {
 		lastsz = wdh > 0 ? wdh : 0;
 		for (var j = hflexs.length - 1; j > 0; --j) {
 			let cwgt = hflexs.shift()!, //{n: node, f: hflex}
-				hsz = (cwgt._nhflex * wdh / hflexsz) | 0, //cast to integer
+				hsz = (cwgt._nhflex! * wdh / hflexsz) | 0, //cast to integer
 				chdex = cwgt.$n('chdex')!,
 				$chdex = zk(chdex),
 				minus = $chdex.padBorderWidth();

@@ -35,11 +35,8 @@ export * from './dateImpl';
 declare global {
 	// eslint-disable-next-line no-unused-vars
 	interface Window {
-		$eval(s: string): unknown;
-		zk;
-		zKeys;
-		zjq;
-		zFlex;
+		$: typeof jq;
+		jQuery: typeof jq;
 	}
 }
 if (!window.jQuery) {
@@ -81,7 +78,7 @@ if (zk.tabletUIEnabled) {
 	document.addEventListener('DOMContentLoaded', function () {
 		var jqTabletStylesheet = jq('link[href*="zkmax/css/tablet.css.dsp"]').eq(0);
 		if (jqTabletStylesheet)
-			jqTabletStylesheet.attr('disabled', false); // ZK-4451: disable tablet css
+			jqTabletStylesheet.attr('disabled', String(false)); // ZK-4451: disable tablet css
 	});
 }
 

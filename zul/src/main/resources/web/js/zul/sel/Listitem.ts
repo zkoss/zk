@@ -181,9 +181,10 @@ export class Listitem extends zul.sel.ItemWidget {
 		zWatch.unlisten({
 			onCommandReady: this
 		});
-	},
-	beforeChildAdded_: function (child, insertBefore) {
-		if (!child.$instanceof(zul.sel.Listcell)) {
+	}
+
+	override beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
+		if (!(child instanceof zul.sel.Listcell)) {
 			zk.error('Unsupported child for listitem: ' + child.className);
 			return false;
 		}

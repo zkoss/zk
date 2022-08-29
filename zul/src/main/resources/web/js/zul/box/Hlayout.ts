@@ -22,7 +22,7 @@ export class Hlayout extends zul.box.Layout {
 	_valign = 'top';
 	_beforeSizeWidth?: number;
 
-    /*zk.def*/
+	/*zk.def*/
 	setValign(valign: string, opts?: Record<string, boolean>): this {
 		const o = this._valign;
 		this._valign = valign;
@@ -31,15 +31,15 @@ export class Hlayout extends zul.box.Layout {
 			this.updateDomClass_();
 		}
 
-        return this;
-    }
+		return this;
+	}
 
-    /** Sets the vertical-align to top or bottom.
-     *
-     * @param String valign the value of vertical-align property
-     * "top", "middle", "bottom".
-     * @since 6.0.0
-     */
+	/** Sets the vertical-align to top or bottom.
+	 *
+	 * @param String valign the value of vertical-align property
+	 * "top", "middle", "bottom".
+	 * @since 6.0.0
+	 */
 	getValign(): string {
 		return this._valign;
 	}
@@ -58,9 +58,9 @@ export class Hlayout extends zul.box.Layout {
 		return false;
 	}
 
-    // F60-ZK-537: Hlayout supports valign (top, middle and bottom),
-    // set vertical-align to children cause wrong layout on IE6,
-    // set it to parent directly
+	// F60-ZK-537: Hlayout supports valign (top, middle and bottom),
+	// set vertical-align to children cause wrong layout on IE6,
+	// set it to parent directly
 	override domClass_(no?: Partial<zk.DomClassOptions>): string {
 		var clsnm = super.domClass_(no),
 			v;
@@ -75,7 +75,7 @@ export class Hlayout extends zul.box.Layout {
 		return 'row';
 	}
 
-    //ZK-4476
+	//ZK-4476
 	_beforeSizeForRead(): void {
 		var n = this.$n();
 		this._beforeSizeWidth = n ? n.offsetWidth : 0;
@@ -90,7 +90,7 @@ export class Hlayout extends zul.box.Layout {
 			totalWdCached = this._beforeSizeWidth,
 			totalWd = totalWdCached != null ? totalWdCached : this.$n()!.offsetWidth,
 			flexCnt = 0,
-			flexWgts: {wgt; flex}[] = [];
+			flexWgts: {wgt: zk.Widget; flex: number}[] = [];
 		for (; xc; xc = xc.nextSibling) {
 			if (xc.isVisible() && !zk(xc).hasVParent()) {
 				var nhflex = xc._nhflex,
@@ -110,7 +110,7 @@ export class Hlayout extends zul.box.Layout {
 		if (flexCnt > 0) {
 			var perWd = totalWd / flexCnt;
 			for (var i = 0, l = flexWgts.length; i < l; i++)
-				flexWgts[i].wgt.$n('chdex').style.width = jq.px0(perWd * flexWgts[i].flex);
+				flexWgts[i].wgt.$n_('chdex').style.width = jq.px0(perWd * flexWgts[i].flex);
 		}
 		delete this._beforeSizeWidth;
 	}

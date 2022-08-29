@@ -56,9 +56,10 @@ export class Columns extends zul.mesh.ColumnMenuWidget {
 		zWatch.unlisten({
 			onCommandReady: this
 		});
-	},
-	beforeChildAdded_: function (child, insertBefore) {
-		if (!child.$instanceof(zul.grid.Column)) {
+	}
+
+	override beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
+		if (!(child instanceof zul.grid.Column)) {
 			zk.error('Unsupported child for columns: ' + child.className);
 			return false;
 		}

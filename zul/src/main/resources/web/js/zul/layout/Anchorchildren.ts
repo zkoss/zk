@@ -22,38 +22,38 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.layout.Anchorchildren')
 export class Anchorchildren extends zul.Widget {
-    _anchor?: string;
+	_anchor?: string;
 
-    /**
-     * Sets the width, height relative to parent, anchorlayout.
-     * It can use % or number.
-     * Accept one argument, or two argument separated by space.
-     * The first argument is for width, and second for height.
-     * For example, "50% 50%" means the anchorchildren width and height is 50%
-     * of {@link Anchorlayout}.
-     * "-30 20%" means the width is 20px less than parent, and height is 20% of parent.
-     * "50%" means the width is 50% of parent, and the height is no assumed.
-     * @param String anchor
-     */
-    setAnchor(anchor: string, opts?: Record<string, boolean>): this {
-        const o = this._anchor;
-        this._anchor = anchor;
+	/**
+	 * Sets the width, height relative to parent, anchorlayout.
+	 * It can use % or number.
+	 * Accept one argument, or two argument separated by space.
+	 * The first argument is for width, and second for height.
+	 * For example, "50% 50%" means the anchorchildren width and height is 50%
+	 * of {@link Anchorlayout}.
+	 * "-30 20%" means the width is 20px less than parent, and height is 20% of parent.
+	 * "50%" means the width is 50% of parent, and the height is no assumed.
+	 * @param String anchor
+	 */
+	setAnchor(anchor: string, opts?: Record<string, boolean>): this {
+		const o = this._anchor;
+		this._anchor = anchor;
 
-        if (o !== anchor || opts?.force) {
+		if (o !== anchor || opts?.force) {
 			if (this.desktop)
 				this.onSize();
 		}
 
-        return this;
-    }
+		return this;
+	}
 
-    /**
-     * Returns the anchor setting.
-     * @return String
-     */
-    getAnchor(): string | undefined {
-        return this._anchor;
-    }
+	/**
+	 * Returns the anchor setting.
+	 * @return String
+	 */
+	getAnchor(): string | undefined {
+		return this._anchor;
+	}
 
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
@@ -65,7 +65,7 @@ export class Anchorchildren extends zul.Widget {
 		super.unbind_(skipper, after, keepRod);
 	}
 
-    override onSize(): void {
+	override onSize(): void {
 		//calculate the height and width in pixel based on _anchor
 		var n = this.$n_(),
 			parentn = this.parent!.$n_(),

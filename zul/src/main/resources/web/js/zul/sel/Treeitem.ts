@@ -366,13 +366,14 @@ export class Treeitem extends zul.sel.ItemWidget {
 	override isRealElement(): boolean {
 		return false; // fixed for ZK Client selector issue
 	}
-	beforeChildAdded_: function (child, insertBefore) {
-		if (child.$instanceof(zul.sel.Treerow)) {
+
+	override beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
+		if (child instanceof zul.sel.Treerow) {
 			if (this.treerow && this.treerow != child) {
 				zk.error('Only one treerow is allowed: ' + this.className);
 				return false;
 			}
-		} else if (child.$instanceof(zul.sel.Treechildren)) {
+		} else if (child instanceof zul.sel.Treechildren) {
 			if (this.treechildren && this.treechildren != child) {
 				zk.error('Only one treechildren is allowed: ' + this.className);
 				return false;
@@ -382,7 +383,7 @@ export class Treeitem extends zul.sel.ItemWidget {
 			return false;
 		}
 		return true;
-	},
+	}
 	//@Override
 	override insertBefore(child: zk.Widget, sibling: zk.Widget | undefined, ignoreDom?: boolean): boolean {
 		if (super.insertBefore(child, sibling,

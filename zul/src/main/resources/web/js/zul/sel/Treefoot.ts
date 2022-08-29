@@ -38,9 +38,10 @@ export class Treefoot extends zul.Widget {
 	override setHflex(hflex: boolean | string): this { //hflex ignored for Treefoot
 		hflex = false;
 		return super.setHflex(hflex);
-	},
-	beforeChildAdded_: function (child, insertBefore) {
-		if (!child.$instanceof(zul.sel.Treefooter)) {
+	}
+
+	override beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
+		if (!(child instanceof zul.sel.Treefooter)) {
 			zk.error('Unsupported child for treefoot: ' + child.className);
 			return false;
 		}

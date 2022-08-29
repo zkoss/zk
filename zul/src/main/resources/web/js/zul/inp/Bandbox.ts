@@ -100,9 +100,10 @@ export class Bandbox extends zul.inp.ComboWidget {
 	override doFocus_(evt: zk.Event): void {
 		var target = evt.domTarget;
 		if (!(target != this.getInputNode() && target != this.$n('btn'))) super.doFocus_(evt);
-	},
-	beforeChildAdded_: function (child, insertBefore) {
-		if (!child.$instanceof(zul.inp.Bandpopup)) {
+	}
+
+	override beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
+		if (!(child instanceof zul.inp.Bandpopup)) {
 			zk.error('Unsupported child for Bandbox: ' + child.className);
 			return false;
 		}

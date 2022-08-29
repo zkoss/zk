@@ -69,6 +69,14 @@ export class Tabpanels extends zul.Widget {
 		super.unbind_(skipper, after, keepRod);
 	}
 
+	override beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
+		if (!(child instanceof zul.tab.Tabpanel)) {
+			zk.error('Unsupported child for tabpanels: ' + child.className);
+			return false;
+		}
+		return true;
+	}
+
 	override onChildRemoved_(child: zk.Widget): void {
 		super.onChildRemoved_(child);
 		this._shallSync = true;

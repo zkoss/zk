@@ -336,8 +336,9 @@ export class Combobutton extends zul.wgt.Button {
 		}
 		return super.rerender(skipper);
 	}
-	beforeChildAdded_: function (child, insertBefore) {
-		if (!child.$instanceof(zul.wgt.Popup)) {
+
+	override beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
+		if (!(child instanceof zul.wgt.Popup)) {
 			zk.error('Unsupported child for Combobutton: ' + child.className);
 			return false;
 		}
@@ -346,4 +347,5 @@ export class Combobutton extends zul.wgt.Button {
 			return false;
 		}
 		return true;
+	}
 }
