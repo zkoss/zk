@@ -745,7 +745,6 @@ export function WrapClass(pkg: string) {
  * @disable(zkgwt)
  */
 // zk scope
-@WrapClass('zk.Widget')
 export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Object {
 	declare z$rod?: boolean; // Used by rod in zkmax.
 	declare _rodopen?: boolean; // Used by rod in zkmax.
