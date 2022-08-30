@@ -439,7 +439,7 @@ export class WScroll extends zk.Object {
 	}
 
 	_mouseOver(evt: zk.Event): void {
-		var cls = evt.target!.className,
+		var cls = evt.target.className,
 			index = cls.lastIndexOf('-'),
 			key = cls.substring(index + 1),
 			$drag = jq(this.edrag);
@@ -463,7 +463,7 @@ export class WScroll extends zk.Object {
 	}
 
 	_mouseOut(evt: zk.Event): void {
-		var cls = evt.target!.className,
+		var cls = evt.target.className,
 			$drag = jq(this.edrag);
 		$drag.removeClass(cls + '-over');
 		if ($drag.hasClass(cls + '-clk')) {
@@ -472,11 +472,11 @@ export class WScroll extends zk.Object {
 	}
 
 	_mouseUp(evt: zk.Event): void {
-		jq(this.edrag).removeClass(evt.target!.className + '-clk');
+		jq(this.edrag).removeClass(evt.target.className + '-clk');
 	}
 
 	_mouseDown(evt: zk.Event): void {
-		var cls = evt.target!.className,
+		var cls = evt.target.className,
 			index = cls.lastIndexOf('-'),
 			key = cls.substring(index + 1),
 			$drag = jq(this.edrag);

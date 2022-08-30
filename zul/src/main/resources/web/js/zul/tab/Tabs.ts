@@ -427,12 +427,12 @@ export class Tabs extends zul.Widget {
 	}
 
 	override beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
- 		if (!(child instanceof zul.tab.Tab)) {
- 			zk.error('Unsupported child for tabs: ' + child.className);
- 			return false;
- 		}
- 		return true;
- 	}
+		if (!(child instanceof zul.tab.Tab)) {
+			zk.error('Unsupported child for tabs: ' + child.className);
+			return false;
+		}
+		return true;
+	}
 
 	override onChildRemoved_(child: zk.Widget): void {
 		var p = this.parent;
