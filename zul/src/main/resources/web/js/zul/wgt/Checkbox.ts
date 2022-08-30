@@ -357,8 +357,8 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 
 		this.domUnlisten_(mold, 'onMouseDown', '_doMoldMouseDown')
 			.domUnlisten_(n, 'onFocus', 'doFocus_')
-			.domUnlisten_(n, 'onBlur', 'doBlur_')
-			.unbind_(skipper, after, keepRod);
+			.domUnlisten_(n, 'onBlur', 'doBlur_');
+		super.unbind_(skipper, after, keepRod);
 	}
 
 	_setTabIndexForMold(): void {
