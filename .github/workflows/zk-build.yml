@@ -24,6 +24,14 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16
+      - name: Checkout ZK EE
+        uses: actions/checkout@v3
+        with:
+          repository: zkoss/zkcml
+          ref: 10-experiment
+          path: zkcml-${{ github.run_id }}-${{ github.run_number }}
+          ssh-key: ${{ secrets.SSH_KEY }}
+      - run: mv zkcml-${{ github.run_id }}-${{ github.run_number }} ../zkcml
       - name: Build Latest ZK
         run: |
           if [ -e yarn.lock ]; then
