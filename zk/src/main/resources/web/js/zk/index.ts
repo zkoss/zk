@@ -33,7 +33,6 @@ export * from './flex';
 export * from './dateImpl';
 
 declare global {
-	// eslint-disable-next-line no-unused-vars
 	interface Window {
 		$: typeof jq;
 		jQuery: typeof jq;

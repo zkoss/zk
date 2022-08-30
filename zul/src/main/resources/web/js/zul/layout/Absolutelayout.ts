@@ -31,7 +31,7 @@ export class Absolutelayout extends zul.Widget {
 		}
 		return true;
 	}
-    static redraw(this: zk.Widget, out: string[]): void {
+	static redraw(this: zk.Widget, out: string[]): void {
 		out.push('<div ', this.domAttrs_(), '>');
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
