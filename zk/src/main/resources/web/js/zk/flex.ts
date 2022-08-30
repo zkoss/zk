@@ -725,10 +725,9 @@ export namespace flex_global {
 	};
 }
 zk.copy(window, flex_global);
-const _xWidget: Partial<zk.Widget> = {};
-zk.override(zk.Widget.prototype, _xWidget, {
+const _xWidget = zk.augment(zk.Widget.prototype, {
 	domClass_(no?: zk.DomClassOptions): string {
-		let domClass = _xWidget.domClass_!.call(this, no),
+		let domClass = _xWidget.domClass_.call(this, no),
 			n = this.$n() as HTMLElement | undefined;
 		if (n) {
 			let jqn = jq(n),
