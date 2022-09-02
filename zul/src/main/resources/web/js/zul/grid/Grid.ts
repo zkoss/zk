@@ -407,6 +407,7 @@ export class RowIter extends zk.Object implements zul.mesh.ItemIterator {
 	opts?: Record<string, unknown>;
 	_isInit?: boolean;
 	p?: zul.grid.Row;
+	length?: number;
 
 	/** Constructor
 	 * @param Grid grid the widget that the iterator belongs to

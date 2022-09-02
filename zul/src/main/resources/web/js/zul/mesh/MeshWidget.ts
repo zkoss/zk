@@ -444,6 +444,7 @@ export interface Item extends zul.Widget<HTMLTableRowElement> {
 export interface ItemIterator<TItem extends zul.mesh.Item = zul.mesh.Item> {
 	hasNext(): boolean;
 	next(): TItem | undefined;
+	length?: number;
 }
 /**
  *  A skeletal implementation for a mesh widget.
