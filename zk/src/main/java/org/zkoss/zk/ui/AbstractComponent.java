@@ -35,7 +35,6 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
@@ -89,6 +88,7 @@ import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.EventListenerMap;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.sys.HtmlPageRenders;
+import org.zkoss.zk.ui.sys.IdGenerator;
 import org.zkoss.zk.ui.sys.JSCumulativeContentRenderer;
 import org.zkoss.zk.ui.sys.JsContentRenderer;
 import org.zkoss.zk.ui.sys.Names;
@@ -607,8 +607,13 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 					break;
 				}
 			}
-			// avoid duplicating uuid in zephyr cloud mode
-			_uuid = exec == null ? ANONYMOUS_ID + (UUID.randomUUID().toString().split("-")[0]) + _anonymousId++ : nextUuid(exec.getDesktop());
+			if (exec == null) {
+				IdGenerator idGenerator = ((WebAppCtrl) WebApps.getCurrent()).getIdGenerator();
+				final String uid = idGenerator != null ? idGenerator.nextAnonymousComponentUuid(this, Utils.getComponentInfo(this)): null;
+				_uuid = ANONYMOUS_ID + (uid != null ? uid : String.valueOf(_anonymousId++));
+			} else {
+				_uuid = nextUuid(exec.getDesktop());
+			}
 			//OK to race for _anonymousId (since ok to be the same)
 		}
 		return _uuid;
