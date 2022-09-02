@@ -609,7 +609,7 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 			}
 			if (exec == null) {
 				IdGenerator idGenerator = ((WebAppCtrl) WebApps.getCurrent()).getIdGenerator();
-				final String uid = idGenerator != null ? idGenerator.nextAnonymousComponentUuid(this, Utils.getComponentInfo(this)): null;
+				final String uid = idGenerator != null ? idGenerator.nextAnonymousComponentUuid(this, Utils.getComponentInfo(this)) : null;
 				_uuid = ANONYMOUS_ID + (uid != null ? uid : String.valueOf(_anonymousId++));
 			} else {
 				_uuid = nextUuid(exec.getDesktop());
