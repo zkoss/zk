@@ -965,6 +965,8 @@ open: function () {
  * @param Object dst the destination object to override
  * @param Object src the source map providing the new members
  * @return Object the backup object
+ *
+ * @since 10.0.0
  */
 _zk.augment = function<D extends Pick<S, keyof D & keyof S>, S> (dst: D, src: S & Pick<D, keyof D & keyof S> & ThisType<D & S>) {
 	const backup = {} as Pick<D, keyof D & keyof S>;
