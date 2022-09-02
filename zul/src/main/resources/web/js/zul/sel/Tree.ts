@@ -183,7 +183,7 @@ export class Tree extends zul.sel.SelectWidget {
 				zk.error('The child paging is allowed only in the paging mold, ' + this.className);
 				return false;
 			}
-		} else if (child instanceof zul.grid.Foot) {
+		} else if (zul.grid /* zul.grid might not exist. See zk.wpd */ && child instanceof zul.grid.Foot) {
 			if (this.foot && this.foot != child) {
 				zk.error('Only one foot child is allowed: ' + this.className);
 				return false;
@@ -312,18 +312,18 @@ export class Tree extends zul.sel.SelectWidget {
 	_fixSelected(): boolean {
 		var sel: zul.sel.Treeitem | undefined;
 		switch (this._selItems.length) {
-		case 1:
-			sel = this._selItems[0];
+			case 1:
+				sel = this._selItems[0];
 			// fallthrough
-		case 0:
-			break;
-		default:
-			for (var j = 0, items = this.getItems(), k = items.length; j < k; ++j) {
-				if (items[j].isSelected()) {
-					sel = items[j];
-					break;
+			case 0:
+				break;
+			default:
+				for (var j = 0, items = this.getItems(), k = items.length; j < k; ++j) {
+					if (items[j].isSelected()) {
+						sel = items[j];
+						break;
+					}
 				}
-			}
 		}
 
 		if (sel != this._sel) {
