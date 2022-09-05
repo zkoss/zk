@@ -242,19 +242,6 @@ export class Menu extends zul.LabelImageWidget implements zul.LabelImageWidgetWi
 		super.beforeParentChanged_(newParent);
 	}
 
-	override beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
-		if (child instanceof zul.menu.Menupopup) {
-			if (this.menupopup && this.menupopup != child) {
-				zk.error('Only one menupopup is allowed: ' + this.className);
-				return false;
-			}
-		} else {
-			zk.error('Unsupported child for menu: ' + child.className);
-			return false;
-		}
-		return true;
-	}
-
 	override onChildAdded_(child: zk.Widget): void {
 		super.onChildAdded_(child);
 		if (child instanceof zul.menu.Menupopup) {
