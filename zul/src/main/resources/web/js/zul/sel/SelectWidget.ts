@@ -1246,7 +1246,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 
 	_updHeaderCM(): void { //update header's checkmark
 		if (this._headercm && this._multiple) {
-			this._nUpdHeaderCM = Math.max(0, this._nUpdHeaderCM!) + 1;
+			this._nUpdHeaderCM = 1 + Math.max(0, this._nUpdHeaderCM || 0); // in case `_nUpdHeaderCM` is undefined or NaN
 			setTimeout(() => _updHeaderCM(this), 100); //do it in batch
 		}
 	}
