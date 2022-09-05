@@ -104,6 +104,7 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 	 * @since 9.6.0
 	 */
 	private ConcurrentMap<String, String> _sourceMapContentMap; // browser$source-map-name -> source map content
+	private static final byte[] EMPTY_SOURCE_MAP_CONTENT = "{\"version\":3,\"sources\":[],\"names\":[],\"mappings\":\"\"}".getBytes();
 
 	public void init(ExtendletConfig config) {
 		init(config, new WpdLoader());
@@ -152,6 +153,7 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 		boolean isSourceMapSupported = false;
 		Boolean shouldHandleSourceMappingURL = null;
 		String userAgent = null;
+		boolean isSourceMap = path.endsWith(".map");
 		if (isDebugJS()) {
 			userAgent = request.getHeader("user-agent");
 			isSourceMapSupported = Objects.equals(CLOSURE_COMPILER_AVAILABLE, true)
@@ -159,7 +161,7 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 					|| Servlets.isBrowser(userAgent, "ie11") || Servlets.isBrowser(userAgent, "safari"));
 			if (isSourceMapSupported) {
 				HttpSession session = request.getSession();
-				if (path.endsWith(".map")) { // try to get *.js.map
+				if (isSourceMap) { // try to get *.js.map
 					String name = path.substring(path.lastIndexOf("/") + 1).replaceAll(".map", "");
 					String sourceMapContent = _sourceMapContentMap.get(Servlets.getBrowser(userAgent) + "$" + name);
 					if (sourceMapContent == null) {
@@ -176,6 +178,8 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 				if (shouldHandleSourceMappingURL != null)
 					request.removeAttribute(HANDLE_SOURCE_MAPPING_URL);
 				request.setAttribute(SOURCE_MAP_SUPPORTED, true);
+			} else if (isSourceMap) { // return empty source map when it is not supported
+				return EMPTY_SOURCE_MAP_CONTENT;
 			}
 		}
 		/* 2011/4/27 Tony:
@@ -777,6 +781,9 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 		}
 
 		protected String getRealPath(String path) {
+			if (path.endsWith("map")) { // source map
+				return path;
+			}
 			final int j = path.lastIndexOf(".wpd");
 			return path.substring(0, j).replace('.', '/') + "/zk" + path.substring(j);
 		}
