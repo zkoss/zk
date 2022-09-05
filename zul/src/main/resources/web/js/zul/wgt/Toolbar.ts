@@ -148,7 +148,7 @@ export class Toolbar extends zul.Widget {
 		this._overflowPopupIconSclass = overflowPopupIconSclass;
 
 		if (o !== overflowPopupIconSclass || opts?.force) {
-			var icon = this.$n('overflowpopup-button');
+			const icon = this.$n('overflowpopup-button');
 			if (this.desktop && icon)
 				icon.className = this._getOverflowPopupBtnClass();
 		}
@@ -165,7 +165,7 @@ export class Toolbar extends zul.Widget {
 	}
 
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
-		var popup = this.$n('pp');
+		const popup = this.$n('pp');
 		if (popup) {
 			this.domUnlisten_(this.$n_('overflowpopup-button'), 'onClick', '_openPopup');
 			zWatch.unlisten({ onFloatUp: this, onCommandReady: this, onSize: this });
@@ -182,11 +182,11 @@ export class Toolbar extends zul.Widget {
 			return;
 
 		this._open = true;
-		var popup = this.$n_('pp');
+		const popup = this.$n_('pp');
 		this.setFloating_(true, { node: popup });
 		zWatch.fire('onFloatUp', this);
-		var topZIndex = this.setTopmost();
-		popup.style.zIndex = (topZIndex > 0 ? topZIndex : 1) as unknown as string;
+		const topZIndex = this.setTopmost();
+		popup.style.zIndex = String(topZIndex > 0 ? topZIndex : 1);
 		jq(popup).removeClass(this.$s('popup-close')).addClass(this.$s('popup-open')).zk.makeVParent();
 		this._syncPopupPosition();
 	}
@@ -205,7 +205,7 @@ export class Toolbar extends zul.Widget {
 			return;
 
 		this._open = false;
-		var jqPopup = jq(this.$n_('pp'));
+		const jqPopup = jq(this.$n_('pp'));
 		jqPopup.removeClass(this.$s('popup-open')).addClass(this.$s('popup-close')).zk.undoVParent();
 		this.setFloating_(false);
 	}
@@ -230,19 +230,19 @@ export class Toolbar extends zul.Widget {
 			return;
 		}
 
-		var jqToolbar = jq(this),
+		const jqToolbar = jq(this),
 			contentWidth = jqToolbar.width()! - jq(this.$n_('overflowpopup-button')).width()!,
 			popup = this.$n_('pp'),
 			cave = this.$n_('cave'),
 			oldToolbarChildren = jq(cave).children().toArray(),
 			oldPopupChildren = jq(popup).children().toArray(),
 			children = oldToolbarChildren.concat(oldPopupChildren),
-			childrenAmount = children.length,
-			tempChildrenWidth = 0,
+			childrenAmount = children.length;
+		let tempChildrenWidth = 0,
 			newPopupChildrenAmount = 0;
 
 		// Calculate width to decide how many children should be displayed on popup.
-		for (var i = 0; i < childrenAmount; i++) {
+		for (let i = 0; i < childrenAmount; i++) {
 			tempChildrenWidth += jq(children[i]).outerWidth(true)!;
 			if (tempChildrenWidth >= contentWidth) {
 				newPopupChildrenAmount = childrenAmount - i;
@@ -250,20 +250,20 @@ export class Toolbar extends zul.Widget {
 			}
 		}
 
-		var popupChildrenDiff = newPopupChildrenAmount - oldPopupChildren.length;
+		const popupChildrenDiff = newPopupChildrenAmount - oldPopupChildren.length;
 		if (!popupChildrenDiff)
 			return;
 
 		// Start to move children
-		var overflowpopupOn = this.$s('overflowpopup-on'),
+		const overflowpopupOn = this.$s('overflowpopup-on'),
 			overflowpopupOff = this.$s('overflowpopup-off');
 		if (newPopupChildrenAmount) {
 			jqToolbar.removeClass(overflowpopupOff).addClass(overflowpopupOn);
 			if (popupChildrenDiff > 0) {
-				for (var i = 0; i < popupChildrenDiff; i++)
+				for (let i = 0; i < popupChildrenDiff; i++)
 					popup.insertBefore(oldToolbarChildren.pop()!, popup.children[0]);
 			} else {
-				for (var i = 0; i < -popupChildrenDiff; i++)
+				for (let i = 0; i < -popupChildrenDiff; i++)
 					cave.appendChild(oldPopupChildren.shift()!);
 			}
 		} else {
@@ -277,9 +277,9 @@ export class Toolbar extends zul.Widget {
 
 	// super
 	override domClass_(no?: zk.DomClassOptions): string {
-		var sc = super.domClass_(no);
-		if (!no || !no.zclass) {
-			var tabs = this.parent && zk.isLoaded('zul.tab') && this.parent instanceof zul.tab.Tabbox ? this.$s('tabs') : '';
+		let sc = super.domClass_(no);
+		if (!no?.zclass) {
+			const tabs = this.parent && zk.isLoaded('zul.tab') && this.parent instanceof zul.tab.Tabbox ? this.$s('tabs') : '';
 
 			if (tabs)
 				sc += ' ' + tabs;
@@ -299,7 +299,7 @@ export class Toolbar extends zul.Widget {
 	override setFlexSizeW_(n: HTMLElement, zkn: zk.JQZK, width: number, isFlexMin?: boolean): void {
 		super.setFlexSizeW_(n, zkn, width, isFlexMin);
 		if (!isFlexMin && this.getAlign() == 'start') {
-			var cave = this.$n('cave');
+			const cave = this.$n('cave');
 			if (cave)
 				cave.style.width = jq.px0(zk(this.$n()).contentWidth());
 		}
@@ -315,17 +315,17 @@ export class Toolbar extends zul.Widget {
 
 	override appendChild(child: zk.Widget, ignoreDom?: boolean): boolean {
 		super.appendChild(child, ignoreDom);
-		var popup = this.$n('pp');
+		const popup = this.$n('pp');
 		if (popup && popup.children.length > 0)
 			popup.appendChild(child.$n_());
 		return false;
 	}
 
 	override removeChild(child: zk.Widget, ignoreDom?: boolean): boolean {
-		var popupNode = this.$n('pp'),
+		const popupNode = this.$n('pp'),
 			childNode = child.$n();
 		if (popupNode && childNode) {
-			var childOnPopup = childNode.parentNode == popupNode;
+			const childOnPopup = childNode.parentNode == popupNode;
 			if (childOnPopup && popupNode.children.length == 1) {
 				jq(this.$n_()).removeClass(this.$s('overflowpopup-on')).addClass(this.$s('overflowpopup-off'));
 				this._closePopup(); // should close popup if overflowpopup turns off

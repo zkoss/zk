@@ -23,8 +23,8 @@ function _isListgroupfoot(w: ItemWidget): boolean {
  */
 @zk.WrapClass('zul.sel.ItemWidget')
 export class ItemWidget extends zul.Widget<HTMLTableRowElement> implements zul.mesh.Item {
-	override nextSibling!: zul.sel.ItemWidget | undefined;
-	override previousSibling!: zul.sel.ItemWidget | undefined;
+	override nextSibling?: zul.sel.ItemWidget;
+	override previousSibling?: zul.sel.ItemWidget;
 
 	_loaded?: boolean;
 	_index?: number;
@@ -140,17 +140,14 @@ export class ItemWidget extends zul.Widget<HTMLTableRowElement> implements zul.m
 	 */
 	setSelected(selected: boolean): this {
 		if (this._selected != selected) {
-			var box = this.getMeshWidget();
-			if (box)
-				box.toggleItemSelection(this);
-
+			this.getMeshWidget()?.toggleItemSelection(this);
 			this._setSelectedDirectly(selected);
 		}
 		return this;
 	}
 
 	_setSelectedDirectly(selected: boolean): void {
-		var n = this.$n();
+		const n = this.$n();
 
 		// do this before _updHeaderCM(), otherwise, it will call too many times to sync the state.
 		this._selected = selected;
@@ -196,7 +193,7 @@ export class ItemWidget extends zul.Widget<HTMLTableRowElement> implements zul.m
 	}
 
 	_getVisibleChild(row: HTMLTableRowElement): HTMLElement {
-		for (var i = 0, j = row.cells.length; i < j; i++)
+		for (let i = 0, j = row.cells.length; i < j; i++)
 			if (zk(row.cells[i]).isVisible()) return row.cells[i];
 		return row;
 	}
@@ -207,15 +204,14 @@ export class ItemWidget extends zul.Widget<HTMLTableRowElement> implements zul.m
 			super.setVisible(visible);
 			if (this.isStripeable_()) {
 				// Only Listbox is stripeable.
-				var p = this.getMeshWidget() as zul.sel.Listbox | undefined;
-				if (p) p.stripe();
+				(this.getMeshWidget() as zul.sel.Listbox | undefined)?.stripe();
 			}
 		}
 		return this;
 	}
 
 	override domClass_(no?: zk.DomClassOptions): string {
-		var scls = super.domClass_(no);
+		let scls = super.domClass_(no);
 		if (!no || !no.zclass) {
 			if (this.isDisabled())
 				scls += (scls ? ' ' : '') + this.$s('disabled');
@@ -232,7 +228,7 @@ export class ItemWidget extends zul.Widget<HTMLTableRowElement> implements zul.m
 	}
 
 	override focus_(timeout?: number): boolean {
-		var mesh = this.getMeshWidget()!;
+		const mesh = this.getMeshWidget()!;
 		this._doFocusIn();
 		mesh._syncFocus(this);
 		mesh.focusA_(mesh.$n('a')!, timeout);
@@ -240,14 +236,13 @@ export class ItemWidget extends zul.Widget<HTMLTableRowElement> implements zul.m
 	}
 
 	_doFocusIn(): void {
-		var n = this.$n(),
+		const n = this.$n(),
 			mesh = this.getMeshWidget();
 		if (n) {
-			var cls = this.$s('focus')!,
-				last = mesh ? mesh._focusItem : undefined,
-				lastn;
+			const cls = this.$s('focus')!,
+				lastn = mesh?._focusItem?.$n();
 			// ZK-3077: focus out the last focused item first (for draggable issue)
-			if (last && (lastn = last.$n()))
+			if (lastn)
 				jq(lastn).removeClass(cls);
 			// Bugfix: add focus class on itself, not on its children elements
 			jq(n).addClass(cls);
@@ -258,23 +253,23 @@ export class ItemWidget extends zul.Widget<HTMLTableRowElement> implements zul.m
 	}
 
 	_doFocusOut(): void {
-		var n = this.$n();
+		const n = this.$n();
 		if (n) {
-			var cls = this.$s('focus')!;
+			const cls = this.$s('focus')!;
 			jq(n).removeClass(cls);
 			jq(n.cells).removeClass(cls);
 		}
 	}
 
 	_updHeaderCM(bRemove?: boolean): void { //update header's checkmark
-		var box: zul.sel.SelectWidget | undefined;
-		if ((box = this.getMeshWidget()) && box._headercm && box._multiple) {
+		const box = this.getMeshWidget();
+		if (box?._headercm && box._multiple) {
 			if (bRemove) {
 				box._updHeaderCM();
 				return;
 			}
 
-			var headerWgt = zk.Widget.$<zul.mesh.HeaderWidget>(box._headercm)!,
+			const headerWgt = zk.Widget.$<zul.mesh.HeaderWidget>(box._headercm)!,
 				zcls = headerWgt.$s('checked')!,
 				$headercm = jq(box._headercm);
 
@@ -288,23 +283,22 @@ export class ItemWidget extends zul.Widget<HTMLTableRowElement> implements zul.m
 	}
 
 	override getDragMessage_(): string | undefined {
-		var iterator = this.getMeshWidget()!.itemIterator(),
-			cnt = 2,
+		const iterator = this.getMeshWidget()!.itemIterator();
+		let cnt = 2,
 			msg: string | undefined;
-		if (!this.isSelected())	return zUtl.encodeXML(this.getLabel()!);
+		if (!this.isSelected()) return zUtl.encodeXML(this.getLabel()!);
 		while (iterator.hasNext()) {
-			var item = iterator.next()!;
+			const item = iterator.next()!;
 			if (item.isSelected()) {
-				var label = item.getLabel()!;
+				let label = item.getLabel()!;
 				if (label.length > 9)
 					label = label.substring(0, 9) + '...';
 				label = zUtl.encodeXML(label);
 				if (!msg)
 					msg = label;
 				else
-					msg += '</div><div class="z-drop-content"><span id="zk_ddghost-img'
-						+ (cnt++) + '" class="z-drop-icon"></span>&nbsp;'
-						+ label;
+					msg += '</div><div class="z-drop-content">' +
+						`<span id="zk_ddghost-img${cnt++}" class="z-drop-icon"></span>&nbsp;${label}`;
 			}
 		}
 		return msg;
@@ -314,7 +308,7 @@ export class ItemWidget extends zul.Widget<HTMLTableRowElement> implements zul.m
 	// do not want cut again here, and change _dragImg to array
 	override cloneDrag_(drag: zk.Draggable, ofs: zk.Offset): HTMLElement {
 		//See also bug 1783363 and 1766244
-		var msg = this.getDragMessage_(),
+		const msg = this.getDragMessage_(),
 			dgelm = zk.DnD.ghost(drag, ofs, msg);
 
 		drag._orgcursor = document.body.style.cursor;
@@ -328,7 +322,7 @@ export class ItemWidget extends zul.Widget<HTMLTableRowElement> implements zul.m
 	//@Override
 	override beforeParentChanged_(newp?: zk.Widget): void {
 		if (!newp) {//remove
-			var mesh = this.getMeshWidget();
+			const mesh = this.getMeshWidget();
 			if (mesh) mesh._shallSyncCM = true;
 		}
 		super.beforeParentChanged_(newp);
@@ -337,7 +331,7 @@ export class ItemWidget extends zul.Widget<HTMLTableRowElement> implements zul.m
 	//@Override
 	override afterParentChanged_(oldparent?: zk.Widget): void {
 		if (this.parent) {//add
-			var mesh = this.getMeshWidget();
+			const mesh = this.getMeshWidget();
 			if (mesh) mesh._shallSyncCM = true;
 		}
 		super.afterParentChanged_(oldparent);
@@ -359,7 +353,7 @@ export class ItemWidget extends zul.Widget<HTMLTableRowElement> implements zul.m
 	}
 
 	override doKeyDown_(evt: zk.Event<zk.EventKeyData>): void {
-		var mesh = this.getMeshWidget()!;
+		const mesh = this.getMeshWidget()!;
 
 		// disable item's content selection excluding input box and textarea
 		if (!jq.nodeName(evt.domTarget, 'input', 'textarea')) {
@@ -371,7 +365,7 @@ export class ItemWidget extends zul.Widget<HTMLTableRowElement> implements zul.m
 	}
 
 	override doKeyUp_(evt: zk.Event<zk.EventKeyData>): void {
-		var mesh = this.getMeshWidget()!;
+		const mesh = this.getMeshWidget()!;
 		if (this._disableSelection_) {
 			zk(mesh.$n()).enableSelection();
 			this._disableSelection_ = false;
@@ -381,7 +375,7 @@ export class ItemWidget extends zul.Widget<HTMLTableRowElement> implements zul.m
 	}
 
 	override deferRedrawHTML_(out: string[]): void {
-		out.push('<tr', this.domAttrs_({domClass: true}), ' class="z-renderdefer"></tr>');
+		out.push(`<tr ${this.domAttrs_({ domClass: true })} class="z-renderdefer"></tr>`);
 	}
 
 	/**
@@ -403,11 +397,11 @@ export class ItemWidget extends zul.Widget<HTMLTableRowElement> implements zul.m
 
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
-		zWatch.listen({onResponse: this});
+		zWatch.listen({ onResponse: this });
 	}
 
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
-		zWatch.unlisten({onResponse: this});
+		zWatch.unlisten({ onResponse: this });
 		super.unbind_(skipper, after, keepRod);
 	}
 

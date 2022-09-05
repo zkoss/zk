@@ -52,8 +52,8 @@ export class Select extends zul.Widget<HTMLSelectElement> {
 		this._multiple = multiple;
 
 		if (o !== multiple || opts?.force) {
-			var n = this.$n();
-			if (n) n.multiple = (multiple ? 'multiple' : '') as unknown as boolean;
+			const n = this.$n();
+			if (n) n.multiple = multiple;
 		}
 
 		return this;
@@ -78,8 +78,8 @@ export class Select extends zul.Widget<HTMLSelectElement> {
 		this._disabled = disabled;
 
 		if (o !== disabled || opts?.force) {
-			var n = this.$n();
-			if (n) n.disabled = (disabled ? 'disabled' : '') as unknown as boolean;
+			const n = this.$n();
+			if (n) n.disabled = disabled;
 		}
 
 		return this;
@@ -103,10 +103,10 @@ export class Select extends zul.Widget<HTMLSelectElement> {
 		this._selectedIndex = selectedIndex;
 
 		if (o !== selectedIndex || opts?.force) {
-			var i = 0,
+			let i = 0,
 				j = 0,
-				w: zk.Widget | undefined,
-				n = this.$n();
+				w: zk.Widget | undefined;
+			const n = this.$n();
 			this.clearSelection();
 			// B50-ZK-989: original skipFixIndex way gives wrong value for this._selectedIndex
 			// select from server API call, fix the index
@@ -167,7 +167,7 @@ export class Select extends zul.Widget<HTMLSelectElement> {
 		this._name = name;
 
 		if (o !== name || opts?.force) {
-			var n = this.$n();
+			const n = this.$n();
 			if (n) n.name = name;
 		}
 
@@ -196,7 +196,7 @@ export class Select extends zul.Widget<HTMLSelectElement> {
 		this._rows = rows;
 
 		if (o !== rows || opts?.force) {
-			var n = this.$n();
+			const n = this.$n();
 			if (n) n.size = rows;
 		}
 
@@ -230,15 +230,15 @@ export class Select extends zul.Widget<HTMLSelectElement> {
 
 	// ZK-2133: should sync all items
 	setChgSel(chgSel: string): this { //called from the server
-		var sels = {};
-		for (var j = 0; ;) {
-			var k = chgSel.indexOf(',', j),
-			s = (k >= 0 ? chgSel.substring(j, k) : chgSel.substring(j)).trim();
+		const sels = {};
+		for (let j = 0; ;) {
+			const k = chgSel.indexOf(',', j),
+				s = (k >= 0 ? chgSel.substring(j, k) : chgSel.substring(j)).trim();
 			if (s) sels[s] = true;
 			if (k < 0) break;
 			j = k + 1;
 		}
-		for (var w = this.firstChild; w; w = w.nextSibling)
+		for (let w = this.firstChild; w; w = w.nextSibling)
 			this._changeSelect(w as zul.sel.Option, sels[w.uuid] == true);
 		return this;
 	}
@@ -247,7 +247,7 @@ export class Select extends zul.Widget<HTMLSelectElement> {
 	 * and return true if the status is really changed.
 	 */
 	_changeSelect(option: zul.sel.Option, toSel: boolean): boolean {
-		var changed = !!option.isSelected() != toSel;
+		const changed = !!option.isSelected() != toSel;
 		if (changed) {
 			option.setSelected(toSel);
 		}
@@ -271,7 +271,7 @@ export class Select extends zul.Widget<HTMLSelectElement> {
 	 * @param Option item
 	 *            the item to select. If null, all items are deselected.
 	 */
-	selectItem(item: zul.sel.Option): void {
+	selectItem(item?: zul.sel.Option): void {
 		if (!item)
 			this.setSelectedIndex(-1);
 		else if (this._multiple || !item.isSelected()) {
@@ -284,11 +284,11 @@ export class Select extends zul.Widget<HTMLSelectElement> {
 
 	_addItemToSelection(item: zul.sel.Option): void {
 		if (!item.isSelected()) {
-			var multiple = this._multiple;
+			const multiple = this._multiple;
 			if (!multiple)
 				this.clearSelection();
-			var index = item.getOptionIndex_ ? item.getOptionIndex_() : item.getChildIndex();
-			if (!multiple || (index < this._selectedIndex || this._selectedIndex < 0))
+			const index = item.getOptionIndex_ ? item.getOptionIndex_() : item.getChildIndex();
+			if (!multiple || index < this._selectedIndex || this._selectedIndex < 0)
 				this._selectedIndex = index;
 			item._setSelectedDirectly(true);
 			this._selItems.push(item);
@@ -311,15 +311,14 @@ export class Select extends zul.Widget<HTMLSelectElement> {
 	 */
 	clearSelection(): void {
 		if (this._selItems.length) {
-			var item: zul.sel.Option | undefined;
-			for (;(item = this._selItems.pop());)
+			for (let item: zul.sel.Option | undefined; (item = this._selItems.pop());)
 				item._setSelectedDirectly(false);
 			this._selectedIndex = -1;
 		}
 	}
 
 	override domAttrs_(no?: zk.DomAttrsOptions): string {
-		var v;
+		let v;
 		return super.domAttrs_(no)
 			+ (this.isDisabled() ? ' disabled="disabled"' : '')
 			+ (this.isMultiple() ? ' multiple="multiple"' : '')
@@ -331,30 +330,30 @@ export class Select extends zul.Widget<HTMLSelectElement> {
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 
-		var n = this.$n_();
+		const n = this.$n_();
 		this.domListen_(n, 'onChange')
 			.domListen_(n, 'onFocus', 'doFocus_')
 			.domListen_(n, 'onBlur', 'doBlur_');
 
 		if (!zk.gecko) {
-			var fn: [unknown, CallableFunction] = [this, this._fixSelIndex];
-			zWatch.listen({onRestore: fn, onVParent: fn});
+			const fn: [unknown, CallableFunction] = [this, this._fixSelIndex];
+			zWatch.listen({ onRestore: fn, onVParent: fn });
 		}
-		zWatch.listen({onCommandReady: this});
+		zWatch.listen({ onCommandReady: this });
 
 		this._fixSelIndex();
 	}
 
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
-		zWatch.unlisten({onCommandReady: this});
-		var n = this.$n_();
+		zWatch.unlisten({ onCommandReady: this });
+		const n = this.$n_();
 		this.domUnlisten_(n, 'onChange')
 			.domUnlisten_(n, 'onFocus', 'doFocus_')
 			.domUnlisten_(n, 'onBlur', 'doBlur_');
 		super.unbind_(skipper, after, keepRod);
 
-		var fn: [unknown, CallableFunction] = [this, this._fixSelIndex];
-		zWatch.unlisten({onRestore: fn, onVParent: fn});
+		const fn: [unknown, CallableFunction] = [this, this._fixSelIndex];
+		zWatch.unlisten({ onRestore: fn, onVParent: fn });
 	}
 
 	_fixSelIndex(): void {
@@ -363,14 +362,14 @@ export class Select extends zul.Widget<HTMLSelectElement> {
 	}
 
 	_doChange(evt: zk.Event): void {
-		var n = this.$n_(),
+		const n = this.$n_(),
 			opts = n.options,
 			multiple = this._multiple,
-			data: zul.sel.Option[] = [],
-			changed = false,
+			data: zul.sel.Option[] = [];
+		let changed = false,
 			reference: zk.Widget | undefined;
-		for (var j = 0, ol = opts.length; j < ol; ++j) {
-			var opt = opts[j],
+		for (let j = 0, ol = opts.length; j < ol; ++j) {
+			const opt = opts[j],
 				o = zk.Widget.$<zul.sel.Option>(opt.id),
 				v = opt.selected;
 			if (multiple) {
@@ -395,7 +394,7 @@ export class Select extends zul.Widget<HTMLSelectElement> {
 		if (!changed)
 			return;
 
-		this.fire('onSelect', {items: data, reference: reference});
+		this.fire('onSelect', { items: data, reference });
 	}
 
 	override doBlur_(evt: zk.Event): void {
@@ -460,9 +459,8 @@ export class Select extends zul.Widget<HTMLSelectElement> {
 	}
 
 	setItemsInvalid_(itemsInvalid: ArrayLike<unknown>[]): void {
-		var wgt = this;
-		zAu.createWidgets(itemsInvalid, function (ws) {
-			wgt.replaceCavedChildren_('', ws);
+		zAu.createWidgets(itemsInvalid, (ws) => {
+			this.replaceCavedChildren_('', ws);
 		}, function (wx) {
 			return wx;
 		});
