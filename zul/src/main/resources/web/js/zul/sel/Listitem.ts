@@ -17,12 +17,12 @@ function _isPE(): boolean {
 }
 // _dragImg changed to an array, update image node after original DD_dragging
 function updateImg(drag: zk.Draggable): void {
-	var dragImg = drag._dragImg as JQuery | undefined;
+	const dragImg = drag._dragImg as JQuery | undefined;
 	if (dragImg) {
 		// update drag image
-		var allow = jq(drag.node).hasClass('z-drop-allow');
+		const allow = jq(drag.node).hasClass('z-drop-allow');
 		// eslint-disable-next-line @typescript-eslint/prefer-for-of
-		for (var len = 0; len < dragImg.length; len++) {
+		for (let len = 0; len < dragImg.length; len++) {
 			if (allow)
 				jq(dragImg[len]).removeClass('z-icon-times').addClass('z-icon-check');
 			else
@@ -38,11 +38,11 @@ function updateImg(drag: zk.Draggable): void {
 @zk.WrapClass('zul.sel.Listitem')
 export class Listitem extends zul.sel.ItemWidget {
 	// Parent could be null as asserted by `getListgroup`.
-	override parent!: zul.sel.Listbox | undefined;
-	override nextSibling!: zul.sel.Listitem | undefined;
-	override previousSibling!: zul.sel.Listitem | undefined;
-	override firstChild!: zul.sel.Listcell | undefined;
-	override lastChild!: zul.sel.Listcell | undefined;
+	override parent?: zul.sel.Listbox;
+	override nextSibling?: zul.sel.Listitem;
+	override previousSibling?: zul.sel.Listitem;
+	override firstChild?: zul.sel.Listcell;
+	override lastChild?: zul.sel.Listcell;
 
 	/** Returns the list box that it belongs to.
 	 * @return Listbox
@@ -57,8 +57,9 @@ export class Listitem extends zul.sel.ItemWidget {
 	 */
 	getListgroup(): zkex.sel.Listgroup | undefined {
 		// TODO: this performance is not good.
-		if (_isPE() && this.parent && this.parent.hasGroup())
-			for (var w: zul.sel.Listitem | undefined = this; w; w = w.previousSibling)
+		if (_isPE() && this.parent?.hasGroup())
+			// eslint-disable-next-line @typescript-eslint/no-this-alias
+			for (let w: zul.sel.Listitem | undefined = this; w; w = w.previousSibling)
 				if (w instanceof zkex.sel.Listgroup)
 					return w;
 
@@ -77,7 +78,7 @@ export class Listitem extends zul.sel.ItemWidget {
 
 	// replace the origional DD_dragging
 	override getDragOptions_(map: zk.DraggableOptions): zk.DraggableOptions {
-		var old = map.change!;
+		const old = map.change!;
 		map.change = function (drag, pt, evt) {
 			old(drag, pt, evt);
 			// update drag image after origional function
@@ -105,21 +106,23 @@ export class Listitem extends zul.sel.ItemWidget {
 	//super//
 	override domStyle_(no?: zk.DomStyleOptions): string {
 		if (_isPE() && (this instanceof zkex.sel.Listgroup || this instanceof zkex.sel.Listgroupfoot)
-				|| (no && no.visible))
+			|| no?.visible)
 			return super.domStyle_(no);
 
-		var style = super.domStyle_(no),
+		const style = super.domStyle_(no),
 			group = this.getListgroup();
 		return group && !group.isOpen() ? style + 'display:none;' : style;
 	}
 
 	override domClass_(no?: zk.DomClassOptions): string {
-		var cls = super.domClass_(no),
-			list = this.getListbox(),
-			sclass: string;
+		const cls = super.domClass_(no),
+			list = this.getListbox();
 		// NOTE: The following `this.$n()` could be null. This behavior is verified on old code.
-		if (list && jq(this.$n()).hasClass(sclass = list.getOddRowSclass()))
-			return cls + ' ' + sclass;
+		if (list) {
+			const sclass = list.getOddRowSclass();
+			if (jq(this.$n()).hasClass(sclass))
+				return cls + ' ' + sclass;
+		}
 		return cls;
 	}
 
@@ -129,7 +132,7 @@ export class Listitem extends zul.sel.ItemWidget {
 	}
 
 	override scrollIntoView(): this {
-		var bar = this.getListbox()!._scrollbar;
+		const bar = this.getListbox()!._scrollbar;
 		if (bar) {
 			bar.syncSize();
 			bar.scrollToElement(this.$n_());
@@ -140,17 +143,19 @@ export class Listitem extends zul.sel.ItemWidget {
 	}
 
 	_syncListitems(newwgt: zul.sel.Listitem): void {
-		var box: zul.sel.Listbox | undefined;
-		if (box = this.getListbox()) {
+		const box = this.getListbox();
+		if (box) {
 			if (box.firstItem!.uuid == newwgt.uuid)
 				box.firstItem = newwgt;
 			if (box.lastItem!.uuid == newwgt.uuid)
 				box.lastItem = newwgt;
 
-			var items = box._selItems, b1, b2;
-			if (b1 = this.isSelected())
+			const items = box._selItems,
+				b1 = this.isSelected();
+			if (b1)
 				items.$remove(this);
-			if (b2 = newwgt.isSelected())
+			const b2 = newwgt.isSelected();
+			if (b2)
 				items.push(newwgt);
 			if (b1 != b2)
 				box._updHeaderCM();
@@ -159,15 +164,15 @@ export class Listitem extends zul.sel.ItemWidget {
 
 	//@Override
 	override compareItemPos_(item: zul.sel.Listitem): number {
-		var thisIndex = this._index!, itemIndex = item._index!;
+		const thisIndex = this._index!, itemIndex = item._index!;
 		return thisIndex == itemIndex ? 0 : thisIndex > itemIndex ? -1 : 1;
 	}
 
 	//@Override
 	override shallFireSizedLaterWhenAddChd_(): boolean {
-		if (this.getListbox()!._model == 'group' as unknown) { // FIXME: inconsistent type
+		if (this.getListbox()!._model == 'group') {
 			zWatch.listen({
-					onCommandReady: this
+				onCommandReady: this
 			});
 			return true;
 		}
