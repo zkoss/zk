@@ -128,7 +128,6 @@ export class Toolbarbutton extends zul.LabelImageWidget implements zul.LabelImag
 			if (this._adbs)
 				// autodisable is still active, enable allowed
 				this._adbs = false;
-			// eslint-disable-next-line @typescript-eslint/no-unnecessary-boolean-literal-compare
 			else if (opts && opts.adbs === false)
 				// ignore re-enable by autodisable mechanism
 				value = this._disabled;

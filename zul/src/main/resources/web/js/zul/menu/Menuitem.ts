@@ -106,7 +106,7 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 			if (this._adbs)
 				// autodisable is still active, enable allowed
 				this._adbs = false;
-			else if (opts && !opts.adbs)
+			else if (opts && opts.adbs === false)
 				// ignore re-enable by autodisable mechanism
 				value = this._disabled;
 		}

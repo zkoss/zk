@@ -69,7 +69,6 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 			if (this._adbs) {
 				// autodisable is still active, allow enabling
 				this._adbs = false;
-				// eslint-disable-next-line @typescript-eslint/no-unnecessary-boolean-literal-compare
 			} else if (opts && opts.adbs === false)
 				// ignore re-enable by autodisable mechanism
 				disabled = !!this._disabled;
