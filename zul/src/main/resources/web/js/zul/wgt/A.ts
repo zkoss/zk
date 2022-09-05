@@ -49,7 +49,7 @@ export class A extends zul.LabelImageWidget<HTMLAnchorElement> implements zul.La
 		// Refer from Button.js for the following changes
 		// B60-ZK-1176
 		// Autodisable should not re-enable when setDisabled(true) is called during onClick
-		if (opts && opts.adbs)
+		if (opts?.adbs)
 			// called from zul.wgt.ADBS.autodisable
 			this._adbs = true;	// Start autodisabling
 		else if (!opts || opts.adbs === undefined)
