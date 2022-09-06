@@ -41,7 +41,7 @@ public class B95_ZK_4584Test extends WebDriverTestCase {
 	public void test() throws Exception {
 		connect();
 		waitResponse();
-		assertEquals(jq(".z-spinner-input").outerWidth(), jq(".z-spinner-button").width() + jq(".z-spinner-button").positionLeft(), 1);
-		assertEquals(jq(".z-doublespinner-input").outerWidth(), jq(".z-doublespinner-button").width() + jq(".z-doublespinner-button").positionLeft(), 1);
+		assertEquals(jq(".z-spinner-input").outerWidth(), jq(".z-spinner-button").width() + jq(".z-spinner-button").positionLeft(), 2);
+		assertEquals(jq(".z-doublespinner-input").outerWidth(), jq(".z-doublespinner-button").width() + jq(".z-doublespinner-button").positionLeft(), 2);
 	}
 }
