@@ -24,18 +24,17 @@ import org.zkoss.zul.Label;
  */
 public class B96_ZK_3563Test extends ZATSTestCase {
 	@Test
-	public void test() {
+	public void test() throws InterruptedException {
 		final DesktopAgent desktop = connect();
 		ComponentAgent saveBtn = desktop.query("#saveBtn");
 		saveBtn.click();
 		saveBtn.click();
 		saveBtn.click();
-		Label label2 = desktop.query("#l2").as(Label.class);
-		Assertions.assertEquals(desktop.query("#l1").as(Label.class).getValue(), label2.getValue());
+		Assertions.assertEquals(desktop.query("#l1").as(Label.class).getValue(), desktop.query("#l2").as(Label.class).getValue());
 		desktop.query("#serializeBtn").click();
 		saveBtn.click();
 		saveBtn.click();
 		saveBtn.click();
-		Assertions.assertEquals(desktop.query("#l1").as(Label.class).getValue(), label2.getValue());
+		Assertions.assertEquals(desktop.query("#l1").as(Label.class).getValue(), desktop.query("#l2").as(Label.class).getValue());
 	}
 }
