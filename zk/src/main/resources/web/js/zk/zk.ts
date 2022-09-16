@@ -1391,7 +1391,7 @@ _zk.ajaxURI = function (uri: string | undefined, opts?: Partial<AjaxURIOptions>)
 };
 /**
  * Encodes and returns the resource URI from Class-Web Resources (CWR).
- * Example: <pre><code>var res = zk.resourceURI('/js/my/path/res.css');</code></pre>
+ * Example: <pre><code>var res = zk.ajaxResourceURI('/js/my/path/res.css');</code></pre>
  *
  * @param String uri the resource URI.
  * @param String version [optional] the version string to build the cache-friendly URI. If none is set, use zk.build by default.
