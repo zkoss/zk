@@ -177,9 +177,10 @@ export function _load(pkg: string, dt?: zk.Desktop): boolean { //called by mount
  * and ZK Client Engine is halted.
  * @param String charset the charset. UTF-8 is assumed if null.
  * @param boolean force the script to be loaded. (no matter it is loading or loaded)
+ * @param Function the function to execute after the JavaScript file loaded. (since 9.6.3)
  * @return zk
  */
-export function loadScript(src: string, name?: string, charset?: string, force?: boolean): void { // FIXME: return ZKCoreUtilityStatic;
+export function loadScript(src: string, name?: string, charset?: string, force?: boolean, callback?: CallableFunction): void { // FIXME: return ZKCoreUtilityStatic;
 	if (name) {
 		if (!force && zk.isLoaded(name, true))
 			return;
@@ -190,21 +191,33 @@ export function loadScript(src: string, name?: string, charset?: string, force?:
 	e.type = 'text/javascript';
 	e.charset = charset || 'UTF-8';
 	e.src = src;
+	if (callback) {
+		e.onload = function () {
+			callback();
+		};
+	}
 	jq.head()?.appendChild(e);
 }
 /** Loads a CSS file.
  * @param String href the URL of the CSS file.
  * @param String id the identifier. Ignored if not specified.
  * @param String media the media attribute. Ignored if not specified.
+ * @param Function the function to execute after the CSS file loaded. (since 9.6.3)
  * @since 5.0.4
  * @return zk
  */
-export function loadCSS(href: string, id?: string, media?: string): void {
+export function loadCSS(href: string, id?: string, media?: string, callback?: CallableFunction): void {
 	var ln = document.createElement('link');
 	if (id) ln.id = id;
 	ln.rel = 'stylesheet';
 	ln.type = 'text/css';
 	ln.href = href;
+
+	if (callback) {
+		ln.onload = function () {
+			callback();
+		};
+	}
 	if (media) ln.media = media;
 	jq.head()?.appendChild(ln);
 }
