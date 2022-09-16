@@ -174,9 +174,10 @@ zk.load('zul.utl', function () {
 	 * and ZK Client Engine is halted.
 	 * @param String charset the charset. UTF-8 is assumed if null.
 	 * @param boolean force the script to be loaded. (no matter it is loading or loaded)
+	 * @param callback the function to execute after the JavaScript file loaded. (since 9.6.3)
 	 * @return zk
 	 */
-	loadScript: function (src, name, charset, force) {
+	loadScript: function (src, name, charset, force, callback) {
 		if (name) {
 			if (!force && zk.isLoaded(name, true))
 				return;
@@ -187,6 +188,11 @@ zk.load('zul.utl', function () {
 		e.type = 'text/javascript';
 		e.charset = charset || 'UTF-8';
 		e.src = src;
+		if (callback) {
+			e.onload = function () {
+				callback();
+			}
+		}
 		jq.head()?.appendChild(e);
 		return this;
 	},
@@ -194,15 +200,22 @@ zk.load('zul.utl', function () {
 	 * @param String href the URL of the CSS file.
 	 * @param String id the identifier. Ignored if not specified.
 	 * @param String media the media attribute. Ignored if not specified.
+	 * @param callback the function to execute after the CSS file loaded. (since 9.6.3)
 	 * @since 5.0.4
 	 * @return zk
 	 */
-	loadCSS: function (href, id, media) {
+	loadCSS: function (href, id, media, callback) {
 		var ln = document.createElement('link');
 		if (id) ln.id = id;
 		ln.rel = 'stylesheet';
 		ln.type = 'text/css';
 		ln.href = href;
+
+		if (callback) {
+			ln.onload = function () {
+				callback();
+			}
+		}
 		if (media) ln.media = media;
 		jq.head()?.appendChild(ln);
 		return this;
