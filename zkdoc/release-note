@@ -2,6 +2,7 @@ ZK 9.6.3
 * Features
 
 * Bugs
+  ZK-5029: sporadic text wrapping in listbox/grid/tree cells since chrome 90
 
 * Upgrade Notes
 
