@@ -2,6 +2,7 @@ ZK 9.6.3
 * Features
 
 * Bugs
+  ZK-5115: Websocket endpoint registers threadpool, doesn't close, prevents tomcat graceful stop, threads remain after stop
 
 * Upgrade Notes
 
