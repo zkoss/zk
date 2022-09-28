@@ -2,6 +2,7 @@ ZK 9.6.3
 * Features
 
 * Bugs
+  ZK-5155: bandbox closes its popup when switching active page
 
 * Upgrade Notes
 
