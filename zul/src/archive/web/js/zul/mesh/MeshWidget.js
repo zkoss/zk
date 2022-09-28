@@ -121,7 +121,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				footcells = ftfaker ? wgt._getFirstRowCells(wgt.efootrows) : null;
 
 			for (var i = 0; i < len; i++) {
-				var wd = bodycells && bodycells[i] ? Math.ceil(bodycells[i].getBoundingClientRect().width) : 0,
+				var wd = bodycells && bodycells[i] ? zk(bodycells[i]).offsetWidthCeil() : 0,
 					ftwd = footcells && footcells[i] && zk(footcells[i]).isVisible() ? footcells[i].offsetWidth : 0,
 					hdwd = w && w.isVisible() ? w.getContentWidth_() : 0,
 					header;

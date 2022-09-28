@@ -1572,6 +1572,49 @@ jq(el).zk.center(); //same as 'center'
 		return this.jq[0].getBoundingClientRect().left;
 	},
 
+	/** Returns the actual client width rounded "up" to the closest integer.
+	 * @return the actual client width rounded "up" to the closest integer
+	 * @since 9.6.3
+	 */
+	clientWidthCeil: function () {
+		return Math.ceil(this.clientWidthDoubleValue());
+	},
+	/** Returns the actual client height rounded "up" to the closest integer.
+	 * @return the actual client height rounded "up" to the closest integer
+	 * @since 9.6.3
+	 */
+	clientHeightCeil: function () {
+		return Math.ceil(this.clientHeightDoubleValue());
+	},
+	/** Returns the actual offset width rounded "up" to the closest integer.
+	 * @return the actual offset width rounded "up" to the closest integer
+	 * @since 9.6.3
+	 */
+	offsetWidthCeil: function () {
+		return Math.ceil(this.offsetWidthDoubleValue());
+	},
+	/** Returns the actual offset height rounded "up" to the closest integer.
+	 * @return the actual offset height rounded "up" to the closest integer
+	 * @since 9.6.3
+	 */
+	offsetHeightCeil: function () {
+		return Math.ceil(this.offsetHeightDoubleValue());
+	},
+	/** Returns the actual offset top rounded "up" to the closest integer.
+	 * @return the actual offset top rounded "up" to the closest integer
+	 * @since 9.6.3
+	 */
+	offsetTopCeil: function () {
+		return Math.ceil(this.offsetTopDoubleValue());
+	},
+	/** Returns the actual offset left rounded "up" to the closest integer.
+	 * @return the actual offset left rounded "up" to the closest integer
+	 * @since 9.6.3
+	 */
+	offsetLeftCeil: function () {
+		return Math.ceil(this.offsetLeftDoubleValue());
+	},
+
 	/** Returns the X/Y coordinates of the first matched element relative to the viewport.
 	 * @return Offset the coordinates
 	 * @see #cmOffset
