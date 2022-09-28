@@ -2,6 +2,7 @@ ZK 9.6.3
 * Features
 
 * Bugs
+  ZK-5140: ZK loads vulnerable commons-io transitively
 
 * Upgrade Notes
 
