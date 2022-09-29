@@ -2,6 +2,7 @@ ZK 9.6.3
 * Features
 
 * Bugs
+  ZK-5220: a listbox without ROD causes a websocket connection to close
 
 * Upgrade Notes
 

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-5220.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Mon Sep 26 17:10:22 CST 2022, Created by jameschu
+
+Copyright (C) 2022 Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		0. Test in tomcat
+		1. Enable WebSocket in zk.xml.
+		&lt;listener>
+		&lt;listener-class>org.zkoss.zkmax.au.websocket.WebSocketWebAppInit&lt;/listener-class>
+		&lt;/listener>
+		2. You should not see a dialog shows:
+		the server is temporarily out of service.
+		would you like to try again?
+		3. websocket should work and you can see "$ZKPARTIALMESSAGE$...." is message
+	</label>
+
+	<zscript><![CDATA[
+List Items = new ArrayList();
+for (int i = 0; i < 1500; i++) {
+    Items.add("data "+i);
+}
+ListModelList model = new ListModelList(Items);
+	]]></zscript>
+	<custom-attributes org.zkoss.zul.listbox.rod="false"/>
+	<listbox model="${model}">
+		<listhead>
+			<listheader label="listbox header"/>
+		</listhead>
+	</listbox>
+</zk>
