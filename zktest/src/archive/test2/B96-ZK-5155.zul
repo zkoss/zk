@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk>
+	<label multiline="true">
+		1. Click the magnifier glass. A popup should appear.
+		2. Click the "next page" button in the popup. The popup shouldn't close.
+		3. Click the "previous page" button in the popup. The popup shouldn't close.
+		4. Press the "TAB" key. The popup shouldn't close, and the focus (might not be visible) should be on the "next page" button.
+		5. Press the "TAB" key. The popup shouldn't close, and the focus (might not be visible) should be on the "last page" button.
+		6. Press the "TAB" key. The popup should close, and the focus should be likely on the browser's "omnibox".
+	</label>
+	<bandbox id="bd">
+		<bandpopup>
+			<vbox>
+				<listbox rows="3" width="300px"
+				         onSelect="bd.value=self.selectedItem.label;bd.close();" mold="paging" pageSize="3">
+					<listhead>
+						<listheader label="Name"/>
+						<listheader label="Description"/>
+					</listhead>
+					<listitem>
+						<listcell label="John"/>
+						<listcell label="CEO"/>
+					</listitem>
+					<listitem>
+						<listcell label="Joe"/>
+						<listcell label="Engineer"/>
+					</listitem>
+					<listitem>
+						<listcell label="Mary"/>
+						<listcell label="Supervisor"/>
+					</listitem>
+					<listitem>
+						<listcell label="John"/>
+						<listcell label="CEO"/>
+					</listitem>
+				</listbox>
+			</vbox>
+		</bandpopup>
+	</bandbox>
+</zk>
