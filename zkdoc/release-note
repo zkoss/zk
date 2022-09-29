@@ -3,6 +3,8 @@ ZK 9.6.3
 
 * Bugs
   ZK-5029: sporadic text wrapping in listbox/grid/tree cells since chrome 90
+  ZK-5159: Firefox Windows 11 scrollbar doesn't have height, cause missing scrollbar
+  ZK-5115: Websocket endpoint registers threadpool, doesn't close, prevents tomcat graceful stop, threads remain after stop
 
 * Upgrade Notes
 
