@@ -2159,11 +2159,50 @@ zk.copy(jq, {
 		}
 		if (!_sbwDiv) {
 			_sbwDiv = document.createElement('div');
-			_sbwDiv.style.cssText = 'top:-1000px;left:-1000px;position:absolute;visibility:hidden;border:none;width:50px;height:50px;overflow:scroll;';
-			_sbwDiv.appendChild(document.createElement('div'));
+			const outerDivStyleString = 'top:-1000px;left:-1000px;position:absolute;visibility:hidden;border:none;width:50px;height:50px;overflow:scroll;';
+			// `!!` is to prevent the TS error "This condition will always return true" without resorting to `@ts-ignore` or `@ts-expect-error`.
+			// eslint-disable-next-line no-extra-boolean-cast
+			if (!!HTMLElement.prototype.attachShadow) {
+				// Shadow DOM is supported. The purpose of using a shadow DOM is explained in the comment preceding `shadow.appendChild(style)`.
+
+				// `mode` must be `'open'` so that its children can be access externally via `_sbwDiv.shadowRoot`
+				const shadow = _sbwDiv.attachShadow({mode: 'open'});
+				// Append `div` before `style`
+				shadow.appendChild(document.createElement('div'));
+				const style = document.createElement('style');
+				style.textContent =
+					':host{' + outerDivStyleString + '}' +
+					':host::-webkit-scrollbar{background-color:gold;}'; // This line is the key. The body of `::-webkit-scrollbar` must not be empty.
+				// By concretely styling `::-webkit-scrollbar`, the scrollbar will be forced into displaying itself
+				// "obtrusively" as opposed to "floating" for browsers based on WebKit (e.g., Chrome, Safari, and Edge)
+				// on macOS and Win11, so that we can compute the scrollbar width through DOM API.
+
+				// Use shadow DOM to create a scoped `style`. This is to prevent name conflicts and tricky rule
+				// precedence in global CSS, as CSS rules won't leak in to nor leak out of shadow DOM. Also, controlling
+				// the CSS rule here directly with JS avoids the need to duplicate CSS rules for all ZK themes which
+				// people often (understandably) forget to do as demonstrated in ZK-5170.
+				shadow.appendChild(style);
+			} else {
+				// Among all browsers we currently support, only IE doesn't support shadow DOM. For IE, `::-webkit-scrollbar`
+				// won't take effect either. Furthermore, IE can't run on macOS nor Win11 where the "floating" scrollbar
+				// plagues. Hence, we don't have to do anything fancy.
+				_sbwDiv.style.cssText = outerDivStyleString;
+				_sbwDiv.appendChild(document.createElement('div'));
+			}
 			body.appendChild(_sbwDiv);
 		}
-		return _sbwDiv._value || (_sbwDiv._value = _sbwDiv.getBoundingClientRect().width - _sbwDiv.firstChild.getBoundingClientRect().width);
+		if (!_sbwDiv._value) {
+			const innerDiv = (_sbwDiv.shadowRoot || _sbwDiv).firstChild;
+			let width = _sbwDiv.getBoundingClientRect().width - innerDiv.getBoundingClientRect().width;
+			if (width < 2) {
+				// `width` will result in 0 for Firefox on macOS and Win11 with "floating" scrollbars. In this case, we
+				// return a scrollbar width of a sensible default value. We use the condition `width < 2` instead of
+				// `width === 0` to account for possible floating point imprecision.
+				width = 16; // Many browsers have a default scrollbar width of 16 or 17 pixels.
+			}
+			_sbwDiv._value = width;
+		}
+		return _sbwDiv._value;
 	},
     /** Returns if the specified rectangles are overlapped with each other.
      * @param Offset ofs1 the offset of the first rectangle

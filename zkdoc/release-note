@@ -2,6 +2,7 @@ ZK 9.6.3
 * Features
 
 * Bugs
+  ZK-5159: Firefox Windows 11 scrollbar doesn't have height, cause missing scrollbar
 
 * Upgrade Notes
 
