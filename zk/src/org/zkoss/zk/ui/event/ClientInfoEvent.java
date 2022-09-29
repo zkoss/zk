@@ -119,7 +119,9 @@ public class ClientInfoEvent extends Event {
 	/** Returns the time zone of the client.
 	 * The result is a GMT based time zone without any geographical region info.
 	 * @see #getZoneId()
-	 * @deprecated getZoneId() is preferred since 9.0.0
+	 * @deprecated getZoneId() is preferred since 9.0.0.
+	 * getTimeZone returns a TimeZone object, which is no longer the preferred option to identify time zones.
+	 * Instead, use #getZoneId(), which returns a ZoneId object, which better supports the current Instant and a LocalDateTime java APIs
 	 */
 	@Deprecated
 	public TimeZone getTimeZone() {
