@@ -2,6 +2,7 @@ ZK 9.6.3
 * Features
 
 * Bugs
+  ZK-5170: borderlayout title css rules are missing under sapphire theme
   ZK-5140: ZK loads vulnerable commons-io transitively
   ZK-5220: a listbox without ROD causes a websocket connection to close
   ZK-5029: sporadic text wrapping in listbox/grid/tree cells since chrome 90
