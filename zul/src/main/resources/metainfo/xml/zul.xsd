@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.zkoss.org/2005/zul"
-	targetNamespace="http://www.zkoss.org/2005/zul" elementFormDefault="qualified" version="9.6.0.202108091529">
+	targetNamespace="http://www.zkoss.org/2005/zul" elementFormDefault="qualified" version="9.6.3.202209291420">
 	<!--
 	SIMPLETYPE
 	-->
@@ -398,22 +398,57 @@
 		<xs:union>
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
+					<xs:enumeration value="arcdiagram" />
 					<xs:enumeration value="area" />
 					<xs:enumeration value="arearange" />
 					<xs:enumeration value="areaspline" />
 					<xs:enumeration value="areasplinerange" />
 					<xs:enumeration value="bar" />
+					<xs:enumeration value="bellcurve" />
+					<xs:enumeration value="boxplot" />
 					<xs:enumeration value="bubble" />
+					<xs:enumeration value="bullet" />
 					<xs:enumeration value="column" />
+					<xs:enumeration value="columnpyramid" />
 					<xs:enumeration value="columnrange" />
+					<xs:enumeration value="cylinder" />
+					<xs:enumeration value="dependencywheel" />
+					<xs:enumeration value="dumbbell" />
 					<xs:enumeration value="errorbar" />
 					<xs:enumeration value="funnel" />
+					<xs:enumeration value="funnel3d" />
 					<xs:enumeration value="gauge" />
+					<xs:enumeration value="heatmap" />
+					<xs:enumeration value="histogram" />
+					<xs:enumeration value="item" />
 					<xs:enumeration value="line" />
+					<xs:enumeration value="lollipop" />
+					<xs:enumeration value="networkgraph" />
+					<xs:enumeration value="organization" />
+					<xs:enumeration value="packedbubble" />
+					<xs:enumeration value="pareto" />
 					<xs:enumeration value="pie" />
+					<xs:enumeration value="polygon" />
+					<xs:enumeration value="pyramid" />
+					<xs:enumeration value="pyramid3d" />
+					<xs:enumeration value="sankey" />
 					<xs:enumeration value="scatter" />
+					<xs:enumeration value="scatter3d" />
+					<xs:enumeration value="solidgauge" />
 					<xs:enumeration value="spline" />
+					<xs:enumeration value="streamgraph" />
+					<xs:enumeration value="sunburst" />
+					<xs:enumeration value="tilemap" />
+					<xs:enumeration value="timeline" />
+					<xs:enumeration value="treemap" />
+					<xs:enumeration value="variablepie" />
+					<xs:enumeration value="variwide" />
+					<xs:enumeration value="vector" />
+					<xs:enumeration value="venn" />
 					<xs:enumeration value="waterfall" />
+					<xs:enumeration value="windbarb" />
+					<xs:enumeration value="wordcloud" />
+					<xs:enumeration value="xrange" />
 				</xs:restriction>
 			</xs:simpleType>
 			<xs:simpleType>
@@ -637,6 +672,10 @@
 		<xs:attribute name="onPlotMouseOut" type="xs:string" use="optional" />
 		<xs:attribute name="onPlotMouseOver" type="xs:string" use="optional" />
 		<xs:attribute name="onPlotShow" type="xs:string" use="optional" />
+		<xs:attribute name="onPlotMouseOutPoint" type="xs:string" use="optional" />
+		<xs:attribute name="onPlotMouseOverPoint" type="xs:string" use="optional" />
+		<xs:attribute name="onPlotSelect" type="xs:string" use="optional" />
+		<xs:attribute name="onPlotUnselect" type="xs:string" use="optional" />
 	</xs:attributeGroup>
 	<!--
 	ELEMENTGROUP
@@ -1372,23 +1411,21 @@
 	<xs:complexType name="chartsType">
 		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="abstractComponentAttrGroup" />
-		<xs:attribute name="type" type="chartsTypeAttrType" use="optional" />
-		<xs:attribute name="model" type="xs:string" use="optional" />
-		<xs:attribute name="title" type="xs:string" use="optional" />
-		<xs:attribute name="subtitle" type="xs:string" use="optional" />
-		<xs:attribute name="width" type="xs:string" use="optional" />
-		<xs:attribute name="height" type="xs:string" use="optional" />
 		<xs:attribute name="alignTicks" type="booleanType" use="optional" />
 		<xs:attribute name="animation" type="booleanType" use="optional" />
 		<xs:attribute name="backgroundColor" type="xs:string" use="optional" />
 		<xs:attribute name="borderColor" type="xs:string" use="optional" />
 		<xs:attribute name="borderRadius" type="xs:string" use="optional" />
 		<xs:attribute name="borderWidth" type="xs:string" use="optional" />
+		<xs:attribute name="caption" type="xs:string" use="optional" />
 		<xs:attribute name="chart" type="xs:string" use="optional" />
 		<xs:attribute name="colors" type="xs:string" use="optional" />
 		<xs:attribute name="credits" type="xs:string" use="optional" />
+		<xs:attribute name="className" type="xs:string" use="optional" />
 		<xs:attribute name="enableZoomSelection" type="booleanType" use="optional" />
 		<xs:attribute name="exporting" type="xs:string" use="optional" />
+		<xs:attribute name="height" type="xs:string" use="optional" />
+		<xs:attribute name="hflex" type="xs:string" use="optional" />
 		<xs:attribute name="ignoreHiddenSeries" type="booleanType" use="optional" />
 		<xs:attribute name="inverted" type="booleanType" use="optional" />
 		<xs:attribute name="labels" type="xs:string" use="optional" />
@@ -1398,8 +1435,15 @@
 		<xs:attribute name="marginLeft" type="xs:string" use="optional" />
 		<xs:attribute name="marginRight" type="xs:string" use="optional" />
 		<xs:attribute name="marginTop" type="xs:string" use="optional" />
+		<xs:attribute name="model" type="xs:string" use="optional" />
 		<xs:attribute name="navigation" type="xs:string" use="optional" />
+		<xs:attribute name="noData" type="xs:string" use="optional" />
 		<xs:attribute name="options" type="xs:string" use="optional" />
+		<xs:attribute name="options3D" type="xs:string" use="optional" />
+		<xs:attribute name="panKey" type="xs:string" use="optional" />
+		<xs:attribute name="panning" type="booleanType" use="optional" />
+		<xs:attribute name="parallelAxes" type="xs:string" use="optional" />
+		<xs:attribute name="parallelCoordinates" type="booleanType" use="optional" />
 		<xs:attribute name="pinchType" type="xs:string" use="optional" />
 		<xs:attribute name="plotBackgroundColor" type="xs:string" use="optional" />
 		<xs:attribute name="plotBackgroundImage" type="xs:string" use="optional" />
@@ -1409,6 +1453,9 @@
 		<xs:attribute name="plotShadow" type="booleanType" use="optional" />
 		<xs:attribute name="polar" type="booleanType" use="optional" />
 		<xs:attribute name="reflow" type="booleanType" use="optional" />
+		<xs:attribute name="resetZoomButton" type="xs:string" use="optional" />
+		<xs:attribute name="responsive" type="xs:string" use="optional" />
+		<xs:attribute name="scrollablePlotArea" type="xs:string" use="optional" />
 		<xs:attribute name="selectionMarkerFill" type="xs:string" use="optional" />
 		<xs:attribute name="shadow" type="booleanType" use="optional" />
 		<xs:attribute name="showAxes" type="booleanType" use="optional" />
@@ -1418,13 +1465,17 @@
 		<xs:attribute name="spacingRight" type="xs:string" use="optional" />
 		<xs:attribute name="spacingTop" type="xs:string" use="optional" />
 		<xs:attribute name="style" type="xs:string" use="optional" />
+		<xs:attribute name="styleMode" type="booleanType" use="optional" />
+		<xs:attribute name="subtitle" type="xs:string" use="optional" />
 		<xs:attribute name="theme" type="xs:string" use="optional" />
+		<xs:attribute name="title" type="xs:string" use="optional" />
 		<xs:attribute name="tooltip" type="xs:string" use="optional" />
+		<xs:attribute name="type" type="chartsTypeAttrType" use="optional" />
+		<xs:attribute name="vflex" type="xs:string" use="optional" />
+		<xs:attribute name="width" type="xs:string" use="optional" />
 		<xs:attribute name="zclass" type="xs:string" use="optional" />
 		<xs:attribute name="zoomType" type="xs:string" use="optional" />
 		<xs:attribute name="onSelection" type="xs:string" use="optional" />
-		<xs:attribute name="hflex" type="xs:string" use="optional" />
-		<xs:attribute name="vflex" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="mouseAttrGroup" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 		<xs:attributeGroup ref="plotAttrGroup" />
