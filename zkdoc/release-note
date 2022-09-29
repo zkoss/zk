@@ -3,6 +3,11 @@ ZK 9.6.3
 
 * Bugs
   ZK-5155: bandbox closes its popup when switching active page
+  ZK-5140: ZK loads vulnerable commons-io transitively
+  ZK-5220: a listbox without ROD causes a websocket connection to close
+  ZK-5029: sporadic text wrapping in listbox/grid/tree cells since chrome 90
+  ZK-5159: Firefox Windows 11 scrollbar doesn't have height, cause missing scrollbar
+  ZK-5115: Websocket endpoint registers threadpool, doesn't close, prevents tomcat graceful stop, threads remain after stop
 
 * Upgrade Notes
 
