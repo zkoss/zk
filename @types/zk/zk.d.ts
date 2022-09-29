@@ -853,7 +853,9 @@ declare namespace zk {
         cleanVisibility(): JQuery;
         clearStyles(): this;
         clientHeightDoubleValue(): number;
+        clientHeightCeil(): number;
         clientWidthDoubleValue(): number;
+        clientWidthCeil(): number;
         cmOffset(): zk.Offset;
         contentHeight(excludeMargin?: boolean): number;
         contentWidth(excludeMargin?: boolean): number;
@@ -880,12 +882,16 @@ declare namespace zk {
         ncols(visibleOnly?: boolean): number;
         offsetHeight(): number;
         offsetHeightDoubleValue(): number;
+        offsetHeightCeil(): number;
         offsetLeft(): number;
         offsetLeftDoubleValue(): number;
+        offsetLeftCeil(): number;
         offsetTop(): number;
         offsetTopDoubleValue(): number;
+        offsetTopCeil(): number;
         offsetWidth(): number;
         offsetWidthDoubleValue(): number;
+        offsetWidthCeil(): number;
         padBorderHeight(): number;
         padBorderWidth(): number;
         paddingHeight(): number;
