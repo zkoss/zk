@@ -137,10 +137,10 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		if (!dt) {
 			//original dt is decided by aureq.target.desktop, so start by it's parent.
 			var wgt: zk.Widget | null | undefined = aureq.target.parent;
-			while (!wgt?.desktop) {
-				wgt = wgt?.parent;
+			while (!wgt!.desktop) {
+				wgt = wgt!.parent;
 			}
-			dt = wgt?.desktop;
+			dt = wgt!.desktop;
 		}
 		////
 		zAu.addAuRequest(dt, aureq);
