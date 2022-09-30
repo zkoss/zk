@@ -402,6 +402,9 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 			this._scrollcheck('init');
 		}
 	},
+	beforeChildReplaced_: function (oldTab, newTab) {
+		newTab.setSelected(oldTab.isSelected());
+	},
 	onChildRemoved_: function (child) {
 		var p = this.parent;
 		if (p && child == p._selTab) {
