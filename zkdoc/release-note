@@ -40,6 +40,7 @@ ZK 9.6.3
   ZK-5179: Custom attributes on template do not resolve after ZK-5002
   ZK-2259: Tabbox doesn't select second tab automatically when first tab is invisible
   ZK-5214: Locales.getLocale("de_DE_dgl") returns a different locale than zk 8
+  ZK-5253: title of borderlayout north/south shouldn't rotate 90 degrees
   ZK-5240: calculation issue in tpad cause grid to render entire content at once
   ZK-5247: dynamically rerendered row breaking hflex min column
   ZK-5033: infinite loop when firing an event on a detached widget
