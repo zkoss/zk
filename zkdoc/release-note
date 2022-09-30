@@ -14,6 +14,7 @@ ZK 9.6.3
   ZK-4974: grid-column with min-width
   ZK-5240: calculation issue in tpad cause grid to render entire content at once
   ZK-2259: Tabbox doesn't select second tab automatically when first tab is invisible
+  ZK-5253: title of borderlayout north/south shouldn't rotate 90 degrees
 
 * Upgrade Notes
 
