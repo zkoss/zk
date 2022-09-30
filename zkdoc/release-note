@@ -13,6 +13,7 @@ ZK 9.6.3
   ZK-5214: Locales.getLocale("de_DE_dgl") returns a different locale than zk 8
   ZK-4974: grid-column with min-width
   ZK-5240: calculation issue in tpad cause grid to render entire content at once
+  ZK-2259: Tabbox doesn't select second tab automatically when first tab is invisible
 
 * Upgrade Notes
 
