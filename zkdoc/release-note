@@ -2,6 +2,7 @@ ZK 9.6.3
 * Features
 
 * Bugs
+  ZK-5253: title of borderlayout north/south shouldn't rotate 90 degrees
 
 * Upgrade Notes
 
