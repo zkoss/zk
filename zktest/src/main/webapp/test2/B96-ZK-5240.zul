@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk>
+	<label multiline="true">
+		1. Force into tablet mode with chrome devtool. "zk.touchEnabled" should evaluates to "true" in the console.
+		2. Start network monitoring in chrome devtool.
+		3. Click the "add content" button. You should see a zkau response with 40-120 rows of data.
+		4. Keep scrolling down. You should see several zkau responses with 40-120 rows of data.
+		5. Keep scrolling up. You should see several zkau responses with 40-120 rows of data.
+
+		The original problem was that upon step 3. The complete 2500 rows of data were loaded at once in one zkau response.
+	</label>
+	<div apply="org.zkoss.zktest.test2.B96_ZK_5240Composer">
+		<button label="add content" id="btn" autodisable="self"/>
+		<grid id="gd" height="600px">
+			<auxhead>
+				<auxheader label="grid header"></auxheader>
+			</auxhead>
+		</grid>
+	</div>
+</zk>

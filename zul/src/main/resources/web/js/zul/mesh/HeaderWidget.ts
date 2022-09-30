@@ -255,7 +255,7 @@ export abstract class HeaderWidget extends zul.LabelImageWidget<HTMLTableCellEle
 		var mesh = this.getMeshWidget(),
 			width0 = zul.mesh.MeshWidget.WIDTH0;
 		if (mesh) {
-			var $n = jq(this.$n_()),
+			var $n = jq(this.$n()),
 				$faker = jq(this.$n('hdfaker')), // `this.$n('hdfaker')` can be null. Musn't use `this.$n_('hdfaker')`.
 				w = this.getWidth();
 			if (mesh._cssflex && mesh.isChildrenFlex && mesh.isChildrenFlex()) { //skip not MeshWidget
