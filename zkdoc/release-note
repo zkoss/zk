@@ -2,6 +2,7 @@ ZK 9.6.3
 * Features
 
 * Bugs
+  ZK-5240: calculation issue in tpad cause grid to render entire content at once
 
 * Upgrade Notes
 
