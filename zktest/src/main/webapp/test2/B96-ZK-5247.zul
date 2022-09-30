@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B96-ZK-5247.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		2022/9/30, Created by jumperchen
+
+Copyright (C) 2022 Potix Corporation. All Rights Reserved.
+
+-->
+<div xmlns:w="client">
+	<button label="A) toggle visible" onClick="container.setVisible(!container.isVisible());"/>
+	<button label="B) rerender dynamic row" onClick="dynamic.invalidate();"/>
+	<div id="container" visible="true">
+		<!-- workaround -->
+		<!--
+		<attribute w:name="setVisible"><![CDATA[
+		  function() {
+			this.$setVisible.apply(this, arguments);
+			if (this.isVisible()) {
+			  zUtl.fireSized(this, true);
+			}
+		  }
+		]]></attribute>
+		-->
+		<grid>
+			<columns>
+				<column hflex="min"/>
+				<column hflex="1"/>
+			</columns>
+			<rows>
+				<row>
+					static
+					<textbox/>
+				</row>
+				<row id="dynamic">
+					dynamic_row
+					<textbox/>
+				</row>
+				<row>
+					static
+					<textbox/>
+				</row>
+			</rows>
+		</grid>
+	</div>
+</div>
