@@ -1278,6 +1278,9 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		this._calcHgh();
 	},
 	_afterCalcSize: function () {
+		// Fix B96-ZK-5247
+		if (!this.isRealVisible()) return;
+
 		var isCSSFlex = this._cssflex && this.isChildrenFlex();
 		if (this._ebodyScrollPos) {
 			// ZK-2046: Restore ebody scroll position after calculated size.
