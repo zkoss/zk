@@ -384,6 +384,10 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 			this._shallSize = true;
 	},
 	//super//
+	beforeChildReplaced_: function (oldTabs, newTabs) {
+		// NOTE: At this point, `this.tabs === oldTabs`. Thus, `this.setSelectedIndex()` will set for `oldTabs` not `newTabs`.
+		newTabs.getChildAt(this.getSelectedIndex()).setSelected(true);
+	},
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
 		if (child.$instanceof(zul.wgt.Toolbar))
