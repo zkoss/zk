@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B96-ZK-4974.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		2022/9/30, Created by jumperchen
+
+Copyright (C) 2022 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<style>
+		.columns-noshrink .z-column {
+		flex-shrink: 0!important;
+		}
+	</style>
+	1) hflex="1" column shrinking down to 0
+	<grid>
+		<columns>
+			<column label="column-1" width="200px"/>
+			<column label="column-2" hflex="1"/>
+			<column label="column-3" width="200px"/>
+		</columns>
+		<rows>
+			<row>
+				<cell>content-1</cell>
+				<cell>content-2</cell>
+				<cell>content-3</cell>
+			</row>
+		</rows>
+	</grid>
+	2) after applying a min-width the  FIXED columns shrink
+	<grid>
+		<columns>
+			<column label="column-1" width="200px"/>
+			<column label="column-2" hflex="1" style="min-width: 200px"/>
+			<column label="column-3" width="200px"/>
+		</columns>
+		<rows>
+			<row>
+				<cell>content-1</cell>
+				<cell>content-2</cell>
+				<cell>content-3</cell>
+			</row>
+		</rows>
+	</grid>
+	3) workaround disable column shrinking
+	<grid sclass="columns-noshrink" >
+		<columns>
+			<column label="column-1" width="200px"/>
+			<column label="column-2" hflex="1" style="min-width: 200px"/>
+			<column label="column-3" width="200px"/>
+		</columns>
+		<rows>
+			<row>
+				<cell>content-1</cell>
+				<cell>content-2</cell>
+				<cell>content-3</cell>
+			</row>
+		</rows>
+	</grid>
+
+</zk>
