@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B96-ZK-2259.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		2022/9/30, Created by jumperchen
+
+Copyright (C) 2022 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label>Tabbox doesn't select second tab when first tab is invisible at the beginning.</label>
+	<tabbox>
+		<tabs>
+			<tab id="first" label="First Panel" closable="false" visible="false"/>
+			<tab id="second" label="Second Panel" closable="false" visible="true"/>
+		</tabs>
+		<tabpanels>
+			<tabpanel visible="false">
+				First Panel
+			</tabpanel>
+			<tabpanel visible="true">
+				Second Panel
+			</tabpanel>
+		</tabpanels>
+	</tabbox>
+</zk>
