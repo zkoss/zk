@@ -1,4 +1,4 @@
-/* B96_ZK_5214.java
+/* B96_ZK_5214Test.java
 
 	Purpose:
 		
@@ -22,7 +22,7 @@ import org.zkoss.util.Locales;
 /**
  * @author jumperchen
  */
-public class B96_ZK_5214 {
+public class B96_ZK_5214Test {
 	@Test
 	public void test() {
 		assertEquals(Locale.forLanguageTag("zh-TW-u-ca-roc"), Locales.getLocale("zh-TW-u-ca-roc"));
