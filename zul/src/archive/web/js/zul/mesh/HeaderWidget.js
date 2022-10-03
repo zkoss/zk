@@ -491,7 +491,9 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			hdcols = hdfaker.childNodes,
 			bdcols = bdfaker.childNodes,
 			ftcols = ftfaker ? ftfaker.childNodes : null,
-			wds = [];
+			wds = [],
+			shallResyncColumns = [], // if cssflex, the fixed size should resync its body col size.
+			cssflex = mesh._cssflex && mesh.isChildrenFlex();
 
 		//1. store resized width
 		// B70-ZK-2199: convert percent width to fixed width
@@ -519,8 +521,16 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 
 			// reset hflex, Bug ZK-2772 - Misaligned Grid columns
 			var wdInt = zk.parseInt(wds[i]);
-			if (mesh._cssflex && mesh.isChildrenFlex()) {
+			if (cssflex) {
 				zFlex.clearCSSFlex(this, 'h', true);
+				// reset display:none and flex for ZK-5030
+				var wns = w.$n().style;
+
+				if (wns.flex) {
+					shallResyncColumns.push(i);
+					wns.flex = '';
+				}
+				wns.display = '';
 			} else if (w._hflexWidth) {
 				w.setHflex_(null);
 				w._hflexWidth = undefined;
@@ -530,11 +540,23 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			}
 		}
 
+		if (cssflex) {
+			// re-enable head's colgruop and head-bar
+			mesh.head.$n('hdfaker').style.display = mesh.head.$n('bar').style.display = '';
+		}
+
 
 		//2. set resized width to colgroup col
 		if (!wgt.origWd)
 			wgt._width = wds[cidx] = wd;
 		hdcols[cidx].style.width = bdcols[cidx].style.width = wd;
+
+		// resync
+		while (shallResyncColumns.length) {
+			var ci = shallResyncColumns.shift();
+			hdcols[ci].style.width = bdcols[ci].style.width = wds[ci];
+		}
+
 		if (ftcols) //ZK-2769: Listfooter is not aligned with listhead on changing width
 			ftcols[cidx].style.width = wd;
 

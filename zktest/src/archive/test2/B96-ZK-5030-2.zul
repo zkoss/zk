@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B96-ZK-5030-2.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		2022/10/3, Created by jumperchen
+
+Copyright (C) 2022 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	To resize any column, the resized column is stayed at the same size. (not the updated size)
+	<listbox>
+		<!--<custom-attributes org.zkoss.zul.css.flex="false"/>-->
+		<listhead sizable="true">
+			<listheader label="Col 1" width="200px"/>
+			<listheader label="Col 2" width="200px"/>
+			<listheader label="Col 3" hflex="2" visible="false" />
+			<listheader label="Col 4" width="200px"/>
+			<listheader label="Col 5" width="200px"/>
+			<listheader label="Col 6" width="200px"/>
+		</listhead>
+		<listitem>
+			<listcell label="cell 1" />
+			<listcell label="cell 2" />
+			<listcell label="cell 3" />
+			<listcell label="cell 4" />
+			<listcell label="cell 5" />
+			<listcell label="cell 6" />
+		</listitem>
+	</listbox>
+</zk>
