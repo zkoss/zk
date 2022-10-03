@@ -30,6 +30,7 @@ ZK 9.6.3
 * Features
 
 * Bugs
+  ZK-2259: Tabbox doesn't select second tab automatically when first tab is invisible
   ZK-5214: Locales.getLocale("de_DE_dgl") returns a different locale than zk 8
 
 * Upgrade Notes
