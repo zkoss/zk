@@ -2,6 +2,15 @@ ZK 9.6.3
 * Features
 
 * Bugs
+  ZK-5155: bandbox closes its popup when switching active page
+  ZK-5170: borderlayout title css rules are missing under sapphire theme
+  ZK-5140: ZK loads vulnerable commons-io transitively
+  ZK-5220: a listbox without ROD causes a websocket connection to close
+  ZK-5029: sporadic text wrapping in listbox/grid/tree cells since chrome 90
+  ZK-5159: Firefox Windows 11 scrollbar doesn't have height, cause missing scrollbar
+  ZK-5115: Websocket endpoint registers threadpool, doesn't close, prevents tomcat graceful stop, threads remain after stop
+  ZK-5179: Custom attributes on template do not resolve after ZK-5002
+  ZK-5214: Locales.getLocale("de_DE_dgl") returns a different locale than zk 8
   ZK-5253: title of borderlayout north/south shouldn't rotate 90 degrees
 
 * Upgrade Notes

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-5179.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Mon Sep 26 17:10:22 CST 2022, Created by jameschu
+
+Copyright (C) 2022 Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript>
+		String value="test";
+		Boolean trueValue = true;
+	</zscript>
+	<vlayout apply="org.zkoss.bind.BindComposer" >
+		<label value="vm value:"/>
+		<label style="font-weight: bold;" value="@load(value)"/>
+		<separator bar="true" />
+		<label id="anchor1" value="with dom wrapper"/>
+		<apply template="testTemplate" foo="@load(value)" bar="@load(trueValue)"/>
+		<separator bar="true" />
+		<label id="anchor2" value="without dom wrapper"/>
+		<apply template="testTemplate2" foo="@load(value)" bar="@load(trueValue)"/>
+		<separator bar="true" />
+		<label id="anchor3" value="without dom wrapper and nested"/>
+		<apply foo="@load(value)" bar="@load(trueValue)">
+			<apply template="testTemplate2"/>
+		</apply>
+		<template name="testTemplate">
+			<vlayout>
+				<custom-attributes customAtt="${foo}"/>
+				Loading value directly:
+				<label style="font-weight: bold;" value="@load(foo)"/>
+				Loading value from Custom attribute on parent AbstractComponent
+				<label style="font-weight: bold;"  value="@load(customAtt)"/>
+				<!-- addded section -->
+				accessing value set on apply tag in if attribute
+				<label style="font-weight: bold;" if="${bar}" value="if attribute successful"/>
+			</vlayout>
+		</template>
+		<template name="testTemplate2">
+			<custom-attributes customAtt="${foo}"/>
+			Loading value directly:
+			<label style="font-weight: bold;"  value="@load(foo)"/>
+			Loading value from custom attribute on parent template:
+			<label style="font-weight: bold;"  value="@load(customAtt)"/>
+			 addded section
+			accessing value set on apply tag in if attribute
+			<label style="font-weight: bold;" if="${bar}" value="if attribute successful"/>
+		</template>
+	</vlayout>
+</zk>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk>
+    <label multiline="true">
+        Text in cells of the following Listboxs, Grids, and Trees shouldn't wrap to a new line.
+    </label>
+    <listbox id="listbox1" sizedByContent="true">
+        <listhead>
+            <listheader label="Title 1"/>
+            <listheader label="Title 2"/>
+            <listheader label="Title 3"/>
+        </listhead>
+        <listitem>
+            <listcell label="This is a reasonably long title to see if the web browsers such as Chrome or Firefox wraps the text"/>
+            <listcell label="This long:"/>
+            <listcell label="This short:"/>
+        </listitem>
+    </listbox>
+    <listbox id="listbox2" hflex="min">
+        <listhead>
+            <listheader label="Title 1"/>
+            <listheader label="Title 2"/>
+            <listheader label="Title 3"/>
+        </listhead>
+        <listitem>
+            <listcell label="This is a reasonably long title to see if the web browsers such as Chrome or Firefox wraps the text"/>
+            <listcell label="This long:"/>
+            <listcell label="This short:"/>
+        </listitem>
+    </listbox>
+    <grid id="grid1" sizedByContent="true">
+        <columns>
+            <column label="Title"/>
+            <column label="Title"/>
+        </columns>
+        <rows>
+            <row>
+                <label value="This is a reasonably long title to see if the web browsers such as Chrome or Firefox wraps the text"/>
+                <label/>
+            </row>
+            <row>
+                <cell></cell>
+                <cell>
+                    <label value="This is a reasonably long title to see if the web browsers such as Chrome or Firefox wraps the text"/>
+                </cell>
+            </row>
+        </rows>
+    </grid>
+    <tree id="tree1" sizedByContent="true">
+        <treecols>
+            <treecol label="Title"/>
+            <treecol label="Title"/>
+        </treecols>
+        <treechildren>
+            <treeitem>
+                <treerow>
+                    <treecell>
+                        <label value="This is a reasonably long title to see if the web browsers such as Chrome or Firefox wraps the text"/>
+                    </treecell>
+                    <treecell>
+                        <label value="This is a reasonably long title to see if the web browsers such as Chrome or Firefox wraps the text"/>
+                    </treecell>
+                </treerow>
+            </treeitem>
+        </treechildren>
+    </tree>
+</zk>
