@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk>
+	<label multiline="true">
+		You should see a horizontal scrollbar below the listbox whether "floating" scrollbar is enabled or not.
+	</label>
+	<window title="bug scroll" border="normal">
+		<listbox sizedByContent="true" mold="paging" pageSize="20">
+			<frozen columns="1" />
+			<auxhead>
+				<auxheader label="filter1 ">
+					<textbox />
+				</auxheader>
+				<auxheader label="filter2 ">
+					<textbox />
+				</auxheader>
+				<auxheader label="filter3 ">
+					<textbox />
+				</auxheader>
+				<auxheader label="filter4 ">
+					<textbox />
+				</auxheader>
+				<auxheader label="filter5 ">
+					<textbox />
+				</auxheader>
+				<auxheader label="filter6 ">
+					<textbox />
+				</auxheader>
+				<auxheader label="filter7 ">
+					<textbox />
+				</auxheader>
+				<auxheader label="filter8 ">
+					<textbox />
+				</auxheader>
+				<auxheader label="filter9 ">
+					<textbox />
+				</auxheader>
+				<auxheader label="filter10 ">
+					<textbox />
+				</auxheader>
+				<auxheader label="filter11 ">
+					<textbox />
+				</auxheader>
+				<auxheader label="filter12 ">
+					<textbox />
+				</auxheader>
+			</auxhead>
+			<listhead>
+				<listheader label="column 1" />
+				<listheader label="column 2" />
+				<listheader label="column 3" />
+				<listheader label="column 4" />
+				<listheader label="column 5" />
+				<listheader label="column 6" />
+				<listheader label="column 7" />
+				<listheader label="column 8" />
+				<listheader label="column 9" />
+				<listheader label="column 10" />
+				<listheader label="column 11" />
+				<listheader label="column 12" />
+			</listhead>
+			<listitem>
+				<listcell>
+					<label value="@bind(each.code)" />
+				</listcell>
+				<listcell>
+					<label value="@bind(each.code)" />
+				</listcell>
+				<listcell>
+					<label value="@bind(each.code)" />
+				</listcell>
+				<listcell>
+					<label value="@bind(each.code)" />
+				</listcell>
+				<listcell>
+					<label value="@bind(each.code)" />
+				</listcell>
+				<listcell>
+					<label value="@bind(each.code)" />
+				</listcell>
+				<listcell>
+					<label value="@bind(each.code)" />
+				</listcell>
+				<listcell>
+					<label value="@bind(each.code)" />
+				</listcell>
+				<listcell>
+					<label value="@bind(each.code)" />
+				</listcell>
+				<listcell>
+					<label value="@bind(each.code)" />
+				</listcell>
+				<listcell>
+					<label value="@bind(each.code)" />
+				</listcell>
+				<listcell>
+					<label value="@bind(each.code)" />
+				</listcell>
+			</listitem>
+		</listbox>
+	</window>
+</zk>

@@ -47,11 +47,11 @@ zul.inp.Bandpopup = zk.$extends(zul.Widget, {
 
 			self._shallClosePopup = true;
 			setTimeout(function () {
-				if (bandbox && bandbox.isOpen() && self._shallClosePopup) {
+				if (bandbox && bandbox.isOpen() && self._shallClosePopup && !jq.isAncestor(bandbox.$n('pp'), document.activeElement)) {
 					bandbox.close();
 					self._shallClosePopup = false;
 				}
-			});
+			}, 150);
 		}
 	},
 	//super
