@@ -41,6 +41,12 @@ zul.inp.Bandpopup = zk.$extends(zul.Widget, {
 		if (e.relatedTarget) {
 			if (bandbox && bandbox.isOpen() && !jq.isAncestor(bandbox.$n('pp'), e.relatedTarget))
 				bandbox.close();
+		} else if (e.originalEvent && e.originalEvent.target && e.originalEvent.target.disabled) {
+			// ZK-5155: A focusout/blur event can be fired when an element is disabled. If a child of this Bandpopup
+			// loses its focus due to being disabled, let the popup receive focus.
+			var popup = bandbox.$n('pp');
+			popup.focus(); // The popup can receive focus because it has tabindex set.
+			e.relatedTarget = popup;
 		} else {
 			// for solving B96-ZK-4748, treechildren will rerender itself when clicking
 			// the open icon, and JQ will simulate a fake focusout event without any relatedTarget.
@@ -51,7 +57,7 @@ zul.inp.Bandpopup = zk.$extends(zul.Widget, {
 					bandbox.close();
 					self._shallClosePopup = false;
 				}
-			}, 150);
+			});
 		}
 	},
 	//super
