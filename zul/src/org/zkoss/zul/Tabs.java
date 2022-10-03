@@ -99,7 +99,7 @@ public class Tabs extends XulElement {
 	}
 
 	public boolean insertBefore(Component child, Component refChild) {
-		boolean sel = getChildren().isEmpty(), desel = false;
+		boolean sel = !getChildren().stream().filter(Component::isVisible).findAny().isPresent(), desel = false;
 		final Tab newtab = (Tab) child;
 		if (!sel && newtab.isSelected()) {
 			if (newtab.getTabbox() != null) // B65-ZK-1597
@@ -112,7 +112,7 @@ public class Tabs extends XulElement {
 		if (super.insertBefore(child, refChild)) {
 			final Tabbox tabbox = getTabbox();
 
-			if (sel)
+			if (sel && newtab.isVisible())
 				if (tabbox != null) {
 					if (tabbox.getModel() == null || tabbox.getSelectableModel().isSelectionEmpty())
 						tabbox.setSelectedTab(newtab);
