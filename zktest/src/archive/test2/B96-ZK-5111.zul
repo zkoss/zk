@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B96-ZK-5111.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		2022/10/3, Created by jumperchen
+
+Copyright (C) 2022 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.js"/>
+	<button onClick='org.zkoss.zkmax.ui.util.Toast.show("now is " + System.currentTimeMillis())'/>
+</zk>
