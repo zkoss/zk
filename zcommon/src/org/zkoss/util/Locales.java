@@ -15,11 +15,10 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.util;
 
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Locale;
-import java.util.Collection;
+import java.util.Map;
 
 import org.zkoss.lang.Objects;
 
@@ -117,7 +116,21 @@ public class Locales {
 			}
 		}
 		localeString = localeString.replace(separator, '-');
-		return getLocale(Locale.forLanguageTag(localeString));
+		Locale locale = Locale.forLanguageTag(localeString);
+
+		// fix for ZK-5214
+		if (!java.util.Objects.equals(localeString, locale.toLanguageTag())) {
+			String[] split = localeString.split("-");
+			switch (split.length) {
+			case 1: locale = new Locale(split[0]);
+				break;
+			case 2: locale = new Locale(split[0], split[1]);
+				break;
+			case 3: locale = new Locale(split[0], split[1], split[2]);
+				break;
+			}
+		}
+		return getLocale(locale);
 	}
 	/** Converts a string that consists of language, country and variant
 	 * to a locale.
