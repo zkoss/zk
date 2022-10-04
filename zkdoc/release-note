@@ -20,6 +20,7 @@ ZK 9.6.3
   ZK-4974: grid-column with min-width
   ZK-5030: column header disappearing when resizing column
   ZK-5111: require.js causes Toast.show() failed
+  ZK-5223: the if element doesn't keep the position of its child component
 
 * Upgrade Notes
 
