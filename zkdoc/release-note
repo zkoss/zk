@@ -34,6 +34,7 @@ ZK 9.6.3
   ZK-5214: Locales.getLocale("de_DE_dgl") returns a different locale than zk 8
   ZK-5247: dynamically rerendered row breaking hflex min column
   ZK-5033: infinite loop when firing an event on a detached widget
+  ZK-4974: grid-column with min-width
 
 * Upgrade Notes
 
