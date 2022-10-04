@@ -609,7 +609,7 @@ zk.fmt.Calendar = zk.$extends(zk.Object, {
 		this._date = date;
 		if (localizedSymbols) {
 			var localeDateTimeFormat = zk.ie < 11 ? null : new Intl.DateTimeFormat(localizedSymbols.LAN_TAG, {year: 'numeric'});
-			this._offset = localizedSymbols.YDELTA || zk.fmt.Date.getYDelta(date._moment.toDate(), localeDateTimeFormat);
+			this._offset = localizedSymbols.YDELTA || zk.fmt.Date.getYDelta(date ? date._moment.toDate() : null, localeDateTimeFormat);
 		}
 	},
 	getTime: function () {
