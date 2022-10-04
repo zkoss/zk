@@ -22,6 +22,7 @@ ZK 9.6.3
   ZK-5111: require.js causes Toast.show() failed
   ZK-5223: the if element doesn't keep the position of its child component
   ZK-5176: signature backgroundImage doesn't accept an absolute path
+  ZK-4982: Listbox (mold select with groups) fail when selecting from serverside
 
 * Upgrade Notes
 
