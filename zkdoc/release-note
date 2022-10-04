@@ -25,6 +25,7 @@ ZK 9.6.3
   ZK-4982: Listbox (mold select with groups) fail when selecting from serverside
   ZK-5153: window with vflex content broken after title update
   ZK-5167: showBusy() doesn't mask the whole page
+  ZK-5168: height calculation in groupbox with css scale incorrect after ZK-4670
 
 * Upgrade Notes
 
