@@ -162,12 +162,16 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 	/* Changes the selected status of an item without affecting other items
 	 * and return true if the status is really changed.
 	 */
-	_changeSelect: function (option, toSel) {
-		var changed = !!option.isSelected() != toSel;
-		if (changed) {
-			option.setSelected(toSel);
+	_changeSelect: function (optionOrOptgroup, toSel) {
+		if (optionOrOptgroup.$instanceof(zul.sel.Option)) {
+			var option = optionOrOptgroup,
+				changed = !!option.isSelected() != toSel;
+			if (changed) {
+				option.setSelected(toSel);
+			}
+			return changed;
 		}
-		return changed;
+		return false;
 	},
 	/**
 	 * If the specified item is selected, it is deselected. If it is not
