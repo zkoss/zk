@@ -585,7 +585,10 @@ export abstract class HeaderWidget extends zul.LabelImageWidget<HTMLTableCellEle
 			hdcols = hdfaker.childNodes as NodeListOf<HTMLElement>,
 			bdcols = bdfaker.childNodes as NodeListOf<HTMLElement>,
 			ftcols = ftfaker ? ftfaker.childNodes as NodeListOf<HTMLElement> : undefined,
-			wds: string[] = [];
+			wds: string[] = [],
+			shallResyncColumns: number[] = [], // if cssflex, the fixed size should resync its body col size.
+			cssflex: boolean = mesh._cssflex && mesh.isChildrenFlex();
+
 
 		//1. store resized width
 		// B70-ZK-2199: convert percent width to fixed width
@@ -613,8 +616,16 @@ export abstract class HeaderWidget extends zul.LabelImageWidget<HTMLTableCellEle
 
 			// reset hflex, Bug ZK-2772 - Misaligned Grid columns
 			var wdInt = zk.parseInt(wds[i]);
-			if (mesh._cssflex && mesh.isChildrenFlex()) {
+			if (cssflex) {
 				zFlex.clearCSSFlex(w, 'h', true);
+				// reset display:none and flex for ZK-5030
+				const wns = w.$n_().style;
+
+				if (wns.flex) {
+					shallResyncColumns.push(i);
+					wns.flex = '';
+				}
+				wns.display = '';
 			} else if (w._hflexWidth) {
 				w.setHflex_();
 				w._hflexWidth = undefined;
@@ -624,6 +635,11 @@ export abstract class HeaderWidget extends zul.LabelImageWidget<HTMLTableCellEle
 			}
 		}
 
+		if (cssflex) {
+			// re-enable head's colgruop and head-bar
+			mesh.head!.$n_('hdfaker').style.display = mesh.head!.$n_('bar').style.display = '';
+		}
+
 
 		//2. set resized width to colgroup col
 		if (!wgt._origWd) // NOTE: originally, `if(!wgt.origWd)` which was wrong.
@@ -631,6 +647,12 @@ export abstract class HeaderWidget extends zul.LabelImageWidget<HTMLTableCellEle
 		hdcols[cidx].style.width = bdcols[cidx].style.width = wd;
 		if (ftcols) //ZK-2769: Listfooter is not aligned with listhead on changing width
 			ftcols[cidx].style.width = wd;
+
+		// resync
+		while (shallResyncColumns.length) {
+			const ci = shallResyncColumns.shift() as number;
+			hdcols[ci].style.width = bdcols[ci].style.width = wds[ci];
+		}
 
 		//3. clear width=100% setting, otherwise it will try to expand to whole width
 		mesh.eheadtbl!.width = '';

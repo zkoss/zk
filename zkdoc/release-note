@@ -35,6 +35,7 @@ ZK 9.6.3
   ZK-5247: dynamically rerendered row breaking hflex min column
   ZK-5033: infinite loop when firing an event on a detached widget
   ZK-4974: grid-column with min-width
+  ZK-5030: column header disappearing when resizing column
 
 * Upgrade Notes
 

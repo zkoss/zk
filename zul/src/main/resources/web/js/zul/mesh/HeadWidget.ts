@@ -377,6 +377,9 @@ export class HeadWidget extends zul.Widget<HTMLTableRowElement> {
 						ftcol = ftcol.nextSibling;
 				}
 				ehead!.style.display = emptyHead ? 'none' : '';
+
+				// css flex doesn't need 'bar' style, because 'colgroup' is disabled.
+				this.$n('bar').style.display = 'none';
 			} else {
 				wgt._adjFlexWd();
 				wgt._adjSpanWd(); //if there is span and shall span the column width for extra space
