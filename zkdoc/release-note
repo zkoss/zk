@@ -24,6 +24,7 @@ ZK 9.6.3
   ZK-5176: signature backgroundImage doesn't accept an absolute path
   ZK-4982: Listbox (mold select with groups) fail when selecting from serverside
   ZK-5153: window with vflex content broken after title update
+  ZK-5167: showBusy() doesn't mask the whole page
 
 * Upgrade Notes
 
