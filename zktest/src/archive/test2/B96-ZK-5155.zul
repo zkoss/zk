@@ -4,9 +4,7 @@
 		1. Click the magnifier glass. A popup should appear.
 		2. Click the "next page" button in the popup. The popup shouldn't close.
 		3. Click the "previous page" button in the popup. The popup shouldn't close.
-		4. Press the "TAB" key. The popup shouldn't close, and the focus (might not be visible) should be on the "next page" button.
-		5. Press the "TAB" key. The popup shouldn't close, and the focus (might not be visible) should be on the "last page" button.
-		6. Press the "TAB" key. The popup should close, and the focus should be likely on the browser's "omnibox".
+		4. Click the "click me for bandpopup to lose focus" button. The popup should close.
 	</label>
 	<bandbox id="bd">
 		<bandpopup>
@@ -37,4 +35,5 @@
 			</vbox>
 		</bandpopup>
 	</bandbox>
+	<button id="outerButton" label="click me for bandpopup to lose focus"/>
 </zk>
