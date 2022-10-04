@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B96-ZK-5148.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		2022/10/4, Created by jumperchen
+
+Copyright (C) 2022 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+	1. Click the "Click Me" button
+	2. NO JS error in browser console.
+	</label>
+	<datebox id="dbox" locale="de" />
+	<button onClick="setConstraint()" label="Click Me"/>
+	<zscript><![CDATA[
+        public void setConstraint(){
+            dbox.setConstraint("after 20000501");
+        }
+    ]]></zscript>
+</zk>
