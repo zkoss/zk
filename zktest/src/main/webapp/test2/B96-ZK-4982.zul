@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk>
+	<label multiline="true">
+		Click the "select item 3" button. You should see "Item 3" being selected.
+	</label>
+	<listbox id="lb" mold="select" multiple="true" height="200px">
+		<listgroup label="group 1"/>
+		<listitem id="li1" label="Item 1"/>
+		<listitem id="li2" label="Item 2"/>
+		<listgroup label="group2"/>
+		<listitem id="li3" label="Item 3"/>
+	</listbox>
+	<button id="selectButton" onClick="li3.setSelected(true);" label="select item 3"/>
+</zk>

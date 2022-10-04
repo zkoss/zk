@@ -246,12 +246,15 @@ export class Select extends zul.Widget<HTMLSelectElement> {
 	/* Changes the selected status of an item without affecting other items
 	 * and return true if the status is really changed.
 	 */
-	_changeSelect(option: zul.sel.Option, toSel: boolean): boolean {
-		const changed = !!option.isSelected() != toSel;
-		if (changed) {
-			option.setSelected(toSel);
+	_changeSelect(child: zul.sel.Option | zul.sel.Optgroup, toSel: boolean): boolean {
+		if (child instanceof zul.sel.Option) {
+			const changed = child.isSelected() != toSel;
+			if (changed) {
+				child.setSelected(toSel);
+			}
+			return changed;
 		}
-		return changed;
+		return false;
 	}
 
 	/**
