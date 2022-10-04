@@ -23,16 +23,8 @@ public class B96_ZK_5155Test extends WebDriverTestCase {
 		clickOn(".z-paging-button.z-paging-previous");
 		assertBandboxOpen();
 
-		// 4. Press the "TAB" key. The popup shouldn't close, and the focus (might not be visible) should be on the "next page" button.
-		pressTab();
-		assertBandboxOpen();
-
-		// 5. Press the "TAB" key. The popup shouldn't close, and the focus (might not be visible) should be on the "last page" button.
-		pressTab();
-		assertBandboxOpen();
-
-		// 6. Press the "TAB" key. The popup should close, and the focus should be likely on the browser's "omnibox".
-		pressTab();
+		// 4. Click the "click me for bandpopup to lose focus" button. The popup should close.
+		clickOn("$outerButton");
 		assertBandboxClose();
 	}
 
@@ -43,11 +35,6 @@ public class B96_ZK_5155Test extends WebDriverTestCase {
 
 	void clickOn(String selector) {
 		click(jq(selector));
-		waitResponse();
-	}
-
-	void pressTab() {
-		act.sendKeys(Keys.TAB).perform();
 		waitResponse();
 	}
 
