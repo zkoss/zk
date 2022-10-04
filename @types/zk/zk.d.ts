@@ -507,6 +507,7 @@ declare namespace zk {
         $toNumber(): number;
         $toString(): string;
         $toLocaleString(): string;
+        getPrecision(): number;
     }
 
     interface Long extends zk.Object {

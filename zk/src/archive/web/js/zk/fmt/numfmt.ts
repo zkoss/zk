@@ -170,7 +170,11 @@ zk.fmt.Number = {
 		if (!fmt) return val + '';
 		
 		if (fmt.startsWith('locale:')) {
-			return new Intl.NumberFormat(fmt.substring(fmt.indexOf(':') + 1)).format(parseFloat(val));
+			const fractionDigits = new zk.BigDecimal(val).getPrecision();
+			return new Intl.NumberFormat(fmt.substring(fmt.indexOf(':') + 1), {
+				minimumFractionDigits: fractionDigits,
+				maximumFractionDigits: fractionDigits,
+			}).format(parseFloat(val));
 		}
 		var useMinsuFmt;
 		if (fmt.indexOf(';') != -1) {

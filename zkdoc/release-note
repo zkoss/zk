@@ -29,6 +29,7 @@ ZK 9.6.3
   ZK-5177: signature saves a background image into a larger one
   ZK-5181: Optimize the use of DefinitionNotFoundException when creating event queues
   ZK-5148: datebox throws a js error with locale specified
+  ZK-5156: locale format doesn't keep the fractional part
 
 * Upgrade Notes
 
