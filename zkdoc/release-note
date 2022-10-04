@@ -36,6 +36,7 @@ ZK 9.6.3
   ZK-5033: infinite loop when firing an event on a detached widget
   ZK-4974: grid-column with min-width
   ZK-5030: column header disappearing when resizing column
+  ZK-5111: require.js causes Toast.show() failed
 
 * Upgrade Notes
 
