@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk>
+	<label multiline="true">
+		1. The first box should read "123456789.02".
+		2. The second box should read "12,34,56,789.02".
+		3. The third box should read "12,34,56,789.02".
+	</label>
+	<vlayout>
+		<decimalbox id="decimal-1" cols="20" value="123456789.02" />
+		<doublebox id="decimal-2" format="locale:en-IN" cols="20" value="123456789.02" />
+		<decimalbox id="decimal-3" format="locale:en-IN" cols="20" value="123456789.02" />
+	</vlayout>
+</zk>
