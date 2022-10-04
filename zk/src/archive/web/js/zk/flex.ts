@@ -533,7 +533,8 @@ zFlex = { //static methods
 			minFlexInfoListKeyStr = 'minFlexInfoList',
 			pwgt = wgt.parent;
 		if (!pwgt) return;
-		var minFlexInfoList: MinFlexInfo[] = [];
+		var minFlexInfoList: MinFlexInfo[] = [],
+			fContainer = pwgt.$instanceof(zk.Page) ? pwgt.$n() : pwgt.getFlexContainer_();
 		if ((cssFlexAppliedInfo && cssFlexAppliedInfo['flexApplied'])) { //other vflex/hflex sibling has done it!
 			minFlexInfoList = cssFlexAppliedInfo[minFlexInfoListKeyStr];
 			if (minFlexInfoList) { //still need to call fixMinFlex
@@ -543,9 +544,14 @@ zFlex = { //static methods
 				}
 				pwgt.afterChildrenFlex_(wgt);
 			}
+
+			// Fix ZK-5153
+			var fcWgt = zk.$(fContainer);
+			if (fcWgt && fcWgt._cssflexContainer) {
+				jq(fContainer).addClass('z-flex').addClass(zFlex.getFlexInfo(wgt).isFlexRow ? 'z-flex-row' : 'z-flex-column');
+			}
 			return;
 		}
-		var fContainer = pwgt.$instanceof(zk.Page) ? pwgt.$n() : pwgt.getFlexContainer_();
 		if (fContainer == null) { //using old flex
 			wgt._cssflex = false;
 			return;
@@ -606,8 +612,17 @@ zFlex = { //static methods
 		if (minFlexInfoList.length > 0)
 			cssFlexAppliedInfo[minFlexInfoListKeyStr] = minFlexInfoList;
 
-		if (!isAllMin)
+		var fcWgt = zk.$(fContainer);
+		if (!isAllMin) {
+			if (fcWgt) {
+				fcWgt._cssflexContainer = true;
+			}
 			jq(fContainer).addClass('z-flex').addClass(isRow ? 'z-flex-row' : 'z-flex-column');
+		} else {
+			if (fcWgt) {
+				delete fcWgt._cssflexContainer;
+			}
+		}
 
 		for (var i = 0, length = cwgtsz.length; i < length; i++) {
 			var szInfo = cwgtsz[i];
@@ -660,8 +675,11 @@ zFlex = { //static methods
 				noSibFlex = noSibFlex ? !jqFcc.hasClass(flexItemClass) : false;
 		}
 
-		if (clearAllSiblings || noSibFlex)
+		if (clearAllSiblings || noSibFlex) {
+			var fcWgt = zk.$(fContainer);
+			if (fcWgt) delete fcWgt._cssflexContainer;
 			jq(fContainer).removeClass('z-flex').removeClass(isRow ? 'z-flex-row' : 'z-flex-column');
+		}
 		wgt.afterClearFlex_();
 	},
 	getFlexInfo: function (wgt) {
