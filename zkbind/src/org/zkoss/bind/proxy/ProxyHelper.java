@@ -105,9 +105,6 @@ public class ProxyHelper {
 	public static <T extends Object> T createProxyIfAny(T origin, Annotation[] annotations) {
 		if (origin == null)
 			return null;
-		if (origin instanceof FormProxyObject) {
-			return origin;
-		}
 
 		origin = getOriginObject(origin);
 		boolean hasImmutableFields = false;
@@ -264,7 +261,7 @@ public class ProxyHelper {
 		factory.setFilter(FormProxyHandler.FORM_METHOD_FILTER);
 		if (origin instanceof FormProxyObject)
 			type = ((FormProxyObject) origin).getOriginObject().getClass();
-		else if (origin != null)
+		if (origin != null)
 			type = getTargetClassIfProxied(origin.getClass());
 
 		// set super class

@@ -21,6 +21,8 @@ ZK 9.6.3
   ZK-5030: column header disappearing when resizing column
   ZK-5111: require.js causes Toast.show() failed
   ZK-5223: the if element doesn't keep the position of its child component
+  ZK-4975: nested form proxies update original object (without submit to origin)
+  ZK-4976: nested listproxies update original object without outer submit
 
 * Upgrade Notes
 
