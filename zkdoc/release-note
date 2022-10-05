@@ -41,6 +41,7 @@ ZK 9.6.3
   ZK-5167: showBusy() doesn't mask the whole page
   ZK-5168: height calculation in groupbox with css scale incorrect after ZK-4670
   ZK-5177: signature saves a background image into a larger one
+  ZK-5181: Optimize the use of DefinitionNotFoundException when creating event queues
 
 * Upgrade Notes
 
