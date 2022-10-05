@@ -878,7 +878,7 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 
 	redrawpp_(out: string[]): void {
 		out.push('<div id="', this.uuid, '-pp" class="', this.$s('popup'),
-			'" style="display:none" role="dialog" aria-labelledby="', this._pop.uuid, '-title">');
+			'" style="display:none" role="dialog" aria-labelledby="', this._pop.uuid, '-title" tabindex="-1">');
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
 
