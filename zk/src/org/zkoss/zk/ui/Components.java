@@ -46,7 +46,6 @@ import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.ext.Scope;
 import org.zkoss.zk.ui.ext.ScopeListener;
 import org.zkoss.zk.ui.metainfo.ComponentDefinition;
-import org.zkoss.zk.ui.metainfo.DefinitionNotFoundException;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
@@ -209,9 +208,10 @@ public class Components {
 	 */
 	public static final ComponentDefinition getDefinitionByDeviceType(String deviceType, Class cls) {
 		for (LanguageDefinition ld : LanguageDefinition.getByDeviceType(deviceType)) {
-			try {
-				return ld.getComponentDefinition(cls);
-			} catch (DefinitionNotFoundException ex) { //ignore
+			ComponentDefinition definitionIfAny = ld.getComponentDefinitionIfAny(
+					cls);
+			if (definitionIfAny != null) {
+				return definitionIfAny;
 			}
 		}
 		return null;

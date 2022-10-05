@@ -478,17 +478,13 @@ public class Parser {
 				noEL("extends", extds, pi);
 				ref = langdef.getComponentDefinition(extds);
 			} else {
-				try {
-					final Class cls = pgdef.getImportedClassResolver().resolveClass(clsnm);
-					if (lang != null) {
-						ref = langdef.getComponentDefinition(cls);
-						//throw exception if not found
-					} else {
-						ref = pgdef.getComponentDefinition(cls, true);
-						if (ref == null) //return null if not found
-							ref = Components.getDefinitionByDeviceType(langdef.getDeviceType(), cls);
-					}
-				} catch (Throwable ex) { //ignore
+				final Class cls = pgdef.getImportedClassResolver().resolveClass(clsnm);
+				if (lang != null) {
+					ref = langdef.getComponentDefinitionIfAny(cls);
+				} else {
+					ref = pgdef.getComponentDefinition(cls, true);
+					if (ref == null) //return null if not found
+						ref = Components.getDefinitionByDeviceType(langdef.getDeviceType(), cls);
 				}
 			}
 
