@@ -593,7 +593,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 
 	redrawpp_: function (out) {
 		out.push('<div id="', this.uuid, '-pp" class="', this.$s('popup'),
-			'" style="display:none" role="dialog" aria-labelledby="', this._pop.uuid, '-title">');
+			'" style="display:none" role="dialog" aria-labelledby="', this._pop.uuid, '-title" tabindex="-1">');
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
 

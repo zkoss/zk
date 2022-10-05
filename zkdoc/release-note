@@ -30,6 +30,7 @@ ZK 9.6.3
   ZK-5181: Optimize the use of DefinitionNotFoundException when creating event queues
   ZK-5148: datebox throws a js error with locale specified
   ZK-5156: locale format doesn't keep the fractional part
+  ZK-5180: Bandbox closes its popup when clicking on day of a datebox
 
 * Upgrade Notes
 
