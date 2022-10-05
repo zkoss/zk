@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B96-ZK-5181.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		2022/10/5, Created by jumperchen
+
+Copyright (C) 2022 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	The "Average length (nano):" time should be less than 1,000,000
+<div apply="org.zkoss.zktest.test2.B96_ZK_5181Composer"/>
+</zk>
