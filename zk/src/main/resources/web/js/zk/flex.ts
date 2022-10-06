@@ -538,6 +538,8 @@ export namespace flex_global {
 				pwgt = wgt.parent;
 			if (!pwgt) return;
 			let minFlexInfoList: zk.MinFlexInfo[] | undefined = [];
+			const fContainer = (pwgt instanceof zk.Page) ? pwgt.$n() : pwgt.getFlexContainer_();
+
 			if ((cssFlexAppliedInfo && cssFlexAppliedInfo.flexApplied)) { //other vflex/hflex sibling has done it!
 				minFlexInfoList = cssFlexAppliedInfo.minFlexInfoList;
 				if (minFlexInfoList) { //still need to call fixMinFlex
@@ -547,9 +549,13 @@ export namespace flex_global {
 					}
 					pwgt.afterChildrenFlex_(wgt);
 				}
+				// Fix ZK-5153
+				const fcWgt: zk.Widget & {_cssflexContainer?: boolean} | undefined = zk.$(fContainer);
+				if (fcWgt && fcWgt._cssflexContainer) {
+					jq(fContainer).addClass('z-flex').addClass(zFlex.getFlexInfo(wgt).isFlexRow ? 'z-flex-row' : 'z-flex-column');
+				}
 				return;
 			}
-			const fContainer = (pwgt instanceof zk.Page) ? pwgt.$n() : pwgt.getFlexContainer_();
 			if (fContainer == null) { //using old flex
 				wgt._cssflex = false;
 				return;
@@ -613,8 +619,17 @@ export namespace flex_global {
 			if (minFlexInfoList.length > 0)
 				cssFlexAppliedInfo.minFlexInfoList = minFlexInfoList;
 
-			if (!isAllMin)
+			const fcWgt: zk.Widget & {_cssflexContainer?: boolean} | undefined = zk.$(fContainer);
+			if (!isAllMin) {
+				if (fcWgt) {
+					fcWgt._cssflexContainer = true;
+				}
 				jq(fContainer).addClass('z-flex').addClass(isRow ? 'z-flex-row' : 'z-flex-column');
+			} else {
+				if (fcWgt) {
+					delete fcWgt._cssflexContainer;
+				}
+			}
 
 			for (let i = 0, length = cwgtsz.length; i < length; i++) {
 				const szInfo = cwgtsz[i];
@@ -667,8 +682,12 @@ export namespace flex_global {
 					noSibFlex = noSibFlex ? !jqFcc.hasClass(flexItemClass) : false;
 			}
 
-			if (clearAllSiblings || noSibFlex)
+			if (clearAllSiblings || noSibFlex) {
+				const fcWgt: zk.Widget & {_cssflexContainer?: boolean} | undefined = zk.$(fContainer);
+				if (fcWgt) delete fcWgt._cssflexContainer;
 				jq(fContainer).removeClass('z-flex').removeClass(isRow ? 'z-flex-row' : 'z-flex-column');
+			}
+
 			wgt.afterClearFlex_();
 		},
 		getFlexInfo(wgt: zk.Widget): { isFlexRow: boolean; flexContainerChildren: HTMLElement[]; childrenWidgets: zk.Widget[] } {
