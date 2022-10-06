@@ -37,6 +37,7 @@ ZK 9.6.3
   ZK-4974: grid-column with min-width
   ZK-5030: column header disappearing when resizing column
   ZK-5111: require.js causes Toast.show() failed
+  ZK-5153: window with vflex content broken after title update
 
 * Upgrade Notes
 
