@@ -430,11 +430,11 @@ export namespace utl_global {
 			if (mask) {
 				// old IE will get the auto value by default.
 				var zIndex: string | number = $txt.css('z-index');
-				if (zIndex == 'auto' || typeof zIndex === 'string')
+				if (zIndex == 'auto')
 					zIndex = 1;
 				n.z_mask = new zk.eff.FullMask({
 					mask: jq(idmsk, zk)[0],
-					zIndex: zIndex - 1
+					zIndex: (zIndex as number) - 1
 				});
 				jq('html').on('keydown', zk.$void);
 			}
