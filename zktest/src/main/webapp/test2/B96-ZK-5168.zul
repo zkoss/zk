@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B96-ZK-5168.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		2022/10/4, Created by jumperchen
+
+Copyright (C) 2022 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<style>
+		html, body {
+		padding: 0;
+		margin: 0;
+		height: 100%;
+		width: 100%;
+		}
+	</style>
+	<!-- <script><![CDATA[
+		zk.afterLoad("zk", function () {
+			var _xzjq = {};
+			zk.override(zjq.prototype, _xzjq, {
+				vflexHeight: function () {
+					var el = this.jq[0],
+						hgh = el.parentNode.clientHeight;
+					for (var p = el; p = p.previousSibling;)
+						if (p.offsetHeight && zk(p).isVisible())
+							hgh -= p.offsetHeight; //may undefined
+					for (var p = el; p = p.nextSibling;)
+						if (p.offsetHeight && zk(p).isVisible())
+							hgh -= p.offsetHeight; //may undefined
+					return hgh;
+				}
+			 });
+		});
+	]]></script>-->
+	<label>
+		The height of the left groupbox should not be less then its outer div (i.e. blue border)
+	</label>
+	<div style="display:flex; flex-direction: row;">
+		<div style="transform: scale(0.8); transform-origin: left top;">
+			<div>
+				<groupbox mold="3d" height="430px" width="700px" contentStyle="overflow:auto;border:solid 1px gray;" style="border: solid 1px blue;">
+					<caption label="Component with scale(0.8)"/>
+					<image src="https://www.zkoss.org/resource/img/Mainpage/main-banner-image-10.png" height="565" width="433"/>
+				</groupbox>
+			</div>
+		</div>
+		<div>
+			<groupbox mold="3d" height="430px" width="700px" contentStyle="overflow:auto;border:solid 1px gray;" style="border: solid 1px blue;">
+				<caption label="Component"/>
+				<image src="https://www.zkoss.org/resource/img/Mainpage/main-banner-image-10.png" height="565" width="433"/>
+			</groupbox>
+		</div>
+	</div>
+</zk>
