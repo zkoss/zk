@@ -602,7 +602,7 @@ var DateFmt = {
 		}
 		return txt;
 	},
-	getYDelta(date: Date, localeDateTimeFormat: Intl.DateTimeFormat): number { // override
+	getYDelta(date?: Date, localeDateTimeFormat?: Intl.DateTimeFormat): number { // override
 		return 0;
 	},
 	getEraName(date: Date, localizedSymbols: zk.LocalizedSymbols, localeDateTimeFormat?: Intl.DateTimeFormat): string { // override
@@ -632,8 +632,8 @@ export class Calendar extends zk.Object {
 		super();
 		this._date = date;
 		if (localizedSymbols) {
-			var localeDateTimeFormat = new Intl.DateTimeFormat(localizedSymbols.LAN_TAG, { year: 'numeric' });
-			this._offset = localizedSymbols.YDELTA || zk.fmt.Date.getYDelta(date!._moment.toDate(), localeDateTimeFormat);
+			const localeDateTimeFormat = new Intl.DateTimeFormat(localizedSymbols.LAN_TAG, {year: 'numeric'});
+			this._offset = localizedSymbols.YDELTA || zk.fmt.Date.getYDelta(date ? date._moment.toDate() : undefined, localeDateTimeFormat);
 		}
 	}
 
