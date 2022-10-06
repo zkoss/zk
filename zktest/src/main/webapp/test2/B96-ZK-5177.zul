@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B96-ZK-5177.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		2022/10/5, Created by jumperchen
+
+Copyright (C) 2022 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Click the save icon to download the file.
+		2. The dimensions of the downloaded file should be "width: 598" and height: 298".
+	</label>
+	<script>
+		window.devicePixelRatio = 1.5;
+	</script>
+	<signature id="sig" width="600px" height="300px"
+	           backgroundImage="/img/ZK-Logo.gif"
+	           backgroundIncluded="true" onSave="Filedownload.save(event.getMedia(), null);"/>
+</zk>
