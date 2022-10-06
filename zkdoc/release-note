@@ -32,6 +32,7 @@ ZK 9.6.3
   ZK-5156: locale format doesn't keep the fractional part
   ZK-5180: Bandbox closes its popup when clicking on day of a datebox
   ZK-5205: ClientInfoEvent should preserve the precision of devicePixelRatio
+  ZK-5203: a highlighted window in an invisible parent doesn't get onSize event
 
 * Upgrade Notes
 
