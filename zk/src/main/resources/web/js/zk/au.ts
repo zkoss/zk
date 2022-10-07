@@ -1525,7 +1525,7 @@ export namespace au_global {
 			export function clientInfo(dtid?: string): void {
 				zAu._cInfoReg = true;
 				var orient = '',
-					dpr = 1;
+					dpr = 1.0;
 
 				if (zk.mobile) {
 					//change default portrait definition because landscape is the default orientation for this device/browser.
@@ -1542,7 +1542,7 @@ export namespace au_global {
 
 				var clientInfo = [new Date().getTimezoneOffset(),
 				screen.width, screen.height, screen.colorDepth,
-				jq.innerWidth(), jq.innerHeight(), jq.innerX(), jq.innerY(), dpr.toFixed(1), orient,
+				jq.innerWidth(), jq.innerHeight(), jq.innerX(), jq.innerY(), String(dpr), orient,
 				zk.mm.tz.guess()],
 					oldClientInfo = zAu._clientInfo;
 
