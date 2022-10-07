@@ -904,7 +904,7 @@ public abstract class AbstractTreeModel<E> implements TreeModel<E>, TreeSelectab
 	}
 
 	private void getChildNodes(List<E> all, E parent) {
-		for (int i = 0, j = getChildNodeCount(parent); i < j; i++) {
+		for (int i = 0, j = getChildCount(parent); i < j; i++) {
 			E child = getChild(parent, i);
 			if (child != null) {
 				all.add(child);
