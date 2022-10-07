@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B96-ZK-5208.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		2022/10/7, Created by jumperchen
+
+Copyright (C) 2022 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	If you can see this page, the bug has fixed.
+	<div apply="org.zkoss.zktest.test2.B96_ZK_5208Composer">
+		<tree id="tree" height="800px" width="600px" checkmark="true">
+			<treecols>
+				<treecol label="Name" />
+			</treecols>
+		</tree>
+	</div>
+</zk>
