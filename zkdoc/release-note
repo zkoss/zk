@@ -35,6 +35,7 @@ ZK 9.6.3
   ZK-5203: a highlighted window in an invisible parent doesn't get onSize event
   ZK-5116: NullPointerException happened during evaluating an EL expression
   ZK-5256: classloading issues with multiple war files
+  ZK-5208: Review use of getChildNodeCount in AbstractTreeModel getChildNodes
 
 * Upgrade Notes
 
