@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B96-ZK-5205.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		2022/10/7, Created by jumperchen
+
+Copyright (C) 2022 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<script>
+		window.devicePixelRatio = 1.234567;
+	</script>
+	<div onClientInfo="Clients.log(event.getDevicePixelRatio())"/>
+</zk>
