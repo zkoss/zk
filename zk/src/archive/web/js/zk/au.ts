@@ -1359,7 +1359,7 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	clientInfo: function (dtid) {
 		zAu._cInfoReg = true;
 		var orient = '',
-			dpr = 1;
+			dpr = 1.0;
 		
 		if (zk.mobile) {
 			//change default portrait definition because landscape is the default orientation for this device/browser.
@@ -1376,7 +1376,7 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 
 		var clientInfo = [new Date().getTimezoneOffset(),
 				screen.width, screen.height, screen.colorDepth,
-				jq.innerWidth(), jq.innerHeight(), jq.innerX(), jq.innerY(), dpr.toFixed(1), orient,
+				jq.innerWidth(), jq.innerHeight(), jq.innerX(), jq.innerY(), String(dpr), orient,
 				zk.mm.tz.guess()],
 			oldClientInfo = zAu._clientInfo;
 
