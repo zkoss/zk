@@ -546,9 +546,10 @@ zFlex = { //static methods
 			}
 
 			// Fix ZK-5153
-			var fcWgt = zk.$(fContainer);
-			if (fcWgt && fcWgt._cssflexContainer) {
-				jq(fContainer).addClass('z-flex').addClass(zFlex.getFlexInfo(wgt).isFlexRow ? 'z-flex-row' : 'z-flex-column');
+			var fcWgt = zk.$(fContainer),
+				fcJQ = jq(fContainer);
+			if (fcWgt && fcWgt._cssflexContainer && !fcJQ.hasClass('z-flex') /* fix for B95-ZK-4764.zul */) {
+				fcJQ.addClass('z-flex').addClass(zFlex.getFlexInfo(wgt).isFlexRow ? 'z-flex-row' : 'z-flex-column');
 			}
 			return;
 		}
