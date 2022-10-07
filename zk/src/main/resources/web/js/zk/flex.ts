@@ -550,9 +550,10 @@ export namespace flex_global {
 					pwgt.afterChildrenFlex_(wgt);
 				}
 				// Fix ZK-5153
-				const fcWgt: zk.Widget & {_cssflexContainer?: boolean} | undefined = zk.$(fContainer);
-				if (fcWgt && fcWgt._cssflexContainer) {
-					jq(fContainer).addClass('z-flex').addClass(zFlex.getFlexInfo(wgt).isFlexRow ? 'z-flex-row' : 'z-flex-column');
+				const fcWgt: zk.Widget & {_cssflexContainer?: boolean} | undefined = zk.$(fContainer),
+					fcJQ = jq(fContainer);
+				if (fcWgt && fcWgt._cssflexContainer && !fcJQ.hasClass('z-flex') /* fix for B95-ZK-4764.zul */) {
+					fcJQ.addClass('z-flex').addClass(zFlex.getFlexInfo(wgt).isFlexRow ? 'z-flex-row' : 'z-flex-column');
 				}
 				return;
 			}
