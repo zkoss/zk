@@ -173,10 +173,10 @@ public class ClassLocator implements XMLResourcesLocator {
 	private static void warningMessage(String message, String[] args, boolean strict) {
 		if (strict) {
 			String f = message.replace("{}", "%s");
-			String result = String.format(f, args);
+			String result = String.format(f, (Object []) args);
 			throw new SystemException(result);
 		} else {
-			log.warn(message, args);
+			log.warn(message, (Object[]) args);
 		}
 	}
 	/** Info used with getDependentXMLResource. */
