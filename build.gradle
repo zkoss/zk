@@ -88,18 +88,29 @@ subprojects {
 	// Prepare the result of TypeScript before gradle assemble
 	task compileTypeScript() {
 		setOnlyIf { project.ext['gradleFrontendSkip'] == 'false' }
-		doLast {
-			exec {
-				commandLine "$rootDir/node_modules/.bin/gulp", 'build:single', "--src=$projectDir/$resources/web/js", "--dest=$projectDir/$codegen/web/js"
+		if (new File("$projectDir/$resources/web/js").exists()) {
+			inputs.dir("$projectDir/$resources/web/js")
+			outputs.dir("$projectDir/$codegen/web/js")
+
+			doLast {
+				exec {
+					commandLine "$rootDir/node_modules/.bin/gulp", 'build:single', "--src=$projectDir/$resources/web/js", "--dest=$projectDir/$codegen/web/js"
+				}
 			}
 		}
 	}
 
 	task compileCSS() {
 		setOnlyIf { project.ext['gradleFrontendSkip'] == 'false' }
-		doLast {
-			exec {
-				commandLine "$rootDir/node_modules/.bin/gulp", 'build:minify-css', "--src=$projectDir/$resources/web/$project.name/css", "--dest=$projectDir/$codegen/web/$project.name/css"
+
+		if (new File("$projectDir/$resources/web/$project.name/css").exists()) {
+			inputs.dir("$projectDir/$resources/web/$project.name/css")
+			outputs.dir("$projectDir/$codegen/web/$project.name/css")
+
+			doLast {
+				exec {
+					commandLine "$rootDir/node_modules/.bin/gulp", 'build:minify-css', "--src=$projectDir/$resources/web/$project.name/css", "--dest=$projectDir/$codegen/web/$project.name/css"
+				}
 			}
 		}
 	}
@@ -145,9 +156,13 @@ subprojects {
 	// Compile LESS
 	task compileLess() {
 		setOnlyIf { project.ext['gradleFrontendSkip'] == 'false' }
-		doLast {
-			exec {
-				commandLine "$rootDir/node_modules/.bin/zklessc", '-s', "$projectDir/$resources/web/", '-o', "$projectDir/$codegen/web/", '-i', "$rootDir/zul/$resources/web/", '-i', "$zkcmlDir/zkmax/$resources/web/", '-c'
+		if (new File("$projectDir/$resources/web/$project.name/").exists()) {
+			inputs.dir("$projectDir/$resources/web/$project.name/")
+			outputs.dir("$projectDir/$codegen/web/$project.name/")
+			doLast {
+				exec {
+					commandLine "$rootDir/node_modules/.bin/zklessc", '-s', "$projectDir/$resources/web/", '-o', "$projectDir/$codegen/web/", '-i', "$rootDir/zul/$resources/web/", '-i', "$zkcmlDir/zkmax/$resources/web/", '-c'
+				}
 			}
 		}
 	}
