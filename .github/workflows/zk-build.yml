@@ -31,6 +31,16 @@ jobs:
           ref: 10-experiment
           path: zkcml-${{ github.run_id }}-${{ github.run_number }}
           ssh-key: '${{ secrets.SSH_KEY }}'
+      - run: |
+          mv zkcml-${{ github.run_id }}-${{ github.run_number }} ../zkcml
+          cd ../zkcml
+          if [ -e yarn.lock ]; then
+            yarn install --frozen-lockfile
+          elif [ -e package-lock.json ]; then
+            npm ci
+          else
+            npm i
+          fi
       - name: Build Latest ZK
         run: |
           sed -i 's/includeBuild/\/\/includeBuild/' settings.gradle
