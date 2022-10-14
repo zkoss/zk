@@ -311,7 +311,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 						}
 					}
 				} else if (vert) {
-					hgh -= zkxc.offsetHeightDoubleValue() + zkxc.marginHeight();
+					hgh -= cp.getBoundingClientRect().height + zkxc.marginHeight();
 				}
 
 				//horizontal size
