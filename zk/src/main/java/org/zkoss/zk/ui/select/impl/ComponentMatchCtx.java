@@ -28,6 +28,10 @@ public class ComponentMatchCtx {
 	// ::shadow support
 	private boolean _isShadowHost = false;
 
+	/*package*/ ComponentMatchCtx _lastChild; //for sibling to use
+	/*package*/ ComponentMatchCtx _lastShadowRoot; //for sibling to use
+	/*package*/ ComponentMatchCtx _shadowOwner; //shadow owner of non-shadow component
+
 	/*package*/ ComponentMatchCtx(Component component) { // used by root jumping
 		_comp = component;
 		_qualified = new boolean[0][0];
@@ -66,14 +70,17 @@ public class ComponentMatchCtx {
 		// ZK-2944: status clearing is conditional, let the caller handle it
 		// reset the status when moving to siblings 
 		_isShadowHost = !((ComponentCtrl) _comp).getShadowRoots().isEmpty();
+		// clear
+		_lastChild = null;
+		_lastShadowRoot = null;
+		_shadowOwner = null;
 	}
 
 	/*package*/ void moveToNextShadowSibling(Component next) {
 		_comp = next;
 		_compChildIndex++;
-		// ZK-2944: status clearing is conditional, let the caller handle it
-		// reset the status when moving to siblings 
-		_isShadowHost = !((ComponentCtrl) next).getShadowRoots().isEmpty();
+		// clear
+		_lastChild = null;
 	}
 
 	// getter //
