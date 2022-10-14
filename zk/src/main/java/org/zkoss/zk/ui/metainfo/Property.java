@@ -17,6 +17,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.metainfo;
 
 import java.lang.reflect.Method;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,6 +71,8 @@ public class Property extends ConditionValue {
 	 * (and use {@link #_mtd} in this case).
 	 */
 	private transient Method[] _mtds;
+
+	private ReentrantLock _lock = new ReentrantLock();
 
 	/** Constructs a property with a class that is known in advance.
 	 * @exception IllegalArgumentException if name is null
@@ -242,13 +245,16 @@ public class Property extends ConditionValue {
 		//(unless it is initialized at the constructor)
 		final Class cls = comp.getClass();
 		if (_lastcls == null) { //first tiime
-			synchronized (this) {
+			_lock.lock();
+			try {
 				if (_lastcls == null) { //not being initialized
 					final Object[] mi = resolve(cls);
 					_mtd = (Method) mi[0];
 					_mtds = (Method[]) mi[1];
 					_lastcls = cls;
 				}
+			} finally {
+				_lock.unlock();
 			}
 		}
 
@@ -267,9 +273,15 @@ public class Property extends ConditionValue {
 		//Note: if mtd and mtds are both null, it must be dyna-attr
 		//However, if dyna-attr, mtd or mtds might not be null
 		Class type = mtd != null ? mtd.getParameterTypes()[0] : Object.class;
-		if (_value != null)
-			_value.setExpectedType(type);
-		Object val = getValue(comp);
+		Object val;
+		_lock.lock();
+		try {
+			if (_value != null)
+				_value.setExpectedType(type); //change the _value._expr
+			val = getValue(comp);
+		} finally {
+			_lock.unlock();
+		}
 
 		Method m = null;
 		if (mtd != null) {

@@ -54,6 +54,7 @@ ZK 9.6.3
   ZK-3543: Can't wire <apply> with its ID
   ZK-5140: ZK loads vulnerable commons-io transitively
   ZK-5223: the if element doesn't keep the position of its child component
+  ZK-5116: NullPointerException happened during evaluating an EL expression
 
 * Upgrade Notes
 
