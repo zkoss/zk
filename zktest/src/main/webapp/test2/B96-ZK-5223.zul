@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-5223.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Thu Sep 29 16:13:11 CST 2022, Created by jameschu
+
+Copyright (C) 2022 Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label>Click button and see the order of "1) ,2) ,3) " should not change</label>
+	<zscript><![CDATA[
+        Map dummyVm = new HashMap();
+        dummyVm.put("flag", true);
+    ]]></zscript>
+	<div viewModel="@id('vm') @init(dummyVm)">
+		<apply id="test" template="test"/>
+	</div>
+	<template name="test">
+		<div id="header">
+			header
+		</div>
+		<div id="contentDiv">
+			<apply id="content" template="content"/>
+		</div>
+		<div id="footer">
+			footer
+		</div>
+	</template>
+	<template name="content">
+		<apply id="some-control" template="some-control"/>
+		<div id="div2">
+			2)
+			<button label="toggle A/B"
+					onClick='dummyVm.put("flag", !dummyVm.get("flag")); BindUtils.postNotifyChange(null, null, dummyVm, "flag");'/>
+		</div>
+		<if test="@load(vm.flag)">
+			<div>
+				3) show A
+			</div>
+		</if>
+		<if test="@load(not vm.flag)">
+			<div>
+				3) show B
+			</div>
+		</if>
+	</template>
+	<template name="some-control">
+		<div id="div1">
+			1) some control
+		</div>
+	</template>
+</zk>

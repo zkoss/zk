@@ -634,11 +634,14 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 					} else {
 						setPrevInsertion(newPrevious, previous);
 					}
-					previous = null;
+					_previousInsertion = null;
 				}
 				Component newNext = child._nextInsertion;
-				if (newNext == null) {
-					setPrevInsertion(this, child);
+				if (_nextInsertion != null) {
+					if (newNext == null) {
+						child._nextInsertion = _nextInsertion;
+					}
+					_nextInsertion = null;
 				}
 				if (_firstInsertion == child._firstInsertion || _firstInsertion == child._previousInsertion)
 					_firstInsertion = null; // reset
