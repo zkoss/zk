@@ -52,6 +52,7 @@ ZK 9.6.3
   ZK-5220: a listbox without ROD causes a websocket connection to close
   ZK-5256: classloading issues with multiple war files
   ZK-3543: Can't wire <apply> with its ID
+  ZK-5140: ZK loads vulnerable commons-io transitively
 
 * Upgrade Notes
 
