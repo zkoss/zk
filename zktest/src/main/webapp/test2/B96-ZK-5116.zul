@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-5116.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Wed Oct 05 11:45:50 CST 2022, Created by jameschu
+
+Copyright (C) 2022 Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label>
+		Reproduce in multi-threads
+		1. visit zul with chrome and stop at breakpoint A (ExValue#setExpectedType: _expr = null). This is thread A.
+		2. visit zul with another browser (firefox) and stop at breakpoint B (ExValue#getValue(Evaluator eval, Component comp): init), step to next line. This is thread B.
+		3. You should see thread A also processing into the init function, which means race condition disappear.
+	</label>
+	<include src="${'empty.zul'}"/>
+</zk>
