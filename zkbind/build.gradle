@@ -162,9 +162,9 @@ task zkbindAPIJar(type: Jar) {
 	from("$buildDir/classes/java/main") {
 		includeEmptyDirs = false
 		include "**/annotation/**.class"
-		include "**/BindContext.class", "**/Binder.class", "**/Converter.class", "**/Form.class", "**/FormStatus.class", "**/PhaseListener.class", "**/Property.class", "**/ValidationContext.class", "**/Validator.class", "**/Property.class"
+		include "**/BindContext.class", "**/Binder.class", "**/Converter.class", "**/Form.class", "**/FormStatus.class", "**/Phase.class", "**/PhaseListener.class", "**/Property.class", "**/ValidationContext.class", "**/Validator.class", "**/Property.class"
 		include "**/proxy/FormFieldCleaner.class", "**/proxy/FormProxyObject.class", "**/proxy/ProxyNode.class"
-		include "**/sys/BindEvaluatorX.class", "**/sys/Binding.class", "**/sys/FormBinding.class", "**/sys/PropertyBinding.class", "**/sys/SaveBinding.class", "**/sys/SavePropertyBinding.class"
+		include "**/sys/BindEvaluatorX.class", "**/sys/Binding.class", "**/sys/ConditionType.class", "**/sys/FormBinding.class", "**/sys/PropertyBinding.class", "**/sys/SaveBinding.class", "**/sys/SavePropertyBinding.class"
 	}
 }
 
@@ -177,9 +177,9 @@ task zkbindIMPLJar(type: Jar) {
 	from "$buildDir/resources/main"
 	from("$buildDir/classes/java/main") {
 		includeEmptyDirs = false
-		exclude "**/BindContext.class", "**/Binder.class", "**/Converter.class", "**/Form.class", "**/FormStatus.class", "**/PhaseListener.class", "**/Property.class", "**/ValidationContext.class", "**/Validator.class", "**/Property.class"
+		exclude "**/BindContext.class", "**/Binder.class", "**/Converter.class", "**/Form.class", "**/FormStatus.class", "**/Phase.class", "**/PhaseListener.class", "**/Property.class", "**/ValidationContext.class", "**/Validator.class", "**/Property.class"
 		exclude "**/proxy/FormFieldCleaner.class", "**/proxy/FormProxyObject.class", "**/proxy/ProxyNode.class"
-		exclude "**/sys/BindEvaluatorX.class", "**/sys/Binding.class", "**/sys/FormBinding.class", "**/sys/PropertyBinding.class", "**/sys/SaveBinding.class", "**/sys/SavePropertyBinding.class"
+		exclude "**/sys/BindEvaluatorX.class", "**/sys/Binding.class", "**/sys/ConditionType.class", "**/sys/FormBinding.class", "**/sys/PropertyBinding.class", "**/sys/SaveBinding.class", "**/sys/SavePropertyBinding.class"
 	}
 	manifest {
 		attributes(
