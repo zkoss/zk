@@ -5,12 +5,17 @@ package org.zkoss.zk.ui.select.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Optional;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.zkoss.lang.Strings;
+import org.zkoss.util.Pair;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.HtmlShadowElement;
 import org.zkoss.zk.ui.IdSpace;
@@ -38,6 +43,7 @@ public class ComponentIterator implements Iterator<Component> {
 
 	private Component _offsetRoot;
 	private ComponentMatchCtx _currCtx;
+	private Set<String> _trackedUuid;
 
 	/**
 	 * Create an iterator which selects from all the components in the page.
@@ -72,6 +78,9 @@ public class ComponentIterator implements Iterator<Component> {
 		_posOffset = getCommonSeqLength(_selectorList);
 		_allIds = isAllIds(_selectorList, _posOffset);
 		_lookingForShadow = lookingForShadow(_selectorList);
+		if (_lookingForShadow) {
+			_trackedUuid = new HashSet<>();
+		}
 
 		_root = root;
 		_page = page;
@@ -200,13 +209,24 @@ public class ComponentIterator implements Iterator<Component> {
 			return;
 		_next = seekNext();
 		_ready = true;
+		if (_next == null && _trackedUuid != null) {
+			_trackedUuid.clear();
+		}
 	}
 
 	private Component seekNext() {
-		_currCtx = _index < 0 ? buildRootCtx() : buildNextCtx();
+		if (_index < 0) {
+			_currCtx = buildRootCtx();
+		} else {
+			if (_lookingForShadow) {
+				_currCtx = buildNextShadowCtx();
+			} else {
+				_currCtx = buildNextCtx();
+			}
+		}
 
 		while (_currCtx != null && !_currCtx.isMatched())
-			_currCtx = buildNextCtx();
+			_currCtx = _lookingForShadow ? buildNextShadowCtx() : buildNextCtx();
 		if (_currCtx != null) {
 			_index++;
 			return _currCtx.getComponent();
@@ -291,24 +311,11 @@ public class ComponentIterator implements Iterator<Component> {
 			return null;
 
 		// TODO: how to skip tree branches
-
-		// traverse shadow element tree only when selecting shadow elements
-		if (_lookingForShadow && _currCtx.isShadowHost()) {
-			return buildFirstShadowChildCtx(_currCtx);
-		}
-
-		// traverse non shadow component tree
 		if (_currCtx.getComponent().getFirstChild() != null) {
 			return buildFirstChildCtx(_currCtx);
 		}
 
 		while (_currCtx.getComponent().getNextSibling() == null) {
-			if (_lookingForShadow) {
-				ShadowElement se = getNextShadowRootSibling();
-				if (se != null) {
-					return buildNextShadowSiblingCtx(_currCtx, se);
-				}
-			}
 			_currCtx = _currCtx.getParent();
 			if (_currCtx == null || _currCtx.getComponent() == (_posOffset > 0 ? _offsetRoot : _root))
 				return null; // reached root
@@ -316,26 +323,113 @@ public class ComponentIterator implements Iterator<Component> {
 		return buildNextSiblingCtx(_currCtx);
 	}
 
-	// shadow root have no parent, only host. Retrieve sibling from host's seRoots, if there is any.
-	private ShadowElement getNextShadowRootSibling() {
+	private Component getNextUntrackedChild(Component comp) {
+		Component child = comp.getFirstChild();
+		while (child != null) {
+			if (_trackedUuid.contains(child.getUuid())) {
+				child = child.getNextSibling();
+			} else {
+				break; //found
+			}
+		}
+		return child;
+	}
+
+	private Component getNextUntrackedDistributedChild(List<Component> distributedChildren) {
+		Optional<Component> matched = distributedChildren.stream().filter(comp -> !_trackedUuid.contains(comp.getUuid())).findFirst();
+		return matched.orElse(null);
+	}
+
+	private Pair<Integer, ShadowElement> getNextUntrackedShadowRoot(List<ShadowElement> shadowRoots) {
+		AtomicInteger index = new AtomicInteger(-1);
+		Optional<ShadowElement> matched = shadowRoots.stream().filter(shadowElement -> {
+			index.getAndIncrement(); // to keep sibling info
+			return !_trackedUuid.contains(((HtmlShadowElement) shadowElement).getUuid());
+		}).findFirst();
+		return matched.map(shadowElement -> new Pair<>(index.get(), shadowElement)).orElse(null);
+	}
+
+	private ComponentMatchCtx buildNextShadowCtx() {
 		Component comp = _currCtx.getComponent();
-		if (comp instanceof ShadowElement) {
-			Component host = ((ShadowElement) comp).getShadowHost();
-			if (host instanceof ComponentCtrl) {
-				List<ShadowElement> seRoots = ((ComponentCtrl) host).getShadowRoots();
-				if (seRoots != null && seRoots.size() > 1) { //if equal to 1, then it is the current comp itelf
-					int index = seRoots.indexOf(comp) + 1;
-					if (index < seRoots.size()) { //
-						return seRoots.get(index);
-					}
+		boolean isShadow = comp instanceof ShadowElement;
+		Component child = getNextUntrackedChild(comp);
+		if (!isShadow) {
+			boolean isShadowHost = _currCtx.isShadowHost();
+			if (isShadowHost) {
+				Pair<Integer, ShadowElement> nextUntrackedShadowRoot = getNextUntrackedShadowRoot(((ComponentCtrl) comp).getShadowRoots());
+				HtmlShadowElement shadow = nextUntrackedShadowRoot != null ? (HtmlShadowElement) nextUntrackedShadowRoot.getY() : null;
+				int shadowIndex = nextUntrackedShadowRoot != null ? nextUntrackedShadowRoot.getX() : -1;
+				ComponentMatchCtx componentMatchCtx = buildChildCtxWithShadowOrComponent(child, shadow, shadowIndex == 0);
+				if (componentMatchCtx != null) {
+					return componentMatchCtx;
+				}
+			} else if (child != null) {
+				return buildChildCtx(child);
+			}
+		} else {
+			HtmlShadowElement htmlShadowElement = (HtmlShadowElement) comp;
+			Component distributedChild = getNextUntrackedDistributedChild(htmlShadowElement.getDistributedChildren());
+			HtmlShadowElement shadowChild = (HtmlShadowElement) getNextUntrackedChild(htmlShadowElement);
+			int shadowIndex = -1;
+			if (shadowChild != null) {
+				shadowIndex = comp.getChildren().indexOf(shadowChild);
+			}
+			ComponentMatchCtx componentMatchCtx = buildChildCtxWithShadowOrComponent(distributedChild, shadowChild, shadowIndex == 0);
+			if (componentMatchCtx != null) {
+				return componentMatchCtx;
+			}
+		}
+		_currCtx = _currCtx._shadowOwner != null ? _currCtx._shadowOwner : _currCtx.getParent();
+		if (_currCtx == null) {
+			return null;
+		} else {
+			Component currComp = _currCtx.getComponent();
+			// check if root + no untracked shadow roots + no untracked child
+			if (currComp == (_posOffset > 0 ? _offsetRoot : _root) && (!_currCtx.isShadowHost() || getNextUntrackedShadowRoot(((ComponentCtrl) currComp).getShadowRoots()) == null) && getNextUntrackedChild(currComp) == null) {
+				return null;
+			}
+		}
+		return buildNextShadowCtx();
+	}
+
+	private ComponentMatchCtx buildChildCtxWithShadowOrComponent(Component comp, HtmlShadowElement htmlShadowElement, boolean isFirstShadow) {
+		if (comp != null && htmlShadowElement != null) {
+			try {
+				switch (HtmlShadowElement.inRange(htmlShadowElement, comp)) {
+					case PREVIOUS:
+					case BEFORE_PREVIOUS:
+						return buildChildCtx(comp);
+					case IN_RANGE:
+					case FIRST:
+					case LAST:
+					case NEXT:
+					case AFTER_NEXT:
+					case UNKNOWN:
+						return buildShadowCtx(_currCtx, htmlShadowElement, isFirstShadow);
+				}
+			} catch (IllegalStateException ex) {
+				if (htmlShadowElement.getDistributedChildren().contains(comp)) { //inside nested shadow
+					return buildShadowCtx(_currCtx, htmlShadowElement, isFirstShadow);
 				}
 			}
+		} else if (comp != null) {
+			return buildChildCtx(comp);
+		} else if (htmlShadowElement != null) {
+			return buildShadowCtx(_currCtx, htmlShadowElement, isFirstShadow);
 		}
 		return null;
 	}
 
-	private ComponentMatchCtx buildNextShadowSiblingCtx(ComponentMatchCtx ctx, ShadowElement se) {
-		ctx.moveToNextShadowSibling((Component) se);
+	private ComponentMatchCtx buildShadowCtx(ComponentMatchCtx parent, HtmlShadowElement htmlShadowElement, boolean isFirstChild) {
+		_trackedUuid.add(htmlShadowElement.getUuid());
+		if (_currCtx.getComponent() instanceof ShadowElement) {
+			return buildShadowChildCtx(htmlShadowElement);
+		}
+		return isFirstChild ? buildFirstShadowRootCtx(parent, htmlShadowElement) : buildNextShadowRootSiblingCtx(parent._lastShadowRoot, htmlShadowElement);
+	}
+
+	private ComponentMatchCtx buildNextShadowRootSiblingCtx(ComponentMatchCtx ctx, HtmlShadowElement htmlShadowElement) {
+		ctx.moveToNextShadowSibling(htmlShadowElement);
 		//TODO need to match selectors
 		for (Selector selector : _selectorList) {
 			int i = selector.getSelectorIndex();
@@ -379,10 +473,9 @@ public class ComponentIterator implements Iterator<Component> {
 		return ctx;
 	}
 
-	private ComponentMatchCtx buildFirstShadowChildCtx(ComponentMatchCtx parent) {
-		ComponentMatchCtx ctx = new ComponentMatchCtx(
-				((HtmlShadowElement) ((ComponentCtrl) parent.getComponent()).getShadowRoots().get(0)), parent);
-
+	private ComponentMatchCtx buildFirstShadowRootCtx(ComponentMatchCtx parent, HtmlShadowElement htmlShadowElement) {
+		ComponentMatchCtx ctx = new ComponentMatchCtx(htmlShadowElement, parent);
+		parent._lastShadowRoot = ctx;
 		if (_posOffset == 0)
 			matchLevel0(ctx);
 
@@ -402,9 +495,42 @@ public class ComponentIterator implements Iterator<Component> {
 		return ctx;
 	}
 
-	private ComponentMatchCtx buildFirstChildCtx(ComponentMatchCtx parent) {
+	private ComponentMatchCtx buildShadowChildCtx(HtmlShadowElement se) {
+		_trackedUuid.add(se.getUuid());
+		ComponentMatchCtx parent = _currCtx;
+		ComponentMatchCtx lastCtx = parent._lastChild;
+		if (lastCtx == null) {
+			return buildFirstChildCtx(parent);
+		}
+		return buildNextSiblingCtx(lastCtx);
+	}
 
+	private ComponentMatchCtx buildChildCtx(Component comp) {
+		_trackedUuid.add(comp.getUuid());
+		ComponentMatchCtx parent = _currCtx;
+		boolean insideShadow = false;
+		if (parent.getComponent() instanceof ShadowElement) {
+			insideShadow = true;
+			while (parent != null && parent.getComponent() instanceof ShadowElement) {
+				parent = parent.getParent();
+			}
+		}
+		ComponentMatchCtx ctx;
+		if (parent != null) {
+			ComponentMatchCtx lastCtx = parent._lastChild;
+			ctx = lastCtx == null ? buildFirstChildCtx(parent) : buildNextSiblingCtx(lastCtx);
+		} else {
+			ctx = buildCompCtx0(new ComponentMatchCtx(comp, _currCtx));
+		}
+		if (insideShadow) {
+			ctx._shadowOwner = _currCtx;
+		}
+		return ctx;
+	}
+
+	private ComponentMatchCtx buildFirstChildCtx(ComponentMatchCtx parent) {
 		ComponentMatchCtx ctx = new ComponentMatchCtx(parent.getComponent().getFirstChild(), parent);
+		parent._lastChild = ctx;
 		if (_posOffset == 0)
 			matchLevel0(ctx);
 
@@ -431,7 +557,10 @@ public class ComponentIterator implements Iterator<Component> {
 
 	private ComponentMatchCtx buildNextSiblingCtx(ComponentMatchCtx ctx) {
 		ctx.moveToNextSibling(); //no more status clearing when moving
+		return buildCompCtx0(ctx);
+	}
 
+	private ComponentMatchCtx buildCompCtx0(ComponentMatchCtx ctx) {
 		for (Selector selector : _selectorList) {
 			int i = selector.getSelectorIndex();
 			int posEnd = _posOffset > 0 ? _posOffset - 1 : 0;
