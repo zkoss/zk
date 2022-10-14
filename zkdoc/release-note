@@ -47,6 +47,7 @@ ZK 9.6.3
   ZK-5203: a highlighted window in an invisible parent doesn't get onSize event
   ZK-5208: Review use of getChildNodeCount in AbstractTreeModel getChildNodes
   ZK-5215: cannot load locale-dependent resources in a relative path
+  ZK-5115: Websocket endpoint registers threadpool, doesn't close, prevents tomcat graceful stop, threads remain after stop
 
 * Upgrade Notes
 
