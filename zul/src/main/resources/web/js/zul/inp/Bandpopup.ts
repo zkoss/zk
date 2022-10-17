@@ -23,20 +23,22 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.inp.Bandpopup')
 export class Bandpopup extends zul.Widget {
-	override parent!: zul.inp.Bandbox | undefined;
-	override nextSibling!: zul.inp.Bandpopup | undefined;
-	override previousSibling!: zul.inp.Bandpopup | undefined;
+	override parent?: zul.inp.Bandbox;
+	override nextSibling?: zul.inp.Bandpopup;
+	override previousSibling?: zul.inp.Bandpopup;
 	_shallClosePopup?: boolean;
 
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
-		jq(this.$n()).on('focusin', this.proxy(this._focusin))
-			.on('focusout', this.proxy(this._focusout));
+		jq(this.$n())
+			.on('focusin', this._focusin.bind(this))
+			.on('focusout', this._focusout.bind(this));
 	}
 
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
-		jq(this.$n()).off('focusout', this.proxy(this._focusout))
-			.off('focusin', this.proxy(this._focusin));
+		jq(this.$n())
+			.off('focusout', this._focusout.bind(this))
+			.off('focusin', this._focusin.bind(this));
 		super.unbind_(skipper, after, keepRod);
 	}
 
@@ -45,20 +47,36 @@ export class Bandpopup extends zul.Widget {
 	}
 
 	_focusout(e: JQuery.FocusOutEvent): void {
-		var bandbox = this.parent,
-			self = this;
+		const bandbox = this.parent;
 		if (e.relatedTarget) {
-			if (bandbox && bandbox.isOpen() && !jq.isAncestor(bandbox.$n('pp'), e.relatedTarget as HTMLElement))
+			if (bandbox?.isOpen() && !jq.isAncestor(bandbox.$n('pp'), e.relatedTarget as HTMLElement))
 				bandbox.close();
+		} else if ((e.originalEvent?.target as {disabled?: boolean} | null | undefined)?.disabled) { // eslint-disable-line zk/noNull
+			if (bandbox) {
+				// ZK-5155: A focusout/blur event can be fired when an element is disabled. If a child of this Bandpopup
+				// loses its focus due to being disabled, let the popup receive focus.
+				const popup = bandbox.$n_('pp');
+				popup.focus(); // The popup can receive focus because it has tabindex set.
+				e.relatedTarget = popup;
+			}
 		} else {
 			// for solving B96-ZK-4748, treechildren will rerender itself when clicking
 			// the open icon, and JQ will simulate a fake focusout event without any relatedTarget.
 
-			self._shallClosePopup = true;
-			setTimeout(function () {
-				if (bandbox && bandbox.isOpen() && self._shallClosePopup) {
-					bandbox.close();
-					self._shallClosePopup = false;
+			this._shallClosePopup = true;
+			setTimeout(() => {
+				if (bandbox?.isOpen() && this._shallClosePopup && !jq.isAncestor(bandbox.$n('pp'), document.activeElement)) {
+					const blurredElement = e.originalEvent?.target;
+					if (blurredElement && !document.body.contains(blurredElement as Node)) {
+						// ZK-5155: The focusout/blur event is due to unmounting the target from DOM. In this case, let the
+						// bandpopup take focus, and don't close the bandpopup.
+						const popup = bandbox.$n_('pp');
+						popup.focus(); // The popup can receive focus because it has tabindex set.
+						e.relatedTarget = popup;
+					} else {
+						bandbox.close();
+					}
+					this._shallClosePopup = false;
 				}
 			});
 		}
@@ -67,8 +85,7 @@ export class Bandpopup extends zul.Widget {
 	//super
 	override afterChildrenMinFlex_(orient: zk.FlexOrient): void {
 		if (orient == 'w') {
-			var bandbox = this.parent,
-				pp = bandbox && bandbox.$n('pp');
+			const pp = this.parent?.$n('pp');
 			if (pp) {
 				// test case is B50-ZK-859.zul
 				pp.style.width = jq.px0(this._hflexsz! + zk(pp).padBorderWidth());

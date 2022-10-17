@@ -770,14 +770,9 @@ export abstract class MeshWidget extends zul.Widget {
 	 */
 	setPaginal(paginal?: zul.mesh.Paging): this {
 		if (this._paginal != paginal) {
-			if (this._paginal) {
-				this._paginal.setMeshWidget();
-			}
+			this._paginal?.setMeshWidget();
 			this._paginal = paginal;
-
-			if (this._paginal) {
-				this._paginal.setMeshWidget(this);
-			}
+			this._paginal?.setMeshWidget(this);
 		}
 		return this;
 	}
@@ -787,8 +782,7 @@ export abstract class MeshWidget extends zul.Widget {
 	 * @see Paging#getPageSize
 	 */
 	getPageSize(): number {
-		var pgnl = this.getPagingChild();
-		return pgnl ? pgnl.getPageSize() : 0;
+		return this.getPagingChild()?.getPageSize() ?? 0;
 	}
 
 	/** Sets the page size, aka., the number rows per page.
@@ -814,8 +808,7 @@ export abstract class MeshWidget extends zul.Widget {
 	 * @see Paging#getActivePage
 	 */
 	getActivePage(): number {
-		var pgnl = this.getPagingChild();
-		return pgnl ? pgnl.getActivePage() : 0;
+		return this.getPagingChild()?.getActivePage() ?? 0;
 	}
 
 	/** Sets the active page (starting from 0).
@@ -823,9 +816,7 @@ export abstract class MeshWidget extends zul.Widget {
 	 * @see Paging#setActivePage
 	 */
 	setActivePage(activePage: number): this {
-		const pgnl = this.getPagingChild();
-		if (pgnl)
-			pgnl.setActivePage(activePage);
+		this.getPagingChild()?.setActivePage(activePage);
 		return this;
 	}
 

@@ -31,6 +31,7 @@ ZK 9.6.3
 
 * Bugs
   ZK-4973: tabbox tab.invalidate() loses selected tab
+  ZK-5155: bandbox closes its popup when switching active page
   ZK-5170: borderlayout title css rules are missing under sapphire theme
   ZK-5140: ZK loads vulnerable commons-io transitively
   ZK-5220: a listbox without ROD causes a websocket connection to close
