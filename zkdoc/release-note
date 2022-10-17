@@ -30,6 +30,10 @@ ZK 9.6.3
 * Features
 
 * Bugs
+  ZK-5140: ZK loads vulnerable commons-io transitively
+  ZK-5220: a listbox without ROD causes a websocket connection to close
+  ZK-5115: Websocket endpoint registers threadpool, doesn't close, prevents tomcat graceful stop, threads remain after stop
+  ZK-5179: Custom attributes on template do not resolve after ZK-5002
   ZK-2259: Tabbox doesn't select second tab automatically when first tab is invisible
   ZK-5214: Locales.getLocale("de_DE_dgl") returns a different locale than zk 8
   ZK-5247: dynamically rerendered row breaking hflex min column
@@ -37,6 +41,7 @@ ZK 9.6.3
   ZK-4974: grid-column with min-width
   ZK-5030: column header disappearing when resizing column
   ZK-5111: require.js causes Toast.show() failed
+  ZK-5223: the if element doesn't keep the position of its child component
   ZK-5153: window with vflex content broken after title update
   ZK-5167: showBusy() doesn't mask the whole page
   ZK-5168: height calculation in groupbox with css scale incorrect after ZK-4670
@@ -45,15 +50,10 @@ ZK 9.6.3
   ZK-5148: datebox throws a js error with locale specified
   ZK-5205: ClientInfoEvent should preserve the precision of devicePixelRatio
   ZK-5203: a highlighted window in an invisible parent doesn't get onSize event
-  ZK-5208: Review use of getChildNodeCount in AbstractTreeModel getChildNodes
-  ZK-5115: Websocket endpoint registers threadpool, doesn't close, prevents tomcat graceful stop, threads remain after stop
-  ZK-5179: Custom attributes on template do not resolve after ZK-5002
-  ZK-5220: a listbox without ROD causes a websocket connection to close
-  ZK-5256: classloading issues with multiple war files
-  ZK-3543: Can't wire <apply> with its ID
-  ZK-5140: ZK loads vulnerable commons-io transitively
-  ZK-5223: the if element doesn't keep the position of its child component
   ZK-5116: NullPointerException happened during evaluating an EL expression
+  ZK-5256: classloading issues with multiple war files
+  ZK-5208: Review use of getChildNodeCount in AbstractTreeModel getChildNodes
+  ZK-3543: Can't wire <apply> with its ID
 
 * Upgrade Notes
 
