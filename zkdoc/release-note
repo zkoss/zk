@@ -37,7 +37,6 @@ ZK 9.6.3
   ZK-5116: NullPointerException happened during evaluating an EL expression
   ZK-5256: classloading issues with multiple war files
   ZK-5208: Review use of getChildNodeCount in AbstractTreeModel getChildNodes
-  ZK-5215: cannot load locale-dependent resources in a relative path
   ZK-3543: Can't wire <apply> with its ID
 
 * Upgrade Notes
