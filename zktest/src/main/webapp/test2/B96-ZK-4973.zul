@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk>
+	<style>
+		.yellow {
+			background: yellow !important;
+		}
+	</style>
+	<label multiline="true">
+		1. Click the datebox icon. The date selection popup should show.
+		2. Click the "Set Tab1 Yellow" button. Tab1 should have a yellow background.
+		3. Click the "Invalidate current Tab" button. Tab1 should still be selected with a yellow background.
+		4. Select "Tab2"; then, click "Invalidate Tabs". The Tabpanel should be visible and "Tab2" should still be selected.
+		5. Click the "Invalidate Tabbox" button. The Tabpanel should be visible and "Tab2" should still be selected.
+		6. Click the "Invalidate current Tab" button. he Tabpanel should be visible and "Tab2" should still be selected.
+	</label>
+	<window border="normal" title="hello" apply="org.zkoss.zktest.test2.B96_ZK_4973Composer">
+		<div>Welcome to ZK Fiddle , run it right now!</div>
+		<tabbox id="myTabbox">
+			<tabs id="myTabs">
+				<tab id="myTab1" label="Tab1"></tab>
+				<tab id="myTab2" label="Tab2"></tab>
+			</tabs>
+			<tabpanels>
+				<tabpanel>
+					<datebox></datebox>
+					<button id="btnYellow" label="Set Tab1 Yellow" />
+					<button id="btnYellowRemove" label="Remove Tab1 Yellow" />
+					<button id="btnInvalidate" label="Invalidate current Tab" />
+				</tabpanel>
+				<tabpanel>
+					<button id="btnInvalidate2" label="Invalidate current Tab" />
+					<button id="btnInvalidateTabs" label="Invalidate Tabs" onClick="myTabs.invalidate()"/>
+					<button id="btnInvalidateTabbox" label="Invalidate Tabbox" onClick="myTabbox.invalidate()"/>
+				</tabpanel>
+			</tabpanels>
+		</tabbox>
+	</window>
+</zk>

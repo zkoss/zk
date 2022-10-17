@@ -426,6 +426,10 @@ export class Tabs extends zul.Widget {
 		}
 	}
 
+	override beforeChildReplaced_(oldTab: zul.tab.Tab, newTab: zul.tab.Tab): void {
+		newTab.setSelected(oldTab.isSelected());
+	}
+
 	override beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
 		if (!(child instanceof zul.tab.Tab)) {
 			zk.error('Unsupported child for tabs: ' + child.className);
