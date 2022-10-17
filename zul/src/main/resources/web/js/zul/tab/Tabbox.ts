@@ -512,6 +512,10 @@ export class Tabbox extends zul.Widget {
 		return true;
 	}
 	//super//
+	override beforeChildReplaced_(oldTabs: zul.tab.Tabs, newTabs: zul.tab.Tabs): void {
+		// NOTE: At this point, `this.tabs === oldTabs`. Thus, `this.setSelectedIndex()` will set for `oldTabs` not `newTabs`.
+		newTabs.getChildAt<zul.tab.Tab>(this.getSelectedIndex())!.setSelected(true);
+	}
 	override onChildAdded_(child: zk.Widget): void {
 		super.onChildAdded_(child);
 		if (child instanceof zul.wgt.Toolbar)
