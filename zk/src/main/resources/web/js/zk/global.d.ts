@@ -192,7 +192,8 @@ declare global {
 		innerWidth(): number;
 		innerX(): number;
 		innerY(): number;
-		isAncestor(p: HTMLElement | undefined, c: HTMLElement | undefined): boolean;
+		// eslint-disable-next-line zk/noNull
+		isAncestor(p: Element | undefined | null, c: Element | undefined | null): boolean;
 		isOverlapped(ofs1: Offset, dim1: Offset, ofs2: Offset, dim2: Offset, tolerant?: number): boolean;
 		j2d(s: string): Date;
 		newFrame(id: string, src?: string, style?: string): HTMLIFrameElement;
