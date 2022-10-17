@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zk>
-	<borderlayout >
-		<north title="North" maxsize="300" size="50%" open="false" >
+	<label multiline="true">
+		For the Atlantic theme, the title of the North borderlayout should be horizontal, not vertical.
+	</label>
+	<borderlayout>
+		<north title="North" maxsize="300" size="50%" open="false">
 			north
 		</north>
 	</borderlayout>
