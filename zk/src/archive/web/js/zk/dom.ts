@@ -1537,7 +1537,7 @@ jq(el).zk.center(); //same as 'center'
 		var n = this.jq[0],
 			width = n.getBoundingClientRect().width,
 			diff = Math.abs(n.offsetWidth - width);
-		if (diff > 0 && diff < 1) {
+		if (diff > 0 && diff <= 1) {
 			return width; // double value
 		}
 		return n.offsetWidth; // return offsetWidth instead for ZK-5168
@@ -1550,7 +1550,7 @@ jq(el).zk.center(); //same as 'center'
 		var n = this.jq[0],
 			height = n.getBoundingClientRect().height,
 			diff = Math.abs(n.offsetHeight - height);
-		if (diff > 0 && diff < 1) {
+		if (diff > 0 && diff <= 1) {
 			return height; // double value
 		}
 		return n.offsetHeight; // return offsetHeight instead for ZK-5168
