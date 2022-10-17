@@ -124,7 +124,7 @@ function _calcMinWd(wgt: MeshWidget): MeshWidth {
 			footcells = ftfaker ? wgt._getFirstRowCells(wgt.efootrows) : undefined;
 
 		for (var i = 0; i < len; i++) {
-			var wd = bodycells?.[i] ? bodycells[i].offsetWidth : 0,
+			var wd = bodycells?.[i] ? zk(bodycells[i]).offsetWidthCeil() : 0,
 				ftwd = footcells?.[i] && zk(footcells[i]).isVisible() ? footcells[i].offsetWidth : 0,
 				hdwd = w?.isVisible() ? w.getContentWidth_() : 0,
 				header: zk.Widget | undefined;
