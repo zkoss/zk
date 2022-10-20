@@ -12,12 +12,12 @@ Copyright (C) 2022 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zk.ui.Component;
@@ -38,7 +38,7 @@ public class B96_ZK_3543Test extends ZATSTestCase {
 		assertEquals(4, shadows.size());
 		List<Component> innerApply = Selectors.find(rootDiv, "::shadow#pageContent");
 		assertEquals(1, innerApply.size());
-		Assert.assertTrue(innerApply.get(0).getClass().equals(Apply.class));
-		Assert.assertTrue(innerApply.get(0).getId().equals("pageContent"));
+		Assertions.assertTrue(innerApply.get(0).getClass().equals(Apply.class));
+		Assertions.assertTrue(innerApply.get(0).getId().equals("pageContent"));
 	}
 }
