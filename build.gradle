@@ -36,18 +36,22 @@ ext {
 			'zcommon'      : "$rootDir/zcommon",
 			'zkwebfragment': "$rootDir/zkwebfragment",
 			'zul'          : "$rootDir/zul",
+			'zephyr'       : "$rootDir/zephyr",
+			'zephyr-immutable': "$rootDir/zephyr-immutable",
 			'za11y'        : "$zkcmlDir/za11y",
 			'zkex'         : "$zkcmlDir/zkex",
 			'zkmax'        : "$zkcmlDir/zkmax",
 			'zml'          : "$zkcmlDir/zml",
-			'zuti'         : "$zkcmlDir/zuti"
+			'zuti'         : "$zkcmlDir/zuti",
+			'zephyr-ex' : "$zkcmlDir/zephyr-ex"
 	]
 	zkcmlprojects = [
 			'za11y': "$zkcmlDir/za11y",
 			'zkex' : "$zkcmlDir/zkex",
 			'zkmax': "$zkcmlDir/zkmax",
 			'zml'  : "$zkcmlDir/zml",
-			'zuti' : "$zkcmlDir/zuti"
+			'zuti' : "$zkcmlDir/zuti",
+			'zephyr-ex' : "$zkcmlDir/zephyr-ex"
 	]
 }
 
@@ -169,6 +173,7 @@ subprojects {
 
 	// Configure additional resource for generated resources
 	processResources() {
+		dependsOn(compileJava)
 		dependsOn(compileTypeScript)
 		dependsOn(compileLess)
 		dependsOn(compileCSS)

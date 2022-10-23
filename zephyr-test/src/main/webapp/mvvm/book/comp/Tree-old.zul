@@ -1,0 +1,26 @@
+<zk>
+	<label multiline="true">
+		1. Select any treeitem.
+		2. The label should be updated.
+		3. Open/close any treeitem.
+		4. Other treeitems should be opened/closed accordingly. And the label should be updated.
+	</label>
+	<vlayout apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zephyr.test.mvvm.book.comp.Tree')">
+		<tree id="tree" model="@load(vm.model)" selectedItem="@bind(vm.selected)" multiple="true" selectedItems="@bind(vm.selectedItems)">
+			<template name="model" var="i">
+				<treeitem open="@bind(vm.open)">
+					<treerow>
+<!--						<treecell label="@load(iStatus.index)" />-->
+						<treecell label="@load(i.data)" />
+					</treerow>
+				</treeitem>
+			</template>
+		</tree>
+		selectedLabel: <label id="selectedLabel" value="@load(vm.selected.data)"/>
+		open: <label id="open" value="@load(vm.open)"/>
+		<button label="select first" onClick="@command('doSelectFirst')" />
+		<button label="select first layer" onClick="@command('doSelectFirstLayer')" />
+		<label id="debug" value=""/>
+	</vlayout>
+</zk>

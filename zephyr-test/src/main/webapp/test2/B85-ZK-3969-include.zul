@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3969-include.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Jun 26 11:27:12 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <div viewModel="@id('vm') @init('org.zkoss.zktest.test2.B85_ZK_3969VM')">
+        <div children="@load(vm.valueList) @template('default')">
+            <template name="default">
+                <div>
+                    <label value="@load(vm.stringValue)" />
+                </div>
+            </template>
+        </div>
+    </div>
+</zk>

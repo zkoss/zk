@@ -1,0 +1,23 @@
+plugins {
+    id "java"
+    id 'idea'
+}
+
+idea {
+    module {
+        outputDir file("$buildDir/classes/main")
+        testOutputDir file("$buildDir/classes/test")
+    }
+}
+
+description = "Zephyr Immutable Style"
+
+dependencies {
+    implementation "org.immutables:value:$immutablesVersion"
+}
+
+buildConfig {
+    className = 'Version'
+    packageName = "org.zkoss.zephyr"
+    buildConfigField("String", "UID", provider { "\"${project.version}\"" })
+}

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4376.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Oct 21 14:49:17 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Click the button.
+        2. The badge text of Dashboard should be remained '7'.
+        3. The badge text of Contact should be remained '8'.
+    </label>
+    <div sclass="sidebar" viewModel="@id('vm') @init('org.zkoss.zktest.test2.B90_ZK_4376VM')">
+        <button onClick="@command('notifyCollapse')" label="Trigger notifyCollapse"/>
+        <navbar orient="vertical" collapsed="@load(vm.collapsed)">
+            <apply template="iterate" menuItems="@load(vm.menuList)"/>
+        </navbar>
+    </div>
+    <template name="iterate">
+        <forEach items="@load(menuItems)">
+            <apply template="@load(empty each.subMenus? 'menuitem' : 'menu')" menuItem="@load(each)"/>
+        </forEach>
+    </template>
+    <template name="menu">
+        <nav label="@load(menuItem.label)" iconSclass="@load(menuItem.icon)"
+             badgeText="@load(vm.collapsed ? '' : menuItem.counter)">
+            <apply template="iterate" menuItems="@load(menuItem.subMenus)"/>
+        </nav>
+    </template>
+    <template name="menuitem">
+        <navitem label="@load(menuItem.label)" iconSclass="@load(menuItem.icon)"/>
+    </template>
+</zk>

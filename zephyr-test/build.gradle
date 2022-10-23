@@ -1,0 +1,88 @@
+plugins {
+	id "idea"
+	id "war"
+	id "org.gretty" version "3.0.6"
+	id "com.adarshr.test-logger" version "3.0.0"
+}
+
+idea {
+	module {
+		outputDir file("$buildDir/classes/main")
+		testOutputDir file("$buildDir/classes/test")
+	}
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs << '-parameters'
+}
+
+repositories {
+	mavenLocal()
+
+	maven {
+		url = uri('https://mavensync.zkoss.org/maven2')
+	}
+
+	maven {
+		url = uri('https://mavensync.zkoss.org/eval')
+	}
+
+	maven {
+		url = uri('https://repo.maven.apache.org/maven2/')
+	}
+}
+
+dependencies {
+	implementation "org.zkoss.zk:zhtml:${version}"
+	implementation "org.zkoss.zk:zkmax:${version}"
+	implementation "org.zkoss.zk:zkplus:${version}"
+	implementation "org.zkoss.zk:zuti:${version}"
+	implementation "org.zkoss.zk:zephyr:${version}"
+	implementation "org.zkoss.zk:zephyr-ex:${version}"
+	implementation 'commons-lang:commons-lang:2.6'
+	implementation 'commons-beanutils:commons-beanutils:1.9.4'
+
+	// for JSR 303
+	implementation 'org.hibernate:hibernate-validator:7.0.3.Final'
+	implementation 'javax.validation:validation-api:2.0.1.Final'
+
+	//for webdriver test
+	testImplementation "org.junit.jupiter:junit-jupiter-api:$junitVersion"
+	testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
+	testImplementation 'xml-apis:xml-apis:2.0.2'
+	testImplementation 'org.slf4j:slf4j-jdk14:2.0.0-alpha1'
+	testImplementation 'org.zkoss.test:zk-webdriver:1.0.0'
+}
+
+test {
+	useJUnitPlatform()
+	testlogger {
+		theme "standard"
+		showExceptions true
+		showStackTraces true
+		showFullStackTraces true
+		showCauses true
+		slowThreshold 2000
+		showSummary true
+		showSimpleNames true
+		showPassed true
+		showSkipped true
+		showFailed true
+		showStandardStreams false
+		showPassedStandardStreams true
+		showSkippedStandardStreams true
+		showFailedStandardStreams true
+		logLevel "debug"
+	}
+}
+
+test {
+	systemProperty "zkWebdriverContextPath", "/zephyr-test"
+	systemProperty "zkWebdriverTestURLPackage", "org.zkoss.zephyr.webdriver"
+}

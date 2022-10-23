@@ -33,7 +33,14 @@ def javadocClassPath = files(
 		"$rootDir/dist/lib/ext/mvel.jar",
 		"$rootDir/dist/lib/ext/jcommon.jar",
 		"$rootDir/dist/lib/ext/jackson-core.jar",
-		"$rootDir/dist/lib/ext/Filters.jar"
+		"$rootDir/dist/lib/ext/Filters.jar",
+		"$rootDir/dist/lib/ext/jackson-annotations.jar",
+		"$rootDir/dist/lib/ext/value.jar",
+		"$rootDir/dist/lib/ext/value-processor.jar",
+		"$rootDir/dist/lib/ext/metainf.jar",
+		"$rootDir/dist/lib/ext/generator.jar",
+		"$rootDir/dist/lib/ext/reflections.jar",
+		"$rootDir/dist/lib/ext/junit-jupiter-api.jar"
 )
 // general javadoc options
 def javadocOptions = {
@@ -66,17 +73,25 @@ def addJavadocFooter(dir, footerMessage) {
 
 // generate javadoc
 task alljavadoc(type: Javadoc) {
+	dependsOn ':zephyr:compileJava'
+	if (gradle.includedBuilds.find {it.name == 'zkcml'} != null) {
+		dependsOn gradle.includedBuild('zkcml').task(':zephyr-ex:compileJava')
+	}
 	title = "$project.description ${version} API"
 	options.setWindowTitle("$project.description ${version} API")
 	configure javadocOptions
 	source zkprojects.values().collect { dir ->
 		"$dir/src/main/java"
 	}
+	// add immutables code-gen for generating Javadoc
+	source files("zephyr/build/generated/sources", "../zkcml/zephyr-ex/build/generated/sources")
+
 	// Can't get package.html into javadoc with gradle
 	exclude '**/package.html',
 			'**/ELParser.html',
 			'**/*.properties',
-			'**/*.jjt'
+			'**/*.jjt',
+			'**/**.template' //zephyr action type template
 	destinationDir = file("$buildDir/docs/javadoc/zk")
 	classpath = javadocClassPath
 
@@ -99,12 +114,13 @@ task alljavadoc(type: Javadoc) {
 
 // generate jsdoc
 task alljsdoc(type: Javadoc) {
+	dependsOn alljavadoc
 	doFirst {
 		// build java for jsdoc
-		def jsdocprj = ['zk', 'zkbind', 'zul', 'zkex', 'zkmax']
+		def jsdocprj = ['zk', 'zkbind', 'zul', 'zephyr', 'zkex', 'zkmax', 'zephyr-ex']
 		jsdocprj.each {prj ->
 			exec {
-				if (prj == 'zkex' || prj == 'zkmax')
+				if (prj == 'zkex' || prj == 'zkmax' || prj == 'zephyr-ex')
 					workingDir "$rootDir/../zkcml/$prj"
 				else
 					workingDir "$rootDir/$prj"
@@ -138,13 +154,14 @@ subprojects {
 		options.setWindowTitle("$project.description ${version} API")
 		configure javadocOptions
 		options.links 'https://docs.oracle.com/javase/8/docs/api/'
-		source "$projectDir/src/main/java"
+		source sourceSets.main.allJava
 
 		// Can't get package.html into javadoc with gradle
 		exclude '**/package.html',
 				'**/ELParser.html',
 				'**/*.properties',
-				'**/*.jjt'
+				'**/*.jjt',
+				'**/**.template' //zephyr action type template
 		destinationDir = file("$buildDir/docs/javadoc")
 
 		// add jars in dist into classpath

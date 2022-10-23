@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B80-ZK-3136.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu Mar 17 16:01:32 CST 2016, Created by jameschu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label>
+        You should able to see the "*" in the textbox.
+    </label>
+    <window border="none" vflex="1" viewModel="@id('vm') @init('org.zkoss.zktest.test2.B80_ZK_3136VM')">
+        <div form="@id('fx') @load(vm.foo) @save(vm.foo, before='save')">
+            <textbox maxlength="60" value="@bind(fx.name)" />
+        </div>
+    </window>
+</zk>

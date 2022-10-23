@@ -1,0 +1,60 @@
+<zk>
+	<label multiline="true">
+		There are 2 group of tests (index / item), please test each group.
+		1. Click "select tab 1" and "select tab 3"
+		2. The "Tab 1" and "Tab 3" will be selected. And the selected index or item will be updated in the label.
+		3. Click "Tab 4" to select it.
+		4. The selected index or item will be updated in the label.
+	</label>
+	<div>
+		<hlayout>
+<!--			<vlayout id="vbox1" width="300px" height="300px"-->
+<!--				  viewModel="@id('vm') @init('org.zkoss.zephyr.test.mvvm.book.comp.TabboxDynamicSelectionVM')">-->
+<!--				<hlayout>-->
+<!--					<button label="select tab 1" onClick="@command('selectTabByIndex',index=1)"/>-->
+<!--					<button label="select tab 3" onClick="@command('selectTabByIndex',index=3)"/>-->
+<!--					<label id="selectedIndex" value="@bind(vm.selectedIndex)"/>-->
+<!--				</hlayout>-->
+<!--				<tabbox selectedIndex="@save(vm.selectedIndex)">-->
+<!--					<tabs children="@load(vm.tabs)">-->
+<!--						<template name="children">-->
+<!--							<tab label="@load(each.name)"-->
+<!--								 selected="@load(vm.selectedIndex eq forEachStatus.index)"/>-->
+<!--						</template>-->
+<!--					</tabs>-->
+<!--					<tabpanels children="@load(vm.tabs)">-->
+<!--						<template name="children">-->
+<!--							<tabpanel height="200px">-->
+<!--								<label value="@load(each.name)"/>-->
+<!--							</tabpanel>-->
+<!--						</template>-->
+<!--					</tabpanels>-->
+<!--				</tabbox>-->
+<!--			</vlayout>-->
+			<vlayout id="vbox2" width="300px" height="300px" apply="org.zkoss.bind.BindComposer"
+				  viewModel="@id('vm') @init('org.zkoss.zephyr.test.mvvm.book.comp.TabboxDynamicSelectionVM')">
+				<hlayout>
+					<button label="select tab 1" onClick="@command('selectTabByItem',item=vm.tabs[1])"/>
+					<button label="select tab 3" onClick="@command('selectTabByItem',item=vm.tabs[3])"/>
+					<label id="selectedItem" value="@bind(vm.selectedItem.name)"/>
+				</hlayout>
+				<tabbox>
+					<tabs children="@load(vm.tabs)">
+						<template name="children">
+							<tab label="@load(each.name)"
+								 selected="@load(vm.selectedItem eq each)"
+								 onSelect="@command('selectTabByItem',item=each)"/>
+						</template>
+					</tabs>
+					<tabpanels children="@load(vm.tabs)">
+						<template name="children">
+							<tabpanel height="200px">
+								<label value="@load(each.name)"/>
+							</tabpanel>
+						</template>
+					</tabpanels>
+				</tabbox>
+			</vlayout>
+		</hlayout>
+	</div>
+</zk>

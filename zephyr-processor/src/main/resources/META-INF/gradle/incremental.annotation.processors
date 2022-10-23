@@ -1,0 +1,2 @@
+org.zkoss.zephyr.processor.ProxyProcessor,dynamic
+org.zkoss.zephyr.processor.Processor,dynamic

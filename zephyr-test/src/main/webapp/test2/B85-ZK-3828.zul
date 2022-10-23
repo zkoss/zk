@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3828.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jun 28 09:44:06 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<?import org.zkoss.zktest.test2.B85_ZK_3828Status?>
+<zk>
+    <label multiline="true">
+        1. You should view this page without exception.
+        2. Edit the textbox, remove the 'error' text and click somewhere.
+        3. The label will be "OK true."
+        4. Edit the textbox, add back 'error' text and click somewhere.
+        5. The label will be "ERROR false."
+    </label>
+    <div viewModel="@id('vm') @init('org.zkoss.zktest.test2.B85_ZK_3828VM')">
+        <textbox value="@bind(vm.message)"/>
+        <label value="@load(vm.status)"/>
+        <label value="@load(vm.status eq B85_ZK_3828Status.OK)"/>
+    </div>
+</zk>

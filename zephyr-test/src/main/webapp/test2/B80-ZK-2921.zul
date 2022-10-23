@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-2921.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Oct 16 16:18:36 CST 2015, Created by jumperchen
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	if run this page to get NPE, that's a bug.
+<div viewModel="@id('vm') @init('org.zkoss.zktest.test2.B80_ZK_2921VM')">
+<label visible="@load(vm.visible)" value="text" />
+</div>
+</zk>

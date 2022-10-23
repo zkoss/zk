@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F85-ZK-3681-Jsvalidator.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Fri Jun 02 17:42:27 CST 2017, Created by rudyhuang
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <fragment viewModel="@id('vm') @init('org.zkoss.zktest.test2.F85_ZK_3681_Validator_VM')"
+              issue="@bind(vm.selected)"><![CDATA[
+        <div>
+            <h1>Editing selected issue</h1>
+            <p>
+                Issue ID:
+                <input type="text" value="@bind(issue.id) @jsvalidator('validateIssueId')"/>
+                <span textContent="@load(vmsgs['issueId'])"/>
+            </p>
+            <p>
+                Issue Description:
+                <input type="text" value="@bind(issue.description)"/>
+            </p>
+
+            <h1>Result</h1>
+            <p>Issue ID: <span textContent="@load(issue.id)"/></p>
+            <p>Issue Description: <span textContent="@load(issue.description)"/></p>
+        </div>
+        <script type="text/javascript">
+        function validateIssueId(id, vmsgs) {
+            var valid = /^[A-Z]+-\d+$/.test(id);
+            vmsgs['issueId'] = valid ? '' : 'Invalid: ' + id;
+            return valid;
+        }
+        </script>
+    ]]></fragment>
+</zk>

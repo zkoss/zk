@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3656.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jan 04 18:23:02 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Check the Listheader checkbox to select all items.
+        2. Please check these conditions:
+        - The browser console should not have any exception.
+        - The Listheader checkbox still keep checked.
+        - Scroll to render item 20 and item 44, and they should be checked.
+    </label>
+    <vlayout viewModel="@id('vm') @init('org.zkoss.zktest.test2.B85_ZK_3656VM')">
+        <listbox model="@init(vm.persons)" selectedItems="@bind(vm.selectedPersons)" checkmark="true" multiple="true" rows="10">
+            <custom-attributes org.zkoss.zul.listbox.rod="false"/> <!-- Disable EE ROD - Use Live data (CE) -->
+            <listhead>
+                <listheader/>
+                <listheader label="FirstName"/>
+                <listheader label="LastName"/>
+                <listheader label="Checkable"/>
+            </listhead>
+            <template name="model">
+                <listitem>
+                    <listcell/>
+                    <listcell>
+                        <label value="@init(each.firstName)"/>
+                    </listcell>
+                    <listcell>
+                        <label value="@init(each.lastName)"/>
+                    </listcell>
+                    <listcell>
+                        <label value="@init(each.checkable)"/>
+                    </listcell>
+                </listitem>
+            </template>
+        </listbox>
+    </vlayout>
+</zk>

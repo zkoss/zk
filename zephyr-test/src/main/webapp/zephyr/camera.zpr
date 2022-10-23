@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+camera.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Mon Nov 22 14:47:39 CST 2021, Created by katherine
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		1. click the start button to start camera.
+		2. click the pause button to pause camera.
+		3. click the stop button to stop camera.
+	</label>
+	<div apply="org.zkoss.zephyr.test.zephyr.CameraComposer"/>
+</zk>

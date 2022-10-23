@@ -1,0 +1,21 @@
+<window viewModel="@id('vm') @init('org.zkoss.zephyr.test.mvvm.book.basic.AllFunctionVM')">
+	<div if="${'ref' eq param['case']}">
+		Reference: change the value in the textbox, the label on the most left shall not change, others shall sync.
+		<window title="Basic" border="normal" element="@ref(vm.element)" elementNm="@ref(vm.element.name)">
+			<hbox>
+				<label sclass="init-label1" value="@init(element.name)"/>
+				/
+				<textbox value="@bind(element.name)"/>
+				/
+				<label sclass="bind-label1" value="@bind(element.name)"/>
+			</hbox>
+			<hbox>
+				<label sclass="init-label2" value="@init(elementNm)"/>
+				/
+				<textbox value="@bind(elementNm)"/>
+				/
+				<label sclass="bind-label2" value="@bind(elementNm)"/>
+			</hbox>
+		</window>
+	</div>
+</window>

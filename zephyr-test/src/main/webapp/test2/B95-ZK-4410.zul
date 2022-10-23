@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4410.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jul 08 11:28:33 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        Viewing this page shouldn't see an exception in popup:
+        - No public static field named [name] was found on class [java.lang.String]
+        - No public static field named [name] was found on class [java.lang.Integer]
+    </label>
+    <listbox viewModel="@id('vm') @init('org.zkoss.zktest.test2.B95_ZK_4410VM')" model="@load(vm.classes)">
+        <template name="model">
+            <listitem label="@load(each.name)" />
+        </template>
+    </listbox>
+</zk>

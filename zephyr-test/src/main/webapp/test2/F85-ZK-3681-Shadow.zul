@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F85-ZK-3681-Shadow.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Fri Jun 02 12:21:09 CST 2017, Created by rudyhuang
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <fragment viewModel="@id('vm') @init('org.zkoss.zktest.test2.F85_ZK_3681_Shadow_VM')"
+        issues="@bind(vm.issues)"><![CDATA[
+        <section>
+            <h1>My Issue List</h1>
+            <ul>
+                <forEach items="@load(issues)">
+                    <!-- There's a pre-defined variable "each" for convenience. -->
+                    <li>
+                        <!-- @bind(each) is wrong because each is just a temp variable in loops. -->
+                        <input type="checkbox" checked="@load(each.isDone)" />
+                        <if test="@load(each.isDone)">
+                            <strike>[<span textContent="@load(each.id)"/>]
+                            <span textContent="@load(each.description)"/></strike>
+                        </if>
+                        <!-- No else for now. -->
+                        <if test="@load(!each.isDone)">
+                            [<span textContent="@load(each.id)"/>]
+                            <span textContent="@load(each.description)"/>
+                        </if>
+                    </li>
+                </forEach>
+            </ul>
+        <section>
+    ]]></fragment>
+</zk>

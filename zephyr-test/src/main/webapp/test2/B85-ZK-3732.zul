@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3732.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Sep 22 11:52:15 CST 2017, Created by bobpeng
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div viewModel="@id('vm') @init('org.zkoss.zktest.test2.B85_ZK_3732VM')">
+		<listbox model="@bind(vm.model)" height="200px"></listbox>
+		<button id="btn" label="add and clear" onClick="@command('click')"/>
+	</div>
+	<label multiline="true">
+		1. click the button
+		2. listbox disappears without exception
+	</label>
+</zk>

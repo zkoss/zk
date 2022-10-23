@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4279.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Thu May 16 15:23:26 CST 2019, Created by jameschu
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+	<label>
+		click 'change pp' and 'link', then click these two again. Click 'showLog' and see '1' is zk log.
+	</label>
+	<div viewModel="@id('vm')@init('org.zkoss.zktest.test2.B86_ZK_4279VM')">
+		<button id="chgBtn" label="change pp" onClick="@command('changepp')" />
+		<label value="@load(vm.popupid)" />
+		<apply arg1="@load(vm.popupid)">
+			<a id="show" popup="@init(arg1)">link</a>
+			<nodom>
+				<popup id="@init(arg1)">
+					<label value="@init(arg1)" />
+				</popup>
+			</nodom>
+		</apply>
+	</div>
+	<button id="logBtn" w:onClick="zk.log(jq('.z-popup').length)" label="showLog"/>
+</zk>

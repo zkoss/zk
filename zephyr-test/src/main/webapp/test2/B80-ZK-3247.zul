@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3247.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Dec  7 18:51:57 CST 2016, Created by wenninghsu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. bug only appears in tomcat 6 and tomcat 7
+        2. clear cookie
+        3. load this page
+        4. resize the width of the browser to 500px
+        5. reload this page
+        6. should not have IllegalArgumentException when parsing cookies
+
+    </label>
+    <div viewModel="@id('vm') @init('org.zkoss.zktest.test2.B80_ZK_3338VM')" width="100%" height="100%">
+    </div>
+</zk>

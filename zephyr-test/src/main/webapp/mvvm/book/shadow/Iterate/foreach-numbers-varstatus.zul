@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+foreach-numbers-varstatus.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu May 06 16:07:02 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        Check the grid data:
+        * Current is 4, 7, 10, 13, 16, and 19.
+        * Index is the same as current.
+        * Count is index + 1.
+        * First: only the first row is true, others false.
+        * Last: only the last row is true, others false.
+        * All begin / end / step should be 4 / 20 / 3.
+    </label>
+    <grid>
+        <columns>
+            <column label="current"/>
+            <column label="index"/>
+            <column label="count"/>
+            <column label="first"/>
+            <column label="last"/>
+            <column label="begin"/>
+            <column label="end"/>
+            <column label="step"/>
+        </columns>
+        <rows>
+            <forEach begin="4" end="20" step="3" varStatus="status">
+                <row>
+                    <label value="${status.current}"/>
+                    <label value="${status.index}"/>
+                    <label value="${status.count}"/>
+                    <label value="${status.first}"/>
+                    <label value="${status.last}"/>
+                    <label value="${status.begin}"/>
+                    <label value="${status.end}"/>
+                    <label value="${status.step}"/>
+                </row>
+            </forEach>
+        </rows>
+    </grid>
+</zk>

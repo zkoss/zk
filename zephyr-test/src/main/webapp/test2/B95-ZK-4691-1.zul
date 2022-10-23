@@ -1,0 +1,6 @@
+<zk>
+    <div viewModel="@id('vm') @init('org.zkoss.zktest.test2.B95_ZK_4691_1VM')">
+        A.zul
+        <label value="@init(time)"/>
+    </div>
+</zk>

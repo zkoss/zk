@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-2763.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu, May 28, 2015  6:00:29 PM, Created by Jameschu
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<window>
+<label multiline="true">
+0. click button 1, 2, 3, 4 
+1. the first three windows should work fine
+2. the last one shouldn't be changed
+</label>
+	<window viewModel="@id('vm') @init('org.zkoss.zktest.test2.B80_ZK_2763_VM')" >
+		<label value="@load(vm.item.name)" />
+		<button label="change1" onClick="@command('cmd')"/>
+	</window>
+	<window apply="" viewModel="@id('vm') @init('org.zkoss.zktest.test2.B80_ZK_2763_VM')" >
+		<label value="@load(vm.item.name)" />
+		<button label="change2" onClick="@command('cmd')"/>
+	</window>
+	<window apply="org.zkoss.zktest.test2.B80_ZK_2763_Composer1" viewModel="@id('vm') @init('org.zkoss.zktest.test2.B80_ZK_2763_VM')" >
+		<label value="@load(vm.item.name)" />
+		<button label="change3" onClick="@command('cmd')"/>
+	</window>
+	<window apply="org.zkoss.zktest.test2.B80_ZK_2763_Composer2" viewModel="@id('vm') @init('org.zkoss.zktest.test2.B80_ZK_2763_VM')" >
+		<label value="@load(vm.item.name)" />
+		<button label="change4" onClick="@command('cmd')"/>
+	</window>
+</window>

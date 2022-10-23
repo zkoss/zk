@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4877.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon May 17 16:26:26 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label>
+        You shouldn't see a 500 error: java.lang.reflect.InaccessibleObjectException: Unable to make protected final java.lang.Class java.lang.ClassLoader.defineClass
+    </label>
+    <div viewModel="@id('courseVm') @init('org.zkoss.zktest.test2.B96_ZK_4877VM')">
+        <div form="@id('c') @load(courseVm.course) @save(courseVm.course, before='createCourse')">
+            <textbox hflex="1" value="@bind(c.title)"/>
+            <button label="Create" onClick="@command('createCourse')"/>
+        </div>
+    </div>
+</zk>

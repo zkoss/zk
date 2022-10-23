@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk>
+	<language-config>
+		<addon-uri>/WEB-INF/lang-addon.xml</addon-uri>
+	</language-config>
+    <listener>
+        <listener-class>org.zkoss.zephyrex.bind.BinderPropertiesRenderer</listener-class>
+    </listener>
+	<library-property>
+		<name>org.zkoss.bind.defaultComposer.class</name>
+		<value>org.zkoss.zephyrex.bind.ClientBindComposer</value>
+	</library-property>
+	<client-config>
+		<debug-js>true</debug-js>
+	</client-config>
+	<!-- custom converter -->
+	<library-property>
+		<name>org.zkoss.bind.appConverters</name>
+		<value>foo=org.zkoss.zephyr.test.mvvm.book.databinding.converter.FooConverter,bar=org.zkoss.zephyr.test.mvvm.book.databinding.converter.BarConverter</value>
+	</library-property>
+</zk>

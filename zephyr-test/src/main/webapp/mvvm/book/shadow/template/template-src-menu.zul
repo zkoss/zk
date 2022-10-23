@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+template-src-menu.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri May 07 16:50:42 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <nav label="@load(menuItem.label)" iconSclass="@load(menuItem.iconSclass)">
+        <apply template="iterate" menuItems="@ref(menuItem.subMenus)"/>
+    </nav>
+</zk>

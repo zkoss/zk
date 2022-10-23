@@ -1,0 +1,16 @@
+<!--
+B80-ZK-3104-1.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu Jan 28 12:36:03 CST 2016, Created by jameschu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<div viewModel="@id('vm') @init('org.zkoss.zktest.test2.B80_ZK_3104VM')">
+    <button label="test sub pojo reverse" onClick="@command('testPojoSubR', pojo=vm.origPojo)"/>
+</div>

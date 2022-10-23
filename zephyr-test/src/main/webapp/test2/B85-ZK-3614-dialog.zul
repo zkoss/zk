@@ -1,0 +1,4 @@
+<window mode="modal" title=" " border="normal" closable="true" width="300px">
+	<chosenbox hflex="1" emptyMessage="emptyMessage" createMessage="createMessage: {0}" 
+		creatable="true" model="@bind(vm.tagsModel)" onSearch="@command('newTag', tagName=event.value)"/>
+</window>

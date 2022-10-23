@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- zk.wpd
+	Purpose:
+
+	Description:
+
+	History:
+		3:36 PM 2021/10/8, Created by jumperchen
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+-->
+
+<package name="zephyr" language="zephyr/html" depends="zk">
+	<script src="widget.js"/>
+	<script src="zephyr.js"/>
+
+	<!-- Support Client side Paging for #78 -->
+	<script src="MeshWidget.js"/>
+	<script src="Paging.js"/>
+	<script src="Tree.js"/>
+	<script src="Grid.js"/>
+	<script src="Listbox.js"/>
+</package>
+

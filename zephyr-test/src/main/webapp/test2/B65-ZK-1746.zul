@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B65-ZK-1746.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu, Apr 17, 2014  4:13:03 PM, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<label multiline="true">
+Steps to reproduce:
+1. focus the chosenbox inputcomponent
+2. type "aa" (dropdown appears, with 10 items ("aa0" - "aa9") -> OK - getElementAt() called for these 10 items)
+3. select e.g. "aa3" using keyboard press [return]-key to delete the selection of "aa3"
+4. press [tab] so enter the next input component
+5. press [shift+tab] to return to the chosenbox component (if the bug exists, it will show the following result.)
+--> getElementAt() will be called 50000 times (the return value of getSize() of ListModel) !!!
+--> getElementAt() will be called again 13324 times (basically called from 0 through index of previously selected item)
+
+6. start typing again e.g. "b" (if the bug exists, it will show the following result.)
+--> getElementAt() in list model will be called another 13324 times
+
+--> (dropdown appears, with 10 items -> OK - getElementAt() called for these 10 items)
+</label>
+	<window title="new page title" border="normal" viewModel="@id('vm') @init('org.zkoss.zktest.test2.B65_ZK_1746ViewModel')">
+		<vlayout>
+			<chosenbox model="@load(vm.chosenboxModel)" width="400px" />
+		</vlayout>
+	</window>
+</zk>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4195-receiver.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jan 17 14:55:13 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <div viewModel="@id('vm') @init('org.zkoss.zktest.test2.B86_ZK_4195VM')">
+        <intbox value="@load(vm.count)"/>
+    </div>
+</zk>

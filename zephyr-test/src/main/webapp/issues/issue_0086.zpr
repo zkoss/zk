@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+issue_0086.zpr
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		2021/12/15, Created by jumperchen
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<tree apply="org.zkoss.zephyr.test.issues.Issue0086TreePagingComposer" vflex="1" mold="paging" pageSize="10">
+	<zscript><![CDATA[
+		// param: sort ascending
+		Comparator asc =
+		new Comparator() {
+			public int compare(TreeNode t1, TreeNode t2) {
+				return t1.getData().toString().compareTo(t2.getData().toString());
+			}
+		};
+		Comparator dsc =
+		new Comparator() {
+			public int compare(TreeNode t1, TreeNode t2) {
+				return t2.getData().toString().compareTo(t1.getData().toString());
+			}
+		};
+    ]]></zscript>
+	<treecols>
+		<treecol label="Names" sortAscending="${asc}" sortDescending="${dsc}"/>
+	</treecols>
+</tree>

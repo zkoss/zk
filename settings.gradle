@@ -12,6 +12,12 @@ include(':zkbind')
 include(':zcommon')
 include(':zkwebfragment')
 include(':zul')
+include(':zephyr-immutable')
+include(':zephyr-processor')
+include(':zephyr')
+include(':zephyr-mock')
+//include(':zephyr-test')
+//include(':zephyr-benchmark')
 
 includeBuild '../zkcml'
 includeBuild '../zkthemes'

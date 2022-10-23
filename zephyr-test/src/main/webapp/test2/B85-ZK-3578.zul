@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3578.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Sep 21 11:52:15 CST 2017, Created by bobpeng
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div
+		 viewModel="@id('vm') @init('org.zkoss.zktest.test2.B85_ZK_3578VM')">
+		<button id="toggle" label="toggle" onClick="@command('toggle')"></button>
+		<grid visible="@load(!vm.showColumn)">
+			<columns>
+				<forEach items="@load(vm.columnList)">
+					<column label="@load(each)" width="150px"/>
+				</forEach>
+				<column label="aa" width="150px"/>
+				<column label="bb" width="150px"/>
+			</columns>
+		</grid>
+	</div>
+	<label multiline="true">
+		1. open this page in safari
+		2. should see 4 columns
+		3. click button labeled "toggle" to hide the grid
+		4. click button again to show the grid
+		5. should still see 4 columns
+	</label>
+</zk>

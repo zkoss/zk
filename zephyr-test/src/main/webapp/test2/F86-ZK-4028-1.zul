@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F86-ZK-4028.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Wed Aug 15 17:02:51 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<hlayout>
+		<label multiline="true">
+			Navigation
+			1. Click button "Direct NavTo Configuration/Authentication/AAA Profiles".
+			2. You can see Level 1 Configuration, Level 2 Authentication and Level 3 AAA Profiles.
+			3. Click link "Maintenance".
+			4. You can see Level 1 Maintenance.
+			5. Click button "NavTo Configuration".
+			6. You can see Level 1 Configuration but no Level 2.
+		</label>
+		<label multiline="true">
+			Insert / Remove
+			1. Click button "InsertBefore Diagnostics"
+			2. You can see the link "New Item" was added.
+			3. Click button "InsertBefore Diagnostics" again, an error popped up.
+			4. Click link "Diagnostics" then click button "Remove Diagnostics".
+			5. You can see the link "Diagnostics" was removed and the navigation of Level 1 is Maintenance.
+			6. Click button "Remove Maintenance".
+			7. You can see the link "Maintenance" was removed and the navigation of Level 1 is New Item.
+		</label>
+	</hlayout>
+	<nodom>
+		<div id="main" viewModel="@id('vm') @init('org.zkoss.zktest.test2.F86_ZK_4028VM')">
+			<vlayout>
+				<forEach items="@load(vm.navModel.root eq null ? [] : vm.navModel.root.items)">
+					<a onClick="@command('levelNavTo', level=vm.navModel.root, key=each.x)" label="@init(each.x)"/>
+				</forEach>
+			</vlayout>
+			<button label="Remove Diagnostics" onClick='@command("remove", path="Diagnostics")'/>
+			<button label="Remove Maintenance" onClick='@command("remove", path="Maintenance")'/>
+			<button label="InsertBefore Diagnostics" onClick='@command("insert")'/>
+			<button label="Direct NavTo Configuration/Authentication/AAA Profiles"
+					onClick='@command("navTo", path="Configuration/Authentication/AAA Profiles")'/>
+			<apply level="@load(vm.navModel.root)" templateURI="@load(level.current eq null ? null : level.current.url)"
+				data="@load(level.current)" context="@load(level.context)"/>
+		</div>
+	</nodom>
+</zk>

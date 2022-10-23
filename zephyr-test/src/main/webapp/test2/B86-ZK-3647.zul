@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-3647.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Fri Aug 31 09:42:42 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+	<label multiline="true">
+		1. Click scroll, wait for the render until you see "9"
+		2. Click logScrollTop and record the value you see on log
+		3. Click sort, then click logScrollTop
+		4. You should see the same value on log
+	</label>
+	<script><![CDATA[
+		function logScrollTop() {
+			zk.log(Math.floor(jq(".z-listbox-body").scrollTop()));
+		}
+	]]></script>
+	<vlayout viewModel="@id('vm') @init('org.zkoss.zktest.test2.B86_ZK_3647VM')">
+		<custom-attributes org.zkoss.zul.listbox.rod="true"/>
+		<custom-attributes org.zkoss.zul.listbox.initRodSize="1"/>
+		<custom-attributes org.zkoss.zul.listbox.preloadSize="1"/>
+		<listbox id="listbox" width="300px" height="300px" model="@load(vm.model)" >
+			<listhead>
+				<listheader label="sort" sort="auto"/>
+			</listhead>
+		</listbox>
+		<button label="scroll" onClick="listbox.scrollToIndex(6)"/>
+		<button label="logScrollTop" w:onClick="logScrollTop()"/>
+	</vlayout>
+</zk>

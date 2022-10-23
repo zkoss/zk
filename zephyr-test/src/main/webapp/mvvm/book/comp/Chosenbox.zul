@@ -1,0 +1,22 @@
+<zk>
+	<vlayout
+		viewModel="@id('vm') @init('org.zkoss.zephyr.test.mvvm.book.comp.ChosenboxVM')">
+		<label multiline="true">
+		1.change selection(including the remove) on chosenbox 1, the first label should be changed to same selection.
+		2.change selection(including the remove) on chosenbox 2, the 2nd label should be changed to same selection.(box2 is single selection) 
+		</label>
+		<label id="l1" value="@bind(vm.selected)"/>
+		<chosenbox id="cbox1" model="@bind(vm.items)" selectedObjects="@bind(vm.selected)" width="400px" >
+			<template name="model">
+				<label value="@load(each)"/>
+			</template>
+		</chosenbox>
+		
+		<label id="l2" value="@bind(vm.selectedIndex)"/>
+		<chosenbox id="cbox2" model="@bind(vm.items)" selectedIndex="@bind(vm.selectedIndex)" width="400px" >
+			<template name="model">
+				<label value="@load(each)"/>
+			</template>
+		</chosenbox>
+	</vlayout>
+</zk>

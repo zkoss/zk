@@ -1,0 +1,18 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<window title="new page title" border="normal"
+		viewModel="@id('vm') @init('org.zkoss.zephyr.test.mvvm.book.viewmodel.validator.Va08')">
+		va8. validator + arguments: <separator/>
+		<label multiline="true">
+		1. input 123, click, show 123
+		2. clear input, click, show nothing
+		3. input 1234, click, show nothing
+		</label>
+		keyword (max length is 3):<textbox id="keywordBox"
+			value="@save(vm.keyword) @validator(vm.maxLengthValidator, length=3)">
+		</textbox>
+		<separator />
+		you enter:<label id="keywordLabel" value="@load(vm.keyword)" />
+		<button id="blur"/>
+	</window>
+</zk>

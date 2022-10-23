@@ -1,0 +1,55 @@
+<zk>
+	<label multiline="true">
+		1. Open/close the detail, the label will be updated.
+		2. Open/close the group, the label will be updated.
+	</label>
+	<vlayout viewModel="@id('vm') @init('org.zkoss.zephyr.test.mvvm.book.comp.Grid')">
+		<grid id="detailGrid" fixedLayout="true">
+			<columns>
+				<column width="40px"/>
+				<column sort="auto"/>
+				<column width="100px" label="Price" sort="auto"/>
+				<column label="Item location" sort="auto"/>
+			</columns>
+			<rows>
+				<row>
+					<detail open="@bind(vm.open1)">
+						<hlayout>
+							<image sclass="myimg" width="100px" height="100px" src=""/>
+							<vlayout>
+								<hlayout>
+									<label id="brandLabel" value="Brand:"/>
+									<label value="Apple"/>
+								</hlayout>
+							</vlayout>
+						</hlayout>
+					</detail>
+					<label value="Apple 20-inch Aluminum Cinema Display M9177/A"/>
+					<label style="color:green;float:right;" value="US $202.50"/>
+					<label value="Tulsa, OK, United States"/>
+				</row>
+			</rows>
+		</grid>
+		<label id="detailOpen" value="@load(vm.open1)"/>
+		<grid id="groupGrid" fixedLayout="true">
+			<columns sizable="true">
+				<column label="Brand" sort="auto"/>
+				<column label="Processor Type" width="150px" sort="auto"/>
+				<column label="Memory (RAM)" width="120px" sort="auto"/>
+				<column label="Price" width="100px" sort="auto"/>
+				<column label="Hard Drive Capacity" width="150px" sort="auto"/>
+			</columns>
+			<rows>
+				<group label="Dell" open="@bind(vm.open2)"/>
+				<row>
+					<label id="pcNameLabel" style="padding-left:15px" value="Dell E4500 2.2GHz"/>
+					<label value="Intel Core 2 Duo"/>
+					<label value="2GB RAM"/>
+					<label value="$261.00" style="color:green"/>
+					<label value="500GB"/>
+				</row>
+			</rows>
+		</grid>
+		<label id="groupOpen" value="@load(vm.open2)"/>
+	</vlayout>
+</zk>

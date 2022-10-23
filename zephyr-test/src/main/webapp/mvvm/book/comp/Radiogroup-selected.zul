@@ -1,0 +1,20 @@
+<zk>
+	<label multiline="true">
+		Choose any item from Listbox or Radiogroup, the other one should be synchronized.
+	</label>
+	<window viewModel="@id('vm') @init('org.zkoss.zephyr.test.mvvm.book.comp.RadiogroupSelectedVM')" border="none">
+		<vbox>
+			<listbox id="listbox" selectedItem="@bind(vm.selected)">
+				<listitem id="itema" label="Item A" value="itemA"/>
+				<listitem id="itemb" label="Item B" value="itemB"/>
+				<listitem id="itemc" label="Item C" value="itemC"/>
+			</listbox>		
+			==================================
+			<radiogroup id="radiogroup" selectedItem="@bind(vm.selected)">
+				<radio id="radioa" label="Item A" value="itemA"/>
+				<radio id="radiob" label="Item B" value="itemB"/>
+				<radio id="radioc" label="Item C" value="itemC"/>
+			</radiogroup>
+		</vbox>
+	</window>
+</zk>

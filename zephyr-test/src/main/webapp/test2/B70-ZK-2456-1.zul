@@ -1,0 +1,16 @@
+<zk xmlns:n="native" xmlns:h="xhtml">
+	<window id="mainWindow" viewModel="@id('vm') @init('org.zkoss.zktest.test2.B70_ZK_2456_VM')" height="100%" width="100%">
+		<label multiline="true">
+			Press the test button should log the text above correctly.
+		</label>
+		<n:div id="div" aaa="321">
+<!--			<n:span>-->
+<!--				<n:button onClick="@command('selected')">test native inside</n:button>-->
+<!--				<button onClick="@command('selected')">test inside natives</button>-->
+<!--			</n:span>-->
+			<n:button onClick="@command('selected')">test native</n:button>
+			<h:button onClick="@command('selected')">test xhtml</h:button>
+			<button onClick="@command('selected')">test zul</button>
+		</n:div>
+	</window>
+</zk>

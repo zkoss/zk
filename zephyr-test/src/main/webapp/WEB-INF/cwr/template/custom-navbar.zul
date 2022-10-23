@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+custom-navbar.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri June 24 16:40:31 CST 2022, Created by jameschu
+
+Copyright (C) 2022 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<navbar id="navbar" orient="horizontal" collapsed="false">
+		<apply template="iterate"/>
+	</navbar>
+	<template name="iterate">
+		<forEach items="@load(menuItems)">
+			<apply template="@load(empty each.subMenus ? 'menuitem' : 'menu')" menuItem="@ref(each)"/>
+		</forEach>
+	</template>
+	<template name="menu">
+		<nav label="@load(menuItem.label)" iconSclass="@load(menuItem.iconSclass)">
+			<apply template="iterate" menuItems="@ref(menuItem.subMenus)"/>
+		</nav>
+	</template>
+	<template name="menuitem">
+		<navitem label="@load(menuItem.label)" iconSclass="@load(menuItem.iconSclass)"/>
+	</template>
+</zk>

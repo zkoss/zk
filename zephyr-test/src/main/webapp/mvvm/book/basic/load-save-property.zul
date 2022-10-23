@@ -1,0 +1,38 @@
+<zk>
+	<window viewModel="@id('vm') @init('org.zkoss.zephyr.test.mvvm.book.basic.LoadSaveProperty')">
+		<vlayout>
+			<hlayout>l1[<label id="l11" value="@init(vm.value1)"/>]=A
+			</hlayout>
+			<hlayout>l2[<label id="l12" value="@bind(vm.value2)"/>]=B
+			</hlayout>
+			<hlayout>l3[<label id="l13" value="@load(vm.value3)"/>]=C
+			</hlayout>
+			<hlayout>l4[<label id="l14" value="@load(vm.value1)"/>]=A
+			</hlayout>
+			<hlayout>l5[<label id="l15" value="@init(vm.value1) @load(vm.value2)"/>]=B
+			</hlayout>
+			<hlayout>]6[<label id="l16" value="@init(vm.value1) @load(vm.value2) @load(vm.value3)"/>]=C
+			</hlayout>
+			<hlayout>
+				<textbox id="t21" value="@save(vm.value1) @save(vm.value2)"/>[effect l2,l4,l5,l6]
+			</hlayout>
+			<hlayout>
+				<textbox id="t22" value="@save(vm.value1) @save(vm.value3)"/>[effect l3,l4,l6]
+			</hlayout>
+			<hlayout>
+				<textbox id="t23"
+						 value="@save(vm.value1) @save(vm.value2, before='cmd1') @save(vm.value3, before={'cmd2','cmd3'})"/>
+				[effect l4]
+			</hlayout>
+			<hlayout>
+				<button id="btn1" label="cmd1" onClick="@command('cmd1')"/>[effect l2, l5, l6]
+			</hlayout>
+			<hlayout>
+				<button id="btn2" label="cmd2" onClick="@command('cmd2')"/>[effect l3, l6]
+			</hlayout>
+			<hlayout>
+				<button id="btn3" label="cmd3" onClick="@command('cmd3')"/>[effect l3, l6]
+			</hlayout>
+		</vlayout>
+	</window>
+</zk>

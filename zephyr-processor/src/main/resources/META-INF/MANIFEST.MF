@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Specification-Title: The Zephyr Processor
+Specification-Vendor: Potix Corporation
+Implementation-Title: org.zkoss.zephyr.processor
+Implementation-URL: http://www.zkoss.org/prj/zephyr-processor
+Implementation-Vendor: Potix Corporation

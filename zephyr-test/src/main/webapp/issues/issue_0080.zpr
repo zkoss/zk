@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+issue_0080.zpr
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		2021/11/3, Created by jumperchen
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. click the button
+        2. the textbox will show "OK"
+    </label>
+    <div apply="org.zkoss.zephyr.test.issues.Issue0080Composer"/>
+</zk>

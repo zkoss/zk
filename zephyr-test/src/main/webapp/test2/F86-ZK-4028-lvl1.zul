@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk>
+    <div style="border: 1px solid blue">
+        <label value="@init('Level '.concat(level.level))"/>
+        <label value="@load(data.text)" />
+        <label value="@load(context)" />
+        <a iconSclass="@load(data.iconClass)"/>
+
+        <vlayout>
+            <forEach items="@load(level.child eq null ? [] : level.child.items)">
+                <a onClick="@command('levelNavTo', level=level.child, key=self.label)" label="@init(each.x)"/>
+            </forEach>
+        </vlayout>
+        <div>
+            <button onClick='level.setContext(Collections.singletonMap("test", new Random().nextInt()))' label="Random Context"/>
+            <button onClick='level.navigateTo("Configuration")' label="NavTo Configuration"/>
+        </div>
+
+        <apply level1="@load(level.child)"
+                    templateURI="@load(level1.current eq null ? null : level1.current.url)"
+                    data="@load(level1.current)"
+                    context="@load(level1.context)"/>
+    </div>
+</zk>

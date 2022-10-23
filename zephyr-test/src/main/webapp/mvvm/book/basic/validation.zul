@@ -1,0 +1,33 @@
+<zk>
+	<window viewModel="@('org.zkoss.zephyr.test.mvvm.book.basic.ValidationVM')">
+		<vlayout>
+			<hlayout>Value1:
+				<label id="l11" value="@bind(vm.value1)"/>
+			</hlayout>
+			<hlayout>Value2:
+				<label id="l12" value="@bind(vm.value2)"/>
+			</hlayout>
+		</vlayout>
+		<hlayout>
+			Prompt:
+			Value1:
+			<textbox id="t21" value="@bind(vm.value1) @validator(vm.validator1)" errorMessage="@bind(vm.lastMessage1)"/>
+			Value2:
+			<textbox id="t22" value="@bind(vm.value2) @validator(vm.validator2)" errorMessage="@bind(vm.lastMessage2)"/>
+		</hlayout>
+		<hlayout>
+			Command:
+			Value1:
+			<textbox id="t31" value="@load(vm.value1) @save(vm.value1 ,before='cmd1') @validator(vm.validator1)"/>
+			Value2:
+			<textbox id="t32" value="@load(vm.value2) @save(vm.value2 ,before='cmd1') @validator(vm.validator2)"/>
+		</hlayout>
+		<hlayout>
+			<button id="btn1" label="cmd1" onClick="@command('cmd1')"/>
+		</hlayout>
+		<vlayout>
+			<label id="msg1" value="@bind(vm.lastMessage1)"/>
+			<label id="msg2" value="@bind(vm.lastMessage2)"/>
+		</vlayout>
+	</window>
+</zk>

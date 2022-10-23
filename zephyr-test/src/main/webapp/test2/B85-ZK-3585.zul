@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3585.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jul 10 16:42:52 CST 2017, Created by rudyhuang
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Click 'Random City', the new value is shown.
+        2. Change collections, maps, and nested property by program, the new value is shown.
+    </label>
+    <vlayout viewModel="@id('vm') @init('org.zkoss.zktest.test2.B85_ZK_3585VM')"
+             form="@id('fx') @load(vm.person) @save(vm.person, before='doSave')">
+        <hbox widths="5em,16.3em">
+            <cell align="right">
+                <label value="First Name" />
+            </cell>
+            <textbox value="@bind(fx.firstName)" hflex="1" />
+        </hbox>
+        <hbox widths="5em,16.3em">
+            <cell align="right">
+                <label value="Last Name" />
+            </cell>
+            <textbox value="@bind(fx.lastName)" hflex="1" />
+        </hbox>
+        <hbox widths="5em,16.3em">
+            <cell align="right">
+                <label value="City" />
+            </cell>
+            <textbox value="@bind(fx.city)" hflex="1" />
+        </hbox>
+        <hbox widths="7em,7em,7em">
+            <button label="Random City"
+                    onClick="@command('doRandomCity',form=fx)" hflex="1" />
+            <button label="Reset" onClick="@command('doReset')"
+                    disabled="@load(not fxStatus.dirty)" hflex="1" />
+            <button label="Save" onClick="@command('doSave')"
+                    disabled="@load(not fxStatus.dirty)" hflex="1" />
+        </hbox>
+        <!-- Some other notify test cases -->
+        <hbox widths="7em,7em,7em">
+            <button label="Collections"
+                    onClick="@command('doCollections',form=fx)" hflex="1" />
+            <button label="Maps"
+                    onClick="@command('doMaps',form=fx)" hflex="1" />
+            <button label="Nested"
+                    onClick="@command('doNested',form=fx)" hflex="1" />
+        </hbox>
+        <hbox widths="5em,16.3em">
+            <cell align="right">
+                <label value="Collections" />
+            </cell>
+            <vlayout>
+                <forEach items="@load(fx.collections)">
+                    <label value="@load(each)" />
+                </forEach>
+            </vlayout>
+        </hbox>
+        <hbox widths="5em,16.3em">
+            <cell align="right">
+                <label value="Maps" />
+            </cell>
+            <vlayout>
+                <forEach items="@load(fx.maps)">
+                    <div><label value="@load(each.key) " /> - <label value="@load(each.value) " /></div>
+                </forEach>
+            </vlayout>
+        </hbox>
+        <hbox widths="5em,16.3em">
+            <cell align="right">
+                <label value="Nested property" />
+            </cell>
+            <textbox value="@bind(fx.child.firstName)" hflex="1" />
+        </hbox>
+    </vlayout>
+</zk>

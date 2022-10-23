@@ -1,0 +1,18 @@
+<zk>
+	<label multiline="true">
+		1. Open the menu and check/uncheck the menuitem
+		2. The label should be updated.
+	</label>
+	<window viewModel="@id('vm') @init('org.zkoss.zephyr.test.mvvm.book.comp.Menuitem')"
+			border="normal" width="200px">
+		<menubar>
+			<menu label="Option">
+				<menupopup id="editPopup">
+					<menuitem label="Item" checkmark="true" autocheck="true" checked="@bind(vm.checked)"/>
+				</menupopup>
+			</menu>
+		</menubar>
+		<separator height="50px"/>
+		<label id="checked" value="@load(vm.checked)"/>
+	</window>
+</zk>

@@ -1,0 +1,3 @@
+rootProject.name = 'zephyr-test'
+
+includeBuild '../../zk'

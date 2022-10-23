@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3107.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Wed Mar 2 14:12:46 CST 2016, Created by jameschu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div viewModel="@id('vm')@init('org.zkoss.zktest.test2.B80_ZK_3107VM')">
+        <vlayout>
+            <label>1.You should see a textbox with value: Peter</label>
+            <textbox value="@bind(vm.name)"/>
+            <label>2.You should see "PETER 5"</label>
+            <div>
+                <label id="l1" value="@load(vm.nameUpper)"/>
+                <label id="l2" value="@load(vm.calcNameLength(vm.nameUpper))"/>
+            </div>
+            <label>3.You should see "3"</label>
+            <label id="l3" value="@load(vm.calcNameLength(vm.info))"/>
+            <label>4.You should see "1"</label>
+            <label id="l4" value="@load(vm.call(1))"/>
+            <label>5.Click the button. You should see "PETER 5" changed to "HI 2"</label>
+            <button label="click" onClick="@command('change')" />
+        </vlayout>
+	</div>
+</zk>

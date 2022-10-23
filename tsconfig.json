@@ -28,6 +28,7 @@
       "zk",
       "zul",
       "zkbind",
+      "zephyr",
       "zkmax",
       "zkex",
       "webpack-env"
@@ -39,11 +40,17 @@
       "@zul/*": [
         "./zul/src/main/resources/web/js/zul/*"
       ],
+      "@zephyr/*": [
+        "./zephyr/src/main/resources/web/js/zephyr/*"
+      ],
       "@zkex/*": [
         "../zkcml/zkex/src/main/resources/web/js/zkex/*"
       ],
       "@zkmax/*": [
         "../zkcml/zkmax/src/main/resources/web/js/zkmax/*"
+      ],
+      "@zephyrex/*": [
+        "../zkcml/zephyr-ex/src/main/resources/web/js/zephyrex/*"
       ]
     }
   },
@@ -51,7 +58,8 @@
     "zk/src/main/resources/web/js",
     "zul/src/main/resources/web/js",
     "zbind/src/main/resources/web/js",
-    "zhtml/src/main/resources/web/js"
+    "zhtml/src/main/resources/web/js",
+    "zephyr/src/main/resources/web/js"
   ],
   "exclude": [
     "node_modules",

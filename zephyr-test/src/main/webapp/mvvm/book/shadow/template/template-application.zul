@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+template-application.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri June 24 16:40:31 CST 2022, Created by jameschu
+
+Copyright (C) 2022 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		Finally you can see a complete navbar.
+		1. In Products, there are 4 sub navitems.
+		2. In Demos, there are 3 sub navitems.
+		3. Others are no child.
+	</label>
+	<div viewModel="@('org.zkoss.zephyr.test.mvvm.book.shadow.NavbarVM')">
+<!--		<if test="@load(true)" aaa="@load(vm.menuItems)">-->
+<!--			<label value="@load(test)" />-->
+<!--			<label value="@load(aaa)" />-->
+<!--			<label value="12ss3" />-->
+<!--		</if>-->
+		<customNavbar menuItems="@load(vm.menuItems)"/>
+	</div>
+</zk>

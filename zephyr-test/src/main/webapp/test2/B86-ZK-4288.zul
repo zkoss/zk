@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4288.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri May 17 10:21:58 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Enable SerializableUiFactory in zk.xml
+        &lt;system-config>
+            &lt;ui-factory-class>org.zkoss.zk.ui.http.SerializableUiFactory&lt;/ui-factory-class>
+        &lt;/system-config>
+        2. Open browser console / Network to monitor network activities and reload this page.
+        3. The status code of progress-72.gif should be 200, not 500.
+    </label>
+    <window viewModel="@id('vm') @init('org.zkoss.zktest.test2.B86_ZK_4288VM')">
+        <label value="Hello from ZK with Redis"/>
+    </window>
+</zk>

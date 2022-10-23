@@ -1,0 +1,14 @@
+<zk>
+	<label multiline="true">
+		The label will be updated while the combobox is opened/closed.
+	</label>
+	<vlayout
+		viewModel="@id('vm') @init('org.zkoss.zephyr.test.mvvm.book.comp.Combobutton')">
+		<label id="open" value="@load(vm.open)" />
+		<combobox open="@bind(vm.open)" >
+			<comboitem>AAAAA</comboitem>
+			<comboitem>BBBBB</comboitem>
+			<comboitem>CCCCC</comboitem>
+		</combobox>
+	</vlayout>
+</zk>

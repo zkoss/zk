@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B65-ZK-2409.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu, Aug 21, 2014  5:49:23 PM, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native">
+	<div vflex="min">
+		<n:ol>
+			<n:li>Click on combobox to focus (test each combobox)</n:li>
+			<n:li>Enter '0', the popup should appear on top of the combobox</n:li>
+			<n:li>Enter '0' again, the popup should only have '00' left and appear selected</n:li>
+			<n:li>Press 'Enter' or 'Tab' key, the popup should disappear</n:li>
+			<n:li>Focus on combobox and delete one '0', it is bug if popup do not appear on top of the combobox</n:li>
+		</n:ol>
+	</div>
+	<window border="normal" title="Combobox placed at bottom"
+			viewModel="@id('vm') @init('org.zkoss.zktest.test2.B65_ZK_2409VM')"
+			vflex="1">
+		<div height="45%"/>
+		<combobox model="@load(vm.subModelItem)" autodrop="true" autocomplete="false">
+			<template name="model" var="item">
+				<comboitem label="@load(item)"/>
+			</template>
+		</combobox>
+		<div height="45%"/>
+		<combobox model="@load(vm.subModelItem)" autodrop="true" autocomplete="false">
+			<template name="model" var="item">
+				<comboitem label="@load(item)"/>
+			</template>
+		</combobox>
+	</window>
+</zk>

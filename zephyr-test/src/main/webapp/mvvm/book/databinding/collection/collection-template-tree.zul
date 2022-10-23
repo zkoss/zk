@@ -1,0 +1,45 @@
+<window viewModel="@id('vm') @init('org.zkoss.zephyr.test.mvvm.book.basic.CollectionTemplateTreeVM')">
+	<label id="msg" value="@bind(vm.message1)"/>
+	<tree id="tree" model="@bind(vm.model) @template(each.startA or forEachStatus.index eq 1?'model1':'model2')" width="900px">
+		<treecols>
+			<treecol label="index"/>
+			<treecol label="name"/>
+			<treecol label="action" width="600px"/>
+			<treecol label="template" />
+		</treecols>
+		<template name="model1" var="node" status="s">
+			<treeitem open="@bind(node.open)">
+				<treerow>
+					<treecell label="@bind(s.index)"/>
+					<treecell label="@bind(node.data)"/>
+					<treecell>
+						<hlayout>
+							<button label="Index" onClick="@command('showIndex', index=s.index)"/>
+							<button label="Delete" onClick="@command('delete', node=node)"/>
+							<button label="Add After" onClick="@command('addAfter', node=node)"/>
+							<button label="Add Before" onClick="@command('addBefore', node=node)"/>
+						</hlayout>
+					</treecell>
+					<treecell label="Model1"/>
+				</treerow>
+			</treeitem>
+		</template>
+		<template name="model2" var="node" status="s">
+			<treeitem open="@bind(node.open)">
+				<treerow>
+					<treecell label="@bind(s.index)"/>
+					<treecell label="@bind(node.data)"/>
+					<treecell>
+						<hlayout>
+							<button label="Index" onClick="@command('showIndex', index=s.index)"/>
+							<button label="Delete" onClick="@command('delete', node=node)"/>
+							<button label="Add After" onClick="@command('addAfter', node=node)"/>
+							<button label="Add Before" onClick="@command('addBefore', node=node)"/>
+						</hlayout>
+					</treecell>
+					<treecell label="Model2"/>
+				</treerow>
+			</treeitem>
+		</template>
+	</tree>
+</window>

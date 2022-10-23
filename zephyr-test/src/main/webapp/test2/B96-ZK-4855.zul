@@ -1,0 +1,40 @@
+<!--
+B96-ZK-4855.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Tue Apr 20 15:50:21 CST 2021, Created by jameschu
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<window form="@id('fx') @load(vm.department) @save(vm.department, before='save')" border="normal" title="Click 'add' button, you should see listitem(s) added"
+			viewModel="@id('vm') @init('org.zkoss.zktest.test2.B96_ZK_4855VM')">
+		<listbox model="@load(fx.employees) @template('employees')" sclass="gedListBox">
+			<listhead>
+				<listheader label="Frist Name"/>
+				<listheader label="Last Name"/>
+				<listheader label="actions"/>
+			</listhead>
+			<template name="employees" var="employee">
+				<listitem>
+					<listcell>
+						<textbox value="@bind(employee.firstName)"/>
+					</listcell>
+					<listcell>
+						<textbox value="@bind(employee.lastName)"/>
+					</listcell>
+					<listcell>
+						<button label="remove" onClick="@command('remove', form=fx, employee=employee)" />
+					</listcell>
+				</listitem>
+			</template>
+		</listbox>
+		<button id="btn1" label="add" onClick="@command('add', form=fx)"/>
+		<button id="btn2" label="addMultiTimes" onClick="@command('addMultiTimes', form=fx)"/>
+	</window>
+</zk>

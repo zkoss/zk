@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F86-ZK-4184.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jan 07 15:39:35 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <div viewModel="@id('vm') @init('org.zkoss.zktest.test2.F86_ZK_4184VM')">
+        <label multiline="true">
+            1. Click "notifyContacts".
+            2. You should always see an error message in every click.
+        </label>
+        <button id="update" onClick="@command('update')" label="notifyContacts"/>
+        <button onClick="@command('indexLoop')" label="index"/>
+        <button onClick="@command('forLoop')" label="for"/>
+        <button onClick="@command('iteratorLoop')" label="iterator"/>
+        <div children="@load(vm.contacts)">
+            <template name="children">
+                <div style="display: inline-block; width: 150px;">${each}</div>
+            </template>
+        </div>
+    </div>
+</zk>

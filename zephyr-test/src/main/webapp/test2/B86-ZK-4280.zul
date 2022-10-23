@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4280.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Thu May 9 09:41:26 CST 2019, Created by jameschu
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div viewModel="@id('vm')@init('org.zkoss.zktest.test2.B86_ZK_4280VM')">
+		<label>Click "toggle val1" twice and click detach, then click "toggle val1", the title of window should be "true"</label>
+			<separator />
+		<button id="toggle" label="toggle val1" onClick="@command('toggleVal1')" />
+		<separator />
+		<window id="win" title="@load((not empty vm.innerList) and (vm.val1 or vm.val2))" >
+			<textbox id="t1" value="@load(vm.val1)"/>
+			<button id="detach" label="detach" onClick="t1.detach()"/>
+		</window>
+	</div>
+</zk>

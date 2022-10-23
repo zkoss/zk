@@ -1,0 +1,7 @@
+{
+  "name": "zephyr",
+  "version": "0.1.0",
+  "description": "ZK Stateless Utilities",
+  "types": "./src/main/resources/web/js/zephyr/global.d.ts",
+  "author": "Potix"
+}

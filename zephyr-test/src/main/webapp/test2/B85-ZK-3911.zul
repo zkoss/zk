@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3911.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Mon May 28 17:26:22 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Maximize the window
+		2. The text below should be "desktop"
+		3. Resize the width of window to 768px
+		4. The text below should be "tablet"
+		5. Resize the width of window to 414px
+		6. The text below should be "mobile"
+	</label>
+	<separator/>
+	<label sclass="lb" viewModel="@id('vm') @init('org.zkoss.zktest.test2.B85_ZK_3911_ChildVM')"
+		   value="@load(vm.label)"/>
+</zk>

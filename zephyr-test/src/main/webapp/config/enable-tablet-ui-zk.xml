@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<zk>
+    <library-property>
+        <name>org.zkoss.zkmax.tablet.ui.disabled</name>
+        <value>false</value>
+    </library-property>
+</zk>

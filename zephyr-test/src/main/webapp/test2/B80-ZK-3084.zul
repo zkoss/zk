@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3094.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Mon Feb 22 15:12:46 CST 2016, Created by jameschu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div viewModel="@id('vm')@init('org.zkoss.zktest.test2.B80_ZK_3084VM')">
+        <label>Click the following buttons, you should see "false" in ZK log with no exception.</label>
+		<button label="check empty event" onClick="@command(empty event? 'printTrue' : 'printFalse', e = event)" />
+		<button label="check empty self" onClick="@command(empty self? 'printTrue' : 'printFalse', e = event)" />
+		<button label="check empty session" onClick="@command(empty session? 'printTrue' : 'printFalse', e = event)" />
+	</div>
+</zk>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4685.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Tue Nov 24 10:25:45 AM CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label value="Form validation error - to reproduce:" style="display:block;margin-top:10px;"/>
+	<label value="1. Open form using instance of ContentModel1" style="display:block;"/>
+	<label value="2. Close form." style="display:block;"/>
+	<label value="3. Open form using instance of ContentModel2" style="display:block;"/>
+	<label value="4. Save form.  Error occurs" style="display:block;margin-bottom:10px;"/>
+	<div viewModel="@id('vm') @init('org.zkoss.zktest.test2.B95_ZK_4685VM')">
+		<div visible="@load(vm.open)"
+			 form="@id('formData') @load(vm.formModel) @save(vm.formModel, before='doSaveForm') @validator('formBeanValidator', prefix='p_')"
+			 style="border: 1px solid #000; padding:10px;">
+			<apply template="@load(formData.contentModel.formTemplate)">
+				<template name="content1">
+					<label value="Form using ContentModel 1 - populates the form with a model1Property save binding.  Click Close form button (sets the apply templateURI to null), and then Open form using instance of ContentModel2."
+						   style="display:block;margin-bottom:10px;"/>
+					<textbox value="@bind(formData.contentModel.commonProperty)" name="Common field"
+							 style="display:block;margin-top:10px;"/>
+					<textbox value="@bind(formData.contentModel.model1Property)" name="Model 1 field"
+							 style="display:block;margin-top:10px;"/>
+					<button id="btnClose" label="Close form" onClick="@command('doCloseForm')"
+							style="display:block;margin-top:10px;" visible="@load(not vm.content2Open)"/>
+				</template>
+				<template name="content2">
+					<label value="Form using ContentModel 2.  Click Save form button to validate form.  Error occurs - it seems to still be trying to validate the model1Property save binding, although this no longer should exist."
+						   style="display:block;margin-bottom:10px;"/>
+					<textbox value="@bind(formData.contentModel.commonProperty)" name="Common field"
+							 style="display:block;margin-top:10px;"/>
+					<textbox value="@bind(formData.contentModel.model2Property)" name="Model 2 field"
+							 style="display:block;margin-top:10px;"/>
+					<button id="btn" label="Save form" onClick="@command('doSaveForm')" visible="@load(vm.content2Open)"
+							style="display:block;margin-top:10px;"/>
+				</template>
+			</apply>
+		</div>
+		<button id="btnOpen1" label="Open form using instance of ContentModel1"  onClick="@command('doOpenFormContent1')" style="display:block;margin-top:10px;"/>
+		<button id="btnOpen2" label="Open form using instance of ContentModel2"  onClick="@command('doOpenFormContent2')" style="display:block;margin-top:10px;"/>
+	</div>
+</zk>

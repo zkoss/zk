@@ -1,0 +1,20 @@
+<zk>
+	<label multiline="true">
+		Select any item, then the label should be updated to the selected index.
+	</label>
+	<vlayout
+		viewModel="@id('vm') @init('org.zkoss.zephyr.test.mvvm.book.comp.Selectbox')">
+		<zscript>
+        <![CDATA[
+	String[] userName = { "Tony", "Ryan", "Jumper", "Wing", "Sam" };
+	ListModelList model = new ListModelList(userName);
+]]></zscript>
+		<selectbox id="sbox" model="@load(vm.itemList)" selectedIndex="@bind(vm.selectedIndex)">
+			<template name="model">
+				<label value="@load(each)" />
+			</template>
+		</selectbox>
+		<separator height="50px"></separator>
+		<label id="selected" value="@load(vm.selectedIndex)" />
+	</vlayout>
+</zk>
