@@ -329,7 +329,7 @@ var DocRoot = (function () {
  * </ul>
  */
 export class JQZK {
-	/** The associated instance of {@link jq}, the object returned by <code>jq(...)</code>.
+	/** The associated instance of {@link JQZK.jq}, the object returned by <code>jq(...)</code>.
 	 * @type jq
 	 */
 	declare jq: JQuery;
