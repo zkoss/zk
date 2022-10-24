@@ -14,16 +14,16 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 -->
 <zk>
 	<label>Focus to target</label>
-	<div viewModel="@('org.zkoss.zktest.test2.F95_ZK_4624FocusVM')">
+	<div viewModel="@id('vm') @init('org.zkoss.zktest.test2.F95_ZK_4624FocusVM')">
 		<div>
-			<button onClick="@('doFocus')" label="focus the textbox"/>
-			<button id="fcIntoListLastBtn" onClick="@('doFocusListLastBtn')" label="focus the last button in a List"/>
-			<button id="fcIntoInnerTb" onClick="@('doFocusInnerTb')" label="focus the textbox inner"/>
-			<textbox id="tb" value="@(text)" />
+			<button onClick="@command('doFocus')" label="focus the textbox"/>
+			<button id="fcIntoListLastBtn" onClick="@command('doFocusListLastBtn')" label="focus the last button in a List"/>
+			<button id="fcIntoInnerTb" onClick="@command('doFocusInnerTb')" label="focus the textbox inner"/>
+			<textbox id="tb" value="@load(vm.text)" />
 		</div>
 		<div id="list">
-			<forEach items="@(list)">
-				<textbox value="@(each)"/>
+			<forEach items="@load(vm.list)">
+				<textbox value="@load(each)"/>
 			</forEach>
 			<window id="win2">
 				<textbox id="tb_inner" />
