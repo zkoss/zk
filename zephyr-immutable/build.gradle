@@ -11,6 +11,7 @@ idea {
 }
 
 description = "Zephyr Immutable Style"
+group = "org.zkoss.zephyr"
 
 dependencies {
     implementation "org.immutables:value:$immutablesVersion"

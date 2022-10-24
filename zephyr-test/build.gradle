@@ -38,13 +38,15 @@ repositories {
 	}
 }
 
+group = "org.zkoss.zephyr"
+
 dependencies {
 	implementation "org.zkoss.zk:zhtml:${version}"
 	implementation "org.zkoss.zk:zkmax:${version}"
 	implementation "org.zkoss.zk:zkplus:${version}"
 	implementation "org.zkoss.zk:zuti:${version}"
-	implementation "org.zkoss.zk:zephyr:${version}"
-	implementation "org.zkoss.zk:zephyr-ex:${version}"
+	implementation "org.zkoss.zephyr:zephyr:${version}"
+	implementation "org.zkoss.zephyr:zephyr-ex:${version}"
 	implementation 'commons-lang:commons-lang:2.6'
 	implementation 'commons-beanutils:commons-beanutils:1.9.4'
 

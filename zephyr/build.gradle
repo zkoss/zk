@@ -12,6 +12,7 @@ idea {
 }
 
 description = "Zephyr Core"
+group = "org.zkoss.zephyr"
 
 buildConfig {
     className = "Version"

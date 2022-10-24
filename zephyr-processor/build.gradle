@@ -11,6 +11,7 @@ idea {
 }
 
 description = "Zephyr Processor"
+group = "org.zkoss.zephyr"
 
 dependencies {
 	implementation "org.immutables:metainf:$immutablesVersion"
