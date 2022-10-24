@@ -44,4 +44,10 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 			</attribute>
 		</annotation>
 	</component>
+	<component>
+		<component-name>debugger</component-name>
+		<macro-uri>/WEB-INF/tool/debugger.zul</macro-uri>
+		<inline>true</inline>
+	</component>
+
 </language-addon>
