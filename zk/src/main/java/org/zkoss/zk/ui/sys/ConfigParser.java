@@ -53,7 +53,6 @@ import org.zkoss.web.fn.ThemeFns;
 import org.zkoss.web.theme.ThemeRegistry;
 import org.zkoss.web.theme.ThemeResolver;
 import org.zkoss.xel.ExpressionFactory;
-import org.zkoss.zk.Version;
 import org.zkoss.zk.au.AuDecoder;
 import org.zkoss.zk.au.AuWriter;
 import org.zkoss.zk.au.AuWriters;
@@ -107,13 +106,13 @@ public class ConfigParser {
 			return true; //version is optional (3.0.5)
 
 		if (_zkver == null)
-			_zkver = Utils.parseVersion(Version.UID);
+			_zkver = Utils.parseVersion(org.zkoss.zk.Version.UID);
 
 		String s = el.getElementValue("zk-version", true);
 		if (s != null) {
 			final int[] reqzkver = Utils.parseVersion(s);
 			if (Utils.compareVersion(_zkver, reqzkver) < 0) {
-				log.info("Ignore " + url + "\nCause: ZK version must be " + s + " or later, not " + Version.UID);
+				log.info("Ignore " + url + "\nCause: ZK version must be " + s + " or later, not " + org.zkoss.zk.Version.UID);
 				return false;
 			}
 			if (zk5required && reqzkver.length > 0 && reqzkver[0] < 5) {

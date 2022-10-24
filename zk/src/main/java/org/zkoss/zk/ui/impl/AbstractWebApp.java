@@ -26,7 +26,6 @@ import org.slf4j.LoggerFactory;
 
 import org.zkoss.io.Files;
 import org.zkoss.util.Utils;
-import org.zkoss.zk.Version;
 import org.zkoss.zk.au.AuDecoder;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.UiException;
@@ -85,7 +84,7 @@ public abstract class AbstractWebApp implements WebApp, WebAppCtrl {
 	}
 
 	public final String getVersion() {
-		return Version.RELEASE;
+		return org.zkoss.zk.Version.RELEASE;
 	}
 
 	public String getBuild() {
