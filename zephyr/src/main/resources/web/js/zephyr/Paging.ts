@@ -16,7 +16,8 @@ declare module '@zul/mesh/MeshWidget' {
 	}
 }
 zk.afterLoad('zul.mesh', () => {
-	const xPagingWidget = zk.override(zul.mesh.Paging.prototype, {}, {
+	const xPagingWidget: Partial<zul.mesh.Paging> = {};
+	zk.override(zul.mesh.Paging.prototype, xPagingWidget, {
 		isClientPaging(meshWidget?: zul.mesh.MeshWidget): boolean {
 			meshWidget = meshWidget ?? this.getMeshWidget();
 			return meshWidget != null && meshWidget.isZephyr() && !meshWidget.isModel();
@@ -26,11 +27,11 @@ zk.afterLoad('zul.mesh', () => {
 			if (this.isClientPaging(meshWidget)) {
 				if (meshWidget != this.parent) {
 					// external paginal
-					xPagingWidget.rerender.call(this, skipper);
+					xPagingWidget.rerender!.call(this, skipper);
 				}
 				meshWidget!.rerender();
 			} else {
-				xPagingWidget.rerender.call(this, skipper);
+				xPagingWidget.rerender!.call(this, skipper);
 			}
 			return this;
 		},
