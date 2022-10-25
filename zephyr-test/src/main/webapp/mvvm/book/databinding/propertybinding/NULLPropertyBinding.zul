@@ -1,6 +1,6 @@
 <zk>
 	<vlayout viewModel="@id('vm') @init('org.zkoss.zephyr.test.mvvm.book.databinding.propertybinding.NULLPropertyBindingVM')">
-		<label>You should see only "test" string and two javascript exceptions ("Property 'user1'/'sss' does not exist.") in console</label>
+		<label>You should see only "test" string and no javascript exceptions</label>
 		<label id="l1" value="@load(vm.testStr)" />
 		<label id="l3" value="@load(vm.testNULLStr)" />
 		<label id="l4" value="@load(vm.user.account)" />

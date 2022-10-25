@@ -9,6 +9,7 @@
 			3. input 11 in quantity of item A, compute, total not changed
 			4. input 5 in quantity of item A, select off% 50
 			5. compute, total should be 75
+
 		</label>
 		<grid form="@id('fx') @load(vm.order) @save(vm.order, before='compute') @validator(vm.f2Validator, max=10)">
 			<columns>

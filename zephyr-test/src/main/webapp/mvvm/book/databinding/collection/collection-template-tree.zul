@@ -1,10 +1,10 @@
 <window viewModel="@id('vm') @init('org.zkoss.zephyr.test.mvvm.book.basic.CollectionTemplateTreeVM')">
 	<label id="msg" value="@bind(vm.message1)"/>
-	<tree id="tree" model="@bind(vm.model) @template(each.startA or forEachStatus.index eq 1?'model1':'model2')" width="900px">
+	<tree id="tree" model="@bind(vm.model) @template(each.startA or forEachStatus.index eq 1?'model1':'model2')" width="700px">
 		<treecols>
 			<treecol label="index"/>
 			<treecol label="name"/>
-			<treecol label="action" width="600px"/>
+			<treecol label="action" width="400px"/>
 			<treecol label="template" />
 		</treecols>
 		<template name="model1" var="node" status="s">

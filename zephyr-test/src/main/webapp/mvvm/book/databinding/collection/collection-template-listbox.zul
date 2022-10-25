@@ -1,11 +1,10 @@
 <window viewModel="@id('vm') @init('org.zkoss.zephyr.test.mvvm.book.basic.CollectionTemplateListboxVM')">
 	<label id="msg" value="@load(vm.message1)"/>
-	<listbox id="outerbox" hflex="1" model="@load(vm.items) @template(each.name eq 'A' or forEachStatus.index eq 2?'model1':'model2')" rows="5">
-		<custom-attributes org.zkoss.zul.listbox.rod="true"/>
+	<listbox id="outerbox" width="700px" model="@load(vm.items) @template(each.name eq 'A' or forEachStatus.index eq 2?'model1':'model2')" rows="5">
 		<listhead>
 			<listheader label="index"/>
 			<listheader label="name"/>
-			<listheader label="options" width="400px"/>
+			<listheader label="options" width="200px"/>
 			<listheader label="action" width="300px"/>
 			<listheader label="template"/>
 		</listhead>

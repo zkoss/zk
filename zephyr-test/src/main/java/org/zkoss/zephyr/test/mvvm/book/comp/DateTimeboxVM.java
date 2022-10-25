@@ -17,7 +17,7 @@ import java.util.Date;
  * @author rudyhuang
  */
 public class DateTimeboxVM {
-	private Date date = new Date(2021, 1, 23, 14, 2, 2);
+	private Date date = new Date();
 
 	public Date getDate() {
 		return date;
