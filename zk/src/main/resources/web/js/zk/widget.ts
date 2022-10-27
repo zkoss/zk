@@ -6159,8 +6159,8 @@ export class Native extends Widget {
 			//Bug ZK-606/607: hflex/vflex and many components need to know
 			//child.$n(), so we have to generate id if the parent is not native
 			//(and no id is assigned) (otherwise, zk.Native.$n() failed)
-			if ((this instanceof zk.Native) //ZK-745
-				&& !this.id && (p = this.parent) && (!(p as {z_virnd?}).z_virnd || p.getMold() == 'nodom')) { //z_virnd implies zk.Native, zk.Page and zk.Desktop
+			if (/*(this instanceof zk.Native) //ZK-745
+				&&*/ (this.rawId || (p = this.parent) && (!(p as {z_virnd?}).z_virnd || p.getMold() == 'nodom'))) { //z_virnd implies zk.Native, zk.Page and zk.Desktop
 				var j = 0, len = s.length, cond, cc: string;
 				for (cond = {whitespace: 1}; j < len; ++j) {
 					if ((cc = s.charAt(j)) == '<')
@@ -6175,7 +6175,7 @@ export class Native extends Widget {
 					while (++j < len)
 						if (!zUtl.isChar(s.charAt(j), cond as never))
 							break;
-					s = s.substring(0, j) + ' id="' + this.uuid + '"' + s.substring(j);
+					s = s.substring(0, j) + ' id="' + (this.id || this.uuid) + '"' + s.substring(j);
 				}
 			}
 			// B80-ZK-2957
