@@ -17,16 +17,17 @@ import java.util.Iterator;
 
 import org.junit.jupiter.api.Test;
 
+import org.zkoss.stateless.zpr.IColumn;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
- * A set of unit test for {@link org.zkoss.zephyr.zpr.IColumn} Java Docs.
+ * A set of unit test for {@link IColumn} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Data/Grid/Column">Column</a>,
  * if any.
  *
  * @author katherine
- * @see org.zkoss.zephyr.zpr.IColumn
+ * @see IColumn
  */
 public class IColumnRichletTest extends WebDriverTestCase {
 	@Test

@@ -15,12 +15,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
+import org.zkoss.stateless.annotation.ActionVariable;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
- * A set of unit tests for {@link org.zkoss.zephyr.annotation.ActionVariable}
+ * A set of unit tests for {@link ActionVariable}
  * @author jumperchen
- * @see org.zkoss.zephyr.annotation.ActionVariable
+ * @see ActionVariable
  */
 public class ActionVariableRichletTest extends WebDriverTestCase {
 	@Test

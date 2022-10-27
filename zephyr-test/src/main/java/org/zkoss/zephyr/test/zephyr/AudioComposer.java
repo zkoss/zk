@@ -14,14 +14,14 @@ package org.zkoss.zephyr.test.zephyr;
 /**
  * @author katherine
  */
-import org.zkoss.zephyr.annotation.Action;
-import org.zkoss.zephyr.ui.BuildContext;
-import org.zkoss.zephyr.ui.StatelessComposer;
-import org.zkoss.zephyr.zpr.IAnyGroup;
-import org.zkoss.zephyr.zpr.IAudio;
-import org.zkoss.zephyr.zpr.IButton;
-import org.zkoss.zephyr.zpr.IDiv;
-import org.zkoss.zephyr.state.IAudioController;
+import org.zkoss.stateless.annotation.Action;
+import org.zkoss.stateless.ui.BuildContext;
+import org.zkoss.stateless.ui.StatelessComposer;
+import org.zkoss.stateless.zpr.IAnyGroup;
+import org.zkoss.stateless.zpr.IAudio;
+import org.zkoss.stateless.zpr.IButton;
+import org.zkoss.stateless.zpr.IDiv;
+import org.zkoss.stateless.state.IAudioController;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.util.Clients;
 

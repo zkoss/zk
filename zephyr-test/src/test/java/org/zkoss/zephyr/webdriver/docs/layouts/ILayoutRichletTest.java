@@ -15,13 +15,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
+import org.zkoss.stateless.zpr.ILayout;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
- * A set of unit test for {@link org.zkoss.zephyr.zpr.ILayout} Java Docs.
+ * A set of unit test for {@link ILayout} Java Docs.
  *
  * @author katherine
- * @see org.zkoss.zephyr.zpr.ILayout
+ * @see ILayout
  */
 public class ILayoutRichletTest extends WebDriverTestCase {
 	@Test

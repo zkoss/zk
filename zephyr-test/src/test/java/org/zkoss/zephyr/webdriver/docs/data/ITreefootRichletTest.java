@@ -15,15 +15,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
+import org.zkoss.stateless.zpr.ITreefoot;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
- * A set of unit test for {@link org.zkoss.zephyr.zpr.ITreefoot} Java Docs.
+ * A set of unit test for {@link ITreefoot} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Data/Tree/Treefoot">Treefoot</a>,
  * if any.
  *
  * @author katherine
- * @see org.zkoss.zephyr.zpr.ITreefoot
+ * @see ITreefoot
  */
 public class ITreefootRichletTest extends WebDriverTestCase {
 	@Test

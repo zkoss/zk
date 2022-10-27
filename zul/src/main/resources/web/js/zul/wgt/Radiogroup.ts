@@ -277,7 +277,7 @@ export class Radiogroup extends zul.Widget {
 		} else {
 			this._fixSelectedIndex();
 		}
-		// handle this disabled state for zephyr.
+		// handle this disabled state for stateless.
 		child.setDisabled(this.isDisabled());
 	}
 

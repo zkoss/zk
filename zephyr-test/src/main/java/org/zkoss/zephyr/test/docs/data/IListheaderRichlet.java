@@ -11,22 +11,23 @@ Copyright (C) 2022 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zephyr.test.docs.data;
 
-import org.zkoss.zephyr.annotation.RichletMapping;
-import org.zkoss.zephyr.ui.StatelessRichlet;
-import org.zkoss.zephyr.zpr.IListbox;
-import org.zkoss.zephyr.zpr.IListhead;
-import org.zkoss.zephyr.zpr.IListheader;
-import org.zkoss.zephyrex.state.IListboxController;
+import org.zkoss.stateless.annotation.RichletMapping;
+import org.zkoss.stateless.zpr.IColumn;
+import org.zkoss.stateless.ui.StatelessRichlet;
+import org.zkoss.stateless.zpr.IListbox;
+import org.zkoss.stateless.zpr.IListhead;
+import org.zkoss.stateless.zpr.IListheader;
+import org.zkoss.statelessex.state.IListboxController;
 import org.zkoss.zul.RowComparator;
 import org.zkoss.zul.SimpleListModel;
 
 /**
- * A set of example for {@link org.zkoss.zephyr.zpr.IColumn} Java Docs.
+ * A set of example for {@link IColumn} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Data/Listbox/Listheader">IListheader</a>,
  * if any.
  *
  * @author katherine
- * @see org.zkoss.zephyr.zpr.IColumn
+ * @see IColumn
  */
 @RichletMapping("/data/iListheader")
 public class IListheaderRichlet implements StatelessRichlet {

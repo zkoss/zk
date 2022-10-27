@@ -17,15 +17,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.interactions.Actions;
 
+import org.zkoss.stateless.zpr.IColumns;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
- * A set of unit test for {@link org.zkoss.zephyr.zpr.IColumns} Java Docs.
+ * A set of unit test for {@link IColumns} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Data/Grid/Columns">Columns</a>,
  * if any.
  *
  * @author katherine
- * @see org.zkoss.zephyr.zpr.IColumns
+ * @see IColumns
  */
 public class IColumnsRichletTest extends WebDriverTestCase {
 	@Test

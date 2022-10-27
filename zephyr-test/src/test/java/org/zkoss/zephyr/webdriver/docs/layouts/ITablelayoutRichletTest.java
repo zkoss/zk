@@ -18,12 +18,12 @@ import org.junit.jupiter.api.Test;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
- * A set of unit test for {@link org.zkoss.zephyrex.zpr.ITablelayout} Java Docs.
+ * A set of unit test for {@link org.zkoss.statelessex.zpr.ITablelayout} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Layouts/Tablelayout">Tablelayout</a>,
  * if any.
  *
  * @author katherine
- * @see org.zkoss.zephyrex.zpr.ITablelayout
+ * @see org.zkoss.statelessex.zpr.ITablelayout
  */
 public class ITablelayoutRichletTest extends WebDriverTestCase {
 	@Test

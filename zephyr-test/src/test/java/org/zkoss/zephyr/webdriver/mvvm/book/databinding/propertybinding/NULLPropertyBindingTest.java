@@ -1,15 +1,8 @@
 package org.zkoss.zephyr.webdriver.mvvm.book.databinding.propertybinding;
 
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.logging.LogEntry;
-import org.openqa.selenium.logging.LogType;
-import org.zkoss.zephyr.webdriver.TestStage;
-import org.zkoss.zephyr.webdriver.ZephyrClientMVVMTestCase;
 
-import java.util.List;
-import java.util.logging.Level;
+import org.zkoss.zephyr.webdriver.ClientBindTestCase;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -18,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 /**
  * @author jameschu
  */
-public class NULLPropertyBindingTest extends ZephyrClientMVVMTestCase {
+public class NULLPropertyBindingTest extends ClientBindTestCase {
 	@Test
 	public void testNULL() {
 		connect();

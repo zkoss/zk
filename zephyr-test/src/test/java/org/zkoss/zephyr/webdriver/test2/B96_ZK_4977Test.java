@@ -15,13 +15,13 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Dimension;
 
-import org.zkoss.zephyr.webdriver.ZephyrClientMVVMTestCase;
+import org.zkoss.zephyr.webdriver.ClientBindTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author rudyhuang
  */
-public class B96_ZK_4977Test extends ZephyrClientMVVMTestCase {
+public class B96_ZK_4977Test extends ClientBindTestCase {
 	@Test
 	public void test() {
 		connect();

@@ -13,16 +13,14 @@ package org.zkoss.zephyr.webdriver.mvvm.book.viewmodel.init;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.ZephyrClientMVVMTestCase;
-import org.zkoss.zephyr.webdriver.TestStage;
+import org.zkoss.zephyr.webdriver.ClientBindTestCase;
 
 /**
  * @author rudyhuang
  */
-public class InitWithParamTest extends ZephyrClientMVVMTestCase {
+public class InitWithParamTest extends ClientBindTestCase {
 	@Test
 	public void test() {
 		connect("/mvvm/book/viewmodel/init/init-with-param.zul");

@@ -16,15 +16,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
+import org.zkoss.stateless.zpr.ILabel;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
- * A set of unit test for {@link org.zkoss.zephyr.zpr.ILabel} Java Docs.
+ * A set of unit test for {@link ILabel} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Essential_Components/Label">Label</a>,
  * if any.
  *
  * @author katherine
- * @see org.zkoss.zephyr.zpr.ILabel
+ * @see ILabel
  */
 public class ILabelRichletTest extends WebDriverTestCase {
 	@Test

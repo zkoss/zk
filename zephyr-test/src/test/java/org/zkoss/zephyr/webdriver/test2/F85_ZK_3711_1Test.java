@@ -14,12 +14,12 @@ package org.zkoss.zephyr.webdriver.test2;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.ZephyrClientMVVMTestCase;
+import org.zkoss.zephyr.webdriver.ClientBindTestCase;
 
 /**
  * @author rudyhuang
  */
-public class F85_ZK_3711_1Test extends ZephyrClientMVVMTestCase {
+public class F85_ZK_3711_1Test extends ClientBindTestCase {
 	@Test
 	public void testHistoryPopStateMoreThanOne() throws Exception {
 		try {

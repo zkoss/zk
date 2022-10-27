@@ -21,12 +21,12 @@ import org.junit.jupiter.api.Test;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
- * A set of unit test for {@link org.zkoss.zephyrex.zpr.ISignature} Java Docs.
+ * A set of unit test for {@link org.zkoss.statelessex.zpr.ISignature} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Input/Signature">Signature</a>,
  * if any.
  *
  * @author katherine
- * @see org.zkoss.zephyrex.zpr.ISignature
+ * @see org.zkoss.statelessex.zpr.ISignature
  */
 public class ISignatureRichletTest extends WebDriverTestCase {
 	@Test

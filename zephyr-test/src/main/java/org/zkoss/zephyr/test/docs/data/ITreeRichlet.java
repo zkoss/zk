@@ -11,7 +11,7 @@ Copyright (C) 2022 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zephyr.test.docs.data;
 
-import static org.zkoss.zephyr.action.ActionTarget.SELF;
+import static org.zkoss.stateless.action.ActionTarget.SELF;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,42 +19,42 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import org.zkoss.zephyr.annotation.Action;
-import org.zkoss.zephyr.annotation.ActionVariable;
-import org.zkoss.zephyr.annotation.RichletMapping;
-import org.zkoss.zephyr.ui.Locator;
-import org.zkoss.zephyr.ui.Self;
-import org.zkoss.zephyr.ui.StatelessRichlet;
-import org.zkoss.zephyr.ui.UiAgent;
-import org.zkoss.zephyr.util.ActionHandler;
-import org.zkoss.zephyr.zpr.IAnyGroup;
-import org.zkoss.zephyr.zpr.IAuxhead;
-import org.zkoss.zephyr.zpr.IAuxheader;
-import org.zkoss.zephyr.zpr.IButton;
-import org.zkoss.zephyr.zpr.IComponent;
-import org.zkoss.zephyr.zpr.IDiv;
-import org.zkoss.zephyr.zpr.IFrozen;
-import org.zkoss.zephyr.zpr.ITree;
-import org.zkoss.zephyr.zpr.ITreecell;
-import org.zkoss.zephyr.zpr.ITreechildren;
-import org.zkoss.zephyr.zpr.ITreecol;
-import org.zkoss.zephyr.zpr.ITreecols;
-import org.zkoss.zephyr.zpr.ITreefoot;
-import org.zkoss.zephyr.zpr.ITreefooter;
-import org.zkoss.zephyr.zpr.ITreeitem;
-import org.zkoss.zephyr.zpr.IWindow;
-import org.zkoss.zephyrex.state.ITreeController;
+import org.zkoss.stateless.annotation.Action;
+import org.zkoss.stateless.annotation.ActionVariable;
+import org.zkoss.stateless.annotation.RichletMapping;
+import org.zkoss.stateless.ui.Locator;
+import org.zkoss.stateless.ui.Self;
+import org.zkoss.stateless.ui.StatelessRichlet;
+import org.zkoss.stateless.ui.UiAgent;
+import org.zkoss.stateless.util.ActionHandler;
+import org.zkoss.stateless.zpr.IAnyGroup;
+import org.zkoss.stateless.zpr.IAuxhead;
+import org.zkoss.stateless.zpr.IAuxheader;
+import org.zkoss.stateless.zpr.IButton;
+import org.zkoss.stateless.zpr.IComponent;
+import org.zkoss.stateless.zpr.IDiv;
+import org.zkoss.stateless.zpr.IFrozen;
+import org.zkoss.stateless.zpr.ITree;
+import org.zkoss.stateless.zpr.ITreecell;
+import org.zkoss.stateless.zpr.ITreechildren;
+import org.zkoss.stateless.zpr.ITreecol;
+import org.zkoss.stateless.zpr.ITreecols;
+import org.zkoss.stateless.zpr.ITreefoot;
+import org.zkoss.stateless.zpr.ITreefooter;
+import org.zkoss.stateless.zpr.ITreeitem;
+import org.zkoss.stateless.zpr.IWindow;
+import org.zkoss.statelessex.state.ITreeController;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.DefaultTreeModel;
 import org.zkoss.zul.DefaultTreeNode;
 import org.zkoss.zul.TreeNode;
 
 /**
- * A set of example for {@link org.zkoss.zephyr.zpr.ITree} Java Docs.
+ * A set of example for {@link ITree} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Data/Tree">ITree</a>,
  * if any.
  * @author jumperchen
- * @see org.zkoss.zephyr.zpr.ITree
+ * @see ITree
  */
 @RichletMapping("/data/itree")
 public class ITreeRichlet implements StatelessRichlet {

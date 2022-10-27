@@ -11,23 +11,23 @@ Copyright (C) 2022 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zephyr.test.docs.layouts;
 
-import org.zkoss.zephyr.annotation.RichletMapping;
-import org.zkoss.zephyr.ui.StatelessRichlet;
-import org.zkoss.zephyr.zpr.IBorderlayout;
-import org.zkoss.zephyr.zpr.ICenter;
-import org.zkoss.zephyr.zpr.IComponent;
-import org.zkoss.zephyr.zpr.IEast;
-import org.zkoss.zephyr.zpr.INorth;
-import org.zkoss.zephyr.zpr.ISouth;
-import org.zkoss.zephyr.zpr.IWest;
+import org.zkoss.stateless.annotation.RichletMapping;
+import org.zkoss.stateless.ui.StatelessRichlet;
+import org.zkoss.stateless.zpr.IBorderlayout;
+import org.zkoss.stateless.zpr.ICenter;
+import org.zkoss.stateless.zpr.IComponent;
+import org.zkoss.stateless.zpr.IEast;
+import org.zkoss.stateless.zpr.INorth;
+import org.zkoss.stateless.zpr.ISouth;
+import org.zkoss.stateless.zpr.IWest;
 
 /**
- * A set of example for {@link org.zkoss.zephyr.zpr.IBorderlayout} Java Docs.
+ * A set of example for {@link IBorderlayout} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Layouts/Borderlayout">IBorderlayout</a>,
  * if any.
  *
  * @author katherine
- * @see org.zkoss.zephyr.zpr.IBorderlayout
+ * @see IBorderlayout
  */
 @RichletMapping("/layouts/iBorderlayout")
 public class IBorderlayoutRichlet implements StatelessRichlet {

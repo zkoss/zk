@@ -16,15 +16,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.TestStage;
-import org.zkoss.zephyr.webdriver.ZephyrClientMVVMTestCase;
+import org.zkoss.zephyr.webdriver.ClientBindTestCase;
 import org.zkoss.test.webdriver.ztl.Widget;
 
-public class Children_ComplexTest extends ZephyrClientMVVMTestCase {
+public class Children_ComplexTest extends ClientBindTestCase {
 	@Test
 	public void test() {
 		connect("/mvvm/book/databinding/childrenbinding/children-complex.zul");

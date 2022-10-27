@@ -16,17 +16,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.hamcrest.MatcherAssert;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import org.opentest4j.AssertionFailedError;
-import org.zkoss.zephyr.webdriver.TestStage;
-import org.zkoss.zephyr.webdriver.ZephyrClientMVVMTestCase;
+
+import org.zkoss.zephyr.webdriver.ClientBindTestCase;
 
 /**
  * @author rudyhuang
  */
-public class InitTest extends ZephyrClientMVVMTestCase {
+public class InitTest extends ClientBindTestCase {
 	@Test
 	public void testInit() {
 		connect("/mvvm/book/viewmodel/init/init.zul");

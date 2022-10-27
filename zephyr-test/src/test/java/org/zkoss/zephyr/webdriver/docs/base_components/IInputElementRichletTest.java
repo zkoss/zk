@@ -21,16 +21,17 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.interactions.Actions;
 
+import org.zkoss.stateless.zpr.IInputElement;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
- * A set of unit test for {@link org.zkoss.zephyr.zpr.IInputElement} Java Docs.
+ * A set of unit test for {@link IInputElement} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Base_Components/InputElement">InputElement</a>,
  * if any.
  *
  * @author katherine
- * @see org.zkoss.zephyr.zpr.IInputElement
+ * @see IInputElement
  */
 public class IInputElementRichletTest extends WebDriverTestCase {
 	@Test

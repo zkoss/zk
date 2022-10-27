@@ -13,18 +13,16 @@ package org.zkoss.zephyr.webdriver.mvvm.book.viewmodel.notification;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 
-import org.zkoss.zephyr.webdriver.TestStage;
-import org.zkoss.zephyr.webdriver.ZephyrClientMVVMTestCase;
+import org.zkoss.zephyr.webdriver.ClientBindTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author rudyhuang
  */
-public class NotifyChangeOnSetterTest extends ZephyrClientMVVMTestCase {
+public class NotifyChangeOnSetterTest extends ClientBindTestCase {
 	@Test
 	public void test() {
 		connect("/mvvm/book/viewmodel/notification/notifychange-onsetter.zul");

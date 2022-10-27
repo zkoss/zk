@@ -11,13 +11,13 @@ Copyright (C) 2022 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zephyr.test.docs.data;
 
-import org.zkoss.zephyr.annotation.Action;
-import org.zkoss.zephyr.annotation.RichletMapping;
-import org.zkoss.zephyr.ui.StatelessRichlet;
-import org.zkoss.zephyr.zpr.IButton;
-import org.zkoss.zephyr.zpr.IComponent;
-import org.zkoss.zephyr.zpr.IDiv;
-import org.zkoss.zephyr.zpr.ITreefoot;
+import org.zkoss.stateless.annotation.Action;
+import org.zkoss.stateless.annotation.RichletMapping;
+import org.zkoss.stateless.ui.StatelessRichlet;
+import org.zkoss.stateless.zpr.IButton;
+import org.zkoss.stateless.zpr.IComponent;
+import org.zkoss.stateless.zpr.IDiv;
+import org.zkoss.stateless.zpr.ITreefoot;
 import org.zkoss.zk.ui.event.Events;
 
 /**

@@ -11,22 +11,22 @@ Copyright (C) 2022 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zephyr.test.docs.containers;
 
-import org.zkoss.zephyr.annotation.RichletMapping;
-import org.zkoss.zephyr.ui.StatelessRichlet;
-import org.zkoss.zephyr.zpr.ILabel;
-import org.zkoss.zephyr.zpr.ITab;
-import org.zkoss.zephyr.zpr.ITabbox;
-import org.zkoss.zephyr.zpr.ITabpanel;
-import org.zkoss.zephyr.zpr.ITabpanels;
-import org.zkoss.zephyr.zpr.ITabs;
+import org.zkoss.stateless.annotation.RichletMapping;
+import org.zkoss.stateless.ui.StatelessRichlet;
+import org.zkoss.stateless.zpr.ILabel;
+import org.zkoss.stateless.zpr.ITab;
+import org.zkoss.stateless.zpr.ITabbox;
+import org.zkoss.stateless.zpr.ITabpanel;
+import org.zkoss.stateless.zpr.ITabpanels;
+import org.zkoss.stateless.zpr.ITabs;
 
 /**
- * A set of example for {@link org.zkoss.zephyr.zpr.ITabbox} Java Docs.
+ * A set of example for {@link ITabbox} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Containers/Tabbox">ITabbox</a>,
  * if any.
  *
  * @author jumperchen
- * @see org.zkoss.zephyr.zpr.ITabbox
+ * @see ITabbox
  */
 @RichletMapping("/containers/itabbox")
 public class ITabboxRichlet implements StatelessRichlet {

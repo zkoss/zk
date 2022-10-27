@@ -20,12 +20,12 @@ import org.junit.jupiter.api.Test;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
- * A set of unit test for {@link org.zkoss.zephyrex.zpr.INav} Java Docs.
+ * A set of unit test for {@link org.zkoss.statelessex.zpr.INav} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Essential_Components/Nav">Nav</a>,
  * if any.
  *
  * @author katherine
- * @see org.zkoss.zephyrex.zpr.INav
+ * @see org.zkoss.statelessex.zpr.INav
  */
 public class INavRichletTest extends WebDriverTestCase {
 	@Test

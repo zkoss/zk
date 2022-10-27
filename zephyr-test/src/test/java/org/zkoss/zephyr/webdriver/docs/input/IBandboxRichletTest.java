@@ -19,15 +19,16 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.interactions.Actions;
 
+import org.zkoss.stateless.zpr.IBandbox;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
- * A set of unit test for {@link org.zkoss.zephyr.zpr.IBandbox} Java Docs.
+ * A set of unit test for {@link IBandbox} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Input/Bandbox">Bandbox</a>,
  * if any.
  *
  * @author katherine
- * @see org.zkoss.zephyr.zpr.IBandbox
+ * @see IBandbox
  */
 public class IBandboxRichletTest extends WebDriverTestCase {
 	@Test

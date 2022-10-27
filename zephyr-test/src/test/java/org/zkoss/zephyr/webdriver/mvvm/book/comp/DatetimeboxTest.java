@@ -18,17 +18,15 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 
-import org.zkoss.zephyr.webdriver.ZephyrClientMVVMTestCase;
-import org.zkoss.zephyr.webdriver.TestStage;
+import org.zkoss.zephyr.webdriver.ClientBindTestCase;
 
 /**
  * @author rudyhuang
  */
-public class DatetimeboxTest extends ZephyrClientMVVMTestCase {
+public class DatetimeboxTest extends ClientBindTestCase {
 	@Test
 	public void test() {
 		connect();

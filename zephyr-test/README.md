@@ -1,5 +1,5 @@
 # Zephyr Test
-Testing project for Zephyr
+Testing project for Stateless and Client MVVM
 
 ## Prerequisites
 * JDK Version: 1.8
@@ -11,7 +11,7 @@ Run with `./gradlew appRun`
 ### Run Web Application in Debug Mode (Intellij)
 1. Create a [Gradle] Task in [Run/Debug Configurations]
 2. Type "appRunDebug" in [Run]
-3. Select "zephyr:zephyr-test" in [Gradle Project]
+3. Select "zephyr-test" in [Gradle Project]
 4. Click [OK] and [Run]
 5. You can see "Listening for transport dt_socket at address: 5005" [Attach debugger] in console
 6. Click [Attach debugger] -> Start to debug

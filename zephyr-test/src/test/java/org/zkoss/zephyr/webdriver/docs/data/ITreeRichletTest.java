@@ -19,14 +19,15 @@ import java.util.Iterator;
 
 import org.junit.jupiter.api.Test;
 
+import org.zkoss.stateless.zpr.ITree;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
- * A set of unit test for {@link org.zkoss.zephyr.zpr.ITree} Java Docs.
+ * A set of unit test for {@link ITree} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Data/Tree">Tree</a>,
  * if any.
- * @see org.zkoss.zephyr.zpr.ITree
+ * @see ITree
  * @author katherine
  */
 public class ITreeRichletTest extends WebDriverTestCase {

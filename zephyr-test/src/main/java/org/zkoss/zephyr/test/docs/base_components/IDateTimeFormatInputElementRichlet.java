@@ -19,18 +19,19 @@ import java.time.ZonedDateTime;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import org.zkoss.zephyr.annotation.RichletMapping;
-import org.zkoss.zephyr.ui.StatelessRichlet;
-import org.zkoss.zephyr.zpr.IComponent;
-import org.zkoss.zephyr.zpr.IDatebox;
-import org.zkoss.zephyr.zpr.ITimebox;
-import org.zkoss.zephyr.zpr.IVlayout;
+import org.zkoss.stateless.annotation.RichletMapping;
+import org.zkoss.stateless.zpr.IDateTimeFormatInputElement;
+import org.zkoss.stateless.ui.StatelessRichlet;
+import org.zkoss.stateless.zpr.IComponent;
+import org.zkoss.stateless.zpr.IDatebox;
+import org.zkoss.stateless.zpr.ITimebox;
+import org.zkoss.stateless.zpr.IVlayout;
 
 /**
- * A set of example for {@link org.zkoss.zephyr.zpr.IDateTimeFormatInputElement} Java Docs.
+ * A set of example for {@link IDateTimeFormatInputElement} Java Docs.
  *
  * @author katherine
- * @see org.zkoss.zephyr.zpr.IDateTimeFormatInputElement
+ * @see IDateTimeFormatInputElement
  */
 @RichletMapping("/base_components/iDateTimeFormatInputElement")
 public class IDateTimeFormatInputElementRichlet implements StatelessRichlet {

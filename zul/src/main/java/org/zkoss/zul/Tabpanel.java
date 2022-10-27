@@ -88,7 +88,7 @@ public class Tabpanel extends XulElement {
 		return super.isVisible() && isSelected();
 	}
 
-	// used for zephyr API to get real visible state.
+	// used for stateless API to get real visible state.
 	private boolean isRawVisible() {
 		return super.isVisible();
 	}

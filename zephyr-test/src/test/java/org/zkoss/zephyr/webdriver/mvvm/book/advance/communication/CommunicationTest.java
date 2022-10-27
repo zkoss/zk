@@ -13,14 +13,11 @@ package org.zkoss.zephyr.webdriver.mvvm.book.advance.communication;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Tag;
-
 import org.junit.jupiter.api.Test;
-import org.zkoss.zephyr.webdriver.TestStage;
-import org.zkoss.zephyr.webdriver.ZephyrClientMVVMTestCase;
 
-public class CommunicationTest extends ZephyrClientMVVMTestCase {
+import org.zkoss.zephyr.webdriver.ClientBindTestCase;
+
+public class CommunicationTest extends ClientBindTestCase {
 	@Test
 	public void composerToViewModelTest() {
 		connect();

@@ -201,7 +201,7 @@ public class AuMultipartUploader {
 
 	private static Map<String, Object> getFileuploadMetaPerComp(Map<String, Object> params, Desktop desktop, String uuid) {
 
-		// zephyr may not have comp at server.
+		// stateless may not have comp at server.
 		Component comp = desktop.getComponentByUuidIfAny(uuid);
 		if (comp != null) {
 			Integer maxsz = null;

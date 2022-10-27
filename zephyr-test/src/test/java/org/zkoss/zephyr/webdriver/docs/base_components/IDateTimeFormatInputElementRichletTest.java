@@ -15,13 +15,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
+import org.zkoss.stateless.zpr.IDateTimeFormatInputElement;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
- * A set of unit test for {@link org.zkoss.zephyr.zpr.IDateTimeFormatInputElement} Java Docs.
+ * A set of unit test for {@link IDateTimeFormatInputElement} Java Docs.
  *
  * @author katherine
- * @see org.zkoss.zephyr.zpr.IDateTimeFormatInputElement
+ * @see IDateTimeFormatInputElement
  */
 public class IDateTimeFormatInputElementRichletTest extends WebDriverTestCase {
 

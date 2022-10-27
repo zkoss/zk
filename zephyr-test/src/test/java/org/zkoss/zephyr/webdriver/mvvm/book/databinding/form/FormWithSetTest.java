@@ -11,18 +11,15 @@ Copyright (C) 2014 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zephyr.webdriver.mvvm.book.databinding.form;
 
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.TestStage;
-import org.zkoss.zephyr.webdriver.ZephyrClientMVVMTestCase;
+import org.zkoss.zephyr.webdriver.ClientBindTestCase;
 
 /**
  * @author jumperchen
  *
  */
-public class FormWithSetTest extends ZephyrClientMVVMTestCase {
+public class FormWithSetTest extends ClientBindTestCase {
 
 	@Test
 	public void test() {

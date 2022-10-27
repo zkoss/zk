@@ -25,12 +25,12 @@ import org.openqa.selenium.Dimension;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import org.zkoss.zephyr.webdriver.ZephyrClientMVVMTestCase;
+import org.zkoss.zephyr.webdriver.ClientBindTestCase;
 
 /**
  * @author rudyhuang
  */
-public class B80_ZK_3339Test extends ZephyrClientMVVMTestCase {
+public class B80_ZK_3339Test extends ClientBindTestCase {
 	@Test
 	public void test() {
 		connect();

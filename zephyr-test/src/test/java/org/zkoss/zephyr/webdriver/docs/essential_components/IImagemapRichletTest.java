@@ -13,14 +13,16 @@ package org.zkoss.zephyr.webdriver.docs.essential_components;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
+
+import org.zkoss.stateless.zpr.IImagemap;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
- * A set of unit test for {@link org.zkoss.zephyr.zpr.IImagemap} Java Docs.
+ * A set of unit test for {@link IImagemap} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Essential_Components/Imagemap">Imagemap</a>,
  * if any.
  * @author leon
- * @see org.zkoss.zephyr.zpr.IImagemap
+ * @see IImagemap
  */
 public class IImagemapRichletTest extends WebDriverTestCase {
 	@Test

@@ -14,34 +14,34 @@ package org.zkoss.zephyr.test.docs.input;
 import java.util.Arrays;
 import java.util.List;
 
-import org.zkoss.zephyr.action.ActionTarget;
-import org.zkoss.zephyr.annotation.Action;
-import org.zkoss.zephyr.annotation.ActionVariable;
-import org.zkoss.zephyr.annotation.RichletMapping;
-import org.zkoss.zephyr.ui.Locator;
-import org.zkoss.zephyr.ui.StatelessRichlet;
-import org.zkoss.zephyr.ui.UiAgent;
-import org.zkoss.zephyr.util.ActionHandler;
-import org.zkoss.zephyr.zpr.IButton;
-import org.zkoss.zephyr.zpr.IComponent;
-import org.zkoss.zephyr.zpr.IDiv;
-import org.zkoss.zephyr.zpr.IGrid;
-import org.zkoss.zephyr.zpr.IHlayout;
-import org.zkoss.zephyr.zpr.ILabel;
-import org.zkoss.zephyr.zpr.IRadio;
-import org.zkoss.zephyr.zpr.IRadiogroup;
-import org.zkoss.zephyr.zpr.IRow;
-import org.zkoss.zephyr.zpr.ITextbox;
-import org.zkoss.zephyr.zpr.IVlayout;
-import org.zkoss.zephyr.zpr.IWindow;
+import org.zkoss.stateless.action.ActionTarget;
+import org.zkoss.stateless.annotation.Action;
+import org.zkoss.stateless.annotation.ActionVariable;
+import org.zkoss.stateless.annotation.RichletMapping;
+import org.zkoss.stateless.ui.Locator;
+import org.zkoss.stateless.ui.StatelessRichlet;
+import org.zkoss.stateless.ui.UiAgent;
+import org.zkoss.stateless.util.ActionHandler;
+import org.zkoss.stateless.zpr.IButton;
+import org.zkoss.stateless.zpr.IComponent;
+import org.zkoss.stateless.zpr.IDiv;
+import org.zkoss.stateless.zpr.IGrid;
+import org.zkoss.stateless.zpr.IHlayout;
+import org.zkoss.stateless.zpr.ILabel;
+import org.zkoss.stateless.zpr.IRadio;
+import org.zkoss.stateless.zpr.IRadiogroup;
+import org.zkoss.stateless.zpr.IRow;
+import org.zkoss.stateless.zpr.ITextbox;
+import org.zkoss.stateless.zpr.IVlayout;
+import org.zkoss.stateless.zpr.IWindow;
 import org.zkoss.zk.ui.event.Events;
 
 /**
- * A set of example for {@link org.zkoss.zephyr.zpr.IRadiogroup} Java Docs.
+ * A set of example for {@link IRadiogroup} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Essential_Components/Input/Radiogroup">IRadiogroup</a>,
  * if any.
  * @author jumperchen
- * @see org.zkoss.zephyr.zpr.IRadiogroup
+ * @see IRadiogroup
  */
 @RichletMapping("/input/iradiogroup")
 public class IRadiogroupRichlet implements StatelessRichlet {

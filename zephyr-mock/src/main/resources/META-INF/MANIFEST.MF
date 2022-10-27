@@ -1,6 +1,0 @@
-Manifest-Version: 1.0
-Specification-Title: The Zephyr Mocks
-Specification-Vendor: Potix Corporation
-Implementation-Title: org.zkoss.zephyr.mock
-Implementation-URL: http://www.zkoss.org/prj/zephyr-mock
-Implementation-Vendor: Potix Corporation

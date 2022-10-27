@@ -5,6 +5,10 @@ plugins {
 	id "com.adarshr.test-logger" version "3.0.0"
 }
 
+gretty {
+	httpPort = 8081
+}
+
 idea {
 	module {
 		outputDir file("$buildDir/classes/main")
@@ -38,15 +42,16 @@ repositories {
 	}
 }
 
-group = "org.zkoss.zephyr"
+group = "org.zkoss.zk"
 
 dependencies {
 	implementation "org.zkoss.zk:zhtml:${version}"
 	implementation "org.zkoss.zk:zkmax:${version}"
 	implementation "org.zkoss.zk:zkplus:${version}"
 	implementation "org.zkoss.zk:zuti:${version}"
-	implementation "org.zkoss.zephyr:zephyr:${version}"
-	implementation "org.zkoss.zephyr:zephyr-ex:${version}"
+	implementation "org.zkoss.zk:stateless:${version}"
+	implementation "org.zkoss.zk:stateless-ex:${version}"
+	implementation "org.zkoss.zk:client-bind:${version}"
 	implementation 'commons-lang:commons-lang:2.6'
 	implementation 'commons-beanutils:commons-beanutils:1.9.4'
 

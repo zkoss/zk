@@ -16,10 +16,10 @@ import static org.hamcrest.Matchers.lessThanOrEqualTo;
 
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.ZephyrClientMVVMTestCase;
+import org.zkoss.zephyr.webdriver.ClientBindTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
-public class B86_ZK_4353Test extends ZephyrClientMVVMTestCase {
+public class B86_ZK_4353Test extends ClientBindTestCase {
 	@Test
 	public void test() {
 		connect();

@@ -924,7 +924,7 @@ export namespace au_global {
 
 				const oldRequri = zAu.beforeSend(requri, aureq, dt);
 
-				// split the different request for the different ReqUri for zephyr
+				// split the different request for the different ReqUri for stateless
 				if (j > 0 && oldRequri != lasturi) {
 					es.unshift(aureq);
 					sendPending = true;

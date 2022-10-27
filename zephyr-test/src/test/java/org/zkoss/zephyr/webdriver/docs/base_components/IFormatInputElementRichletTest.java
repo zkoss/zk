@@ -19,15 +19,16 @@ import java.util.Locale;
 
 import org.junit.jupiter.api.Test;
 
+import org.zkoss.stateless.zpr.IFormatInputElement;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
- * A set of unit test for {@link org.zkoss.zephyr.zpr.IFormatInputElement} Java Docs.
+ * A set of unit test for {@link IFormatInputElement} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Base_Components/FormatInputElement">FormatInputElement</a>,
  * if any.
  *
  * @author katherine
- * @see org.zkoss.zephyr.zpr.IFormatInputElement
+ * @see IFormatInputElement
  */
 public class IFormatInputElementRichletTest extends WebDriverTestCase {
 	@Test

@@ -7,10 +7,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 
-import org.zkoss.zephyr.webdriver.ZephyrClientMVVMTestCase;
+import org.zkoss.zephyr.webdriver.ClientBindTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
-public class B70_ZK_2024Test extends ZephyrClientMVVMTestCase {
+public class B70_ZK_2024Test extends ClientBindTestCase {
 	@Test
 	public void test() {
 		connect();

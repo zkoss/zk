@@ -16,13 +16,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
+import org.zkoss.stateless.zpr.IMeshElement;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
- * A set of unit test for {@link org.zkoss.zephyr.zpr.IMeshElement} Java Docs.
+ * A set of unit test for {@link IMeshElement} Java Docs.
  *
  * @author katherine
- * @see org.zkoss.zephyr.zpr.IMeshElement
+ * @see IMeshElement
  */
 public class IMeshElementRichletTest extends WebDriverTestCase {
 	@Test

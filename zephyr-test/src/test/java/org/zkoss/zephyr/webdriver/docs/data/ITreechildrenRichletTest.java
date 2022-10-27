@@ -15,15 +15,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
+import org.zkoss.stateless.zpr.ITreechildren;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
- * A set of unit test for {@link org.zkoss.zephyr.zpr.ITreechildren} Java Docs.
+ * A set of unit test for {@link ITreechildren} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Data/Tree/Treechildren">Treechildren</a>,
  * if any.
  *
  * @author katherine
- * @see org.zkoss.zephyr.zpr.ITreechildren
+ * @see ITreechildren
  */
 public class ITreechildrenRichletTest extends WebDriverTestCase {
 	@Test

@@ -1,6 +1,6 @@
 <?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
 <zk>
-	<window id="win1" apply="org.zkoss.zephyrex.bind.ClientBindComposer">
+	<window id="win1" apply="org.zkoss.clientbind.ClientBindComposer">
 		[Step 1] Should see "A-1"
 		<separator/>
 		<label id="result1" value="@load(c:cat('A-', 1))"/>

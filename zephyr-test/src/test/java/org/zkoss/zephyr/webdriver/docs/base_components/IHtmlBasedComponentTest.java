@@ -21,14 +21,15 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.interactions.Actions;
 
+import org.zkoss.stateless.zpr.IHtmlBasedComponent;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
- * A set of unit test for {@link org.zkoss.zephyr.zpr.IHtmlBasedComponent} Java Docs.
+ * A set of unit test for {@link IHtmlBasedComponent} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Base_Components/HtmlBasedComponent">HtmlBasedComponent</a>,
  * if any.
- * @see org.zkoss.zephyr.zpr.IHtmlBasedComponent
+ * @see IHtmlBasedComponent
  * @author jumperchen
  */
 public class IHtmlBasedComponentTest extends WebDriverTestCase {

@@ -18,12 +18,12 @@ import org.junit.jupiter.api.Test;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
- * A set of unit test for {@link org.zkoss.zephyrex.zpr.IColumnchildren} Java Docs.
+ * A set of unit test for {@link org.zkoss.statelessex.zpr.IColumnchildren} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Layouts/ColumnChildren">ColumnChildren</a>,
  * if any.
  *
  * @author katherine
- * @see org.zkoss.zephyrex.zpr.IColumnchildren
+ * @see org.zkoss.statelessex.zpr.IColumnchildren
  */
 public class IColumnchildrenRichletTest extends WebDriverTestCase {
 	@Test

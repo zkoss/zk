@@ -15,17 +15,14 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.hamcrest.Matchers.lessThanOrEqualTo;
 
 import org.hamcrest.MatcherAssert;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.TestStage;
-import org.zkoss.zephyr.webdriver.ZephyrClientMVVMTestCase;
+import org.zkoss.zephyr.webdriver.ClientBindTestCase;
 
 /**
  * @author rudyhuang
  */
-public class PerformanceTest extends ZephyrClientMVVMTestCase {
+public class PerformanceTest extends ClientBindTestCase {
 	@Test
 	public void test() throws Exception {
 		connect("/mvvm/book/basic/performance.zul");

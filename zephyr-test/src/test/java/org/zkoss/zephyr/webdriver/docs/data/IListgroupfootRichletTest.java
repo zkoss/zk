@@ -18,12 +18,12 @@ import org.junit.jupiter.api.Test;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
- * A set of unit test for {@link org.zkoss.zephyrex.zpr.IListgroupfoot} Java Docs.
+ * A set of unit test for {@link org.zkoss.statelessex.zpr.IListgroupfoot} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Data/Listbox/Listgroupfoot">Listgroupfoot</a>,
  * if any.
  *
  * @author katherine
- * @see org.zkoss.zephyrex.zpr.IListgroupfoot
+ * @see org.zkoss.statelessex.zpr.IListgroupfoot
  */
 public class IListgroupfootRichletTest extends WebDriverTestCase {
 	@Test

@@ -3,8 +3,8 @@
 		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		 xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 
-	<description><![CDATA[My ZEPHYR Application]]></description>
-	<display-name>zephyr-test</display-name>
+	<description><![CDATA[My ZEPHYR Benchmark Application]]></description>
+	<display-name>zephyr-benchmark</display-name>
 	<!-- ZK -->
 	<listener>
 		<description>ZK listener for session cleanup</description>
@@ -40,7 +40,7 @@
 
 	<filter>
 		<filter-name>DispatcherRichletFilter</filter-name>
-		<filter-class>org.zkoss.zephyr.ui.http.DispatcherRichletFilter</filter-class>
+		<filter-class>org.zkoss.stateless.ui.http.DispatcherRichletFilter</filter-class>
 		<init-param>
 			<param-name>basePackages</param-name>
 			<param-value>org.zkoss.zephyr.test</param-value>

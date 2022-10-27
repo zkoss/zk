@@ -23,12 +23,12 @@ import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
- * A set of unit test for {@link org.zkoss.zephyrex.zpr.IChosenbox} Java Docs.
+ * A set of unit test for {@link org.zkoss.statelessex.zpr.IChosenbox} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Input/Chosenbox">Chosenbox</a>,
  * if any.
  *
  * @author katherine
- * @see org.zkoss.zephyrex.zpr.IChosenbox
+ * @see org.zkoss.statelessex.zpr.IChosenbox
  */
 public class IChosenboxRichletTest extends WebDriverTestCase {
 	@Test

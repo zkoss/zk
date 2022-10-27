@@ -13,9 +13,9 @@ package org.zkoss.zephyr.webdriver.test2;
 
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.ZephyrClientMVVMTestCase;
+import org.zkoss.zephyr.webdriver.ClientBindTestCase;
 
-public class B90_ZK_4482Test extends ZephyrClientMVVMTestCase {
+public class B90_ZK_4482Test extends ClientBindTestCase {
 	@Test
 	public void test() {
 		connect();

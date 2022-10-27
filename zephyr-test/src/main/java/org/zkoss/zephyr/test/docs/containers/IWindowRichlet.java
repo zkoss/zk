@@ -11,19 +11,19 @@ Copyright (C) 2022 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zephyr.test.docs.containers;
 
-import org.zkoss.zephyr.annotation.RichletMapping;
-import org.zkoss.zephyr.ui.StatelessRichlet;
-import org.zkoss.zephyr.zpr.IComponent;
-import org.zkoss.zephyr.zpr.ILabel;
-import org.zkoss.zephyr.zpr.IWindow;
+import org.zkoss.stateless.annotation.RichletMapping;
+import org.zkoss.stateless.ui.StatelessRichlet;
+import org.zkoss.stateless.zpr.IComponent;
+import org.zkoss.stateless.zpr.ILabel;
+import org.zkoss.stateless.zpr.IWindow;
 
 /**
- * A set of example for {@link org.zkoss.zephyr.zpr.IWindow} Java Docs.
+ * A set of example for {@link IWindow} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Containers/Window">IWindow</a>,
  * if any.
  *
  * @author jumperchen
- * @see org.zkoss.zephyr.zpr.IWindow
+ * @see IWindow
  */
 @RichletMapping("/containers/iwindow")
 public class IWindowRichlet implements StatelessRichlet {

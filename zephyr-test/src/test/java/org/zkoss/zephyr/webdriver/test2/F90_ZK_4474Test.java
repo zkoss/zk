@@ -17,12 +17,12 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
-import org.zkoss.zephyr.webdriver.ZephyrClientMVVMTestCase;
+import org.zkoss.zephyr.webdriver.ClientBindTestCase;
 
 /**
  * @author jameschu
  */
-public class F90_ZK_4474Test extends ZephyrClientMVVMTestCase {
+public class F90_ZK_4474Test extends ClientBindTestCase {
 	@Test
 	public void test() {
 		WebDriver driver = connect();

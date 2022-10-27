@@ -21,12 +21,12 @@ import org.junit.jupiter.api.Test;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
- * A set of unit test for {@link org.zkoss.zephyrex.zpr.INavbar} Java Docs.
+ * A set of unit test for {@link org.zkoss.statelessex.zpr.INavbar} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Essential_Components/Navbar">Navbar</a>,
  * if any.
  *
  * @author katherine
- * @see org.zkoss.zephyrex.zpr.INavbar
+ * @see org.zkoss.statelessex.zpr.INavbar
  */
 public class INavbarRichletTest extends WebDriverTestCase {
 	@Test

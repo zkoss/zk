@@ -4,9 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.ZephyrClientMVVMTestCase;
+import org.zkoss.zephyr.webdriver.ClientBindTestCase;
 
-public class B60_ZK_1139Test extends ZephyrClientMVVMTestCase {
+public class B60_ZK_1139Test extends ClientBindTestCase {
 	@Test
 	public void test() {
 		connect();

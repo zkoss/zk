@@ -20,12 +20,12 @@ import org.junit.jupiter.api.Test;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
- * A set of unit test for {@link org.zkoss.zephyrex.zpr.IRangeslider} Java Docs.
+ * A set of unit test for {@link org.zkoss.statelessex.zpr.IRangeslider} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Input/Rangeslider">Rangeslider</a>,
  * if any.
  *
  * @author katherine
- * @see org.zkoss.zephyrex.zpr.IRangeslider
+ * @see org.zkoss.statelessex.zpr.IRangeslider
  */
 public class IRangesliderRichletTest extends WebDriverTestCase {
 	@Test

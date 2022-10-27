@@ -14,23 +14,23 @@ package org.zkoss.zephyr.test.docs.input;
 import java.util.Arrays;
 import java.util.List;
 
-import org.zkoss.zephyr.annotation.Action;
-import org.zkoss.zephyr.annotation.RichletMapping;
-import org.zkoss.zephyr.ui.Locator;
-import org.zkoss.zephyr.ui.StatelessRichlet;
-import org.zkoss.zephyr.ui.UiAgent;
-import org.zkoss.zephyr.zpr.IButton;
-import org.zkoss.zephyr.zpr.IComponent;
-import org.zkoss.zephyr.zpr.ILongbox;
+import org.zkoss.stateless.annotation.Action;
+import org.zkoss.stateless.annotation.RichletMapping;
+import org.zkoss.stateless.ui.Locator;
+import org.zkoss.stateless.ui.StatelessRichlet;
+import org.zkoss.stateless.ui.UiAgent;
+import org.zkoss.stateless.zpr.IButton;
+import org.zkoss.stateless.zpr.IComponent;
+import org.zkoss.stateless.zpr.ILongbox;
 import org.zkoss.zk.ui.event.Events;
 
 /**
- * A set of example for {@link org.zkoss.zephyr.zpr.ILongbox} Java Docs.
+ * A set of example for {@link ILongbox} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Input/Longbox">ILongbox</a>,
  * if any.
  *
  * @author katherine
- * @see org.zkoss.zephyr.zpr.ILongbox
+ * @see ILongbox
  */
 @RichletMapping("/input/iLongbox")
 public class ILongboxRichlet implements StatelessRichlet {

@@ -14,13 +14,13 @@ package org.zkoss.zephyr.test.issues;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import org.zkoss.zephyr.annotation.RichletMapping;
-import org.zkoss.zephyr.ui.StatelessRichlet;
-import org.zkoss.zephyr.zpr.IComponent;
-import org.zkoss.zephyr.zpr.IListbox;
-import org.zkoss.zephyr.zpr.IListhead;
-import org.zkoss.zephyr.zpr.IListheader;
-import org.zkoss.zephyr.zpr.IListitem;
+import org.zkoss.stateless.annotation.RichletMapping;
+import org.zkoss.stateless.ui.StatelessRichlet;
+import org.zkoss.stateless.zpr.IComponent;
+import org.zkoss.stateless.zpr.IListbox;
+import org.zkoss.stateless.zpr.IListhead;
+import org.zkoss.stateless.zpr.IListheader;
+import org.zkoss.stateless.zpr.IListitem;
 
 /**
  * @author katherine

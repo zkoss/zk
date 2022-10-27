@@ -11,26 +11,26 @@ Copyright (C) 2022 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zephyr.test.docs.containers;
 
-import org.zkoss.zephyr.annotation.Action;
-import org.zkoss.zephyr.annotation.RichletMapping;
-import org.zkoss.zephyr.ui.Locator;
-import org.zkoss.zephyr.ui.StatelessRichlet;
-import org.zkoss.zephyr.ui.UiAgent;
-import org.zkoss.zephyr.zpr.IButton;
-import org.zkoss.zephyr.zpr.IComponent;
-import org.zkoss.zephyr.zpr.IInputgroup;
-import org.zkoss.zephyr.zpr.ILabel;
-import org.zkoss.zephyr.zpr.ITextbox;
-import org.zkoss.zephyr.zpr.IVlayout;
+import org.zkoss.stateless.annotation.Action;
+import org.zkoss.stateless.annotation.RichletMapping;
+import org.zkoss.stateless.ui.Locator;
+import org.zkoss.stateless.ui.StatelessRichlet;
+import org.zkoss.stateless.ui.UiAgent;
+import org.zkoss.stateless.zpr.IButton;
+import org.zkoss.stateless.zpr.IComponent;
+import org.zkoss.stateless.zpr.IInputgroup;
+import org.zkoss.stateless.zpr.ILabel;
+import org.zkoss.stateless.zpr.ITextbox;
+import org.zkoss.stateless.zpr.IVlayout;
 import org.zkoss.zk.ui.event.Events;
 
 /**
- * A set of example for {@link org.zkoss.zephyr.zpr.IInputgroup} Java Docs.
+ * A set of example for {@link IInputgroup} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Containers/Inputgroup">IInputgroup</a>,
  * if any.
  *
  * @author jumperchen
- * @see org.zkoss.zephyr.zpr.IInputgroup
+ * @see IInputgroup
  */
 @RichletMapping("/containers/iinputgroup")
 public class IInputgroupRichlet implements StatelessRichlet {

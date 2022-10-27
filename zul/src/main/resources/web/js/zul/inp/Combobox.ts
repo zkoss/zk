@@ -172,7 +172,7 @@ export class Combobox extends zul.inp.ComboWidget {
 			this._initSelUuid = selectedItemUuid;
 	}
 
-	// since 10.0.0 for Zephyr to use
+	// since 10.0.0 for Client Bind to use
 	setSelectedIndex_(selectedIndex: number): void {
 		if (selectedIndex >= 0) {
 			if (this.desktop) {
@@ -542,7 +542,7 @@ export class Combobox extends zul.inp.ComboWidget {
 		if (this._initSelUuid) {
 			this.setSelectedItemUuid_(this._initSelUuid);
 			this._initSelUuid = undefined;
-		} else if (this._initSelIndex! >= 0) { // for zephyr to use
+		} else if (this._initSelIndex! >= 0) { // for stateless to use
 			this.setSelectedIndex_(this._initSelIndex!);
 			this._initSelIndex = undefined;
 		}

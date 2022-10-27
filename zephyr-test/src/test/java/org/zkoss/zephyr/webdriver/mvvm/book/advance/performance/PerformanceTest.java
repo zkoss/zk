@@ -14,14 +14,11 @@ package org.zkoss.zephyr.webdriver.mvvm.book.advance.performance;
 import static org.hamcrest.Matchers.greaterThan;
 
 import org.hamcrest.MatcherAssert;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.TestStage;
-import org.zkoss.zephyr.webdriver.ZephyrClientMVVMTestCase;
+import org.zkoss.zephyr.webdriver.ClientBindTestCase;
 
-public class PerformanceTest extends ZephyrClientMVVMTestCase {
+public class PerformanceTest extends ClientBindTestCase {
 	@Test
 	public void test() {
 		long start, end;

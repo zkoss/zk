@@ -13,14 +13,12 @@ package org.zkoss.zephyr.webdriver.mvvm.book.databinding.globalcommand;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.TestStage;
-import org.zkoss.zephyr.webdriver.ZephyrClientMVVMTestCase;
+import org.zkoss.zephyr.webdriver.ClientBindTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
-public class GlobalCommandTest extends ZephyrClientMVVMTestCase {
+public class GlobalCommandTest extends ClientBindTestCase {
 	@Test
 	public void test() {
 		connect();

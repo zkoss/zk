@@ -16,24 +16,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.zkoss.zephyr.annotation.Action;
-import org.zkoss.zephyr.annotation.RichletMapping;
-import org.zkoss.zephyr.ui.Locator;
-import org.zkoss.zephyr.ui.StatelessRichlet;
-import org.zkoss.zephyr.ui.UiAgent;
-import org.zkoss.zephyr.zpr.IButton;
-import org.zkoss.zephyr.zpr.IComponent;
-import org.zkoss.zephyrex.zpr.IRangeslider;
-import org.zkoss.zephyrex.zpr.IRangesliderBase;
+import org.zkoss.stateless.annotation.Action;
+import org.zkoss.stateless.annotation.RichletMapping;
+import org.zkoss.stateless.ui.Locator;
+import org.zkoss.stateless.ui.StatelessRichlet;
+import org.zkoss.stateless.ui.UiAgent;
+import org.zkoss.stateless.zpr.IButton;
+import org.zkoss.stateless.zpr.IComponent;
+import org.zkoss.statelessex.zpr.IRangeslider;
+import org.zkoss.statelessex.zpr.IRangesliderBase;
 import org.zkoss.zk.ui.event.Events;
 
 /**
- * A set of example for {@link org.zkoss.zephyrex.zpr.IRangeslider} Java Docs.
+ * A set of example for {@link org.zkoss.statelessex.zpr.IRangeslider} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Input/Rangeslider">IRangeslider</a>,
  * if any.
  *
  * @author katherine
- * @see org.zkoss.zephyrex.zpr.IRangeslider
+ * @see org.zkoss.statelessex.zpr.IRangeslider
  */
 @RichletMapping("/input/iRangeslider")
 public class IRangesliderRichlet implements StatelessRichlet {

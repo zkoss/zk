@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.annotation.Action;
+import org.zkoss.stateless.annotation.Action;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**

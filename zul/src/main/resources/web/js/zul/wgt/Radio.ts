@@ -57,7 +57,7 @@ export class Radio extends zul.wgt.Checkbox {
 	 */
 	setRadiogroup(radiogroup?: zul.wgt.Radiogroup | string): this {
 		var old = this._group;
-		// for zephyr to support set radiogroup by id
+		// for stateless to support set radiogroup by id
 		if (typeof radiogroup == 'string')
 			radiogroup = zk.$<zul.wgt.Radiogroup>('$' + radiogroup);
 		if (old !== radiogroup) {
@@ -195,7 +195,7 @@ export class Radio extends zul.wgt.Checkbox {
 		var group = this.getRadiogroup();
 		this.fire('onCheck', checked);
 
-		// send event to group at client instead of server side. in ZK 10 for zephyr
+		// send event to group at client instead of server side. in ZK 10 for stateless
 		if (group) {
 			group.fire('onCheck', checked);
 		}

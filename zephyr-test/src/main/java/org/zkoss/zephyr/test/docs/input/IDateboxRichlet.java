@@ -16,25 +16,25 @@ import java.time.Month;
 import java.util.Arrays;
 import java.util.List;
 
-import org.zkoss.zephyr.annotation.Action;
-import org.zkoss.zephyr.annotation.RichletMapping;
-import org.zkoss.zephyr.ui.Locator;
-import org.zkoss.zephyr.ui.StatelessRichlet;
-import org.zkoss.zephyr.ui.UiAgent;
-import org.zkoss.zephyr.zpr.IButton;
-import org.zkoss.zephyr.zpr.IComponent;
-import org.zkoss.zephyr.zpr.IDatebox;
-import org.zkoss.zephyr.zpr.IHlayout;
-import org.zkoss.zephyr.zpr.IPopup;
-import org.zkoss.zephyr.zpr.ISeparator;
+import org.zkoss.stateless.annotation.Action;
+import org.zkoss.stateless.annotation.RichletMapping;
+import org.zkoss.stateless.ui.Locator;
+import org.zkoss.stateless.ui.StatelessRichlet;
+import org.zkoss.stateless.ui.UiAgent;
+import org.zkoss.stateless.zpr.IButton;
+import org.zkoss.stateless.zpr.IComponent;
+import org.zkoss.stateless.zpr.IDatebox;
+import org.zkoss.stateless.zpr.IHlayout;
+import org.zkoss.stateless.zpr.IPopup;
+import org.zkoss.stateless.zpr.ISeparator;
 import org.zkoss.zk.ui.event.Events;
 
 /**
- * A change of example for {@link org.zkoss.zephyr.zpr.IDatebox} Java Docs.
+ * A change of example for {@link IDatebox} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Input/Datebox">IDatebox</a>,
  * if any.
  * @author jumperchen
- * @see org.zkoss.zephyr.zpr.IDatebox
+ * @see IDatebox
  */
 @RichletMapping("/input/iDatebox")
 public class IDateboxRichlet implements StatelessRichlet {

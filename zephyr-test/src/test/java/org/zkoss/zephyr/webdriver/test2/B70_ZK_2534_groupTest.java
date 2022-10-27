@@ -16,13 +16,13 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.interactions.Actions;
 
-import org.zkoss.zephyr.webdriver.ZephyrClientMVVMTestCase;
+import org.zkoss.zephyr.webdriver.ClientBindTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author rudyhuang
  */
-public class B70_ZK_2534_groupTest extends ZephyrClientMVVMTestCase {
+public class B70_ZK_2534_groupTest extends ClientBindTestCase {
 	@Test
 	public void test() {
 		connect();

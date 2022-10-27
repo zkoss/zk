@@ -16,9 +16,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
 import org.zkoss.test.webdriver.ztl.JQuery;
-import org.zkoss.zephyr.webdriver.ZephyrClientMVVMTestCase;
+import org.zkoss.zephyr.webdriver.ClientBindTestCase;
 
-public class ArgsTest extends ZephyrClientMVVMTestCase {
+public class ArgsTest extends ClientBindTestCase {
 	@Test
 	public void test() {
 		connect("/mvvm/book/basic/args.zul");

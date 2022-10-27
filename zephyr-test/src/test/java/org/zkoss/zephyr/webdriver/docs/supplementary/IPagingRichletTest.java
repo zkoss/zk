@@ -19,14 +19,15 @@ import java.util.Iterator;
 
 import org.junit.jupiter.api.Test;
 
+import org.zkoss.stateless.zpr.IPaging;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
- * A set of unit test for {@link org.zkoss.zephyr.zpr.IPaging} Java Docs.
+ * A set of unit test for {@link IPaging} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Supplementary/Paging">Paging</a>,
  * if any.
- * @see org.zkoss.zephyr.zpr.IPaging
+ * @see IPaging
  * @author jumperchen
  */
 public class IPagingRichletTest extends WebDriverTestCase {

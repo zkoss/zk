@@ -1,0 +1,20 @@
+plugins {
+    id 'java'
+    id 'idea'
+}
+
+idea {
+    module {
+        outputDir file("$buildDir/classes/main")
+        testOutputDir file("$buildDir/classes/test")
+    }
+}
+
+description = "Stateless Processor"
+group = "org.zkoss.zk"
+
+dependencies {
+	implementation "org.immutables:metainf:$immutablesVersion"
+	implementation "org.immutables:value:$immutablesVersion"
+	implementation "org.immutables:value-processor:$immutablesVersion"
+}

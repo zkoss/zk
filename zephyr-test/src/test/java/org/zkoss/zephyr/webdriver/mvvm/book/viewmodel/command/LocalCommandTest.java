@@ -16,17 +16,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.hamcrest.MatcherAssert;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.TestStage;
-import org.zkoss.zephyr.webdriver.ZephyrClientMVVMTestCase;
+import org.zkoss.zephyr.webdriver.ClientBindTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author rudyhuang
  */
-public class LocalCommandTest extends ZephyrClientMVVMTestCase {
+public class LocalCommandTest extends ClientBindTestCase {
 	@Test
 	public void test() {
 		connect("/mvvm/book/viewmodel/command/local-command.zul");

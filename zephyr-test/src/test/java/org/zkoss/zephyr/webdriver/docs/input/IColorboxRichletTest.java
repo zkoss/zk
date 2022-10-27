@@ -19,12 +19,12 @@ import org.junit.jupiter.api.Test;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
- * A set of unit test for {@link org.zkoss.zephyrex.zpr.IColorbox} Java Docs.
+ * A set of unit test for {@link org.zkoss.statelessex.zpr.IColorbox} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Input/Colorbox">Colorbox</a>,
  * if any.
  *
  * @author katherine
- * @see org.zkoss.zephyrex.zpr.IColorbox
+ * @see org.zkoss.statelessex.zpr.IColorbox
  */
 public class IColorboxRichletTest extends WebDriverTestCase {
 	@Test

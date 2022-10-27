@@ -13,18 +13,15 @@ package org.zkoss.zephyr.webdriver.mvvm.book.comp;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.TestStage;
-import org.zkoss.zephyr.webdriver.ZephyrClientMVVMTestCase;
+import org.zkoss.zephyr.webdriver.ClientBindTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author rudyhuang
  */
-public class Tabbox_selectedTest extends ZephyrClientMVVMTestCase {
+public class Tabbox_selectedTest extends ClientBindTestCase {
 	@Test
 	public void testSingleWay() {
 		connect();

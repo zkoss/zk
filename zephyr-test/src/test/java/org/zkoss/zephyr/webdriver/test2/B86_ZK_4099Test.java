@@ -13,12 +13,12 @@ package org.zkoss.zephyr.webdriver.test2;
 
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.ZephyrClientMVVMTestCase;
+import org.zkoss.zephyr.webdriver.ClientBindTestCase;
 
 /**
  * @author rudyhuang
  */
-public class B86_ZK_4099Test extends ZephyrClientMVVMTestCase {
+public class B86_ZK_4099Test extends ClientBindTestCase {
 	@Test
 	public void test() {
 		// Test FormProxyHandler

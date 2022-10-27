@@ -13,17 +13,14 @@ package org.zkoss.zephyr.webdriver.mvvm.book.databinding.bindcomposer;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.TestStage;
-import org.zkoss.zephyr.webdriver.ZephyrClientMVVMTestCase;
+import org.zkoss.zephyr.webdriver.ClientBindTestCase;
 
 /**
  * @author jameschu
  */
-public class BindComposerTest extends ZephyrClientMVVMTestCase {
+public class BindComposerTest extends ClientBindTestCase {
 	@Test
 	public void test() {
 		connect();
@@ -34,7 +31,7 @@ public class BindComposerTest extends ZephyrClientMVVMTestCase {
 		waitResponse();
 		assertEquals("doGlobalCommand called", getZKLog());
 		//[Step 3]
-		assertTrue(jq("$win1 $result3").text().startsWith("org.zkoss.zephyrex.bind.ClientBinderImpl@"));
+		assertTrue(jq("$win1 $result3").text().startsWith("org.zkoss.clientbind.ClientBinderImpl@"));
 		//[Step 4]
 		assertEquals("123", jq("@vlayout $result4").text());
 		//[Step 5]

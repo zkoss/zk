@@ -13,19 +13,16 @@ package org.zkoss.zephyr.webdriver.mvvm.book.basic;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 
-import org.zkoss.zephyr.webdriver.TestStage;
-import org.zkoss.zephyr.webdriver.ZephyrClientMVVMTestCase;
+import org.zkoss.zephyr.webdriver.ClientBindTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author rudyhuang
  */
-public class ModulizeTest extends ZephyrClientMVVMTestCase {
+public class ModulizeTest extends ClientBindTestCase {
 	@Test
 	public void test() {
 		connect("/mvvm/book/basic/modulize.zul");

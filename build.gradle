@@ -36,14 +36,15 @@ ext {
 			'zcommon'      : "$rootDir/zcommon",
 			'zkwebfragment': "$rootDir/zkwebfragment",
 			'zul'          : "$rootDir/zul",
-			'zephyr'       : "$rootDir/zephyr",
-			'zephyr-immutable': "$rootDir/zephyr-immutable",
+			'stateless'       : "$rootDir/stateless",
+			'stateless-immutable': "$rootDir/stateless-immutable",
 			'za11y'        : "$zkcmlDir/za11y",
 			'zkex'         : "$zkcmlDir/zkex",
 			'zkmax'        : "$zkcmlDir/zkmax",
 			'zml'          : "$zkcmlDir/zml",
 			'zuti'         : "$zkcmlDir/zuti",
-			'zephyr-ex' : "$zkcmlDir/zephyr-ex"
+			'stateless-ex' : "$zkcmlDir/stateless-ex",
+			'client-bind' : "$zkcmlDir/client-bind"
 	]
 	zkcmlprojects = [
 			'za11y': "$zkcmlDir/za11y",
@@ -51,7 +52,8 @@ ext {
 			'zkmax': "$zkcmlDir/zkmax",
 			'zml'  : "$zkcmlDir/zml",
 			'zuti' : "$zkcmlDir/zuti",
-			'zephyr-ex' : "$zkcmlDir/zephyr-ex"
+			'stateless-ex' : "$zkcmlDir/stateless-ex",
+			'client-bind' : "$zkcmlDir/client-bind"
 	]
 }
 
@@ -312,8 +314,6 @@ task versionCheck() {
 	if (project.hasProperty("check.version")) {
 		fileTree("../").matching {
 			include "**/gradle.properties"
-			exclude "**/zephyr/gradle.properties"
-			// don't check zephyr version for now
 		}.each {
 			fileCheck(it, /version=${project.getProperty("check.version")}/)
 		}

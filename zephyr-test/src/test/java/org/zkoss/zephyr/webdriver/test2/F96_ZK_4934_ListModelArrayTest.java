@@ -5,10 +5,10 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.ZephyrClientMVVMTestCase;
+import org.zkoss.zephyr.webdriver.ClientBindTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
-public class F96_ZK_4934_ListModelArrayTest extends ZephyrClientMVVMTestCase {
+public class F96_ZK_4934_ListModelArrayTest extends ClientBindTestCase {
 
 	@Test
 	public void test() {

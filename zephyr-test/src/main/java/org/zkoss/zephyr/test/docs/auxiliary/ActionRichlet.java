@@ -11,18 +11,18 @@ Copyright (C) 2022 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zephyr.test.docs.auxiliary;
 
-import static org.zkoss.zephyr.action.ActionTarget.SELF;
+import static org.zkoss.stateless.action.ActionTarget.SELF;
 
-import org.zkoss.zephyr.annotation.Action;
-import org.zkoss.zephyr.annotation.ActionVariable;
-import org.zkoss.zephyr.annotation.RichletMapping;
-import org.zkoss.zephyr.ui.Locator;
-import org.zkoss.zephyr.ui.StatelessRichlet;
-import org.zkoss.zephyr.ui.UiAgent;
-import org.zkoss.zephyr.zpr.IButton;
-import org.zkoss.zephyr.zpr.IComponent;
-import org.zkoss.zephyr.zpr.IDiv;
-import org.zkoss.zephyr.zpr.ILabel;
+import org.zkoss.stateless.annotation.Action;
+import org.zkoss.stateless.annotation.ActionVariable;
+import org.zkoss.stateless.annotation.RichletMapping;
+import org.zkoss.stateless.ui.Locator;
+import org.zkoss.stateless.ui.StatelessRichlet;
+import org.zkoss.stateless.ui.UiAgent;
+import org.zkoss.stateless.zpr.IButton;
+import org.zkoss.stateless.zpr.IComponent;
+import org.zkoss.stateless.zpr.IDiv;
+import org.zkoss.stateless.zpr.ILabel;
 import org.zkoss.zk.ui.event.Events;
 
 /**

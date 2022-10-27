@@ -19,13 +19,13 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.ZephyrClientMVVMTestCase;
+import org.zkoss.zephyr.webdriver.ClientBindTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author Christopher
  */
-public class B80_ZK_2807Test extends ZephyrClientMVVMTestCase {
+public class B80_ZK_2807Test extends ClientBindTestCase {
 	@Test
 	public void test() {
 		connect();

@@ -19,15 +19,16 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.interactions.Actions;
 
+import org.zkoss.stateless.zpr.ITextbox;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
- * A set of unit test for {@link org.zkoss.zephyr.zpr.ITextbox} Java Docs.
+ * A set of unit test for {@link ITextbox} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Essential_Components/Input/Textbox">Textbox</a>,
  * if any.
  *
  * @author katherine
- * @see org.zkoss.zephyr.zpr.ITextbox
+ * @see ITextbox
  */
 public class ITextboxRichletTest extends WebDriverTestCase {
 	@Test

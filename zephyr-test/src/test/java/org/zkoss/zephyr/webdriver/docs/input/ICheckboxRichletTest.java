@@ -16,15 +16,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
+import org.zkoss.stateless.zpr.ICheckbox;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
- * A set of unit test for {@link org.zkoss.zephyr.zpr.ICheckbox} Java Docs.
+ * A set of unit test for {@link ICheckbox} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Input/Checkbox">Checkbox</a>,
  * if any.
  *
  * @author katherine
- * @see org.zkoss.zephyr.zpr.ICheckbox
+ * @see ICheckbox
  */
 public class ICheckboxRichletTest extends WebDriverTestCase {
 	@Test

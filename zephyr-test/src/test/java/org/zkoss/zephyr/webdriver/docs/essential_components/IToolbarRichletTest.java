@@ -16,15 +16,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
+import org.zkoss.stateless.zpr.IToolbar;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
- * A set of unit test for {@link org.zkoss.zephyr.zpr.IToolbar} Java Docs.
+ * A set of unit test for {@link IToolbar} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Essential_Components/Toolbar">Toolbar</a>,
  * if any.
  *
  * @author katherine
- * @see org.zkoss.zephyr.zpr.IToolbar
+ * @see IToolbar
  */
 public class IToolbarRichletTest extends WebDriverTestCase {
 	@Test

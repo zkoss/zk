@@ -14,25 +14,25 @@ package org.zkoss.zephyr.test.docs.essential_components;
 import java.util.Arrays;
 import java.util.List;
 
-import org.zkoss.zephyr.annotation.Action;
-import org.zkoss.zephyr.annotation.RichletMapping;
-import org.zkoss.zephyr.ui.Locator;
-import org.zkoss.zephyr.ui.StatelessRichlet;
-import org.zkoss.zephyr.ui.UiAgent;
-import org.zkoss.zephyr.zpr.IButton;
-import org.zkoss.zephyr.zpr.IComponent;
-import org.zkoss.zephyrex.zpr.INav;
-import org.zkoss.zephyrex.zpr.INavbar;
-import org.zkoss.zephyrex.zpr.INavitem;
+import org.zkoss.stateless.annotation.Action;
+import org.zkoss.stateless.annotation.RichletMapping;
+import org.zkoss.stateless.ui.Locator;
+import org.zkoss.stateless.ui.StatelessRichlet;
+import org.zkoss.stateless.ui.UiAgent;
+import org.zkoss.stateless.zpr.IButton;
+import org.zkoss.stateless.zpr.IComponent;
+import org.zkoss.statelessex.zpr.INav;
+import org.zkoss.statelessex.zpr.INavbar;
+import org.zkoss.statelessex.zpr.INavitem;
 import org.zkoss.zk.ui.event.Events;
 
 /**
- * A set of example for {@link org.zkoss.zephyrex.zpr.INavbar} Java Docs.
+ * A set of example for {@link org.zkoss.statelessex.zpr.INavbar} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Essential_Components/Navbar">INavbar</a>,
  * if any.
  *
  * @author katherine
- * @see org.zkoss.zephyrex.zpr.INavbar
+ * @see org.zkoss.statelessex.zpr.INavbar
  */
 @RichletMapping("/essential_components/iNavbar")
 public class INavbarRichlet implements StatelessRichlet {

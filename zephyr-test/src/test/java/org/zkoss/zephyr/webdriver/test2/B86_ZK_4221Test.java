@@ -4,13 +4,13 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.ZephyrClientMVVMTestCase;
+import org.zkoss.zephyr.webdriver.ClientBindTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author jameschu
  */
-public class B86_ZK_4221Test extends ZephyrClientMVVMTestCase {
+public class B86_ZK_4221Test extends ClientBindTestCase {
 	@Test
 	public void test() {
 		connect();

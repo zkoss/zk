@@ -14,10 +14,10 @@ package org.zkoss.zephyr.webdriver.test2;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.ZephyrClientMVVMTestCase;
+import org.zkoss.zephyr.webdriver.ClientBindTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
-public class B86_ZK_3647Test extends ZephyrClientMVVMTestCase {
+public class B86_ZK_3647Test extends ClientBindTestCase {
 
 	@Test
 	public void test() {

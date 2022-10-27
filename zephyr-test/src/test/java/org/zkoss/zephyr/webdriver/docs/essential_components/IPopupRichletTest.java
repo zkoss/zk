@@ -17,15 +17,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
+import org.zkoss.stateless.zpr.IPopup;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
- * A set of unit test for {@link org.zkoss.zephyr.zpr.IPopup} Java Docs.
+ * A set of unit test for {@link IPopup} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Input/Popup">Popup</a>,
  * if any.
  *
  * @author katherine
- * @see org.zkoss.zephyr.zpr.IPopup
+ * @see IPopup
  */
 public class IPopupRichletTest extends WebDriverTestCase {
 	@Test

@@ -16,16 +16,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
+import org.zkoss.stateless.zpr.IDecimalbox;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
- * A set of unit test for {@link org.zkoss.zephyr.zpr.IDecimalbox} Java Docs.
+ * A set of unit test for {@link IDecimalbox} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Input/Decimalbox">Decimalbox</a>,
  * if any.
  *
  * @author katherine
- * @see org.zkoss.zephyr.zpr.IDecimalbox
+ * @see IDecimalbox
  */
 public class IDecimalboxRichletTest extends WebDriverTestCase {
 	@Test

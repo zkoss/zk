@@ -20,12 +20,12 @@ import org.junit.jupiter.api.Test;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
- * A set of unit test for {@link org.zkoss.zephyrex.zpr.ICascader} Java Docs.
+ * A set of unit test for {@link org.zkoss.statelessex.zpr.ICascader} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Input/Cascader">Cascader</a>,
  * if any.
  *
  * @author katherine
- * @see org.zkoss.zephyrex.zpr.ICascader
+ * @see org.zkoss.statelessex.zpr.ICascader
  */
 public class ICascaderRichletTest extends WebDriverTestCase {
 	@Test

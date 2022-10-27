@@ -17,15 +17,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
+import org.zkoss.stateless.zpr.ITreecol;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
- * A set of unit test for {@link org.zkoss.zephyr.zpr.ITreecol} Java Docs.
+ * A set of unit test for {@link ITreecol} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Data/Tree/Treecol">Treecol</a>,
  * if any.
  *
  * @author katherine
- * @see org.zkoss.zephyr.zpr.ITreecol
+ * @see ITreecol
  */
 public class ITreecolRichletTest extends WebDriverTestCase {
 	@Test

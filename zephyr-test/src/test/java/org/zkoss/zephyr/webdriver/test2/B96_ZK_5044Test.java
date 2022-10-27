@@ -15,12 +15,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.ZephyrClientMVVMTestCase;
+import org.zkoss.zephyr.webdriver.ClientBindTestCase;
 
 /**
  * @author jumperchen
  */
-public class B96_ZK_5044Test extends ZephyrClientMVVMTestCase {
+public class B96_ZK_5044Test extends ClientBindTestCase {
 	@Test
 	public void test() {
 		connect();

@@ -15,15 +15,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
+import org.zkoss.stateless.zpr.IDiv;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
- * A set of unit test for {@link org.zkoss.zephyr.zpr.IDiv} Java Docs.
+ * A set of unit test for {@link IDiv} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Containers/Div">Div</a>,
  * if any.
  *
  * @author katherine
- * @see org.zkoss.zephyr.zpr.IDiv
+ * @see IDiv
  */
 public class IDivRichletTest extends WebDriverTestCase {
 	@Test

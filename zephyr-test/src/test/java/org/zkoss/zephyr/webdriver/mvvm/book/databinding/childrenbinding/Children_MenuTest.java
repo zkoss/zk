@@ -13,13 +13,11 @@ package org.zkoss.zephyr.webdriver.mvvm.book.databinding.childrenbinding;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.TestStage;
-import org.zkoss.zephyr.webdriver.ZephyrClientMVVMTestCase;
+import org.zkoss.zephyr.webdriver.ClientBindTestCase;
 
-public class Children_MenuTest extends ZephyrClientMVVMTestCase {
+public class Children_MenuTest extends ClientBindTestCase {
 	@Test
 	public void structureTest() {
 		connect("/mvvm/book/databinding/childrenbinding/children-menu.zul");

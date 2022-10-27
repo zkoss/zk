@@ -14,35 +14,35 @@ package org.zkoss.zephyr.test.docs.data;
 import java.util.Arrays;
 import java.util.List;
 
-import org.zkoss.zephyr.annotation.Action;
-import org.zkoss.zephyr.annotation.RichletMapping;
-import org.zkoss.zephyr.ui.Locator;
-import org.zkoss.zephyr.ui.StatelessRichlet;
-import org.zkoss.zephyr.ui.UiAgent;
-import org.zkoss.zephyr.zpr.IAuxhead;
-import org.zkoss.zephyr.zpr.IAuxheader;
-import org.zkoss.zephyr.zpr.IButton;
-import org.zkoss.zephyr.zpr.IComponent;
-import org.zkoss.zephyr.zpr.IFrozen;
-import org.zkoss.zephyr.zpr.IListbox;
-import org.zkoss.zephyr.zpr.IListcell;
-import org.zkoss.zephyr.zpr.IListfoot;
-import org.zkoss.zephyr.zpr.IListfooter;
-import org.zkoss.zephyr.zpr.IListheader;
-import org.zkoss.zephyr.zpr.IListitem;
-import org.zkoss.zephyrex.state.IListboxController;
-import org.zkoss.zephyrex.zpr.IListgroup;
+import org.zkoss.stateless.annotation.Action;
+import org.zkoss.stateless.annotation.RichletMapping;
+import org.zkoss.stateless.ui.Locator;
+import org.zkoss.stateless.ui.StatelessRichlet;
+import org.zkoss.stateless.ui.UiAgent;
+import org.zkoss.stateless.zpr.IAuxhead;
+import org.zkoss.stateless.zpr.IAuxheader;
+import org.zkoss.stateless.zpr.IButton;
+import org.zkoss.stateless.zpr.IComponent;
+import org.zkoss.stateless.zpr.IFrozen;
+import org.zkoss.stateless.zpr.IListbox;
+import org.zkoss.stateless.zpr.IListcell;
+import org.zkoss.stateless.zpr.IListfoot;
+import org.zkoss.stateless.zpr.IListfooter;
+import org.zkoss.stateless.zpr.IListheader;
+import org.zkoss.stateless.zpr.IListitem;
+import org.zkoss.statelessex.state.IListboxController;
+import org.zkoss.statelessex.zpr.IListgroup;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.RowComparator;
 import org.zkoss.zul.SimpleListModel;
 
 /**
- * A set of example for {@link org.zkoss.zephyr.zpr.IListbox} Java Docs.
+ * A set of example for {@link IListbox} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Data/Listbox">IListbox</a>,
  * if any.
  *
  * @author jumperchen
- * @see org.zkoss.zephyr.zpr.IListbox
+ * @see IListbox
  */
 @RichletMapping("/data/ilistbox")
 public class IListboxRichlet implements StatelessRichlet {

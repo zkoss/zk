@@ -18,12 +18,12 @@ import org.junit.jupiter.api.Test;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
- * A set of unit test for {@link org.zkoss.zephyrex.zpr.IDropupload} Java Docs.
+ * A set of unit test for {@link org.zkoss.statelessex.zpr.IDropupload} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Essential_Components/Dropupload">Dropupload</a>,
  * if any.
  *
  * @author katherine
- * @see org.zkoss.zephyrex.zpr.IDropupload
+ * @see org.zkoss.statelessex.zpr.IDropupload
  */
 public class IDropuploadRichletTest extends WebDriverTestCase {
 	@Test

@@ -11,26 +11,26 @@ Copyright (C) 2022 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zephyr.test.docs.input;
 
-import org.zkoss.zephyr.annotation.Action;
-import org.zkoss.zephyr.annotation.RichletMapping;
-import org.zkoss.zephyr.ui.Locator;
-import org.zkoss.zephyr.ui.StatelessRichlet;
-import org.zkoss.zephyr.ui.UiAgent;
-import org.zkoss.zephyr.zpr.IBandbox;
-import org.zkoss.zephyr.zpr.IBandpopup;
-import org.zkoss.zephyr.zpr.IButton;
-import org.zkoss.zephyr.zpr.IComponent;
-import org.zkoss.zephyr.zpr.ILabel;
-import org.zkoss.zephyr.zpr.IVlayout;
+import org.zkoss.stateless.annotation.Action;
+import org.zkoss.stateless.annotation.RichletMapping;
+import org.zkoss.stateless.ui.Locator;
+import org.zkoss.stateless.ui.StatelessRichlet;
+import org.zkoss.stateless.ui.UiAgent;
+import org.zkoss.stateless.zpr.IBandbox;
+import org.zkoss.stateless.zpr.IBandpopup;
+import org.zkoss.stateless.zpr.IButton;
+import org.zkoss.stateless.zpr.IComponent;
+import org.zkoss.stateless.zpr.ILabel;
+import org.zkoss.stateless.zpr.IVlayout;
 import org.zkoss.zk.ui.event.Events;
 
 /**
- * A set of example for {@link org.zkoss.zephyr.zpr.IBandbox} Java Docs.
+ * A set of example for {@link IBandbox} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Input/Bandbox">IBandbox</a>,
  * if any.
  *
  * @author katherine
- * @see org.zkoss.zephyr.zpr.IBandbox
+ * @see IBandbox
  */
 @RichletMapping("/input/iBandbox")
 public class IBandboxRichlet implements StatelessRichlet {

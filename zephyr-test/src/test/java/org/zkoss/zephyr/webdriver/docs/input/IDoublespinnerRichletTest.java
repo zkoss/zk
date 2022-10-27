@@ -17,16 +17,17 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
+import org.zkoss.stateless.zpr.IDoublespinner;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
- * A set of unit test for {@link org.zkoss.zephyr.zpr.IDoublespinner} Java Docs.
+ * A set of unit test for {@link IDoublespinner} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Input/Doublespinner">Doublespinner</a>,
  * if any.
  *
  * @author katherine
- * @see org.zkoss.zephyr.zpr.IDoublespinner
+ * @see IDoublespinner
  */
 public class IDoublespinnerRichletTest extends WebDriverTestCase {
 	@Test

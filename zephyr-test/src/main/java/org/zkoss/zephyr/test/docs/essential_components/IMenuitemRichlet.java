@@ -14,26 +14,26 @@ package org.zkoss.zephyr.test.docs.essential_components;
 import java.util.Arrays;
 import java.util.List;
 
-import org.zkoss.zephyr.annotation.Action;
-import org.zkoss.zephyr.annotation.RichletMapping;
-import org.zkoss.zephyr.ui.Locator;
-import org.zkoss.zephyr.ui.StatelessRichlet;
-import org.zkoss.zephyr.ui.UiAgent;
-import org.zkoss.zephyr.zpr.IButton;
-import org.zkoss.zephyr.zpr.IComponent;
-import org.zkoss.zephyr.zpr.IMenu;
-import org.zkoss.zephyr.zpr.IMenubar;
-import org.zkoss.zephyr.zpr.IMenuitem;
-import org.zkoss.zephyr.zpr.IMenupopup;
+import org.zkoss.stateless.annotation.Action;
+import org.zkoss.stateless.annotation.RichletMapping;
+import org.zkoss.stateless.ui.Locator;
+import org.zkoss.stateless.ui.StatelessRichlet;
+import org.zkoss.stateless.ui.UiAgent;
+import org.zkoss.stateless.zpr.IButton;
+import org.zkoss.stateless.zpr.IComponent;
+import org.zkoss.stateless.zpr.IMenu;
+import org.zkoss.stateless.zpr.IMenubar;
+import org.zkoss.stateless.zpr.IMenuitem;
+import org.zkoss.stateless.zpr.IMenupopup;
 import org.zkoss.zk.ui.event.Events;
 
 /**
- * A set of example for {@link org.zkoss.zephyr.zpr.IMenuitem} Java Docs.
+ * A set of example for {@link IMenuitem} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Essential_Components/Menu/Menuitem">IMenuitem</a>,
  * if any.
  *
  * @author katherine
- * @see org.zkoss.zephyr.zpr.IMenuitem
+ * @see IMenuitem
  */
 @RichletMapping("/essential_components/iMenuitem")
 public class IMenuitemRichlet implements StatelessRichlet {

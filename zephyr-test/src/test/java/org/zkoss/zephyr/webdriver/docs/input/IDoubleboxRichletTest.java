@@ -15,15 +15,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
+import org.zkoss.stateless.zpr.IDoublebox;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
- * A set of unit test for {@link org.zkoss.zephyr.zpr.IDoublebox} Java Docs.
+ * A set of unit test for {@link IDoublebox} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Input/Doublebox">Doublebox</a>,
  * if any.
  *
  * @author katherine
- * @see org.zkoss.zephyr.zpr.IDoublebox
+ * @see IDoublebox
  */
 public class IDoubleboxRichletTest extends WebDriverTestCase {
 	@Test

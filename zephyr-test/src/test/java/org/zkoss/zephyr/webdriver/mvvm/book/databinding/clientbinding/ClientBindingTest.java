@@ -13,17 +13,14 @@ package org.zkoss.zephyr.webdriver.mvvm.book.databinding.clientbinding;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.TestStage;
-import org.zkoss.zephyr.webdriver.ZephyrClientMVVMTestCase;
+import org.zkoss.zephyr.webdriver.ClientBindTestCase;
 
 /**
  * @author jameschu
  */
-public class ClientBindingTest extends ZephyrClientMVVMTestCase {
+public class ClientBindingTest extends ClientBindTestCase {
 	@Test
 	public void test() {
 		connect();

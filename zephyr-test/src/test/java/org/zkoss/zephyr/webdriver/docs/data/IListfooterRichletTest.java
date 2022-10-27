@@ -15,15 +15,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
+import org.zkoss.stateless.zpr.IListfooter;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
- * A set of unit test for {@link org.zkoss.zephyr.zpr.IListfooter} Java Docs.
+ * A set of unit test for {@link IListfooter} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Data/Listbox/Listfooter">Listfooter</a>,
  * if any.
  *
  * @author katherine
- * @see org.zkoss.zephyr.zpr.IListfooter
+ * @see IListfooter
  */
 public class IListfooterRichletTest extends WebDriverTestCase {
 

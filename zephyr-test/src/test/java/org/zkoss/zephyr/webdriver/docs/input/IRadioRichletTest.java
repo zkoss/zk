@@ -15,15 +15,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
+import org.zkoss.stateless.zpr.IRadio;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
- * A set of unit test for {@link org.zkoss.zephyr.zpr.IRadio} Java Docs.
+ * A set of unit test for {@link IRadio} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Input/Radio">Radio</a>,
  * if any.
  *
  * @author katherine
- * @see org.zkoss.zephyr.zpr.IRadio
+ * @see IRadio
  */
 public class IRadioRichletTest extends WebDriverTestCase {
 	@Test

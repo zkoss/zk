@@ -20,16 +20,17 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 
+import org.zkoss.stateless.zpr.IDatebox;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
- * A set of unit test for {@link org.zkoss.zephyr.zpr.IDatebox} Java Docs.
+ * A set of unit test for {@link IDatebox} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Input/Datebox">Datebox</a>,
  * if any.
  *
  * @author katherine
- * @see org.zkoss.zephyr.zpr.IDatebox
+ * @see IDatebox
  */
 public class IDateboxRichletTest extends WebDriverTestCase {
 

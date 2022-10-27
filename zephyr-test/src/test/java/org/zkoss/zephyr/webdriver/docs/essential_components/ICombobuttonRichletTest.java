@@ -16,15 +16,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
+import org.zkoss.stateless.zpr.ICombobutton;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
- * A set of unit test for {@link org.zkoss.zephyr.zpr.ICombobutton} Java Docs.
+ * A set of unit test for {@link ICombobutton} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Essential_Components/Combobutton">Combobutton</a>,
  * if any.
  *
  * @author katherine
- * @see org.zkoss.zephyr.zpr.ICombobutton
+ * @see ICombobutton
  */
 public class ICombobuttonRichletTest extends WebDriverTestCase {
 	@Test

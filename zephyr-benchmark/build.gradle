@@ -11,7 +11,7 @@ idea {
 }
 
 description = "Zephyr Benchmarks"
-group = 'org.zkoss.zephyr'
+group = 'org.zkoss.zk'
 
 jar {
     manifest {
@@ -44,9 +44,10 @@ repositories {
 dependencies {
     implementation "org.zkoss.zk:zul:${version}"
     implementation "org.zkoss.zk:zkbind:${version}"
-    implementation "org.zkoss.zephyr:zephyr:${version}"
-    implementation "org.zkoss.zephyr:zephyr-ex:${version}"
-    implementation "org.zkoss.zephyr:zephyr-mock:${version}"
+    implementation "org.zkoss.zk:stateless:${version}"
+    implementation "org.zkoss.zk:stateless-ex:${version}"
+    implementation "org.zkoss.zk:stateless-mock:${version}"
+    implementation "org.zkoss.zk:client-bind:${version}"
     implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
     implementation "org.openjdk.jmh:jmh-core:$jmhVersion"
     annotationProcessor "org.openjdk.jmh:jmh-generator-annprocess:$jmhVersion"

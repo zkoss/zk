@@ -18,12 +18,12 @@ import org.junit.jupiter.api.Test;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
- * A set of unit test for {@link org.zkoss.zephyrex.zpr.ILinelayout} Java Docs.
+ * A set of unit test for {@link org.zkoss.statelessex.zpr.ILinelayout} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Layouts/Linelayout">Linelayout</a>,
  * if any.
  *
  * @author katherine
- * @see org.zkoss.zephyrex.zpr.ILinelayout
+ * @see org.zkoss.statelessex.zpr.ILinelayout
  */
 public class ILinelayoutRichletTest extends WebDriverTestCase {
 	@Test

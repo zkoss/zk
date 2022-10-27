@@ -83,7 +83,7 @@ export class Selectbox extends zul.Widget<HTMLSelectElement> {
 	 * <p>
 	 * Default: false.
 	 * @return boolean
-	 * @since 10.0.0 for Zephyr
+	 * @since 10.0.0 for Stateless
 	 */
 	isMultiple(): boolean {
 		return !!this._multiple;
@@ -92,7 +92,7 @@ export class Selectbox extends zul.Widget<HTMLSelectElement> {
 	/**
 	 * Sets whether multiple selections are allowed.
 	 * @param boolean multiple
-	 * @since 10.0.0 for Zephyr
+	 * @since 10.0.0 for Stateless
 	 */
 	setMultiple(multiple: boolean, opts?: Record<string, boolean>): this {
 		const o = this._multiple;
@@ -109,7 +109,7 @@ export class Selectbox extends zul.Widget<HTMLSelectElement> {
 	/**
 	 * Returns the maximal length of each item's label.
 	 * @return int
-	 * @since 10.0.0 for Zephyr
+	 * @since 10.0.0 for Stateless
 	 */
 	getMaxlength(): number | undefined {
 		return this._maxlength;
@@ -118,7 +118,7 @@ export class Selectbox extends zul.Widget<HTMLSelectElement> {
 	/**
 	 * Sets the maximal length of each option's label.
 	 * @param int maxlength
-	 * @since 10.0.0 for Zephyr
+	 * @since 10.0.0 for Stateless
 	 */
 	setMaxlength(maxlength: number, opts?: Record<string, boolean>): this {
 		const o = this._maxlength;
@@ -134,7 +134,7 @@ export class Selectbox extends zul.Widget<HTMLSelectElement> {
 	/**
 	 * Returns all the selected indexes or null if no selections.
 	 * @return int[] selectedIndexes
-	 * @since 10.0.0 for Zephyr
+	 * @since 10.0.0 for Stateless
 	 */
 	getSelectedIndexes(): number[] | undefined {
 		return this._selectedIndexes;
@@ -143,7 +143,7 @@ export class Selectbox extends zul.Widget<HTMLSelectElement> {
 	/**
 	 * Sets all the selected indexes.
 	 * @param int[] selectedIndexes
-	 * @since 10.0.0 for Zephyr
+	 * @since 10.0.0 for Stateless
 	 */
 	setSelectedIndexes(selectedIndexes: number[], opts?: Record<string, boolean>): this {
 		function doSelection(node: HTMLSelectElement, selectedIndexes: number[]): void {

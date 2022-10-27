@@ -14,14 +14,11 @@ package org.zkoss.zephyr.webdriver.mvvm.book.basic;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.TestStage;
-import org.zkoss.zephyr.webdriver.ZephyrClientMVVMTestCase;
+import org.zkoss.zephyr.webdriver.ClientBindTestCase;
 
-public class AllfunctionTest extends ZephyrClientMVVMTestCase {
+public class AllfunctionTest extends ClientBindTestCase {
 	@Test
 	public void warmTest() {
 		connect("/mvvm/book/basic/allfunction.zul");

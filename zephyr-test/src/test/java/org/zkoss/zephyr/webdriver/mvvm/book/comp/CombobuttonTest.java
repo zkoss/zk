@@ -11,19 +11,16 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zephyr.webdriver.mvvm.book.comp;
 
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.TestStage;
-import org.zkoss.zephyr.webdriver.ZephyrClientMVVMTestCase;
+import org.zkoss.zephyr.webdriver.ClientBindTestCase;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author rudyhuang
  */
-public class CombobuttonTest extends ZephyrClientMVVMTestCase {
+public class CombobuttonTest extends ClientBindTestCase {
 	@Test
 	public void test() {
 		connect();

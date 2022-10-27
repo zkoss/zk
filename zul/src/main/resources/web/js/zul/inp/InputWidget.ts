@@ -536,7 +536,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	 */
 	setValue(value: ValueType | number | string, fromServer?: boolean): this {
 		var vi: InputValidationResult<ValueType> | undefined;
-		// for zephyr to treat as "value" attribute from "_value" at client side
+		// for stateless to treat as "value" attribute from "_value" at client side
 		if (typeof value == 'number' || typeof value == 'string')
 			value = this.unmarshall_(value);
 		if (fromServer)

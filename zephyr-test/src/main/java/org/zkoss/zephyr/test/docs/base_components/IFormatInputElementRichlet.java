@@ -14,26 +14,27 @@ package org.zkoss.zephyr.test.docs.base_components;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-import org.zkoss.zephyr.annotation.RichletMapping;
-import org.zkoss.zephyr.ui.StatelessRichlet;
-import org.zkoss.zephyr.zpr.IComponent;
-import org.zkoss.zephyr.zpr.IDatebox;
-import org.zkoss.zephyr.zpr.IDecimalbox;
-import org.zkoss.zephyr.zpr.IDoublebox;
-import org.zkoss.zephyr.zpr.IDoublespinner;
-import org.zkoss.zephyr.zpr.IIntbox;
-import org.zkoss.zephyr.zpr.ILongbox;
-import org.zkoss.zephyr.zpr.ISpinner;
-import org.zkoss.zephyr.zpr.ITimebox;
-import org.zkoss.zephyr.zpr.IVlayout;
+import org.zkoss.stateless.annotation.RichletMapping;
+import org.zkoss.stateless.zpr.IFormatInputElement;
+import org.zkoss.stateless.ui.StatelessRichlet;
+import org.zkoss.stateless.zpr.IComponent;
+import org.zkoss.stateless.zpr.IDatebox;
+import org.zkoss.stateless.zpr.IDecimalbox;
+import org.zkoss.stateless.zpr.IDoublebox;
+import org.zkoss.stateless.zpr.IDoublespinner;
+import org.zkoss.stateless.zpr.IIntbox;
+import org.zkoss.stateless.zpr.ILongbox;
+import org.zkoss.stateless.zpr.ISpinner;
+import org.zkoss.stateless.zpr.ITimebox;
+import org.zkoss.stateless.zpr.IVlayout;
 
 /**
- * A set of example for {@link org.zkoss.zephyr.zpr.IFormatInputElement} Java Docs.
+ * A set of example for {@link IFormatInputElement} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Base_Components/FormatInputElement">IFormatInputElement</a>,
  * if any.
  *
  * @author katherine
- * @see org.zkoss.zephyr.zpr.IFormatInputElement
+ * @see IFormatInputElement
  */
 @RichletMapping("/base_components/iFormatInputElement")
 public class IFormatInputElementRichlet implements StatelessRichlet {

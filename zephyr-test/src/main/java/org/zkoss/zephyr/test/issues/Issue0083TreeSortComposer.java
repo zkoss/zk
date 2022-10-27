@@ -14,10 +14,10 @@ package org.zkoss.zephyr.test.issues;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import org.zkoss.zephyrex.state.ITreeController;
-import org.zkoss.zephyr.ui.BuildContext;
-import org.zkoss.zephyr.ui.StatelessComposer;
-import org.zkoss.zephyr.zpr.ITree;
+import org.zkoss.statelessex.state.ITreeController;
+import org.zkoss.stateless.ui.BuildContext;
+import org.zkoss.stateless.ui.StatelessComposer;
+import org.zkoss.stateless.zpr.ITree;
 import org.zkoss.zul.DefaultTreeModel;
 import org.zkoss.zul.DefaultTreeNode;
 

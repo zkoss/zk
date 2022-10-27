@@ -4,11 +4,11 @@
 		<addon-uri>/WEB-INF/lang-addon.xml</addon-uri>
 	</language-config>
     <listener>
-        <listener-class>org.zkoss.zephyrex.bind.BinderPropertiesRenderer</listener-class>
+        <listener-class>org.zkoss.clientbind.BinderPropertiesRenderer</listener-class>
     </listener>
 	<library-property>
 		<name>org.zkoss.bind.defaultComposer.class</name>
-		<value>org.zkoss.zephyrex.bind.ClientBindComposer</value>
+		<value>org.zkoss.clientbind.ClientBindComposer</value>
 	</library-property>
 	<client-config>
 		<debug-js>true</debug-js>

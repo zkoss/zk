@@ -13,15 +13,12 @@ package org.zkoss.zephyr.webdriver.mvvm.book.databinding.collection;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.TestStage;
-import org.zkoss.zephyr.webdriver.ZephyrClientMVVMTestCase;
+import org.zkoss.zephyr.webdriver.ClientBindTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
-public class Collection_template_treeTest extends ZephyrClientMVVMTestCase {
+public class Collection_template_treeTest extends ClientBindTestCase {
 	@Test
 	public void test() {
 		connect("/mvvm/book/databinding/collection/collection-template-tree.zul");

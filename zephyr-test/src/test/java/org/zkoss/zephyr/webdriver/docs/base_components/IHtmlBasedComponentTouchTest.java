@@ -16,13 +16,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.interactions.touch.TouchActions;
 
+import org.zkoss.stateless.zpr.IHtmlBasedComponent;
 import org.zkoss.test.webdriver.TouchWebDriverTestCase;
 
 /**
- * A set of touch device unit test for {@link org.zkoss.zephyr.zpr.IHtmlBasedComponent} Java Docs.
+ * A set of touch device unit test for {@link IHtmlBasedComponent} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Base_Components/HtmlBasedComponent">HtmlBasedComponent</a>,
  * if any.
- * @see org.zkoss.zephyr.zpr.IHtmlBasedComponent
+ * @see IHtmlBasedComponent
  * @author jumperchen
  */
 public class IHtmlBasedComponentTouchTest extends TouchWebDriverTestCase {

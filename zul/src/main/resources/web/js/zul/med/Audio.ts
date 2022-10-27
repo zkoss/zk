@@ -83,12 +83,12 @@ export class Audio extends zul.Widget<HTMLAudioElement> {
 		return this;
 	}
 
-	// for zephyr to treat as "src" attribute at client side
+	// for stateless to treat as "src" attribute at client side
 	getContent(): string | undefined {
 		return this.getSrc();
 	}
 
-	// for zephyr to treat as "src" attribute at client side
+	// for stateless to treat as "src" attribute at client side
 	setContent(content: string, opts?: Record<string, boolean>): this {
 		return this.setSrc(content, opts);
 	}

@@ -18,13 +18,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 
+import org.zkoss.stateless.zpr.IXulElement;
 import org.zkoss.test.webdriver.DockerWebDriverTestCase;
 
 /**
- * A set of unit test for {@link org.zkoss.zephyr.zpr.IXulElement} Java Docs.
+ * A set of unit test for {@link IXulElement} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Base_Components/XulElement">XulElement</a>,
  * if any.
- * @see org.zkoss.zephyr.zpr.IXulElement
+ * @see IXulElement
  * @author jumperchen
  */
 // Remove to extend DockerWebDriver if the bug has fixed - https://tracker.zkoss.org/browse/ZK-5092

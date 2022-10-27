@@ -11,25 +11,25 @@ Copyright (C) 2022 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zephyr.test.docs.essential_components;
 
-import org.zkoss.zephyr.annotation.RichletMapping;
-import org.zkoss.zephyr.ui.StatelessRichlet;
-import org.zkoss.zephyr.zpr.IA;
-import org.zkoss.zephyr.zpr.IComponent;
-import org.zkoss.zephyr.zpr.IDiv;
-import org.zkoss.zephyr.zpr.IHlayout;
-import org.zkoss.zephyr.zpr.ILabel;
-import org.zkoss.zephyr.zpr.IListbox;
-import org.zkoss.zephyr.zpr.IListcell;
-import org.zkoss.zephyr.zpr.IListitem;
-import org.zkoss.zephyr.zpr.IWindow;
-import org.zkoss.zephyrex.zpr.IAnchornav;
+import org.zkoss.stateless.annotation.RichletMapping;
+import org.zkoss.stateless.ui.StatelessRichlet;
+import org.zkoss.stateless.zpr.IA;
+import org.zkoss.stateless.zpr.IComponent;
+import org.zkoss.stateless.zpr.IDiv;
+import org.zkoss.stateless.zpr.IHlayout;
+import org.zkoss.stateless.zpr.ILabel;
+import org.zkoss.stateless.zpr.IListbox;
+import org.zkoss.stateless.zpr.IListcell;
+import org.zkoss.stateless.zpr.IListitem;
+import org.zkoss.stateless.zpr.IWindow;
+import org.zkoss.statelessex.zpr.IAnchornav;
 
 /**
- * A set of example for {@link org.zkoss.zephyrex.zpr.IAnchornav} Java Docs.
+ * A set of example for {@link org.zkoss.statelessex.zpr.IAnchornav} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Essential_Components/Anchornav">IAnchornav</a>,
  * if any.
  * @author jumperchen
- * @see org.zkoss.zephyrex.zpr.IAnchornav
+ * @see org.zkoss.statelessex.zpr.IAnchornav
  */
 @RichletMapping("/essential_components/ianchornav")
 public class IAnchornavRichlet implements StatelessRichlet {

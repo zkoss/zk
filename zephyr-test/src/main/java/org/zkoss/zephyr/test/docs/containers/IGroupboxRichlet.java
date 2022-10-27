@@ -14,26 +14,26 @@ package org.zkoss.zephyr.test.docs.containers;
 import java.util.Arrays;
 import java.util.List;
 
-import org.zkoss.zephyr.annotation.Action;
-import org.zkoss.zephyr.annotation.RichletMapping;
-import org.zkoss.zephyr.ui.Locator;
-import org.zkoss.zephyr.ui.StatelessRichlet;
-import org.zkoss.zephyr.ui.UiAgent;
-import org.zkoss.zephyr.zpr.IButton;
-import org.zkoss.zephyr.zpr.ICaption;
-import org.zkoss.zephyr.zpr.IComponent;
-import org.zkoss.zephyr.zpr.IGroupbox;
-import org.zkoss.zephyr.zpr.IRadio;
-import org.zkoss.zephyr.zpr.IRadiogroup;
+import org.zkoss.stateless.annotation.Action;
+import org.zkoss.stateless.annotation.RichletMapping;
+import org.zkoss.stateless.ui.Locator;
+import org.zkoss.stateless.ui.StatelessRichlet;
+import org.zkoss.stateless.ui.UiAgent;
+import org.zkoss.stateless.zpr.IButton;
+import org.zkoss.stateless.zpr.ICaption;
+import org.zkoss.stateless.zpr.IComponent;
+import org.zkoss.stateless.zpr.IGroupbox;
+import org.zkoss.stateless.zpr.IRadio;
+import org.zkoss.stateless.zpr.IRadiogroup;
 import org.zkoss.zk.ui.event.Events;
 
 /**
- * A set of example for {@link org.zkoss.zephyr.zpr.IGroupbox} Java Docs.
+ * A set of example for {@link IGroupbox} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Containers/Groupbox">IGroupbox</a>,
  * if any.
  *
  * @author jumperchen
- * @see org.zkoss.zephyr.zpr.IGroupbox
+ * @see IGroupbox
  */
 @RichletMapping("/containers/igroupbox")
 public class IGroupboxRichlet implements StatelessRichlet {

@@ -1,0 +1,22 @@
+plugins {
+    id 'java'
+    id 'idea'
+}
+
+idea {
+    module {
+        outputDir file("$buildDir/classes/main")
+        testOutputDir file("$buildDir/classes/test")
+    }
+}
+
+description = "Stateless Mocks"
+group = "org.zkoss.zk"
+
+dependencies {
+    implementation project(":stateless")
+    implementation "org.zkoss.zk:zul:${version}"
+    implementation "javax.servlet:javax.servlet-api:3.0.1"
+    implementation "org.junit.jupiter:junit-jupiter:$junitVersion"
+    implementation 'org.slf4j:slf4j-jdk14:1.7.30'
+}

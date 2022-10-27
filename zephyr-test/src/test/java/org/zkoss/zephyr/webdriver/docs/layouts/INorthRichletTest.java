@@ -16,15 +16,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
+import org.zkoss.stateless.zpr.INorth;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
- * A set of unit test for {@link org.zkoss.zephyr.zpr.INorth} Java Docs.
+ * A set of unit test for {@link INorth} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Layouts/Borderlayout/North">North</a>,
  * if any.
  *
  * @author katherine
- * @see org.zkoss.zephyr.zpr.INorth
+ * @see INorth
  */
 public class INorthRichletTest extends WebDriverTestCase {
 	@Test

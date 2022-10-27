@@ -20,12 +20,12 @@ import org.junit.jupiter.api.Test;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
- * A set of unit test for {@link org.zkoss.zephyrex.zpr.ISearchbox} Java Docs.
+ * A set of unit test for {@link org.zkoss.statelessex.zpr.ISearchbox} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Input/Searchbox">Searchbox</a>,
  * if any.
  *
  * @author katherine
- * @see org.zkoss.zephyrex.zpr.ISearchbox
+ * @see org.zkoss.statelessex.zpr.ISearchbox
  */
 public class ISearchboxRichletTest extends WebDriverTestCase {
 	@Test

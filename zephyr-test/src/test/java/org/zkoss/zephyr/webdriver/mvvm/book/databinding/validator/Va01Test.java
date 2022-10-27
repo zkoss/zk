@@ -13,14 +13,12 @@ package org.zkoss.zephyr.webdriver.mvvm.book.databinding.validator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.TestStage;
-import org.zkoss.zephyr.webdriver.ZephyrClientMVVMTestCase;
+import org.zkoss.zephyr.webdriver.ClientBindTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
-public class Va01Test extends ZephyrClientMVVMTestCase {
+public class Va01Test extends ClientBindTestCase {
 	@Test
 	public void test() {
 		connect();

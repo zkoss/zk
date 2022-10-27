@@ -17,12 +17,12 @@ import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.ZephyrClientMVVMTestCase;
+import org.zkoss.zephyr.webdriver.ClientBindTestCase;
 
 /**
  * @author jameschu
  */
-public class F80_ZK_2650Test extends ZephyrClientMVVMTestCase {
+public class F80_ZK_2650Test extends ClientBindTestCase {
 	@Test
 	public void test() throws IOException {
 		connect();

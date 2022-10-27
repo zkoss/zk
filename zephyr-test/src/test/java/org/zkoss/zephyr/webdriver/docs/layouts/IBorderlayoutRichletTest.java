@@ -15,16 +15,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
+import org.zkoss.stateless.zpr.IBorderlayout;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
- * A set of unit test for {@link org.zkoss.zephyr.zpr.IBorderlayout} Java Docs.
+ * A set of unit test for {@link IBorderlayout} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Layouts/Borderlayout">Borderlayout</a>,
  * if any.
  *
  * @author katherine
- * @see org.zkoss.zephyr.zpr.IBorderlayout
+ * @see IBorderlayout
  */
 public class IBorderlayoutRichletTest extends WebDriverTestCase {
 	@Test

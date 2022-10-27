@@ -14,17 +14,15 @@ package org.zkoss.zephyr.webdriver.mvvm.book.viewmodel.notification;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 
-import org.zkoss.zephyr.webdriver.TestStage;
-import org.zkoss.zephyr.webdriver.ZephyrClientMVVMTestCase;
+import org.zkoss.zephyr.webdriver.ClientBindTestCase;
 
 /**
  * @author rudyhuang
  */
-public class NotifyChangeTest extends ZephyrClientMVVMTestCase {
+public class NotifyChangeTest extends ClientBindTestCase {
 	@Test
 	public void testNotifySelf() {
 		connect("/mvvm/book/viewmodel/notification/notifychange-self.zul");

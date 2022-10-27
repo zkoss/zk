@@ -14,20 +14,20 @@ package org.zkoss.zephyr.test.docs.essential_components;
 import java.util.Arrays;
 import java.util.List;
 
-import org.zkoss.zephyr.annotation.RichletMapping;
-import org.zkoss.zephyr.ui.StatelessRichlet;
-import org.zkoss.zephyr.zpr.IComponent;
-import org.zkoss.zephyrex.zpr.INavbar;
-import org.zkoss.zephyrex.zpr.INavitem;
-import org.zkoss.zephyrex.zpr.INavseparator;
+import org.zkoss.stateless.annotation.RichletMapping;
+import org.zkoss.stateless.ui.StatelessRichlet;
+import org.zkoss.stateless.zpr.IComponent;
+import org.zkoss.statelessex.zpr.INavbar;
+import org.zkoss.statelessex.zpr.INavitem;
+import org.zkoss.statelessex.zpr.INavseparator;
 
 /**
- * A set of example for {@link org.zkoss.zephyrex.zpr.INavseparator} Java Docs.
+ * A set of example for {@link org.zkoss.statelessex.zpr.INavseparator} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Essential_Components/Navseparator">INavseparator</a>,
  * if any.
  *
  * @author katherine
- * @see org.zkoss.zephyrex.zpr.INavseparator
+ * @see org.zkoss.statelessex.zpr.INavseparator
  */
 @RichletMapping("/essential_components/iNavseparator")
 public class INavseparatorRichlet implements StatelessRichlet {

@@ -13,14 +13,11 @@ package org.zkoss.zephyr.webdriver.mvvm.book.basic;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.TestStage;
-import org.zkoss.zephyr.webdriver.ZephyrClientMVVMTestCase;
+import org.zkoss.zephyr.webdriver.ClientBindTestCase;
 
-public class BookCRUDTest extends ZephyrClientMVVMTestCase {
+public class BookCRUDTest extends ClientBindTestCase {
 	@Test
 	public void test() {
 		connect("/mvvm/book/basic/bookCrud.zul");

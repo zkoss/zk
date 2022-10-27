@@ -28,9 +28,10 @@
       "zk",
       "zul",
       "zkbind",
-      "zephyr",
+      "stateless",
       "zkmax",
       "zkex",
+      "client-bind",
       "webpack-env"
     ],
     "paths": {
@@ -40,8 +41,8 @@
       "@zul/*": [
         "./zul/src/main/resources/web/js/zul/*"
       ],
-      "@zephyr/*": [
-        "./zephyr/src/main/resources/web/js/zephyr/*"
+      "@stateless/*": [
+        "./stateless/src/main/resources/web/js/stateless/*"
       ],
       "@zkex/*": [
         "../zkcml/zkex/src/main/resources/web/js/zkex/*"
@@ -49,8 +50,11 @@
       "@zkmax/*": [
         "../zkcml/zkmax/src/main/resources/web/js/zkmax/*"
       ],
-      "@zephyrex/*": [
-        "../zkcml/zephyr-ex/src/main/resources/web/js/zephyrex/*"
+      "@stateless-ex/*": [
+        "../zkcml/stateless-ex/src/main/resources/web/js/statelessex/*"
+      ],
+      "@client-bind/*": [
+        "../zkcml/client-bind/src/main/resources/web/js/clientbind/*"
       ]
     }
   },
@@ -59,7 +63,7 @@
     "zul/src/main/resources/web/js",
     "zbind/src/main/resources/web/js",
     "zhtml/src/main/resources/web/js",
-    "zephyr/src/main/resources/web/js"
+    "stateless/src/main/resources/web/js"
   ],
   "exclude": [
     "node_modules",

@@ -1,0 +1,42 @@
+// **************************************************************************
+// Code Generator: DO NOT modify the content directly
+// **************************************************************************
+
+/* ActionType.java
+
+	Purpose:
+
+	Description:
+
+	History:
+		2:21 PM 2021/10/6, Created by jumperchen
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+*/
+package org.zkoss.stateless.action;
+
+import org.zkoss.stateless.annotation.Action;
+import org.zkoss.stateless.util.ActionHandler0;
+import org.zkoss.stateless.util.ActionHandler1;
+import org.zkoss.stateless.util.ActionHandler2;
+import org.zkoss.stateless.util.ActionHandler3;
+import org.zkoss.stateless.util.ActionHandler4;
+import org.zkoss.stateless.util.ActionHandler5;
+import org.zkoss.stateless.util.ActionHandler6;
+import org.zkoss.stateless.util.ActionHandler7;
+import org.zkoss.stateless.util.ActionHandler8;
+import org.zkoss.stateless.util.ActionHandler9;
+import org.zkoss.zul.event.ZulEvents;
+import org.zkoss.zk.ui.event.Events;
+
+/**
+ * Action type util interface to wrap a Lambda function or functional interface
+ * into a specific {@link Action}, such as {@link #onClick(OnClick0)}.
+ *
+ * For example,
+ * <pre><code>
+ * ILabel.of("my label").withAction(onClick((){@code ->} System.out.println("clicked")));
+ * </code></pre>
+ * @author jumperchen
+ */
+public interface ActionType {

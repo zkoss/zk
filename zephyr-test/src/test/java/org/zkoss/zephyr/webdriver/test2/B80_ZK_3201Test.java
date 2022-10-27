@@ -19,12 +19,12 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.ZephyrClientMVVMTestCase;
+import org.zkoss.zephyr.webdriver.ClientBindTestCase;
 
 /**
  * @author Sefi
  */
-public class B80_ZK_3201Test extends ZephyrClientMVVMTestCase {
+public class B80_ZK_3201Test extends ClientBindTestCase {
 	@Test
 	public void test() {
 		try {

@@ -734,7 +734,7 @@ export class Paging extends zul.Widget {
 			}
 			wgt.fire('onPaging', pgno);
 
-			// update activePage at client for Zephyr
+			// update activePage at client for stateless
 			wgt.setActivePage(pgno);
 		}
 	}

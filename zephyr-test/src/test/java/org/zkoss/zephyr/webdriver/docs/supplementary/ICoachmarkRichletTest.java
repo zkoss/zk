@@ -18,12 +18,12 @@ import org.junit.jupiter.api.Test;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
- * A set of unit test for {@link org.zkoss.zephyrex.zpr.ICoachmark} Java Docs.
+ * A set of unit test for {@link org.zkoss.statelessex.zpr.ICoachmark} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Supplementary/Coachmark">Coachmark</a>,
  * if any.
  *
  * @author katherine
- * @see org.zkoss.zephyrex.zpr.ICoachmark
+ * @see org.zkoss.statelessex.zpr.ICoachmark
  */
 public class ICoachmarkRichletTest extends WebDriverTestCase {
 	@Test

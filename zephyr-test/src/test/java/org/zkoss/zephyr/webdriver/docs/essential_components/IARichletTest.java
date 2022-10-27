@@ -16,14 +16,16 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
+
+import org.zkoss.stateless.zpr.IA;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
- * A set of examples for {@link org.zkoss.zephyr.zpr.IA} Java Docs.
+ * A set of examples for {@link IA} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Essential_Components/A">A</a>,
  * if any.
  * @author leon
- * @see org.zkoss.zephyr.zpr.IA
+ * @see IA
  */
 public class IARichletTest extends WebDriverTestCase {
 	@Test

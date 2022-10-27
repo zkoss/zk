@@ -13,17 +13,14 @@ package org.zkoss.zephyr.webdriver.mvvm.book.comp;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.TestStage;
-import org.zkoss.zephyr.webdriver.ZephyrClientMVVMTestCase;
+import org.zkoss.zephyr.webdriver.ClientBindTestCase;
 
 /**
  * @author rudyhuang
  */
-public class Radiogroup_selectedTest extends ZephyrClientMVVMTestCase {
+public class Radiogroup_selectedTest extends ClientBindTestCase {
 	@Test
 	public void test() {
 		connect();

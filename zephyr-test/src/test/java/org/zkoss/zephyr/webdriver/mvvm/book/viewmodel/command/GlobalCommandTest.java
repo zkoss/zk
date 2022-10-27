@@ -18,16 +18,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.Arrays;
 
 import org.hamcrest.MatcherAssert;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.TestStage;
-import org.zkoss.zephyr.webdriver.ZephyrClientMVVMTestCase;
+import org.zkoss.zephyr.webdriver.ClientBindTestCase;
 
 /**
  * @author rudyhuang
  */
-public class GlobalCommandTest extends ZephyrClientMVVMTestCase {
+public class GlobalCommandTest extends ClientBindTestCase {
 	@Test
 	public void test() {
 		connect("/mvvm/book/viewmodel/command/global-command.zul");

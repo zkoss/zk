@@ -14,17 +14,15 @@ package org.zkoss.zephyr.webdriver.mvvm.book.shadow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import org.zkoss.test.webdriver.ztl.JQuery;
-import org.zkoss.zephyr.webdriver.TestStage;
-import org.zkoss.zephyr.webdriver.ZephyrClientMVVMTestCase;
+import org.zkoss.zephyr.webdriver.ClientBindTestCase;
 
 /**
  * @author rudyhuang
  */
-public class FlowCtrlTest extends ZephyrClientMVVMTestCase {
+public class FlowCtrlTest extends ClientBindTestCase {
 	@Test
 	public void testChoose() {
 		connect("/mvvm/book/shadow/flow/flowctrl-choose.zul");

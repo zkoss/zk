@@ -13,18 +13,17 @@ package org.zkoss.zephyr.webdriver.mvvm.book.databinding.converter;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import org.openqa.selenium.Keys;
-import org.zkoss.zephyr.webdriver.TestStage;
-import org.zkoss.zephyr.webdriver.ZephyrClientMVVMTestCase;
+
+import org.zkoss.zephyr.webdriver.ClientBindTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author jameschu
  */
-public class ConverterTest extends ZephyrClientMVVMTestCase {
+public class ConverterTest extends ClientBindTestCase {
 	@Override
 	protected boolean isHeadless() {
 		return false;

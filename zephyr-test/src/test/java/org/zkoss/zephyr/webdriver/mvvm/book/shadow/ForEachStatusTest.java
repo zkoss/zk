@@ -13,17 +13,15 @@ package org.zkoss.zephyr.webdriver.mvvm.book.shadow;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.TestStage;
-import org.zkoss.zephyr.webdriver.ZephyrClientMVVMTestCase;
+import org.zkoss.zephyr.webdriver.ClientBindTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author rudyhuang
  */
-public class ForEachStatusTest extends ZephyrClientMVVMTestCase {
+public class ForEachStatusTest extends ClientBindTestCase {
 	@Test
 	public void testNumbers() {
 		connect("/mvvm/book/shadow/iterate/foreach-numbers-varstatus.zul");

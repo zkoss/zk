@@ -17,13 +17,13 @@ package org.zkoss.zephyr.webdriver.test2;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.ZephyrClientMVVMTestCase;
+import org.zkoss.zephyr.webdriver.ClientBindTestCase;
 
 /**
  * 
  * @author Christopher
  */
-public class B80_ZK_2859Test extends ZephyrClientMVVMTestCase {
+public class B80_ZK_2859Test extends ClientBindTestCase {
 	
 	@Test
 	public void testExpandClose() {

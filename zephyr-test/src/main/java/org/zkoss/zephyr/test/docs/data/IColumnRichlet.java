@@ -11,22 +11,22 @@ Copyright (C) 2022 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zephyr.test.docs.data;
 
-import org.zkoss.zephyr.annotation.RichletMapping;
-import org.zkoss.zephyr.ui.StatelessRichlet;
-import org.zkoss.zephyr.zpr.IColumn;
-import org.zkoss.zephyr.zpr.IColumns;
-import org.zkoss.zephyr.zpr.IGrid;
-import org.zkoss.zephyrex.state.IGridController;
+import org.zkoss.stateless.annotation.RichletMapping;
+import org.zkoss.stateless.ui.StatelessRichlet;
+import org.zkoss.stateless.zpr.IColumn;
+import org.zkoss.stateless.zpr.IColumns;
+import org.zkoss.stateless.zpr.IGrid;
+import org.zkoss.statelessex.state.IGridController;
 import org.zkoss.zul.RowComparator;
 import org.zkoss.zul.SimpleListModel;
 
 /**
- * A set of example for {@link org.zkoss.zephyr.zpr.IColumn} Java Docs.
+ * A set of example for {@link IColumn} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Data/Grid/Column">IColumn</a>,
  * if any.
  *
  * @author katherine
- * @see org.zkoss.zephyr.zpr.IColumn
+ * @see IColumn
  */
 @RichletMapping("/data/iColumn")
 public class IColumnRichlet implements StatelessRichlet {

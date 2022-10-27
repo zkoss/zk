@@ -18,12 +18,12 @@ import org.junit.jupiter.api.Test;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
- * A set of unit test for {@link org.zkoss.zephyrex.zpr.ITablechildren} Java Docs.
+ * A set of unit test for {@link org.zkoss.statelessex.zpr.ITablechildren} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Layouts/Tablelayout/Tablechildren">Tablechildren</a>,
  * if any.
  *
  * @author katherine
- * @see org.zkoss.zephyrex.zpr.ITablechildren
+ * @see org.zkoss.statelessex.zpr.ITablechildren
  */
 public class ITablechildrenRichletTest extends WebDriverTestCase {
 	@Test

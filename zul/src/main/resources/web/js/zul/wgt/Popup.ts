@@ -64,7 +64,7 @@ export class Popup extends zul.Widget {
 		return this.isVisible();
 	}
 
-	// a delegator for open() in zephyr.
+	// a delegator for open() in stateless.
 	setOpen(open: PositionArgs): this {
 		if (this.desktop || this.z_rod) {
 			this.open(...open);
@@ -78,7 +78,7 @@ export class Popup extends zul.Widget {
 		return this;
 	}
 
-	// a delegator for close() in zephyr.
+	// a delegator for close() in stateless.
 	setClose(close: boolean): this {
 		if (close != this.isOpen()) return this; // do nothing.
 		if (this.desktop || this.z_rod) {

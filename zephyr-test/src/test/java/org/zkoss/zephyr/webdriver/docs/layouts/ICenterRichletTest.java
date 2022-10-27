@@ -15,15 +15,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
+import org.zkoss.stateless.zpr.ICenter;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
- * A set of unit test for {@link org.zkoss.zephyr.zpr.ICenter} Java Docs.
+ * A set of unit test for {@link ICenter} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Layouts/Borderlayout/Center">Center</a>,
  * if any.
  *
  * @author katherine
- * @see org.zkoss.zephyr.zpr.ICenter
+ * @see ICenter
  */
 public class ICenterRichletTest extends WebDriverTestCase {
 	@Test

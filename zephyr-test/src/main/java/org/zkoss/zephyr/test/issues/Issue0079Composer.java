@@ -11,22 +11,22 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zephyr.test.issues;
 
-import static org.zkoss.zephyr.action.ActionType.onClick;
+import static org.zkoss.stateless.action.ActionType.onClick;
 
 import java.util.Arrays;
 
 import org.zkoss.util.Maps;
-import org.zkoss.zephyr.action.data.ActionData;
-import org.zkoss.zephyr.annotation.Action;
-import org.zkoss.zephyr.ui.BuildContext;
-import org.zkoss.zephyr.ui.Locator;
-import org.zkoss.zephyr.ui.StatelessComposer;
-import org.zkoss.zephyr.ui.UiAgent;
-import org.zkoss.zephyr.util.ActionHandler;
-import org.zkoss.zephyr.zpr.IAnyGroup;
-import org.zkoss.zephyr.zpr.IButton;
-import org.zkoss.zephyr.zpr.IDiv;
-import org.zkoss.zephyr.zpr.ITextbox;
+import org.zkoss.stateless.action.data.ActionData;
+import org.zkoss.stateless.annotation.Action;
+import org.zkoss.stateless.ui.BuildContext;
+import org.zkoss.stateless.ui.Locator;
+import org.zkoss.stateless.ui.StatelessComposer;
+import org.zkoss.stateless.ui.UiAgent;
+import org.zkoss.stateless.util.ActionHandler;
+import org.zkoss.stateless.zpr.IAnyGroup;
+import org.zkoss.stateless.zpr.IButton;
+import org.zkoss.stateless.zpr.IDiv;
+import org.zkoss.stateless.zpr.ITextbox;
 import org.zkoss.zk.ui.event.Events;
 
 /**

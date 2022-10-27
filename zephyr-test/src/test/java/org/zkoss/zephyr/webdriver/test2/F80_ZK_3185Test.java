@@ -16,14 +16,14 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.ZephyrClientMVVMTestCase;
+import org.zkoss.zephyr.webdriver.ClientBindTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author jameschu
  *
  */
-public class F80_ZK_3185Test extends ZephyrClientMVVMTestCase{
+public class F80_ZK_3185Test extends ClientBindTestCase {
 
     @Test
     public void test() {

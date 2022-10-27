@@ -73,9 +73,9 @@ def addJavadocFooter(dir, footerMessage) {
 
 // generate javadoc
 task alljavadoc(type: Javadoc) {
-	dependsOn ':zephyr:compileJava'
+	dependsOn ':stateless:compileJava'
 	if (gradle.includedBuilds.find {it.name == 'zkcml'} != null) {
-		dependsOn gradle.includedBuild('zkcml').task(':zephyr-ex:compileJava')
+		dependsOn gradle.includedBuild('zkcml').task(':stateless-ex:compileJava')
 	}
 	title = "$project.description ${version} API"
 	options.setWindowTitle("$project.description ${version} API")
@@ -84,14 +84,14 @@ task alljavadoc(type: Javadoc) {
 		"$dir/src/main/java"
 	}
 	// add immutables code-gen for generating Javadoc
-	source files("zephyr/build/generated/sources", "../zkcml/zephyr-ex/build/generated/sources")
+	source files("stateless/build/generated/sources", "../zkcml/stateless-ex/build/generated/sources")
 
 	// Can't get package.html into javadoc with gradle
 	exclude '**/package.html',
 			'**/ELParser.html',
 			'**/*.properties',
 			'**/*.jjt',
-			'**/**.template' //zephyr action type template
+			'**/**.template' //stateless action type template
 	destinationDir = file("$buildDir/docs/javadoc/zk")
 	classpath = javadocClassPath
 
@@ -117,10 +117,10 @@ task alljsdoc(type: Javadoc) {
 	dependsOn alljavadoc
 	doFirst {
 		// build java for jsdoc
-		def jsdocprj = ['zk', 'zkbind', 'zul', 'zephyr', 'zkex', 'zkmax', 'zephyr-ex']
+		def jsdocprj = ['zk', 'zkbind', 'zul', 'stateless', 'zkex', 'zkmax', 'stateless-ex', 'client-bind']
 		jsdocprj.each {prj ->
 			exec {
-				if (prj == 'zkex' || prj == 'zkmax' || prj == 'zephyr-ex')
+				if (prj == 'zkex' || prj == 'zkmax' || prj == 'stateless-ex' || prj == 'client-bind')
 					workingDir "$rootDir/../zkcml/$prj"
 				else
 					workingDir "$rootDir/$prj"
@@ -161,7 +161,7 @@ subprojects {
 				'**/ELParser.html',
 				'**/*.properties',
 				'**/*.jjt',
-				'**/**.template' //zephyr action type template
+				'**/**.template' //stateless action type template
 		destinationDir = file("$buildDir/docs/javadoc")
 
 		// add jars in dist into classpath

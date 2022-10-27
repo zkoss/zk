@@ -60,7 +60,7 @@ export class Inputgroup extends zul.Widget {
 		return this;
 	}
 
-	// treat this as setVertical(boolean) for zephyr
+	// treat this as setVertical(boolean) for stateless
 	setOrient(orient: string): this {
 		return this.setVertical(orient == 'vertical');
 	}

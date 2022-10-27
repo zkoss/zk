@@ -11,21 +11,22 @@ Copyright (C) 2022 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zephyr.test.docs.base_components;
 
-import org.zkoss.zephyr.annotation.RichletMapping;
-import org.zkoss.zephyr.ui.StatelessRichlet;
-import org.zkoss.zephyr.zpr.IComponent;
-import org.zkoss.zephyr.zpr.IDecimalbox;
-import org.zkoss.zephyr.zpr.IDoublebox;
-import org.zkoss.zephyr.zpr.IDoublespinner;
-import org.zkoss.zephyr.zpr.IVlayout;
+import org.zkoss.stateless.annotation.RichletMapping;
+import org.zkoss.stateless.zpr.INumberInputElement;
+import org.zkoss.stateless.ui.StatelessRichlet;
+import org.zkoss.stateless.zpr.IComponent;
+import org.zkoss.stateless.zpr.IDecimalbox;
+import org.zkoss.stateless.zpr.IDoublebox;
+import org.zkoss.stateless.zpr.IDoublespinner;
+import org.zkoss.stateless.zpr.IVlayout;
 
 /**
- * A set of example for {@link org.zkoss.zephyr.zpr.INumberInputElement} Java Docs.
+ * A set of example for {@link INumberInputElement} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Base_Components/NumberInputElement">INumberInputElement</a>,
  * if any.
  *
  * @author katherine
- * @see org.zkoss.zephyr.zpr.INumberInputElement
+ * @see INumberInputElement
  */
 @RichletMapping("/base_components/iNumberInputElement")
 public class INumberInputElementRichlet implements StatelessRichlet {

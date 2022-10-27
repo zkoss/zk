@@ -11,44 +11,45 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zephyr.test.docs.base_components;
 
-import static org.zkoss.zephyr.action.ActionTarget.SELF;
-import static org.zkoss.zephyr.action.ActionType.onSwipe;
+import static org.zkoss.stateless.action.ActionTarget.SELF;
+import static org.zkoss.stateless.action.ActionType.onSwipe;
 
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import org.zkoss.zephyr.action.data.AfterSizeData;
-import org.zkoss.zephyr.action.data.DropData;
-import org.zkoss.zephyr.action.data.KeyData;
-import org.zkoss.zephyr.action.data.MouseData;
-import org.zkoss.zephyr.action.data.SwipeData;
-import org.zkoss.zephyr.annotation.Action;
-import org.zkoss.zephyr.annotation.ActionVariable;
-import org.zkoss.zephyr.annotation.RichletMapping;
-import org.zkoss.zephyr.ui.Locator;
-import org.zkoss.zephyr.ui.Self;
-import org.zkoss.zephyr.ui.StatelessRichlet;
-import org.zkoss.zephyr.ui.UiAgent;
-import org.zkoss.zephyr.ui.UiAgentCtrl;
-import org.zkoss.zephyr.util.ActionHandler;
-import org.zkoss.zephyr.zpr.IAnyGroup;
-import org.zkoss.zephyr.zpr.IButton;
-import org.zkoss.zephyr.zpr.IComponent;
-import org.zkoss.zephyr.zpr.IDiv;
-import org.zkoss.zephyr.zpr.ILabel;
-import org.zkoss.zephyr.zpr.ITextbox;
-import org.zkoss.zephyr.zpr.IVlayout;
-import org.zkoss.zephyr.zpr.IWindow;
+import org.zkoss.stateless.action.data.AfterSizeData;
+import org.zkoss.stateless.action.data.DropData;
+import org.zkoss.stateless.action.data.KeyData;
+import org.zkoss.stateless.action.data.MouseData;
+import org.zkoss.stateless.action.data.SwipeData;
+import org.zkoss.stateless.annotation.Action;
+import org.zkoss.stateless.annotation.ActionVariable;
+import org.zkoss.stateless.annotation.RichletMapping;
+import org.zkoss.stateless.zpr.IHtmlBasedComponent;
+import org.zkoss.stateless.ui.Locator;
+import org.zkoss.stateless.ui.Self;
+import org.zkoss.stateless.ui.StatelessRichlet;
+import org.zkoss.stateless.ui.UiAgent;
+import org.zkoss.stateless.ui.UiAgentCtrl;
+import org.zkoss.stateless.util.ActionHandler;
+import org.zkoss.stateless.zpr.IAnyGroup;
+import org.zkoss.stateless.zpr.IButton;
+import org.zkoss.stateless.zpr.IComponent;
+import org.zkoss.stateless.zpr.IDiv;
+import org.zkoss.stateless.zpr.ILabel;
+import org.zkoss.stateless.zpr.ITextbox;
+import org.zkoss.stateless.zpr.IVlayout;
+import org.zkoss.stateless.zpr.IWindow;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.util.Clients;
 
 /**
- * A set of examples for {@link org.zkoss.zephyr.zpr.IHtmlBasedComponent} Java Docs.
+ * A set of examples for {@link IHtmlBasedComponent} Java Docs.
  * And also refers to something else on <a href="https://www.zkoss.org/wiki/ZK_Component_Reference/Base_Components/HtmlBasedComponent">IHtmlBasedComponent</a>,
  * if any.
  * @author jumperchen
- * @see org.zkoss.zephyr.zpr.IHtmlBasedComponent
+ * @see IHtmlBasedComponent
  */
 @RichletMapping("/base_components/ihtmlbasedcomponent")
 public class IHtmlBasedComponentRichlet implements StatelessRichlet {
