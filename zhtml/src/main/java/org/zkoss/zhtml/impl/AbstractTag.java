@@ -527,8 +527,9 @@ public class AbstractTag extends AbstractComponent implements DynamicPropertied,
 	/* package */ String getPrologHalf(boolean hideUuidIfNoId) {
 		final StringBuilder sb = new StringBuilder(128).append('<').append(_tagnm);
 
-		if ((!hideUuidIfNoId && !shallHideId()) || getId().length() > 0)
-			sb.append(" id=\"").append(getUuid()).append('"');
+//		Do this at client side for ZK-5270
+//		if ((!hideUuidIfNoId && !shallHideId()) || getId().length() > 0)
+//			sb.append(" id=\"").append(getUuid()).append('"');
 
 		if (_props != null) {
 			for (Iterator it = _props.entrySet().iterator(); it.hasNext();) {

@@ -5,6 +5,7 @@ ZK 10.0.0
   ZK-5091: Move Layout.java to extend from XulElement
   ZK-5123: Searchbox open attribute doesn't work while initializing
   ZK-5228: Support a IdGenerator for Application-wise, not Desktop-wise for Stateless Component
+  ZK-5270: Adjust ID generation mechanism in ZHTML Component
 
 * Bugs
   ZK-5089: AfterSizeEvent doesn't return a correct size of a Window component

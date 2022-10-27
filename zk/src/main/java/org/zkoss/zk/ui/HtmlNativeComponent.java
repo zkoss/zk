@@ -149,10 +149,6 @@ public class HtmlNativeComponent extends AbstractComponent implements DynamicTag
 	}
 
 	//-- Component --//
-	public void setId(String id) {
-		super.setId(id);
-		setDynamicProperty("id", id);
-	}
 
 	public boolean setVisible(boolean visible) {
 		throw new UnsupportedOperationException("Use client-dependent attribute, such as display:none");
