@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.Map;
 
-import org.zkoss.stateless.zpr.IComponent;
+import org.zkoss.stateless.sul.IComponent;
 import org.zkoss.stateless.ui.IStubComponent;
 import org.zkoss.zk.ui.sys.ContentRenderer;
 

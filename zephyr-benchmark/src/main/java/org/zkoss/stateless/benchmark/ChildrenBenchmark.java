@@ -22,8 +22,8 @@ import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
 import org.zkoss.stateless.mock.StatelessTestBase;
-import org.zkoss.stateless.zpr.IDiv;
-import org.zkoss.stateless.zpr.ILabel;
+import org.zkoss.stateless.sul.IDiv;
+import org.zkoss.stateless.sul.ILabel;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.Label;
 

@@ -24,7 +24,7 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 		Delete (visible) button is not visible
 		Delete (disabled) button is disabled
 	</label>
-	<div viewModel="@id('vm') @init('org.zkoss.zephyr.test.mvvm.book.advance.IfVersusVisibleVM')">
+	<div viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.advance.IfVersusVisibleVM')">
 		<!-- wrong usage, no effect -->
 		<button id="wrong" label="not expected to see this" if="@load(vm.showButton)"/>
 		<!-- determined at the beginning -->

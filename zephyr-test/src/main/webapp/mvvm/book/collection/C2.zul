@@ -1,6 +1,6 @@
 <?page title="new page title" contentType="text/html;charset=UTF-8"?>
 <zk>
-	<vbox viewModel="@id('vm') @init('org.zkoss.zephyr.test.mvvm.book.viewmodel.collection.C2')">
+	<vbox viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.viewmodel.collection.C2')">
 		<label multiline="true">
 			c2.
 			1. delete row entry with button one by one.

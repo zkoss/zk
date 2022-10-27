@@ -981,7 +981,7 @@ public class Combobox extends Textbox {
 		if (!ICON_SCLASS.equals(_iconSclass))
 			renderer.render("iconSclass", _iconSclass);
 
-		// handle open state here instead of send AuInvoke for Zephyr
+		// handle open state here instead of send AuInvoke for Stateless
 		if (_open)
 			renderer.render("open", true);
 	}

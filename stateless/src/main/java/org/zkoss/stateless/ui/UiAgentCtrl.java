@@ -14,8 +14,8 @@ package org.zkoss.stateless.ui;
 import java.util.Collection;
 
 import org.zkoss.json.JavaScriptValue;
-import org.zkoss.stateless.zpr.IComponent;
-import org.zkoss.stateless.zpr.IMediaBase;
+import org.zkoss.stateless.sul.IComponent;
+import org.zkoss.stateless.sul.IMediaBase;
 import org.zkoss.util.media.Media;
 import org.zkoss.zk.au.AuResponse;
 

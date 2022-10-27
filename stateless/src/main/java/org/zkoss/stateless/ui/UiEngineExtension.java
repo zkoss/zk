@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.zkoss.stateless.zpr.IComponent;
+import org.zkoss.stateless.sul.IComponent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.ext.Native;

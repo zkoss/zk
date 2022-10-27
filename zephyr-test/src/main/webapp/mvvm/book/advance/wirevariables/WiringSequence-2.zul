@@ -16,7 +16,7 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 	<label>
 		load the page, you should see only "The variable resolver annotated registered with the VariableResolver annotation." in zk log.
 	</label>
-	<div viewModel="@id('vm') @init('org.zkoss.zephyr.test.mvvm.book.advance.WiringSequenceVM')">
+	<div viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.advance.WiringSequenceVM')">
 		<vlayout>
 			var:
 			<label id="l1" value="@load(vm.page)" />

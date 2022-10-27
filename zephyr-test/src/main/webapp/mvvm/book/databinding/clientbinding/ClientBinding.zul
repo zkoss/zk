@@ -6,7 +6,7 @@
 		[Step 4] Click "Count ++ (pure add)", the count remains the same
 		[Step 5] Click "Count ++", the count should be changed to '2' and see 'after command "notifyClient" (1)'
 	</label>
-	<div id="root" viewModel="@id('vm')@init('org.zkoss.zephyr.test.mvvm.book.databinding.clientbinding.ClientBindingVM')">
+	<div id="root" viewModel="@id('vm')@init('org.zkoss.clientbind.test.mvvm.book.databinding.clientbinding.ClientBindingVM')">
 		<div>count:
 			<label id="cnt" value="@load(vm.count)"/>
 		</div>

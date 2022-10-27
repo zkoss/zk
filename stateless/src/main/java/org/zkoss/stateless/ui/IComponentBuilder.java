@@ -11,7 +11,7 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.stateless.ui;
 
-import org.zkoss.stateless.zpr.IComponent;
+import org.zkoss.stateless.sul.IComponent;
 
 /**
  * An immutable component builder interface to build a component tree to

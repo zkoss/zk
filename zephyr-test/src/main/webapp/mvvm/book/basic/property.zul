@@ -1,5 +1,5 @@
 <zk>
-	<window viewModel="@id('vm') @init('org.zkoss.zephyr.test.mvvm.book.basic.PropertyVM')" hflex="1">
+	<window viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.basic.PropertyVM')" hflex="1">
 		<grid width="500px">
 			<columns>
 				<column label="" width="40px"/>

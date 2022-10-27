@@ -16,7 +16,7 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
     <label>
         You should see 6 navitems.
     </label>
-    <div viewModel="@('org.zkoss.zephyr.test.mvvm.book.shadow.NavbarVM')">
+    <div viewModel="@('org.zkoss.clientbind.test.mvvm.book.shadow.NavbarVM')">
         <navbar id="navbar" orient="horizontal" collapsed="false">
             <forEach items="@load(vm.menuItems)" var="menu">
                 <navitem label="@load(menu.label)" iconSclass="@load(menu.iconSclass)"/>

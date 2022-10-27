@@ -6,7 +6,7 @@
 		[Step 4] Click "Update to another person", the First Name/Last Name should be changed.
 		[Step 5] Click "Append number to firstName" multiple times, the First Name should be changed.
 	]]></label>
-	<vlayout viewModel="@id('vm') @init('org.zkoss.zephyr.test.mvvm.book.databinding.referencebinding.BasicReferenceBindingVM')">
+	<vlayout viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.databinding.referencebinding.BasicReferenceBindingVM')">
 		<include n="@ref(vm.num)" p="@ref(vm.person)" src="ModularizedReferenceBinding-1.zul"/>
 	</vlayout>
 </zk>

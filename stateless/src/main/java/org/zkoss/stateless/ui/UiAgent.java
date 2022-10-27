@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
-import org.zkoss.stateless.zpr.IComponent;
+import org.zkoss.stateless.sul.IComponent;
 import org.zkoss.stateless.function.CheckedConsumer;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;

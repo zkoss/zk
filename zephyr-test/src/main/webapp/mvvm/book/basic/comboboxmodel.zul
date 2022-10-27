@@ -1,4 +1,4 @@
-<window viewModel="@id('vm') @init('org.zkoss.zephyr.test.mvvm.book.basic.ComboboxModelVM')">
+<window viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.basic.ComboboxModelVM')">
 	<label id="msg" value="@bind(vm.message1)"/>
 	<grid id="outergrid" width="1000px" model="@bind(vm.items)">
 		<columns>

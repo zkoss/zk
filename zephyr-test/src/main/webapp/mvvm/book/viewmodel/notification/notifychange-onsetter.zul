@@ -19,7 +19,7 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
         3. You should see "I will call you (new first name) (new lastname) . John (new lastname) ."
            Example: I will call you Tom Riddle . John Riddle .
     </label>
-    <div viewModel="@('org.zkoss.zephyr.test.mvvm.book.viewmodel.notification.NotifyChangeOnSetterVM')">
+    <div viewModel="@('org.zkoss.clientbind.test.mvvm.book.viewmodel.notification.NotifyChangeOnSetterVM')">
         <vlayout>
             <hlayout>
                 First Name <textbox id="fn" value="@bind(vm.firstname)" />

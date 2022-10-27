@@ -1,6 +1,6 @@
-<?init class="org.zkoss.zephyr.test.mvvm.book.basic.ViewModelInit"?>
+<?init class="org.zkoss.clientbind.test.mvvm.book.basic.ViewModelInit"?>
 <?import class="org.zkoss.bind.*"?>
-<?import class="org.zkoss.zephyr.test.mvvm.book.basic.ViewModelInit$SubViewModel"?>
+<?import class="org.zkoss.clientbind.test.mvvm.book.basic.ViewModelInit$SubViewModel"?>
 <window>
 	<vbox apply="BindComposer" viewModel="@id('vm1') @init(myvm1)" >
 		<label id="vm1_l1" value="@bind(vm1.name)" />

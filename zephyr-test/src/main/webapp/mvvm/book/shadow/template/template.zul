@@ -19,7 +19,7 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
         2. In Demos, there are 3 sub navitems.
         3. Others are no child.
     </label>
-    <div viewModel="@('org.zkoss.zephyr.test.mvvm.book.shadow.NavbarVM')">
+    <div viewModel="@('org.zkoss.clientbind.test.mvvm.book.shadow.NavbarVM')">
         <navbar id="navbar" orient="horizontal" collapsed="false">
             <apply template="iterate" menuItems="@ref(vm.menuItems)"/>
         </navbar>

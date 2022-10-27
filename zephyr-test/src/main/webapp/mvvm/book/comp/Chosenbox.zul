@@ -1,6 +1,6 @@
 <zk>
 	<vlayout
-		viewModel="@id('vm') @init('org.zkoss.zephyr.test.mvvm.book.comp.ChosenboxVM')">
+		viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.comp.ChosenboxVM')">
 		<label multiline="true">
 		1.change selection(including the remove) on chosenbox 1, the first label should be changed to same selection.
 		2.change selection(including the remove) on chosenbox 2, the 2nd label should be changed to same selection.(box2 is single selection) 

@@ -24,8 +24,8 @@ import javassist.util.proxy.MethodFilter;
 import javassist.util.proxy.MethodHandler;
 
 import org.zkoss.stateless.util.ActionHandler;
-import org.zkoss.stateless.zpr.IComponent;
-import org.zkoss.stateless.zpr.IPagingCtrl;
+import org.zkoss.stateless.sul.IComponent;
+import org.zkoss.stateless.sul.IPagingCtrl;
 import org.zkoss.stateless.immutable.StatelessOnly;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.HtmlBasedComponent;

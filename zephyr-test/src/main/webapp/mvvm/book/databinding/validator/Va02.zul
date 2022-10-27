@@ -1,7 +1,7 @@
 <?page title="new page title" contentType="text/html;charset=UTF-8"?>
 <zk>
 	<window title="va2" border="normal"
-		viewModel="@id('vm') @init('org.zkoss.zephyr.test.mvvm.book.viewmodel.validator.Va02')">
+		viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.viewmodel.validator.Va02')">
 		va2
 		<label multiline="true"> 
 		1. input negative, click, not save 

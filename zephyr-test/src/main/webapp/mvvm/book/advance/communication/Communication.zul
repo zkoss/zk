@@ -19,12 +19,12 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 		shall see "Send a global command in a composer" and "received the global command in VM" in zk log.
 	</label>
 	Composer:
-	<div apply="org.zkoss.zephyr.test.mvvm.book.advance.CommunicationComposer">
+	<div apply="org.zkoss.clientbind.test.mvvm.book.advance.CommunicationComposer">
 		<button id="btn1" label="cmd1"/>
 	</div>
 	<separator bar="true"/>
 	VM:
-	<div viewModel="@id('vm') @init('org.zkoss.zephyr.test.mvvm.book.advance.CommunicationVM')">
+	<div viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.advance.CommunicationVM')">
 		<label id="l2" value="@load(vm.item)"/>
 	</div>
 </zk>

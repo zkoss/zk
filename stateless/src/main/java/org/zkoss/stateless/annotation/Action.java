@@ -19,9 +19,9 @@ import java.lang.annotation.Target;
 import org.zkoss.stateless.ui.StatelessComposer;
 import org.zkoss.stateless.ui.StatelessRichlet;
 import org.zkoss.stateless.util.ActionHandler;
-import org.zkoss.stateless.zpr.IButton;
-import org.zkoss.stateless.zpr.IComponent;
-import org.zkoss.stateless.zpr.ITextbox;
+import org.zkoss.stateless.sul.IButton;
+import org.zkoss.stateless.sul.IComponent;
+import org.zkoss.stateless.sul.ITextbox;
 
 /**
  * Annotation for mapping client widget events onto methods in

@@ -52,7 +52,7 @@ public class UpdaterFragment extends org.immutables.generator.Templates.Fragment
 		__.out("import org.zkoss.lang.reflect.Fields;").ln();
 		__.out("import org.zkoss.stateless.ui.SmartUpdater;").ln();
 		if (isStatelessEx)
-			__.out("import org.zkoss.stateless.zpr.IComponent;").ln();
+			__.out("import org.zkoss.stateless.sul.IComponent;").ln();
 		__.out("import org.zkoss.zk.ui.UiException;").ln().ln();
 	}
 	private void writeClassJavaDoc(Templates.Invokation __, ValueType type) {

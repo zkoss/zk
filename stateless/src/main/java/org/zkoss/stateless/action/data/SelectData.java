@@ -16,7 +16,7 @@ import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 
-import org.zkoss.stateless.zpr.ITree;
+import org.zkoss.stateless.sul.ITree;
 import org.zkoss.zk.au.AuRequests;
 import org.zkoss.zk.ui.event.MouseEvent;
 

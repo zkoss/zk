@@ -6,7 +6,7 @@
 		[Step 4] Click 'update first order quantity to 1', the 'Need to Check' col should be "v" in the first row in #4 grid
 		[Step 5] Click 'update first order quantity to 10', the 'Need to Check' col should be "" in the first row in #4 grid
 	]]></label>
-	<vlayout viewModel="@id('vm') @init('org.zkoss.zephyr.test.mvvm.book.databinding.propertybinding.TemplatePropertyBindingVM')">
+	<vlayout viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.databinding.propertybinding.TemplatePropertyBindingVM')">
 		#1 grid
 		<grid id="g1" model="@load(vm.orders)">
 			<columns>

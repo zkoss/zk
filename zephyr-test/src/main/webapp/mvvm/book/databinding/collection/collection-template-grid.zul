@@ -1,4 +1,4 @@
-<window viewModel="@id('vm') @init('org.zkoss.zephyr.test.mvvm.book.basic.CollectionTemplateGridVM')">
+<window viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.basic.CollectionTemplateGridVM')">
 	<label id="msg" value="@bind(vm.message1)"/>
 	<grid id="outergrid" hflex="1"
 		  model="@bind(vm.items) @template(each.name eq 'A' or forEachStatus.index eq 2?'model1':'model2')">

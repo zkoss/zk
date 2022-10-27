@@ -11,7 +11,7 @@
 	<window>
 		<custom-attributes componentScopeVar="A" componentScopeVar1="C" componentScopeVar2="D"/>
 		<vbox
-			viewModel="@id('vm') @init('org.zkoss.zephyr.test.mvvm.book.basic.ScopeParamVM')">
+			viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.basic.ScopeParamVM')">
 			<custom-attributes componentScopeVar="B" componentScopeVar2="E" />
 	
 			

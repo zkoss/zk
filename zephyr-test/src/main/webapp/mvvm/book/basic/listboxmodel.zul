@@ -1,4 +1,4 @@
-<window viewModel="@id('vm') @init('org.zkoss.zephyr.test.mvvm.book.basic.ListboxModelVM')">
+<window viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.basic.ListboxModelVM')">
 	<label id="msg" value="@bind(vm.message1)"/>
 	<listbox id="outerbox" width="700px" model="@bind(vm.items)" rows="5">
 		<listhead>

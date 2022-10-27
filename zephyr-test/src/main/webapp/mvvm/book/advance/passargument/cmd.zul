@@ -13,7 +13,7 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 
 -->
 <div
-	 viewModel="@id('vm') @init('org.zkoss.zephyr.test.mvvm.book.advance.PassArgumentsInnerVM')">
+	 viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.advance.PassArgumentsInnerVM')">
 	<groupbox width="400px">
 		Argument passed from outer page: >>>>>>>>>> cmd
 		<separator/>

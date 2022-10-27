@@ -16,7 +16,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.zkoss.stateless.zpr.IComponent;
+import org.zkoss.stateless.sul.IComponent;
 import org.zkoss.stateless.action.ActionTarget;
 import org.zkoss.stateless.action.ActionType;
 

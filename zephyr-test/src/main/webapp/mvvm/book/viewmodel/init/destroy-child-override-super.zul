@@ -13,7 +13,7 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
-    <div viewModel="@id('vm') @init('org.zkoss.zephyr.test.mvvm.book.viewmodel.init.ChildInitOverrideVM')">
+    <div viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.viewmodel.init.ChildInitOverrideVM')">
         <label multiline="true">
             1. Reload the browser.
             2. Should see "ChildInitOverrideVM.cleanup was called twice" in the server console.

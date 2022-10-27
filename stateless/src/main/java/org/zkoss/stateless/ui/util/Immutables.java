@@ -37,7 +37,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.zkoss.lang.Classes;
-import org.zkoss.stateless.zpr.IComponent;
+import org.zkoss.stateless.sul.IComponent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
@@ -58,9 +58,9 @@ public final class Immutables {
 
 	private static Map _methodCache = new ConcurrentHashMap();
 
-	private static final String STATELESS_PACKAGE = "org.zkoss.stateless.zpr.I";
+	private static final String STATELESS_PACKAGE = "org.zkoss.stateless.sul.I";
 
-	private static final String STATELESSEX_PACKAGE = "org.zkoss.statelessex.zpr.I";
+	private static final String STATELESSEX_PACKAGE = "org.zkoss.statelessex.sul.I";
 
 	/**
 	 * Makes a proxy of {@link Component} into {@link IComponent}.

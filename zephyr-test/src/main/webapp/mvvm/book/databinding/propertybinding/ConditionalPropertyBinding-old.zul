@@ -32,7 +32,7 @@
 
 	]]></label>
 	<vlayout apply="org.zkoss.bind.BindComposer"
-			viewModel="@id('vm') @init('org.zkoss.zephyr.test.mvvm.book.databinding.propertybinding.ConditionalPropertyBindingVM')">
+			viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.databinding.propertybinding.ConditionalPropertyBindingVM')">
 		<listbox model="@load(vm.orders)" selectedItem="@bind(vm.selected)" hflex="true" height="200px">
 			<listhead>
 				<listheader label="Id"/>

@@ -1,6 +1,6 @@
 <zk>
 	<window title="ZK MVVM Book CRUD" border="normal" width="600px"
-			viewModel="@id('vm') @init('org.zkoss.zephyr.test.mvvm.book.basic.BookCrudViewModelOuter')">
+			viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.basic.BookCrudViewModelOuter')">
 		<include src="@load(vm.src)"/>
 	</window>
 </zk>

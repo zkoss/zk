@@ -1,7 +1,7 @@
 <?page title="new page title" contentType="text/html;charset=UTF-8"?>
 <zk>
 	<div
-		viewModel="@id('vm') @init('org.zkoss.zephyr.test.mvvm.book.comp.Panel')">
+		viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.comp.Panel')">
 		Try expanding/maximizing the Panel. The labels should be updated.
 		<panel id="panel" open="@bind(vm.open)" title="open test"
 			collapsible="true" border="normal" maximizable="true"

@@ -17,8 +17,8 @@ import java.util.List;
 
 import org.zkoss.lang.Strings;
 import org.zkoss.stateless.util.ActionHandler;
-import org.zkoss.stateless.zpr.IComponent;
-import org.zkoss.stateless.zpr.IComponentCtrl;
+import org.zkoss.stateless.sul.IComponent;
+import org.zkoss.stateless.sul.IComponentCtrl;
 import org.zkoss.stateless.annotation.Action;
 import org.zkoss.stateless.annotation.RichletMapping;
 import org.zkoss.stateless.ui.IStubComponent;

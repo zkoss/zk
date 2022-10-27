@@ -17,7 +17,7 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 		Load the page, you shall not see any error,
 		and the list box shall not be empty.(make sure the demo in mvvm book work)
 	</label>
-	<window width="400px" viewModel="@id('vm') @init('org.zkoss.zephyr.test.mvvm.book.advance.HugeDataVM')">
+	<window width="400px" viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.advance.HugeDataVM')">
 		selected Person id:
 		<label value="@load(vm.selectedPerson.id)"/>
 		<separator/>

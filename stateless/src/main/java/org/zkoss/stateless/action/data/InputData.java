@@ -16,8 +16,8 @@ import static org.zkoss.stateless.action.ActionTarget.SELF;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import org.zkoss.stateless.annotation.ActionVariable;
-import org.zkoss.stateless.zpr.ICombobox;
-import org.zkoss.stateless.zpr.IDoublebox;
+import org.zkoss.stateless.sul.ICombobox;
+import org.zkoss.stateless.sul.IDoublebox;
 
 /**
  * Represents input data cause by user's input something at the client.

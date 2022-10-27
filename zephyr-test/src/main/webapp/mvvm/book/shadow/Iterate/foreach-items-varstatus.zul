@@ -22,7 +22,7 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
         * Last: only the last row is true, others false.
         * All begin / end / step should be 0 / 5 / 1.
     </label>
-    <grid viewModel="@('org.zkoss.zephyr.test.mvvm.book.shadow.NavbarVM')">
+    <grid viewModel="@('org.zkoss.clientbind.test.mvvm.book.shadow.NavbarVM')">
         <columns>
             <column label="current" hflex="min"/>
             <column label="index"/>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+issue_0083.sul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		2021/12/13, Created by jumperchen
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<tree apply="org.zkoss.stateless.test.issues.Issue0083TreeSortComposer" vflex="1">
+	<zscript><![CDATA[
+		// param: sort ascending
+		Comparator asc =
+		new Comparator() {
+			public int compare(TreeNode t1, TreeNode t2) {
+				return t1.getData().toString().compareTo(t2.getData().toString());
+			}
+		};
+		Comparator dsc =
+		new Comparator() {
+			public int compare(TreeNode t1, TreeNode t2) {
+				return t2.getData().toString().compareTo(t1.getData().toString());
+			}
+		};
+    ]]></zscript>
+	<treecols>
+		<treecol label="Names" sortAscending="${asc}" sortDescending="${dsc}"/>
+	</treecols>
+</tree>

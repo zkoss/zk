@@ -26,7 +26,7 @@ import org.zkoss.json.JSONValue;
 import org.zkoss.json.JavaScriptValue;
 import org.zkoss.stateless.ui.util.VolatileComponent;
 import org.zkoss.stateless.ui.util.VolatileIPage;
-import org.zkoss.stateless.zpr.IComponent;
+import org.zkoss.stateless.sul.IComponent;
 import org.zkoss.stateless.function.CheckedConsumer;
 import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.au.out.AuAppendChild;

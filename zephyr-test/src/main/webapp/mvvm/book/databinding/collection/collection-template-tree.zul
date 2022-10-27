@@ -1,4 +1,4 @@
-<window viewModel="@id('vm') @init('org.zkoss.zephyr.test.mvvm.book.basic.CollectionTemplateTreeVM')">
+<window viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.basic.CollectionTemplateTreeVM')">
 	<label id="msg" value="@bind(vm.message1)"/>
 	<tree id="tree" model="@bind(vm.model) @template(each.startA or forEachStatus.index eq 1?'model1':'model2')" width="700px">
 		<treecols>

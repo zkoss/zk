@@ -13,7 +13,7 @@ package org.zkoss.stateless.ui;
 
 import java.util.List;
 
-import org.zkoss.stateless.zpr.IComponent;
+import org.zkoss.stateless.sul.IComponent;
 
 /**
  * A selector context to hold a root {@link IComponent} for seeking icomponents.

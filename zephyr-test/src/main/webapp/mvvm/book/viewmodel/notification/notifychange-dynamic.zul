@@ -21,7 +21,7 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
         5. Click "add with notify" button again.
         6. The value updated with a larger value (depends on how many times you click in step 3)
     </label>
-    <div viewModel="@('org.zkoss.zephyr.test.mvvm.book.viewmodel.notification.NotifyChangeDynamicVM')">
+    <div viewModel="@('org.zkoss.clientbind.test.mvvm.book.viewmodel.notification.NotifyChangeDynamicVM')">
         <label id="current" value="@load(vm.number)"/>
         <button id="add" label="add with notify" onClick="@command('add')"/>
         <button id="addNoNotify" label="add without notify" onClick="@command('add', notify=false)"/>

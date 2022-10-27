@@ -1,6 +1,6 @@
 <zk>
 <!--	apply="org.zkoss.bind.BindComposer"-->
-	<window title="Test of ROD for listbox" border="normal" viewModel="@id('vm') @init('org.zkoss.zephyr.test.TestCollectionVM')">
+	<window title="Test of ROD for listbox" border="normal" viewModel="@id('vm') @init('org.zkoss.clientbind.test.TestCollectionVM')">
 		<custom-attributes org.zkoss.zul.listbox.rod="true" />
 		<custom-attributes org.zkoss.zul.listbox.initRodSize="500"/>
 		<listbox width="200px" height="200px" model="@load(vm.list)">

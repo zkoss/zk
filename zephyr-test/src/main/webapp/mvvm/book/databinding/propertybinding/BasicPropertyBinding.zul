@@ -1,5 +1,5 @@
 <zk>
-	<vlayout viewModel="@id('vm') @init('org.zkoss.zephyr.test.mvvm.book.databinding.propertybinding.BasicPropertyBindingVM')">
+	<vlayout viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.databinding.propertybinding.BasicPropertyBindingVM')">
 		[Step 1] Should see "welcome!"
 		<label id="msg1" value="@load(vm.welcomeMessage)"/>
 		[Step 2] Click the maximized button on the window multiple times, and see "Maximized" value changed

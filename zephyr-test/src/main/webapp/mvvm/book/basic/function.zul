@@ -1,6 +1,6 @@
 <vbox>
 	<vbox
-		viewModel="@id('vm') @init('org.zkoss.zephyr.test.mvvm.book.basic.Function')">
+		viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.basic.Function')">
 		<hbox><label id="l11" value="@load(value=vm.foo())"/>=foo</hbox>
 		<hbox><label id="l12" value="@load(vm.foo())" />=foo</hbox>
 		<hbox><label id="l13" value="@load(vm.bar('2bar'))"/>=foo:2bar</hbox>

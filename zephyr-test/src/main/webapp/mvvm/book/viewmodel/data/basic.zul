@@ -19,7 +19,7 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
         3. Click the "Show Properties" button.
         4. You should see the modified values in zk log.
     </label>
-    <div viewModel="@('org.zkoss.zephyr.test.mvvm.book.viewmodel.data.BasicVM')">
+    <div viewModel="@('org.zkoss.clientbind.test.mvvm.book.viewmodel.data.BasicVM')">
         <grid width="600px">
             <columns>
                 <column hflex="1"/>

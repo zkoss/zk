@@ -13,7 +13,7 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
-    <div viewModel="@id('vm') @init('org.zkoss.zephyr.test.mvvm.book.viewmodel.init.MultipleInitVM')">
+    <div viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.viewmodel.init.MultipleInitVM')">
         <label multiline="true">
             You should see:
             org.zkoss.zk.ui.UiException: more than one [@Init] in the class

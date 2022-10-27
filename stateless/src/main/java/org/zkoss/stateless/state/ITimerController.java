@@ -18,7 +18,7 @@ import org.zkoss.stateless.ui.Locator;
 import org.zkoss.stateless.ui.UiAgentCtrl;
 import org.zkoss.stateless.util.ActionHandler;
 import org.zkoss.stateless.util.Oid;
-import org.zkoss.stateless.zpr.ITimer;
+import org.zkoss.stateless.sul.ITimer;
 import org.zkoss.stateless.annotation.Action;
 import org.zkoss.zk.ui.event.Events;
 

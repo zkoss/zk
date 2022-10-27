@@ -16,7 +16,7 @@ import java.util.Collection;
 
 import org.zkoss.stateless.ui.http.DispatcherRichletFilter;
 import org.zkoss.stateless.ui.util.ActionHelper;
-import org.zkoss.stateless.zpr.IComponent;
+import org.zkoss.stateless.sul.IComponent;
 import org.zkoss.zk.au.out.AuScript;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;

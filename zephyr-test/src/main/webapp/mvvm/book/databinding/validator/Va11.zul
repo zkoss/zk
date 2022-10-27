@@ -2,7 +2,7 @@
 <zk>
 	<window title="va11" border="normal"
 		apply="org.zkoss.bind.BindComposer"
-		viewModel="@id('vm') @init('org.zkoss.zephyr.test.mvvm.book.viewmodel.validator.Va11')">
+		viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.viewmodel.validator.Va11')">
 		va11.
 		<label multiline="true">
 			Validator + Command. save before submit.

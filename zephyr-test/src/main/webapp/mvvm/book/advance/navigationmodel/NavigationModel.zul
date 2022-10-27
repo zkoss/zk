@@ -32,7 +32,7 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 		4-2. shall see no link on bottom.
 		4-2. shall see "level2 current: none".
 	</label>
-	<div viewModel="@id('vm') @init('org.zkoss.zephyr.test.mvvm.book.advance.MyVM')">
+	<div viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.advance.MyVM')">
 		<apply level="@load(vm.navModel.root)">
 			<forEach items="@load(level.items)">
 				<a label="@init(each.x)" onClick="@command('navTo', level=level, key=each.x)" />

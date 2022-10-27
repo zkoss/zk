@@ -1,4 +1,4 @@
-<window viewModel="@id('vm') @init('org.zkoss.zephyr.test.mvvm.book.basic.AllFunctionVM')">
+<window viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.basic.AllFunctionVM')">
 	<div>
 		Form:
 		<label multiline="true">

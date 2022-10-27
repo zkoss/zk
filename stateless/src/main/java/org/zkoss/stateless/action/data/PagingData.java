@@ -18,7 +18,7 @@ import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonCreator;
 
 import org.zkoss.stateless.annotation.ActionVariable;
-import org.zkoss.stateless.zpr.IPaging;
+import org.zkoss.stateless.sul.IPaging;
 import org.zkoss.zk.au.AuRequests;
 
 /**

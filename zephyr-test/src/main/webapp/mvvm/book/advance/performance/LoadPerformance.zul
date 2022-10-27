@@ -17,7 +17,7 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 		Test binding time(see org.zkoss.zktest.zats.bind.advance.PerformanceTest):
 		@init &lt; @load or @save &lt; @bind
 	</label>
-	<div viewModel="@id('vm') @init('org.zkoss.zephyr.test.mvvm.book.advance.PerformanceVM')">
+	<div viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.advance.PerformanceVM')">
 		<forEach begin="0" end="10000" step="1">
 			<textbox value="@load(vm.message)"/>
 		</forEach>

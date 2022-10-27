@@ -25,7 +25,7 @@ import org.zkoss.lang.Classes;
 import org.zkoss.util.resource.Locator;
 import org.zkoss.stateless.ui.IStubComponent;
 import org.zkoss.stateless.ui.util.Immutables;
-import org.zkoss.stateless.zpr.IComponent;
+import org.zkoss.stateless.sul.IComponent;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;

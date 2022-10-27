@@ -20,7 +20,7 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
         4. Click command 5, and it prints "command5: [MouseEvent onClick &lt;Button XXXX&gt;]"
         5. Click command 999, and it prints "Command [command999] unknown!"
     </label>
-    <div viewModel="@('org.zkoss.zephyr.test.mvvm.book.viewmodel.command.LocalCommandVM')">
+    <div viewModel="@('org.zkoss.clientbind.test.mvvm.book.viewmodel.command.LocalCommandVM')">
         <button label="command 1" onClick="@command('command1')"/>
         <button label="command 2" onClick="@command('command2')"/>
         <button label="command 3" onClick="@command('command3')"/>

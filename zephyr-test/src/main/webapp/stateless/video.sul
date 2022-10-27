@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+video.zul.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Mon Nov 22 14:47:39 CST 2021, Created by katherine
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		1. click the start button to play video.
+		2. click the pause button to pause video.
+		3. click the stop button to stop video.
+	</label>
+	<div apply="org.zkoss.stateless.test.composer.VideoComposer"/>
+</zk>

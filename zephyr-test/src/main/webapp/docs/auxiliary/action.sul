@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+action.sul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		2022/1/6, Created by jumperchen
+
+Copyright (C) 2022 Potix Corporation. All Rights Reserved.
+
+-->
+<div apply="org.zkoss.stateless.test.docs.auxiliary.ActionComposer">
+</div>

@@ -17,6 +17,7 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 	<depends>xul/html</depends>
 	<device-type>ajax</device-type>
 	<namespace>http://www.zkoss.org/2021/stateless</namespace>
+	<extension>sul</extension><!-- the first extension is the major one -->
 	<extension>stateless</extension>
 
 	<version>

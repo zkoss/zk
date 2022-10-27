@@ -11,7 +11,7 @@ Copyright (C) 2022 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.stateless.ui;
 
-import org.zkoss.stateless.zpr.IComponent;
+import org.zkoss.stateless.sul.IComponent;
 
 /**
  * A util API to seek {@link IComponent} by a selector,

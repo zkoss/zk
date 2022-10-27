@@ -13,8 +13,8 @@ package org.zkoss.stateless.action.data;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import org.zkoss.stateless.zpr.IMeshElement;
-import org.zkoss.stateless.zpr.IPaging;
+import org.zkoss.stateless.sul.IMeshElement;
+import org.zkoss.stateless.sul.IPaging;
 
 /**
  * Used to notify the paging size has been changed

@@ -18,7 +18,7 @@ import org.zkoss.stateless.ui.Locator;
 import org.zkoss.stateless.ui.UiAgentCtrl;
 import org.zkoss.stateless.util.ActionHandler;
 import org.zkoss.stateless.util.Oid;
-import org.zkoss.stateless.zpr.IAudio;
+import org.zkoss.stateless.sul.IAudio;
 import org.zkoss.stateless.action.data.StateChangeData;
 import org.zkoss.stateless.annotation.Action;
 import org.zkoss.zk.au.out.AuInvoke;

@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 
 import org.zkoss.stateless.util.ActionHandler;
-import org.zkoss.stateless.zpr.IComponent;
+import org.zkoss.stateless.sul.IComponent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.sys.ContentRenderer;
 import org.zkoss.zk.ui.sys.StubComponent;

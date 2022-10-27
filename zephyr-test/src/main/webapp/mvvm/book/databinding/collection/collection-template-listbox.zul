@@ -1,4 +1,4 @@
-<window viewModel="@id('vm') @init('org.zkoss.zephyr.test.mvvm.book.basic.CollectionTemplateListboxVM')">
+<window viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.basic.CollectionTemplateListboxVM')">
 	<label id="msg" value="@load(vm.message1)"/>
 	<listbox id="outerbox" width="700px" model="@load(vm.items) @template(each.name eq 'A' or forEachStatus.index eq 2?'model1':'model2')" rows="5">
 		<listhead>

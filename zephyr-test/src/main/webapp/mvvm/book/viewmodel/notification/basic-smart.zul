@@ -20,7 +20,7 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
         4. Click "Reset".
         5. The second and third inputbox should be empty.
     </label>
-    <vlayout viewModel="@('org.zkoss.zephyr.test.mvvm.book.viewmodel.notification.BasicSmartVM')">
+    <vlayout viewModel="@('org.zkoss.clientbind.test.mvvm.book.viewmodel.notification.BasicSmartVM')">
         <intbox id="id" value="@load(vm.id)" readonly="true"/>
         <textbox id="name" value="@load(vm.name)" readonly="true"/>
         <textbox id="city" value="@load(vm.city)" readonly="true"/>

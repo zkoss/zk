@@ -6,7 +6,7 @@
 		4. Other treeitems should be opened/closed accordingly. And the label should be updated.
 	</label>
 	<vlayout apply="org.zkoss.bind.BindComposer"
-		viewModel="@id('vm') @init('org.zkoss.zephyr.test.mvvm.book.comp.Tree')">
+		viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.comp.Tree')">
 		<tree id="tree" model="@load(vm.model)" selectedItem="@bind(vm.selected)" multiple="true" selectedItems="@bind(vm.selectedItems)">
 			<template name="model" var="i">
 				<treeitem open="@bind(vm.open)">

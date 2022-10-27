@@ -20,19 +20,19 @@ import org.junit.jupiter.api.Test;
 
 import org.zkoss.stateless.ui.ISelector;
 import org.zkoss.stateless.ui.ISelectors;
-import org.zkoss.stateless.zpr.IBorderlayout;
-import org.zkoss.stateless.zpr.ICaption;
-import org.zkoss.stateless.zpr.ICenter;
-import org.zkoss.stateless.zpr.IComponent;
-import org.zkoss.stateless.zpr.IDiv;
-import org.zkoss.stateless.zpr.IFrozen;
-import org.zkoss.stateless.zpr.IHlayout;
-import org.zkoss.stateless.zpr.INorth;
-import org.zkoss.stateless.zpr.IPanel;
-import org.zkoss.stateless.zpr.ISouth;
-import org.zkoss.stateless.zpr.ITree;
-import org.zkoss.stateless.zpr.IVlayout;
-import org.zkoss.stateless.zpr.IWindow;
+import org.zkoss.stateless.sul.IBorderlayout;
+import org.zkoss.stateless.sul.ICaption;
+import org.zkoss.stateless.sul.ICenter;
+import org.zkoss.stateless.sul.IComponent;
+import org.zkoss.stateless.sul.IDiv;
+import org.zkoss.stateless.sul.IFrozen;
+import org.zkoss.stateless.sul.IHlayout;
+import org.zkoss.stateless.sul.INorth;
+import org.zkoss.stateless.sul.IPanel;
+import org.zkoss.stateless.sul.ISouth;
+import org.zkoss.stateless.sul.ITree;
+import org.zkoss.stateless.sul.IVlayout;
+import org.zkoss.stateless.sul.IWindow;
 
 /**
  * @author jumperchen

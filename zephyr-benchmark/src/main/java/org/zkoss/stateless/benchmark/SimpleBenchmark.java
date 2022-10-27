@@ -27,7 +27,7 @@ import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
 
 import org.zkoss.stateless.mock.StatelessTestBase;
-import org.zkoss.stateless.zpr.ILabel;
+import org.zkoss.stateless.sul.ILabel;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.Label;

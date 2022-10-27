@@ -1,6 +1,6 @@
 <zk>
 	<window id="mWinA"
-		viewModel="@id('vm') @init('org.zkoss.zephyr.test.mvvm.book.basic.MVP2MVVMViewModel')" border="none">
+		viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.basic.MVP2MVVMViewModel')" border="none">
 		<button id="innerToggle" label="toggle inside" onClick="@command('toggleWriteProtected')" />
 
 		<textbox id="textA" value="@bind(vm.textA)"

@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.zkoss.stateless.util.ActionHandler;
-import org.zkoss.stateless.zpr.IComponent;
+import org.zkoss.stateless.sul.IComponent;
 import org.zkoss.stateless.ui.IStubComponent;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.impl.VolatilePage;

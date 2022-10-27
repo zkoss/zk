@@ -2,7 +2,7 @@
 <div>
 <window	id="win" width="500px" 
 
-	viewModel="@id('vm') @init('org.zkoss.zephyr.test.mvvm.book.viewmodel.form.FormWithSet')">
+	viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.viewmodel.form.FormWithSet')">
 
 
 	<style>

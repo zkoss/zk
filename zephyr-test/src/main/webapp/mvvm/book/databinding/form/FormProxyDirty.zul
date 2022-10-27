@@ -19,7 +19,7 @@
 		}
 	</style>
 	<window id="w" border="normal" title="Books Management"
-			viewModel="@id('vm')@init('org.zkoss.zephyr.test.mvvm.book.viewmodel.form.FormProxyDirtyVM')"
+			viewModel="@id('vm')@init('org.zkoss.clientbind.test.mvvm.book.viewmodel.form.FormProxyDirtyVM')"
 			validationMessages="@id('vmsgs')">
 		<hlayout>
 			<listbox id="list" model="@load(vm.books)"

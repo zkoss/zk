@@ -16,7 +16,7 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 	<label>
 		load the page, you should see var: Resolver1 and var2: Resolver2
 	</label>
-	<div viewModel="@id('vm') @init('org.zkoss.zephyr.test.mvvm.book.advance.WireFromVariableResolverVM')">
+	<div viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.advance.WireFromVariableResolverVM')">
 		<vlayout>
 			var:
 			<label id="l1" value="@load(vm.var)" />

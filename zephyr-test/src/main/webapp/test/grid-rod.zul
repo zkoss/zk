@@ -1,6 +1,6 @@
 <zk>
 <!--	apply="org.zkoss.bind.BindComposer"-->
-	<window title="Test of ROD for grid" border="normal" viewModel="@id('vm') @init('org.zkoss.zephyr.test.TestCollectionVM')">
+	<window title="Test of ROD for grid" border="normal" viewModel="@id('vm') @init('org.zkoss.clientbind.test.TestCollectionVM')">
 		<custom-attributes org.zkoss.zul.grid.rod="true" />
 		<custom-attributes org.zkoss.zul.grid.initRodSize="500"/>
 		<grid width="200px" height="200px" model="@load(vm.list)">

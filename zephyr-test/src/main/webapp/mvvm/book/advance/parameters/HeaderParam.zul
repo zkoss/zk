@@ -17,7 +17,7 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 		1. Load the page, you should see the Host info in request header bellow and a "test" button aside.
 		2. click the "test" button, you should see the button label become the Host info.
 	</label>
-	<div viewModel="@id('vm') @init('org.zkoss.zephyr.test.mvvm.book.advance.HeaderParamVM')">
+	<div viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.advance.HeaderParamVM')">
 		<label id="msg" value="@load(vm.headerParam)"/>
 		<button label="@load(vm.btnLabel)" onClick="@command('cmd')"/>
 	</div>

@@ -1,4 +1,4 @@
-<window apply="org.zkoss.zephyr.test.mvvm.book.basic.LoadComposer">
+<window apply="org.zkoss.clientbind.test.mvvm.book.basic.LoadComposer">
 	<custom-attributes composerName="vm"/>
 <grid width="500px" >
 	<columns>
