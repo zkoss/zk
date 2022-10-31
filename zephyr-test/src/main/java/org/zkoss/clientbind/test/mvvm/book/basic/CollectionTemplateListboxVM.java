@@ -33,9 +33,10 @@ public class CollectionTemplateListboxVM {
 
 	public CollectionTemplateListboxVM() {
 		_items = new ArrayList<Item>();
-		for (int i = 0; i < 100; i++) {
-			_items.add(new Item("A" + i));
-		}
+		_items.add(new Item("A"));
+		_items.add(new Item("B"));
+		_items.add(new Item("C"));
+		_items.add(new Item("D"));
 	}
 
 	public List<Item> getItems() {

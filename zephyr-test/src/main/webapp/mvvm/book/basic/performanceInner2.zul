@@ -1,6 +1,4 @@
 <zk>
-
-
 	<window
 		viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.basic.PerformanceVMInner2')">
 		<hbox>

@@ -18,9 +18,8 @@
 			<label id="maximized" value="@load(vm.maximized)" />
 		</hlayout>
 
-
 		click 2 buttons in windows to make zindex change.
-		<window id="window2" title="Window2" border="normal" width="200px" style="position:absolute;left:550px" maximizable="true"
+		<window id="window2" title="Window2" border="normal" width="200px" style="position:absolute;left:150px" maximizable="true"
 			mode="overlapped" zindex="@bind(vm.index2)">
 			<button id="window2ZIndexAdd" onClick="@command('index2Add')" label="zIndex++"/>
 			Hello, World! 2
