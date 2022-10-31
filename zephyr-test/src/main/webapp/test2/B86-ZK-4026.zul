@@ -15,11 +15,11 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 <zk>
 	<div viewModel="@id('vm') @init('org.zkoss.zktest.test2.B86_ZK_4026VM')">
 		<label multiline="true">
-			1. click the notifyChange pojo.shown button.
+			1. click the notifyChange shown button.
 			2. the value of testLbl label should be the same.
 		</label>
-		<button label="toggle shown" onClick='pojo.setShown(!pojo.isShown());'/>
-		<button id="notifyBtn" label="notifyChange pojo.shown" onClick='BindUtils.postNotifyChange(null, null, pojo, "shown");'/>
+		<button label="toggle shown" onClick="@command('toggleShown')"/>
+		<button id="notifyBtn" label="notifyChange shown" onClick="@command('notifyShown')"/>
 		<separator/>
 		before
 		<if test="@load(vm.shown)">
