@@ -146,7 +146,7 @@ public class ParamCall {
 		});
 	}
 
-	private String getAnnotatedParameterName(Class<? extends Annotation> annoClass,
+	protected String getAnnotatedParameterName(Class<? extends Annotation> annoClass,
 	                                         String annoValue,
 	                                         Supplier<String> parameterName) {
 		if (!Strings.isEmpty(annoValue))
@@ -190,7 +190,7 @@ public class ParamCall {
 		}
 	}
 
-	private Object resolveParameter(Annotation[] parmAnnos, Class<?> paramType, Method method, int index) {
+	protected Object resolveParameter(Annotation[] parmAnnos, Class<?> paramType, Method method, int index) {
 		Object val = null;
 		boolean hitResolver = false;
 		Default defAnno = null;
@@ -242,7 +242,7 @@ public class ParamCall {
 		return val;
 	}
 
-	private Map<String, Object> _bindingArgs;
+	protected Map<String, Object> _bindingArgs;
 
 	private Object resolvePositionalParameter(Class<?> returnType, int index) {
 		Object val = null;
