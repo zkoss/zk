@@ -40,12 +40,12 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
         2. The WebSocket should be established successfully.
         (If error, a zk log will be shown)
     </label>
-    <window id="win" viewModel="@('org.zkoss.zktest.test2.B95_ZK_4655VM')">
+    <window id="win" viewModel="@id('vm') @init('org.zkoss.zktest.test2.B95_ZK_4655VM')">
         <groupbox title="ZK">
             <hlayout>
                 count: <label value="@load(vm.count)"/>
             </hlayout>
-            <button label="add (by ZK)" onClick="@('cmd')"/>
+            <button label="add (by ZK)" onClick="@command('cmd')"/>
             <button label="roll (by ws)" w:onClick="sendWsRandom()"/>
             <button label="receive (by ws)" w:onClick="sendWsReceive()"/>
         </groupbox>

@@ -12,132 +12,125 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 package org.zkoss.zktest.test2;
 
 import org.zkoss.bind.BindUtils;
+import org.zkoss.bind.Form;
+import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
+import org.zkoss.bind.annotation.ContextParam;
+import org.zkoss.bind.annotation.ContextType;
+import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.bind.sys.BinderCtrl;
+import org.zkoss.zk.ui.util.Clients;
 
 public class B95_ZK_4685VM {
-	private final FormModel formModel = new FormModel();
-	private boolean open = false;
-	private boolean content2Open = false;
+	private FormModel formModel = new FormModel("default", null);
+	private String result = "";
+
+	@Command
+	public void displayForm1() {
+		BindUtils.postNotifyChange(formModel, "template");
+		formModel = new FormModel("form1", new ContentModel1());
+		BindUtils.postNotifyChange(this, "formModel");
+	}
+
+	@Command
+	public void displayForm2() {
+		BindUtils.postNotifyChange(formModel, "template");
+		formModel = new FormModel("form2", new ContentModel2());
+		BindUtils.postNotifyChange(this, "formModel");
+	}
+
+	@Command
+	public void save(@ContextParam(ContextType.BINDER) BinderCtrl binder,
+					 @BindingParam("myform") Form myform) {
+		close(binder, myform);
+	}
+
+	@Command
+	@NotifyChange("result")
+	public void close(@ContextParam(ContextType.BINDER) BinderCtrl binder,
+					  @BindingParam("myform") Form myform) {
+		result += binder.getSaveFormFieldNames(myform);
+		resetForm();
+	}
+
+	@Command
+	public void resetForm() {
+		formModel = new FormModel("default", null);
+		BindUtils.postNotifyChange(formModel, "template");
+		BindUtils.postNotifyChange(this, "formModel");
+	}
+
+
 	public FormModel getFormModel() {
-		return this.formModel;
-	}
-	public boolean isOpen() {
-		return this.open;
-	}
-	public void setOpen(boolean open) {
-		this.open = open;
-		BindUtils.postNotifyChange(null, null, this, "open");
-	}
-	public boolean isContent2Open() {
-		return this.content2Open;
-	}
-	public void setContent2Open(boolean open) {
-		this.content2Open = open;
-		BindUtils.postNotifyChange(null, null, this, "content2Open");
-	}
-	@Command
-	public void doCloseForm() {
-		setOpen(false);
-	}
-	@Command
-	public void doOpenFormContent1() {
-		getFormModel().createContentModel1();
-		BindUtils.postNotifyChange(null, null, this, "formModel");
-		setOpen(true);
-		setContent2Open(false);
+		return formModel;
 	}
 
-	@Command
-	public void doOpenFormContent2() {
-		getFormModel().createContentModel2();
-		BindUtils.postNotifyChange(null, null, this, "formModel");
-		setOpen(true);
-		setContent2Open(true);
+	public String getResult() {
+		return result;
 	}
 
-	@Command
-	public void doSaveForm() {
-		setOpen(false);
-	}
 	public static class FormModel {
-		private ContentModel contentModel = new ContentModel1();
+		private String template;
+		private ContentModel formContent;
 
 		public FormModel() {
-			super();
 		}
 
-		public ContentModel getContentModel() {
-			return this.contentModel;
+		public FormModel(String template, ContentModel formContent) {
+			this.template = template;
+			this.formContent = formContent;
 		}
 
-		public void setContentModel(ContentModel model) {
-			this.contentModel = model;
+		public String getTemplate() {
+			return template;
 		}
 
-		public void createContentModel1() {
-			setContentModel(new ContentModel1());
+		public void setTemplate(String template) {
+			this.template = template;
 		}
 
-		public void createContentModel2() {
-			setContentModel(new ContentModel2());
+		public ContentModel getFormContent() {
+			return formContent;
+		}
+
+		public void setFormContent(ContentModel formContent) {
+			this.formContent = formContent;
 		}
 	}
 
 	public static class ContentModel {
+		protected String commonProp;
 
-		private String commonProperty = "Common Property";
-
-		public ContentModel() {
-			super();
+		public String getCommonProp() {
+			return commonProp;
 		}
 
-		public String getCommonProperty() {
-			return this.commonProperty;
-		}
-
-		public void setCommonProperty(String value) {
-			this.commonProperty = value;
-		}
-
-		public String getFormTemplate() {
-			return "content1";
+		public void setCommonProp(String commonProp) {
+			this.commonProp = commonProp;
 		}
 	}
 
 	public static class ContentModel1 extends ContentModel {
-		private String model1Property = "Model 1 Property";
+		private String prop1;
 
-		public ContentModel1() {
-			super();
+		public String getProp1() {
+			return prop1;
 		}
 
-		public String getModel1Property() {
-			return this.model1Property;
-		}
-
-		public void setModel1Property(String value) {
-			this.model1Property = value;
-		}
-
-		public String getFormTemplate() {
-			return "content1";
+		public void setProp1(String prop1) {
+			this.prop1 = prop1;
 		}
 	}
 
 	public static class ContentModel2 extends ContentModel {
-		private String model2Property = "Model 2 Property";
+		private String prop2;
 
-		public ContentModel2() {
-			super();
+		public String getProp2() {
+			return prop2;
 		}
-		public String getModel2Property() {
-			return this.model2Property;
-		}
-		public void setModel2Property(String value) {
-			this.model2Property = value;
-		}
-		public String getFormTemplate() {
-			return "content2";
+
+		public void setProp2(String prop2) {
+			this.prop2 = prop2;
 		}
 	}
 }

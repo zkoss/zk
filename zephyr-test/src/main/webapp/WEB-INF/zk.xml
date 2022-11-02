@@ -18,4 +18,8 @@
 		<name>org.zkoss.bind.appConverters</name>
 		<value>foo=org.zkoss.clientbind.test.mvvm.book.databinding.converter.FooConverter,bar=org.zkoss.clientbind.test.mvvm.book.databinding.converter.BarConverter</value>
 	</library-property>
+	<!-- for B80-ZK-3149  -->
+	<listener>
+		<listener-class>org.zkoss.zktest.test2.B80_ZK_3149ProxyHandler</listener-class>
+	</listener>
 </zk>

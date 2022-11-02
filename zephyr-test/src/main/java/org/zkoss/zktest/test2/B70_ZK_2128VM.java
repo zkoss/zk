@@ -1,4 +1,4 @@
-package org.zkoss.zktest.test;
+package org.zkoss.zktest.test2;
 
 import java.util.ArrayList;
 import java.util.List;

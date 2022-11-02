@@ -1,9 +1,8 @@
 package org.zkoss.zktest.test2;
 
 import org.zkoss.bind.BindUtils;
-import org.zkoss.bind.annotation.*;
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Executions;
+import org.zkoss.bind.annotation.Command;
+import org.zkoss.bind.annotation.Init;
 import org.zkoss.zul.ListModelList;
 
 /**
