@@ -17,20 +17,23 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.wgt.Area')
 export class Area extends zk.Widget<HTMLAreaElement> {
+	/** @internal */
 	_shape?: string;
+	/** @internal */
 	_coords?: string;
 
-	/** Returns the shape of this area.
-	 * <p>Default: null (means rectangle).
-	 * @return String
+	/**
+	 * @returns the shape of this area.
+	 * @defaultValue `null` (means rectangle).
 	 */
 	getShape(): string | undefined {
 		return this._shape;
 	}
 
-	/** Sets the shape of this area.
+	/**
+	 * Sets the shape of this area.
 	 *
-	 * @param String shape the shape only allows one of
+	 * @param shape - the shape only allows one of
 	 * null, "rect", "rectangle", "circle", "circ", "ploygon", and "poly".
 	 */
 	setShape(shape: string, opts?: Record<string, boolean>): this {
@@ -46,15 +49,15 @@ export class Area extends zk.Widget<HTMLAreaElement> {
 	}
 
 	/**
-	 * Returns the coordination of this area.
-	 * @return String
+	 * @returns the coordination of this area.
 	 */
 	getCoords(): string | undefined {
 		return this._coords;
 	}
 
-	/** Sets the coords of this area.
-	 * Its content depends on {@link #getShape}:
+	/**
+	 * Sets the coords of this area.
+	 * Its content depends on {@link getShape}:
 	 * <dl>
 	 * <dt>circle</dt>
 	 * <dd>coords="x,y,r"</dd>
@@ -67,7 +70,6 @@ export class Area extends zk.Widget<HTMLAreaElement> {
 	 * </dl>
 	 *
 	 * <p>Note: (0, 0) is the upper-left corner.
-	 * @param String coords
 	 */
 	setCoords(coords: string, opts?: Record<string, boolean>): this {
 		const o = this._coords;
@@ -82,6 +84,7 @@ export class Area extends zk.Widget<HTMLAreaElement> {
 		return this;
 	}
 
+	/** @internal */
 	override doClick_(evt: zk.Event): void {
 		if (zul.wgt.Imagemap._toofast()) return;
 
@@ -90,6 +93,7 @@ export class Area extends zk.Widget<HTMLAreaElement> {
 		evt.stop();
 	}
 
+	/** @internal */
 	override domAttrs_(no?: zk.DomAttrsOptions): string {
 		var attr = super.domAttrs_(no)
 			+ ' href="javascript:;"', v;

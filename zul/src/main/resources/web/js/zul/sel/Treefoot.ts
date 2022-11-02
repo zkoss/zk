@@ -16,13 +16,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * A row of {@link Treefooter}.
  *
  * <p>Like {@link Treecols}, each tree has at most one {@link Treefoot}.
- * <p>Default {@link #getZclass}: z-treefoot
+ * @defaultValue {@link getZclass}: z-treefoot
  */
 @zk.WrapClass('zul.sel.Treefoot')
 export class Treefoot extends zul.Widget {
 	override parent!: zul.sel.Tree | undefined;
-	/** Returns the tree that it belongs to.
-	 * @return Tree
+	/**
+	 * @returns the tree that it belongs to.
 	 */
 	getTree(): zul.sel.Tree | undefined {
 		return this.parent;
@@ -40,6 +40,7 @@ export class Treefoot extends zul.Widget {
 		return super.setHflex(hflex);
 	}
 
+	/** @internal */
 	override beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
 		if (!(child instanceof zul.sel.Treefooter)) {
 			zk.error('Unsupported child for treefoot: ' + child.className);
@@ -48,6 +49,7 @@ export class Treefoot extends zul.Widget {
 		return true;
 	}
 
+	/** @internal */
 	override deferRedrawHTML_(out: string[]): void {
 		out.push('<tr', this.domAttrs_({domClass: true}), ' class="z-renderdefer"></tr>');
 	}

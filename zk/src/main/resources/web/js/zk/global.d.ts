@@ -46,8 +46,24 @@ declare global {
 	interface JQuery {
 
 		selector?: string; // expose
+		/**
+		 * The associated instance of {@link zk.JQZK} that
+		 * provides additional utilities to <a href="http://docs.jquery.com/Main_Page" target="jq">jQuery</a>.
+		 */
 		zk: zjq;
 
+		/**
+		 * Replaces the match elements with the specified HTML, DOM or {@link Widget}.
+		 * We extends <a href="http://docs.jquery.com/Manipulation/replaceWith">jQuery's replaceWith</a>
+		 * to allow replacing with an instance of {@link Widget}.
+		 * @param widget - a widget
+		 * @param desktop - the desktop. It is optional.
+		 * @param skipper - the skipper. It is optional.
+		 * @returns the jq object matching the DOM element after replaced
+		 */
+		replaceWith(w: zk.Widget | unknown, desktop: zk.Desktop, skipper: zk.Skipper): this;
+
+		on(type: string, selector: string | undefined, data, fn: CallableFunction, ...rest: unknown[]): JQuery;
 		on(selector: string, func: CallableFunction): this;
 		on(selector: string, data: unknown, func: CallableFunction): this;
 		on(type: string, selector: string | undefined, data: unknown, fn: CallableFunction, ...rest: unknown[]): this;
@@ -65,10 +81,50 @@ declare global {
 			selector?: JQuery.Selector,
 			delegateEventFunc?: CallableFunction,
 			...args: unknown[]): this;
-		after(widget: Widget, dt?: Desktop): this;
-		append(widget: Widget, dt?: Desktop): this;
-		before(widget: Widget, dt?: Desktop): this;
-		prepend(widget: Widget, dt?: Desktop): this;
+		/**
+		 * Insert content after each of the matched elements.
+		 * <p>Notice that this method is extended to handle {@link Widget}.
+		 * <p>Refer to <a href="http://docs.jquery.com/Manipulation/after">jQuery documentation</a>
+		 * for more information.
+		 * @param content - If it is a string, it is assumed to be
+		 * a HTML fragment. If it is a widget, the widget will be insert after
+		 * @param desktop - the desktop. It is used only
+		 * if content is a widget.
+		 */
+		after(content: Widget, desktop?: Desktop): this;
+		/**
+		 * Append content to inside of every matched element.
+		 * <p>Notice that this method is extended to handle {@link Widget}.
+		 * <p>Refer to <a href="http://docs.jquery.com/Manipulation/append">jQuery documentation</a>
+		 * for more information.
+		 * @param content - If it is a string, it is assumed to be
+		 * a HTML fragment. If it is a widget, the widget will be appended
+		 * @param desktop - the desktop. It is used only
+		 * if content is a widget.
+		 */
+		append(content: Widget, desktop?: Desktop): this;
+		/**
+		 * Insert content before each of the matched elements.
+		 * <p>Notice that this method is extended to handle {@link Widget}.
+		 * <p>Refer to <a href="http://docs.jquery.com/Manipulation/before">jQuery documentation</a>
+		 * for more information.
+		 * @param content - If it is a string, it is assumed to be
+		 * a HTML fragment. If it is a widget, the widget will be insert before
+		 * @param desktop - the desktop. It is used only
+		 * if content is a widget.
+		 */
+		before(content: Widget, desktop?: Desktop): this;
+		/**
+		 * Prepend content to the inside of every matched element.
+		 * <p>Notice that this method is extended to handle {@link Widget}.
+		 * <p>Refer to <a href="http://docs.jquery.com/Manipulation/prepend">jQuery documentation</a>
+		 * for more information.
+		 * @param content - If it is a string, it is assumed to be
+		 * a HTML fragment. If it is a widget, the widget will be prepended
+		 * @param desktop - the desktop. It is used only
+		 * if content is a widget.
+		 */
+		prepend(content: Widget, desktop?: Desktop): this;
 		absolutize(): this;
 
 		// Used extensively in zul.mesh.Paging
@@ -76,6 +132,31 @@ declare global {
 
 		// fix JQuery.unmousewheel() type error.
 		unmousewheel(handler: JQueryMousewheel.JQueryMousewheelEventHandler): JQuery;
+
+		/**
+		 * Removes all matched elements from the DOM.
+		 * <p>Unlike <a href="http://docs.jquery.com/Manipulation/remove">jQuery</a>,
+		 * it does nothing if nothing is matched.
+		 */
+		//remove(): this
+		/**
+		 * Removes all children of the matched element from the DOM.
+		 * <p>Unlike <a href="http://docs.jquery.com/Manipulation/empty">jQuery</a>,
+		 * it does nothing if nothing is matched.
+		 */
+		//empty(): this
+		/**
+		 * Shows all matched elements from the DOM.
+		 * <p>Unlike <a href="http://docs.jquery.com/show">jQuery</a>,
+		 * it does nothing if nothing is matched.
+		 */
+		//show(): this
+		/**
+		 * Hides all matched elements from the DOM.
+		 * <p>Unlike <a href="http://docs.jquery.com/hide">jQuery</a>,
+		 * it does nothing if nothing is matched.
+		 */
+		//hide(): this
 	}
 
 	declare namespace JQuery {
@@ -180,11 +261,71 @@ declare global {
 		confirm(msg: string): boolean;
 		css(elem: Node, name: string): string;
 		css(elem: Node, name: string, numeric: true): number;
+		/**
+		 * An override function that provide a way to get the style value where is
+		 * defined in the CSS file or the style object, rather than the computed value.
+		 * <p> Note that the function is only applied to the width or height property,
+		 *  and the third argument must be 'styleonly'.
+		 * <p> For example,
+		 * ```ts
+		 * jq.css(elem, 'height', 'styleonly');
+		 * // or
+		 * jq.css(elem, 'width', 'styleonly');
+		 * ```
+		 * @since 5.0.6
+		 * @param elem - a Dom element
+		 * @param name - the style name
+		 * @param extra - an option in this case, it must be 'styleonly'
+		 * @returns the style value.
+		 */
 		css(elem: Node, name: string, extra: 'styleonly', styles?: CSSStyleDeclaration): number;
+		/**
+		 * Marshalls the Date object into a string such that it can be sent
+		 * back to the server.
+		 * <p>It works with `org.zkoss.json.JSONs.d2j()` to transfer data from client
+		 * to server.
+		 * @param d - the date object to marshall. If null, null is returned
+		 * @returns a string
+		 * @since 5.0.5
+		 */
 		d2j(d: Date | DateImpl): string;
 		doSyncScroll(): void;
+		/**
+		 * Decodes a JSON string to a JavaScript object.
+		 * <p>It is similar to jq.parseJSON (jQuery's default function), except
+		 * 1) it doesn't check if the string is a valid JSON
+		 * 2) it uses eval to evaluate
+		 * <p>Thus, it might not be safe to invoke this if the string's source
+		 * is not trustable (and then it is better to use jq.parseJSON)
+		 * @param s - the JSON string
+		 * @returns the converted object.
+		 */
 		evalJSON(s: string): unknown;
+		/**
+		 * @returns the text-relevant style of the specified style
+		 * (same as HTMLs.getTextRelevantStyle in Java).
+		 * ```ts
+		 * jq.filterTextStyle('width:100px;font-size:10pt;font-weight:bold');
+		 * //return 'font-size:10pt;font-weight:bold'
+		 * ```
+		 *
+		 * @param style - the style to filter
+		 * @param plus - an array of the names of the additional style to
+		 * include, such as `['width', 'height']`. Ignored if not specified or null.
+		 */
 		filterTextStyle(style: string, plus?: string[]): string;
+		/**
+		 * @returns the text-relevant style of the specified styles
+		 * (same as HTMLs.getTextRelevantStyle in Java).
+		 * ```ts
+		 * jq.filterTextStyle({width:"100px", fontSize: "10pt"});
+		 * //return {font-size: "10pt"}
+		 *```
+		 *
+		 * @param styles - the styles to filter
+		 * @param plus - an array of the names of the additional style to
+		 * include, such as `['width', 'height']`. Ignored if not specified or null.
+		 */
 		filterTextStyle(style: Record<string, string>, plus?: string[]): Record<string, string>;
 		focusOut(): void;
 		head(): HTMLElement | undefined;
@@ -194,12 +335,42 @@ declare global {
 		innerY(): number;
 		// eslint-disable-next-line zk/noNull
 		isAncestor(p: Element | undefined | null, c: Element | undefined | null): boolean;
+		/**
+		 * @returns if the specified rectangles are overlapped with each other.
+		 * @param ofs1 - the offset of the first rectangle
+		 * @param dim1 - the dimension (size) of the first rectangle
+		 * @param ofs2 - the offset of the second rectangle
+		 * @param dim2 - the dimension (size) of the second rectangle
+		 * @param tolerant - the tolerant value for the calculation
+		 */
 		isOverlapped(ofs1: Offset, dim1: Offset, ofs2: Offset, dim2: Offset, tolerant?: number): boolean;
+		/**
+		 * Unmarshalls the string back to a Date object.
+		 * <p>It works with `org.zkoss.json.JSONs.j2d()` to transfer data from server
+		 * to client.
+		 * @param s - the string that is marshalled at the server
+		 * @returns the date object after unmarshalled back
+		 * @since 5.0.5
+		 */
 		j2d(s: string): Date;
 		newFrame(id: string, src?: string, style?: string): HTMLIFrameElement;
 		newHidden(nm: string, val: string, parent?: Node): HTMLInputElement;
 		newStackup(el: Node | undefined, id: string, anchor?: Node): HTMLIFrameElement;
+		/**
+		 * @returns the node name of the specified element in the lower case.
+		 * @param el - the element to test.
+		 * If el is null, an empty string is returned.
+		 * @since 5.0.1
+		 */
 		nodeName(el: Node): string;
+		/**
+		 * @returns if the node name of the specified element is the same
+		 * as one of the specified name (case insensitive).
+		 * @param el - the element to test
+		 * @param tags - the name to test. You can have any number
+		 * of names to test, such as `jq.nodeName(el, "tr", "td", "span")`
+		 * @since 5.0.1
+		 */
 		nodeName(el: Node, ...tags: string[]): boolean;
 		onSyncScroll(wgt: Widget): void;
 		onzsync(obj: ZSyncObject): void;
@@ -207,6 +378,27 @@ declare global {
 		px(v: number): string;
 		px0(v: number | undefined): string;
 		scrollbarWidth(): number;
+		/**
+		 * Encodes a JavaScript object to a JSON string. To decode, use jq.evalJSON(s), where s is a JSON string.
+		 *
+		 * <p>You can provide an optional replacer method. It will be passed the key and value of each member, with this bound to the containing object. The value that is returned from your method will be serialized. If your method returns undefined, then the member will be excluded from the serialization.
+		 * Values that do not have JSON representations, such as undefined or functions, will not be serialized. Such values in objects will be dropped; in arrays they will be replaced with null. You can use a replacer function to replace those with JSON values. JSON.stringify(undefined) returns undefined.
+		 * <p>The optional space parameter produces a stringification of the value that is filled with line breaks and indentation to make it easier to read.
+		 * <p>If the space parameter is a non-empty string, then that string will be used for indentation. If the space parameter is a number, then the indentation will be that many spaces.
+		 * <p>Example:
+		 * ```ts
+		 * text = jq.toJSON(['e', {pluribus: 'unum'}]);
+		 * // text is '["e",{"pluribus":"unum"}]'
+		 *
+		 * text = jq.toJSON([new Date()], function (key, value) {
+		 * 	return this[key] instanceof Date ?
+		 * 		'Date(' + this[key] + ')' : value;
+		 * });
+		 * // text is '["Date(---current time---)"]'
+		 * ```
+		 * @param obj - any JavaScript object
+		 * @param replace - an optional parameter that determines how object values are stringified for objects. It can be a function.
+		 */
 		toJSON(obj, replace?: (key, value) => unknown): string;
 		uaMatch(ua: string): { browser: string; version: string };
 		unSyncScroll(wgt: Widget): void;

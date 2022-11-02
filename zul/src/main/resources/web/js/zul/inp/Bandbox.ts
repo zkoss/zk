@@ -19,15 +19,17 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * any kind of children. For example, you could place a textbox in
  * the popup to let user search particular items.
  *
- * <p>Default {@link #getZclass}: z-bandbox.
+ * @defaultValue {@link getZclass}: z-bandbox.
  */
 @zk.WrapClass('zul.inp.Bandbox')
 export class Bandbox extends zul.inp.ComboWidget {
 	override firstChild!: zul.inp.Bandpopup | undefined;
 	override lastChild!: zul.inp.Bandpopup | undefined;
+	/** @internal */
 	override _iconSclass = 'z-icon-search';
 
 	//super
+	/** @internal */
 	override getPopupSize_(pp: HTMLElement): zul.inp.PopupSize {
 		var bp = this.firstChild, //bandpopup
 			w, h;
@@ -42,6 +44,7 @@ export class Bandbox extends zul.inp.ComboWidget {
 		return this.$n('pp') ?? this.$n();
 	}
 
+	/** @internal */
 	override redrawpp_(out: string[]): void {
 		var fc = this.firstChild;
 		out.push('<div id="', this.uuid, '-pp" class="', this.$s('popup'),
@@ -64,6 +67,7 @@ export class Bandbox extends zul.inp.ComboWidget {
 		super.open(opts);
 	}
 
+	/** @internal */
 	override presize_(): boolean {
 		var bp = this.firstChild;
 		if (bp && (bp._hflex == 'min' || bp._vflex == 'min')) {
@@ -73,18 +77,21 @@ export class Bandbox extends zul.inp.ComboWidget {
 		return false;
 	}
 
+	/** @internal */
 	override enterPressed_(evt: zk.Event): void {
 		//bug 3280506: do not close when children press enter.
 		if (evt.domTarget == this.getInputNode())
 			super.enterPressed_(evt);
 	}
 
+	/** @internal */
 	override doKeyUp_(evt: zk.Event): void {
 		//bug 3287082: do not fire onChanging when children typing.
 		if (evt.domTarget == this.getInputNode())
 			super.doKeyUp_(evt);
 	}
 
+	/** @internal */
 	override _fixsz(ppofs: zul.inp.PopupSize): void {
 		super._fixsz(ppofs);
 		var pp = this.getPopupNode_()!,
@@ -97,11 +104,13 @@ export class Bandbox extends zul.inp.ComboWidget {
 		}
 	}
 
+	/** @internal */
 	override doFocus_(evt: zk.Event): void {
 		var target = evt.domTarget;
 		if (!(target != this.getInputNode() && target != this.$n('btn'))) super.doFocus_(evt);
 	}
 
+	/** @internal */
 	override beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
 		if (!(child instanceof zul.inp.Bandpopup)) {
 			zk.error('Unsupported child for Bandbox: ' + child.className);

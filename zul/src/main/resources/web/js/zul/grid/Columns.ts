@@ -15,14 +15,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
 /**
  * Defines the columns of a grid.
  * Each child of a columns element should be a {@link Column} element.
- * <p>Default {@link #getZclass}: z-columns.
+ * @defaultValue {@link getZclass}: z-columns.
  */
 @zk.WrapClass('zul.grid.Columns')
 export class Columns extends zul.mesh.ColumnMenuWidget {
 	override parent?: zul.grid.Grid;
 
-	/** Returns the grid that contains this columns.
-	 * @return zul.grid.Grid
+	/**
+	 * @returns the grid that contains this columns.
 	 */
 	getGrid(): zul.grid.Grid | undefined {
 		return this.parent;
@@ -38,11 +38,12 @@ export class Columns extends zul.mesh.ColumnMenuWidget {
 		return this;
 	}
 
+	/** @internal */
 	override getGroupPackage_(): string {
 		return 'zkex.grid';
 	}
 
-	//@Override
+	/** @internal */
 	override shallFireSizedLaterWhenAddChd_(): boolean {
 		zWatch.listen({
 			onCommandReady: this
@@ -58,6 +59,7 @@ export class Columns extends zul.mesh.ColumnMenuWidget {
 		});
 	}
 
+	/** @internal */
 	override beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
 		if (!(child instanceof zul.grid.Column)) {
 			zk.error('Unsupported child for columns: ' + child.className);

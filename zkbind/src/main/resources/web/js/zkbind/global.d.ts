@@ -1,3 +1,8 @@
+/** @class zkbind
+ * @import zkbind.Binder
+ * A collection of ZK bind utilities.
+ * @since 8.0.0
+ */
 export as namespace zkbind;
 export * from '.';
 

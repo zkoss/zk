@@ -16,17 +16,16 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * Panelchildren is used for {@link zul.wnd.Panel} component to manage each
  * child who will be shown in the body of Panel.
  * Note that the size of Panelchildren is automatically calculated by Panel so both
- * {@link #setWidth(String)} and {@link #setHeight(String)} are read-only.
+ * {@link setWidth} and {@link setHeight} are read-only.
  *
- * <p>Default {@link #getZclass}: z-panelchildren.
+ * @defaultValue {@link getZclass}: z-panelchildren.
  */
 @zk.WrapClass('zul.wnd.Panelchildren')
 export class Panelchildren extends zul.ContainerWidget {
 	override parent?: zul.wnd.Panel;
 
 	/**
-	 * This method is unsupported. Please use {@link zul.wnd.Panel#setHeight(String)} instead.
-	 * @param String height
+	 * This method is unsupported. Please use {@link zul.wnd.Panel.setHeight} instead.
 	 */
 	override setHeight(height?: string): this {
 		// Empty on purpose. Shoudn't do anything.
@@ -34,8 +33,7 @@ export class Panelchildren extends zul.ContainerWidget {
 	}
 
 	/**
-	 * This method is unsupported. Please use {@link zul.wnd.Panel#setWidth(String)} instead.
-	 * @param String width
+	 * This method is unsupported. Please use {@link zul.wnd.Panel.setWidth} instead.
 	 */
 	override setWidth(width?: string): this { // readonly
 		// Empty on purpose. Shoudn't do anything.
@@ -43,6 +41,7 @@ export class Panelchildren extends zul.ContainerWidget {
 	}
 
 	// super
+	/** @internal */
 	override domClass_(no?: zk.DomClassOptions): string {
 		const out: string[] = [],
 			scls = super.domClass_(no);
@@ -59,6 +58,7 @@ export class Panelchildren extends zul.ContainerWidget {
 		return out.join(' ');
 	}
 
+	/** @internal */
 	override updateDomStyle_(): void {
 		super.updateDomStyle_();
 		if (this.desktop)

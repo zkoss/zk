@@ -16,31 +16,38 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * The generic cell component to be embedded into {@link Row} or
  * {@link zul.box.Box} for fully control style and layout.
  *
- * <p>Default {@link #getZclass}: z-cell.
+ * @defaultValue {@link getZclass}: z-cell.
  * @import zul.grid.*
  * @import zul.box.*
  */
 @zk.WrapClass('zul.wgt.Cell')
 export class Cell extends zul.Widget<HTMLTableCellElement> {
+	/** @internal */
 	_colspan = 1;
+	/** @internal */
 	_rowspan = 1;
+	/** @internal */
 	_rowType = 0;
+	/** @internal */
 	_boxType = 1;
+	/** @internal */
 	_align?: string;
+	/** @internal */
 	_valign?: string;
+	/** @internal */
 	_headerVisible?: boolean;
 
-	/** Returns number of columns to span.
-	 * Default: 1.
-	 * @return int
+	/**
+	 * @returns number of columns to span.
+	 * @defaultValue `1`.
 	 */
 	getColspan(): number {
 		return this._colspan;
 	}
 
-	/** Sets the number of columns to span.
-	 * <p>It is the same as the colspan attribute of HTML TD tag.
-	 * @param int colspan
+	/**
+	 * Sets the number of columns to span.
+	 * It is the same as the colspan attribute of HTML TD tag.
 	 */
 	setColspan(colspan: number, opts?: Record<string, boolean>): this {
 		const o = this._colspan;
@@ -55,17 +62,17 @@ export class Cell extends zul.Widget<HTMLTableCellElement> {
 		return this;
 	}
 
-	/** Returns number of rows to span.
-	 * Default: 1.
-	 * @return int
+	/**
+	 * @returns number of rows to span.
+	 * @defaultValue `1`.
 	 */
 	getRowspan(): number {
 		return this._rowspan;
 	}
 
-	/** Sets the number of rows to span.
+	/**
+	 * Sets the number of rows to span.
 	 * <p>It is the same as the rowspan attribute of HTML TD tag.
-	 * @param int rowspan
 	 */
 	setRowspan(rowspan: number, opts?: Record<string, boolean>): this {
 		const o = this._rowspan;
@@ -80,16 +87,16 @@ export class Cell extends zul.Widget<HTMLTableCellElement> {
 		return this;
 	}
 
-	/** Returns the horizontal alignment.
-	 * <p>Default: null (system default: left unless CSS specified).
-	 * @return String
+	/**
+	 * @returns the horizontal alignment.
+	 * @defaultValue `null` (system default: left unless CSS specified).
 	 */
 	getAlign(): string | undefined {
 		return this._align;
 	}
 
-	/** Sets the horizontal alignment.
-	 * @param String align
+	/**
+	 * Sets the horizontal alignment.
 	 */
 	setAlign(align: string, opts?: Record<string, boolean>): this {
 		const o = this._align;
@@ -104,16 +111,16 @@ export class Cell extends zul.Widget<HTMLTableCellElement> {
 		return this;
 	}
 
-	/** Returns the vertical alignment.
-	 * <p>Default: null (system default: top).
-	 * @return String
+	/**
+	 * @returns the vertical alignment.
+	 * @defaultValue `null` (system default: top).
 	 */
 	getValign(): string | undefined {
 		return this._valign;
 	}
 
-	/** Sets the vertical alignment of this grid.
-	 * @param String valign
+	/**
+	 * Sets the vertical alignment of this grid.
 	 */
 	setValign(valign: string, opts?: Record<string, boolean>): this {
 		const o = this._valign;
@@ -128,6 +135,7 @@ export class Cell extends zul.Widget<HTMLTableCellElement> {
 		return this;
 	}
 
+	/** @internal */
 	_getParentType(): number | undefined {
 		var isRow = zk.isLoaded('zul.grid') && this.parent instanceof zul.grid.Row;
 		if (!isRow) {
@@ -137,14 +145,17 @@ export class Cell extends zul.Widget<HTMLTableCellElement> {
 		return this._rowType;
 	}
 
+	/** @internal */
 	_getRowAttrs(): string {
 		return (this.parent as zul.grid.Row)._childAttrs(this, this.getChildIndex());
 	}
 
+	/** @internal */
 	_getBoxAttrs(): string {
 		return (this.parent as zul.box.Box)._childInnerAttrs(this);
 	}
 
+	/** @internal */
 	_colHtmlPre(): string {
 		var s = '',
 			p = this.parent;
@@ -153,6 +164,7 @@ export class Cell extends zul.Widget<HTMLTableCellElement> {
 		return s;
 	}
 
+	/** @internal */
 	override domClass_(no?: zk.DomClassOptions): string {
 		var scls = super.domClass_(no);
 		if (this._getParentType() == this._rowType) {
@@ -161,6 +173,7 @@ export class Cell extends zul.Widget<HTMLTableCellElement> {
 		return scls;
 	}
 
+	/** @internal */
 	override domStyle_(no?: zk.DomStyleOptions): string {
 		var style = '';
 		if (this._align)
@@ -172,7 +185,7 @@ export class Cell extends zul.Widget<HTMLTableCellElement> {
 		return super.domStyle_(no) + style;
 	}
 
-	//super//
+	/** @internal */
 	override domAttrs_(no?: zk.DomAttrsOptions): string {
 		var s = super.domAttrs_(no), v;
 		if ((v = this._colspan) != 1)
@@ -216,10 +229,12 @@ export class Cell extends zul.Widget<HTMLTableCellElement> {
 		return this;
 	}
 
+	/** @internal */
 	override deferRedrawHTML_(out: string[]): void {
 		out.push('<td', this.domAttrs_({domClass: true}), ' class="z-renderdefer"></td>');
 	}
 
+	/** @internal */
 	override getFlexContainer_(): HTMLElement | undefined {
 		return undefined;
 	}

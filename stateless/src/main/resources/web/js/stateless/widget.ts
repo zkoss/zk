@@ -16,6 +16,7 @@ const _xWidget: Partial<zk.Widget> = {},
 		this._sendRMS();
 		_xWidget.detach!.apply(this);
     },
+	/** @internal */
 	_sendRMS() {
 		// ignore in cloudMode
 		if (!stateless.cloudMode) {
@@ -24,6 +25,7 @@ const _xWidget: Partial<zk.Widget> = {},
 			this.fire('$rms$', uuids, {toServer: true});
 		}
 	},
+    /** @internal */
     _lookupAllWidgetUuids(parent: zk.Widget, uuids: string[]): void {
         if (parent != null) {
             uuids.push(parent.uuid);
@@ -55,6 +57,7 @@ let xWidget$ = zk.Widget.$;
 	// 2. selector < { multiple selectors }
 	//     For example,
 	//         .child < { .parent > div + .second } > .something
+	/** @internal */
 	function _parse(query: string): string[][] {
 		let matches: string[] = [],
 			parts: string[] = [], closest = false, sibling = false, start = 0, open;

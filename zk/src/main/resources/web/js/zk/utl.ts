@@ -71,10 +71,12 @@ function _encodeXML0(string: string): string {
 	return testRegexp.test(string) ? string.replace(replaceRegexp, escaper) : string;
 }
 
-/* Returns the onSize target of the given widget.
+/**
+ * @returns the onSize target of the given widget.
  * The following code is dirty since it checks _hflexsz (which is implementation)
  * FUTRE: consider to have zk.Widget.beforeSize to clean up _hflexsz and
  * this method considers only if _hflex is min
+ * @internal
  */
 function _onSizeTarget(wgt: zk.Widget): zk.Widget {
 	var r1 = wgt, p1: zk.Widget | undefined = r1,
@@ -132,45 +134,44 @@ export namespace utl_global {
 	export class zUtl { //static methods
 		//Character
 		/**
-		 * Returns whether the character is according to its opts.
-		 * @param char cc the character
-		 * @param Map opts the options.
-	<table border="1" cellspacing="0" width="100%">
-	<caption> Allowed Options
-	</caption>
-	<tr>
-	<th> Name
-	</th><th> Allowed Values
-	</th><th> Description
-	</th></tr>
-	<tr>
-	<td> digit
-	</td><td> true, false
-	</td><td> Specifies the character is digit only.
-	</td></tr>
-	<tr>
-	<td> upper
-	</td><td> true, false
-	</td><td> Specifies the character is upper case only.
-	</td></tr>
-	<tr>
-	<td> lower
-	</td><td> true, false
-	</td><td> Specifies the character is lower case only.
-	</td></tr>
-	<tr>
-	<td> whitespace
-	</td><td> true, false
-	</td><td> Specifies the character is whitespace only.
-	</td></tr>
-	<tr>
-	<td> opts[cc]
-	</td><td> true, false
-	</td><td> Specifies the character is allowed only.
-	</td></tr>
-	</table>
-		* @return boolean
-		*/
+		 * @returns whether the character is according to its opts.
+		 * @param cc - the character
+		 * @param opts - the options.
+		 * <table border="1" cellspacing="0" width="100%">
+		 * <caption> Allowed Options
+		 * </caption>
+		 * <tr>
+		 * <th> Name
+		 * </th><th> Allowed Values
+		 * </th><th> Description
+		 * </th></tr>
+		 * <tr>
+		 * <td> digit
+		 * </td><td> true, false
+		 * </td><td> Specifies the character is digit only.
+		 * </td></tr>
+		 * <tr>
+		 * <td> upper
+		 * </td><td> true, false
+		 * </td><td> Specifies the character is upper case only.
+		 * </td></tr>
+		 * <tr>
+		 * <td> lower
+		 * </td><td> true, false
+		 * </td><td> Specifies the character is lower case only.
+		 * </td></tr>
+		 * <tr>
+		 * <td> whitespace
+		 * </td><td> true, false
+		 * </td><td> Specifies the character is whitespace only.
+		 * </td></tr>
+		 * <tr>
+		 * <td> opts[cc]
+		 * </td><td> true, false
+		 * </td><td> Specifies the character is allowed only.
+		 * </td></tr>
+		 * </table>
+		 */
 		static isChar(cc: string, opts: Partial<IsCharOptions>): boolean {
 			return !!((opts.digit && cc >= '0' && cc <= '9')
 				|| (opts.upper && cc >= 'A' && cc <= 'Z')
@@ -180,17 +181,18 @@ export namespace utl_global {
 		}
 
 		//HTML/XML
-		/** Parses the specifie text into a map.
+		/**
+		 * Parses the specifie text into a map.
 		 * For example
-		 *<pre><code>
-	zUtl.parseMap("a=b,c=d");
-	zUtl.parseMap("a='b c',c=de", ',', "'\"");
-	</code></pre>
-		* @param String text the text to parse
-		* @param String separator the separator. If omitted, <code>','</code>
+		 * ```ts
+		 * zUtl.parseMap("a=b,c=d");
+		 * zUtl.parseMap("a='b c',c=de", ',', "'\"");
+		 * ```
+		* @param text - the text to parse
+		* @param separator - the separator. If omitted, `','`
 		* is assumed
-		* @param String quote the quote to handle. Ignored if omitted.
-		* @return Map the map
+		* @param quote - the quote to handle. Ignored if omitted.
+		* @returns the map
 		*/
 		static parseMap(text: string, separator?: string, quote?: string): Record<string, string> {
 			var map = {};
@@ -219,26 +221,28 @@ export namespace utl_global {
 			}
 			return map;
 		}
-		/** Encodes the string to a valid XML attribute string.
+		/**
+		 * Encodes the string to a valid XML attribute string.
 		 * Refer to {@link Utl} for more XML utilities.
-		 * @param String txt the text to encode
-		 * @return String the encoded text.
+		 * @param txt - the text to encode
+		 * @returns the encoded text.
 		 * @since 8.0.0
 		 */
 		static encodeXMLAttribute(txt: string): string {
 			txt = txt != null ? String(txt) : '';
 			return _encodeXMLAttr0(txt);
 		}
-		/** Encodes the string to a valid XML string.
+		/**
+		 * Encodes the string to a valid XML string.
 		 * Refer to {@link Utl} for more XML utilities.
-		 * @param String txt the text to encode
-		 * @param Map opts [optional] the options. Allowd value:
+		 * @param txt - the text to encode
+		 * @param opts - the options. Allowd value:
 		 * <ul>
-		 * <li>pre - whether to replace whitespace with &amp;nbsp;</li>
-		 * <li>multiline - whether to replace linefeed with &lt;br/&gt;</li>
+		 * <li>pre - whether to replace whitespace with `&nbsp;`</li>
+		 * <li>multiline - whether to replace linefeed with `<br>`</li>
 		 * <li>maxlength - the maximal allowed length of the text</li>
 		 * </ul>
-		 * @return String the encoded text.
+		 * @returns the encoded text.
 		 */
 		static encodeXML(txt: string, opts?: EncodeXmlOptions): string {
 			txt = txt != null ? String(txt) : '';
@@ -286,10 +290,11 @@ export namespace utl_global {
 				out += txt.substring(k);
 			return out;
 		}
-		/** Decodes the XML string into a normal string.
-		 * For example, &amp;lt; is convert to &lt;
-		 * @param String txt the text to decode
-		 * @return String the decoded string
+		/**
+		 * Decodes the XML string into a normal string.
+		 * For example, `&lt;` is convert to `<`
+		 * @param txt - the text to decode
+		 * @returns the decoded string
 		 */
 		static decodeXML(txt: string): string {
 			var out = '';
@@ -317,33 +322,34 @@ export namespace utl_global {
 				k < tl ? out + txt.substring(k) : out;
 		}
 
-		/** A shortcut of <code>' cellpadding="0" cellspacing="0" border="0"'</code>.
-		 * @type String
+		/**
+		 * A shortcut of `' cellpadding="0" cellspacing="0" border="0"'`.
 		 */
 		static cellps0 = ' cellpadding="0" cellspacing="0" border="0"';
-		/** A shortcut of <code>'&lt;img style="height:0;width:0"/&gt;'</code>.
-		 * @type String
+		/**
+		 * A shortcut of `'<img style="height:0;width:0"/>'`.
 		 */
 		static img0 = '<img style="height:0;width:0" aria-hidden="true"/>';
-		/** A shortcut of <code>'&lt;i style="height:0;width:0"/&gt;'</code>.
-		 * @type String
+		/**
+		 * A shortcut of `'<i style="height:0;width:0"/>'`.
 		 */
 		static i0 = '<i style="height:0;width:0"></i>';
-		/** Returns today.
-		 * @param boolean full if true, returns the full time,
-		 * else only returns year, month, and day.
+		/**
+		 * @returns today.
+		 * @param full - if true, returns the full time, else only returns year, month, and day.
 		 * If omitted, false is assumed
-		 * @return Date
 		 */
-		/** Returns today.
-		 * @param String fmt the time format, such as HH:mm:ss.SSS
+		static today(full: boolean, tz?: string): DateImpl
+		/**
+		 * @returns today.
+		 * @param fmt - the time format, such as HH:mm:ss.SSS
 		 * If a time element such as seconds not specified in the format, it will
 		 * be considered as 0. For example, if the format is "HH:mm", then
 		 * the returned object will be today, this hour and this minute, but
 		 * the second and milliseconds will be zero.
-		 * @return zk.DateImpl
 		 * @since 5.0.6
 		 */
+		static today(fmt: string, tz?: string): DateImpl
 		static today(fmt: boolean | string, tz?: string): DateImpl {
 			var d = window.Dates.newInstance().tz(tz), hr = 0, min = 0, sec = 0, msec = 0;
 			if (typeof fmt == 'string') {
@@ -357,20 +363,19 @@ export namespace utl_global {
 			return window.Dates.newInstance([d.getFullYear(), d.getMonth(), d.getDate(),
 				hr, min, sec, msec], tz);
 		}
-		/** Returns if one is ancestor of the other.
-		 * It assumes the object has either a method called <code>getParent</code>
-		 * or a field called <code>parent</code>.
+		/**
+		 * @returns if one is ancestor of the other.
+		 * It assumes the object has either a method called `getParent`
+		 * or a field called `parent`.
 		 * A typical example is used to test the widgets ({@link Widget}).
 		 *
 		 * <p>Notice that, if you want to test DOM elements, please use
-		 * {@link jq#isAncestor} instead.
+		 * {@link jq.isAncestor} instead.
 		 *
-		 * @param Object p the parent. This method return true if p is null
-		 or p is the same as c
-		* @param Object c the child
-		* @return boolean
-		* @see jq#isAncestor
-		*/
+		 * @param p - the parent. This method return true if p is null or p is the same as c
+		 * @param c - the child
+		 * @see {@link jq.isAncestor}
+		 */
 		static isAncestor(p?: zk.Object, c?: zk.Object & {getParent?(): zk.Widget}): boolean
 		static isAncestor(p?: zk.Widget, c?: zk.Widget & {getParent?(): zk.Widget}): boolean {
 			if (!p) return true;
@@ -381,14 +386,15 @@ export namespace utl_global {
 		}
 
 		//progress//
-		/** Creates a message box to indicate something is being processed
-		 * @param String id the ID of the DOM element being created
-		 * @param String msg the message to shown
-		 * @param boolean mask whether to show sem-transparent mask to prevent
+		/**
+		 * Creates a message box to indicate something is being processed
+		 * @param id - the ID of the DOM element being created
+		 * @param msg - the message to shown
+		 * @param mask - whether to show sem-transparent mask to prevent
 		 * the user from accessing it.
-		 * @param String icon the CSS class used to shown an icon in the box.
+		 * @param icon - the CSS class used to shown an icon in the box.
 		 * Ignored if not specified.
-		 * @see #destroyProgressbox
+		 * @see {@link destroyProgressbox}
 		 */
 		static progressbox(id: string, msg: string, mask?: boolean, icon?: string, opts?: Partial<ProgressboxOptions>): void {
 			if (mask && zk.Page.contained.length) {
@@ -403,7 +409,7 @@ export namespace utl_global {
 				return;
 			}
 
-			if (opts && opts.busy) {
+			if (opts?.busy) {
 				zk.busy++;
 				jq.focusOut(); //Bug 2912533
 			}
@@ -477,11 +483,12 @@ export namespace utl_global {
 
 			$n.zk.cleanVisibility();
 		}
-		/** Removes the message box created by {@link #progressbox}.
-		 * @param String id the ID of the DOM element of the message box
+		/**
+		 * Removes the message box created by {@link progressbox}.
+		 * @param id - the ID of the DOM element of the message box
 		 */
 		static destroyProgressbox(id: string, opts?: Partial<ProgressboxOptions>): void {
-			if (opts && opts.busy && --zk.busy < 0)
+			if (opts?.busy && --zk.busy < 0)
 				zk.busy = 0;
 			var $n = jq(id, zk), n: HTMLElement & {z_mask?: zk.eff.Effect} | zk.eff.Effect;
 			if ($n.length) {
@@ -500,9 +507,10 @@ export namespace utl_global {
 		}
 
 		//HTTP//
-		/** Navigates to the specified URL.
-		 * @param String url the URL to go to
-		 * @param Map opts [optional] the options. Allowed values:
+		/**
+		 * Navigates to the specified URL.
+		 * @param url - the URL to go to
+		 * @param opts - the options. Allowed values:
 		 * <ul>
 		 * <li>target - the name of the target browser window. The same browswer
 		 * window is assumed if omitted. You can use any value allowed in
@@ -540,12 +548,12 @@ export namespace utl_global {
 			}
 		}
 
-		/** Returns all descendant frames of the given window.
-		 * <p>To retrieve all, invoke <code>zUtl.frames(top)</code>.
+		/**
+		 * @returns all descendant frames of the given window.
+		 * <p>To retrieve all, invoke `zUtl.frames(top)`.
 		 * Notice: w is included in the returned array.
-		 * If you want to exclude it, invoke <code>zUtl.frames(w).$remove(w)</code>.
-		 * @param Window w the browser window
-		 * @return Array
+		 * If you want to exclude it, invoke `zUtl.frames(w).$remove(w)`.
+		 * @param w - the browser window
 		 * @since 5.0.4
 		 */
 		static frames(w: Window): Window[] {
@@ -554,24 +562,24 @@ export namespace utl_global {
 			return ary;
 		}
 
-		/** Converts an integer array to a string.
-		 * @param int[] ary the integer array to convert.
+		/**
+		 * Converts an integer array to a string.
+		 * @param ary - the integer array to convert.
 		 * If null, an empty string is returned.
-		 * @return String
-		 * @see #stringToInts
-		 * @deprecated Use {@code [].join()} instead.
+		 * @see {@link stringToInts}
+		 * @deprecated Use `[].join()` instead.
 		 */
 		static intsToString(ary: number[] | undefined): string {
 			if (!ary) return '';
 			return ary.join();
 		}
-		/** Converts a string separated by comma to an array of integers.
-		 * @see #intsToString
-		 * @param String text the string to convert.
+		/**
+		 * Converts a string separated by comma to an array of integers.
+		 * @see {@link intsToString}
+		 * @param text - the string to convert.
 		 * If null, null is returned.
-		 * @param int defaultValue the default value used if the value
+		 * @param defaultValue - the default value used if the value
 		 * is not specified. For example, zUtl.stringToInts("1,,3", 2) returns [1, 2, 3].
-		 * @return int[]
 		 */
 		static stringToInts(text: string | undefined, defaultValue: number): number[] | undefined {
 			if (text == null)
@@ -592,12 +600,12 @@ export namespace utl_global {
 			}
 			return list;
 		}
-		/** Converts a map to a string
-		 * @see #intsToString
-		 * @param Map map the map to convert
-		 * @param String assign the symbol for assignment. If omitted, '=' is assumed.
-		 * @param String separator the symbol for separator. If omitted, ',' is assumed.
-		 * @return String
+		/**
+		 * Converts a map to a string
+		 * @see {@link intsToString}
+		 * @param map - the map to convert
+		 * @param assign - the symbol for assignment. If omitted, '=' is assumed.
+		 * @param separator - the symbol for separator. If omitted, ',' is assumed.
 		 */
 		static mapToString(map: Record<string, string>, assign?: string, separator?: string): string {
 			assign = assign || '=';
@@ -608,30 +616,39 @@ export namespace utl_global {
 			out[0] = '';
 			return out.join('');
 		}
-		/** Appends an attribute.
+		/**
+		 * Appends an attribute.
 		 * Notice that the attribute won't be appended if val is empty or false.
 		 * In other words, it is equivalent to<br/>
-		 * <code>val ? ' ' + nm + '="' + val + '"': ""</code>.
+		 * `val ? ' ' + nm + '="' + val + '"': ""`.
 		 * <p>If you want to generate the attribute no matter what val is, use
-		 * {@link #appendAttr(String, Object, boolean)}.
-		 * @param String nm the name of the attribute
-		 * @param Object val the value of the attribute
+		 * {@link (appendAttr:ARGS_3)}.
+		 * @param nm - the name of the attribute
+		 * @param val - the value of the attribute
 		 * @since 5.0.3
+		 *
+		 * {@label ARGS_2}
 		 */
-		/** Appends an attribute.
+		static appendAttr(nm: string, val: unknown): string
+		/**
+		 * Appends an attribute.
 		 * Notice that the attribute won't be appended.
-		 * @param String nm the name of the attribute
-		 * @param Object val the value of the attribute
-		 * @param boolean force whether to append attribute no matter what value it is.
-		 * If false (or omitted), it is the same as {@link #appendAttr(String, Object)}.
+		 * @param nm - the name of the attribute
+		 * @param val - the value of the attribute
+		 * @param force - whether to append attribute no matter what value it is.
+		 * If false (or omitted), it is the same as {@link (appendAttr:ARGS_2)}.
 		 * @since 5.0.3
+		 *
+		 * {@label ARGS_3}
 		 */
+		static appendAttr(nm: string, val: unknown, force: boolean): string
 		static appendAttr(nm: string, val: unknown, force?: boolean): string {
 			return val || force ? ' ' + nm + '="' + val + '"' : '';
 		}
-		/** Fires beforeSize, onFitSize, onSize and afterSize
-		 * @param Widget wgt the widget which the zWatch event will be fired against.
-		 * @param int bfsz the beforeSize mode:
+		/**
+		 * Fires beforeSize, onFitSize, onSize and afterSize
+		 * @param wgt - the widget which the zWatch event will be fired against.
+		 * @param bfsz - the beforeSize mode:
 		 * <ul>
 		 * <li>0 (null/undefined/false): beforeSize sent normally.</li>
 		 * <li>-1: beforeSize won't be sent.</li>
@@ -659,9 +676,10 @@ export namespace utl_global {
 				zWatch.fireDown('afterSize', wgt);
 			}
 		}
-		/** Fires beforeSize, onShow, onFitSize, onSize and afterSize
-		 * @param Widget wgt the widget which the zWatch event will be fired against.
-		 * @param int bfsz the beforeSize mode:
+		/**
+		 * Fires beforeSize, onShow, onFitSize, onSize and afterSize
+		 * @param wgt - the widget which the zWatch event will be fired against.
+		 * @param bfsz - the beforeSize mode:
 		 * <ul>
 		 * <li>0 (null/undefined/false): beforeSize sent normally.</li>
 		 * <li>-1: beforeSize won't be sent.</li>
@@ -676,7 +694,7 @@ export namespace utl_global {
 		}
 		/**
 		 * Loads an image before ZK client engine to calculate the widget's layout.
-		 * @param String url the loading image's localation
+		 * @param url - the loading image's localation
 		 * @since 6.0.0
 		 */
 		static loadImage(url: string): void {
@@ -687,7 +705,7 @@ export namespace utl_global {
 		}
 		/**
 		 * Checks whether all the loading images are finish.
-		 * @see #loadImage
+		 * @see {@link loadImage}
 		 * @since 6.0.0
 		 */
 		static isImageLoading(): boolean {
@@ -725,21 +743,19 @@ export namespace utl_global {
 			return new Blob([arrayBuffer], {type: mimeString});
 		}
 		/**
-		 * Returns the ratio of the resolution in physical pixels to the resolution in CSS pixels for the current display device.
+		 * @returns the ratio of the resolution in physical pixels to the resolution in CSS pixels for the current display device.
 		 * For more information, please visit https://developer.mozilla.org/en-US/docs/Web/API/Window/devicePixelRatio
-		 * @return double the devicePixelRatio
 		 * @since 8.6.0
 		 */
 		static getDevicePixelRatio(): number {
 			return window.devicePixelRatio || window.screen.deviceXDPI / window.screen.logicalXDPI;
 		}
 		/**
-		 * Returns the Promise whose fulfillment handler receives a MediaStream object when the requested media has successfully been obtained.
+		 * @returns the Promise whose fulfillment handler receives a MediaStream object when the requested media has successfully been obtained.
 		 * Note: this function may returns a Promise that is rejected, if this browser not support getUserMedia.
 		 * For more information, please visit https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia
 		 *
-		 * @param String constraints a constraints object specifying the types of media to request
-		 * @return Promise
+		 * @param constraints - a constraints object specifying the types of media to request
 		 * @since 8.6.1
 		 */
 		static getUserMedia(constraints: MediaStreamConstraints): Promise<MediaStream> {
@@ -765,9 +781,9 @@ export namespace utl_global {
 		 *
 		 * Copied from underscore.js, MIT license.
 		 *
-		 * @param Function func the passed function
-		 * @param int wait wait milliseconds
-		 * @return Function a new, throttled version of the passed function
+		 * @param func - the passed function
+		 * @param wait - wait milliseconds
+		 * @returns a new, throttled version of the passed function
 		 * @since 9.6.0
 		 */
 		static throttle<T, A extends unknown[], R>(func: (this: T, ...args: A) => R, wait: number):
@@ -807,10 +823,10 @@ export namespace utl_global {
 		 *
 		 * Copied from debounce, MIT license.
 		 *
-		 * @param Function func the passed function
-		 * @param int wait wait milliseconds
-		 * @param boolean immediate trigger the function on the leading instead of the trailing edge of the wait interval
-		 * @return Function a new debounced version of the passed function
+		 * @param func - the passed function
+		 * @param wait - wait milliseconds
+		 * @param immediate - trigger the function on the leading instead of the trailing edge of the wait interval
+		 * @returns a new debounced version of the passed function
 		 * @since 9.6.0
 		 */
 		static debounce<T, A extends unknown[], R>(func: (this: T, ...args: A) => R, wait: number,
@@ -850,9 +866,9 @@ export namespace utl_global {
 		/**
 		 * Check if the two objects has the same value
 		 * ref: undersore isEqual
-		 * @param a first object
-		 * @param b second object
-		 * @return boolean the two object is the same or not
+		 * @param a - object
+		 * @param b - object
+		 * @returns the two object is the same or not
 		 * @since 10.0.0
 		 */
 		static isEqualObject(a: unknown, b: unknown): boolean {

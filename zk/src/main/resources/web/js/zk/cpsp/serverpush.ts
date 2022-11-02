@@ -31,6 +31,7 @@ export class SPush extends zk.Object {
 		clearInterval(this.intv);
 		this.intv = undefined;
 	}
+	/** @internal */
 	_do(): void {
 		if (!zAu.processing()) {
 			var doNow = !zAu.doneTime;

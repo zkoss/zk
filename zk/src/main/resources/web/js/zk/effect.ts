@@ -57,10 +57,12 @@ export namespace eff {
 	export function shallStackup(): boolean {
 		return !!_useSKU;
 	}
+	/** @internal */
 	export function _skuOpts<T extends EffectStackupOptions>(opts?: EffectStackupOptions): T {
 		return zk.$default(opts, _defSKUOpts ??= { stackup: eff.shallStackup() }) as T;
 	}
 	// ZK-1904: stackup should be moved from wgt to document.body
+	/** @internal */
 	export function _onVParent(evt: zk.Event, opts: {shadow?: {node: HTMLElement; stackup: HTMLElement}}): void {
 		var sdw: undefined | {node: HTMLElement; stackup: HTMLElement}, stackup;
 		if (opts && (sdw = opts.shadow) && (stackup = sdw.stackup)) {
@@ -134,21 +136,22 @@ export namespace eff {
 			return this.stackup;
 		}
 	}
-	/** A mask covers the browser window fully.
-	 * @disable(zkgwt)
+	/**
+	 * A mask covers the browser window fully.
 	 */
 	export class FullMask extends zk.Object implements Effect {
 		declare mask?: HTMLElement;
 		declare stackup?: HTMLIFrameElement;
 		
-		/** The constructor of the full mask object.
-		 * <p>To remove the full mask, invoke {@link #destroy}.
-		 * @param Map opts [optional] the options. Allowed options:
+		/**
+		 * The constructor of the full mask object.
+		 * <p>To remove the full mask, invoke {@link destroy}.
+		 * @param opts - the options. Allowed options:
 		 * <ul>
 		 * <li>{@link DOMElement} mask: the mask element if the mask was created somewhere else. Default: create a new one.</li>
 		 * <li>{@link DOMElement} anchor: whether to insert the mask before.</li>
 		 * <li>String id: the mask ID. Default: z_mask.</li>
-		 * <li>int zIndex: z-index to assign. Default: defined in the CSS called z-modal-mask.</code>
+		 * <li>int zIndex: z-index to assign. Default: defined in the CSS called z-modal-mask.
 		 * <li>boolean visible: whether it is visible</li>
 		 * </ul>
 		 */
@@ -186,7 +189,8 @@ export namespace eff {
 
 			jq(mask).click(jq.Event.stop); //don't eat mousemove (drag depends on it)
 		}
-		/** Removes the full mask. You can not access this object any more.
+		/**
+		 * Removes the full mask. You can not access this object any more.
 		 */
 		destroy(): void {
 			var mask = this.mask;
@@ -197,14 +201,16 @@ export namespace eff {
 			jq(this.stackup).remove();
 			this.mask = this.stackup = undefined;
 		}
-		/** Hide the full mask. Application developers rarely need to invoke this method.
-		 * Rather, use {@link #sync} to synchronized the visual states.
+		/**
+		 * Hide the full mask. Application developers rarely need to invoke this method.
+		 * Rather, use {@link sync} to synchronized the visual states.
 		 */
 		hide(): void {
 			if (this.mask) this.mask.style.display = 'none';
 			if (this.stackup) this.stackup.style.display = 'none';
 		}
-		/** Synchronizes the visual states of the full mask with the specified element and the browser window.
+		/**
+		 * Synchronizes the visual states of the full mask with the specified element and the browser window.
 		 * The visual states include the visibility and Z Index.
 		 */
 		sync(el?: HTMLElement): void {
@@ -233,18 +239,21 @@ export namespace eff {
 			}
 		}
 	}
-	/** Applies the mask over the specified element to indicate it is busy.
-	 * @disable(zkgwt)
+	/**
+	 * Applies the mask over the specified element to indicate it is busy.
 	 */
 	export class Mask extends zk.Object implements Effect {
 		declare mask?: HTMLElement;
+		/** @internal */
 		declare _opts: EffectMaskOptions;
+		/** @internal */
 		declare __mask?: Required<Effect>;
 		declare wgt?: zk.Widget & Pick<Mask, '__mask'>;
 
-		/** The constructor.
-		 * <p>To remove the mask, invoke {@link #destroy}.
-		 * @param Map opts [optional] the options:
+		/**
+		 * The constructor.
+		 * <p>To remove the mask, invoke {@link destroy}.
+		 * @param opts - the options:
 		 * <ul>
 		 * <li>String id - the id of the applied mask, if any.</li>
 		 * <li>String/{@link DOMElement} anchor - the anchor of the applied mask, it can be an instance of {@link String} or {@link DOMElement}.</li>
@@ -264,6 +273,7 @@ export namespace eff {
 			this.sync();
 		}
 		//ZK-3118
+		/** @internal */
 		_draw(opts: EffectMaskOptions, $anchor: zk.JQZK): void {
 			var maskId = opts.id || 'z_applymask',
 				progbox = jq(maskId, zk)[0];
@@ -300,8 +310,9 @@ export namespace eff {
 			}
 
 		}
-		/** Hide the mask. Application developers rarely need to invoke this method.
-		 * Rather, use {@link #sync} to synchronized the visual states.
+		/**
+		 * Hide the mask. Application developers rarely need to invoke this method.
+		 * Rather, use {@link sync} to synchronized the visual states.
 		 */
 		hide(): void {
 			this.mask!.style.display = 'none';
@@ -309,7 +320,8 @@ export namespace eff {
 		onHide(): void {
 			this.__mask!.hide();
 		}
-		/** Synchronizes the visual states of the mask with the specified element and the browser window.
+		/**
+		 * Synchronizes the visual states of the mask with the specified element and the browser window.
 		 * The visual states include the visibility and Z Index.
 		 */
 		sync(): void {
@@ -391,7 +403,8 @@ export namespace eff {
 			this.__mask!.sync();
 		}
 
-		/** Removes the mask.
+		/**
+		 * Removes the mask.
 		 */
 		destroy(): void {
 			jq(this.mask).remove();
@@ -405,47 +418,51 @@ export namespace eff {
 	/** @class zk.Eff.Actions
 	 * A collection of actions that can be used with {@link zk.Widget#setAction}.
 	 * <p>The signature of an action must be as follows:<br>
-	 * <code>function ({@link DOMElement} n, {@link Map} opts) {}</code>
+	 * `function ({@link DOMElement} n, {@link Map} opts) {}`
 	 * <p>Furthermore, the method will be called as a widget's method, i.e.,
-	 * <code>this</code> references to the widget.
+	 * `this` references to the widget.
 	 * @since 5.0.6
 	 */
 	export const Actions = {
-		/** Slides down to display this widget.
-		 * @param DOMElement n the node to display
-		 * @param Map opts the options. Allowed options:
+		/**
+		 * Slides down to display this widget.
+		 * @param n - the node to display
+		 * @param opts - the options. Allowed options:
 		 * <ul>
-		 * <li><code>duration</code>: how many milliseconds to slide down</li>
+		 * <li>`duration`: how many milliseconds to slide down</li>
 		 * </ul>
 		 */
 		slideDown(this: zk.Widget, n: HTMLElement, opts?: zk.SlideOptions): void {
 			zk(n).slideDown(this, opts);
 		},
-		/** Slides up to hide this widget.
-		 * @param DOMElement n the node to hide
-		 * @param Map opts the options. Allowed options:
+		/**
+		 * Slides up to hide this widget.
+		 * @param n - the node to hide
+		 * @param opts - the options. Allowed options:
 		 * <ul>
-		 * <li><code>duration</code>: how many milliseconds to slide up</li>
+		 * <li>`duration`: how many milliseconds to slide up</li>
 		 * </ul>
 		 */
 		slideUp(this: zk.Widget, n: HTMLElement, opts?: zk.SlideOptions): void {
 			zk(n).slideUp(this, opts);
 		},
-		/** Slides in to display this widget.
-		 * @param DOMElement n the node to display
-		 * @param Map opts the options. Allowed options:
+		/**
+		 * Slides in to display this widget.
+		 * @param n - the node to display
+		 * @param opts - the options. Allowed options:
 		 * <ul>
-		 * <li><code>duration</code>: how many milliseconds to slide in</li>
+		 * <li>`duration`: how many milliseconds to slide in</li>
 		 * </ul>
 		 */
 		slideIn(this: zk.Widget, n: HTMLElement, opts?: zk.SlideOptions): void {
 			zk(n).slideIn(this, opts);
 		},
-		/** Slides out to hide this widget.
-		 * @param DOMElement n the node to hide
-		 * @param Map opts the options. Allowed options:
+		/**
+		 * Slides out to hide this widget.
+		 * @param n - the node to hide
+		 * @param opts - the options. Allowed options:
 		 * <ul>
-		 * <li><code>duration</code>: how many milliseconds to slide out</li>
+		 * <li>`duration`: how many milliseconds to slide out</li>
 		 * </ul>
 		 */
 		slideOut(this: zk.Widget, n: HTMLElement, opts?: zk.SlideOptions): void {
@@ -457,13 +474,16 @@ export namespace eff {
 	 * @since 9.5.0
 	 */
 	export class KeyboardTrap extends zk.Object {
+		/** @internal */
 		declare _area?: HTMLElement;
+		/** @internal */
 		declare _boundaryTop?: HTMLDivElement;
+		/** @internal */
 		declare _boundaryBottom?: HTMLDivElement;
 		/**
 		 * The constructor.
-		 * <p>To remove the trap, invoke {@link #destroy}.
-		 * @param DOMElement area which area should the focus be restricted.
+		 * <p>To remove the trap, invoke {@link destroy}.
+		 * @param area - which area should the focus be restricted.
 		 */
 		constructor(area: HTMLElement) {
 			super();
@@ -473,6 +493,7 @@ export namespace eff {
 			area.insertAdjacentElement('beforebegin', this._boundaryTop);
 			area.insertAdjacentElement('afterend', this._boundaryBottom);
 		}
+		/** @internal */
 		_createBoundary(id: string): HTMLDivElement {
 			var boundary = document.createElement('div'),
 				self = this;
@@ -483,6 +504,7 @@ export namespace eff {
 			});
 			return boundary;
 		}
+		/** @internal */
 		_handleFocus(id: string): void {
 			var focusableElements = (this._area!).querySelectorAll(
 				'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'),
@@ -495,6 +517,7 @@ export namespace eff {
 				if (elem) (elem as HTMLElement).focus();
 			}
 		}
+		/** @internal */
 		_getFirstFocusableElement(elems: NodeListOf<Element>): Element | undefined {
 			var len = elems.length;
 			for (var i = 0; i < len; i++) {
@@ -502,6 +525,7 @@ export namespace eff {
 			}
 			return undefined;
 		}
+		/** @internal */
 		_getLastFocusableElement(elems: NodeListOf<Element>): Element | undefined {
 			var len = elems.length;
 			for (var i = len - 1; i >= 0; i--) {
@@ -509,6 +533,7 @@ export namespace eff {
 			}
 			return undefined;
 		}
+		/** @internal */
 		_isFocusable(elem: HTMLElement & {disabled?: boolean}): boolean {
 			return !(elem.disabled || elem.getAttribute('disabled')) // not disabled
 				&& !!(elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length); // visible
@@ -534,6 +559,7 @@ jq(function () {
 	//Handle zk.useStackup
 	var _lastFloat, _autohideCnt = 0, _shallUse = false, _callback: Partial<typeof zWatch>;
 
+	/** @internal */
 	function _onFloatUp(ctl: {origin?: zk.Widget}): void {
 		var wgt = ctl.origin;
 		++_autohideCnt;
@@ -548,6 +574,7 @@ jq(function () {
 			}
 		}, 120); //filter
 	}
+	/** @internal */
 	function _autohide(): void {
 		_lastFloat = false; //enforce to run if onFloatUp also fired
 		++_autohideCnt;

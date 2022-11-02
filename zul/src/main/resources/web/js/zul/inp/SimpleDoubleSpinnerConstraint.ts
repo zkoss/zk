@@ -1,42 +1,44 @@
 /**
  * A simple double spinner constraint.
- * @disable(zkgwt)
  */
 @zk.WrapClass('zul.inp.SimpleDoubleSpinnerConstraint')
 export class SimpleDoubleSpinnerConstraint extends zul.inp.SimpleConstraint {
+	/** @internal */
 	_min?: number;
+	/** @internal */
 	_max?: number;
 
-	/** Returns the minimum value.
-	 * @return double
+	/**
+	 * @returns the minimum value.
 	 */
 	getMin(): number | undefined {
 		return this._min;
 	}
 
-	/** Set the minimum value.
-	 * @param double min
+	/**
+	 * Set the minimum value.
 	 */
 	setMin(min: number): this {
 		this._min = min;
 		return this;
 	}
 
-	/** Returns the maximum value.
-	 * @return double
+	/**
+	 * @returns the maximum value.
 	 */
 	getMax(): number | undefined {
 		return this._max;
 	}
 
-	/** Set the maximum value.
-	 * @param double max
+	/**
+	 * Set the maximum value.
 	 */
 	setMax(max: number): this {
 		this._max = max;
 		return this;
 	}
 
+	/** @internal */
 	override parseConstraint_(cst: string): void {
 		var cstList = cst.replace(/ +/g, ' ').split(/[, ]/),
 			len = cstList.length,

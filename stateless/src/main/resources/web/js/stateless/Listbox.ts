@@ -19,6 +19,7 @@ zk.afterLoad('zul.sel', () => {
 	const _xItemIter = zk.augment(zul.sel.ItemIter.prototype, {
 		cur: undefined as number | undefined,
 		length: undefined as number | undefined,
+		/** @internal */
 		_init(): void {
 			if (!this._isInit) {
 				_xItemIter._init.call(this);

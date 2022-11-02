@@ -14,6 +14,7 @@ export class Input extends zhtml.Widget {
 	value?: string;
 	start?: number;
 
+	/** @internal */
 	_doChange(evt: zk.Event): void {
 		var n = this.$n();
 		if (n) {
@@ -25,16 +26,19 @@ export class Input extends zhtml.Widget {
 		}
 	}
 
+	/** @internal */
 	_onChangeData(val: string, selbak?: boolean): {value: string; start: number; marshal(): [string?, boolean?, number?]} {
 		return {value: val,
 			start: zk(this.$n()).getSelectionRange()[0],
 			marshal: this._onChangeMarshal};
 	}
 
+	/** @internal */
 	_onChangeMarshal(): [string?, boolean?, number?] {
 		return [this.value, false, this.start];
 	}
 
+	/** @internal */
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		var n: HTMLInputElement | undefined;
@@ -49,6 +53,7 @@ export class Input extends zhtml.Widget {
 		}
 	}
 
+	/** @internal */
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		if (this._defValue !== undefined)
 			this.domUnlisten_(this.$n_(), 'onChange');

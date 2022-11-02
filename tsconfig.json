@@ -61,7 +61,7 @@
   "include": [
     "zk/src/main/resources/web/js",
     "zul/src/main/resources/web/js",
-    "zbind/src/main/resources/web/js",
+    "zkbind/src/main/resources/web/js",
     "zhtml/src/main/resources/web/js",
     "stateless/src/main/resources/web/js"
   ],

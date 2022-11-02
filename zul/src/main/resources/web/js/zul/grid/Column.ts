@@ -22,14 +22,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>The use of column is mainly to define attributes for each cell
  * in the grid.
  *
- * <p>Default {@link #getZclass}: z-column.
+ * @defaultValue {@link getZclass}: z-column.
  */
 @zk.WrapClass('zul.grid.Column')
 export class Column extends zul.mesh.SortWidget {
 	override parent!: zul.grid.Columns | undefined;
 
-	/** Returns the grid that contains this column.
-	 * @return zul.grid.Grid
+	/**
+	 * @returns the grid that contains this column.
 	 */
 	getGrid(): zul.grid.Grid | undefined {
 		return this.parent ? this.parent.parent : undefined;
@@ -40,29 +40,31 @@ export class Column extends zul.mesh.SortWidget {
 		this.listen({onGroup: this}, -1000);
 	}
 
-	/** Returns the rows of the grid that contains this column.
-	 * @return zul.grid.Rows
+	/**
+	 * @returns the rows of the grid that contains this column.
 	 */
 	getMeshBody(): zul.grid.Rows | undefined {
 		var grid = this.getGrid();
 		return grid ? grid.rows : undefined;
 	}
 
+	/** @internal */
 	override checkClientSort_(ascending: boolean): boolean {
 		const body = this.getMeshBody();
 		return !(!body || body.hasGroup()) && super.checkClientSort_(ascending);
 	}
 
-	/** Groups and sorts the rows ({@link Row}) based on
-	 * {@link #getSortAscending}.
+	/**
+	 * Groups and sorts the rows ({@link Row}) based on
+	 * {@link getSortAscending}.
 	 * If the corresponding comparator is not set, it returns false
 	 * and does nothing.
 	 *
-	 * @param boolean ascending whether to use {@link #getSortAscending}.
+	 * @param ascending - whether to use {@link getSortAscending}.
 	 * If the corresponding comparator is not set, it returns false
 	 * and does nothing.
-	 * @param zk.Event evt the event causes the group
-	 * @return boolean whether the rows are grouped.
+	 * @param evt - the event causes the group
+	 * @returns boolean whether the rows are grouped.
 	 */
 	group(ascending: boolean, evt: zk.Event): boolean {
 		var dir = this.getSortDirection();
@@ -181,8 +183,8 @@ export class Column extends zul.mesh.SortWidget {
 		return this;
 	}
 
-	/** It invokes {@link #group} to group list items and maintain
-	 * {@link #getSortDirection}.
+	/**
+	 * It invokes {@link group} to group list items and maintain {@link getSortDirection}.
 	 */
 	onGroup(evt: zk.Event): void {
 		var dir = this.getSortDirection();
@@ -194,6 +196,7 @@ export class Column extends zul.mesh.SortWidget {
 			this.group(false, evt);
 	}
 
+	/** @internal */
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		var n = this.$n_();
@@ -204,6 +207,7 @@ export class Column extends zul.mesh.SortWidget {
 			this.domListen_(btn, 'onClick', '_doMenuClick');
 	}
 
+	/** @internal */
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		var n = this.$n_();
 		this.domUnlisten_(n, 'onMouseOver')
@@ -214,12 +218,14 @@ export class Column extends zul.mesh.SortWidget {
 		super.unbind_(skipper, after, keepRod);
 	}
 
+	/** @internal */
 	_doMouseOver(evt: zk.Event): void {
 		if (this.isSortable_()
 				|| (this.parent!._menupopup && this.parent!._menupopup != 'none'))
 			jq(this.$n_()).addClass(this.$s('hover'));
 	}
 
+	/** @internal */
 	_doMouseOut(evt: zk.Event): void {
 		if (this.isSortable_()
 				|| (this.parent!._menupopup && this.parent!._menupopup != 'none')) {

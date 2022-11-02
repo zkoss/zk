@@ -152,11 +152,13 @@ zk.override(zk.Widget.prototype, _xWidget, {
 	_pt: [0, 0],
 	_cancelMouseUp: false,
 	_cancelClick: <number | undefined> undefined,
+	/** @internal */
 	bindSwipe_() {
 		var node = this.$n() as HTMLElement;
 		if (this.isListen('onSwipe') || jq(node).data('swipeable'))
 			this._swipe = new zk.Swipe(this, node);
 	},
+	/** @internal */
 	unbindSwipe_() {
 		var swipe = this._swipe;
 		if (swipe) {
@@ -164,6 +166,7 @@ zk.override(zk.Widget.prototype, _xWidget, {
 			swipe.destroy(this.$n() as HTMLElement);
 		}
 	},
+	/** @internal */
 	bindDoubleTap_() {
 		if (this.isListen('onDoubleClick')) {
 			var doubleClickTime = 500;
@@ -178,6 +181,7 @@ zk.override(zk.Widget.prototype, _xWidget, {
 				.on('touchend', this.proxy(this._dblTapEnd));
 		}
 	},
+	/** @internal */
 	unbindDoubleTap_() {
 		if (this.isListen('onDoubleClick')) {
 			this._startTap = undefined;
@@ -185,6 +189,7 @@ zk.override(zk.Widget.prototype, _xWidget, {
 				.off('touchend', this.proxy(this._dblTapEnd));
 		}
 	},
+	/** @internal */
 	_dblTapStart(evt: JQuery.TouchStartEvent) {
 		var tevt = evt.originalEvent as TouchEvent;
 		if (tevt.touches.length > 1) return;
@@ -205,6 +210,7 @@ zk.override(zk.Widget.prototype, _xWidget, {
 			&& (!zk.isLoaded('zul.sel') || (!(p instanceof zul.sel.Listitem) && !(p instanceof zul.sel.Treerow))))
 		tevt.stopPropagation();
 	},
+	/** @internal */
 	_dblTapEnd(evt: JQuery.TouchEndEvent) {
 		var tevt = evt.originalEvent as TouchEvent;
 		if (tevt.touches.length > 1) return;
@@ -222,6 +228,7 @@ zk.override(zk.Widget.prototype, _xWidget, {
 			tevt.preventDefault(); //stop ios zoom
 		}
 	},
+	/** @internal */
 	bindTapHold_() {
 		if (this.isListen('onRightClick') || (window.zul && this instanceof zul.Widget && this.getContext())) { //also register context menu to tapHold event
 			this._holdTime = 800;
@@ -262,6 +269,7 @@ zk.override(zk.Widget.prototype, _xWidget, {
 				.on('touchend', this.proxy(this._tapHoldEnd));
 		}
 	},
+	/** @internal */
 	unbindTapHold_() {
 		if (this.isListen('onRightClick') || (window.zul && this instanceof zul.Widget && this.getContext())) { //also register context menu to tapHold event
 			this._startHold = this._cancelHold = undefined;
@@ -271,6 +279,7 @@ zk.override(zk.Widget.prototype, _xWidget, {
 				.off('touchend', this.proxy(this._tapHoldEnd));
 		}
 	},
+	/** @internal */
 	_tapHoldStart(evt: JQuery.TouchEventBase) {
 		var tevt = evt.originalEvent as TouchEvent;
 
@@ -287,6 +296,7 @@ zk.override(zk.Widget.prototype, _xWidget, {
 			&& (!zk.isLoaded('zul.sel') || (!(p instanceof zul.sel.Listitem) && !(p instanceof zul.sel.Treerow))))
 			tevt.stopPropagation();
 	},
+	/** @internal */
 	_tapHoldMove(evt: JQuery.TouchEventBase) {
 		var tevt = evt.originalEvent as TouchEvent,
 			initSensitivity = 3;
@@ -299,6 +309,7 @@ zk.override(zk.Widget.prototype, _xWidget, {
 			|| Math.abs(changedTouch.clientY - this._pt[1]) > initSensitivity)
 			this._cancelHold!();
 	},
+	/** @internal */
 	_tapHoldClick(evt: JQuery.TouchEventBase) {
 		if (this._cancelClick) {
 			//stop click after hold
@@ -309,6 +320,7 @@ zk.override(zk.Widget.prototype, _xWidget, {
 			this._cancelClick = undefined;
 		}
 	},
+	/** @internal */
 	_tapHoldEnd(evt: JQuery.TouchEventBase) {
 		var tevt = evt.originalEvent as TouchEvent;
 		if (tevt.touches.length > 1) return;

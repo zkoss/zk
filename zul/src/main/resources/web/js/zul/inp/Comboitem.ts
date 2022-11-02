@@ -17,7 +17,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  *
  * <p>Non-XUL extension. Refer to {@link Combobox}.
  *
- * <p>Default {@link #getZclass}: z-comboitem.
+ * @defaultValue {@link getZclass}: z-comboitem.
  *
  * @see Combobox
  */
@@ -26,23 +26,29 @@ export class Comboitem extends zul.LabelImageWidget implements zul.LabelImageWid
 	override parent!: zul.inp.Combobox;
 	override nextSibling!: zul.inp.Comboitem | undefined;
 	override previousSibling!: zul.inp.Comboitem | undefined;
+	/** @internal */
 	_maxFlexWidth = true; //ZK-5044
+	/** @internal */
 	_description?: string;
+	/** @internal */
 	_content?: string;
+	/** @internal */
 	declare _value: unknown;
+	/** @internal */
 	_disabled = false;
+	/** @internal */
 	_autodisable?: string;
 
-	/** Returns whether it is disabled.
-	 * <p>Default: false.
-	 * @return boolean
+	/**
+	 * @returns whether it is disabled.
+	 * @defaultValue `false`.
 	 */
 	isDisabled(): boolean {
 		return this._disabled;
 	}
 
-	/** Sets whether it is disabled.
-	 * @param boolean disabled
+	/**
+	 * Sets whether it is disabled.
 	 */
 	setDisabled(disabled: boolean, opts?: Record<string, boolean>): this {
 		const o = this._disabled;
@@ -59,20 +65,20 @@ export class Comboitem extends zul.LabelImageWidget implements zul.LabelImageWid
 		return this;
 	}
 
-	/** Returns the description (never null).
+	/**
+	 * @returns the description (never null).
 	 * The description is used to provide extra information such that
 	 * users is easy to make a selection.
-	 * <p>Default: "".
+	 * @defaultValue `""`.
 	 * <p>Deriving class can override it to return whatever it wants
 	 * other than null.
-	 * @return String
 	 */
 	getDescription(): string | undefined {
 		return this._description;
 	}
 
-	/** Sets the description.
-	 * @param String desc
+	/**
+	 * Sets the description.
 	 */
 	setDescription(description: string, opts?: Record<string, boolean>): this {
 		const o = this._description;
@@ -85,28 +91,28 @@ export class Comboitem extends zul.LabelImageWidget implements zul.LabelImageWid
 		return this;
 	}
 
-	/** Returns the embedded content (i.e., HTML tags) that is
+	/**
+	 * @returns the embedded content (i.e., HTML tags) that is
 	 * shown as part of the description.
 	 *
 	 * <p>It is useful to show the description in more versatile way.
 	 *
-	 * <p>Default: empty ("").
+	 * @defaultValue empty ("").
 	 *
 	 * <p>Deriving class can override it to return whatever it wants
 	 * other than null.
-	 * @return String
-	 * @see #getDescription
+	 * @see {@link getDescription}
 	 */
 	getContent(): string | undefined {
 		return this._content;
 	}
 
-	/** Sets the embedded content (i.e., HTML tags) that is
+	/**
+	 * Sets the embedded content (i.e., HTML tags) that is
 	 * shown as part of the description.
 	 *
 	 * <p>It is useful to show the description in more versatile way.
-	 * @param String content
-	 * @see #setDescription
+	 * @see {@link setDescription}
 	 */
 	setContent(content: string, opts?: Record<string, boolean>): this {
 		const o = this._content;
@@ -131,10 +137,12 @@ export class Comboitem extends zul.LabelImageWidget implements zul.LabelImageWid
 	}
 
 	//super
+	/** @internal */
 	override domLabel_(): string {
 		return zUtl.encodeXML(this.getLabel(), {pre: true});
 	}
 
+	/** @internal */
 	override doClick_(evt: zk.Event, popupOnly?: boolean): void {
 		if (!this._disabled) {
 
@@ -151,6 +159,7 @@ export class Comboitem extends zul.LabelImageWidget implements zul.LabelImageWid
 		}
 	}
 
+	/** @internal */
 	override domClass_(no?: zk.DomClassOptions): string {
 		var scls = super.domClass_(no);
 		if (this._disabled && (!no || !no.zclass)) {
@@ -159,6 +168,7 @@ export class Comboitem extends zul.LabelImageWidget implements zul.LabelImageWid
 		return scls;
 	}
 
+	/** @internal */
 	override deferRedrawHTML_(out: string[]): void {
 		out.push('<li', this.domAttrs_({domClass: true}), ' class="z-renderdefer"></li>');
 	}

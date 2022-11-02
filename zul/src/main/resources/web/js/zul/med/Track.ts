@@ -10,26 +10,30 @@
 Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 /**
- * A representation of {@code <track>}.
+ * A representation of `<track>`.
  *
- * <p>It is expected to use with {@code <audio>} or {@code <video>}.
- * <p>{@code <track>} is not supported in Internet Explorer 9.
+ * <p>It is expected to use with `<audio>` or `<video>`.
+ * <p>`<track>` is not supported in Internet Explorer 9.
  *
  * @author rudyhuang
  * @since 9.5.0
  */
 @zk.WrapClass('zul.med.Track')
 export class Track extends zul.Widget<HTMLTrackElement> {
+	/** @internal */
 	_default?: boolean;
+	/** @internal */
 	_kind?: string;
+	/** @internal */
 	_label?: string;
+	/** @internal */
 	_src?: string;
+	/** @internal */
 	_srclang?: string;
 
 	/**
-	 * Returns if this track should be enabled by default.
-	 * <p>Default: false.
-	 * @return boolean if this track should be enabled by default.
+	 * @returns if this track should be enabled by default.
+	 * @defaultValue `false`.
 	 */
 	isDefault(): boolean {
 		return !!this._default;
@@ -37,7 +41,7 @@ export class Track extends zul.Widget<HTMLTrackElement> {
 
 	/**
 	 * Sets if this track should be enabled by default.
-	 * @param boolean isDefault if this track should be enabled by default.
+	 * @param isDefault - if this track should be enabled by default.
 	 */
 	// eslint-disable-next-line zk/javaStyleSetterSignature
 	setDefault(isDefault: boolean, opts?: Record<string, boolean>): this {
@@ -53,9 +57,8 @@ export class Track extends zul.Widget<HTMLTrackElement> {
 	}
 
 	/**
-	 * Returns what kind of track it is.
-	 * <p>Default: null.
-	 * @return String what kind of track it is.
+	 * @returns what kind of track it is.
+	 * @defaultValue `null`.
 	 */
 	getKind(): string | undefined {
 		return this._kind;
@@ -70,7 +73,7 @@ export class Track extends zul.Widget<HTMLTrackElement> {
 	 *     <li>chapters</li>
 	 *     <li>metadata</li>
 	 * </ul>
-	 * @param String kind what kind of track it is.
+	 * @param kind - what kind of track it is.
 	 */
 	setKind(kind: string, opts?: Record<string, boolean>): this {
 		const o = this._kind;
@@ -85,9 +88,8 @@ export class Track extends zul.Widget<HTMLTrackElement> {
 	}
 
 	/**
-	 * Returns a readable description of this track.
-	 * <p>Default: null.
-	 * @return String a readable description of this track.
+	 * @returns a readable description of this track.
+	 * @defaultValue `null`.
 	 */
 	getLabel(): string | undefined {
 		return this._label;
@@ -95,7 +97,7 @@ export class Track extends zul.Widget<HTMLTrackElement> {
 
 	/**
 	 * Sets a readable description of this track.
-	 * @param String label a readable description of this track.
+	 * @param label - a readable description of this track.
 	 */
 	setLabel(label: string, opts?: Record<string, boolean>): this {
 		const o = this._label;
@@ -110,9 +112,8 @@ export class Track extends zul.Widget<HTMLTrackElement> {
 	}
 
 	/**
-	 * Returns the source address of this track.
-	 * <p>Default: null.
-	 * @return String the source address of this track.
+	 * @returns the source address of this track.
+	 * @defaultValue `null`.
 	 */
 	getSrc(): string | undefined {
 		return this._src;
@@ -121,10 +122,10 @@ export class Track extends zul.Widget<HTMLTrackElement> {
 	/**
 	 * Sets the source address of this track. Must be a valid URL.
 	 * This attribute must be specified.
-	 * The URL must have the same origin as the parent {@code <audio>} or {@code <video>},
-	 * unless the {@code crossorigin} attribute is set.
+	 * The URL must have the same origin as the parent `<audio>` or `<video>`,
+	 * unless the `crossorigin` attribute is set.
 	 *
-	 * @param String src the source address of this track.
+	 * @param src - the source address of this track.
 	 */
 	setSrc(src: string, opts?: Record<string, boolean>): this {
 		const o = this._src;
@@ -139,9 +140,8 @@ export class Track extends zul.Widget<HTMLTrackElement> {
 	}
 
 	/**
-	 * Returns the language of the source.
-	 * <p>Default: null.
-	 * @return String the language of the source.
+	 * @returns the language of the source.
+	 * @defaultValue `null`.
 	 */
 	getSrclang(): string | undefined {
 		return this._srclang;
@@ -151,7 +151,7 @@ export class Track extends zul.Widget<HTMLTrackElement> {
 	 * Sets the language of the source.
 	 * It must be a valid BCP 47 language tag.
 	 * This attribute must be specified if kind is "subtitles".
-	 * @param String srclang the language of the source.
+	 * @param srclang - the language of the source.
 	 */
 	setSrclang(srclang: string, opts?: Record<string, boolean>): this {
 		const o = this._srclang;
@@ -165,6 +165,7 @@ export class Track extends zul.Widget<HTMLTrackElement> {
 		return this;
 	}
 
+	/** @internal */
 	override domAttrs_(no?: zk.DomAttrsOptions): string {
 		let attr = super.domAttrs_(no)
 			+ zUtl.appendAttr('kind', this._kind)

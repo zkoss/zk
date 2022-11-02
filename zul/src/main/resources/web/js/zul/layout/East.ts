@@ -14,38 +14,36 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 /**
  * An east region of a border layout.
- * <p>Default {@link #getZclass}: z-east.
- *
- * <p>Default: {@link #getCmargins()} is "0,0,0,0"</p>
+ * @defaultValue {@link getZclass}: z-east.
+ * @defaultValue {@link getCmargins} is "0,0,0,0"</p>
  */
 @zk.WrapClass('zul.layout.East')
 export class East extends zul.layout.LayoutRegion {
+	/** @internal */
 	_sumFlexWidth = true; //indicate shall add this flex width for borderlayout. @See _fixMinFlex in widget.js
+	/** @internal */
 	_maxFlexHeight = true; //indicate shall check if the maximum flex height for borderlayout. @See _fixMinFlex in widget.js
+	/** @internal */
 	override _cmargins = [0, 0, 0, 0];
 	override sanchor = 'r';
 
 	/**
 	 * The height can't be specified in this component because its height is
 	 * determined by other region components ({@link North} or {@link South}).
-	 * @param String height
 	 */
 	override setHeight(height: string): this { // readonly
 		return this;
 	}
 
 	/**
-	 * Returns {@link Borderlayout#EAST}.
-	 * @return String
+	 * @returns The value {@link zul.layout.Borderlayout.EAST}.
 	 */
 	override getPosition(): string {
 		return zul.layout.Borderlayout.EAST;
 	}
 
 	/**
-	 * Returns the size of this region. This method is shortcut for
-	 * {@link #getWidth()}.
-	 * @return String
+	 * @returns the size of this region. This method is shortcut for {@link getWidth}.
 	 */
 	getSize(): string | undefined {
 		// Bug ZK-1490: Cannot find 'getWidth' method in widget.js
@@ -53,14 +51,13 @@ export class East extends zul.layout.LayoutRegion {
 	}
 
 	/**
-	 * Sets the size of this region. This method is shortcut for
-	 * {@link #setWidth(String)}.
-	 * @param String size
+	 * Sets the size of this region. This method is shortcut for {@link setWidth}.
 	 */
 	setSize(size: string): this {
 		return this.setWidth(size);
 	}
 
+	/** @internal */
 	override _ambit2(ambit: zul.layout.LayoutRegionAmbit, mars: zk.Dimension, split: { offsetWidth; offsetHeight }): void {
 		ambit.w += split.offsetWidth;
 		ambit.h = mars.height;
@@ -68,6 +65,7 @@ export class East extends zul.layout.LayoutRegion {
 		ambit.x = ambit.w + (mars.width - mars.left);
 	}
 
+	/** @internal */
 	override _reszSp2(ambit: zul.layout.LayoutRegionAmbit, split: { w; h }): Partial<{ left; top; width; height }> {
 		ambit.w -= split.w;
 		ambit.x += split.w;

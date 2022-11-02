@@ -56,25 +56,32 @@ function _onSizeLater(wgt: Frozen): void {
 
 /**
  * A frozen component to represent a frozen column or row in grid, like MS Excel.
- * <p>Default {@link #getZclass}: z-frozen.
+ * @defaultValue {@link getZclass}: z-frozen.
  */
 @zk.WrapClass('zul.mesh.Frozen')
 export class Frozen extends zul.Widget {
 	// Parent could be null because it's checked in `Frozen.prototype.syncScroll`.
 	override parent!: zul.mesh.MeshWidget | undefined;
+	/** @internal */
 	_start = 0;
+	/** @internal */
 	_scrollScale = 0;
+	/** @internal */
 	_smooth: boolean | undefined; // eslint-disable-line zk/preferStrictBooleanType
+	/** @internal */
 	_columns?: number;
+	/** @internal */
 	_shallSyncScale?: boolean;
+	/** @internal */
 	_delayedScroll?: number;
+	/** @internal */
 	_lastScale?: number;
+	/** @internal */
 	_shallSync?: boolean;
 
 	/**
-	 * Returns the number of columns to freeze.
-	 * <p>Default: 0
-	 * @return int
+	 * @returns the number of columns to freeze.
+	 * @defaultValue `0`
 	 */
 	getColumns(): number | undefined {
 		return this._columns;
@@ -82,7 +89,7 @@ export class Frozen extends zul.Widget {
 
 	/**
 	 * Sets the number of columns to freeze.(from left to right)
-	 * @param int columns positive only
+	 * @param columns - positive only
 	 */
 	setColumns(columns: number, opts?: Record<string, boolean>): this {
 		const o = this._columns;
@@ -102,9 +109,8 @@ export class Frozen extends zul.Widget {
 	}
 
 	/**
-	 * Returns the start position of the scrollbar.
-	 * <p>Default: 0
-	 * @return int
+	 * @returns the start position of the scrollbar.
+	 * @defaultValue `0`
 	 */
 	getStart(): number {
 		return this._start;
@@ -112,8 +118,8 @@ export class Frozen extends zul.Widget {
 
 	/**
 	 * Sets the start position of the scrollbar.
-	 * <p> Default: 0
-	 * @param int start the column number
+	 * @defaultValue `0`
+	 * @param start - the column number
 	 */
 	setStart(start: number, opts?: Record<string, boolean>): this {
 		const o = this._start;
@@ -127,7 +133,7 @@ export class Frozen extends zul.Widget {
 	}
 
 	/**
-	 * Synchronizes the scrollbar according to {@link #getStart}.
+	 * Synchronizes the scrollbar according to {@link getStart}.
 	 */
 	syncScroll(): void {
 		if (this.parent?._nativebar) {
@@ -153,6 +159,7 @@ export class Frozen extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		var p = this.parent!,
@@ -186,6 +193,7 @@ export class Frozen extends zul.Widget {
 			jq(foot).addClass('z-word-nowrap');
 	}
 
+	/** @internal */
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		var p = this.parent!,
 			body = p.$n('body'),
@@ -254,10 +262,12 @@ export class Frozen extends zul.Widget {
 		});
 	}
 
+	/** @internal */
 	_syncFrozen(): void { //called by Rows, HeadWidget...
 		this._shallSync = true;
 	}
 
+	/** @internal */
 	_syncFrozenNow(): void {
 		var num = this._start;
 		if (this._shallSync && num)
@@ -266,6 +276,7 @@ export class Frozen extends zul.Widget {
 		this._shallSync = false;
 	}
 
+	/** @internal */
 	override beforeParentChanged_(p: zk.Widget | undefined): void {
 		//bug B50-ZK-238
 		//ZK-2651: JS Error showed when clear grid children component that include frozen
@@ -275,6 +286,7 @@ export class Frozen extends zul.Widget {
 		super.beforeParentChanged_(p);
 	}
 
+	/** @internal */
 	_onScroll(evt: zk.Event): void {
 		if (!evt.data || !zk.currentFocus)
 			return;
@@ -301,6 +313,7 @@ export class Frozen extends zul.Widget {
 		evt.stop();
 	}
 
+	/** @internal */
 	_doHeadScroll(evt: zk.Event): void {
 		var head = evt.domTarget,
 			num = Math.ceil(head.scrollLeft / 50);
@@ -311,6 +324,7 @@ export class Frozen extends zul.Widget {
 		this._onScroll(evt);
 	}
 
+	/** @internal */
 	_doScroll(n: number): void {
 		var p = this.parent!,
 			num: number;
@@ -332,6 +346,7 @@ export class Frozen extends zul.Widget {
 		}, 0);
 	}
 
+	/** @internal */
 	_doScrollNow(num: number, force?: boolean): void {
 		var totalWidth = 0,
 			mesh = this.parent!,

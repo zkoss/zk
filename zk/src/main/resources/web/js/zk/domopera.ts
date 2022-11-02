@@ -35,10 +35,12 @@ Object.assign<zk.JQZK, Partial<zk.JQZK>>(zjq.prototype, {
 });
 
 Object.assign(zjq, {
+	/** @internal */
 	_cleanVisi(n: HTMLElement): void {
 		n.style.visibility = n.getElementsByTagName('input').length ? 'visible' : 'inherit';
 		// visible will cause elements that shall be cropped become visible, but we need do it if it has INPUT
 	},
+	/** @internal */
 	_fixCSS(el: HTMLElement): void {
 		var old = el.style.display,
 			top = el.scrollTop,

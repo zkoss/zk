@@ -108,7 +108,9 @@ function dayOfWeekInMonth(d: DateImpl): string {
 // a proxy of Date object for leap day on Thai locale - B60-ZK-1010
 @zk.WrapClass('zul.fmt.LeapDay')
 class LeapDay extends zk.Object {
+	/** @internal */
 	_date: DateImpl;
+	/** @internal */
 	_offset?: number;
 
 	constructor(date: DateImpl)
@@ -610,6 +612,7 @@ var DateFmt = {
 			localeDateString = date.toLocaleDateString(langTag, { era: 'short', day: 'numeric' });
 		return localeDateString.split(' ')[0];
 	},
+	/** @internal */
 	_findEraKey(txt: string, eras: NonNullable<zk.LocalizedSymbols['ERAS']>): string | undefined { // override
 		return undefined;
 	}
@@ -617,7 +620,7 @@ var DateFmt = {
 export { DateFmt as Date };
 zk.fmt.Date = DateFmt;
 /**
- * The <code>calendar</code> object provides a way
+ * The `calendar` object provides a way
  * to convert between a specific instant in time for locale-sensitive
  * like buddhist's time.
  * <p>By default the year offset is specified from server if any.</p>
@@ -625,7 +628,9 @@ zk.fmt.Date = DateFmt;
  */
 @zk.WrapClass('zk.fmt.Calendar')
 export class Calendar extends zk.Object {
+	/** @internal */
 	_offset = zk.YDELTA;
+	/** @internal */
 	_date?: DateImpl;
 
 	constructor(date?: DateImpl, localizedSymbols?: zk.LocalizedSymbols) {

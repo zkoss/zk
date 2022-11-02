@@ -14,24 +14,26 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 /**
  * An auxiliary header.
- * <p>Default {@link #getZclass}: z-auxheader.
+ * @defaultValue {@link getZclass}: z-auxheader.
  */
 @zk.WrapClass('zul.mesh.Auxheader')
 export abstract class Auxheader extends zul.mesh.HeaderWidget {
+	/** @internal */
 	override _colspan = 1;
+	/** @internal */
 	override _rowspan = 1;
 
-	/** Returns number of columns to span this header.
-	 * Default: 1.
-	 * @return int
+	/**
+	 * @returns number of columns to span this header.
+	 * @defaultValue `1`.
 	 */
 	getColspan(): number {
 		return this._colspan;
 	}
 
-	/** Sets the number of columns to span this header.
+	/**
+	 * Sets the number of columns to span this header.
 	 * <p>It is the same as the colspan attribute of HTML TD tag.
-	 * @param int colspan
 	 */
 	setColspan(colspan: number, opts?: Record<string, boolean>): this {
 		const o = this._colspan;
@@ -47,17 +49,17 @@ export abstract class Auxheader extends zul.mesh.HeaderWidget {
 		return this;
 	}
 
-	/** Returns number of rows to span this header.
-	 * Default: 1.
-	 * @return int
+	/**
+	 * @returns number of rows to span this header.
+	 * @defaultValue `1`.
 	 */
 	getRowspan(): number {
 		return this._rowspan;
 	}
 
-	/** Sets the number of rows to span this header.
+	/**
+	 * Sets the number of rows to span this header.
 	 * <p>It is the same as the rowspan attribute of HTML TD tag.
-	 * @param int rowspan
 	 */
 	setRowspan(rowspan: number, opts?: Record<string, boolean>): this {
 		const o = this._rowspan;
@@ -72,8 +74,8 @@ export abstract class Auxheader extends zul.mesh.HeaderWidget {
 
 		return this;
 	}
-
-	//super//
+	
+	/** @internal */
 	override domAttrs_(no?: zk.DomAttrsOptions): string {
 		var s = super.domAttrs_(no);
 		if (this._colspan != 1)

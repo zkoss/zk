@@ -16,13 +16,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * A row of {@link Listfooter}.
  *
  * <p>Like {@link Listhead}, each listbox has at most one {@link Listfoot}.
- * <p>Default {@link #getZclass}: z-listfoot
+ * @defaultValue {@link getZclass}: z-listfoot
  */
 @zk.WrapClass('zul.sel.Listfoot')
 export class Listfoot extends zul.Widget {
 	override parent!: zul.sel.Listbox | undefined;
-	/** Returns the list box that it belongs to.
-	 * @return Listbox
+	/**
+	 * @returns the list box that it belongs to.
 	 */
 	getListbox(): zul.sel.Listbox | undefined {
 		return this.parent;
@@ -40,6 +40,7 @@ export class Listfoot extends zul.Widget {
 		return super.setHflex(hflex);
 	}
 
+	/** @internal */
 	override beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
 		if (!(child instanceof zul.sel.Listfooter)) {
 			zk.error('Unsupported child for listfoot: ' + child.className);
@@ -48,6 +49,7 @@ export class Listfoot extends zul.Widget {
 		return true;
 	}
 
+	/** @internal */
 	override deferRedrawHTML_(out: string[]): void {
 		out.push('<tr', this.domAttrs_({domClass: true}), ' class="z-renderdefer"></tr>');
 	}

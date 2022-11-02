@@ -19,29 +19,34 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.utl.Script')
 export class Script extends zk.Widget {
+	/** @internal */
 	_src?: string;
+    /** @internal */
     _content?: string;
+	/** @internal */
 	_charset?: string;
+	/** @internal */
 	_srcrun?: boolean;
+	/** @internal */
 	// eslint-disable-next-line @typescript-eslint/ban-types
 	_fn?: Function;
 	packages?: string;
 
-    /** Returns the content of the script element.
+    /**
+	 * @returns the content of the script element.
      * By content we mean the JavaScript codes that will be enclosed
      * by the HTML SCRIPT element.
      *
-     * <p>Default: null.
-     * @return String
+     * @defaultValue `null`.
      */
     getContent(): string | undefined {
         return this._content;
     }
 
-    /** Sets the content of the script element.
+    /**
+	 * Sets the content of the script element.
      * By content we mean the JavaScript codes that will be enclosed
      * by the HTML SCRIPT element.
-     * @param String content
      */
     setContent(content: string, opts?: Record<string, boolean>): this {
         const o = this._content;
@@ -59,22 +64,23 @@ export class Script extends zk.Widget {
         return this;
     }
 
-    /** Returns the URI of the source that contains the script codes.
-     * <p>Default: null.
-     * @return String
+    /**
+	 * @returns the URI of the source that contains the script codes.
+     * @defaultValue `null`.
      */
     getSrc(): string | undefined {
         return this._src;
     }
 
-    /** Sets the URI of the source that contains the script codes.
+    /**
+     * Sets the URI of the source that contains the script codes.
      *
      * <p>You either add the script codes directly with the {@link Label}
      * children, or
-     * set the URI to load the script codes with {@link #setSrc}.
+     * set the URI to load the script codes with {@link setSrc}.
      * But, not both.
      *
-     * @param String src the URI of the source that contains the script codes
+     * @param src - the URI of the source that contains the script codes
      */
     setSrc(src: string, opts?: Record<string, boolean>): this {
         const o = this._src;
@@ -91,25 +97,26 @@ export class Script extends zk.Widget {
         return this;
     }
 
-    /** Returns the character enconding of the source.
-     * It is used with {@link #getSrc}.
+    /**
+	 * @returns the character enconding of the source.
+     * It is used with {@link getSrc}.
      *
-     * <p>Default: null.
-     * @return String
+     * @defaultValue `null`.
      */
     getCharset(): string | undefined {
         return this._charset;
     }
 
-    /** Sets the character encoding of the source.
-     * It is used with {@link #setSrc}.
-     * @param String charset
+    /**
+	 * Sets the character encoding of the source.
+     * It is used with {@link setSrc}.
      */
     setCharset(charset: string): this {
         this._charset = charset;
         return this;
     }
 
+    /** @internal */
     _exec(): void {
 		var pkgs = this.packages; //not visible to client (since meaningless)
 		if (!pkgs) return this._exec0();
@@ -123,6 +130,7 @@ export class Script extends zk.Widget {
 			this._exec0();
 	}
 
+    /** @internal */
     _exec0(): void {
 		var wgt = this, fn = this._fn;
 		if (fn) {
@@ -154,22 +162,24 @@ export class Script extends zk.Widget {
 		this._nodeSolved = true;
 	}
 
+	/** @internal */
 	override ignoreFlexSize_(attr: string): boolean {
 		// ZK-2248: ignore widget dimension in vflex/hflex calculation
 		return true;
 	}
-
-    //super//
+    
 	override redraw(out: string[], skipper?: zk.Skipper): void {
 		// empty
 	}
 
+	/** @internal */
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		this._visible = false; //Bug ZK-1516: no DOM element widget should always return false.
 		this._exec();
 	}
 
+	/** @internal */
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		jq(this._node).remove(); // ZK-4043: the script DOM is appended in body, a manual remove is needed.
 		super.unbind_(skipper, after, keepRod);

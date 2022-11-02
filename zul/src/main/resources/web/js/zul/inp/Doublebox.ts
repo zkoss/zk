@@ -14,10 +14,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 /**
  * An edit box for holding an float point value (double).
- * <p>Default {@link #getZclass}: z-doublebox.
+ * @defaultValue {@link getZclass}: z-doublebox.
  */
 @zk.WrapClass('zul.inp.Doublebox')
 export class Doublebox extends zul.inp.NumberInputWidget<number> {
+	/** @internal */
 	override coerceFromString_(value: string | undefined): zul.inp.CoerceFromStringResult | number | undefined {
 		if (!value) return undefined;
 
@@ -28,7 +29,7 @@ export class Doublebox extends zul.inp.NumberInputWidget<number> {
 			valind = valstr.indexOf('.'),
 			rawind = raw.indexOf('.');
 
-		if (isNaN(val) || valstr.indexOf('e') < 0) {
+		if (isNaN(val) || !valstr.includes('e')) {
 			if (rawind == 0) {
 				raw = '0' + raw;
 				++rawind;
@@ -56,7 +57,7 @@ export class Doublebox extends zul.inp.NumberInputWidget<number> {
 					valstr += '0';
 			}
 
-			if (isNaN(val) || (raw != valstr && raw != '-' + valstr && raw.indexOf('e') < 0)) { //1e2: assumes OK
+			if (isNaN(val) || (raw != valstr && raw != '-' + valstr && !raw.includes('e'))) { //1e2: assumes OK
 				if (!isNaN(val) && raw != valstr) //Bug ZK-1218: show Illegal value instead if input is number but too long
 					return {error: zk.fmt.Text.format(msgzul.ILLEGAL_VALUE)};
 				return {error: zk.fmt.Text.format(msgzul.NUMBER_REQUIRED, value)};
@@ -71,12 +72,14 @@ export class Doublebox extends zul.inp.NumberInputWidget<number> {
 		return val;
 	}
 
+	/** @internal */
 	_allzero(val: string): boolean {
 		for (var len = val.length; len-- > 0;)
 			if (val.charAt(len) != '0') return false;
 		return true;
 	}
 
+	/** @internal */
 	override coerceToString_(value?: number | string): string {
 		var fmt = this._format,
 			symbols = this._localizedSymbols,
@@ -86,6 +89,7 @@ export class Doublebox extends zul.inp.NumberInputWidget<number> {
 			DECIMAL == '.' ? ('' + value) : ('' + value).replace('.', DECIMAL!);
 	}
 
+	/** @internal */
 	override getAllowedKeys_(): string {
 		var symbols = this._localizedSymbols;
 		return super.getAllowedKeys_()

@@ -21,7 +21,7 @@ function _isListgroupfoot(wgt: zk.Widget): boolean {
 /**
  * A list cell.
  *
- * <p>Default {@link #getZclass}: z-listcell
+ * @defaultValue {@link getZclass}: z-listcell
  */
 @zk.WrapClass('zul.sel.Listcell')
 export class Listcell extends zul.LabelImageWidget<HTMLTableCellElement> {
@@ -29,19 +29,24 @@ export class Listcell extends zul.LabelImageWidget<HTMLTableCellElement> {
 	override parent?: zul.sel.Listitem;
 	override previousSibling?: zul.sel.Listcell;
 	override nextSibling?: zul.sel.Listcell;
+	/** @internal */
 	_span = 1;
 
-	/** Returns number of columns to span this cell.
-	 * Default: 1.
-	 * @return int
+	/**
+	 * @returns number of columns to span this cell.
+	 * @defaultValue `1`.
 	 */
-	getColspan = Listcell.prototype.getSpan;
+	getColspan(): number {
+		return this.getSpan();
+	}
 
-	/** Sets the number of columns to span this cell.
+	/**
+	 * Sets the number of columns to span this cell.
 	 * <p>It is the same as the colspan attribute of HTML TD tag.
-	 * @param int colspan
 	 */
-	setColspan = Listcell.prototype.setSpan;
+	setColspan(colspan: number, opts?: Record<string, boolean>): this {
+		return this.setSpan(colspan, opts);
+	}
 
 	// change colspan to span since ZK 10.0.0
 	getSpan(): number {
@@ -73,27 +78,26 @@ export class Listcell extends zul.LabelImageWidget<HTMLTableCellElement> {
 		return this;
 	}
 
-	/** Returns the list box that it belongs to.
-	 * @return Listbox
+	/**
+	 * @returns the list box that it belongs to.
 	 */
 	getListbox(): zul.sel.Listbox | undefined {
 		var p = this.parent;
 		return p ? p.parent : undefined;
 	}
 
-	//super//
 	override getTextNode(): HTMLElement | undefined {
 		return jq(this.$n_()).find('>div:first')[0];
 	}
 
-	/** Returns the maximal length for this cell.
+	/**
+	 * @returns the maximal length for this cell.
 	 * If listbox's mold is "select", it is the same as
 	 * {@link Select#getMaxlength}
-	 * If not, it is the same as the correponding {@link #getListheader}'s
+	 * If not, it is the same as the correponding {@link getListheader}'s
 	 * {@link Listheader#getMaxlength}.
 	 *
 	 * <p>Note: {@link Option#getMaxlength} is the same as {@link Select#getMaxlength}.
-	 * @return int
 	 */
 	getMaxlength(): number | undefined {
 		var box = this.getListbox();
@@ -107,9 +111,9 @@ export class Listcell extends zul.LabelImageWidget<HTMLTableCellElement> {
 		return lc ? lc.getMaxlength() : 0;
 	}
 
-	/** Returns the list header that is in the same column as
+	/**
+	 * @returns the list header that is in the same column as
 	 * this cell, or null if not available.
-	 * @return Listheader
 	 */
 	getListheader(): zul.sel.Listheader | undefined {
 		var box = this.getListbox();
@@ -121,16 +125,19 @@ export class Listcell extends zul.LabelImageWidget<HTMLTableCellElement> {
 		return undefined;
 	}
 
+	/** @internal */
 	override domLabel_(): string {
 		return zUtl.encodeXML(this.getLabel(), { maxlength: this.getMaxlength() });
 	}
 
+	/** @internal */
 	override domContent_(): string {
 		var s1 = super.domContent_(),
 			s2 = this._colHtmlPre();
 		return s1 ? s2 ? s2 + '&nbsp;' + s1 : s1 : s2;
 	}
 
+	/** @internal */
 	override domClass_(no?: zk.DomClassOptions): string {
 		var scls = super.domClass_(no),
 			p = this.parent!,
@@ -144,6 +151,7 @@ export class Listcell extends zul.LabelImageWidget<HTMLTableCellElement> {
 		return scls;
 	}
 
+	/** @internal */
 	_colHtmlPre(): string {
 		var s = '',
 			box = this.getListbox(),
@@ -181,6 +189,7 @@ export class Listcell extends zul.LabelImageWidget<HTMLTableCellElement> {
 		return (!this.getImage() && !this.getLabel() && !this.firstChild) ? '&nbsp;' : '';
 	}
 
+	/** @internal */
 	override doFocus_(evt: zk.Event): void {
 		super.doFocus_(evt);
 		//sync frozen
@@ -191,6 +200,7 @@ export class Listcell extends zul.LabelImageWidget<HTMLTableCellElement> {
 			box!._moveToHidingFocusCell(node.cellIndex);
 	}
 
+	/** @internal */
 	override doMouseOver_(evt: zk.Event): void {
 		var n = this.$n();
 
@@ -202,6 +212,7 @@ export class Listcell extends zul.LabelImageWidget<HTMLTableCellElement> {
 		super.doMouseOver_(evt);
 	}
 
+	/** @internal */
 	override doMouseOut_(evt: zk.Event): void {
 		var n = this.$n();
 
@@ -213,12 +224,14 @@ export class Listcell extends zul.LabelImageWidget<HTMLTableCellElement> {
 		super.doMouseOut_(evt);
 	}
 
+	/** @internal */
 	override domAttrs_(no?: zk.DomAttrsOptions): string {
 		return super.domAttrs_(no)
 			+ (this._span > 1 ? ` colspan="${this._span}"` : '');
 	}
 
 	//-- super --//
+	/** @internal */
 	override domStyle_(no?: zk.DomStyleOptions): string {
 		var style = '',
 			head = this.getListheader();
@@ -233,18 +246,21 @@ export class Listcell extends zul.LabelImageWidget<HTMLTableCellElement> {
 		return super.domStyle_(no) + style;
 	}
 
+	/** @internal */
 	override bindChildren_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		var p = this.parent;
 		if (!p || !(p instanceof zul.sel.Option || p instanceof zul.sel.Optgroup))
 			super.bindChildren_(desktop, skipper, after);
 	}
 
+	/** @internal */
 	override unbindChildren_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		var p = this.parent;
 		if (!p || !(p instanceof zul.sel.Option || p instanceof zul.sel.Optgroup))
 			super.unbindChildren_(skipper, after, keepRod);
 	}
 
+	/** @internal */
 	override deferRedrawHTML_(out: string[]): void {
 		out.push(`<td ${this.domAttrs_({ domClass: true })} class="z-renderdefer"></td>`);
 	}

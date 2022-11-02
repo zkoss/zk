@@ -12,6 +12,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 @zk.WrapClass('zhtml.Content')
 export class Content extends zhtml.Widget {
+	/** @internal */
 	_content?: string;
 	epilog?: string;
 

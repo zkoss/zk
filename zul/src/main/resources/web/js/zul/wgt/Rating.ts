@@ -18,17 +18,23 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
  */
 @zk.WrapClass('zul.wgt.Rating')
 export class Rating extends zul.Widget {
+	/** @internal */
 	_orient = 'horizontal';
+	/** @internal */
 	_rating = 0;
+	/** @internal */
 	_cancelable = true;
+	/** @internal */
 	_max = 5;
+	/** @internal */
 	_disabled = false;
+	/** @internal */
 	_iconSclass = 'z-icon-star';
+	/** @internal */
 	_readonly?: boolean;
 
 	/**
 	 * Sets the iconSclass.
-	 * @param String sclass
 	 */
 	setIconSclass(iconSclass: string, opts?: Record<string, boolean>): this {
 		const o = this._iconSclass;
@@ -44,8 +50,7 @@ export class Rating extends zul.Widget {
 	}
 
 	/**
-	 * Returns the iconSclass.
-	 * @return String
+	 * @returns the iconSclass.
 	 */
 	getIconSclass(): string {
 		return this._iconSclass;
@@ -53,7 +58,6 @@ export class Rating extends zul.Widget {
 
 	/**
 	 * Sets the rating.
-	 * @param int rating
 	 */
 	setRating(rating: number, opts?: Record<string, boolean>): this {
 		const o = this._rating;
@@ -69,8 +73,7 @@ export class Rating extends zul.Widget {
 	}
 
 	/**
-	 * Returns the rating.
-	 * @return int
+	 * @returns the rating.
 	 */
 	getRating(): number {
 		return this._rating;
@@ -78,7 +81,6 @@ export class Rating extends zul.Widget {
 
 	/**
 	 * Sets whether this widget is disabled
-	 * @param boolean disabled
 	 */
 	setDisabled(disabled: boolean, opts?: Record<string, boolean>): this {
 		const o = this._disabled;
@@ -94,8 +96,7 @@ export class Rating extends zul.Widget {
 	}
 
 	/**
-	 * Returns whether this widget is disabled
-	 * @return boolean
+	 * @returns whether this widget is disabled
 	 */
 	isDisabled(): boolean {
 		return this._disabled;
@@ -103,7 +104,6 @@ export class Rating extends zul.Widget {
 
 	/**
 	 * Sets whether this widget is readonly
-	 * @param boolean readonly
 	 */
 	setReadonly(readonly: boolean, opts?: Record<string, boolean>): this {
 		const o = this._readonly;
@@ -119,13 +119,13 @@ export class Rating extends zul.Widget {
 	}
 
 	/**
-	 * Returns whether this widget is readonly
-	 * @return boolean
+	 * @returns whether this widget is readonly
 	 */
 	isReadonly(): boolean {
 		return !!this._readonly;
 	}
 
+	/** @internal */
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		var wgt = this,
@@ -136,6 +136,7 @@ export class Rating extends zul.Widget {
 		});
 	}
 
+	/** @internal */
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		var wgt = this;
 		jq(wgt).children().each(function () {
@@ -144,6 +145,7 @@ export class Rating extends zul.Widget {
 		super.unbind_(skipper, after, keepRod);
 	}
 
+	/** @internal */
 	override domClass_(no?: zk.DomClassOptions): string {
 		var sc = super.domClass_(no);
 		if (!no || !no.zclass) {
@@ -152,12 +154,14 @@ export class Rating extends zul.Widget {
 		return sc;
 	}
 
+	/** @internal */
 	override doSelect_(evt: zk.Event): void {
 		if (this._disabled || this._readonly)
 			return;
 		this._changeRating(evt);
 	}
 
+	/** @internal */
 	_changeRating(evt: zk.Event): void {
 		var rating = jq(evt.domTarget).data('rate') as number,
 			isCanceling = this._cancelable && this._rating == rating;
@@ -166,18 +170,21 @@ export class Rating extends zul.Widget {
 		this.fire('onChange', {rating: this._rating});
 	}
 
+	/** @internal */
 	_doMouseOver(evt: zk.Event): void {
 		if (this._disabled || this._readonly)
 			return;
 		this._toggleClass('hover', jq(evt.domTarget).data('rate') as number);
 	}
 
+	/** @internal */
 	_doMouseOut(evt: zk.Event): void {
 		if (this._disabled || this._readonly)
 			return;
 		jq(this).children().removeClass(this.$s('hover'));
 	}
 
+	/** @internal */
 	_toggleClass(name: string, rate: number): void {
 		var wgt = this;
 		jq(wgt).children().each(function () {

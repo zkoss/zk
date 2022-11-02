@@ -15,24 +15,27 @@ it will be useful, but WITHOUT ANY WARRANTY.
 /**
  * A progress meter is a bar that indicates how much of a task has been completed.
  *
- * <p>Default {@link #getZclass}: z-progressmeter.
+ * @defaultValue {@link getZclass}: z-progressmeter.
  */
 @zk.WrapClass('zul.wgt.Progressmeter')
 export class Progressmeter extends zul.Widget {
+	/** @internal */
 	_value = 0;
+	/** @internal */
 	_indeterminate = false;
+	/** @internal */
 	_indeterminateAnimation = false;
 
-	/** Returns the current value of the progress meter.
-	 * @return int
+	/**
+	 * @returns the current value of the progress meter.
 	 */
 	getValue(): number {
 		return this._value;
 	}
 
-	/** Sets the current value of the progress meter.
+	/**
+	 * Sets the current value of the progress meter.
 	 * <p>Range: 0~100.
-	 * @param int value
 	 */
 	setValue(value: number, opts?: Record<string, boolean>): this {
 		const o = this._value;
@@ -46,15 +49,15 @@ export class Progressmeter extends zul.Widget {
 		return this;
 	}
 
-	/** Returns the indeterminate state of the progress meter.(default false)
-	 * @return boolean
+	/**
+	 * @returns the indeterminate state of the progress meter.(default false)
 	 */
 	isIndeterminate(): boolean {
 		return this._indeterminate;
 	}
 
-	/** Sets the indeterminate state of the progress meter.
-	 * @param boolean indeterminate
+	/**
+	 * Sets the indeterminate state of the progress meter.
 	 */
 	setIndeterminate(indeterminate: boolean, opts?: Record<string, boolean>): this {
 		const o = this._indeterminate;
@@ -69,7 +72,7 @@ export class Progressmeter extends zul.Widget {
 		return this;
 	}
 
-	//super//
+	/** @internal */
 	_fixImgWidth(): void {
 		var n = this.$n(),
 			img = this.$n('img');
@@ -88,12 +91,14 @@ export class Progressmeter extends zul.Widget {
 		this._fixImgWidth();
 	}
 
+	/** @internal */
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {//after compose
 		super.bind_(desktop, skipper, after);
 		this._fixImgWidth();
 		zWatch.listen({onSize: this});
 	}
 
+	/** @internal */
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		zWatch.unlisten({onSize: this});
 		super.unbind_(skipper, after, keepRod);
@@ -105,6 +110,7 @@ export class Progressmeter extends zul.Widget {
 		return this;
 	}
 
+	/** @internal */
 	override domClass_(no?: zk.DomClassOptions): string {
 		var scls = super.domClass_(no);
 		if (!no || !no.zclass) {

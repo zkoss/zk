@@ -16,10 +16,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * Used to define a collection of auxiliary headers ({@link Auxheader}).
  *
  * <p>Non XUL element.
- * <p>Default {@link #getZclass}: z-auxhead.
+ * @defaultValue {@link getZclass}: z-auxhead.
  */
 @zk.WrapClass('zul.mesh.Auxhead')
 export class Auxhead extends zul.mesh.HeadWidget {
+	/** @internal */
 	override bind_(desktop: zk.Desktop | undefined, skipper: zk.Skipper | undefined, after: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		// B50-3306729: the first header should have border-left when the first column is covered with other header
@@ -27,6 +28,7 @@ export class Auxhead extends zul.mesh.HeadWidget {
 	}
 
 	// B50-3306729: the first header should have border-left when the first column is covered with other header
+	/** @internal */
 	fixBorder_(): void {
 		var fc = jq(this).children(':first-child'),
 			rspan = fc.attr('rowspan')!,
@@ -37,6 +39,7 @@ export class Auxhead extends zul.mesh.HeadWidget {
 		}
 	}
 
+	/** @internal */
 	override beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
 		if (!(child instanceof zul.mesh.Auxheader)) {
 			zk.error('Unsupported child for Auxhead: ' + child.className);

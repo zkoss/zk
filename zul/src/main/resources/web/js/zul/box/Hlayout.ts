@@ -14,15 +14,23 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 /**
  * A horizontal layout.
- * <p>Default {@link #getZclass}: z-hlayout.
+ * @defaultValue {@link getZclass}: z-hlayout.
  * @since 5.0.4
  */
 @zk.WrapClass('zul.box.Hlayout')
 export class Hlayout extends zul.box.Layout {
+	/** @internal */
 	_valign = 'top';
+	/** @internal */
 	_beforeSizeWidth?: number;
 
-	/*zk.def*/
+	/**
+	 * Sets the vertical-align to top or bottom.
+	 *
+	 * @param valign - the value of vertical-align property
+	 * "top", "middle", "bottom".
+	 * @since 6.0.0
+	 */
 	setValign(valign: string, opts?: Record<string, boolean>): this {
 		const o = this._valign;
 		this._valign = valign;
@@ -34,26 +42,23 @@ export class Hlayout extends zul.box.Layout {
 		return this;
 	}
 
-	/** Sets the vertical-align to top or bottom.
-	 *
-	 * @param String valign the value of vertical-align property
-	 * "top", "middle", "bottom".
-	 * @since 6.0.0
-	 */
 	getValign(): string {
 		return this._valign;
 	}
 
+	/** @internal */
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		zWatch.listen({_beforeSizeForRead: this, beforeSize: this, onFitSize: this}); //ZK-4476
 	}
 
+	/** @internal */
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		zWatch.unlisten({_beforeSizeForRead: this, beforeSize: this, onFitSize: this});
 		super.unbind_(skipper, after, keepRod);
 	}
 
+	/** @internal */
 	override isVertical_(): boolean {
 		return false;
 	}
@@ -61,6 +66,7 @@ export class Hlayout extends zul.box.Layout {
 	// F60-ZK-537: Hlayout supports valign (top, middle and bottom),
 	// set vertical-align to children cause wrong layout on IE6,
 	// set it to parent directly
+	/** @internal */
 	override domClass_(no?: Partial<zk.DomClassOptions>): string {
 		var clsnm = super.domClass_(no),
 			v;
@@ -71,11 +77,13 @@ export class Hlayout extends zul.box.Layout {
 		return clsnm;
 	}
 
+	/** @internal */
 	override getFlexDirection_(): string {
 		return 'row';
 	}
 
 	//ZK-4476
+	/** @internal */
 	_beforeSizeForRead(): void {
 		var n = this.$n();
 		this._beforeSizeWidth = n ? n.offsetWidth : 0;

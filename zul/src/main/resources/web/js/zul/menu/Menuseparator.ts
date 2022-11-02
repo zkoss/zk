@@ -15,19 +15,19 @@ it will be useful, but WITHOUT ANY WARRANTY.
 /**
  * Used to create a separator between menu items.
  *
- *<p>Default {@link #getZclass}: z-menuseparator.
+ * @defaultValue {@link getZclass}: z-menuseparator.
  */
 @zk.WrapClass('zul.menu.Menuseparator')
 export class Menuseparator extends zul.Widget {
-	/** Returns whether parent is a {@link Menupopup}
-	 * @return boolean
+	/**
+	 * @returns whether parent is a {@link Menupopup}
 	 */
 	isPopup(): boolean {
 		return !!this.parent && this.parent instanceof zul.menu.Menupopup;
 	}
 
-	/** Returns the {@link Menubar} that contains this menuseparator, or null if not available.
-	 * @return zul.menu.Menubar
+	/**
+	 * @returns the {@link Menubar} that contains this menuseparator, or null if not available.
 	 */
 	getMenubar(): zul.menu.Menubar | undefined {
 		for (var p = this.parent; p; p = p.parent)
@@ -36,6 +36,7 @@ export class Menuseparator extends zul.Widget {
 		return undefined;
 	}
 
+	/** @internal */
 	override doMouseOver_(evt: zk.Event): void {
 		if (zul.menu._nOpen)
 			zWatch.fire('onFloatUp', this); //notify all

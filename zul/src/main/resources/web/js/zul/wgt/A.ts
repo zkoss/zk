@@ -17,28 +17,34 @@ it will be useful, but WITHOUT ANY WARRANTY.
 //zk.$package('zul.wgt');
 /**
  * The same as HTML A tag.
- * <p>Default {@link #getZclass}: z-a.
+ * @defaultValue {@link getZclass}: z-a.
  */
 @zk.WrapClass('zul.wgt.A')
 export class A extends zul.LabelImageWidget<HTMLAnchorElement> implements zul.LabelImageWidgetWithAutodisable {
+	/** @internal */
 	_dir = 'normal';
+	/** @internal */
 	_href?: string;
+	/** @internal */
 	_target?: string;
+	/** @internal */
 	_disabled?: boolean;
+	/** @internal */
 	_adbs?: boolean;
+	/** @internal */
 	_autodisable?: string;
 	//_tabindex: 0,
 
-	/** Returns whether it is disabled.
-	 * <p>Default: false.
-	 * @return boolean
+	/**
+	 * @returns whether it is disabled.
+	 * @defaultValue `false`.
 	 */
 	isDisabled(): boolean {
 		return !!this._disabled;
 	}
 
-	/** Sets whether it is disabled.
-	 * @param boolean disabled
+	/**
+	 * Sets whether it is disabled.
 	 */
 	setDisabled(disabled: boolean, opts?: Record<string, boolean>): this {
 		const o = this._disabled;
@@ -59,6 +65,7 @@ export class A extends zul.LabelImageWidget<HTMLAnchorElement> implements zul.La
 			if (this._adbs) {
 				// autodisable is still active, allow enabling
 				this._adbs = false;
+			// eslint-disable-next-line @typescript-eslint/no-unnecessary-boolean-literal-compare
 			} else if (opts && opts.adbs === false)
 				// ignore re-enable by autodisable mechanism
 				value = this._disabled;
@@ -77,16 +84,17 @@ export class A extends zul.LabelImageWidget<HTMLAnchorElement> implements zul.La
 		return this;
 	}
 
-	/** Returns the direction.
-	 * <p>Default: "normal".
-	 * @return String
+	/**
+	 * @returns the direction.
+	 * @defaultValue `"normal"`.
 	 */
 	getDir(): string {
 		return this._dir;
 	}
 
-	/** Sets the direction.
-	 * @param String dir either "normal" or "reverse".
+	/**
+	 * Sets the direction.
+	 * @param dir - either "normal" or "reverse".
 	 */
 	setDir(dir: string, opts?: Record<string, boolean>): this {
 		const o = this._dir;
@@ -100,19 +108,19 @@ export class A extends zul.LabelImageWidget<HTMLAnchorElement> implements zul.La
 		return this;
 	}
 
-	/** Returns the href that the browser shall jump to, if an user clicks
+	/**
+	 * @returns the href that the browser shall jump to, if an user clicks
 	 * this button.
-	 * <p>Default: null. If null, the button has no function unless you
+	 * @defaultValue `null`. If null, the button has no function unless you
 	 * specify the onClick event listener.
 	 * <p>If it is not null, the onClick event won't be sent.
-	 * @return String
 	 */
 	getHref(): string | undefined {
 		return this._href;
 	}
 
-	/** Sets the href.
-	 * @param String href
+	/**
+	 * Sets the href.
 	 */
 	setHref(href: string, opts?: Record<string, boolean>): this {
 		const o = this._href;
@@ -126,20 +134,21 @@ export class A extends zul.LabelImageWidget<HTMLAnchorElement> implements zul.La
 		return this;
 	}
 
-	/** Returns the target frame or window.
+	/**
+	 * @returns the target frame or window.
 	 *
-	 * <p>Note: it is useful only if href ({@link #setHref}) is specified
+	 * <p>Note: it is useful only if href ({@link setHref}) is specified
 	 * (i.e., use the onClick listener).
 	 *
-	 * <p>Default: null.
-	 * @return String
+	 * @defaultValue `null`.
 	 */
 	getTarget(): string | undefined {
 		return this._target;
 	}
 
-	/** Sets the target frame or window.
-	 * @param String target the name of the frame or window to hyperlink.
+	/**
+	 * Sets the target frame or window.
+	 * @param target - the name of the frame or window to hyperlink.
 	 */
 	setTarget(target: string, opts?: Record<string, boolean>): this {
 		const o = this._target;
@@ -153,20 +162,21 @@ export class A extends zul.LabelImageWidget<HTMLAnchorElement> implements zul.La
 		return this;
 	}
 
-	/** Returns a list of component IDs that shall be disabled when the user
+	/**
+	 * @returns a list of component IDs that shall be disabled when the user
 	 * clicks this anchor.
 	 *
-	 * <p>To represent the anchor itself, the developer can specify <code>self</code>.
+	 * <p>To represent the anchor itself, the developer can specify `self`.
 	 * For example,
-	 * <pre><code>
+	 * ```ts
 	 * anchor.setId('ok');
 	 * wgt.setAutodisable('self,cancel');
-	 * </code></pre>
+	 * ```
 	 * is the same as
-	 * <pre><code>
+	 * ```ts
 	 * anchor.setId('ok');
 	 * wgt.setAutodisable('ok,cancel');
-	 * </code></pre>
+	 * ```
 	 * that will disable
 	 * both the ok and cancel anchors when an user clicks it.
 	 *
@@ -177,33 +187,34 @@ export class A extends zul.LabelImageWidget<HTMLAnchorElement> implements zul.La
 	 *
 	 * <p>However, if you prefer to enable them later manually, you can
 	 * prefix with '+'. For example,
-	 * <pre><code>
+	 * ```ts
 	 * anchor.setId('ok');
 	 * wgt.setAutodisable('+self,+cancel');
-	 * </code></pre>
+	 * ```
 	 *
 	 * <p>Then, you have to enable them manually such as
-	 * <pre><code>if (something_happened){
+	 * ```ts
+	 * if (something_happened){
 	 *  ok.setDisabled(false);
 	 *  cancel.setDisabled(false);
-	 *</code></pre>
+	 * }
+	 * ```
 	 *
-	 * <p>Default: null.
-	 * @return String
+	 * @defaultValue `null`.
 	 */
 	getAutodisable(): string | undefined {
 		return this._autodisable;
 	}
 
-	/** Sets whether to disable the anchor after the user clicks it.
-	 * @param String autodisable
+	/**
+	 * Sets whether to disable the anchor after the user clicks it.
 	 */
 	setAutodisable(autodisable: string): this {
 		this._autodisable = autodisable;
 		return this;
 	}
 
-	// super//
+	/** @internal */
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		if (!this._disabled) {
@@ -213,6 +224,7 @@ export class A extends zul.LabelImageWidget<HTMLAnchorElement> implements zul.La
 		}
 	}
 
+	/** @internal */
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		var n = this.$n()!;
 		this.domUnlisten_(n, 'onFocus', 'doFocus_')
@@ -221,6 +233,7 @@ export class A extends zul.LabelImageWidget<HTMLAnchorElement> implements zul.La
 		super.unbind_(skipper, after, keepRod);
 	}
 
+	/** @internal */
 	override domContent_(): string {
 		var label = zUtl.encodeXML(this.getLabel()),
 			img = this.domImage_(),
@@ -235,6 +248,7 @@ export class A extends zul.LabelImageWidget<HTMLAnchorElement> implements zul.La
 		return this.getDir() == 'reverse' ? label + img : img + label;
 	}
 
+	/** @internal */
 	override domAttrs_(no?: zk.DomAttrsOptions): string {
 		var attr = super.domAttrs_(no),
 			v: string | undefined;
@@ -249,6 +263,7 @@ export class A extends zul.LabelImageWidget<HTMLAnchorElement> implements zul.La
 		return attr;
 	}
 
+	/** @internal */
 	override doClick_(evt: zk.Event): void {
 		var href = this.getHref();
 		// ZK-2506: use iframe to open a 'mailto' href

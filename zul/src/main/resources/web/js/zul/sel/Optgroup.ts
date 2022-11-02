@@ -21,14 +21,14 @@ export class Optgroup extends zul.Widget<HTMLOptGroupElement> {
 	override parent!: zul.sel.Select | undefined;
 	override firstChild!: zul.sel.Option | undefined;
 	override lastChild!: zul.sel.Option | undefined;
+	/** @internal */
 	_open = true;
+	/** @internal */
 	_disabled?: boolean;
 
 	/**
-	 * Returns whether it is disabled.
-	 * <p>
-	 * Default: false.
-	 * @return boolean
+	 * @returns whether it is disabled.
+	 * @defaultValue `false`.
 	 */
 	isDisabled(): boolean {
 		return !!this._disabled;
@@ -36,7 +36,6 @@ export class Optgroup extends zul.Widget<HTMLOptGroupElement> {
 
 	/**
 	 * Sets whether it is disabled.
-	 * @param boolean disabled
 	 */
 	setDisabled(disabled: boolean, opts?: Record<string, boolean>): this {
 		const o = this._disabled;
@@ -50,18 +49,17 @@ export class Optgroup extends zul.Widget<HTMLOptGroupElement> {
 		return this;
 	}
 
-	/** Returns whether this container is open.
-	 * <p>Default: true.
-	 * @return boolean
+	/**
+	 * @returns whether this container is open.
+	 * @defaultValue `true`.
 	 */
 	isOpen(): boolean {
 		return this._open;
 	}
 
-	/** Sets whether this container is open.
-	 * @param boolean open
+	/**
+	 * Sets whether this container is open.
 	 */
-	// FIXME: can a defSet generated setter accept more than one arguments before `opts`?
 	setOpen(open: boolean, fromServer: boolean, opts?: Record<string, boolean>): this {
 		const o = this._open;
 		this._open = open;
@@ -74,20 +72,20 @@ export class Optgroup extends zul.Widget<HTMLOptGroupElement> {
 		return this;
 	}
 
-	/** Returns the label of the {@link Listcell} it contains, or null
+	/**
+	 * @returns the label of the {@link Listcell} it contains, or null
 	 * if no such cell.
-	 * @return String
 	 */
 	getLabel(): string | undefined {
 		return this.firstChild ? this.firstChild.domLabel_() : undefined;
 	}
 
+	/** @internal */
 	updateLabel_(): void {
 		var n = this.$n();
 		if (n) n.label = this.getLabel()!;
 	}
 
-	//@Override
 	override setVisible(visible: boolean, fromServer?: boolean): this {
 		if (this._visible != visible) {
 			this._visible = visible;
@@ -97,6 +95,7 @@ export class Optgroup extends zul.Widget<HTMLOptGroupElement> {
 		return this;
 	}
 
+	/** @internal */
 	override domAttrs_(no?: zk.DomAttrsOptions): string {
 		var attr = super.domAttrs_(no),
 			label = this.getLabel(),

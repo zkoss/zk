@@ -17,13 +17,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>An Absolutelayout component can contain absolute positioned multiple
  * absolutechildren components.
  *
- * <p>Default {@link #getZclass}: z-absolutelayout.
+ * @defaultValue {@link getZclass}: z-absolutelayout.
  *
  * @author ashish
  * @since 6.0.0
  */
 @zk.WrapClass('zul.layout.Absolutelayout')
 export class Absolutelayout extends zul.Widget {
+	/** @internal */
 	override beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
 		if (!(child instanceof zul.layout.Absolutechildren)) {
 			zk.error('Unsupported child for Absolutelayout: ' + child.className);

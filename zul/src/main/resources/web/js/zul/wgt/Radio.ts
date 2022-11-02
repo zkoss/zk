@@ -18,7 +18,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>Radio buttons without an ancestor {@link Radiogroup} is considered
  * as the same group.
  * The nearest ancestor {@link Radiogroup} is the group that the radio
- * belongs to. See also {@link #getRadiogroup}.
+ * belongs to. See also {@link getRadiogroup}.
  *
  * <p>Event:
  * <ol>
@@ -29,16 +29,18 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.wgt.Radio')
 export class Radio extends zul.wgt.Checkbox {
+	/** @internal */
 	_attachExternal?: boolean = undefined;
+	/** @internal */
 	_group?: zul.wgt.Radiogroup;
 
-	/** Returns {@link Radiogroup} that this radio button belongs to.
+	/**
+	 * @returns {@link Radiogroup} that this radio button belongs to.
 	 * It is the nearest ancestor {@link Radiogroup}.
 	 * In other words, it searches up the parent, parent's parent
 	 * and so on for any {@link Radiogroup} instance.
 	 * If found this radio belongs the found radiogroup.
 	 * If not, this radio itself is a group.
-	 * @return Radiogroup
 	 */
 	getRadiogroup(parent?: zk.Widget): zul.wgt.Radiogroup | undefined {
 		if (!parent && this._group)
@@ -49,10 +51,11 @@ export class Radio extends zul.wgt.Checkbox {
 		return undefined;
 	}
 
-	/** Sets {@link Radiogroup} that this radio button belongs to.
+	/**
+	 * Sets {@link Radiogroup} that this radio button belongs to.
 	 * The radio automatically belongs to the nearest ancestral radiogroup.
 	 * Use this method only if the radio group is not one of its ancestors.
-	 * @param Radiogroup group the radio group, or null to dis-associate
+	 * @param radiogroup - the radio group, or null to dis-associate
 	 * @since 5.0.4
 	 */
 	setRadiogroup(radiogroup?: zul.wgt.Radiogroup | string): this {
@@ -72,6 +75,7 @@ export class Radio extends zul.wgt.Checkbox {
 		return this;
 	}
 
+	/** @internal */
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		if (this._group && this.desktop && !this._attachExternal) {
@@ -80,6 +84,7 @@ export class Radio extends zul.wgt.Checkbox {
 		}
 	}
 
+	/** @internal */
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		if (this._group && this._attachExternal) {
 			this._group._rmExtern(this);
@@ -88,11 +93,10 @@ export class Radio extends zul.wgt.Checkbox {
 		super.unbind_(skipper, after, keepRod);
 	}
 
-	/** Sets the radio is checked and unchecked the others in the same radio
+	/**
+	 * Sets the radio is checked and unchecked the others in the same radio
 	 * group ({@link Radiogroup}
-	 * @param boolean checked
-	 * @return Radio
-	 * @disable(zkgwt)
+	 * @returns Radio
 	 */
 	override setChecked(checked: boolean, opts?: Record<string, boolean>): this {
 		if (checked != this._checked) {
@@ -131,43 +135,44 @@ export class Radio extends zul.wgt.Checkbox {
 		return this;
 	}
 
-	/** Sets whether it is selected.
-	 * <p>Don't override this. Override {@link #setChecked} instead.
-	 * <p>The same as {@link #setChecked}.
-	 * @param boolean selected
-	 * @return Radio
+	/**
+	 * Sets whether it is selected.
+	 * <p>Don't override this. Override {@link setChecked} instead.
+	 * <p>The same as {@link setChecked}.
 	 */
 	setSelected(selected: boolean, opts?: Record<string, boolean>): this {
 		return this.setChecked(selected, opts);
 	}
 
-	/** Returns whether it is selected.
-	 * <p>Default: false.
-	 * <p>Don't override this. Override {@link #isChecked} instead.
-	 * @return boolean
+	/**
+	 * @returns whether it is selected.
+	 * @defaultValue `false`.
+	 * <p>Don't override this. Override {@link isChecked} instead.
 	 */
 	isSelected(): boolean {
 		return this.isChecked();
 	}
 
-	/** Returns the name of this radio button.
+	/**
+	 * @returns the name of this radio button.
 	 * <p>Don't use this method if your application is purely based
 	 * on ZK's event-driven model.
 	 * <p>It is readonly, and it is generated automatically
 	 * to be the same as its parent's name ({@link Radiogroup#getName}).
-	 * @return String
 	 */
 	override getName(): string | undefined {
 		var group = this.getRadiogroup();
 		return group != null ? group.getName() : this.uuid;
 	}
 
+	/** @internal */
 	_fixName(): void {
 		var n = this.$n<HTMLInputElement>('real');
 		if (n)
 			n.name = this.getName()!;
 	}
 
+	/** @internal */
 	override beforeParentChanged_(newParent?: zk.Widget): void {
 		var oldGroup = this.getRadiogroup(),
 			newGroup = newParent ? this.getRadiogroup(newParent) : undefined;
@@ -190,6 +195,7 @@ export class Radio extends zul.wgt.Checkbox {
 		super.beforeParentChanged_(newParent);
 	}
 
+	/** @internal */
 	override fireOnCheck_(checked: boolean): void {
 		// if Radiogroup listens to onCheck, we shall fire the event too.
 		var group = this.getRadiogroup();

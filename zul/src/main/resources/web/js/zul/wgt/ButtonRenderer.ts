@@ -17,12 +17,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * It is designed to be overridden
  * @since 9.5.0
  */
-export let ButtonRenderer = {
-	/** Redraws the collapse button HTML.
+export var ButtonRenderer = {
+	/**
+	 * Redraws the collapse button HTML.
 	 *
-	 * @param zul.wnd.Panel wgt the panel
-	 * @param zk.Buffer out the buffer
-	 * @param int the tabindex, can be omitted
+	 * @param wgt - the panel
+	 * @param out - the buffer
+	 * @param tabindex - the tabindex, can be omitted
 	 */
 	redrawCollapseButton(wgt: zul.wnd.Panel, out: string[], tabindex?: number): void {
 		var uuid = wgt.uuid,
@@ -35,11 +36,12 @@ export let ButtonRenderer = {
 		out.push(' title="', collapsibleLabel, '" aria-label="', collapsibleLabel, '">');
 		out.push('<i class="', openIcon, '" aria-hidden="true"></i></button>');
 	},
-	/** Redraws the minimize button HTML.
+	/**
+	 * Redraws the minimize button HTML.
 	 *
-	 * @param zul.wnd.Window wgt the window
-	 * @param zk.Buffer out the buffer
-	 * @param int the tabindex, can be omitted
+	 * @param wgt - the window
+	 * @param out - the buffer
+	 * @param tabindex - the tabindex, can be omitted
 	 */
 	redrawMinimizeButton(wgt: zul.wnd.Window, out: string[], tabindex?: number): void {
 		var uuid = wgt.uuid,
@@ -50,11 +52,12 @@ export let ButtonRenderer = {
 		out.push(' title="', minLabel, '" aria-label="', minLabel, '">');
 		out.push('<i class="', wgt.getMinimizableIconClass_(), '" aria-hidden="true"></i></button>');
 	},
-	/** Redraws the maximize button HTML.
+	/**
+	 * Redraws the maximize button HTML.
 	 *
-	 * @param zul.wnd.Window wgt the window
-	 * @param zk.Buffer out the buffer
-	 * @param int the tabindex, can be omitted
+	 * @param wgt - the window
+	 * @param out - the buffer
+	 * @param tabindex - the tabindex, can be omitted
 	 */
 	redrawMaximizeButton(wgt: zul.wnd.Window, out: string[], tabindex?: number): void {
 		var uuid = wgt.uuid,
@@ -68,11 +71,12 @@ export let ButtonRenderer = {
 		out.push('" title="', maxLabel, '" aria-label="', maxLabel, '">');
 		out.push('<i class="', maxIcon, '" aria-hidden="true"></i></button>');
 	},
-	/** Redraws the close button HTML.
+	/**
+	 * Redraws the close button HTML.
 	 *
-	 * @param zul.wnd.Window wgt the window
-	 * @param zk.Buffer out the buffer
-	 * @param int the tabindex, can be omitted
+	 * @param wgt - the window
+	 * @param out - the buffer
+	 * @param tabindex - the tabindex, can be omitted
 	 */
 	redrawCloseButton(wgt: zul.wnd.Window, out: string[], tabindex?: number): void {
 		var uuid = wgt.uuid,

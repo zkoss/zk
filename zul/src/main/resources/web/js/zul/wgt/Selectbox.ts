@@ -14,22 +14,27 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 /**
  * A light weight dropdown list.
- * <p>Default {@link #getZclass}: z-selectbox.
+ * @defaultValue {@link getZclass}: z-selectbox.
  * @author jumperchen
  * @since 6.0.0
  */
 @zk.WrapClass('zul.wgt.Selectbox')
 export class Selectbox extends zul.Widget<HTMLSelectElement> {
+	/** @internal */
 	_selectedIndex?: number;
+	/** @internal */
 	_disabled?: boolean;
+	/** @internal */
 	_multiple?: boolean;
+	/** @internal */
 	_maxlength?: number;
+	/** @internal */
 	_selectedIndexes?: number[];
+	/** @internal */
 	_name?: string;
 
 	/**
-	 * Returns the index of the selected item (-1 if no one is selected).
-	 * @return int
+	 * @returns the index of the selected item (-1 if no one is selected).
 	 */
 	getSelectedIndex(): number | undefined {
 		return this._selectedIndex;
@@ -37,7 +42,6 @@ export class Selectbox extends zul.Widget<HTMLSelectElement> {
 
 	/**
 	 * Selects the item with the given index.
-	 * @param int selectedIndex
 	 */
 	setSelectedIndex(selectedIndex: number, opts?: Record<string, boolean>): this {
 		const o = this._selectedIndex;
@@ -53,10 +57,9 @@ export class Selectbox extends zul.Widget<HTMLSelectElement> {
 	}
 
 	/**
-	 * Returns whether it is disabled.
+	 * @returns whether it is disabled.
 	 * <p>
-	 * Default: false.
-	 * @return boolean
+	 * @defaultValue `false`.
 	 */
 	isDisabled(): boolean {
 		return !!this._disabled;
@@ -64,7 +67,6 @@ export class Selectbox extends zul.Widget<HTMLSelectElement> {
 
 	/**
 	 * Sets whether it is disabled.
-	 * @param boolean disabled
 	 */
 	setDisabled(disabled: boolean, opts?: Record<string, boolean>): this {
 		const o = this._disabled;
@@ -79,10 +81,8 @@ export class Selectbox extends zul.Widget<HTMLSelectElement> {
 	}
 
 	/**
-	 * Returns whether it is multiple selections.
-	 * <p>
-	 * Default: false.
-	 * @return boolean
+	 * @returns whether it is multiple selections.
+	 * @defaultValue `false`.
 	 * @since 10.0.0 for Stateless
 	 */
 	isMultiple(): boolean {
@@ -91,7 +91,6 @@ export class Selectbox extends zul.Widget<HTMLSelectElement> {
 
 	/**
 	 * Sets whether multiple selections are allowed.
-	 * @param boolean multiple
 	 * @since 10.0.0 for Stateless
 	 */
 	setMultiple(multiple: boolean, opts?: Record<string, boolean>): this {
@@ -107,8 +106,7 @@ export class Selectbox extends zul.Widget<HTMLSelectElement> {
 	}
 
 	/**
-	 * Returns the maximal length of each item's label.
-	 * @return int
+	 * @returns the maximal length of each item's label.
 	 * @since 10.0.0 for Stateless
 	 */
 	getMaxlength(): number | undefined {
@@ -117,7 +115,6 @@ export class Selectbox extends zul.Widget<HTMLSelectElement> {
 
 	/**
 	 * Sets the maximal length of each option's label.
-	 * @param int maxlength
 	 * @since 10.0.0 for Stateless
 	 */
 	setMaxlength(maxlength: number, opts?: Record<string, boolean>): this {
@@ -132,8 +129,7 @@ export class Selectbox extends zul.Widget<HTMLSelectElement> {
 	}
 
 	/**
-	 * Returns all the selected indexes or null if no selections.
-	 * @return int[] selectedIndexes
+	 * @returns all the selected indexes or null if no selections.
 	 * @since 10.0.0 for Stateless
 	 */
 	getSelectedIndexes(): number[] | undefined {
@@ -142,7 +138,6 @@ export class Selectbox extends zul.Widget<HTMLSelectElement> {
 
 	/**
 	 * Sets all the selected indexes.
-	 * @param int[] selectedIndexes
 	 * @since 10.0.0 for Stateless
 	 */
 	setSelectedIndexes(selectedIndexes: number[], opts?: Record<string, boolean>): this {
@@ -173,9 +168,8 @@ export class Selectbox extends zul.Widget<HTMLSelectElement> {
 
 
 	/**
-	 * Returns the name of this component.
-	 * <p>
-	 * Default: null.
+	 * @returns the name of this component.
+	 * @defaultValue `null`.
 	 * <p>
 	 * The name is used only to work with "legacy" Web application that handles
 	 * user's request by servlets. It works only with HTTP/HTML-based browsers.
@@ -183,7 +177,6 @@ export class Selectbox extends zul.Widget<HTMLSelectElement> {
 	 * <p>
 	 * Don't use this method if your application is purely based on ZK's
 	 * event-driven model.
-	 * @return String
 	 */
 	getName(): string | undefined {
 		return this._name;
@@ -199,8 +192,7 @@ export class Selectbox extends zul.Widget<HTMLSelectElement> {
 	 * Don't use this method if your application is purely based on ZK's
 	 * event-driven model.
 	 *
-	 * @param String name
-	 *            the name of this component.
+	 * @param name - the name of this component.
 	 */
 	setName(name: string, opts?: Record<string, boolean>): this {
 		const o = this._name;
@@ -214,11 +206,13 @@ export class Selectbox extends zul.Widget<HTMLSelectElement> {
 		return this;
 	}
 
+	/** @internal */
 	_fixSelIndex(): void {
 		if (this._selectedIndex! < 0)
 			this.$n_().selectedIndex = -1;
 	}
 
+	/** @internal */
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		var n = this.$n_();
@@ -234,6 +228,7 @@ export class Selectbox extends zul.Widget<HTMLSelectElement> {
 		this._fixSelIndex();
 	}
 
+	/** @internal */
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		var n = this.$n_();
 		this.domUnlisten_(n, 'onChange')
@@ -245,6 +240,7 @@ export class Selectbox extends zul.Widget<HTMLSelectElement> {
 		zWatch.unlisten({onRestore: fn, onVParent: fn});
 	}
 
+	/** @internal */
 	_doChange(evt: zk.Event): void {
 		const n = this.$n_();
 		if (!this._multiple) {
@@ -274,16 +270,19 @@ export class Selectbox extends zul.Widget<HTMLSelectElement> {
 	}
 
 	//Bug 3304408: IE does not fire onchange
+	/** @internal */
 	override doBlur_(evt: zk.Event): void {
 		this._doChange(evt);
 		return super.doBlur_(evt);
 	}
 
 	//Bug 1756559: ctrl key shall fore it to be sent first
+	/** @internal */
 	override beforeCtrlKeys_(evt: zk.Event): void {
 		this._doChange(evt);
 	}
 
+	/** @internal */
 	override domAttrs_(no?: zk.DomAttrsOptions): string {
 		const index = this.getSelectedIndex()!, name = this.getName();
 		return super.domAttrs_(no)

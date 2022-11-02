@@ -71,7 +71,7 @@ function _prevVisibleMenu(menu: zul.menu.Menu): zul.menu.Menu {
  * of the menu will be displayed.
  * This element is also used to create submenus (of {@link Menupopup}.
  *
- * <p>Default {@link #getZclass}: z-mean.
+ * @defaultValue {@link getZclass}: z-mean.
  */
 @zk.WrapClass('zul.menu.Menu')
 export class Menu extends zul.LabelImageWidget implements zul.LabelImageWidgetWithDisable {
@@ -81,32 +81,36 @@ export class Menu extends zul.LabelImageWidget implements zul.LabelImageWidgetWi
 	override previousSibling!: zul.menu.Menu | undefined;
 	// menupopup could be null as asserted in _doMouseEnter
 	menupopup?: zul.menu.Menupopup | undefined;
+	/** @internal */
 	_content?: string;
+	/** @internal */
 	_contentHandler?: zul.menu.ContentHandler | zkex.inp.ContentHandler;
+	/** @internal */
 	_ignoreActive?: boolean;
+	/** @internal */
 	_topmost = false;
+	/** @internal */
 	_disabled = false;
+	/** @internal */
 	_autodisable?: string;
 
-	/** Returns the embedded content (i.e., HTML tags) that is
-	 * shown as part of the description.
+	/**
+	 * @returns the embedded content (i.e., HTML tags) that is shown as part of the description.
 	 * <p>It is useful to show the description in more versatile way.
-	 * <p>Default: empty ("").
-	 * @return String
+	 * @defaultValue empty ("").
 	 */
 	getContent(): string | undefined {
 		return this._content;
 	}
 
-	/** Sets the embedded content (i.e., HTML tags) that is
+	/**
+	 * Sets the embedded content (i.e., HTML tags) that is
 	 * shown as part of the description.
 	 *
 	 * <p>It is useful to show the description in more versatile way.
 	 *
 	 * <p>There is a way to create {@link zkex.inp.Colorbox} automatically by using
-	 * #color=#RRGGBB, usage example <code>setContent("#color=FFFFFF")</code>
-	 *
-	 * @param String content
+	 * `#color=#RRGGBB`, usage example `setContent("#color=FFFFFF")`
 	 */
 	setContent(content: string, opts?: Record<string, boolean>): this {
 		const o = this._content;
@@ -132,17 +136,17 @@ export class Menu extends zul.LabelImageWidget implements zul.LabelImageWidgetWi
 		return this;
 	}
 
-	/** Returns whether it is disabled.
-	 * <p>Default: false.
+	/**
+	 * @returns whether it is disabled.
+	 * @defaultValue `false`.
 	 * @since 8.0.3
-	 * @return boolean
 	 */
 	isDisabled(): boolean {
 		return this._disabled;
 	}
 
-	/** Sets whether it is disabled.
-	 * @param boolean disabled
+	/**
+	 * Sets whether it is disabled.
 	 * @since 8.0.3
 	 */
 	setDisabled(disabled: boolean, opts?: Record<string, boolean>): this {
@@ -201,10 +205,12 @@ export class Menu extends zul.LabelImageWidget implements zul.LabelImageWidgetWi
 	}
 
 	// since ZK 6.5.0 internal use only.
+	/** @internal */
 	getAnchor_(): HTMLAnchorElement | undefined {
 		return this.$n('a');
 	}
 
+	/** @internal */
 	override domContent_(): string {
 		var label = '<span class="' + this.$s('text') + '">'
 					+ (zUtl.encodeXML(this.getLabel())) + '</span>',
@@ -229,19 +235,21 @@ export class Menu extends zul.LabelImageWidget implements zul.LabelImageWidgetWi
 		return img + label + separator + icon;
 	}
 
-	/** Returns whether this is an top-level menu, i.e., not owning
+	/**
+	 * @returns whether this is an top-level menu, i.e., not owning
 	 * by another {@link Menupopup}.
-	 * @return boolean
 	 */
 	isTopmost(): boolean {
 		return this._topmost;
 	}
 
+	/** @internal */
 	override beforeParentChanged_(newParent: zk.Widget | undefined): void {
 		this._topmost = !!newParent && !(newParent instanceof zul.menu.Menupopup);
 		super.beforeParentChanged_(newParent);
 	}
 
+	/** @internal */
 	override onChildAdded_(child: zk.Widget): void {
 		super.onChildAdded_(child);
 		if (child instanceof zul.menu.Menupopup) {
@@ -252,6 +260,7 @@ export class Menu extends zul.LabelImageWidget implements zul.LabelImageWidgetWi
 		}
 	}
 
+	/** @internal */
 	override onChildRemoved_(child: zk.Widget): void {
 		super.onChildRemoved_(child);
 		if (child == this.menupopup) {
@@ -262,8 +271,8 @@ export class Menu extends zul.LabelImageWidget implements zul.LabelImageWidgetWi
 		}
 	}
 
-	/** Returns the {@link Menubar} that contains this menu, or null if not available.
-	 * @return zul.menu.Menubar
+	/**
+	 * @returns the {@link Menubar} that contains this menu, or null if not available.
 	 */
 	getMenubar(): zul.menu.Menubar | undefined {
 		for (var p: zk.Widget | undefined = this.parent; p; p = p.parent) {
@@ -291,6 +300,7 @@ export class Menu extends zul.LabelImageWidget implements zul.LabelImageWidgetWi
 			this._contentHandler.onHide();
 	}
 
+	/** @internal */
 	override focus_(timeout?: number, ignoreActive?: boolean/* used for Menupopup.js*/): boolean {
 		if (this.isTopmost() && zk(this.getAnchor_()).focus(timeout)) {
 			// fixed for pressing TAB key from menupopup when the menupopup
@@ -306,6 +316,7 @@ export class Menu extends zul.LabelImageWidget implements zul.LabelImageWidgetWi
 	}
 
 	// used for Menupopup.js
+	/** @internal */
 	_getPrevVisibleMenu(): zul.menu.Menu {
 		var prev = this.previousSibling;
 		if (!prev) {
@@ -317,6 +328,7 @@ export class Menu extends zul.LabelImageWidget implements zul.LabelImageWidgetWi
 	}
 
 	// used for Menupopup.js
+	/** @internal */
 	_getNextVisibleMenu(): zul.menu.Menu {
 		var next = this.nextSibling;
 		if (!next) {
@@ -327,6 +339,7 @@ export class Menu extends zul.LabelImageWidget implements zul.LabelImageWidgetWi
 		return next ? _nextVisibleMenu(next) : this;
 	}
 
+	/** @internal */
 	override doKeyDown_(evt: zk.Event): void {
 
 		// only support for the topmost menu
@@ -388,6 +401,7 @@ export class Menu extends zul.LabelImageWidget implements zul.LabelImageWidgetWi
 		super.doKeyDown_(evt);
 	}
 
+	/** @internal */
 	override doFocus_(evt: zk.Event): void {
 		if (this.isTopmost()) {
 			var menubar = this.getMenubar(),
@@ -404,6 +418,7 @@ export class Menu extends zul.LabelImageWidget implements zul.LabelImageWidgetWi
 		super.doFocus_(evt);
 	}
 
+	/** @internal */
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 
@@ -423,6 +438,7 @@ export class Menu extends zul.LabelImageWidget implements zul.LabelImageWidgetWi
 			this._contentHandler.bind();
 	}
 
+	/** @internal */
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		var anc = this.getAnchor_()!;
 		this.domUnlisten_(anc, 'onFocus', 'doFocus_')
@@ -437,16 +453,19 @@ export class Menu extends zul.LabelImageWidget implements zul.LabelImageWidgetWi
 	}
 
 	// used for overriding from different theme
+	/** @internal */
 	_getArrowWidth(): number {
 		return 20;
 	}
 
+	/** @internal */
 	_showContentHandler(): void {
 		var content = this._contentHandler;
 		if (content && !content.isOpen())
 			content.onShow();
 	}
 
+	/** @internal */
 	_hideContentHandler(): void {
 		var content = this._contentHandler;
 		if (content && content.isOpen()) {
@@ -458,6 +477,7 @@ export class Menu extends zul.LabelImageWidget implements zul.LabelImageWidgetWi
 		}
 	}
 
+	/** @internal */
 	override doClick_(evt: zk.Event, popupOnly?: boolean): void {
 		if (!this._disabled) {
 			if (this.menupopup) {
@@ -472,6 +492,7 @@ export class Menu extends zul.LabelImageWidget implements zul.LabelImageWidgetWi
 		evt.stop();
 	}
 
+	/** @internal */
 	override doMouseOver_(evt: zk.Event): void {
 		if (!this.isTopmost()) {
 			this._showContentHandler();
@@ -479,6 +500,7 @@ export class Menu extends zul.LabelImageWidget implements zul.LabelImageWidgetWi
 		super.doMouseOver_(evt);
 	}
 
+	/** @internal */
 	_togglePopup(byKeyboard?: boolean): void {
 		// show the content handler
 		if (!this.menupopup && this._contentHandler) {
@@ -495,6 +517,7 @@ export class Menu extends zul.LabelImageWidget implements zul.LabelImageWidgetWi
 		}
 	}
 
+	/** @internal */
 	_doMouseEnter(evt: zk.Event): void {
 		var menubar = this.getMenubar();
 		if (menubar) {
@@ -533,6 +556,7 @@ export class Menu extends zul.LabelImageWidget implements zul.LabelImageWidgetWi
 		(this.$class as typeof Menu)._addActive(this);
 	}
 
+	/** @internal */
 	_doMouseLeave(evt: zk.Widget): void { //not zk.Widget.doMouseOut_
 		var menubar = this.getMenubar();
 		this._updateHoverImage(); // remove hover image if any
@@ -549,7 +573,6 @@ export class Menu extends zul.LabelImageWidget implements zul.LabelImageWidgetWi
 			(this.$class as typeof Menu)._rmActive(this);
 	}
 
-	//@Override
 	override getImageNode(): HTMLImageElement | undefined {
 		if (!this._eimg && (this._image || this._hoverImage)) {
 			var n = this.$n();
@@ -559,10 +582,12 @@ export class Menu extends zul.LabelImageWidget implements zul.LabelImageWidgetWi
 		return this._eimg;
 	}
 
+	/** @internal */
 	override ignoreDescendantFloatUp_(des: zk.Widget): boolean {
 		return des && des instanceof zul.menu.Menupopup;
 	}
 
+	/** @internal */
 	isVertical_(): boolean {
 		if (this.isTopmost()) {
 			var bar = this.getMenubar();
@@ -572,6 +597,7 @@ export class Menu extends zul.LabelImageWidget implements zul.LabelImageWidgetWi
 		return false;
 	}
 
+	/** @internal */
 	static _isActive(wgt: zul.menu.Menu): boolean {
 		var top = wgt.isTopmost(),
 			n = wgt.$n_(),
@@ -580,6 +606,7 @@ export class Menu extends zul.LabelImageWidget implements zul.LabelImageWidgetWi
 		return jq(n).hasClass(cls);
 	}
 
+	/** @internal */
 	static _addActive(wgt: zul.menu.Menu): void {
 		var top = wgt.isTopmost(),
 			n = wgt.$n_(),
@@ -604,6 +631,7 @@ export class Menu extends zul.LabelImageWidget implements zul.LabelImageWidgetWi
 		}
 	}
 
+	/** @internal */
 	static _rmActive(wgt: zul.menu.Menu, ignoreSeld?: boolean/* used for mouseout when topmost*/): void {
 		var top = wgt.isTopmost(),
 			n = wgt.$n_(),
@@ -615,6 +643,7 @@ export class Menu extends zul.LabelImageWidget implements zul.LabelImageWidgetWi
 	}
 
 	// Prior to TS migration, this method was accidentally declared in ContentHandler.
+	/** @internal */
 	override deferRedrawHTML_(out: string[]): void {
 		out.push('<li', this.domAttrs_({domClass: true}), ' class="z-renderdefer"></li>');
 	}
@@ -622,9 +651,13 @@ export class Menu extends zul.LabelImageWidget implements zul.LabelImageWidgetWi
 
 @zk.WrapClass('zul.menu.ContentHandler')
 export class ContentHandler extends zk.Object {
+	/** @internal */
 	_wgt: Menu;
+	/** @internal */
 	_content?: string;
+	/** @internal */
 	_shadow?: zk.eff.Shadow;
+	/** @internal */
 	_pp?: HTMLElement;
 
 	constructor(wgt: zul.menu.Menu, content: string) {
@@ -684,11 +717,13 @@ export class ContentHandler extends zk.Object {
 		return (!!pp && zk(pp).isVisible());
 	}
 
+	/** @internal */
 	_doMouseEnter(): void {
 		var menubar = this._wgt.getMenubar();
 		if (menubar) menubar._bOver = true;
 	}
 
+	/** @internal */
 	_doMouseLeave(): void {
 		var menubar = this._wgt.getMenubar();
 		if (menubar) menubar._bOver = false;

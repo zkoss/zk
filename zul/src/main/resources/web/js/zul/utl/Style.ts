@@ -23,16 +23,16 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.utl.Style')
 export class Style extends zk.Widget {
+	/** @internal */
 	_src?: string;
+	/** @internal */
 	_content?: string;
+	/** @internal */
 	_media?: string;
 
 	/**
-	 * Returns the URI of an external style sheet.
-	 * <p>
-	 * Default: null.
-	 *
-	 * @return String
+	 * @returns the URI of an external style sheet.
+	 * @defaultValue `null`.
 	 */
 	getSrc(): string | undefined {
 		return this._src;
@@ -41,7 +41,7 @@ export class Style extends zk.Widget {
 	/**
 	 * Sets the URI of an external style sheet.
 	 * <p>Calling this method implies setContent(null).
-	 * @param String src the URI of an external style sheet
+	 * @param src - the URI of an external style sheet
 	 */
 	setSrc(src: string, opts?: Record<string, boolean>): this {
 		const o = this._src;
@@ -56,8 +56,7 @@ export class Style extends zk.Widget {
 	}
 
 	/**
-	 * Returns the content of this style tag.
-	 * @return String
+	 * @returns the content of this style tag.
 	 * @since 5.0.8
 	 */
 	getContent(): string | undefined {
@@ -67,7 +66,7 @@ export class Style extends zk.Widget {
 	/**
 	 * Sets the content of this style tag.
 	 * <p>Calling this method implies setSrc(null).
-	 * @param String content the content of this style tag.
+	 * @param content - the content of this style tag.
 	 */
 	setContent(content: string, opts?: Record<string, boolean>): this {
 		const o = this._content;
@@ -82,10 +81,9 @@ export class Style extends zk.Widget {
 	}
 
 	/**
-	 * Returns the media dependencies for this style sheet.
-	 * <p>Default: null
+	 * @returns the media dependencies for this style sheet.
+	 * @defaultValue `null`
 	 * <p>Refer to <a href="http://www.w3.org/TR/CSS2/media.html">media-depedent style sheet</a> for details.
-	 * @return String
 	 * @since 5.0.3
 	 */
 	getMedia(): string | undefined {
@@ -94,7 +92,7 @@ export class Style extends zk.Widget {
 
 	/**
 	 * Sets the media dependencies for this style sheet.
-	 * @param String media the media of this style sheet.
+	 * @param media - the media of this style sheet.
 	 * @since 5.0.3
 	 */
 	setMedia(media: string, opts?: Record<string, boolean>): this {

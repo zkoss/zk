@@ -25,22 +25,28 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.utl.Iframe')
 export class Iframe extends zul.Widget<HTMLIFrameElement> {
+	/** @internal */
 	_scrolling = 'auto';
+	/** @internal */
 	_src?: string;
+	/** @internal */
 	_align?: string;
+	/** @internal */
 	_name?: string;
+	/** @internal */
 	_autohide = false;
 
-	/** Returns the src.
-	 * <p>Default: null.
+	/**
+	 * @returns the src.
+	 * @defaultValue `null`.
 	 */
 	getSrc(): string | undefined {
 		return this._src;
 	}
 
-	/** Sets the src.
-	 *
-	 * @param String src the source URL. If null or empty, nothing is included.
+	/**
+	 * Sets the src.
+	 * @param src - the source URL. If null or empty, nothing is included.
 	 */
 	setSrc(src: string, opts?: Record<string, boolean>): this {
 		const o = this._src;
@@ -55,9 +61,8 @@ export class Iframe extends zul.Widget<HTMLIFrameElement> {
 	}
 
 	/**
-	 * Return the scroll bars.
-	 * <p>Default: "auto"
-	 * @return String
+	 * @returns the scroll bars.
+	 * @defaultValue `"auto"`
 	 * @deprecated as of release 7.0.0, use CSS instead.
 	 */
 	getScrolling(): string | undefined {
@@ -66,7 +71,7 @@ export class Iframe extends zul.Widget<HTMLIFrameElement> {
 
 	/**
 	 * Define scroll bars
-	 * @param String scrolling "true", "false", "yes" or "no" or "auto", "auto" by default
+	 * @param scrolling - "true", "false", "yes" or "no" or "auto", "auto" by default
 	 * If null, "auto" is assumed.
 	 * @deprecated as of release 7.0.0, use CSS instead.
 	 */
@@ -89,18 +94,18 @@ export class Iframe extends zul.Widget<HTMLIFrameElement> {
 	}
 
 
-	/** Returns the alignment.
-	 * <p>Default: null (use browser default).
-	 * @return String
+	/**
+	 * @returns the alignment.
+	 * @defaultValue `null` (use browser default).
 	 * @deprecated as of release 6.0.0, use CSS instead.
 	 */
 	getAlign(): string | undefined {
 		return this._align;
 	}
 
-	/** Sets the alignment: one of top, middle, bottom, left, right and
+	/**
+	 * Sets the alignment: one of top, middle, bottom, left, right and
 	 * center.
-	 * @param String align
 	 * @deprecated as of release 6.0.0, use CSS instead.
 	 */
 	setAlign(align: string, opts?: Record<string, boolean>): this {
@@ -115,16 +120,16 @@ export class Iframe extends zul.Widget<HTMLIFrameElement> {
 		return this;
 	}
 
-	/** Returns the frame name.
-	 * <p>Default: null (use browser default).
-	 * @return String
+	/**
+	 * @returns the frame name.
+	 * @defaultValue `null` (use browser default).
 	 */
 	getName(): string | undefined {
 		return this._name;
 	}
 
-	/** Sets the frame name.
-	 * @param String name
+	/**
+	 * Sets the frame name.
 	 */
 	setName(name: string, opts?: Record<string, boolean>): this {
 		const o = this._name;
@@ -138,27 +143,29 @@ export class Iframe extends zul.Widget<HTMLIFrameElement> {
 		return this;
 	}
 
-	/** Returns whether to automatically hide this component if
+	/**
+	 * @returns whether to automatically hide this component if
 	 * a popup or dropdown is overlapped with it.
 	 *
-	 * <p>Default: false.
+	 * @defaultValue `false`.
 	 *
 	 * <p>If an iframe contains PDF or other non-HTML resource,
 	 * it is possible that it obscues the popup that shall be shown
 	 * above it. To resolve this, you have to specify autohide="true"
 	 * to this component, and specify the following in the page:
-	 * <pre><code>&lt;script content="zk.useStack='auto';"?></code></pre>
+	 * ```html
+	 * <script content="zk.useStack='auto';"?>
+	 * ```
 	 * <p>Refer to <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/Customization/Stackup_and_Shadow">Stackup and Shadow</a>
 	 * for more information.
-	 * @return boolean
 	 */
 	isAutohide(): boolean {
 		return this._autohide;
 	}
 
-	/** Sets whether to automatically hide this component if
+	/**
+	 * Sets whether to automatically hide this component if
 	 * a popup or dropdown is overlapped with it.
-	 * @param boolean autohide
 	 */
 	setAutohide(autohide: boolean, opts?: Record<string, boolean>): this {
 		const o = this._autohide;
@@ -172,7 +179,7 @@ export class Iframe extends zul.Widget<HTMLIFrameElement> {
 		return this;
 	}
 
-	//super//
+	/** @internal */
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		if (this._src) {
@@ -180,6 +187,7 @@ export class Iframe extends zul.Widget<HTMLIFrameElement> {
 		}
 	}
 
+	/** @internal */
 	override domAttrs_(no?: zk.DomAttrsOptions): string {
 		var attr = super.domAttrs_(no)
 				+ ' src="' + zjq.src0 + '" frameborder="0"',

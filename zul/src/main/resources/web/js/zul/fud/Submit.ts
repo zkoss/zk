@@ -17,6 +17,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 @zk.WrapClass('zul.fud.Submit')
 export class Submit extends zul.wgt.Button {
 	override nextSibling!: zk.Widget & { setDisabled(disabled: boolean) };
+	/** @internal */
 	_tmp?: number;
 
 	override getZclass(): string { // keep the button's zclass

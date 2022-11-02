@@ -26,8 +26,10 @@ export class Bandpopup extends zul.Widget {
 	override parent?: zul.inp.Bandbox;
 	override nextSibling?: zul.inp.Bandpopup;
 	override previousSibling?: zul.inp.Bandpopup;
+	/** @internal */
 	_shallClosePopup?: boolean;
 
+	/** @internal */
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		jq(this.$n())
@@ -35,6 +37,7 @@ export class Bandpopup extends zul.Widget {
 			.on('focusout', this._focusout.bind(this));
 	}
 
+	/** @internal */
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		jq(this.$n())
 			.off('focusout', this._focusout.bind(this))
@@ -42,10 +45,12 @@ export class Bandpopup extends zul.Widget {
 		super.unbind_(skipper, after, keepRod);
 	}
 
+	/** @internal */
 	_focusin(e: JQuery.FocusInEvent): void {
 		this._shallClosePopup = false;
 	}
 
+	/** @internal */
 	_focusout(e: JQuery.FocusOutEvent): void {
 		const bandbox = this.parent;
 		if (e.relatedTarget) {
@@ -83,6 +88,7 @@ export class Bandpopup extends zul.Widget {
 	}
 
 	//super
+	/** @internal */
 	override afterChildrenMinFlex_(orient: zk.FlexOrient): void {
 		if (orient == 'w') {
 			const pp = this.parent?.$n('pp');
@@ -94,6 +100,7 @@ export class Bandpopup extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	override doClick_(evt: zk.Event, popupOnly?: boolean): void {
 		if (evt.domTarget == this.$n())
 			this.parent!.focus();

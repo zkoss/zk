@@ -343,6 +343,7 @@ export let Number = {
 			shownZero = suf ? rexp.test(suf) && /^0*$/.test(pre) : rexp.test(pre);
 		return (val != '' && parseFloat(val) < 0 && !shownZero && !useMinsuFmt ? localizedSymbols.MINUS : '') + (suf ? pre + (/[\d]/.test(suf.charAt(0)) ? localizedSymbols.DECIMAL : '') + suf : pre);
 	},
+	/** @internal */
 	_escapeQuote(fmt: string, localizedSymbols: zk.LocalizedSymbols): Efmt {
 		//note we do NOT support mixing of quoted and unquoted percent
 		var cc, q = -2, shift = 0, ret = '', jdot = -1, purejdot = -1, pure = '', prej = -1,
@@ -380,6 +381,7 @@ export let Number = {
 		}
 		return {shift: shift, fmt: ret, pureFmtStr: pure, jdot: jdot, purejdot: purejdot, prej: prej};
 	},
+	/** @internal */
 	_extraFmtIndex(fmt: string): number {
 		var j = 0;
 		for (var len = fmt.length; j < len; ++j) {
@@ -389,6 +391,7 @@ export let Number = {
 		}
 		return j;
 	},
+	/** @internal */
 	_removePrefixSharps(val: string, localizedSymbols: zk.LocalizedSymbols): string {
 		var ret = '',
 			sharp = true;

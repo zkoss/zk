@@ -16,15 +16,16 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 /**
  * A tab panel.
- * <p>Default {@link #getZclass}: z-tabpanel.
+ * @defaultValue {@link getZclass}: z-tabpanel.
  */
 @zk.WrapClass('zul.tab.Tabpanel')
 export class Tabpanel extends zul.ContainerWidget {
 	override parent!: zul.tab.Tabpanels | undefined;
+	/** @internal */
 	_lastScrollTop?: number | undefined;
 
-	/** Returns the tabbox owns this component.
-	 * @return zul.tab.Tabbox
+	/**
+	 * @returns the tabbox owns this component.
 	 */
 	getTabbox(): zul.tab.Tabbox | undefined {
 		return this.parent ? this.parent.parent : undefined;
@@ -41,6 +42,7 @@ export class Tabpanel extends zul.ContainerWidget {
 		return this;
 	}
 
+	/** @internal */
 	override domClass_(no?: zk.DomClassOptions): string {
 		var cls = super.domClass_(no),
 			tabbox = this.getTabbox()!;
@@ -49,8 +51,8 @@ export class Tabpanel extends zul.ContainerWidget {
 		return cls;
 	}
 
-	/** Returns the tab associated with this tab panel.
-	 * @return zul.tab.Tab
+	/**
+	 * @returns the tab associated with this tab panel.
 	 */
 	getLinkedTab(): zul.tab.Tab | undefined {
 		var tabbox = this.getTabbox();
@@ -60,22 +62,23 @@ export class Tabpanel extends zul.ContainerWidget {
 		return tabs ? tabs.getChildAt<zul.tab.Tab>(this.getIndex()) : undefined;
 	}
 
-	/** Returns the index of this panel, or -1 if it doesn't belong to any
+	/**
+	 * @returns the index of this panel, or -1 if it doesn't belong to any
 	 * tabpanels.
-	 * @return int
 	 */
 	getIndex(): number {
 		return this.getChildIndex();
 	}
 
-	/** Returns whether this tab panel is selected.
-	 * @return boolean
+	/**
+	 * @returns whether this tab panel is selected.
 	 */
 	isSelected(): boolean {
 		return !!this.getLinkedTab()?.isSelected();
 	}
 
 	// Bug 3026669
+	/** @internal */
 	_changeSel(oldPanel: zul.tab.Tabpanel | undefined): void {
 		if (oldPanel) {
 			var cave = this.$n('cave'),
@@ -85,6 +88,7 @@ export class Tabpanel extends zul.ContainerWidget {
 		}
 	}
 
+	/** @internal */
 	_sel(toSel: boolean, animation?: boolean): void { //don't rename (zkmax counts on it)!!
 		var tabbox = this.getTabbox();
 
@@ -130,17 +134,19 @@ export class Tabpanel extends zul.ContainerWidget {
 	}
 
 	// Could return NaN. Should validate the return value before using it.
+	/** @internal */
 	getPanelContentHeight_(): number {
 		// NOTE: Adding undefined to a number results in NaN. If any argument of
 		// Math.max is undefined, the result is NaN. Fortunately, zul.tab.Tabs.prototype._fixHgh
 		// validates the return value of this function before using it.
 		const node = this.$n(),
 			tabpanelsNode = this.parent?.$n(),
-			panelContentHeight = (tabpanelsNode?.scrollHeight as number) + zk(tabpanelsNode).padBorderHeight();
+			panelContentHeight = (tabpanelsNode?.scrollHeight!) + zk(tabpanelsNode).padBorderHeight();
 
-		return Math.max(node?.offsetHeight as number, panelContentHeight); // B50-ZK-298: concern panel height
+		return Math.max(node?.offsetHeight!, panelContentHeight); // B50-ZK-298: concern panel height
 	}
 
+	/** @internal */
 	_fixPanelHgh(): void {
 		var tabbox = this.getTabbox()!,
 			tbx = tabbox.$n_(),
@@ -186,6 +192,7 @@ export class Tabpanel extends zul.ContainerWidget {
 		return super.setHflex(hflex);
 	}
 
+	/** @internal */
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		zWatch.listen({onSize: this});
@@ -206,6 +213,7 @@ export class Tabpanel extends zul.ContainerWidget {
 		}
 	}
 
+	/** @internal */
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		zWatch.unlisten({onSize: this});
 		this._lastScrollTop = undefined;

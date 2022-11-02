@@ -43,7 +43,9 @@ export class FileuploadDlg extends zul.wnd.Window {
 @zk.WrapClass('zul.fud.ModalFileViewer')
 export class ModalFileViewer extends zk.Object {
 	updated?: boolean;
+	/** @internal */
 	_finish?: boolean;
+	/** @internal */
 	_uplder: zul.Uploader;
 	viewer?: HTMLElement;
 

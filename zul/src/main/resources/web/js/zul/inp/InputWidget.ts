@@ -43,7 +43,7 @@ var _keyIgnorable = zk.opera ? function (code: number) {
  * The RoundUtl used to adjust the display of the rounded input.
  * @since 5.0.7
  */
-export let RoundUtl = {
+export var RoundUtl = {
 	// @since 7.0.0
 	buttonVisible<T>(wgt: InputWidget<T>, v: boolean): void {
 		var n = wgt.$n('btn');
@@ -54,6 +54,7 @@ export let RoundUtl = {
 		}
 	},
 	// @since 7.0.0
+	/** @internal */
 	doFocus_<T>(wgt: InputWidget<T>): void {
 		if (wgt._inplace) {
 			if (wgt._inplaceTimerId != null) {
@@ -63,6 +64,7 @@ export let RoundUtl = {
 			wgt.onSize();
 		}
 	},
+	/** @internal */
 	doBlur_<T>(wgt: InputWidget<T>): void {
 		if (wgt._inplace) {
 			var n = wgt.$n_();
@@ -86,62 +88,93 @@ zul.inp.RoundUtl = RoundUtl;
  * A skeletal implementation for a input widget.
  *
  * <p>The delay to send the onChanging event is controlled by
- * {@link #onChangingDelay}, which is default to 350.
+ * {@link onChangingDelay}, which is default to 350.
  * To change it, you can specify the following in a ZUL file.
- * <pre><code>
-&lt;?script content="zk.afterLoad('zul.inp',function(){zul.inp.InputWidget.onChangingDelay=1000;})"?&gt;
-</code></pre>
+ * ```html
+ * <script content="zk.afterLoad('zul.inp',function(){zul.inp.InputWidget.onChangingDelay=1000;})"?>
+ * ```
  */
 @zk.WrapClass('zul.inp.InputWidget')
 export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElement> {
+	/** @internal */
 	_maxlength = 0;
+	/** @internal */
 	_cols = 0;
 	//_tabindex: 0,
+	/** @internal */
 	_type = 'text';
+	/** @internal */
 	_placeholder?: string;
+	/** @internal */
 	_inputAttributes?: Record<string, string>;
+	/** @internal */
 	_lastinputAttributes?: Record<string, string>;
+	/** @internal */
 	_inplaceTimerId?: number;
+	/** @internal */
 	_inplaceTimeout = 150;
+	/** @internal */
 	_inplaceIgnore = false;
 
+	/** @internal */
 	_name?: string;
+	/** @internal */
 	_cst?: zul.inp.SimpleConstraint | string;
+	/** @internal */
 	_reVald?: boolean;
+	/** @internal */
 	valueEnter_?: string;
+	/** @internal */
 	valueSel_?: string;
+	/** @internal */
 	_lastChg?: string;
+	/** @internal */
 	_errbox?: zul.inp.Errorbox;
+	/** @internal */
 	__ebox?: zul.inp.Errorbox;
+	/** @internal */
 	_tidChg?: number;
+	/** @internal */
 	_multiline?: boolean;
+	/** @internal */
 	_disabled = false;
+	/** @internal */
 	_readonly = false;
+	/** @internal */
 	_value?: ValueType;
+	/** @internal */
 	_errmsg?: string;
+	/** @internal */
 	_defRawVal?: string;
+	/** @internal */
 	_lastKeyDown?: number;
+	/** @internal */
 	_tabbable?: boolean;
+	/** @internal */
 	_instant?: boolean;
+	/** @internal */
 	_errorboxSclass?: string;
+	/** @internal */
 	_errorboxIconSclass?: string;
+	/** @internal */
 	_inplace?: boolean;
 
-	/** Returns the name of this component.
-	 * <p>Default: null.
+	/**
+	 * @returns the name of this component.
+	 * @defaultValue `null`.
 	 * <p>Don't use this method if your application is purely based
 	 * on ZK's event-driven model.
 	 * <p>The name is used only to work with "legacy" Web application that
 	 * handles user's request by servlets.
 	 * It works only with HTTP/HTML-based browsers. It doesn't work
 	 * with other kind of clients.
-	 * @return String
 	 */
 	getName(): string | undefined {
 		return this._name;
 	}
 
-	/** Sets the name of this component.
+	/**
+	 * Sets the name of this component.
 	 * <p>Don't use this method if your application is purely based
 	 * on ZK's event-driven model.
 	 * <p>The name is used only to work with "legacy" Web application that
@@ -149,7 +182,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	 * It works only with HTTP/HTML-based browsers. It doesn't work
 	 * with other kind of clients.
 	 *
-	 * @param String name the name of this component.
+	 * @param name - the name of this component.
 	 */
 	setName(name: string, opts?: Record<string, boolean>): this {
 		const o = this._name;
@@ -164,16 +197,16 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		return this;
 	}
 
-	/** Returns whether it is disabled.
-	 * <p>Default: false.
-	 * @return boolean
+	/**
+	 * @returns whether it is disabled.
+	 * @defaultValue `false`.
 	 */
 	isDisabled(): boolean {
 		return this._disabled;
 	}
 
-	/** Sets whether it is disabled.
-	 * @param boolean disabled
+	/**
+	 * Sets whether it is disabled.
 	 */
 	setDisabled(disabled: boolean, opts?: Record<string, boolean>): this {
 		const o = this._disabled;
@@ -191,16 +224,16 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		return this;
 	}
 
-	/** Returns whether it is readonly.
-	 * <p>Default: false.
-	 * @return boolean
+	/**
+	 * @returns whether it is readonly.
+	 * @defaultValue `false`.
 	 */
 	isReadonly(): boolean {
 		return this._readonly;
 	}
 
-	/** Sets whether it is readonly.
-	 * @param boolean readonly
+	/**
+	 * Sets whether it is readonly.
 	 */
 	setReadonly(readonly: boolean, opts?: Record<string, boolean>): this {
 		const o = this._readonly;
@@ -221,16 +254,16 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		return this;
 	}
 
-	/** Returns the cols.
-	 * <p>Default: 0 (non-positive means the same as browser's default).
-	 * @return int
+	/**
+	 * @returns the cols.
+	 * @defaultValue `0` (non-positive means the same as browser's default).
 	 */
 	getCols(): number {
 		return this._cols;
 	}
 
-	/** Sets the cols.
-	 * @param int cols
+	/**
+	 * Sets the cols.
 	 */
 	setCols(cols: number, opts?: Record<string, boolean>): this {
 		const o = this._cols;
@@ -255,16 +288,16 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		return this;
 	}
 
-	/** Returns the maxlength.
-	 * <p>Default: 0 (non-postive means unlimited).
-	 * @return int
+	/**
+	 * @returns the maxlength.
+	 * @defaultValue `0` (non-postive means unlimited).
 	 */
 	getMaxlength(): number {
 		return this._maxlength;
 	}
 
-	/** Sets the maxlength.
-	 * @param int maxlength
+	/**
+	 * Sets the maxlength.
 	 */
 	setMaxlength(maxlength: number, opts?: Record<string, boolean>): this {
 		const o = this._maxlength;
@@ -279,16 +312,16 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		return this;
 	}
 
-	/** Returns the tab order of this component.
-	 * <p>Default: 0 (means the same as browser's default).
-	 * @return int
+	/**
+	 * @returns the tab order of this component.
+	 * @defaultValue `0` (means the same as browser's default).
 	 */
 	override getTabindex(): number | undefined {
 		return this._tabindex;
 	}
 
-	/** Sets the tab order of this component.
-	 * @param int tabindex
+	/**
+	 * Sets the tab order of this component.
 	 */
 	override setTabindex(tabindex: number, opts?: Record<string, boolean>): this {
 		const o = this._tabindex;
@@ -307,17 +340,17 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		return this;
 	}
 
-	/** Returns whether enable the inplace-editing.
-	 * <p>default: false.
-	 * @return boolean
+	/**
+	 * @returns whether enable the inplace-editing.
+	 * @defaultValue `false`.
 	 */
 	isInplace(): boolean {
 		return !!this._inplace;
 	}
 
-	/** Sets to enable the inplace-editing function that the look and feel is
+	/**
+	 * Sets to enable the inplace-editing function that the look and feel is
 	 * like a label.
-	 * @param boolean inplace
 	 */
 	setInplace(inplace: boolean, opts?: Record<string, boolean>): this {
 		const o = this._inplace;
@@ -331,9 +364,8 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	}
 
 	/**
-	 * Returns the placeholder text
+	 * @returns the placeholder text
 	 * @since 6.5.0
-	 * @return String placeholder
 	 */
 	getPlaceholder(): string | undefined {
 		return this._placeholder;
@@ -343,7 +375,6 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	 * Sets the placeholder text that is displayed when input is empty.
 	 * Only works for browsers supporting HTML5.
 	 * @since 6.5.0
-	 * @param String placeholder
 	 */
 	setPlaceholder(placeholder: string, opts?: Record<string, boolean>): this {
 		const o = this._placeholder;
@@ -357,9 +388,8 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	}
 
 	/**
-	 * Returns the additional attributes which is set by setinputAttributes(inputAttributes).
+	 * @returns the additional attributes which is set by setinputAttributes(inputAttributes).
 	 * @since 8.6.1
-	 * @return Map inputAttributes
 	 */
 	getInputAttributes(): Record<string, string> | undefined {
 		return this._inputAttributes;
@@ -369,7 +399,6 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	 * Sets some additional attributes to the input html tag in the component.
 	 * this will only reset the additional attributes that are set by this method.
 	 * @since 8.6.1
-	 * @param Map inputAttributes
 	 */
 	setInputAttributes(inputAttributes: Record<string, string>, opts?: Record<string, boolean>): this {
 		const o = this._inputAttributes;
@@ -392,10 +421,10 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		return this;
 	}
 
-	/** Returns whether to send onChange event as soon as user types in the
+	/**
+	 * @returns whether to send onChange event as soon as user types in the
 	 * input.
-	 * <p>Default: false.
-	 * @return boolean
+	 * @defaultValue `false`.
 	 * @since 6.0.0
 	 */
 	isInstant(): boolean {
@@ -403,9 +432,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	}
 
 	/**
-	 * Sets whether to send onChange event as soon as user types in the
-	 * input.
-	 * @param boolean instant
+	 * Sets whether to send onChange event as soon as user types in the input.
 	 * @since 6.0.0
 	 */
 	setInstant(instant: boolean): this {
@@ -413,9 +440,9 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		return this;
 	}
 
-	/** Returns the custom style class name applied to the errorbox, if any.
-	 * <p>Default: null.
-	 * @return String
+	/**
+	 * @returns the custom style class name applied to the errorbox, if any.
+	 * @defaultValue `null`.
 	 * @since 8.0.1
 	 */
 	getErrorboxSclass(): string | undefined {
@@ -424,7 +451,6 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 
 	/**
 	 * Sets the custom style class name to be applied to the errorbox.
-	 * @param String errorboxSclass
 	 * @since 8.0.1
 	 */
 	setErrorboxSclass(errorboxSclass: string): this {
@@ -432,9 +458,9 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		return this;
 	}
 
-	/** Returns the custom style icon class name applied to the errorbox, if any.
-	 * <p>Default: null.
-	 * @return String
+	/**
+	 * @returns the custom style icon class name applied to the errorbox, if any.
+	 * @defaultValue `null`.
 	 * @since 8.0.1
 	 */
 	getErrorboxIconSclass(): string | undefined {
@@ -443,7 +469,6 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 
 	/**
 	 * Sets the custom style icon class name to be applied to the errorbox.
-	 * @param String errorboxIconSclass
 	 * @since 8.0.1
 	 */
 	setErrorboxIconSclass(errorboxIconSclass: string): this {
@@ -451,16 +476,17 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		return this;
 	}
 
-	/** Returns the CSS style of inplace if inplace is not null
-	 * @return String
+	/**
+	 * @returns the CSS style of inplace if inplace is not null
 	 */
 	getInplaceCSS(): string {
 		return this._inplace ? this.$s('inplace') : '';
 	}
 
-	/** Selects the whole text in this input.
-	 * @param int start the starting index of the selection range
-	 * @param int end the ending index of the selection range (excluding).
+	/**
+	 * Selects the whole text in this input.
+	 * @param start - the starting index of the selection range
+	 * @param end - the ending index of the selection range (excluding).
 	 * 		In other words, the text between start and (end-1) is selected.
 	 */
 	select(start: number, end: number): void {
@@ -477,61 +503,63 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		}
 	}
 
-	/** Returns the type.
-	 * <p>Default: text.
-	 * @return String
+	/**
+	 * @returns the type.
+	 * @defaultValue text.
 	 */
 	getType(): string {
 		return this._type;
 	}
 
-	/** Returns whether it is multiline.
-	 * <p>Default: false.
-	 * @return boolean
+	/**
+	 * @returns whether it is multiline.
+	 * @defaultValue `false`.
 	 */
 	isMultiline(): boolean {
 		return false;
 	}
 
 	/**
-	 * Returns whether is in rounded mold or not.
-	 * <p>Default: false, only combo component are true (@since 7.0.0)
-	 * @return boolean
+	 * @returns whether is in rounded mold or not.
+	 * @defaultValue `false`, only combo component are true
+	 * @since 7.0.0
 	 */
 	inRoundedMold(): boolean {
 		return true;
 	}
 
-	/** Returns the text representing the value in the given format,
+	/**
+	 * @returns the text representing the value in the given format,
 	 * or an empty etring if value is null
-	 * @return String
 	 * @since 5.0.5
 	 */
 	getText(): string {
 		return this.coerceToString_(this.getValue());
 	}
 
-	/** Sets the text representing the value in the given format.
-	 * @param String txt the text
+	/**
+	 * Sets the text representing the value in the given format.
+	 * @param text - the text
 	 * @since 5.0.5
 	 */
 	setText(text: string): this {
 		return this.setValue(this.coerceFromString_(text) as ValueType);
 	}
 
-	/** Returns the value in the String format.
-	 * @return String
+	/**
+	 * @returns the value in the String format.
 	 */
 	getValue(): ValueType | undefined {
 		return this._value;
 	}
 
-	/** Sets the value in the String format(assumes no locale issue).
-	 * <p>Notice that the invocation of {@link #getValue} won't fire
-	 * the onChange event. To fire it, you have to invoke {@link #fireOnChange}
+	/**
+	 * Sets the value in the String format(assumes no locale issue).
+	 * <p>Notice that the invocation of {@link getValue} won't fire
+	 * the onChange event. To fire it, you have to invoke {@link fireOnChange}
 	 * explicitly.
-	 * @param Object value the value.
-	 * @param boolean fromServer whether it is called from the server.
+	 * @param value - the value.
+	 * @param fromServer - whether it is called from the server.
 	 * The error message will be cleared if true
 	 */
 	setValue(value: ValueType | number | string, fromServer?: boolean): this {
@@ -565,8 +593,8 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		this.setValue(this.unmarshall_(value), fromServer);
 	}
 
-	/** Returns the input node of this widget
-	 * @return DOMElement
+	/**
+	 * @returns the input node of this widget
 	 */
 	override getInputNode(): HTMLInputElement | undefined {
 		return this.$n('real') ?? this.$n();
@@ -576,6 +604,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		return this.getInputNode();
 	}
 
+	/** @internal */
 	override domAttrs_(no?: zk.DomAttrsOptions): string {
 		var attr = super.domAttrs_(no);
 		if (!no || !no.text)
@@ -583,10 +612,11 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		return attr;
 	}
 
-	/** Attributes for the text control.
-	 * Called automatically by [[#domAttrs_]] unless {text:true}
-	 * is specified
-	 * @return String
+	/**
+	 * Attributes for the text control.
+	 * Called automatically by {@link domAttrs_} unless `{text:true}` is specified
+	 * @returns String
+	 * @internal
 	 */
 	textAttrs_(): string {
 		var html = '', v;
@@ -621,17 +651,19 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		return html;
 	}
 
+	/** @internal */
 	_onChanging(timeout?: number): void {
 		InputWidget._onChanging.call(this, timeout);
 	}
 
+	/** @internal */
 	_areaText(): string {
 		return zUtl.encodeXML(this.coerceToString_(this._value));
 	}
 
-	/** Sets the constraint.
-	 * <p>Default: null (means no constraint all all).
-	 * @param String cst
+	/**
+	 * Sets the constraint.
+	 * @defaultValue `null` (means no constraint all all).
 	 */
 	setConstraint(constraint: zul.inp.SimpleConstraint | string | undefined): this {
 		if (typeof constraint == 'string' && !constraint.startsWith('[')/*by server*/)
@@ -643,13 +675,14 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		return this;
 	}
 
-	/** Returns the constraint, or null if no constraint at all.
-	 * @return zul.inp.SimpleConstraint
+	/**
+	 * @returns the constraint, or null if no constraint at all.
 	 */
 	getConstraint(): zul.inp.SimpleConstraint | string | undefined {
 		return this._cst;
 	}
 
+	/** @internal */
 	override doFocus_(evt: zk.Event): void {
 		super.doFocus_(evt);
 
@@ -676,6 +709,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		}
 	}
 
+	/** @internal */
 	override doBlur_(evt: zk.Event): void {
 		InputWidget._stopOnChanging(this, true);
 		if (!zk.alerting && this.shallUpdate_(zk.currentFocus!)) {
@@ -703,6 +737,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		this._lastKeyDown = undefined;
 	}
 
+	/** @internal */
 	_doTouch(evt: zk.Event): boolean {
 		if (!zk.ios) {
 			return false;
@@ -713,6 +748,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		return false;
 	}
 
+	/** @internal */
 	_doSelect(evt: zk.Event): void { //domListen_
 		if (this.isListen('onSelection')) {
 			var inp = this.getInputNode()!,
@@ -723,26 +759,30 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		}
 	}
 
+	/** @internal */
 	_doMouseOver(): void {
 		if (this._disabled)
 			return;
 		jq(this.getInputNode()).addClass(this.$s('hover'));
 	}
 
+	/** @internal */
 	_doMouseOut(): void {
 		if (this._disabled)
 			return;
 		jq(this.getInputNode()).removeClass(this.$s('hover'));
 	}
 
-	/** Returns shall be update or not
-	 * @param zk.Widget focus
+	/**
+	 * @returns shall be update or not
+	 * @internal
 	 */
 	shallUpdate_(focus: zk.Widget): boolean {
 		return !focus || !zUtl.isAncestor(this, focus);
 	}
 
-	/** Returns the error message that is caused when user entered invalid value,
+	/**
+	 * @returns the error message that is caused when user entered invalid value,
 	 * or null if no error at all.
 	 *
 	 * <p>
@@ -752,14 +792,14 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	 *
 	 * <p>
 	 * If the error message is set, we say this input is in the error mode.
-	 * @return String
 	 * @deprecated use getErrorMessage() instead.
 	 */
 	getErrorMesssage(): string | undefined {
 		return this.getErrorMessage();
 	}
 
-	/** Returns the error message that is caused when user entered invalid value,
+	/**
+	 * @returns the error message that is caused when user entered invalid value,
 	 * or null if no error at all.
 	 *
 	 * <p>
@@ -769,15 +809,15 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	 *
 	 * <p>
 	 * If the error message is set, we say this input is in the error mode.
-	 * @return String
 	 */
 	getErrorMessage(): string | undefined {
 		return this._errmsg;
 	}
 
-	/** Marks this widget's value is wrong and show the error message.
+	/**
+	 * Marks this widget's value is wrong and show the error message.
 	 * <p>It is usually called by {@link zk.AuCmd0#wrongValue} (from the sever)
-	 * @param String msg the error message
+	 * @param msg - the error message
 	 */
 	setErrorMessage(errorMessage: string): this {
 		this.clearErrorMessage(true, true);
@@ -785,11 +825,12 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		return this;
 	}
 
-	/** Clears the error message and the error status.
+	/**
+	 * Clears the error message and the error status.
 	 * <p>It is also called by {@link zk.AuCmd0#clearWrongValue} (from the server).
-	 * @param boolean revalidate whether to re-validate the value next time
+	 * @param revalidate - whether to re-validate the value next time
 	 * onblur occurs
-	 * @param boolean remainError whether the input widget remains in the
+	 * @param remainError - whether the input widget remains in the
 	 * error status, if any, after the invocation.
 	 */
 	clearErrorMessage(revalidate: boolean, remainError?: boolean): void {
@@ -807,38 +848,43 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 			this._reVald = true; //revalidate required
 	}
 
-	/** Coerces the value passed to {@link #setValue}.
+	/**
+	 * Coerces the value passed to {@link setValue}.
 	 *
 	 * <p>Deriving note:<br>
 	 * If you want to store the value in other type, say BigDecimal,
-	 * you have to override {@link #coerceToString_} and {@link #coerceFromString_}
+	 * you have to override {@link coerceToString_} and {@link coerceFromString_}
 	 * to convert between a string and your targeting type.
 	 *
 	 * <p>Moreover, when {@link zul.inp.Textbox} is called, it calls this method
 	 * with value = null. Derives shall handle this case properly.
 	 *
-	 * @param String value the string to coerce from
-	 * @return String
+	 * @param value - the string to coerce from
+	 * @returns String
+	 * @internal
 	 */
 	coerceFromString_(value: string | undefined): zul.inp.CoerceFromStringResult | ValueType | undefined {
 		return value as unknown as ValueType;
 	}
 
-	/** Coerces the value passed to {@link #setValue}.
+	/**
+	 * Coerces the value passed to {@link setValue}.
 	 *
-	 * <p>Default: convert null to an empty string.
+	 * @defaultValue convert null to an empty string.
 	 *
 	 * <p>Deriving note:<br>
 	 * If you want to store the value in other type, say BigDecimal,
-	 * you have to override {@link #coerceToString_} and {@link #coerceFromString_}
+	 * you have to override {@link coerceToString_} and {@link coerceFromString_}
 	 * to convert between a string and your targeting type.
-	 * @param Object value the value that will be coerced to a string
-	 * @return String
+	 * @param value - the value that will be coerced to a string
+	 * @returns String
+	 * @internal
 	 */
 	coerceToString_(value: ValueType | undefined): string {
 		return (value as unknown as string | undefined) || '';
 	}
 
+	/** @internal */
 	_markError(msg: string, val?: string, noOnError?: boolean): void {
 		this._errmsg = msg;
 
@@ -862,10 +908,12 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		}
 	}
 
-	/** Make the {@link zul.inp.SimpleConstraint} calls the validate for val,
+	/**
+	 * Make the {@link zul.inp.SimpleConstraint} calls the validate for val,
 	 * if {@link zul.inp.SimpleConstraint} is exist
-	 * @param Object val a String, a number, or a date,the number or name of flag,
+	 * @param val - a String, a number, or a date,the number or name of flag,
 	 * such as 'no positive", 0x0001.
+	 * @internal
 	 */
 	validate_(val: unknown): string | boolean | undefined {
 		var cst: zul.inp.SimpleConstraint | string | undefined;
@@ -877,6 +925,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		}
 	}
 
+	/** @internal */
 	_validate(value: string | ValueType | undefined): InputValidationResult<ValueType> {
 		zul.inp.validating = true;
 		try {
@@ -919,17 +968,19 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		}
 	}
 
+	/** @internal */
 	_sendClearingErrorEvent(val: unknown): void {
 		// ZK-4453 for easier overriding this behavior
 		this.fire('onError', {value: val});
 	}
 
+	/** @internal */
 	_shallIgnore(evt: zk.Event, keys: string): boolean {
 		// ZK-1736 add metakey on mac
 		if (zk.mac && evt.metaKey)
 			return false;
 		else {
-			var code = zk.opera ? evt.keyCode : evt.charCode as number;
+			var code = zk.opera ? evt.keyCode : evt.charCode!;
 			if (!evt.altKey && !evt.ctrlKey && _keyIgnorable(code) && !keys.includes(String.fromCharCode(code))) {
 				evt.stop();
 				return true;
@@ -938,9 +989,11 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		return false;
 	}
 
-	/** Create a {@link zul.inp.Errorbox} widget, and show the error message
-	 * @param String msg the error message
+	/**
+	 * Create a {@link zul.inp.Errorbox} widget, and show the error message
+	 * @param msg - the error message
 	 * @see zul.inp.Errorbox#show
+	 * @internal
 	 */
 	showError_(msg: string): zul.inp.Errorbox {
 		var eb = new zul.inp.Errorbox(this, msg);
@@ -955,20 +1008,25 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		}
 	}
 
+	/** @internal */
 	_equalValue(a: ValueType | undefined, b: ValueType | undefined): boolean {
 		return a == b || this.marshall_(a) == this.marshall_(b);
 	}
 
+	/** @internal */
 	marshall_(val: ValueType | undefined): string | undefined {
 		return val as never;
 	}
 
+	/** @internal */
 	unmarshall_(val: string | number): ValueType | '' | 0 {
 		return val as never;
 	}
 
-	/** Updates the change to server by firing onChange if necessary.
-	 * @return boolean
+	/**
+	 * Updates the change to server by firing onChange if necessary.
+	 * @returns boolean
+	 * @internal
 	 */
 	updateChange_(): boolean {
 		if (zul.inp.validating) return false; //avoid deadloop (when both focus and blur fields invalid)
@@ -1013,10 +1071,11 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		return true;
 	}
 
-	/** Fires the onChange event.
+	/**
+	 * Fires the onChange event.
 	 * If the widget is created at the server, the event will be sent
 	 * to the server too.
-	 * @param Map opts [optional] the options. Refer to {@link zk.Event#opts}
+	 * @param opts - the options. Refer to {@link zk.Event#opts}
 	 * @since 5.0.5
 	 */
 	fireOnChange(opts?: zk.EventOptions): void {
@@ -1024,6 +1083,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 			InputWidget._onChangeData(this, {value: this.marshall_(this.getValue())}), opts);
 	}
 
+	/** @internal */
 	_resetForm(): void {
 		var inp = this.getInputNode()!;
 		if (inp.value != inp.defaultValue) { //test if it will be reset
@@ -1032,8 +1092,8 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 				//value not reset yet so wait a moment
 		}
 	}
-
-	//super//
+	
+	/** @internal */
 	override focus_(timeout?: number): boolean {
 		// ZK-2020: should give timeout for ie11
 		if (zk.ie11_ && !timeout)
@@ -1042,6 +1102,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		return true;
 	}
 
+	/** @internal */
 	override domClass_(no?: zk.DomClassOptions): string {
 		var sc = super.domClass_(no);
 		if ((!no || !no.zclass) && this._disabled)
@@ -1057,6 +1118,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		return sc;
 	}
 
+	/** @internal */
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		var n: HTMLInputElement | HTMLFormElement = this.getInputNode()!;
@@ -1086,6 +1148,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		zWatch.listen({onShow: this});
 	}
 
+	/** @internal */
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		zWatch.unlisten({onShow: this});
 		InputWidget._stopOnChanging(this);
@@ -1108,6 +1171,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		super.unbind_(skipper, after, keepRod);
 	}
 
+	/** @internal */
 	doInput_(evt: zk.Event): void {
 		//ZK-2757, fire onChange when native drag'n' drop in different browsers
 		var wgt = this;
@@ -1120,6 +1184,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		this._updateValue();
 	}
 
+	/** @internal */
 	override resetSize_(orient: zk.FlexOrient): void {
 		var n: HTMLInputElement | undefined;
 		if (this.$n() != (n = this.getInputNode()))
@@ -1127,6 +1192,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		super.resetSize_(orient);
 	}
 
+	/** @internal */
 	override doKeyDown_(evt: zk.Event): void {
 		var keyCode = evt.keyCode;
 		this._lastKeyDown = keyCode;
@@ -1156,6 +1222,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		super.doKeyDown_(evt);
 	}
 
+	/** @internal */
 	_updateValue(): void {
 		//Support maxlength for Textarea
 		if (this.isMultiline()) {
@@ -1171,11 +1238,13 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		this._startOnChanging();
 	}
 
+	/** @internal */
 	_startOnChanging(): void {
 		if (this.isListen('onChanging') || this._instant)
 			InputWidget._startOnChanging(this);
 	}
 
+	/** @internal */
 	override afterKeyDown_(evt: zk.Event, simulated?: boolean): boolean {
 		if (!simulated && this._inplace) {
 			if (!this._multiline && evt.keyCode == 13) {
@@ -1190,10 +1259,12 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		return false;
 	}
 
+	/** @internal */
 	override beforeCtrlKeys_(evt: zk.Event): void {
 		this.updateChange_();
 	}
 
+	/** @internal */
 	override shallIgnoreClick_(evt: zk.Event): boolean {
 		return this.isDisabled();
 	}
@@ -1202,7 +1273,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	 * Inserts the text at the current cursor position.
 	 * It would trigger focus and change event.
 	 *
-	 * @param String text the text to be inserted
+	 * @param insertedText - the text to be inserted
 	 * @since 8.5.1
 	 */
 	setInsertedText(insertedText: string): this {
@@ -1229,26 +1300,26 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	/** The delay for sending the onChanging event (unit: milliseconds).
 	 * The onChanging event will be sent after the specified delay once
 	 * the user pressed a keystroke (and changed the value).
-	 * <p>Default: 350
-	 * @type int
+	 * @defaultValue `350`
 	 * @since 5.0.1
 	 */
 	static onChangingDelay = 350;
 
 	/** Whether to send at least one the onChanging event if it is listened
 	 * and the content is ever changed.
-	 * <p>Default: true
-	 * @type boolean
+	 * @defaultValue `true`
 	 * @since 5.0.1
 	 */
 	static onChangingForced = true;
 
 	// for errorbox, datebox, combowidget
+	/** @internal */
 	static _isInView<T>(wgt: Pick<InputWidget<T>, 'getInputNode'>): boolean {
 		var n = wgt.getInputNode();
 		return zk(n).isRealScrollIntoView(true);
 	}
 
+	/** @internal */
 	static _onChanging<T>(this: InputWidget<T>, timeout?: number): void {
 		//Note: "this" is available here
 		if (this.desktop) {
@@ -1267,18 +1338,21 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		}
 	}
 
+	/** @internal */
 	static _onChangeData<T>(wgt: InputWidget<T>, inf: Record<string, unknown>, selbk?: boolean): Record<string, unknown> {
 		inf.start = zk(wgt.getInputNode()).getSelectionRange()[0];
 		if (selbk) inf.bySelectBack = true;
 		return inf;
 	}
 
+	/** @internal */
 	static _startOnChanging<T>(wgt: InputWidget<T>): void {
 		InputWidget._stopOnChanging(wgt);
 		wgt._tidChg = setTimeout(
 			wgt.proxy(InputWidget._onChanging), InputWidget.onChangingDelay);
 	}
 
+	/** @internal */
 	static _stopOnChanging<T>(wgt: InputWidget<T>, onBlur?: boolean): void {
 		if (wgt._tidChg) {
 			clearTimeout(wgt._tidChg);
@@ -1293,10 +1367,12 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		}
 	}
 
+	/** @internal */
 	static _clearOnChanging<T>(wgt: InputWidget<T>): void {
 		wgt.valueEnter_ = wgt.valueSel_ = undefined;
 	}
 
+	/** @internal */
 	static _clearInplaceTimeout<T>(widget: InputWidget<T>): void {
 		if (widget._inplaceTimerId) {
 			clearTimeout(widget._inplaceTimerId);
@@ -1313,29 +1389,24 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
  * It is designed to be overriden
  * @since 6.5.0
  */
-export let InputCtrl = {
+export var InputCtrl = {
 	/**
-	 * Returns whether to preserve the focus state.
-	 * @param zk.Widget wgt a widget
-	 * @return boolean
+	 * @returns whether to preserve the focus state.
+	 * @param wgt - a widget
 	 */
 	isPreservedFocus(wgt: zk.Widget): boolean {
 		return true;
 	},
 	/**
-	 * Returns whether to preserve the mousemove state.
-	 * @param zk.Widget wgt a widget
-	 * @return boolean
+	 * @returns whether to preserve the mousemove state.
+	 * @param wgt - a widget
 	 */
 	isPreservedMouseMove(wgt: zk.Widget): boolean {
 		return true;
 	},
 	/**
-	 * Returns whether to ignore the dragdrop for errorbox
-	 * @param zk.Draggable dg the drag object
-	 * @param Offset pointer
-	 * @param jq.Event evt
-	 * @return boolean
+	 * @returns whether to ignore the dragdrop for errorbox
+	 * @param dg - the drag object
 	 */
 	isIgnoredDragForErrorbox(dg: zk.Draggable, pointer: zk.Offset, evt: zk.Event): boolean {
 		var c = (dg.control as zk.Widget).$n_('c');

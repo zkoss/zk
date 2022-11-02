@@ -91,10 +91,15 @@ function _redudant(group: zul.wgt.Radiogroup, radio: zul.wgt.Radio): boolean {
  */
 @zk.WrapClass('zul.wgt.Radiogroup')
 export class Radiogroup extends zul.Widget {
+	/** @internal */
 	_orient = 'horizontal';
+	/** @internal */
 	_jsel = -1;
+	/** @internal */
 	_name?: string;
+	/** @internal */
 	_disabled?: boolean;
+	/** @internal */
 	_externs: zul.wgt.Radio[];
 
 	constructor() {
@@ -102,9 +107,9 @@ export class Radiogroup extends zul.Widget {
 		this._externs = [];
 	}
 
-	/** Returns the orient.
-	 * <p>Default: "horizontal".
-	 * @return String
+	/**
+	 * @returns the orient.
+	 * @defaultValue `"horizontal"`.
 	 */
 	getOrient(): string {
 		return this._orient;
@@ -121,22 +126,22 @@ export class Radiogroup extends zul.Widget {
 		return this;
 	}
 
-	/** Returns the name of this group of radio buttons.
+	/**
+	 * @returns the name of this group of radio buttons.
 	 * All child radio buttons shared the same name ({@link Radio#getName}).
-	 * <p>Default: automatically generated an unique name
+	 * @defaultValue automatically generated an unique name
 	 * <p>Don't use this method if your application is purely based
 	 * on ZK's event-driven model.
-	 * @return String
 	 */
 	getName(): string | undefined {
 		return this._name;
 	}
 
-	/** Sets the name of this group of radio buttons.
+	/**
+	 * Sets the name of this group of radio buttons.
 	 * All child radio buttons shared the same name ({@link Radio#getName}).
 	 * <p>Don't use this method if your application is purely based
 	 * on ZK's event-driven model.
-	 * @param String name
 	 */
 	setName(name: string, opts?: Record<string, boolean>): this {
 		const o = this._name;
@@ -150,8 +155,9 @@ export class Radiogroup extends zul.Widget {
 		return this;
 	}
 
-	/** Returns whether it is disabled.
-	 * <p>Default: false.
+	/**
+	 * @returns whether it is disabled.
+	 * @defaultValue `false`.
 	 * @since 10.0.0
 	 */
 	setDisabled(disabled: boolean, opts?: Record<string, boolean>): this {
@@ -169,46 +175,46 @@ export class Radiogroup extends zul.Widget {
 		return this;
 	}
 
-	/** Sets whether to disable all radios.
-	 * <p>Default: false.
+	/**
+	 * Sets whether to disable all radios.
+	 * @defaultValue `false`.
 	 * @since 10.0.0
 	 */
 	isDisabled(): boolean {
 		return !!this._disabled;
 	}
 
-	/** Returns the radio button at the specified index.
-	 * @param int index
-	 * @return Radio
+	/**
+	 * @returns the radio button at the specified index.
 	 */
 	getItemAtIndex(index: number): zul.wgt.Radio | undefined {
 		return index >= 0 ? _getAt(this, {value: 0}, index) : undefined;
 	}
 
-	/** Returns the number of radio buttons in this group.
-	 * @return int
+	/**
+	 * @returns (int) the number of radio buttons in this group.
 	 */
 	getItemCount(): number {
 		return this.getItems().length;
 	}
 
-	/** Returns the all of radio buttons in this group.
-	 * @return Array
+	/**
+	 * @returns the all of radio buttons in this group.
 	 */
 	getItems(): zul.wgt.Radio[] {
 		return _concatItem(this);
 	}
 
-	/** Returns the index of the selected radio button (-1 if no one is selected).
-	 * @return int
+	/**
+	 * @returns (int) the index of the selected radio button (-1 if no one is selected).
 	 */
 	getSelectedIndex(): number {
 		return this._jsel;
 	}
 
-	/** Deselects all the currently selected radio button and selects
+	/**
+	 * Deselects all the currently selected radio button and selects
 	 * the radio button with the given index.
-	 * @param int selectedIndex
 	 */
 	setSelectedIndex(selectedIndex: number): this {
 		if (selectedIndex < 0) selectedIndex = -1;
@@ -225,16 +231,16 @@ export class Radiogroup extends zul.Widget {
 		return this;
 	}
 
-	/** Returns the selected radio button.
-	 * @return Radio
+	/**
+	 * @returns the selected radio button.
 	 */
 	getSelectedItem(): zul.wgt.Radio | undefined {
 		return this._jsel >= 0 ? this.getItemAtIndex(this._jsel) : undefined;
 	}
 
-	/**  Deselects all of the currently selected radio buttons and selects
+	/**
+	 * Deselects all of the currently selected radio buttons and selects
 	 * the given radio button.
-	 * @param Radio selectedItem
 	 */
 	setSelectedItem(selectedItem?: zul.wgt.Radio): this {
 		if (selectedItem == null)
@@ -254,8 +260,7 @@ export class Radiogroup extends zul.Widget {
 
 	/**
 	 * Removes the child radio button in the list box at the given index.
-	 * @param int index
-	 * @return Radio the removed radio button.
+	 * @returns Radio the removed radio button.
 	 */
 	removeItemAt(index: number): zul.wgt.Radio | undefined {
 		var item = this.getItemAtIndex(index);
@@ -266,11 +271,12 @@ export class Radiogroup extends zul.Widget {
 		return item;
 	}
 
-	/** method */
+	/** @internal */
 	_fixSelectedIndex(): void {
 		this._jsel = _fixSelIndex(this, {value: 0});
 	}
 
+	/** @internal */
 	_fixOnAdd(child: zul.wgt.Radio): void {
 		if (this._jsel >= 0 && child.isSelected()) {
 			child.setSelected(false); //it will call _fixSelectedIndex()
@@ -281,6 +287,7 @@ export class Radiogroup extends zul.Widget {
 		child.setDisabled(this.isDisabled());
 	}
 
+	/** @internal */
 	_fixOnRemove(child: zul.wgt.Radio): void {
 		if (child.isSelected()) {
 			this._jsel = -1;
@@ -289,12 +296,14 @@ export class Radiogroup extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	_addExtern(radio: zul.wgt.Radio): void {
 		this._externs.push(radio);
 		if (!_redudant(this, radio))
 			this._fixOnAdd(radio);
 	}
 
+	/** @internal */
 	_rmExtern(radio: zul.wgt.Radio): boolean {
 		if (this._externs.$remove(radio)) {
 			if (!_redudant(this, radio))
@@ -305,6 +314,7 @@ export class Radiogroup extends zul.Widget {
 	}
 
 	// ZK-4989
+	/** @internal */
 	override domClass_(no?: zk.DomClassOptions): string {
 		var scls = super.domClass_(no);
 		if (!no || !no.zclass) {
@@ -314,11 +324,13 @@ export class Radiogroup extends zul.Widget {
 		return scls;
 	}
 
+	/** @internal */
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		this.listen({onCheck: this});
 	}
 
+	/** @internal */
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		this.unlisten({onCheck: this});
 		super.unbind_(skipper, after, keepRod);

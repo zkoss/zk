@@ -14,22 +14,24 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 /**
  * A simple time constraint.
- * @disable(zkgwt)
  * @since 9.0.0
  */
 @zk.WrapClass('zul.inp.SimpleLocalTimeConstraint')
 export class SimpleLocalTimeConstraint extends zul.inp.SimpleConstraint {
 	readonly format = 'HHmmss';
+	/** @internal */
 	_wgt: zul.inp.FormatWidget<DateImpl>;
+	/** @internal */
 	_localizedSymbols?: zk.LocalizedSymbols;
+	/** @internal */
 	_beg?: DateImpl;
+	/** @internal */
 	_end?: DateImpl;
 	
-	/** Constructor.
-	 * @param Object a
+	/**
 	 * It can be String or number, the number or name of flag,
 	 * such as "no positive", 0x0001.
-	 * @param zk.Widget the datebox
+	 * @param wgt - datebox
 	 */
 	constructor(a: unknown, wgt: zul.inp.FormatWidget<DateImpl>) {
 		super(a);
@@ -37,6 +39,7 @@ export class SimpleLocalTimeConstraint extends zul.inp.SimpleConstraint {
 		this._localizedSymbols = wgt._localizedSymbols;
 	}
 
+	/** @internal */
 	override parseConstraint_(constraint: string): void {
 		var len = this.format.length + 1,
 			arr = this._cstArr,
@@ -70,19 +73,20 @@ export class SimpleLocalTimeConstraint extends zul.inp.SimpleConstraint {
 			var msg = this._errmsg,
 				time = this._getTime(val);
 			if (this._beg != null && this._getTime(this._beg) > time)
-				return msg['between'] || msg['after'] || this.outOfRangeValue();
+				return msg.between || msg.after || this.outOfRangeValue();
 			if (this._end != null && this._getTime(this._end) < time)
-				return msg['between'] || msg['before'] || this.outOfRangeValue();
+				return msg.between || msg.before || this.outOfRangeValue();
 		}
 		return result;
 	}
 
+	/** @internal */
 	_getTime(val: DateImpl): number {
 		return val.getSeconds() + val.getMinutes() * 60 + val.getHours() * 3600;
 	}
 
-	/** Returns the message about out of range value
-	 * @return String
+	/**
+	 * @returns the message about out of range value
 	 */
 	outOfRangeValue(): string {
 		var format = this._wgt._format,

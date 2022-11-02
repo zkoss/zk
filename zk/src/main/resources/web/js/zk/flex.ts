@@ -746,6 +746,7 @@ export namespace flex_global {
 }
 zk.copy(window, flex_global);
 const _xWidget = zk.augment(zk.Widget.prototype, {
+	/** @internal */
 	domClass_(no?: zk.DomClassOptions): string {
 		let domClass = _xWidget.domClass_.call(this, no),
 			n = this.$n() as HTMLElement | undefined;

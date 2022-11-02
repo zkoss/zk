@@ -12,7 +12,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	This program is distributed under LGPL Version 2.1 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
-/** The box widgets, such as hbox and vbox.
+/**
+ * The box widgets, such as hbox and vbox.
+ * @internal
  */
 //zk.$package('zul.box');
 
@@ -99,24 +101,38 @@ function _fixTd(this: zul.box.Box): void {
 
 @zk.WrapClass('zul.box.Box')
 export class Box extends zul.Widget {
+	/** @internal */
 	override _mold = 'vertical';
+	/** @internal */
 	_align = 'start';
+	/** @internal */
 	_pack = 'start';
+	/** @internal */
 	_sizedByContent = true;
+	/** @internal */
 	_spacing?: string;
+	/** @internal */
 	_sizes?: string[];
+	/** @internal */
 	_widths?: string[];
+	/** @internal */
 	_splitterKid = false;
+	/** @internal */
 	_stretchPack?: boolean;
+	/** @internal */
 	_watchBound?: boolean;
+	/** @internal */
 	_pack2?: string;
+	/** @internal */
 	_watchTd?: boolean;
+	/** @internal */
 	_watchAlign?: boolean;
 
-	/** Sets the alignment of cells of this box in the 'opposite' direction
+	/**
+	 * Sets the alignment of cells of this box in the 'opposite' direction
 	 * (<i>start</i>, center, end, stretch).
 	 *
-	 * @param String align the alignment in the 'opposite' direction.
+	 * @param align - the alignment in the 'opposite' direction.
 	 * Allowed values: start, center, end, stretch.
 	 * If empty or null, the browser's default is used
 	 * (IE center and FF left, if vertical).
@@ -132,7 +148,8 @@ export class Box extends zul.Widget {
 		return this;
 	}
 
-	/** Returns the alignment of cells of a box in the 'opposite' direction
+	/**
+	 * @returns the alignment of cells of a box in the 'opposite' direction
 	 * (<i>null</i>, start, center, end).
 	 *
 	 * <p>The align attribute specifies how child elements of the box are aligned,
@@ -140,7 +157,7 @@ export class Box extends zul.Widget {
 	 * boxes that have horizontal orientation, it specifies how its children will
 	 * be aligned vertically. For boxes that have vertical orientation, it is used
 	 * to specify how its children are aligned horizontally. The pack attribute
-	 * ({@link #getPack}) is
+	 * ({@link getPack}) is
 	 * related to the alignment but is used to specify the position in the
 	 * opposite direction.
 	 *
@@ -160,19 +177,19 @@ export class Box extends zul.Widget {
 	 * <dd>Child elements are stretched to fill the box.</dd>
 	 * </dl>
 	 *
-	 * <p>Default: start</p>
-	 * @return String
+	 * @defaultValue start
 	 */
 	getAlign(): string {
 		return this._align;
 	}
 
-	/** Sets the alignment of cells of this box
+	/**
+	 * Sets the alignment of cells of this box
 	 * (start, center, end) plus an <i>stretch</i> option.
 	 *
-	 * @param String pack the alignment. Allowed values: (start, center, end) plus an
+	 * @param pack - the alignment. Allowed values: (start, center, end) plus an
 	 * <i>stretch</i> option. If empty or null, it defaults to "stretch,start".
-	 * @see #getPack()
+	 * @see {@link getPack}
 	 */
 	setPack(pack: string, opts?: Record<string, boolean>): this {
 		const o = this._pack;
@@ -185,7 +202,8 @@ export class Box extends zul.Widget {
 		return this;
 	}
 
-	/** Returns the pack alignment of cells of this box
+	/**
+	 * @returns the pack alignment of cells of this box
 	 * (start, center, end) plus an indication <i>stretch</i> option.
 	 *
 	 * <p>The pack attribute specifies where child elements of the box are placed
@@ -193,7 +211,7 @@ export class Box extends zul.Widget {
 	 * horizontal orientation, it is used to indicate the position of children
 	 * horizontally. For boxes with vertical orientation, it is used to indicate
 	 * the position of children vertically. The align attribute
-	 * ({@link #getAlign})is used to specify
+	 * ({@link getAlign})is used to specify
 	 * the position in the opposite direction.
 	 *
 	 * <dl>
@@ -225,17 +243,17 @@ export class Box extends zul.Widget {
 	 * same as "stretch,start"</dd>
 	 * </dl>
 	 *
-	 * <p>Default: start.
-	 * @return String
+	 * @defaultValue start.
 	 */
 	getPack(): string {
 		return this._pack;
 	}
 
-	/** Sets the spacing between adjacent children.
-	 * @param String spacing the spacing (such as "0", "5px", "3pt" or "1em"),
+	/**
+	 * Sets the spacing between adjacent children.
+	 * @param spacing - the spacing (such as "0", "5px", "3pt" or "1em"),
 	 * or null to use the default spacing
-	 * @see #getSpacing
+	 * @see {@link getSpacing}
 	 */
 	setSpacing(spacing: string, opts?: Record<string, boolean>): this {
 		const o = this._spacing;
@@ -248,20 +266,20 @@ export class Box extends zul.Widget {
 		return this;
 	}
 
-	/** Returns the spacing between adjacent children, or null if the default
+	/**
+	 * @returns the spacing between adjacent children, or null if the default
 	 * spacing is used.
 	 *
 	 * <p>The default spacing depends on the definition of the style class
 	 * called "xxx-sp", where xxx is
 	 *
 	 * <ol>
-	 *  <li>{@link #getSclass} if it is not null.</li>
-	 *  <li>hbox if {@link #getSclass} is null and it is a horizontal box.</li>
-	 *  <li>vbox if {@link #getSclass} is null and it is a vertical box.</li>
+	 *  <li>{@link getSclass} if it is not null.</li>
+	 *  <li>hbox if {@link getSclass} is null and it is a horizontal box.</li>
+	 *  <li>vbox if {@link getSclass} is null and it is a vertical box.</li>
 	 * </ol>
 	 *
-	 * <p>Default: null (means to use the default spacing).
-	 * @return String
+	 * @defaultValue `null` (means to use the default spacing).
 	 */
 	getSpacing(): string | undefined {
 		return this._spacing;
@@ -269,11 +287,10 @@ export class Box extends zul.Widget {
 
 	/**
 	 * Sets whether sizing the cell's size by its content.
-	 * <p>Default: true. It means the cell's size is depended on its content.
+	 * @defaultValue `true`. It means the cell's size is depended on its content.
 	 *
 	 * <p> With {@link Splitter}, you can specify the sizedByContent to be false
 	 * for resizing smoothly
-	 * @param boolean byContent
 	 * @since 5.0.4
 	 */
 	setSizedByContent(sizedByContent: boolean, opts?: Record<string, boolean>): this {
@@ -288,10 +305,9 @@ export class Box extends zul.Widget {
 	}
 
 	/**
-	 * Returns whether sizing the cell's size by its content.
-	 * <p>Default: true.
+	 * @returns whether sizing the cell's size by its content.
+	 * @defaultValue `true`.
 	 * @since 5.0.4
-	 * @return boolean
 	 */
 	isSizedByContent(): boolean {
 		return this._sizedByContent;
@@ -321,31 +337,32 @@ export class Box extends zul.Widget {
 		return this.getWidths();
 	}
 
-	/** Returns whether it is a vertical box.
-	 * @return boolean
+	/**
+	 * @returns whether it is a vertical box.
 	 */
 	isVertical(): boolean {
 		return 'vertical' == this._mold;
 	}
 
-	/** Returns the orient.
-	 * @return String
+	/**
+	 * @returns the orient.
 	 */
 	getOrient(): string {
 		return this._mold;
 	}
 
-	//super//
 	override getZclass(): string {
 		var zcs = this._zclass;
 		return zcs != null ? zcs : this.isVertical() ? 'z-vbox' : 'z-hbox';
 	}
 
+	/** @internal */
 	override onChildVisible_(child: zk.Widget): void {
 		super.onChildVisible_(child);
 		if (this.desktop) this._fixChildDomVisible(child, child._visible);
 	}
 
+	/** @internal */
 	override replaceChildHTML_(child: zk.Widget, en: HTMLElement | string, desktop?: zk.Desktop, skipper?: zk.Skipper, _trim_?: boolean): void {
 		super.replaceChildHTML_(child, en, desktop, skipper, _trim_);
 		this._fixChildDomVisible(child, child._visible);
@@ -359,6 +376,7 @@ export class Box extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	_fixChildDomVisible(child: zk.Widget, visible?: boolean): void {
 		var n: zk.Widget | HTMLElement | undefined = this._chdextr(child);
 		if (n) n.style.display = visible ? '' : 'none';
@@ -374,10 +392,12 @@ export class Box extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	_chdextr(child: zk.Widget): HTMLElement | undefined {
 		return child.$n('chdex') || child.$n();
 	}
 
+	/** @internal */
 	override insertChildHTML_(child: zk.Widget, before?: zk.Widget, desktop?: zk.Desktop): void {
 		if (before) {
 			jq(this._chdextr(before)).before(this.encloseChildHTML_(child)!);
@@ -391,6 +411,7 @@ export class Box extends zul.Widget {
 		child.bind(desktop);
 	}
 
+	/** @internal */
 	override removeChildHTML_(child: zk.Widget, ignoreDom?: boolean): void {
 		super.removeChildHTML_(child, ignoreDom);
 		jq(child.uuid + '-chdex', zk).remove();
@@ -400,13 +421,14 @@ export class Box extends zul.Widget {
 			jq(sib.uuid + '-chdex2', zk).remove();
 	}
 
-	/** Enclose child with HTML tag such as TR or TD,
+	/**
+	 * Enclose child with HTML tag such as TR or TD,
 	 * and return a HTML code or add HTML fragments in out array.
-	 * @param zk.Widget child the child which will be enclosed
-	 * @param boolean prefixSpace if true the previousSibling of the child
+	 * @param child - the child which will be enclosed
+	 * @param prefixSpace - if true the previousSibling of the child
 	 * will put in front of child.
-	 * @param Array out an array of HTML fragments.
-	 * @return String
+	 * @param out - an array of HTML fragments.
+	 * @internal
 	 */
 	encloseChildHTML_(child: zk.Widget, prefixSpace?: boolean, out?: string[]): string | void {
 		var oo: string[] = [],
@@ -454,6 +476,7 @@ export class Box extends zul.Widget {
 			out.push(oo[j]);
 	}
 
+	/** @internal */
 	_resetBoxSize(vert: boolean): void {
 		var	vert = this.isVertical(),
 			k = -1,
@@ -501,6 +524,7 @@ export class Box extends zul.Widget {
 	}
 
 	//Bug ZK-1569: add minium 1px width on <td> to pass isWatchable_
+	/** @internal */
 	override afterResetChildSize_(): void {
 		for (var kid = this.firstChild, vert = this.isVertical(); kid; kid = kid.nextSibling) {
 			// ZK-2231: kid may not bind to desktop yet (client rod enabled)
@@ -513,6 +537,7 @@ export class Box extends zul.Widget {
 	}
 
 	//bug#3042306
+	/** @internal */
 	override resetSize_(orient: zk.FlexOrient): void { //@Overrid zk.Widget#resetSize_, called when beforeSize
 		super.resetSize_(orient);
 
@@ -557,6 +582,7 @@ export class Box extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	_getContentSize(): {height: number; width: number} {
 		//bug 3010663: boxes do not resize when browser window is resized
 		var p = this.$n(),
@@ -572,6 +598,7 @@ export class Box extends zul.Widget {
 		return zkp ? {height: hgh, width: wdh} : {height: 0, width: 0};
 	}
 
+	/** @internal */
 	override beforeChildrenFlex_(child: zk.Widget): boolean {
 		child._flexFixed = true;
 
@@ -605,6 +632,7 @@ export class Box extends zul.Widget {
 			hgh -= scrWdh || jq.scrollbarWidth();
 
 		for (; xc; xc = xc.nextSibling) {
+			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 			var c = (xc as HTMLElement).id?.endsWith('-chdex') ? vert ?
 					(xc.firstChild as HTMLElement).id ? xc.firstChild : (xc.firstChild as HTMLElement).firstChild : xc.firstChild : xc;
 
@@ -671,7 +699,7 @@ export class Box extends zul.Widget {
 		var lastsz = hgh > 0 ? hgh : 0;
 		for (var j = vflexs.length - 1; j > 0; --j) {
 			let cwgt = vflexs.shift()!,
-				vsz = (cwgt._nvflex as number * hgh / vflexsz) | 0, //cast to integer
+				vsz = (cwgt._nvflex! * hgh / vflexsz) | 0, //cast to integer
 				//B50-3014664.zul offtop = cwgt.$n().offsetTop,
 				isz = vsz, // B50-3014664.zul vsz - ((zk.ie && offtop > 0) ? (offtop * 2) : 0);
 				chdex = cwgt.$n('chdex')!,
@@ -752,6 +780,7 @@ export class Box extends zul.Widget {
 		return false; //to skip original _fixFlex
 	}
 
+	/** @internal */
 	_childOuterAttrs(child: zk.Widget): string {
 		var html = '';
 		if (child instanceof zul.box.Splitter)
@@ -768,6 +797,7 @@ export class Box extends zul.Widget {
 		return html;
 	}
 
+	/** @internal */
 	_childInnerAttrs(child: zk.Widget): string {
 		var html = '',
 			vert = this.isVertical();
@@ -798,17 +828,20 @@ export class Box extends zul.Widget {
 		return style ? html + ' style="' + style + '"' : html;
 	}
 
+	/** @internal */
 	_isStretchPack(): boolean {
 		//when pack has specifies 'stretch' or there are splitter kids which
 		//implies pack='stretch'
 		return !!(this._splitterKid || this._stretchPack);
 	}
 
+	/** @internal */
 	_isStretchAlign(): boolean {
 		return this._align == 'stretch';
 	}
 
 	//called by Splitter
+	/** @internal */
 	_bindWatch(): void {
 		if (!this._watchBound) {
 			this._watchBound = true;
@@ -816,6 +849,7 @@ export class Box extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	_unbindWatch(): void {
 		if (this._watchBound) {
 			zWatch.unlisten({onSize: this, onHide: this});
@@ -823,6 +857,7 @@ export class Box extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		this._bindFixTd();
@@ -832,6 +867,7 @@ export class Box extends zul.Widget {
 			this._bindWatch();
 	}
 
+	/** @internal */
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		this._unbindWatch();
 		this._unbindAlign();
@@ -839,6 +875,7 @@ export class Box extends zul.Widget {
 		super.unbind_(skipper, after, keepRod);
 	}
 
+	/** @internal */
 	_bindAlign(): void {
 		if (!this._watchAlign) {
 			this._watchAlign = true;
@@ -846,6 +883,7 @@ export class Box extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	_unbindAlign(): void {
 		if (this._watchAlign) {
 			zWatch.unlisten({onSize: [this, this._fixAlign], onHide: [this, this._fixAlign]});
@@ -853,6 +891,7 @@ export class Box extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	_fixAlign(): void {
 		if (this._isStretchAlign()) {
 			var vert = this.isVertical(),
@@ -872,6 +911,7 @@ export class Box extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	_bindFixTd(): void {
 		if (!this._watchTd) {
 			this._watchTd = true;
@@ -879,6 +919,7 @@ export class Box extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	_unbindFixTd(): void {
 		if (this._watchTd) {
 			zWatch.unlisten({onSize: [this, _fixTd], onHide: [this, _fixTd]});
@@ -886,6 +927,7 @@ export class Box extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	_configPack(): void {
 		var w = this._pack;
 		if (w) {
@@ -906,6 +948,7 @@ export class Box extends zul.Widget {
 	//watch//
 	override onSize(): void {
 		if (!this._splitterKid) return; //only when there are splitter kids
+		// eslint-disable-next-line @typescript-eslint/non-nullable-type-assertion-style
 		var vert = this.isVertical(), real = this.$n('real') as HTMLTableElement;
 		real.style.height = real.style.width = '100%'; //there are splitter kids
 
@@ -949,16 +992,18 @@ export class Box extends zul.Widget {
 		this.onSize();
 	}
 
+	/** @internal */
 	override getFlexContainer_(): HTMLElement | undefined {
 		return undefined;
 	}
 
-	//static
+	/** @internal */
 	static _toValign(v?: string): string | undefined {
 		return v ? 'start' == v ? 'top' : 'center' == v ? 'middle' :
 			'end' == v ? 'bottom' : v : undefined;
 	}
 
+	/** @internal */
 	static _toHalign(v?: string): string | undefined {
 		return v ? 'start' == v ? 'left' : 'end' == v ? 'right' : v : undefined;
 	}

@@ -96,22 +96,22 @@ export class Treeitem extends zul.sel.ItemWidget {
 	override nextSibling!: zul.sel.Treeitem | undefined;
 	override previousSibling!: zul.sel.Treeitem | undefined;
 
+	/** @internal */
 	_open = true;
 	treerow?: zul.sel.Treerow | undefined;
 	treechildren?: zul.sel.Treechildren | undefined;
 
-	/** Returns whether this container is open.
-	 * <p>Default: true.
-	 * @return boolean
+	/**
+	 * @returns whether this container is open.
+	 * @defaultValue `true`.
 	 */
 	isOpen(): boolean {
 		return this._open;
 	}
 
-	/** Sets whether this container is open.
-	 * @param boolean open
+	/**
+	 * Sets whether this container is open.
 	 */
-	// FIXME: can a defSet generated setter accept more than one arguments before `opts`?
 	setOpen(open: boolean, fromServer?: boolean, opts?: Record<string, boolean>): this {
 		const o = this._open;
 		this._open = open;
@@ -175,6 +175,7 @@ export class Treeitem extends zul.sel.ItemWidget {
 		return this;
 	}
 
+	/** @internal */
 	_showKids(open: boolean): void {
 		var tc = this.treechildren;
 		if (tc)
@@ -187,22 +188,21 @@ export class Treeitem extends zul.sel.ItemWidget {
 			}
 	}
 
+	/** @internal */
 	override isStripeable_(): boolean {
 		return false;
 	}
 
 	/**
-	 * Returns the mesh widget. i.e. {@link Tree}
-	 * @return Tree
+	 * @returns the mesh widget. i.e. {@link Tree}
 	 */
 	override getMeshWidget(): zul.sel.Tree | undefined {
 		return this.parent ? this.parent.getTree() : undefined;
 	}
 
 	/**
-	 * Returns the {@link Tree}.
-	 * @return Tree
-	 * @see #getMeshWidget
+	 * @returns the {@link Tree}.
+	 * @see {@link getMeshWidget}
 	 */
 	getTree = Treeitem.prototype.getMeshWidget;
 
@@ -221,23 +221,23 @@ export class Treeitem extends zul.sel.ItemWidget {
 		return undefined;
 	}
 
-	/** Returns whether the element is to act as a container
+	/**
+	 * @returns whether the element is to act as a container
 	 * which can have child elements.
-	 * @return boolean
 	 */
 	isContainer(): boolean {
 		return this.treechildren != null;
 	}
 
-	/** Returns whether this element contains no child elements.
-	 * @return boolean
+	/**
+	 * @returns whether this element contains no child elements.
 	 */
 	isEmpty(): boolean {
 		return !this.treechildren || !this.treechildren.nChildren;
 	}
 
-	/** Returns the level this cell is. The root is level 0.
-	 * @return int
+	/**
+	 * @returns the level this cell is. The root is level 0.
 	 */
 	getLevel(): number {
 		var level = 0;
@@ -252,19 +252,18 @@ export class Treeitem extends zul.sel.ItemWidget {
 		return level;
 	}
 
-	/** Returns the label of the {@link Treecell} it contains, or null
+	/**
+	 * @returns the label of the {@link Treecell} it contains, or null
 	 * if no such cell.
-	 * @return String
 	 */
 	override getLabel(): string | undefined {
 		var cell = this.getFirstCell();
 		return cell ? cell.getLabel() : undefined;
 	}
 
-	/** Sets the label of the {@link Treecell} it contains.
-	 *
+	/**
+	 * Sets the label of the {@link Treecell} it contains.
 	 * <p>If it is not created, we automatically create it.
-	 * @param String label
 	 */
 	setLabel(label: string): this {
 		this._autoFirstCell().setLabel(label);
@@ -272,13 +271,13 @@ export class Treeitem extends zul.sel.ItemWidget {
 	}
 
 	/**
-	 * Returns the first treecell.
-	 * @return Treecell
+	 * @returns the first treecell.
 	 */
 	getFirstCell(): zul.sel.Treecell | undefined {
 		return this.treerow ? this.treerow.firstChild : undefined;
 	}
 
+	/** @internal */
 	_autoFirstCell(): zul.sel.Treecell {
 		if (!this.treerow)
 			this.appendChild(new zul.sel.Treerow());
@@ -291,40 +290,40 @@ export class Treeitem extends zul.sel.ItemWidget {
 		return cell;
 	}
 
-	/** Returns the image of the {@link Treecell} it contains.
-	 * @return String
+	/**
+	 * @returns the image of the {@link Treecell} it contains.
 	 */
 	getImage(): string | undefined {
 		var cell = this.getFirstCell();
 		return cell ? cell.getImage() : undefined;
 	}
 
-	/** Sets the image of the {@link Treecell} it contains.
-	 *
+	/**
+	 * Sets the image of the {@link Treecell} it contains.
 	 * <p>If it is not created, we automatically create it.
-	 * @param String image
-	 * @return Treeitem
 	 */
 	setImage(image: string): this {
 		this._autoFirstCell().setImage(image);
 		return this;
 	}
 
-	/** Returns the parent tree item,
+	/**
+	 * @returns the parent tree item,
 	 * or null if this item is already the top level of the tree.
 	 * The parent tree item is actually the grandparent if any.
-	 * @return Treeitem
 	 */
 	getParentItem(): zul.sel.Treeitem | undefined {
 		const p = this.parent?.parent; // null/undefined are not instances of any Object
 		return p instanceof zul.sel.Treeitem ? p : undefined;
 	}
 
+	/** @internal */
 	_isRealVisible(): boolean {
 		const p = this.parent;
 		return this.isVisible() && !!p && p._isRealVisible();
 	}
 
+	/** @internal */
 	_isVisibleInTree(): boolean {
 		// used by Treecell#_isLastVisibleChild
 		if (!this.isVisible())
@@ -349,6 +348,7 @@ export class Treeitem extends zul.sel.ItemWidget {
 		return this;
 	}
 
+	/** @internal */
 	override beforeParentChanged_(newParent?: zul.sel.Treechildren): void {
 		var oldtree = this.getTree();
 		if (oldtree)
@@ -362,11 +362,11 @@ export class Treeitem extends zul.sel.ItemWidget {
 		super.beforeParentChanged_(newParent);
 	}
 
-	//@Override
 	override isRealElement(): boolean {
 		return false; // fixed for ZK Client selector issue
 	}
 
+	/** @internal */
 	override beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
 		if (child instanceof zul.sel.Treerow) {
 			if (this.treerow && this.treerow != child) {
@@ -384,7 +384,7 @@ export class Treeitem extends zul.sel.ItemWidget {
 		}
 		return true;
 	}
-	//@Override
+
 	override insertBefore(child: zk.Widget, sibling: zk.Widget | undefined, ignoreDom?: boolean): boolean {
 		if (super.insertBefore(child, sibling,
 		ignoreDom || (!this.z_rod && child instanceof zul.sel.Treechildren))) {
@@ -394,7 +394,6 @@ export class Treeitem extends zul.sel.ItemWidget {
 		return false;
 	}
 
-	//@Override
 	override appendChild(child: zk.Widget, ignoreDom?: boolean): boolean {
 		if (super.appendChild(child,
 		ignoreDom || (!this.z_rod && child instanceof zul.sel.Treechildren))) {
@@ -405,6 +404,7 @@ export class Treeitem extends zul.sel.ItemWidget {
 		return false;
 	}
 
+	/** @internal */
 	_fixOnAdd(child: zk.Widget, ignoreDom?: boolean): void {
 		if (child instanceof zul.sel.Treerow)
 			this.treerow = child;
@@ -415,6 +415,7 @@ export class Treeitem extends zul.sel.ItemWidget {
 		}
 	}
 
+	/** @internal */
 	override onChildRemoved_(child: zk.Widget): void {
 		super.onChildRemoved_(child);
 		if (child == this.treerow) {
@@ -426,6 +427,7 @@ export class Treeitem extends zul.sel.ItemWidget {
 		}
 	}
 
+	/** @internal */
 	override onChildAdded_(child: zk.Widget): void {
 		super.onChildAdded_(child);
 		if (this.childReplacing_) //called by onChildReplaced_
@@ -434,6 +436,7 @@ export class Treeitem extends zul.sel.ItemWidget {
 			this._fixOnAdd(child, true); // fixed dynamically change treerow. B65-ZK-1608
 	}
 
+	/** @internal */
 	override removeHTML_(n: HTMLElement | HTMLElement[]): void {
 		for (var w: zk.Widget | undefined = this.firstChild; w; w = w.nextSibling) {
 			const cn = w.$n();
@@ -450,6 +453,7 @@ export class Treeitem extends zul.sel.ItemWidget {
 		super.replaceWidget(newwgt, skipper);
 	}
 
+	/** @internal */
 	_removeChildHTML(n: HTMLElement | string): void {
 		for (var cn: HTMLElement | undefined, w = this.firstChild; w; w = w.nextSibling) {
 			if (w != this.treerow && (cn = w.$n()))
@@ -457,6 +461,7 @@ export class Treeitem extends zul.sel.ItemWidget {
 		}
 	}
 
+	/** @internal */
 	_renderChildHTML(childHTML: string): void {
 		var tree = this.getTree()!,
 			erows = tree.ebodyrows;
@@ -496,6 +501,7 @@ export class Treeitem extends zul.sel.ItemWidget {
 		}
 	}
 
+	/** @internal */
 	override insertChildHTML_(child: zk.Widget, before?: zk.Widget, desktop?: zk.Desktop): void {
 		const nodeOfBefore = before ? before.getFirstNode_() : undefined;
 		if (nodeOfBefore)
@@ -506,6 +512,7 @@ export class Treeitem extends zul.sel.ItemWidget {
 		child.bind(desktop);
 	}
 
+	/** @internal */
 	override getOldWidget_(n: HTMLElement | string): zk.Widget | undefined {
 		var old = super.getOldWidget_(n);
 		if (old && old instanceof zul.sel.Treerow)
@@ -518,6 +525,7 @@ export class Treeitem extends zul.sel.ItemWidget {
 		super.replaceHTML(n, desktop, skipper, _trim_, _callback_);
 	}
 
+	/** @internal */
 	_syncIcon(isRemoved?: boolean): void {
 		if (this.desktop && this.treerow) {
 			const treecell = this.treerow.firstChild;
@@ -528,7 +536,7 @@ export class Treeitem extends zul.sel.ItemWidget {
 		}
 	}
 
-	//@Override
+	/** @internal */
 	override compareItemPos_(item: zul.sel.Treeitem): number {
 		if (this == item)
 			return 0;
@@ -537,6 +545,7 @@ export class Treeitem extends zul.sel.ItemWidget {
 	}
 
 	//package utiltiy: sync selected items for replaceWidget
+	/** @internal */
 	static _syncSelItems<T extends (zul.sel.Treeitem | zul.sel.Treechildren)>(oldwgt: T, newwgt: T): void {
 		const items = oldwgt.getTree()?._selItems;
 		if (items)

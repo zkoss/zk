@@ -34,22 +34,28 @@ function _fixForEmpty(wgt: zul.grid.Grid): void {
 
 @zk.WrapClass('zul.grid.Grid')
 export class Grid extends zul.mesh.MeshWidget {
+	/** @internal */
 	_grid$rod?: boolean; // zkex.grid.Group
+	/** @internal */
 	_fixhdwcnt?: number; // zkex.grid.Detail
+	/** @internal */
 	_fixhdoldwd?: number; // zkex.grid.Detail
+	/** @internal */
 	_emptyMessage?: string;
 	rows?: zul.grid.Rows;
 	columns?: zul.grid.Columns;
+	/** @internal */
 	_shallFixEmpty?: boolean;
+	/** @internal */
 	_scOddRow?: string;
 	// Prevent name clash with inherited method `_visibleRows`. Fortunately, Java
 	// calls its setter, so this renaming is safe. See `renderProperties`
 	// in `Grid.java`.
+	/** @internal */
 	_visibleRows_?: number;
 
 	/**
-	 * Returns the message to display when there are no items
-	 * @return String
+	 * @returns the message to display when there are no items
 	 * @since 5.0.7
 	 */
 	getEmptyMessage(): string | undefined {
@@ -58,7 +64,6 @@ export class Grid extends zul.mesh.MeshWidget {
 
 	/**
 	 * Sets the message to display when there are no items
-	 * @param String msg
 	 * @since 5.0.7
 	 */
 	setEmptyMessage(emptyMessage: string, opts?: Record<string, boolean>): this {
@@ -84,9 +89,9 @@ export class Grid extends zul.mesh.MeshWidget {
 		return this._visibleRows_;
 	}
 
-	/** Sets the visible rows.
+	/**
+	 * Sets the visible rows.
 	 * Not allowed to set visibleRows and height/vflex at the same time.
-	 * @param int rows
 	 * @since 10.0.0
 	 */
 	setVisibleRows(visibleRows: number, opts?: Record<string, boolean>): this {
@@ -100,10 +105,10 @@ export class Grid extends zul.mesh.MeshWidget {
 		return this;
 	}
 
-	/** Returns the specified cell, or null if not available.
-	 * @param int row which row to fetch (starting at 0).
-	 * @param int col which column to fetch (starting at 0).
-	 * @return zk.Widget
+	/**
+	 * @returns the specified cell, or null if not available.
+	 * @param row - which row to fetch (starting at 0).
+	 * @param col - which column to fetch (starting at 0).
 	 */
 	getCell(row: number, col: number): zk.Widget | undefined {
 		const rows = this.rows;
@@ -117,19 +122,19 @@ export class Grid extends zul.mesh.MeshWidget {
 		return gridRow.nChildren <= col ? undefined : gridRow.getChildAt(col);
 	}
 
-	/** Returns the style class for the odd rows.
-	 * <p>Default: {@link #getZclass()}-odd.
-	 * @return String
+	/**
+	 * @returns the style class for the odd rows.
+	 * @defaultValue {@link getZclass}-odd.
 	 */
 	getOddRowSclass(): string {
 		return this._scOddRow == null ? this.$s('odd') : this._scOddRow;
 	}
 
-	/** Sets the style class for the odd rows.
+	/**
+	 * Sets the style class for the odd rows.
 	 * If the style class doesn't exist, the striping effect disappears.
 	 * You can provide different effects by providing the proper style
 	 * classes.
-	 * @param String scls
 	 */
 	setOddRowSclass(oddRowSclass: string): this {
 		const scls = oddRowSclass;
@@ -166,6 +171,7 @@ export class Grid extends zul.mesh.MeshWidget {
 		return false;
 	}
 
+	/** @internal */
 	_fixOnAdd(child: zk.Widget, ignoreDom?: boolean, _noSync?: boolean): void {
 		if (child instanceof zul.grid.Rows) {
 			this.rows = child;
@@ -187,6 +193,7 @@ export class Grid extends zul.mesh.MeshWidget {
 			this._syncSize();  //sync-size required
 	}
 
+	/** @internal */
 	override onChildRemoved_(child: zk.Widget): void {
 		super.onChildRemoved_(child);
 
@@ -212,10 +219,10 @@ export class Grid extends zul.mesh.MeshWidget {
 	}
 
 	/**
-	 * a redraw method for the empty message , if you want to customize the message ,
+	 * A redraw method for the empty message, if you want to customize the message,
 	 * you could overwrite this.
-	 * @param Array out A array that contains html structure ,
-	 * 			it usually come from mold(redraw_).
+	 * @param out - An array that contains html structure, it usually come from `mold(redraw_)`.
+	 * @internal
 	 */
 	redrawEmpty_(out: string[]): void {
 		out.push('<tbody class="', this.$s('emptybody'), '"><tr><td id="',
@@ -226,6 +233,7 @@ export class Grid extends zul.mesh.MeshWidget {
 		out.push('>', this._emptyMessage!, '</div></td></tr></tbody>');
 	}
 
+	/** @internal */
 	override bind_(desktop: zk.Desktop | undefined, skipper: zk.Skipper | undefined, after: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		after.push(() => {
@@ -233,6 +241,7 @@ export class Grid extends zul.mesh.MeshWidget {
 		});
 	}
 
+	/** @internal */
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		this.destroyBar_();
 		super.unbind_(skipper, after, keepRod);
@@ -254,6 +263,7 @@ export class Grid extends zul.mesh.MeshWidget {
 		}, 200);
 	}
 
+	/** @internal */
 	destroyBar_(): void {
 		var bar = this._scrollbar;
 		if (bar) {
@@ -270,9 +280,11 @@ export class Grid extends zul.mesh.MeshWidget {
 		super.onResponse(ctl, opts);
 	}
 
+	/** @internal */
 	override _syncEmpty(): void {
 		this._shallFixEmpty = true;
 	}
+	/** @internal */
 	override beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
 		if (child instanceof zul.grid.Rows) {
 			if (this.rows && this.rows != child) {
@@ -315,6 +327,7 @@ export class Grid extends zul.mesh.MeshWidget {
 		return true;
 	}
 
+	/** @internal */
 	override onChildAdded_(child: zk.Widget): void {
 		super.onChildAdded_(child);
 		if (this.childReplacing_) //called by onChildReplaced_
@@ -322,6 +335,7 @@ export class Grid extends zul.mesh.MeshWidget {
 		//else handled by insertBefore/appendChild
 	}
 
+	/** @internal */
 	override insertChildHTML_(child: zk.Widget, before?: zk.Widget, desktop?: zk.Desktop): void {
 		if (child instanceof zul.grid.Rows) {
 			this.rows = child;
@@ -351,16 +365,14 @@ export class Grid extends zul.mesh.MeshWidget {
 	}
 
 	/**
-	 * Returns the head widget class.
-	 * @return zul.grid.Columns
+	 * @returns the head widget class.
 	 */
 	getHeadWidgetClass(): typeof zul.grid.Columns {
 		return zul.grid.Columns;
 	}
 
 	/**
-	 * Returns the tree item iterator.
-	 * @return zul.grid.RowIter
+	 * @returns the tree item iterator.
 	 */
 	getBodyWidgetIterator(opts?: Record<string, unknown>): zul.grid.RowIter {
 		return new zul.grid.RowIter(this, opts);
@@ -368,9 +380,8 @@ export class Grid extends zul.mesh.MeshWidget {
 	itemIterator = Grid.prototype.getBodyWidgetIterator;
 
 	/**
-	 * Returns whether the grid has group.
+	 * @returns whether the grid has group.
 	 * @since 6.5.0
-	 * @return boolean
 	 */
 	hasGroup(): boolean {
 		return !!this.rows?.hasGroup();
@@ -378,8 +389,8 @@ export class Grid extends zul.mesh.MeshWidget {
 
 	/**
 	 * Scroll to the specified row by the given index.
-	 * @param int index the index of row
-	 * @param double scrollRatio the scroll ratio
+	 * @param index - the index of row
+	 * @param scrollRatio - the scroll ratio
 	 * @since 8.5.2
 	 */
 	scrollToIndex(index: number, scrollRatio: number): void {
@@ -388,10 +399,12 @@ export class Grid extends zul.mesh.MeshWidget {
 		});
 	}
 
+	/** @internal */
 	_getFirstItemIndex(): number | undefined {
 		return this.rows!.firstChild!._index;
 	}
 
+	/** @internal */
 	_getLastItemIndex(): number | undefined {
 		return this.rows!.lastChild!._index;
 	}
@@ -399,18 +412,18 @@ export class Grid extends zul.mesh.MeshWidget {
 
 /**
  * The row iterator.
- * @disable(zkgwt)
  */
 @zk.WrapClass('zul.grid.RowIter')
 export class RowIter extends zk.Object implements zul.mesh.ItemIterator {
 	grid: zul.grid.Grid;
 	opts?: Record<string, unknown>;
+	/** @internal */
 	_isInit?: boolean;
 	p?: zul.grid.Row;
 	length?: number;
 
-	/** Constructor
-	 * @param Grid grid the widget that the iterator belongs to
+	/**
+	 * @param grid - the widget that the iterator belongs to
 	 */
 	constructor(grid: zul.grid.Grid, opts?: Record<string, unknown>) {
 		super();
@@ -418,6 +431,7 @@ export class RowIter extends zk.Object implements zul.mesh.ItemIterator {
 		this.opts = opts;
 	}
 
+	/** @internal */
 	_init(): void {
 		if (!this._isInit) {
 			this._isInit = true;
@@ -429,8 +443,7 @@ export class RowIter extends zk.Object implements zul.mesh.ItemIterator {
 	}
 
 	/**
-	* Returns <tt>true</tt> if the iteration has more elements
-	* @return boolean
+	* @returns `true` if the iteration has more elements
 	*/
 	hasNext(): boolean {
 		this._init();
@@ -438,9 +451,7 @@ export class RowIter extends zk.Object implements zul.mesh.ItemIterator {
 	}
 
 	/**
-	 * Returns the next element in the iteration.
-	 *
-	 * @return Row the next element in the iteration.
+	 * @returns the next element in the iteration.
 	 */
 	next(): zul.grid.Row | undefined {
 		this._init();

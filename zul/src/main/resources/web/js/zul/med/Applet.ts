@@ -21,17 +21,25 @@ it will be useful, but WITHOUT ANY WARRANTY.
  *
  * <p>
  * Non XUL extension.
- * <p>Note: {@link #setVisible} with false cannot work in IE. (Browser's limitation)
+ * <p>Note: {@link setVisible} with false cannot work in IE. (Browser's limitation)
  */
 @zk.WrapClass('zul.med.Applet')
 export class Applet extends zul.Widget<HTMLAppletElement> {
+	/** @internal */
 	_code?: string;
+	/** @internal */
 	_codebase?: string;
+	/** @internal */
 	_archive?: string;
+	/** @internal */
 	_mayscript?: boolean;
+	/** @internal */
 	_params: Partial<HTMLAppletElement>;
+	/** @internal */
 	_align?: string;
+	/** @internal */
 	_hspace?: string;
+	/** @internal */
 	_vspace?: string;
 
 	constructor() {
@@ -42,15 +50,15 @@ export class Applet extends zul.Widget<HTMLAppletElement> {
 		// overrides use _params during initialization.
 	}
 
-	/** Return the applet class to run.
-	 * @return String
+	/**
+	 * @returns the applet class to run.
 	 */
 	getCode(): string | undefined {
 		return this._code;
 	}
 
-	/** Sets the applet class to run.
-	 * @param String code
+	/**
+	 * Sets the applet class to run.
 	 */
 	setCode(code: string, opts?: Record<string, boolean>): this {
 		const o = this._code;
@@ -63,15 +71,15 @@ export class Applet extends zul.Widget<HTMLAppletElement> {
 		return this;
 	}
 
-	/** Return a relative base URL for applets specified in {@link #setCode} (URL).
-	 * @return String
+	/**
+	 * @returns a relative base URL for applets specified in {@link setCode} (URL).
 	 */
 	getCodebase(): string | undefined {
 		return this._codebase;
 	}
 
-	/** Sets a relative base URL for applets specified in {@link #setCode} (URL).
-	 * @param String codebase
+	/**
+	 * Sets a relative base URL for applets specified in {@link setCode} (URL).
 	 */
 	setCodebase(codebase: string, opts?: Record<string, boolean>): this {
 		const o = this._codebase;
@@ -84,16 +92,16 @@ export class Applet extends zul.Widget<HTMLAppletElement> {
 		return this;
 	}
 
-	/** Returns the location of an archive file (URL).
-	 * @return String
+	/**
+	 * @returns the location of an archive file (URL).
 	 * @since 5.0.3
 	 */
 	getArchive(): string | undefined {
 		return this._archive;
 	}
 
-	/** Sets the location of an archive file (URL).
-	 * @param String archive
+	/**
+	 * Sets the location of an archive file (URL).
 	 * @since 5.0.3
 	 */
 	setArchive(archive: string, opts?: Record<string, boolean>): this {
@@ -107,16 +115,16 @@ export class Applet extends zul.Widget<HTMLAppletElement> {
 		return this;
 	}
 
-	/** Returns whether the applet is allowed to access the scripting object.
-	 * @return boolean
+	/**
+	 * @returns whether the applet is allowed to access the scripting object.
 	 * @since 5.0.3
 	 */
 	isMayscript(): boolean {
 		return !!this._mayscript;
 	}
 
-	/** Sets whether the applet is allowed to access the scripting object.
-	 * @param boolean mayscript
+	/**
+	 * Sets whether the applet is allowed to access the scripting object.
 	 * @since 5.0.3
 	 */
 	setMayscript(mayscript: boolean, opts?: Record<string, boolean>): this {
@@ -132,16 +140,16 @@ export class Applet extends zul.Widget<HTMLAppletElement> {
 		return this;
 	}
 
-	/** Returns the alignment of an applet according to surrounding elements.
-	 * @return String
+	/**
+	 * @returns the alignment of an applet according to surrounding elements.
 	 * @since 5.0.3
 	 */
 	getAlign(): string | undefined {
 		return this._align;
 	}
 
-	/** Sets the alignment of an applet according to surrounding elements.
-	 * @param String align
+	/**
+	 * Sets the alignment of an applet according to surrounding elements.
 	 * @since 5.0.3
 	 */
 	setAlign(align: string, opts?: Record<string, boolean>): this {
@@ -157,16 +165,16 @@ export class Applet extends zul.Widget<HTMLAppletElement> {
 		return this;
 	}
 
-	/** Returns the horizontal spacing around an applet.
-	 * @return String
+	/**
+	 * @returns the horizontal spacing around an applet.
 	 * @since 5.0.3
 	 */
 	getHspace(): string | undefined {
 		return this._hspace;
 	}
 
-	/** Sets the horizontal spacing around an applet.
-	 * @param String hspace
+	/**
+	 * Sets the horizontal spacing around an applet.
 	 * @since 5.0.3
 	 */
 	setHspace(hspace: string, opts?: Record<string, boolean>): this {
@@ -182,16 +190,16 @@ export class Applet extends zul.Widget<HTMLAppletElement> {
 		return this;
 	}
 
-	/** Returns the vertical spacing around an applet.
-	 * @return String
+	/**
+	 * @returns the vertical spacing around an applet.
 	 * @since 5.0.3
 	 */
 	getVspace(): string | undefined {
 		return this._vspace;
 	}
 
-	/** Sets the vertical spacing around an applet.
-	 * @param String vspace
+	/**
+	 * Sets the vertical spacing around an applet.
 	 * @since 5.0.3
 	 */
 	setVspace(vspace: string, opts?: Record<string, boolean>): this {
@@ -207,7 +215,8 @@ export class Applet extends zul.Widget<HTMLAppletElement> {
 		return this;
 	}
 
-	/** Invokes the function of the applet running at the client.
+	/**
+	 * Invokes the function of the applet running at the client.
 	 */
 	invoke(): void {
 		// Empty on purpose. To be overriden in the following static initialization block.
@@ -264,18 +273,16 @@ export class Applet extends zul.Widget<HTMLAppletElement> {
 		};
 	}
 
-	/** Returns the value of the specified field.
-	 * @param String name
-	 * @return String
+	/**
+	 * @returns the value of the specified field.
 	 */
 	getField(name: string): string | undefined {
 		var n = this.$n();
 		return n ? n[name] as string | undefined : undefined;
 	}
 
-	/** Sets the value of the specified filed.
-	 * @param String name
-	 * @param String value
+	/**
+	 * Sets the value of the specified filed.
 	 */
 	setField(field: string, value: string): this {
 		const n = this.$n();
@@ -289,32 +296,33 @@ export class Applet extends zul.Widget<HTMLAppletElement> {
 		return this;
 	}
 
-	/** Sets the param. Notice that it is meaningful only if it is called
-	 * before redraw. For example, <code>setParam('attr1', 'value1')</code>
-	 * gives a <code>param</code> tag under <code>applet</code> tag with name
-	 * <code>attr1</code>, value <code>value1</code>.
-	 * There are two format:
-	 * setParam(nm, val)
-	 * and
-	 * setParam([nm, val])
-	 * @param String nm
-	 * @param String val
+	/**
+	 * Sets the param. Notice that it is meaningful only if it is called
+	 * before redraw. For example, `setParam('attr1', 'value1')`
+	 * gives a `param` tag under `applet` tag with name `attr1`, value `value1`.
+	 * {@label SEPARATE_PARAMS}
 	 */
-	setParam(param: string, val: string): this {
+	setParam(param: string, val: string): this
+	/**
+	 * @see {@link Applet.(setParam:SEPARATE_PARAMS)}
+	 */
+	setParam(param: [param: string, val: string]): this
+	setParam(param: string | [string, string], val?: string): this {
 		if (arguments.length == 1) {
 			val = param[1];
 			param = param[0];
 		}
-		if (val != null) this._params[param] = val;
-		else delete this._params[param];
+		if (val != null) this._params[param as string] = val;
+		else delete this._params[param as string];
 		return this;
 	}
 
-	/** Sets the params map. It should only be called before redraw.
-	 * @param Map m A map of param pairs, as applet parameters. For example,
-	 * <code>{attr1:'value1', attr2:'value2'}</code> gives two <code>param</code>
-	 * tags under <code>applet</code> tag with names <code>attr1, attr2</code>,
-	 * values <code>value1, value2</code> respectively.
+	/**
+	 * Sets the params map. It should only be called before redraw.
+	 * @param params - A map of param pairs, as applet parameters. For example,
+	 * `{attr1:'value1', attr2:'value2'}` gives two `param`
+	 * tags under `applet` tag with names `attr1, attr2`,
+	 * values `value1, value2` respectively.
 	 * @since 5.0.4
 	 */
 	setParams(params: Partial<HTMLAppletElement>): this {
@@ -322,6 +330,7 @@ export class Applet extends zul.Widget<HTMLAppletElement> {
 		return this;
 	}
 
+	/** @internal */
 	override domAttrs_(no?: zk.DomAttrsOptions): string {
 		return super.domAttrs_(no)
 				+ ' code="' + (this._code || '') + '"'
@@ -333,11 +342,13 @@ export class Applet extends zul.Widget<HTMLAppletElement> {
 				+ zUtl.appendAttr('mayscript', this._mayscript);
 	}
 
+	/** @internal */
 	override domStyle_(no?: zk.DomStyleOptions): string {
 		return super.domStyle_(no)
 			+ 'visibility:visible;'; //bug 2815049
 	}
 
+	/** @internal */
 	_outParamHtml(out: string[]): void {
 		var params = this._params;
 		for (var nm in params)

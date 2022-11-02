@@ -14,7 +14,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 /**
  * A treecols.
- * <p>Default {@link #getZclass}: z-treecols
+ * @defaultValue {@link getZclass}: z-treecols
  */
 @zk.WrapClass('zul.sel.Treecols')
 export class Treecols extends zul.mesh.HeadWidget {
@@ -22,8 +22,8 @@ export class Treecols extends zul.mesh.HeadWidget {
 	override firstChild!: zul.sel.Treecol | undefined;
 	override lastChild!: zul.sel.Treecol | undefined;
 
-	/** Returns the tree that it belongs to.
-	 * @return Tree
+	/**
+	 * @returns the tree that it belongs to.
 	 */
 	getTree(): zul.sel.Tree | undefined {
 		return this.parent;
@@ -37,6 +37,7 @@ export class Treecols extends zul.mesh.HeadWidget {
 		return this;
 	}
 
+	/** @internal */
 	override beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
 		if (!(child instanceof zul.sel.Treecol)) {
 			zk.error('Unsupported child for treecols: ' + child.className);

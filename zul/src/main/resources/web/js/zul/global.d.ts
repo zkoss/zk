@@ -170,7 +170,7 @@ declare global {
 		 */
 		standby: string;
 		/**
-		 * Returns the content type of the object.
+		 * The content type of the object.
 		 */
 		type: string;
 		/**

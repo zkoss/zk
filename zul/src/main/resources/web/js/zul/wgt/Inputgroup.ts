@@ -24,20 +24,19 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
  *     <li>LabelImageElement</li>
  * </ul>
  *
- * <p>Default {@link #getZclass}: z-inputgroup.
+ * @defaultValue {@link getZclass}: z-inputgroup.
  *
  * @since 9.0.0
  * @author charlesqiu, rudyhuang
  */
 @zk.WrapClass('zul.wgt.Inputgroup')
 export class Inputgroup extends zul.Widget {
+	/** @internal */
 	_vertical = false;
 
 	/**
-	 * Returns whether it is a vertical orientation.
-	 * <p>Default: false
-	 *
-	 * @return boolean whether it is a vertical orientation
+	 * @returns whether it is a vertical orientation.
+	 * @defaultValue `false`
 	 */
 	isVertical(): boolean {
 		return this._vertical;
@@ -45,7 +44,7 @@ export class Inputgroup extends zul.Widget {
 
 	/**
 	 * Sets whether it is a vertical orientation.
-	 * @param boolean vertical whether it is a vertical orientation
+	 * @param vertical - whether it is a vertical orientation
 	 */
 	setVertical(vertical: boolean, opts?: Record<string, boolean>): this {
 		const o = this._vertical;
@@ -65,11 +64,13 @@ export class Inputgroup extends zul.Widget {
 		return this.setVertical(orient == 'vertical');
 	}
 
+	/** @internal */
 	override domClass_(no?: zk.DomClassOptions): string {
 		const classes = super.domClass_(no);
 		return classes + (this._vertical ? ' ' + this.$s('vertical') : '');
 	}
 
+	/** @internal */
 	override insertChildHTML_(child: zk.Widget, before?: zk.Widget, desktop?: zk.Desktop): void {
 		if (before)
 			jq(before.$n('chdex') || before.$n()!).before(
@@ -81,11 +82,13 @@ export class Inputgroup extends zul.Widget {
 		child.bind(desktop);
 	}
 
+	/** @internal */
 	override removeChildHTML_(child: zk.Widget, ignoreDom?: boolean): void {
 		super.removeChildHTML_(child, ignoreDom);
 		jq(child.uuid + '-chdex', zk).remove();
 	}
 
+	/** @internal */
 	encloseChildHTML_(opts: { child: zk.Widget; out?: string[] }): string | undefined {
 		const out = opts.out || new zk.Buffer(),
 			w = opts.child;
@@ -100,6 +103,7 @@ export class Inputgroup extends zul.Widget {
 		if (!opts.out) return out.join('');
 	}
 
+	/** @internal */
 	override beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
 		if (!(child instanceof zul.wgt.Label) && !(zul.inp && child instanceof zul.inp.InputWidget) && !(child instanceof zul.LabelImageWidget)) {
 			zk.error('Unsupported child for Inputgroup: ' + child.className);

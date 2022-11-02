@@ -17,5 +17,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.wgt.Space')
 export class Space extends zul.wgt.Separator {
+	/** @internal */
 	override _orient = 'vertical';
 }

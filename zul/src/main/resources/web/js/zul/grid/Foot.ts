@@ -14,13 +14,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 /**
  * Defines a set of footers ({@link Footer}) for a grid ({@link Grid}).
- * <p>Default {@link #getZclass}: z-foot.
+ * @defaultValue {@link getZclass}: z-foot.
  */
 @zk.WrapClass('zul.grid.Foot')
 export class Foot extends zul.Widget {
 	override parent!: zul.grid.Grid | undefined;
-	/** Returns the grid that contains this column.
-	 * @return zul.grid.Grid
+	/**
+	 * @returns the grid that contains this column.
 	 */
 	getGrid(): zul.grid.Grid | undefined {
 		return this.parent;
@@ -38,10 +38,12 @@ export class Foot extends zul.Widget {
 		return super.setHflex(hflex);
 	}
 
+	/** @internal */
 	override deferRedrawHTML_(out: string[]): void {
 		out.push('<tr', this.domAttrs_({domClass: true}), ' class="z-renderdefer"></tr>');
 	}
 
+	/** @internal */
 	override beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
 		if (!(child instanceof zul.grid.Footer)) {
 			zk.error('Unsupported child for foot: ' + child.className);

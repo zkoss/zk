@@ -78,35 +78,32 @@ function _checkPosition(self: zk.JQZK, css: Record<string, string>): zk.JQZK {
 	return self;
 }
 
-/** @partial zk
- */
-
-/** Returns whether there is some animation taking place.
+/**
+ * @returns whether there is some animation taking place.
  * If you'd like to have a function to be called only when no animation
  * is taking place (such as waiting for sliding down to be completed),
- * you could use {@link #afterMount}.
- * @return boolean
- * @see #afterAnimate
+ * you could use {@link zk.afterMount}.
+ * @see {@link zk.afterAnimate}
  */
-zk.animating = animating;
 export function animating(): boolean {
 	return !!jq.timers.length;
 }
-/** Executes a function only when no animation is taking place.
+zk.animating = animating;
+/**
+ * Executes a function only when no animation is taking place.
  * If there is some animation, the specified function will be queued
  * and invoked after the animation is done.
  * <p>If the delay argument is not specified and no animation is taking place,
- * the function is executed with <code>setTimeout(fn, 0)</code>.
- * @param Function fn the function to execute
- * @param int delay how many milliseconds to wait before execute if
+ * the function is executed with `setTimeout(fn, 0)`.
+ * @param fn - the function to execute
+ * @param delay - (int) how many milliseconds to wait before execute if
  * there is no animation is taking place. If omitted, 0 is assumed.
  * If negative, the function is executed immediately.
- * @return boolean true if this method has been called before return (delay must
+ * @returns true if this method has been called before return (delay must
  * be negative, and no animation); otherwise, undefined is returned.
- * @see #animating
+ * @see {@link zk.animating}
  * @since 5.0.6
  */
-zk.afterAnimate = afterAnimate;
 export function afterAnimate(fn: () => void, delay?: number): boolean | void {
 	if (zk.animating())
 		_aftAnims.push(fn);
@@ -116,8 +113,9 @@ export function afterAnimate(fn: () => void, delay?: number): boolean | void {
 	} else
 		setTimeout(fn, delay);
 }
+zk.afterAnimate = afterAnimate;
 
-export let _anique: Record<string, Anima[]> = {};
+export var _anique: Record<string, Anima[]> = {};
 zk._anique = _anique;
 
 export namespace anima_global {
@@ -126,17 +124,17 @@ export namespace anima_global {
 	export class zjq extends zk.JQZK {
 		/**
 		 * Get the value of animation speed assigned through client attribute "data-animationspeed"
-		 * @param Object defaultValue [optional] default value if widget doesn't have this attribute.
+		 * @param defaultValue - default value if widget doesn't have this attribute.
 		 * <p>
 		 * Allowed values:
 		 * <dl>
-		 * <dt><code>Integer</code></dt>
+		 * <dt>`Integer`</dt>
 		 * <dd>It can be any integer value</dd>
-		 * <dt><code>String</code></dt>
+		 * <dt>`String`</dt>
 		 * <dd>This value can be "slow" or "fast", which is the same as jQuery Animation</dd>
 		 * </dl>
 		 * </p>
-		 * @return Object this value will be Integer or String.
+		 * @returns an Integer or String.
 		 * @since 7.0.3
 		 */
 		getAnimationSpeed(defaultValue?: 'slow' | 'fast' | number): 'slow' | 'fast' | number {
@@ -152,15 +150,15 @@ export namespace anima_global {
 
 			return typeof animationSpeed === 'number' && !isNaN(animationSpeed) ? animationSpeed : (defaultValue === 0 ? 0 : defaultValue || jqSpeed._default);
 		}
-		/** Slides down (show) of the matched DOM element(s).
-		 * @param Widget wgt the widget that owns the DOM element
-		 * @param Map opts the options. Ignored if not specified.
-		 * @return jqzk
+		/**
+		 * Slides down (show) of the matched DOM element(s).
+		 * @param wgt - the widget that owns the DOM element
+		 * @param opts - the options. Ignored if not specified.
 		 * Allowed options:
 		 * <dl>
 		 * <dt>anchor</dt>
-		 * <dd>The anchor position which can be <code>t</code>, <code>b</code>,
-		 * <code>l</code>, and <code>r</code>. Default: <code>t</code>.</dd>
+		 * <dd>The anchor position which can be `t`, `b`,
+		 * `l`, and `r`. Default: `t`.</dd>
 		 * <dt>easing</dt>
 		 * <dd>The name of the easing effect that you want to use (plugin required). There are two built-in values, "linear" and "swing".</dd>
 		 * <dt>duration</dt>
@@ -213,15 +211,15 @@ export namespace anima_global {
 			} as JQuery.EffectsOptions<HTMLElement>);
 			return this;
 		}
-		/** Slides up (hide) of the matched DOM element(s).
-		 * @param Widget wgt the widget that owns the DOM element
-		 * @param Map opts the options. Ignored if not specified.
-		 * @return jqzk
+		/**
+		 * Slides up (hide) of the matched DOM element(s).
+		 * @param wgt - the widget that owns the DOM element
+		 * @param opts - the options. Ignored if not specified.
 		 * Allowed options:
 		 * <dl>
 		 * <dt>anchor</dt>
-		 * <dd>The anchor position which can be <code>t</code>, <code>b</code>,
-		 * <code>l</code>, and <code>r</code>. Default: <code>t</code>.</dd>
+		 * <dd>The anchor position which can be `t`, `b`,
+		 * `l`, and `r`. Default: `t`.</dd>
 		 * <dt>easing</dt>
 		 * <dd>The name of the easing effect that you want to use (plugin required). There are two built-in values, "linear" and "swing".</dd>
 		 * <dt>duration</dt>
@@ -270,15 +268,15 @@ export namespace anima_global {
 			} as JQuery.EffectsOptions<HTMLElement>);
 			return this;
 		}
-		/** Slides out (hide) of the matched DOM element(s).
-		 * @param Widget wgt the widget that owns the DOM element
-		 * @param Map opts the options. Ignored if not specified.
-		 * @return jqzk
+		/**
+		 * Slides out (hide) of the matched DOM element(s).
+		 * @param wgt - the widget that owns the DOM element
+		 * @param opts - the options. Ignored if not specified.
 		 * Allowed options:
 		 * <dl>
 		 * <dt>anchor</dt>
-		 * <dd>The anchor position which can be <code>t</code>, <code>b</code>,
-		 * <code>l</code>, and <code>r</code>. Default: <code>t</code>.</dd>
+		 * <dd>The anchor position which can be `t`, `b`,
+		 * `l`, and `r`. Default: `t`.</dd>
 		 * <dt>easing</dt>
 		 * <dd>The name of the easing effect that you want to use (plugin required). There are two built-in values, "linear" and "swing".</dd>
 		 * <dt>duration</dt>
@@ -323,15 +321,15 @@ export namespace anima_global {
 			} as JQuery.EffectsOptions<HTMLElement>);
 			return this;
 		}
-		/** Slides in (show) of the matched DOM element(s).
-		 * @param Widget wgt the widget that owns the DOM element
-		 * @param Map opts the options. Ignored if not specified.
-		 * @return jqzk
+		/**
+		 * Slides in (show) of the matched DOM element(s).
+		 * @param wgt - the widget that owns the DOM element
+		 * @param opts - the options. Ignored if not specified.
 		 * Allowed options:
 		 * <dl>
 		 * <dt>anchor</dt>
-		 * <dd>The anchor position which can be <code>t</code>, <code>b</code>,
-		 * <code>l</code>, and <code>r</code>. Default: <code>t</code>.</dd>
+		 * <dd>The anchor position which can be `t`, `b`,
+		 * `l`, and `r`. Default: `t`.</dd>
 		 * <dt>easing</dt>
 		 * <dd>The name of the easing effect that you want to use (plugin required). There are two built-in values, "linear" and "swing".</dd>
 		 * <dt>duration</dt>
@@ -380,20 +378,21 @@ export namespace anima_global {
 			} as JQuery.EffectsOptions<HTMLElement>);
 			return this;
 		}
+		/** @internal */
 		_updateProp(prop: string[]): void { //used by Bandpopup.js
 			_saveProp(this, prop);
 		}
-		/** Initializes the animation with the default effect, such as
+		/**
+		 * Initializes the animation with the default effect, such as
 		 * firing the onSize watch.
 		 * <p>Example:<br/>
-		 * <code>zk(n).defaultAnimaOpts(wgt, opts, prop, true).jq.css(css).show().animate(...);</code>
-		 * @param Widget wgt the widget
-		 * @param Map opts the options. Ignored if not specified.
+		 * `zk(n).defaultAnimaOpts(wgt, opts, prop, true).jq.css(css).show().animate(...);`
+		 * @param wgt - the widget
+		 * @param opts - the options. Ignored if not specified.
 		 * It depends on the effect being taken
-		 * @param Array prop an array of properties, such ['top', 'left', 'position'].
-		 * @param boolean visible whether the result of the animation will make
+		 * @param prop - an array of properties, such `['top', 'left', 'position']`.
+		 * @param visible - whether the result of the animation will make
 		 * the DOM element visible
-		 * @return jqzk
 		 * @since 5.0.6
 		 */
 		defaultAnimaOpts(wgt: zk.Widget, opts: zk.SlideOptions, prop: string[], visible?: boolean): this {
@@ -432,6 +431,7 @@ export namespace anima_global {
 		}
 		// Wraps the content of a element with an inner wrapper that copies position properties to avoid jumpy animation.
 		// The methods are borrowed from jquery-ui ui/effect.js, MIT license.
+		/** @internal */
 		_createWrapper(element: JQuery): JQuery {
 		// If the element is already wrapped, return it
 			var wrapped = element.children('.ui-effects-wrapper');
@@ -477,6 +477,7 @@ export namespace anima_global {
 				padding: 0
 			});
 		}
+		/** @internal */
 		_removeWrapper(element: JQuery): JQuery {
 			var active = document.activeElement,
 				wrapped = element.children('.ui-effects-wrapper');

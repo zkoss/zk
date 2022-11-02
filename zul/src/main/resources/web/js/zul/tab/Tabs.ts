@@ -17,30 +17,32 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 /**
  * A collection of tabs ({@link Tab}).
  *
- * <p>Default {@link #getZclass}: z-tabs.
+ * @defaultValue {@link getZclass}: z-tabs.
  */
 @zk.WrapClass('zul.tab.Tabs')
 export class Tabs extends zul.Widget {
 	override parent!: zul.tab.Tabbox | undefined;
 
+	/** @internal */
 	_tabsScrollLeft = 0;
+	/** @internal */
 	_tabsScrollTop = 0;
+	/** @internal */
 	_shallCheck?: boolean;
+	/** @internal */
 	_doingScroll?: Record<string, number>;
 
-	/** Returns the tabbox owns this component.
-	 * @return zul.tab.Tabbox
+	/**
+	 * @returns the tabbox owns this component.
 	 */
 	getTabbox(): zul.tab.Tabbox | undefined {
 		return this.parent;
 	}
 
-	//@Override
 	override getWidth(): string | undefined {
 		var wd = this._width;
 		if (!wd) {
-			var tabbox = this.getTabbox();
-			if (tabbox && tabbox.isVertical())
+			if (this.getTabbox()?.isVertical())
 				return '50px';
 		}
 		return wd;
@@ -67,6 +69,7 @@ export class Tabs extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	override insertChildHTML_(child: zk.Widget, before?: zk.Widget, desktop?: zk.Desktop): void {
 		var last = child.previousSibling,
 			out;
@@ -99,16 +102,19 @@ export class Tabs extends zul.Widget {
 		return super.setHflex(hflex);
 	}
 
+	/** @internal */
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		zWatch.listen({onSize: this, onResponse: this, beforeSize: this});
 	}
 
+	/** @internal */
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		zWatch.unlisten({onSize: this, onResponse: this, beforeSize: this});
 		super.unbind_(skipper, after, keepRod);
 	}
 
+	/** @internal */
 	_scrollcheck(way: string, tb?: zul.tab.Tab): void {
 		this._shallCheck = false;
 		var tabbox = this.getTabbox()!;
@@ -246,6 +252,7 @@ export class Tabs extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	_doScroll(to: string, move: number): void {
 		if (!this._doingScroll)
 			this._doingScroll = {};
@@ -292,6 +299,7 @@ export class Tabs extends zul.Widget {
 		}, 10);
 	}
 
+	/** @internal */
 	_getArrowSize(): number {
 		var tabbox = this.getTabbox()!,
 			isVer = tabbox.isVertical(),
@@ -304,6 +312,7 @@ export class Tabs extends zul.Widget {
 		return size;
 	}
 
+	/** @internal */
 	_showbutton(show: boolean): void {
 		var tabbox = this.getTabbox()!;
 		if (tabbox.isTabscroll()) {
@@ -323,6 +332,7 @@ export class Tabs extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	_fixWidth(toSel: boolean): void {
 		var tabs = this.$n_(),
 			tabbox = this.getTabbox()!,
@@ -372,6 +382,7 @@ export class Tabs extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	_fixHgh(toSel: boolean): void {
 		if (this.getTabbox()!._scrolling) return;
 		var tabbox = this.getTabbox()!;
@@ -426,10 +437,12 @@ export class Tabs extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	override beforeChildReplaced_(oldTab: zul.tab.Tab, newTab: zul.tab.Tab): void {
 		newTab.setSelected(oldTab.isSelected());
 	}
 
+	/** @internal */
 	override beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
 		if (!(child instanceof zul.tab.Tab)) {
 			zk.error('Unsupported child for tabs: ' + child.className);
@@ -438,6 +451,7 @@ export class Tabs extends zul.Widget {
 		return true;
 	}
 
+	/** @internal */
 	override onChildRemoved_(child: zk.Widget): void {
 		var p = this.parent;
 		if (p && child == p._selTab) {
@@ -448,12 +462,14 @@ export class Tabs extends zul.Widget {
 		super.onChildRemoved_(child);
 	}
 
+	/** @internal */
 	override onChildAdded_(child: zk.Widget): void {
 		if (this.desktop)
 			this._shallCheck = true;
 		super.onChildAdded_(child);
 	}
 
+	/** @internal */
 	override onChildVisible_(child: zk.Widget): void {
 		if (this.desktop) {
 			var tabbox = this.getTabbox()!;
@@ -464,16 +480,19 @@ export class Tabs extends zul.Widget {
 		super.onChildVisible_(child);
 	}
 
+	/** @internal */
 	override ignoreFlexSize_(attr: zk.FlexOrient): boolean {
 		var p = this.getTabbox()!;
 		return (p.isVertical() && 'h' == attr)
 			|| (p.isHorizontal() && 'w' == attr);
 	}
 
+	/** @internal */
 	_fixTabsScrollLeft(scrollLeft: number): void {
 		this.$n_().scrollLeft = this._tabsScrollLeft = scrollLeft;
 	}
 
+	/** @internal */
 	_fixTabsScrollTop(scrollTop: number): void {
 		this.$n_().scrollTop = this._tabsScrollTop = scrollTop;
 	}
