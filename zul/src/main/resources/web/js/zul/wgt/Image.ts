@@ -19,23 +19,30 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.wgt.Image')
 export class Image extends zul.Widget<HTMLImageElement> {
+	/** @internal */
 	_src?: string;
+	/** @internal */
 	_hover?: string;
+	/** @internal */
 	_align?: string;
+	/** @internal */
 	_hspace?: string;
+	/** @internal */
 	_vspace?: string;
+	/** @internal */
 	_preloadImage?: boolean;
 
-	/** Returns the source URI of the image.
-	 * <p>Default: null.
-	 * @return String
+	/**
+	 * @returns the source URI of the image.
+	 * @defaultValue `null`.
 	 */
 	getSrc(): string | undefined {
 		return this._src;
 	}
 
-	/** Sets the source URI of the image.
-	 * @param String src the URI of the image source
+	/**
+	 * Sets the source URI of the image.
+	 * @param src - the URI of the image source
 	 */
 	setSrc(src: string, opts?: Record<string, boolean>): this {
 		const o = this._src;
@@ -59,36 +66,36 @@ export class Image extends zul.Widget<HTMLImageElement> {
 		return this.setSrc(content, opts);
 	}
 
-	/** Returns the URI of the hover image.
+	/**
+	 * @returns the URI of the hover image.
 	 * The hover image is used when the mouse is moving over this component.
-	 * <p>Default: null.
-	 * @return String
+	 * @defaultValue `null`.
 	 */
 	getHover(): string | undefined {
 		return this._hover;
 	}
 
-	/** Sets the image URI.
+	/**
+	 * Sets the image URI.
 	 * The hover image is used when the mouse is moving over this component.
-	 * @param String hover
 	 */
 	setHover(hover: string): this {
 		this._hover = hover;
 		return this;
 	}
 
-	/** Returns the alignment.
-	 * <p>Default: null (use browser default).
-	 * @return String
+	/**
+	 * @returns the alignment.
+	 * @defaultValue `null` (use browser default).
 	 * @deprecated as of release 6.0.0, use CSS instead.
 	 */
 	getAlign(): string | undefined {
 		return this._align;
 	}
 
-	/** Sets the alignment: one of top, texttop, middle, absmiddle,
+	/**
+	 * Sets the alignment: one of top, texttop, middle, absmiddle,
 	 * bottom, absbottom, baseline, left, right and center.
-	 * @param String align
 	 * @deprecated as of release 6.0.0, use CSS instead.
 	 */
 	setAlign(align: string, opts?: Record<string, boolean>): this {
@@ -103,19 +110,18 @@ export class Image extends zul.Widget<HTMLImageElement> {
 		return this;
 	}
 
-	/** Returns number of pixels of extra space to the left and right
+	/**
+	 * @returns number of pixels of extra space to the left and right
 	 * side of the image.
-	 * <p>Default: null (use browser default).
-	 * @return String
+	 * @defaultValue `null` (use browser default).
 	 * @deprecated as of release 6.0.0, use CSS instead.
 	 */
 	getHspace(): string | undefined {
 		return this._hspace;
 	}
 
-	/** Sets number of pixels of extra space to the left and right
-	 * side of the image.
-	 * @param String hspace
+	/**
+	 * Sets number of pixels of extra space to the left and right side of the image.
 	 * @deprecated as of release 6.0.0, use CSS instead.
 	 */
 	setHspace(hspace: string, opts?: Record<string, boolean>): this {
@@ -130,19 +136,17 @@ export class Image extends zul.Widget<HTMLImageElement> {
 		return this;
 	}
 
-	/** Returns number of pixels of extra space to the top and bottom
-	 * side of the image.
-	 * <p>Default: null (use browser default).
-	 * @return String
+	/**
+	 * @returns number of pixels of extra space to the top and bottom side of the image.
+	 * @defaultValue `null` (use browser default).
 	 * @deprecated as of release 6.0.0, use CSS instead.
 	 */
 	getVspace(): string | undefined {
 		return this._vspace;
 	}
 
-	/** Sets number of pixels of extra space to the top and bottom
-	 * side of the image.
-	 * @param String vspace
+	/**
+	 * Sets number of pixels of extra space to the top and bottom side of the image.
 	 * @deprecated as of release 6.0.0, use CSS instead.
 	 */
 	setVspace(vspace: string, opts?: Record<string, boolean>): this {
@@ -158,14 +162,14 @@ export class Image extends zul.Widget<HTMLImageElement> {
 	}
 
 	/**
-	 * Returns the image node if any.
-	 * @return DOMElement
+	 * @returns the image node if any.
 	 */
 	getImageNode(): HTMLImageElement | undefined {
 		return this.$n();
 	}
 
 	//super
+	/** @internal */
 	override doMouseOver_(evt: zk.Event): void {
 		var hover = this._hover;
 		if (hover) {
@@ -175,6 +179,7 @@ export class Image extends zul.Widget<HTMLImageElement> {
 		super.doMouseOver_(evt);
 	}
 
+	/** @internal */
 	override doMouseOut_(evt: zk.Event): void {
 		if (this._hover) {
 			var img = this.getImageNode();
@@ -183,6 +188,7 @@ export class Image extends zul.Widget<HTMLImageElement> {
 		super.doMouseOut_(evt);
 	}
 
+	/** @internal */
 	override domAttrs_(no?: zk.DomAttrsOptions): string {
 		var attr = super.domAttrs_(no);
 		if (!no || !no.content)
@@ -190,8 +196,10 @@ export class Image extends zul.Widget<HTMLImageElement> {
 		return attr;
 	}
 
-	/** This method is required only if IMG is placed in the inner.
-	 * And, it also has to specify {content:true} when calling [[#domAttrs_]]
+	/**
+	 * This method is required only if IMG is placed in the inner.
+	 * And, it also has to specify `{content:true}` when calling {@link domAttrs_}
+	 * @internal
 	 */
 	contentAttrs_(): string {
 		var attr = ' src="' + (this._src || '') + '"', v;

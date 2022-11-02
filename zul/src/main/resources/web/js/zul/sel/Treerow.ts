@@ -14,7 +14,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 /**
  * A treerow.
- * <p>Default {@link #getZclass}: z-treerow
+ * @defaultValue {@link getZclass}: z-treerow
  */
 @zk.WrapClass('zul.sel.Treerow')
 export class Treerow extends zul.Widget<HTMLTableRowElement> {
@@ -23,30 +23,31 @@ export class Treerow extends zul.Widget<HTMLTableRowElement> {
 	override lastChild!: zul.sel.Treecell | undefined;
 	override nextSibling!: zul.sel.Treerow | zul.sel.Treechildren | undefined;
 	override previousSibling!: zul.sel.Treerow | zul.sel.Treechildren | undefined;
+	/** @internal */
 	_shallCheckClearCache?: boolean;
 
-	/** Returns the {@link Tree} instance containing this element.
-	 * @return Tree
+	/**
+	 * @returns the {@link Tree} instance containing this element.
 	 */
 	getTree(): zul.sel.Tree | undefined {
 		return this.parent ? this.parent.getTree() : undefined;
 	}
 
-	/** Returns the level this cell is. The root is level 0.
-	 * @return int
+	/**
+	 * @returns the level this cell is. The root is level 0.
 	 */
 	getLevel(): number {
 		return this.parent ? this.parent.getLevel() : 0;
 	}
 
-	/** Returns the {@link Treechildren} associated with this
-	 * {@link Treerow}.
-	 * @return Treechildren
+	/**
+	 * @returns the {@link Treechildren} associated with this {@link Treerow}.
 	 */
 	getLinkedTreechildren(): zul.sel.Treechildren | undefined {
 		return this.parent ? this.parent.treechildren : undefined;
 	}
 
+	/** @internal */
 	override domClass_(no?: zk.DomClassOptions): string {
 		var scls = super.domClass_(no),
 			p = this.parent;
@@ -59,17 +60,19 @@ export class Treerow extends zul.Widget<HTMLTableRowElement> {
 		return scls;
 	}
 
+	/** @internal */
 	override domTooltiptext_(): string | undefined {
 		return this._tooltiptext || this.parent!._tooltiptext || this.parent!.parent!._tooltiptext;
 	}
 
-	//@Override
+	/** @internal */
 	override domStyle_(no?: zk.DomStyleOptions): string {
 		// patch the case that treerow is hidden by treeitem visibility
 		return ((this.parent && !this.parent._isRealVisible() && this.isVisible()) ?
 				'display:none;' : '') + super.domStyle_(no);
 	}
 
+	/** @internal */
 	override beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
 		if (!(child instanceof zul.sel.Treecell)) {
 			zk.error('Unsupported child for tree row: ' + child.className);
@@ -77,7 +80,7 @@ export class Treerow extends zul.Widget<HTMLTableRowElement> {
 		}
 		return true;
 	}
-	//@Override
+
 	override removeChild(child: zk.Widget, ignoreDom?: boolean): boolean {
 		for (var w = child.firstChild; w;) {
 			var n = w.nextSibling; //remember, since remove will null the link
@@ -91,7 +94,7 @@ export class Treerow extends zul.Widget<HTMLTableRowElement> {
 		return false;
 	}
 
-	//@Override
+	/** @internal */
 	override doClick_(evt: zk.Event, popupOnly?: boolean): void {
 		var ti = this.parent!,
 			tg = evt.domTarget;
@@ -103,7 +106,6 @@ export class Treerow extends zul.Widget<HTMLTableRowElement> {
 			super.doClick_(evt, popupOnly);
 	}
 
-	//@Override
 	override scrollIntoView(): this {
 		var bar = this.getTree()!._scrollbar;
 		if (bar) {
@@ -115,26 +117,31 @@ export class Treerow extends zul.Widget<HTMLTableRowElement> {
 		return this;
 	}
 
+	/** @internal */
 	override deferRedrawHTML_(out: string[]): void {
 		out.push('<tr', this.domAttrs_({domClass: true}), ' class="z-renderdefer"></tr>');
 	}
 
+	/** @internal */
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		zWatch.listen({onResponse: this});
 	}
 
+	/** @internal */
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		zWatch.unlisten({onResponse: this});
 		super.unbind_(skipper, after, keepRod);
 	}
 
+	/** @internal */
 	override onChildAdded_(child: zk.Widget): void {
 		super.onChildAdded_(child);
 		// ZK-5107
 		this._shallCheckClearCache = true;
 	}
 
+	/** @internal */
 	override onChildRemoved_(child: zk.Widget): void {
 		super.onChildRemoved_(child);
 		// ZK-5107
@@ -144,8 +151,7 @@ export class Treerow extends zul.Widget<HTMLTableRowElement> {
 	onResponse(): void {
 		if (this._shallCheckClearCache) {
 			this._shallCheckClearCache = false;
-			let p = this.getTree();
-			if (p && p.isCheckmark()) {
+			if (this.getTree()?.isCheckmark()) {
 				this.clearCache();
 			}
 		}

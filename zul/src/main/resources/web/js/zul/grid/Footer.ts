@@ -17,20 +17,20 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * Its parent must be {@link Foot}.
  *
  * <p>Unlike {@link Column}, you could place any child in a grid footer.
- * <p>Default {@link #getZclass}: z-footer.
+ * @defaultValue {@link getZclass}: z-footer.
  */
 @zk.WrapClass('zul.grid.Footer')
 export class Footer extends zul.mesh.FooterWidget {
-	/** Returns the grid that this belongs to.
-	 * @return zul.grid.Grid
+	/**
+	 * @returns the grid that this belongs to.
 	 */
 	getGrid(): zul.grid.Grid | undefined {
 		return this.getMeshWidget() as zul.grid.Grid | undefined;
 	}
 
-	/** Returns the column that is in the same column as
+	/**
+	 * @returns the column that is in the same column as
 	 * this footer, or null if not available.
-	 * @return zul.grid.Column
 	 */
 	getColumn(): zul.grid.Column | undefined {
 		return this.getHeaderWidget() as zul.grid.Column | undefined;

@@ -50,34 +50,54 @@ export class LayoutRegion extends zul.Widget {
 	override previousSibling?: zul.layout.LayoutRegion;
 	override nextSibling?: zul.layout.LayoutRegion;
 
+	/** @internal */
 	_open = true;
+	/** @internal */
 	_border = 'normal';
+	/** @internal */
 	_maxsize = 2000;
+	/** @internal */
 	_minsize = 0;
+	/** @internal */
 	_scrollbar?: zul.Scrollbar;
+	/** @internal */
 	_slidable = true;
+	/** @internal */
 	_closable = true;
+	/** @internal */
 	_nativebar = true;
+	/** @internal */
 	_margins = [0, 0, 0, 0];
+	/** @internal */
 	_cmargins = [3, 3, 3, 3]; //center
 	sanchor?: string;
 
+	/** @internal */
 	_collapsible = false;
+	/** @internal */
 	_splittable = false;
+	/** @internal */
 	_flex = false;
+	/** @internal */
 	_autoscroll = false;
+	/** @internal */
 	_slide = false;
+	/** @internal */
 	_isSlide = false;
+	/** @internal */
 	_original?: [string, string];
+	/** @internal */
 	_fixBarHeight?: boolean;
+	/** @internal */
 	_title?: string;
+	/** @internal */
 	_fcvflex?: string | boolean | undefined;
+	/** @internal */
 	_fchflex?: string | boolean | undefined;
 
 	/**
 	 * Sets whether to grow and shrink vertical/horizontal to fit their given
 	 * space, so called flexibility.
-	 * @param boolean flex
 	 */
 	setFlex(flex: boolean, opts?: Record<string, boolean>): this {
 		const o = this._flex;
@@ -92,12 +112,9 @@ export class LayoutRegion extends zul.Widget {
 	}
 
 	/**
-	 * Returns whether to grow and shrink vertical/horizontal to fit their given
+	 * @returns whether to grow and shrink vertical/horizontal to fit their given
 	 * space, so called flexibility.
-	 *
-	 * <p>
-	 * Default: false.
-	 * @return boolean
+	 * @defaultValue `false`.
 	 */
 	isFlex(): boolean {
 		return this._flex;
@@ -105,8 +122,7 @@ export class LayoutRegion extends zul.Widget {
 
 	/**
 	 * Sets the border (either none or normal).
-	 *
-	 * @param String border the border. If null or "0", "none" is assumed.
+	 * @param border - the border. If null or "0", "none" is assumed.
 	 */
 	setBorder(border: string, opts?: Record<string, boolean>): this {
 		const o = this._border;
@@ -129,18 +145,16 @@ export class LayoutRegion extends zul.Widget {
 	}
 
 	/**
-	 * Returns the border.
+	 * @returns the border.
 	 * <p>
 	 * The border actually controls what CSS class to use: If border is null, it
 	 * implies "none".
 	 *
 	 * <p>
-	 * If you also specify the CSS class ({@link #setSclass}), it overwrites
+	 * If you also specify the CSS class ({@link setSclass}), it overwrites
 	 * whatever border you specify here.
 	 *
-	 * <p>
-	 * Default: "normal".
-	 * @return String
+	 * @defaultValue `"normal"`.
 	 */
 	getBorder(): string {
 		return this._border;
@@ -148,7 +162,6 @@ export class LayoutRegion extends zul.Widget {
 
 	/**
 	 * Sets the title.
-	 * @param String title
 	 */
 	setTitle(title: string, opts?: Record<string, boolean>): this {
 		const o = this._title;
@@ -162,9 +175,8 @@ export class LayoutRegion extends zul.Widget {
 	}
 
 	/**
-	 * Returns the title.
-	 * <p>Default: null.
-	 * @return String
+	 * @returns the title.
+	 * @defaultValue `null`.
 	 */
 	getTitle(): string | undefined {
 		return this._title;
@@ -172,7 +184,6 @@ export class LayoutRegion extends zul.Widget {
 
 	/**
 	 * Sets whether enable the split functionality.
-	 * @param boolean splittable
 	 */
 	setSplittable(splittable: boolean, opts?: Record<string, boolean>): this {
 		const o = this._splittable;
@@ -187,10 +198,8 @@ export class LayoutRegion extends zul.Widget {
 	}
 
 	/**
-	 * Returns whether enable the split functionality.
-	 * <p>
-	 * Default: false.
-	 * @return boolean
+	 * @returns whether enable the split functionality.
+	 * @defaultValue `false`.
 	 */
 	isSplittable(): boolean {
 		return this._splittable;
@@ -198,7 +207,6 @@ export class LayoutRegion extends zul.Widget {
 
 	/**
 	 * Sets the maximum size of the resizing element.
-	 * @param int maxsize
 	 */
 	setMaxsize(maxsize: number): this {
 		this._maxsize = maxsize;
@@ -206,10 +214,8 @@ export class LayoutRegion extends zul.Widget {
 	}
 
 	/**
-	 * Returns the maximum size of the resizing element.
-	 * <p>
-	 * Default: 2000.
-	 * @return int
+	 * @returns the maximum size of the resizing element.
+	 * @defaultValue `2000`.
 	 */
 	getMaxsize(): number {
 		return this._maxsize;
@@ -217,7 +223,6 @@ export class LayoutRegion extends zul.Widget {
 
 	/**
 	 * Sets the minimum size of the resizing element.
-	 * @param int minsize
 	 */
 	setMinsize(minsize: number): this {
 		this._minsize = minsize;
@@ -225,10 +230,8 @@ export class LayoutRegion extends zul.Widget {
 	}
 
 	/**
-	 * Returns the minimum size of the resizing element.
-	 * <p>
-	 * Default: 0.
-	 * @return int
+	 * @returns the minimum size of the resizing element.
+	 * @defaultValue `0`.
 	 */
 	getMinsize(): number {
 		return this._minsize;
@@ -237,8 +240,7 @@ export class LayoutRegion extends zul.Widget {
 	/**
 	 * Sets whether set the initial display to collapse.
 	 *
-	 * <p>It only applied when {@link #getTitle()} is not null.
-	 * @param boolean collapsible
+	 * <p>It only applied when {@link getTitle} is not null.
 	 */
 	setCollapsible(collapsible: boolean, opts?: Record<string, boolean>): this {
 		const o = this._collapsible;
@@ -254,10 +256,8 @@ export class LayoutRegion extends zul.Widget {
 	}
 
 	/**
-	 * Returns whether set the initial display to collapse.
-	 * <p>
-	 * Default: false.
-	 * @return boolean
+	 * @returns whether set the initial display to collapse.
+	 * @defaultValue `false`.
 	 */
 	isCollapsible(): boolean {
 		return this._collapsible;
@@ -265,7 +265,6 @@ export class LayoutRegion extends zul.Widget {
 
 	/**
 	 * Sets whether enable overflow scrolling.
-	 * @param boolean autoscroll
 	 */
 	setAutoscroll(autoscroll: boolean, opts?: Record<string, boolean>): this {
 		const o = this._autoscroll;
@@ -303,10 +302,8 @@ export class LayoutRegion extends zul.Widget {
 	}
 
 	/**
-	 * Returns whether enable overflow scrolling.
-	 * <p>
-	 * Default: false.
-	 * @return boolean
+	 * @returns whether enable overflow scrolling.
+	 * @defaultValue `false`.
 	 */
 	isAutoscroll(): boolean {
 		return this._autoscroll;
@@ -314,8 +311,7 @@ export class LayoutRegion extends zul.Widget {
 
 	/**
 	 * Opens or collapses the splitter. Meaningful only if
-	 * {@link #isCollapsible} is not false.
-	 * @param boolean open
+	 * {@link isCollapsible} is not false.
 	 */
 	setOpen(open: boolean, fromServer?: Record<string, boolean>, nonAnima?: boolean): this {
 		const o = this._open;
@@ -387,11 +383,9 @@ export class LayoutRegion extends zul.Widget {
 	}
 
 	/**
-	 * Returns whether it is open (i.e., not collapsed. Meaningful only if
-	 * {@link #isCollapsible} is not false.
-	 * <p>
-	 * Default: true.
-	 * @return boolean
+	 * @returns whether it is open (i.e., not collapsed. Meaningful only if
+	 * {@link isCollapsible} is not false.
+	 * @defaultValue `true`.
 	 */
 	isOpen(): boolean {
 		return this._open;
@@ -399,8 +393,7 @@ export class LayoutRegion extends zul.Widget {
 
 	/**
 	 * Slides down or up the region. Meaningful only if
-	 * {@link #isCollapsible} is not false and {@link #isOpen} is false.
-	 * @param boolean slide
+	 * {@link isCollapsible} is not false and {@link isOpen} is false.
 	 * @since 8.0.2
 	 */
 	setSlide(slide: boolean, fromServer?: Record<string, boolean>, nonAnima?: boolean): this {
@@ -444,10 +437,8 @@ export class LayoutRegion extends zul.Widget {
 	}
 
 	/**
-	 * Returns whether it is slide down.
-	 * <p>
-	 * Default: false.
-	 * @return boolean
+	 * @returns whether it is slide down.
+	 * @defaultValue `false`.
 	 * @since 8.0.2
 	 */
 	isSlide(): boolean {
@@ -456,9 +447,9 @@ export class LayoutRegion extends zul.Widget {
 
 	/**
 	 * Sets whether users can slide (preview) the region when clicked on a collapsed region.
-	 * Meaningful only if {@link #isCollapsible()} is true and {@link #isOpen()} is false.
+	 * Meaningful only if {@link isCollapsible} is true and {@link isOpen} is false.
 	 *
-	 * @param boolean slidable whether users can slide (preview) the region.
+	 * @param slidable - whether users can slide (preview) the region.
 	 * @since 8.5.2
 	 */
 	setSlidable(slidable: boolean): this {
@@ -467,11 +458,9 @@ export class LayoutRegion extends zul.Widget {
 	}
 
 	/**
-	 * Returns whether users can slide (preview) the region when clicked on a collapsed region.
+	 * @returns whether users can slide (preview) the region when clicked on a collapsed region.
 	 * In other words, if false, clicking on a collapsed region will open it instead of sliding.
-	 * <p>Default: true.
-	 *
-	 * @return boolean whether users can slide (preview) the region.
+	 * @defaultValue `true`.
 	 * @since 8.5.2
 	 */
 	isSlidable(): boolean {
@@ -480,9 +469,9 @@ export class LayoutRegion extends zul.Widget {
 
 	/**
 	 * Sets whether users can open or close the region.
-	 * Meaningful only if {@link #isCollapsible()} is true.
+	 * Meaningful only if {@link isCollapsible} is true.
 	 *
-	 * @param boolean closable whether users can open or close the region.
+	 * @param closable - whether users can open or close the region.
 	 * @since 8.5.2
 	 */
 	setClosable(closable: boolean, opts?: Record<string, boolean>): this {
@@ -501,12 +490,10 @@ export class LayoutRegion extends zul.Widget {
 	}
 
 	/**
-	 * Returns whether users can open or close the region.
+	 * @returns whether users can open or close the region.
 	 * In other words, if false, users are no longer allowed to
 	 * change the open status (by clicking the button on the bar).
-	 * <p>Default: true.
-	 *
-	 * @return boolean whether users can open or close the region.
+	 * @defaultValue `true`.
 	 * @since 8.5.2
 	 */
 	isClosable(): boolean {
@@ -526,11 +513,8 @@ export class LayoutRegion extends zul.Widget {
 	}
 
 	/**
-	 * Returns the collapsed margins, which is a list of numbers separated by comma.
-	 *
-	 * <p>
-	 * Default: "3,3,3,3".
-	 * @return String
+	 * @returns the collapsed margins, which is a list of numbers separated by comma.
+	 * @defaultValue `"3,3,3,3"`.
 	 */
 	getCmargins(): string {
 		return zUtl.intsToString(this._open ? this._margins : this._cmargins);
@@ -539,7 +523,6 @@ export class LayoutRegion extends zul.Widget {
 	/**
 	 * Sets the collapsed margins for the element "0,1,2,3" that direction is
 	 * "top,left,right,bottom"
-	 * @param String cmargins
 	 */
 	setCmargins(cmargins: string): this {
 		if (this.getCmargins() != cmargins) {
@@ -551,27 +534,23 @@ export class LayoutRegion extends zul.Widget {
 	}
 
 	/**
-	 * Returns the current margins.
-	 * @return Dimension
+	 * @returns the current margins.
+	 * @internal
 	 */
 	getCurrentMargins_(): zk.Dimension {
 		return LayoutRegion._aryToObject(this._open ? this._margins : this._cmargins);
 	}
 
 	/**
-	 * Returns the margins, which is a list of numbers separated by comma.
-	 * <p>
-	 * Default: "0,0,0,0".
-	 * @return String
+	 * @returns the margins, which is a list of numbers separated by comma.
+	 * @defaultValue `"0,0,0,0"`.
 	 */
 	getMargins(): string {
 		return zUtl.intsToString(this._margins);
 	}
 
 	/**
-	 * Sets margins for the element "0,1,2,3" that direction is
-	 * "top,left,right,bottom"
-	 * @param String margins
+	 * Sets margins for the element "0,1,2,3" that direction is "top,left,right,bottom"
 	 */
 	setMargins(margins: string): this {
 		if (this.getMargins() != margins) {
@@ -582,6 +561,7 @@ export class LayoutRegion extends zul.Widget {
 		return this;
 	}
 
+	/** @internal */
 	override domClass_(no?: zk.DomClassOptions): string {
 		var scls = super.domClass_(no);
 		if (!no || !no.zclass) {
@@ -596,6 +576,7 @@ export class LayoutRegion extends zul.Widget {
 	}
 
 	//-- super --//
+	/** @internal */
 	override getMarginSize_(attr: string): number {
 		return zk(this.$n('real')).sumStyles(attr == 'h' ? 'tb' : 'lr', jq.margins);
 	}
@@ -650,6 +631,7 @@ export class LayoutRegion extends zul.Widget {
 	}
 
 	//@Override to apply the calculated value on xxx-real element
+	/** @internal */
 	override setFlexSize_(flexSize: { width?: string | number; height?: string | number }, isFlexMin?: boolean): void {
 		if (this._cssflex && this.parent!.getFlexContainer_() != null && !isFlexMin)
 			return;
@@ -681,6 +663,7 @@ export class LayoutRegion extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	override updateDomClass_(): void {
 		if (this.desktop) {
 			var real = this.$n('real');
@@ -692,6 +675,7 @@ export class LayoutRegion extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	override updateDomStyle_(): void {
 		if (this.desktop) {
 			var real = this.$n('real');
@@ -703,8 +687,9 @@ export class LayoutRegion extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	override beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
-		let firstChild = this.firstChild;
+		const { firstChild } = this;
 		if (firstChild) {
 			if (child instanceof zul.wgt.Caption) { //caption is always the first child (if exist)
 				if (firstChild instanceof zul.wgt.Caption && firstChild != child) {
@@ -720,6 +705,7 @@ export class LayoutRegion extends zul.Widget {
 		}
 		return true;
 	}
+	/** @internal */
 	override onChildAdded_(child: zk.Widget): void {
 		super.onChildAdded_(child);
 		if (child instanceof zul.layout.Borderlayout) {
@@ -742,6 +728,7 @@ export class LayoutRegion extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	override onChildRemoved_(child: zk.Widget): void {
 		super.onChildRemoved_(child);
 
@@ -773,6 +760,7 @@ export class LayoutRegion extends zul.Widget {
 		return this;
 	}
 
+	/** @internal */
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		if (this.getPosition() != zul.layout.Borderlayout.CENTER) {
@@ -827,6 +815,7 @@ export class LayoutRegion extends zul.Widget {
 			_setFirstChildFlex(this, true, true);
 	}
 
+	/** @internal */
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		if (this.isAutoscroll()) {
 			if (this._nativebar) {
@@ -853,6 +842,7 @@ export class LayoutRegion extends zul.Widget {
 		super.unbind_(skipper, after, keepRod);
 	}
 
+	/** @internal */
 	override afterChildMinFlexChanged_(wgt: zk.Widget, o: string): void {
 		if (this.desktop) {
 			var cave = this.$n('cave'),
@@ -885,6 +875,7 @@ export class LayoutRegion extends zul.Widget {
 		}, 200);
 	}
 
+	/** @internal */
 	initScrollbar_(): zul.Scrollbar | undefined {
 		var embed = jq(this.$n_('real')).data('embedscrollbar') !== false, // change default value to true since 7.0.2
 			cave = this.$n_('cave');
@@ -896,6 +887,7 @@ export class LayoutRegion extends zul.Widget {
 		});
 	}
 
+	/** @internal */
 	refreshBar_(showBar?: boolean, scrollToTop?: boolean): void {
 		var bar = this._scrollbar;
 		if (bar && this._open) {
@@ -930,6 +922,7 @@ export class LayoutRegion extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	destroyBar_(): void {
 		var bar = this._scrollbar;
 		if (bar) {
@@ -938,6 +931,7 @@ export class LayoutRegion extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	override doResizeScroll_(): void {
 		super.doResizeScroll_();
 		this.refreshBar_(true);
@@ -947,6 +941,7 @@ export class LayoutRegion extends zul.Widget {
 		this._fireSizedIfChildFlex();
 	}
 
+	/** @internal */
 	_fireSizedIfChildFlex(): void {
 		// only fire when child has h/vflex
 		for (var w = this.firstChild; w; w = w.nextSibling) {
@@ -957,6 +952,7 @@ export class LayoutRegion extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	override doClick_(evt: zk.Event, popupOnly?: boolean): void {
 		var target = evt.domTarget;
 		if (!target.id)
@@ -988,6 +984,7 @@ export class LayoutRegion extends zul.Widget {
 		super.doClick_(evt, popupOnly);
 	}
 
+	/** @internal */
 	_docClick(evt: JQuery.TriggeredEvent): void {
 		var target = evt.target as HTMLElement;
 		if (this._isSlide && !jq.isAncestor(this.$n('real'), target)) {
@@ -1002,6 +999,7 @@ export class LayoutRegion extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	_syncSize(inclusive?: boolean): void {
 		var layout = this.parent!,
 			el = layout.$n_(),
@@ -1067,6 +1065,7 @@ export class LayoutRegion extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	_alignTo(): void {
 		var from = this.$n_('colled'),
 			to = this.$n_('real'),
@@ -1092,17 +1091,20 @@ export class LayoutRegion extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	_doScroll(): void {
 		zWatch.fireDown('onScroll', this);
 		zWatch.fire('_onSyncScroll', this); // ZK-4408: for Popup only
 	}
 
+	/** @internal */
 	_fixSplit(): void {
 		var split = this.$n('split');
 		if (split)
 			split.style.display = this._splittable ? 'block' : 'none';
 	}
 
+	/** @internal */
 	_fixFontIcon(): void {
 		zk(this).redoCSS(-1, {
 			'fixFontIcon': true,
@@ -1110,6 +1112,7 @@ export class LayoutRegion extends zul.Widget {
 		});
 	}
 
+	/** @internal */
 	_isVertical(): boolean {
 		var BL = zul.layout.Borderlayout;
 		return this.getPosition() != BL.WEST
@@ -1117,6 +1120,7 @@ export class LayoutRegion extends zul.Widget {
 	}
 
 	// returns the ambit of the specified cmp for region calculation.
+	/** @internal */
 	_ambit(ignoreSplit?: boolean): LayoutRegionAmbit {
 		var ambit: LayoutRegionAmbit, mars = this.getCurrentMargins_(),
 			region = this.getPosition();
@@ -1157,10 +1161,12 @@ export class LayoutRegion extends zul.Widget {
 		return ambit;
 	}
 
+	/** @internal */
 	_ambit2(ambit: LayoutRegionAmbit, mars: zk.Dimension, split: { offsetWidth; offsetHeight }): void {
 		// empty
 	}
 
+	/** @internal */
 	setBtnPos_(btnPos: LayoutRegionAmbit, ver: boolean): void {
 		var sbtn = this.$n_('splitbtn');
 		if (ver)
@@ -1169,6 +1175,7 @@ export class LayoutRegion extends zul.Widget {
 			sbtn.style.marginTop = jq.px0((btnPos.h - sbtn.offsetHeight) / 2);
 	}
 
+	/** @internal */
 	_reszSplt(ambit: LayoutRegionAmbit): LayoutRegionAmbit {
 		var split = this.$n_('split'),
 			sbtn = this.$n('splitbtn');
@@ -1184,11 +1191,13 @@ export class LayoutRegion extends zul.Widget {
 		return ambit;
 	}
 
+	/** @internal */
 	_reszSp2(ambit: LayoutRegionAmbit, split: { w; h }): Partial<{ left; top; width; height }> {
 		// empty;
 		return {};
 	}
 
+	/** @internal */
 	getIconClass_(collapsed?: boolean): string {
 		var BL = zul.layout.Borderlayout;
 		switch (this.getPosition()) {
@@ -1204,6 +1213,7 @@ export class LayoutRegion extends zul.Widget {
 		return ''; // no icon
 	}
 
+	/** @internal */
 	titleRenderer_(out: string[]): void {
 		if (this._title) {
 			var uuid = this.uuid,
@@ -1231,6 +1241,7 @@ export class LayoutRegion extends zul.Widget {
 		return this.firstChild;
 	}
 
+	/** @internal */
 	static _aryToObject(array: number[]): zk.Dimension {
 		return {
 			top: array[0],
@@ -1249,6 +1260,7 @@ export class LayoutRegion extends zul.Widget {
 		this.parent!.resize();
 	}
 
+	/** @internal */
 	static _afterSlideOutX(this: LayoutRegion, n: HTMLElement): void {
 		// B50-ZK-301: fire onOpen after animation
 		LayoutRegion.afterSlideOut.call(this, n, true);
@@ -1279,6 +1291,7 @@ export class LayoutRegion extends zul.Widget {
 		this._fixFontIcon();
 	}
 
+	/** @internal */
 	static _afterSlideInX(this: LayoutRegion, n: HTMLElement): void {
 		// B50-ZK-301: fire onOpen after animation
 		LayoutRegion.afterSlideIn.call(this, n);
@@ -1314,6 +1327,7 @@ export class LayoutRegion extends zul.Widget {
 	}
 
 	//drag
+	/** @internal */
 	static _ignoredrag(dg: zk.Draggable, _pointer: zk.Offset, evt: zk.Event): boolean {
 		var target = evt.domTarget,
 			wgt = dg.control as LayoutRegion,
@@ -1380,6 +1394,7 @@ export class LayoutRegion extends zul.Widget {
 		return true;
 	}
 
+	/** @internal */
 	static _endeffect(dg: zk.Draggable, evt: zk.Event): void {
 		var wgt = dg.control as LayoutRegion;
 		if (wgt._isVertical())
@@ -1399,6 +1414,7 @@ export class LayoutRegion extends zul.Widget {
 		}, evt.data));
 	}
 
+	/** @internal */
 	static _snap(dg: zk.Draggable, pointer: zk.Offset): zk.Offset {
 		var wgt = dg.control as LayoutRegion,
 			x = pointer[0],
@@ -1444,6 +1460,7 @@ export class LayoutRegion extends zul.Widget {
 		return [x, y];
 	}
 
+	/** @internal */
 	static _ghosting(dg: zk.Draggable, ofs: zk.Offset, evt: zk.Event): HTMLElement {
 		var el = dg.node!, $el = zk(el);
 		jq(document.body).prepend('<div id="zk_layoutghost" class="z-splitter-ghost" style="font-size:0;line-height:0;background:#AAA;position:absolute;top:'

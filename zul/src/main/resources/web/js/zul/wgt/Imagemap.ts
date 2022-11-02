@@ -17,7 +17,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.wgt.Imagemap')
 export class Imagemap extends zul.wgt.Image {
+	/** @internal */
 	static _doneURI?: string;
+	/** @internal */
 	static _stamp?: number;
 
 	override getWidth(): string | undefined {
@@ -54,6 +56,7 @@ export class Imagemap extends zul.wgt.Image {
 		return this;
 	}
 
+	/** @internal */
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 
@@ -73,6 +76,7 @@ export class Imagemap extends zul.wgt.Image {
 		return this.$n('map');
 	}
 
+	/** @internal */
 	override beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
 		if (!(child instanceof zul.wgt.Area)) {
 			zk.error('Unsupported child for imagemap: ' + child.className);
@@ -81,18 +85,21 @@ export class Imagemap extends zul.wgt.Image {
 		return true;
 	}
 
+	/** @internal */
 	override onChildAdded_(child: zk.Widget): void {
 		super.onChildAdded_(child);
 		if (this.desktop && this.firstChild == this.lastChild) //first child
 			this._fixchd(true);
 	}
 
+	/** @internal */
 	override onChildRemoved_(child: zk.Widget): void {
 		super.onChildRemoved_(child);
 		if (this.desktop && !this.firstChild) //remove last
 			this._fixchd(false);
 	}
 
+	/** @internal */
 	_fixchd(bArea: boolean): void {
 		var mapid = this.uuid + '-map',
 			img = this.getImageNode()!;
@@ -100,6 +107,7 @@ export class Imagemap extends zul.wgt.Image {
 		img.isMap = !bArea;
 	}
 
+	/** @internal */
 	override contentAttrs_(): string {
 		var attr = super.contentAttrs_(),
 			w = this._width,
@@ -116,13 +124,13 @@ export class Imagemap extends zul.wgt.Image {
 			' ismap="ismap"');
 	}
 
-	//@Override
 	override fromPageCoord(x: number, y: number): zk.Offset {
 		//2997402: Imagemap rightclick/doubleclick wrong coordinates
 		var ofs = zk(this.getImageNode()).revisedOffset();
 		return [x - ofs[0], y - ofs[1]];
 	}
 
+	/** @internal */
 	_doneURI(): string {
 		var Imagemap = zul.wgt.Imagemap,
 			url = Imagemap._doneURI;
@@ -154,6 +162,7 @@ export class Imagemap extends zul.wgt.Image {
 		}, {ctl: true});
 	}
 
+	/** @internal */
 	static _toofast(): boolean {
 		if (zk.gecko) { //bug 1510374
 			var Imagemap = zul.wgt.Imagemap,

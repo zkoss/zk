@@ -12,7 +12,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-/** The menu related widgets, such as menubar and menuitem.
+/**
+ * The menu related widgets, such as menubar and menuitem.
+ * @internal
  */
 //zk.$package('zul.menu');
 function _closeOnOut(menubar: zul.menu.Menubar): void {
@@ -27,32 +29,42 @@ function _closeOnOut(menubar: zul.menu.Menubar): void {
 /**
  * A container that usually contains menu elements.
  *
- * <p>Default {@link #getZclass}: z-menubar
+ * @defaultValue {@link getZclass}: z-menubar
  */
 @zk.WrapClass('zul.menu.Menubar')
 export class Menubar extends zul.Widget {
 	override firstChild!: zul.menu.Menu | undefined;
 	override lastChild!: zul.menu.Menu | undefined;
+	/** @internal */
 	_orient = 'horizontal';
+	/** @internal */
 	_bodyScrollLeft = 0;
+	/** @internal */
 	_lastTarget?: zul.menu.Menu;
+	/** @internal */
 	_noFloatUp?: boolean;
+	/** @internal */
 	_bOver?: boolean;
+	/** @internal */
 	_autodrop?: boolean;
+	/** @internal */
 	_scrollable: boolean | undefined; // eslint-disable-line zk/preferStrictBooleanType
+	/** @internal */
 	_scrolling?: boolean;
+	/** @internal */
 	_runId?: number;
 
-	/** Returns the orient.
-	 * <p>Default: "horizontal".
-	 * @return String
+	/**
+	 * @returns the orient.
+	 * @defaultValue `"horizontal"`.
 	 */
 	getOrient(): string {
 		return this._orient;
 	}
 
-	/** Sets the orient.
-	 * @param String orient either horizontal or vertical
+	/**
+	 * Sets the orient.
+	 * @param orient - either horizontal or vertical
 	 */
 	setOrient(orient: string, opts?: Record<string, boolean>): this {
 		const o = this._orient;
@@ -65,16 +77,16 @@ export class Menubar extends zul.Widget {
 		return this;
 	}
 
-	/** Returns whether the menubar scrolling is enabled.
-	 * <p>Default: false.
-	 * @return boolean
+	/**
+	 * @returns whether the menubar scrolling is enabled.
+	 * @defaultValue `false`.
 	 */
 	isScrollable(): boolean {
 		return !!this._scrollable;
 	}
 
-	/** Sets whether to enable the menubar scrolling
-	 * @param boolean scrollable
+	/**
+	 * Sets whether to enable the menubar scrolling
 	 */
 	setScrollable(scrollable: boolean, opts?: Record<string, boolean>): this {
 		const o = this._scrollable;
@@ -88,18 +100,16 @@ export class Menubar extends zul.Widget {
 		return this;
 	}
 
-	/** Returns whether to automatically drop down menus if user moves mouse
-	 * over it.
-	 * <p>Default: false.
-	 * @return boolean
+	/**
+	 * @returns whether to automatically drop down menus if user moves mouse over it.
+	 * @defaultValue `false`.
 	 */
 	isAutodrop(): boolean {
 		return !!this._autodrop;
 	}
 
-	/** Sets whether to automatically drop down menus if user moves mouse
-	 * over it.
-	 * @param boolean autodrop
+	/**
+	 * Sets whether to automatically drop down menus if user moves mouse over it.
 	 */
 	setAutodrop(autodrop: boolean): this {
 		this._autodrop = autodrop;
@@ -112,6 +122,7 @@ export class Menubar extends zul.Widget {
 		return this;
 	}
 
+	/** @internal */
 	override domClass_(no?: zk.DomClassOptions): string {
 		var sc = super.domClass_(no);
 		if (!no || !no.zclass) {
@@ -120,6 +131,7 @@ export class Menubar extends zul.Widget {
 		return sc;
 	}
 
+	/** @internal */
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		if (this.checkScrollable()) {
 			var left = this.$n('left'),
@@ -138,6 +150,7 @@ export class Menubar extends zul.Widget {
 		super.unbind_(skipper, after, keepRod);
 	}
 
+	/** @internal */
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		var n = this.$n_();
@@ -154,8 +167,8 @@ export class Menubar extends zul.Widget {
 		}
 	}
 
-	/** Returns whether the menubar scrolling is enabled in horizontal orient.
-	 * @return boolean
+	/**
+	 * @returns whether the menubar scrolling is enabled in horizontal orient.
 	 */
 	checkScrollable(): boolean {
 		return !!this._scrollable && !this.isVertical();
@@ -165,6 +178,7 @@ export class Menubar extends zul.Widget {
 		this._checkScrolling();
 	}
 
+	/** @internal */
 	override beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
 		if (!(child instanceof zul.menu.Menu) && !(child instanceof zul.menu.Menuitem) && !(child instanceof zul.menu.Menuseparator)) {
 			zk.error('Unsupported child for menubar: ' + child.className);
@@ -173,17 +187,20 @@ export class Menubar extends zul.Widget {
 		return true;
 	}
 
+	/** @internal */
 	override onChildAdded_(child: zul.menu.Menu): void {
 		super.onChildAdded_(child);
 		this._checkScrolling();
 	}
 
+	/** @internal */
 	override onChildRemoved_(child: zul.menu.Menu): void {
 		super.onChildRemoved_(child);
 		if (!this.childReplacing_)
 			this._checkScrolling();
 	}
 
+	/** @internal */
 	_checkScrolling(): void {
 		if (!this.checkScrollable()) return;
 
@@ -220,6 +237,7 @@ export class Menubar extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	_fixScrollPos(lastChild?: HTMLElement): void {
 		if (lastChild) {
 			var offsetLeft = lastChild.offsetLeft;
@@ -229,6 +247,7 @@ export class Menubar extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	_fixButtonPos(node: HTMLElement): void {
 		var body = this.$n_('body'),
 			left = this.$n_('left'),
@@ -241,30 +260,36 @@ export class Menubar extends zul.Widget {
 		body.style.marginRight = this._scrolling ? jq.px(right.offsetWidth) : '0';
 	}
 
+	/** @internal */
 	_forceStyle(node: HTMLElement, value: string): void {
 		if (zk.parseInt(value) < 0)
 			return;
 		node.style.width = value;
 	}
 
+	/** @internal */
 	_doMouseEnter(evt: MouseEvent): void {
 		this._bOver = true;
 		this._noFloatUp = false;
 	}
 
+	/** @internal */
 	_doMouseLeave(evt: MouseEvent): void {
 		this._bOver = false;
 		this._closeOnOut();
 	}
 
+	/** @internal */
 	_doScroll(evt: zk.Event): void {
 		this._scroll(evt.domTarget == this.$n('left') || evt.domTarget.parentNode == this.$n('left') ? 'left' : 'right');
 	}
 
+	/** @internal */
 	_fixBodyScrollLeft(scrollLeft: number): void {
 		this.$n_('body').scrollLeft = this._bodyScrollLeft = scrollLeft;
 	}
 
+	/** @internal */
 	_scroll(direction: string): void {
 		if (!this.checkScrollable() || this._runId) return;
 		var body = this.$n_('body'),
@@ -313,6 +338,7 @@ export class Menubar extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	_moveTo(body: HTMLElement, moveDest: number): boolean {
 		var currPos = this._bodyScrollLeft;
 		if (currPos == moveDest)
@@ -328,11 +354,13 @@ export class Menubar extends zul.Widget {
 		return true;
 	}
 
+	/** @internal */
 	_afterMove(): void {
 		clearInterval(this._runId);
 		this._runId = undefined;
 	}
 
+	/** @internal */
 	override insertChildHTML_(child: zul.menu.Menu, before?: zk.Widget, desktop?: zk.Desktop): void {
 		var vert = this.isVertical();
 		if (before)
@@ -345,11 +373,13 @@ export class Menubar extends zul.Widget {
 		child.bind(desktop);
 	}
 
+	/** @internal */
 	override removeChildHTML_(child: zul.menu.Menu, ignoreDom?: boolean): void {
 		super.removeChildHTML_(child, ignoreDom);
 		jq(child.$n_('chdextr')).remove();
 	}
 
+	/** @internal */
 	encloseChildHTML_(opts: { child: zk.Widget; vertical: boolean; out?: string[] }): string | undefined {
 		var out = opts.out ?? new zk.Buffer(),
 			child = opts.child;
@@ -358,20 +388,21 @@ export class Menubar extends zul.Widget {
 	}
 
 	//Closes all menupopup when mouse is moved out
+	/** @internal */
 	_closeOnOut(): void {
 		if (this._autodrop && !zul.Widget.getOpenTooltip()) //dirty fix: don't auto close if tooltip shown
 			setTimeout(() => _closeOnOut(this), 200);
 	}
 
 	/**
-	 * Returns whether it is a vertical menubar.
-	 * @return boolean
+	 * @returns whether it is a vertical menubar.
 	 * @since 9.5.0
 	 */
 	isVertical(): boolean {
 		return 'vertical' == this.getOrient();
 	}
 
+	/** @internal */
 	override doKeyDown_(evt: zk.Event): void {
 		var direction = 0,
 			isVertical = this.isVertical(),
@@ -401,6 +432,7 @@ export class Menubar extends zul.Widget {
 		super.doKeyDown_(evt);
 	}
 
+	/** @internal */
 	_getPrevVisibleMenuTarget(currentTarget: zk.Widget): zk.Widget | undefined {
 		var prev = currentTarget.previousSibling;
 		if (!prev) {
@@ -409,6 +441,7 @@ export class Menubar extends zul.Widget {
 		return prev ? this._prevVisibleMenu(prev) : undefined;
 	}
 
+	/** @internal */
 	_getNextVisibleMenuTarget(currentTarget: zk.Widget): zk.Widget | undefined {
 		var next = currentTarget.nextSibling;
 		if (!next) {
@@ -417,6 +450,7 @@ export class Menubar extends zul.Widget {
 		return next ? this._nextVisibleMenu(next) : undefined;
 	}
 
+	/** @internal */
 	_nextVisibleMenu(menu?: zk.Widget): zk.Widget | undefined {
 		for (var m = menu; m; m = m.nextSibling) {
 			if (Menubar._isActiveItem(m))
@@ -427,6 +461,7 @@ export class Menubar extends zul.Widget {
 		return this._nextVisibleMenu(this.firstChild);
 	}
 
+	/** @internal */
 	_prevVisibleMenu(menu?: zk.Widget): zk.Widget | undefined {
 		for (var m = menu; m; m = m.previousSibling) {
 			if ((this.$class as typeof Menubar)._isActiveItem(m))
@@ -437,6 +472,7 @@ export class Menubar extends zul.Widget {
 		return this._prevVisibleMenu(this.lastChild);
 	}
 
+	/** @internal */
 	static _isActiveItem(wgt: zk.Widget): boolean {
 		return wgt.isVisible()
 			&& (wgt instanceof zul.menu.Menu || wgt instanceof zul.menu.Menuitem)

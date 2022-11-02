@@ -20,29 +20,49 @@ var globallocalizedSymbols: Record<string, zk.LocalizedSymbols> = {},
 
 @zk.WrapClass('zul.db.Datebox')
 export class Datebox extends zul.inp.FormatWidget<DateImpl> {
+	/** @internal */
 	_buttonVisible = true;
+	/** @internal */
 	_lenient = true;
+	/** @internal */
 	_strictDate = false;
+	/** @internal */
 	_selectLevel: 'day' | 'month' | 'year' | 'decade' | 'today' = 'day';
+	/** @internal */
 	_closePopupOnTimezoneChange = true;
+	/** @internal */
 	_pop: CalendarPop;
+	/** @internal */
 	_tm: CalendarTime;
 	// defSet will generate `_timeZone` but actually `_timezone` is used in code.
 	// Debugger in ZKDemo shows that both properties are created and agree.
 	// However, the server should expect `_timeZone`.
+	/** @internal */
 	_timeZone?: string;
+	/** @internal */
 	_constraint?: string;
+	/** @internal */
 	_displayedTimeZones?: string;
+	/** @internal */
 	_dtzones?: string[];
+	/** @internal */
 	_unformater?: string;
+	/** @internal */
 	_weekOfYear?: boolean;
+	/** @internal */
 	_showTodayLink?: boolean;
+	/** @internal */
 	_todayLinkLabel?: string;
+	/** @internal */
 	_defaultDateTime?: DateImpl;
+	/** @internal */
 	_refDate?: DateImpl;
+	/** @internal */
 	_timeZonesReadonly?: boolean;
+	/** @internal */
 	static _unformater?: zul.db.Unformater;
 	localizedFormat?: string;
+	/** @internal */
 	_position?: string;
 
 	constructor() {
@@ -65,7 +85,6 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 
 	/**
 	 * Sets whether the button (on the right of the textbox) is visible.
-	 * @param boolean visible
 	 */
 	setButtonVisible(buttonVisible: boolean, opts?: Record<string, boolean>): this {
 		const o = this._buttonVisible;
@@ -79,65 +98,64 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 	}
 
 	/**
-	 * Returns whether the button (on the right of the textbox) is visible.
-	 * <p>
-	 * Default: true.
-	 * @return boolean
+	 * @returns whether the button (on the right of the textbox) is visible.
+	 * @defaultValue `true`.
 	 */
 	isButtonVisible(): boolean {
 		return this._buttonVisible;
 	}
 
-	/** Sets the date format.
+	/**
+	 * Sets the date format.
 	 * <p>The following pattern letters are defined:
-	 * <table border=0 cellspacing=3 cellpadding=0>
+	 * <table border="0" cellspacing="3" cellpadding="0">
 	 * <tr bgcolor="#ccccff">
-	 * <th align=left>Letter
-	 * <th align=left>Date or Time Component
-	 * <th align=left>Presentation
-	 * <th align=left>Examples
-	 * <tr><td><code>G</code>
+	 * <th align="left">Letter
+	 * <th align="left">Date or Time Component
+	 * <th align="left">Presentation
+	 * <th align="left">Examples
+	 * <tr><td>`G`
 	 * <td>Era designator
 	 * <td>Text</a>
-	 * <td><code>AD</code>
+	 * <td>`AD`
 	 * <tr bgcolor="#eeeeff">
-	 * <td><code>y</code>
+	 * <td>`y`
 	 * <td>Year
 	 * <td>Year</a>
-	 * <td><code>1996</code>; <code>96</code>
-	 * <tr><td><code>M</code>
+	 * <td>`1996`; `96`
+	 * <tr><td>`M`
 	 * <td>Month in year
 	 * <td>Month</a>
-	 * <td><code>July</code>; <code>Jul</code>; <code>07</code>
+	 * <td>`July`; `Jul`; `07`
 	 * <tr bgcolor="#eeeeff">
-	 * <td><code>w</code>
+	 * <td>`w`
 	 * <td>Week in year (starting at 1)
 	 * <td>Number</a>
-	 * <td><code>27</code>
-	 * <tr><td><code>W</code>
+	 * <td>`27`
+	 * <tr><td>`W`
 	 * <td>Week in month (starting at 1)
 	 * <td>Number</a>
-	 * <td><code>2</code>
+	 * <td>`2`
 	 * <tr bgcolor="#eeeeff">
-	 * <td><code>D</code>
+	 * <td>`D`
 	 * <td>Day in year (starting at 1)
 	 * <td>Number</a>
-	 * <td><code>189</code>
-	 * <tr><td><code>d</code>
+	 * <td>`189`
+	 * <tr><td>`d`
 	 * <td>Day in month (starting at 1)
 	 * <td>Number</a>
-	 * <td><code>10</code>
+	 * <td>`10`
 	 * <tr bgcolor="#eeeeff">
-	 * <td><code>F</code>
+	 * <td>`F`
 	 * <td>Day of week in month
 	 * <td>Number</a>
-	 * <td><code>2</code>
-	 * <tr><td><code>E</code>
+	 * <td>`2`
+	 * <tr><td>`E`
 	 * <td>Day in week
 	 * <td>Text</a>
-	 * <td><code>Tuesday</code>; <code>Tue</code>
+	 * <td>`Tuesday`; `Tue`
 	 * </table>
-	 * @param String format the pattern.
+	 * @param format - the pattern.
 	 */
 	override setFormat(format: string, opts?: Record<string, boolean>): this {
 		const o = this._format;
@@ -157,16 +175,16 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 		return this;
 	}
 
-	/** Returns the full date format of the specified format
-	 * @return String
+	/**
+	 * @returns the full date format of the specified format
 	 */
 	override getFormat(): string | undefined {
 		return this._format;
 	}
 
-	/** Sets the constraint.
-	 * <p>Default: null (means no constraint all all).
-	 * @param String cst
+	/**
+	 * Sets the constraint.
+	 * @defaultValue `null` (means no constraint all all).
 	 */
 	override setConstraint(constraint: string | undefined, opts?: Record<string, boolean>): this {
 		const o = this._constraint;
@@ -188,15 +206,16 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 		return this;
 	}
 
-	/** Returns the constraint, or null if no constraint at all.
-	 * @return String
+	/**
+	 * @returns the constraint, or null if no constraint at all.
 	 */
 	override getConstraint(): string | undefined {
 		return this._constraint;
 	}
 
-	/** Sets the time zone that this date box belongs to.
-	 * @param String timezone the time zone's ID, such as "America/Los_Angeles".
+	/**
+	 * Sets the time zone that this date box belongs to.
+	 * @param timezone - the time zone's ID, such as "America/Los_Angeles".
 	 */
 	setTimeZone(timeZone: string, opts?: Record<string, boolean>): this {
 		const o = this._timeZone;
@@ -216,16 +235,16 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 		return this;
 	}
 
-	/** Returns the time zone that this date box belongs to.
-	 * @return String the time zone's ID, such as "America/Los_Angeles".
+	/**
+	 * @returns the time zone that this date box belongs to, such as "America/Los_Angeles"
 	 */
 	override getTimeZone(): string | undefined {
 		return this._timeZone;
 	}
 
-	/** Sets whether the list of the time zones to display is readonly.
+	/**
+	 * Sets whether the list of the time zones to display is readonly.
 	 * If readonly, the user cannot change the time zone at the client.
-	 * @param boolean readonly
 	 */
 	setTimeZonesReadonly(timeZonesReadonly: boolean, opts?: Record<string, boolean>): this {
 		const o = this._timeZonesReadonly;
@@ -239,18 +258,19 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 		return this;
 	}
 
-	/** Returns whether the list of the time zones to display is readonly.
+	/**
+	 * @returns whether the list of the time zones to display is readonly.
 	 * If readonly, the user cannot change the time zone at the client.
-	 * @return boolean
 	 */
 	isTimeZonesReadonly(): boolean {
 		return !!this._timeZonesReadonly;
 	}
 
-	/** Sets a catenation of a list of the time zones' ID, separated by comma,
+	/**
+	 * Sets a catenation of a list of the time zones' ID, separated by comma,
 	 * that will be displayed at the client and allow user to select.
-	 * @param String dtzones a catenation of a list of the timezones' ID, such as
-	 * <code>"America/Los_Angeles,GMT+8"</code>
+	 * @param dtzones - a catenation of a list of the timezones' ID, such as
+	 * `"America/Los_Angeles,GMT+8"`
 	 */
 	setDisplayedTimeZones(displayedTimeZones: string, opts?: Record<string, boolean>): this {
 		const o = this._displayedTimeZones;
@@ -263,17 +283,18 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 		return this;
 	}
 
-	/** Returns a list of the time zones that will be displayed at the
+	/**
+	 * @returns a list of the time zones that will be displayed at the
 	 * client and allow user to select.
-	 * <p>Default: null
-	 * @return Array
+	 * @defaultValue `null`
 	 */
 	getDisplayedTimeZones(): string | undefined {
 		return this._displayedTimeZones;
 	}
 
-	/** Sets the unformater function. This method is called from Server side.
-	 * @param String unf the unformater function
+	/**
+	 * Sets the unformater function. This method is called from Server side.
+	 * @param unf - the unformater function
 	 */
 	setUnformater(unformater: string, opts?: Record<string, boolean>): this {
 		const o = this._unformater;
@@ -286,35 +307,35 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 		return this;
 	}
 
-	/** Returns the unformater.
-	 * @return String the unformater function
+	/**
+	 * @returns the unformater.
 	 */
 	getUnformater(): string | undefined {
 		return this._unformater;
 	}
 
-	/** Sets whether or not date/time parsing is to be lenient.
+	/**
+	 * Sets whether or not date/time parsing is to be lenient.
 	 *
 	 * <p>
 	 * With lenient parsing, the parser may use heuristics to interpret inputs
 	 * that do not precisely match this object's format. With strict parsing,
 	 * inputs must match this object's format.
 	 *
-	 * <p>Default: true.
-	 * @param boolean lenient
+	 * @defaultValue `true`.
 	 */
 	setLenient(lenient: boolean): this {
 		this._lenient = lenient;
 		return this;
 	}
 
-	/** Returns whether or not date/time parsing is to be lenient.
+	/**
+	 * @returns whether or not date/time parsing is to be lenient.
 	 *
 	 * <p>
 	 * With lenient parsing, the parser may use heuristics to interpret inputs
 	 * that do not precisely match this object's format. With strict parsing,
 	 * inputs must match this object's format.
-	 * @return boolean
 	 */
 	isLenient(): boolean {
 		return this._lenient;
@@ -349,7 +370,6 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 	 * Sets whether enable to show the week number in the current calendar or
 	 * not. [ZK EE]
 	 * @since 6.5.0
-	 * @param boolean weekOfYear
 	 */
 	setWeekOfYear(weekOfYear: boolean, opts?: Record<string, boolean>): this {
 		const o = this._weekOfYear;
@@ -364,11 +384,10 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 	}
 
 	/**
-	 * Returns whether enable to show the week number in the current calendar
+	 * @returns whether enable to show the week number in the current calendar
 	 * or not.
-	 * <p>Default: false
+	 * @defaultValue `false`
 	 * @since 6.5.0
-	 * @return boolean
 	 */
 	isWeekOfYear(): boolean {
 		return !!this._weekOfYear;
@@ -377,7 +396,6 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 	/**
 	 * Sets whether enable to show the link that jump to today in day view
 	 * @since 8.0.0
-	 * @param boolean showTodayLink
 	 */
 	setShowTodayLink(showTodayLink: boolean, opts?: Record<string, boolean>): this {
 		const o = this._showTodayLink;
@@ -393,10 +411,9 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 	}
 
 	/**
-	 * Returns whether enable to show the link that jump to today in day view
-	 * <p>Default: false
+	 * @returns whether enable to show the link that jump to today in day view
+	 * @defaultValue `false`
 	 * @since 8.0.0
-	 * @return boolean
 	 */
 	isShowTodayLink(): boolean {
 		return !!this._showTodayLink;
@@ -405,7 +422,6 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 	/**
 	 * Sets the label of the link that jump to today in day view
 	 * @since 8.0.4
-	 * @param String todayLinkLabel
 	 */
 	setTodayLinkLabel(todayLinkLabel: string, opts?: Record<string, boolean>): this {
 		const o = this._todayLinkLabel;
@@ -421,9 +437,8 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 	}
 
 	/**
-	 * Returns the label of the link that jump to today in day view
+	 * @returns the label of the link that jump to today in day view
 	 * @since 8.0.4
-	 * @return String
 	 */
 	getTodayLinkLabel(): string | undefined {
 		return this._todayLinkLabel;
@@ -434,7 +449,6 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 	 * If true, any invalid input like "Jan 0" or "Nov 31" would be refused.
 	 * If false, it won't be checked and let lenient parsing decide.
 	 * @since 8.6.0
-	 * @param boolean strictDate
 	 */
 	setStrictDate(strictDate: boolean): this {
 		this._strictDate = strictDate;
@@ -442,10 +456,9 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 	}
 
 	/**
-	 * Returns whether or not date/time should be strict.
-	 * <p>Default: false.
+	 * @returns whether or not date/time should be strict.
+	 * @defaultValue `false`.
 	 * @since 8.6.0
-	 * @return boolean
 	 */
 	isStrictDate(): boolean {
 		return this._strictDate;
@@ -454,7 +467,7 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 	/**
 	 * Sets the default datetime if the value is empty.
 	 * @since 9.0.0
-	 * @param Date defaultDateTime Default datetime. null means current datetime.
+	 * @param defaultDateTime - Default datetime. null means current datetime.
 	 */
 	setDefaultDateTime(defaultDateTime: DateImpl): this {
 		this._defaultDateTime = defaultDateTime;
@@ -462,10 +475,9 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 	}
 
 	/**
-	 * Returns the default datetime if the value is empty.
-	 * <p>Default: null (means current datetime).
+	 * @returns the default datetime if the value is empty.
+	 * @defaultValue `null` (means current datetime).
 	 * @since 9.0.0
-	 * @return Date
 	 */
 	getDefaultDateTime(): DateImpl | undefined {
 		return this._defaultDateTime;
@@ -475,7 +487,7 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 	 * Sets the level that a user can select.
 	 * The valid options are "day", "month", and "year".
 	 *
-	 * @param String selectLevel the level that a user can select
+	 * @param selectLevel - the level that a user can select
 	 * @since 9.5.1
 	 */
 	setSelectLevel(selectLevel: 'day' | 'month' | 'year' | 'decade' | 'today'): this {
@@ -484,10 +496,8 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 	}
 
 	/**
-	 * Returns the level that a user can select.
-	 * <p>
-	 * Default: "day"
-	 * @return String
+	 * @returns the level that a user can select.
+	 * @defaultValue `"day"`
 	 * @since 9.5.1
 	 */
 	getSelectLevel(): string {
@@ -497,7 +507,7 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 	/**
 	 * Sets whether to auto close the datebox popup after changing the timezone.
 	 *
-	 * @param boolean closePopupOnTimezoneChange shall close the datebox popup or not
+	 * @param closePopupOnTimezoneChange - shall close the datebox popup or not
 	 * @since 9.6.0
 	 */
 	setClosePopupOnTimezoneChange(closePopupOnTimezoneChange: boolean): this {
@@ -506,10 +516,8 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 	}
 
 	/**
-	 * Returns whether to auto close the datebox popup after changing the timezone.
-	 * <p>
-	 * Default: true
-	 * @return boolean
+	 * @returns whether to auto close the datebox popup after changing the timezone.
+	 * @defaultValue `true`
 	 * @since 9.6.0
 	 */
 	isClosePopupOnTimezoneChange(): boolean {
@@ -581,8 +589,7 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 	}
 
 	/**
-	 * Returns the iconSclass name of this Datebox.
-	 * @return String the iconSclass name
+	 * @returns the iconSclass name of this Datebox.
 	 * @since 8.6.2
 	 */
 	getIconSclass(): string {
@@ -593,6 +600,7 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 		return true;
 	}
 
+	/** @internal */
 	_setTimeZonesIndex(): this {
 		var select = this.$n<HTMLSelectElement>('dtzones');
 		if (select && this._timeZone) {
@@ -609,8 +617,8 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 			Datebox._reposition(this, true);
 	}
 
-	/** Returns the Time format of the specified format
-	 * @return String
+	/**
+	 * @returns the Time format of the specified format
 	 */
 	getTimeFormat(): string {
 		//Note: S (milliseconds not supported yet)
@@ -641,14 +649,15 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 
 	}
 
-	/** Returns the Date format of the specified format
-	 * @return String
+	/**
+	 * @returns the Date format of the specified format
 	 */
 	getDateFormat(): string {
 		return this._format!.replace(/[(s.S{1,3})ahKHksm]*:?/g, '').trim();
 	}
 
-	/** Drops down or closes the calendar to select a date.
+	/**
+	 * Drops down or closes the calendar to select a date.
 	 */
 	setOpen(open: boolean, _focus_: boolean): this {
 		if (this.isRealVisible()) {
@@ -671,6 +680,7 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 		return super.setValue(value, fromServer);
 	}
 
+	/** @internal */
 	override coerceFromString_(val: string | undefined, pattern?: string): zul.inp.CoerceFromStringResult | DateImpl | undefined {
 		var unf = Datebox._unformater,
 			tz = this.getTimeZone();
@@ -695,10 +705,12 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 		return undefined;
 	}
 
+	/** @internal */
 	override coerceToString_(val: DateImpl | undefined, pattern?: string): string {
 		return val ? new zk.fmt.Calendar().formatDate(val, pattern || this.getFormat(), this._localizedSymbols) : '';
 	}
 
+	/** @internal */
 	override doClick_(evt: zk.Event, popupOnly?: boolean): void {
 		if (this._disabled) return;
 		if (this._readonly && this._buttonVisible && this._pop && !this._pop.isOpen())
@@ -706,12 +718,14 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 		super.doClick_(evt, popupOnly);
 	}
 
+	/** @internal */
 	override doKeyDown_(evt: zk.Event): void {
 		this._doKeyDown(evt);
 		if (!evt.stopped)
 			super.doKeyDown_(evt);
 	}
 
+	/** @internal */
 	_doKeyDown(evt: zk.Event): void {
 		if (jq.nodeName(evt.domTarget, 'option', 'select'))
 			return;
@@ -758,10 +772,12 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 		}
 	}
 
-	/** Called when the user presses enter when this widget has the focus ({@link #focus}).
+	/**
+	 * Called when the user presses enter when this widget has the focus ({@link focus}).
 	 * <p>call the close function
-	 * @param zk.Event evt the widget event.
+	 * @param evt - the widget event.
 	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget}
+	 * @internal
 	 */
 	enterPressed_(evt: zk.Event): void {
 		this._pop.close();
@@ -769,16 +785,19 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 		evt.stop();
 	}
 
-	/** Called when the user presses escape key when this widget has the focus ({@link #focus}).
+	/**
+	 * Called when the user presses escape key when this widget has the focus ({@link focus}).
 	 * <p>call the close function
-	 * @param zk.Event evt the widget event.
+	 * @param evt - the widget event.
 	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget}
+	 * @internal
 	 */
 	escPressed_(evt: zk.Event): void {
 		this._pop.close();
 		evt.stop();
 	}
 
+	/** @internal */
 	override afterKeyDown_(evt: zk.Event, simulated?: boolean): boolean {
 		if (!simulated && this._inplace)
 			jq(this.$n_()).toggleClass(this.getInplaceCSS(), evt.keyCode == 13);
@@ -786,6 +805,7 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 		return super.afterKeyDown_(evt, simulated);
 	}
 
+	/** @internal */
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		var btn = this.$n('btn');
@@ -799,6 +819,7 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 		this._pop.setFormat(this.getDateFormat());
 	}
 
+	/** @internal */
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		var pop = this._pop;
 		if (pop)
@@ -814,6 +835,7 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 		super.unbind_(skipper, after, keepRod);
 	}
 
+	/** @internal */
 	_doBtnClick(evt: zk.Event): void {
 		this._inplaceIgnore = false;
 		if (!this._buttonVisible) return;
@@ -823,10 +845,12 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 		evt.stop((this._pop && this._pop._open ? { propagation: true } : undefined));
 	}
 
+	/** @internal */
 	_doBtnMouseDown(): void {
 		this._inplaceIgnore = true;
 	}
 
+	/** @internal */
 	_doTimeZoneChange(evt: zk.Event): void {
 		var select = this.$n_<HTMLSelectElement>('dtzones'),
 			timezone = select.value;
@@ -869,13 +893,14 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 		}
 	}
 
-	/** Returns the label of the time zone
-	 * @return String
+	/**
+	 * @returns the label of the time zone
 	 */
 	getTimeZoneLabel(): string {
 		return '';
 	}
 
+	/** @internal */
 	redrawpp_(out: string[]): void {
 		out.push('<div id="', this.uuid, '-pp" class="', this.$s('popup'),
 			'" style="display:none" role="dialog" aria-labelledby="', this._pop.uuid, '-title" tabindex="-1">');
@@ -886,6 +911,7 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 		out.push('</div>');
 	}
 
+	/** @internal */
 	_redrawTimezone(out: string[]): void {
 		var timezones = this._dtzones;
 		if (timezones) {
@@ -899,12 +925,14 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 		}
 	}
 
+	/** @internal */
 	override updateChange_(clear?: boolean): boolean {
 		if (!this.isOpen())
 			super.updateChange_(clear);
 		return false;
 	}
 
+	/** @internal */
 	static _reposition(db: Datebox, silent?: boolean): void {
 		if (!db.$n()) return;
 		var pp = db.$n('pp'),
@@ -920,6 +948,7 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 		}
 	}
 
+	/** @internal */
 	static _prepareTimeFormat(h: string, m: string, s: string): string {
 		var o: string[] = [];
 		if (h) o.push(h);
@@ -932,7 +961,9 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 @zk.WrapClass('zul.db.CalendarPop')
 export class CalendarPop extends zul.db.Calendar {
 	override parent!: Datebox;
+	/** @internal */
 	_shadow?: zk.eff.Shadow;
+	/** @internal */
 	_open?: boolean;
 
 	constructor() {
@@ -1133,6 +1164,7 @@ export class CalendarPop extends zul.db.Calendar {
 		}
 	}
 
+	/** @internal */
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		this._bindTimezoneEvt();
@@ -1140,6 +1172,7 @@ export class CalendarPop extends zul.db.Calendar {
 		zWatch.listen({ onFloatUp: this });
 	}
 
+	/** @internal */
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		zWatch.unlisten({ onFloatUp: this });
 		this._unbindfTimezoneEvt();
@@ -1150,6 +1183,7 @@ export class CalendarPop extends zul.db.Calendar {
 		super.unbind_(skipper, after, keepRod);
 	}
 
+	/** @internal */
 	_bindTimezoneEvt(): void {
 		var db = this.parent,
 			select = db.$n<HTMLSelectElement>('dtzones');
@@ -1160,6 +1194,7 @@ export class CalendarPop extends zul.db.Calendar {
 		}
 	}
 
+	/** @internal */
 	_unbindfTimezoneEvt(): void {
 		var db = this.parent,
 			select = db.$n('dtzones');
@@ -1167,6 +1202,7 @@ export class CalendarPop extends zul.db.Calendar {
 			db.domUnlisten_(select, 'onChange', '_doTimeZoneChange');
 	}
 
+	/** @internal */
 	override _setView(val: 'day' | 'month' | 'year' | 'decade' | 'today', force?: number): this {
 		if (this.parent.getTimeFormat())
 			this.parent._tm.setVisible(val == 'day');
@@ -1181,6 +1217,7 @@ export class CalendarPop extends zul.db.Calendar {
 	}
 
 	// ZK-2308
+	/** @internal */
 	override doKeyDown_(evt: zk.Event): void {
 		super.doKeyDown_(evt);
 		if (evt.keyCode == 27) {
@@ -1188,10 +1225,12 @@ export class CalendarPop extends zul.db.Calendar {
 		}
 	}
 
+	/** @internal */
 	override animationSpeed_(): number | 'slow' | 'fast' {
 		return zk(this.parent).getAnimationSpeed();
 	}
 
+	/** @internal */
 	override _chooseDate(target: HTMLTableCellElement | undefined, val: number): void {
 		var db = this.parent,
 			selectLevel = db._selectLevel;
@@ -1237,6 +1276,7 @@ export class CalendarPop extends zul.db.Calendar {
 		}
 	}
 
+	/** @internal */
 	static _equalDate(d1: DateImpl | undefined, d2: DateImpl | undefined): boolean {
 		return !!((d1 == d2) || (d1 && d2 && d1.getTime() == d2.getTime()));
 	}
@@ -1283,9 +1323,8 @@ export class CalendarTime extends zul.db.Timebox {
  */
 export var DateboxCtrl = {
 	/**
-	 * Returns whether to preserve the focus state.
-	 * @param zk.Widget wgt a widget
-	 * @return boolean
+	 * @returns whether to preserve the focus state.
+	 * @param wgt - a widget
 	 */
 	isPreservedFocus(wgt: zk.Widget): boolean {
 		return true;

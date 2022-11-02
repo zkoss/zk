@@ -14,24 +14,25 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 @zk.WrapClass('zhtml.Text')
 export class Text extends zhtml.Widget {
+	/** @internal */
 	_value = '';
+	/** @internal */
 	_encode = true;
 	idRequired?: boolean;
 
-	/** Returns whether to encode the text, such as converting &lt;
-	 * to &amp;lt;.
-	 * <p>Default: true.
-	 * @return boolean
+	/**
+	 * @returns whether to encode the text, such as converting `<` to `&lt;`.
+	 * @defaultValue `true`
 	 * @since 5.0.8
 	 */
 	isEncode(): boolean {
 		return this._encode;
 	}
 
-	/** Sets whether to encode the text, such as converting &lt;
-	 * to &amp;lt;.
-	 * <p>Default: true.
-	 * @param boolean encode whether to encode
+	/**
+	 * Sets whether to encode the text, such as converting `<` to `&lt;`.
+	 * @defaultValue `true`
+	 * @param encode - whether to encode
 	 * @since 5.0.8
 	 */
 	setEncode(encode: boolean, opts?: Record<string, boolean>): this {
@@ -43,22 +44,23 @@ export class Text extends zhtml.Widget {
 			if (n) {
 				var val = this._value;
 				n.innerHTML = this._encode ? zUtl.encodeXML(val) : val;
-				//See Bug 2871080 and ZK-294
+				// See Bug 2871080 and ZK-294
 			}
 		}
 
 		return this;
 	}
 
-	/** Returns the value of this label.
-	 * @return String
+	/**
+	 * @returns the value of this label.
 	 */
 	getValue(): string {
 		return this._value;
 	}
 
-	/** Sets the value of this label.
-	 * @param String label the label
+	/**
+	 * Sets the value of this label.
+	 * @param label - the label
 	 */
 	// eslint-disable-next-line zk/javaStyleSetterSignature
 	setValue(label: string, opts?: Record<string, boolean>): this {
@@ -70,15 +72,18 @@ export class Text extends zhtml.Widget {
 			if (n) {
 				var val = this._value;
 				n.innerHTML = this._encode ? zUtl.encodeXML(val) : val;
-				//See Bug 2871080 and ZK-294
+				// See Bug 2871080 and ZK-294
 			}
 		}
 
 		return this;
 	}
 
-	// ZK 7.5 enable to preserve the line break and comment into XHTML format
-	// so we need to skip them here.
+	/**
+	 * ZK 7.5 enable to preserve the line break and comment into XHTML format so
+	 * we need to skip them here.
+	 * @internal
+	 */
 	_checkContentRequired(val: string): boolean {
 		if (val) {
 			val = val.trim();
@@ -89,13 +94,13 @@ export class Text extends zhtml.Widget {
 	}
 
 	override redraw(out: string[]): void {
-		var attrs = this.domAttrs_({id: true, zclass: true}),
+		var attrs = this.domAttrs_({ id: true, zclass: true }),
 			val = this._value,
 			span = attrs || (this.idRequired && this._checkContentRequired(val));
-			// Bug 3245960: enclosed text was wrapped with <span>
+		// Bug 3245960: enclosed text was wrapped with <span>
 		if (span) out.push('<span', ' id="', this.uuid, '"', attrs, '>');
 		out.push(this._encode ? zUtl.encodeXML(val) : val);
-			//See Bug 2871080 and ZK-294
+		// See Bug 2871080 and ZK-294
 		if (span) out.push('</span>');
 	}
 }

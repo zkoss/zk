@@ -17,12 +17,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.inp.FormatWidget')
 export class FormatWidget<ValueType> extends zul.inp.InputWidget<ValueType> {
+	/** @internal */
 	_format?: string;
+	/** @internal */
 	_shortcut?: string;
+	/** @internal */
 	_localizedSymbols?: zk.LocalizedSymbols;
 	getTimeZone?(): string | undefined;
 
-	//zk.def
 	setFormat(format: string, opts?: Record<string, boolean>): this {
 		const o = this._format;
 		this._format = format;
@@ -35,21 +37,23 @@ export class FormatWidget<ValueType> extends zul.inp.InputWidget<ValueType> {
 		return this;
 	}
 
-	/** Returns the format.
+	/**
+	 * @returns the format.
 	 * Always return null when input type is number (including Intbox, Spinner, Doublebox, Doublespinner, Longbox and Decimalbox) on tablet device.
-	 * <p>Default: null (used what is defined in the format sheet).
-	 * @return String
+	 * @defaultValue `null` (used what is defined in the format sheet).
 	 */
 	getFormat(): string | undefined {
 		return this._format;
 	}
 
+	/** @internal */
 	override doFocus_(evt: zk.Event): void {
 		super.doFocus_(evt);
 		if (this._shortcut)
 			this.getInputNode()!.value = this._shortcut;
 	}
 
+	/** @internal */
 	override updateChange_(clear?: boolean): boolean {
 		var upd = super.updateChange_();
 		if (clear)

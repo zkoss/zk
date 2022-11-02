@@ -37,9 +37,9 @@ function _syncMaximized(wgt: zul.wnd.Window): void {
 function _startmove(dg: zk.Draggable): void {
 	//Bug #1568393: we have to change the percetage to the pixel.
 	var el = dg.node!;
-	if (el.style.top && el.style.top.indexOf('%') >= 0)
+	if (el.style.top && el.style.top.includes('%'))
 			el.style.top = el.offsetTop + 'px';
-	if (el.style.left && el.style.left.indexOf('%') >= 0)
+	if (el.style.left && el.style.left.includes('%'))
 			el.style.left = el.offsetLeft + 'px';
 
 	//ZK-1309: Add a flag to identify is dragging or not in onFloatUp()
@@ -289,13 +289,13 @@ function _updDomPos(wgt: zul.wnd.Window, force?: boolean, posParent?: boolean, m
 		var opts = sdw.opts as Required<zk.eff.EffectStackupOptions>,
 			l = n.offsetLeft,
 			t = n.offsetTop;
-		if (pos.indexOf('left') >= 0 && opts.left < 0)
+		if (pos.includes('left') && opts.left < 0)
 			st.left = jq.px(l - opts.left);
-		else if (pos.indexOf('right') >= 0 && opts.right > 0)
+		else if (pos.includes('right') && opts.right > 0)
 			st.left = jq.px(l - opts.right);
-		if (pos.indexOf('top') >= 0 && opts.top < 0)
+		if (pos.includes('top') && opts.top < 0)
 			st.top = jq.px(t - opts.top);
-		else if (pos.indexOf('bottom') >= 0 && opts.bottom > 0)
+		else if (pos.includes('bottom') && opts.bottom > 0)
 			st.top = jq.px(t - opts.bottom);
 	}
 
@@ -378,7 +378,7 @@ function _getPosByParent(wgt: zul.wnd.Window, l: string, t: string): [string, st
  * <p>Unlike other elements, each {@link Window} is an independent ID space.
  * It means a window and all its descendants forms a ID space and
  * the ID of each of them is unique in this space.
- * You could retrieve any of them in this space by calling {@link #$f}.
+ * You could retrieve any of them in this space by calling {@link Window.$f}.
  *
  * <p>If a window X is a descendant of another window Y, X's descendants
  * are not visible in Y's space. To retrieve a descendant, say Z, of X,
@@ -389,49 +389,78 @@ function _getPosByParent(wgt: zul.wnd.Window, l: string, t: string): [string, st
  * Note: to have better performance, onOpen is sent only if a
  * non-deferrable event listener is registered.
  *
- * <p><code>onClose</code> is sent when the close button is pressed
- * (if {@link #isClosable} is true). The window has to detach or hide
+ * <p>`onClose` is sent when the close button is pressed
+ * (if {@link isClosable} is true). The window has to detach or hide
  * the window.
  *
- * <p>On the other hand, <code>onOpen</code> is sent when a popup
- * window (i.e., {@link #getMode} is popup) is closed due to user's activity
+ * <p>On the other hand, `onOpen` is sent when a popup
+ * window (i.e., {@link getMode} is popup) is closed due to user's activity
  * (such as press ESC). This event is only a notification.
  * In other words, the popup is hidden before the event is sent to the server.
  * The application cannot prevent the window from being hidden.
  *
- * <p>Default {@link #getZclass}: z-window.
+ * @defaultValue {@link getZclass}: z-window.
  */
 @zk.WrapClass('zul.wnd.Window')
 export class Window extends zul.ContainerWidget {
+	/** @internal */
 	_mode: WindowMode = 'embedded';
+	/** @internal */
 	_border = 'none';
+	/** @internal */
 	_minheight = 100;
+	/** @internal */
 	_minwidth = 200;
+	/** @internal */
 	_shadow = true;
+	/** @internal */
 	override _tabindex = 0;
+	/** @internal */
 	_nativebar = true;
+	/** @internal */
 	_title?: string;
 	caption?: zul.wgt.Caption;
+	/** @internal */
 	_skipper: zul.wnd.Skipper;
+	/** @internal */
 	_closable?: boolean;
+	/** @internal */
 	_sizable?: boolean;
+	/** @internal */
 	_sizer?: zk.Draggable;
+	/** @internal */
 	_maximizable?: boolean;
+	/** @internal */
 	_minimizable?: boolean;
+	/** @internal */
 	_maximized?: boolean;
+	/** @internal */
 	_minimized?: boolean;
+	/** @internal */
 	_notSendMaximize?: boolean;
+	/** @internal */
 	_lastSize?: { l?: string; t?: string; w?: string; h?: string };
+	/** @internal */
 	_contentStyle?: string;
+	/** @internal */
 	_contentSclass?: string;
+	/** @internal */
 	_position?: string;
+	/** @internal */
 	_shadowWgt?: zk.eff.Shadow;
+	/** @internal */
 	_mask?: zk.eff.FullMask;
+	/** @internal */
 	_shallSize?: boolean;
+	/** @internal */
 	_anchor?: HTMLElement;
+	/** @internal */
 	_backupCursor?: string;
+	/** @internal */
 	_updDOFocus?: zk.Widget | boolean;
+	/** @internal */
 	_lastfocus?: zk.Widget;
+	/** @internal */
 	_offset?: zk.Offset;
 
 	constructor(props: Record<string, unknown>) {
@@ -446,11 +475,12 @@ export class Window extends zul.ContainerWidget {
 		this._skipper = new zul.wnd.Skipper(this);
 	}
 
-	/** Sets the mode to overlapped, popup, modal, embedded or highlighted.
+	/**
+	 * Sets the mode to overlapped, popup, modal, embedded or highlighted.
 	 *
-	 * @param String name the mode which could be one of
+	 * @param name - the mode which could be one of
 	 * "embedded", "overlapped", "popup", "modal", "highlighted".
-	 * Note: it cannot be "modal". Use {@link #doModal} instead.
+	 * Note: it cannot be "modal". Use {@link doModal} instead.
 	 */
 	setMode(mode: WindowMode, opts?: Record<string, boolean>): this {
 		const o = this._mode;
@@ -469,7 +499,6 @@ export class Window extends zul.ContainerWidget {
 
 	/**
 	 * Sets the title.
-	 * @param String title
 	 */
 	setTitle(title: string, opts?: Record<string, boolean>): this {
 		const o = this._title;
@@ -486,13 +515,12 @@ export class Window extends zul.ContainerWidget {
 	}
 
 	/**
-	 * Returns the title.
+	 * @returns the title.
 	 * Besides this attribute, you could use {@link zul.wgt.Caption} to define
 	 * a more sophisticated caption (aka., title).
 	 * <p>If a window has a caption whose label ({@link zul.wgt.Caption#getLabel})
 	 * is not empty, then this attribute is ignored.
-	 * <p>Default: empty.
-	 * @return String
+	 * @defaultValue empty.
 	 */
 	getTitle(): string | undefined {
 		return this._title;
@@ -500,7 +528,7 @@ export class Window extends zul.ContainerWidget {
 
 	/**
 	 * Sets the border (either none or normal).
-	 * @param String border the border. If null or "0", "none" is assumed.
+	 * @param border - the border. If null or "0", "none" is assumed.
 	 */
 	setBorder(border: string, opts?: Record<string, boolean>): this {
 		const o = this._border;
@@ -514,14 +542,13 @@ export class Window extends zul.ContainerWidget {
 	}
 
 	/**
-	 * Returns the border.
+	 * @returns the border.
 	 * The border actually controls what the content style class is
 	 * is used. In fact, the name of the border (except "normal")
 	 * is generate as part of the style class used for the content block.
-	 * Refer to {@link #getContentSclass} for more details.
+	 * Refer to {@link getContentSclass} for more details.
 	 *
-	 * <p>Default: "none".
-	 * @return String
+	 * @defaultValue `"none"`.
 	 */
 	getBorder(): string {
 		return this._border;
@@ -532,10 +559,9 @@ export class Window extends zul.ContainerWidget {
 	 * If closable, a button is displayed and the onClose event is sent
 	 * if an user clicks the button.
 	 *
-	 * <p>Default: false.
+	 * @defaultValue `false`.
 	 *
 	 * <p>Note: the close button won't be displayed if no title or caption at all.
-	 * @param boolean closable
 	 */
 	setClosable(closable: boolean, opts?: Record<string, boolean>): this {
 		const o = this._closable;
@@ -549,17 +575,16 @@ export class Window extends zul.ContainerWidget {
 	}
 
 	/**
-	 * Returns whether to show a close button on the title bar.
-	 * @return boolean
+	 * @returns whether to show a close button on the title bar.
 	 */
 	isClosable(): boolean {
 		return !!this._closable;
 	}
 
-	/** Sets whether the window is sizable.
+	/**
+	 * Sets whether the window is sizable.
 	 * If true, an user can drag the border to change the window width.
-	 * <p>Default: false.
-	 * @param boolean sizable
+	 * @defaultValue `false`.
 	 */
 	setSizable(sizable: boolean, opts?: Record<string, boolean>): this {
 		const o = this._sizable;
@@ -579,8 +604,8 @@ export class Window extends zul.ContainerWidget {
 		return this;
 	}
 
-	/** Returns whether the window is sizable.
-	 * @return boolean
+	/**
+	 * @returns whether the window is sizable.
 	 */
 	isSizable(): boolean {
 		return !!this._sizable;
@@ -591,10 +616,9 @@ export class Window extends zul.ContainerWidget {
 	 * the window, when a window is maximized, the button will automatically
 	 * change to a restore button with the appropriate behavior already built-in
 	 * that will restore the window to its previous size.
-	 * <p>Default: false.
+	 * @defaultValue `false`.
 	 *
 	 * <p>Note: the maximize button won't be displayed if no title or caption at all.
-	 * @param boolean maximizable
 	 */
 	setMaximizable(maximizable: boolean, opts?: Record<string, boolean>): this {
 		const o = this._maximizable;
@@ -608,10 +632,9 @@ export class Window extends zul.ContainerWidget {
 	}
 
 	/**
-	 * Returns whether to display the maximizing button and allow the user to maximize
+	 * @returns whether to display the maximizing button and allow the user to maximize
 	 * the window.
-	 * <p>Default: false.
-	 * @return boolean
+	 * @defaultValue `false`.
 	 */
 	isMaximizable(): boolean {
 		return !!this._maximizable;
@@ -624,9 +647,8 @@ export class Window extends zul.ContainerWidget {
 	 * event must be handled and a custom minimize behavior implemented for this
 	 * option to be useful.
 	 *
-	 * <p>Default: false.
+	 * @defaultValue `false`.
 	 * <p>Note: the maximize button won't be displayed if no title or caption at all.
-	 * @param boolean minimizable
 	 */
 	setMinimizable(minimizable: boolean, opts?: Record<string, boolean>): this {
 		const o = this._minimizable;
@@ -640,10 +662,9 @@ export class Window extends zul.ContainerWidget {
 	}
 
 	/**
-	 * Returns whether to display the minimizing button and allow the user to minimize
+	 * @returns whether to display the minimizing button and allow the user to minimize
 	 * the window.
-	 * <p>Default: false.
-	 * @return boolean
+	 * @defaultValue `false`.
 	 */
 	isMinimizable(): boolean {
 		return !!this._minimizable;
@@ -653,12 +674,11 @@ export class Window extends zul.ContainerWidget {
 	 * Sets whether the window is maximized, and then the size of the window will depend
 	 * on it to show a appropriate size. In other words, if true, the size of the
 	 * window will count on the size of its offset parent node whose position is
-	 * absolute (by not {@link #doEmbedded()}) or its parent node. Otherwise, its size
+	 * absolute (by not {@link doEmbedded}) or its parent node. Otherwise, its size
 	 * will be original size. Note that the maximized effect will run at client's
 	 * sizing phase not initial phase.
 	 *
-	 * <p>Default: false.
-	 * @param boolean maximized
+	 * @defaultValue `false`.
 	 */
 	setMaximized(maximized: boolean, fromServer?: boolean, opts?: Record<string, boolean>): this {
 		const o = this._maximized;
@@ -748,8 +768,7 @@ export class Window extends zul.ContainerWidget {
 	}
 
 	/**
-	 * Returns whether the window is maximized.
-	 * @return boolean
+	 * @returns whether the window is maximized.
 	 */
 	isMaximized(): boolean {
 		return !!this._maximized;
@@ -757,8 +776,7 @@ export class Window extends zul.ContainerWidget {
 
 	/**
 	 * Sets whether the window is minimized.
-	 * <p>Default: false.
-	 * @param boolean minimized
+	 * @defaultValue `false`.
 	 */
 	setMinimized(minimized: boolean, fromServer?: boolean, opts?: Record<string, boolean>): this {
 		const o = this._minimized;
@@ -797,9 +815,8 @@ export class Window extends zul.ContainerWidget {
 	}
 
 	/**
-	 * Returns whether the window is minimized.
-	 * <p>Default: false.
-	 * @return boolean
+	 * @returns whether the window is minimized.
+	 * @defaultValue `false`.
 	 */
 	isMinimized(): boolean {
 		return !!this._minimized;
@@ -807,8 +824,7 @@ export class Window extends zul.ContainerWidget {
 
 	/**
 	 * Sets the CSS style for the content block of the window.
-	 * <p>Default: null.
-	 * @param String contentStyle
+	 * @defaultValue `null`.
 	 */
 	setContentStyle(contentStyle: string, opts?: Record<string, boolean>): this {
 		const o = this._contentStyle;
@@ -822,8 +838,7 @@ export class Window extends zul.ContainerWidget {
 	}
 
 	/**
-	 * Returns the CSS style for the content block of the window.
-	 * @return String
+	 * @returns the CSS style for the content block of the window.
 	 */
 	getContentStyle(): string | undefined {
 		return this._contentStyle;
@@ -831,7 +846,6 @@ export class Window extends zul.ContainerWidget {
 
 	/**
 	 * Sets the style class used for the content block.
-	 * @param String contentSclass
 	 */
 	setContentSclass(contentSclass: string, opts?: Record<string, boolean>): this {
 		const o = this._contentSclass;
@@ -845,33 +859,33 @@ export class Window extends zul.ContainerWidget {
 	}
 
 	/**
-	 * Returns the style class used for the content block.
-	 * @return String
+	 * @returns the style class used for the content block.
 	 */
 	getContentSclass(): string | undefined {
 		return this._contentSclass;
 	}
 
-	/** Sets how to position the window at the client screen.
+	/**
+	 * Sets how to position the window at the client screen.
 	 * It is meaningless if the embedded mode is used.
 	 *
-	 * @param String pos how to position. It can be null (the default), or
+	 * @param pos - how to position. It can be null (the default), or
 	 * a combination of the following values (by separating with comma).
 	 * <dl>
 	 * <dt>center</dt>
-	 * <dd>Position the window at the center. {@link #setTop} and {@link #setLeft}
+	 * <dd>Position the window at the center. {@link setTop} and {@link setLeft}
 	 * are both ignored.</dd>
 	 * <dt>left</dt>
-	 * <dd>Position the window at the left edge. {@link #setLeft} is ignored.</dd>
+	 * <dd>Position the window at the left edge. {@link setLeft} is ignored.</dd>
 	 * <dt>right</dt>
-	 * <dd>Position the window at the right edge. {@link #setLeft} is ignored.</dd>
+	 * <dd>Position the window at the right edge. {@link setLeft} is ignored.</dd>
 	 * <dt>top</dt>
-	 * <dd>Position the window at the top edge. {@link #setTop} is ignored.</dd>
+	 * <dd>Position the window at the top edge. {@link setTop} is ignored.</dd>
 	 * <dt>bottom</dt>
-	 * <dd>Position the window at the bottom edge. {@link #setTop} is ignored.</dd>
+	 * <dd>Position the window at the bottom edge. {@link setTop} is ignored.</dd>
 	 * <dt>parent</dt>
 	 * <dd>Position the window relative to its parent.
-	 * That is, the left and top ({@link #getTop} and {@link #getLeft})
+	 * That is, the left and top ({@link getTop} and {@link getLeft})
 	 * is an offset to his parent's let-top corner.</dd>
 	 * </dl>
 	 * <p>For example, "left,center" means to position it at the center of
@@ -888,13 +902,13 @@ export class Window extends zul.ContainerWidget {
 		return this;
 	}
 
-	/** Returns how to position the window at the client screen.
+	/**
+	 * @returns how to position the window at the client screen.
 	 * It is meaningless if the embedded mode is used.
 	 *
-	 * <p>Default: null which depends on {@link #getMode}:
-	 * If overlapped or popup, {@link #setLeft} and {@link #setTop} are
+	 * @defaultValue `null` which depends on {@link getMode}:
+	 * If overlapped or popup, {@link setLeft} and {@link setTop} are
 	 * assumed. If modal or highlighted, it is centered.
-	 * @return String
 	 */
 	getPosition(): string | undefined {
 		return this._position;
@@ -903,9 +917,8 @@ export class Window extends zul.ContainerWidget {
 	/**
 	 * Sets the minimum height in pixels allowed for this window.
 	 * If negative, 100 is assumed.
-	 * <p>Default: 100.
-	 * <p>Note: Only applies when {@link #isSizable()} = true.
-	 * @param int minheight
+	 * @defaultValue `100`.
+	 * <p>Note: Only applies when {@link isSizable} = true.
 	 */
 	setMinheight(minheight: number): this { //TODO
 		this._minheight = minheight;
@@ -913,9 +926,9 @@ export class Window extends zul.ContainerWidget {
 	}
 
 	/**
-	 * Returns the minimum height.
-	 * <p>Default: 100.
-	 * @return int
+	 * @returns the minimum height.
+	 * @defaultValue `100`.
+	 * @returns int
 	 */
 	getMinheight(): number { //TODO
 		return this._minheight;
@@ -924,9 +937,8 @@ export class Window extends zul.ContainerWidget {
 	/**
 	 * Sets the minimum width in pixels allowed for this window. If negative,
 	 * 200 is assumed.
-	 * <p>Default: 200.
-	 * <p>Note: Only applies when {@link #isSizable()} = true.
-	 * @param int minwidth
+	 * @defaultValue `200`.
+	 * <p>Note: Only applies when {@link isSizable} = true.
 	 */
 	setMinwidth(minwidth: number): this { //TODO
 		this._minwidth = minwidth;
@@ -934,18 +946,18 @@ export class Window extends zul.ContainerWidget {
 	}
 
 	/**
-	 * Returns the minimum width.
-	 * <p>Default: 200.
-	 * @return int
+	 * @returns the minimum width.
+	 * @defaultValue `200`.
+	 * @returns int
 	 */
 	getMinwidth(): number { //TODO
 		return this._minwidth;
 	}
 
-	/** Sets whether to show the shadow of an overlapped/popup/modal
+	/**
+	 * Sets whether to show the shadow of an overlapped/popup/modal
 	 * window. It is meaningless if it is an embedded window.
-	 * <p>Default: true.
-	 * @param boolean shadow
+	 * @defaultValue `true`.
 	 */
 	setShadow(shadow: boolean, opts?: Record<string, boolean>): this {
 		const o = this._shadow;
@@ -963,55 +975,62 @@ export class Window extends zul.ContainerWidget {
 		return this;
 	}
 
-	/** Returns whether to show the shadow of an overlapped/popup/modal
+	/**
+	 * @returns whether to show the shadow of an overlapped/popup/modal
 	 * window. It is meaningless if it is an embedded window.
-	 * @return boolean
 	 */
 	isShadow(): boolean {
 		return this._shadow;
 	}
 
-	/** Re-position the window based on the value of {@link #getPosition}.
+	/**
+	 * Re-position the window based on the value of {@link getPosition}.
 	 * @since 5.0.3
 	 */
 	repos(): void {
 		_updDomPos(this, false, this._visible);
 	}
 
-	/** Makes this window as overlapped with other components.
+	/**
+	 * Makes this window as overlapped with other components.
 	 */
 	doOverlapped(): void {
 		this.setMode('overlapped');
 	}
 
-	/** Makes this window as popup, which is overlapped with other component
+	/**
+	 * Makes this window as popup, which is overlapped with other component
 	 * and auto-hiden when user clicks outside of the window.
 	 */
 	doPopup(): void {
 		this.setMode('popup');
 	}
 
-	/** Makes this window as highlited. The visual effect is
+	/**
+	 * Makes this window as highlited. The visual effect is
 	 * the similar to the modal window.
 	 */
 	doHighlighted(): void {
 		this.setMode('highlighted');
 	}
 
-	/** Makes this window as a modal dialog.
-	 * It will automatically center the window (ignoring {@link #getLeft} and
-	 * {@link #getTop}).
+	/**
+	 * Makes this window as a modal dialog.
+	 * It will automatically center the window (ignoring {@link getLeft} and
+	 * {@link getTop}).
 	 */
 	doModal(): void {
 		this.setMode('modal');
 	}
 
-	/** Makes this window as embeded with other components (Default).
+	/**
+	 * Makes this window as embeded with other components (Default).
 	 */
 	doEmbedded(): void {
 		this.setMode('embedded');
 	}
 
+	/** @internal */
 	override afterAnima_(visible: boolean): void { //mode="highlighted" action="hide:slideDown"
 		super.afterAnima_(visible);
 		this.zsync();
@@ -1181,6 +1200,7 @@ export class Window extends zul.ContainerWidget {
 			}
 	}
 
+	/** @internal */
 	_fixHgh(ignoreVisible?: boolean/* speed up */): void {
 		if (ignoreVisible || this.isRealVisible()) {
 			var n = this.$n_(),
@@ -1197,15 +1217,18 @@ export class Window extends zul.ContainerWidget {
 		}
 	}
 
+	/** @internal */
 	_offsetHeight(n: HTMLElement): number {
 		return zk(n).offsetHeight() - this._titleHeight() - zk(n).padBorderHeight();
 	}
 
+	/** @internal */
 	_titleHeight(): number {
 		var cap = this.getTitle() || this.caption ? this.$n('cap') : undefined;
 		return cap ? cap.offsetHeight : 0;
 	}
 
+	/** @internal */
 	_fireOnMove(keys?: zul.wnd.Dimension): void {
 		var s = this.$n_().style,
 			p = _getPosByParent(this, s.left, s.top); //Bug ZK-1689
@@ -1216,7 +1239,6 @@ export class Window extends zul.ContainerWidget {
 
 	}
 
-	//super//
 	override setVisible(visible: boolean): this {
 		if (this._visible != visible) {
 			if (this._maximized) {
@@ -1295,6 +1317,7 @@ export class Window extends zul.ContainerWidget {
 		return this.setZIndex(zindex, opts);
 	}
 
+	/** @internal */
 	override focus_(timeout?: number): boolean {
 		var cap = this.caption;
 		if (!zk.mobile) { //Bug ZK-1314: avoid focus on input widget to show keyboard on ipad
@@ -1312,6 +1335,7 @@ export class Window extends zul.ContainerWidget {
 		return false;
 	}
 
+	/** @internal */
 	override domClass_(no?: zk.DomClassOptions): string {
 		var cls = super.domClass_(no),
 			bordercls = this._border;
@@ -1329,6 +1353,7 @@ export class Window extends zul.ContainerWidget {
 		return cls;
 	}
 
+	/** @internal */
 	override onChildVisible_(child: zk.Widget): void {
 		super.onChildVisible_(child);
 		if (this.desktop) {
@@ -1336,6 +1361,7 @@ export class Window extends zul.ContainerWidget {
 		}
 	}
 
+	/** @internal */
 	override beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
 		if (child instanceof zul.wgt.Caption) {
 			if (this.caption && this.caption != child) {
@@ -1349,6 +1375,7 @@ export class Window extends zul.ContainerWidget {
 		return true;
 	}
 
+	/** @internal */
 	override onChildAdded_(child: zk.Widget): void {
 		super.onChildAdded_(child);
 		if (child instanceof zul.wgt.Caption) {
@@ -1357,6 +1384,7 @@ export class Window extends zul.ContainerWidget {
 		}
 	}
 
+	/** @internal */
 	override onChildRemoved_(child: zk.Widget): void {
 		super.onChildRemoved_(child);
 		if (child == this.caption) {
@@ -1368,11 +1396,13 @@ export class Window extends zul.ContainerWidget {
 		}
 	}
 
+	/** @internal */
 	override insertChildHTML_(child: zk.Widget, before?: zk.Widget, desktop?: zk.Desktop): void {
 		if (!(child instanceof zul.wgt.Caption)) // B50-ZK-275
 			super.insertChildHTML_(child, before, desktop);
 	}
 
+	/** @internal */
 	override domStyle_(no?: zk.DomStyleOptions): string {
 		var style = super.domStyle_(no);
 		if ((!no || !no.visible) && this._minimized)
@@ -1382,6 +1412,7 @@ export class Window extends zul.ContainerWidget {
 		return style;
 	}
 
+	/** @internal */
 	override bind_(desktop: zk.Desktop | undefined, skipper: zk.Skipper | undefined, after: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 
@@ -1427,6 +1458,7 @@ export class Window extends zul.ContainerWidget {
 		super.detach();
 	}
 
+	/** @internal */
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		var node = this.$n_();
 		zk(node).beforeHideOnUnbind();
@@ -1480,6 +1512,7 @@ export class Window extends zul.ContainerWidget {
 		super.unbind_(skipper, after, keepRod);
 	}
 
+	/** @internal */
 	_doMouseMove(evt: zk.Event): void {
 		if (this._sizer && evt.target == this) {
 			var n = this.$n_(),
@@ -1500,10 +1533,12 @@ export class Window extends zul.ContainerWidget {
 		}
 	}
 
+	/** @internal */
 	_doMouseOut(evt: zk.Event): void {
 		this.$n_().style.cursor = this._backupCursor || '';
 	}
 
+	/** @internal */
 	override doClick_(evt: zk.Event, popupOnly?: boolean): void {
 		var n: HTMLElement | undefined = evt.domTarget;
 		if (!n.id)
@@ -1529,6 +1564,7 @@ export class Window extends zul.ContainerWidget {
 	}
 
 	//@Override, children minimum flex might change window dimension, have to re-position. bug #3007908.
+	/** @internal */
 	override afterChildrenMinFlex_(orient: zk.FlexOrient): void {
 		super.afterChildrenMinFlex_(orient);
 		if (_isModal(this._mode)) //win hflex="min"
@@ -1536,6 +1572,7 @@ export class Window extends zul.ContainerWidget {
 	}
 
 	//@Override, children minimize flex might change window dimension, have to re-position. bug #3007908.
+	/** @internal */
 	override afterChildrenFlex_(cwgt?: zk.Widget): void {
 		super.afterChildrenFlex_(cwgt);
 		if (_isModal(this._mode))
@@ -1543,6 +1580,7 @@ export class Window extends zul.ContainerWidget {
 	}
 
 	//@Override, Bug ZK-1524: caption children should not considered.
+	/** @internal */
 	override getChildMinSize_(attr: zk.FlexOrient, wgt: zk.Widget): number {
 		var including = true;
 		if (wgt == this.caption) {
@@ -1560,6 +1598,7 @@ export class Window extends zul.ContainerWidget {
 	}
 
 	//@Override, related to Bug ZK-1799
+	/** @internal */
 	override getContentEdgeWidth_(width: number): number {
 		if (this.caption && (width == this.caption.$n_().offsetWidth)) {
 			// use caption's edge width
@@ -1587,41 +1626,48 @@ export class Window extends zul.ContainerWidget {
 	}
 
 	// eslint-disable-next-line zk/javaStyleSetterSignature
-	override setFlexSizeH_(n: HTMLElement, zkn: zk.JQZK, height: number, isFlexMin?: boolean): void {
+	/** @internal */
+	override setFlexSizeH_(flexSizeH: HTMLElement, zkn: zk.JQZK, height: number, isFlexMin?: boolean): void {
 		if (isFlexMin) {
 			height += this._titleHeight();
 		}
-		super.setFlexSizeH_(n, zkn, height, isFlexMin);
+		super.setFlexSizeH_(flexSizeH, zkn, height, isFlexMin);
 	}
 
 	//@Override, do not count size of floating window in flex calculation. bug #3172785.
+	/** @internal */
 	override ignoreFlexSize_(type: zk.FlexOrient): boolean {
 		return this._mode != 'embedded';
 	}
 
+	/** @internal */
 	getClosableIconClass_(): string {
 		return 'z-icon-times';
 	}
 
+	/** @internal */
 	getMaximizableIconClass_(): string {
 		return 'z-icon-expand';
 	}
 
+	/** @internal */
 	getMaximizedIconClass_(): string {
 		return 'z-icon-compress';
 	}
 
+	/** @internal */
 	getMinimizableIconClass_(): string {
 		return 'z-icon-minus';
 	}
 
-	//static
 	// drag sizing (also referenced by Panel.js)
+	/** @internal */
 	static _startsizing(dg: zk.Draggable, evt?: zk.Event): void {
 		_hideShadow(dg.control as zul.wnd.Window); //ZK-3877: startsizing is the better event to hideShadow
 		zWatch.fire('onFloatUp', dg.control!); //notify all
 	}
 
+	/** @internal */
 	static _snapsizing(dg: zk.Draggable, pos: zk.Offset): zk.Offset {
 		const z_dir = dg.z_dir!;
 			// snap y only when dragging upper boundary/corners
@@ -1631,6 +1677,7 @@ export class Window extends zul.ContainerWidget {
 		return [px, py];
 	}
 
+	/** @internal */
 	static _ghostsizing(dg: zk.Draggable, ofs: zk.Offset, evt: zk.Event): HTMLElement | undefined {
 		var wnd = dg.control as zul.wnd.Window,
 			el = dg.node!;
@@ -1646,6 +1693,7 @@ export class Window extends zul.ContainerWidget {
 		return jq('#zk_ddghost')[0];
 	}
 
+	/** @internal */
 	static _endghostsizing(dg: zk.Draggable, origin: HTMLElement): void {
 		var el = dg.node!; //ghostvar org = zkau.getGhostOrgin(dg);
 		if (origin) {
@@ -1662,6 +1710,7 @@ export class Window extends zul.ContainerWidget {
 		}
 	}
 
+	/** @internal */
 	static _insizer(node: HTMLElement, ofs: zk.Offset, x: number, y: number): number | undefined {
 		var r = ofs[0] + node.offsetWidth, b = ofs[1] + node.offsetHeight;
 		if (x - ofs[0] <= 5) {
@@ -1686,6 +1735,7 @@ export class Window extends zul.ContainerWidget {
 		}
 	}
 
+	/** @internal */
 	static _ignoresizing(dg: zk.Draggable, pointer: zk.Offset, evt: zk.Event): boolean {
 		var el = dg.node!,
 			wgt = dg.control as zul.wnd.Window;
@@ -1706,6 +1756,7 @@ export class Window extends zul.ContainerWidget {
 		return true;
 	}
 
+	/** @internal */
 	static _aftersizing(dg: zk.Draggable, evt: zk.Event): void {
 		var wgt = dg.control as zk.Widget,
 			data = dg.z_szofs;
@@ -1715,6 +1766,7 @@ export class Window extends zul.ContainerWidget {
 		dg.z_szofs = undefined;
 	}
 
+	/** @internal */
 	static _drawsizing(dg: zk.Draggable, pointer: zk.Offset, evt: zk.Event): void {
 		const z_dir = dg.z_dir!,
 			z_box = dg.z_box!,
@@ -1751,15 +1803,21 @@ export class Window extends zul.ContainerWidget {
 		}
 	}
 
+	/** @internal */
 	static _startmove = _startmove;
+	/** @internal */
 	static _ghostmove = _ghostmove;
+	/** @internal */
 	static _endghostmove = _endghostmove;
+	/** @internal */
 	static _ignoremove = _ignoremove;
+	/** @internal */
 	static _aftermove = _aftermove;
 }
 
 @zk.WrapClass('zul.wnd.Skipper')
 export class Skipper extends zk.Skipper {
+	/** @internal */
 	_w: Window;
 
 	constructor(wnd: zul.wnd.Window) {
@@ -1783,9 +1841,9 @@ export class Skipper extends zk.Skipper {
  * @since 5.0.5
  */
 export var WindowRenderer = {
-	/** Returns whether to check the border's height.
-	 *
-	 * @param zul.wnd.Window wgt the window
+	/**
+	 * @returns whether to check the border's height.
+	 * @param wgt - the window
 	 */
 	shallCheckBorder(wgt: zul.wnd.Window): boolean {
 		return wgt._mode != 'popup'

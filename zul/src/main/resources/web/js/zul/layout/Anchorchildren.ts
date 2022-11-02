@@ -16,12 +16,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * The children of Anchorlayout. <br>
  * Can accept any ZK component as child.
  *
- * <p>Default {@link #getZclass}: z-anchorchildren.
+ * @defaultValue {@link getZclass}: z-anchorchildren.
  * @author peterkuo
  * @since 6.0.0
  */
 @zk.WrapClass('zul.layout.Anchorchildren')
 export class Anchorchildren extends zul.Widget {
+	/** @internal */
 	_anchor?: string;
 
 	/**
@@ -33,7 +34,6 @@ export class Anchorchildren extends zul.Widget {
 	 * of {@link Anchorlayout}.
 	 * "-30 20%" means the width is 20px less than parent, and height is 20% of parent.
 	 * "50%" means the width is 50% of parent, and the height is no assumed.
-	 * @param String anchor
 	 */
 	setAnchor(anchor: string, opts?: Record<string, boolean>): this {
 		const o = this._anchor;
@@ -48,18 +48,19 @@ export class Anchorchildren extends zul.Widget {
 	}
 
 	/**
-	 * Returns the anchor setting.
-	 * @return String
+	 * @returns the anchor setting.
 	 */
 	getAnchor(): string | undefined {
 		return this._anchor;
 	}
 
+	/** @internal */
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		zWatch.listen({onSize: this});
 	}
 
+	/** @internal */
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		zWatch.unlisten({onSize: this});
 		super.unbind_(skipper, after, keepRod);

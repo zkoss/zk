@@ -18,9 +18,13 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 @zk.WrapClass('zul.wgt.Include')
 export class Include extends zul.Widget {
 	//F70-ZK-2455: a way to change enclosing tag
+	/** @internal */
 	_enclosingTag = 'div';
+	/** @internal */
 	_comment?: boolean;
+	/** @internal */
 	_childjs?: (() => void);
+	/** @internal */
 	_xcnt?: HTMLElement[] | string;
 
 	constructor() {
@@ -31,19 +35,16 @@ export class Include extends zul.Widget {
 		// the none in the chain of super constructors will access `_fellows`.
 	}
 
-	/** Returns whether to generate the included content inside
-	 * the HTML comment.
-	 * <p>Default: false.
-	 *
-	 * @return boolean
+	/**
+	 * @returns whether to generate the included content inside the HTML comment.
+	 * @defaultValue `false`.
 	 */
 	isComment(): boolean {
 		return !!this._comment;
 	}
 
-	/** Sets  whether to generate the included content inside
-	 * the HTML comment.
-	 * @param boolean comment
+	/**
+	 * Sets whether to generate the included content inside the HTML comment.
 	 */
 	setComment(comment: boolean): this {
 		this._comment = comment;
@@ -51,8 +52,7 @@ export class Include extends zul.Widget {
 	}
 
 	/**
-	 * Returns the enclosing tag
-	 * @return String
+	 * @returns the enclosing tag
 	 * @since 7.0.4
 	 */
 	getEnclosingTag(): string {
@@ -61,7 +61,6 @@ export class Include extends zul.Widget {
 
 	/**
 	 * Sets the enclosing tag
-	 * @param String enclosing tag
 	 * @since 7.0.4
 	 */
 	setEnclosingTag(enclosingTag: string): this {
@@ -69,7 +68,7 @@ export class Include extends zul.Widget {
 		return this;
 	}
 
-	//super//
+	/** @internal */
 	override domStyle_(no?: zk.DomStyleOptions): string {
 		var style = super.domStyle_(no);
 		if (!this.previousSibling && !this.nextSibling) {
@@ -82,6 +81,7 @@ export class Include extends zul.Widget {
 		return style;
 	}
 
+	/** @internal */
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		const ctn = this._childjs;
@@ -97,6 +97,7 @@ export class Include extends zul.Widget {
 				n.appendChild(xcnt[j]);
 	}
 
+	/** @internal */
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		if (Array.isArray(this._xcnt)) //array -> zk().detachChildren() used
 			for (var n = this.$n_(); n.firstChild;)

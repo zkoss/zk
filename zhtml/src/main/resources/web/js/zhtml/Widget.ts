@@ -15,18 +15,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 @zk.WrapClass('zhtml.Widget')
 export class Widget extends zk.Widget<HTMLInputElement> {
 	override rawId = true;
-
-	/** The class name (<code>zhtml.Widget</code>)
-	 * @type String
-	 */
+	/** The class name (`zhtml.Widget`) */
 	override className = 'zhtml.Widget';
-
-	/** The widget name (<code>zhtml</code>).
-	 * @type String
-	 */
+	/** The widget name (`zhtml`) */
 	override widgetName = 'zhtml';
-
+	/** @internal */
 	_defChecked?: boolean;
+	/** @internal */
 	_defValue?: string;
 
 	setDynamicProperty(dynamicProperty: [string, string]): this {
@@ -57,6 +52,7 @@ export class Widget extends zk.Widget<HTMLInputElement> {
 		return this;
 	}
 
+	/** @internal */
 	override doClick_(wevt: zk.Event): void {
 		var n = this.$n();
 		if (n) {
@@ -71,6 +67,7 @@ export class Widget extends zk.Widget<HTMLInputElement> {
 		}
 	}
 
+	/** @internal */
 	_doCheck(): void {
 		var n = this.$n();
 		if (n) {

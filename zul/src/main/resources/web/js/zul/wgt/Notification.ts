@@ -39,13 +39,21 @@ export interface NotificationOptions {
  */
 @zk.WrapClass('zul.wgt.Notification')
 export class Notification extends zul.wgt.Popup {
+	/** @internal */
 	override _keepVisible = true;
+	/** @internal */
 	_closable?: boolean;
+	/** @internal */
 	_dur?: number;
+	/** @internal */
 	_nftPos?: string;
+	/** @internal */
 	_dir?: keyof typeof _dirMap | 'n';
+	/** @internal */
 	_ref?: zk.Widget;
+	/** @internal */
 	_msg: string;
+	/** @internal */
 	_type: NotificationOptions['type'];
 
 	constructor(msg: string, opts: NotificationOptions) {
@@ -73,6 +81,7 @@ export class Notification extends zul.wgt.Popup {
 		out.push('</div>'); // not encoded to support HTML
 	}
 
+	/** @internal */
 	override domClass_(no?: zk.DomClassOptions): string {
 		var type = this._type,
 			s = super.domClass_(no);
@@ -81,6 +90,7 @@ export class Notification extends zul.wgt.Popup {
 		return s;
 	}
 
+	/** @internal */
 	override doClick_(evt: zk.Event, popupOnly?: boolean): void {
 		var p = evt.domTarget;
 		if (p == this.$n('cls') || p == this.$n('clsIcon')) //may click on font-icon
@@ -122,11 +132,13 @@ export class Notification extends zul.wgt.Popup {
 		this._fixarrow(ref); //ZK-1583: modify arrow position based on reference component
 	}
 
+	/** @internal */
 	override _posInfo(ref?: zul.wgt.Ref, offset?: zk.Offset, position?: string, opts?: zul.wgt.PopupOptions): zul.wgt.PositionInfo | undefined {
 		this._fixPadding(position);
 		return super._posInfo(ref, offset, position, opts);
 	}
 
+	/** @internal */
 	_fixPadding(position?: string): void {
 		var p = this.$n('p');
 		if (!p)
@@ -183,6 +195,7 @@ export class Notification extends zul.wgt.Popup {
 		}
 	}
 
+	/** @internal */
 	_fixarrow(ref: zk.Widget): void {
 		var p = this.$n('p');
 		if (!p)
@@ -226,6 +239,7 @@ export class Notification extends zul.wgt.Popup {
 		}
 	}
 
+	/** @internal */
 	override openAnima_(ref?: zul.wgt.Ref, offset?: zk.Offset, position?: string, opts?: zul.wgt.PopupOptions): void {
 		var self = this;
 		jq(this.$n()).fadeIn(500, function () {
@@ -233,6 +247,7 @@ export class Notification extends zul.wgt.Popup {
 		});
 	}
 
+	/** @internal */
 	override closeAnima_(opts?: zul.wgt.PopupOptions): void {
 		var self = this;
 		jq(this.$n()).fadeOut(500, function () {
@@ -240,6 +255,7 @@ export class Notification extends zul.wgt.Popup {
 		});
 	}
 
+	/** @internal */
 	override afterCloseAnima_(opts?: zul.wgt.PopupOptions): void {
 		if (opts && opts.keepVisible) {
 			this.setVisible(false);
@@ -251,6 +267,7 @@ export class Notification extends zul.wgt.Popup {
 		}
 	}
 
+	/** @internal */
 	override getPositionArgs_(): zul.wgt.PositionArgs {
 		return [this._fakeParent, undefined, this._nftPos, undefined];
 	}

@@ -13,6 +13,7 @@ export = {
 				'zk/noNull': 'error',
 				'zk/preferStrictBooleanType': 'error',
 				'zk/noPropertyFunction': 'error',
+				'zk/tsdocValidation': 'error',
 			},
 		},
 	},

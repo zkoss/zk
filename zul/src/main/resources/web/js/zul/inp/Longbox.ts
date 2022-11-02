@@ -14,11 +14,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 /**
  * An edit box for holding an integer.
- * <p>Default {@link #getZclass}: z-longbox.
+ * @defaultValue {@link getZclass}: z-longbox.
  */
 @zk.WrapClass('zul.inp.Longbox')
 export class Longbox extends zul.inp.NumberInputWidget<zk.Long> {
 	//bug #2997037, cannot enter large long integer into longbox
+	/** @internal */
 	override coerceFromString_(value: string | undefined): zul.inp.CoerceFromStringResult | zk.Long | undefined {
 		if (!value) return undefined;
 
@@ -34,6 +35,7 @@ export class Longbox extends zul.inp.NumberInputWidget<zk.Long> {
 		return val;
 	}
 
+	/** @internal */
 	override coerceToString_(value?: zk.Long | string): string {
 		var fmt = this._format;
 		return value != null ? typeof value == 'string' ? value :
@@ -41,8 +43,9 @@ export class Longbox extends zul.inp.NumberInputWidget<zk.Long> {
 				 : value.$toLocaleString() : '';
 	}
 
+	/** @internal */
 	_isOutRange(val: string): boolean {
-		var negative = val.charAt(0) == '-';
+		var negative = val.startsWith('-');
 		if (negative)
 			val = val.substring(1);
 		if (val.length > 19)
@@ -59,10 +62,12 @@ export class Longbox extends zul.inp.NumberInputWidget<zk.Long> {
 		return false;
 	}
 
+	/** @internal */
 	override marshall_(val: zk.Long | undefined): string | undefined {
 		return val ? val.$toString() : val;
 	}
 
+	/** @internal */
 	override unmarshall_(val: string | number): zk.Long | '' | 0 {
 		return val ? new zk.Long(val) : val as '' | 0;
 	}

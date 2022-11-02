@@ -53,24 +53,31 @@ function _invoke2(wgt: zul.med.Audio, fn: 'pause' | 'play' | 'stop'): void {
  */
 @zk.WrapClass('zul.med.Audio')
 export class Audio extends zul.Widget<HTMLAudioElement> {
+	/** @internal */
 	_src?: string;
+	/** @internal */
 	_autoplay?: boolean;
+	/** @internal */
 	_preload?: string;
+	/** @internal */
 	_controls?: boolean;
+	/** @internal */
 	_loop?: boolean;
+	/** @internal */
 	_muted?: boolean;
+	/** @internal */
 	_isUnbinded?: boolean;
 
-	/** Returns the src.
-	 * <p>Default: null.
-	 * @return String
+	/**
+	 * @returns the src.
+	 * @defaultValue `null`.
 	 */
 	getSrc(): string | undefined {
 		return this._src;
 	}
 
-	/** Sets the src.
-	 * @param String src
+	/**
+	 * Sets the src.
 	 */
 	setSrc(src: string, opts?: Record<string, boolean>): this {
 		const o = this._src;
@@ -93,16 +100,16 @@ export class Audio extends zul.Widget<HTMLAudioElement> {
 		return this.setSrc(content, opts);
 	}
 
-	/** Returns whether to auto start playing the audio.
-	 * <p>Default: false.
-	 * @return boolean
+	/**
+	 * @returns whether to auto start playing the audio.
+	 * @defaultValue `false`.
 	 */
 	isAutoplay(): boolean {
 		return !!this._autoplay;
 	}
 
-	/** Sets whether to auto start playing the audio.
-	 * @param boolean autoplay
+	/**
+	 * Sets whether to auto start playing the audio.
 	 */
 	setAutoplay(autoplay: boolean, opts?: Record<string, boolean>): this {
 		const o = this._autoplay;
@@ -116,19 +123,18 @@ export class Audio extends zul.Widget<HTMLAudioElement> {
 		return this;
 	}
 
-	/** Returns whether and how the audio should be loaded.
-	 *
-	 * <p>Default: null.
-	 * @return String
+	/**
+	 * @returns whether and how the audio should be loaded.
+	 * @defaultValue `null`.
 	 * @since 7.0.0
 	 */
 	getPreload(): string | undefined {
 		return this._preload;
 	}
 
-	/** Sets whether and how the audio should be loaded.
+	/**
+	 * Sets whether and how the audio should be loaded.
 	 * Refer to <a href="http://www.w3.org/TR/html5/embedded-content-0.html#attr-media-preload">Preload Attribute Description</a> for details.
-	 * @param String preload
 	 * @since 7.0.0
 	 */
 	setPreload(preload: 'none' | 'metadata' | 'auto' | '', opts?: Record<string, boolean>): this {
@@ -143,18 +149,17 @@ export class Audio extends zul.Widget<HTMLAudioElement> {
 		return this;
 	}
 
-	/** Returns whether to display the audio controls.
-	 *
-	 * <p>Default: false.
-	 * @return boolean
+	/**
+	 * @returns whether to display the audio controls.
+	 * @defaultValue `false`.
 	 * @since 7.0.0
 	 */
 	isControls(): boolean {
 		return !!this._controls;
 	}
 
-	/** Sets whether to display the audio controls.
-	 * @param boolean controls
+	/**
+	 * Sets whether to display the audio controls.
 	 * @since 7.0.0
 	 */
 	setControls(controls: boolean, opts?: Record<string, boolean>): this {
@@ -169,16 +174,16 @@ export class Audio extends zul.Widget<HTMLAudioElement> {
 		return this;
 	}
 
-	/** Returns whether to play the audio repeatedly.
-	 * <p>Default: false.
-	 * @return boolean
+	/**
+	 * @returns whether to play the audio repeatedly.
+	 * @defaultValue `false`.
 	 */
 	isLoop(): boolean {
 		return !!this._loop;
 	}
 
-	/** Sets whether to play the audio repeatedly.
-	 * @param boolean loop
+	/**
+	 * Sets whether to play the audio repeatedly.
 	 */
 	setLoop(loop: boolean, opts?: Record<string, boolean>): this {
 		const o = this._loop;
@@ -192,18 +197,17 @@ export class Audio extends zul.Widget<HTMLAudioElement> {
 		return this;
 	}
 
-	/** Returns whether to mute the audio.
-	 *
-	 * <p>Default: false.
-	 * @return boolean
+	/**
+	 * @returns whether to mute the audio.
+	 * @defaultValue `false`.
 	 * @since 7.0.0
 	 */
 	isMuted(): boolean {
 		return !!this._muted;
 	}
 
-	/** Sets whether to mute the audio.
-	 * @param boolean muted
+	/**
+	 * Sets whether to mute the audio.
 	 * @since 7.0.0
 	 */
 	setMuted(muted: boolean, opts?: Record<string, boolean>): this {
@@ -218,24 +222,28 @@ export class Audio extends zul.Widget<HTMLAudioElement> {
 		return this;
 	}
 
-	/** Plays the audio at the client.
+	/**
+	 * Plays the audio at the client.
 	 */
 	play(): void {
 		_invoke(this, 'play');
 	}
 
-	/** Stops the audio at the client.
+	/**
+	 * Stops the audio at the client.
 	 */
 	stop(): void {
 		_invoke(this, 'stop');
 	}
 
-	/** Pauses the audio at the client.
+	/**
+	 * Pauses the audio at the client.
 	 */
 	pause(): void {
 		_invoke(this, 'pause');
 	}
 
+	/** @internal */
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		const n = this.$n_();
@@ -244,6 +252,7 @@ export class Audio extends zul.Widget<HTMLAudioElement> {
 		n.addEventListener('ended', this.proxy(this._audioOnEnded));
 	}
 
+	/** @internal */
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		this._isUnbinded = true;
 		this.stop();
@@ -254,6 +263,7 @@ export class Audio extends zul.Widget<HTMLAudioElement> {
 		super.unbind_(skipper, after, keepRod);
 	}
 
+	/** @internal */
 	override domAttrs_(no?: zk.DomAttrsOptions): string {
 		var attr = super.domAttrs_(no);
 		if (this._autoplay)
@@ -269,6 +279,7 @@ export class Audio extends zul.Widget<HTMLAudioElement> {
 		return attr;
 	}
 
+	/** @internal */
 	domContent_(): string {
 		var src = this._src!,
 			length = src.length,
@@ -279,24 +290,29 @@ export class Audio extends zul.Widget<HTMLAudioElement> {
 		return result;
 	}
 
+	/** @internal */
 	_audioOnPlay(): void {
 		this._fireOnStateChange(_PLAY);
 	}
 
+	/** @internal */
 	_audioOnPause(): void {
 		if (this.$n_().currentTime) {
 			this._fireOnStateChange(_PAUSE);
 		}
 	}
 
+	/** @internal */
 	_audioOnEnded(): void {
 		this._fireOnStateChange(_ENDED);
 	}
 
+	/** @internal */
 	_fireOnStateChange(state: number): void {
 		this.fire('onStateChange', {state: state});
 	}
 
+	/** @internal */
 	_MIMEtype(name: string): string {
 		var start = name.lastIndexOf('.'),
 			type = 'wav';
@@ -310,6 +326,7 @@ export class Audio extends zul.Widget<HTMLAudioElement> {
 		}
 		return 'audio/' + type;
 	}
+	/** @internal */
 	override beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
 		if (!(child instanceof zul.med.Track)) {
 			zk.error('Unsupported child for audio: ' + child.className);

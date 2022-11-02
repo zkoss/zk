@@ -40,7 +40,6 @@ export interface SwipeEventOptions extends zk.EventOptions {
 }
 /**
  * A swipe object used to make a DOM element swipe-able.
- * @disable(zkgwt)
  */
 export class Swipe extends zk.Object {
 	declare widget?: zk.Widget;
@@ -48,11 +47,11 @@ export class Swipe extends zk.Object {
 	declare opts?: SwipeOptions;
 	/**
 	 * The Constructor.
-	 * @param Object widget the object for swipe.
+	 * @param widget - the object for swipe.
 	 * It can be anything, but it is usually a widget ({@link zk.Widget}).
-	 * @param DOMElement node [optional] the DOM element that is made to be swipe-able.
-	 * If omitted and widget is a widget, {@link zk.Widget#$n} is assumed.
-	 * @param Map opts [optional] options. Allowed options:
+	 * @param node - the DOM element that is made to be swipe-able.
+	 * If omitted and widget is a widget, {@link zk.Widget.$n} is assumed.
+	 * @param opts - options. Allowed options:
 	 * <ul>
 	 * <li>int scrollThreshold: swipe displacement(pixel). When larger than threshold, prevent page scrolling. Default: 5.</li>
 	 * <li>int duration: swipe start to end time duration(millisecond). When larger than time duration, it is not a swipe action. Default: 500.</li>
@@ -63,6 +62,7 @@ export class Swipe extends zk.Object {
 	constructor(widget: zk.Widget, node?: HTMLElement, opts?: Partial<SwipeOptions>) {
 		super();
 		this.widget = widget;
+		// eslint-disable-next-line @typescript-eslint/dot-notation
 		this.node = node ? jq(node, zk)[0] as HTMLElement | undefined : widget['node'] as HTMLElement | undefined || (widget.$n ? widget.$n() : undefined);
 		if (!this.node)
 			throw 'Handle required for ' + widget;
@@ -86,6 +86,7 @@ export class Swipe extends zk.Object {
 		this.widget = this.node = this.opts = undefined;
 	}
 
+	/** @internal */
 	_swipeStart(devt: JQuery.TriggeredEvent): void {
 		var evt = devt.originalEvent as TouchEvent,
 			data = evt.touches ? evt.touches[0] : (evt as unknown as MouseEvent);
@@ -99,6 +100,7 @@ export class Swipe extends zk.Object {
 			.one(endEvt, this.proxy(this._swipeEnd) as unknown as false);
 	}
 
+	/** @internal */
 	_swipeMove(devt: JQuery.TriggeredEvent): void {
 		if (!start) return;
 		var evt = devt.originalEvent as TouchEvent,
@@ -119,6 +121,7 @@ export class Swipe extends zk.Object {
 			evt.preventDefault();
 	}
 
+	/** @internal */
 	_swipeEnd(devt: JQuery.TriggeredEvent): void {
 		jq(this.node).off(moveEvt, this.proxy(this._swipeMove));
 		if (start && stop && this.opts) {

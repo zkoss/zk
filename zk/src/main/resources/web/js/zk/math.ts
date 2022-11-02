@@ -12,16 +12,20 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-/** A big decimal.
- * @disable(zkgwt)
+/**
+ * A big decimal.
  */
 export class BigDecimal extends zk.Object {
+	/** @internal */
 	_precision = 0;
+	/** @internal */
 	declare _negative?: boolean;
+	/** @internal */
 	declare _dot?: boolean;
+	/** @internal */
 	declare _value: string;
-	/** Constructor.
-	 * @param Object value a number or a string
+	/**
+	 * @param value - a number or a string
 	 */
 	constructor(value: number | string) {
 		super();
@@ -50,15 +54,16 @@ export class BigDecimal extends zk.Object {
 		}
 		this._value = value;
 	}
-	/** Returns the precision.
-	 * <p>Default: 0
-	 * @return int
+	/**
+	 * @returns the precision.
+	 * @defaultValue `0`
 	 */
 	getPrecision(): number {
 		return this._precision;
 	}
-	/** Sets the precision
-	 * @param int precision the precision
+	/**
+	 * Sets the precision
+	 * @param precision - the precision
 	 */
 	setPrecision(precision: number): this {
 		this._precision = precision;
@@ -72,10 +77,10 @@ export class BigDecimal extends zk.Object {
 			v /= Math.pow(10, p as number);
 		return v;
 	}
-	/** Returns a string for this big decimal (per the original form).
-	 * To have a Locale-dependent string, use {@link #$toLocaleString}
+	/**
+	 * @returns a string for this big decimal (per the original form).
+	 * To have a Locale-dependent string, use {@link BigDecimal.$toLocaleString}
 	 * instead.
-	 * @return String
 	 */
 	$toString(): string { //toString is reserved keyword for IE
 		if (this._value.length == 0) return '';
@@ -86,8 +91,8 @@ export class BigDecimal extends zk.Object {
 				valFixed += '0';
 		return (this._negative ? '-' : '') + this._value.substring(0, j) + (this._dot || this._precision ? '.' + valFixed + this._value.substring(j) : '');
 	}
-	/** Returns a Locale-dependent string for this big decimal(for human's eye).
-	 * @return String
+	/**
+	 * @returns a Locale-dependent string for this big decimal(for human's eye).
 	 */
 	$toLocaleString(): string { //toLocaleString is reserved keyword for IE
 		if (this._value.length == 0) return '';
@@ -102,13 +107,14 @@ export class BigDecimal extends zk.Object {
 	}
 }
 
-/** A long integer.
- * @disable(zkgwt)
+/**
+ * A long integer.
  */
 export class Long extends zk.Object {
+	/** @internal */
 	declare _value: string;
-	/** Constructor.
-	 * @param Object value a number or a string
+	/**
+	 * @param value - a number or a string
 	 */
 	constructor(value: number | string) {
 		super();
@@ -131,17 +137,18 @@ export class Long extends zk.Object {
 		}
 		this._value = value;
 	}
-	/** Scales the number as value * 10 ^ digits.
-	 * @param int digits the number of digits to scale.
+	/**
+	 * Scales the number as value * 10 ^ digits.
+	 * @param digits - the number of digits to scale.
 	 * If zero, nothing changed.
-	 * @since 5.0.10.
+	 * @since 5.0.10
 	 */
 	scale(digits: number): void {
 		var val = this._value || '',
 			n = val.length;
 		if (n)
 			if (digits > 0) {
-				if (n > 1 || val.charAt(0) != '0')
+				if (n > 1 || !val.startsWith('0'))
 					while (digits-- > 0) //in case if digits is not an integer
 						val += '0';
 			} else if (digits < 0)
@@ -150,16 +157,16 @@ export class Long extends zk.Object {
 	$toNumber(): number {
 		return parseFloat(this._value);
 	}
-	/** Returns a string for this long integer
-	 * To have a Locale-dependent string, use {@link #$toLocaleString}
+	/**
+	 * @returns a string for this long integer
+	 * To have a Locale-dependent string, use {@link Long.$toLocaleString}
 	 * instead.
-	 * @return String
 	 */
 	$toString(): string { //toString is reserved keyword for IE
 		return this._value;
 	}
-	/** Returns a Locale-dependent string for this long integer.
-	 * @return String
+	/**
+	 * @returns a Locale-dependent string for this long integer.
 	 */
 	$toLocaleString = Long.prototype.$toString;
 }

@@ -79,7 +79,7 @@ function _tt_clearClosing_(): void {
 		clearTimeout(tmClosing);
 	}
 }
-function _tt_open_(event: zk.Event): undefined | void {
+function _tt_open_(event: zk.Event): undefined | undefined {
 	var inf = _tt_inf;
 	if (inf) {
 		_tt_tip = inf.tip,
@@ -110,7 +110,7 @@ function _tt_close_(): void {
 	_tt_clearClosing_();
 
 	var tip = _tt_tip;
-	if (tip && tip.desktop) { //check still attached to desktop
+	if (tip?.desktop) { //check still attached to desktop
 		// Bug ZK-1222, ZK-1594
 		// If the tooltip (popup) and mouse pointer overlapped, a TooltipOut event
 		// will be triggered again that closes the tooltip immediately, then another
@@ -131,7 +131,7 @@ function _setCtrlKeysErr(msg: string): void {
 	zk.error('setCtrlKeys: ' + msg);
 }
 function _parseParamFunc(event: zk.Event | undefined, funcBody: string): number {
-	if (funcBody.indexOf('(') != -1 && funcBody.indexOf(')') != -1) {
+	if (funcBody.includes('(') && funcBody.includes(')')) {
 		var func = new Function('event', 'return ' + funcBody + ';');
 		return func(event) as number;
 	} else {
@@ -142,21 +142,28 @@ export type ParsedCtlKeys = Record<number, boolean>[];
 
 /** The base class for ZUL widget.
  * <p>The corresponding Java class is org.zkoss.zul.impl.XulElement.
- * <p>If a widget has a client attribute 'scrollable', it will listen <code>onScroll</code> event.
+ * <p>If a widget has a client attribute 'scrollable', it will listen `onScroll` event.
  */
 @zk.WrapClass('zul.Widget')
 export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Widget<TElement> {
+	/** @internal */
 	_context?: string;
+	/** @internal */
 	_popup?: string;
+	/** @internal */
 	_doScrollableSyncScroll?: (() => void);
+	/** @internal */
 	_tooltip?: string;
+	/** @internal */
 	_ctrlKeys?: string;
+	/** @internal */
 	_parsedCtlKeys?: ParsedCtlKeys;
 
 	constructor(props?: Record<string, unknown> | typeof zkac) {
 		super(props);
 	}
 
+	/** @internal */
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		// B70-ZK-2069: some widget need fire onScroll event, which has
@@ -172,6 +179,7 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Widge
 		}
 	}
 
+	/** @internal */
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		if (this._doScrollableSyncScroll) {
 			this.domUnlisten_(this.getCaveNode()!, 'onScroll', '_doScrollableSyncScroll');
@@ -179,11 +187,11 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Widge
 		super.unbind_(skipper, after, keepRod);
 	}
 
-	/** Returns the ID of the popup ({@link zul.wgt.Popup}) that should appear
+	/**
+	 * @returns the ID of the popup ({@link zul.wgt.Popup}) that should appear
 	 * when the user right-clicks on the element (aka., context menu).
 	 *
-	 * <p>Default: null (no context menu).
-	 * @return String
+	 * @defaultValue `null` (no context menu).
 	 */
 	getContext(): string | undefined {
 		return this._context;
@@ -192,10 +200,12 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Widge
 	/**
 	 * Sets the ID of the popup ({@link zul.wgt.Popup}) that should appear
 	 * when the user right-clicks on the element (aka., context menu).
-	 * @param String context the ID of the popup widget.
-	 * @see #setContext(zul.wgt.Popup)
+	 * @param context - the ID of the popup widget.
+	 * @see {@link setContext}
 	 */
-	/** Sets the ID of the popup ({@link zul.wgt.Popup}) that should appear
+	setContext(context: string): this
+	/**
+	 * Sets the ID of the popup ({@link zul.wgt.Popup}) that should appear
 	 * when the user right-clicks on the element (aka., context menu).
 	 *
 	 * <p>An onOpen event is sent to the context menu if it is going to
@@ -211,14 +221,14 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Widge
 	 * <p>If there are two components with the same ID (of course, in
 	 * different ID spaces), you can specify the UUID with the following
 	 * format:<br/>
-	 * <code>uuid(comp_uuid)</code>
+	 * `uuid(comp_uuid)`
 	 *
 	 * <p>Example:<br/>
-	 * <pre><code>
+	 * ```ts
 	 * wgt.setContext('an_id');
 	 * wgt.setContext('uuid(an_uuid)');
 	 * wgt.setContext(a_wgt);
-	 * </code></pre>
+	 * ```
 	 * Both reference a component whose ID is "some".
 	 * But, if there are several components with the same ID,
 	 * the first one can reference to any of them.
@@ -227,26 +237,26 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Widge
 	 *
 	 *
 	 * <p>The context menu can be shown by a position from
-	 * {@link zul.wgt.Popup#open(zk.Widget, Offset, String, Map)}
-	 * or the location of <code>x</code> and <code>y</code>, you can specify the following format:</br>
+	 * {@link zul.wgt.Popup.open}
+	 * or the location of `x` and `y`, you can specify the following format:</br>
 	 * <ul>
-	 * <li><code>id, position</code></li>
-	 * <li><code>id, position=before_start</code></li>
-	 * <li><code>id, x=15, y=20</code></li>
-	 * <li><code>uuid(comp_uuid), position</code></li>
-	 * <li><code>uuid(comp_uuid), x=15, y=20</code></li>
+	 * <li>`id, position`</li>
+	 * <li>`id, position=before_start`</li>
+	 * <li>`id, x=15, y=20`</li>
+	 * <li>`uuid(comp_uuid), position`</li>
+	 * <li>`uuid(comp_uuid), x=15, y=20`</li>
 	 * </ul>
 	 * For example,
-	 * <pre>
+	 * ```ts
 	 * wgt.setContext('an_id', 'start_before');
-	 * </pre>
-	 * Since 6.5.2, the context menu can also be shown on customized location of <code>x</code> and <code>y</code> by adding parentheses"()", for example,
-	 * <pre>
+	 * ```
+	 * Since 6.5.2, the context menu can also be shown on customized location of `x` and `y` by adding parentheses"()", for example,
+	 * ```ts
 	 * wgt.setContext('an_id', 'x=(zk.currentPointer[0] + 10), y=(zk.currentPointer[1] - 10)');
-	 * </pre>
-	 * @param zul.wgt.Popup context the popup widget.
-	 * @return zul.Widget
+	 * ```
+	 * @param context - the popup widget.
 	 */
+	setContext(context: zul.wgt.Popup): this
 	setContext(context: zul.wgt.Popup | string): this {
 		if (context instanceof zk.Widget)
 			context = 'uuid(' + context.uuid + ')';
@@ -254,11 +264,11 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Widge
 		return this;
 	}
 
-	/** Returns the ID of the popup ({@link zul.wgt.Popup}) that should appear
+	/**
+	 * @returns the ID of the popup ({@link zul.wgt.Popup}) that should appear
 	 * when the user clicks on the element.
 	 *
-	 * <p>Default: null (no popup).
-	 * @return String the ID of the popup widget
+	 * @defaultValue `null` (no popup).
 	 */
 	getPopup(): string | undefined {
 		return this._popup;
@@ -267,10 +277,12 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Widge
 	/**
 	 * Sets the ID of the popup ({@link zul.wgt.Popup}) that should appear
 	 * when the user clicks on the element.
-	 * @param String popup the ID of the popup widget.
-	 * @see #setPopup(zul.wgt.Popup)
+	 * @param popup - the ID of the popup widget.
+	 * @see {@link setPopup}
 	 */
-	/** Sets the ID of the popup ({@link zul.wgt.Popup}) that should appear
+	setPopup(popup: string): this
+	/**
+	 * Sets the ID of the popup ({@link zul.wgt.Popup}) that should appear
 	 * when the user clicks on the element.
 	 *
 	 * <p>An onOpen event is sent to the popup menu if it is going to
@@ -286,14 +298,14 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Widge
 	 * <p>If there are two components with the same ID (of course, in
 	 * different ID spaces), you can specify the UUID with the following
 	 * format:<br/>
-	 * <code>uuid(comp_uuid)</code>
+	 * `uuid(comp_uuid)`
 	 *
 	 * <p>Example:<br/>
-	 * <pre><code>
+	 * ```ts
 	 * wgt.setPopup('an_id');
 	 * wgt.setPopup('uuid(an_uuid)');
 	 * wgt.setPopup(a_wgt);
-	 * </code></pre>
+	 * ```
 	 * Both reference a component whose ID is "some".
 	 * But, if there are several components with the same ID,
 	 * the first one can reference to any of them.
@@ -302,26 +314,29 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Widge
 	 *
 	 *
 	 * <p>The popup menu can be shown by a position from
-	 * {@link zul.wgt.Popup#open(zk.Widget, Offset, String, Map)}
-	 * or the location of <code>x</code> and <code>y</code>, you can specify the following format:</br>
+	 * {@link zul.wgt.Popup.open}
+	 * or the location of `x` and `y`, you can specify the following format:</br>
 	 * <ul>
-	 * <li><code>id, position</code></li>
-	 * <li><code>id, position=before_start</code></li>
-	 * <li><code>id, x=15, y=20</code></li>
-	 * <li><code>uuid(comp_uuid), position</code></li>
-	 * <li><code>uuid(comp_uuid), x=15, y=20</code></li>
+	 * <li>`id, position`</li>
+	 * <li>`id, position=before_start`</li>
+	 * <li>`id, x=15, y=20`</li>
+	 * <li>`uuid(comp_uuid), position`</li>
+	 * <li>`uuid(comp_uuid), x=15, y=20`</li>
 	 * </ul>
 	 * For example,
-	 * <pre>
+	 * ```ts
 	 * wgt.setPopup('an_id', 'start_before');
-	 * </pre>
-	 * Since 6.5.2, the popup can also be shown on customized location of <code>x</code> and <code>y</code> by adding parentheses"()", for example,
-	 * <pre>
+	 * ```
+	 * Since 6.5.2, the popup can also be shown on customized location of `x` and `y` by adding parentheses"()", for example,
+	 * ```ts
 	 * wgt.setPopup('an_id', 'x=(zk.currentPointer[0] + 10), y=(zk.currentPointer[1] - 10)');
-	 * </pre>
-	 * @param zul.wgt.Popup popup the popup widget.
-	 * @return zul.Widget
+	 * ```
+	 * @param popup - the popup widget.
 	 */
+	setPopup(popup: zul.wgt.Popup): this
+	// eslint-disable-next-line zk/tsdocValidation
+	/** This overload is for internal use @internal */
+	setPopup(popup: zul.wgt.Popup | string): this
 	setPopup(popup: zul.wgt.Popup | string): this {
 		if (popup instanceof zk.Widget)
 			popup = 'uuid(' + popup.uuid + ')';
@@ -329,12 +344,12 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Widge
 		return this;
 	}
 
-	/** Returns the ID of the popup ({@link zul.wgt.Popup}) that should be used
+	/**
+	 * @returns the ID of the popup ({@link zul.wgt.Popup}) that should be used
 	 * as a tooltip window when the mouse hovers over the element for a moment.
 	 * The tooltip will automatically disappear when the mouse is moved away.
 	 *
-	 * <p>Default: null (no tooltip).
-	 * @return String the ID of the popup widget
+	 * @defaultValue `null` (no tooltip).
 	 */
 	getTooltip(): string | undefined {
 		return this._tooltip;
@@ -343,10 +358,12 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Widge
 	/**
 	 * Sets the ID of the popup ({@link zul.wgt.Popup}) that should be used
 	 * as a tooltip window when the mouse hovers over the element for a moment.
-	 * @param String tooltip the ID of the popup widget.
-	 * @see #setPopup(zul.wgt.Popup)
+	 * @param tooltip - the ID of the popup widget.
+	 * @see {@link setPopup}
 	 */
-	/** Sets the ID of the popup ({@link zul.wgt.Popup}) that should be used
+	setTooltip(tooltip: string): this
+	/**
+	 * Sets the ID of the popup ({@link zul.wgt.Popup}) that should be used
 	 * as a tooltip window when the mouse hovers over the element for a moment.
 	 *
 	 * <p>An onOpen event is sent to the tooltip if it is going to
@@ -362,14 +379,14 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Widge
 	 * <p>If there are two components with the same ID (of course, in
 	 * different ID spaces), you can specify the UUID with the following
 	 * format:<br/>
-	 * <code>uuid(comp_uuid)</code>
+	 * `uuid(comp_uuid)`
 	 *
 	 * <p>Example:<br/>
-	 * <pre><code>
+	 * ```ts
 	 * wgt.setTooltip('an_id');
 	 * wgt.setTooltip('uuid(an_uuid)');
 	 * wgt.setTooltip(a_wgt);
-	 * </code></pre>
+	 * ```
 	 * Both reference a component whose ID is "some".
 	 * But, if there are several components with the same ID,
 	 * the first one can reference to any of them.
@@ -378,28 +395,28 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Widge
 	 *
 	 *
 	 * <p>The tooltip can be shown by a position from
-	 * {@link zul.wgt.Popup#open(zk.Widget, Offset, String, Map)}
-	 * or the location of <code>x</code> and <code>y</code>, and can be specified
+	 * {@link zul.wgt.Popup.open}
+	 * or the location of `x` and `y`, and can be specified
 	 * with a delay time (in millisecond), you can specify the following format:
 	 * </br>
 	 * <ul>
-	 * <li><code>id, position</code></li>
-	 * <li><code>id, position=before_start, delay=500</code></li>
-	 * <li><code>id, x=15, y=20</code></li>
-	 * <li><code>uuid(comp_uuid), position</code></li>
-	 * <li><code>uuid(comp_uuid), x=15, y=20</code></li>
+	 * <li>`id, position`</li>
+	 * <li>`id, position=before_start, delay=500`</li>
+	 * <li>`id, x=15, y=20`</li>
+	 * <li>`uuid(comp_uuid), position`</li>
+	 * <li>`uuid(comp_uuid), x=15, y=20`</li>
 	 * </ul>
 	 * For example,
-	 * <pre>
+	 * ```ts
 	 * wgt.setTooltip('an_id', 'start_before');
-	 * </pre>
-	 * Since 6.5.2, the tooltip can also be shown on customized location of <code>x</code> and <code>y</code> by adding parentheses"()", for example,
-	 * <pre>
+	 * ```
+	 * Since 6.5.2, the tooltip can also be shown on customized location of `x` and `y` by adding parentheses"()", for example,
+	 * ```ts
 	 * wgt.setPopup('an_id', 'x=(zk.currentPointer[0] + 10), y=(zk.currentPointer[1] - 10)');
-	 * </pre>
-	 * @param zul.wgt.Popup popup the popup widget.
-	 * @return zul.Widget
+	 * ```
+	 * @param popup - the popup widget.
 	 */
+	setTooltip(tooltip: zul.wgt.Popup): this
 	setTooltip(tooltip: zul.wgt.Popup | string): this {
 		if (tooltip instanceof zk.Widget)
 			tooltip = 'uuid(' + tooltip.uuid + ')';
@@ -407,21 +424,22 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Widge
 		return this;
 	}
 
-	/** Returns what keystrokes to intercept.
-	 * <p>Default: null.
-	 * @return String
+	/**
+	 * @returns what keystrokes to intercept.
+	 * @defaultValue `null`.
 	 */
 	getCtrlKeys(): string | undefined {
 		return this._ctrlKeys;
 	}
 
-	/** Sets what keystrokes to intercept.
+	/**
+	 * Sets what keystrokes to intercept.
 	 *
 	 * <p>The string could be a combination of the following:
 	 * <dl>
 	 * <dt>^k</dt>
 	 * <dd>A control key, i.e., Ctrl+k, where k could be a~z, 0~9, #n</dd>
-	 * <dt>@k</dt>
+	 * <dt>\@k</dt>
 	 * <dd>A alt key, i.e., Alt+k, where k could be a~z, 0~9, #n</dd>
 	 * <dt>$n</dt>
 	 * <dd>A shift key, i.e., Shift+n, where n could be #n.
@@ -454,19 +472,16 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Widge
 	 *
 	 * <p>For example,
 	 * <dl>
-	 * <dt>^a^d@c#f10#left#right</dt>
+	 * <dt>^a^d\@c#f10#left#right</dt>
 	 * <dd>It means you want to intercept Ctrl+A, Ctrl+D, Alt+C, F10,
 	 * Left and Right.</dd>
 	 * <dt>^#left</dt>
 	 * <dd>It means Ctrl+Left.</dd>
 	 * <dt>^#f1</dt>
 	 * <dd>It means Ctrl+F1.</dd>
-	 * <dt>@#f3</dt>
+	 * <dt>\@#f3</dt>
 	 * <dd>It means Alt+F3.</dd>
 	 * </dl>
-	 *
-	 * @param String keys
-	 * @return zul.Widget
 	 */
 	setCtrlKeys(ctrlKeys: string): this {
 		if (this._ctrlKeys == ctrlKeys) return this;
@@ -559,6 +574,7 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Widge
 		return this;
 	}
 
+	/** @internal */
 	_parsePopParams(txt: string, event?: zk.Event): PopupParams {
 		var params: {
 			id?: string;
@@ -599,7 +615,7 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Widge
 		return params as PopupParams;
 	}
 
-	//super//
+	/** @internal */
 	override doClick_(evt: zk.Event, popupOnly?: boolean): void {
 		if (!this.shallIgnoreClick_(evt) && !evt.contextSelected) {
 			var params = this._popup ? this._parsePopParams(this._popup, evt) : {},
@@ -627,6 +643,7 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Widge
 			super.doClick_(evt); // super method doesn't accept a second parameter
 	}
 
+	/** @internal */
 	override doRightClick_(evt: zk.Event): void {
 		if (!this.shallIgnoreClick_(evt) && !evt.contextSelected) {
 			var params = this._context ? this._parsePopParams(this._context, evt) : {},
@@ -653,6 +670,7 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Widge
 		super.doRightClick_(evt);
 	}
 
+	/** @internal */
 	override doTooltipOver_(evt: zk.Event): void {
 		if (!evt.tooltipped && _tt_beforeBegin(this)) {
 			var params = this._tooltip ? this._parsePopParams(this._tooltip) : {},
@@ -666,11 +684,13 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Widge
 		super.doTooltipOver_(evt);
 	}
 
+	/** @internal */
 	override doTooltipOut_(evt: zk.Event): void {
 		_tt_end(this);
 		super.doTooltipOut_(evt);
 	}
 
+	/** @internal */
 	_smartFellow(id?: string): zk.Widget | undefined {
 		return id ? id.startsWith('uuid(') && id.endsWith(')') ?
 			zk.Widget.$(id.substring(5, id.length - 1)) :
@@ -678,6 +698,7 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Widge
 	}
 
 	//B70-ZK-2435: catch key down event right now rather than propagate it
+	/** @internal */
 	override doKeyDown_(evt: zk.Event): void {
 		if (this.getCtrlKeys() || this.isListen('onOK') || this.isListen('onCancel')) {
 			//B70-ZK-2532: if afterKeyDown_ doesn't handle evt, then propagate to super
@@ -690,15 +711,16 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Widge
 	/**
 	 * Called after {@link zk.Widget#doKeyDown_} is called and the event
 	 * propagation is not stopped.
-	 * <p>Default: handles the control keys, including onOK and onCancel,
+	 * @defaultValue handles the control keys, including onOK and onCancel,
 	 * by searching up the ancestor chain to see if any one is listening.
-	 * If found, it calls {@link #beforeCtrlKeys_} for each widget that were
+	 * If found, it calls {@link beforeCtrlKeys_} for each widget that were
 	 * searched, and then fire the event.
-	 * @param zk.Event evt the widget event.
-	 * @param boolean simulated if the event was not sent to the widget originally (rather,
+	 * @param evt - the widget event.
+	 * @param simulated - if the event was not sent to the widget originally (rather,
 	 * it is caused by pressing when none of widget but document gains the focus)
-	 * @return boolean true if the event has been processed
-	 * @see #setCtrlKeys
+	 * @returns true if the event has been processed
+	 * @see {@link setCtrlKeys}
+	 * @internal
 	 */
 	afterKeyDown_(evt: zk.Event, simulated?: boolean): boolean {
 		var keyCode = evt.keyCode, evtnm = 'onCtrlKey', okcancel, commandKey = zk.mac && evt.metaKey;
@@ -781,25 +803,27 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Widge
 	/**
 	 * Called before a control key is pressed. A control key includes onOK and
 	 * onCancel; refer to #setCtrlKeys for details.
-	 * <p>Default: does nothing (but return false)
+	 * @defaultValue does nothing (but return false)
 	 * It is usually overridden by a stateful widget, such as an input box,
 	 * to update its state to the server, such as firing the onChange event.
-	 * @param zk.Event evt the widget event.
-	 * @return boolean if true, the widget want to abort the firing of the control
+	 * @param _evt - the widget event.
+	 * @returns if true, the widget want to abort the firing of the control
 	 * 		key. In other words, if true is returned, the control key is ignored.
+	 * @internal
 	 */
 	beforeCtrlKeys_(_evt: zk.Event): void {
 		// empty on purpose
 	}
 
-	/** Returns the tooltip that is opened, or null if no tooltip is opened.
-	 * @return zk.Widget
+	/**
+	 * @returns the tooltip that is opened, or null if no tooltip is opened.
 	 * @since 5.0.5
 	 */
 	static getOpenTooltip(): zul.wgt.Popup | undefined {
-		return _tt_tip && _tt_tip.isOpen() ? _tt_tip : undefined;
+		return _tt_tip?.isOpen() ? _tt_tip : undefined;
 	}
 
+	/** @internal */
 	static _getPopupPosition(params: PopupParams): string | undefined {
 		if (params.position)
 			return params.position;

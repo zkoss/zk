@@ -14,18 +14,19 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 /**
  * An edit box for holding an integer.
- * <p>Default {@link #getZclass}: z-intbox.
+ * @defaultValue {@link getZclass}: z-intbox.
  *
  */
 @zk.WrapClass('zul.inp.Intbox')
 export class Intbox extends zul.inp.NumberInputWidget<number> {
-	/** Returns the value in int. If null, zero is returned.
-	 * @return int
+	/**
+	 * @returns the value in int. If null, zero is returned.
 	 */
 	intValue(): number | undefined {
 		return super.getValue();
 	}
 
+	/** @internal */
 	override coerceFromString_(value: string | undefined): zul.inp.CoerceFromStringResult | number | undefined {
 		if (!value) return undefined;
 
@@ -47,6 +48,7 @@ export class Intbox extends zul.inp.NumberInputWidget<number> {
 		return val;
 	}
 
+	/** @internal */
 	override coerceToString_(value: unknown): string {
 		var fmt = this._format;
 		return fmt ? zk.fmt.Number.format(fmt, value as string, this._rounding!, this._localizedSymbols)

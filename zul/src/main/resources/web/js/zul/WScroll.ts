@@ -241,25 +241,29 @@ export class WScroll extends zk.Object {
 	 * String orient
 	 * <p>Specifies either 'vertical' or 'horizontal' to indicate that it can be
 	 * scrolled only in the vertical or horizontal direction.
-	 * <p>Default: 'horizontal'
+	 * @defaultValue 'horizontal'
 	 *
 	 * <h4>anchor</h4>
 	 * DOMElement anchor
 	 * <p>Specifies the anchor that indicates the scrollbar will be its child node.
-	 * <p>Default: the parent node of the control.
+	 * @defaultValue the parent node of the control.
 	 *
 	 * <h4>syncSize</h4>
 	 * boolean syncSize
 	 * <p>Specifies whether to sync the scrolling area size at initial phase.
-	 * <p>Default: true.
+	 * @defaultValue `true`.
 	 *
 	 * <h4>onScrollY</h4>
-	 * <pre><code>void onScrollY(int step);</code></pre>
+	 * ```ts
+	 * void onScrollY(int step);
+	 * ```
 	 * <p>Specifies the callback function for the vertical scrolling, when user
 	 * changes the vertical scrolling step.
 	 *
 	 * <h4>onScrollX</h4>
-	 * <pre><code>void onScrollX(int step);</code></pre>
+	 * ```ts
+	 * void onScrollX(int step);
+	 * ```
 	 * <p>Specifies the callback function for the horizental scrolling, when user
 	 * changes the horizental scrolling step.
 	 *
@@ -269,16 +273,17 @@ export class WScroll extends zk.Object {
 	 * functions (onScrollX and onScrollY) are invoked.
 	 * For example, if the offset is 2, then the steps in the onScrollX/Y event
 	 * will start at 2.
-	 * <p>Default: 0
-	 *
-	 * @type Map
+	 * @defaultValue `0`
 	 */
 	//opts: null,
 	opts: WScrollOptions;
+	/** @internal */
 	_gap = 0;
 	control: HTMLElement;
 	widget: zk.Widget & {_cols?: number};
+	/** @internal */
 	_scale!: number; // Initialized before use.
+	/** @internal */
 	_isVer: boolean;
 	uid: string;
 	zcls: string;
@@ -320,7 +325,7 @@ export class WScroll extends zk.Object {
 
 	/**
 	 * Syncs the scrolling area and control bar size.
-	 * @param Map opts the opts can override the initail opts data for resizing.
+	 * @param opts - the opts can override the initail opts data for resizing.
 	 */
 	syncSize(opts?: Record<string, unknown>): void {
 		if (opts) {
@@ -403,6 +408,7 @@ export class WScroll extends zk.Object {
 		}
 	}
 
+	/** @internal */
 	_listenMouseEvent(): void {
 		if (this._isVer) {
 			// @ts-expect-error: zk.Event is not completely compatible with JQueryMousewheelEventObject
@@ -421,6 +427,7 @@ export class WScroll extends zk.Object {
 		$drag.on('click', zk.$void);
 	}
 
+	/** @internal */
 	_unlistenMouseEvent(): void {
 		if (this._isVer)
 			// @ts-expect-error: unmousewheel expects 0 arguments, but got 1
@@ -438,6 +445,7 @@ export class WScroll extends zk.Object {
 		$drag.off('click', zk.$void);
 	}
 
+	/** @internal */
 	_mouseOver(evt: zk.Event): void {
 		var cls = evt.target.className,
 			index = cls.lastIndexOf('-'),
@@ -462,6 +470,7 @@ export class WScroll extends zk.Object {
 		}
 	}
 
+	/** @internal */
 	_mouseOut(evt: zk.Event): void {
 		var cls = evt.target.className,
 			$drag = jq(this.edrag);
@@ -471,10 +480,12 @@ export class WScroll extends zk.Object {
 		}
 	}
 
+	/** @internal */
 	_mouseUp(evt: zk.Event): void {
 		jq(this.edrag).removeClass(evt.target.className + '-clk');
 	}
 
+	/** @internal */
 	_mouseDown(evt: zk.Event): void {
 		var cls = evt.target.className,
 			index = cls.lastIndexOf('-'),
@@ -628,6 +639,7 @@ export class WScroll extends zk.Object {
 		this._syncButtonStatus();
 	}
 
+	/** @internal */
 	_mousewheelY(evt: zk.Event, delta: number, deltaX: number, deltaY: number): void {
 		if (deltaY) {
 			evt.stop();
@@ -663,6 +675,7 @@ export class WScroll extends zk.Object {
 		}
 	}
 
+	/** @internal */
 	_mousewheelX(evt: zk.Event, delta: number, deltaX: number, deltaY: number): void {
 		if (deltaX) {
 			evt.stop();
@@ -698,6 +711,7 @@ export class WScroll extends zk.Object {
 		}
 	}
 
+	/** @internal */
 	_initDragdrop(): void {
 		var orient = this._isVer ? 'v' : 'h',
 			uuid = this.uid + '-' + orient + 'bar';
@@ -752,6 +766,7 @@ export class WScroll extends zk.Object {
 			+ '</div>');
 	}
 
+	/** @internal */
 	_syncButtonStatus(): void {
 		var zcls = this.zcls + '-wscroll',
 			$drag = jq(this.edrag),

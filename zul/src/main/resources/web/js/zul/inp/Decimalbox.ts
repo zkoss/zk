@@ -14,25 +14,26 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 /**
  * An edit box for holding BigDecimal.
- * <p>Default {@link #getZclass}: z-decimalbox.
+ * @defaultValue {@link getZclass}: z-decimalbox.
  */
 @zk.WrapClass('zul.inp.Decimalbox')
 export class Decimalbox extends zul.inp.NumberInputWidget<zk.BigDecimal> {
+	/** @internal */
 	_scale?: number;
 
-	// zk.def
 	setScale(scale: number): this {
 		this._scale = scale;
 		return this;
 	}
 
-	/** Returns the precision scale.
-	 * @return int
+	/**
+	 * @returns the precision scale.
 	 */
 	getScale(): number | undefined {
 		return this._scale;
 	}
 
+	/** @internal */
 	override coerceFromString_(value: string | undefined): zul.inp.CoerceFromStringResult | zk.BigDecimal | undefined {
 		if (!value) return undefined;
 
@@ -52,6 +53,7 @@ export class Decimalbox extends zul.inp.NumberInputWidget<zk.BigDecimal> {
 		return val;
 	}
 
+	/** @internal */
 	override coerceToString_(value?: zk.BigDecimal | string): string {
 		var fmt = this._format;
 		return value != null ? typeof value == 'string' ? value :
@@ -59,14 +61,17 @@ export class Decimalbox extends zul.inp.NumberInputWidget<zk.BigDecimal> {
 			: value.$toLocaleString() : '';
 	}
 
+	/** @internal */
 	override marshall_(val: zk.BigDecimal | undefined): string | undefined {
 		return val ? val.$toString() : val;
 	}
 
+	/** @internal */
 	override unmarshall_(val: string | number): zk.BigDecimal | '' | 0 {
 		return val ? new zk.BigDecimal(val) : val as '' | 0;
 	}
 
+	/** @internal */
 	override getAllowedKeys_(): string {
 		var symbols = this._localizedSymbols;
 		return super.getAllowedKeys_()

@@ -87,7 +87,7 @@ export const javaStyleSetterSignature = createRule({
 					loc: firstParam.loc,
 					messageId: 'setterSuggestiveParameter',
 					fix(fixer) {
-						// There must be a variable with bearing the name of the first parameter.
+						// There must be a variable bearing the name of the first parameter.
 						// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 						const fixes = context
 							.getDeclaredVariables(functionExpression)

@@ -52,6 +52,7 @@ export interface DraggableOptions {
 		_stackup: undefined | HTMLIFrameElement, _activedg: undefined | Draggable, _initPt: zk.Offset, _dnEvt: boolean | zk.Event | undefined,
 		_lastPt: zk.Offset | undefined, _lastScrlPt: zk.Offset | undefined;
 
+	/** @internal */
 	function _activate(dg: Draggable, devt: JQuery.TriggeredEvent, pt: zk.Offset): void {
 		_actTmout = setTimeout(function () {
 			_actTmout = undefined;
@@ -61,10 +62,12 @@ export interface DraggableOptions {
 		}, dg.opts.delay);
 		_initPt = pt;
 	}
+	/** @internal */
 	function _deactivate(): void {
 		_activedg = undefined;
 		if (_dnEvt) setTimeout(function () {_dnEvt = undefined;}, 0);
 	}
+	/** @internal */
 	function _docmousemove(devt: JQuery.TriggeredEvent): void {
 		if (!_activedg || _activedg.dead) return;
 
@@ -83,6 +86,7 @@ export interface DraggableOptions {
 			//test/dragdrop.zul: it seems less stall-dragging when dragging
 			//IMG (but still happens if dragging fast)
 	}
+	/** @internal */
 	function _docmouseup(devt: JQuery.TriggeredEvent): void {
 		if (_actTmout) {
 			clearTimeout(_actTmout);
@@ -106,11 +110,13 @@ export interface DraggableOptions {
 			adg.destroy();
 		}
 	}
+	/** @internal */
 	function _dockeypress(devt: JQuery.TriggeredEvent): void {
 		if (_activedg) _activedg._keypress(devt);
 	}
 
 	//default effect//
+	/** @internal */
 	function _defStartEffect(dg: Draggable): void {
 		var node: undefined | HTMLElement & {_$opacity?} = dg.node;
 		if (node) {
@@ -129,6 +135,7 @@ export interface DraggableOptions {
 				});
 		}
 	}
+	/** @internal */
 	function _defEndEffect(dg: Draggable): void {
 		var node: undefined | HTMLElement & {_$opacity?} = dg.node,
 			toOpacity = typeof node!._$opacity == 'number' ? node!._$opacity : 1.0;
@@ -148,6 +155,7 @@ export interface DraggableOptions {
 				});
 		}
 	}
+	/** @internal */
 	function _defRevertEffect(dg: Draggable, offset: zk.Offset): void {
 		var dx: number | undefined, dy: number | undefined;
 		if ((dx = offset[0]) && (dy = offset[1])) {
@@ -170,24 +178,29 @@ export interface DraggableOptions {
 			}
 		}
 	}
+	/** @internal */
 	function _disableDragStart(evt: JQuery.TriggeredEvent): boolean {
 		return jq.nodeName(evt.target as HTMLElement, 'input', 'textarea');
 	}
-/** A draggable object used to make a DOM element draggable.
- * @disable(zkgwt)
+/**
+ * A draggable object used to make a DOM element draggable.
  */
 export class Draggable extends zk.Object {
+	/** @internal */
 	declare _isScrollChild?: boolean;
 	declare delta: zk.Offset;
 	declare dragging: boolean;
+	/** @internal */
 	declare _suicide?: boolean;
 	declare dead?: boolean;
 	declare lastScrolled?: Date;
 	declare scrollSpeed: zk.Offset;
 	declare offset: zk.Offset;
 	declare scrollInterval?: number;
+	/** @internal */
 	declare _innerOfs: zk.Offset;
 	declare stackup?: HTMLDivElement;
+	/** @internal */
 	declare _stackup?: HTMLIFrameElement;
 	declare orgnode?: HTMLElement;
 	declare z_scrl?: zk.Offset;
@@ -195,14 +208,21 @@ export class Draggable extends zk.Object {
 	declare orgZ?: number;
 	declare orgScrlLeft?: number;
 	declare orgScrlTop?: number;
+	/** @internal */
 	declare _clone?: Node;
+	/** @internal */
 	declare _lastDropTo?: zk.Widget;
+	/** @internal */
 	declare _lastDrop?: zk.Widget;
+	/** @internal */
 	declare _orgcursor?: string; // zk.Widget.prototype.uncloneDrag_
+	/** @internal */
 	declare _zszofs?: number; // zul.mesh.HeaderWidget
+	/** @internal */
 	declare _zmin?: number; // zul.mesh.HeaderWidget
 
 	// zul.wnd.{Window, Panel}
+	/** @internal */
 	declare _wndoffs?: zk.Offset;
 	declare z_szofs?: {
 		top: string;
@@ -222,7 +242,9 @@ export class Draggable extends zk.Object {
 	};
 
 	// zul.layout.LayoutRegion
+	/** @internal */
 	declare _point?: zk.Offset;
+	/** @internal */
 	declare _rootoffs?: {
 		maxs: number;
 		left: number;
@@ -233,89 +255,114 @@ export class Draggable extends zk.Object {
 	};
 
 	// zul.WScroll
+	/** @internal */
 	declare _lastSteps: number;
+	/** @internal */
 	declare _timer: number;
+	/** @internal */
 	declare _epos?: HTMLElement;
+	/** @internal */
 	declare _scale: number;
+	/** @internal */
 	declare _endStep: number;
+	/** @internal */
 	declare _steps: number;
+	/** @internal */
 	declare _isVer: boolean;
+	/** @internal */
 	declare _start: number;
+	/** @internal */
 	declare _end: number;
+	/** @internal */
 	declare _lastPos?: number;
 
 	// zkmax.big.Biglistbox
+	/** @internal */
 	declare _step: number;
+	/** @internal */
 	declare _diff: number;
+	/** @internal */
 	declare _ghost: HTMLElement;
 
+	/** @internal */
 	static _drags: Draggable[] = [];
-	/** The control object for this draggable.
-	 * @type Object
+	/**
+	 * The control object for this draggable.
 	 */
 	control?: zk.Object;
-	/** The DOM element that represents the handle that the user can
-	 * drag the whole element ({@link #node}.
-	 * It is either {@link #node} or a child element of it.
-	 * @type DOMElement
+	/**
+	 * The DOM element that represents the handle that the user can
+	 * drag the whole element ({@link node}.
+	 * It is either {@link node} or a child element of it.
 	 */
 	handle?: HTMLElement;
-	/** The DOM element that is draggable (the whole element).
-	 * @type DOMElement
+	/**
+	 * The DOM element that is draggable (the whole element).
 	 */
 	node?: HTMLElement;
 	/** The options of this draggable.
 	 * <h3>Allowed options</h3>
 	 * <blockquote>
 	 * <h4>handle</h4>
-	 * <pre><code>{@link DOMElement} handle</code></pre>
+	 * ```ts
+	 * {@link DOMElement} handle
+	 * ```
 	 * <p>A child DOM element that the user can drag the whole element.
 	 * Specify one if not the whole element (the node argument) can be dragged.
-	 * It becomes the value of {@link #handle} if specified.</p>
-	 * <p>Default: null (i.e., {@link #node} is used.
+	 * It becomes the value of {@link handle} if specified.</p>
+	 * @defaultValue `null` (i.e., {@link node} is used.
 	 *
 	 * <h4>snap</h4>
-	 *<pre><code>{@link zk.Offset} snap;
-int snap;
-Offset snap({@link zk.Draggable} dg, {@link zk.Offset} pos);
-</code></pre>
+	 *```java
+	 * {@link zk.Offset} snap;
+	 * int snap;
+	 * Offset snap({@link zk.Draggable} dg, {@link zk.Offset} pos);
+	 * ```
 	 * <p>Specifies how many pixels to snap the dragging. For example, if the snap is 10, then the dragging has no effect if the offset is only 4, and the dragging offset is considered as 10 if it was 5.
 	 * <p>The first format specifies the snaps for the x and y coordinate, such as [5, 3]. The second format specifies the snap for both x and y coordinate. The third format is used to calculate the snap dynamically based on the current position.
-	 * <p>Default: null
+	 * @defaultValue `null`
 	 * <ul>
 	 * <li>dg - the draggable object</li>
 	 * <li>pos - the position of the element being dragged </li>
 	 * </ul>
 
 	 * <h4>starteffect</h4>
-	 * <pre><code>void starteffect({@link zk.Draggable} dg);</code></pre>
+	 * ```java
+	 * void starteffect({@link zk.Draggable} dg);
+	 * ```
 	 * <p>Specifies the effect to execute when the dragging is started. It usually generates an animation effect.</p>
-	 * <p>Default: a default action. To disable it, pass {@link zk#$void}.
+	 * @defaultValue a default action. To disable it, pass {@link zk.$void}.
 	 *
 	 * <h4>endeffect</h4>
-	 * <pre><code>void endeffect({@link zk.Draggable} dg, {@link zk.Event} evt);</code></pre>
+	 * ```java
+	 * void endeffect({@link zk.Draggable} dg, {@link zk.Event} evt);
+	 * ```
 	 * <p>Specifies the effect to execute when the dragging is finished. It usually generates an animation effect.</p>
-	 * <p>Default: a default action. To disable it, pass {@link zk#$void}.
+	 * @defaultValue a default action. To disable it, pass {@link zk.$void}.
 	 * <ul>
 	 * <li>evt - the DOM event. It is null if caused by scrolling.
 	 * It is not null if caused by dragging. </li>
 	 * </ul>
 	 *
 	 * <h4>reverteffect</h4>
-	 * <pre><code>void reverteffect({@link zk.Draggable} dg, int dx, int dy);</code></pre>
+	 * ```java
+	 * void reverteffect({@link zk.Draggable} dg, int dx, int dy);
+	 * ```
 	 * <p>The function to do the revert effect.
 	 * Notice that it is ignored if the revert option is false (or returns false). </p>
-	 * <p>Default: null.
+	 * @defaultValue `null`.
 	 * <ul>
 	 * <li>dx - the number of pixels that the element has been dragged in the X coordinate</li>
 	 * <li>dy - the number of pixels that the element has been dragged in the Y coordinate</li>
 	 * </ul>
 	 *
 	 * <h4>revert</h4>
-	 * <pre><code>boolean revert;</code></pre>
-boolean revert({@link zk.Draggable} dg, {@link zk.Offset} pointer, {@link zk.Event} evt);
+	 * ```java
+	 * boolean revert;
+	 * boolean revert({@link zk.Draggable} dg, {@link zk.Offset} pointer, {@link zk.Event} evt);
+	 * ```
 	 * <p>The revert option could be a boolean, or a function that returns a boolean value. The boolean value decides whether to revert the dragging after dragged. If true, the element is reverted to its original location.
-	 * <p>Default: false
+	 * @defaultValue `false`
 	 * <p>To have a custom revert effect, you can specify a function as the #reverteffect option. It is usually an animation effect; see zEffect;
 	 * <ul>
 	 * <li>pointer - the offset of the mouse pointer</li>
@@ -324,71 +371,86 @@ boolean revert({@link zk.Draggable} dg, {@link zk.Offset} pointer, {@link zk.Eve
 	 * </ul>
 	 *
 	 * <h4>constraint</h4>
-	 * <pre><code>String constraint;</code></pre>
-{@link zk.Offset} constraint({@link zk.Draggable} dg, {@link zk.Offset} pos, {@link zk.Event} evt);</code></pre>
+	 * ```java
+	 * String constraint;
+	 * {@link zk.Offset} constraint({@link zk.Draggable} dg, {@link zk.Offset} pos, {@link zk.Event} evt);
+	 * ```
 	 * <p>Specifies the constraint. The first format specifies either 'vertical' or 'horizontal' to indicate that it can be dragged only in the vertical or horizontal direction.
 	 * <p>The second format specified a function that can modify the position dynamically. For example, you can limit the drag at the diagonal direction.
 	 * <ul>
-	 * <li>pos - the position of the element being dragged. It is the position going to assign to {@link #node}'s left and top. </li>
+	 * <li>pos - the position of the element being dragged. It is the position going to assign to {@link node}'s left and top. </li>
 	 * <li>evt - the mouse event.</li>
 	 * </ul>
 	 * <p>Returns real position, or null if the pos argument is correct
 	 *
 	 * <h4>ghosting</h4>
-	 * <pre><code>boolean ghosting;</code></pre>
-{@link DOMElement} ghosting({@link zk.Draggable dg}, {@link zk.Offset} pos, {@link zk.Event} evt);</code></pre>
+	 * ```java
+	 * boolean ghosting;
+	 * {@link DOMElement} ghosting({@link zk.Draggable dg}, {@link zk.Offset} pos, {@link zk.Event} evt);
+	 * ```
 	 * <p>Specified whether to make a copy of the element and then drag the copy instead of the element itself.
-	 * <p>If true is specified (the first format), {@link #node} is cloned and the cloned element will be dragged.
-	 * <p>If a function is specified (the second format), the function is called and it shall create and return a DOM element (so called a ghost or a copy)that will be used for dragging. Furthermore, after dragging, <code>endghosting</code>, if specified, will be called to clean up.
-	 * <p>Default: null (the element, {@link #node}, will be dragged directly.
+	 * <p>If true is specified (the first format), {@link node} is cloned and the cloned element will be dragged.
+	 * <p>If a function is specified (the second format), the function is called and it shall create and return a DOM element (so called a ghost or a copy)that will be used for dragging. Furthermore, after dragging, `endghosting`, if specified, will be called to clean up.
+	 * @defaultValue `null` (the element, {@link node}, will be dragged directly.
 	 * <ul>
 	 * <li>pos - the position of the new created element, i.e., the left-top corner. </li>
 	 * </ul>
 	 * <p>Example:
-	 * <pre>{@code
+	 * ```ts
 	 * var html = '<div style="left:' + pos[0] + 'px;top:' + pos[1] +'px"';
 	 * //...
-	 * }</pre>
-	 * <p>Returns the ghost element. This element will become {@link #node}, and
-	 * the original node will be restored after the dragging is finished (also after function specified in <code>endghosting</code> is called).
+	 * }
+	 * ```
+	 * <p>Returns the ghost element. This element will become {@link node}, and
+	 * the original node will be restored after the dragging is finished (also after function specified in `endghosting` is called).
 	 *
 	 * <h4>endghosting</h4>
-	 * <pre><code>void endghosting({@link zk.Draggable} dg, {@link DOMElement} origin);</code></pre>
+	 * ```java
+	 * void endghosting({@link zk.Draggable} dg, {@link DOMElement} origin);
+	 * ```
 	 * <p>Called after the dragging is finished to clean up what have been done by the function
-	 * specified in <code>ghosting</code>.
+	 * specified in `ghosting`.
 	 * <p>It is optional since {@link zk.Draggable} will remove the DOM element
-	 * created by the function specified in <code>ghosting</code>.
-	 * <p>Notice that it is ignored if the <code>ghosting</code> option is not
+	 * created by the function specified in `ghosting`.
+	 * <p>Notice that it is ignored if the `ghosting` option is not
 	 * specified with a function.
-	 * <p>Default: null
+	 * @defaultValue `null`
 	 * <ul>
-	 * <li>origin - the original element ({@link #node}) before the function
-	 * specified in <code>ghosting</code>. Notice {@link #node} is switched to
-	 * the ghost element during dragging, and restored after <code>endghosting</code> was called. </li>
+	 * <li>origin - the original element ({@link node}) before the function
+	 * specified in `ghosting`. Notice {@link node} is switched to
+	 * the ghost element during dragging, and restored after `endghosting` was called. </li>
 	 * </ul>
 	 *
 	 * <h4>overlay</h4>
-	 * <pre><code>boolean overlay;</code></pre>
+	 * ```java
+	 * boolean overlay;
+	 * ```
 	 * <p>Specifies whether to create a DIV to cover the whole browser window when dragging. The DIV is helpful if the browser window contains iframe and other objects that will 'eat' the mousemove effect (and cause the dragging stopped abruptly).
-	 * <p>Default: false
+	 * @defaultValue `false`
 	 *
 	 * <h4>stackup</h4>
-	 * <pre><code>boolean stackup;</code></pre>
+	 * ```java
+	 * boolean stackup;
+	 * ```
 	 * <p>Specifies whether to create a stackup (actually an iframe) that makes sure the element being dragging is on top of others.
-	 * <p>Default: false
+	 * @defaultValue `false`
 	 *
 	 * <h4>zIndex</h4>
-	 * <pre><code>int zIndex;</code></pre>
-	 * <pre><code>int zIndex({@link zk.Draggable} dg);</code></pre>
+	 * ```java
+	 * int zIndex;
+	 * int zIndex({@link zk.Draggable} dg);
+	 * ```
 	 * <p>The z-index that will be assigned when dragging the element.
 	 * If it is a function, it is assumed to be a function returning
 	 * the z-index (or -1 if it prefer not to change z-index)
-	 * Default: <i>not assign any value to z-index</i>
+	 * @defaultValue <i>not assign any value to z-index</i>
 	 *
 	 * <h4>change</h4>
-	 * <pre><code>void change({@link zk.Draggable} dg, {@link zk.Offset} pointer, {@link zk.Event} evt);</code></pre>
+	 * ```java
+	 * void change({@link zk.Draggable} dg, {@link zk.Offset} pointer, {@link zk.Event} evt);
+	 * ```
 	 * <p>Called after the dragging has changed the position of the element
-	 * ({@link #node}). It is called after the function specified
+	 * ({@link node}). It is called after the function specified
 	 * in the snap and draw or constraint option.
 	 * It is also called it has been scrolled.
 	 * <ul>
@@ -398,45 +460,53 @@ boolean revert({@link zk.Draggable} dg, {@link zk.Offset} pointer, {@link zk.Eve
 	 * </ul>
 	 *
 	 * <h4>draw</h4>
-	 * <pre><code>void draw({@link zk.Draggable} dg, {@link zk.Offset} pos, {@link zk.Event} evt);</code></pre>
+	 * ```java
+	 * void draw({@link zk.Draggable} dg, {@link zk.Offset} pos, {@link zk.Event} evt);
+	 * ```
 	 * <p>Used to override the default change of the element's position. If not specified, the constraint option is,
-	 * if any, called and then {@link #node}'s position (left and top) are changed. You can provide your own way to change the position.
-	 * <p>Default: null
+	 * if any, called and then {@link node}'s position (left and top) are changed. You can provide your own way to change the position.
+	 * @defaultValue `null`
 	 * <ul>
-	 * <li>pos - the position of the element being dragged. It is the position going to assign to {@link #node}'s left and top.</li>
+	 * <li>pos - the position of the element being dragged. It is the position going to assign to {@link node}'s left and top.</li>
 	 * <li>evt - the mouse event</li>
 	 * </ul>
 	 *
 	 * <h4>scroll</h4>
-	 * <pre><code>{@link DOMElement} scroll;
-String scroll; //DOM Element's ID</code></pre>
+	 * ```java
+	 * {@link DOMElement} scroll;
+	 * String scroll; //DOM Element's ID
+	 * ```
 	 * <p>Specify which DOM element to consider its scrollLeft and scrollTop. In other words, it is the element with scrollbar that affects the location of the draggable element (zk.Draggable#node).
-	 * <p>Default: null
+	 * @defaultValue `null`
 	 * <p>Notice that scroll could be DOM element, including window, or its ID.
 	 *
 	 * <h4>scrollSensitivity</h4>
-	 * <pre><code>int scrollSensitivity;</code></pre>
+	 * ```java
+	 * int scrollSensitivity;
+	 * ```
 	 * <p>The scroll sensitivity.
-	 * <p>Default: 20
+	 * @defaultValue `20`
 	 *
 	 * <h4>scrollSpeed</h4>
-	 * <pre><code>int scrollSpeed;</code></pre>
+	 * ```java
+	 * int scrollSpeed;
+	 * ```
 	 * <p>The scroll speed.
-	 * <p>Default: 15
+	 * @defaultValue `15`
 	 * </blockquote>
-	 * @type Map
 	 */
 	opts: DraggableOptions;
 
+	/** @internal */
 	_dragImg?: HTMLElement // zk.Widget.prototype.ghost
 		| JQuery; // zul/sel/ItemWidget and zul/sel/Listitem
 
-	/** Constructor.
-	 * @param Object control the control object for this draggable.
+	/**
+	 * @param control - the control object for this draggable.
 	 * It can be anything, but it is usually a widget ({@link zk.Widget}).
-	 * @param DOMElement node [optional] the DOM element that is made to be draggable.
-	 * If omitted and control is a widget, {@link zk.Widget#$n} is assumed.
-	 * @param Map opts [optional] options. Refer to {@link #opts} for allowed options.
+	 * @param node - the DOM element that is made to be draggable.
+	 * If omitted and control is a widget, {@link zk.Widget.$n} is assumed.
+	 * @param opts - options. Refer to {@link opts} for allowed options.
 	 */
 	constructor(control: zk.Object & {node?: HTMLElement} | undefined, node: HTMLElement | undefined, opts: DraggableOptions) {
 		super();
@@ -493,7 +563,8 @@ String scroll; //DOM Element's ID</code></pre>
 				.keypress(_dockeypress);
 		Draggable._drags.push(this);
 	}
-	/** Destroys this draggable object. This method must be called to clean up, if you don't want to associate the draggable feature to a DOM element.
+	/**
+	 * Destroys this draggable object. This method must be called to clean up, if you don't want to associate the draggable feature to a DOM element.
 	 */
 	destroy(): void {
 		if (this.dragging) {
@@ -518,12 +589,13 @@ String scroll; //DOM Element's ID</code></pre>
 		this.dead = true;
 	}
 
-	/** [left, right] of this node. */
+	/** `[left, right]` of this node. @internal */
 	_currentDelta(): zk.Offset {
 		var $node = jq(this.node);
 		return [zk.parseInt($node.css('left')), zk.parseInt($node.css('top'))];
 	}
 
+	/** @internal */
 	_startDrag(evt: zk.Event): void {
 		zWatch.fire('onStartDrag', this, evt as unknown as zk.FireOptions);
 
@@ -598,6 +670,7 @@ String scroll; //DOM Element's ID</code></pre>
 		if (this.opts.starteffect)
 			this.opts.starteffect(this, evt);
 	}
+	/** @internal */
 	_syncStackup(): void {
 		if (this._stackup) {
 			var node = this.node,
@@ -612,6 +685,7 @@ String scroll; //DOM Element's ID</code></pre>
 		}
 	}
 
+	/** @internal */
 	_updateDrag(pt: zk.Offset, evt: zk.Event): void {
 		if (!this.dragging) {
 			let v = this.opts.initSensitivity;
@@ -657,6 +731,7 @@ String scroll; //DOM Element's ID</code></pre>
 		evt.stop();
 	}
 
+	/** @internal */
 	_finishDrag(evt: zk.Event, success: boolean): void {
 		this.dragging = false;
 		if (this.stackup) {
@@ -733,6 +808,7 @@ String scroll; //DOM Element's ID</code></pre>
 			//we have to reset it later since event is fired later (after onmouseup)
 	}
 
+	/** @internal */
 	_mousedown(devt: JQuery.TriggeredEvent): void {
 		var node = this.node,
 			evt = jq.Event.zk(devt),
@@ -771,6 +847,7 @@ String scroll; //DOM Element's ID</code></pre>
 			//simulate mousedown later (mount.js's invocation of ignoreMouseUp)
 		}
 	}
+	/** @internal */
 	_keypress(devt: JQuery.TriggeredEvent): void {
 		if (devt.keyCode == 27) {
 			this._finishDrag(jq.Event.zk(devt), false);
@@ -778,6 +855,7 @@ String scroll; //DOM Element's ID</code></pre>
 		}
 	}
 
+	/** @internal */
 	_endDrag(evt: zk.Event): void {
 		if (this.dragging) {
 			this._stopScrolling();
@@ -787,6 +865,7 @@ String scroll; //DOM Element's ID</code></pre>
 			_deactivate();
 	}
 
+	/** @internal */
 	_draw(point: zk.Offset, evt?: zk.Event): void {
 		var node = this.node!,
 			$node = zk(node),
@@ -848,6 +927,7 @@ String scroll; //DOM Element's ID</code></pre>
 		if (style.visibility == 'hidden') style.visibility = ''; // fix gecko rendering
 	}
 
+	/** @internal */
 	_stopScrolling(): void {
 		if (this.scrollInterval) {
 			clearInterval(this.scrollInterval);
@@ -855,6 +935,7 @@ String scroll; //DOM Element's ID</code></pre>
 			_lastScrlPt = undefined;
 		}
 	}
+	/** @internal */
 	_startScrolling(speed: zk.Offset): void {
 		if (speed[0] || speed[1]) {
 			const scrollSpeed = this.opts.scrollSpeed!;
@@ -864,6 +945,7 @@ String scroll; //DOM Element's ID</code></pre>
 		}
 	}
 
+	/** @internal */
 	_scroll(): void {
 		var current = new Date(),
 			delta = current.valueOf() - this.lastScrolled!.valueOf();
@@ -882,7 +964,7 @@ String scroll; //DOM Element's ID</code></pre>
 
 		this._updateInnerOfs();
 		if (this._isScrollChild) {
-			_lastScrlPt = _lastScrlPt ?? _lastPt as zk.Offset;
+			_lastScrlPt = _lastScrlPt ?? _lastPt!;
 			_lastScrlPt[0] += this.scrollSpeed[0] * delta / 1000;
 			_lastScrlPt[1] += this.scrollSpeed[1] * delta / 1000;
 			if (_lastScrlPt[0] < 0)
@@ -900,9 +982,11 @@ String scroll; //DOM Element's ID</code></pre>
 		}
 	}
 
+	/** @internal */
 	_updateInnerOfs(): void {
 		this._innerOfs = [jq.innerX(), jq.innerY()];
 	}
+	/** @internal */
 	_getWndScroll(w: Window): zk.Dimension {
 		var T: number | undefined, L: number | undefined, W: number | undefined, H: number | undefined,
 			doc = w.document,
@@ -927,14 +1011,16 @@ String scroll; //DOM Element's ID</code></pre>
 		return {top: T!, left: L!, width: W, height: H};
 	}
 
-	/** Snaps the dragging position.
+	/**
+	 * Snaps the dragging position.
 	 * It is the default snapping. For individual snapping, use
 	 * the snap or constraint options of {@link zk.Draggable}.
 	 * Notice this method is always called no matter if the snap or constraint
 	 * options are specified.
-	 * <p>Default: return <code>pos</code> (i.e., not changing at all)
-	 * @param zk.Offset ofs the offset of the dragging position
-	 * @return zk.Offset the offset after snapped
+	 * @defaultValue `pos` (i.e., not changing at all)
+	 * @param pos - the offset of the dragging position
+	 * @returns the offset after snapped
+	 * @internal
 	 */
 	snap_(pos: zk.Offset, opts: DraggableOptions): zk.Offset {
 		if (!opts.snap && pos[1] < 0)

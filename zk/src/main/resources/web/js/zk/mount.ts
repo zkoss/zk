@@ -62,9 +62,10 @@ export namespace mount_global {
 			return;
 		}
 
-		var ms = wgtcls['molds'] = {};
+		var ms = wgtcls.molds = {};
 		for (var nm in molds) {
 			var fn = molds[nm];
+			// eslint-disable-next-line @typescript-eslint/dot-notation
 			ms[nm] = typeof fn == 'function' ? fn : fn[0]['molds'][fn[1]];
 		}
 	}
@@ -119,6 +120,7 @@ var Widget = zk.Widget,
 //Note: it is better to block zAu but the chance to be wrong is low --
 //a timer must be started early and its response depends page's AU
 jq(function () {
+	/** @internal */
 	function _stateless(): boolean {
 		var dts = zk.Desktop.all;
 		for (var dtid in dts)
@@ -150,27 +152,22 @@ export function _apac(fn: () => void, _which_?: string): void {
 	zk.afterMount(fn); //it might happen if ZUML loaded later (with custom JS code)
 }
 
-/** @partial zk
- */
-//@{
-/** Adds a function that will be executed after the mounting is done. By mounting we mean the creation of peer widgets.
+/**
+ * Adds a function that will be executed after the mounting is done. By mounting we mean the creation of peer widgets.
  * <p>By mounting we mean the creation of the peer widgets under the
  * control of the server. To run after the mounting of the peer widgets,
  * <p>If the delay argument is not specified and no mounting is taking place,
- * the function is executed with <code>setTimeout(fn, 0)</code>.
- * @param Function fn the function to execute after mounted
- * @param int delay (since 5.0.6) how many milliseconds to wait before execute if
+ * the function is executed with `setTimeout(fn, 0)`.
+ * @param fn - the function to execute after mounted
+ * @param delay - (since 5.0.6) how many milliseconds to wait before execute if
  * there is no mounting taking place. If omitted, 0 is assumed.
  * If negative, the function is executed immediately (if no mounting is taking place).
- * @return boolean true if this method has been called before return (delay must
+ * @returns true if this method has been called before return (delay must
  * be negative, and no mounting); otherwise, undefined is returned.
- * @see #mounting
- * @see #afterLoad
- * @see #afterAnimate
+ * @see {@link mounting}
+ * @see {@link afterLoad}
+ * @see {@link afterAnimate}
  */
-//afterMount: function () {}
-//@};
-zk.afterMount = afterMount;
 export function afterMount(fn?: () => void, delay?: number): boolean { //part of zk
 	if (fn) {
 		if (!jq.isReady)
@@ -189,10 +186,10 @@ export function afterMount(fn?: () => void, delay?: number): boolean { //part of
 	}
 	return false;
 }
-/** @partial zk
- */
-//@{
-/** Adds a function that will be executed after all of the onSize events are done.
+zk.afterMount = afterMount;
+
+/**
+ * Adds a function that will be executed after all of the onSize events are done.
  * <p>Here lists the execution phases:
  * <ol>
  *     <li>After the page loaded, the function added in the afterResze() will be invoked</li>
@@ -200,22 +197,21 @@ export function afterMount(fn?: () => void, delay?: number): boolean { //part of
  *     <li>After zWatch.fire/fireDown('onSize'), the function added in the afterResze() will be invoked</li>
  * </ol>
  * </p>
- * @param Function fn the function to execute after resized
+ * @param fn - the function to execute after resized
  * @since 6.5.2
  */
-//afterResize: function () {}
-//@};
-zk.afterResize = afterResize;
 export function afterResize(fn: () => void): void {
 	if (fn)
 		_aftResizes.push(fn);
 }
-zk.doAfterResize = doAfterResize;
+zk.afterResize = afterResize;
+
 export function doAfterResize(): void {
 	for (var fn: undefined | CallableFunction; fn = _aftResizes.shift();) {
 		fn();
 	}
 }
+zk.doAfterResize = doAfterResize;
 
 function _curdt(): zk.Desktop {
 	return _mntctx.curdt ?? (_mntctx.curdt = zk.Desktop.$());
@@ -350,7 +346,7 @@ function mtAU(): void {
 		if (!inf)
 			break; //done
 
-			if (filter = (inf[4] as ExtraInfo)[1]) {//inf[4] is extra if AU
+			if (filter = inf[4]![1]) {//inf[4] is extra if AU
 				_wgt_$ = Widget.$; // update the latest one, if somewhere else override it already.
 				Widget.$ = function <T extends zk.Widget> (n, opts?: Partial<{exact: boolean; strict: boolean; child: boolean}>): T | undefined {
 					return (filter as CallableFunction)(_wgt_$(n, opts)) as T | undefined;
@@ -361,7 +357,7 @@ function mtAU(): void {
 		} finally {
 			if (filter && _wgt_$) Widget.$ = _wgt_$;
 		}
-		((inf[4] as ExtraInfo)[0] as CallableFunction)(wgt); //invoke stub
+		(inf[4]![0] as CallableFunction)(wgt); //invoke stub
 
 		if (breathe(mtAU))
 			return; //mtAU has been scheduled for later execution
@@ -400,7 +396,7 @@ function doAuCmds(cmds?: AuCmds): void {
 
 function create(parent: zk.Widget | undefined, wi: WidgetInfo, ignoreDom?: boolean): zk.Widget {
 	let nm;
-	var wgt: zk.Widget, stub: boolean, v: string,
+	var wgt: zk.Widget, stub: boolean,
 		type = wi[0],
 		uuid = wi[1],
 		props: WidgetProps = wi[2] || {},
@@ -430,7 +426,8 @@ function create(parent: zk.Widget | undefined, wi: WidgetInfo, ignoreDom?: boole
 			(wgt = new cls(window.zkac)).inServer = true;
 			//zkac used as token to optimize the performance of zk.Widget.$init
 			wgt.uuid = uuid;
-			if (v = wi[5] as string)
+			const v = wi[5];
+			if (v)
 				wgt.setMold(v);
 		}
 		if (parent) parent.appendChild(wgt, ignoreDom);
@@ -439,7 +436,8 @@ function create(parent: zk.Widget | undefined, wi: WidgetInfo, ignoreDom?: boole
 		//There are two ways to specify IdSpace at client
 		//1) Override $init and assign _fellows (e.g., Macro/Include/Window)
 		//2) Assign this.z$is to true (used by AbstractComponent.java)
-		if (v = zk.cut(props, 'z$is') as string) {
+		if (zk.cut(props, 'z$is')) {
+			// eslint-disable-next-line @typescript-eslint/dot-notation
 			wgt['z$is'] = true;
 			wgt._fellows = {};
 		}
@@ -467,7 +465,7 @@ function create(parent: zk.Widget | undefined, wi: WidgetInfo, ignoreDom?: boole
 		wgt.set(nm as string, props[nm as string] as never, true); //fromServer
 
 	for (nm in seProps) {
-		let seProp = seProps[nm as never];
+		const seProp = seProps[nm as never];
 		for (var i = 0, length = seProp.length; i < length; i++) {
 			const vv = seProp[i];
 			wgt.set(nm as string, vv as never, true); //fromServer
@@ -517,7 +515,7 @@ export namespace mount_global {
 			if (contextURI != null) dt.contextURI = contextURI;
 			if (reqURI != null) dt.requestPath = reqURI;
 		}
-		_mntctx['curdt'] = dt;
+		_mntctx.curdt = dt;
 		return dt;
 	}
 
@@ -556,7 +554,7 @@ export namespace mount_global {
 						ru = zk.cut(props, 'ru') as string | undefined;
 					window.zkdt(dtid, cu, uu, rsu, ru);
 					if (owner = zk.cut(props, 'ow') as string)
-						owner = zk.Widget.$(owner) as zk.Widget;
+						owner = zk.Widget.$(owner)!;
 				}
 
 				infs.push([_curdt(), wi, _mntctx.bindOnly, owner as zk.Widget | undefined, extra]);
@@ -583,6 +581,7 @@ export namespace mount_global {
 
 	//widget creation called by au.js
 	//args: [wi] (a single element array containing wi)
+	/** @internal */
 	export function zkx_(args: ArrayLike<unknown>, stub: unknown, filter?: CallableFunction): void {
 		_t0 = Date.now(); //so breathe() won't do unncessary delay
 		(args as unknown[])[1] = [stub, filter]; //assign stub as 2nd argument (see zkx)
@@ -613,8 +612,8 @@ export namespace mount_global {
 
 	//end of mounting
 	export function zkme(): void {
-		_mntctx['curdt'] = undefined;
-		_mntctx['bindOnly'] = false;
+		_mntctx.curdt = undefined;
+		_mntctx.bindOnly = false;
 	}
 
 	// window scope
@@ -636,29 +635,15 @@ jq(function () {
 			onMouseOut: 'doTooltipOut_'
 		};
 
-	/** @partial zk
-	 */
-	
-	/** Adds a function that will be executed when the browser is about to unload the document. In other words, it is called when window.onbeforeunload is called.
-	 *
-	 * <p>To remove the function, invoke this method by specifying remove to the opts argument.
-<pre><code>zk.beforeUnload(fn, {remove: true});</code></pre>
-	 *
-	 * @param Function fn the function to execute.
-	 * The function shall return null if it is OK to close, or a message (String) if it wants to show it to the end user for confirmation.
-	 * @param Map opts [optional] a map of options. Allowed vlaues:<br/>
-	 * <ul>
-	 * <li>remove: whether to remove instead of add.</li>
-	 * </ul>
-	 */
-	zk.beforeUnload = function (fn: () => string | undefined, opts?: {remove: boolean}): void { //part of zk
-		if (opts && opts.remove) _bfUploads.$remove(fn);
+	zk.beforeUnload = function (fn, opts): void { //part of zk
+		if (opts?.remove) _bfUploads.$remove(fn);
 		else _bfUploads.push(fn);
 	};
 
+	/** @internal */
 	function _doEvt(wevt: zk.Event): void {
 		var wgt = wevt.target;
-		if (wgt && !wgt['$weave']) {
+		if (wgt && !wgt.$weave) {
 			var en = wevt.name,
 				fn = _subevts[en] as string | undefined;
 			if (fn) {
@@ -667,6 +652,7 @@ jq(function () {
 					(wgt[fn] as CallableFunction)(wevt);
 				}
 			}
+			// eslint-disable-next-line @typescript-eslint/dot-notation
 			if (!wevt.stopped && (!wevt['originalEvent'] || !(wevt['originalEvent'] as object)['zkstopped'])) // Bug ZK-2544
 				(wgt['do' + en.substring(2) + '_'] as CallableFunction)(wevt);
 			if (wevt.domStopped)
@@ -674,6 +660,7 @@ jq(function () {
 		}
 	}
 
+	/** @internal */
 	function _docMouseDown(evt: zk.Event, wgt: zk.Widget | undefined, noFocusChange?: boolean): void {
 		zk.clickPointer[0] = evt.pageX!;
 		zk.clickPointer[1] = evt.pageY!;
@@ -710,21 +697,27 @@ jq(function () {
 		}
 	}
 
+	/** @internal */
 	function _docResize(): void {
+		// eslint-disable-next-line @typescript-eslint/dot-notation
 		if (!_reszInf['time']) return; //already handled
 
 		var now = Date.now();
+		// eslint-disable-next-line @typescript-eslint/dot-notation
 		if (zk.mounting || zk.loading || now < _reszInf['time'] || zk.animating()) {
 			setTimeout(_docResize, 10);
 			return;
 		}
 
+		// eslint-disable-next-line @typescript-eslint/dot-notation
 		_reszInf['time'] = undefined; //handled
+		// eslint-disable-next-line @typescript-eslint/dot-notation
 		_reszInf['lastTime'] = now + 1000;
 		//ignore following for a while if processing (in slow machine)
 
 		zAu._onClientInfo();
 
+		// eslint-disable-next-line @typescript-eslint/dot-notation
 		_reszInf['inResize'] = true;
 		try {
 			const dt = zk.Desktop._dt!;
@@ -733,13 +726,16 @@ jq(function () {
 			zWatch.fire('onFitSize', dt, {reverse: true}); //notify all
 			zWatch.fire('onSize', dt); //notify all
 			zWatch.fire('afterSize', dt); //notify all
+			// eslint-disable-next-line @typescript-eslint/dot-notation
 			_reszInf['lastTime'] = Date.now() + 8;
 		} finally {
+			// eslint-disable-next-line @typescript-eslint/dot-notation
 			_reszInf['inResize'] = false;
 		}
 	}
 
 	//Invoke the first root wiget's afterKeyDown_
+	/** @internal */
 	function _afterKeyDown(wevt: zk.Event): void {
 		var dts = zk.Desktop.all, Page = zk.Page;
 		for (var dtid in dts)
@@ -752,6 +748,7 @@ jq(function () {
 					return; //handled
 	}
 
+	/** @internal */
 	function _afterKD(wgt: zk.Widget | zul.Widget, wevt: zk.Event): boolean {
 		if (!zk.isLoaded('zul') || !(wgt instanceof zul.Widget))
 			return false; //handled
@@ -762,7 +759,7 @@ jq(function () {
 	var lastTimestamp, lastTarget;
 	jq(document)
 		.keydown(function (evt) {
-			const wgt = Widget.$(evt, {child: true}) as zk.Widget,
+			const wgt = Widget.$(evt, {child: true})!,
 				wevt = new zk.Event(wgt, 'onKeyDown', evt.keyData(), undefined, evt);
 			if (wgt) {
 				_doEvt(wevt);
@@ -771,6 +768,7 @@ jq(function () {
 					if (wevt.domStopped)
 						wevt.domEvent!.stop();
 				}
+			// eslint-disable-next-line @typescript-eslint/dot-notation
 			} else if (zk['invokeFirstRootForAfterKeyDown'])
 				_afterKeyDown(wevt);
 
@@ -888,12 +886,12 @@ jq(function () {
 
 	if (zk.scriptErrorHandlerEnabled) {
 		zk.scriptErrorHandler = function (evt: JQuery.TriggeredEvent & {originalEvent: ErrorEvent}): void {
-			let errorMsg = evt.originalEvent.message,
+			const errorMsg = evt.originalEvent.message,
 				stack = (evt.originalEvent.error as Error).stack!,
 				checkFunctionList = ['globalEval', 'script', '_doCmds', 'afterResponse', '_onResponseReady'];
 
 			for (let i = 0, l = checkFunctionList.length, lastCheckPos = -1; i < l; i++) {
-				let checkPos = stack.indexOf(checkFunctionList[i]);
+				const checkPos = stack.indexOf(checkFunctionList[i]);
 				if (checkPos == -1 || checkPos < lastCheckPos)
 					return; //not from Clients.evalJavascript
 				lastCheckPos = checkPos;
@@ -920,10 +918,12 @@ jq(function () {
 		//so we have to filter (most of) them out
 
 		var now = Date.now();
+		// eslint-disable-next-line @typescript-eslint/dot-notation
 		if ((_reszInf['lastTime'] && now < _reszInf['lastTime']) || _reszInf['inResize'])
 			return; //ignore resize for a while (since onSize might trigger onsize)
 
 		var delay = zk.android ? 250 : 50;
+		// eslint-disable-next-line @typescript-eslint/dot-notation
 		_reszInf['time'] = now + delay - 1; //handle it later
 		setTimeout(_docResize, delay);
 

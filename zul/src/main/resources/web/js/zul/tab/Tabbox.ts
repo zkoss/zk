@@ -49,35 +49,44 @@ class TabboxSkipper extends zk.Skipper {
  * </dl>
  *
  * <p>{@link Toolbar} only works in the horizontal default mold and
- * the {@link #isTabscroll()} to be true.
+ * the {@link isTabscroll} to be true.
  *
- * <p>Default {@link #getZclass}: z-tabbox.
+ * @defaultValue {@link getZclass}: z-tabbox.
  * @import zul.wgt.Toolbar
  */
 @zk.WrapClass('zul.tab.Tabbox')
 export class Tabbox extends zul.Widget {
+	/** @internal */
 	_orient = 'top';
+	/** @internal */
 	_tabscroll = true;
+	/** @internal */
 	_maximalHeight = false;
 
 	/* ZK-1441
 	 * Reference: doClick_() in Tab.js, _sel() in Tabpanel.js
 	 */
+	/** @internal */
 	_animating?: boolean = false;
+	/** @internal */
 	_nativebar = true;
+	/** @internal */
 	_panelSpacing?: string;
 	tabs?: zul.tab.Tabs;
 	tabpanels?: zul.tab.Tabpanels;
 	toolbar?: zul.wgt.Toolbar;
+	/** @internal */
 	_selTab?: zul.tab.Tab;
+	/** @internal */
 	_scrolling?: boolean;
+	/** @internal */
 	_toolbarWidth?: number;
+	/** @internal */
 	_shallSize?: boolean;
 
 	/**
-	 * Returns whether the tab scrolling is enabled.
-	 * Default: true.
-	 * @return boolean
+	 * @returns whether the tab scrolling is enabled.
+	 * @defaultValue `true`.
 	 */
 	isTabscroll(): boolean {
 		return this._tabscroll;
@@ -85,7 +94,6 @@ export class Tabbox extends zul.Widget {
 
 	/**
 	 * Sets whether to eable the tab scrolling
-	 * @param boolean tabscroll
 	 */
 	setTabscroll(tabscroll: boolean, opts?: Record<string, boolean>): this {
 		const o = this._tabscroll;
@@ -99,14 +107,10 @@ export class Tabbox extends zul.Widget {
 	}
 
 	/**
-	 * Returns the orient.
-	 *
-	 * <p>
-	 * Default: "top".
-	 *
+	 * @returns the orient.
+	 * @defaultValue `"top"`.
 	 * <p>
 	 * Note: only the default mold supports it (not supported if accordion).
-	 * @return String
 	 */
 	getOrient(): string {
 		return this._orient;
@@ -115,7 +119,7 @@ export class Tabbox extends zul.Widget {
 	/**
 	 * Sets the orient.
 	 *
-	 * @param String orient either "top", "left", "bottom or "right".
+	 * @param orient - either "top", "left", "bottom or "right".
 	 * @since 7.0.0 "horizontal" is renamed to "top" and "vertical" is renamed to "left".
 	 */
 	setOrient(orient: string, opts?: Record<string, boolean>): this {
@@ -134,10 +138,8 @@ export class Tabbox extends zul.Widget {
 	}
 
 	/**
-	 * Returns whether to use maximum height of all tabpanel in initial phase or not.
-	 * <p>
-	 * Default: false.
-	 * @return boolean
+	 * @returns whether to use maximum height of all tabpanel in initial phase or not.
+	 * @defaultValue `false`.
 	 * @since 7.0.0
 	 */
 	isMaximalHeight(): boolean {
@@ -148,7 +150,6 @@ export class Tabbox extends zul.Widget {
 	 * Sets whether to use maximum height of all tabpanel in initial phase or not.
 	 * <p>
 	 * The Client ROD feature will be disabled if it is set to true.
-	 * @param boolean maximalHeight
 	 * @since 7.0.0
 	 */
 	setMaximalHeight(maximalHeight: boolean, opts?: Record<string, boolean>): this {
@@ -163,11 +164,9 @@ export class Tabbox extends zul.Widget {
 	}
 
 	/**
-	 * Returns the spacing between {@link Tabpanel}. This is used by certain
+	 * @returns the spacing between {@link Tabpanel}. This is used by certain
 	 * molds, such as accordion.
-	 * <p>
-	 * Default: null (no spacing).
-	 * @return String
+	 * @defaultValue `null` (no spacing).
 	 */
 	getPanelSpacing(): string | undefined {
 		return this._panelSpacing;
@@ -176,7 +175,6 @@ export class Tabbox extends zul.Widget {
 	/**
 	 * Sets the spacing between {@link Tabpanel}. This is used by certain molds,
 	 * such as accordion.
-	 * @param String panelSpacing
 	 */
 	setPanelSpacing(panelSpacing: string, opts?: Record<string, boolean>): this {
 		const o = this._panelSpacing;
@@ -190,29 +188,27 @@ export class Tabbox extends zul.Widget {
 	}
 
 	/**
-	 * Returns the tabs that this tabbox owns.
-	 * @return zul.tab.Tabs
+	 * @returns the tabs that this tabbox owns.
 	 */
 	getTabs(): zul.tab.Tabs | undefined {
 		return this.tabs;
 	}
 
 	/**
-	 * Returns the tabpanels that this tabbox owns.
-	 * @return zul.tab.Tabpanels
+	 * @returns the tabpanels that this tabbox owns.
 	 */
 	getTabpanels(): zul.tab.Tabpanels | undefined {
 		return this.tabpanels;
 	}
 
 	/**
-	 * Returns the auxiliary toolbar that this tabbox owns.
-	 * @return zul.wgt.Toolbar
+	 * @returns the auxiliary toolbar that this tabbox owns.
 	 */
 	getToolbar(): zul.wgt.Toolbar | undefined {
 		return this.toolbar;
 	}
 
+	/** @internal */
 	override domClass_(no?: zk.DomClassOptions): string {
 		var sc = super.domClass_(no);
 		if (!no || !no.zclass) {
@@ -224,8 +220,7 @@ export class Tabbox extends zul.Widget {
 	}
 
 	/**
-	 * Returns whether it is a horizontal tabbox.
-	 * @return boolean
+	 * @returns whether it is a horizontal tabbox.
 	 */
 	isHorizontal(): boolean {
 		var orient = this.getOrient();
@@ -233,8 +228,7 @@ export class Tabbox extends zul.Widget {
 	}
 
 	/**
-	 * Returns whether it is the top orientation.
-	 * @return boolean
+	 * @returns whether it is the top orientation.
 	 */
 	isTop(): boolean {
 		var orient = this.getOrient();
@@ -242,16 +236,14 @@ export class Tabbox extends zul.Widget {
 	}
 
 	/**
-	 * Returns whether it is the bottom orientation.
-	 * @return boolean
+	 * @returns whether it is the bottom orientation.
 	 */
 	isBottom(): boolean {
 		return 'bottom' == this.getOrient();
 	}
 
 	/**
-	 * Returns whether it is a vertical tabbox.
-	 * @return boolean
+	 * @returns whether it is a vertical tabbox.
 	 */
 	isVertical(): boolean {
 		var orient = this.getOrient();
@@ -259,16 +251,14 @@ export class Tabbox extends zul.Widget {
 	}
 
 	/**
-	 * Returns whether it is the right orientation.
-	 * @return boolean
+	 * @returns whether it is the right orientation.
 	 */
 	isRight(): boolean {
 		return 'right' == this.getOrient();
 	}
 
 	/**
-	 * Returns whether it is the left orientation.
-	 * @return boolean
+	 * @returns whether it is the left orientation.
 	 */
 	isLeft(): boolean {
 		var orient = this.getOrient();
@@ -276,16 +266,14 @@ export class Tabbox extends zul.Widget {
 	}
 
 	/**
-	 * Returns whether it is in the accordion mold.
-	 * @return boolean
+	 * @returns whether it is in the accordion mold.
 	 */
 	inAccordionMold(): boolean {
-		return this.getMold().indexOf('accordion') != -1;
+		return this.getMold().includes('accordion');
 	}
 
 	/**
-	 * Returns the selected index.
-	 * @return int
+	 * @returns the selected index.
 	 */
 	getSelectedIndex(): number {
 		return this._selTab ? this._selTab.getIndex() : -1;
@@ -293,7 +281,6 @@ export class Tabbox extends zul.Widget {
 
 	/**
 	 * Sets the selected index.
-	 * @param int index
 	 */
 	setSelectedIndex(selectedIndex: number): this {
 		if (this.tabs)
@@ -302,8 +289,7 @@ export class Tabbox extends zul.Widget {
 	}
 
 	/**
-	 * Returns the selected tab panel.
-	 * @return Tabpanel
+	 * @returns the selected tab panel.
 	 */
 	getSelectedPanel(): zul.tab.Tabpanel | undefined {
 		return this._selTab ? this._selTab.getLinkedPanel() : undefined;
@@ -311,7 +297,6 @@ export class Tabbox extends zul.Widget {
 
 	/**
 	 * Sets the selected tab panel.
-	 * @param Tabpanel panel
 	 */
 	setSelectedPanel(selectedPanel: zul.tab.Tabpanel | undefined): this {
 		if (selectedPanel && selectedPanel.getTabbox() != this)
@@ -323,8 +308,7 @@ export class Tabbox extends zul.Widget {
 	}
 
 	/**
-	 * Returns the selected tab.
-	 * @return zul.tab.Tab
+	 * @returns the selected tab.
 	 */
 	getSelectedTab(): zul.tab.Tab | undefined {
 		return this._selTab;
@@ -332,7 +316,6 @@ export class Tabbox extends zul.Widget {
 
 	/**
 	 * Sets the selected tab.
-	 * @param tab zul.tab.Tab
 	 */
 	setSelectedTab(selectedTab: zul.tab.Tab | undefined, fromServer?: boolean): this {
 		if (this._selTab != selectedTab) {
@@ -342,6 +325,7 @@ export class Tabbox extends zul.Widget {
 		return this;
 	}
 
+	/** @internal */
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, new TabboxSkipper(skipper), after); // F61-ZK-970.zul
 
@@ -375,6 +359,7 @@ export class Tabbox extends zul.Widget {
 		});
 	}
 
+	/** @internal */
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		zWatch.unlisten({onResponse: this});
 		for (var key = ['right', 'left', 'down', 'up'], le = key.length; le--;) {
@@ -386,6 +371,7 @@ export class Tabbox extends zul.Widget {
 		super.unbind_(skipper, after, keepRod);
 	}
 
+	/** @internal */
 	_doClick(evt: zk.Event, direction: string): void {
 		if (!this.tabs || !this.tabs.nChildren) return; // nothing to do
 
@@ -454,9 +440,10 @@ export class Tabbox extends zul.Widget {
 		}
 	}
 
-	/** Synchronizes the size immediately.
+	/**
+	 * Synchronizes the size immediately.
 	 * This method is called automatically if the widget is created
-	 * at the server (i.e., {@link #inServer} is true).
+	 * at the server (i.e., {@link inServer} is true).
 	 * You have to invoke this method only if you create this widget
 	 * at client and add or remove children from this widget.
 	 * @since 5.0.8
@@ -480,11 +467,13 @@ export class Tabbox extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	_syncSize(): void {
 		if (this.desktop)
 			this._shallSize = true;
 	}
 
+	/** @internal */
 	override beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
 		if (child instanceof zul.wgt.Toolbar) {
 			if (this.toolbar && this.toolbar != child) {
@@ -511,11 +500,13 @@ export class Tabbox extends zul.Widget {
 		}
 		return true;
 	}
-	//super//
+
+	/** @internal */
 	override beforeChildReplaced_(oldTabs: zul.tab.Tabs, newTabs: zul.tab.Tabs): void {
 		// NOTE: At this point, `this.tabs === oldTabs`. Thus, `this.setSelectedIndex()` will set for `oldTabs` not `newTabs`.
 		newTabs.getChildAt<zul.tab.Tab>(this.getSelectedIndex())!.setSelected(true);
 	}
+	/** @internal */
 	override onChildAdded_(child: zk.Widget): void {
 		super.onChildAdded_(child);
 		if (child instanceof zul.wgt.Toolbar)
@@ -528,6 +519,7 @@ export class Tabbox extends zul.Widget {
 		this.rerender();
 	}
 
+	/** @internal */
 	override onChildRemoved_(child: zk.Widget): void {
 		super.onChildRemoved_(child);
 		if (child == this.toolbar)
@@ -554,6 +546,7 @@ export class Tabbox extends zul.Widget {
 		return this;
 	}
 
+	/** @internal */
 	_fixMaxHeight(): void {
 		if (this._maximalHeight) {
 			var max = 0,
@@ -579,6 +572,7 @@ export class Tabbox extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	_setSel(newtab: zul.tab.Tab | undefined, notify: boolean): void {
 		if (newtab) {
 			var oldtab = this._selTab;

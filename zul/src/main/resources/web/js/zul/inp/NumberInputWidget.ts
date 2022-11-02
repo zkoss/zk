@@ -26,10 +26,13 @@ zk.load('zul.lang', function () {
  */
 @zk.WrapClass('zul.inp.NumberInputWidget')
 export class NumberInputWidget<ValueType> extends zul.inp.FormatWidget<ValueType> {
+	/** @internal */
 	_rounding?: number;
+	/** @internal */
 	_allowKeys?: string;
 
-	/** Returns the rounding mode.
+	/**
+	 * @returns the rounding mode.
 	 * <ul>
 	 * <li>0: ROUND_UP</li>
 	 * <li>1: ROUND_DOWN</li>
@@ -40,13 +43,13 @@ export class NumberInputWidget<ValueType> extends zul.inp.FormatWidget<ValueType
 	 * <li>6: ROUND_HALF_EVEN</li>
 	 * <li>7: ROUND_UNNECESSARY</li>
 	 * </ul>
-	 * @return int
 	 */
 	getRounding(): number | undefined {
 		return this._rounding;
 	}
 
-	/** Sets the rounding mode.
+	/**
+	 * Sets the rounding mode.
 	 * <ul>
 	 * <li>0: ROUND_UP</li>
 	 * <li>1: ROUND_DOWN</li>
@@ -57,7 +60,7 @@ export class NumberInputWidget<ValueType> extends zul.inp.FormatWidget<ValueType
 	 * <li>6: ROUND_HALF_EVEN</li>
 	 * <li>7: ROUND_UNNECESSARY</li>
 	 * </ul>
-	 * @param int rounding mode
+	 * @param rounding - mode
 	 */
 	setRounding(rounding: number): this {
 		this._rounding = rounding;
@@ -91,14 +94,16 @@ export class NumberInputWidget<ValueType> extends zul.inp.FormatWidget<ValueType
 		return this;
 	}
 
-	/** Returns a string of keystrokes that are allowed.
-	 * @return String
+	/**
+	 * @returns a string of keystrokes that are allowed.
 	 * @since 5.0.8
+	 * @internal
 	 */
 	getAllowedKeys_(): string {
 		return this._allowKeys ?? _allowKeys;
 	}
 
+	/** @internal */
 	override doKeyPress_(evt: zk.Event): void {
 		//Bug ZK-1373: ALTGR + 3 key in Spanish keyboard is a combination of Ctrl + Alt + 3 for € sign.
 		if (evt.ctrlKey && evt.altKey)
@@ -107,6 +112,7 @@ export class NumberInputWidget<ValueType> extends zul.inp.FormatWidget<ValueType
 			super.doKeyPress_(evt);
 	}
 
+	/** @internal */
 	override doPaste_(evt: zk.Event): void {
 		//Bug ZK-3838: add a paste event dealer
 		var inp = this.getInputNode(),
@@ -121,6 +127,7 @@ export class NumberInputWidget<ValueType> extends zul.inp.FormatWidget<ValueType
 		return this._type;
 	}
 
+	/** @internal */
 	override domAttrs_(no?: zk.DomAttrsOptions): string {
 		var attr = super.domAttrs_(no);
 		if ((!no || !no.text) && zk.mobile)

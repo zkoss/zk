@@ -14,15 +14,17 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 /**
  * A vertical layout.
- * <p>Default {@link #getZclass}: z-vlayout.
+ * @defaultValue {@link getZclass}: z-vlayout.
  * @since 5.0.4
  */
 @zk.WrapClass('zul.box.Vlayout')
 export class Vlayout extends zul.box.Layout {
+    /** @internal */
     override isVertical_(): boolean {
 		return true;
 	}
 
+    /** @internal */
     override getFlexDirection_(): string {
 		return 'column';
 	}

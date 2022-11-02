@@ -13,51 +13,48 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 var LEGAL_CHARS = 'ahKHksmz',
-	/*constant for MINUTE (m) field alignment.
-	 * @type int
-	 */
+	/* constant for MINUTE (m) field alignment. */
 	MINUTE_FIELD = 1,
-	/*constant for SECOND (s) field alignment.
-	 * @type int
-	 */
+	/* constant for SECOND (s) field alignment. */
 	SECOND_FIELD = 2,
-	/*constant for AM_PM (a) field alignment.
-	 * @type int
-	 */
+	/* constant for AM_PM (a) field alignment. */
 	AM_PM_FIELD = 3,
-	/*constant for HOUR0 (H) field alignment. (Hour in day (0-23))
-	 * @type int
-	 */
+	/* constant for HOUR0 (H) field alignment. (Hour in day (0-23)) */
 	HOUR0_FIELD = 4,
-	/*constant for HOUR1 (k) field alignment. (Hour in day (1-24))
-	 * @type int
-	 */
+	/* constant for HOUR1 (k) field alignment. (Hour in day (1-24)) */
 	HOUR1_FIELD = 5,
-	/*constant for HOUR2 (h) field alignment. (Hour in am/pm (1-12))
-	 * @type int
-	 */
+	/* constant for HOUR2 (h) field alignment. (Hour in am/pm (1-12)) */
 	HOUR2_FIELD = 6,
-	/*constant for HOUR3 (K) field alignment. (Hour in am/pm (0-11))
-	 * @type int
-	 */
+	/* constant for HOUR3 (K) field alignment. (Hour in am/pm (0-11)) */
 	HOUR3_FIELD = 7,
 	globallocalizedSymbols: Record<string, zk.LocalizedSymbols> = {};
 
 @zk.WrapClass('zul.db.Timebox')
 export class Timebox extends zul.inp.FormatWidget<DateImpl> {
+	/** @internal */
 	_buttonVisible = true;
+	/** @internal */
 	override readonly _format = 'HH:mm';
+	/** @internal */
 	_timezoneAbbr = '';
+	/** @internal */
 	_fmthdler!: TimeHandler[];
+	/** @internal */
 	_timeZone?: string;
+	/** @internal */
 	_unformater?: string;
+	/** @internal */
 	static _unformater?: zul.db.Unformater;
+	/** @internal */
 	_changed?: boolean;
 	type?: number;
 	timerId?: number;
 	lastPos?: number;
+	/** @internal */
 	_lastPos?: number;
+	/** @internal */
 	_constraint?: string;
+	/** @internal */
 	_currentbtn?: HTMLElement;
 
 	constructor() {
@@ -80,8 +77,9 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 		return this;
 	}
 
-	/** Sets the time zone ID that this time box belongs to.
-	 * @param String timezone the time zone's ID, such as "America/Los_Angeles".
+	/**
+	 * Sets the time zone ID that this time box belongs to.
+	 * @param timeZone - the time zone's ID, such as "America/Los_Angeles".
 	 * @since 9.0.0
 	 */
 	setTimeZone(timeZone: string, opts?: Record<string, boolean>): this {
@@ -95,24 +93,24 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 		return this;
 	}
 
-	/** Returns the time zone ID that this time box belongs to.
-	 * @return String the time zone's ID, such as "America/Los_Angeles".
+	/**
+	 * @returns the time zone ID that this time box belongs to, such as "America/Los_Angeles".
 	 * @since 9.0.0
 	 */
 	override getTimeZone(): string | undefined {
 		return this._timeZone;
 	}
 
-	/** Returns whether the button (on the right of the textbox) is visible.
-	 * <p>Default: true.
-	 * @return boolean
+	/**
+	 * @returns whether the button (on the right of the textbox) is visible.
+	 * @defaultValue `true`.
 	 */
 	isButtonVisible(): boolean {
 		return this._buttonVisible;
 	}
 
-	/** Sets whether the button (on the right of the textbox) is visible.
-	 * @param boolean buttonVisible
+	/**
+	 * Sets whether the button (on the right of the textbox) is visible.
 	 */
 	setButtonVisible(buttonVisible: boolean, opts?: Record<string, boolean>): this {
 		const o = this._buttonVisible;
@@ -125,8 +123,9 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 		return this;
 	}
 
-	/** Sets the unformater function. This method is called from Server side.
-	 * @param String unf the unformater function
+	/**
+	 * Sets the unformater function. This method is called from Server side.
+	 * @param unformater - the unformater function
 	 */
 	setUnformater(unformater: string, opts?: Record<string, boolean>): this {
 		const o = this._unformater;
@@ -139,8 +138,8 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 		return this;
 	}
 
-	/** Returns the unformater.
-	 * @return String the unformater function
+	/**
+	 * @returns the unformater.
 	 */
 	getUnformater(): string | undefined {
 		return this._unformater;
@@ -159,16 +158,16 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 		return this;
 	}
 
-	/** Sets the constraint.
-	 * <p>Default: null (means no constraint all all).
-	 * @param String cst
+	/**
+	 * Sets the constraint.
+	 * @defaultValue `null` (means no constraint all all).
 	 */
 	override setConstraint(constraint: string, opts?: Record<string, boolean>): this {
 		const o = this._constraint;
 		this._constraint = constraint;
 
 		if (o !== constraint || opts?.force) {
-			if (typeof constraint == 'string' && constraint.charAt(0) != '['/*by server*/)
+			if (typeof constraint == 'string' && !constraint.startsWith('[')/*by server*/)
 				this._cst = new zul.inp.SimpleLocalTimeConstraint(constraint, this);
 			else
 				this._cst = constraint;
@@ -184,8 +183,8 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 		return this;
 	}
 
-	/** Returns the constraint, or null if no constraint at all.
-	 * @return String
+	/**
+	 * @returns the constraint, or null if no constraint at all.
 	 */
 	override getConstraint(): string | undefined {
 		return this._constraint;
@@ -257,17 +256,17 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 
 	/**
 	 * Sets the time zone ID that this time box belongs to.
-	 * @param String timezone the time zone's ID, such as "America/Los_Angeles".
-	 * @deprecated Use {@link #setTimeZone(String)} instead.
+	 * @param timezone - the time zone's ID, such as "America/Los_Angeles".
+	 * @deprecated Use {@link setTimeZone} instead.
 	 */
 	setTimezone(timezone: string): this {
 		return this.setTimeZone(timezone);
 	}
 
-	/** Returns the time zone ID that this time box belongs to.
-	 * @return String the time zone's ID, such as "America/Los_Angeles".
+	/**
+	 * @returns the time zone ID that this time box belongs to, such as "America/Los_Angeles"
 	 * @since 8.5.1
-	 * @deprecated Use {@link #getTimeZone()} instead.
+	 * @deprecated Use {@link getTimeZone} instead.
 	 */
 	getTimezone(): string | undefined {
 		return this._timeZone;
@@ -291,6 +290,7 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 		return super.setValue(value, fromServer);
 	}
 
+	/** @internal */
 	override coerceToString_(date?: DateImpl): string {
 		if (!this._changed && !date && arguments.length) return '';
 		var out = '', th: TimeHandler, text: string, offset: number | boolean;
@@ -306,6 +306,7 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 		return out;
 	}
 
+	/** @internal */
 	override coerceFromString_(val: string | undefined): DateImpl | undefined {
 		var unf = Timebox._unformater,
 			tz = this.getTimeZone();
@@ -368,12 +369,14 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 	onHide = undefined;
 	validate = undefined;
 
+	/** @internal */
 	override doClick_(evt: zk.Event, popupOnly?: boolean): void {
 		if (evt.domTarget == this.getInputNode())
 			this._doCheckPos();
 		super.doClick_(evt, popupOnly);
 	}
 
+	/** @internal */
 	override doKeyPress_(evt: zk.Event): void {
 		if (zk.opera && evt.keyCode != 9) {
 			evt.stop();
@@ -382,6 +385,7 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 		super.doKeyPress_(evt);
 	}
 
+	/** @internal */
 	_doBeforeInput(evt: zk.Event): void {
 		var inp = this.getInputNode()!;
 		if (inp.disabled || inp.readOnly)
@@ -397,6 +401,7 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 		}
 	}
 
+	/** @internal */
 	override doKeyDown_(evt: zk.Event): void {
 		var inp = this.getInputNode()!;
 		if (inp.disabled || inp.readOnly)
@@ -466,11 +471,13 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 		super.doKeyDown_(evt);
 	}
 
+	/** @internal */
 	override doPaste_(evt: zk.Event): void {
 		this._updateChanged();
 		super.doPaste_(evt);
 	}
 
+	/** @internal */
 	_updateChanged(): void {
 		var inp = this.getInputNode()!,
 			self = this,
@@ -485,12 +492,14 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 		}, 0);
 	}
 
+	/** @internal */
 	_ondropbtnup(evt: zk.Event): void {
 		this.domUnlisten_(document.body, 'onZMouseup', '_ondropbtnup');
 		this._stopAutoIncProc();
 		this._currentbtn = undefined;
 	}
 
+	/** @internal */
 	_btnDown(evt: zk.Event): void { // TODO: format the value first
 		if (!this._buttonVisible || this._disabled) return;
 
@@ -545,6 +554,7 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 		evt.stop();
 	}
 
+	/** @internal */
 	_btnUp(evt: zk.Event): void {
 		if (!this._buttonVisible || this._disabled || zk.dragging) return;
 
@@ -558,36 +568,43 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 			zk(this.getInputNode()).setSelectionRange(this._lastPos, this._lastPos);
 	}
 
+	/** @internal */
 	_getPos(): number {
 		return zk(this.getInputNode()).getSelectionRange()[0];
 	}
 
+	/** @internal */
 	_doCheckPos(): void {
 		this.lastPos = this._getPos();
 	}
 
+	/** @internal */
 	_doUp(): void {
 		this._changed = true;
 		this.getTimeHandler().increase(this, 1);
 		this._onChanging();
 	}
 
+	/** @internal */
 	_doDown(): void {
 		this._changed = true;
 		this.getTimeHandler().increase(this, -1);
 		this._onChanging();
 	}
 
+	/** @internal */
 	_doBack(): void {
 		this._changed = true;
 		this.getTimeHandler().deleteTime(this, true);
 	}
 
+	/** @internal */
 	_doDel(): void {
 		this._changed = true;
 		this.getTimeHandler().deleteTime(this, false);
 	}
 
+	/** @internal */
 	_doType(val: number): void {
 		this._changed = true;
 		this.getTimeHandler().addTime(this, val);
@@ -624,6 +641,7 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 		return lastHandler;
 	}
 
+	/** @internal */
 	_startAutoIncProc(up: boolean): void {
 		if (this.timerId)
 			clearInterval(this.timerId);
@@ -637,6 +655,7 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 		jq(this.$n('btn-' + (up ? 'up' : 'down'))).addClass(this.$s('active'));
 	}
 
+	/** @internal */
 	_stopAutoIncProc(): void {
 		if (this.timerId)
 			clearTimeout(this.timerId);
@@ -645,6 +664,7 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 		jq('.' + this.$s('icon'), this.$n('btn')).removeClass(this.$s('active'));
 	}
 
+	/** @internal */
 	override doFocus_(evt: zk.Event): void {
 		super.doFocus_(evt);
 		var inp = this.getInputNode()!,
@@ -664,6 +684,7 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 		zul.inp.RoundUtl.doFocus_(this);
 	}
 
+	/** @internal */
 	override doBlur_(evt: zk.Event): void {
 		// skip onchange, Bug 2936568
 		if (!this._value && !this._changed && !Timebox._unformater)
@@ -674,6 +695,7 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 		zul.inp.RoundUtl.doBlur_(this);
 	}
 
+	/** @internal */
 	override afterKeyDown_(evt: zk.Event, simulated?: boolean): boolean {
 		if (!simulated && this._inplace)
 			jq(this.$n_()).toggleClass(this.getInplaceCSS(), evt.keyCode == 13);
@@ -681,6 +703,7 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 		return super.afterKeyDown_(evt, simulated);
 	}
 
+	/** @internal */
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		var btn: HTMLElement | undefined;
@@ -693,6 +716,7 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 		zWatch.listen({onSize: this});
 	}
 
+	/** @internal */
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		if (this.timerId) {
 			clearTimeout(this.timerId);
@@ -710,14 +734,17 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 		super.unbind_(skipper, after, keepRod);
 	}
 
+	/** @internal */
 	getBtnUpIconClass_(): string {
 		return 'z-icon-angle-up';
 	}
 
+	/** @internal */
 	getBtnDownIconClass_(): string {
 		return 'z-icon-angle-down';
 	}
 
+	/** @internal */
 	static _updFormat(wgt: Timebox, fmt: string): void {
 		var index: TimeHandler[] = [],
 			APM = wgt._localizedSymbols ? wgt._localizedSymbols.APM! : zk.APM;
@@ -772,7 +799,7 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 
 				while ((ary += c) && ++end < l) {
 					c = fmt.charAt(end);
-					if (LEGAL_CHARS.indexOf(c) != -1) {
+					if (LEGAL_CHARS.includes(c)) {
 						end--;
 						break;
 					}
@@ -797,6 +824,7 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 		wgt._fmthdler = index;
 	}
 
+	/** @internal */
 	static _shouldObeyCount(nextType: number): boolean {
 		switch (nextType) {
 			case MINUTE_FIELD:
@@ -921,6 +949,7 @@ export class TimeHandler extends zk.Object {
 		zk(inp).setSelectionRange(pos, pos);
 	}
 
+	/** @internal */
 	_addNextTime(wgt: Timebox, num: number): void {
 		var inp = wgt.getInputNode(),
 			index: number,
@@ -1022,6 +1051,7 @@ export class TimeHandler extends zk.Object {
 		return obeyCount !== false ? val.substring(start, end) : val.substring(start);
 	}
 
+	/** @internal */
 	_doShift(wgt: Timebox, shift: number): void {
 		var f = wgt._fmthdler,
 			index = f.$indexOf(this),
@@ -1047,6 +1077,7 @@ export class TimeHandler extends zk.Object {
 		return zk.parseInt(text);
 	}
 
+	/** @internal */
 	static _getMaxLen(wgt: Timebox): number {
 		var val = wgt.getInputNode()!.value,
 			len = 0,
@@ -1063,6 +1094,7 @@ export class TimeHandler extends zk.Object {
 		return (lastTh!.digits == 1) ? ++len : len;
 	}
 
+	/** @internal */
 	static _cleanSelectionText(wgt: Timebox, startHandler: TimeHandler): string {
 		var inp = wgt.getInputNode(),
 			sel = zk(inp).getSelectionRange(),

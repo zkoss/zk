@@ -68,10 +68,10 @@ function _getRegionSize(wgt?: zul.layout.LayoutRegion, hor?: boolean, ext?: bool
  * child components to fit in five regions: north, south, east, west, and center.
  * Each region may
  * contain no more than one component, and is identified by a corresponding
- * constant: <code>NORTH</code>, <code>SOUTH</code>, <code>EAST</code>,
- * <code>WEST</code>, and <code>CENTER</code>.
+ * constant: `NORTH`, `SOUTH`, `EAST`,
+ * `WEST`, and `CENTER`.
  *
- * <p>Default {@link #getZclass}: z-borderlayout.
+ * @defaultValue {@link getZclass}: z-borderlayout.
  *
  */
 @zk.WrapClass('zul.layout.Borderlayout')
@@ -84,14 +84,18 @@ export class Borderlayout extends zul.Widget {
 	center?: zul.layout.Center;
 	west?: zul.layout.West;
 	east?: zul.layout.East;
+	/** @internal */
 	_shallResize?: boolean;
+	/** @internal */
 	_isOnSize?: boolean;
+	/** @internal */
 	_animationDisabled = false;
 
 	setResize(): this {
 		this.resize();
 		return this;
 	}
+	/** @internal */
 	override beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
 		if (!(child instanceof zul.layout.LayoutRegion)) {
 			zk.error('Unsupported child for Borderlayout: ' + child.className);
@@ -126,8 +130,8 @@ export class Borderlayout extends zul.Widget {
 		return true;
 	}
 	/**
-	 * Returns whether disable animation effects
-	 * <p>Default: false.
+	 * @returns whether disable animation effects
+	 * @defaultValue `false`.
 	 * @since 5.0.8
 	 */
 	isAnimationDisabled(): boolean {
@@ -146,6 +150,7 @@ export class Borderlayout extends zul.Widget {
 	}
 
 	//-- super --//
+	/** @internal */
 	override onChildAdded_(child: zul.layout.LayoutRegion): void {
 		super.onChildAdded_(child);
 		switch (child.getPosition()) {
@@ -168,6 +173,7 @@ export class Borderlayout extends zul.Widget {
 		this._shallResize = true;
 	}
 
+	/** @internal */
 	override onChildRemoved_(child: zk.Widget): void {
 		super.onChildRemoved_(child);
 		if (child == this.north)
@@ -184,11 +190,13 @@ export class Borderlayout extends zul.Widget {
 			this._shallResize = true;
 	}
 
+	/** @internal */
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		zWatch.listen({ onSize: this, onCommandReady: this });
 	}
 
+	/** @internal */
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		zWatch.unlisten({ onSize: this, onCommandReady: this });
 		super.unbind_(skipper, after, keepRod);
@@ -199,6 +207,7 @@ export class Borderlayout extends zul.Widget {
 			this.resize();
 	}
 
+	/** @internal */
 	override beforeMinFlex_(o: string): number {
 		// B50-ZK-309
 		var east = this.east,
@@ -219,6 +228,7 @@ export class Borderlayout extends zul.Widget {
 	}
 
 	//@Override, region with vflex/hflex, must wait flex resolved then do resize
+	/** @internal */
 	override afterChildrenFlex_(): void {
 		//region's min vflex/hflex resolved and try the border resize
 		//@see #_resize
@@ -234,6 +244,7 @@ export class Borderlayout extends zul.Widget {
 			this._resize();
 	}
 
+	/** @internal */
 	_resize(isOnSize?: boolean): void {
 		this._shallResize = false;
 		this._isOnSize = isOnSize;
@@ -290,6 +301,7 @@ export class Borderlayout extends zul.Widget {
 		this._isOnSize = false; // reset
 	}
 
+	/** @internal */
 	_resizeWgt(wgt: zul.layout.LayoutRegion, ambit: zul.layout.LayoutRegionAmbit, ignoreSplit?: boolean): void {
 		if (wgt._open) {
 			if (!ignoreSplit && wgt.$n('split')) {
@@ -332,6 +344,7 @@ export class Borderlayout extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	_resizeBody(wgt: zul.layout.LayoutRegion, ambit: zul.layout.LayoutRegionAmbit): void {
 		ambit.w = Math.max(0, ambit.w);
 		ambit.h = Math.max(0, ambit.h);
@@ -369,6 +382,7 @@ export class Borderlayout extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	_ignoreResize(el: HTMLElement, w: number, h: number): boolean {
 		if (el._lastSize && el._lastSize.width == w && el._lastSize.height == h) {
 			return true;
@@ -386,31 +400,26 @@ export class Borderlayout extends zul.Widget {
 
 	/**
 	 * The north layout constraint (top of container).
-	 * @type String
 	 */
 	static readonly NORTH = 'north';
 
 	/**
 	 * The south layout constraint (bottom of container).
-	 * @type String
 	 */
 	static readonly SOUTH = 'south';
 
 	/**
 	 * The east layout constraint (right side of container).
-	 * @type String
 	 */
 	static readonly EAST = 'east';
 
 	/**
 	 * The west layout constraint (left side of container).
-	 * @type String
 	 */
 	static readonly WEST = 'west';
 
 	/**
 	 * The center layout constraint (middle of container).
-	 * @type String
 	 */
 	static readonly CENTER = 'center';
 }

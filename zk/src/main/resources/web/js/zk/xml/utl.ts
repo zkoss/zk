@@ -1,4 +1,3 @@
-/*global ActiveXObject*/
 /* utl.ts
 
 	Purpose:
@@ -19,14 +18,11 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
  * Utilities for parsing XML and others.
  * <p>Refer to {@link zUtl} for basic utilities.
  */
-export let Utl = {
+export var Utl = {
 	/**
 	 * Loads XML from the resource at the specified URL.
 	 * If the callback method is specified, the URL is loaded asynchronously and
 	 * the callback is called with the XML document after the document is loaded and parsed.
-	 * @param String url
-	 * @param Function callback
-	 * @return DOMElement
 	 */
 	loadXML(url: string, callback: CallableFunction): DOMImplementation | XMLDocument {
 		const doc: XMLDocument & Partial<{load(url: string); async: boolean}> = document.implementation.createDocument('', '', undefined);
@@ -38,8 +34,6 @@ export let Utl = {
 	},
 	/**
 	 * Parses and returns the XML document from the specified text.
-	 * @param String text
-	 * @return DOMElement
 	 */
 	parseXML(text: string): XMLDocument {
 		if (typeof DOMParser != 'undefined')
@@ -55,16 +49,17 @@ export let Utl = {
 		doc.loadXML(text);
 		return doc;
 	},
-	/** Renames the type embedded in an URL
+	/**
+	 * Renames the type embedded in an URL
 	 * For example,
-<pre><code>
-zk.xml.Utl.renType("/zkdemo/img/whatever-off.gif", "on");
-	//return "/zkdemo/img/whatever-on.gif"
-</code></pre>
+	 * ```ts
+	 * zk.xml.Utl.renType("/zkdemo/img/whatever-off.gif", "on");
+	 * //return "/zkdemo/img/whatever-on.gif"
+	 * ```
 	 * as shown above, it assumes the type is embedded after dash (-).
-	 * @param String url the URL to modify
-	 * @param String type the type to replace with
-	 * @return String the new URL after replacing the type
+	 * @param url - the URL to modify
+	 * @param type - the type to replace with
+	 * @returns the new URL after replacing the type
 	 */
 	renType(url: string, type: string): string {
 		var j = url.lastIndexOf(';'),
@@ -86,15 +81,15 @@ zk.xml.Utl.renType("/zkdemo/img/whatever-off.gif", "on");
 		return pref + type + ext + suffix;
 	},
 
-	/** Returns the concatenation of the text nodes under the specified
-	 * DOM element.
-	 * @param DOMElement el the DOM element.
-	 * @return String the text
+	/**
+	 * @returns the concatenation of the text nodes under the specified DOM element.
+	 * @param el - the DOM element.
 	 */
 	getElementValue(el: HTMLElement): string {
 		var txt = '';
 		// eslint-disable-next-line zk/noNull
 		for (let target: Element | null = el.firstElementChild; target; target = target.nextElementSibling)
+			// eslint-disable-next-line @typescript-eslint/dot-notation
 			if (target['data']) txt += target['data'];
 		return txt;
 	}

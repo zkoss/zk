@@ -69,33 +69,36 @@ export class Scrollbar extends zk.Object {
 	 * <h4>embed</h4>
 	 * boolean embed
 	 * <p>Embed the scrollbar inside container or not.
-	 * <p>Default: false
+	 * @defaultValue `false`
 	 *
 	 * <h4>step</h4>
 	 * int step
 	 * <p>Specifies scrolling pixels each time click on scroll-bar arrow.
-	 * <p>Default: 20
+	 * @defaultValue `20`
 	 *
 	 * <h4>wheelAmountStep</h4>
 	 * int wheelAmountStep
 	 * <p>Specifies the multiple of step when mouse wheel scrolling.
-	 * <p>Default: 3
+	 * @defaultValue `3`
 	 *
 	 * <h4>startPositionX</h4>
 	 * int startPositionX
 	 * <p>Specifies the horizontal scroll-bar start position according to the scrolling area.
-	 * <p>Default: 0
+	 * @defaultValue `0`
 	 *
 	 * <h4>startPositionY</h4>
 	 * int startPositionY
 	 * <p>Specifies the vertical scroll-bar start position according to the scrolling area.
-	 * <p>Default: 0
+	 * @defaultValue `0`
 	 *
 	 * @type Map
 	 */
 		//opts: null,
+	/** @internal */
 	_pos?: zk.Offset = undefined;
+	/** @internal */
 	_barPos?: zk.Offset = undefined;
+	/** @internal */
 	_pressTimer?: number = undefined;
 	cave: HTMLElement;
 	scroller: HTMLElement;
@@ -441,6 +444,7 @@ export class Scrollbar extends zk.Object {
 		return this;
 	}
 
+	/** @internal */
 	_checkBarRequired(): void {
 		var cave = this.cave,
 			scroller = this.scroller,
@@ -487,6 +491,7 @@ export class Scrollbar extends zk.Object {
 		}
 	}
 
+	/** @internal */
 	_bindMouseEvent(orient: string): void {
 		var self = this,
 			cave = self.cave,
@@ -516,6 +521,7 @@ export class Scrollbar extends zk.Object {
 			.on('mouseup', self.proxy(self._mouseUp));
 	}
 
+	/** @internal */
 	_unbindMouseEvent(orient: string): void {
 		var self = this,
 			cave = self.cave,
@@ -545,17 +551,20 @@ export class Scrollbar extends zk.Object {
 			.off('mouseup', self.proxy(self._mouseUp));
 	}
 
+	/** @internal */
 	_fixScroll(evt: zk.Event): void {
 		var cave = this.cave;
 		if (!this.dragging)
 			this.scrollTo(cave.scrollLeft, cave.scrollTop);
 	}
 
+	/** @internal */
 	_mouseEnter(evt: JQuery.MouseEnterEvent): void {
 		_showScrollbar(this, 'hor', 1);
 		_showScrollbar(this, 'ver', 1);
 	}
 
+	/** @internal */
 	_mouseLeave(evt: JQuery.MouseLeaveEvent): void {
 		if (this.dragging)
 			return;
@@ -564,6 +573,7 @@ export class Scrollbar extends zk.Object {
 		_showScrollbar(this, 'ver', 0);
 	}
 
+	/** @internal */
 	_dragStart(evt: JQuery.DragStartEvent): void {
 		if (this._pressTimer) { //just in case
 			clearInterval(this._pressTimer);
@@ -586,6 +596,7 @@ export class Scrollbar extends zk.Object {
 			.on('mouseup', self.proxy(self._dragEnd));
 	}
 
+	/** @internal */
 	_dragEnd(evt: JQuery.DragEndEvent): void {
 		var self = this,
 			x = evt.pageX!,
@@ -607,6 +618,7 @@ export class Scrollbar extends zk.Object {
 		}
 	}
 
+	/** @internal */
 	_dragMove(evt: JQuery.DragEvent<never, {orient: string; point: number; pos: number}>): void {
 		var data = evt.data,
 			orient = data.orient,
@@ -637,6 +649,7 @@ export class Scrollbar extends zk.Object {
 		}
 	}
 
+	/** @internal */
 	_mousewheelX(evt: zk.Event, delta: number, deltaX: number, deltaY: number): void {
 		var opts = this.opts,
 			step = opts.step * opts.wheelAmountStep,
@@ -666,6 +679,7 @@ export class Scrollbar extends zk.Object {
 		}
 	}
 
+	/** @internal */
 	_mousewheelY(evt: zk.Event, delta: number, deltaX: number, deltaY: number): void {
 		var opts = this.opts,
 			step = opts.step * opts.wheelAmountStep,
@@ -694,11 +708,13 @@ export class Scrollbar extends zk.Object {
 		}
 	}
 
+	/** @internal */
 	_mouseUp(evt: JQuery.MouseUpEvent): void {
 		clearInterval(this._pressTimer);
 		this._pressTimer = undefined;
 	}
 
+	/** @internal */
 	_mouseDown(evt: JQuery.MouseDownEvent<never, never, HTMLElement>): void {
 		if (this._pressTimer) {
 			clearInterval(this._pressTimer);
@@ -803,6 +819,7 @@ export class Scrollbar extends zk.Object {
 		}
 	}
 
+	/** @internal */
 	_syncPosition(orient: string, pos: number): void {
 		if (!this._pos)
 			return;
@@ -838,6 +855,7 @@ export class Scrollbar extends zk.Object {
 		}
 	}
 
+	/** @internal */
 	_syncBarPosition(orient: string, pos: number): void {
 		var isH = orient == 'hor',
 			indicator = this.$n(orient + '-indicator');
@@ -846,6 +864,7 @@ export class Scrollbar extends zk.Object {
 		indicator.style[isH ? 'left' : 'top'] = pos + 'px';
 	}
 
+	/** @internal */
 	_syncEmbedBarPosition(orient: string, pos: number): void {
 		if (this.opts.embed) {
 			var isH = orient == 'hor',
@@ -856,6 +875,7 @@ export class Scrollbar extends zk.Object {
 		}
 	}
 
+	/** @internal */
 	_onScrollEnd(): void {
 		var onScrollEnd = this.opts.onScrollEnd;
 		if (onScrollEnd) {

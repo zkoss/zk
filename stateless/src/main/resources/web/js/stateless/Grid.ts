@@ -18,6 +18,7 @@ declare module '@zul/grid/Grid' {
 zk.afterLoad('zul.grid', () => {
 	const _xRowIter = zk.augment(zul.grid.RowIter.prototype, {
 		cur: undefined as number | undefined,
+		/** @internal */
 		_init(): void {
 			if (!this._isInit) {
 				_xRowIter._init.call(this);

@@ -14,17 +14,17 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 /**
  *  A header for a {@link Groupbox}.
- * It may contain either a text label, using {@link #setLabel},
+ * It may contain either a text label, using {@link setLabel},
  * or child elements for a more complex caption.
- * <p>Default {@link #getZclass}: z-caption.
+ * @defaultValue {@link getZclass}: z-caption.
  *
  */
 @zk.WrapClass('zul.wgt.Caption')
 export class Caption extends zul.LabelImageWidget<HTMLDivElement> {
 	// NOTE: parent could be null as asserted in domCon
 	// In essence, parent is `zul.wnd.Window | zul.wnd.Panel | zul.wgt.Groupbox`.
-	override parent!: zk.Widget & Partial<zul.wnd.Panel> | undefined;
-	//super//
+	override parent?: zk.Widget & Partial<zul.wnd.Panel>;
+	/** @internal */
 	domDependent_ = true;
 
 	override rerender(skipper?: zk.Skipper | number): this {
@@ -34,6 +34,7 @@ export class Caption extends zul.LabelImageWidget<HTMLDivElement> {
 		return super.rerender(skipper);
 	}
 
+	/** @internal */
 	override domContent_(): string {
 		var label = this.getLabel(),
 			img = this.getImage(),
@@ -48,6 +49,7 @@ export class Caption extends zul.LabelImageWidget<HTMLDivElement> {
 		return label ? img + ' ' + '<span class="' + this.$s('label') + '">' + label + '</span>' : img;
 	}
 
+	/** @internal */
 	override updateDomContent_(): void {
 		var cnt = this.domContent_(),
 			dn = this.$n('cave');
@@ -66,6 +68,7 @@ export class Caption extends zul.LabelImageWidget<HTMLDivElement> {
 		}
 	}
 
+	/** @internal */
 	override domClass_(no?: zk.DomClassOptions): string {
 		var sc = super.domClass_(no),
 			parent = this.parent;
@@ -76,6 +79,7 @@ export class Caption extends zul.LabelImageWidget<HTMLDivElement> {
 		return sc + (parent._closable ? '' : ' ' + this.$s('readonly'));
 	}
 
+	/** @internal */
 	override doClick_(evt: zk.Event, popupOnly?: boolean): void {
 		if (this.parent instanceof zul.wgt.Groupbox && this.parent.isClosable())
 			this.parent.setOpen(!this.parent.isOpen());
@@ -83,34 +87,36 @@ export class Caption extends zul.LabelImageWidget<HTMLDivElement> {
 	}
 
 	//private//
+	/** @internal */
 	_getBlank(): string {
 		return '&nbsp;';
 	}
 
-	/** Whether to generate a collapsible button (determined by parent only). */
+	/** Whether to generate a collapsible button (determined by parent only). @internal */
 	_isCollapsibleVisible(): boolean {
 		var parent = this.parent!;
 		return !!(parent.isCollapsible && parent.getCollapseOpenIconClass_ && parent.isCollapsible());
 	}
 
-	/** Whether to generate a close button (determined by parent only). */
+	/** Whether to generate a close button (determined by parent only). @internal */
 	_isCloseVisible(): boolean {
 		var parent = this.parent!;
 		return !!(parent.isClosable && parent.getClosableIconClass_ && parent.isClosable());
 	}
 
-	/** Whether to generate a minimize button (determined by parent only). */
+	/** Whether to generate a minimize button (determined by parent only). @internal */
 	_isMinimizeVisible(): boolean {
 		var parent = this.parent!;
 		return !!(parent.isMinimizable && parent.getMinimizableIconClass_ && parent.isMinimizable());
 	}
 
-	/** Whether to generate a maximize button (determined by parent only). */
+	/** Whether to generate a maximize button (determined by parent only). @internal */
 	_isMaximizeVisible(): boolean {
 		var parent = this.parent!;
 		return !!(parent.isMaximizable && parent.getMaximizableIconClass_ && parent.isMaximizable());
 	}
 
+	/** @internal */
 	override beforeMinFlex_(o: zk.FlexOrient): number | undefined { // Fixed for B50-3343388.zul
 		// FIXME: Div has no property width. Setting it in the console has no effect.
 		// Dead code?
@@ -121,7 +127,8 @@ export class Caption extends zul.LabelImageWidget<HTMLDivElement> {
 
 	// override for the bug ZK-1799
 	// eslint-disable-next-line zk/javaStyleSetterSignature
-	override setFlexSizeW_(n: HTMLElement, zkn: zk.JQZK, width: number, isFlexMin?: boolean): void {
+	/** @internal */
+	override setFlexSizeW_(flexSizeW: HTMLElement, zkn: zk.JQZK, width: number, isFlexMin?: boolean): void {
 		if (isFlexMin) {
 			if (this._isCloseVisible()) {
 				var close = this.parent!.$n_('close');
@@ -140,7 +147,7 @@ export class Caption extends zul.LabelImageWidget<HTMLDivElement> {
 				width += exp.offsetWidth + zk(exp).marginWidth();
 			}
 		}
-		super.setFlexSizeW_(n, zkn, width, isFlexMin);
+		super.setFlexSizeW_(flexSizeW, zkn, width, isFlexMin);
 	}
 
 	// override

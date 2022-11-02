@@ -12,7 +12,9 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-/** The selectable widgets, such as listbox and tree.
+/**
+ * The selectable widgets, such as listbox and tree.
+ * @internal
  */
 //zk.$package('zul.sel');
 function _beforeChildKey(wgt: SelectWidget, evt: zk.Event): boolean {
@@ -75,37 +77,59 @@ function _isListgroupfoot(w: zul.sel.ItemWidget): boolean {
 export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	override firstChild!: zul.sel.ItemWidget | undefined;
 	override lastChild!: zul.sel.ItemWidget | undefined;
-	/** Whether to change a list item selection on right click
-	 * <p>Default: true (unless the server changes the setting)
+	/**
+	 * Whether to change a list item selection on right click
+	 * @defaultValue `true` (unless the server changes the setting)
 	 * @since 5.0.5
-	 * @type boolean
 	 */
 	rightSelect = true;
+	/** @internal */
 	_anchorTop = 0;
+	/** @internal */
 	_anchorLeft = 0;
+	/** @internal */
 	_isSelecting = true;
+	/** @internal */
 	_startRow?: zul.sel.ItemWidget = undefined;
 	nonselectableTags?: string;
+	/** @internal */
 	_checkmark?: boolean;
+	/** @internal */
 	_multiple?: boolean;
+	/** @internal */
 	_selItems: zul.sel.ItemWidget[];
+	/** @internal */
 	_focusItem?: zul.sel.ItemWidget;
 	efield?: HTMLElement;
+	/** @internal */
 	_selectedIndex?: number;
+	/** @internal */
 	_name?: string;
+	/** @internal */
 	_selectOnHighlightDisabled?: boolean;
+	/** @internal */
 	_checkmarkDeselectOther?: boolean;
+	/** @internal */
 	_cdo?: boolean;
 	$$selectAll?: boolean;
+	/** @internal */
 	_oldCSS?: string;
+	/** @internal */
 	_lastSelectedItem?: zul.sel.ItemWidget;
+	/** @internal */
 	_nUpdHeaderCM?: number;
+	/** @internal */
 	_headercm?: HTMLElement;
+	/** @internal */
 	_$services?: Record<string, CallableFunction[] | undefined>;
 	groupSelect?: boolean;
+	/** @internal */
 	_shallSyncFocus?: boolean | zul.sel.ItemWidget;
+	/** @internal */
 	_shallSyncCM?: boolean;
+	/** @internal */
 	_itemForSelect?: zul.sel.ItemWidget;
+	/** @internal */
 	_disableSelection_?: boolean;
 	declare static shallSyncSelInView?: Record<string, boolean>;
 
@@ -118,10 +142,8 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	}
 
 	/**
-	 * Returns whether the check mark shall be displayed in front of each item.
-	 * <p>
-	 * Default: false.
-	 * @return boolean
+	 * @returns whether the check mark shall be displayed in front of each item.
+	 * @defaultValue `false`.
 	 */
 	isCheckmark(): boolean {
 		return !!this._checkmark;
@@ -130,9 +152,8 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	/**
 	 * Sets whether the check mark shall be displayed in front of each item.
 	 * <p>
-	 * The check mark is a checkbox if {@link #isMultiple} returns true. It is a
-	 * radio button if {@link #isMultiple} returns false.
-	 * @param boolean checkmark
+	 * The check mark is a checkbox if {@link isMultiple} returns true. It is a
+	 * radio button if {@link isMultiple} returns false.
 	 */
 	setCheckmark(checkmark: boolean, opts?: Record<string, boolean>): this {
 		const o = this._checkmark;
@@ -147,10 +168,8 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	}
 
 	/**
-	 * Returns whether multiple selections are allowed.
-	 * <p>
-	 * Default: false.
-	 * @return boolean
+	 * @returns whether multiple selections are allowed.
+	 * @defaultValue `false`.
 	 */
 	isMultiple(): boolean {
 		return !!this._multiple;
@@ -158,7 +177,6 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 
 	/**
 	 * Sets whether multiple selections are allowed.
-	 * @param boolean multiple
 	 */
 	setMultiple(multiple: boolean, opts?: Record<string, boolean>): this {
 		const o = this._multiple;
@@ -184,8 +202,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	}
 
 	/**
-	 * Returns the index of the selected item (-1 if no one is selected).
-	 * @return int
+	 * @returns the index of the selected item (-1 if no one is selected).
 	 */
 	getSelectedIndex(): number | undefined {
 		return this._selectedIndex;
@@ -194,7 +211,6 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	/**
 	 * Deselects all of the currently selected items and selects the item with
 	 * the given index.
-	 * @param int selectedIndex
 	 */
 	setSelectedIndex(selectedIndex: number, opts?: Record<string, boolean>): this {
 		const o = this._selectedIndex,
@@ -230,9 +246,8 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	}
 
 	/**
-	 * Returns the name of this component.
-	 * <p>
-	 * Default: null.
+	 * @returns the name of this component.
+	 * @defaultValue `null`.
 	 * <p>
 	 * The name is used only to work with "legacy" Web application that handles
 	 * user's request by servlets. It works only with HTTP/HTML-based browsers.
@@ -240,7 +255,6 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	 * <p>
 	 * Don't use this method if your application is purely based on ZK's
 	 * event-driven model.
-	 * @return String
 	 */
 	getName(): string | undefined {
 		return this._name;
@@ -256,8 +270,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	 * Don't use this method if your application is purely based on ZK's
 	 * event-driven model.
 	 *
-	 * @param String name
-	 *            the name of this component.
+	 * @param name - the name of this component.
 	 */
 	setName(name: string, opts?: Record<string, boolean>): this {
 		const o = this._name;
@@ -349,8 +362,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	/**
 	 * Deselects all of the currently selected items and selects the given item.
 	 * <p>
-	 * It is the same as {@link #selectItem}.
-	 * @param ItemWidget item
+	 * It is the same as {@link selectItem}.
 	 */
 	setSelectedItem(selectedItem?: zul.sel.ItemWidget): this {
 		if (!selectedItem)
@@ -378,16 +390,14 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	}
 
 	/**
-	 * Returns the selected item.
-	 * @return ItemWidget
+	 * @returns the selected item.
 	 */
 	getSelectedItem(): zul.sel.ItemWidget | undefined {
 		return this._selItems[0];
 	}
 
 	/**
-	 * Returns all selected items.
-	 * @return Array
+	 * @returns all selected items.
 	 */
 	getSelectedItems(): zul.sel.ItemWidget[] {
 		// returns a readonly array
@@ -418,6 +428,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		return this;
 	}
 
+	/** @internal */
 	_getEbodyWd(): number {
 		var anchor = this.$n_('a');
 		// Bug in B30-1823236.zul, the anchor needs to be hidden before invoking this.ebody.clientWidth
@@ -433,6 +444,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		return tblwd;
 	}
 
+	/** @internal */
 	override _beforeCalcSize(): void {
 		// Bug 279925
 		if (zk.ie9) {
@@ -444,6 +456,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		this._calcHgh();
 	}
 
+	/** @internal */
 	override _afterCalcSize(): void {
 		// Bug 279925
 		if (zk.ie9) {
@@ -454,9 +467,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	}
 
 	/**
-	 * Returns the index of the ItemWidget
-	 * @param ItemWidget item
-	 * @return int
+	 * @returns the index of the ItemWidget
 	 */
 	indexOfItem(item: zul.sel.ItemWidget): number {
 		if (item.getMeshWidget() == this) {
@@ -475,10 +486,9 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	/**
 	 * Deselects all of the currently selected items and selects the given item.
 	 * <p>
-	 * It is the same as {@link #setSelectedItem}.
+	 * It is the same as {@link setSelectedItem}.
 	 *
-	 * @param ItemWidget item
-	 *            the item to select. If null, all items are deselected.
+	 * @param item - the item to select. If null, all items are deselected.
 	 */
 	selectItem(item?: zul.sel.ItemWidget): void {
 		if (!item)
@@ -487,6 +497,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 			this.setSelectedIndex(this.indexOfItem(item));
 	}
 
+	/** @internal */
 	_addItemToSelection(item: zul.sel.ItemWidget): void {
 		if (!item.isSelected()) {
 			if (!this._multiple) {
@@ -502,6 +513,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		}
 	}
 
+	/** @internal */
 	_removeItemFromSelection(item: zul.sel.ItemWidget): void {
 		if (item.isSelected()) {
 			if (!this._multiple) {
@@ -532,6 +544,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	}
 
 	//super
+	/** @internal */
 	override focus_(timeout?: number): boolean {
 		var btn = this.$n<HTMLAnchorElement>('a');
 		if (btn) {
@@ -562,10 +575,12 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		return false;
 	}
 
+	/** @internal */
 	focusA_(btn: HTMLAnchorElement, timeout: number | undefined): void { //called by derived class
 		zk(btn).focus(timeout);
 	}
 
+	/** @internal */
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		var btn = this.$n('a');
@@ -577,6 +592,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		this._updHeaderCM();
 	}
 
+	/** @internal */
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		var btn = this.$n('a');
 		if (btn)
@@ -591,12 +607,14 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		this.efield = undefined;
 	}
 
+	/** @internal */
 	override doFocus_(evt: zk.Event): void {
 		var row = this._focusItem ?? this._lastSelectedItem;
 		if (row) row._doFocusIn();
 		super.doFocus_(evt);
 	}
 
+	/** @internal */
 	override doBlur_(evt: zk.Event): void { //if clicking on the selected item, don't lose focus
 		if (this._focusItem) {
 			this._lastSelectedItem = this._focusItem;
@@ -606,16 +624,17 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		super.doBlur_(evt);
 	}
 
-	/** Returns whether to ignore the selection.
+	/**
+	 * @returns whether to ignore the selection.
 	 * It is called when selecting an item ({@link ItemWidget#doSelect_}).
-	 * <p>Default: always false (don't ignore) unless {@link #rightSelect} is true and event is onRightClick.
+	 * @defaultValue always false (don't ignore) unless {@link rightSelect} is true and event is onRightClick.
 	 * Notice that clicking on button/textbox are already ignored, i.e.,
 	 * this method won't be called if the user clicks on, say, a button.
-	 * @param zk.Event evt the event
-	 * @param ItemWidget row the row about to be selected
-	 * @return int 1 (true): ignore,<br/>
+	 * @param evt - the event
+	 * @param row - the row about to be selected
 	 * 0 (false): select if single select, and toggle selection if multiple,<br/>
 	 * and -1: always select (even if multiple)
+	 * @internal
 	 */
 	shallIgnoreSelect_(evt: zk.Event, row: zul.sel.ItemWidget): boolean | -1 { //row has to be the second argument for backward compatible
 		//see also _shallIgnore
@@ -623,6 +642,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	}
 
 	//@param bSel whether it is called by _doItemSelect
+	/** @internal */
 	_shallIgnore(evt: zk.Event, bSel?: string | boolean): boolean { // move this function in the widget for override
 		// F70-ZK-2433
 		if (this.checkOnHighlightDisabled_())
@@ -667,10 +687,12 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	}
 
 	// F70-ZK-2433 to be overridden
+	/** @internal */
 	checkOnHighlightDisabled_(): boolean {
 		return false;
 	}
 
+	/** @internal */
 	_doItemSelect(row: zul.sel.ItemWidget, evt: zk.Event<zk.EventMetaData>): void { //called by ItemWidget
 		//It is better not to change selection only if dragging selected
 		//(like Windows does)
@@ -729,6 +751,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	}
 
 	/* Handles keydown sent to the body. */
+	/** @internal */
 	override doKeyDown_(evt: zk.Event<zk.EventKeyData>): void {
 		if (!this._shallIgnore(evt)) {
 
@@ -769,6 +792,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		super.doKeyDown_(evt);
 	}
 
+	/** @internal */
 	override doKeyUp_(evt: zk.Event): void {
 		if (this._disableSelection_) {
 			this._disableSelection_ = false;
@@ -778,6 +802,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		super.doKeyUp_(evt);
 	}
 
+	/** @internal */
 	_doKeyDown(evt: zk.Event<zk.EventKeyData>): boolean { //called by listener of this widget and ItemWidget
 		if (_beforeChildKey(this, evt))
 			return true;
@@ -929,6 +954,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		return _afterChildKey(evt);
 	}
 
+	/** @internal */
 	_getToSelFlag(row: zul.sel.ItemWidget, startRow: zul.sel.ItemWidget | undefined, step: number): boolean { // F85-ZK-3507
 		if (!startRow)
 			return true;
@@ -936,18 +962,22 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		return pos == 0 || (pos == -1 && step == -1) || (pos == 1 && step == 1);
 	}
 
+	/** @internal */
 	_doKeyUp(evt: zk.Event<zk.EventKeyData>): boolean { //called by ItemWidget only
 		return _beforeChildKey(this, evt) || _afterChildKey(evt);
 	}
 
+	/** @internal */
 	_doLeft(row: zul.sel.ItemWidget): void {
 		// An empty default implementation.
 	}
+	/** @internal */
 	_doRight(row: zul.sel.ItemWidget): void {
 		// An empty default implementation.
 	}
 
 	/* maintain the offset of the focus proxy*/
+	/** @internal */
 	_syncFocus(row?: zul.sel.ItemWidget): void {
 		var focusEl = this.$n('a');
 		if (!focusEl) //Bug ZK-1480: widget may not rendered when ROD enabled
@@ -977,6 +1007,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		focusElStyle.left = `${this._anchorLeft}px`;
 	}
 
+	/** @internal */
 	_toStyleOffset(el: HTMLElement, x: number, y: number): zk.Offset {
 		var ofs1 = zk(el).revisedOffset(),
 			x2 = zk.parseFloat(el.style.left), y2 = zk.parseFloat(el.style.top);
@@ -985,8 +1016,9 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 
 	/**
 	 * May need fix anchor.
-	 * @param int[] offs The anchor offset [left, top]
+	 * @param offs - The anchor offset [left, top]
 	 * @since 6.0.0
+	 * @internal
 	 */
 	fixAnchor_(offs: zk.Offset, focusEl: HTMLElement): void {
 		var body = this.ebody!,
@@ -997,6 +1029,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	}
 
 	/* Selects an item, notify server and change focus if necessary. */
+	/** @internal */
 	_select(row: zul.sel.ItemWidget | undefined, evt: zk.Event<zk.EventMetaData>, skipFocus?: boolean): void {
 		if (this._selectOne(row, skipFocus)) {
 			//notify server
@@ -1007,6 +1040,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	/* Selects a range from the last focus up to the specified one.
 	 * Callable only if multiple
 	 */
+	/** @internal */
 	_selectUpto(row: zul.sel.ItemWidget, evt: zk.Event<zk.EventMetaData>, skipFocus: boolean): void {
 		if (row.isSelected()) {
 			if (!skipFocus)
@@ -1068,9 +1102,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 
 	/**
 	 * Selects all items.
-	 * @param boolean notify if true, fire onSelect event to server
-	 * @param jq.Event evt
-	 * @disable(zkgwt)
+	 * @param selectAll - if true, fire onSelect event to server
 	 */
 	setSelectAll(selectAll: boolean, evt: zk.Event<zk.EventMetaData> | boolean): this {
 		for (var it = this.getBodyWidgetIterator(), w: zul.sel.ItemWidget | undefined; (w = it.next());)
@@ -1083,15 +1115,16 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 
 	/**
 	 * Selects all items.
-	 * @param boolean notify if true, fire onSelect event to server
-	 * @param jq.Event evt
-	 * @disable(zkgwt)
+	 * @param selectAll - if true, fire onSelect event to server
 	 */
-	selectAll = SelectWidget.prototype.setSelectAll;
+	selectAll(selectAll: boolean, evt: zk.Event<zk.EventMetaData> | boolean): this {
+		return this.setSelectAll(selectAll, evt);
+	}
 
 	/* Selects one and deselect others, and return whehter any changes.
 	 * It won't notify the server.
 	 */
+	/** @internal */
 	_selectOne(row?: zul.sel.ItemWidget, skipFocus?: boolean): boolean {
 		var selItem = this.getSelectedItem();
 		if (this._multiple) {
@@ -1123,6 +1156,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	}
 
 	/* Toggle the selection and notifies server. */
+	/** @internal */
 	_toggleSelect(row: zul.sel.ItemWidget, toSel: boolean, evt: zk.Event<zk.EventMetaData>, skipFocus?: boolean): void {
 		//B70-ZK-2588: don't jump the focus if item is deselected and _multiple is true
 		this._isSelecting = toSel;
@@ -1139,10 +1173,11 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		this.fireOnSelect(row, evt);
 	}
 
-	/** Fires the onSelect event.
+	/**
+	 * Fires the onSelect event.
 	 * If the widget is created at the server, the event will be sent
 	 * to the server too.
-	 * @param zk.Widget ref the reference which causes this onSelect event.
+	 * @param ref - the reference which causes this onSelect event.
 	 * Ignored if null.
 	 * @since 5.0.5
 	 */
@@ -1181,6 +1216,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	}
 
 	/* Changes the specified row as focused. */
+	/** @internal */
 	_focus0(row: zul.sel.ItemWidget): void {
 		if (this.canActivate({ checkOnly: true })) {
 			this._unsetFocusExcept(row);
@@ -1191,6 +1227,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	/* Changes the selected status of an item without affecting other items
 	 * and return true if the status is really changed.
 	 */
+	/** @internal */
 	_changeSelect(row: zul.sel.ItemWidget, toSel: boolean): boolean {
 		var changed = !!row.isSelected() != toSel;
 		if (changed) {
@@ -1200,11 +1237,13 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		return changed;
 	}
 
+	/** @internal */
 	_isFocus(row: zul.sel.ItemWidget): boolean {
 		return this._focusItem == row;
 	}
 
 	/* Changes the focus status, and return whether it is changed. */
+	/** @internal */
 	_setFocus(row: zul.sel.ItemWidget, bFocus: boolean): boolean {
 		var changed = this._isFocus(row) != bFocus;
 		if (changed) {
@@ -1225,6 +1264,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	/* Cleans selected except the specified one, and returns any selected status
 	 * is changed.
 	 */
+	/** @internal */
 	_unsetSelectAllExcept(row?: zul.sel.ItemWidget): boolean {
 		this.$$selectAll = undefined;
 		var changed = false;
@@ -1237,6 +1277,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 
 	/* Cleans focus except the specified one.
 	 */
+	/** @internal */
 	_unsetFocusExcept(row: zul.sel.ItemWidget): void {
 		if (this._focusItem && this._focusItem != row) {
 			this._setFocus(this._focusItem, false);
@@ -1244,6 +1285,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		}
 	}
 
+	/** @internal */
 	_updHeaderCM(): void { //update header's checkmark
 		if (this._headercm && this._multiple) {
 			this._nUpdHeaderCM = 1 + Math.max(0, this._nUpdHeaderCM || 0); // in case `_nUpdHeaderCM` is undefined or NaN
@@ -1276,6 +1318,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		return !!this._$services?.[evtName];
 	}
 
+	/** @internal */
 	_isAllSelected(): boolean {
 		//B70-ZK-1953: if selectedItems is empty return false.
 		if (!this._selItems.length) {
@@ -1319,11 +1362,11 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		return true;
 	}
 
+	/** @internal */
 	override _ignoreHghExt(): boolean {
 		return this._rows > 0;
 	}
 
-	//@Override
 	override onResponse(ctl: zk.ZWatchController, opts: { rtags: { selectAll?} }): void {
 		if (this._shallSyncFocus) {
 			var child: zul.sel.ItemWidget | true | undefined = this._shallSyncFocus;
@@ -1368,6 +1411,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		super.onResponse(ctl, opts);
 	}
 
+	/** @internal */
 	override onChildAdded_(child: zk.Widget): void {
 		super.onChildAdded_(child);
 		if (this.desktop) {
@@ -1376,7 +1420,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		}
 	}
 
-	//@Override
+	/** @internal */
 	override onChildRemoved_(child: zk.Widget): void {
 		super.onChildRemoved_(child);
 		var selItems = this._selItems, len;
@@ -1396,7 +1440,6 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		}
 	}
 
-	//@Override
 	override replaceWidget(newwgt: zul.sel.SelectWidget, skipper?: zk.Skipper): void {
 		super.replaceWidget(newwgt, skipper);
 

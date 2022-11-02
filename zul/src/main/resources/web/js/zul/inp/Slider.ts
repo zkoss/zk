@@ -20,35 +20,45 @@ export interface SliderPosition {
 
 /**
  * A slider.
- *  <p>Default {@link #getZclass}: z-slider.
+ * @defaultValue {@link getZclass}: z-slider.
  */
 @zk.WrapClass('zul.inp.Slider')
 export class Slider extends zul.Widget {
+	/** @internal */
 	_orient = 'horizontal';
+	/** @internal */
 	_curpos = 0;
+	/** @internal */
 	_minpos = 0;
+	/** @internal */
 	_maxpos = 100;
+	/** @internal */
 	_slidingtext = '{0}';
+	/** @internal */
 	_pageIncrement = -1;
+	/** @internal */
 	_step = -1;
+	/** @internal */
 	_mode = 'integer';
+	/** @internal */
 	_name?: string;
 	efield?: HTMLInputElement;
 	slidetip?: HTMLElement;
 	static down_btn?: HTMLElement;
 	slidepos?: number;
 
-	/** Returns the orient.
-	 * <p>Default: "horizontal".
-	 * @return String
+	/**
+	 * @returns the orient.
+	 * @defaultValue `"horizontal"`.
 	 */
 	getOrient(): string {
 		return this._orient;
 	}
 
-	/** Sets the orient.
-	 * <p>Default : "horizontal"
-	 * @param String orient either "horizontal" or "vertical".
+	/**
+	 * Sets the orient.
+	 * @defaultValue `"horizontal"`
+	 * @param orient - either "horizontal" or "vertical".
 	 */
 	setOrient(orient: string, opts?: Record<string, boolean>): this {
 		const o = this._orient;
@@ -61,18 +71,18 @@ export class Slider extends zul.Widget {
 		return this;
 	}
 
-	/** Returns the current position of the slider.
-	 * <p>Default: 0.
-	 * @return double
+	/**
+	 * @returns the current position of the slider.
+	 * @defaultValue `0`.
 	 */
 	getCurpos(): number {
 		return this._curpos;
 	}
 
-	/** Sets the current position of the slider.
-	 * If negative, 0 is assumed. If larger than {@link #getMaxpos},
-	 * {@link #getMaxpos} is assumed.
-	 * @param double curpos
+	/**
+	 * Sets the current position of the slider.
+	 * If negative, 0 is assumed. If larger than {@link getMaxpos},
+	 * {@link getMaxpos} is assumed.
 	 */
 	setCurpos(curpos: number, opts?: Record<string, boolean>): this {
 		const o = this._curpos;
@@ -87,16 +97,18 @@ export class Slider extends zul.Widget {
 		return this;
 	}
 
-	/** Returns the minimum position of the slider.
-	 * <p>Default: 0.
-	 * @return double (since 7.0.1)
+	/**
+	 * @returns the minimum position of the slider.
+	 * @defaultValue `0`.
+	 * @since 7.0.1
 	 */
 	getMinpos(): number {
 		return this._minpos;
 	}
 
-	/** Sets the minimum position of the slider.
-	 * @param double minpos (since 7.0.1)
+	/**
+	 * Sets the minimum position of the slider.
+	 * @since 7.0.1
 	 */
 	setMinpos(minpos: number, opts?: Record<string, boolean>): this {
 		const o = this._minpos;
@@ -114,16 +126,18 @@ export class Slider extends zul.Widget {
 		return this;
 	}
 
-	/** Returns the maximum position of the slider.
-	 * <p>Default: 100.
-	 * @return double (since 7.0.1)
+	/**
+	 * @returns the maximum position of the slider.
+	 * @defaultValue `100`.
+	 * @since 7.0.1
 	 */
 	getMaxpos(): number {
 		return this._maxpos;
 	}
 
-	/** Sets the maximum position of the slider.
-	 * @param double maxpos (since 7.0.1)
+	/**
+	 * Sets the maximum position of the slider.
+	 * @since 7.0.1
 	 */
 	setMaxpos(maxpos: number, opts?: Record<string, boolean>): this {
 		const o = this._maxpos;
@@ -141,55 +155,57 @@ export class Slider extends zul.Widget {
 		return this;
 	}
 
-	/** Returns the sliding text.
-	 * <p>Default : "{0}"
-	 * @return String
+	/**
+	 * @returns the sliding text.
+	 * @defaultValue `"{0}"`
 	 */
 	getSlidingtext(): string | undefined {
 		return this._slidingtext;
 	}
 
-	/** Sets the sliding text.
-	 * The syntax "{0}" will be replaced with the position at client side.
-	 * @param String slidingtext
+	/**
+	 * Sets the sliding text.
+	 * The syntax `"{0}"` will be replaced with the position at client side.
 	 */
 	setSlidingtext(slidingtext: string): this {
 		this._slidingtext = slidingtext;
 		return this;
 	}
 
-	/** Returns the amount that the value of {@link #getCurpos}
+	/**
+	 * @returns the amount that the value of {@link getCurpos}
 	 * changes by when the tray of the scroll bar is clicked.
 	 *
-	 * <p>Default: -1 (means it will scroll to the position the user clicks).
+	 * @defaultValue -1 (means it will scroll to the position the user clicks).
 	 */
 	setPageIncrement(pageIncrement: number): this {
 		this._pageIncrement = pageIncrement;
 		return this;
 	}
 
-	/** Sets the amount that the value of {@link #getCurpos}
+	/**
+	 * Sets the amount that the value of {@link getCurpos}
 	 * changes by when the tray of the scroll bar is clicked.
-	 * <p>Default: -1 (means it will scroll to the position the user clicks).
-	 * @param double pginc the page increment. If negative, slider will scroll (since 7.0.1)
+	 * @defaultValue `-1` (means it will scroll to the position the user clicks).
+	 * @param pginc - the page increment. If negative, slider will scroll (since 7.0.1)
 	 * to the position that user clicks.
 	 */
 	getPageIncrement(): number {
 		return this._pageIncrement;
 	}
 
-	/** Returns the step of slider
-	 * @return double
+	/**
+	 * @returns the step of slider
 	 * @since 7.0.1
 	 */
 	getStep(): number {
 		return this._step;
 	}
 
-	/** Sets the step of slider
-	 * <p>Default: -1 (means it will scroll to the position the user clicks).
+	/**
+	 * Sets the step of slider
+	 * @defaultValue `-1` (means it will scroll to the position the user clicks).
 	 * <strong>Note:</strong> In "decimal" mode, the fraction part only contains one digit if step is -1.
-	 * @param double step
 	 * @since 7.0.1
 	 */
 	setStep(step: number, opts?: Record<string, boolean>): this {
@@ -203,21 +219,22 @@ export class Slider extends zul.Widget {
 		return this;
 	}
 
-	/** Returns the name of this component.
-	 * <p>Default: null.
+	/**
+	 * @returns the name of this component.
+	 * @defaultValue `null`.
 	 * <p>The name is used only to work with "legacy" Web application that
 	 * handles user's request by servlets.
 	 * It works only with HTTP/HTML-based browsers. It doesn't work
 	 * with other kind of clients.
 	 * <p>Don't use this method if your application is purely based
 	 * on ZK's event-driven model.
-	 * @return String
 	 */
 	getName(): string | undefined {
 		return this._name;
 	}
 
-	/** Sets the name of this component.
+	/**
+	 * Sets the name of this component.
 	 * <p>The name is used only to work with "legacy" Web application that
 	 * handles user's request by servlets.
 	 * It works only with HTTP/HTML-based browsers. It doesn't work
@@ -225,7 +242,7 @@ export class Slider extends zul.Widget {
 	 * <p>Don't use this method if your application is purely based
 	 * on ZK's event-driven model.
 	 *
-	 * @param String name the name of this component.
+	 * @param name - the name of this component.
 	 */
 	setName(name: string, opts?: Record<string, boolean>): this {
 		const o = this._name;
@@ -239,20 +256,19 @@ export class Slider extends zul.Widget {
 		return this;
 	}
 
-	/** Returns the current mode of slider
-	 * One of "integer", "decimal".
-	 * <p> Default: "integer"
-	 * @return String
+	/**
+	 * @returns the current mode of slider. One of `"integer"`, `"decimal"`.
+	 * @defaultValue `"integer"`
 	 * @since 7.0.1
 	 */
 	getMode(): string {
 		return this._mode;
 	}
 
-	/** Sets the mode to integer or decimal.
+	/**
+	 * Sets the mode to integer or decimal.
 	 *
-	 * @param String name the mode which could be one of
-	 * "integer", "decimal".
+	 * @param mode - the mode which could be one of `"integer"`, `"decimal"`.
 	 * @since 7.0.1
 	 */
 	setMode(mode: string, opts?: Record<string, boolean>): this {
@@ -285,6 +301,7 @@ export class Slider extends zul.Widget {
 		return this;
 	}
 
+	/** @internal */
 	override domClass_(no?: zk.DomClassOptions): string {
 		var scls = super.domClass_(no);
 		if (this._mold == 'knob')
@@ -303,6 +320,7 @@ export class Slider extends zul.Widget {
 		return scls;
 	}
 
+	/** @internal */
 	onup_(evt: zk.Event): void {
 		var btn = zul.inp.Slider.down_btn,
 			widget: Slider | undefined;
@@ -315,6 +333,7 @@ export class Slider extends zul.Widget {
 			jq(document).off('zmouseup', widget.onup_);
 	}
 
+	/** @internal */
 	override doMouseDown_(evt: zk.Event): void {
 		if (this._mold == 'knob') {
 			super.doMouseDown_(evt);
@@ -325,6 +344,7 @@ export class Slider extends zul.Widget {
 		super.doMouseDown_(evt);
 	}
 
+	/** @internal */
 	override doClick_(evt: zk.Event, popupOnly?: boolean): void {
 		if (this._mold == 'knob') {
 			super.doClick_(evt, popupOnly);
@@ -380,6 +400,7 @@ export class Slider extends zul.Widget {
 		super.doClick_(evt, popupOnly);
 	}
 
+	/** @internal */
 	_makeDraggable(): void {
 		var opt: Partial<zk.DraggableOptions> = {
 			constraint: this._orient || 'horizontal',
@@ -392,6 +413,7 @@ export class Slider extends zul.Widget {
 		this._drag = new zk.Draggable(this, this.$n_('btn'), opt);
 	}
 
+	/** @internal */
 	_snap(x: number, y: number): zk.Offset {
 		var btn = this.$n('btn'), ofs = zk(this.$n()).cmOffset();
 		ofs = zk(btn).toStyleOffset(ofs[0], ofs[1]);
@@ -412,6 +434,7 @@ export class Slider extends zul.Widget {
 		return [x, y];
 	}
 
+	/** @internal */
 	_startDrag(dg: zk.Draggable): void {
 		var widget = dg.control as Slider,
 			sclass = widget.getSclass();
@@ -435,6 +458,7 @@ export class Slider extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	_dragging(dg: zk.Draggable): void {
 		var widget = dg.control as Slider,
 			isDecimal = widget.isDecimal(),
@@ -449,6 +473,7 @@ export class Slider extends zul.Widget {
 		widget._fixPos();
 	}
 
+	/** @internal */
 	_endDrag(dg: zk.Draggable): void {
 		var widget = dg.control as Slider,
 			pos = widget._constraintPos(widget._realpos());
@@ -460,6 +485,7 @@ export class Slider extends zul.Widget {
 		widget.slidetip = undefined;
 	}
 
+	/** @internal */
 	_realpos(dg?: zk.Draggable): number {
 		var btnofs = zk(this.$n('btn')).revisedOffset(),
 			refofs = zk(this.$n()).revisedOffset(),
@@ -482,6 +508,7 @@ export class Slider extends zul.Widget {
 			return this._curpos = (pos > 0 ? pos : 0) + minpos;
 	}
 
+	/** @internal */
 	_constraintPos(pos: number): number {
 		var step = Slider._getStep(this),
 			max = this._maxpos;
@@ -494,6 +521,7 @@ export class Slider extends zul.Widget {
 		return pos;
 	}
 
+	/** @internal */
 	_getSteppedPos(pos: number): number {
 		var minpos = this._minpos,
 			step = Slider._getStep(this),
@@ -509,14 +537,17 @@ export class Slider extends zul.Widget {
 		return (pos - rmdPos + Math.round((rmdPos) / step) * step) / mul + minpos;
 	}
 
+	/** @internal */
 	_getWidth(): number {
 		return this.$n_().clientWidth - this.$n_('btn').offsetWidth;
 	}
 
+	/** @internal */
 	_getHeight(): number {
 		return this.$n_().clientHeight - this.$n_('btn').offsetHeight;
 	}
 
+	/** @internal */
 	_getStepOffset(): zk.Offset {
 		var totalLen = this.isVertical() ? this._getHeight() : this._getWidth(),
 			step = Slider._getStep(this),
@@ -526,6 +557,7 @@ export class Slider extends zul.Widget {
 		return ofs;
 	}
 
+	/** @internal */
 	_fixSize(): void {
 		var n = this.$n_(),
 			btn = this.$n_('btn'),
@@ -541,6 +573,7 @@ export class Slider extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	_fixPos(): void {
 		var btn = this.$n_('btn'),
 			vert = this.isVertical(),
@@ -551,6 +584,7 @@ export class Slider extends zul.Widget {
 			zk(this.slidetip).position(btn, vert ? 'end_before' : 'before_start');
 	}
 
+	/** @internal */
 	_fixStep(): void {
 		var step = Slider._getStep(this);
 		if (this._drag) {
@@ -567,29 +601,29 @@ export class Slider extends zul.Widget {
 		this._fixPos();
 	}
 
-	/** Return whether this widget in scale mold
-	 * @return boolean
+	/**
+	 * @returns whether this widget in scale mold
 	 */
 	inScaleMold(): boolean {
 		return this.getMold() == 'scale';
 	}
 
-	/** Return whether this widget in sphere mold
-	 * @return boolean
+	/**
+	 * @returns whether this widget in sphere mold
 	 */
 	inSphereMold(): boolean {
 		return this.getMold() == 'sphere';
 	}
 
-	/** Returns whether it is a vertical slider.
-	 * @return boolean
+	/**
+	 * @returns whether it is a vertical slider.
 	 */
 	isVertical(): boolean {
 		return 'vertical' == this._orient;
 	}
 
-	/** Returns whether it is a decimal slider.
-	 * @return boolean
+	/**
+	 * @returns whether it is a decimal slider.
 	 * @since 7.0.1
 	 */
 	isDecimal(): boolean {
@@ -614,6 +648,7 @@ export class Slider extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	override setFlexSize_(flexSize: zk.FlexSize, isFlexMin?: boolean): void {
 		super.setFlexSize_(flexSize, isFlexMin);
 		if (this._mold != 'knob') {
@@ -621,6 +656,7 @@ export class Slider extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		if (this._mold == 'knob')
@@ -639,6 +675,7 @@ export class Slider extends zul.Widget {
 		this._fixPos();
 	}
 
+	/** @internal */
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		if (this._mold == 'knob') {
 			super.unbind_(skipper, after, keepRod);
@@ -658,17 +695,20 @@ export class Slider extends zul.Widget {
 		super.unbind_(skipper, after, keepRod);
 	}
 
+	/** @internal */
 	static _digitsAfterDecimal(v: number): number {
 		var vs = '' + v,
 			i = vs.indexOf('.');
 		return i < 0 ? 0 : vs.length - i - 1;
 	}
 
+	/** @internal */
 	static _roundDecimal(v: number, p: number): number {
 		var mul = Math.pow(10, p);
 		return Math.round(v * mul) / mul;
 	}
 
+	/** @internal */
 	static _getBtnNewPos(wgt: Slider): number {
 		var btn = wgt.$n_('btn'),
 			curpos = wgt._curpos,
@@ -691,6 +731,7 @@ export class Slider extends zul.Widget {
 		return ofs[(isVertical ? 1 : 0)];
 	}
 
+	/** @internal */
 	static _getNextPos(wgt: Slider, offset?: number): SliderPosition {
 		var $btn = jq(wgt.$n_('btn')),
 			fum = wgt.isVertical() ? ['top', 'height'] as const : ['left', 'width'] as const,
@@ -703,6 +744,7 @@ export class Slider extends zul.Widget {
 		return newPosition;
 	}
 
+	/** @internal */
 	static _getStep(wgt: Slider): number {
 		var step = wgt._step;
 		return (!wgt.isDecimal() || step != -1) ? step : 0.1;

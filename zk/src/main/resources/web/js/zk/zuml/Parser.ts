@@ -10,7 +10,9 @@
 Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
 */
-/** iZUML utilities.
+/**
+ * iZUML utilities.
+ * @internal
  */
 //zk.$package('zk.zuml');
 function _innerText(node: HTMLElement): string | undefined {
@@ -81,11 +83,14 @@ function _create(parent: zk.Widget, e: HTMLElement | undefined, args: unknown, c
 
 	var forEach = _eval(parent, e.getAttribute('forEach'), args);
 	if (forEach != null) {
+		// eslint-disable-next-line @typescript-eslint/dot-notation
 		var oldEach = window['each'] as never;
 		for (var l = forEach.length, j = 0; j < l; j++) {
+			// eslint-disable-next-line @typescript-eslint/dot-notation
 			window['each'] = forEach[j];
 			_create0(parent, e, args, cwgts);
 		}
+		// eslint-disable-next-line @typescript-eslint/dot-notation
 		window['each'] = oldEach;
 	} else
 		_create0(parent, e, args, cwgts);
@@ -127,7 +132,7 @@ function _create0(parent: zk.Widget, e: HTMLElement, args: unknown, cwgts: zk.Wi
 					prolog = undefined;
 				}
 			} else if (nt == 3) {
-				let txt = _eval(wgt, child.nodeValue, args)!;
+				const txt = _eval(wgt, child.nodeValue, args)!;
 				if (txt.trim().length) {
 					const w = new zk.Native();
 					w.prolog = txt;
@@ -177,16 +182,17 @@ function _eval(wgt: zk.Widget, s: string | null, args: unknown): string | null {
 		}
 	return s;
 }
-/** @class zk.zuml.Parser
+/**
+ * @class zk.zuml.Parser
  * The parser of using iZUML(Client-side ZUML).
  */
-export let Parser = {
-	/** Parse the iZUML into widgets
-	 * @param zk.Widget parent the root component
-	 * @param String doc the content text of the domElement
-	 * @param Map args a map of arguments
-	 * @param Function fn the function to register for execution later
-	 * @return zk.Widget
+export var Parser = {
+	/**
+	 * Parse the iZUML into widgets
+	 * @param parent - the root component
+	 * @param doc - the content text of the domElement
+	 * @param args - a map of arguments
+	 * @param fn - the function to register for execution later
 	 */
 	create(parent: zk.Widget | undefined, doc: string | Document, args: Record<string, unknown> | undefined, fn: CallableFunction): zk.Widget | zk.Widget[] {
 		if (typeof args == 'function' && !fn) {
@@ -203,12 +209,12 @@ export let Parser = {
 		});
 		return cwgts.length <= 1 ? cwgts[0] : cwgts;
 	},
-	/** Parse the iZUML into widgets
-	 * @param String nodeId the id of the root component
-	 * @param Map opts a map of options
-	 * @param Map args a map of arguments
-	 * @param Function fn the function to register for execution later
-	 * @return zk.Widget
+	/**
+	 * Parse the iZUML into widgets
+	 * @param nodeId - the id of the root component
+	 * @param opts - a map of options
+	 * @param args - a map of arguments
+	 * @param fn - the function to register for execution later
 	 */
 	createAt(nodeId: string, opts: Record<string, unknown>, args: Record<string, unknown> | undefined, fn: CallableFunction): zk.Widget | zk.Widget[] | undefined {
 		if (typeof args == 'function' && !fn) {
@@ -216,7 +222,7 @@ export let Parser = {
 			args = undefined;
 		}
 
-		let node = jq(nodeId)[0];
+		const node = jq(nodeId)[0];
 		var txt = _innerText(node);
 		if (!txt) return;
 

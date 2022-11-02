@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/dot-notation */
 /* dom.ts
 
 	Purpose:
@@ -313,59 +314,54 @@ var DocRoot = (function () {
 	};
 })();
 
-/** @class jqzk
+/**
  * @import zk.Widget
- * Represents the object returned by the <code>zk</code> function, or by
- * {@link jq#zk}.
- * For example, <code>zk('#id');</code>
+ * Represents the object returned by the `zk` function, or by
+ * {@link jq.zk}.
+ * For example, `zk('#id');`
  *
- * <p>Refer to {@link jq} for more information.
+ * <p>Refer to {@link JQZK.jq} for more information.
  *
  * <h3>Other Extension</h3>
  * <ul>
- * <li>{@link jq} - the object returned by <code>jq(...)</code>. The original jQuery API.</li>
- * <li>{@link jq} - DOM utilities (such as, {@link jq#innerX}</li>
+ * <li>{@link JQZK.jq} - the object returned by `jq(...)`. The original jQuery API.</li>
+ * <li>{@link JQZK.jq} - DOM utilities (such as, {@link jq.innerX}</li>
  * <li>{@link jq.Event} - the event object passed to the event listener</li>
  * </ul>
  */
 export class JQZK {
-	/** The associated instance of {@link JQZK.jq}, the object returned by <code>jq(...)</code>.
-	 * @type jq
+	/**
+	 * The associated instance of {@link JQZK.jq}, the object returned by `jq(...)`.
 	 */
 	declare jq: JQuery;
 	constructor(jq: JQuery) { //ZK extension
 		this.jq = jq;
 	}
-	/** Cleans, i.e., reset, the visibility (of the CSS style) for the matched elements.
-	 * 	Depending on the browser, the reset visibility is either visible or inherit.
-	 * @return jq
+	/**
+	 * Cleans, i.e., reset, the visibility (of the CSS style) for the matched elements.
+	 * Depending on the browser, the reset visibility is either visible or inherit.
 	 */
 	cleanVisibility(): JQuery {
 		return this.jq.each(function (this: HTMLElement) {
 			zjq._cleanVisi(this);
 		});
 	}
-	/** Returns whether the first matched element is visible.
-	 * Returns false if not exist. Returns true if no style attribute.
-	 * @return boolean whether the first matched element is visible.
-	 */
-	/** Returns whether the first matched element is visible.
-	 * Returns false if not exist. Returns true if no style attribute.
-	 * @param boolean strict whether the visibility property must not be hidden, too.
+	/**
+	 * @returns whether the first matched element is visible. `false` if not exist; `true` if no style attribute.
+	 * @param strict - whether the visibility property must not be hidden, too.
 	 * If false, only the style.display property is tested.
 	 * If true, both the style.display and style.visibility properties are tested.
-	 * @return boolean whether the first matched element is visible.
 	 */
 	isVisible(strict?: boolean): boolean {
 		var n = this.jq[0];
 		return n && (!n.style || (n.style.display != 'none' && (!strict || jq.inArray(n.style.visibility, ['hidden', 'collapse']) == -1)));
 	}
-	/** Returns whether the first match element is really visible.
+	/**
+	 * @returns whether the first match element is really visible.
 	 * By real visible we mean the element and all its ancestors are visible.
-	 * @param boolean strict whether the visibility property must not be hidden, too.
+	 * @param strict - whether the visibility property must not be hidden, too.
 	 * If false, only the style.display property is tested.
 	 * If true, both the style.display and style.visibility properties are tested.
-	 * @return boolean whether the first matched element is really visible.
 	 */
 	isRealVisible(strict?: boolean): boolean {
 		// eslint-disable-next-line zk/noNull
@@ -376,9 +372,9 @@ export class JQZK {
 		//Bug 3141549: look up parent if !firstChild (no check if firstChild for better performance)
 	}
 
-	/** Scrolls the browser window to make the first matched element visible.
+	/**
+	 * Scrolls the browser window to make the first matched element visible.
 	 * <p>Notice that it scrolls only the browser window. If the element is obscured by another element, it is still not visible. To really make it visible, use el.scrollIntoView() instead.
-	 * @return jqzk this object
 	 */
 	scrollTo(): this {
 		if (this.jq.length) {
@@ -387,10 +383,10 @@ export class JQZK {
 		}
 		return this;
 	}
-	/** Causes the first matched element to scroll into view.
-	 * @param DOMElement parent scrolls the first matched element into the parent's view,
+	/**
+	 * Causes the first matched element to scroll into view.
+	 * @param parent - scrolls the first matched element into the parent's view,
 	 * if any. Otherwise, document.body is assumed.
-	 * @return jqzk this object
 	 */
 	scrollIntoView(parent?: Element): this {
 		// ZK-3330: scroll into view after animation
@@ -399,6 +395,7 @@ export class JQZK {
 		}, -1);
 		return this;
 	}
+	/** @internal */
 	_scrollIntoView(parent?: Element | boolean): this {
 		// eslint-disable-next-line zk/noNull
 		var n: HTMLElement | null = this.jq[0];
@@ -433,7 +430,7 @@ export class JQZK {
 				}
 
 				if (isAbsolute) {
-					let parent1 = parent || document.documentElement;
+					const parent1 = parent || document.documentElement;
 					// eslint-disable-next-line zk/noNull
 					for (let p: HTMLElement | null = n, c: undefined | ScrollIntoViewInfo; (p = p.parentElement) && n != parent1; n = p)
 						c = _scrlIntoView(p, n, c, true);
@@ -449,7 +446,7 @@ export class JQZK {
 	}
 	/**
 	 * Checks whether the element is shown in the current viewport (consider both native and fake scrollbar).
-	 * @return boolean if false, it means the element is not shown.
+	 * @returns if false, it means the element is not shown.
 	 * @since 7.0.6
 	 */
 	isRealScrollIntoView(opt?: boolean): boolean {
@@ -478,7 +475,7 @@ export class JQZK {
 	}
 	/**
 	 * Checks whether the element is shown in the current viewport.
-	 * @return boolean if false, it means the element is not shown.
+	 * @returns if false, it means the element is not shown.
 	 * @since 6.5.2
 	 */
 	isScrollIntoView(recursive?: boolean): boolean {// ZK-2069: can check whether the element is shown in parents' viewport.
@@ -511,8 +508,8 @@ export class JQZK {
 		return false;
 	}
 
-	/** Returns whether the first matched DOM element has the vertical scrollbar
-	 * @return boolean
+	/**
+	 * @returns whether the first matched DOM element has the vertical scrollbar
 	 * @since 5.0.8
 	 */
 	hasVScroll(): boolean {
@@ -528,8 +525,8 @@ export class JQZK {
 		}
 		return scrollbarWidth > 0;
 	}
-	/** Returns whether the first matched DOM element has the horizontal scrollbar
-	 * @return boolean
+	/**
+	 * @returns whether the first matched DOM element has the horizontal scrollbar
 	 * @since 5.0.8
 	 */
 	hasHScroll(): boolean {
@@ -546,11 +543,12 @@ export class JQZK {
 		return scrollbarHeight > 0;
 	}
 
-	/** Tests if the first matched element is overlapped with the specified
+	/**
+	 * Tests if the first matched element is overlapped with the specified
 	 * element.
-	 * @param DOMElement el the element to check with
-	 * @param int the tolerant value for the calculation
-	 * @return boolean true if they are overlapped.
+	 * @param el - the element to check with
+	 * @param tolerant - tolerant value for the calculation
+	 * @returns true if they are overlapped.
 	 */
 	isOverlapped(el: HTMLElement, tolerant?: number): boolean {
 		var n: undefined | HTMLElement;
@@ -562,18 +560,18 @@ export class JQZK {
 		return false;
 	}
 
-	/** Returns the summation of the specified styles.
+	/**
+	 * @returns the summation of the specified styles.
 	 * For example,
-	<pre><code>
-	jq(el).zk.sumStyles("lr", jq.paddings);
-	  //sums the style values of jq.paddings['l'] and jq.paddings['r'].
-	</code></pre>
+	 * ```ts
+	 * jq(el).zk.sumStyles("lr", jq.paddings);
+	 * //sums the style values of jq.paddings['l'] and jq.paddings['r'].
+	 * ```
 	 *
-	 * @param String areas the areas is abbreviation for left "l", right "r", top "t", and bottom "b". So you can specify to be "lr" or "tb" or more.
-	 * @param Array styles an array of styles, such as {@link jq#paddings}, {@link jq#margins} or {@link jq#borders}.
-	 * @return int the summation
+	 * @param areas - the areas is abbreviation for left "l", right "r", top "t", and bottom "b". So you can specify to be "lr" or "tb" or more.
+	 * @param styles - an array of styles, such as {@link jq.paddings}, {@link jq.margins} or {@link jq.borders}.
 	 */
-	sumStyles(areas: string, styles: {[cssProp: string]: string}): number {
+	sumStyles(areas: string, styles: Record<string, string>): number {
 		var val = 0;
 		for (var i = 0, len = areas.length, $jq = this.jq; i < len; i++) {
 			var w = Math.round(zk.parseFloat($jq.css(styles[areas.charAt(i)])));
@@ -582,21 +580,17 @@ export class JQZK {
 		return val;
 	}
 
-	/** Returns the revised (i.e., browser's coordinate) offset of the selected
-	 * element.
-	 * In other words, it is the offset of the left-top corner related to
-	 * the browser window.
-	 * @return Offset the revised offset
-	 * @see #cmOffset
-	 */
-	/** Converts the specified offset in the element's coordinate to
+	/**
+	 * Converts the specified offset in the element's coordinate to
 	 * to the browser window's coordinateReturns the revised (calibrated) offset, i.e., the offset of the element
 	 * related to the screen.
 	 * <p>It is calculated by subtracting the offset of the scrollbar
-	 * ({@link #scrollOffset} and {@link jq#innerX}), for the first matched element.
-	 * @param Offset ofs the offset to revise. If not specified, the first matched
+	 * ({@link scrollOffset} and {@link jq.innerX}), for the first matched element.
+	 * @param ofs - the offset to revise. If not specified, the first matched
 	 * element's bounding rectange is assumed.
-	 * @return Offset the revised offset
+	 * @returns the revised (i.e., browser's coordinate) offset of the selected element.
+	 * In other words, it is the offset of the left-top corner related to the browser window.
+	 * @see {@link cmOffset}
 	 */
 	revisedOffset(ofs?: zk.Offset): zk.Offset {
 		var el = this.jq[0];
@@ -630,17 +624,19 @@ export class JQZK {
 		scrolls[0] -= jq.innerX(); scrolls[1] -= jq.innerY();
 		return [ofs[0] - scrolls[0], ofs[1] - scrolls[1]];
 	}
-	/** Returns the revised (calibrated) width, which subtracted the width of
+	/**
+	 * @returns the revised (calibrated) width, which subtracted the width of
 	 * its CSS border or padding, for the first matched element if the box-sizing
 	 * is not in the border-box mode.
 	 * <p>It is usually used to assign the width to an element (since we have to subtract the padding).
-	<pre><code>el.style.width = zk(parentEL).revisedWidth(100);</code></pre>
+	 * ```ts
+	 * el.style.width = zk(parentEL).revisedWidth(100);
+	 * ```
 	 *
-	 * @param int size the width to be assigned to the specified element.
-	 * @param boolean excludeMargin whether to subtract the margins, too.
+	 * @param size - the width to be assigned to the specified element.
+	 * @param excludeMargin - whether to subtract the margins, too.
 	 * You rarely need this unless the width is specified in term of the parent's perspective.
-	 * @return int the revised width
-	 * @see #contentWidth(boolean)
+	 * @see {@link contentWidth}
 	 */
 	revisedWidth(size: number, excludeMargin?: boolean): number {
 		if (this.jq.css('box-sizing') != 'border-box')
@@ -649,18 +645,20 @@ export class JQZK {
 			size -= this.marginWidth();
 		return size < 0 ? 0 : size;
 	}
-	/** Returns the revised (calibrated) height, which subtracted the height of
+	/**
+	 * @returns the revised (calibrated) height, which subtracted the height of
 	 * its CSS border or padding, for the first matched element if the box-sizing
 	 * is not in the border-box mode.
 	 * <p>It is usually used to assign the height to an element
 	 * (since we have to subtract the padding).
-	<pre><code>el.style.height = zk(parentEL).revisedHeight(100);</code></pre>
+	 * ```ts
+	 * el.style.height = zk(parentEL).revisedHeight(100);
+	 * ```
 	 *
-	 * @param int size #  the height to be assigned to the first matched element.
-	 * @param boolean excludeMargin whether to subtract the margins, too.
+	 * @param size - the height to be assigned to the first matched element.
+	 * @param excludeMargin - whether to subtract the margins, too.
 	 * You rarely need this unless the height is specified in term of the parent's perspective.
-	 * @return int the revised height
-	 * @see #contentHeight(boolean)
+	 * @see {@link contentHeight}
 	 */
 	revisedHeight(size: number, excludeMargin?: boolean): number {
 		if (this.jq.css('box-sizing') != 'border-box')
@@ -670,11 +668,10 @@ export class JQZK {
 		return size < 0 ? 0 : size;
 	}
 	/**
-	 * Returns the content width of the element, which substracted the width of its
-	 * CSS border or padding, unlike {@link #revisedWidth(int, boolean)}, the contentWidth
+	 * @returns the content width of the element, which substracted the width of its
+	 * CSS border or padding, unlike {@link revisedWidth}, the contentWidth
 	 * will ignore the box-sizing with border-box.
-	 * @param boolean excludeMargin whether to subtract the margins, too.
-	 * @return int the content width.
+	 * @param excludeMargin - whether to subtract the margins, too.
 	 * @since 7.0.0
 	 */
 	contentWidth(excludeMargin?: boolean): number {
@@ -685,11 +682,10 @@ export class JQZK {
 		return size < 0 ? 0 : size;
 	}
 	/**
-	 * Returns the content height of the element, which substracted the height of its
-	 * CSS border or padding, unlike {@link #revisedHeight(int, boolean)},
+	 * @returns the content height of the element, which substracted the height of its
+	 * CSS border or padding, unlike {@link revisedHeight},
 	 * the contentHeight will ignore the box-sizing with border-box.
-	 * @param boolean excludeMargin whether to subtract the margins, too.
-	 * @return int the content height.
+	 * @param excludeMargin - whether to subtract the margins, too.
 	 * @since 7.0.0
 	 */
 	contentHeight(excludeMargin?: boolean): number {
@@ -699,59 +695,59 @@ export class JQZK {
 			size -= this.marginHeight();
 		return size < 0 ? 0 : size;
 	}
-	/** Returns the summation of the margin width of the first matched element.
-	 * @return int summation
+	/**
+	 * @returns the summation of the margin width of the first matched element.
 	 * @since 7.0.0
 	 */
 	marginWidth(): number {
 		return this.sumStyles('lr', jq.margins);
 	}
-	/** Returns the summation of the margin height of the first matched element.
-	 * @return int summation
+	/**
+	 * @returns the summation of the margin height of the first matched element.
 	 * @since 7.0.0
 	 */
 	marginHeight(): number {
 		return this.sumStyles('tb', jq.margins);
 	}
-	/** Returns the summation of the border width of the first matched element.
-	 * @return int summation
+	/**
+	 * @returns the summation of the border width of the first matched element.
 	 */
 	borderWidth(): number {
 		return this.sumStyles('lr', jq.borders);
 	}
-	/** Returns the summation of the border height of the first matched element.
-	 * @return int summation
+	/**
+	 * @returns the summation of the border height of the first matched element.
 	 */
 	borderHeight(): number {
 		return this.sumStyles('tb', jq.borders);
 	}
-	/** Returns the summation of the padding width of the first matched element.
-	 * @return int summation
+	/**
+	 * @returns the summation of the padding width of the first matched element.
 	 */
 	paddingWidth(): number {
 		return this.sumStyles('lr', jq.paddings);
 	}
-	/** Returns the summation of the padding height of the first matched element.
-	 * @return int summation
+	/**
+	 * @returns the summation of the padding height of the first matched element.
 	 */
 	paddingHeight(): number {
 		return this.sumStyles('tb', jq.paddings);
 	}
-	/** Returns the summation of the padding width and the border width of the first matched element.
-	 * @return int the summation
+	/**
+	 * @returns the summation of the padding width and the border width of the first matched element.
 	 */
 	padBorderWidth(): number {
 		return this.borderWidth() + this.paddingWidth();
 	}
-	/** Returns the summation of the padding height and the border height of the first matched element.
-	 * @return int the summation
+	/**
+	 * @returns the summation of the padding height and the border height of the first matched element.
 	 */
 	padBorderHeight(): number {
 		return this.borderHeight() + this.paddingHeight();
 	}
-	/** Returns the maximal allowed height of the first matched element.
+	/**
+	 * @returns the maximal allowed height of the first matched element.
 	 * In other words, it is the client height of the parent minus all sibling's.
-	 * @return double the maximal allowed height
 	 */
 	vflexHeight(): number {
 		var el = this.jq[0],
@@ -772,19 +768,19 @@ export class JQZK {
 		}
 		return hgh;
 	}
-	/** Retrieves the index of the first selected (table) cell in the cells collection of a (table) row.
+	/**
+	 * @returns the index of the first selected (table) cell in the cells collection of a (table) row.
 	 * <p>Note: The function fixed the problem of IE that cell.cellIndex returns a wrong index if there is a hidden cell in the table.
-	 * @return int the index of the first selected cell
-	 * @see #ncols
+	 * @see {@link ncols}
 	 */
 	cellIndex(): number {
 		var cell = this.jq[0];
 		return cell instanceof HTMLTableCellElement ? cell.cellIndex : 0;
 	}
-	/** Returns the number of columns of a row. Notice that it, unlike row.cells.length, calculate colSpan, too. In addition, it can filter out invisible cells.
-	 * @param boolean visibleOnly whether not count invisible cells
-	 * @return int the number of columns of the first selected row
-	 * @see #cellIndex
+	/**
+	 * @returns the number of columns of a row. Notice that it, unlike row.cells.length, calculate colSpan, too. In addition, it can filter out invisible cells.
+	 * @param visibleOnly - whether not count invisible cells
+	 * @see {@link cellIndex}
 	 */
 	ncols(visibleOnly?: boolean): number {
 		var row = this.jq[0],
@@ -802,10 +798,11 @@ export class JQZK {
 		}
 		return cnt;
 	}
-	/** Converts an offset (x,y) from absolute coordination to the element's style coordination, such that you can assign them to the style (el.style).
-	 * @param int x the X coordinate
-	 * @param int y the Y coordinate
-	 * @return Offset the offset
+	/**
+	 * Converts an offset (x,y) from absolute coordination to the element's style coordination, such that you can assign them to the style (el.style).
+	 * @param x - the X coordinate
+	 * @param y - the Y coordinate
+	 * @returns the offset
 	 */
 	toStyleOffset(x: number, y: number): zk.Offset {
 		var el = this.jq[0],
@@ -830,17 +827,23 @@ export class JQZK {
 		el.style.left = oldx; el.style.top = oldy; //restore
 		return ofs1;
 	}
-	/** Positions the first selected element at the particular location of the browser window.
-	<pre><code>
-	jq(el).zk.center('left top');
-	jq(el).zk.center('left center');
-	jq(el).zk.center('left'); //not to change the Y coordinate
-	jq(el).zk.center(); //same as 'center'
-	</code></pre>
+	/**
+	 * ```ts
+	 * jq(el).zk.center('left top');
+	 * jq(el).zk.center('left center');
+	 * jq(el).zk.center('left'); //not to change the Y coordinate
+	 * jq(el).zk.center(); //same as 'center'
+	 * ```
+	 * Positions the first selected element at the particular location of the browser window.
+	 * ```ts
+	 * jq(el).zk.center('left top');
+	 * jq(el).zk.center('left center');
+	 * jq(el).zk.center('left'); //not to change the Y coordinate
+	 * jq(el).zk.center(); //same as 'center'
+	 * ```
 	 *
-	 * @param Map flags A combination of center, left, right, top and bottom. If omitted, center is assumed.
-	 * @return jqzk this object
-	 * @see #position
+	 * @param flags - A combination of center, left, right, top and bottom. If omitted, center is assumed.
+	 * @see {@link position}
 	 */
 	center(flags?: string): this {
 		var el = this.jq[0],
@@ -860,18 +863,18 @@ export class JQZK {
 
 		wdgap = jq.innerWidth() - wdgap;
 		if (!flags) x = left + wdgap / 2;
-		else if (flags.indexOf('left') >= 0) x = left;
-		else if (flags.indexOf('right') >= 0) x = left + wdgap - 1; //just in case
-		else if (flags.indexOf('center') >= 0) x = left + wdgap / 2;
+		else if (flags.includes('left')) x = left;
+		else if (flags.includes('right')) x = left + wdgap - 1; //just in case
+		else if (flags.includes('center')) x = left + wdgap / 2;
 		else {
 			x = 0; skipx = true;
 		}
 
 		hghgap = jq.innerHeight() - hghgap;
 		if (!flags) y = top + hghgap / 2;
-		else if (flags.indexOf('top') >= 0) y = top;
-		else if (flags.indexOf('bottom') >= 0) y = top + hghgap - 1; //just in case
-		else if (flags.indexOf('center') >= 0) y = top + hghgap / 2;
+		else if (flags.includes('top')) y = top;
+		else if (flags.includes('bottom')) y = top + hghgap - 1; //just in case
+		else if (flags.includes('center')) y = top + hghgap / 2;
 		else {
 			y = 0; skipy = true;
 		}
@@ -885,10 +888,11 @@ export class JQZK {
 		if (!skipy) el.style.top = jq.px(ofs[1]);
 		return this;
 	}
-	/** Position the first matched element to the specified location.
+	/**
+	 * Position the first matched element to the specified location.
 	 *
-	 * @param Dimension dim the dimension of the anchor location
-	 * @param String where where to position. Default: <code>overlap</code><br/>
+	 * @param dim - the dimension of the anchor location
+	 * @param where - where to position. Default: `overlap`<br/>
 	 * Allowed values:</br>
 	 * <ul>
 	 * 	<li><b>before_start</b><br/> the element appears above the anchor, aligned to the left.</li>
@@ -916,22 +920,23 @@ export class JQZK {
 	 *  <li><b>after_pointer</b><br/> the element appears with the top aligned with
 	 *  	the bottom of the mouse cursor, with the left side of the element at the horizontal position of the mouse cursor.</li>
 	 * </ul>
-	 * @param Map opts a map of addition options. Allowed values include
+	 * @param opts - a map of addition options. Allowed values include
 	<ol><li> <b>overflow</b><br /> whether to allow the element being scrolled out of the visible area (Default: false, i.e., not allowed). If not specified (or false), the popup always remains visible even if the user scrolls the anchor widget out of the visible area</li></ol>
-	 * @return jqzk this object
-	 * @see #center
+	 * @see {@link center}
 	 */
-	/** Position the first matched element to the specified location.
+	position(dim?: Dimension, where?: string, opts?: PositionOptions): this
+	/**
+	 * Position the first matched element to the specified location.
 	 *
-	 * @param DOMElement dim the element used to get the dimension of the achor location.
-	 * (by use of {@link #dimension})
-	 * @param String where where to position. Default: <code>overlap</code><br/>
-	 * Allowed values: refer to {@link #position(Dimension,String,Map)}.
-	 * @param Map opts a map of addition options.<br/>
-	 * Allowed values: refer to {@link #position(Dimension,String,Map)}.
-	 * @return jqzk this object
-	 * @see #center
+	 * @param dim - the element used to get the dimension of the achor location.
+	 * (by use of {@link dimension})
+	 * @param where - where to position. Default: `overlap`<br/>
+	 * Allowed values: refer to {@link position}.
+	 * @param opts - a map of addition options.<br/>
+	 * Allowed values: refer to {@link position}.
+	 * @see {@link center}
 	 */
+	position(dim?: Element, where?: string, opts?: PositionOptions): this
 	position(dim?: Dimension | Element, where?: string, opts?: PositionOptions): this {
 		where = where || 'overlap';
 
@@ -1089,13 +1094,14 @@ export class JQZK {
 		return this;
 	}
 
-	/** Calculates the cumulative scroll offset of the first matched element in nested scrolling containers. It adds the cumulative scrollLeft and scrollTop of an element and all its parents.
+	/**
+	 * Calculates the cumulative scroll offset of the first matched element in nested scrolling containers. It adds the cumulative scrollLeft and scrollTop of an element and all its parents.
 	 * <p>It is used for calculating the scroll offset of an element that is in more than one scroll container (e.g., a draggable in a scrolling container which is itself part of a scrolling document).
 	 * <p>Note that all values are returned as numbers only although they are expressed in pixels.
-	 * @return Offset the cumulative scroll offset.
-	 * @see #cmOffset
-	 * @see #viewportOffset
-	 * @see #revisedOffset
+	 * @returns the cumulative scroll offset.
+	 * @see {@link cmOffset}
+	 * @see {@link viewportOffset}
+	 * @see {@link revisedOffset}
 	 */
 	scrollOffset(): zk.Offset {
 		// eslint-disable-next-line zk/noNull
@@ -1108,15 +1114,15 @@ export class JQZK {
 		}
 		return [l, t];
 	}
-	/** Returns the cumulative offset of the first matched element from the top left corner of the document.
+	/**
+	 * @returns the cumulative offset of the first matched element from the top left corner of the document.
 	 * <p>It actually adds the cumulative offsetLeft and offsetTop of an element and all its parents.
 	 * <p>Note that it ignores the scroll offset. If you want the element's coordinate,
-	 * use {@link #revisedOffset()} instead.
+	 * use {@link revisedOffset} instead.
 	 * <p>Note that all values are returned as numbers only although they are expressed in pixels.
-	 * @return Offset the cumulative offset
-	 * @see #scrollOffset
-	 * @see #viewportOffset
-	 * @see #revisedOffset
+	 * @see {@link scrollOffset}
+	 * @see {@link viewportOffset}
+	 * @see {@link revisedOffset}
 	 */
 	cmOffset(): zk.Offset {
 		//fix safari's bug: TR has no offsetXxx
@@ -1136,13 +1142,12 @@ export class JQZK {
 	}
 	/**
 	 * A short cut for looking up ZK Widget from jQuery object.
-	 * Now the code
-	 * <pre><code> zk.Widget.$(jq("@listbox"))</code></pre> could be replaced with <code><pre> zk("@listbox").$() </code></pre>
+	 * Now the code `zk.Widget.$(jq("@listbox"))` could be replaced with `zk("@listbox").$()`
 	 */
 	$<T extends zk.Widget>(): T {
-		let e = this.jq[0];
+		const e = this.jq[0];
 		if (e) {
-			let target = e[zk.Widget._TARGET] as T;
+			const target = e[zk.Widget._TARGET] as T;
 			if (target) {
 				// reset all query targets, if any
 				let len = this.jq.length;
@@ -1154,13 +1159,15 @@ export class JQZK {
 		}
 		return zk.Widget.$(e) as T;
 	}
-	/** Makes the position of the first selected element as absolute.
+	/**
+	 * Makes the position of the first selected element as absolute.
 	 * In addition to changing the style's position to absolute, it
 	 * will store the location such that it can be restored later when
-	 * {@link #relativize} is called.
-	 *<pre><code>zk('abc').absolutize();</code></pre>
-	 * @return jqzk this object
-	 * @see #relativize
+	 * {@link relativize} is called.
+	 * ```ts
+	 * zk('abc').absolutize()
+	 * ```
+	 * @see {@link relativize}
 	 */
 	absolutize(): this {
 		var el = this.jq[0];
@@ -1176,9 +1183,9 @@ export class JQZK {
 		st.left = jq.px(left);
 		return this;
 	}
-	/** Makes the position of the element as relative. In addition to changing the style's position to relative, it tries to restore the location before calling {@link #absolutize}.
-	 * @return jqzk this object
-	 * @see #absolutize
+	/**
+	 * Makes the position of the element as relative. In addition to changing the style's position to relative, it tries to restore the location before calling {@link absolutize}.
+	 * @see {@link absolutize}
 	 */
 	relativize(): this {
 		var el = this.jq[0];
@@ -1194,8 +1201,8 @@ export class JQZK {
 		return this;
 	}
 
-	/** Returns the offset width. It is similar to el.offsetWidth, except it solves some browser's bug or limitation.
-	 * @return int the offset width
+	/**
+	 * @returns the offset width. It is similar to el.offsetWidth, except it solves some browser's bug or limitation.
 	 */
 	offsetWidth(): number {
 		var n = this.jq[0],
@@ -1206,8 +1213,8 @@ export class JQZK {
 		}
 		return Math.max(width as number, n.offsetWidth);
 	}
-	/** Returns the offset height. It is similar to el.offsetHeight, except it solves some browser's bug or limitation.
-	 * @return int the offset height
+	/**
+	 * @returns the offset height. It is similar to el.offsetHeight, except it solves some browser's bug or limitation.
 	 */
 	offsetHeight(): number {
 		var n = this.jq[0];
@@ -1225,20 +1232,20 @@ export class JQZK {
 		}
 		return n.offsetHeight;
 	}
-	/** Returns the offset top. It is similar to el.offsetTop, except it solves some browser's bug or limitation.
-	 * @return int the offset top
+	/**
+	 * @returns the offset top. It is similar to el.offsetTop, except it solves some browser's bug or limitation.
 	 */
 	offsetTop(): number {
 		return this.jq[0].offsetTop;
 	}
-	/** Returns the offset left. It is similar to el.offsetLeft, except it solves some browser's bug or limitation.
-	 * @return int the offset left
+	/**
+	 * @returns the offset left. It is similar to el.offsetLeft, except it solves some browser's bug or limitation.
 	 */
 	offsetLeft(): number {
 		return this.jq[0].offsetLeft;
 	}
-	/** Returns the offset width. The value will not be rounded.
-	 * @return double the offset width
+	/**
+	 * @returns the offset width. The value will not be rounded.
 	 * @since 8.5.1
 	 */
 	offsetWidthDoubleValue(): number {
@@ -1250,8 +1257,8 @@ export class JQZK {
 		}
 		return n.offsetWidth; // return offsetWidth instead for ZK-5168
 	}
-	/** Returns the offset height. The value will not be rounded.
-	 * @return double the offset height
+	/**
+	 * @returns the offset height. The value will not be rounded.
 	 * @since 8.5.1
 	 */
 	offsetHeightDoubleValue(): number {
@@ -1263,82 +1270,82 @@ export class JQZK {
 		}
 		return n.offsetHeight; // return offsetHeight instead for ZK-5168
 	}
-	/** Returns the client width. The value will not be rounded.
-	 * @return double the client width
+	/**
+	 * @returns the client width. The value will not be rounded.
 	 * @since 9.5.1
 	 */
 	clientWidthDoubleValue(): number {
 		return this.offsetWidthDoubleValue() - this.borderWidth();
 	}
-	/** Returns the client height. The value will not be rounded.
-	 * @return double the client height
+	/**
+	 * @returns the client height. The value will not be rounded.
 	 * @since 9.5.1
 	 */
 	clientHeightDoubleValue(): number {
 		return this.offsetHeightDoubleValue() - this.borderHeight();
 	}
-	/** Returns the offset top. The value will not be rounded.
-	 * @return double the offset top
+	/**
+	 * @returns the offset top. The value will not be rounded.
 	 * @since 8.5.1
 	 */
 	offsetTopDoubleValue(): number {
 		return this.jq[0].getBoundingClientRect().top;
 	}
-	/** Returns the offset left. The value will not be rounded.
-	 * @return double the offset left
+	/**
+	 * @returns the offset left. The value will not be rounded.
 	 * @since 8.5.1
 	 */
 	offsetLeftDoubleValue(): number {
 		return this.jq[0].getBoundingClientRect().left;
 	}
 
-	/** Returns the actual client width rounded "up" to the closest integer.
-	 * @return the actual client width rounded "up" to the closest integer
+	/**
+	 * @returns the actual client width rounded "up" to the closest integer.
 	 * @since 9.6.3
 	 */
 	clientWidthCeil(): number {
 		return Math.ceil(this.clientWidthDoubleValue());
 	}
-	/** Returns the actual client height rounded "up" to the closest integer.
-	 * @return the actual client height rounded "up" to the closest integer
+	/**
+	 * @returns the actual client height rounded "up" to the closest integer.
 	 * @since 9.6.3
 	 */
 	clientHeightCeil(): number {
 		return Math.ceil(this.clientHeightDoubleValue());
 	}
-	/** Returns the actual offset width rounded "up" to the closest integer.
-	 * @return the actual offset width rounded "up" to the closest integer
+	/**
+	 * @returns the actual offset width rounded "up" to the closest integer.
 	 * @since 9.6.3
 	 */
 	offsetWidthCeil(): number {
 		return Math.ceil(this.offsetWidthDoubleValue());
 	}
-	/** Returns the actual offset height rounded "up" to the closest integer.
-	 * @return the actual offset height rounded "up" to the closest integer
+	/**
+	 * @returns the actual offset height rounded "up" to the closest integer.
 	 * @since 9.6.3
 	 */
 	offsetHeightCeil(): number {
 		return Math.ceil(this.offsetHeightDoubleValue());
 	}
-	/** Returns the actual offset top rounded "up" to the closest integer.
-	 * @return the actual offset top rounded "up" to the closest integer
+	/**
+	 * @returns the actual offset top rounded "up" to the closest integer.
 	 * @since 9.6.3
 	 */
 	offsetTopCeil(): number {
 		return Math.ceil(this.offsetTopDoubleValue());
 	}
-	/** Returns the actual offset left rounded "up" to the closest integer.
-	 * @return the actual offset left rounded "up" to the closest integer
+	/**
+	 * @returns the actual offset left rounded "up" to the closest integer.
 	 * @since 9.6.3
 	 */
 	offsetLeftCeil(): number {
 		return Math.ceil(this.offsetLeftDoubleValue());
 	}
 
-	/** Returns the X/Y coordinates of the first matched element relative to the viewport.
-	 * @return Offset the coordinates
-	 * @see #cmOffset
-	 * @see #scrollOffset
+	/**
+	 * @returns the X/Y coordinates of the first matched element relative to the viewport.
+	 * @see {@link cmOffset}
+	 * @see {@link scrollOffset}
 	 */
 	viewportOffset(): zk.Offset {
 		// eslint-disable-next-line zk/noNull
@@ -1362,10 +1369,10 @@ export class JQZK {
 		}
 		return [l, t];
 	}
-	/** Returns the size of the text if it is placed inside the first matched element.
-	 * @param String text the content text
-	 * @return Size the size of the text
-	 * @deprecated Use {@link #textWidth} instead for better performance.
+	/**
+	 * @returns the size of the text if it is placed inside the first matched element.
+	 * @param text - the content text
+	 * @deprecated Use {@link textWidth} instead for better performance.
 	 */
 	textSize(text?: string): zk.Offset {
 		const jq = this.jq;
@@ -1398,9 +1405,9 @@ export class JQZK {
 		return result;
 	}
 
-	/** Returns the width of the text if it is placed inside the first matched element.
-	 * @param String text the content text. The text of the first matched element if omitted
-	 * @return double the width in px of the text
+	/**
+	 * @returns the width of the text if it is placed inside the first matched element.
+	 * @param text - the content text. The text of the first matched element if omitted
 	 * @since 9.0.1
 	 * @see <a href="https://stackoverflow.com/a/21015393">Stack Overflow</a>
 	 */
@@ -1417,11 +1424,10 @@ export class JQZK {
 		context.font = newFont;
 		return context.measureText(text).width;
 	}
-	/** Returns the dimension of the specified element.
+	/**
+	 * @returns the dimension of the specified element.
 	 * <p>If revised not specified (i.e., not to calibrate), the left and top are the offsetLeft and offsetTop of the element.
-	 * @param boolean revised if revised is true, {@link #revisedOffset} will be
-	 * 		used (i.e., the offset is calibrated).
-	 * @return Dimension the dimension
+	 * @param revised - if revised is true, {@link revisedOffset} will be used (i.e., the offset is calibrated).
 	 */
 	dimension(revised?: boolean): Dimension {
 		var display = this.jq.css('display');
@@ -1446,14 +1452,14 @@ export class JQZK {
 		}
 	}
 
-	/** Forces the browser to redo (re-apply) CSS of all matched elements.
+	/**
+	 * Forces the browser to redo (re-apply) CSS of all matched elements.
 	 * <p>Notice that calling this method might introduce some performance penality.
-	 * @param int timeout number of milliseconds to wait before really re-applying CSS.
+	 * @param timeout - number of milliseconds to wait before really re-applying CSS.
 	 * 100 is assumed if not specified , -1 means re-applying css right now.
-	 * @return jqzk this object
 	 */
 	redoCSS(timeout?: number, opts?: Partial<RedoCSSOptions>): this {
-		if (opts && opts['fixFontIcon']) {
+		if (opts?.fixFontIcon) {
 			return this;
 		}
 		if (timeout == -1) { //timeout -1 means immediately
@@ -1466,9 +1472,9 @@ export class JQZK {
 		}
 		return this;
 	}
-	/** Forces the browser to re-load the resource specified in the <code>src</code>
+	/**
+	 * Forces the browser to re-load the resource specified in the `src`
 	 * attribute for all matched elements.
-	 * @return jqzk this object
 	 */
 	redoSrc(): this {
 		for (let j = this.jq.length; j--;) {
@@ -1481,12 +1487,12 @@ export class JQZK {
 		return this;
 	}
 
-	/** Returns the virtual parent of the first matched element.
-	 * <p>Refer to {@link #makeVParent} for more information.
-	 * @param boolean real whether to return DOM element's parentNode if
-	 * no virtual parent. In other words, <code>zk(n).vparentNode(true)</code>
-	 * is the same as <code>zk(n).vparentNode()||n.parentNode</code>.
-	 * @return DOMElement
+	/**
+	 * @returns the virtual parent of the first matched element.
+	 * <p>Refer to {@link makeVParent} for more information.
+	 * @param real - whether to return DOM element's parentNode if
+	 * no virtual parent. In other words, `zk(n).vparentNode(true)`
+	 * is the same as `zk(n).vparentNode()||n.parentNode`.
 	 */
 	vparentNode(real?: boolean): HTMLElement | undefined {
 		var el = this.jq[0];
@@ -1500,16 +1506,16 @@ export class JQZK {
 				return el.parentNode as HTMLElement | undefined;
 		}
 	}
-	/** Creates a virtual parent for the specified element. Creating a virtual parent makes the specified element able to appear above any other element (such as a menu popup). By default, the Z order of an element is decided by its parent and ancestors (if any of them has the relative or absolute position). If you want to resolve this limitation, you can create a virtual parent for it with this method.
-	 * <p>To undo the creation of the virtual parent, use {@link #undoVParent}.
+	/**
+	 * Creates a virtual parent for the specified element. Creating a virtual parent makes the specified element able to appear above any other element (such as a menu popup). By default, the Z order of an element is decided by its parent and ancestors (if any of them has the relative or absolute position). If you want to resolve this limitation, you can create a virtual parent for it with this method.
+	 * <p>To undo the creation of the virtual parent, use {@link undoVParent}.
 	 * <p>Notice that, due to browser's limitation, creating a virtual parent is still not enough to make an element appear on top of all others in all conditions. For example, it cannot in IE6 if there is a SELECT element underneath. To really solve this, you have to create a so-called stackup, which is actually an IFRAME element. By position the iframe right under the element, you can really want it appear on top.
-	 * Refer to {@link jq#newStackup} for more information.
+	 * Refer to {@link jq.newStackup} for more information.
 	 * <h3>What Really Happens</h3>
-	 * <p>This method actually moves the element to the topmost level in the DOM tree (i.e., as the child of document.body), and then the original parent (the parent before calling this method) becomes the virtual parent, which can be retrieved by {@link #vparentNode}.
+	 * <p>This method actually moves the element to the topmost level in the DOM tree (i.e., as the child of document.body), and then the original parent (the parent before calling this method) becomes the virtual parent, which can be retrieved by {@link vparentNode}.
 	 * <h3>When to Use</h3>
 	 * <p>When you implement a widget that appears above others, such as an overlapped window, a menu popup and a dropdown list, you can invoke this method when {@link Widget#bind_} is called. And then, restore it
-	 * by calling {@link #undoVParent} when {@link Widget#unbind_} is called.
-	 * @return jqzk this object
+	 * by calling {@link undoVParent} when {@link Widget#unbind_} is called.
 	 */
 	makeVParent(): this {
 		var el = this.jq[0],
@@ -1537,9 +1543,9 @@ export class JQZK {
 		document.body.appendChild(el);
 		return this;
 	}
-	/** Undoes the creation of a virtual parent of the first matched element.
-	 * <p>Refer to {@link #makeVParent} for more information.
-	 * @return jqzk this object
+	/**
+	 * Undoes the creation of a virtual parent of the first matched element.
+	 * <p>Refer to {@link makeVParent} for more information.
 	 */
 	undoVParent(): this {
 		if (this.hasVParent()) {
@@ -1580,7 +1586,6 @@ export class JQZK {
 	}
 	/**
 	 * Check if element has virtual parent
-	 * @return boolean
 	 * @since 7.0.3
 	 */
 	hasVParent(): boolean {
@@ -1589,14 +1594,16 @@ export class JQZK {
 		return !!(el && (el['z_vp'] || el['z_vpagt']));
 	}
 
-	/** Fixes DOM elements when a widget's unbind_ is called
+	/**
+	 * Fixes DOM elements when a widget's unbind_ is called
 	 * and it will hide the DOM element (display="none" or visibility="hidden").
 	 * <p>For firefox, it has to reset the src attribute of iframe (Bug 3076384)
 	 */
 	beforeHideOnUnbind(): unknown { return; }
 
 	//focus/select//
-	/** Sets the focus to the first matched element.
+	/**
+	 * Sets the focus to the first matched element.
 	 * It is the same as jq(n).focus() and n.focus, except
 	 * <ul>
 	 * <li>it doesn't throw any exception (rather, returns false).</li>
@@ -1605,9 +1612,9 @@ export class JQZK {
 	 * </ul>
 	 * <p>In general, it is suggested to use zk(n).focus(), unless
 	 * n does not belong to any widget.
-	 * @param int timeout the number of milliseconds to delay before setting the focus. If omitted or negative, the focus is set immediately.
-	 * @return boolean whether the focus is allowed to set to the element. Currently, only SELECT, BUTTON, INPUT and IFRAME is allowed.
-	 * @see #select
+	 * @param timeout - the number of milliseconds to delay before setting the focus. If omitted or negative, the focus is set immediately.
+	 * @returns whether the focus is allowed to set to the element. Currently, only SELECT, BUTTON, INPUT and IFRAME is allowed.
+	 * @see {@link select}
 	 */
 	focus(timeout?: number): boolean {
 		var n = this.jq[0];
@@ -1621,12 +1628,13 @@ export class JQZK {
 		else _focus(n);
 		return true;
 	}
-	/** Selects the first matched element. It is the same as DOMElement.select, except it won't throws an exception (rather, returns false), and can delay the execution for the specified number of milliseconds.
-	 * @param int timeout the number of milliseconds to delay before setting the focus. If omitted or negative, the focus is set immediately.
-	 * @return boolean whether the element supports the select method. In other words, it returns false if the object doesn't have the select method.
-	 * @see #getSelectionRange
-	 * @see #setSelectionRange
-	 * @see #focus
+	/**
+	 * Selects the first matched element. It is the same as DOMElement.select, except it won't throws an exception (rather, returns false), and can delay the execution for the specified number of milliseconds.
+	 * @param timeout - the number of milliseconds to delay before setting the focus. If omitted or negative, the focus is set immediately.
+	 * @returns whether the element supports the select method. In other words, it returns false if the object doesn't have the select method.
+	 * @see {@link getSelectionRange}
+	 * @see {@link setSelectionRange}
+	 * @see {@link focus}
 	 */
 	select(timeout?: number): boolean {
 		var n = this.jq[0];
@@ -1637,11 +1645,11 @@ export class JQZK {
 		return true;
 	}
 
-	/** Returns the selection range of the specified input-type element. The selection range is returned as a two-element array, where the first item is the starting index, and the second item is the ending index (excluding).
+	/**
+	 * @returns the selection range of the specified input-type element. The selection range is returned as a two-element array, where the first item is the starting index, and the second item is the ending index (excluding).
 	 * <p>If an exception occurs, [0, 0] is returned.
-	 * @return Array a two-element array representing the selection range
-	 * @see #setSelectionRange
-	 * @see #select
+	 * @see {@link setSelectionRange}
+	 * @see {@link select}
 	 */
 	getSelectionRange(): zk.Offset {
 		const inp = this.jq[0] as HTMLInputElement;
@@ -1651,10 +1659,10 @@ export class JQZK {
 			return [0, 0];
 		}
 	}
-	/** Sets the selection range of the specified input-type element.
-	 * @param int start the starting index of the selection range
-	 * @param int end the ending index of the selection rane (excluding). In other words, the text between start and (end-1) is selected.
-	 * @return jqzk this object
+	/**
+	 * Sets the selection range of the specified input-type element.
+	 * @param start - the starting index of the selection range
+	 * @param end - the ending index of the selection rane (excluding). In other words, the text between start and (end-1) is selected.
 	 */
 	// eslint-disable-next-line zk/javaStyleSetterSignature
 	setSelectionRange(start: number, end?: number): this {
@@ -1671,8 +1679,8 @@ export class JQZK {
 		return this;
 	}
 
-	/** Submit the selected form.
-	 * @return jqzk this object
+	/**
+	 * Submit the selected form.
 	 * @since 5.0.4
 	 */
 	submit(): this {
@@ -1681,40 +1689,40 @@ export class JQZK {
 	}
 
 	//selection//
-	/** Disallows the user to select a portion of its content. You usually invoke this method to disable the selection for button-like widgets. By default, all elements can be selected (unless disabled with CSS -- which not all browsers support).
+	/**
+	 * Disallows the user to select a portion of its content. You usually invoke this method to disable the selection for button-like widgets. By default, all elements can be selected (unless disabled with CSS -- which not all browsers support).
 	 * <p>If you disable the selection in {@link Widget#bind_}, you shall enable it back in {@link Widget#unbind_}
 	 * since this method will register a DOM-level listener for certain browsers.
-	 * @return jqzk this object
 	 */
 	disableSelection(): this {
 		this.jq.each(_dissel);
 		return this;
 	}
-	/** Allows the user to select a portion of its content. You usually invoke this method to undo {@link #disableSelection}.
+	/**
+	 * Allows the user to select a portion of its content. You usually invoke this method to undo {@link disableSelection}.
 	 * By default, all elements can be selected (unless disabled with CSS -- which not all browsers support).
-	 * @return jqzk this object
 	 */
 	enableSelection(): this {
 		this.jq.each(_ensel);
 		return this;
 	}
 
-	/** Sets the CSS style with a map of style names and values. For example,
-	<pre><code>
-	jq(el).css({width:'100px', paddingTop: "1px", "border-left": "2px"});
-	jq(el).css(jq.parseStyle(jq.filterTextStle('width:100px;font-size:10pt')));
-	</code></pre>
-	 * <p>To parse a style (e.g., 'width:10px;padding:2px') to a map of style names and values, use {@link jq#parseStyle}.
-	 * @return jqzk this object
+	/**
+	 * Sets the CSS style with a map of style names and values. For example,
+	 * ```ts
+	 * jq(el).css({width:'100px', paddingTop: "1px", "border-left": "2px"});
+	 * jq(el).css(jq.parseStyle(jq.filterTextStle('width:100px;font-size:10pt')));
+	 * ```
+	 * <p>To parse a style (e.g., 'width:10px;padding:2px') to a map of style names and values, use {@link jq.parseStyle}.
 	 * @deprecated As of release 5.0.2, use jq.css(map) instead
 	 */
 	setStyles(styles: JQuery.PlainObject<string | number | ((this: HTMLElement, index: number, value: string) => string | number | void | undefined)>): this {
 		this.jq.css(styles);
 		return this;
 	}
-	/** Clears the CSS styles (excluding the inherited styles).
+	/**
+	 * Clears the CSS styles (excluding the inherited styles).
 	 * @since 5.0.2
-	 * @return jqzk this object
 	 */
 	clearStyles(): this {
 		var n = this.jq[0];
@@ -1722,9 +1730,10 @@ export class JQZK {
 			n.removeAttribute('style');
 		return this;
 	}
-	/** Detaches all child elements and return them as an array.
+	/**
+	 * Detaches all child elements and return them as an array.
 	 * @since 5.0.10
-	 * @return Array an array of {@link DOMElement} that are detached,
+	 * @returns an array of {@link DOMElement} that are detached,
 	 * or null if no element is selected.
 	 */
 	detachChildren(): HTMLElement[] | undefined {
@@ -1740,8 +1749,8 @@ export class JQZK {
 		return undefined;
 	}
 
-	/** Tests if all elements are input elements (including textarea).
-	 * @return boolean
+	/**
+	 * Tests if all elements are input elements (including textarea).
 	 * @since 5.0.8
 	 */
 	isInput(): boolean {
@@ -1773,6 +1782,7 @@ export class JQZK {
 			zk.debugLog((e as Error).message ?? e);
 		}
 	}
+	/** @internal */
 	static _fixCSS(el: HTMLElement): void { //overriden in domie.js , domsafari.js , domopera.js
 		el.className += ' ';
 		if (el.offsetHeight) {
@@ -1780,15 +1790,19 @@ export class JQZK {
 		}
 		el.className.trim();
 	}
+	/** @internal */
 	static _cleanVisi(n: HTMLElement): void { //overriden in domopera.js
 		n.style.visibility = 'inherit';
 	}
+	/** @internal */
 	static _fixClick(el: Event | JQuery.ClickEvent): void {//overridden in domie.js
 		// empty for overriding
 	}
+	/** @internal */
 	static _fixedVParent(el: Element, option?: boolean): void {
 		// empty for overriding
 	}
+	/** @internal */
 	static _fixIframe(el: Element): void {
 		// empty for overriding
 	}
@@ -1804,74 +1818,88 @@ export class JQZK {
 	};
 
 	// used in domsafari.ts
+	/** @internal */
 	declare static _sfKeys: Record<number, number>;
+	/** @internal */
 	declare static _evt: Record<'fix' | string, Function>; // eslint-disable-line @typescript-eslint/ban-types
 }
-jq.fn['zon'] = jq.fn.on;
-jq.fn['zoff'] = jq.fn.off;
-/** @class jq
+jq.fn.zon = jq.fn.on;
+jq.fn.zoff = jq.fn.off;
+/**
+ * @class jq
  * @import jq.Event
  * @import zk.Widget
  * @import zk.Desktop
  * @import zk.Skipper
  * @import zk.eff.Shadow
- * Represents the object returned by the <code>jq</code> function.
- * For example, <code>jq('#id');</code>
+ * Represents the object returned by the `jq` function.
+ * For example, `jq('#id');`
  *
  * <p>ZK 5 Client Engine is based on <a href="http://jquery.com/" target="jq">jQuery</a>.
  * It inherits all functionality provided by jQuery. Refer to <a href="http://docs.jquery.com/Main_Page" target="jq">jQuery documentation</a>
- * for complete reference. However, we use the global function called <code>jq</code>
+ * for complete reference. However, we use the global function called `jq`
  * to represent jQuery. Furthermore, for documentation purpose,
- * we use @{link jq} to represent the object returned by the <code>jq</code> function.</p>
-
- * <p>Notice that there is no package called <code>_</code>.
-	Rather, it represents the global namespace of JavaScript.
-	In other words, it is the namespace of the <code>window</code> object
-	in a browser.
+ * we use {@link JQZK.jq} to represent the object returned by the `jq` function.</p>
+ * <p>Notice that there is no package called `_`.
+ * Rather, it represents the global namespace of JavaScript.
+ * In other words, it is the namespace of the `window` object
+ * in a browser.
  *
  * <h2>Diffirence and Enhancement to jQuery</h2>
- * <p><code>{@link jq} jq(Object selector, Object context);</code>
+ * <p>`{@link JQZK.jq} jq(Object selector, Object context);`
  *
  * <blockquote>
- * <h3>Refer jQuery as <code>jq</code></h3>
- * <p>First of all, the jQuery class is referenced as {@link #jq}, and it is suggested to use jq instead of $ or jQuery when developing a widget, since it might be renamed later by an application (say, overridden by other client framework). Here is an example uses jq:
- * <pre><code>jq(document.body).append("<div></div>");</code></pre>
+ * <h3>Refer jQuery as `jq`</h3>
+ * <p>First of all, the jQuery class is referenced as {@link JQZK.jq}, and it is suggested to use jq instead of $ or jQuery when developing a widget, since it might be renamed later by an application (say, overridden by other client framework). Here is an example uses jq:
+ * ```ts
+ * jq(document.body).append("<div></div>");
+ * ```
  *
  * <h3>Dual Objects</h3>
- * <p>To extend jQuery's functionally,  each time <code>jq(...)</code>
- * or <code>zk(...)</code> is called, an instance of {@link jq}
+ * <p>To extend jQuery's functionally,  each time `jq(...)`
+ * or `zk(...)` is called, an instance of {@link JQZK.jq}
  * and an instance of {@link jqzk} are created. The former one provides the
  * standard jQuery API plus some minimal enhancement as described below.
  * The later is ZK's addions APIs.
  *
  * <p>You can retrieve one of the other with
- * {@link jq#zk} and {@link jqzk#jq}.
+ * {@link jq.zk} and {@link jqzk#jq}.
  *
- * <pre><code>jq('#abc').zk; //the same as zk('#abc')
- *zk('#abc').jq; //the same as jq('#abc');</code></pre>
+ * ```ts
+ * jq('#abc').zk; //the same as zk('#abc')
+ * zk('#abc').jq; //the same as jq('#abc');
+ * ```
  *
  * <h3>Extra Selectors</h3>
  * <blockquote>
  *
- * <h4>@tagName</h4>
- * <p><code>jq</code> is extended to support the selection by use of ZK widget's
+ * <h4>\@tagName</h4>
+ * <p>`jq` is extended to support the selection by use of ZK widget's
  * tagName. For example,
- * <pre><code>jq('@window');</code></pre>
+ * ```ts
+ * jq('@window');
+ * ```
  *
  *<p>Notice that it looks for the ZK widget tree to see if any widget whose className
- * ends with <code>window</code>.
+ * ends with `window`.
  * <p>If you want to search the widget in the nested tag, you can specify
- * the selector after @. For example, the following searches the space owner named x,
+ * the selector after \@. For example, the following searches the space owner named x,
  * then y, and finally z
- * <pre><code>jq('@x @y @z');</code></pre>
+ * ```ts
+ * jq('@x @y @z');
+ * ```
  * or search the element from the given attribute of the widget, you can specify
  * the selector as follows. For example,
- * <pre><code>jq('@window[border="normal"]')</code></pre>
+ * ```ts
+ * jq('@window[border="normal"]')
+ * ```
  *
  * <h4>$id</h4>
- * <p><code>jq</code> is extended to support the selection by use of widget's
- * ID ({@link Widget#id}), and then DOM element's ID. For example,
- * <pre><code>jq('$xx');</code></pre>
+ * <p>`jq` is extended to support the selection by use of widget's
+ * ID ({@link zk.Widget.id}), and then DOM element's ID. For example,
+ * ```ts
+ * jq('$xx');
+ * ```
  *
  * <p>Notice that it looks for any bound widget whose ID is xx, and
  * select the associated DOM element if found.
@@ -1879,68 +1907,76 @@ jq.fn['zoff'] = jq.fn.off;
  * <p>If you want to search the widget in the inner ID space, you can specify
  * the selector after $. For example, the following searches the space owner
  * named x, then y, and finally z
- * <pre><code>jq('$x $y $z');</code></pre>
- * or advanced search combine with CSS3 and @, you can specify like this.
- * <pre><code>jq('@window[border="normal"] > $x + div$y > @button:first');</code></pre>
+ * ```ts
+ * jq('$x $y $z');
+ * ```
+ * or advanced search combine with CSS3 and \@, you can specify like this.
+ * ```ts
+ * jq('@window[border="normal"] > $x + div$y > @button:first');
+ * ```
  *
  * <h4>A widget</h4>
- * <p><code>jq</code> is extended to support {@link Widget}.
- * If the selector is a widget, <code>jq</code> will select the associated DOM element
+ * <p>`jq` is extended to support {@link Widget}.
+ * If the selector is a widget, `jq` will select the associated DOM element
  * of the widget.
  *
- * <pre><code>jq(widget).after('<div></div>'); //assume widget is an instance of {@link Widget}</code></pre>
+ * ```ts
+ * jq(widget).after('<div></div>'); //assume widget is an instance of {@link Widget}
+ * ```
  *
  * <p>In other words, it is the same as
  *
- * <pre><code>jq(widget.$n()).after('<div></div>');</code></pre>
+ * ```ts
+ * jq(widget.$n()).after('<div></div>');
+ * ```
  * </blockquote>
  *
  * <h3>Extra Contexts</h3>
  * <blockquote>
- * <h4>The <code>zk</code> context</h4>
- * <pre><code>jq('foo', zk);</code></pre>
+ * <h4>The `zk` context</h4>
+ * ```ts
+ * jq('foo', zk);
+ * ```
  * <p>With the zk context, the selector without any prefix is assumed to be
  * the identifier of ID. In other words, you don't need to prefix it with '#'.
  * Thus, the above example is the same as
- * <pre><code>jq('#foo')</code></pre>
+ * ```ts
+ * jq('#foo')
+ * ```
  *
  * <p>Of course, if the selector is not a string or prefix with a non-alphnumeric letter, the zk context is ignored.
  * </blockquote>
  *
  * <h3>Extra Global Functions</h3>
  * <blockquote>
- * <h4>The <code>zk</code> function</h4>
- * <pre><code>{@link jq} zk(Object selector);</code></pre>
+ * <h4>The `zk` function</h4>
+ * ```ts
+ * {@link JQZK.jq} zk(Object selector);
+ * ```
  *
- * <p>It is the same as <code>jq(selector, zk).zk</code>. In other words,
+ * <p>It is the same as `jq(selector, zk).zk`. In other words,
  * it assumes the zk context and returns an instance of {@link jqzk}
- * rather than an instance of {@link jq}.
+ * rather than an instance of {@link JQZK.jq}.
  * </blockquote>
  *
  * <h3>Other Extension</h3>
  * <ul>
- * <li>{@link jq} - DOM utilities (such as, {@link jq#innerX}</li>
- * <li>{@link jqzk} - additional utilities to {@link jq}.</li>
+ * <li>{@link JQZK.jq} - DOM utilities (such as, {@link jq.innerX}</li>
+ * <li>{@link jqzk} - additional utilities to {@link JQZK.jq}.</li>
  * <li>{@link Event} - the event object passed to the event listener</li>
  * </ul>
  * <h3>Not override previous copy if any</h3>
  * <p>Unlike the original jQuery behavior, ZK's jQuery doesn't override
  * the previous copy, if any, so ZK can be more compatible with other frameworks
  * that might use jQuery. For example, if you manually include a copy
- * of jQuery before loading ZK Client Engine, <code>jQuery</code>
+ * of jQuery before loading ZK Client Engine, `jQuery`
  * will refer to the copy of jQuery you included explicitly. To refer
- * ZK's copy, always use <code>jq</code>.
+ * ZK's copy, always use `jq`.
  * </blockquote>
  *
  * @author tomyeh
  */
 var _jq /** original jQuery */ = zk.augment(jq.fn, {
-	/** The associated instance of {@link jqzk} that
-	 * provides additional utilities to <a href="http://docs.jquery.com/Main_Page" target="jq">jQuery</a>.
-	 * @type jqzk
-	 */
-	//zk: null,
-
 	init(sel: string | zk.Widget | HTMLElement, ctx, ...rest: unknown[]): JQuery {
 		if (ctx === zk) {
 			if (typeof sel == 'string'
@@ -1964,13 +2000,14 @@ var _jq /** original jQuery */ = zk.augment(jq.fn, {
 		ret1.zk = new zjq(ret1);
 		return ret1;
 	},
-	/** Replaces the match elements with the specified HTML, DOM or {@link Widget}.
+	/**
+	 * Replaces the match elements with the specified HTML, DOM or {@link Widget}.
 	 * We extends <a href="http://docs.jquery.com/Manipulation/replaceWith">jQuery's replaceWith</a>
 	 * to allow replacing with an instance of {@link Widget}.
-	 * @param Widget widget a widget
-	 * @param Desktop desktop the desktop. It is optional.
-	 * @param Skipper skipper the skipper. It is optional.
-	 * @return jq the jq object matching the DOM element after replaced
+	 * @param widget - a widget
+	 * @param desktop - the desktop. It is optional.
+	 * @param skipper - the skipper. It is optional.
+	 * @returns jq the jq object matching the DOM element after replaced
 	 */
 	// @ts-expect-error: incompatible with the signature in the original jQuery
 	replaceWith(w: zk.Widget | unknown, desktop: zk.Desktop, skipper: zk.Skipper): JQuery {
@@ -1999,71 +2036,6 @@ var _jq /** original jQuery */ = zk.augment(jq.fn, {
 	unbind: function (types: string, fn: CallableFunction): JQuery {
 		return this.off(types, undefined, fn);
 	}
-	/** Removes all matched elements from the DOM.
-	 * <p>Unlike <a href="http://docs.jquery.com/Manipulation/remove">jQuery</a>,
-	 * it does nothing if nothing is matched.
-	 * @return jq this object
-	 */
-	//remove: function () {}
-	/** Removes all children of the matched element from the DOM.
-	 * <p>Unlike <a href="http://docs.jquery.com/Manipulation/empty">jQuery</a>,
-	 * it does nothing if nothing is matched.
-	 * @return jq this object
-	 */
-	//empty: function () {}
-	/** Shows all matched elements from the DOM.
-	 * <p>Unlike <a href="http://docs.jquery.com/show">jQuery</a>,
-	 * it does nothing if nothing is matched.
-	 * @return jq this object
-	 */
-	//show: function () {}
-	/** Hides all matched elements from the DOM.
-	 * <p>Unlike <a href="http://docs.jquery.com/hide">jQuery</a>,
-	 * it does nothing if nothing is matched.
-	 * @return jq this object
-	 */
-	//hide: function () {}
-
-	/** Insert content before each of the matched elements.
-	 * <p>Notice that this method is extended to handle {@link Widget}.
-	 * <p>Refer to <a href="http://docs.jquery.com/Manipulation/before">jQuery documentation</a>
-	 * for more information.
-	 * @param Object content If it is a string, it is assumed to be
-	 * a HTML fragment. If it is a widget, the widget will be insert before
-	 * @param Desktop desktop [optional] the desktop. It is used only
-	 * if content is a widget.
-	 */
-	//before: function () {}
-	/** Insert content after each of the matched elements.
-	 * <p>Notice that this method is extended to handle {@link Widget}.
-	 * <p>Refer to <a href="http://docs.jquery.com/Manipulation/after">jQuery documentation</a>
-	 * for more information.
-	 * @param Object content If it is a string, it is assumed to be
-	 * a HTML fragment. If it is a widget, the widget will be insert after
-	 * @param Desktop desktop [optional] the desktop. It is used only
-	 * if content is a widget.
-	 */
-	//after: function () {}
-	/** Append content to inside of every matched element.
-	 * <p>Notice that this method is extended to handle {@link Widget}.
-	 * <p>Refer to <a href="http://docs.jquery.com/Manipulation/append">jQuery documentation</a>
-	 * for more information.
-	 * @param Object content If it is a string, it is assumed to be
-	 * a HTML fragment. If it is a widget, the widget will be appended
-	 * @param Desktop desktop [optional] the desktop. It is used only
-	 * if content is a widget.
-	 */
-	//append: function () {}
-	/** Prepend content to the inside of every matched element.
-	 * <p>Notice that this method is extended to handle {@link Widget}.
-	 * <p>Refer to <a href="http://docs.jquery.com/Manipulation/prepend">jQuery documentation</a>
-	 * for more information.
-	 * @param Object content If it is a string, it is assumed to be
-	 * a HTML fragment. If it is a widget, the widget will be prepended
-	 * @param Desktop desktop [optional] the desktop. It is used only
-	 * if content is a widget.
-	 */
-	//prepend: function () {}
 });
 (jq.fn['init'] as NewableFunction).prototype = jq.fn;
 
@@ -2092,23 +2064,7 @@ jq.each(['before', 'after', 'append', 'prepend'], function (i, nm) {
 	};
 });
 
-/** @partial jq
- */
 Object.assign(jq, {
-	/** Returns the node name of the specified element in the lower case.
-	 * @param DOMElement el the element to test.
-	 * If el is null, an empty string is returned.
-	 * @return String the node name.
-	 * @since 5.0.1
-	 */
-	/** Returns if the node name of the specified element is the same
-	 * as one of the specified name (case insensitive).
-	 * @param DOMElement el the element to test
-	 * @param String tag1 the name to test. You can have any number
-	 * of names to test, such as <code>jq.nodeName(el, "tr", "td", "span")</code>
-	 * @return boolean if the node name is the same as one of the specified names.
-	 * @since 5.0.1
-	 */
 	nodeName(el?: Element, ...tags: string[]): boolean {
 		var tag = el && el.nodeName ? el.nodeName.toLowerCase() : '',
 			j = arguments.length;
@@ -2120,46 +2076,47 @@ Object.assign(jq, {
 		return false;// don't remove this line, texts are highlighted when SHIFT-click listitems (because of IE's onselect depends on it)
 	},
 
-	/** Converting an integer to a string ending with "px".
+	/**
+	 * Converting an integer to a string ending with "px".
 	 * <p>It is usually used for generating left or top.
-	 * @param Integer v the number of pixels
-	 * @return String the integer with string.
-	 * @see #px0
+	 * @param v - the number of pixels
+	 * @returns the integer with string.
+	 * @see {@link px0}
 	 */
 	px(v: number): string {
 		return (v ?? 0) + 'px';
 	},
-	/** Converting an integer a string ending with "px".
-	 * <p>Unlike {@link #px}, this method assumes 0 if v is negative.
+	/**
+	 * Converting an integer a string ending with "px".
+	 * <p>Unlike {@link px}, this method assumes 0 if v is negative.
 	 * <p>It is usually used for generating width or height.
-	 * @param Integer v the number of pixels. 0 is assumed if negative.
-	 * @return String the integer with string.
-	 * @see #px
+	 * @param v - the number of pixels. 0 is assumed if negative.
+	 * @returns the integer with string.
+	 * @see {@link px}
 	 */
 	px0(v?: number): string {
 		return Math.max(v ?? 0, 0) + 'px';
 	},
 
-	/** Returns an array of {@link DOMElement} that matches.
-	 * It invokes <code>document.getElementsByName</code> to retrieve
+	/**
+	 * @returns an array of {@link DOMElement} that matches.
+	 * It invokes `document.getElementsByName` to retrieve
 	 * the DOM elements.
-	 * @return Array an array of {@link DOMElement} that matches
-	 * the specified condition
-	 * @param String id the identifier
-	 * @param String subId [Optional] the identifier of the sub-element.
-	 * Example, <code>jq.$$('_u_12', 'cave');</code>.
+	 * @param id - the identifier
+	 * @param subId - [Optional] the identifier of the sub-element.
+	 * Example, `jq.$$('_u_12', 'cave');`.
 	 */
 	$$(id: string, subId?: string): NodeListOf<HTMLElement> {
 		return document.getElementsByName(id + (subId ? '-' + subId : ''));
 	},
 
-	/** Tests if one element (p) is an ancestor of another (c).
+	/**
+	 * Tests if one element (p) is an ancestor of another (c).
 	 * <p>Notice that, if you want to test widgets, please use
 	 * {@link zUtl#isAncestor} instead.
 	 *
-	 * @param DOMElement p the parent element to test
-	 * @param DOMElement c the child element to test
-	 * @return boolean if p is an ancesotor of c.
+	 * @param p - the parent element to test
+	 * @param c - the child element to test
 	 * @see zUtl#isAncestor
 	 */
 	isAncestor(p?: HTMLElement, c?: HTMLElement): boolean {
@@ -2169,62 +2126,62 @@ Object.assign(jq, {
 				return true;
 		return false;
 	},
-	/** Returns the X coordination of the visible part of the browser window.
-	 * @return int
+	/**
+	 * @returns the X coordination of the visible part of the browser window.
 	 */
 	innerX(): number {
 		return Math.round(window.pageXOffset
 			|| DocRoot().scrollLeft || 0); //ZK-2633: browser might return decimal number
 	},
-	/** Returns the Y coordination of the visible part of the browser window.
-	 * @return int
+	/**
+	 * @returns the Y coordination of the visible part of the browser window.
 	 */
 	innerY(): number {
 		return Math.round(window.pageYOffset
 			|| DocRoot().scrollTop || 0); //ZK-2633: browser might return decimal number
 	},
-	/** Returns the width of the viewport (visible part) of the browser window.
+	/**
+	 * @returns the width of the viewport (visible part) of the browser window.
 	 * It is the same as jq(window).width().
-	 * @return int
 	 */
 	innerWidth(): number {
 		return jq(window).width()!;
 	},
-	/** Returns the height of the viewport (visible part) of the browser window.
+	/**
+	 * @returns the height of the viewport (visible part) of the browser window.
 	 * It is the same as jq(window).height().
-	 * @return int
 	 */
 	innerHeight(): number {
 		return jq(window).height()!;
 	},
 
-	/** A map of the margin style names: {l: 'margin-left', t: 'margin-top'...}.
+	/**
+	 * A map of the margin style names: `{l: 'margin-left', t: 'margin-top'...}`.
 	 * It is usually used with {@link jqzk#sumStyles} to calculate the numbers specified
 	 * in these styles.
-	 * @see #margins
-	 * @see #paddings
-	 * @return Map
+	 * @see {@link margins}
+	 * @see {@link paddings}
 	 */
 	margins: {l: 'margin-left', r: 'margin-right', t: 'margin-top', b: 'margin-bottom'},
-	/** A map of the border style names: {l: 'border-left', t: 'border-top'...}.
+	/**
+	 * A map of the border style names: `{l: 'border-left', t: 'border-top'...}`.
 	 * It is usually used with {@link jqzk#sumStyles} to calculate the numbers specified
 	 * in these styles.
-	 * @see #margins
-	 * @see #paddings
-	 * @return Map
+	 * @see {@link margins}
+	 * @see {@link paddings}
 	 */
 	borders: {l: 'border-left-width', r: 'border-right-width', t: 'border-top-width', b: 'border-bottom-width'},
-	/** A map of the padding style names: {l: 'padding-left', t: 'padding-top'...}.
+	/**
+	 * A map of the padding style names: `{l: 'padding-left', t: 'padding-top'...}`.
 	 * It is usually used with {@link jqzk#sumStyles} to calculate the numbers specified
 	 * in these styles.
-	 * @see #margins
-	 * @see #borders
-	 * @return Map
+	 * @see {@link margins}
+	 * @see {@link borders}
 	 */
 	paddings: {l: 'padding-left', r: 'padding-right', t: 'padding-top', b: 'padding-bottom'},
 
-	/** Returns the width of the scrollbar
-	 * @return int
+	/**
+	 * @returns the width of the scrollbar
 	 */
 	scrollbarWidth(): number {
 		var devicePixelRatio = zUtl.getDevicePixelRatio(),
@@ -2283,21 +2240,6 @@ Object.assign(jq, {
 		}
 		return _sbwDiv._value;
 	},
-	/** Returns if the specified rectangles are overlapped with each other.
-	 * @param Offset ofs1 the offset of the first rectangle
-	 * @param Offset dim1 the dimension (size) of the first rectangle
-	 * @param Offset ofs2 the offset of the second rectangle
-	 * @param Offset dim2 the dimension (size) of the second rectangle
-	 * @return boolean
-	 */
-	/** Returns if the specified rectangles are overlapped with each other.
-	 * @param Offset ofs1 the offset of the first rectangle
-	 * @param Offset dim1 the dimension (size) of the first rectangle
-	 * @param Offset ofs2 the offset of the second rectangle
-	 * @param Offset dim2 the dimension (size) of the second rectangle
-	 * @param int the tolerant value for the calculation
-	 * @return boolean
-	 */
 	isOverlapped(ofs1: zk.Offset, dim1: zk.Offset, ofs2: zk.Offset, dim2: zk.Offset, tolerant?: number): boolean {
 		var o1x1 = ofs1[0], o1x2 = dim1[0] + o1x1,
 			o1y1 = ofs1[1], o1y2 = dim1[1] + o1y1,
@@ -2311,17 +2253,18 @@ Object.assign(jq, {
 			return o2x1 <= o1x2 && o2x2 >= o1x1 && o2y1 <= o1y2 && o2y2 >= o1y1;
 	},
 
-	/** Clears the current selection in the browser window.
+	/**
+	 * Clears the current selection in the browser window.
 	 * <p>Notice: {@link jqzk#setSelectionRange} is used for the input-type
 	 * elements, while this method is applied to the whole browser window.
 	 * @see jqzk#setSelectionRange
 	 * @see jqzk#enableSelection
 	 * @see jqzk#disableSelection
-	 * @return boolean whether it is cleared successfully
+	 * @returns whether it is cleared successfully
 	 */
 	clearSelection(): boolean {
 		try {
-			let sel = window.getSelection();
+			const sel = window.getSelection();
 			// eslint-disable-next-line zk/noNull
 			if (zk.webkit) sel?.collapse(null);
 			else sel?.removeAllRanges();
@@ -2331,31 +2274,6 @@ Object.assign(jq, {
 			return false;
 		}
 	},
-
-	/** Returns the text-relevant style of the specified style
-	 * (same as HTMLs.getTextRelevantStyle in Java).
-	 * <pre>><code>
-jq.filterTextStyle('width:100px;font-size:10pt;font-weight:bold');
-  //return 'font-size:10pt;font-weight:bold'
-	 *</code></pre>
-	 *
-	 * @param String style the style to filter
-	 * @param Array plus an array of the names of the additional style to
-	 * include, such as <code>['width', 'height']</code>. Ignored if not specified or null.
-	 * @return String the text-related style
-	 */
-	/** Returns the text-relevant style of the specified styles
-	 * (same as HTMLs.getTextRelevantStyle in Java).
-	 * <pre><code>
-jq.filterTextStyle({width:"100px", fontSize: "10pt"});
-  //return {font-size: "10pt"}
-	 *</code></pre>
-	 *
-	 * @param Map styles the styles to filter
-	 * @param Array plus an array of the names of the additional style to
-	 * include, such as <code>['width', 'height']</code>. Ignored if not specified or null.
-	 * @return Map the text-related styles
-	 */
 	filterTextStyle(style: Record<string, string> | string, plus?: string[]): Record<string, string> | string {
 		if (typeof style == 'string') {
 			let ts = '';
@@ -2381,12 +2299,13 @@ jq.filterTextStyle({width:"100px", fontSize: "10pt"});
 		return ts;
 	},
 
-	/** Parses a string-type CSS style into a map of names and values of styles.
+	/**
+	 * Parses a string-type CSS style into a map of names and values of styles.
 	 * It is usually used with jq.css(map) to update the CSS style of an element.
-	 * @param String style the style to parse
-	 * @return Map a map of styles (name, value)
+	 * @param style - the style to parse
+	 * @returns a map of styles (name, value)
 	 */
-	parseStyle(style: string): {[key: string]: string} {
+	parseStyle(style: string): Record<string, string> {
 		var map = {};
 		if (style) {
 			var dummy = document.createElement('div');
@@ -2400,11 +2319,11 @@ jq.filterTextStyle({width:"100px", fontSize: "10pt"});
 		return map;
 	},
 
-	/** Creates an IFRAME element with the specified ID, src and style.
-	 * @param String id ID (required)
-	 * @param String src the source URL. If omitted, an one-pixel gif is assumed.
-	 * @param String style the CSS style. Ingored if omitted.
-	 * @return DOMElement
+	/**
+	 * Creates an IFRAME element with the specified ID, src and style.
+	 * @param id - ID (required)
+	 * @param src - the source URL. If omitted, an one-pixel gif is assumed.
+	 * @param style - the CSS style. Ingored if omitted.
 	 */
 	newFrame(id: string, src?: string, style?: string): HTMLIFrameElement {
 		if (!src) src = zjq.src0;
@@ -2416,7 +2335,8 @@ jq.filterTextStyle({width:"100px", fontSize: "10pt"});
 		jq(document.body).append(html);
 		return zk(id).jq[0] as HTMLIFrameElement;
 	},
-	/** Creates a 'stackup' (actually, an iframe) that makes an element
+	/**
+	 * Creates a 'stackup' (actually, an iframe) that makes an element
 	 * (with position:absolute) shown above others.
 	 * It is used to solve the layer issues of the browser.
 	 * <ol>
@@ -2425,13 +2345,12 @@ jq.filterTextStyle({width:"100px", fontSize: "10pt"});
 	 * </ol>
 	 *
 	 * <p>Notice that you usually have to call {@link jqzk#makeVParent} before calling this, since DIV with relative or absolute position will crop the child element. In other words, you have to make the element as the top-level element before creating a stackup for it.
-	 * <p>To remove the stackup, call {@link #remove}.
+	 * <p>To remove the stackup, call {@link remove}.
 	 * <p>If you want to create a shadow, you don't need to access this method since {@link zk.eff.Shadow} has an option to create and maintain the stackup automatically.
-	 * @param DOMElement el the element to retrieve the dimensions. If omitted, the stackup is not appended to the DOM tree.
-	 * @param String id ID of the stackup (iframe). If omitted and el is specified, it is el.id + '$ifrstk'. If both el and id are omitted, 'z_ifrstk' is assumed.
-	 * @param DOMElement anchor where to insert the DOM element before
+	 * @param el - the element to retrieve the dimensions. If omitted, the stackup is not appended to the DOM tree.
+	 * @param id - ID of the stackup (iframe). If omitted and el is specified, it is el.id + '$ifrstk'. If both el and id are omitted, 'z_ifrstk' is assumed.
+	 * @param anchor - where to insert the DOM element before
 	 * (i.e., anchor will become the next sibling of the stackup, so anchor will be on top of the stackup if z-index is the same). If omitted, el is assumed.
-	 * @return DOMElement
 	 */
 	newStackup(el: HTMLElement | undefined, id: string, anchor?: Node): HTMLIFrameElement {
 		el = jq(el || [], zk)[0];
@@ -2451,11 +2370,11 @@ jq.filterTextStyle({width:"100px", fontSize: "10pt"});
 		}
 		return ifr;
 	},
-	/** Creates a HIDDEN element
-	 * @param String name the name of the HIDDEN tag.
-	 * @param String value the value of the HIDDEN tag.
-	 * @param DOMElement parent the parent node. Ignored if not specified.
-	 * @return DOMElement
+	/**
+	 * Creates a HIDDEN element
+	 * @param name - the name of the HIDDEN tag.
+	 * @param value - the value of the HIDDEN tag.
+	 * @param parent - the parent node. Ignored if not specified.
 	 */
 	newHidden(nm: string, val: string, parent?: Node): HTMLInputElement {
 		var inp = document.createElement('input');
@@ -2466,8 +2385,8 @@ jq.filterTextStyle({width:"100px", fontSize: "10pt"});
 		return inp;
 	},
 
-	/** Returns the head element of this document.
-	 * @return DOMElement the head element
+	/**
+	 * @returns the head element of this document.
 	 * @since 5.0.1
 	 */
 	head(): HTMLElement | undefined {
@@ -2475,10 +2394,11 @@ jq.filterTextStyle({width:"100px", fontSize: "10pt"});
 	},
 
 	//dialog//
-	/** It is the same as <code>window.confirm</code>, except it will set
-	 * {@link zk#alerting} so widgets know to ignore <code>onblur</code> (since the focus will be back later).
-	 * <p>It is strongly suggested to use this method instead of <code>window.confirm</code>.
-	 * @return boolean whether the Yes button is pressed
+	/**
+	 * It is the same as `window.confirm`, except it will set
+	 * {@link zk#alerting} so widgets know to ignore `onblur` (since the focus will be back later).
+	 * <p>It is strongly suggested to use this method instead of `window.confirm`.
+	 * @returns whether the Yes button is pressed
 	 */
 	confirm(msg: string): boolean {
 		zk.alerting = true;
@@ -2492,69 +2412,70 @@ jq.filterTextStyle({width:"100px", fontSize: "10pt"});
 			} //doc might be unloaded
 		}
 	},
-	/** Shows up a message.
+	/**
+	 * Shows up a message.
 	 * If opts.mode is os, this method is the same as window.alert, except it will set
 	 * {@link zk#alerting}, so widgets (particularly input widgets) know to ignore onblur (since the focus will be back later).
 	 * <p>It is strongly suggested to use this method instead of window.alert.
 	 * <p>If opts is omitted or opts.mode is not os, it is similar to
-	 * <code>org.zkoss.zul.Messagebox.show()</code> at the server.
-<pre><code>
-jq.alert('Hi');
-jq.alert('This is a popup message box', {mode:"popup", icon: "ERROR"});
-jq.alert('With listener', {
-	button : {
-  		YES: function () {jq.alert('Yes clicked')},
-  		NO: function () {jq.alert('No clicked')}
-	}
-});
-</code></pre>
-	 * @param String msg the message to show
-	 * @param Map opts the options.
-<table border="1" cellspacing="0" width="100%">
-<caption> Allowed Options
-</caption>
-<tr>
-<th> Name
-</th><th> Allowed Values
-</th><th> Default Value
-</th><th> Description
-</th></tr>
-<tr>
-<td> icon
-</td><td> 'QUESTION', 'EXCLAMATION', 'INFORMATION', 'ERROR', 'NONE'
-</td><td> 'INFORMATION'
-</td><td> Specifies the icon to display.
-</td></tr>
-<tr>
-<td> mode
-</td><td> 'overlapped', 'popup', 'modal'
-</td><td> 'modal'
-</td><td> Specifies which window mode to use.
-</td></tr>
-<tr>
-<td> title
-</td><td> any string
-</td><td> 'ZK'
-</td><td> Specifies the message box's title.
-</td></tr>
-<tr>
-<td> desktop
-</td><td> a desktop ({@link Desktop}) or null
-</td><td> The current desktop
-</td><td> Specifies which desktop this message box belongs to. You rarely need to specify it.
-</td></tr>
-<tr>
-<td> button
-</td><td> a map ({@link Map}) of buttons.
-</td><td> If null or empty, OK is assumed
-</td><td> Specifies what buttons to display. The key is the button name,
-and the value is a function ({@link Function}) to execute when the button
-is clicked.
-The label is assumed to be <code>msgzul[name.toUpperCase()]||name</code>.
-Localized labels include OK, Cancel, Yes, No, Retry, Abort, Ignore, Reload.
-You can add your own labels by puttingit to <code>msgzul</code>.
-</td></tr>
-</table>
+	 * `org.zkoss.zul.Messagebox.show()` at the server.
+	 * ```ts
+	 * jq.alert('Hi');
+	 * jq.alert('This is a popup message box', {mode:"popup", icon: "ERROR"});
+	 * jq.alert('With listener', {
+	 * 	button : {
+	 *   		YES: function () {jq.alert('Yes clicked')},
+	 *   		NO: function () {jq.alert('No clicked')}
+	 * 	}
+	 * });
+	 * ```
+	 * @param msg - the message to show
+	 * @param opts - the options.
+	 * <table border="1" cellspacing="0" width="100%">
+	 * <caption> Allowed Options
+	 * </caption>
+	 * <tr>
+	 * <th> Name
+	 * </th><th> Allowed Values
+	 * </th><th> Default Value
+	 * </th><th> Description
+	 * </th></tr>
+	 * <tr>
+	 * <td> icon
+	 * </td><td> 'QUESTION', 'EXCLAMATION', 'INFORMATION', 'ERROR', 'NONE'
+	 * </td><td> 'INFORMATION'
+	 * </td><td> Specifies the icon to display.
+	 * </td></tr>
+	 * <tr>
+	 * <td> mode
+	 * </td><td> 'overlapped', 'popup', 'modal'
+	 * </td><td> 'modal'
+	 * </td><td> Specifies which window mode to use.
+	 * </td></tr>
+	 * <tr>
+	 * <td> title
+	 * </td><td> any string
+	 * </td><td> 'ZK'
+	 * </td><td> Specifies the message box's title.
+	 * </td></tr>
+	 * <tr>
+	 * <td> desktop
+	 * </td><td> a desktop ({@link Desktop}) or null
+	 * </td><td> The current desktop
+	 * </td><td> Specifies which desktop this message box belongs to. You rarely need to specify it.
+	 * </td></tr>
+	 * <tr>
+	 * <td> button
+	 * </td><td> a map ({@link Map}) of buttons.
+	 * </td><td> If null or empty, OK is assumed
+	 * </td><td> Specifies what buttons to display. The key is the button name,
+	 * and the value is a function ({@link Function}) to execute when the button
+	 * is clicked.
+	 * The label is assumed to be `msgzul[name.toUpperCase()]||name`.
+	 * Localized labels include OK, Cancel, Yes, No, Retry, Abort, Ignore, Reload.
+	 * You can add your own labels by puttingit to `msgzul`.
+	 * </td></tr>
+	 * </table>
 	 */
 	alert(msg: string, opts?: zk.AlertOptions): void {
 		zk.alerting = true;
@@ -2568,30 +2489,37 @@ You can add your own labels by puttingit to <code>msgzul</code>.
 			} //doc might be unloaded
 		}
 	},
-	/** To register one object for the <code>zsync</code> invocation.
+	/**
+	 * To register one object for the `zsync` invocation.
 	 * For example,
-	 * <pre><code>jq.onzsync(obj1);</code></pre>
-	 * @param Object obj the object to register
-	 * @see #zsync
-	 * @see #unzsync
+	 * ```ts
+	 * jq.onzsync(obj1);
+	 * ```
+	 * @param obj - the object to register
+	 * @see {@link zsync}
+	 * @see {@link unzsync}
 	 * @since 5.0.1
 	 */
 	onzsync(obj: ZSyncObject): void {
 		_zsyncs.unshift(obj);
 	},
-	/** To unregister one object for the <code>zsync</code> invocation.
+	/**
+	 * To unregister one object for the `zsync` invocation.
 	 * For example,
-	 * <pre><code>jq.unzsync(obj1);</code></pre>
-	 * @param Object obj the object to register
-	 * @see #zsync
-	 * @see #onzsync
+	 * ```ts
+	 * jq.unzsync(obj1);
+	 * ```
+	 * @param obj - the object to register
+	 * @see {@link zsync}
+	 * @see {@link onzsync}
 	 * @since 5.0.1
 	 */
 	unzsync(obj: ZSyncObject): void {
 		_zsyncs.$remove(obj);
 	},
-	/** To invoke the <code>zsync</code> method of the registered objects.
-	 * <p><code>zsync</code> is called automatically when {@link zWatch}
+	/**
+	 * To invoke the `zsync` method of the registered objects.
+	 * <p>`zsync` is called automatically when {@link zWatch}
 	 * fires onSize, onShow or onHide.
 	 * It is useful if you have a DOM element whose position is absolute.
 	 * Then, if you register the widget, the widget's zsync method will be called when some widget becomes visible, is added and so on.
@@ -2599,19 +2527,20 @@ You can add your own labels by puttingit to <code>msgzul</code>.
 	 * <p>For example, {@link zul.wnd.Window} uses DIV to simulate the shadow in IE,
 	 * then it can register itself in {@link Widget#bind_} and then
 	 * synchronize the position and size of shadow (DIV) in zsync as follows.
-	 * <pre><code>
-bind_: function () {
-  if (zk.ie) jq.onzsync(this); //register
-...
-},
-unbind_: function () {
-  if (zk.ie) jq.unzsync(this); //unregister
-...
-},
-zsync: function () {
-this._syncShadow(); //synchronize shadow
-...
-}</code></pre>
+	 * ```ts
+	 * bind_: function () {
+	 *   if (zk.ie) jq.onzsync(this); //register
+	 * ...
+	 * },
+	 * unbind_: function () {
+	 *   if (zk.ie) jq.unzsync(this); //unregister
+	 * ...
+	 * },
+	 * zsync: function () {
+	 * this._syncShadow(); //synchronize shadow
+	 * ...
+	 * }
+	 * ```
 	 * <p>Notice that it is better not to use the absolute position for any child element, so the browser will maintain the position for you.
 	 * After all, it runs faster and zsync won't be called if some 3rd-party library is used to create DOM element directly (without ZK).
 	 */
@@ -2620,9 +2549,10 @@ this._syncShadow(); //synchronize shadow
 		setTimeout(function () {_zsync(org);}, 50);
 	},
 
-	/** Move the focus out of any element.
-	 * <p>Notice that you cannot simply use <code>jq(window).focus()</code>
-	 * or <code>zk(window).focus()</code>,
+	/**
+	 * Move the focus out of any element.
+	 * <p>Notice that you cannot simply use `jq(window).focus()`
+	 * or `zk(window).focus()`,
 	 * because it has no effect for browsers other than IE.
 	 * @since 5.0.1
 	 */
@@ -2638,113 +2568,54 @@ this._syncShadow(); //synchronize shadow
 		a.focus();
 		setTimeout(function () {jq(a).remove();}, 500);
 	},
-	/**
-	 * An override function that provide a way to get the style value where is
-	 * defined in the CSS file or the style object, rather than the computed value.
-	 * <p> Note that the function is only applied to the width or height property,
-	 *  and the third argument must be 'styleonly'.
-	 * <p> For example,
-<pre><code>
-jq.css(elem, 'height', 'styleonly');
-or
-jq.css(elem, 'width', 'styleonly');
-</code></pre>
-	 * @since 5.0.6
-	 * @param DOMElement elem a Dom element
-	 * @param String name the style name
-	 * @param String extra an option in this case, it must be 'styleonly'
-	 * @return String the style value.
-	 */
-	//css: function () {},
-	/** Decodes a JSON string to a JavaScript object.
-	 * <p>It is similar to jq.parseJSON (jQuery's default function), except
-	 * 1) it doesn't check if the string is a valid JSON
-	 * 2) it uses eval to evaluate
-	 * <p>Thus, it might not be safe to invoke this if the string's source
-	 * is not trustable (and then it is better to use jq.parseJSON)
-	 * @param String s the JSON string
-	 * @return Object the converted object.
-	 */
-	//evalJSON: function () {},
-	/** Encodes a JavaScript object to a JSON string. To decode, use jq.evalJSON(s), where s is a JSON string.
-	 *
-	 * <p>You can provide an optional replacer method. It will be passed the key and value of each member, with this bound to the containing object. The value that is returned from your method will be serialized. If your method returns undefined, then the member will be excluded from the serialization.
-	 * Values that do not have JSON representations, such as undefined or functions, will not be serialized. Such values in objects will be dropped; in arrays they will be replaced with null. You can use a replacer function to replace those with JSON values. JSON.stringify(undefined) returns undefined.
-	 * <p>The optional space parameter produces a stringification of the value that is filled with line breaks and indentation to make it easier to read.
-	 * <p>If the space parameter is a non-empty string, then that string will be used for indentation. If the space parameter is a number, then the indentation will be that many spaces.
-	 * <p>Example:
-<pre><code>
-text = jq.toJSON(['e', {pluribus: 'unum'}]);
-// text is '["e",{"pluribus":"unum"}]'
 
-text = jq.toJSON([new Date()], function (key, value) {
-	return this[key] instanceof Date ?
-		'Date(' + this[key] + ')' : value;
-});
-// text is '["Date(---current time---)"]'
-</code></pre>
-	 * @param Object obj any JavaScript object
-	 * @param Object replace an optional parameter that determines how object values are stringified for objects. It can be a function.
-	 */
-	//toJSON: function () {},
-	/**
-	 * Marshalls the Date object into a string such that it can be sent
-	 * back to the server.
-	 * <p>It works with org.zkoss.json.JSONs.d2j() to transfer data from client
-	 * to server.
-	 * @param Date d the date object to marshall. If null, null is returned
-	 * @return String a string
-	 * @since 5.0.5
-	 */
-	//d2j: function () {},
-	/** Unmarshalls the string back to a Date object.
-	 * <p>It works with org.zkoss.json.JSONs.j2d() to transfer data from server
-	 * to client.
-	 * @param String s the string that is marshalled at the server
-	 * @return Date the date object after unmarshalled back
-	 * @since 5.0.5
-	 */
-	//j2d: function () {}
 	_syncScroll: <Record<string, zk.Widget>> {},
-	/** To register one object for the <code>doSyncScroll</code> invocation.
+	/**
+	 * To register one object for the `doSyncScroll` invocation.
 	 * For example,
-	 * <pre><code>onSyncScroll();</code></pre>
-	 * @param Object wgt the object to register
-	 * @see #doSyncScroll
-	 * @see #unSyncScroll
+	 * ```ts
+	 * onSyncScroll();
+	 * ```
+	 * @param wgt - the object to register
+	 * @see {@link doSyncScroll}
+	 * @see {@link unSyncScroll}
 	 * @since 6.5.0
 	 */
 	onSyncScroll(wgt: zk.Widget): void {
-		var sync = this['_syncScroll'];
+		var sync = this._syncScroll;
 		if (!sync[wgt.uuid])
 			sync[wgt.uuid] = wgt;
 	},
-	/** To invoke the <code>doSyncScroll</code> method of the registered objects.
-	 * <p><code>doSyncScroll</code> is called automatically when {@link zWatch}
+	/**
+	 * To invoke the `doSyncScroll` method of the registered objects.
+	 * <p>`doSyncScroll` is called automatically when {@link zWatch}
 	 * fires onResponse, onShow or onHide.
 	 * It is useful if you have a Widget that using zul.Scrollbar.
 	 * Then, if you register the widget, the widget's doSyncScroll method will be called when widget add/remove/hide/show its child widget.
-	 * @see #onSyncScroll
-	 * @see #unSyncScroll
+	 * @see {@link onSyncScroll}
+	 * @see {@link unSyncScroll}
 	 * @since 6.5.0
 	 */
 	doSyncScroll(): void {
-		var sync = this['_syncScroll'];
+		var sync = this._syncScroll;
 		for (var id in sync) {
 			sync[id].doResizeScroll_();
 		}
-		this['_syncScroll'] = {}; // reset
+		this._syncScroll = {}; // reset
 	},
-	/** To unregister one object for the <code>doSyncScroll</code> invocation.
+	/**
+	 * To unregister one object for the `doSyncScroll` invocation.
 	 * For example,
-	 * <pre><code>unSyncScroll(wgt);</code></pre>
-	 * @param Object wgt the object to register
-	 * @see #doSyncScroll
-	 * @see #onSyncScroll
+	 * ```ts
+	 * unSyncScroll(wgt);
+	 * ```
+	 * @param wgt - the object to register
+	 * @see {@link doSyncScroll}
+	 * @see {@link onSyncScroll}
 	 * @since 6.5.0
 	 */
 	unSyncScroll(wgt: zk.Widget): void {
-		delete this['_syncScroll'][wgt.uuid];
+		delete this._syncScroll[wgt.uuid];
 	}
 });
 
@@ -2768,24 +2639,25 @@ export interface EventKeyData extends EventMetaData {
 	key: string | undefined;
 }
 export const _JQEvent = {
-	/** Stops the event propagation.
+	/**
+	 * Stops the event propagation.
 	 */
 	stop(this: JQuery.Event): void {
 		this.preventDefault();
 		this.stopPropagation();
 	},
-	/** Retrieve the mouse information of a DOM event. The properties of the returned object include pageX, pageY and the meta information
-	 * @return Map a map of data.
-	 * @see zk.Event#data
+	/**
+	 * @returns the mouse information of a DOM event. The properties of the returned object include pageX, pageY and the meta information
+	 * @see {@link zk.Event.data}
 	 */
 	mouseData(this: JQuery.MouseEventBase): EventMouseData {
 		return zk.copy({
 			pageX: this.pageX, pageY: this.pageY
 		}, this.metaData());
 	},
-	/** Retrieve the key information of a DOM event. The properties of the returned object include keyCode, charCode, key and the meta information ({@link #metaData}).
-	 * @return Map a map of data.
-	 * @see zk.Event#data
+	/**
+	 * @returns the key information of a DOM event. The properties of the returned object include keyCode, charCode, key and the meta information ({@link metaData}).
+	 * @see {@link zk.Event.data}
 	 */
 	keyData(this: JQuery.KeyboardEventBase): EventKeyData {
 		return zk.copy({
@@ -2794,6 +2666,7 @@ export const _JQEvent = {
 			key: this._keyDataKey()
 			}, this.metaData());
 	},
+	/** @internal */
 	_keyDataKey(this: JQuery.KeyboardEventBase): string {
 		// Ref: https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values
 		var key = this.originalEvent!.key;
@@ -2829,9 +2702,9 @@ export const _JQEvent = {
 			default: return key;
 		}
 	},
-	/** Retrieve the meta-information of a DOM event. The properties of the returned object include altKey, ctrlKey, shiftKey, metaKey and which.
-	 * @return Map a map of data.
-	 * @see zk.Event#data
+	/**
+	 * @returns the meta-information of a DOM event. The properties of the returned object include altKey, ctrlKey, shiftKey, metaKey and which.
+	 * @see {@link zk.Event.data}
 	 */
 	metaData(this: JQuery.Event): EventMetaData {
 		var inf: EventMetaData = {
@@ -2846,33 +2719,37 @@ export const _JQEvent = {
 };
 zk.copy(jq.Event.prototype, _JQEvent);
 
-/** @partial jq.Event
- */
 export const _JQEventStatic = {
-	/** Fires a DOM element.
-	 * @param DOMElement el the target element
-	 * @param String evtnm the name of the event
+	/**
+	 * Fires a DOM element.
+	 * @param el - the target element
+	 * @param evtnm - the name of the event
 	 */
 	fire(el: HTMLElement, evtnm: string): void {
 		var evt = document.createEvent('HTMLEvents');
 		evt.initEvent(evtnm, false, false);
 		el.dispatchEvent(evt);
 	},
-	/** Stops the event propagation of the specified event.
+	/**
+	 * Stops the event propagation of the specified event.
 	 * It is usually used as the event listener, such as
-	 * <pre><code>jq(el).mousemove(jq.Event.stop)</code></pre>
-	 * @param jq.Event evt the event.
+	 * ```ts
+	 * jq(el).mousemove(jq.Event.stop)
+	 * ```
+	 * @param evt - the event.
 	 */
 	stop(evt: JQuery.Event): void {
 		evt.stop();
 	},
-	/** Returns only the properties that are meta data, such as altKey, ctrlKey, shiftKey, metaKey and which.
-	 * <p>For example, the following returns <code>{ctrlKey:true}</code>.
-	* <pre><code>jq.event.filterMetaData({some:1,ctrlKey:true});</code></pre>
-	* @param Map data a map of data. It is usually the value returned
-	* by {@link #mouseData} or {@link #metaData}.
-	* @return Map a map of data after filtered
-	*/
+	/**
+	 * @returns only the properties that are meta data, such as altKey, ctrlKey, shiftKey, metaKey and which.
+	 * <p>For example, the following returns `{ctrlKey:true}`.
+	 * ```ts
+	 * jq.event.filterMetaData({some:1,ctrlKey:true});
+	 * ```
+	 * @param data - a map of data. It is usually the value returned
+	 * by {@link mouseData} or {@link metaData}.
+	 */
 	filterMetaData(data: EventMetaData): EventMetaData {
 		var inf: EventMetaData = {
 			which: data.which || 0
@@ -2883,11 +2760,12 @@ export const _JQEventStatic = {
 		if (data.metaKey) inf.metaKey = true;
 		return inf;
 	},
-	/** Converts a DOM event ({@link jq.Event}) to a ZK event ({@link zk.Event}).
-	 * @param jq.Event evt the DOM event
-	 * @param zk.Widget wgt the target widget. It is used if the widget
-	 * can be resolved from the event (<code>zk.Widget.$(evt)</code>)
-	 * @return zk.Event the ZK event
+	/**
+	 * Converts a DOM event ({@link jq.Event}) to a ZK event ({@link zk.Event}).
+	 * @param evt - the DOM event
+	 * @param wgt - the target widget. It is used if the widget
+	 * can be resolved from the event (`zk.Widget.$(evt)`)
+	 * @returns the ZK event
 	 */
 	zk(evt: JQuery.TriggeredEvent, wgt?: zk.Widget): zk.Event {
 		var type = evt.type,
@@ -2915,21 +2793,20 @@ export const _JQEventStatic = {
 };
 Object.assign(jq.Event, _JQEventStatic);
 // eslint-disable-next-line @typescript-eslint/ban-types
-export let delayQue: Record<string, Function[]> = {};
+export var delayQue: Record<string, Function[]> = {};
 zk.delayQue = delayQue; //key is uuid, value is array of pending functions
 /**
  * Execute function related to specified widget after a while,
  * and will insure the execution order.
- * @param String uuid wgt's uuid
- * @param Function func a function to be executed
- * @param Map opts [optional] the options. Allowed options:
+ * @param uuid - wgt's uuid
+ * @param func - a function to be executed
+ * @param opts - the options. Allowed options:
  * <ul>
  * <li>int timeout: number of milliseconds to wait before executing the function. Default: 50</li>
  * <li>boolean urgent: whether to execute function as soon as possible</li>
  * </ul>
  * Note: timeout is only meaningful for the first function added to wgt
  */
-zk.delayFunction = delayFunction;
 export function delayFunction(uuid: string, func: () => void, opts?: Partial<{ timeout: number; urgent: boolean }>): void {
 	if (uuid && typeof func == 'function') {
 		if (!opts)
@@ -2954,4 +2831,5 @@ export function delayFunction(uuid: string, func: () => void, opts?: Partial<{ t
 		}
 	}
 }
+zk.delayFunction = delayFunction;
 zk.JQZK = JQZK;

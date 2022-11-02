@@ -22,15 +22,16 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <li>There is no listcol in ZUL because it is merged into {@link Listheader}.
  * Reason: easier to write Listbox.</li>
  * </ol>
- * <p>Default {@link #getZclass}: z-listheader.
+ * @defaultValue {@link getZclass}: z-listheader.
  */
 @zk.WrapClass('zul.sel.Listheader')
 export class Listheader extends zul.mesh.SortWidget {
 	override parent!: zul.sel.Listhead | undefined;
+	/** @internal */
 	_maxlength?: number;
 
-	/** Returns the listbox that this belongs to.
-	 * @return Listbox
+	/**
+	 * @returns the listbox that this belongs to.
 	 */
 	getListbox(): zul.sel.Listbox | undefined {
 		return this.parent ? this.parent.parent : undefined;
@@ -41,27 +42,28 @@ export class Listheader extends zul.mesh.SortWidget {
 		this.listen({onGroup: this}, -1000);
 	}
 
-	/** Returns the mesh body that this belongs to.
-	 * @return Listbox
+	/**
+	 * @returns the mesh body that this belongs to.
 	 */
 	getMeshBody = Listheader.prototype.getListbox;
 
+	/** @internal */
 	override checkClientSort_(ascending: boolean): boolean {
 		const body = this.getMeshBody();
 		return !(!body || body.hasGroup())
 				&& super.checkClientSort_(ascending);
 	}
 
-	/** Returns the maximal length of each item's label.
-	 * Default: 0 (no limit).
-	 * @return int
+	/**
+	 * @returns the maximal length of each item's label.
+	 * @defaultValue `0` (no limit).
 	 */
 	getMaxlength(): number | undefined {
 		return this._maxlength;
 	}
 
-	/** Sets the maximal length of each item's label.
-	 * @param int maxlength
+	/**
+	 * Sets the maximal length of each item's label.
 	 */
 	setMaxlength(maxlength: number, opts?: Record<string, boolean>): this {
 		const o = this._maxlength;
@@ -87,16 +89,17 @@ export class Listheader extends zul.mesh.SortWidget {
 		return this;
 	}
 
-	/** Groups and sorts the items ({@link Listitem}) based on
-	 * {@link #getSortAscending}.
+	/**
+	 * Groups and sorts the items ({@link Listitem}) based on
+	 * {@link getSortAscending}.
 	 * If the corresponding comparator is not set, it returns false
 	 * and does nothing.
 	 *
-	 * @param boolean ascending whether to use {@link #getSortAscending}.
+	 * @param ascending - whether to use {@link getSortAscending}.
 	 * If the corresponding comparator is not set, it returns false
 	 * and does nothing.
-	 * @param zk.Event evt the event causes the group
-	 * @return boolean whether the items are grouped.
+	 * @param evt - the event causes the group
+	 * @returns boolean whether the items are grouped.
 	 * @since 6.5.0
 	 */
 	group(ascending: boolean, evt: zk.Event): boolean {
@@ -198,8 +201,9 @@ export class Listheader extends zul.mesh.SortWidget {
 		return true;
 	}
 
-	/** It invokes {@link #group} to group list items and maintain
-	 * {@link #getSortDirection}.
+	/**
+	 * It invokes {@link group} to group list items and maintain
+	 * {@link getSortDirection}.
 	 * @since 6.5.0
 	 */
 	onGroup(evt: zk.Event): void {
@@ -214,6 +218,7 @@ export class Listheader extends zul.mesh.SortWidget {
 
 	/**
 	 * Updates the cells according to the listheader
+	 * @internal
 	 */
 	updateCells_(): void {
 		var box = this.getListbox();
@@ -230,8 +235,8 @@ export class Listheader extends zul.mesh.SortWidget {
 		if (w && jcol < w.nChildren)
 			w.getChildAt(jcol)!.rerender();
 	}
-
-	//super//
+	
+	/** @internal */
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		var cm = this.$n('cm'),
@@ -249,6 +254,7 @@ export class Listheader extends zul.mesh.SortWidget {
 			this.domListen_(btn, 'onClick', '_doMenuClick');
 	}
 
+	/** @internal */
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		var cm = this.$n('cm'),
 			n = this.$n();
@@ -267,11 +273,13 @@ export class Listheader extends zul.mesh.SortWidget {
 		super.unbind_(skipper, after, keepRod);
 	}
 
+	/** @internal */
 	_doMouseOver(evt: zk.Event): void {
 		if (this.isSortable_() || (this.parent!._menupopup && this.parent!._menupopup != 'none'))
 			jq(this.$n_()).addClass(this.$s('hover'));
 	}
 
+	/** @internal */
 	_doMouseOut(evt: zk.Event): void {
 		if (this.isSortable_() || (this.parent!._menupopup && this.parent!._menupopup != 'none')) {
 			var $n = jq(this.$n_());
@@ -280,6 +288,7 @@ export class Listheader extends zul.mesh.SortWidget {
 		}
 	}
 
+	/** @internal */
 	_doClick(evt: zk.Event<zk.EventMetaData>): void {
 		this._checked = !this._checked;
 		var box = this.getListbox()!,
@@ -295,7 +304,7 @@ export class Listheader extends zul.mesh.SortWidget {
 		box.fire('onCheckSelectAll', this._checked, {toServer: true});
 	}
 
-	//@Override
+	/** @internal */
 	override doClick_(evt: zk.Event, popupOnly?: boolean): void {
 		var box = this.getListbox(),
 			cm = this.$n('cm');
@@ -307,7 +316,7 @@ export class Listheader extends zul.mesh.SortWidget {
 		super.doClick_(evt, popupOnly);
 	}
 
-	//@Override
+	/** @internal */
 	override domContent_(): string {
 		var s = super.domContent_(),
 			box = this.getListbox()!;
@@ -318,18 +327,19 @@ export class Listheader extends zul.mesh.SortWidget {
 		return s;
 	}
 
+	/** @internal */
 	_hasCheckbox(): boolean {
 		var box = this.getListbox();
 		return !!(box != null && this.parent!.firstChild == this
 			&& box._checkmark && box._multiple && !box._listbox$noSelectAll);  // B50-ZK-873
 	}
 
-	//@Override
+	/** @internal */
 	override domLabel_(): string {
 		return zUtl.encodeXML(this.getLabel(), {maxlength: this._maxlength});
 	}
 
-	//@Override
+	/** @internal */
 	override getContentWidth_(): number {
 		var $cv = zk(this.$n('cave')),
 			isTextOnly = !this.nChildren && !this._iconSclass && !this._hasCheckbox(),

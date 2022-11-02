@@ -15,28 +15,29 @@ it will be useful, but WITHOUT ANY WARRANTY.
 /**
  * A component used to embed the browser native content (i.e., HTML tags)
  * into the output sent to the browser.
- * The browser native content is specified by {@link #setContent}.
+ * The browser native content is specified by {@link setContent}.
  *
  * <p>Notice that {@link Html} generates HTML SPAN to enclose
  * the embedded HTML tags. Thus, you can specify the style
- * ({@link #getStyle}), tooltip {@link #getTooltip} and so on.
+ * ({@link getStyle}), tooltip {@link getTooltip} and so on.
  */
 @zk.WrapClass('zul.wgt.Html')
 export class Html extends zul.Widget<HTMLHtmlElement> {
+	/** @internal */
 	_content = '';
 
-	/** Returns the embedded content (i.e., HTML tags).
-	 * <p>Default: empty ("").
+	/**
+	 * @returns the embedded content (i.e., HTML tags).
+	 * @defaultValue empty ("").
 	 * <p>Deriving class can override it to return whatever it wants
 	 * other than null.
-	 * @return String
 	 */
 	getContent(): string {
 		return this._content;
 	}
 
-	/** Sets the embedded content (i.e., HTML tags).
-	 * @param String content
+	/**
+	 * Sets the embedded content (i.e., HTML tags).
 	 */
 	setContent(content: string, opts?: Record<string, boolean>): this {
 		const o = this._content;
@@ -50,6 +51,7 @@ export class Html extends zul.Widget<HTMLHtmlElement> {
 		return this;
 	}
 
+	/** @internal */
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		if (Array.isArray(this._content)) //zk().detachChildren() is used
@@ -57,6 +59,7 @@ export class Html extends zul.Widget<HTMLHtmlElement> {
 				n.appendChild(ctn[j]);
 	}
 
+	/** @internal */
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		if (Array.isArray(this._content)) //zk().detachChildren() is used
 			for (var n = this.$n_(); n.firstChild;)

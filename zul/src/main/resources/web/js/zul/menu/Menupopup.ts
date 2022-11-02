@@ -89,17 +89,22 @@ function _activateNextMenu(menu: zul.menu.Menu): void {
  * A container used to display menus. It should be placed inside a
  * {@link Menu}.
  *
- * <p>Default {@link #getZclass}: z-menupopup.
+ * @defaultValue {@link getZclass}: z-menupopup.
  */
 @zk.WrapClass('zul.menu.Menupopup')
 export class Menupopup extends zul.wgt.Popup {
 	override parent!: zul.menu.Menu | undefined;
 	override firstChild!: zul.menu.Menuitem | undefined;
 	override lastChild!: zul.menu.Menuitem | undefined;
+	/** @internal */
 	_curIndex = -1;
+	/** @internal */
 	_keepOpen = false;
+	/** @internal */
 	_shallClose?: boolean;
+	/** @internal */
 	_shadow?: zk.eff.Shadow;
+	/** @internal */
 	_reverseDirection?: boolean;
 
 	override zsync(opts?: zk.Object): void {
@@ -110,10 +115,12 @@ export class Menupopup extends zul.wgt.Popup {
 		this._shadow.sync();
 	}
 
+	/** @internal */
 	_hideShadow(): void {
 		if (this._shadow) this._shadow.hide();
 	}
 
+	/** @internal */
 	_syncPos(): void {
 		var menu = _getMenu(this);
 		if (menu) {
@@ -224,6 +231,7 @@ export class Menupopup extends zul.wgt.Popup {
 		}
 	}
 
+	/** @internal */
 	override shallStackup_(): boolean {
 		return false;
 	}
@@ -251,6 +259,7 @@ export class Menupopup extends zul.wgt.Popup {
 		this._doFloatUp(ctl);
 	}
 
+	/** @internal */
 	override _doFloatUp(ctl: zk.ZWatchController): void {
 		if (!this.isVisible())
 			return;
@@ -309,6 +318,7 @@ export class Menupopup extends zul.wgt.Popup {
 		this._hideShadow();
 	}
 
+	/** @internal */
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		zWatch.listen({onHide: this, onResponse: this});
@@ -319,6 +329,7 @@ export class Menupopup extends zul.wgt.Popup {
 		if (!zk.css3) jq.onzsync(this);
 	}
 
+	/** @internal */
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		if (this.isOpen())
 			this.close();
@@ -345,6 +356,7 @@ export class Menupopup extends zul.wgt.Popup {
 		this._syncPos(); // For Bug ZK-2160, resync position again after invoking supers.
 	}
 
+	/** @internal */
 	override doKeyDown_(evt: zk.Event): void {
 		var w: zk.Widget | undefined = this._currentChild(),
 			menu: zul.menu.Menu | undefined,
@@ -463,6 +475,7 @@ export class Menupopup extends zul.wgt.Popup {
 		super.doKeyDown_(evt);
 	}
 
+	/** @internal */
 	override doClick_(evt: zk.Event, popupOnly?: boolean): void {
 		// Prevent from closing the popup if being triggered by space key.
 		// https://bugzilla.mozilla.org/show_bug.cgi?id=1220143
@@ -471,8 +484,8 @@ export class Menupopup extends zul.wgt.Popup {
 		super.doClick_(evt, popupOnly);
 	}
 
-	/** Returns the {@link Menubar} that contains this menuitem, or null if not available.
-	 * @return zul.menu.Menubar
+	/**
+	 * @returns the {@link Menubar} that contains this menuitem, or null if not available.
 	 * @since 5.0.5
 	 */
 	getMenubar(): zul.menu.Menubar | undefined {
@@ -486,12 +499,14 @@ export class Menupopup extends zul.wgt.Popup {
 		return undefined;
 	}
 
+	/** @internal */
 	_doMouseEnter(evt: MouseEvent): void {
 		var menubar = this.getMenubar();
 		if (menubar) menubar._bOver = true;
 		this._shallClose = false;
 	}
 
+	/** @internal */
 	_doMouseLeave(evt: MouseEvent): void {
 		var menubar = this.getMenubar();
 		if (menubar) {
@@ -506,7 +521,7 @@ export class Menupopup extends zul.wgt.Popup {
 
 	/**
 	 * Sets the current active item in this menupopup.
-	 * @param int childIndex the index of menupopup children
+	 * @param childIndex - the index of menupopup children
 	 * @since 8.6.0
 	 */
 	// eslint-disable-next-line zk/javaStyleSetterSignature
@@ -534,10 +549,12 @@ export class Menupopup extends zul.wgt.Popup {
 	}
 
 	// internal use only.
+	/** @internal */
 	getAnchor_(): HTMLAnchorElement | undefined {
 		return this.$n('a');
 	}
 
+	/** @internal */
 	override focus_(timeout?: number): boolean {
 		if (zk(this.getAnchor_()).focus(timeout)) {
 			return true;
@@ -545,17 +562,16 @@ export class Menupopup extends zul.wgt.Popup {
 		return super.focus_(timeout);
 	}
 
+	/** @internal */
 	addActive_(wgt: zk.Widget): void {
 		// ZK-5026
 		if (zk.currentFocus != this) {
-			let anc = this.getAnchor_();
-			if (anc) {
-				anc.focus();
-			}
+			this.getAnchor_()?.focus();
 		}
 		this._curIndex = _indexOfVisibleMenu(this, wgt);
 	}
 
+	/** @internal */
 	removeActive_(): void {
 		const currentActive = this._currentChild();
 		if (currentActive) {
@@ -564,6 +580,7 @@ export class Menupopup extends zul.wgt.Popup {
 		}
 	}
 
+	/** @internal */
 	_currentChild(): zul.menu.Menuitem | zul.menu.Menu | undefined {
 		const index = this._curIndex,
 			$menubar = zul.menu.Menubar;
@@ -574,6 +591,7 @@ export class Menupopup extends zul.wgt.Popup {
 		}
 		return undefined;
 	}
+	/** @internal */
 	override beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
 		if (!(child instanceof zul.menu.Menuitem) && !(child instanceof zul.menu.Menuseparator) && !(child instanceof zul.menu.Menu)) {
 			zk.error('Unsupported child for menupopup: ' + child.className);
@@ -582,10 +600,11 @@ export class Menupopup extends zul.wgt.Popup {
 		return true;
 	}
 
+	/** @internal */
 	static _rmActive(wgt: zk.Widget): void {
 		if (wgt.parent instanceof zul.menu.Menu) {
 			(wgt.parent.constructor as typeof zul.menu.Menu)._rmActive(wgt.parent);
 		}
 	}
 }
-export let _nOpen = 0;
+export var _nOpen = 0;

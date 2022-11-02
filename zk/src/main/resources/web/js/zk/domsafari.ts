@@ -13,6 +13,7 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 Object.assign(zjq, {
+	/** @internal */
 	_fixCSS(el: HTMLElement): void {
 		//we have to preserve scrollTop
 		//Test case: test2/B50-ZK-373.zul and test2/B50-3315594.zul

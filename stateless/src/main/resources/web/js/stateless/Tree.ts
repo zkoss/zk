@@ -12,6 +12,7 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 export default {};
 zk.afterLoad('zul.sel', () => {
 	const xTreeItemIter = zk.augment(zul.sel.TreeItemIter.prototype, {
+		/** @internal */
 		_init(): void {
 			if (!this._isInit) {
 				xTreeItemIter._init.call(this);
@@ -77,6 +78,7 @@ zk.afterLoad('zul.sel', () => {
 			if (this.treerow) this.treerow.redraw(out);
 			if (this.treechildren) this.treechildren.redraw(out, iter as never);
 		},
+		/** @internal */
 		_showKids(open: boolean): void {
 			let tree = this.getTree();
 			if (this.isClientPaging(tree)) {
@@ -98,6 +100,7 @@ zk.afterLoad('zul.sel', () => {
 			}
 			return xTreeitem.fire.call(this, evtnm, data, opts, timeout);
 		},
+		/** @internal */
 		getPath_(): number[] {
 			let path: number[] = [], parent = this as zul.sel.Treeitem | zul.sel.Treechildren | zul.sel.Tree | undefined;
 			while (!(parent instanceof zul.sel.Tree)) {

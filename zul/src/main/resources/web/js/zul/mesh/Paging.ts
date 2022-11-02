@@ -32,28 +32,40 @@ export interface PagingFocusInfo {
 
 /**
  * Paging of long content.
- *
- * <p>Default {@link #getZclass}: z-paging.
+ * @defaultValue {@link getZclass}: z-paging.
  */
 @zk.WrapClass('zul.mesh.Paging')
 export class Paging extends zul.Widget {
 	override parent?: zul.mesh.MeshWidget;
+	/** @internal */
 	_pageSize = 20;
+	/** @internal */
 	_totalSize = 0;
+	/** @internal */
 	_pageCount = 1;
+	/** @internal */
 	_activePage = 0;
+	/** @internal */
 	_pageIncrement = zk.mobile ? 5 : 10;
+	/** @internal */
 	_showFirstLast = true;
+	/** @internal */
 	_detailed = false;
+	/** @internal */
 	_autohide?: boolean;
+	/** @internal */
 	_disabled?: boolean;
+	/** @internal */
 	_meshWidget?: zul.mesh.MeshWidget;
+	/** @internal */
 	static _autoFocusInfo?: PagingFocusInfo;
+	/** @internal */
 	_lastIsWide?: boolean;
+	/** @internal */
 	_navWidth?: number;
 
-	/** Sets the total number of items.
-	 * @param int totalSize
+	/**
+	 * Sets the total number of items.
 	 */
 	setTotalSize(totalSize: number, opts?: Record<string, boolean>): this {
 		const o = this._totalSize;
@@ -76,24 +88,23 @@ export class Paging extends zul.Widget {
 		return this;
 	}
 
-	/** Returns the total number of items.
-	 * @return int
+	/**
+	 * @returns the total number of items.
 	 */
 	getTotalSize(): number {
 		return this._totalSize;
 	}
 
-	/** Returns the number of page anchors shall appear at the client.
-	 *
-	 * <p>Default: 10.
-	 * @return int
+	/**
+	 * @returns the number of page anchors shall appear at the client.
+	 * @defaultValue `10`.
 	 */
 	getPageIncrement(): number {
 		return this._pageIncrement;
 	}
 
-	/** Sets the number of page anchors shall appear at the client.
-	 * @param int pageIncrement
+	/**
+	 * Sets the number of page anchors shall appear at the client.
 	 */
 	setPageIncrement(pageIncrement: number, opts?: Record<string, boolean>): this {
 		const o = this._pageIncrement;
@@ -106,15 +117,15 @@ export class Paging extends zul.Widget {
 		return this;
 	}
 
-	/** Returns whether to show the detailed info, such as {@link #getTotalSize}.
-	 * @return boolean
+	/**
+	 * @returns whether to show the detailed info, such as {@link getTotalSize}.
 	 */
 	isDetailed(): boolean {
 		return this._detailed;
 	}
 
-	/** Sets whether to show the detailed info, such as {@link #getTotalSize}.
-	 * @param boolean detailed
+	/**
+	 * Sets whether to show the detailed info, such as {@link getTotalSize}.
 	 */
 	setDetailed(detailed: boolean, opts?: Record<string, boolean>): this {
 		const o = this._detailed;
@@ -127,17 +138,17 @@ export class Paging extends zul.Widget {
 		return this;
 	}
 
-	/** Returns the number of pages.
+	/**
+	 * @returns the number of pages.
 	 * Note: there is at least one page even no item at all.
-	 * @return int
 	 */
 	getPageCount(): number {
 		return this._pageCount;
 	}
 
-	/** Sets the number of pages.
+	/**
+	 * Sets the number of pages.
 	 * Note: there is at least one page even no item at all.
-	 * @param int pageCount
 	 */
 	setPageCount(pageCount: number, opts?: Record<string, boolean>): this {
 		const o = this._pageCount;
@@ -150,15 +161,15 @@ export class Paging extends zul.Widget {
 		return this;
 	}
 
-	/** Returns the active page (starting from 0).
-	 * @return int
+	/**
+	 * @returns the active page (starting from 0).
 	 */
 	getActivePage(): number {
 		return this._activePage;
 	}
 
-	/** Sets the active page (starting from 0).
-	 * @param int activePage
+	/**
+	 * Sets the active page (starting from 0).
 	 */
 	setActivePage(activePage: number, opts?: Record<string, boolean>): this {
 		const o = this._activePage;
@@ -171,15 +182,15 @@ export class Paging extends zul.Widget {
 		return this;
 	}
 
-	/** Returns the page size, aka., the number rows per page.
-	 * @return int
+	/**
+	 * @returns the page size, aka., the number rows per page.
 	 */
 	getPageSize(): number {
 		return this._pageSize;
 	}
 
-	/** Sets the page size, aka., the number rows per page.
-	 * @param int pageSize
+	/**
+	 * Sets the page size, aka., the number rows per page.
 	 */
 	setPageSize(pageSize: number, opts?: Record<string, boolean>): this {
 		const o = this._pageSize;
@@ -193,11 +204,9 @@ export class Paging extends zul.Widget {
 	}
 
 	/**
-	 * Returns whether to automatically hide this component if there is only one
+	 * @returns whether to automatically hide this component if there is only one
 	 * page available.
-	 * <p>
-	 * Default: false.
-	 * @return boolean
+	 * @defaultValue `false`.
 	 */
 	isAutohide(): boolean {
 		return !!this._autohide;
@@ -206,7 +215,6 @@ export class Paging extends zul.Widget {
 	/**
 	 * Sets whether to automatically hide this component if there is only one
 	 * page available.
-	 * @param boolean autohide
 	 */
 	setAutohide(autohide: boolean, opts?: Record<string, boolean>): this {
 		const o = this._autohide;
@@ -219,17 +227,17 @@ export class Paging extends zul.Widget {
 		return this;
 	}
 
-	/** Returns whether it is disabled.
-	 * <p>Default: false.
-	 * @return boolean
+	/**
+	 * @returns whether it is disabled.
+	 * @defaultValue `false`.
 	 * @since 8.0.3
 	 */
 	isDisabled(): boolean {
 		return !!this._disabled;
 	}
 
-	/** Sets whether it is disabled.
-	 * @param boolean disabled
+	/**
+	 * Sets whether it is disabled.
 	 * @since 8.0.3
 	 */
 	setDisabled(disabled: boolean, opts?: Record<string, boolean>): this {
@@ -243,16 +251,16 @@ export class Paging extends zul.Widget {
 		return this;
 	}
 
-	/** Returns the associated {@link zul.mesh.MeshWidget} if any.
-	 * @return zul.mesh.MeshWidget
+	/**
+	 * @returns the associated {@link zul.mesh.MeshWidget} if any.
 	 * @since 10.0.0
 	 */
 	getMeshWidget(): zul.mesh.MeshWidget | undefined {
 		return this._meshWidget;
 	}
 
-	/** Sets the associated {@link zul.mesh.MeshWidget}.
-	 * @param zul.mesh.MeshWidget meshWidget
+	/**
+	 * Sets the associated {@link zul.mesh.MeshWidget}.
 	 * @since 10.0.0
 	 */
 	setMeshWidget(meshWidget?: zul.mesh.MeshWidget): this {
@@ -310,14 +318,14 @@ export class Paging extends zul.Widget {
 	}
 
 	/**
-	 * Returns whether the paging is in both mold. i.e. Top and Bottom
-	 * @return boolean
+	 * @returns whether the paging is in both mold. i.e. Top and Bottom
 	 */
 	isBothPaging(): boolean {
 		return !!this.parent && this.parent.getPagingPosition
 			&& 'both' == this.parent.getPagingPosition();
 	}
 
+	/** @internal */
 	_drawDisabled(disabled: boolean): void {
 		const uuid = this.uuid,
 			ap = this.getActivePage(),
@@ -340,6 +348,7 @@ export class Paging extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	_updatePageNum(): void {
 		let pageCount = Math.floor((this.getTotalSize() - 1) / this._pageSize + 1);
 		if (pageCount == 0) pageCount = 1;
@@ -372,8 +381,8 @@ export class Paging extends zul.Widget {
 	}
 
 	/**
-	 * Returns the information text of the paging, if {@link #isDetailed()} is enabled.
-	 * @return String
+	 * @returns the information text of the paging, if {@link isDetailed} is enabled.
+	 * @internal
 	 */
 	infoText_(): string {
 		const acp = this.getActivePage(),
@@ -388,6 +397,7 @@ export class Paging extends zul.Widget {
 		return `[ ${acp * psz + 1}${dash} / ${tsz} ]`;
 	}
 
+	/** @internal */
 	_infoTags(out: string[]): void {
 		if (this.getTotalSize() == 0)
 			return;
@@ -397,6 +407,7 @@ export class Paging extends zul.Widget {
 			nameOrId, '="', uuid, '-info" aria-hidden="true">', this.infoText_(), '</span></div>');
 	}
 
+	/** @internal */
 	_innerTags(): string {
 		const out = new zk.Buffer(),
 			pinc = this.getPageIncrement(),
@@ -456,6 +467,7 @@ export class Paging extends zul.Widget {
 			'" href="javascript:;" data-paging="', val as unknown as string, '"', seld ? ' aria-current="page"' : '', '>', label as string, '</a></li>');
 	}
 
+	/** @internal */
 	override domClass_(no?: zk.DomClassOptions): string {
 		const cls = super.domClass_(no),
 			added = 'os' == this.getMold() ? ' ' + this.$s('os') : '';
@@ -467,6 +479,7 @@ export class Paging extends zul.Widget {
 		return visible && (this.getPageCount() > 1 || !this._autohide);
 	}
 
+	/** @internal */
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		zWatch.listen({ onSize: this });
@@ -525,6 +538,7 @@ export class Paging extends zul.Widget {
 			jq(this.parent!.$n_('pgib')).find('.' + this.$s())[0].id = '';
 	}
 
+	/** @internal */
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		const uuid = this.uuid;
 		if (this.getMold() == 'os') {
@@ -550,6 +564,7 @@ export class Paging extends zul.Widget {
 		super.unbind_(skipper, after, keepRod);
 	}
 
+	/** @internal */
 	_domKeyDown(evt: JQuery.KeyDownEvent<unknown, unknown, unknown, HTMLInputElement>): void {
 		const inp = evt.target;
 		if (inp.disabled || inp.readOnly)
@@ -612,6 +627,7 @@ export class Paging extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	_domBlur(evt: JQuery.BlurEvent<unknown, unknown, unknown, HTMLInputElement>): void {
 		const inp = evt.target;
 		if (inp.disabled || inp.readOnly)
@@ -622,6 +638,7 @@ export class Paging extends zul.Widget {
 		evt.stop();
 	}
 
+	/** @internal */
 	_domfirstClick(evt: JQuery.ClickEvent<unknown, unknown, HTMLElement>): void {
 		if (this.isDisabled()) return;
 		const uuid = this.uuid,
@@ -636,6 +653,7 @@ export class Paging extends zul.Widget {
 		Paging._callWgtDoAfterGo(this, evt.currentTarget, 'first');
 	}
 
+	/** @internal */
 	_domprevClick(evt: JQuery.ClickEvent<unknown, unknown, HTMLElement>): void {
 		if (this.isDisabled()) return;
 		const uuid = this.uuid,
@@ -653,6 +671,7 @@ export class Paging extends zul.Widget {
 		Paging._callWgtDoAfterGo(this, evt.currentTarget, 'prev');
 	}
 
+	/** @internal */
 	_domnextClick(evt: JQuery.ClickEvent<unknown, unknown, HTMLElement>): void {
 		if (this.isDisabled()) return;
 		const uuid = this.uuid,
@@ -671,6 +690,7 @@ export class Paging extends zul.Widget {
 		Paging._callWgtDoAfterGo(this, evt.currentTarget, 'next');
 	}
 
+	/** @internal */
 	_domlastClick(evt: JQuery.ClickEvent<unknown, unknown, HTMLElement>): void {
 		if (this._disabled) return;
 		const uuid = this.uuid,
@@ -705,15 +725,15 @@ export class Paging extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	_doAfterGo(postfix: string, btnIndex?: number): void {
 		// This function shoudn't do anything.
 	}
 
-	//static
 	/**
 	 * Goes to the active page according to the page number.
-	 * @param DOMElement anc the anchor of the page number
-	 * @param int pagenumber the page number
+	 * @param anc - the anchor of the page number
+	 * @param pgno - the page number
 	 */
 	static go(anc: Paging | HTMLAnchorElement, pgno: number, inp?: HTMLInputElement): void {
 		const wgt = anc instanceof zk.Widget ? anc : zk.Widget.$<Paging>(anc);
@@ -739,6 +759,7 @@ export class Paging extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	static _increase(inp: HTMLInputElement, wgt: Paging, add: number): void {
 		let value = zk.parseInt(inp.value);
 		value += add;
@@ -749,6 +770,7 @@ export class Paging extends zul.Widget {
 		inp.value = String(value);
 	}
 
+	/** @internal */
 	static _fixControl(node: Node, wgt: Paging, wideChanged: boolean): void {
 		const control = jq('> ul', node),
 			info = jq('> .z-paging-info', node),
@@ -768,6 +790,7 @@ export class Paging extends zul.Widget {
 		});
 	}
 
+	/** @internal */
 	static _getNavWidth(node: Node, wgt: zul.mesh.Paging): number {
 		if (wgt._navWidth)
 			return wgt._navWidth;
@@ -780,6 +803,7 @@ export class Paging extends zul.Widget {
 		return navWidth;
 	}
 
+	/** @internal */
 	static _callWgtDoAfterGo(wgt: Paging, btn: HTMLElement, postfix: string): void {
 		let btnIdx = 0;
 		jq(jq.$$(wgt.uuid, postfix)!).each(function (idx) {

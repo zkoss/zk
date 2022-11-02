@@ -14,7 +14,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 /**
  * Groups a set of child elements to have a visual effect.
- * <p>Default {@link #getZclass}: "z-groupbox". If {@link #getMold()} is 3d,
+ * @defaultValue {@link getZclass}: "z-groupbox". If {@link getMold} is 3d,
  * "z-groupbox-3d" is assumed.
  *
  * <p>Events: onOpen.
@@ -22,16 +22,22 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.wgt.Groupbox')
 export class Groupbox extends zul.ContainerWidget {
+	/** @internal */
 	_open = true;
+	/** @internal */
 	_closable = true;
+	/** @internal */
 	_nativebar = true;
+	/** @internal */
 	_contentStyle?: string;
+	/** @internal */
 	_contentSclass?: string;
+	/** @internal */
 	_title?: string;
 	caption?: zul.wgt.Caption;
 
-	/** Opens or closes this groupbox.
-	 * @param boolean open
+	/**
+	 * Opens or closes this groupbox.
 	 */
 	setOpen(open: boolean, fromServer?: boolean, opts?: Record<string, boolean>): this {
 		const o = this._open;
@@ -58,27 +64,27 @@ export class Groupbox extends zul.ContainerWidget {
 		return this;
 	}
 
-	/** Returns whether this groupbox is open.
-	 * <p>Default: true.
-	 * @return boolean
+	/**
+	 * @returns whether this groupbox is open.
+	 * @defaultValue `true`.
 	 */
 	isOpen(): boolean {
 		return this._open;
 	}
 
-	/** Returns whether user can open or close the group box.
+	/**
+	 * @returns whether user can open or close the group box.
 	 * In other words, if false, users are no longer allowed to
 	 * change the open status (by clicking on the title).
 	 *
-	 * <p>Default: true.
-	 * @return boolean
+	 * @defaultValue `true`.
 	 */
 	isClosable(): boolean {
 		return this._closable;
 	}
 
-	/** Sets whether user can open or close the group box.
-	 * @param boolean closable
+	/**
+	 * Sets whether user can open or close the group box.
 	 */
 	setClosable(closable: boolean, opts?: Record<string, boolean>): this {
 		const o = this._closable;
@@ -91,19 +97,19 @@ export class Groupbox extends zul.ContainerWidget {
 		return this;
 	}
 
-	/** Returns the CSS style for the content block of the groupbox.
-	 * Used only if {@link #getMold} is not default.
-	 * @return String
+	/**
+	 * @returns the CSS style for the content block of the groupbox.
+	 * Used only if {@link getMold} is not default.
 	 */
 	getContentStyle(): string | undefined {
 		return this._contentStyle;
 	}
 
-	/** Sets the CSS style for the content block of the groupbox.
-	 * Used only if {@link #getMold} is not default.
+	/**
+	 * Sets the CSS style for the content block of the groupbox.
+	 * Used only if {@link getMold} is not default.
 	 *
-	 * <p>Default: null.
-	 * @param String contentStyle
+	 * @defaultValue `null`.
 	 */
 	setContentStyle(contentStyle: string, opts?: Record<string, boolean>): this {
 		const o = this._contentStyle;
@@ -116,16 +122,16 @@ export class Groupbox extends zul.ContainerWidget {
 		return this;
 	}
 
-	/** Returns the style class used for the content block of the groupbox.
-	 * Used only if {@link #getMold} is not default.
-	 * @return String
+	/**
+	 * @returns the style class used for the content block of the groupbox.
+	 * Used only if {@link getMold} is not default.
 	 */
 	getContentSclass(): string | undefined {
 		return this._contentSclass;
 	}
 
-	/** Sets the style class used for the content block.
-	 * @param String contentSclass
+	/**
+	 * Sets the style class used for the content block.
 	 */
 	setContentSclass(contentSclass: string, opts?: Record<string, boolean>): this {
 		const o = this._contentSclass;
@@ -138,17 +144,17 @@ export class Groupbox extends zul.ContainerWidget {
 		return this;
 	}
 
-	/** Returns the title of the groupbox.
-	 * @return String
-	 * @since 6.0
+	/**
+	 * @returns the title of the groupbox.
+	 * @since 6.0.0
 	 */
 	getTitle(): string | undefined {
 		return this._title;
 	}
 
-	/** Sets the title of the groupbox.
-	 * @param String title
-	 * @since 6.0
+	/**
+	 * Sets the title of the groupbox.
+	 * @since 6.0.0
 	 */
 	setTitle(title: string, opts?: Record<string, boolean>): this {
 		const o = this._title;
@@ -161,14 +167,17 @@ export class Groupbox extends zul.ContainerWidget {
 		return this;
 	}
 
+	/** @internal */
 	_isDefault(): boolean {
 		return this._mold == 'default';
 	}
 
+	/** @internal */
 	_updDomOuter(): void {
 		this.rerender(zk.Skipper.nonCaptionSkipper);
 	}
 
+	/** @internal */
 	_contentAttrs(): string {
 		var html = ' class="', s = this._contentSclass;
 		if (s)
@@ -185,6 +194,7 @@ export class Groupbox extends zul.ContainerWidget {
 		return html;
 	}
 
+	/** @internal */
 	_redrawCave(out: string[], skipper?: zk.Skipper): void { //reserve for customizing
 		out.push('<div id="', this.uuid, '-cave"', this._contentAttrs(), '>');
 
@@ -202,6 +212,7 @@ export class Groupbox extends zul.ContainerWidget {
 		return this;
 	}
 
+	/** @internal */
 	_fixHgh(): void {
 		var n = this.$n_(),
 			hgh: string | number = n.style.height;
@@ -231,15 +242,16 @@ export class Groupbox extends zul.ContainerWidget {
 
 	// B60-ZK-562: Groupbox vflex=min is wrong
 	// eslint-disable-next-line zk/javaStyleSetterSignature
-	override setFlexSizeH_(n: HTMLElement, zkn: zk.JQZK, height: number, isFlexMin?: boolean): void {
+	/** @internal */
+	override setFlexSizeH_(flexSizeH: HTMLElement, zkn: zk.JQZK, height: number, isFlexMin?: boolean): void {
 		if (isFlexMin && (this.caption || this._title)) {
 			// B60-ZK-562
 			height = this._isDefault() ? parseInt(jq(this).css('padding-top')) : 0;
-			for (var c = n.firstChild; c; c = c.nextSibling)
+			for (var c = flexSizeH.firstChild; c; c = c.nextSibling)
 				height += jq(c).outerHeight()!;
 		}
 
-		super.setFlexSizeH_(n, zkn, height, isFlexMin);
+		super.setFlexSizeH_(flexSizeH, zkn, height, isFlexMin);
 	}
 
 	//watch//
@@ -250,17 +262,19 @@ export class Groupbox extends zul.ContainerWidget {
 		// shadow not used in breeze, sapphire and silvertail,
 	}
 
+	/** @internal */
 	override clearCachedSize_(): void {
 		super.clearCachedSize_();
 		this.$n_('cave').style.height = '';
 	}
 
+	/** @internal */
 	override updateDomStyle_(): void {
 		super.updateDomStyle_();
 		if (this.desktop) this.onSize();
 	}
 
-	//super//
+	/** @internal */
 	override focus_(timeout?: number): boolean {
 		var cap = this.caption;
 		for (var w = this.firstChild; w; w = w.nextSibling)
@@ -269,6 +283,7 @@ export class Groupbox extends zul.ContainerWidget {
 		return !!cap?.focus_(timeout);
 	}
 
+	/** @internal */
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		zWatch.listen({onSize: this});
@@ -277,6 +292,7 @@ export class Groupbox extends zul.ContainerWidget {
 			this.domListen_(tt, 'onClick', '_doTitleClick');
 	}
 
+	/** @internal */
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		zWatch.unlisten({onSize: this});
 		const tt = this.$n('title');
@@ -286,11 +302,13 @@ export class Groupbox extends zul.ContainerWidget {
 	}
 
 	// will be called while click on title and title exists but no caption
+	/** @internal */
 	_doTitleClick(evt: zk.Event, popupOnly?: boolean): void {
 		if (this._closable) this.setOpen(!this.isOpen());
 		super.doClick_(evt, popupOnly);
 	}
 
+	/** @internal */
 	override beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
 		if (child instanceof zul.wgt.Caption) {
 			if (this.caption && this.caption != child) {
@@ -304,6 +322,7 @@ export class Groupbox extends zul.ContainerWidget {
 		return true;
 	}
 
+	/** @internal */
 	override onChildAdded_(child: zk.Widget): void {
 		super.onChildAdded_(child);
 		if (child instanceof zul.wgt.Caption) {
@@ -312,6 +331,7 @@ export class Groupbox extends zul.ContainerWidget {
 		}
 	}
 
+	/** @internal */
 	override onChildRemoved_(child: zk.Widget): void {
 		super.onChildRemoved_(child);
 		if (child == this.caption) {
@@ -321,12 +341,14 @@ export class Groupbox extends zul.ContainerWidget {
 	}
 
 	//@Override, Bug ZK-1524: caption children should not considered.
+	/** @internal */
 	override getChildMinSize_(attr: zk.FlexOrient, wgt: zk.Widget): number {
 		if (!(wgt instanceof zul.wgt.Caption))
 			return super.getChildMinSize_(attr, wgt);
 		return 0; // FIXME: prior to TS migration, it returns nothing here.
 	}
 
+	/** @internal */
 	override domClass_(no?: zk.DomClassOptions): string {
 		var cls = super.domClass_(no);
 		if (!this._isDefault()) {
@@ -346,11 +368,13 @@ export class Groupbox extends zul.ContainerWidget {
 		return cls;
 	}
 
+	/** @internal */
 	override afterAnima_(visible: boolean): void {
 		super.afterAnima_(visible);
 		this._afterOpen(visible);
 	}
 
+	/** @internal */
 	_afterOpen(visible: boolean): void {
 		if (!visible && this._isDefault())
 			jq(this.$n()).addClass(this.$s('collapsed'));

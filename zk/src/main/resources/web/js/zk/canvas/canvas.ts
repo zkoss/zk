@@ -1,4 +1,3 @@
-/*global G_vmlCanvasManager*/
 /* canvas.ts
 
 	Purpose:
@@ -14,19 +13,21 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 /** Canvas - 2D command-based drawing.
  * Specifying this package in the depends attribute if one of your packages
  * would like to use the canvas function. For example,
- *<pre><code>//zk.wpd
- *<package name="foo.whatever" language="xul/html" depends="zk.canvas">
- *</code></pre>
+ * ```xml
+ * //zk.wpd
+ * <package name="foo.whatever" language="xul/html" depends="zk.canvas">
+ * ```
  */
 //zk.$package('zk.canvas');
 /** @class zk.canvas.Canvas
  * Utilities to create and manipulate the canvas element.
  * @since 5.0.2
  */
-export let Canvas = {
-	/** Creates a canvas element.
+export var Canvas = {
+	/**
+	 * Creates a canvas element.
 	 * <p>For example,
-	 *<pre><code>
+	 *```ts
 	 * var main = jq("#main");
 	 * main.append(canvas);
 	 * var canvas = zk.canvas.Canvas.create(main.clientWidth, main.clientHeight);
@@ -36,13 +37,12 @@ export let Canvas = {
 	 *
 	 * ctx.fillStyle = "rgba(0, 0, 200, 0.5)";
 	 * ctx.fillRect (30, 30, 255, 50);
-	 * </code></pre>
+	 * ```
 	 *
-	 * @param int width the width. Ignored if not specified.
+	 * @param width - the width. Ignored if not specified.
 	 * Notice that it accepts only integer (unlike other DOM element)
-	 * @param int height the height. Ignored if not specified.
+	 * @param height - the height. Ignored if not specified.
 	 * Notice that it accepts only integer (unlike other DOM element)
-	 * @return DOMElement
 	 */
 	create(width?: number, height?: number): HTMLCanvasElement {
 		var el = document.createElement('canvas');

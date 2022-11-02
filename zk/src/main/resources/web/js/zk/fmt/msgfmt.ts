@@ -12,7 +12,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-export let Text = {
+export var Text = {
 	format(msg: string, ...rest: (string|number)[]): string {
 		var i = 0, sb = '';
 		for (var j = 0, len = msg.length, cc, k: number; j < len; ++j) {
@@ -41,10 +41,10 @@ export let Text = {
 	},
 	/**
 	 * Formatting a filesize depending on its value:
-	 * >= 1024 GB: 1.0 TB,
-	 * >= 1024 MB: 1.0 GB,
-	 * >= 1024 KB: 1.0 MB,
-	 * >= 1024 B : 1.0 KB,
+	 * ≥ 1024 GB: 1.0 TB,
+	 * ≥ 1024 MB: 1.0 GB,
+	 * ≥ 1024 KB: 1.0 MB,
+	 * ≥ 1024 B : 1.0 KB,
 	 * else: bytes. Decimal point is determined by System language.
 	 */
 	formatFileSize(bytes: number): string {

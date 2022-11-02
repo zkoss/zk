@@ -33,7 +33,7 @@ function updateImg(drag: zk.Draggable): void {
 /**
  * A listitem.
  *
- * <p>Default {@link #getZclass}: z-listitem
+ * @defaultValue {@link getZclass}: z-listitem
  */
 @zk.WrapClass('zul.sel.Listitem')
 export class Listitem extends zul.sel.ItemWidget {
@@ -44,16 +44,15 @@ export class Listitem extends zul.sel.ItemWidget {
 	override firstChild?: zul.sel.Listcell;
 	override lastChild?: zul.sel.Listcell;
 
-	/** Returns the list box that it belongs to.
-	 * @return Listbox
+	/**
+	 * @returns the list box that it belongs to.
 	 */
 	getListbox(): zul.sel.Listbox | undefined {
 		return this.parent;
 	}
 
 	/**
-	 * Returns the listgroup that this item belongs to, or null.
-	 * @return zkex.sel.Listgroup
+	 * @returns the listgroup that this item belongs to, or null.
 	 */
 	getListgroup(): zkex.sel.Listgroup | undefined {
 		// TODO: this performance is not good.
@@ -66,10 +65,9 @@ export class Listitem extends zul.sel.ItemWidget {
 		return undefined;
 	}
 
-	/** Sets the label of the {@link Listcell} it contains.
-	 *
+	/**
+	 * Sets the label of the {@link Listcell} it contains.
 	 * <p>If it is not created, we automatically create it.
-	 * @param String label
 	 */
 	setLabel(label: string): this {
 		this._autoFirstCell().setLabel(label);
@@ -77,6 +75,7 @@ export class Listitem extends zul.sel.ItemWidget {
 	}
 
 	// replace the origional DD_dragging
+	/** @internal */
 	override getDragOptions_(map: zk.DraggableOptions): zk.DraggableOptions {
 		const old = map.change!;
 		map.change = function (drag, pt, evt) {
@@ -87,23 +86,23 @@ export class Listitem extends zul.sel.ItemWidget {
 		return super.getDragOptions_(map);
 	}
 
-	/** Sets the image of the {@link Listcell} it contains.
-	 *
+	/**
+	 * Sets the image of the {@link Listcell} it contains.
 	 * <p>If it is not created, we automatically create it.
-	 * @param String image
 	 */
 	setImage(image: string): this {
 		this._autoFirstCell().setImage(image);
 		return this;
 	}
 
+	/** @internal */
 	_autoFirstCell(): zul.sel.Listcell {
 		if (!this.firstChild)
 			this.appendChild(new zul.sel.Listcell());
 		return this.firstChild!; // guaranteed to exists because appended in the previous line
 	}
-
-	//super//
+	
+	/** @internal */
 	override domStyle_(no?: zk.DomStyleOptions): string {
 		if (_isPE() && (this instanceof zkex.sel.Listgroup || this instanceof zkex.sel.Listgroupfoot)
 			|| no?.visible)
@@ -114,6 +113,7 @@ export class Listitem extends zul.sel.ItemWidget {
 		return group && !group.isOpen() ? style + 'display:none;' : style;
 	}
 
+	/** @internal */
 	override domClass_(no?: zk.DomClassOptions): string {
 		const cls = super.domClass_(no),
 			list = this.getListbox();
@@ -142,6 +142,7 @@ export class Listitem extends zul.sel.ItemWidget {
 		return this;
 	}
 
+	/** @internal */
 	_syncListitems(newwgt: zul.sel.Listitem): void {
 		const box = this.getListbox();
 		if (box) {
@@ -162,13 +163,13 @@ export class Listitem extends zul.sel.ItemWidget {
 		}
 	}
 
-	//@Override
+	/** @internal */
 	override compareItemPos_(item: zul.sel.Listitem): number {
 		const thisIndex = this._index!, itemIndex = item._index!;
 		return thisIndex == itemIndex ? 0 : thisIndex > itemIndex ? -1 : 1;
 	}
 
-	//@Override
+	/** @internal */
 	override shallFireSizedLaterWhenAddChd_(): boolean {
 		if (this.getListbox()!._model == 'group') {
 			zWatch.listen({
@@ -188,6 +189,7 @@ export class Listitem extends zul.sel.ItemWidget {
 		});
 	}
 
+	/** @internal */
 	override beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
 		if (!(child instanceof zul.sel.Listcell)) {
 			zk.error('Unsupported child for listitem: ' + child.className);

@@ -21,22 +21,31 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <li>onSelect event is sent when user changes the selection.</li>
  * </ol>
  *
- * <p>Default {@link #getZclass}: z-tree.
+ * @defaultValue {@link getZclass}: z-tree.
  */
 @zk.WrapClass('zul.sel.Tree')
 export class Tree extends zul.sel.SelectWidget {
+	/** @internal */
 	override _selItems!: zul.sel.Treeitem[]; // initialized in super constructor
+	/** @internal */
 	override _scrollbar?: zul.Scrollbar = undefined;
+	/** @internal */
 	_barPos = undefined;
 	treecols?: zul.sel.Treecols;
 	treefoot?: zul.sel.Treefoot;
 	treechildren?: zul.sel.Treechildren;
+	/** @internal */
 	_shallSyncFrozen?: boolean;
+	/** @internal */
 	_tree$noSelectAll?: boolean;
+	/** @internal */
 	_sel?: zul.sel.Treeitem;
+	/** @internal */
 	_fixhdwcnt?: number; // zul.sel.Treeitem.prototype.setOpen
+	/** @internal */
 	_fixhdoldwd?: number; // zul.sel.Treeitem.prototype.setOpen
 
+	/** @internal */
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		this.destroyBar_();
 		super.unbind_(skipper, after, keepRod);
@@ -59,6 +68,7 @@ export class Tree extends zul.sel.SelectWidget {
 		}, 200);
 	}
 
+	/** @internal */
 	override refreshBar_(showBar?: boolean, scrollToTop?: boolean): void {
 		var bar = this._scrollbar;
 		if (bar) {
@@ -90,6 +100,7 @@ export class Tree extends zul.sel.SelectWidget {
 		}
 	}
 
+	/** @internal */
 	destroyBar_(): void {
 		var bar = this._scrollbar;
 		if (bar) {
@@ -125,6 +136,7 @@ export class Tree extends zul.sel.SelectWidget {
 		return false;
 	}
 
+	/** @internal */
 	_fixOnAdd(child: zk.Widget, ignoreDom?: boolean, _noSync?: boolean): void {
 		if (child instanceof zul.sel.Treecols)
 			this.treecols = child;
@@ -145,10 +157,12 @@ export class Tree extends zul.sel.SelectWidget {
 	}
 
 	// ZK-5050
+	/** @internal */
 	override beforeChildReplaced_(oldc: zk.Widget, newc: zk.Widget): void {
 		this._fixOnAdd(newc, true, true);
 	}
 
+	/** @internal */
 	override beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
 		if (child instanceof zul.sel.Treecols) {
 			if (this.treecols && this.treecols != child) {
@@ -195,6 +209,7 @@ export class Tree extends zul.sel.SelectWidget {
 		return true;
 	}
 
+	/** @internal */
 	override onChildRemoved_(child: zk.Widget): void {
 		super.onChildRemoved_(child);
 
@@ -218,6 +233,7 @@ export class Tree extends zul.sel.SelectWidget {
 			this._syncSize();
 	}
 
+	/** @internal */
 	override onChildAdded_(child: zul.mesh.HeadWidget): void {
 		super.onChildAdded_(child);
 		if (this.childReplacing_) //called by onChildReplaced_
@@ -225,11 +241,13 @@ export class Tree extends zul.sel.SelectWidget {
 		//else handled by insertBefore/appendChild
 	}
 
+	/** @internal */
 	_onTreeitemAdded(item: zul.sel.Treeitem): void {
 		this._fixNewChild(item);
 		this._onTreechildrenAdded(item.treechildren);
 	}
 
+	/** @internal */
 	_onTreeitemRemoved(item: zul.sel.Treeitem): void {
 		var fixSel;
 		if (item.isSelected()) {
@@ -249,6 +267,7 @@ export class Tree extends zul.sel.SelectWidget {
 		}
 	}
 
+	/** @internal */
 	_onTreechildrenAdded(tchs: zul.sel.Treechildren | undefined): void {
 		if (!tchs || tchs.parent == this)
 			return; //the rest is already being processed by insertBefore
@@ -258,6 +277,7 @@ export class Tree extends zul.sel.SelectWidget {
 			if (items[j]) this._fixNewChild(items[j]);
 	}
 
+	/** @internal */
 	_onTreechildrenRemoved(tchs: zul.sel.Treechildren | undefined): void {
 		if (tchs == null || tchs.parent == this)
 			return; //already being processed by onChildRemoved
@@ -280,6 +300,7 @@ export class Tree extends zul.sel.SelectWidget {
 		if (fixSel) this._fixSelected();
 	}
 
+	/** @internal */
 	_fixNewChild(item: zul.sel.Treeitem): void {
 		if (item.isSelected()) {
 			if (this._sel && !this._multiple) {
@@ -293,6 +314,7 @@ export class Tree extends zul.sel.SelectWidget {
 		}
 	}
 
+	/** @internal */
 	_fixSelectedSet(): void {
 		this._sel = undefined;
 		this._selItems = [];
@@ -309,6 +331,7 @@ export class Tree extends zul.sel.SelectWidget {
 		}
 	}
 
+	/** @internal */
 	_fixSelected(): boolean {
 		var sel: zul.sel.Treeitem | undefined;
 		switch (this._selItems.length) {
@@ -333,6 +356,7 @@ export class Tree extends zul.sel.SelectWidget {
 		return false;
 	}
 
+	/** @internal */
 	_sizeOnOpen(): void {
 		this._shallShowScrollbar = true;
 		var cols = this.treecols, wd;
@@ -349,30 +373,26 @@ export class Tree extends zul.sel.SelectWidget {
 	}
 
 	/**
-	 * Returns the head widget class. i.e. {@link Treecols}
-	 * @return zul.sel.Treecols
+	 * @returns the head widget class. i.e. {@link Treecols}
 	 */
 	getHeadWidgetClass(): typeof zul.sel.Treecols {
 		return zul.sel.Treecols;
 	}
 
 	/**
-	 * Returns the tree item iterator.
-	 * @return zul.sel.TreeItemIter
-	 * @disable(zkgwt)
+	 * @returns the tree item iterator.
 	 */
 	itemIterator(opts?: Record<string, unknown>): zul.sel.TreeItemIter {
 		return new zul.sel.TreeItemIter(this, opts);
 	}
 
 	/**
-	 * Returns the tree item iterator.
-	 * @return zul.sel.TreeItemIter
-	 * @see #itemIterator
-	 * @disable(zkgwt)
+	 * @returns the tree item iterator.
+	 * @see {@link itemIterator}
 	 */
 	getBodyWidgetIterator = Tree.prototype.itemIterator;
 
+	/** @internal */
 	override _updHeaderCM(): void {
 		const tc = this.treecols?.firstChild;
 		if (this._headercm && this._multiple && tc)
@@ -380,44 +400,47 @@ export class Tree extends zul.sel.SelectWidget {
 		super._updHeaderCM();
 	}
 
-	/** Returns a readonly list of all descending {@link Treeitem}
+	/**
+	 * @returns a readonly list of all descending {@link Treeitem}
 	 * (children's children and so on).
 	 *
 	 * <p>Note: the performance of the size method of returned collection
 	 * is no good.
-	 * @return Array
 	 */
 	getItems(opts?: Record<string, unknown>): zul.sel.Treeitem[] {
 		return this.treechildren ? this.treechildren.getItems(undefined, opts) : [];
 	}
 
-	/** Returns the number of child {@link Treeitem}.
-	 * The same as {@link #getItems}.size().
+	/**
+	 * @returns the number of child {@link Treeitem}.
+	 * The same as {@link getItems}.size().
 	 * <p>Note: the performance of this method is no good.
-	 * @return int
 	 */
 	getItemCount(opts?: {skipHidden?: boolean}): number {
 		return this.treechildren != null ? this.treechildren.getItemCount(opts) : 0;
 	}
 
+	/** @internal */
 	override _doLeft(row: zul.sel.Treeitem): void {
 		if (row.isOpen()) {
 			row.setOpen(false);
 		}
 	}
 
+	/** @internal */
 	override _doRight(row: zul.sel.Treeitem): void {
 		if (!row.isOpen()) {
 			row.setOpen(true);
 		}
 	}
 
-	/** Returns whether to ignore the selection.
+	/**
+	 * @returns whether to ignore the selection.
 	 * It is called when selecting an item ({@link ItemWidget#doSelect_}).
-	 * <p>Default: ignore the selection if it is clicked on the open icon or {@link #rightSelect} is true and event is onRightClick.
-	 * @param zk.Event evt the event
-	 * @param ItemWidget row the row about to be selected
-	 * @return boolean whether to ignore the selection
+	 * @defaultValue ignore the selection if it is clicked on the open icon or {@link rightSelect} is true and event is onRightClick.
+	 * @param evt - the event
+	 * @param row - the row about to be selected
+	 * @internal
 	 */
 	override shallIgnoreSelect_(evt: zk.Event, row: zul.sel.ItemWidget): boolean {
 		var n = evt.domTarget;
@@ -434,18 +457,22 @@ export class Tree extends zul.sel.SelectWidget {
 		this._sel = undefined;
 	} // Bug ZK-2295
 
+	/** @internal */
 	override _addItemToSelection(item: zul.sel.ItemWidget): void {
 		super._addItemToSelection(item);
 		this._sel = this._selItems[0]; // resync
 	} // Bug ZK-2295
 
+	/** @internal */
 	override _removeItemFromSelection(item: zul.sel.ItemWidget): void {
 		super._removeItemFromSelection(item);
 		this._sel = this._selItems[0]; // resync
 	} // @Override F70-ZK-2433
 
+	/** @internal */
 	override checkOnHighlightDisabled_(): boolean {
 		if (this._selectOnHighlightDisabled) {
+			// eslint-disable-next-line @typescript-eslint/dot-notation
 			var selection = window.getSelection || document['selection'];
 			if (selection) {
 				return selection()!.toString().length > 0;
@@ -462,13 +489,14 @@ export class Tree extends zul.sel.SelectWidget {
 export class TreeItemIter extends zk.Object implements zul.mesh.ItemIterator {
 	tree: Tree;
 	opts?: Record<string, unknown>;
+	/** @internal */
 	_isInit?: boolean;
 	cur?: number;
 	items?: zul.sel.Treeitem[];
 	length?: number;
 
-	/** Constructor
-	 * @param Tree tree the widget that the iterator belongs to
+	/**
+	 * @param tree - the widget that the iterator belongs to
 	 */
 	constructor(tree: zul.sel.Tree, opts?: Record<string, unknown>) {
 		super();
@@ -476,6 +504,7 @@ export class TreeItemIter extends zk.Object implements zul.mesh.ItemIterator {
 		this.opts = opts;
 	}
 
+	/** @internal */
 	_init(): void {
 		if (!this._isInit) {
 			this._isInit = true;
@@ -486,8 +515,7 @@ export class TreeItemIter extends zk.Object implements zul.mesh.ItemIterator {
 	}
 
 	/**
-	* Returns <tt>true</tt> if the iteration has more elements
-	* @return boolean
+	* @returns `true` if the iteration has more elements
 	*/
 	hasNext(): boolean {
 		this._init();
@@ -495,9 +523,7 @@ export class TreeItemIter extends zk.Object implements zul.mesh.ItemIterator {
 	}
 
 	/**
-	 * Returns the next element in the iteration.
-	 *
-	 * @return Treeitem the next element in the iteration.
+	 * @returns the next element in the iteration.
 	 */
 	next(): zul.sel.Treeitem | undefined {
 		this._init();

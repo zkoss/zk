@@ -25,10 +25,12 @@ var _dirMap = {
 @zk.WrapClass('zul.inp.Errorbox')
 export class Errorbox extends zul.wgt.Notification {
 	override parent: zul.inp.InputWidget | undefined;
+	/** @internal */
 	_defaultPos = 'end_before';
 	msg: string;
 	sclass?: string;
 	iconSclass: string;
+	/** @internal */
 	__ebox?: Errorbox;
 
 	constructor(owner: zul.inp.InputWidget, msg: string) {
@@ -40,6 +42,7 @@ export class Errorbox extends zul.wgt.Notification {
 		this.iconSclass = owner._errorboxIconSclass || 'z-icon-exclamation-triangle';
 	}
 
+	/** @internal */
 	override domClass_(no?: zk.DomClassOptions): string {
 		var sclass = this.sclass,
 			s = super.domClass_(no);
@@ -48,8 +51,9 @@ export class Errorbox extends zul.wgt.Notification {
 		return s;
 	}
 
-	/** Opens the popup.
-	 * @see zul.wgt.Popup#open
+	/**
+	 * Opens the popup.
+	 * @see {@link zul.wgt.Popup.open}
 	 */
 	override show(): this {
 		if (!this.$n())
@@ -89,7 +93,7 @@ export class Errorbox extends zul.wgt.Notification {
 		}
 	}
 
-	//super//
+	/** @internal */
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		this._drag = new zk.Draggable(this, undefined, {
@@ -101,6 +105,7 @@ export class Errorbox extends zul.wgt.Notification {
 		zWatch.listen({ onMove: this });
 	}
 
+	/** @internal */
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		// bug ZK-1143
 		var drag = this._drag;
@@ -133,12 +138,14 @@ export class Errorbox extends zul.wgt.Notification {
 			this._fixarrow();
 	}
 
+	/** @internal */
 	override setDomVisible_(domVisible: HTMLElement, visible: boolean, opts?: zk.DomVisibleOptions): void {
 		super.setDomVisible_(domVisible, visible, opts);
 		const stackup = this._stackup;
 		if (stackup) stackup.style.display = visible ? '' : 'none';
 	}
 
+	/** @internal */
 	override doClick_(evt: zk.Event, popupOnly?: boolean): void {
 		interface WidgetErrorMessage extends zk.Widget {
 			clearErrorMessage?(revalidate: boolean, remainError?: boolean): void;
@@ -162,6 +169,7 @@ export class Errorbox extends zul.wgt.Notification {
 		this._fixarrow();
 	}
 
+	/** @internal */
 	override afterCloseAnima_(opts?: zul.wgt.PopupOptions): void {
 		opts = zk.copy(opts, { keepVisible: true });
 		super.afterCloseAnima_(opts);
@@ -207,6 +215,7 @@ export class Errorbox extends zul.wgt.Notification {
 		}
 	}
 
+	/** @internal */
 	_uncover(el: HTMLElement): void {
 		var elofs = zk(el).revisedOffset(),
 			node = this.$n()!,
@@ -227,6 +236,7 @@ export class Errorbox extends zul.wgt.Notification {
 		}
 	}
 
+	/** @internal */
 	override _fixarrow(): void {
 		var parent = this.parent!.$n()!,
 			node = this.$n()!,
@@ -308,25 +318,30 @@ export class Errorbox extends zul.wgt.Notification {
 		jq(pointer).show();
 	}
 
+	/** @internal */
 	override isInView_(): boolean {
 		return zul.inp.InputWidget._isInView(this);
 	}
 
+	/** @internal */
 	override getPositionArgs_(): zul.wgt.PositionArgs {
 		var p = this.parent, cstp = p ? p._cst && (p._cst as zul.inp.SimpleConstraint)._pos : false;
 		return [p, undefined, cstp || 'end_before', { dodgeRef: !cstp }];
 	}
 
+	/** @internal */
 	static _enddrag(dg: zk.Draggable): void {
 		var errbox = dg.control as Errorbox;
 		errbox.setTopmost();
 		errbox._fixarrow();
 	}
 
+	/** @internal */
 	static _ignoredrag(dg: zk.Draggable, pointer: zk.Offset, evt: zk.Event): boolean {
 		return zul.inp.InputCtrl.isIgnoredDragForErrorbox(dg, pointer, evt);
 	}
 
+	/** @internal */
 	static _change(dg: zk.Draggable): void {
 		var errbox = dg.control as Errorbox,
 			stackup = errbox._stackup,

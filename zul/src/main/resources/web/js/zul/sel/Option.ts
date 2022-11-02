@@ -22,16 +22,18 @@ export class Option extends zul.Widget<HTMLOptionElement> {
 	// The type of firstChild is determined by the comment in getLabel
 	override firstChild!: zul.sel.Listcell | undefined;
 	override lastChild!: zul.sel.Listcell | undefined;
+	/** @internal */
 	_selected = false;
+	/** @internal */
 	_disabled?: boolean;
+	/** @internal */
 	_value?: string;
+	/** @internal */
 	__updating__?: boolean;
 
 	/**
-	 * Returns whether it is disabled.
-	 * <p>
-	 * Default: false.
-	 * @return boolean
+	 * @returns whether it is disabled.
+	 * @defaultValue `false`.
 	 */
 	isDisabled(): boolean {
 		return !!this._disabled;
@@ -39,7 +41,6 @@ export class Option extends zul.Widget<HTMLOptionElement> {
 
 	/**
 	 * Sets whether it is disabled.
-	 * @param boolean disabled
 	 */
 	setDisabled(disabled: boolean, opts?: Record<string, boolean>): this {
 		const o = this._disabled;
@@ -53,21 +54,22 @@ export class Option extends zul.Widget<HTMLOptionElement> {
 		return this;
 	}
 
-	/** Returns the value.
-	 * <p>Default: null.
+	/**
+	 * @returns the value.
+	 * @defaultValue `null`.
 	 * <p>Note: the value is application dependent, you can place
 	 * whatever value you want.
 	 * <p>If you are using listitem with HTML Form (and with
 	 * the name attribute), it is better to specify a String-typed
 	 * value.
-	 * @return String
 	 */
 	getValue(): string | undefined {
 		return this._value;
 	}
 
-	/** Sets the value.
-	 * @param String value the value.
+	/**
+	 * Sets the value.
+	 * @param value - the value.
 	 * <p>Note: the value is application dependent, you can place
 	 * whatever value you want.
 	 * <p>If you are using listitem with HTML Form (and with
@@ -79,7 +81,6 @@ export class Option extends zul.Widget<HTMLOptionElement> {
 		return this;
 	}
 
-	//@Override
 	override focus(timeout?: number): boolean {
 		var p = this.parent;
 		if (p) p.focus(timeout);
@@ -88,7 +89,6 @@ export class Option extends zul.Widget<HTMLOptionElement> {
 		return false;
 	}
 
-	//@Override
 	override setVisible(visible: boolean, fromServer?: boolean): this {
 		if (this._visible != visible) {
 			this._visible = visible;
@@ -98,8 +98,8 @@ export class Option extends zul.Widget<HTMLOptionElement> {
 		return this;
 	}
 
-	/** Sets whether it is selected.
-	 * @param boolean selected
+	/**
+	 * Sets whether it is selected.
 	 */
 	setSelected(selected: boolean): this {
 		if (this.__updating__) { // for B50-3012466.zul
@@ -120,6 +120,7 @@ export class Option extends zul.Widget<HTMLOptionElement> {
 		return this;
 	}
 
+	/** @internal */
 	_setSelectedDirectly(selected: boolean): void {
 		var n = this.$n();
 		// Bug ZK-2285, ignore if the status is the same for IE's issue
@@ -129,35 +130,37 @@ export class Option extends zul.Widget<HTMLOptionElement> {
 		this._selected = selected;
 	}
 
-	/** Returns whether it is selected.
-	 * <p>Default: false.
-	 * @return boolean
+	/**
+	 * @returns whether it is selected.
+	 * @defaultValue `false`.
 	 */
 	isSelected(): boolean {
 		return this._selected;
 	}
 
-	/** Returns the label of the {@link Listcell} it contains, or null
+	/**
+	 * @returns the label of the {@link Listcell} it contains, or null
 	 * if no such cell.
-	 * @return String
 	 */
 	getLabel(): string | undefined {
 		return this.firstChild ? this.firstChild.getLabel() : undefined;
 	}
 
+	/** @internal */
 	updateLabel_(): void {
 		var n = this.$n();
 		if (n) jq(n).html(this.domLabel_());
 	}
 
-	/** Returns the maximal length of each item's label.
+	/**
+	 * @returns the maximal length of each item's label.
 	 * It is a shortcut of {@link Select#getMaxlength}.
-	 * @return int
 	 */
 	getMaxlength(): number | undefined {
 		return this.parent ? this.parent.getMaxlength() : 0;
 	}
 
+	/** @internal */
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		//B60-ZK-1303: force update parent's selected index.
@@ -165,6 +168,7 @@ export class Option extends zul.Widget<HTMLOptionElement> {
 			this.parent!._selectedIndex = this.getOptionIndex_();
 	}
 
+	/** @internal */
 	override doClick_(evt: zk.Event /*, popupOnly?: boolean */): void {
 		evt.stop(); // Eats the non-standard onclick event
 	}
@@ -172,6 +176,7 @@ export class Option extends zul.Widget<HTMLOptionElement> {
 	/**
 	 * The index for option widget only , not including the listhead.etc
 	 * @since 6.0.1
+	 * @internal
 	 */
 	getOptionIndex_(): number {
 		var parent = this.parent, ret = -1;
@@ -186,10 +191,12 @@ export class Option extends zul.Widget<HTMLOptionElement> {
 		return ret;
 	}
 
+	/** @internal */
 	domLabel_(): string {
 		return zUtl.encodeXML(this.getLabel()!, {maxlength: this.getMaxlength()!});
 	}
 
+	/** @internal */
 	override domAttrs_(no?: zk.DomAttrsOptions): string {
 		var value = this.getValue(),
 			shallRenderValue = value && this.parent && this.parent.getName();
@@ -202,6 +209,7 @@ export class Option extends zul.Widget<HTMLOptionElement> {
 		super.replaceWidget(newwgt, skipper);
 	}
 
+	/** @internal */
 	_syncItems(newwgt: zul.sel.Option): void {
 		if (this.parent && this.isSelected()) {
 			var items = this.parent._selItems;

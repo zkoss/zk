@@ -43,6 +43,7 @@ const _WidgetX = zk.augment(zk.Widget.prototype, {
 		if (binder)
 			binder.$doAfterCommand(command, args);
 	},
+	/** @internal */
 	unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		if (this._$binder) {
 			this._$binder.destroy();
@@ -57,43 +58,34 @@ export interface BinderOptions {
 	strict?: boolean;
 	child?: boolean;
 }
-
-/** @class zkbind
- * @import zkbind.Binder
- * A collection of ZK bind utilities.
- * @since 8.0.0
- */
-//@{
-/** Retrieves the binder if any.
- * @param Object n the object to look for. If it is a string,
+/**
+ * Retrieves the binder if any.
+ * @param n - the object to look for. If it is a string,
  * it is assumed to be UUID, unless it starts with '$'.
- * For example, <code>zkbind.$('uuid')<code> is the same as <code>zkbind.$('#uuid')<code>,
+ * For example, `zkbind.$('uuid')` is the same as `zkbind.$('#uuid')`,
  * and both look for a widget whose ID is 'uuid'. On the other hand,
- * <code>zkbind.$('$id') looks for a widget whose ID is 'id'.<br/>
- * and <code>zkbind.$('.className') looks for a widget whose CSS selector is 'className'.<br/>
+ * `zkbind.$('$id')` looks for a widget whose ID is 'id'.<br/>
+ * and `zkbind.$('.className')` looks for a widget whose CSS selector is 'className'.<br/>
  * If it is an DOM element ({@link DOMElement}), it will look up
  * which widget it belongs to.<br/>
  * If the object is not a DOM element and has a property called
- * <code>target</code>, then <code>target</code> is assumed.
+ * `target`, then `target` is assumed.
  * Thus, you can pass an instance of {@link jq.Event} or {@link zk.Event},
  * and the target widget will be returned.
- * @param Map opts [optional] the options. Allowed values:
+ * @param opts - the options. Allowed values:
  * <ul>
  * <li>exact - id must exactly match uuid (i.e., uuid-xx ignored).
  * It also implies strict</li>
  * <li>strict - whether not to look up the parent node.(since 5.0.2)
  * If omitted, false is assumed (and it will look up parent).</li>
  * <li>child - whether to ensure the given element is a child element
- * of the widget's main element ({@link zk.Widget#$n}). In most cases, if ID
+ * of the widget's main element ({@link zk.Widget.$n}). In most cases, if ID
  * of an element is xxx-yyy, the the element must be a child of
  * the element whose ID is xxx. However, there is some exception
  * such as the shadow of a window.</li>
  * </ul>
- * @return Binder
  * @since 8.0.0
  */
-//$: function () {}
-//@};
 export function $(n: string | HTMLElement | zk.Event | JQuery.Event, opts?: BinderOptions): Binder | undefined {
 	var widget = zk.Widget.$(n, opts);
 	if (widget)
@@ -156,12 +148,18 @@ export interface MediaQueryListWithHandler {
  */
 @zk.WrapClass('zkbind.Binder')
 export class Binder extends zk.Object {
+	/** @internal */
 	_cookies?: string[];
+	/** @internal */
 	_lastcmd?: string;
+	/** @internal */
 	_aftercmd?: Record<string, CallableFunction[]>;
+	/** @internal */
 	_mediaQueryLists?: MediaQueryListWithHandler[];
+	/** @internal */
 	_processingAfterCommand?: boolean;
 	$view?: zk.Widget;
+	/** @internal */
 	_toDoUnAftercmd: Record<string, CallableFunction[]>;
 	$currentTarget?: object;
 
@@ -203,8 +201,8 @@ export class Binder extends zk.Object {
 
 	/**
 	 * Registers a callback after some command executed.
-	 * @param String command the name of the command
-	 * @param Function func the function to execute
+	 * @param cmd - the name of the command
+	 * @param fn - the function to execute
 	 */
 	after(cmd: string | CallableFunction, fn: CallableFunction): this {
 		if (!fn && jq.isFunction(cmd)) {
@@ -221,8 +219,8 @@ export class Binder extends zk.Object {
 
 	/**
 	 * Unregisters a callback after some command executed.
-	 * @param String command the name of the command
-	 * @param Function func the function to execute
+	 * @param cmd - the name of the command
+	 * @param fn - the function to execute
 	 */
 	unAfter(cmd: string, fn: CallableFunction): this {
 		var ac = this._aftercmd![cmd];
@@ -261,10 +259,10 @@ export class Binder extends zk.Object {
 
 	/**
 	 * Post a command to the binder
-	 * @param String command the name of the command
-	 * @param Map args the arguments for this command. (the value should be json type)
-	 * @param Map opts a map of options to zk.Event, if any.
-	 * @param int timeout the time (milliseconds) to wait before sending the request.
+	 * @param cmd - the name of the command
+	 * @param args - the arguments for this command. (the value should be json type)
+	 * @param opts - a map of options to zk.Event, if any.
+	 * @param timeout - the time (milliseconds) to wait before sending the request.
 	 */
 	command(cmd: string, args?: Record<string, unknown>, opts?: zk.EventOptions, timeout?: number): this {
 		var wgt = this.$view;
@@ -281,10 +279,10 @@ export class Binder extends zk.Object {
 
 	/**
 	 * Post a global command from the binder.
-	 * @param String command the name of the command
-	 * @param Map args the arguments for this command. (the value should be json type)
-	 * @param Map opts a map of options to zk.Event, if any.
-	 * @param int timeout the time (milliseconds) to wait before sending the request.
+	 * @param cmd - the name of the command
+	 * @param args - the arguments for this command. (the value should be json type)
+	 * @param opts - a map of options to zk.Event, if any.
+	 * @param timeout - the time (milliseconds) to wait before sending the request.
 	 */
 	globalCommand(cmd: string, args?: Record<string, unknown>, opts?: zk.EventOptions, timeout?: number): this {
 		var wgt = this.$view;
@@ -314,8 +312,8 @@ export class Binder extends zk.Object {
 
 	/**
 	 * Post a upload command to the binder
-	 * @param String cmd the name of the command
-	 * @param File file the file to upload. (the value should be a file type)
+	 * @param cmd - the name of the command
+	 * @param file - the file to upload. (the value should be a file type)
 	 * @since 9.0.1
 	 */
 	upload(cmd: string, file: File): void {
@@ -324,11 +322,11 @@ export class Binder extends zk.Object {
 
 	/**
 	 * Post a command to the binder from the give dom element.
-	 * @param DOMElement dom the target of the dom element.
-	 * @param String command the name of the command
-	 * @param Map args the arguments for this command. (the value should be json type)
-	 * @param Map opts a map of options to zk.Event, if any.
-	 * @param int timeout the time (milliseconds) to wait before sending the request.
+	 * @param dom - the target of the dom element.
+	 * @param command - the name of the command
+	 * @param args - the arguments for this command. (the value should be json type)
+	 * @param opt - a map of options to zk.Event, if any.
+	 * @param timeout - the time (milliseconds) to wait before sending the request.
 	 */
 	static postCommand(dom: HTMLElement, command: string, args?: Record<string, unknown>, opt?: zk.EventOptions, timeout?: number): void {
 		var w = zk.Widget.$(dom);
@@ -342,10 +340,10 @@ export class Binder extends zk.Object {
 
 	/**
 	 * Post a global command from the binder of the give dom element.
-	 * @param DOMElement dom the target of the dom element.
-	 * @param String command the name of the command
-	 * @param Map args the arguments for this command. (the value should be json type)
-	 * @param int timeout the time (milliseconds) to wait before sending the request.
+	 * @param dom - the target of the dom element.
+	 * @param command - the name of the command
+	 * @param args - the arguments for this command. (the value should be json type)
+	 * @param timeout - the time (milliseconds) to wait before sending the request.
 	 */
 	static postGlobalCommand(dom: HTMLElement, command: string, args?: Record<string, unknown>, opt?: zk.EventOptions, timeout?: number): void {
 		var w = zk.Widget.$(dom);

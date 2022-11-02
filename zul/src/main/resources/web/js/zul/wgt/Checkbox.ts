@@ -37,24 +37,30 @@ export interface Checkbox {
 @zk.WrapClass('zul.wgt.Checkbox')
 export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidgetWithDisable {
 	//_tabindex: 0,
+	/** @internal */
 	_checked = false;
+	/** @internal */
 	_disabled?: boolean = false; // disabled by default
+	/** @internal */
 	_adbs?: boolean;
+	/** @internal */
 	_autodisable?: string;
+	/** @internal */
 	_name?: string;
+	/** @internal */
 	_value?: string;
+	/** @internal */
 	_indeterminate?: boolean;
 
-	/** Returns whether it is disabled.
-	 * <p>Default: false.
-	 * @return boolean
+	/**
+	 * @returns whether it is disabled.
+	 * @defaultValue `false`.
 	 */
 	isDisabled(): boolean {
 		return !!this._disabled;
 	}
 
 	/** Sets whether it is disabled.
-	 * @param boolean disabled
 	 */
 	setDisabled(disabled: boolean, opts?: Record<string, boolean>): this {
 		const o = this._disabled;
@@ -69,6 +75,7 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 			if (this._adbs) {
 				// autodisable is still active, allow enabling
 				this._adbs = false;
+			// eslint-disable-next-line @typescript-eslint/no-unnecessary-boolean-literal-compare
 			} else if (opts && opts.adbs === false)
 				// ignore re-enable by autodisable mechanism
 				disabled = !!this._disabled;
@@ -89,9 +96,9 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 		return this;
 	}
 
-	/** Returns whether it is checked.
-	 * <p>Default: false.
-	 * @return boolean
+	/**
+	 * @returns whether it is checked.
+	 * @defaultValue `false`.
 	 */
 	isChecked(): boolean {
 		return this._checked;
@@ -99,7 +106,6 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 
 	/** Sets whether it is checked,
 	 * changing checked will set indeterminate to false.
-	 * @param boolean checked
 	 */
 	setChecked(checked: boolean, opts?: Record<string, boolean>): this {
 		const o = this._checked;
@@ -119,15 +125,15 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 		return this;
 	}
 
-	/** Returns the name of this component.
-	 * <p>Default: null.
+	/**
+	 * @returns the name of this component.
+	 * @defaultValue `null`.
 	 * <p>Don't use this method if your application is purely based
 	 * on ZK's event-driven model.
 	 * <p>The name is used only to work with "legacy" Web application that
 	 * handles user's request by servlets.
 	 * It works only with HTTP/HTML-based browsers. It doesn't work
 	 * with other kind of clients.
-	 * @return String
 	 */
 	getName(): string | undefined {
 		return this._name;
@@ -141,7 +147,7 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 	 * It works only with HTTP/HTML-based browsers. It doesn't work
 	 * with other kind of clients.
 	 *
-	 * @param String name the name of this component.
+	 * @param name - the name of this component.
 	 */
 	setName(name: string, opts?: Record<string, boolean>): this {
 		const o = this._name;
@@ -155,16 +161,16 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 		return this;
 	}
 
-	/** Returns the tab order of this component.
-	 * <p>Default: -1 (means the same as browser's default).
-	 * @return int
+	/**
+	 * @returns the tab order of this component.
+	 * @defaultValue -1 (means the same as browser's default).
 	 */
 	override getTabindex(): number | undefined {
 		return this._tabindex;
 	}
 
-	/** Sets the tab order of this component.
-	 * @param int tabindex
+	/**
+	 * Sets the tab order of this component.
 	 */
 	override setTabindex(tabindex: number, opts?: Record<string, boolean>): this {
 		const o = this._tabindex;
@@ -183,9 +189,9 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 		return this;
 	}
 
-	/** Returns the value.
-	 * <p>Default: "".
-	 * @return String
+	/**
+	 * @returns the value.
+	 * @defaultValue `""`.
 	 * @since 5.0.4
 	 */
 	getValue(): string | undefined {
@@ -193,7 +199,7 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 	}
 
 	/** Sets the value.
-	 * @param String value the value; If null, it is considered as empty.
+	 * @param value - the value; If null, it is considered as empty.
 	 * @since 5.0.4
 	 */
 	setValue(value: string, opts?: Record<string, boolean>): this {
@@ -208,20 +214,21 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 		return this;
 	}
 
-	/** Returns a list of checkbox component IDs that shall be disabled when the user
+	/**
+	 * @returns a list of checkbox component IDs that shall be disabled when the user
 	 * clicks this checkbox.
 	 *
-	 * <p>To represent the checkbox itself, the developer can specify <code>self</code>.
+	 * <p>To represent the checkbox itself, the developer can specify `self`.
 	 * For example,
-	 * <pre><code>
+	 * ```ts
 	 * checkbox.setId('ok');
 	 * wgt.setAutodisable('self,cancel');
-	 * </code></pre>
+	 * ```
 	 * is the same as
-	 * <pre><code>
+	 * ```ts
 	 * checkbox.setId('ok');
 	 * wgt.setAutodisable('ok,cancel');
-	 * </code></pre>
+	 * ```
 	 * that will disable
 	 * both the ok and cancel checkboxes when an user clicks it.
 	 *
@@ -232,26 +239,26 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 	 *
 	 * <p>However, if you prefer to enable them later manually, you can
 	 * prefix with '+'. For example,
-	 * <pre><code>
+	 * ```ts
 	 * checkbox.setId('ok');
 	 * wgt.setAutodisable('+self,+cancel');
-	 * </code></pre>
+	 * ```
 	 *
 	 * <p>Then, you have to enable them manually such as
-	 * <pre><code>if (something_happened){
+	 * ```ts
+	 * if (something_happened) {
 	 *  ok.setDisabled(false);
 	 *  cancel.setDisabled(false);
-	 *</code></pre>
+	 * }
+	 * ```
 	 *
-	 * <p>Default: null.
-	 * @return String
+	 * @defaultValue `null`.
 	 */
 	getAutodisable(): string | undefined {
 		return this._autodisable;
 	}
 
 	/** Sets whether to disable the checkbox after the user clicks it.
-	 * @param String autodisable
 	 */
 	setAutodisable(autodisable: string): this {
 		this._autodisable = autodisable;
@@ -259,10 +266,8 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 	}
 
 	/**
-	 * Return whether checkbox is in indeterminate state.
-	 * Default: false.
-	 *
-	 * @return boolean
+	 * @returns whether checkbox is in indeterminate state.
+	 * @defaultValue `false`.
 	 * @since 8.6.0
 	 */
 	isIndeterminate(): boolean {
@@ -272,7 +277,7 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 	/**
 	 * Set whether checkbox is in indeterminate state.
 	 *
-	 * @param boolean indeterminate whether checkbox is indeterminate
+	 * @param indeterminate - whether checkbox is indeterminate
 	 * @since 8.6.0
 	 */
 	setIndeterminate(indeterminate: boolean, opts?: Record<string, boolean>): this {
@@ -293,9 +298,8 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 		return this;
 	}
 
-	/** Returns the current state according to isIndeterminate() and isChecked().
-	 *
-	 * @return Boolean
+	/**
+	 * @returns the current state according to isIndeterminate() and isChecked().
 	 * @since 9.0.0
 	 */
 	// eslint-disable-next-line zk/preferStrictBooleanType
@@ -306,12 +310,13 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 			return this.isChecked();
 	}
 
-	//super//
+	/** @internal */
 	override focus_(timeout?: number): boolean {
 		zk(this.$n('real') || this.$n()).focus(timeout);
 		return true;
 	}
 
+	/** @internal */
 	contentAttrs_(): string {
 		const out: string[] = [],
 			name = this.getName(); // cannot use this._name for radio
@@ -329,10 +334,12 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 		return out.join(' ');
 	}
 
+	/** @internal */
 	_moldA11yAttrs(): string {
 		return '';
 	}
 
+	/** @internal */
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 
@@ -350,6 +357,7 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 			._setTabIndexForMold();
 	}
 
+	/** @internal */
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		const n = this.$n('real')!,
 			mold = this.$n('mold')!;
@@ -360,21 +368,25 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 		super.unbind_(skipper, after, keepRod);
 	}
 
+	/** @internal */
 	_setTabIndexForMold(): void {
 		const mold = this.$n('mold');
 		if (mold)
 			mold.tabIndex = this._canTabOnMold() ? 0 : -1;
 	}
 
+	/** @internal */
 	_canTabOnMold(): boolean {
 		return !this._isDefaultMold() && !this.isDisabled();
 	}
 
+	/** @internal */
 	override doSelect_(evt: zk.Event): void {
 		if (!_shallIgnore(evt))
 			super.doSelect_(evt);
 	}
 
+	/** @internal */
 	override doClick_(evt: zk.Event, popupOnly?: boolean): void {
 		// B96-ZK-4821: shall not doClick if the checkbox is disabled
 		if (!_shallIgnore(evt) && !this.isDisabled()) {
@@ -407,15 +419,18 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 		}
 	}
 
+	/** @internal */
 	_doMoldMouseDown(evt: zk.Event): void {
 		if (this.isDisabled())
 			evt.stop();
 	}
+	/** @internal */
 	// eslint-disable-next-line zk/preferStrictBooleanType
 	fireOnCheck_(checked: boolean | undefined): void {
 		this.fire('onCheck', checked);
 	}
 
+	/** @internal */
 	override beforeSendAU_(wgt: zk.Widget, evt: zk.Event): void {
 		if (evt.name != 'onClick') //don't stop event if onClick (otherwise, check won't work)
 			super.beforeSendAU_(wgt, evt);
@@ -425,10 +440,12 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 		return this.$n('cnt');
 	}
 
+	/** @internal */
 	override shallIgnoreClick_(): boolean {
 		return this.isDisabled();
 	}
 
+	/** @internal */
 	override domClass_(no?: zk.DomClassOptions): string {
 		const out = [
 			super.domClass_(no),
@@ -440,14 +457,17 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 		return out.join(' ');
 	}
 
+	/** @internal */
 	_isDefaultMold(): boolean {
 		return this.getMold() == 'default';
 	}
 
+	/** @internal */
 	_isTristateMold(): boolean {
 		return this.getMold() == 'tristate';
 	}
 
+	/** @internal */
 	nextState_(): void {
 		if (this._indeterminate) {
 			this.setIndeterminate(false);
@@ -459,10 +479,12 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 		}
 	}
 
+	/** @internal */
 	getMoldPrefix_(): string {
 		return this._isDefaultMold() ? '' : (this.getMold() + '-');
 	}
 
+	/** @internal */
 	getClassNameByState_(): string {
 		const moldPrefix = this.getMoldPrefix_();
 		if (this._indeterminate) {
@@ -472,6 +494,7 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 		}
 	}
 
+	/** @internal */
 	clearStateClassName_(): void {
 		const n = jq(this.$n()),
 			moldPrefix = this.getMoldPrefix_();
@@ -482,6 +505,7 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 		}
 	}
 
+	/** @internal */
 	override doKeyDown_(evt: zk.Event): void {
 		super.doKeyDown_(evt);
 		const spaceKeyCode = 32;

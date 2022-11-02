@@ -14,21 +14,23 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 /**
  * A simple date constraint.
- * @disable(zkgwt)
  */
 @zk.WrapClass('zul.inp.SimpleDateConstraint')
 export class SimpleDateConstraint extends zul.inp.SimpleConstraint {
 	readonly format = 'yyyyMMdd';
+	/** @internal */
 	_wgt: zul.db.Datebox;
+	/** @internal */
 	_localizedSymbols?: zk.LocalizedSymbols;
+	/** @internal */
 	_beg?: DateImpl;
+	/** @internal */
 	_end?: DateImpl;
 
-	/** Constructor.
-	 * @param Object a
+	/**
 	 * It can be String or number, the number or name of flag,
 	 * such as "no positive", 0x0001.
-	 * @param zk.Widget the datebox
+	 * @param wgt - datebox
 	 * @since 5.0.8
 	 */
 	constructor(a: unknown, wgt: zul.db.Datebox) {
@@ -37,6 +39,7 @@ export class SimpleDateConstraint extends zul.inp.SimpleConstraint {
 		this._localizedSymbols = wgt._localizedSymbols;
 	}
 
+	/** @internal */
 	override parseConstraint_(constraint: string): void {
 		var len = this.format.length + 1,
 			arr = this._cstArr,
@@ -75,15 +78,15 @@ export class SimpleDateConstraint extends zul.inp.SimpleConstraint {
 			var msg = this._errmsg,
 				v = Dates.newInstance([val.getFullYear(), val.getMonth(), val.getDate()], val.getTimeZone());
 			if (this._beg != null && this._beg.getTime() > v.getTime())
-				return msg['between'] || msg['after'] || this.outOfRangeValue();
+				return msg.between || msg.after || this.outOfRangeValue();
 			if (this._end != null && this._end.getTime() < v.getTime())
-				return msg['between'] || msg['before'] || this.outOfRangeValue();
+				return msg.between || msg.before || this.outOfRangeValue();
 		}
 		return result;
 	}
 
-	/** Returns the message about out of range value
-	 * @return String
+	/**
+	 * @returns the message about out of range value
 	 */
 	outOfRangeValue(): string {
 		var format = this._wgt._format,

@@ -15,43 +15,49 @@ it will be useful, but WITHOUT ANY WARRANTY.
 /**
  * An edit box for holding a constrained integer.
  *
- * <p>Default {@link #getZclass}: z-spinner.
+ * @defaultValue {@link getZclass}: z-spinner.
  */
 @zk.WrapClass('zul.inp.Spinner')
 export class Spinner extends zul.inp.NumberInputWidget<number> {
+	/** @internal */
 	_step = 1;
+	/** @internal */
 	_buttonVisible = true;
+	/** @internal */
 	_min?: number;
+	/** @internal */
 	_max?: number;
+	/** @internal */
 	_currentbtn?: HTMLElement;
+	/** @internal */
 	_noPreviousValue?: boolean;
 	timerId?: number;
 
-	/** Return the step of spinner
-	 * @return int
+	/**
+	 * @returns the step of spinner
 	 */
 	getStep(): number | undefined {
 		return this._step;
 	}
 
-	/** Set the step of spinner
-	 * @param int step
+	/**
+	 * Set the step of spinner
 	 */
 	setStep(step: number, opts?: Record<string, boolean>): this {
 		this._step = step;
 		return this;
 	}
 
-	/** Returns whether the button (on the right of the textbox) is visible.
-	 * <p>Default: true.
-	 * @return boolean
+	/**
+	 * @returns whether the button (on the right of the textbox) is visible.
+	 * @defaultValue `true`.
 	 */
 	isButtonVisible(): boolean {
 		return this._buttonVisible;
 	}
 
-	/** Sets whether the button (on the right of the textbox) is visible.
-	 * @param boolean visible
+	/**
+	 * Sets whether the button (on the right of the textbox) is visible.
 	 */
 	setButtonVisible(buttonVisible: boolean, opts?: Record<string, boolean>): this {
 		const o = this._buttonVisible;
@@ -68,15 +74,15 @@ export class Spinner extends zul.inp.NumberInputWidget<number> {
 		return true;
 	}
 
-	/** Returns the value in int. If null, zero is returned.
-	 * @return int
+	/**
+	 * @returns the value in int. If null, zero is returned.
 	 */
 	intValue(): number | undefined {
 		return super.getValue();
 	}
 
 	override setConstraint(constraint: string): this {
-		if (typeof constraint == 'string' && constraint.charAt(0) != '['/*by server*/) {
+		if (typeof constraint == 'string' && !constraint.startsWith('[')/*by server*/) {
 			var spinnerConstraint = new zul.inp.SimpleSpinnerConstraint(constraint);
 			this._min = spinnerConstraint._min;
 			this._max = spinnerConstraint._max;
@@ -86,6 +92,7 @@ export class Spinner extends zul.inp.NumberInputWidget<number> {
 		return this;
 	}
 
+	/** @internal */
 	override coerceFromString_(value: string | undefined): zul.inp.CoerceFromStringResult | number | undefined {//copy from intbox
 		if (!value) return undefined;
 
@@ -100,6 +107,7 @@ export class Spinner extends zul.inp.NumberInputWidget<number> {
 		return val;
 	}
 
+	/** @internal */
 	override coerceToString_(value: unknown): string {//copy from intbox
 		var fmt = this._format;
 		return fmt ? zk.fmt.Number.format(fmt, value as string, this._rounding!, this._localizedSymbols)
@@ -109,6 +117,7 @@ export class Spinner extends zul.inp.NumberInputWidget<number> {
 	onHide = undefined;
 	validate = undefined;
 
+	/** @internal */
 	override doKeyDown_(evt: zk.Event): void {
 		var inp = this.getInputNode()!;
 		if (inp.disabled || inp.readOnly)
@@ -129,12 +138,14 @@ export class Spinner extends zul.inp.NumberInputWidget<number> {
 		super.doKeyDown_(evt);
 	}
 
+	/** @internal */
 	_ondropbtnup(evt: zk.Event): void {
 		this.domUnlisten_(document.body, 'onZMouseup', '_ondropbtnup');
 		this._stopAutoIncProc();
 		this._currentbtn = undefined;
 	}
 
+	/** @internal */
 	_btnDown(evt: zk.Event): void {
 		if (!this._buttonVisible || this._disabled) return;
 
@@ -186,6 +197,7 @@ export class Spinner extends zul.inp.NumberInputWidget<number> {
 		}
 	}
 
+	/** @internal */
 	_btnUp(evt: zk.Event): void {
 		if (!this._buttonVisible || this._disabled || zk.dragging) return;
 
@@ -196,6 +208,7 @@ export class Spinner extends zul.inp.NumberInputWidget<number> {
 		inp.focus();
 	}
 
+	/** @internal */
 	_increase(is_add: boolean): void {
 		var inp = this.getInputNode()!,
 			value = this.coerceFromString_(inp.value), //ZK-1851 convert input value using pattern
@@ -227,11 +240,13 @@ export class Spinner extends zul.inp.NumberInputWidget<number> {
 
 	}
 
+	/** @internal */
 	_clearValue(): boolean {
 		this.getInputNode()!.value = this._defRawVal = '';
 		return true;
 	}
 
+	/** @internal */
 	_startAutoIncProc(isup: boolean): void {
 		var widget = this;
 		if (this.timerId)
@@ -241,6 +256,7 @@ export class Spinner extends zul.inp.NumberInputWidget<number> {
 		jq(this.$n_('btn-' + (isup ? 'up' : 'down'))).addClass(this.$s('active'));
 	}
 
+	/** @internal */
 	_stopAutoIncProc(): void {
 		if (this.timerId)
 			clearTimeout(this.timerId);
@@ -249,17 +265,20 @@ export class Spinner extends zul.inp.NumberInputWidget<number> {
 		jq('.' + this.$s('icon'), this.$n_('btn')).removeClass(this.$s('active'));
 	}
 
+	/** @internal */
 	override doFocus_(evt: zk.Event): void {
 		super.doFocus_(evt);
 
 		zul.inp.RoundUtl.doFocus_(this);
 	}
 
+	/** @internal */
 	override doBlur_(evt: zk.Event): void {
 		super.doBlur_(evt);
 		zul.inp.RoundUtl.doBlur_(this);
 	}
 
+	/** @internal */
 	override afterKeyDown_(evt: zk.Event, simulated?: boolean): boolean {
 		if (!simulated && this._inplace)
 			jq(this.$n_()).toggleClass(this.getInplaceCSS(), evt.keyCode == 13);
@@ -267,6 +286,7 @@ export class Spinner extends zul.inp.NumberInputWidget<number> {
 		return super.afterKeyDown_(evt, simulated);
 	}
 
+	/** @internal */
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {//after compose
 		super.bind_(desktop, skipper, after);
 
@@ -278,6 +298,7 @@ export class Spinner extends zul.inp.NumberInputWidget<number> {
 		zWatch.listen({onSize: this});
 	}
 
+	/** @internal */
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		if (this.timerId) {
 			clearTimeout(this.timerId);
@@ -292,10 +313,12 @@ export class Spinner extends zul.inp.NumberInputWidget<number> {
 		super.unbind_(skipper, after, keepRod);
 	}
 
+	/** @internal */
 	getBtnUpIconClass_(): string {
 		return 'z-icon-angle-up';
 	}
 
+	/** @internal */
 	getBtnDownIconClass_(): string {
 		return 'z-icon-angle-down';
 	}

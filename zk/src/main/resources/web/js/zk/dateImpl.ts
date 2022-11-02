@@ -41,7 +41,9 @@ export namespace dateImpl_global {
 	};
 
 	export class DateImpl {
+		/** @internal */
 		_moment: Moment;
+		/** @internal */
 		_timezone: string;
 		constructor(m: Moment, tz: string) {
 			this._moment = m;
@@ -51,9 +53,11 @@ export namespace dateImpl_global {
 			if (v) this._timezone = parseTzId(v);
 			return this;
 		}
+		/** @internal */
 		_getTzMoment(): Moment {
 			return this._moment.tz(this._timezone);
 		}
+		/** @internal */
 		_getUTCMoment(): Moment {
 			return this._moment.tz('UTC');
 		}

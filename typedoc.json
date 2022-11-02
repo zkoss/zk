@@ -1,0 +1,24 @@
+{
+  "name": "zkoss",
+  "entryPoints": [
+    "jsdoc/src/index.d.ts"
+  ],
+  "out": "jsdoc/codegen",
+  "logLevel": "Error",
+  "disableSources": true,
+  "excludeInternal": true,
+  "hideGenerator": true,
+  "skipErrorChecking": true,
+  "visibilityFilters": {
+    "protected": false,
+    "private": false,
+    "inherited": false,
+    "external": false,
+    "@alpha": false,
+    "@beta": false
+  },
+  "validation": {
+    "invalidLink": true
+  },
+  "tsconfig": "jsdoc/tsconfig.json"
+}

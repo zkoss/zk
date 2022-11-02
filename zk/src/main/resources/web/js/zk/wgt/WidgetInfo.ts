@@ -28,30 +28,33 @@ function _load(pkgs: string[], f: (() => void), weave: boolean): void {
  */
 //zk.$package('zk.wgt');
 
-/** @class zk.wgt.WidgetInfo
+/**
+ * @class zk.wgt.WidgetInfo
  * Information of widgets.
- * <p>Whne this package (zk.wgt) is loaded, all widget informations defined
+ * <p>When this package (zk.wgt) is loaded, all widget informations defined
  * in the server are loaded automatically.
  */
-export let WidgetInfo = {
-	/** A map ({@link Map}) of widget informations (readonly).
+export var WidgetInfo = {
+	/**
+	 * A map ({@link Map}) of widget informations (readonly).
 	 * The key is the widget name, such as textbox, and the value is
 	 * the class name. However the value might be changed in the future,
 	 * so it is better to iterate only the keys.
-	 * <p>To add a mapping, use {@link #register}.
+	 * <p>To add a mapping, use {@link register}.
 	 * @type Map
 	 */
 	all: _wgtInfs,
-	/** Returns the class name of the widget.
-	 * @param String wgtnm the widget name, such as textbox
-	 * @return String the class name, such as zul.inp.Textbox
+	/**
+	 * @returns the class name of the widget, such as `"zul.inp.Textbox"`.
+	 * @param wgtnm - the widget name, such as textbox
 	 */
 	getClassName(wgtnm: string): string {
 		return _wgtInfs[wgtnm] as string;
 	},
-	/** Registers an arry of widget information.
-	 * @param Array infs an array of widget class names. For example,
-	 * ['zul.wnd.Window', 'zul.inp.Textbox'].
+	/**
+	 * Registers an arry of widget information.
+	 * @param infs - an array of widget class names. For example,
+	 * `['zul.wnd.Window', 'zul.inp.Textbox']`.
 	 */
 	register(infs: string[]): void {
 		for (var i = 0, len = infs.length; i < len; ++i) {
@@ -61,11 +64,12 @@ export let WidgetInfo = {
 			_wgtInfs[wgtnm.substring(0, 1).toLowerCase() + wgtnm.substring(1)] = clsnm;
 		}
 	},
-	/** Loads all packages requires by all widgets.
+	/**
+	 * Loads all packages requires by all widgets.
 	 * It is usually used in a visual designer, such as ZK Weaver, to
 	 * make sure the classes of all widgets are available to use.
-	 * @param Function f the function to run after all packages are loaded
-	 * @param boolean weave whether to load the package used for ZK weaver.
+	 * @param f - the function to run after all packages are loaded
+	 * @param weave - whether to load the package used for ZK weaver.
 	 * For example, if a package is called zul.wnd, then we assume zul.wnd.wv is the package
 	 * for widgets defined in zul.wnd to communicate with ZK Weaver.
 	 */

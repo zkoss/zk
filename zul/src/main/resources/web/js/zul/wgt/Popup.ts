@@ -39,26 +39,33 @@ export interface PositionInfo {
  * A container that is displayed as a popup.
  * The popup window does not have any special frame.
  * Popups can be displayed when an element is clicked by assigning
- * the id of the popup to either the {@link #setPopup},
- * {@link #setContext} or {@link #setTooltip} attribute of the element.
+ * the id of the popup to either the {@link setPopup},
+ * {@link setContext} or {@link setTooltip} attribute of the element.
  *
- * <p>Default {@link #getZclass}: z-popup.
+ * @defaultValue {@link getZclass}: z-popup.
  */
 @zk.WrapClass('zul.wgt.Popup')
 export class Popup extends zul.Widget {
+	/** @internal */
 	override _visible = false;
+	/** @internal */
 	_fakeParent?: zk.Widget;
 	mask?: zk.eff.Mask;
+	/** @internal */
 	_openInfo?: PositionArgs;
+	/** @internal */
 	_adjustLeft?: number;
+	/** @internal */
 	_adjustTop?: number;
+	/** @internal */
 	_shallToggle?: boolean;
+	/** @internal */
 	_keepVisible?: boolean;
+	/** @internal */
 	_stackup?: HTMLIFrameElement;
 
 	/**
-	 * Returns whether the popup is visible.
-	 * @return boolean
+	 * @returns whether the popup is visible.
 	 */
 	isOpen(): boolean {
 		return this.isVisible();
@@ -97,10 +104,9 @@ export class Popup extends zul.Widget {
 	 * Opens the popup.
 	 * <p>Note: the ref with the position parameter is prior to the offset parameter,
 	 * if any.
-	 * @param zk.Widget ref the referred widget.
-	 * @param Offset offset the offset of x and y
-	 * @param String position
-	 * <p> Possible values for the position attribute are:
+	 * @param ref - the referred widget or its uuid.
+	 * @param offset - the offset of x and y
+	 * @param position - Possible values for the position attribute are:
 	 * <ul>
 	 * 	<li><b>before_start</b><br/> the popup appears above the anchor, aligned to the left.</li>
 	 * 	<li><b>before_center</b><br/> the popup appears above the anchor, aligned to the center.</li>
@@ -126,26 +132,11 @@ export class Popup extends zul.Widget {
 	 *  <li><b>at_pointer</b><br/> the popup appears with the upper-left aligned with the mouse cursor.</li>
 	 *  <li><b>after_pointer</b><br/> the popup appears with the top aligned with
 	 *  	the bottom of the mouse cursor, with the left side of the popup at the horizontal position of the mouse cursor.</li>
-	 * </ul></p>
-	 * @param Map opts
-	 * 	if opts.sendOnOpen exists, it will fire onOpen event. If opts.disableMask exists,
+	 * </ul>
+	 * @param opts - if opts.sendOnOpen exists, it will fire onOpen event. If opts.disableMask exists,
 	 *  it will show a disable mask. If opts.overflow exists, it allows the popup to appear
 	 *  out of the screen range. If opts.dodgeRef exists, it will avoid covering the reference
 	 *  element.
-	 */
-	/**
-	 * Opens the popup.
-	 * <p>Note: the ref with the position parameter is prior to the offset parameter,
-	 * if any.
-	 * @param String ref the uuid of the ref widget.
-	 * @param Offset offset the offset of x and y
-	 * @param String position Possible values for the position attribute
-	 * @param Map opts
-	 * 	if opts.sendOnOpen exists, it will fire onOpen event. If opts.disableMask exists,
-	 *  it will show a disable mask. If opts.overflow exists, it allows the popup to appear
-	 *  out of the screen range. If opts.dodgeRef exists, it will avoid covering the reference
-	 *  element.
-	 *  @see #open(zk.Widget, Offset, String, Map)
 	 */
 	open(ref?: Ref, offset?: zk.Offset, position?: string, opts?: PopupOptions): void {
 		this._fakeParent = zk.$(ref);
@@ -177,16 +168,20 @@ export class Popup extends zul.Widget {
 		this.openAnima_(ref, offset, position, opts);
 	}
 
-	/** The effect for opening the popup. Override this function to provide
+	/**
+	 * The effect for opening the popup. Override this function to provide
 	 * opening effect. afterOpenAnima_ needs to be called after the effect.
 	 * @since 6.0.1
+	 * @internal
 	 */
 	openAnima_(ref?: Ref, offset?: zk.Offset, position?: string, opts?: PopupOptions): void {
 		this.afterOpenAnima_(ref, offset, position, opts);
 	}
 
-	/** The handling after the opening effect of popup.
+	/**
+	 * The handling after the opening effect of popup.
 	 * @since 6.0.1
+	 * @internal
 	 */
 	afterOpenAnima_(ref?: Ref, _offset?: zk.Offset, _position?: string, opts?: PopupOptions): void {
 		var node = this.$n(),
@@ -237,6 +232,7 @@ export class Popup extends zul.Widget {
 		jq(node).addClass(this.$s('open'));
 	}
 
+	/** @internal */
 	_adjustOffsets(ref?: zk.Widget): void {
 		if (ref && ref.desktop && this.desktop) {
 			var refDim = zk(ref).dimension(true),
@@ -249,11 +245,12 @@ export class Popup extends zul.Widget {
 		}
 	}
 
-	/** Returns whether to instantiate a stackup when {@link #open}
+	/**
+	 * @returns whether to instantiate a stackup when {@link open}
 	 * is called.
 	 * <p>If the derive class created its own stackup (such as creating
 	 * a shadow), it shall override this method to return false.
-	 * @return boolean
+	 * @internal
 	 */
 	shallStackup_(): boolean {
 		return zk.eff.shallStackup();
@@ -263,14 +260,10 @@ export class Popup extends zul.Widget {
 	 * Sets the popup position.
 	 * <p>Note: the ref with the position parameter is prior to the offset parameter,
 	 * if any.
-	 * @param zk.Widget ref the referred widget.
-	 * @param Offset offset the offset of x and y
-	 * @param String position
-	 * <p> Possible values for the position attribute
-	 * refer to {@link #open}.
-	 * </p>
-	 * @param Map opts a map of addition options.<br/>
-	 * Allowed values: refer to {@link jqzk#position(Dimension,String,Map)}.
+	 * @param ref - the referred widget.
+	 * @param offset - the offset of x and y
+	 * @param position - Possible values for the position attribute refer to {@link open}.
+	 * @param opts - a map of addition options. Allowed values: refer to {@link zjq.position}.
 	 */
 	position(ref?: Ref, offset?: zk.Offset, position?: string, opts?: zk.PositionOptions): void {
 		var posInfo = this._posInfo(ref, offset, position);
@@ -278,8 +271,9 @@ export class Popup extends zul.Widget {
 			zk(this.$n()).position(posInfo.dim, posInfo.pos, opts);
 	}
 
-	/** Reset the position on scroll
-	 * @param zk.ZWatchController evt
+	/**
+	 * Reset the position on scroll
+	 * @internal
 	 */
 	_onSyncScroll(evt: zk.ZWatchController): void {
 		if (evt && (!this._fakeParent || zUtl.isAncestor(evt.origin, this._fakeParent))) {
@@ -296,6 +290,7 @@ export class Popup extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	_posInfo(ref?: Ref, offset?: zk.Offset, position?: string, _opts?: PopupOptions): PositionInfo | undefined {
 		var pos: string | undefined,
 			dim: zk.Dimension | undefined;
@@ -347,7 +342,7 @@ export class Popup extends zul.Widget {
 	 *
 	 * <p>In most cases, the popup is closed automatically when the user
 	 * clicks outside of the popup.
-	 * @param Map opts if opts.sendOnOpen exists, it will fire onOpen event.
+	 * @param opts - if opts.sendOnOpen exists, it will fire onOpen event.
 	 */
 	close(opts?: PopupOptions): void {
 		if (this._stackup)
@@ -382,16 +377,20 @@ export class Popup extends zul.Widget {
 		}
 	}
 
-	/** The effect for closing the popup. Override this function to provide
+	/**
+	 * The effect for closing the popup. Override this function to provide
 	 * closing effect. afterCloseAnima_ needs to be called after the effect.
 	 * @since 6.0.1
+	 * @internal
 	 */
 	closeAnima_(opts?: PopupOptions): void {
 		this.afterCloseAnima_(opts);
 	}
 
-	/** The handling after the closing effect of popup.
+	/**
+	 * The handling after the closing effect of popup.
 	 * @since 6.0.1
+	 * @internal
 	 */
 	afterCloseAnima_(opts?: PopupOptions): void {
 		this.setVisible(false);
@@ -422,6 +421,7 @@ export class Popup extends zul.Widget {
 		this._doFloatUp(ctl);
 	}
 
+	/** @internal */
 	_doFloatUp(ctl: zk.ZWatchController): void {
 		if (!this.isVisible())
 			return;
@@ -440,6 +440,7 @@ export class Popup extends zul.Widget {
 	}
 
 	// ZK-2990: should also change the zIndex of the stackup of the widget
+	/** @internal */
 	override setFloatZIndex_(floatZIndex: HTMLElement, zi: number): void {
 		super.setFloatZIndex_(floatZIndex, zi);
 		if (this._stackup) {
@@ -447,12 +448,14 @@ export class Popup extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		zWatch.listen({onFloatUp: this, onShow: this, afterSize: this, _onSyncScroll: this});
 		this.setFloating_(true);
 	}
 
+	/** @internal */
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		zk(this.$n()).undoVParent(); //Bug 3079480
 		if (this._stackup) {
@@ -471,7 +474,8 @@ export class Popup extends zul.Widget {
 		this.reposition();
 	}
 
-	/** Reposition popup
+	/**
+	 * Reposition popup
 	 * @since 8.0.3
 	 */
 	reposition(): void {
@@ -510,18 +514,22 @@ export class Popup extends zul.Widget {
 		return this;
 	}
 
+	/** @internal */
 	prologHTML_(_out: string[]): void {
 		// empty on purpose
 	}
 
+	/** @internal */
 	epilogHTML_(_out: string[]): void {
 		// empty on purpose
 	}
 
+	/** @internal */
 	isInView_(): boolean {
 		return this._fakeParent ? zk(this._fakeParent).isRealScrollIntoView(true) : false;
 	}
 
+	/** @internal */
 	getPositionArgs_(): PositionArgs {
 		var p = this._fakeParent, dim = zk(p).dimension(true);
 		return [p, [dim.left + this._adjustLeft!, dim.top + this._adjustTop!], undefined, {dodgeRef: false}];

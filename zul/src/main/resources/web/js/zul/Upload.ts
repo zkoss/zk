@@ -95,20 +95,28 @@ export class Upload extends zk.Object {
 	multiple?: string;
 	accept?: string;
 	isNative?: boolean;
+	/** @internal */
 	_clsnm: string;
+	/** @internal */
 	_wgt?: zk.Widget;
+	/** @internal */
 	_parent?: HTMLElement;
+	/** @internal */
 	_tooltiptext?: string;
+	/** @internal */
 	_outer!: HTMLElement;
+	/** @internal */
 	_inp!: HTMLElement | undefined;
+	/** @internal */
 	_formDetached: unknown;
+	/** @internal */
 	_aded?: zul.wgt.ADBS;
 
-	/** Constructor
-	 * @param zk.Widget wgt the widget belongs to the file upload
-	 * @param DOMElement parent the element representing where the upload element
+	/**
+	 * @param wgt - the widget belongs to the file upload
+	 * @param parent - the element representing where the upload element
 	 * 		is appended
-	 * @param String option the upload option.
+	 * @param option - the upload option.
 	 *      It contains upload options like maxsize, multiple, and so on.
 	 *      It specifies the widget class name of the fileupload.
 	 */
@@ -239,8 +247,7 @@ export class Upload extends zk.Object {
 	}
 
 	/**
-	 * Returns the uuid of the uploader with its sequential number
-	 * @return String the key of the uploader
+	 * @returns the uuid of the uploader with its sequential number
 	 */
 	getKey(sid?: number): string {
 		return (this._wgt ? this._wgt.uuid : '') + '_uplder_' + sid;
@@ -248,7 +255,7 @@ export class Upload extends zk.Object {
 
 	/**
 	 * Cancels the fileupload if the fileupload is progressing.
-	 * @param int sid the sequential number of the uploader
+	 * @param sid - the sequential number of the uploader
 	 */
 	cancel(sid?: number): void { //cancel upload
 		_cancel(this, sid);
@@ -256,7 +263,7 @@ export class Upload extends zk.Object {
 
 	/**
 	 * Finishes the fileupload if the fileupload is done.
-	 * @param int sid the sequential number of the uploader
+	 * @param sid - the sequential number of the uploader
 	 */
 	finish(sid: number): void {
 		_cancel(this, sid, true);
@@ -272,9 +279,9 @@ export class Upload extends zk.Object {
 
 	/**
 	 * Shows the error message of the fileupload
-	 * @param String msg the error message
-	 * @param String uuid the ID of the widget
-	 * @param int sid the sequential number of the uploader
+	 * @param msg - the error message
+	 * @param uuid - the ID of the widget
+	 * @param sid - the sequential number of the uploader
 	 */
 	static error(msg: string, uuid?: string, sid?: number): void {
 		var wgt = zk.Widget.$(uuid);
@@ -296,8 +303,8 @@ export class Upload extends zk.Object {
 
 	/**
 	 * Closes the fileupload
-	 * @param String uuid the ID of the widget
-	 * @param int sid the sequential number of the uploader
+	 * @param uuid - the ID of the widget
+	 * @param sid - the sequential number of the uploader
 	 */
 	static close(uuid?: string, sid?: number): void {
 		var wgt = zk.Widget.$(uuid);
@@ -307,9 +314,9 @@ export class Upload extends zk.Object {
 
 	/**
 	 * Sends the upload result to server.
-	 * @param String uuid the ID of the widget
-	 * @param String contentId the ID of the content being uploaded
-	 * @param int sid the sequential number of the uploader
+	 * @param uuid - the ID of the widget
+	 * @param contentId - the ID of the content being uploaded
+	 * @param sid - the sequential number of the uploader
 	 */
 	static sendResult(uuid: string, contentId: string, sid: number): void {
 		var wgt = zk.Widget.$(uuid);
@@ -323,9 +330,8 @@ export class Upload extends zk.Object {
 	}
 
 	/**
-	 * Returns the fileupload of the widget whether is finish or not.
-	 * @param zk.Widget wgt the widget
-	 * @return boolean
+	 * @returns the fileupload of the widget whether is finish or not.
+	 * @param wgt - the widget
 	 */
 	static isFinish(wgt: zk.Widget): boolean {
 		for (var key = (typeof wgt == 'string' ? wgt : wgt.uuid) + '_uplder_',
@@ -337,8 +343,7 @@ export class Upload extends zk.Object {
 
 	/**
 	 * Starts the uploader to upload a file.
-	 * @param Object uplder the uploader
-	 * @return boolean
+	 * @param uplder - the uploader
 	 */
 	static start(uplder?: Uploader): boolean {
 		var files = zul.Upload.files;
@@ -353,7 +358,6 @@ export class Upload extends zk.Object {
 
 	/**
 	 * Destroys the uploader to upload
-	 * @param Object uplder
 	 */
 	static destroy(uplder: Uploader): void {
 		for (var files = zul.Upload.files, i = files.length; i--;)
@@ -367,7 +371,7 @@ export class Upload extends zk.Object {
 	static files: Uploader[] = [];
 }
 /**
- * Default file uploader for the upload widget.
+ * @defaultValue file uploader for the upload widget.
  * <p> One upload widget can have multi-instance of uploader to upload multiple
  * files at the same time.
  */
@@ -375,21 +379,27 @@ export class Upload extends zk.Object {
 export class Uploader extends zk.Object {
 	id: string;
 	flnm: string;
+	/** @internal */
 	_upload?: Upload;
+	/** @internal */
 	_form: HTMLFormElement | undefined;
+	/** @internal */
 	_parent: HTMLElement | undefined;
+	/** @internal */
 	_sid: number;
+	/** @internal */
 	_wgt?: zk.Widget;
 	viewer?: UploadViewer;
+	/** @internal */
 	_echo?: boolean;
+	/** @internal */
 	static _tmupload: boolean;
 	isStart?: boolean;
-	/** Constructor
-	 * @param zul.Upload upload the upload object belong to the file uploader
-	 * @param String id the ID of the uploader
-	 * @param DOMElement form the element representing where the uploader element
-	 * 		is appended
-	 * @param String flnm the name of the file to be uploaded
+	/**
+	 * @param upload - the upload object belong to the file uploader
+	 * @param id - the ID of the uploader
+	 * @param form - the element representing where the uploader element is appended
+	 * @param flnm - the name of the file to be uploaded
 	 */
 	constructor(upload: Upload, id: string, form: HTMLFormElement, flnm: string) {
 		super();
@@ -416,8 +426,7 @@ export class Uploader extends zk.Object {
 	}
 
 	/**
-	 * Returns the widget which the uploader belongs to.
-	 * @return zk.Widget
+	 * @returns the widget which the uploader belongs to.
 	 */
 	getWidget(): zk.Widget | undefined {
 		return this._wgt;
@@ -425,7 +434,7 @@ export class Uploader extends zk.Object {
 
 	/**
 	 * Destroys the uploader to upload.
-	 * @param boolean finish if true, the upload is finish.
+	 * @param finish - if true, the upload is finish.
 	 */
 	destroy(finish?: boolean): void {
 		this.end(finish);
@@ -457,6 +466,7 @@ export class Uploader extends zk.Object {
 		return false;
 	}
 
+	/** @internal */
 	_passSizeCheck(): boolean {
 		var uploadMaxsize = this._upload!.maxsize as unknown as number,
 			maxBytes = uploadMaxsize > 0 ? uploadMaxsize * 1024 : -1;
@@ -475,6 +485,7 @@ export class Uploader extends zk.Object {
 		return true;
 	}
 
+	/** @internal */
 	_showMaxsizeErrorAndDestroy(sizeBytes: number, maxBytes: number): void {
 		var uploader = this;
 		zk.load('zk.fmt', function () {
@@ -493,6 +504,7 @@ export class Uploader extends zk.Object {
 		});
 	}
 
+	/** @internal */
 	_onprogress(): (event) => void {
 		var viewer = this.viewer!,
 			wgt = this._wgt!;
@@ -504,6 +516,7 @@ export class Uploader extends zk.Object {
 		};
 	}
 
+	/** @internal */
 	_onload(): (event) => void {
 		var uploader = this,
 			wgt = this._wgt!;
@@ -529,9 +542,8 @@ export class Uploader extends zk.Object {
 
 	/**
 	 * Updates the status of the file being uploaded.
-	 * @param int sent how many percentage being sent
-	 * @param int total the size of the file
-	 * @return boolean
+	 * @param sent - how many percentage being sent
+	 * @param total - the size of the file
 	 */
 	update(sent: number, total: number): boolean {
 		var wgt = this.getWidget();
@@ -551,7 +563,7 @@ export class Uploader extends zk.Object {
 
 	/**
 	 * Ends the uploader to upload.
-	 * @param boolean finish whether the file is finish.
+	 * @param finish - whether the file is finish.
 	 */
 	end(finish?: boolean): void {
 		this.viewer!.destroy(finish);
@@ -602,11 +614,12 @@ function _initUM(uplder: Uploader, flnm: string): void {
 
 	zk.load('zul.wgt,zul.box', function () {
 		/**
-		 * Default file upload manager to manage the uploading files in a panel.
+		 * @defaultValue file upload manager to manage the uploading files in a panel.
 		 * Users can add/delete the file upon the panel.
 		 */
 		// @zk.WrapClass('zul.UploadManager')
 		class UploadManager extends zul.wgt.Popup {
+			/** @internal */
 			_files: Record<string, zul.wgt.Div>;
 			constructor() {
 				super();
@@ -621,9 +634,8 @@ function _initUM(uplder: Uploader, flnm: string): void {
 			}
 
 			/**
-			 * Returns the file item.
-			 * @param String id the ID of the file or the ID of upload widget
-			 * @return zul.wgt.Div the file item widget.
+			 * @returns the file item.
+			 * @param id - the ID of the file or the ID of upload widget
 			 */
 			getFileItem(id: string): zul.wgt.Div {
 				return this._files[id] || zk.Widget.$(id);
@@ -631,8 +643,7 @@ function _initUM(uplder: Uploader, flnm: string): void {
 
 			/**
 			 * Adds the file item to upload.
-			 * @param zul.Uploader uplder
-			 * @return zul.wgt.Div the file item widget
+			 * @returns the file item {@link zul.wgt.Div} widget
 			 */
 			addFile(uplder: zul.Uploader): zul.wgt.Div {
 				var id = uplder.id,
@@ -672,9 +683,8 @@ function _initUM(uplder: Uploader, flnm: string): void {
 
 			/**
 			 * Updates the status of the file item.
-			 * @param zul.Uploader uplder
-			 * @param int val how many percentage being uploaded
-			 * @param string total the size of the file
+			 * @param val - how many percentage being uploaded
+			 * @param total - the size of the file
 			 */
 			updateFile(uplder: zul.Uploader, val: number, total: string): void {
 				var id = uplder.id,
@@ -686,7 +696,6 @@ function _initUM(uplder: Uploader, flnm: string): void {
 
 			/**
 			 * Removes the file item.
-			 * @param zul.Uploader uplder
 			 */
 			removeFile(uplder: zul.Uploader): void {
 				var id = uplder.id,
@@ -701,8 +710,8 @@ function _initUM(uplder: Uploader, flnm: string): void {
 
 			/**
 			 * Opens the file manager to show.
-			 * @param zk.Widget wgt the wgt where the file manager is shown
-			 * @param String position the position where the file manager is located
+			 * @param wgt - the wgt where the file manager is shown
+			 * @param position - the position where the file manager is located
 			 */
 			// @ts-expect-error: signature doesn't match that of super
 			override open(wgt?: zk.Widget, position?: string): void {
@@ -729,16 +738,16 @@ export declare class UploadManager extends zul.wgt.Popup {
 }
 
 /**
- * Default file viewer to see the upload status.
+ * @defaultValue file viewer to see the upload status.
  */
 @zk.WrapClass('zul.UploadViewer')
 export class UploadViewer extends zk.Object {
+	/** @internal */
 	_uplder: Uploader;
 	static flman: UploadManager;
 
-	/** Constructor
-	 * @param zul.Uploader uplder
-	 * @param String flnm the name of the file to be uploaded
+	/**
+	 * @param flnm - the name of the file to be uploaded
 	 */
 	constructor(uplder: zul.Uploader, flnm: string) {
 		super();
@@ -748,8 +757,8 @@ export class UploadViewer extends zk.Object {
 
 	/**
 	 * Updates the status of the file being uploaded.
-	 * @param int sent how many percentage being sent
-	 * @param int total the size of the file
+	 * @param sent - how many percentage being sent
+	 * @param total - the size of the file
 	 */
 	update(sent: number, total: number): void {
 		var flman = zul.UploadViewer.flman;

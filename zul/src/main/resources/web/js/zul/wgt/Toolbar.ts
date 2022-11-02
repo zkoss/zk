@@ -33,23 +33,27 @@ export interface ToolbarChild extends zul.Widget {
  * <li>panel: this mold is used for {@link zul.wnd.Panel} component as its
  * foot toolbar.</li>
  * </ol>
- * <p>Default {@link #getZclass}: z-toolbar
+ * @defaultValue {@link getZclass}: z-toolbar
  */
 @zk.WrapClass('zul.wgt.Toolbar')
 export class Toolbar extends zul.Widget {
 	override firstChild?: ToolbarChild;
 	override lastChild?: ToolbarChild;
+	/** @internal */
 	_orient = 'horizontal';
+	/** @internal */
 	_align = 'start';
+	/** @internal */
 	_overflowPopupIconSclass = 'z-icon-ellipsis-h';
+	/** @internal */
 	_overflowPopup?: boolean;
+	/** @internal */
 	_open?: boolean;
 
 	/**
-	 * Returns the alignment of any children added to this toolbar. Valid values
+	 * @returns the alignment of any children added to this toolbar. Valid values
 	 * are "start", "end" and "center".
-	 * <p>Default: "start"
-	 * @return String
+	 * @defaultValue `"start"`
 	 */
 	getAlign(): string {
 		return this._align;
@@ -58,8 +62,7 @@ export class Toolbar extends zul.Widget {
 	/**
 	 * Sets the alignment of any children added to this toolbar. Valid values
 	 * are "start", "end" and "center".
-	 * <p>Default: "start", if null, "start" is assumed.
-	 * @param String align
+	 * @defaultValue `"start"`, if null, "start" is assumed.
 	 */
 	setAlign(align: string, opts?: Record<string, boolean>): this {
 		const o = this._align;
@@ -72,16 +75,17 @@ export class Toolbar extends zul.Widget {
 		return this;
 	}
 
-	/** Returns the orient.
-	 * <p>Default: "horizontal".
-	 * @return String
+	/**
+	 * @returns the orient.
+	 * @defaultValue `"horizontal"`.
 	 */
 	getOrient(): string {
 		return this._orient;
 	}
 
-	/** Sets the orient.
-	 * @param String orient either "horizontal" or "vertical".
+	/**
+	 * Sets the orient.
+	 * @param orient - either "horizontal" or "vertical".
 	 */
 	setOrient(orient: string, opts?: Record<string, boolean>): this {
 		const o = this._orient;
@@ -95,12 +99,10 @@ export class Toolbar extends zul.Widget {
 	}
 
 	/**
-	 * Return whether toolbar has a button that shows a popup
+	 * @returns whether toolbar has a button that shows a popup
 	 * which contains those content weren't able to fit in the toolbar.
 	 * If overflowPopup is false, toolbar will display multiple rows when content is wider than toolbar.
-	 * Default: false.
-	 *
-	 * @return boolean
+	 * @defaultValue `false`.
 	 * @since 8.6.0
 	 */
 	isOverflowPopup(): boolean {
@@ -112,7 +114,7 @@ export class Toolbar extends zul.Widget {
 	 * which contains those content weren't able to fit in the toolbar.
 	 * If overflowPopup is false, toolbar will display multiple rows when content is wider than toolbar.
 	 *
-	 * @param boolean overflowPopup whether toolbar has a button that shows a popup
+	 * @param overflowPopup - whether toolbar has a button that shows a popup
 	 * @since 8.6.0
 	 */
 	setOverflowPopup(overflowPopup: boolean, opts?: Record<string, boolean>): this {
@@ -127,9 +129,8 @@ export class Toolbar extends zul.Widget {
 	}
 
 	/**
-	 * Returns the overflow sclass name of overflow popup icon of this toolbar.
-	 * <p>Default: "z-icon-ellipsis-h".
-	 * @return String
+	 * @returns the overflow sclass name of overflow popup icon of this toolbar.
+	 * @defaultValue `"z-icon-ellipsis-h"`.
 	 * @since 9.6.0
 	 */
 	getOverflowPopupIconSclass(): string {
@@ -140,7 +141,7 @@ export class Toolbar extends zul.Widget {
 	 * Sets the overflow sclass name of overflow popup icon of this toolbar.
 	 * When overflowPopup is true, toolbar has a button that shows a popup
 	 * users can customize the overflow popup icon.
-	 * @param String the overflow sclass name of overflow popup icon of this toolbar
+	 * @param overflowPopupIconSclass - the overflow sclass name of overflow popup icon of this toolbar
 	 * @since 9.6.0
 	 */
 	setOverflowPopupIconSclass(overflowPopupIconSclass: string, opts?: Record<string, boolean>): this {
@@ -156,6 +157,7 @@ export class Toolbar extends zul.Widget {
 		return this;
 	}
 
+	/** @internal */
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		if (this.isOverflowPopup()) {
@@ -164,6 +166,7 @@ export class Toolbar extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		const popup = this.$n('pp');
 		if (popup) {
@@ -173,10 +176,12 @@ export class Toolbar extends zul.Widget {
 		super.unbind_(skipper, after, keepRod);
 	}
 
+	/** @internal */
 	_getOverflowPopupBtnClass(): string {
 		return this.$s('overflowpopup-button') + ' ' + this.getOverflowPopupIconSclass() + ' z-icon-fw';
 	}
 
+	/** @internal */
 	_openPopup(evt?: zk.Event): void {
 		if (this._open)
 			return;
@@ -191,6 +196,7 @@ export class Toolbar extends zul.Widget {
 		this._syncPopupPosition();
 	}
 
+	/** @internal */
 	_syncPopupPosition(): void {
 		zk(this.$n('pp')).position(this.$n_(), 'after_end');
 	}
@@ -200,6 +206,7 @@ export class Toolbar extends zul.Widget {
 			this._closePopup();
 	}
 
+	/** @internal */
 	_closePopup(): void {
 		if (!this._open)
 			return;
@@ -224,6 +231,7 @@ export class Toolbar extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	_adjustContent(): void {
 		if (zUtl.isImageLoading()) {
 			setTimeout(this.proxy(this._adjustContent), 20);
@@ -276,6 +284,7 @@ export class Toolbar extends zul.Widget {
 	}
 
 	// super
+	/** @internal */
 	override domClass_(no?: zk.DomClassOptions): string {
 		let sc = super.domClass_(no);
 		if (!no?.zclass) {
@@ -296,8 +305,9 @@ export class Toolbar extends zul.Widget {
 	// Bug ZK-1706 issue: we have to expand the width of the content div when
 	// align="left", others won't support
 	// eslint-disable-next-line zk/javaStyleSetterSignature
-	override setFlexSizeW_(n: HTMLElement, zkn: zk.JQZK, width: number, isFlexMin?: boolean): void {
-		super.setFlexSizeW_(n, zkn, width, isFlexMin);
+	/** @internal */
+	override setFlexSizeW_(flexSizeW: HTMLElement, zkn: zk.JQZK, width: number, isFlexMin?: boolean): void {
+		super.setFlexSizeW_(flexSizeW, zkn, width, isFlexMin);
 		if (!isFlexMin && this.getAlign() == 'start') {
 			const cave = this.$n('cave');
 			if (cave)
@@ -306,8 +316,7 @@ export class Toolbar extends zul.Widget {
 	}
 
 	/**
-	 * Returns whether is in panel mold or not.
-	 * @return boolean
+	 * @returns whether is in panel mold or not.
 	 */
 	inPanelMold(): boolean {
 		return this._mold == 'panel';
@@ -336,12 +345,14 @@ export class Toolbar extends zul.Widget {
 	}
 
 	// protected
+	/** @internal */
 	override onChildAdded_(child: zk.Widget): void {
 		super.onChildAdded_(child);
 		if (this.inPanelMold())
 			this.rerender();
 	}
 
+	/** @internal */
 	override onChildRemoved_(child: zk.Widget): void {
 		super.onChildRemoved_(child);
 		if (!this.childReplacing_ && this.inPanelMold())

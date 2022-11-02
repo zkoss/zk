@@ -48,55 +48,55 @@ function _getTimeZone(wgt: zul.db.Calendar): string | undefined {
  * The renderer used to render a calendar.
  * It is designed to be overridden
  */
-export let Renderer = {
-	/** Returns the HTML fragment representing a day cell.
+export var Renderer = {
+	/**
+	 * @returns the HTML fragment representing a day cell.
 	 * By overriding this method, you could customize the look of a day cell.
-	 * <p>Default: day
-	 * @param zul.db.Calendar cal the calendar
-	 * @param int y the year
-	 * @param int m the month (between 0 to 11)
-	 * @param int day the day (between 1 to 31)
-	 * @param int monthofs the month offset. If the day is in the same month
-	 * @return String the HTML fragment
+	 * @defaultValue day
+	 * @param cal - the calendar
+	 * @param y - the year
+	 * @param m - the month (between 0 to 11)
+	 * @param day - the day (between 1 to 31)
+	 * @param monthofs - the month offset. If the day is in the same month
 	 * @since 5.0.3
 	 */
 	cellHTML(cal: zul.db.Calendar, y: number, m: number, day: number, monthofs: number): string {
 		return String(day);
 	},
 	/**
-	 * Returns the label of a date cell.
+	 * @returns the label of a date cell.
 	 * By overriding this method, you could customize the aria-label of a day cell.
-	 * <p>Default: dd MMMM, yyyy
-	 * @param zul.db.Calendar cal the calendar
-	 * @param int y the year
-	 * @param int m the month (between 0 to 11)
-	 * @param int day the day (between 1 to 31)
-	 * @param int monthofs the month offset. If the day is in the same month
-	 * @param int dayofweek the day of the week (between 0 to 6)
-	 * @return String the label of a date
+	 * @defaultValue dd MMMM, yyyy
+	 * @param cal - the calendar
+	 * @param y - the year
+	 * @param m - the month (between 0 to 11)
+	 * @param day - the day (between 1 to 31)
+	 * @param monthofs - the month offset. If the day is in the same month
+	 * @param dayofweek - the day of the week (between 0 to 6)
 	 * @since 9.5.0
 	 */
 	cellAriaLabel(cal: zul.db.Calendar, y: number, m: number, day: number, monthofs: number, dayofweek: number): string {
 		var localizedSymbols = cal.getLocalizedSymbols();
 		return day + ' ' + localizedSymbols.FMON![m] + ', ' + y;
 	},
-	/** Called before {@link zul.db.Calendar#redraw} is invoked.
-	 * <p>Default: does nothing
-	 * @param zul.db.Calendar cal the calendar
+	/**
+	 * Called before {@link zul.db.Calendar#redraw} is invoked.
+	 * @defaultValue does nothing
+	 * @param cal - the calendar
 	 * @since 5.0.3
 	 */
 	beforeRedraw(cal: zul.db.Calendar): void {
 		// empty on purpose
 	},
-	/** Tests if the specified date is disabled.
-	 * <p>Default: it depends on the constraint, if any
-	 * @param zul.db.Calendar cal the calendar
-	 * @param int y the year
-	 * @param int m the month (between 0 to 11)
-	 * @param int v the day (between 1 to 31)
-	 * @param Date today today
+	/**
+	 * Tests if the specified date is disabled.
+	 * @defaultValue it depends on the constraint, if any
+	 * @param cal - the calendar
+	 * @param y - the year
+	 * @param m - the month (between 0 to 11)
+	 * @param v - the day (between 1 to 31)
+	 * @param today - today
 	 * @since 5.0.3
-	 * @return boolean
 	 */
 	disabled(cal: zul.db.Calendar, y: number, m: number, v: number, today: DateImpl): boolean {
 		var d = Dates.newInstance([y, m, v, 0, 0, 0, 0], _getTimeZone(cal)),
@@ -119,22 +119,19 @@ export let Renderer = {
 		return result;
 	},
 	/**
-	 * Generates the label of the week of year.
-	 * <p>Default: the string of the value
-	 * @param zul.db.Calendar wgt the calendar widget
-	 * @param int the number of the week of the value
-	 * @param Map localizedSymbols the symbols for localization
-	 * @return String the label of the week of year
+	 * @returns the label of the week of year.
+	 * @defaultValue the string of the value
+	 * @param wgt - the calendar widget
+	 * @param val - number of the week of the value
 	 * @since 6.5.0
 	 */
 	labelOfWeekOfYear(wgt: zul.db.Calendar, val: number): string {
 		return String(val);
 	},
 	/**
-	 * Generates the title of the week of year.
-	 * <p>Default: 'Wk'
-	 * @param zul.db.Calendar wgt the calendar widget
-	 * @return String the title of the week of year
+	 * @returns the title of the week of year.
+	 * @defaultValue 'Wk'
+	 * @param wgt - the calendar widget
 	 * @since 6.5.0
 	 */
 	titleOfWeekOfYear(wgt: zul.db.Calendar): string {
@@ -142,9 +139,9 @@ export let Renderer = {
 	},
 	/**
 	 * Generates the title of the content HTML.
-	 * @param zul.db.Calendar wgt the calendar widget
-	 * @param Array out an array to output HTML fragments.
-	 * @param Map localizedSymbols the symbols for localization
+	 * @param wgt - the calendar widget
+	 * @param out - an array to output HTML fragments.
+	 * @param localizedSymbols - the symbols for localization
 	 * @since 6.5.3
 	 */
 	titleHTML(wgt: zul.db.Calendar, out: string[], localizedSymbols: zk.LocalizedSymbols): void {
@@ -206,9 +203,9 @@ export let Renderer = {
 	},
 	/**
 	 * Renderer the dayView for this calendar
-	 * @param zul.db.Calendar wgt the calendar widget
-	 * @param Array out an array to output HTML fragments.
-	 * @param Map localizedSymbols the symbols for localization
+	 * @param wgt - the calendar widget
+	 * @param out - an array to output HTML fragments.
+	 * @param localizedSymbols - the symbols for localization
 	 * @since 6.5.0
 	 */
 	dayView(wgt: zul.db.Calendar, out: string[], localizedSymbols: zk.LocalizedSymbols): void {
@@ -235,9 +232,9 @@ export let Renderer = {
 	},
 	/**
 	 * Renderer the monthView for this calendar
-	 * @param zul.db.Calendar wgt the calendar widget
-	 * @param Array out an array to output HTML fragments.
-	 * @param Map localizedSymbols the symbols for localization
+	 * @param wgt - the calendar widget
+	 * @param out - an array to output HTML fragments.
+	 * @param localizedSymbols - the symbols for localization
 	 * @since 6.5.0
 	 */
 	monthView(wgt: zul.db.Calendar, out: string[], localizedSymbols: zk.LocalizedSymbols): void {
@@ -255,9 +252,9 @@ export let Renderer = {
 	},
 	/**
 	 * Renderer the yearView for this calendar
-	 * @param zul.db.Calendar wgt the calendar widget
-	 * @param Array out an array to output HTML fragments.
-	 * @param Map localizedSymbols the symbols for localization
+	 * @param wgt - the calendar widget
+	 * @param out - an array to output HTML fragments.
+	 * @param localizedSymbols - the symbols for localization
 	 * @since 6.5.0
 	 */
 	yearView(wgt: zul.db.Calendar, out: string[], localizedSymbols: zk.LocalizedSymbols): void {
@@ -293,9 +290,9 @@ export let Renderer = {
 	},
 	/**
 	 * Renderer the decadeView for this calendar
-	 * @param zul.db.Calendar wgt the calendar widget
-	 * @param Array out an array to output HTML fragments.
-	 * @param Map localizedSymbols the symbols for localization
+	 * @param wgt - the calendar widget
+	 * @param out - an array to output HTML fragments.
+	 * @param localizedSymbols - the symbols for localization
 	 * @since 6.5.0
 	 */
 	decadeView(wgt: zul.db.Calendar, out: string[], localizedSymbols: zk.LocalizedSymbols): void {
@@ -339,9 +336,9 @@ export let Renderer = {
 	},
 	/**
 	 * Renderer the today link for this calendar
-	 * @param zul.db.Calendar wgt the calendar widget
-	 * @param Array out an array to output HTML fragments.
-	 * @param Map localizedSymbols the symbols for localization
+	 * @param wgt - the calendar widget
+	 * @param out - an array to output HTML fragments.
+	 * @param localizedSymbols - the symbols for localization
 	 * @since 8.0.0
 	 */
 	todayView(wgt: zul.db.Calendar, out: string[], localizedSymbols: zk.LocalizedSymbols): void {
@@ -352,9 +349,11 @@ export let Renderer = {
 		}
 		out.push(val);
 	},
+	/** @internal */
 	_getDisplayYear(date: Date, localizedSymbols: zk.LocalizedSymbols, localeDateTimeFormat: Intl.DateTimeFormat, padLength?: number): string { // override
 		return date.getFullYear() + localizedSymbols.YDELTA! + '';
 	},
+	/** @internal */
 	_getPadYearLength(wgt: zul.db.Calendar, localizedSymbols: zk.LocalizedSymbols, localeDateTimeFormat: Intl.DateTimeFormat): number {
 		var y = wgt.getTime().getFullYear(),
 			yearGap = 10 * 11 + 9,
@@ -376,21 +375,36 @@ export interface CalendarOnChangeData {
 }
 @zk.WrapClass('zul.db.Calendar')
 export class Calendar extends zul.Widget {
+	/** @internal */
 	_view = 'day';
+	/** @internal */
 	_minyear = 1900; //"day", "month", "year", "decade",
+	/** @internal */
 	_maxyear = 2099;
+	/** @internal */
 	_beg?: DateImpl;
+	/** @internal */
 	_end?: DateImpl;
+	/** @internal */
 	_constraint?: string;
+	/** @internal */
 	_localizedSymbols?: zk.LocalizedSymbols;
+	/** @internal */
 	_selectedValue?: DateImpl;
+	/** @internal */
 	_value?: DateImpl;
+	/** @internal */
 	_defaultTzone?: string;
+	/** @internal */
 	_name?: string;
+	/** @internal */
 	_weekOfYear?: boolean;
+	/** @internal */
 	_showTodayLink?: boolean;
 	efield?: HTMLInputElement;
+	/** @internal */
 	_fmt?: string;
+	/** @internal */
 	_todayLinkLabel?: string;
 
 	constructor() {
@@ -398,8 +412,9 @@ export class Calendar extends zul.Widget {
 		this.listen({onChange: this}, -1000);
 	}
 
-	/** Assigns a value to this component.
-	 * @param Date value the date to assign. If null, today is assumed.
+	/**
+	 * Assigns a value to this component.
+	 * @param value - the date to assign. If null, today is assumed.
 	 */
 	setValue(value: DateImpl, opts?: Record<string, boolean>): this {
 		const o = this._value;
@@ -416,29 +431,31 @@ export class Calendar extends zul.Widget {
 		return this;
 	}
 
-	/** Returns the value that is assigned to this component.
-	 * @return Date
+	/**
+	 * @returns the value that is assigned to this component.
 	 */
 	getValue(): DateImpl | undefined {
 		return this._value;
 	}
 
-	/** Sets default time zone that this calendar belongs to.
-	 * @param String timezone the time zone's ID, such as "America/Los_Angeles".
+	/**
+	 * Sets default time zone that this calendar belongs to.
+	 * @param defaultTzone - the time zone's ID, such as "America/Los_Angeles".
 	 */
 	setDefaultTzone(defaultTzone: string): this {
 		this._defaultTzone = defaultTzone;
 		return this;
 	}
 
-	/** Returns default time zone that this calendar belongs to.
-	 * @return String the time zone's ID, such as "America/Los_Angeles".
+	/**
+	 * @returns default time zone that this calendar belongs to, such as "America/Los_Angeles".
 	 */
 	getDefaultTzone(): string | undefined {
 		return this._defaultTzone;
 	}
 
-	/** Set the date limit for this component with yyyyMMdd format,
+	/**
+	 * Set the date limit for this component with yyyyMMdd format,
 	 * such as 20100101 is mean Jan 01 2010
 	 *
 	 * <dl>
@@ -448,7 +465,6 @@ export class Calendar extends zul.Widget {
 	 * <dd>after 20091231</dd>
 	 * </dl>
 	 *
-	 * @param String constraint
 	 */
 	setConstraint(constraint: string | undefined, opts?: Record<string, boolean>): this {
 		const o = this._constraint;
@@ -466,14 +482,15 @@ export class Calendar extends zul.Widget {
 		return this;
 	}
 
-	/** Returns the constraint of this component.
-	 * @return String
+	/**
+	 * @returns the constraint of this component.
 	 */
 	getConstraint(): string | undefined {
 		return this._constraint;
 	}
 
-	/** Sets the name of this component.
+	/**
+	 * Sets the name of this component.
 	 * <p>The name is used only to work with "legacy" Web application that
 	 * handles user's request by servlets.
 	 * It works only with HTTP/HTML-based browsers. It doesn't work
@@ -481,7 +498,7 @@ export class Calendar extends zul.Widget {
 	 * <p>Don't use this method if your application is purely based
 	 * on ZK's event-driven model.
 	 *
-	 * @param String name the name of this component.
+	 * @param name - the name of this component.
 	 */
 	setName(name: string, opts?: Record<string, boolean>): this {
 		const o = this._name;
@@ -495,15 +512,15 @@ export class Calendar extends zul.Widget {
 		return this;
 	}
 
-	/** Returns the name of this component.
+	/**
+	 * @returns the name of this component.
 	 * <p>The name is used only to work with "legacy" Web application that
 	 * handles user's request by servlets.
 	 * It works only with HTTP/HTML-based browsers. It doesn't work
 	 * with other kind of clients.
 	 * <p>Don't use this method if your application is purely based
 	 * on ZK's event-driven model.
-	 * <p>Default: null.
-	 * @return String
+	 * @defaultValue `null`.
 	 */
 	getName(): string | undefined {
 		return this._name;
@@ -513,7 +530,6 @@ export class Calendar extends zul.Widget {
 	 * Sets whether enable to show the week number within the current year or
 	 * not. [ZK EE]
 	 * @since 6.5.0
-	 * @param boolean weekOfYear
 	 */
 	setWeekOfYear(weekOfYear: boolean, opts?: Record<string, boolean>): this {
 		const o = this._weekOfYear;
@@ -528,10 +544,9 @@ export class Calendar extends zul.Widget {
 	}
 
 	/**
-	 * Returns whether enable to show the week number within the current year or not.
-	 * <p>Default: false
+	 * @returns whether enable to show the week number within the current year or not.
+	 * @defaultValue `false`
 	 * @since 6.5.0
-	 * @return boolean
 	 */
 	isWeekOfYear(): boolean {
 		return !!this._weekOfYear;
@@ -540,7 +555,6 @@ export class Calendar extends zul.Widget {
 	/**
 	 * Sets whether enable to show the link that jump to today in day view
 	 * @since 8.0.0
-	 * @param boolean showTodayLink
 	 */
 	setShowTodayLink(showTodayLink: boolean, opts?: Record<string, boolean>): this {
 		const o = this._showTodayLink;
@@ -554,10 +568,9 @@ export class Calendar extends zul.Widget {
 	}
 
 	/**
-	 * Returns whether enable to show the link that jump to today in day view
-	 * <p>Default: false
+	 * @returns whether enable to show the link that jump to today in day view
+	 * @defaultValue `false`
 	 * @since 8.0.0
-	 * @return boolean
 	 */
 	isShowTodayLink(): boolean {
 		return !!this._showTodayLink;
@@ -566,7 +579,6 @@ export class Calendar extends zul.Widget {
 	/**
 	 * Sets the label of the link that jump to today in day view
 	 * @since 8.0.4
-	 * @param String todayLinkLabel
 	 */
 	setTodayLinkLabel(todayLinkLabel: string, opts?: Record<string, boolean>): this {
 		const o = this._todayLinkLabel;
@@ -580,9 +592,8 @@ export class Calendar extends zul.Widget {
 	}
 
 	/**
-	 * Returns the label of the link that jump to today in day view
+	 * @returns the label of the link that jump to today in day view
 	 * @since 8.0.4
-	 * @return String
 	 */
 	getTodayLinkLabel(): string | undefined {
 		return this._todayLinkLabel;
@@ -652,7 +663,6 @@ export class Calendar extends zul.Widget {
 		return this.setValue(valueInLocalTime, opts);
 	}
 
-	//@Override
 	override redraw(out: string[], skipper?: zk.Skipper): void {
 		Renderer.beforeRedraw(this);
 		super.redraw(out, skipper);
@@ -662,6 +672,7 @@ export class Calendar extends zul.Widget {
 		this._updFormData((evt.data as {value: DateImpl}).value);
 	}
 
+	/** @internal */
 	override doKeyDown_(evt: zk.Event): void {
 		var keyCode = evt.keyCode,
 			ofs = keyCode == 37 ? -1 : keyCode == 39 ? 1 : keyCode == 38 ? -7 : keyCode == 40 ? 7 : 0;
@@ -678,6 +689,7 @@ export class Calendar extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	setMinYear_(minYear: number): void {
 		if (minYear) {
 			var y = this.getTime().getFullYear();
@@ -687,6 +699,7 @@ export class Calendar extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	setMaxYear_(maxYear: number): void {
 		if (maxYear) {
 			var y = this.getTime().getFullYear();
@@ -696,6 +709,7 @@ export class Calendar extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	_shift(ofs: number, opts?: MarkCalOptions): void {
 		var oldTime = this.getTime(),
 			tz = _getTimeZone(this),
@@ -766,6 +780,7 @@ export class Calendar extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	_fixConstraint(): void {
 		var constraint = this._constraint || '';
 		// ZK-4641: Datebox doesn't clean beginning and end at client when removing constraint
@@ -806,13 +821,14 @@ export class Calendar extends zul.Widget {
 		}
 	}
 
-	/** Returns the format of this component.
-	 * @return String
+	/**
+	 * @returns the format of this component.
 	 */
 	getFormat(): string {
 		return this._fmt || 'yyyy/MM/dd';
 	}
 
+	/** @internal */
 	_updFormData(formData: DateImpl): void {
 		let val = new zk.fmt.Calendar().formatDate(formData, this.getFormat(), this._localizedSymbols);
 		if (this._name) {
@@ -824,6 +840,7 @@ export class Calendar extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	override focus_(timeout: number): boolean {
 		if (this._view != 'decade')
 			this._markCal({timeout: timeout});
@@ -835,6 +852,7 @@ export class Calendar extends zul.Widget {
 		return true;
 	}
 
+	/** @internal */
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		var node = this.$n(),
@@ -856,6 +874,7 @@ export class Calendar extends zul.Widget {
 		this._updFormData(this.getTime());
 	}
 
+	/** @internal */
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		var node = this.$n(),
 			title = this.$n('title'),
@@ -887,6 +906,7 @@ export class Calendar extends zul.Widget {
 		return this;
 	}
 
+	/** @internal */
 	_clickArrow(evt: zk.Event): void {
 		if (zk.animating()) return; // ignore
 		var node = jq.nodeName(evt.domTarget, 'a') ? evt.domTarget
@@ -898,11 +918,13 @@ export class Calendar extends zul.Widget {
 		evt.stop();
 	}
 
+	/** @internal */
 	_clickToday(): void {
 		this.setValue(zUtl.today(!!this.parent, _getTimeZone(this)));
 		this._setView('day');
 	}
 
+	/** @internal */
 	_shiftView(ofs: number, disableAnima?: boolean): void {
 		switch (this._view) {
 		case 'day':
@@ -926,6 +948,7 @@ export class Calendar extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	_doMousewheel(evt: zk.Event, intDelta: number): void {
 		if (jq(this.$n(-intDelta > 0 ? 'right' : 'left')).attr('disabled'))
 			return;
@@ -933,14 +956,15 @@ export class Calendar extends zul.Widget {
 		evt.stop();
 	}
 
-	/** Returns the Date that is assigned to this component.
+	/**
+	 * @returns the Date that is assigned to this component.
 	 *  <p>returns today if value is null
-	 * @return Date
 	 */
 	getTime(): DateImpl {
 		return this._value || zUtl.today(this.getFormat(), _getTimeZone(this));
 	}
 
+	/** @internal */
 	_setTime(y: number | undefined, m?: number, d?: number, fireOnChange?: boolean): this {
 		var dateobj = this.getTime(),
 			year = y != null ? y : dateobj.getFullYear(),
@@ -957,6 +981,7 @@ export class Calendar extends zul.Widget {
 	}
 
 	// calendar-ctrl.js will override this function
+	/** @internal */
 	_clickDate(evt: Pick<zk.Event, 'target' | 'domTarget' | 'stop'>): void {
 		var target = evt.domTarget as HTMLTableCellElement | undefined,
 			val: number;
@@ -977,6 +1002,7 @@ export class Calendar extends zul.Widget {
 		evt.stop();
 	}
 
+	/** @internal */
 	_chooseDate(target: HTMLTableCellElement | undefined, val: number): void {
 		if (target && !jq(target).hasClass(this.$s('disabled'))) {
 			var cell = target,
@@ -1012,6 +1038,7 @@ export class Calendar extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	_shiftDate(opt: string, ofs: number, ignoreUpdate?: boolean): DateImpl {
 		var dateobj = this.getTime(),
 			year = dateobj.getFullYear(),
@@ -1045,6 +1072,7 @@ export class Calendar extends zul.Widget {
 		return newTime;
 	}
 
+	/** @internal */
 	_changeView(evt: zk.Event): void {
 		var tm = this.$n('tm'),
 			ty = this.$n('ty'),
@@ -1067,8 +1095,10 @@ export class Calendar extends zul.Widget {
 		evt.stop();
 	}
 
+	/** @internal */
 	_setView(view: string, force?: number): this {
 		// check whether to disable the arrow
+		/** @internal */
 		function _updateArrow(wgt: zul.db.Calendar): void {
 			if (wgt.isOutOfRange(true)) {
 				jq(wgt.$n('left')).attr('disabled', 'disabled');
@@ -1192,10 +1222,10 @@ export class Calendar extends zul.Widget {
 
 	/**
 	 * Check whether the date is out of range between 1900~2100 years
-	 * @param boolean left it is used for the left arrow button
-	 * @param Date date the date object for the range if null, the current value
-	 * of {@link #getTime()} is assumed.
-	 * @return boolean if true it means the date is out of range.
+	 * @param left - it is used for the left arrow button
+	 * @param date - the date object for the range if null, the current value
+	 * of {@link getTime} is assumed.
+	 * @returns if true it means the date is out of range.
 	 * @since 6.5.3
 	 */
 	isOutOfRange(left?: boolean, date?: Date): boolean {
@@ -1226,6 +1256,7 @@ export class Calendar extends zul.Widget {
 
 	}
 
+	/** @internal */
 	_markCal(opts?: MarkCalOptions): void {
 		this._markCal0(opts);
 		var anc: HTMLAnchorElement | undefined;
@@ -1234,6 +1265,7 @@ export class Calendar extends zul.Widget {
 	}
 
 	// calendar-ctrl.js will override this function
+	/** @internal */
 	_markCal0(opts?: MarkCalOptions): void {
 		var	seldate = this.getTime(),
 			m = seldate.getMonth(),
@@ -1322,6 +1354,7 @@ export class Calendar extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	override domClass_(no?: zk.DomClassOptions): string {
 		var cls = '';
 		if (this._weekOfYear)
@@ -1329,15 +1362,18 @@ export class Calendar extends zul.Widget {
 		return cls + super.domClass_(no);
 	}
 
+	/** @internal */
 	animationSpeed_(): 'slow' | 'fast' | number {
 		return zk(this).getAnimationSpeed();
 	}
 
+	/** @internal */
 	getAnchor_(): HTMLAnchorElement | undefined {
 		return this.$n('a');
 	}
 
 	// Bug 2936994, fixed unnecessary setting scrollTop
+	/** @internal */
 	_doFocus(n: HTMLElement, timeout?: number | boolean): void {
 		if (zk.gecko && timeout)
 			setTimeout(() => zk(n).focus()); // FIXME: missing timeout argument?

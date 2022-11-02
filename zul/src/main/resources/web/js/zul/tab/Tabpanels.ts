@@ -31,17 +31,19 @@ function _syncSelectedPanels(panels: zul.tab.Tabpanels): void {
 /**
  * A collection of tab panels.
  *
- * <p>Default {@link #getZclass}: z-tabpanels.
+ * @defaultValue {@link getZclass}: z-tabpanels.
  */
 @zk.WrapClass('zul.tab.Tabpanels')
 export class Tabpanels extends zul.Widget {
 	override parent!: zul.tab.Tabbox | undefined;
 
+	/** @internal */
 	_selPnl?: zul.tab.Tabpanel;
+	/** @internal */
 	_shallSync?: boolean;
 
-	/** Returns the tabbox owns this component.
-	 * @return zul.tab.Tabbox
+	/**
+	 * @returns the tabbox owns this component.
 	 */
 	getTabbox(): zul.tab.Tabbox | undefined {
 		return this.parent;
@@ -59,16 +61,19 @@ export class Tabpanels extends zul.Widget {
 		return super.setHflex(hflex);
 	}
 
+	/** @internal */
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		zWatch.listen({onResponse: this});
 	}
 
+	/** @internal */
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		zWatch.unlisten({onResponse: this});
 		super.unbind_(skipper, after, keepRod);
 	}
 
+	/** @internal */
 	override beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
 		if (!(child instanceof zul.tab.Tabpanel)) {
 			zk.error('Unsupported child for tabpanels: ' + child.className);
@@ -77,11 +82,13 @@ export class Tabpanels extends zul.Widget {
 		return true;
 	}
 
+	/** @internal */
 	override onChildRemoved_(child: zk.Widget): void {
 		super.onChildRemoved_(child);
 		this._shallSync = true;
 	}
 
+	/** @internal */
 	override onChildAdded_(child: zk.Widget): void {
 		super.onChildAdded_(child);
 		// sync select status if tabbox not in accordion mold or

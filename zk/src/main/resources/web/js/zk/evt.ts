@@ -91,7 +91,6 @@ export interface EventStopOptions {
  * <td>F1</td><td>112</td>
  * </tr>
  * </table>
- * @disable(zkgwt)
  */
 export class Event<TData = unknown> extends zk.Object {
 	keys?: zul.wnd.Dimension; // zul.wnd.Window
@@ -120,54 +119,50 @@ export class Event<TData = unknown> extends zk.Object {
 	shallStop = false;
 
 	/** The target widget (readonly).
-	 * @type zk.Widget
-	 * @see #currentTarget
+	 * @see {@link currentTarget}
 	 */
 	target: zk.Widget;
 	/** Indicates the target which is handling this event.
 	 * <p>By default, an event will be propagated to its parent, and this member tells which widget is handling it, while #target is the widget that the event is targeting.
-	 * @type zk.Widget
-	 * @see #target
+	 * @see {@link target}
 	 */
 	currentTarget?: zk.Widget;
 	/** The event name, such as 'onChange'.
 	 * The data which depends on the event. Here is the list of Event Data.
 	 * <p>However, if data is an instance of Map, its content is copied to the event instance. Thus, you can access them directly with the event instance as follows.
-<pre><code>
-onClick: function (evt) {
-  if (evt.altKey) { //it is the same as evt.data.altKey
-  }
-}
-</code></pre>
-	 * @type String
+	 * ```ts
+	 * onClick: function (evt) {
+	 *   if (evt.altKey) { //it is the same as evt.data.altKey
+	 *   }
+	 * }
+	 * ```
 	 */
 	name: string;
 	/** The data which depends on the event. Here is the list of Event Data.
 	 * <p>Data can be any javascript Object. You can bring Number, String or JSON object to server side with it.
 	 * <p>The javascript JSON object will be transfered to org.zkoss.json.JSONObject at server side as the following:
-<pre><code>
-// at client side
-var json = { "aa" : [{"a11":"11", "a12":12},{"a21":"21","a22":22.2}],
-	"bb":[{"b11":"31","b12":"32"},{"b21":"41","b22":"42","b23":43}]
-  },
-  data = {jsonObject:json};
-
-// at server side
-final JSONObject jsonObject = (JSONObject)data.get("jsonObject"); // get JSONObject
-// will output "22.2"
-System.out.println(((JSONObject)((JSONArray)jsonObject.get("aa")).get(1)).get("a22"));
-// will output "class java.lang.Double"
-System.out.println(((JSONObject)((JSONArray)jsonObject.get("aa")).get(1)).get("a22").getClass());
-</code></pre>
+	 * ```ts
+	 * // at client side
+	 * var json = { "aa" : [{"a11":"11", "a12":12},{"a21":"21","a22":22.2}],
+	 * 	"bb":[{"b11":"31","b12":"32"},{"b21":"41","b22":"42","b23":43}]
+	 *   },
+	 *   data = {jsonObject:json};
+	 *
+	 * // at server side
+	 * final JSONObject jsonObject = (JSONObject)data.get("jsonObject"); // get JSONObject
+	 * // will output "22.2"
+	 * System.out.println(((JSONObject)((JSONArray)jsonObject.get("aa")).get(1)).get("a22"));
+	 * // will output "class java.lang.Double"
+	 * System.out.println(((JSONObject)((JSONArray)jsonObject.get("aa")).get(1)).get("a22").getClass());
+	 * ```
 	 * <p>However, if data is an instance of Map, its content is copied to the event instance. Thus, you can access them directly with the event instance as follows.
-<pre><code>
-onClick: function (evt) {
-  if (evt.altKey) { //it is the same as evt.data.altKey
-  }
-}
-</code></pre>
+	 * ```ts
+	 * onClick: function (evt) {
+	 *   if (evt.altKey) { //it is the same as evt.data.altKey
+	 *   }
+	 * }
+	 * ```
 	 * <p>Refer to <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/Communication/AU_Requests/Server-side_Processing">ZK Client-side Reference: AU Requests: Server-side Processing</a>.
-	 * @type Object
 	 */
 	data?: TData;
 	/** The options (never null).
@@ -175,52 +170,51 @@ onClick: function (evt) {
 	 * <ul>
 	 * <li>implicit: whether this event is an implicit event, i.e., whether it is implicit to users (so no progressing bar).</li>
 	 * <li>ignorable: whether this event is ignorable, i.e., whether to ignore any error of sending this event back the server.
-		<ul><li>An ignorable event is also an imiplicit event.</li></ul></li>
+	 * <ul><li>An ignorable event is also an imiplicit event.</li></ul></li>
 	 * <li>toServer: whether to send this event to the server. If specified, it is always sent no matter the widget is created at the server or not.</li>
 	 * <li>uri: the URI to send the Ajax request to. If not specified, zAu#comURI is used (i.e., the desktop's update URI is used). If specified, the URI specified in this option is used -- notice that there is no encoding at all, so make sure it is correct. </li>
 	 * <li>rtags (since 5.0.2): a map ({@link Map}) that can be anything and will be passed to
-	 * the <code>onResponse</code> watch (see also {@link _global_.zWatch}).</li>
+	 * the `onResponse` watch (see also {@link _global_.zWatch}).</li>
 	 * </ul>
-	 * @type Map
 	 */
 	opts: EventOptions;
-	/** The DOM event that causes this widget event, or null if not available.
-	 * @type jq.Event
+	/**
+	 * The DOM event that causes this widget event, or null if not available.
 	 */
 	domEvent?: JQuery.TriggeredEvent;
-	/** The DOM element that the event is targeting, or null if not available.
-	 * @type DOMElement
+	/**
+	 * The DOM element that the event is targeting, or null if not available.
 	 */
 	domTarget!: HTMLElement;
 
-	/** Indicates whether the event propagation is stopped.
-	 * @type boolean
-	 * @see #stop
-	 * @see #auStopped
-	 * @see #domStopped
+	/**
+	 * Indicates whether the event propagation is stopped.
+	 * @see {@link Event.stop}
+	 * @see {@link auStopped}
+	 * @see {@link domStopped}
 	 */
 	stopped = false;
-	/** Indicates whether to stop the sending of the AU request to the server.
-	 * @type boolean
-	 * @see #stop
-	 * @see #stopped
-	 * @see #domStopped
+	/**
+	 * Indicates whether to stop the sending of the AU request to the server.
+	 * @see {@link Event.stop}
+	 * @see {@link stopped}
+	 * @see {@link domStopped}
 	 */
 	auStopped = false;
-	/** Indicates whether to stop the native DOM event.
-	 * @type boolean
-	 * @see #stop
-	 * @see #stopped
-	 * @see #auStopped
+	/**
+	 * Indicates whether to stop the native DOM event.
+	 * @see {@link Event.stop}
+	 * @see {@link stopped}
+	 * @see {@link auStopped}
 	 */
 	domStopped = false;
 
-	/** Constructor.
-	 * @param zk.Widget target the target widget.
-	 * @param String name the event name, such as onClick
-	 * @param Object data [optional] the data depending on the event.
-	 * @param Map opts [optional] the options. Refer to {@link #opts}
-	 * @param jq.Event domEvent [optional] the DOM event that causes this widget event.
+	/**
+	 * @param target - the target widget.
+	 * @param name - the event name, such as onClick
+	 * @param data - the data depending on the event.
+	 * @param opts - the options. Refer to {@link opts}
+	 * @param domEvent - the DOM event that causes this widget event.
 	 */
 	// NOTE: There are 3 instances where `target` is set to `undefined`, but these cases are rare; search for `zk.Event(undefined`.
 	constructor(target: zk.Widget | undefined, name: string, data?: TData, opts?: EventOptions, domEvent?: JQuery.TriggeredEvent) { // FIXME: TriggeredEvent missing type parameters
@@ -236,59 +230,66 @@ onClick: function (evt) {
 		if (this.domEvent = domEvent)
 			this.domTarget = domEvent.target as HTMLElement;
 	}
-	/** Adds the additions options to {@link #opts}.
-	 * @param Map opts a map of options to append to #opts
+	/**
+	 * Adds the additions options to {@link opts}.
+	 * @param opts - a map of options to append to #opts
 	 */
 	addOptions(opts: EventOptions): void {
 		this.opts = Object.assign(this.opts, opts);
 	}
-	/** Stop the event propagation.
-<pre><code>
-evt.stop();
-evt.stop({propagation:true}); //stop only the event propagation (see below)
-evt.stop({au:true}); //stop only the sending of the AU request
-</code></pre>
-	 *<p>If you want to revoke the stop of the event propagation, you can specify {revoke:true} to the opts argument.
-<pre><code>
-evt.stop({progagation:true,revoke:true}); //revoke the event propagation
-</code></pre>
-	* <p>Notice that the event won't be sent to the server if stop() was called.
-	*
-	* @param Map opts [optional] control what to stop.
-	* If omitted, the event propagation ({@link #stopped}) and the native DOM event ({@link #domStopped}) are both stopped
-	* (but not {@link #auStopped}).
-	* For fine control, you can use a combination of the following values:
-	<ul>
-	<li>revoke - revoke the stop, i.e., undo the last invocation of {@link #stop}</li>
-	<li>propagation - stop (or revoke) the event propagation ({@link #stopped}).</li>
-	<li>dom - stop (or revoke) the native DOM event ({@link #domStopped}).</li>
-	<li>au - stop (or revoke) the sending of the AU request to the server ({@link #auStopped}).
-	Notice that, unlike the propagation and dom options, the sending of AU requests won't be stopped if opts is omitted.
-	In other words, to stop it, you have to specify the au option explicitly. </li>
-	</ul>
-	*/
+	/**
+	 * ```ts
+	 * evt.stop();
+	 * evt.stop({propagation:true}); //stop only the event propagation (see below)
+	 * evt.stop({au:true}); //stop only the sending of the AU request
+	 * ```
+	 * Stop the event propagation.
+	 * ```ts
+	 * evt.stop();
+	 * evt.stop({propagation:true}); //stop only the event propagation (see below)
+	 * evt.stop({au:true}); //stop only the sending of the AU request
+	 * ```
+	 * <p>If you want to revoke the stop of the event propagation, you can specify `{revoke:true}` to the opts argument.
+	 * ```ts
+	 * evt.stop({progagation:true,revoke:true}); //revoke the event propagation
+	 * ```
+	 * <p>Notice that the event won't be sent to the server if stop() was called.
+	 *
+	 * @param opts - control what to stop.
+	 * If omitted, the event propagation ({@link stopped}) and the native DOM event ({@link domStopped}) are both stopped
+	 * (but not {@link auStopped}).
+	 * For fine control, you can use a combination of the following values:
+	 * <ul>
+	 * <li>revoke - revoke the stop, i.e., undo the last invocation of {@link stop}</li>
+	 * <li>propagation - stop (or revoke) the event propagation ({@link stopped}).</li>
+	 * <li>dom - stop (or revoke) the native DOM event ({@link domStopped}).</li>
+	 * <li>au - stop (or revoke) the sending of the AU request to the server ({@link auStopped}).
+	 * Notice that, unlike the propagation and dom options, the sending of AU requests won't be stopped if opts is omitted.
+	 * In other words, to stop it, you have to specify the au option explicitly. </li>
+	 * </ul>
+	 */
 	stop(opts?: EventStopOptions): void {
 		var b = !opts || !opts.revoke;
 		if (!opts || opts.propagation) this.stopped = b;
 		if (!opts || opts.dom) this.domStopped = b;
-		if (opts && opts.au) this.auStopped = b;
+		if (opts?.au) this.auStopped = b;
 	}
-	/** Indicates whether a key is currently pressed.
+	/**
+	 * Indicates whether a key is currently pressed.
 	 * You can also pass more then one key into this method as a key combination, but combination only works with modifier keys(ALT/CONTROL/SHIFT/META).
 	 * If you combine two(or more) keys that are not modifier keys, you will always get an exception since it is invalid.
 	 * For example:
 	 * isPressed(zKeys.CONTROL, zKeys.ALT, zKeys.ARROWDOWN) is valid.
 	 * isPressed(zKeys.ARROWDOWN, zKeys.ARROWUP) is invalid.
-	 * @param String... The target key and the modifier keys
-	 * @return boolean
+	 * @param args - The target key and the modifier keys
 	 * @since 9.5.0
-	 * @see _global_.zKeys
+	 * @see {@link zKeys}
 	 */
-	isPressed(): boolean {
+	isPressed(...args: string[]): boolean {
 		let keyCount = 0,
 			result = true;
-		for (var i = 0, len = arguments.length; i < len; i++) {
-			var arg = arguments[i] as string;
+		for (var i = 0, len = args.length; i < len; i++) {
+			var arg = args[i];
 			if (arg != zKeys.META && arg != zKeys.ALT && arg != zKeys.CONTROL && arg != zKeys.SHIFT) {
 				keyCount++;
 				if (keyCount > 1)
@@ -551,38 +552,46 @@ export namespace evt_global {
 	 * <p>A watch is a system-level event, such as onSize and beforeSize. For example, when an AU request is going to be sent to the server, the onSend watch is fired so the client application and/or the widget implementation can listen to it.
 	 *
 	 * <p>Here is a full list of <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/Notifications/Client_Activity_Watches">Client Activity Watches</a></li>.
-
-	<h3>Add a Watch</h3>
-
-	<p>To add a listener to a watch, use {@link #listen}. The listener must implement a method with the same as the action name. For example,
-	<pre><code>
-	MyListener = zk.$extends(zk.Object, {
-	onSend: function() {
-	}
-	});
-	var ml = new MyListener();
-	zWatch.listen({onSend: ml})
-	</code></pre>
-
-	<p>Then, ml.onSend will be called when sending an AU request.
-	<h3>Invocation Sequence</h3>
-	<h4>Sequence of {@link #fireDown}</h4>
-
-	<p>The watch listener is added in the parent-first sequence if it has a method called getParent, or a member called parent (a typical example is {@link Widget}). Thus, the parent will be called before its children, if they are all registered to the same action.
-	*/
+	 *
+	 * <h3>Add a Watch</h3>
+	 *
+	 * <p>To add a listener to a watch, use {@link listen}. The listener must implement a method with the same as the action name. For example,
+	 * ```ts
+	 * MyListener = zk.$extends(zk.Object, {
+	 *   onSend: function() {
+	 *   }
+	 * });
+	 * var ml = new MyListener();
+	 * zWatch.listen({onSend: ml})
+	 * ```
+	 *
+	 * <p>Then, ml.onSend will be called when sending an AU request.
+	 * <h3>Invocation Sequence</h3>
+	 * <h4>Sequence of {@link fireDown}</h4>
+	 *
+	 * <p>The watch listener is added in the parent-first sequence if it has a method called getParent, or a member called parent (a typical example is {@link Widget}). Thus, the parent will be called before its children, if they are all registered to the same action.
+	 */
 	export class zWatch {
-		/** Registers watch listener(s). For example,
-	<pre><code>
-	zWatch.listen({
-	onSize: this,
-	onShow: this,
-	onHide: [this, this._onHide]
-	});
-	</code></pre>
-		* <p>As shown above, each key of the infs map is the watch name, and each value is the target against which the watch listener will be called, or a two-element array, where the first element is the target and the second the listener function. For example, zWatch({onSize: foo}) will cause foo.onSize to be called when onSize is fired. The arguments passed are the same as {@link #fire}/{@link #fireDown}.
-		* <p>Note: the order is parent-first (if the watch has a method called getParent or a member called parent), so the invocation ({@link #fire}) is from the parent to the child if both are registered.
-		* @param Map infs a map of the watch listeners. Each key of the map is the watch name, and each value is the target or a two-element array, where the first element is the target and the second the listener function. It assumes the target implements the method with the same name as the watch name. In addition, when the method is called, this references to the target.
-		*/
+		/**
+		 * ```ts
+		 * zWatch.listen({
+		 *   onSize: this,
+		 *   onShow: this,
+		 *   onHide: [this, this._onHide]
+		 * });
+		 * ```
+		 * Registers watch listener(s). For example,
+		 * ```ts
+		 * zWatch.listen({
+		 *   onSize: this,
+		 *   onShow: this,
+		 *   onHide: [this, this._onHide]
+		 * });
+		 * ```
+		 * <p>As shown above, each key of the infs map is the watch name, and each value is the target against which the watch listener will be called, or a two-element array, where the first element is the target and the second the listener function. For example, `zWatch({onSize: foo})` will cause foo.onSize to be called when onSize is fired. The arguments passed are the same as {@link fire}/{@link fireDown}.
+		 * <p>Note: the order is parent-first (if the watch has a method called getParent or a member called parent), so the invocation ({@link fire}) is from the parent to the child if both are registered.
+		 * @param infs - a map of the watch listeners. Each key of the map is the watch name, and each value is the target or a two-element array, where the first element is the target and the second the listener function. It assumes the target implements the method with the same name as the watch name. In addition, when the method is called, this references to the target.
+		 */
 		static listen(infs: Partial<ClientActivity>): void {
 			for (const name in infs) {
 				const wts = _watches[name],
@@ -624,8 +633,9 @@ export namespace evt_global {
 				}
 			}
 		}
-		/** Removes watch listener(s).
-		 * @param Map infs a map of watch listeners. Each key is the watch name, and each value is the target or or a two-element array, where the first element is the target and the second the listener function.
+		/**
+		 * Removes watch listener(s).
+		 * @param infs - a map of watch listeners. Each key is the watch name, and each value is the target or or a two-element array, where the first element is the target and the second the listener function.
 		 */
 		static unlisten(infs: Partial<ClientActivity>): void {
 			for (var name in infs) {
@@ -645,53 +655,57 @@ export namespace evt_global {
 				}
 			}
 		}
-		/** Removes all listener of the specified watch.
-		 * @param String name the watch name, such as onShow
+		/**
+		 * Removes all listener of the specified watch.
+		 * @param name - the watch name, such as onShow
 		 */
 		static unlistenAll(name: keyof ClientActivity): void {
 			delete _watches[name];
 		}
-		/** Fires an watch that invokes all listeners of the watch.
-		 * <p>For example, zWatch.fire('onX', null, 'a', 123) will cause
+		/**
+		 * Fires an watch that invokes all listeners of the watch.
+		 *
+		 * For example, zWatch.fire('onX', null, 'a', 123) will cause
 		 * ml.onX(ctl, 'a', 123) being called -- assuming ml is a listener of onX.
-		 * <p>Notice that the first argument (ctl in the above example) is a special
+		 *
+		 * Notice that the first argument (ctl in the above example) is a special
 		 * controller.
-		 * The first two argument of {@link #fire} become part of the control
+		 * The first two argument of {@link fire} become part of the control
 		 * (as the name and origin fields).
 		 * In additions, the control can be used to control the invocation sequence.
 		 * For example, the invocation sequence is, by default, evaluated in the
 		 * order of fist-listen-first-call, and you can use the controller to force
 		 * the listeners of a certain target to be called first as follows.
-	<pre><code>
-	onX: function (ctl) {
-	ctl.fire(specialTarget); //enforce the listeners of specialTarget to execute first
-	....
-	}
-	</code></pre>
-
-		* <p>If you want the listeners of descendants to execute too, use fireDown instead as follows:
-	<pre><code>
-	onX: function (ctl) {
-	ctl.fireDown(specialTarget); //enforce the listeners of specialTarget and descendants to execute first
-	....
-	}
-	</code></pre>
-		* @param String name the watch name, such as onFloatUp.
-		* @param Object origin the origin (optional).
-		* It could be anything and it will become the origin member of the special controller (the first argument of the listener)
-		* @param Map opts [optional] options:
-		* <ul>
-		*<li>reverse - whether to reverse the execution order.
-		* If false or omitted, the parent is called first.
-		* If true, the child is called first. Notice that there is a limitation: if reverse, you can invoke
-		* <code>ctl.fire</code> in the callback.</li>
-		* <li>timeout - how many miliseconds to wait before calling the listeners. If Omitted or negative, the listeners are invoked immediately.</li>
-		* @param Object... vararg any number of arguments to pass to the listener. They will become the second, third and following arguments when the listener is called.
-		*/
-		static fire(name: string, org: zk.Object, opts?: Partial<FireOptions> | unknown): void {
+		 * ```ts
+		 * onX: function (ctl) {
+		 *   ctl.fire(specialTarget); //enforce the listeners of specialTarget to execute first
+		 *   ...
+		 * }
+		 * ```
+		 * If you want the listeners of descendants to execute too, use fireDown instead as follows:
+		 * ```ts
+		 * onX: function (ctl) {
+		 * ctl.fireDown(specialTarget); //enforce the listeners of specialTarget and descendants to execute first
+		 * ....
+		 * }
+		 * ```
+		 * @param name - the watch name, such as onFloatUp.
+		 * @param origin - the origin (optional).
+		 * It could be anything and it will become the origin member of the special controller (the first argument of the listener)
+		 * @param opts - options:
+		 * <ul>
+		 * <li>reverse - whether to reverse the execution order.
+		 * If false or omitted, the parent is called first.
+		 * If true, the child is called first. Notice that there is a limitation: if reverse, you can invoke
+		 * `ctl.fire` in the callback.</li>
+		 * <li>timeout - how many miliseconds to wait before calling the listeners. If Omitted or negative, the listeners are invoked immediately.</li>
+		 * @param vararg - any number of arguments to pass to the listener. They will become the second, third and following arguments when the listener is called.
+		 */
+		static fire(name: string, org: zk.Object, opts?: Partial<FireOptions> | unknown, ...vararg: unknown[]): void {
 			_fire(name, org, opts, arguments);
 		}
-		/** Fires an watch but invokes only the listeners that are a descendant of the specified origin.
+		/**
+		 * Fires an watch but invokes only the listeners that are a descendant of the specified origin.
 		 * <p>By descendant we mean the watch listener is the same or an descendant of the specified origin. In other words, if the specified origin is not the ancestor of a watch listener, the listener won't be called.
 		 *
 		 * <p>Notice that it assumes:
@@ -703,39 +717,39 @@ export namespace evt_global {
 		 *
 		 * <p>For example, zWatch.fireDown('onX', wgt, opts, 'a', 123) will cause ml.onX(ctl, opts, 'a', 123) being called -- assuming ml is a listener of onX and zUtl.isAncestor(wgt, ml) is true (zUtl#isAncestor).
 		 * <p>Notice that the first argument (ctl in the above example) is a special controller that a listen can use to do further control. For example, origin (of fire()) can be retrieved by accessing the member of the controller called origin.
-	<pre><code>
-	onSize: function (ctl) {
-	if (ctl.origin) //retrieve the origin
-	...
-	</code></pre>
-		* <p>Notice that the second argument (opts in the above example) is also a special argument used to pass optional control info to the zWatch engine.
-		* <p>The invocation sequence is, by default, evaluated in the order of parent-first, and you can use the controller to change it. For example, the following will cause the listener of specialTarget, if any, to execute first.
-	<pre><code>
-	onX: function (ctl) {
-	ctl.fire(specialTarget); //enfore the listeners of specialTarget to execute first
-	....
-	}
-	</code></pre>
-
-		* <p>If you want the listeners of descendants to execute too, use fireDown instead as follows:
-	<pre><code>
-	onX: function (ctl) {
-	ctl.fireDown(specialTarget); //enfore the listeners of specialTarget and descendants to execute first
-	....
-	}
-	</code></pre>
-		* <p>It is useful if a listener depends some of its children's listeners to complete (notice that the parent's listener is, by default, called first). For example, when onSize of a widget is called, it might want some of its children's onSiz to be called first (so he can have their updated size).
-		* @param String name the watch name, such as onShow.
-		* @param Object origin the reference object used to decide what listeners to invoke (required). Notice, unlike {@link #fire}, it cannot be null. It will become the origin member of the controller (i.e., the first argument when the listener is called).
-		* @param Map opts [optional] options:
-		* <ul>
-		*<li>reverse - whether to reverse the execution order.
-		* If false or omitted, the parent is called first.
-		* If true, the child is called first. Notice that there is a limitation: if reverse, you can invoke
-		* <code>ctl.fireDown</code> in the callback.</li>
-		* <li>timeout - how many miliseconds to wait before calling the listeners. If Omitted or negative, the listeners are invoked immediately.</li></ul>
-		* @param Object... vararg any number of arguments to pass to the listener. They will become the third, forth, and following arguments when the listener is called.
-		*/
+		 * ```ts
+		 * onSize: function (ctl) {
+		 *  if (ctl.origin) //retrieve the origin
+		 *  ...
+		 * }
+		 * ```
+		 * <p>Notice that the second argument (opts in the above example) is also a special argument used to pass optional control info to the zWatch engine.
+		 * <p>The invocation sequence is, by default, evaluated in the order of parent-first, and you can use the controller to change it. For example, the following will cause the listener of specialTarget, if any, to execute first.
+		 * ```ts
+		 * onX: function (ctl) {
+		 *   ctl.fire(specialTarget); //enfore the listeners of specialTarget to execute first
+		 *   ...
+		 * }
+		 * ```
+		 * <p>If you want the listeners of descendants to execute too, use fireDown instead as follows:
+		 * ```ts
+		 * onX: function (ctl) {
+		 *   ctl.fireDown(specialTarget); //enfore the listeners of specialTarget and descendants to execute first
+		 *   ...
+		 * }
+		 * ```
+		 * <p>It is useful if a listener depends some of its children's listeners to complete (notice that the parent's listener is, by default, called first). For example, when onSize of a widget is called, it might want some of its children's onSiz to be called first (so he can have their updated size).
+		 * @param name - the watch name, such as onShow.
+		 * @param origin - the reference object used to decide what listeners to invoke (required). Notice, unlike {@link fire}, it cannot be null. It will become the origin member of the controller (i.e., the first argument when the listener is called).
+		 * @param opts - options:
+		 * <ul>
+		 *<li>reverse - whether to reverse the execution order.
+		 * If false or omitted, the parent is called first.
+		 * If true, the child is called first. Notice that there is a limitation: if reverse, you can invoke
+		 * `ctl.fireDown` in the callback.</li>
+		 * <li>timeout - how many miliseconds to wait before calling the listeners. If Omitted or negative, the listeners are invoked immediately.</li></ul>
+		 * @param vararg - any number of arguments to pass to the listener. They will become the third, forth, and following arguments when the listener is called.
+		 */
 		static fireDown(name: string, org: zk.Object, opts?: Partial<FireOptions>, ...vararg: unknown[]): void {
 			_fire(name, org, zk.copy(opts, {down: true}), arguments);
 		}

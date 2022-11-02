@@ -454,17 +454,29 @@ export interface ItemIterator<TItem extends zul.mesh.Item = zul.mesh.Item> {
  */
 @zk.WrapClass('zul.mesh.MeshWidget')
 export abstract class MeshWidget extends zul.Widget {
+	/** @internal */
 	_rows = 0;
+	/** @internal */
 	_pagingPosition = 'bottom';
+	/** @internal */
 	_prehgh = -1;
+	/** @internal */
 	_minWd?: MeshWidth; //minimum width for each column
+	/** @internal */
 	_sizedByContent?: boolean;
+	/** @internal */
 	_span?: string | boolean;
+	/** @internal */
 	_nspan?: number;
+	/** @internal */
 	_autopaging?: boolean;
+	/** @internal */
 	_model?: boolean | string;
+	/** @internal */
 	_paginal?: zul.mesh.Paging;
+	/** @internal */
 	_pendOnRender?: boolean;
+	/** @internal */
 	_ebodyScrollPos?: { l: number; t: number };
 	// Types established from inspecting https://www.zkoss.org/zkdemo/grid/header_and_footer
 	ehead?: HTMLDivElement;
@@ -489,22 +501,38 @@ export abstract class MeshWidget extends zul.Widget {
 	heads: zul.mesh.HeadWidget[];
 	head?: zul.mesh.HeadWidget;
 	foot?: zul.grid.Foot;
+	/** @internal */
 	_visiRows?: number;
+	/** @internal */
 	_wsbak?: string;
+	/** @internal */
 	_targetIndex?: number;
+	/** @internal */
 	_keepScroll?: boolean;
+	/** @internal */
 	_bottomBoundary?: number;
+	/** @internal */
 	_topBoundary?: number;
+	/** @internal */
 	_rowsOnFitSize?: boolean;
+	/** @internal */
 	_scrollbar?: zul.Scrollbar;
+	/** @internal */
 	_cachehgh?: number;
+	/** @internal */
 	_lastDevicePixelRatio?: number;
+	/** @internal */
 	_adjustScrollTopLater?: boolean;
+	/** @internal */
 	_shallSize?: boolean;
+	/** @internal */
 	_syncingbodyrows?: boolean;
+	/** @internal */
 	_shallClearTableWidth?: boolean;
+	/** @internal */
 	_shallShowScrollbar?: boolean;
 
+	/** @internal */
 	_syncEmpty(): void {
 		// Empty on purpose. To be inherited.
 	}
@@ -515,9 +543,13 @@ export abstract class MeshWidget extends zul.Widget {
 	}
 
 	// `zul.mesh.prototype.HeadWidget.onColSize` could assign `_innerWidth` a number
+	/** @internal */
 	_innerWidth = '100%';
+	/** @internal */
 	_currentTop = 0;
+	/** @internal */
 	_currentLeft = 0;
+	/** @internal */
 	_nativebar = true;
 
 	abstract getHeadWidgetClass(): typeof zul.mesh.HeadWidget;
@@ -525,10 +557,8 @@ export abstract class MeshWidget extends zul.Widget {
 	abstract itemIterator(opts?: Record<string, unknown>): ItemIterator;
 
 	/**
-	 * Returns the rows. Zero means no limitation.
-	 * <p>
-	 * Default: 0.
-	 * @return int
+	 * @returns (int) the rows. Zero means no limitation.
+	 * @defaultValue `0`.
 	 */
 	getRows(): number {
 		return this._rows;
@@ -537,9 +567,8 @@ export abstract class MeshWidget extends zul.Widget {
 	/**
 	 * Sets the rows.
 	 * <p>
-	 * Note: if both {@link #setHeight} is specified with non-empty,
-	 * {@link #setRows} is ignored
-	 * @param int rows
+	 * Note: if both {@link setHeight} is specified with non-empty,
+	 * {@link setRows} is ignored
 	 */
 	setRows(rows: number, opts?: Record<string, boolean>): this {
 		const o = this._rows;
@@ -558,9 +587,8 @@ export abstract class MeshWidget extends zul.Widget {
 	}
 
 	/**
-	 * Returns how to position the paging of the widget at the client screen.
+	 * @returns how to position the paging of the widget at the client screen.
 	 * It is meaningless if the mold is not in "paging".
-	 * @return String
 	 */
 	getPagingPosition(): string {
 		return this._pagingPosition;
@@ -569,7 +597,7 @@ export abstract class MeshWidget extends zul.Widget {
 	/**
 	 * Sets how to position the paging of the widget at the client screen.
 	 * It is meaningless if the mold is not in "paging".
-	 * @param String pagingPosition how to position. It can only be "bottom" (the default), or
+	 * @param pagingPosition - how to position. It can only be "bottom" (the default), or
 	 * "top", or "both".
 	 */
 	setPagingPosition(pagingPosition: string, opts?: Record<string, boolean>): this {
@@ -584,11 +612,10 @@ export abstract class MeshWidget extends zul.Widget {
 	}
 
 	/**
-	 * Returns whether sizing the widget column width by its content. Default is false.
+	 * @returns whether sizing the widget column width by its content. Default is false.
 	 * <p>Note: if the "sized-by-content" attribute of component is specified,
 	 * it's prior to the original value.
-	 * @return boolean
-	 * @see #setSizedByContent
+	 * @see {@link setSizedByContent}
 	 */
 	isSizedByContent(): boolean {
 		return !!this._sizedByContent;
@@ -603,7 +630,6 @@ export abstract class MeshWidget extends zul.Widget {
 	 *
 	 * <p> You can also specify the "sized-by-content" attribute of component in
 	 * lang-addon.xml directly, it will then take higher priority.
-	 * @param boolean byContent
 	 */
 	setSizedByContent(sizedByContent: boolean, opts?: Record<string, boolean>): this {
 		const o = this._sizedByContent;
@@ -617,11 +643,10 @@ export abstract class MeshWidget extends zul.Widget {
 	}
 
 	/**
-	 * Return column span hint of this widget.
-	 * <p>Default: null
-	 * @return String column span hint of this widget.
+	 * @returns column span hint of this widget.
+	 * @defaultValue `null`
 	 * @since 5.0.6
-	 * @see #setSpan
+	 * @see {@link setSpan}
 	 */
 	getSpan(): string | boolean | undefined {
 		return this._span;
@@ -639,12 +664,12 @@ export abstract class MeshWidget extends zul.Widget {
 	 * fit the extra remaining space.</p>
 	 * <p>Special span hint with "true" means span ALL columns proportionally per their
 	 * original widths while null or "false" means NOT spanning any column.</p>
-	 * <p>Default: null. That is, NOT span any column.</p>
+	 * @defaultValue `null`. That is, NOT span any column.</p>
 	 * <p>Note span is meaningful only if there is remaining empty space for columns.</p>
 	 *
-	 * @param String span the column span hint.
+	 * @param span - the column span hint.
 	 * @since 5.0.6
-	 * @see #getSpan
+	 * @see {@link getSpan}
 	 */
 	setSpan(span: string | boolean, opts?: Record<string, boolean>): this {
 		const o = this._span;
@@ -665,12 +690,11 @@ export abstract class MeshWidget extends zul.Widget {
 	}
 
 	/**
-	 * Returns whether turn on auto-paging facility when mold is
-	 * "paging". If it is set to true, the {@link #setPageSize} is ignored;
+	 * @returns whether turn on auto-paging facility when mold is
+	 * "paging". If it is set to true, the {@link setPageSize} is ignored;
 	 * rather, the page size(number of item count) is automatically determined by the
 	 * height of this widget dynamically.
-	 * @return boolean
-	 * @see #setAutopaging
+	 * @see {@link setAutopaging}
 	 */
 	isAutopaging(): boolean {
 		return !!this._autopaging;
@@ -678,10 +702,9 @@ export abstract class MeshWidget extends zul.Widget {
 
 	/**
 	 * Sets whether turn on auto-paging facility when mold is
-	 * "paging". If it is set to true, the {@link #setPageSize} is ignored;
+	 * "paging". If it is set to true, the {@link setPageSize} is ignored;
 	 * rather, the page size(number of item count) is automatically determined by the
 	 * height of this widget dynamically.
-	 * @param boolean autopaging
 	 */
 	setAutopaging(autopaging: boolean, opts?: Record<string, boolean>): this {
 		const o = this._autopaging;
@@ -695,8 +718,7 @@ export abstract class MeshWidget extends zul.Widget {
 	}
 
 	/**
-	 * Returns whether the widget is in model mode or not.
-	 * @return boolean
+	 * @returns whether the widget is in model mode or not.
 	 */
 	isModel(): boolean {
 		return !!this._model;
@@ -708,7 +730,6 @@ export abstract class MeshWidget extends zul.Widget {
 
 	/**
 	 * Sets whether the widget is in model mode.
-	 * @param boolean inModel
 	 */
 	setModel(model: boolean): this {
 		this._model = model;
@@ -716,11 +737,10 @@ export abstract class MeshWidget extends zul.Widget {
 	}
 
 	/**
-	 * Returns the inner width of this component.
+	 * @returns the inner width of this component.
 	 * The inner width is the width of the inner table.
-	 * <p>Default: "100%"
-	 * @see #setInnerWidth
-	 * @return String
+	 * @defaultValue `"100%"`
+	 * @see {@link setInnerWidth}
 	 */
 	getInnerWidth(): string {
 		return this._innerWidth;
@@ -737,10 +757,10 @@ export abstract class MeshWidget extends zul.Widget {
 	 * they want to preserve the widths of sizable columns
 	 * changed by the user.
 	 * To preserve the widths, the developer have to store the widths of
-	 * all columns and the inner width ({@link #getInnerWidth}),
+	 * all columns and the inner width ({@link getInnerWidth}),
 	 * and then restore them when re-creating this component.
 	 *
-	 * @param String innerWidth the inner width. If null, "100%" is assumed.
+	 * @param innerWidth - the inner width. If null, "100%" is assumed.
 	 */
 	setInnerWidth(innerWidth: string, opts?: Record<string, boolean>): this {
 		const o = this._innerWidth;
@@ -757,8 +777,7 @@ export abstract class MeshWidget extends zul.Widget {
 	}
 
 	/**
-	 * Returns the external Paging widget, if any.
-	 * @return Paging
+	 * @returns the external Paging widget, if any.
 	 */
 	getPaginal(): zul.mesh.Paging | undefined {
 		return this._paginal;
@@ -766,7 +785,6 @@ export abstract class MeshWidget extends zul.Widget {
 
 	/**
 	 * Sets the external Paging widget.
-	 * @param Paging paging
 	 */
 	setPaginal(paginal?: zul.mesh.Paging): this {
 		if (this._paginal != paginal) {
@@ -777,43 +795,43 @@ export abstract class MeshWidget extends zul.Widget {
 		return this;
 	}
 
-	/** Returns the page size, aka., the number rows per page.
-	 * @return int
-	 * @see Paging#getPageSize
+	/**
+	 * @returns the page size, aka., the number rows per page.
+	 * @see {@link zul.mesh.Paging.getPageSize}
 	 */
 	getPageSize(): number {
 		return this.getPagingChild()?.getPageSize() ?? 0;
 	}
 
-	/** Sets the page size, aka., the number rows per page.
-	 * @param int pageSize
-	 * @see Paging#setPageSize
+	/**
+	 * Sets the page size, aka., the number rows per page.
+	 * @see {@link zul.mesh.Paging.setPageSize}
 	 */
 	setPageSize(pageSize: number): this {
 		this.getPagingChild()?.setPageSize(pageSize);
 		return this;
 	}
 
-	/** Returns the number of pages.
+	/**
+	 * @returns the number of pages.
 	 * Note: there is at least one page even no item at all.
-	 * @return int
-	 * @see Paging#getPageCount
+	 * @see {@link zul.mesh.Paging.getPageCount}
 	 */
 	getPageCount(): number {
 		return this.getPagingChild()?.getPageCount() ?? 1;
 	}
 
-	/** Returns the active page (starting from 0).
-	 * @return int
-	 * @see Paging#getActivePage
+	/**
+	 * @returns the active page (starting from 0).
+	 * @see {@link zul.mesh.Paging.getActivePage}
 	 */
 	getActivePage(): number {
 		return this.getPagingChild()?.getActivePage() ?? 0;
 	}
 
-	/** Sets the active page (starting from 0).
-	 * @param int activePage
-	 * @see Paging#setActivePage
+	/**
+	 * Sets the active page (starting from 0).
+	 * @see {@link zul.mesh.Paging.setActivePage}
 	 */
 	setActivePage(activePage: number): this {
 		this.getPagingChild()?.setActivePage(activePage);
@@ -821,8 +839,7 @@ export abstract class MeshWidget extends zul.Widget {
 	}
 
 	/**
-	 * Returns whether the widget is in paging mold.
-	 * @return boolean
+	 * @returns whether the widget is in paging mold.
 	 */
 	inPagingMold(): boolean {
 		return 'paging' == this.getMold();
@@ -860,8 +877,7 @@ export abstract class MeshWidget extends zul.Widget {
 	}
 
 	/**
-	 * Returns the self's head widget.
-	 * @return zul.mesh.HeadWidget
+	 * @returns the self's head widget.
 	 * @since 5.0.4
 	 */
 	getHeadWidget(): zul.mesh.HeadWidget | undefined {
@@ -869,9 +885,8 @@ export abstract class MeshWidget extends zul.Widget {
 	}
 
 	/**
-	 * Returns the index of the cell including the child got focus.
-	 * @param DOMElement el the element got focus.
-	 * @return DOMElement the cell element.
+	 * @param el - the element got focus.
+	 * @returns the focused cell element.
 	 * @since 5.0.7
 	 */
 	getFocusCell(el: HTMLElement): HTMLTableCellElement | undefined {
@@ -893,6 +908,7 @@ export abstract class MeshWidget extends zul.Widget {
 		return td;
 	}
 
+	/** @internal */
 	_moveToHidingFocusCell(index: number, ignoreWidth?: boolean, notFocusBack?: boolean): void { //used in Row/Listcell and a11y frozen
 		//B50-3178977 navigating the input in hiddin column.
 		var td = this.ehdfaker ? this.ehdfaker.childNodes[index] as HTMLTableCellElement | undefined : undefined,
@@ -910,6 +926,7 @@ export abstract class MeshWidget extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	_restoreFocus(): void { //used in Frozen
 		if (_shallFocusBack && zk.currentFocus) {
 			_shallFocusBack = false;
@@ -917,12 +934,14 @@ export abstract class MeshWidget extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	disableAutoSizing_(): void {
 		this._span = false;
 		this._nspan = 0;
 		this._sizedByContent = false;
 	}
 
+	/** @internal */
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 
@@ -947,6 +966,7 @@ export abstract class MeshWidget extends zul.Widget {
 		zWatch.listen({ onSize: this, onResponse: this });
 	}
 
+	/** @internal */
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		unlistenOnFitSize(this);
 		zWatch.unlisten({ onSize: this, onResponse: this });
@@ -968,9 +988,10 @@ export abstract class MeshWidget extends zul.Widget {
 			= this.ehdfaker = this.ebdfaker = undefined;
 	}
 
-	/** Synchronizes the size immediately.
+	/**
+	 * Synchronizes the size immediately.
 	 * This method is called automatically if the widget is created
-	 * at the server (i.e., {@link #inServer} is true).
+	 * at the server (i.e., {@link inServer} is true).
 	 * You have to invoke this method only if you create this widget
 	 * at client and add or remove children from this widget.
 	 * @since 5.0.8
@@ -999,6 +1020,7 @@ export abstract class MeshWidget extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	_syncSize(shallClearTableWidth?: boolean): void {
 		// fixed for F50-3025422.zul on ZTL
 		if (this.desktop) {
@@ -1007,6 +1029,7 @@ export abstract class MeshWidget extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	_clearTableWidth(): void {
 		if (this.desktop) {
 			// clear table width
@@ -1022,6 +1045,7 @@ export abstract class MeshWidget extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	_fixHeaders(force?: boolean): boolean { //used in HeadWidget
 		if (this.head && this.ehead) {
 			if (this._cssflex && this.isChildrenFlex()) return false;
@@ -1080,6 +1104,7 @@ export abstract class MeshWidget extends zul.Widget {
 		return false;
 	}
 
+	/** @internal */
 	_adjFlexWd(): void { //used by HeadWidget
 		var head = this.head;
 		if (head) {
@@ -1162,6 +1187,7 @@ export abstract class MeshWidget extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	_bindDomNode(): void {
 		this.ehead = this.$n('head');
 		this.eheadtbl = this.$n('headtbl');
@@ -1205,6 +1231,7 @@ export abstract class MeshWidget extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	override replaceChildHTML_(child: zk.Widget, n: HTMLElement | string, desktop?: zk.Desktop, skipper?: zk.Skipper, _trim_?: boolean): void { // rows outer
 		var old = this._syncingbodyrows;
 		this._syncingbodyrows = true;
@@ -1222,6 +1249,7 @@ export abstract class MeshWidget extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	_doScroll(): void { //called zkmax, overriden in Listbox
 		var t = zul.mesh.Scrollbar.getScrollPosV(this),
 			l = zul.mesh.Scrollbar.getScrollPosH(this),
@@ -1263,6 +1291,7 @@ export abstract class MeshWidget extends zul.Widget {
 			this.frozen.syncScrollByParentBody();
 	}
 
+	/** @internal */
 	_doSyncScroll(): void { //sync scroll for input tab key scroll
 		var ehead = this.ehead,
 			ebody = this.ebody,
@@ -1277,13 +1306,16 @@ export abstract class MeshWidget extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	_timeoutId: number | undefined;
 
+	/** @internal */
 	_fireOnScrollPos(time?: number, forceToScroll?: boolean /* overriden in zkmax */): void {
 		clearTimeout(this._timeoutId);
 		this._timeoutId = setTimeout(this._onScrollPos.bind(this), time! >= 0 ? time : 300);
 	}
 
+	/** @internal */
 	_onScrollPos(): void {
 		// Bug ZK-414
 		if (this.ebody) {
@@ -1296,6 +1328,7 @@ export abstract class MeshWidget extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	_onRender(): boolean { //overriden in zkmax
 		if (!this.$n())
 			return false; // the target may not exist. B50-ZK-963
@@ -1382,6 +1415,7 @@ export abstract class MeshWidget extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	_vflexSize(): number {
 		var n = this.$n(),
 			pgHgh = 0;
@@ -1400,6 +1434,7 @@ export abstract class MeshWidget extends zul.Widget {
 			hgh - this.efrozen!.offsetHeight : hgh;
 	}
 
+	/** @internal */
 	override setFlexSize_(flexSize: zk.FlexSize, isFlexMin?: boolean): void {
 		if (this._cssflex && this.parent!.getFlexContainer_() != null && !isFlexMin)
 			return;
@@ -1427,6 +1462,7 @@ export abstract class MeshWidget extends zul.Widget {
 	}
 
 	/* set the height. */
+	/** @internal */
 	_setHgh(hgh?: string): void {
 		var n = this.$n_(),
 			ebody = this.ebody!,
@@ -1447,11 +1483,12 @@ export abstract class MeshWidget extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	_ignoreHghExt(): boolean {
 		return false;
 	}
 
-	/** Calculates the size. */
+	/** Calculates the size. @internal */
 	_calcSize(): void {
 		this._beforeCalcSize();
 		//Bug 1553937: wrong sibling location
@@ -1493,6 +1530,7 @@ export abstract class MeshWidget extends zul.Widget {
 		this._afterCalcSize();
 	}
 
+	/** @internal */
 	_beforeCalcSize(): void {
 		var ebody = this.ebody!;
 		if (!this._nativebar && (ebody.scrollLeft || ebody.scrollTop)) {
@@ -1502,6 +1540,7 @@ export abstract class MeshWidget extends zul.Widget {
 		this._calcHgh();
 	}
 
+	/** @internal */
 	_afterCalcSize(): void {
 		// Fix B96-ZK-5247
 		if (!this.isRealVisible()) return;
@@ -1623,6 +1662,7 @@ export abstract class MeshWidget extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	_syncFaker(): void {
 		var head = this.head;
 		if (!head || !this.desktop)
@@ -1674,6 +1714,7 @@ export abstract class MeshWidget extends zul.Widget {
 	}
 
 	//return if all widths of columns are fixed (directly or indirectly)
+	/** @internal */
 	_isAllWidths(): boolean {
 		// ZK-2157: should skip if the mesh has no children
 		if (this.isSizedByContent() && this.ebodyrows && this.ebodyrows.firstChild)
@@ -1690,6 +1731,7 @@ export abstract class MeshWidget extends zul.Widget {
 		return true;
 	}
 
+	/** @internal */
 	domFaker_(out: string[], fakeId: string): void { //used by redraw
 		var head = this.head!;
 		out.push('<colgroup id="', head.uuid, fakeId, '">');
@@ -1705,7 +1747,8 @@ export abstract class MeshWidget extends zul.Widget {
 		out.push('</colgroup>');
 	}
 
-	//super//
+	
+	/** @internal */
 	override onChildAdded_(child: zk.Widget): void {
 		super.onChildAdded_(child);
 
@@ -1727,6 +1770,7 @@ export abstract class MeshWidget extends zul.Widget {
 		this.heads.push(child);
 	}
 
+	/** @internal */
 	override onChildRemoved_(child: zk.Widget): void {
 		super.onChildRemoved_(child);
 
@@ -1740,6 +1784,7 @@ export abstract class MeshWidget extends zul.Widget {
 	}
 
 	//bug# 3022669: listbox hflex="min" sizedByContent="true" not work
+	/** @internal */
 	override beforeMinFlex_(orient: zk.FlexOrient): number | undefined {
 		if (this._hflexsz === undefined && orient == 'w' && this._width === undefined) {
 			if (this.isSizedByContent())
@@ -1757,6 +1802,7 @@ export abstract class MeshWidget extends zul.Widget {
 	}
 
 	// fixed for B50-3315594.zul
+	/** @internal */
 	override beforeParentMinFlex_(orient: zk.FlexOrient): void {
 		if (orient == 'w') {
 			if (this.isSizedByContent())
@@ -1767,6 +1813,7 @@ export abstract class MeshWidget extends zul.Widget {
 			this._calcSize();
 	}
 
+	/** @internal */
 	override clearCachedSize_(): void {
 		super.clearCachedSize_();
 		this._clearCachedSize();
@@ -1783,18 +1830,21 @@ export abstract class MeshWidget extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	_clearCachedSize(): void {
 		const n = this.$n();
 		if (n)
 			n._lastsz = this._minWd = undefined;
 	}
 
+	/** @internal */
 	_calcMinWds(): MeshWidth { //used in HeaderWidgets
 		if (!this._minWd)
 			this._minWd = _calcMinWd(this);
 		return this._minWd;
 	}
 
+	/** @internal */
 	_adjSpanWd(): void { //used in HeadWidgets
 		if (!this._isAllWidths() || !this.isSpan())
 			return;
@@ -1943,6 +1993,7 @@ export abstract class MeshWidget extends zul.Widget {
 			zk(this.$n()).redoCSS();
 	}
 
+	/** @internal */
 	_adjHeadWd(): void {
 		var hdfaker = this.ehdfaker,
 			bdfaker = this.ebdfaker,
@@ -2020,6 +2071,7 @@ export abstract class MeshWidget extends zul.Widget {
 		_adjMinWd(this);
 	}
 
+	/** @internal */
 	_getFirstRowCells(tbody: HTMLTableSectionElement | undefined): HTMLCollectionOf<HTMLTableCellElement> | undefined {
 		var rowsLength: number,
 			tbodyrows: HTMLCollectionOf<HTMLTableRowElement>;
@@ -2057,11 +2109,13 @@ export abstract class MeshWidget extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	_deleteFakeRow(tbody: HTMLTableSectionElement | undefined): void {
 		if (tbody)
 			jq('#' + tbody.id + '-fakeRow').remove();
 	} // for Grid.js and Listbox.js
 
+	/** @internal */
 	refreshBar_(showBar?: boolean, scrollToTop?: boolean): void {
 		var bar = this._scrollbar;
 		if (bar) {
@@ -2091,6 +2145,7 @@ export abstract class MeshWidget extends zul.Widget {
 			this._calcHgh();
 	}
 
+	/** @internal */
 	_calcHgh(): void {
 		var rows: ArrayLike<HTMLTableRowElement> = this.ebodyrows ? this.ebodyrows.rows : [],
 			n = this.$n_(),
@@ -2193,7 +2248,10 @@ export abstract class MeshWidget extends zul.Widget {
 		}
 	}
 
-	/* Returns the real # of rows (aka., real size). */
+	/**
+	 * @returns the real # of rows (aka., real size).
+	 * @internal
+	 */
 	_setOrGetVisibleRows(v?: number): number | undefined {
 		if ('number' == typeof v) {
 			this._visiRows = v;
@@ -2202,6 +2260,7 @@ export abstract class MeshWidget extends zul.Widget {
 	}
 
 	/* Height of the head row. If no header, defval is returned. */
+	/** @internal */
 	_headHgh(defVal: number, isExcludeAuxhead?: boolean): number {
 		var headWidget = this.getHeadWidget(), //Bug ZK-1297: get head height exclude auxhead
 			head = this.ehead,
@@ -2219,8 +2278,9 @@ export abstract class MeshWidget extends zul.Widget {
 	 * Scroll to the specified item by the given index, used by Grid and Listbox,
 	 * this function could be invoked by server-side or client-side,
 	 * when invoked by client-side, scrollRatio will be undefined.
-	 * @param int index the index of item
-	 * @param double scrollRatio the scroll ratio
+	 * @param index - the index of item
+	 * @param scrollRatio - the scroll ratio
+	 * @internal
 	 */
 	_scrollToIndex(index: number, scrollRatio?: number): void {
 		// NOTE: _scrollToIndex will only be called by Grid and Listbox, and both of them
@@ -2260,6 +2320,7 @@ export abstract class MeshWidget extends zul.Widget {
 		}
 	}
 
+	/** @internal */
 	override getContentEdgeHeight_(height: number): number {
 		var height = super.getContentEdgeHeight_(height),
 			efoot = this.efoot;
@@ -2270,6 +2331,7 @@ export abstract class MeshWidget extends zul.Widget {
 		return height;
 	}
 
+	/** @internal */
 	override afterChildrenMinFlex_(o: zk.FlexOrient): void {
 		var n = this.$n_();
 		if (o == 'h') {
@@ -2292,6 +2354,7 @@ export abstract class MeshWidget extends zul.Widget {
 		return false;
 	}
 
+	/** @internal */
 	waitForRendered_(): Promise<void> {
 		return new Promise(resolve => {
 			const callback = (): void => {
@@ -2303,7 +2366,7 @@ export abstract class MeshWidget extends zul.Widget {
 	}
 
 	// ZK-5028 for Treecols, Listhead, and Columns
-	//@Override
+	/** @internal */
 	override shallFireSizedLaterWhenAddChd_(): boolean {
 		if (this._rerendering) {
 			zWatch.listen({
@@ -2315,6 +2378,7 @@ export abstract class MeshWidget extends zul.Widget {
 	}
 
 	// ZK-5028 for Treecols, Listhead, and Columns
+	/** @internal */
 	_fixFireSizedLaterWhenAddChd(): void {
 		zUtl.fireSized(this);
 		zWatch.unlisten({
@@ -2324,6 +2388,7 @@ export abstract class MeshWidget extends zul.Widget {
 
 	static readonly WIDTH0 = zk.webkit ? '0.001px' : '0px';
 
+	/** @internal */
 	static _getWidth(wgt: zk.Widget, width: string | undefined): string | undefined {
 		if (wgt.isVisible())
 			return width;
@@ -2339,7 +2404,7 @@ export abstract class MeshWidget extends zul.Widget {
 export var Scrollbar = {
 	/**
 	 * Initialize the scrollbar of MeshWidget.
-	 * @param zk.Widget wgt a widget
+	 * @param wgt - a widget
 	 */
 	init(wgt: zul.mesh.MeshWidget): zul.Scrollbar | undefined /* zkmax-override could return undefined */ {
 		var embed = jq(wgt.$n_()).data('embedscrollbar') !== false, // change default value to true since 7.0.2
@@ -2379,9 +2444,8 @@ export var Scrollbar = {
 		});
 	},
 	/**
-	 * Return the vertical scroll position of the body element of given MeshWidget.
-	 * @param zk.Widget wgt the widget
-	 * @return int
+	 * @returns the vertical scroll position of the body element of given MeshWidget.
+	 * @param wgt - the widget
 	 */
 	getScrollPosV(wgt: zul.mesh.MeshWidget): number {
 		var bar = wgt._scrollbar;
@@ -2391,9 +2455,8 @@ export var Scrollbar = {
 		return wgt.ebody!.scrollTop;
 	},
 	/**
-	 * Return the horizontal scroll position of the body element of given MeshWidget.
-	 * @param zk.Widget wgt the widget
-	 * @return int
+	 * @returns the horizontal scroll position of the body element of given MeshWidget.
+	 * @param wgt - the widget
 	 * @since 7.0.0
 	 */
 	getScrollPosH(wgt: zul.mesh.MeshWidget): number {
