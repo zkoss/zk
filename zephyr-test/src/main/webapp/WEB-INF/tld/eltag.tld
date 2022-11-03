@@ -1,7 +1,7 @@
 <taglib>
     <function>
         <name>cat2</name>
-        <function-class>org.zkoss.clientbind.test.mvvm.book.basic.ELTagVM</function-class>
+        <function-class>org.zkoss.clientbind.test.book.basic.ELTagVM</function-class>
         <function-signature>
     String cat2(java.lang.String,java.lang.String)
         </function-signature>

@@ -1,0 +1,16 @@
+<zk>
+	<window title="aa"
+		viewModel="@id('vm') @init('org.zkoss.clientbind.test.issue.B01063BindException')">
+		<vbox>
+		normal property
+		<label id="lb1" value="@bind(vm.value)"/>
+		<textbox id="tb1" value="@bind(vm.value)"/>
+		normal map property
+		<label id="lb2" value="@bind(vm.map.xyz)"/>
+		<textbox id="tb2" value="@save(vm.map.xyz)"/>
+		get exception if change the textbox value
+		<textbox id="tb3" value="@save(vm.valuex)"/>
+		</vbox>
+		
+	</window>
+</zk>

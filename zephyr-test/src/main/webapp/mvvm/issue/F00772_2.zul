@@ -1,0 +1,7 @@
+<window id="inc2win" viewModel="@id('vm') @init('org.zkoss.clientbind.test.issue.F00772_2')">
+	<vbox>
+		<label id="l21" value="@bind(vm.value2)"/>
+		<button id="globaly" label="global cmdY" onClick="@global-command('cmdY',data=vm.value2)" />
+		<button label="Dump" onClick="binder.getTracker().dump()" />
+	</vbox>
+</window>

@@ -1,4 +1,4 @@
-<window apply="org.zkoss.clientbind.test.mvvm.book.basic.ConverterComposer">
+<window apply="org.zkoss.clientbind.test.book.basic.ConverterComposer">
 	<custom-attributes composerName="vm"/>
 	format : yyyy/MM/dd
 	<vbox>

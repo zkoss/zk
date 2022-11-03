@@ -1,0 +1,10 @@
+<!-- B01268UnsupportChildExp.zul -->
+<zk>
+	<listbox
+		viewModel="@id('vm') @init('org.zkoss.clientbind.test.issue.B01268UnsupportChildExp')"
+		children="@load(vm.strings)">
+	<template name="children" var="str">
+		<listitem><listcell label="@load(str)"></listcell></listitem>
+	</template>
+	</listbox>
+</zk>

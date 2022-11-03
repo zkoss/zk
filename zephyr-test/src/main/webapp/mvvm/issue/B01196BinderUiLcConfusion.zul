@@ -1,0 +1,8 @@
+<!-- B01196BinderUiLcConfusion.zul -->
+<zk>
+<window title="Order Management" border="normal" width="600px" 
+	apply="org.zkoss.clientbind.test.issue.B01196BinderUiLcConfusion" >
+
+
+</window>
+</zk>

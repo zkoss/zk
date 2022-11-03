@@ -1,0 +1,45 @@
+<div>
+<label multiline="true">
+1.select A ~ D, the message shall show A ~ D accordingly
+2.select B, and edit the item's name with E and click save.
+3.you shall see the message change to E.
+4.click serialize/deserialize, you should not see the message become error.
+5.You shall not see the screen show any change except pop an alert window showing "done Serialize/Deserialize". 
+5.select A ~ D, the message shall show A ~ D accordingly
+6.select E, and edit the item's name with B and click save.
+7.you shall see the message change to B.
+8.done.
+</label>
+	<window id="win" viewModel="@id('vm') @init('org.zkoss.clientbind.test.issue.B00869Serialization')">
+		<vlayout>
+		<label id="selected" value="@bind(vm.selected.name)"/>
+		</vlayout>
+		<hbox id="children" children="@load(vm.items)">
+			<template name="children">
+				<label value="@load(each.name)"/>
+			</template>
+		</hbox>
+		<listbox id="listbox" width="700px" model="@bind(vm.items)" rows="5" selectedItem="@bind(vm.selected)">
+			<listhead>
+				<listheader label="index"/>
+				<listheader label="name"/>
+			</listhead>
+			
+			<template name="model" var="item" status="s">
+				<listitem>
+					<listcell label="@bind(s.index)"/>
+					<listcell label="@bind(item.name)"/>
+				</listitem>
+			</template>
+		</listbox>
+		<vbox form="@id('fx') @load(vm.selected) @save(vm.selected,after='save') @validator(vm.dummyValidator)">
+			Name : <textbox id="tb1" value="@bind(fx.name) @converter(vm.dummyConverter)"/>
+		</vbox>
+		<button id="save" label="save" onClick="@command('save') @global-command('nothihg')"/>
+	</window>
+	<hlayout>message:<label id="msg"/></hlayout>
+	<hbox id="hbox">
+		<button id="serialize" label="serialize/deserialize" onClick='win.getAttribute("vm").doSerialize(win,msg)' />
+		<button label="Dump" onClick='win.getAttribute("binder").getTracker().dump()' />
+	</hbox>
+</div>

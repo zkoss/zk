@@ -1,4 +1,4 @@
-<window apply="org.zkoss.clientbind.test.mvvm.book.basic.CommandIndirectComposer">
+<window apply="org.zkoss.clientbind.test.book.basic.CommandIndirectComposer">
 	<custom-attributes composerName="vm"/>
 	<vbox>
 	<label id="l1" value="@bind(vm.value1)"/>

@@ -1,0 +1,41 @@
+<zk>
+    <window id="win" viewModel="@id('vm') @init('org.zkoss.clientbind.test.issue.F00916FormBeanValidator')"
+    validationMessages = "@id('vmsgs')">
+        <grid width="600px" form="@id('fx') @load(vm.user) @save(vm.user,after='save') @validator('formBeanValidator',prefix='fx_')">
+            <columns>
+                <column width="100px" />
+                <column width="500px" />
+            </columns>
+            <rows>
+                <row>
+                    First Name
+                    <hlayout>
+                    <textbox id="tb1" value="@bind(fx.firstName)"/>
+                    <label id="msg1" value="@load(vmsgs['fx_firstName'])"/>
+                    </hlayout>
+                </row>
+                <row>
+                    Last Name
+                    <hlayout>
+                    <textbox id="tb2" value="@bind(fx['lastName'])" />
+                    <label id="msg2" value="@load(vmsgs['fx_lastName'])"/>
+                    </hlayout>
+                </row>
+                <row>
+                    EMail
+                    <hlayout>
+                    <textbox id="tb3" value="@bind(fx[vm.prop])" />
+                    <label id="msg3" value="@load(vmsgs['fx_email'])"/>
+                    </hlayout>
+                </row>                
+            </rows>
+        </grid>
+        <hlayout>
+        	<label id="l1" value="@bind(vm.user.firstName)"/>
+        	<label id="l2" value="@bind(vm.user.lastName)"/>
+        	<label id="l3" value="@bind(vm.user.email)"/>
+        </hlayout>
+        <button id="save" label="Save" onClick="@command('save')" />
+        
+    </window>
+</zk>
