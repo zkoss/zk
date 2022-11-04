@@ -1,6 +1,6 @@
 <?page title="new page title" contentType="text/html;charset=UTF-8"?>
 <zk>
-	<vbox viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.viewmodel.collection.C1')">
+	<vbox viewModel="@id('vm') @init('org.zkoss.clientbind.test.book.viewmodel.collection.C1')">
 		<label multiline="true">
 			c1.
 			1. select combobox

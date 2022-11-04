@@ -15,11 +15,11 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.ClientBindTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 import org.zkoss.zktest.test2.F85_ZK_1148FileDealer;
 
-public class F85_ZK_1148Test extends ClientBindTestCase {
+public class F85_ZK_1148Test extends WebDriverTestCase {
 
 	@Test
 	public void testInnerWindowDetach() {

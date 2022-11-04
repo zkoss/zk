@@ -1,4 +1,4 @@
-<window viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.basic.CollectionTemplateDependenceVM')">
+<window viewModel="@id('vm') @init('org.zkoss.clientbind.test.book.basic.CollectionTemplateDependenceVM')">
 	<label multiline="true">
 	1.the item named from A - E, only item which name is 'A' or the index is 2 is applied to 'model1' , others are 'model2'
 	2.after click change1, the 1st item('A') becomes to 'X' and 'model2', the 2nd item('B') becomes to 'A' and model1

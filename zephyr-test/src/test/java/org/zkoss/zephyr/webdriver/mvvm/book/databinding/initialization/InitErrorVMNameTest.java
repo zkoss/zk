@@ -14,12 +14,12 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.ClientBindTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author jameschu
  */
-public class InitErrorVMNameTest extends ClientBindTestCase {
+public class InitErrorVMNameTest extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();

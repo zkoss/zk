@@ -16,12 +16,12 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.Select;
 
-import org.zkoss.zephyr.webdriver.ClientBindTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
  */
-public class F86_ZK_2756Test extends ClientBindTestCase {
+public class F86_ZK_2756Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		WebDriver driver = connect();

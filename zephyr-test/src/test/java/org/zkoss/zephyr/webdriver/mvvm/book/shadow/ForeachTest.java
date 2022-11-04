@@ -13,7 +13,7 @@ package org.zkoss.zephyr.webdriver.mvvm.book.shadow;
 
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.ClientBindTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * @author rudyhuang
  */
-public class ForeachTest extends ClientBindTestCase {
+public class ForeachTest extends WebDriverTestCase {
 	@Test
 	public void testItems() {
 		connect("/mvvm/book/shadow/iterate/foreach-items.zul");

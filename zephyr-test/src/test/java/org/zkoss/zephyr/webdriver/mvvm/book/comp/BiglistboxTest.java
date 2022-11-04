@@ -16,13 +16,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.support.ui.Select;
 
-import org.zkoss.zephyr.webdriver.ClientBindTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author rudyhuang
  */
-public class BiglistboxTest extends ClientBindTestCase {
+public class BiglistboxTest extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();

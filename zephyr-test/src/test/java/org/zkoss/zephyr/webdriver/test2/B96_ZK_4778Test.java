@@ -15,13 +15,13 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.ClientBindTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
  */
 @Disabled
-public class B96_ZK_4778Test extends ClientBindTestCase {
+public class B96_ZK_4778Test extends WebDriverTestCase {
 	@Test
 	public void testLeak1() {
 		connect();

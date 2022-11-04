@@ -1,4 +1,4 @@
-<window viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.basic.ArgsVM')">
+<window viewModel="@id('vm') @init('org.zkoss.clientbind.test.book.basic.ArgsVM')">
 	<label multiline="true">
 		1. click cmd 1 button:
 		you should see ADennis-Arg1 on the top left textbox and the top left label.

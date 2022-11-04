@@ -20,12 +20,12 @@ import java.util.Arrays;
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.ClientBindTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
  */
-public class GlobalCommandTest extends ClientBindTestCase {
+public class GlobalCommandTest extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect("/mvvm/book/viewmodel/command/global-command.zul");

@@ -13,14 +13,14 @@ package org.zkoss.zephyr.webdriver.mvvm.book.comp;
 
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.ClientBindTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author rudyhuang
  */
-public class CombobuttonTest extends ClientBindTestCase {
+public class CombobuttonTest extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();

@@ -3,7 +3,7 @@
 		Select any item, then the label should be updated to the selected index.
 	</label>
 	<vlayout
-		viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.comp.Selectbox')">
+		viewModel="@id('vm') @init('org.zkoss.clientbind.test.book.comp.Selectbox')">
 		<zscript>
         <![CDATA[
 	String[] userName = { "Tony", "Ryan", "Jumper", "Wing", "Sam" };

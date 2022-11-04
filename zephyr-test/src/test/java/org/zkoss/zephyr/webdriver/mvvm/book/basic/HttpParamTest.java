@@ -4,12 +4,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.ClientBindTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author Jameschu
  */
-public class HttpParamTest extends ClientBindTestCase {
+public class HttpParamTest extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect("/mvvm/book/basic/httpparam.zul");

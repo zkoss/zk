@@ -15,12 +15,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.ClientBindTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author jumperchen
  */
-public class F96_ZK_5013Test  extends ClientBindTestCase {
+public class F96_ZK_5013Test  extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();

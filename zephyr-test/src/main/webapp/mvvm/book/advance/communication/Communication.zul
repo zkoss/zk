@@ -24,7 +24,7 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 	</div>
 	<separator bar="true"/>
 	VM:
-	<div viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.advance.CommunicationVM')">
+	<div viewModel="@id('vm') @init('org.zkoss.clientbind.test.book.advance.CommunicationVM')">
 		<label id="l2" value="@load(vm.item)"/>
 	</div>
 </zk>

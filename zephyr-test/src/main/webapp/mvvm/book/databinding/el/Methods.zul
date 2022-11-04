@@ -1,7 +1,7 @@
 <?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
 <?xel-method prefix="x" name="max" class="java.lang.Math" signature="int max(int,int)"?>
 <zk>
-	<vlayout viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.databinding.el.MethodsVM')">
+	<vlayout viewModel="@id('vm') @init('org.zkoss.clientbind.test.book.databinding.el.MethodsVM')">
 		[Step 1] Should see "my-test-valuepostfix"
 		<label id="result1" value="@load(vm.concat(vm.value, 'postfix'))"/>
 		[Step 2] Should see "A-my-test-value"

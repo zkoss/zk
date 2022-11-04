@@ -21,12 +21,12 @@ import java.util.Date;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 
-import org.zkoss.zephyr.webdriver.ClientBindTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
  */
-public class DatetimeboxTest extends ClientBindTestCase {
+public class DatetimeboxTest extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();

@@ -17,13 +17,13 @@ import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.ClientBindTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author jameschu
  */
-public class B80_ZK_3104Test extends ClientBindTestCase {
+public class B80_ZK_3104Test extends WebDriverTestCase {
 
 	@Test
 	public void test() throws IOException {

@@ -15,10 +15,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 
-import org.zkoss.zephyr.webdriver.ClientBindTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
-public class B80_ZK_3333Test extends ClientBindTestCase {
+public class B80_ZK_3333Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();

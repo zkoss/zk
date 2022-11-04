@@ -13,14 +13,16 @@ package org.zkoss.zephyr.webdriver.mvvm.book.viewmodel.data;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.zkoss.zephyr.webdriver.ClientBindTestCase;
+import org.junit.jupiter.api.Test;
+
+import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author rudyhuang
  */
-public class MapTest extends ClientBindTestCase {
-//	@Test
+public class MapTest extends WebDriverTestCase {
+	@Test
 	public void testRemove() {
 		connect("/mvvm/book/viewmodel/data/map.zul");
 		click(jq("$gM @row").eq(0).find("@button"));
@@ -28,7 +30,7 @@ public class MapTest extends ClientBindTestCase {
 		assertEquals(1, jq("$gM @row").length());
 	}
 
-//	@Test
+	@Test
 	public void testAdd() {
 		connect("/mvvm/book/viewmodel/data/map.zul");
 		click(jq("$addM"));
@@ -36,7 +38,7 @@ public class MapTest extends ClientBindTestCase {
 		assertEquals(3, jq("$gM @row").length());
 	}
 
-//	@Test
+	@Test
 	public void testInplaceEdit() {
 		connect("/mvvm/book/viewmodel/data/map.zul");
 		inplaceEdit(jq("$gM @row").eq(0));

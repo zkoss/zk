@@ -15,9 +15,9 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.ClientBindTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
-public class WireFromImplicitObjectTest extends ClientBindTestCase {
+public class WireFromImplicitObjectTest extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();

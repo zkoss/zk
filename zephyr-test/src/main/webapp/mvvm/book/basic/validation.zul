@@ -1,5 +1,5 @@
 <zk>
-	<window viewModel="@('org.zkoss.clientbind.test.mvvm.book.basic.ValidationVM')">
+	<window viewModel="@('org.zkoss.clientbind.test.book.basic.ValidationVM')">
 		<vlayout>
 			<hlayout>Value1:
 				<label id="l11" value="@bind(vm.value1)"/>

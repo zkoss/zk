@@ -2,7 +2,7 @@ package org.zkoss.zephyr.webdriver.mvvm.book.databinding.propertybinding;
 
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.ClientBindTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 /**
  * @author jameschu
  */
-public class NULLPropertyBindingTest extends ClientBindTestCase {
+public class NULLPropertyBindingTest extends WebDriverTestCase {
 	@Test
 	public void testNULL() {
 		connect();

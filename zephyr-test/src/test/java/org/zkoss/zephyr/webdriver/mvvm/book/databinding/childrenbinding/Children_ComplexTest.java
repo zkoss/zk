@@ -18,10 +18,10 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.ClientBindTestCase;
 import org.zkoss.test.webdriver.ztl.Widget;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
-public class Children_ComplexTest extends ClientBindTestCase {
+public class Children_ComplexTest extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect("/mvvm/book/databinding/childrenbinding/children-complex.zul");

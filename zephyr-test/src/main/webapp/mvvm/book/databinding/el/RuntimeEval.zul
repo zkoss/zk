@@ -1,5 +1,5 @@
 <zk>
-	<vlayout viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.databinding.el.RuntimeEvalVM', arg1='myValue')">
+	<vlayout viewModel="@id('vm') @init('org.zkoss.clientbind.test.book.databinding.el.RuntimeEvalVM', arg1='myValue')">
 		<div>
 			Result: <label id="result1" value="@load(vm.result)"/>
 		</div>

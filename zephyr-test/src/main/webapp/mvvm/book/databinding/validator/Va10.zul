@@ -1,6 +1,6 @@
 <?page title="new page title" contentType="text/html;charset=UTF-8"?>
 <zk>
-	<groupbox viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.viewmodel.validator.Va10')">
+	<groupbox viewModel="@id('vm') @init('org.zkoss.clientbind.test.book.viewmodel.validator.Va10')">
 		<caption label="va10. multiple field validation"/>
 		<label multiline="true">
 			va10.

@@ -15,9 +15,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.ClientBindTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
-public class BookCRUD2Test extends ClientBindTestCase {
+public class BookCRUD2Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect("/mvvm/book/basic/bookCrud2.zul");

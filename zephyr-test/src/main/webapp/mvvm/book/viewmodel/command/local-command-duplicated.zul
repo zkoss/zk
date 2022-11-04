@@ -17,7 +17,7 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
         1. Click command 1.
         2. The error popup occurs indicating there are more than one Command.
     </label>
-    <div viewModel="@('org.zkoss.clientbind.test.mvvm.book.viewmodel.command.LocalCommandDuplicatedVM')">
+    <div viewModel="@('org.zkoss.clientbind.test.book.viewmodel.command.LocalCommandDuplicatedVM')">
         <button label="command 1" onClick="@command('command1')"/>
     </div>
 </zk>

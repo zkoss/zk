@@ -7,7 +7,7 @@
 		[Step 5] Click 'New' then see one new item added
 	]]></label>
 	<vlayout
-			viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.databinding.propertybinding.CollectionPropertyBindingVM')">
+			viewModel="@id('vm') @init('org.zkoss.clientbind.test.book.databinding.propertybinding.CollectionPropertyBindingVM')">
 		<listbox id="lb" model="@load(vm.orders)" selectedItem="@bind(vm.selected)" hflex="true" height="200px">
 			<listhead>
 				<listheader label="Row Index"/>

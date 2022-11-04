@@ -22,14 +22,14 @@ import org.openqa.selenium.interactions.touch.TouchActions;
 
 import org.zkoss.test.webdriver.ExternalZkXml;
 import org.zkoss.test.webdriver.ForkJVMTestOnly;
-import org.zkoss.zephyr.webdriver.ClientBindTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.Element;
 
 /**
  * @author rudyhuang
  */
 @ForkJVMTestOnly
-public class B70_ZK_2351Test extends ClientBindTestCase {
+public class B70_ZK_2351Test extends WebDriverTestCase {
 	@RegisterExtension
 	public static final ExternalZkXml CONFIG = new ExternalZkXml("/test2/enable-tablet-ui-zk.xml");
 

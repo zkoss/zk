@@ -15,13 +15,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.ClientBindTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author rudyhuang
  */
-public class Tabbox_dynamic_selectionTest extends ClientBindTestCase {
+public class Tabbox_dynamic_selectionTest extends WebDriverTestCase {
 	@Test
 	public void testIndex() {
 		connect();

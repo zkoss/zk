@@ -15,12 +15,12 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.ClientBindTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author jumperchen
  */
-public class B80_ZK_2927_2Test extends ClientBindTestCase {
+public class B80_ZK_2927_2Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		try {

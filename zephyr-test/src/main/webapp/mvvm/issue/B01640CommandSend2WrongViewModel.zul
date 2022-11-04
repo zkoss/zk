@@ -1,7 +1,6 @@
 <zk xmlns="http://www.zkoss.org/2005/zul">
 
 	<window title="Parent" border="normal" id="mainWin"
-		apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.zkoss.clientbind.test.issue.B01640CommandSend2WrongViewModel')">
 	
 	<label multiline="true">

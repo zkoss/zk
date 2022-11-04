@@ -17,12 +17,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import org.zkoss.test.webdriver.ztl.JQuery;
-import org.zkoss.zephyr.webdriver.ClientBindTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
  */
-public class FlowCtrlTest extends ClientBindTestCase {
+public class FlowCtrlTest extends WebDriverTestCase {
 	@Test
 	public void testChoose() {
 		connect("/mvvm/book/shadow/flow/flowctrl-choose.zul");

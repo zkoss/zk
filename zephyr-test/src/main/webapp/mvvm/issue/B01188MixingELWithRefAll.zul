@@ -1,5 +1,4 @@
 <window id="win" title="new page title" border="normal"
-	apply="org.zkoss.bind.BindComposer"
 	viewModel="@id('vm') @init('org.zkoss.clientbind.test.issue.B01188MixingELWithRefAll')">
 	<label multiline="true">
 	1.There are 2 element (0.Item1 , 1.Item2 ) in all the component)

@@ -15,13 +15,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.ClientBindTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author rudyhuang
  */
-public class Tabbox_selectedTest extends ClientBindTestCase {
+public class Tabbox_selectedTest extends WebDriverTestCase {
 	@Test
 	public void testSingleWay() {
 		connect();

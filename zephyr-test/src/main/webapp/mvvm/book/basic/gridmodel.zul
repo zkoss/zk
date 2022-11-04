@@ -1,4 +1,4 @@
-<window viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.basic.GridModelVM')">
+<window viewModel="@id('vm') @init('org.zkoss.clientbind.test.book.basic.GridModelVM')">
 	<label id="msg" value="@bind(vm.message1)"/>
 	<grid id="outergrid" width="800px" model="@bind(vm.items)">
 		<columns>

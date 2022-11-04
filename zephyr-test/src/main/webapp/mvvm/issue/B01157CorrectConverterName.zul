@@ -3,7 +3,6 @@
 
 	<window title="correct formatted converter name"
 		border="normal" 
-		apply="org.zkoss.bind.BindComposer" 
 		viewModel="@id('vm') @init('org.zkoss.clientbind.test.issue.B01157CorrectConverterName')">
 	
 	

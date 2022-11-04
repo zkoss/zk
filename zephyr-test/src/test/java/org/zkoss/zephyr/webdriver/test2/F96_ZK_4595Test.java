@@ -19,13 +19,13 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import org.zkoss.lang.Strings;
-import org.zkoss.zephyr.webdriver.ClientBindTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author jameschu
  */
-public class F96_ZK_4595Test extends ClientBindTestCase {
+public class F96_ZK_4595Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();

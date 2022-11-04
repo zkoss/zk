@@ -21,7 +21,7 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
         * @NotifyChangeDisabled + @NotifyChange: error
         * @NotifyChangeDisabled + @SmartNotifyChange: error
     </label>
-    <div viewModel="@('org.zkoss.clientbind.test.mvvm.book.viewmodel.notification.NotifyChangeDisabledVM')">
+    <div viewModel="@('org.zkoss.clientbind.test.book.viewmodel.notification.NotifyChangeDisabledVM')">
         <hlayout>
             Default
             <textbox id="inp0" value="@bind(vm.val0)"/>

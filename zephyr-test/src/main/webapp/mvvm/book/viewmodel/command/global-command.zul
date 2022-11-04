@@ -23,8 +23,8 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
         [GlobalCommandVM] GlobalCommand [unknown] unknown!
         [LocalCommandVM] GlobalCommand [unknown] unknown!
     </label>
-    <div viewModel="@('org.zkoss.clientbind.test.mvvm.book.viewmodel.command.GlobalCommandVM')">
-        <div viewModel="@('org.zkoss.clientbind.test.mvvm.book.viewmodel.command.LocalCommandVM')">
+    <div viewModel="@('org.zkoss.clientbind.test.book.viewmodel.command.GlobalCommandVM')">
+        <div viewModel="@('org.zkoss.clientbind.test.book.viewmodel.command.LocalCommandVM')">
             <button id="btnClean" label="Do clean" onClick="@global-command('clean')"/>
             <button id="btnUnknown" label="Do unknown" onClick="@global-command('unknown')"/>
         </div>

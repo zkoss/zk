@@ -3,7 +3,7 @@
 		[Step 1] Should see 7 items
 		[Step 2] Click "Add 1 item", and see 1 item added in <Simple - load> container
 	]]></label>
-	<div viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.databinding.converter.ChildrenBindingConverterVM')">
+	<div viewModel="@id('vm') @init('org.zkoss.clientbind.test.book.databinding.converter.ChildrenBindingConverterVM')">
 		Simple - init
 		<vlayout id="container1" children="@init(vm.data) @converter(vm.itemConverter)">
 			<template name="children">

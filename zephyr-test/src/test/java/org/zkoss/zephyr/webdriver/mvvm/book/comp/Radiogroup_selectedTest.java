@@ -15,12 +15,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.ClientBindTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
  */
-public class Radiogroup_selectedTest extends ClientBindTestCase {
+public class Radiogroup_selectedTest extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();

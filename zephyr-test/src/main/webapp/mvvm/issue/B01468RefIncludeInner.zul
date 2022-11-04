@@ -11,8 +11,7 @@
 		</vlayout>
 	</window>
 	<window id="win3"
-		title = "Inner Window 2"
-		apply="org.zkoss.bind.BindComposer" viewModel="@id('vmi') @init('org.zkoss.clientbind.test.issue.B01468RefIncludeInner')" >
+		title = "Inner Window 2" viewModel="@id('vmi') @init('org.zkoss.clientbind.test.issue.B01468RefIncludeInner')" >
 		<button label="dump inner" onClick="binder.tracker.dump()"/>
 		<vlayout>
 			<hlayout>

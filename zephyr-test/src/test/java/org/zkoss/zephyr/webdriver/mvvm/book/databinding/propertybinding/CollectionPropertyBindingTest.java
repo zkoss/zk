@@ -15,13 +15,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 
-import org.zkoss.zephyr.webdriver.ClientBindTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author jameschu
  */
-public class CollectionPropertyBindingTest extends ClientBindTestCase {
+public class CollectionPropertyBindingTest extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();

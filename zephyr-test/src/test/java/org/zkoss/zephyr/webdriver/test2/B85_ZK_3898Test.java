@@ -15,13 +15,13 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.ClientBindTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
  */
 @Disabled
-public class B85_ZK_3898Test extends ClientBindTestCase {
+public class B85_ZK_3898Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();

@@ -1,6 +1,6 @@
 <?page title="new page title" contentType="text/html;charset=UTF-8"?>
 <zk>
-	<vbox viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.viewmodel.form.F1')" width="400px">
+	<vbox viewModel="@id('vm') @init('org.zkoss.clientbind.test.book.viewmodel.form.F1')" width="400px">
 		<label multiline="true">
 			f1.
 			form, command+argument, validator+argument,notifychange

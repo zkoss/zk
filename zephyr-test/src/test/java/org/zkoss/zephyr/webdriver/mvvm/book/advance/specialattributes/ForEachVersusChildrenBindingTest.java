@@ -15,9 +15,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.ClientBindTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
-public class ForEachVersusChildrenBindingTest extends ClientBindTestCase {
+public class ForEachVersusChildrenBindingTest extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();

@@ -17,14 +17,14 @@ import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.ClientBindTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 import org.zkoss.test.webdriver.ztl.Widget;
 
 /**
  * @author rudyhuang
  */
-public class F90_ZK_4347Test extends ClientBindTestCase {
+public class F90_ZK_4347Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();

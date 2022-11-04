@@ -16,13 +16,13 @@ import static org.hamcrest.Matchers.matchesRegex;
 
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.ClientBindTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author rudyhuang
  */
-public class F70_ZK_2483Test extends ClientBindTestCase {
+public class F70_ZK_2483Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();

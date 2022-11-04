@@ -1,6 +1,6 @@
 <vbox>
 	<vbox
-		viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.basic.ExecutionParamVM')">
+		viewModel="@id('vm') @init('org.zkoss.clientbind.test.book.basic.ExecutionParamVM')">
 		
 		<hbox><label id="l11" value="@load(vm.param1)"/> = foo|abc</hbox>
 		<hbox><label id="l12" value="@load(vm.arg1)" /> = bar|goo</hbox>

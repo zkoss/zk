@@ -15,9 +15,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.ClientBindTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
-public class Children_MenuTest extends ClientBindTestCase {
+public class Children_MenuTest extends WebDriverTestCase {
 	@Test
 	public void structureTest() {
 		connect("/mvvm/book/databinding/childrenbinding/children-menu.zul");

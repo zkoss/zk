@@ -15,13 +15,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.ClientBindTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author rudyhuang
  */
-public class ForEachStatusTest extends ClientBindTestCase {
+public class ForEachStatusTest extends WebDriverTestCase {
 	@Test
 	public void testNumbers() {
 		connect("/mvvm/book/shadow/iterate/foreach-numbers-varstatus.zul");

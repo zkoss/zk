@@ -1,4 +1,4 @@
-<window viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.databinding.childrenbinding.ChildrenMenuVM')">
+<window viewModel="@id('vm') @init('org.zkoss.clientbind.test.book.databinding.childrenbinding.ChildrenMenuVM')">
 	<menubar id="mbar" children="@bind(vm.nodes) @template(empty each.children?'menuitem':'menu')">
 		<template name="menu" var="node">
 			<menu label="@bind(node.name)">

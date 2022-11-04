@@ -3,7 +3,7 @@
 		1. Open/close the detail, the label will be updated.
 		2. Open/close the group, the label will be updated.
 	</label>
-	<vlayout viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.comp.Grid')">
+	<vlayout viewModel="@id('vm') @init('org.zkoss.clientbind.test.book.comp.Grid')">
 		<grid id="detailGrid" fixedLayout="true">
 			<columns>
 				<column width="40px"/>

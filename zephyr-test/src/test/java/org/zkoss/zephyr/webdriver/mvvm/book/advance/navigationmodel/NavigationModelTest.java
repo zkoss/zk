@@ -14,12 +14,12 @@ package org.zkoss.zephyr.webdriver.mvvm.book.advance.navigationmodel;
 
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.ClientBindTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class NavigationModelTest extends ClientBindTestCase {
+public class NavigationModelTest extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();

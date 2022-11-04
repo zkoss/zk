@@ -13,7 +13,7 @@
 		<separator/>
 		<label id="result3" value='${win1.getAttribute("binder")}'/>
 	</window>
-	<vlayout viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.databinding.bindcomposer.BindComposerModel')">
+	<vlayout viewModel="@id('vm') @init('org.zkoss.clientbind.test.book.databinding.bindcomposer.BindComposerModel')">
 		[Step 4] Should see "123"
 		<label id="result4" value="@load(vm.msg)"/>
 		[Step 5] Should see "00"

@@ -18,8 +18,8 @@
 		<caption label="Person Profile" />
 		<listbox id="personList" model="@bind(vm.person)">
 			<listhead>
-				<listheader label="" width="140px" />
-				<listheader label="" width="30px" />
+				<listheader label="" width="300px" />
+				<listheader label="" width="100px" />
 			</listhead>
 			<template name="model" var="item">
 				<listitem>
@@ -48,8 +48,8 @@
 		<caption label="Person Websites" />
 		<listbox id="urlList" model="@bind(vm.URL)">
 			<listhead>
-				<listheader label="" width="140px" />
-				<listheader label="" width="30px" />
+				<listheader label="" width="300px" />
+				<listheader label="" width="100px" />
 			</listhead>
 			<template name="model" var="item">
 				<listitem>

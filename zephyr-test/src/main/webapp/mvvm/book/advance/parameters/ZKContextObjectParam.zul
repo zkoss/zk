@@ -18,7 +18,7 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 		2. eventName, cmdName should be "null", others shall not be empty.
 		3. click the cmd button, eventName should be "onClick", cmdName should be "show", others shall not be empty.
 	</label>
-	<vlayout viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.advance.ZKContextObjectParamVM')">
+	<vlayout viewModel="@id('vm') @init('org.zkoss.clientbind.test.book.advance.ZKContextObjectParamVM')">
 		bindContext:
 		<label id="bindContextString" value="@load(vm.bindContextString)" />
 		binder:

@@ -11,39 +11,48 @@ Copyright (C) 2014 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zephyr.webdriver.mvvm.book.databinding.form;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.ClientBindTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author jumperchen
- *
  */
-public class F1Test extends ClientBindTestCase {
+public class F1Test extends WebDriverTestCase {
 	@Test
 	public void test() {
-		//		DesktopAgent desktop = connect();
-		//		JQuery registerButton = jq("$registerButton");
-		//		JQuery message = jq("$message");
-		//		final String msg = message.text();
-		//		registerButton.click();
-		//		assertEquals(msg, message.text());
-		//
-		//
-		//		JQuery accountBox = jq("$accountBox");
-		//		accountBox.type("john");
-		//		JQuery passwordBox = jq("$passwordBox");
-		//		passwordBox.type("1");
-		//		JQuery passwordBox2 = jq("$passwordBox2");
-		//		passwordBox2.type("2");
-		//		registerButton.click();
-		//		assertEquals(msg, message.text());
-		//		passwordBox2.type("1");
-		//		registerButton.click();
-		//		assertEquals("Hi, john: You are NOT an adult.", message.text());
-		//
-		//		jq("$birthdayBox").type("1978/1/1");
-		//		registerButton.click();
-		//		assertEquals("Hi, john: You are an adult.", message.text());
+		connect();
+		JQuery registerButton = jq("$registerButton");
+		JQuery message = jq("$message");
+		final String msg = message.text();
+		click(registerButton);
+		waitResponse();
+		assertEquals(msg, message.text());
+
+
+		JQuery accountBox = jq("$accountBox");
+		type(accountBox, "john");
+		waitResponse();
+		JQuery passwordBox = jq("$passwordBox");
+		type(passwordBox, "1");
+		waitResponse();
+		JQuery passwordBox2 = jq("$passwordBox2");
+		type(passwordBox2, "2");
+		waitResponse();
+		click(registerButton);
+		waitResponse();
+		assertEquals(msg, message.text());
+		type(passwordBox2, "1");
+		waitResponse();
+		click(registerButton);
+		waitResponse();
+		assertEquals("Hi, john: You are NOT an adult.", message.text());
+		type(jq("$birthdayBox"), "1978/1/1");
+		click(registerButton);
+		waitResponse();
+		assertEquals("Hi, john: You are an adult.", message.text());
 	}
 }

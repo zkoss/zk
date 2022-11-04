@@ -15,11 +15,9 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 -->
 <zk>
 
-<window	width="500px" 
+<window	width="800px"
 	apply="org.zkoss.bind.BindComposer" 
 	viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B02078')">
-
-
 	<style>
 		.icon-red {
 			color: red;

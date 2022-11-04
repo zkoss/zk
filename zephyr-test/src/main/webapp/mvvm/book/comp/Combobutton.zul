@@ -3,7 +3,7 @@
 		The label will be updated while the combobutton is opened/closed.
 	</label>
 	<vlayout
-		viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.comp.Combobutton')">
+		viewModel="@id('vm') @init('org.zkoss.clientbind.test.book.comp.Combobutton')">
 		<label id="open" value="@load(vm.open)" />
 		<combobutton label="combobutton" open="@bind(vm.open)" >
 			<popup>

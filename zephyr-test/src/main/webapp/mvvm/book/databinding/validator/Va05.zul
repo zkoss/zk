@@ -1,7 +1,7 @@
 <?page title="new page title" contentType="text/html;charset=UTF-8"?>
 <zk>
 	<window title="new page title" border="normal"
-		viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.viewmodel.validator.Va05')">
+		viewModel="@id('vm') @init('org.zkoss.clientbind.test.book.viewmodel.validator.Va05')">
 		<label multiline="true">
 		va5.
 		command, before, converter output with argument

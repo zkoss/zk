@@ -3,13 +3,13 @@ package org.zkoss.zephyr.webdriver.test2;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.ClientBindTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author jameschu
  */
-public class F85_ZK_3816Test extends ClientBindTestCase {
+public class F85_ZK_3816Test extends WebDriverTestCase {
 	@Test
 	public void test() throws Exception {
 		connect();

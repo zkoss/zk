@@ -1,4 +1,4 @@
-<window viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.databinding.childrenbinding.ChildrenSimpleVM')">
+<window viewModel="@id('vm') @init('org.zkoss.clientbind.test.book.databinding.childrenbinding.ChildrenSimpleVM')">
 	<label multiline="true">
 		1. Load the page:
 		you should see Item A, Item B, Item C in "Simple - Init", "Simple - load" and "Simple - dependency", "Simple - load after cmd" should be empty.

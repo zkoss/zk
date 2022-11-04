@@ -11,64 +11,64 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zephyr.webdriver.mvvm.book.databinding.form;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.ClientBindTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author jameschu
- *
  */
-public class FormProxyDirtyTest extends ClientBindTestCase {
+public class FormProxyDirtyTest extends WebDriverTestCase {
 	@Test
 	public void test() {
-		//		DesktopAgent desktop = connect();
-		//		JQuery edit_btn = jq("$w #panel #edit_btn");
-		//		edit_btn.click();
-		//
-		//		//add
-		//		JQuery currentdata = jq("$w #panel #currentdata");
-		//		JQuery categories = currentdata.getLastChild().getLastChild().getLastChild();
-		//		JQuery categoryAddPanel = categories.getLastChild();
-		//		JQuery categoryTextBox = categoryAddPanel.getChild(1);
-		//		categoryTextBox.type("New Category");
-		//		JQuery categoryAddBtn = categoryAddPanel.getLastChild();
-		//		categoryAddBtn.click();
-		//		JQuery categoriesList = categories.getFirstChild();
-		//		assertEquals("New Category", categoriesList.getChild(3).getFirstChild().getFirstChild().getFirstChild()
-		//				.as(Textbox.class).getValue());
-		//		categoriesList.getChild(2).getFirstChild().getFirstChild().getLastChild().click();
-		//		assertEquals("New Category", categoriesList.getChild(2).getFirstChild().getFirstChild().getFirstChild()
-		//				.as(Textbox.class).getValue());
-		//
-		//		//cancel
-		//		JQuery cancel_btn = jq("$w #panel #cancel_btn");
-		//		cancel_btn.click();
-		//
-		//		//add again
-		//		categoryTextBox.type("New Category");
-		//		categoryAddBtn.click();
-		//		assertEquals("New Category", categoriesList.getChild(3).getFirstChild().getFirstChild().getFirstChild()
-		//				.as(Textbox.class).getValue());
-		//		categoriesList.getChild(2).getFirstChild().getFirstChild().getLastChild().click();
-		//		assertEquals("New Category", categoriesList.getChild(2).getFirstChild().getFirstChild().getFirstChild()
-		//				.as(Textbox.class).getValue());
-		//
-		//		//save
-		//		JQuery save_btn = jq("$w #panel #save_btn");
-		//		save_btn.click();
-		//
-		//		//check
-		//		currentdata = jq("$w #panel #currentdata");
-		//		categories = currentdata.getLastChild().getLastChild().getLastChild();
-		//		assertEquals("Children", categories.getChild(1).getFirstChild().text());
-		//		assertEquals("Classics", categories.getChild(3).getFirstChild().text());
-		//		assertEquals("New Category", categories.getChild(5).getFirstChild().text());
-		//
-		//		JQuery list = jq("$w #list");
-		//		categories = list.getChild(1).getLastChild().getLastChild();
-		//		assertEquals("Children", categories.getChild(1).getFirstChild().text());
-		//		assertEquals("Classics", categories.getChild(3).getFirstChild().text());
-		//		assertEquals("New Category", categories.getChild(5).getFirstChild().text());
+		connect();
+		JQuery edit_btn = jq("$w $panel $edit_btn");
+		click(edit_btn);
+		waitResponse();
+		//add
+		JQuery currentdata = jq("$w $panel $currentdata");
+		JQuery categories = currentdata.find("@row").eq(2);
+		JQuery categoryAddPanel = categories.find("@hlayout").last();
+		JQuery categoryTextBox = categoryAddPanel.find("@textbox");
+		type(categoryTextBox, "New Category");
+		waitResponse();
+		JQuery categoryAddBtn = categoryAddPanel.find("@a");
+		click(categoryAddBtn);
+		waitResponse();
+		assertEquals("New Category", categories.find("@textbox").eq(3).toWidget().get("value"));
+		click(categories.find("@listbox @hlayout").eq(2).find("@a"));
+		waitResponse();
+		assertEquals("New Category", categories.find("@textbox").eq(2).toWidget().get("value"));
+		//cancel
+		JQuery cancel_btn = jq("$w $panel $cancel_btn");
+		click(cancel_btn);
+		waitResponse();
+		//add again
+		type(categoryTextBox, "New Category");
+		waitResponse();
+		click(categoryAddBtn);
+		waitResponse();
+		assertEquals("New Category", categories.find("@textbox").eq(3).toWidget().get("value"));
+		click(categories.find("@listbox @hlayout").eq(2).find("@a"));
+		waitResponse();
+		assertEquals("New Category", categories.find("@textbox").eq(2).toWidget().get("value"));
+
+		//save
+		JQuery save_btn = jq("$w $panel $save_btn");
+		click(save_btn);
+		waitResponse();
+		//check
+		assertEquals("Children", categories.find(".z-row-inner").eq(1).find("@label").eq(0).text());
+		assertEquals("Classics", categories.find(".z-row-inner").eq(1).find("@label").eq(1).text());
+		assertEquals("New Category", categories.find(".z-row-inner").eq(1).find("@label").eq(2).text());
+
+		JQuery list = jq("$w $list");
+		categories = list.find("@listitem").eq(0).find(".z-listcell").eq(2);
+		assertEquals("Children", categories.find("@label").eq(0).text());
+		assertEquals("Classics", categories.find("@label").eq(1).text());
+		assertEquals("New Category", categories.find("@label").eq(2).text());
 	}
 }

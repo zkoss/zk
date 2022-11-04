@@ -22,13 +22,13 @@ import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.ClientBindTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author christopher
  */
-public class B80_ZK_2763Test extends ClientBindTestCase {
+public class B80_ZK_2763Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		try {

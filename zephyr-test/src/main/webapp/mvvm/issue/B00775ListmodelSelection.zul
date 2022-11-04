@@ -1,15 +1,14 @@
 <?page title="new page title" contentType="text/html;charset=UTF-8"?>
 <window id="win" title="new page title" border="normal"
-	apply="org.zkoss.bind.BindComposer"
-	viewModel="@id('vm') @init('org.zkoss.clientbind.test.issue.B00775ListmodelSelection')">
-	<listbox id="listbox"  selectedItems="@bind(vm.selected)"
-		model="@load(vm.model) @converter('org.zkoss.clientbind.test.issue.B00775ListmodelSelection$Converter')">
+		viewModel="@id('vm') @init('org.zkoss.clientbind.test.issue.B00775ListmodelSelection')">
+	<listbox id="listbox" selectedItems="@bind(vm.selected)"
+			 model="@load(vm.model) @converter('org.zkoss.clientbind.test.issue.B00775ListmodelSelection$Converter')">
 		<listhead sizable="true">
-			<listheader id="header" label="Value" width="100px" sort="auto" />
+			<listheader id="header" label="Value" width="100px" sort="auto"/>
 		</listhead>
 		<template name="model" var="entry">
 			<listitem>
-				<listcell label="@load(entry)" />
+				<listcell label="@load(entry)"/>
 			</listitem>
 		</template>
 	</listbox>

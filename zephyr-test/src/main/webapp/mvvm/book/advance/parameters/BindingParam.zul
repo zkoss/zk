@@ -13,7 +13,7 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
-	<window viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.advance.BindingParamVM')">
+	<window viewModel="@id('vm') @init('org.zkoss.clientbind.test.book.advance.BindingParamVM')">
 		<label id="msg" value="@bind(vm.message1)"/>
 		<grid id="outergrid" width="900px" model="@bind(vm.items)">
 			<columns>

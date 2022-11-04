@@ -15,13 +15,13 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.interactions.Actions;
 
-import org.zkoss.zephyr.webdriver.ClientBindTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author rudyhuang
  */
-public class B70_ZK_2949Test extends ClientBindTestCase {
+public class B70_ZK_2949Test extends WebDriverTestCase {
 	private static final int DRAG_THRESHOLD = 3;
 
 	@Test

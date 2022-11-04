@@ -9,7 +9,7 @@
 	<div>
 		<hbox>
 			<vbox id="vbox1"   width="300px" height="300px"
-				viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.comp.TabboxDynamicSelectionVM')" >
+				viewModel="@id('vm') @init('org.zkoss.clientbind.test.book.comp.TabboxDynamicSelectionVM')" >
 				<hbox>
 					<button label="select tab 1" onClick="@command('selectTabByIndex',index=1)"/>
 					<button label="select tab 3" onClick="@command('selectTabByIndex',index=3)"/>
@@ -34,7 +34,7 @@
 				</tabbox>
 			</vbox>
 			<vbox id="vbox2"   width="300px" height="300px"
-				viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.comp.TabboxDynamicSelectionVM')" >
+				viewModel="@id('vm') @init('org.zkoss.clientbind.test.book.comp.TabboxDynamicSelectionVM')" >
 				<hbox>
 					<button label="select tab 1" onClick="@command('selectTabByItem',item=vm.tabs[1])"/>
 					<button label="select tab 3" onClick="@command('selectTabByItem',item=vm.tabs[3])"/>

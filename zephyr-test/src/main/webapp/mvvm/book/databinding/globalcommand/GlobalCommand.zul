@@ -6,7 +6,7 @@
 		[Step 4] Type "bbb" and Click "Add" button and see one item "bbb" added in "Items" listbox
 	</label>
 	<separator/>
-	<vlayout viewModel="@id('mainVm') @init('org.zkoss.clientbind.test.mvvm.book.databinding.globalcommand.MainViewModel')">
+	<vlayout viewModel="@id('mainVm') @init('org.zkoss.clientbind.test.book.databinding.globalcommand.MainViewModel')">
 		<menubar width="600px">
 			<menuitem id="show" label="Show" onClick="@global-command('show')"/>
 			<menuitem id="hide" label="Hide" onClick="@global-command('hide')"/>
@@ -14,7 +14,7 @@
 		<hlayout>
 			<vlayout id="mainArea" width="200px" height="300px" style="border:dashed 2px"
 					 visible="@load(mainVm.visible)"
-					 viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.databinding.globalcommand.AddViewModel')"
+					 viewModel="@id('vm') @init('org.zkoss.clientbind.test.book.databinding.globalcommand.AddViewModel')"
 					 validationMessages="@id('vmsgs')">
 				<label value="Main Panel" style="font-size:30px"/>
 				Enter a Item (at least 3 characters):
@@ -26,7 +26,7 @@
 				<label value="@load(vm.msg)"/>
 			</vlayout>
 			<vlayout id="listArea" width="400px" height="300px" visible="@load(mainVm.visible)" style="border:solid 2px"
-					 viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.databinding.globalcommand.ListViewModel')">
+					 viewModel="@id('vm') @init('org.zkoss.clientbind.test.book.databinding.globalcommand.ListViewModel')">
 				<listbox model="@load(vm.items)">
 					<listhead>
 						<listheader label="Items"/>

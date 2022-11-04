@@ -19,7 +19,7 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 		3. click the "test2" button, you should see the jsessionid become the Host info.
 		4. click the "test3" button, you should see the Host info become the jsessionid.
 	</label>
-	<div viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.advance.MultipleContextScopeRetrievalParamVM')">
+	<div viewModel="@id('vm') @init('org.zkoss.clientbind.test.book.advance.MultipleContextScopeRetrievalParamVM')">
 		<label id="msg" value="@load(vm.message)"/>
 		<button label="test" onClick="@command('cmd')"/>
 		<button label="test2" onClick="@command('cmd2')"/>

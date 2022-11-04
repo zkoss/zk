@@ -16,13 +16,13 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.ClientBindTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author rudyhuang
  */
-public class NotifyChangeAutoTest extends ClientBindTestCase {
+public class NotifyChangeAutoTest extends WebDriverTestCase {
 	@Test
 	public void testByAnnotation() {
 		connect("/mvvm/book/viewmodel/notification/notifychange-auto.zul");

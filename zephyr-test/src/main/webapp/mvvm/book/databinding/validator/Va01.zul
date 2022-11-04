@@ -1,6 +1,6 @@
 <?page title="new page title" contentType="text/html;charset=UTF-8"?>
 <zk>
-	<window title="new page title" border="normal" viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.viewmodel.validator.Va01')">
+	<window title="new page title" border="normal" viewModel="@id('vm') @init('org.zkoss.clientbind.test.book.viewmodel.validator.Va01')">
 		va1.
 		<label multiline="true">
 		Validator + Command. save before submit.

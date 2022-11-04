@@ -4,9 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.ClientBindTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
-public class B65_ZK_1913Test extends ClientBindTestCase {
+public class B65_ZK_1913Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();

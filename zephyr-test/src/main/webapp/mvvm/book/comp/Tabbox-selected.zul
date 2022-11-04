@@ -4,7 +4,7 @@
 		2. The selection in right side is bidirectional.
 	</label>
 	<hlayout
-		viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.comp.TabboxSelectedVM')">
+		viewModel="@id('vm') @init('org.zkoss.clientbind.test.book.comp.TabboxSelectedVM')">
 		<vlayout hflex="1">
 			Single way
 			<listbox id="listbox1" selectedItem="@bind(vm.selectedTab1)">

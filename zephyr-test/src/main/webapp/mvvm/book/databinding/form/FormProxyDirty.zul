@@ -19,7 +19,7 @@
 		}
 	</style>
 	<window id="w" border="normal" title="Books Management"
-			viewModel="@id('vm')@init('org.zkoss.clientbind.test.mvvm.book.viewmodel.form.FormProxyDirtyVM')"
+			viewModel="@id('vm')@init('org.zkoss.clientbind.test.book.viewmodel.form.FormProxyDirtyVM')"
 			validationMessages="@id('vmsgs')">
 		<hlayout>
 			<listbox id="list" model="@load(vm.books)"
@@ -64,7 +64,8 @@
 						<column width="120px"/>
 						<column/>
 					</columns>
-					<rows children="@load(1) @template(vm.editable ? 'edit' : 'read')">
+					<rows>
+						<apply template="@load(vm.editable ? 'edit' : 'read')"/>
 						<template name="read">
 							<row>
 								Name:

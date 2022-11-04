@@ -16,13 +16,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.support.ui.Select;
 
-import org.zkoss.zephyr.webdriver.ClientBindTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author rudyhuang
  */
-public class Combobox_selectedTest extends ClientBindTestCase {
+public class Combobox_selectedTest extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();

@@ -1,6 +1,5 @@
 <?page title="new page title" contentType="text/html;charset=UTF-8"?>
 <window id="win" title="new page title" border="normal"
-	apply="org.zkoss.bind.BindComposer"
 	viewModel="@id('vm') @init('org.zkoss.clientbind.test.issue.F01044DeferOnChange')"
 	validationMessages="@id('vmsgs')">
 	<label multiline="true">

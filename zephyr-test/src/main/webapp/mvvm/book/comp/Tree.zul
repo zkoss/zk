@@ -6,7 +6,7 @@
 		4. Other treeitems should be opened/closed accordingly. And the label should be updated.
 	</label>
 	<vlayout
-		viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.comp.Tree')">
+		viewModel="@id('vm') @init('org.zkoss.clientbind.test.book.comp.Tree')">
 		<tree id="tree" model="@load(vm.model)" selectedItem="@save(vm.selected)">
 			<template name="model" var="i">
 				<treeitem open="@bind(vm.open)">

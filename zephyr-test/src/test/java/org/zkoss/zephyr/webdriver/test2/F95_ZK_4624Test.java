@@ -14,13 +14,13 @@ package org.zkoss.zephyr.webdriver.test2;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.ClientBindTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author jameschu
  */
-public class F95_ZK_4624Test extends ClientBindTestCase {
+public class F95_ZK_4624Test extends WebDriverTestCase {
 	@Test
 	public void testScroll() {
 		connect("/test2/F95-ZK-4624-scroll.zul");

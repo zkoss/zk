@@ -15,16 +15,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.ClientBindTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
  */
-public class InitWithParamTest extends ClientBindTestCase {
+public class InitWithParamTest extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect("/mvvm/book/viewmodel/init/init-with-param.zul");
-		click(jq("button"));
+		click(jq("@button"));
 		waitResponse();
 		assertEquals("test test2", getZKLog().split("\n")[0]);
 	}

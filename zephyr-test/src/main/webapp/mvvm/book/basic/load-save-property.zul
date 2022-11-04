@@ -1,5 +1,5 @@
 <zk>
-	<window viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.basic.LoadSaveProperty')">
+	<window viewModel="@id('vm') @init('org.zkoss.clientbind.test.book.basic.LoadSaveProperty')">
 		<vlayout>
 			<hlayout>l1[<label id="l11" value="@init(vm.value1)"/>]=A
 			</hlayout>

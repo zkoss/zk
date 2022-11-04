@@ -1,5 +1,5 @@
 <window id="win" title="new page title" border="normal"
-	apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.clientbind.test.issue.B01189FormNotifyChange')">
+	viewModel="@id('vm') @init('org.zkoss.clientbind.test.issue.B01189FormNotifyChange')">
 	<label multiline="true">
 	1.change tb1 to A, only tb2 and tb4 value is changed to A, click save 1, bea1.prop is changed to A
 	2.change tb2 to B, only tb1 and tb4 value is changed to B, click save 1, bea1.prop is changed to B

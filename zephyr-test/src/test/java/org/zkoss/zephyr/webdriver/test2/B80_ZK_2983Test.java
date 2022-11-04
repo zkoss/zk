@@ -16,14 +16,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.ClientBindTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author jameschu
  *
  */
 @Disabled
-public class B80_ZK_2983Test extends ClientBindTestCase {
+public class B80_ZK_2983Test extends WebDriverTestCase {
 
     @Test
     public void test() {

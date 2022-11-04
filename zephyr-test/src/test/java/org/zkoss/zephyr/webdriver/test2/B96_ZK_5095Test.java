@@ -18,13 +18,13 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 
 import org.zkoss.test.webdriver.ExternalZkXml;
 import org.zkoss.test.webdriver.ForkJVMTestOnly;
-import org.zkoss.zephyr.webdriver.ClientBindTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author jameschu
  */
 @ForkJVMTestOnly
-public class B96_ZK_5095Test extends ClientBindTestCase {
+public class B96_ZK_5095Test extends WebDriverTestCase {
 	@RegisterExtension
 	public static final ExternalZkXml CONFIG = new ExternalZkXml("/test2/B96-ZK-5095.xml");
 

@@ -15,10 +15,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.ClientBindTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 @Disabled
-public class F95_ZK_4501Test extends ClientBindTestCase {
+public class F95_ZK_4501Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		String initName = "guest";

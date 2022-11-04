@@ -1,6 +1,5 @@
 <zk>
 <window id="win" title="new page title" border="normal"
-	apply="org.zkoss.bind.BindComposer"
 	viewModel="@id('vm') @init('org.zkoss.clientbind.test.issue.B01595SelectedItems')">
 	<label multiline="true">
 	1.select the listitem, the selection should follow the older you make 

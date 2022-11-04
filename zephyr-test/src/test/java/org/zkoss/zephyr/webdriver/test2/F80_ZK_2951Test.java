@@ -16,13 +16,13 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.ClientBindTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author jumperchen
  */
-public class F80_ZK_2951Test extends ClientBindTestCase {
+public class F80_ZK_2951Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();

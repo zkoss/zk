@@ -11,7 +11,7 @@
 	<window id="w1">
 		<custom-attributes componentScopeVar="spaceScope-A" />
 		<vbox id="vbox1"
-			viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.basic.ContextParamVM')">
+			viewModel="@id('vm') @init('org.zkoss.clientbind.test.book.basic.ContextParamVM')">
 		<custom-attributes componentScopeVar="componentScope-B" />
 			<hbox><label id="l11" value="@load(vm.applicationScope)" />= applicationScope-A ||var2 by Desktop |applicationScope-A</hbox>
 			<hbox><label id="l12" value="@load(vm.sessionScope)" />= sessionScope-A ||var1 by Desktop|sessionScope-A</hbox>

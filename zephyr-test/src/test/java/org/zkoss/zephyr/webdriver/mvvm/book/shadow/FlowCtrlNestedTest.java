@@ -13,7 +13,7 @@ package org.zkoss.zephyr.webdriver.mvvm.book.shadow;
 
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.ClientBindTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * @author rudyhuang
  */
-public class FlowCtrlNestedTest extends ClientBindTestCase {
+public class FlowCtrlNestedTest extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect("/mvvm/book/shadow/flow/flowctrl-nested.zul");

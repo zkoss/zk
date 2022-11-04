@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.ClientBindTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.Element;
 import org.zkoss.test.webdriver.ztl.JQuery;
 import org.zkoss.test.webdriver.ztl.Widget;
@@ -24,7 +24,7 @@ import org.zkoss.test.webdriver.ztl.Widget;
 /**
  * @author jumperchen
  */
-public class B80_ZK_3000Test extends ClientBindTestCase {
+public class B80_ZK_3000Test extends WebDriverTestCase {
 	@Test
 	public void testZK3000() {
 		connect();

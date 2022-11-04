@@ -16,9 +16,9 @@ import static org.hamcrest.Matchers.greaterThan;
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.ClientBindTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
-public class PerformanceTest extends ClientBindTestCase {
+public class PerformanceTest extends WebDriverTestCase {
 	@Test
 	public void test() {
 		long start, end;

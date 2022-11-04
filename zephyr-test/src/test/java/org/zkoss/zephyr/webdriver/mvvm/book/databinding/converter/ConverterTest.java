@@ -17,13 +17,13 @@ import org.junit.jupiter.api.Test;
 
 import org.openqa.selenium.Keys;
 
-import org.zkoss.zephyr.webdriver.ClientBindTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author jameschu
  */
-public class ConverterTest extends ClientBindTestCase {
+public class ConverterTest extends WebDriverTestCase {
 	@Override
 	protected boolean isHeadless() {
 		return false;

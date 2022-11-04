@@ -1,5 +1,5 @@
 <window id="win" title="new page title" border="normal"
-	apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.clientbind.test.issue.B01188MixingELWithRef')">
+	viewModel="@id('vm') @init('org.zkoss.clientbind.test.issue.B01188MixingELWithRef')">
 	<label multiline="true">
 	1. you should see Today- [Item 1, Item 2] in element1 of listbox
 	and Tomorrow - [Item3, Item4] in element2 of listbox 

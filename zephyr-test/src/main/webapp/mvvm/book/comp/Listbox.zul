@@ -1,5 +1,5 @@
 <zk>
-	<vlayout viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.comp.Listbox')">
+	<vlayout viewModel="@id('vm') @init('org.zkoss.clientbind.test.book.comp.Listbox')">
 		<label multiline="true">
 			1. Select an item.
 			2. The Selected item and index should be updated.

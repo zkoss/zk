@@ -1,5 +1,5 @@
 <window
-	viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.basic.FormDirty')">
+	viewModel="@id('vm') @init('org.zkoss.clientbind.test.book.basic.FormDirty')">
 
 	<vbox form="@id('fx') @load(vm.person) @save(vm.person, before='save')">
 		<label id="dirty" value="@load(fxStatus.dirty)"/>

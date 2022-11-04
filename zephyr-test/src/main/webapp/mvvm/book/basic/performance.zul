@@ -3,7 +3,7 @@
 		1. Rapidly click the "switch" buttons.
 		2. It should be fast.
 	</label>
-	<window viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.basic.PerformanceVM')">
+	<window viewModel="@id('vm') @init('org.zkoss.clientbind.test.book.basic.PerformanceVM')">
 		<button id="btnSwitch" label="switch" onClick="@command('switchCase')"/>
 		<hbox>
 			<label value="@load(vm.count)"/>

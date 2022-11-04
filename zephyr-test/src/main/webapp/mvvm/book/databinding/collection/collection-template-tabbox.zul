@@ -1,4 +1,4 @@
-<window viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.basic.CollectionTemplateTabboxVM')">
+<window viewModel="@id('vm') @init('org.zkoss.clientbind.test.book.basic.CollectionTemplateTabboxVM')">
 	<label id="msg" value="@bind(vm.message1)"/>
 	<tabbox id="outerbox" width="700px"
 			model="@bind(vm.items) @template(each.name eq 'A' or forEachStatus.index eq 2?'model1':'model2')">

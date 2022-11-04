@@ -1,7 +1,6 @@
 <zk>
 	<window id="win2" 
-		title = "Inner Window"
-		apply="org.zkoss.bind.BindComposer" viewModel="@id('vmi') @init('org.zkoss.clientbind.test.issue.B01469ScopeParamRefInner')" >
+		title = "Inner Window" viewModel="@id('vmi') @init('org.zkoss.clientbind.test.issue.B01469ScopeParamRefInner')" >
 		<vlayout>
 			<hlayout>
 				Static Value : <label id="l2" value="@load(vmi.staticValue)"/> 

@@ -5,14 +5,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.ClientBindTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * Created by wenning on 5/5/16.
  */
 @Disabled
-public class F80_ZK_2582Test extends ClientBindTestCase {
+public class F80_ZK_2582Test extends WebDriverTestCase {
 
     @Test
     public void test() {

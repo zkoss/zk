@@ -1,4 +1,4 @@
-<window viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.databinding.childrenbinding.ChildrenNavVM')">
+<window viewModel="@id('vm') @init('org.zkoss.clientbind.test.book.databinding.childrenbinding.ChildrenNavVM')">
 	<label id="msg" value="@bind(vm.message)"/>
 	<navbar id="mbar" orient="vertical" children="@bind(vm.nodes) @template(empty each.children?'navitem':'nav')">
 		<template name="nav" var="node">

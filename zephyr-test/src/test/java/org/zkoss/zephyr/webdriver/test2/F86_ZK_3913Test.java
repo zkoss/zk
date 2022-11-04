@@ -14,10 +14,10 @@ import javax.imageio.ImageIO;
 
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.ClientBindTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
-public class F86_ZK_3913Test extends ClientBindTestCase {
+public class F86_ZK_3913Test extends WebDriverTestCase {
 	@Test
 	public void test() throws Exception {
 		connect();

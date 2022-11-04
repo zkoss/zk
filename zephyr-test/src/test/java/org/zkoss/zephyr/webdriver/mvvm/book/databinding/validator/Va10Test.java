@@ -13,7 +13,7 @@ package org.zkoss.zephyr.webdriver.mvvm.book.databinding.validator;
 
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.ClientBindTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 /**
  * @author jameschu
  */
-public class Va10Test extends ClientBindTestCase {
+public class Va10Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();

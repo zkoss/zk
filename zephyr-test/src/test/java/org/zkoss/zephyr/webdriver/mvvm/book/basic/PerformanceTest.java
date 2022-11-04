@@ -17,12 +17,12 @@ import static org.hamcrest.Matchers.lessThanOrEqualTo;
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.ClientBindTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
  */
-public class PerformanceTest extends ClientBindTestCase {
+public class PerformanceTest extends WebDriverTestCase {
 	@Test
 	public void test() throws Exception {
 		connect("/mvvm/book/basic/performance.zul");

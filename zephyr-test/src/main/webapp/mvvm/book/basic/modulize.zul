@@ -7,7 +7,7 @@
 		4. The submodule number decreases.
 	</label>
 	<window
-		viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.basic.Modulize')"
+		viewModel="@id('vm') @init('org.zkoss.clientbind.test.book.basic.Modulize')"
 		width="500px">
 		<vlayout>
 			<hlayout>

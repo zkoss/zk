@@ -1,6 +1,6 @@
 <zk>
 <div>
-<window	id="win" width="500px" 
+<window	id="win" width="800px"
 	apply="org.zkoss.bind.BindComposer" 
 	viewModel="@id('vm') @init('org.zkoss.zktest.bind.viewmodel.form.FormWithList')">
 

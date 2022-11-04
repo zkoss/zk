@@ -1,6 +1,5 @@
 <zk>
 <window id="win" title="new page title" border="normal"
-	apply="org.zkoss.bind.BindComposer"
 	viewModel="@id('vm') @init('org.zkoss.clientbind.test.issue.B01529SelectedItemsIndex')">
 	
 	<label multiline="true">

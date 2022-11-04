@@ -1,6 +1,5 @@
 <zk>
-	<window border="normal" title="hello"
-		apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.clientbind.test.issue.B01259HaskMapInFx')">
+	<window border="normal" title="hello" viewModel="@id('vm') @init('org.zkoss.clientbind.test.issue.B01259HaskMapInFx')">
 		<label multiline="true" >
 			1.the left text value should equal to left side value 
 		</label>

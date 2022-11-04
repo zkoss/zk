@@ -1,14 +1,13 @@
 <?page title="" contentType="text/html;charset=UTF-8"?>
-<zk xmlns:w="client" xmlns:ca="client/attribute">
+<zk>
 	<window title="" border="normal"
-		apply="org.zkoss.bind.BindComposer"
-		viewModel="@id('vm') @init('org.zkoss.clientbind.test.issue.zk2592.FromValidationViewModel')"
-		validationMessages="@id('vmsgs')">
+			viewModel="@id('vm') @init('org.zkoss.clientbind.test.issue.zk2592.FromValidationViewModel')"
+			validationMessages="@id('vmsgs')">
 
 		<grid form="@id('fx') 
 					@load(vm.personDto) 
 					@save(vm.personDto, after='submit') 
-					@validator('formBeanValidator', prefix='p_', groups=vm.validationGroups)" >
+					@validator('formBeanValidator', prefix='p_', groups=vm.validationGroups)">
 			<rows>
 				<row>
 					<cell>
@@ -18,8 +17,8 @@
 					<cell>
 						<textbox value="@bind(fx.nameDto.name)"/>
 						<label id="err2" value="@load(vmsgs['p_nameDto.name'])"/>
-<!-- 						workaround but not ideal -->
-<!-- 						<textbox value="@bind(fx.nameDto.name) @validator('beanValidator')" errorMessage="@load(vmsgs[self])"/> -->
+						<!-- 						workaround but not ideal -->
+						<!-- 						<textbox value="@bind(fx.nameDto.name) @validator('beanValidator')" errorMessage="@load(vmsgs[self])"/> -->
 					</cell>
 					<cell>
 						<intbox value="@bind(fx.age2)"/>

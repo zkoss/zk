@@ -1,6 +1,6 @@
 <zk>
 	<window title="ZK MVVM Book CRUD" border="normal" width="500px"
-			viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.basic.BookCrudViewModel')">
+			viewModel="@id('vm') @init('org.zkoss.clientbind.test.book.basic.BookCrudViewModel')">
 		<vlayout>
 			<div>Selected book<label value="@load(vm.selectedBook.name)"/></div>
 			<listbox selectedItem="@bind(vm.selectedBook)" rows="10" model="@bind(vm.bookList)">

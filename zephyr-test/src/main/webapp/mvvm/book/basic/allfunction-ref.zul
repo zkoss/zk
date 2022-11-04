@@ -1,4 +1,4 @@
-<window viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.basic.AllFunctionVM')">
+<window viewModel="@id('vm') @init('org.zkoss.clientbind.test.book.basic.AllFunctionVM')">
 	<div if="${'ref' eq param['case']}">
 		Reference: change the value in the textbox, the label on the most left shall not change, others shall sync.
 		<window title="Basic" border="normal" element="@ref(vm.element)" elementNm="@ref(vm.element.name)">

@@ -1,8 +1,8 @@
 <zk>
 <div>
-<window	id="win" width="500px" 
+<window	id="win" width="800px"
 
-	viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.viewmodel.form.FormWithMap')">
+	viewModel="@id('vm') @init('org.zkoss.clientbind.test.book.viewmodel.form.FormWithMap')">
 
 
 	<style>

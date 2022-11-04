@@ -4,13 +4,13 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.ClientBindTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author bob peng
  */
-public class B85_ZK_3732Test extends ClientBindTestCase {
+public class B85_ZK_3732Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();

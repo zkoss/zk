@@ -1,6 +1,5 @@
 <zk>
 	<window border="normal" title="big list" vflex="1" hflex="1"
-		apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.zkoss.clientbind.test.issue.B02224ListboxRemove')">
 		<label multiline="true">
 		1.click widen model number, and click narrow model to remove items.

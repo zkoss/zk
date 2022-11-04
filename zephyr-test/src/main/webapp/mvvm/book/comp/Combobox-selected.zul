@@ -2,7 +2,7 @@
 	<label multiline="true">
 		The selected item in both listbox and combobox will be synchronized.
 	</label>
-	<window viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.comp.ComboboxSelectedVM')" border="none">
+	<window viewModel="@id('vm') @init('org.zkoss.clientbind.test.book.comp.ComboboxSelectedVM')" border="none">
 		<vbox>
 			<listbox mold="select" selectedItem="@bind(vm.selected)">
 				<listitem label="Item A" value="itemA"/>

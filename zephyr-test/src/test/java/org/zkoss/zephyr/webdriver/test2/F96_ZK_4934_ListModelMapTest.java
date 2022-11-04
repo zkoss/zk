@@ -4,10 +4,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.ClientBindTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
-public class F96_ZK_4934_ListModelMapTest extends ClientBindTestCase {
+public class F96_ZK_4934_ListModelMapTest extends WebDriverTestCase {
 
 	@Test
 	public void test() {

@@ -1,6 +1,6 @@
 <zk>
 	<window
-		viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.basic.PerformanceVMInner2')">
+		viewModel="@id('vm') @init('org.zkoss.clientbind.test.book.basic.PerformanceVMInner2')">
 		<hbox>
 		<hbox>
 			<label value="@load(vm.switchCount)"/>

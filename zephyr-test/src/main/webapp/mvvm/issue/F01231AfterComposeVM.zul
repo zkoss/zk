@@ -4,8 +4,7 @@
 	
 	
 	<window id="myWin" border="normal" width="600px"
-		apply="org.zkoss.bind.BindComposer"
-		viewModel="@id('vm') 
+		viewModel="@id('vm')
 		@init('org.zkoss.clientbind.test.issue.F01231AfterComposeVM',
 		label='This is a label', name='admin', desc='this is desc')">
 		

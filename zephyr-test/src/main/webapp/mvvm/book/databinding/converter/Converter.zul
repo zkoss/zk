@@ -4,20 +4,20 @@
 		[Step 2] (Test "Application Level Converter") Apply the following setting in zk.xml
 			<library-property>
 				<name>org.zkoss.bind.appConverters</name>
-				<value>foo=org.zkoss.clientbind.test.book.databinding.converter.FooConverter,bar=org.zkoss.clientbind.test.mvvm.book.databinding.converter.BarConverter</value>
+				<value>foo=org.zkoss.clientbind.test.book.databinding.converter.FooConverter,bar=org.zkoss.clientbind.test.book.databinding.converter.BarConverter</value>
 			</library-property>
 		[Step 3] (Test "Application Level Converter")
 			Change the textbox, the Foo/Bar would be added in value
 		[Step 4] (Test "Built-in Converter")
 			Change the textbox, the value should be changed will the corresponding format
 	]]></label>
-	<vlayout viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.databinding.converter.ConverterVM')">
+	<vlayout viewModel="@id('vm') @init('org.zkoss.clientbind.test.book.databinding.converter.ConverterVM')">
 		Custom Converter: (format : yyyy/MM/dd)
 		<div>
 			<label id="msg1" value="@load(vm.creationDate) @converter(vm.myConverter, format='yyyy/MM/dd')"/>
 			<label value="@init(vm.creationDate) @converter('formatedDate', format='yyyy/MM/dd')"/>
 			(vm property) <textbox id="tb1_1" value="@bind(vm.creationDate) @converter(vm.myConverter, format='yyyy/MM/dd')"/>
-			(class name) <textbox id="tb1_2" value="@bind(vm.creationDate) @converter('org.zkoss.clientbind.test.mvvm.book.databinding.converter.MyDateFormatConverter', format='yyyy/MM/dd')"/>
+			(class name) <textbox id="tb1_2" value="@bind(vm.creationDate) @converter('org.zkoss.clientbind.test.book.databinding.converter.MyDateFormatConverter', format='yyyy/MM/dd')"/>
 		</div>
 		Application Level Converter
 		<div>

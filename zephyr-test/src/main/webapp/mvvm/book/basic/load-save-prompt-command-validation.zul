@@ -1,4 +1,4 @@
-<window viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.basic.LoadSavePromptCommandValidation')">
+<window viewModel="@id('vm') @init('org.zkoss.clientbind.test.book.basic.LoadSavePromptCommandValidation')">
 	<vlayout>
 		the value should only save to value 2 when it is ZZ. if you type XX, or YY, it should not save to
 		<hlayout>l1[<label id="l11" value="@load(vm.value1)"/>]=A

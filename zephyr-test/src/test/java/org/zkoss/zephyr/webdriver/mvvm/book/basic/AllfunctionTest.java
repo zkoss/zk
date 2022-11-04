@@ -16,9 +16,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.ClientBindTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
-public class AllfunctionTest extends ClientBindTestCase {
+public class AllfunctionTest extends WebDriverTestCase {
 	@Test
 	public void warmTest() {
 		connect("/mvvm/book/basic/allfunction.zul");

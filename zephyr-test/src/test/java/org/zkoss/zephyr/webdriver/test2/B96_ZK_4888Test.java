@@ -14,10 +14,10 @@ package org.zkoss.zephyr.webdriver.test2;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.ClientBindTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
-public class B96_ZK_4888Test extends ClientBindTestCase {
+public class B96_ZK_4888Test extends WebDriverTestCase {
 	private static final int DRAGGING_THRESHOLD = 5;
 
 	@Test

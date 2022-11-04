@@ -16,10 +16,10 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.ClientBindTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
-public class IfVersusVisibleTest extends ClientBindTestCase {
+public class IfVersusVisibleTest extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();

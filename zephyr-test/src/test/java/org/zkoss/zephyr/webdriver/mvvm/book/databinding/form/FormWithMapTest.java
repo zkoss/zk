@@ -11,128 +11,161 @@ Copyright (C) 2014 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zephyr.webdriver.mvvm.book.databinding.form;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zephyr.webdriver.ClientBindTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
+import org.zkoss.test.webdriver.ztl.Widget;
 
 /**
  * @author jumperchen
- *
  */
-public class FormWithMapTest extends ClientBindTestCase {
+public class FormWithMapTest extends WebDriverTestCase {
 
 	@Test
 	public void test() {
-		//		DesktopAgent desktop = connect();
-		//		JQuery window = jq("$win");
-		//		JQuery viewGrid = window.query("$view");
-		//		JQuery formGrid = window.query("$form");
-		//		JQuery listbox = window.query("listbox");
-		//		JQuery newTagValue = listbox.query("$newTagValue");
-		//		JQuery addNewTagBtn = newTagValue.getNextSibling();
-		//		JQuery editRow = formGrid.getFirstChild().getFirstChild();
-		//		//buttons
-		//		JQuery addAll = window.query("$addAll");
-		//		JQuery removeAll = window.query("$removeAll");
-		//		JQuery serialize = window.query("$serialize");
-		//		JQuery save = window.query("$save");
-		//		JQuery cancel = window.query("$cancel");
-		//		
-		//		checkContent(viewGrid, "screw", "tool", "{metal=metal, construction=construction, small=small}");
-		//		
-		//		//click cancel to discard all changes
-		//		editRow.getLastChild().type("Name");
-		//		editRow = editRow.getNextSibling();
-		//		editRow.getLastChild().type("MainTag");
-		//		listbox.getFirstChild().query("textbox").type("Name");
-		//		listbox.getChild(1).query("textbox").type("MainTag");
-		//		listbox.getLastChild().query("textbox").getNextSibling().click();
-		//		newTagValue.type("NewItem");
-		//		addNewTagBtn.click();
-		//		cancel.click();
-		//		checkContent(viewGrid, "screw", "tool", "{metal=metal, construction=construction, small=small}");
-		//		
-		//		//add tag and save
-		//		editRow = formGrid.getFirstChild().getFirstChild();
-		//		editRow.getLastChild().type("Name");
-		//		editRow = editRow.getNextSibling();
-		//		editRow.getLastChild().type("MainTag");
-		//		listbox.getFirstChild().query("textbox").type("Name");
-		//		listbox.getChild(1).query("textbox").type("MainTag");
-		//		listbox.getLastChild().query("textbox").type("Tags");
-		//		newTagValue.type("NewItem");
-		//		addNewTagBtn.click();
-		//		save.click();
-		//		checkContent(viewGrid, "Name", "MainTag", "{metal=Name, construction=MainTag, small=Tags, NewItem=NewItem}");
-		//		
-		//		//remove tags and cancel
-		//		listbox.getLastChild().query("textbox").getNextSibling().click();
-		//		checkContent(viewGrid, "Name", "MainTag", "{metal=Name, construction=MainTag, small=Tags, NewItem=NewItem}");
-		//		cancel.click();
-		//		checkContent(viewGrid, "Name", "MainTag", "{metal=Name, construction=MainTag, small=Tags, NewItem=NewItem}");
-		//		
-		//		//remove tags and save
-		//		listbox.getLastChild().query("textbox").getNextSibling().click();;
-		//		checkContent(viewGrid, "Name", "MainTag", "{metal=Name, construction=MainTag, small=Tags, NewItem=NewItem}");
-		//		save.click();
-		//		checkContent(viewGrid, "Name", "MainTag", "{metal=Name, construction=MainTag, small=Tags}");
-		//		
-		//		//add multiple tags and save
-		//		newTagValue.type("big");
-		//		addNewTagBtn.click();
-		//		newTagValue.type("middle");
-		//		addNewTagBtn.click();
-		//		newTagValue.type("big");
-		//		addNewTagBtn.click();
-		//		save.click();
-		//		checkContent(viewGrid, "Name", "MainTag", "{metal=Name, construction=MainTag, small=Tags, big=big, middle=middle}");
-		//		
-		//		//remove tags to ensure the order
-		//		listbox.getChild(3).query("textbox").getNextSibling().click();
-		//		save.click();
-		//		checkContent(viewGrid, "Name", "MainTag", "{metal=Name, construction=MainTag, small=Tags, middle=middle}");
-		//		
-		//		//click addAll
-		//		addAll.click();
-		//		checkContent(viewGrid, "Name", "MainTag", "{metal=Name, construction=MainTag, small=Tags, middle=middle}");
-		//		save.click();
-		//		checkContent(viewGrid, "Name", "MainTag", "{metal=Name, construction=MainTag, small=Tags, middle=middle, addAll1=addAll1, addAll2=addAll2, addAll3=addAll3}");
-		//		
-		//		//click removeAll
-		//		removeAll.click();
-		//		checkContent(viewGrid, "Name", "MainTag", "{metal=Name, construction=MainTag, small=Tags, middle=middle, addAll1=addAll1, addAll2=addAll2, addAll3=addAll3}");
-		//		save.click();
-		//		checkContent(viewGrid, "Name", "MainTag", "{}");
-		//		
-		//		// do serialize and deserialize, need to use the new component reference
-		//		serialize.click(); // do serialization
-		//		window = jq("$win");
-		//		viewGrid = window.query("$view");
-		//		formGrid = window.query("$form");
-		//		listbox = window.query("listbox");
-		//		newTagValue = listbox.query("$newTagValue");
-		//		addNewTagBtn = newTagValue.getNextSibling();
-		//		editRow = formGrid.getFirstChild().getFirstChild();
-		//		save = window.query("$save");
-		//		checkContent(viewGrid, "Name", "MainTag", "{}");
-		//		
-		//		editRow = formGrid.getFirstChild().getFirstChild();
-		//		editRow.getLastChild().type("chunfu");
-		//		editRow = editRow.getNextSibling();
-		//		editRow.getLastChild().type("potix");
-		//		newTagValue.type("NewItem");
-		//		addNewTagBtn.click();
-		//		save.click();
-		//		checkContent(viewGrid, "chunfu", "potix", "{NewItem=NewItem}");
+		connect();
+		JQuery window = jq("$win");
+		JQuery viewGrid = window.find("$view");
+		JQuery formGrid = window.find("$form");
+		JQuery listbox = window.find("@listbox");
+		JQuery newTagValue = jq("$newTagValue");
+		Widget addNewTagBtn = newTagValue.toWidget().nextSibling();
+		Widget editRow = formGrid.find("@row").toWidget();
+		//buttons
+		JQuery addAll = window.find("$addAll");
+		JQuery removeAll = window.find("$removeAll");
+		JQuery serialize = window.find("$serialize");
+		JQuery save = window.find("$save");
+		JQuery cancel = window.find("$cancel");
+
+		checkContent(viewGrid, "screw", "tool", "{metal=metal, construction=construction, small=small}");
+
+		//click cancel to discard all changes
+		type(editRow.lastChild(), "Name");
+		waitResponse();
+		editRow = editRow.nextSibling();
+		type(editRow.lastChild(), "MainTag");
+		waitResponse();
+		type(listbox.find("@textbox").eq(0), "Name");
+		waitResponse();
+		type(listbox.find("@textbox").eq(1), "MainTag");
+		waitResponse();
+		click(listbox.find("@listitem").eq(2).find("@a"));
+		waitResponse();
+		type(newTagValue, "NewItem");
+		waitResponse();
+		click(addNewTagBtn);
+		waitResponse();
+		click(cancel);
+		waitResponse();
+		checkContent(viewGrid, "screw", "tool", "{metal=metal, construction=construction, small=small}");
+
+		//add tag and save
+		editRow = formGrid.toWidget().firstChild().firstChild();
+		type(editRow.lastChild(), "Name");
+		waitResponse();
+		editRow = editRow.nextSibling();
+		type(editRow.lastChild(), "MainTag");
+		waitResponse();
+		type(listbox.find("@textbox").eq(0), "Name");
+		waitResponse();
+		type(listbox.find("@textbox").eq(1), "MainTag");
+		waitResponse();
+		type(listbox.find("@textbox").eq(2), "Tags");
+		waitResponse();
+		type(newTagValue, "NewItem");
+		waitResponse();
+		click(addNewTagBtn);
+		waitResponse();
+		click(save);
+		waitResponse();
+		checkContent(viewGrid, "Name", "MainTag", "{metal=Name, construction=MainTag, small=Tags, NewItem=NewItem}");
+
+		//remove tags and cancel
+		click(listbox.find("@textbox").last().toWidget().nextSibling());
+		waitResponse();
+		checkContent(viewGrid, "Name", "MainTag", "{metal=Name, construction=MainTag, small=Tags, NewItem=NewItem}");
+		click(cancel);
+		waitResponse();
+		checkContent(viewGrid, "Name", "MainTag", "{metal=Name, construction=MainTag, small=Tags, NewItem=NewItem}");
+		//remove tags and save
+		click(listbox.find("@textbox").last().toWidget().nextSibling());
+		waitResponse();
+		checkContent(viewGrid, "Name", "MainTag", "{metal=Name, construction=MainTag, small=Tags, NewItem=NewItem}");
+		click(save);
+		waitResponse();
+		checkContent(viewGrid, "Name", "MainTag", "{metal=Name, construction=MainTag, small=Tags}");
+		//add multiple tags and save
+		type(newTagValue, "big");
+		waitResponse();
+		click(addNewTagBtn);
+		waitResponse();
+		type(newTagValue, "middle");
+		waitResponse();
+		click(addNewTagBtn);
+		waitResponse();
+		type(newTagValue, "big");
+		waitResponse();
+		click(addNewTagBtn);
+		waitResponse();
+		click(save);
+		waitResponse();
+		checkContent(viewGrid, "Name", "MainTag", "{metal=Name, construction=MainTag, small=Tags, big=big, middle=middle}");
+		//remove tags to ensure the order
+		click(listbox.find("@textbox").eq(3).toWidget().nextSibling());
+		waitResponse();
+		click(save);
+		waitResponse();
+		checkContent(viewGrid, "Name", "MainTag", "{metal=Name, construction=MainTag, small=Tags, middle=middle}");
+		//click addAll
+		click(addAll);
+		waitResponse();
+		checkContent(viewGrid, "Name", "MainTag", "{metal=Name, construction=MainTag, small=Tags, middle=middle}");
+		click(save);
+		waitResponse();
+		checkContent(viewGrid, "Name", "MainTag", "{metal=Name, construction=MainTag, small=Tags, middle=middle, addAll1=addAll1, addAll2=addAll2, addAll3=addAll3}");
+		//click removeAll
+		click(removeAll);
+		waitResponse();
+		checkContent(viewGrid, "Name", "MainTag", "{metal=Name, construction=MainTag, small=Tags, middle=middle, addAll1=addAll1, addAll2=addAll2, addAll3=addAll3}");
+		click(save);
+		waitResponse();
+		checkContent(viewGrid, "Name", "MainTag", "{}");
+		// do serialize and deserialize, need to use the new component reference
+		click(serialize);
+		waitResponse(); // do serialization
+		window = jq("$win");
+		viewGrid = window.find("$view");
+		formGrid = window.find("$form");
+		newTagValue = jq("$newTagValue");
+		addNewTagBtn = newTagValue.toWidget().nextSibling();
+		save = window.find("$save");
+		checkContent(viewGrid, "Name", "MainTag", "{}");
+
+		editRow = formGrid.toWidget().firstChild().firstChild();
+		type(editRow.lastChild(), "chunfu");
+		waitResponse();
+		editRow = editRow.nextSibling();
+		type(editRow.lastChild(), "potix");
+		waitResponse();
+		type(newTagValue, "NewItem");
+		waitResponse();
+		click(addNewTagBtn);
+		waitResponse();
+		click(save);
+		waitResponse();
+		checkContent(viewGrid, "chunfu", "potix", "{NewItem=NewItem}");
 	}
 
-	//	private void checkContent(JQuery viewGrid, String val0, String val1, String val2) {
-	//		JQuery row = viewGrid.getFirstChild().getFirstChild();
-	//		assertEquals(val0, row.getLastChild().text());
-	//		row = row.getNextSibling();
-	//		assertEquals(val1, row.getLastChild().text());
-	//		row = row.getNextSibling();
-	//		assertEquals(val2, row.getLastChild().text());
-	//
-	//	}
+	private void checkContent(JQuery viewGrid, String val0, String val1, String val2) {
+		Widget row = viewGrid.toWidget().firstChild().firstChild();
+		assertEquals(val0, row.lastChild().get("value"));
+		row = row.nextSibling();
+		assertEquals(val1, row.lastChild().get("value"));
+		row = row.nextSibling();
+		assertEquals(val2, row.lastChild().get("value"));
+	}
 }

@@ -18,7 +18,7 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 		load the page, shall see "myArgument" and "myArgument" bellow.
 		click the cmd button, "myArgument" labels shall not change.
 	</label>
-	<div id="outerVM" viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.advance.PassArgumentsOuterVM')">
+	<div id="outerVM" viewModel="@id('vm') @init('org.zkoss.clientbind.test.book.advance.PassArgumentsOuterVM')">
 		<include type="@load(vm.myArgument)" abc="@load(vm.myArgument)" src='@load(c:cat(vm.myArgument, ".zul"))'/>
 		<separator />
 		<label value="@load(vm.myArgument)"/>

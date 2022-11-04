@@ -18,12 +18,12 @@ import java.io.IOException;
 import org.junit.jupiter.api.Test;
 
 import org.zkoss.test.webdriver.ztl.JQuery;
-import org.zkoss.zephyr.webdriver.ClientBindTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author jameschu
  */
-public class B80_ZK_3104_1Test extends ClientBindTestCase {
+public class B80_ZK_3104_1Test extends WebDriverTestCase {
 	@Test
 	public void test() throws IOException {
 		connect();

@@ -1,6 +1,6 @@
 <vbox>
 	<vbox
-		viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.basic.HttpParamVM')">
+		viewModel="@id('vm') @init('org.zkoss.clientbind.test.book.basic.HttpParamVM')">
 		
 		<hbox><label id="l11" value="@load(vm.queryParam)"/> = your url parameter['param1']</hbox>
 		<hbox><label id="l12" value="@load(vm.headerParam)" /> = your browser user-agent</hbox>

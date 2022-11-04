@@ -22,7 +22,7 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 
         Click both buttons to see the result.
     </label>
-    <div viewModel="@('org.zkoss.clientbind.test.mvvm.book.shadow.FizzBuzzVM')">
+    <div viewModel="@('org.zkoss.clientbind.test.book.shadow.FizzBuzzVM')">
         <button id="btnS" label="Small (1-20)" onClick="@command('useSmall')"/>
         <button id="btnL" label="Large (50-100)" onClick="@command('useLarge')"/>
         <vlayout>

@@ -15,7 +15,7 @@
 	}
 </zscript>
 	<window
-		viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.basic.ComponentSwitch')"
+		viewModel="@id('vm') @init('org.zkoss.clientbind.test.book.basic.ComponentSwitch')"
 		width="600px">
 		<label multiline="true">
 			Test the top part:
@@ -46,7 +46,7 @@
 		</hlayout>
 	</window>
 	<window
-		viewModel="@id('vm') @init('org.zkoss.clientbind.test.mvvm.book.basic.ComponentSwitch')"
+		viewModel="@id('vm') @init('org.zkoss.clientbind.test.book.basic.ComponentSwitch')"
 		width="600px">
 		<hlayout>
 			Name 1:

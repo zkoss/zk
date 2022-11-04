@@ -17,12 +17,12 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 
-import org.zkoss.zephyr.webdriver.ClientBindTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author rudyhuang
  */
-public class NotifyChangeTest extends ClientBindTestCase {
+public class NotifyChangeTest extends WebDriverTestCase {
 	@Test
 	public void testNotifySelf() {
 		connect("/mvvm/book/viewmodel/notification/notifychange-self.zul");

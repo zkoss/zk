@@ -3,8 +3,7 @@
 1.you should see all static values are ABC
 </label>
 	<window id="win1"
-		title = "Outter Window"
-		apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.clientbind.test.issue.B01469ScopeParamRef')" >
+		title = "Outter Window" viewModel="@id('vm') @init('org.zkoss.clientbind.test.issue.B01469ScopeParamRef')" >
 		<vlayout>
 			<hlayout>
 				Static Value : <label id="l1" value="@load(vm.staticValue)"/> 
