@@ -64,9 +64,9 @@ public class B01194NestedVMInit {
 			this.desc = desc;
 		}
 	}
-
-	@Wire
-	private Span headerNameLbOuter;
+//
+//	@Wire
+//	private Span headerNameLbOuter;
 	private VM2 innerVm;
 
 	@Init
@@ -91,10 +91,10 @@ public class B01194NestedVMInit {
 		HashMap<String, String[]> annotAttrs = new HashMap<String, String[]>();
 		annotAttrs.put("value", new String[]{"vm.innerVm.name"});
 		Label headerNameLb = new Label();
-		headerNameLb.setParent(headerNameLbOuter);
+		headerNameLb.setParent(self.getFellow("headerNameLbOuter"));
 		headerNameLb.setId("headerNameLb");
 		headerNameLb.addAnnotation("value", "load", annotAttrs);
-		new AnnotateBinderHelper(binder).initComponentBindings(headerNameLb);
+//		new AnnotateBinderHelper(binder).initComponentBindings(headerNameLb);
 	}
 	
 	public VM2 getInnerVm() {

@@ -126,6 +126,14 @@ export class Combobox extends zul.inp.ComboWidget {
 		return this;
 	}
 
+	/**
+	 * Returns the selected item if any.
+	 * @since 10.0.0
+	 */
+	getSelectedItem(): zul.inp.Comboitem | undefined {
+		return this._sel;
+	}
+
 	override onResponse(ctl: zk.ZWatchController, opts: zul.inp.ResponseOptions): void {
 		// Bug ZK-2960: need to wait until the animation is finished before calling super
 		if (this.isOpen() && jq(this.getPopupNode_()).is(':animated')) {
