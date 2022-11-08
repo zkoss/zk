@@ -312,7 +312,7 @@ module.exports = {
         ],
         '@typescript-eslint/type-annotation-spacing': 'error',
         '@typescript-eslint/unbound-method': 'off',
-		'@typescript-eslint/unified-signatures': 'off' // TSDoc overloaded functions
+	'@typescript-eslint/unified-signatures': 'off' // TSDoc overloaded functions
       }
     }
   ]
