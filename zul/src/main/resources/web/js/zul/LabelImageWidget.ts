@@ -16,13 +16,16 @@ it will be useful, but WITHOUT ANY WARRANTY.
 // `zul.wgt.ADBS.prototype.autodisable` requires the properties _adbs, _disabled,
 // and _autodisable to be public.
 export interface LabelImageWidgetWithDisable extends LabelImageWidget {
+	/** @internal */
 	_adbs?: boolean;
+	/** @internal */
 	_disabled?: boolean;
 	isDisabled(): boolean;
 	setDisabled(disabled?: boolean, opts?: Record<string, boolean>): this;
 }
 
 export interface LabelImageWidgetWithAutodisable extends LabelImageWidgetWithDisable {
+	/** @internal */
 	_autodisable?: string;
 	getAutodisable(): string | undefined;
 	setAutodisable(autodisable: string): this;

@@ -115,12 +115,11 @@ export function afterAnimate(fn: () => void, delay?: number): boolean | void {
 }
 zk.afterAnimate = afterAnimate;
 
+/** @internal */
 export var _anique: Record<string, Anima[]> = {};
 zk._anique = _anique;
 
 export namespace anima_global {
-	/** @partial jqzk
-	 */
 	export class zjq extends zk.JQZK {
 		/**
 		 * Get the value of animation speed assigned through client attribute "data-animationspeed"

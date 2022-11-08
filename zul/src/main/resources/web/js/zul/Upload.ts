@@ -43,6 +43,7 @@ function _start(o: Upload, form: HTMLFormElement, val: string): void { //start u
 	o.initContent();
 }
 interface ZKInputElement extends HTMLInputElement {
+	/** @internal */
 	_ctrl: zul.Upload;
 	z$proxy: HTMLElement;
 }

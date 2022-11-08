@@ -36,6 +36,7 @@ interface GAPIOptions {
 	message: string;
 	inittime?: number;
 	timeout?: number;
+	/** @internal */
 	_mask?: zk.eff.Mask;
 }
 

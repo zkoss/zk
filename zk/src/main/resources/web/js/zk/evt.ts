@@ -305,7 +305,9 @@ export class Event<TData = unknown> extends zk.Object {
 	}
 }
 export interface ClientActivity {
+	/** @internal */
 	_onSyncScroll: {_onSyncScroll} | [unknown, CallableFunction];
+	/** @internal */
 	_beforeSizeForRead: {_beforeSizeForRead} | [unknown, CallableFunction];
 	beforeSize: {beforeSize} | [unknown, CallableFunction];
 	afterSize: {afterSize} | [unknown, CallableFunction];
@@ -470,7 +472,8 @@ function _bindLevel(a: {bindLevel?: number}): number {
 function _cmpLevel(a: WatchInfo, b: WatchInfo): number {
 	return _bindLevel(a[0]) - _bindLevel(b[0]);
 }
-zk._zsyncFns = _zsyncFns;
+
+/** @internal */
 export function _zsyncFns(name: string, org: zk.Object): void {
 	if (name == 'onSize' || name == 'onShow' || name == 'onHide') {
 		jq.zsync(org);
@@ -480,6 +483,8 @@ export function _zsyncFns(name: string, org: zk.Object): void {
 	if (name == 'onResponse')
 		jq.doSyncScroll();
 }
+zk._zsyncFns = _zsyncFns;
+
 //invoke fns in the reverse order
 function _reversefns(fns: undefined | [CallableFunction, zk.Widget][], args: unknown[]): void {
 	if (fns)

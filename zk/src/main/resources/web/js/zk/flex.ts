@@ -751,10 +751,10 @@ const _xWidget = zk.augment(zk.Widget.prototype, {
 		let domClass = _xWidget.domClass_.call(this, no),
 			n = this.$n() as HTMLElement | undefined;
 		if (n) {
-			let jqn = jq(n),
+			const jqn = jq(n),
 				flexClasses = ['z-flex', 'z-flex-row', 'z-flex-column', 'z-flex-item'];
 			for (let i = 0, length = flexClasses.length; i < length; i++) {
-				let flexClass = flexClasses[i];
+				const flexClass = flexClasses[i];
 				if (jqn.hasClass(flexClass)) {
 					domClass += ' ' + flexClass;
 				}

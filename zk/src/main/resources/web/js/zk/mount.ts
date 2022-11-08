@@ -143,7 +143,7 @@ jq(function () {
 	}, 25);
 });
 //run after page AU cmds
-zk._apac = _apac;
+/** @internal */
 export function _apac(fn: () => void, _which_?: string): void {
 	if (_paci) {
 		(_paci[_which_ || 'f1'] as CallableFunction[]).push(fn);
@@ -151,6 +151,7 @@ export function _apac(fn: () => void, _which_?: string): void {
 	}
 	zk.afterMount(fn); //it might happen if ZUML loaded later (with custom JS code)
 }
+zk._apac = _apac;
 
 /**
  * Adds a function that will be executed after the mounting is done. By mounting we mean the creation of peer widgets.

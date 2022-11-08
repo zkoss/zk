@@ -17,6 +17,7 @@ var _zkMatchMediaRegexPattern = /ZKMatchMedia=([^;]*)/,
 
 declare module '@zk/widget' {
 	interface Widget {
+		/** @internal */
 		_$binder?: zkbind.Binder;
 		$ZKBINDER$?: boolean;
 		$ZKMATCHMEDIA$?: string[];

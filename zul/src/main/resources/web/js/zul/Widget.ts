@@ -783,6 +783,7 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Widge
 		//so we have to defer the firing of ctrl keys
 		setTimeout(function () {
 			interface WidgetBeforeCtrlKeys extends zk.Widget {
+				/** @internal */
 				beforeCtrlKeys_?(evt: zk.Event): unknown;
 			}
 			for (var w: WidgetBeforeCtrlKeys = target; ; w = w.parent!) {

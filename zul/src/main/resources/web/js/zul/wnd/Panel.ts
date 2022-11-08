@@ -14,10 +14,15 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 
 interface NodeInfo {
+	/** @internal */
 	_scrollTop: number;
+	/** @internal */
 	_pos?: string;
+	/** @internal */
 	_ppos?: string;
+	/** @internal */
 	_zIndex?: string;
+	/** @internal */
 	_pheight?: boolean;
 }
 

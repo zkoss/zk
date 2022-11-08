@@ -2638,6 +2638,7 @@ export interface EventKeyData extends EventMetaData {
 	charCode: number | undefined;
 	key: string | undefined;
 }
+/** @internal */
 export const _JQEvent = {
 	/**
 	 * Stops the event propagation.
@@ -2719,6 +2720,7 @@ export const _JQEvent = {
 };
 zk.copy(jq.Event.prototype, _JQEvent);
 
+/** @internal */
 export const _JQEventStatic = {
 	/**
 	 * Fires a DOM element.
