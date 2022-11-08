@@ -40,7 +40,7 @@ export var WidgetInfo = {
 	 * The key is the widget name, such as textbox, and the value is
 	 * the class name. However the value might be changed in the future,
 	 * so it is better to iterate only the keys.
-	 * <p>To add a mapping, use {@link register}.
+	 * <p>To add a mapping, use {@link WidgetInfo.register}.
 	 * @type Map
 	 */
 	all: _wgtInfs,

@@ -22,6 +22,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 export interface ToolbarChild extends zul.Widget {
 	previousSibling?: ToolbarChild;
 	nextSibling?: ToolbarChild;
+	/** @internal */
 	_disabled?: boolean;
 }
 /**

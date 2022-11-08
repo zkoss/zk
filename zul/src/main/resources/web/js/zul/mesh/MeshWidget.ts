@@ -437,7 +437,9 @@ function unlistenOnFitSize(wgt: MeshWidget): void {
 }
 
 export interface Item extends zul.Widget<HTMLTableRowElement> {
+	/** @internal */
 	_loaded?: boolean;
+	/** @internal */
 	_index?: number;
 }
 

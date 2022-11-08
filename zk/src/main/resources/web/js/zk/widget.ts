@@ -5947,6 +5947,7 @@ zk.Widget.getClass('cool'); //widget name
  */
 export var $ = Widget.$;
 
+/** @internal */
 export namespace widget_global {
 	export const zkreg = Widget.register; //a shortcut for WPD loader
 }
@@ -6190,6 +6191,7 @@ export class Desktop extends Widget {
 	}
 }
 
+/** @internal */
 export var _wgtutl = class { //internal utilities
 	static setUuid(wgt: zk.Widget, uuid: string): void { //called by au.js
 		if (!uuid)
@@ -6510,6 +6512,7 @@ export class Macro extends Widget {
 	}
 }
 
+/** @internal */
 export namespace widget_global {
 	export const zkservice = {
 		/**
@@ -6792,8 +6795,11 @@ interface NoDOMInterceptor extends zk.Widget {
 		result: unknown;
 		args: Parameters<zk.Widget['bind_']>;
 	};
+	/** @internal */
 	_startNode?: Comment;
+	/** @internal */
 	_endNode?: Comment;
+	/** @internal */
 	_oldWgt?: zk.Widget;
 }
 // zk scope
@@ -7037,6 +7043,7 @@ export var NoDOM = class NoDOM {
 		return true;
 	}
 };
+/** @internal */
 export namespace widget_global {
 	export function zkopt(opts: Record<string, unknown>): void {
 		for (var nm in opts) {

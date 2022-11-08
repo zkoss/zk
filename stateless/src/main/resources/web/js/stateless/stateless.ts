@@ -12,6 +12,7 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 export default {};
 declare module '@zk/widget' {
 	interface Widget {
+		/** @internal */
 		getPath_(): number[];
 	}
 }

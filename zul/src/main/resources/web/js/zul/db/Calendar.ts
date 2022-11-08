@@ -28,6 +28,7 @@ interface TimeZoneWidget extends zk.Widget {
 }
 declare global {
 	interface HTMLTableCellElement {
+		/** @internal */
 		_monofs?: number;
 	}
 }

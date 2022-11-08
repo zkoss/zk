@@ -17,11 +17,14 @@ export as namespace zul;
 
 declare global {
 	interface HTMLElement {
+		/** @internal */
 		_width?: string; // zul.tab.Tabs
+		/** @internal */
 		_lastsz?: { // zul/mesh
 			width: number;
 			height: number;
 		};
+		/** @internal */
 		_lastSize?: { // zul/layout
 			width: number;
 			height: number;

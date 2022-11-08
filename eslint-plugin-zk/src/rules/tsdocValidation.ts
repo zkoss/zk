@@ -117,17 +117,38 @@ export const tsdocValidation = createRule({
 				}
 			},
 			FunctionDeclaration: transformFunction,
-			TSDeclareFunction: transformFunction,
-			PropertyDefinition(node) {
-				if (node.key.type === AST_NODE_TYPES.Identifier) {
-					if (!sourceCode.getCommentsBefore(node).some(comment =>
-						comment.value.includes('@internal')
-					)) {
-						markInternal(node, node.key.name);
-					}
+			// TSDeclareFunction: transformFunction,
+			// TSAbstractMethodDefinition: transformFunction,
+
+			PropertyDefinition: markPropertyInternal,
+			TSPropertySignature(node) {
+				if (node.parent?.type === AST_NODE_TYPES.TSInterfaceBody) {
+					markPropertyInternal(node);
 				}
 			},
+			TSMethodSignature(node) {
+				if (node.parent?.type === AST_NODE_TYPES.TSInterfaceBody) {
+					markPropertyInternal(node);
+				}
+			},
+			TSAbstractPropertyDefinition: markPropertyInternal,
+			TSEnumDeclaration(node) {
+				markInternal(node.id, node.id.name);
+			},
+			TSNamespaceExportDeclaration(node) {
+				markInternal(node.id, node.id.name);
+			}
 		};
+
+		function markPropertyInternal(node: TSESTree.Node & { key: TSESTree.PropertyName, computed?: boolean}) {
+			if (!node.computed && node.key.type === AST_NODE_TYPES.Identifier) {
+				if (!sourceCode.getCommentsBefore(node).some(comment =>
+					comment.value.includes('@internal')
+				)) {
+					markInternal(node, node.key.name);
+				}
+			}
+		}
 
 		function transformFunction(node: TSESTree.FunctionDeclaration | TSESTree.TSDeclareFunction): void {
 			if (node.id) {
@@ -296,7 +317,7 @@ export const tsdocValidation = createRule({
 			});
 		}
 
-		function markInternal(node: TSESTree.Node & { key: TSESTree.Node }, name: string) {
+		function markInternal(node: TSESTree.Node & { key?: TSESTree.Node }, name: string) {
 			if (!name.startsWith('_') && !name.endsWith('_')) {
 				return;
 			}
@@ -312,7 +333,7 @@ export const tsdocValidation = createRule({
 				return;
 			}
 			context.report({
-				node: node.key,
+				node: node.key ?? node,
 				messageId: 'annotateInternal',
 				fix(fixer) {
 					return fixer.insertTextAfterRange([newline, newline + 1], `${indent}/** @internal */\n`);

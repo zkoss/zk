@@ -147,6 +147,7 @@ export function load(pkg: string, dt?: zk.Desktop | CallableFunction, func?: Cal
 	}
 	return !loading;
 }
+/** @internal */
 export function _load(pkg: string, dt?: zk.Desktop): boolean { //called by mount.js (better performance)
 	if (!pkg || _loading[pkg])
 		return !zk.loading && !_loadedsemis.length;
