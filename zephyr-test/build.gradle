@@ -64,7 +64,7 @@ dependencies {
 	testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
 	testImplementation 'xml-apis:xml-apis:2.0.2'
 	testImplementation 'org.slf4j:slf4j-jdk14:2.0.0-alpha1'
-	testImplementation 'org.zkoss.test:zk-webdriver:1.0.0'
+	testImplementation 'org.zkoss.test:zk-webdriver:1.0.6'
 }
 
 test {

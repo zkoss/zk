@@ -11,27 +11,16 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import java.util.Collections;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.interactions.touch.TouchActions;
 
-import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.TouchWebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author rudyhuang
  */
-public class B60_ZK_1305Test extends WebDriverTestCase {
-	@Override
-	protected ChromeOptions getWebDriverOptions() {
-		return super.getWebDriverOptions()
-				.setExperimentalOption("mobileEmulation", Collections.singletonMap("deviceName", "iPad"))
-				.setExperimentalOption("w3c", false); // Temporary workaround for TouchAction
-	}
-
+public class B60_ZK_1305Test extends TouchWebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
@@ -42,11 +31,9 @@ public class B60_ZK_1305Test extends WebDriverTestCase {
 
 		Assertions.assertEquals("select index: 0", jq("$lbl").text());
 
-		JQuery body = jq(".z-listbox-body");
-		new TouchActions(driver)
-				.scroll(toElement(body), 0, 100)
-				.perform();
+		scroll(toElement(jq(".z-listbox")), 0, 200);
 		waitResponse();
+		JQuery body = jq(".z-listbox-body");
 		Assertions.assertNotEquals(0, body.scrollTop());
 	}
 }

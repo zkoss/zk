@@ -30,8 +30,9 @@ import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.util.resource.Resource;
 import org.eclipse.jetty.webapp.WebAppContext;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,30 +41,42 @@ import org.springframework.session.Session;
 import org.springframework.session.SessionRepository;
 import org.springframework.session.web.http.SessionRepositoryFilter;
 
+import org.zkoss.test.webdriver.BaseTestCase;
 import org.zkoss.test.webdriver.ExternalZkXml;
 import org.zkoss.test.webdriver.ForkJVMTestOnly;
-import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.PrototypeServer;
 
 /**
  * @author rudyhuang
  */
 @ForkJVMTestOnly
-public class B86_ZK_4288Test extends WebDriverTestCase {
+public class B86_ZK_4288Test extends BaseTestCase {
 	@RegisterExtension
+	@Order(1)
 	public static final ExternalZkXml CONFIG = new ExternalZkXml(B86_ZK_4288Test.class);
+	@RegisterExtension
+	public static final InternalServer prototypeServer = new InternalServer();
+	public static class InternalServer extends PrototypeServer {
+		private Server server;
+		public void postProcessTestInstance(Object testInstance,
+				ExtensionContext eContext) throws Exception {
 
-	@BeforeAll
-	public static void init() throws Exception {
-		Server server = new Server(new InetSocketAddress(getHost(), 0));
+			Server server = new Server(new InetSocketAddress(getHost(), 0));
 
-		final WebAppContext context = new WebAppContext();
-		context.setContextPath(getContextPath());
-		context.setBaseResource(Resource.newResource("./src/main/webapp/"));
-		context.getSessionHandler().setSessionIdPathParameterName(null);
-		Filter sessionRepositoryFilter = new SessionRepositoryFilter<>(new B86_ZK_4288SessionRepository());
-		context.addFilter(new FilterHolder(sessionRepositoryFilter), "/*",  EnumSet.of(DispatcherType.REQUEST));
-		server.setHandler(new HandlerList(context, new DefaultHandler()));
-		initServer(server);
+			final WebAppContext context = new WebAppContext();
+			context.setContextPath(getContextPath());
+			context.setBaseResource(Resource.newResource("./src/main/webapp/"));
+			context.getSessionHandler().setSessionIdPathParameterName(null);
+			Filter sessionRepositoryFilter = new SessionRepositoryFilter<>(new B86_ZK_4288SessionRepository());
+			context.addFilter(new FilterHolder(sessionRepositoryFilter), "/*",  EnumSet.of(DispatcherType.REQUEST));
+			server.setHandler(new HandlerList(context, new DefaultHandler()));
+			B86_ZK_4288Test base = (B86_ZK_4288Test) testInstance;
+			server.start();
+			base.initServer(server);
+		}
+		public Server getServer() {
+			return server;
+		}
 	}
 
 	@Test
