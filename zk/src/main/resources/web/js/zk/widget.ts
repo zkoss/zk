@@ -1688,7 +1688,7 @@ new zul.wnd.Window({
 			id = ids[j];
 			if (id) {
 				if (f) f = f._fellows![id];
-				if (!f && global) f = _globals[id][0];
+				if (!f && global && _globals[id]) f = _globals[id][0];
 				if (!f || zk.spaceless) break;
 				global = false;
 			}
