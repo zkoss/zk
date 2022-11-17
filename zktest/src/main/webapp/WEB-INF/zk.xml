@@ -558,7 +558,9 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<library-property>
 		<name>org.zkoss.bind.appConverters</name>
 		<value>xConverter=org.zkoss.zktest.bind.issue.F00921SystemConverterValidator$XConverter,
-		yConverter=org.zkoss.zktest.bind.issue.F00921SystemConverterValidator$YConverter</value>
+		yConverter=org.zkoss.zktest.bind.issue.F00921SystemConverterValidator$YConverter,
+		foo=org.zkoss.zktest.bind.databinding.converter.FooConverter,
+		bar=org.zkoss.zktest.bind.databinding.converter.BarConverter</value>
 	</library-property>
 	<library-property>
 		<name>org.zkoss.bind.appValidators</name>

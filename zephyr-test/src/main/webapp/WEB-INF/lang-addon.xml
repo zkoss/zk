@@ -17,19 +17,19 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 	<language-name>xul/html</language-name>
 	<component>
 		<component-name>editableLabel</component-name>
-		<component-class>org.zkoss.clientbind.test.mvvm.book.advance.EditableLabel</component-class>
+		<component-class>org.zkoss.clientbind.test.book.advance.EditableLabel</component-class>
 	</component>
 	<component>
 		<component-name>editableLabel1</component-name>
-		<component-class>org.zkoss.clientbind.test.mvvm.book.advance.EditableLabel1</component-class>
+		<component-class>org.zkoss.clientbind.test.book.advance.EditableLabel1</component-class>
 	</component>
 	<component>
 		<component-name>editableLabel2</component-name>
-		<component-class>org.zkoss.clientbind.test.mvvm.book.advance.EditableLabel2</component-class>
+		<component-class>org.zkoss.clientbind.test.book.advance.EditableLabel2</component-class>
 	</component>
 	<component>
 		<component-name>editableLabel3</component-name>
-		<component-class>org.zkoss.clientbind.test.mvvm.book.advance.EditableLabel3</component-class>
+		<component-class>org.zkoss.clientbind.test.book.advance.EditableLabel3</component-class>
 	</component>
 	<!-- ZK-4128 -->
 	<component>

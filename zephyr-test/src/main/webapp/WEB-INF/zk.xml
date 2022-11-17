@@ -13,10 +13,17 @@
 	<client-config>
 		<debug-js>true</debug-js>
 	</client-config>
-	<!-- custom converter -->
+	<!-- for ZKBIND ZK-921	A way to register system level converter and validator  -->
 	<library-property>
 		<name>org.zkoss.bind.appConverters</name>
-		<value>foo=org.zkoss.clientbind.test.book.databinding.converter.FooConverter,bar=org.zkoss.clientbind.test.book.databinding.converter.BarConverter</value>
+		<value>xConverter=org.zkoss.clientbind.test.issue.F00921SystemConverterValidator$XConverter,
+			yConverter=org.zkoss.clientbind.test.issue.F00921SystemConverterValidator$YConverter,
+			foo=org.zkoss.clientbind.test.book.databinding.converter.FooConverter,bar=org.zkoss.clientbind.test.book.databinding.converter.BarConverter</value>
+	</library-property>
+	<library-property>
+		<name>org.zkoss.bind.appValidators</name>
+		<value>xValidator=org.zkoss.clientbind.test.issue.F00921SystemConverterValidator$XValidator,
+			yValidator=org.zkoss.clientbind.test.issue.F00921SystemConverterValidator$YValidator</value>
 	</library-property>
 	<!-- for B80-ZK-3149  -->
 	<listener>
