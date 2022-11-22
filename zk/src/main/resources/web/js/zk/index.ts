@@ -12,7 +12,7 @@ Copyright (C) 2022 Potix Corporation. All Rights Reserved.
 */
 export default {};
 import './crashmsg';  // side-effect-only import
-import './ext/jquery'; // side-effect-only import
+require('./ext/jquery'); // side-effect-only import
 export * from './zk';
 import './js'; // side-effect-only import
 export * from './dom';
@@ -65,7 +65,9 @@ if (!Promise) {
 // workaround for FileUpload with fetch() API.
 require('./ext/fetch.js');
 
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-boolean-literal-compare
 zk.touchEnabled = zk.touchEnabled !== false && (!!zk.mobile || navigator.maxTouchPoints > 0);
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-boolean-literal-compare
 zk.tabletUIEnabled = zk.tabletUIEnabled !== false && !!zk.mobile;
 if (zk.touchEnabled) {
 	require('./ext/inputdevicecapabilities-polyfill');
