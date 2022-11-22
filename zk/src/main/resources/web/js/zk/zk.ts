@@ -1716,7 +1716,9 @@ if (!_zk.ie && !_zk.edge_legacy) {
 			throw 'Wrong usage here! Please run the script `zk.Buffer = Array;` instead.';
 		}
 	}
-	_zk.Buffer = Buffer;
+	// NOTE: the shape of the class `Buffer` shouldn't be leaked.
+	// Externally, `zk.Buffer` should always look like `ArrayConstructor`.
+	_zk.Buffer = Buffer as never as typeof Array<string>;
 } else {
 	_zk.Buffer = Array<string>;
 }

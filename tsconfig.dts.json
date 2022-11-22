@@ -1,0 +1,17 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "emitDeclarationOnly": true,
+    "declaration": true,
+    "declarationDir": "./build/dts",
+    "stripInternal": true,
+    "allowJs": true // JS files should be excluded as configured below except when they are referenced via the triple-slash directives
+  },
+  "exclude": [
+    "node_modules",
+    "**/build/*",
+    "**/codegen/*",
+    "**/*.js"
+  ]
+}
