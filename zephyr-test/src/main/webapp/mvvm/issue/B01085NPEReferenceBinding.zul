@@ -1,7 +1,7 @@
 <?page title="new page title" contentType="text/html;charset=UTF-8"?>
 <window id="win" title="new page title" border="normal"
 		viewModel="@id('vm') @init('org.zkoss.clientbind.test.issue.B01085NPEReferenceBinding')"
-		vmsel="@ref(vm.selected)" simple="@ref(selected)">
+		vmsel="@ref(vm.selected)" simple="@ref(selected)" selected="@init('1')">
 	<zscript>
 		Object selected = "1";
 		//for test

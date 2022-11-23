@@ -56,8 +56,8 @@ dependencies {
 	implementation 'commons-beanutils:commons-beanutils:1.9.4'
 
 	// for JSR 303
-	implementation 'org.hibernate:hibernate-validator:7.0.3.Final'
-	implementation 'javax.validation:validation-api:2.0.1.Final'
+	implementation 'org.hibernate:hibernate-validator:5.3.6.Final'
+	implementation 'javax.validation:validation-api:1.1.0.Final'
 
 	//for webdriver test
 	testImplementation "org.junit.jupiter:junit-jupiter-api:$junitVersion"
