@@ -1,7 +1,9 @@
+//@ts-check
 const path = require('path');
-var webpack = require('webpack');
-// var CircularDependencyPlugin = require('circular-dependency-plugin');
+const webpack = require('webpack');
+// const CircularDependencyPlugin = require('circular-dependency-plugin');
 
+/** @type { import('webpack').Configuration } */
 module.exports = {
 	resolve: {
 		extensions: ['.ts', '.js', '.json'],

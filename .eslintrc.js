@@ -1,3 +1,4 @@
+/** @type {import('eslint').Linter.Config} */
 module.exports = {
   'root': true,
   'parser': '@typescript-eslint/parser',
@@ -14,6 +15,15 @@ module.exports = {
     'browser': true
   },
   'overrides': [
+    {
+      'files': [
+        'gulpfile.js'
+      ],
+      'env': {
+        'browser': false,
+        'node': true
+      }
+    },
     {
       'files': [
         '*.js'
@@ -312,7 +322,7 @@ module.exports = {
         ],
         '@typescript-eslint/type-annotation-spacing': 'error',
         '@typescript-eslint/unbound-method': 'off',
-	'@typescript-eslint/unified-signatures': 'off' // TSDoc overloaded functions
+        '@typescript-eslint/unified-signatures': 'off' // TSDoc overloaded functions
       }
     }
   ]
