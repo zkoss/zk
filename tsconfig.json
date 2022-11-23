@@ -5,16 +5,16 @@
     "lib": [
       "esnext",
       "dom",
-      "ScriptHost" // ActiveObject
+      "ScriptHost"
     ],
     "module": "commonjs",
     "allowJs": true,
-    "noEmit": true, // type checking only
+    "noEmit": true,
     "strict": true,
     "allowSyntheticDefaultImports": true,
     "allowUmdGlobalAccess": true,
     "forceConsistentCasingInFileNames": true,
-    "noImplicitAny": false, // leave this for js compatible,
+    "noImplicitAny": false,
     "noImplicitOverride": true,
     "noUnusedLocals": true,
     "useUnknownInCatchVariables": false,
