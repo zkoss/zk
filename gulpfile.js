@@ -1,22 +1,27 @@
-var fs = require('fs');
-var path = require('path');
-var gulp = require('gulp');
-var minimist = require('minimist');
-var babel = require('gulp-babel');
-var rename = require('gulp-rename');
-var uglify = require('gulp-uglify');
-var browserSync = require('browser-sync').create();
-var print = require('gulp-print').default;
-var tap = require('gulp-tap');
-var gulpIgnore = require('gulp-ignore');
-var postcss = require('gulp-postcss');
-var mergeStream = require('merge-stream');
-var createResolver = require('resolve-options');
+/* eslint-disable one-var */
+//@ts-check
+const fs = require('fs');
+const path = require('path');
+const gulp = require('gulp');
+const minimist = require('minimist');
+const babel = require('gulp-babel');
+const rename = require('gulp-rename');
+const uglify = require('gulp-uglify');
+const browserSync = require('browser-sync').create();
+const print = require('gulp-print').default;
+const tap = require('gulp-tap');
+const gulpIgnore = require('gulp-ignore');
+const postcss = require('gulp-postcss');
+const mergeStream = require('merge-stream');
+const createResolver = require('resolve-options');
 const webpackStream = require('webpack-stream');
 const webpack = require('webpack');
 const flatmap = require('gulp-flatmap');
+const ts = require('gulp-typescript');
+const concat = require('gulp-concat');
+const vinylMap = require('vinyl-map');
 
-var knownOptions = {
+const knownOptions = {
 	string: ['src', 'dest'],
 	number: ['port'],
 	boolean: ['force'],
@@ -27,25 +32,28 @@ var knownOptions = {
 		port: 8080
 	}
 };
-var options = minimist(process.argv.slice(3), knownOptions);
+const options = minimist(process.argv.slice(3), knownOptions);
 
-// Workaround for maven frontend-maven-plugin passing quoted strings
+/**
+ * Workaround for maven frontend-maven-plugin passing quoted strings
+ * @param {string} txt
+ */
 function stripQuotes(txt) {
-	if (txt.charAt(0) === '"' && txt.charAt(txt.length - 1) === '"') {
+	if (txt.startsWith('"') && txt.endsWith('"')) {
 		return txt.substring(1, txt.length - 1);
 	}
 	return txt;
 }
 
 function watch_job(glob, job) {
-	var watcher = gulp.watch(glob, {ignoreInitial: false}, job);
+	const watcher = gulp.watch(glob, { ignoreInitial: false }, job);
 	watcher.on('change', function (path) {
 		console.log('Detect file change: ' + path + '...');
 	});
 	return watcher;
 }
 
-var config = {
+const config = {
 	cwd: {
 		type: 'string',
 		default: process.cwd,
@@ -60,13 +68,13 @@ function ignoreSameFile(destDir, force) {
 	return gulpIgnore.exclude(function (file) {
 		if (force) return false;
 		// simulate gulp.dest() to find a output path
-		var optResolver = createResolver(config);
-		var cwd = path.resolve(optResolver.resolve('cwd', file));
-		var basePath = path.resolve(cwd, destDir);
-		var writePath = path.resolve(basePath, file.relative);
+		const optResolver = createResolver(config);
+		const cwd = path.resolve(optResolver.resolve('cwd', file));
+		const basePath = path.resolve(cwd, destDir);
+		const writePath = path.resolve(basePath, file.relative);
 		if (fs.existsSync(writePath)) {
-			var srcStat = fs.statSync(file.path);
-			var outStat = fs.statSync(writePath);
+			const srcStat = fs.statSync(file.path);
+			const outStat = fs.statSync(writePath);
 			if (srcStat.mtime <= outStat.mtime) {
 				return true;
 			}
@@ -79,9 +87,9 @@ function ignoreSameFile(destDir, force) {
  * Used by gradle task `compileTypeScript`
  */
 function typescript_build_single() {
-	var sources = stripQuotes(options.src),
-		destDir = stripQuotes(options.dest),
-		force = options.force;
+	const sources = stripQuotes(options.src);
+	const destDir = stripQuotes(options.dest);
+	const force = options.force;
 	return typescript_build(sources, destDir, force);
 }
 
@@ -102,16 +110,16 @@ function typescript_build(src, dest, force) {
 	return mergeStream(
 		// Transpile single files with babel which are not siblings of some `index.ts`
 		gulp.src('/**/@(*.ts|*.js)', { // stream 1
-				root: src,
-				ignore: ['/**/*.d.ts'],
-			})
+			root: src,
+			ignore: ['/**/*.d.ts'],
+		})
 			.pipe(gulpIgnore.exclude(
 				file => fs.existsSync(path.join(path.dirname(file.path), 'index.ts'))
 			))
 			.pipe(babel({
 				root: __dirname
 			}))
-			.pipe(rename({suffix: '.src'}))
+			.pipe(rename({ suffix: '.src' }))
 			.pipe(gulp.dest(dest))
 			.pipe(uglify())
 			.pipe(rename(function (path) {
@@ -121,8 +129,8 @@ function typescript_build(src, dest, force) {
 			.pipe(print()),
 		// Bundle `index.ts` with webpack
 		gulp.src('/**/index.ts', { // stream 2
-				root: src,
-			})
+			root: src,
+		})
 			// There is no official way to specify the "library" property in a
 			// webpack "entry" from webpack-stream, so we manipulate the stream
 			// manually; note that specifying the "library" property in "output"
@@ -152,9 +160,9 @@ function typescript_build(src, dest, force) {
 			.pipe(print()),
 		// fix copy resource in zipjs folder
 		gulp.src('/**/!(*.less|*.js|*.d.ts)', { // stream 3
-				root: src,
-				nodir: true,
-			})
+			root: src,
+			nodir: true,
+		})
 			.pipe(ignoreSameFile(dest))
 			.pipe(gulp.dest(dest))
 			.pipe(print())
@@ -175,13 +183,13 @@ function browsersync_init(done) {
  * @returns {NodeJS.WritableStream}
  */
 function typescript_dev(src, dest, since) {
-	return gulp.src(src + '/**/*.ts', {since: since})
+	return gulp.src(src + '/**/*.ts', { since: since })
 		.pipe(print())
 		.pipe(babel({
 			root: __dirname
 		}))
 		.pipe(gulp.dest(dest))
-		.pipe(rename({suffix: '.src'}))
+		.pipe(rename({ suffix: '.src' }))
 		.pipe(gulp.dest(dest))
 		.pipe(browserSync.stream());
 }
@@ -218,9 +226,9 @@ function typescript_dev_zkmax() {
 	);
 }
 exports['build:minify-css'] = function () {
-	var sources = stripQuotes(options.src),
-		destDir = stripQuotes(options.dest),
-		force = options.force;
+	const sources = stripQuotes(options.src);
+	const destDir = stripQuotes(options.dest);
+	const force = options.force;
 	if (!fs.existsSync(sources)) {
 		return gulp.src('.');// ignore
 	}
@@ -241,7 +249,7 @@ exports['build:minify-css'] = function () {
 		}))
 		.pipe(tap(function (file, t) {
 			if (file.path.endsWith('.css.dsp')) {
-				return t.through(postcss, [[ require('cssnano') ]]);
+				return t.through(postcss, [[require('cssnano')]]);
 			} else {
 				console.log('copy...', file.path);
 			}
@@ -261,6 +269,69 @@ exports['build:minify-css'] = function () {
 		}))
 		.pipe(gulp.dest(destDir))
 		.pipe(print());
+};
+
+const dtsEntry = 'index.d.ts';
+/**
+ * Requires the command line argument `--version=<VERSION>`
+ */
+exports['build:dts'] = function () {
+	const { declarationDir } = require('./tsconfig.dts.json').compilerOptions;
+
+	const zkDTS = ts.createProject('./tsconfig.dts.json');
+	const zkcmlDTS = ts.createProject('../zkcml/tsconfig.dts.json');
+	const zkProjectDirs = require('./tsconfig.json').include;
+	const zkcmlProjectDirs = require('../zkcml/tsconfig.json').include.map(dir => path.join('../zkcml', dir));
+
+	return mergeStream(
+		zkDTS.src()
+			.pipe(zkDTS())
+			.dts
+			.pipe(gulp.dest(declarationDir)),
+		zkcmlDTS.src()
+			.pipe(zkcmlDTS())
+			.dts
+			.pipe(gulp.dest(declarationDir)),
+		gulp.src(zkProjectDirs.map(dir => dir + '/**/*.d.ts'), { base: '.' })
+			.pipe(gulp.dest(declarationDir))
+			.pipe(print()),
+		gulp.src(zkcmlProjectDirs.map(dir => dir + '/**/*.d.ts'), { base: '../zkcml' })
+			.pipe(gulp.dest(declarationDir))
+			.pipe(print()),
+		gulp.src(['./*/package.json', '../zkcml/*/package.json'])
+			.pipe(print())
+			.pipe(vinylMap((contents, filename) => {
+				const { types } = JSON.parse(contents.toString());
+				if (!types) {
+					return '';
+				}
+				const dir = path.basename(path.dirname(filename));
+				return `/// <reference path="./${path.join(dir, types)}" />`;
+			}))
+			.pipe(concat(dtsEntry))
+			.pipe(gulp.dest(declarationDir))
+			.pipe(print()),
+	);
+};
+exports['publish:dts'] = function (done) {
+	const { version } = options;
+	if (!version || typeof version !== 'string') {
+		console.log('Requires a version string!');
+		return;
+	}
+	console.log(`version: ${version}`);
+
+	const dtsPackage = {
+		name: 'zk-types',
+		version,
+		types: dtsEntry,
+		dependencies: {
+			...require('./package.json').dependencies,
+			...require('../zkcml/package.json').dependencies,
+		}
+	};
+	fs.writeFileSync('./build/dts/package.json', JSON.stringify(dtsPackage));
+	return done();
 };
 
 exports['build:single'] = typescript_build_single;
