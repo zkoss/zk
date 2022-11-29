@@ -14,6 +14,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 package org.zkoss.zephyr.webdriver.test2;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -29,13 +30,13 @@ public class B80_ZK_3201Test extends WebDriverTestCase {
 	public void test() {
 		try {
 			connect();
-			sleep(2000);
+			waitResponse();
 			click(jq("$btn"));
 			waitResponse();
+			assertEquals("Test", getZKLog());
 		} catch (Exception e) {
 			fail();
 		}
-		assertNoJSError();
-		assertTrue(true);
+		assertNoAnyError();
 	}
 }

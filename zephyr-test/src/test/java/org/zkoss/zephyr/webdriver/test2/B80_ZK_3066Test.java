@@ -22,12 +22,11 @@ import org.zkoss.test.webdriver.ztl.JQuery;
 /**
  * @author jameschu
  */
-@Disabled
 public class B80_ZK_3066Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
-		sleep(2000);
+		waitResponse();
 		JQuery dpLabel = jq("$dp");
 		assertEquals("ccc", dpLabel.text());
 	}

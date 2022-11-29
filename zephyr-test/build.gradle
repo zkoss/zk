@@ -62,9 +62,15 @@ dependencies {
 	//for webdriver test
 	testImplementation "org.junit.jupiter:junit-jupiter-api:$junitVersion"
 	testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
+	testImplementation 'org.springframework.session:spring-session-core:2.1.6.RELEASE'
+	testImplementation "org.mockito:mockito-inline:4.7.0"
 	testImplementation 'xml-apis:xml-apis:2.0.2'
-	testImplementation 'org.slf4j:slf4j-jdk14:2.0.0-alpha1'
+	testImplementation 'org.slf4j:slf4j-jdk14:2.0.3'
 	testImplementation 'org.zkoss.test:zk-webdriver:1.0.6'
+
+	// workaround for running Mockito under Java 11
+	providedCompile "net.bytebuddy:byte-buddy:1.8.22"
+	providedCompile "net.bytebuddy:byte-buddy-agent:1.8.22"
 }
 
 test {

@@ -20,7 +20,7 @@ import org.zkoss.test.webdriver.WebDriverTestCase;
 /**
  * @author rudyhuang
  */
-public class F90_ZK_4380_bindTest extends WebDriverTestCase {
+public class F90_ZK_4380_mvvmTest extends WebDriverTestCase {
 	@Test
 	public void testSingleSelection() {
 		connect();

@@ -12,7 +12,8 @@ public class B86_ZK_4280Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
-		sleep(2000);
+		waitResponse();
+		assertEquals("false", jq(".z-window-header").text());
 		JQuery btn = jq("$toggle");
 		JQuery de = jq("$detach");
 		click(btn);

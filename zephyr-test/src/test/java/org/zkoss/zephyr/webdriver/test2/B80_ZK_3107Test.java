@@ -27,7 +27,7 @@ public class B80_ZK_3107Test extends WebDriverTestCase {
 	public void test() {
 		try {
 			connect();
-			sleep(2000);
+			waitResponse();
 			JQuery t = jq("@textbox");
 			assertEquals("Peter", t.val());
 			JQuery l1 = jq("$l1");
@@ -47,6 +47,6 @@ public class B80_ZK_3107Test extends WebDriverTestCase {
 			e.printStackTrace();
 			fail();
 		}
-		assertNoJSError();
+		assertNoAnyError();
 	}
 }

@@ -25,6 +25,7 @@ public class ChildrenBindingConverterTest extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
+		waitResponse();
 		//[Step 1]
 		JQuery container1 = jq("$container1");
 		JQuery container2 = jq("$container2");

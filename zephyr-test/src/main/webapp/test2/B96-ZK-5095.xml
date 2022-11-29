@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<zk>
+    <system-config>
+        <ui-factory-class>org.zkoss.zk.ui.http.SerializableUiFactory</ui-factory-class>
+    </system-config>
+</zk>

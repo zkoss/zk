@@ -26,7 +26,7 @@ public class F80_ZK_3133_1_VM {
 	public void min501() {
 	}
 
-	@MatchMedia("all and (max-width: 500px)")
+	@MatchMedia("all and (min-width: 501px)")
 	public void max500() {
 	}
 

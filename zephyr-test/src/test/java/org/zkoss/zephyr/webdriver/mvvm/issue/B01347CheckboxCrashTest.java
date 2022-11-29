@@ -11,8 +11,10 @@ public class B01347CheckboxCrashTest extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
-
 		JQuery listbox = jq("@listbox");
 		assertTrue(listbox.length() > 0);
+		click(jq("@checkbox"));
+		waitResponse();
+		assertNoAnyError();
 	}
 }

@@ -11,6 +11,8 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -34,5 +36,6 @@ public class B95_ZK_4610Test extends WebDriverTestCase {
 		click(jq(".z-icon-bars"));
 		waitResponse();
 		Assertions.assertTrue(jq("@menupopup").isVisible());
+		assertEquals(1, jq(".z-listcell-content:contains(Test 4)").length());
 	}
 }

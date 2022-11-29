@@ -23,6 +23,8 @@ public class Collection_template_treeTest extends WebDriverTestCase {
 	public void test() {
 		connect("/mvvm/book/databinding/collection/collection-template-tree.zul");
 		int length = jq(".z-treerow").length();
+		assertEquals(30, length);
+		assertNoAnyError();
 		for (int i = 0; i < length; i++) {
 			JQuery treerow = jq(".z-treerow").eq(i);
 			String indexString = treerow.find(".z-treecell-content:eq(0)>.z-treecell-text").text();

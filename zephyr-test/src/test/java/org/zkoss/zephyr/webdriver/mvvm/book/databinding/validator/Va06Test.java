@@ -15,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.Keys;
 
 import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
@@ -30,7 +31,7 @@ public class Va06Test extends WebDriverTestCase {
 		JQuery checkBox = jq("$adultBox");
 		JQuery checkButton = jq("$checkButton");
 
-		type(ageBoxAgent, "-1");
+		sendKeys(ageBoxAgent, Keys.END, Keys.BACK_SPACE, Keys.BACK_SPACE, "-1");
 		waitResponse();
 		click(checkButton);
 		waitResponse();

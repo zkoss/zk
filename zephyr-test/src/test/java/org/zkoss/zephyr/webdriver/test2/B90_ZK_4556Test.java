@@ -12,6 +12,7 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 package org.zkoss.zephyr.webdriver.test2;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import org.junit.jupiter.api.Test;
 
@@ -28,6 +29,7 @@ public class B90_ZK_4556Test extends WebDriverTestCase {
 		click(jq("@button"));
 		waitResponse();
 		JQuery jqBtn = jq("@button");
+		assertNotEquals(0, jqBtn.eq(1).outerWidth());
 		assertEquals(jqBtn.eq(1).outerWidth() * 2, jqBtn.eq(2).outerWidth(), 2);
 	}
 }

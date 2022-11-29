@@ -24,6 +24,7 @@ public class BindComposerTest extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
+		sleep(2000);
 		//[Step 1]
 		assertEquals("A-1", jq("$win1 $result1").text());
 		//[Step 2]

@@ -22,7 +22,6 @@ import org.zkoss.test.webdriver.WebDriverTestCase;
  * @author jameschu
  *
  */
-@Disabled
 public class B80_ZK_2983Test extends WebDriverTestCase {
 
     @Test
@@ -32,5 +31,6 @@ public class B80_ZK_2983Test extends WebDriverTestCase {
 		waitResponse();
 		assertEquals("Value 1", jq("@textbox").val());
 		assertEquals("Bob", jq(jq(".z-chosenbox-item-content").get(0)).html());
+		assertNoAnyError();
 	}
 }

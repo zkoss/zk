@@ -24,6 +24,7 @@ public class MethodsTest extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
+		waitResponse();
 		//[Step 1]
 		assertEquals("my-test-valuepostfix", jq("$result1").text());
 		//[Step 2]

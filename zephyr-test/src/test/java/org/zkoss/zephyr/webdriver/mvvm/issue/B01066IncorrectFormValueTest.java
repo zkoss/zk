@@ -29,5 +29,6 @@ public class B01066IncorrectFormValueTest extends WebDriverTestCase {
 		waitResponse();
 		assertEquals("Abc", lb1.text());
 		assertEquals("Abc", lb2.text());
+		assertNoAnyError();
 	}
 }

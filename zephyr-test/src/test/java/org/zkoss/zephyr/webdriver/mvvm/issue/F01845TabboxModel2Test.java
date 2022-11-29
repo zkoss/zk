@@ -1,6 +1,7 @@
 package org.zkoss.zephyr.webdriver.mvvm.issue;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
@@ -22,6 +23,8 @@ public class F01845TabboxModel2Test extends WebDriverTestCase {
 
 		assertEquals("0", msg.text());
 		assertEquals(2, tabs.length());
+		assertTrue(jq("@tabpanel @label").eq(0).text().contains("F01845TabboxModelDetail"));
+		assertTrue(jq("@tabpanel @label").eq(1).text().contains("F01845TabboxModelDetail"));
 
 		click(tabs.eq(1));
 		waitResponse();
@@ -34,6 +37,8 @@ public class F01845TabboxModel2Test extends WebDriverTestCase {
 		tabs = tbox.find("@tab");
 		assertEquals("1", msg.text());
 		assertEquals(4, tabs.length());
+		assertTrue(jq("@tabpanel @label").eq(2).text().contains("F01845TabboxModelDetail"));
+		assertTrue(jq("@tabpanel @label").eq(3).text().contains("F01845TabboxModelDetail"));
 
 		click(tabs.eq(2));
 		waitResponse();

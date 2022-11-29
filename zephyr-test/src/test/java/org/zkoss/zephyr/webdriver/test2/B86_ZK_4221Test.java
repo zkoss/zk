@@ -14,7 +14,7 @@ public class B86_ZK_4221Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
-		sleep(2000);
+		waitResponse();
 		JQuery cb = jq("@checkbox");
 		try {
 			click(cb);
@@ -24,6 +24,6 @@ public class B86_ZK_4221Test extends WebDriverTestCase {
 		} catch (Exception e) {
 			fail();
 		}
-		assertNoJSError();
+		assertNoAnyError();
 	}
 }

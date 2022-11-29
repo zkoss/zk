@@ -25,10 +25,14 @@ public class B95_ZK_4691Test extends WebDriverTestCase {
 	public void test() {
 		connect();
 		waitResponse();
+		assertEquals(1, jq("@div").length());
+		assertEquals(2, jq("@div").find("@label").length());
 		closeZKLog();
 		waitResponse();
 		click(jq("$chgURI"));
 		waitResponse();
+		assertEquals(1, jq("@div").length());
+		assertEquals(1, jq("@div").find("@label").length());
 		assertEquals("B.zul", jq("@div").find("@label").html().trim());
 		assertEquals(false, isZKLogAvailable());
 	}

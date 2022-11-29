@@ -22,11 +22,6 @@ import org.zkoss.test.webdriver.ztl.JQuery;
  * @author jameschu
  */
 public class Va08Test extends WebDriverTestCase {
-	@Override
-	protected boolean isHeadless() {
-		return false;
-	}
-
 	@Test
 	public void test() {
 		connect();

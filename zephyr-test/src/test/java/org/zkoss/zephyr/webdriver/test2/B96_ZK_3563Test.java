@@ -33,6 +33,7 @@ public class B96_ZK_3563Test extends WebDriverTestCase {
 		waitResponse();
 		JQuery label2 = jq("$l2");
 		Assertions.assertEquals(jq("$l1").text(), label2.text());
+		Assertions.assertEquals("3", label2.text());
 		click(jq("$serializeBtn"));
 		waitResponse();
 		click(saveBtn);
@@ -42,5 +43,6 @@ public class B96_ZK_3563Test extends WebDriverTestCase {
 		click(saveBtn);
 		waitResponse();
 		Assertions.assertEquals(jq("$l1").text(), label2.text());
+		Assertions.assertEquals("7", label2.text());
 	}
 }

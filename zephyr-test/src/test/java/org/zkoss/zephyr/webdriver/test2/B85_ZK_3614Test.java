@@ -26,5 +26,6 @@ public class B85_ZK_3614Test extends WebDriverTestCase {
 		click(btnOpen);
 		waitResponse();
 		assertFalse(jq(".z-messagebox-error").exists(), "error popped");
+		assertNoAnyError();
 	}
 }

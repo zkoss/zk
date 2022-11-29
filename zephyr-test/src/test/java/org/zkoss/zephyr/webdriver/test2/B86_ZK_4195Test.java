@@ -23,12 +23,13 @@ public class B86_ZK_4195Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
-		sleep(2000);
+		waitResponse();
 		JQuery buttons = jq("@button");
 		waitResponse();
 		click(buttons.eq(0));
 		waitResponse();
 		click(buttons.eq(1));
 		waitResponse();
+		assertNoAnyError();
 	}
 }

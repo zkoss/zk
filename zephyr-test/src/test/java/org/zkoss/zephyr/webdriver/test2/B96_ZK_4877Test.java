@@ -23,6 +23,8 @@ public class B96_ZK_4877Test extends WebDriverTestCase {
 	public void test() throws Exception {
 		connect();
 		sleep(2000);
+		click(jq("@button"));
+		waitResponse();
 		assertNoAnyError();
 	}
 }

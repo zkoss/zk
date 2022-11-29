@@ -82,6 +82,9 @@ public class B00690ClusterEnv implements Serializable{
 		
 		List<String> options = new ArrayList<String>();
 
+		public Item() {
+		}
+
 		public Item(String name) {
 			this.name = name;
 			options.add(name+" 0");

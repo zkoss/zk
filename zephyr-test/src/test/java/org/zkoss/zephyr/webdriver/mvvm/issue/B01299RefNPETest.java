@@ -1,6 +1,7 @@
 package org.zkoss.zephyr.webdriver.mvvm.issue;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
@@ -67,5 +68,15 @@ public class B01299RefNPETest extends WebDriverTestCase {
 		assertEquals("I", jq("$win9 $lbb62").text());
 		assertEquals("I", jq("$win9 $lbb63").text());
 		assertEquals("I", jq("$win9 $lbb64").text());
+
+		type(jq("$win10 $tbc1"), "J");
+		waitResponse();
+		assertTrue(hasError());
+
+		type(jq("$win11 $tbc2"), "K");
+		waitResponse();
+		click(jq("$win11 $btnc2"));
+		waitResponse();
+		assertTrue(hasError());
 	}
 }

@@ -20,7 +20,6 @@ import org.zkoss.test.webdriver.WebDriverTestCase;
 /**
  * @author rudyhuang
  */
-@Disabled
 public class B96_ZK_4778Test extends WebDriverTestCase {
 	@Test
 	public void testLeak1() {

@@ -21,7 +21,7 @@ public class B86_ZK_4026Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
-		sleep(2000);
+		waitResponse();
 		JQuery btn = jq("$notifyBtn");
 		JQuery lbl = jq("$testLbl");
 		String uuid1 = lbl.get(0).get("id");

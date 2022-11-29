@@ -20,7 +20,7 @@ public class B85_ZK_3944Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
-		sleep(2000);
+		waitResponse();
 		try {
 			click(jq("$button"));
 			waitResponse();

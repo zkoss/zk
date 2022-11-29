@@ -12,9 +12,6 @@ package org.zkoss.zephyr.webdriver.mvvm.issue;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
-
 import org.junit.jupiter.api.Test;
 
 import org.zkoss.test.webdriver.WebDriverTestCase;
@@ -26,17 +23,8 @@ public class B00611Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
-		ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-		System.setOut(new PrintStream(outContent));
-		click(jq("@button"));
-		String[] outLines = outContent.toString().split("\n");
-		String loadBindingStr = null;
-		for (String line : outLines) {
-			String trimLine = line.trim();
-			if (trimLine.contains("LoadPropertyBindingImpl") && trimLine.contains("Treecell")) {
-				if (loadBindingStr == null) loadBindingStr = trimLine;
-				assertEquals(loadBindingStr, trimLine);
-			}
-		}
+		waitResponse();
+		assertNoAnyError();
+		assertEquals(1, jq("@treerow").length());
 	}
 }

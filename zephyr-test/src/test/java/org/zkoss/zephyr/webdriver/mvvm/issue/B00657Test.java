@@ -11,7 +11,8 @@ public class B00657Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
-
+		waitResponse();
+		assertEquals(5, jq("option").length());
 		JQuery listbox = jq("$listbox");
 		JQuery intbox = jq("$intbox");
 		assertEquals("0", listbox.toWidget().get("selectedIndex"));

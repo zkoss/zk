@@ -22,6 +22,7 @@ public class ArgsTest extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect("/mvvm/book/basic/args.zul");
+		sleep(2000);
 
 		JQuery l1 = jq("$l1");
 		JQuery l2 = jq("$l2");

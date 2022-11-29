@@ -16,6 +16,6 @@ public class B80_ZK_3562Test extends WebDriverTestCase {
 		} catch (Exception e) {
 			fail(e.getMessage());
 		}
-		assertNoJSError();
+		assertNoAnyError();
 	}
 }

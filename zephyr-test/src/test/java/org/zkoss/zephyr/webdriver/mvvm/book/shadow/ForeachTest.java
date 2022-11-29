@@ -38,15 +38,6 @@ public class ForeachTest extends WebDriverTestCase {
 	}
 
 	@Test
-	public void testNumbersStepMinus() {
-		//TODO: step restriction
-		//		Throwable t = Assert.assertThrows(ZatsException.class, () -> {
-		//			connect("/mvvm/book/shadow/foreach-numbers-step-minus.zul");
-		//		});
-		//		assertEquals(IllegalArgumentException.class, t.getCause().getClass());
-	}
-
-	@Test
 	public void testNumbersReverse() {
 		connect("/mvvm/book/shadow/iterate/foreach-numbers-reverse.zul");
 		final JQuery multiplicationTable = jq("$multiplicationTable");

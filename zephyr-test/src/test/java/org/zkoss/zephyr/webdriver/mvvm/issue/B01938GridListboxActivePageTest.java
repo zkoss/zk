@@ -16,6 +16,9 @@ public class B01938GridListboxActivePageTest extends WebDriverTestCase {
 		JQuery grid = jq("$grid");
 		JQuery listbox = jq("$listbox");
 
+		assertEquals("3", jq("@listitem").length());
+		assertEquals("3", jq("@row").length());
+
 		type(intbox, "23");
 		waitResponse();
 		assertEquals(23, Integer.parseInt(grid.toWidget().get("activePage")));

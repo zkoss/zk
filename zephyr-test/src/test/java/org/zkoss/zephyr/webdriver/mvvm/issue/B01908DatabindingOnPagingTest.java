@@ -18,5 +18,12 @@ public class B01908DatabindingOnPagingTest extends WebDriverTestCase {
 		assertEquals(10, Integer.parseInt(pg.toWidget().get("pageSize")));
 		assertEquals(100, Integer.parseInt(pg.toWidget().get("totalSize")));
 		assertEquals("3", lab1.text());
+
+		for (int i = 4; i<= 7; i++) {
+			click(jq(".z-paging-next"));
+			waitResponse();
+			assertEquals(i, Integer.parseInt(pg.toWidget().get("activePage")));
+			assertEquals(i + "", lab1.text());
+		}
 	}
 }

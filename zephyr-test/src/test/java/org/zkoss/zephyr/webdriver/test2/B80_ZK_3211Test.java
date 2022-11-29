@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
-@Disabled
 public class B80_ZK_3211Test extends WebDriverTestCase {
 
 	@Test

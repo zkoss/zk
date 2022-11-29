@@ -20,7 +20,6 @@ import org.zkoss.test.webdriver.WebDriverTestCase;
 /**
  * @author rudyhuang
  */
-@Disabled
 public class B85_ZK_3898Test extends WebDriverTestCase {
 	@Test
 	public void test() {

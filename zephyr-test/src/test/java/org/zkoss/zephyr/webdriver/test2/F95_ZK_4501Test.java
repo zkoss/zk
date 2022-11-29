@@ -17,7 +17,6 @@ import org.junit.jupiter.api.Test;
 
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
-@Disabled
 public class F95_ZK_4501Test extends WebDriverTestCase {
 	@Test
 	public void test() {
@@ -62,5 +61,6 @@ public class F95_ZK_4501Test extends WebDriverTestCase {
 		waitResponse();
 		Assertions.assertEquals(setName, jq("$on").text());
 		Assertions.assertEquals(setAge, jq("$oa").text());
+		assertNoAnyError();
 	}
 }

@@ -36,6 +36,6 @@ public class B80_ZK_3084Test extends WebDriverTestCase {
 		} catch (Exception e) {
 			fail();
 		}
-		assertNoJSError();
+		assertNoAnyError();
 	}
 }

@@ -14,12 +14,10 @@ public class B65_ZK_2019Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
-		sleep(2000);
-		JQuery cb = jq(".z-chosenbox");
 		waitResponse();
 		sendKeys(jq(".z-chosenbox-input"), "oh");
 		waitResponse(true);
 		sleep(300);
-		assertTrue(jq(".z-chosenbox-option:contains(john@company.org)").exists(), "Your will see 'John (john@company.org)' option.");
+		assertTrue(jq(".z-chosenbox-option:contains(john@company.org)").isVisible(), "Your will see 'John (john@company.org)' option.");
 	}
 }

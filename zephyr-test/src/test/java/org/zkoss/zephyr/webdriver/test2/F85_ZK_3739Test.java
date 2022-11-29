@@ -21,7 +21,6 @@ import org.zkoss.test.webdriver.ztl.JQuery;
 /**
  * @author rudyhuang
  */
-@Disabled
 public class F85_ZK_3739Test extends WebDriverTestCase {
 	@Test
 	public void test() {

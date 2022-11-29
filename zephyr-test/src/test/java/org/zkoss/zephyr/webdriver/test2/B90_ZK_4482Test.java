@@ -21,6 +21,6 @@ public class B90_ZK_4482Test extends WebDriverTestCase {
 		connect();
 		click(jq("@button"));
 		waitResponse();
-		assertNoJSError();
+		assertNoAnyError();
 	}
 }

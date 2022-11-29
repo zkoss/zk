@@ -9,10 +9,8 @@ import org.zkoss.test.webdriver.WebDriverTestCase;
 public class B01016NestedFormTest extends WebDriverTestCase {
 	@Test
 	public void test() {
-		try {
-			connect();
-		} catch (Exception e) {
-			assertTrue(e.getCause().toString().contains("UiException: doesn't support to load a nested form"));
-		}
+		connect();
+		waitResponse();
+		assertTrue(hasError());
 	}
 }

@@ -40,5 +40,6 @@ public class B00714Test extends WebDriverTestCase {
 		assertEquals("A0", items.eq(0).find(".z-listcell-content").eq(0).text());
 		assertEquals("A0 0", items.eq(1).find(".z-listcell-content").eq(0).text());
 		assertEquals("A0", lb.text());
+		assertNoAnyError();
 	}
 }

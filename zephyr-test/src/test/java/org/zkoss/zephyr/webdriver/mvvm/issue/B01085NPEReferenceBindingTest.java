@@ -1,7 +1,7 @@
 package org.zkoss.zephyr.webdriver.mvvm.issue;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import org.junit.jupiter.api.Test;
 
@@ -49,23 +49,20 @@ public class B01085NPEReferenceBindingTest extends WebDriverTestCase {
 		assertEquals("2", listbox2.toWidget().get("selectedIndex"));
 		assertEquals("2", lb1.text());
 
-		try {
-			click(listbox4.find("@listitem").eq(0));
-			waitResponse();
-		} catch (Exception e) {
-			assertTrue(e.getCause().toString().contains("UiException: selected"));
-		}
-		try {
-			click(listbox5.find("@listitem").eq(0));
-			waitResponse();
-		} catch (Exception e) {
-			assertTrue(e.getCause().toString().contains("UiException: selected"));
-		}
-		try {
-			click(listbox6.find("@listitem").eq(0));
-			waitResponse();
-		} catch (Exception e) {
-			assertTrue(e.getCause().toString().contains("UiException: selected"));
-		}
+		click(listbox4.find("@listitem").eq(0));
+		waitResponse();
+		String selIndex = listbox4.toWidget().get("selectedIndex");
+		assertNotEquals(selIndex, listbox5.toWidget().get("selectedIndex"));
+		assertNotEquals(selIndex, listbox6.toWidget().get("selectedIndex"));
+		click(listbox5.find("@listitem").eq(2));
+		waitResponse();
+		selIndex = listbox5.toWidget().get("selectedIndex");
+		assertNotEquals(selIndex, listbox4.toWidget().get("selectedIndex"));
+		assertNotEquals(selIndex, listbox6.toWidget().get("selectedIndex"));
+		click(listbox6.find("@listitem").eq(3));
+		waitResponse();
+		selIndex = listbox6.toWidget().get("selectedIndex");
+		assertNotEquals(selIndex, listbox4.toWidget().get("selectedIndex"));
+		assertNotEquals(selIndex, listbox5.toWidget().get("selectedIndex"));
 	}
 }

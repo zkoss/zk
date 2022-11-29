@@ -32,6 +32,6 @@ public class B96_ZK_5079Test extends WebDriverTestCase {
 			e.printStackTrace();
 			fail("Should not throw exception!");
 		}
-		assertNoJSError();
+		assertNoAnyError();
 	}
 }

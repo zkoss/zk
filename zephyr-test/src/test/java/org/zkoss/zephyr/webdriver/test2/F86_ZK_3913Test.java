@@ -38,6 +38,7 @@ public class F86_ZK_3913Test extends WebDriverTestCase {
 		final Image actualImage2 = fromDataURL(data);
 		assertTrue(compareImages(expectedImage2, actualImage2),
 				"image is different");
+		assertNoAnyError();
 	}
 
 	private Image fromDataURL(String dataUrl) throws IOException {

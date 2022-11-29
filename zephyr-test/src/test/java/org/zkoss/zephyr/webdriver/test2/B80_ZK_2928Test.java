@@ -51,5 +51,6 @@ public class B80_ZK_2928Test extends WebDriverTestCase {
 		click(jq);
 		waitResponse();
 		assertEquals("showSelectedItem:null", getZKLog());
+		assertNoAnyError();
 	}
 }

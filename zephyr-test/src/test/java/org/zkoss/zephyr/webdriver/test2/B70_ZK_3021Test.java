@@ -22,12 +22,11 @@ import org.zkoss.test.webdriver.ztl.JQuery;
 /**
  * @author jumperchen
  */
-@Disabled
 public class B70_ZK_3021Test extends WebDriverTestCase {
 	@Test
 	public void testZK3021() {
 		connect();
-		sleep(2000);
+		waitResponse();
 		JQuery labels = jq("@label");
 		assertEquals(11, labels.length());
 		for (int i = 1; i < 11; i += 2) {

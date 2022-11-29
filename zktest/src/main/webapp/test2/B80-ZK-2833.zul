@@ -14,7 +14,7 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 
 -->
 <zk xmlns:w="client" xmlns:ca="client/attribute">
-	If you can see this page with any exception, the bug is fixed.
+	If you can see this page with no exception, the bug is fixed.
 	<window title="" border="normal" apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.zkoss.zktest.test2.B80_ZK_2833VM')"
 		validationMessages="@id('vmsgs')">

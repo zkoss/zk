@@ -11,6 +11,8 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -30,6 +32,7 @@ public class B86_ZK_4160Test extends WebDriverTestCase {
 		click(jq("@button:last"));
 		click(jq("@button:last"));
 		waitResponse();
+		assertEquals(4, jq(".z-treerow").length());
 
 		click(jq("@tab:first > .z-tab-content"));
 		waitResponse();
@@ -40,6 +43,7 @@ public class B86_ZK_4160Test extends WebDriverTestCase {
 
 		click(jq("@tab:last > .z-tab-content"));
 		waitResponse();
-		Assertions.assertEquals(1 + jq("$treeitems > @label").length(), jq("@treerow").length());
+		assertEquals(1 + jq("$treeitems > @label").length(), jq("@treerow").length());
+		assertEquals(7, jq(".z-treerow").length());
 	}
 }
