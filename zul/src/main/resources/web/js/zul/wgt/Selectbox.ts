@@ -32,6 +32,8 @@ export class Selectbox extends zul.Widget<HTMLSelectElement> {
 	_selectedIndexes?: number[];
 	/** @internal */
 	_name?: string;
+	/** @internal */
+	items?: string[];
 
 	/**
 	 * @returns the index of the selected item (-1 if no one is selected).
