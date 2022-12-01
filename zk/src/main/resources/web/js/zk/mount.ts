@@ -482,8 +482,14 @@ function create(parent: zk.Widget | undefined, wi: WidgetInfo, ignoreDom?: boole
 	// packages are loaded.
 	if (zk.loading) {
 		zk.afterLoad(() => wgt.afterCompose_());
-	} else {
+	} else if (parent) {
 		wgt.afterCompose_();
+	} else {
+		const callOnce = (): void => {
+			wgt.afterCompose_();
+			wgt.unlisten({'onBind': callOnce});
+		};
+		wgt.listen({'onBind': callOnce});
 	}
 	return wgt;
 }
