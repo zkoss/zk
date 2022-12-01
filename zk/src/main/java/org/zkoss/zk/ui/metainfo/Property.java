@@ -121,6 +121,15 @@ public class Property extends ConditionValue {
 		return _value.getRawValue();
 	}
 
+	/**
+	 * Returns whether the property is held by {@link NativeInfo}.
+	 * @since 10.0.0
+	 * @return
+	 */
+	public boolean isNativeInfo() {
+		return _navval != null;
+	}
+
 	/** Sets the raw value of the property.
 	 * @exception UnsupportedOperationException if value is the native content,
 	 * i.e., it is constructed by use of {@link #Property(EvaluatorRef, String, NativeInfo, ConditionImpl)}.
