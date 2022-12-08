@@ -77,7 +77,7 @@ public class ExecutionResolver implements VariableResolverX {
 		return resolveVariable0(_self, ctx, base, onm);
 	}
 
-	private Object resolveVariable0(Object self, XelContext ctx, Object base, Object onm) {
+	protected Object resolveVariable0(Object self, XelContext ctx, Object base, Object onm) {
 		if (base != null) {
 			Object o = ((ExecutionCtrl) _exec).getExtraXelVariable(ctx, base, onm);
 			if (o != null)
