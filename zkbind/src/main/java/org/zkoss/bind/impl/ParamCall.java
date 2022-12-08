@@ -262,7 +262,7 @@ public class ParamCall {
 		return null;
 	}
 
-	private Object resolveParameter0(Object val, Class<?> returnType) {
+	protected Object resolveParameter0(Object val, Class<?> returnType) {
 		if (val != null && returnType.isAssignableFrom(val.getClass())) { //escape
 			return val;
 		} else if (Component.class.isAssignableFrom(returnType) && val instanceof String) {
