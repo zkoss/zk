@@ -27,6 +27,7 @@
     "types": [
       "zk",
       "zul",
+      "zhtml",
       "zkbind",
       "stateless",
       "zkmax",
@@ -40,6 +41,9 @@
       ],
       "@zul/*": [
         "./zul/src/main/resources/web/js/zul/*"
+      ],
+      "@zhtml/*": [
+        "./zhtml/src/main/resources/web/js/zhtml/*"
       ],
       "@stateless/*": [
         "./stateless/src/main/resources/web/js/stateless/*"

@@ -11,11 +11,11 @@ Copyright (C) 2014 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.zuti.composer;
 
+import static org.zkoss.zk.ui.util.Clients.log;
+
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
-
-import javax.swing.text.html.HTML;
 
 import org.zkoss.json.JSONArray;
 import org.zkoss.json.JSONObject;
@@ -23,19 +23,14 @@ import org.zkoss.json.JSONValue;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.HtmlShadowElement;
-import org.zkoss.zk.ui.HtmlShadowElement.Direction;
 import org.zkoss.zk.ui.ShadowElement;
 import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.util.Clients;
-
-import static org.zkoss.zk.ui.util.Clients.*;
-
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Div;
-import org.zkoss.zul.Label;
 
 /**
  * @author jumperchen
@@ -51,7 +46,7 @@ public class DebuggerComposer extends SelectorComposer<Div> {
 		JSONObject rootData = new JSONObject();
 		if (root != null)
 			log1(root, rootData);
-		Clients.evalJavaScript("DrawTree(" + rootData.toJSONString() + ")");
+		Clients.evalJavaScript("DrawTree(" + rootData.toJSONString() + ",'" + host.getId()+ "')");
 	}
 	
 	private JSONObject fillShadowHost(Component host) {
@@ -111,7 +106,7 @@ public class DebuggerComposer extends SelectorComposer<Div> {
 		return rootData;
 	}
 	private void logWholeTree(Component host) {
-		Clients.evalJavaScript("DrawTree(" + fillShadowHost(host).toJSONString() + ")");
+		Clients.evalJavaScript("DrawTree(" + fillShadowHost(host).toJSONString() + ",'" + host.getId() + "')");
 	}
 	private JSONObject fillShadowElement(HtmlShadowElement se, AbstractComponent current, ListIterator<AbstractComponent> cit) {
 		String name = se.toString();

@@ -54,6 +54,7 @@ dependencies {
 	implementation "org.zkoss.zk:client-bind:${version}"
 	implementation 'commons-lang:commons-lang:2.6'
 	implementation 'commons-beanutils:commons-beanutils:1.9.4'
+	implementation 'org.slf4j:slf4j-jdk14:2.0.3'
 
 	// for JSR 303
 	implementation 'org.hibernate:hibernate-validator:5.3.6.Final'

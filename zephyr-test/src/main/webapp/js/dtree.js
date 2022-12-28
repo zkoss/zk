@@ -46,9 +46,9 @@ function getNodeSize(node, levelInfos) {
 		}
 	}
 }
-window.DrawTree = function(json) {
+window.DrawTree = function(json, hostId) {
 	var maxNodeSize = getMaxNodeSize(json);
-	var zkcontent = jq('$host');
+	var zkcontent = jq('$' + hostId);
 	 w = jq.innerWidth() - 50 - m[1] - m[3];
 	 h = jq.innerHeight() - 100 - zkcontent.height() - m[0] - m[2];
 	 h = Math.max(110 * maxNodeSize, h);

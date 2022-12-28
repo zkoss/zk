@@ -1901,15 +1901,19 @@ new zul.wnd.Window({
 	 * @see {@link insertBefore}
 	 */
 	appendChild(child: zk.Widget, ignoreDom?: boolean): boolean {
-		if (!this.beforeChildAdded_(child)) {
-			return false;
-		}
 		if (child == this.lastChild)
 			return false;
 
+		if (!this.beforeChildAdded_(child)) {
+			return false;
+		}
+		this.triggerBeforeHostChildAdded_(child, undefined);
+
 		var oldpt: zk.Widget | undefined;
-		if ((oldpt = child.parent) != this)
+		if ((oldpt = child.parent) != this) {
 			child.beforeParentChanged_(this);
+			child.triggerBeforeHostParentChanged_(this);
+		}
 
 		if (oldpt) {
 			_noParentCallback = true;
@@ -1944,8 +1948,10 @@ new zul.wnd.Window({
 		}
 
 		child.afterParentChanged_(oldpt);
-		if (!_noChildCallback)
+		if (!_noChildCallback) {
 			this.onChildAdded_(child);
+			this.triggerAfterHostChildAdded_(child);
+		}
 		return true;
 	}
 
@@ -2030,9 +2036,29 @@ new zul.wnd.Window({
 		}
 
 		child.afterParentChanged_(oldpt);
-		if (!_noChildCallback)
+		if (!_noChildCallback) {
 			this.onChildAdded_(child);
+			this.triggerAfterHostChildAdded_(child);
+		}
 		return true;
+	}
+
+	/** A callback called before removing a child.
+	 * @param child - the child being removed.
+	 * @since 10.0.0
+	 * @internal
+	 */
+	beforeChildRemoved_(child: zk.Widget): void {
+		return;
+	}
+
+	/** A callback called before removing a child for shadow host.
+	 * @param child - the child being removed.
+	 * @since 10.0.0
+	 * @internal
+	 */
+	triggerBeforeHostChildRemoved_(child: zk.Widget): void {
+		return;
 	}
 
 	/**
@@ -2056,6 +2082,8 @@ new zul.wnd.Window({
 		if (this != oldpt)
 			return false;
 
+		this.beforeChildRemoved_(child);
+		this.triggerBeforeHostChildRemoved_(child);
 		_rmIdSpaceDown(child);
 
 		//Note: remove HTML and unbind first, so unbind_ will have all info
@@ -2075,8 +2103,10 @@ new zul.wnd.Window({
 
 		if (!_noParentCallback)
 			child.afterParentChanged_(oldpt);
-		if (!_noChildCallback)
+		if (!_noChildCallback) {
 			this.onChildRemoved_(child);
+			this.triggerAfterHostChildRemoved_(child);
+		}
 		return true;
 	}
 
@@ -2250,6 +2280,17 @@ new zul.wnd.Window({
 	 * @internal
 	 */
 	beforeParentChanged_(newparent?: zk.Widget): void {
+		return;
+	}
+
+	/**
+	 * A callback called before the parent is changed for shadow host.
+	 * @param newparent - the new parent (null if it is removed)
+	 * The previous parent can be found by {@link parent}.
+	 * @since 10.0.0
+	 * @internal
+	 */
+	triggerBeforeHostParentChanged_(newparent?: zk.Widget): void {
 		return;
 	}
 
@@ -2522,6 +2563,15 @@ new zul.wnd.Window({
 	beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
 		return true; //to be overridden
 	}
+
+	/**
+	 * Called before adding a child for shadow host.
+	 * @since 10.0.0
+	 * @internal
+	 */
+	triggerBeforeHostChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): void {
+		return; //to be overridden
+	}
 	/** A callback called after a child has been added to this widget.
 	 * <p>Notice: when overriding this method, {@link onChildReplaced_}
 	 * is usually required to override, too.
@@ -2533,6 +2583,15 @@ new zul.wnd.Window({
 	onChildAdded_(child: zk.Widget): void {
 		if (this.desktop)
 			jq.onSyncScroll(this);
+	}
+
+	/** A callback called after a child has been added to this widget for shadow host.
+	 * @since 10.0.0
+	 * @param child
+	 * @internal
+	 */
+	triggerAfterHostChildAdded_(child: zk.Widget): void {
+		return;
 	}
 
 	/** A callback called after a child has been removed to this widget.
@@ -2547,6 +2606,15 @@ new zul.wnd.Window({
 			jq.onSyncScroll(this);
 	}
 
+	/** A callback called after a child has been removed to this widget for shadow
+	 * host.
+	 * @param child - the child being removed
+	 * @since 10.0.0
+	 * @internal
+	 */
+	triggerAfterHostChildRemoved_(child: zk.Widget): void {
+		return;
+	}
 	/** A callback called after a child has been replaced.
 	 * Unlike {@link onChildAdded_} and {@link onChildRemoved_}, this
 	 * method is called only if {@link zk.AuCmd1#outer}.
@@ -2564,8 +2632,14 @@ new zul.wnd.Window({
 	onChildReplaced_(oldc: zk.Widget | undefined, newc: zk.Widget | undefined): void {
 		this.childReplacing_ = true;
 		try {
-			if (oldc) this.onChildRemoved_(oldc);
-			if (newc) this.onChildAdded_(newc);
+			if (oldc) {
+				this.onChildRemoved_(oldc);
+				this.triggerAfterHostChildRemoved_(oldc);
+			}
+			if (newc) {
+				this.onChildAdded_(newc);
+				this.triggerAfterHostChildAdded_(newc);
+			}
 		} finally {
 			this.childReplacing_ = false;
 		}

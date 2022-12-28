@@ -23,19 +23,19 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
         <navbar orient="vertical" collapsed="@load(vm.collapsed)">
             <apply template="iterate" menuItems="@load(vm.menuList)"/>
         </navbar>
+        <template name="iterate">
+            <forEach items="@load(menuItems)">
+                <apply template="@load(empty each.subMenus? 'menuitem' : 'menu')" menuItem="@load(each)"/>
+            </forEach>
+        </template>
+        <template name="menu">
+            <nav label="@load(menuItem.label)" iconSclass="@load(menuItem.icon)"
+                 badgeText="@load(vm.collapsed ? '' : menuItem.counter)">
+                <apply template="iterate" menuItems="@load(menuItem.subMenus)"/>
+            </nav>
+        </template>
+        <template name="menuitem">
+            <navitem label="@load(menuItem.label)" iconSclass="@load(menuItem.icon)"/>
+        </template>
     </div>
-    <template name="iterate">
-        <forEach items="@load(menuItems)">
-            <apply template="@load(empty each.subMenus? 'menuitem' : 'menu')" menuItem="@load(each)"/>
-        </forEach>
-    </template>
-    <template name="menu">
-        <nav label="@load(menuItem.label)" iconSclass="@load(menuItem.icon)"
-             badgeText="@load(vm.collapsed ? '' : menuItem.counter)">
-            <apply template="iterate" menuItems="@load(menuItem.subMenus)"/>
-        </nav>
-    </template>
-    <template name="menuitem">
-        <navitem label="@load(menuItem.label)" iconSclass="@load(menuItem.icon)"/>
-    </template>
 </zk>

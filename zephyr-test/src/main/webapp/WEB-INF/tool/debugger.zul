@@ -2,6 +2,7 @@
 <script src="/js/d3.js" />
 <script src="/js/d3.layout.js" />
 <script src="/js/dtree.js" />
+<script src="/js/showShadowTree.js" />
 <style>
 .node circle {
   cursor: pointer;
@@ -30,10 +31,10 @@ path.link {
 }
 </style>
 	<groupbox title="Debugging Tool">
-	<div apply="org.zkoss.zktest.test2.util.DebuggerComposer">
+	<div xmlns:w="client" apply="org.zkoss.zktest.test2.util.DebuggerComposer">
 		<custom-attributes rootId="${arg.rootId}"/>
-		<button id="printShadowTree" label="Print Shadow Tree"/>
-		<button id="printWholeTree" label="Print Whole Tree"/>
+		<button id="printShadowTree" w:onClick="if (zk.$('$${arg.rootId}').getShadowRoots()) {showShadowTree(zk.$('$${arg.rootId}')); event.stop()}" label="Print Shadow Tree"/>
+		<button id="printWholeTree" w:onClick="if (zk.$('$${arg.rootId}').getShadowRoots()) {showShadowTree(zk.$('$${arg.rootId}'), true); event.stop()}" label="Print Whole Tree"/>
 		<n:div id="body" xmlns:n="native"/>
 	</div>
 	</groupbox>
