@@ -2587,7 +2587,7 @@ new zul.wnd.Window({
 
 	/** A callback called after a child has been added to this widget for shadow host.
 	 * @since 10.0.0
-	 * @param child
+	 * @param child - the child being added
 	 * @internal
 	 */
 	triggerAfterHostChildAdded_(child: zk.Widget): void {
