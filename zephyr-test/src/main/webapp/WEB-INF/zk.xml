@@ -29,4 +29,29 @@
 	<listener>
 		<listener-class>org.zkoss.zktest.test2.B80_ZK_3149ProxyHandler</listener-class>
 	</listener>
+
+	<!-- F70-ZK 2079
+	Turn on autohide in mesh component -->
+	<library-property>
+		<name>org.zkoss.zul.grid.autohidePaging</name>
+		<value>true</value>
+	</library-property>
+	<library-property>
+		<name>org.zkoss.zul.tree.autohidePaging</name>
+		<value>true</value>
+	</library-property>
+	<library-property>
+		<name>org.zkoss.zul.listbox.autohidePaging</name>
+		<value>true</value>
+	</library-property>
+
+	<library-property>
+		<name>org.zkoss.zul.listbox.rod</name>
+		<value>true</value>
+	</library-property>
+
+	<library-property>
+		<name>org.zkoss.zul.grid.rod</name>
+		<value>true</value>
+	</library-property>
 </zk>
