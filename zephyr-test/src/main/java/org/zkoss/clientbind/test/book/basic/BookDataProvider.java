@@ -14,7 +14,7 @@ public class BookDataProvider {
 		return nf.format(r.nextInt(99999999));
 	}
 	static {
-		for (int i = 0; i < 10; i++) { //200
+		for (int i = 0; i < 200; i++) {
 			for (int j = 0; j < 3; j++) {
 				books.add(new Book("Book " + i + "_" + j, "Author " + i, nextIsbn()));
 			}
