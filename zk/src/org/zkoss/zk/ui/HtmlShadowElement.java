@@ -623,31 +623,30 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 			}
 		} else { // merge to host
 			Component previous = _previousInsertion;
+			HtmlShadowElement firstChild = children.get(0);
+			if (previous != null) {
+				Component newPrevious = firstChild._previousInsertion;
+				if (newPrevious == null) {
+					setPrevInsertion(firstChild, previous);
+				} else {
+					setPrevInsertion(newPrevious, previous);
+				}
+				_previousInsertion = null;
+			}
+			if (_firstInsertion == firstChild._firstInsertion || _firstInsertion == firstChild._previousInsertion)
+				_firstInsertion = null; // reset
+			firstChild = children.get(children.size() - 1);
+			Component newNext = firstChild._nextInsertion;
+			if (_nextInsertion != null) {
+				if (newNext == null) {
+					firstChild._nextInsertion = _nextInsertion;
+				}
+				_nextInsertion = null;
+			}
+			if (_lastInsertion == firstChild._lastInsertion || _lastInsertion == firstChild._nextInsertion)
+				_lastInsertion = null; // reset
 			for (HtmlShadowElement child : new ArrayList<HtmlShadowElement>(children)) {
-
 				child.mergeToHost(_host);
-
-				if (previous != null) {
-					Component newPrevious = child._previousInsertion;
-					if (newPrevious == null) {
-						setPrevInsertion(child, previous);
-					} else {
-						setPrevInsertion(newPrevious, previous);
-					}
-					_previousInsertion = null;
-				}
-				Component newNext = child._nextInsertion;
-				if (_nextInsertion != null) {
-					if (newNext == null) {
-						child._nextInsertion = _nextInsertion;
-					}
-					_nextInsertion = null;
-				}
-				if (_firstInsertion == child._firstInsertion || _firstInsertion == child._previousInsertion)
-					_firstInsertion = null; // reset
-
-				if (_lastInsertion == child._lastInsertion || _lastInsertion == child._nextInsertion)
-					_lastInsertion = null; // reset
 			}
 		}
 	}
