@@ -51,7 +51,6 @@ export abstract class LabelImageWidget<TElement extends HTMLElement = HTMLElemen
 
 	/**
 	 * Sets the label.
-	 * <p>If label is changed, the whole component is invalidate.
 	 * Thus, you want to smart-update, you have to override {@link updateDomContent_}.
 	 */
 	setLabel(label: string, opts?: Record<string, boolean>): this {
@@ -59,8 +58,16 @@ export abstract class LabelImageWidget<TElement extends HTMLElement = HTMLElemen
 		this._label = label;
 
 		if (o !== label || opts?.force) {
-			if (this.desktop)
+			if (this.desktop) {
+				const n = this.$n();
+
+				// avoid to invalidate the whole widget if only changed by label.
+				if (n && n.firstChild == n.lastChild && n.firstChild instanceof Text) {
+					jq(n).text(label);
+					return this;
+				}
 				this.updateDomContent_();
+			}
 		}
 
 		return this;
