@@ -69,7 +69,8 @@ zk.afterLoad('zul.sel', () => {
 			}
 		}
 	});
-	let xTreeitem = zk.override(zul.sel.Treeitem.prototype, {}, {
+	let xTreeitem: Partial<zul.sel.Treeitem> = {};
+	zk.override(zul.sel.Treeitem.prototype, xTreeitem, {
 		isClientPaging(tree?: zul.sel.Tree): boolean {
 			tree = tree ?? this.getTree();
 			return !!(tree && tree.isStateless() && !tree.isModel() && tree.getPagingChild() != null);
@@ -89,7 +90,7 @@ zk.afterLoad('zul.sel', () => {
 					return;
 				}
 			}
-			xTreeitem._showKids.call(this, open);
+			xTreeitem._showKids!.call(this, open);
 		},
 		fire(evtnm: string, data?: unknown, opts?: zk.EventOptions, timeout?: number): zk.Event {
 			if ('onOpen' == evtnm && this.isClientPaging()) {
@@ -98,7 +99,7 @@ zk.afterLoad('zul.sel', () => {
 					opts.toServer = false;
 				}
 			}
-			return xTreeitem.fire.call(this, evtnm, data, opts, timeout);
+			return xTreeitem.fire!.call(this, evtnm, data, opts, timeout);
 		},
 		/** @internal */
 		getPath_(): number[] {
