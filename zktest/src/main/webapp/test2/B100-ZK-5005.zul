@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk>
+	<label multiline="true">
+	You should see many cells containing texts.
+	Compare the result with a some other PDF viewer.
+	</label>
+	<div>
+		<pdfviewer src="B100-ZK-5005.pdf" hflex="1" vflex="1" />
+	</div>
+</zk>
