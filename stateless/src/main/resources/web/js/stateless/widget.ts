@@ -28,7 +28,9 @@ const _xWidget: Partial<zk.Widget> = {},
     /** @internal */
     _lookupAllWidgetUuids(parent: zk.Widget, uuids: string[]): void {
         if (parent != null) {
-            uuids.push(parent.uuid);
+			if (parent.uuid && !parent.uuid.startsWith('_z_')) {
+				uuids.push(parent.uuid);
+			}
             for (let w = parent.firstChild; w; w = w.nextSibling) {
                 this._lookupAllWidgetUuids(w, uuids);
             }

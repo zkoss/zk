@@ -171,12 +171,17 @@ export class Paging extends zul.Widget {
 	/**
 	 * Sets the active page (starting from 0).
 	 */
-	setActivePage(activePage: number, opts?: Record<string, boolean>): this {
+	setActivePage(activePage: number, opts?: Record<string, boolean> | boolean): this {
 		const o = this._activePage;
 		this._activePage = activePage;
 
-		if (o !== activePage || opts?.force) {
+		if (o !== activePage || (typeof opts != 'boolean' && (opts as Record<string, boolean>)?.force)) {
 			this.rerender();
+		}
+
+		// for client mvvm if activePage is set at client, we should trigger onPaging event to server
+		if (opts === undefined) {
+			this.fire('onPaging', activePage);
 		}
 
 		return this;
@@ -752,10 +757,12 @@ export class Paging extends zul.Widget {
 			} else if (wgt.getMold() == 'os') {
 				wgt._doAfterGo((anc as HTMLAnchorElement).text);
 			}
-			wgt.fire('onPaging', pgno);
 
-			// update activePage at client for stateless
-			wgt.setActivePage(pgno);
+			// 1. update activePage at client for stateless
+			// 2. update before onPaging for client mvvm
+			wgt.setActivePage(pgno, true);
+
+			wgt.fire('onPaging', pgno);
 		}
 	}
 

@@ -614,6 +614,23 @@ export abstract class MeshWidget extends zul.Widget {
 	}
 
 	/**
+	 * Returns whether the paging component of this component is disabled
+	 * @since 10.0.0
+	 */
+	isPagingDisabled(): boolean {
+		return !!this.getPagingChild()?.isDisabled();
+	}
+
+	/**
+	 * Sets whether to disable the Paging component of this component
+	 * @since 10.0.0
+	 */
+	setPagingDisabled(pagingDisabled: boolean): this {
+		this.getPagingChild()?.setDisabled(pagingDisabled);
+		return this;
+	}
+
+	/**
 	 * @returns whether sizing the widget column width by its content. Default is false.
 	 * <p>Note: if the "sized-by-content" attribute of component is specified,
 	 * it's prior to the original value.
