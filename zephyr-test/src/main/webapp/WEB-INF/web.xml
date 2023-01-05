@@ -45,6 +45,7 @@
 			<param-name>basePackages</param-name>
 			<param-value>org.zkoss.stateless.test</param-value>
 		</init-param>
+		<async-supported>true</async-supported>
 	</filter>
 
 	<filter-mapping>
