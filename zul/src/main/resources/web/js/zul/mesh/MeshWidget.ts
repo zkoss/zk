@@ -2387,7 +2387,7 @@ export abstract class MeshWidget extends zul.Widget {
 	// ZK-5028 for Treecols, Listhead, and Columns
 	/** @internal */
 	override shallFireSizedLaterWhenAddChd_(): boolean {
-		if (this._rerendering) {
+		if (this.inRerendering_()) {
 			zWatch.listen({
 				onResponse: [this, this._fixFireSizedLaterWhenAddChd]
 			});

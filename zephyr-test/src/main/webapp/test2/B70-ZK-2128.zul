@@ -67,7 +67,7 @@
 	</div>
 
 	<div height="500px" width="30%"
-		 viewModel="@id('vm') @init('org.zkoss.zktest.test.B70_ZK_2128VM')">
+		 viewModel="@id('vm') @init('org.zkoss.zktest.test2.B70_ZK_2128VM')">
 		<vlayout vflex="1" hflex="1">
 			<hlayout>
 				<checkbox label="toggle aux header" checked="@bind(vm.showAux)"/>

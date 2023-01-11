@@ -24,8 +24,10 @@ import java.util.List;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WebApps;
+import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.OpenEvent;
+import org.zkoss.zk.ui.ext.Scope;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zul.event.PagingEvent;
 import org.zkoss.zul.ext.Paginal;
@@ -460,7 +462,6 @@ public class Treeitem extends XulElement implements org.zkoss.zk.ui.ext.Disable 
 	/**
 	 * adds the number of the visible item to the count of its parent.
 	 * @param count
-	 * @param force if true, ignores {@link #isVisible()}
 	 * @since 3.0.7
 	 */
 	void addVisibleItemCount(int count) {
@@ -676,7 +677,7 @@ public class Treeitem extends XulElement implements org.zkoss.zk.ui.ext.Disable 
 
 	/** Processes an AU request.
 	 *
-	 * <p>Default: in addition to what are handled by {@link XulElement#service},
+	 * <p>Default: in addition to what are handled by {@link XulElement#service(Event, Scope)},
 	 * it also handles onOpen.
 	 * @since 5.0.0
 	 */

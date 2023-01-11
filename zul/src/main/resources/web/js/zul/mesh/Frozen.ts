@@ -250,8 +250,9 @@ export class Frozen extends zul.Widget {
 			//B70-ZK-2463: if firstHdcell is not undefined
 			if (firstHdcell) {
 				const fhcs = firstHdcell.style;
-				if (!fhcs.height)
-					fhcs.height = `${firstHdcell.offsetHeight}px`;
+				if (!fhcs.height || n!.cells![1]) {
+					fhcs.height = jq.px0(Math.max(firstHdcell.offsetHeight, n!.cells![1] ? n!.cells![1].offsetHeight : 0));
+				}
 			}
 		}
 

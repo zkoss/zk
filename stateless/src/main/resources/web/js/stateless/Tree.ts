@@ -85,7 +85,7 @@ zk.afterLoad('zul.sel', () => {
 			if (this.isClientPaging(tree)) {
 				tree!.paging!._totalSize = 0;// reset cache to recalculate it
 				// client Paging case
-				if (!tree!._rerendering) {
+				if (!tree!.inRerendering_()) {
 					tree!.rerender(10);
 					return;
 				}

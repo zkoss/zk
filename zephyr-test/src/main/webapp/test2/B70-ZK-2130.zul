@@ -10,7 +10,7 @@
 	<hlayout>
 		<vlayout hflex="1">
 			<div height="350px" width="100%"
-				viewModel="@id('vm') @init('org.zkoss.zktest.test.B70_ZK_2128VM')">
+				viewModel="@id('vm') @init('org.zkoss.zktest.test2.B70_ZK_2128VM')">
 				<vlayout>
 					<tree height="300px" model="@load(vm.treeModel)"
 						id="treeNativeScrollbar" hflex="1">
@@ -78,7 +78,7 @@
 
 			<div height="350px" width="100%"
 
-				viewModel="@id('vm') @init('org.zkoss.zktest.test.B70_ZK_2128VM')">
+				viewModel="@id('vm') @init('org.zkoss.zktest.test2.B70_ZK_2128VM')">
 				<vlayout>
 					<tree height="300px" model="@load(vm.treeModel)"
 						id="treeFakeScrollbar" hflex="1">
@@ -147,7 +147,7 @@
 		<vlayout hflex="1">
 			<div height="350px" width="100%"
 
-				viewModel="@id('vm') @init('org.zkoss.zktest.test.B70_ZK_2128VM')">
+				viewModel="@id('vm') @init('org.zkoss.zktest.test2.B70_ZK_2128VM')">
 				<vlayout>
 					<tree model="@load(vm.treeModel)"
 						id="treeNativeScrollbar1" hflex="1" rows="4">
@@ -216,7 +216,7 @@
 
 			<div height="350px" width="100%"
 
-				viewModel="@id('vm') @init('org.zkoss.zktest.test.B70_ZK_2128VM')">
+				viewModel="@id('vm') @init('org.zkoss.zktest.test2.B70_ZK_2128VM')">
 				<vlayout>
 					<tree model="@load(vm.treeModel)"
 						id="treeFakeScrollbar1" hflex="1" rows="4">

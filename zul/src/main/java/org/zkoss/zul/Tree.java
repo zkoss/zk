@@ -2144,7 +2144,7 @@ public class Tree extends MeshElement {
 	 *  <p>
 	 * Default: 50. (Since 7.0.0)
 	 * <p>
-	 * It is used only if live data ({@link #setModel(ListModel)} and not paging
+	 * It is used only if live data ({@link #setModel(TreeModel)} and not paging
 	 * ({@link #getPagingChild}.
 	 */
 	private int initRodSize() {

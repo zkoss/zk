@@ -638,7 +638,6 @@ function _rerender0(): void {
 		}
 
 		wgt.rerender(-1);
-		delete wgt._rerendering;
 	}
 }
 /* Bug ZK-2281 */
@@ -3394,6 +3393,7 @@ new zul.wnd.Window({
 						this.replaceHTML(n, undefined, undefined, true);
 				} finally {
 					delete zk._avoidRod;
+					delete this._rerendering;
 				}
 			}
 		}
@@ -3490,8 +3490,17 @@ new zul.wnd.Window({
 			const sib = (before0).previousSibling;
 			if (_isProlog(sib)) before0 = sib as HTMLElement;
 			jq(before0).before(html);
-		} else
-			jq(ben as HTMLElement).append(html);
+		} else {
+			// fix for B70-ZK-2128.zul on client mvvm that the HeadWidget creates a
+			// '-bar' element as the last child of the HeadWidget element, if the
+			// upcoming added child is appended, the added child will be placed at
+			// the end of the elements, which is a wrong position.
+			if (this.lastChild === child && ben!.lastChild != null && !(ben!.lastChild as HTMLElement).id) {
+				jq(ben!.lastChild).before(html);
+			} else {
+				jq(ben as HTMLElement).append(html);
+			}
+		}
 		child.bind(desktop);
 	}
 
@@ -3663,6 +3672,22 @@ new zul.wnd.Window({
 	 */
 	isRealElement(): boolean {
 		return true;
+	}
+
+	/**
+	 * @returns whether the widget is in re-rendering phases.
+	 * @since 10.0.0
+	 * @internal
+	 */
+	inRerendering_(): boolean {
+		let p = this as zk.Widget | undefined;
+		while (p) {
+			if (p._rerendering) {
+				return true;
+			}
+			p = p.parent;
+		}
+		return false;
 	}
 
 	/**
