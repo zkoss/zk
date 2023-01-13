@@ -5,10 +5,6 @@ plugins {
 	id "com.adarshr.test-logger" version "3.0.0"
 }
 
-gretty {
-	httpPort = 8081
-}
-
 idea {
 	module {
 		outputDir file("$buildDir/classes/main")
@@ -46,6 +42,9 @@ group = "org.zkoss.zk"
 
 dependencies {
 	implementation "org.zkoss.zk:zhtml:${version}"
+	implementation "org.zkoss.zk:zk:${version}"
+	implementation "org.zkoss.zk:zul:${version}"
+	implementation "org.zkoss.zk:zkex:${version}"
 	implementation "org.zkoss.zk:zkmax:${version}"
 	implementation "org.zkoss.zk:zkplus:${version}"
 	implementation "org.zkoss.zk:zuti:${version}"
@@ -72,6 +71,7 @@ dependencies {
 	// workaround for running Mockito under Java 11
 	providedCompile "net.bytebuddy:byte-buddy:1.8.22"
 	providedCompile "net.bytebuddy:byte-buddy-agent:1.8.22"
+
 }
 
 test {
@@ -100,3 +100,49 @@ test {
 	systemProperty "zkWebdriverContextPath", "/zephyr-test"
 	systemProperty "zkWebdriverTestURLPackage", "org.zkoss.zephyr.webdriver"
 }
+
+gretty {
+	httpPort = 8081
+}
+
+task devMode {
+	gretty {
+		httpPort = 8081
+		beforeClassPath = []
+		def allowedWorkspace = []
+		configurations.implementation.dependencies.each {
+			allowedWorkspace << it.group + ":" + it.name
+		}
+		addClassPath(gradle, beforeClassPath, [], allowedWorkspace)
+	}
+}
+
+task appRunDev {
+	dependsOn devMode
+}
+task appRunDebugDev {
+	dependsOn devMode
+}
+
+def addClassPath(gradle, beforeClassPath, visitedBuilds, allowedWorkspace) {
+	gradle.includedBuilds.each {
+		if (visitedBuilds.contains(it.name)) return
+		visitedBuilds << it.name
+		def rootGradle = it.properties['gradle']
+		it.properties['availableModules'].each {
+
+			def prj = rootGradle.rootProject.findProject(it.right.identityPath.toString())
+			if (!prj) {
+				prj = rootGradle.rootProject.findProject(it.right.projectPath.toString())
+			}
+			if (prj && allowedWorkspace.contains(prj.group + ":" + prj.name)) {
+				beforeClassPath << prj.sourceSets.main.output.resourcesDir
+				println "add to classPath: " + prj.sourceSets.main.output.resourcesDir
+			}
+		}
+		addClassPath(rootGradle, beforeClassPath, visitedBuilds, allowedWorkspace);
+	}
+}
+
+appRunDev.dependsOn 'appRun'
+appRunDebugDev.dependsOn 'appRunDebug'
