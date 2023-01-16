@@ -229,15 +229,19 @@ task browsersync(type: com.github.psxpaul.task.ExecFork) {
 // WARNING: Do NOT move this task before the "dependencies" declaration; otherwise,
 // `configurations.implementation.dependencies` will not work.
 task devMode {
-	dependsOn browsersync
-	gretty {
-		httpPort = gretty.httpPort
-		beforeClassPath = []
-		def allowedWorkspace = []
-		configurations.implementation.dependencies.each {
-			allowedWorkspace << it.group + ":" + it.name
+	if (project.gradle.startParameter.taskNames.stream().filter {
+			it.endsWith('Dev')
+		}.findFirst().isPresent()) {
+		dependsOn browsersync
+		gretty {
+			httpPort = gretty.httpPort
+			beforeClassPath = []
+			def allowedWorkspace = []
+			configurations.implementation.dependencies.each {
+				allowedWorkspace << it.group + ":" + it.name
+			}
+			addClassPath(gradle, beforeClassPath, [], allowedWorkspace)
 		}
-		addClassPath(gradle, beforeClassPath, [], allowedWorkspace)
 	}
 }
 
