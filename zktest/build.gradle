@@ -2,6 +2,7 @@ plugins {
 	id 'war'
 	id "org.gretty" version "3.0.6"
 	id 'idea'
+	id 'com.github.psxpaul.execfork' version '0.2.2'
 }
 
 idea {
@@ -197,3 +198,75 @@ task renameNoA11yTestResult (type: Copy) {
 }
 
 description = 'ZK Test'
+
+
+gretty {
+	httpPort = 8080
+}
+
+// Start browsersync in the background.
+// Failed attempt:
+//   Use `ant.exec` instead of `exec`: https://stackoverflow.com/a/43501772
+//   However, the synatx for `arg` in the link above is wrong: https://discuss.gradle.org/t/running-ant-exec-with-env-attribute/11001
+//   Unfortunately, the spawned process will not be killed.
+//   ```
+//   ant.exec(executable: 'npm', spawn: true) {
+// 	   arg(value: 'run')
+// 	   arg(value: 'dev')
+// 	   arg(value: '--')
+// 	   arg(value: '--port')
+// 	   arg(value: gretty.httpPort)
+// 	   arg(value: '--startPath')
+// 	   arg(value: '/zephyr-test')
+//   }
+// Beware that specifying `waitForPort` below could cause the spawned process to not be killed.
+// In that case, check for `ps aux | grep gulp` and `localhost:300{n}` where n is odd.
+task browsersync(type: com.github.psxpaul.task.ExecFork) {
+    executable = 'npm'
+    args = ['run', 'dev', '--', '--port', "${gretty.httpPort}", '--startPath', '/zktest']
+}
+
+// WARNING: Do NOT move this task before the "dependencies" declaration; otherwise,
+// `configurations.implementation.dependencies` will not work.
+task devMode {
+	dependsOn browsersync
+	gretty {
+		httpPort = gretty.httpPort
+		beforeClassPath = []
+		def allowedWorkspace = []
+		configurations.implementation.dependencies.each {
+			allowedWorkspace << it.group + ":" + it.name
+		}
+		addClassPath(gradle, beforeClassPath, [], allowedWorkspace)
+	}
+}
+
+task appRunDev {
+	dependsOn devMode
+}
+task appRunDebugDev {
+	dependsOn devMode
+}
+
+def addClassPath(gradle, beforeClassPath, visitedBuilds, allowedWorkspace) {
+	gradle.includedBuilds.each {
+		if (visitedBuilds.contains(it.name)) return
+		visitedBuilds << it.name
+		def rootGradle = it.properties['gradle']
+		it.properties['availableModules'].each {
+
+			def prj = rootGradle.rootProject.findProject(it.right.identityPath.toString())
+			if (!prj) {
+				prj = rootGradle.rootProject.findProject(it.right.projectPath.toString())
+			}
+			if (prj && allowedWorkspace.contains(prj.group + ":" + prj.name)) {
+				beforeClassPath << prj.sourceSets.main.output.resourcesDir
+				println "add to classPath: " + prj.sourceSets.main.output.resourcesDir
+			}
+		}
+		addClassPath(rootGradle, beforeClassPath, visitedBuilds, allowedWorkspace);
+	}
+}
+
+appRunDev.dependsOn 'appRun'
+appRunDebugDev.dependsOn 'appRunDebug'
