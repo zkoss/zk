@@ -27,7 +27,7 @@ const knownOptions = {
 	boolean: ['force'],
 	default: {
 		src: 'zul/src/main/resources/web/js',
-		dest: 'zul/codegen/resources/web/js',
+		dest: 'zul/build/resources/main/web/js',
 		force: false,
 		port: 8080
 	}
@@ -97,11 +97,17 @@ function typescript_build_single() {
  * See {@link typescript_build_single}
  * @param {string} src - Directory containing JS/TS sources
  * @param {string} dest - Output directory
- * @param {boolean} [force] - Force keep. See {@link ignoreSameFile}.
+ * @param {boolean} [force] - Force keep. See {@link ignoreSameFile}
+ * @param {number | Date} [since] - Only find files that have been modified since the time specified
  */
-function typescript_build(src, dest, force) {
+function typescript_build(src, dest, force, since) {
 	const webpackConfig = require('./webpack.config.js');
 	webpackConfig.mode = 'production';
+	/** @type {import('vinyl-fs').SrcOptions} */
+	const defaultSrcOptions = {
+		root: src,
+		since,
+	};
 	// Streams are not sequenced. If one uses `ignoreSameFile` on stream 1, but stream 3
 	// executes first, then `*.ts` will be excluded from compilation because stream 3 would
 	// have already copied the same `*.ts` into `dest`. Thus, I don't rely on ignoreSameFile.
@@ -110,7 +116,7 @@ function typescript_build(src, dest, force) {
 	return mergeStream(
 		// Transpile single files with babel which are not siblings of some `index.ts`
 		gulp.src('/**/@(*.ts|*.js)', { // stream 1
-			root: src,
+			...defaultSrcOptions,
 			ignore: ['/**/*.d.ts'],
 		})
 			.pipe(gulpIgnore.exclude(
@@ -128,9 +134,7 @@ function typescript_build(src, dest, force) {
 			.pipe(gulp.dest(dest))
 			.pipe(print()),
 		// Bundle `index.ts` with webpack
-		gulp.src('/**/index.ts', { // stream 2
-			root: src,
-		})
+		gulp.src('/**/index.ts', defaultSrcOptions) // stream 2
 			// There is no official way to specify the "library" property in a
 			// webpack "entry" from webpack-stream, so we manipulate the stream
 			// manually; note that specifying the "library" property in "output"
@@ -160,7 +164,7 @@ function typescript_build(src, dest, force) {
 			.pipe(print()),
 		// fix copy resource in zipjs folder
 		gulp.src('/**/!(*.less|*.js|*.d.ts)', { // stream 3
-			root: src,
+			...defaultSrcOptions,
 			nodir: true,
 		})
 			.pipe(ignoreSameFile(dest))
@@ -171,7 +175,8 @@ function typescript_build(src, dest, force) {
 
 function browsersync_init(done) {
 	browserSync.init({
-		proxy: `localhost:${options.port}`
+		proxy: `localhost:${options.port}`,
+		startPath: options.startPath,
 	});
 	done();
 }
@@ -183,21 +188,16 @@ function browsersync_init(done) {
  * @returns {NodeJS.WritableStream}
  */
 function typescript_dev(src, dest, since) {
-	return gulp.src(src + '/**/*.ts', { since: since })
-		.pipe(print())
-		.pipe(babel({
-			root: __dirname
-		}))
-		.pipe(gulp.dest(dest))
-		.pipe(rename({ suffix: '.src' }))
-		.pipe(gulp.dest(dest))
+	// WARNING: Don't pass `since`, as the cache liveliness detection is faulty.
+	// Only pass `since` if the corretness can be verified in future versions.
+	return typescript_build(src, dest)
 		.pipe(browserSync.stream());
 }
 
 function typescript_dev_zk() {
 	return typescript_dev(
 		'zk/src/main/resources',
-		'zk/codegen/resources',
+		'zk/build/resources/main',
 		gulp.lastRun(typescript_dev_zk)
 	);
 }
@@ -205,7 +205,7 @@ function typescript_dev_zk() {
 function typescript_dev_zul() {
 	return typescript_dev(
 		'zul/src/main/resources',
-		'zul/codegen/resources',
+		'zul/build/resources/main',
 		gulp.lastRun(typescript_dev_zul)
 	);
 }
@@ -213,7 +213,7 @@ function typescript_dev_zul() {
 function typescript_dev_zkex() {
 	return typescript_dev(
 		'../zkcml/zkex/src/main/resources',
-		'../zkcml/zkex/codegen/resources',
+		'../zkcml/zkex/build/resources/main',
 		gulp.lastRun(typescript_dev_zkex)
 	);
 }
@@ -221,7 +221,7 @@ function typescript_dev_zkex() {
 function typescript_dev_zkmax() {
 	return typescript_dev(
 		'../zkcml/zkmax/src/main/resources',
-		'../zkcml/zkmax/codegen/resources',
+		'../zkcml/zkmax/build/resources/main',
 		gulp.lastRun(typescript_dev_zkmax)
 	);
 }
@@ -348,22 +348,22 @@ exports.build = gulp.parallel(
 	function build_zk() {
 		return typescript_dev(
 			'zk/src/main/resources/web/js',
-			'zk/codegen/resources/web/js');
+			'zk/build/resources/main/web/js');
 	},
 	function build_zul() {
 		return typescript_dev(
 			'zul/src/main/resources/web/js',
-			'zul/codegen/resources/web/js');
+			'zul/build/resources/main/web/js');
 	},
 	function build_zkex() {
 		return typescript_dev(
 			'../zkcml/zkex/src/main/resources/web/js',
-			'../zkcml/zkex/codegen/resources/web/js');
+			'../zkcml/zkex/build/resources/main/web/js');
 	},
 	function build_zkmax() {
 		return typescript_dev(
 			'../zkcml/zkmax/src/main/resources/web/js',
-			'../zkcml/zkmax/codegen/resources/web/js');
+			'../zkcml/zkmax/build/resources/main/web/js');
 	}
 );
 exports.default = exports.build;

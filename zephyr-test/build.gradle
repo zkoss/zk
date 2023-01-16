@@ -1,8 +1,9 @@
 plugins {
-	id "idea"
-	id "war"
-	id "org.gretty" version "3.0.6"
-	id "com.adarshr.test-logger" version "3.0.0"
+	id 'idea'
+	id 'war'
+	id 'org.gretty' version '3.0.6'
+	id 'com.adarshr.test-logger' version '3.0.0'
+	id 'com.github.psxpaul.execfork' version '0.2.2'
 }
 
 idea {
@@ -105,9 +106,21 @@ gretty {
 	httpPort = 8081
 }
 
+
+// Start browsersync in the background.
+// Beware that specifying `waitForPort` below could cause the spawned process to not be killed.
+// In that case, check for `ps aux | grep gulp` and `localhost:300{n}` where n is odd.
+task browsersync(type: com.github.psxpaul.task.ExecFork) {
+    executable = 'npm'
+    args = ['run', 'dev', '--', '--port', "${gretty.httpPort}", '--startPath', '/zephyr-test']
+}
+
+// WARNING: Do NOT move this task before the "dependencies" declaration; otherwise,
+// `configurations.implementation.dependencies` will not work.
 task devMode {
+	dependsOn browsersync
 	gretty {
-		httpPort = 8081
+		httpPort = gretty.httpPort
 		beforeClassPath = []
 		def allowedWorkspace = []
 		configurations.implementation.dependencies.each {
