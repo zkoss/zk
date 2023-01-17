@@ -129,7 +129,12 @@ task devMode {
 			configurations.implementation.dependencies.each {
 				allowedWorkspace << it.group + ":" + it.name
 			}
-			addClassPath(gradle, beforeClassPath, [], allowedWorkspace)
+			def subprojectsWithJS = []
+			addClassPath(gradle, beforeClassPath, [], allowedWorkspace, subprojectsWithJS)
+
+			println "Watching the following subprojects with browsersync:"
+			println subprojectsWithJS
+			browsersync.args << '--subprojectPaths' << subprojectsWithJS.join(',')
 		}
 	}
 }
@@ -141,7 +146,7 @@ task appRunDebugDev {
 	dependsOn devMode
 }
 
-def addClassPath(gradle, beforeClassPath, visitedBuilds, allowedWorkspace) {
+def addClassPath(gradle, beforeClassPath, visitedBuilds, allowedWorkspace, subprojectsWithJS) {
 	gradle.includedBuilds.each {
 		if (visitedBuilds.contains(it.name)) return
 		visitedBuilds << it.name
@@ -155,9 +160,10 @@ def addClassPath(gradle, beforeClassPath, visitedBuilds, allowedWorkspace) {
 			if (prj && allowedWorkspace.contains(prj.group + ":" + prj.name)) {
 				beforeClassPath << prj.sourceSets.main.output.resourcesDir
 				println "add to classPath: " + prj.sourceSets.main.output.resourcesDir
+				subprojectsWithJS << prj.projectDir
 			}
 		}
-		addClassPath(rootGradle, beforeClassPath, visitedBuilds, allowedWorkspace);
+		addClassPath(rootGradle, beforeClassPath, visitedBuilds, allowedWorkspace, subprojectsWithJS);
 	}
 }
 
