@@ -29,10 +29,18 @@ const knownOptions = {
 		src: 'zul/src/main/resources/web/js',
 		dest: 'zul/build/resources/main/web/js',
 		force: false,
-		port: 8080
+		port: 8080,
+		subprojectPaths: 'zk,zul,../zkcml/zkex,../zkcml/zkmax,../zkcml/client-bind',
 	}
 };
 const options = minimist(process.argv.slice(3), knownOptions);
+/**
+ * `options.subprojectPaths` is set from "build.gradle" in "zktest" and "zephyr-test".
+ * In any case, duplicated paths should be pruned.
+ */
+options.subprojectPaths = [...new Set(
+	/** @type string */(options.subprojectPaths).split(',')
+)];
 
 /**
  * Workaround for maven frontend-maven-plugin passing quoted strings
@@ -194,37 +202,22 @@ function typescript_dev(src, dest, since) {
 		.pipe(browserSync.stream());
 }
 
-function typescript_dev_zk() {
+/**
+ * @param {string} subprojectPath - E.g., "zul", "../zkcml/client-bind"
+ * @param {number | Date} [since] - Only find files that have been modified since the time specified
+ */
+function typescript_dev_subproject(subprojectPath, since) {
 	return typescript_dev(
-		'zk/src/main/resources',
-		'zk/build/resources/main',
-		gulp.lastRun(typescript_dev_zk)
+		path.join(subprojectPath, 'src/main/resources'),
+		path.join(subprojectPath, 'build/resources/main'),
+		since, // gulp.lastRun(typescript_dev_zk)
+		// TODO: `gulp.lastRun` is currently ignored in the downstream due to it
+		// unreliable. Hence, it is safe to ignore it here. See the warning in
+		// `typescript_dev`. Read more docs and do more experiments to see how
+		// we can make it work.
 	);
 }
 
-function typescript_dev_zul() {
-	return typescript_dev(
-		'zul/src/main/resources',
-		'zul/build/resources/main',
-		gulp.lastRun(typescript_dev_zul)
-	);
-}
-
-function typescript_dev_zkex() {
-	return typescript_dev(
-		'../zkcml/zkex/src/main/resources',
-		'../zkcml/zkex/build/resources/main',
-		gulp.lastRun(typescript_dev_zkex)
-	);
-}
-
-function typescript_dev_zkmax() {
-	return typescript_dev(
-		'../zkcml/zkmax/src/main/resources',
-		'../zkcml/zkmax/build/resources/main',
-		gulp.lastRun(typescript_dev_zkmax)
-	);
-}
 exports['build:minify-css'] = function () {
 	const sources = stripQuotes(options.src);
 	const destDir = stripQuotes(options.dest);
@@ -334,36 +327,32 @@ exports['publish:dts'] = function (done) {
 	return done();
 };
 
+class Subproject {
+	/**
+	 * @param {string} subprojectPath - E.g., "zul", "../zkcml/client-bind". With or without
+	 * a trailing slash ('/') doesn't matter, as we meticulously use `path.join`.
+	 */
+	constructor(subprojectPath) {
+		this.subprojectPath = subprojectPath;
+	}
+	get watcher() {
+		return () => watch_job(
+			path.join(this.subprojectPath, '**/*.ts'),
+			this.builder,
+		);
+	}
+	get builder() {
+		return () => typescript_dev_subproject(this.subprojectPath);
+	}
+}
+
+const subprojects = /** @type string[] */(options.subprojectPaths)
+	.map(subprojectPath => new Subproject(subprojectPath));
+
 exports['build:single'] = typescript_build_single;
 exports.watch = gulp.series(
 	browsersync_init,
-	gulp.parallel(
-		() => watch_job('zk/src/**/*.ts', typescript_dev_zk),
-		() => watch_job('zul/src/**/*.ts', typescript_dev_zul),
-		() => watch_job('../zkcml/zkex/src/**/*.ts', typescript_dev_zkex),
-		() => watch_job('../zkcml/zkmax/src/**/*.ts', typescript_dev_zkmax),
-	)
+	gulp.parallel(...subprojects.map(subproject => subproject.watcher)),
 );
-exports.build = gulp.parallel(
-	function build_zk() {
-		return typescript_dev(
-			'zk/src/main/resources/web/js',
-			'zk/build/resources/main/web/js');
-	},
-	function build_zul() {
-		return typescript_dev(
-			'zul/src/main/resources/web/js',
-			'zul/build/resources/main/web/js');
-	},
-	function build_zkex() {
-		return typescript_dev(
-			'../zkcml/zkex/src/main/resources/web/js',
-			'../zkcml/zkex/build/resources/main/web/js');
-	},
-	function build_zkmax() {
-		return typescript_dev(
-			'../zkcml/zkmax/src/main/resources/web/js',
-			'../zkcml/zkmax/build/resources/main/web/js');
-	}
-);
+exports.build = gulp.parallel(...subprojects.map(subproject => subproject.builder));
 exports.default = exports.build;
