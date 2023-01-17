@@ -30,7 +30,7 @@ public class MapVM {
 
 	@Command
 	@NotifyChange("addressMap")
-	public void removeMap(@BindingParam int key) {
+	public void removeMap(@BindingParam String key) {
 		addressMap.remove(key);
 	}
 
