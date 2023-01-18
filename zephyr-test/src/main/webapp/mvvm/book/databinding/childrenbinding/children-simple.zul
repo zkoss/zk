@@ -5,7 +5,7 @@
 		2. click "reload 1" button:
 		you should see Item D is added into "Simple - load" and "Simple - dependency", "Simple - Init" and "Simple - load after cmd" shall not change.
 		3. click "reload 2" button:
-		you should see Item A, B, C, D (4 items) are added into "Simple - load after cmd".
+		you should see Item A, B, C, D, E (5 items) are added into "Simple - load after cmd".
 		4. click "reload 3" button:
 		you should see the first item changed to "Item X" and the second item become "Item A" in all parts.
 		5. the Item A in "Simple - dependency" shall always display with blue border, others with red border, otherwise it's a bug.
