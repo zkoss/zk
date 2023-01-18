@@ -1409,7 +1409,7 @@ export var InputCtrl = {
 	 * @param dg - the drag object
 	 */
 	isIgnoredDragForErrorbox(dg: zk.Draggable, pointer: zk.Offset, evt: zk.Event): boolean {
-		var c = (dg.control as zk.Widget).$n_('c');
+		var c = (dg.control as zk.Widget).$n('c');
 		return evt.domTarget == c && jq(c).hasClass('z-errbox-close-over');
 	}
 };
