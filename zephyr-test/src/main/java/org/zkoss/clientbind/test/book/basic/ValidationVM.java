@@ -4,6 +4,7 @@ import org.zkoss.bind.Property;
 import org.zkoss.bind.Validator;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.lang.Strings;
 import org.zkoss.zk.ui.util.Clients;
 
 /**
@@ -16,7 +17,7 @@ public class ValidationVM {
 		if (!ctx.isValid()) return;
 		Property p = ctx.getProperty();
 		Object val = p.getValue();
-		if (val != null && Integer.parseInt(val.toString()) > 10) {
+		if (val != null && !Strings.isBlank(val.toString()) && Integer.parseInt(val.toString()) > 10) {
 			setLastMessage1(null);
 		} else {
 			ctx.setInvalid();
@@ -30,7 +31,7 @@ public class ValidationVM {
 		if (!ctx.isValid()) return;
 		Property p = ctx.getProperty();
 		Object val = p.getValue();
-		if (val != null && Integer.parseInt(val.toString()) > 20) {
+		if (val != null && !Strings.isBlank(val.toString()) && Integer.parseInt(val.toString()) > 20) {
 			setLastMessage2(null);
 		} else {
 			ctx.setInvalid();
