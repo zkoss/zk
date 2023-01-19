@@ -16,6 +16,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.ext;
 
+import java.util.Map;
+
 import org.zkoss.zk.ui.WrongValueException;
 
 /**
@@ -42,4 +44,12 @@ public interface DynamicPropertied {
 	 * to a String instance.
 	 */
 	public void setDynamicProperty(String name, Object value) throws WrongValueException;
+
+	/**
+	 * Returns all available dynamic properties.
+	 * @since 10.0.0
+	 */
+	public default Map<String, Object> getDynamicProperties() {
+		return null;
+	}
 }

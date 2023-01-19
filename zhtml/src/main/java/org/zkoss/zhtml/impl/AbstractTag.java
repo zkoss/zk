@@ -301,6 +301,10 @@ public class AbstractTag extends AbstractComponent implements DynamicPropertied,
 		return ComponentsCtrl.isReservedAttribute(name);
 	}
 
+	public Map<String, Object> getDynamicProperties() {
+		return _props;
+	}
+
 	/**
 	 * Returns the dynamic property, or null if not found. Note: it must be a String object or null.
 	 */

@@ -350,6 +350,10 @@ public class HtmlNativeComponent extends AbstractComponent implements DynamicTag
 		return _props != null ? _props.get(name) : null;
 	}
 
+	public Map<String, Object> getDynamicProperties() {
+		return _props;
+	}
+
 	public void setDynamicProperty(String name, Object value) throws WrongValueException {
 		if (name == null)
 			throw new WrongValueException("name required");

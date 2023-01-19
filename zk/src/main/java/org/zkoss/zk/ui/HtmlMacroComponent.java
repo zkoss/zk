@@ -341,6 +341,10 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 		return _props.containsKey(name);
 	}
 
+	public Map<String, Object> getDynamicProperties() {
+		return _props;
+	}
+
 	public Object getDynamicProperty(String name) {
 		return _props.get(name);
 	}

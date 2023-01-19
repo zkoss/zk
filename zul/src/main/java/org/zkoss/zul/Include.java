@@ -540,6 +540,10 @@ public class Include extends XulElement implements Includer, DynamicPropertied, 
 		return _dynams != null && _dynams.containsKey(name);
 	}
 
+	public Map<String, Object> getDynamicProperties() {
+		return _dynams;
+	}
+
 	/** Returns the parameter associated with the specified name,
 	 * or null if not found.
 	 *

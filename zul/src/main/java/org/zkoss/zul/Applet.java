@@ -202,6 +202,10 @@ public class Applet extends HtmlBasedComponent implements DynamicPropertied {
 		return _params.containsKey(name);
 	}
 
+	public Map<String, Object> getDynamicProperties() {
+		return (Map) _params;
+	}
+
 	public void setDynamicProperty(String name, Object value) throws WrongValueException {
 		setParam(name, Objects.toString(value));
 	}
