@@ -54,7 +54,7 @@ public class FakeOrderService implements OrderService {
 	}
 
 	double nextPrice() {
-		return Math.round(r.nextDouble() * 300 * 100) / 100;
+		return r.nextDouble() * 300;
 	}
 
 	int nextQuantity() {
