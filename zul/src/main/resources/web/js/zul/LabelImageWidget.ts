@@ -158,6 +158,24 @@ export abstract class LabelImageWidget<TElement extends HTMLElement = HTMLElemen
 		return this._hoverImage;
 	}
 
+	// for stateless and client mvvm to treat as "image" attribute at client side
+	getImageContent(): string | undefined {
+		return this.getImage();
+	}
+	// for stateless and client mvvm to treat as "image" attribute at client side
+	setImageContent(imageContent: string, opts?: Record<string, boolean>): this {
+		return this.setImage(imageContent, opts);
+	}
+
+	// for stateless and client mvvm to treat as "hoverImage" attribute at client side
+	getHoverImageContent(): string | undefined {
+		return this.getHoverImage();
+	}
+	// for stateless and client mvvm to treat as "hoverImage" attribute at client side
+	setHoverImageContent(hoverImageContent: string): this {
+		return this.setHoverImage(hoverImageContent);
+	}
+
 	/**
 	 * Updates the DOM tree for the modified label and image. It is called by
 	 * {@link setLabel} and {@link setImage} to update the new content of the
