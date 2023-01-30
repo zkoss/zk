@@ -371,7 +371,7 @@ function _deconstructPacket(data: ArrayBufferView | unknown & { buffer?} | undef
 		}
 		return newData as never;
 	} else if (typeof data === 'object' && !(data instanceof Date) &&
-		!(data instanceof DateImpl) && !(data instanceof zk.Widget)) {
+		!(data instanceof DateImpl) && !(data instanceof zk.Object)) {
 		const newData = {};
 		for (const key in data) {
 			if (Object.prototype.hasOwnProperty.call(data, key)) {

@@ -105,6 +105,9 @@ export class BigDecimal extends zk.Object {
 		}
 		return (this._negative ? zk.MINUS : '') + this._value.substring(0, j) + (this._precision ? zk.DECIMAL + this._value.substring(j) : '');
 	}
+	toJSON(): unknown {
+		return this.$toString() == String(this.$toNumber()) ? this.$toNumber() : this.$toString();
+	}
 }
 
 /**
@@ -169,6 +172,9 @@ export class Long extends zk.Object {
 	 * @returns a Locale-dependent string for this long integer.
 	 */
 	$toLocaleString = Long.prototype.$toString;
+	toJSON(): unknown {
+		return this.$toString() == String(this.$toNumber()) ? this.$toNumber() : this.$toString();
+	}
 }
 zk.BigDecimal = BigDecimal;
 zk.Long = Long;
