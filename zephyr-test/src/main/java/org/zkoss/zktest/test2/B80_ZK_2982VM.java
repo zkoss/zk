@@ -22,6 +22,7 @@ import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
+import org.zkoss.zk.au.out.AuScript;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.util.Clients;
@@ -53,7 +54,11 @@ public class B80_ZK_2982VM implements Serializable {
 		bais.close();
 		ois.close();
 		newdiv.setPage(pg);
-		((Label)newdiv.getFirstChild()).setValue("Serialized!!");
+		if (newdiv.getFirstChild() instanceof Label) {
+			((Label)newdiv.getFirstChild()).setValue("Serialized!!");
+		} else {
+			Clients.response(new AuScript("zk.$('@div @label').setValue('Serialized!!')"));
+		}
 		((ComponentCtrl)newdiv).sessionDidActivate(newdiv.getPage());//simulate
 	}
 
