@@ -16,7 +16,7 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
     <div viewModel="@id('vm') @init('org.zkoss.clientbind.test.book.viewmodel.init.MultipleDestroyVM')">
         <label multiline="true">
             1. Reload the browser.
-            2. You should see:
+            2. You should see: (in the server console log)
             org.zkoss.zk.ui.UiException: more than one [@Destroy] in the class
         </label>
     </div>
