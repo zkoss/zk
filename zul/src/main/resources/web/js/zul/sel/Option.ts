@@ -81,6 +81,25 @@ export class Option extends zul.Widget<HTMLOptionElement> {
 		return this;
 	}
 
+	/**
+	 * Sets the label of the {@link Optgroup} it contains.
+	 *
+	 * <p>If it is not created, we automatically create it.
+	 * @since 10.0.0
+	 */
+	// To treat as "value" attribute from "label" at client side
+	setLabel(label: string): this {
+		this._autoFirstCell().setLabel(label);
+		return this;
+	}
+
+	/** @internal */
+	_autoFirstCell(): zul.sel.Listcell {
+		if (!this.firstChild)
+			this.appendChild(new zul.sel.Listcell({mold: 'select'}));
+		return this.firstChild!; // guaranteed to exist because appended in the previous line
+	}
+
 	override focus(timeout?: number): boolean {
 		var p = this.parent;
 		if (p) p.focus(timeout);

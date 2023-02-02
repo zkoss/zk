@@ -99,7 +99,7 @@ export class Listitem extends zul.sel.ItemWidget {
 	_autoFirstCell(): zul.sel.Listcell {
 		if (!this.firstChild)
 			this.appendChild(new zul.sel.Listcell());
-		return this.firstChild!; // guaranteed to exists because appended in the previous line
+		return this.firstChild!; // guaranteed to exist because appended in the previous line
 	}
 	
 	/** @internal */

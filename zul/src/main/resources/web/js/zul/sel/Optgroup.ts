@@ -19,8 +19,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 @zk.WrapClass('zul.sel.Optgroup')
 export class Optgroup extends zul.Widget<HTMLOptGroupElement> {
 	override parent!: zul.sel.Select | undefined;
-	override firstChild!: zul.sel.Option | undefined;
-	override lastChild!: zul.sel.Option | undefined;
+	override firstChild!: zul.sel.Listcell | undefined;
+	override lastChild!: zul.sel.Listcell | undefined;
 	/** @internal */
 	_open = true;
 	/** @internal */
@@ -78,6 +78,25 @@ export class Optgroup extends zul.Widget<HTMLOptGroupElement> {
 	 */
 	getLabel(): string | undefined {
 		return this.firstChild ? this.firstChild.domLabel_() : undefined;
+	}
+
+	/**
+	 * Sets the label of the {@link Optgroup} it contains.
+	 *
+	 * <p>If it is not created, we automatically create it.
+	 * @since 10.0.0
+	 */
+	// To treat as "value" attribute from "label" at client side
+	setLabel(label: string): this {
+		this._autoFirstCell().setLabel(label);
+		return this;
+	}
+
+	/** @internal */
+	_autoFirstCell(): zul.sel.Listcell {
+		if (!this.firstChild)
+			this.appendChild(new zul.sel.Listcell({mold: 'select'}));
+		return this.firstChild!; // guaranteed to exist because appended in the previous line
 	}
 
 	/** @internal */
