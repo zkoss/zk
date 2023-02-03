@@ -90,4 +90,36 @@ public class ConditionImpl implements java.io.Serializable {
 		return (_if == null || ((Boolean) _if.getValue(eval, page)).booleanValue())
 				&& (_unless == null || !((Boolean) _unless.getValue(eval, page)).booleanValue());
 	}
+
+	/**
+	 * Returns whether it's If condition.
+	 * @since 10.0.0
+	 */
+	public boolean isIf() {
+		return _if != null;
+	}
+
+	/**
+	 * Returns If expression.
+	 * @since 10.0.0
+	 */
+	public ExValue getIf() {
+		return _if;
+	}
+
+	/**
+	 * Returns Unless expression.
+	 * @since 10.0.0
+	 */
+	public ExValue getUnless() {
+		return _unless;
+	}
+
+	/**
+	 * Returns whether it's Unless condition.
+	 * @since 10.0.0
+	 */
+	public boolean isUnless() {
+		return _unless != null;
+	}
 }
