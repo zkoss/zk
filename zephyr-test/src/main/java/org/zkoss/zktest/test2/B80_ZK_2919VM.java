@@ -15,6 +15,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.zkoss.bind.annotation.Command;
+import org.zkoss.bind.annotation.SelectorParam;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.util.Clients;
 
@@ -38,9 +40,9 @@ public class B80_ZK_2919VM {
 	}
 
 	@Command("save")
-	public void save() {
-		if (item == null || item.isEmpty()) {
-			throw new WrongValueException("Not valid");
+	public void save(@SelectorParam("#combobox") Component c){
+		if(item == null || item.isEmpty()){
+			throw new WrongValueException(c, "Not valid");
 		}
 	}
 
