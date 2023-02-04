@@ -25,7 +25,7 @@ import org.zkoss.test.webdriver.ztl.JQuery;
 public class B90_ZK_4556Test extends WebDriverTestCase {
 	@Test
 	public void testNodom() {
-		connect("/test2/B90-ZK-4556-1.zul");
+		connect("/test2/B90-ZK-4556.zul");
 		click(jq("@button"));
 		waitResponse();
 		JQuery jqBtn = jq("@button");
