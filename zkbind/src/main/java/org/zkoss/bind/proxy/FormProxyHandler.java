@@ -46,7 +46,7 @@ public class FormProxyHandler<T> extends BeanProxyHandler<T> {
 			if (m.isAnnotationPresent(Transient.class))
 				return false;
 			final String name = m.getName();
-			if ("hashCode".equals(name))
+			if ("hashCode".equals(name) || "equals".equals(name))
 				return true;
 			if (ProxyHelper.isAttribute(m)) {
 				if (name.startsWith("set"))
