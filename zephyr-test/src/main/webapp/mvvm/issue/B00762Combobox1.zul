@@ -23,7 +23,8 @@
 		<button id="clean" label="clean" onClick="@command('clean')" />
 		<button id="select" label="select 1" onClick="@command('select')" />
 		<button id="reload" label="reload" onClick="@command('reload')" />
-		<button id="showselect" label="show selection" onClick="show()" />
+		<!-- Converted ListModel in client MVVM is not available, ignore this
+		<button id="showselect" label="show selection" onClick="show()" /> -->
 		
 		<button label="Dump" onClick="binder.getTracker().dump()" />
 	</hbox>

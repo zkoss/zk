@@ -13,11 +13,11 @@ B70-ZK-2636.zul
 Copyright (C)  Potix Corporation. All Rights Reserved.
 
 -->
-<div
+<div xmlns:w="client"
 	viewModel="@id('vm') @init('org.zkoss.zktest.test2.B70_ZK_2636VM')"
 	validationMessages="@id('vmsgs')"
 	form="@id('fx') @load(vm.bean) @save(vm.bean, before='save') @validator(vm.beanValidator, prefix='p_')">
-	Please selected an item and click two buttons "Show" and "Save", you should see "null" in the console.
+	Please selected an item and click two buttons "Show" and "Save", you should not see "null" in the console.
 	<combobox id="cbx" model="@load(vm.letters)" selectedItem="@bind(fx.letter)"
 		errorMessage="@load(vmsgs['p_letter'])"
 		onChange="@command('onChangeLetter')">
@@ -25,6 +25,8 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 			<comboitem label="${each}" />
 		</template>
 	</combobox>
-	<button onClick='Clients.log("" + (cbx.getSelectedItem() != null?cbx.getSelectedItem().getLabel() : "null"))' label="Show"/>
+	<!-- change it to client log
+	<button onClick='Clients.log("" + (cbx.getSelectedItem() != null?cbx.getSelectedItem().getLabel() : "null"))' label="Show"/>-->
+	<button w:onClick='zk.log("" + (zk.$("$cbx").getSelectedItem() != null?zk.$("$cbx").getSelectedItem().getLabel() : "null"))' label="Show"/>
 	<button onClick="@command('save')">Save</button>
 </div>

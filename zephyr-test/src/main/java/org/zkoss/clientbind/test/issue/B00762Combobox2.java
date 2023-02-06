@@ -28,6 +28,7 @@ public class B00762Combobox2 {
 	private String message1;
 
 	ListModelList<Item> items;
+	private int min;
 
 	public B00762Combobox2() {
 		items = new ListModelList<Item>();
@@ -43,6 +44,10 @@ public class B00762Combobox2 {
 
 	public String getMessage1() {
 		return message1;
+	}
+
+	public int getMin() {
+		return min;
 	}
 
 	static public class Item {
@@ -86,4 +91,9 @@ public class B00762Combobox2 {
 		items.clearSelection();
 	}
 
+	@Command @NotifyChange("min")
+	public void show(){
+		Set sels = items.getSelection();
+		min = (sels == null || sels.size() == 0) ? -1 : items.indexOf(sels.iterator().next());
+	}
 }

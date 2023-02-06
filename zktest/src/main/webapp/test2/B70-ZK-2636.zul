@@ -17,7 +17,7 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 	viewModel="@id('vm') @init('org.zkoss.zktest.test2.B70_ZK_2636VM')"
 	validationMessages="@id('vmsgs')"
 	form="@id('fx') @load(vm.bean) @save(vm.bean, before='save') @validator(vm.beanValidator, prefix='p_')">
-	Please selected an item and click two buttons "Show" and "Save", you should see "null" in the console.
+	Please selected an item and click two buttons "Show" and "Save", you should see not "null" in the console.
 	<combobox id="cbx" model="@load(vm.letters)" selectedItem="@bind(fx.letter)"
 		errorMessage="@load(vmsgs['p_letter'])"
 		onChange="@command('onChangeLetter')">
