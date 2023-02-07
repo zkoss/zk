@@ -151,6 +151,14 @@ export class Listcell extends zul.LabelImageWidget<HTMLTableCellElement> {
 		return scls;
 	}
 
+	override clearCache(): void {
+		if (this.parent) {
+			// Listitem.$n('cm') may be wrong if only the listcell is rerendered.
+			this.parent.clearCache();
+		}
+		super.clearCache();
+	}
+
 	/** @internal */
 	_colHtmlPre(): string {
 		var s = '',

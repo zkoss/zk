@@ -16,6 +16,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.metainfo;
 
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -145,6 +146,14 @@ public class AttributesInfo extends ConditionLeafInfo {
 						_scope != -1 ? _scope : Component.PAGE_SCOPE);
 			}
 		}
+	}
+
+	/**
+	 * Returns the internal attributes if any.
+	 * @since 10.0.0
+	 */
+	public Map<String, Object> getAttrs() {
+		return _attrs != null ? _attrs : Collections.emptyMap();
 	}
 
 	//Object//
