@@ -113,33 +113,9 @@ task alljavadoc(type: Javadoc) {
 }
 
 // generate jsdoc
-task alljsdoc(type: Javadoc) {
+task alljsdoc(type: NpmTask) {
 	dependsOn alljavadoc
-	doFirst {
-		// build java for jsdoc
-		def jsdocprj = ['zk', 'zkbind', 'zul', 'stateless', 'zkex', 'zkmax', 'stateless-ex', 'client-bind']
-		jsdocprj.each {prj ->
-			exec {
-				if (prj == 'zkex' || prj == 'zkmax' || prj == 'stateless-ex' || prj == 'client-bind')
-					workingDir "$rootDir/../zkcml/$prj"
-				else
-					workingDir "$rootDir/$prj"
-				commandLine "$rootDir/bin/jsdoc", prj, "$rootDir"
-			}
-		}
-	}
-	title = "ZK Client Engine ${version} API"
-	options.setWindowTitle("ZK Client Engine ${version} API")
-	configure javadocOptions
-	source files("$rootDir/jsdoc/src", "$rootDir/jsdoc/codegen")
-	// Can't get package.html into javadoc with gradle
-	exclude '**/package.html'
-	destinationDir = file("$buildDir/docs/javadoc/jsdoc")
-	classpath = files("$rootDir/jsdoc/src")
-
-	doLast {
-		addJavadocFooter("$buildDir/docs/javadoc/jsdoc", footerMessage)
-	}
+	args = ['run', 'build:doc']
 }
 
 subprojects {
