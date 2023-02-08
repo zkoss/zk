@@ -122,11 +122,6 @@ public class ValidationTest extends WebDriverTestCase {
 		assertEquals("", msg2.text());
 	}
 
-	@Override
-	protected boolean isHeadless() {
-		return false;
-	}
-
 	@Test
 	public void test2() {
 		connect();
