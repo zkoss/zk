@@ -95,6 +95,9 @@ test {
 		showFailedStandardStreams true
 		logLevel "debug"
 	}
+	forkEvery = 1 // a new test process is started for every test class
+	if (project.hasProperty('maxParallelForks'))
+		maxParallelForks = project.maxParallelForks as int
 }
 
 test {
