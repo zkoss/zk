@@ -21,7 +21,7 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 			3. Edit tags and save, should update
 			4. Test Serializable
 		]]></label>
-		<window id="win" width="500px" viewModel="@id('vm') @init('org.zkoss.zktest.test2.F96_ZK_4394_ListModelArrayVM')">
+		<window id="win" width="800px" viewModel="@id('vm') @init('org.zkoss.zktest.test2.F96_ZK_4394_ListModelArrayVM')">
 			<style>
 				.icon-red {
 				color: red;
