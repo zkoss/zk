@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.Keys;
 
 import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
@@ -17,8 +18,7 @@ public class F96_ZK_4934_ListModelListTest extends WebDriverTestCase {
 		JQuery window = jq("$win");
 		JQuery formGrid = window.find("$form");
 		JQuery listbox = window.find("@listbox");
-		JQuery newTagValue = listbox.find("$newTagValue");
-		JQuery addNewTagBtn = listbox.find("$newTagBtn");
+		JQuery newTagValue = jq("$newTagValue");
 		JQuery editRow = formGrid.find("@row");
 		//buttons
 		JQuery addAll = window.find("$addAll");
@@ -41,7 +41,7 @@ public class F96_ZK_4934_ListModelListTest extends WebDriverTestCase {
 		waitResponse();
 		type(newTagValue, "NewItem");
 		waitResponse();
-		click(addNewTagBtn);
+		sendKeys(newTagValue, Keys.ENTER);
 		waitResponse();
 		click(cancel);
 		waitResponse();
@@ -60,7 +60,7 @@ public class F96_ZK_4934_ListModelListTest extends WebDriverTestCase {
 		waitResponse();
 		type(newTagValue, "NewItem");
 		waitResponse();
-		click(addNewTagBtn);
+		sendKeys(newTagValue, Keys.ENTER);
 		waitResponse();
 		click(save);
 		waitResponse();
@@ -85,15 +85,15 @@ public class F96_ZK_4934_ListModelListTest extends WebDriverTestCase {
 		//add multiple tags and save
 		type(newTagValue, "big");
 		waitResponse();
-		click(addNewTagBtn);
+		sendKeys(newTagValue, Keys.ENTER);
 		waitResponse();
 		type(newTagValue, "middle");
 		waitResponse();
-		click(addNewTagBtn);
+		sendKeys(newTagValue, Keys.ENTER);
 		waitResponse();
 		type(newTagValue, "big");
 		waitResponse();
-		click(addNewTagBtn);
+		sendKeys(newTagValue, Keys.ENTER);
 		waitResponse();
 		click(save);
 		waitResponse();
@@ -127,8 +127,7 @@ public class F96_ZK_4934_ListModelListTest extends WebDriverTestCase {
 		waitResponse();
 		window = jq("$win");
 		listbox = window.find("@listbox");
-		newTagValue = listbox.find("$newTagValue");
-		addNewTagBtn = listbox.find("$newTagBtn");
+		newTagValue = jq("$newTagValue");
 		save = window.find("$save");
 		checkContent("Name", "MainTag", "[addAll1, addAll2, addAll3]");
 
@@ -144,7 +143,7 @@ public class F96_ZK_4934_ListModelListTest extends WebDriverTestCase {
 		waitResponse();
 		type(newTagValue, "NewItem");
 		waitResponse();
-		click(addNewTagBtn);
+		sendKeys(newTagValue, Keys.ENTER);
 		waitResponse();
 		click(save);
 		waitResponse();
