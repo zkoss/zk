@@ -15,14 +15,14 @@ public class F85_ZK_3816Test extends WebDriverTestCase {
 		connect();
 		sleep(2000);
 		clickBtns();
-		Assertions.assertEquals("+*-$", jq("$win #result").text());
-		Assertions.assertEquals("+*-$ 123", jq("$win #str").text());
+		Assertions.assertEquals("+*-$", jq("$win $result").text());
+		Assertions.assertEquals("+*-$ 123", jq("$win $str").text());
 		click(jq("button").eq(4));
 		waitResponse();
-		Assertions.assertTrue(jq("$win #msg").text().contains("done"));
+		Assertions.assertTrue(jq("$win $msg").text().contains("done"));
 		clickBtns();
-		Assertions.assertEquals("+*-$+*-$", jq("$win #result").text());
-		Assertions.assertEquals("+*-$+*-$ 123", jq("$win #str").text());
+		Assertions.assertEquals("+*-$+*-$", jq("$win $result").text());
+		Assertions.assertEquals("+*-$+*-$ 123", jq("$win $str").text());
 	}
 
 	private void clickBtns() {
