@@ -25,7 +25,6 @@ public class B96_ZK_5043Test extends WebDriverTestCase {
 	@Test
 	public void testMap() throws Exception {
 		connect();
-		sleep(2000);
 		JQuery mapAgent = jq("$map");
 		JQuery replace1 = mapAgent.find("@button").eq(0);
 		JQuery change1 = mapAgent.find("@button").eq(1);
@@ -47,7 +46,6 @@ public class B96_ZK_5043Test extends WebDriverTestCase {
 	@Test
 	public void testDot() throws Exception {
 		connect();
-		sleep(2000);
 		JQuery dotAgent = jq("$dot");
 		JQuery replace1 = dotAgent.find("@button").eq(0);
 		JQuery change1 = dotAgent.find("@button").eq(1);

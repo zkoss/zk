@@ -82,4 +82,9 @@ public class F95_ZK_4508VM {
 	public void headerParam(@HeaderParam String Connection, @HeaderParam("Connection") String conn2) {
 		Clients.log(String.format("HeaderParam, %s (%s)!", Connection, conn2));
 	}
+
+	@Command
+	public void selectorParam(@SelectorParam Div div, @SelectorParam("button[label=\"SelectorParam\"]") Button btn) {
+		Clients.log(String.format("SelectorParam, %s (%s)!", div.getId(), btn.getId()));
+	}
 }

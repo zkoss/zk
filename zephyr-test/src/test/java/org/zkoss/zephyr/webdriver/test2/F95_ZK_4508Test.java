@@ -30,7 +30,6 @@ public class F95_ZK_4508Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
-		sleep(2000);
 
 		JQuery btns = jq("@button");
 		for (JQuery btn : btns) {
@@ -42,10 +41,11 @@ public class F95_ZK_4508Test extends WebDriverTestCase {
 		Assertions.assertEquals(8, zkLog.size());
 		Assertions.assertEquals("BindingParam, Tom (Tom)!", zkLog.get(0));
 		Assertions.assertEquals("HeaderParam, keep-alive (keep-alive)!", zkLog.get(1));
+		Assertions.assertEquals("SelectorParam, main (btnSelector)!", zkLog.get(2));
 		Assertions.assertEquals("ScopeParam, Tim (Tim)!", zkLog.get(3));
 		assertThat(zkLog.get(4), matchesRegex("CookieParam, ([\\w.]+?) \\(\\1\\)!"));
-		Assertions.assertEquals("ExecutionParam, foo (foo)!", zkLog.get(5));
-		Assertions.assertEquals("ExecutionArgParam, bar (bar)!", zkLog.get(6));
-		Assertions.assertEquals("QueryParam, Tony (Tony)!", zkLog.get(7));
+		Assertions.assertEquals("QueryParam, Tony (Tony)!", zkLog.get(5));
+		Assertions.assertEquals("ExecutionParam, foo (foo)!", zkLog.get(6));
+		Assertions.assertEquals("ExecutionArgParam, bar (bar)!", zkLog.get(7));
 	}
 }
