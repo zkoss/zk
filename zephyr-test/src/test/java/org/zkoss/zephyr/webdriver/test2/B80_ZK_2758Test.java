@@ -35,14 +35,15 @@ public class B80_ZK_2758Test extends WebDriverTestCase {
 		JQuery groups = main.find(".form-group");
 		assertFalse(groups.eq(0).hasClass("has-error"));
 		assertFalse(groups.eq(1).hasClass("has-error"));
+		assertFalse(groups.eq(2).hasClass("has-error"));
 		click(button);
-		waitResponse();
-		assertTrue(groups.eq(0).hasClass("has-error"));
+		waitResponse(true);
 		assertTrue(groups.eq(1).hasClass("has-error"));
+		assertTrue(groups.eq(2).hasClass("has-error"));
 		click(button);
-		waitResponse();
-		assertFalse(groups.eq(0).hasClass("has-error"));
+		waitResponse(true);
 		assertFalse(groups.eq(1).hasClass("has-error"));
+		assertFalse(groups.eq(2).hasClass("has-error"));
 	}
 
 	@Test
