@@ -12,6 +12,7 @@ public class B70_ZK_2128Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
+		waitResponse();
 		JQuery treeCells = jq(".z-treecell");
 		int treeCellCount = treeCells.length();
 		for (int i = 0; i <= 1; i++) {
