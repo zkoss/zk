@@ -29,7 +29,7 @@ public class B80_ZK_1987_1Test extends WebDriverTestCase {
 		JQuery result = jq("@window $result");
 		JQuery combobox = jq("@combobox");
 
-		assertEquals(jq(".z-comboitem").get(1).get("id"), jq(".z-comboitem-selected").get(0).get("id"));
+		assertEquals(jq(".z-comboitem").eq(1).attr("id"), jq(".z-comboitem-selected").eq(1).attr("id"));
 
 		// should fire onChange to trigger save
 		click(jq(".z-combobox-button"));
