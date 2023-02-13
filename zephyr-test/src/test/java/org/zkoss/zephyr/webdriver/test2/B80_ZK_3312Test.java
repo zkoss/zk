@@ -26,6 +26,7 @@ public class B80_ZK_3312Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
+		waitResponse();
 		JQuery info_origin = jq("$info_origin");
 		JQuery info_selList = jq("$info_selList");
 		JQuery info_selSet = jq("$info_selSet");
