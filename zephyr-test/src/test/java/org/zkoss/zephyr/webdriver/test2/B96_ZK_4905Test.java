@@ -27,11 +27,10 @@ public class B96_ZK_4905Test extends WebDriverTestCase {
 		connect();
 		final JQuery sel = jq("@select");
 		new Select(toElement(sel)).selectByIndex(1);
-		final Select select = new Select(toElement(sel));
-		final JQuery $selected = jq("$selected");
-
-		select.selectByIndex(1);
+		waitResponse();
+		new Select(toElement(sel)).selectByIndex(1);
 		waitResponse();
 		Assertions.assertEquals(2, sel.children().length());
+		Assertions.assertEquals("beepbop", sel.text());
 	}
 }
