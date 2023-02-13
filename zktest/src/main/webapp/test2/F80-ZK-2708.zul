@@ -91,9 +91,11 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 		</rowlayout>
 
 		<rowlayout id="rowlayout1" ncols="@bind(vm.ncols)" spacing="@bind(vm.spacing)">
-			<rowchildren forEach="1,1,1,1,1,1,1,1,1,1,1,1" colspan="${each}">
-				<window border="normal" title="colspan=1" hflex="1" />
-			</rowchildren>
+			<forEach begin="@init(1)" end="@load(vm.ncols)">
+				<rowchildren colspan="1">
+					<window border="normal" title="colspan=1" hflex="1" />
+				</rowchildren>
+			</forEach>
 		</rowlayout>
 	</window>
 	<separator />
