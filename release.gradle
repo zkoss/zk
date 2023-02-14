@@ -780,14 +780,7 @@ task peEvalBundles() {
 	}
 }
 
-task release() {
-	// check before release
-	dependsOn 'check'
-	if (gradle.includedBuilds.find {it.name == 'zkcml'} != null) {
-		dependsOn gradle.includedBuild('zkcml').task(':check')
-	}
-	// bin
-	dependsOn 'bins'
+task bundles() {
 	// maven bundles
 	dependsOn 'ceBundles'
 	if (gradle.includedBuilds.find {it.name == 'zkcml'} != null) {
@@ -796,6 +789,17 @@ task release() {
 		dependsOn 'peEvalBundles'
 		dependsOn 'eeEvalBundles'
 	}
+}
+
+task release() {
+	// check before release
+	dependsOn 'check'
+	if (gradle.includedBuilds.find {it.name == 'zkcml'} != null) {
+		dependsOn gradle.includedBuild('zkcml').task(':check')
+	}
+	dependsOn bundles
+	bundles.dependsOn bins
+
 	// javadoc & jsdoc
 	dependsOn 'alljavadoc'
 	dependsOn 'alljsdoc'
