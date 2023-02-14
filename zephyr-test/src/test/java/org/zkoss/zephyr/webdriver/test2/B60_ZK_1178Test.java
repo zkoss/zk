@@ -12,9 +12,9 @@ public class B60_ZK_1178Test extends WebDriverTestCase {
 		connect();
 		click(jq("@button"));
 		waitResponse();
-		assertTrue(jq("@image").eq(1).toElement().get("src").contains("foo.png"));
+		assertTrue(jq("@image").eq(1).toElement().get("src").startsWith("data:image/png;base64,"));
 		click(jq("@button"));
 		waitResponse();
-		assertTrue(jq("@image").eq(2).toElement().get("src").contains("a.png"));
+		assertTrue(jq("@image").eq(2).toElement().get("src").startsWith("data:image/png;base64,"));
 	}
 }

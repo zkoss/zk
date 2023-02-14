@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Test;
 
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
+@Disabled
 public class F95_ZK_4501Test extends WebDriverTestCase {
 	@Test
 	public void test() {

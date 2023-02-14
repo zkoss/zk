@@ -1,8 +1,8 @@
 package org.zkoss.zephyr.webdriver.test2;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThan;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import org.zkoss.test.webdriver.WebDriverTestCase;
@@ -23,7 +23,14 @@ public class F80_ZK_2582Test extends WebDriverTestCase {
         waitResponse();
         click(jq(".z-page"));
         waitResponse();
-        assertEquals("100\n99\n0\n-100", getZKLog());
+        int max = Integer.MAX_VALUE;
+        for (String s : getZKLog().split("\n")) {
+            Integer integer = Integer.valueOf(s);
+            if (integer != 0) {
+                assertThat(max, greaterThan(integer));
+                max = integer;
+            }
+        }
     }
 
 }

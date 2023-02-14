@@ -17,7 +17,7 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
     <label multiline="true">
         1. should see "111" in textbox
         2. change it to "111222" and click somewhere else to trigger onChange
-        3. should see "100 99 0 -100" in zklog
+        3. should see "0 100 99 -100" in zklog (Client MVVM handle command first, and then Event Listener)
 
     </label>
     <div viewModel="@id('vm') @init('org.zkoss.zktest.test2.F80_ZK_2582')">
