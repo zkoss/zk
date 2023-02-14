@@ -228,6 +228,26 @@ task prepareBin() {
 			into "$buildDir/tmp/cebin/doc"
 			from "$rootDir/zkdoc"
 		}
+	}
+}
+
+task processBins() {
+	if (gradle.includedBuilds.find {it.name == 'zkcml'} != null) {
+		dependsOn gradle.includedBuild('zkcml').task(':processBins')
+	}
+}
+
+task prepareCmlBin() {
+	dependsOn processBins
+	processBins.dependsOn prepareBin
+	doLast {
+		// prepare ee
+		copy {
+			into "$buildDir/tmp/eebin/dist/lib"
+			from("zk/build/libs/zk-${project.version}.jar") {
+				rename "zk-${project.version}.jar", "zk.jar"
+			}
+		}
 
 		// prepare ee eval
 		// copy from eebin exclude cml jar & sources jar
@@ -316,7 +336,20 @@ task prepareBinOSGi() {
 			into "$buildDir/tmp/cebin-osgi/doc"
 			from "$rootDir/zkdoc"
 		}
+	}
+}
 
+task prepareCmlBinOSGi() {
+	dependsOn processBins
+	processBins.dependsOn prepareBinOSGi
+	doLast {
+		// prepare ee
+		copy {
+			into "$buildDir/tmp/eebin-osgi/dist/lib"
+			from("$buildDir/dist/lib/osgi") {
+				include "zk.osgi.jar"
+			}
+		}
 		// prepare ee eval
 		// copy from eebin exclude cml jar & sources jar
 		copy {
@@ -388,7 +421,7 @@ task prepareSrc() {
 }
 
 task zkeeBinTar(type: Tar) {
-	dependsOn(prepareBin)
+	dependsOn(prepareCmlBin)
 	archiveFileName = "zkee-bin-${project.version}.tar.gz"
 	destinationDirectory = file("$buildDir/bin/proprietary")
 	compression = Compression.GZIP
@@ -397,7 +430,7 @@ task zkeeBinTar(type: Tar) {
 }
 
 task zkeeBinZip(type: Zip) {
-	dependsOn(prepareBin)
+	dependsOn(prepareCmlBin)
 	archiveFileName = "zkee-bin-${project.version}.zip"
 	destinationDirectory = file("$buildDir/bin/proprietary")
 	from "$buildDir/tmp/eebin"
@@ -405,7 +438,7 @@ task zkeeBinZip(type: Zip) {
 }
 
 task zkeeBinOSGiTar(type: Tar) {
-	dependsOn(prepareBinOSGi)
+	dependsOn(prepareCmlBinOSGi)
 	archiveFileName = "zkee-bin-osgi-${project.version}.tar.gz"
 	destinationDirectory = file("$buildDir/bin/proprietary")
 	compression = Compression.GZIP
@@ -414,7 +447,7 @@ task zkeeBinOSGiTar(type: Tar) {
 }
 
 task zkeeBinOSGiZip(type: Zip) {
-	dependsOn(prepareBinOSGi)
+	dependsOn(prepareCmlBinOSGi)
 	archiveFileName = "zkee-bin-osgi-${project.version}.zip"
 	destinationDirectory = file("$buildDir/bin/proprietary")
 	from "$buildDir/tmp/eebin-osgi"
@@ -430,7 +463,7 @@ task zkeeSrcZip(type: Zip) {
 }
 
 task zkpeBinTar(type: Tar) {
-	dependsOn(prepareBin)
+	dependsOn(prepareCmlBin)
 	archiveFileName = "zkpe-bin-${project.version}.tar.gz"
 	destinationDirectory = file("$buildDir/bin/proprietary")
 	compression = Compression.GZIP
@@ -441,7 +474,7 @@ task zkpeBinTar(type: Tar) {
 }
 
 task zkpeBinZip(type: Zip) {
-	dependsOn(prepareBin)
+	dependsOn(prepareCmlBin)
 	archiveFileName = "zkpe-bin-${project.version}.zip"
 	destinationDirectory = file("$buildDir/bin/proprietary")
 	from "$buildDir/tmp/eebin"
@@ -451,7 +484,7 @@ task zkpeBinZip(type: Zip) {
 }
 
 task zkpeBinOSGiTar(type: Tar) {
-	dependsOn(prepareBinOSGi)
+	dependsOn(prepareCmlBinOSGi)
 	archiveFileName = "zkpe-bin-osgi-${project.version}.tar.gz"
 	destinationDirectory = file("$buildDir/bin/proprietary")
 	compression = Compression.GZIP
@@ -461,7 +494,7 @@ task zkpeBinOSGiTar(type: Tar) {
 }
 
 task zkpeBinOSGiZip(type: Zip) {
-	dependsOn(prepareBinOSGi)
+	dependsOn(prepareCmlBinOSGi)
 	archiveFileName = "zkpe-bin-osgi-${project.version}.zip"
 	destinationDirectory = file("$buildDir/bin/proprietary")
 	from "$buildDir/tmp/eebin-osgi"
@@ -523,7 +556,7 @@ task zkSrcZip(type: Zip) {
 }
 
 task zkpeBinEvalZip(type: Zip) {
-	dependsOn(prepareBin)
+	dependsOn(prepareCmlBin)
 	archiveFileName = "zkpe-bin-eval-${project.version}.zip"
 	destinationDirectory = file("$buildDir/bin")
 	from("$buildDir/tmp/eebin-eval") {
@@ -534,7 +567,7 @@ task zkpeBinEvalZip(type: Zip) {
 }
 
 task zkeeBinEvalZip(type: Zip) {
-	dependsOn(prepareBin)
+	dependsOn(prepareCmlBin)
 	archiveFileName = "zkee-bin-eval-${project.version}.zip"
 	destinationDirectory = file("$buildDir/bin")
 	from "$buildDir/tmp/eebin-eval"
@@ -542,7 +575,7 @@ task zkeeBinEvalZip(type: Zip) {
 }
 
 task zkeeBinOSGiEvalZip(type: Zip) {
-	dependsOn(prepareBin)
+	dependsOn(prepareCmlBinOSGi)
 	archiveFileName = "zkee-bin-osgi-eval-${project.version}.zip"
 	destinationDirectory = file("$buildDir/bin")
 	from "$buildDir/tmp/eebin-osgi-eval"
@@ -550,7 +583,7 @@ task zkeeBinOSGiEvalZip(type: Zip) {
 }
 
 task zkpeBinOSGiEvalZip(type: Zip) {
-	dependsOn(prepareBin)
+	dependsOn(prepareCmlBinOSGi)
 	archiveFileName = "zkpe-bin-osgi-eval-${project.version}.zip"
 	destinationDirectory = file("$buildDir/bin")
 	from("$buildDir/tmp/eebin-osgi-eval") {
@@ -560,7 +593,7 @@ task zkpeBinOSGiEvalZip(type: Zip) {
 }
 
 task zksandboxZip(type: Zip) {
-	dependsOn(prepareBin)
+	dependsOn(prepareCmlBin)
 	archiveFileName = "zk-sandbox-${project.version}.zip"
 	destinationDirectory = file("$buildDir/bin")
 	from "$buildDir/tmp/sandbox"
@@ -583,7 +616,20 @@ task zkjavadocZip(type: Zip) {
 	into "zk"
 }
 
-task bins() {
+task zkBins() {
+	// ce
+	dependsOn(zkBinZip)
+	dependsOn(zkBinTar)
+	dependsOn(zkBinOSGiTar)
+	dependsOn(zkBinOSGiZip)
+	dependsOn(zkSrcZip)
+
+	// javadoc & jsdoc
+	 dependsOn(zkjavadocZip)
+	 dependsOn(zkjsdocZip)
+}
+
+task cmlBins() {
 	// ee
 	dependsOn(zkeeBinZip)
 	dependsOn(zkeeBinTar)
@@ -601,17 +647,13 @@ task bins() {
 	dependsOn(zkpeBinEvalZip)
 	dependsOn(zkeeBinOSGiEvalZip)
 	dependsOn(zkpeBinOSGiEvalZip)
-	// ce
-	dependsOn(zkBinZip)
-	dependsOn(zkBinTar)
-	dependsOn(zkBinOSGiTar)
-	dependsOn(zkBinOSGiZip)
-	dependsOn(zkSrcZip)
+}
+
+task bins() {
 	// zksandbox
 	dependsOn(zksandboxZip)
-	// javadoc & jsdoc
-	dependsOn(zkjavadocZip)
-	dependsOn(zkjsdocZip)
+	zksandboxZip.dependsOn(cmlBins)
+	cmlBins.dependsOn(zkBins)
 }
 
 // maven part
