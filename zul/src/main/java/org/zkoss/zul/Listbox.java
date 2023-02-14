@@ -3866,6 +3866,9 @@ public class Listbox extends MeshElement {
 			SelectEvent<Listitem, Object> evt = new SelectEvent<Listitem, Object>("onSelect", this, getSelectedItems(),
 					getItemAtIndex(index), shift != 0 ? SelectEvent.SHIFT_KEY : 0);
 			Events.postEvent(evt);
+
+			// a way to notify Client MVVM
+			Events.postEvent(new Event(Events.ON_ACROSS_PAGE, this, data));
 		} else if (cmd.equals(Events.ON_CHECK_SELECT_ALL)) { // F65-ZK-2014
 			CheckEvent evt = CheckEvent.getCheckEvent(request);
 			if (_model != null) {
