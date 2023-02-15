@@ -240,20 +240,25 @@ export class ComboWidget extends zul.inp.InputWidget<string> {
 				setTimeout(() => {if (this.desktop) this.onResponse(ctl, opts);}, 50);
 				return;
 			}
-			this._shallFixPopupDimension = false;
-			var pp = this.getPopupNode_()!,
-				pz = this.getPopupSize_(pp),
-				scrollPos: {left?: number; Top?: number} = {}; // Bug ZK-2294
-			try {
-				scrollPos.left = pp.scrollLeft;
-				scrollPos.Top = pp.scrollTop;
-				pp.style.height = 'auto'; // ZK-2086: BandBox popup invalid render if ON_OPEN event listener is attached
-				this._fixsz(pz);
-			} finally {
-				// Bug ZK-2294, restore the scroll position
-				pp.scrollTop = scrollPos.Top ?? 0;
-				pp.scrollLeft = scrollPos.left ?? 0;
-			}
+			this.fixPopupDimension_();
+		}
+	}
+
+	/** @internal */
+	fixPopupDimension_(): void {
+		this._shallFixPopupDimension = false;
+		var pp = this.getPopupNode_()!,
+			pz = this.getPopupSize_(pp),
+			scrollPos: {left?: number; Top?: number} = {}; // Bug ZK-2294
+		try {
+			scrollPos.left = pp.scrollLeft;
+			scrollPos.Top = pp.scrollTop;
+			pp.style.height = 'auto'; // ZK-2086: BandBox popup invalid render if ON_OPEN event listener is attached
+			this._fixsz(pz);
+		} finally {
+			// Bug ZK-2294, restore the scroll position
+			pp.scrollTop = scrollPos.Top ?? 0;
+			pp.scrollLeft = scrollPos.left ?? 0;
 		}
 	}
 

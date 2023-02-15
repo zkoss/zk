@@ -43,6 +43,8 @@ export class Combobox extends zul.inp.ComboWidget {
 	/** @internal */
 	_shallRedoCss = false;
 	/** @internal */
+	_isOnChanging = false;
+	/** @internal */
 	_initSelIndex?: number;
 	/** @internal */
 	_sel?: zul.inp.Comboitem;
@@ -151,12 +153,22 @@ export class Combobox extends zul.inp.ComboWidget {
 			return;
 		}
 		super.onResponse(ctl, opts);
+		if (opts && opts.rtags && opts.rtags.onChanging && this.isOpen()) {
+			this._isOnChanging = true;
+		}
+		this.fixPopupDimension_();
+	}
+
+	/** @internal */
+	override fixPopupDimension_(): void {
+		super.fixPopupDimension_();
 		if (this._shallRedoCss) { //fix in case
 			zk(this.getPopupNode_()).redoCSS(-1);
 			this._shallRedoCss = false;
 		}
 		//ZK-3204 check popup position after onChanging
-		if (opts && opts.rtags && opts.rtags.onChanging && this.isOpen()) {
+		if (this._isOnChanging && this.isOpen()) {
+			this._isOnChanging = false;
 			this._checkPopupPosition();
 			// F85-ZK-3827: Combobox empty search message
 			this._fixEmptySearchMessage();
