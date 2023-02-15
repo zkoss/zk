@@ -30,13 +30,13 @@ public class B85_ZK_3585Test extends WebDriverTestCase {
 		waitResponse();
 		Assertions.assertNotEquals(cityValue, city.val());
 
-		JQuery collectionHbox = jq("@hbox").eq(5);
+		JQuery collectionHbox = jq(".z-hbox").eq(5);
 		int numOfCollectionLabel = collectionHbox.find("@vlayout").children().length();
 		click(jq("@button").eq(3));
 		waitResponse();
 		Assertions.assertEquals(numOfCollectionLabel + 1, collectionHbox.find("@vlayout").children().length());
 
-		JQuery mapHbox = jq("@hbox").eq(6);
+		JQuery mapHbox = jq(".z-hbox").eq(6);
 		int numOfMapDiv = mapHbox.find("@vlayout").children().length();
 		click(jq("button").eq(4));
 		waitResponse();
