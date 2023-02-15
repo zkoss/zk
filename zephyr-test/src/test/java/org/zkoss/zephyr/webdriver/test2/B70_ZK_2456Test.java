@@ -25,8 +25,8 @@ public class B70_ZK_2456Test extends WebDriverTestCase {
 		connect();
 
 		click(jq("button:eq(0)"));
-		click(jq("button:eq(1)"));
 		click(jq("button:eq(2)"));
+		click(jq("button:eq(4)"));
 		waitResponse();
 
 		Assertions.assertEquals("Selected: Demo\nSelected: Edit\nSelected: Add", getZKLog());
