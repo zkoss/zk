@@ -16,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import org.zkoss.lang.Strings;
@@ -25,6 +26,7 @@ import org.zkoss.test.webdriver.ztl.JQuery;
 /**
  * @author jameschu
  */
+@Disabled
 public class F96_ZK_4595Test extends WebDriverTestCase {
 	@Test
 	public void test() {

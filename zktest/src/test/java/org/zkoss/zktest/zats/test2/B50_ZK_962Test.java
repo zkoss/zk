@@ -13,18 +13,11 @@ package org.zkoss.zktest.zats.test2;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
 
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
 public class B50_ZK_962Test extends WebDriverTestCase {
-	@Override
-	protected ChromeOptions getWebDriverOptions() {
-		return super.getWebDriverOptions()
-				.setExperimentalOption("w3c", false); // drag&drag workaround
-	}
-
 	@Test
 	public void test() {
 		Actions act = new Actions(connect());

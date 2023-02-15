@@ -13,22 +13,17 @@ package org.zkoss.zephyr.webdriver.test2;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
 
 import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.Widget;
 
 public class F95_ZK_4423Test extends WebDriverTestCase {
-	@Override
-	protected ChromeOptions getWebDriverOptions() {
-		return super.getWebDriverOptions()
-				.setExperimentalOption("w3c", false); // drag&drag workaround
-	}
 
 	@Test
 	public void test() {
 		Actions act = new Actions(connect());
+		waitResponse();
 		Widget portalchildren1 = jq(".z-portalchildren").eq(0).toWidget();
 		Widget portalchildren2 = jq(".z-portalchildren").eq(1).toWidget();
 		Widget portalchildren3 = jq(".z-portalchildren").eq(2).toWidget();
