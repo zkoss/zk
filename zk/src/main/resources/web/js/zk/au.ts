@@ -184,8 +184,13 @@ function ajaxSend(dt: zk.Desktop, aureq: zk.Event, timeout?: number): void {
 		var wgt: zk.Widget | undefined = aureq.target.parent;
 		while (!wgt!.desktop) {
 			wgt = wgt!.parent;
+			if (wgt instanceof zk.Desktop) break;
 		}
-		dt = wgt!.desktop;
+		if (wgt instanceof zk.Desktop) {
+			dt = wgt;
+		} else {
+			dt = wgt!.desktop as never;
+		}
 	}
 	////
 	zAu.addAuRequest(dt, aureq);
