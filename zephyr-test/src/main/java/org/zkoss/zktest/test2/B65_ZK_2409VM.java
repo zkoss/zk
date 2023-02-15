@@ -12,6 +12,7 @@ import org.zkoss.zul.ListModels;
 
 public class B65_ZK_2409VM {
 	private List items;
+	private ListModel subModelItem;
 
 	public B65_ZK_2409VM() {
 		final NumberFormat nf = new DecimalFormat("00");
@@ -19,17 +20,17 @@ public class B65_ZK_2409VM {
 		for (int i = 0; i < 5; i++) {
 			items.add(nf.format(new Integer(i)));
 		}
-	}
-
-	public ListModel getSubModelItem() {
-		final NumberFormat nf = new DecimalFormat("00");
-
-		return ListModels.toListSubModel(new ListModelList(items), new Comparator() {
+		subModelItem = ListModels.toListSubModel(new ListModelList(items), new Comparator() {
 			public int compare(Object val, Object item) {
 				String text = String.valueOf(val);
 				String id = String.valueOf(item);
 				return id.startsWith(text) ? 0 : -1;
 			}
 		}, 100);
+
+	}
+
+	public ListModel getSubModelItem() {
+		return subModelItem;
 	}
 }
