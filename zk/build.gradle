@@ -55,6 +55,7 @@ task genmd5sign(type: Exec) {
 	commandLine './genmd5sign', "$projectDir/codegen/resources/metainfo/zk/buildsign", "org.zkoss.zk.ui.sys.WebAppFactoryImpl,org.zkoss.zk.ui.http.WebManager,org.zkoss.zk.ui.sys.Registry", "$projectDir/build/classes/java/main", "$projectDir/codegen/resources/metainfo/zk/build", "$rootDir"
 }
 genmd5sign.dependsOn(gentime)
-processResources.dependsOn(genmd5sign)
+gentime.mustRunAfter(processResources)
+jar.dependsOn(genmd5sign)
 
 description = 'ZK Kernel'
