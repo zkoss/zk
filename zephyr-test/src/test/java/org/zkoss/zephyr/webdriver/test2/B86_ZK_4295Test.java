@@ -28,6 +28,6 @@ public class B86_ZK_4295Test extends WebDriverTestCase {
 		click(jq("@button"));
 		waitResponse();
 		Assertions.assertEquals("Item 2", jq(".target").text());
-		Assertions.assertEquals("2", getZKLog());
+//		Assertions.assertEquals("2", getZKLog()); Not support for Client MVVM
 	}
 }

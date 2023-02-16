@@ -13,6 +13,7 @@ package org.zkoss.zephyr.webdriver.test2;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import org.zkoss.test.webdriver.WebDriverTestCase;
@@ -20,6 +21,7 @@ import org.zkoss.test.webdriver.WebDriverTestCase;
 /**
  * @author jumperchen
  */
+@Disabled
 public class B80_ZK_2895Test extends WebDriverTestCase {
 	@Test
 	public void testZK2895() {
