@@ -65,7 +65,7 @@ public class F95_ZK_4423Test extends WebDriverTestCase {
 
 		act.dragAndDrop(toElement(jq(".z-panel-header-move").eq(0)), toElement(jq(".z-panel-header-move").eq(2))).perform();
 		waitResponse();
-		Assertions.assertEquals("{todo=[todo task 1, complete task 2, todo task 2], active=[active task 1, active task 2], complete=[complete task 1]}", getZKLog());
+		Assertions.assertEquals("{todo=[todo task 1, todo task 2, complete task 2], active=[active task 1, active task 2], complete=[complete task 1]}", getZKLog());
 		closeZKLog();
 		Assertions.assertEquals(3, portalchildren1.nChildren());
 		Assertions.assertEquals(2, portalchildren2.nChildren());

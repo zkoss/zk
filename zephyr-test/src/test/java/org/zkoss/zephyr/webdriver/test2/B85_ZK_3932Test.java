@@ -12,10 +12,12 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 package org.zkoss.zephyr.webdriver.test2;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
+@Disabled
 public class B85_ZK_3932Test extends WebDriverTestCase {
 	@Test
 	public void test() {

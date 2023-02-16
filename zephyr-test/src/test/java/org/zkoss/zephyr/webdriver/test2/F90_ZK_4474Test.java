@@ -33,9 +33,9 @@ public class F90_ZK_4474Test extends WebDriverTestCase {
 		assertEquals("Hello1", jq("$msg").html());
 		driver.findElement(By.id("btn-n")).click();
 		waitResponse();
-		assertEquals("Hello2", jq("$msg-n").html());
+		assertEquals("Hello2", jq("#msg-n").html());
 		driver.findElement(By.id("btn-h")).click();
 		waitResponse();
-		assertEquals("Hello3", jq("$msg-h").html());
+		assertEquals("Hello3", jq("#msg-h").html());
 	}
 }

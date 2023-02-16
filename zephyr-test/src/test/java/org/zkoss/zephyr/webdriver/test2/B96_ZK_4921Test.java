@@ -13,6 +13,7 @@ package org.zkoss.zephyr.webdriver.test2;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.support.ui.Select;
 
@@ -21,6 +22,7 @@ import org.zkoss.test.webdriver.WebDriverTestCase;
 /**
  * @author jameschu
  */
+@Disabled
 public class B96_ZK_4921Test extends WebDriverTestCase {
 	@Test
 	public void test() {

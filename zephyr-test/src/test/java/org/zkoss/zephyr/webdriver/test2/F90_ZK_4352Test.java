@@ -24,6 +24,7 @@ public class F90_ZK_4352Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
+		waitResponse();
 		Assertions.assertEquals("2000/01/01 PM 02:23:55", jq("@textbox:eq(0)").val());
 		Assertions.assertEquals("2000/01/01", jq("@textbox:eq(1)").val());
 		Assertions.assertEquals("14:23:55", jq("@textbox:eq(2)").val());
