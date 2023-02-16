@@ -19,6 +19,7 @@
 package org.zkoss.zel.impl.parser;
 
 import org.zkoss.zel.ELException;
+import org.zkoss.zel.ValueReference;
 import org.zkoss.zel.impl.lang.EvaluationContext;
 
 
@@ -43,5 +44,11 @@ public final class AstChoice extends SimpleNode {
         Object obj0 = this.children[0].getValue(ctx);
         Boolean b0 = coerceToBoolean(obj0, true);
         return this.children[((b0.booleanValue() ? 1 : 2))].getValue(ctx);
+    }
+
+    public ValueReference getValueReference(EvaluationContext ctx) {
+        Object obj0 = this.children[0].getValue(ctx);
+        Boolean b0 = coerceToBoolean(obj0, true);
+        return this.children[((b0.booleanValue() ? 1 : 2))].getValueReference(ctx);
     }
 }
