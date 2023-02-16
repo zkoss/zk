@@ -14,6 +14,7 @@ public class F86_ZK_3986Test extends WebDriverTestCase {
 		JQuery chosenbox = jq("@chosenbox");
 		JQuery chosenboxPopup = jq(".z-chosenbox-select");
 		click(chosenbox);
+		waitResponse(true);
 		sleep(1000);
 		assertTrue(chosenboxPopup.isVisible());
 		sleep(3000);

@@ -43,6 +43,6 @@ public class B96_ZK_3563Test extends WebDriverTestCase {
 		click(saveBtn);
 		waitResponse();
 		Assertions.assertEquals(jq("$l1").text(), label2.text());
-		Assertions.assertEquals("7", label2.text());
+		Assertions.assertEquals("6", label2.text());
 	}
 }

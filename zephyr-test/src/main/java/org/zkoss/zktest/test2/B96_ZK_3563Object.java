@@ -22,14 +22,20 @@ public class B96_ZK_3563Object implements Serializable {
 	private int counter3;
 
 	public int getCounter1() {
-		return counter1++;
+		return counter1;
 	}
 
 	public int getCounter2() {
-		return counter2++;
+		return counter2;
 	}
 
 	public int getCounter3() {
-		return counter3++;
+		return counter3;
+	}
+
+	public void increase() {
+		counter1++;
+		counter2++;
+		counter3++;
 	}
 }

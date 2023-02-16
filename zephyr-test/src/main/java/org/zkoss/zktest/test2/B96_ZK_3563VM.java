@@ -41,6 +41,7 @@ public class B96_ZK_3563VM implements Serializable {
 
 	@Command("save")
 	public void save() {
+		paramObject.increase();
 		BindUtils.postNotifyChange(null, null, this, ".");
 	}
 
