@@ -13,7 +13,7 @@
         </vlayout>
         <div>
             <button onClick='level.setContext(Collections.singletonMap("test", new Random().nextInt()))' label="Random Context"/>
-            <button onClick='level.navigateTo("Configuration")' label="NavTo Configuration"/>
+            <button onClick="@command('levelNavTo', level=level, key='Configuration')" label="NavTo Configuration"/>
         </div>
 
         <apply level1="@load(level.child)"

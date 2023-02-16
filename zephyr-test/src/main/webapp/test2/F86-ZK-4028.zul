@@ -101,8 +101,8 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 
             <button label="Remove Diagnostics" onClick='@command("remove", path="Diagnostics")' />
             <button label="Remove Maintenance" onClick='@command("remove", path="Maintenance")' />
-            <button label="InsertBefore Diagnostics" onClick='@command("insert")' />
-            <button label="Direct NavTo Configuration/Authentication/AAA Profiles" onClick='@command("navTo", path="Configuration/Authentication/AAA Profiles")'/>
+            <button id="InsertBefore" label="InsertBefore Diagnostics" onClick='@command("insert")' />
+            <button id="NavTo" label="Direct NavTo Configuration/Authentication/AAA Profiles" onClick='@command("navTo", path="Configuration/Authentication/AAA Profiles")'/>
 
             <apply level="@load(vm.navModel.root)"
                         templateURI="@load(self.level.current eq null ? null : self.level.current.url)"

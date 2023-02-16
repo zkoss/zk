@@ -28,52 +28,55 @@ public class F86_ZK_4028Test extends WebDriverTestCase {
 		sleep(2000);
 
 		// Navigation
-		click(jq("@button[label^='Direct NavTo']"));
+		click(jq("$NavTo"));
 		waitResponse();
-		assertEquals(1, jq("@label[value='Level 3']").length());
-		assertEquals(1, jq("@label[value='Level 3']").length());
+		assertEquals(1, jq("@label[value=\"Level 3\"]").length());
+		assertEquals(1, jq("@label[value=\"AAA Profiles\"]").length());
 
-		click(jq("@a[label='Maintenance']"));
+		click(jq("@a[label=\"Maintenance\"]"));
 		waitResponse();
-		assertEquals(1, jq("@label[value='Maintenance']").length());
+		assertEquals(1, jq("@label[value=\"Maintenance\"]").length());
 
-		click(jq("@button[label='NavTo Configuration']"));
+		click(jq("@button[label=\"NavTo Configuration\"]"));
 		waitResponse();
-		assertEquals(1, jq("@label[value='Level 1']").length());
-		assertEquals(1, jq("@label[value='Configuration']").length());
-		assertEquals(0, jq("@label[value='Level 2']").length());
+		assertEquals(1, jq("@label[value=\"Level 1\"]").length());
+		assertEquals(1, jq("@label[value=\"Configuration\"]").length());
+		assertEquals(0, jq("@label[value=\"Level 2\"]").length());
 
 		// Insert / Remove
-		click(jq("@button[label^='InsertBefore']"));
+		click(jq("$InsertBefore"));
 		waitResponse();
-		assertEquals(1, jq("@a[label='New Item']").length());
+		assertEquals(1, jq("@a[label=\"New Item\"]").length());
 
-		click(jq("@button[label^='InsertBefore']"));
+		click(jq("$InsertBefore"));
 		waitResponse();
 		assertTrue(hasError());
 
-		click(jq("@a[label='Diagnostics']"));
+		click(jq(".z-messagebox-window .z-button"));
 		waitResponse();
-		click(jq("@button[label='Remove Diagnostics']"));
-		waitResponse();
-		assertEquals(0, jq("@a[label='Diagnostics']").length());
-		assertEquals(1, jq("@label[value='Maintenance']").length());
 
-		click(jq("@button[label='Remove Maintenance']"));
+		click(jq("@a[label=\"Diagnostics\"]"));
 		waitResponse();
-		assertEquals(0, jq("@a[label='Maintenance']").length());
-		assertEquals(1, jq("@label[value='New Item']").length());
+		click(jq("@button[label=\"Remove Diagnostics\"]"));
+		waitResponse();
+		assertEquals(0, jq("@a[label=\"Diagnostics\"]").length());
+		assertEquals(1, jq("@label[value=\"Maintenance\"]").length());
+
+		click(jq("@button[label=\"Remove Maintenance\"]"));
+		waitResponse();
+		assertEquals(0, jq("@a[label=\"Maintenance\"]").length());
+		assertEquals(1, jq("@label[value=\"New Item\"]").length());
 
 		// Test serialize/deserialize
-		click(jq("@button[label^='Direct NavTo']"));
+		click(jq("$NavTo"));
 		waitResponse();
-		assertEquals(1, jq("@label[value='Level 3']").length());
-		assertEquals(1, jq("@label[value='AAA Profiles']").length());
-		click(jq("@button[label='Test serialize/deserialize']"));
+		assertEquals(1, jq("@label[value=\"Level 3\"]").length());
+		assertEquals(1, jq("@label[value=\"AAA Profiles\"]").length());
+		click(jq("@button[label=\"Test serialize/deserialize\"]"));
 		waitResponse();
-		click(jq("@a[label='Auth Servers']"));
+		click(jq("@a[label=\"Auth Servers\"]"));
 		waitResponse();
-		assertEquals(1, jq("@label[value='Level 3']").length());
-		assertEquals(1, jq("@label[value='Auth Servers']").length());
+		assertEquals(1, jq("@label[value=\"Level 3\"]").length());
+		assertEquals(1, jq("@label[value=\"Auth Servers\"]").length());
 	}
 }
