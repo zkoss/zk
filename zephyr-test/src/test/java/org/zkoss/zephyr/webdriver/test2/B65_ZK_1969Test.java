@@ -16,6 +16,7 @@ public class B65_ZK_1969Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
+		waitResponse();
 		JQuery button = jq("@button");
 		click(button);
 		waitResponse();

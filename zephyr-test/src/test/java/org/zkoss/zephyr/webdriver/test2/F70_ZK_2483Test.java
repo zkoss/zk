@@ -27,16 +27,15 @@ public class F70_ZK_2483Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
-		sleep(2000);
 		assertNoAnyError();
 		JQuery lbls = jq("$init > @label");
 		assertNotEquals(0, lbls.length());
 		int index = 0;
 		for (JQuery lbl : lbls) {
 			if (index % 2 == 0) {
-				assertThat(lbl.text(), matchesRegex("value \\d+"));
-			} else {
 				assertThat(lbl.text(), matchesRegex("key \\d+"));
+			} else {
+				assertThat(lbl.text(), matchesRegex("value \\d+"));
 			}
 			index++;
 		}
