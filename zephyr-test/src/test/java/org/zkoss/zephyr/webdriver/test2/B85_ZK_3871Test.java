@@ -38,7 +38,7 @@ public class B85_ZK_3871Test extends WebDriverTestCase {
 
 			click(bckBtn);
 			waitResponse();
-			buttons = jq("button");
+			buttons = jq("@button");
 			assertEquals(buttons.length(), 5);
 		} catch (Exception e) {
 			fail();
