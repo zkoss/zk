@@ -27,6 +27,7 @@ public class ActionRichletTest extends WebDriverTestCase {
 	@Test
 	public void testIdSelector() {
 		connect("/auxiliary/action/selector/id");
+		waitResponse();
 		click(jq("$btn"));
 		waitResponse();
 		assertEquals("Clicked", jq("$msg").text());
