@@ -317,7 +317,7 @@ zk.get = function (oo: zk.Object, names: string): unknown {
 			// try $n() if possible
 			if (o instanceof zk.Widget) {
 				let elem = o.$n<HTMLElement>();
-				const elemValue = elem ? elem.getAttribute(nm) : undefined;
+				const elemValue = elem ? elem[nm] as unknown : undefined;
 				if (elemValue !== '') { // avoid an empty string
 					result = elemValue;
 				}
