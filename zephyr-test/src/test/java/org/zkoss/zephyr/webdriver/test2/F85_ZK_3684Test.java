@@ -20,8 +20,8 @@ public class F85_ZK_3684Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
-		sleep(2000);
-		verify("", "[FirstName should be capitalized and only letters are accepted., FirstName cannot be empty.]");
+		waitResponse();
+		verify("", "[FirstName should be capitalized and only letters are accepted.,FirstName cannot be empty.]");
 		verify("123", "[FirstName should be capitalized and only letters are accepted.]");
 		verify("Henry", "[]");
 	}
@@ -29,6 +29,6 @@ public class F85_ZK_3684Test extends WebDriverTestCase {
 	private void verify(String input, String text) {
 		type(jq("@textbox"), input);
 		waitResponse();
-		Assertions.assertEquals(text, jq("label").text());
+		Assertions.assertEquals(text, jq("$msg").text());
 	}
 }

@@ -15,7 +15,7 @@ Copyright (C) 2017 Potix Corporation. All Rights Reserved.
 <zk>
     <div viewModel="@id('vm') @init('org.zkoss.zktest.test2.F85_ZK_3684VM')" validationMessages="@id('vmsgs')">
         <textbox value="@bind(vm.person.firstName) @validator('beanValidator', key='fn')"/>
-        <label value="@load(vmsgs.texts['fn'])"/>
+        <label id="msg" value="@load(vmsgs.texts['fn'])"/>
     </div>
     <label multiline="true">
         1. Input nothing, the validation message will be shown.
