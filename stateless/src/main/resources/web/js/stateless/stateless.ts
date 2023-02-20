@@ -45,6 +45,19 @@ interface ActionCmd {
 }
 type ActionCmds = ActionCmd | (ActionParam | ActionPojoParam)[];
 
+function resolveActionTargetRelation(field: string): string {
+	let fields = field.split('.');
+	switch (fields[0]) {
+		case 'nextSibling':
+		case 'previousSibling':
+		case 'parent':
+		case 'firstChild':
+		case 'lastChild':
+			return fields[0] + '.' + (fields.length > 1 ? resolveActionTargetRelation('.' + (fields.splice(1).join('.'))) : '');
+	}
+	return ''; // ignore Duplicate key format that ".$Oid"
+}
+
 function resolveAction(target: zk.Widget, args: ActionCmds, req: zk.Event): string | undefined {
 	if (!args) return undefined;
 	let richletMethod, uri: string | undefined, resolvedArgs: unknown[] = [];
@@ -73,7 +86,7 @@ function resolveAction(target: zk.Widget, args: ActionCmds, req: zk.Event): stri
 				} = others as ActionParam;
 				if (query.startsWith('.')) {
 					if (query != '.') {
-						field = query.substring(1) + '.' + field;
+						field = resolveActionTargetRelation(query.substring(1)) + field;
 					}
 					resolvedArgs.push(target.get(field || 'value'));
 				} else {
@@ -92,7 +105,7 @@ function resolveAction(target: zk.Widget, args: ActionCmds, req: zk.Event): stri
 						let fieldName = q; // query as the field
 						if (fieldName.startsWith('.')) {
 							if (fieldName != '.') {
-								fields[0] = fieldName.substring(1) + '.' + fields[0];
+								fields[0] = resolveActionTargetRelation(fieldName.substring(1)) + fields[0];
 							}
 							resolvedPojo[fields[1]] = target.get(fields[0] || 'value');
 						} else {
