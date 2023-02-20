@@ -61,7 +61,7 @@ public class IImageRichlet implements StatelessRichlet {
 
 	@RichletMapping("/content")
 	public List<IComponent> content() throws IOException {
-		java.io.FileInputStream fis = new java.io.FileInputStream(ServletFns.getCurrentServletContext().getRealPath("/zephyr") + "/ZK-Logo.gif");
+		java.io.FileInputStream fis = new java.io.FileInputStream(ServletFns.getCurrentServletContext().getRealPath("/stateless") + "/ZK-Logo.gif");
 		org.zkoss.image.AImage img = new org.zkoss.image.AImage("ZK-Logo-dynamic", fis);
 		return Arrays.asList(
 				IButton.of("change content").withAction(this::changeContent),
@@ -71,7 +71,7 @@ public class IImageRichlet implements StatelessRichlet {
 
 	@Action(type = Events.ON_CLICK)
 	public void changeContent() throws IOException {
-		java.io.FileInputStream fis = new java.io.FileInputStream(ServletFns.getCurrentServletContext().getRealPath("/zephyr") + "/ZK-Logo-old.gif");
+		java.io.FileInputStream fis = new java.io.FileInputStream(ServletFns.getCurrentServletContext().getRealPath("/stateless") + "/ZK-Logo-old.gif");
 		org.zkoss.image.AImage img = new org.zkoss.image.AImage("ZK-Logo-dynamic2", fis);
 		UiAgent.getCurrent().smartUpdate(Locator.ofId("img"), new IImage.Updater().content(img));
 	}
