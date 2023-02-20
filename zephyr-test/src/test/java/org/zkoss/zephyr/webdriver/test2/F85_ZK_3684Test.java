@@ -13,6 +13,7 @@ package org.zkoss.zephyr.webdriver.test2;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.Keys;
 
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
@@ -21,13 +22,14 @@ public class F85_ZK_3684Test extends WebDriverTestCase {
 	public void test() {
 		connect();
 		waitResponse();
-		verify("", "[FirstName should be capitalized and only letters are accepted.,FirstName cannot be empty.]");
+		verify("", "[FirstName should be capitalized and only letters are accepted., FirstName cannot be empty.]");
 		verify("123", "[FirstName should be capitalized and only letters are accepted.]");
 		verify("Henry", "[]");
 	}
 
 	private void verify(String input, String text) {
 		type(jq("@textbox"), input);
+		sendKeys(jq("@textbox"), Keys.TAB);
 		waitResponse();
 		Assertions.assertEquals(text, jq("$msg").text());
 	}
