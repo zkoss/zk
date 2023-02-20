@@ -16,12 +16,13 @@ import java.util.List;
 
 import org.zkoss.stateless.annotation.Action;
 import org.zkoss.stateless.annotation.RichletMapping;
-import org.zkoss.stateless.ui.Locator;
-import org.zkoss.stateless.ui.StatelessRichlet;
-import org.zkoss.stateless.ui.UiAgent;
 import org.zkoss.stateless.sul.IButton;
 import org.zkoss.stateless.sul.IComponent;
 import org.zkoss.stateless.sul.IListbox;
+import org.zkoss.stateless.ui.Locator;
+import org.zkoss.stateless.ui.StatelessRichlet;
+import org.zkoss.stateless.ui.UiAgent;
+import org.zkoss.statelessex.sul.IListgroup;
 import org.zkoss.statelessex.sul.IListgroupfoot;
 import org.zkoss.zk.ui.event.Events;
 
@@ -38,7 +39,9 @@ public class IListgroupfootRichlet implements StatelessRichlet {
 	@RichletMapping("/label")
 	public List<IComponent> label() {
 		return Arrays.asList(
-				IListbox.of(IListgroupfoot.ofId("listgroupfoot").withLabel("foot")),
+				IListbox.of(
+						IListgroup.ofId("listgroup").withLabel("head"),
+						IListgroupfoot.ofId("listgroupfoot").withLabel("foot")),
 				IButton.of("change label").withAction(this::changeLabel)
 		);
 	}
