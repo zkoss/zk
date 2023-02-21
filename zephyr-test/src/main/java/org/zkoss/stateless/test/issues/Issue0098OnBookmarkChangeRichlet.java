@@ -25,7 +25,7 @@ import org.zkoss.zk.ui.event.Events;
 /**
  * @author jumperchen
  */
-@RichletMapping("/issue0098")
+@RichletMapping("/stateless/issue0098")
 public class Issue0098OnBookmarkChangeRichlet implements StatelessRichlet {
 	@RichletMapping("")
 	public IComponent index() {

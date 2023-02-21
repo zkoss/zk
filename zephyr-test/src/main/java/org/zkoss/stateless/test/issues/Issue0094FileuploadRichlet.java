@@ -29,7 +29,7 @@ import org.zkoss.zk.ui.event.Events;
 /**
  * @author jumperchen
  */
-@RichletMapping("/issue0094")
+@RichletMapping("/stateless/issue0094")
 public class Issue0094FileuploadRichlet implements StatelessRichlet {
 
 	@RichletMapping("")

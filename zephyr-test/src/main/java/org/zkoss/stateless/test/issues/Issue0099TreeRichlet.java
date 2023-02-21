@@ -31,7 +31,7 @@ import org.zkoss.zk.ui.event.Events;
 /**
  * @author jumperchen
  */
-@RichletMapping("/issue0099")
+@RichletMapping("/stateless/issue0099")
 public class Issue0099TreeRichlet implements StatelessRichlet {
 	@RichletMapping("/createOnOpen")
 	public IComponent createOnOpen() {

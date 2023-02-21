@@ -24,7 +24,7 @@ import org.zkoss.stateless.sul.ITreeitem;
 /**
  * @author jumperchen
  */
-@RichletMapping("/issue0078")
+@RichletMapping("/stateless/issue0078")
 public class Issue0078TreePagingRichlet implements StatelessRichlet {
 	@RichletMapping("")
 	public IComponent pagingMold() {

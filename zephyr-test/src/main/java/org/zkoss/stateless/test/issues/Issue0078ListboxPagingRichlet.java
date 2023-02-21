@@ -25,7 +25,7 @@ import org.zkoss.stateless.sul.IListitem;
 /**
  * @author katherine
  */
-@RichletMapping("/issue0078/listbox")
+@RichletMapping("/stateless/issue0078/listbox")
 public class Issue0078ListboxPagingRichlet implements StatelessRichlet {
 	@RichletMapping("")
 	public IComponent pagingMold() {

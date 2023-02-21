@@ -26,7 +26,7 @@ import org.zkoss.stateless.sul.IRow;
 /**
  * @author katherine
  */
-@RichletMapping("/issue0078/grid")
+@RichletMapping("/stateless/issue0078/grid")
 public class Issue0078GridPagingRichlet implements StatelessRichlet {
 	@RichletMapping("")
 	public IComponent pagingMold() {

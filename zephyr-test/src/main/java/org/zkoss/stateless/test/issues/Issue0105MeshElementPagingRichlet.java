@@ -46,7 +46,7 @@ import org.zkoss.zk.ui.event.Events;
 /**
  * @author jumperchen
  */
-@RichletMapping("/issue0105")
+@RichletMapping("/stateless/issue0105")
 public class Issue0105MeshElementPagingRichlet implements StatelessRichlet {
 	@RichletMapping("/grid")
 	public IComponent pagingGrid() {
