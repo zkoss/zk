@@ -10,7 +10,8 @@ import org.zkoss.test.webdriver.ztl.JQuery;
 public class ComboboxmodelselectionTest extends WebDriverTestCase {
 	@Test
 	public void test() {
-		connect();
+		connect("/mvvm/book/basic/comboboxmodelselection.zul");
+		waitResponse();
 		JQuery combobox1 = jq("$cb1");
 		JQuery combobox2 = jq("$cb2");
 		assertEquals("", jq("$msg").toWidget().get("value"));
