@@ -135,6 +135,14 @@ export class ItemWidget extends zul.Widget<HTMLTableRowElement> implements zul.m
 	}
 
 	/**
+	 * @returns the index of this item (a.k.a., the order in the SelectWidget).
+	 * @since 10.0.0
+	 */
+	getIndex(): number | undefined {
+		return this._index;
+	}
+
+	/**
 	 * Sets the value.
 	 * @param value - the value.
 	 * <p>Note: the value is application dependent, you can place
