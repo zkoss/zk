@@ -92,7 +92,7 @@ public class ILineitemRichlet implements StatelessRichlet {
 
 	@RichletMapping("/pointImageContent")
 	public List<IComponent> pointImageContent() throws IOException {
-		java.io.FileInputStream fis = new java.io.FileInputStream(ServletFns.getCurrentServletContext().getRealPath("/zephyr") + "/ZK-Logo.gif");
+		java.io.FileInputStream fis = new java.io.FileInputStream(ServletFns.getCurrentServletContext().getRealPath("/stateless") + "/ZK-Logo.gif");
 		org.zkoss.image.AImage img = new org.zkoss.image.AImage("ZK-Logo-dynamic", fis);
 		return Arrays.asList(
 				ILinelayout.of(ILineitem.ofId("item").withPointImageContent(img)),
@@ -102,7 +102,7 @@ public class ILineitemRichlet implements StatelessRichlet {
 
 	@Action(type = Events.ON_CLICK)
 	public void changePointImageContent() throws IOException {
-		java.io.FileInputStream fis = new java.io.FileInputStream(ServletFns.getCurrentServletContext().getRealPath("/zephyr") + "/ZK-Logo.gif");
+		java.io.FileInputStream fis = new java.io.FileInputStream(ServletFns.getCurrentServletContext().getRealPath("/stateless") + "/ZK-Logo.gif");
 		org.zkoss.image.AImage img = new org.zkoss.image.AImage("ZK-Logo-dynamic-new", fis);
 		UiAgent.getCurrent().smartUpdate(Locator.ofId("item"), new ILineitem.Updater().pointImageContent(img));
 	}

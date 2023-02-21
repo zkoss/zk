@@ -38,6 +38,7 @@ public class ICoachmarkRichletTest extends WebDriverTestCase {
 	@Test
 	public void target() {
 		connect("/supplementary/iCoachmark/target");
+		waitResponse(true);
 		int offsetLeft = jq(".z-coachmark").offsetLeft();
 		click(jq(".z-coachmark-close"));
 		click(jq("@button:eq(0)"));
