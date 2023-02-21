@@ -50,7 +50,7 @@ const _xWidget: Partial<zk.Widget> = {},
 });
 
 // support closest()
-let xWidget$ = zk.Widget.$;
+let xWidget$ = zk.$;
 
 	// Support two syntax:
 	// 1. selector < singleSelector
@@ -120,7 +120,7 @@ let xWidget$ = zk.Widget.$;
 		}
 		return [matches, parts];
 	}
-zk.Widget.$ = <T extends zk.Widget> (n?: string | JQuery | JQuery.Event | zk.Event | Node | undefined | null | T, // eslint-disable-line zk/noNull
+zk.$ = <T extends zk.Widget> (n?: string | JQuery | JQuery.Event | zk.Event | Node | undefined | null | T, // eslint-disable-line zk/noNull
 		opts?: Partial<{exact: boolean; strict: boolean; child: boolean}>): T | undefined => {
 	if (typeof n == 'string') {
 		let query = n.trim(),
