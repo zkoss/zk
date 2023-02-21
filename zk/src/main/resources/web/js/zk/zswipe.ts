@@ -137,10 +137,15 @@ export class Swipe extends zk.Object {
 				dispX = Math.abs(deltaX);
 				dispY = Math.abs(deltaY);
 
-				if (dispX > min && dispY < max)
+				if (dispX > min) {
 					dir = deltaX > 0 ? 'left' : 'right';
-				else if (dispY > min && dispX < max)
+				} else if (dispY > min && dispX < max) {
 					dir = deltaY > 0 ? 'up' : 'down';
+				} else if (dispY - max > dispX - min) {
+					dir = deltaY > 0 ? 'up' : 'down';
+				} else {
+					dir = deltaX > 0 ? 'left' : 'right';
+				}
 			}
 
 			var wgt = this.widget;
