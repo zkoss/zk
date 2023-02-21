@@ -37,6 +37,7 @@ public class IMeshElementRichletTest extends WebDriverTestCase {
 	@Test
 	public void nativeScrollbar() {
 		connect("/base_components/IMeshElement/nativeScrollbar");
+		waitResponse();
 		assertEquals(3, jq(".z-scrollbar-vertical-embed").length());
 	}
 
