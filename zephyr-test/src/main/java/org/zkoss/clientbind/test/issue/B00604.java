@@ -1,5 +1,7 @@
 package org.zkoss.clientbind.test.issue;
 
+import org.zkoss.bind.annotation.Command;
+import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zul.ListModelList;
 
 /**
@@ -8,6 +10,7 @@ import org.zkoss.zul.ListModelList;
  */
 public class B00604 {
 	ListModelList<Option> options = new ListModelList<Option>();
+	private String src;
 
 	public B00604() {
 		options = new ListModelList<Option>();
@@ -39,5 +42,15 @@ public class B00604 {
 		public void setValue(String value) {
 			this.value = value;
 		}
+	}
+
+	public String getSrc() {
+		return src;
+	}
+
+	@Command
+	@NotifyChange("src")
+	public void updateSrc() {
+		src = "./B00604-1.zul";
 	}
 }
