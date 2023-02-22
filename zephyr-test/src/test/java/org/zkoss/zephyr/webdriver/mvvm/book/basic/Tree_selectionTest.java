@@ -10,7 +10,8 @@ import org.zkoss.test.webdriver.ztl.JQuery;
 public class Tree_selectionTest extends WebDriverTestCase {
 	@Test
 	public void test() {
-		connect();
+		connect("/mvvm/book/basic/tree-selection.zul");
+		waitResponse();
 		JQuery msg = jq("$msg");
 		JQuery selected = jq("$selected");
 		JQuery clean = jq("$clean");

@@ -9,7 +9,7 @@ import org.zkoss.test.webdriver.WebDriverTestCase;
 public class Form_DirtyTest extends WebDriverTestCase {
 	@Test
 	public void test() {
-		connect();
+		connect("/mvvm/book/basic/form-dirty.zul");
 		assertEquals("false", jq("$dirty").toWidget().get("value"));
 		assertEquals("Dennis", jq("$l1").toWidget().get("value"));
 

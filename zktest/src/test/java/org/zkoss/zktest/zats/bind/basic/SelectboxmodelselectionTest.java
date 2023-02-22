@@ -10,7 +10,7 @@ import org.zkoss.test.webdriver.ztl.Widget;
 public class SelectboxmodelselectionTest extends WebDriverTestCase {
 	@Test
 	public void test() {
-		connect();
+		connect("/bind/basic/selectboxmodelselection.zul");
 		Widget sb1 = jq("$sb1").toWidget();
 		Widget sb2 = jq("$sb2").toWidget();
 		Widget sb3 = jq("$sb3").toWidget();

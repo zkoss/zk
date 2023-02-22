@@ -12,7 +12,7 @@ import org.zkoss.test.webdriver.ztl.Widget;
 public class GridmodelTest extends WebDriverTestCase {
 	@Test
 	public void test() {
-		connect();
+		connect("/bind/basic/gridmodel.zul");
 		JQuery outerbox = jq("$outergrid");
 		Widget outerrows = outerbox.find("@rows").toWidget().firstChild();
 		// =================================delete 2rd row

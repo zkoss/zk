@@ -24,7 +24,8 @@ import org.zkoss.test.webdriver.ztl.JQuery;
 public class ValidationTest extends WebDriverTestCase {
 	@Test
 	public void test1() {
-		connect();
+		connect("/mvvm/book/basic/validation.zul");
+		waitResponse();
 		JQuery l11 = jq("$l11");
 		JQuery l12 = jq("$l12");
 		JQuery t21 = jq("$t21");
@@ -124,7 +125,7 @@ public class ValidationTest extends WebDriverTestCase {
 
 	@Test
 	public void test2() {
-		connect();
+		connect("/mvvm/book/basic/validation.zul");
 		JQuery l11 = jq("$l11");
 		JQuery l12 = jq("$l12");
 		JQuery t21 = jq("$t21");

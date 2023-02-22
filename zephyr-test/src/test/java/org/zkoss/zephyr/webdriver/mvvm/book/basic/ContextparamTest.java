@@ -9,7 +9,7 @@ import org.zkoss.test.webdriver.WebDriverTestCase;
 public class ContextparamTest extends WebDriverTestCase {
 	@Test
 	public void test() {
-		connect();
+		connect("/mvvm/book/basic/contextparam.zul");
 		assertEquals("applicationScope-A", jq("$l11").toWidget().get("value"));
 		assertEquals("sessionScope-A", jq("$l12").toWidget().get("value"));
 		assertEquals("desktopScope-A", jq("$l13").toWidget().get("value"));

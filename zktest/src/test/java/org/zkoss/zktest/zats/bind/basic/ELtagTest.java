@@ -10,7 +10,7 @@ import org.zkoss.test.webdriver.ztl.JQuery;
 public class ELtagTest extends WebDriverTestCase {
 	@Test
 	public void test() {
-		connect();
+		connect("/bind/basic/eltag.zul");
 		JQuery t1 = jq("$t1");
 		JQuery l1 = jq("$l1");
 		JQuery l2 = jq("$l2");

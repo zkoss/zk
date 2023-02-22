@@ -9,7 +9,7 @@ import org.zkoss.test.webdriver.WebDriverTestCase;
 public class ExecutionparamTest extends WebDriverTestCase {
 	@Test
 	public void test() {
-		connect();
+		connect("/mvvm/book/basic/executionparam.zul");
 		click(jq("$btn1").toWidget());
 		waitResponse();
 		assertEquals("foo", jq("$w1").find("$l11").toWidget().get("value"));

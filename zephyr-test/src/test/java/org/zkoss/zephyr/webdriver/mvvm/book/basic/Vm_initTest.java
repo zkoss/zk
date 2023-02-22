@@ -11,7 +11,7 @@ import org.zkoss.test.webdriver.ztl.Widget;
 public class Vm_initTest extends WebDriverTestCase {
 	@Test
 	public void test() {
-		connect();
+		connect("/mvvm/book/basic/vm-init.zul");
 		Widget vm1_l1 = jq("$vm1_l1").toWidget();
 		Widget vm1_t1 = jq("$vm1_t1").toWidget();
 		Widget vm1_l2 = jq("$vm1_l2").toWidget();

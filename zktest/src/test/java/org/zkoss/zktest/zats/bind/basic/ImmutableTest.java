@@ -10,7 +10,7 @@ import org.zkoss.test.webdriver.ztl.JQuery;
 public class ImmutableTest extends WebDriverTestCase {
 	@Test
 	public void test() {
-		connect();
+		connect("/bind/basic/immutable.zul");
 		JQuery l1 = jq("$l1");
 		JQuery l2 = jq("$l2");
 		JQuery l3 = jq("$l3");

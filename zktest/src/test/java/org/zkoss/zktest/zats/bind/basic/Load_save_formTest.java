@@ -10,7 +10,7 @@ import org.zkoss.test.webdriver.ztl.JQuery;
 public class Load_save_formTest extends WebDriverTestCase {
 	@Test
 	public void test() {
-		connect();
+		connect("/bind/basic/load-save-form.zul");
 		JQuery t21 = jq("$t21");
 		t21.toElement().set("value", "");
 		sendKeys(t21.toWidget(), "X");

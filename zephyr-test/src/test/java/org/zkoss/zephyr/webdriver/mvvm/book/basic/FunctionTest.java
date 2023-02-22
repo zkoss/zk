@@ -9,7 +9,8 @@ import org.zkoss.test.webdriver.WebDriverTestCase;
 public class FunctionTest extends WebDriverTestCase {
 	@Test
 	public void test() {
-		connect();
+		connect("/mvvm/book/basic/function.zul");
+		waitResponse();
 		assertEquals("foo", jq("$l11").toWidget().get("value"));
 		assertEquals("foo", jq("$l12").toWidget().get("value"));
 		assertEquals("foo:2bar", jq("$l13").toWidget().get("value"));
