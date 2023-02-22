@@ -13,6 +13,7 @@ public class F00986CloseWindowTest extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
+		waitResponse();
 
 		JQuery detach = jq("$detach");
 		JQuery win1 = jq("$win1");
