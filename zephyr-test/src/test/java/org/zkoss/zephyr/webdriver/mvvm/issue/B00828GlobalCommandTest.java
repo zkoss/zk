@@ -11,6 +11,7 @@ public class B00828GlobalCommandTest extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
+		waitResponse();
 		JQuery post = jq("$post");
 		JQuery msg = jq("$msg");
 		for (int i = 0; i < 50; i++) {
