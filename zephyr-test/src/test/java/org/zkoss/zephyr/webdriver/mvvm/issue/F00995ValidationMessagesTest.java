@@ -12,6 +12,7 @@ public class F00995ValidationMessagesTest extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
+		waitResponse();
 
 		JQuery l1 = jq("$l1");
 		JQuery t1 = jq("$t1");

@@ -3,6 +3,7 @@ package org.zkoss.zephyr.webdriver.mvvm.issue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.Keys;
 
 import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
@@ -32,7 +33,7 @@ public class B02078Test extends WebDriverTestCase {
 		editRow = editRow.nextSibling();
 		type(editRow.lastChild(), "MainTag");
 		waitResponse();
-		click(newTagValue.toWidget().nextSibling());
+		sendKeys(newTagValue, Keys.ENTER);
 		waitResponse();
 		click(window.toWidget().lastChild());
 		waitResponse();
@@ -45,7 +46,7 @@ public class B02078Test extends WebDriverTestCase {
 		waitResponse();
 		type(newTagValue, "NewItem");
 		waitResponse();
-		click(newTagValue.toWidget().nextSibling());
+		sendKeys(newTagValue, Keys.ENTER);
 		waitResponse();
 		editRow = formGrid.toWidget().firstChild().firstChild();
 		type(editRow.lastChild(), "Name");
