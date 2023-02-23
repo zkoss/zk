@@ -14,10 +14,13 @@ package org.zkoss.zephyr.webdriver.mvvm.book.shadow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.jupiter.api.Test;
+import java.util.logging.Level;
 
-import org.zkoss.test.webdriver.ztl.JQuery;
+import org.junit.jupiter.api.Test;
+import org.openqa.selenium.logging.LogType;
+
 import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author rudyhuang
@@ -26,6 +29,7 @@ public class FlowCtrlTest extends WebDriverTestCase {
 	@Test
 	public void testChoose() {
 		connect("/mvvm/book/shadow/flow/flowctrl-choose.zul");
+		waitResponse();
 		JQuery navitems = jq("$navbar > @navitem");
 		JQuery navs = jq("$navbar > @nav");
 		assertEquals(4, navitems.length());
@@ -35,6 +39,7 @@ public class FlowCtrlTest extends WebDriverTestCase {
 	@Test
 	public void testIf() {
 		connect("/mvvm/book/shadow/flow/flowctrl-if.zul");
+		waitResponse();
 		JQuery navitems = jq("$navbar > @navitem");
 		JQuery navs = jq("$navbar > @nav");
 		assertEquals(4, navitems.length());
@@ -44,14 +49,16 @@ public class FlowCtrlTest extends WebDriverTestCase {
 	@Test
 	public void testOtherwiseWrongUsage() {
 		connect("/mvvm/book/shadow/flow/flowctrl-otherwise-wrong.zul");
-		waitResponse();
-		assertTrue(hasError());
+		assertTrue(driver.manage().logs().get(LogType.BROWSER).getAll().stream()
+				.filter(entry -> entry.getLevel().intValue()
+						>= Level.SEVERE.intValue()).findFirst().isPresent());
 	}
 
 	@Test
 	public void testWhenWrongUsage() {
 		connect("/mvvm/book/shadow/flow/flowctrl-when-wrong.zul");
-		waitResponse();
-		assertTrue(hasError());
+		assertTrue(driver.manage().logs().get(LogType.BROWSER).getAll().stream()
+				.filter(entry -> entry.getLevel().intValue()
+						>= Level.SEVERE.intValue()).findFirst().isPresent());
 	}
 }
