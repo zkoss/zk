@@ -25,6 +25,7 @@ public class ForEachStatusTest extends WebDriverTestCase {
 	@Test
 	public void testNumbers() {
 		connect("/mvvm/book/shadow/iterate/foreach-numbers-varstatus.zul");
+		waitResponse();
 		JQuery rows = jq("@row");
 		checkData(rows, 0, new String[]{"4", "7", "10", "13", "16", "19"});
 		checkData(rows, 1, new String[]{"4", "7", "10", "13", "16", "19"});
@@ -39,6 +40,7 @@ public class ForEachStatusTest extends WebDriverTestCase {
 	@Test
 	public void testItems() {
 		connect("/mvvm/book/shadow/iterate/foreach-items-varstatus.zul");
+		waitResponse();
 		JQuery rows = jq("@row");
 		checkData(rows, 0, new String[]{"Menu[label='Home', iconSclass='z-icon-home']", "Menu[label='Products', iconSclass='z-icon-clone']", "Menu[label='Demos', iconSclass='z-icon-cube']", "Menu[label='Downloads', iconSclass='z-icon-download']", "Menu[label='Community', iconSclass='z-icon-facebook']", "Menu[label='About', iconSclass='z-icon-question']"});
 		checkData(rows, 1, new String[]{"0", "1", "2", "3", "4", "5"});

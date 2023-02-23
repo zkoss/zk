@@ -25,6 +25,7 @@ public class TemplateTest extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect("/mvvm/book/shadow/template/template.zul");
+		waitResponse();
 		JQuery navitems = jq("$navbar > @navitem");
 		JQuery navs = jq("$navbar > @nav");
 		assertEquals(4, navitems.length());
@@ -36,6 +37,7 @@ public class TemplateTest extends WebDriverTestCase {
 	@Test
 	public void testExternal() {
 		connect("/mvvm/book/shadow/template/template-external.zul");
+		waitResponse();
 		JQuery navitems = jq("$navbar > @navitem");
 		JQuery navs = jq("$navbar > @nav");
 		assertEquals(4, navitems.length());
@@ -47,6 +49,7 @@ public class TemplateTest extends WebDriverTestCase {
 	@Test
 	public void testSrc() {
 		connect("/mvvm/book/shadow/template/template-src.zul");
+		waitResponse();
 		JQuery navitems = jq("$navbar > @navitem");
 		JQuery navs = jq("$navbar > @nav");
 		assertEquals(4, navitems.length());
