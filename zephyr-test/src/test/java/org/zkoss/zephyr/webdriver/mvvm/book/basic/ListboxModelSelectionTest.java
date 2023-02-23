@@ -28,4 +28,8 @@ public class ListboxModelSelectionTest extends WebDriverTestCase {
 		assertEquals(outeritem.uuid(), jq(outerbox).find(".z-listitem-selected").toWidget().uuid());
 		assertEquals("reloaded", msg.get("value"));
 	}
+
+	protected boolean isHeadless() {
+		return false;
+	}
 }
