@@ -219,7 +219,6 @@ export class Radiogroup extends zul.Widget {
 	setSelectedIndex(selectedIndex: number): this {
 		if (selectedIndex < 0) selectedIndex = -1;
 		if (this._jsel != selectedIndex) {
-			this._jsel = selectedIndex;
 			if (this.desktop) {
 				if (selectedIndex < 0) {
 					this.getSelectedItem()!.setSelected(false);
@@ -227,6 +226,7 @@ export class Radiogroup extends zul.Widget {
 					this.getItemAtIndex(selectedIndex)!.setSelected(true);
 				}
 			}
+			this._jsel = selectedIndex;
 		}
 		return this;
 	}
