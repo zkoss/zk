@@ -25,6 +25,7 @@ public class F1Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
+		waitResponse();
 		JQuery registerButton = jq("$registerButton");
 		JQuery message = jq("$message");
 		final String msg = message.text();
@@ -50,7 +51,8 @@ public class F1Test extends WebDriverTestCase {
 		click(registerButton);
 		waitResponse();
 		assertEquals("Hi, john: You are NOT an adult.", message.text());
-		type(jq("$birthdayBox"), "1978/1/1");
+		type(jq("$birthdayBox input"), "1978/1/1");
+		waitResponse();
 		click(registerButton);
 		waitResponse();
 		assertEquals("Hi, john: You are an adult.", message.text());
