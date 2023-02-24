@@ -27,9 +27,11 @@ import org.zkoss.test.webdriver.WebDriverTestCase;
  * @author rudyhuang
  */
 public class DatetimeboxTest extends WebDriverTestCase {
+
 	@Test
 	public void test() {
 		connect();
+		waitResponse();
 		final SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm:ss a");
 		final SimpleDateFormat timeboxFormat = new SimpleDateFormat("a hh:mm:ss");
 		final SimpleDateFormat dateboxFormat = new SimpleDateFormat("yyyy/MM/dd a hh:mm:ss");
@@ -41,8 +43,12 @@ public class DatetimeboxTest extends WebDriverTestCase {
 		} catch (ParseException e) {
 			fail("Unable to parse date, " + e);
 		}
-		assertEquals("11:11:11 AM", timeFormat.format(date));
-		type(jq("@datebox input"), "2021/01/23 PM 06:05:04");
+
+		assertEquals("11:11:11 " + (timeFormat.format(new Date()).endsWith("AM") ? "PM" : "AM"), timeFormat.format(date));
+
+		// avoid using type() here to prevent unwanted value changes.
+		sendKeys(jq("@datebox input"),Keys.chord(Keys.CONTROL, "a"), "2021/01/23 PM 06:05:04", Keys.TAB);
+		sleep(500);
 		waitResponse();
 		try {
 			date = timeboxFormat.parse(jq(".z-timebox-input").val());
