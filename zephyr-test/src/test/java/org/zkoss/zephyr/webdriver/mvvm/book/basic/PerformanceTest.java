@@ -27,7 +27,7 @@ public class PerformanceTest extends WebDriverTestCase {
 	@Test
 	public void test() throws Exception {
 		connect("/mvvm/book/basic/performance.zul");
-
+		waitResponse();
 		assertEquals(5, jq(".z-include .z-hbox").length());
 		assertEquals(0, jq(".z-hbox").eq(0).find("@label").eq(0).text());
 		final long start = System.currentTimeMillis();

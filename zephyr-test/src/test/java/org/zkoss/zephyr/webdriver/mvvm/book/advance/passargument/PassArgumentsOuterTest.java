@@ -21,6 +21,7 @@ public class PassArgumentsOuterTest extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
+		waitResponse();
 		assertEquals("outerPageLiteralValue", jq("@include $innerLabel").text());
 		assertEquals("outerPageABC", jq("@include $innerLabel2").text());
 	}
@@ -28,6 +29,7 @@ public class PassArgumentsOuterTest extends WebDriverTestCase {
 	@Test
 	public void test2() {
 		connect("/mvvm/book/advance/passargument/PassArgumentsOuter-2.zul");
+		waitResponse();
 		assertEquals("myArgument", jq("@include $innerLabel").text());
 		assertEquals("myArgument", jq("@include $innerLabel2").text());
 

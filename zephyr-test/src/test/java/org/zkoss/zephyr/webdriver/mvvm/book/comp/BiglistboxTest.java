@@ -26,7 +26,7 @@ public class BiglistboxTest extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
-
+		waitResponse();
 		assertEquals("0", jq(".z-biglistbox-selected").eval("index()"));
 
 		click(jq(".z-biglistbox-row:eq(1)"));
