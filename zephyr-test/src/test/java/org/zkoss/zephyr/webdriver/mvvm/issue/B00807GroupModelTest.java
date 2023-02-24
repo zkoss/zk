@@ -11,6 +11,7 @@ public class B00807GroupModelTest extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
+		waitResponse();
 
 		JQuery grid = jq("$grid");
 		JQuery groups = grid.find("@group");

@@ -12,6 +12,7 @@ public class B00807GroupModelListboxMultipleTest extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
+		waitResponse();
 
 		JQuery listbox = jq("$listbox");
 		JQuery groups = listbox.find("@listgroup");

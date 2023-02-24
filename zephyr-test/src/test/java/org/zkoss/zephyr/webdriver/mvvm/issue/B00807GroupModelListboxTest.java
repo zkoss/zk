@@ -11,6 +11,7 @@ public class B00807GroupModelListboxTest extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
+		waitResponse();
 
 		JQuery listbox = jq("$listbox");
 		JQuery groups = listbox.find("@listgroup");
