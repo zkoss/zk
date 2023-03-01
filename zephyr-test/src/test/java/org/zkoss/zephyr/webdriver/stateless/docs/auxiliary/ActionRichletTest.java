@@ -36,6 +36,7 @@ public class ActionRichletTest extends WebDriverTestCase {
 	@Test
 	public void testTypeSelector() {
 		connect("/auxiliary/action/selector/type");
+		waitResponse();
 		click(jq("@button:eq(0)"));
 		waitResponse();
 		assertEquals("button 1", jq("$msg2").text());

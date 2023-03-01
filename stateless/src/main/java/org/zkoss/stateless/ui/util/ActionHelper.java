@@ -42,7 +42,7 @@ import org.zkoss.zk.ui.sys.JsContentRenderer;
  */
 public class ActionHelper {
 
-	private static final String JS_FUNCTION = "(zk.ausending?zk.afterMount:function(f){f();})(function(){var q=\"%s\",wgs=(q.charAt(0)==\"$\")?[zk.$(q)]:jq(q).map(function(){return zk.$(this)}).get(),args={%s};if(wgs.length){for(var i=0,j=wgs.length;i<j;i++){var w=wgs[i];for(var m in args){w.set(m,args[m])}}}});";
+	private static final String JS_FUNCTION = "(zk.ausending?zk.afterMount:function(f){f();})(function(){var q=\"%s\",wgs=(q.charAt(0)==\"$\")?[zk.$(q)]:jq(q).map(function(){return zk.$(this)}).get(),args={%s};if(wgs.length){for(var i=0,j=wgs.length;i<j;i++){var w=wgs[i];for(var m in args){if (w) w.set(m,args[m])}}}});";
 
 	/**
 	 * Wires the method action handlers from the given {@code richlet}
