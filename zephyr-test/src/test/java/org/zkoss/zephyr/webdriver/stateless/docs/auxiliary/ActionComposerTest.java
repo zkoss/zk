@@ -26,6 +26,7 @@ public class ActionComposerTest extends WebDriverTestCase {
 	@Test
 	public void testSelector() {
 		connect("/stateless/docs/auxiliary/action.sul");
+		waitResponse();
 		// ID Selector
 		click(jq("$btn"));
 		waitResponse();
