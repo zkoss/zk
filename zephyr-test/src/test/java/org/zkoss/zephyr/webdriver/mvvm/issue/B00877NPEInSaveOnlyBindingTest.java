@@ -12,6 +12,7 @@ public class B00877NPEInSaveOnlyBindingTest extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
+		waitResponse();
 		JQuery msg = jq("$msg");
 		JQuery tb = jq("$tb");
 

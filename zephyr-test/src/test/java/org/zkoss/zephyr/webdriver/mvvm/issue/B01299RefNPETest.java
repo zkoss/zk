@@ -11,6 +11,7 @@ public class B01299RefNPETest extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
+		waitResponse();
 
 		type(jq("$win1 $tba1"), "AA");
 		waitResponse();

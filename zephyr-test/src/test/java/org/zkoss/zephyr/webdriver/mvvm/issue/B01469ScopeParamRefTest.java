@@ -11,6 +11,7 @@ public class B01469ScopeParamRefTest extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
+		waitResponse();
 
 		JQuery l1 = jq("$win1 $l1");
 		JQuery l2 = jq("$win1 $inc1 $win2 $l2");
