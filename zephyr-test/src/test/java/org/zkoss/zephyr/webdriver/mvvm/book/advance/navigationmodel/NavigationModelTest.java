@@ -11,18 +11,18 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zephyr.webdriver.mvvm.book.advance.navigationmodel;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
 import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 public class NavigationModelTest extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
+		waitResponse();
 
 		JQuery jqL1 = jq("$l1");
 		assertEquals("AAA", jqL1.text());
