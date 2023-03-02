@@ -36,6 +36,7 @@ public class IHtmlBasedComponentTest extends WebDriverTestCase {
 	@Test
 	public void testClickAction() {
 		connect("/base_components/ihtmlbasedcomponent/actions/click");
+		waitResponse();
 		Actions actions = getActions();
 		click(jq("@button"));
 		waitResponse();
@@ -75,6 +76,7 @@ public class IHtmlBasedComponentTest extends WebDriverTestCase {
 	@Test
 	public void testDoubleClickAction() {
 		connect("/base_components/ihtmlbasedcomponent/actions/doubleClick");
+		waitResponse();
 		dblClick(jq("@button"));
 		waitResponse();
 		String label = jq("$msg").text();
@@ -89,6 +91,7 @@ public class IHtmlBasedComponentTest extends WebDriverTestCase {
 	@Test
 	public void testRightClickAction() {
 		connect("/base_components/ihtmlbasedcomponent/actions/rightClick");
+		waitResponse();
 		rightClick(jq("@button"));
 		waitResponse();
 		String label = jq("$msg").text();
@@ -103,6 +106,7 @@ public class IHtmlBasedComponentTest extends WebDriverTestCase {
 	@Test
 	public void testMouseOverAction() {
 		connect("/base_components/ihtmlbasedcomponent/actions/mouseOver");
+		waitResponse();
 		mouseOver(jq("@button"));
 		waitResponse();
 		String label = jq("$msg").text();
@@ -117,6 +121,7 @@ public class IHtmlBasedComponentTest extends WebDriverTestCase {
 	@Test
 	public void testMouseOutAction() {
 		connect("/base_components/ihtmlbasedcomponent/actions/mouseOut");
+		waitResponse();
 		mouseOver(jq("@button"));
 
 		// trigger mouseOut
@@ -134,6 +139,7 @@ public class IHtmlBasedComponentTest extends WebDriverTestCase {
 	@Test
 	public void testKeysAction() {
 		connect("/base_components/ihtmlbasedcomponent/actions/key");
+		waitResponse();
 
 		// onOK
 		getActions().sendKeys(toElement(jq("$inp")), Keys.ENTER).perform();
@@ -163,6 +169,7 @@ public class IHtmlBasedComponentTest extends WebDriverTestCase {
 	@Test
 	public void testDropAction() {
 		connect("/base_components/ihtmlbasedcomponent/actions/drop");
+		waitResponse();
 		Actions actions = getActions();
 		JQuery div1 = jq("@label:contains(div 0)");
 		JQuery div2 = jq("@label:contains(div 1)");
@@ -208,6 +215,7 @@ public class IHtmlBasedComponentTest extends WebDriverTestCase {
 	@Test
 	public void testZclass() {
 		connect("/base_components/ihtmlbasedcomponent/zclass");
+		waitResponse();
 		assertTrue(jq(".mywin").exists());
 		assertTrue(jq(".mywin-content").exists());
 		assertFalse(jq(".z-window-content").exists());
@@ -216,6 +224,7 @@ public class IHtmlBasedComponentTest extends WebDriverTestCase {
 	@Test
 	public void testFlex() {
 		connect("/base_components/ihtmlbasedcomponent/flex");
+		waitResponse();
 		JQuery div = jq("$main");
 		assertEquals(300, div.height());
 		assertEquals(300, div.width());
@@ -232,6 +241,7 @@ public class IHtmlBasedComponentTest extends WebDriverTestCase {
 	@Test
 	public void testFlexAndSize() {
 		connect("/base_components/ihtmlbasedcomponent/flexAndSize");
+		waitResponse();
 		click(jq("@button:eq(0)"));
 		waitResponse();
 		assertTrue(hasError());

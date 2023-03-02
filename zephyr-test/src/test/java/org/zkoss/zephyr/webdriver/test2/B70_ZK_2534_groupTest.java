@@ -40,6 +40,7 @@ public class B70_ZK_2534_groupTest extends WebDriverTestCase {
 	@Test
 	public void testSelectRange() {
 		connect();
+		waitResponse();
 
 		testListboxSelectRange(jq("@listbox:eq(1)"), false);
 		testListboxSelectRange(jq("@listbox:eq(3)"), true);

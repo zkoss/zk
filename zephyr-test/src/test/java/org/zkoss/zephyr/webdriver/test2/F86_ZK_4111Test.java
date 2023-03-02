@@ -20,6 +20,7 @@ public class F86_ZK_4111Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
+		waitResponse();
 		//test MVVM
 		click(jq("$btn1"));
 		waitResponse();
