@@ -29,13 +29,13 @@ public class PerformanceTest extends WebDriverTestCase {
 		connect("/mvvm/book/basic/performance.zul");
 		waitResponse();
 		assertEquals(5, jq(".z-include .z-hbox").length());
-		assertEquals(0, jq(".z-hbox").eq(0).find("@label").eq(0).text());
+		assertEquals("0", jq(".z-hbox").eq(0).find("@label").eq(0).text());
 		final long start = System.currentTimeMillis();
 		for (int i = 0; i < 10; i++) {
 			click(jq("@window $btnSwitch"));
 			Thread.sleep(100);
 		}
-		assertEquals(10, jq(".z-hbox").eq(0).find("@label").eq(0).text());
+		assertEquals("10", jq(".z-hbox").eq(0).find("@label").eq(0).text());
 		final long actualMillis = System.currentTimeMillis() - start;
 		MatcherAssert.assertThat(actualMillis, lessThanOrEqualTo(SECONDS.toMillis(2)));
 	}
