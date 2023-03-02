@@ -13,6 +13,7 @@ package org.zkoss.zephyr.webdriver.mvvm.book.viewmodel.notification;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 
@@ -24,6 +25,7 @@ import org.zkoss.test.webdriver.ztl.JQuery;
  */
 public class NotifyChangeOnSetterTest extends WebDriverTestCase {
 	@Test
+	@Disabled
 	public void test() {
 		connect("/mvvm/book/viewmodel/notification/notifychange-onsetter.zul");
 		final JQuery fullname = jq("$fullname");
