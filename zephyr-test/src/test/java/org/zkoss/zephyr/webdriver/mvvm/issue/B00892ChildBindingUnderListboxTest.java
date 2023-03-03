@@ -11,6 +11,7 @@ public class B00892ChildBindingUnderListboxTest extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
+		waitResponse();
 
 		JQuery outerbox = jq("$outerbox");
 		JQuery items = outerbox.find("@listitem");
