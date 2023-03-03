@@ -13,7 +13,6 @@ package org.zkoss.zephyr.webdriver.mvvm.book.viewmodel.notification;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 
@@ -25,7 +24,6 @@ import org.zkoss.test.webdriver.ztl.JQuery;
  */
 public class NotifyChangeOnSetterTest extends WebDriverTestCase {
 	@Test
-	@Disabled
 	public void test() {
 		connect("/mvvm/book/viewmodel/notification/notifychange-onsetter.zul");
 		final JQuery fullname = jq("$fullname");
@@ -39,7 +37,7 @@ public class NotifyChangeOnSetterTest extends WebDriverTestCase {
 		sendKeys(jq("$ln"), Keys.HOME, Keys.chord(Keys.SHIFT, Keys.END), Keys.DELETE, "Riddle", Keys.TAB);
 		waitResponse();
 		assertEquals("Tom Riddle", fullname.text());
-		assertEquals("John", firstname.text()); //error, might be spec change??
+		assertEquals("John", firstname.text());
 		assertEquals("Riddle", lastname.text());
 	}
 
