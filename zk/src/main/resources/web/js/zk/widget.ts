@@ -3719,6 +3719,15 @@ new zul.wnd.Window({
 	}
 
 	/**
+	 * Unbinds when in rod mode. (internal use for callback)
+	 * @since 10.0.0
+	 * @internal
+	 */
+	unbindRod_(): void {
+		// for override
+	}
+
+	/**
 	 * @returns the page that this widget belongs to, or null if there is
 	 * no page available.
 	 */
@@ -6018,6 +6027,7 @@ zk.Widget.getClass('cool'); //widget name
 		delete _binds[wgt.uuid];
 		wgt.desktop = undefined;
 		wgt.clearCache();
+		wgt.unbindRod_(); // fix for Client MVVM
 	}
 
 	/** @internal */
