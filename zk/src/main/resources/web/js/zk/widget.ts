@@ -1917,7 +1917,7 @@ new zul.wnd.Window({
 		if (oldpt) {
 			_noParentCallback = true;
 			try {
-				oldpt.removeChild(child);
+				oldpt.removeChild(child, ignoreDom);
 			} finally {
 				_noParentCallback = false;
 			}
@@ -2005,7 +2005,7 @@ new zul.wnd.Window({
 		if (oldpt) {
 			_noParentCallback = true;
 			try {
-				oldpt.removeChild(child);
+				oldpt.removeChild(child, ignoreDom);
 			} finally {
 				_noParentCallback = false;
 			}
