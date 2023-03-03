@@ -13,6 +13,7 @@ public class ListboxModelTest extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect("/mvvm/book/basic/listboxmodel.zul");
+		waitResponse();
 		JQuery outerbox = jq("$outerbox");
 		// =================================delete 2rd row
 		Widget outeritems = outerbox.toWidget().firstChild();// include header
