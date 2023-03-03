@@ -2148,66 +2148,72 @@ new zul.wnd.Window({
 	 * @since 5.0.1
 	 */
 	replaceWidget(newwgt: zk.Widget, skipper?: Skipper): void {
-		_replaceLink(this, newwgt);
+		try {
+			newwgt._rerendering = true;
+			_replaceLink(this, newwgt);
 
-		_rmIdSpaceDown(this);
-		_addIdSpaceDown(newwgt);
+			_rmIdSpaceDown(this);
+			_addIdSpaceDown(newwgt);
 
-		var cf: zk.Widget | undefined = zk.currentFocus, cfid, cfrg: zk.Offset | undefined;
-		if (cf && zUtl.isAncestor(this, cf)) {
-			cfid = cf.uuid;
-			cfrg = _bkRange(cf);
-			zk.currentFocus = undefined;
-		}
-
-		// eslint-disable-next-line zk/noNull
-		let node: HTMLElement | undefined | null = this.$n(),
-			p = this.parent, shallReplace,
-			dt = newwgt.desktop || this.desktop;
-		if (this.z_rod) {
-			this.get$Class<typeof Widget>()._unbindrod(this);
-			if (!(shallReplace = (dt = dt || (p ? p.desktop : p))
-				&& (node = document.getElementById(this.uuid))))
-				this.get$Class<typeof Widget>()._bindrod(newwgt);
-		} else
-			shallReplace = dt;
-
-		// ZK-5050
-		if (p)
-			p.beforeChildReplaced_(this, newwgt);
-
-		var callback: CallableFunction[] = [];
-		if (shallReplace) {
-			if (node) newwgt.replaceHTML(node, dt, skipper, true, callback);
-			else {
-				this.unbind();
-				newwgt.bind(dt);
+			var cf: zk.Widget | undefined = zk.currentFocus, cfid,
+				cfrg: zk.Offset | undefined;
+			if (cf && zUtl.isAncestor(this, cf)) {
+				cfid = cf.uuid;
+				cfrg = _bkRange(cf);
+				zk.currentFocus = undefined;
 			}
 
-			_fixBindLevel(newwgt, p ? p.bindLevel + 1 : 0);
-			zWatch.fire('onBindLevelMove', newwgt);
-		}
+			// eslint-disable-next-line zk/noNull
+			let node: HTMLElement | undefined | null = this.$n(),
+				p = this.parent, shallReplace,
+				dt = newwgt.desktop || this.desktop;
+			if (this.z_rod) {
+				this.get$Class<typeof Widget>()._unbindrod(this);
+				if (!(shallReplace = (dt = dt || (p ? p.desktop : p))
+					&& (node = document.getElementById(this.uuid))))
+					this.get$Class<typeof Widget>()._bindrod(newwgt);
+			} else
+				shallReplace = dt;
 
-		if (p)
-			p.onChildReplaced_(this, newwgt);
+			// ZK-5050
+			if (p)
+				p.beforeChildReplaced_(this, newwgt);
 
-		this.parent = this.nextSibling = this.previousSibling = undefined;
+			var callback: CallableFunction[] = [];
+			if (shallReplace) {
+				if (node) newwgt.replaceHTML(node, dt, skipper, true, callback);
+				else {
+					this.unbind();
+					newwgt.bind(dt);
+				}
 
-		// For Bug ZK-2271, we delay the fireSized calculation after p.onChilReplaced_,
-		// because the sub-nodes mapping are not getting up to date.
-		if (callback && callback.length) {
-			let f: CallableFunction | undefined;
-			while ((f = callback.shift()) && typeof f === 'function')
-				f();
-		}
-		if (cfid) {
-			cf = zk.Widget.$(cfid) as zk.Widget | undefined;
-			if (!cf) {
-				// Bug ZK-2664, we should not restore the focus to root component, which
-				// may not be correct one.
-				// _rsFocus({focus: newwgt, range: cfrg}); // restore to outer root
-			} else if (zUtl.isAncestor(newwgt, cf))
-				_rsFocus({focus: cf, range: cfrg});
+				_fixBindLevel(newwgt, p ? p.bindLevel + 1 : 0);
+				zWatch.fire('onBindLevelMove', newwgt);
+			}
+
+			if (p)
+				p.onChildReplaced_(this, newwgt);
+
+			this.parent = this.nextSibling = this.previousSibling = undefined;
+
+			// For Bug ZK-2271, we delay the fireSized calculation after p.onChilReplaced_,
+			// because the sub-nodes mapping are not getting up to date.
+			if (callback && callback.length) {
+				let f: CallableFunction | undefined;
+				while ((f = callback.shift()) && typeof f === 'function')
+					f();
+			}
+			if (cfid) {
+				cf = zk.Widget.$(cfid) as zk.Widget | undefined;
+				if (!cf) {
+					// Bug ZK-2664, we should not restore the focus to root component, which
+					// may not be correct one.
+					// _rsFocus({focus: newwgt, range: cfrg}); // restore to outer root
+				} else if (zUtl.isAncestor(newwgt, cf))
+					_rsFocus({focus: cf, range: cfrg});
+			}
+		} finally {
+			newwgt._rerendering = false;
 		}
 	}
 
