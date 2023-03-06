@@ -617,7 +617,6 @@ function _doDeferRender(wgt: zk.Widget): void {
 function _rerender(wgt: zk.Widget, timeout: number): void {
 	if (_rdtid)
 		clearTimeout(_rdtid);
-	wgt._rerendering = true;
 	_rdque.push(wgt);
 	_rdtid = window.setTimeout(_rerender0, timeout);
 }
@@ -626,18 +625,13 @@ function _rerender0(): void {
 	l_out:
 	for (var wgt: zk.Widget | undefined; wgt = _rdque.shift();) {
 		if (!wgt.desktop) {
-			delete wgt._rerendering;
 			continue;
 		}
 
 		for (var j = _rdque.length; j--;) {
 			if (zUtl.isAncestor(wgt, _rdque[j])) {
-				if (_rdque[j] !== wgt) {
-					delete _rdque[j]._rerendering;
-				}
 				_rdque.splice(j, 1); //skip _rdque[j]
 			} else if (zUtl.isAncestor(_rdque[j], wgt)) {
-				delete wgt._rerendering;
 				continue l_out; //skip wgt
 			}
 		}
@@ -3379,6 +3373,7 @@ new zul.wnd.Window({
 			var n = this.$n();
 			if (n) {
 				try {
+					this._rerendering = true;
 					zk._avoidRod = true;
 					//to avoid side effect since the caller might look for $n(xx)
 
