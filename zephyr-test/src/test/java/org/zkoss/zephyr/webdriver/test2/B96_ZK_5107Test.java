@@ -24,6 +24,7 @@ public class B96_ZK_5107Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
+		waitResponse();
 		String pencilClz = ".z-icon-pencil";
 		click(jq(pencilClz));
 		waitResponse();
