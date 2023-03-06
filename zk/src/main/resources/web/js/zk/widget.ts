@@ -631,10 +631,15 @@ function _rerender0(): void {
 		}
 
 		for (var j = _rdque.length; j--;) {
-			if (zUtl.isAncestor(wgt, _rdque[j]))
+			if (zUtl.isAncestor(wgt, _rdque[j])) {
+				if (_rdque[j] !== wgt) {
+					delete _rdque[j]._rerendering;
+				}
 				_rdque.splice(j, 1); //skip _rdque[j]
-			else if (zUtl.isAncestor(_rdque[j], wgt))
+			} else if (zUtl.isAncestor(_rdque[j], wgt)) {
+				delete wgt._rerendering;
 				continue l_out; //skip wgt
+			}
 		}
 
 		wgt.rerender(-1);
