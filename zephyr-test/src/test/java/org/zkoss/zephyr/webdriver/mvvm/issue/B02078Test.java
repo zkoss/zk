@@ -13,6 +13,7 @@ public class B02078Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
+		waitResponse();
 		JQuery window = jq("@window");
 		JQuery viewGrid = jq("$view");
 		checkContent(viewGrid, "screw", "tool", "[metal, construction, small]");
