@@ -18,6 +18,8 @@ public class B86_ZK_4280Test extends WebDriverTestCase {
 		JQuery de = jq("$detach");
 		click(btn);
 		waitResponse();
+		click(btn);
+		waitResponse();
 		click(de);
 		waitResponse();
 		click(btn);

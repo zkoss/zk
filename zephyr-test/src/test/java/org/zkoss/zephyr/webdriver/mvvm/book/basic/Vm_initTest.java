@@ -12,6 +12,7 @@ public class Vm_initTest extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect("/mvvm/book/basic/vm-init.zul");
+		waitResponse();
 		Widget vm1_l1 = jq("$vm1_l1").toWidget();
 		Widget vm1_t1 = jq("$vm1_t1").toWidget();
 		Widget vm1_l2 = jq("$vm1_l2").toWidget();

@@ -24,6 +24,7 @@ public class B96_ZK_5038Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
+		waitResponse();
 		String first = ".z-listitem-checkable.z-listitem-checkbox:eq(0)";
 		click(jq(first));
 		assertTrue(jq(first).toWidget().is("selected"));
