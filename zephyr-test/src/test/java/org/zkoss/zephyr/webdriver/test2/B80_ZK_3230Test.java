@@ -12,6 +12,7 @@ public class B80_ZK_3230Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
+		waitResponse();
 		click(jq(".z-treerow").eq(0));
 		waitResponse();
 		JQuery tree = jq("@tree");
