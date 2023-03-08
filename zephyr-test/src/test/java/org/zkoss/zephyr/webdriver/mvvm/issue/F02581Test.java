@@ -14,9 +14,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 package org.zkoss.zephyr.webdriver.mvvm.issue;
 
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
@@ -30,6 +29,7 @@ public class F02581Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
+		waitResponse();
 
 		JQuery l1 = jq("$win2 $l1");
 		JQuery l2 = jq("$win2 $l2");
@@ -45,8 +45,8 @@ public class F02581Test extends WebDriverTestCase {
 			waitResponse();
 			l1 = jq("$win2 $l1");
 			l2 = jq("$win2 $l2");
-			assertTrue(val1.equals(l1.text()));
-			assertTrue(val2.equals(l2.text()));
+			assertEquals(val1, l1.text());
+			assertEquals(val2, l2.text());
 
 			try {
 				Thread.sleep(100);
@@ -60,6 +60,7 @@ public class F02581Test extends WebDriverTestCase {
 	@Test
 	public void testChange() {
 		connect();
+		waitResponse();
 
 		JQuery l1 = jq("$win2 $l1");
 		JQuery l2 = jq("$win2 $l2");
