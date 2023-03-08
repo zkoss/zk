@@ -30,6 +30,7 @@ public class F00718Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
+		waitResponse();
 		JQuery tb1 = jq("$tb1");
 		sendKeys(tb1, Keys.BACK_SPACE, Keys.BACK_SPACE, Keys.BACK_SPACE, Keys.BACK_SPACE, Keys.BACK_SPACE, Keys.BACK_SPACE, Keys.BACK_SPACE, Keys.TAB);
 		waitResponse();
