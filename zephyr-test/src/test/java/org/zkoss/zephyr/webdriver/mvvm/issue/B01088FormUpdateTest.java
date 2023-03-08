@@ -8,9 +8,11 @@ import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class B01088FormUpdateTest extends WebDriverTestCase {
+
 	@Test
 	public void test() {
 		connect();
+		waitResponse();
 
 		JQuery lb11 = jq("$lb11");
 		JQuery lb12 = jq("$lb12");

@@ -10,9 +10,11 @@ import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class B00619Test extends WebDriverTestCase {
+
 	@Test
 	public void test() {
 		connect();
+		waitResponse();
 
 		JQuery listbox = jq("$listbox");
 		assertEquals("1", listbox.toWidget().get("selectedIndex"));
