@@ -12,6 +12,7 @@ public class B00869SerializationTest extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
+		waitResponse();
 
 		JQuery msg = jq("$msg");
 		JQuery selected = jq("$win $selected");
