@@ -115,7 +115,6 @@ public class FormProxyHandler<T> extends BeanProxyHandler<T> {
 
 		public void submit(BindContext ctx) {
 			self.submitToOrigin(ctx);
-
 		}
 
 		public Object getOrigin() {

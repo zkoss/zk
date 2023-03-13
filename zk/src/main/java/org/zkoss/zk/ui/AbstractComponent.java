@@ -2617,6 +2617,10 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 		return true;
 	}
 
+	public Map<String, ForwardInfo> getForwards() {
+		return _auxinf.forwards != null ? Collections.unmodifiableMap(_auxinf.forwards) : Collections.emptyMap();
+	}
+
 	public boolean removeForward(String orgEvent, Component target, String targetEvent) {
 		return removeForward0(orgEvent, target, targetEvent);
 	}
@@ -3962,7 +3966,7 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 		}
 	}
 
-	private static class ForwardInfo implements java.io.Serializable {
+	public static class ForwardInfo implements java.io.Serializable {
 		private final EventListener<? extends Event> listener;
 		//List([target or targetPath, targetEvent, eventData])]
 		private final List<TargetInfo> targets;
@@ -3971,9 +3975,13 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 			this.listener = listener;
 			this.targets = targets;
 		}
+
+		public List<TargetInfo> getTargets() {
+			return targets;
+		}
 	}
 
-	private static class TargetInfo implements java.io.Serializable {
+	public static class TargetInfo implements java.io.Serializable {
 		private final Object target;
 		private final String event;
 		private Object data;
@@ -3982,6 +3990,17 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 			this.target = target;
 			this.event = event;
 			this.data = data;
+		}
+
+		public Object getTarget() {
+			return target;
+		}
+		public String getEvent() {
+			return event;
+		}
+
+		public Object getData() {
+			return data;
 		}
 	}
 

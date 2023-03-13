@@ -188,7 +188,18 @@ public class BeanProxyHandler<T> implements MethodHandler, Serializable {
 					final String attr = ProxyHelper.toAttrName(method);
 					if (_cache != null) {
 						if (_cache.containsKey(attr)) {
-							return _cache.get(attr);
+							Object cacheData = _cache.get(attr);
+							if (_origin.getClass().getAnnotation(ImmutableFields.class) == null
+									&& !(self instanceof ImmutableFields)) {
+								// ZK-2736 Form proxy with Immutable values
+								Object proxyIfAny = ProxyHelper.createProxyIfAny(
+										cacheData, method.getAnnotations());
+
+								addCache(attr, proxyIfAny);
+
+								return proxyIfAny;
+							}
+							return cacheData;
 						}
 					}
 

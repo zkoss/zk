@@ -19,11 +19,13 @@ package org.zkoss.zk.ui.sys;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.zkoss.zk.au.AuRequest;
+import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.ShadowElement;
@@ -654,4 +656,14 @@ public interface ComponentCtrl {
 	 */
 	@Deprecated
 	public void invalidatePartial();
+
+	/**
+	 * Returns the forwards info if any.
+	 * Never null.
+	 * @since 10.0.0
+	 */
+	public default Map<String, AbstractComponent.ForwardInfo> getForwards() {
+		return Collections.emptyMap();
+	}
+
 }

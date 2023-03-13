@@ -8,15 +8,15 @@ import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class F96_ZK_4934_ListModelMapTest extends WebDriverTestCase {
-
 	@Test
 	public void test() {
 		connect();
+		waitResponse();
 		JQuery window = jq("$win");
 		JQuery formGrid = window.find("$form");
 		JQuery listbox = window.find("@listbox");
-		JQuery newTagValue = listbox.find("$newTagValue");
-		JQuery addNewTagBtn = listbox.find("$newTagBtn");
+		JQuery newTagValue = jq("$newTagValue");
+		JQuery addNewTagBtn = jq("$newTagBtn");
 		JQuery editRow = formGrid.find("@row");
 		//buttons
 		JQuery addAll = window.find("$addAll");
@@ -123,21 +123,14 @@ public class F96_ZK_4934_ListModelMapTest extends WebDriverTestCase {
 		click(serialize); // do serialization
 		waitResponse();
 		window = jq("$win");
-		listbox = window.find("@listbox");
-		newTagValue = listbox.find("$newTagValue");
-		addNewTagBtn = listbox.find("$newTagBtn");
+		newTagValue = jq("$newTagValue");
+		addNewTagBtn = jq("$newTagBtn");
 		save = window.find("$save");
 		checkContent("Name", "MainTag", "{}");
 
 		type(editRow.find("@textbox").eq(0), "chunfu");
 		waitResponse();
 		type(editRow.find("@textbox").eq(1), "potix");
-		waitResponse();
-		type(listbox.find("@listitem").eq(0).find("@textbox"), "first");
-		waitResponse();
-		type(listbox.find("@listitem").eq(1).find("@textbox"), "second");
-		waitResponse();
-		type(listbox.find("@listitem").eq(2).find("@textbox"), "third");
 		waitResponse();
 		type(newTagValue, "NewItem");
 		waitResponse();

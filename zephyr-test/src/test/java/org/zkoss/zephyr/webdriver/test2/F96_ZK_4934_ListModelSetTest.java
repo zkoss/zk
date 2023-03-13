@@ -12,12 +12,12 @@ public class F96_ZK_4934_ListModelSetTest extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
-		sleep(2000);
+		waitResponse();
 		JQuery window = jq("$win");
 		JQuery formGrid = window.find("$form");
 		JQuery listbox = window.find("@listbox");
-		JQuery newTagValue = listbox.find("$newTagValue");
-		JQuery addNewTagBtn = listbox.find("$newTagBtn");
+		JQuery newTagValue = jq("$newTagValue");
+		JQuery addNewTagBtn = jq("$newTagBtn");
 		JQuery editRow = formGrid.find("@row");
 		//buttons
 		JQuery addAll = window.find("$addAll");
@@ -108,7 +108,7 @@ public class F96_ZK_4934_ListModelSetTest extends WebDriverTestCase {
 		//click addAll
 		click(addAll);
 		waitResponse();
-		checkContent("Name", "MainTag", "[Name, MainTag, Tags, middle, big]");
+		checkContent("Name", "MainTag", "[Name, MainTag, Tags, middle]");
 		click(save);
 		waitResponse();
 		checkContent("Name", "MainTag", "[Name, MainTag, Tags, middle, addAll1, addAll2, addAll3]");
@@ -126,8 +126,8 @@ public class F96_ZK_4934_ListModelSetTest extends WebDriverTestCase {
 		waitResponse();
 		window = jq("$win");
 		listbox = window.find("@listbox");
-		newTagValue = listbox.find("$newTagValue");
-		addNewTagBtn = listbox.find("$newTagBtn");
+		newTagValue = jq("$newTagValue");
+		addNewTagBtn = jq("$newTagBtn");
 		save = window.find("$save");
 		checkContent("Name", "MainTag", "[addAll1, addAll2, addAll3]");
 
