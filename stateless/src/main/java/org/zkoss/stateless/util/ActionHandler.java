@@ -22,6 +22,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 
 import org.zkoss.lang.Library;
@@ -217,7 +218,9 @@ public interface ActionHandler extends Serializable {
 	 */
 	default SerializedLambda serialized() {
 		try {
-			return LOADED_LAMBDA_CACHE.computeIfAbsent(getClass().getCanonicalName(), (ignore) -> {
+			return LOADED_LAMBDA_CACHE.computeIfAbsent(
+					Optional.ofNullable(getClass().getCanonicalName())
+							.orElse(getClass().getName()), (ignore) -> {
 				try {
 					Method replaceMethod = getClass().getDeclaredMethod(
 							"writeReplace");

@@ -15,6 +15,7 @@ ZK 10.0.0
   ZK-5217: Timepicker error in Mobile touch
   ZK-5086: Should ignore source map file request when the source map is disabled
   ZK-5005: pdfviewer some fonts are not rendering
+  ZK-5411: withAction() cannot accept anonymous class, please convert it to Lambda syntax
 
 * Upgrade Notes
   + Layout.java (Vlayout and Hlayout) are extended from XulElement since ZK 10.0.0
