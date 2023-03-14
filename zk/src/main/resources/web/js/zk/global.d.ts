@@ -426,6 +426,7 @@ declare global {
 	type ZKStatic = typeof zk;
 
 	export import Moment = moment_global.Moment;
+	export import MomentFormatSpecification = moment_global.MomentFormatSpecification;
 	export import DateImpl = dateImpl_global.DateImpl;
 	export import Dates = dateImpl_global.Dates;
 

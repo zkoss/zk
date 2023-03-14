@@ -28,6 +28,7 @@ public class F90_ZK_4347Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
+		waitResponse();
 
 		testDateboxes();
 		testTimeboxes();
