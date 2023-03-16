@@ -11,12 +11,12 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.test2;
 
-import org.zkoss.bind.annotation.Init;
-import org.zkoss.zul.ListModelList;
-
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+
+import org.zkoss.bind.annotation.Init;
+import org.zkoss.zul.ListModelList;
 
 public class B86_ZK_4323VM {
 	private ListModelList model;
@@ -30,9 +30,9 @@ public class B86_ZK_4323VM {
 		}
 		model = new ListModelList(Items);
 		model.setMultiple(true);
-		
-		selectedItems.add(model.get(model.size()-1).toString());
+
 		selectedItems.add(model.get(model.size()-10).toString());
+		selectedItems.add(model.get(model.size()-1).toString());
 	}
 	
 	public ListModelList getModel() {
