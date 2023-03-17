@@ -1,4 +1,4 @@
-package org.zkoss.zktest.zats.test2;
+package org.zkoss.zephyr.webdriver.test2;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
