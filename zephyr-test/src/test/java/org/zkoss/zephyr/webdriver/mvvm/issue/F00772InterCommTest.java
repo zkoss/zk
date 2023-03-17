@@ -12,6 +12,7 @@ public class F00772InterCommTest extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect("/mvvm/issue/F00772-inter-comm.zul");
+		waitResponse();
 
 		JQuery t11 = jq("$inc1 $inc1win $t11");
 		JQuery l21 = jq("$inc2 $inc2win $l21");

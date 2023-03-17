@@ -1,6 +1,7 @@
 package org.zkoss.clientbind.test.issue;
 
 import org.zkoss.bind.annotation.Command;
+import org.zkoss.bind.annotation.NotifyChange;
 
 public class F00772_1 {
 
@@ -15,6 +16,7 @@ public class F00772_1 {
 	}
 	
 	@Command
+	@NotifyChange("value")
 	public void cmd1(){
 		value1 = value1+"-local";
 	}
