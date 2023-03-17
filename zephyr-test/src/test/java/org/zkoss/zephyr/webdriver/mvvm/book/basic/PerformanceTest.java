@@ -33,7 +33,7 @@ public class PerformanceTest extends WebDriverTestCase {
 		final long start = System.currentTimeMillis();
 		for (int i = 0; i < 10; i++) {
 			click(jq("@window $btnSwitch"));
-			Thread.sleep(50);
+			Thread.sleep(100);
 		}
 		assertEquals("10", jq(".z-hbox").eq(0).find("@label").eq(0).text());
 		final long actualMillis = System.currentTimeMillis() - start;

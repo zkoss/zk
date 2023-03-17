@@ -34,6 +34,7 @@ public class B80_ZK_3339Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
+		waitResponse();
 
 		driver.manage().deleteAllCookies();
 		refreshPage();
