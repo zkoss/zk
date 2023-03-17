@@ -11,6 +11,7 @@ public class B00849ConverterParametersTest extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
+		waitResponse();
 
 		JQuery l11 = jq("$l11");
 		JQuery l12 = jq("$l12");
