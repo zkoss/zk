@@ -336,58 +336,6 @@ function _afterAction(wgt: zk.Widget, act: [CallableFunction, unknown]): boolean
 	return false;
 }
 
-// refer to socket.io
-const _withNativeArrayBuffer = typeof ArrayBuffer === 'function',
-	isView = (obj: ArrayBufferView | unknown & { buffer?}): boolean => {
-		return typeof ArrayBuffer.isView === 'function'
-			? ArrayBuffer.isView(obj)
-			: obj.buffer instanceof ArrayBuffer;
-	},
-	toString = Object.prototype.toString,
-	_withNativeBlob = typeof Blob === 'function' ||
-		(typeof Blob !== 'undefined' &&
-			toString.call(Blob) === '[object BlobConstructor]'),
-	_withNativeFile = typeof File === 'function' ||
-		(typeof File !== 'undefined' &&
-			toString.call(File) === '[object FileConstructor]');
-function _isBinary(obj: ArrayBufferView | unknown & { buffer?}): boolean {
-	return ((_withNativeArrayBuffer && (obj instanceof ArrayBuffer || isView(obj))) ||
-		(_withNativeBlob && obj instanceof Blob) ||
-		(_withNativeFile && obj instanceof File));
-}
-
-function _deconstructPacket(data: ArrayBufferView | unknown & { buffer?} | undefined, buffers: unknown[]): unknown {
-	if (!data) return data;
-
-	if (_isBinary(data)) {
-		const placeholder = { _placeholder: true, num: buffers.length };
-		buffers.push(data);
-		return placeholder;
-	} else if (Array.isArray(data)) {
-		const newData = new Array(data.length);
-		for (let i = 0; i < data.length; i++) {
-			newData[i] = _deconstructPacket(data[i] as never, buffers);
-		}
-		return newData as never;
-	} else if (data instanceof FileList) { // avoid Object type toJson.
-		const newData = new Array(data.length);
-		for (let i = 0; i < data.length; i++) {
-			newData[i] = _deconstructPacket(data.item(i) as never, buffers);
-		}
-		return newData as never;
-	} else if (typeof data === 'object' && !(data instanceof Date) &&
-		!(data instanceof DateImpl) && !(data instanceof zk.Object)) {
-		const newData = {};
-		for (const key in data) {
-			if (Object.prototype.hasOwnProperty.call(data, key)) {
-				newData[key] = _deconstructPacket(data[key] as never, buffers);
-			}
-		}
-		return newData;
-	}
-	return data;
-}
-
 /**
  * @class zAu
  * @import zk.Widget
@@ -993,7 +941,7 @@ export namespace au_global {
 				}
 				lasturi = oldRequri;
 
-				aureq.data = _deconstructPacket(aureq.data as never, files);
+				aureq.data = zAu._deconstructPacket(aureq.data as never, files);
 
 				if (files.length) {
 					// TODO: forceAjax for file upload, we may support it on websocket later on.
@@ -1360,6 +1308,81 @@ export namespace au_global {
 			return jq.toJSON(data);
 		}
 		/* internal use only */
+
+		// refer to socket.io
+		const _withNativeArrayBuffer = typeof ArrayBuffer === 'function',
+			isView = (obj: ArrayBufferView | unknown & { buffer?}): boolean => {
+				return typeof ArrayBuffer.isView === 'function'
+					? ArrayBuffer.isView(obj)
+					: obj.buffer instanceof ArrayBuffer;
+			},
+			toString = Object.prototype.toString,
+			_withNativeBlob = typeof Blob === 'function' ||
+				(typeof Blob !== 'undefined' &&
+					toString.call(Blob) === '[object BlobConstructor]'),
+			_withNativeFile = typeof File === 'function' ||
+				(typeof File !== 'undefined' &&
+					toString.call(File) === '[object FileConstructor]');
+
+		/** @internal */
+		export function _isBinary(obj: ArrayBufferView | unknown & { buffer?}): boolean {
+			return ((_withNativeArrayBuffer && (obj instanceof ArrayBuffer || isView(obj))) ||
+				(_withNativeBlob && obj instanceof Blob) ||
+				(_withNativeFile && obj instanceof File));
+		}
+		/** @internal */
+		export function _constructPacket(data: unknown | undefined, files: unknown[]): unknown {
+			if (!data) return data;
+			if (Array.isArray(data)) {
+				for (let i = 0; i < data.length; i++) {
+					data[i] = _constructPacket(data[i] as never, files);
+				}
+			} else if (typeof data === 'object' && !(data instanceof Date) &&
+				!(data instanceof DateImpl) && !(data instanceof zk.Object)) {
+
+				if (Object.hasOwnProperty.call(data, '_placeholder') && typeof data['num'] === 'number') {
+					return files[data['num']];
+				}
+				for (const key in data) {
+					if (Object.prototype.hasOwnProperty.call(data, key)) {
+						data[key] = _constructPacket(data[key] as never, files);
+					}
+				}
+			}
+			return data;
+		}
+		/** @internal */
+		export function _deconstructPacket(data: ArrayBufferView | unknown & { buffer?} | undefined, buffers: unknown[]): unknown {
+			if (!data) return data;
+
+			if (_isBinary(data)) {
+				const placeholder = { _placeholder: true, num: buffers.length };
+				buffers.push(data);
+				return placeholder;
+			} else if (Array.isArray(data)) {
+				const newData = new Array(data.length);
+				for (let i = 0; i < data.length; i++) {
+					newData[i] = _deconstructPacket(data[i] as never, buffers);
+				}
+				return newData as never;
+			} else if (data instanceof FileList) { // avoid Object type toJson.
+				const newData = new Array(data.length);
+				for (let i = 0; i < data.length; i++) {
+					newData[i] = _deconstructPacket(data.item(i) as never, buffers);
+				}
+				return newData as never;
+			} else if (typeof data === 'object' && !(data instanceof Date) &&
+				!(data instanceof DateImpl) && !(data instanceof zk.Object)) {
+				const newData = {};
+				for (const key in data) {
+					if (Object.prototype.hasOwnProperty.call(data, key)) {
+						newData[key] = _deconstructPacket(data[key] as never, buffers);
+					}
+				}
+				return newData;
+			}
+			return data;
+		}
 		export let ajaxReq: XMLHttpRequest | undefined;
 		/* internal use only */
 		export let ajaxReqInf: AuRequestInfo | undefined;
