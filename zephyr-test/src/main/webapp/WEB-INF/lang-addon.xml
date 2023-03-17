@@ -50,4 +50,7 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 		<inline>true</inline>
 	</component>
 
+	<javascript src="/test2/js/zk-3913-PDF417lib.js"/>
+	<javascript src="/test2/js/zk-3913-l.js"/>
+
 </language-addon>
