@@ -3,7 +3,6 @@ package org.zkoss.zktest.test2;
 import java.lang.reflect.Field;
 import java.util.Map;
 
-import org.zkoss.bind.BindComposer;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
@@ -12,7 +11,8 @@ import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.HistoryPopState;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
-import org.zkoss.bind.impl.BinderImpl;
+import org.zkoss.clientbind.ClientBindComposer;
+import org.zkoss.lang.Classes;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.HistoryPopStateEvent;
 import org.zkoss.zk.ui.util.Clients;
@@ -32,12 +32,17 @@ public class F96_ZK_4761VM {
 	public void doTest() {
 		result = "";
 		resultNum = 0;
-		logMap(BinderImpl.class, "_initMethodCache");
-		logMap(BinderImpl.class, "_destroyMethodCache");
-		logMap(BinderImpl.class, "_commandMethodCache");
-		logMap(BinderImpl.class, "_globalCommandMethodCache");
-		logMap(BindComposer.class, "_afterComposeMethodCache");
-		logMap(BindComposer.class, "_historyPopStateMethodCache");
+		try {
+			Class<?> clzClientBinderImpl = Classes.forNameByThread("org.zkoss.clientbind.ClientBinderImpl");
+			logMap(clzClientBinderImpl, "_initMethodCache");
+			logMap(clzClientBinderImpl, "_destroyMethodCache");
+			logMap(clzClientBinderImpl, "_commandMethodCache");
+			logMap(clzClientBinderImpl, "_globalCommandMethodCache");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		logMap(ClientBindComposer.class, "_afterComposeMethodCache");
+		logMap(ClientBindComposer.class, "_historyPopStateMethodCache");
 	}
 
 	@GlobalCommand
