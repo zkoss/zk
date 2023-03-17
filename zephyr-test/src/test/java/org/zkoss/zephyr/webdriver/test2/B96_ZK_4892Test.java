@@ -23,7 +23,7 @@ public class B96_ZK_4892Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
-		sleep(2000);
+		waitResponse();
 		JQuery l1 = jq("$l1");
 		JQuery l2 = jq("$l2");
 		JQuery l3 = jq("$l3");
