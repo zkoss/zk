@@ -13,6 +13,7 @@ public class B00604Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
+		waitResponse();
 
 		JQuery inc1 = jq("$inc1");
 		JQuery inc2 = jq("$inc2");

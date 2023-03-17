@@ -11,6 +11,7 @@ public class B01699IncludeMultipleTimesTest extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
+		waitResponse();
 		JQuery btn = jq("$btn");
 		JQuery lab1 = jq("$lb1");
 		JQuery lab2 = jq("$lb2");

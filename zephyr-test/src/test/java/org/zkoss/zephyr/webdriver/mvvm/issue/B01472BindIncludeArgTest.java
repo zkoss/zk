@@ -11,6 +11,7 @@ public class B01472BindIncludeArgTest extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
+		waitResponse();
 
 		JQuery lb1 = jq("$win1 $lb1");
 		JQuery lb2 = jq("$win1 $inc1 $win2 $lb2");

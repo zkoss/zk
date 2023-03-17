@@ -23,6 +23,7 @@ public class B90_ZK_4344Test extends WebDriverTestCase {
 	@Test
 	public void test() throws Exception {
 		connect();
+		waitResponse();
 
 		click(jq("@button"));
 		waitResponse();
