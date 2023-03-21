@@ -880,8 +880,11 @@ export namespace utl_global {
 			// `NaN`s are equivalent, but non-reflexive.
 			if (a !== a) return b !== b;
 			// Exhaust primitive checks
-			const type = typeof a;
-			if (type !== 'function' && type !== 'object' && typeof b != 'object') return false;
+			const typeA = typeof a,
+				typeB = typeof b;
+			if (typeA !== 'function' && typeA !== 'object' && typeB != 'object') return false;
+
+			if (typeA == 'function' && typeB == 'function') return true; //ignore functions
 
 			const keys = Object.keys(a as Record<string, unknown>);
 			if (Object.keys(b as Record<string, unknown>).length !== keys.length) {
