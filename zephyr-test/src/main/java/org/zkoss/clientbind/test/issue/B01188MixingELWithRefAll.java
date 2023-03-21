@@ -28,6 +28,8 @@ public class B01188MixingELWithRefAll {
 		
 		n1.add(new DefaultTreeNode(new Item("Item 1-1")));
 		n1.add(new DefaultTreeNode(new Item("Item 1-2")));
+
+		((DefaultTreeModel) treedata).addOpenObject(n1);
 	}
 
 	public class Item {

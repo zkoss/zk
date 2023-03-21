@@ -57,7 +57,7 @@
 	tree:
 	<tree id="tree1" model="@bind(vm.treedata)" >
 		<template name="model">
-			<treeitem open="@bind(true)">
+			<treeitem>
 				<treerow>
 					<treecell label="${forEachStatus.index}.${each}" />
 				</treerow>
