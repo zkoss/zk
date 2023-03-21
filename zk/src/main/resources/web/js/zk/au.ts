@@ -1871,7 +1871,7 @@ export namespace au_global {
 								}, -1);
 							};
 						};
-						zk.delayFunction(uuid, toSetErrMsg(wgt, msg));
+						zk.delayFunction(wgt.uuid, toSetErrMsg(wgt, msg));
 					} else if (!uuid) //keep silent if component (of uuid) not exist (being detaced)
 						jq.alert(msg);
 				}
