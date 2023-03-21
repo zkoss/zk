@@ -14,7 +14,7 @@ public class B86_ZK_4146Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
-		sleep(2000);
+		waitResponse();
 		click(jq("@button"));
 		waitResponse();
 		JQuery dirtyFlag = jq("@window $flag");
