@@ -24,6 +24,7 @@ public class C2Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
+		waitResponse();
 		for (int i = 4; i >= 0; i--) {
 			click(jq("@button"));
 			waitResponse();
