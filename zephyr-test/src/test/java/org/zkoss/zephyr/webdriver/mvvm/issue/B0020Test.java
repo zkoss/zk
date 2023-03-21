@@ -10,6 +10,7 @@ public class B0020Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
+		waitResponse();
 
 		//test property init
 		assertEquals(5, jq("@button").length());
