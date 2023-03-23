@@ -22,13 +22,13 @@ Copyright (C) 2017 Potix Corporation. All Rights Reserved.
                     <!-- There's a pre-defined variable "each" for convenience. -->
                     <li>
                         <!-- @bind(each) is wrong because each is just a temp variable in loops. -->
-                        <input type="checkbox" checked="@load(each.isDone)" />
-                        <if test="@load(each.isDone)">
+                        <input type="checkbox" checked="@load(each.done)" />
+                        <if test="@load(each.done)">
                             <strike>[<span textContent="@load(each.id)"/>]
                             <span textContent="@load(each.description)"/></strike>
                         </if>
                         <!-- No else for now. -->
-                        <if test="@load(!each.isDone)">
+                        <if test="@load(!each.done)">
                             [<span textContent="@load(each.id)"/>]
                             <span textContent="@load(each.description)"/>
                         </if>
