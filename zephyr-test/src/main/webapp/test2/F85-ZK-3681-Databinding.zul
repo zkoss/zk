@@ -25,7 +25,7 @@ Copyright (C) 2017 Potix Corporation. All Rights Reserved.
         <p>vm.assets: <span textContent="@load(assets)" /></p>
         <p>Assets: <input type="text" value="@bind(assets)" /></p>
         <p>vm.issue: <span textContent="@load(issue)" /></p>
-        <p>isDone: <input type="text" value="@bind(issue.isDone)" /></p>
+        <p>isDone: <input type="text" value="@bind(issue.done)" /></p>
     ]]></fragment>
     <label multiline="true">
         1. Test @bind, @load, @save.
