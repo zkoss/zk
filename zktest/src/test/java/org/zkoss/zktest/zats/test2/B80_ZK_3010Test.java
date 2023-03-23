@@ -12,6 +12,7 @@ public class B80_ZK_3010Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
+		waitResponse();
 		JQuery cb = jq(".z-chosenbox-input");
 		focus(cb);
 		sendKeys(cb, "ban");

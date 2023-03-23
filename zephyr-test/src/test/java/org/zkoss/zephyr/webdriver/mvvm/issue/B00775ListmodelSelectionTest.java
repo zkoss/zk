@@ -11,6 +11,7 @@ public class B00775ListmodelSelectionTest extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
+		waitResponse();
 		JQuery listbox = jq("$listbox");
 		JQuery header = jq("$header");
 		JQuery shrink = jq("$shrink");

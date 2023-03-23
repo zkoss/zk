@@ -27,6 +27,7 @@ public class FormWithSetTest extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
+		waitResponse();
 		JQuery window = jq("$win");
 		JQuery viewGrid = window.find("$view");
 		JQuery formGrid = window.find("$form");
