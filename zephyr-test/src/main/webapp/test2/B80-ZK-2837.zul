@@ -41,7 +41,7 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 		<sh:if test="@load(vm.showDetails)">
 			<div>
 				Details:
-				<sh:forEach items="@load(vm.details)">
+				<sh:forEach items="@init(vm.details)">
 					<sh:apply template="detailsLabel"/>
 				</sh:forEach>
 			</div>
@@ -62,7 +62,7 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 				List newDetails = new ArrayList();
 				newDetails.add("added");
 				vm.getDetails().add("new detail");
-				BindUtils.postNotifyChange(null, null, vm, "*");
+				BindUtils.postNotifyChange(null, null, vm, "showDetails");
 			]]></attribute>
 		</button>
 		<button label="remove one element" >
