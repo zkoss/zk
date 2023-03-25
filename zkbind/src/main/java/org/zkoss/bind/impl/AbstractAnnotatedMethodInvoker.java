@@ -108,8 +108,7 @@ public abstract class AbstractAnnotatedMethodInvoker<T extends Annotation> {
 				}
 
 				if (notifyChange) {
-					if (binder instanceof BinderImpl)
-						((BinderImpl) binder).handleNotifyChange(ctx, viewModel, m, parCall, changes);
+					handleNotifyChange(binder, ctx, viewModel, m, parCall, changes);
 				} else {
 					parCall.call(viewModel, m);
 				}
@@ -120,9 +119,19 @@ public abstract class AbstractAnnotatedMethodInvoker<T extends Annotation> {
 				throw UiException.Aide.wrap(e, e.getMessage());
 			}
 		}
-		if (!changes.isEmpty() && binder instanceof BinderImpl) {
-			((BinderImpl) binder).fireNotifyChanges(changes);
+		if (!changes.isEmpty()) {
+			fireNotifyChanges(binder, changes);
 		}
+	}
+
+	protected void handleNotifyChange(Binder binder, BindContext ctx, Object viewModel, Method m, ParamCall parCall, Set<Property> changes) {
+		if (binder instanceof BinderImpl)
+			((BinderImpl) binder).handleNotifyChange(ctx, viewModel, m, parCall, changes);
+	}
+
+	protected void fireNotifyChanges(Binder binder, Set<Property> changes) {
+		if (binder instanceof BinderImpl)
+			((BinderImpl) binder).fireNotifyChanges(changes);
 	}
 
 	private List<Method> getAnnotateMethods(Binder binder, Class<T> annotationClass, Class<?> vmClass) {
