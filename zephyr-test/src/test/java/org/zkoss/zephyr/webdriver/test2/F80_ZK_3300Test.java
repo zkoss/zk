@@ -18,7 +18,6 @@ public class F80_ZK_3300Test extends WebDriverTestCase {
 	@Test
 	public void testZHTML() {
 		connect("/test2/F80-ZK-3300.zhtml");
-		waitResponse();
 		testMVVM();
 	}
 
