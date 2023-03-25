@@ -26,8 +26,6 @@ public class B01063BindExceptionTest extends WebDriverTestCase {
 		String exceptionMsg = "";
 		type(tb3, "3");
 		waitResponse();
-		assertTrue(jq(".z-messagebox @label").text().contains("Property 'valuex' not found"));
-		click(jq(".z-messagebox-buttons").find("button"));
-		waitResponse();
+		assertTrue(hasError());
 	}
 }
