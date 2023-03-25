@@ -156,7 +156,7 @@ public class F80_ZK_3300Test extends WebDriverTestCase {
 		waitResponse();
 		assertEquals("321", jqALoadDownload.attr("download"));
 		assertEquals("https://www.zkoss.org", jqALoadDownload.attr("href"));
-		assertEquals("print", jqALoadMedia.attr("media"));
+		assertEquals("print and (resolution:300dpi)", jqALoadMedia.attr("media"));
 		assertEquals("https://www.zkoss.org", jqALoadMedia.attr("href"));
 		assertEquals("nofollow", jqALoadTab.attr("rel"));
 		assertEquals("_self", jqALoadTab.attr("target"));
