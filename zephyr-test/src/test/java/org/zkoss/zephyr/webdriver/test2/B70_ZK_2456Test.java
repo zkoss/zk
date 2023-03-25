@@ -23,6 +23,7 @@ public class B70_ZK_2456Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
+		waitResponse();
 
 		click(jq("button:eq(0)"));
 		click(jq("button:eq(2)"));
