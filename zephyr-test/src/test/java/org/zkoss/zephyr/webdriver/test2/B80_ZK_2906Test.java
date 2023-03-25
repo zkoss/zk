@@ -19,7 +19,6 @@ public class B80_ZK_2906Test extends WebDriverTestCase {
 		// type the special characters that will be escaped
 		focus(cb);
 		sendKeys(cb, "'`&<>\"");
-		blur(cb);
 		waitResponse(true);
 
 		String itemText = jq(".z-chosenbox-empty span").text();
