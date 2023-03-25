@@ -26,6 +26,10 @@
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>DHtmlLayoutServlet</servlet-name>
+		<url-pattern>*.zhtml</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>DHtmlLayoutServlet</servlet-name>
 		<url-pattern>*.sul</url-pattern>
 	</servlet-mapping>
 	<servlet>
