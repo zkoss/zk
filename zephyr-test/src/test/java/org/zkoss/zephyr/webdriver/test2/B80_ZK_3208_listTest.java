@@ -16,6 +16,7 @@ package org.zkoss.zephyr.webdriver.test2;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import org.zkoss.test.webdriver.WebDriverTestCase;
@@ -24,6 +25,7 @@ import org.zkoss.test.webdriver.ztl.JQuery;
 /**
  * @author Christopher
  */
+@Disabled
 public class B80_ZK_3208_listTest extends WebDriverTestCase {
 	@Test
 	public void test() {

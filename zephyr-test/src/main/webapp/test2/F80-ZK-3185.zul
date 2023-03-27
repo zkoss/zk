@@ -13,6 +13,7 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
+	<div>
 	<window id="win" viewModel="@id('vm') @init('org.zkoss.zktest.test2.F80_ZK_3185VM')">
 		<div form="@id('myProxy') @load(vm.myObj) @save(vm.myObj, before='validate') @load(vm.myObj, after='cancel') @validator(vm.myValidator)">
 			<vlayout>
@@ -55,4 +56,5 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
 			</vlayout>
 		</div>
 	</window>
+	</div>
 </zk>
