@@ -62,6 +62,8 @@ public class B01891ComboboxValidator {
 	
 	public static class Item {
 		private String name;
+
+		public Item() {}
 		public Item (String name) {
 			this.name = name;
 		}
