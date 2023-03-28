@@ -95,7 +95,7 @@ export class Optgroup extends zul.Widget<HTMLOptGroupElement> {
 	/** @internal */
 	_autoFirstCell(): zul.sel.Listcell {
 		if (!this.firstChild)
-			this.appendChild(new zul.sel.Listcell({mold: 'select'}));
+			this.appendChild(new zul.sel.Listcell(), true);
 		return this.firstChild!; // guaranteed to exist because appended in the previous line
 	}
 

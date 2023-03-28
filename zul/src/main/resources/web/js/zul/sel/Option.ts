@@ -82,7 +82,7 @@ export class Option extends zul.Widget<HTMLOptionElement> {
 	}
 
 	/**
-	 * Sets the label of the {@link Optgroup} it contains.
+	 * Sets the label of the {@link Option} it contains.
 	 *
 	 * <p>If it is not created, we automatically create it.
 	 * @since 10.0.0
@@ -96,7 +96,7 @@ export class Option extends zul.Widget<HTMLOptionElement> {
 	/** @internal */
 	_autoFirstCell(): zul.sel.Listcell {
 		if (!this.firstChild)
-			this.appendChild(new zul.sel.Listcell({mold: 'select'}));
+			this.appendChild(new zul.sel.Listcell(), true);
 		return this.firstChild!; // guaranteed to exist because appended in the previous line
 	}
 
