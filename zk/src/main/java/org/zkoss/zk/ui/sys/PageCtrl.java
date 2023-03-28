@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Collection;
 
+import org.zkoss.lang.ClassResolver;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Execution;
@@ -273,4 +274,12 @@ public interface PageCtrl {
 	 * has just been activated (a.k.a., deserialized).
 	 */
 	public void sessionDidActivate(Desktop desktop);
+
+	/**
+	 * Internal used only
+	 * @hidden
+	 */
+	default ClassResolver getClassResolver() {
+		return null;
+	}
 }

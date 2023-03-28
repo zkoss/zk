@@ -594,6 +594,10 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		}
 	}
 
+	public ClassResolver getClassResolver() {
+		return _clsresolver;
+	}
+
 	public Class<?> getZScriptClass(String clsnm) {
 		for (Interpreter ip : getLoadedInterpreters()) {
 			Class<?> cls = ip.getClass(clsnm);
