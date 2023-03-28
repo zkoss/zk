@@ -23,6 +23,7 @@ public class B70_ZK_2552Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
+		waitResponse();
 		click(widget("@tab:eq(2)").$n("cls"));
 		waitResponse();
 

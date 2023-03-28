@@ -31,13 +31,10 @@ import org.zkoss.test.webdriver.WebDriverTestCase;
  * @author rudyhuang
  */
 public class B80_ZK_3339Test extends WebDriverTestCase {
+
 	@Test
 	public void test() {
 		connect();
-		waitResponse();
-
-		driver.manage().deleteAllCookies();
-		refreshPage();
 		waitResponse();
 
 		final Dimension size = driver.manage().window().getSize();
