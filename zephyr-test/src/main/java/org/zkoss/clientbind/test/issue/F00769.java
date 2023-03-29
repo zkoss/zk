@@ -78,15 +78,16 @@ public class F00769{
 	}
 	
 	
-	public Converter getSelectedConverter(){
-		return new Converter() {
-			
-			public Object coerceToUi(Object val, Component component, BindContext ctx) {
+	public Converter<List, Set<MyTreeNode>, Component> getSelectedConverter(){
+		return new Converter<List, Set<MyTreeNode>, Component>() {
+
+
+			public List coerceToUi(Set<MyTreeNode> val, Component component, BindContext ctx) {
 				return sort((Set)val);
 			}
 			
-			public Object coerceToBean(Object val, Component component, BindContext ctx) {
-				return val;
+			public Set<MyTreeNode> coerceToBean(List val, Component component, BindContext ctx) {
+				return (Set<MyTreeNode>) val;
 			}
 		};
 	}
@@ -104,6 +105,9 @@ public class F00769{
 	static public class MyTreeNode extends DefaultTreeNode<String> {
 
 		boolean open;
+		public MyTreeNode() {
+			super(null);
+		}
 
 		public MyTreeNode(String data, MyTreeNode[] children) {
 			super(data,children);
