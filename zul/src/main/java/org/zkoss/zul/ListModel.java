@@ -16,6 +16,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.util.Collections;
+import java.util.List;
+
 import org.zkoss.zul.event.ListDataListener;
 import org.zkoss.zul.ext.Selectable;
 
@@ -57,4 +60,12 @@ public interface ListModel<E> {
 	 * a change to the data model occurs. 
 	 */
 	public void removeListDataListener(ListDataListener l);
+
+	/**
+	 * Returns all listeners.
+	 * @10.0.0
+	 */
+	public default List<ListDataListener> getListDataListeners() {
+		return Collections.emptyList();
+	}
 }

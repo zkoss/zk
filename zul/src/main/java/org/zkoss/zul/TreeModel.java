@@ -16,6 +16,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.util.Collections;
+import java.util.List;
+
 import org.zkoss.zul.event.TreeDataEvent;
 import org.zkoss.zul.event.TreeDataListener;
 
@@ -102,4 +105,12 @@ public interface TreeModel<E> {
 	 * @param l the listener to remove
 	 */
 	public void removeTreeDataListener(TreeDataListener l);
+
+	/**
+	 * Returns all listeners.
+	 * @10.0.0
+	 */
+	public default List<TreeDataListener> getTreeDataListeners() {
+		return Collections.emptyList();
+	}
 }

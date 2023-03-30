@@ -60,6 +60,10 @@ public abstract class AbstractListModel<E>
 		_ctrl = new DefaultSelectionControl<E>(this);
 	}
 
+	public List<ListDataListener> getListDataListeners() {
+		return _listeners;
+	}
+
 	/**
 	 * Fires a {@link ListDataEvent} for all registered listener (thru
 	 * {@link #addListDataListener}.
