@@ -11,8 +11,10 @@ Copyright (C) 2017 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zephyr.webdriver.test2;
 
-import org.junit.jupiter.api.Assertions;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.By;
 
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
@@ -22,14 +24,8 @@ import org.zkoss.test.webdriver.WebDriverTestCase;
 public class F85_ZK_3711_1Test extends WebDriverTestCase {
 	@Test
 	public void testHistoryPopStateMoreThanOne() throws Exception {
-		try {
-			connect();
-			sleep(2000);
-			Assertions.fail("Should throw an exception");
-		} catch (Exception e) {
-			String message = e.getMessage();
-			if (!message.startsWith("more than one [@HistoryPopState]"))
-				Assertions.fail("Unknown exception: " + message);
-		}
+		connect();
+		sleep(2000);
+		assertTrue(getWebDriver().findElement(By.tagName("html")).getText().contains("org.zkoss.zk.ui.UiException: more than one [@HistoryPopState]"));
 	}
 }
