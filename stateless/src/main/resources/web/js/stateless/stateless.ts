@@ -242,7 +242,7 @@ function getIndex(wgt: zk.Widget & {_index?: number}): number {
 function convertUuidToIndexIfPossible(req: zk.Event & {data: object}): void {
 	const target = req.target;
 	if (target) {
-		if (isSelectableModule()) {
+		if (isSelectableModule() && req.data) {
 			if (target instanceof zul.sel.Tree) {
 				const {items, reference} = req.data as {items: zk.Widget[]; reference: zk.Widget};
 				if (items && items.length) {
