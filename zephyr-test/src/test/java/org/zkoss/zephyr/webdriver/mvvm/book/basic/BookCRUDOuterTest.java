@@ -21,7 +21,8 @@ public class BookCRUDOuterTest extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect("/mvvm/book/basic/bookCrudOuter.zul");
+		waitResponse();
 
-		assertEquals("include shall work", "ZK MVVM Book CRUD", jq(".z-include .z-window-header").text());
+		assertEquals("ZK MVVM Book CRUD", jq(".z-include .z-window-header").text(), "include shall work");
 	}
 }

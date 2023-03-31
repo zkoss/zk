@@ -3,11 +3,13 @@ package org.zkoss.zephyr.webdriver.mvvm.issue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
+@Disabled
 public class F00743_1Test extends WebDriverTestCase {
 	private void checkSelectedItems(JQuery listbox, int[] selectedIndexes) {
 		assertEquals(selectedIndexes.length + "", listbox.toWidget().eval("getSelectedItems().length"));

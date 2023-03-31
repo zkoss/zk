@@ -24,6 +24,7 @@ public class ListboxTest extends WebDriverTestCase {
 	@Test
 	public void testListgroup() {
 		connect();
+		waitResponse();
 		click(jq("@listgroup .z-listgroup-icon"));
 		waitResponse();
 		assertEquals("true", jq("$open").text());
@@ -35,6 +36,7 @@ public class ListboxTest extends WebDriverTestCase {
 	@Test
 	public void testSelected() {
 		connect();
+		waitResponse();
 		click(jq("$listbox > @listitem").eq(0));
 		waitResponse();
 		assertEquals("item01", jq("$itemLabel").text());
