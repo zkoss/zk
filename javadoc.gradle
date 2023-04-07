@@ -73,9 +73,8 @@ def addJavadocFooter(dir, footerMessage) {
 
 // generate javadoc
 task alljavadoc(type: Javadoc) {
-	dependsOn ':stateless:compileJava'
 	if (gradle.includedBuilds.find {it.name == 'zkcml'} != null) {
-		dependsOn gradle.includedBuild('zkcml').task(':stateless-ex:compileJava')
+		dependsOn gradle.includedBuild('zkcml').task(':stateless:compileJava')
 	}
 	title = "$project.description ${version} API"
 	options.setWindowTitle("$project.description ${version} API")
@@ -84,7 +83,7 @@ task alljavadoc(type: Javadoc) {
 		"$dir/src/main/java"
 	}
 	// add immutables code-gen for generating Javadoc
-	source files("stateless/build/generated/sources", "../zkcml/stateless-ex/build/generated/sources")
+	source files("../zkcml/stateless/build/generated/sources")
 
 	// Can't get package.html into javadoc with gradle
 	exclude '**/package.html',

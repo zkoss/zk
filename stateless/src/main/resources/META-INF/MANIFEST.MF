@@ -1,6 +1,0 @@
-Manifest-Version: 1.0
-Specification-Title: The Stateless Core
-Specification-Vendor: Potix Corporation
-Implementation-Title: org.zkoss.stateless
-Implementation-URL: http://www.zkoss.org/prj/stateless
-Implementation-Vendor: Potix Corporation

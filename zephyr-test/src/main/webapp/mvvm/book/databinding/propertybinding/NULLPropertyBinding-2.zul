@@ -1,6 +1,0 @@
-<zk>
-	<vlayout viewModel="@id('vm') @init('org.zkoss.clientbind.test.book.databinding.propertybinding.NULLPropertyBindingVM')">
-		<label>You should see javascript exceptions ("Property 'user1' does not exist.") in console</label>
-		<label id="l5" value="@load(vm.user1.account)" />
-	</vlayout>
-</zk>

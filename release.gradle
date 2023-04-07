@@ -219,7 +219,7 @@ task prepareBin() {
 				exclude "**/timeplotz.jar"
 				exclude "**/zuljsp.jar"
 				// cml
-				exclude "**/za11y*.jar", "**/zkmax*.jar", "**/zuti*.jar", "**/zkex*.jar", "**/zml*.jar", "**/stateless-ex*.jar", "**/client-bind*.jar"
+				exclude "**/za11y*.jar", "**/zkmax*.jar", "**/zuti*.jar", "**/zkex*.jar", "**/zml*.jar", "**/stateless*.jar", "**/client-bind*.jar"
 				// doc
 				exclude "**/doc"
 			}
@@ -304,7 +304,7 @@ task prepareCmlBin() {
 		copy {
 			into "$buildDir/tmp/eebin-eval"
 			from("$buildDir/tmp/eebin") {
-				exclude "**/za11y*.jar", "**/zkmax*.jar", "**/zuti*.jar", "**/zkex*.jar", "**/zml*.jar", "**/stateless-ex*.jar", "**/client-bind*.jar"
+				exclude "**/za11y*.jar", "**/zkmax*.jar", "**/zuti*.jar", "**/zkex*.jar", "**/zml*.jar", "**/stateless*.jar", "**/client-bind*.jar"
 				exclude "**/LICENSE"
 			}
 		}
@@ -377,7 +377,7 @@ task prepareBinOSGi() {
 			into "$buildDir/tmp/cebin-osgi"
 			from("$buildDir/tmp/eebin-osgi") {
 				// cml
-				exclude "**/za11y*.jar", "**/zkmax*.jar", "**/zuti*.jar", "**/zkex*.jar", "**/zml*.jar", "**/stateless-ex*.jar", "**/client-bind*.jar"
+				exclude "**/za11y*.jar", "**/zkmax*.jar", "**/zuti*.jar", "**/zkex*.jar", "**/zml*.jar", "**/stateless*.jar", "**/client-bind*.jar"
 				// doc
 				exclude "**/doc"
 			}
@@ -405,7 +405,7 @@ task prepareCmlBinOSGi() {
 		copy {
 			into "$buildDir/tmp/eebin-osgi-eval"
 			from("$buildDir/tmp/eebin-osgi") {
-				exclude "**/za11y*.jar", "**/zkmax*.jar", "**/zuti*.jar", "**/zkex*.jar", "**/zml*.jar", "**/stateless-ex*.jar", "**/client-bind*.jar"
+				exclude "**/za11y*.jar", "**/zkmax*.jar", "**/zuti*.jar", "**/zkex*.jar", "**/zml*.jar", "**/stateless*.jar", "**/client-bind*.jar"
 				exclude "**/LICENSE"
 			}
 		}
@@ -458,8 +458,8 @@ task prepareSrc() {
 		copy {
 			into "$buildDir/tmp/cesrc"
 			from("$buildDir/tmp/src") {
-				exclude "**/za11y*.jar", "**/zkmax*.jar", "**/zuti*.jar", "**/zkex*.jar", "**/zml*.jar", "**/stateless-ex*.jar", "**/client-bind*.jar"
-				exclude "**/za11y", "**/zkmax", "**/zuti", "**/zkex", "**/zml", "**/stateless-ex*.jar", "**/client-bind*.jar"
+				exclude "**/za11y*.jar", "**/zkmax*.jar", "**/zuti*.jar", "**/zkex*.jar", "**/zml*.jar", "**/stateless*.jar", "**/client-bind*.jar"
+				exclude "**/za11y", "**/zkmax", "**/zuti", "**/zkex", "**/zml", "**/stateless*.jar", "**/client-bind*.jar"
 				exclude "**/LICENSE"
 			}
 		}
@@ -519,7 +519,7 @@ task zkpeBinTar(type: Tar) {
 	compression = Compression.GZIP
 	from "$buildDir/tmp/eebin"
 	into "zkpe-bin-${project.version}"
-	exclude "**/za11y*.jar", "**/zkmax*.jar", "**/zuti*.jar", "**/stateless-ex*.jar", "**/client-bind*.jar"
+	exclude "**/za11y*.jar", "**/zkmax*.jar", "**/zuti*.jar", "**/stateless*.jar", "**/client-bind*.jar"
 	exclude "**/gson.jar", "**/gmapsz.jar", "**/timeplotz.jar", "**/zuljsp.jar"
 }
 
@@ -529,7 +529,7 @@ task zkpeBinZip(type: Zip) {
 	destinationDirectory = file("$buildDir/bin/proprietary")
 	from "$buildDir/tmp/eebin"
 	into "zkpe-bin-${project.version}"
-	exclude "**/za11y*.jar", "**/zkmax*.jar", "**/zuti*.jar", "**/stateless-ex*.jar", "**/client-bind*.jar"
+	exclude "**/za11y*.jar", "**/zkmax*.jar", "**/zuti*.jar", "**/stateless*.jar", "**/client-bind*.jar"
 	exclude "**/gson.jar", "**/gmapsz.jar", "**/timeplotz.jar", "**/zuljsp.jar"
 }
 
@@ -540,7 +540,7 @@ task zkpeBinOSGiTar(type: Tar) {
 	compression = Compression.GZIP
 	from "$buildDir/tmp/eebin-osgi"
 	into "zkpe-bin-osgi-${project.version}"
-	exclude "**/za11y*.jar", "**/zkmax*.jar", "**/zuti*.jar", "**/stateless-ex*.jar", "**/client-bind*.jar"
+	exclude "**/za11y*.jar", "**/zkmax*.jar", "**/zuti*.jar", "**/stateless*.jar", "**/client-bind*.jar"
 }
 
 task zkpeBinOSGiZip(type: Zip) {
@@ -549,7 +549,7 @@ task zkpeBinOSGiZip(type: Zip) {
 	destinationDirectory = file("$buildDir/bin/proprietary")
 	from "$buildDir/tmp/eebin-osgi"
 	into "zkpe-bin-osgi-${project.version}"
-	exclude "**/za11y*.jar", "**/zkmax*.jar", "**/zuti*.jar", "**/stateless-ex*.jar", "**/client-bind*.jar"
+	exclude "**/za11y*.jar", "**/zkmax*.jar", "**/zuti*.jar", "**/stateless*.jar", "**/client-bind*.jar"
 }
 
 task zkpeSrcZip(type: Zip) {
@@ -557,8 +557,8 @@ task zkpeSrcZip(type: Zip) {
 	archiveFileName = "zkpe-src-${project.version}.zip"
 	destinationDirectory = file("$buildDir/bin/proprietary")
 	from("$buildDir/tmp/src") {
-		exclude "**/za11y*.jar", "**/zkmax*.jar", "**/zuti*.jar", "**/stateless-ex*.jar", "**/client-bind*.jar"
-		exclude "**/za11y", "**/zkmax", "**/zuti", "**/stateless-ex", "**/client-bind"
+		exclude "**/za11y*.jar", "**/zkmax*.jar", "**/zuti*.jar", "**/stateless*.jar", "**/client-bind*.jar"
+		exclude "**/za11y", "**/zkmax", "**/zuti", "**/stateless", "**/client-bind"
 	}
 	into "zkpe-src-${project.version}"
 }
@@ -610,7 +610,7 @@ task zkpeBinEvalZip(type: Zip) {
 	archiveFileName = "zkpe-bin-eval-${project.version}.zip"
 	destinationDirectory = file("$buildDir/bin")
 	from("$buildDir/tmp/eebin-eval") {
-		exclude "**/za11y*.jar", "**/zkmax*.jar", "**/zuti*.jar", "**/stateless-ex*.jar", "**/client-bind*.jar"
+		exclude "**/za11y*.jar", "**/zkmax*.jar", "**/zuti*.jar", "**/stateless*.jar", "**/client-bind*.jar"
 		exclude "**/gson.jar", "**/gmapsz.jar", "**/timeplotz.jar", "**/zuljsp.jar"
 	}
 	into "zkpe-bin-eval-${project.version}"
@@ -637,7 +637,7 @@ task zkpeBinOSGiEvalZip(type: Zip) {
 	archiveFileName = "zkpe-bin-osgi-eval-${project.version}.zip"
 	destinationDirectory = file("$buildDir/bin")
 	from("$buildDir/tmp/eebin-osgi-eval") {
-		exclude "**/za11y*.jar", "**/zkmax*.jar", "**/zuti*.jar", "**/stateless-ex*.jar", "**/client-bind*.jar"
+		exclude "**/za11y*.jar", "**/zkmax*.jar", "**/zuti*.jar", "**/stateless*.jar", "**/client-bind*.jar"
 	}
 	into "zkpe-bin-osgi-eval-${project.version}"
 }

@@ -54,9 +54,6 @@
       "@zkmax/*": [
         "../zkcml/zkmax/src/main/resources/web/js/zkmax/*"
       ],
-      "@stateless-ex/*": [
-        "../zkcml/stateless-ex/src/main/resources/web/js/statelessex/*"
-      ],
       "@client-bind/*": [
         "../zkcml/client-bind/src/main/resources/web/js/clientbind/*"
       ]

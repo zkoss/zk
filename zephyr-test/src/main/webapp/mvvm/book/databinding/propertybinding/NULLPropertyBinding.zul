@@ -1,8 +1,0 @@
-<zk>
-	<vlayout viewModel="@id('vm') @init('org.zkoss.clientbind.test.book.databinding.propertybinding.NULLPropertyBindingVM')">
-		<label>You should see only "test" string and no javascript exceptions</label>
-		<label id="l1" value="@load(vm.testStr)" />
-		<label id="l3" value="@load(vm.testNULLStr)" />
-		<label id="l4" value="@load(vm.user.account)" />
-	</vlayout>
-</zk>

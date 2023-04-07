@@ -1,5 +1,0 @@
-<zk>
-	<div viewModel="@id('vm') @init(listVM)">
-		<label id="lab2" value="@load(vm.inc)"/>
-	</div>
-</zk>

@@ -1,6 +1,0 @@
-Manifest-Version: 1.0
-Specification-Title: The Stateless Immutable Style
-Specification-Vendor: Potix Corporation
-Implementation-Title: org.zkoss.stateless.immutable
-Implementation-URL: http://www.zkoss.org/prj/stateless-immutable
-Implementation-Vendor: Potix Corporation

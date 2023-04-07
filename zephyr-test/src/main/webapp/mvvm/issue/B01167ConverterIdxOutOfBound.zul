@@ -1,9 +1,0 @@
-<zk>
-
-<!-- should throw no such converter exception not EL exception.... -->
-<window title="Search Storage Item" border="normal" width="600px"
-	viewModel="@id('vm') @init('org.zkoss.clientbind.test.issue.B01167ConverterIdxOutOfBound')" >
-	
-			<textbox value="@bind(vm.text) @converter('something')"/> 
-</window>
-</zk>

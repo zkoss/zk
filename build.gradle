@@ -36,14 +36,13 @@ ext {
 			'zcommon'      : "$rootDir/zcommon",
 			'zkwebfragment': "$rootDir/zkwebfragment",
 			'zul'          : "$rootDir/zul",
-			'stateless'       : "$rootDir/stateless",
-			'stateless-immutable': "$rootDir/stateless-immutable",
 			'za11y'        : "$zkcmlDir/za11y",
 			'zkex'         : "$zkcmlDir/zkex",
 			'zkmax'        : "$zkcmlDir/zkmax",
 			'zml'          : "$zkcmlDir/zml",
 			'zuti'         : "$zkcmlDir/zuti",
-			'stateless-ex' : "$zkcmlDir/stateless-ex",
+			'stateless'       : "$zkcmlDir/stateless",
+			'stateless-immutable': "$zkcmlDir/stateless-immutable",
 			'client-bind' : "$zkcmlDir/client-bind"
 	]
 	zkcmlprojects = [
@@ -52,7 +51,8 @@ ext {
 			'zkmax': "$zkcmlDir/zkmax",
 			'zml'  : "$zkcmlDir/zml",
 			'zuti' : "$zkcmlDir/zuti",
-			'stateless-ex' : "$zkcmlDir/stateless-ex",
+			'stateless' : "$zkcmlDir/stateless",
+			'stateless-immutable': "$zkcmlDir/stateless-immutable",
 			'client-bind' : "$zkcmlDir/client-bind"
 	]
 }

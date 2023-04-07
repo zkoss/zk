@@ -79,7 +79,6 @@
     "zul",
     "zkbind",
     "zhtml",
-    "stateless",
     "eslint-plugin-zk"
   ]
 }

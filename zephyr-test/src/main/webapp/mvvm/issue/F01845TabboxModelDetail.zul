@@ -1,5 +1,0 @@
-<zk>
-	<div viewModel="@id('detailVM') @init('org.zkoss.clientbind.test.issue.F01845TabboxModelDetail')">
-		<label value="@load(detailVM)"/>
-	</div>
-</zk>

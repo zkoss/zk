@@ -1,6 +1,0 @@
-<zk>
-	<vlayout viewModel="@id('vm') @init('org.zkoss.clientbind.test.book.databinding.propertybinding.NULLPropertyBindingVM')">
-		<label>You should see javascript exceptions ("Property 'sss' does not exist.") in console</label>
-		<label id="l2" value="@load(vm.testStr.sss)" />
-	</vlayout>
-</zk>
