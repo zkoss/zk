@@ -3,6 +3,7 @@ ZK 9.6.4
 
 * Bugs
   ZK-5382: Wrong shadow insertions after shadow tree merged
+  ZK-5418: variable shadowing to reference binding
 
 * Upgrade Notes
 

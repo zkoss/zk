@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-5418.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Fri Apr 07 12:13:31 CST 2023, Created by jameschu
+
+Copyright (C) 2023 Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div id="root1" viewModel="@id('vm')@init('org.zkoss.zktest.test2.B96_ZK_5418VM')" value2="@ref(vm.value)">
+		<label multiline="true">
+			case 1: variable in zscript
+			1. enter "a" in the textbox
+			2. go to B96-ZK-5418-1.zul
+			3. modify the value in the textbox
+			4. the label should be changed.
+		</label>
+		<zscript><![CDATA[
+        String value2 = "in zscript";
+        ]]></zscript>
+		<textbox value="@bind(value2)"/>
+		<label value="@load(value2)"/>
+	</div>
+	<div id="root2" viewModel="@id('vm')@init('org.zkoss.zktest.test2.B96_ZK_5418VM')">
+		<label multiline="true">
+			case 2: no ref binding
+			1. enter "a" in the textbox
+			2. go to B96-ZK-5418-1.zul
+			3. modify the value in the textbox
+			4. the label should be changed.
+		</label>
+		<textbox value="@bind(value3)"/>
+		<label value="@load(value3)"/>
+	</div>
+</zk>

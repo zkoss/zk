@@ -45,16 +45,14 @@ import org.zkoss.zel.impl.stream.StreamELResolverImpl;
  */
 public class XelELResolver extends ELResolver {
 	private static final CompositeELResolver DEFAULT;
-	private final static Map<String, Object> localBeans = new HashMap<String, Object>();
-	
+
 	private static final Class REFERENCE_BINDING;
 	private static final Method GET_VALUE;
 
 	static {
 		DEFAULT = new CompositeELResolver();
 		//add resolver in order to support EL 3.0
-		DEFAULT.add(new BeanNameELResolver(
-                new StandardBeanNameResolver(localBeans))); // for semicolon expression
+		DEFAULT.add(new BeanNameELResolver(new StandardBeanNameResolver())); // for semicolon expression
 		DEFAULT.add(new StreamELResolverImpl()); // for stream operations
 		DEFAULT.add(new StaticFieldELResolver()); //for calling static method
 		DEFAULT.add(new MapELResolver());
@@ -195,37 +193,29 @@ public class XelELResolver extends ELResolver {
 	 *
 	 */
 	public static class StandardBeanNameResolver extends BeanNameResolver {
+		public boolean isNameResolved(String beanName) {
+			//ZK-5418, doesn't cache bean name and value
+			return false;
+		}
 
-        private final Map<String,Object> beans;
 
-        public StandardBeanNameResolver(Map<String,Object> beans) {
-            this.beans = beans;
-        }
+		public Object getBean(String beanName) {
+			return null;
+		}
 
-        
-        public boolean isNameResolved(String beanName) {
-            return beans.containsKey(beanName);
-        }
 
-        
-        public Object getBean(String beanName) {
-            return beans.get(beanName);
-        }
+		public void setBeanValue(String beanName, Object value)
+				throws PropertyNotWritableException {
+		}
 
-        
-        public void setBeanValue(String beanName, Object value)
-                throws PropertyNotWritableException {
-            beans.put(beanName, value);
-        }
 
-        
-        public boolean isReadOnly(String beanName) {
-            return false;
-        }
+		public boolean isReadOnly(String beanName) {
+			return false;
+		}
 
-        
-        public boolean canCreateBean(String beanName) {
-            return true;
-        }
-    }
+
+		public boolean canCreateBean(String beanName) {
+			return true;
+		}
+	}
 }
