@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?script content="zk.tabletUIEnabled=true;"?>
+<!--
+B96-ZK-5251.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Mon Apr 11 12:32:44 CST 2023, Created by jameschu
+
+Copyright (C) 2023 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label>
+		open with tablet simulator, should not see any js error (Mold default not found in zul.sel.Optgroup)
+	</label>
+	<listbox mold="select">
+		<listgroup label="2018"/>
+		<listitem label="2018 Q1"/>
+		<listitem label="2018 Q2"/>
+		<listitem label="2018 Q3"/>
+		<listitem label="2018 Q4"/>
+		<listgroup label="2017"/>
+		<listitem label="2017 Q1"/>
+		<listitem label="2017 Q2"/>
+		<listitem label="2017 Q3"/>
+		<listitem label="2017 Q4"/>
+	</listbox>
+</zk>
