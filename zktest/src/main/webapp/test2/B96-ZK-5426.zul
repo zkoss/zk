@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk>
+	<image src="/test2/img/B96-ZK-5426.png" width="400px"/>
+	<label>The pdf below should render like the image in the upper left corner of this page where no text is missing.</label>
+	<pdfviewer src="B96-ZK-5426.pdf" width="100%" height="400px"/>
+</zk>
