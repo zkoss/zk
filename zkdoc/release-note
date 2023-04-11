@@ -7,6 +7,7 @@ ZK 9.6.4
   ZK-5238: upgrade moment.js to eliminate the security vulnerabilities
   ZK-5426: pdfviewer cannot display some texts
   ZK-5251: listbox select mold produces js error in a mobile browser
+  ZK-5353: Insertion [] of the shadow [] cannot be orphan in 9.6.3
 
 * Upgrade Notes
 

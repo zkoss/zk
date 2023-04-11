@@ -1,0 +1,8 @@
+<?component name="sub2" templateURI="./B96-ZK-5353-sub2.zul" ?>
+<?component name="sub3" templateURI="./B96-ZK-5353-sub3.zul" ?>
+<zk>
+	<idspace thisVM="@ref(VM)" vflex="1" sclass="detail-section">
+		<sub2/>
+		<sub3 VM="@load(thisVM)"/>
+	</idspace>
+</zk>
