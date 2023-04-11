@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?component name="main" templateURI="./B96-ZK-5353-main.zul"?>
+<!--
+B96-ZK-5353-1.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Fri Apr 07 16:52:12 CST 2023, Created by jameschu
+
+Copyright (C) 2023 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div viewModel="@id('vm') @init('org.zkoss.zktest.test2.B96_ZK_5353VM')">
+		<div>
+			<main VM="@load(vm)"/>
+		</div>
+	</div>
+</zk>
