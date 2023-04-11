@@ -1,0 +1,5 @@
+<zk xmlns:sh="shadow">
+	<sh:if test="@load(not empty thisVM)">
+		<div/>
+	</sh:if>
+</zk>
