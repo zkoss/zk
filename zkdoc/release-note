@@ -37,6 +37,7 @@ ZK 9.6.4
   ZK-4194: ZK cannot clear disconnected desktops reliably by remove-desktop requests
   ZK-5445: avoid reflected cross site scripting (XSS) attacks
   ZK-5368: Tree with client-ROD fails to replace treerow if parent is currently not rendered
+  ZK-5260: chosenbox options don't escape HTML characters
 
 * Upgrade Notes
   + Upgrade JRuby dependency from 1.1.2 to 1.7.27 for some security vulnerabilities
