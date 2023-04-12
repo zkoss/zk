@@ -244,7 +244,8 @@ export namespace utl_global {
 		 * </ul>
 		 * @returns the encoded text.
 		 */
-		static encodeXML(txt: string, opts?: EncodeXmlOptions): string {
+		// eslint-disable-next-line zk/noNull
+		static encodeXML(txt: string | null, opts?: EncodeXmlOptions): string {
 			txt = txt != null ? String(txt) : '';
 
 			if (!opts) // speed up the replacement.
