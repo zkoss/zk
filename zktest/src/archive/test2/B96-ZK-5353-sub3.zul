@@ -1,0 +1,7 @@
+<zk>
+	<div>
+		<attribute name="onCreate">
+			<![CDATA[Clients.evalJavaScript("console.log('baz');"); ]]>
+		</attribute>
+	</div>
+</zk>

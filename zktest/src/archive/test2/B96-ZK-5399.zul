@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-5399.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Tue Apr 11 16:11:11 CST 2023, Created by jameschu
+
+Copyright (C) 2023 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label>
+		1. click "refresh" several times
+		2. open visual vm and do heap dump to check the "NoDOM" class instance, the count should be 0
+	</label>
+	<div viewModel="@id('vm') @init('org.zkoss.zktest.test2.B96_ZK_5399VM')">
+		<forEach items="@init(vm.numbers)">
+			<choose>
+				<when test="@init(each % 2 eq 0)">
+					<div style="color:blue">${each}</div>
+				</when>
+				<otherwise>
+					<div style="color:orange">${each}</div>
+				</otherwise>
+			</choose>
+		</forEach>
+		<template name="test">
+			<label value="@init(each % 2)"/>
+		</template>
+		<button onClick="@global-command('refresh')" label="refresh"/>
+	</div>
+</zk>

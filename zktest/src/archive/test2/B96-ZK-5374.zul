@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-5374.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Mon Apr 11 12:32:44 CST 2023, Created by jameschu
+
+Copyright (C) 2023 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label><![CDATA[
+		1. open axe tools in chrome devTool
+		2. scan and should not see <table> element not allowed in "treegrid" role
+		Ref: https://www.w3.org/TR/wai-aria-1.1/#row
+	]]>
+	</label>
+
+	<tree id="tree" rows="5">
+		<treecols sizable="true">
+			<treecol label="Name"/>
+			<treecol label="Description"/>
+		</treecols>
+		<treechildren>
+			<treeitem>
+				<treerow>
+					<treecell label="Item 1"/>
+					<treecell label="Item 1 description"/>
+				</treerow>
+			</treeitem>
+			<treeitem>
+				<treerow>
+					<treecell label="Item 2"/>
+					<treecell label="Item 2 description"/>
+				</treerow>
+				<treechildren>
+					<treeitem>
+						<treerow>
+							<treecell label="Item 2.1"/>
+						</treerow>
+					</treeitem>
+					<treeitem>
+						<treerow>
+							<treecell label="Item 2.2"/>
+							<treecell
+									label="Item 2.2 is something who cares"/>
+						</treerow>
+					</treeitem>
+				</treechildren>
+			</treeitem>
+			<treeitem label="Item 3"/>
+		</treechildren>
+		<treefoot>
+			<treefooter label="Count"/>
+			<treefooter label="Summary"/>
+		</treefoot>
+	</tree>
+</zk>

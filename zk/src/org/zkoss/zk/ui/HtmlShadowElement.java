@@ -635,15 +635,18 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 			}
 			if (_firstInsertion == firstChild._firstInsertion || _firstInsertion == firstChild._previousInsertion)
 				_firstInsertion = null; // reset
-			firstChild = children.get(children.size() - 1);
-			Component newNext = firstChild._nextInsertion;
+			HtmlShadowElement lastChild = children.get(children.size() - 1);
+			Component newNext = lastChild._nextInsertion;
 			if (_nextInsertion != null) {
 				if (newNext == null) {
-					firstChild._nextInsertion = _nextInsertion;
+					lastChild._nextInsertion = _nextInsertion;
+				}
+				if (_nextInsertion instanceof HtmlShadowElement) {
+					((HtmlShadowElement) _nextInsertion)._previousInsertion = lastChild;
 				}
 				_nextInsertion = null;
 			}
-			if (_lastInsertion == firstChild._lastInsertion || _lastInsertion == firstChild._nextInsertion)
+			if (_lastInsertion == lastChild._lastInsertion || _lastInsertion == lastChild._nextInsertion)
 				_lastInsertion = null; // reset
 			for (HtmlShadowElement child : new ArrayList<HtmlShadowElement>(children)) {
 				child.mergeToHost(_host);
