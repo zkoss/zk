@@ -1,0 +1,35 @@
+<zk xmlns:sh="shadow" xmlns:x="xhtml">
+	<x:div id="host" class="form-horizontal" viewModel="@id('vm') @init('org.zkoss.zktest.test2.B80_ZK_2758VM')" >
+		Click "Print Whole Tree" and see the shadow tree, the insertions should be correct.
+		<separator/>
+		<button label="toggleError" onClick="@command('toggleError')"/>
+		<!-- this sh:apply tag can also be commented out to fix the issue -->
+		<sh:apply>
+			<!-- missing error param causes problem, sometimes -->
+			<!-- commenting out this line or adding the 'error' param fixes the problem --> 
+			<sh:apply template="formGroup" type="static" label="Street" value="@ref('some value')" /> <!-- error="@ref(vm.errorMessage)" -->
+			<sh:apply template="formGroup" type="textbox" label="Street" value="@ref('some value')" error="@ref(vm.errorMessage)"/> 
+			<sh:apply template="formGroup" type="textbox" label="Street" value="@ref('some value')" error="@ref(vm.errorMessage)"/> 
+		</sh:apply>
+		<template name="formGroup">
+			<x:div sclass="@load(empty error ? 'form-group' : 'form-group has-error')">
+				<x:label class="col-sm-2 control-label" textContent="@load(label)" />
+				<x:div class="col-sm-10">
+					<sh:apply template="@load(type)" />
+				</x:div>
+				<template name="textbox">
+					<textbox zclass="form-control" value="@bind(value)" onChange="@command(changeCommand)" />
+				</template>
+	
+				<template name="static">
+					<x:p class="form-control-static" textContent="@load(value)" />
+				</template>
+			</x:div>
+	
+			<sh:if test="@load(!empty error)">
+				<x:div sclass="alert alert-danger well-sm" textContent="@load(error)" />
+			</sh:if>
+		</template>
+		<debugger rootId="host"/>
+	</x:div>
+</zk>
