@@ -22,14 +22,27 @@ import java.util.Map;
 import javax.imageio.ImageIO;
 
 import org.junit.Test;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
+import org.zkoss.zktest.zats.ChromiumHeadlessDriver;
 import org.zkoss.zktest.zats.WebDriverTestCase;
 
 /**
  * @author jumperchen
  */
 public class B96_ZK_5177Test extends WebDriverTestCase {
+	// https://github.com/SeleniumHQ/selenium/issues/11637, noticed that there is still a bug in viewport (using --headless=new)
+	protected WebDriver getWebDriver() {
+		if (driver == null) {
+			ChromeOptions driverOptions = getWebDriverOptions();
+			// https://www.selenium.dev/blog/2023/headless-is-going-away/
+			driverOptions.addArguments("--headless=new");
+			driverOptions.addArguments("--disable-gpu");
+			driver = new ChromiumHeadlessDriver(driverOptions, false); // intended, handled above
+		}
+		return driver;
+	}
 
 	protected ChromeOptions getWebDriverOptions() {
 		ChromeOptions chromeOptions = super.getWebDriverOptions();
