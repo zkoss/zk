@@ -1038,6 +1038,10 @@ public class Combobox extends Textbox {
 			Comboitem oldSel = _selItem;
 			Set<Comboitem> selItems = evt.getSelectedItems();
 			_selItem = selItems != null && !selItems.isEmpty() ? (Comboitem) selItems.iterator().next() : null;
+			if (getModel() instanceof ListSubModel && _selItem == null && ((List) request.getData().get("items")).size() != 0) {
+				_selItem = oldSel; // selItem might be missing when new items are created in the same AU, sync back
+				selItems.add(oldSel);
+			}
 			_lastCkVal = getValue(); //onChange is sent before onSelect
 
 			syncSelectionToModel();
