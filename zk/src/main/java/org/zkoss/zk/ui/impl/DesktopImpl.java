@@ -32,10 +32,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -166,8 +169,23 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	private transient SimpleScope _attrs;
 	//don't create it dynamically because PageImp._ip bind it at constructor
 	private transient Execution _exec;
-	/** A list of ScheduleInfo; must be thread safe */
-	private final ConcurrentLinkedQueue<ScheduleInfo<? extends Event>> _schedInfos = new ConcurrentLinkedQueue<ScheduleInfo<? extends Event>>();
+
+	// ZK-4194
+	private final AtomicInteger _scheduleInfoReadCount = new AtomicInteger(0);
+
+	// ZK-4194
+	private final AtomicInteger _scheduleInfoWriteCount = new AtomicInteger(0);
+
+	/* ZK-4194: This cache is to avoid a disconnected desktop (no connected and corresponding browser tab)
+	 from stacking ScheduleInfo sent by a server push EventQueue. Cache works as a Map which is not an ordered collection,
+	 we use read/write count to serve as an index and ensure we retrieve it in insertion order. ScheduleInfo cache must be thread safe. */
+	private final Cache<Integer, ScheduleInfo<? extends Event>> _schedInfos = CacheBuilder.newBuilder()
+			.maximumSize(Library.getIntProperty(
+					"org.zkoss.zk.ui.Desktop.maxScheduleInfoSize", 10_000))
+			.expireAfterWrite(Library.getIntProperty(
+							"org.zkoss.zk.ui.Desktop.scheduleInfoTimeout", 10),
+					TimeUnit.MINUTES).build();
+
 	/** For handling scheduled task in onSchedule. */
 	private Component _dummyTarget = null;
 	/** Next available key. */
@@ -1663,14 +1681,20 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			public void schedule(EventListener<T> listener, T event) {
 				if (log.isDebugEnabled()) {
 					log.debug("scheduleServerPush: [{}]", event);
+
 				}
-				_schedInfos.add(new ScheduleInfo<T>(listener, event));
+				if (!scheduledServerPush()) {
+					// reset write/read count
+					_scheduleInfoReadCount.set(0);
+					_scheduleInfoWriteCount.set(0);
+				}
+				_schedInfos.put(_scheduleInfoWriteCount.getAndIncrement(), new ScheduleInfo<T>(listener, event));
 			}
 		});
 	}
 
 	public boolean scheduledServerPush() {
-		return !_schedInfos.isEmpty(); //no need to sync
+		return !_schedInfos.asMap().isEmpty(); //no need to sync
 	}
 
 	private void checkSeverPush(String what) {
@@ -1729,7 +1753,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			}
 		}
 
-		if (!_schedInfos.isEmpty())
+		if (scheduledServerPush())
 			Events.postEvent(ON_SCHEDULE, _dummyTarget, null);
 		//we could not process them here (otherwise, event handling, thread
 		//might not work)
@@ -1861,10 +1885,25 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		public void onEvent(Event event) throws Exception {
 			final long max = System.currentTimeMillis() + getMaxSchedTime();
 			if (log.isDebugEnabled()) {
-				log.debug("Handling schedule server push, _schedInfos is empty: [{}]", _schedInfos.isEmpty());
+				log.debug("Handling schedule server push, _schedInfos is empty: [{}]", !scheduledServerPush());
 			}
-			while (!_schedInfos.isEmpty()) {
-				_schedInfos.poll().invoke();
+			while (scheduledServerPush()) {
+				final Integer key = _scheduleInfoReadCount.getAndIncrement();
+				ScheduleInfo<? extends Event> ifPresent = _schedInfos.getIfPresent(key);
+				if (ifPresent != null) {
+					ifPresent.invoke();
+					_schedInfos.invalidate(key);
+				} else if (scheduledServerPush()) {
+					// just in case to avoid endless loop
+					List<Integer> keys = new ArrayList<>(_schedInfos.asMap().keySet());
+					if (!keys.isEmpty()) {
+						Collections.sort(keys);
+						_scheduleInfoReadCount.set(keys.get(0));
+						continue;
+					} else {
+						break;
+					}
+				}
 				if (System.currentTimeMillis() > max)
 					break; //avoid if server push is coming too fast
 			}

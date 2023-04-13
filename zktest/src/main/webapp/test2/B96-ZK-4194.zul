@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B96-ZK-4194.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		2023/4/12, Created by jumperchen
+
+Copyright (C) 2023 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. add Library property in B96-ZK-4194-zk.xml into zk.xml
+		2. open two windows (we named Window1 and Window2) for this page
+		3. click a button in Window1 and then you can see a log label in both Windows.
+		4. set Chrome Dev-tool Network in "Offline" for Window2.
+		5. click 20 times of the button in Window1, and then you should see 20 times logs in Window1 but nothing in Window2
+		6. set Chrome Dev-tool Network in "No throttling" for Window2.
+		7. click a button in Window2 and then you should see 15 + 1 times log labels in Window2.
+	</label>
+	<div apply="org.zkoss.zktest.test2.B96_ZK_4194Composer">
+		<div id="eventLog"/>
+	</div>
+</zk>

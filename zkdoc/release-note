@@ -17,6 +17,7 @@ ZK 10.0.0
   ZK-5005: pdfviewer some fonts are not rendering
   ZK-5411: withAction() cannot accept anonymous class, please convert it to Lambda syntax
 
+
 * Upgrade Notes
   + Layout.java (Vlayout and Hlayout) are extended from XulElement since ZK 10.0.0
   + Refine ZK-3277 to enable multipart file uploads into AUEngine instead of individual
@@ -27,8 +28,17 @@ ZK 10.0.0
         z-combobox-emptySearchMessage -> z-combobox-empty-search-message
         z-combobox-emptySearchMessage-hidden -> z-combobox-empty-search-message-hidden
   + Disable UUID recycle mechanism by default.
-   --------
 
+   --------
+  ZK 9.6.4
+  * Features
+
+  * Bugs
+    ZK-4194: ZK cannot clear disconnected desktops reliably by remove-desktop requests
+
+  * Upgrade Notes
+
+   --------
 ZK 9.6.3
 * Features
 
