@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4955.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Wed Apr 12 18:23:51 CST 2023, Created by jameschu
+
+Copyright (C) 2023 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div apply="org.zkoss.zktest.test2.B96_ZK_4955Composer">
+		<label>
+			1. type "0" in combobox, then blur after autocomplete
+			2. you should only see one "onchange" in zk log
+			3. click button
+			4. you should see the selection size is 1
+		</label>
+		<combobox id="myCb" />
+		<button id="btn" label="show selection count"/>
+	</div>
+</zk>
