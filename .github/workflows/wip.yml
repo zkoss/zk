@@ -2,6 +2,10 @@ name: WIP
 on:
   pull_request_target:
     types: [opened, synchronize, reopened, edited]
+  workflow_run:
+    workflows: [ "Automatic Rebase Trigger" ]
+    types:
+      - completed
 
 jobs:
   wip:

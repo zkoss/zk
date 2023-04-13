@@ -1,0 +1,20 @@
+<?component name="sub1" templateURI="./B96-ZK-5353-sub1.zul" ?>
+<zk>
+	<div id="p" sclass="master-detail" height="400px" width="400px" thisVM="@ref(VM)">
+		<div id="d">
+			<sub1 thisVM="@ref(VM)" VM="@load(thisVM)"/>
+		</div>
+	</div>
+	<button onClick="do1()" label="do 1"/>
+	<button onClick="do2()" label="do 2"/>
+	<zscript><![CDATA[
+       	Div og;
+		void do1(){
+		og = d;
+			d.detach();
+		}
+		void do2(){
+			og.setParent(p);
+		}
+	]]></zscript>
+</zk>
