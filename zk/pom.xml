@@ -48,8 +48,8 @@
 		</dependency>
 		<dependency>
 			<groupId>org.jruby</groupId>
-			<artifactId>jruby</artifactId>
-			<version>1.1.2</version>
+			<artifactId>jruby-core</artifactId>
+			<version>1.7.27</version>
 			<optional>true</optional>
 			<exclusions>
 				<exclusion>
