@@ -15,6 +15,7 @@ ZK 9.6.4
   ZK-4955: Combobox fires a duplicate onChange event
   ZK-2297: @ContextParam TRIGGER_EVENT not sent for global commands
   ZK-5224: hflex and vflex doesn't consider a component's margin
+  ZK-5423: select a date causes an invalid result under locale pt
 
 * Upgrade Notes
   + Upgrade JRuby dependency from 1.1.2 to 1.7.27 for some security vulnerabilities

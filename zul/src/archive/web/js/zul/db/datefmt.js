@@ -14,6 +14,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
 	function _parseTextToArray(txt, fmt) {
+		//ZK-5423
+		var literals = extractLiteral(fmt); //extract literal token from format
+		//remove literal from format and text
+		fmt = fmt.replace(/'.*?'/g, ' ');  //remove any string enclosed by single quotes
+		txt = removeLiteral(txt, literals);
 		if (fmt.indexOf('\'') > -1) //Bug ZK-1341: 'long+medium' format with single quote in zh_TW locale failed to parse AM/PM
 			fmt = fmt.replace(/'/g, '');
 		var ts = [], mindex = fmt.indexOf('MMM'), eindex = fmt.indexOf('E'),
@@ -67,6 +72,23 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 	function _parseInt(v) {
 		return parseInt(v, 10);
+	}
+	/* extracts any text enclosed by single quote from a string */
+	function extractLiteral(str) {
+		var pattern = /'(.*?)'/g,
+			matches = [],
+			match;
+		while ((match = pattern.exec(str)) !== null && match[1].length > 0) {
+			matches.push(match[1]);
+		}
+		return matches;
+	}
+	function removeLiteral(str, literals) {
+		if (literals.length === 0) {
+			return str;
+		}
+		var pattern = new RegExp(literals.join('|'), 'g');
+		return str.replace(pattern, ' ');
 	}
 	function _digitFixed(val, digits) {
 		var s = '' + val;

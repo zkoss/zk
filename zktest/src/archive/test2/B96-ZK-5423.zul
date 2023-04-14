@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-5423.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Fri Apr 14 15:52:31 CST 2023, Created by jameschu
+
+Copyright (C) 2023 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label>select any date and see the correct date, not error popup</label>
+	<separator/>
+	<datebox cols="30" format="long" onCreate="self.value = new Date()" locale="pt"/>
+</zk>
