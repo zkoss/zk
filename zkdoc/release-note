@@ -14,6 +14,7 @@ ZK 9.6.4
   ZK-4194: ZK cannot clear disconnected desktops reliably by remove-desktop requests
   ZK-4955: Combobox fires a duplicate onChange event
   ZK-2297: @ContextParam TRIGGER_EVENT not sent for global commands
+  ZK-5224: hflex and vflex doesn't consider a component's margin
 
 * Upgrade Notes
   + Upgrade JRuby dependency from 1.1.2 to 1.7.27 for some security vulnerabilities
