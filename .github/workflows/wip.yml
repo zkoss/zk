@@ -6,6 +6,8 @@ on:
     workflows: [ "Automatic Rebase Trigger" ]
     types:
       - completed
+    inputs:
+      tags: "${{  github.event.pull_request }}"
 
 jobs:
   wip:
@@ -14,3 +16,6 @@ jobs:
       - uses: zkoss/wip-action@v1
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      - run: |
+          echo "PR: ${{payload.pull_request}}"
+          echo "Tags: ${{ github.event.inputs.tags }}"
