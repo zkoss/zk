@@ -17,7 +17,9 @@
 package org.zkoss.zel;
 
 import java.beans.FeatureDescriptor;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 /**
  * @since EL 3.0
@@ -41,10 +43,9 @@ public class BeanNameELResolver extends ELResolver {
         }
 
         String beanName = (String) property;
-
-        if (beanNameResolver.isNameResolved(beanName)) {
+        if (isNameResolved(context, beanName)) { //ZK-5418, cache bean name and value (cache store in ELContext)
             try {
-                Object result = beanNameResolver.getBean((String) property);
+                Object result = getBean(context, (String) property); //ZK-5418
                 context.setPropertyResolved(base, property);
                 return result;
             } catch (Throwable t) {
@@ -86,10 +87,10 @@ public class BeanNameELResolver extends ELResolver {
                     "beanNameELResolver.beanReadOnly", beanName));
         }
 
-        if (beanNameResolver.isNameResolved(beanName) ||
+        if (isNameResolved(context, beanName) || //ZK-5418, cache bean name and value (cache store in ELContext)
                 beanNameResolver.canCreateBean(beanName)) {
             try {
-                beanNameResolver.setBeanValue(beanName, value);
+                setBeanValue(context, beanName, value); //ZK-5418
                 context.setPropertyResolved(base, property);
             } catch (Throwable t) {
                 Util.handleThrowable(t);
@@ -111,8 +112,8 @@ public class BeanNameELResolver extends ELResolver {
         String beanName = (String) property;
 
         try {
-            if (beanNameResolver.isNameResolved(beanName)) {
-                Class<?> result = beanNameResolver.getBean(beanName).getClass();
+            if (isNameResolved(context, beanName)) { //ZK-5418, cache bean name and value (cache store in ELContext)
+                Class<?> result = getBean(context, beanName).getClass();
                 context.setPropertyResolved(base, property);
                 return result;
             }
@@ -137,7 +138,7 @@ public class BeanNameELResolver extends ELResolver {
 
         String beanName = (String) property;
 
-        if (beanNameResolver.isNameResolved(beanName)) {
+        if (isNameResolved(context, beanName)) { //ZK-5418, cache bean name and value (cache store in ELContext)
             boolean result;
             try {
                 result = beanNameResolver.isReadOnly(beanName);
@@ -162,5 +163,27 @@ public class BeanNameELResolver extends ELResolver {
     
     public Class<?> getCommonPropertyType(ELContext context, Object base) {
         return String.class;
+    }
+
+    //ZK-5418, cache bean name and value (cache in ELContext)
+    private boolean isNameResolved(ELContext context, String beanName) {
+        Map<String,Object> cache = (Map<String, Object>) context.getContext(beanNameResolver.getClass());
+        return cache != null && cache.containsKey(beanName);
+    }
+
+    private Object getBean(ELContext context, String beanName) {
+        Map<String,Object> cache = (Map<String, Object>) context.getContext(beanNameResolver.getClass());
+        return cache != null ? cache.get(beanName) : null;
+    }
+
+    private void setBeanValue(ELContext context, String beanName, Object value)
+            throws PropertyNotWritableException {
+        Class key = beanNameResolver.getClass();
+        Map<String,Object> cache = (Map<String, Object>) context.getContext(key);
+        if (cache == null) {
+            cache = new HashMap<>();
+            context.putContext(key, cache);
+        }
+        cache.put(beanName, value);
     }
 }

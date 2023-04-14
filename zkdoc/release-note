@@ -13,6 +13,7 @@ ZK 9.6.4
   ZK-5399: Number of NoDOM increases unexpectedly
 
 * Upgrade Notes
+  + Upgrade JRuby dependency from 1.1.2 to 1.7.27 for some security vulnerabilities
 
    --------
 ZK 9.6.3
