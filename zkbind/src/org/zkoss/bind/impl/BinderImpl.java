@@ -435,7 +435,7 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 			} else if (event instanceof GlobalCommandEvent) {
 				final GlobalCommandEvent evt = (GlobalCommandEvent) event;
 				final Set<Property> notifys = new LinkedHashSet<Property>();
-				BinderImpl.this.doGlobalCommand(_rootComp, evt.getCommand(), evt.getArgs(), notifys);
+				BinderImpl.this.doGlobalCommand(_rootComp, evt.getCommand(), evt.getTriggerEvent(), evt.getArgs(), notifys);
 				fireNotifyChanges(notifys);
 				notifyVMsgsChanged();
 			}
@@ -1861,13 +1861,13 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 
 	}
 
-	private void doGlobalCommand(Component comp, String command, Map<String, Object> commandArgs,
+	private void doGlobalCommand(Component comp, String command, Event evt, Map<String, Object> commandArgs,
 			Set<Property> notifys) {
 		if (_log.isDebugEnabled()) {
 			_log.debug("Start doGlobalCommand comp=[{}],command=[{}]", comp, command);
 		}
 
-		BindContext ctx = BindContextUtil.newBindContext(this, null, false, command, comp, null);
+		BindContext ctx = BindContextUtil.newBindContext(this, null, false, command, comp, evt);
 		BindContextUtil.setCommandArgs(this, comp, ctx, commandArgs);
 		try {
 			doPrePhase(Phase.GLOBAL_COMMAND, ctx); //begin of Command
@@ -2621,7 +2621,7 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 						command, args, null));
 			}
 
-			getEventQueue().publish(new GlobalCommandEvent(_rootComp, command, args));
+			getEventQueue().publish(new GlobalCommandEvent(_rootComp, command, args, evt));
 		} finally {
 			if (collector != null) {
 				collector.popStack();

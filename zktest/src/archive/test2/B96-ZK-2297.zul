@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-2297.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Fri Apr 14 15:52:31 CST 2023, Created by jameschu
+
+Copyright (C) 2023 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<window border="normal" title="hello" viewModel="@id('vm') @init('org.zkoss.zktest.test2.B96_ZK_2297VM')">
+		<vlayout>
+			<label>click the following buttons, you should not see any "null" result in zk log</label>
+			<button label="Click Me To Evaluate Command binding with event in VM via context param"
+					onClick="@command('someCommand')"/>
+			<button label="Click Me To Evaluate Command binding with event in VM via binding param"
+					onClick="@command('someCommand2', event=event)"/>
+			<!-- Just for testing -->
+			<!-- <button label="Click Me To post global command" onClick="@command('postGlobalCommand')"/>-->
+			<separator bar="true"/>
+			<button label="Click Me To Evaluate Global Command binding with event in VM via context param -> null"
+					onClick="@global-command('someGlobalCommand')"/>
+			<button label="Click Me To Evaluate Global Command binding with event in VM via binding param -> fixed for ZK-1791 in 6.5.4"
+					onClick="@global-command('someGlobalCommand2', event=event)"/>
+		</vlayout>
+	</window>
+</zk>
