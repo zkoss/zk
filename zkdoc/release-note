@@ -30,13 +30,14 @@ ZK 10.0.0
   + Disable UUID recycle mechanism by default.
 
    --------
-  ZK 9.6.4
-  * Features
+ZK 9.6.4
+* Features
 
-  * Bugs
-    ZK-4194: ZK cannot clear disconnected desktops reliably by remove-desktop requests
+* Bugs
+  ZK-4194: ZK cannot clear disconnected desktops reliably by remove-desktop requests
 
-  * Upgrade Notes
+* Upgrade Notes
+  + Upgrade JRuby dependency from 1.1.2 to 1.7.27 for some security vulnerabilities
 
    --------
 ZK 9.6.3

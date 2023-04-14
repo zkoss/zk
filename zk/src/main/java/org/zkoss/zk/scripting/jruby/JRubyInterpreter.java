@@ -63,7 +63,7 @@ public class JRubyInterpreter extends GenericInterpreter {
 	}
 
 	protected void set(String name, Object value) {
-		_runtime.getGlobalVariables().define(GlobalVariable.variableName(name), new Variable(value));
+		_runtime.getGlobalVariables().define(GlobalVariable.variableName(name), new Variable(value), org.jruby.internal.runtime.GlobalVariable.Scope.GLOBAL);
 	}
 
 	protected void unset(String name) {
