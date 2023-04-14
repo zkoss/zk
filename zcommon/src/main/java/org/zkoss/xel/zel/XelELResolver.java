@@ -194,7 +194,7 @@ public class XelELResolver extends ELResolver {
 	 */
 	public static class StandardBeanNameResolver extends BeanNameResolver {
 		public boolean isNameResolved(String beanName) {
-			//ZK-5418, doesn't cache bean name and value
+			//ZK-5418, doesn't cache bean name and value here (it's static)
 			return false;
 		}
 
