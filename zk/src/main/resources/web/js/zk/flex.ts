@@ -589,9 +589,12 @@ export namespace flex_global {
 					jqFcc.addClass(flexItemClass);
 					if (flex != 1 || fcc.style.flexGrow)
 						fcc.style.flexGrow = flex as unknown as string; //update flex
-					if (fcc != c && !c.style[dim])
-						c.style[dim] = '100%';
-					else
+					if (fcc != c && !c.style[dim]) {
+						let cMarginSize = isRow ? zk(c).marginHeight() : zk(c).marginWidth(),
+							cDimValue = cMarginSize > 0 ? 'calc(100% - ' + jq.px0(cMarginSize) + ')' : '100%'; //handle margin issue
+						c.style[dim] = cDimValue;
+					} else
+
 						sz[dim] = 'auto';
 				} else if (flex && flex < 0) {//min
 					const orient = dim.substring(0, 1) as FlexOrient;
@@ -605,9 +608,11 @@ export namespace flex_global {
 				if (flex && flex > 0) {
 					const marginSize = isRow ? zk(jqFcc).marginHeight() : zk(jqFcc).marginWidth(); //handle margin issue
 					fcc.style[dim] = marginSize > 0 ? 'calc(100% - ' + jq.px0(marginSize) + ')' : '100%';
-					if (fcc != c)
-						c.style[dim] = '100%';
-					else
+					if (fcc != c) {
+						let cMarginSize = isRow ? zk(c).marginHeight() : zk(c).marginWidth(),
+							cDimValue = cMarginSize > 0 ? 'calc(100% - ' + jq.px0(cMarginSize) + ')' : '100%'; //handle margin issue
+						c.style[dim] = cDimValue;
+					} else
 						sz[dim] = 'auto';
 				} else if (flex && flex < 0) {//min
 					const orient = dim.substring(0, 1) as FlexOrient;
