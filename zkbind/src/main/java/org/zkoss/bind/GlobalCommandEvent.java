@@ -25,11 +25,17 @@ public class GlobalCommandEvent extends Event {
 	private static final long serialVersionUID = 201109091736L;
 	String _command;
 	Map<String, Object> _args;
+	Event _evt;
 
 	public GlobalCommandEvent(Component comp, String command, Map<String, Object> args) {
+		this(comp, command, args, null);
+	}
+
+	public GlobalCommandEvent(Component comp, String command, Map<String, Object> args, Event evt) {
 		super("onGlobalCommand", comp);
 		this._command = command;
 		this._args = args;
+		this._evt = evt;
 	}
 
 	/**
@@ -46,4 +52,11 @@ public class GlobalCommandEvent extends Event {
 		return _args;
 	}
 
+	/**
+	 * Gets the trigger event.
+	 * @since 9.6.4
+	 */
+	public Event getTriggerEvent() {
+		return _evt;
+	}
 }
