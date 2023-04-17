@@ -2,10 +2,8 @@ name: WIP
 on:
   pull_request_target:
     types: [opened, synchronize, reopened, edited]
-  workflow_run:
-    workflows: [ "Automatic Rebase Command" ]
-    types:
-      - completed
+  repository_dispatch:
+    types: [rebase-command]
 
 jobs:
   wip:
