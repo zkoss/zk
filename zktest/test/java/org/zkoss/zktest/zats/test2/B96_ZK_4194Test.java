@@ -34,6 +34,10 @@ public class B96_ZK_4194Test extends WebDriverTestCase {
 	@ClassRule
 	public static final ExternalZkXml CONFIG = new ExternalZkXml(B96_ZK_4194Test.class);
 
+	protected boolean isUsingRemoteWebDriver(ChromeOptions driverOptions) {
+		return false;
+	}
+
 	protected ChromeOptions getWebDriverOptions() {
 		ChromeOptions webDriverOptions = super.getWebDriverOptions();
 		webDriverOptions.setExperimentalOption("mobileEmulation", Collections

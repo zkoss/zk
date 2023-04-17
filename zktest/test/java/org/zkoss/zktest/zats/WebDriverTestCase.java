@@ -118,7 +118,7 @@ public abstract class WebDriverTestCase {
 	}
 
 	@SuppressWarnings("unchecked")
-	private boolean isUsingRemoteWebDriver(ChromeOptions driverOptions) {
+	protected boolean isUsingRemoteWebDriver(ChromeOptions driverOptions) {
 		// There are 2 situations needed to be run on remote
 		// 1. lang
 		// 2. mobileEmulation (TouchActions)
