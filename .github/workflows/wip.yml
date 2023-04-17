@@ -4,6 +4,8 @@ on:
     types: [opened, synchronize, reopened, edited]
   repository_dispatch:
     types: [rebase-command]
+    inputs:
+      pull_request: ${{ github.event.client_payload.pull_request }}
 
 jobs:
   wip:
