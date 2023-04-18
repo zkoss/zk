@@ -57,7 +57,7 @@ dependencies {
 	implementation "org.zkoss.theme:sapphire:${version}"
 	implementation "org.zkoss.theme:atlantic:${version}"
 	implementation 'commons-logging:commons-logging:1.1.1'
-	implementation 'commons-fileupload:commons-fileupload:1.4'
+	implementation 'commons-fileupload:commons-fileupload:1.5'
 	implementation 'commons-io:commons-io:2.8.0'
 	implementation "org.zkoss.zk:zk:${version}"
 	implementation "org.zkoss.zk:zkplus:${version}"

@@ -22,7 +22,7 @@ java {
 dependencies {
 	api project(':zweb')
 	api project(':zkwebfragment')
-	api 'commons-fileupload:commons-fileupload:1.4'
+	api 'commons-fileupload:commons-fileupload:1.5'
 	api 'commons-io:commons-io:2.8.0'
 	compileOnly "javax.servlet:servlet-api:${servletVersion}"
 	compileOnly "javax.portlet:portlet-api:${portletVersion}"
