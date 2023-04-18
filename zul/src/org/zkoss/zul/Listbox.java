@@ -3725,14 +3725,17 @@ public class Listbox extends MeshElement {
 								smodel.addToSelection(ele);
 						}
 					}
+					final int firstItemIndex = (int) data.get("firstItemIndex"); // Convert a non-null `Integer` to `int`
+					final int lastItemIndex = (int) data.get("lastItemIndex"); // Same as above
 					for (final Listitem item : prevSeldItems) {
-						if (!curSeldItems.contains(item)) {
-							final int index = item.getIndex();
-							if (!paging || (index >= from && index < to)) {
-								removeItemFromSelection(item);
-								if (smodel != null)
-									smodel.removeFromSelection(_model.getElementAt(index));
-							}
+						final int index = item.getIndex();
+						if (firstItemIndex <= index && index <= lastItemIndex // ZK-2658
+								&& !curSeldItems.contains(item)
+								&& (!paging || (from <= index && index < to))
+						) {
+							removeItemFromSelection(item);
+							if (smodel != null)
+								smodel.removeFromSelection(_model.getElementAt(index));
 						}
 					}
 				}
