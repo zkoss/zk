@@ -6,10 +6,14 @@ on:
     types: [rebase-command]
   pull_request_review:
     types: [ submitted ]
-permissions: write-all
 jobs:
   wip:
     runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+      statuses: write
     steps:
       - uses: zkoss/wip-action@v1
         env:
