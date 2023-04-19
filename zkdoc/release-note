@@ -17,6 +17,7 @@ ZK 9.6.4
   ZK-5224: hflex and vflex doesn't consider a component's margin
   ZK-5423: select a date causes an invalid result under locale pt
   ZK-2658: Listbox: multiple="true" checkmark="true" issue
+  ZK-5133: Radio onPageAttached condition causes onPageAttach to not fix index on parent radiogroup
 
 * Upgrade Notes
   + Upgrade JRuby dependency from 1.1.2 to 1.7.27 for some security vulnerabilities
