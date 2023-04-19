@@ -6,11 +6,7 @@ on:
     types: [rebase-command]
   pull_request_review:
     types: [ submitted ]
-permissions:
-  actions: read
-  contents: read
-  security-events: write
-  statuses: write
+permissions: write-all
 jobs:
   wip:
     runs-on: ubuntu-latest
