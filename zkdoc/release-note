@@ -19,6 +19,7 @@ ZK 9.6.4
   ZK-2658: Listbox: multiple="true" checkmark="true" issue
   ZK-5133: Radio onPageAttached condition causes onPageAttach to not fix index on parent radiogroup
   ZK-5419: Security upgrade commons fileupload
+  ZK-5378: Add safety check to DesktopEventQueue$QueueListener#onEvent
 
 * Upgrade Notes
   + Upgrade JRuby dependency from 1.1.2 to 1.7.27 for some security vulnerabilities

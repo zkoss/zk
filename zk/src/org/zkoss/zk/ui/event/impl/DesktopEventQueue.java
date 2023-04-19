@@ -14,6 +14,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.event.impl;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -22,7 +23,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.zkoss.lang.Threads;
-import org.zkoss.util.CollectionsX;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
@@ -160,7 +160,7 @@ public class DesktopEventQueue<T extends Event> implements EventQueue<T>, java.i
 		public void onEvent(Event event) throws Exception {
 			@SuppressWarnings("unchecked")
 			T evt = (T) event.getData();
-			for (Iterator<ListenerInfo<T>> it = CollectionsX.comodifiableIterator(_listenerInfos); it.hasNext();) {
+			for (Iterator<ListenerInfo<T>> it = new ArrayList<>(_listenerInfos).iterator(); it.hasNext();) {
 				final ListenerInfo<T> inf = it.next();
 				if (inf.async)
 					new AsyncListenerThread<T>(DesktopEventQueue.this, inf, evt).start();
