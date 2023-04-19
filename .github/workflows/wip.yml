@@ -4,6 +4,8 @@ on:
     types: [opened, synchronize, reopened, edited]
   repository_dispatch:
     types: [rebase-command]
+  pull_request_review:
+    types: [ submitted ]
 
 jobs:
   wip:
