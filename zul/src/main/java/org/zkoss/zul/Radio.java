@@ -17,7 +17,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.CheckEvent;
@@ -297,8 +296,7 @@ public class Radio extends Checkbox {
 		if (!_explictGroup) {
 			_group = this.getRadiogroup();
 		}
-		if (rg != null && rootParent instanceof ComponentCtrl
-				&& (!Components.isAncestor(rootParent, rg) || rootParent == rg)) {
+		if (rg != null && rootParent instanceof ComponentCtrl) {
 			((ComponentCtrl) rootParent).addCallback(AFTER_CHILD_ADDED, new Callback<Component>() {
 				public void call(Component rootParent) {
 					rg.fixOnAdd(Radio.this, false);
