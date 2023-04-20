@@ -13,7 +13,7 @@ jobs:
       - name: test
         run: |
           echo "$RUNNER_TEMP"
-          cd "/home/runner/work/_temp/"
+          cd "/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/"
           ls  -d */
           cd $(ls -d */|head -n 1)
           git status
