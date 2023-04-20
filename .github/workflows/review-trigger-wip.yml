@@ -11,10 +11,7 @@ jobs:
       - name: get the one latest&last sha # get the last commit sha in pull_Requst
         run: |
           URL=${{ github.event.issue.pull_request.url }}/commits
-          echo "PRSHA=$(curl -u "weide:${{ secrets.GITHUB_TOKEN }}" -s $URL | jq -r '.[] | .sha' | xargs | awk -F " " '{print $NF}')" >> $GITHUB_ENV
-      - name: echo PRSHA # check the lastest SHA
-        run: |
-          echo "${{ env.PRSHA }}"
+          echo "${{ github.event.pull_request.head.sha }}"
       - name: create the status # create the status on the lastest commit sha from pull request
         run: |
           curl -L \
@@ -22,5 +19,5 @@ jobs:
             -H "Accept: application/vnd.github+json" \
             -H "Authorization:  ${{ github.event.repository.owner.login }} ${{ secrets.GITHUB_TOKEN }}"\
             -H "X-GitHub-Api-Version: 2022-11-28" \
-            https://api.github.com/repos/${{ github.repository }}/statuses/${{ env.PRSHA }} \
+            https://api.github.com/repos/${{ github.repository }}/statuses/${{ github.event.pull_request.head.sha }} \
             -d '{"state":"success","target_url":"https://github.com/wip/action","description":"ready for review","context":"WIP (action)"}'
