@@ -17,7 +17,7 @@ jobs:
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
-          git config core.fileMode false
+          git config --add --global core.filemode false
           git commit --amend --no-edit
           git push --force-with-lease
       - name: Add reaction
