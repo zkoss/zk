@@ -15,4 +15,3 @@ jobs:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
         with:
           pull_request_sha: ${{ github.event.client_payload.pull_request.head.sha }}
-          token: ${{ secrets.GITHUB_TOKEN }}
