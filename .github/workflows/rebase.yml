@@ -18,8 +18,9 @@ jobs:
           git config user.name github-actions
           git config user.email github-actions@github.com
           git config --add --global core.filemode false
-          git commit --amend --no-edit
-          git push --force-with-lease
+          cat .git/config
+#          git commit --amend --no-edit
+#          git push --force-with-lease
       - name: Add reaction
         if: steps.rebase.outputs.rebased-count == 1
         uses: peter-evans/create-or-update-comment@v1
