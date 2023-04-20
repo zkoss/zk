@@ -11,7 +11,7 @@ jobs:
       - name: get the one latest&last sha # get the last commit sha in pull_Requst
         run: |
           URL=${{ github.event.issue.pull_request.url }}/commits
-          echo "PRSHA::$(curl -u "weide:${{ secrets.GITHUB_TOKEN }}" -s $URL | jq -r '.[] | .sha' | xargs | awk -F " " '{print $NF}')" >> $GITHUB_ENV
+          echo "PRSHA=$(curl -u "weide:${{ secrets.GITHUB_TOKEN }}" -s $URL | jq -r '.[] | .sha' | xargs | awk -F " " '{print $NF}')" >> $GITHUB_ENV
       - name: echo PRSHA # check the lastest SHA
         run: |
           echo "${{ env.PRSHA }}"
