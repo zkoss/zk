@@ -9,7 +9,6 @@ on:
 jobs:
   wip:
     runs-on: ubuntu-latest
-    permissions: write-all
     steps:
       - uses: zkoss/wip-action@v1
         env:
