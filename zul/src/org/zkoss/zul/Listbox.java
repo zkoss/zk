@@ -3725,8 +3725,20 @@ public class Listbox extends MeshElement {
 								smodel.addToSelection(ele);
 						}
 					}
-					final int firstItemIndex = (int) data.get("firstItemIndex"); // Convert a non-null `Integer` to `int`
-					final int lastItemIndex = (int) data.get("lastItemIndex"); // Same as above
+
+					int firstItemIndex = _items.get(0).getIndex();
+					int lastItemIndex = _items.get(_items.size() - 1).getIndex();
+					final Map<String, Object> rodItemIndexRange = cast((Map) data.get("rodItemIndexRange"));
+					if (rodItemIndexRange != null) {
+						final Integer clientFirstItemIndex = (Integer) rodItemIndexRange.get("start");
+						if (clientFirstItemIndex != null) {
+							firstItemIndex = clientFirstItemIndex;
+						}
+						final Integer clientLastItemIndex = (Integer) rodItemIndexRange.get("end");
+						if (clientLastItemIndex != null) {
+							lastItemIndex = clientLastItemIndex;
+						}
+					}
 					for (final Listitem item : prevSeldItems) {
 						final int index = item.getIndex();
 						if (firstItemIndex <= index && index <= lastItemIndex // ZK-2658
