@@ -23,6 +23,7 @@ ZK 9.6.4
   ZK-5430: Camera uses incorrect aspect ratio during snapshot if canvas has height / width
   ZK-3246: File download doesn't work with Chrome in iOS
    
+test
 * Upgrade Notes
   + Upgrade JRuby dependency from 1.1.2 to 1.7.27 for some security vulnerabilities
 
