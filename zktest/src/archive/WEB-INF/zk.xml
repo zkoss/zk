@@ -503,6 +503,12 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	</library-property>
 	-->
 
+	<!-- ZK-5061 -->
+<!--	<library-property>-->
+<!--		<name>org.zkoss.zk.embedded.css</name>-->
+<!--		<value>true</value>-->
+<!--	</library-property>-->
+
 	<!-- Configure the client where to display the progress box.
 		The progress box is a message box used to indicate the AU requests
 		have being processed by the server.
