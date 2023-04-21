@@ -1029,8 +1029,8 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		this.fire('onSelect',
 			zk.copy({
 				items: data,
-				firstItemIndex: this.firstItem._index, // ZK-2658
-				lastItemIndex: this.lastItem._index, // ZK-2658
+				// The shape of `rodItemIndexRange` is the same as `range` in listbox-rod#fireOnSelectByRange
+				rodItemIndexRange: { start: this.firstItem?._index, end: this.lastItem?._index }, // ZK-2658
 				reference: ref,
 				clearFirst: !keep,
 				selectAll: checkSelectAll,
