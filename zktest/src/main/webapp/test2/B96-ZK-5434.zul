@@ -1,0 +1,89 @@
+<?page title="Timezone test"?>
+<zk xmlns:w="client">
+	<zscript><![CDATA[
+		public class ViewModel {
+			private java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z");
+			private java.util.Date date = new java.util.Date();
+			private java.util.GregorianCalendar cal = new java.util.GregorianCalendar();
+			
+			public java.util.Date getDate() {
+				return date;
+			}
+			public String getFormatedDate() {
+				return sdf.format(date);
+			}
+			public String getLocale() {
+				return Locale.getDefault().toString();
+			}
+			public String getTimezone() {
+				return TimeZone.getDefault().toString();
+			}
+			public int getDstOffset() {
+				return cal.get(java.util.Calendar.DST_OFFSET);
+			}
+			public int getTimezoneOffset() {
+				return cal.get(java.util.Calendar.ZONE_OFFSET);
+			}
+			
+		}
+	]]></zscript>
+<label multiline="true">
+	* java 1.8 144, GMT-5
+	* java 1.8 362, GMT-6
+</label>
+	<grid viewModel="@id('vm') @init('ViewModel')" sizedByContent="true">
+		<columns>
+			<column hflex="false"/>
+			<column hflex="1"/>
+		</columns>
+		<rows>
+			<row>
+				<label value="Java System Date" hflex="false"/>
+				<label value="${vm.date}" hflex="1"/>
+			</row>
+			<row>
+				<label value="Java Formated Date" hflex="false"/>
+				<label value="${vm.formatedDate}" hflex="1"/>
+			</row>
+			<row>
+				<label value="Locale" hflex="false"/>
+				<label value="${vm.locale}" hflex="1"/>
+			</row>
+			<row>
+				<label value="Timezone" hflex="false"/>
+				<textbox value="${vm.timezone}" hflex="1" multiline="true" rows="3"/>
+			</row>
+			<row>
+				<label value="DST Offset" hflex="false"/>
+				<label value="${vm.dstOffset}" hflex="1"/>
+			</row>
+			<row>
+				<label value="Timezone Offset" hflex="false"/>
+				<label value="${vm.timezoneOffset}" hflex="1"/>
+			</row>
+			<row>
+				<label value="ZK datebox" hflex="false"/>
+				<datebox value="${vm.date}" format="yyyy-MM-dd HH:mm:ss" hflex="1" />
+			</row>
+		</rows>
+	</grid>
+	<script><![CDATA[
+function getOffset(area){
+	return zk.mm().tz(area).utcOffset()/60;
+}
+	]]></script>
+	offset in moment.js
+	see https://gist.github.com/diogocapela/12c6617fc87607d11fd62d2a4f42b02a
+	<hlayout>
+		<label value="America/Mexico_City"/> <label w:onAfterSize="this.setValue(getOffset(this.previousSibling.getValue()))"/>
+	</hlayout>
+	<hlayout>
+		<label value="Mexico/BajaNorte"/> <label w:onAfterSize="this.setValue(getOffset(this.previousSibling.getValue()))"/>
+	</hlayout>
+	<hlayout>
+		<label value="Mexico/BajaSur"/> <label w:onAfterSize="this.setValue(getOffset(this.previousSibling.getValue()))"/>
+	</hlayout>
+	<hlayout>
+		<label value="Mexico/General"/> <label w:onAfterSize="this.setValue(getOffset(this.previousSibling.getValue()))"/>
+	</hlayout>
+</zk>

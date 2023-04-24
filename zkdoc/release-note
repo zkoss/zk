@@ -43,6 +43,7 @@ ZK 9.6.4
   ZK-5426: pdfviewer cannot display some texts
   ZK-5252: a modal window doesn't focus on its first focusable child
   ZK-5258: setFocus() doesn't work on a textbox in a modal window
+  ZK-5434: Datebox show different time when running with -Duser.timezone="America/Mexico_City"
 
 * Upgrade Notes
   + Upgrade JRuby dependency from 1.1.2 to 1.7.27 for some security vulnerabilities
