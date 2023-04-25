@@ -16,10 +16,20 @@ public class B96_ZK_5434Test extends WebDriverTestCase {
 		waitResponse();
 
 		final String tzIdentifier = "America/Mexico_City";
-		final float momentjsUtcOffsetInHours = Float.parseFloat(getEval("getOffset('" + tzIdentifier + "')"));
 		final int javaUtcOffsetInSeconds = OffsetDateTime.now(ZoneId.of(tzIdentifier)).getOffset().getTotalSeconds();
+		System.out.println("javaUtcOffsetInSeconds:");
+		System.out.println(javaUtcOffsetInSeconds);
+		assertEquals(-6 * 3600, javaUtcOffsetInSeconds); // The UTC offset should be -6 as of Apr 24, 2023.
+
+		final String offsetString = getEval("getOffset('" + tzIdentifier + "')");
+		System.out.println("offsetString:");
+		System.out.println(offsetString);
+		assertEquals("-6", offsetString);
+
+		final float momentjsUtcOffsetInHours = Float.parseFloat(offsetString);
+		System.out.println("momentjsUtcOffsetInHours:");
+		System.out.println(momentjsUtcOffsetInHours);
 		// Don't use `assertEquals` to compare floating-point numbers.
 		assertTrue(javaUtcOffsetInSeconds == momentjsUtcOffsetInHours * 3600);
-		assertEquals(javaUtcOffsetInSeconds, -6 * 3600); // The UTC offset should be -6 as of Apr 24, 2023.
 	}
 }
