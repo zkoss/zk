@@ -27,6 +27,7 @@ ZK 9.6.4
   ZK-5445: avoid reflected cross site scripting (XSS) attacks
   ZK-5429: tabbox scroll unsynced when resizing with toolbar
   ZK-5433: tabbox doesn't scroll the selected tab into the current view when shrinking its width
+  ZK-5432: aria-activedescendant is generated at wrong place
 
 * Upgrade Notes
   + Upgrade JRuby dependency from 1.1.2 to 1.7.27 for some security vulnerabilities
