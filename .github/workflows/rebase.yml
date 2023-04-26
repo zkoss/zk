@@ -18,3 +18,12 @@ jobs:
           repository: ${{ github.event.client_payload.github.payload.repository.full_name }}
           comment-id: ${{ github.event.client_payload.github.payload.comment.id }}
           reaction-type: hooray
+      - name: Update a space to PR title to trigger WIP action
+        run: |
+          timeout 5s curl -L \
+             -X PATCH \
+             -H "Accept: application/vnd.github+json" \
+             -H "Authorization: token ${{ secrets.ZKADMIN_TOKEN }}"\
+             -H "X-GitHub-Api-Version: 2022-11-28" \
+             https://api.github.com/repos/${{ github.event.repository.owner.login }}/${{ github.event.repository.name }}/pulls/${{ github.event.client_payload.pull_request.number }} \
+             -d '{"title": "${{ github.event.client_payload.pull_request.title }} "}'
