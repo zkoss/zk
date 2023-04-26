@@ -41,6 +41,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.zkoss.html.HTMLs;
 import org.zkoss.io.Files;
 import org.zkoss.io.WriterOutputStream;
 import org.zkoss.lang.Exceptions;
@@ -674,13 +675,13 @@ public class ClassWebResource {
 					//Don't sendError. Reason: 1) IE waits and no onerror fired
 					//2) better to debug (user will tell us what went wrong)
 					// B65-ZK-1897 Sanitizing pi to prevent possible cross-site scripting vulnerability
-					data = ("(window.zk&&zk.error?zk.error:alert)('" + XMLs.encodeText(pi) + " not found');")
+					data = ("(window.zk&&zk.error?zk.error:alert)('" + HTMLs.encodeJavaScript(XMLs.encodeText(pi)) + " not found');")
 							.getBytes("UTF-8");
 					//FUTURE: zweb shall not depend on zk
 				} else {
 					if (Servlets.isIncluded(request))
 						log.error("Resource not found: " + Encodes.encodeURI(pi));
-					response.sendError(HttpServletResponse.SC_NOT_FOUND, XMLs.escapeXML(pi));
+					response.sendError(HttpServletResponse.SC_NOT_FOUND, HTMLs.encodeJavaScript(XMLs.escapeXML(pi)));
 					return;
 				}
 			} else {
