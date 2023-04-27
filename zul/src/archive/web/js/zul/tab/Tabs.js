@@ -40,7 +40,10 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 	},
 	onSize: function () {
 		this._fixWidth(true); //ZK-2810: set height to tabbox when onSize (maybe setHeight or setWidth)
-
+		// ZK-5429, ZK-5433: reset the cache when onSize
+		var tabs = this.$n();
+		this._tabsScrollLeft = tabs.scrollLeft;
+		this._tabsScrollTop = tabs.scrollTop;
 		// Bug Z35-tabbox-004.zul, we need to check again.
 		this._scrollcheck('init');
 	},
