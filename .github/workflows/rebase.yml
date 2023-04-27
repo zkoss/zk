@@ -20,7 +20,7 @@ jobs:
           reaction-type: hooray
       - name: Update a space to PR title to trigger WIP action
         run: |
-          timeout 5s curl -L \
+          timeout 8s curl -L \
              -X PATCH \
              -H "Accept: application/vnd.github+json" \
              -H "Authorization: token ${{ secrets.ZKADMIN_TOKEN }}"\
