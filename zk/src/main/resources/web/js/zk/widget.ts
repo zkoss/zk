@@ -3761,13 +3761,30 @@ new zul.wnd.Window({
 	}
 
 	/**
-	 * Forces the delaied rerendering children or itself to do now.
+	 * Forces the delayed rerendering children or itself to do now.
 	 * @param skipper - used if {@link rerender} is called with a non-null skipper.
 	 * @since 7.0.2
 	 * @internal
 	 */
 	rerenderNow_(skipper?: Skipper): void { // for Bug ZK-2281 and others life cycle issues when the dom of children of itself is undefined.
 		_rerenderNow(this, skipper);
+	}
+
+	/**
+	 * Recursively bind ancestors that are currently unbound (i.e., `desktop` is falsy). Used by ROD.
+	 * Introduced by ZK-5368.
+	 * @param desktop - the desktop the DOM element belongs to.
+	 * If not specified, ZK will decide it automatically.
+	 * @param skipper - used if {@link rerender} is called with a non-null skipper.
+	 * @since 9.6.4
+	 */
+	bindMissingAncestors(desktop?: Desktop, skipper?: Skipper): this {
+		const { parent } = this;
+		if (parent && !parent.desktop) {
+			// `skipper` for this widget and its descendents shouldn't affect that of ancestors.
+			parent.bind(desktop, skipper, true).bindMissingAncestors(desktop);
+		}
+		return this;
 	}
 
 	/**
@@ -3782,19 +3799,20 @@ new zul.wnd.Window({
 	 *
 	 * @see {@link bind_}
 	 * @see {@link unbind}
-	 * @param dt - the desktop the DOM element belongs to.
+	 * @param desktop - the desktop the DOM element belongs to.
 	 * If not specified, ZK will decide it automatically.
 	 * @param skipper - used if {@link rerender} is called with a non-null skipper.
+	 * @param bindSelfOnly - set to true if one doesn't want to recursively bind descendents.
 	 */
-	bind(desktop?: Desktop, skipper?: Skipper): this {
+	bind(desktop?: Desktop, skipper?: Skipper, bindSelfOnly?: boolean): this {
 		this._binding = true;
 
 		_rerenderDone(this, skipper); //cancel pending async rerender
-		if (this.z_rod)
+		if (this.z_rod && !bindSelfOnly)
 			this.get$Class<typeof Widget>()._bindrod(this);
 		else {
 			var after: CallableFunction[] = [], fn: CallableFunction | undefined;
-			this.bind_(desktop, skipper, after);
+			this.bind_(desktop, skipper, after, bindSelfOnly);
 			while (fn = after.shift())
 				fn();
 		}
@@ -3814,8 +3832,6 @@ new zul.wnd.Window({
 	 *
 	 * @see {@link unbind_}
 	 * @see {@link bind}
-	 * @param dt - the desktop the DOM element belongs to.
-	 * If not specified, ZK will decide it automatically.
 	 * @param skipper - used if {@link rerender} is called with a non-null skipper.
 	 * @param keepRod - used if the ROD flag needs to be kept.
 	 */
@@ -3848,7 +3864,7 @@ new zul.wnd.Window({
 	 *
 	 * @see {@link bind}
 	 * @see {@link unbind_}
-	 * @param dt - the desktop the DOM element belongs to.
+	 * @param desktop - the desktop the DOM element belongs to.
 	 * If not specified, ZK will decide it automatically.
 	 * @param skipper - used if {@link rerender} is called with a non-null skipper.
 	 * @param after - an array of function ({@link Function}) that will be invoked after {@link bind_} has been called. For example,
@@ -3862,9 +3878,10 @@ new zul.wnd.Window({
 	 *   });
 	 * }
 	 * ```
+	 * @param bindSelfOnly - set to true if one doesn't want to recursively bind descendents.
 	 * @internal
 	 */
-	bind_(desktop?: Desktop, skipper?: Skipper, after?: CallableFunction[]): void {
+	bind_(desktop?: Desktop, skipper?: Skipper, after?: CallableFunction[], bindSelfOnly?: boolean): void {
 		this.get$Class<typeof Widget>()._bind0(this);
 
 		this.desktop = desktop ?? (desktop = zk.Desktop.$(this.parent));
@@ -3878,7 +3895,8 @@ new zul.wnd.Window({
 		if (this._nvflex || this._nhflex)
 			_listenFlex(this);
 
-		this.bindChildren_(desktop, skipper, after);
+		if (!bindSelfOnly)
+			this.bindChildren_(desktop, skipper, after);
 		var self = this;
 		if (this.isListen('onBind')) {
 			zk.afterMount(function () {
