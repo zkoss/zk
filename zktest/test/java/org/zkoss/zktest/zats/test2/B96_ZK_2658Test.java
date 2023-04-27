@@ -23,7 +23,7 @@ public class B96_ZK_2658Test extends WebDriverTestCase {
 		final JQuery listitems = jq("@listitem");
 		lastListitem = listitems.last();
 		top3Listitems = StreamSupport.stream(listitems.spliterator(), false)
-				.limit(3).collect(Collectors.toUnmodifiableList());
+				.limit(3).collect(Collectors.toList());
 	}
 
 	@Test
