@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-5432.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Mon Apr 24 14:23:11 CST 2023, Created by jameschu
+
+Copyright (C) 2023 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<zscript><![CDATA[
+List Items = new ArrayList();
+for (int i = 0; i < 5; i++) {
+    Items.add("data "+i);
+}
+ListModelList model = new ListModelList(Items);
+model.addToSelection(model.get(0));
+	]]></zscript>
+	<label>
+		0. Test with za11y module.
+		1. select one item
+		2. scan with axe tools
+		3. should not see error "ARIA attribute is not allowed: aria-activedescendant="...""
+	</label>
+	<listbox model="${model}">
+		<listhead>
+			<listheader label="listbox header"/>
+		</listhead>
+		<template name="model">
+			<listitem label="${each}"/>
+		</template>
+	</listbox>
+</zk>
