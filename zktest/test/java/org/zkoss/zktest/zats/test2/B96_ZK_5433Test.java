@@ -14,7 +14,7 @@ public class B96_ZK_5433Test extends WebDriverTestCase {
 		connect();
 		waitResponse();
 		driver.manage().window().setSize(new Dimension(820, 1080));
-		waitResponse();
+		waitResponse(true);
 		JQuery tab15 = jq("@tab").eq(14);
 		//in view
 		System.out.println("tab15 offsetLeft: " + tab15.toElement().get("offsetLeft"));
