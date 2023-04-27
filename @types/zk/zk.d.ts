@@ -171,10 +171,11 @@ declare namespace zk {
         appendChild(child: Widget, ignoreDom?: boolean): boolean;
         beforeParentChanged_(newparent: Widget): void;
         beforeSendAU_(wgt: Widget, evt: Event): void;
-        bind_(dt?: Desktop| null, skipper?: Skipper | null, after?: (() => void)[]): void;
-        bind(dt?: Desktop| null, skipper?: Skipper | null): void;
+        bind_(dt?: Desktop| null, skipper?: Skipper | null, after?: (() => void)[], bindSelfOnly?: boolean): void;
+        bind(dt?: Desktop| null, skipper?: Skipper | null, bindSelfOnly?: boolean): this;
         bindChildren_(dt?: Desktop| null, skipper?: Skipper| null, after?: (() => void)[]): void;
         bindDoubleTap_(): void;
+        bindMissingAncestors(desktop?: zk.Desktop | null, skipper?: zk.Skipper | null): this;
         bindSwipe_(): void;
         bindTapHold_(): void;
         canActivate(opts?: {checkOnly?: boolean}): boolean;
@@ -327,7 +328,7 @@ declare namespace zk {
         show(): Widget;
         smartUpdate(name: string, value: any, timeout?: number): Widget;
         unbind_(skipper?: Skipper | null, after?: (() => void)[], keepRod?: boolean): void;
-        unbind(skipper?: Skipper | null, keepRod?: boolean): Widget;
+        unbind(skipper?: Skipper | null, keepRod?: boolean): this;
         unbindChildren_(skipper?: Skipper, after?: (() => void)[], keepRod?: boolean): void;
         unbindDoubleTap_(): void;
         unbindSwipe_(): void;

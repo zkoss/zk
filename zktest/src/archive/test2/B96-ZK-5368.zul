@@ -1,0 +1,28 @@
+<zk>
+	<div height="600px" width="600px" viewModel="@id('vm') @init('org.zkoss.zktest.test2.B96_ZK_5368VM')">
+		<button label="toggle" onClick="@command('toggle')"/>
+		<button label="refresh" onClick="@command('refresh')"/>
+		<button label="remove" onClick="@command('remove')"/>
+		<checkbox checked="@load(vm.show)"/>
+		<if test="@load(vm.show)">
+			<tree model="@load(vm.treeModel)" renderdefer="100" hflex="1" id="tree" height="500px"
+			      onCreate='Events.echoEvent(new Event("onFoo", self));'
+			      onFoo="@command('refresh')">
+				<custom-attributes  org.zkoss.zul.tree.maxRodPageSize="5"/>
+				<treecols>
+					<treecol width="85%"/>
+					<treecol width="15%"/>
+				</treecols>
+				<template name="model">
+					<treeitem open="true" onClick="@command('update',target=each)">
+						<treerow>
+							<treecell>
+								<label value="@load(each)"/>
+							</treecell>
+						</treerow>
+					</treeitem>
+				</template>
+			</tree>
+		</if>
+	</div>
+</zk>
