@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B96-ZK-5445.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		2023/4/26, Created by jumperchen
+
+Copyright (C) 2023 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:h="native">
+	<label multiline="true">
+		# produce the malicious link
+		1. payload: dzkmy'-alert(1)-'y3u52/2f397812/global/bootstrap/js/bootstrap.js
+		2. the resulting link of ~./myfile.js is
+		http://localhost:8080/zk9support/zkau/web/7ecf21e3/myfile.js
+		3. append the payload after "web" to produce the final URL: http://localhost:8080/zk9support/zkau/webdzkmy'-alert(1)-'y3u52//7ecf21e3/myfile.js
+	</label>
+	<!--    <script src="~./myfile.js"/>-->
+	<h:script src="/zktest/zkau/webdzkmy'-alert(1)-'y3u52/2f397812/global/bootstrap/js/bootstrap.js"></h:script>
+</zk>
