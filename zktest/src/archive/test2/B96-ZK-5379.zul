@@ -1,0 +1,109 @@
+<zk>
+	<window border="normal" title="hello" apply="org.zkoss.zktest.test2.B96_ZK_5379Composer" height="400px" width="600px" xmlns:ca="client/attribute">
+		<style>
+			.z-anchornav-link-active {
+				background-color: yellow;
+			}
+			.padding{
+				padding: 20px;
+			}
+			.title{
+				font-size: 1.5em;
+				font-weight: bold;
+			}
+		</style>
+		<hlayout vflex="1" hflex="1">
+			<div class="padding">
+				<anchornav id="anchornav" name="anchor1">
+					<vlayout>
+						<a id="anch1Scroll" ca:data-anchornav-target="$anch1" class="z-anchornav-link-active">Anchor Title 1</a>
+						<a id="anch2Scroll" ca:data-anchornav-target="$anch2">Anchor Title 2</a>
+						<a id="anch3Scroll" ca:data-anchornav-target="$anch3">Anchor Title 3</a>
+					</vlayout>
+				</anchornav>
+			</div>
+			<div class="padding" vflex="1" hflex="1">
+				<div id="outer" vflex="1" style="overflow: auto;" ca:data-anchornav-scroll="anchor1" hflex="1">
+					<div id="anch1">
+						<label class="title">Anchor Title 1</label><separator/>
+						content<separator/>
+						content<separator/>
+						content<separator/>
+						content<separator/>
+						content<separator/>
+						content<separator/>
+						content<separator/>
+						content<separator/>
+						content<separator/>
+						content<separator/>
+						content<separator/>
+						content<separator/>
+						content<separator/>
+						content<separator/>
+						content<separator/>
+						content<separator/>
+						content<separator/>
+						content<separator/>
+						content<separator/>
+						content<separator/>
+						content<separator/>
+						content<separator/>
+						content<separator height="40px;"/>
+					</div>
+					<div id="anch2">
+						<label class="title">Anchor Title 2</label><separator/>
+						content<separator/>
+						content<separator/>
+						content<separator/>
+						content<separator/>
+						content<separator/>
+						content<separator/>
+						content<separator/>
+						content<separator/>
+						content<separator/>
+						content<separator/>
+						content<separator/>
+						content<separator/>
+						content<separator/>
+						content<separator/>
+						content<separator/>
+						content<separator/>
+						content<separator/>
+						content<separator/>
+						content<separator/>
+						content<separator/>
+						content<separator/>
+						content<separator/>
+						content<separator height="40px;"/>
+					</div>
+					<div id="anch3">
+						<label class="title">Anchor Title 3</label><separator/>
+						content<separator/>
+						content<separator/>
+						content<separator/>
+						content<separator/>
+						content<separator/>
+						content<separator/>
+						content<separator/>
+						content<separator/>
+						content<separator/>
+						content<separator/>
+						content<separator/>
+						content<separator/>
+						content<separator/>
+						content<separator/>
+						content<separator/>
+						content<separator/>
+						content<separator/>
+						content<separator/>
+						content<separator/>
+						content<separator/>
+						content<separator/>
+						content<separator/>
+						content<separator height="40px;"/>
+					</div>
+				</div>
+			</div>
+		</hlayout>
+	</window>
+</zk>
