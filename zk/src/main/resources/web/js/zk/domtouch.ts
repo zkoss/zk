@@ -73,6 +73,9 @@ function delegateEventFunc (event: JQuery.TouchEventBase): void {
 		touches = touchEvt.touches,
 		sourceCapabilities = touchEvt.sourceCapabilities;
 	if (touches && touches.length > 1) return;
+	else if (touches.length == 1) {
+		zk.currentPointer = [touches['clientX'], touches['clientY']] as zk.Offset;
+	}
 	if (touchEvt instanceof MouseEvent
 		&& sourceCapabilities && sourceCapabilities['firesTouchEvents']) return; // handled by touch handler
 

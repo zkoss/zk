@@ -3908,7 +3908,7 @@ new zul.wnd.Window({
 		if (this.isListen('onAfterSize')) //Feature ZK-1672
 			zWatch.listen({onSize: this});
 
-		if (zk.mobile && after) {
+		if ((zk.mobile || zk.touchEnabled) && after) {
 			after.push(function () {
 				setTimeout(function () {// lazy init
 					self.bindSwipe_();
