@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-5427.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Fri Apr 28 12:00:11 CST 2023, Created by jameschu
+
+Copyright (C) 2023 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label>
+		1. use chrome dev. tools sensor panel to force touch API enabling. (or run on chrome, on a device (no mobile) with both mouse and touch screen)
+		2. tap label "aaa" for 1 sec and see context menu
+	</label>
+	<separator />
+	<label forEach="aaa, bbb, ccc, ddd" value="${each}" style="padding: 50px; border: 1px red solid;"
+		   context="contextMenu" onClick='Clients.log("foo")'/>
+	<menupopup id="contextMenu" onOpen='
+  	if(event.isOpen()) {
+  		self.getChildren().clear();
+		self.appendChild(new Menuitem("Edit:" + event.getReference().getValue()));
+	}'>
+	</menupopup>
+</zk>

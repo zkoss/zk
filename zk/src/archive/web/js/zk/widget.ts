@@ -3064,6 +3064,22 @@ function () {
 	rerenderNow_: function (skipper) { // for Bug ZK-2281 and others life cycle issues when the dom of children of itself is undefined.
 		_rerenderNow(this, skipper);
 	},
+	/**
+	 * Recursively bind ancestors that are currently unbound (i.e., `desktop` is falsy). Used by ROD.
+	 * Introduced by ZK-5368.
+	 * @param zk.Desktop desktop [optional] the desktop the DOM element belongs to.
+	 * If not specified, ZK will decide it automatically.
+	 * @param zk.Skipper skipper [optional] used if {@link #rerender} is called with a non-null skipper.
+	 * @since 9.6.4
+	 */
+	bindMissingAncestors: function (desktop, skipper) {
+		const { parent } = this;
+		if (parent && !parent.desktop) {
+			// `skipper` for this widget and its descendents shouldn't affect that of ancestors.
+			parent.bind(desktop, skipper, true).bindMissingAncestors(desktop);
+		}
+		return this;
+	},
 	/** Binds this widget.
 	 * It is called to associate (aka., attach) the widget with
 	 * the DOM tree.
@@ -3075,20 +3091,21 @@ function () {
 	 *
 	 * @see #bind_
 	 * @see #unbind
-	 * @param zk.Desktop dt [optional] the desktop the DOM element belongs to.
+	 * @param zk.Desktop desktop [optional] the desktop the DOM element belongs to.
 	 * If not specified, ZK will decide it automatically.
 	 * @param zk.Skipper skipper [optional] used if {@link #rerender} is called with a non-null skipper.
+	 * @param boolean bindSelfOnly [optional] set to true if one doesn't want to recursively bind descendents.
 	 * @return zk.Widget this widget
 	 */
-	bind: function (desktop, skipper) {
+	bind: function (desktop, skipper, bindSelfOnly) {
 		this._binding = true;
 
 		_rerenderDone(this, skipper); //cancel pending async rerender
-		if (this.z_rod)
+		if (this.z_rod && !bindSelfOnly)
 			this.$class._bindrod(this);
 		else {
 			var after = [], fn;
-			this.bind_(desktop, skipper, after);
+			this.bind_(desktop, skipper, after, bindSelfOnly);
 			while (fn = after.shift())
 				fn();
 		}
@@ -3106,8 +3123,6 @@ function () {
 	 *
 	 * @see #unbind_
 	 * @see #bind
-	 * @param zk.Desktop dt [optional] the desktop the DOM element belongs to.
-	 * If not specified, ZK will decide it automatically.
 	 * @param zk.Skipper skipper [optional] used if {@link #rerender} is called with a non-null skipper.
 	 * @param boolean keepRod [optional] used if the ROD flag needs to be kept.
 	 * @return zk.Widget this widget
@@ -3155,8 +3170,9 @@ bind_: function (desktop, skipper, after) {
   });
 }
 </code></pre>
+	 * @param boolean bindSelfOnly [optional] set to true if one doesn't want to recursively bind descendents.
 	 */
-	bind_: function (desktop, skipper, after) {
+	bind_: function (desktop, skipper, after, bindSelfOnly) {
 		this.$class._bind0(this);
 
 		this.desktop = desktop || (desktop = zk.Desktop.$(this.parent));
@@ -3169,8 +3185,8 @@ bind_: function (desktop, skipper, after) {
 		
 		if (this._nvflex || this._nhflex)
 			_listenFlex(this);
-
-		this.bindChildren_(desktop, skipper, after);
+		if (!bindSelfOnly)
+			this.bindChildren_(desktop, skipper, after);
 		var self = this;
 		if (this.isListen('onBind')) {
 			zk.afterMount(function () {
@@ -3182,7 +3198,7 @@ bind_: function (desktop, skipper, after) {
 		if (this.isListen('onAfterSize')) //Feature ZK-1672
 			zWatch.listen({onSize: this});
 		
-		if (zk.mobile) {
+		if (zk.mobile || zk['touchEnabled']) {
 			after.push(function () {
 				setTimeout(function () {// lazy init
 					self.bindSwipe_();

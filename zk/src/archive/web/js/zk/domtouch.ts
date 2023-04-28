@@ -265,6 +265,9 @@ zk.override(zk.Widget.prototype, _xWidget, {
 		
 		if (tevt.touches.length > 1)
 			return;
+		else if (tevt.touches.length == 1) {
+			zk.currentPointer = [evt.touches[0].clientX, evt.touches[0].clientY];
+		}
 		
 		var	changedTouch = tevt.changedTouches[0];
 		this._pt = [changedTouch.clientX, changedTouch.clientY];

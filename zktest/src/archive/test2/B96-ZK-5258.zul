@@ -1,0 +1,14 @@
+<zk>
+	<button label="show modal" onClick="showModal()"/>
+	<zscript><![CDATA[
+public void showModal(){
+	Window w = new Window();
+	w.setPage(page);
+	w.appendChild(new Toolbarbutton("get focus"));
+	Textbox box1 = new Textbox();
+	w.appendChild(box1);
+	box1.setFocus(true);
+	w.doModal();
+}
+ ]]></zscript>
+</zk>
