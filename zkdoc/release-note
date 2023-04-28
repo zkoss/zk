@@ -33,6 +33,7 @@ ZK 9.6.4
   ZK-5252: a modal window doesn't focus on its first focusable child
   ZK-5258: setFocus() doesn't work on a textbox in a modal window
   ZK-5076: Listbox in select mold setModel + set selectedIndex causes unsync selection state
+  ZK-5427: missing context menu after ZK-4835 on hybrid mouse / touch devices
 
 * Upgrade Notes
   + Upgrade JRuby dependency from 1.1.2 to 1.7.27 for some security vulnerabilities
