@@ -1,0 +1,4 @@
+<window mode="modal" title="modal">
+	focus on the first focusable component:
+	<textbox/>
+</window>
