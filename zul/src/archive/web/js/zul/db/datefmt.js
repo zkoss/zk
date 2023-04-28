@@ -437,7 +437,16 @@ zk.fmt.Date = {
 					if (nosep)
 						token = _parseToken(token, ts, --i, len);
 					if (!token) return; //failed
-					isAM = token.toUpperCase().startsWith(localizedSymbols.APM[0].toUpperCase());
+					var tokenUpperCase = token.toUpperCase(),
+						apmText = localizedSymbols.APM[0].toUpperCase();
+					if (tokenUpperCase.startsWith(apmText)) {
+						isAM = true;
+					} else if (apmText.startsWith(tokenUpperCase) && ts[i] && apmText.endsWith(ts[i].toUpperCase())) { // ZK-5216, Spanish AM/PM
+						isAM = true;
+						i++;
+					} else {
+						isAM = false;
+					}
 					break;
 				case 'G':
 					if (nosep && eras) {
