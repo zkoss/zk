@@ -1468,7 +1468,7 @@ export class JQZK {
 		} else {
 			for (var j = this.jq.length; j--;)
 				_rdcss.push(this.jq[j]);
-			setTimeout(_redoCSS0, timeout && timeout >= 0 ? timeout : 100);
+			setTimeout(_redoCSS0, Number(timeout) >= 0 ? timeout : 100);
 		}
 		return this;
 	}
@@ -1624,7 +1624,7 @@ export class JQZK {
 		if (!jq.nodeName(n, 'button', 'input', 'textarea', 'a', 'select', 'iframe') && n.getAttribute('tabindex') == null)
 			return false;
 
-		if (timeout && timeout >= 0) setTimeout(function () {_focus(n);}, timeout);
+		if (Number(timeout) >= 0) setTimeout(function () {_focus(n);}, timeout);
 		else _focus(n);
 		return true;
 	}
@@ -1640,7 +1640,7 @@ export class JQZK {
 		var n = this.jq[0];
 		if (!n || typeof n['select'] != 'function') return false;
 
-		if (timeout && timeout >= 0) setTimeout(function () {_select(n as HTMLInputElement);}, timeout);
+		if (Number(timeout) >= 0) setTimeout(function () {_select(n as HTMLInputElement);}, timeout);
 		else _select(n as HTMLInputElement);
 		return true;
 	}
@@ -2824,7 +2824,7 @@ export function delayFunction(uuid: string, func: () => void, opts?: Partial<{ t
 					pendFunc();
 					pendFunc = idQue.shift();
 				}
-			}, timeout && timeout >= 0 ? timeout : 50);
+			}, Number(timeout) >= 0 ? timeout : 50);
 		} else { //put func to queue
 			if (urgent)
 				idQue.splice(0, 0, func);
