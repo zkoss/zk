@@ -3198,7 +3198,7 @@ bind_: function (desktop, skipper, after) {
 		if (this.isListen('onAfterSize')) //Feature ZK-1672
 			zWatch.listen({onSize: this});
 		
-		if (zk.mobile) {
+		if (zk.mobile || zk['touchEnabled']) {
 			after.push(function () {
 				setTimeout(function () {// lazy init
 					self.bindSwipe_();
