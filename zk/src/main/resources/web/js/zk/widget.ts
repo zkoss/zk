@@ -618,7 +618,11 @@ function _rerender(wgt: zk.Widget, timeout: number): void {
 	if (_rdtid)
 		clearTimeout(_rdtid);
 	_rdque.push(wgt);
-	_rdtid = window.setTimeout(_rerender0, timeout);
+	if (timeout === 0) {
+		queueMicrotask(_rerender0);
+	} else {
+		_rdtid = window.setTimeout(_rerender0, timeout);
+	}
 }
 function _rerender0(): void {
 	_rdtid = undefined;
