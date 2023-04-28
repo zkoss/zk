@@ -29,6 +29,10 @@ ZK 9.6.4
   ZK-5433: tabbox doesn't scroll the selected tab into the current view when shrinking its width
   ZK-5432: aria-activedescendant is generated at wrong place
   ZK-5216: cannot change to am of a day under Spanish locale
+  ZK-5368: Tree with client-ROD fails to replace treerow if parent is currently not rendered
+  ZK-5252: a modal window doesn't focus on its first focusable child
+  ZK-5258: setFocus() doesn't work on a textbox in a modal window
+  ZK-5076: Listbox in select mold setModel + set selectedIndex causes unsync selection state
 
 * Upgrade Notes
   + Upgrade JRuby dependency from 1.1.2 to 1.7.27 for some security vulnerabilities
