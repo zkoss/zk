@@ -1299,9 +1299,15 @@ export class CalendarTime extends zul.db.Timebox {
 			dateTime = db.coerceToString_(oldDate, _innerDateFormat) + evt.data.value, //onChanging's data is string
 			pattern = _innerDateFormat + db.getTimeFormat();
 
-		// add 'AM' by default, if pattern specified AMPM
-		dateTime += pattern.includes('a') ?
-			!dateTime.includes('AM') && !dateTime.includes('PM') ? 'AM' : '' : '';
+		// add 'AM' (or APM in localizedSymbols) by default, if pattern specified AMPM
+		if (pattern.indexOf('a') > -1) {
+			var localizedSymbols = db.getLocalizedSymbols();
+			if (localizedSymbols && localizedSymbols.APM) {
+				dateTime += dateTime.indexOf(localizedSymbols.APM[0]) < 0 && dateTime.indexOf(localizedSymbols.APM[1]) < 0 ? localizedSymbols.APM[0] : '';
+			} else {
+				dateTime += dateTime.indexOf('AM') < 0 && dateTime.indexOf('PM') < 0 ? 'AM' : '';
+			}
+		}
 		var date = db.coerceFromString_(dateTime, pattern);
 
 		// do nothing if date converted from String is not a valid Date object e.g. dateTime = "2014/10/10 1 :  :     "

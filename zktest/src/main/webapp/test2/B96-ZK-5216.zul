@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-5216.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Mon Apr 24 16:22:54 CST 2023, Created by jameschu
+
+Copyright (C) 2023 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<zscript><![CDATA[
+		java.util.Calendar cal = java.util.Calendar.getInstance();
+		cal.set(java.util.Calendar.HOUR_OF_DAY, 13);
+		java.util.Date date = cal.getTime();
+	]]></zscript>
+	<label>
+		open datebox popup and change "p. m." to "a. m.". the value should be changed
+	</label>
+	<datebox locale="es" format="MMM dd, yyyy h:mm a" cols="50" value="${date}"/>
+</zk>
