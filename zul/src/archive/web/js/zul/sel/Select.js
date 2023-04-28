@@ -201,15 +201,21 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 	},
 	_addItemToSelection: function (item) {
 		if (!item.isSelected()) {
-			var multiple = this._multiple;
-			if (!multiple)
-				this.clearSelection();
-			var index = item.getOptionIndex_ ? item.getOptionIndex_() : item.getChildIndex();
-			if (!multiple || (index < this._selectedIndex || this._selectedIndex < 0))
-				this._selectedIndex = index;
-			item._setSelectedDirectly(true);
-			this._selItems.push(item);
+			this.updateSelectionDirectly(item);
 		}
+	},
+	/**
+	 * Internal used only
+	 */
+	updateSelectionDirectly: function (item) {
+		var multiple = this._multiple;
+		if (!multiple)
+			this.clearSelection();
+		var index = item.getOptionIndex_ ? item.getOptionIndex_() : item.getChildIndex();
+		if (!multiple || (index < this._selectedIndex || this._selectedIndex < 0))
+			this._selectedIndex = index;
+		item._setSelectedDirectly(true);
+		this._selItems.push(item);
 	},
 	_removeItemFromSelection: function (item) {
 		if (item.isSelected()) {
@@ -319,6 +325,9 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 	onChildRemoved_: function (child) {
 		if (child.$instanceof(zul.sel.Optgroup))
 			this._groupsInfo.$remove(child);
+		if (child.$instanceof(zul.sel.Option) && child.isSelected()) {
+			this._selItems.$remove(child);
+		}
 		if (this.desktop && !this.childReplacing_)
 			this.requestRerender_(true);
 	},
