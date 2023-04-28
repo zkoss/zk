@@ -121,8 +121,9 @@ zul.sel.Option = zk.$extends(zul.Widget, {
 	bind_: function () {
 		this.$supers('bind_', arguments);
 		//B60-ZK-1303: force update parent's selected index.
-		if (this.isSelected())
-			this.parent._selectedIndex = this.getOptionIndex_();
+		if (this.isSelected()) {
+			this.parent.updateSelectionDirectly(this);
+		}
 	},
 	doClick_: function (evt) {
 		evt.stop(); // Eats the non-standard onclick event
