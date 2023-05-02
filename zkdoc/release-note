@@ -45,6 +45,7 @@ ZK 9.6.4
   ZK-5258: setFocus() doesn't work on a textbox in a modal window
   ZK-5434: Datebox show different time when running with -Duser.timezone="America/Mexico_City"
   ZK-5379: Floating scrollbar prevent anchornav from scrolling
+  ZK-5414: onTimer event causes a cascader to close its next level items
 
 * Upgrade Notes
   + Upgrade JRuby dependency from 1.1.2 to 1.7.27 for some security vulnerabilities
