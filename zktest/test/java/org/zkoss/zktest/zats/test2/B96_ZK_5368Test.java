@@ -17,17 +17,14 @@ public class B96_ZK_5368Test extends WebDriverTestCase {
 		treeBody.scrollTop(Integer.parseInt(treeBody.toElement().get("scrollHeight")));
 		waitResponse();
 		// Then, scroll item44 into view.
-		eval("jq('[aria-label=\" item-44\"]')[0].scrollIntoView()");
+		eval("jq('div:contains(\"item-44\")').filter((i, elem) => elem.textContent === \" item-44\")[0].scrollIntoView()");
 		waitResponse();
 		// Click item44 and make sure its label is appended with "-foo".
-		click(selectByAriaLabel(" item-44")); // Note the leading space character.
+		// Note the leading space character.
+		eval("jq('div:contains(\"item-44\")').filter((i, elem) => elem.textContent === \" item-44\")[0].click()");
 		waitResponse();
 		// Note the leading space character and that the aria label has changed.
 		final String label = " item-44-foo";
-		assertEquals(label, selectByAriaLabel(label).text());
-	}
-
-	private JQuery selectByAriaLabel(String ariaLabel) {
-		return jq("[aria-label=\"" + ariaLabel + "\"]");
+		assertEquals(label, getEval("jq('div:contains(\"" + label + "\")').filter((i, elem) => elem.textContent === \"" + label + "\")[0].textContent"));
 	}
 }
