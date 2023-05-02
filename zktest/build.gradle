@@ -118,8 +118,9 @@ dependencies {
 	testImplementation 'org.zkoss.test:zk-webdriver:1.0.9.1'
 
 	// For B96_ZK_4194Test to use a specific Chrome driver version (this will change to match latest chrome)
-	testImplementation 'org.seleniumhq.selenium:selenium-devtools-v111:4.8.3'
-	testImplementation "org.seleniumhq.selenium:selenium-java:4.8.3"
+	testImplementation 'org.seleniumhq.selenium:selenium-devtools-v112:4.9.0'
+	testImplementation "org.seleniumhq.selenium:selenium-java:4.9.0"
+	testImplementation 'com.google.javascript:closure-compiler-unshaded:v20230411'
 
 	providedCompile 'javax.el:javax.el-api:2.2.5'
 	providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
