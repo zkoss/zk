@@ -46,3 +46,4 @@ slf4j-jdk14.jar
 zsoup.jar
 javassist.jar
 gson.jar
+closure-compiler-unshaded.jar
