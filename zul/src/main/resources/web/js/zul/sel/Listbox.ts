@@ -53,8 +53,8 @@ export class Listbox extends zul.sel.SelectWidget {
 	override groupSelect = false;
 	/** @internal */
 	override _scrollbar?: zul.Scrollbar = undefined;
-	firstItem?: zul.sel.Listitem;
-	lastItem?: zul.sel.Listitem;
+	override firstItem?: zul.sel.Listitem;
+	override lastItem?: zul.sel.Listitem;
 	/** @internal */
 	_emptyMessage?: string = undefined;
 	/** @internal */

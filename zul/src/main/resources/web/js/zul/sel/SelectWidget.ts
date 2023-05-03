@@ -77,6 +77,8 @@ function _isListgroupfoot(w: zul.sel.ItemWidget): boolean {
 export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	override firstChild!: zul.sel.ItemWidget | undefined;
 	override lastChild!: zul.sel.ItemWidget | undefined;
+	firstItem?: zul.sel.ItemWidget;
+	lastItem?: zul.sel.ItemWidget;
 	/**
 	 * Whether to change a list item selection on right click
 	 * @defaultValue `true` (unless the server changes the setting)
@@ -1204,14 +1206,21 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 				} else {
 					var tg = evt.domTarget,
 						cm = ref?.$n('cm');
-					keep = !((edata.ctrlKey || edata.metaKey) || edata.shiftKey
+					keep = !!((edata.ctrlKey || edata.metaKey) || edata.shiftKey
 						|| (this._checkmark && (!this._cdo || (tg == cm || tg.parentNode == cm) || checkSelectAll)));
 				}
 			}
 		}
 
 		this.fire('onSelect',
-			zk.copy({ items: data, reference: ref, clearFirst: !keep, selectAll: checkSelectAll }, edata),
+			zk.copy({
+				items: data,
+				// The shape of `rodItemIndexRange` is the same as `range` in listbox-rod#fireOnSelectByRange
+				rodItemIndexRange: { start: this.firstItem?._index, end: this.lastItem?._index }, // ZK-2658
+				reference: ref,
+				clearFirst: !keep,
+				selectAll: checkSelectAll,
+			}, edata),
 			{ rtags: { selectAll: checkSelectAll }, toServer: !!this._model });
 	}
 
