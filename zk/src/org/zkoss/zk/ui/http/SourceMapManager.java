@@ -50,6 +50,7 @@ public class SourceMapManager implements Serializable {
 	private Map<Pair<String, String>, String> _jsContentMap; //js <src path, real path> -> content
 	private Map<Pair<String, String>, String> _postJsContentMap; //js <src path, real path> -> content (for merging package)
 	private Pair<String, String> _jsCursor = null;
+	private static final SourceFile.Builder _builder = SourceFile.builder();
 
 	public SourceMapManager(String name, String sourceRoot, String id) {
 		_name = name;
@@ -132,7 +133,7 @@ public class SourceMapManager implements Serializable {
 		String wpdFileName = "js/src/" + _name + ".wpd.src.js";
 		String wpdFilePath = _sourceRoot + wpdFileName;
 		String wpdFileContent = this._preScript + new String(data) + this._postScript;
-		SourceFile wpdSourceFile = SourceFile.fromCode(wpdFilePath, wpdFileContent);
+		SourceFile wpdSourceFile = _builder.withPath(wpdFilePath).withContent(wpdFileContent).build();
 		cacheJsSource(sourceCache, "/" + wpdFileName, wpdFileContent);
 		jsSourceFiles.add(wpdSourceFile);
 
@@ -179,7 +180,7 @@ public class SourceMapManager implements Serializable {
 			if (jsRealPath.startsWith(File.separator)) {
 				jsRealPath = _sourceRoot + jsRealPath.substring(1);
 			}
-			SourceFile sourceFile = SourceFile.fromCode(jsRealPath, jsContent);
+			SourceFile sourceFile = _builder.withPath(jsRealPath).withContent(jsContent).build();
 			sourceFiles.add(sourceFile);
 		}
 	}

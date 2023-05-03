@@ -184,6 +184,12 @@
 			<version>1.9.4</version>
 		</dependency>
 		<dependency>
+			<groupId>com.google.javascript</groupId>
+			<artifactId>closure-compiler-unshaded</artifactId>
+			<version>v20220601</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>org.apache-extras.beanshell</groupId>
 			<artifactId>bsh</artifactId>
 			<version>${bsh.version}</version>
