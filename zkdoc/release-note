@@ -35,6 +35,7 @@ ZK 9.6.4
 
 * Bugs
   ZK-5382: Wrong shadow insertions after shadow tree merged
+  ZK-5418: variable shadowing to reference binding
   ZK-4194: ZK cannot clear disconnected desktops reliably by remove-desktop requests
   ZK-5445: avoid reflected cross site scripting (XSS) attacks
   ZK-5368: Tree with client-ROD fails to replace treerow if parent is currently not rendered
