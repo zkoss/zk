@@ -43,6 +43,7 @@ ZK 9.6.4
   ZK-5238: upgrade moment.js to eliminate the security vulnerabilities
   ZK-5067: update internal timezone file
   ZK-5426: pdfviewer cannot display some texts
+  ZK-5251: listbox select mold produces js error in a mobile browser
   ZK-5252: a modal window doesn't focus on its first focusable child
   ZK-5258: setFocus() doesn't work on a textbox in a modal window
   ZK-5434: Datebox show different time when running with -Duser.timezone="America/Mexico_City"
