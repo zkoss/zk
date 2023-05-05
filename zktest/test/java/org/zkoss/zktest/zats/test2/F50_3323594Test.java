@@ -11,6 +11,8 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import java.time.Duration;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.Alert;
@@ -28,7 +30,7 @@ public class F50_3323594Test extends WebDriverTestCase {
 		connect();
 
 		click(jq("@button"));
-		Alert alert = new WebDriverWait(driver, 3).until(ExpectedConditions.alertIsPresent());
+		Alert alert = new WebDriverWait(driver, Duration.ofSeconds(3)).until(ExpectedConditions.alertIsPresent());
 		Assert.assertEquals("count1: 30, count2: 30", alert.getText());
 	}
 }

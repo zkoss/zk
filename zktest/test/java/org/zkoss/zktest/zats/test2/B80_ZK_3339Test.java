@@ -14,6 +14,8 @@ package org.zkoss.zktest.zats.test2;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;
 
+import java.time.Duration;
+
 import org.apache.commons.lang.StringUtils;
 import org.junit.Assert;
 import org.junit.Test;
@@ -50,7 +52,7 @@ public class B80_ZK_3339Test extends WebDriverTestCase {
 
 	private void refreshPage() {
 		driver.navigate().refresh();
-		new WebDriverWait(driver, 3)
+		new WebDriverWait(driver, Duration.ofSeconds(3))
 				.until(ExpectedConditions.presenceOfElementLocated(By.className("z-page")));
 	}
 }

@@ -11,6 +11,7 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import java.time.Duration;
 import java.util.Collections;
 
 import org.junit.Assert;
@@ -39,7 +40,7 @@ public class B70_ZK_2963Test extends WebDriverTestCase {
 
 		click(jq("a:contains(Silvertail)"));
 		sleep(1000);
-		new WebDriverWait(driver, 3)
+		new WebDriverWait(driver, Duration.ofSeconds(3))
 				.until(ExpectedConditions.presenceOfElementLocated(By.className("z-page")));
 		Assert.assertEquals("current theme: silvertail", trim(jq("@label:last").text()));
 		Assert.assertEquals(Color.fromString("#eaeaea"), Color.fromString(jq("@window").css("backgroundColor")));

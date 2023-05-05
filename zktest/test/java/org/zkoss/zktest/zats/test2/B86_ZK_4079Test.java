@@ -11,6 +11,8 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import java.time.Duration;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.Alert;
@@ -42,7 +44,7 @@ public class B86_ZK_4079Test extends WebDriverTestCase {
 	}
 	
 	private Double getBarWidth() {
-		WebDriverWait wait = new WebDriverWait(driver, 7);
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(7));
 		wait.until(ExpectedConditions.alertIsPresent());
 		Alert alert = driver.switchTo().alert();
 		Double barWidth = Double.valueOf(alert.getText().split(": ")[1]);

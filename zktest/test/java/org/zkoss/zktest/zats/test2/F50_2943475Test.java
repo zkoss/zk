@@ -11,6 +11,7 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import java.time.Duration;
 import java.util.function.Supplier;
 
 import org.junit.Assert;
@@ -52,7 +53,7 @@ public class F50_2943475Test extends WebDriverTestCase {
 
 	private void waitForPageReloaded() {
 		sleep(1000); // wait for redirection first
-		new WebDriverWait(driver, 5)
+		new WebDriverWait(driver, Duration.ofSeconds(5))
 				.until(ExpectedConditions.presenceOfElementLocated(By.className("z-page")));
 	}
 
