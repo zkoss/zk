@@ -1,9 +1,11 @@
 @import "~./zul/less/_header.less";
 @import "~./zul/less/_reset.less";
 
+e('<c:if test="${empty c:property(@{browserDefault})}">');
 html, body {
 	height: 100%;
 }
+e('</c:if>');
 
 // affect ZK component only
 [class^="z-"],
@@ -21,33 +23,33 @@ html, body {
 }
 
 // Reset
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
+@{browserDefaultPrefix}input[type=number]::-webkit-inner-spin-button,
+@{browserDefaultPrefix}input[type=number]::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
-input,
-input:focus,
-textarea,
-textarea:focus {
+@{browserDefaultPrefix}input,
+@{browserDefaultPrefix}input:focus,
+@{browserDefaultPrefix}textarea,
+@{browserDefaultPrefix}textarea:focus {
 	-webkit-appearance: none;
 	-moz-appearance: none;
 	 outline: none;
 	 -webkit-user-select: text;
 }
 
-*:focus {
+@{browserDefaultPrefix}*:focus {
   outline: none;
 }
 
-fieldset { 
+@{browserDefaultPrefix}fieldset {
 	border: 1px solid #c0c0c0;
 	border-radius: 0;
 	margin: 0 2px;
 	padding: 0px;
 }
 
-legend {
+@{browserDefaultPrefix}legend {
 	border: 0;
 	padding: 0;
 }
@@ -57,8 +59,6 @@ legend {
 		border: 0;
 	}
 }
-
-@browserDefault: "'org.zkoss.zul.theme.browserDefault'";
 e('<c:if test="${empty c:property(@{browserDefault})}">');
 body {
 	margin: 0;
@@ -166,7 +166,7 @@ div.z-log {
 }
 
 //radio, radiogroup
-input[type="radio"] {
+@{browserDefaultPrefix}input[type="radio"] {
 	margin: @checkboxMargin;
 	background: @inputBackgroundColor;
 	border: 1px solid @inputBorderColor;
@@ -233,7 +233,7 @@ input[type="radio"] {
 }
 
 //checkbox
-input[type="checkbox"] {
+@{browserDefaultPrefix}input[type="checkbox"] {
 	.baseIconFont();
 	font-size: @fontSizeLarge;
 	margin: @checkboxMargin;
