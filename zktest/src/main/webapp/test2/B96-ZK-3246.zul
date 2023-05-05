@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-3246.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Wed Apr 19 16:02:11 CST 2023, Created by jameschu
+
+Copyright (C) 2023 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		1. open this page on IOS device (or chrome to simulate iPad with dev tool)
+		2. hit 'download' button, should download the file successfully
+	</label>
+	<button label="Download 1" onClick="download1()"/>
+	<button label="Download 2" onClick="download2()"/>
+	<zscript><![CDATA[
+        import org.apache.poi.util.*;
+        public void download1() throws java.io.IOException{
+        	org.zkoss.zul.Filedownload.save(org.apache.commons.io.IOUtils.toByteArray(desktop.webApp.getResourceAsStream("/test2/B96-ZK-3246.pdf")), "application/pdf", "B96-ZK-3246.pdf");
+        }
+        public void download2() throws java.io.IOException{
+        	org.zkoss.zul.Filedownload.save("/test2/B96-ZK-3246.pdf", "application/pdf");
+        }
+]]>
+	</zscript>
+</zk>
