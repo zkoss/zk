@@ -11,6 +11,8 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import java.time.Duration;
+
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
@@ -41,7 +43,7 @@ public class B90_ZK_4385Test extends WebDriverTestCase {
 	}
 
 	private void waitForDialog() {
-		new WebDriverWait(getWebDriver(), 3)
+		new WebDriverWait(getWebDriver(), Duration.ofSeconds(3))
 				.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[text()='Cancel']")));
 	}
 }

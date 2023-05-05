@@ -11,6 +11,8 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import java.time.Duration;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -33,7 +35,7 @@ public class B50_2947657Test extends WebDriverTestCase {
 		click(jq("@listitem:eq(3)"));
 		driver.findElement(By.cssSelector("input[type='submit']")).click();
 
-		WebDriverWait wait = new WebDriverWait(driver, 5);
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
 		wait.until(ExpectedConditions.presenceOfElementLocated(By.tagName("body")));
 		waitResponse();
 

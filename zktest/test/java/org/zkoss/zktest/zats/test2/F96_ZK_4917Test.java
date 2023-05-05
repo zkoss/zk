@@ -13,6 +13,8 @@ package org.zkoss.zktest.zats.test2;
 
 import static org.hamcrest.Matchers.greaterThan;
 
+import java.time.Duration;
+
 import org.hamcrest.MatcherAssert;
 import org.junit.Assert;
 import org.junit.Test;
@@ -105,7 +107,7 @@ public class F96_ZK_4917Test extends WebDriverTestCase {
 	}
 
 	private void waitForPDFLoaded() {
-		final WebDriverWait wait = new WebDriverWait(driver, 3);
+		final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(3));
 		wait.until(ExpectedConditions.presenceOfElementLocated(By.id("zk_log")));
 		closeZKLog();
 	}

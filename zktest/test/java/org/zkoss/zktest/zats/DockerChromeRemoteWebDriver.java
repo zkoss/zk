@@ -16,9 +16,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.openqa.selenium.Capabilities;
-import org.openqa.selenium.interactions.HasTouchScreen;
-import org.openqa.selenium.interactions.TouchScreen;
-import org.openqa.selenium.remote.RemoteTouchScreen;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 /**
@@ -31,13 +28,13 @@ import org.openqa.selenium.remote.RemoteWebDriver;
  * @see <a href="https://crbug.com/1010288">Chrome is not supporting --lang parameter with language that contains a '-' while using headless mode</a>
  * @author rudyhuang
  */
-public class DockerChromeRemoteWebDriver extends RemoteWebDriver implements HasTouchScreen {
+public class DockerChromeRemoteWebDriver extends RemoteWebDriver {
 	public DockerChromeRemoteWebDriver(URL remoteAddress, Capabilities capabilities) {
 		super(remoteAddress, capabilities);
 	}
 
-	public DockerChromeRemoteWebDriver(Capabilities capabilities) {
-		this(toURL("http://sechrome.test:4444/wd/hub"), capabilities);
+	public DockerChromeRemoteWebDriver(String url, Capabilities capabilities) {
+		this(toURL(url), capabilities);
 	}
 
 	private static URL toURL(String url) {
@@ -46,10 +43,5 @@ public class DockerChromeRemoteWebDriver extends RemoteWebDriver implements HasT
 		} catch (MalformedURLException e) {
 			throw new UncheckedIOException(e);
 		}
-	}
-
-	@Override
-	public TouchScreen getTouch() {
-		return new RemoteTouchScreen(getExecuteMethod());
 	}
 }

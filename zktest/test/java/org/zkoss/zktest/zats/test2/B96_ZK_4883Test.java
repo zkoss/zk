@@ -11,6 +11,8 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import java.time.Duration;
+
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
@@ -31,11 +33,11 @@ public class B96_ZK_4883Test extends WebDriverTestCase {
 
 		click(jq("@button"));
 		assertNoJSError();
-		final Alert alert = new WebDriverWait(driver, 3000).until(ExpectedConditions.alertIsPresent());
+		final Alert alert = new WebDriverWait(driver, Duration.ofSeconds(3000)).until(ExpectedConditions.alertIsPresent());
 		Assert.assertEquals("onsubmit triggered", alert.getText());
 
 		alert.accept();
-		new WebDriverWait(driver, 3000).until(ExpectedConditions.urlContains("B96-ZK-4883-redirect.zul"));
+		new WebDriverWait(driver, Duration.ofSeconds(3000)).until(ExpectedConditions.urlContains("B96-ZK-4883-redirect.zul"));
 		final String result = jq("$result").text();
 		MatcherAssert.assertThat(result, Matchers.containsString("xmlContent: blahblah"));
 		MatcherAssert.assertThat(result, Matchers.containsString("encoding: utf-8"));

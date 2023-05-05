@@ -11,6 +11,8 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import java.time.Duration;
+
 import org.junit.Test;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -25,7 +27,7 @@ public class B50_3009925Test extends WebDriverTestCase {
 	public void test() {
 		connect();
 
-		new WebDriverWait(driver, 3).until(ExpectedConditions.alertIsPresent());
+		new WebDriverWait(driver, Duration.ofSeconds(3)).until(ExpectedConditions.alertIsPresent());
 		driver.switchTo().alert().accept();
 	}
 }
