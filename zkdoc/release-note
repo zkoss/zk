@@ -74,6 +74,22 @@ ZK 9.6.4
   ZK-2297: @ContextParam TRIGGER_EVENT not sent for global commands
   ZK-5224: hflex and vflex doesn't consider a component's margin
   ZK-5423: select a date causes an invalid result under locale pt
+  ZK-2658: Listbox: multiple="true" checkmark="true" issue
+  ZK-5133: Radio onPageAttached condition causes onPageAttach to not fix index on parent radiogroup
+  ZK-5419: Security upgrade commons fileupload
+  ZK-5378: Add safety check to DesktopEventQueue$QueueListener#onEvent
+  ZK-5430: Camera uses incorrect aspect ratio during snapshot if canvas has height / width
+  ZK-3246: File download doesn't work with Chrome in iOS
+  ZK-5434: Datebox show different time when running with -Duser.timezone="America/Mexico_City"
+  ZK-5061: ZK Embedded loading default ZK styles causes style changes to the outer page
+  ZK-5445: avoid reflected cross site scripting (XSS) attacks
+  ZK-5429: tabbox scroll unsynced when resizing with toolbar
+  ZK-5433: tabbox doesn't scroll the selected tab into the current view when shrinking its width
+  ZK-5432: aria-activedescendant is generated at wrong place
+  ZK-5368: Tree with client-ROD fails to replace treerow if parent is currently not rendered
+  ZK-5252: a modal window doesn't focus on its first focusable child
+  ZK-5258: setFocus() doesn't work on a textbox in a modal window
+  ZK-5076: Listbox in select mold setModel + set selectedIndex causes unsync selection state
 
 * Upgrade Notes
   + Upgrade JRuby dependency from 1.1.2 to 1.7.27 for some security vulnerabilities

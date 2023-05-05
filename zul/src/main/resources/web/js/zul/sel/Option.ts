@@ -183,8 +183,9 @@ export class Option extends zul.Widget<HTMLOptionElement> {
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		//B60-ZK-1303: force update parent's selected index.
-		if (this.isSelected())
-			this.parent!._selectedIndex = this.getOptionIndex_();
+		if (this.isSelected()) {
+			this.parent!.updateSelectionDirectly(this);
+		}
 	}
 
 	/** @internal */

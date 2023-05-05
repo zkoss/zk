@@ -279,15 +279,22 @@ export class Select extends zul.Widget<HTMLSelectElement> {
 	/** @internal */
 	_addItemToSelection(item: zul.sel.Option): void {
 		if (!item.isSelected()) {
-			const multiple = this._multiple;
-			if (!multiple)
-				this.clearSelection();
-			const index = item.getOptionIndex_ ? item.getOptionIndex_() : item.getChildIndex();
-			if (!multiple || index < this._selectedIndex || this._selectedIndex < 0)
-				this._selectedIndex = index;
-			item._setSelectedDirectly(true);
-			this._selItems.push(item);
+			this.updateSelectionDirectly(item);
 		}
+	}
+	/**
+	 * Internal used only
+	 * @hidden for jsdoc
+	 */
+	updateSelectionDirectly(item: zul.sel.Option): void {
+		const multiple = this._multiple;
+		if (!multiple)
+			this.clearSelection();
+		const index = item.getOptionIndex_ ? item.getOptionIndex_() : item.getChildIndex();
+		if (!multiple || (index < this._selectedIndex || this._selectedIndex < 0))
+			this._selectedIndex = index;
+		item._setSelectedDirectly(true);
+		this._selItems.push(item);
 	}
 
 	/** @internal */
