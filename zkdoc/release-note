@@ -16,6 +16,7 @@ ZK 10.0.0
   ZK-5086: Should ignore source map file request when the source map is disabled
   ZK-5005: pdfviewer some fonts are not rendering
   ZK-5411: withAction() cannot accept anonymous class, please convert it to Lambda syntax
+  ZK-5454: nextSibling locator doesn't work in smartUpdate()
 
 
 * Upgrade Notes
