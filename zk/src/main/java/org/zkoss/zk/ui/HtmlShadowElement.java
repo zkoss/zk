@@ -173,6 +173,36 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 	}
 
 	/**
+	 * Updates the given previous insertion to this shadow element. (Internal use only)
+	 * @since 10.0.0
+	 */
+	public void updatePreviousInsertion(Component newPreviousInsertion) {
+		if (_previousInsertion == newPreviousInsertion)
+			return; // do nothing
+
+		_previousInsertion = newPreviousInsertion;
+
+		if (newPreviousInsertion instanceof HtmlShadowElement) {
+			asShadow(newPreviousInsertion)._nextInsertion = this;
+		}
+	}
+
+	/**
+	 * Updates the given next insertion to this shadow element. (Internal use only)
+	 * @since 10.0.0
+	 */
+	public void updateNextInsertion(Component newNextInsertion) {
+		if (_nextInsertion == newNextInsertion)
+			return; // do nothing
+
+		_nextInsertion = newNextInsertion;
+
+		if (newNextInsertion instanceof HtmlShadowElement) {
+			asShadow(newNextInsertion)._previousInsertion = this;
+		}
+	}
+
+	/**
 	 * Returns the first component of its insertion range.
 	 */
 	public Component getFirstInsertion() {
@@ -522,6 +552,32 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 		clone._lastInsertion = _lastInsertion;
 		clone._nextInsertion = _nextInsertion;
 		return clone;
+	}
+
+	protected void initClone(AbstractComponent cloneHost) {
+		if (_previousInsertion != null) {
+			if (_previousInsertion instanceof ShadowElement) {
+				_previousInsertion = (Component) cloneHost.getShadowRoots().get(((ComponentCtrl) _host).getShadowRoots().indexOf(_previousInsertion));
+			} else {
+				_previousInsertion = cloneHost.getChildren().get(_host.getChildren().indexOf(_previousInsertion));
+			}
+		}
+
+		if (_firstInsertion != null) {
+			_firstInsertion = cloneHost.getChildren().get(_host.getChildren().indexOf(_firstInsertion));
+		}
+
+		if (_lastInsertion != null) {
+			_lastInsertion = cloneHost.getChildren().get(_host.getChildren().indexOf(_lastInsertion));
+		}
+
+		if (_nextInsertion != null) {
+			if (_nextInsertion instanceof ShadowElement) {
+				_nextInsertion = (Component) cloneHost.getShadowRoots().get(((ComponentCtrl) _host).getShadowRoots().indexOf(_nextInsertion));
+			} else {
+				_nextInsertion = cloneHost.getChildren().get(_host.getChildren().indexOf(_nextInsertion));
+			}
+		}
 	}
 
 	public Component getShadowHost() {
@@ -1572,4 +1628,4 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 			}
 		}
 	}
-}
+}

@@ -36,6 +36,7 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -2343,6 +2344,11 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 			renderer.render("z$rod", (o instanceof Boolean && ((Boolean) o).booleanValue()) || !"false".equals(o));
 	}
 
+	public void renderPropertiesOnly(ContentRenderer renderer)
+			throws IOException {
+		this.renderProperties(renderer);
+	}
+
 	/** An utility to be called by {@link #renderProperties} to
 	 * render a string-value property.
 	 * It ignores if value is null or empty.
@@ -3832,6 +3838,15 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 					for (TargetInfo ti : tis)
 						owner.addForward0(orgEvent, ti.target, ti.event, ti.data);
 				}
+			}
+
+			if (seRoots != null) {
+				clone.seRoots = seRoots.stream()
+						.map(shadowElement -> (ShadowElement) ((Component) shadowElement).clone())
+						.collect(Collectors.toList());
+				clone.seRoots.stream()
+						.filter(shadowElement -> shadowElement instanceof HtmlShadowElement)
+						.forEach(shadowElement -> ((HtmlShadowElement) shadowElement).initClone(owner));
 			}
 
 			//AuService

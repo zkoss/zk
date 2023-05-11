@@ -825,6 +825,15 @@ public abstract class HtmlBasedComponent extends AbstractComponent {
 	private static HashMap<String, PropertyAccess> _properties = new HashMap<String, PropertyAccess>(20);
 
 	static {
+		_properties.put("prolog", new StringPropertyAccess() {
+			public void setValue(Component cmp, String prolog) {
+				((HtmlBasedComponent) cmp)._prolog = prolog;
+			}
+
+			public String getValue(Component cmp) {
+				return ((HtmlBasedComponent) cmp)._prolog;
+			}
+		});
 		_properties.put("width", new StringPropertyAccess() {
 			public void setValue(Component cmp, String width) {
 				((HtmlBasedComponent) cmp).setWidth(width);

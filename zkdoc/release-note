@@ -17,6 +17,7 @@ ZK 10.0.0
   ZK-5005: pdfviewer some fonts are not rendering
   ZK-5411: withAction() cannot accept anonymous class, please convert it to Lambda syntax
   ZK-5454: nextSibling locator doesn't work in smartUpdate()
+  ZK-5261: forEach always re-renders all items
 
 
 * Upgrade Notes

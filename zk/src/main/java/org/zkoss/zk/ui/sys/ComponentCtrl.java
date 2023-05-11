@@ -666,4 +666,11 @@ public interface ComponentCtrl {
 		return Collections.emptyMap();
 	}
 
+	/**
+	 * Renders the component properties only
+	 * @param renderer
+	 * @throws IOException
+	 * @since 10.0.0
+	 */
+	public void renderPropertiesOnly(ContentRenderer renderer) throws IOException;
 }
