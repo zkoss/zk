@@ -182,6 +182,10 @@ import org.zkoss.zk.ui.sys.Visualizer;
 		_disabled = true;
 	}
 
+	public void enable() {
+		_disabled = false;
+	}
+
 	//-- update/redraw --//
 	/** Returns if this component needs to be redrawn.
 	 * <p>Note:

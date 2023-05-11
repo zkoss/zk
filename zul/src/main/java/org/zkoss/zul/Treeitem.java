@@ -18,6 +18,7 @@ package org.zkoss.zul;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -28,7 +29,9 @@ import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.OpenEvent;
 import org.zkoss.zk.ui.ext.Scope;
+import org.zkoss.zk.ui.sys.BooleanPropertyAccess;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
+import org.zkoss.zk.ui.sys.PropertyAccess;
 import org.zkoss.zul.event.PagingEvent;
 import org.zkoss.zul.ext.Paginal;
 import org.zkoss.zul.ext.TreeOpenableModel;
@@ -163,7 +166,12 @@ public class Treeitem extends XulElement implements org.zkoss.zk.ui.ext.Disable 
 	 * @since 7.0.0
 	 */
 	public boolean isRendered() {
-		return _rendered || (getTree() != null && getTree().getModel() == null);
+		if (_rendered) return true;
+		Tree tree = getTree();
+		if (tree != null) {
+			return tree.getModel() == null;
+		}
+		return false;
 	}
 
 	// Component developer use only. (since 7.0.0)
@@ -673,6 +681,37 @@ public class Treeitem extends XulElement implements org.zkoss.zk.ui.ext.Disable 
 
 		if (_value instanceof String)
 			render(renderer, "value", _value);
+	}
+
+	//--ComponentCtrl--//
+	private static HashMap<String, PropertyAccess> _properties = new HashMap<String, PropertyAccess>(2);
+
+	static {
+		_properties.put("_loadedChildren", new BooleanPropertyAccess() {
+			public void setValue(Component cmp, Boolean loadedChildren) {
+				((Treeitem) cmp).setLoaded(loadedChildren != null && loadedChildren);
+			}
+
+			public Boolean getValue(Component cmp) {
+				return ((Treeitem) cmp).isLoaded();
+			}
+		});
+		_properties.put("_loaded", new BooleanPropertyAccess() {
+			public void setValue(Component cmp, Boolean rendered) {
+				((Treeitem) cmp).setRendered(rendered != null && rendered);
+			}
+
+			public Boolean getValue(Component cmp) {
+				return ((Treeitem) cmp).isRendered();
+			}
+		});
+	}
+
+	public PropertyAccess getPropertyAccess(String prop) {
+		PropertyAccess pa = _properties.get(prop);
+		if (pa != null)
+			return pa;
+		return super.getPropertyAccess(prop);
 	}
 
 	/** Processes an AU request.

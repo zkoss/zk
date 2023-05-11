@@ -77,4 +77,12 @@ public interface Visualizer {
 	 * @since 3.0.2
 	 */
 	public void disable();
+
+	/** Enables this visualizer.
+	 * Once enabled, any update of components will be synchronized to
+	 * the client.
+	 *
+	 * @since 10.0.0
+	 */
+	public void enable();
 }

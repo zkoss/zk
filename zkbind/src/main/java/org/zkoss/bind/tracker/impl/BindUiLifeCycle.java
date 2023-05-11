@@ -58,10 +58,10 @@ import org.zkoss.zul.event.ListDataListener;
 public class BindUiLifeCycle implements UiLifeCycle {
 
 	static final Logger log = LoggerFactory.getLogger(BindUiLifeCycle.class);
-	private static final String ON_ZKBIND_LATER = "onZKBindLater";
-	private static final String REMOVE_MARK = "$$RemoveMark$$";
+	public static final String ON_ZKBIND_LATER = "onZKBindLater";
+	public static final String REMOVE_MARK = "$$RemoveMark$$";
 	//F80: Speed up render, check component's subBinderAnnotation
-	private static final String SKIP_BIND_INIT = "$$SkipBindInitMark$$";
+	public static final String SKIP_BIND_INIT = "$$SkipBindInitMark$$";
 	private static Extension _ext;
 
 	public void afterComponentAttached(Component comp, Page page) {

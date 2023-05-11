@@ -69,6 +69,12 @@ public interface ComponentCtrl {
 	 */
 	public static String  AFTER_CHILD_REMOVED = "afterChildRemoved";
 
+	/**
+	 * For after parent changed callback, use in {@link #addCallback(String, Callback)}
+	 * @since 10.0.0
+	 */
+	public static String AFTER_PARENT_CHANGED = "afterParentChanged";
+
 	/** Sets the component definition.
 	 *
 	 * <p>The component definition affects how a component behaves.
@@ -119,6 +125,15 @@ public interface ComponentCtrl {
 	 * @since 3.6.2
 	 */
 	public void beforeParentChanged(Component parent);
+
+	/** Called after the parent changed.
+	 *  Usually, {@link #onPageDetached(Page)} and {@link #onPageAttached(Page, Page)}
+	 *  cover all the cases, unless its page is not changed.
+	 *
+	 * @param parent the new parent. If null, it means detachment.
+	 * @since 10.0.0
+	 */
+	public void onParentChanged(Component parent);
 
 	/** Called when a child is added.
 	 * If a component want to optimize the update, it might do something
@@ -666,4 +681,11 @@ public interface ComponentCtrl {
 		return Collections.emptyMap();
 	}
 
+	/**
+	 * Renders the component properties only
+	 * @param renderer
+	 * @throws IOException
+	 * @since 10.0.0
+	 */
+	public void renderPropertiesOnly(ContentRenderer renderer) throws IOException;
 }
