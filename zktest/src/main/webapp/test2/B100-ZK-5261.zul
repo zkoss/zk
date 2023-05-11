@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B100-ZK-5261.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		2023/5/2, Created by jumperchen
+
+Copyright (C) 2023 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+		ListModelList model = new ListModelList();
+		for (int i = 0; i < 5; i++) {
+		model.add("aaa" + i);
+		}
+	]]></zscript>
+	<style>
+		@keyframes flash {
+		0%, 50%, 100% {
+		background-color: white;
+		}
+		25%, 75% {
+		background-color: red;
+		}
+		}
+		.flash-initially {
+		animation-duration: 0.5s;
+		animation-name: flash;
+		}
+	</style>
+	<div id="main">
+		<button label="invalidate" onClick='main.invalidate()'/>
+		<button label="add" onClick='model.add("ddd " + System.currentTimeMillis());'/>
+		<button label="insertBefore" onClick='model.add(0, "ddd " + System.currentTimeMillis());'/>
+		<forEach items="${model}">
+			<div>
+				<label value="${each}" sclass="flash-initially"/>
+			</div>
+		</forEach>
+		<button label="insert middle" onClick='model.add(((int) model.size() / 2), "ddd " + System.currentTimeMillis());'/>
+		<button label="remove" onClick='model.remove(0);'/>
+	</div>
+</zk>

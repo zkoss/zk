@@ -36,6 +36,7 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -1274,6 +1275,7 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 		if (idSpaceChanged)
 			addToIdSpacesDown(this); //called after setPage
 
+		onParentChanged(parent);
 		//call back UiLifeCycle
 		afterComponentPageChanged(newpg, oldpg);
 		if (newpg != null || oldpg != null) {
@@ -1999,6 +2001,10 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 			WebApps.getCurrent().getConfiguration().invokeCallback("destroy", this);
 	}
 
+	public void onParentChanged(Component parent) {
+		processCallback(AFTER_PARENT_CHANGED);
+	}
+
 	/** Default: handles special event listeners.
 	 * @see ComponentCtrl#onChildAdded
 	 */
@@ -2341,6 +2347,11 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 		o = getAttribute(Attributes.CLIENT_ROD);
 		if (o != null)
 			renderer.render("z$rod", (o instanceof Boolean && ((Boolean) o).booleanValue()) || !"false".equals(o));
+	}
+
+	public void renderPropertiesOnly(ContentRenderer renderer)
+			throws IOException {
+		this.renderProperties(renderer);
 	}
 
 	/** An utility to be called by {@link #renderProperties} to
@@ -3834,6 +3845,15 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 				}
 			}
 
+			if (seRoots != null) {
+				clone.seRoots = seRoots.stream()
+						.map(shadowElement -> (ShadowElement) ((Component) shadowElement).clone())
+						.collect(Collectors.toList());
+				clone.seRoots.stream()
+						.filter(shadowElement -> shadowElement instanceof HtmlShadowElement)
+						.forEach(shadowElement -> ((HtmlShadowElement) shadowElement).initClone(owner));
+			}
+
 			//AuService
 			if (ausvc instanceof ComponentCloneListener)
 				clone.ausvc = (AuService) ((ComponentCloneListener) ausvc).willClone(owner);
@@ -4050,8 +4070,7 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 	}
 
 	// Shadow Element Implementation Start
-	/**package*/
-	Map<Component, Integer> initIndexCacheMap() {
+	protected Map<Component, Integer> initIndexCacheMap() {
 		Map<Component, Integer> distributedIndexInfo = getIndexCacheMap();
 		if (distributedIndexInfo == null) {
 			distributedIndexInfo = new HashMap<Component, Integer>(getChildren().size());
@@ -4060,13 +4079,11 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 		return distributedIndexInfo;
 	}
 
-	/**package*/
-	Map<Component, Integer> getIndexCacheMap() {
+	protected Map<Component, Integer> getIndexCacheMap() {
 		return (Map<Component, Integer>) ShadowElementsCtrl.getDistributedIndexInfo();
 	}
 
-	/**package*/
-	void destroyIndexCacheMap() {
+	protected void destroyIndexCacheMap() {
 		ShadowElementsCtrl.setDistributedIndexInfo(null);
 	}
 

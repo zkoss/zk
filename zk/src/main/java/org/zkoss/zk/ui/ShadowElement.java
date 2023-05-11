@@ -54,4 +54,29 @@ public interface ShadowElement extends AfterCompose {
 	 * to re-create child components to reflect the new values.
 	 */
 	public void recreate();
+
+	/**
+	 * Returns the first component of its insertion range.
+	 * @since 10.0.0
+	 */
+	public Component getFirstInsertion();
+
+	/**
+	 * Returns the last component of its insertion range.
+	 * @since 10.0.0
+	 */
+	public Component getLastInsertion();
+
+
+	/**
+	 * Returns the next insertion point, it may be a component, a shadow element, or null.
+	 * @since 10.0.0
+	 */
+	public Component getNextInsertion();
+
+	/**
+	 * Returns the previous insertion point, it may be a component, a shadow element, or null.
+	 * @since 10.0.0
+	 */
+	public Component getPreviousInsertion();
 }
