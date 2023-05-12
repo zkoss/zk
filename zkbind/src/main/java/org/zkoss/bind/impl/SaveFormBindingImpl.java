@@ -222,7 +222,7 @@ public class SaveFormBindingImpl extends FormBindingImpl implements SaveFormBind
 	}
 
 	public boolean hasValidator() {
-		return _validator == null ? false : true;
+		return _validator != null;
 	}
 
 	public String getValidatorExpressionString() {

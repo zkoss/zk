@@ -240,7 +240,7 @@ public class SavePropertyBindingImpl extends PropertyBindingImpl implements Save
 	}
 
 	public boolean hasValidator() {
-		return _validator == null ? false : true;
+		return _validator != null;
 	}
 
 	public void validate(ValidationContext vctx) {
