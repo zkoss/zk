@@ -127,7 +127,7 @@ subprojects {
 	}
 
 	checkstyle {
-		toolVersion '8.44'
+		toolVersion '10.11.0'
 	}
 
 	task tscheck(type: NpmTask) {
