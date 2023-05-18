@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -67,6 +68,9 @@ import org.zkoss.zk.ui.event.SelectEvent;
 import org.zkoss.zk.ui.event.SerializableEventListener;
 import org.zkoss.zk.ui.ext.Blockable;
 import org.zkoss.zk.ui.ext.render.Cropper;
+import org.zkoss.zk.ui.sys.BooleanPropertyAccess;
+import org.zkoss.zk.ui.sys.IntegerPropertyAccess;
+import org.zkoss.zk.ui.sys.PropertyAccess;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zk.ui.util.ComponentCloneListener;
 import org.zkoss.zul.event.DataLoadingEvent;
@@ -3560,6 +3564,90 @@ public class Listbox extends MeshElement {
 		if (currentSelection != null && prevSeldItems.size() > 0)
 			prevSeldItems.removeAll(currentSelection);
 		return prevSeldItems;
+	}
+
+	private static HashMap<String, PropertyAccess> _properties = new HashMap<String, PropertyAccess>(8);
+
+	static {
+		_properties.put("_currentTop", new IntegerPropertyAccess() {
+			public void setValue(Component cmp, Integer currentTop) {
+				((Listbox) cmp)._currentTop = currentTop;
+			}
+
+			public Integer getValue(Component cmp) {
+				return ((Listbox) cmp)._currentTop;
+			}
+		});
+		_properties.put("_currentLeft", new IntegerPropertyAccess() {
+			public void setValue(Component cmp, Integer currentLeft) {
+				((Listbox) cmp)._currentLeft = currentLeft;
+			}
+
+			public Integer getValue(Component cmp) {
+				return ((Listbox) cmp)._currentLeft;
+			}
+		});
+		_properties.put("_anchorTop", new IntegerPropertyAccess() {
+			public void setValue(Component cmp, Integer anchorTop) {
+				((Listbox) cmp)._anchorTop = anchorTop;
+			}
+
+			public Integer getValue(Component cmp) {
+				return ((Listbox) cmp)._anchorTop;
+			}
+		});
+		_properties.put("_anchorLeft", new IntegerPropertyAccess() {
+			public void setValue(Component cmp, Integer anchorLeft) {
+				((Listbox) cmp)._anchorLeft = anchorLeft;
+			}
+
+			public Integer getValue(Component cmp) {
+				return ((Listbox) cmp)._anchorLeft;
+			}
+		});
+		_properties.put("_topPad", new IntegerPropertyAccess() {
+			public void setValue(Component cmp, Integer topPad) {
+				((Listbox) cmp)._topPad = topPad;
+			}
+
+			public Integer getValue(Component cmp) {
+				return ((Listbox) cmp)._topPad;
+			}
+		});
+		_properties.put("_selInView", new IntegerPropertyAccess() {
+			public void setValue(Component cmp, Integer jsel) {
+				((Listbox) cmp)._jsel = jsel;
+			}
+
+			public Integer getValue(Component cmp) {
+				return ((Listbox) cmp)._jsel;
+			}
+		});
+		_properties.put("_listbox$shallSyncSelInView", new BooleanPropertyAccess() {
+			public void setValue(Component cmp, Boolean shallSyncSelInView) {
+				((Listbox) cmp)._shallSyncSelInView = shallSyncSelInView;
+			}
+
+			public Boolean getValue(Component cmp) {
+				return ((Listbox) cmp)._shallSyncSelInView;
+			}
+		});
+		_properties.put("_listbox$shallUpdateScrollPos", new BooleanPropertyAccess() {
+			public void setValue(Component cmp, Boolean shallUpdateScrollPos) {
+				((Listbox) cmp)._shallUpdateScrollPos = shallUpdateScrollPos;
+			}
+
+			public Boolean getValue(Component cmp) {
+				return ((Listbox) cmp)._shallUpdateScrollPos;
+			}
+		});
+	}
+
+	public PropertyAccess getPropertyAccess(String prop) {
+		PropertyAccess pa = _properties.get(prop);
+		if (pa != null)
+			return pa;
+		return super.getPropertyAccess(prop);
 	}
 
 	/**

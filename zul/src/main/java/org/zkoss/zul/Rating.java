@@ -11,16 +11,22 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.zk.au.AuRequest;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.Disable;
 import org.zkoss.zk.ui.ext.Readonly;
+import org.zkoss.zk.ui.sys.BooleanPropertyAccess;
+import org.zkoss.zk.ui.sys.IntegerPropertyAccess;
+import org.zkoss.zk.ui.sys.PropertyAccess;
+import org.zkoss.zk.ui.sys.StringPropertyAccess;
 
 /**
  * A rating component provides a icon based rating input.
@@ -236,6 +242,45 @@ public class Rating extends HtmlBasedComponent implements Disable, Readonly {
 			render(renderer, "iconSclass", _iconSclass);
 		}
 
+	}
+
+	private static HashMap<String, PropertyAccess> _properties = new HashMap<String, PropertyAccess>(3);
+
+	static {
+		_properties.put("_max", new IntegerPropertyAccess() {
+			public void setValue(Component cmp, Integer max) {
+				((Rating) cmp)._max = max;
+			}
+
+			public Integer getValue(Component cmp) {
+				return ((Rating) cmp)._max;
+			}
+		});
+		_properties.put("_cancelable", new BooleanPropertyAccess() {
+			public void setValue(Component cmp, Boolean cancelable) {
+				((Rating) cmp)._cancelable = cancelable;
+			}
+
+			public Boolean getValue(Component cmp) {
+				return ((Rating) cmp)._cancelable;
+			}
+		});
+		_properties.put("_orient", new StringPropertyAccess() {
+			public void setValue(Component cmp, String orient) {
+				((Rating) cmp)._orient = orient;
+			}
+
+			public String getValue(Component cmp) {
+				return ((Rating) cmp)._orient;
+			}
+		});
+	}
+
+	public PropertyAccess getPropertyAccess(String prop) {
+		PropertyAccess pa = _properties.get(prop);
+		if (pa != null)
+			return pa;
+		return super.getPropertyAccess(prop);
 	}
 
 	public void service(AuRequest request, boolean everError) {

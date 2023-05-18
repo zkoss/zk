@@ -17,11 +17,15 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import java.io.Serializable;
+import java.util.HashMap;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.sys.BooleanPropertyAccess;
+import org.zkoss.zk.ui.sys.IntegerPropertyAccess;
+import org.zkoss.zk.ui.sys.PropertyAccess;
 import org.zkoss.zul.impl.LoadStatus;
 import org.zkoss.zul.impl.XulElement;
 
@@ -387,6 +391,36 @@ public class Listitem extends XulElement {
 		if (oldparent == null || !((Listbox) oldparent).isLoadingModel()) {
 			super.addMoved(oldparent, oldpg, newpg);
 		}
+	}
+
+	private static HashMap<String, PropertyAccess> _properties = new HashMap<String, PropertyAccess>(2);
+
+	static {
+		_properties.put("_loaded", new BooleanPropertyAccess() {
+			public void setValue(Component cmp, Boolean loaded) {
+				((Listitem) cmp)._loaded = loaded;
+			}
+
+			public Boolean getValue(Component cmp) {
+				return ((Listitem) cmp)._loaded;
+			}
+		});
+		_properties.put("_index", new IntegerPropertyAccess() {
+			public void setValue(Component cmp, Integer index) {
+				((Listitem) cmp)._index = index;
+			}
+
+			public Integer getValue(Component cmp) {
+				return ((Listitem) cmp)._index;
+			}
+		});
+	}
+
+	public PropertyAccess getPropertyAccess(String prop) {
+		PropertyAccess pa = _properties.get(prop);
+		if (pa != null)
+			return pa;
+		return super.getPropertyAccess(prop);
 	}
 
 	//-- Component --//

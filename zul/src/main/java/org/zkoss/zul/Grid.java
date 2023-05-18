@@ -23,6 +23,7 @@ import java.util.AbstractCollection;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -53,6 +54,8 @@ import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.SerializableEventListener;
 import org.zkoss.zk.ui.ext.render.Cropper;
+import org.zkoss.zk.ui.sys.IntegerPropertyAccess;
+import org.zkoss.zk.ui.sys.PropertyAccess;
 import org.zkoss.zk.ui.util.ComponentCloneListener;
 import org.zkoss.zul.event.DataLoadingEvent;
 import org.zkoss.zul.event.GroupsDataEvent;
@@ -1836,6 +1839,45 @@ public class Grid extends MeshElement {
 		public void setHeight(int height) {
 			_topPad = height;
 		}
+	}
+
+	private static HashMap<String, PropertyAccess> _properties = new HashMap<String, PropertyAccess>(3);
+
+	static {
+		_properties.put("_currentTop", new IntegerPropertyAccess() {
+			public void setValue(Component cmp, Integer currentTop) {
+				((Grid) cmp)._currentTop = currentTop;
+			}
+
+			public Integer getValue(Component cmp) {
+				return ((Grid) cmp)._currentTop;
+			}
+		});
+		_properties.put("_currentLeft", new IntegerPropertyAccess() {
+			public void setValue(Component cmp, Integer currentLeft) {
+				((Grid) cmp)._currentLeft = currentLeft;
+			}
+
+			public Integer getValue(Component cmp) {
+				return ((Grid) cmp)._currentLeft;
+			}
+		});
+		_properties.put("_topPad", new IntegerPropertyAccess() {
+			public void setValue(Component cmp, Integer topPad) {
+				((Grid) cmp)._topPad = topPad;
+			}
+
+			public Integer getValue(Component cmp) {
+				return ((Grid) cmp)._topPad;
+			}
+		});
+	}
+
+	public PropertyAccess getPropertyAccess(String prop) {
+		PropertyAccess pa = _properties.get(prop);
+		if (pa != null)
+			return pa;
+		return super.getPropertyAccess(prop);
 	}
 
 	/** Processes an AU request.
