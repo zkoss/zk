@@ -92,7 +92,7 @@ dependencies {
 	implementation 'javax.validation:validation-api:1.1.0.Final'
 
 	// fix for DestroyTest.java that org.eclipse.jetty:apache-jsp:10.0.5 depends on slf4j-api 2.0.0-alpha1
-	implementation 'org.slf4j:slf4j-jdk14:2.0.3'
+//	implementation 'org.slf4j:slf4j-jdk14:2.0.3'
 	implementation 'javax.inject:javax.inject:1'
 	implementation 'javax.enterprise:cdi-api:1.0'
 	implementation 'org.javassist:javassist:3.28.0-GA'
@@ -116,6 +116,7 @@ dependencies {
 	testImplementation 'org.junit.platform:junit-platform-launcher:1.9.0'
 	testImplementation 'xml-apis:xml-apis:1.4.01'
 	testImplementation 'org.zkoss.test:zk-webdriver:1.0.9.1'
+	implementation 'ch.qos.logback:logback-classic:1.4.7', 'ch.qos.logback:logback-core:1.4.7'
 
 	// For B96_ZK_4194Test to use a specific Chrome driver version (this will change to match latest chrome)
 	testImplementation 'org.seleniumhq.selenium:selenium-devtools-v112:4.9.0'
