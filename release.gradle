@@ -142,6 +142,7 @@ task prepareBin() {
 				include "**/jfreechart.jar"
 				include "**/slf4j-api.jar"
 				include "**/zsoup.jar"
+				include "**/zkdiffer.jar"
 			}
 		}
 		// theme jars
