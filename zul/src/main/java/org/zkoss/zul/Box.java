@@ -14,9 +14,13 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.util.HashMap;
+
 import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.sys.ObjectPropertyAccess;
+import org.zkoss.zk.ui.sys.PropertyAccess;
 import org.zkoss.zul.impl.Utils;
 import org.zkoss.zul.impl.XulElement;
 
@@ -369,5 +373,32 @@ public class Box extends XulElement {
 
 	public String getZclass() {
 		return _zclass == null ? isVertical() ? "z-vbox" : "z-hbox" : _zclass;
+	}
+
+	private static HashMap<String, PropertyAccess> _properties = new HashMap<String, PropertyAccess>(1);
+
+	static {
+		_properties.put("_sizes", new ObjectPropertyAccess() {
+			public void setValue(Component cmp, Object sizes) {
+				if (sizes instanceof String[]) {
+					((Box) cmp)._sizes = (String[]) sizes;
+				} else if (sizes instanceof String) {
+					((Box) cmp)._sizes = Utils.stringToArray((String) sizes, null);
+				} else if (sizes == null) {
+					((Box) cmp)._sizes = null;
+				}
+			}
+
+			public Object getValue(Component cmp) {
+				return ((Box) cmp)._sizes;
+			}
+		});
+	}
+
+	public PropertyAccess getPropertyAccess(String prop) {
+		PropertyAccess pa = _properties.get(prop);
+		if (pa != null)
+			return pa;
+		return super.getPropertyAccess(prop);
 	}
 }

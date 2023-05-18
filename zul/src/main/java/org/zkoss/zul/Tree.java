@@ -62,6 +62,8 @@ import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.SelectEvent;
 import org.zkoss.zk.ui.event.SerializableEventListener;
+import org.zkoss.zk.ui.sys.IntegerPropertyAccess;
+import org.zkoss.zk.ui.sys.PropertyAccess;
 import org.zkoss.zk.ui.sys.ShadowElementsCtrl;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zk.ui.util.ComponentCloneListener;
@@ -2745,6 +2747,54 @@ public class Tree extends MeshElement {
 				return false;
 		}
 		return true;
+	}
+
+	private static HashMap<String, PropertyAccess> _properties = new HashMap<String, PropertyAccess>(4);
+
+	static {
+		_properties.put("_currentTop", new IntegerPropertyAccess() {
+			public void setValue(Component cmp, Integer currentTop) {
+				((Tree) cmp)._currentTop = currentTop;
+			}
+
+			public Integer getValue(Component cmp) {
+				return ((Tree) cmp)._currentTop;
+			}
+		});
+		_properties.put("_currentLeft", new IntegerPropertyAccess() {
+			public void setValue(Component cmp, Integer currentLeft) {
+				((Tree) cmp)._currentLeft = currentLeft;
+			}
+
+			public Integer getValue(Component cmp) {
+				return ((Tree) cmp)._currentLeft;
+			}
+		});
+		_properties.put("_anchorTop", new IntegerPropertyAccess() {
+			public void setValue(Component cmp, Integer anchorTop) {
+				((Tree) cmp)._anchorTop = anchorTop;
+			}
+
+			public Integer getValue(Component cmp) {
+				return ((Tree) cmp)._anchorTop;
+			}
+		});
+		_properties.put("_anchorLeft", new IntegerPropertyAccess() {
+			public void setValue(Component cmp, Integer anchorLeft) {
+				((Tree) cmp)._anchorLeft = anchorLeft;
+			}
+
+			public Integer getValue(Component cmp) {
+				return ((Tree) cmp)._anchorLeft;
+			}
+		});
+	}
+
+	public PropertyAccess getPropertyAccess(String prop) {
+		PropertyAccess pa = _properties.get(prop);
+		if (pa != null)
+			return pa;
+		return super.getPropertyAccess(prop);
 	}
 
 	/** Processes an AU request.
