@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -1389,6 +1390,8 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 
 			Component firstInsertion = _firstInsertion;
 			Component lastInsertion = _lastInsertion;
+			Component nextInsertion = lastInsertion != null ? lastInsertion.getNextSibling() : null;
+			Component previousInsertion = firstInsertion != null ? firstInsertion.getPreviousSibling() : null;
 			if (_firstInsertion != null) {
 				for (Component next = _firstInsertion, end = _lastInsertion.getNextSibling();
 					 next != end;) {
@@ -1397,16 +1400,20 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 					next = tmp;
 				}
 			}
-
 			if (hostIfAny != null) {
 				Component parent = getParent();
 				while (parent != null) {
 					HtmlShadowElement parentSe = (HtmlShadowElement) parent;
 					if (parentSe._firstInsertion == firstInsertion) {
-						parentSe._firstInsertion = null;
-					}
-					if (parentSe._lastInsertion == lastInsertion) {
-						parentSe._lastInsertion = null;
+						if (parentSe._lastInsertion == lastInsertion) {
+							parentSe._firstInsertion = parentSe._lastInsertion = null; // cut all
+						} else {
+							parentSe._firstInsertion = nextInsertion;
+						}
+					} else if (parentSe._lastInsertion == lastInsertion) {
+						parentSe._lastInsertion = Optional.ofNullable(
+										parentSe._lastInsertion.getPreviousSibling())
+								.orElse(previousInsertion);
 					}
 					parent = parent.getParent();
 				}
