@@ -1104,7 +1104,13 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 					Map<Component, Integer> indexCacheMap = getIndexCacheMap();
 					try {
 						if (indexCacheMap != null) {
-							destroyIndexCacheMap(); // reset
+							Iterator<Component> iterator = indexCacheMap.keySet()
+									.iterator();
+							if (iterator.hasNext() && iterator.next().getParent() != baseChild
+									&& iterator.next().getParent() != baseChild.getParent()) {
+								// check whether it's the same parent
+								destroyIndexCacheMap(); // reset
+							}
 						}
 						initIndexCacheMap();
 
@@ -4087,27 +4093,49 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 		ShadowElementsCtrl.setDistributedIndexInfo(null);
 	}
 
+	private boolean _disabledHostChanged = false;
+
+	protected boolean isDisabledHostChanged() {
+		return _disabledHostChanged;
+	}
+	protected void disableHostChanged() {
+		_disabledHostChanged = true;
+	}
+	protected void enableHostChanged() {
+		_disabledHostChanged = false;
+	}
+
 	private void triggerBeforeHostParentChanged(Component parent) {
+		if (isDisabledHostChanged()) return;
 		List<ShadowElement> shadowRoots = getShadowRoots();
 		if (!shadowRoots.isEmpty()) {
+			Map<Component, Integer> indexCacheMap = getIndexCacheMap();
 			try {
-				initIndexCacheMap();
+				if (indexCacheMap == null) {
+					initIndexCacheMap();
+				}
 				for (ShadowElement se : new LinkedList<ShadowElement>(shadowRoots)) {
 					if (se instanceof ShadowElementCtrl) {
 						((ShadowElementCtrl) se).beforeHostParentChanged(parent);
 					}
 				}
 			} finally {
-				destroyIndexCacheMap();
+				if (indexCacheMap == null) {
+					destroyIndexCacheMap();
+				}
 			}
 		}
 	}
 
 	private void triggerBeforeHostChildRemoved(Component child) {
+		if (isDisabledHostChanged()) return;
 		List<ShadowElement> shadowRoots = getShadowRoots();
 		if (!shadowRoots.isEmpty()) {
+			Map<Component, Integer> indexCacheMap = getIndexCacheMap();
 			try {
-				initIndexCacheMap();
+				if (indexCacheMap == null) {
+					initIndexCacheMap();
+				}
 				final int indexOf = getChildren().indexOf(child);
 				for (ShadowElement se : new LinkedList<ShadowElement>(shadowRoots)) {
 					if (se instanceof ShadowElementCtrl) {
@@ -4115,7 +4143,9 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 					}
 				}
 			} finally {
-				destroyIndexCacheMap();
+				if (indexCacheMap == null) {
+					destroyIndexCacheMap();
+				}
 			}
 		}
 	}
@@ -4123,24 +4153,33 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 	private void triggerAfterHostChildRemoved(Component child) {
 		List<ShadowElement> shadowRoots = getShadowRoots();
 		if (!shadowRoots.isEmpty()) {
+			Map<Component, Integer> indexCacheMap = getIndexCacheMap();
 			try {
-				initIndexCacheMap();
+				if (indexCacheMap == null) {
+					initIndexCacheMap();
+				}
 				for (ShadowElement se : new LinkedList<ShadowElement>(shadowRoots)) {
 					if (se instanceof ShadowElementCtrl) {
 						((ShadowElementCtrl) se).afterHostChildRemoved(child);
 					}
 				}
 			} finally {
-				destroyIndexCacheMap();
+				if (indexCacheMap == null) {
+					destroyIndexCacheMap();
+				}
 			}
 		}
 	}
 
 	private void triggerBeforeHostChildAdded(Component child, Component insertBefore) {
+		if (isDisabledHostChanged()) return;
 		List<ShadowElement> shadowRoots = getShadowRoots();
 		if (!shadowRoots.isEmpty()) {
+			Map<Component, Integer> indexCacheMap = getIndexCacheMap();
 			try {
-				initIndexCacheMap();
+				if (indexCacheMap == null) {
+					initIndexCacheMap();
+				}
 				final int indexOfInsertBefore = insertBefore == null ? -1 : getChildren().indexOf(insertBefore);
 				for (ShadowElement se : new LinkedList<ShadowElement>(shadowRoots)) {
 					if (se instanceof ShadowElementCtrl) {
@@ -4148,16 +4187,22 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 					}
 				}
 			} finally {
-				destroyIndexCacheMap();
+				if (indexCacheMap == null) {
+					destroyIndexCacheMap();
+				}
 			}
 		}
 	}
 
 	private void triggerAfterHostChildAdded(Component child) {
+		if (isDisabledHostChanged()) return;
 		List<ShadowElement> shadowRoots = getShadowRoots();
 		if (!shadowRoots.isEmpty()) {
+			Map<Component, Integer> indexCacheMap = getIndexCacheMap();
 			try {
-				initIndexCacheMap();
+				if (indexCacheMap == null) {
+					initIndexCacheMap();
+				}
 				final int indexOf = getChildren().indexOf(child);
 				for (ShadowElement se : new LinkedList<ShadowElement>(shadowRoots)) {
 					if (se instanceof ShadowElementCtrl) {
@@ -4165,7 +4210,9 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 					}
 				}
 			} finally {
-				destroyIndexCacheMap();
+				if (indexCacheMap == null) {
+					destroyIndexCacheMap();
+				}
 			}
 		}
 	}
@@ -4203,8 +4250,9 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 		if (_shadowIdMap == null)
 			_shadowIdMap = new HashMap<String, ShadowElement>(4);
 
-		if (!auxinf.seRoots.contains(shadow))
+		if (!auxinf.seRoots.contains(shadow)) {
 			return auxinf.seRoots.add(shadow);
+		}
 		return false;
 	}
 
