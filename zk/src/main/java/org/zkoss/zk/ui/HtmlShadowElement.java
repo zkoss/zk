@@ -1378,15 +1378,43 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 	}
 
 	public void clearChildren() {
-		if (getFirstChild() != null) {
-			removeChildren(getFirstChild());
-		}
+		AbstractComponent hostIfAny = (AbstractComponent) getShadowHostIfAny();
+		try {
+			if (hostIfAny != null) {
+				hostIfAny.disableHostChanged();
+			}
+			if (getFirstChild() != null) {
+				removeChildren(getFirstChild());
+			}
 
-		if (_firstInsertion != null) {
-			for (Component next = _firstInsertion, end = _lastInsertion.getNextSibling(); next != end;) {
-				Component tmp = next.getNextSibling();
-				next.detach();
-				next = tmp;
+			Component firstInsertion = _firstInsertion;
+			Component lastInsertion = _lastInsertion;
+			if (_firstInsertion != null) {
+				for (Component next = _firstInsertion, end = _lastInsertion.getNextSibling();
+					 next != end;) {
+					Component tmp = next.getNextSibling();
+					next.detach();
+					next = tmp;
+				}
+			}
+
+			if (hostIfAny != null) {
+				Component parent = getParent();
+				while (parent != null) {
+					HtmlShadowElement parentSe = (HtmlShadowElement) parent;
+					if (parentSe._firstInsertion == firstInsertion) {
+						parentSe._firstInsertion = null;
+					}
+					if (parentSe._lastInsertion == lastInsertion) {
+						parentSe._lastInsertion = null;
+					}
+					parent = parent.getParent();
+				}
+			}
+			_firstInsertion = _lastInsertion = null;
+		} finally {
+			if (hostIfAny != null) {
+				hostIfAny.enableHostChanged();
 			}
 		}
 	}
