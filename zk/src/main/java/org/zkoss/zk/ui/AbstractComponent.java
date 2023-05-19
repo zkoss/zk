@@ -1106,8 +1106,9 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 						if (indexCacheMap != null) {
 							Iterator<Component> iterator = indexCacheMap.keySet()
 									.iterator();
-							if (iterator.hasNext() && iterator.next().getParent() != baseChild
-									&& iterator.next().getParent() != baseChild.getParent()) {
+							Component parent = null;
+							if (iterator.hasNext() && (parent = iterator.next().getParent()) != baseChild
+									&& parent != baseChild.getParent()) {
 								// check whether it's the same parent
 								destroyIndexCacheMap(); // reset
 							}
