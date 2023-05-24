@@ -265,9 +265,7 @@ exports['build:minify-css'] = function () {
 };
 
 const dtsEntry = 'index.d.ts';
-/**
- * Requires the command line argument `--version=<VERSION>`
- */
+
 exports['build:dts'] = function () {
 	const { declarationDir } = require('./tsconfig.dts.json').compilerOptions;
 
@@ -306,10 +304,15 @@ exports['build:dts'] = function () {
 			.pipe(print()),
 	);
 };
+/**
+ * Requires the command line argument `--zk-version <VERSION>`
+ */
 exports['publish:dts'] = function (done) {
-	const { version } = options;
+	// Don't name the CLI argument as `version` as, `gulp` will interpret it as
+	// `gulp --version` regardless of argument position.
+	const { 'zk-version': version } = options;
 	if (!version || typeof version !== 'string') {
-		console.log('Requires a version string!');
+		console.log('Requires a version string: --zk-version <semVer>');
 		return;
 	}
 	console.log(`version: ${version}`);
@@ -323,6 +326,7 @@ exports['publish:dts'] = function (done) {
 			...require('../zkcml/package.json').dependencies,
 		}
 	};
+	console.log(JSON.stringify(dtsPackage));
 	fs.writeFileSync('./build/dts/package.json', JSON.stringify(dtsPackage));
 	return done();
 };
