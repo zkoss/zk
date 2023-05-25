@@ -1,18 +1,51 @@
-/* eslint-disable one-var */
-//@ts-check
+// @ts-check
 const fs = require('fs');
 const path = require('path');
 const gulp = require('gulp');
 const minimist = require('minimist');
+/**
+ * @typedef {Object} BabelMismatch
+ * @property {import('@babel/core').TransformOptions['filename']} patch
+ * @property {NonNullable<Parameters<typeof import('gulp-babel')>[0]>['filename']} original
+ */
+/**
+ * gulp-babel seems to be no longer supported, so I patch the type declaration here manually.
+ * @type {(options?: import('@babel/core').TransformOptions) => NodeJS.ReadWriteStream}
+ *
+ * {@link BabelMismatch.patch} is not assignable to {@link BabelMismatch.original}.
+ */
+// @ts-expect-error: Types of property `filename` are incompatible. See the links above.
 const babel = require('gulp-babel');
 const rename = require('gulp-rename');
 const uglify = require('gulp-uglify');
 const browserSync = require('browser-sync').create();
+/**
+ * @typedef {Object} PrintMismatch
+ * @property {NodeJS.ReadWriteStream} patch
+ * @property {import('stream').Stream} original
+ */
+/**
+ * gulp-print seems to be no longer supported, so I patch the type declaration here manually.
+ * @type {(format?: import('gulp-print').FormatFunction) => NodeJS.ReadWriteStream}
+ *
+ * {@link PrintMismatch.patch} is not assignable to {@link PrintMismatch.original}.
+ */
+// @ts-expect-error: Type mismatch due to missing properties. See the links above.
 const print = require('gulp-print').default;
+/**
+ * @typedef {<F extends () => NodeJS.ReadWriteStream, A extends Parameters<F>>(filter: F, args: A) => ReturnType<F>} Through
+ */
+/**
+ * @type {(tapFunction: (file: import('vinyl'), t?: {through?: Through}) => void) => NodeJS.ReadWriteStream}
+ */
 const tap = require('gulp-tap');
 const gulpIgnore = require('gulp-ignore');
 const postcss = require('gulp-postcss');
 const mergeStream = require('merge-stream');
+/**
+ * The signature should be `createResolver(config, options).resolve(key, ...)`.
+ * @type {(...args: Parameters<typeof import('resolve-options')>) => {resolve: (key: string, ...args: any[]) => number | string | boolean | Date | undefined | null}}
+ */
 const createResolver = require('resolve-options');
 const webpackStream = require('webpack-stream');
 const webpack = require('webpack');
@@ -39,7 +72,7 @@ const options = minimist(process.argv.slice(3), knownOptions);
  * In any case, duplicated paths should be pruned.
  */
 options.subprojectPaths = [...new Set(
-	/** @type string */(options.subprojectPaths).split(',')
+	/** @type {string} */(options.subprojectPaths).split(',')
 )];
 
 /**
@@ -76,8 +109,8 @@ function ignoreSameFile(destDir, force) {
 	return gulpIgnore.exclude(function (file) {
 		if (force) return false;
 		// simulate gulp.dest() to find a output path
-		const optResolver = createResolver(config);
-		const cwd = path.resolve(optResolver.resolve('cwd', file));
+		const optResolver = createResolver(config, {});
+		const cwd = path.resolve(/** @type {string} */(optResolver.resolve('cwd', file)));
 		const basePath = path.resolve(cwd, destDir);
 		const writePath = path.resolve(basePath, file.relative);
 		if (fs.existsSync(writePath)) {
@@ -211,7 +244,7 @@ function typescript_dev_subproject(subprojectPath, since) {
 		path.join(subprojectPath, 'src/main/resources'),
 		path.join(subprojectPath, 'build/resources/main'),
 		since, // gulp.lastRun(typescript_dev_zk)
-		// TODO: `gulp.lastRun` is currently ignored in the downstream due to it
+		// TODO: `gulp.lastRun` is currently ignored in the downstream due to it being
 		// unreliable. Hence, it is safe to ignore it here. See the warning in
 		// `typescript_dev`. Read more docs and do more experiments to see how
 		// we can make it work.
@@ -230,11 +263,9 @@ exports['build:minify-css'] = function () {
 		.pipe(tap(function (file) {
 			if (file.path.endsWith('.css.dsp')) {
 				// ignore DSP syntax
-				file.contents = Buffer.from(file.contents.toString('utf-8')
+				file.contents = Buffer.from(/** @type {NonNullable<typeof file.contents>} */(file.contents).toString('utf-8')
 					.replace(/<%/g, '/*!<%')
-					.replace(/\${([^}]*)}/g, function (match, g1) {
-						return '\\9' + g1 + '\\0';
-					})
+					.replace(/\${([^}]*)}/g, (match, g1) => `\\9${g1}\\0`)
 					.replace(/<c:/g, '<%c--')
 					.replace(/%>/g, '%>*/')
 					.replace(/\/>/g, '--c%>'), 'utf-8');
@@ -242,7 +273,7 @@ exports['build:minify-css'] = function () {
 		}))
 		.pipe(tap(function (file, t) {
 			if (file.path.endsWith('.css.dsp')) {
-				return t.through(postcss, [[require('cssnano')]]);
+				return /** @type {Required<NonNullable<typeof t>>} */(t).through(postcss, [[require('cssnano')]]);
 			} else {
 				console.log('copy...', file.path);
 			}
@@ -250,11 +281,9 @@ exports['build:minify-css'] = function () {
 		.pipe(tap(function (file) {
 			if (file.path.endsWith('.css.dsp')) {
 				// revert DSP syntax
-				file.contents = Buffer.from(file.contents.toString('utf-8')
+				file.contents = Buffer.from(/** @type {NonNullable<typeof file.contents>} */(file.contents).toString('utf-8')
 					.replace(/\/\*!<%/g, '<%')
-					.replace(/\\9([^\\0]*)\\0/g, function (match, g1) {
-						return '${' + g1 + '}';
-					})
+					.replace(/\\9([^\\0]*)\\0/g, (match, g1) => `\${${g1}}`)
 					.replace(/<%c--/g, '<c:')
 					.replace(/--c%>/g, '/>')
 					.replace(/%>\*\//g, '%>'), 'utf-8');
@@ -350,7 +379,7 @@ class Subproject {
 	}
 }
 
-const subprojects = /** @type string[] */(options.subprojectPaths)
+const subprojects = /** @type {string[]} */(options.subprojectPaths)
 	.map(subprojectPath => new Subproject(subprojectPath));
 
 exports['build:single'] = typescript_build_single;
