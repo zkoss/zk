@@ -143,17 +143,18 @@ function typescript_build_single() {
  */
 function typescript_build(src, dest, force, since) {
 	const webpackConfig = require('./webpack.config.js');
-	webpackConfig.mode = 'production';
 	/** @type {import('vinyl-fs').SrcOptions} */
 	const defaultSrcOptions = {
 		root: src,
 		since,
 	};
-	// Streams are not sequenced. If one uses `ignoreSameFile` on stream 1, but stream 3
-	// executes first, then `*.ts` will be excluded from compilation because stream 3 would
+	const tsBundledEntries = gulp.src('/**/index.ts', defaultSrcOptions);
+
+	// Streams are not sequenced. If one uses `ignoreSameFile` on stream 1, but stream 4
+	// executes first, then `*.ts` will be excluded from compilation because stream 4 would
 	// have already copied the same `*.ts` into `dest`. Thus, I don't rely on ignoreSameFile.
-	// Fortunately, stream 1 and stream 2 both produces only `*.js` which stream 3 will not
-	// overwrite (stream 3 explicitly ignores `*.js` in `gulp.src()`).
+	// Fortunately, stream 1 and stream 2 both produces only `*.js` which stream 4 will not
+	// overwrite (stream 4 explicitly ignores `*.js` in `gulp.src()`).
 	return mergeStream(
 		// Transpile single files with babel which are not siblings of some `index.ts`
 		gulp.src('/**/@(*.ts|*.js)', { // stream 1
@@ -174,8 +175,45 @@ function typescript_build(src, dest, force, since) {
 			}))
 			.pipe(gulp.dest(dest))
 			.pipe(print()),
-		// Bundle `index.ts` with webpack
-		gulp.src('/**/index.ts', defaultSrcOptions) // stream 2
+		// Bundle `index.ts` with webpack as `index.js` with source map
+		bundleWithWebpack( // stream 2
+			tsBundledEntries, {
+				...webpackConfig,
+				mode: 'production',
+				devtool: 'source-map',
+			},
+			'js',
+		),
+		// Bundle `index.ts` with webpack as `index.src.js` without source map
+		bundleWithWebpack( // stream 3
+			tsBundledEntries, {
+				...webpackConfig,
+				mode: 'development',
+				optimization: {
+					minimize: false,
+				},
+				devtool: false,
+			},
+			'src.js',
+		),
+		// fix copy resource in zipjs folder
+		gulp.src('/**/!(*.less|*.js|*.d.ts)', { // stream 4
+			...defaultSrcOptions,
+			nodir: true,
+		})
+			.pipe(ignoreSameFile(dest))
+			.pipe(gulp.dest(dest))
+			.pipe(print())
+	);
+
+	/**
+	 * @param {NodeJS.ReadWriteStream} bundleEntries
+	 * @param {webpack.Configuration} webpackConfig
+	 * @param {string} fileExtension - `js`, `src.js`, etc.
+	 * @returns {NodeJS.ReadWriteStream}
+	 */
+	function bundleWithWebpack(bundleEntries, webpackConfig, fileExtension) {
+		return bundleEntries
 			// There is no official way to specify the "library" property in a
 			// webpack "entry" from webpack-stream, so we manipulate the stream
 			// manually; note that specifying the "library" property in "output"
@@ -192,26 +230,18 @@ function typescript_build(src, dest, force, since) {
 						library: {
 							type: 'window',
 							export: 'default',
-						}
-					}
+						},
+					},
 				};
 				webpackConfig.output = {
-					filename: '[name].js',
+					filename: `[name].${fileExtension}`,
 					path: process.cwd(),
 				};
 				return webpackStream(webpackConfig, webpack);
 			}))
 			.pipe(gulp.dest(dest))
-			.pipe(print()),
-		// fix copy resource in zipjs folder
-		gulp.src('/**/!(*.less|*.js|*.d.ts)', { // stream 3
-			...defaultSrcOptions,
-			nodir: true,
-		})
-			.pipe(ignoreSameFile(dest))
-			.pipe(gulp.dest(dest))
-			.pipe(print())
-	);
+			.pipe(print());
+	}
 }
 
 function browsersync_init(done) {
