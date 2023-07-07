@@ -8,6 +8,11 @@ ZK 10.0.0
   ZK-5270: Adjust ID generation mechanism in ZHTML Component
 
 * Bugs
+  ZK-5373: focus button, z-focus-a, doesn't have an accessible name
+  ZK-5448: Elements with an ARIA treegrid(role) that require children to contain a specific row(role) are missing some or all of those required children
+  ZK-5449: Elements with an ARIA treegrid(role) that require children to contain a specific [role] are missing some or all of those required children
+  ZK-5462: empty listbox fails to pass lighthouse accessibility check for missing required role
+  ZK-5463: empty tree fails to pass lighthouse accessibility check for missing required role
   ZK-5089: AfterSizeEvent doesn't return a correct size of a Window component
   ZK-5120: Combobox smart update emptySearchMessage doesn't work
   ZK-5138: Grid row setAlign not work after rendered
