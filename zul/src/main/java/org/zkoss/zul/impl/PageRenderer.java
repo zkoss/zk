@@ -85,9 +85,7 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 			if (!"auto".equals(viewport))
 				out.write("<meta name=\"viewport\" content=\"" + viewport + "\" > \n");
 			else if (!"true".equals(Library.getProperty("org.zkoss.zul.tablet.meta.viewport.disabled", "false")))
-				out.write(
-						"<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no\" > \n");
-
+				out.write("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" > \n");
 			out.write("<title>");
 		}
 		write(out, page.getTitle());
