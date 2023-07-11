@@ -18,6 +18,7 @@ ZK 10.0.0
   ZK-5411: withAction() cannot accept anonymous class, please convert it to Lambda syntax
   ZK-5454: nextSibling locator doesn't work in smartUpdate()
   ZK-5261: forEach always re-renders all items
+  ZK-5493: [user-scalable='no'] is used in the <meta name='viewport'> element or the [maximum-scale] attribute is less than 5
 
 
 * Upgrade Notes
