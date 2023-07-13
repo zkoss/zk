@@ -27,6 +27,7 @@ ZK 10.0.0
   ZK-5462: empty listbox fails to pass lighthouse accessibility check for missing required role
   ZK-5479: checkboxes in a listheader have missing required aria attribute: aria-checked
   ZK-5492: The elements with an id of 'tpad-tbl' and 'bpad-tbl' do not have the correct role
+  ZK-5491: Multislider and Rangeslider's [aria-*] attributes do not match their roles
 
 
 * Upgrade Notes
