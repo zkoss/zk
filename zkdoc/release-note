@@ -25,6 +25,7 @@ ZK 10.0.0
   ZK-5449: Elements with an ARIA treegrid(role) that require children to contain a specific [role] are missing some or all of those required children
   ZK-5463: empty tree fails to pass lighthouse accessibility check for missing required role
   ZK-5462: empty listbox fails to pass lighthouse accessibility check for missing required role
+  ZK-5479: checkboxes in a listheader have missing required aria attribute: aria-checked
 
 
 * Upgrade Notes
