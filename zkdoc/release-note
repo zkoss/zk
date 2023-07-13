@@ -21,6 +21,9 @@ ZK 10.0.0
   ZK-5261: forEach always re-renders all items
   ZK-5493: [user-scalable='no'] is used in the <meta name='viewport'> element or the [maximum-scale] attribute is less than 5
   ZK-5373: focus button, z-focus-a, doesn't have an accessible name
+  ZK-5448: Elements with an ARIA treegrid(role) that require children to contain a specific row(role) are missing some or all of those required children
+  ZK-5449: Elements with an ARIA treegrid(role) that require children to contain a specific [role] are missing some or all of those required children
+  ZK-5463: empty tree fails to pass lighthouse accessibility check for missing required role
 
 
 * Upgrade Notes
