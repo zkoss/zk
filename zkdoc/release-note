@@ -29,6 +29,7 @@ ZK 10.0.0
   ZK-5492: The elements with an id of 'tpad-tbl' and 'bpad-tbl' do not have the correct role
   ZK-5491: Multislider and Rangeslider's [aria-*] attributes do not match their roles
   ZK-5494: Background and foreground colors do not have a sufficient contrast ratio
+  ZK-5481: The checkbox in a listitem doesn't have a role "checkbox"
 
 
 * Upgrade Notes
