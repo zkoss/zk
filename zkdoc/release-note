@@ -28,6 +28,7 @@ ZK 10.0.0
   ZK-5479: checkboxes in a listheader have missing required aria attribute: aria-checked
   ZK-5492: The elements with an id of 'tpad-tbl' and 'bpad-tbl' do not have the correct role
   ZK-5491: Multislider and Rangeslider's [aria-*] attributes do not match their roles
+  ZK-5494: Background and foreground colors do not have a sufficient contrast ratio
 
 
 * Upgrade Notes
