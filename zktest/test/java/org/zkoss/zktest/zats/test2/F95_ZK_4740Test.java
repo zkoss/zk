@@ -13,6 +13,8 @@ package org.zkoss.zktest.zats.test2;
 
 import static org.hamcrest.Matchers.greaterThan;
 
+import java.time.Duration;
+
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 import org.openqa.selenium.Dimension;
@@ -30,7 +32,7 @@ public class F95_ZK_4740Test extends WebDriverTestCase {
 	public void test() {
 		connect();
 
-		final WebDriverWait wait = new WebDriverWait(driver, 3);
+		final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(3));
 		final WebElement pdfCanvas = toElement(jq("canvas"));
 		wait.until(ExpectedConditions.attributeToBeNotEmpty(pdfCanvas, "height"));
 

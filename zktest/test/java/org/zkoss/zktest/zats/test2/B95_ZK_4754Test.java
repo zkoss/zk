@@ -11,6 +11,8 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import java.time.Duration;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -26,7 +28,7 @@ public class B95_ZK_4754Test extends WebDriverTestCase {
 	public void test() {
 		connect();
 
-		final WebDriverWait wait = new WebDriverWait(driver, 3);
+		final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(3));
 		wait.until(ExpectedConditions.attributeToBeNotEmpty(toElement(jq("canvas")), "height"));
 		sleep(500);
 

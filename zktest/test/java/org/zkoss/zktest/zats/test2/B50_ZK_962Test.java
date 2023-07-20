@@ -13,28 +13,19 @@ package org.zkoss.zktest.zats.test2;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.interactions.Actions;
 
 import org.zkoss.zktest.zats.WebDriverTestCase;
 
 public class B50_ZK_962Test extends WebDriverTestCase {
-	@Override
-	protected ChromeOptions getWebDriverOptions() {
-		return super.getWebDriverOptions()
-				.setExperimentalOption("w3c", false); // drag&drag workaround
-	}
-
 	@Test
 	public void test() {
-		Actions act = new Actions(connect());
+		connect();
 		waitResponse();
 		Assert.assertEquals("Panel 1Panel 2Panel 3Panel 5", jq(".z-portalchildren-content").eq(0).children().text());
 		Assert.assertEquals("Panel 4", jq(".z-portalchildren-content").eq(1).children().text());
-		
 		click(jq("@button:contains(single column)"));
 		waitResponse();
-		act.dragAndDrop(toElement(jq(".z-panel-head:contains(Panel 1)")), toElement(jq(".z-panel-head:contains(Panel 3)"))).perform();
+		dragAndDrop(jq(".z-panel-head:contains(Panel 1)"), jq(".z-panel-head:contains(Panel 2)"));
 		waitResponse();
 		Assert.assertEquals("Panel 2Panel 1Panel 3Panel 5", jq(".z-portalchildren-content").eq(0).children().text());
 		click(jq("@button:contains(two columns)"));

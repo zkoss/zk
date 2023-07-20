@@ -11,6 +11,8 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import java.time.Duration;
+
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Test;
@@ -29,7 +31,7 @@ public class B90_ZK_4340Test extends WebDriverTestCase {
 		connect();
 
 		final JQuery textbox = jq("@textbox");
-		new WebDriverWait(driver, 2).until(ExpectedConditions.presenceOfElementLocated(textbox));
+		new WebDriverWait(driver, Duration.ofSeconds(2)).until(ExpectedConditions.presenceOfElementLocated(textbox));
 		Assert.assertTrue(textbox.exists());
 
 		click(textbox);

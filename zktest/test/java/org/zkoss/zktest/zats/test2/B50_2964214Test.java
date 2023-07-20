@@ -14,6 +14,8 @@ package org.zkoss.zktest.zats.test2;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.not;
 
+import java.time.Duration;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -33,7 +35,7 @@ public class B50_2964214Test extends WebDriverTestCase {
 		connect();
 
 		waitResponse();
-		new WebDriverWait(driver, 5)
+		new WebDriverWait(driver, Duration.ofSeconds(5))
 				.until(ExpectedConditions.presenceOfElementLocated(jq("@ckeditor iframe")));
 		driver.switchTo().frame(toElement(jq("@ckeditor iframe")));
 		WebElement body = driver.findElement(By.tagName("body"));

@@ -12,7 +12,6 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 package org.zkoss.zktest.zats;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -58,16 +57,6 @@ public class ChromiumHeadlessDriver extends ChromeDriver {
 
 	public ChromiumHeadlessDriver(ChromeDriverService service, ChromeOptions options, boolean headless) {
 		super(service, headlessSettings(options, headless));
-	}
-
-	@Deprecated
-	public ChromiumHeadlessDriver(Capabilities capabilities) {
-		super(capabilities);
-	}
-
-	@Deprecated
-	public ChromiumHeadlessDriver(ChromeDriverService service, Capabilities capabilities) {
-		super(service, capabilities);
 	}
 
 	private static ChromeOptions headlessSettings(ChromeOptions options, boolean headless) {

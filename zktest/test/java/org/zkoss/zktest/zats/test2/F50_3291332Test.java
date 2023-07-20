@@ -13,6 +13,8 @@ package org.zkoss.zktest.zats.test2;
 
 import static org.hamcrest.CoreMatchers.startsWith;
 
+import java.time.Duration;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -32,7 +34,7 @@ public class F50_3291332Test extends WebDriverTestCase {
 		driver.navigate().refresh(); // trigger rmDesktop
 		sleep(1000);
 		driver.navigate().refresh(); // the beacon of rmDesktop is asynchronous, so wait for 1s and refresh
-		new WebDriverWait(driver, 3)
+		new WebDriverWait(driver, Duration.ofSeconds(3))
 				.until(ExpectedConditions.presenceOfElementLocated(By.className("z-page")));
 		waitResponse();
 		Assert.assertThat(jq("@button").text(), startsWith("rmDesktop received at"));

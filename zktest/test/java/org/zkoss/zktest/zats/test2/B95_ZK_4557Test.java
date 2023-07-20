@@ -11,6 +11,8 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import java.time.Duration;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.Alert;
@@ -29,7 +31,7 @@ public class B95_ZK_4557Test extends WebDriverTestCase {
 	
 	public boolean checkAlert() {
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, 2);
+			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(2));
 			wait.until(ExpectedConditions.alertIsPresent());
 			Alert alert = driver.switchTo().alert();
 			alert.accept();

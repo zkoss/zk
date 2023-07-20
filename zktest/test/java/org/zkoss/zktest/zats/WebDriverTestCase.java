@@ -44,10 +44,12 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.Point;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.interactions.Locatable;
 import org.openqa.selenium.logging.LogType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -111,10 +113,18 @@ public abstract class WebDriverTestCase {
 		if (driver == null) {
 			ChromeOptions driverOptions = getWebDriverOptions();
 			driver = isUsingRemoteWebDriver(driverOptions)
-					? new DockerChromeRemoteWebDriver(driverOptions)
+					? new DockerChromeRemoteWebDriver(getRemoteWebDriverUrl(), driverOptions)
 					: new ChromiumHeadlessDriver(driverOptions, isHeadless());
 		}
 		return driver;
+	}
+
+	protected String getRemoteWebDriverUrl() {
+		return "http://sechrome.test:4444/wd/hub";
+	}
+
+	protected boolean isUseDocker() {
+		return false;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -139,7 +149,7 @@ public abstract class WebDriverTestCase {
 	 */
 	protected ChromeOptions getWebDriverOptions() {
 		ChromeOptions options = new ChromeOptions();
-		options.addArguments("window-size=1920,1080");
+		options.addArguments("window-size=1920,1080", "--remote-allow-origins=*");
 		return options;
 	}
 
@@ -727,6 +737,32 @@ public abstract class WebDriverTestCase {
 				.moveByOffset(fromX, fromY)
 				.clickAndHold()
 				.moveByOffset(offsetX, offsetY)
+				.release()
+				.perform();
+	}
+
+	/**
+	 * Drag the element and moves to the location of the target element, then releases the mouse.
+	 * Notice that this method is to simulate dnd in driver, coz it's still a bug in the webdriver
+	 * Ref: https://github.com/w3c/webdriver/issues/1488
+	 * @param from start element
+	 * @param to end element
+	 */
+	protected void dragAndDrop(ClientWidget from, ClientWidget to) {
+		WebElement fromElement = toElement(from);
+		Locatable fromElementLocation = (Locatable) fromElement;
+		Point fromPt = fromElementLocation.getCoordinates().inViewPort();
+		int fromSourceX = fromPt.getX();
+		int fromSourceY = fromPt.getY();
+		WebElement toElement = toElement(to);
+		Locatable toElementLocation = (Locatable) toElement;
+		Point toPt = toElementLocation.getCoordinates().inViewPort();
+		int toSourceX = toPt.getX();
+		int toSourceY = toPt.getY();
+		getActions().moveToElement(fromElement)
+				.moveByOffset(0, 0)
+				.clickAndHold()
+				.moveByOffset(toSourceX - fromSourceX, toSourceY - fromSourceY)
 				.release()
 				.perform();
 	}
