@@ -248,7 +248,7 @@ public class Classes {
 	}
 	/**
 	 * Returns the Class object of the specified class name, using
-	 * the current thread's context class loader.
+	 * the current thread's context class loader and the class will be initialized by default.
 	 * <p>It first tries Thread.currentThread().getContextClassLoader(),
 	 * and then {@link Classes}'s class loader if not found.
 	 *
@@ -257,9 +257,30 @@ public class Classes {
 	 * @param clsName fully qualified name of the desired class
 	 * @return the Class object representing the desired class
 	 * @exception ClassNotFoundException if the class cannot be located by the specified class loader
+	 * @see #forNameByThread(String, boolean)
 	 */
 	public static final Class<?> forNameByThread(String clsName)
-	throws ClassNotFoundException {
+			throws ClassNotFoundException {
+		return forNameByThread(clsName, true);
+	}
+
+	/**
+	 * Returns the Class object of the specified class name, using
+	 * the current thread's context class loader.
+	 * <p>It first tries Thread.currentThread().getContextClassLoader(),
+	 * and then {@link Classes}'s class loader if not found.
+	 *
+	 * <p>In additions, it handles the primitive types, such as int and double.
+	 *
+	 * @param clsName fully qualified name of the desired class
+	 * @param initialize if {@code true} the class will be initialized.
+	 * @return the Class object representing the desired class
+	 * @exception ClassNotFoundException if the class cannot be located by the specified class loader
+	 * @since 10.0.0
+	 * @see #forNameByThread(String)
+	 */
+	public static final Class<?> forNameByThread(String clsName, boolean initialize)
+			throws ClassNotFoundException {
 		clsName = toInternalForm(clsName);
 		final Class<?> cls = Primitives.toClass(clsName);
 		if (cls != null)
@@ -271,7 +292,7 @@ public class Classes {
 				: getContextClassLoaderForName(clsName);
 		if (cl != null)
 			try {
-				return Class.forName(clsName, true, cl);
+				return Class.forName(clsName, initialize, cl);
 			} catch (ClassNotFoundException ex) { //ignore and try the other
 			}
 		return Class.forName(clsName);
