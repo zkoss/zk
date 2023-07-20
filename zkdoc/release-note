@@ -30,6 +30,7 @@ ZK 10.0.0
   ZK-5491: Multislider and Rangeslider's [aria-*] attributes do not match their roles
   ZK-5494: Background and foreground colors do not have a sufficient contrast ratio
   ZK-5481: The checkbox in a listitem doesn't have a role "checkbox"
+  ZK-5257: Ignore unused component NoClassDefFoundError such as jasperreport component
 
 
 * Upgrade Notes
