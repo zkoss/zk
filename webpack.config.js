@@ -38,6 +38,4 @@ module.exports = {
 		// 	failOnError: true
 		// })
 	],
-
-	devtool: 'source-map',
 };

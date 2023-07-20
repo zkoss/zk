@@ -1,18 +1,51 @@
-/* eslint-disable one-var */
-//@ts-check
+// @ts-check
 const fs = require('fs');
 const path = require('path');
 const gulp = require('gulp');
 const minimist = require('minimist');
+/**
+ * @typedef {Object} BabelMismatch
+ * @property {import('@babel/core').TransformOptions['filename']} patch
+ * @property {NonNullable<Parameters<typeof import('gulp-babel')>[0]>['filename']} original
+ */
+/**
+ * gulp-babel seems to be no longer supported, so I patch the type declaration here manually.
+ * @type {(options?: import('@babel/core').TransformOptions) => NodeJS.ReadWriteStream}
+ *
+ * {@link BabelMismatch.patch} is not assignable to {@link BabelMismatch.original}.
+ */
+// @ts-expect-error: Types of property `filename` are incompatible. See the links above.
 const babel = require('gulp-babel');
 const rename = require('gulp-rename');
 const uglify = require('gulp-uglify');
 const browserSync = require('browser-sync').create();
+/**
+ * @typedef {Object} PrintMismatch
+ * @property {NodeJS.ReadWriteStream} patch
+ * @property {import('stream').Stream} original
+ */
+/**
+ * gulp-print seems to be no longer supported, so I patch the type declaration here manually.
+ * @type {(format?: import('gulp-print').FormatFunction) => NodeJS.ReadWriteStream}
+ *
+ * {@link PrintMismatch.patch} is not assignable to {@link PrintMismatch.original}.
+ */
+// @ts-expect-error: Type mismatch due to missing properties. See the links above.
 const print = require('gulp-print').default;
+/**
+ * @typedef {<F extends () => NodeJS.ReadWriteStream, A extends Parameters<F>>(filter: F, args: A) => ReturnType<F>} Through
+ */
+/**
+ * @type {(tapFunction: (file: import('vinyl'), t?: {through?: Through}) => void) => NodeJS.ReadWriteStream}
+ */
 const tap = require('gulp-tap');
 const gulpIgnore = require('gulp-ignore');
 const postcss = require('gulp-postcss');
 const mergeStream = require('merge-stream');
+/**
+ * The signature should be `createResolver(config, options).resolve(key, ...)`.
+ * @type {(...args: Parameters<typeof import('resolve-options')>) => {resolve: (key: string, ...args: any[]) => number | string | boolean | Date | undefined | null}}
+ */
 const createResolver = require('resolve-options');
 const webpackStream = require('webpack-stream');
 const webpack = require('webpack');
@@ -39,7 +72,7 @@ const options = minimist(process.argv.slice(3), knownOptions);
  * In any case, duplicated paths should be pruned.
  */
 options.subprojectPaths = [...new Set(
-	/** @type string */(options.subprojectPaths).split(',')
+	/** @type {string} */(options.subprojectPaths).split(',')
 )];
 
 /**
@@ -76,8 +109,8 @@ function ignoreSameFile(destDir, force) {
 	return gulpIgnore.exclude(function (file) {
 		if (force) return false;
 		// simulate gulp.dest() to find a output path
-		const optResolver = createResolver(config);
-		const cwd = path.resolve(optResolver.resolve('cwd', file));
+		const optResolver = createResolver(config, {});
+		const cwd = path.resolve(/** @type {string} */(optResolver.resolve('cwd', file)));
 		const basePath = path.resolve(cwd, destDir);
 		const writePath = path.resolve(basePath, file.relative);
 		if (fs.existsSync(writePath)) {
@@ -110,17 +143,18 @@ function typescript_build_single() {
  */
 function typescript_build(src, dest, force, since) {
 	const webpackConfig = require('./webpack.config.js');
-	webpackConfig.mode = 'production';
 	/** @type {import('vinyl-fs').SrcOptions} */
 	const defaultSrcOptions = {
 		root: src,
 		since,
 	};
-	// Streams are not sequenced. If one uses `ignoreSameFile` on stream 1, but stream 3
-	// executes first, then `*.ts` will be excluded from compilation because stream 3 would
+	const tsBundledEntries = gulp.src('/**/index.ts', defaultSrcOptions);
+
+	// Streams are not sequenced. If one uses `ignoreSameFile` on stream 1, but stream 4
+	// executes first, then `*.ts` will be excluded from compilation because stream 4 would
 	// have already copied the same `*.ts` into `dest`. Thus, I don't rely on ignoreSameFile.
-	// Fortunately, stream 1 and stream 2 both produces only `*.js` which stream 3 will not
-	// overwrite (stream 3 explicitly ignores `*.js` in `gulp.src()`).
+	// Fortunately, stream 1 and stream 2 both produces only `*.js` which stream 4 will not
+	// overwrite (stream 4 explicitly ignores `*.js` in `gulp.src()`).
 	return mergeStream(
 		// Transpile single files with babel which are not siblings of some `index.ts`
 		gulp.src('/**/@(*.ts|*.js)', { // stream 1
@@ -141,8 +175,45 @@ function typescript_build(src, dest, force, since) {
 			}))
 			.pipe(gulp.dest(dest))
 			.pipe(print()),
-		// Bundle `index.ts` with webpack
-		gulp.src('/**/index.ts', defaultSrcOptions) // stream 2
+		// Bundle `index.ts` with webpack as `index.js` with source map
+		bundleWithWebpack( // stream 2
+			tsBundledEntries, {
+				...webpackConfig,
+				mode: 'production',
+				devtool: 'source-map',
+			},
+			'js',
+		),
+		// Bundle `index.ts` with webpack as `index.src.js` without source map
+		bundleWithWebpack( // stream 3
+			tsBundledEntries, {
+				...webpackConfig,
+				mode: 'development',
+				optimization: {
+					minimize: false,
+				},
+				devtool: false,
+			},
+			'src.js',
+		),
+		// fix copy resource in zipjs folder
+		gulp.src('/**/!(*.less|*.js|*.d.ts)', { // stream 4
+			...defaultSrcOptions,
+			nodir: true,
+		})
+			.pipe(ignoreSameFile(dest))
+			.pipe(gulp.dest(dest))
+			.pipe(print())
+	);
+
+	/**
+	 * @param {NodeJS.ReadWriteStream} bundleEntries
+	 * @param {webpack.Configuration} webpackConfig
+	 * @param {string} fileExtension - `js`, `src.js`, etc.
+	 * @returns {NodeJS.ReadWriteStream}
+	 */
+	function bundleWithWebpack(bundleEntries, webpackConfig, fileExtension) {
+		return bundleEntries
 			// There is no official way to specify the "library" property in a
 			// webpack "entry" from webpack-stream, so we manipulate the stream
 			// manually; note that specifying the "library" property in "output"
@@ -159,26 +230,18 @@ function typescript_build(src, dest, force, since) {
 						library: {
 							type: 'window',
 							export: 'default',
-						}
-					}
+						},
+					},
 				};
 				webpackConfig.output = {
-					filename: '[name].js',
+					filename: `[name].${fileExtension}`,
 					path: process.cwd(),
 				};
 				return webpackStream(webpackConfig, webpack);
 			}))
 			.pipe(gulp.dest(dest))
-			.pipe(print()),
-		// fix copy resource in zipjs folder
-		gulp.src('/**/!(*.less|*.js|*.d.ts)', { // stream 3
-			...defaultSrcOptions,
-			nodir: true,
-		})
-			.pipe(ignoreSameFile(dest))
-			.pipe(gulp.dest(dest))
-			.pipe(print())
-	);
+			.pipe(print());
+	}
 }
 
 function browsersync_init(done) {
@@ -211,7 +274,7 @@ function typescript_dev_subproject(subprojectPath, since) {
 		path.join(subprojectPath, 'src/main/resources'),
 		path.join(subprojectPath, 'build/resources/main'),
 		since, // gulp.lastRun(typescript_dev_zk)
-		// TODO: `gulp.lastRun` is currently ignored in the downstream due to it
+		// TODO: `gulp.lastRun` is currently ignored in the downstream due to it being
 		// unreliable. Hence, it is safe to ignore it here. See the warning in
 		// `typescript_dev`. Read more docs and do more experiments to see how
 		// we can make it work.
@@ -230,11 +293,9 @@ exports['build:minify-css'] = function () {
 		.pipe(tap(function (file) {
 			if (file.path.endsWith('.css.dsp')) {
 				// ignore DSP syntax
-				file.contents = Buffer.from(file.contents.toString('utf-8')
+				file.contents = Buffer.from(/** @type {NonNullable<typeof file.contents>} */(file.contents).toString('utf-8')
 					.replace(/<%/g, '/*!<%')
-					.replace(/\${([^}]*)}/g, function (match, g1) {
-						return '\\9' + g1 + '\\0';
-					})
+					.replace(/\${([^}]*)}/g, (match, g1) => `\\9${g1}\\0`)
 					.replace(/<c:/g, '<%c--')
 					.replace(/%>/g, '%>*/')
 					.replace(/\/>/g, '--c%>'), 'utf-8');
@@ -242,7 +303,7 @@ exports['build:minify-css'] = function () {
 		}))
 		.pipe(tap(function (file, t) {
 			if (file.path.endsWith('.css.dsp')) {
-				return t.through(postcss, [[require('cssnano')]]);
+				return /** @type {Required<NonNullable<typeof t>>} */(t).through(postcss, [[require('cssnano')]]);
 			} else {
 				console.log('copy...', file.path);
 			}
@@ -250,11 +311,9 @@ exports['build:minify-css'] = function () {
 		.pipe(tap(function (file) {
 			if (file.path.endsWith('.css.dsp')) {
 				// revert DSP syntax
-				file.contents = Buffer.from(file.contents.toString('utf-8')
+				file.contents = Buffer.from(/** @type {NonNullable<typeof file.contents>} */(file.contents).toString('utf-8')
 					.replace(/\/\*!<%/g, '<%')
-					.replace(/\\9([^\\0]*)\\0/g, function (match, g1) {
-						return '${' + g1 + '}';
-					})
+					.replace(/\\9([^\\0]*)\\0/g, (match, g1) => `\${${g1}}`)
 					.replace(/<%c--/g, '<c:')
 					.replace(/--c%>/g, '/>')
 					.replace(/%>\*\//g, '%>'), 'utf-8');
@@ -265,9 +324,7 @@ exports['build:minify-css'] = function () {
 };
 
 const dtsEntry = 'index.d.ts';
-/**
- * Requires the command line argument `--version=<VERSION>`
- */
+
 exports['build:dts'] = function () {
 	const { declarationDir } = require('./tsconfig.dts.json').compilerOptions;
 
@@ -306,10 +363,15 @@ exports['build:dts'] = function () {
 			.pipe(print()),
 	);
 };
+/**
+ * Requires the command line argument `--zk-version <VERSION>`
+ */
 exports['publish:dts'] = function (done) {
-	const { version } = options;
+	// Don't name the CLI argument as `version` as, `gulp` will interpret it as
+	// `gulp --version` regardless of argument position.
+	const { 'zk-version': version } = options;
 	if (!version || typeof version !== 'string') {
-		console.log('Requires a version string!');
+		console.log('Requires a version string: --zk-version <semVer>');
 		return;
 	}
 	console.log(`version: ${version}`);
@@ -323,6 +385,7 @@ exports['publish:dts'] = function (done) {
 			...require('../zkcml/package.json').dependencies,
 		}
 	};
+	console.log(JSON.stringify(dtsPackage));
 	fs.writeFileSync('./build/dts/package.json', JSON.stringify(dtsPackage));
 	return done();
 };
@@ -346,7 +409,7 @@ class Subproject {
 	}
 }
 
-const subprojects = /** @type string[] */(options.subprojectPaths)
+const subprojects = /** @type {string[]} */(options.subprojectPaths)
 	.map(subprojectPath => new Subproject(subprojectPath));
 
 exports['build:single'] = typescript_build_single;

@@ -22,6 +22,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -135,9 +136,16 @@ public class ClassLocator implements XMLResourcesLocator {
 		Element xrRoot = xr.document.getRootElement();
 		Element strictElement = xrRoot.getElement("strict");
 		boolean strict = strictElement == null ? false : Boolean.parseBoolean(strictElement.getText(true));
-		for (Element el : xrRoot.getElements("component")) {
-			if (el.getElement("extends") == null)
+		List<Element> elementList = xrRoot.getElements("component");
+		Map<String, Boolean> visited = new HashMap<>(elementList.size());
+		for (Element el : elementList) {
+
+			// ignore same lang.xml extending component, such as fileupload to extend button
+			visited.put(el.getElement("component-name").getText(), Boolean.TRUE);
+			Element anExtends = el.getElement("extends");
+			if (anExtends == null || visited.containsKey(anExtends.getText()))
 				continue;
+
 			List<Element> ambigComps = findAmbiguousComps(rcmap, el);
 			if (!ambigComps.isEmpty()) {
 				StringBuilder addonNameBuilder = new StringBuilder();
