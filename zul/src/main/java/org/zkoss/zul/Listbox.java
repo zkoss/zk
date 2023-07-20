@@ -3813,29 +3813,30 @@ public class Listbox extends MeshElement {
 								smodel.addToSelection(ele);
 						}
 					}
-
-					int firstItemIndex = _items.get(0).getIndex();
-					int lastItemIndex = _items.get(_items.size() - 1).getIndex();
-					final Map<String, Object> rodItemIndexRange = cast((Map) data.get("rodItemIndexRange"));
-					if (rodItemIndexRange != null) {
-						final Integer clientFirstItemIndex = (Integer) rodItemIndexRange.get("start");
-						if (clientFirstItemIndex != null) {
-							firstItemIndex = clientFirstItemIndex;
+					if (prevSeldItems != null && prevSeldItems.size() > 0) {
+						int firstItemIndex = _items.get(0).getIndex();
+						int lastItemIndex = _items.get(_items.size() - 1).getIndex();
+						final Map<String, Object> rodItemIndexRange = cast((Map) data.get("rodItemIndexRange"));
+						if (rodItemIndexRange != null) {
+							final Integer clientFirstItemIndex = (Integer) rodItemIndexRange.get("start");
+							if (clientFirstItemIndex != null) {
+								firstItemIndex = clientFirstItemIndex;
+							}
+							final Integer clientLastItemIndex = (Integer) rodItemIndexRange.get("end");
+							if (clientLastItemIndex != null) {
+								lastItemIndex = clientLastItemIndex;
+							}
 						}
-						final Integer clientLastItemIndex = (Integer) rodItemIndexRange.get("end");
-						if (clientLastItemIndex != null) {
-							lastItemIndex = clientLastItemIndex;
-						}
-					}
-					for (final Listitem item : prevSeldItems) {
-						final int index = item.getIndex();
-						if (firstItemIndex <= index && index <= lastItemIndex // ZK-2658
-								&& !curSeldItems.contains(item)
-								&& (!paging || (from <= index && index < to))
-						) {
-							removeItemFromSelection(item);
-							if (smodel != null)
-								smodel.removeFromSelection(_model.getElementAt(index));
+						for (final Listitem item : prevSeldItems) {
+							final int index = item.getIndex();
+							if (firstItemIndex <= index && index <= lastItemIndex // ZK-2658
+									&& !curSeldItems.contains(item)
+									&& (!paging || (from <= index && index < to))
+							) {
+								removeItemFromSelection(item);
+								if (smodel != null)
+									smodel.removeFromSelection(_model.getElementAt(index));
+							}
 						}
 					}
 				}

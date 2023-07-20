@@ -17,6 +17,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.metainfo;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -72,6 +73,11 @@ public class DefinitionLoaders {
 	/** A map of (String ext, String lang). */
 	private static volatile Map<String, String> _exts;
 	private static volatile boolean _loaded, _loading;
+
+	// Fix ZK-5387
+	private static Map<String, XMLResourcesLocator.Resource> dependingLangs = new HashMap<>(2);
+	private static List<LazyParsingInfo> lazyParsingInfos = new ArrayList<>();
+
 
 	//CONSIDER:
 	//Store language definitions per WebApp, since different app may add its
@@ -164,6 +170,20 @@ public class DefinitionLoaders {
 		}
 	}
 
+	private static class LazyParsingInfo {
+		private Document doc;
+		private Locator locator;
+		private URL url;
+		private boolean addon;
+
+		public LazyParsingInfo(Document doc, Locator locator, URL url,
+				boolean addon) {
+			this.doc = doc;
+			this.locator = locator;
+			this.url = url;
+			this.addon = addon;
+		}
+	}
 	private static void load0() throws java.io.IOException {
 		final XMLResourcesLocator locator = Utils.getXMLResourcesLocator();
 
@@ -171,17 +191,24 @@ public class DefinitionLoaders {
 		final ConfigParser parser = new ConfigParser();
 		parser.parseConfigXml(null); //only system default configs
 
-		//2. process lang.xml (including dependency)
+		//2. process lang.xml (excluding dependency)
 		final List<XMLResourcesLocator.Resource> langXmls = locator.getDependentXMLResources("metainfo/zk/lang.xml",
 				"language-name", "depends");
 		for (XMLResourcesLocator.Resource res : langXmls) {
+
+			// Fix ZK-5387, ignore any dependent lang.
+			if (res.document.getRootElement()
+					.getElement("depends") != null) {
+				dependingLangs.put(res.document.getRootElement().getElement("language-name").getText(), res);
+				continue;
+			}
+
 			final URL url = res.url;
 			if (log.isDebugEnabled())
 				log.debug("Loading " + url);
 			try {
-				final Document doc = new SAXBuilder(true, false, true).build(url);
-				if (ConfigParser.checkVersion(url, doc, true))
-					parseLang(doc, locator, url, false);
+				if (ConfigParser.checkVersion(url, res.document, true))
+					parseLang(res.document, locator, url, false);
 			} catch (Exception ex) {
 				log.error("Failed to load " + url, ex);
 				throw UiException.Aide.wrap(ex, "Failed to load " + url);
@@ -220,6 +247,35 @@ public class DefinitionLoaders {
 			_addons = null; //free memory
 		}
 
+		//5.1 process all descendant Langs.
+		for (Map.Entry<String, XMLResourcesLocator.Resource> entry : new ArrayList<>(dependingLangs.entrySet())) {
+			dependingLangs.remove(entry.getKey());
+			XMLResourcesLocator.Resource res = entry.getValue();
+			final URL url = res.url;
+			if (log.isDebugEnabled())
+				log.debug("Loading " + url);
+			try {
+				if (ConfigParser.checkVersion(url, res.document, true))
+					parseLang(res.document, locator, url, false);
+			} catch (Exception ex) {
+				log.error("Failed to load " + url, ex);
+				throw UiException.Aide.wrap(ex, "Failed to load " + url);
+				//abort since it is hardly to work then
+			}
+		}
+		dependingLangs.clear();
+
+		//5.2 prcoess all descendant addons
+		for (LazyParsingInfo info: lazyParsingInfos) {
+			try {
+				parseLang(info.doc, info.locator, info.url, info.addon);
+			} catch (Exception ex) {
+				log.error("Failed to load " + (info.addon ? "addon" : "language") + ": " + info.url, ex);
+				//keep running
+			}
+		}
+		lazyParsingInfos.clear();
+
 		//6. process the extension
 		if (_exts != null) {
 			for (Map.Entry<String, String> me : _exts.entrySet()) {
@@ -251,6 +307,12 @@ public class DefinitionLoaders {
 		final String lang = IDOMs.getRequiredElementValue(root, "language-name");
 		final LanguageDefinition langdef;
 		final Device device;
+
+		if (dependingLangs.containsKey(lang)) {
+			// lazy parsing
+			lazyParsingInfos.add(new LazyParsingInfo(doc, locator, url, addon));
+			return;
+		}
 		if (addon) {
 			if (log.isDebugEnabled())
 				log.debug("Addon language to " + lang + " from " + root.getElementValue("addon-name", true));
