@@ -148,10 +148,14 @@ public class ServletContextLocator implements Locator {
 	}
 
 	public URL getResource(String name) {
+		String relativePath = null;
 		try {
-			URL url = getResource0(fixName(name, true));
-			return url == null && _prefix != null ? getResource0(fixName(name, false)) : url;
+			URL url = getResource0(relativePath = fixName(name, true));
+			return url == null && _prefix != null ? getResource0(relativePath = fixName(name, false)) : url;
 		} catch (java.net.MalformedURLException ex) {
+			if (relativePath != null && !relativePath.startsWith("-")) {
+				return null; // ignore relative path here for ZK-5215
+			}
 			throw new SystemException(ex);
 		} catch (UnsupportedEncodingException e) {
 			throw new SystemException(e);

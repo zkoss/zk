@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F100-ZK-5215.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		2023/7/20, Created by jumperchen
+
+Copyright (C) 2023 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	If you can see this page, the bug has fixed.
+	<style src="/i18n/mycss*.css" /> <!-- this works -->
+	<style src="mycss*.css" /><!-- this fails -->
+</zk>
