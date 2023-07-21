@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B100-ZK-5468-Organigram.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		2023/7/20, Created by jumperchen
+
+Copyright (C) 2023 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+class ListTreeModel extends org.zkoss.zul.AbstractTreeModel {
+		public ListTreeModel() {
+			super(new ArrayList());
+		}
+		public int getChildCount(Object parent) {
+			if (isLeaf(parent))
+				return -1;
+			else {
+				ArrayList al = (ArrayList) parent;
+				return al.size();
+			}
+		}
+		public boolean isLeaf(Object node) {
+			boolean isLeaf = !(node instanceof ArrayList);
+			if (!isLeaf) {
+				return (((ArrayList) node).size() == 0);
+			}
+			return isLeaf;
+		}
+		public Object getChild(Object parent, int index) {
+			ArrayList al = (ArrayList) parent;
+			return al.get(index);
+		}
+		public Object getRoot() {
+			return super.getRoot();
+		}
+		public void add(Object data) {
+			List root = (List) getRoot();
+			root.add(data);
+			fireEvent(root, root.size() - 1, root.size() - 1, org.zkoss.zul.event.TreeDataEvent.INTERVAL_ADDED);
+		}
+		public void add(int index, Object data) {
+			List root = (List) getRoot();
+			root.add(index, data);
+			fireEvent(root, index, index, org.zkoss.zul.event.TreeDataEvent.INTERVAL_ADDED);
+		}
+		public void remove(int index) {
+			List root = (List) getRoot();
+			root.remove(index);
+			fireEvent(root, index, index, org.zkoss.zul.event.TreeDataEvent.INTERVAL_REMOVED);
+		}
+		public int size() {
+			return getRoot().size();
+		}
+	}
+		ListTreeModel model = new ListTreeModel();
+		for (int i = 0; i < 3; i++) {
+		model.add("aaa" + i);
+		}
+	]]></zscript>
+	<style>
+		@keyframes flash {
+		0%, 50%, 100% {
+		background-color: white;
+		}
+		25%, 75% {
+		background-color: red;
+		}
+		}
+		.flash-initially {
+		animation-duration: 0.5s;
+		animation-name: flash;
+		}
+	</style>
+	<div id="main">
+		<label multiline="true">
+			1. Click "insert before" button, the new label should be added at first row.
+			2. The second row should be "1 - aaa0" label.
+			3. When you click "insert before", "add", "insert middle", and "remove" button,
+			there should not have any CSS flickering animation.
+		</label>
+		<button label="invalidate" onClick='main.invalidate()'/>
+		<button label="add"
+		        onClick='model.add("ddd " + System.currentTimeMillis());'/>
+		<button label="insert before"
+		        onClick='model.add(0, "ddd " + System.currentTimeMillis());'/>
+		<button label="insert middle"
+		        onClick='model.add(((int) model.size() / 2), "ddd " + System.currentTimeMillis());'/>
+		<button label="remove" onClick='model.remove(0);'/>
+		<hlayout>
+			<vlayout hflex="1">
+				Organigram with model
+				<organigram model="${model}">
+					<template name="model">
+						<orgitem label="${forEachStatus.index} - ${each}"
+						       sclass="flash-initially"/>
+					</template>
+				</organigram>
+			</vlayout>
+		</hlayout>
+	</div>
+</zk>

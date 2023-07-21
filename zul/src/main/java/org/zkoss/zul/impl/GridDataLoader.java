@@ -132,6 +132,11 @@ public class GridDataLoader implements DataLoader, Cropper {
 					renderer = (RowRenderer) getRealRenderer();
 				rows.insertBefore(newUnloadedItem(renderer, min++), next);
 			}
+
+			// Fix ZK-5468: the content of the subsequence item might be changed
+			if (!rows.isInvalidated()) {
+				syncModel(max, rows.getChildren().size() - (max - min));
+			}
 			break;
 
 		case ListDataEvent.INTERVAL_REMOVED:
@@ -158,6 +163,11 @@ public class GridDataLoader implements DataLoader, Cropper {
 				Component p = comp.getPreviousSibling();
 				comp.detach();
 				comp = p;
+			}
+
+			// Fix ZK-5468: the content of the subsequence item might be changed
+			if (!rows.isInvalidated()) {
+				syncModel(max, rows.getChildren().size() - (max - min));
 			}
 			break;
 

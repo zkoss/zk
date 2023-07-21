@@ -122,8 +122,11 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 				throw new UiException("Adding causes a smaller list?");
 			if (cnt == 0) //no change, nothing to do here
 				return;
-			if ((oldsz <= 0 || cnt > INVALIDATE_THRESHOLD) && !inPagingMold())
+			boolean isInvalidated = false;
+			if ((oldsz <= 0 || cnt > INVALIDATE_THRESHOLD) && !inPagingMold()) {
 				invalidateListitems();
+				isInvalidated = true;
+			}
 			if (min < 0)
 				if (max < 0)
 					min = 0;
@@ -138,6 +141,11 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 				if (renderer == null)
 					renderer = (ListitemRenderer) getRealRenderer();
 				_listbox.insertBefore(newUnloadedItem(renderer, min++), next);
+			}
+
+			// Fix ZK-5468: the content of the subsequence item might be changed
+			if (!isInvalidated && !_listbox.isInvalidated()) {
+				syncModel(max, _listbox.getItemCount() - (max - min));
 			}
 			break;
 
@@ -154,9 +162,11 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 			if (max > oldsz - 1)
 				max = oldsz - 1;
 
+			boolean isInvalidated0 = false;
 			if ((newsz <= 0 || cnt > INVALIDATE_THRESHOLD) && !inPagingMold()) {
 				_listbox.shallUpdateScrollPos(true);
 				invalidateListitems();
+				isInvalidated0 = true;
 			}
 
 			//detach from end (due to groupfoot issue)
@@ -165,6 +175,11 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 				Component p = comp.getPreviousSibling();
 				comp.detach();
 				comp = p;
+			}
+
+			// Fix ZK-5468: the content of the subsequence item might be changed
+			if (!isInvalidated0 && !_listbox.isInvalidated()) {
+				syncModel(max, _listbox.getItemCount() - (max - min));
 			}
 			break;
 
