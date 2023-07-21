@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B100-ZK-5468-Biglistbox.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		2023/7/20, Created by jumperchen
+
+Copyright (C) 2023 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+	class MyMatrixModel extends AbstractListModel implements MatrixModel{
+
+		List rows = new ArrayList();
+
+		public void add(Object item){
+			rows.add(item);
+			fireEvent(org.zkoss.zul.event.ListDataEvent.INTERVAL_ADDED, rows.size() - 1, rows.size() -1);
+		}
+		public void remove(int index){
+			rows.remove(index);
+			fireEvent(org.zkoss.zul.event.ListDataEvent.INTERVAL_REMOVED, index, index);
+		}
+		public void add(int index, Object item){
+			rows.add(index, item);
+			fireEvent(org.zkoss.zul.event.ListDataEvent.INTERVAL_ADDED, index, index);
+		}
+
+
+		public Object getElementAt(int index) {
+			return rows.get(index);
+		}
+
+		public int size() {
+			return getSize();
+		}
+
+		public int getSize() {
+			return rows.size();
+		}
+
+
+		public int getColumnSize() {
+			return 1;
+		}
+
+
+		public int getHeadSize() {
+			return 1;
+		}
+
+
+		public Object getHeadAt(int rowIndex) {
+			return "Head"+rowIndex;
+		}
+
+
+		public Object getCellAt(Object rowData, int columnIndex) {
+			return rowData;
+		}
+
+
+		public Object getHeaderAt(Object headData, int columnIndex) {
+			return headData+":Header"+columnIndex;
+		}
+	}
+
+		MyMatrixModel model = new MyMatrixModel();
+		for (int i = 0; i < 3; i++) {
+		model.add("aaa" + i);
+		}
+	]]></zscript>
+	<style>
+		@keyframes flash {
+		0%, 50%, 100% {
+		background-color: white;
+		}
+		25%, 75% {
+		background-color: red;
+		}
+		}
+		.flash-initially {
+		animation-duration: 0.5s;
+		animation-name: flash;
+		}
+	</style>
+	<div id="main">
+		<label multiline="true">
+			1. Click "insert before" button, the new label should be added at first row.
+			2. The second row should be "1 - aaa0" label.
+			3. When you click "insert before", "add", "insert middle", and "remove" button,
+			 there should not have any CSS flickering animation.
+		</label>
+		<button label="invalidate" onClick='main.invalidate()'/>
+		<button label="add"
+		        onClick='model.add("ddd " + System.currentTimeMillis());'/>
+		<button label="insert before"
+		        onClick='model.add(0, "ddd " + System.currentTimeMillis());'/>
+		<button label="insert middle"
+		        onClick='model.add(((int) model.size() / 2), "ddd " + System.currentTimeMillis());'/>
+		<button label="remove" onClick='model.remove(0);'/>
+		<hlayout>
+			<vlayout hflex="1">
+				Biglistbox with model
+				<biglistbox model="${model}" colWidth="350px">
+					<template name="rows">
+						<html>
+							<attribute name="content"><![CDATA[
+								<span class="flash-initially">${matrixInfo[1]} - ${each}</span>
+							]]></attribute>
+						</html>
+					</template>
+				</biglistbox>
+			</vlayout>
+		</hlayout>
+	</div>
+</zk>
