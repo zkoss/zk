@@ -36,6 +36,7 @@ ZK 10.0.0
   ZK-5412: Desktop of stateless components is not cleared after reloading [CloudMode]
   ZK-5450: 2 NEXT_SIBLING for targetId don't pass the expected value
   ZK-5435: desktop timeout config doesn't work as expected
+  ZK-5498: Some checkboxes do not have [aria-checked] attribute, and they do not have accessible names
 
 
 * Upgrade Notes
