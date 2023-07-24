@@ -29,8 +29,8 @@ jobs:
         with:
           repository: zkoss/zkcml
           ref: 10-experiment
+          token: ${{ secrets.Test_TOKEN }}
           path: zkcml-${{ github.run_id }}-${{ github.run_number }}
-          ssh-key: '${{ secrets.SSH_KEY }}'
       - run: |
           mv zkcml-${{ github.run_id }}-${{ github.run_number }} ../zkcml
           cd ../zkcml
