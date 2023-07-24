@@ -4,7 +4,8 @@ on:
   push:
     branches-ignore:
       - '*-Stable'
-  pull_request:
+  pull_request_target:
+    types: [opened]
     branches-ignore:
       - '*-Stable'
 
