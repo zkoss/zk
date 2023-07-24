@@ -41,6 +41,12 @@ export abstract class LabelImageWidget<TElement extends HTMLElement = HTMLElemen
 	/** @internal */
 	_iconSclass?: string;
 	/** @internal */
+	_iconSclasses?: string[];
+	/** @internal */
+	_iconTooltip?: string;
+	/** @internal */
+	_iconTooltips?: string[];
+	/** @internal */
 	_image?: string;
 	/** @internal */
 	_hoverImage?: string;
@@ -82,7 +88,7 @@ export abstract class LabelImageWidget<TElement extends HTMLElement = HTMLElemen
 	}
 
 	/**
-	 * Sets the icon font
+	 * Sets the icon font, if iconSclasses is set, iconSclass will be ignored, iconSclasses will take precedence over iconSclass
 	 * @param iconSclass - a CSS class name for the icon font
 	 * @since 7.0.0
 	 */
@@ -94,7 +100,22 @@ export abstract class LabelImageWidget<TElement extends HTMLElement = HTMLElemen
 			if (this.desktop)
 				this.updateDomContent_();
 		}
+		return this;
+	}
 
+	/**
+	 * Sets multiple icons font, if iconSclasses is set, iconSclass will be ignored, iconSclasses will take precedence over iconSclass
+	 * @param iconSclasses - a CSS class name String array for the icon font
+	 * @since 10.0.0
+	 */
+	setIconSclasses(iconSclasses: string[], opts?: Record<string, boolean>): this {
+		const o = this._iconSclasses;
+		this._iconSclasses = iconSclasses;
+
+		if (o !== iconSclasses || opts?.force) {
+			if (this.desktop)
+				this.updateDomContent_();
+		}
 		return this;
 	}
 
@@ -104,6 +125,62 @@ export abstract class LabelImageWidget<TElement extends HTMLElement = HTMLElemen
 	 */
 	getIconSclass(): string | undefined {
 		return this._iconSclass;
+	}
+
+	/**
+	 * @returns the CSS class name string array for the icon font (`iconSclass`)
+	 * @since 10.0.0
+	 */
+	getIconSclasses(): string[] | undefined {
+		return this._iconSclasses;
+	}
+
+	/**
+	 * * Sets the iconTooltip, if iconTooltips is set, iconTooltip will be ignored, iconTooltips will take precedence over iconTooltip
+	 * @param iconTooltip - a content string for iconTooltip
+	 * @since 10.0.0
+	 */
+	setIconTooltip(iconTooltip: string, opts?: Record<string, boolean>): this {
+		const o = this._iconTooltip;
+		this._iconTooltip = iconTooltip;
+
+		if (o !== iconTooltip || opts?.force) {
+			if (this.desktop)
+				this.updateDomContent_();
+		}
+		return this;
+	}
+
+	/**
+	 * Sets multiple iconTooltips, if iconTooltips is set, iconTooltip will be ignored, iconTooltips will take precedence over iconTooltip
+	 * @param iconTooltips - a content string array for iconTooltip
+	 * @since 10.0.0
+	 */
+	setIconTooltips(iconTooltips: string[], opts?: Record<string, boolean>): this {
+		const o = this._iconTooltips;
+		this._iconTooltips = iconTooltips;
+
+		if (o !== iconTooltips || opts?.force) {
+			if (this.desktop)
+				this.updateDomContent_();
+		}
+		return this;
+	}
+
+	/**
+	 * @returns the iconTooltip content
+	 * @since 10.0.0
+	 */
+	getIconTooltip(): string | undefined {
+		return this._iconTooltip;
+	}
+
+	/**
+	 * @returns the iconTooltip content string array
+	 * @since 10.0.0
+	 */
+	getIconTooltips(): string[] | undefined {
+		return this._iconTooltips;
 	}
 
 	/**
@@ -202,26 +279,26 @@ export abstract class LabelImageWidget<TElement extends HTMLElement = HTMLElemen
 	 * @internal
 	 */
 	domIcon_(): string {
-		var icon = this.getIconSclass(), // use getIconSclass() to allow overriding
-			result = '';
-		//ZK-3636: Added simple support for stacked font awesome icons
+		const iconSclass = this.getIconSclass(),
+			iconSclasses = this.getIconSclasses(),
+			iconTooltip = this.getIconTooltip(),
+			iconTooltips = this.getIconTooltips(),
+			icon = iconSclasses ? iconSclasses : iconSclass ? [iconSclass] : undefined,
+			tooltip = iconTooltips ? iconTooltips : iconTooltip ? [iconTooltip] : undefined;
 		if (icon) {
-			var icons = icon.split(','),
-				length = icons.length;
-			if (length > 1) {
-				var arr = ['<span class="z-icon-stack" aria-hidden="true">'];
-				for (var i = 0; i < length; i++) {
-					var ic = icons[i];
-					if (ic)
-						arr.push('<i class="' + ic + '"></i>');
+			let res = '';
+			for (let i = 0, icon_length = icon.length; i < icon_length; i++) {
+				if (icon[i]) { // add icon if icon[i] not undefined
+					res += '<i class="' + icon[i] + '"';
+					if (tooltip?.[i]) { // add iconTooltip if iconTooltip[i] not undefined
+						res += ' title="' + tooltip[i] + '"';
+					}
+					res += ' aria-hidden="true"></i>';
 				}
-				arr.push('</span>');
-				result = arr.join('');
-			} else {
-				result = '<i class="' + icon + '" aria-hidden="true"></i>';
 			}
+			return res;
 		}
-		return result;
+		return '';
 	}
 
 	/**
@@ -241,7 +318,7 @@ export abstract class LabelImageWidget<TElement extends HTMLElement = HTMLElemen
 	 * @internal
 	 */
 	domContent_(): string {
-		var label = this.domLabel_(),
+		const label = this.domLabel_(),
 			icon = this.domIcon_(),
 			img = this.domImage_();
 
