@@ -4,7 +4,7 @@ on:
   push:
     branches-ignore:
       - '*-Stable'
-  pull_request:
+  pull_request_target:
     branches-ignore:
       - '*-Stable'
 
