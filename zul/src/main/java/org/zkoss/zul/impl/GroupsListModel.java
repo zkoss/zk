@@ -404,7 +404,7 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> implemen
 				else
 					type = ListDataEvent.INTERVAL_REMOVED;
 				j0 = _gpofs[index] + 1;
-				j1 = 0;
+				j1 = j0; // as same as j0 for B70-ZK-2812
 				break;
 			case GroupsDataEvent.DISABLE_CLIENT_UPDATE:
 				type = ListDataEvent.DISABLE_CLIENT_UPDATE;
