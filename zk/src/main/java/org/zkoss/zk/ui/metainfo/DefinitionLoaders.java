@@ -711,7 +711,7 @@ public class DefinitionLoaders {
 
 	@SuppressWarnings("unchecked")
 	private static <T> Class<? extends T> locateClass(String clsnm, Class<?>... clses) throws Exception {
-		final Class<?> c = Classes.forNameByThread(clsnm);
+		final Class<?> c = Classes.forNameByThread(clsnm, false); // check only for ZK-5257
 		if (clses != null)
 			for (Class<?> cls : clses)
 				if (!cls.isAssignableFrom(c))

@@ -17,15 +17,6 @@ module.exports = {
   'overrides': [
     {
       'files': [
-        'gulpfile.js'
-      ],
-      'env': {
-        'browser': false,
-        'node': true
-      }
-    },
-    {
-      'files': [
         '*.js'
       ],
       'globals': {
@@ -323,6 +314,22 @@ module.exports = {
         '@typescript-eslint/type-annotation-spacing': 'error',
         '@typescript-eslint/unbound-method': 'off',
         '@typescript-eslint/unified-signatures': 'off' // TSDoc overloaded functions
+      }
+    },
+    {
+      'files': [
+        'gulpfile.js'
+      ],
+      'env': {
+        'browser': false,
+        'node': true
+      },
+      'parserOptions': {
+        'ecmaVersion': 2020
+      },
+      'rules': {
+        'no-console': 'off',
+        'one-var': 'off'
       }
     }
   ]

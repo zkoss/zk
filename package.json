@@ -17,7 +17,7 @@
     "build:doc": "typedoc",
     "prepublish:dts": "gulp build:dts",
     "publish:dts": "gulp publish:dts",
-    "postpublish:dts": "cp jsdoc/README.md build/dts && cd build/dts && npm pack"
+    "postpublish:dts": "cp jsdoc/README.md build/dts && cd build/dts && npm publish"
   },
   "author": "Potix",
   "license": "LGPL-2.0-or-later",

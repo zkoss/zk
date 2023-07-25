@@ -20,6 +20,18 @@ ZK 10.0.0
   ZK-5411: withAction() cannot accept anonymous class, please convert it to Lambda syntax
   ZK-5454: nextSibling locator doesn't work in smartUpdate()
   ZK-5261: forEach always re-renders all items
+  ZK-5493: [user-scalable='no'] is used in the <meta name='viewport'> element or the [maximum-scale] attribute is less than 5
+  ZK-5373: focus button, z-focus-a, doesn't have an accessible name
+  ZK-5448: Elements with an ARIA treegrid(role) that require children to contain a specific row(role) are missing some or all of those required children
+  ZK-5449: Elements with an ARIA treegrid(role) that require children to contain a specific [role] are missing some or all of those required children
+  ZK-5463: empty tree fails to pass lighthouse accessibility check for missing required role
+  ZK-5462: empty listbox fails to pass lighthouse accessibility check for missing required role
+  ZK-5479: checkboxes in a listheader have missing required aria attribute: aria-checked
+  ZK-5492: The elements with an id of 'tpad-tbl' and 'bpad-tbl' do not have the correct role
+  ZK-5491: Multislider and Rangeslider's [aria-*] attributes do not match their roles
+  ZK-5494: Background and foreground colors do not have a sufficient contrast ratio
+  ZK-5481: The checkbox in a listitem doesn't have a role "checkbox"
+  ZK-5257: Ignore unused component NoClassDefFoundError such as jasperreport component
 
 
 * Upgrade Notes

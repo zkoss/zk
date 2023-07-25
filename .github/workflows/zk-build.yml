@@ -1,12 +1,8 @@
 name: zk-build
 
 on:
-  push:
-    branches-ignore:
-      - '*-Stable'
-  pull_request:
-    branches-ignore:
-      - '*-Stable'
+  pull_request_target:
+    types: [opened, synchronize, reopened, edited]
 
 jobs:
   build:
@@ -29,8 +25,8 @@ jobs:
         with:
           repository: zkoss/zkcml
           ref: 10-experiment
-          path: zkcml-${{ github.run_id }}-${{ github.run_number }}
           ssh-key: '${{ secrets.SSH_KEY }}'
+          path: zkcml-${{ github.run_id }}-${{ github.run_number }}
       - run: |
           mv zkcml-${{ github.run_id }}-${{ github.run_number }} ../zkcml
           cd ../zkcml
