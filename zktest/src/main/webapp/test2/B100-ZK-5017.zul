@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B100-ZK-5017.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		2023/7/26, Created by jumperchen
+
+Copyright (C) 2023 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	if you don't see any flickering on Listbox's header, the bug has fixed.
+	<!--    no flicker without onClientInfo-->
+	<!--    <div>-->
+	<div onClientInfo="">
+		<!--    add a delay to make it more obvious-->
+		<!--    <div onClientInfo="Thread.sleep(1000);">-->
+		<listbox width="200px">
+			<listhead>
+				<listheader hflex="7"/>
+				<listheader hflex="5"/>
+			</listhead>
+			<listitem>
+				<listcell label="col1"/>
+				<listcell label="col2"/>
+			</listitem>
+		</listbox>
+	</div>
+</zk>
