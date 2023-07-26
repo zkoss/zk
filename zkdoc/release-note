@@ -35,6 +35,7 @@ ZK 10.0.0
   ZK-5488: Biglistbox's Elements with an ARIA [role] that require children to contain a specific [role] are missing some or all of those required children
   ZK-5412: Desktop of stateless components is not cleared after reloading [CloudMode]
   ZK-5450: 2 NEXT_SIBLING for targetId don't pass the expected value
+  ZK-5435: desktop timeout config doesn't work as expected
 
 
 * Upgrade Notes
@@ -48,6 +49,10 @@ ZK 10.0.0
         z-combobox-emptySearchMessage -> z-combobox-empty-search-message
         z-combobox-emptySearchMessage-hidden -> z-combobox-empty-search-message-hidden
   + Disable UUID recycle mechanism by default.
+  + With the fixed of ZK-5435, the desktop timeout mechanism will clean all expired desktop instances
+  by a timer per session if the setting is enabled. (By default, it's enabled with 1 hour)
+  To disable the cleaner timer per session, you can specify -1 to the desktop timeout
+  value to disable the mechanism.
 
    --------
 ZK 9.6.4

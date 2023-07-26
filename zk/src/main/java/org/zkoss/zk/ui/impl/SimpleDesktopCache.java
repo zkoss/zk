@@ -17,6 +17,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.impl;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.slf4j.Logger;
@@ -57,8 +59,17 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 	//to reduce the chance that two browsers with the same desktop ID
 	//it is possible if we re-boot the server
 
+	private transient Timer _cleaner;
 	public SimpleDesktopCache(Configuration config) {
 		_desktops = new Cache(config);
+
+		// ZK-5435
+		int desktopMaxInactiveInterval = config.getDesktopMaxInactiveInterval();
+		if (desktopMaxInactiveInterval >= 0) {
+			_cleaner = new Timer();
+			_cleaner.scheduleAtFixedRate(new CleanerTask(), desktopMaxInactiveInterval * 1_000, desktopMaxInactiveInterval * 1_000);
+		}
+
 		if (!config.isRepeatUuid())
 			_nextKey = ((int) System.currentTimeMillis()) & 0xffff;
 	}
@@ -206,6 +217,12 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 			for (Desktop desktop : desktops)
 				((DesktopCtrl) desktop).sessionDidActivate(sess);
 
+			int lifetime = _desktops.getLifetime();
+			if (lifetime >= 0 && lifetime < Integer.MAX_VALUE / 4) {
+				// enable cleaner timer
+				_cleaner = new Timer();
+				_cleaner.scheduleAtFixedRate(new CleanerTask(), lifetime, lifetime);
+			}
 		} finally {
 			_desktops.disableExpunge(old);
 		}
@@ -226,6 +243,11 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 			}
 		} finally {
 			_desktops.disableExpunge(old);
+		}
+
+		// ZK-5435
+		if (_cleaner != null) {
+			_cleaner.cancel();
 		}
 	}
 
@@ -249,7 +271,7 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 
 		protected boolean shallExpunge() {
 			return !_expungeDisabled.get() && (super.shallExpunge() || sizeWithoutExpunge() > (getMaxSize() / 2));
-			//2012-12-07 Ian: expunge should been triggered often  
+			//2012-12-07 Ian: expunge should be triggered often
 			//1) disable expunge if serialization/activation
 			//2) to minimize memory use, expunge even if no GC
 		}
@@ -279,6 +301,15 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 				s.defaultWriteObject();
 			} finally {
 				disableExpunge(old);
+			}
+		}
+	}
+
+	// ZK-5435
+	private class CleanerTask extends TimerTask {
+		public void run() {
+			synchronized (_desktops) {
+				_desktops.expunge();
 			}
 		}
 	}

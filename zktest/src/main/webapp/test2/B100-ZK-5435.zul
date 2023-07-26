@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B100-ZK-5435.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		2023/7/25, Created by jumperchen
+
+Copyright (C) 2023 Potix Corporation. All Rights Reserved.
+
+-->
+<window>
+	<label multiline="true">
+		1. Apply test2/B100-ZK-5435-zk.xml to enable desktop-timeout in 10 sec.
+		2. Wait for 12 sec. and then click the button.
+		3. And you should see desktop timeout error.
+	</label>
+	<button label="Click me after 12 sec." onClick=""/>
+</window>
