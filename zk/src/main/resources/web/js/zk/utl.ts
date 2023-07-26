@@ -662,9 +662,13 @@ export namespace utl_global {
 			// ignore delayed rerendering case, like Bug ZK-2281
 			if (wgt.desktop) {
 				if (zUtl.isImageLoading() || zk.clientinfo) {
-					setTimeout(() => {
-						return this.fireSized(wgt, bfsz);
-					}, 20);
+					if (zk.clientinfo) { // Fix ZK-5017, not to use setTimeout here
+						zk.afterAuResponse(() => this.fireSized(wgt, bfsz));
+					} else {
+						setTimeout(() => {
+							return this.fireSized(wgt, bfsz);
+						}, 20);
+					}
 					return;
 				}
 				wgt = _onSizeTarget(wgt);

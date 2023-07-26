@@ -316,6 +316,9 @@ div.z-log {
 	top: 0;
 	left: 0;
 }
+#zk_proc > .z-modal-mask {
+	.opacity(1); // ZK-5017.zul, before zk processing ready, we should hide the screen to avoid flickering.
+}
 .mobile {
 	.z-temp,
 	.z-modal-mask {
