@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F100-ZK-5142.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		2023/7/26, Created by jumperchen
+
+Copyright (C) 2023 Potix Corporation. All Rights Reserved.
+
+-->
+<window xmlns:w="client">
+	<script><![CDATA[
+	window.tryGet = function (wgt) {
+		jq.ajax({
+		type: 'GET',
+		url: zk.ajaxURI('?cmd_0=onTimer&dtid=' + zk.Desktop.$().id + '&uuid_0=' + wgt.uuid, { desktop: zk.Desktop.$(), au: true }),
+		success: function (data) {
+			zk.log('has a security issue')
+		}});
+	}
+	]]></script>
+	<label multiline="true">
+		You should not see any zk.log() message.
+	</label>
+	<timer id="timer" onTimer='msg.setValue(System.currentTimeMillis()+"")' w:onTimer="tryGet(this);" delay="100"/>
+	<button label="start" onClick="timer.start()"/>
+	<button label="stop" onClick="timer.stop()"/>
+	<label id="msg" value="timestamp"/>
+</window>

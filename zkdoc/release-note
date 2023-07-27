@@ -8,6 +8,7 @@ ZK 10.0.0
   ZK-5270: Adjust ID generation mechanism in ZHTML Component
   ZK-5422: Provide some utile APIs to update IComponent Tree
   ZK-5215: Support load locale-dependent resources in a relative path
+  ZK-5142: Handle GET and POST requests more strictly
 
 * Bugs
   ZK-5089: AfterSizeEvent doesn't return a correct size of a Window component
