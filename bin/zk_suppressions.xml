@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE suppressions PUBLIC
+          "-//Puppy Crawl//DTD Suppressions 1.1//EN"
+          "http://www.puppycrawl.com/dtds/suppressions_1_1.dtd">
+
+<suppressions>
+	<!-- all packages -->
+    <suppress checks=".*" files="Version\.java"/>
+    <suppress checks=".*" files="[\\/]license[\\/]"/>
+    <suppress checks=".*" files="[\\/]test[\\/]"/>
+    <!-- zhtml -->
+    <suppress checks="RedundantImport" files="src[\\/]org[\\/]zkoss[\\/]zhtml[\\/](Html|Text|Textarea|Zkhead|Input)\.java"/>
+    <!-- zkex -->
+    <suppress checks=".*" files="zkex[\\/]srcpv[\\/]org[\\/]zkoss[\\/].*"/>
+</suppressions>
