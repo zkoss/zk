@@ -1335,7 +1335,7 @@ _zk.ajaxURI = function (uri: string | undefined, opts?: Partial<AjaxURIOptions>)
 	var abs = uri.startsWith('/');
 	if (au && !abs) {
 		abs = true;
-		if (uri)
+		if (uri && !uri.startsWith('?')) // ignore url starts with '?....'
 			uri = '/' + uri; //non-au supports relative path
 	}
 
