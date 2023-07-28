@@ -293,6 +293,18 @@ public class Combobox extends Textbox {
 								insertBefore(item, next);
 								renderer.render(item, _model.getElementAt(index), index++);
 							}
+
+							// Fix ZK-5468: the content of the subsequence item might be changed
+							List<Comboitem> comboitems = new ArrayList<>(getItems());
+							Iterator<Comboitem> iterator = comboitems.iterator();
+							int start = 0;
+							for (int i = max + 1, j = comboitems.size(); i < j && iterator.hasNext(); start++) {
+								if (start < i) {
+									iterator.next();
+									continue;
+								}
+								renderer.render(iterator.next(), _model.getElementAt(i), i++);
+							}
 						} catch (Throwable ex) {
 							renderer.doCatch(ex);
 						} finally {
@@ -322,6 +334,27 @@ public class Combobox extends Textbox {
 							Component p = comp.getPreviousSibling();
 							comp.detach();
 							comp = p;
+						}
+
+						// Fix ZK-5468: the content of the subsequence item might be changed
+						List<Comboitem> comboitems = new ArrayList<>(getItems());
+						Iterator<Comboitem> iterator = comboitems.iterator();
+						final Renderer renderer1 = new Renderer();
+						try {
+							int start = 0;
+							// no need to plus one for "max" here for removal
+							for (int i = max, j = comboitems.size();
+								 i < j && iterator.hasNext(); start++) {
+								if (start < i) {
+									iterator.next();
+									continue;
+								}
+								renderer1.render(iterator.next(), _model.getElementAt(i), i++);
+							}
+						} catch (Throwable ex) {
+							renderer1.doCatch(ex);
+						} finally {
+							renderer1.doFinally();
 						}
 						break;
 					default:

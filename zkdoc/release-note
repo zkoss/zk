@@ -40,6 +40,7 @@ ZK 10.0.0
   ZK-5498: Some checkboxes do not have [aria-checked] attribute, and they do not have accessible names
   ZK-5489: Linelayout's Elements with an ARIA [role] that require children to contain a specific [role] are missing some or all of those required children
   ZK-5017: Listbox head flickering caused by onClientInfo
+  ZK-5468: Components with Model only renders one item with wrong result if the EL contains forEachStatus.index
 
 
 * Upgrade Notes

@@ -1662,10 +1662,24 @@ public class Tree extends MeshElement {
 			case TreeDataEvent.INTERVAL_ADDED:
 				for (int i = indexFrom; i <= indexTo; i++)
 					onTreeDataInsert(target, node, i);
+
+				// Fix ZK-5468: the content of the subsequence item might be changed
+				for (int i = indexTo + 1, endSize = _model.getChildCount(node);
+					 i < endSize; i++) {
+					onTreeDataContentChange(target, node, i);
+				}
+
 				break;
 			case TreeDataEvent.INTERVAL_REMOVED:
 				for (int i = indexTo; i >= indexFrom; i--)
 					onTreeDataRemoved(target, node, i);
+
+				// Fix ZK-5468: the content of the subsequence item might be changed
+				// no need to plus one for "indexTo" here for removal
+				for (int i = indexTo, endSize = _model.getChildCount(node);
+					 i < endSize; i++) {
+					onTreeDataContentChange(target, node, i);
+				}
 				break;
 			case TreeDataEvent.CONTENTS_CHANGED:
 				for (int i = indexFrom; i <= indexTo; i++)
