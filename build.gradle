@@ -173,6 +173,19 @@ subprojects {
 		}
 	}
 
+	task codegenMessages() {
+		if (new File("$projectDir/$resources/metainfo/mesg").exists()) {
+			doFirst {
+				exec {
+					commandLine 'sh', "$rootDir/bin/genprop", '-x', "$projectDir/$resources/metainfo/mesg/", "$projectDir/src/main/java/"
+				}
+			}
+		}
+	}
+	compileJava {
+		dependsOn(codegenMessages)
+	}
+
 	// Configure additional resource for generated resources
 	processResources() {
 		dependsOn(compileJava)
