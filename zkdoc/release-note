@@ -33,6 +33,7 @@ ZK 10.0.0
   ZK-5481: The checkbox in a listitem doesn't have a role "checkbox"
   ZK-5257: Ignore unused component NoClassDefFoundError such as jasperreport component
   ZK-5488: Biglistbox's Elements with an ARIA [role] that require children to contain a specific [role] are missing some or all of those required children
+  ZK-5450: 2 NEXT_SIBLING for targetId don't pass the expected value
 
 
 * Upgrade Notes
