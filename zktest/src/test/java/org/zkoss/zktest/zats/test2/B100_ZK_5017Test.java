@@ -31,6 +31,8 @@ public class B100_ZK_5017Test extends WebDriverTestCase {
 
 	protected void waitResponse() {
 		// can only invoke once, otherwise it will all pass
-		Boolean.valueOf(this.getEval("!!zAu.processing()"));
+		while(Boolean.valueOf(this.getEval("!!zAu.processing()"))) {
+			sleep(5);
+		}
 	}
 }
