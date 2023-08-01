@@ -18,12 +18,6 @@ var _isPE = (function () {
 			return _isPE_ && zk.isLoaded('zkex.grid');
 		};
 })();
-function _syncFrozen(wgt: zul.grid.Rows): void {
-	var grid = wgt.getGrid(),
-		frozen: zul.mesh.Frozen | undefined;
-	if (grid && grid._nativebar && (frozen = grid.frozen))
-		frozen._syncFrozen();
-}
 
 @zk.WrapClass('zul.grid.Rows')
 export class Rows extends zul.Widget<HTMLTableSectionElement> {
@@ -97,7 +91,7 @@ export class Rows extends zul.Widget<HTMLTableSectionElement> {
 		var w = this;
 		after.push(function () {
 			w.stripe();
-			_syncFrozen(w);
+			Rows._syncFrozen(w);
 		});
 	}
 
@@ -191,7 +185,7 @@ export class Rows extends zul.Widget<HTMLTableSectionElement> {
 		this._syncStripe();
 
 		if (this.desktop)
-			_syncFrozen(this);
+			Rows._syncFrozen(this);
 
 		if (g && g._cssflex && g.isChildrenFlex())
 			g._syncSize();
@@ -212,5 +206,13 @@ export class Rows extends zul.Widget<HTMLTableSectionElement> {
 	/** @internal */
 	override deferRedrawHTML_(out: string[]): void {
 		out.push('<tbody', this.domAttrs_({domClass: true}), ' class="z-renderdefer"></tbody>');
+	}
+
+	/** @internal */
+	static _syncFrozen(wgt: zul.grid.Rows): void {
+		var grid = wgt.getGrid(),
+			frozen: zul.mesh.Frozen | undefined;
+		if (grid && grid._nativebar && (frozen = grid.frozen))
+			frozen._syncFrozen();
 	}
 }

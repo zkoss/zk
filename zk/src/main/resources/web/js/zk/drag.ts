@@ -46,142 +46,6 @@ export interface DraggableOptions {
 	zIndex?: string;
 	snap?: zk.Offset | ((dg: Draggable, offset: zk.Offset) => zk.Offset);
 }
-
-	var _dragging = {},
-		_actTmout: undefined | number, //if not null, it means _activate() is called but not really activated
-		_stackup: undefined | HTMLIFrameElement, _activedg: undefined | Draggable, _initPt: zk.Offset, _dnEvt: boolean | zk.Event | undefined,
-		_lastPt: zk.Offset | undefined, _lastScrlPt: zk.Offset | undefined;
-
-	/** @internal */
-	function _activate(dg: Draggable, devt: JQuery.TriggeredEvent, pt: zk.Offset): void {
-		_actTmout = setTimeout(function () {
-			_actTmout = undefined;
-			//bug: 3027322 & 2924049: Wrong target when dragging a sub div in IE browsers
-			if (!_activedg || _activedg.node == dg.node)
-				_activedg = dg;
-		}, dg.opts.delay);
-		_initPt = pt;
-	}
-	/** @internal */
-	function _deactivate(): void {
-		_activedg = undefined;
-		if (_dnEvt) setTimeout(function () {_dnEvt = undefined;}, 0);
-	}
-	/** @internal */
-	function _docmousemove(devt: JQuery.TriggeredEvent): void {
-		if (!_activedg || _activedg.dead) return;
-
-		var evt = jq.Event.zk(devt),
-			pt = [evt.pageX, evt.pageY] as zk.Offset;
-
-		// Mozilla-based browsers fire successive mousemove events with
-		// the same coordinates, prevent needless redrawing (moz bug?)
-		if (_lastPt && _lastPt[0] == pt[0]
-		&& _lastPt[1] == pt[1])
-			return;
-
-		_lastPt = pt;
-		_activedg._updateDrag(pt, evt);
-		devt.stop();
-			//test/dragdrop.zul: it seems less stall-dragging when dragging
-			//IMG (but still happens if dragging fast)
-	}
-	/** @internal */
-	function _docmouseup(devt: JQuery.TriggeredEvent): void {
-		if (_actTmout) {
-			clearTimeout(_actTmout);
-			_actTmout = undefined;
-		}
-		var evt = jq.Event.zk(devt),
-			adg = _activedg;
-		if (!adg) {
-			// B50-ZK-221: need to clear _dnEvt here
-			if (evt.which == 1)
-				_dnEvt = undefined;
-			return;
-		}
-
-		_lastPt = _activedg = undefined;
-		adg._endDrag(evt);
-		if (evt.domStopped) devt.stop();
-		// Bug B50-3285142: Drag fails to clear up ghost when widget is detached
-		if (adg._suicide) {
-			adg._suicide = false;
-			adg.destroy();
-		}
-	}
-	/** @internal */
-	function _dockeypress(devt: JQuery.TriggeredEvent): void {
-		if (_activedg) _activedg._keypress(devt);
-	}
-
-	//default effect//
-	/** @internal */
-	function _defStartEffect(dg: Draggable): void {
-		var node: undefined | HTMLElement & {_$opacity?} = dg.node;
-		if (node) {
-			node._$opacity = jq(node).css('opacity');
-			_dragging[node.toString()] = true;
-		}
-		if (node) {
-			jq(node)
-				.css( // from
-					'opacity', node ? node._$opacity as string : 1
-				)
-				.animate({ // to
-					opacity: 0.7
-				}, { // properties
-					duration: 200
-				});
-		}
-	}
-	/** @internal */
-	function _defEndEffect(dg: Draggable): void {
-		var node: undefined | HTMLElement & {_$opacity?} = dg.node,
-			toOpacity = typeof node!._$opacity == 'number' ? node!._$opacity : 1.0;
-		if (node) {
-			jq(node)
-				.css({ // from
-					opacity: 0.7
-				})
-				.animate({ // to
-					opacity: toOpacity
-				}, { // properties
-					duration: 200,
-					queue: '_draggable',
-					complete: function () {
-						delete _dragging[node!.toString()];
-					}
-				});
-		}
-	}
-	/** @internal */
-	function _defRevertEffect(dg: Draggable, offset: zk.Offset): void {
-		var dx: number | undefined, dy: number | undefined;
-		if ((dx = offset[0]) && (dy = offset[1])) {
-			var node = dg.node,
-				orgpos = node?.style.position,
-				dur = Math.sqrt(Math.abs(dy ^ 2) + Math.abs(dx ^ 2)) * 20;
-			
-			if (node) {
-				jq(node)
-					.animate({ // to
-						left: `-=${dx}`,
-						top: `-=${dy}`
-					}, { // properties
-						duration: dur,
-						queue: '_draggable',
-						complete: function () {
-							node!.style.position = orgpos || '';
-						}
-					});
-			}
-		}
-	}
-	/** @internal */
-	function _disableDragStart(evt: JQuery.TriggeredEvent): boolean {
-		return jq.nodeName(evt.target as HTMLElement, 'input', 'textarea');
-	}
 /**
  * A draggable object used to make a DOM element draggable.
  */
@@ -508,12 +372,28 @@ export class Draggable extends zk.Object {
 	 * If omitted and control is a widget, {@link zk.Widget.$n} is assumed.
 	 * @param opts - options. Refer to {@link opts} for allowed options.
 	 */
+	/** @internal */
+	static _dragging = {};
+	/** @internal */
+	static _actTmout: undefined | number; //if not null, it means _activate() is called but not really activated
+	/** @internal */
+	static _stackup: undefined | HTMLIFrameElement;
+	/** @internal */
+	static _activedg: undefined | Draggable;
+	/** @internal */
+	static _initPt: zk.Offset;
+	/** @internal */
+	static _dnEvt: boolean | zk.Event | undefined;
+	/** @internal */
+	static _lastPt: zk.Offset | undefined;
+	/** @internal */
+	static _lastScrlPt: zk.Offset | undefined;
 	constructor(control: zk.Object & {node?: HTMLElement} | undefined, node: HTMLElement | undefined, opts: DraggableOptions) {
 		super();
-		if (!_stackup) {
+		if (!Draggable._stackup) {
 		//IE: if we don't insert stackup at beginning, dragging is slow
-			_stackup = jq.newStackup(undefined, 'z_ddstkup');
-			document.body.appendChild(_stackup);
+			Draggable._stackup = jq.newStackup(undefined, 'z_ddstkup');
+			document.body.appendChild(Draggable._stackup);
 		}
 
 		this.control = control;
@@ -531,11 +411,11 @@ export class Draggable extends zk.Object {
 		});
 
 		if (opts.reverteffect == null)
-			opts.reverteffect = _defRevertEffect;
+			opts.reverteffect = Draggable._defRevertEffect;
 		if (opts.endeffect == null) {
-			opts.endeffect = _defEndEffect;
+			opts.endeffect = Draggable._defEndEffect;
 			if (opts.starteffect == null)
-				opts.starteffect = _defStartEffect;
+				opts.starteffect = Draggable._defStartEffect;
 		}
 
 		let handler: HTMLElement | undefined;
@@ -554,13 +434,13 @@ export class Draggable extends zk.Object {
 
 		jq(this.handle).on('zmousedown', this.proxy(this._mousedown))
 				// issue in test/dragdrop.zul for dragging image file
-				.on('dragstart', _disableDragStart);
+				.on('dragstart', Draggable._disableDragStart);
 
 		//register
 		if (Draggable._drags.length == 0)
-			jq(document).on('zmouseup', _docmouseup)
-				.on('zmousemove', _docmousemove)
-				.keypress(_dockeypress);
+			jq(document).on('zmouseup', Draggable._docmouseup)
+				.on('zmousemove', Draggable._docmousemove)
+				.keypress(Draggable._dockeypress);
 		Draggable._drags.push(this);
 	}
 	/**
@@ -574,16 +454,16 @@ export class Draggable extends zk.Object {
 			return;
 		}
 		jq(this.handle).off('zmousedown', this.proxy(this._mousedown))
-				.off('dragstart', _disableDragStart);
+				.off('dragstart', Draggable._disableDragStart);
 
 		//unregister
 		Draggable._drags.$remove(this);
 		if (Draggable._drags.length == 0)
-			jq(document).off('zmouseup', _docmouseup)
-				.off('zmousemove', _docmousemove)
-				.off('keypress', _dockeypress);
-		if (_activedg == this) //just in case
-			_activedg = undefined;
+			jq(document).off('zmouseup', Draggable._docmouseup)
+				.off('zmousemove', Draggable._docmousemove)
+				.off('keypress', Draggable._dockeypress);
+		if (Draggable._activedg == this) //just in case
+			Draggable._activedg = undefined;
 
 		this.node = this.control = this.handle = undefined;
 		this.dead = true;
@@ -637,12 +517,12 @@ export class Draggable extends zk.Object {
 			}
 
 		if (this.opts.stackup) {
-			if (zk(_stackup).isVisible()) //in use
+			if (zk(Draggable._stackup).isVisible()) //in use
 				this._stackup = jq.newStackup(node, node.id + '-ddstk');
 			else {
-				this._stackup = _stackup;
+				this._stackup = Draggable._stackup;
 				this._syncStackup();
-				node.parentNode?.insertBefore(_stackup!, node);
+				node.parentNode?.insertBefore(Draggable._stackup!, node);
 			}
 		}
 
@@ -689,8 +569,8 @@ export class Draggable extends zk.Object {
 	_updateDrag(pt: zk.Offset, evt: zk.Event): void {
 		if (!this.dragging) {
 			let v = this.opts.initSensitivity;
-			if (v && pt[0] <= _initPt[0] + v && pt[0] >= _initPt[0] - v
-			&& pt[1] <= _initPt[1] + v && pt[1] >= _initPt[1] - v)
+			if (v && pt[0] <= Draggable._initPt[0] + v && pt[0] >= Draggable._initPt[0] - v
+			&& pt[1] <= Draggable._initPt[1] + v && pt[1] >= Draggable._initPt[1] - v)
 				return;
 			this._startDrag(evt);
 		}
@@ -745,7 +625,7 @@ export class Draggable extends zk.Object {
 
 		var stackup = this._stackup;
 		if (stackup) {
-			if (stackup == _stackup) jq(stackup).hide();
+			if (stackup == Draggable._stackup) jq(stackup).hide();
 			else jq(stackup).remove();
 			delete this._stackup;
 		}
@@ -799,7 +679,7 @@ export class Draggable extends zk.Object {
 				}, evt.data), {ignorable: true});
 			}
 		}
-		_deactivate();
+		Draggable._deactivate();
 		var self = this;
 		setTimeout(function () {
 			zk.dragging = false;
@@ -813,7 +693,7 @@ export class Draggable extends zk.Object {
 		var node = this.node,
 			evt = jq.Event.zk(devt),
 			target = devt.target as HTMLElement;
-		if (_actTmout || (node && _dragging[node.toString()]) || evt.which != 1
+		if (Draggable._actTmout || (node && Draggable._dragging[node.toString()]) || evt.which != 1
 			|| (zk.webkit && jq.nodeName(target, 'select'))
 			|| (zk(target).isInput() && this.control != zk.Widget.$(target)))
 			return;
@@ -840,10 +720,10 @@ export class Draggable extends zk.Object {
 			return;
 
 		this.offset = ofs;
-		_activate(this, devt, pt);
+		Draggable._activate(this, devt, pt);
 
 		if (!zk.mobile) {
-			_dnEvt = jq.Event.zk(devt, this.control as zk.Widget);
+			Draggable._dnEvt = jq.Event.zk(devt, this.control as zk.Widget);
 			//simulate mousedown later (mount.js's invocation of ignoreMouseUp)
 		}
 	}
@@ -862,7 +742,7 @@ export class Draggable extends zk.Object {
 			this._finishDrag(evt, true);
 			evt.stop();
 		} else
-			_deactivate();
+			Draggable._deactivate();
 	}
 
 	/** @internal */
@@ -932,7 +812,7 @@ export class Draggable extends zk.Object {
 		if (this.scrollInterval) {
 			clearInterval(this.scrollInterval);
 			this.scrollInterval = undefined;
-			_lastScrlPt = undefined;
+			Draggable._lastScrlPt = undefined;
 		}
 	}
 	/** @internal */
@@ -964,21 +844,21 @@ export class Draggable extends zk.Object {
 
 		this._updateInnerOfs();
 		if (this._isScrollChild) {
-			_lastScrlPt = _lastScrlPt ?? _lastPt!;
-			_lastScrlPt[0] += this.scrollSpeed[0] * delta / 1000;
-			_lastScrlPt[1] += this.scrollSpeed[1] * delta / 1000;
-			if (_lastScrlPt[0] < 0)
-				_lastScrlPt[0] = 0;
-			if (_lastScrlPt[1] < 0)
-				_lastScrlPt[1] = 0;
-			this._draw(_lastScrlPt);
+			Draggable._lastScrlPt = Draggable._lastScrlPt ?? Draggable._lastPt!;
+			Draggable._lastScrlPt[0] += this.scrollSpeed[0] * delta / 1000;
+			Draggable._lastScrlPt[1] += this.scrollSpeed[1] * delta / 1000;
+			if (Draggable._lastScrlPt[0] < 0)
+				Draggable._lastScrlPt[0] = 0;
+			if (Draggable._lastScrlPt[1] < 0)
+				Draggable._lastScrlPt[1] = 0;
+			this._draw(Draggable._lastScrlPt);
 		}
 
 		if (this.opts.change) {
 			var devt = window.event ? jq.event.fix(window.event) : undefined,
 				evt = devt ? jq.Event.zk(devt) : undefined;
 			this.opts.change(this,
-				evt ? [evt.pageX, evt.pageY] : _lastPt!, evt);
+				evt ? [evt.pageX, evt.pageY] : Draggable._lastPt!, evt);
 		}
 	}
 
@@ -1029,7 +909,7 @@ export class Draggable extends zk.Object {
 	}
 
 	static ignoreMouseUp(): boolean | zk.Event | undefined { //called by mount
-		return zk.dragging ? true : _dnEvt;
+		return zk.dragging ? true : Draggable._dnEvt;
 	}
 	static ignoreClick(): boolean { //called by mount
 		return !!zk.dragging;
@@ -1040,6 +920,136 @@ export class Draggable extends zk.Object {
 	 */
 	static ignoreStop(target: HTMLElement): boolean { //called by mount
 		return false;
+	}
+	/** @internal */
+	static _activate(dg: Draggable, devt: JQuery.TriggeredEvent, pt: zk.Offset): void {
+		Draggable._actTmout = setTimeout(function () {
+			Draggable._actTmout = undefined;
+			//bug: 3027322 & 2924049: Wrong target when dragging a sub div in IE browsers
+			if (!Draggable._activedg || Draggable._activedg.node == dg.node)
+				Draggable._activedg = dg;
+		}, dg.opts.delay);
+		Draggable._initPt = pt;
+	}
+	/** @internal */
+	static _deactivate(): void {
+		Draggable._activedg = undefined;
+		if (Draggable._dnEvt) setTimeout(function () {Draggable._dnEvt = undefined;}, 0);
+	}
+	/** @internal */
+	static _docmousemove(devt: JQuery.TriggeredEvent): void {
+		if (!Draggable._activedg || Draggable._activedg.dead) return;
+
+		var evt = jq.Event.zk(devt),
+			pt = [evt.pageX, evt.pageY] as zk.Offset;
+
+		// Mozilla-based browsers fire successive mousemove events with
+		// the same coordinates, prevent needless redrawing (moz bug?)
+		if (Draggable._lastPt && Draggable._lastPt[0] == pt[0]
+			&& Draggable._lastPt[1] == pt[1])
+			return;
+
+		Draggable._lastPt = pt;
+		Draggable._activedg._updateDrag(pt, evt);
+		devt.stop();
+		//test/dragdrop.zul: it seems less stall-dragging when dragging
+		//IMG (but still happens if dragging fast)
+	}
+	/** @internal */
+	static _docmouseup(devt: JQuery.TriggeredEvent): void {
+		if (Draggable._actTmout) {
+			clearTimeout(Draggable._actTmout);
+			Draggable._actTmout = undefined;
+		}
+		var evt = jq.Event.zk(devt),
+			adg = Draggable._activedg;
+		if (!adg) {
+			// B50-ZK-221: need to clear _dnEvt here
+			if (evt.which == 1)
+				Draggable._dnEvt = undefined;
+			return;
+		}
+
+		Draggable._lastPt = Draggable._activedg = undefined;
+		adg._endDrag(evt);
+		if (evt.domStopped) devt.stop();
+		// Bug B50-3285142: Drag fails to clear up ghost when widget is detached
+		if (adg._suicide) {
+			adg._suicide = false;
+			adg.destroy();
+		}
+	}
+	/** @internal */
+	static _dockeypress(devt: JQuery.TriggeredEvent): void {
+		if (Draggable._activedg) Draggable._activedg._keypress(devt);
+	}
+
+	//default effect//
+	/** @internal */
+	static _defStartEffect(dg: Draggable): void {
+		var node: undefined | HTMLElement & {_$opacity?} = dg.node;
+		if (node) {
+			node._$opacity = jq(node).css('opacity');
+			Draggable._dragging[node.toString()] = true;
+		}
+		if (node) {
+			jq(node)
+				.css( // from
+					'opacity', node ? node._$opacity as string : 1
+				)
+				.animate({ // to
+					opacity: 0.7
+				}, { // properties
+					duration: 200
+				});
+		}
+	}
+	/** @internal */
+	static _defEndEffect(dg: Draggable): void {
+		var node: undefined | HTMLElement & {_$opacity?} = dg.node,
+			toOpacity = typeof node!._$opacity == 'number' ? node!._$opacity : 1.0;
+		if (node) {
+			jq(node)
+				.css({ // from
+					opacity: 0.7
+				})
+				.animate({ // to
+					opacity: toOpacity
+				}, { // properties
+					duration: 200,
+					queue: '_draggable',
+					complete: function () {
+						delete Draggable._dragging[node!.toString()];
+					}
+				});
+		}
+	}
+	/** @internal */
+	static _defRevertEffect(dg: Draggable, offset: zk.Offset): void {
+		var dx: number | undefined, dy: number | undefined;
+		if ((dx = offset[0]) && (dy = offset[1])) {
+			var node = dg.node,
+				orgpos = node?.style.position,
+				dur = Math.sqrt(Math.abs(dy ^ 2) + Math.abs(dx ^ 2)) * 20;
+
+			if (node) {
+				jq(node)
+					.animate({ // to
+						left: `-=${dx}`,
+						top: `-=${dy}`
+					}, { // properties
+						duration: dur,
+						queue: '_draggable',
+						complete: function () {
+							node!.style.position = orgpos || '';
+						}
+					});
+			}
+		}
+	}
+	/** @internal */
+	static _disableDragStart(evt: JQuery.TriggeredEvent): boolean {
+		return jq.nodeName(evt.target as HTMLElement, 'input', 'textarea');
 	}
 }
 zk.Draggable = Draggable;

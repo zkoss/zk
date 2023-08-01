@@ -33,18 +33,6 @@ declare global {
 	}
 }
 
-function _newDate(year, month, day, bFix, tz?: string): DateImpl {
-	var v = Dates.newInstance([year, month, day], tz);
-	return bFix && v.getMonth() != month && v.getDate() != day ? //Bug ZK-1213: also need to check date
-		Dates.newInstance([year, month + 1, 0], tz)/*last day of month*/ : v;
-}
-
-function _getTimeZone(wgt: zul.db.Calendar): string | undefined {
-	var parent: TimeZoneWidget | undefined = wgt.parent,
-		tz = parent?.getTimeZone?.();
-	return tz ? tz : wgt._defaultTzone;
-}
-
 /** @class zul.db.Renderer
  * The renderer used to render a calendar.
  * It is designed to be overridden
@@ -100,7 +88,7 @@ export var Renderer = {
 	 * @since 5.0.3
 	 */
 	disabled(cal: zul.db.Calendar, y: number, m: number, v: number, today: DateImpl): boolean {
-		var d = Dates.newInstance([y, m, v, 0, 0, 0, 0], _getTimeZone(cal)),
+		var d = Dates.newInstance([y, m, v, 0, 0, 0, 0], Calendar._getTimeZone(cal)),
 			constraint;
 
 		if ((constraint = cal._constraint) && typeof constraint == 'string') {
@@ -345,7 +333,7 @@ export var Renderer = {
 	todayView(wgt: zul.db.Calendar, out: string[], localizedSymbols: zk.LocalizedSymbols): void {
 		var val = wgt.getTodayLinkLabel();
 		if (!val) {
-			var tz = _getTimeZone(wgt);
+			var tz = Calendar._getTimeZone(wgt);
 			val = new zk.fmt.Calendar().formatDate(zUtl.today(!!wgt.parent, tz), wgt.getFormat(), localizedSymbols);
 		}
 		out.push(val);
@@ -713,7 +701,7 @@ export class Calendar extends zul.Widget {
 	/** @internal */
 	_shift(ofs: number, opts?: MarkCalOptions): void {
 		var oldTime = this.getTime(),
-			tz = _getTimeZone(this),
+			tz = Calendar._getTimeZone(this),
 			shiftTime = Dates.newInstance(oldTime.getTime(), tz),
 			minTime = Dates.newInstance([this._minyear, 0, 1, 0, 0, 0, 0], tz),
 			maxTime = Dates.newInstance([this._maxyear, 11, 31, 23, 59, 59, 999], tz),
@@ -793,7 +781,7 @@ export class Calendar extends zul.Widget {
 		var constraints = constraint.split(','),
 			format = 'yyyyMMdd',
 			len = format.length + 1,
-			tz = _getTimeZone(this);
+			tz = Calendar._getTimeZone(this);
 		// eslint-disable-next-line @typescript-eslint/prefer-for-of
 		for (var i = 0; i < constraints.length; i++) {
 			constraint = jq.trim(constraints[i]); //Bug ZK-1718: should trim whitespace
@@ -921,7 +909,7 @@ export class Calendar extends zul.Widget {
 
 	/** @internal */
 	_clickToday(): void {
-		this.setValue(zUtl.today(!!this.parent, _getTimeZone(this)));
+		this.setValue(zUtl.today(!!this.parent, Calendar._getTimeZone(this)));
 		this._setView('day');
 	}
 
@@ -962,7 +950,7 @@ export class Calendar extends zul.Widget {
 	 *  <p>returns today if value is null
 	 */
 	getTime(): DateImpl {
-		return this._value || zUtl.today(this.getFormat(), _getTimeZone(this));
+		return this._value || zUtl.today(this.getFormat(), Calendar._getTimeZone(this));
 	}
 
 	/** @internal */
@@ -971,8 +959,8 @@ export class Calendar extends zul.Widget {
 			year = y != null ? y : dateobj.getFullYear(),
 			month = m != null ? m : dateobj.getMonth(),
 			day = d != null ? d : dateobj.getDate(),
-			tz = _getTimeZone(this),
-			val = new zk.fmt.Calendar().escapeDSTConflict(_newDate(year, month, day, d == null, tz), tz); // B70-ZK-2382
+			tz = Calendar._getTimeZone(this),
+			val = new zk.fmt.Calendar().escapeDSTConflict(Calendar._newDate(year, month, day, d == null, tz), tz); // B70-ZK-2382
 
 		this._value = val;
 		this._selectedValue = val;
@@ -1045,7 +1033,7 @@ export class Calendar extends zul.Widget {
 			year = dateobj.getFullYear(),
 			month = dateobj.getMonth(),
 			day = dateobj.getDate(),
-			tz = _getTimeZone(this),
+			tz = Calendar._getTimeZone(this),
 			nofix;
 		switch (opt) {
 		case 'day':
@@ -1062,7 +1050,7 @@ export class Calendar extends zul.Widget {
 			year += ofs;
 			break;
 		}
-		var newTime = _newDate(year, month, day, !nofix, tz);
+		var newTime = Calendar._newDate(year, month, day, !nofix, tz);
 		if (!ignoreUpdate) {
 			this._value = newTime;
 			if (!Renderer.disabled(this, year, month, day, zUtl.today(false, this._defaultTzone))) {
@@ -1380,5 +1368,19 @@ export class Calendar extends zul.Widget {
 			setTimeout(() => zk(n).focus()); // FIXME: missing timeout argument?
 		else
 			zk(n).focus();
+	}
+
+	/** @internal */
+	static _newDate(year: number, month: number, day: number, bFix: boolean, tz?: string): DateImpl {
+		var v = Dates.newInstance([year, month, day], tz);
+		return bFix && v.getMonth() != month && v.getDate() != day ? //Bug ZK-1213: also need to check date
+			Dates.newInstance([year, month + 1, 0], tz)/*last day of month*/ : v;
+	}
+
+	/** @internal */
+	static _getTimeZone(wgt: zul.db.Calendar): string | undefined {
+		var parent: TimeZoneWidget | undefined = wgt.parent,
+			tz = parent?.getTimeZone?.();
+		return tz ? tz : wgt._defaultTzone;
 	}
 }

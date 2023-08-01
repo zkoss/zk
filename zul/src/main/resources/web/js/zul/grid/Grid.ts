@@ -13,24 +13,6 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 // fix for the empty message shows up or not.
-function _fixForEmpty(wgt: zul.grid.Grid): void {
-	if (wgt.desktop) {
-		var empty = wgt.$n_<HTMLTableCellElement>('empty'),
-			colspan = 0;
-		if (wgt.rows?.nChildren) {
-			empty.style.display = 'none';
-		} else {
-			if (wgt.columns) {
-				for (var w = wgt.columns.firstChild; w; w = w.nextSibling)
-					colspan++;
-			}
-			empty.colSpan = colspan || 1;
-			// ZK-2365 table cell needs the "display:table-cell" when colspan is enable.
-			empty.style.display = 'table-cell';
-		}
-	}
-	wgt._shallFixEmpty = false;
-}
 
 @zk.WrapClass('zul.grid.Grid')
 export class Grid extends zul.mesh.MeshWidget {
@@ -237,7 +219,7 @@ export class Grid extends zul.mesh.MeshWidget {
 	override bind_(desktop: zk.Desktop | undefined, skipper: zk.Skipper | undefined, after: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		after.push(() => {
-			_fixForEmpty(this);
+			Grid._fixForEmpty(this);
 		});
 	}
 
@@ -275,7 +257,7 @@ export class Grid extends zul.mesh.MeshWidget {
 	override onResponse(ctl?: zk.ZWatchController, opts?: Record<string, unknown>): void {
 		if (this.desktop) {
 			if (this._shallFixEmpty)
-				_fixForEmpty(this);
+				Grid._fixForEmpty(this);
 		}
 		super.onResponse(ctl, opts);
 	}
@@ -407,6 +389,26 @@ export class Grid extends zul.mesh.MeshWidget {
 	/** @internal */
 	_getLastItemIndex(): number | undefined {
 		return this.rows!.lastChild!._index;
+	}
+
+	/** @internal */
+	static _fixForEmpty(wgt: zul.grid.Grid): void {
+		if (wgt.desktop) {
+			var empty = wgt.$n_<HTMLTableCellElement>('empty'),
+				colspan = 0;
+			if (wgt.rows?.nChildren) {
+				empty.style.display = 'none';
+			} else {
+				if (wgt.columns) {
+					for (var w = wgt.columns.firstChild; w; w = w.nextSibling)
+						colspan++;
+				}
+				empty.colSpan = colspan || 1;
+				// ZK-2365 table cell needs the "display:table-cell" when colspan is enable.
+				empty.style.display = 'table-cell';
+			}
+		}
+		wgt._shallFixEmpty = false;
 	}
 }
 

@@ -12,22 +12,6 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-var LEGAL_CHARS = 'ahKHksmz',
-	/* constant for MINUTE (m) field alignment. */
-	MINUTE_FIELD = 1,
-	/* constant for SECOND (s) field alignment. */
-	SECOND_FIELD = 2,
-	/* constant for AM_PM (a) field alignment. */
-	AM_PM_FIELD = 3,
-	/* constant for HOUR0 (H) field alignment. (Hour in day (0-23)) */
-	HOUR0_FIELD = 4,
-	/* constant for HOUR1 (k) field alignment. (Hour in day (1-24)) */
-	HOUR1_FIELD = 5,
-	/* constant for HOUR2 (h) field alignment. (Hour in am/pm (1-12)) */
-	HOUR2_FIELD = 6,
-	/* constant for HOUR3 (K) field alignment. (Hour in am/pm (0-11)) */
-	HOUR3_FIELD = 7,
-	globallocalizedSymbols: Record<string, zk.LocalizedSymbols> = {};
 
 @zk.WrapClass('zul.db.Timebox')
 export class Timebox extends zul.inp.FormatWidget<DateImpl> {
@@ -56,6 +40,22 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 	_constraint?: string;
 	/** @internal */
 	_currentbtn?: HTMLElement;
+	static LEGAL_CHARS = 'ahKHksmz';
+	/* constant for MINUTE (m) field alignment. */
+	static MINUTE_FIELD = 1;
+	/* constant for SECOND (s) field alignment. */
+	static SECOND_FIELD = 2;
+	/* constant for AM_PM (a) field alignment. */
+	static AM_PM_FIELD = 3;
+	/* constant for HOUR0 (H) field alignment. (Hour in day (0-23)) */
+	static HOUR0_FIELD = 4;
+	/* constant for HOUR1 (k) field alignment. (Hour in day (1-24)) */
+	static HOUR1_FIELD = 5;
+	/* constant for HOUR2 (h) field alignment. (Hour in am/pm (1-12)) */
+	static HOUR2_FIELD = 6;
+	/* constant for HOUR3 (K) field alignment. (Hour in am/pm (0-11)) */
+	static HOUR3_FIELD = 7;
+	static globallocalizedSymbols: Record<string, zk.LocalizedSymbols> = {};
 
 	constructor() {
 		super();
@@ -151,9 +151,9 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 
 	setLocalizedSymbols(localizedSymbols?: [string, zk.LocalizedSymbols]): this {
 		if (localizedSymbols) {
-			if (!globallocalizedSymbols[localizedSymbols[0]])
-				globallocalizedSymbols[localizedSymbols[0]] = localizedSymbols[1];
-			this._localizedSymbols = globallocalizedSymbols[localizedSymbols[0]];
+			if (!Timebox.globallocalizedSymbols[localizedSymbols[0]])
+				Timebox.globallocalizedSymbols[localizedSymbols[0]] = localizedSymbols[1];
+			this._localizedSymbols = Timebox.globallocalizedSymbols[localizedSymbols[0]];
 		}
 		return this;
 	}
@@ -332,7 +332,7 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 
 		for (var i = 0, f = this._fmthdler, l = f.length; i < l; i++) {
 			var th = f[i];
-			if (th.type == AM_PM_FIELD) {
+			if (th.type == Timebox.AM_PM_FIELD) {
 				hasAM = true;
 				isAM = th.unformat(date, val, {});
 				if (!th.getText(val).trim().length)
@@ -353,7 +353,7 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 		}
 
 		for (var i = 0, l = fmt.length; i < l; i++) {
-			if (!hasAM && (fmt[i].type == HOUR2_FIELD || fmt[i].type == HOUR3_FIELD))
+			if (!hasAM && (fmt[i].type == Timebox.HOUR2_FIELD || fmt[i].type == Timebox.HOUR3_FIELD))
 				isAM = true;
 			date = fmt[i].unformat(date, val, {am: isAM, obeyCount: fmtObeyCount[i]}) as DateImpl; // FIXME: inconsistent use of unformat
 		}
@@ -636,7 +636,7 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 			lastHandler: TimeHandler;
 
 		while ((lastHandler = f[++index])
-				&& (!lastHandler.type || lastHandler.type == AM_PM_FIELD));
+				&& (!lastHandler.type || lastHandler.type == Timebox.AM_PM_FIELD));
 
 		return lastHandler;
 	}
@@ -753,37 +753,37 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 			switch (c) {
 			case 'a':
 				var len = APM[0].length;
-				index.push(new zul.inp.AMPMHandler([i, i + len - 1], AM_PM_FIELD, wgt));
+				index.push(new zul.inp.AMPMHandler([i, i + len - 1], Timebox.AM_PM_FIELD, wgt));
 				break;
 			case 'K':
 				var start = i,
 					end = fmt.charAt(i + 1) == 'K' ? ++i : i;
-				index.push(new zul.inp.HourHandler2([start, end], HOUR3_FIELD, wgt));
+				index.push(new zul.inp.HourHandler2([start, end], Timebox.HOUR3_FIELD, wgt));
 				break;
 			case 'h':
 				var start = i,
 					end = fmt.charAt(i + 1) == 'h' ? ++i : i;
-				index.push(new zul.inp.HourHandler([start, end], HOUR2_FIELD, wgt));
+				index.push(new zul.inp.HourHandler([start, end], Timebox.HOUR2_FIELD, wgt));
 				break;
 			case 'H':
 				var start = i,
 					end = fmt.charAt(i + 1) == 'H' ? ++i : i;
-				index.push(new zul.inp.HourInDayHandler([start, end], HOUR0_FIELD, wgt));
+				index.push(new zul.inp.HourInDayHandler([start, end], Timebox.HOUR0_FIELD, wgt));
 				break;
 			case 'k':
 				var start = i,
 					end = fmt.charAt(i + 1) == 'k' ? ++i : i;
-				index.push(new zul.inp.HourInDayHandler2([start, end], HOUR1_FIELD, wgt));
+				index.push(new zul.inp.HourInDayHandler2([start, end], Timebox.HOUR1_FIELD, wgt));
 				break;
 			case 'm':
 				var start = i,
 					end = fmt.charAt(i + 1) == 'm' ? ++i : i;
-				index.push(new zul.inp.MinuteHandler([start, end], MINUTE_FIELD, wgt));
+				index.push(new zul.inp.MinuteHandler([start, end], Timebox.MINUTE_FIELD, wgt));
 				break;
 			case 's':
 				var start = i,
 					end = fmt.charAt(i + 1) == 's' ? ++i : i;
-				index.push(new zul.inp.SecondHandler([start, end], SECOND_FIELD, wgt));
+				index.push(new zul.inp.SecondHandler([start, end], Timebox.SECOND_FIELD, wgt));
 				break;
 			case 'z':
 				index.push({index: [i, i], format: (function (text) {
@@ -799,7 +799,7 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 
 				while ((ary += c) && ++end < l) {
 					c = fmt.charAt(end);
-					if (LEGAL_CHARS.includes(c)) {
+					if (Timebox.LEGAL_CHARS.includes(c)) {
 						end--;
 						break;
 					}
@@ -813,7 +813,7 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 			}
 		}
 		for (var shift, i = 0, l = index.length; i < l; i++) {
-			if (index[i].type == AM_PM_FIELD) {
+			if (index[i].type == Timebox.AM_PM_FIELD) {
 				shift = index[i].index[1] - index[i].index[0];
 				if (!shift) break; // no need to shift.
 			} else if (shift) {
@@ -827,12 +827,12 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 	/** @internal */
 	static _shouldObeyCount(nextType: number): boolean {
 		switch (nextType) {
-			case MINUTE_FIELD:
-			case SECOND_FIELD:
-			case HOUR0_FIELD:
-			case HOUR1_FIELD:
-			case HOUR2_FIELD:
-			case HOUR3_FIELD:
+			case Timebox.MINUTE_FIELD:
+			case Timebox.SECOND_FIELD:
+			case Timebox.HOUR0_FIELD:
+			case Timebox.HOUR1_FIELD:
+			case Timebox.HOUR2_FIELD:
+			case Timebox.HOUR3_FIELD:
 				return true;
 			default:
 				return false;

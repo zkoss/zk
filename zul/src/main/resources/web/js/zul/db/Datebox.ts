@@ -14,9 +14,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
-var globallocalizedSymbols: Record<string, zk.LocalizedSymbols> = {},
-	_quotePattern = /'/g, // move pattern string here to avoid jsdoc failure
-	_innerDateFormat = 'yyyy/MM/dd ';
 
 @zk.WrapClass('zul.db.Datebox')
 export class Datebox extends zul.inp.FormatWidget<DateImpl> {
@@ -64,6 +61,11 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 	localizedFormat?: string;
 	/** @internal */
 	_position?: string;
+	static globallocalizedSymbols: Record<string, zk.LocalizedSymbols> = {};
+	/** @internal */
+	static _quotePattern = /'/g; // move pattern string here to avoid jsdoc failure
+	/** @internal */
+	static _innerDateFormat = 'yyyy/MM/dd ';
 
 	constructor() {
 		super();
@@ -349,9 +351,9 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 		const o = this._localizedSymbols;
 
 		if (localizedSymbols) {
-			if (!globallocalizedSymbols[localizedSymbols[0]])
-				globallocalizedSymbols[localizedSymbols[0]] = localizedSymbols[1];
-			this._localizedSymbols = globallocalizedSymbols[localizedSymbols[0]];
+			if (!Datebox.globallocalizedSymbols[localizedSymbols[0]])
+				Datebox.globallocalizedSymbols[localizedSymbols[0]] = localizedSymbols[1];
+			this._localizedSymbols = Datebox.globallocalizedSymbols[localizedSymbols[0]];
 		}
 
 		if (o !== localizedSymbols || opts?.force) {
@@ -696,7 +698,7 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 				format = this.getFormat()!,
 				d = new zk.fmt.Calendar().parseDate(val, pattern || format, !this._lenient, refDate, this._localizedSymbols, tz, this._strictDate);
 			this._refDate = undefined;
-			if (!d) return { error: zk.fmt.Text.format(msgzul.DATE_REQUIRED + (this.localizedFormat!.replace(_quotePattern, ''))) };
+			if (!d) return { error: zk.fmt.Text.format(msgzul.DATE_REQUIRED + (this.localizedFormat!.replace(Datebox._quotePattern, ''))) };
 			// B70-ZK-2382 escape shouldn't be used in format including hour
 			if (!format.match(/[HkKh]/))
 				d = new zk.fmt.Calendar().escapeDSTConflict(d, tz);
@@ -1296,8 +1298,8 @@ export class CalendarTime extends zul.db.Timebox {
 			oldDate = db.getValue() || db._pop.getValue(),
 			// ZK-2382 we must do the conversion with date and time in the same time
 			// otherwise the result may be affcted by DST adjustment
-			dateTime = db.coerceToString_(oldDate, _innerDateFormat) + evt.data.value, //onChanging's data is string
-			pattern = _innerDateFormat + db.getTimeFormat();
+			dateTime = db.coerceToString_(oldDate, Datebox._innerDateFormat) + evt.data.value, //onChanging's data is string
+			pattern = Datebox._innerDateFormat + db.getTimeFormat();
 
 		// add 'AM' (or APM in localizedSymbols) by default, if pattern specified AMPM
 		if (pattern.indexOf('a') > -1) {

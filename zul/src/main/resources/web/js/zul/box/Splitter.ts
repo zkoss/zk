@@ -28,59 +28,6 @@ declare namespace SplitterDraggable {
 	}
 }
 
-function _setOpen(wgt: Splitter, open: boolean, opts?: {sendOnOpen?: boolean}): void {
-	var colps = wgt.getCollapse();
-	if (!colps || 'none' == colps) return; //nothing to do
-
-	var nd = wgt.$n_('chdex'),
-		vert = wgt.isVertical(),
-		before = colps == 'before',
-		sib = before ? Splitter._prev(nd) : Splitter._next(nd),
-		sibwgt = zk.Widget.$<Splitter>(sib)!,
-		fd = vert ? 'height' as const : 'width' as const,
-		diff = 0;
-	if (sib) {
-		if (!open)
-			zWatch.fireDown('onHide', sibwgt);
-
-		sibwgt.setDomVisible_(sib, open);
-		sibwgt.parent._fixChildDomVisible(sibwgt, open);
-
-		var c = vert && sib.cells.length ? sib.cells[0] : sib;
-		diff = zk.parseInt(c.style[fd]);
-		if (!before && sibwgt && !sibwgt.nextSibling) {
-			var sp = wgt.$n('chdex2');
-			if (sp) {
-				sp.style.display = open ? '' : 'none';
-				diff += zk.parseInt(sp.style[fd]);
-			}
-		}
-	}
-
-	var sib2 = before ? Splitter._next(nd) : Splitter._prev(nd);
-	if (sib2) {
-		var c = vert && sib2.cells.length ? sib2.cells[0] : sib2,
-			sz = c.style[fd];
-		//ZK-1879: set width only if it has width originally
-		if (sz && sz.includes('px')) {
-			diff = zk.parseInt(c.style[fd]) + (open ? -diff : diff);
-			if (diff < 0) diff = 0;
-			c.style[fd] = diff + 'px';
-		}
-	}
-	if (sib && open)
-		zUtl.fireShown(sibwgt);
-	if (sib2)
-		zUtl.fireSized(zk.Widget.$(sib2)!, -1); //no beforeSize
-
-	wgt._fixNSDomClass();
-	wgt._fixbtn();
-	wgt._fixszAll();
-
-	if (!opts || opts.sendOnOpen)
-		wgt.fire('onOpen', {open: open});
-		//if fromServer, opts is true
-}
 /**
  * An element which should appear before or after an element inside a box
  * ({@link Box}).
@@ -116,7 +63,7 @@ export class Splitter extends zul.Widget {
 
 		if (o !== open || opts?.force) {
 			if (this.desktop)
-				_setOpen(this, open, opts);
+				Splitter._setOpen(this, open, opts);
 		}
 
 		return this;
@@ -317,7 +264,7 @@ export class Splitter extends zul.Widget {
 
 		if (this._shallClose) { //set in bind_
 			delete this._shallClose;
-			_setOpen(this, false, {sendOnOpen: false});
+			Splitter._setOpen(this, false, {sendOnOpen: false});
 		}
 	}
 
@@ -564,5 +511,60 @@ export class Splitter extends zul.Widget {
 			return false;
 		}
 		if (fl) fl[0].style.tableLayout = fl[1];
+	}
+
+	/** @internal */
+	static _setOpen(wgt: Splitter, open: boolean, opts?: {sendOnOpen?: boolean}): void {
+		var colps = wgt.getCollapse();
+		if (!colps || 'none' == colps) return; //nothing to do
+
+		var nd = wgt.$n_('chdex'),
+			vert = wgt.isVertical(),
+			before = colps == 'before',
+			sib = before ? Splitter._prev(nd) : Splitter._next(nd),
+			sibwgt = zk.Widget.$<Splitter>(sib)!,
+			fd = vert ? 'height' as const : 'width' as const,
+			diff = 0;
+		if (sib) {
+			if (!open)
+				zWatch.fireDown('onHide', sibwgt);
+
+			sibwgt.setDomVisible_(sib, open);
+			sibwgt.parent._fixChildDomVisible(sibwgt, open);
+
+			var c = vert && sib.cells.length ? sib.cells[0] : sib;
+			diff = zk.parseInt(c.style[fd]);
+			if (!before && sibwgt && !sibwgt.nextSibling) {
+				var sp = wgt.$n('chdex2');
+				if (sp) {
+					sp.style.display = open ? '' : 'none';
+					diff += zk.parseInt(sp.style[fd]);
+				}
+			}
+		}
+
+		var sib2 = before ? Splitter._next(nd) : Splitter._prev(nd);
+		if (sib2) {
+			var c = vert && sib2.cells.length ? sib2.cells[0] : sib2,
+				sz = c.style[fd];
+			//ZK-1879: set width only if it has width originally
+			if (sz && sz.includes('px')) {
+				diff = zk.parseInt(c.style[fd]) + (open ? -diff : diff);
+				if (diff < 0) diff = 0;
+				c.style[fd] = diff + 'px';
+			}
+		}
+		if (sib && open)
+			zUtl.fireShown(sibwgt);
+		if (sib2)
+			zUtl.fireSized(zk.Widget.$(sib2)!, -1); //no beforeSize
+
+		wgt._fixNSDomClass();
+		wgt._fixbtn();
+		wgt._fixszAll();
+
+		if (!opts || opts.sendOnOpen)
+			wgt.fire('onOpen', {open: open});
+		//if fromServer, opts is true
 	}
 }

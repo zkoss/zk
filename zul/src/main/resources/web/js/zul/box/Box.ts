@@ -18,87 +18,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
  */
 //zk.$package('zul.box');
 
-// Returns if the spacing is 0.
-function _spacing0(spacing?: string): boolean {
-	return !!spacing && spacing.startsWith('0') && !zk.parseInt(spacing);
-}
-function _spacingHTML(box: zul.box.Box, child: zk.Widget): string {
-	var oo = '',
-		spacing = box._spacing,
-		spacing0 = _spacing0(spacing),
-		vert = box.isVertical(),
-		spstyle = spacing && spacing != 'auto' ? (vert ? 'height:' : 'width:') + spacing : '';
-
-	oo += '<t' + (vert ? 'r' : 'd') + ' id="' + child.uuid
-		+ '-chdex2" class="' + box.$s('separator') + '"';
-
-	var s = spstyle;
-	if (spacing0 || !child.isVisible()) s = 'display:none;' + s;
-	if (s) oo += ' style="' + s + '"';
-
-	oo += '>' + (vert ? '<td>' : '') + zUtl.img0 + (vert ? '</td></tr>' : '</td>');
-	return oo;
-}
-
-//notice it is invoked as a member of Box (so no need to pass box as argument
-function _fixTd(this: zul.box.Box): void {
-	//when align is stretched must release the children, then must "shrink td" manually
-	var vert = this.isVertical();
-	if (this._isStretchAlign() || (vert && this._nhflex) || (!vert && this._nvflex)) {
-		for (var child = this.firstChild; child; child = child.nextSibling) {
-			if (child.isVisible()) {
-				var c = child.$n();
-				if (vert) {
-					if (child._nhflex && child._nhflex > 0) // B50-ZK-159: skip when min flex
-						child.setFlexSize_({width: 'auto'});
-					else if (c && this._isStretchAlign()) {//release width of children might cause wider box
-								//bug 2951825, widget not necessary with HTML dom element(<script>)
-								//add StretchAlign checking, see revision: 13172
-						var oldwidth = c.style.width;
-						if (oldwidth) {
-							var oldoffwidth = c.offsetWidth;
-							c.style.width = ''; //release the width of children so td can shrink
-							if (c.offsetWidth > oldoffwidth)
-								c.style.width = oldwidth;
-						}
-					}
-					if (!(child instanceof zul.wgt.Cell) && this._nhflex) {
-						var chdex = child.$n('chdex');
-						chdex!.style.width = '';
-					}
-				} else {
-					if (child._nvflex && child._nvflex > 0) // B50-ZK-159: skip when min flex
-						child.setFlexSize_({height: 'auto'});
-					else if (c && this._isStretchAlign()) {//release height of children might cause higher box
-								//bug 2951825, widget not necessary with HTML dom element(<script>)
-								//add StretchAlign checking, see revision: 13172
-						var oldheight = c.style.height;
-						if (oldheight) {
-							var oldoffheight = c.offsetHeight;
-							c.style.height = ''; //release the height of children so td can shrink
-							if (c.offsetHeight > oldoffheight)
-								c.style.height = oldheight;
-						}
-					}
-					if (!(child instanceof zul.wgt.Cell) && this._nvflex) {
-						var chdex = child.$n('chdex');
-						chdex!.style.height = '';
-					}
-				}
-			}
-		}
-	}
-	//Safari/chrome will not extend the height of td to as tr (B30-2088496.zul)
-	//but cannot always give pixels if size determined by contents (big gap in B30-1769047.zul)
-	var nh: string;
-	if (zk.webkit && !vert && (nh = this.$n()!.style.height)) {
-		var td = this.$n('frame')!;
-		td.style.height = '';
-		td.style.height = nh.indexOf('%') > 0 ?
-			jq.px0(td.offsetHeight) : nh; // B50-ZK-559
-	}
-}
-
 @zk.WrapClass('zul.box.Box')
 export class Box extends zul.Widget {
 	/** @internal */
@@ -381,7 +300,7 @@ export class Box extends zul.Widget {
 		var n: zk.Widget | HTMLElement | undefined = this._chdextr(child);
 		if (n) n.style.display = visible ? '' : 'none';
 		n = child.$n('chdex2');
-		if (n) n.style.display = visible && !_spacing0(this._spacing) ? '' : 'none';
+		if (n) n.style.display = visible && !Box._spacing0(this._spacing) ? '' : 'none';
 
 		if (this.lastChild == child) {
 			n = child.previousSibling;
@@ -464,10 +383,10 @@ export class Box extends zul.Widget {
 		}
 		var next = child.nextSibling; //Bug ZK-1526: popup should not consider spacing
 		if (next && !(next instanceof zul.wgt.Popup))
-			oo.push(_spacingHTML(this, child));
+			oo.push(Box._spacingHTML(this, child));
 		else if (prefixSpace) {
 			var pre = child.previousSibling;
-			if (pre) oo.unshift(_spacingHTML(this, pre));
+			if (pre) oo.unshift(Box._spacingHTML(this, pre));
 		}
 
 		if (!out) return oo.join('');
@@ -915,14 +834,14 @@ export class Box extends zul.Widget {
 	_bindFixTd(): void {
 		if (!this._watchTd) {
 			this._watchTd = true;
-			zWatch.listen({onSize: [this, _fixTd], onHide: [this, _fixTd]});
+			zWatch.listen({onSize: [this, Box._fixTd], onHide: [this, Box._fixTd]});
 		}
 	}
 
 	/** @internal */
 	_unbindFixTd(): void {
 		if (this._watchTd) {
-			zWatch.unlisten({onSize: [this, _fixTd], onHide: [this, _fixTd]});
+			zWatch.unlisten({onSize: [this, Box._fixTd], onHide: [this, Box._fixTd]});
 			delete this._watchTd;
 		}
 	}
@@ -1006,5 +925,90 @@ export class Box extends zul.Widget {
 	/** @internal */
 	static _toHalign(v?: string): string | undefined {
 		return v ? 'start' == v ? 'left' : 'end' == v ? 'right' : v : undefined;
+	}
+
+	// Returns if the spacing is 0.
+	/** @internal */
+	static _spacing0(spacing?: string): boolean {
+		return !!spacing && spacing.startsWith('0') && !zk.parseInt(spacing);
+	}
+
+	/** @internal */
+	static _spacingHTML(box: zul.box.Box, child: zk.Widget): string {
+		var oo = '',
+			spacing = box._spacing,
+			spacing0 = Box._spacing0(spacing),
+			vert = box.isVertical(),
+			spstyle = spacing && spacing != 'auto' ? (vert ? 'height:' : 'width:') + spacing : '';
+
+		oo += '<t' + (vert ? 'r' : 'd') + ' id="' + child.uuid
+			+ '-chdex2" class="' + box.$s('separator') + '"';
+
+		var s = spstyle;
+		if (spacing0 || !child.isVisible()) s = 'display:none;' + s;
+		if (s) oo += ' style="' + s + '"';
+
+		oo += '>' + (vert ? '<td>' : '') + zUtl.img0 + (vert ? '</td></tr>' : '</td>');
+		return oo;
+	}
+
+//notice it is invoked as a member of Box (so no need to pass box as argument
+	/** @internal */
+	static _fixTd(this: zul.box.Box): void {
+		//when align is stretched must release the children, then must "shrink td" manually
+		var vert = this.isVertical();
+		if (this._isStretchAlign() || (vert && this._nhflex) || (!vert && this._nvflex)) {
+			for (var child = this.firstChild; child; child = child.nextSibling) {
+				if (child.isVisible()) {
+					var c = child.$n();
+					if (vert) {
+						if (child._nhflex && child._nhflex > 0) // B50-ZK-159: skip when min flex
+							child.setFlexSize_({width: 'auto'});
+						else if (c && this._isStretchAlign()) {//release width of children might cause wider box
+							//bug 2951825, widget not necessary with HTML dom element(<script>)
+							//add StretchAlign checking, see revision: 13172
+							var oldwidth = c.style.width;
+							if (oldwidth) {
+								var oldoffwidth = c.offsetWidth;
+								c.style.width = ''; //release the width of children so td can shrink
+								if (c.offsetWidth > oldoffwidth)
+									c.style.width = oldwidth;
+							}
+						}
+						if (!(child instanceof zul.wgt.Cell) && this._nhflex) {
+							var chdex = child.$n('chdex');
+							chdex!.style.width = '';
+						}
+					} else {
+						if (child._nvflex && child._nvflex > 0) // B50-ZK-159: skip when min flex
+							child.setFlexSize_({height: 'auto'});
+						else if (c && this._isStretchAlign()) {//release height of children might cause higher box
+							//bug 2951825, widget not necessary with HTML dom element(<script>)
+							//add StretchAlign checking, see revision: 13172
+							var oldheight = c.style.height;
+							if (oldheight) {
+								var oldoffheight = c.offsetHeight;
+								c.style.height = ''; //release the height of children so td can shrink
+								if (c.offsetHeight > oldoffheight)
+									c.style.height = oldheight;
+							}
+						}
+						if (!(child instanceof zul.wgt.Cell) && this._nvflex) {
+							var chdex = child.$n('chdex');
+							chdex!.style.height = '';
+						}
+					}
+				}
+			}
+		}
+		//Safari/chrome will not extend the height of td to as tr (B30-2088496.zul)
+		//but cannot always give pixels if size determined by contents (big gap in B30-1769047.zul)
+		var nh: string;
+		if (zk.webkit && !vert && (nh = this.$n()!.style.height)) {
+			var td = this.$n('frame')!;
+			td.style.height = '';
+			td.style.height = nh.indexOf('%') > 0 ?
+				jq.px0(td.offsetHeight) : nh; // B50-ZK-559
+		}
 	}
 }

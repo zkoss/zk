@@ -12,31 +12,6 @@ Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-function _digitsAfterDecimal(v, DECIMAL?: string): number {
-	var vs = '' + v,
-		i = vs.indexOf(DECIMAL!);
-	return i < 0 ? 0 : vs.length - i - 1;
-}
-function _shiftedSum(v1: number, v2: number, exp: number, asc: boolean): number {
-	var mul;
-	if (exp) {
-		mul = Math.pow(10, exp);
-		v1 *= mul;
-		v2 *= mul;
-		v1 = Math.round(v1);
-		v2 = Math.round(v2);
-	}
-	var res = asc ? v1 + v2 : v1 - v2;
-	if (exp)
-		res /= mul;
-	return res;
-}
-function _updateFixedDigits(wgt: Doublespinner, val?: number): void {
-	var decimal = wgt._localizedSymbols ? wgt._localizedSymbols.DECIMAL : zk.DECIMAL,
-			stepd = _digitsAfterDecimal(wgt._step, decimal),
-			vald = _digitsAfterDecimal(val || wgt._value, decimal);
-	wgt._fixedDigits = Math.max(stepd, vald);
-}
 
 /**
  * An edit box for holding a constrained double.
@@ -75,7 +50,7 @@ export class Doublespinner extends zul.inp.NumberInputWidget<number> {
 		this._step = step;
 
 		if (o !== step || opts?.force) {
-			_updateFixedDigits(this);
+			Doublespinner._updateFixedDigits(this);
 		}
 
 		return this;
@@ -175,7 +150,7 @@ export class Doublespinner extends zul.inp.NumberInputWidget<number> {
 		if (info.divscale) val = val / Math.pow(10, info.divscale);
 
 		// B50-3322795
-		_updateFixedDigits(this, val);
+		Doublespinner._updateFixedDigits(this, val);
 		return val;
 	}
 
@@ -300,8 +275,8 @@ export class Doublespinner extends zul.inp.NumberInputWidget<number> {
 		if (value && (value as zul.inp.CoerceFromStringResult).error)
 			return; //nothing to do if error happens
 
-		var	shiftLen = Math.max(_digitsAfterDecimal(value), this._fixedDigits!),
-			result = _shiftedSum(value as number, this._step, shiftLen, asc); // B50-3301517
+		var	shiftLen = Math.max(Doublespinner._digitsAfterDecimal(value), this._fixedDigits!),
+			result = Doublespinner._shiftedSum(value as number, this._step, shiftLen, asc); // B50-3301517
 
 		// control overflow
 		if (result > Math.pow(2, 63) - 1)	result = Math.pow(2, 63) - 1;
@@ -406,5 +381,36 @@ export class Doublespinner extends zul.inp.NumberInputWidget<number> {
 	/** @internal */
 	getBtnDownIconClass_(): string {
 		return 'z-icon-angle-down';
+	}
+
+	/** @internal */
+	static _digitsAfterDecimal(v: number | zul.inp.CoerceFromStringResult |undefined, DECIMAL?: string): number {
+		var vs = '' + v,
+			i = vs.indexOf(DECIMAL!);
+		return i < 0 ? 0 : vs.length - i - 1;
+	}
+
+	/** @internal */
+	static _shiftedSum(v1: number, v2: number, exp: number, asc: boolean): number {
+		var mul;
+		if (exp) {
+			mul = Math.pow(10, exp);
+			v1 *= mul;
+			v2 *= mul;
+			v1 = Math.round(v1);
+			v2 = Math.round(v2);
+		}
+		var res = asc ? v1 + v2 : v1 - v2;
+		if (exp)
+			res /= mul;
+		return res;
+	}
+
+	/** @internal */
+	static _updateFixedDigits(wgt: Doublespinner, val?: number): void {
+		var decimal = wgt._localizedSymbols ? wgt._localizedSymbols.DECIMAL : zk.DECIMAL,
+			stepd = Doublespinner._digitsAfterDecimal(wgt._step, decimal),
+			vald = Doublespinner._digitsAfterDecimal(val || wgt._value, decimal);
+		wgt._fixedDigits = Math.max(stepd, vald);
 	}
 }
