@@ -6497,6 +6497,8 @@ export class Native extends Widget {
 	//a virtual node that might have no DOM node and must be handled specially
 	override z_virnd = true;
 
+	override rawId = true; // Fix a side effect of ZK-5270 for B86-ZK-4055
+
 	/** The class name (`zk.Native`)
 	 * @type String
 	 */
