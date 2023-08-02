@@ -17,11 +17,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
 import org.zkoss.test.webdriver.ExternalZkXml;
+import org.zkoss.test.webdriver.ForkJVMTestOnly;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
  * @author jumperchen
  */
+@ForkJVMTestOnly
 public class B100_ZK_5435Test extends WebDriverTestCase {
 
 	@RegisterExtension
