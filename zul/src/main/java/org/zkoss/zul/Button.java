@@ -68,6 +68,7 @@ public class Button extends LabelImageElement implements org.zkoss.zk.ui.ext.Dis
 		}
 	}
 
+	public void testCheckOPrFile() {}
 	/** Returns a list of component IDs that shall be disabled when the user
 	 * clicks this button.
 	 * @since 5.0.0
