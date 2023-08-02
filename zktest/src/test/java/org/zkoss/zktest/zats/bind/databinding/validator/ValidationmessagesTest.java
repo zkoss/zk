@@ -10,7 +10,7 @@ import org.zkoss.test.webdriver.ztl.JQuery;
 public class ValidationmessagesTest extends WebDriverTestCase {
 	@Test
 	public void test() {
-		connect();
+		connect("/bind/databinding/validator/validationmessages.zul");
 		JQuery l11 = jq("$l11");
 		JQuery l12 = jq("$l12");
 		JQuery t21 = jq("$t21");

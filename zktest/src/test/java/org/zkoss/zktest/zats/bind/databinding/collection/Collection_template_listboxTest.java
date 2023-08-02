@@ -12,7 +12,7 @@ import org.zkoss.test.webdriver.ztl.Widget;
 public class Collection_template_listboxTest extends WebDriverTestCase {
 	@Test
 	public void test1() {
-		connect();
+		connect("/bind/databinding/collection/collection-template-listbox.zul");
 		JQuery outerbox = jq("$outerbox");
 		Widget outeritems = outerbox.toWidget().firstChild();// include header
 		outeritems = outeritems.nextSibling(); // don't care header
@@ -58,7 +58,7 @@ public class Collection_template_listboxTest extends WebDriverTestCase {
 
 	@Test
 	public void test2() {
-		connect();
+		connect("/bind/databinding/collection/collection-template-listbox.zul");
 		Widget outerbox = jq("$outerbox").toWidget();
 		Widget outeritems = outerbox.firstChild(); // include header
 		// =================================delete 2rd row
@@ -160,7 +160,7 @@ public class Collection_template_listboxTest extends WebDriverTestCase {
 
 	@Test
 	public void test3() {
-		connect();
+		connect("/bind/databinding/collection/collection-template-listbox.zul");
 		Widget outerbox = jq("$outerbox").toWidget();
 		Widget outeritems = outerbox.firstChild(); // include header
 		String[] itemLabel = {"A", "B", "C", "D"};
