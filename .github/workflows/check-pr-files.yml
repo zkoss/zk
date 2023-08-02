@@ -7,6 +7,6 @@ jobs:
   check-pr-files:
     runs-on: ubuntu-latest
     steps:
-      - uses: zkoss/check-pr-files-action@v2
+      - uses: zkoss/check-pr-files-action@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
