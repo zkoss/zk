@@ -192,18 +192,18 @@ test {
 }
 
 task renameNoA11yTestResult (type: Copy) {
-	mustRunAfter test
-	mustRunAfter 'testGroupForkJVMTestOnly'
-	setOnlyIf { project.ext['zktestWithoutA11y'] != 'false' }
+//	mustRunAfter test
+//	mustRunAfter 'testGroupForkJVMTestOnly'
+//	setOnlyIf { project.ext['zktestWithoutA11y'] != 'false' }
 	destinationDir = file("$buildDir/test-results/no-A11Y")
 	from ("$buildDir/test-results")
 	includeEmptyDirs false
 	include '**/*Test.xml'
-	rename '(.*).xml', '$1NO_A11Y.xml'
 	filter {
 		String line -> line.replaceAll("testsuite name=\"(.[^\"]*)\"",
 				"testsuite name=\"\$1(A11Y)\"")
 	}
+	rename '(.*).xml', '$1NO_A11Y.xml'
 }
 
 description = 'ZK Test'
