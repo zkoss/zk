@@ -30,6 +30,7 @@ import org.zkoss.image.AImage;
 import org.zkoss.image.Image;
 import org.zkoss.image.encoder.ImageEncoder;
 import org.zkoss.image.encoder.ImageEncoders;
+import org.zkoss.zktest.zats.ZATSTestCase;
 import org.zkoss.zul.Intbox;
 import org.zkoss.zul.Listcell;
 import org.zkoss.zul.Popup;
@@ -38,7 +39,7 @@ import org.zkoss.zul.Timebox;
 /**
  * @author Sefi
  */
-public class B80_ZK_3044Test {
+public class B80_ZK_3044Test extends ZATSTestCase {
     @Test
 	public void testXulElement() {
         Timebox d = new Timebox();
