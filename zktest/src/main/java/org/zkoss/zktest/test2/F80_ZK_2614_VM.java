@@ -12,11 +12,13 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 package org.zkoss.zktest.test2;
 
 import org.zkoss.bind.annotation.Command;
+import org.zkoss.bind.annotation.ToClientCommand;
 
 /**
  * @author jumperchen
  *
  */
+@ToClientCommand("clickable")
 public class F80_ZK_2614_VM {
 	
 	@Command("clickable")
