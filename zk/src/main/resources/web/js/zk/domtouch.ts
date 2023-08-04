@@ -69,11 +69,11 @@ function _doEvt(type: string, evt: JQuery.TouchEventBase, jqevt: JQuery.Event): 
 	}
 }
 function delegateEventFunc (event: JQuery.TouchEventBase): void {
-	var touchEvt = event.originalEvent as TouchEvent & {sourceCapabilities?: object},
+	var touchEvt = event.originalEvent as (JQuery.Event|TouchEvent) & {sourceCapabilities?: object},
 		touches = touchEvt.touches,
 		sourceCapabilities = touchEvt.sourceCapabilities;
 	if (touches && touches.length > 1) return;
-	else if (touches.length == 1) {
+	else if (touches && touches.length == 1) {
 		zk.currentPointer = [touches['clientX'], touches['clientY']] as zk.Offset;
 	}
 	if (touchEvt instanceof MouseEvent
