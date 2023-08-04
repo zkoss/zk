@@ -11,7 +11,7 @@ import org.zkoss.test.webdriver.ztl.Widget;
 public class Collection_template_comboboxTest extends WebDriverTestCase {
 	@Test
 	public void test() {
-		connect();
+		connect("/bind/databinding/collection/collection-template-combobox.zul");
 		Widget outerbox = jq("$outergrid").toWidget();
 		Widget outerrows = jq(outerbox).find("@rows").toWidget().firstChild();
 		String[] itemLabel = {"A", "B", "C", "D"};

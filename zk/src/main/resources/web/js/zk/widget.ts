@@ -3685,6 +3685,10 @@ new zul.wnd.Window({
 	 * @internal
 	 */
 	inRerendering_(): boolean {
+		// Fix a side-effect of https://github.com/zkoss/zk/commit/97407d42c9bebd412dc1e5632728f6c3546ce21d
+		// for ZK-5028
+		if (_rdque.includes(this)) return true;
+
 		let p = this as zk.Widget | undefined;
 		while (p) {
 			if (p._rerendering) {
