@@ -201,7 +201,7 @@ task renameNoA11yTestResult (type: Copy) {
 	include '**/*Test.xml'
 	filter {
 		String line -> line.replaceAll("testsuite name=\"(.[^\"]*)\"",
-				"testsuite name=\"\$1(A11Y)\"")
+				"testsuite name=\"\$1(NO_A11Y)\"")
 	}
 	rename '(.*).xml', '$1NO_A11Y.xml'
 }
