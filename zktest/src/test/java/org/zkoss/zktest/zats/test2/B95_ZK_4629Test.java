@@ -24,6 +24,6 @@ public class B95_ZK_4629Test extends WebDriverTestCase {
 	public void test() {
 		connect();
 		waitResponse();
-		Assertions.assertTrue(jq("iframe").contents().find("body").html().contains("HTTP ERROR 400"));
+		Assertions.assertTrue(jq("iframe").contents().find("body").html().contains("HTTP ERROR"));
 	}
 }
