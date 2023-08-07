@@ -11,7 +11,7 @@ import org.zkoss.test.webdriver.ztl.Widget;
 public class ComboboxmodelTest extends WebDriverTestCase {
 	@Test
 	public void test() {
-		connect();
+		connect("/bind/basic/comboboxmodel.zul");
 		Widget outerbox = jq("$outergrid").toWidget();
 		Widget outerrows = jq(outerbox).find("@rows").toWidget().firstChild();
 		// =================================delete 2rd row
