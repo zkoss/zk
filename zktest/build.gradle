@@ -145,6 +145,7 @@ task testGroupForkJVMTestOnly(type: Test) {
 	if (project.hasProperty('maxParallelForks'))
 		maxParallelForks = project.maxParallelForks as int
 	if (project.ext['zktestWithoutA11y'] != 'false') {
+		reports.junitXml.destination = file("$buildDir/test-results/no-A11Y/testGroupForkJVMTestOnly")
 		filter {
 			excludeTestsMatching('*.wcag.*')
 		}
@@ -171,6 +172,7 @@ test {
 	if (project.hasProperty('maxParallelForks'))
 		maxParallelForks = project.maxParallelForks as int
 	if (project.ext['zktestWithoutA11y'] != 'false') {
+		reports.junitXml.destination = file("$buildDir/test-results/no-A11Y/test")
 		filter {
 			excludeTestsMatching('*.wcag.*')
 		}
@@ -196,7 +198,7 @@ task renameNoA11yTestResult (type: Copy) {
 //	mustRunAfter 'testGroupForkJVMTestOnly'
 //	setOnlyIf { project.ext['zktestWithoutA11y'] != 'false' }
 	destinationDir = file("$buildDir/test-results/no-A11Y")
-	from ("$buildDir/test-results")
+	from ("$buildDir/test-results/no-A11Y")
 	includeEmptyDirs false
 	include '**/*Test.xml'
 	filter {
