@@ -191,7 +191,7 @@ test {
 	}
 }
 
-task renameNoA11yTestResult (type: Copy) {
+task renameNoA11yTestResult (type: Sync) {
 //	mustRunAfter test
 //	mustRunAfter 'testGroupForkJVMTestOnly'
 //	setOnlyIf { project.ext['zktestWithoutA11y'] != 'false' }
