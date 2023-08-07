@@ -2265,7 +2265,9 @@ export function afterAuResponse(fn: () => void): void {
 zk.afterAuResponse = afterAuResponse;
 
 export function doAfterAuResponse(): void {
-	for (var fn: CallableFunction | undefined; fn = _aftAuResp.shift();) {
+	// Fix ZK-5017, not to use a live array for doAfterAuResponse();
+	let backup = _aftAuResp.splice(0, _aftAuResp.length);
+	for (var fn: CallableFunction | undefined; fn = backup.shift();) {
 		fn();
 	}
 }
