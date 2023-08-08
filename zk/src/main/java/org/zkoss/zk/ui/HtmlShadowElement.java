@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import com.google.common.collect.HashBiMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -487,12 +488,39 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 					indexMap.put(next, i);
 				}
 			} else {
-				indexMap.put(next, i);
-				if (next == last)
+				HashBiMap<Component, Integer> biIndexMap = setAndGetCacheMapIndex(indexMap, next, i);
+				if (next == last) {
+					// sync back to origin map
+					if (biIndexMap != indexMap) {
+						indexMap.putAll(biIndexMap);
+					}
 					break;
+				}
 			}
 		}
 		return indexMap;
+	}
+
+	private static HashBiMap<Component, Integer> setAndGetCacheMapIndex(Map<Component, Integer> cacheMap, Component next, int index) {
+
+		HashBiMap<Component, Integer> biIndexMap;
+		if (!(cacheMap instanceof HashBiMap)) {
+			biIndexMap = HashBiMap.create(cacheMap);
+		} else {
+			biIndexMap = (HashBiMap<Component, Integer>) cacheMap;
+		}
+		int nextIndex = index;
+		Component nextNext = next;
+
+		// update all subsequence index
+		while (biIndexMap.containsValue(nextIndex)) {
+			Component temp = biIndexMap.inverse().remove(nextIndex);
+			biIndexMap.put(nextNext, nextIndex);
+			nextNext = temp;
+			nextIndex++;
+		}
+		biIndexMap.put(nextNext, nextIndex);
+		return biIndexMap;
 	}
 
 	@SuppressWarnings("unused")
@@ -1246,11 +1274,18 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 			return result;
 		int i = 0;
 		int matched = -1;
+		HashBiMap<Component, Integer> biIndexMap = cacheMap instanceof HashBiMap ?
+				(HashBiMap<Component, Integer>) cacheMap : HashBiMap.create(cacheMap);
 		for (Iterator<Component> it = insertion.getParent().getChildren().iterator(); it.hasNext(); i++) {
 			Component next = it.next();
-			cacheMap.put(next, new Integer(i));
-			if (next == insertion)
+			setAndGetCacheMapIndex(biIndexMap, next, i);
+			if (next == insertion) {
 				matched = i;
+			}
+		}
+		// sync back to origin map
+		if (biIndexMap != cacheMap) {
+			cacheMap.putAll(biIndexMap);
 		}
 		return matched;
 	}
