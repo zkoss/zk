@@ -142,7 +142,7 @@ sourceSets {
 task testGroupForkJVMTestOnly(type: Test) {
 
 	forkEvery = 1 // a new test process is started for every test class
-	maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
+	maxParallelForks = Runtime.runtime.availableProcessors().intdiv(4) ?: 1
 	if (project.ext['zktestWithoutA11y'] != 'false') {
 		reports.junitXml.destination = file("$buildDir/test-results/no-A11Y/testGroupForkJVMTestOnly")
 		filter {
@@ -168,7 +168,7 @@ task testGroupForkJVMTestOnly(type: Test) {
 
 test {
 	forkEvery = 0 // reuse the test process for all test classes
-	maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
+	maxParallelForks = Runtime.runtime.availableProcessors().intdiv(4) ?: 1
 	if (project.ext['zktestWithoutA11y'] != 'false') {
 		reports.junitXml.destination = file("$buildDir/test-results/no-A11Y/test")
 		filter {
