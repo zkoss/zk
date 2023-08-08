@@ -191,11 +191,11 @@ test {
 	}
 }
 
-task renameNoA11yTestResult (type: Sync) {
+task renameNoA11yTestResult (type: Copy) {
 //	mustRunAfter test
 //	mustRunAfter 'testGroupForkJVMTestOnly'
 //	setOnlyIf { project.ext['zktestWithoutA11y'] != 'false' }
-	destinationDir = file("$buildDir/test-results/no-A11Y")
+	destinationDir = file("$buildDir/test-results/no-A11Y0")
 	from ("$buildDir/test-results/no-A11Y")
 	includeEmptyDirs false
 	include '**/*Test.xml'
@@ -204,6 +204,10 @@ task renameNoA11yTestResult (type: Sync) {
 				"testsuite name=\"\$1(NO_A11Y)\"")
 	}
 	rename '(.*).xml', '$1NO_A11Y.xml'
+
+	doLast {
+		new File("$buildDir/test-results/no-A11Y").deleteDir()
+	}
 }
 
 description = 'ZK Test'
