@@ -481,6 +481,12 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 				return indexMap; //nothing to fill up
 		}
 		int i = 0;
+		HashBiMap<Component, Integer> biIndexMap;
+		if (!(indexMap instanceof HashBiMap)) {
+			biIndexMap = HashBiMap.create(indexMap);
+		} else {
+			biIndexMap = (HashBiMap<Component, Integer>) indexMap;
+		}
 		for (Iterator<Component> it = children.iterator(); it.hasNext(); i++) {
 			Component next = it.next();
 			if (indexMap.isEmpty()) {
@@ -488,7 +494,7 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 					indexMap.put(next, i);
 				}
 			} else {
-				HashBiMap<Component, Integer> biIndexMap = setAndGetCacheMapIndex(indexMap, next, i);
+				setAndGetCacheMapIndex(biIndexMap, next, i);
 				if (next == last) {
 					// sync back to origin map
 					if (biIndexMap != indexMap) {
