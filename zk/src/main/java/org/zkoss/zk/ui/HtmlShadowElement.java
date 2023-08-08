@@ -504,6 +504,10 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 				}
 			}
 		}
+
+		if (biIndexMap != indexMap) {
+			indexMap.putAll(biIndexMap);
+		}
 		return indexMap;
 	}
 
@@ -522,6 +526,9 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 		while (biIndexMap.containsValue(nextIndex)) {
 			Component temp = biIndexMap.inverse().remove(nextIndex);
 			biIndexMap.put(nextNext, nextIndex);
+			if (temp == nextNext) {
+				return biIndexMap; // same value
+			}
 			nextNext = temp;
 			nextIndex++;
 		}
