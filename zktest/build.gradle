@@ -205,9 +205,11 @@ task renameNoA11yTestResult (type: Copy) {
 	}
 	rename '(.*).xml', '$1NO_A11Y.xml'
 
-	doLast {
-		new File("$buildDir/test-results/no-A11Y").deleteDir()
-	}
+	finalizedBy clearNoA11Y
+}
+
+task clearNoA11Y(type: Delete) {
+	delete "$buildDir/test-results/no-A11Y"
 }
 
 description = 'ZK Test'
