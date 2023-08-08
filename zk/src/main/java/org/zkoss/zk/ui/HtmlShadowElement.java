@@ -1274,8 +1274,9 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 			return result;
 		int i = 0;
 		int matched = -1;
-		HashBiMap<Component, Integer> biIndexMap = cacheMap instanceof HashBiMap ?
-				(HashBiMap<Component, Integer>) cacheMap : HashBiMap.create(cacheMap);
+		HashBiMap<Component, Integer> biIndexMap = cacheMap instanceof HashBiMap
+				? (HashBiMap<Component, Integer>) cacheMap :
+				HashBiMap.create(cacheMap);
 		for (Iterator<Component> it = insertion.getParent().getChildren().iterator(); it.hasNext(); i++) {
 			Component next = it.next();
 			setAndGetCacheMapIndex(biIndexMap, next, i);
