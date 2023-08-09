@@ -22,7 +22,6 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import com.google.common.collect.HashBiMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -451,9 +450,9 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 	//		shrinkRange(childSE._firstInsertion, childSE._lastInsertion);
 	//	}
 
-	private Map<Component, Integer> getIndexMap() {
+	private Map<Component, Integer> getIndexMap(Component host) {
 		Map<Component, Integer> distributedIndexInfo = (Map<Component, Integer>) ShadowElementsCtrl
-				.getDistributedIndexInfo();
+				.getDistributedIndexInfo(host);
 		if (distributedIndexInfo == null) {
 			throw new IllegalStateException("Distributed index map cannot be null! [" + this + "]");
 		}
@@ -468,12 +467,12 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 
 	private Map<Component, Integer> fillUpIndexMap(Component first, Component last) {
 		if (first == null) // last will be null too 
-			return getIndexMap();
+			return getIndexMap(getShadowHostIfAny());
 		Component parent = first.getParent();
 		if (parent == null)
 			throw new UiException("The insertion point cannot be null: " + first);
 		List<Component> children = parent.getChildren();
-		Map<Component, Integer> indexMap = getIndexMap();
+		Map<Component, Integer> indexMap = getIndexMap(parent);
 		// reuse map
 		Integer integer = indexMap.get(first);
 		if (integer != null) {
@@ -481,12 +480,7 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 				return indexMap; //nothing to fill up
 		}
 		int i = 0;
-		HashBiMap<Component, Integer> biIndexMap;
-		if (!(indexMap instanceof HashBiMap)) {
-			biIndexMap = HashBiMap.create(indexMap);
-		} else {
-			biIndexMap = (HashBiMap<Component, Integer>) indexMap;
-		}
+
 		for (Iterator<Component> it = children.iterator(); it.hasNext(); i++) {
 			Component next = it.next();
 			if (indexMap.isEmpty()) {
@@ -494,46 +488,13 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 					indexMap.put(next, i);
 				}
 			} else {
-				setAndGetCacheMapIndex(biIndexMap, next, i);
+				indexMap.put(next, i);
 				if (next == last) {
-					// sync back to origin map
-					if (biIndexMap != indexMap) {
-						indexMap.putAll(biIndexMap);
-					}
 					break;
 				}
 			}
 		}
-
-		if (biIndexMap != indexMap) {
-			indexMap.putAll(biIndexMap);
-		}
 		return indexMap;
-	}
-
-	private static HashBiMap<Component, Integer> setAndGetCacheMapIndex(Map<Component, Integer> cacheMap, Component next, int index) {
-
-		HashBiMap<Component, Integer> biIndexMap;
-		if (!(cacheMap instanceof HashBiMap)) {
-			biIndexMap = HashBiMap.create(cacheMap);
-		} else {
-			biIndexMap = (HashBiMap<Component, Integer>) cacheMap;
-		}
-		int nextIndex = index;
-		Component nextNext = next;
-
-		// update all subsequence index
-		while (biIndexMap.containsValue(nextIndex)) {
-			Component temp = biIndexMap.inverse().remove(nextIndex);
-			biIndexMap.put(nextNext, nextIndex);
-			if (temp == nextNext) {
-				return biIndexMap; // same value
-			}
-			nextNext = temp;
-			nextIndex++;
-		}
-		biIndexMap.put(nextNext, nextIndex);
-		return biIndexMap;
 	}
 
 	@SuppressWarnings("unused")
@@ -805,16 +766,17 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 	}
 
 	private void rebuildShadowTree() {
-		Map<Component, Integer> oldCacheMap = getIndexCacheMap();
+		Component hostIfAny = getShadowHostIfAny();
+		Map<Component, Integer> oldCacheMap = getIndexCacheMap(hostIfAny);
 		final boolean destroyCacheMap = oldCacheMap == null;
 		try {
 			if (destroyCacheMap) // the first caller
-				initIndexCacheMap();
+				initIndexCacheMap(hostIfAny);
 
 			rebuildSubShadowTree();
 		} finally {
 			if (destroyCacheMap) // the first caller
-				destroyIndexCacheMap();
+				destroyIndexCacheMap(hostIfAny);
 		}
 	}
 
@@ -1287,19 +1249,13 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 			return result;
 		int i = 0;
 		int matched = -1;
-		HashBiMap<Component, Integer> biIndexMap = cacheMap instanceof HashBiMap
-				? (HashBiMap<Component, Integer>) cacheMap :
-				HashBiMap.create(cacheMap);
+
 		for (Iterator<Component> it = insertion.getParent().getChildren().iterator(); it.hasNext(); i++) {
 			Component next = it.next();
-			setAndGetCacheMapIndex(biIndexMap, next, i);
+			cacheMap.put(next, i);
 			if (next == insertion) {
 				matched = i;
 			}
-		}
-		// sync back to origin map
-		if (biIndexMap != cacheMap) {
-			cacheMap.putAll(biIndexMap);
 		}
 		return matched;
 	}
@@ -1310,12 +1266,13 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 	 * @param target the target to check.
 	 */
 	public static Direction inRange(HtmlShadowElement se, Component target) {
-		Map<Component, Integer> oldCacheMap = se.getIndexCacheMap();
+		Component hostIfAny = se.getShadowHostIfAny();
+		Map<Component, Integer> oldCacheMap = se.getIndexCacheMap(hostIfAny);
 		final boolean destroyCacheMap = oldCacheMap == null;
 		try {
 			// cache the index.
 			if (destroyCacheMap)
-				oldCacheMap = se.initIndexCacheMap();
+				oldCacheMap = se.initIndexCacheMap(hostIfAny);
 
 			int targetIndex = getIndex(null, target, oldCacheMap);
 			int prev = getIndex(se, se.getPreviousInsertion(), oldCacheMap);
@@ -1345,7 +1302,7 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 			}
 		} finally {
 			if (destroyCacheMap)
-				se.destroyIndexCacheMap();
+				se.destroyIndexCacheMap(hostIfAny);
 		}
 	}
 
@@ -1734,23 +1691,23 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 	 * Internal use
 	 * @since 10.0.0
 	 */
-	public Map<Component, Integer> initIndexCacheMap() {
-		return super.initIndexCacheMap();
+	public Map<Component, Integer> initIndexCacheMap(Component host) {
+		return super.initIndexCacheMap(host);
 	}
 
 	/**
 	 * Internal use
 	 * @since 10.0.0
 	 */
-	public Map<Component, Integer> getIndexCacheMap() {
-		return super.getIndexCacheMap();
+	public Map<Component, Integer> getIndexCacheMap(Component host) {
+		return super.getIndexCacheMap(host);
 	}
 
 	/**
 	 * Internal use
 	 * @since 10.0.0
 	 */
-	public void destroyIndexCacheMap() {
-		super.destroyIndexCacheMap();
+	public void destroyIndexCacheMap(Component host) {
+		super.destroyIndexCacheMap(host);
 	}
 }
