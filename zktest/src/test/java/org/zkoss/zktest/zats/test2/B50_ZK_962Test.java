@@ -27,7 +27,7 @@ public class B50_ZK_962Test extends WebDriverTestCase {
 		
 		click(jq("@button:contains(single column)"));
 		waitResponse();
-		act.dragAndDrop(toElement(jq(".z-panel-head:contains(Panel 1)")), toElement(jq(".z-panel-head:contains(Panel 3)"))).perform();
+		act.dragAndDrop(toElement(jq(".z-panel-head:contains(Panel 1)")), toElement(jq(".z-panel-head:contains(Panel 2)"))).perform();
 		waitResponse();
 		Assertions.assertEquals("Panel 2Panel 1Panel 3Panel 5", jq(".z-portalchildren-content").eq(0).children().text());
 		click(jq("@button:contains(two columns)"));
