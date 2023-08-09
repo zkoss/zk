@@ -28,6 +28,8 @@ public class B80_ZK_3139Test extends WebDriverTestCase{
     public void test() {
 		connect();
 
+		// this case cannot work with A11Y as the fixed ZK-5213: Improve accessibility by add tooltips on icons
+		if (!Boolean.valueOf(getEval("!!window.za11y"))) {
 			JQuery p = jq("@panel");
 
 			JQuery maximize1 = p.find(".z-panel-maximize");
@@ -45,5 +47,6 @@ public class B80_ZK_3139Test extends WebDriverTestCase{
 			click(maximize2);
 			waitResponse();
 			assertEquals("Restore", maximize2.attr("title"));
+		}
 	}
 }
