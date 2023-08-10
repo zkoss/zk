@@ -12,11 +12,15 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 package org.zkoss.bind.impl;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import javassist.util.proxy.MethodHandler;
+import javassist.util.proxy.Proxy;
+import javassist.util.proxy.ProxyFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,6 +33,7 @@ import org.zkoss.bind.FormStatus;
 import org.zkoss.bind.Property;
 import org.zkoss.bind.ValidationContext;
 import org.zkoss.bind.Validator;
+import org.zkoss.bind.proxy.FormProxyHandler;
 import org.zkoss.bind.sys.BindEvaluatorX;
 import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.ConditionType;
@@ -36,6 +41,7 @@ import org.zkoss.bind.sys.SaveFormBinding;
 import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollector;
 import org.zkoss.bind.sys.debugger.impl.info.SaveInfo;
 import org.zkoss.bind.sys.debugger.impl.info.ValidationInfo;
+import org.zkoss.lang.reflect.Fields;
 import org.zkoss.xel.ExpressionX;
 import org.zkoss.xel.ValueReference;
 import org.zkoss.zel.PropertyNotFoundException;
@@ -144,8 +150,50 @@ public class SaveFormBindingImpl extends FormBindingImpl implements SaveFormBind
 			}
 		} else {
 			FormStatus formStatus = form.getFormStatus();
-			if (formStatus.isDirty())
-				formStatus.submit(ctx);
+			if (formStatus.isDirty()) {
+				Object origin = null;
+				try {
+					// Fix Load_save_formTest.java, if @save is different than @load target.
+					ValueReference valueReference = getValueReference(ctx);
+					Object target = Fields.get(valueReference.getBase(),
+							(String) valueReference.getProperty());
+
+					Object formStatusOrigin = formStatus.getOrigin();
+					if (formStatusOrigin != null && !formStatusOrigin.equals(
+							target)) {
+						MethodHandler handler = ProxyFactory.getHandler(
+								(Proxy) formStatusOrigin);
+						if (handler instanceof FormProxyHandler) {
+							Field originField = handler.getClass().getSuperclass()
+									.getDeclaredField("_origin");
+							// change origin here
+							originField.setAccessible(true);
+							origin = originField.get(handler);
+							originField.set(handler, target);
+							originField.setAccessible(false);
+						}
+					}
+
+					formStatus.submit(ctx);
+				} catch (Throwable t) {
+					throw new RuntimeException(t);
+				} finally {
+					// if origin is not null, we should set it back to the form bean.
+					if (origin != null) {
+						try {
+							Object formStatusOrigin = formStatus.getOrigin();
+							MethodHandler handler = ProxyFactory.getHandler((Proxy) formStatusOrigin);
+							Field originField = handler.getClass().getSuperclass().getDeclaredField("_origin");
+							// change origin back here
+							originField.setAccessible(true);
+							originField.set(handler, origin);
+							originField.setAccessible(false);
+						} catch (Throwable t) {
+							throw new RuntimeException(t);
+						}
+					}
+				}
+			}
 			
 			binder.notifyChange(formStatus, "."); //notify change of fxStatus and fxStatus.*
 		}
