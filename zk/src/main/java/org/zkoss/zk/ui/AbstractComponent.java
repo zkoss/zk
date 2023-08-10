@@ -4176,11 +4176,8 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 		if (isDisabledHostChanged()) return;
 		List<ShadowElement> shadowRoots = getShadowRoots();
 		if (!shadowRoots.isEmpty()) {
-			Map<Component, Integer> indexCacheMap = getIndexCacheMap(this);
 			try {
-				if (indexCacheMap == null) {
-					initIndexCacheMap(this);
-				}
+				initIndexCacheMap(this);
 				final int indexOfInsertBefore = insertBefore == null ? -1 : getChildren().indexOf(insertBefore);
 				for (ShadowElement se : new LinkedList<ShadowElement>(shadowRoots)) {
 					if (se instanceof ShadowElementCtrl) {
@@ -4188,9 +4185,9 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 					}
 				}
 			} finally {
-				if (indexCacheMap == null) {
-					destroyIndexCacheMap(this);
-				}
+				// Always reset because the index cache will be changed after child added.
+				// See: NavigationModelTest.java
+				destroyIndexCacheMap(this);
 			}
 		}
 	}
