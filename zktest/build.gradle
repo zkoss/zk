@@ -20,7 +20,11 @@ tasks.withType(JavaCompile) {
 }
 
 repositories {
-	mavenLocal()
+	mavenLocal() {
+		content {
+			excludeGroupByRegex "io\\.netty\\.*"
+		}
+	}
 
 	maven {
 		url = uri('https://mavensync.zkoss.org/maven2')
