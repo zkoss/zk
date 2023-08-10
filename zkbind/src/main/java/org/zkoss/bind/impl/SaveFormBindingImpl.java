@@ -154,29 +154,32 @@ public class SaveFormBindingImpl extends FormBindingImpl implements SaveFormBind
 				Object origin = null;
 				try {
 					// Fix Load_save_formTest.java, if @save is different than @load target.
-					ValueReference valueReference = getValueReference(ctx);
-					Object target = Fields.get(valueReference.getBase(),
-							(String) valueReference.getProperty());
+					if (_accessInfo.getProperty().getExpressionString().contains(".")) {
+						try {
+							ValueReference valueReference = getValueReference(
+									ctx);
+							Object target = Fields.get(valueReference.getBase(),
+									(String) valueReference.getProperty());
 
-					Object formStatusOrigin = formStatus.getOrigin();
-					if (formStatusOrigin != null && !formStatusOrigin.equals(
-							target)) {
-						MethodHandler handler = ProxyFactory.getHandler(
-								(Proxy) formStatusOrigin);
-						if (handler instanceof FormProxyHandler) {
-							Field originField = handler.getClass().getSuperclass()
-									.getDeclaredField("_origin");
-							// change origin here
-							originField.setAccessible(true);
-							origin = originField.get(handler);
-							originField.set(handler, target);
-							originField.setAccessible(false);
+							Object formStatusOrigin = formStatus.getOrigin();
+							if (formStatusOrigin != null && !formStatusOrigin.equals(target)) {
+								MethodHandler handler = ProxyFactory.getHandler(
+										(Proxy) formStatusOrigin);
+								if (handler instanceof FormProxyHandler) {
+									Field originField = handler.getClass().getSuperclass()
+											.getDeclaredField("_origin");
+									// change origin here
+									originField.setAccessible(true);
+									origin = originField.get(handler);
+									originField.set(handler, target);
+									originField.setAccessible(false);
+								}
+							}
+						} catch (Throwable t) {
+							// ignore
 						}
 					}
-
 					formStatus.submit(ctx);
-				} catch (Throwable t) {
-					throw new RuntimeException(t);
 				} finally {
 					// if origin is not null, we should set it back to the form bean.
 					if (origin != null) {
