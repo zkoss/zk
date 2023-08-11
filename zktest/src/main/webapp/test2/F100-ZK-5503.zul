@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F100-ZK-5503.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Wed Jul 26 14:33:41 CST 2023, Created by jamsonchan
+
+Copyright (C) 2023 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns:n="native">
+    <window apply="org.zkoss.zktest.test2.F100_ZK_5503_Composer">
+        <button id="test1" label="test1"/>
+        <button id="test2" label="test2"/>
+        <button id="test3" label="test3"/>
+        <button id="test4" label="test4"/>
+        <button id="test5" label="test5"/>
+        <n:h1>A</n:h1>
+        <a id="a" iconSclass="z-icon-home" iconTooltip="a"/>
+        <separator/>
+        <n:h1>AuxHeader / Column / Footer</n:h1>
+        <grid>
+            <auxhead>
+                <auxheader id="auxheader" label="auxheader" colspan="1" iconSclass="z-icon-home" iconTooltip="auxheader"/>
+            </auxhead>
+            <columns>
+                <column id="column" label="column" iconSclass="z-icon-home" iconTooltip="column"/>
+            </columns>
+            <foot>
+                <footer id="footer" iconSclass="z-icon-home" iconTooltip="footer">footer</footer>
+            </foot>
+        </grid>
+        <separator/>
+
+        <n:h1>Button</n:h1>
+        <button id="button" iconSclass="z-icon-home" iconTooltip="button"/>
+        <separator/>
+
+        <n:h1>Caption</n:h1>
+        <caption id="caption" iconSclass="z-icon-home" iconTooltip="caption"/>
+        <separator/>
+
+        <n:h1>CheckBox</n:h1>
+        <checkbox id="checkbox" iconSclass="z-icon-home" iconTooltip="checkbox"/>
+        <separator/>
+
+        <n:h1>ComboButton</n:h1>
+        <combobutton id="combobutton" iconSclass="z-icon-home" iconTooltip="combobutton"/>
+        <separator/>
+
+        <n:h1>ComboItem</n:h1>
+        <combobox>
+            <comboitem id="comboitem" label="comboitem" iconSclass="z-icon-home" iconTooltip="comboitem"/>
+        </combobox>
+        <separator/>
+
+        <n:h1>FileUpload</n:h1>
+        <fileupload id="fileupload" label="fileupload" iconSclass="z-icon-home" iconTooltip="fileupload" >
+        </fileupload>
+        <separator/>
+
+        <n:h1>ListHeader / ListCell / ListFooter</n:h1>
+        <listbox>
+            <listhead>
+                <listheader id="listheader" label="listheader" iconSclass="z-icon-home" iconTooltip="listheader"/>
+            </listhead>
+            <listitem>
+                <listcell id="listcell" label="listcell" iconSclass="z-icon-home" iconTooltip="listcell"/>
+            </listitem>
+            <listfoot>
+                <listfooter id="listfooter" label="listfooter" iconSclass="z-icon-home" iconTooltip="listfooter"/>
+            </listfoot>
+        </listbox>
+        <separator/>
+
+        <n:h1>Menu / MenuItem</n:h1>
+        <menubar>
+            <menu id="menu" label="menu" iconSclass="z-icon-home" iconTooltip="menu"/>
+            <menuitem id="menuitem" label="menuitem" iconSclass="z-icon-home" iconTooltip="menuitem"/>
+        </menubar>
+        <separator/>
+
+        <n:h1>Nav / NavItem</n:h1>
+        <navbar>
+            <nav id="nav" label="nav" iconSclass="z-icon-home" iconTooltip="nav"/>
+            <navitem id="navitem" label="navitem" iconSclass="z-icon-home" iconTooltip="navitem"/>
+        </navbar>
+        <separator/>
+
+        <n:h1>OrgNode</n:h1>
+        <organigram>
+            <orgchildren>
+                <orgitem>
+                    <orgnode id="orgnode" label="orgnode" iconSclass="z-icon-home" iconTooltip="orgnode"/>
+                </orgitem>
+            </orgchildren>
+        </organigram>
+        <separator/>
+
+        <n:h1>Radio</n:h1>
+        <radio id="radio" label="radio" iconSclass="z-icon-home" iconTooltip="radio"/>
+        <separator/>
+
+        <n:h1>Tab</n:h1>
+        <tabbox>
+            <tabs>
+                <tab id="tab" label="tab" iconSclass="z-icon-home" iconTooltip="tab"/>
+            </tabs>
+        </tabbox>
+        <separator/>
+
+        <n:h1>ToolBarButton</n:h1>
+        <toolbar>
+            <toolbarbutton id="toolbarbutton" label="toolbarbutton" iconSclass="z-icon-home" iconTooltip="toolbarbutton"/>
+        </toolbar>
+        <separator/>
+
+        <n:h1>TreeCol / TreeCell / TreeFooter</n:h1>
+        <tree>
+            <treecols>
+                <treecol id="treecol" label="treecol" iconSclass="z-icon-home" iconTooltip="treecol"/>
+            </treecols>
+            <treechildren>
+                <treeitem>
+                    <treerow>
+                        <treecell id="treecell" label="treecell" iconSclass="z-icon-home" iconTooltip="treecell"/>
+                    </treerow>
+                </treeitem>
+            </treechildren>
+            <treefoot>
+                <treefooter id="treefooter" label="treefooter" iconSclass="z-icon-home" iconTooltip="treefooter"/>
+            </treefoot>
+        </tree>
+        <separator/>
+    </window>
+</zk>

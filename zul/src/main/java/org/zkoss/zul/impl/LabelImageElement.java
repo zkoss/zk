@@ -84,12 +84,12 @@ public abstract class LabelImageElement extends LabelElement {
 	}
 
 	/**
-	 * Sets the icon font
+	 * Sets the icon font, if iconSclasses is set, iconSclass will be ignored, iconSclasses will take precedence over iconSclass
 	 * @param iconSclass a CSS class name for the icon font
 	 * @since 7.0.0
 	 */
 	public void setIconSclass(String iconSclass) {
-		if (iconSclass != null && iconSclass.length() == 0)
+		if (iconSclass != null && iconSclass.isEmpty())
 			iconSclass = null;
 		if (!Objects.equals(_auxinf != null ? _auxinf.iconSclass : null, iconSclass)) {
 			initAuxInfo().iconSclass = iconSclass;
@@ -98,12 +98,73 @@ public abstract class LabelImageElement extends LabelElement {
 	}
 
 	/**
+	 * Sets multiple icons font, if iconSclasses is set, iconSclass will be ignored, iconSclasses will take precedence over iconSclass
+	 * @param iconSclasses a CSS class name String array for the icon font
+	 * @since 10.0.0
+	 */
+	public void setIconSclasses(String[] iconSclasses) {
+		if (!Objects.equals(_auxinf != null ? _auxinf.iconSclasses : null, iconSclasses)) {
+			initAuxInfo().iconSclasses = iconSclasses;
+			smartUpdate("iconSclasses", iconSclasses);
+		}
+	}
+
+	/**
 	 * Returns the icon font
 	 * @since 7.0.0
 	 */
 	public String getIconSclass() {
-		return _auxinf != null && _auxinf.iconSclass instanceof String ? (String) _auxinf.iconSclass : null;
+		return _auxinf != null && _auxinf.iconSclass instanceof String ? _auxinf.iconSclass : null;
+	}
 
+	/**
+	 * Returns the icon font String array
+	 * @since 10.0.0
+	 */
+	public String[] getIconSclasses() {
+		return _auxinf != null && _auxinf.iconSclasses instanceof String[] ? _auxinf.iconSclasses : null;
+	}
+
+	/**
+	 * Sets the iconTooltip, if iconTooltips is set, iconTooltip will be ignored, iconTooltips will take precedence over iconTooltip
+	 * @param iconTooltip a content String for iconTooltip
+	 * @since 10.0.0
+	 */
+	public void setIconTooltip(String iconTooltip) {
+		if (iconTooltip != null && iconTooltip.isEmpty())
+			iconTooltip = null;
+		if (!Objects.equals(_auxinf != null ? _auxinf.iconTooltips : null, iconTooltip)) {
+			initAuxInfo().iconTooltip = iconTooltip;
+			smartUpdate("iconTooltip", iconTooltip);
+		}
+	}
+
+	/**
+	 * Sets multiple iconTooltips, if iconTooltips is set, iconTooltip will be ignored, iconTooltips will take precedence over iconTooltip
+	 * @param iconTooltips a content String array for iconTooltip
+	 * @since 10.0.0
+	 */
+	public void setIconTooltips(String[] iconTooltips) {
+		if (!Objects.equals(_auxinf != null ? _auxinf.iconTooltips : null, iconTooltips)) {
+			initAuxInfo().iconTooltips = iconTooltips;
+			smartUpdate("iconTooltips", iconTooltips);
+		}
+	}
+
+	/**
+	 * Returns the iconTooltip content
+	 * @since 10.0.0
+	 */
+	public String getIconTooltip() {
+		return _auxinf != null && _auxinf.iconTooltip instanceof String ? _auxinf.iconTooltip : null;
+	}
+
+	/**
+	 * Returns the iconTooltip content String array
+	 * @since 10.0.0
+	 */
+	public String[] getIconTooltips() {
+		return _auxinf != null && _auxinf.iconTooltips instanceof String[] ? _auxinf.iconTooltips : null;
 	}
 
 	/** Returns the image URI.
@@ -313,6 +374,9 @@ public abstract class LabelImageElement extends LabelElement {
 		render(renderer, "image", getEncodedImageURL());
 		render(renderer, "hoverImage", getEncodedHoverURL());
 		render(renderer, "iconSclass", getIconSclass());
+		render(renderer, "iconTooltip", getIconTooltip());
+		render(renderer, "iconSclasses", getIconSclasses());
+		render(renderer, "iconTooltips", getIconTooltips());
 	}
 
 	//-- ComponentCtrl --//
@@ -354,13 +418,46 @@ public abstract class LabelImageElement extends LabelElement {
 	private static HashMap<String, PropertyAccess> _properties = new HashMap<String, PropertyAccess>(5);
 
 	static {
-		_properties.put("iconSclass", new StringPropertyAccess() {
-			public void setValue(Component cmp, String iconSclass) {
-				((LabelImageElement) cmp).setIconSclass(iconSclass);
+		_properties.put("iconSclass", new ObjectPropertyAccess() {
+			public void setValue(Component cmp, Object iconSclass) {
+				if (iconSclass instanceof String[]) {
+					((LabelImageElement) cmp).setIconSclasses((String[]) iconSclass);
+				} else if (iconSclass instanceof String) {
+					((LabelImageElement) cmp).setIconSclass((String) iconSclass);
+				} else if (iconSclass == null) {
+					((LabelImageElement) cmp).setIconSclass(null);
+				}
+			}
+
+			public Object getValue(Component cmp) {
+				return ((LabelImageElement) cmp).getIconSclasses();
+			}
+		});
+		_properties.put("iconSclasses", new ObjectPropertyAccess() {
+			public void setValue(Component cmp, Object iconSclasses) {
+				((LabelImageElement) cmp).setIconSclasses((String[]) iconSclasses);
+			}
+
+			public Object getValue(Component cmp) {
+				return ((LabelImageElement) cmp).getIconSclasses();
+			}
+		});
+		_properties.put("iconTooltip", new StringPropertyAccess() {
+			public void setValue(Component cmp, String iconTooltip) {
+				((LabelImageElement) cmp).setIconTooltip(iconTooltip);
 			}
 
 			public String getValue(Component cmp) {
-				return ((LabelImageElement) cmp).getIconSclass();
+				return ((LabelImageElement) cmp).getIconTooltip();
+			}
+		});
+		_properties.put("iconTooltips", new ObjectPropertyAccess() {
+			public void setValue(Component cmp, Object iconTooltip) {
+				((LabelImageElement) cmp).setIconTooltips((String[]) iconTooltip);
+			}
+
+			public Object getValue(Component cmp) {
+				return ((LabelImageElement) cmp).getIconTooltips();
 			}
 		});
 		_properties.put("image", new StringPropertyAccess() {
@@ -450,6 +547,12 @@ public abstract class LabelImageElement extends LabelElement {
 		private byte hoverimgver;
 
 		private String iconSclass;
+
+		private String[] iconSclasses;
+
+		private String iconTooltip;
+
+		private String[] iconTooltips;
 
 		public Object clone() {
 			try {
