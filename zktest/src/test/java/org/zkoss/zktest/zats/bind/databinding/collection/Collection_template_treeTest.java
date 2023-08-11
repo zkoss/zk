@@ -23,6 +23,7 @@ public class Collection_template_treeTest extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect("/bind/databinding/collection/collection-template-tree.zul");
+		waitResponse();
 		int length = jq(".z-treerow").length();
 		assertEquals(30, length);
 		assertNoAnyError();

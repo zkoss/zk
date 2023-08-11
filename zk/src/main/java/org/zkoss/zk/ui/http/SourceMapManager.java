@@ -50,7 +50,7 @@ public class SourceMapManager implements Serializable {
 	private Map<Pair<String, String>, String> _jsContentMap; //js <src path, real path> -> content
 	private Map<Pair<String, String>, String> _postJsContentMap; //js <src path, real path> -> content (for merging package)
 	private Pair<String, String> _jsCursor = null;
-	private static final SourceFile.Builder _builder = new SourceFile.Builder();
+	private static final SourceFile.Builder _builder = SourceFile.builder();
 
 	public SourceMapManager(String name, String sourceRoot, String id) {
 		_name = name;

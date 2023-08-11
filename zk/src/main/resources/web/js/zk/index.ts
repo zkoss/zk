@@ -79,7 +79,7 @@ if (zk.tabletUIEnabled) {
 	document.addEventListener('DOMContentLoaded', function () {
 		var jqTabletStylesheet = jq('link[href*="zkmax/css/tablet.css.dsp"]').eq(0);
 		if (jqTabletStylesheet)
-			jqTabletStylesheet.attr('disabled', String(false)); // ZK-4451: disable tablet css
+			jqTabletStylesheet.attr('disabled', false as never); // ZK-4451: disable tablet css
 	});
 }
 

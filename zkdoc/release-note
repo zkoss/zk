@@ -11,6 +11,7 @@ ZK 10.0.0
   ZK-5142: Handle GET and POST requests more strictly
   ZK-5502: Allow users to customize tooltip on the icon
   ZK-5503: Allow users to set multiple icons and tooltips on the same LabelImageElement
+  ZK-5213: Improve accessibility by add tooltips on icons
 
 * Bugs
   ZK-5089: AfterSizeEvent doesn't return a correct size of a Window component

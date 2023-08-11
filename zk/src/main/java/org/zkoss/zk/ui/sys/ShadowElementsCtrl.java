@@ -11,8 +11,10 @@ Copyright (C) 2014 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.sys;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.HtmlShadowElement;
@@ -30,7 +32,8 @@ import org.zkoss.zk.ui.util.Template;
  */
 public class ShadowElementsCtrl {
 	private static final ThreadLocal<Object> _shadowInfo = new ThreadLocal<Object>();
-	private static final ThreadLocal<Object> _distributedIndexInfo = new ThreadLocal<Object>();
+	private static final ThreadLocal<Map<Component, Object>> _distributedIndexInfo = ThreadLocal.withInitial(
+			HashMap::new);
 
 	/** Sets the current shadow element, which is used only by
 	 * {@link org.zkoss.zk.ui.sys.UiEngine} to communicate with
@@ -54,16 +57,20 @@ public class ShadowElementsCtrl {
 	 * {@link org.zkoss.zk.ui.HtmlShadowElement}.
 	 * <p>Used only internally.
 	 */
-	public static final void setDistributedIndexInfo(Object indexMapInfo) {
-		_distributedIndexInfo.set(indexMapInfo);
+	public static final void setDistributedIndexInfo(Component host, Object indexMapInfo) {
+		if (indexMapInfo == null) {
+			_distributedIndexInfo.get().remove(host);
+		} else {
+			_distributedIndexInfo.get().put(host, indexMapInfo);
+		}
 	}
 
 	/** Returns the current distributed index info, which is used only by
 	 * {@link org.zkoss.zk.ui.HtmlShadowElement}.
 	 * <p>Used only internally.
 	 */
-	public static final Object getDistributedIndexInfo() {
-		return _distributedIndexInfo.get();
+	public static final Object getDistributedIndexInfo(Component host) {
+		return _distributedIndexInfo.get().get(host);
 	}
 
 	/**

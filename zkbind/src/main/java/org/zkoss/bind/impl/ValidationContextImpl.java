@@ -80,7 +80,9 @@ public class ValidationContextImpl implements ValidationContext {
 
 		for (Entry<String, Property[]> e : _properties.entrySet()) {
 			for (Property p : e.getValue()) {
-				if (base.equals(p.getBase())) {
+				// Fix a side effect of ZK-5323 for F00864ValidationContextEasierTest
+				// So we don't use "equals" here. Instead, using "==" to avoid ZK-5323 side effect.
+				if (base == p.getBase()) {
 					mp.put(e.getKey(), p);
 				}
 			}
