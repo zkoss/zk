@@ -418,19 +418,13 @@ public abstract class LabelImageElement extends LabelElement {
 	private static HashMap<String, PropertyAccess> _properties = new HashMap<String, PropertyAccess>(5);
 
 	static {
-		_properties.put("iconSclass", new ObjectPropertyAccess() {
-			public void setValue(Component cmp, Object iconSclass) {
-				if (iconSclass instanceof String[]) {
-					((LabelImageElement) cmp).setIconSclasses((String[]) iconSclass);
-				} else if (iconSclass instanceof String) {
-					((LabelImageElement) cmp).setIconSclass((String) iconSclass);
-				} else if (iconSclass == null) {
-					((LabelImageElement) cmp).setIconSclass(null);
-				}
+		_properties.put("iconSclass", new StringPropertyAccess() {
+			public void setValue(Component cmp, String iconSclass) {
+				((LabelImageElement) cmp).setIconSclass(iconSclass);
 			}
 
-			public Object getValue(Component cmp) {
-				return ((LabelImageElement) cmp).getIconSclasses();
+			public String getValue(Component cmp) {
+				return ((LabelImageElement) cmp).getIconSclass();
 			}
 		});
 		_properties.put("iconSclasses", new ObjectPropertyAccess() {
