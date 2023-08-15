@@ -45,6 +45,7 @@ ZK 10.0.0
   ZK-5017: Listbox head flickering caused by onClientInfo
   ZK-5468: Components with Model only renders one item with wrong result if the EL contains forEachStatus.index
   ZK-5490: Grid's [aria-*] attributes do not match their roles
+  ZK-5525: Checkbox tristate [aria-checked] attribute missing "mixed" state
 
 
 * Upgrade Notes
