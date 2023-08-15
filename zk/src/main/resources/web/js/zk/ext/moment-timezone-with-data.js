@@ -9,7 +9,7 @@
 
 	/*global define*/
 	if (typeof module === 'object' && module.exports) {
-		module.exports = factory(require('moment')); // Node
+		module.exports = factory(zk.mm); /* JumperChen, Potix, 20230815 */ // Node
 	} else if (typeof define === 'function' && define.amd) {
 		define(['moment'], factory);                 // AMD
 	} else {

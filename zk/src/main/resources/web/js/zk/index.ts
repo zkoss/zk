@@ -13,6 +13,8 @@ Copyright (C) 2022 Potix Corporation. All Rights Reserved.
 export default {};
 import './crashmsg';  // side-effect-only import
 require('./ext/jquery'); // side-effect-only import
+// workaround for FileUpload with fetch() API.
+require('./ext/fetch.js'); // before ./au
 export * from './zk';
 import './js'; // side-effect-only import
 export * from './dom';
@@ -57,13 +59,6 @@ window.$eval = function<T> (s: unknown): T | undefined {
 	// WARN: conisder https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval#never_use_eval!
 	// Despite the official TS definition for `eval`, `eval` can actually accept anything.
 };
-
-if (!Promise) {
-	require('./ext/promise-polyfill.js');
-}
-
-// workaround for FileUpload with fetch() API.
-require('./ext/fetch.js');
 
 // eslint-disable-next-line @typescript-eslint/no-unnecessary-boolean-literal-compare
 zk.touchEnabled = zk.touchEnabled !== false && (!!zk.mobile || navigator.maxTouchPoints > 0);
