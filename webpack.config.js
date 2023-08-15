@@ -2,12 +2,15 @@
 const path = require('path');
 const webpack = require('webpack');
 const tslib = require('tslib');
+const baseDir = path.resolve(__dirname)
+
 // const CircularDependencyPlugin = require('circular-dependency-plugin');
 
 /** @type { import('webpack').Configuration } */
 module.exports = {
 	resolve: {
 		extensions: ['.ts', '.js', '.json'],
+		modules: [path.join(baseDir, 'node_modules') /* zk node_modules for zkcml*/, 'node_modules'],
 		alias: {
 			'tslib$': 'tslib/tslib.es6.js',
 		},
@@ -19,6 +22,9 @@ module.exports = {
 				test: /\.(ts|js)x?$/,
 				exclude: /node_modules/,
 				use: [
+					{
+						loader: 'babel-loader'
+					},
 					{
 						loader: 'ts-loader',
 						options: {
@@ -46,8 +52,5 @@ module.exports = {
 				'__extends': [path.join(__dirname, 'extends.js'), 'default'] // fix ZK-5441
 			});
 		})())
-		// new CircularDependencyPlugin({
-		// 	failOnError: true
-		// })
 	],
 };
