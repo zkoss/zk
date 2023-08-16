@@ -177,7 +177,12 @@ task testGroupForkJVMTestOnly(type: Test) {
 	}
 }
 
+task npmInstallLighthouse(type: Exec) {
+	commandLine 'npm', 'install', '-g', 'lighthouse@10.4.0'
+}
+
 test {
+	dependsOn npmInstallLighthouse
 	forkEvery = 0 // reuse the test process for all test classes
 	maxParallelForks = Runtime.runtime.availableProcessors().intdiv(4) ?: 1
 	if (project.hasProperty('maxParallelForks'))

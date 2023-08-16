@@ -11,13 +11,12 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.wcag;
 
-import java.util.Arrays;
-
-import com.deque.html.axecore.results.Results;
-import com.deque.html.axecore.selenium.AxeBuilder;
-import com.deque.html.axecore.selenium.AxeReporter;
 import org.junit.jupiter.api.Assertions;
-
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import org.zkoss.json.JSONObject;
+import org.zkoss.json.parser.JSONParser;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
@@ -25,6 +24,7 @@ import org.zkoss.test.webdriver.WebDriverTestCase;
  * @author rudyhuang
  */
 public abstract class WcagTestCase extends WebDriverTestCase {
+
 	@Override
 	protected String getFileLocation() {
 		String simple = getClass().getSimpleName();
@@ -38,15 +38,33 @@ public abstract class WcagTestCase extends WebDriverTestCase {
 	 * If there is any issue, test will fail.
 	 */
 	protected void verifyA11y() {
-		// FIXME: Temporary disabled color-contrast
-		AxeBuilder builder = new AxeBuilder()
-				.withTags(Arrays.asList("wcag2a", "wcag2aa"))
-				.disableRules(Arrays.asList("color-contrast"));
-		Results results = builder.analyze(driver);
-		if (!results.violationFree()) {
-			Assertions.fail(AxeReporter.getReadableAxeResults("WCAG", driver, results.getViolations())
-					? AxeReporter.getAxeResultString()
-					: null);
+		try {
+			String url = getAddress() + getFileLocation(), failmsg = "", data = "", line = "";
+			boolean pass = true;
+			int count = 1;
+
+			// get whole lighthouse a11y results
+			Process process = Runtime.getRuntime().exec("lighthouse " + url + " --output=json --chrome-flags=\"--headless\" --only-categories=\"accessibility\"");
+			BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+			while ((line = reader.readLine()) != null) data += line;
+			JSONParser parser = new JSONParser();
+			JSONObject audits = (JSONObject)((JSONObject) parser.parse(data)).get("audits");
+
+			// check results
+			for (Object key : audits.keySet()) {
+				JSONObject audit = (JSONObject)audits.get((String)key);
+				// Disable color-contrast because it only passes when using wcag theme, general theme does not need to pass
+				if (String.valueOf(audit.get("score")).equals("0") && !String.valueOf(audit.get("id")).equals("color-contrast")) {
+					pass = false;
+					failmsg += "\n================== " + (count++) + " ==================\n"
+							+ ">>> id : " + audit.get("id") + "\n"
+							+ ">>> title : " + audit.get("title") + "\n"
+							+ ">>> description : " + audit.get("description") + "\n";
+				}
+			}
+			if (!pass) Assertions.fail(failmsg);
+		} catch (IOException e) {
+			Assertions.fail("\n================== Exception ==================\n" + e.getMessage() + "\n");
 		}
 	}
 }

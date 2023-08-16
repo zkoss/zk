@@ -17,7 +17,6 @@ import org.junit.jupiter.api.Test;
 /**
  * @author jameschu
  */
-@Disabled("Needs aXe fix this issue, https://github.com/dequelabs/axe-core/issues/2720")
 public class TreeTest extends WcagTestCase {
 	@Test
 	public void test() {
