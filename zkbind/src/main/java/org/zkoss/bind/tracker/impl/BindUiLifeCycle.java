@@ -233,7 +233,9 @@ public class BindUiLifeCycle implements UiLifeCycle {
 
 		//F80: Speed up render, check component's subBinderAnnotation
 		comp.setAttribute(SKIP_BIND_INIT, false);
-		Events.postEvent(new Event(BinderImpl.ON_BIND_CLEAN, comp));
+
+		// Fix B70-ZK-2812.zul, that bind_clean should run after normal AU event.
+		Events.postEvent(-10000, new Event(BinderImpl.ON_BIND_CLEAN, comp));
 	}
 	public void afterComponentMoved(Component parent, Component child, Component prevparent) {
 		//do nothing
