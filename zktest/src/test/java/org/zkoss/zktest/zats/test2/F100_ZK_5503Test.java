@@ -29,8 +29,8 @@ public class F100_ZK_5503Test  extends WebDriverTestCase {
             if (widgetName.equals("comboitem")) {
                 click(jq(".z-combobox-icon.z-icon-caret-down"));
             }
-            assertEquals(jq("@" + widgetName +" > .z-icon-plus").attr("title"), "1");
-            assertEquals(jq("@" + widgetName +" > .z-icon-minus").attr("title"), "1");
+            assertEquals(jq("@" + widgetName +" > .z-icon-address-card").attr("title"), "1");
+            assertEquals(jq("@" + widgetName +" > .z-icon-podcast").attr("title"), "1");
         }
 
         click(jq("@button:contains(test2)"));
@@ -39,8 +39,8 @@ public class F100_ZK_5503Test  extends WebDriverTestCase {
             if (widgetName.equals("comboitem")) {
                 click(jq(".z-combobox-icon.z-icon-caret-down"));
             }
-            assertEquals(jq("@" + widgetName +" > .z-icon-plus").attr("title"), "2");
-            assertEquals(jq("@" + widgetName + " > .z-icon-minus").attr("title"), "null");
+            assertEquals(jq("@" + widgetName +" > .z-icon-address-card").attr("title"), "2");
+            assertEquals(jq("@" + widgetName + " > .z-icon-podcast").attr("title"), "null");
         }
 
         click(jq("@button:contains(test3)"));
@@ -49,8 +49,8 @@ public class F100_ZK_5503Test  extends WebDriverTestCase {
             if (widgetName.equals("comboitem")) {
                 click(jq(".z-combobox-icon.z-icon-caret-down"));
             }
-            assertEquals(jq("@" + widgetName +" > .z-icon-plus").attr("title"), "3");
-            assertEquals(jq("@" + widgetName + " > .z-icon-minus").attr("title"), "null");
+            assertEquals(jq("@" + widgetName +" > .z-icon-address-card").attr("title"), "3");
+            assertEquals(jq("@" + widgetName + " > .z-icon-podcast").attr("title"), "null");
         }
 
         click(jq("@button:contains(test4)"));
@@ -59,8 +59,8 @@ public class F100_ZK_5503Test  extends WebDriverTestCase {
             if (widgetName.equals("comboitem")) {
                 click(jq(".z-combobox-icon.z-icon-caret-down"));
             }
-            assertEquals(jq("@" + widgetName + " > .z-icon-plus").attr("title"), "null");
-            assertEquals(jq("@" + widgetName + " > .z-icon-minus").attr("title"), "null");
+            assertEquals(jq("@" + widgetName + " > .z-icon-address-card").attr("title"), "null");
+            assertEquals(jq("@" + widgetName + " > .z-icon-podcast").attr("title"), "null");
         }
 
         click(jq("@button:contains(test5)"));
@@ -69,8 +69,8 @@ public class F100_ZK_5503Test  extends WebDriverTestCase {
             if (widgetName.equals("comboitem")) {
                 click(jq(".z-combobox-icon.z-icon-caret-down"));
             }
-            assertEquals(jq("@" + widgetName + " > .z-icon-plus").attr("title"), "null");
-            assertEquals(jq("@" + widgetName + " > .z-icon-minus").attr("title"), "null");
+            assertEquals(jq("@" + widgetName + " > .z-icon-address-card").attr("title"), "null");
+            assertEquals(jq("@" + widgetName + " > .z-icon-podcast").attr("title"), "null");
         }
     }
 }

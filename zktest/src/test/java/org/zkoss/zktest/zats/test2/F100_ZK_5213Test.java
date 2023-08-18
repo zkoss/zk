@@ -23,7 +23,7 @@ public class F100_ZK_5213Test extends WebDriverTestCase {
     @Test
     public void bandbox_test() {
         connect();
-        String slt = "@bandbox > .z-bandbox-icon.z-icon-search";
+        String slt = ".z-bandbox-icon.z-icon-search";
         test_(slt, MZa11y.BANDBOX_SEARCH);
     }
     @Test
@@ -159,21 +159,21 @@ public class F100_ZK_5213Test extends WebDriverTestCase {
     @Test
     public void listbox_test() {
         connect();
-        String slt = ".z-listbox .z-listheader-checkable.z-listheader-checked .z-listheader-icon.z-icon-check";
+        String slt = ".z-listheader-icon.z-icon-check";
         test_(slt, MZa11y.LISTHEADER_CHECK);
 
-        slt = ".z-listbox .z-listbox-body .z-listitem.z-listitem-selected .z-listcell .z-listitem-checkable.z-listitem-checkbox .z-listitem-icon.z-icon-check";
+        slt = ".z-listitem-icon.z-icon-check";
         test_(slt, MZa11y.LISTITEM_CHECK);
 
-        slt = ".z-listbox .z-listbox-body .z-listgroup.z-listgroup-open .z-icon-angle-down.z-listgroup-icon-open";
+        slt = ".z-icon-angle-down.z-listgroup-icon-open";
         test_(slt, MZa11y.LISTGROUP_ANGLE_DOWN_LISTGROUP_OPEN);
         click_(slt);
 
-        slt = ".z-listbox .z-listbox-body .z-listgroup .z-icon-angle-right.z-listgroup-icon-close";
+        slt = ".z-icon-angle-right.z-listgroup-icon-close";
         test_(slt, MZa11y.LISTGROUP_ANGLE_RIGHT_LISTGROUP_CLOSE);
         click_(slt);
 
-        slt = ".z-listbox .z-listbox-body .z-listitem-icon.z-icon-radio";
+        slt = ".z-listitem-icon.z-icon-radio";
         test_(slt, MZa11y.LISTITEM_RADIO);
     }
     @Test
