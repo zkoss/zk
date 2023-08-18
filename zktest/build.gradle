@@ -168,6 +168,11 @@ task testGroupForkJVMTestOnly(type: Test) {
 	options {
 		systemProperties(System.getProperties())
 	}
+
+	// for Jenkins' info
+	testLogging {
+		events("standardOut", "started", "passed", "skipped", "failed")
+	}
 }
 
 test {
@@ -192,6 +197,11 @@ test {
 	// a way to pass -Dtags=...
 	options {
 		systemProperties(System.getProperties())
+	}
+
+	// for Jenkins' info
+	testLogging {
+		events("standardOut", "started", "passed", "skipped", "failed")
 	}
 }
 

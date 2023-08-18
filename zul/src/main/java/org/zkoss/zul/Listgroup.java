@@ -207,6 +207,10 @@ public class Listgroup extends Listitem {
 		if (cmd.equals(Events.ON_OPEN)) {
 			OpenEvent evt = OpenEvent.getOpenEvent(request);
 			_open = evt.isOpen();
+
+			// Fix B70-ZK-2812.zul, that bind_clean should run after normal AU event.
+			Events.postEvent(evt);
+
 			final Listbox listbox = getListbox();
 			if (listbox != null) {
 				listbox.addVisibleItemCount(_open ? getVisibleItemCount() : -getVisibleItemCount());
@@ -220,7 +224,6 @@ public class Listgroup extends Listitem {
 						gmodel.removeOpenGroup(gindex);
 				}
 			}
-			Events.postEvent(evt);
 		} else
 			super.service(request, everError);
 	}

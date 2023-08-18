@@ -257,6 +257,10 @@ public class Group extends Row {
 		if (cmd.equals(Events.ON_OPEN)) {
 			OpenEvent evt = OpenEvent.getOpenEvent(request);
 			_open = evt.isOpen();
+
+			// Fix B70-ZK-2812.zul, that bind_clean should run after normal AU event.
+			Events.postEvent(evt);
+
 			final Rows rows = (Rows) getParent();
 			if (rows != null) {
 				rows.addVisibleItemCount(_open ? getVisibleItemCount() : -getVisibleItemCount());
@@ -273,7 +277,6 @@ public class Group extends Row {
 					}
 				}
 			}
-			Events.postEvent(evt);
 		} else
 			super.service(request, everError);
 	}
