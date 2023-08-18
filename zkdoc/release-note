@@ -407,6 +407,9 @@ Aug 10, 2021
   ZK-4977: Triggering @MatchMedia by immediate resizing is not working in Desktop since Chrome 92
 
 * Upgrade Notes
+  + It was originally possible to set multiple icons on the same label image element,
+    by using the attribute `iconSclass="a,b,c"` in the zul file,
+    but in ZK10 the above feature has been cancelled, Use the Java API `setIconSclasses(String[] icons)` instead.
   + The default desktop ID generator was replaced by a more secured one.
     If you prefer to use the previous generator, use org.zkoss.zk.ui.impl.LegacyDesktopIdGenerator.
   + Due to ZK-4783, the hbox of message box is substituted by DIV.

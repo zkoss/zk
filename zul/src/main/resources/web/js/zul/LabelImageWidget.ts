@@ -286,17 +286,22 @@ export abstract class LabelImageWidget<TElement extends HTMLElement = HTMLElemen
 			icon = iconSclasses ? iconSclasses : iconSclass ? [iconSclass] : undefined,
 			tooltip = iconTooltips ? iconTooltips : iconTooltip ? [iconTooltip] : undefined;
 		if (icon) {
-			let res = '';
-			for (let i = 0, icon_length = icon.length; i < icon_length; i++) {
-				if (icon[i]) { // add icon if icon[i] not undefined
-					res += '<i class="' + icon[i] + '"';
-					if (tooltip?.[i]) { // add iconTooltip if iconTooltip[i] not undefined
-						res += ' title="' + tooltip[i] + '"';
+			if (icon.length > 1) {
+				let res = '<span class="z-icon-stack" aria-hidden="true">';
+				for (let i = 0, icon_length = icon.length; i < icon_length; i++) {
+					if (icon[i]) { // add icon if icon[i] not undefined
+						res += '<i class="' + icon[i] + '"';
+						if (tooltip?.[i]) { // add iconTooltip if iconTooltip[i] not undefined
+							res += ' title="' + tooltip[i] + '"';
+						}
+						res += '></i>';
 					}
-					res += ' aria-hidden="true"></i>';
 				}
+				res += '</span>';
+				return res;
+			} else {
+				return '<i class="' + icon[0] + '"' + (tooltip?.[0] ? ' title="' + tooltip[0] + '"' : '') + ' aria-hidden="true"></i>';
 			}
-			return res;
 		}
 		return '';
 	}

@@ -94,7 +94,7 @@ public class F100_ZK_5503_Composer extends SelectorComposer {
     public void test1() {
         LabelImageElement[] lies = new LabelImageElement[] {a, auxheader, column, footer, button, caption, checkbox, combobutton, comboitem, fileupload, listheader, listcell, listfooter, menu, menuitem, nav, navitem, orgnode, radio, tab, toolbarbutton, treecol, treecell, treefooter};
         for (LabelImageElement lie : lies) {
-            lie.setIconSclasses(new String[]{"z-icon-plus", "z-icon-minus"});
+            lie.setIconSclasses(new String[]{"z-icon-address-card", "z-icon-podcast"});
             lie.setIconTooltips(new String[]{"1", "1"});
         }
     }
@@ -103,7 +103,7 @@ public class F100_ZK_5503_Composer extends SelectorComposer {
     public void test2() {
         LabelImageElement[] lies = new LabelImageElement[] {a, auxheader, column, footer, button, caption, checkbox, combobutton, comboitem, fileupload, listheader, listcell, listfooter, menu, menuitem, nav, navitem, orgnode, radio, tab, toolbarbutton, treecol, treecell, treefooter};
         for (LabelImageElement lie : lies) {
-            lie.setIconSclasses(new String[] {"z-icon-plus", "z-icon-minus"});
+            lie.setIconSclasses(new String[] {"z-icon-address-card", "z-icon-podcast"});
             lie.setIconTooltips(new String[] {"2"});
         }
     }
@@ -112,7 +112,7 @@ public class F100_ZK_5503_Composer extends SelectorComposer {
     public void test3() {
         LabelImageElement[] lies = new LabelImageElement[] {a, auxheader, column, footer, button, caption, checkbox, combobutton, comboitem, fileupload, listheader, listcell, listfooter, menu, menuitem, nav, navitem, orgnode, radio, tab, toolbarbutton, treecol, treecell, treefooter};
         for (LabelImageElement lie : lies) {
-            lie.setIconSclasses(new String[] {"z-icon-plus"});
+            lie.setIconSclasses(new String[] {"z-icon-address-card"});
             lie.setIconTooltips(new String[] {"3", "3"});
         }
     }
@@ -130,7 +130,7 @@ public class F100_ZK_5503_Composer extends SelectorComposer {
     public void test5() {
         LabelImageElement[] lies = new LabelImageElement[] {a, auxheader, column, footer, button, caption, checkbox, combobutton, comboitem, fileupload, listheader, listcell, listfooter, menu, menuitem, nav, navitem, orgnode, radio, tab, toolbarbutton, treecol, treecell, treefooter};
         for (LabelImageElement lie : lies) {
-            lie.setIconSclasses(new String[] {"z-icon-plus", null, "z-icon-minus"});
+            lie.setIconSclasses(new String[] {"z-icon-address-card", null, "z-icon-podcast"});
             lie.setIconTooltips(new String[] {null, "123", ""});
         }
     }
