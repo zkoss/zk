@@ -372,6 +372,7 @@ exports['publish:dts'] = function (done) {
 	const { 'zk-version': version } = options;
 	if (!version || typeof version !== 'string') {
 		console.log('Requires a version string: --zk-version <semVer>');
+		console.log('For example: npm run publish:dts -- --zk-version <semVer>');
 		return;
 	}
 	console.log(`version: ${version}`);
@@ -379,6 +380,7 @@ exports['publish:dts'] = function (done) {
 	const dtsPackage = {
 		name: 'zk-types',
 		version,
+		license: require('./package.json').license,
 		types: dtsEntry,
 		dependencies: {
 			...require('./package.json').dependencies,
