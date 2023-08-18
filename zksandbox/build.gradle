@@ -55,7 +55,7 @@ dependencies {
 	implementation "org.zkoss.zk:zkmax:${version}"
 	implementation "org.zkoss.zk:zkplus:${version}"
 	implementation "org.zkoss.zk:zkbind:${version}"
-	implementation 'org.zkoss.zkforge:ckez:4.14.0.0'
+	implementation 'org.zkoss.zkforge:ckez:4.21.0.0'
 	implementation 'org.zkoss.zkforge:timelinez:2.3.1_50'
 	implementation 'org.zkoss.zkforge:timeplotz:1.1_50'
 	implementation 'org.zkoss.zkforge:gmapsz:3.1.0'
