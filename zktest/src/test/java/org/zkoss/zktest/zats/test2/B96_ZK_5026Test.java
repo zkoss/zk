@@ -19,6 +19,7 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.interactions.Actions;
 
 import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author jumperchen
@@ -55,10 +56,11 @@ public class B96_ZK_5026Test extends WebDriverTestCase {
 				.perform();
 
 		assertTrue(jq(" .z-menuitem.z-menuitem-hover").exists());
+		JQuery childMenupopup = jq(".z-menupopup-content").eq(1);
 		act.sendKeys(Keys.DOWN).perform();
-		assertTrue(jq(".z-menupopup-content > .z-menuitem:nth-child(2)").hasClass("z-menuitem-hover"));
+		assertTrue(childMenupopup.children(".z-menuitem:first-child").hasClass("z-menuitem-hover"));
 
 		act.sendKeys(Keys.DOWN).perform();
-		assertTrue(jq(".z-menupopup-content > .z-menuitem:nth-child(3)").hasClass("z-menuitem-hover"));
+		assertTrue(childMenupopup.children(".z-menuitem:nth-child(2)").hasClass("z-menuitem-hover"));
 	}
 }

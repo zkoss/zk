@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B100-ZK-5235.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Aug 17 17:24:19 CST 2023, Created by rebeccalai
+
+Copyright (C) 2023 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label multiline="true">
+        1. scroll down to hover on the "last" menu and wait for the menupopup to show
+        2. the scroll bar stays at the current position (if bug exists then goes back to the top)
+    </label>
+    <menubar>
+        <menu id="longMenu" label="long menu">
+            <menupopup>
+                <forEach begin="1" end="50">
+                    <menuitem label="${each}"/>
+                </forEach>
+                <menu id="childMenu" label="last">
+                    <menupopup>
+                        <menuitem label="inner item"/>
+                    </menupopup>
+                </menu>
+            </menupopup>
+        </menu>
+    </menubar>
+</zk>
