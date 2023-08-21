@@ -54,6 +54,7 @@ ZK 10.0.0
   ZK-5468: Components with Model only renders one item with wrong result if the EL contains forEachStatus.index
   ZK-5490: Grid's [aria-*] attributes do not match their roles
   ZK-5525: Checkbox tristate [aria-checked] attribute missing "mixed" state
+  ZK-5235: Opening a menupopup moves a scrollbar of a long menu back to top
 
 
 * Upgrade Notes
@@ -74,6 +75,7 @@ ZK 10.0.0
   + Remove Acronym, Big, Center, Dir, Font, isindex, Nobr, Param, Rtc, and Tt in ZHTML module
   + Remove Applet, Flash, and FusionChart components since ZK 10.0.0
   + Deprecated org.zkoss.zk.ui.uuidRecycle.disabled since ZK 10.0.0
+  + Revert ZK-5026 which the original bug cannot be reproduced to fix ZK-5235.
 
    --------
 ZK 9.6.4
