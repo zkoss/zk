@@ -135,6 +135,7 @@ task prepareBin() {
 				include "**/commons-logging.jar"
 				include "**/Filters.jar"
 				include "**/gson.jar"
+				include "**/guava.jar"
 				include "**/itext.jar"
 				include "**/jasperreports.jar"
 				include "**/javassist.jar"

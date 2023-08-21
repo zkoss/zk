@@ -9,6 +9,7 @@ def javadocClassPath = files(
 		"$rootDir/dist/lib/ext/js.jar",
 		"$rootDir/dist/lib/ext/jruby.jar",
 		"$rootDir/dist/lib/ext/bsh.jar",
+		"$rootDir/dist/lib/ext/guava.jar",
 		"$rootDir/dist/lib/ext/groovy.jar",
 		"$rootDir/dist/lib/ext/portlet-api.jar",
 		"$rootDir/dist/lib/ext/closure-compiler.jar",
