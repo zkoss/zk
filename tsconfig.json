@@ -17,6 +17,7 @@
     "noImplicitAny": false,
     "noImplicitOverride": true,
     "noUnusedLocals": true,
+    "noEmitHelpers": true,
     "useUnknownInCatchVariables": false,
     "skipLibCheck": true,
     "typeRoots": [

@@ -13,6 +13,7 @@ ZK 10.0.0
   ZK-5503: Allow users to set multiple icons and tooltips on the same LabelImageElement
   ZK-5213: Improve accessibility by add tooltips on icons
   ZK-5469: Make cloudMode true by default for ZK Stateless
+  ZK-5441: Provide a better way to override za11y module
 
 * Bugs
   ZK-5089: AfterSizeEvent doesn't return a correct size of a Window component
