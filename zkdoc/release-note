@@ -47,6 +47,7 @@ ZK 10.0.0
   ZK-5468: Components with Model only renders one item with wrong result if the EL contains forEachStatus.index
   ZK-5490: Grid's [aria-*] attributes do not match their roles
   ZK-5525: Checkbox tristate [aria-checked] attribute missing "mixed" state
+  ZK-5235: Opening a menupopup moves a scrollbar of a long menu back to top
 
 
 * Upgrade Notes
@@ -64,6 +65,7 @@ ZK 10.0.0
   by a timer per session if the setting is enabled. (By default, it's enabled with 1 hour)
   To disable the cleaner timer per session, you can specify -1 to the desktop timeout
   value to disable the mechanism.
+  + Revert ZK-5026 which the original bug cannot be reproduced to fix ZK-5235.
 
    --------
 ZK 9.6.4

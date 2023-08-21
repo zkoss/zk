@@ -564,10 +564,6 @@ export class Menupopup extends zul.wgt.Popup {
 
 	/** @internal */
 	addActive_(wgt: zk.Widget): void {
-		// ZK-5026
-		if (zk.currentFocus != this) {
-			this.getAnchor_()?.focus();
-		}
 		this._curIndex = _indexOfVisibleMenu(this, wgt);
 	}
 
