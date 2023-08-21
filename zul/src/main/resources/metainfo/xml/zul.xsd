@@ -172,20 +172,6 @@
 			</xs:simpleType>
 		</xs:union>
 	</xs:simpleType>
-	<xs:simpleType name="flashWmodeAttrType">
-		<xs:union>
-			<xs:simpleType>
-				<xs:restriction base="xs:string">
-					<xs:enumeration value="transparent" />
-					<xs:enumeration value="opaque" />
-					<xs:enumeration value="window" />
-				</xs:restriction>
-			</xs:simpleType>
-			<xs:simpleType>
-				<xs:restriction base="annotationType" />
-			</xs:simpleType>
-		</xs:union>
-	</xs:simpleType>
 	<xs:simpleType name="gridAlignAttrType">
 		<xs:union>
 			<xs:simpleType>
@@ -735,10 +721,7 @@
 			<xs:element ref="dropupload"/>
 			<xs:element ref="fckeditor" />
 			<xs:element ref="fisheyebar" />
-			<xs:element ref="flash" />
-			<xs:element ref="flashchart" />
 			<xs:element ref="forEach" />
-			<xs:element ref="fusionchart" />
 			<xs:element ref="fragment" />
 			<xs:element ref="frozen" />
 			<xs:element ref="gmaps" />
@@ -853,10 +836,7 @@
 				<xs:element ref="dropupload"/>
 				<xs:element ref="fckeditor" />
 				<xs:element ref="fisheyebar" />
-				<xs:element ref="flash" />
-				<xs:element ref="flashchart" />
 				<xs:element ref="forEach" />
-				<xs:element ref="fusionchart" />
 				<xs:element ref="fragment" />
 				<xs:element ref="frozen" />
 				<xs:element ref="gmaps" />
@@ -984,20 +964,6 @@
 		<xs:attribute name="name" type="xs:string" use="optional" />
 		<xs:attribute name="positionFixed" type="booleanType" use="optional" />
 		<xs:attributeGroup ref="xulElementAttrGroup" />
-	</xs:complexType>
-	<!-- applet -->
-	<xs:element name="applet" type="appletType" />
-	<xs:complexType name="appletType">
-		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-		<xs:attributeGroup ref="htmlBasedComponentAttrGroup" />
-		<xs:attribute name="code" type="xs:string" use="optional" />
-		<xs:attribute name="codebase" type="xs:string" use="optional" />
-		<xs:attribute name="archive" type="xs:string" use="optional" />
-		<xs:attribute name="align" type="xs:string" use="optional" />
-		<xs:attribute name="hspace" type="xs:string" use="optional" />
-		<xs:attribute name="vspace" type="xs:string" use="optional" />
-		<xs:attribute name="mayscript" type="xs:string" use="optional" />
-		<xs:attribute name="params" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- area -->
 	<xs:element name="area" type="areaType" />
@@ -1857,53 +1823,6 @@
 		<xs:attribute name="labelEdge" type="xs:string" use="optional" />
 		<xs:attribute name="onChildAdded" type="xs:string" use="optional" />
 		<xs:attribute name="onChildRemoved" type="xs:string" use="optional" />
-	</xs:complexType>
-
-	<!-- flash -->
-	<xs:element name="flash" type="flashType" />
-	<xs:complexType name="flashType">
-		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-		<xs:attributeGroup ref="htmlBasedComponentAttrGroup" />
-		<xs:attribute name="bgcolor" type="xs:string" use="optional" />
-		<xs:attribute name="loop" type="booleanType" use="optional" />
-		<xs:attribute name="autoplay" type="booleanType" use="optional" />
-		<xs:attribute name="wmode" type="flashWmodeAttrType" use="optional" />
-		<xs:attribute name="src" type="xs:string" use="optional" />
-		<xs:attribute name="content" type="mediaType" use="optional" />
-	</xs:complexType>
-
-	<!-- flashchart -->
-	<xs:element name="flashchart" type="flashchartType" />
-	<xs:complexType name="flashchartType">
-		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-		<xs:attributeGroup ref="htmlBasedComponentAttrGroup" />
-		<xs:attribute name="type" type="xs:string" use="required" />
-		<xs:attribute name="model" type="xs:string" use="optional" />
-		<xs:attribute name="xAxis" type="xs:string" use="optional" />
-		<xs:attribute name="yAxis" type="xs:string" use="optional" />
-		<xs:attribute name="chartStyle" type="xs:string" use="optional" />
-	</xs:complexType>
-
-	<!-- fusionchart -->
-	<xs:element name="fusionchart" type="fusionchartType" />
-	<xs:complexType name="fusionchartType">
-		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-		<xs:attributeGroup ref="htmlBasedComponentAttrGroup" />
-		<xs:attribute name="type" type="xs:string" use="required" />
-		<xs:attribute name="model" type="xs:string" use="optional" />
-		<xs:attribute name="tableModel" type="xs:string" use="optional" />
-		<xs:attribute name="chartConfig" type="xs:string" use="optional" />
-		<xs:attribute name="tableRenderer" type="xs:string" use="optional" />
-		<xs:attribute name="engine" type="xs:string" use="optional" />
-		<xs:attribute name="dataXMLPath" type="xs:string" use="optional" />
-		<xs:attribute name="title" type="xs:string" use="optional" />
-		<xs:attribute name="subTitle" type="xs:string" use="optional" />
-		<xs:attribute name="xAxis" type="xs:string" use="optional" />
-		<xs:attribute name="yAxis" type="xs:string" use="optional" />
-		<xs:attribute name="threeD" type="booleanType" use="optional" />
-		<xs:attribute name="showLegend" type="booleanType" use="optional" />
-		<xs:attribute name="orient" type="orientAttrType" use="optional" />
-		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
 
 	<!-- foot -->

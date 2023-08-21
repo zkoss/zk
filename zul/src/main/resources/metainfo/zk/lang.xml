@@ -251,15 +251,6 @@ def alert(m):
 		</mold>
 	</component>
 	<component>
-		<component-name>applet</component-name>
-		<component-class>org.zkoss.zul.Applet</component-class>
-		<widget-class>zul.med.Applet</widget-class>
-		<mold>
-			<mold-name>default</mold-name>
-			<mold-uri>mold/applet.js</mold-uri>
-		</mold>
-	</component>
-	<component>
 		<component-name>area</component-name>
 		<component-class>org.zkoss.zul.Area</component-class>
 		<widget-class>zul.wgt.Area</widget-class>
@@ -589,15 +580,6 @@ def alert(m):
 		<extends>button</extends>
 		<component-class>org.zkoss.zul.Fileupload</component-class>
 		<widget-class>zul.wgt.Fileupload</widget-class>
-	</component>
-	<component>
-		<component-name>flash</component-name>
-		<component-class>org.zkoss.zul.Flash</component-class>
-		<widget-class>zul.med.Flash</widget-class>
-		<mold>
-			<mold-name>default</mold-name>
-			<mold-uri>mold/flash.js</mold-uri>
-		</mold>
 	</component>
 	<component>
 		<component-name>foot</component-name>

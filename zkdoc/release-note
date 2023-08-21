@@ -15,6 +15,7 @@ ZK 10.0.0
   ZK-5469: Make cloudMode true by default for ZK Stateless
   ZK-5441: Provide a better way to override za11y module
   ZK-5532: Remove all unsupported HTML tags in ZK 10 ZHTML
+  ZK-5531: Remove Applet, Flash, and FusionChart components in ZK 10
 
 * Bugs
   ZK-5089: AfterSizeEvent doesn't return a correct size of a Window component
