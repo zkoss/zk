@@ -340,7 +340,7 @@ task cleanJsdoc(type: Delete) {
 
 clean {
 	// also clean cml
-	if (gradle.includedBuilds.find {it.name == 'zkcml'} != null) {
+	if (!project.hasProperty("cleanZKOnly") && gradle.includedBuilds.find {it.name == 'zkcml'} != null) {
 		dependsOn(gradle.includedBuild('zkcml').task(':clean'))
 		zkcmlprojects.each { prjName, dir ->
 			dependsOn(gradle.includedBuild('zkcml').task(":$prjName:clean"))
