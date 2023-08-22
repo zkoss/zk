@@ -14,6 +14,7 @@ ZK 10.0.0
   ZK-5213: Improve accessibility by add tooltips on icons
   ZK-5469: Make cloudMode true by default for ZK Stateless
   ZK-5441: Provide a better way to override za11y module
+  ZK-5532: Remove all unsupported HTML tags in ZK 10 ZHTML
 
 * Bugs
   ZK-5089: AfterSizeEvent doesn't return a correct size of a Window component
@@ -65,6 +66,7 @@ ZK 10.0.0
   by a timer per session if the setting is enabled. (By default, it's enabled with 1 hour)
   To disable the cleaner timer per session, you can specify -1 to the desktop timeout
   value to disable the mechanism.
+  + Remove Acronym, Big, Center, Dir, Font, isindex, Nobr, Param, Rtc, and Tt in ZHTML module
 
    --------
 ZK 9.6.4
