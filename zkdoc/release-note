@@ -68,6 +68,7 @@ ZK 10.0.0
   To disable the cleaner timer per session, you can specify -1 to the desktop timeout
   value to disable the mechanism.
   + Remove Acronym, Big, Center, Dir, Font, isindex, Nobr, Param, Rtc, and Tt in ZHTML module
+  + Remove Applet, Flash, and FusionChart components since ZK 10.0.0
 
    --------
 ZK 9.6.4
