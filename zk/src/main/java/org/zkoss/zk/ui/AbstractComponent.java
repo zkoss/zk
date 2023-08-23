@@ -498,7 +498,7 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 		if (_page != null) {
 			if (bRoot)
 				((AbstractPage) _page).removeRoot(this);
-			if (page == null && ((DesktopCtrl) _page.getDesktop()).removeComponent(this, true)
+			if (page == null && ((DesktopCtrl) _page.getDesktop()).removeComponent(this)
 					&& !(this instanceof StubComponent)) //Bug ZK-1452: don't need to reset StubComponent's uuid
 				resetUuid = true; //recycled (so reset it -- refer to DesktopImpl for reason)
 		}
@@ -574,7 +574,7 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 				if (_page != null) {
 					//called before uuid is changed
 					final Desktop dt = _page.getDesktop();
-					((DesktopCtrl) dt).removeComponent(this, false);
+					((DesktopCtrl) dt).removeComponent(this);
 
 					if (newUuid.length() == 0)
 						newUuid = nextUuid(dt);
@@ -1552,8 +1552,7 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 	private static void childrenMerged(DesktopCtrl desktopCtrl, ChildInfo chdinf) {
 		if (chdinf != null)
 			for (AbstractComponent p = chdinf.first; p != null; p = p._next) {
-				desktopCtrl.removeComponent(p, false);
-				//don't recycle it (since the client might hold them)
+				desktopCtrl.removeComponent(p);
 				childrenMerged(desktopCtrl, p._chdinf);
 			}
 	}

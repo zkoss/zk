@@ -83,11 +83,9 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.HistoryPopStateEvent;
 import org.zkoss.zk.ui.event.ScriptErrorEvent;
 import org.zkoss.zk.ui.event.VisibilityChangeEvent;
-import org.zkoss.zk.ui.ext.RawId;
 import org.zkoss.zk.ui.ext.ScopeListener;
 import org.zkoss.zk.ui.ext.render.DynamicMedia;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
-import org.zkoss.zk.ui.sys.Attributes;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.ui.sys.DesktopCache;
@@ -102,7 +100,6 @@ import org.zkoss.zk.ui.sys.Scheduler;
 import org.zkoss.zk.ui.sys.ServerPush;
 import org.zkoss.zk.ui.sys.SessionCtrl;
 import org.zkoss.zk.ui.sys.Storage;
-import org.zkoss.zk.ui.sys.StubComponent;
 import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.sys.Visualizer;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
@@ -225,9 +222,6 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	private transient Visualizer _uv;
 	private transient Object _uvLock;
 	private final Lock _storageLock = new ReentrantLock(); // since ZK 8.0.0
-	/** List<RecycleInfo>: used to recycle detached component's UUID. */
-	private transient List<RecycleInfo> _uuidRecycle;
-
 	private transient ReqResult _lastRes;
 	private transient List<AuResponse> _piggyRes;
 	/** A set of keys that shall be generated to the client only once per desktop. */
@@ -681,32 +675,9 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			}*/
 	}
 
-	public boolean removeComponent(Component comp, boolean recycleAllowed) {
+	public boolean removeComponent(Component comp) {
 		final String uuid = comp.getUuid();
-		if (_comps.remove(uuid) == null || !recycleAllowed || recycleUuidDisabled() || (comp instanceof StubComponent)) //Bug ZK-1452: don't need to recycle StubComponent's uuid since it's never reset
-			return false; //not recycled
-
-		//Bug 3002611: don't recycle UUID if RawId, since addUuidChanged will
-		//cause AuRemove to be sent
-		if (comp instanceof RawId
-				&& (!ComponentsCtrl.isAutoUuid(uuid) || ((WebAppCtrl) _wapp).getIdGenerator() != null))
-			return false; //not recycled
-
-		final int execId = getExecId();
-		RecycleInfo ri = null;
-		if (_uuidRecycle == null) {
-			_uuidRecycle = new LinkedList<RecycleInfo>();
-		} else {
-			for (RecycleInfo r : _uuidRecycle)
-				if (r.execId == execId) {
-					ri = r; //found
-					break;
-				}
-		}
-		if (ri == null)
-			_uuidRecycle.add(ri = new RecycleInfo(execId));
-		ri.uuids.add(uuid);
-		return true; //recycled
+		return _comps.remove(uuid) != null;
 	}
 
 	public Component mapComponent(String uuid, Component comp) {
@@ -720,20 +691,6 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		final Execution exec = Executions.getCurrent();
 		return exec != null ? System.identityHashCode(exec) : 0;
 	}
-
-	private static boolean recycleUuidDisabled() {
-		if (_recycleUuidDisabled == null) {
-			_recycleUuidDisabled = Boolean.valueOf("true".equals(Library.getProperty(Attributes.UUID_RECYCLE_DISABLED, "true")));
-			if (!_recycleUuidDisabled) {
-				log.warn(
-						"UUID recycle is enabled and it's better to disable it by specifying a library property 'org.zkoss.zk.ui.uuidRecycle.disabled' with true to prevent"
-								+ " some unwanted widget uuid reusing at client side accidentally.");
-			}
-		}
-		return _recycleUuidDisabled.booleanValue();
-	}
-
-	private static Boolean _recycleUuidDisabled;
 
 	public Map<String, Object> getAttributes() {
 		return _attrs.getAttributes();
@@ -923,21 +880,6 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	}
 
 	public String getNextUuid(Component comp) {
-		//The reason to recycle UUID is to keep it short (since _nextUuid won't grow too fast)
-		//Thus, it takes fewer memory at the client
-		if (_uuidRecycle != null && !_uuidRecycle.isEmpty()) {
-			final int execId = getExecId();
-			for (Iterator<RecycleInfo> it = _uuidRecycle.iterator(); it.hasNext();) {
-				final RecycleInfo ri = it.next();
-				if (ri.execId != execId) { //reuse if different
-					final String uuid = ri.uuids.remove(0);
-					if (ri.uuids.isEmpty())
-						it.remove();
-					return uuid;
-				}
-			}
-		}
-
 		final IdGenerator idgen = ((WebAppCtrl) _wapp).getIdGenerator();
 		String uuid = null;
 		if (idgen != null) {
@@ -998,7 +940,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	private void removeComponents(Collection<Component> comps) {
 		for (Component comp : comps) {
 			removeComponents(comp.getChildren()); //recursive
-			removeComponent(comp, true);
+			removeComponent(comp);
 		}
 	}
 
