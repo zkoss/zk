@@ -17,12 +17,12 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.chrome.ChromeOptions;
 
-import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.DockerWebDriverTestCase;
 
 /**
  * @author rudyhuang
  */
-public class B50_3003756Test extends WebDriverTestCase {
+public class B50_3003756Test extends DockerWebDriverTestCase {
 	private ThreadLocal<String> acceptLang = new ThreadLocal<>();
 
 	@Override
