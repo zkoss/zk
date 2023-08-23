@@ -133,4 +133,58 @@ public class Link extends AbstractTag {
 	public void setType(String type) throws WrongValueException {
 		setDynamicProperty("type", type);
 	}
+
+	/**
+	 * Returns the imagesizes of this tag.
+	 *
+	 * @since 10.0.0
+	 */
+	public String getImagesizes() {
+		return (String) getDynamicProperty("imagesizes");
+	}
+
+	/**
+	 * Sets the imagesizes of this tag.
+	 *
+	 * @since 10.0.0
+	 */
+	public void setImagesizes(String imagesizes) throws WrongValueException {
+		setDynamicProperty("imagesizes", imagesizes);
+	}
+
+	/**
+	 * Returns the imagesrcset of this tag.
+	 *
+	 * @since 10.0.0
+	 */
+	public String getImagesrcset() {
+		return (String) getDynamicProperty("imagesrcset");
+	}
+
+	/**
+	 * Sets the imagesrcset of this tag.
+	 *
+	 * @since 10.0.0
+	 */
+	public void setImagesrcset(String imagesrcset) throws WrongValueException {
+		setDynamicProperty("imagesrcset", imagesrcset);
+	}
+
+	/**
+	 * Returns the integrity of this tag.
+	 *
+	 * @since 10.0.0
+	 */
+	public String getIntegrity() {
+		return (String) getDynamicProperty("integrity");
+	}
+
+	/**
+	 * Sets the integrity of this tag.
+	 *
+	 * @since 10.0.0
+	 */
+	public void setIntegrity(String integrity) throws WrongValueException {
+		setDynamicProperty("integrity", integrity);
+	}
 }

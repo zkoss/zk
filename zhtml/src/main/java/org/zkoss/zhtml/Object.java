@@ -138,4 +138,22 @@ public class Object extends AbstractTag {
 	public void setWidth(String width) throws WrongValueException {
 		setDynamicProperty("width", width);
 	}
+
+	/**
+	 * Returns the form of this tag.
+	 *
+	 * @since 10.0.0
+	 */
+	public String getForm() {
+		return (String) getDynamicProperty("form");
+	}
+
+	/**
+	 * Sets the form of this tag.
+	 *
+	 * @since 10.0.0
+	 */
+	public void setForm(String form) throws WrongValueException {
+		setDynamicProperty("form", form);
+	}
 }

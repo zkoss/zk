@@ -97,6 +97,7 @@ public class Area extends AbstractTag {
 	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
 	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.0.3
+	 * @deprecated Not supported in HTML5.
 	 */
 	public String getHreflang() {
 		return (String) getDynamicProperty("hreflang");
@@ -107,6 +108,7 @@ public class Area extends AbstractTag {
 	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
 	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.0.3
+	 * @deprecated Not supported in HTML5.
 	 */
 	public void setHreflang(String hreflang) throws WrongValueException {
 		setDynamicProperty("hreflang", hreflang);
@@ -184,6 +186,7 @@ public class Area extends AbstractTag {
 	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
 	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.0.3
+	 * @deprecated Not supported in HTML5.
 	 */
 	public String getType() {
 		return (String) getDynamicProperty("type");
@@ -194,8 +197,62 @@ public class Area extends AbstractTag {
 	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
 	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.0.3
+	 * @deprecated Not supported in HTML5.
 	 */
 	public void setType(String type) throws WrongValueException {
 		setDynamicProperty("type", type);
+	}
+
+
+	/**
+	 * Returns the ping of this a tag.
+	 * @since 10.0.0
+	 */
+	public String getPing() {
+		return (String) getDynamicProperty("ping");
+	}
+
+	/**
+	 * Sets the ping of this a tag as a space-separated list of URLs.
+	 * When the link is followed, the browser will send {@code POST} requests with the body
+	 * {@code PING} to the URLs. Typically, it's for tracking.
+	 * @since 10.0.0
+	 */
+	public void setPing(String ping) throws WrongValueException {
+		setDynamicProperty("ping", ping);
+	}
+
+	/**
+	 * Returns the referrerpolicy of this a tag.
+	 * @since 10.0.0
+	 */
+	public String getReferrerpolicy() {
+		return (String) getDynamicProperty("referrerpolicy");
+	}
+
+	/**
+	 * Sets the referrerpolicy of this a tag.
+	 * <p>How much of the {@code referrer} to send when following the link.
+	 * <ul>
+	 * <li>{@code no-referrer}: The Referer header will not be sent.</li>
+	 * <li>{@code no-referrer-when-downgrade}: The Referer header will not be sent to origins without TLS (HTTPS).</li>
+	 * <li>{@code origin}: The sent referrer will be limited to the origin of the referring page: its scheme, host, and port.</li>
+	 * <li>{@code origin-when-cross-origin}: The referrer sent to other origins will be limited to the scheme, the host, and the port. Navigations on the same origin will still include the path.</li>
+	 * <li>{@code same-origin}: A referrer will be sent for same origin, but cross-origin requests will contain no referrer information.</li>
+	 * <li>{@code strict-origin}: Only send the origin of the document as the referrer when the protocol security level stays the same (HTTPS→HTTPS), but don't send it to a less secure destination (HTTPS→HTTP).</li>
+	 * <li>{@code strict-origin-when-cross-origin} (default): Send a full URL when performing a same-origin request, only send the origin when the protocol security level stays the same (HTTPS→HTTPS), and send no header to a less secure destination (HTTPS→HTTP).</li>
+	 * <li>{@code unsafe-url}: The referrer will include the origin and the path (but not the fragment, password, or username). This value is unsafe, because it leaks origins and paths from TLS-protected resources to insecure origins.</li>
+	 * </ul>
+	 * @since 10.0.0
+	 */
+	public void setReferrerpolicy(String referrerpolicy) throws WrongValueException {
+		setDynamicProperty("referrerpolicy", referrerpolicy);
+	}
+
+	/**
+	 * @deprecated Not supported in HTML5.
+	 */
+	public void setTabindex(Integer tabindex) throws WrongValueException {
+		super.setTabindex(tabindex);
 	}
 }

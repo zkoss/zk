@@ -157,4 +157,24 @@ public class Form extends AbstractTag {
 	public void setTarget(String target) throws WrongValueException {
 		setDynamicProperty("target", target);
 	}
+
+	/**
+	 * Returns the rel of this tag.
+	 *
+	 * @since 10.0.0
+	 */
+	public String getRel() {
+		return (String) getDynamicProperty("rel");
+	}
+
+	/**
+	 * Sets the rel of this tag.
+	 * <p>Controls the annotations and what kinds of links the form creates.
+	 * <p>Annotations include {@code external}, {@code nofollow}, {@code opener},
+	 * {@code noopener}, and {@code noreferrer}
+	 * @since 10.0.0
+	 */
+	public void setRel(String rel) throws WrongValueException {
+		setDynamicProperty("rel", rel);
+	}
 }

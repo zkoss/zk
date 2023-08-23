@@ -112,4 +112,95 @@ public class Script extends org.zkoss.zhtml.impl.ContentTag {
 	public void setType(String type) throws WrongValueException {
 		setDynamicProperty("type", type);
 	}
+
+	/**
+	 * Returns the crossorigin of this tag.
+	 *
+	 * @since 10.0.0
+	 */
+	public String getCrossorigin() {
+		return (String) getDynamicProperty("crossorigin");
+	}
+
+	/**
+	 * Sets the crossorigin of this tag.
+	 *
+	 * @since 10.0.0
+	 */
+	public void setCrossorigin(String crossorigin) throws WrongValueException {
+		setDynamicProperty("crossorigin", crossorigin);
+	}
+
+	/**
+	 * Returns the integrity of this tag.
+	 *
+	 * @since 10.0.0
+	 */
+	public String getIntegrity() {
+		return (String) getDynamicProperty("integrity");
+	}
+
+	/**
+	 * Sets the integrity of this tag.
+	 *
+	 * @since 10.0.0
+	 */
+	public void setIntegrity(String integrity) throws WrongValueException {
+		setDynamicProperty("integrity", integrity);
+	}
+
+	/**
+	 * Returns the nomodule of this tag.
+	 *
+	 * @since 10.0.0
+	 */
+	public boolean isNomodule() {
+		Boolean nomodule = (Boolean) getDynamicProperty("nomodule");
+		return nomodule != null && nomodule;
+	}
+
+	/**
+	 * Sets the nomodule of this tag.
+	 *
+	 * @since 10.0.0
+	 */
+	public void setNomodule(Boolean nomodule) throws WrongValueException {
+		setDynamicProperty("nomodule", nomodule);
+	}
+
+	/**
+	 * Returns the referrerpolicy of this tag.
+	 *
+	 * @since 10.0.0
+	 */
+	public String getReferrerpolicy() {
+		return (String) getDynamicProperty("referrerpolicy");
+	}
+
+	/**
+	 * Sets the referrerpolicy of this tag.
+	 *
+	 * @since 10.0.0
+	 */
+	public void setReferrerpolicy(String referrerpolicy) throws WrongValueException {
+		setDynamicProperty("referrerpolicy", referrerpolicy);
+	}
+
+	/**
+	 * Returns the nonce of this tag.
+	 *
+	 * @since 10.0.0
+	 */
+	public String getNonce() {
+		return (String) getDynamicProperty("nonce");
+	}
+
+	/**
+	 * Sets the nonce of this tag.
+	 *
+	 * @since 10.0.0
+	 */
+	public void setNonce(String nonce) throws WrongValueException {
+		setDynamicProperty("nonce", nonce);
+	}
 }

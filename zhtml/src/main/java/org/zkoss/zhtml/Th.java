@@ -88,4 +88,22 @@ public class Th extends AbstractTag {
 	public void setScope(String scope) throws WrongValueException {
 		setDynamicProperty("scope", scope);
 	}
+
+	/**
+	 * Returns the abbr of this tag.
+	 *
+	 * @since 10.0.0
+	 */
+	public String getAbbr() {
+		return (String) getDynamicProperty("abbr");
+	}
+
+	/**
+	 * Sets the abbr of this tag.
+	 *
+	 * @since 10.0.0
+	 */
+	public void setAbbr(String abbr) throws WrongValueException {
+		setDynamicProperty("abbr", abbr);
+	}
 }

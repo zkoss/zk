@@ -17,6 +17,7 @@ ZK 10.0.0
   ZK-5532: Remove all unsupported HTML tags in ZK 10 ZHTML
   ZK-5531: Remove Applet, Flash, and FusionChart components in ZK 10
   ZK-5466: include Guava instead of closure-compiler
+  ZK-5533: Add all new HTML5 tags in ZK 10 ZHTML
 
 * Bugs
   ZK-5089: AfterSizeEvent doesn't return a correct size of a Window component
