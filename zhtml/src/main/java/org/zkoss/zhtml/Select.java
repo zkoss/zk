@@ -137,6 +137,24 @@ public class Select extends AbstractTag {
 		setDynamicProperty("size", size);
 	}
 
+	/**
+	 * Returns the form of this tag.
+	 *
+	 * @since 10.0.0
+	 */
+	public String getForm() {
+		return (String) getDynamicProperty("form");
+	}
+
+	/**
+	 * Sets the form of this tag.
+	 *
+	 * @since 10.0.0
+	 */
+	public void setForm(String form) throws WrongValueException {
+		setDynamicProperty("form", form);
+	}
+
 	// -- Component --//
 	/**
 	 * Returns the widget class, "zhtml.Input".

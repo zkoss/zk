@@ -35,8 +35,9 @@ public class Video extends AbstractTag {
 	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.5.1
 	*/
-	public boolean getAutoplay() {
-		return (Boolean) getDynamicProperty("autoplay");
+	public boolean isAutoplay() {
+		Boolean autoplay = (Boolean) getDynamicProperty("autoplay");
+		return autoplay != null && autoplay;
 	}
 
 	/**
@@ -115,8 +116,9 @@ public class Video extends AbstractTag {
 	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.5.1
 	 */
-	public boolean getLoop() {
-		return (Boolean) getDynamicProperty("loop");
+	public boolean isLoop() {
+		Boolean loop = (Boolean) getDynamicProperty("loop");
+		return loop != null && loop;
 	}
 
 	/**
@@ -135,8 +137,9 @@ public class Video extends AbstractTag {
 	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.5.1
 	 */
-	public boolean getMuted() {
-		return (Boolean) getDynamicProperty("muted");
+	public boolean isMuted() {
+		Boolean muted = (Boolean) getDynamicProperty("muted");
+		return muted != null && muted;
 	}
 
 	/**
@@ -235,8 +238,9 @@ public class Video extends AbstractTag {
 	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.5.1
 	 */
-	public boolean getPlaysinline() {
-		return (Boolean) getDynamicProperty("playsinline");
+	public boolean isPlaysinline() {
+		Boolean playsinline = (Boolean) getDynamicProperty("playsinline");
+		return playsinline != null && playsinline;
 	}
 
 	/**

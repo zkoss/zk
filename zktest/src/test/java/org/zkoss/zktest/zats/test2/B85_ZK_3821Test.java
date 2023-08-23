@@ -22,13 +22,13 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.chrome.ChromeOptions;
 
-import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.DockerWebDriverTestCase;
 
 /**
  * @author rudyhuang
  */
 @NotThreadSafe
-public class B85_ZK_3821Test extends WebDriverTestCase {
+public class B85_ZK_3821Test extends DockerWebDriverTestCase {
 	@Override
 	protected ChromeOptions getWebDriverOptions() {
 		return super.getWebDriverOptions()

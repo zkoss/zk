@@ -128,4 +128,40 @@ public class Source extends AbstractTag {
 	public void setType(String type) throws WrongValueException {
 		setDynamicProperty("type", type);
 	}
+
+	/**
+	 * Returns the height of this tag.
+	 *
+	 * @since 10.0.0
+	 */
+	public String getHeight() {
+		return (String) getDynamicProperty("height");
+	}
+
+	/**
+	 * Sets the height of this tag.
+	 *
+	 * @since 10.0.0
+	 */
+	public void setHeight(String height) throws WrongValueException {
+		setDynamicProperty("height", height);
+	}
+
+	/**
+	 * Returns the width of this tag.
+	 *
+	 * @since 10.0.0
+	 */
+	public String getWidth() {
+		return (String) getDynamicProperty("width");
+	}
+
+	/**
+	 * Sets the width of this tag.
+	 *
+	 * @since 10.0.0
+	 */
+	public void setWidth(String width) throws WrongValueException {
+		setDynamicProperty("width", width);
+	}
 }

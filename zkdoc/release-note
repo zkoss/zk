@@ -17,6 +17,8 @@ ZK 10.0.0
   ZK-5532: Remove all unsupported HTML tags in ZK 10 ZHTML
   ZK-5531: Remove Applet, Flash, and FusionChart components in ZK 10
   ZK-5466: include Guava instead of closure-compiler
+  ZK-5533: Add all new HTML5 tags in ZK 10 ZHTML
+  ZK-5049: Deprecate org.zkoss.zk.ui.uuidRecycle.disabled in ZK10
   ZK-5437: Upgrade WCAG with the lighthouse 10.x detection tools
 
 * Bugs
@@ -71,6 +73,7 @@ ZK 10.0.0
   value to disable the mechanism.
   + Remove Acronym, Big, Center, Dir, Font, isindex, Nobr, Param, Rtc, and Tt in ZHTML module
   + Remove Applet, Flash, and FusionChart components since ZK 10.0.0
+  + Deprecated org.zkoss.zk.ui.uuidRecycle.disabled since ZK 10.0.0
 
    --------
 ZK 9.6.4

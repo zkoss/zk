@@ -65,6 +65,7 @@ public class Style extends org.zkoss.zhtml.impl.ContentTag {
 	/**
 	 * Returns the type of this style tag.
 	 * @since 8.0.3
+	 * @deprecated Not supported in HTML5
 	 */
 	public String getType() {
 		return (String) getDynamicProperty("type");
@@ -73,6 +74,7 @@ public class Style extends org.zkoss.zhtml.impl.ContentTag {
 	/**
 	 * Sets the type of this style tag.
 	 * @since 8.0.3
+	 * @deprecated Not supported in HTML5
 	 */
 	public void setType(String type) throws WrongValueException {
 		setDynamicProperty("type", type);

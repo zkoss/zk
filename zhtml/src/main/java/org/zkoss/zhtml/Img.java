@@ -94,6 +94,7 @@ public class Img extends AbstractTag {
 	/**
 	 * Returns the longdesc of this img tag.
 	 * @since 8.0.3
+	 * @deprecated Not supported in HTML5
 	 */
 	public String getLongdesc() {
 		return (String) getDynamicProperty("longdesc");
@@ -102,6 +103,7 @@ public class Img extends AbstractTag {
 	/**
 	 * Sets the longdesc of this img tag.
 	 * @since 8.0.3
+	 * @deprecated Not supported in HTML5
 	 */
 	public void setLongdesc(String longdesc) throws WrongValueException {
 		setDynamicProperty("longdesc", longdesc);
@@ -150,5 +152,95 @@ public class Img extends AbstractTag {
 	 */
 	public void setWidth(String width) throws WrongValueException {
 		setDynamicProperty("width", width);
+	}
+
+	/**
+	 * Returns the decoding of this tag.
+	 *
+	 * @since 10.0.0
+	 */
+	public String getDecoding() {
+		return (String) getDynamicProperty("decoding");
+	}
+
+	/**
+	 * Sets the decoding of this tag.
+	 *
+	 * @since 10.0.0
+	 */
+	public void setDecoding(String decoding) throws WrongValueException {
+		setDynamicProperty("decoding", decoding);
+	}
+
+	/**
+	 * Returns the loading of this tag.
+	 *
+	 * @since 10.0.0
+	 */
+	public String getLoading() {
+		return (String) getDynamicProperty("loading");
+	}
+
+	/**
+	 * Sets the loading of this tag.
+	 *
+	 * @since 10.0.0
+	 */
+	public void setLoading(String loading) throws WrongValueException {
+		setDynamicProperty("loading", loading);
+	}
+
+	/**
+	 * Returns the referrerpolicy of this tag.
+	 *
+	 * @since 10.0.0
+	 */
+	public String getReferrerpolicy() {
+		return (String) getDynamicProperty("referrerpolicy");
+	}
+
+	/**
+	 * Sets the referrerpolicy of this tag.
+	 *
+	 * @since 10.0.0
+	 */
+	public void setReferrerpolicy(String referrerpolicy) throws WrongValueException {
+		setDynamicProperty("referrerpolicy", referrerpolicy);
+	}
+
+	/**
+	 * Returns the sizes of this tag.
+	 *
+	 * @since 10.0.0
+	 */
+	public String getSizes() {
+		return (String) getDynamicProperty("sizes");
+	}
+
+	/**
+	 * Sets the sizes of this tag.
+	 *
+	 * @since 10.0.0
+	 */
+	public void setSizes(String sizes) throws WrongValueException {
+		setDynamicProperty("sizes", sizes);
+	}
+
+	/**
+	 * Returns the srcset of this tag.
+	 *
+	 * @since 10.0.0
+	 */
+	public String getSrcset() {
+		return (String) getDynamicProperty("srcset");
+	}
+
+	/**
+	 * Sets the srcset of this tag.
+	 *
+	 * @since 10.0.0
+	 */
+	public void setSrcset(String srcset) throws WrongValueException {
+		setDynamicProperty("srcset", srcset);
 	}
 }
