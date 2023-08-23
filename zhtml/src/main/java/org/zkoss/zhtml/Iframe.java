@@ -126,4 +126,76 @@ public class Iframe extends AbstractTag {
 	public void setWidth(String width) throws WrongValueException {
 		setDynamicProperty("width", width);
 	}
+
+	/**
+	 * Returns the allow of this tag.
+	 *
+	 * @since 10.0.0
+	 */
+	public String getAllow() {
+		return (String) getDynamicProperty("allow");
+	}
+
+	/**
+	 * Sets the allow of this tag.
+	 *
+	 * @since 10.0.0
+	 */
+	public void setAllow(String allow) throws WrongValueException {
+		setDynamicProperty("allow", allow);
+	}
+
+	/**
+	 * Returns the allowfullscreen of this tag.
+	 *
+	 * @since 10.0.0
+	 */
+	public String getAllowfullscreen() {
+		return (String) getDynamicProperty("allowfullscreen");
+	}
+
+	/**
+	 * Sets the allowfullscreen of this tag.
+	 *
+	 * @since 10.0.0
+	 */
+	public void setAllowfullscreen(String allowfullscreen) throws WrongValueException {
+		setDynamicProperty("allowfullscreen", allowfullscreen);
+	}
+
+	/**
+	 * Returns the loading of this tag.
+	 *
+	 * @since 10.0.0
+	 */
+	public String getLoading() {
+		return (String) getDynamicProperty("loading");
+	}
+
+	/**
+	 * Sets the loading of this tag.
+	 *
+	 * @since 10.0.0
+	 */
+	public void setLoading(String loading) throws WrongValueException {
+		setDynamicProperty("loading", loading);
+	}
+
+	/**
+	 * Returns the referrerpolicy of this tag.
+	 *
+	 * @since 10.0.0
+	 */
+	public String getReferrerpolicy() {
+		return (String) getDynamicProperty("referrerpolicy");
+	}
+
+	/**
+	 * Sets the referrerpolicy of this tag.
+	 *
+	 * @since 10.0.0
+	 */
+	public void setReferrerpolicy(String referrerpolicy) throws WrongValueException {
+		setDynamicProperty("referrerpolicy", referrerpolicy);
+	}
 }
