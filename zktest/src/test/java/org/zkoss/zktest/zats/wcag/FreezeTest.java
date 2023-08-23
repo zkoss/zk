@@ -14,7 +14,6 @@ package org.zkoss.zktest.zats.wcag;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-@Disabled("Needs aXe fix this issue, https://github.com/dequelabs/axe-core/issues/2720")
 public class FreezeTest extends WcagTestCase {
 	@Test
 	public void test() {
