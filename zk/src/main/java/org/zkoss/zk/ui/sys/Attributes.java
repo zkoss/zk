@@ -122,12 +122,6 @@ public class Attributes {
 	public static final String RENEW_NATIVE_SESSION = "org.zkoss.zk.ui.renewNativeSession";
 
 	//Library//
-	/** A library property to indicate whether UUID shall not be recycled.
-	 * <p>Default: false (i.e., not disabled).
-	 * @since 5.0.3
-	 */
-	public static final String UUID_RECYCLE_DISABLED = "org.zkoss.zk.ui.uuidRecycle.disabled";
-
 	/** A library property to specify the class used to patch the rendering
 	 * result of a portlet.
 	 * <p>Default: null (means no need of patch).

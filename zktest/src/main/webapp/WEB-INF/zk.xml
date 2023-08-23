@@ -150,14 +150,6 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	</library-property>
 	-->
 
-	<!-- Turn on the following if you want to turn off the recycle of UUID.
-		Thus, it is backward compatible with 5.0.2 and prior (no recycling).
-	<library-property>
-		<name>org.zkoss.zk.ui.uuidRecycle.disabled</name>
-		<value>true</value>
-	</library-property>
-	-->
-
 	<!-- Turn on if you want to use language addons. -->
 	<language-config>
 		<addon-uri>/WEB-INF/lang-addon.xml</addon-uri>
