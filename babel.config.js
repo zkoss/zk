@@ -18,8 +18,9 @@ module.exports = function (api) {
             '@babel/plugin-proposal-class-properties',
             '@babel/plugin-proposal-object-rest-spread',
         ],
-	    ignore: [
-		    /[\\/]ext[\\/]//* ignore 3rd-party library */
-	    ]
+	    overrides: [{
+		    test: /[\\/]ext[\\/]//* treat as script for 3rd-party library */,
+		    sourceType: 'script'
+        }]
     };
 };
