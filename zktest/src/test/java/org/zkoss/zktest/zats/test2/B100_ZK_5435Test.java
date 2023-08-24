@@ -32,7 +32,7 @@ public class B100_ZK_5435Test extends WebDriverTestCase {
 	public void testDesktopTimeout() {
 		connect();
 		waitResponse();
-		sleep(12000);
+		sleep(15000);
 		click(jq("@button"));
 		waitResponse();
 		assertTrue(hasError());
