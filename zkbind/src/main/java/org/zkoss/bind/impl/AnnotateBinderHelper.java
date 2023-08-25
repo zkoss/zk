@@ -31,6 +31,7 @@ import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.debugger.BindingAnnotationInfoChecker;
 import org.zkoss.lang.Strings;
 import org.zkoss.util.IllegalSyntaxException;
+import org.zkoss.zhtml.impl.AbstractTag;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.ShadowElement;
 import org.zkoss.zk.ui.metainfo.Annotation;
@@ -502,6 +503,9 @@ public class AnnotateBinderHelper {
 
 		Collection<Annotation> idannos = compCtrl.getAnnotations(FORM_ATTR, ID_ANNO);
 		if (idannos.size() == 0) {
+			if (comp instanceof AbstractTag) {
+				return; // ignore since HTML5 has "form" attribute.
+			}
 			throw new IllegalSyntaxException(
 					MiscUtil.formatLocationMessage("@id is not found for a form binding of " + comp, comp));
 		} else if (idannos.size() > 1) {

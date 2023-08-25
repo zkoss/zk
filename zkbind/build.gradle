@@ -14,6 +14,7 @@ idea {
 
 dependencies {
 	api project(':zul')
+	api project(':zhtml')
 	api "org.javassist:javassist:${javassistVersion}"
 	compileOnly "javax.servlet:servlet-api:${servletVersion}"
 	compileOnly 'javax.validation:validation-api:1.0.0.GA'
