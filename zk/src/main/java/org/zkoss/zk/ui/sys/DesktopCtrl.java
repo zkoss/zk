@@ -103,8 +103,8 @@ public interface DesktopCtrl {
 	/** Removes a component to this page.
 	 * <p>It is used internally and developers shall not invoke it
 	 * explicitly.
-	 * @return whether UUID is recycled. If true, the caller shall
-	 * reset UUID of the give component.
+	 * @return false always since 10.0.0 (Deprecated: <s>whether UUID is recycled. If true, the caller shall
+	 * reset UUID of the give component.)
 	 * @since 5.0.4
 	 */
 	public boolean removeComponent(Component comp);
