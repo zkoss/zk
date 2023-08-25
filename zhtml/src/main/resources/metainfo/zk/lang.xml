@@ -250,6 +250,22 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 				<attribute-value>load</attribute-value>
 			</attribute>
 		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>ping</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>referrerpolicy</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
 	</component>
 	<component>
 		<component-name>abbr</component-name>
@@ -557,6 +573,22 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<annotation>
 			<annotation-name>ZKBIND</annotation-name>
 			<property-name>type</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>ping</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>referrerpolicy</property-name>
 			<attribute>
 				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>load</attribute-value>
@@ -1528,6 +1560,54 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<annotation>
 			<annotation-name>ZKBIND</annotation-name>
 			<property-name>value</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>form</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>formaction</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>formenctype</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>formmethod</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>formnovalidate</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>formtarget</property-name>
 			<attribute>
 				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>load</attribute-value>
@@ -2529,6 +2609,92 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		</annotation>
 	</component>
 	<component>
+		<component-name>dialog</component-name>
+		<component-class>org.zkoss.zhtml.Dialog</component-class>
+		<!-- Global annotations -->
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>accesskey</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>contenteditable</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>dir</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>draggable</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>hidden</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>lang</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>spellcheck</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>tabindex</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>title</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<!-- Custom annotations -->
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>open</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+	</component>
+	<component>
 		<component-name>div</component-name>
 		<component-class>org.zkoss.zhtml.Div</component-class>
 		<!-- Global annotations -->
@@ -3039,6 +3205,14 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 				<attribute-value>load</attribute-value>
 			</attribute>
 		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>form</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
 	</component>
 	<component>
 		<component-name>figcaption</component-name>
@@ -3330,6 +3504,14 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<annotation>
 			<annotation-name>ZKBIND</annotation-name>
 			<property-name>target</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>rel</property-name>
 			<attribute>
 				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>load</attribute-value>
@@ -3645,6 +3827,160 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		</annotation>
 	</component>
 	<component>
+		<component-name>h5</component-name>
+		<component-class>org.zkoss.zhtml.H5</component-class>
+		<!-- Global annotations -->
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>accesskey</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>contenteditable</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>dir</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>draggable</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>hidden</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>lang</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>spellcheck</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>tabindex</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>title</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+	</component>
+	<component>
+		<component-name>h6</component-name>
+		<component-class>org.zkoss.zhtml.H6</component-class>
+		<!-- Global annotations -->
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>accesskey</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>contenteditable</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>dir</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>draggable</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>hidden</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>lang</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>spellcheck</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>tabindex</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>title</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+	</component>
+	<component>
 		<component-name>head</component-name>
 		<component-class>org.zkoss.zhtml.Head</component-class>
 		<!-- Global annotations -->
@@ -3724,6 +4060,83 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>header</component-name>
 		<component-class>org.zkoss.zhtml.Header</component-class>
+		<!-- Global annotations -->
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>accesskey</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>contenteditable</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>dir</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>draggable</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>hidden</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>lang</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>spellcheck</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>tabindex</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>title</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+	</component>
+	<component>
+		<component-name>hgroup</component-name>
+		<component-class>org.zkoss.zhtml.Hgroup</component-class>
 		<!-- Global annotations -->
 		<annotation>
 			<annotation-name>ZKBIND</annotation-name>
@@ -4171,6 +4584,38 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 				<attribute-value>load</attribute-value>
 			</attribute>
 		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>allow</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>allowfullscreen</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>loading</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>referrerpolicy</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
 	</component>
 	<component>
 		<component-name>img</component-name>
@@ -4308,6 +4753,46 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<annotation>
 			<annotation-name>ZKBIND</annotation-name>
 			<property-name>width</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>decoding</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>loading</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>referrerpolicy</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>sizes</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>srcset</property-name>
 			<attribute>
 				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>load</attribute-value>
@@ -4489,6 +4974,14 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		</annotation>
 		<annotation>
 			<annotation-name>ZKBIND</annotation-name>
+			<property-name>minlength</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
 			<property-name>multiple</property-name>
 			<attribute>
 				<attribute-name>ACCESS</attribute-name>
@@ -4578,6 +5071,54 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<annotation>
 			<annotation-name>ZKBIND</annotation-name>
 			<property-name>width</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>form</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>formaction</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>formenctype</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>formmethod</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>formnovalidate</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>formtarget</property-name>
 			<attribute>
 				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>load</attribute-value>
@@ -5164,6 +5705,30 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<annotation>
 			<annotation-name>ZKBIND</annotation-name>
 			<property-name>type</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>imagesizes</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>imagesrcset</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>integrity</property-name>
 			<attribute>
 				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>load</attribute-value>
@@ -5826,6 +6391,83 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		</annotation>
 	</component>
 	<component>
+		<component-name>noscript</component-name>
+		<component-class>org.zkoss.zhtml.Noscript</component-class>
+		<!-- Global annotations -->
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>accesskey</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>contenteditable</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>dir</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>draggable</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>hidden</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>lang</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>spellcheck</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>tabindex</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>title</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+	</component>
+	<component>
 		<component-name>object</component-name>
 		<component-class>org.zkoss.zhtml.Object</component-class>
 		<!-- Global annotations -->
@@ -5953,6 +6595,14 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<annotation>
 			<annotation-name>ZKBIND</annotation-name>
 			<property-name>width</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>form</property-name>
 			<attribute>
 				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>load</attribute-value>
@@ -6370,6 +7020,83 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>p</component-name>
 		<component-class>org.zkoss.zhtml.P</component-class>
+		<!-- Global annotations -->
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>accesskey</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>contenteditable</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>dir</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>draggable</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>hidden</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>lang</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>spellcheck</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>tabindex</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>title</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+	</component>
+	<component>
+		<component-name>picture</component-name>
+		<component-class>org.zkoss.zhtml.Picture</component-class>
 		<!-- Global annotations -->
 		<annotation>
 			<annotation-name>ZKBIND</annotation-name>
@@ -7208,6 +7935,46 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 				<attribute-value>load</attribute-value>
 			</attribute>
 		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>crossorigin</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>integrity</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>nomodule</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>referrerpolicy</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>nonce</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
 	</component>
 	<component>
 		<component-name>section</component-name>
@@ -7411,6 +8178,14 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 				<attribute-value>load</attribute-value>
 			</attribute>
 		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>form</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
         <annotation>
             <annotation-name>ZKBIND</annotation-name>
             <property-name>value</property-name>
@@ -7427,6 +8202,92 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
                 <attribute-value>java.lang.String</attribute-value>
             </attribute>
         </annotation>
+	</component>
+	<component>
+		<component-name>slot</component-name>
+		<component-class>org.zkoss.zhtml.Slot</component-class>
+		<!-- Global annotations -->
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>accesskey</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>contenteditable</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>dir</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>draggable</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>hidden</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>lang</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>spellcheck</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>tabindex</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>title</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<!-- Custom annotations -->
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>name</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
 	</component>
 	<component>
 		<component-name>small</component-name>
@@ -7617,6 +8478,22 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<annotation>
 			<annotation-name>ZKBIND</annotation-name>
 			<property-name>type</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>height</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>width</property-name>
 			<attribute>
 				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>load</attribute-value>
@@ -8786,6 +9663,14 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			</attribute>
 		</annotation>
 		<!-- Custom annotations -->
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>abbr</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>load</attribute-value>
+			</attribute>
+		</annotation>
 		<annotation>
 			<annotation-name>ZKBIND</annotation-name>
 			<property-name>colspan</property-name>
