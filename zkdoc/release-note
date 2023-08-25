@@ -20,6 +20,7 @@ ZK 10.0.0
   ZK-5533: Add all new HTML5 tags in ZK 10 ZHTML
   ZK-5049: Deprecate org.zkoss.zk.ui.uuidRecycle.disabled in ZK10
   ZK-5437: Upgrade WCAG with the lighthouse 10.x detection tools
+  ZK-5408: Enable InaccessibleWidgetBlockService by default
 
 * Bugs
   ZK-5089: AfterSizeEvent doesn't return a correct size of a Window component
@@ -76,6 +77,7 @@ ZK 10.0.0
   + Remove Applet, Flash, and FusionChart components since ZK 10.0.0
   + Deprecated org.zkoss.zk.ui.uuidRecycle.disabled since ZK 10.0.0
   + Revert ZK-5026 which the original bug cannot be reproduced to fix ZK-5235.
+  + Enable InaccessibleWidgetBlockService by default, to disable it, set library-property `org.zkoss.zkmax.au.IWBS.disable` to `true`.
 
    --------
 ZK 9.6.4
