@@ -677,7 +677,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 
 	public boolean removeComponent(Component comp) {
 		final String uuid = comp.getUuid();
-		return _comps.remove(uuid) != null;
+		_comps.remove(uuid);
+		return false; // always since 10.0.0 for ZK-5049: Deprecate org.zkoss.zk.ui.uuidRecycle.disable
 	}
 
 	public Component mapComponent(String uuid, Component comp) {
