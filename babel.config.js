@@ -5,18 +5,18 @@ module.exports = function (api) {
 
     return {
         presets: [
-            ['@babel/preset-env', {'modules': 'commonjs',
+            ['@babel/preset-env', {'modules': false,
 	            "exclude": ['@babel/plugin-transform-typeof-symbol']}],
+            '@babel/preset-typescript'
         ],
         plugins: [
-			['@babel/plugin-transform-modules-commonjs', {
-		        loose: true,
-		        strictMode: false,
+	        ['@babel/plugin-transform-typescript', {
+		        'allowDeclareFields': true
 	        }],
-	        ['@babel/plugin-transform-runtime', {'corejs': 3}],
 	        ["@babel/plugin-proposal-decorators", { "legacy": true }],
             '@babel/plugin-proposal-class-properties',
             '@babel/plugin-proposal-object-rest-spread',
+			'remove-import-export',
         ]
     };
 };
