@@ -494,13 +494,13 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 		//assert _parent == null || _parent.getPage() == page;
 		//detach
 		final boolean bRoot = _parent == null;
-		boolean resetUuid = false;
 		if (_page != null) {
 			if (bRoot)
 				((AbstractPage) _page).removeRoot(this);
 			if (page == null && ((DesktopCtrl) _page.getDesktop()).removeComponent(this)
-					&& !(this instanceof StubComponent)) //Bug ZK-1452: don't need to reset StubComponent's uuid
-				resetUuid = true; //recycled (so reset it -- refer to DesktopImpl for reason)
+					&& !(this instanceof StubComponent)) { //Bug ZK-1452: don't need to reset StubComponent's uuid
+				//	resetUuid = true; //recycled (so reset it -- refer to DesktopImpl for reason)
+			}
 		}
 
 		final Page oldpage = _page;
@@ -525,9 +525,6 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 		//process all children recursively
 		for (AbstractComponent p = (AbstractComponent) getFirstChild(); p != null; p = p._next)
 			p.setPage0(page); //recursive
-
-		if (resetUuid)
-			_uuid = null; //reset it after everything is done since some tool might depend on it
 	}
 
 	private String nextUuid(Desktop desktop) {

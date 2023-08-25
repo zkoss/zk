@@ -46,7 +46,7 @@
 		</x:nav>
 		<x:output name="result">60</x:output>
 		<x:object data="movie.swf" type="application/x-shockwave-flash">
-			<x:param name="foo" value="bar" />
+<!--			<x:param name="foo" value="bar" />-->
 		</x:object>
 		<x:progress value="70" max="100">70 %</x:progress>
 		<x:ruby>
