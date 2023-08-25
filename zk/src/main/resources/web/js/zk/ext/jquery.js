@@ -1963,7 +1963,7 @@ Expr = Sizzle.selectors = {
 						elem[zk.Widget._CURRENT_TARGET] = wgt;
 						return true;
 					} else if (wgtName == 'treerow') {
-						if (wgt.parent && wgt.parent.widgetName == tag) {
+						if (wgt.parent?.widgetName == tag) {
 							elem[zk.Widget._CURRENT_TARGET] = wgt.parent;
 							return true;
 						}

@@ -157,8 +157,7 @@ function typescript_build(src, dest, force, since) {
 	// overwrite (stream 4 explicitly ignores `*.js` in `gulp.src()`).
 	return mergeStream(
 		// Transpile single files with babel which are not siblings of some `index.ts`
-		// Only for JS files, because *.ts will be included by `index.ts`
-		gulp.src('/**/@(*.js)', { // stream 1
+		gulp.src('/**/@(*.ts|*.js)', { // stream 1
 			...defaultSrcOptions,
 			ignore: ['/**/*.d.ts'],
 		})
