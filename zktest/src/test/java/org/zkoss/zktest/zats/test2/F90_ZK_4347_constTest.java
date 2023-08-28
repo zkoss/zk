@@ -13,7 +13,10 @@ package org.zkoss.zktest.zats.test2;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 
+import org.zkoss.test.webdriver.ExternalZkXml;
+import org.zkoss.test.webdriver.ForkJVMTestOnly;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.Element;
 import org.zkoss.test.webdriver.ztl.Widget;
@@ -21,7 +24,13 @@ import org.zkoss.test.webdriver.ztl.Widget;
 /**
  * @author rudyhuang
  */
+@ForkJVMTestOnly
 public class F90_ZK_4347_constTest extends WebDriverTestCase {
+
+	// fix side effects of F100-ZK-5408, test case pass only when InaccessibleWidgetBlockService was disabled.
+	@RegisterExtension
+	public static final ExternalZkXml CONFIG = new ExternalZkXml("/test2/F100-ZK-5408-1-zk.xml");
+
 	@Test
 	public void testDateboxes() {
 		connect();

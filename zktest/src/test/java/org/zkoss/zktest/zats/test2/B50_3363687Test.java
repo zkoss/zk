@@ -16,10 +16,19 @@ import java.io.PrintStream;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 
+import org.zkoss.test.webdriver.ExternalZkXml;
+import org.zkoss.test.webdriver.ForkJVMTestOnly;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
+@ForkJVMTestOnly
 public class B50_3363687Test extends WebDriverTestCase {
+
+	// fix side effects of F100-ZK-5408, test case pass only when InaccessibleWidgetBlockService was disabled.
+	@RegisterExtension
+	public static final ExternalZkXml CONFIG = new ExternalZkXml("/test2/F100-ZK-5408-1-zk.xml");
+
 	@Test
 	public void test() {
 		connect();

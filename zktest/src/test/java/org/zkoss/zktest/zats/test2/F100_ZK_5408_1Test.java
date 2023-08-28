@@ -23,7 +23,6 @@ import org.zkoss.zktest.zats.ZATSTestCase;
 public class F100_ZK_5408_1Test extends ZATSTestCase {
 
     // Disable InaccessibleWidgetBlockService by set library-property `org.zkoss.zkmax.au.IWBS.disable` to `true`
-
     @RegisterExtension
     public static final ExternalZkXml CONFIG = new ExternalZkXml("/test2/F100-ZK-5408-1-zk.xml");
 
