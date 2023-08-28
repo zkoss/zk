@@ -3,11 +3,13 @@ package org.zkoss.zktest.zats.test2;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
+@Disabled("IE Only")
 public class B80_ZK_3230Test extends WebDriverTestCase {
 	@Test
 	public void test() {
