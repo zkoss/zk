@@ -32,9 +32,16 @@ public class B100_ZK_5435Test extends WebDriverTestCase {
 	public void testDesktopTimeout() {
 		connect();
 		waitResponse();
-		sleep(15000);
+		sleep(1000);
 		click(jq("@button"));
 		waitResponse();
+		System.out.println("Desktop counts: " + jq("$img").text());
+
+		sleep(1500);
+		click(jq("@button"));
+		waitResponse();
+		System.out.println("Desktop counts: " + jq("$img").text());
+
 		assertTrue(hasError());
 	}
 }

@@ -19,5 +19,6 @@ Copyright (C) 2023 Potix Corporation. All Rights Reserved.
 		2. Wait for 12 sec. and then click the button.
 		3. And you should see desktop timeout error.
 	</label>
-	<button label="Click me after 12 sec." onClick=""/>
+	<button label="Click me after 12 sec." onClick="msg.value = String.valueOf(((org.zkoss.zk.ui.util.Statistic) WebApps.getCurrent().getConfiguration().getMonitor()).getActiveDesktopCount())"/>
+	<label id="msg"/>
 </window>
