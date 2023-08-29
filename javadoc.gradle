@@ -14,7 +14,6 @@ def javadocClassPath = files(
 		"$rootDir/dist/lib/ext/portlet-api.jar",
 		"$rootDir/dist/lib/ext/closure-compiler-unshaded.jar",
 		"$rootDir/dist/lib/ext/commons-io.jar",
-		"$rootDir/dist/lib/ext/hibernate-core.jar",
 		"$rootDir/dist/lib/ext/commons-fileupload.jar",
 		"$rootDir/dist/lib/ext/zsoup.jar",
 		"$rootDir/dist/lib/ext/zkdiffer.jar",

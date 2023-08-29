@@ -47,13 +47,7 @@ dependencies {
 	optionalImplementation('org.seasar.container:s2-framework:2.4.43') {
 		exclude group: '*', module: '*'
 	}
-	optionalImplementation('org.acegisecurity:acegi-security:1.0.7') {
-		exclude group: '*', module: '*'
-	}
 	optionalImplementation 'javax.persistence:persistence-api:1.0'
-	optionalImplementation('org.hibernate:hibernate-core:5.5.3.Final') {
-		exclude group: '*', module: '*'
-	}
 	optionalImplementation 'javax.transaction:jta:1.1'
 	compileOnly "javax.servlet:servlet-api:${servletVersion}"
 	compileOnly 'javax.el:javax.el-api:2.2.5'
