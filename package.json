@@ -59,7 +59,7 @@
     "merge-stream": "^2.0.0",
     "minimist": "^1.2.6",
     "moment": "^2.24.0",
-    "moment-timezone": "^0.5.34",
+    "moment-timezone": "^0.5.35",
     "postcss": "^8.4.5",
     "ts-loader": "^9.3.0",
     "tslib": "^2.6.2",
@@ -73,7 +73,7 @@
   },
   "dependencies": {
     "moment": "^2.24.0",
-    "moment-timezone": "^0.5.34"
+    "moment-timezone": "^0.5.35"
   },
   "workspaces": [
     "zk",
