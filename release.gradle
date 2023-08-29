@@ -128,7 +128,7 @@ task prepareBin() {
 			into "$buildDir/tmp/eebin/dist/lib/ext"
 			from("$rootDir/dist/lib/ext") {
 				include "**/bsh.jar"
-				include "**/closure-compiler.jar"
+				include "**/closure-compiler-unshaded.jar"
 				include "**/commons-collections4.jar"
 				include "**/commons-fileupload.jar"
 				include "**/commons-io.jar"
