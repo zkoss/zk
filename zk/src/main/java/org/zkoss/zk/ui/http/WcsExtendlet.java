@@ -24,6 +24,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.zkoss.html.HTMLs;
 import org.zkoss.idom.Element;
 import org.zkoss.idom.input.SAXBuilder;
 import org.zkoss.idom.util.IDOMs;
@@ -34,6 +35,7 @@ import org.zkoss.web.servlet.http.Https;
 import org.zkoss.web.util.resource.ExtendletConfig;
 import org.zkoss.web.util.resource.ExtendletContext;
 import org.zkoss.web.util.resource.ExtendletLoader;
+import org.zkoss.xml.XMLs;
 import org.zkoss.zk.fn.JspFns;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
@@ -72,7 +74,8 @@ public class WcsExtendlet extends AbstractExtendlet<WcsInfo> {
 				throw new java.io.FileNotFoundException("Failed to load the resource: " + path);
 				//have the includer to handle it
 			}
-			response.sendError(HttpServletResponse.SC_NOT_FOUND, path);
+			response.sendError(HttpServletResponse.SC_NOT_FOUND,
+					HTMLs.encodeJavaScript(XMLs.escapeXML(path)));
 			return;
 		}
 

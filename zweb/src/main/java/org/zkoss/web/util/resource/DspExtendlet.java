@@ -29,6 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.zkoss.html.HTMLs;
 import org.zkoss.io.Files;
 import org.zkoss.lang.Library;
 import org.zkoss.util.media.ContentTypes;
@@ -87,7 +88,7 @@ public class DspExtendlet implements Extendlet {
 				throw new java.io.FileNotFoundException("Failed to load the resource: " + path);
 				//have the includer to handle it
 			}
-			response.sendError(HttpServletResponse.SC_NOT_FOUND, XMLs.escapeXML(path));
+			response.sendError(HttpServletResponse.SC_NOT_FOUND, HTMLs.encodeJavaScript(XMLs.escapeXML(path)));
 			return;
 		}
 

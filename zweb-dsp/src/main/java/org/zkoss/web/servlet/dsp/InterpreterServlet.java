@@ -36,6 +36,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.zkoss.html.HTMLs;
 import org.zkoss.io.Files;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.util.resource.Locator;
@@ -126,7 +127,7 @@ public class InterpreterServlet extends HttpServlet {
 				if (Https.isIncluded(request))
 					log.error("Not found: " + path);
 				//It might be eaten, so log the error
-				response.sendError(HttpServletResponse.SC_NOT_FOUND, XMLs.escapeXML(path));
+				response.sendError(HttpServletResponse.SC_NOT_FOUND, HTMLs.encodeJavaScript(XMLs.escapeXML(path)));
 				return;
 			}
 

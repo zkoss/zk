@@ -35,6 +35,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.zkoss.html.HTMLs;
 import org.zkoss.idom.Element;
 import org.zkoss.idom.input.SAXBuilder;
 import org.zkoss.idom.util.IDOMs;
@@ -52,6 +53,7 @@ import org.zkoss.web.servlet.http.Https;
 import org.zkoss.web.util.resource.ExtendletConfig;
 import org.zkoss.web.util.resource.ExtendletContext;
 import org.zkoss.web.util.resource.ExtendletLoader;
+import org.zkoss.xml.XMLs;
 import org.zkoss.zk.device.Device;
 import org.zkoss.zk.device.Devices;
 import org.zkoss.zk.ui.UiException;
@@ -166,7 +168,8 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 					String sourceMapContent = _sourceMapContentMap.get(Servlets.getBrowser(userAgent) + "$" + name);
 					if (sourceMapContent == null) {
 						log.warn("Failed to load the source map resource: " + path);
-						response.sendError(HttpServletResponse.SC_NOT_FOUND, path);
+						response.sendError(HttpServletResponse.SC_NOT_FOUND, HTMLs.encodeJavaScript(
+								XMLs.escapeXML(path)));
 						return null;
 					}
 					session.setAttribute(SOURCE_MAP_SUPPORTED, true); //for ClassWebResource to get *.src.js
@@ -202,7 +205,7 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 				throw new java.io.FileNotFoundException("Failed to load the resource: " + path);
 				//have the includer to handle it
 			}
-			response.sendError(response.SC_NOT_FOUND, path);
+			response.sendError(response.SC_NOT_FOUND, HTMLs.encodeJavaScript(XMLs.escapeXML(path)));
 			return null;
 		}
 

@@ -31,6 +31,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.zkoss.html.HTMLs;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Library;
 import org.zkoss.mesg.Messages;
@@ -38,6 +39,7 @@ import org.zkoss.web.Attributes;
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.util.resource.ClassWebResource;
 import org.zkoss.web.util.resource.Extendlet;
+import org.zkoss.xml.XMLs;
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
@@ -167,7 +169,8 @@ public class Utils {
 				else
 					throw UiException.Aide.wrap(err);
 			}
-			response.sendError(HttpServletResponse.SC_NOT_FOUND, path);
+			response.sendError(HttpServletResponse.SC_NOT_FOUND,
+					HTMLs.encodeJavaScript(XMLs.escapeXML(path)));
 		}
 	}
 
