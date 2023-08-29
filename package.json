@@ -39,7 +39,7 @@
     "@typescript-eslint/parser": "^5.62.0",
     "babel-loader": "8.2.3",
     "babel-plugin-remove-import-export": "^1.1.1",
-    "browser-sync": "^2.27.7",
+    "browser-sync": "^2.29.3",
     "circular-dependency-plugin": "^5.2.2",
     "cssnano": "^5.0.15",
     "eslint": "^8.45.0",
