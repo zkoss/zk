@@ -85,7 +85,7 @@ dependencies {
 	implementation 'commons-lang:commons-lang:2.6'
 	implementation 'commons-beanutils:commons-beanutils:1.9.4'
 	implementation 'com.google.javascript:closure-compiler-unshaded:v20200426'
-	implementation 'net.sf.jasperreports:jasperreports:6.17.0'
+	implementation 'net.sf.jasperreports:jasperreports:6.20.5'
 	implementation 'org.jfree:jfreechart:1.0.19'
 	implementation 'com.jhlabs:filters:2.0.235-1'
 	implementation 'org.zkoss.zkforge:ckez:4.21.0.0'

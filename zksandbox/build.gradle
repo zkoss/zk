@@ -63,7 +63,7 @@ dependencies {
 	implementation 'org.zkoss.zkforge.el:zcommons-el:1.1.0'
 	implementation 'org.zkoss.addon:flashchart:1.0'
 	implementation 'commons-lang:commons-lang:2.6'
-	implementation 'net.sf.jasperreports:jasperreports:6.17.0'
+	implementation 'net.sf.jasperreports:jasperreports:6.20.5'
 	runtimeOnly 'org.apache-extras.beanshell:bsh:2.0b6'
 	providedCompile 'javax.servlet:servlet-api:2.4'
 }

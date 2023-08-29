@@ -78,6 +78,7 @@ ZK 10.0.0
   + Deprecated org.zkoss.zk.ui.uuidRecycle.disabled since ZK 10.0.0
   + Revert ZK-5026 which the original bug cannot be reproduced to fix ZK-5235.
   + Enable InaccessibleWidgetBlockService by default, to disable it, set library-property `org.zkoss.zkmax.au.IWBS.disable` to `true`.
+  + Upgrade jasperreports to 6.20.5 version for fix some vulnerabilities from dependencies and drop the itext dependency.
 
    --------
 ZK 9.6.4
