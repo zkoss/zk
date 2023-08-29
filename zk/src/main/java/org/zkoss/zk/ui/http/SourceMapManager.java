@@ -180,7 +180,7 @@ public class SourceMapManager implements Serializable {
 			if (jsRealPath.startsWith(File.separator)) {
 				jsRealPath = _sourceRoot + jsRealPath.substring(1);
 			}
-			SourceFile sourceFile = _builder.buildFromCode(jsRealPath, jsContent);
+			SourceFile sourceFile = _builder.withPath(jsRealPath).withContent(jsContent).build();
 			sourceFiles.add(sourceFile);
 		}
 	}
