@@ -300,8 +300,8 @@ def addClassPath(gradle, beforeClassPath, visitedBuilds, allowedWorkspace, subpr
 	gradle.includedBuilds.each {
 		if (visitedBuilds.contains(it.name)) return
 		visitedBuilds << it.name
-		def rootGradle = it.properties['gradle']
-		it.properties['availableModules'].each {
+		def rootGradle = it.properties['target'].properties['buildController'].gradle
+		it.properties['target'].properties['availableModules'].each {
 
 			def prj = rootGradle.rootProject.findProject(it.right.identityPath.toString())
 			if (!prj) {
