@@ -105,7 +105,7 @@ dependencies {
 	implementation 'de.odysseus.juel:juel-impl:2.2.7'
 	runtimeOnly 'org.apache-extras.beanshell:bsh:2.0b6'
 	runtimeOnly 'org.codehaus.groovy:groovy-all:1.5.6'
-	runtimeOnly 'org.mozilla:rhino:1.7R4'
+	runtimeOnly 'org.mozilla:rhino:1.7.14'
 //	testImplementation 'org.jruby:jruby-core:1.7.27'
 //	testImplementation 'org.python:jython:2.2.1'
 	testImplementation 'org.zkoss.zats:zats-mimic-ext:10.0.0-FL-2022070817'
