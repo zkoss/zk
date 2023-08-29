@@ -29,9 +29,7 @@ dependencies {
 	compileOnly 'javax.websocket:javax.websocket-api:1.1'
 	api 'com.google.guava:guava:32.1.2-jre'
 	optionalImplementation 'com.google.javascript:closure-compiler-unshaded:v20230802'
-	optionalImplementation('org.codehaus.groovy:groovy-all:1.5.6') {
-		exclude group: '*', module: '*'
-	}
+	optionalImplementation 'org.apache.groovy:groovy:5.0.0-alpha-1'
 	optionalImplementation('org.jruby:jruby-core:1.7.27') {
 		exclude group: '*', module: '*'
 	}
