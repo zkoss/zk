@@ -149,11 +149,12 @@ task testGroupForkJVMTestOnly(type: Test) {
 	maxParallelForks = Runtime.runtime.availableProcessors().intdiv(4) ?: 1
 	if (project.hasProperty('maxParallelForks'))
 		maxParallelForks = project.maxParallelForks as int
+
+	filter {
+		excludeTestsMatching('*.wcag.*')
+	}
 	if (project.ext['zktestWithoutA11y'] != 'false') {
 		reports.junitXml.destination = file("$buildDir/test-results/no-A11Y/testGroupForkJVMTestOnly")
-		filter {
-			excludeTestsMatching('*.wcag.*')
-		}
 		useJUnitPlatform {
 			includeTags 'ForkJVMTestOnly'
 			excludeTags 'WcagTestOnly'
@@ -181,18 +182,40 @@ task npmInstallLighthouse(type: Exec) {
 	outputs.dir("${project.buildDir}/lighthouse/")
 	commandLine 'npm', 'install', '-g', 'lighthouse@10.4.0'
 }
+task testWCAGOnly(type: Test) {
+	forkEvery = 1 // a new test process is started for every test class
+	maxParallelForks = 1 // default 1 process, because it will hang in Jenkins
+	if (project.hasProperty('maxParallelForks'))
+		maxParallelForks = project.maxParallelForks as int
+	filter {
+		includeTestsMatching('*.wcag.*')
+	}
 
+	systemProperty "zkWebdriverContextPath", "/zktest"
+	systemProperty "zkWebdriverTestURLPackage", "org.zkoss.zktest.zats"
+
+	// a way to pass -Dtags=...
+	options {
+		systemProperties(System.getProperties())
+	}
+
+	// for Jenkins' info
+	testLogging {
+		events("standardOut", "started", "passed", "skipped", "failed")
+	}
+}
 test {
 	dependsOn npmInstallLighthouse
 	forkEvery = 0 // reuse the test process for all test classes
 	maxParallelForks = Runtime.runtime.availableProcessors().intdiv(4) ?: 1
 	if (project.hasProperty('maxParallelForks'))
 		maxParallelForks = project.maxParallelForks as int
+
+	filter {
+		excludeTestsMatching('*.wcag.*')
+	}
 	if (project.ext['zktestWithoutA11y'] != 'false') {
 		reports.junitXml.destination = file("$buildDir/test-results/no-A11Y/test")
-		filter {
-			excludeTestsMatching('*.wcag.*')
-		}
 		useJUnitPlatform {
 			excludeTags 'WcagTestOnly', 'ForkJVMTestOnly'
 		}
