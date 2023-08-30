@@ -79,6 +79,8 @@ dependencies {
 	implementation "org.zkoss.zk:zuti:${version}"
 	if (project.ext['zktestWithoutA11y'] == 'false') {
 		implementation "org.zkoss.zk:za11y:${version}"
+	} else {
+		testCompileOnly "org.zkoss.zk:za11y:${version}"
 	}
 	implementation 'org.zkoss.zkforge.el:zcommons-el:1.1.0'
 	implementation 'org.zkoss.addon:flashchart:1.0'
