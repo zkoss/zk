@@ -22,6 +22,7 @@ module.exports = function (api) {
 	    overrides: [{
 		    test: /[\\/]ext[\\/]//* treat as script for 3rd-party library */,
 		    sourceType: 'script'
-        }]
+        }],
+	    exclude: /pdfviewer\/ext/
     };
 };
