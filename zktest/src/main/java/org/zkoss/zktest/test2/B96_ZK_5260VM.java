@@ -11,8 +11,8 @@ public class B96_ZK_5260VM {
 		model.add("3@email.io");
 		model.add("4@email.io <aerror");
 		model.add("5@email.io");
-		model.add("6@email.io");
-		model.add("7@email.io");
+		model.add("<a onmouseover=\"alert('xss attack 1')\" href='https://www.zkoss.org/'>6@email.io</a>");
+		model.add("<b onmouseover=f()>7@email.io</b><script>function f() { alert('xss attack 2'); }</script>");
 	}
 
 	public ListModelList<String> getModel() {

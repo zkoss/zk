@@ -1,7 +1,17 @@
 <zk>
+	<label multiline="true">
+		1. click chosenbox to show options
+		2. if the original bug exists then the 4th item merges with the next 3 items
+		3. hover over the text of the 6th and 7th items
+		4. if show an alert popup then prepareString didn't remove scripts correctly
+		5. click the Toggle allowScripts button
+		6. hover over the text of the 6th and 7th items
+		7. should show an alert popup else allowScripts didn't work correctly
+	</label>
 	<div>
 		<chosenbox id="chosenbox" name="chosenboxinput" model="@init(vm.model)"
 		           viewModel="@id('vm')@init('org.zkoss.zktest.test2.B96_ZK_5260VM')"
 		           creatable="true" hflex="1" />
 	</div>
+	<button onClick="chosenbox.setAllowScripts(!chosenbox.isAllowScripts())">Toggle allowScripts</button>
 </zk>

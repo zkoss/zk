@@ -90,6 +90,8 @@ ZK 10.0.0
   + Upgrade gson to 2.10.1 for fixing vulnerabilities
   + Upgrade jackson-databind to 2.15.2 for fixing vulnerabilities
   + Upgrade Font Awesome version from 4.7.0 to 6.4.2, and previous iconSclass syntax will continue to be supported
+  + Refix ZK-5260 by running the prepareString method to remove scripts for HTML and
+  escape special characters for non-HTML before rendering model items of a chosenbox.
 
    --------
 ZK 9.6.4
