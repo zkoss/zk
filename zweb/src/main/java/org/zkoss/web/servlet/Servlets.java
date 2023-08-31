@@ -25,6 +25,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -256,8 +257,13 @@ public class Servlets {
 
 		String uri = map.get(index);
 		if (uri == null) {
+			HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+			Path path = Path.of(httpServletRequest.getServletPath());
+			if (!path.endsWith("/")) {
+				path = path.getParent();
+			}
 			final Locators.URLLocation loc = Locators.locate(pgpath, locale,
-					locator != null ? locator : new ServletContextLocator(ctx));
+					locator != null ? locator : new ServletContextLocator(ctx, path.toString()));
 			uri = loc != null ? loc.file : pgpath;
 			map.put(index, uri);
 		}

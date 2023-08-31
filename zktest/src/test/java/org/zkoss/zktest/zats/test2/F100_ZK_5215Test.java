@@ -12,23 +12,20 @@ Copyright (C) 2023 Potix Corporation. All Rights Reserved.
 package org.zkoss.zktest.zats.test2;
 
 
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import org.zkoss.zats.mimic.DesktopAgent;
-import org.zkoss.zktest.zats.ZATSTestCase;
+import org.zkoss.test.webdriver.WebDriverTestCase;
 /**
  * @author jumperchen
  */
-public class F100_ZK_5215Test extends ZATSTestCase {
+public class F100_ZK_5215Test extends WebDriverTestCase {
 
 	@Test
 	public void test() {
-		try {
-			DesktopAgent desktop = connect();
-		} catch (Throwable t) {
-			fail("cannot run into this line");
-		}
+		connect();
+		waitResponse();
+		assertEquals("rgb(255, 0, 0)", jq("body").css("background-color"));
 	}
 }
