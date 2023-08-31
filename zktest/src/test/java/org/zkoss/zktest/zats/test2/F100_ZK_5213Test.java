@@ -13,12 +13,14 @@ package org.zkoss.zktest.zats.test2;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import org.zkoss.mesg.Messages;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.za11y.mesg.MZa11y;
 
+@Tag("WcagTestOnly")
 public class F100_ZK_5213Test extends WebDriverTestCase {
     @Test
     public void bandbox_test() {

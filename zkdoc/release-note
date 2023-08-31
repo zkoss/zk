@@ -82,6 +82,8 @@ ZK 10.0.0
   + Upgrade jasperreports to 6.20.5 version for fix some vulnerabilities from dependencies and drop the itext dependency.
   + Remove Acegi and Hibernate integration utiles in zkplus module
   + Upgrade rhino to 1.7.14, groovy to 5.0.0-alpha-1, and closure-compiler to v20230802 for fixing vulnerabilities
+  + Upgrade gson to 2.10.1 for fixing vulnerabilities
+  + Upgrade jackson-databind to 2.15.2 for fixing vulnerabilities
 
    --------
 ZK 9.6.4

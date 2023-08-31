@@ -21,6 +21,7 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.net.URL;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -86,6 +87,10 @@ public class SAXBuilder {
 	throws ParserConfigurationException, SAXException {
 		SAXParserFactory fty = SAXParserFactory.newInstance();
 
+		// Fix XML external entity injection
+		fty.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+		fty.setFeature("http://xml.org/sax/features/external-general-entities", false);
+		
 		// SAX2 namespace-prefixes should be true for either builder
 		setSafeFeature(fty, "http://xml.org/sax/features/namespace-prefixes", true);
 
