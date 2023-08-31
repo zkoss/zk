@@ -129,6 +129,8 @@ task prepareBin() {
 			from("$rootDir/dist/lib/ext") {
 				include "**/bsh.jar"
 				include "**/closure-compiler-unshaded.jar"
+				include "**/jsr305.jar"
+				include "**/error_prone_annotations.jar"
 				include "**/commons-collections4.jar"
 				include "**/commons-fileupload.jar"
 				include "**/commons-io.jar"
