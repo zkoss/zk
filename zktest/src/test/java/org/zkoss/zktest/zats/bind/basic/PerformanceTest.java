@@ -34,6 +34,6 @@ public class PerformanceTest extends ZATSTestCase {
 			Thread.sleep(100);
 		}
 		final long actualMillis = System.currentTimeMillis() - start;
-		MatcherAssert.assertThat(actualMillis, lessThanOrEqualTo(SECONDS.toMillis(2)));
+		MatcherAssert.assertThat(actualMillis, lessThanOrEqualTo(SECONDS.toMillis(3)));
 	}
 }

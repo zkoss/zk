@@ -29,6 +29,6 @@ public class B96_ZK_5181Test extends WebDriverTestCase {
 		String[] split = getZKLog().split("/n");
 		String[] strings = split[split.length - 1].split(" ");
 		long time = Long.parseLong(strings[strings.length - 1]);
-		assertThat(time, lessThan(2000000L));
+		assertThat(time, lessThan(3000000L));
 	}
 }

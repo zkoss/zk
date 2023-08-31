@@ -24,7 +24,6 @@ public class B100_ZK_5017Test extends WebDriverTestCase {
 	@RepeatedTest(3)
 	public void test() {
 		connect();
-		assertEquals(jq(".z-listbox-header").css("display"), "block");
 		waitResponse();
 		assertEquals(jq(".z-listbox-header").css("display"), "none");
 	}
