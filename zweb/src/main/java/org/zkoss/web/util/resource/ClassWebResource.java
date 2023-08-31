@@ -21,6 +21,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.nio.file.Path;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -159,6 +160,11 @@ public class ClassWebResource {
 			if (url != null)
 				return url;
 		}
+		// Fix path traversal vulnerabilities
+		Path normalized = Path.of(PATH_PREFIX, uri).normalize();
+		if (!normalized.startsWith(PATH_PREFIX)) {
+			throw new IllegalArgumentException("User path escapes the base path [" + normalized + "]");
+		}
 		return Locators.getDefault().getResource(PATH_PREFIX + uri);
 	}
 
@@ -173,6 +179,12 @@ public class ClassWebResource {
 			final InputStream is = _extraloc.getResourceAsStream(uri);
 			if (is != null)
 				return is;
+		}
+
+		// Fix path traversal vulnerabilities
+		Path normalized = Path.of(PATH_PREFIX, uri).normalize();
+		if (!normalized.startsWith(PATH_PREFIX)) {
+			throw new IllegalArgumentException("User path escapes the base path [" + normalized + "]");
 		}
 		return Locators.getDefault().getResourceAsStream(PATH_PREFIX + uri);
 	}
@@ -265,8 +277,15 @@ public class ClassWebResource {
 	public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		final String pi = Https.getThisPathInfo(request);
 		//		if (log.isDebugEnabled()) log.debug("Path info: "+pi);
-		if (pi != null)
+		if (pi != null) {
+
+			// Fix path traversal vulnerabilities
+			Path normalized = Path.of(pi).normalize();
+			if (!normalized.startsWith(PATH_PREFIX)) {
+				throw new IllegalArgumentException("User path escapes the base path [" + normalized + "]");
+			}
 			service(request, response, pi.substring(PATH_PREFIX.length()));
+		}
 	}
 
 	/** Process the request with the specified path.

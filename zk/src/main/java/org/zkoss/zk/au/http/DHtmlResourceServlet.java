@@ -17,6 +17,7 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.au.http;
 
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.Date;
 
 import javax.servlet.ServletContext;
@@ -114,6 +115,12 @@ public class DHtmlResourceServlet extends HttpServlet {
 									: I18Ns.setup(hsess, request, response, "UTF-8")
 					: Charsets.setup(null, request, response, "UTF-8");
 			try {
+
+				// Fix path traversal vulnerabilities
+				Path normalized = Path.of(pi).normalize();
+				if (!normalized.startsWith(ClassWebResource.PATH_PREFIX)) {
+					throw new IllegalArgumentException("User path escapes the base path [" + normalized + "]");
+				}
 				cwr.service(request, response, pi.substring(ClassWebResource.PATH_PREFIX.length()));
 			} finally {
 				if (hsess != null)
