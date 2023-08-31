@@ -101,7 +101,7 @@ dependencies {
 	implementation 'org.slf4j:slf4j-jdk14:2.0.7'
 	implementation 'javax.inject:javax.inject:1'
 	implementation 'javax.enterprise:cdi-api:2.0.SP1'
-	implementation 'org.javassist:javassist:3.28.0-GA'
+	implementation 'org.javassist:javassist:3.29.2-GA'
 	implementation 'org.easymock:easymock:3.4'
 	implementation 'de.odysseus.juel:juel-spi:2.2.7'
 	implementation 'de.odysseus.juel:juel-impl:2.2.7'
