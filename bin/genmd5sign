@@ -77,21 +77,22 @@ function md5java {
 	if [ "$TERM" = "cygwin" ] || [ "$OSTYPE" = "cygwin" ] ; then
 		# need to parse with cygpath for correct path on cygwin/windows
 		# also need semi-colon instead of colon for java classpath
-		java -cp "$maindir/dist/lib/ext/commons-codec.jar;$maindir/dist/lib/ext/bsh.jar" bsh.Interpreter $(cygpath -mp $maindir/bin/md5java) $src
+		java -cp "$maindir/dist/lib/ext/bsh.jar" bsh.Interpreter $(cygpath -mp $maindir/bin/md5java) $src
 	elif [ "$OSTYPE" = "msys" ] ; then
 		# MinGW, git-bash
-		java -cp "$maindir/dist/lib/ext/commons-codec.jar;$maindir/dist/lib/ext/bsh.jar" bsh.Interpreter $maindir/bin/md5java $src
+		java -cp "$maindir/dist/lib/ext/bsh.jar" bsh.Interpreter $maindir/bin/md5java $src
 	else
-		java -cp "$maindir/dist/lib/ext/commons-codec.jar:$maindir/dist/lib/ext/bsh.jar" bsh.Interpreter $maindir/bin/md5java $src
+		java -cp "$maindir/dist/lib/ext/bsh.jar" bsh.Interpreter $maindir/bin/md5java $src
 	fi
 }
 
 export IFS=","
 echo "Generate md5 sign"
 for cls in $classes; do
-	echo "class => $cls"
 	clsdir=$(echo $cls | sed 's/\./\//g')
 	filemd5=`md5java "$debugdir/$clsdir.class"`
+	echo "class => $cls"
+	echo "output: $filemd5"
 	filemd5=`md5java "$filemd5$build"`
 	name=`md5java "$cls"`
 	# remove line break at the end for windows/cygwin compatility
