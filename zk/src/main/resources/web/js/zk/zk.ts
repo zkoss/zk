@@ -152,7 +152,7 @@ function newClass<T>(superclass: { $oid?: number }): T {
 		// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 		this._$super.____ = superclass.$oid ? (superclass.$oid + 1) : ___s++;
 		// call super constructor refer to babel
-		const _this = _super.bind(this)() as ZKObject;
+		const _this = _super.bind(this)(...(arguments as never as [])) as ZKObject;
 
 		// Note: we cannot use Object.assign() here, because some prototype property may not be copied.
 		_zk.copy(_this, Object.getPrototypeOf(this));
@@ -161,10 +161,13 @@ function newClass<T>(superclass: { $oid?: number }): T {
 		// for example in B50-ZK-441.zul
 		if (____ === undefined || ____ - 1 < this.___s) {
 
-			// call afterCreated_() for ES6 class here
-			this.afterCreated_.call(_this, ...(arguments as never as []));
+			// If $init() has invoked, don't need to call it again.
+			if (!_this['__$inited']) {
+				// call afterCreated_() for ES6 class here
+				this.afterCreated_.call(_this, ...(arguments as never as []));
 
-			this.$init.call(_this, ...(arguments as never as []));
+				this.$init.call(_this, ...(arguments as never as []));
+			}
 
 			var ais = _this._$ais;
 			if (ais) {
@@ -1763,6 +1766,7 @@ export abstract class ZKObject {
 	 */
 	$init(props?: Record<string, unknown> | typeof zkac): void {
 		// empty for subclass to override
+		this['__$inited'] = true;
 	}
 
 	/**
