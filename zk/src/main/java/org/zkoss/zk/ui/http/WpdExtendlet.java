@@ -527,11 +527,6 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 
 	private boolean writeResource(RequestContext reqctx, OutputStream out, String path, String dir, boolean locate,
 			SourceMapManager sourceMapManager) throws IOException, ServletException {
-		return writeResource(reqctx, out, path, dir, locate, sourceMapManager, -1);
-	}
-
-	private boolean writeResource(RequestContext reqctx, OutputStream out, String path, String dir, boolean locate,
-			SourceMapManager sourceMapManager, int index) throws IOException, ServletException {
 		if (path.startsWith("~./"))
 			path = path.substring(2);
 		else if (path.charAt(0) != '/')
@@ -896,16 +891,14 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 								|| getScriptManager().isScriptIgnored(reqctx.request, inf[0]))
 							continue;
 					}
-					if (sourceMapManager != null) {
-						//handle browser issue
-						int sourceMapInfoIndex = unresolvedList != null ? unresolvedList.get(resultList.size() - 1) : -1;
+					if (sourceMapManager != null)
 						sourceMapManager.startJsCursor(inf[0]);
-						if (!writeResource(reqctx, out, inf[0], _dir, true, sourceMapManager, sourceMapInfoIndex)) {
-							log.error(inf[0] + " not found");
+					if (!writeResource(reqctx, out, inf[0], _dir, true, sourceMapManager)) {
+						log.error(inf[0] + " not found");
+						if (sourceMapManager != null)
 							sourceMapManager.clearJsCursor();
-						} else
-							sourceMapManager.closeJsCursor(out);
-					}
+					} else if (sourceMapManager != null)
+						sourceMapManager.closeJsCursor(out);
 				} else if (o instanceof Object[]) { //host
 					if (main != null) {
 						final Object[] inf = (Object[]) o;
