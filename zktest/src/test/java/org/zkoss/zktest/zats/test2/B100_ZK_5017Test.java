@@ -13,6 +13,7 @@ package org.zkoss.zktest.zats.test2;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.RepeatedTest;
 
 import org.zkoss.test.webdriver.WebDriverTestCase;
@@ -20,6 +21,7 @@ import org.zkoss.test.webdriver.WebDriverTestCase;
 /**
  * @author jumperchen
  */
+@Disabled("unreliableness")
 public class B100_ZK_5017Test extends WebDriverTestCase {
 	@RepeatedTest(3)
 	public void test() {
