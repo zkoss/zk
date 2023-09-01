@@ -27,7 +27,9 @@ dependencies {
 	compileOnly "javax.servlet:servlet-api:${servletVersion}"
 	compileOnly "javax.portlet:portlet-api:${portletVersion}"
 	compileOnly 'javax.websocket:javax.websocket-api:1.1'
-	api 'com.google.guava:guava:32.1.2-jre'
+	implementation('com.google.guava:guava:32.1.2-jre') {
+		exclude group: '*', module: '*'
+	}
 	optionalImplementation 'com.google.javascript:closure-compiler-unshaded:v20230802'
 	optionalImplementation 'org.apache.groovy:groovy:5.0.0-alpha-1'
 	optionalImplementation('org.jruby:jruby-core:1.7.27') {
