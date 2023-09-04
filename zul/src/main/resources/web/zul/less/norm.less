@@ -1,5 +1,6 @@
 @import "~./zul/less/_header.less";
 @import "~./zul/less/_reset.less";
+@import "~./zul/less/font/_variables.less";
 
 e('<c:if test="${empty c:property(@{browserDefault})}">');
 html, body {
@@ -17,10 +18,30 @@ e('</c:if>');
 .z-borderbox {
 	.applyCSS3('box-sizing', 'border-box');
 }
-[class^="z-icon-"],
-[class*=" z-icon-"] {
-	font-family: ZK85Icons, FontAwesome; // Default theme uses some override font
+
+// Set icons class
+// ZK85Icons & support FontAwesome 4 syntax
+[class*="@{fa-css-prefix}-"] {
+	font-family: ZK85Icons, "Font Awesome 6 Free", "Font Awesome 6 Brands"; // Default theme uses some override font
 }
+// FontAwesome 6 solid & regular syntax
+[class*="@{fa-css-prefix}-classic"],
+[class*="@{fa-css-prefix}-solid"],
+[class*="@{fa-css-prefix}-regular"] {
+	font-family: "Font Awesome 6 Free";
+}
+// FontAwesome 6 brands syntax
+[class*="@{fa-css-prefix}-brands"] {
+	font-family: "Font Awesome 6 Brands";
+}
+
+// To support specific ZK85Icons's icons, these unicodes are abandoned in fa6
+.@{fa-css-prefix}-circle-o:before { content: "\f10c"; }
+.@{fa-css-prefix}-envelope-o:before { content: "\f003"; }
+.@{fa-css-prefix}-flag-o:before { content: "\f11d"; }
+.@{fa-css-prefix}-question-circle-o:before { content: "\f29c"; }
+.@{fa-css-prefix}-times-circle-o:before { content: "\f05c"; }
+.@{fa-css-prefix}-user-o:before { content: "\f2c0"; }
 
 // Reset
 @{browserDefaultPrefix}input[type=number]::-webkit-inner-spin-button,
@@ -107,7 +128,7 @@ e('</c:if>');
 		margin-left: @errorButtonMarginLeft;
 		cursor: pointer;
 		float: right;
-		
+
 		> .z-icon-times {
 			font-size: @errorCloseButtonFontSize;
 		}
@@ -125,12 +146,12 @@ e('</c:if>');
 //zk.log box
 div.z-log {
 	width: 50%;
-	text-align: right;  
+	text-align: right;
 	position: absolute;
 	right: 10px;
 	bottom: 5px;
 	z-index: 99000;
-	
+
 	textarea {
 		width: 100%;
 		border-color: rgba(82,168,236,0.8);
@@ -538,7 +559,7 @@ div.z-log {
 	-moz-user-select: text;
 	-khtml-user-select: text;
 	overflow: hidden;
-	
+
 	&:focus {
 		-moz-outline: 0 none;
 		outline: 0 none;

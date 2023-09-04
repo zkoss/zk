@@ -1,0 +1,2915 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F100-ZK-5119-1.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Aug 31 11:01:29 CST 2023, Created by jamson
+
+Copyright (C) 2023 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label value="Check that all Font Awesome 4.7.0 syntax `z-icon-{name}` work successfully."/>
+	<separator/>
+	<label value="Icon 'meanpath' and 'tripadvisor' are removed since FontAwesome 5, so it's right that their cells are empty."/>
+	<grid width="auto" hflex="min">
+		<columns>
+			<column label="icon" width="100px"/>
+			<column label="name" width="200px"/>
+			<column label="code" width="100px" hflex="min"/>
+			<column label="icon" width="100px"/>
+			<column label="name" width="200px"/>
+			<column label="code" width="100px" hflex="min"/>
+			<column label="icon" width="100px"/>
+			<column label="name" width="200px"/>
+			<column label="code" width="100px" hflex="min"/>
+		</columns>
+		<rows>
+			<row>
+				<a iconSclass="z-icon-500px z-icon-2x"/>
+				<label value="500px"/>
+				<label value="\f26e"/>
+				<a iconSclass="z-icon-address-book z-icon-2x"/>
+				<label value="address-book"/>
+				<label value="\f2b9"/>
+				<a iconSclass="z-icon-address-book-o z-icon-2x"/>
+				<label value="address-book-o"/>
+				<label value="\f2ba"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-address-card z-icon-2x"/>
+				<label value="address-card"/>
+				<label value="\f2bb"/>
+				<a iconSclass="z-icon-address-card-o z-icon-2x"/>
+				<label value="address-card-o"/>
+				<label value="\f2bc"/>
+				<a iconSclass="z-icon-adjust z-icon-2x"/>
+				<label value="adjust"/>
+				<label value="\f042"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-adn z-icon-2x"/>
+				<label value="adn"/>
+				<label value="\f170"/>
+				<a iconSclass="z-icon-align-center z-icon-2x"/>
+				<label value="align-center"/>
+				<label value="\f037"/>
+				<a iconSclass="z-icon-align-justify z-icon-2x"/>
+				<label value="align-justify"/>
+				<label value="\f039"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-align-left z-icon-2x"/>
+				<label value="align-left"/>
+				<label value="\f036"/>
+				<a iconSclass="z-icon-align-right z-icon-2x"/>
+				<label value="align-right"/>
+				<label value="\f038"/>
+				<a iconSclass="z-icon-amazon z-icon-2x"/>
+				<label value="amazon"/>
+				<label value="\f270"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-ambulance z-icon-2x"/>
+				<label value="ambulance"/>
+				<label value="\f0f9"/>
+				<a iconSclass="z-icon-american-sign-language-interpreting z-icon-2x"/>
+				<label value="american-sign-language-interpreting"/>
+				<label value="\f2a3"/>
+				<a iconSclass="z-icon-anchor z-icon-2x"/>
+				<label value="anchor"/>
+				<label value="\f13d"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-android z-icon-2x"/>
+				<label value="android"/>
+				<label value="\f17b"/>
+				<a iconSclass="z-icon-angellist z-icon-2x"/>
+				<label value="angellist"/>
+				<label value="\f209"/>
+				<a iconSclass="z-icon-angle-double-down z-icon-2x"/>
+				<label value="angle-double-down"/>
+				<label value="\f103"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-angle-double-left z-icon-2x"/>
+				<label value="angle-double-left"/>
+				<label value="\f100"/>
+				<a iconSclass="z-icon-angle-double-right z-icon-2x"/>
+				<label value="angle-double-right"/>
+				<label value="\f101"/>
+				<a iconSclass="z-icon-angle-double-up z-icon-2x"/>
+				<label value="angle-double-up"/>
+				<label value="\f102"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-angle-down z-icon-2x"/>
+				<label value="angle-down"/>
+				<label value="\f107"/>
+				<a iconSclass="z-icon-angle-left z-icon-2x"/>
+				<label value="angle-left"/>
+				<label value="\f104"/>
+				<a iconSclass="z-icon-angle-right z-icon-2x"/>
+				<label value="angle-right"/>
+				<label value="\f105"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-angle-up z-icon-2x"/>
+				<label value="angle-up"/>
+				<label value="\f106"/>
+				<a iconSclass="z-icon-apple z-icon-2x"/>
+				<label value="apple"/>
+				<label value="\f179"/>
+				<a iconSclass="z-icon-archive z-icon-2x"/>
+				<label value="archive"/>
+				<label value="\f187"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-area-chart z-icon-2x"/>
+				<label value="area-chart"/>
+				<label value="\f1fe"/>
+				<a iconSclass="z-icon-arrow-circle-down z-icon-2x"/>
+				<label value="arrow-circle-down"/>
+				<label value="\f0ab"/>
+				<a iconSclass="z-icon-arrow-circle-left z-icon-2x"/>
+				<label value="arrow-circle-left"/>
+				<label value="\f0a8"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-arrow-circle-o-down z-icon-2x"/>
+				<label value="arrow-circle-o-down"/>
+				<label value="\f01a"/>
+				<a iconSclass="z-icon-arrow-circle-o-left z-icon-2x"/>
+				<label value="arrow-circle-o-left"/>
+				<label value="\f190"/>
+				<a iconSclass="z-icon-arrow-circle-o-right z-icon-2x"/>
+				<label value="arrow-circle-o-right"/>
+				<label value="\f18e"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-arrow-circle-o-up z-icon-2x"/>
+				<label value="arrow-circle-o-up"/>
+				<label value="\f01b"/>
+				<a iconSclass="z-icon-arrow-circle-right z-icon-2x"/>
+				<label value="arrow-circle-right"/>
+				<label value="\f0a9"/>
+				<a iconSclass="z-icon-arrow-circle-up z-icon-2x"/>
+				<label value="arrow-circle-up"/>
+				<label value="\f0aa"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-arrow-down z-icon-2x"/>
+				<label value="arrow-down"/>
+				<label value="\f063"/>
+				<a iconSclass="z-icon-arrow-left z-icon-2x"/>
+				<label value="arrow-left"/>
+				<label value="\f060"/>
+				<a iconSclass="z-icon-arrow-right z-icon-2x"/>
+				<label value="arrow-right"/>
+				<label value="\f061"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-arrow-up z-icon-2x"/>
+				<label value="arrow-up"/>
+				<label value="\f062"/>
+				<a iconSclass="z-icon-arrows z-icon-2x"/>
+				<label value="arrows"/>
+				<label value="\f047"/>
+				<a iconSclass="z-icon-arrows-alt z-icon-2x"/>
+				<label value="arrows-alt"/>
+				<label value="\f0b2"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-arrows-h z-icon-2x"/>
+				<label value="arrows-h"/>
+				<label value="\f07e"/>
+				<a iconSclass="z-icon-arrows-v z-icon-2x"/>
+				<label value="arrows-v"/>
+				<label value="\f07d"/>
+				<a iconSclass="z-icon-asl-interpreting z-icon-2x"/>
+				<label value="asl-interpreting"/>
+				<label value="\f2a3"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-assistive-listening-systems z-icon-2x"/>
+				<label value="assistive-listening-systems"/>
+				<label value="\f2a2"/>
+				<a iconSclass="z-icon-asterisk z-icon-2x"/>
+				<label value="asterisk"/>
+				<label value="\f069"/>
+				<a iconSclass="z-icon-at z-icon-2x"/>
+				<label value="at"/>
+				<label value="\f1fa"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-audio-description z-icon-2x"/>
+				<label value="audio-description"/>
+				<label value="\f29e"/>
+				<a iconSclass="z-icon-automobile z-icon-2x"/>
+				<label value="automobile"/>
+				<label value="\f1b9"/>
+				<a iconSclass="z-icon-backward z-icon-2x"/>
+				<label value="backward"/>
+				<label value="\f04a"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-balance-scale z-icon-2x"/>
+				<label value="balance-scale"/>
+				<label value="\f24e"/>
+				<a iconSclass="z-icon-ban z-icon-2x"/>
+				<label value="ban"/>
+				<label value="\f05e"/>
+				<a iconSclass="z-icon-bandcamp z-icon-2x"/>
+				<label value="bandcamp"/>
+				<label value="\f2d5"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-bank z-icon-2x"/>
+				<label value="bank"/>
+				<label value="\f19c"/>
+				<a iconSclass="z-icon-bar-chart z-icon-2x"/>
+				<label value="bar-chart"/>
+				<label value="\f080"/>
+				<a iconSclass="z-icon-bar-chart-o z-icon-2x"/>
+				<label value="bar-chart-o"/>
+				<label value="\f080"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-barcode z-icon-2x"/>
+				<label value="barcode"/>
+				<label value="\f02a"/>
+				<a iconSclass="z-icon-bars z-icon-2x"/>
+				<label value="bars"/>
+				<label value="\f0c9"/>
+				<a iconSclass="z-icon-bath z-icon-2x"/>
+				<label value="bath"/>
+				<label value="\f2cd"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-bathtub z-icon-2x"/>
+				<label value="bathtub"/>
+				<label value="\f2cd"/>
+				<a iconSclass="z-icon-battery z-icon-2x"/>
+				<label value="battery"/>
+				<label value="\f240"/>
+				<a iconSclass="z-icon-battery-0 z-icon-2x"/>
+				<label value="battery-0"/>
+				<label value="\f244"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-battery-1 z-icon-2x"/>
+				<label value="battery-1"/>
+				<label value="\f243"/>
+				<a iconSclass="z-icon-battery-2 z-icon-2x"/>
+				<label value="battery-2"/>
+				<label value="\f242"/>
+				<a iconSclass="z-icon-battery-3 z-icon-2x"/>
+				<label value="battery-3"/>
+				<label value="\f241"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-battery-4 z-icon-2x"/>
+				<label value="battery-4"/>
+				<label value="\f240"/>
+				<a iconSclass="z-icon-battery-empty z-icon-2x"/>
+				<label value="battery-empty"/>
+				<label value="\f244"/>
+				<a iconSclass="z-icon-battery-full z-icon-2x"/>
+				<label value="battery-full"/>
+				<label value="\f240"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-battery-half z-icon-2x"/>
+				<label value="battery-half"/>
+				<label value="\f242"/>
+				<a iconSclass="z-icon-battery-quarter z-icon-2x"/>
+				<label value="battery-quarter"/>
+				<label value="\f243"/>
+				<a iconSclass="z-icon-battery-three-quarters z-icon-2x"/>
+				<label value="battery-three-quarters"/>
+				<label value="\f241"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-bed z-icon-2x"/>
+				<label value="bed"/>
+				<label value="\f236"/>
+				<a iconSclass="z-icon-beer z-icon-2x"/>
+				<label value="beer"/>
+				<label value="\f0fc"/>
+				<a iconSclass="z-icon-behance z-icon-2x"/>
+				<label value="behance"/>
+				<label value="\f1b4"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-behance-square z-icon-2x"/>
+				<label value="behance-square"/>
+				<label value="\f1b5"/>
+				<a iconSclass="z-icon-bell z-icon-2x"/>
+				<label value="bell"/>
+				<label value="\f0f3"/>
+				<a iconSclass="z-icon-bell-o z-icon-2x"/>
+				<label value="bell-o"/>
+				<label value="\f0a2"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-bell-slash z-icon-2x"/>
+				<label value="bell-slash"/>
+				<label value="\f1f6"/>
+				<a iconSclass="z-icon-bell-slash-o z-icon-2x"/>
+				<label value="bell-slash-o"/>
+				<label value="\f1f7"/>
+				<a iconSclass="z-icon-bicycle z-icon-2x"/>
+				<label value="bicycle"/>
+				<label value="\f206"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-binoculars z-icon-2x"/>
+				<label value="binoculars"/>
+				<label value="\f1e5"/>
+				<a iconSclass="z-icon-birthday-cake z-icon-2x"/>
+				<label value="birthday-cake"/>
+				<label value="\f1fd"/>
+				<a iconSclass="z-icon-bitbucket z-icon-2x"/>
+				<label value="bitbucket"/>
+				<label value="\f171"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-bitbucket-square z-icon-2x"/>
+				<label value="bitbucket-square"/>
+				<label value="\f172"/>
+				<a iconSclass="z-icon-bitcoin z-icon-2x"/>
+				<label value="bitcoin"/>
+				<label value="\f15a"/>
+				<a iconSclass="z-icon-black-tie z-icon-2x"/>
+				<label value="black-tie"/>
+				<label value="\f27e"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-blind z-icon-2x"/>
+				<label value="blind"/>
+				<label value="\f29d"/>
+				<a iconSclass="z-icon-bluetooth z-icon-2x"/>
+				<label value="bluetooth"/>
+				<label value="\f293"/>
+				<a iconSclass="z-icon-bluetooth-b z-icon-2x"/>
+				<label value="bluetooth-b"/>
+				<label value="\f294"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-bold z-icon-2x"/>
+				<label value="bold"/>
+				<label value="\f032"/>
+				<a iconSclass="z-icon-bolt z-icon-2x"/>
+				<label value="bolt"/>
+				<label value="\f0e7"/>
+				<a iconSclass="z-icon-bomb z-icon-2x"/>
+				<label value="bomb"/>
+				<label value="\f1e2"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-book z-icon-2x"/>
+				<label value="book"/>
+				<label value="\f02d"/>
+				<a iconSclass="z-icon-bookmark z-icon-2x"/>
+				<label value="bookmark"/>
+				<label value="\f02e"/>
+				<a iconSclass="z-icon-bookmark-o z-icon-2x"/>
+				<label value="bookmark-o"/>
+				<label value="\f097"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-braille z-icon-2x"/>
+				<label value="braille"/>
+				<label value="\f2a1"/>
+				<a iconSclass="z-icon-briefcase z-icon-2x"/>
+				<label value="briefcase"/>
+				<label value="\f0b1"/>
+				<a iconSclass="z-icon-btc z-icon-2x"/>
+				<label value="btc"/>
+				<label value="\f15a"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-bug z-icon-2x"/>
+				<label value="bug"/>
+				<label value="\f188"/>
+				<a iconSclass="z-icon-building z-icon-2x"/>
+				<label value="building"/>
+				<label value="\f1ad"/>
+				<a iconSclass="z-icon-building-o z-icon-2x"/>
+				<label value="building-o"/>
+				<label value="\f0f7"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-bullhorn z-icon-2x"/>
+				<label value="bullhorn"/>
+				<label value="\f0a1"/>
+				<a iconSclass="z-icon-bullseye z-icon-2x"/>
+				<label value="bullseye"/>
+				<label value="\f140"/>
+				<a iconSclass="z-icon-bus z-icon-2x"/>
+				<label value="bus"/>
+				<label value="\f207"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-buysellads z-icon-2x"/>
+				<label value="buysellads"/>
+				<label value="\f20d"/>
+				<a iconSclass="z-icon-cab z-icon-2x"/>
+				<label value="cab"/>
+				<label value="\f1ba"/>
+				<a iconSclass="z-icon-calculator z-icon-2x"/>
+				<label value="calculator"/>
+				<label value="\f1ec"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-calendar z-icon-2x"/>
+				<label value="calendar"/>
+				<label value="\f073"/>
+				<a iconSclass="z-icon-calendar-check-o z-icon-2x"/>
+				<label value="calendar-check-o"/>
+				<label value="\f274"/>
+				<a iconSclass="z-icon-calendar-minus-o z-icon-2x"/>
+				<label value="calendar-minus-o"/>
+				<label value="\f272"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-calendar-o z-icon-2x"/>
+				<label value="calendar-o"/>
+				<label value="\f133"/>
+				<a iconSclass="z-icon-calendar-plus-o z-icon-2x"/>
+				<label value="calendar-plus-o"/>
+				<label value="\f271"/>
+				<a iconSclass="z-icon-calendar-times-o z-icon-2x"/>
+				<label value="calendar-times-o"/>
+				<label value="\f273"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-camera z-icon-2x"/>
+				<label value="camera"/>
+				<label value="\f030"/>
+				<a iconSclass="z-icon-camera-retro z-icon-2x"/>
+				<label value="camera-retro"/>
+				<label value="\f083"/>
+				<a iconSclass="z-icon-car z-icon-2x"/>
+				<label value="car"/>
+				<label value="\f1b9"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-caret-down z-icon-2x"/>
+				<label value="caret-down"/>
+				<label value="\f0d7"/>
+				<a iconSclass="z-icon-caret-left z-icon-2x"/>
+				<label value="caret-left"/>
+				<label value="\f0d9"/>
+				<a iconSclass="z-icon-caret-right z-icon-2x"/>
+				<label value="caret-right"/>
+				<label value="\f0da"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-caret-square-o-down z-icon-2x"/>
+				<label value="caret-square-o-down"/>
+				<label value="\f150"/>
+				<a iconSclass="z-icon-caret-square-o-left z-icon-2x"/>
+				<label value="caret-square-o-left"/>
+				<label value="\f191"/>
+				<a iconSclass="z-icon-caret-square-o-right z-icon-2x"/>
+				<label value="caret-square-o-right"/>
+				<label value="\f152"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-caret-square-o-up z-icon-2x"/>
+				<label value="caret-square-o-up"/>
+				<label value="\f151"/>
+				<a iconSclass="z-icon-caret-up z-icon-2x"/>
+				<label value="caret-up"/>
+				<label value="\f0d8"/>
+				<a iconSclass="z-icon-cart-arrow-down z-icon-2x"/>
+				<label value="cart-arrow-down"/>
+				<label value="\f218"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-cart-plus z-icon-2x"/>
+				<label value="cart-plus"/>
+				<label value="\f217"/>
+				<a iconSclass="z-icon-cc z-icon-2x"/>
+				<label value="cc"/>
+				<label value="\f20a"/>
+				<a iconSclass="z-icon-cc-amex z-icon-2x"/>
+				<label value="cc-amex"/>
+				<label value="\f1f3"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-cc-diners-club z-icon-2x"/>
+				<label value="cc-diners-club"/>
+				<label value="\f24c"/>
+				<a iconSclass="z-icon-cc-discover z-icon-2x"/>
+				<label value="cc-discover"/>
+				<label value="\f1f2"/>
+				<a iconSclass="z-icon-cc-jcb z-icon-2x"/>
+				<label value="cc-jcb"/>
+				<label value="\f24b"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-cc-mastercard z-icon-2x"/>
+				<label value="cc-mastercard"/>
+				<label value="\f1f1"/>
+				<a iconSclass="z-icon-cc-paypal z-icon-2x"/>
+				<label value="cc-paypal"/>
+				<label value="\f1f4"/>
+				<a iconSclass="z-icon-cc-stripe z-icon-2x"/>
+				<label value="cc-stripe"/>
+				<label value="\f1f5"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-cc-visa z-icon-2x"/>
+				<label value="cc-visa"/>
+				<label value="\f1f0"/>
+				<a iconSclass="z-icon-certificate z-icon-2x"/>
+				<label value="certificate"/>
+				<label value="\f0a3"/>
+				<a iconSclass="z-icon-chain z-icon-2x"/>
+				<label value="chain"/>
+				<label value="\f0c1"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-chain-broken z-icon-2x"/>
+				<label value="chain-broken"/>
+				<label value="\f127"/>
+				<a iconSclass="z-icon-check z-icon-2x"/>
+				<label value="check"/>
+				<label value="\f00c"/>
+				<a iconSclass="z-icon-check-circle z-icon-2x"/>
+				<label value="check-circle"/>
+				<label value="\f058"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-check-circle-o z-icon-2x"/>
+				<label value="check-circle-o"/>
+				<label value="\f05d"/>
+				<a iconSclass="z-icon-check-square z-icon-2x"/>
+				<label value="check-square"/>
+				<label value="\f14a"/>
+				<a iconSclass="z-icon-check-square-o z-icon-2x"/>
+				<label value="check-square-o"/>
+				<label value="\f046"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-chevron-circle-down z-icon-2x"/>
+				<label value="chevron-circle-down"/>
+				<label value="\f13a"/>
+				<a iconSclass="z-icon-chevron-circle-left z-icon-2x"/>
+				<label value="chevron-circle-left"/>
+				<label value="\f137"/>
+				<a iconSclass="z-icon-chevron-circle-right z-icon-2x"/>
+				<label value="chevron-circle-right"/>
+				<label value="\f138"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-chevron-circle-up z-icon-2x"/>
+				<label value="chevron-circle-up"/>
+				<label value="\f139"/>
+				<a iconSclass="z-icon-chevron-down z-icon-2x"/>
+				<label value="chevron-down"/>
+				<label value="\f078"/>
+				<a iconSclass="z-icon-chevron-left z-icon-2x"/>
+				<label value="chevron-left"/>
+				<label value="\f053"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-chevron-right z-icon-2x"/>
+				<label value="chevron-right"/>
+				<label value="\f054"/>
+				<a iconSclass="z-icon-chevron-up z-icon-2x"/>
+				<label value="chevron-up"/>
+				<label value="\f077"/>
+				<a iconSclass="z-icon-child z-icon-2x"/>
+				<label value="child"/>
+				<label value="\f1ae"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-chrome z-icon-2x"/>
+				<label value="chrome"/>
+				<label value="\f268"/>
+				<a iconSclass="z-icon-circle z-icon-2x"/>
+				<label value="circle"/>
+				<label value="\f111"/>
+				<a iconSclass="z-icon-circle-o z-icon-2x"/>
+				<label value="circle-o"/>
+				<label value="\f10c"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-circle-o-notch z-icon-2x"/>
+				<label value="circle-o-notch"/>
+				<label value="\f1ce"/>
+				<a iconSclass="z-icon-circle-thin z-icon-2x"/>
+				<label value="circle-thin"/>
+				<label value="\f1db"/>
+				<a iconSclass="z-icon-clipboard z-icon-2x"/>
+				<label value="clipboard"/>
+				<label value="\f0ea"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-clock-o z-icon-2x"/>
+				<label value="clock-o"/>
+				<label value="\f017"/>
+				<a iconSclass="z-icon-clone z-icon-2x"/>
+				<label value="clone"/>
+				<label value="\f24d"/>
+				<a iconSclass="z-icon-close z-icon-2x"/>
+				<label value="close"/>
+				<label value="\f00d"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-cloud z-icon-2x"/>
+				<label value="cloud"/>
+				<label value="\f0c2"/>
+				<a iconSclass="z-icon-cloud-download z-icon-2x"/>
+				<label value="cloud-download"/>
+				<label value="\f0ed"/>
+				<a iconSclass="z-icon-cloud-upload z-icon-2x"/>
+				<label value="cloud-upload"/>
+				<label value="\f0ee"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-cny z-icon-2x"/>
+				<label value="cny"/>
+				<label value="\f157"/>
+				<a iconSclass="z-icon-code z-icon-2x"/>
+				<label value="code"/>
+				<label value="\f121"/>
+				<a iconSclass="z-icon-code-fork z-icon-2x"/>
+				<label value="code-fork"/>
+				<label value="\f126"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-codepen z-icon-2x"/>
+				<label value="codepen"/>
+				<label value="\f1cb"/>
+				<a iconSclass="z-icon-codiepie z-icon-2x"/>
+				<label value="codiepie"/>
+				<label value="\f284"/>
+				<a iconSclass="z-icon-coffee z-icon-2x"/>
+				<label value="coffee"/>
+				<label value="\f0f4"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-cog z-icon-2x"/>
+				<label value="cog"/>
+				<label value="\f013"/>
+				<a iconSclass="z-icon-cogs z-icon-2x"/>
+				<label value="cogs"/>
+				<label value="\f085"/>
+				<a iconSclass="z-icon-columns z-icon-2x"/>
+				<label value="columns"/>
+				<label value="\f0db"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-comment z-icon-2x"/>
+				<label value="comment"/>
+				<label value="\f075"/>
+				<a iconSclass="z-icon-comment-o z-icon-2x"/>
+				<label value="comment-o"/>
+				<label value="\f0e5"/>
+				<a iconSclass="z-icon-commenting z-icon-2x"/>
+				<label value="commenting"/>
+				<label value="\f27a"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-commenting-o z-icon-2x"/>
+				<label value="commenting-o"/>
+				<label value="\f27b"/>
+				<a iconSclass="z-icon-comments z-icon-2x"/>
+				<label value="comments"/>
+				<label value="\f086"/>
+				<a iconSclass="z-icon-comments-o z-icon-2x"/>
+				<label value="comments-o"/>
+				<label value="\f0e6"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-compass z-icon-2x"/>
+				<label value="compass"/>
+				<label value="\f14e"/>
+				<a iconSclass="z-icon-compress z-icon-2x"/>
+				<label value="compress"/>
+				<label value="\f066"/>
+				<a iconSclass="z-icon-connectdevelop z-icon-2x"/>
+				<label value="connectdevelop"/>
+				<label value="\f20e"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-contao z-icon-2x"/>
+				<label value="contao"/>
+				<label value="\f26d"/>
+				<a iconSclass="z-icon-copy z-icon-2x"/>
+				<label value="copy"/>
+				<label value="\f0c5"/>
+				<a iconSclass="z-icon-copyright z-icon-2x"/>
+				<label value="copyright"/>
+				<label value="\f1f9"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-creative-commons z-icon-2x"/>
+				<label value="creative-commons"/>
+				<label value="\f25e"/>
+				<a iconSclass="z-icon-credit-card z-icon-2x"/>
+				<label value="credit-card"/>
+				<label value="\f09d"/>
+				<a iconSclass="z-icon-credit-card-alt z-icon-2x"/>
+				<label value="credit-card-alt"/>
+				<label value="\f283"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-crop z-icon-2x"/>
+				<label value="crop"/>
+				<label value="\f125"/>
+				<a iconSclass="z-icon-crosshairs z-icon-2x"/>
+				<label value="crosshairs"/>
+				<label value="\f05b"/>
+				<a iconSclass="z-icon-css3 z-icon-2x"/>
+				<label value="css3"/>
+				<label value="\f13c"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-cube z-icon-2x"/>
+				<label value="cube"/>
+				<label value="\f1b2"/>
+				<a iconSclass="z-icon-cubes z-icon-2x"/>
+				<label value="cubes"/>
+				<label value="\f1b3"/>
+				<a iconSclass="z-icon-cut z-icon-2x"/>
+				<label value="cut"/>
+				<label value="\f0c4"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-cutlery z-icon-2x"/>
+				<label value="cutlery"/>
+				<label value="\f0f5"/>
+				<a iconSclass="z-icon-dashboard z-icon-2x"/>
+				<label value="dashboard"/>
+				<label value="\f0e4"/>
+				<a iconSclass="z-icon-dashcube z-icon-2x"/>
+				<label value="dashcube"/>
+				<label value="\f210"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-database z-icon-2x"/>
+				<label value="database"/>
+				<label value="\f1c0"/>
+				<a iconSclass="z-icon-deaf z-icon-2x"/>
+				<label value="deaf"/>
+				<label value="\f2a4"/>
+				<a iconSclass="z-icon-deafness z-icon-2x"/>
+				<label value="deafness"/>
+				<label value="\f2a4"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-dedent z-icon-2x"/>
+				<label value="dedent"/>
+				<label value="\f03b"/>
+				<a iconSclass="z-icon-delicious z-icon-2x"/>
+				<label value="delicious"/>
+				<label value="\f1a5"/>
+				<a iconSclass="z-icon-desktop z-icon-2x"/>
+				<label value="desktop"/>
+				<label value="\f108"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-deviantart z-icon-2x"/>
+				<label value="deviantart"/>
+				<label value="\f1bd"/>
+				<a iconSclass="z-icon-diamond z-icon-2x"/>
+				<label value="diamond"/>
+				<label value="\f219"/>
+				<a iconSclass="z-icon-digg z-icon-2x"/>
+				<label value="digg"/>
+				<label value="\f1a6"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-dollar z-icon-2x"/>
+				<label value="dollar"/>
+				<label value="\f155"/>
+				<a iconSclass="z-icon-dot-circle-o z-icon-2x"/>
+				<label value="dot-circle-o"/>
+				<label value="\f192"/>
+				<a iconSclass="z-icon-download z-icon-2x"/>
+				<label value="download"/>
+				<label value="\f019"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-dribbble z-icon-2x"/>
+				<label value="dribbble"/>
+				<label value="\f17d"/>
+				<a iconSclass="z-icon-drivers-license z-icon-2x"/>
+				<label value="drivers-license"/>
+				<label value="\f2c2"/>
+				<a iconSclass="z-icon-drivers-license-o z-icon-2x"/>
+				<label value="drivers-license-o"/>
+				<label value="\f2c3"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-dropbox z-icon-2x"/>
+				<label value="dropbox"/>
+				<label value="\f16b"/>
+				<a iconSclass="z-icon-drupal z-icon-2x"/>
+				<label value="drupal"/>
+				<label value="\f1a9"/>
+				<a iconSclass="z-icon-edge z-icon-2x"/>
+				<label value="edge"/>
+				<label value="\f282"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-edit z-icon-2x"/>
+				<label value="edit"/>
+				<label value="\f044"/>
+				<a iconSclass="z-icon-eercast z-icon-2x"/>
+				<label value="eercast"/>
+				<label value="\f2da"/>
+				<a iconSclass="z-icon-eject z-icon-2x"/>
+				<label value="eject"/>
+				<label value="\f052"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-ellipsis-h z-icon-2x"/>
+				<label value="ellipsis-h"/>
+				<label value="\f141"/>
+				<a iconSclass="z-icon-ellipsis-v z-icon-2x"/>
+				<label value="ellipsis-v"/>
+				<label value="\f142"/>
+				<a iconSclass="z-icon-empire z-icon-2x"/>
+				<label value="empire"/>
+				<label value="\f1d1"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-envelope z-icon-2x"/>
+				<label value="envelope"/>
+				<label value="\f0e0"/>
+				<a iconSclass="z-icon-envelope-o z-icon-2x"/>
+				<label value="envelope-o"/>
+				<label value="\f003"/>
+				<a iconSclass="z-icon-envelope-open z-icon-2x"/>
+				<label value="envelope-open"/>
+				<label value="\f2b6"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-envelope-open-o z-icon-2x"/>
+				<label value="envelope-open-o"/>
+				<label value="\f2b7"/>
+				<a iconSclass="z-icon-envelope-square z-icon-2x"/>
+				<label value="envelope-square"/>
+				<label value="\f199"/>
+				<a iconSclass="z-icon-envira z-icon-2x"/>
+				<label value="envira"/>
+				<label value="\f299"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-eraser z-icon-2x"/>
+				<label value="eraser"/>
+				<label value="\f12d"/>
+				<a iconSclass="z-icon-etsy z-icon-2x"/>
+				<label value="etsy"/>
+				<label value="\f2d7"/>
+				<a iconSclass="z-icon-eur z-icon-2x"/>
+				<label value="eur"/>
+				<label value="\f153"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-euro z-icon-2x"/>
+				<label value="euro"/>
+				<label value="\f153"/>
+				<a iconSclass="z-icon-exchange z-icon-2x"/>
+				<label value="exchange"/>
+				<label value="\f0ec"/>
+				<a iconSclass="z-icon-exclamation z-icon-2x"/>
+				<label value="exclamation"/>
+				<label value="\f12a"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-exclamation-circle z-icon-2x"/>
+				<label value="exclamation-circle"/>
+				<label value="\f06a"/>
+				<a iconSclass="z-icon-exclamation-triangle z-icon-2x"/>
+				<label value="exclamation-triangle"/>
+				<label value="\f071"/>
+				<a iconSclass="z-icon-expand z-icon-2x"/>
+				<label value="expand"/>
+				<label value="\f065"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-expeditedssl z-icon-2x"/>
+				<label value="expeditedssl"/>
+				<label value="\f23e"/>
+				<a iconSclass="z-icon-external-link z-icon-2x"/>
+				<label value="external-link"/>
+				<label value="\f08e"/>
+				<a iconSclass="z-icon-external-link-square z-icon-2x"/>
+				<label value="external-link-square"/>
+				<label value="\f14c"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-eye z-icon-2x"/>
+				<label value="eye"/>
+				<label value="\f06e"/>
+				<a iconSclass="z-icon-eye-slash z-icon-2x"/>
+				<label value="eye-slash"/>
+				<label value="\f070"/>
+				<a iconSclass="z-icon-eyedropper z-icon-2x"/>
+				<label value="eyedropper"/>
+				<label value="\f1fb"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-fa z-icon-2x"/>
+				<label value="fa"/>
+				<label value="\f2b4"/>
+				<a iconSclass="z-icon-facebook z-icon-2x"/>
+				<label value="facebook"/>
+				<label value="\f09a"/>
+				<a iconSclass="z-icon-facebook-f z-icon-2x"/>
+				<label value="facebook-f"/>
+				<label value="\f09a"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-facebook-official z-icon-2x"/>
+				<label value="facebook-official"/>
+				<label value="\f230"/>
+				<a iconSclass="z-icon-facebook-square z-icon-2x"/>
+				<label value="facebook-square"/>
+				<label value="\f082"/>
+				<a iconSclass="z-icon-fast-backward z-icon-2x"/>
+				<label value="fast-backward"/>
+				<label value="\f049"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-fast-forward z-icon-2x"/>
+				<label value="fast-forward"/>
+				<label value="\f050"/>
+				<a iconSclass="z-icon-fax z-icon-2x"/>
+				<label value="fax"/>
+				<label value="\f1ac"/>
+				<a iconSclass="z-icon-feed z-icon-2x"/>
+				<label value="feed"/>
+				<label value="\f09e"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-female z-icon-2x"/>
+				<label value="female"/>
+				<label value="\f182"/>
+				<a iconSclass="z-icon-fighter-jet z-icon-2x"/>
+				<label value="fighter-jet"/>
+				<label value="\f0fb"/>
+				<a iconSclass="z-icon-file z-icon-2x"/>
+				<label value="file"/>
+				<label value="\f15b"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-file-archive-o z-icon-2x"/>
+				<label value="file-archive-o"/>
+				<label value="\f1c6"/>
+				<a iconSclass="z-icon-file-audio-o z-icon-2x"/>
+				<label value="file-audio-o"/>
+				<label value="\f1c7"/>
+				<a iconSclass="z-icon-file-code-o z-icon-2x"/>
+				<label value="file-code-o"/>
+				<label value="\f1c9"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-file-excel-o z-icon-2x"/>
+				<label value="file-excel-o"/>
+				<label value="\f1c3"/>
+				<a iconSclass="z-icon-file-image-o z-icon-2x"/>
+				<label value="file-image-o"/>
+				<label value="\f1c5"/>
+				<a iconSclass="z-icon-file-movie-o z-icon-2x"/>
+				<label value="file-movie-o"/>
+				<label value="\f1c8"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-file-o z-icon-2x"/>
+				<label value="file-o"/>
+				<label value="\f016"/>
+				<a iconSclass="z-icon-file-pdf-o z-icon-2x"/>
+				<label value="file-pdf-o"/>
+				<label value="\f1c1"/>
+				<a iconSclass="z-icon-file-photo-o z-icon-2x"/>
+				<label value="file-photo-o"/>
+				<label value="\f1c5"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-file-picture-o z-icon-2x"/>
+				<label value="file-picture-o"/>
+				<label value="\f1c5"/>
+				<a iconSclass="z-icon-file-powerpoint-o z-icon-2x"/>
+				<label value="file-powerpoint-o"/>
+				<label value="\f1c4"/>
+				<a iconSclass="z-icon-file-sound-o z-icon-2x"/>
+				<label value="file-sound-o"/>
+				<label value="\f1c7"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-file-text z-icon-2x"/>
+				<label value="file-text"/>
+				<label value="\f15c"/>
+				<a iconSclass="z-icon-file-text-o z-icon-2x"/>
+				<label value="file-text-o"/>
+				<label value="\f0f6"/>
+				<a iconSclass="z-icon-file-video-o z-icon-2x"/>
+				<label value="file-video-o"/>
+				<label value="\f1c8"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-file-word-o z-icon-2x"/>
+				<label value="file-word-o"/>
+				<label value="\f1c2"/>
+				<a iconSclass="z-icon-file-zip-o z-icon-2x"/>
+				<label value="file-zip-o"/>
+				<label value="\f1c6"/>
+				<a iconSclass="z-icon-files-o z-icon-2x"/>
+				<label value="files-o"/>
+				<label value="\f0c5"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-film z-icon-2x"/>
+				<label value="film"/>
+				<label value="\f008"/>
+				<a iconSclass="z-icon-filter z-icon-2x"/>
+				<label value="filter"/>
+				<label value="\f0b0"/>
+				<a iconSclass="z-icon-fire z-icon-2x"/>
+				<label value="fire"/>
+				<label value="\f06d"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-fire-extinguisher z-icon-2x"/>
+				<label value="fire-extinguisher"/>
+				<label value="\f134"/>
+				<a iconSclass="z-icon-firefox z-icon-2x"/>
+				<label value="firefox"/>
+				<label value="\f269"/>
+				<a iconSclass="z-icon-first-order z-icon-2x"/>
+				<label value="first-order"/>
+				<label value="\f2b0"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-flag z-icon-2x"/>
+				<label value="flag"/>
+				<label value="\f024"/>
+				<a iconSclass="z-icon-flag-checkered z-icon-2x"/>
+				<label value="flag-checkered"/>
+				<label value="\f11e"/>
+				<a iconSclass="z-icon-flag-o z-icon-2x"/>
+				<label value="flag-o"/>
+				<label value="\f11d"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-flash z-icon-2x"/>
+				<label value="flash"/>
+				<label value="\f0e7"/>
+				<a iconSclass="z-icon-flask z-icon-2x"/>
+				<label value="flask"/>
+				<label value="\f0c3"/>
+				<a iconSclass="z-icon-flickr z-icon-2x"/>
+				<label value="flickr"/>
+				<label value="\f16e"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-floppy-o z-icon-2x"/>
+				<label value="floppy-o"/>
+				<label value="\f0c7"/>
+				<a iconSclass="z-icon-folder z-icon-2x"/>
+				<label value="folder"/>
+				<label value="\f07b"/>
+				<a iconSclass="z-icon-folder-o z-icon-2x"/>
+				<label value="folder-o"/>
+				<label value="\f114"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-folder-open z-icon-2x"/>
+				<label value="folder-open"/>
+				<label value="\f07c"/>
+				<a iconSclass="z-icon-folder-open-o z-icon-2x"/>
+				<label value="folder-open-o"/>
+				<label value="\f115"/>
+				<a iconSclass="z-icon-font z-icon-2x"/>
+				<label value="font"/>
+				<label value="\f031"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-font-awesome z-icon-2x"/>
+				<label value="font-awesome"/>
+				<label value="\f2b4"/>
+				<a iconSclass="z-icon-fonticons z-icon-2x"/>
+				<label value="fonticons"/>
+				<label value="\f280"/>
+				<a iconSclass="z-icon-fort-awesome z-icon-2x"/>
+				<label value="fort-awesome"/>
+				<label value="\f286"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-forumbee z-icon-2x"/>
+				<label value="forumbee"/>
+				<label value="\f211"/>
+				<a iconSclass="z-icon-forward z-icon-2x"/>
+				<label value="forward"/>
+				<label value="\f04e"/>
+				<a iconSclass="z-icon-foursquare z-icon-2x"/>
+				<label value="foursquare"/>
+				<label value="\f180"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-free-code-camp z-icon-2x"/>
+				<label value="free-code-camp"/>
+				<label value="\f2c5"/>
+				<a iconSclass="z-icon-frown-o z-icon-2x"/>
+				<label value="frown-o"/>
+				<label value="\f119"/>
+				<a iconSclass="z-icon-futbol-o z-icon-2x"/>
+				<label value="futbol-o"/>
+				<label value="\f1e3"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-gamepad z-icon-2x"/>
+				<label value="gamepad"/>
+				<label value="\f11b"/>
+				<a iconSclass="z-icon-gavel z-icon-2x"/>
+				<label value="gavel"/>
+				<label value="\f0e3"/>
+				<a iconSclass="z-icon-gbp z-icon-2x"/>
+				<label value="gbp"/>
+				<label value="\f154"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-ge z-icon-2x"/>
+				<label value="ge"/>
+				<label value="\f1d1"/>
+				<a iconSclass="z-icon-gear z-icon-2x"/>
+				<label value="gear"/>
+				<label value="\f013"/>
+				<a iconSclass="z-icon-gears z-icon-2x"/>
+				<label value="gears"/>
+				<label value="\f085"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-genderless z-icon-2x"/>
+				<label value="genderless"/>
+				<label value="\f22d"/>
+				<a iconSclass="z-icon-get-pocket z-icon-2x"/>
+				<label value="get-pocket"/>
+				<label value="\f265"/>
+				<a iconSclass="z-icon-gg z-icon-2x"/>
+				<label value="gg"/>
+				<label value="\f260"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-gg-circle z-icon-2x"/>
+				<label value="gg-circle"/>
+				<label value="\f261"/>
+				<a iconSclass="z-icon-gift z-icon-2x"/>
+				<label value="gift"/>
+				<label value="\f06b"/>
+				<a iconSclass="z-icon-git z-icon-2x"/>
+				<label value="git"/>
+				<label value="\f1d3"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-git-square z-icon-2x"/>
+				<label value="git-square"/>
+				<label value="\f1d2"/>
+				<a iconSclass="z-icon-github z-icon-2x"/>
+				<label value="github"/>
+				<label value="\f09b"/>
+				<a iconSclass="z-icon-github-alt z-icon-2x"/>
+				<label value="github-alt"/>
+				<label value="\f113"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-github-square z-icon-2x"/>
+				<label value="github-square"/>
+				<label value="\f092"/>
+				<a iconSclass="z-icon-gitlab z-icon-2x"/>
+				<label value="gitlab"/>
+				<label value="\f296"/>
+				<a iconSclass="z-icon-gittip z-icon-2x"/>
+				<label value="gittip"/>
+				<label value="\f184"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-glass z-icon-2x"/>
+				<label value="glass"/>
+				<label value="\f000"/>
+				<a iconSclass="z-icon-glide z-icon-2x"/>
+				<label value="glide"/>
+				<label value="\f2a5"/>
+				<a iconSclass="z-icon-glide-g z-icon-2x"/>
+				<label value="glide-g"/>
+				<label value="\f2a6"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-globe z-icon-2x"/>
+				<label value="globe"/>
+				<label value="\f0ac"/>
+				<a iconSclass="z-icon-google z-icon-2x"/>
+				<label value="google"/>
+				<label value="\f1a0"/>
+				<a iconSclass="z-icon-google-plus z-icon-2x"/>
+				<label value="google-plus"/>
+				<label value="\f0d5"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-google-plus-circle z-icon-2x"/>
+				<label value="google-plus-circle"/>
+				<label value="\f2b3"/>
+				<a iconSclass="z-icon-google-plus-official z-icon-2x"/>
+				<label value="google-plus-official"/>
+				<label value="\f2b3"/>
+				<a iconSclass="z-icon-google-plus-square z-icon-2x"/>
+				<label value="google-plus-square"/>
+				<label value="\f0d4"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-google-wallet z-icon-2x"/>
+				<label value="google-wallet"/>
+				<label value="\f1ee"/>
+				<a iconSclass="z-icon-graduation-cap z-icon-2x"/>
+				<label value="graduation-cap"/>
+				<label value="\f19d"/>
+				<a iconSclass="z-icon-gratipay z-icon-2x"/>
+				<label value="gratipay"/>
+				<label value="\f184"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-grav z-icon-2x"/>
+				<label value="grav"/>
+				<label value="\f2d6"/>
+				<a iconSclass="z-icon-group z-icon-2x"/>
+				<label value="group"/>
+				<label value="\f0c0"/>
+				<a iconSclass="z-icon-h-square z-icon-2x"/>
+				<label value="h-square"/>
+				<label value="\f0fd"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-hacker-news z-icon-2x"/>
+				<label value="hacker-news"/>
+				<label value="\f1d4"/>
+				<a iconSclass="z-icon-hand-grab-o z-icon-2x"/>
+				<label value="hand-grab-o"/>
+				<label value="\f255"/>
+				<a iconSclass="z-icon-hand-lizard-o z-icon-2x"/>
+				<label value="hand-lizard-o"/>
+				<label value="\f258"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-hand-o-down z-icon-2x"/>
+				<label value="hand-o-down"/>
+				<label value="\f0a7"/>
+				<a iconSclass="z-icon-hand-o-left z-icon-2x"/>
+				<label value="hand-o-left"/>
+				<label value="\f0a5"/>
+				<a iconSclass="z-icon-hand-o-right z-icon-2x"/>
+				<label value="hand-o-right"/>
+				<label value="\f0a4"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-hand-o-up z-icon-2x"/>
+				<label value="hand-o-up"/>
+				<label value="\f0a6"/>
+				<a iconSclass="z-icon-hand-paper-o z-icon-2x"/>
+				<label value="hand-paper-o"/>
+				<label value="\f256"/>
+				<a iconSclass="z-icon-hand-peace-o z-icon-2x"/>
+				<label value="hand-peace-o"/>
+				<label value="\f25b"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-hand-pointer-o z-icon-2x"/>
+				<label value="hand-pointer-o"/>
+				<label value="\f25a"/>
+				<a iconSclass="z-icon-hand-rock-o z-icon-2x"/>
+				<label value="hand-rock-o"/>
+				<label value="\f255"/>
+				<a iconSclass="z-icon-hand-scissors-o z-icon-2x"/>
+				<label value="hand-scissors-o"/>
+				<label value="\f257"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-hand-spock-o z-icon-2x"/>
+				<label value="hand-spock-o"/>
+				<label value="\f259"/>
+				<a iconSclass="z-icon-hand-stop-o z-icon-2x"/>
+				<label value="hand-stop-o"/>
+				<label value="\f256"/>
+				<a iconSclass="z-icon-handshake-o z-icon-2x"/>
+				<label value="handshake-o"/>
+				<label value="\f2b5"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-hard-of-hearing z-icon-2x"/>
+				<label value="hard-of-hearing"/>
+				<label value="\f2a4"/>
+				<a iconSclass="z-icon-hashtag z-icon-2x"/>
+				<label value="hashtag"/>
+				<label value="\f292"/>
+				<a iconSclass="z-icon-hdd-o z-icon-2x"/>
+				<label value="hdd-o"/>
+				<label value="\f0a0"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-header z-icon-2x"/>
+				<label value="header"/>
+				<label value="\f1dc"/>
+				<a iconSclass="z-icon-headphones z-icon-2x"/>
+				<label value="headphones"/>
+				<label value="\f025"/>
+				<a iconSclass="z-icon-heart z-icon-2x"/>
+				<label value="heart"/>
+				<label value="\f004"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-heart-o z-icon-2x"/>
+				<label value="heart-o"/>
+				<label value="\f08a"/>
+				<a iconSclass="z-icon-heartbeat z-icon-2x"/>
+				<label value="heartbeat"/>
+				<label value="\f21e"/>
+				<a iconSclass="z-icon-history z-icon-2x"/>
+				<label value="history"/>
+				<label value="\f1da"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-home z-icon-2x"/>
+				<label value="home"/>
+				<label value="\f015"/>
+				<a iconSclass="z-icon-hospital-o z-icon-2x"/>
+				<label value="hospital-o"/>
+				<label value="\f0f8"/>
+				<a iconSclass="z-icon-hotel z-icon-2x"/>
+				<label value="hotel"/>
+				<label value="\f236"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-hourglass z-icon-2x"/>
+				<label value="hourglass"/>
+				<label value="\f254"/>
+				<a iconSclass="z-icon-hourglass-1 z-icon-2x"/>
+				<label value="hourglass-1"/>
+				<label value="\f251"/>
+				<a iconSclass="z-icon-hourglass-2 z-icon-2x"/>
+				<label value="hourglass-2"/>
+				<label value="\f252"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-hourglass-3 z-icon-2x"/>
+				<label value="hourglass-3"/>
+				<label value="\f253"/>
+				<a iconSclass="z-icon-hourglass-end z-icon-2x"/>
+				<label value="hourglass-end"/>
+				<label value="\f253"/>
+				<a iconSclass="z-icon-hourglass-half z-icon-2x"/>
+				<label value="hourglass-half"/>
+				<label value="\f252"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-hourglass-o z-icon-2x"/>
+				<label value="hourglass-o"/>
+				<label value="\f250"/>
+				<a iconSclass="z-icon-hourglass-start z-icon-2x"/>
+				<label value="hourglass-start"/>
+				<label value="\f251"/>
+				<a iconSclass="z-icon-houzz z-icon-2x"/>
+				<label value="houzz"/>
+				<label value="\f27c"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-html5 z-icon-2x"/>
+				<label value="html5"/>
+				<label value="\f13b"/>
+				<a iconSclass="z-icon-i-cursor z-icon-2x"/>
+				<label value="i-cursor"/>
+				<label value="\f246"/>
+				<a iconSclass="z-icon-id-badge z-icon-2x"/>
+				<label value="id-badge"/>
+				<label value="\f2c1"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-id-card z-icon-2x"/>
+				<label value="id-card"/>
+				<label value="\f2c2"/>
+				<a iconSclass="z-icon-id-card-o z-icon-2x"/>
+				<label value="id-card-o"/>
+				<label value="\f2c3"/>
+				<a iconSclass="z-icon-ils z-icon-2x"/>
+				<label value="ils"/>
+				<label value="\f20b"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-image z-icon-2x"/>
+				<label value="image"/>
+				<label value="\f03e"/>
+				<a iconSclass="z-icon-imdb z-icon-2x"/>
+				<label value="imdb"/>
+				<label value="\f2d8"/>
+				<a iconSclass="z-icon-inbox z-icon-2x"/>
+				<label value="inbox"/>
+				<label value="\f01c"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-indent z-icon-2x"/>
+				<label value="indent"/>
+				<label value="\f03c"/>
+				<a iconSclass="z-icon-industry z-icon-2x"/>
+				<label value="industry"/>
+				<label value="\f275"/>
+				<a iconSclass="z-icon-info z-icon-2x"/>
+				<label value="info"/>
+				<label value="\f129"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-info-circle z-icon-2x"/>
+				<label value="info-circle"/>
+				<label value="\f05a"/>
+				<a iconSclass="z-icon-inr z-icon-2x"/>
+				<label value="inr"/>
+				<label value="\f156"/>
+				<a iconSclass="z-icon-instagram z-icon-2x"/>
+				<label value="instagram"/>
+				<label value="\f16d"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-institution z-icon-2x"/>
+				<label value="institution"/>
+				<label value="\f19c"/>
+				<a iconSclass="z-icon-internet-explorer z-icon-2x"/>
+				<label value="internet-explorer"/>
+				<label value="\f26b"/>
+				<a iconSclass="z-icon-intersex z-icon-2x"/>
+				<label value="intersex"/>
+				<label value="\f224"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-ioxhost z-icon-2x"/>
+				<label value="ioxhost"/>
+				<label value="\f208"/>
+				<a iconSclass="z-icon-italic z-icon-2x"/>
+				<label value="italic"/>
+				<label value="\f033"/>
+				<a iconSclass="z-icon-joomla z-icon-2x"/>
+				<label value="joomla"/>
+				<label value="\f1aa"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-jpy z-icon-2x"/>
+				<label value="jpy"/>
+				<label value="\f157"/>
+				<a iconSclass="z-icon-jsfiddle z-icon-2x"/>
+				<label value="jsfiddle"/>
+				<label value="\f1cc"/>
+				<a iconSclass="z-icon-key z-icon-2x"/>
+				<label value="key"/>
+				<label value="\f084"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-keyboard-o z-icon-2x"/>
+				<label value="keyboard-o"/>
+				<label value="\f11c"/>
+				<a iconSclass="z-icon-krw z-icon-2x"/>
+				<label value="krw"/>
+				<label value="\f159"/>
+				<a iconSclass="z-icon-language z-icon-2x"/>
+				<label value="language"/>
+				<label value="\f1ab"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-laptop z-icon-2x"/>
+				<label value="laptop"/>
+				<label value="\f109"/>
+				<a iconSclass="z-icon-lastfm z-icon-2x"/>
+				<label value="lastfm"/>
+				<label value="\f202"/>
+				<a iconSclass="z-icon-lastfm-square z-icon-2x"/>
+				<label value="lastfm-square"/>
+				<label value="\f203"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-leaf z-icon-2x"/>
+				<label value="leaf"/>
+				<label value="\f06c"/>
+				<a iconSclass="z-icon-leanpub z-icon-2x"/>
+				<label value="leanpub"/>
+				<label value="\f212"/>
+				<a iconSclass="z-icon-legal z-icon-2x"/>
+				<label value="legal"/>
+				<label value="\f0e3"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-lemon-o z-icon-2x"/>
+				<label value="lemon-o"/>
+				<label value="\f094"/>
+				<a iconSclass="z-icon-level-down z-icon-2x"/>
+				<label value="level-down"/>
+				<label value="\f149"/>
+				<a iconSclass="z-icon-level-up z-icon-2x"/>
+				<label value="level-up"/>
+				<label value="\f148"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-life-bouy z-icon-2x"/>
+				<label value="life-bouy"/>
+				<label value="\f1cd"/>
+				<a iconSclass="z-icon-life-buoy z-icon-2x"/>
+				<label value="life-buoy"/>
+				<label value="\f1cd"/>
+				<a iconSclass="z-icon-life-ring z-icon-2x"/>
+				<label value="life-ring"/>
+				<label value="\f1cd"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-life-saver z-icon-2x"/>
+				<label value="life-saver"/>
+				<label value="\f1cd"/>
+				<a iconSclass="z-icon-lightbulb-o z-icon-2x"/>
+				<label value="lightbulb-o"/>
+				<label value="\f0eb"/>
+				<a iconSclass="z-icon-line-chart z-icon-2x"/>
+				<label value="line-chart"/>
+				<label value="\f201"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-link z-icon-2x"/>
+				<label value="link"/>
+				<label value="\f0c1"/>
+				<a iconSclass="z-icon-linkedin z-icon-2x"/>
+				<label value="linkedin"/>
+				<label value="\f0e1"/>
+				<a iconSclass="z-icon-linkedin-square z-icon-2x"/>
+				<label value="linkedin-square"/>
+				<label value="\f08c"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-linode z-icon-2x"/>
+				<label value="linode"/>
+				<label value="\f2b8"/>
+				<a iconSclass="z-icon-linux z-icon-2x"/>
+				<label value="linux"/>
+				<label value="\f17c"/>
+				<a iconSclass="z-icon-list z-icon-2x"/>
+				<label value="list"/>
+				<label value="\f03a"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-list-alt z-icon-2x"/>
+				<label value="list-alt"/>
+				<label value="\f022"/>
+				<a iconSclass="z-icon-list-ol z-icon-2x"/>
+				<label value="list-ol"/>
+				<label value="\f0cb"/>
+				<a iconSclass="z-icon-list-ul z-icon-2x"/>
+				<label value="list-ul"/>
+				<label value="\f0ca"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-location-arrow z-icon-2x"/>
+				<label value="location-arrow"/>
+				<label value="\f124"/>
+				<a iconSclass="z-icon-lock z-icon-2x"/>
+				<label value="lock"/>
+				<label value="\f023"/>
+				<a iconSclass="z-icon-long-arrow-down z-icon-2x"/>
+				<label value="long-arrow-down"/>
+				<label value="\f175"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-long-arrow-left z-icon-2x"/>
+				<label value="long-arrow-left"/>
+				<label value="\f177"/>
+				<a iconSclass="z-icon-long-arrow-right z-icon-2x"/>
+				<label value="long-arrow-right"/>
+				<label value="\f178"/>
+				<a iconSclass="z-icon-long-arrow-up z-icon-2x"/>
+				<label value="long-arrow-up"/>
+				<label value="\f176"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-low-vision z-icon-2x"/>
+				<label value="low-vision"/>
+				<label value="\f2a8"/>
+				<a iconSclass="z-icon-magic z-icon-2x"/>
+				<label value="magic"/>
+				<label value="\f0d0"/>
+				<a iconSclass="z-icon-magnet z-icon-2x"/>
+				<label value="magnet"/>
+				<label value="\f076"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-mail-forward z-icon-2x"/>
+				<label value="mail-forward"/>
+				<label value="\f064"/>
+				<a iconSclass="z-icon-mail-reply z-icon-2x"/>
+				<label value="mail-reply"/>
+				<label value="\f112"/>
+				<a iconSclass="z-icon-mail-reply-all z-icon-2x"/>
+				<label value="mail-reply-all"/>
+				<label value="\f122"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-male z-icon-2x"/>
+				<label value="male"/>
+				<label value="\f183"/>
+				<a iconSclass="z-icon-map z-icon-2x"/>
+				<label value="map"/>
+				<label value="\f279"/>
+				<a iconSclass="z-icon-map-marker z-icon-2x"/>
+				<label value="map-marker"/>
+				<label value="\f041"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-map-o z-icon-2x"/>
+				<label value="map-o"/>
+				<label value="\f278"/>
+				<a iconSclass="z-icon-map-pin z-icon-2x"/>
+				<label value="map-pin"/>
+				<label value="\f276"/>
+				<a iconSclass="z-icon-map-signs z-icon-2x"/>
+				<label value="map-signs"/>
+				<label value="\f277"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-mars z-icon-2x"/>
+				<label value="mars"/>
+				<label value="\f222"/>
+				<a iconSclass="z-icon-mars-double z-icon-2x"/>
+				<label value="mars-double"/>
+				<label value="\f227"/>
+				<a iconSclass="z-icon-mars-stroke z-icon-2x"/>
+				<label value="mars-stroke"/>
+				<label value="\f229"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-mars-stroke-h z-icon-2x"/>
+				<label value="mars-stroke-h"/>
+				<label value="\f22b"/>
+				<a iconSclass="z-icon-mars-stroke-v z-icon-2x"/>
+				<label value="mars-stroke-v"/>
+				<label value="\f22a"/>
+				<a iconSclass="z-icon-maxcdn z-icon-2x"/>
+				<label value="maxcdn"/>
+				<label value="\f136"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-meanpath z-icon-2x"/>
+				<label value="meanpath"/>
+				<label value="\f20c"/>
+				<a iconSclass="z-icon-medium z-icon-2x"/>
+				<label value="medium"/>
+				<label value="\f23a"/>
+				<a iconSclass="z-icon-medkit z-icon-2x"/>
+				<label value="medkit"/>
+				<label value="\f0fa"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-meetup z-icon-2x"/>
+				<label value="meetup"/>
+				<label value="\f2e0"/>
+				<a iconSclass="z-icon-meh-o z-icon-2x"/>
+				<label value="meh-o"/>
+				<label value="\f11a"/>
+				<a iconSclass="z-icon-mercury z-icon-2x"/>
+				<label value="mercury"/>
+				<label value="\f223"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-microchip z-icon-2x"/>
+				<label value="microchip"/>
+				<label value="\f2db"/>
+				<a iconSclass="z-icon-microphone z-icon-2x"/>
+				<label value="microphone"/>
+				<label value="\f130"/>
+				<a iconSclass="z-icon-microphone-slash z-icon-2x"/>
+				<label value="microphone-slash"/>
+				<label value="\f131"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-minus z-icon-2x"/>
+				<label value="minus"/>
+				<label value="\f068"/>
+				<a iconSclass="z-icon-minus-circle z-icon-2x"/>
+				<label value="minus-circle"/>
+				<label value="\f056"/>
+				<a iconSclass="z-icon-minus-square z-icon-2x"/>
+				<label value="minus-square"/>
+				<label value="\f146"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-minus-square-o z-icon-2x"/>
+				<label value="minus-square-o"/>
+				<label value="\f147"/>
+				<a iconSclass="z-icon-mixcloud z-icon-2x"/>
+				<label value="mixcloud"/>
+				<label value="\f289"/>
+				<a iconSclass="z-icon-mobile z-icon-2x"/>
+				<label value="mobile"/>
+				<label value="\f10b"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-mobile-phone z-icon-2x"/>
+				<label value="mobile-phone"/>
+				<label value="\f10b"/>
+				<a iconSclass="z-icon-modx z-icon-2x"/>
+				<label value="modx"/>
+				<label value="\f285"/>
+				<a iconSclass="z-icon-money z-icon-2x"/>
+				<label value="money"/>
+				<label value="\f0d6"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-moon-o z-icon-2x"/>
+				<label value="moon-o"/>
+				<label value="\f186"/>
+				<a iconSclass="z-icon-mortar-board z-icon-2x"/>
+				<label value="mortar-board"/>
+				<label value="\f19d"/>
+				<a iconSclass="z-icon-motorcycle z-icon-2x"/>
+				<label value="motorcycle"/>
+				<label value="\f21c"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-mouse-pointer z-icon-2x"/>
+				<label value="mouse-pointer"/>
+				<label value="\f245"/>
+				<a iconSclass="z-icon-music z-icon-2x"/>
+				<label value="music"/>
+				<label value="\f001"/>
+				<a iconSclass="z-icon-navicon z-icon-2x"/>
+				<label value="navicon"/>
+				<label value="\f0c9"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-neuter z-icon-2x"/>
+				<label value="neuter"/>
+				<label value="\f22c"/>
+				<a iconSclass="z-icon-newspaper-o z-icon-2x"/>
+				<label value="newspaper-o"/>
+				<label value="\f1ea"/>
+				<a iconSclass="z-icon-object-group z-icon-2x"/>
+				<label value="object-group"/>
+				<label value="\f247"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-object-ungroup z-icon-2x"/>
+				<label value="object-ungroup"/>
+				<label value="\f248"/>
+				<a iconSclass="z-icon-odnoklassniki z-icon-2x"/>
+				<label value="odnoklassniki"/>
+				<label value="\f263"/>
+				<a iconSclass="z-icon-odnoklassniki-square z-icon-2x"/>
+				<label value="odnoklassniki-square"/>
+				<label value="\f264"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-opencart z-icon-2x"/>
+				<label value="opencart"/>
+				<label value="\f23d"/>
+				<a iconSclass="z-icon-openid z-icon-2x"/>
+				<label value="openid"/>
+				<label value="\f19b"/>
+				<a iconSclass="z-icon-opera z-icon-2x"/>
+				<label value="opera"/>
+				<label value="\f26a"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-optin-monster z-icon-2x"/>
+				<label value="optin-monster"/>
+				<label value="\f23c"/>
+				<a iconSclass="z-icon-outdent z-icon-2x"/>
+				<label value="outdent"/>
+				<label value="\f03b"/>
+				<a iconSclass="z-icon-pagelines z-icon-2x"/>
+				<label value="pagelines"/>
+				<label value="\f18c"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-paint-brush z-icon-2x"/>
+				<label value="paint-brush"/>
+				<label value="\f1fc"/>
+				<a iconSclass="z-icon-paper-plane z-icon-2x"/>
+				<label value="paper-plane"/>
+				<label value="\f1d8"/>
+				<a iconSclass="z-icon-paper-plane-o z-icon-2x"/>
+				<label value="paper-plane-o"/>
+				<label value="\f1d9"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-paperclip z-icon-2x"/>
+				<label value="paperclip"/>
+				<label value="\f0c6"/>
+				<a iconSclass="z-icon-paragraph z-icon-2x"/>
+				<label value="paragraph"/>
+				<label value="\f1dd"/>
+				<a iconSclass="z-icon-paste z-icon-2x"/>
+				<label value="paste"/>
+				<label value="\f0ea"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-pause z-icon-2x"/>
+				<label value="pause"/>
+				<label value="\f04c"/>
+				<a iconSclass="z-icon-pause-circle z-icon-2x"/>
+				<label value="pause-circle"/>
+				<label value="\f28b"/>
+				<a iconSclass="z-icon-pause-circle-o z-icon-2x"/>
+				<label value="pause-circle-o"/>
+				<label value="\f28c"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-paw z-icon-2x"/>
+				<label value="paw"/>
+				<label value="\f1b0"/>
+				<a iconSclass="z-icon-paypal z-icon-2x"/>
+				<label value="paypal"/>
+				<label value="\f1ed"/>
+				<a iconSclass="z-icon-pencil z-icon-2x"/>
+				<label value="pencil"/>
+				<label value="\f040"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-pencil-square z-icon-2x"/>
+				<label value="pencil-square"/>
+				<label value="\f14b"/>
+				<a iconSclass="z-icon-pencil-square-o z-icon-2x"/>
+				<label value="pencil-square-o"/>
+				<label value="\f044"/>
+				<a iconSclass="z-icon-percent z-icon-2x"/>
+				<label value="percent"/>
+				<label value="\f295"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-phone z-icon-2x"/>
+				<label value="phone"/>
+				<label value="\f095"/>
+				<a iconSclass="z-icon-phone-square z-icon-2x"/>
+				<label value="phone-square"/>
+				<label value="\f098"/>
+				<a iconSclass="z-icon-photo z-icon-2x"/>
+				<label value="photo"/>
+				<label value="\f03e"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-picture-o z-icon-2x"/>
+				<label value="picture-o"/>
+				<label value="\f03e"/>
+				<a iconSclass="z-icon-pie-chart z-icon-2x"/>
+				<label value="pie-chart"/>
+				<label value="\f200"/>
+				<a iconSclass="z-icon-pied-piper z-icon-2x"/>
+				<label value="pied-piper"/>
+				<label value="\f2ae"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-pied-piper-alt z-icon-2x"/>
+				<label value="pied-piper-alt"/>
+				<label value="\f1a8"/>
+				<a iconSclass="z-icon-pied-piper-pp z-icon-2x"/>
+				<label value="pied-piper-pp"/>
+				<label value="\f1a7"/>
+				<a iconSclass="z-icon-pinterest z-icon-2x"/>
+				<label value="pinterest"/>
+				<label value="\f0d2"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-pinterest-p z-icon-2x"/>
+				<label value="pinterest-p"/>
+				<label value="\f231"/>
+				<a iconSclass="z-icon-pinterest-square z-icon-2x"/>
+				<label value="pinterest-square"/>
+				<label value="\f0d3"/>
+				<a iconSclass="z-icon-plane z-icon-2x"/>
+				<label value="plane"/>
+				<label value="\f072"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-play z-icon-2x"/>
+				<label value="play"/>
+				<label value="\f04b"/>
+				<a iconSclass="z-icon-play-circle z-icon-2x"/>
+				<label value="play-circle"/>
+				<label value="\f144"/>
+				<a iconSclass="z-icon-play-circle-o z-icon-2x"/>
+				<label value="play-circle-o"/>
+				<label value="\f01d"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-plug z-icon-2x"/>
+				<label value="plug"/>
+				<label value="\f1e6"/>
+				<a iconSclass="z-icon-plus z-icon-2x"/>
+				<label value="plus"/>
+				<label value="\f067"/>
+				<a iconSclass="z-icon-plus-circle z-icon-2x"/>
+				<label value="plus-circle"/>
+				<label value="\f055"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-plus-square z-icon-2x"/>
+				<label value="plus-square"/>
+				<label value="\f0fe"/>
+				<a iconSclass="z-icon-plus-square-o z-icon-2x"/>
+				<label value="plus-square-o"/>
+				<label value="\f196"/>
+				<a iconSclass="z-icon-podcast z-icon-2x"/>
+				<label value="podcast"/>
+				<label value="\f2ce"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-power-off z-icon-2x"/>
+				<label value="power-off"/>
+				<label value="\f011"/>
+				<a iconSclass="z-icon-print z-icon-2x"/>
+				<label value="print"/>
+				<label value="\f02f"/>
+				<a iconSclass="z-icon-product-hunt z-icon-2x"/>
+				<label value="product-hunt"/>
+				<label value="\f288"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-puzzle-piece z-icon-2x"/>
+				<label value="puzzle-piece"/>
+				<label value="\f12e"/>
+				<a iconSclass="z-icon-qq z-icon-2x"/>
+				<label value="qq"/>
+				<label value="\f1d6"/>
+				<a iconSclass="z-icon-qrcode z-icon-2x"/>
+				<label value="qrcode"/>
+				<label value="\f029"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-question z-icon-2x"/>
+				<label value="question"/>
+				<label value="\f128"/>
+				<a iconSclass="z-icon-question-circle z-icon-2x"/>
+				<label value="question-circle"/>
+				<label value="\f059"/>
+				<a iconSclass="z-icon-question-circle-o z-icon-2x"/>
+				<label value="question-circle-o"/>
+				<label value="\f29c"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-quora z-icon-2x"/>
+				<label value="quora"/>
+				<label value="\f2c4"/>
+				<a iconSclass="z-icon-quote-left z-icon-2x"/>
+				<label value="quote-left"/>
+				<label value="\f10d"/>
+				<a iconSclass="z-icon-quote-right z-icon-2x"/>
+				<label value="quote-right"/>
+				<label value="\f10e"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-ra z-icon-2x"/>
+				<label value="ra"/>
+				<label value="\f1d0"/>
+				<a iconSclass="z-icon-random z-icon-2x"/>
+				<label value="random"/>
+				<label value="\f074"/>
+				<a iconSclass="z-icon-ravelry z-icon-2x"/>
+				<label value="ravelry"/>
+				<label value="\f2d9"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-rebel z-icon-2x"/>
+				<label value="rebel"/>
+				<label value="\f1d0"/>
+				<a iconSclass="z-icon-recycle z-icon-2x"/>
+				<label value="recycle"/>
+				<label value="\f1b8"/>
+				<a iconSclass="z-icon-reddit z-icon-2x"/>
+				<label value="reddit"/>
+				<label value="\f1a1"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-reddit-alien z-icon-2x"/>
+				<label value="reddit-alien"/>
+				<label value="\f281"/>
+				<a iconSclass="z-icon-reddit-square z-icon-2x"/>
+				<label value="reddit-square"/>
+				<label value="\f1a2"/>
+				<a iconSclass="z-icon-refresh z-icon-2x"/>
+				<label value="refresh"/>
+				<label value="\f021"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-registered z-icon-2x"/>
+				<label value="registered"/>
+				<label value="\f25d"/>
+				<a iconSclass="z-icon-remove z-icon-2x"/>
+				<label value="remove"/>
+				<label value="\f00d"/>
+				<a iconSclass="z-icon-renren z-icon-2x"/>
+				<label value="renren"/>
+				<label value="\f18b"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-reorder z-icon-2x"/>
+				<label value="reorder"/>
+				<label value="\f0c9"/>
+				<a iconSclass="z-icon-repeat z-icon-2x"/>
+				<label value="repeat"/>
+				<label value="\f01e"/>
+				<a iconSclass="z-icon-reply z-icon-2x"/>
+				<label value="reply"/>
+				<label value="\f112"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-reply-all z-icon-2x"/>
+				<label value="reply-all"/>
+				<label value="\f122"/>
+				<a iconSclass="z-icon-resistance z-icon-2x"/>
+				<label value="resistance"/>
+				<label value="\f1d0"/>
+				<a iconSclass="z-icon-retweet z-icon-2x"/>
+				<label value="retweet"/>
+				<label value="\f079"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-rmb z-icon-2x"/>
+				<label value="rmb"/>
+				<label value="\f157"/>
+				<a iconSclass="z-icon-road z-icon-2x"/>
+				<label value="road"/>
+				<label value="\f018"/>
+				<a iconSclass="z-icon-rocket z-icon-2x"/>
+				<label value="rocket"/>
+				<label value="\f135"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-rotate-left z-icon-2x"/>
+				<label value="rotate-left"/>
+				<label value="\f0e2"/>
+				<a iconSclass="z-icon-rotate-right z-icon-2x"/>
+				<label value="rotate-right"/>
+				<label value="\f01e"/>
+				<a iconSclass="z-icon-rouble z-icon-2x"/>
+				<label value="rouble"/>
+				<label value="\f158"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-rss z-icon-2x"/>
+				<label value="rss"/>
+				<label value="\f09e"/>
+				<a iconSclass="z-icon-rss-square z-icon-2x"/>
+				<label value="rss-square"/>
+				<label value="\f143"/>
+				<a iconSclass="z-icon-rub z-icon-2x"/>
+				<label value="rub"/>
+				<label value="\f158"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-ruble z-icon-2x"/>
+				<label value="ruble"/>
+				<label value="\f158"/>
+				<a iconSclass="z-icon-rupee z-icon-2x"/>
+				<label value="rupee"/>
+				<label value="\f156"/>
+				<a iconSclass="z-icon-s15 z-icon-2x"/>
+				<label value="s15"/>
+				<label value="\f2cd"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-safari z-icon-2x"/>
+				<label value="safari"/>
+				<label value="\f267"/>
+				<a iconSclass="z-icon-save z-icon-2x"/>
+				<label value="save"/>
+				<label value="\f0c7"/>
+				<a iconSclass="z-icon-scissors z-icon-2x"/>
+				<label value="scissors"/>
+				<label value="\f0c4"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-scribd z-icon-2x"/>
+				<label value="scribd"/>
+				<label value="\f28a"/>
+				<a iconSclass="z-icon-search z-icon-2x"/>
+				<label value="search"/>
+				<label value="\f002"/>
+				<a iconSclass="z-icon-search-minus z-icon-2x"/>
+				<label value="search-minus"/>
+				<label value="\f010"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-search-plus z-icon-2x"/>
+				<label value="search-plus"/>
+				<label value="\f00e"/>
+				<a iconSclass="z-icon-sellsy z-icon-2x"/>
+				<label value="sellsy"/>
+				<label value="\f213"/>
+				<a iconSclass="z-icon-send z-icon-2x"/>
+				<label value="send"/>
+				<label value="\f1d8"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-send-o z-icon-2x"/>
+				<label value="send-o"/>
+				<label value="\f1d9"/>
+				<a iconSclass="z-icon-server z-icon-2x"/>
+				<label value="server"/>
+				<label value="\f233"/>
+				<a iconSclass="z-icon-share z-icon-2x"/>
+				<label value="share"/>
+				<label value="\f064"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-share-alt z-icon-2x"/>
+				<label value="share-alt"/>
+				<label value="\f1e0"/>
+				<a iconSclass="z-icon-share-alt-square z-icon-2x"/>
+				<label value="share-alt-square"/>
+				<label value="\f1e1"/>
+				<a iconSclass="z-icon-share-square z-icon-2x"/>
+				<label value="share-square"/>
+				<label value="\f14d"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-share-square-o z-icon-2x"/>
+				<label value="share-square-o"/>
+				<label value="\f045"/>
+				<a iconSclass="z-icon-shekel z-icon-2x"/>
+				<label value="shekel"/>
+				<label value="\f20b"/>
+				<a iconSclass="z-icon-sheqel z-icon-2x"/>
+				<label value="sheqel"/>
+				<label value="\f20b"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-shield z-icon-2x"/>
+				<label value="shield"/>
+				<label value="\f132"/>
+				<a iconSclass="z-icon-ship z-icon-2x"/>
+				<label value="ship"/>
+				<label value="\f21a"/>
+				<a iconSclass="z-icon-shirtsinbulk z-icon-2x"/>
+				<label value="shirtsinbulk"/>
+				<label value="\f214"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-shopping-bag z-icon-2x"/>
+				<label value="shopping-bag"/>
+				<label value="\f290"/>
+				<a iconSclass="z-icon-shopping-basket z-icon-2x"/>
+				<label value="shopping-basket"/>
+				<label value="\f291"/>
+				<a iconSclass="z-icon-shopping-cart z-icon-2x"/>
+				<label value="shopping-cart"/>
+				<label value="\f07a"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-shower z-icon-2x"/>
+				<label value="shower"/>
+				<label value="\f2cc"/>
+				<a iconSclass="z-icon-sign-in z-icon-2x"/>
+				<label value="sign-in"/>
+				<label value="\f090"/>
+				<a iconSclass="z-icon-sign-language z-icon-2x"/>
+				<label value="sign-language"/>
+				<label value="\f2a7"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-sign-out z-icon-2x"/>
+				<label value="sign-out"/>
+				<label value="\f08b"/>
+				<a iconSclass="z-icon-signal z-icon-2x"/>
+				<label value="signal"/>
+				<label value="\f012"/>
+				<a iconSclass="z-icon-signing z-icon-2x"/>
+				<label value="signing"/>
+				<label value="\f2a7"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-simplybuilt z-icon-2x"/>
+				<label value="simplybuilt"/>
+				<label value="\f215"/>
+				<a iconSclass="z-icon-sitemap z-icon-2x"/>
+				<label value="sitemap"/>
+				<label value="\f0e8"/>
+				<a iconSclass="z-icon-skyatlas z-icon-2x"/>
+				<label value="skyatlas"/>
+				<label value="\f216"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-skype z-icon-2x"/>
+				<label value="skype"/>
+				<label value="\f17e"/>
+				<a iconSclass="z-icon-slack z-icon-2x"/>
+				<label value="slack"/>
+				<label value="\f198"/>
+				<a iconSclass="z-icon-sliders z-icon-2x"/>
+				<label value="sliders"/>
+				<label value="\f1de"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-slideshare z-icon-2x"/>
+				<label value="slideshare"/>
+				<label value="\f1e7"/>
+				<a iconSclass="z-icon-smile-o z-icon-2x"/>
+				<label value="smile-o"/>
+				<label value="\f118"/>
+				<a iconSclass="z-icon-snapchat z-icon-2x"/>
+				<label value="snapchat"/>
+				<label value="\f2ab"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-snapchat-ghost z-icon-2x"/>
+				<label value="snapchat-ghost"/>
+				<label value="\f2ac"/>
+				<a iconSclass="z-icon-snapchat-square z-icon-2x"/>
+				<label value="snapchat-square"/>
+				<label value="\f2ad"/>
+				<a iconSclass="z-icon-snowflake-o z-icon-2x"/>
+				<label value="snowflake-o"/>
+				<label value="\f2dc"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-soccer-ball-o z-icon-2x"/>
+				<label value="soccer-ball-o"/>
+				<label value="\f1e3"/>
+				<a iconSclass="z-icon-sort z-icon-2x"/>
+				<label value="sort"/>
+				<label value="\f0dc"/>
+				<a iconSclass="z-icon-sort-alpha-asc z-icon-2x"/>
+				<label value="sort-alpha-asc"/>
+				<label value="\f15d"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-sort-alpha-desc z-icon-2x"/>
+				<label value="sort-alpha-desc"/>
+				<label value="\f15e"/>
+				<a iconSclass="z-icon-sort-amount-asc z-icon-2x"/>
+				<label value="sort-amount-asc"/>
+				<label value="\f160"/>
+				<a iconSclass="z-icon-sort-amount-desc z-icon-2x"/>
+				<label value="sort-amount-desc"/>
+				<label value="\f161"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-sort-asc z-icon-2x"/>
+				<label value="sort-asc"/>
+				<label value="\f0de"/>
+				<a iconSclass="z-icon-sort-desc z-icon-2x"/>
+				<label value="sort-desc"/>
+				<label value="\f0dd"/>
+				<a iconSclass="z-icon-sort-down z-icon-2x"/>
+				<label value="sort-down"/>
+				<label value="\f0dd"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-sort-numeric-asc z-icon-2x"/>
+				<label value="sort-numeric-asc"/>
+				<label value="\f162"/>
+				<a iconSclass="z-icon-sort-numeric-desc z-icon-2x"/>
+				<label value="sort-numeric-desc"/>
+				<label value="\f163"/>
+				<a iconSclass="z-icon-sort-up z-icon-2x"/>
+				<label value="sort-up"/>
+				<label value="\f0de"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-soundcloud z-icon-2x"/>
+				<label value="soundcloud"/>
+				<label value="\f1be"/>
+				<a iconSclass="z-icon-space-shuttle z-icon-2x"/>
+				<label value="space-shuttle"/>
+				<label value="\f197"/>
+				<a iconSclass="z-icon-spinner z-icon-2x"/>
+				<label value="spinner"/>
+				<label value="\f110"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-spoon z-icon-2x"/>
+				<label value="spoon"/>
+				<label value="\f1b1"/>
+				<a iconSclass="z-icon-spotify z-icon-2x"/>
+				<label value="spotify"/>
+				<label value="\f1bc"/>
+				<a iconSclass="z-icon-square z-icon-2x"/>
+				<label value="square"/>
+				<label value="\f0c8"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-square-o z-icon-2x"/>
+				<label value="square-o"/>
+				<label value="\f096"/>
+				<a iconSclass="z-icon-stack-exchange z-icon-2x"/>
+				<label value="stack-exchange"/>
+				<label value="\f18d"/>
+				<a iconSclass="z-icon-stack-overflow z-icon-2x"/>
+				<label value="stack-overflow"/>
+				<label value="\f16c"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-star z-icon-2x"/>
+				<label value="star"/>
+				<label value="\f005"/>
+				<a iconSclass="z-icon-star-half z-icon-2x"/>
+				<label value="star-half"/>
+				<label value="\f089"/>
+				<a iconSclass="z-icon-star-half-empty z-icon-2x"/>
+				<label value="star-half-empty"/>
+				<label value="\f123"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-star-half-full z-icon-2x"/>
+				<label value="star-half-full"/>
+				<label value="\f123"/>
+				<a iconSclass="z-icon-star-half-o z-icon-2x"/>
+				<label value="star-half-o"/>
+				<label value="\f123"/>
+				<a iconSclass="z-icon-star-o z-icon-2x"/>
+				<label value="star-o"/>
+				<label value="\f006"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-steam z-icon-2x"/>
+				<label value="steam"/>
+				<label value="\f1b6"/>
+				<a iconSclass="z-icon-steam-square z-icon-2x"/>
+				<label value="steam-square"/>
+				<label value="\f1b7"/>
+				<a iconSclass="z-icon-step-backward z-icon-2x"/>
+				<label value="step-backward"/>
+				<label value="\f048"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-step-forward z-icon-2x"/>
+				<label value="step-forward"/>
+				<label value="\f051"/>
+				<a iconSclass="z-icon-stethoscope z-icon-2x"/>
+				<label value="stethoscope"/>
+				<label value="\f0f1"/>
+				<a iconSclass="z-icon-sticky-note z-icon-2x"/>
+				<label value="sticky-note"/>
+				<label value="\f249"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-sticky-note-o z-icon-2x"/>
+				<label value="sticky-note-o"/>
+				<label value="\f24a"/>
+				<a iconSclass="z-icon-stop z-icon-2x"/>
+				<label value="stop"/>
+				<label value="\f04d"/>
+				<a iconSclass="z-icon-stop-circle z-icon-2x"/>
+				<label value="stop-circle"/>
+				<label value="\f28d"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-stop-circle-o z-icon-2x"/>
+				<label value="stop-circle-o"/>
+				<label value="\f28e"/>
+				<a iconSclass="z-icon-street-view z-icon-2x"/>
+				<label value="street-view"/>
+				<label value="\f21d"/>
+				<a iconSclass="z-icon-strikethrough z-icon-2x"/>
+				<label value="strikethrough"/>
+				<label value="\f0cc"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-stumbleupon z-icon-2x"/>
+				<label value="stumbleupon"/>
+				<label value="\f1a4"/>
+				<a iconSclass="z-icon-stumbleupon-circle z-icon-2x"/>
+				<label value="stumbleupon-circle"/>
+				<label value="\f1a3"/>
+				<a iconSclass="z-icon-subscript z-icon-2x"/>
+				<label value="subscript"/>
+				<label value="\f12c"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-subway z-icon-2x"/>
+				<label value="subway"/>
+				<label value="\f239"/>
+				<a iconSclass="z-icon-suitcase z-icon-2x"/>
+				<label value="suitcase"/>
+				<label value="\f0f2"/>
+				<a iconSclass="z-icon-sun-o z-icon-2x"/>
+				<label value="sun-o"/>
+				<label value="\f185"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-superpowers z-icon-2x"/>
+				<label value="superpowers"/>
+				<label value="\f2dd"/>
+				<a iconSclass="z-icon-superscript z-icon-2x"/>
+				<label value="superscript"/>
+				<label value="\f12b"/>
+				<a iconSclass="z-icon-support z-icon-2x"/>
+				<label value="support"/>
+				<label value="\f1cd"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-table z-icon-2x"/>
+				<label value="table"/>
+				<label value="\f0ce"/>
+				<a iconSclass="z-icon-tablet z-icon-2x"/>
+				<label value="tablet"/>
+				<label value="\f10a"/>
+				<a iconSclass="z-icon-tachometer z-icon-2x"/>
+				<label value="tachometer"/>
+				<label value="\f0e4"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-tag z-icon-2x"/>
+				<label value="tag"/>
+				<label value="\f02b"/>
+				<a iconSclass="z-icon-tags z-icon-2x"/>
+				<label value="tags"/>
+				<label value="\f02c"/>
+				<a iconSclass="z-icon-tasks z-icon-2x"/>
+				<label value="tasks"/>
+				<label value="\f0ae"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-taxi z-icon-2x"/>
+				<label value="taxi"/>
+				<label value="\f1ba"/>
+				<a iconSclass="z-icon-telegram z-icon-2x"/>
+				<label value="telegram"/>
+				<label value="\f2c6"/>
+				<a iconSclass="z-icon-television z-icon-2x"/>
+				<label value="television"/>
+				<label value="\f26c"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-tencent-weibo z-icon-2x"/>
+				<label value="tencent-weibo"/>
+				<label value="\f1d5"/>
+				<a iconSclass="z-icon-terminal z-icon-2x"/>
+				<label value="terminal"/>
+				<label value="\f120"/>
+				<a iconSclass="z-icon-text-height z-icon-2x"/>
+				<label value="text-height"/>
+				<label value="\f034"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-text-width z-icon-2x"/>
+				<label value="text-width"/>
+				<label value="\f035"/>
+				<a iconSclass="z-icon-th z-icon-2x"/>
+				<label value="th"/>
+				<label value="\f00a"/>
+				<a iconSclass="z-icon-th-large z-icon-2x"/>
+				<label value="th-large"/>
+				<label value="\f009"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-th-list z-icon-2x"/>
+				<label value="th-list"/>
+				<label value="\f00b"/>
+				<a iconSclass="z-icon-themeisle z-icon-2x"/>
+				<label value="themeisle"/>
+				<label value="\f2b2"/>
+				<a iconSclass="z-icon-thermometer z-icon-2x"/>
+				<label value="thermometer"/>
+				<label value="\f2c7"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-thermometer-0 z-icon-2x"/>
+				<label value="thermometer-0"/>
+				<label value="\f2cb"/>
+				<a iconSclass="z-icon-thermometer-1 z-icon-2x"/>
+				<label value="thermometer-1"/>
+				<label value="\f2ca"/>
+				<a iconSclass="z-icon-thermometer-2 z-icon-2x"/>
+				<label value="thermometer-2"/>
+				<label value="\f2c9"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-thermometer-3 z-icon-2x"/>
+				<label value="thermometer-3"/>
+				<label value="\f2c8"/>
+				<a iconSclass="z-icon-thermometer-4 z-icon-2x"/>
+				<label value="thermometer-4"/>
+				<label value="\f2c7"/>
+				<a iconSclass="z-icon-thermometer-empty z-icon-2x"/>
+				<label value="thermometer-empty"/>
+				<label value="\f2cb"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-thermometer-full z-icon-2x"/>
+				<label value="thermometer-full"/>
+				<label value="\f2c7"/>
+				<a iconSclass="z-icon-thermometer-half z-icon-2x"/>
+				<label value="thermometer-half"/>
+				<label value="\f2c9"/>
+				<a iconSclass="z-icon-thermometer-quarter z-icon-2x"/>
+				<label value="thermometer-quarter"/>
+				<label value="\f2ca"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-thermometer-three-quarters z-icon-2x"/>
+				<label value="thermometer-three-quarters"/>
+				<label value="\f2c8"/>
+				<a iconSclass="z-icon-thumb-tack z-icon-2x"/>
+				<label value="thumb-tack"/>
+				<label value="\f08d"/>
+				<a iconSclass="z-icon-thumbs-down z-icon-2x"/>
+				<label value="thumbs-down"/>
+				<label value="\f165"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-thumbs-o-down z-icon-2x"/>
+				<label value="thumbs-o-down"/>
+				<label value="\f088"/>
+				<a iconSclass="z-icon-thumbs-o-up z-icon-2x"/>
+				<label value="thumbs-o-up"/>
+				<label value="\f087"/>
+				<a iconSclass="z-icon-thumbs-up z-icon-2x"/>
+				<label value="thumbs-up"/>
+				<label value="\f164"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-ticket z-icon-2x"/>
+				<label value="ticket"/>
+				<label value="\f145"/>
+				<a iconSclass="z-icon-times z-icon-2x"/>
+				<label value="times"/>
+				<label value="\f00d"/>
+				<a iconSclass="z-icon-times-circle z-icon-2x"/>
+				<label value="times-circle"/>
+				<label value="\f057"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-times-circle-o z-icon-2x"/>
+				<label value="times-circle-o"/>
+				<label value="\f05c"/>
+				<a iconSclass="z-icon-times-rectangle z-icon-2x"/>
+				<label value="times-rectangle"/>
+				<label value="\f2d3"/>
+				<a iconSclass="z-icon-times-rectangle-o z-icon-2x"/>
+				<label value="times-rectangle-o"/>
+				<label value="\f2d4"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-tint z-icon-2x"/>
+				<label value="tint"/>
+				<label value="\f043"/>
+				<a iconSclass="z-icon-toggle-down z-icon-2x"/>
+				<label value="toggle-down"/>
+				<label value="\f150"/>
+				<a iconSclass="z-icon-toggle-left z-icon-2x"/>
+				<label value="toggle-left"/>
+				<label value="\f191"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-toggle-off z-icon-2x"/>
+				<label value="toggle-off"/>
+				<label value="\f204"/>
+				<a iconSclass="z-icon-toggle-on z-icon-2x"/>
+				<label value="toggle-on"/>
+				<label value="\f205"/>
+				<a iconSclass="z-icon-toggle-right z-icon-2x"/>
+				<label value="toggle-right"/>
+				<label value="\f152"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-toggle-up z-icon-2x"/>
+				<label value="toggle-up"/>
+				<label value="\f151"/>
+				<a iconSclass="z-icon-trademark z-icon-2x"/>
+				<label value="trademark"/>
+				<label value="\f25c"/>
+				<a iconSclass="z-icon-train z-icon-2x"/>
+				<label value="train"/>
+				<label value="\f238"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-transgender z-icon-2x"/>
+				<label value="transgender"/>
+				<label value="\f224"/>
+				<a iconSclass="z-icon-transgender-alt z-icon-2x"/>
+				<label value="transgender-alt"/>
+				<label value="\f225"/>
+				<a iconSclass="z-icon-trash z-icon-2x"/>
+				<label value="trash"/>
+				<label value="\f1f8"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-trash-o z-icon-2x"/>
+				<label value="trash-o"/>
+				<label value="\f014"/>
+				<a iconSclass="z-icon-tree z-icon-2x"/>
+				<label value="tree"/>
+				<label value="\f1bb"/>
+				<a iconSclass="z-icon-trello z-icon-2x"/>
+				<label value="trello"/>
+				<label value="\f181"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-tripadvisor z-icon-2x"/>
+				<label value="tripadvisor"/>
+				<label value="\f262"/>
+				<a iconSclass="z-icon-trophy z-icon-2x"/>
+				<label value="trophy"/>
+				<label value="\f091"/>
+				<a iconSclass="z-icon-truck z-icon-2x"/>
+				<label value="truck"/>
+				<label value="\f0d1"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-try z-icon-2x"/>
+				<label value="try"/>
+				<label value="\f195"/>
+				<a iconSclass="z-icon-tty z-icon-2x"/>
+				<label value="tty"/>
+				<label value="\f1e4"/>
+				<a iconSclass="z-icon-tumblr z-icon-2x"/>
+				<label value="tumblr"/>
+				<label value="\f173"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-tumblr-square z-icon-2x"/>
+				<label value="tumblr-square"/>
+				<label value="\f174"/>
+				<a iconSclass="z-icon-turkish-lira z-icon-2x"/>
+				<label value="turkish-lira"/>
+				<label value="\f195"/>
+				<a iconSclass="z-icon-tv z-icon-2x"/>
+				<label value="tv"/>
+				<label value="\f26c"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-twitch z-icon-2x"/>
+				<label value="twitch"/>
+				<label value="\f1e8"/>
+				<a iconSclass="z-icon-twitter z-icon-2x"/>
+				<label value="twitter"/>
+				<label value="\f099"/>
+				<a iconSclass="z-icon-twitter-square z-icon-2x"/>
+				<label value="twitter-square"/>
+				<label value="\f081"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-umbrella z-icon-2x"/>
+				<label value="umbrella"/>
+				<label value="\f0e9"/>
+				<a iconSclass="z-icon-underline z-icon-2x"/>
+				<label value="underline"/>
+				<label value="\f0cd"/>
+				<a iconSclass="z-icon-undo z-icon-2x"/>
+				<label value="undo"/>
+				<label value="\f0e2"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-universal-access z-icon-2x"/>
+				<label value="universal-access"/>
+				<label value="\f29a"/>
+				<a iconSclass="z-icon-university z-icon-2x"/>
+				<label value="university"/>
+				<label value="\f19c"/>
+				<a iconSclass="z-icon-unlink z-icon-2x"/>
+				<label value="unlink"/>
+				<label value="\f127"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-unlock z-icon-2x"/>
+				<label value="unlock"/>
+				<label value="\f09c"/>
+				<a iconSclass="z-icon-unlock-alt z-icon-2x"/>
+				<label value="unlock-alt"/>
+				<label value="\f13e"/>
+				<a iconSclass="z-icon-unsorted z-icon-2x"/>
+				<label value="unsorted"/>
+				<label value="\f0dc"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-upload z-icon-2x"/>
+				<label value="upload"/>
+				<label value="\f093"/>
+				<a iconSclass="z-icon-usb z-icon-2x"/>
+				<label value="usb"/>
+				<label value="\f287"/>
+				<a iconSclass="z-icon-usd z-icon-2x"/>
+				<label value="usd"/>
+				<label value="\f155"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-user z-icon-2x"/>
+				<label value="user"/>
+				<label value="\f007"/>
+				<a iconSclass="z-icon-user-circle z-icon-2x"/>
+				<label value="user-circle"/>
+				<label value="\f2bd"/>
+				<a iconSclass="z-icon-user-circle-o z-icon-2x"/>
+				<label value="user-circle-o"/>
+				<label value="\f2be"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-user-md z-icon-2x"/>
+				<label value="user-md"/>
+				<label value="\f0f0"/>
+				<a iconSclass="z-icon-user-o z-icon-2x"/>
+				<label value="user-o"/>
+				<label value="\f2c0"/>
+				<a iconSclass="z-icon-user-plus z-icon-2x"/>
+				<label value="user-plus"/>
+				<label value="\f234"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-user-secret z-icon-2x"/>
+				<label value="user-secret"/>
+				<label value="\f21b"/>
+				<a iconSclass="z-icon-user-times z-icon-2x"/>
+				<label value="user-times"/>
+				<label value="\f235"/>
+				<a iconSclass="z-icon-users z-icon-2x"/>
+				<label value="users"/>
+				<label value="\f0c0"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-vcard z-icon-2x"/>
+				<label value="vcard"/>
+				<label value="\f2bb"/>
+				<a iconSclass="z-icon-vcard-o z-icon-2x"/>
+				<label value="vcard-o"/>
+				<label value="\f2bc"/>
+				<a iconSclass="z-icon-venus z-icon-2x"/>
+				<label value="venus"/>
+				<label value="\f221"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-venus-double z-icon-2x"/>
+				<label value="venus-double"/>
+				<label value="\f226"/>
+				<a iconSclass="z-icon-venus-mars z-icon-2x"/>
+				<label value="venus-mars"/>
+				<label value="\f228"/>
+				<a iconSclass="z-icon-viacoin z-icon-2x"/>
+				<label value="viacoin"/>
+				<label value="\f237"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-viadeo z-icon-2x"/>
+				<label value="viadeo"/>
+				<label value="\f2a9"/>
+				<a iconSclass="z-icon-viadeo-square z-icon-2x"/>
+				<label value="viadeo-square"/>
+				<label value="\f2aa"/>
+				<a iconSclass="z-icon-video-camera z-icon-2x"/>
+				<label value="video-camera"/>
+				<label value="\f03d"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-vimeo z-icon-2x"/>
+				<label value="vimeo"/>
+				<label value="\f27d"/>
+				<a iconSclass="z-icon-vimeo-square z-icon-2x"/>
+				<label value="vimeo-square"/>
+				<label value="\f194"/>
+				<a iconSclass="z-icon-vine z-icon-2x"/>
+				<label value="vine"/>
+				<label value="\f1ca"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-vk z-icon-2x"/>
+				<label value="vk"/>
+				<label value="\f189"/>
+				<a iconSclass="z-icon-volume-control-phone z-icon-2x"/>
+				<label value="volume-control-phone"/>
+				<label value="\f2a0"/>
+				<a iconSclass="z-icon-volume-down z-icon-2x"/>
+				<label value="volume-down"/>
+				<label value="\f027"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-volume-off z-icon-2x"/>
+				<label value="volume-off"/>
+				<label value="\f026"/>
+				<a iconSclass="z-icon-volume-up z-icon-2x"/>
+				<label value="volume-up"/>
+				<label value="\f028"/>
+				<a iconSclass="z-icon-warning z-icon-2x"/>
+				<label value="warning"/>
+				<label value="\f071"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-wechat z-icon-2x"/>
+				<label value="wechat"/>
+				<label value="\f1d7"/>
+				<a iconSclass="z-icon-weibo z-icon-2x"/>
+				<label value="weibo"/>
+				<label value="\f18a"/>
+				<a iconSclass="z-icon-weixin z-icon-2x"/>
+				<label value="weixin"/>
+				<label value="\f1d7"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-whatsapp z-icon-2x"/>
+				<label value="whatsapp"/>
+				<label value="\f232"/>
+				<a iconSclass="z-icon-wheelchair z-icon-2x"/>
+				<label value="wheelchair"/>
+				<label value="\f193"/>
+				<a iconSclass="z-icon-wheelchair-alt z-icon-2x"/>
+				<label value="wheelchair-alt"/>
+				<label value="\f29b"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-wifi z-icon-2x"/>
+				<label value="wifi"/>
+				<label value="\f1eb"/>
+				<a iconSclass="z-icon-wikipedia-w z-icon-2x"/>
+				<label value="wikipedia-w"/>
+				<label value="\f266"/>
+				<a iconSclass="z-icon-window-close z-icon-2x"/>
+				<label value="window-close"/>
+				<label value="\f2d3"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-window-close-o z-icon-2x"/>
+				<label value="window-close-o"/>
+				<label value="\f2d4"/>
+				<a iconSclass="z-icon-window-maximize z-icon-2x"/>
+				<label value="window-maximize"/>
+				<label value="\f2d0"/>
+				<a iconSclass="z-icon-window-minimize z-icon-2x"/>
+				<label value="window-minimize"/>
+				<label value="\f2d1"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-window-restore z-icon-2x"/>
+				<label value="window-restore"/>
+				<label value="\f2d2"/>
+				<a iconSclass="z-icon-windows z-icon-2x"/>
+				<label value="windows"/>
+				<label value="\f17a"/>
+				<a iconSclass="z-icon-won z-icon-2x"/>
+				<label value="won"/>
+				<label value="\f159"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-wordpress z-icon-2x"/>
+				<label value="wordpress"/>
+				<label value="\f19a"/>
+				<a iconSclass="z-icon-wpbeginner z-icon-2x"/>
+				<label value="wpbeginner"/>
+				<label value="\f297"/>
+				<a iconSclass="z-icon-wpexplorer z-icon-2x"/>
+				<label value="wpexplorer"/>
+				<label value="\f2de"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-wpforms z-icon-2x"/>
+				<label value="wpforms"/>
+				<label value="\f298"/>
+				<a iconSclass="z-icon-wrench z-icon-2x"/>
+				<label value="wrench"/>
+				<label value="\f0ad"/>
+				<a iconSclass="z-icon-xing z-icon-2x"/>
+				<label value="xing"/>
+				<label value="\f168"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-xing-square z-icon-2x"/>
+				<label value="xing-square"/>
+				<label value="\f169"/>
+				<a iconSclass="z-icon-y-combinator z-icon-2x"/>
+				<label value="y-combinator"/>
+				<label value="\f23b"/>
+				<a iconSclass="z-icon-y-combinator-square z-icon-2x"/>
+				<label value="y-combinator-square"/>
+				<label value="\f1d4"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-yahoo z-icon-2x"/>
+				<label value="yahoo"/>
+				<label value="\f19e"/>
+				<a iconSclass="z-icon-yc z-icon-2x"/>
+				<label value="yc"/>
+				<label value="\f23b"/>
+				<a iconSclass="z-icon-yc-square z-icon-2x"/>
+				<label value="yc-square"/>
+				<label value="\f1d4"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-yelp z-icon-2x"/>
+				<label value="yelp"/>
+				<label value="\f1e9"/>
+				<a iconSclass="z-icon-yen z-icon-2x"/>
+				<label value="yen"/>
+				<label value="\f157"/>
+				<a iconSclass="z-icon-yoast z-icon-2x"/>
+				<label value="yoast"/>
+				<label value="\f2b1"/>
+			</row>
+			<row>
+				<a iconSclass="z-icon-youtube z-icon-2x"/>
+				<label value="youtube"/>
+				<label value="\f167"/>
+				<a iconSclass="z-icon-youtube-play z-icon-2x"/>
+				<label value="youtube-play"/>
+				<label value="\f16a"/>
+				<a iconSclass="z-icon-youtube-square z-icon-2x"/>
+				<label value="youtube-square"/>
+				<label value="\f166"/>
+			</row>
+		</rows>
+	</grid>
+</zk>

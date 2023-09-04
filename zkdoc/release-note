@@ -22,6 +22,7 @@ ZK 10.0.0
   ZK-5437: Upgrade WCAG with the lighthouse 10.x detection tools
   ZK-5408: Enable InaccessibleWidgetBlockService by default
   ZK-4928: expose widget private functions and variables as public ones
+  ZK-5119: Integrate Font Awesome 6 free icons
 
 * Bugs
   ZK-5089: AfterSizeEvent doesn't return a correct size of a Window component
@@ -85,6 +86,7 @@ ZK 10.0.0
   + Upgrade rhino to 1.7.14, groovy to 5.0.0-alpha-1, and closure-compiler to v20230802 for fixing vulnerabilities
   + Upgrade gson to 2.10.1 for fixing vulnerabilities
   + Upgrade jackson-databind to 2.15.2 for fixing vulnerabilities
+  + Upgrade Font Awesome version from 4.7.0 to 6.4.2, and previous iconSclass syntax will continue to be supported
 
    --------
 ZK 9.6.4
