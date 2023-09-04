@@ -59,6 +59,7 @@ ZK 10.0.0
   ZK-5235: Opening a menupopup moves a scrollbar of a long menu back to top
   ZK-5539: $init() will call twice on Keikai component
   ZK-5540: zk.wpd with browser condition won't work with ZK 10
+  ZK-5530: users cannot focus on the icons on the Calendar header
 
 * Upgrade Notes
   + The Java binary-compatible level is Java 11 since ZK 10.
