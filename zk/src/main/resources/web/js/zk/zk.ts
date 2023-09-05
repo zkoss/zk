@@ -134,39 +134,38 @@ function _createSuper(Derived): CallableFunction {
 		return result;
 	};
 }
-// the "___s" is the sequence number of the "this" instance to check its "_$super" order
-var ___s = 1;
+const HasDescendant = Symbol('HasDescendant'), DescendantIndex = 12;
 function newClass<T>(superclass: { $oid?: number }): T {
-	var init = function (this: ZKObject & {___s?: number ; ____?: number}): object {
-		// For B95-ZK-4320.zul, the ___s is always differed by 1, so we use
-		// "superclass.$oid" to distinguish whether is the same inherited class or not.
-		// For example,
+	var init = function (this: ZKObject): object {
+		// For B95-ZK-4320.zul,
 		// "->" means extension, "=>" means creation
 		// case 1: A3 -> A2 -> A1 -> A
 		//       : only A3 can invoke $init()
 		// case 2: B1's $init() => (C2 and D3)
 		//       : B1, C2, and D3 can invoke $init() if any.
-		this.___s = superclass.$oid ?? ___s;
-		const ____ = this.____;
-
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-		this._$super.____ = superclass.$oid ? (superclass.$oid + 1) : ___s++;
 		// call super constructor refer to babel
-		const _this = _super.bind(this)(...(arguments as never as [])) as ZKObject;
+		const hasDescendant = arguments.length <= DescendantIndex + 1 ? arguments[DescendantIndex] === HasDescendant : arguments[DescendantIndex * 2] === HasDescendant,
+			args: unknown[] = [...(arguments as unknown as [])];
+		if (!hasDescendant) {
+			if (arguments.length > DescendantIndex + 1) {
+				args[DescendantIndex * 2] = HasDescendant;
+			} else {
+				args[DescendantIndex] = HasDescendant;
+			}
+		}
+		const _this = _super.bind(this)(...args) as ZKObject;
 
 		// Note: we cannot use Object.assign() here, because some prototype property may not be copied.
 		_zk.copy(_this, Object.getPrototypeOf(this));
 
-		// if not differed by 1, it could be another instance with the same zk.$extends() widget.
 		// for example in B50-ZK-441.zul
-		if (____ === undefined || ____ - 1 < this.___s) {
+		if (!hasDescendant) {
 
 			// If $init() has invoked, don't need to call it again.
 			if (!_this['__$inited']) {
 				// call afterCreated_() for ES6 class here
-				this.afterCreated_.call(_this, ...(arguments as never as []));
-
-				this.$init.call(_this, ...(arguments as never as []));
+				this.afterCreated_.call(_this, ...(args as []));
+				this.$init.call(_this, ...(args as []));
 			}
 
 			var ais = _this._$ais;
@@ -176,13 +175,6 @@ function newClass<T>(superclass: { $oid?: number }): T {
 					ais[j].bind(_this)();
 			}
 		}
-
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-		delete this._$super.____;
-		delete this.___s;
-
-		// reset if it's greater than 100,000.
-		___s %= 100000;
 
 		return _this as object;
 	};
