@@ -344,21 +344,6 @@ export class Tab extends zul.LabelImageWidget implements zul.LabelImageWidgetWit
 	contentRenderer_(out: string[]): void {
 		out.push(`<span id="${this.uuid}-cnt" class="${this.$s('text')}">`, this.domContent_(), '</span>');
 	}
-
-	/** @internal */
-	override beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
-		const firstChild = this.firstChild;
-		if (child instanceof zul.wgt.Caption) { //caption is always the first child (if exist)
-			if (firstChild && firstChild instanceof zul.wgt.Caption && firstChild != child) {
-				zk.error('Only one caption is allowed: ' + this.className);
-				return false;
-			}
-		} else if (!(child instanceof zul.wgt.Label)) {
-			zk.error('Only caption is allowed: ' + this.className);
-			return false;
-		}
-		return true;
-	}
 }
 /** @class zul.tab.TabRenderer
  * The renderer used to render a Tab.

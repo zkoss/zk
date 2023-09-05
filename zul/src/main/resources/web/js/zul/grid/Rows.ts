@@ -158,27 +158,6 @@ export class Rows extends zul.Widget<HTMLTableSectionElement> {
 	}
 
 	/** @internal */
-	override beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
-		if (!(child instanceof zul.grid.Row)) {
-			zk.error('Unsupported child for rows: ' + child.className);
-			return false;
-		}
-		if (zk.isLoaded('zkex.grid') && child instanceof zkex.grid.Groupfoot) {
-			if (!this.hasGroup()) {
-				zk.error('Groupfoot cannot exist alone, you have to add a Group first, ' + this.className);
-				return false;
-			}
-			if (!insertBefore) {
-				if (this.lastChild && this.lastChild instanceof zkex.grid.Groupfoot) {
-					zk.error('Only one Groupfoot is allowed per Group, ' + this.className);
-					return false;
-				}
-			}
-		}
-		return true;
-	}
-
-	/** @internal */
 	override onChildAdded_(child: zk.Widget): void {
 		super.onChildAdded_(child);
 		if (_isPE() && child instanceof zkex.grid.Group)

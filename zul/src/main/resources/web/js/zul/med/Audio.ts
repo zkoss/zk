@@ -326,12 +326,4 @@ export class Audio extends zul.Widget<HTMLAudioElement> {
 		}
 		return 'audio/' + type;
 	}
-	/** @internal */
-	override beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
-		if (!(child instanceof zul.med.Track)) {
-			zk.error('Unsupported child for audio: ' + child.className);
-			return false;
-		}
-		return true;
-	}
 }

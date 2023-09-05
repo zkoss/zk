@@ -41,15 +41,6 @@ export class Listfoot extends zul.Widget {
 	}
 
 	/** @internal */
-	override beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
-		if (!(child instanceof zul.sel.Listfooter)) {
-			zk.error('Unsupported child for listfoot: ' + child.className);
-			return false;
-		}
-		return true;
-	}
-
-	/** @internal */
 	override deferRedrawHTML_(out: string[]): void {
 		out.push('<tr', this.domAttrs_({domClass: true}), ' class="z-renderdefer"></tr>');
 	}

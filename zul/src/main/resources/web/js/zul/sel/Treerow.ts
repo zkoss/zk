@@ -72,15 +72,6 @@ export class Treerow extends zul.Widget<HTMLTableRowElement> {
 				'display:none;' : '') + super.domStyle_(no);
 	}
 
-	/** @internal */
-	override beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
-		if (!(child instanceof zul.sel.Treecell)) {
-			zk.error('Unsupported child for tree row: ' + child.className);
-			return false;
-		}
-		return true;
-	}
-
 	override removeChild(child: zk.Widget, ignoreDom?: boolean): boolean {
 		for (var w = child.firstChild; w;) {
 			var n = w.nextSibling; //remember, since remove will null the link
