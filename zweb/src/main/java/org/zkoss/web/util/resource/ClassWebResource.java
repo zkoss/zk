@@ -162,7 +162,7 @@ public class ClassWebResource {
 		}
 		// Fix path traversal vulnerabilities
 		Path normalized = Path.of(PATH_PREFIX, uri).normalize();
-		if (!normalized.startsWith(PATH_PREFIX)) {
+		if (!normalized.toString().startsWith(PATH_PREFIX)) {
 			throw new IllegalArgumentException("User path escapes the base path [" + normalized + "]");
 		}
 		return Locators.getDefault().getResource(PATH_PREFIX + uri);
@@ -183,7 +183,7 @@ public class ClassWebResource {
 
 		// Fix path traversal vulnerabilities
 		Path normalized = Path.of(PATH_PREFIX, uri).normalize();
-		if (!normalized.startsWith(PATH_PREFIX)) {
+		if (!normalized.toString().startsWith(PATH_PREFIX)) {
 			throw new IllegalArgumentException("User path escapes the base path [" + normalized + "]");
 		}
 		return Locators.getDefault().getResourceAsStream(PATH_PREFIX + uri);
@@ -281,7 +281,7 @@ public class ClassWebResource {
 
 			// Fix path traversal vulnerabilities
 			Path normalized = Path.of(pi).normalize();
-			if (!normalized.startsWith(PATH_PREFIX)) {
+			if (!normalized.toString().startsWith(PATH_PREFIX)) {
 				throw new IllegalArgumentException("User path escapes the base path [" + normalized + "]");
 			}
 			service(request, response, pi.substring(PATH_PREFIX.length()));

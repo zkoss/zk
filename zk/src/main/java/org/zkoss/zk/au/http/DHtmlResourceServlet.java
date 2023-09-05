@@ -118,7 +118,7 @@ public class DHtmlResourceServlet extends HttpServlet {
 
 				// Fix path traversal vulnerabilities
 				Path normalized = Path.of(pi).normalize();
-				if (!normalized.startsWith(ClassWebResource.PATH_PREFIX)) {
+				if (!normalized.toString().startsWith(ClassWebResource.PATH_PREFIX)) {
 					throw new IllegalArgumentException("User path escapes the base path [" + normalized + "]");
 				}
 				cwr.service(request, response, pi.substring(ClassWebResource.PATH_PREFIX.length()));
