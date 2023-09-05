@@ -115,7 +115,6 @@
 		white-space: nowrap;
 		min-height: @menuContentMinHeight;
 		z-index: 20; // the 20 is greater than menupopup-separator's z-index
-
 		&:hover {
 			.contentStyle(@menuItemHoverColor, @menuItemHoverBackground);
 		}
@@ -216,12 +215,6 @@
 	.z-menuitem-content {
 		color: @menuPopupItemColor;
 		background: @menuPopupItemBackground;
-		&:hover {
-			.contentStyle(@menuPopupItemHoverColor, @menuPopupItemHoverBackground);
-		}
-		&:focus {
-			.contentStyle(@menuPopupItemHoverColor, @menuPopupItemHoverBackground);
-		}
 		&:active {
 			.contentStyle(@menuPopupItemActiveColor, @menuPopupItemActiveBackground);
 		}
@@ -263,7 +256,9 @@
 		line-height: normal;
 	}
 	.z-menu-hover > .z-menu-content,
-	.z-menuitem-hover > .z-menuitem-content {
+	.z-menu-focus > .z-menu-content,
+	.z-menuitem-hover > .z-menuitem-content,
+	.z-menuitem-focus > .z-menuitem-content {
 		.contentStyle(@menuPopupItemHoverColor, @menuPopupItemHoverBackground);
 	}
 }

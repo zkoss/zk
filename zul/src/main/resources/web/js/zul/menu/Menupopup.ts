@@ -81,7 +81,7 @@ function _activateNextMenu(menu: zul.menu.Menu): void {
 			pp.open(undefined, undefined, undefined, {focusFirst: true, sendOnOpen: true, disableMask: true});
 		}
 	}
-	(menu.$class as typeof zul.menu.Menu)._addActive(menu);
+	(menu.$class as typeof zul.menu.Menu)._addActive(menu, 'focus');
 	zWatch.fire('onFloatUp', menu); //notify all
 }
 
@@ -265,7 +265,7 @@ export class Menupopup extends zul.wgt.Popup {
 			return;
 
 		var org = ctl.origin;
-		if (this.parent!.menupopup == this && !this.parent!.isTopmost() && !(this.parent!.$class as typeof zul.menu.Menu)._isActive(this.parent!)) {
+		if (this.parent!.menupopup == this && !this.parent!.isTopmost() && !(this.parent!.$class as typeof zul.menu.Menu)._isActive(this.parent!, 'hover')) {
 			this.close({sendOnOpen: true});
 			return;
 		}
@@ -366,9 +366,12 @@ export class Menupopup extends zul.wgt.Popup {
 		case 40: //DOWN
 			// UP: 1. jump to the previousSibling item
 			// DOWN: 1. jump to the nextSibling item
-			if (w) (w.$class as typeof zul.menu.Menuitem)._rmActive(w);
+			this.removeAllChildrenActive_();
 			w = keyCode == 38 ? _prevChild(this, w) : _nextChild(this, w);
-			if (w) (w.$class as typeof zul.menu.Menuitem)._addActive(w as zul.menu.Menuitem); // FIXME: type of w is inconsistent
+			if (w) {
+				(w.$class as typeof zul.menu.Menuitem)._addActive(w as zul.menu.Menuitem, 'focus'); // FIXME: type of w is inconsistent
+				w.focus();
+			}
 			break;
 		case 37: //LEFT
 			// 1. close the contenthandler (like colorbox), if any
@@ -379,7 +382,7 @@ export class Menupopup extends zul.wgt.Popup {
 				w._contentHandler.onHide();
 			} else if (((menu = _getMenu(this))) && !menu.isTopmost()) {
 				this.close();
-				(menu.$class as typeof zul.menu.Menu)._addActive(menu);
+				(menu.$class as typeof zul.menu.Menu)._addActive(menu, 'focus');
 				const pp = menu.parent as unknown as zul.menu.Menupopup | undefined; // FIXME: type of pp is inconsistent
 				if (pp) {
 					pp.focus();
@@ -424,7 +427,7 @@ export class Menupopup extends zul.wgt.Popup {
 					if (menu.isTopmost()) {
 						menu.focus();
 					} else {
-						(menu.$class as typeof zul.menu.Menu)._addActive(menu);
+						(menu.$class as typeof zul.menu.Menu)._addActive(menu, 'focus');
 						const pp = menu.parent;
 						if (pp) {
 							pp.focus();
@@ -446,7 +449,7 @@ export class Menupopup extends zul.wgt.Popup {
 						content.onHide();
 					} else {
 						this.close();
-						(menu.$class as typeof zul.menu.Menu)._addActive(menu);
+						(menu.$class as typeof zul.menu.Menu)._addActive(menu, 'focus');
 						const pp = menu.parent;
 						if (pp) {
 							pp.focus();
@@ -542,7 +545,7 @@ export class Menupopup extends zul.wgt.Popup {
 
 				this._curIndex = newCurrIndex;
 				var target = this.getChildAt<zul.menu.Menuitem>(childIndex);
-				if (target) (target.$class as typeof zul.menu.Menuitem)._addActive(target);
+				if (target) (target.$class as typeof zul.menu.Menuitem)._addActive(target, 'hover');
 			}
 		}
 		return this;
@@ -573,6 +576,22 @@ export class Menupopup extends zul.wgt.Popup {
 		if (currentActive) {
 			(currentActive.$class as unknown as {_rmActive(wgt)})._rmActive(currentActive);
 			this._curIndex = -1;
+		}
+	}
+
+	/** @internal */
+	removeAllChildrenActive_(): void {
+		for (let child: zk.Widget | undefined = this?.firstChild; child != undefined; child = child.nextSibling) {
+			if (child instanceof zul.menu.Menuitem) {
+				(child.$class as typeof zul.menu.Menuitem)._rmActive(child);
+			} else if (child instanceof zul.menu.Menu) {
+				(child.$class as typeof zul.menu.Menu)._rmActive(child);
+				const pp = child.menupopup;
+				if (pp?.isOpen()) {
+					jq(child.$n_()).removeClass(child.$s('hover')).removeClass(child.$s('selected'));
+					pp.close();
+				}
+			}
 		}
 	}
 
