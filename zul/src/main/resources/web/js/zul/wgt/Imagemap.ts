@@ -77,15 +77,6 @@ export class Imagemap extends zul.wgt.Image {
 	}
 
 	/** @internal */
-	override beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
-		if (!(child instanceof zul.wgt.Area)) {
-			zk.error('Unsupported child for imagemap: ' + child.className);
-			return false;
-		}
-		return true;
-	}
-
-	/** @internal */
 	override onChildAdded_(child: zk.Widget): void {
 		super.onChildAdded_(child);
 		if (this.desktop && this.firstChild == this.lastChild) //first child

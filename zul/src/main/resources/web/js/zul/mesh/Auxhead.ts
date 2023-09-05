@@ -38,13 +38,4 @@ export class Auxhead extends zul.mesh.HeadWidget {
 				jq(head.firstChild!).addClass(this.$s('border'));
 		}
 	}
-
-	/** @internal */
-	override beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
-		if (!(child instanceof zul.mesh.Auxheader)) {
-			zk.error('Unsupported child for Auxhead: ' + child.className);
-			return false;
-		}
-		return true;
-	}
 }

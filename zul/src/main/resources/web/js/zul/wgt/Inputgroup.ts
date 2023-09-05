@@ -102,13 +102,4 @@ export class Inputgroup extends zul.Widget {
 		}
 		if (!opts.out) return out.join('');
 	}
-
-	/** @internal */
-	override beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
-		if (!(child instanceof zul.wgt.Label) && !(zul.inp && child instanceof zul.inp.InputWidget) && !(child instanceof zul.LabelImageWidget)) {
-			zk.error('Unsupported child for Inputgroup: ' + child.className);
-			return false;
-		}
-		return true;
-	}
 }

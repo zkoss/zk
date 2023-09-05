@@ -682,13 +682,4 @@ export class Combobox extends zul.inp.ComboWidget {
 		}
 		return result;
 	}
-
-	/** @internal */
-	override beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
-		if (!(child instanceof zul.inp.Comboitem)) {
-			zk.error('Unsupported child for Combobox: ' + child.className);
-			return false;
-		}
-		return true;
-	}
 }

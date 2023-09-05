@@ -474,34 +474,6 @@ export class Tabbox extends zul.Widget {
 	}
 
 	/** @internal */
-	override beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
-		if (child instanceof zul.wgt.Toolbar) {
-			if (this.toolbar && this.toolbar != child) {
-				zk.error('Only one Toolbar is allowed: ' + this.className);
-				return false;
-			}
-			if (this.isVertical()) {
-				zk.error('Toolbar is allowed only when the tabbox is horizontal. ' + this.className);
-				return false;
-			}
-		} else if (child instanceof zul.tab.Tabs) {
-			if (this.tabs && this.tabs != child) {
-				zk.error('Only one tabs is allowed: ' + this.className);
-				return false;
-			}
-		} else if (child instanceof zul.tab.Tabpanels) {
-			if (this.tabpanels && this.tabpanels != child) {
-				zk.error('Only one tabpanels is allowed: ' + this.className);
-				return false;
-			}
-		} else {
-			zk.error('Unsupported child for tabbox: ' + child.className);
-			return false;
-		}
-		return true;
-	}
-
-	/** @internal */
 	override beforeChildReplaced_(oldTabs: zul.tab.Tabs, newTabs: zul.tab.Tabs): void {
 		// NOTE: At this point, `this.tabs === oldTabs`. Thus, `this.setSelectedIndex()` will set for `oldTabs` not `newTabs`.
 		newTabs.getChildAt<zul.tab.Tab>(this.getSelectedIndex())!.setSelected(true);

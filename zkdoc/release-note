@@ -23,6 +23,7 @@ ZK 10.0.0
   ZK-5408: Enable InaccessibleWidgetBlockService by default
   ZK-4928: expose widget private functions and variables as public ones
   ZK-5119: Integrate Font Awesome 6 free icons
+  ZK-5541: Move widget restriction check to Client MVVM
 
 * Bugs
   ZK-5089: AfterSizeEvent doesn't return a correct size of a Window component
