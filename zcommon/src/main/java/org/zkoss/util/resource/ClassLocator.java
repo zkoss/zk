@@ -233,8 +233,14 @@ public class ClassLocator implements XMLResourcesLocator {
 	public URL getResource(String name) {
 		// no need to use Classes.getContextClassLoader() here because of the loading order issue
 		final ClassLoader cl = Thread.currentThread().getContextClassLoader();
-		final URL url = cl != null ? cl.getResource(resolveName(name)): null;
-		return url != null ? url: ClassLocator.class.getResource(name);
+		URL url = cl != null ? cl.getResource(resolveName(name)): null;
+		if (url != null) {
+			return url;
+		} else {
+			url = ClassLocator.class.getResource(name);
+		}
+		// fix if name is not starts with "/", then The getClassLoader() can find the current one.
+		return url != null ? url : ClassLocator.class.getClassLoader().getResource(name);
 	}
 	public InputStream getResourceAsStream(String name) {
 		// no need to use Classes.getContextClassLoader() here because of the loading order issue
