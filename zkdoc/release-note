@@ -25,6 +25,7 @@ ZK 10.0.0
   ZK-5119: Integrate Font Awesome 6 free icons
   ZK-5541: Move widget restriction check to Client MVVM
   ZK-5354: Update animation implementation to avoid iframe reloading
+  ZK-4969: dropupload supports accept file type
 
 * Bugs
   ZK-5089: AfterSizeEvent doesn't return a correct size of a Window component
@@ -92,6 +93,8 @@ ZK 10.0.0
   + Upgrade Font Awesome version from 4.7.0 to 6.4.2, and previous iconSclass syntax will continue to be supported
   + Refix ZK-5260 by running the prepareString method to remove scripts for HTML and
   escape special characters for non-HTML before rendering model items of a chosenbox.
+  + Dropupload now can use `accept` to set the acceptable file types with MIME format, use `accept` attribute in zul file,
+  and use `setAccept()` in Java API.
 
    --------
 ZK 9.6.4
