@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F100-ZK-5354.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Tue Aug 22 11:38:29 CST 2023, Created by rebeccalai
+
+Copyright (C) 2023 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label multiline="true">
+        1. click the angle icon to collapse east
+        2. click the angle icon to expand east
+        3. initCount should remain unchanged (else bug exists)
+    </label>
+    <borderlayout>
+        <center>
+            center
+        </center>
+        <east collapsible="true" title="iframe">
+            <iframe src="F100-ZK-5354-1.zul"/>
+        </east>
+    </borderlayout>
+</zk>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F100-ZK-5354-2.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Sep 07 11:25:36 CST 2023, Created by rebeccalai
+
+Copyright (C) 2023 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label multiline="true">
+        1. click the second tab to expand
+        2. click the third tab to expand
+        3. no js error (else bug exists)
+    </label>
+    <tabbox mold="accordion">
+        <tabs>
+            <tab iconSclass="z-icon-users" label="First tab"/>
+            <tab iconSclass="z-icon-graduation-cap" label="Second tab"/>
+            <tab iconSclass="z-icon-star-half-o" label="Third tab"/>
+        </tabs>
+        <tabpanels>
+            <tabpanel>
+                <ckeditor id="ck1" height="100%" width="100%" />
+            </tabpanel>
+            <tabpanel>
+                <ckeditor id="ck2" height="100%" width="100%" />
+            </tabpanel>
+            <tabpanel>
+                <ckeditor id="ck3" height="100%" width="100%"/>
+            </tabpanel>
+        </tabpanels>
+    </tabbox>
+    <custom-attributes org.zkoss.zul.client.rod="false" />
+</zk>
