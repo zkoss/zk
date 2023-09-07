@@ -326,4 +326,13 @@
 
 .gen_fa6_style(length(@solid_icons), @solid_icons, 'Font Awesome 6 Free', 900);
 .gen_fa6_style(length(@regular_icons), @regular_icons, 'Font Awesome 6 Free', 400);
-.gen_fa6_style(length(@brands_icons), @brands_icons, 'Font Awesome 6 Brands', 400);;
+.gen_fa6_style(length(@brands_icons), @brands_icons, 'Font Awesome 6 Brands', 400);
+
+// To support specific ZK85Icons's icons, these unicodes are abandoned in fa6
+
+.@{fa-css-prefix}-circle-o:before { content: "\f10c"; }
+.@{fa-css-prefix}-envelope-o:before { content: "\f003"; }
+.@{fa-css-prefix}-flag-o:before { content: "\f11d"; }
+.@{fa-css-prefix}-question-circle-o:before { content: "\f29c"; }
+.@{fa-css-prefix}-times-circle-o:before { content: "\f05c"; }
+.@{fa-css-prefix}-user-o:before { content: "\f2c0"; }
