@@ -432,6 +432,11 @@ export namespace anima_global {
 		// The methods are borrowed from jquery-ui ui/effect.js, MIT license.
 		/** @internal */
 		_createWrapper(element: JQuery): JQuery {
+			// ZK-5354: Update animation implementation to avoid iframe reloading
+			if (element.find('iframe').length) {
+				return element;
+			}
+
 		// If the element is already wrapped, return it
 			var wrapped = element.children('.ui-effects-wrapper');
 			if (wrapped.length) {
