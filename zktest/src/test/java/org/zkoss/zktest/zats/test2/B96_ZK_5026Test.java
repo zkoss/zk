@@ -27,6 +27,8 @@ import org.zkoss.test.webdriver.ztl.JQuery;
 public class B96_ZK_5026Test extends WebDriverTestCase {
 	@Test
 	public void test() {
+		// The highlight class names were used to be all `-hover`, after ZK-5025, it's divided into `-hover` (mouse) and `-focus` (keydown)
+
 		Actions act = new Actions(connect());
 		act.moveToElement(toElement(jq("$menu"))).perform();
 		waitResponse();
@@ -39,10 +41,10 @@ public class B96_ZK_5026Test extends WebDriverTestCase {
 		assertTrue(jq(" .z-menuitem.z-menuitem-hover").exists());
 
 		act.sendKeys(Keys.DOWN).perform();
-		assertTrue(jq(".z-menupopup-content > .z-menuitem:nth-child(2)").hasClass("z-menuitem-hover"));
+		assertTrue(jq(".z-menupopup-content > .z-menuitem:nth-child(2)").hasClass("z-menuitem-focus"));
 
 		act.sendKeys(Keys.DOWN).perform();
-		assertTrue(jq(".z-menupopup-content > .z-menuitem:nth-child(3)").hasClass("z-menuitem-hover"));
+		assertTrue(jq(".z-menupopup-content > .z-menuitem:nth-child(3)").hasClass("z-menuitem-focus"));
 
 		// error happen if bug exists
 		act.moveToElement(toElement(
@@ -56,11 +58,8 @@ public class B96_ZK_5026Test extends WebDriverTestCase {
 				.perform();
 
 		assertTrue(jq(" .z-menuitem.z-menuitem-hover").exists());
-		JQuery childMenupopup = jq(".z-menupopup-content").eq(1);
-		act.sendKeys(Keys.DOWN).perform();
-		assertTrue(childMenupopup.children(".z-menuitem:first-child").hasClass("z-menuitem-hover"));
 
-		act.sendKeys(Keys.DOWN).perform();
-		assertTrue(childMenupopup.children(".z-menuitem:nth-child(2)").hasClass("z-menuitem-hover"));
+		// After ZK-5025, if hover or focus is removed from the menupopup, the menupopup will automatically close.
+		// Since the behavior has changed, it's contrary to this test case, so the previous subsequent operations are removed.
 	}
 }

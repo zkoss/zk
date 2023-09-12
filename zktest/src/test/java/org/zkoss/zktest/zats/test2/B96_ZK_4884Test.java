@@ -22,18 +22,20 @@ import org.zkoss.test.webdriver.WebDriverTestCase;
 public class B96_ZK_4884Test extends WebDriverTestCase {
 	@Test
 	public void test() {
+		// The highlight class names were used to be all `-hover`, after ZK-5025, it's divided into `-hover` (mouse) and `-focus` (keydown)
+
 		connect();
 
 		click(jq("$menu1"));
 		waitResponse();
 		click(jq("$menuitem1"));
 		waitResponse();
-		Assertions.assertEquals(1, jq(".z-menu-hover").length());
+		Assertions.assertEquals(1, jq(".z-menu-focus").length());
 
 		click(jq("$menu2"));
 		waitResponse();
 		click(jq("$menuitem2"));
 		waitResponse();
-		Assertions.assertEquals(1, jq(".z-menu-hover").length());
+		Assertions.assertEquals(1, jq(".z-menu-focus").length());
 	}
 }
