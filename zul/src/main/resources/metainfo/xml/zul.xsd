@@ -1481,6 +1481,7 @@
 		<xs:attribute name="selectedObjects" type="xs:string" use="optional" />
 		<xs:attribute name="itemRenderer" type="xs:string" use="optional" />
 		<xs:attribute name="inplace" type="booleanType" use="optional" />
+		<xs:attribute name="allowScripts" type="booleanType" use="optional" />
 		<xs:attribute name="onSelect" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- coachmark -->
