@@ -36,13 +36,4 @@ export class Treecols extends zul.mesh.HeadWidget {
 		}
 		return this;
 	}
-
-	/** @internal */
-	override beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
-		if (!(child instanceof zul.sel.Treecol)) {
-			zk.error('Unsupported child for treecols: ' + child.className);
-			return false;
-		}
-		return true;
-	}
 }

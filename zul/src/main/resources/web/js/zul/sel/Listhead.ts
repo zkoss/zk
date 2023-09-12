@@ -31,13 +31,4 @@ export class Listhead extends zul.mesh.ColumnMenuWidget {
 	override getGroupPackage_(): string {
 		return 'zkex.sel';
 	}
-
-	/** @internal */
-	override beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
-		if (!(child instanceof zul.sel.Listheader)) {
-			zk.error('Unsupported child for listhead: ' + child.className);
-			return false;
-		}
-		return true;
-	}
 }

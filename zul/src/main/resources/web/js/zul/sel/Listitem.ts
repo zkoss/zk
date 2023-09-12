@@ -188,13 +188,4 @@ export class Listitem extends zul.sel.ItemWidget {
 			onCommandReady: this
 		});
 	}
-
-	/** @internal */
-	override beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
-		if (!(child instanceof zul.sel.Listcell)) {
-			zk.error('Unsupported child for listitem: ' + child.className);
-			return false;
-		}
-		return true;
-	}
 }

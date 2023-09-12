@@ -688,24 +688,6 @@ export class LayoutRegion extends zul.Widget {
 	}
 
 	/** @internal */
-	override beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
-		const { firstChild } = this;
-		if (firstChild) {
-			if (child instanceof zul.wgt.Caption) { //caption is always the first child (if exist)
-				if (firstChild instanceof zul.wgt.Caption && firstChild != child) {
-					zk.error('Only one caption is allowed: ' + this.className);
-					return false;
-				}
-			} else {
-				if (!(firstChild instanceof zul.wgt.Caption) || this.nChildren > 1) {
-					zk.error('Only one child and one caption is allowed: ' + this.className);
-					return false;
-				}
-			}
-		}
-		return true;
-	}
-	/** @internal */
 	override onChildAdded_(child: zk.Widget): void {
 		super.onChildAdded_(child);
 		if (child instanceof zul.layout.Borderlayout) {

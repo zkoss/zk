@@ -366,25 +366,6 @@ export class Treeitem extends zul.sel.ItemWidget {
 		return false; // fixed for ZK Client selector issue
 	}
 
-	/** @internal */
-	override beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
-		if (child instanceof zul.sel.Treerow) {
-			if (this.treerow && this.treerow != child) {
-				zk.error('Only one treerow is allowed: ' + this.className);
-				return false;
-			}
-		} else if (child instanceof zul.sel.Treechildren) {
-			if (this.treechildren && this.treechildren != child) {
-				zk.error('Only one treechildren is allowed: ' + this.className);
-				return false;
-			}
-		} else {
-			zk.error('Unsupported child for tree item: ' + child.className);
-			return false;
-		}
-		return true;
-	}
-
 	override insertBefore(child: zk.Widget, sibling: zk.Widget | undefined, ignoreDom?: boolean): boolean {
 		if (super.insertBefore(child, sibling,
 		ignoreDom || (!this.z_rod && child instanceof zul.sel.Treechildren))) {
