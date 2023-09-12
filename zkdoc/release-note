@@ -26,6 +26,7 @@ ZK 10.0.0
   ZK-5541: Move widget restriction check to Client MVVM
   ZK-5354: Update animation implementation to avoid iframe reloading
   ZK-4969: dropupload supports accept file type
+  ZK-4494: Tree shall provide enough information to decorate lines with CSS
 
 * Bugs
   ZK-5089: AfterSizeEvent doesn't return a correct size of a Window component

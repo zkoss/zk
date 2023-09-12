@@ -298,4 +298,12 @@ export class Treechildren extends zul.Widget {
 		}
 		child.bind(desktop, skipper);
 	}
+
+	/** @internal */
+	getLastVisibleItem_(): zul.sel.Treeitem | undefined {
+		for (let w = this.lastChild; w; w = w.previousSibling) {
+			if (w._isVisibleInTree()) return w;
+		}
+		return undefined;
+	}
 }
