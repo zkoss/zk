@@ -617,15 +617,9 @@ export class Menu extends zul.LabelImageWidget implements zul.LabelImageWidgetWi
 			var mb = wgt.getMenubar();
 			if (mb)
 				mb._lastTarget = wgt;
-		} else {
-			// FIXME: This branch is hardly ever taken. I was never able to get into this branch by playing in ZK Demo.
-			// So, I can't tell whether the logic below is correct or not. Two points seem fishy.
-			// 1. Prior to ZK-4598 `wgt.parent` was not tested for nullity. After ZK-4598, the second `if` assumes that
-			//    `wgt.parent` is not null, but tests it for the first `if`. What should be the case?
-			// 2. Shouldn't `wgt.parent` be a Menubar? But the code assumes it to be a Menupopup. Which is the case?
-			var parentMenupopup = wgt.parent as unknown as zul.menu.Menupopup;
-			if (parentMenupopup)
-				parentMenupopup.addActive_(wgt);
+		} else if (wgt.parent instanceof zul.menu.Menupopup) {
+			const parentMenupopup = wgt.parent;
+			parentMenupopup.addActive_(wgt);
 			if (parentMenupopup.parent instanceof zul.menu.Menu)
 				this._addActive(parentMenupopup.parent);
 		}
