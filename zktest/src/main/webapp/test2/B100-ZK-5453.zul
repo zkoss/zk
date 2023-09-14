@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B100-ZK-5453.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Fri Aug 25 16:38:10 CST 2023, Created by rebeccalai
+
+Copyright (C) 2023 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label multiline="true">
+        1. enter '&quot;&gt;&lt;img src=foo onerror=alert(/XSS-/+location)&gt;
+        2. create a new item without alert (if bug exists then show an alert popup)
+    </label>
+    <separator/>
+    <zscript><![CDATA[
+    ListModel model = new ListModelList();
+    ]]></zscript>
+    <chosenbox width="100%" creatable="true" model="${model}"
+               onSearch="model.add(event.value);model.addToSelection(event.value)"/>
+</zk>
