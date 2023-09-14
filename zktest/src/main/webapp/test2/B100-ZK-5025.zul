@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B100-ZK-5025.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Tue Sep 05 11:12:30 CST 2023, Created by jamson
+
+Copyright (C) 2023 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<menubar>
+		<menu label="Nested">
+			<menupopup>
+				<menuitem label="F1R1"/>
+				<menuitem label="F1R2"/>
+				<menu label="F1R3">
+					<menupopup>
+						<menuitem label="F2R1"/>
+						<menuitem label="F2R2"/>
+						<menuitem label="F2R3"/>
+					</menupopup>
+				</menu>
+			</menupopup>
+		</menu>
+	</menubar>
+</zk>

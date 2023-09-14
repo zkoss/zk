@@ -372,7 +372,7 @@ export class Menu extends zul.LabelImageWidget implements zul.LabelImageWidgetWi
 					jq(this.$n_()).removeClass(this.$s('hover')).removeClass(this.$s('selected'));
 					pp.close();
 				}
-				(this.$class as typeof Menu)._addActive(this); // keep the focus
+				(this.$class as typeof Menu)._addActive(this, 'focus'); // keep the focus
 				evt.stop();
 				break;
 			case 40: //DOWN
@@ -411,7 +411,7 @@ export class Menu extends zul.LabelImageWidget implements zul.LabelImageWidgetWi
 			if (menubar && menubar._lastTarget)
 				$menu._rmActive(menubar._lastTarget);
 			if (!this._ignoreActive)
-				$menu._addActive(this);
+				$menu._addActive(this, 'focus');
 		}
 		// delete the variable used for IE
 		delete this._ignoreActive;
@@ -553,7 +553,7 @@ export class Menu extends zul.LabelImageWidget implements zul.LabelImageWidgetWi
 				}
 			}
 		}
-		(this.$class as typeof Menu)._addActive(this);
+		(this.$class as typeof Menu)._addActive(this, 'hover');
 	}
 
 	/** @internal */
@@ -598,36 +598,30 @@ export class Menu extends zul.LabelImageWidget implements zul.LabelImageWidgetWi
 	}
 
 	/** @internal */
-	static _isActive(wgt: zul.menu.Menu): boolean {
+	static _isActive(wgt: zul.menu.Menu, type: string): boolean {
 		var top = wgt.isTopmost(),
 			n = wgt.$n_(),
 			menupopup = wgt.menupopup,
-			cls = top ? menupopup && menupopup.isOpen() ? wgt.$s('selected') : wgt.$s('hover') : wgt.$s('hover');
+			cls = top ? menupopup && menupopup.isOpen() ? wgt.$s('selected') : wgt.$s(type) : wgt.$s(type);
 		return jq(n).hasClass(cls);
 	}
 
 	/** @internal */
-	static _addActive(wgt: zul.menu.Menu): void {
+	static _addActive(wgt: zul.menu.Menu, type: string): void {
 		var top = wgt.isTopmost(),
 			n = wgt.$n_(),
 			menupopup = wgt.menupopup,
-			cls = top ? menupopup && menupopup.isOpen() ? wgt.$s('selected') : wgt.$s('hover') : wgt.$s('hover');
+			cls = top ? menupopup && menupopup.isOpen() ? wgt.$s('selected') : wgt.$s(type) : wgt.$s(type);
 		jq(n).addClass(cls);
 		if (top) {
 			var mb = wgt.getMenubar();
 			if (mb)
 				mb._lastTarget = wgt;
-		} else {
-			// FIXME: This branch is hardly ever taken. I was never able to get into this branch by playing in ZK Demo.
-			// So, I can't tell whether the logic below is correct or not. Two points seem fishy.
-			// 1. Prior to ZK-4598 `wgt.parent` was not tested for nullity. After ZK-4598, the second `if` assumes that
-			//    `wgt.parent` is not null, but tests it for the first `if`. What should be the case?
-			// 2. Shouldn't `wgt.parent` be a Menubar? But the code assumes it to be a Menupopup. Which is the case?
-			var parentMenupopup = wgt.parent as unknown as zul.menu.Menupopup;
-			if (parentMenupopup)
-				parentMenupopup.addActive_(wgt);
+		} else if (wgt.parent instanceof zul.menu.Menupopup) {
+			const parentMenupopup = wgt.parent;
+			parentMenupopup.addActive_(wgt);
 			if (parentMenupopup.parent instanceof zul.menu.Menu)
-				this._addActive(parentMenupopup.parent);
+				this._addActive(parentMenupopup.parent, type);
 		}
 	}
 
@@ -636,9 +630,8 @@ export class Menu extends zul.LabelImageWidget implements zul.LabelImageWidgetWi
 		var top = wgt.isTopmost(),
 			n = wgt.$n_(),
 			menupopup = wgt.menupopup,
-			cls = top ? (!ignoreSeld && menupopup && menupopup.isOpen()) ? wgt.$s('selected') : wgt.$s('hover') : wgt.$s('hover'),
-			anode = jq(n).removeClass(cls);
-		if (top && !(anode.hasClass(wgt.$s('selected')) || anode.hasClass(wgt.$s('hover'))))
+			anode = (top && !ignoreSeld && menupopup && menupopup.isOpen()) ? jq(n).removeClass(wgt.$s('selected')) : jq(n).removeClass(wgt.$s('hover')).removeClass(wgt.$s('focus'));
+		if (top && !(anode.hasClass(wgt.$s('selected')) || (anode.hasClass(wgt.$s('hover')) || anode.hasClass(wgt.$s('focus')))))
 			_toggleClickableCSS(wgt, true);
 	}
 

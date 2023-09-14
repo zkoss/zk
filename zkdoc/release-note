@@ -65,6 +65,8 @@ ZK 10.0.0
   ZK-5539: $init() will call twice on Keikai component
   ZK-5540: zk.wpd with browser condition won't work with ZK 10
   ZK-5530: users cannot focus on the icons on the Calendar header
+  ZK-5453: XSS in chosenbox
+  ZK-5025: redundant selection highlight on a menupopup
 
 * Upgrade Notes
   + The Java binary-compatible level is Java 11 since ZK 10.
