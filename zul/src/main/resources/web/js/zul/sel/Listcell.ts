@@ -171,12 +171,8 @@ export class Listcell extends zul.LabelImageWidget<HTMLTableCellElement> {
 			if (box.isCheckmark() && !_isListgroupfoot(p)
 				&& (!isGrp || (box.groupSelect && box.isMultiple()))) {
 				// ZK-5035: Remove the old checkmark to prevent duplicate checkmarks
-				const oldCm = this.parent?.$n('cm');
-				if (oldCm) {
-					oldCm.remove();
-					const nextSiblingCave = jq(this.nextSibling?.$n('cave'));
-					nextSiblingCave.html(nextSiblingCave.html().replace(/^&nbsp;/, ''));
-				}
+				if (this.parent?.$n('cm'))
+					this.nextSibling?.rerender();
 
 				var chkable = p.isSelectable(),
 					multi = box.isMultiple();
