@@ -218,9 +218,11 @@ export class Treecell extends zul.LabelImageWidget<HTMLTableCellElement> {
 			}
 			var iconScls = tree ? tree.getZclass() : '',
 				pitems = this._getTreeitems(item, tree);
-			for (var j = 0, k = pitems.length; j < k; ++j)
-				this._appendIcon(sb, iconScls, 'spacer', false);
-
+			for (var j = 0, k = pitems.length; j < k; ++j) {
+				// ZK-4494: Add information about whether a line should be omitted when decorating
+				const omit = j < k - 1 && pitems[j + 1].treerow?.isLastVisibleChild_();
+				this._appendIcon(sb, iconScls, 'spacer', false, omit);
+			}
 			if (item.isContainer()) {
 				var name = item.isOpen() ? 'open' : 'close';
 				this._appendIcon(sb, iconScls, name, true);
@@ -251,11 +253,12 @@ export class Treecell extends zul.LabelImageWidget<HTMLTableCellElement> {
 	}
 
 	/** @internal */
-	_appendIcon(sb: string[], iconScls: string, name: string, button: boolean): void {
+	_appendIcon(sb: string[], iconScls: string, name: string, button: boolean, omit?: boolean): void {
 		var openCloseIcon = '';
 		sb.push('<span class="');
 		if (name == 'spacer') {
-			sb.push(iconScls, '-line ', iconScls, '-', name, '"');
+			// ZK-4494: Add information about whether a line should be omitted when decorating lines
+			sb.push(iconScls, '-line ', iconScls, '-', name, omit ? (' ' + iconScls + '-line-omit') : '', '"');
 		} else {
 			var id = '';
 			if (button) {

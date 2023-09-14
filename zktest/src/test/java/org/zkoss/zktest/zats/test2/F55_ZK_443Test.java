@@ -24,6 +24,8 @@ import org.zkoss.test.webdriver.WebDriverTestCase;
 public class F55_ZK_443Test extends WebDriverTestCase {
 	@Test
 	public void test() {
+		// The highlight class names were used to be all `-hover`, after ZK-5025, it's divided into `-hover` (mouse) and `-focus` (keydown)
+
 		connect();
 
 		click(jq("@menu:first"));
@@ -59,7 +61,7 @@ public class F55_ZK_443Test extends WebDriverTestCase {
 
 		click(jq("@button:eq(0)"));
 		waitResponse();
-		Assertions.assertTrue(jq("@menu:contains(Project)").hasClass("z-menu-hover"));
+		Assertions.assertTrue(jq("@menu:contains(Project)").hasClass("z-menu-focus"));
 
 		click(jq("@button:eq(1)"));
 		waitResponse();

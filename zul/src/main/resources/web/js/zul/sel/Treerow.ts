@@ -147,4 +147,10 @@ export class Treerow extends zul.Widget<HTMLTableRowElement> {
 			}
 		}
 	}
+
+	/** @internal */
+	isLastVisibleChild_(): boolean {
+		const treeitem = this.parent;
+		return !!treeitem && treeitem == treeitem.parent?.getLastVisibleItem_();
+	}
 }
