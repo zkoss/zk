@@ -582,19 +582,14 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 	}
 
 	/** @internal */
-	static _addActive(wgt: zul.menu.Menuitem): void {
+	static _addActive(wgt: zul.menu.Menu | zul.menu.Menuitem): void {
 		var top = wgt.isTopmost();
 		jq(wgt.$n_()).addClass(wgt.$s('hover'));
-		if (!top) {
-			// FIXME: See `zul.menu.Menu.prototype._addActive`, but there is an
-			// additional point here.
-			// 3. Shouldn't this function take a parameter of type Menuitem?
-			//    However, `parentMenupopup.parent` seems to never be a Menuitem.
-			var parentMenupopup = wgt.parent;
-			if (parentMenupopup)
-				parentMenupopup.addActive_(wgt);
-			if (parentMenupopup!.parent instanceof zul.menu.Menu)
-				this._addActive(parentMenupopup!.parent as unknown as zul.menu.Menuitem);
+		if (!top && wgt.parent instanceof zul.menu.Menupopup) {
+			const parentMenupopup = wgt.parent;
+			parentMenupopup.addActive_(wgt);
+			if (parentMenupopup.parent instanceof zul.menu.Menu)
+				this._addActive(parentMenupopup.parent);
 		}
 	}
 

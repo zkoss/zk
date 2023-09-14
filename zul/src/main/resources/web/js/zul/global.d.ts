@@ -84,6 +84,7 @@ declare global {
 	| 'UNKNOWN_TYPE'
 	| 'UPLOAD_CANCEL' // zul/fud/FileuploadDig
 	| 'UPLOAD_ERROR_EXCEED_MAXSIZE' // zul/Upload
+	| 'UPLOAD_ERROR_UNACCEPTED_FILE_TYPE' // zkmax/wgt/Dropupload
 	| 'VALUE_NOT_MATCHED' // zul/inp/Combobox
 	| 'WS_HOME' // zul/WScroll
 	| 'WS_PREV' // zul/WScroll

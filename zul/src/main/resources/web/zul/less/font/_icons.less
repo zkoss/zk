@@ -7,3 +7,7 @@
 each(.fa-icons(), {
   .@{fa-css-prefix}-@{key}::before { content: @value; }
 });
+
+each(.fa-brand-icons(), {
+  .@{fa-css-prefix}-@{key}:before { content: @value; }
+});

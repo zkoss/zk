@@ -19,30 +19,6 @@ e('</c:if>');
 	.applyCSS3('box-sizing', 'border-box');
 }
 
-// Set icons class
-// ZK85Icons & support FontAwesome 4 syntax
-[class*="@{fa-css-prefix}-"] {
-	font-family: ZK85Icons, "Font Awesome 6 Free", "Font Awesome 6 Brands"; // Default theme uses some override font
-}
-// FontAwesome 6 solid & regular syntax
-[class*="@{fa-css-prefix}-classic"],
-[class*="@{fa-css-prefix}-solid"],
-[class*="@{fa-css-prefix}-regular"] {
-	font-family: "Font Awesome 6 Free";
-}
-// FontAwesome 6 brands syntax
-[class*="@{fa-css-prefix}-brands"] {
-	font-family: "Font Awesome 6 Brands";
-}
-
-// To support specific ZK85Icons's icons, these unicodes are abandoned in fa6
-.@{fa-css-prefix}-circle-o:before { content: "\f10c"; }
-.@{fa-css-prefix}-envelope-o:before { content: "\f003"; }
-.@{fa-css-prefix}-flag-o:before { content: "\f11d"; }
-.@{fa-css-prefix}-question-circle-o:before { content: "\f29c"; }
-.@{fa-css-prefix}-times-circle-o:before { content: "\f05c"; }
-.@{fa-css-prefix}-user-o:before { content: "\f2c0"; }
-
 // Reset
 @{browserDefaultPrefix}input[type=number]::-webkit-inner-spin-button,
 @{browserDefaultPrefix}input[type=number]::-webkit-outer-spin-button {
