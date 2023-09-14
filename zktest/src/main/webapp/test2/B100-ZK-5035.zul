@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B100-ZK-5035.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Sep 07 13:18:53 CST 2023, Created by rebeccalai
+
+Copyright (C) 2023 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label multiline="true">
+        1. click the prepend 1st column dynamically button
+        2. only the 1st column has checkmarks (if bug exists then the 2nd column also has checkmarks)
+    </label>
+    <zscript><![CDATA[
+        ListModelList model = new ListModelList(Locale.getAvailableLocales());
+        String[] columnSettings = {"displayName", "country", "language"};
+        ListModelList visibleColumns = new ListModelList();
+        visibleColumns.addAll(Arrays.asList(columnSettings));
+    ]]></zscript>
+    <button label="prepend 1st column dynamically" onClick='visibleColumns.add(0, "displayCountry");'/>
+    <listbox id="lb" apply="org.zkoss.bind.BindComposer" multiple="true" checkmark="true" model="@load(model)" height="400px">
+        <listhead sizable="true" menupopup="auto">
+            <forEach items="@init(visibleColumns)">
+                <listheader label="@init(each)"/>
+            </forEach>
+        </listhead>
+        <template name="model" var="record">
+            <listitem >
+                <forEach items="@init(visibleColumns)">
+                    <listcell label="@init(record[each])"/>
+                </forEach>
+            </listitem>
+        </template>
+    </listbox>
+</zk>

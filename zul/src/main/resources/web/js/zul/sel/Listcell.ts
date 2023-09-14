@@ -170,6 +170,10 @@ export class Listcell extends zul.LabelImageWidget<HTMLTableCellElement> {
 			//B70-ZK-2053:make sure checkmark won't display on multiple listgroup
 			if (box.isCheckmark() && !_isListgroupfoot(p)
 				&& (!isGrp || (box.groupSelect && box.isMultiple()))) {
+				// ZK-5035: Remove the old checkmark to prevent duplicate checkmarks
+				if (this.parent?.$n('cm'))
+					this.nextSibling?.rerender();
+
 				var chkable = p.isSelectable(),
 					multi = box.isMultiple();
 				s += '<span id="' + p.uuid + '-cm" class="' + p.$s('checkable')
