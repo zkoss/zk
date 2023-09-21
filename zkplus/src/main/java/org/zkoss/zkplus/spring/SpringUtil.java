@@ -21,9 +21,9 @@ import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
-import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.WebApp;
+import org.zkoss.zk.ui.WebApps;
 
 /**
  * SpringUtil, a Spring utility.
@@ -35,13 +35,13 @@ public class SpringUtil {
 	 * Get the spring application context.
 	 */
 	public static ApplicationContext getApplicationContext() {
-		Execution exec = Executions.getCurrent();
-		if (exec == null) {
+		WebApp webApp = WebApps.getCurrent();
+		if (webApp == null) {
 			throw new UiException("SpringUtil can be called only under ZK environment!");
 		}
 
 		return WebApplicationContextUtils
-				.getRequiredWebApplicationContext(exec.getDesktop().getWebApp().getServletContext());
+				.getRequiredWebApplicationContext(webApp.getServletContext());
 	}
 
 	/**
