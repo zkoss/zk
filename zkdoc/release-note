@@ -99,6 +99,7 @@ ZK 10.0.0
   escape special characters for non-HTML before rendering model items of a chosenbox.
   + Dropupload now can use `accept` to set the acceptable file types with MIME format, use `accept` attribute in zul file,
   and use `setAccept()` in Java API.
+  + ZSciprt using python and the corresponding jython dependency are now optional.
 
    --------
 ZK 9.6.4
