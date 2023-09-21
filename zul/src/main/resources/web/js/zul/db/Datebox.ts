@@ -636,17 +636,21 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 			mv = mm > -1 ? 'mm' : '',
 			sv = ss > -1 ? 'ss' : '';
 
+		// Differentiate single/double 'h' and whether there is a space before/after 'a'
+		// to ensure the extracted time format matches the original format
 		if (hasHour1) {
-			var time = Datebox._prepareTimeFormat(hh < KK ? 'KK' : 'hh', mv, sv);
+			const hv = (hh == -1 || fmt.includes('hh')) ? 'hh' : 'h';
+			var time = Datebox._prepareTimeFormat(hh < KK ? 'KK' : hv, mv, sv);
 			if (aa == -1)
 				return time;
 			else if ((hh != -1 && aa < hh) || (KK != -1 && aa < KK))
-				return 'a ' + time;
+				return (fmt.includes('a ') ? 'a ' : 'a') + time;
 			else
-				return time + ' a';
-		} else
-			return Datebox._prepareTimeFormat(HH < kk ? 'kk' : HH > -1 ? 'HH' : '', mv, sv);
-
+				return time + (fmt.includes(' a') ? ' a' : 'a');
+		} else {
+			const hv = (HH == -1 || fmt.includes('HH')) ? 'HH' : 'H';
+			return Datebox._prepareTimeFormat(HH < kk ? 'kk' : HH > -1 ? hv : '', mv, sv);
+		}
 	}
 
 	/**
