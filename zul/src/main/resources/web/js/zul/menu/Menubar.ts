@@ -355,7 +355,7 @@ export class Menubar extends zul.Widget {
 	override insertChildHTML_(child: zul.menu.Menu, before?: zk.Widget, desktop?: zk.Desktop): void {
 		var vert = this.isVertical();
 		if (before)
-			jq(before.$n('chdextr') ?? before.$n_()).before(
+			jq(before.$n_()).before(
 				this.encloseChildHTML_({ child: child, vertical: vert })!);
 		else
 			jq(this.$n_('cave')).append(
@@ -367,7 +367,6 @@ export class Menubar extends zul.Widget {
 	/** @internal */
 	override removeChildHTML_(child: zul.menu.Menu, ignoreDom?: boolean): void {
 		super.removeChildHTML_(child, ignoreDom);
-		jq(child.$n_('chdextr')).remove();
 	}
 
 	/** @internal */
