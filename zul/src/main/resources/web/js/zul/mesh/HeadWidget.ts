@@ -200,7 +200,6 @@ export class HeadWidget extends zul.Widget<HTMLTableRowElement> {
 
 			// ZK-2098: recovery the header faker if not exists
 			var head = this,
-				recoverFakerbar = !frozen && !!mesh._nativebar,
 				fakers = ['hdfaker', 'bdfaker', 'ftfaker'];
 			// B30-1926480: ie8 does not support array.forEach
 			// eslint-disable-next-line @typescript-eslint/prefer-for-of
@@ -229,7 +228,7 @@ export class HeadWidget extends zul.Widget<HTMLTableRowElement> {
 						$bar.remove();
 						delete this._subnodes.bar;
 
-						if (recoverFakerbar && hdfakerbar && (s = hdfakerbar.style)) {
+						if (hdfakerbar && (s = hdfakerbar.style)) {
 							hdfakerbarstyle = s.display ? 'display:' + s.display + ';' : '';
 							hdfakerbarstyle += s.width ? 'width:' + s.width + ';' : '';
 						}
@@ -255,7 +254,7 @@ export class HeadWidget extends zul.Widget<HTMLTableRowElement> {
 					$hdfakerbar = jq(head.$n_('hdfaker')).find('[id*=hdfaker-bar]');
 					hdfakerbar = $hdfakerbar[0];
 
-					if ((faker == 'hdfaker') && !bar && recoverFakerbar) {
+					if ((faker == 'hdfaker') && !bar) {
 						if (!hdfakerbar)
 							jq(head.$n_('hdfaker')).append('<col id="' + head.uuid + '-hdfaker-bar" style="' + hdfakerbarstyle + '" ></col>');
 						jq(head).append('<th id="' + head.uuid + '-bar" class="' + head.$s('bar') + '" style="' + barstyle + '" ></th>');
