@@ -15,6 +15,7 @@
 				<vlayout>
 					<tree height="300px" model="@load(vm.treeModel)"
 						id="treeNativeScrollbar" hflex="1">
+						<custom-attributes org.zkoss.zul.frozen.smooth="false"/>
 						<custom-attributes
 							org.zkoss.zul.nativebar="true" />
 						<frozen columns="1" />
@@ -84,6 +85,7 @@
 				<vlayout>
 					<tree height="300px" model="@load(vm.treeModel)"
 						id="treeFakeScrollbar" hflex="1">
+						<custom-attributes org.zkoss.zul.frozen.smooth="false"/>
 						<frozen columns="1" />
 						<treecols sizable="false"
 							children="@load(vm.cols)  @template(vm.colTemplate(forEachStatus.index))">
@@ -153,6 +155,7 @@
 				<vlayout>
 					<tree model="@load(vm.treeModel)"
 						id="treeNativeScrollbar1" hflex="1" rows="4">
+						<custom-attributes org.zkoss.zul.frozen.smooth="false"/>
 						<custom-attributes
 							org.zkoss.zul.nativebar="true" />
 						<frozen columns="1" />
@@ -222,6 +225,7 @@
 				<vlayout>
 					<tree model="@load(vm.treeModel)"
 						id="treeFakeScrollbar1" hflex="1" rows="4">
+						<custom-attributes org.zkoss.zul.frozen.smooth="false"/>
 						<frozen columns="1" />
 						<treecols sizable="false"
 							children="@load(vm.cols)  @template(vm.colTemplate(forEachStatus.index))">
