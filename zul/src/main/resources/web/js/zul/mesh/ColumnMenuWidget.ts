@@ -248,7 +248,9 @@ export abstract class ColumnMenuWidget extends zul.mesh.HeadWidget {
 		super.onChildRemoved_(child);
 		if (!this.childReplacing_)
 			this._syncColMenu();
-		this.getMeshWidget()?._syncEmpty();
+		let mesh = this.getMeshWidget();
+		if (mesh && mesh._syncEmpty)
+			mesh._syncEmpty();
 	}
 
 	/** @internal */
