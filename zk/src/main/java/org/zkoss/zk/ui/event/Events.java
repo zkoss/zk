@@ -576,6 +576,10 @@ public class Events {
 	 * operation. A typical case is to open a highlighted window to
 	 * prevent the user from clicking any button before the operation gets done.
 	 *
+	 * <p>Since 10.0.0, ZK EE opened InaccessableWidgetBlockService by default,
+	 * so it will block echo event for disabled and invisible component,
+	 * to disable it, set library property `org.zkoss.zkmax.au.IWBS.disable` to `true`.
+	 *
 	 * <p>It is the same as <code>echoEvent(name, target, (Object)data)</code>.
 	 *
 	 * @since 3.0.2
@@ -601,6 +605,10 @@ public class Events {
 	 * operation. A typical case is to open a highlighted window to
 	 * prevent the user from clicking any button before the operation gets done.
 	 *
+	 * <p>Since 10.0.0, ZK EE opened InaccessableWidgetBlockService by default,
+	 * so it will block echo event for disabled and invisible component,
+	 * to disable it, set library property `org.zkoss.zkmax.au.IWBS.disable` to `true`.
+	 *
 	 * @since 5.0.4
 	 * @see #sendEvent
 	 */
@@ -618,6 +626,10 @@ public class Events {
 	 * <p>It is usually if you want to prompt the user before doing a long
 	 * operation. A typical case is to open a highlighted window to
 	 * prevent the user from clicking any button before the operation gets done.
+	 *
+	 * <p>Since 10.0.0, ZK EE opened InaccessableWidgetBlockService by default,
+	 * so it will block echo event for disabled and invisible component,
+	 * to disable it, set library property `org.zkoss.zkmax.au.IWBS.disable` to `true`.
 	 *
 	 * @since 5.0.4
 	 * @see #sendEvent
