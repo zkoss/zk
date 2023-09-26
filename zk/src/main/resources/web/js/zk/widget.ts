@@ -5825,7 +5825,7 @@ this.domListen_(fn, 'onBlur', 'doBlur_');
 					n = _w.$n(), w;
 
 				// force rod to render before query.
-				if (!n && _w.z_rod) {
+				if (!n && _w.z_rod && zk.isLoaded('stateless') && stateless['disableROD']) {
 					var parent = _w;
 					for (var p: zk.Widget | undefined = _w; p; p = p.parent) {
 						if (p.z_rod || p._rodKid) {
