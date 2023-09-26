@@ -134,8 +134,19 @@ function doProcess(cmd: string, data: ({ $u?: string } & zk.Widget | undefined)[
 			if (!data.length)
 				return zAu.showError('ILLEGAL_RESPONSE', 'uuid required', cmd);
 
-			data[0] = zk.Widget.$(data[0]); //might be null (such as rm)
-
+			// fix stateless JQ selector issue on client ROD case
+			let selector = String(data[0]),
+				hasStateless = zk.isLoaded('stateless') && (selector.includes('@') || selector.includes('$'));
+			try {
+				if (hasStateless) {
+					stateless['disableROD'] = true;
+				}
+                data[0] = zk.Widget.$(data[0]); //might be null (such as rm)
+            } finally {
+                if (hasStateless) {
+                    stateless['disableROD'] = undefined;
+                }
+			}
 			// Bug ZK-2827
 			if (!data[0] && cmd != 'invoke' && cmd != 'addChd' /*Bug ZK-2839*/) {
 				return;
