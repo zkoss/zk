@@ -2072,17 +2072,14 @@ Expr = Sizzle.selectors = {
 						node = wgt;
 
 						parent = wgt.parent;
-						name = ofType && wgt.widgetName;
+						name = wgt.widgetName;
 						if (parent) {
 							// :(first|last|only)-(child|of-type)
 							if (simple) {
 								while (dir) {
 									node = wgt;
 									while ((node = node[dir])) {
-										if (ofType ?
-											node.widgetName === name :
-											true) {
-
+										if (node.widgetName === name) {
 											return false;
 										}
 									}
