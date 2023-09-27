@@ -418,12 +418,11 @@ export class Button extends zul.LabelImageWidget<HTMLButtonElement> implements z
 			return;
 
 		if (!this._disabled) {
+			this.fireX(evt);
 			if (!this._upload)
 				zul.wgt.ADBS.autodisable(this);
 			else
 				this._uplder!.openFileDialog();
-
-			this.fireX(evt);
 
 			if (!evt.stopped) {
 				var href = this._href,
