@@ -5733,7 +5733,7 @@ this.domListen_(fn, 'onBlur', 'doBlur_');
 			}
 
 			if (!wgt)
-				return jq(query).zk.$<T>();
+				return jq(query).zk.$<T>(opts);
 			return wgt as T;
 		}
 
