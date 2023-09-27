@@ -1144,7 +1144,7 @@ export class JQZK {
 	 * A short cut for looking up ZK Widget from jQuery object.
 	 * Now the code `zk.Widget.$(jq("@listbox"))` could be replaced with `zk("@listbox").$()`
 	 */
-	$<T extends zk.Widget>(): T {
+	$<T extends zk.Widget>(opts?: Partial<{exact: boolean; strict: boolean; child: boolean}>): T {
 		const e = this.jq[0];
 		if (e) {
 			const target = e[zk.Widget._TARGET] as T;
@@ -1157,7 +1157,7 @@ export class JQZK {
 				return target;
 			}
 		}
-		return zk.Widget.$(e) as T;
+		return zk.Widget.$(e, opts) as T;
 	}
 	/**
 	 * Makes the position of the first selected element as absolute.
