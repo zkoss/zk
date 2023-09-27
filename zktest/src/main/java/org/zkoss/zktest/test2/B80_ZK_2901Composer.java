@@ -106,14 +106,10 @@ public class B80_ZK_2901Composer  extends GenericForwardComposer {
 		}
 
 		public void remove() {
-
-			// I know that it would be better to fire one event here with different from and to index.
-			// This is just to point out the problem
-			//
 			for( int i=0; i<1490; ++i) {
 				((TestNode)getRoot()).getChildren().remove(0);
-				this.fireEvent(getRoot(), 0, 0, TreeDataEvent.INTERVAL_REMOVED);
 			}
+			this.fireEvent(getRoot(), 0, 1489, TreeDataEvent.INTERVAL_REMOVED);
 		}
 
 		public Object getChild(final Object parentObject, final int index)
