@@ -278,9 +278,9 @@ export class A extends zul.LabelImageWidget<HTMLAnchorElement> implements zul.La
 		if (this._disabled)
 			evt.stop(); // Prevent browser default
 		else {
+			this.fireX(evt);
 			zul.wgt.ADBS.autodisable(this);
 
-			this.fireX(evt);
 			if (!evt.stopped)
 				super.doClick_(evt, true);
 		}
