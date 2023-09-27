@@ -1437,9 +1437,12 @@ export class Window extends zul.ContainerWidget {
 		this.unbindChildren_();
 		// ZK-2247: remove iframe to prevent load twice
 		if (zk.ie11 || zk.chrome) {
-			var $jq = jq(this.$n_()).find('iframe');
-			if ($jq.length)
-				$jq.hide().remove();
+			const n = this.$n();
+			if (n) {
+				var $jq = jq(n).find('iframe');
+				if ($jq.length)
+					$jq.hide().remove();
+			}
 		}
 		super.detach();
 	}
