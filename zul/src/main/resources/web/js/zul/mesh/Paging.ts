@@ -535,7 +535,6 @@ export class Paging extends zul.Widget {
 				zinp = zk(input[focusInfo.inpIdx!]);
 			zinp.focus();
 			zinp.setSelectionRange(pos[0], pos[1]);
-			zul.mesh.Paging._autoFocusInfo = undefined;
 		}
 
 		//remove second id
