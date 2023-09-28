@@ -426,12 +426,11 @@ export class Toolbarbutton extends zul.LabelImageWidget implements zul.LabelImag
 	/** @internal */
 	override doClick_(evt: zk.Event<zk.EventMetaData>, popupOnly?: boolean): void {
 		if (!this._disabled) {
+			this.fireX(evt);
 			if (!this._upload)
 				zul.wgt.ADBS.autodisable(this);
 			else
 				this._uplder!.openFileDialog();
-
-			this.fireX(evt);
 
 			if (!evt.stopped) {
 				var href = this._href,
