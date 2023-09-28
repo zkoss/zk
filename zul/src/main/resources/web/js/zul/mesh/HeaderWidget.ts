@@ -333,9 +333,9 @@ export abstract class HeaderWidget extends zul.LabelImageWidget<HTMLTableCellEle
 	 * @internal
 	 */
 	fixFaker_(): void {
-		if (!(this.parent instanceof zul.mesh.Auxhead)) {
-			var n = this.$n_(),
-				index = zk(n).cellIndex(),
+		let n = this.$n();
+		if (!(this.parent instanceof zul.mesh.Auxhead) && n) {
+			let index = zk(n).cellIndex(),
 				owner = this.getMeshWidget()!;
 			for (var faker: HTMLElement | undefined, fs = HeaderWidget._faker, i = fs.length; i--;) {
 				type MethodName = `e${typeof fs[number]}`;
