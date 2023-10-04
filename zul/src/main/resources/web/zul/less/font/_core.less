@@ -15,6 +15,9 @@
 .@{fa-css-prefix}-regular,
 .fab,
 .@{fa-css-prefix}-brands {
+  // NOTICE that this part is to avoid the side effects of B85-ZK-3800,
+  // so keep the settings from FontAwesome 4.7.0 instead of 6.4.2.
+  // Be careful when modifying, the margins of the icon may change.
   display: inline-block;
   font: normal normal normal @fa-font-size-base/@fa-line-height-base FontAwesome; // shortening font declaration
   font-size: inherit; // can't have font-size inherit on line above, so need to override
