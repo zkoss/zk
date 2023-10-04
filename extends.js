@@ -21,5 +21,5 @@ export default function (d, b) {
 	extendStatics(d, b);
 	function __() { this.constructor = d; }
 	d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	d.prototype._$super = b.prototype; // Potix: Jumper Chen adds to support `$supers(foo.Bar, 'bind_')`
+	d.prototype._$super = d.name == '$subclass$' && b.prototype._$super ? b.prototype._$super : b.prototype; // Potix: Jumper Chen adds to support `$supers(foo.Bar, 'bind_')`
 }

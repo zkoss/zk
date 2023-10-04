@@ -699,11 +699,11 @@ const _dragoptions: zk.DraggableOptions = {
 
 export function WrapClass(pkg: string) {
 	return function _WrapClass<T extends typeof zk.Object>(constr: T): T {
-		abstract class subclass extends constr {
+		abstract class $subclass$ extends constr {
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			constructor(...args: any[]) {
 				super(...args as []);
-				if ((this as {className?}).className == pkg) {
+				if ((String((args as [])[args.length - 1])) != 'Symbol(HasDescendant)' && (this as {className?}).className == pkg) {
 					// call old ZK widget $init(), which uses zk.override() to
 					// override an ES6 class
 					this.$init(...args as []);
@@ -724,7 +724,7 @@ export function WrapClass(pkg: string) {
 				for (let i = 0, j = pkges.length - 1; i < j; i++) {
 					context = context[pkges[i]] as never;
 				}
-				context[pkges[pkges.length - 1]] = zk.regClass(subclass);
+				context[pkges[pkges.length - 1]] = zk.regClass($subclass$);
 			};
 			if (!context) {
 				zk.afterLoad(pkges.slice(0, pkges.length - 1).join('.'), function () {
@@ -734,7 +734,7 @@ export function WrapClass(pkg: string) {
 				run(window);
 			}
 		}
-		return subclass;
+		return $subclass$;
 	};
 }
 

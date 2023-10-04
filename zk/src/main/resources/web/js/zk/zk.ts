@@ -163,9 +163,9 @@ function newClass<T>(superclass: { $oid?: number }): T {
 
 			// If $init() has invoked, don't need to call it again.
 			if (!_this['__$inited']) {
+				this.$init.call(_this, ...(args as []));
 				// call afterCreated_() for ES6 class here
 				this.afterCreated_.call(_this, ...(args as []));
-				this.$init.call(_this, ...(args as []));
 			}
 
 			var ais = _this._$ais;
