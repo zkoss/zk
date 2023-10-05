@@ -36,9 +36,10 @@ public class F96_ZK_4330_2Test extends WebDriverTestCase {
 		waitResponse();
 		click(selAllBtn);
 		click(selCountBtn);
-		Assertions.assertFalse(tree1.find(".z-treecol-checkable").hasClass("z-treecol-checked"));
-		Assertions.assertFalse(tree2.find(".z-treecol-checkable").hasClass("z-treecol-checked"));
-		Assertions.assertFalse(tree3.find(".z-treecol-checkable").hasClass("z-treecol-checked"));
+		waitResponse();
+		Assertions.assertTrue(tree1.find(".z-treecol-checkable").hasClass("z-treecol-checked"));
+		Assertions.assertTrue(tree2.find(".z-treecol-checkable").hasClass("z-treecol-checked"));
+		Assertions.assertTrue(tree3.find(".z-treecol-checkable").hasClass("z-treecol-checked"));
 		click(jq("@button:eq(1)"));
 		click(jq("@button:eq(5)"));
 		click(selAllBtn);
