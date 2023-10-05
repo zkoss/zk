@@ -80,6 +80,8 @@ ZK 10.0.0
         z-combobox-emptySearchMessage -> z-combobox-empty-search-message
         z-combobox-emptySearchMessage-hidden -> z-combobox-empty-search-message-hidden
   + Disable UUID recycle mechanism by default.
+  + Customize the tooltip on the icon of LabelImagElelement (see ZK-5502).
+  + Customize multiple icons and tooltips on the same LabelImagElelement (see ZK-5503).
   + With the fixed of ZK-5435, the desktop timeout mechanism will clean all expired desktop instances
   by a timer per session if the setting is enabled. (By default, it's enabled with 1 hour)
   To disable the cleaner timer per session, you can specify -1 to the desktop timeout
