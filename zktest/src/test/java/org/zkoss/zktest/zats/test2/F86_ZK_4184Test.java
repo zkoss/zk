@@ -32,6 +32,7 @@ public class F86_ZK_4184Test extends WebDriverTestCase {
 		testUpdate();
 		// Test 4 more times
 		for (int i = 0; i < 4; i++) {
+			System.out.println(">>>> test -> " + (i + 1));
 			closeAuAlert();
 			testUpdate();
 		}
@@ -45,7 +46,9 @@ public class F86_ZK_4184Test extends WebDriverTestCase {
 
 	private void closeAuAlert() {
 		JQuery $aualert = jq("$aualert");
+		System.out.println(">>>> closeAuAlert is called!");
 		if ($aualert.isVisible()) {
+			System.out.println(">>>> closeAuAlert: try to close");
 			click($aualert.find("@button"));
 			waitResponse();
 		}
