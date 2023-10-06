@@ -137,18 +137,6 @@ if="deploy.tomcat.required">
 <target name="deploy" depends="deploy.lib, deploy.osgi, deploy.tomcat">
 </target>
 
-<target name="dev" depends="config, gentime">
-	<delete file="${zkcmldir}/zkex/${codegen.archive.dir}/metainfo/zk/buildsign" verbose="true" failonerror="false" />
-	<exec executable="bash" dir="." failonerror="true">
-		<arg value="${bin.dir}/genmd5sign"/>
-		<arg value="${codegen.dir}/${signdir}"/>
-		<arg value="${signclasses}"/>
-		<arg value="${out.dir}/classes"/>
-		<arg value="${maindir}/zk/${codegen.dir}/${buildstamp}"/>
-		<arg value="${maindir}"/>
-	</exec>
-</target>
-
 <!-- ===== -->
 <!-- BUILD -->
 <!-- ===== -->
@@ -201,7 +189,7 @@ if="deploy.tomcat.required">
 		<arg value="--dest=${codegen.archive.dir}/${zipjs}"/>
 	</exec>
 </target>
-<target name="build.jar" depends="lessc, zipjs, gentime, genmd5sign, compile" if="build.jar.required">
+<target name="build.jar" depends="lessc, zipjs, gentime, compile" if="build.jar.required">
 	<available file="${srcpv.dir}" property="jar.srcpv.dir" value="${srcpv.dir}"/>
 	<property name="jar.srcpv.dir" value="${codegen.archive.dir}"/><!-- could be any existent directory -->
 
@@ -259,16 +247,6 @@ if="deploy.tomcat.required">
 	<exec executable="bash" dir="." failonerror="true">
 		<arg value="${bin.dir}/gentime"/>
 		<arg value="${codegen.dir}/${gentime}"/>
-	</exec>
-</target>
-<target name="genmd5sign" depends="config" if="genmd5sign.required">
-	<exec executable="bash" dir="." failonerror="true">
-		<arg value="${bin.dir}/genmd5sign"/>
-		<arg value="${codegen.dir}/${signdir}"/>
-		<arg value="${signclasses}"/>
-		<arg value="${out.dir}"/>
-		<arg value="${maindir}/zk/${codegen.dir}/${buildstamp}"/>
-		<arg value="${maindir}"/>
 	</exec>
 </target>
 

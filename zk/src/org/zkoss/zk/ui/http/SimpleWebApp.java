@@ -34,8 +34,6 @@ import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.ext.ScopeListener;
 import org.zkoss.zk.ui.impl.AbstractWebApp;
 import org.zkoss.zk.ui.impl.ScopeListeners;
-import org.zkoss.zk.ui.sys.Registry;
-import org.zkoss.zk.ui.sys.WebAppFactoryImpl;
 import org.zkoss.zk.ui.util.Configuration;
 
 /**
@@ -56,8 +54,6 @@ public class SimpleWebApp extends AbstractWebApp {
 			throw new IllegalArgumentException("context");
 		_ctx = (ServletContext) context;
 		super.init(context, config);
-
-		Registry.sign(this, Registry.class, WebManager.class, WebAppFactoryImpl.class);
 	}
 
 	private final Map<String, Object> _attrs = new AttributesMap() {
