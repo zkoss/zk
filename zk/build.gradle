@@ -51,16 +51,7 @@ task gentime(type: Exec) {
 	commandLine './gentime', "$projectDir/codegen/resources/metainfo/zk/build"
 }
 
-task genmd5sign() {
-	doLast {
-		exec {
-			workingDir "$rootDir/bin"
-			commandLine './genmd5sign', "$projectDir/codegen/resources/metainfo/zk/buildsign", "org.zkoss.zk.ui.sys.WebAppFactoryImpl,org.zkoss.zk.ui.http.WebManager,org.zkoss.zk.ui.sys.Registry", "$projectDir/build/classes/java/main", "$projectDir/codegen/resources/metainfo/zk/build", "$rootDir"
-		}
-	}
-}
-genmd5sign.dependsOn(gentime)
 gentime.mustRunAfter(compileJava)
-processResources.dependsOn(genmd5sign)
+processResources.dependsOn(gentime)
 
 description = 'ZK Kernel'
