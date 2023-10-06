@@ -63,13 +63,11 @@ import org.zkoss.zk.ui.metainfo.PageDefinitions;
 import org.zkoss.zk.ui.sys.ConfigParser;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.ExecutionsCtrl;
-import org.zkoss.zk.ui.sys.Registry;
 import org.zkoss.zk.ui.sys.RequestInfo;
 import org.zkoss.zk.ui.sys.SessionsCtrl;
 import org.zkoss.zk.ui.sys.UiFactory;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.WebAppFactory;
-import org.zkoss.zk.ui.sys.WebAppFactoryImpl;
 import org.zkoss.zk.ui.sys.WebAppsCtrl;
 import org.zkoss.zk.ui.util.Configuration;
 
@@ -284,8 +282,6 @@ public class WebManager {
 				}
 			}
 		}
-
-		Registry.sign(_wapp, Registry.class, WebManager.class, WebAppFactoryImpl.class);
 	}
 
 	private void checkAndAddExtendlet(String ext, Extendlet extlet) {
