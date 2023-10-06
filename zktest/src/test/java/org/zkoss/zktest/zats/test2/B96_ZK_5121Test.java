@@ -24,12 +24,15 @@ public class B96_ZK_5121Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
+		waitResponse();
 		click(jq("@button"));
+		sleep(50);
 		click(jq(".z-searchbox-icon.z-icon-caret-down"));
 		waitResponse(4000);
 		assertFalse(jq(".z-searchbox-popup").is(":visible"));
 
 		click(jq("@button"));
+		sleep(50);
 		click(jq(".z-cascader-icon.z-icon-caret-down"));
 		waitResponse(4000);
 		assertFalse(jq(".z-cascader-popup").is(":visible"));
