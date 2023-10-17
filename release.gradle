@@ -123,6 +123,27 @@ task prepareBin() {
 		dependsOn gradle.includedBuild('zkthemes').task(':release')
 	}
 	doLast {
+		// xsd
+		copy {
+			into "$buildDir/tmp/eebin/dist/xsd"
+			from("$rootDir/zul/src/main/resources/metainfo/xml") {
+				include "**/*.xsd"
+			}
+		}
+		// zweb WEB-INF/tld/
+		copy {
+			into "$buildDir/tmp/eebin/dist/WEB-INF/tld"
+			from("$rootDir/zweb/src/main/resources/web/WEB-INF/tld/web") {
+				include "**/*.tld"
+			}
+		}
+		// zk WEB-INF/tld/
+		copy {
+			into "$buildDir/tmp/eebin/dist/WEB-INF/tld"
+			from("$rootDir/zk/src/main/resources/web/WEB-INF/tld/zk") {
+				include "**/*.tld"
+			}
+		}
 		// ext lib jars
 		copy {
 			into "$buildDir/tmp/eebin/dist/lib/ext"
