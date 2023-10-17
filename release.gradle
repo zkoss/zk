@@ -234,9 +234,6 @@ task prepareBin() {
 }
 
 task processBins() {
-	if (gradle.includedBuilds.find {it.name == 'zkcml'} != null) {
-		dependsOn gradle.includedBuild('zkcml').task(':processBins')
-	}
 	doLast {
 		// prepare ee
 		copy {
