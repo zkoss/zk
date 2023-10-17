@@ -173,12 +173,6 @@ task prepareBin() {
 			into "$buildDir/tmp/eebin/dist/lib/theme"
 			from("$rootDir/dist/lib") {
 				include "**/iceblue_c.jar"
-			}
-		}
-		copy {
-			includeEmptyDirs false
-			into "$buildDir/tmp/eebin/dist/lib/theme"
-			from("../zkthemes/dist/lib") {
 				include "**/breeze.jar"
 				include "**/sapphire.jar"
 				include "**/silvertail.jar"
