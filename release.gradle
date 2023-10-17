@@ -132,14 +132,14 @@ task prepareBin() {
 		}
 		// zweb WEB-INF/tld/
 		copy {
-			into "$buildDir/tmp/eebin/dist/WEB-INF/tld"
+			into "$buildDir/tmp/eebin/dist/WEB-INF/tld/web"
 			from("$rootDir/zweb/src/main/resources/web/WEB-INF/tld/web") {
 				include "**/*.tld"
 			}
 		}
 		// zk WEB-INF/tld/
 		copy {
-			into "$buildDir/tmp/eebin/dist/WEB-INF/tld"
+			into "$buildDir/tmp/eebin/dist/WEB-INF/tld/zk"
 			from("$rootDir/zk/src/main/resources/web/WEB-INF/tld/zk") {
 				include "**/*.tld"
 			}
