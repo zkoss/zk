@@ -459,7 +459,9 @@ task prepareSrc() {
 			// copy src
 			copy {
 				into "$buildDir/tmp/src/$prjName/src"
-				from "$dir/src"
+				from ("$dir/src") {
+					exclude "test/**"
+				}
 			}
 			// copy codegen
 			copy {
