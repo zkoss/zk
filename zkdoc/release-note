@@ -1,5 +1,14 @@
 ZK 10.0.0
 * Features
+
+* Bugs
+
+* Upgrade Notes
+
+   --------
+ZK 10.0.0-Beta
+Oct 17, 2023
+* Features
   ZK-5024: Add a library property to change the default apply composer for MVVM
   ZK-5039: remove deprecated classicblue theme in ZK 10
   ZK-5091: Move Layout.java to extend from XulElement
