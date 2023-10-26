@@ -3,7 +3,7 @@
   "entryPoints": [
     "jsdoc/src/index.d.ts"
   ],
-  "out": "jsdoc/codegen",
+  "out": "build/docs/javadoc/jsdoc",
   "logLevel": "Error",
   "disableSources": true,
   "excludeInternal": true,
