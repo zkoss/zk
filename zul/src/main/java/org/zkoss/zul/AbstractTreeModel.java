@@ -192,11 +192,23 @@ public abstract class AbstractTreeModel<E> implements TreeModel<E>, TreeSelectab
 	/**
 	 * Has the same functionality with {@link #fireEvent(int, int[], int, int)},
 	 * while this is used for node removal only
-	 * 
+	 *
 	 * @since 7.0.5
 	 */
 	public void fireEvent(int evtType, int[] path, int indexFrom, int indexTo, int[] affectedPath) {
 		final TreeDataEvent evt = new TreeDataEvent(this, evtType, path, indexFrom, indexTo, affectedPath);
+		for (TreeDataListener l : _listeners)
+			l.onChange(evt);
+	}
+
+	/**
+	 * Has the same functionality with {@link #fireEvent(int, int[], int, int)},
+	 * while this is used for node removal only
+	 *
+	 * @since 10.0.0
+	 */
+	public void fireEvent(int evtType, int[] path, int indexFrom, int indexTo, int[][] affectedPaths) {
+		final TreeDataEvent evt = new TreeDataEvent(this, evtType, path, indexFrom, indexTo, affectedPaths);
 		for (TreeDataListener l : _listeners)
 			l.onChange(evt);
 	}

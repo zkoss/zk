@@ -58,6 +58,7 @@ public class TreeDataEvent {
 	private final int _indexTo;
 	private final int[] _nodePath;
 	private final int[] _affectedPath;
+	private final int[][] _affectedPaths;
 
 	/** Constructor.
 	 *
@@ -79,6 +80,7 @@ public class TreeDataEvent {
 		_indexFrom = indexFrom;
 		_indexTo = indexTo;
 		_affectedPath = null;
+		_affectedPaths = null;
 	}
 
 	/** Constructor.
@@ -102,6 +104,36 @@ public class TreeDataEvent {
 		_indexFrom = indexFrom;
 		_indexTo = indexTo;
 		_affectedPath = affectedPath;
+		_affectedPaths = new int[][] {affectedPath};
+	}
+
+	/** Constructor.
+	 *
+	 * @param type one of {@link #CONTENTS_CHANGED},
+	 * {@link #INTERVAL_ADDED}, {@link #INTERVAL_REMOVED}, {@link #SELECTION_CHANGED},
+	 * {@link #OPEN_CHANGED}, {@link #STRUCTURE_CHANGED} or {@link #MULTIPLE_CHANGED}.
+	 * @param nodePath the path of the affected node.
+	 * If {@link #CONTENTS_CHANGED}, {@link #INTERVAL_ADDED} or {@link #INTERVAL_REMOVED},
+	 * it is the parent node. If {@link #SELECTION_CHANGED} or {@link #OPEN_CHANGED},
+	 * it is the node being selected or opened.
+	 * If {@link #STRUCTURE_CHANGED} or {@link #MULTIPLE_CHANGED}, it is null.
+	 * @param indexFrom the lower index of the change range
+	 * @param indexTo the upper index of the change range
+	 * @param affectedPaths the paths to be removed or added
+	 * @since 10.0.0
+	 */
+	public TreeDataEvent(TreeModel model, int type, int[] nodePath, int indexFrom, int indexTo, int[][] affectedPaths) {
+		_model = model;
+		_type = type;
+		_nodePath = nodePath;
+		_indexFrom = indexFrom;
+		_indexTo = indexTo;
+		if (affectedPaths != null && affectedPaths.length > 0) {
+			_affectedPath = affectedPaths[0];
+		} else {
+			_affectedPath = null;
+		}
+		_affectedPaths = affectedPaths;
 	}
 
 	/** Returns the tree model that fires this event.
@@ -151,6 +183,14 @@ public class TreeDataEvent {
 	 */
 	public int[] getAffectedPath() {
 		return _affectedPath;
+	}
+
+	/**
+	 * Return the paths of removed nodes, if any.
+	 * @since 10.0.0
+	 */
+	public int[][] getAffectedPaths() {
+		return _affectedPaths;
 	}
 
 }

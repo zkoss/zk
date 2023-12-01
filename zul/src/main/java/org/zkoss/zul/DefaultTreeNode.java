@@ -254,6 +254,36 @@ public class DefaultTreeNode<E>
 
 		}
 
+		protected void removeRange(int fromIndex, int toIndex) {
+			if (fromIndex == toIndex - 1) {
+				// single one
+				super.removeRange(fromIndex, toIndex);
+			} else {
+				// a batch mode
+				DefaultTreeModel<E> model = getModel();
+				List<int[]> paths = new ArrayList<>(toIndex - fromIndex + 1);
+				for (int i = 0, n = toIndex - fromIndex; i < n; i++) {
+
+					TreeNode<E> child = _list.get(fromIndex);
+
+					if (model != null) {
+						paths.add(model.getPath(child));
+					}
+					_list.remove(fromIndex);
+					if (child instanceof DefaultTreeNode)
+						((DefaultTreeNode<E>) child).setParent(null);
+				}
+
+				if (model != null) {
+					int[][] pathsArray = paths.toArray(new int[0][]);
+					model.removeSelectionPaths(pathsArray);
+					model.removeOpenPaths(pathsArray);
+					model.fireEvent(TreeDataEvent.INTERVAL_REMOVED, model.getPath(DefaultTreeNode.this), fromIndex,
+							toIndex, pathsArray);
+				}
+			}
+		}
+
 		public TreeNode<E> remove(int index) {
 
 			DefaultTreeModel<E> model = getModel();
