@@ -123,6 +123,27 @@ task prepareBin() {
 		dependsOn gradle.includedBuild('zkthemes').task(':release')
 	}
 	doLast {
+		// xsd
+		copy {
+			into "$buildDir/tmp/eebin/dist/xsd"
+			from("$rootDir/zul/src/main/resources/metainfo/xml") {
+				include "**/*.xsd"
+			}
+		}
+		// zweb WEB-INF/tld/
+		copy {
+			into "$buildDir/tmp/eebin/dist/WEB-INF/tld/web"
+			from("$rootDir/zweb/src/main/resources/web/WEB-INF/tld/web") {
+				include "**/*.tld"
+			}
+		}
+		// zk WEB-INF/tld/
+		copy {
+			into "$buildDir/tmp/eebin/dist/WEB-INF/tld/zk"
+			from("$rootDir/zk/src/main/resources/web/WEB-INF/tld/zk") {
+				include "**/*.tld"
+			}
+		}
 		// ext lib jars
 		copy {
 			into "$buildDir/tmp/eebin/dist/lib/ext"
@@ -152,12 +173,6 @@ task prepareBin() {
 			into "$buildDir/tmp/eebin/dist/lib/theme"
 			from("$rootDir/dist/lib") {
 				include "**/iceblue_c.jar"
-			}
-		}
-		copy {
-			includeEmptyDirs false
-			into "$buildDir/tmp/eebin/dist/lib/theme"
-			from("../zkthemes/dist/lib") {
 				include "**/breeze.jar"
 				include "**/sapphire.jar"
 				include "**/silvertail.jar"
@@ -234,9 +249,6 @@ task prepareBin() {
 }
 
 task processBins() {
-	if (gradle.includedBuilds.find {it.name == 'zkcml'} != null) {
-		dependsOn gradle.includedBuild('zkcml').task(':processBins')
-	}
 	doLast {
 		// prepare ee
 		copy {
@@ -447,7 +459,9 @@ task prepareSrc() {
 			// copy src
 			copy {
 				into "$buildDir/tmp/src/$prjName/src"
-				from "$dir/src"
+				from ("$dir/src") {
+					exclude "test/**"
+				}
 			}
 			// copy codegen
 			copy {
