@@ -32,8 +32,8 @@ import java.io.InputStream;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.fileupload.FileUploadBase;
-import org.apache.commons.fileupload.UploadContext;
+import org.apache.commons.fileupload2.core.AbstractFileUpload;
+import org.apache.commons.fileupload2.core.RequestContext;
 
 /**
  * An implementation of RequestContext, for commons-fileupload.
@@ -42,7 +42,7 @@ import org.apache.commons.fileupload.UploadContext;
  * @author rudyhuang
  * @since 9.6.0
  */
-class ServletRequestContext implements UploadContext {
+class ServletRequestContext implements RequestContext {
 	private final HttpServletRequest _request;
 
 	public ServletRequestContext(HttpServletRequest request) {
@@ -60,16 +60,10 @@ class ServletRequestContext implements UploadContext {
 	}
 
 	@Override
-	@Deprecated
-	public int getContentLength() {
-		return _request.getContentLength();
-	}
-
-	@Override
-	public long contentLength() {
+	public long getContentLength() {
 		long size;
 		try {
-			size = Long.parseLong(_request.getHeader(FileUploadBase.CONTENT_LENGTH));
+			size = Long.parseLong(_request.getHeader(AbstractFileUpload.CONTENT_LENGTH));
 		} catch (NumberFormatException e) {
 			size = _request.getContentLength();
 		}
@@ -84,7 +78,7 @@ class ServletRequestContext implements UploadContext {
 	@Override
 	public String toString() {
 		return String.format("ContentLength=%s, ContentType=%s",
-				this.contentLength(),
+				this.getContentLength(),
 				this.getContentType());
 	}
 }

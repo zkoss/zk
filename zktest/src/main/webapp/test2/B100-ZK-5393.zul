@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B100-ZK-5393.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Fri Dec 01 17:18:04 CST 2023, Created by rebeccalai
+
+Copyright (C) 2023 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		1. Open developer tools to observe network.
+		2. Dropupload a file, should observe an XMLHttpRequest and see its file name in zk log.
+	</label>
+	<dropupload content="Dropupload a file" detection="none">
+		<attribute name="onUpload"><![CDATA[
+			import org.zkoss.util.media.Media;
+			for (Media media : event.getMedias()) {
+				Clients.log(media.getName());
+			}
+		]]></attribute>
+	</dropupload>
+</zk>

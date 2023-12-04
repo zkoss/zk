@@ -42,7 +42,7 @@ public class PackageData {
 																		// opened
 														new DirectoryTreeNode(new PackageDataUnit("/ext",null),
 																new DirectoryTreeNode[] {
-																		new DirectoryTreeNode(new PackageDataUnit("commons-fileupload.jar", "Upload Features")),
+																		new DirectoryTreeNode(new PackageDataUnit("commons-fileupload2-javax.jar", "Upload Features")),
 																		new DirectoryTreeNode(new PackageDataUnit("commons-io.jar", "Upload Features")),
 																		new DirectoryTreeNode(new PackageDataUnit("jcommon.jar", "Chart Component")),
 																		new DirectoryTreeNode(new PackageDataUnit("jfreechar.jar", "Chart Component")),

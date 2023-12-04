@@ -21,7 +21,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.net.URLDecoder;
+import java.nio.charset.Charset;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,14 +38,15 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileUploadBase;
-import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.fileupload2.core.AbstractFileUpload;
+import org.apache.commons.fileupload2.core.DiskFileItemFactory;
+import org.apache.commons.fileupload2.core.FileItem;
+import org.apache.commons.fileupload2.core.FileUploadException;
+import org.apache.commons.fileupload2.core.FileUploadSizeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -77,12 +80,57 @@ import org.zkoss.zk.ui.util.Configuration;
 public class AuMultipartUploader {
 	private static final String FILE_DATA = AuMultipartUploader.class.getName() + ".FILE_DATA";
 	private static final Logger log = LoggerFactory.getLogger(AuMultipartUploader.class);
+	private static final String JAVAX_UPLOAD_CLASS = "org.apache.commons.fileupload2.javax.JavaxServletFileUpload";
+	private static final String JAKARTA_UPLOAD_CLASS = "org.apache.commons.fileupload2.jakarta.JakartaServletFileUpload";
+	private static final String JAVAX_DISK_UPLOAD_CLASS = "org.apache.commons.fileupload2.javax.JavaxServletDiskFileUpload";
+	private static final String JAKARTA_DISK_UPLOAD_CLASS = "org.apache.commons.fileupload2.jakarta.JakartaServletDiskFileUpload";
+
+	private static Class<?> getServletFileUploadClass() {
+		try {
+			return Class.forName(JAVAX_UPLOAD_CLASS);
+		} catch (ClassNotFoundException ex0) {
+			try {
+				return Class.forName(JAKARTA_UPLOAD_CLASS);
+			} catch (ClassNotFoundException ex1) {
+				throw new RuntimeException("Failed to find " + JAVAX_UPLOAD_CLASS + " or " + JAKARTA_UPLOAD_CLASS);
+			}
+		}
+	}
+
+	public static boolean isMultipartContent(HttpServletRequest request) {
+		Class<?> clazz = getServletFileUploadClass();
+		try {
+			Method method = clazz.getMethod("isMultipartContent", HttpServletRequest.class);
+			return (boolean) method.invoke(null, request);
+		} catch (Exception ex) {
+			throw new RuntimeException("Failed to invoke " + clazz.getName() + "#isMultipartContent(HttpServletRequest)", ex);
+		}
+	}
+
+	private static AbstractFileUpload newServletDiskFileUpload(DiskFileItemFactory factory) {
+		Class<?> clazz;
+		try {
+			clazz = Class.forName(JAVAX_DISK_UPLOAD_CLASS);
+		} catch (ClassNotFoundException ex0) {
+			try {
+				clazz = Class.forName(JAKARTA_DISK_UPLOAD_CLASS);
+			} catch (ClassNotFoundException ex1) {
+				throw new RuntimeException("Failed to find " + JAVAX_DISK_UPLOAD_CLASS + " or " + JAKARTA_DISK_UPLOAD_CLASS);
+			}
+		}
+		try {
+			return (AbstractFileUpload) clazz.getDeclaredConstructor(DiskFileItemFactory.class).newInstance(factory);
+		} catch (Exception ex) {
+			throw new RuntimeException("Failed to create a new instance of " + clazz.getName(), ex);
+		}
+	}
+
 	public static AuDecoder parseRequest(HttpServletRequest request, AuDecoder decoder) {
 		Map<String, Object> params = getFileuploadMetaPerWebApp(
 				WebApps.getCurrent());
-		ServletFileUpload upload = new ServletFileUpload(
-				new DiskFileItemFactory((Integer) params.get("sizeThreadHold"),
-						(File) params.get("repository")));
+		AbstractFileUpload upload = newServletDiskFileUpload(new DiskFileItemFactory.Builder()
+				.setBufferSize((Integer) params.get("sizeThreadHold"))
+				.setPath(((File) params.get("repository")).toPath()).get());
 		try {
 			List<FileItem> fileItems = upload.parseRequest(request);
 			Map<String, Object> dataMap = new HashMap<>(fileItems.size());
@@ -176,15 +224,15 @@ public class AuMultipartUploader {
 
 		params.put("sizeThreadHold", sizeThreadHold);
 
-		File repository = null;
-
-		if (conf.getFileRepository() != null) {
+		ServletContext context = webApp.getServletContext();
+		File repository = (File) context.getAttribute("javax.servlet.context.tempdir");
+		if (repository == null)
+			repository = (File) context.getAttribute("jakarta.servlet.context.tempdir");
+		if (conf.getFileRepository() != null)
 			repository = new File(conf.getFileRepository());
-			if (!repository.isDirectory()) {
-				log.warn("The file repository is not a directory! [" + repository + "]");
-			}
-			params.put("repository", repository);
-		}
+		if (!repository.isDirectory())
+			log.warn("The file repository is not a directory! [" + repository + "]");
+		params.put("repository", repository);
 
 		org.zkoss.zk.ui.sys.DiskFileItemFactory dfiFactory = null;
 		if (conf.getFileItemFactoryClass() != null) {
@@ -269,8 +317,8 @@ public class AuMultipartUploader {
 					reconstructPacket(auRequest.getData(), _reqData, desktop, params);
 					Long fileSize = (Long) params.get("fileSize");
 					if (maxSizeLong >= 0 && fileSize > maxSizeLong) {
-						String errorMessage = uploadErrorMessage(new FileUploadBase.SizeLimitExceededException(null, fileSize, maxSizeLong));
-						throw new FileUploadBase.SizeLimitExceededException(errorMessage, fileSize, maxSizeLong);
+						String errorMessage = uploadErrorMessage(new FileUploadSizeException(null, fileSize, maxSizeLong));
+						throw new FileUploadSizeException(errorMessage, fileSize, maxSizeLong);
 					}
 				} catch (Exception e) {
 					throw UiException.Aide.wrap(e);
@@ -285,11 +333,11 @@ public class AuMultipartUploader {
 	}
 	private static String uploadErrorMessage(Throwable ex) {
 		log.error("Failed to upload", ex);
-		if (ex instanceof FileUploadBase.SizeLimitExceededException) {
+		if (ex instanceof FileUploadSizeException) {
 			try {
-				FileUploadBase.SizeLimitExceededException fex = (FileUploadBase.SizeLimitExceededException) ex;
+				FileUploadSizeException fex = (FileUploadSizeException) ex;
 				long size = fex.getActualSize();
-				long limit = fex.getPermittedSize();
+				long limit = fex.getPermitted();
 				final Class<?> msgClass = Classes.forNameByThread("org.zkoss.zul.mesg.MZul");
 				Field msgField = msgClass.getField("UPLOAD_ERROR_EXCEED_MAXSIZE");
 				int divisor1 = 1024;
@@ -529,7 +577,7 @@ public class AuMultipartUploader {
 					if (charset == null)
 						charset = conf.getUploadCharset();
 				}
-				return fi.isInMemory() ? new AMedia(name, null, ctype, fi.getString(charset))
+				return fi.isInMemory() ? new AMedia(name, null, ctype, fi.getString(Charset.forName(charset)))
 						: new ReaderMedia(name, null, ctype, fi, charset);
 			}
 		}

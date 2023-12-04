@@ -22,8 +22,8 @@ java {
 dependencies {
 	api project(':zweb')
 	api project(':zkwebfragment')
-	api 'commons-fileupload:commons-fileupload:1.5'
-	api 'commons-io:commons-io:2.8.0'
+	api 'org.apache.commons:commons-fileupload2-javax:2.0.0-M1'
+	api 'commons-io:commons-io:2.13.0'
 	compileOnly "javax.servlet:servlet-api:${servletVersion}"
 	compileOnly "javax.portlet:portlet-api:${portletVersion}"
 	compileOnly 'javax.websocket:javax.websocket-api:1.1'

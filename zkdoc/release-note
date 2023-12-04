@@ -2,8 +2,10 @@ ZK 10.0.0
 * Features
 
 * Bugs
+  ZK-5393: Update ZK jars to jakarta-friendly uploads
 
 * Upgrade Notes
+  + Upgrade commons-fileupload to commons-fileupload2-javax 2.0.0-M1 and commons-io to 2.13.0 to support jakarta-friendly uploads
 
    --------
 ZK 10.0.0-Beta
