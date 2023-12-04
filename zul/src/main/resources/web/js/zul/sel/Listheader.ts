@@ -328,9 +328,17 @@ export class Listheader extends zul.mesh.SortWidget {
 	}
 
 	/** @internal */
+	_isFirstVisibleChild(): boolean {
+		let firstVisibleChild = this.parent!.firstChild;
+		while (firstVisibleChild && !firstVisibleChild.isVisible())
+			firstVisibleChild = firstVisibleChild.nextSibling;
+		return this == firstVisibleChild;
+	}
+ 
+	/** @internal */
 	_hasCheckbox(): boolean {
 		var box = this.getListbox();
-		return !!(box != null && this.parent!.firstChild == this
+		return !!(box != null && this._isFirstVisibleChild() // B100-ZK-5037
 			&& box._checkmark && box._multiple && !box._listbox$noSelectAll);  // B50-ZK-873
 	}
 

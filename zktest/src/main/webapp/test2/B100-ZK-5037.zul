@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B100-ZK-5037.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Wed Nov 29 17:22:14 CST 2023, Created by rebeccalai
+
+Copyright (C) 2023 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		1. checkmarks are placed in the country column (if bug exists then cannot see any checkmarks)
+		2. click the toggle visibility of name column button, checkmarks are moved to the name column
+		2. click the toggle visibility of name column button, checkmarks are moved to the country column
+	</label>
+	<zscript><![CDATA[
+		ListModelList model = new ListModelList(Locale.getAvailableLocales());
+		model.setMultiple(true);
+	]]></zscript>
+	<button label="toggle visibility of name column" onClick="name.visible=!name.visible"/>
+	<listbox id="lb" apply="org.zkoss.bind.BindComposer" multiple="true" checkmark="true" model="@load(model)" height="400px">
+		<listhead sizable="true" menupopup="auto">
+			<listheader id="name" label="name" visible="false"/>
+			<listheader label="country"/>
+			<listheader label="lang"/>
+		</listhead>
+		<template name="model" >
+			<listitem >
+				<listcell label="@init(each.displayName)" />
+				<listcell label="@init(each.country)" />
+				<listcell label="@init(each.language)" />
+			</listitem>
+		</template>
+	</listbox>
+</zk>

@@ -160,11 +160,20 @@ export class Listcell extends zul.LabelImageWidget<HTMLTableCellElement> {
 	}
 
 	/** @internal */
+	_isFirstVisibleChild(): boolean {
+		let firstVisibleChild = this.parent!.firstChild;
+		while (firstVisibleChild && !firstVisibleChild.isVisible())
+			firstVisibleChild = firstVisibleChild.nextSibling;
+		return this == firstVisibleChild;
+	}
+
+	/** @internal */
 	_colHtmlPre(): string {
 		var s = '',
 			box = this.getListbox(),
 			p = this.parent!;
-		if (box != null && p.firstChild == this) {
+		// ZK-5037: invisible first column hides checkmarks in a listbox
+		if (box != null && (this.getListheader() ?? this)._isFirstVisibleChild()) {
 			var isGrp = _isListgroup(p);
 			// insert checkmark
 			//B70-ZK-2053:make sure checkmark won't display on multiple listgroup
