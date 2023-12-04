@@ -2,6 +2,9 @@ ZK 10.0.0
 * Features
 
 * Bugs
+  ZK-5575: forEach causes an unexpected ClassCastException
+  ZK-5579: Listbox always renders the same set of items under ROD enabled
+  ZK-5582: Listbox only renders 50 items with client mvvm
 
 * Upgrade Notes
 
