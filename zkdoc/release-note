@@ -1,5 +1,6 @@
 ZK 10.0.0
 * Features
+  ZK-5221: Show websocket close reason
 
 * Bugs
   ZK-5575: forEach causes an unexpected ClassCastException
