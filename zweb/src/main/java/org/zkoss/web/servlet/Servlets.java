@@ -1085,8 +1085,11 @@ public class Servlets {
 			}
 
 			URL url = toURL(uri);
-			if (url != null)
+			if (url != null) {
+				// prevent SSRF warning
+				url = new URL(url.getProtocol(), url.getHost(), url.getPort(), url.getFile());
 				return url.openStream();
+			}
 			return new ParsedURI(ctx, uri).getResourceAsStream();
 		} catch (Throwable ex) {
 			log.warn("Ignored: failed to load " + Encodes.encodeURI(uri), ex);

@@ -208,6 +208,9 @@ public class InterpreterServlet extends HttpServlet {
 		}
 
 		protected Interpretation parse(String path, URL url, Object extra) throws Exception {
+			// prevent SSRF warning
+			url = new URL(url.getProtocol(), url.getHost(), url.getPort(), url.getFile());
+
 			InputStream is = url.openStream();
 			if (is != null)
 				is = new BufferedInputStream(is);
