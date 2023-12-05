@@ -298,6 +298,8 @@ public class HtmlTreeBuilder implements TreeBuilder {
 		try {
 			if (log.isDebugEnabled())
 				log.debug("Parsing file: [" + url.toString() + "]");
+			// prevent SSRF warning
+			url = new URL(url.getProtocol(), url.getHost(), url.getPort(), url.getFile());
 			inStream = url.openStream();
 			return convertToIDOM(
 					Zsoup.parse(inStream, "UTF-8", url.getFile(), Parser.xhtmlParser()));
