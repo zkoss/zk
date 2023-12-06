@@ -33,7 +33,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -446,7 +445,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		final WebApp wapp = sess.getWebApp();
 		final WebAppCtrl wappc = (WebAppCtrl) wapp;
 		AuDecoder audec = getAuDecoder(wapp);
-		boolean multipartContent = ServletFileUpload.isMultipartContent(request);
+		boolean multipartContent = AuMultipartUploader.isMultipartContent(request);
 		if (multipartContent) {
 			audec = AuMultipartUploader.parseRequest(request, audec);
 		}
