@@ -3,6 +3,7 @@ ZK 10.0.0
   ZK-5221: Show websocket close reason
 
 * Bugs
+  ZK-5393: Update ZK jars to jakarta-friendly uploads
   ZK-5575: forEach causes an unexpected ClassCastException
   ZK-5579: Listbox always renders the same set of items under ROD enabled
   ZK-5582: Listbox only renders 50 items with client mvvm
@@ -10,6 +11,7 @@ ZK 10.0.0
   ZK-5535: TrackerImplEx#removeAllReference accesses map value by iteration instead of key, lowers performance
 
 * Upgrade Notes
+  + Upgrade commons-fileupload to commons-fileupload2-javax 2.0.0-M1 and commons-io to 2.13.0 to support jakarta-friendly uploads
 
    --------
 ZK 10.0.0-Beta

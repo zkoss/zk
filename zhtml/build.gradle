@@ -14,7 +14,7 @@ idea {
 
 dependencies {
 	api project(':zul')
-	api 'commons-io:commons-io:2.8.0'
+	api 'commons-io:commons-io:2.13.0'
 	api 'org.zkoss:zsoup:1.8.2.5'
 }
 

@@ -151,7 +151,7 @@ task prepareBin() {
 				include "**/bsh.jar"
 				include "**/closure-compiler-unshaded.jar"
 				include "**/commons-collections4.jar"
-				include "**/commons-fileupload.jar"
+				include "**/commons-fileupload2-javax.jar"
 				include "**/commons-io.jar"
 				include "**/commons-logging.jar"
 				include "**/Filters.jar"

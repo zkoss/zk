@@ -13,7 +13,7 @@ package org.zkoss.zk.ui.sys;
 
 import java.io.File;
 
-import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload2.core.FileItem;
 
 import org.zkoss.util.media.Media;
 
@@ -22,7 +22,7 @@ import org.zkoss.util.media.Media;
  * Factories can provide their own custom configuration, over and above that provided
  * by the default file upload implementation.
  * <br/>
- * Unlike {@link org.apache.commons.fileupload.FileItemFactory}, this factory
+ * Unlike {@link org.apache.commons.fileupload2.core.FileItemFactory}, this factory
  * needs two extra information, sizeThreshold and repository.
  * </p>
  * @author jumperchen
