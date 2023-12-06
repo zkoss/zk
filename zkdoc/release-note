@@ -8,6 +8,7 @@ ZK 10.0.0
   ZK-5579: Listbox always renders the same set of items under ROD enabled
   ZK-5582: Listbox only renders 50 items with client mvvm
   ZK-5476: client mvvm failed for a tree
+  ZK-5037: invisible first column hides checkmarks in a listbox
   ZK-5535: TrackerImplEx#removeAllReference accesses map value by iteration instead of key, lowers performance
 
 * Upgrade Notes
