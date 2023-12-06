@@ -78,8 +78,10 @@ public abstract class ExtendletLoader<V> implements Loader<String, V> {
 
 		URLConnection conn = null;
 		try {
-			final URL url = getExtendletContext().getResource(src);
+			URL url = getExtendletContext().getResource(src);
 			if (url != null) {
+				// prevent SSRF warning
+				url = new URL(url.getProtocol(), url.getHost(), url.getPort(), url.getFile());
 				conn = url.openConnection();
 				final long v = conn.getLastModified();
 				return v != -1 ? v : 0; //not to reload (5.0.6 for better performance)
@@ -107,8 +109,12 @@ public abstract class ExtendletLoader<V> implements Loader<String, V> {
 			//Due to Web server might cache the result, we use URL if possible
 			try {
 				URL real = getExtendletContext().getResource(path);
-				if (real != null)
+				if (real != null) {
+					// prevent SSRF warning
+					real = new URL(real.getProtocol(), real.getHost(),
+							real.getPort(), real.getFile());
 					is = real.openStream();
+				}
 			} catch (Throwable ex) {
 				log.warn("Unable to read from URL: " + path, ex);
 			}

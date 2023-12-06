@@ -1,0 +1,76 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<label multiline="true">
+		1. Click "Show Data" button.
+		2. Click "Clear Tree" (if it takes over 40 sec., it's a bug).
+	</label>
+<window width="100%" border="none" apply="org.zkoss.bind.BindComposer"  viewModel="@id('vm') @init('org.zkoss.zktest.test2.B100_ZK_5535.Bug')" >
+<button label="Show Data" id="show" onClick="@command('showData')"/><button id="clear" label="Clear Tree" onClick="@command('clearTree')"/>
+<tree sizedByContent="true"  model="@bind(vm.gridTree.treeNodes)"  mold="paging" pageSize="20"  >
+<treecols  sizable="true" >
+<treecol label="Code" />
+<treecol label="Description" />
+<treecol label="Code" />
+<treecol label="Description" />
+<treecol label="Code" />
+<treecol label="Description" />
+<treecol label="Code" />
+<treecol label="Description" />
+<treecol label="Code" />
+<treecol label="Description" />
+<treecol label="Code" />
+<treecol label="Description" />
+<treecol label="Code" />
+<treecol label="Description" />
+<treecol label="Code" />
+<treecol label="Description" />
+<treecol label="Code" />
+<treecol label="Description" />
+<treecol label="Code" />
+<treecol label="Description" />
+<treecol label="Code" />
+<treecol label="Description" />
+<treecol label="Code" />
+<treecol label="Description" />
+<treecol label="Code" />
+<treecol label="Description" />
+<treecol label="Code" />
+<treecol label="Description" />
+</treecols>
+<template name="model">
+<treeitem>
+<treerow>
+<treecell label="@bind(each.data.fields['coarfo'].stringVal)"/>
+<treecell label="@bind(each.data.fields['descri'].stringVal)"/>
+<treecell label="@bind(each.data.fields['coarfo'].stringVal)"/>
+<treecell label="@bind(each.data.fields['descri'].stringVal)"/>
+<treecell label="@bind(each.data.fields['coarfo'].stringVal)"/>
+<treecell label="@bind(each.data.fields['descri'].stringVal)"/>
+<treecell label="@bind(each.data.fields['coarfo'].stringVal)"/>
+<treecell label="@bind(each.data.fields['descri'].stringVal)"/>
+<treecell label="@bind(each.data.fields['coarfo'].stringVal)"/>
+<treecell label="@bind(each.data.fields['descri'].stringVal)"/>
+<treecell label="@bind(each.data.fields['coarfo'].stringVal)"/>
+<treecell label="@bind(each.data.fields['descri'].stringVal)"/>
+<treecell label="@bind(each.data.fields['coarfo'].stringVal)"/>
+<treecell label="@bind(each.data.fields['descri'].stringVal)"/>
+<treecell label="@bind(each.data.fields['coarfo'].stringVal)"/>
+<treecell label="@bind(each.data.fields['descri'].stringVal)"/>
+<treecell label="@bind(each.data.fields['coarfo'].stringVal)"/>
+<treecell label="@bind(each.data.fields['descri'].stringVal)"/>
+<treecell label="@bind(each.data.fields['coarfo'].stringVal)"/>
+<treecell label="@bind(each.data.fields['descri'].stringVal)"/>
+<treecell label="@bind(each.data.fields['coarfo'].stringVal)"/>
+<treecell label="@bind(each.data.fields['descri'].stringVal)"/>
+<treecell label="@bind(each.data.fields['coarfo'].stringVal)"/>
+<treecell label="@bind(each.data.fields['descri'].stringVal)"/>
+<treecell label="@bind(each.data.fields['coarfo'].stringVal)"/>
+<treecell label="@bind(each.data.fields['descri'].stringVal)"/>
+<treecell label="@bind(each.data.fields['coarfo'].stringVal)"/>
+<treecell label="@bind(each.data.fields['descri'].stringVal)"/>
+</treerow>
+</treeitem>
+</template>
+</tree>
+</window>
+</zk>

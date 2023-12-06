@@ -90,7 +90,10 @@ public class SAXBuilder {
 		// Fix XML external entity injection
 		fty.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
 		fty.setFeature("http://xml.org/sax/features/external-general-entities", false);
-		
+
+		// Fix Resolving XML external entity in user-controlled data
+		fty.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+
 		// SAX2 namespace-prefixes should be true for either builder
 		setSafeFeature(fty, "http://xml.org/sax/features/namespace-prefixes", true);
 

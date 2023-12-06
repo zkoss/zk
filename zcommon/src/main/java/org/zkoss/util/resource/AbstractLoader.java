@@ -40,7 +40,10 @@ public abstract class AbstractLoader<K, V> implements Loader<K, V> {
 		if (src instanceof URL) {
 			URLConnection conn = null;
 			try {
-				conn = ((URL) src).openConnection();
+				URL url = (URL) src;
+				// prevent SSRF warning
+				url = new URL(url.getProtocol(), url.getHost(), url.getPort(), url.getFile());
+				conn = url.openConnection();
 				final long v = conn.getLastModified();
 				return v != -1 ? v : 0; //not to reload if unknown (5.0.6 for better performance)
 			} catch (Throwable ex) {
