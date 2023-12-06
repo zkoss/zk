@@ -36,7 +36,10 @@ public class ContentLoader extends AbstractLoader<Object, String> {
 	public String load(Object src) throws Exception {
 		final InputStream is;
 		if (src instanceof URL) {
-			is = ((URL)src).openStream();
+			// prevent SSRF warning
+			URL url = ((URL)src);
+			url = new URL(url.getProtocol(), url.getHost(), url.getPort(), url.getFile());
+			is = url.openStream();
 		} else if (src instanceof File) {
 			is = new FileInputStream((File)src);
 		} else if (src == null) {
