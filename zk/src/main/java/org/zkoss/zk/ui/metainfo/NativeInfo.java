@@ -123,20 +123,26 @@ public class NativeInfo extends ComponentInfo {
 					final char cc = value.charAt(j);
 					final String rep;
 					switch (cc) {
-					case '<': rep = "\\u003c"; break;
-					case '>': rep = "\\u003e"; break;
+					case '<':
+						rep = "\\u003c";
+						break;
+					case '>':
+						rep = "\\u003e";
+						break;
 					default:
-						if (sb != null) sb.append(cc);
+						if (sb != null)
+							sb.append(cc);
 						continue;
 					}
 
 					if (sb == null) {
 						sb = new StringBuffer(len + 8);
-						if (j > 0) sb.append(value.substring(0, j));
+						if (j > 0)
+							sb.append(value.substring(0, j));
 					}
 					sb.append(rep);
 				}
-				child = new TextInfo(sb != null ? sb.toString(): value);
+				child = new TextInfo(sb != null ? sb.toString() : value);
 			}
 		}
 		_prokids.add(child);
