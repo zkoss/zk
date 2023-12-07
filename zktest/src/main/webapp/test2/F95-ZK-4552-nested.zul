@@ -18,7 +18,7 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 		 height="500px">
 		<div>
 			<label id="l1" value="@(vm.label)"/>
-			<button onClick="@('doClick', 123, ss=1, bb='asssas,sa2')" label="Click"/>
+			<button onClick="@('doClick', 123, 'asssas,sa2', 1)" label="Click"/>
 			<button onClick="@('doTest', 'aa', 12, 2)" label="Click"/>
 		</div>
 		<separator/>

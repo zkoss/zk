@@ -1005,7 +1005,7 @@ public class Parser {
 									attvaltrim = attvaltrim.replace("@(", "@init(");
 								}
 							} else {
-								attvaltrim = modifyAttrValueIfSimplified(attnm, attval.trim(), parent);
+								attvaltrim = modifyAttrValueIfSimplified(attnm, attval.trim());
 							}
 							if (!bNativeContent && !bNative && (shouldIgnoreAnnotNamespace
 									|| (attURI.length() == 0 || LanguageDefinition.ZK_NAMESPACE.endsWith(attURI)))
@@ -1096,10 +1096,12 @@ public class Parser {
 		return null;
 	}
 
-	private static String modifyAttrValueIfSimplified(String attrName, String attrValue, NodeInfo parent) {
-		if (attrValue.matches("@\\(.*\\)")) {
-			if (Events.isValid(attrName)) {
-                String commandProperty = attrValue.substring(2, attrValue.length() - 1);
+	private static String modifyAttrValueIfSimplified(String attrName, String attrValue) {
+		boolean isCommand = attrValue.matches("@(global-)?command\\(.*\\)");
+		if (attrValue.matches("@\\(.*\\)") || isCommand) {
+			if (Events.isValid(attrName) || isCommand) {
+				int attrValueIndex = attrValue.indexOf("(") + 1;
+				String commandProperty = attrValue.substring(attrValueIndex, attrValue.length() - 1);
 				boolean isNamedParam = false;
 				int len = commandProperty.length();
 				final StringBuilder modifiedCommandPropertySb = new StringBuilder(len);
@@ -1117,6 +1119,9 @@ public class Parser {
 						if (cc == ',') {
 							sb.append(cc);
 							modifiedCommandPropertySb.append(modifyAttrValueIfSimplified0(nm, sb.toString().trim(), paramIndex, isNamedParam));
+							if (paramIndex != 0 && isNamedParam == false && nm != null) { // named param and un-named parameters together
+								throwCommandSimplifiedErrorUsage();
+							}
 							isNamedParam = nm != null;
 							nm = null; //cleanup
 							sb.setLength(0); //cleanup
@@ -1138,9 +1143,13 @@ public class Parser {
 					//Note: we don't decode \x. Rather, we preserve it such
 					//that the data binder can use them
 				}
-				attrValue = "@command(" + modifiedCommandPropertySb.toString() + ")";
+				if (!isCommand) {
+					attrValue = "@command(" + modifiedCommandPropertySb + ")";
+				} else {
+					attrValue = attrValue.substring(0, attrValueIndex) + modifiedCommandPropertySb + ")";
+				}
 			} else
-				attrValue = "@init" + attrValue.substring(1);
+				attrValue = "@bind" + attrValue.substring(1);
 		}
 		return attrValue;
 	}
@@ -1150,13 +1159,17 @@ public class Parser {
 	private static String modifyAttrValueIfSimplified0(String nm, String val, int paramIndex, boolean isNamedParam) {
 		if (nm == null) {
 			if (isNamedParam)
-				throw new UiException("Not allowed to use named parameters before un-named parameters.");
+				throwCommandSimplifiedErrorUsage();
 			if (paramIndex != -1) //skip command method name
 				val = SIMPLIFIED_COMMAND_PARAM_PREFIX + paramIndex + "=" + val;
 		} else {
 			val = nm + "=" + val;
 		}
 		return val;
+	}
+
+	private static void throwCommandSimplifiedErrorUsage() {
+		throw new UiException("Not allowed to use named parameters and un-named parameters together.");
 	}
 
 	private boolean textAsAllowed(LanguageDefinition langdef, Collection<Item> items, boolean bNativeContent) {
@@ -1425,7 +1438,7 @@ public class Parser {
 				String attvaltrim;
 				if (!"xmlns".equals(attPref) && !("xmlns".equals(attnm) && "".equals(attPref))
 						&& !"http://www.w3.org/2001/XMLSchema-instance".equals(attURI)) {
-					attvaltrim = modifyAttrValueIfSimplified(attnm, attval.trim(), parent);
+					attvaltrim = modifyAttrValueIfSimplified(attnm, attval.trim());
 					if ((attURI.length() == 0 || LanguageDefinition.ZK_NAMESPACE.endsWith(attURI))
 							&& AnnotationHelper.isAnnotation(attvaltrim)) { // annotation
 						if (attrAnnHelper == null)
