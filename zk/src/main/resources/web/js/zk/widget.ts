@@ -6566,28 +6566,7 @@ export class Native extends Widget {
 	static $redraw = Native.prototype.redraw;
 
 	static replaceScriptContent(str: string): string {
-		try {
-			var result = str.match(/<script[^>]*>([\s\S]*?)<\/script>/g);
-			if (!result)
-				return str.replace(/<\/(?=script>)/ig, '<\\/');
-			else {
-				for (var i = 0, j = result.length; i < j; i++) {
-					var substr = result[i];
-
-					// enclose with <script></script>
-					if (substr.length >= 17) {
-						var cnt = substr.substring(8, substr.length - 9),
-							cnt2 = zk.Native.replaceScriptContent(cnt);
-						if (cnt != cnt2)
-							str = str.replace(cnt, cnt2);
-					}
-				}
-			}
-			return str;
-		} catch (e) {
-			zk.debugLog((e as Error).message ?? e);
-		}
-		return str;
+		return str; // handle ZK-2622 on server side.
 	}
 }
 

@@ -113,6 +113,32 @@ public class NativeInfo extends ComponentInfo {
 	public void addPrologChild(NodeInfo child) {
 		if (_prokids == null)
 			_prokids = new LinkedList<NodeInfo>();
+
+		// fix ZK-2622
+		if ("script".equalsIgnoreCase(getTag())) {
+			if (child instanceof TextInfo) {
+				String value = ((TextInfo) child).getRawValue();
+				StringBuffer sb = null;
+				for (int j = 0, len = value.length(); j < len; ++j) {
+					final char cc = value.charAt(j);
+					final String rep;
+					switch (cc) {
+					case '<': rep = "\\u003c"; break;
+					case '>': rep = "\\u003e"; break;
+					default:
+						if (sb != null) sb.append(cc);
+						continue;
+					}
+
+					if (sb == null) {
+						sb = new StringBuffer(len + 8);
+						if (j > 0) sb.append(value.substring(0, j));
+					}
+					sb.append(rep);
+				}
+				child = new TextInfo(sb != null ? sb.toString(): value);
+			}
+		}
 		_prokids.add(child);
 	}
 
