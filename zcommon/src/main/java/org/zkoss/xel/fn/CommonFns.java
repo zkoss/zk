@@ -488,6 +488,8 @@ public class CommonFns {
 	 * @since 6.0.1
 	 */
 	public static final String formatNumber (Object number, String pattern, Locale locale) {
+		if (number == null)
+			return "";
 		return getDecimalFormat(pattern, locale).format(number);
 	}
 	/**
