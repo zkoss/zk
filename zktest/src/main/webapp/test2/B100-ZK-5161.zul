@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B100-ZK-5161.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		2023/12/11, Created by jumperchen
+
+Copyright (C) 2023 Potix Corporation. All Rights Reserved.
+
+-->
+<?page title="</title><script>alert('XSS')</script>"?>
+<?page viewport="\"><script>alert('XSS')</script>"?>
+<zk>
+	If you can see the alert dialog, it means the XSS is successful. (It's a bug)
+</zk>

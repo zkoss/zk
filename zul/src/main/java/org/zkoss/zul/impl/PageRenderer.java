@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.Writer;
 
 import org.zkoss.lang.Library;
+import org.zkoss.xml.XMLs;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
@@ -68,14 +69,14 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 
 		out.write("<html");
 		if (number == null || number.intValue() == 0) {
-			write(out, pageCtrl.getRootAttributes());
+			write(out, XMLs.escapeXML(pageCtrl.getRootAttributes()));
 			out.write(">\n<head>\n"
 					// B70-ZK-2065: Remove meta for validation.
 					//	+ "<meta http-equiv=\"Pragma\" content=\"no-cache\" />\n"
 					//	+ "<meta http-equiv=\"Expires\" content=\"-1\" />\n"
 					+ "<title>");
 		} else {
-			write(out, pageCtrl.getRootAttributes());
+			write(out, XMLs.escapeXML(pageCtrl.getRootAttributes()));
 			out.write(">\n<head>\n");
 			// B70-ZK-2065: Remove meta for validation.
 			//	+ "<meta http-equiv=\"Pragma\" content=\"no-cache\" />\n"
@@ -83,12 +84,12 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 
 			String viewport = page.getViewport();
 			if (!"auto".equals(viewport))
-				out.write("<meta name=\"viewport\" content=\"" + viewport + "\" > \n");
+				out.write("<meta name=\"viewport\" content=\"" + XMLs.escapeXML(viewport) + "\" > \n");
 			else if (!"true".equals(Library.getProperty("org.zkoss.zul.tablet.meta.viewport.disabled", "false")))
 				out.write("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" > \n");
 			out.write("<title>");
 		}
-		write(out, page.getTitle());
+		write(out, XMLs.escapeXML(page.getTitle()));
 		out.write("</title>\n");
 		outHeaders(exec, page, out);
 		out.write("</head>\n");
