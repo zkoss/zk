@@ -22,11 +22,13 @@ import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
+import java.util.regex.Pattern;
 import java.util.zip.GZIPOutputStream;
 
 import javax.servlet.ServletContext;
@@ -374,6 +376,47 @@ public class Https extends Servlets {
 			}
 		}
 		throw ex;
+	}
+
+	private static final String PATH_REGEX = "^(/[-\\w:@&?=+,.!/~*'%$_;\\(\\)]*)?$";
+	private static final Pattern PATH_PATTERN = Pattern.compile(PATH_REGEX);
+
+	/**
+	 * Returns whether the specified path is valid.
+	 * It is valid if it is null, or starts with "/" and doesn't contain "..".
+	 *
+	 * @since 10.0.0
+	 */
+	public static final boolean isValidPath(String path) {
+		if (path == null)
+			return false;
+		path = Paths.get(path).normalize().toString();
+
+		if (!PATH_PATTERN.matcher(path).matches()) {
+			return false;
+		}
+		if (path.startsWith("/../") || path.equals("/..")) {
+			return false;
+		}
+		final int slash2Count = countToken("//", path);
+		if (slash2Count > 0) {
+			return false;
+		}
+
+		return true;
+	}
+
+	private static int countToken(final String token, final String target) {
+		int tokenIndex = 0;
+		int count = 0;
+		while (tokenIndex != -1) {
+			tokenIndex = target.indexOf(token, tokenIndex);
+			if (tokenIndex > -1) {
+				tokenIndex++;
+				count++;
+				}
+			}
+		return count;
 	}
 
 	/**

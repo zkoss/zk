@@ -138,6 +138,10 @@ public class RichletFilter implements Filter {
 
 	protected boolean process(Session sess, HttpServletRequest request, HttpServletResponse response, String path,
 			boolean bRichlet) throws ServletException, IOException {
+
+		// Fix Server-Side Request Forgery (SSRF)
+		if (!Https.isValidPath(path)) return false;
+
 		final WebApp wapp = sess.getWebApp();
 		final WebAppCtrl wappc = (WebAppCtrl) wapp;
 		final Configuration config = wapp.getConfiguration();
