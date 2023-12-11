@@ -34,6 +34,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.event.CheckEvent;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.Disable;
@@ -754,6 +755,19 @@ public class Radiogroup extends XulElement implements Disable {
 		if (_model != null) {
 			initDataListener();
 		}
+	}
+	//-- ComponentCtrl --//
+	/** Processes an AU request.
+	 * @since 10.0.0
+	 */
+	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
+		final String cmd = request.getCommand();
+		if (cmd.equals(Events.ON_CHECK)) {
+			// for compatibility (before 10.0.0), the target of check event in radio group should be the checked radio
+			CheckEvent evt = new CheckEvent(request.getCommand(), getSelectedItem(), (Boolean) request.getData().get(""));
+			Events.postEvent(this, evt);
+		} else
+			super.service(request, everError);
 	}
 
 	public void onPageAttached(Page newpage, Page oldpage) {
