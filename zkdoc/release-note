@@ -11,6 +11,7 @@ ZK 10.0.0
   ZK-5037: invisible first column hides checkmarks in a listbox
   ZK-5535: TrackerImplEx#removeAllReference accesses map value by iteration instead of key, lowers performance
   ZK-5522: CommonFns.formatNumber() doesn't handle null as javadoc mentions
+  ZK-5569: Radiogroup onCheck event type mismatch
 
 * Upgrade Notes
   + Upgrade commons-fileupload to commons-fileupload2-javax 2.0.0-M1 and commons-io to 2.13.0 to support jakarta-friendly uploads
