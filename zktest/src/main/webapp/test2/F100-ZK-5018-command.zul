@@ -1,30 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-F95-ZK-4552-syntax.zul
+F100-ZK-5018-command.zul
 
 	Purpose:
 
 	Description:
 
 	History:
-		Mon Feb 24 14:26:36 CST 2020, Created by jameschu
+		Tue Dec 05 14:43:51 CST 2023, Created by jameschu
 
-Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+Copyright (C) 2023 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
-	<label>Simplified Syntax, you should see no exceptions and buttons works fine.</label>
+	<label>Simplified Syntax</label>
 	<separator />
-	<div viewModel="@('org.zkoss.zktest.test2.F95_ZK_4552SyntaxVM')" style="overflow:auto" width="500px"
+	<div viewModel="@('org.zkoss.zktest.test2.F100_ZK_5018SyntaxVM')" style="overflow:auto" width="500px"
 		 height="500px">
 		<div>
 			<label id="l1" value="@(vm.label)"/>
 			<separator />
 			<button onClick="@('doClick', 123, 'asssas,sa2', 1)" label="Click"/>
-			<button onClick="@('doTest', 'aa', 12, 2)" label="Click"/>
+			<button onClick="@command('doTest', 'aa', 12, 2)" label="Click"/>
+			<button onClick="@('log', txt='123', msg='logMessage')" label="log"/>
 		</div>
 		<separator/>
 		<label id="l2" value="@(vm.text)"/>
+		<separator/>
+		<textbox id="tb" value="@(vm.text)"/>
 		<separator/>
 		<div id="list">
 			<forEach items="@(vm.list)">

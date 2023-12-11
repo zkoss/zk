@@ -20,7 +20,7 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 		<div>
 			<label id="l1" value="@(vm.label)"/>
 			<separator />
-			<!-- Not allowed to use named parameters before un-named parameters. -->
+			<!-- Not allowed to use named parameters and un-named parameters together. -->
 			<button onClick="@('doClick', ss=1, 123, bb='asssas,sa2')" label="Click"/>
 			<button onClick="@('doTest', 'aa', 12, 2)" label="Click"/>
 		</div>

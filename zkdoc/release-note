@@ -1,6 +1,7 @@
 ZK 10.0.0
 * Features
   ZK-5221: Show websocket close reason
+  ZK-5018: Enhance simplified MVVM syntax
 
 * Bugs
   ZK-5393: Update ZK jars to jakarta-friendly uploads
@@ -15,6 +16,7 @@ ZK 10.0.0
 
 * Upgrade Notes
   + Upgrade commons-fileupload to commons-fileupload2-javax 2.0.0-M1 and commons-io to 2.13.0 to support jakarta-friendly uploads
+  + Now it is not allowed to use positional and non-positional parameters together in MVVM command binding.
 
    --------
 ZK 10.0.0-Beta

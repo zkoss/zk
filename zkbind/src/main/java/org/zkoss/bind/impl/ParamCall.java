@@ -232,9 +232,9 @@ public class ParamCall {
 		}
 
 		if (val == null) {
-			val = resolvePositionalParameter(paramType, index);
+			val = resolvePositionalOrNoAnnoParameter(paramType, method, index);
 		} else if (isDefaultVal) { // from default
-			Object positionalVal = resolvePositionalParameter(paramType, index);
+			Object positionalVal = resolvePositionalOrNoAnnoParameter(paramType, method, index);
 			if (positionalVal != null)
 				val = positionalVal;
 		}
@@ -244,18 +244,25 @@ public class ParamCall {
 
 	protected Map<String, Object> _bindingArgs;
 
-	private Object resolvePositionalParameter(Class<?> returnType, int index) {
+	private Object resolvePositionalOrNoAnnoParameter(Class<?> returnType, Method method, int index) {
 		Object val = null;
 		if (_bindingArgs != null) {
 			int argIndex = 0;
 			for (Map.Entry<String, Object> entry : _bindingArgs.entrySet()) {
 				// skip using positional if the param key is not auto-generated
 				if (argIndex == index) {
-					if (entry.getKey().startsWith(Parser.SIMPLIFIED_COMMAND_PARAM_PREFIX))
+					if (entry.getKey().startsWith(Parser.SIMPLIFIED_COMMAND_PARAM_PREFIX)) {
 						val = entry.getValue();
+					}
 					break;
 				}
 				argIndex++;
+			}
+			if (val == null) { // check param names
+				String[] parameterNames = _PARANAMER.lookupParameterNames(method, false);
+				if (index < parameterNames.length) {
+					val = _bindingArgs.get(parameterNames[index]);
+				}
 			}
 			return resolveParameter0(val, returnType);
 		}
