@@ -1,0 +1,13 @@
+<zk>
+	<window apply="org.zkoss.zktest.test2.B100_ZK_5569Composer">
+		<label>click any radio, should see correct label in zk log and no exception</label>
+		<radiogroup id="categorySelector">
+			<hlayout width="100%">
+				<radio label="All Food" checked="true" width="90px" />
+				<radio label="Vegetables" width="90px" />
+				<radio label="Seafood" width="90px" />
+				<radio label="Fruits" width="90px" />
+			</hlayout>
+		</radiogroup>
+	</window>
+</zk>
