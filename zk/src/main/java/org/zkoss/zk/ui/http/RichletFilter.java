@@ -136,11 +136,16 @@ public class RichletFilter implements Filter {
 		chain.doFilter(request, response);
 	}
 
-	protected boolean process(Session sess, HttpServletRequest request, HttpServletResponse response, String path,
+	protected boolean process(Session sess, HttpServletRequest request, HttpServletResponse response, String originPath,
 			boolean bRichlet) throws ServletException, IOException {
 
 		// Fix Server-Side Request Forgery (SSRF)
-		if (!Https.isValidPath(path)) return false;
+		String path = Https.sanitizePath(originPath);
+
+		if (path == null) {
+			log.warn("The path is sanitized to be null [" + originPath + "]");
+			return false;
+		}
 
 		final WebApp wapp = sess.getWebApp();
 		final WebAppCtrl wappc = (WebAppCtrl) wapp;

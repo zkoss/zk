@@ -1119,7 +1119,7 @@ public class Parser {
 						if (cc == ',') {
 							sb.append(cc);
 							modifiedCommandPropertySb.append(modifyAttrValueIfSimplified0(nm, sb.toString().trim(), paramIndex, isNamedParam));
-							if (paramIndex != 0 && isNamedParam == false && nm != null) { // named param and un-named parameters together
+							if (paramIndex != 0 && !isNamedParam && nm != null) { // named param and un-named parameters together
 								throwCommandSimplifiedErrorUsage();
 							}
 							isNamedParam = nm != null;
