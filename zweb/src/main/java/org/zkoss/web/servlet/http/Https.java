@@ -411,7 +411,14 @@ public class Https extends Servlets {
 			}
 		}
 
-		return String.join("/", parts);
+		String result =  String.join("/", parts);
+		if (path.startsWith("/")) {
+			result = "/" + result;
+		}
+		if (path.endsWith("/")) {
+			result = result + "/";
+		}
+		return result;
 	}
 
 	/**
