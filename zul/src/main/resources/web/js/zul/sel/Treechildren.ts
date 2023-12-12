@@ -278,24 +278,8 @@ export class Treechildren extends zul.Widget {
 		else if (this.shallChildROD_(child))
 			(this.$class as typeof Treechildren)._unbindrod(child); //possible (e.g., Errorbox: jq().replaceWith)
 		var content = child.redrawHTML_(skipper, _trim_);
-		if (zk.ie11_ || zk.edge_legacy) { // Zk-3371: IE/Edge performance workaround (domie not apply to ie 11)
-			var jqelem = jq(n),
-				len = content.length,
-				elem = jqelem[0];
-			if (len > 1048576) {
-				var chunkSize = len / 2,
-					splitPos = content.lastIndexOf('</tr>', chunkSize),
-					chunk1 = content.substr(0, splitPos),
-					chunk2 = content.substr(splitPos);
-				elem.insertAdjacentHTML('afterend', chunk2);
-				elem.insertAdjacentHTML('afterend', chunk1);
-			} else {
-				elem.insertAdjacentHTML('afterend', content);
-			}
-			jqelem.remove();
-		} else {
-			jq(n).replaceWith(content);
-		}
+
+		jq(n).replaceWith(content);
 		child.bind(desktop, skipper);
 	}
 

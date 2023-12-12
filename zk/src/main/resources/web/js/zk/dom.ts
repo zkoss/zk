@@ -127,14 +127,10 @@ function _submit(this: HTMLElement): void {
 function _dissel(this: HTMLElement): void {
 	var $this = jq(this);
 	$this.css('user-select', 'none');
-	if (zk.ie11_ || zk.edge_legacy)
-		$this.on('selectstart', zk.$void);
 }
 function _ensel(this: HTMLElement): void {
 	var $this = jq(this);
 	$this.css('user-select', '');
-	if (zk.ie11_ || zk.edge_legacy)
-		$this.off('selectstart', zk.$void);
 }
 
 type ScrollIntoViewInfo = { oft: zk.Offset; h: number; w: number; el: HTMLElement } | undefined;
@@ -807,7 +803,7 @@ export class JQZK {
 	toStyleOffset(x: number, y: number): zk.Offset {
 		var el = this.jq[0],
 			oldx = el.style.left, oldy = el.style.top,
-			resetFirst = zk.webkit || zk.opera || zk.air || zk.ie;
+			resetFirst = zk.webkit || zk.opera;
 		//Opera:
 		//1)we have to reset left/top. Or, the second call position wrong
 		//test case: Tooltips and Popups
@@ -1766,12 +1762,10 @@ export class JQZK {
 
 	//Returns the minimal width to hold the given cell called by getChildMinSize_
 	static minWidth(el: Element | zk.Widget): number {
-		// B65-ZK-1526: IE11 required an extra pixel as IE9/IE10
-		return zk(el).offsetWidth() + (zk.ie11 ? 1 : 0);
+		return zk(el).offsetWidth();
 	}
 	//overriden in dom.js to fix the focus issue (losing caret...)
 	static fixInput(el: Element): void { //ZK-3237: including domie.js for IE 11 will have many side effects
-		if (zk.ie11_) return;
 		try {
 			var $n = zk(el), pos: zk.Offset;
 			if ($n.isInput()) {
@@ -2524,16 +2518,16 @@ Object.assign(jq, {
 	 * It is useful if you have a DOM element whose position is absolute.
 	 * Then, if you register the widget, the widget's zsync method will be called when some widget becomes visible, is added and so on.
 	 *
-	 * <p>For example, {@link zul.wnd.Window} uses DIV to simulate the shadow in IE,
+	 * <p>For example, {@link zul.wnd.Window} uses DIV to simulate the shadow in Firefox,
 	 * then it can register itself in {@link Widget#bind_} and then
 	 * synchronize the position and size of shadow (DIV) in zsync as follows.
 	 * ```ts
 	 * bind_: function () {
-	 *   if (zk.ie) jq.onzsync(this); //register
+	 *   if (zk.ff) jq.onzsync(this); //register
 	 * ...
 	 * },
 	 * unbind_: function () {
-	 *   if (zk.ie) jq.unzsync(this); //unregister
+	 *   if (zk.ff) jq.unzsync(this); //unregister
 	 * ...
 	 * },
 	 * zsync: function () {

@@ -448,26 +448,8 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 
 	/** @internal */
 	override _beforeCalcSize(): void {
-		// Bug 279925
-		if (zk.ie9) {
-			var anchor = this.$n_('a');
-			this._oldCSS = anchor.style.display;
-			anchor.style.display = 'none';
-		}
-
 		this._calcHgh();
 	}
-
-	/** @internal */
-	override _afterCalcSize(): void {
-		// Bug 279925
-		if (zk.ie9) {
-			this.$n_('a').style.display = this._oldCSS!;
-			delete this._oldCSS;
-		}
-		super._afterCalcSize();
-	}
-
 	/**
 	 * @returns the index of the ItemWidget
 	 */

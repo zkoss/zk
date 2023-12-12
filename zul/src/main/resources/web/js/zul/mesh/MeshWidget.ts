@@ -28,8 +28,6 @@ function _calcMinWd(wgt: MeshWidget): MeshWidth {
 	var wgtn = wgt.$n(),
 		ws = wgtn ? wgtn.style.whiteSpace : ''; //bug#3106514: sizedByContent with not visible columns
 	if (wgtn) {
-		if (zk.ie9)
-			wgt._wsbak = ws; // B50-ZK-432
 		wgtn.style.whiteSpace = 'nowrap'; // B50-3316030, B50-3346235: pre cause extra space
 	}
 	var eheadtblw: string | undefined,
@@ -137,7 +135,7 @@ function _calcMinWd(wgt: MeshWidget): MeshWidth {
 				wd = ftwd;
 			wds[i] = wd;
 			// Bug ZK-2772 don't plus one when frozen exists.
-			if (!wgt.frozen && (zk.ff! > 4 || zk.ie11 || zk.safari)) // firefox4 & IE9, 10, 11 & safari still cause break line in case B50-3147926 column 1
+			if (!wgt.frozen && (zk.ff! > 4 || zk.safari)) // firefox4 & IE9, 10, 11 & safari still cause break line in case B50-3147926 column 1
 				++wds[i];
 			width += wds[i]; // using wds[i] instead of wd for B50-3183172.zul
 			if (w)
@@ -154,7 +152,7 @@ function _calcMinWd(wgt: MeshWidget): MeshWidth {
 				wds[i] = wd;
 
 				// Bug ZK-2772 don't plus one when frozen exists.
-				if (!wgt.frozen && (zk.ff! > 4 || zk.ie11)) // firefox4 & IE9, 10, 11 still cause break line in case B50-3147926 column 1
+				if (!wgt.frozen && (zk.ff! > 4)) // firefox4 & IE9, 10, 11 still cause break line in case B50-3147926 column 1
 					++wds[i];
 				width += wds[i]; // using wds[i] instead of wd for B50-3183172.zul
 			}
@@ -965,7 +963,7 @@ export abstract class MeshWidget extends zul.Widget {
 		super.bind_(desktop, skipper, after);
 
 		this._bindDomNode();
-		if (this.frozen || zk.ie)
+		if (this.frozen)
 			this._cssflex = false; //force to use old flex
 		if (this._cssflex && this.isChildrenFlex()) {//css flex
 			this.ehdfaker!.style.display = 'none';
@@ -1362,11 +1360,6 @@ export abstract class MeshWidget extends zul.Widget {
 		if (this.inPagingMold() && this._autopaging && rows && rows.length)
 			if (_fixPageSize(this, rows))
 				return false; //need to reload with new page size
-
-		if (zk.ie9 && (this._wsbak !== undefined)) { // B50-ZK-432
-			this.$n_().style.whiteSpace = this._wsbak;
-			delete this._wsbak;
-		}
 
 		if (!this.desktop || !this._model || !rows || !rows.length)
 			return false;

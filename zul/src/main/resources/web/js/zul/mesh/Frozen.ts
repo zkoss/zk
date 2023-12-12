@@ -173,7 +173,7 @@ export class Frozen extends zul.Widget {
 				scrollbarWidth = jq.scrollbarWidth();
 			// ZK-2583: native IE bug, add 1px in scroll div's height for workaround
 			this.$n_().style.height = this.$n_('cave').style.height = this.$n_('right').style.height = scroll.style.height
-				= (scroll.firstChild as HTMLElement).style.height = jq.px0(zk.ie ? scrollbarWidth + 1 : scrollbarWidth);
+				= (scroll.firstChild as HTMLElement).style.height = jq.px0(scrollbarWidth);
 			p._currentLeft = 0;
 			this.domListen_(scroll, 'onScroll');
 
@@ -399,7 +399,7 @@ export class Frozen extends zul.Widget {
 
 				if (cnt-- <= 0) { //show
 					var wd = isVisible ?
-						(zk.ie ? Math.max(jq(n).width()!, 0) : n.offsetWidth) // Bug ZK-2690
+						n.offsetWidth // Bug ZK-2690
 						: 0;
 					// ZK-2071: nativebar behavior should be same as fakebar
 					// ZK-4762: cellWidth should update while scroll into view
@@ -414,7 +414,7 @@ export class Frozen extends zul.Widget {
 					}
 				} else if (force ||
 					// Bug ZK-2690
-					((zk.ie ? Math.max(jq(n).width()!, 0) : n.offsetWidth) != 0)) { //hide
+					(n.offsetWidth != 0)) { //hide
 					faker = jq('#' + n.id + '-hdfaker')[0];
 					//ZK-2776: consider faker's width first for layout consistent
 					if (faker.style.width && zk.parseInt(faker.style.width) > 1)

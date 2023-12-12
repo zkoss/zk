@@ -184,9 +184,6 @@ export class Menupopup extends zul.wgt.Popup {
 
 			if (left >= 0) {
 				n.style.left = jq.px0(left);
-				// ZK-2119: should sync again for ie
-				if (zk.ie)
-					this.onShow();
 			}
 		}
 	}

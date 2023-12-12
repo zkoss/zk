@@ -1208,11 +1208,6 @@ export class CalendarPop extends zul.db.Calendar {
 			this.parent._tm.setVisible(val == 'day');
 		super._setView(val, force);
 
-		// ZK-2047: when sync shadow, the calendar popup should be above the pdf
-		if (zk.ie11) {
-			this.syncShadow();
-		}
-
 		return this;
 	}
 
