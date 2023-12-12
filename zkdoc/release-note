@@ -3,6 +3,7 @@ ZK 10.0.0
   ZK-5221: Show websocket close reason
   ZK-5018: Enhance simplified MVVM syntax
   ZK-5516: change the current month with a keyboard
+  ZK-5517: change the current year with a keyboard
 
 * Bugs
   ZK-5393: Update ZK jars to jakarta-friendly uploads
