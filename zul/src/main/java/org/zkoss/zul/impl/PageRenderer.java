@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.Writer;
 
 import org.zkoss.lang.Library;
+import org.zkoss.lang.Strings;
 import org.zkoss.xml.XMLs;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
@@ -69,14 +70,14 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 
 		out.write("<html");
 		if (number == null || number.intValue() == 0) {
-			write(out, XMLs.escapeXML(pageCtrl.getRootAttributes()));
+			write(out, Strings.escapeJavaScript(pageCtrl.getRootAttributes()));
 			out.write(">\n<head>\n"
 					// B70-ZK-2065: Remove meta for validation.
 					//	+ "<meta http-equiv=\"Pragma\" content=\"no-cache\" />\n"
 					//	+ "<meta http-equiv=\"Expires\" content=\"-1\" />\n"
 					+ "<title>");
 		} else {
-			write(out, XMLs.escapeXML(pageCtrl.getRootAttributes()));
+			write(out, Strings.escapeJavaScript(pageCtrl.getRootAttributes()));
 			out.write(">\n<head>\n");
 			// B70-ZK-2065: Remove meta for validation.
 			//	+ "<meta http-equiv=\"Pragma\" content=\"no-cache\" />\n"
