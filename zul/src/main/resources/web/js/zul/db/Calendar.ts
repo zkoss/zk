@@ -674,6 +674,19 @@ export class Calendar extends zul.Widget {
 
 	/** @internal */
 	override doKeyDown_(evt: zk.Event): void {
+
+		const currentView = this._view;
+		if (evt.key === 'PageUp') {
+			// PageUp: prev month ; Shift + PageUp: prev year
+			this._setView(evt.shiftKey ? 'year' : 'month');
+			this._shift(-1);
+		} else if (evt.key === 'PageDown') {
+			// PageDown: next month ; Shift + PageDown: next year
+			this._setView(evt.shiftKey ? 'year' : 'month');
+			this._shift(1);
+		}
+		this._setView(currentView);
+
 		var keyCode = evt.keyCode,
 			ofs = keyCode == 37 ? -1 : keyCode == 39 ? 1 : keyCode == 38 ? -7 : keyCode == 40 ? 7 : 0;
 		if (ofs) {
