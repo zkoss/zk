@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.io.Writer;
 
 import org.zkoss.lang.Library;
-import org.zkoss.lang.Strings;
 import org.zkoss.xml.XMLs;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
