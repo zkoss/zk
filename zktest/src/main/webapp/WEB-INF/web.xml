@@ -303,4 +303,13 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 <!--		<filter-name>embeddedCORSFilter</filter-name>-->
 <!--		<url-pattern>/*</url-pattern>-->
 <!--	</filter-mapping>-->
+
+	<servlet>
+		<servlet-name>zkEmbedded</servlet-name>
+		<servlet-class>org.zkoss.zkmax.ui.http.EmbeddedServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>zkEmbedded</servlet-name>
+		<url-pattern>/zkEmbedded</url-pattern>
+	</servlet-mapping>
 </web-app>
