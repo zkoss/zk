@@ -70,14 +70,14 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 
 		out.write("<html");
 		if (number == null || number.intValue() == 0) {
-			write(out, Strings.escapeJavaScript(pageCtrl.getRootAttributes()));
+			write(out, pageCtrl.getRootAttributes());
 			out.write(">\n<head>\n"
 					// B70-ZK-2065: Remove meta for validation.
 					//	+ "<meta http-equiv=\"Pragma\" content=\"no-cache\" />\n"
 					//	+ "<meta http-equiv=\"Expires\" content=\"-1\" />\n"
 					+ "<title>");
 		} else {
-			write(out, Strings.escapeJavaScript(pageCtrl.getRootAttributes()));
+			write(out, pageCtrl.getRootAttributes());
 			out.write(">\n<head>\n");
 			// B70-ZK-2065: Remove meta for validation.
 			//	+ "<meta http-equiv=\"Pragma\" content=\"no-cache\" />\n"
