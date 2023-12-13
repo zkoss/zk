@@ -675,8 +675,7 @@ jq(function () {
 		if (!wgt) wgt = evt.target;
 
 		var dEvent = evt.domEvent!,
-			body = document.body,
-			old = zk.currentFocus;
+			body = document.body;
 		if (dEvent.clientX! <= body.clientWidth && dEvent.clientY! <= body.clientHeight) //not click on scrollbar
 			// F70-ZK-2007: Add the button information in it.
 			Widget.mimicMouseDown_(wgt, noFocusChange, evt.which); //wgt is null if mask
@@ -968,18 +967,16 @@ jq(function () {
 
 	var _oldBfUnload = window.onbeforeunload;
 	window.onbeforeunload = function (ev: BeforeUnloadEvent) {
-		if (!zk.skipBfUnload) {
-			if (zk.confirmClose) {
-				setTimeout(function () { //If user click 'cancel', the disabledRequest should be false. Ref: https://stackoverflow.com/questions/4650692/
-					zAu.disabledRequest = false;
-				}, 0);
-				return zk.confirmClose;
-			}
+		if (zk.confirmClose) {
+			setTimeout(function () { //If user click 'cancel', the disabledRequest should be false. Ref: https://stackoverflow.com/questions/4650692/
+				zAu.disabledRequest = false;
+			}, 0);
+			return zk.confirmClose;
+		}
 
-			for (var j = 0; j < _bfUploads.length; ++j) {
-				var s = _bfUploads[j]() as unknown;
-				if (s) return s;
-			}
+		for (var j = 0; j < _bfUploads.length; ++j) {
+			var s = _bfUploads[j]() as unknown;
+			if (s) return s;
 		}
 
 		if (_oldBfUnload) {

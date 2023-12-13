@@ -1583,8 +1583,6 @@ _zk.ipad = (_zk.webkit && agent.includes('ipad') && (
 _zk.android = agent.includes('android');
 _zk.mobile = _zk.ios || _zk.android;
 _zk.css3 = true;
-const ie11 = browser.mozilla && (agent.includes('trident')) && _ver(browser.version);
-
 _zk.vendor = _zk.webkit ? 'webkit' : '';
 
 let bodycls = '';
