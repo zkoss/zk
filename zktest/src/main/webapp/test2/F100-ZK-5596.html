@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="/zktest/zkEmbedded"></script>
+	</head>
+	<body>
+		<button id="btn">load zk</button>
+		<div id="zkapp"/>
+		<script>
+			btn.addEventListener('click', () => {
+				zEmbedded.load('zkapp', '/zktest/test2/F100-ZK-5596.zul');
+			});
+		</script>
+	</body>
+</html>

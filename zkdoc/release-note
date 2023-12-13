@@ -6,6 +6,7 @@ ZK 10.0.0
   ZK-5517: change the current year with a keyboard
   ZK-5048: MVVM DebuggerFactory should log via SLF4J
   ZK-5595: Upgrade Servlet version from 2.4 to 3.1 aligned with Java EE 7
+  ZK-5596: Simplify the JavaScript url when enable embedded mode
 
 * Bugs
   ZK-5393: Update ZK jars to jakarta-friendly uploads
@@ -26,6 +27,8 @@ ZK 10.0.0
   + ZK's corresponding features now require Java EE 7 API level, including:
     Servlet 3.1, Bean Validation 1.1, EL 3.0, and JSP 2.3.
   + Remove all deprecated Java APIs and the legacy module "zkplus-legacy".
+  + Use /zkEmbedded url (or specify yourself) to simply include embedded.js, instead of specify the real path to embedded.js,
+    simplifying the source to enable embedded mode.
 
    --------
 ZK 10.0.0-Beta
