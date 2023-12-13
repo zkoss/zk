@@ -1109,6 +1109,7 @@ public class Parser {
 				String nm = null;
 				char quot = (char) 0;
 				int paramIndex = -1;
+				int inRoundBrackets = 0;
 				for (int j = 0;; ++j) {
 					if (j >= len) {
 						modifiedCommandPropertySb.append(modifyAttrValueIfSimplified0(nm, sb.toString().trim(), paramIndex, isNamedParam));
@@ -1127,12 +1128,16 @@ public class Parser {
 							sb.setLength(0); //cleanup
 							paramIndex++;
 							continue; //next name=value
-						} else if (cc == '=') {
+						} else if (cc == '=' && inRoundBrackets == 0) {
 							nm = sb.toString().trim(); //name found
 							sb.setLength(0); //cleanup
 							continue; //parse value
 						} else if (cc == '\'' || cc == '"') {
 							quot = cc;
+						} else if (cc == '(') {
+							inRoundBrackets++;
+						} else if (cc == ')') {
+							inRoundBrackets--;
 						}
 					} else if (cc == quot) {
 						quot = (char) 0;
