@@ -1654,9 +1654,7 @@ export namespace au_global {
 			export function download(url: string): void {
 				if (url) {
 					var ifr: HTMLIFrameElement = jq('#zk_download')[0] as HTMLIFrameElement,
-						ie = zk.ie,
 						sbu = zk.skipBfUnload;
-					if (ie) zk.skipBfUnload = true;
 
 					if (!ifr) {
 						ifr = document.createElement('iframe');
@@ -1667,12 +1665,6 @@ export namespace au_global {
 					}
 
 					ifr.src = url; //It is OK to reuse the same iframe
-
-					// Workaround for IE11: wait a second (not perfect) for iframe loading
-					if (ie === 11)
-						setTimeout(function () {
-							zk.skipBfUnload = sbu;
-						}, 1000);
 				}
 			}
 			/**
@@ -2183,10 +2175,7 @@ export namespace au_global {
 					// so we have to do the same as that code in Window.js
 					setTimeout(function () {
 						zk.afterAnimate(function () {
-							if (zk.ie9_)
-								wgt.focus(100);
-							else
-								wgt.focus(0); //wgt.focus() failed in FF
+							wgt.focus(0); //wgt.focus() failed in FF
 						}, -1);
 					});
 				}

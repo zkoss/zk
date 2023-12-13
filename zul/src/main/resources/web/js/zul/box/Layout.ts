@@ -515,10 +515,6 @@ export class Layout extends zul.Widget {
 						total += (w as HTMLElement).offsetWidth;
 				}
 
-				// IE9+ bug ZK-483
-				if (zk.ie11 && this._hflexsz)
-					total = Math.max(this._hflexsz, total);
-
 				n.style.width = jq.px0(total);
 			} else {
 				var max = 0;
@@ -527,10 +523,6 @@ export class Layout extends zul.Widget {
 					if (wd > max)
 						max = wd;
 				}
-
-				// IE9+ bug ZK-483
-				if (zk.ie11 && this._hflexsz)
-					max = Math.max(this._hflexsz, max);
 
 				n.style.width = jq.px0(max);
 			}

@@ -541,13 +541,6 @@ export class Box extends zul.Widget {
 	override resetSize_(orient: zk.FlexOrient): void { //@Overrid zk.Widget#resetSize_, called when beforeSize
 		super.resetSize_(orient);
 
-		// B85-ZK-3516: remove size of frame
-		if (!zk.ie) {
-			var n = this.$n()!;
-			if (!n.scrollTop && !n.scrollLeft)
-				this.$n('frame')!.style[orient == 'w' ? 'width' : 'height'] = '';
-		}
-
 		var	vert = this.isVertical(),
 		k = -1,
 		szes = this._sizes;
@@ -701,7 +694,7 @@ export class Box extends zul.Widget {
 			let cwgt = vflexs.shift()!,
 				vsz = (cwgt._nvflex! * hgh / vflexsz) | 0, //cast to integer
 				//B50-3014664.zul offtop = cwgt.$n().offsetTop,
-				isz = vsz, // B50-3014664.zul vsz - ((zk.ie && offtop > 0) ? (offtop * 2) : 0);
+				isz = vsz,
 				chdex = cwgt.$n('chdex')!,
 				$chdex = zk(chdex),
 				minus = $chdex.padBorderHeight();
@@ -721,7 +714,7 @@ export class Box extends zul.Widget {
 		if (vflexs.length) {
 			let cwgt = vflexs.shift()!,
 				// B50-3014664.zul offtop = cwgt.$n().offsetTop,
-				isz = lastsz, // B50-3014664.zul - ((zk.ie && offtop > 0) ? (offtop * 2) : 0);
+				isz = lastsz,
 				chdex = cwgt.$n('chdex')!,
 				$chdex = zk(chdex),
 				minus = $chdex.padBorderHeight();

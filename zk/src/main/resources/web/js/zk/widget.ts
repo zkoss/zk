@@ -342,8 +342,6 @@ function _rsFocus(cfi?: CurrentFocusInfo): void {
 
 function _listenFlex(wgt: zk.Widget & {_flexListened?: boolean}): void {
 	if (!wgt._flexListened) {
-		if (zk.ie) // not to use css flex in ie
-			wgt._cssflex = false;
 		var parent = wgt.parent,
 			cssFlexEnabled = wgt._cssflex && parent && ((parent instanceof zk.Page) || parent.getFlexContainer_() != null);
 		if (cssFlexEnabled)
@@ -408,9 +406,7 @@ export var DnD = class { //for easy overriding
 	static getDropTarget(evt: zk.Event, drag?: zk.Draggable): zk.Widget {
 		var wgt: zk.Widget | undefined;
 		// Firefox's bug -  https://bugzilla.mozilla.org/show_bug.cgi?id=1259357
-		if ((zk.ff && jq(evt.domTarget).css('overflow') !== 'visible') ||
-			// IE 9~11 and Edge may receive a wrong target when dragging with an Image.
-			((zk.ie || zk.edge_legacy) && jq.nodeName(evt.domTarget, 'img'))) {
+		if ((zk.ff && jq(evt.domTarget).css('overflow') !== 'visible')) {
 			var n = document.elementFromPoint(evt.domEvent!.clientX || 0, evt.domEvent!.clientY || 0);
 			if (n)
 				wgt = zk.$(n);
@@ -4157,12 +4153,7 @@ new zul.wnd.Window({
 	/** @internal */
 	getChildMinSize_(attr: zk.FlexOrient, wgt: zk.Widget): number { //'w' for width or 'h' for height
 		if (attr == 'w') {
-			// feature #ZK-314: zjq.minWidth function return extra 1px in IE9/10/11
-			var wd = zjq.minWidth(wgt);
-			if (zk.ie && zk.isLoaded('zul.wgt') && (wgt instanceof zul.wgt.Image)) {
-				wd = zk(wgt).offsetWidth();
-			}
-			return wd;
+			return zjq.minWidth(wgt);
 		} else {
 			return zk(wgt).offsetHeight();//See also bug ZK-483
 		}

@@ -14,5 +14,4 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 <package name="zk.canvas" language="xul/html">
 	<script>//ExplorerCanvas, Copyright 2006 Google Inc.</script>
 	<script src="index.js" jsdoc="true"/>
-	<script src="ext/excanvas.js" browser="ie"/>
 </package>

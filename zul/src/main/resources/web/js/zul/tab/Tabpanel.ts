@@ -119,14 +119,14 @@ export class Tabpanel extends zul.ContainerWidget {
 				if (!vis) {
 					$pl.show();
 					// Bug ZK-1454: Scrollbar forgets its position when switching tabs in Tabbox
-					if (zk.ie9 || zk.webkit)
+					if (zk.webkit)
 						$pl.scrollTop(this._lastScrollTop!);
 					zUtl.fireShown(this);
 				}
 			} else if (vis) {
 				zWatch.fireDown('onHide', this);
 				// Bug ZK-1454: Scrollbar forgets its position when switching tabs in Tabbox
-				if (zk.ie9 || zk.webkit)
+				if (zk.webkit)
 					this._lastScrollTop = $pl.scrollTop();
 				$pl.hide();
 			}

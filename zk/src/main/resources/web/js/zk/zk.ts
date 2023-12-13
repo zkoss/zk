@@ -457,22 +457,6 @@ declare namespace _zk {
 	/** The user agent of the browser. */
 	export let agent: string;
 	/**
-	 * The DOM API's version
-	 * if the browser is Internet Explorer, or null if not.
-	 * <p>Note: it is DOM API's version, not the browser version.
-	 * In other words, it depends on if the browser is running in a compatible mode.
-	 * For the browser's version, please use {@link iex} instead.
-	 */
-	export let ie: number | undefined;
-	/**
-	 * The browser's version as double (only the first two part of the version, such as 8)
-	 * if the browser is Internet Explorer, or null if not.
-	 * <p>Notice that this is the browser's version, which might not be the
-	 * version of DOM API. For DOM API's version, please use {@link ie} instead.
-	 * @since 5.0.7
-	 */
-	export let iex: number | string | false | undefined;
-	/**
 	 * The version as double (only the first two part of the version, such as 3.5)
 	 * if it is Gecko-based browsers,
 	 * such as Firefox.
@@ -496,8 +480,6 @@ declare namespace _zk {
 	 * The version as double (only the first two part of the version, such as 10.1) if it is Opera, or null if not.
 	 */
 	export let opera: string | number | false | undefined;
-	/** Whether it is Adobe AIR. */
-	export let air: boolean;
 	/** Whether it supports CSS3. */
 	export let css3: boolean;
 
@@ -1613,26 +1595,7 @@ if (_zk.ff) {
 	bodycls = 'opera';
 	_zk.vendor = 'O';
 } else {
-	_zk.iex = browser.msie && _ver(browser.version); //browser version
-		//zk.iex is the Browser Mode (aka., Compatibility View)
-		//while zk.ie is the Document Mode
-	if (!_zk.iex && ie11)
-		_zk.iex = ie11;
-
-	if (_zk.iex) {
-		_zk.ie = (document['documentMode'] || _zk.iex) as undefined | number;
-		if (_zk.ie) {
-			// zk.ien: the version n or later but less than 11
-			if (_zk.ie < 11 && _zk.ie >= 9) {
-				_zk.ie9 = _zk.ie >= 9;
-				_zk.ie10 = _zk.ie >= 10;
-			}
-			_zk['ie' + _zk.ie + '_'] = true;
-			_zk.css3 = _zk.ie >= 9;
-			bodycls = 'ie ie' + Math.floor(_zk.ie);
-		}
-		_zk.vendor = 'ms';
-	} else if (_zk.edge || _zk.edge_legacy) {
+	if (_zk.edge || _zk.edge_legacy) {
 		bodycls = 'edge';
 	} else {
 		if (_zk.chrome) {
@@ -1651,8 +1614,6 @@ if (_zk.mobile) {
 	else
 		bodycls += ' android';
 }
-if ((_zk.air = agent.includes('adobeair')) && _zk.webkit)
-	bodycls += ' air';
 
 if (bodycls)
 	jq(function () {
@@ -1662,61 +1623,58 @@ if (bodycls)
 _zk.vendor_ = _zk.vendor.toLowerCase();
 
 
-if (!_zk.ie && !_zk.edge_legacy) {
-	/** @class zk.Buffer
-	 * A string concatenation implementation to speed up the rendering performance
-	 * in the modern browsers, except IE or MS's Edge. The implementation is to
-	 * cheat the mold js of the ZK widgets' implementation that it assumed the
-	 * argument is an array type in the early ZK version.
-	 * <p>Note: if the default implementation breaks the backward compatibility,
-	 * please use the following script to overwrite the implementation as the same
-	 * as the early ZK version. For example,
-	 * ```ts
-	 * zk.Buffer = Array;
-	 * ```
-	 * @since 8.0.0
-	 */
-	class Buffer extends Array<string> {
-		out: string;
-		constructor() {
-			super();
-			this.out = '';
-		}
-		override push(...items: (string | null | undefined)[]): number {
-			for (const item of items) {
-				if (item != null) {
-					this.out += item;
-				}
-			}
-			return this.length;
-		}
-		override join(separator?: string): string {
-			if (separator)
-				throw 'Wrong usage here! Please run the script `zk.Buffer = Array;` instead.';
-			return this.out;
-		}
-		override shift(): string | undefined {
-			throw 'Wrong usage here! Please run the script `zk.Buffer = Array;` instead.';
-		}
-		override unshift(...items: string[]): number {
-			throw 'Wrong usage here! Please run the script `zk.Buffer = Array;` instead.';
-		}
-		override pop(): string | undefined {
-			throw 'Wrong usage here! Please run the script `zk.Buffer = Array;` instead.';
-		}
-		override slice(start?: number | undefined, end?: number | undefined): string[] {
-			throw 'Wrong usage here! Please run the script `zk.Buffer = Array;` instead.';
-		}
-		override sort(compareFn?: ((a: string, b: string) => number) | undefined): this {
-			throw 'Wrong usage here! Please run the script `zk.Buffer = Array;` instead.';
-		}
+/** @class zk.Buffer
+ * A string concatenation implementation to speed up the rendering performance
+ * in the modern browsers, except IE or MS's Edge. The implementation is to
+ * cheat the mold js of the ZK widgets' implementation that it assumed the
+ * argument is an array type in the early ZK version.
+ * <p>Note: if the default implementation breaks the backward compatibility,
+ * please use the following script to overwrite the implementation as the same
+ * as the early ZK version. For example,
+ * ```ts
+ * zk.Buffer = Array;
+ * ```
+ * @since 8.0.0
+ */
+class Buffer extends Array<string> {
+	out: string;
+	constructor() {
+		super();
+		this.out = '';
 	}
-	// NOTE: the shape of the class `Buffer` shouldn't be leaked.
-	// Externally, `zk.Buffer` should always look like `ArrayConstructor`.
-	_zk.Buffer = Buffer as never as typeof Array<string>;
-} else {
-	_zk.Buffer = Array<string>;
+	override push(...items: (string | null | undefined)[]): number {
+		for (const item of items) {
+			if (item != null) {
+				this.out += item;
+			}
+		}
+		return this.length;
+	}
+	override join(separator?: string): string {
+		if (separator)
+			throw 'Wrong usage here! Please run the script `zk.Buffer = Array;` instead.';
+		return this.out;
+	}
+	override shift(): string | undefined {
+		throw 'Wrong usage here! Please run the script `zk.Buffer = Array;` instead.';
+	}
+	override unshift(...items: string[]): number {
+		throw 'Wrong usage here! Please run the script `zk.Buffer = Array;` instead.';
+	}
+	override pop(): string | undefined {
+		throw 'Wrong usage here! Please run the script `zk.Buffer = Array;` instead.';
+	}
+	override slice(start?: number | undefined, end?: number | undefined): string[] {
+		throw 'Wrong usage here! Please run the script `zk.Buffer = Array;` instead.';
+	}
+	override sort(compareFn?: ((a: string, b: string) => number) | undefined): this {
+		throw 'Wrong usage here! Please run the script `zk.Buffer = Array;` instead.';
+	}
 }
+// NOTE: the shape of the class `Buffer` shouldn't be leaked.
+// Externally, `zk.Buffer` should always look like `ArrayConstructor`.
+_zk.Buffer = Buffer as never as typeof Array<string>;
+
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type PickFunction<T, K extends keyof T> = T[K] extends ((...args: any) => any) ? T[K] : never;

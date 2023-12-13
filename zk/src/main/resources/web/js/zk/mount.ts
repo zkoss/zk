@@ -682,26 +682,6 @@ jq(function () {
 			Widget.mimicMouseDown_(wgt, noFocusChange, evt.which); //wgt is null if mask
 
 		_doEvt(evt);
-
-		//Bug 2799334, 2635555 and 2807475: need to enforce a focus event (IE only)
-		//However, ZK-354: if target is upload, we can NOT focus to it. Thus, focusBackFix was introduced
-		if (old && zk.ie) { // Bug ZK-2795, IE11 still fails in this case.
-			var n = jq(old)[0];
-			if (n)
-				setTimeout(function () {
-					try {
-						var cf = zk.currentFocus;
-						if (cf && cf != old && !n.offsetWidth && !n.offsetHeight) {
-							zk.focusBackFix = true;
-							cf.focus();
-						}
-					} catch (e) {
-						zk.debugLog((e as Error).message ?? e);
-					} finally {
-						delete zk.focusBackFix;
-					}
-				});
-		}
 	}
 
 	/** @internal */
@@ -963,8 +943,7 @@ jq(function () {
 	}).on('unload', function () {
 		zk.unloading = true; //to disable error message
 
-		// B65-ZK-2051: Remove desktop if is IE.
-		if (zk.ie || !zk.rmDesktoping) {
+		if (!zk.rmDesktoping) {
 			rmDesktop();
 		}
 	});
@@ -1011,9 +990,7 @@ jq(function () {
 		zk.unloading = true; //FF3 aborts ajax before calling window.onunload
 
 		// B65-ZK-2051: Remove desktop if not IE.
-		if (!zk.ie) {
-			rmDesktop();
-		}
+		rmDesktop();
 		//Return nothing
 	};
 

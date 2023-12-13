@@ -30,12 +30,6 @@ var _keyIgnorable = zk.opera ? function (code: number) {
 	} : function (code: number) {
 		return code >= 32;
 	},
-	_fixInput = zk.ie ? function<T> (wgt: InputWidget<T>) { //ZK-426; ZK-3237: IE 11 also have this problem
-		setTimeout(function () { //we have to delay since zk.currentFocus might not be ready
-			if (wgt == zk.currentFocus)
-				window.zjq.fixInput(wgt.getInputNode()!);
-		}, 0);
-	} : zk.$void,
 	windowX = 0,
 	windowY = 0;
 
@@ -242,8 +236,6 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		if (o !== readonly || opts?.force) {
 			var inp = this.getInputNode();
 			if (inp) {
-				_fixInput(this);
-
 				var fnm = readonly ? 'addClass' as const : 'removeClass' as const;
 
 				inp.readOnly = readonly;
@@ -1095,9 +1087,6 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	
 	/** @internal */
 	override focus_(timeout?: number): boolean {
-		// ZK-2020: should give timeout for ie11
-		if (zk.ie11_ && !timeout)
-			timeout = 0;
 		zk(this.getInputNode()).focus(timeout);
 		return true;
 	}
@@ -1129,16 +1118,8 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 			.domListen_(n, 'onBlur', 'doBlur_')
 			.domListen_(n, 'onSelect')
 			.domListen_(n, 'onMouseOver')
-			.domListen_(n, 'onMouseOut');
-		//prevent unexpected onInput bug in IE10 and IE11, see https://connect.microsoft.com/IE/feedback/details/816137
-		if (zk.ie10_ || zk.ie11_) {
-			var self = this;
-			setTimeout(function () {
-				self.domListen_(self.getInputNode()!, 'onInput', 'doInput_');
-			}, 100);
-		} else {
-			this.domListen_(n, 'onInput', 'doInput_');
-		}
+			.domListen_(n, 'onMouseOut')
+			.domListen_(n, 'onInput', 'doInput_');
 
 		if (zk.ios)
 			this.domListen_(n, 'onTouchStart', '_doTouch');

@@ -170,15 +170,6 @@ export class HeadWidget extends zul.Widget<HTMLTableRowElement> {
 	}
 
 	/** @internal */
-	override insertChildHTML_(child: zul.mesh.HeaderWidget, before?: zk.Widget, desktop?: zk.Desktop): void {
-		//ZK-2461: ie8 will take head-bar as one of columns, and equalize the width with other normal heads
-		if (zk.ie9 && this.$n('bar')) {
-			this.$n_('bar').style.display = 'none';
-		}
-		super.insertChildHTML_(child, before, desktop);
-	}
-
-	/** @internal */
 	override onChildAdded_(child: zul.mesh.HeaderWidget): void {
 		super.onChildAdded_(child);
 		if (this.desktop) {

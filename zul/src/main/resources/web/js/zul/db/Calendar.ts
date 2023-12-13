@@ -151,8 +151,7 @@ export var Renderer = {
 			val = wgt.getTime(),
 			m = val.getMonth(),
 			y = val.getFullYear(),
-			// to avoid moment using the last day(according to local timezone) of the previous year in ie.
-			date = zk.ie ? new Date(y, m) : val._moment.toDate(),
+			date = val._moment.toDate(),
 			localeDateTimeFormat = new Intl.DateTimeFormat(localizedSymbols.LAN_TAG, {year: 'numeric'}),
 			displayYear = this._getDisplayYear(date, localizedSymbols, localeDateTimeFormat),
 			yofs = y - (y % 10 + 1),
