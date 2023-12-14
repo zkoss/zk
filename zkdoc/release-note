@@ -4,6 +4,7 @@ ZK 10.0.0
   ZK-5018: Enhance simplified MVVM syntax
   ZK-5516: change the current month with a keyboard
   ZK-5517: change the current year with a keyboard
+  ZK-5595: Upgrade Servlet version from 2.4 to 3.1 aligned with Java EE 7
 
 * Bugs
   ZK-5393: Update ZK jars to jakarta-friendly uploads
@@ -20,6 +21,8 @@ ZK 10.0.0
 * Upgrade Notes
   + Upgrade commons-fileupload to commons-fileupload2-javax 2.0.0-M1 and commons-io to 2.13.0 to support jakarta-friendly uploads
   + Now it is not allowed to use positional and non-positional parameters together in MVVM command binding.
+  + ZK's corresponding features now require Java EE 7 API level, including:
+    Servlet 3.1, Bean Validation 1.1, EL 3.0, and JSP 2.3.
 
    --------
 ZK 10.0.0-Beta

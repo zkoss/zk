@@ -21,6 +21,7 @@ import java.io.OutputStream;
 import java.io.Writer;
 
 import javax.servlet.ServletOutputStream;
+import javax.servlet.WriteListener;
 
 import org.zkoss.io.WriterOutputStream;
 
@@ -75,5 +76,13 @@ public class ServletOutputStreamWrapper extends ServletOutputStream {
 	public void close() throws IOException {
 		_stream.close();
 		super.close();
+	}
+
+	public boolean isReady() {
+		return false;
+	}
+
+	public void setWriteListener(WriteListener writeListener) {
+		throw new UnsupportedOperationException();
 	}
 }

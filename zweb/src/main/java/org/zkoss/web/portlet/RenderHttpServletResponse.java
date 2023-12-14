@@ -16,6 +16,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.web.portlet;
 
+import java.util.Collection;
+
 import javax.portlet.RenderResponse;
 import javax.servlet.http.HttpServletResponse;
 
@@ -166,6 +168,26 @@ public class RenderHttpServletResponse implements HttpServletResponse {
 	 * @deprecated
 	 */
 	public void setStatus(int sc, String sm) {
+	}
+
+	public int getStatus() {
+		return 0;
+	}
+
+	public String getHeader(String s) {
+		return null;
+	}
+
+	public Collection<String> getHeaders(String s) {
+		return null;
+	}
+
+	public Collection<String> getHeaderNames() {
+		return null;
+	}
+
+	public void setContentLengthLong(long l) {
+
 	}
 
 	//Object//
