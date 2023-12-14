@@ -12,7 +12,7 @@ public class B01016NestedFormTest extends ZATSTestCase {
 		try {
 			connect();
 		} catch (Exception e) {
-			assertTrue(e.getCause().toString().contains("UiException: doesn't support to load a nested form"));
+			assertTrue(e.getCause().getCause().toString().contains("UiException: doesn't support to load a nested form"));
 		}
 	}
 }
