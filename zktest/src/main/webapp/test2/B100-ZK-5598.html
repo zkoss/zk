@@ -1,0 +1,26 @@
+<!--
+B100-ZK-5598.html
+
+        Purpose:
+
+        Description:
+
+        History:
+                Fri Dec 15 15:40:13 CST 2023, Created by jamson
+
+Copyright (C) 2023 Potix Corporation. All Rights Reserved.
+-->
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="http://localhost:8080/zktest/zkau/web/js/zkmax/embedded/index.js"></script>
+	</head>
+	<body>
+		<div>Set Library Property org.zkoss.web.servlet.http.embedded.enabled to true in zk.xml to enable embedded mode.</div>
+		<div>If you didn't see the ckeditor below, the bug still exist</div>
+		<div>(This bug triggered when use absolute-path to embedded a zul.</div>
+		<div id="zkapp"/>
+		<script>zEmbedded.load('zkapp', 'http://localhost:8080/zktest/test2/B100-ZK-5598.zul');</script>
+	</body>
+</html>
