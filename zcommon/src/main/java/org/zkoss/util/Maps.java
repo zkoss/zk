@@ -434,15 +434,6 @@ public class Maps {
 	boolean parenthesis) throws IllegalSyntaxException {
 		return parse0(map, src, pairSeparator, separator, quote, asValue, parenthesis, true);
 	}
-	/** @deprecated As of release 6.0.0, replaced with
-	 * {@link #parse(Map, String, char, char, boolean, boolean)} and
-	 * {@link #parseMultiple}
-	 */
-	public static final Map
-	parse(Map map, String src, char separator, char quote, boolean asValue,
-	boolean multiple, boolean parenthesis) throws IllegalSyntaxException {
-		return parse0(map, src, '=', separator, quote, asValue, parenthesis, multiple);
-	}
 	
 	private static final Map
 	parse0(Map map, String src, char pairSeparator, char separator, char quote, boolean asValue,

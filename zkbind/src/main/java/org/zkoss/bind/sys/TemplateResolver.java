@@ -41,21 +41,6 @@ public interface TemplateResolver {
 	Template resolveTemplate(Component eachComp, Object eachData, int index, int size, String subType);
 
 	/**
-	 * @deprecated since 7.0.0
-	 * use {@link #resolveTemplate(Component, Object, int, int, String)}
-	 */
-	@Deprecated
-	Template resolveTemplate(Component eachComp, Object eachData, int index, int size);
-
-	/**
-	 * Add template tracking to component
-	 * @param eachComp the component to add template tracking
-	 * @deprecated since 6.5.3
-	 */
-	@Deprecated
-	void addTemplateTracking(Component eachComp);
-
-	/**
 	 * Add template tracking to component
 	 * @param eachComp the template to be resolved of the component
 	 * @param eachData the data for resolver

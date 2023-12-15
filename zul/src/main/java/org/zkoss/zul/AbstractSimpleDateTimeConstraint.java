@@ -52,18 +52,6 @@ public abstract class AbstractSimpleDateTimeConstraint<T extends Comparable<? su
 		fixConstraint();
 	}
 
-	/** Constructs a constraint combining regular expression.
-	 *
-	 * @param regex ignored if null or empty. Unlike constraint, the regex doesn't need to enclose with '/'.
-	 * @param errmsg the error message to display. Ignored if null or empty.
-	 * @deprecated As of release 8.0.1, replaced with {@link #AbstractSimpleDateTimeConstraint(int, Pattern, String)}
-	 */
-	@Deprecated
-	public AbstractSimpleDateTimeConstraint(String regex, String errmsg) {
-		super(regex, errmsg);
-		fixConstraint();
-	}
-
 	/** Constructs a regular-expression constraint.
 	 *
 	 * @param regex ignored if null or empty
@@ -71,20 +59,6 @@ public abstract class AbstractSimpleDateTimeConstraint<T extends Comparable<? su
 	 */
 	public AbstractSimpleDateTimeConstraint(Pattern regex, String errmsg) {
 		super(regex, errmsg);
-		fixConstraint();
-	}
-
-	/** Constructs a constraint combining regular expression.
-	 *
-	 * @param flags a combination of {@link #NO_POSITIVE}, {@link #NO_NEGATIVE},
-	 * {@link #NO_ZERO}, and so on.
-	 * @param regex ignored if null or empty. Unlike constraint, the regex doesn't need to enclose with '/'.
-	 * @param errmsg the error message to display. Ignored if null or empty.
-	 * @deprecated As of release 8.0.1, replaced with {@link #AbstractSimpleDateTimeConstraint(int, Pattern, String)}
-	 */
-	@Deprecated
-	public AbstractSimpleDateTimeConstraint(int flags, String regex, String errmsg) {
-		super(flags, regex, errmsg);
 		fixConstraint();
 	}
 

@@ -40,6 +40,7 @@ import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
+import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuRequests;
 import org.zkoss.zk.au.out.AuInvoke;
 import org.zkoss.zk.ui.Component;
@@ -443,21 +444,6 @@ public class Grid extends MeshElement {
 		super.setVflex(flex);
 	}
 
-	/**
-	 * @deprecated since 5.0.0, use {@link #setSizedByContent}(!fixedLayout) instead
-	 * @param fixedLayout true to outline this grid by browser
-	 */
-	public void setFixedLayout(boolean fixedLayout) {
-		setSizedByContent(!fixedLayout);
-	}
-
-	/**
-	 * @deprecated since 5.0.0, use !{@link #isSizedByContent} instead
-	 */
-	public boolean isFixedLayout() {
-		return !isSizedByContent();
-	}
-
 	/** Returns the rows.
 	 */
 	public Rows getRows() {
@@ -508,17 +494,6 @@ public class Grid extends MeshElement {
 
 		children = ((Row) children.get(row)).getChildren();
 		return children.size() <= col ? null : (Component) children.get(col);
-	}
-
-	/** @deprecated As of release 5.0, use CSS instead.
-	 */
-	public String getAlign() {
-		return null;
-	}
-
-	/** @deprecated As of release 5.0, use CSS instead.
-	 */
-	public void setAlign(String align) {
 	}
 
 	/** Returns the visible rows. Zero means no limitation.
@@ -1003,41 +978,6 @@ public class Grid extends MeshElement {
 			IllegalAccessException, InstantiationException, java.lang.reflect.InvocationTargetException {
 		if (clsnm != null)
 			setRowRenderer((RowRenderer) Classes.newInstanceByThread(clsnm));
-	}
-
-	/** @deprecated As of release 5.0.8, use custom attributes (org.zkoss.zul.listbox.preloadSize) instead.
-	 * Returns the number of rows to preload when receiving
-	 * the rendering request from the client.
-	 *
-	 * <p>Default: 50. (since 6.0.1)
-	 *
-	 * <p>It is used only if live data ({@link #setModel(ListModel)} and
-	 * not paging ({@link #getPagingChild}.
-	 *
-	 * <p>Note: if the "pre-load-size" attribute of component is specified, it's prior to the original value.(@since 3.0.4)
-	 * @since 2.4.1
-	 */
-	public int getPreloadSize() {
-		final String size = (String) getAttribute("pre-load-size");
-		return size != null ? Integer.parseInt(size) : _preloadsz;
-	}
-
-	/** @deprecated As of release 5.0.8, use custom attributes (org.zkoss.zul.listbox.preloadSize) instead.
-	 * Sets the number of rows to preload when receiving
-	 * the rendering request from the client.
-	 * <p>It is used only if live data ({@link #setModel(ListModel)} and
-	 * not paging ({@link #getPagingChild}.
-	 *
-	 * @param sz the number of rows to preload. If zero, no preload
-	 * at all.
-	 * @exception UiException if sz is negative
-	 * @since 2.4.1
-	 */
-	public void setPreloadSize(int sz) {
-		if (sz < 0)
-			throw new UiException("nonnegative is required: " + sz);
-		_preloadsz = sz;
-		//no need to update client since paging done at server
 	}
 
 	/**
@@ -1882,7 +1822,7 @@ public class Grid extends MeshElement {
 
 	/** Processes an AU request.
 	 *
-	 * <p>Default: in addition to what are handled by {@link XulElement#service},
+	 * <p>Default: in addition to what are handled by {@link XulElement#service(AuRequest, boolean)},
 	 * it also handles onSelect.
 	 * @since 5.0.0
 	 */

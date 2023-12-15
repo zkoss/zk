@@ -826,11 +826,6 @@ public interface Component extends Scope, java.io.Serializable, Cloneable {
 	 */
 	public boolean isListenerAvailable(String evtnm, boolean asap);
 
-	/** @deprecated As of release 6.0, replaced with {@link #getEventListeners}.
-	 * Returns an iterator for iterating the event listeners for the given event.
-	 */
-	public Iterator<EventListener<? extends Event>> getListenerIterator(String evtnm);
-
 	/** Returns an iterable collection of the event listeners for the given event.
 	 * <p>Note: it is OK to invoke {@link #addEventListener} or {@link #removeEventListener}
 	 * when iterating through the event listeners with the returned collection.
@@ -1082,27 +1077,15 @@ public interface Component extends Scope, java.io.Serializable, Cloneable {
 	 */
 	public Set<String> getWidgetOverrideNames();
 
-	/**
-	 * @deprecated As released of ZK 8.0.0, please use {@link #setClientAttribute(String, String)}
-	 * instead.
-	 */
-	public String setWidgetAttribute(String name, String value);
-
-	/** 
-	 * @deprecated As released of ZK 8.0.0, please use {@link #getClientAttribute(String)}
-	 * instead.
-	 */
-	public String getWidgetAttribute(String name);
-
 	/*** Sets or removes a DOM attribute of the peer widget (at the client).
 	 * ZK pass the attributes directly to the DOM attribute generated
 	 * at the client.
 	 * <p>Notice that {@link #setWidgetOverride} or {@link #setWidgetListener}
-	 * are used to customize the peer widget, while {@link #setWidgetAttribute}
+	 * are used to customize the peer widget, while {@link #setClientAttribute(String, String)}
 	 * customizes the DOM element of the peer widget directly.
 	 *
 	 * <p>Unlike {@link #setWidgetOverride} or {@link #setWidgetListener},
-	 * {@link #setWidgetAttribute} has no effect if the widget has been
+	 * {@link #setClientAttribute} has no effect if the widget has been
 	 * generated at the client, unless {@link #invalidate} is called.
 	 *
 	 * @param name the attribute name to generate to the DOM element,
@@ -1150,7 +1133,7 @@ public interface Component extends Scope, java.io.Serializable, Cloneable {
 	public String getClientDataAttribute(String name);
 
 	/** Returns a read-only collection of additions DOM attributes that shall be
-	 * generated. That is, they are the attributes added by {@link #setWidgetAttribute}.
+	 * generated. That is, they are the attributes added by {@link #setClientAttribute}.
 	 * @since 5.0.3
 	 */
 	public Set<String> getWidgetAttributeNames();

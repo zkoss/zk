@@ -630,21 +630,6 @@ public class Column extends HeaderElement {
 		sort(event.isAscending());
 	}
 
-	/** It invokes {@link #sort(boolean)} to sort list items and maintain
-	 * {@link #getSortDirection}.
-	 * @deprecated As of release 5.0.8, use or override {@link #onSort(SortEvent)}
-	 * instead.
-	 */
-	public void onSort() {
-		final String dir = getSortDirection();
-		if ("ascending".equals(dir))
-			sort(false);
-		else if ("descending".equals(dir))
-			sort(true);
-		else if (!sort(true))
-			sort(false);
-	}
-
 	/**
 	 * Internal use only.
 	 * @since 6.5.0

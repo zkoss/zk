@@ -310,18 +310,10 @@ public class ParamCall {
 
 	public interface ParamResolver<T> {
 		/**
-		 * @deprecated since 9.5.0
-		 * @see #resolveParameter(Object, Class, Supplier)
-		 */
-		@Deprecated
-		default Object resolveParameter(T anno, Class<?> returnType) {
-			return null;
-		}
-		/**
 		 * @since 9.5.0
 		 */
 		default Object resolveParameter(T anno, Class<?> returnType, Supplier<String> parameterName) {
-			return resolveParameter(anno, returnType);
+			return null;
 		}
 	}
 

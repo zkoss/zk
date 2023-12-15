@@ -614,6 +614,7 @@ public class Rows extends XulElement {
 	 * components, please refer to {@link Grid} and {@link Column} instead.
 	 */
 	public void setWidth(String width) {
+		// Don't remove this method, it's to override super.setWidth().
 	}
 
 	/**
@@ -621,6 +622,7 @@ public class Rows extends XulElement {
 	 * components, please refer to {@link Grid} and {@link Column} instead.
 	 */
 	public void setHflex(String flex) {
+		// Don't remove this method, it's to override super.setHflex().
 	}
 
 	//Cloneable//

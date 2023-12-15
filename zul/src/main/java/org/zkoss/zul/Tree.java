@@ -47,6 +47,7 @@ import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.xel.VariableResolver;
+import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuRequests;
 import org.zkoss.zk.au.out.AuInvoke;
 import org.zkoss.zk.ui.Component;
@@ -429,7 +430,7 @@ public class Tree extends MeshElement {
 					addPagingListener(_pgi);
 				else
 					newInternalPaging();
-				setFixedLayout(true);
+				setSizedByContent(false);
 				resetPosition(true); //non-paging mold -> paging mold
 				if (_model instanceof Pageable) {
 					Pageable m = (Pageable) _model;
@@ -722,21 +723,6 @@ public class Tree extends MeshElement {
 
 	private int getVisibleItemCount() {
 		return _treechildren != null ? _treechildren.getVisibleItemCount() : 0;
-	}
-
-	/**
-	 * @deprecated since 5.0.0, use {@link #setSizedByContent}(!fixedLayout) instead
-	 * @param fixedLayout true to outline this grid by browser
-	 */
-	public void setFixedLayout(boolean fixedLayout) {
-		setSizedByContent(!fixedLayout);
-	}
-
-	/**
-	 * @deprecated since 5.0.0, use !{@link #isSizedByContent} instead
-	 */
-	public boolean isFixedLayout() {
-		return !isSizedByContent();
 	}
 
 	/** Returns the treecols that this tree owns (might null).
@@ -1969,32 +1955,6 @@ public class Tree extends MeshElement {
 		return (TreeitemRenderer) _renderer;
 	}
 
-	/** @deprecated As of release 5.0.6, replaced with {@link #setItemRenderer}.
-	 * Sets the renderer which is used to render each item
-	 * if {@link #getModel} is not null.
-	 *
-	 * <p>Note: changing a render will not cause the tree to re-render.
-	 * If you want it to re-render, you could assign the same model again
-	 * (i.e., setModel(getModel())), or fire an {@link TreeDataEvent} event.
-	 *
-	 * @param renderer the renderer, or null to use the default.
-	 * @exception UiException if failed to initialize with the model
-	 * @since 3.0.0
-	 */
-	public void setTreeitemRenderer(TreeitemRenderer<?> renderer) {
-		setItemRenderer(renderer);
-	}
-
-	/** @deprecated As of release 5.0.6, replaced with {@link #getItemRenderer}.
-	/** Returns the renderer to render each item, or null if the default
-	 * renderer is used.
-	 * @return the renderer to render each item, or null if the default
-	 * @since 3.0.0
-	 */
-	public <T> TreeitemRenderer<T> getTreeitemRenderer() {
-		return getItemRenderer();
-	}
-
 	/*
 	 * Render the root of Tree
 	 * Notice: _model.getRoot() is mapped to Tree, not first Treeitem
@@ -2127,7 +2087,7 @@ public class Tree extends MeshElement {
 	 * <p>
 	 * Default: 50. (since 7.0.0)
 	 * <p>
-	 * It is used only if live data ({@link #setModel(ListModel)} and not paging
+	 * It is used only if live data ({@link #setModel(TreeModel)} and not paging
 	 * ({@link #getPagingChild}.
 	 */
 	private int preloadSize() {
@@ -2145,7 +2105,7 @@ public class Tree extends MeshElement {
 	 *  <p>
 	 * Default: 1. (Since 7.0.0)
 	 * <p>
-	 * It is used only if live data ({@link #setModel(ListModel)} and in paging mold
+	 * It is used only if live data ({@link #setModel(TreeModel)} and in paging mold
 	 * ({@link #getPagingChild}.
 	 */
 	private int maxRodPageSize() {
@@ -2813,7 +2773,7 @@ public class Tree extends MeshElement {
 
 	/** Processes an AU request.
 	 *
-	 * <p>Default: in addition to what are handled by {@link XulElement#service},
+	 * <p>Default: in addition to what are handled by {@link XulElement#service(AuRequest, boolean)},
 	 * it also handles onSelect.
 	 * @since 5.0.0
 	 */

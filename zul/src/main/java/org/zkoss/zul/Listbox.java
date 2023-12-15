@@ -515,23 +515,6 @@ public class Listbox extends MeshElement {
 	}
 
 	/**
-	 * @deprecated since 5.0.0, use {@link #setSizedByContent}(!fixedLayout)
-	 *             instead
-	 * @param fixedLayout
-	 *            true to outline this listbox by browser
-	 */
-	public void setFixedLayout(boolean fixedLayout) {
-		setSizedByContent(!fixedLayout);
-	}
-
-	/**
-	 * @deprecated since 5.0.0, use !{@link #isSizedByContent} instead
-	 */
-	public boolean isFixedLayout() {
-		return !isSizedByContent();
-	}
-
-	/**
 	 * Returns {@link Listhead} belonging to this listbox, or null if no list
 	 * headers at all.
 	 */
@@ -2529,48 +2512,6 @@ public class Listbox extends MeshElement {
 			IllegalAccessException, InstantiationException, java.lang.reflect.InvocationTargetException {
 		if (clsnm != null)
 			setItemRenderer((ListitemRenderer) Classes.newInstanceByThread(clsnm));
-	}
-
-	/** @deprecated As of release 5.0.8, use custom attributes (org.zkoss.zul.listbox.preloadSize) instead.
-	 * Returns the number of items to preload when receiving the rendering
-	 * request from the client.
-	 *
-	 * <p>
-	 * Default: 50. (Since 6.0.1)
-	 *
-	 * <p>
-	 * It is used only if live data ({@link #setModel(ListModel)} and not paging
-	 * ({@link #getPagingChild}.
-	 *
-	 * <p>
-	 * Note: if the "pre-load-size" attribute of component is specified, it's
-	 * prior to the original value.(@since 3.0.4)
-	 *
-	 * @since 2.4.1
-	 */
-	public int getPreloadSize() {
-		final String size = (String) getAttribute("pre-load-size");
-		return size != null ? Integer.parseInt(size) : _preloadsz;
-	}
-
-	/** @deprecated As of release 5.0.8, use custom attributes (org.zkoss.zul.listbox.preloadSize) instead.
-	 * Sets the number of items to preload when receiving the rendering request
-	 * from the client.
-	 * <p>
-	 * It is used only if live data ({@link #setModel(ListModel)} and not paging
-	 * ({@link #getPagingChild}.
-	 *
-	 * @param sz
-	 *            the number of items to preload. If zero, no preload at all.
-	 * @exception UiException
-	 *                if sz is negative
-	 * @since 2.4.1
-	 */
-	public void setPreloadSize(int sz) {
-		if (sz < 0)
-			throw new UiException("nonnegative is required: " + sz);
-		_preloadsz = sz;
-		// no need to update client since paging done at server
 	}
 
 	/**

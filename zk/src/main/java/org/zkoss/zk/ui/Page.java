@@ -500,11 +500,6 @@ public interface Page extends IdSpace, Scope, ClassResolver {
 	 */
 	public boolean isListenerAvailable(String evtnm);
 
-	/** @deprecated As of release 6.0, replaced with {@link #getEventListeners}.
-	 * Returns an iterator for iterating the event listeners for the given event.
-	 */
-	public Iterator<EventListener<? extends Event>> getListenerIterator(String evtnm);
-
 	/** Returns an iterable collection of the event listeners for the given event.
 	 * <p>Note: it is OK to invoke {@link #addEventListener} or {@link #removeEventListener}
 	 * when iterating through the event listeners with the returned collection.

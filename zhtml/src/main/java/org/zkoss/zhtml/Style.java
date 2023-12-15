@@ -62,21 +62,4 @@ public class Style extends org.zkoss.zhtml.impl.ContentTag {
 	public void setScoped(boolean scoped) throws WrongValueException {
 		setDynamicProperty("scoped", scoped ? Boolean.valueOf(scoped) : null);
 	}
-	/**
-	 * Returns the type of this style tag.
-	 * @since 8.0.3
-	 * @deprecated Not supported in HTML5
-	 */
-	public String getType() {
-		return (String) getDynamicProperty("type");
-	}
-
-	/**
-	 * Sets the type of this style tag.
-	 * @since 8.0.3
-	 * @deprecated Not supported in HTML5
-	 */
-	public void setType(String type) throws WrongValueException {
-		setDynamicProperty("type", type);
-	}
 }

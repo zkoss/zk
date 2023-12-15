@@ -19,9 +19,7 @@ package org.zkoss.zk.ui.event;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.Map;
-import java.util.TimeZone;
 
-import org.zkoss.util.TimeZones;
 import org.zkoss.zk.au.AuRequest;
 
 /**
@@ -38,7 +36,6 @@ import org.zkoss.zk.au.AuRequest;
  * @see org.zkoss.zk.ui.util.Clients
  */
 public class ClientInfoEvent extends Event {
-	private final TimeZone _timeZone;
 	private final int _scrnwd, _scrnhgh, _colorDepth;
 	private final int _dtwd, _dthgh, _dtx, _dty;
 	private final double _dpr;
@@ -94,10 +91,6 @@ public class ClientInfoEvent extends Event {
 		super(name, null);
 
 		final StringBuffer sb = new StringBuffer(8).append("GMT");
-		//Note: we have to revert the sign
-		//see http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Reference:Global_Objects:Date:getTimezoneOffset
-		_timeZone = TimeZones.getTimeZone(-timeZoneOfs);
-
 		_scrnwd = scrnwd;
 		_scrnhgh = scrnhgh;
 		_colorDepth = colorDepth;
@@ -114,18 +107,6 @@ public class ClientInfoEvent extends Event {
 		//ZK-3133 for matchMedia
 		_mediaMatched = mediaMatched;
 		_media = media;
-	}
-
-	/** Returns the time zone of the client.
-	 * The result is a GMT based time zone without any geographical region info.
-	 * @see #getZoneId()
-	 * @deprecated getZoneId() is preferred since 9.0.0.
-	 * getTimeZone returns a TimeZone object, which is no longer the preferred option to identify time zones.
-	 * Instead, use #getZoneId(), which returns a ZoneId object, which better supports the current Instant and a LocalDateTime java APIs
-	 */
-	@Deprecated
-	public TimeZone getTimeZone() {
-		return _timeZone;
 	}
 
 	/** Returns the pixel width of the client's screen.
@@ -247,8 +228,7 @@ public class ClientInfoEvent extends Event {
 
 	/**
 	 * Returns the time-zone ID of the client.
-	 * Compared with {@link #getTimeZone()}, the geographical region will be
-	 * used as a result.
+	 * The geographical region will be used as a result.
 	 * @since 9.0.0
 	 */
 	public ZoneId getZoneId() {

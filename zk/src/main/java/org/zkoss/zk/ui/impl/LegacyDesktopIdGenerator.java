@@ -20,13 +20,10 @@ import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.ui.sys.DesktopCache;
 import org.zkoss.zk.ui.sys.IdGenerator;
 import org.zkoss.zk.ui.sys.SessionCtrl;
-import org.zkoss.zk.ui.util.Configuration;
 
 /**
  * A legacy sequential desktop ID generator used in ZK before 9.6.0.
  * The result is like <code>z_1ym6</code> or <code>_ga6b</code>.
- *
- * It accepts {@link Configuration#isRepeatUuid()} for initial key value.
  *
  * <p>To use this Id Generator, add system-config in zk.xml.
  * <pre>
@@ -43,6 +40,8 @@ public class LegacyDesktopIdGenerator implements IdGenerator, Serializable {
 	private static final String DESKTOP_ID_PREFIX = "z_";
 	private static final AtomicInteger _keyWithoutDC = new AtomicInteger();
 
+	private int _nextKey = ((int) System.currentTimeMillis()) & 0xffff;
+
 	@Override
 	public String nextDesktopId(Desktop desktop) {
 		final Session session = desktop.getSession();
@@ -50,7 +49,7 @@ public class LegacyDesktopIdGenerator implements IdGenerator, Serializable {
 		if (dc != null)
 			return ComponentsCtrl.encodeId(
 					new StringBuffer(12).append(DESKTOP_ID_PREFIX),
-					dc.getNextKey());
+					_nextKey++);
 
 		return ComponentsCtrl.encodeId(
 				new StringBuffer(12).append("_g"),

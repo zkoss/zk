@@ -193,19 +193,6 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> implemen
 		return Objects.toString(_model);
 	}
 
-	//For Backward Compatibility//
-	/** @deprecated As of release 6.0.0, replaced with {@link #addToSelection}.
-	 */
-	public void addSelection(Object obj) {
-		addToSelection(obj);
-	}
-
-	/** @deprecated As of release 6.0.0, replaced with {@link #removeFromSelection}.
-	 */
-	public void removeSelection(Object obj) {
-		removeFromSelection(obj);
-	}
-
 	//ListModel
 	//ListModel assume each item in the ListModel is visible; thus items inside closed
 	//Group is deemed not in the ListModel

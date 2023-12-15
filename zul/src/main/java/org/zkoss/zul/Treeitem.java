@@ -81,20 +81,6 @@ public class Treeitem extends XulElement implements org.zkoss.zk.ui.ext.Disable 
 	}
 
 	/**
-	 * @deprecated As of release 8.0.0, please use {@link #isSelectable()}
-	 */
-	public boolean isCheckable() {
-		return isSelectable();
-	}
-
-	/**
-	 * @deprecated As of release 8.0.0, please use {@link #setSelectable(boolean)}
-	 */
-	public void setCheckable(boolean checkable) {
-		setSelectable(checkable);
-	}
-
-	/**
 	 * Returns whether it is selectable.
 	 * <p>Default: true.</p>
 	 * @since 8.0.0
@@ -208,6 +194,7 @@ public class Treeitem extends XulElement implements org.zkoss.zk.ui.ext.Disable 
 	 * @deprecated as of release 7.0.3.
 	 */
 	public void setStubonly(String stubonly) {
+		// Don't remove this method, it's to override super.setStubonly().
 		super.setStubonly(stubonly);
 	}
 
@@ -216,6 +203,7 @@ public class Treeitem extends XulElement implements org.zkoss.zk.ui.ext.Disable 
 	 * @deprecated as of release 7.0.3.
 	 */
 	public void setStubonly(boolean stubonly) {
+		// Don't remove this method, it's to override super.setStubonly().
 		super.setStubonly(stubonly);
 	}
 
@@ -227,13 +215,6 @@ public class Treeitem extends XulElement implements org.zkoss.zk.ui.ext.Disable 
 	public int getIndex() {
 		List list = this.getParent().getChildren();
 		return list.indexOf(this);
-	}
-
-	/**
-	 * @deprecated As of release 5.0.9, replaced with {@link #getIndex}.
-	 */
-	public int indexOf() {
-		return getIndex();
 	}
 
 	/** Returns the treerow that this tree item owns (might null).
@@ -379,20 +360,6 @@ public class Treeitem extends XulElement implements org.zkoss.zk.ui.ext.Disable 
 		return _treerow;
 	}
 
-	/** @deprecated As of release 3.5.0, it is redundant since it
-	 * the same as {@link #getImage}.
-	 */
-	public String getSrc() {
-		return getImage();
-	}
-
-	/** @deprecated As of release 3.5.0, it is redundant since it
-	 * the same as {@link #setImage}.
-	 */
-	public void setSrc(String src) {
-		setImage(src);
-	}
-
 	/** Returns the image of the {@link Treecell} it contains.
 	 */
 	public String getImage() {
@@ -483,6 +450,7 @@ public class Treeitem extends XulElement implements org.zkoss.zk.ui.ext.Disable 
 	 * components, please refer to {@link Tree} and {@link Treecol} instead.
 	 */
 	public void setWidth(String width) {
+		// Don't remove this method, it's to override super.setWidth().
 	}
 
 	/**
@@ -490,6 +458,7 @@ public class Treeitem extends XulElement implements org.zkoss.zk.ui.ext.Disable 
 	 * components, please refer to {@link Tree} and {@link Treecol} instead.
 	 */
 	public void setHflex(String flex) {
+		// Don't remove this method, it's to override super.setHflex().
 	}
 
 	//-- Component --//

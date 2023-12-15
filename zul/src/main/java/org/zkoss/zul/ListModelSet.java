@@ -442,16 +442,4 @@ public class ListModelSet<E> extends AbstractListModel<E> implements Sortable<E>
 		fireEvent(ListDataEvent.SELECTION_CHANGED, indexOf(e), -1);
 	}
 
-	//For Backward Compatibility//
-	/** @deprecated As of release 6.0.0, replaced with {@link #addToSelection}.
-	 */
-	public void addSelection(E obj) {
-		addToSelection(obj);
-	}
-
-	/** @deprecated As of release 6.0.0, replaced with {@link #removeFromSelection}.
-	 */
-	public void removeSelection(Object obj) {
-		removeFromSelection(obj);
-	}
 }

@@ -65,7 +65,6 @@ dependencies {
 	implementation 'commons-io:commons-io:2.13.0'
 	implementation "org.zkoss.zk:zk:${version}"
 	implementation "org.zkoss.zk:zkplus:${version}"
-	implementation "org.zkoss.zk:zkplus-legacy:${version}"
 	implementation "org.zkoss.zk:zkbind:${version}"
 	implementation "org.zkoss.zk:zul:${version}"
 	implementation "org.zkoss.zk:zhtml:${version}"

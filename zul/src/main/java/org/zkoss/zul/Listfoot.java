@@ -41,6 +41,7 @@ public class Listfoot extends XulElement {
 	 * components, please refer to {@link Listbox} and {@link Listheader} instead.
 	 */
 	public void setWidth(String width) {
+		// Don't need to remove this method, it's used to override super.setWidth();
 	}
 
 	/**
@@ -48,6 +49,7 @@ public class Listfoot extends XulElement {
 	 * components, please refer to {@link Listbox} and {@link Listheader} instead.
 	 */
 	public void setHflex(String flex) {
+		// Don't need to remove this method, it's used to override super.setHflex();
 	}
 
 	//-- Component --//

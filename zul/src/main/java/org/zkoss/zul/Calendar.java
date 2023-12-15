@@ -118,17 +118,6 @@ public class Calendar extends XulElement implements Constrainted {
 		return _weekOfYear;
 	}
 
-	/** @deprecated As of release 5.0.5, it is meaningless to set time zone for a calendar.
-	 */
-	public TimeZone getTimeZone() {
-		return null;
-	}
-
-	/** As of release 5.0.5, it is meaningless to set time zone for a calendar.
-	 */
-	public void setTimeZone(TimeZone tzone) {
-	}
-
 	/** Returns the value that is assigned to this component, never null.
 	 */
 	public Date getValue() {

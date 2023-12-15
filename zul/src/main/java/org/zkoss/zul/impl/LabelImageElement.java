@@ -191,20 +191,6 @@ public abstract class LabelImageElement extends LabelElement {
 		}
 	}
 
-	/** @deprecated As of release 3.5.0, it is redundant since
-	 * it is the same as {@link #getImage}
-	 */
-	public String getSrc() {
-		return getImage();
-	}
-
-	/** @deprecated As of release 3.5.0, it is redundant since
-	 * it is the same as {@link #setImage}
-	 */
-	public void setSrc(String src) {
-		setImage(src);
-	}
-
 	/** Sets the content directly.
 	 * <p>Default: null.
 	 *
