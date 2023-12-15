@@ -531,22 +531,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	with HTML/XML.
 		</description>
 	</function>
-
-	<function>
-		<name>browser</name>
-		<function-class>org.zkoss.web.fn.ServletFns</function-class>
-		<function-signature>
-	boolean isBrowser(java.lang.String)
-		</function-signature>
-		<description><![CDATA[
-	Whether the current request is coming from the browser of the specified
-	type.
-	 @param type the type of the browser.
-	 The syntax: <code>&lt;browser-name&gt;[&lt;version-number&gt;];[-]</code>.<br/>
-	 For example, ff, ios.
-		]]></description>
-	</function>
-
+	
 	<function>
 		<name>render</name>
 		<function-class>org.zkoss.web.fn.ServletFns</function-class>
