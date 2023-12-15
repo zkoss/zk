@@ -977,7 +977,7 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 					</div>
 					<!-- ******************** edit mode ******************** -->
 					<div id="editView" visible="true" height="100%">
-						<grid width="100%" fixedLayout="true" height="100%">
+						<grid width="100%"  height="100%">
 							<custom-attributes org.zkoss.zul.grid.rod="true"/>
 							<custom-attributes org.zkoss.zul.grid.initRodSize="15"/>
 							<columns>

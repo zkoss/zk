@@ -18,7 +18,7 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
         2. Click any tool button of CKEditor (ex: Source)
         3. No exception on browser dev console.
     </label>
-    <grid fixedLayout="true" width="600px">
+    <grid  width="600px">
         <columns>
             <column width="40px" />
             <column>Product Name</column>

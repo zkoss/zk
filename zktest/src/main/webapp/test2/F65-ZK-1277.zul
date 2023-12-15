@@ -18,7 +18,7 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 	<separator/>
 	2. Please click the "autopaging" button, and check the same as step 1 again.
 	<button label="Autopaging" onClick='grid.autopaging = !grid.autopaging'/>
-	<grid id="grid" fixedLayout="true">
+	<grid id="grid" >
 		<columns sizable="true">
 			<column label="Brand" />
 			<column label="Processor Type" width="150px"/>
