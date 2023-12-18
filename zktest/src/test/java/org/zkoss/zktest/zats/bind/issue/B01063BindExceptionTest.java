@@ -27,7 +27,7 @@ public class B01063BindExceptionTest extends ZATSTestCase {
 		try {
 			tb3.type("3");
 		} catch(Exception e) {
-			exceptionMsg = e.getCause().toString();
+			exceptionMsg = e.getCause().getCause().getCause().toString();
 		}
 		assertTrue(exceptionMsg.contains("Property 'valuex' not found"));
 	}

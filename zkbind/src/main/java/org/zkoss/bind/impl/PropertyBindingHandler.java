@@ -11,6 +11,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.bind.impl;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -105,14 +106,15 @@ import org.zkoss.zk.ui.event.Event;
 				evt);
 		BindContextUtil.setConverterArgs(_binder, binding.getComponent(), ctx, binding);
 		BindContextUtil.setValidatorArgs(_binder, binding.getComponent(), ctx, binding);
+		String debugInfo = getSaveBindingDebugInfo("doSavePropertyBinding", comp, binding, command, evt, notifys);
 		try {
 			if (_log.isDebugEnabled()) {
-				_log.debug(
-						"doSavePropertyBinding:binding.save() comp=[{}],binding=[{}],command=[{}],evt=[{}],notifys=[{}]",
-						comp, binding, command, evt, notifys);
+				_log.debug(debugInfo);
 			}
 			doPrePhase(Phase.SAVE_BINDING, ctx);
 			binding.save(ctx);
+		} catch (Exception ex) {
+			throw new RuntimeException(debugInfo, ex);
 		} finally {
 			doPostPhase(Phase.SAVE_BINDING, ctx);
 		}
@@ -131,10 +133,10 @@ import org.zkoss.zk.ui.event.Event;
 		if (binding instanceof InitPropertyBindingImpl) {
 			ctx.setAttribute(BinderImpl.IGNORE_TRACKER, Boolean.TRUE); //ignore tracker when doing el , we don't need to track the init
 		}
+		String debugInfo = getLoadBindingDebugInfo("doLoadPropertyBinding", comp, binding, ctx, command);
 		try {
 			if (_log.isDebugEnabled()) {
-				_log.debug("doLoadPropertyBinding:binding.load(),component=[{}],binding=[{}],context=[{}],command=[{}]",
-						comp, binding, ctx, command);
+				_log.debug(debugInfo);
 			}
 			doPrePhase(Phase.LOAD_BINDING, ctx);
 			binding.load(ctx);
@@ -143,6 +145,8 @@ import org.zkoss.zk.ui.event.Event;
 			if (((BinderImpl) binding.getBinder()).hasValidator(binding.getComponent(), binding.getFieldName())) {
 				clearValidationMessages(binding.getBinder(), binding.getComponent(), binding.getFieldName());
 			}
+		} catch (Exception ex) {
+			throw new RuntimeException(debugInfo, ex);
 		} finally {
 			doPostPhase(Phase.LOAD_BINDING, ctx);
 		}
@@ -184,12 +188,14 @@ import org.zkoss.zk.ui.event.Event;
 			BindContextUtil.setConverterArgs(_binder, binding.getComponent(), ctx, binding);
 			BindContextUtil.setValidatorArgs(_binder, binding.getComponent(), ctx, binding);
 
+			String debugInfo = MessageFormat.format("doValidateSaveEvent "
+							+ "comp=[{0}],binding=[{1}],evt=[{2}]", comp, binding, evt);
 			try {
 				doPrePhase(Phase.VALIDATE, ctx);
 				final Property p = binding.getValidate(ctx);
+				debugInfo += MessageFormat.format(",validate=[{0}]", p);
 				if (_log.isDebugEnabled()) {
-					_log.debug("doValidateSaveEvent comp=[{}],binding=[{}],evt=[{}],validate=[{}]", comp, binding, evt,
-							p);
+					_log.debug(debugInfo);
 				}
 				if (p == null) {
 					throw new UiException("no main property for save-binding " + binding);
@@ -206,6 +212,7 @@ import org.zkoss.zk.ui.event.Event;
 				if (_log.isDebugEnabled()) {
 					_log.debug("doValidateSaveEvent result=[{}]", valid);
 				}
+				debugInfo += MessageFormat.format(",result=[{0}]", valid);
 
 				final Set<Property> xnotifys = getNotifys(ctx);
 				if (xnotifys != null) {
@@ -214,6 +221,7 @@ import org.zkoss.zk.ui.event.Event;
 
 				return valid;
 			} catch (Exception e) {
+				_log.error(debugInfo);
 				throw UiException.Aide.wrap(e);
 			} finally {
 				doPostPhase(Phase.VALIDATE, ctx);

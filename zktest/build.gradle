@@ -268,6 +268,7 @@ description = 'ZK Test'
 
 gretty {
 	httpPort = 8080
+	systemProperty 'java.util.logging.config.file', './src/main/webapp/WEB-INF/logging.properties'
 }
 
 // Start browsersync in the background.
