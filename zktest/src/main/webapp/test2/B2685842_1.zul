@@ -15,7 +15,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 -->
 <box hflex="min" height="650">
 	<vbox>
-		<panel framable="true" title="My First Panel" border="normal" hflex="min"
+		<panel title="My First Panel" border="rounded" hflex="min"
 			height="200px">
 			<panelchildren><div width="800px" height="162px" id="tl"/></panelchildren>
 		</panel>

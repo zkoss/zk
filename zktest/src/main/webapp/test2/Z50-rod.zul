@@ -237,7 +237,7 @@ new Comboitem("John3").setParent(mycombo);
 </button>
 <button label="set visible" onClick="panel.visible = true"/>
 <button label="set max" onClick="panel.setMaximized(true)"/>
-<panel id="panel" framable="false" title="Panel component" maximizable="true"
+<panel id="panel" title="Panel component" maximizable="true"
 border="normal" collapsible="true" closable="true" visible="false">
 	<panelchildren id="pc">
 	The content of a panel

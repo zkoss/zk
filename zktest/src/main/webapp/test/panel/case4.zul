@@ -1,10 +1,10 @@
 <vbox>
 	<hbox>
-		<panel framable="true" width="300px"
-			title="has title with frame" border="normal">
+		<panel width="300px"
+			title="has title with frame" border="rounded">
 			<panelchildren>Test border</panelchildren>
 		</panel>
-		<panel framable="true" width="300px" border="normal">
+		<panel width="300px" border="rounded">
 			<panelchildren>Test border</panelchildren>
 		</panel>
 		<panel title="has title" width="300px" border="normal">
@@ -15,11 +15,11 @@
 		</panel>
 	</hbox>
 	<hbox>
-		<panel framable="true" title="has title with frame"
+		<panel border="rouned" title="has title with frame"
 			width="300px">
 			<panelchildren>Test none-border</panelchildren>
 		</panel>
-		<panel framable="true" width="300px">
+		<panel border="rounded" width="300px">
 			<panelchildren>Test none-border</panelchildren>
 		</panel>
 		<panel title="has title" width="300px">
@@ -31,8 +31,8 @@
 	</hbox>
 	<separator bar="true"/>
 	<hbox>
-		<panel framable="true" width="300px"
-			title="has title with frame" border="normal">
+		<panel width="300px"
+			title="has title with frame" border="rounded">
 			<toolbar>
 				<toolbarbutton label="top" />
 				<button label="top" />
@@ -47,7 +47,7 @@
 				<button label="foot" />
 			</toolbar>
 		</panel>
-		<panel framable="false" width="500px" border="normal">
+		<panel width="500px" border="normal">
 			<toolbar mold="panel" align="center">
 				<toolbarbutton label="top" />
 				<button label="top" />
@@ -104,8 +104,8 @@
 	</hbox>
 	<separator bar="true"/>
 	<hbox>
-		<panel framable="true" width="500px"
-			title="Panel component - has frame" border="normal"
+		<panel width="500px"
+			title="Panel component - has frame" border="rounded"
 			collapsible="true" closable="true">
 			<toolbar>
 				Search:
@@ -189,7 +189,7 @@
 				<button label="button1" />
 			</toolbar>
 		</panel>
-		<panel framable="false" width="500px" title="Panel component"
+		<panel width="500px" title="Panel component"
 			border="normal" collapsible="true" closable="true" >
 			<toolbar>
 				Search:
