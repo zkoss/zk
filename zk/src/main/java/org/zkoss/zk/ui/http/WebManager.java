@@ -181,8 +181,6 @@ public class WebManager {
 			log.error("Unable to load " + xml, ex);
 		}
 
-		LogConfigurer.configure();
-
 		//load additional configuration file
 		xml = Library.getProperty("org.zkoss.zk.config.path");
 		if (xml != null && xml.length() > 0) {

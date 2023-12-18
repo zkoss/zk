@@ -32,17 +32,6 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
  */
 public class AnnotationUtil {
 
-	/**
-	 * @deprecated since 6.5.4
-	 */
-	@SuppressWarnings("rawtypes")
-	public static Annotation getOverrideAnnotation(ComponentCtrl compCtrl, String propName, String annoName) {
-		Collection<Annotation> annos = compCtrl.getAnnotations(propName, annoName);
-		if (annos.isEmpty())
-			return null;
-		return getActivatedAnnotation(annos);
-	}
-
 	// Deal with multiple annotations
 	private static Annotation getActivatedAnnotation(Collection<Annotation> annos) {
 		// Use last defined annotation instead of default annotation if any

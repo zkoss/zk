@@ -170,12 +170,6 @@ public abstract class AbstractTreeModel<E> implements TreeModel<E>, TreeSelectab
 		_root = root;
 	}
 
-	/** @deprecated As of release 6.0.0, replaced with {@link #fireEvent(int, int[], int, int)}.
-	 */
-	public void fireEvent(E node, int indexFrom, int indexTo, int evtType) {
-		fireEvent(evtType, getPath(node), indexFrom, indexTo);
-	}
-
 	/**
 	 * Fires a {@link TreeDataEvent} for all registered listener
 	 * 

@@ -30,7 +30,7 @@ Copyright (C) 2013 Potix Corporation. All Rights Reserved.
  					 
 					<div id="orgDetailTabDiv"  vflex="min">
  
- 						   <grid sclass="GridLayoutNoBorder" fixedLayout="true"  >
+ 						   <grid sclass="GridLayoutNoBorder" >
 								<columns>	
 									<column width="500px" />
  								</columns>

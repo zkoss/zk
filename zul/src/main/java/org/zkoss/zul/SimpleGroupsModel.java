@@ -267,21 +267,6 @@ public class SimpleGroupsModel<D, H, F, E> extends AbstractGroupsModel<D, Object
 		return _foots != null && groupIndex > -1 && groupIndex < _foots.size() && _foots.get(groupIndex) != null;
 	}
 
-	/**
-	 * @deprecated As of release 6.0.0, replace with {@link #isGroupOpened(int)}
-	 */
-	public boolean isClose(int groupIndex) {
-		return !isGroupOpened(groupIndex);
-	}
-
-	/**
-	 * @deprecated As of release 6.0.0, replace with {@link #addOpenGroup(int)}
-	 * and {@link #removeOpenGroup(int)}.
-	 */
-	public void setClose(int groupIndex, boolean close) {
-		setOpenGroup0(groupIndex, !close);
-	}
-
 	public boolean isGroupOpened(int groupIndex) {
 		return _opens == null || _opens[groupIndex];
 	}

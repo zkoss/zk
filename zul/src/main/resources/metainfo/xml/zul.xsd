@@ -2025,7 +2025,6 @@
 		<xs:attribute name="emptyMessage" type="xs:string" use="optional" />
 		<xs:attribute name="span" type="xs:string" use="optional" />
 		<xs:attribute name="pagingDisabled" type="booleanType" use="optional" />
-		<xs:attribute name="fixedLayout" type="booleanType" use="optional" />
 		<xs:attribute name="activePage" type="intType" use="optional" />
 	</xs:complexType>
 
@@ -2325,7 +2324,6 @@
 		<xs:attribute name="emptyMessage" type="xs:string" use="optional" />
 		<xs:attribute name="span" type="xs:string" use="optional" />
 		<xs:attribute name="pagingDisabled" type="booleanType" use="optional" />
-		<xs:attribute name="fixedLayout" type="booleanType" use="optional" />
 		<xs:attribute name="activePage" type="intType" use="optional" />
 		<xs:attribute name="onFocus" type="xs:string" use="optional" />
 		<xs:attribute name="onBlur" type="xs:string" use="optional" />
@@ -3469,7 +3467,6 @@
 		<xs:attribute name="autopaging" type="booleanType" use="optional" />
 		<xs:attribute name="span" type="xs:string" use="optional" />
 		<xs:attribute name="pagingDisabled" type="booleanType" use="optional" />
-		<xs:attribute name="fixedLayout" type="booleanType" use="optional" />
 		<xs:attribute name="activePage" type="intType" use="optional" />
 	</xs:complexType>
 	<!-- treecell -->

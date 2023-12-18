@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.util.ArraysX;
@@ -190,16 +191,8 @@ public class SimpleListModel<E> extends AbstractListModel<E>
 	 * @since 5.0.4
 	 */
 	protected boolean inSubModel(Object key, Object value) {
-		String idx = objectToString(key);
-		return idx.length() > 0 && objectToString(value).startsWith(idx);
-	}
-
-	/**
-	 * @deprecated As of release 5.0.4, replaced with {@link #inSubModel}.
-	 */
-	protected String objectToString(Object value) {
-		final String s = value != null ? value.toString() : "";
-		return s != null ? s : "";
+		String idx = Optional.ofNullable(key).orElse("").toString();
+		return !idx.isEmpty() && Optional.ofNullable(value).orElse("").toString().startsWith(idx);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -219,18 +212,5 @@ public class SimpleListModel<E> extends AbstractListModel<E>
 			}
 		}
 		fireEvent(ListDataEvent.SELECTION_CHANGED, index, -1);
-	}
-
-	//For Backward Compatibility//
-	/** @deprecated As of release 6.0.0, replaced with {@link #addToSelection}.
-	 */
-	public void addSelection(E obj) {
-		addToSelection(obj);
-	}
-
-	/** @deprecated As of release 6.0.0, replaced with {@link #removeFromSelection}.
-	 */
-	public void removeSelection(Object obj) {
-		removeFromSelection(obj);
 	}
 }

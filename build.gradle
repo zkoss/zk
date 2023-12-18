@@ -30,7 +30,6 @@ ext {
 			'zweb-dsp'     : "$rootDir/zweb-dsp",
 			'zhtml'        : "$rootDir/zhtml",
 			'zweb'         : "$rootDir/zweb",
-			'zkplus-legacy': "$rootDir/zkplus-legacy",
 			'zel'          : "$rootDir/zel",
 			'zkbind'       : "$rootDir/zkbind",
 			'zcommon'      : "$rootDir/zcommon",
@@ -233,7 +232,7 @@ subprojects {
 	// build javadoc jar each subproject for bundle
 	task javadocJar(type: Jar) {
 		dependsOn 'buildJavadoc'
-		setOnlyIf { project.name != 'zkwebfragment' && project.name != 'zweb-dsp' && project.name != 'zkplus-legacy' }
+		setOnlyIf { project.name != 'zkwebfragment' && project.name != 'zweb-dsp' }
 		archiveClassifier = 'javadoc'
 		from "$javadoc.destinationDir"
 	}

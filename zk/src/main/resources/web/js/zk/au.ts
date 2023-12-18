@@ -1653,8 +1653,7 @@ export namespace au_global {
 			 */
 			export function download(url: string): void {
 				if (url) {
-					var ifr: HTMLIFrameElement = jq('#zk_download')[0] as HTMLIFrameElement,
-						sbu = zk.skipBfUnload;
+					var ifr: HTMLIFrameElement = jq('#zk_download')[0] as HTMLIFrameElement;
 
 					if (!ifr) {
 						ifr = document.createElement('iframe');

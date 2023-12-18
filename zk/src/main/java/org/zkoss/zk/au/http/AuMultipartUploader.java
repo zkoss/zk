@@ -617,8 +617,10 @@ public class AuMultipartUploader {
 		}
 
 		public Map getParameterMap() {
-			HashMap<String, List<String>> hashMap = new HashMap<>(
-					_data);
+			HashMap<String, String[]> hashMap = new HashMap<>();
+			_data.forEach((key, value) -> {
+				hashMap.put(key, value.toArray(new String[0]));
+			});
 			hashMap.putAll(super.getParameterMap());
 			return hashMap;
 		}

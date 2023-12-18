@@ -124,22 +124,6 @@ public class Label extends XulElement {
 		}
 	}
 
-	/** @deprecated As of release 5.0.0, use CSS instead.
-	 */
-	public boolean isHyphen() {
-		return false;
-	}
-
-	/** @deprecated As of release 5.0.0, use CSS instead.
-	 *
-	 * <p>Use the CSS style called "word-wrap: word-break"
-	 * to have similar effect.
-	 * Unfortunately, word-wrap is not applicable to
-	 * FF and Opera(it works fine with IE and Safari).
-	 */
-	public void setHyphen(boolean hyphen) {
-	}
-
 	//--ComponentCtrl--//
 	private static HashMap<String, PropertyAccess> _properties = new HashMap<String, PropertyAccess>(3);
 

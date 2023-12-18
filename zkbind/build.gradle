@@ -16,8 +16,8 @@ dependencies {
 	api project(':zul')
 	api project(':zhtml')
 	api "org.javassist:javassist:${javassistVersion}"
-	compileOnly "javax.servlet:servlet-api:${servletVersion}"
-	compileOnly 'javax.validation:validation-api:1.0.0.GA'
+	compileOnly "javax.servlet:javax.servlet-api:${servletVersion}"
+	compileOnly 'javax.validation:validation-api:1.1.0.Final'
 }
 
 buildConfig {

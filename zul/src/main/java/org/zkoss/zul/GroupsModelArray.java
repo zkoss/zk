@@ -148,21 +148,6 @@ public class GroupsModelArray<D, H, F, E> extends AbstractGroupsModel<D, H, F, E
 		group(_comparator, true, col);
 	}
 
-	/** @deprecated As of release 6.0.1, there is no way to instantiate
-	 * the array with the correct type.
-	 */
-	@SuppressWarnings("unchecked")
-	public GroupsModelArray(List<D> data, Comparator cmpr, int col) {
-		this((D[]) data.toArray(), cmpr, col, false); //no need to clone
-	}
-
-	/** @deprecated As of release 6.0.1, there is no way to instantiate
-	 * the array with the correct type.
-	 */
-	public GroupsModelArray(List<D> data, Comparator cmpr) {
-		this(data, cmpr, 0);
-	}
-
 	public D getChild(int groupIndex, int index) {
 		return _data[groupIndex][index];
 	}
@@ -215,21 +200,6 @@ public class GroupsModelArray<D, H, F, E> extends AbstractGroupsModel<D, H, F, E
 			sortAllGroupData(cmpr, ascending, col); //sort by original comparator
 
 		fireEvent(GroupsDataEvent.GROUPS_RESET, -1, -1, -1);
-	}
-
-	/**
-	 * @deprecated As of release 6.0.0, replace with {@link #isGroupOpened(int)}
-	 */
-	public boolean isClose(int groupIndex) {
-		return !isGroupOpened(groupIndex);
-	}
-
-	/**
-	 * @deprecated As of release 6.0.0, replace with {@link #addOpenGroup(int)}
-	 * and {@link #removeOpenGroup(int)}.
-	 */
-	public void setClose(int groupIndex, boolean close) {
-		setOpenGroup0(groupIndex, !close);
 	}
 
 	public boolean addOpenGroup(int groupIndex) {

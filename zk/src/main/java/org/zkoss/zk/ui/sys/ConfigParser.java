@@ -309,27 +309,12 @@ public class ConfigParser {
 				final String clsnm = IDOMs.getRequiredElementValue(el, "richlet-class");
 				final Map<String, String> params = IDOMs.parseParams(el, "init-param", "param-name", "param-value");
 
-				String path = el.getElementValue("richlet-url", true);
-				if (path != null) {
-					//deprecated since 2.4.0, but backward compatible
-					final int cnt;
-					synchronized (this) {
-						cnt = _richletnm++;
-					}
-					final String name = "z_obs_" + Integer.toHexString(cnt);
-					try {
-						config.addRichlet(name, clsnm, params);
-						config.addRichletMapping(name, path);
-					} catch (Throwable ex) {
-						log.error("Illegal richlet definition at " + el.getLocator(), ex);
-					}
-				} else { //syntax since 2.4.0
-					final String nm = IDOMs.getRequiredElementValue(el, "richlet-name");
-					try {
-						config.addRichlet(nm, clsnm, params);
-					} catch (Throwable ex) {
-						log.error("Illegal richlet definition at " + el.getLocator(), ex);
-					}
+				 //syntax since 2.4.0
+				final String nm = IDOMs.getRequiredElementValue(el, "richlet-name");
+				try {
+					config.addRichlet(nm, clsnm, params);
+				} catch (Throwable ex) {
+					log.error("Illegal richlet definition at " + el.getLocator(), ex);
 				}
 			} else if ("richlet-mapping".equals(elnm)) { //syntax since 2.4.0
 				final String nm = IDOMs.getRequiredElementValue(el, "richlet-name");
@@ -446,9 +431,6 @@ public class ConfigParser {
 				Devices.add(el);
 				//Note: device-config is applied to the whole system, not just langdef
 				parseTimeoutURI(config, el);
-				//deprecated since 3.6.3, but to be backward-compatible
-			} else if ("log".equals(elnm)) {
-				log.warn("Ingored. Use the library property called org.zkoss.util.logging.config.file instead");
 			} else if ("error-page".equals(elnm)) {
 				//error-page
 				final Class cls = parseClass(el, "exception-type", Throwable.class, true);
@@ -639,13 +621,10 @@ public class ConfigParser {
 		if (v != null)
 			Library.setProperty("org.zkoss.util.resource.extendlet.checkPeriod", v.toString());
 		//library-wide property
-
-		String s = conf.getElementValue("repeat-uuid", true);
-		if (s != null)
-			config.setRepeatUuid(!"false".equals(s));
 	}
 
 	/** Parses client-config. */
+	@SuppressWarnings("deprecation")
 	private static void parseSystemConfig(Configuration config, Element el) throws Exception {
 		String s = el.getElementValue("disable-event-thread", true);
 		if (s != null) {

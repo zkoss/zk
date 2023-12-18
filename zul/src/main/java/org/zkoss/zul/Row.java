@@ -23,7 +23,6 @@ import java.util.Iterator;
 import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.sys.BooleanPropertyAccess;
 import org.zkoss.zk.ui.sys.IntegerPropertyAccess;
 import org.zkoss.zk.ui.sys.PropertyAccess;
@@ -150,29 +149,6 @@ public class Row extends XulElement {
 		_value = value;
 	}
 
-	/** Returns the spans, which is a list of numbers separated by comma.
-	 *
-	 * <p>Default: empty.
-	 * @deprecated As of release 5.0.0, use {@link Cell} instead.
-	 */
-	public String getSpans() {
-		return _spans;
-	}
-
-	/** Sets the spans, which is a list of numbers separated by comma.
-	 *
-	 * <p>For example, "1,2,3" means the second column will span two columns
-	 * and the following column span three columns, while others occupies
-	 * one column.
-	 * @deprecated As of release 5.0.0, use {@link Cell} instead.
-	 */
-	public void setSpans(String spans) throws WrongValueException {
-		if (!Objects.equals(spans, _spans)) {
-			_spans = spans;
-			smartUpdate("spans", spans);
-		}
-	}
-
 	/** Internal Use only. Sets whether the content of this row is loaded; used if
 	 * the grid owning this row is using a list model.
 	 */
@@ -224,6 +200,7 @@ public class Row extends XulElement {
 	 * components, please refer to {@link Grid} and {@link Column} instead.
 	 */
 	public void setWidth(String width) {
+		// Don't remove this method, it's override super.setWidth().
 	}
 
 	/**
@@ -231,6 +208,7 @@ public class Row extends XulElement {
 	 * components, please refer to {@link Grid} and {@link Column} instead.
 	 */
 	public void setHflex(String flex) {
+		// Don't remove this method, it's override super.setHflex().
 	}
 
 	//-- super --//

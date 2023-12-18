@@ -38,7 +38,7 @@
 		1. Click column A to sort several times.
 		2. Should not see js error message.
 		</label>
-		<grid id="gridExample" sizedByContent="false" width="99%">
+		<grid id="gridExample"  width="99%">
 			<columns>
 				<column id="col" label="A" sortAscending="${desc}" sortDescending="${asc}" />
 				<column label="B" />

@@ -5,7 +5,7 @@
    	  	2.expend the first group
 			There should not have horizontal scrollbar and spaces in the bottom.    	  	
    	  </h:pre>
-      <tree checkmark="true" multiple="true" fixedLayout="true"
+      <tree checkmark="true" multiple="true"
          height="310px" width="510px">
          <treechildren>
             <treeitem label="test" open="false">

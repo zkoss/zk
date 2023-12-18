@@ -54,8 +54,6 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 
 	/** Used to purge obsolete desktops. */
 	private final Cache _desktops;
-	/** The next available key. */
-	private int _nextKey;
 	//to reduce the chance that two browsers with the same desktop ID
 	//it is possible if we re-boot the server
 
@@ -69,17 +67,9 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 			_cleaner = new Timer();
 			_cleaner.scheduleAtFixedRate(new CleanerTask(), desktopMaxInactiveInterval * 1_000, desktopMaxInactiveInterval * 1_000);
 		}
-
-		if (!config.isRepeatUuid())
-			_nextKey = ((int) System.currentTimeMillis()) & 0xffff;
 	}
 
 	//-- DesktopCache --//
-	public int getNextKey() {
-		synchronized (this) {
-			return _nextKey++;
-		}
-	}
 
 	public Desktop getDesktopIfAny(String desktopId) {
 		final boolean old = _desktops.disableExpunge(true);

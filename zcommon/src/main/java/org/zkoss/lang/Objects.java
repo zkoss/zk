@@ -74,23 +74,6 @@ public class Objects {
 	 */
 	public static final Character NULL_CHARACTER = new Character('\u0000');
 
-	/** @deprecated As of release 6.0.0, never used and confusing.
-	 */
-	public static final char PATH_SEPARATOR_CHAR = '/';
-	/** @deprecated As of release 6.0.0, never used and confusing.
-	 */
-	public static final String PATH_SEPARATOR_STRING = "" + PATH_SEPARATOR_CHAR;
-
-	/** @deprecated As of release 6.0.0, not worth to have this API.
-	 */
-	public static final String BAR0_STRING = "..\t\t..............................";
-	/** @deprecated As of release 6.0.0, not worth to have this API.
-	 */
-	public static final String BAR1_STRING = "--\t\t------------------------------";
-	/** @deprecated As of release 6.0.0, not worth to have this API.
-	 */
-	public static final String BAR2_STRING = "==\t\t==============================";
-
 	/**
 	 * Returns the next hash value by giving the previous one and a new one.
 	 * The caller usually uses a loop to accumulate all related fields.

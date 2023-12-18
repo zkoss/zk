@@ -49,8 +49,8 @@ dependencies {
 	}
 	optionalImplementation 'javax.persistence:persistence-api:1.0'
 	optionalImplementation 'javax.transaction:jta:1.1'
-	compileOnly "javax.servlet:servlet-api:${servletVersion}"
-	compileOnly 'javax.el:javax.el-api:2.2.5'
+	compileOnly "javax.servlet:javax.servlet-api:${servletVersion}"
+	compileOnly "javax.el:javax.el-api:${elVersion}"
 	compileOnly "javax.portlet:portlet-api:${portletVersion}"
 }
 

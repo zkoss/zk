@@ -215,8 +215,7 @@ public class Charsets {
 				return l;
 			}
 		}
-		// B65-ZK-1916: convert zh_HANS-XX and zh_HANT-XX to zh_XX
-		return l != null ? fixZhLocale(l) : Locale.getDefault();
+		return l != null ? l : Locale.getDefault();
 	}
 	
 	/** Returns the preferred locale of the specified request.
@@ -224,44 +223,6 @@ public class Charsets {
 	 */
 	public static final Locale getPreferredLocale(ServletRequest request) {
 		return getPreferredLocale(getSession(request), request);
-	}
-
-	/* Maps zh_HANS-XX to zh_HANT-XX to zh_XX 
-	 * 
-	 * Mapping rules:
-	 * 
-	 *     zh_HANS     =>  zh_CN
-	 *     zh_HANS-CN  =>  zh_CN
-	 *     zh_HANS-SG  =>  zh_SG
-	 *     
-	 *     zh_HANT     =>  zh_TW
-	 *     zh_HANT-TW  =>  zh_TW
-	 *     zh_HANT-HK  =>  zh_HK
-	 *     zh_HANT-MO  =>  zh_MO
-	 *     zh_HANS-CN  =>  zh_CN
-	 * 
-	 * This function should be deprecated or modified in JDK 1.7 environment or later.
-	 */
-	private static Locale fixZhLocale(Locale locale) {
-		final String country = locale.getCountry();
-		if (new Locale("zh").getLanguage().equals(locale.getLanguage()) && !country.isEmpty()) {
-			if (country.startsWith("HANS")) {
-				if (country.endsWith("SG"))
-					return new Locale("zh", "SG");
-				else
-					return Locale.SIMPLIFIED_CHINESE;
-			} else if (country.startsWith("HANT")) {
-				if (country.endsWith("TW"))
-					return Locale.TAIWAN;
-				else if (country.endsWith("HK"))
-					return new Locale("zh", "HK");
-				else if (country.endsWith("MO"))
-					return new Locale("zh", "MO");
-				else
-					return Locale.TRADITIONAL_CHINESE;
-			}
-		}
-		return locale;
 	}
 
 	/** The previous attribute name (backward compatible prior to 5.0.3. */

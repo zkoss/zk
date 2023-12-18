@@ -832,10 +832,6 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 		return Collections.emptySet();
 	}
 
-	public String setWidgetAttribute(String name, String value) {
-		return setClientAttribute(name, value);
-	}
-
 	public String setClientAttribute(String name, String value) {
 		if (name == null)
 			throw new IllegalArgumentException();
@@ -848,10 +844,6 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 		} else
 			old = _auxinf != null && _auxinf.domattrs != null ? _auxinf.domattrs.remove(name) : null;
 		return old;
-	}
-
-	public String getWidgetAttribute(String name) {
-		return getClientAttribute(name);
 	}
 
 	public String getClientAttribute(String name) {
@@ -1684,10 +1676,6 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 		}
 	}
 
-	public void invalidatePartial() {
-		invalidate();
-	}
-
 	/** Causes a response to be sent to the client.
 	 * It is the same as <code>response(response.getOverrideKey(), response)</code>
 	 *
@@ -2474,9 +2462,8 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 	}
 
 	//Event//
-	@SuppressWarnings("deprecation")
 	public boolean addEventListener(String evtnm, EventListener<? extends Event> listener) {
-		return addEventListener(listener instanceof org.zkoss.zk.ui.event.Express ? 1000 : 0, evtnm, listener);
+		return addEventListener(0, evtnm, listener);
 	}
 
 	public boolean addEventListener(int priority, String evtnm, EventListener<? extends Event> listener) {
@@ -2681,17 +2668,6 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 		return false;
 	}
 
-	/** @deprecated As of release 6.0, replaced with {@link #getEventListeners}.
-	 */
-	public Iterator<EventListener<? extends Event>> getListenerIterator(String evtnm) {
-		if (_auxinf != null && _auxinf.listeners != null) {
-			final List<EventListenerInfo> lis = _auxinf.listeners.get(evtnm);
-			if (lis != null)
-				return CollectionsX.comodifiableIterator(lis, _listenerInfoConverter);
-		}
-		return CollectionsX.emptyIterator();
-	}
-
 	public Iterable<EventListener<? extends Event>> getEventListeners(String evtnm) {
 		if (_auxinf != null && _auxinf.listeners != null) {
 			final List<EventListenerInfo> lis = _auxinf.listeners.get(evtnm);
@@ -2814,13 +2790,6 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 		}
 	}
 
-	/** @deprecated As of release 6.0.0, replaced with
-	 * {@link #getAnnotation(String, String)}.
-	 */
-	public Annotation getAnnotation(String annotName) {
-		return getAnnotation(null, annotName);
-	}
-
 	public Annotation getAnnotation(String propName, String annotName) {
 		return _auxinf != null && _auxinf.annots != null ? _auxinf.annots.getAnnotation(propName, annotName) : null;
 	}
@@ -2830,13 +2799,6 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 			return _auxinf.annots.getAnnotations(propName, annotName);
 		return Collections.emptyList();
 	}
-
-	/** @deprecated As of release 6.0.0, replaced with {@link #getAnnotations(String)}.
-	 */
-	public Collection<Annotation> getAnnotations() {
-		return getAnnotations(null);
-	}
-
 	public Collection<Annotation> getAnnotations(String propName) {
 		if (_auxinf != null && _auxinf.annots != null)
 			return _auxinf.annots.getAnnotations(propName);
@@ -2872,14 +2834,6 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 			}
 		}
 	}
-
-	/** @deprecated As of release 6.0.0, replaced with
-	 * {@link #addAnnotation(String, String, Map)}
-	 */
-	public void addAnnotation(String annotName, Map<String, String[]> annotAttrs) {
-		addAnnotation(null, annotName, annotAttrs);
-	}
-
 	public void addAnnotation(String propName, String annotName, Map<String, String[]> annotAttrs) {
 		unshareAnnotationMap(true);
 		_auxinf.annots.addAnnotation(propName, annotName, fixAttrValues(annotAttrs), null);

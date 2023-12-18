@@ -38,6 +38,7 @@ public class Treecols extends HeadersElement {
 	 * components, please refer to {@link Tree} and {@link Treecol} instead.
 	 */
 	public void setWidth(String width) {
+		// Don't remove this method, it's to override super.setWidth().
 	}
 
 	/**
@@ -45,6 +46,7 @@ public class Treecols extends HeadersElement {
 	 * components, please refer to {@link Tree} and {@link Treecol} instead.
 	 */
 	public void setHflex(String flex) {
+		// Don't remove this method, it's to override super.setHflex().
 	}
 
 	//super//

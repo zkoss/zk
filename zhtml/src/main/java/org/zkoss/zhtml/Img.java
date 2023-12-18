@@ -91,23 +91,7 @@ public class Img extends AbstractTag {
 	public void setIsmap(boolean ismap) throws WrongValueException {
 		setDynamicProperty("ismap", ismap ? Boolean.valueOf(ismap) : null);
 	}
-	/**
-	 * Returns the longdesc of this img tag.
-	 * @since 8.0.3
-	 * @deprecated Not supported in HTML5
-	 */
-	public String getLongdesc() {
-		return (String) getDynamicProperty("longdesc");
-	}
 
-	/**
-	 * Sets the longdesc of this img tag.
-	 * @since 8.0.3
-	 * @deprecated Not supported in HTML5
-	 */
-	public void setLongdesc(String longdesc) throws WrongValueException {
-		setDynamicProperty("longdesc", longdesc);
-	}
 	/**
 	 * Returns the src of this img tag.
 	 * @since 8.0.3
