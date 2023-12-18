@@ -113,27 +113,6 @@ public abstract class LayoutRegion extends XulElement {
 	}
 
 	/**
-	 * @deprecated As of release 6.0.2, use {@link #getHflex()} and {@link #getVflex()} on child component instead
-	 * <p>
-	 * Default: false.
-	 */
-	public boolean isFlex() {
-		return _flex;
-	}
-
-	/**
-	 * @deprecated As of release 6.0.2, use {@link #setHflex(String)} and {@link #setVflex(String)} on child component instead
-	 *
-	 */
-	public void setFlex(boolean flex) {
-		log.warn("The flex attribute is deprecated, use setHflex and setVflex on child component instead.");
-		if (_flex != flex) {
-			_flex = flex;
-			smartUpdate("flex", _flex);
-		}
-	}
-
-	/**
 	 * Returns the margins, which is a list of numbers separated by comma.
 	 *
 	 * <p>

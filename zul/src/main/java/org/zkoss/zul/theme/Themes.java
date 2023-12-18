@@ -39,25 +39,6 @@ import org.zkoss.zk.ui.Execution;
  * @author neillee
  */
 public class Themes {
-
-	/**
-	 * Should use StandardTheme.DEFAULT_NAME
-	 * @deprecated since 6.5.2
-	 */
-	public static final String BREEZE_NAME = "breeze";
-
-	/**
-	 * Should use StandardTheme.DEFAULT_DISPLAY
-	 * @deprecated since 6.5.2
-	 */
-	public static final String BREEZE_DISPLAY = "Breeze";
-
-	/**
-	 * Should use StandardTheme.DEFAULT_PRIORITY
-	 * @deprecated since 6.5.2
-	 */
-	public static final int BREEZE_PRIORITY = 500;
-
 	/**
 	 * Sets the theme name using the current theme resolution strategy
 	 * Default strategy is to use cookies

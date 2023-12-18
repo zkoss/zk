@@ -27,7 +27,6 @@ import javax.servlet.ServletResponse;
 
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Strings;
-import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.dsp.DspException;
 import org.zkoss.web.servlet.dsp.action.ActionContext;
 import org.zkoss.web.servlet.http.Encodes;
@@ -114,65 +113,6 @@ public class ServletFns {
 			}
 		}
 		return resolved;
-	}
-
-	/** Returns whether the current request is from
-	 * a browser of the specified type.
-	 *
-	 * @param type the type of the browser.
-	 * The syntax: {@code <browser-name>[<version-number>][-]}.<br/>
-	 * For example, ie9, ios and ie6-.
-	 * And, <code>ie9</code> means Internet Explorer 9 and later, while
-	 * <code>ie6-</code> means Internet Explorer 6 (not prior, nor later).
-	 * @since 3.5.1
-	 * @deprecated As of release 6.0.0, replaced with {@link Servlets#getBrowser}.
-	 */
-	public static boolean isBrowser(String type) {
-		return Servlets.isBrowser(getCurrentRequest(), type);
-	}
-
-	/** Returns whether the browser of the current request is Explorer.
-	 * @deprecated As of release 6.0.0, replaced with {@link Servlets#getBrowser}.
-	 */
-	public static boolean isExplorer() {
-		return Servlets.isExplorer(getCurrentRequest());
-	}
-
-	/** Returns whether the browser of the current request is Explorer 7 or later.
-	 * @deprecated As of release 6.0.0, replaced with {@link Servlets#getBrowser}.
-	 */
-	public static boolean isExplorer7() {
-		return Servlets.isExplorer7(getCurrentRequest());
-	}
-
-	/** Returns whether the browser of the current request is Gecko based,
-	 * such as Mozilla, Firefox and Camino.
-	 * @deprecated As of release 6.0.0, replaced with {@link Servlets#getBrowser}.
-	 */
-	public static boolean isGecko() {
-		return Servlets.isGecko(getCurrentRequest());
-	}
-
-	/** Returns whether the browser is Gecko 3 based, such as Firefox 3.
-	 * @since 3.5.0
-	 * @deprecated As of release 6.0.0, replaced with {@link Servlets#getBrowser}.
-	 */
-	public static boolean isGecko3() {
-		return Servlets.isGecko3(getCurrentRequest());
-	}
-
-	/** Returns whether the browser of the current request is Safari.
-	 * @deprecated As of release 6.0.0, replaced with {@link Servlets#getBrowser}.
-	 */
-	public static boolean isSafari() {
-		return Servlets.isSafari(getCurrentRequest());
-	}
-
-	/** Returns whether the browser of the current request is Opera.
-	 * @deprecated As of release 6.0.0, replaced with {@link Servlets#getBrowser}.
-	 */
-	public static boolean isOpera() {
-		return Servlets.isOpera(getCurrentRequest());
 	}
 
 	/** Returns the current EL context. */

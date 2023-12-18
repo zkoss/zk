@@ -23,7 +23,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 </ol>
 ]]></html>
     <hlayout>
-        <listbox id="left" height="250px" width="200px" fixedLayout="true" onDrop="move(event.dragged)"
+        <listbox id="left" height="250px" width="200px"  onDrop="move(event.dragged)"
             multiple="true" droppable="true" oddRowSclass="non-odd">
             <listitem draggable="true" droppable="true" onDrop="move(event.dragged)">
                 <listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK Forge" />
@@ -45,7 +45,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
             </listitem>
         </listbox>
         <separator orient="vertical" spacing="8px" />
-        <listbox id="right" height="250px" width="200px" fixedLayout="true" onDrop="move(event.dragged)"
+        <listbox id="right" height="250px" width="200px"  onDrop="move(event.dragged)"
             multiple="true" droppable="true" oddRowSclass="non-odd">
             <listitem draggable="true" droppable="true" onDrop="move(event.dragged)">
                 <listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK" />

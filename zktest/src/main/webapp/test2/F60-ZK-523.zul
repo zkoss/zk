@@ -24,7 +24,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 	    <columnlayout>
 	        <columnchildren width="50%">
 	            <listbox id="left" multiple="true" height="300px"
-	                oddRowSclass="non-odd" fixedLayout="true" checkmark="true">
+	                oddRowSclass="non-odd"  checkmark="true">
 	                <listitem selected="true">
 	                    <listcell label="ZK Forge"
 	                        src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" />
@@ -86,7 +86,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 	        </columnchildren>
 	        <columnchildren width="50%">
 	            <listbox id="right" multiple="true" height="300px"
-	                oddRowSclass="non-odd" fixedLayout="true" checkmark="true">
+	                oddRowSclass="non-odd"  checkmark="true">
 	                <listitem>
 	                    <listcell label="ZK"
 	                        src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" />

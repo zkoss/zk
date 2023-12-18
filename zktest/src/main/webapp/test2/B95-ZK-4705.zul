@@ -13,7 +13,7 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
-	<script type="text/javascript">
+	<script>
 		zk.afterMount(function () {
 			MyWest = zk.$extends(zul.layout.West, {
 				bind_: function () {

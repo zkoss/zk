@@ -149,56 +149,6 @@ import org.zkoss.zk.ui.metainfo.PageDefinition;
 		throw new UnsupportedOperationException();
 	}
 
-	/** @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}. */
-	public boolean isBrowser() {
-		return false;
-	}
-
-	/** @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}. */
-	public boolean isBrowser(String type) {
-		return false;
-	}
-
-	/** @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}. */
-	public boolean isRobot() {
-		return false;
-	}
-
-	/** @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}. */
-	public boolean isExplorer() {
-		return false;
-	}
-
-	/** @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}. */
-	public boolean isExplorer7() {
-		return false;
-	}
-
-	/** @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}. */
-	public boolean isOpera() {
-		return false;
-	}
-
-	/** @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}. */
-	public boolean isGecko() {
-		return false;
-	}
-
-	/** @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}. */
-	public boolean isGecko3() {
-		return false;
-	}
-
-	/** @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}. */
-	public boolean isSafari() {
-		return false;
-	}
-
-	/** @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}. */
-	public boolean isHilDevice() {
-		return false;
-	}
-
 	public Double getBrowser(String name) {
 		return null;
 	}

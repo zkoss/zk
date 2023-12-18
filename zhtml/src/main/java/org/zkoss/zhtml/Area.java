@@ -92,27 +92,7 @@ public class Area extends AbstractTag {
 	public void setHref(String href) throws WrongValueException {
 		setDynamicProperty("href", href);
 	}
-	/**
-	 * Returns the hreflang of this area tag.
-	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
-	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
-	 * @since 8.0.3
-	 * @deprecated Not supported in HTML5.
-	 */
-	public String getHreflang() {
-		return (String) getDynamicProperty("hreflang");
-	}
 
-	/**
-	 * Sets the hreflang of this area tag.
-	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
-	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
-	 * @since 8.0.3
-	 * @deprecated Not supported in HTML5.
-	 */
-	public void setHreflang(String hreflang) throws WrongValueException {
-		setDynamicProperty("hreflang", hreflang);
-	}
 	/**
 	 * Returns the media of this area tag.
 	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
@@ -181,28 +161,6 @@ public class Area extends AbstractTag {
 	public void setTarget(String target) throws WrongValueException {
 		setDynamicProperty("target", target);
 	}
-	/**
-	 * Returns the type of this area tag.
-	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
-	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
-	 * @since 8.0.3
-	 * @deprecated Not supported in HTML5.
-	 */
-	public String getType() {
-		return (String) getDynamicProperty("type");
-	}
-
-	/**
-	 * Sets the type of this area tag.
-	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
-	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
-	 * @since 8.0.3
-	 * @deprecated Not supported in HTML5.
-	 */
-	public void setType(String type) throws WrongValueException {
-		setDynamicProperty("type", type);
-	}
-
 
 	/**
 	 * Returns the ping of this a tag.
@@ -247,12 +205,5 @@ public class Area extends AbstractTag {
 	 */
 	public void setReferrerpolicy(String referrerpolicy) throws WrongValueException {
 		setDynamicProperty("referrerpolicy", referrerpolicy);
-	}
-
-	/**
-	 * @deprecated Not supported in HTML5.
-	 */
-	public void setTabindex(Integer tabindex) throws WrongValueException {
-		super.setTabindex(tabindex);
 	}
 }

@@ -3,7 +3,7 @@
 		1. click the button
 		2. you should see zk.log shows two "Yes" to indicate the table width is the same with colgroup width
 	</label>
-	<script type="text/javascript"><![CDATA[
+	<script><![CDATA[
 
   	function getWidth() {
   		var hdcolwidth = jq('.z-grid-header>table tr').width();

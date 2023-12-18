@@ -337,19 +337,6 @@ public class Window extends XulElement implements Framable, IdSpace {
 		return _minwidth;
 	}
 
-	/**
-	 * @deprecated As release of 5.0.0, replaced with {@link org.zkoss.zk.ui.HtmlBasedComponent#setAction}.
-	 */
-	public static void setDefaultActionOnShow(String onshow) {
-	}
-
-	/**
-	 * @deprecated As release of 5.0.0, replaced with {@link org.zkoss.zk.ui.HtmlBasedComponent#setAction}.
-	 */
-	public static String getDefaultActionOnShow() {
-		return null;
-	}
-
 	/** Returns the caption of this window.
 	 */
 	public Caption getCaption() {

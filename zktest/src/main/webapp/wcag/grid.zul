@@ -68,7 +68,7 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 			</foot>
 		</grid>
 		<label value="Detail" />
-		<grid fixedLayout="true" width="600px">
+		<grid  width="600px">
 			<columns>
 				<column width="40px" />
 				<column>Product Name</column>

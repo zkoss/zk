@@ -14,7 +14,7 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
-	<script type="text/javascript" defer="true"><![CDATA[
+	<script defer="true"><![CDATA[
 		var arr = ['0', '1', '2'], content = '';
 		for (var i in arr) {
 			content += i + '\n';

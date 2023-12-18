@@ -184,40 +184,6 @@ public class DefaultTreeModel<E> extends AbstractTreeModel<TreeNode<E>>
 			sort0(child, cmpr);
 	}
 
-	//For Backward Compatibility//
-	/** @deprecated As of release 6.0.0, replaced with {@link #addToSelection}.
-	 */
-	@SuppressWarnings("unchecked")
-	public void addSelection(Object obj) {
-		if (obj instanceof TreeNode)
-			addToSelection((TreeNode) obj);
-	}
-
-	/** @deprecated As of release 6.0.0, replaced with {@link #removeFromSelection}.
-	 */
-	public void removeSelection(Object obj) {
-		removeFromSelection(obj);
-	}
-
-	/** @deprecated As of release 6.0.0, replaced with {@link #addOpenObject}
-	 * and {@link #removeOpenObject}.
-	 */
-	public void setOpen(TreeNode<E> child, boolean open) {
-		final int[] path = getPath(child);
-		if (path != null && path.length > 0) {
-			if (open)
-				addOpenPath(path);
-			else
-				removeOpenPath(path);
-		}
-	}
-
-	/** @deprecated As of release 6.0.0, replaced with {@link #isObjectOpened}.
-	 */
-	public boolean isOpen(Object child) {
-		return isObjectOpened(child);
-	}
-
 	public String getSortDirection(Comparator<TreeNode<E>> cmpr) {
 		if (Objects.equals(_sorting, cmpr))
 			return _sortDir ? "ascending" : "descending";

@@ -5,7 +5,7 @@
 </label>
 <vlayout apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.zkoss.zktest.bind.comp.Grid')">
-	<grid id="detailGrid" fixedLayout="true">
+	<grid id="detailGrid" >
 		<columns>
 			<column width="40px" />
 			<column sort="auto" />
@@ -35,7 +35,7 @@
 		</rows>
 	</grid>
 	<label id="detailOpen" value="@load(vm.open1)"/>
-	<grid id="groupGrid" fixedLayout="true">
+	<grid id="groupGrid" >
 		<columns sizable="true">
 			<column label="Brand" sort="auto" />
 			<column label="Processor Type" width="150px" sort="auto" />

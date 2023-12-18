@@ -5,7 +5,7 @@
 		<p>Demonstrate input, constraint and captcha.</p>
 	]]></html>
 	<separator/>
-    <grid id="view" fixedLayout="true">
+    <grid id="view" >
         <columns>
             <column label="Type" width="150px" />
             <column label="Content" />

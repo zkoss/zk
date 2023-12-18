@@ -73,17 +73,6 @@ public class Style extends AbstractComponent {
 		setMedia(media);
 	}
 
-	/** @deprecated As of release 5.0.0, it is decided automatically.
-	 */
-	public void setDynamic(boolean dynamic) {
-	}
-
-	/** @deprecated As of release 5.0.0, it is decided automatically.
-	 */
-	public boolean isDynamic() {
-		return true;
-	}
-
 	/** Returns the URI of an external style sheet.
 	 *
 	 * <p>Default: null.

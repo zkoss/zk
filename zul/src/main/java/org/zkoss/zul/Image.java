@@ -61,7 +61,6 @@ import org.zkoss.zul.impl.XulElement;
  * @author tomyeh
  */
 public class Image extends XulElement {
-	private String _align, _hspace, _vspace;
 	private String _src;
 	/** The image. _src and _image cannot be nonnull at the same time.  */
 	private org.zkoss.image.Image _image;
@@ -79,86 +78,6 @@ public class Image extends XulElement {
 
 	public Image(String src) {
 		setSrc(src);
-	}
-
-	/** Returns the alignment.
-	 * <p>Default: null (use browser default).
-	 * @deprecated as of release 6.0.0, use CSS instead.
-	 */
-	public String getAlign() {
-		return _align;
-	}
-
-	/** Sets the alignment: one of top, texttop, middle, absmiddle,
-	 * bottom, absbottom, baseline, left, right and center.
-	 * @deprecated as of release 6.0.0, use CSS instead.
-	 */
-	public void setAlign(String align) {
-		if (align != null && align.length() == 0)
-			align = null;
-
-		if (!Objects.equals(_align, align)) {
-			_align = align;
-			smartUpdate("align", _align);
-		}
-	}
-
-	/** 
-	 * @deprecated As of release 5.0.5, use CSS instead.
-	 */
-	public String getBorder() {
-		return null;
-	}
-
-	/** @deprecated As of release 5.0.5, use CSS instead.
-	 */
-	public void setBorder(String border) {
-	}
-
-	/** Returns number of pixels of extra space to the left and right
-	 * side of the image.
-	 * <p>Default: null (use browser default).
-	 * @deprecated as of release 6.0.0, use CSS instead.
-	 */
-	public String getHspace() {
-		return _hspace;
-	}
-
-	/** Sets number of pixels of extra space to the left and right
-	 * side of the image.
-	 * @deprecated as of release 6.0.0, use CSS instead.
-	 */
-	public void setHspace(String hspace) {
-		if (hspace != null && hspace.length() == 0)
-			hspace = null;
-
-		if (!Objects.equals(_hspace, hspace)) {
-			_hspace = hspace;
-			smartUpdate("hspace", _hspace);
-		}
-	}
-
-	/** Returns number of pixels of extra space to the top and bottom
-	 * side of the image.
-	 * <p>Default: null (use browser default).
-	 * @deprecated as of release 6.0.0, use CSS instead.
-	 */
-	public String getVspace() {
-		return _vspace;
-	}
-
-	/** Sets number of pixels of extra space to the top and bottom
-	 * side of the image.
-	 * @deprecated as of release 6.0.0, use CSS instead.
-	 */
-	public void setVspace(String vspace) {
-		if (vspace != null && vspace.length() == 0)
-			vspace = null;
-
-		if (!Objects.equals(_vspace, vspace)) {
-			_vspace = vspace;
-			smartUpdate("vspace", _vspace);
-		}
 	}
 
 	/** Returns the source URI of the image.
@@ -221,7 +140,7 @@ public class Image extends XulElement {
 	 */
 	public void setContent(RenderedImage image) {
 		try {
-			setContent(image == null ? (org.zkoss.image.Image) null : Images.encode("a.png", image));
+			setContent(image == null ? null : Images.encode("a.png", image));
 		} catch (java.io.IOException ex) {
 			throw new UiException(ex);
 		}
@@ -335,9 +254,6 @@ public class Image extends XulElement {
 		render(renderer, "src", getEncodedURL());
 		if (_hoversrc != null || _hoverimg != null)
 			render(renderer, "hover", getEncodedHoverURL());
-		render(renderer, "align", _align);
-		render(renderer, "hspace", _hspace);
-		render(renderer, "vspace", _vspace);
 	}
 
 	//-- Component --//

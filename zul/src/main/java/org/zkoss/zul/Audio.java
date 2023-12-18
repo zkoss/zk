@@ -159,23 +159,6 @@ public class Audio extends XulElement implements MediaElement {
 
 	/** Returns whether to auto start playing the audio.
 	 *
-	 * <p>Default: false;
-	 * @deprecated As of release 7.0.0, use {@link #isAutoplay} instead.
-	 */
-	public boolean isAutostart() {
-		return isAutoplay();
-	}
-
-	/** Sets whether to auto start playing the audio.
-	 *
-	 * @deprecated As of release 7.0.0, use {@link #setAutoplay} instead.
-	 */
-	public void setAutostart(boolean autostart) {
-		setAutoplay(autostart);
-	}
-
-	/** Returns whether to auto start playing the audio.
-	 *
 	 * <p>Default: false.
 	 * @since 7.0.0
 	 */

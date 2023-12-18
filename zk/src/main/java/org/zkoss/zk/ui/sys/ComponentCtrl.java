@@ -269,11 +269,6 @@ public interface ComponentCtrl {
 	 */
 	public Map<String, Integer> getClientEvents();
 
-	/** @deprecated As of release 6.0.0, replaced with
-	 * {@link #getAnnotation(String, String)}.
-	 */
-	public Annotation getAnnotation(String annotName);
-
 	/** Returns the annotation associated with the definition of the specified
 	 * property, or null if not available.
 	 *
@@ -336,10 +331,6 @@ public interface ComponentCtrl {
 	 */
 	public Collection<Annotation> getAnnotations(String propName, String annotName);
 
-	/** @deprecated As of release 6.0.0, replaced with {@link #getAnnotations(String)}.
-	 */
-	public Collection<Annotation> getAnnotations();
-
 	/** Returns a read-only collection of all annotations ({@link Annotation})
 	 * associated with the specified property. It never returns null.
 	 *
@@ -358,11 +349,6 @@ public interface ComponentCtrl {
 	 * are associated at least one annotation (never null).
 	 */
 	public List<String> getAnnotatedProperties();
-
-	/** @deprecated As of release 6.0.0, replaced with
-	 * {@link #addAnnotation(String, String, Map)}
-	 */
-	public void addAnnotation(String annotName, Map<String, String[]> annotAttrs);
 
 	/** Adds an annotation to the specified property of this component.
 	 *
@@ -591,29 +577,6 @@ public interface ComponentCtrl {
 	public int getSubBindingAnnotationCount();
 
 	/**
-	 * Adds a callback at component redraw phase.
-	 * @param callback
-	 * @since 8.0.0
-	 * @deprecated as of release 8.0.2, use {@link #addCallback} with specific name "redraw"
-	 */
-	public boolean addRedrawCallback(Callback<ContentRenderer> callback);
-
-	/**
-	 * Removes a callback for component redraw phase.
-	 * @param callback
-	 * @since 8.0.0
-	 * @deprecated as of release 8.0.2, use {@link #removeCallback} with specific name "redraw"
-	 */
-	public boolean removeRedrawCallback(Callback<ContentRenderer> callback);
-
-	/**
-	 * Returns all of callbacks for component redraw phase
-	 * @since 8.0.0
-	 * @deprecated as of release 8.0.2, use {@link #getCallback} with specific name "redraw"
-	 */
-	public Collection<Callback<ContentRenderer>> getRedrawCallback();
-
-	/**
 	 * Adds a callback at component in specific name
 	 * @param name
 	 * @param callback
@@ -643,34 +606,6 @@ public interface ComponentCtrl {
 	 * @since 8.0.1
 	 */
 	public ShadowElement getShadowFellowIfAny(String id);
-
-	/**
-	 * @since 9.0.0
-	 * @deprecated since 9.0.1. Use {@link #invalidatePartial()} instead.
-	 */
-	@Deprecated
-	public default void invalidatePartial(String subId) {
-		invalidatePartial();
-	}
-
-	/**
-	 * Invalidates this component by setting the dirty flag
-	 * such that it will be redraw the partial content of this
-	 * component and its dependencies later.
-	 * And, the widget associated with this component and all its
-	 * descendant at the client will be deleted and recreated, too.
-	 *
-	 * <p>If the application is totally controlled by the server side
-	 * (i.e., you don't write client codes), you rarely need to access
-	 * this method.
-	 *
-	 * <p>It can be called only in the request-processing and event-processing
-	 * phases. However, it is NOT allowed in the rendering phase.
-	 * @since 9.0.1
-	 * @deprecated since 9.5.1 it acts just the same as {@link Component#invalidate}
-	 */
-	@Deprecated
-	public void invalidatePartial();
 
 	/**
 	 * Returns the forwards info if any.

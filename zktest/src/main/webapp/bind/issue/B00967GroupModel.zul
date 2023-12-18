@@ -19,7 +19,9 @@
 				<group label="@load(each[0].category)"/>
 			</template>
 			<template name="model:groupfoot">
-				<groupfoot spans="2" sclass="foodFooter" label="@load(each)"/>
+				<groupfoot sclass="foodFooter">
+					<cell colspan="2"><label value="@load(each)"></label></cell>
+				</groupfoot>
 			</template>
 		</grid>
 	</vlayout>

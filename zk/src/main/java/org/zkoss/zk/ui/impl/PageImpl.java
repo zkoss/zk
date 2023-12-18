@@ -29,8 +29,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.ServletRequest;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,7 +42,6 @@ import org.zkoss.lang.SimpleClassResolver;
 import org.zkoss.lang.Strings;
 import org.zkoss.util.CollectionsX;
 import org.zkoss.util.DualCollection;
-import org.zkoss.web.servlet.Servlets;
 import org.zkoss.xel.ExpressionFactory;
 import org.zkoss.xel.Function;
 import org.zkoss.xel.FunctionMapper;
@@ -886,20 +883,6 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		final boolean au = exec.isAsyncUpdate(null);
 		if (!au && !exec.isIncluded()
 				&& ((ctl = ExecutionsCtrl.getPageRedrawControl(exec)) == null || "desktop".equals(ctl))) {
-			if (!shallDisableAutoCompatible())
-				try {
-					if (exec.getBrowser("ie") >= 9 && !exec.containsResponseHeader("X-UA-Compatible")) {
-						double[] ieCompatibilityInfo = Servlets
-								.getIECompatibilityInfo((ServletRequest) exec.getNativeRequest());
-						if (ieCompatibilityInfo != null) {
-							if (ieCompatibilityInfo[0] != ieCompatibilityInfo[2]) {
-								exec.addResponseHeader("X-UA-Compatible", "IE=" + (int) ieCompatibilityInfo[2]);
-							}
-						}
-					}
-				} catch (Throwable ex) { //ignore (it might not be allowed)
-				}
-
 			//FUTURE: Consider if config.isKeepDesktopAcrossVisits() implies cacheable
 			//Why yes: the client doesn't need to ask the server for updated content
 			//Why no: browsers seems fail to handle DHTML correctly (when BACK to
@@ -1068,17 +1051,6 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 			return ls != null && !ls.isEmpty();
 		}
 		return false;
-	}
-
-	/** @deprecated As of release 6.0, replaced with {@link #getEventListeners}.
-	 */
-	public Iterator<EventListener<? extends Event>> getListenerIterator(String evtnm) {
-		if (_listeners != null) {
-			final List<EventListener<? extends Event>> l = _listeners.get(evtnm);
-			if (l != null)
-				return CollectionsX.comodifiableIterator(l);
-		}
-		return CollectionsX.emptyIterator();
 	}
 
 	public Iterable<EventListener<? extends Event>> getEventListeners(String evtnm) {

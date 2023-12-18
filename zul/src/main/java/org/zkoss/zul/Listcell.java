@@ -150,6 +150,7 @@ public class Listcell extends LabelImageElement {
 	 * use {@link Listheader#setHflex(String)} instead.
 	 */
 	public void setHflex(String flex) {
+		// Don't need to remove this method, it's used to override super.setHflex().
 	}
 
 	//-- super --//

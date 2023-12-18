@@ -15,7 +15,7 @@ idea {
 dependencies {
 	implementation project(':zcommon')
 	implementation project(':zweb')
-	compileOnly "javax.servlet:servlet-api:${servletVersion}"
+	compileOnly "javax.servlet:javax.servlet-api:${servletVersion}"
 }
 
 buildConfig {

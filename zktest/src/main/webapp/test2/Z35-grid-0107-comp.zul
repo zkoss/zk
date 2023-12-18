@@ -113,9 +113,9 @@
 				<radio label="Grape"/>
 			</radiogroup>
 		</groupbox>
-	<panel framable="true" width="250px"
+	<panel width="250px"
 		title="Panel component"
-		maximizable="true" minimizable="true" border="normal"
+		maximizable="true" minimizable="true" border="rounded"
 		collapsible="true" closable="true"  if="${!empty arg.panel1}">
 		<panelchildren>
 		<window border="normal" width="200px" sizable="true">

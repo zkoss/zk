@@ -423,56 +423,6 @@ public class ExecutionImpl extends AbstractExecution {
 			_response.setContentType(contentType);
 	}
 
-	/** @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}. */
-	public boolean isBrowser() {
-		return true;
-	}
-
-	/** @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}. */
-	public boolean isBrowser(String type) {
-		return Servlets.isBrowser(_request, type);
-	}
-
-	/** @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}. */
-	public boolean isRobot() {
-		return Servlets.isRobot(_request);
-	}
-
-	/** @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}. */
-	public boolean isExplorer() {
-		return Servlets.isExplorer(_request);
-	}
-
-	/** @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}. */
-	public boolean isExplorer7() {
-		return Servlets.isExplorer7(_request);
-	}
-
-	/** @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}. */
-	public boolean isGecko() {
-		return Servlets.isGecko(_request);
-	}
-
-	/** @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}. */
-	public boolean isGecko3() {
-		return Servlets.isGecko3(_request);
-	}
-
-	/** @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}. */
-	public boolean isOpera() {
-		return Servlets.isOpera(_request);
-	}
-
-	/** @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}. */
-	public boolean isSafari() {
-		return Servlets.isSafari(_request);
-	}
-
-	/** @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}. */
-	public boolean isHilDevice() {
-		return Servlets.isHilDevice(_request);
-	}
-
 	public Double getBrowser(String name) {
 		return Servlets.getBrowser(_request, name);
 	}

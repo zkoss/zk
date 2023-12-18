@@ -33,7 +33,7 @@ You shall see "item 19" in the window and panel.
 			</listitem>
 		</listbox>
 	</window>
-	<panel border="normal" vflex="min" hflex="min" framable="true">
+	<panel border="rounded" vflex="min" hflex="min">
 	<panelchildren>
 		<listbox rows="20" hflex="min">
 			<listhead>

@@ -87,7 +87,31 @@ public class DHtmlLayoutServlet extends HttpServlet {
 		final ServletConfig config = getServletConfig();
 		String param = config.getInitParameter("log-level");
 		if (param != null && param.length() > 0) {
-			final Level level = org.zkoss.util.logging.Log.getLevel(param);
+			param = param.toUpperCase();
+			Level level = null;
+			switch (param) {
+			case "DEBUG":
+			case "FINE":
+				level = Level.FINER;
+				break;
+			case "ERROR":
+			case "SEVERE":
+				level = Level.SEVERE;
+				break;
+			case "FINER":
+				level = Level.FINER;
+				break;
+			case "INFO":
+				level = Level.INFO;
+				break;
+			case "WARNING":
+				level = Level.WARNING;
+				break;
+			case "OFF":
+				level = Level.OFF;
+				break;
+			}
+
 			if (level != null)
 				Logger.getLogger("org.zkoss").setLevel(level);
 			else

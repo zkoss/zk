@@ -50,7 +50,6 @@ import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.util.Composer;
-import org.zkoss.zk.ui.util.ConventionWires;
 import org.zkoss.zk.xel.Evaluator;
 
 /**
@@ -59,7 +58,6 @@ import org.zkoss.zk.xel.Evaluator;
  * @author tomyeh
  */
 public class Components {
-	private static final Logger log = LoggerFactory.getLogger(Components.class);
 	private static final Logger _zklog = LoggerFactory.getLogger("org.zkoss.zk.log");
 
 	protected Components() {
@@ -409,100 +407,6 @@ public class Components {
 			return (Component) owner;
 		}
 		return Path.getComponent(ref.getSpaceOwner(), path);
-	}
-
-	/** @deprecated As of release 6.0.0, replaced with {@link ConventionWires}.
-	 */
-	public static final void wireFellows(IdSpace idspace, Object controller) {
-		ConventionWires.wireFellows(idspace, controller);
-	}
-
-	/** @deprecated As of release 6.0.0, replaced with {@link ConventionWires}.
-	 */
-	public static final void wireFellows(IdSpace idspace, Object controller, char separator) {
-		ConventionWires.wireFellows(idspace, controller, separator);
-	}
-
-	/** @deprecated As of release 6.0.0, replaced with {@link ConventionWires}.
-	 */
-	public static final void wireFellows(IdSpace idspace, Object controller, char separator, boolean ignoreZScript,
-			boolean ignoreXel) {
-		ConventionWires.wireFellows(idspace, controller, separator, ignoreZScript, ignoreXel);
-	}
-
-	/** @deprecated As of release 6.0.0, replaced with {@link ConventionWires}.
-	 */
-	public static final void wireVariables(Component comp, Object controller) {
-		ConventionWires.wireVariables(comp, controller);
-	}
-
-	/** @deprecated As of release 6.0.0, replaced with {@link ConventionWires}.
-	 */
-	public static final void wireVariables(Component comp, Object controller, char separator) {
-		ConventionWires.wireVariables(comp, controller, separator);
-	}
-
-	/** @deprecated As of release 6.0.0, replaced with {@link ConventionWires}.
-	 */
-	public static final void wireVariables(Component comp, Object controller, char separator, boolean ignoreZScript,
-			boolean ignoreXel) {
-		ConventionWires.wireVariables(comp, controller, separator, ignoreZScript, ignoreXel);
-	}
-
-	/** @deprecated As of release 6.0.0, replaced with {@link ConventionWires}.
-	 */
-	public static final void wireVariables(Page page, Object controller) {
-		ConventionWires.wireVariables(page, controller);
-	}
-
-	/** @deprecated As of release 6.0.0, replaced with {@link ConventionWires}.
-	 */
-	public static final void wireVariables(Page page, Object controller, char separator) {
-		ConventionWires.wireVariables(page, controller, separator);
-	}
-
-	/** @deprecated As of release 6.0.0, replaced with {@link ConventionWires}.
-	 */
-	public static final void wireVariables(Page page, Object controller, char separator, boolean ignoreZScript,
-			boolean ignoreXel) {
-		ConventionWires.wireVariables(page, controller, separator, ignoreZScript, ignoreXel);
-	}
-
-	/** @deprecated As of release 6.0.0, replaced with {@link ConventionWires}.
-	 */
-	public static final void wireController(Component comp, Object controller) {
-		ConventionWires.wireController(comp, controller);
-	}
-
-	/** @deprecated As of release 6.0.0, replaced with {@link ConventionWires}.
-	 */
-	public static final void wireController(Component comp, Object controller, char separator) {
-		ConventionWires.wireController(comp, controller, separator);
-	}
-
-	/** @deprecated As of release 6.0.0, replaced with {@link ConventionWires}.
-	 */
-	public static final void wireController(Component comp, Object controller, char separator, boolean ignoreZScript,
-			boolean ignoreXel) {
-		ConventionWires.wireController(comp, controller, separator);
-	}
-
-	/** @deprecated As of release 6.0.0, replaced with {@link ConventionWires}.
-	 */
-	public static final void wireImplicit(Component comp, Object controller) {
-		ConventionWires.wireImplicit(comp, controller);
-	}
-
-	/** @deprecated As of release 6.0.0, replaced with {@link ConventionWires}.
-	 */
-	public static void addForwards(Component comp, Object controller) {
-		ConventionWires.addForwards(comp, controller);
-	}
-
-	/** @deprecated As of release 6.0.0, replaced with {@link ConventionWires}.
-	 */
-	public static void addForwards(Component comp, Object controller, char separator) {
-		ConventionWires.addForwards(comp, controller, separator);
 	}
 
 	/**
@@ -978,56 +882,6 @@ public class Components {
 
 		public String getBrowser() {
 			return exec().getBrowser();
-		}
-
-		/** @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}. */
-		public boolean isBrowser() {
-			return exec().isBrowser();
-		}
-
-		/** @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}. */
-		public boolean isBrowser(String type) {
-			return exec().isBrowser(type);
-		}
-
-		/** @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}. */
-		public boolean isExplorer() {
-			return exec().isExplorer();
-		}
-
-		/** @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}. */
-		public boolean isExplorer7() {
-			return exec().isExplorer7();
-		}
-
-		/** @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}. */
-		public boolean isOpera() {
-			return exec().isOpera();
-		}
-
-		/** @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}. */
-		public boolean isGecko() {
-			return exec().isGecko();
-		}
-
-		/** @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}. */
-		public boolean isGecko3() {
-			return exec().isGecko3();
-		}
-
-		/** @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}. */
-		public boolean isHilDevice() {
-			return exec().isHilDevice();
-		}
-
-		/** @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}. */
-		public boolean isSafari() {
-			return exec().isSafari();
-		}
-
-		/** @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}. */
-		public boolean isRobot() {
-			return exec().isRobot();
 		}
 
 		public boolean isForwarded() {

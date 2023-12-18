@@ -33,11 +33,6 @@ public interface ForEachStatus {
 	 */
 	public ForEachStatus getPrevious();
 
-	/** Returns the object of this iteration.
-	 * @deprecated As of release 8.0.0, use {@link #getCurrent()} instead.
-	 */
-	public Object getEach();
-
 	/**
 	 * Returns the object of this iteration.
 	 * @since 8.0.0

@@ -27,9 +27,9 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
     }
 </style>
 Panel can be sizable
-<panel sizable="true" id="panel" framable="true" width="500px" height="400px"
+<panel sizable="true" id="panel" width="500px" height="400px"
     title="Panel"
-    maximizable="true" minimizable="true" border="normal"
+    maximizable="true" minimizable="true" border="rounded"
     collapsible="true" closable="true">
     <attribute name="onClose">alert("Panel is closed");</attribute>
     <attribute name="onMinimize">alert("Panel is minimized");</attribute>

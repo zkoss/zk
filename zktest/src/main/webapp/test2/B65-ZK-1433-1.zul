@@ -6,7 +6,7 @@
 ]]></zscript>
 	<window title="${title}" mode="overlapped" border="normal" top="${y}" left="${x}"
 		sizable="false" closable="true" maximizable="false" width="800px">
-		<grid fixedLayout="true" vflex="true">
+		<grid  vflex="true">
 			<columns>
 				<column width="100px" />
 				<column />

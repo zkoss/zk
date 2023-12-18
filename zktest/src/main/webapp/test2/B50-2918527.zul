@@ -3,7 +3,7 @@
 Click the button, the "textbox" below should move to center
 <button label="Click Me">
 	<attribute name="onClick">
-		div.setAlign("center");	
+		div.setStyle("text-align:center");
 	</attribute>
 </button>
 <div id="div">

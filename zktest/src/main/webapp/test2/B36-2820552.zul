@@ -27,9 +27,9 @@ After loading the page, you should not see any error.
         background: transparent none;
     }
 </style>
-<panel id="panel" framable="true" width="500px" height="400px"
+<panel id="panel" width="500px" height="400px"
 	title="Panel"
-	maximizable="true" minimizable="true" border="normal"
+	maximizable="true" minimizable="true" border="rounded"
 	collapsible="true" closable="true">
 	<attribute name="onClose">alert("Panel is closed");</attribute>
 	<attribute name="onMinimize">alert("Panel is minimized");</attribute>

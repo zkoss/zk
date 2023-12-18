@@ -44,17 +44,17 @@ Copyright (C) 2023 Potix Corporation. All Rights Reserved.
 		public void add(Object data) {
 			List root = (List) getRoot();
 			root.add(data);
-			fireEvent(root, root.size() - 1, root.size() - 1, org.zkoss.zul.event.TreeDataEvent.INTERVAL_ADDED);
+			fireEvent(org.zkoss.zul.event.TreeDataEvent.INTERVAL_ADDED, getPath(root), root.size() - 1, root.size() - 1);
 		}
 		public void add(int index, Object data) {
 			List root = (List) getRoot();
 			root.add(index, data);
-			fireEvent(root, index, index, org.zkoss.zul.event.TreeDataEvent.INTERVAL_ADDED);
+			fireEvent(org.zkoss.zul.event.TreeDataEvent.INTERVAL_ADDED, getPath(root), index, index);
 		}
 		public void remove(int index) {
 			List root = (List) getRoot();
 			root.remove(index);
-			fireEvent(root, index, index, org.zkoss.zul.event.TreeDataEvent.INTERVAL_REMOVED);
+			fireEvent(org.zkoss.zul.event.TreeDataEvent.INTERVAL_REMOVED, getPath(root), index, index);
 		}
 		public int size() {
 			return getRoot().size();

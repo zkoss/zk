@@ -19,8 +19,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 -->
 <zk>
 <button id="btn" label="Restore Panel" visible="false" onClick='self.visible = panel.minimized = false;'/>
-<panel id="panel" framable="true" width="500px" height="500px" title="Panel component" floatable="true" movable="true"
-	maximizable="true" minimizable="true"  border="normal" collapsible="true" closable="true">
+<panel id="panel" width="500px" height="500px" title="Panel component" floatable="true" movable="true"
+	maximizable="true" minimizable="true"  border="rounded" collapsible="true" closable="true">
 	<attribute name="onMinimize">
 		btn.visible = self.minimized;
 		btn.focus();

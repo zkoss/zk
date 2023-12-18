@@ -144,19 +144,4 @@ public class HttpBufferedResponse extends HttpServletResponseWrapper {
 		super.sendRedirect(location);
 		_bSendRedirect = true;
 	}
-
-	//deprecated//
-	/**
-	 * @deprecated
-	 */
-	public String encodeRedirectUrl(String url) {
-		return super.encodeRedirectUrl(url);
-	}
-
-	/**
-	 * @deprecated
-	 */
-	public String encodeUrl(String url) {
-		return super.encodeUrl(url);
-	}
 }

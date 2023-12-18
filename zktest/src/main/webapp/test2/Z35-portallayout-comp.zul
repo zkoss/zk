@@ -127,9 +127,9 @@
 			</radiogroup>
 	</groupbox>
 	
-	<panel framable="true" width="200px"
+	<panel width="200px"
 		title="Panel component"
-		maximizable="true" minimizable="true" border="normal"
+		maximizable="true" minimizable="true" border="rounded"
 		collapsible="true" closable="true"  if="${!empty execution.parameterMap.panel1}">
 		<panelchildren>
 		<window border="normal" width="250px" sizable="true">

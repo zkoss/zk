@@ -16,7 +16,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 <window>
 In IE, each panel should display well (the corner of each panel should not disappear)
 <vlayout>
-    <panel title="Test0" closable="false" framable="true"
+    <panel title="Test0" closable="false" border="rounded"
 collapsible="true" width="300px">
         <panelchildren>
             <listbox>
@@ -26,7 +26,7 @@ collapsible="true" width="300px">
             </listbox>
         </panelchildren>
     </panel>
-    <panel title="Test1" closable="false" framable="true"
+    <panel title="Test1" closable="false" border="rounded"
 collapsible="true">
         <panelchildren>
             <listbox>
@@ -36,7 +36,7 @@ collapsible="true">
             </listbox>
         </panelchildren>
     </panel>
-    <panel title="Test2" closable="false" framable="false"
+    <panel title="Test2" closable="false"
 collapsible="true" border="normal">
         <panelchildren>
             <listbox>
@@ -46,7 +46,7 @@ collapsible="true" border="normal">
             </listbox>
         </panelchildren>
     </panel>
-    <panel closable="false" framable="true"
+    <panel closable="false" border="rounded"
 collapsible="true">
         <panelchildren>
             <listbox>

@@ -109,7 +109,7 @@ public class B80_ZK_2901Composer  extends GenericForwardComposer {
 			for( int i=0; i<1490; ++i) {
 				((TestNode)getRoot()).getChildren().remove(0);
 			}
-			this.fireEvent(getRoot(), 0, 1489, TreeDataEvent.INTERVAL_REMOVED);
+			fireEvent(TreeDataEvent.INTERVAL_REMOVED, getPath(getRoot()), 0, 1489);
 		}
 
 		public Object getChild(final Object parentObject, final int index)

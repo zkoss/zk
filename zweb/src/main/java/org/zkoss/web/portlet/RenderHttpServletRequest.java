@@ -16,7 +16,9 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.web.portlet;
 
+import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -24,8 +26,18 @@ import java.util.Map;
 
 import javax.portlet.PortletSession;
 import javax.portlet.RenderRequest;
+import javax.servlet.AsyncContext;
+import javax.servlet.DispatcherType;
+import javax.servlet.ReadListener;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpUpgradeHandler;
+import javax.servlet.http.Part;
 
 import org.zkoss.util.CollectionsX;
 import org.zkoss.web.Attributes;
@@ -141,6 +153,18 @@ public class RenderHttpServletRequest implements HttpServletRequest {
 
 	public javax.servlet.ServletInputStream getInputStream() {
 		return new javax.servlet.ServletInputStream() {
+			public boolean isFinished() {
+				return false;
+			}
+
+			public boolean isReady() {
+				return false;
+			}
+
+			public void setReadListener(ReadListener readListener) {
+
+			}
+
 			public int read() {
 				return -1;
 			}
@@ -352,6 +376,71 @@ public class RenderHttpServletRequest implements HttpServletRequest {
 		return _req.isUserInRole(role);
 	}
 
+	public String changeSessionId() {
+		return _hreq != null ? _hreq.changeSessionId() : null;
+	}
+
+	public boolean authenticate(HttpServletResponse httpServletResponse)
+			throws IOException, ServletException {
+		return _hreq != null ? _hreq.authenticate(httpServletResponse) : false;
+	}
+
+	public void login(String s, String s1) throws ServletException {
+		if (_hreq != null)
+			_hreq.login(s, s1);
+	}
+
+	public void logout() throws ServletException {
+		if (_hreq != null)
+			_hreq.logout();
+	}
+
+	public Collection<Part> getParts() throws IOException, ServletException {
+		return _hreq != null ? _hreq.getParts() : null;
+	}
+
+	public Part getPart(String s) throws IOException, ServletException {
+		return _hreq != null ? _hreq.getPart(s) : null;
+	}
+
+	public <T extends HttpUpgradeHandler> T upgrade(Class<T> aClass)
+			throws IOException, ServletException {
+		return _hreq != null ? _hreq.upgrade(aClass) : null;
+	}
+
+	public long getContentLengthLong() {
+		return _hreq != null ? _hreq.getContentLengthLong() : -1;
+	}
+
+	public ServletContext getServletContext() {
+		return _hreq != null ? _hreq.getServletContext() : null;
+	}
+
+	public AsyncContext startAsync() throws IllegalStateException {
+		return _hreq != null ? _hreq.startAsync() : null;
+	}
+
+	public AsyncContext startAsync(ServletRequest servletRequest,
+			ServletResponse servletResponse) throws IllegalStateException {
+		return _hreq != null ? _hreq.startAsync(servletRequest, servletResponse) : null;
+	}
+
+	public boolean isAsyncStarted() {
+		return _hreq != null && _hreq.isAsyncStarted();
+	}
+
+	public boolean isAsyncSupported() {
+		return _hreq != null && _hreq.isAsyncSupported();
+	}
+
+	public AsyncContext getAsyncContext() {
+		return _hreq != null ? _hreq.getAsyncContext() : null;
+	}
+
+	public DispatcherType getDispatcherType() {
+		return _hreq != null ? _hreq.getDispatcherType() : null;
+	}
+
 	//Object//
 	public int hashCode() {
 		return _req.hashCode();
@@ -364,4 +453,5 @@ public class RenderHttpServletRequest implements HttpServletRequest {
 				: o instanceof RenderHttpServletRequest ? ((RenderHttpServletRequest) o)._req : null;
 		return val != null && val.equals(_req);
 	}
+
 }

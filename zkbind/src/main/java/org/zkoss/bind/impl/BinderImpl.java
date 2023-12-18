@@ -324,13 +324,6 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 	}
 	
 	/**
-	 * @deprecated use {@link #init(Component, Object, Map)} instead
-	 */
-	public void init(Component comp, Object viewModel) {
-		init(comp, viewModel, null);
-	}
-	
-	/**
 	 * @since 6.0.1
 	 */
 	public void init(Component comp, Object viewModel, Map<String, Object> initArgs) {
@@ -1411,11 +1404,6 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 		}
 	}
 
-	@Deprecated
-	public void addChildrenInitBinding(Component comp, String initExpr, Map<String, Object> initArgs) {
-		this.addChildrenInitBinding(comp, initExpr, initArgs, null, null);
-	}
-
 	public void addChildrenInitBinding(Component comp, String initExpr, Map<String, Object> initArgs,
 			String converterExpr, Map<String, Object> converterArgs) {
 		checkInit();
@@ -1424,12 +1412,6 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 					MiscUtil.formatLocationMessage("initExpr is null for children of " + comp, comp));
 		}
 		addChildrenInitBinding0(comp, initExpr, initArgs, converterExpr, converterArgs);
-	}
-
-	@Deprecated
-	public void addChildrenLoadBindings(Component comp, String loadExpr, String[] beforeCmds, String[] afterCmds,
-			Map<String, Object> bindingArgs) {
-		addChildrenLoadBindings(comp, loadExpr, beforeCmds, afterCmds, bindingArgs, null, null);
 	}
 
 	public void addChildrenLoadBindings(Component comp, String loadExpr, String[] beforeCmds, String[] afterCmds,
