@@ -12,6 +12,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.bind.impl;
 
 import java.io.Serializable;
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -65,5 +66,15 @@ public abstract class AbstractBindingHandler implements Serializable {
 		if (bindings0 != bindings) { //yes, use != ; not !equals
 			bindingsMap.put(bkey, bindings0);
 		}
+	}
+
+	protected String getSaveBindingDebugInfo(String operation, Object... args) {
+		return MessageFormat.format(operation + ":binding.save() "
+				+ "comp=[{0}],binding=[{1}],command=[{2}],evt=[{3}],notifys=[{4}]", args);
+	}
+
+	protected String getLoadBindingDebugInfo(String operation, Object... args) {
+		return MessageFormat.format(operation + ":binding.load() "
+				+ "comp=[{0}],binding=[{1}],context=[{2}],command=[{3}]", args);
 	}
 }

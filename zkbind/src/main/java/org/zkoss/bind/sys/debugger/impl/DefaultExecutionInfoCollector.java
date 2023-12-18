@@ -11,6 +11,8 @@ Copyright (C) 2013 Potix Corporation. All Rights Reserved.
  */
 package org.zkoss.bind.sys.debugger.impl;
 
+import org.slf4j.LoggerFactory;
+
 import org.zkoss.bind.sys.debugger.impl.info.AddBindingInfo;
 import org.zkoss.bind.sys.debugger.impl.info.AddCommandBindingInfo;
 import org.zkoss.bind.sys.debugger.impl.info.AnnoWarnInfo;
@@ -31,6 +33,16 @@ import org.zkoss.json.JSONObject;
 public class DefaultExecutionInfoCollector extends AbstractExecutionInfoCollector {
 
 	private boolean _startLine = false;
+
+	private Class<?> _viewModelClass;
+
+	protected Class<?> getViewModelClass() {
+		return _viewModelClass;
+	}
+
+	public void setViewModelClass(Class<?> viewModelClass) {
+		_viewModelClass = viewModelClass;
+	}
 
 	public void addInfo(JSONObject info) {
 
@@ -125,7 +137,7 @@ public class DefaultExecutionInfoCollector extends AbstractExecutionInfoCollecto
 	}
 
 	protected void out(String string) {
-		System.out.println(string);
+		LoggerFactory.getLogger(getViewModelClass()).info(string);
 	}
 
 }

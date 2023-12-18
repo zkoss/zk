@@ -317,6 +317,8 @@ public class ExecutionImpl extends AbstractExecution {
 	}
 
 	public String encodeURL(String uri) {
+		if (uri == null || uri.isEmpty()) // ZK-5598
+			return uri;
 		try {
 			String encodedURL = Encodes.encodeURL(_ctx, _request, _response, uri);
 			String zkHostURL = (String) getDesktop().getAttribute("org.zkoss.desktop.auHost");
