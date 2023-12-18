@@ -19,7 +19,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 <li>Click the button "Click Me", you should see the toolbar of "T3" is outside the border of the "Panel Content".</li>
 </ol>
 ]]></html>
-<panel id="panel" title="Panel" border="normal" framable="true">
+<panel id="panel" title="Panel" border="rounded">
 <panelchildren>
 Panel Content
 </panelchildren>

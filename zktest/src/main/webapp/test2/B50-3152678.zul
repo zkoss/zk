@@ -4,7 +4,7 @@
 			<li>Click on each of the following buttons. If in any case the Panel does not resize to fit the height (you need to see the complete bottom of Panel), it is a bug.</li>
 		</ol>
 	]]></html>
-	<panel title="Panel" border="normal" framable="true" width="300px" height="300px">
+	<panel title="Panel" border="rounded" width="300px" height="300px">
 		<toolbar id="tbar1" visible="false">
 			Toolbar 1
 		</toolbar>

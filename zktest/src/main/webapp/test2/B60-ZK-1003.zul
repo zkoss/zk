@@ -16,7 +16,7 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 <zk>
 	<div>You should see two Toolbar below the 'Panel Content'</div>
 	<div height="400px" style="border: 1px solid red">
-		<panel vflex="1" border="normal" title="Panel" framable="true"
+		<panel vflex="1" border="rounded" title="Panel"
 			closable="true" maximizable="true" minimizable="true" collapsible="true">
 			<toolbar mold="panel">Toolbar</toolbar>
 			<panelchildren>
