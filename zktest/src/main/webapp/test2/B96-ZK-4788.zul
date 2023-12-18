@@ -40,7 +40,7 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 	<longbox id="longbox" cols="0"/>
 	<longbox id="longbox1" cols="5"/>
 	<separator/>
-	<script type="text/javascript"><![CDATA[
+	<script><![CDATA[
 		function hasSizeAttribute() {
 			zk.log(jq('$textbox')[0].hasAttribute("size"));
 			zk.log(jq('$intbox')[0].hasAttribute("size"));

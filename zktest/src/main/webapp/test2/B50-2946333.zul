@@ -15,9 +15,8 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 -->
 <zk>
     <borderlayout >
-        <north id="north" title="Processes" splittable="true" height="50%"
-flex="true">
-            <hbox>
+        <north id="north" title="Processes" splittable="true" height="50%">
+            <hbox vflex="1" hflex="1">
                 Please click each button and the layout should be displayed correctly.
                 <button label="25%" onClick="north.height = self.label" />
                 <button label="50%" onClick="north.height = self.label" />

@@ -202,26 +202,6 @@ public class SimpleCharStream
     return c;
   }
 
-  @Deprecated
-  /**
-   * @deprecated
-   * @see #getEndColumn
-   */
-
-  public int getColumn() {
-    return bufcolumn[bufpos];
-  }
-
-  @Deprecated
-  /**
-   * @deprecated
-   * @see #getEndLine
-   */
-
-  public int getLine() {
-    return bufline[bufpos];
-  }
-
   /** Get token end column number. */
   public int getEndColumn() {
     return bufcolumn[bufpos];

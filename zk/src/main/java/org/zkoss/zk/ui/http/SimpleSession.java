@@ -32,8 +32,6 @@ import org.slf4j.LoggerFactory;
 
 import org.zkoss.util.CollectionsX;
 import org.zkoss.web.servlet.xel.AttributesMap;
-import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.ext.ScopeListener;
@@ -59,7 +57,6 @@ import org.zkoss.zk.ui.util.SessionSerializationListener;
  *
  * @author tomyeh
  */
-@SuppressWarnings("deprecation")
 public class SimpleSession implements Session, SessionCtrl {
 	private static final Logger log = LoggerFactory.getLogger(SimpleSession.class);
 
@@ -305,41 +302,6 @@ public class SimpleSession implements Session, SessionCtrl {
 
 	public Map<String, Object> getAttributes() {
 		return _attrs;
-	}
-
-	public String getRemoteAddr() {
-		Execution execution = Executions.getCurrent();
-		if (execution != null)
-			return execution.getRemoteAddr();
-		return null;
-	}
-
-	public String getRemoteHost() {
-		Execution execution = Executions.getCurrent();
-		if (execution != null)
-			return execution.getRemoteHost();
-		return null;
-	}
-
-	public String getServerName() {
-		Execution execution = Executions.getCurrent();
-		if (execution != null)
-			return execution.getServerName();
-		return null;
-	}
-
-	public String getLocalName() {
-		Execution execution = Executions.getCurrent();
-		if (execution != null)
-			return execution.getLocalName();
-		return null;
-	}
-
-	public String getLocalAddr() {
-		Execution execution = Executions.getCurrent();
-		if (execution != null)
-			return execution.getLocalAddr();
-		return null;
 	}
 
 	public void invalidateNow() {

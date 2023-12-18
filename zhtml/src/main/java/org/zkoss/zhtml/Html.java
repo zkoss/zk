@@ -36,27 +36,7 @@ public class Html extends AbstractTag {
 	public Html() {
 		super("html");
 	}
-	/**
-	 * Returns the manifest of this html tag.
-	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
-	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
-	 * @since 8.0.3
-	 * @deprecated Not supported in HTML5
-	 */
-	public String getManifest() {
-		return (String) getDynamicProperty("manifest");
-	}
 
-	/**
-	 * Sets the manifest of this html tag.
-	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
-	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
-	 * @since 8.0.3
-	 * @deprecated Not supported in HTML5
-	 */
-	public void setManifest(String manifest) throws WrongValueException {
-		setDynamicProperty("manifest", manifest);
-	}
 	/**
 	 * Returns the xmlns of this html tag.
 	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.

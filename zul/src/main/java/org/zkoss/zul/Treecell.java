@@ -142,6 +142,7 @@ public class Treecell extends LabelImageElement {
 	 * use {@link Treecol#setWidth(String)} instead.
 	 */
 	public void setWidth(String width) {
+		// Don't remove this method, it's to override super.setWidth().
 	}
 
 	/**
@@ -149,6 +150,7 @@ public class Treecell extends LabelImageElement {
 	 * use {@link Treecol#setHflex(String)} instead.
 	 */
 	public void setHflex(String flex) {
+		// Don't remove this method, it's to override super.setHflex().
 	}
 
 	//-- Component --//

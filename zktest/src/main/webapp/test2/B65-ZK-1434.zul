@@ -20,7 +20,7 @@
 	]]></zscript>
 	<window id="winExa" border="normal" width="100%" closable="false" left="0px">
 		<label value='If you see "a0 b0 c0" in one cell, it is a bug.' />
-		<grid id="gridExample" sizedByContent="false" emptyMessage="Nessun elemento trovato" width="99%">
+		<grid id="gridExample"  emptyMessage="Nessun elemento trovato" width="99%">
 			<columns>
 				<column label="A" />
 				<column label="B" />

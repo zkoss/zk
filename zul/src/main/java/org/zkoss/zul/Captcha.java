@@ -303,24 +303,6 @@ public class Captcha extends org.zkoss.zul.Image {
 
 	/** Sets whether generate border.
 	 * <p> Default to false.
-	 * @since 5.0.0
-	 * @deprecated As of release 5.0.4, use {@link #setFrame(boolean)} instead.
-	 */
-	public void setBorder(boolean b) {
-		setFrame(b);
-	}
-
-	/** Returns whether generate border.
-	 * <p> Default to false.
-	 * @since 5.0.0
-	 * @deprecated As of release 5.0.4, use {@link #isFrame()} instead.
-	 */
-	public boolean isBorder() {
-		return isFrame();
-	}
-
-	/** Sets whether generate border.
-	 * <p> Default to false.
 	 * @since 5.0.4
 	 */
 	public void setFrame(boolean frame) {

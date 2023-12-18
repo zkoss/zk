@@ -27,7 +27,6 @@ import org.zkoss.util.media.Media;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.UploadEvent;
 import org.zkoss.zul.impl.FileuploadDlg;
@@ -79,39 +78,6 @@ public class Fileupload extends Button { //not XulElement since not applicable
 	public Fileupload(String label, String image) {
 		this(label);
 		setImage(image);
-	}
-
-	/** @deprecated As of release 5.0.0, replaced with {@link #setUpload(String)}
-	 */
-	public int getMaxsize() {
-		return -1;
-	}
-
-	/** @deprecated As of release 5.0.0, replaced with {@link #setUpload(String)}
-	 */
-	public void setMaxsize(int maxsize) {
-	}
-
-	/** @deprecated As of release 5.0.0, replaced with {@link #setUpload(String)}
-	 */
-	public int getNumber() {
-		return 1;
-	}
-
-	/** @deprecated As of release 5.0.0, replaced with {@link #setUpload(String)}
-	 */
-	public void setNumber(int maxnum) throws WrongValueException {
-	}
-
-	/** @deprecated As of release 5.0.0, replaced with {@link #setUpload(String)}
-	 */
-	public boolean isNative() {
-		return false;
-	}
-
-	/** @deprecated As of release 5.0.0, replaced with {@link #setUpload(String)}
-	 */
-	public void setNative(boolean alwaysNative) {
 	}
 
 	/////Open as a Modal Dialog/////

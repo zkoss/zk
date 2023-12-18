@@ -19,6 +19,7 @@ package org.zkoss.zul;
 import org.zkoss.lang.Objects;
 import org.zkoss.util.media.Media;
 import org.zkoss.util.media.RepeatableMedia;
+import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.event.Events;
@@ -41,7 +42,7 @@ import org.zkoss.zul.impl.XulElement;
  * @see Include
  */
 public class Iframe extends HtmlBasedComponent {
-	private String _align, _name;
+	private String _name;
 	private String _src, _scrolling = "auto";
 	/** The media. _src and _media cannot be nonnull at the same time. */
 	private Media _media;
@@ -83,25 +84,6 @@ public class Iframe extends HtmlBasedComponent {
 	 */
 	public String getScrolling() {
 		return _scrolling;
-	}
-
-	/** Returns the alignment.
-	 * <p>Default: null (use browser default).
-	 * @deprecated as of release 6.0.0, use CSS instead.
-	 */
-	public String getAlign() {
-		return _align;
-	}
-
-	/** Sets the alignment: one of top, middle, bottom, left, right and
-	 * center.
-	 * @deprecated as of release 6.0.0, use CSS instead.
-	 */
-	public void setAlign(String align) {
-		if (!Objects.equals(_align, align)) {
-			_align = align;
-			smartUpdate("align", _align);
-		}
 	}
 
 	/** Returns the frame name.
@@ -226,14 +208,13 @@ public class Iframe extends HtmlBasedComponent {
 		render(renderer, "src", getEncodedSrc());
 		if (!"auto".equals(_scrolling))
 			render(renderer, "scrolling", _scrolling);
-		render(renderer, "align", _align);
 		render(renderer, "name", _name);
 		render(renderer, "autohide", _autohide);
 	}
 
 	/** Processes an AU request.
 	 *
-	 * <p>Default: in addition to what are handled by {@link XulElement#service},
+	 * <p>Default: in addition to what are handled by {@link XulElement#service(AuRequest, boolean)},
 	 * it also handles onURIChange.
 	 * @since 5.0.0
 	 */

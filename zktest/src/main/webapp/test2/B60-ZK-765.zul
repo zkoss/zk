@@ -28,7 +28,7 @@
 	</vbox>
 	<button id="btnTwo" label="show index" w:onClick="showindex()"/>
 	<button id="btnThree" label="show selected" w:onClick="showselected()"/>
-	<script type="text/javascript"><![CDATA[
+	<script><![CDATA[
 	showindex = function(){
 		var msg = zk.Widget.$('$msg');
 		var listbox = zk.Widget.$('$listbox');

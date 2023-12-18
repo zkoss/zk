@@ -200,10 +200,6 @@ public interface WebApp extends Scope, Locator {
 	 */
 	public Configuration getConfiguration();
 
-	/** @deprecated As of release 6.0.0, replaced with {@link #getServletContext}.
-	 */
-	public Object getNativeContext();
-
 	/** Returns the servlet context of this application.
 	 * @since 6.0.0
 	 */

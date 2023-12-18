@@ -398,13 +398,6 @@ public class ArraysX {
 		return (T[])resize((Object)ary, size);
 	}
 
-	/** 
-	 * @deprecated As of release 6.0.0, replaced with {@link #duplicate(Object)}.
-	 */
-	public static final Object clone(Object ary) {
-		return duplicate(ary);
-	}
-
 	/**
 	 * Returns a fixed-size boxed list backed by the specified primitive array.
 	 *

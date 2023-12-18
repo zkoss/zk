@@ -55,7 +55,7 @@ public class Serialization1 extends SelectorComposer {
 </zscript>
 If you cannot see any Java Exception, that bug has fixed.
 	<window apply="Serialization1">
-		<script type="text/javascript"><![CDATA[
+		<script><![CDATA[
 			function dummy() {
 				// nothing to do
 			}

@@ -82,20 +82,6 @@ public class Listitem extends XulElement {
 	}
 
 	/**
-	 * @deprecated As of release 8.0.0, please use {@link #isSelectable()}
-	 */
-	public boolean isCheckable() {
-		return isSelectable();
-	}
-
-	/**
-	 * @deprecated As of release 8.0.0, please use {@link #setSelectable(boolean)}
-	 */
-	public void setCheckable(boolean checkable) {
-		setSelectable(checkable);
-	}
-
-	/**
 	 * Returns whether it is selectable.
 	 * <p>Default: true.</p>
 	 * @since 8.0.0
@@ -165,22 +151,6 @@ public class Listitem extends XulElement {
 		}
 	}
 
-	/**
-	 * Please use {@link Listcell} or {@link Listbox} instead.
-	 * @deprecated as of release 7.0.3.
-	 */
-	public void setStubonly(String stubonly) {
-		super.setStubonly(stubonly);
-	}
-
-	/**
-	 * Please use {@link Listcell} or {@link Listbox} instead.
-	 * @deprecated as of release 7.0.3.
-	 */
-	public void setStubonly(boolean stubonly) {
-		super.setStubonly(stubonly);
-	}
-
 	/** Returns whether it is disabled.
 	 * <p>Default: false.
 	 */
@@ -242,20 +212,6 @@ public class Listitem extends XulElement {
 			cell.setParent(this);
 		}
 		return cell;
-	}
-
-	/** @deprecated As of release 3.5.0, it is redundant since it
-	 * is the same {@link #getImage}.
-	 */
-	public String getSrc() {
-		return getImage();
-	}
-
-	/** @deprecated As of release 3.5.0, it is redundant since it
-	 * is the same {@link #getSrc}.
-	 */
-	public void setSrc(String src) {
-		setImage(src);
 	}
 
 	/** Returns the image of the {@link Listcell} it contains.
@@ -362,6 +318,7 @@ public class Listitem extends XulElement {
 	 * components, please refer to {@link Listbox} and {@link Listheader} instead.
 	 */
 	public void setWidth(String width) {
+		// Don't need to remove this method, it's used to override super.setWidth();
 	}
 
 	/**
@@ -369,6 +326,7 @@ public class Listitem extends XulElement {
 	 * components, please refer to {@link Listbox} and {@link Listheader} instead.
 	 */
 	public void setHflex(String flex) {
+		// Don't need to remove this method, it's used to override super.setHflex();
 	}
 
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
@@ -383,7 +341,7 @@ public class Listitem extends XulElement {
 			render(renderer, "value", _value);
 		}
 
-		if (!isCheckable())
+		if (!isSelectable())
 			renderer.render("checkable", false);
 	}
 

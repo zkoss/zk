@@ -63,7 +63,7 @@ public class Panel extends XulElement implements Framable {
 	private String _title = "";
 	private int _minheight = 100, _minwidth = 200;
 	private boolean _closable, _collapsible, _floatable, _movable, _maximizable, _minimizable, _maximized, _minimized,
-			_sizable, _open = true, _framableBC/*backward compatible*/;
+			_sizable, _open = true;
 
 	static {
 		addClientEvent(Panel.class, Events.ON_CLOSE, 0);
@@ -91,27 +91,6 @@ public class Panel extends XulElement implements Framable {
 			_open = open;
 			smartUpdate("open", _open);
 		}
-	}
-
-	/**
-	 * @deprecated As of release 5.0.6, replaced with {@link #getBorder}.
-	 * Returns whether to render the panel with custom rounded borders.
-	 * <p>Default: false.
-	 */
-	public boolean isFramable() {
-		return _border.startsWith("rounded"); //rounded or rounded+
-	}
-
-	/**
-	 * @deprecated As of release 5.0.6, replaced with {@link #setBorder}.
-	 * Sets whether to render the panel with custom rounded borders.
-	 *
-	 * <p>Default: false.
-	 */
-	public void setFramable(boolean framable) {
-		_framableBC = true;
-		boolean bordered = "normal".equals(_border) || "rounded+".equals(_border);
-		setBorder0(framable ? bordered ? "rounded+" : "rounded" : bordered ? "normal" : "none");
 	}
 
 	/**
@@ -407,14 +386,11 @@ public class Panel extends XulElement implements Framable {
 	 * <p>Default: "none".
 	 */
 	public String getBorder() {
-		if (_framableBC && _border.startsWith("rounded")) //backward compatible
-			return "rounded".equals(_border) ? "none" : "normal";
 		return _border;
 	}
 
 	/** Sets the border.
-	 * Allowed values include <code>none</code> (default), <code>normal</code>,
-	 * <code>rounded</code> and <code>rounded+</code>.
+	 * Allowed values include <code>none</code> (default), <code>normal</code>.
 	 * For more information, please refer to
 	 * <a href="http://books.zkoss.org/wiki/ZK_Component_Reference/Containers/Panel#Border">ZK Component Reference: Panel</a>.
 	 * @param border the border. If null, "0" or "false", "none" is assumed.
@@ -425,18 +401,6 @@ public class Panel extends XulElement implements Framable {
 			border = "none";
 		else if ("true".equals(border))
 			border = "normal";
-		if (_framableBC) {
-			if (border.startsWith("rounded")) {
-				_framableBC = false;
-			} else if ("normal".equals(border)) {
-				if (_border.startsWith("rounded"))
-					border = "rounded+";
-			} else {
-				if (_border.startsWith("rounded"))
-					border = "rounded";
-			}
-		}
-
 		setBorder0(border);
 	}
 

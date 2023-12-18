@@ -89,19 +89,6 @@ public class Script extends AbstractComponent {
 		setContent(content);
 	}
 
-	/** @deprecated As of release 5.0.0, it is meaningless since
-	 * text/javascript is always assumed.
-	 */
-	public String getType() {
-		return "text/javascript";
-	}
-
-	/** @deprecated As of release 5.0.0, it is meaningless since
-	 * text/javascript is always assumed.
-	 */
-	public void setType(String type) {
-	}
-
 	/** Returns the character encoding of the source.
 	 * It is used with {@link #getSrc}.
 	 *

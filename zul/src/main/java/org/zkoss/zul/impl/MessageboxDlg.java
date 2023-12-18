@@ -167,34 +167,5 @@ public class MessageboxDlg extends Window {
 		protected String getDefaultMold(Class klass) {
 			return super.getDefaultMold(org.zkoss.zul.Button.class);
 		}
-
-		/**
-		 * @deprecated As of release 6.0.0, buttons are created in Java
-		 */
-		public void setIdentity(int button) {
-			switch (button) {
-			case Messagebox.YES:
-				setButton(Messagebox.Button.YES);
-				break;
-			case Messagebox.NO:
-				setButton(Messagebox.Button.NO);
-				break;
-			case Messagebox.RETRY:
-				setButton(Messagebox.Button.RETRY);
-				break;
-			case Messagebox.ABORT:
-				setButton(Messagebox.Button.ABORT);
-				break;
-			case Messagebox.IGNORE:
-				setButton(Messagebox.Button.IGNORE);
-				break;
-			case Messagebox.CANCEL:
-				setButton(Messagebox.Button.CANCEL);
-				break;
-			default:
-				setButton(Messagebox.Button.OK);
-				break;
-			}
-		}
 	}
 }

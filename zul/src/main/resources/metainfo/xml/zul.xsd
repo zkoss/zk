@@ -2025,7 +2025,6 @@
 		<xs:attribute name="emptyMessage" type="xs:string" use="optional" />
 		<xs:attribute name="span" type="xs:string" use="optional" />
 		<xs:attribute name="pagingDisabled" type="booleanType" use="optional" />
-		<xs:attribute name="fixedLayout" type="booleanType" use="optional" />
 		<xs:attribute name="activePage" type="intType" use="optional" />
 	</xs:complexType>
 
@@ -2325,7 +2324,6 @@
 		<xs:attribute name="emptyMessage" type="xs:string" use="optional" />
 		<xs:attribute name="span" type="xs:string" use="optional" />
 		<xs:attribute name="pagingDisabled" type="booleanType" use="optional" />
-		<xs:attribute name="fixedLayout" type="booleanType" use="optional" />
 		<xs:attribute name="activePage" type="intType" use="optional" />
 		<xs:attribute name="onFocus" type="xs:string" use="optional" />
 		<xs:attribute name="onBlur" type="xs:string" use="optional" />
@@ -2352,7 +2350,6 @@
 		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="labelImageElementAttrGroup" />
 		<xs:attribute name="span" type="intType" use="optional" />
-		<xs:attribute name="src" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- listfoot -->
 	<xs:element name="listfoot" type="listfootType" />
@@ -2488,7 +2485,6 @@
 		<xs:attribute name="href" type="xs:string" use="optional" />
 		<xs:attribute name="target" type="xs:string" use="optional" />
 		<xs:attribute name="disabled" type="booleanType" use="optional" />
-		<xs:attribute name="src" type="xs:string" use="optional" />
 		<xs:attribute name="upload" type="xs:string" use="optional" />
 		<xs:attribute name="onUpload" type="xs:string" use="optional" />
 	</xs:complexType>
@@ -2561,7 +2557,6 @@
 		<xs:attribute name="href" type="xs:string" use="optional" />
 		<xs:attribute name="target" type="xs:string" use="optional" />
 		<xs:attribute name="disabled" type="booleanType" use="optional" />
-		<xs:attribute name="src" type="xs:string" use="optional" />
 		<xs:attribute name="selected" type="booleanType" use="optional" />
 		<xs:attribute name="content" type="xs:string" use="optional" />
 		<xs:attribute name="badgeText" type="xs:string" use="optional" />
@@ -3469,7 +3464,6 @@
 		<xs:attribute name="autopaging" type="booleanType" use="optional" />
 		<xs:attribute name="span" type="xs:string" use="optional" />
 		<xs:attribute name="pagingDisabled" type="booleanType" use="optional" />
-		<xs:attribute name="fixedLayout" type="booleanType" use="optional" />
 		<xs:attribute name="activePage" type="intType" use="optional" />
 	</xs:complexType>
 	<!-- treecell -->

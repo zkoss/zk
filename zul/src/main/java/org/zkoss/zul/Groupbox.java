@@ -174,21 +174,6 @@ public class Groupbox extends XulElement {
 		}
 	}
 
-	/** @deprecated As of release 6.0, legend no longer used in groupbox.
-	 */
-	public boolean isLegend() {
-		return "default".equals(getMold());
-	}
-
-	/** @deprecated As of release 6.0, legend no longer used in groupbox.
-	 */
-	public void setLegend(boolean legend) {
-		if (legend && "3d".equals(getMold()))
-			setMold("default");
-		else if (!legend && "default".equals(getMold()))
-			setMold("3d");
-	}
-
 	//-- Component --//
 	public void beforeChildAdded(Component child, Component refChild) {
 		if (child instanceof Caption) {

@@ -32,7 +32,7 @@ Copyright (C) 2017 Potix Corporation. All Rights Reserved.
             <p>Issue Description: <span textContent="@load(issue.description)"/></p>
         </div>
     ]]></fragment>
-    <script type="text/javascript">
+    <script>
         function validateIssueId(id, vmsgs) {
         var valid = /^[A-Z]+-\d+$/.test(id);
         vmsgs['issueId'] = valid ? '' : 'Invalid: ' + id;

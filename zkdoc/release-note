@@ -24,6 +24,7 @@ ZK 10.0.0
   + Now it is not allowed to use positional and non-positional parameters together in MVVM command binding.
   + ZK's corresponding features now require Java EE 7 API level, including:
     Servlet 3.1, Bean Validation 1.1, EL 3.0, and JSP 2.3.
+  + Remove all deprecated Java APIs and the legacy module "zkplus-legacy".
 
    --------
 ZK 10.0.0-Beta

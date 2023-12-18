@@ -585,10 +585,6 @@ public class ForEachImpl implements ForEach {
 			return this.previous instanceof ForEachStatus ? (ForEachStatus) this.previous : null;
 		}
 
-		public Object getEach() {
-			return getCurrent();
-		}
-
 		public int getIndex() {
 			return this.index;
 		}

@@ -280,17 +280,6 @@ public class Datebox extends DateTimeFormatInputElement {
 		}
 	}
 
-	/** @deprecated As of release 5.0.0, it is no longer supported.
-	 */
-	public boolean isCompact() {
-		return false;
-	}
-
-	/** @deprecated As of release 5.0.0, it is no longer supported.
-	 */
-	public void setCompact(boolean compact) {
-	}
-
 	/**
 	 * Returns whether the button (on the right of the textbox) is visible.
 	 * <p>

@@ -830,19 +830,6 @@ public class ListModelMap<K, V> extends AbstractListModel<Map.Entry<K, V>>
 		fireEvent(ListDataEvent.SELECTION_CHANGED, indexOf(e), -1);
 	}
 
-	//For Backward Compatibility//
-	/** @deprecated As of release 6.0.0, replaced with {@link #addToSelection}.
-	 */
-	public void addSelection(Entry<K, V> obj) {
-		addToSelection(obj);
-	}
-
-	/** @deprecated As of release 6.0.0, replaced with {@link #removeFromSelection}.
-	 */
-	public void removeSelection(Object obj) {
-		removeFromSelection(obj);
-	}
-
 	protected void writeSelection(java.io.ObjectOutputStream s) throws java.io.IOException {
 		s.writeInt(_selection.size());
 		for (final Map.Entry<K, V> sel : _selection)

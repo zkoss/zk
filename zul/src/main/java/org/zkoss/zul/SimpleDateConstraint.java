@@ -53,34 +53,12 @@ public class SimpleDateConstraint extends AbstractSimpleDateTimeConstraint<Date>
 
 	/** Constructs a regular-expression constraint.
 	 *
-	 * @param regex ignored if null or empty. Unlike constraint, the regex doesn't need to enclose with '/'.
-	 * @param errmsg the error message to display. Ignored if null or empty.
-	 * @deprecated As of release 8.0.1, replaced with {@link #SimpleDateConstraint(Pattern, String)}
-	 */
-	public SimpleDateConstraint(String regex, String errmsg) {
-		super(regex == null || regex.length() == 0 ? null : Pattern.compile(regex), errmsg);
-	}
-
-	/** Constructs a regular-expression constraint.
-	 *
 	 * @param regex ignored if null or empty
 	 * @param errmsg the error message to display. Ignored if null or empty.
 	 * @since 8.0.1
 	 */
 	public SimpleDateConstraint(Pattern regex, String errmsg) {
 		super(regex, errmsg);
-	}
-
-	/** Constructs a constraint combining regular expression.
-	 *
-	 * @param flags a combination of {@link #NO_POSITIVE}, {@link #NO_NEGATIVE},
-	 * {@link #NO_ZERO}, and so on.
-	 * @param regex ignored if null or empty. Unlike constraint, the regex doesn't need to enclose with '/'.
-	 * @param errmsg the error message to display. Ignored if null or empty.
-	 * @deprecated As of release 8.0.1, replaced with {@link #SimpleDateConstraint(int, Pattern, String)}
-	 */
-	public SimpleDateConstraint(int flags, String regex, String errmsg) {
-		super(flags, regex == null || regex.length() == 0 ? null : Pattern.compile(regex), errmsg);
 	}
 
 	/** Constructs a constraint combining regular expression.

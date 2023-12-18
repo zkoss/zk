@@ -59,7 +59,6 @@ import org.zkoss.zk.ui.event.EventThreadInit;
 import org.zkoss.zk.ui.event.EventThreadResume;
 import org.zkoss.zk.ui.event.EventThreadSuspend;
 import org.zkoss.zk.ui.impl.EventInterceptors;
-import org.zkoss.zk.ui.impl.LegacyDesktopIdGenerator;
 import org.zkoss.zk.ui.impl.MultiComposer;
 import org.zkoss.zk.ui.impl.RichletConfigImpl;
 import org.zkoss.zk.ui.metainfo.NamespaceParser;
@@ -1762,35 +1761,6 @@ public class Configuration {
 		return _promptDelay;
 	}
 
-	/**
-	 * Specifies the time, in milliseconds, to filter out consecutive
-	 * click events.
-	 * If two click events (also onOK and onCancel) come too close, the
-	 * second one will be removed to avoid the denial-of-service attack.
-	 *
-	 * <p>If you prefer not to filter out any of them, specify a non-positive
-	 * value.
-	 *
-	 * <p>Default: 0
-	 *
-	 * @param minisecs the delay to filtering the second click event
-	 * if it happens shorter than the second value.
-	 * If a non-positive value is specified, no click event is ignored.
-	 * @deprecated As of release 5.0.0, please use {@link org.zkoss.zul.Button#setAutodisable} instead.
-	 * @since 3.6.0
-	 */
-	public void setClickFilterDelay(int minisecs) {
-	}
-
-	/** Returns the time, in milliseconds, to filter out consecutive
-	 * click events.
-	 * @deprecated As of release 5.0.0, please use {@link org.zkoss.zul.Button#setAutodisable} instead.
-	 * @since 3.6.0
-	 */
-	public int getClickFilterDelay() {
-		return 0;
-	}
-
 	/** Specifies the time, in milliseconds, before ZK Client Engine shows
 	 * the tooltip when a user moves the mouse over particular UI components.
 	 *
@@ -1823,38 +1793,6 @@ public class Configuration {
 	 */
 	public int getAutoResendTimeout() {
 		return _autoResendTimeout;
-	}
-
-	/** @deprecated As of release 6.0.0, it is removed without replacement, since
-	 * it is rarely applicable and over complicated.
-	 * Specifies the time, in milliseconds, before ZK Client Engine re-sends
-	 * the request to the server.
-	 *
-	 * <p>Default: -1 (i.e., disabled).
-	 * However, if ZK 5.0.3 EE or prior, the default is 9000.
-	 *
-	 * <p>There are many reasons an Ajax request is not received by
-	 * the server. With the resending mechanism, ZK ensures the reliable
-	 * connection between the client and the server.
-	 *
-	 * <p>See also <a href="http://sourceforge.net/tracker/index.php?func=detail&aid=1839246&group_id=152762&atid=785191">Bug 1839246</a>
-	 *
-	 * @since 3.0.1
-	 *
-	 * @param minisecs the timeout in milliseconds.
-	 * Since 3.0.3, you can specify a non-positive number to disable the resend.
-	 */
-	public void setResendDelay(int minisecs) {
-	}
-
-	/** @deprecated As of release 6.0.0, it is removed without replacement, since
-	 * it is rarely applicable and over complicated.
-	 * Returns the time, in milliseconds, before ZK Client Engine re-sends
-	 * the request to the server.
-	 * @since 3.0.1
-	 */
-	public int getResendDelay() {
-		return -1;
 	}
 
 	/** Returns whether this Web application can be crawled by search engines.
@@ -2263,6 +2201,7 @@ public class Configuration {
 	 *
 	 * @exception IllegalStateException if there is suspended thread
 	 * and use is false.
+	 * @deprecated as of release 10.0.0. (not recommended to use in production)
 	 */
 	public void enableEventThread(boolean enable) {
 		if (!enable && _wapp != null) {
@@ -2279,6 +2218,7 @@ public class Configuration {
 
 	/** Returns whether to use the event processing thread.
 	 * <p>Default: false (disabled).
+	 * @deprecated as of release 10.0.0. (not recommended to use in production)
 	 */
 	public boolean isEventThreadEnabled() {
 		return _evtThdEnabled;
@@ -2858,27 +2798,6 @@ public class Configuration {
 		_debugJS = debug;
 		if (_wapp != null)
 			org.zkoss.zk.ui.http.Utils.updateDebugJS(_wapp, debug);
-	}
-
-	/** Returns whether to use the same UUID sequence for desktops after
-	 * rebooting.
-	 * <p>Default: false.
-	 * <p>Note: if the custom ID generator (org.zkoss.zk.ui.util.IdGenerator)
-	 * is used, this option is meaningless. Except {@link LegacyDesktopIdGenerator}.
-	 * @since 5.0.0
-	 * @deprecated since 9.6.0
-	 */
-	@Deprecated
-	public boolean isRepeatUuid() {
-		return _repeatUuid;
-	}
-
-	/** Sets whether to use the same UUID sequence for desktops after
-	 * rebooting.
-	 * @since 5.0.0
-	 */
-	public void setRepeatUuid(boolean repeat) {
-		_repeatUuid = repeat;
 	}
 
 	/** Sets the implementation of the expression factory that shall

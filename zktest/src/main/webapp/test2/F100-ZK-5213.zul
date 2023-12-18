@@ -20,7 +20,7 @@ Copyright (C) 2023 Potix Corporation. All Rights Reserved.
     <borderlayout height="450px">
         <north title="North" maxsize="300" size="50%" splittable="true" collapsible="true">
             <borderlayout>
-                <west title="West" size="25%" flex="true" maxsize="250" splittable="true" collapsible="true"/>
+                <west title="West" size="25%" maxsize="250" splittable="true" collapsible="true"/>
                 <center border="none"/>
                 <east size="50%" border="none" splittable="true" collapsible="true" title="East"/>
             </borderlayout>
