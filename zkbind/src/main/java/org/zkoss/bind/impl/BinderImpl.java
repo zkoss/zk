@@ -18,6 +18,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URLDecoder;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -91,6 +92,8 @@ import org.zkoss.bind.sys.ValidationMessages;
 import org.zkoss.bind.sys.debugger.BindingAnnotationInfoChecker;
 import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollector;
 import org.zkoss.bind.sys.debugger.DebuggerFactory;
+import org.zkoss.bind.sys.debugger.impl.DefaultAnnotationInfoChecker;
+import org.zkoss.bind.sys.debugger.impl.DefaultExecutionInfoCollector;
 import org.zkoss.bind.sys.debugger.impl.info.AddBindingInfo;
 import org.zkoss.bind.sys.debugger.impl.info.AddCommandBindingInfo;
 import org.zkoss.bind.sys.debugger.impl.info.CommandInfo;
@@ -447,8 +450,9 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 
 	//called when onPropertyChange is fired to the subscribed event queue
 	private void doPropertyChange(Object base, String prop) {
+		String debugInfo = MessageFormat.format("doPropertyChange: base=[{0}],prop=[{1}]", base, prop);
 		if (_log.isDebugEnabled()) {
-			_log.debug("doPropertyChange:base=[{}],prop=[{}]", base, prop);
+			_log.debug(debugInfo);
 		}
 
 		//zk-1468, 
@@ -474,6 +478,8 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 				collector.addInfo(new NotifyChangeInfo(_rootComp, base, prop, "Size=" + bindings.size()));
 			}
 			doPropertyChange0(base, prop, bindings);
+		} catch (Exception ex) {
+			throw new RuntimeException(debugInfo, ex);
 		} finally {
 			if (collector != null) {
 				collector.popStack();
@@ -505,12 +511,16 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 				BindContextUtil.setConverterArgs(this, comp, ctx, (PropertyBinding) binding);
 			}
 
+			String debugInfo = MessageFormat.format("doPropertyChange:binding.load() "
+					+ "binding=[{0}],context=[{1}]", binding, ctx);
 			try {
 				if (_log.isDebugEnabled()) {
-					_log.debug("doPropertyChange:binding.load(),binding=[{}],context=[{}]", binding, ctx);
+					_log.debug(debugInfo);
 				}
 				doPrePhase(Phase.LOAD_BINDING, ctx);
 				binding.load(ctx);
+			} catch (Exception ex) {
+				throw new RuntimeException(debugInfo, ex);
 			} finally {
 				doPostPhase(Phase.LOAD_BINDING, ctx);
 			}
@@ -1795,8 +1805,10 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 	private int doCommand(Component comp, CommandBinding commandBinding, String command, Event evt,
 			Map<String, Object> commandArgs, Set<Property> notifys) {
 		final String evtnm = evt == null ? null : evt.getName();
+		String debugInfo = MessageFormat.format("doCommand "
+				+ "comp=[{0}],command=[{1}],evtnm=[{2}]", comp, command, evtnm);
 		if (_log.isDebugEnabled()) {
-			_log.debug("Start doCommand comp=[{}],command=[{}],evtnm=[{}]", comp, command, evtnm);
+			_log.debug("Start " + debugInfo);
 		}
 		BindContext ctx = BindContextUtil.newBindContext(this, commandBinding, false, command, comp, evt);
 		BindContextUtil.setCommandArgs(this, comp, ctx, commandArgs);
@@ -1837,6 +1849,8 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 				_log.debug("End doCommand");
 			}
 			return COMMAND_SUCCESS;
+		} catch (Exception ex) {
+			throw new RuntimeException(debugInfo, ex);
 		} finally {
 			doPostPhase(Phase.COMMAND, ctx); //end of Command
 		}
@@ -1845,8 +1859,9 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 
 	private void doGlobalCommand(Component comp, String command, Event evt, Map<String, Object> commandArgs,
 			Set<Property> notifys) {
+		String debugInfo = MessageFormat.format("doGlobalCommand comp=[{0}],command=[{1}]", comp, command);
 		if (_log.isDebugEnabled()) {
-			_log.debug("Start doGlobalCommand comp=[{}],command=[{}]", comp, command);
+			_log.debug("Start " + debugInfo);
 		}
 
 		BindContext ctx = BindContextUtil.newBindContext(this, null, false, command, comp, evt);
@@ -1862,6 +1877,8 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 
 			//execute command
 			doGlobalCommandExecute(comp, command, commandArgs, ctx, notifys);
+		} catch (Exception ex) {
+			throw new RuntimeException(debugInfo, ex);
 		} finally {
 			doPostPhase(Phase.GLOBAL_COMMAND, ctx); //end of Command
 		}
@@ -1869,9 +1886,10 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 
 	private void doGlobalCommandExecute(Component comp, String command, Map<String, Object> commandArgs,
 			BindContext ctx, Set<Property> notifys) {
+		String debugInfo = MessageFormat.format("doGlobalCommandExecute comp=[{0}],command=[{1}]", comp, command); 
 		try {
 			if (_log.isDebugEnabled()) {
-				_log.debug("before doGlobalCommandExecute comp=[{}],command=[{}]", comp, command);
+				_log.debug("before " + debugInfo);
 			}
 			doPrePhase(Phase.EXECUTE, ctx);
 
@@ -1898,10 +1916,13 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 				if (_log.isDebugEnabled()) {
 					_log.debug("no global command method in [{}]", viewModel);
 				}
+				debugInfo += MessageFormat.format(",no global command method in viewModel=[{0}]", viewModel);
 			}
 			if (_log.isDebugEnabled()) {
 				_log.debug("after doGlobalCommandExecute notifys=[{}]", notifys);
 			}
+		} catch (Exception ex) {
+			throw new RuntimeException(debugInfo, ex);
 		} finally {
 			doPostPhase(Phase.EXECUTE, ctx);
 		}
@@ -1982,9 +2003,11 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 	//doCommand -> doValidate
 	protected boolean doValidate(Component comp, String command, Event evt, BindContext ctx, Set<Property> notifys) {
 		final Set<Property> validates = new HashSet<Property>();
+		String debugInfo = MessageFormat.format("doValidate "
+				+ "comp=[{0}],command=[{1}],evt=[{2}],context=[{3}]", comp, command, evt, ctx);
 		try {
 			if (_log.isDebugEnabled()) {
-				_log.debug("doValidate comp=[{}],command=[{}],evt=[{}],context=[{}]", comp, command, evt, ctx);
+				_log.debug(debugInfo);
 			}
 			doPrePhase(Phase.VALIDATE, ctx);
 
@@ -2022,6 +2045,7 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 				if (_log.isDebugEnabled()) {
 					_log.debug("doValidate validates=[{}]", validates);
 				}
+				debugInfo += MessageFormat.format(",validates=[{0}]", validates);
 				boolean valid = true;
 
 				//ZK-878 Exception if binding a form with errorMessage
@@ -2052,6 +2076,7 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 				return valid;
 			}
 		} catch (Exception e) {
+			_log.error(debugInfo, e);
 			throw UiException.Aide.wrap(e, e.getMessage());
 		} finally {
 			doPostPhase(Phase.VALIDATE, ctx);
@@ -2076,6 +2101,8 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 
 	protected void doExecute(Component comp, String command, Map<String, Object> commandArgs, BindContext ctx,
 			Set<Property> notifys) {
+		String debugInfo = MessageFormat.format("doExecute "
+				+ "comp=[{0}],command=[{1}],notifys=[{2}]", comp, command, notifys);
 		try {
 			Matcher matcher = CALL_OTHER_VM_COMMAND_PATTERN.matcher(command);
 			if (matcher.find()) {
@@ -2088,7 +2115,7 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 				}
 			}
 			if (_log.isDebugEnabled()) {
-				_log.debug("before doExecute comp=[{}],command=[{}],notifys=[{}]", comp, command, notifys);
+				_log.debug("before " + debugInfo);
 			}
 			doPrePhase(Phase.EXECUTE, ctx);
 
@@ -2122,6 +2149,8 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 			if (_log.isDebugEnabled()) {
 				_log.debug("after doExecute notifys=[{}]", notifys);
 			}
+		} catch (Exception ex) {
+			throw new RuntimeException(debugInfo, ex);
 		} finally {
 			doPostPhase(Phase.EXECUTE, ctx);
 		}
@@ -2217,26 +2246,34 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 
 	//doCommand -> doSaveBefore
 	protected void doSaveBefore(Component comp, String command, Event evt, BindContext ctx, Set<Property> notifys) {
+		String debugInfo = MessageFormat.format("doSaveBefore "
+				+ "comp=[{0}],command=[{1}],evt=[{2}],notifys=[{3}]", comp, command, evt, notifys);
 		if (_log.isDebugEnabled()) {
-			_log.debug("doSaveBefore, comp=[{}],command=[{}],evt=[{}],notifys=[{}]", comp, command, evt, notifys);
+			_log.debug(debugInfo);
 		}
 		try {
 			doPrePhase(Phase.SAVE_BEFORE, ctx);
 			_propertyBindingHandler.doSaveBefore(comp, command, evt, notifys);
 			_formBindingHandler.doSaveBefore(comp, command, evt, notifys);
+		} catch (Exception ex) {
+			throw new RuntimeException(debugInfo, ex);
 		} finally {
 			doPostPhase(Phase.SAVE_BEFORE, ctx);
 		}
 	}
 
 	protected void doSaveAfter(Component comp, String command, Event evt, BindContext ctx, Set<Property> notifys) {
+		String debugInfo = MessageFormat.format("doSaveAfter "
+				+ "comp=[{0}],command=[{1}],evt=[{2}],notifys=[{3}]", comp, command, evt, notifys);
 		if (_log.isDebugEnabled()) {
-			_log.debug("doSaveAfter, comp=[{}],command=[{}],evt=[{}],notifys=[{}]", comp, command, evt, notifys);
+			_log.debug(debugInfo);
 		}
 		try {
 			doPrePhase(Phase.SAVE_AFTER, ctx);
 			_propertyBindingHandler.doSaveAfter(comp, command, evt, notifys);
 			_formBindingHandler.doSaveAfter(comp, command, evt, notifys);
+		} catch (Exception ex) {
+			throw new RuntimeException(debugInfo, ex);
 		} finally {
 			doPostPhase(Phase.SAVE_AFTER, ctx);
 		}
@@ -2244,28 +2281,34 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 	}
 
 	protected void doLoadBefore(Component comp, String command, BindContext ctx) {
+		String debugInfo = MessageFormat.format("doLoadBefore comp=[{0}],command=[{1}]", comp, command);
 		if (_log.isDebugEnabled()) {
-			_log.debug("doLoadBefore, comp=[{}],command=[{}]", comp, command);
+			_log.debug(debugInfo);
 		}
 		try {
 			doPrePhase(Phase.LOAD_BEFORE, ctx);
 			_propertyBindingHandler.doLoadBefore(comp, command);
 			_formBindingHandler.doLoadBefore(comp, command);
 			_childrenBindingHandler.doLoadBefore(comp, command);
+		} catch (Exception ex) {
+			throw new RuntimeException(debugInfo, ex);
 		} finally {
 			doPostPhase(Phase.LOAD_BEFORE, ctx);
 		}
 	}
 
 	protected void doLoadAfter(Component comp, String command, BindContext ctx) {
+		String debugInfo = MessageFormat.format("doLoadAfter comp=[{0}],command=[{1}]", comp, command);
 		if (_log.isDebugEnabled()) {
-			_log.debug("doLoadAfter, comp=[{}],command=[{}]", comp, command);
+			_log.debug(debugInfo);
 		}
 		try {
 			doPrePhase(Phase.LOAD_AFTER, ctx);
 			_propertyBindingHandler.doLoadAfter(comp, command);
 			_formBindingHandler.doLoadAfter(comp, command);
 			_childrenBindingHandler.doLoadAfter(comp, command);
+		} catch (Exception ex) {
+			throw new RuntimeException(debugInfo, ex);
 		} finally {
 			doPostPhase(Phase.LOAD_AFTER, ctx);
 		}
@@ -2590,8 +2633,9 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 
 	private void postGlobalCommand(Component comp, CommandBinding commandBinding, String command, Event evt,
 			Map<String, Object> args) {
+		String debugInfo = MessageFormat.format("postGlobalCommand command=[{0}],args=[{1}]", command, args);
 		if (_log.isDebugEnabled()) {
-			_log.debug("postGlobalCommand command=[{}], args=[{}]", command, args);
+			_log.debug(debugInfo);
 		}
 
 		final BindingExecutionInfoCollector collector = getBindingExecutionInfoCollector();
@@ -2604,6 +2648,8 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 			}
 
 			getEventQueue().publish(new GlobalCommandEvent(_rootComp, command, args, evt));
+		} catch (Exception ex) {
+			throw new RuntimeException(debugInfo, ex); 
 		} finally {
 			if (collector != null) {
 				collector.popStack();
@@ -2829,12 +2875,26 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 
 	public BindingExecutionInfoCollector getBindingExecutionInfoCollector() {
 		DebuggerFactory factory = DebuggerFactory.getInstance();
-		return factory == null ? null : factory.getExecutionInfoCollector();
+		if (factory == null) return null;
+		// ZK-5048: setViewModelClass for MVVM DebuggerFactory to log via SLF4J
+		BindingExecutionInfoCollector collector = factory.getExecutionInfoCollector();
+		if (collector instanceof DefaultExecutionInfoCollector) {
+			Class<?> vmClass = BindUtils.getViewModelClass(getViewModelInView());
+			((DefaultExecutionInfoCollector) collector).setViewModelClass(vmClass);
+		}
+		return collector;
 	}
 
 	public BindingAnnotationInfoChecker getBindingAnnotationInfoChecker() {
 		DebuggerFactory factory = DebuggerFactory.getInstance();
-		return factory == null ? null : factory.getAnnotationInfoChecker();
+		if (factory == null) return null;
+		// ZK-5048: setViewModelClass for MVVM DebuggerFactory to log via SLF4J
+		BindingAnnotationInfoChecker checker = factory.getAnnotationInfoChecker();
+		if (checker instanceof DefaultAnnotationInfoChecker) {
+			Class<?> vmClass = BindUtils.getViewModelClass(getViewModelInView());
+			((DefaultAnnotationInfoChecker) checker).setViewModelClass(vmClass);
+		}
+		return checker;
 	}
 
 	public String getQueueName() {

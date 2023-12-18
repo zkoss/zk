@@ -16,7 +16,7 @@
 		none; }
 	</style>
 
-	<panel framable="true" sclass="container" width="400px">
+	<panel sclass="container" border="rounded" width="400px">
 		<panelchildren>
 			<textbox id='txb' sclass="txb" width="99%"
 				style="background:#FFFFCC" rows="5"

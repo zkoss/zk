@@ -16,9 +16,9 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 <?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
 <zk>
 After you see this page, you should not see the horizontal scrollbar shown in the grid.
-<panel border="normal"
+<panel border="rounded"
 	width="580px" height="250px" sclass="bg-tree-panel"
-	framable="true" id="homeContext" style="min-height">
+	id="homeContext" style="min-height">
 	<caption
 		label="Listbox test" />
 	<panelchildren

@@ -2582,7 +2582,6 @@
 		<xs:attribute name="border" type="panelBorderAttrType"
 			use="optional" />
 		<xs:attribute name="sizable" type="booleanType" use="optional" />
-		<xs:attribute name="framable" type="booleanType" use="optional" />
 		<xs:attribute name="closable" type="booleanType" use="optional" />
 		<xs:attribute name="collapsible" type="booleanType" use="optional" />
 		<xs:attribute name="floatable" type="booleanType" use="optional" />
@@ -2600,6 +2599,7 @@
 				<xs:restriction base="xs:string">
 					<xs:enumeration value="normal" />
 					<xs:enumeration value="none" />
+					<xs:enumeration value="rounded" />
 				</xs:restriction>
 			</xs:simpleType>
 			<xs:simpleType>

@@ -88,13 +88,15 @@ import org.zkoss.zk.ui.Component;
 		if (binding instanceof InitChildrenBindingImpl) {
 			ctx.setAttribute(BinderImpl.IGNORE_TRACKER, Boolean.TRUE); //ignore tracker when doing el , we don't need to track the init
 		}
+		String debugInfo = getLoadBindingDebugInfo("doLoadChildrenBinding", comp, binding, ctx, command);
 		try {
 			if (_log.isDebugEnabled()) {
-				_log.debug("doLoadChildrenBinding:binding.load(),component=[{}],binding=[{}],context=[{}],command=[{}]",
-						comp, binding, ctx, command);
+				_log.debug(debugInfo);
 			}
 			doPrePhase(Phase.LOAD_BINDING, ctx);
 			binding.load(ctx);
+		} catch (Exception ex) {
+			throw new RuntimeException(debugInfo, ex);
 		} finally {
 			doPostPhase(Phase.LOAD_BINDING, ctx);
 		}

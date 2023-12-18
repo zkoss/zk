@@ -20,11 +20,6 @@
 					p1.setBorder("none");
 			</attribute>
 		</button>
-		<button label="Change framable">
-			<attribute name="onClick">
-					p1.framable=!p1.framable;
-			</attribute>
-		</button>
 		<button label="Change width and height">
 			<attribute name="onClick">
 				if(p1.width.equals("500px")) {

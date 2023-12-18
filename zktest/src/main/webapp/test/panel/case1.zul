@@ -1,4 +1,4 @@
-<panel framable="false" width="500px" height="100%" title="Panel component"
+<panel width="500px" height="100%" title="Panel component"
 	border="normal" collapsible="true" closable="true">
 	<toolbar>
 		Search:

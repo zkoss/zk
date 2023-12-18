@@ -39,8 +39,8 @@ import org.zkoss.zkmax.zul.Columnchildren;
 				collapsible="true">
 				<panelchildren>Panel</panelchildren>
 			</panel>
-			<panel height="100px" framable="true" title="column1-2"
-				border="normal" maximizable="true" style="margin-bottom:10px">
+			<panel height="100px" title="column1-2"
+				border="rounded" maximizable="true" style="margin-bottom:10px">
 				<panelchildren>Panel</panelchildren>
 			</panel>
 			<panel height="100px" title="column1-3" border="normal"
@@ -105,7 +105,7 @@ import org.zkoss.zkmax.zul.Columnchildren;
 		</columnchildren>
 
 		<columnchildren id="cRig" width="30%" style="padding: 10px">
-			<panel title="Data" framable="true" border="normal"
+			<panel title="Data" border="rounded"
 				style="margin-bottom:10px">
 				<panelchildren>
 					<grid>

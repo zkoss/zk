@@ -53,9 +53,20 @@ public class DefaultAnnotationInfoChecker implements BindingAnnotationInfoChecke
 	//	private static final String QUEUE_SCOPE_ANNO_ATTR = "queueScope";
 
 	BindingExecutionInfoCollector _collector;
+	private Class<?> _viewModelClass;
 
 	DefaultAnnotationInfoChecker(BindingExecutionInfoCollector collector) {
 		_collector = collector;
+		if (_collector instanceof DefaultExecutionInfoCollector)
+			((DefaultExecutionInfoCollector) _collector).setViewModelClass(getViewModelClass());
+	}
+
+	protected Class<?> getViewModelClass() {
+		return _viewModelClass;
+	}
+
+	public void setViewModelClass(Class<?> viewModelClass) {
+		_viewModelClass = viewModelClass;
 	}
 
 	public void checkBinding(Binder binder, Component comp) {

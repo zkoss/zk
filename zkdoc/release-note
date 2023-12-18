@@ -4,6 +4,7 @@ ZK 10.0.0
   ZK-5018: Enhance simplified MVVM syntax
   ZK-5516: change the current month with a keyboard
   ZK-5517: change the current year with a keyboard
+  ZK-5048: MVVM DebuggerFactory should log via SLF4J
   ZK-5595: Upgrade Servlet version from 2.4 to 3.1 aligned with Java EE 7
 
 * Bugs

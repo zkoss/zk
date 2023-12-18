@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F100-ZK-5048.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Mon Dec 11 11:58:12 CST 2023, Created by rebeccalai
+
+Copyright (C) 2023 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		1. set library property "org.zkoss.bind.DebuggerFactory.enable" in zk.xml to "true"
+		2. open the page, should see ADD-BINDING information logged to the console
+		3. click myButton, should see ON_EVENT information logged to the console
+		4. add "org.zkoss.zktest.test2.F100_ZK_5048VM.level=OFF" to logging.properties
+		5. open the page and click myButton, should not see any ADD-BINDING/ON_EVENT information logged
+	</label>
+	<div viewModel="@id('vm') @init('org.zkoss.zktest.test2.F100_ZK_5048VM')">
+		<button label="myButton" onClick="@command('myCommand')"/>
+	</div>
+</zk>

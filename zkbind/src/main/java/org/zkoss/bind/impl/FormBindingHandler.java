@@ -105,13 +105,15 @@ import org.zkoss.zk.ui.event.Event;
 				evt);
 		BindContextUtil.setValidatorArgs(_binder, binding.getComponent(), ctx, binding);
 		//TODO converter args when we support converter in form
+		String debugInfo = getSaveBindingDebugInfo("doSaveFormBinding", comp, binding, command, evt, notifys);
 		try {
 			if (_log.isDebugEnabled()) {
-				_log.debug("doSaveFormBinding:binding.save() comp=[{}],binding=[{}],command=[{}],evt=[{}],notifys=[{}]",
-						comp, binding, command, evt, notifys);
+				_log.debug(debugInfo);
 			}
 			doPrePhase(Phase.SAVE_BINDING, ctx);
 			binding.save(ctx);
+		} catch (Exception ex) {
+			throw new RuntimeException(debugInfo, ex);
 		} finally {
 			doPostPhase(Phase.SAVE_BINDING, ctx);
 		}
@@ -130,10 +132,10 @@ import org.zkoss.zk.ui.event.Event;
 			ctx.setAttribute(BinderImpl.IGNORE_TRACKER, Boolean.TRUE); //ignore tracker when doing el , we don't need to track the init
 		}
 		//TODO converter args when we support converter in form
+		String debugInfo = getLoadBindingDebugInfo("doLoadFormBinding", comp, binding, ctx, command);
 		try {
 			if (_log.isDebugEnabled()) {
-				_log.debug("doLoadFormBinding:binding.load(),component=[{}],binding=[{}],context=[{}],command=[{}]",
-						comp, binding, ctx, command);
+				_log.debug(debugInfo);
 			}
 			doPrePhase(Phase.LOAD_BINDING, ctx);
 			binding.load(ctx);
@@ -142,6 +144,8 @@ import org.zkoss.zk.ui.event.Event;
 			if (((BinderImpl) binding.getBinder()).hasValidator(binding.getComponent(), binding.getFormId())) {
 				clearValidationMessages(binding.getBinder(), binding.getComponent(), binding.getFormId());
 			}
+		} catch (Exception ex) {
+			throw new RuntimeException(debugInfo, ex);
 		} finally {
 			doPostPhase(Phase.LOAD_BINDING, ctx);
 		}
