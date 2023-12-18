@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B100-ZK-5598.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Fri Dec 15 15:40:05 CST 2023, Created by jamson
+
+Copyright (C) 2023 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<ckeditor value="To test this issue, you have to open B100-ZK-5598.html and follow the guides."/>
+</zk>
