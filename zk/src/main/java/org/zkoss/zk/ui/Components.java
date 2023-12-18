@@ -58,7 +58,6 @@ import org.zkoss.zk.xel.Evaluator;
  * @author tomyeh
  */
 public class Components {
-	private static final Logger log = LoggerFactory.getLogger(Components.class);
 	private static final Logger _zklog = LoggerFactory.getLogger("org.zkoss.zk.log");
 
 	protected Components() {

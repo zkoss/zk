@@ -19,66 +19,90 @@ Copyright (C) 2017 Potix Corporation. All Rights Reserved.
     </label>
     <vlayout viewModel="@id('vm') @init('org.zkoss.zktest.test2.B85_ZK_3585VM')"
              form="@id('fx') @load(vm.person) @save(vm.person, before='doSave')">
-        <hbox widths="5em,16.3em">
-            <cell align="right">
+        <hbox>
+            <cell width="5em" align="right">
                 <label value="First Name" />
             </cell>
-            <textbox value="@bind(fx.firstName)" hflex="1" />
+            <cell width="16.3em">
+                <textbox value="@bind(fx.firstName)" hflex="1" />
+            </cell>
         </hbox>
-        <hbox widths="5em,16.3em">
-            <cell align="right">
+        <hbox>
+            <cell width="5em" align="right">
                 <label value="Last Name" />
             </cell>
-            <textbox value="@bind(fx.lastName)" hflex="1" />
+            <cell width="16.3em">
+                <textbox value="@bind(fx.lastName)" hflex="1" />
+            </cell>
         </hbox>
-        <hbox widths="5em,16.3em">
-            <cell align="right">
+        <hbox>
+            <cell width="5em" align="right">
                 <label value="City" />
             </cell>
-            <textbox value="@bind(fx.city)" hflex="1" />
+            <cell width="16.3em">
+                <textbox value="@bind(fx.city)" hflex="1" />
+            </cell>
         </hbox>
-        <hbox widths="7em,7em,7em">
-            <button label="Random City"
-                    onClick="@command('doRandomCity',form=fx)" hflex="1" />
-            <button label="Reset" onClick="@command('doReset')"
-                    disabled="@load(not fxStatus.dirty)" hflex="1" />
-            <button label="Save" onClick="@command('doSave')"
-                    disabled="@load(not fxStatus.dirty)" hflex="1" />
+        <hbox>
+            <cell width="7em">
+                <button label="Random City"
+                        onClick="@command('doRandomCity',form=fx)" hflex="1"/>
+            </cell>
+            <cell width="7em">
+                <button label="Reset" onClick="@command('doReset')"
+                        disabled="@load(not fxStatus.dirty)" hflex="1"/>
+            </cell>
+            <cell width="7em">
+                <button label="Save" onClick="@command('doSave')"
+                        disabled="@load(not fxStatus.dirty)" hflex="1"/>
+            </cell>
         </hbox>
         <!-- Some other notify test cases -->
-        <hbox widths="7em,7em,7em">
-            <button label="Collections"
-                    onClick="@command('doCollections',form=fx)" hflex="1" />
-            <button label="Maps"
-                    onClick="@command('doMaps',form=fx)" hflex="1" />
-            <button label="Nested"
-                    onClick="@command('doNested',form=fx)" hflex="1" />
+        <hbox>
+            <cell width="7em">
+                <button label="Collections"
+                        onClick="@command('doCollections',form=fx)" hflex="1"/>
+            </cell>
+            <cell width="7em">
+                <button label="Maps"
+                        onClick="@command('doMaps',form=fx)" hflex="1"/>
+            </cell>
+            <cell width="7em">
+                <button label="Nested"
+                        onClick="@command('doNested',form=fx)" hflex="1"/>
+            </cell>
         </hbox>
-        <hbox widths="5em,16.3em">
-            <cell align="right">
+        <hbox>
+            <cell width="5em" align="right">
                 <label value="Collections" />
             </cell>
+            <cell width="16.3em">
             <vlayout>
                 <forEach items="@load(fx.collections)">
                     <label value="@load(each)" />
                 </forEach>
             </vlayout>
+            </cell>
         </hbox>
-        <hbox widths="5em,16.3em">
-            <cell align="right">
+        <hbox>
+            <cell width="5em" align="right">
                 <label value="Maps" />
             </cell>
+            <cell width="16.3em">
             <vlayout>
                 <forEach items="@load(fx.maps)">
                     <div><label value="@load(each.key) " /> - <label value="@load(each.value) " /></div>
                 </forEach>
             </vlayout>
+            </cell>
         </hbox>
-        <hbox widths="5em,16.3em">
-            <cell align="right">
+        <hbox>
+            <cell width="5em" align="right">
                 <label value="Nested property" />
             </cell>
+            <cell width="16.3em">
             <textbox value="@bind(fx.child.firstName)" hflex="1" />
+            </cell>
         </hbox>
     </vlayout>
 </zk>

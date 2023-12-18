@@ -9,7 +9,7 @@
     <button id="startLongOp" label="Click" />
     <separator/>
     <label id="msg"/>
-		<script type="text/javascript" defer="true"><![CDATA[
+		<script defer="true"><![CDATA[
 zk.afterMount(function () {
 	var oldFn = zAu.cmd0.script,
 			arr = ["cpsp.start", "cpsp.stop"],

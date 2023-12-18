@@ -1,6 +1,6 @@
 <zk>
 	<window id="mainWin" width="100%" height="100%" >
-		<script type="text/javascript"><![CDATA[
+		<script><![CDATA[
 			zk.afterMount(function () {
 				zk.beforeUnload(function() {
 					console.log("invoke beforeUnload")

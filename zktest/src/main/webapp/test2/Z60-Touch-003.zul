@@ -174,9 +174,9 @@
 			</div>
 			<div id="result" />
 			<!-- Load the script -->
-			<script type="text/javascript" src="http://www.zkoss.org/zkdemo/widgets/effects/form_effect/maskedinput-1.2.2.min.js" />
-			<script type="text/javascript" src="http://www.zkoss.org/zkdemo/widgets/effects/form_effect/watermarkinput.js" />
-			<script type="text/javascript">
+			<script src="http://www.zkoss.org/zkdemo/widgets/effects/form_effect/maskedinput-1.2.2.min.js" />
+			<script src="http://www.zkoss.org/zkdemo/widgets/effects/form_effect/watermarkinput.js" />
+			<script>
 				zk.afterMount(function() {
 				jq("$username").Watermark("Your Name","gray");
 
