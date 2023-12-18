@@ -10,28 +10,28 @@
 		<listbox id="left" height="500px" width="250px" onDrop="move(event.dragged)" droppable="listbox"
 			oddRowSclass="non-odd" mold="paging" pageSize="5">
 			<listitem draggable="listbox" >
-				<listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK Forge" />
+				<listcell image="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK Forge" />
 			</listitem>
 			<listitem draggable="listbox" > 
-				<listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK Mobile" />
+				<listcell image="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK Mobile" />
 			</listitem>
 			<listitem draggable="listbox" >
-				<listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK GWT" />
+				<listcell image="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK GWT" />
 			</listitem>
 			<listitem draggable="listbox" >
-				<listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK JSF" />
+				<listcell image="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK JSF" />
 			</listitem>
 			<listitem draggable="listbox" >
-				<listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK JSP" />
+				<listcell image="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK JSP" />
 			</listitem>
 			<listitem draggable="listbox" >
-				<listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK Spring" />
+				<listcell image="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK Spring" />
 			</listitem>
 			<listitem draggable="listbox" >
-				<listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK" />
+				<listcell image="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK" />
 			</listitem>
 			<listitem draggable="listbox" >
-				<listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK Studio" />
+				<listcell image="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK Studio" />
 			</listitem>
 		</listbox>
 		<grid height="500px" width="250px" onDrop="move(event.dragged)" droppable="grid"

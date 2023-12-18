@@ -20,7 +20,7 @@ Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 			<li>The week names shall be the same with calendar</li>
 		</ul>
 	]]></html>
-	<script type="text/javascript"><![CDATA[
+	<script><![CDATA[
 		zk.afterLoad('zul.db,zk.fmt', function() {
 			var d = new Date();
 			for(var i = 0; i < 7; i++) {

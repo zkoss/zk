@@ -31,9 +31,9 @@ public class B00807GroupModelTest extends ZATSTestCase {
 		assertEquals("Seafood", groups.get(1).as(Group.class).getLabel());
 		assertEquals("Vegetables", groups.get(2).as(Group.class).getLabel());
 		
-		assertEquals("1", groupfoots.get(0).as(Groupfoot.class).getLabel());
-		assertEquals("2", groupfoots.get(1).as(Groupfoot.class).getLabel());
-		assertEquals("2", groupfoots.get(2).as(Groupfoot.class).getLabel());
+		assertEquals("1", ((Label)groupfoots.get(0).as(Groupfoot.class).getFirstChild().getFirstChild()).getValue());
+		assertEquals("2", ((Label)groupfoots.get(1).as(Groupfoot.class).getFirstChild().getFirstChild()).getValue());
+		assertEquals("2", ((Label)groupfoots.get(2).as(Groupfoot.class).getFirstChild().getFirstChild()).getValue());
 		
 		assertEquals("Apples", rows.get(0).queryAll("label").get(1).as(Label.class).getValue());
 		assertEquals("Salmon", rows.get(1).queryAll("label").get(1).as(Label.class).getValue());

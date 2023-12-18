@@ -7,7 +7,7 @@
 	        Click the button, it will show true.
 		<button label="Button" onClick="@command('toggltServerPush')"/>
 		<label id="msg"/>
-		<script type="text/javascript" defer="true"><![CDATA[
+		<script defer="true"><![CDATA[
 		    var arr = [
 				"cmsp.start",
 				"cmsp.stop"];
