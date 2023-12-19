@@ -152,8 +152,10 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 					<label value="$980.00" style="color:green" />
 					<label value="500GB" />
 				</row>
-				<groupfoot spans="5">
-					<label value="This a summary about Compaq Desktop PCs" />
+				<groupfoot>
+					<cell colspan="5">
+						<label value="This a summary about Compaq Desktop PCs" />
+					</cell>
 				</groupfoot>
 			</rows>
 		</grid>

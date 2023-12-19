@@ -28,7 +28,7 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
                 data.add("Data " + i);
             model.clear();
             model.addAll(data);
-            l1.invalidatePartial(""); // Force to invalidatePartial
+            l1.invalidate(); // Force to invalidatePartial
         }
         ]]>
         </zscript>

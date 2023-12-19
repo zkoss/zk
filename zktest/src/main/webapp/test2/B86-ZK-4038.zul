@@ -13,17 +13,21 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
-	<hbox spacing="0" width="100%" height="100%" widths="50%,50%">
-		<panel title="Dashboard 2.1" border="normal" vflex="true" hflex="true">
-			<panelchildren>
-				<div>Drag splitter, the heights should not become smaller</div>
-			</panelchildren>
-		</panel>
+	<hbox spacing="0" width="100%" height="100%">
+		<cell width="50%">
+			<panel title="Dashboard 2.1" border="normal" vflex="true" hflex="true">
+				<panelchildren>
+					<div>Drag splitter, the heights should not become smaller</div>
+				</panelchildren>
+			</panel>
+		</cell>
 		<splitter/>
-		<panel title="Dashboard 2.2" border="normal" vflex="true" hflex="true">
-			<panelchildren>
-				<div>Dashboard components</div>
-			</panelchildren>
-		</panel>
+		<cell width="50%">
+			<panel title="Dashboard 2.2" border="normal" vflex="true" hflex="true">
+				<panelchildren>
+					<div>Dashboard components</div>
+				</panelchildren>
+			</panel>
+		</cell>
 	</hbox>
 </zk>

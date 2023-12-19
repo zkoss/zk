@@ -1690,7 +1690,6 @@
 	<xs:element name="div" type="divType" />
 	<xs:complexType name="divType" mixed="true">
 		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
-		<xs:attribute name="align" type="gridAlignAttrType" use="optional" />
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
@@ -2397,7 +2396,7 @@
 		<xs:attribute name="label" type="xs:string" use="optional" />
 		<xs:attribute name="value" type="xs:string" use="optional" />
 		<xs:attribute name="disabled" type="booleanType" use="optional" />
-		<xs:attribute name="checkable" type="booleanType" use="optional" />
+		<xs:attribute name="selectable" type="booleanType" use="optional" />
 		<xs:attribute name="selected" type="booleanType" use="optional" />
 		<!-- -->
 	</xs:complexType>
@@ -2441,7 +2440,6 @@
 		<xs:attribute name="label" type="xs:string" use="optional" />
 		<xs:attribute name="value" type="xs:string" use="optional" />
 		<xs:attribute name="disabled" type="booleanType" use="optional" />
-		<xs:attribute name="checkable" type="booleanType" use="optional" />
 		<xs:attribute name="selected" type="booleanType" use="optional" />
 		<xs:attribute name="selectable" type="booleanType" use="optional" />
 	</xs:complexType>
@@ -3547,7 +3545,7 @@
 		<xs:attribute name="value" type="xs:string" use="optional" />
 		<xs:attribute name="open" type="booleanType" use="optional" />
 		<xs:attribute name="selected" type="booleanType" use="optional" />
-		<xs:attribute name="checkable" type="booleanType" use="optional" />
+		<xs:attribute name="selectable" type="booleanType" use="optional" />
 		<xs:attribute name="image" type="xs:string" use="optional" />
 		<xs:attribute name="disabled" type="booleanType" use="optional" />
 		<xs:attribute name="onOpen" type="xs:string" use="optional" />

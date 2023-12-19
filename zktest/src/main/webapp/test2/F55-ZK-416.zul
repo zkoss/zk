@@ -26,32 +26,32 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
         <listbox id="left" height="250px" width="200px"  onDrop="move(event.dragged)"
             multiple="true" droppable="true" oddRowSclass="non-odd">
             <listitem draggable="true" droppable="true" onDrop="move(event.dragged)">
-                <listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK Forge" />
+                <listcell image="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK Forge" />
             </listitem>
             <listitem draggable="true" droppable="true" onDrop="move(event.dragged)"> 
-                <listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK Mobile" />
+                <listcell image="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK Mobile" />
             </listitem>
             <listitem draggable="true" droppable="true" onDrop="move(event.dragged)">
-                <listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK GWT" />
+                <listcell image="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK GWT" />
             </listitem>
             <listitem draggable="true" droppable="true" onDrop="move(event.dragged)">
-                <listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK JSF" />
+                <listcell image="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK JSF" />
             </listitem>
             <listitem draggable="true" droppable="true" onDrop="move(event.dragged)">
-                <listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK JSP" />
+                <listcell image="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK JSP" />
             </listitem>
             <listitem draggable="true" droppable="true" onDrop="move(event.dragged)">
-                <listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK Spring" />
+                <listcell image="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK Spring" />
             </listitem>
         </listbox>
         <separator orient="vertical" spacing="8px" />
         <listbox id="right" height="250px" width="200px"  onDrop="move(event.dragged)"
             multiple="true" droppable="true" oddRowSclass="non-odd">
             <listitem draggable="true" droppable="true" onDrop="move(event.dragged)">
-                <listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK" />
+                <listcell image="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK" />
             </listitem>
             <listitem draggable="true" droppable="true" onDrop="move(event.dragged)">
-                <listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK Studio" />
+                <listcell image="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK Studio" />
             </listitem>
         </listbox>
     </hlayout>

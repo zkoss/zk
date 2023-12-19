@@ -6,16 +6,20 @@
     <panel title="Splitter" border="normal" width="500px" >
         <panelchildren>
             <hbox spacing="0" width="100%" height="300px">
-                <vbox spacing="0" hflex="1" heights="150px,150px">
-                	<div vflex="1">
-                    Column 1-1: The left-top box. To know whether a splitter
-                    is collapsed, you can listen to the onOpen event.
-                    </div>
+                <vbox spacing="0" hflex="1">
+	                <cell height="150px">
+	                    <div vflex="1">
+	                    Column 1-1: The left-top box. To know whether a splitter
+	                    is collapsed, you can listen to the onOpen event.
+	                    </div>
+	                </cell>
                     <splitter id="s1" collapse="before"/>
-                    <div vflex="1">
-                    Column 1-2: You can enforce to open or collapse programming
-                    by calling setOpen method.
-                    </div>
+	                <cell height="150px">
+	                    <div vflex="1">
+	                    Column 1-2: You can enforce to open or collapse programming
+	                    by calling setOpen method.
+	                    </div>
+	                </cell>
                 </vbox>
                 <splitter id="s2" collapse="before"/>
               	<div hflex="1">

@@ -6,6 +6,6 @@
 		</window>
 	</div>
 	<zscript>
-		Components.wireFellows(win, new Object());
+		org.zkoss.zk.ui.util.ConventionWires.wireFellows(win, new Object());
 	</zscript>
 </zk>

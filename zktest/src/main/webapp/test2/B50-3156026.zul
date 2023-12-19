@@ -34,19 +34,19 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 									<borderlayout height="30px">
 										<west border="none"
 											width="30%">
-											<div align="left">
+											<div style="text-align:left">
 												<hlayout>
 												</hlayout>
 											</div>
 										</west>
 										<east border="none"
 											width="70%">
-											<div align="right" />
+											<div style="text-align:right" />
 										</east>
 									</borderlayout>
 								</north>
 								<center border="none">
-									<div align="center">
+									<div style="text-align:center">
 										<hlayout id="statusMsgZone">
 											<button id="btnFroze"
 												label="test"
