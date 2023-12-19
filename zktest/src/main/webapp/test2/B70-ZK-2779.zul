@@ -27,7 +27,7 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
                 <treecol label=""/>
             </treecols>
             <template name="model">
-                <treeitem  checkable="true" >
+                <treeitem  selectable="true" >
                     <treerow>
                         <treecell label="@bind(each.data.name)" style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;" />
                     </treerow>

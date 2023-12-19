@@ -15,7 +15,6 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 <zk>
     <zscript><![CDATA[
     void printClientInfo(ClientInfoEvent event) {
-        tz.value = event.getTimeZone().toString();
         zid.value = TimeZone.getTimeZone(event.getZoneId()).toString();
     }
     ]]>
@@ -24,8 +23,6 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
         You can see timezone and zoneid, which timezone is GMT based info and zoneid is geographical based info.
     </label>
     <div onClientInfo="printClientInfo(event)">
-        timezone = <label id="tz"/>
-        <separator/>
         zoneid = <label id="zid"/>
     </div>
 </zk>

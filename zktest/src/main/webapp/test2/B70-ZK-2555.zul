@@ -49,7 +49,9 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 <!-- custom template name fails -->
 		<grid id="grid" model="@load(model) @template(useCustom.flag ? 'custom' : 'model')">
 			<template name="model:group">
-				<group spans="2" label="@load(each)"/>
+				<group>
+					<cell colspan="2"><label value="@load(each)"/></cell>
+				</group>
 			</template>
 			<template name="model" var="a">
 				<row>
@@ -59,7 +61,9 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 			</template>
 
 			<template name="custom:group">
-				<group spans="1" label="@load(each)"/>
+				<group>
+					<cell colspan="1"><label value="@load(each)"/></cell>
+				</group>
 			</template>
 			<template name="custom" var="a">
 				<row>

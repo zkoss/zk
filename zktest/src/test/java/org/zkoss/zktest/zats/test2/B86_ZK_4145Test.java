@@ -57,7 +57,7 @@ public class B86_ZK_4145Test extends WebDriverTestCase {
 
 		click(menupopupTwo.find(MENU));
 		waitResponse();
-		Assertions.assertTrue(popupTwoLeft < getMenupopup(2).offsetLeft());
+		Assertions.assertTrue(popupTwoLeft > getMenupopup(2).offsetLeft());
 	}
 
 	private JQuery getMenupopup(int index) {

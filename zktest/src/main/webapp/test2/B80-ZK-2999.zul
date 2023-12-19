@@ -36,7 +36,7 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 					<treecell label="Item 1 description"/>
 				</treerow>
 			</treeitem>
-			<treeitem  checkable="false" open="false">
+			<treeitem  selectable="false" open="false">
 				<treerow>
 					<treecell label="Item 2"/>
 					<treecell label="Item 2 description"/>

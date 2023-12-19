@@ -28,8 +28,6 @@ public class F90_ZK_4334Test extends WebDriverTestCase {
 		connect();
 		sleep(300);
 		waitResponse();
-
-		assertThat(jq("$tz").text(), containsString("GMT"));
 		assertThat(jq("$zid").text(), not(containsString("GMT")));
 	}
 }

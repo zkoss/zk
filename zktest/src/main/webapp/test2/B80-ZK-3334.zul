@@ -27,7 +27,7 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
 		</label>
 		<hlayout>
 			<window id="exampleWindow" hflex="2" height="600px" border="normal">
-				<div align="right">
+				<div style="text-align:right">
 					<textbox id="text" constraint="no empty"/>
 					<zscript><![CDATA[
                     String[] languages = {"Ada","Basic","C","C++","CSS","Cobol","Forth","Fortran",

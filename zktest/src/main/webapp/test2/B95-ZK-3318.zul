@@ -29,7 +29,7 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 					<treecell label="Item 1 description"/>
 				</treerow>
 			</treeitem>
-			<treeitem  checkable="false" open="true">
+			<treeitem  selectable="false" open="true">
 				<treerow>
 					<treecell label="Item 2"/>
 					<treecell label="Item 2 description"/>
@@ -74,7 +74,7 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 					<treecell label="Item 1 description"/>
 				</treerow>
 			</treeitem>
-			<treeitem  checkable="false" open="true">
+			<treeitem  selectable="false" open="true">
 				<treerow>
 					<treecell label="Item 2"/>
 					<treecell label="Item 2 description"/>
@@ -107,7 +107,7 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 					<treecell label="Item 1 description"/>
 				</treerow>
 			</treeitem>
-			<treeitem  checkable="false" open="true">
+			<treeitem  selectable="false" open="true">
 				<treerow>
 					<treecell label="Item 2"/>
 					<treecell label="Item 2 description"/>

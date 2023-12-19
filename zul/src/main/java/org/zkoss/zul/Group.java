@@ -210,7 +210,15 @@ public class Group extends Row {
 	 */
 	public String getLabel() {
 		final Component cell = getFirstChild();
-		return cell != null && cell instanceof Label ? ((Label) cell).getValue() : null;
+		if (cell != null) {
+			if (cell instanceof Label)
+				return ((Label) cell).getValue();
+			else if (cell instanceof Cell) {
+				final Component child = cell.getFirstChild();
+				return child instanceof Label ? ((Label) child).getValue() : null;
+			}
+		}
+		return null;
 	}
 
 	/** Sets the value of the {@link Label} it contains.
@@ -223,9 +231,16 @@ public class Group extends Row {
 
 	private Label autoFirstCell() {
 		Component cell = getFirstChild();
-		if (cell == null || cell instanceof Label) {
+		if (cell == null || cell instanceof Label || cell instanceof Cell) {
 			if (cell == null)
 				cell = new Label();
+			if (cell instanceof Cell) {
+				final Component child = cell.getFirstChild();
+				if (child != null && child instanceof Label)
+					cell = child;
+				else
+					cell = new Label();
+			}
 			cell.applyProperties();
 			cell.setParent(this);
 			return (Label) cell;

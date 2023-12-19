@@ -34,7 +34,7 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
     <button label="show + clear model"
             onClick='lb.setVisible(true); model.clear();'/>
     <button label="show + invalidatePartial"
-            onClick='lb.setVisible(true); lb.invalidatePartial("rows");'/>
+            onClick='lb.setVisible(true); lb.invalidate();'/>
     <separator/>
     <button label="workaround (call invalidate)" onClick='lb.setVisible(true); lb.invalidate();'/>
 </zk>

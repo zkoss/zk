@@ -73,10 +73,10 @@
        		a0.append("0");
        		b0.append("0");
        		a22.append("2");
-       		stm.fireEvent(root,0,0,org.zkoss.zul.event.TreeDataEvent.CONTENTS_CHANGED);
-       		stm.fireEvent(a,0,0,org.zkoss.zul.event.TreeDataEvent.CONTENTS_CHANGED);
-       		stm.fireEvent(b,0,0,org.zkoss.zul.event.TreeDataEvent.CONTENTS_CHANGED);
-       		stm.fireEvent(a2,2,2,org.zkoss.zul.event.TreeDataEvent.CONTENTS_CHANGED);
+       		stm.fireEvent(org.zkoss.zul.event.TreeDataEvent.CONTENTS_CHANGED, stm.getPath(root),0,0);
+       		stm.fireEvent(org.zkoss.zul.event.TreeDataEvent.CONTENTS_CHANGED, stm.getPath(a),0,0);
+       		stm.fireEvent(org.zkoss.zul.event.TreeDataEvent.CONTENTS_CHANGED, stm.getPath(b),0,0);
+       		stm.fireEvent(org.zkoss.zul.event.TreeDataEvent.CONTENTS_CHANGED, stm.getPath(a2),2,2);
        }
        
         ]]></zscript>

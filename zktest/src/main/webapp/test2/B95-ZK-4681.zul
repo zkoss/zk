@@ -23,11 +23,11 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 		<listhead>
 			<listheader label="head"/>
 		</listhead>
-		<listgroup checkable="true" label="group 1"/>
+		<listgroup selectable="true" label="group 1"/>
 		<listitem label="item 1"/>
 		<listitem label="item 2"/>
 		<listitem label="item 3"/>
-		<listgroup checkable="true" label="group 2"/>
+		<listgroup selectable="true" label="group 2"/>
 		<listitem label="item 1"/>
 		<listitem label="item 2"/>
 		<listitem label="item 3"/>

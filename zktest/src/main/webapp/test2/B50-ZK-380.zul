@@ -18,7 +18,7 @@
 		</treecols>
 		<treechildren>
 			<treeitem label="Item 1" />
-			<treeitem checkable="false" open="false" label="Item 2">
+			<treeitem selectable="false" open="false" label="Item 2">
 				<treechildren>
 					<treeitem label="Item 2.1">
 						<treechildren>

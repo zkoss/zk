@@ -74,7 +74,7 @@ public class B85_ZK_3848Test {
 		try {
 			clToTest.getDependentXMLResources(name, elName, elDepends);
 		} catch (Exception ex) {
-			assertThat(ex.getMessage(), containsString("you are extending component decimalbox which is defined in 'zkplus-legacy', 'zkbind', please define <depends> element"));
+			assertThat(ex.getMessage(), containsString("you are extending component decimalbox which is defined in 'zkbind', please define <depends> element"));
 			throwError = true;
 		} finally {
 			Files.delete(dst.toPath());
@@ -116,7 +116,7 @@ public class B85_ZK_3848Test {
 			verify(logger, times(1)).warn(anyString(), anyString(),
 					anyString(), anyString());
 			assertThat(results.get(0), containsString(
-					"you are extending component decimalbox which is defined in 'zkplus-legacy', 'zkbind', please define <depends> element"));
+					"you are extending component decimalbox which is defined in 'zkbind', please define <depends> element"));
 		} finally {
 			Files.delete(dst.toPath());
 			Path metainfoPath = zkPath.getParent();
