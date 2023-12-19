@@ -22,7 +22,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
             <listheader label="Age"/>
             <listheader label="Description"/>
         </listhead>
-        <listgroup label="abc" checkable="false"/>
+        <listgroup label="abc" selectable="false"/>
         <listitem>
             <listcell label="Mary"/>
             <listcell label="FEMALE"/>

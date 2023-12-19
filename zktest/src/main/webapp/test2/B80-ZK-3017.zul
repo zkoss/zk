@@ -24,6 +24,6 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
     </vlayout>
 
     <zscript><![CDATA[
-		textbox2.setConstraint(new SimpleConstraint("^([0-9]{1,3}(,[0-9]{1,2})?)?$", "myMsg"));
+		textbox2.setConstraint(new SimpleConstraint(java.util.regex.Pattern.compile("^([0-9]{1,3}(,[0-9]{1,2})?)?$"), "myMsg"));
 	]]></zscript>
 </zk>

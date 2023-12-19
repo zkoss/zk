@@ -16,9 +16,11 @@
 				<column label='column 4' />
 			</columns>
 			<rows>
-				<row spans='1,2'>
+				<row>
 					<label value='cell 2.1' />
-					<label value='cell 2.2 + 2.3' />
+					<cell colspan="2">
+						<label value='cell 2.2 + 2.3' />
+					</cell>
 					<label value='cell 2.4' />
 				</row>
 			</rows>
@@ -40,12 +42,14 @@
 			</columns>
 			<rows>
 				<group label="Group1:" />
-				<row spans='1,2'>
+				<row>
 					<label value='cell 2.1' />
-					<label value='cell 2.2 + 2.3' />
+					<cell colspan="2">
+						<label value='cell 2.2 + 2.3' />
+					</cell>
 					<label value='cell 2.4' />
 				</row>
-				<groupfoot spans="2,1">
+				<groupfoot>
 					<cell colspan="2" align="center">
 						<label value="footer 1" />
 					</cell>

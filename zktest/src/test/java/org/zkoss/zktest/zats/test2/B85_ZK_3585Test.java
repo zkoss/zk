@@ -32,14 +32,14 @@ public class B85_ZK_3585Test extends ZATSTestCase {
 		Assertions.assertNotEquals(cityValue, city.getValue());
 
 		Hbox collectionHbox = desktop.queryAll("hbox").get(5).as(Hbox.class);
-		int numOfCollectionLabel = collectionHbox.getLastChild().getChildren().size();
+		int numOfCollectionLabel = collectionHbox.getLastChild().getFirstChild().getChildren().size();
 		desktop.queryAll("button").get(3).click();
-		Assertions.assertEquals(numOfCollectionLabel + 1, collectionHbox.getLastChild().getChildren().size());
+		Assertions.assertEquals(numOfCollectionLabel + 1, collectionHbox.getLastChild().getFirstChild().getChildren().size());
 
 		Hbox mapHbox = desktop.queryAll("hbox").get(6).as(Hbox.class);
-		int numOfMapDiv = mapHbox.getLastChild().getChildren().size();
+		int numOfMapDiv = mapHbox.getLastChild().getFirstChild().getChildren().size();
 		desktop.queryAll("button").get(4).click();
-		Assertions.assertEquals(numOfMapDiv + 1, mapHbox.getLastChild().getChildren().size());
+		Assertions.assertEquals(numOfMapDiv + 1, mapHbox.getLastChild().getFirstChild().getChildren().size());
 
 		Textbox childName = desktop.queryAll("textbox").get(3).as(Textbox.class);
 		String name = childName.getValue();

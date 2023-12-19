@@ -1,6 +1,6 @@
 <zk>
 	Open the "test menu" in IE8, should not see a horizontal scroll bar showed.
-	<div width="100%" align="right">
+	<div width="100%" style="text-align:right">
 		<menubar width="100%" autodrop="true">
 			<menu label="test menu">
 				<menupopup>

@@ -2,7 +2,7 @@
 	xmlns:h="http://www.w3.org/1999/xhtml"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
-	<div align="center">
+	<div style="text-align:center">
 	<label value="Use columnlayout to arrange contents in window, the window in the middle column should be in the center of Browser window" />
 	</div>
 	<columnlayout>
@@ -15,7 +15,7 @@
 			<panel>
 				<panelchildren>
 					<window border="normal" title="middle window">
-						<div align="center">
+						<div style="text-align:center">
 							<label style="font-weight:bold" value="I am the center of browser!" />
 						</div>
 					</window>

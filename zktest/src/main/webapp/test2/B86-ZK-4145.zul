@@ -25,7 +25,7 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 		<div hflex="1">
 			<button iconSclass="z-icon-bars" popup="menu"/>
 		</div>
-		<div align="right" hflex="1">
+		<div style="text-align:right" hflex="1">
 			<button iconSclass="z-icon-bars" popup="menu"/>
 		</div>
 	</hlayout>
