@@ -113,6 +113,7 @@ export interface EncodeXmlOptions {
 	pre?: boolean;
 	multiline?: boolean;
 	maxlength?: number;
+	encode?: boolean;
 }
 
 export interface ProgressboxOptions {
@@ -241,6 +242,7 @@ export namespace utl_global {
 		 * <li>pre - whether to replace whitespace with `&nbsp;`</li>
 		 * <li>multiline - whether to replace linefeed with `<br>`</li>
 		 * <li>maxlength - the maximal allowed length of the text</li>
+		 * <li>encode - false to not encode the text</li>
 		 * </ul>
 		 * @returns the encoded text.
 		 */
@@ -254,7 +256,8 @@ export namespace utl_global {
 			var tl = txt.length,
 				pre = opts && opts.pre,
 				multiline = pre || (opts && opts.multiline),
-				maxlength = opts ? opts.maxlength : 0;
+				maxlength = opts ? opts.maxlength : 0,
+				encode = opts ? opts.encode : true;
 
 			if (!multiline && maxlength && tl > maxlength) {
 				var j = maxlength;
@@ -265,7 +268,7 @@ export namespace utl_global {
 			}
 
 			var out = '', k = 0, enc;
-			if (multiline || pre) {
+			if (encode !== false && (multiline || pre)) {
 				for (let j = 0; j < tl; ++j) {
 					var cc = txt.charAt(j);
 					if (enc = _encs[cc] as undefined | string) {
@@ -283,7 +286,7 @@ export namespace utl_global {
 				}
 			} else {
 				// fixed B65-ZK-1836 that opt may be an empty object.
-				return _encodeXML0(txt);
+				return encode !== false ? _encodeXML0(txt) : txt;
 			}
 
 			if (!k) return txt;

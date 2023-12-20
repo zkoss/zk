@@ -54,6 +54,6 @@ export class Listfooter extends zul.mesh.FooterWidget {
 
 	/** @internal */
 	override domLabel_(): string {
-		return zUtl.encodeXML(this.getLabel(), {maxlength: this.getMaxlength()});
+		return zUtl.encodeXML(this.getLabel(), { maxlength: this.getMaxlength(), encode: false });
 	}
 }

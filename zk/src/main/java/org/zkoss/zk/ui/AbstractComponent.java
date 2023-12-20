@@ -49,6 +49,7 @@ import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
 import org.zkoss.util.CollectionsX;
 import org.zkoss.util.Converter;
+import org.zkoss.xml.XMLs;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.au.AuService;
@@ -1853,6 +1854,8 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 	 * and <code>wgt.setAttr("value2")</code> will be invoked at the client
 	 * accordingly.
 	 *
+	 * <p>Note: the String type value will be escaped by {@link Strings#escapeJavaScript} and {@link XMLs#escapeXML}.
+	 * To allow the safe HTML, use {@link org.zkoss.zk.ui.SafeHtmlValue} to wrap the value. (since 10.0.0)
 	 * @param append whether to append the updates of properties with the same
 	 * name. If false, only the last value of the same property will be sent
 	 * to the client.
@@ -1860,8 +1863,13 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 	 * @see #smartUpdate(String, Object)
 	 */
 	protected void smartUpdate(String attr, Object value, boolean append) {
-		if (_page != null)
+		if (_page != null) {
+			if (value instanceof String) {
+				// no need to use Strings.escapeJavaScript() here.
+				value = XMLs.escapeXML((String) value);
+			}
 			getAttachedUiEngine().addSmartUpdate(this, attr, value, append);
+		}
 	}
 
 	/** A special smart update to update a value in int.

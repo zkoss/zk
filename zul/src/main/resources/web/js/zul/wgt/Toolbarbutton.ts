@@ -385,7 +385,7 @@ export class Toolbarbutton extends zul.LabelImageWidget implements zul.LabelImag
 
 	/** @internal */
 	override domContent_(): string {
-		var label = zUtl.encodeXML(this.getLabel()), img = this.domImage_(),
+		var label = this.getLabel(), img = this.domImage_(),
 			iconSclass = this.domIcon_();
 		if (!img && !iconSclass)
 			return label;

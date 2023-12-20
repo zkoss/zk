@@ -13,5 +13,5 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
 function label$mold$(out) {
-	out.push('<span', this.domAttrs_(), '>', this.getEncodedText(), '</span>');
+	out.push('<span', this.domAttrs_(), '>', this._value, '</span>');
 }

@@ -629,7 +629,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		if (v) html += ' name="' + v + '"';
 		if (this._disabled) html += ' disabled="disabled"';
 		if (this._readonly) html += ' readonly="readonly"';
-		if (this._placeholder) html += ' placeholder="' + zUtl.encodeXML(this._placeholder) + '"';
+		if (this._placeholder) html += ' placeholder="' + this._placeholder + '"';
 		if (this._inputAttributes) {
 			for (var key in this._inputAttributes) {
 				var val = this._inputAttributes[key];
@@ -650,7 +650,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 
 	/** @internal */
 	_areaText(): string {
-		return zUtl.encodeXML(this.coerceToString_(this._value));
+		return this.coerceToString_(this._value);
 	}
 
 	/**

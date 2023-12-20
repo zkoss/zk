@@ -25,6 +25,7 @@ import java.util.Map;
 import org.zkoss.json.JSONAware;
 import org.zkoss.json.JSONs;
 import org.zkoss.lang.Strings;
+import org.zkoss.xml.XMLs;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 
@@ -153,7 +154,7 @@ public class JsContentRenderer implements ContentRenderer {
 			_buf.append((String) null);
 		else {
 			_buf.append('\'');
-			_buf.append(Strings.escapeJavaScript(value));
+			_buf.append(Strings.escapeJavaScript(XMLs.escapeXML(value)));
 			_buf.append('\'');
 		}
 	}

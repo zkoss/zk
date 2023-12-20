@@ -127,7 +127,7 @@ export class Listcell extends zul.LabelImageWidget<HTMLTableCellElement> {
 
 	/** @internal */
 	override domLabel_(): string {
-		return zUtl.encodeXML(this.getLabel(), { maxlength: this.getMaxlength() });
+		return zUtl.encodeXML(this.getLabel(), { maxlength: this.getMaxlength(), encode: false });
 	}
 
 	/** @internal */

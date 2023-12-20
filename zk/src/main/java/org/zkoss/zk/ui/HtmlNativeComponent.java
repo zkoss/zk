@@ -294,8 +294,8 @@ public class HtmlNativeComponent extends AbstractComponent implements DynamicTag
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
 
-		render(renderer, "prolog", getPrologHalf());
-		render(renderer, "epilog", getEpilogHalf());
+		render(renderer, "prolog", SafeHtmlValue.valueOf(getPrologHalf()));
+		render(renderer, "epilog", SafeHtmlValue.valueOf(getEpilogHalf()));
 	}
 
 	private String getPrologHalf() {

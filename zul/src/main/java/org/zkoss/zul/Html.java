@@ -20,6 +20,7 @@ import java.io.Writer;
 
 import org.zkoss.json.JavaScriptValue;
 import org.zkoss.lang.Objects;
+import org.zkoss.zk.ui.SafeHtmlValue;
 import org.zkoss.zk.ui.sys.HtmlPageRenders;
 import org.zkoss.zul.impl.XulElement;
 
@@ -72,7 +73,7 @@ import org.zkoss.zul.impl.XulElement;
  * @author tomyeh
  */
 public class Html extends XulElement {
-	private String _content = "";
+	private SafeHtmlValue _content = SafeHtmlValue.EMPTY;
 
 	/** Constructs a {@link Html} component to embed HTML tags.
 	 */
@@ -83,12 +84,19 @@ public class Html extends XulElement {
 	 * with the specified content.
 	 */
 	public Html(String content) {
-		_content = content != null ? content : "";
+		_content = SafeHtmlValue.valueOf(content != null ? content : "");
 	}
 
 	/** Returns the embedded content (i.e., HTML tags).
 	 */
 	public String getContent() {
+		return _content.toString();
+	}
+
+	/** Returns the embedded content (i.e., HTML tags).
+	 * @since 10.0.0
+	 */
+	public SafeHtmlValue getRawContent() {
 		return _content;
 	}
 
@@ -107,10 +115,9 @@ public class Html extends XulElement {
 	public void setContent(String content) {
 		if (content == null)
 			content = "";
-		if (!Objects.equals(_content, content)) {
-			_content = content;
-			smartUpdate("content", getContent());
-			//allow deriving to override getContent()
+		if (!Objects.equals(_content, SafeHtmlValue.valueOf(content))) {
+			_content = SafeHtmlValue.valueOf(content);
+			smartUpdate("content", getRawContent());
 		}
 	}
 
@@ -135,7 +142,7 @@ public class Html extends XulElement {
 			if (cnt == null)
 				renderer.render("content", new JavaScriptValue("zk('" + getUuid() + "').detachChildren()"));
 			else
-				render(renderer, "content", cnt);
+				render(renderer, "content", getRawContent());
 		}
 	}
 

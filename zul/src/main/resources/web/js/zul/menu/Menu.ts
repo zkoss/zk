@@ -213,7 +213,7 @@ export class Menu extends zul.LabelImageWidget implements zul.LabelImageWidgetWi
 	/** @internal */
 	override domContent_(): string {
 		var label = '<span class="' + this.$s('text') + '">'
-					+ (zUtl.encodeXML(this.getLabel())) + '</span>',
+					+ this.getLabel() + '</span>',
 		img = this.getImage(),
 		icon = '<i class="' + this.$s('icon') + ' z-icon-caret-'
 				+ (this.isTopmost() && !this.isVertical_() ? 'down' : 'right') + '" aria-hidden="true"></i>',

@@ -268,7 +268,7 @@ export class Tab extends zul.LabelImageWidget implements zul.LabelImageWidgetWit
 
 	/** @internal */
 	override domContent_(): string {
-		let label = zUtl.encodeXML(this.getLabel()),
+		let label = this.getLabel(),
 			img = this.getImage();
 		const iconSclass = this.domIcon_();
 

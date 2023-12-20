@@ -1211,7 +1211,7 @@ export class LayoutRegion extends zul.Widget {
 					out.push(' style="display:none;"');
 				out.push('></i>');
 			}
-			out.push(zUtl.encodeXML(this._title), '</div>');
+			out.push(this._title, '</div>');
 		}
 	}
 

@@ -20,9 +20,12 @@ import java.io.IOException;
 import java.util.Map;
 
 import org.zkoss.lang.Objects;
+import org.zkoss.lang.Strings;
+import org.zkoss.xml.XMLs;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.out.AuInvoke;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.SafeHtmlValue;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.InputEvent;
@@ -41,7 +44,7 @@ import org.zkoss.zul.impl.LabelImageElement;
  */
 public class Menu extends LabelImageElement implements org.zkoss.zk.ui.ext.Disable {
 	private Menupopup _popup;
-	private String _content = "";
+	private SafeHtmlValue _content = SafeHtmlValue.EMPTY;
 	private boolean _disabled = false;
 
 	static {
@@ -83,10 +86,22 @@ public class Menu extends LabelImageElement implements org.zkoss.zk.ui.ext.Disab
 	 * @since 5.0.0
 	 */
 	public String getContent() {
+		return _content.toString();
+	}
+
+	/** Returns the embedded content (i.e., HTML tags) that is
+	 * shown as part of the description.
+	 *
+	 * <p>It is useful to show the description in more versatile way.
+	 *
+	 * @since 10.0.0
+	 */
+	public SafeHtmlValue getRawContent() {
 		return _content;
 	}
 
-	/** Sets the embedded content (i.e., HTML tags) that is
+
+	/** Sets the embedded content that is
 	 * shown as part of the description.
 	 *
 	 * <p>It is useful to show the description in more versatile way.
@@ -94,14 +109,32 @@ public class Menu extends LabelImageElement implements org.zkoss.zk.ui.ext.Disab
 	 * <p>There is a way to create Colorbox automatically by using
 	 * #color=#RRGGBB, usage example <code>setContent("#color=#FFFFFF")</code>
 	 *
+	 * <h3>Security Note</h3>
+	 * <p>Since 10.0.0, the content assigned to this method will be escaped by default.
+	 * To avoid escaping, use {@link #setContent(SafeHtmlValue)} instead.
 	 * @since 5.0.0
 	 */
 	public void setContent(String content) {
 		if (content == null)
 			content = "";
+		content = Strings.escapeJavaScript(XMLs.escapeXML(content));
+		if (!Objects.equals(_content, SafeHtmlValue.valueOf(content))) {
+			_content = SafeHtmlValue.valueOf(content);
+			smartUpdate("content", getRawContent());
+		}
+	}
+
+
+	/** Sets the embedded content (i.e., HTML tags) that is
+	 * shown as part of the description.
+	 * @since 10.0.0
+	 */
+	public void setContent(SafeHtmlValue content) {
+		if (content == null)
+			content = SafeHtmlValue.EMPTY;
 		if (!Objects.equals(_content, content)) {
 			_content = content;
-			smartUpdate("content", content);
+			smartUpdate("content", getRawContent());
 		}
 	}
 
@@ -141,7 +174,7 @@ public class Menu extends LabelImageElement implements org.zkoss.zk.ui.ext.Disab
 
 	protected void renderProperties(ContentRenderer renderer) throws IOException {
 		super.renderProperties(renderer);
-		render(renderer, "content", _content);
+		render(renderer, "content", getRawContent());
 		render(renderer, "disabled", _disabled);
 	}
 

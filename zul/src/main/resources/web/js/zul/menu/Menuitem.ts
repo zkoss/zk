@@ -360,7 +360,7 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 	/** @internal */
 	override domContent_(): string {
 		var label = '<span class="' + this.$s('text') + '">'
-			+ (zUtl.encodeXML(this.getLabel())) + '</span>',
+			+ this.getLabel() + '</span>',
 			icon = '<i class="' + this.$s('icon') + ' z-icon-check" aria-hidden="true"></i>',
 			img = this.getImage(),
 			iconSclass = this.domIcon_();

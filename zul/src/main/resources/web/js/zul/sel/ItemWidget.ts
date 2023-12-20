@@ -313,7 +313,7 @@ export class ItemWidget extends zul.Widget<HTMLTableRowElement> implements zul.m
 		const iterator = this.getMeshWidget()!.itemIterator();
 		let cnt = 2,
 			msg: string | undefined;
-		if (!this.isSelected()) return zUtl.encodeXML(this.getLabel()!);
+		if (!this.isSelected()) return this.getLabel();
 		while (iterator.hasNext()) {
 			const item = iterator.next()!;
 			if (item.isSelected()) {

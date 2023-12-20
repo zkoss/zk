@@ -213,7 +213,7 @@ export class Option extends zul.Widget<HTMLOptionElement> {
 
 	/** @internal */
 	domLabel_(): string {
-		return zUtl.encodeXML(this.getLabel()!, {maxlength: this.getMaxlength()!});
+		return zUtl.encodeXML(this.getLabel()!, { maxlength: this.getMaxlength(), encode: false });
 	}
 
 	/** @internal */

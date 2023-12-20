@@ -27,6 +27,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.SafeHtmlValue;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.SelectEvent;
@@ -63,7 +64,7 @@ public class Selectbox extends HtmlBasedComponent implements Disable {
 	private static final String ATTR_ON_INIT_RENDER_POSTED = "org.zkoss.zul.onInitLaterPosted";
 
 	private transient boolean _childable;
-	private transient String[] _tmpdatas;
+	private transient SafeHtmlValue[] _tmpdatas;
 
 	static {
 		addClientEvent(Selectbox.class, Events.ON_SELECT, CE_DUPLICATE_IGNORE | CE_IMPORTANT);
@@ -279,7 +280,7 @@ public class Selectbox extends HtmlBasedComponent implements Disable {
 
 	public void onInitRenderNow() {
 		if (_model != null) {
-			_tmpdatas = new String[_model.getSize()];
+			_tmpdatas = new SafeHtmlValue[_model.getSize()];
 			final boolean old = _childable;
 			try {
 				_childable = true;
@@ -290,7 +291,7 @@ public class Selectbox extends HtmlBasedComponent implements Disable {
 					final Object value = _model.getElementAt(i);
 					if (_jsel < 0 && smodel.isSelected(value))
 						_jsel = i;
-					_tmpdatas[i] = renderer.render(this, value, i);
+					_tmpdatas[i] = SafeHtmlValue.valueOf(renderer.render(this, value, i));
 				}
 			} catch (Exception e) {
 				throw UiException.Aide.wrap(e);

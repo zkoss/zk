@@ -209,7 +209,7 @@ export class Treecol extends zul.mesh.SortWidget {
 
 	/** @internal */
 	override domLabel_(): string {
-		return zUtl.encodeXML(this.getLabel(), {maxlength: this._maxlength});
+		return zUtl.encodeXML(this.getLabel(), { maxlength: this.getMaxlength(), encode: false });
 	}
 
 	/** @internal */

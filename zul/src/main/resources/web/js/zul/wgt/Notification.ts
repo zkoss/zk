@@ -86,7 +86,7 @@ export class Notification extends zul.wgt.Popup {
 		var type = this._type,
 			s = super.domClass_(no);
 		if (type)
-			s += ' ' + this.$s(zUtl.encodeXML(type));
+			s += ' ' + this.$s(type);
 		return s;
 	}
 

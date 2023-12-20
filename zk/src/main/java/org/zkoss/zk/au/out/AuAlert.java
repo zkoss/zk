@@ -16,6 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.au.out;
 
+import org.zkoss.xml.XMLs;
 import org.zkoss.zk.au.AuResponse;
 
 /**
@@ -28,7 +29,7 @@ import org.zkoss.zk.au.AuResponse;
  */
 public class AuAlert extends AuResponse {
 	public AuAlert(String message) {
-		super("alert", message); //component-independent
+		super("alert", XMLs.encodeText(message)); //component-independent
 	}
 
 	/**
@@ -39,7 +40,7 @@ public class AuAlert extends AuResponse {
 	 * @since 7.0.0
 	 */
 	public AuAlert(String message, boolean disabledAuRequest) {
-		super("alert", new Object[] { message, null, null, disabledAuRequest }); //component-independent
+		super("alert", new Object[] { XMLs.encodeText(message), null, null, disabledAuRequest }); //component-independent
 	}
 
 	/**
@@ -48,7 +49,7 @@ public class AuAlert extends AuResponse {
 	 * @since 5.0.3
 	 */
 	public AuAlert(String message, String title) {
-		super("alert", new String[] { message, title }); //component-independent
+		super("alert", new String[] { XMLs.encodeText(message), title }); //component-independent
 	}
 
 	/**
@@ -60,6 +61,6 @@ public class AuAlert extends AuResponse {
 	 * @since 5.0.3
 	 */
 	public AuAlert(String message, String title, String icon) {
-		super("alert", new String[] { message, title, icon }); //component-independent
+		super("alert", new String[] { XMLs.encodeText(message), title, icon }); //component-independent
 	}
 }

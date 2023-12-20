@@ -19,7 +19,10 @@ package org.zkoss.zul;
 import java.io.Serializable;
 
 import org.zkoss.lang.Objects;
+import org.zkoss.lang.Strings;
+import org.zkoss.xml.XMLs;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.SafeHtmlValue;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zul.impl.LabelImageElement;
 
@@ -36,7 +39,7 @@ import org.zkoss.zul.impl.LabelImageElement;
 public class Comboitem extends LabelImageElement implements org.zkoss.zk.ui.ext.Disable {
 	private String _desc = "";
 	private transient Object _value;
-	private String _content = "";
+	private SafeHtmlValue _content = SafeHtmlValue.EMPTY;
 	private boolean _disabled;
 	private transient int _index;
 
@@ -101,34 +104,50 @@ public class Comboitem extends LabelImageElement implements org.zkoss.zk.ui.ext.
 	 * @since 3.0.0
 	 */
 	public String getContent() {
-		return _content;
+		return _content.toString();
 	}
 
-	/** Sets the embedded content (i.e., HTML tags) that is
+	/** Returns the embedded content (i.e., HTML tags) that is
 	 * shown as part of the description.
 	 *
 	 * <p>It is useful to show the description in more versatile way.
 	 *
-	 * <p>Default: empty ("").
-	 *
-	 * <p>Deriving class can override it to return whatever it wants
-	 * other than null.
+	 * @see #getDescription
+	 * @since 10.0.0
+	 */
+	public SafeHtmlValue getRawContent() {
+		return _content;
+	}
+
+	/** Sets the embedded content that is
+	 * shown as part of the description.
 	 *
 	 * <h3>Security Note</h3>
-	 * <p>Unlike other methods, the content assigned to this method
-	 * is generated directly to the browser without escaping.
-	 * Thus, it is better not to have something input by the user to avoid
-	 * any <a href="http://books.zkoss.org/wiki/ZK_Developer%27s_Reference/Security_Tips/Cross-site_scripting">XSS</a>
-	 * attach.
+	 * <p>Since 10.0.0, the content assigned to this method will be escaped by default.
+	 * To avoid escaping, use {@link #setContent(SafeHtmlValue)} instead.
 	 * @see #setDescription
 	 * @since 3.0.0
 	 */
 	public void setContent(String content) {
 		if (content == null)
 			content = "";
+		content = Strings.escapeJavaScript(XMLs.escapeXML(content));
+		if (!Objects.equals(_content, SafeHtmlValue.valueOf(content))) {
+			_content = SafeHtmlValue.valueOf(content);
+			smartUpdate("content", getRawContent());
+		}
+	}
+
+	/** Sets the embedded content (i.e., HTML tags) that is
+	 * shown as part of the description.
+	 * @since 10.0.0
+	 */
+	public void setContent(SafeHtmlValue content) {
+		if (content == null)
+			content = SafeHtmlValue.EMPTY;
 		if (!Objects.equals(_content, content)) {
 			_content = content;
-			smartUpdate("content", getContent()); //allow overriding getContent()
+			smartUpdate("content", getRawContent());
 		}
 	}
 
@@ -203,7 +222,7 @@ public class Comboitem extends LabelImageElement implements org.zkoss.zk.ui.ext.
 
 		render(renderer, "disabled", _disabled);
 		render(renderer, "description", getDescription()); //allow overriding getDescription()
-		render(renderer, "content", getContent()); //allow overriding getContent()
+		render(renderer, "content", getRawContent()); //allow overriding getContent()
 
 		if (_value instanceof String) {
 			render(renderer, "value", _value);

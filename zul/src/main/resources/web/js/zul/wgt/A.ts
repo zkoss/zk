@@ -235,7 +235,7 @@ export class A extends zul.LabelImageWidget<HTMLAnchorElement> implements zul.La
 
 	/** @internal */
 	override domContent_(): string {
-		var label = zUtl.encodeXML(this.getLabel()),
+		var label = this.getLabel(),
 			img = this.domImage_(),
 			iconSclass = this.domIcon_();
 		if (!img && !iconSclass)

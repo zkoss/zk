@@ -3160,7 +3160,7 @@ new zul.wnd.Window({
 			if ((s = this.domClass_(no)))
 				out += ' class="' + s + '"';
 			if ((s = this.domTooltiptext_()))
-				out += ' title="' + zUtl.encodeXML(s) + '"'; // ZK-676
+				out += ' title="' + s + '"'; // ZK-676
 			if ((tabIndex = this.getTabindex()) != undefined)
 				out += ' tabindex="' + tabIndex + '"';
 		} else {

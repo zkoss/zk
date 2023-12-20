@@ -32,6 +32,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.SafeHtmlValue;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
@@ -520,8 +521,8 @@ public class AbstractTag extends AbstractComponent implements DynamicPropertied,
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 			throws java.io.IOException {
 		super.renderProperties(renderer);
-		render(renderer, "prolog", getPrologHalf(false));
-		render(renderer, "epilog", getEpilogHalf());
+		render(renderer, "prolog", SafeHtmlValue.valueOf(getPrologHalf(false)));
+		render(renderer, "epilog", SafeHtmlValue.valueOf(getEpilogHalf()));
 	}
 
 	/**

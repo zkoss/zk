@@ -114,7 +114,7 @@ export class Treecell extends zul.LabelImageWidget<HTMLTableCellElement> {
 
 	/** @internal */
 	override domLabel_(): string {
-		return zUtl.encodeXML(this.getLabel(), {maxlength: this.getMaxlength()});
+		return zUtl.encodeXML(this.getLabel(), { maxlength: this.getMaxlength(), encode: false });
 	}
 
 	override getTextNode(): HTMLElement | undefined {

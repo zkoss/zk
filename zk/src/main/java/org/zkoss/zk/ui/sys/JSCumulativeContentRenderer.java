@@ -23,6 +23,7 @@ import org.zkoss.json.JSONAware;
 import org.zkoss.json.JSONs;
 import org.zkoss.lang.Generics;
 import org.zkoss.lang.Strings;
+import org.zkoss.xml.XMLs;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 
@@ -95,7 +96,7 @@ public class JSCumulativeContentRenderer implements ContentRenderer {
 		if (value == null)
 			return null;
 		else {
-			return Strings.escapeJavaScript(value);
+			return Strings.escapeJavaScript(XMLs.escapeXML(value));
 		}
 	}
 

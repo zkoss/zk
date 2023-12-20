@@ -141,7 +141,7 @@ export class Combobutton extends zul.wgt.Button {
 	/** @internal */
 	override domContent_(): string {
 		var label = '<span id="' + this.uuid + '-txt" class="' + this.$s('text') + '">'
-			+ zUtl.encodeXML(this.getLabel()) + '</span>',
+			+ this.getLabel() + '</span>',
 			img = this.domImage_(),
 			iconSclass = this.domIcon_();
 		if (!img && !iconSclass) return label;

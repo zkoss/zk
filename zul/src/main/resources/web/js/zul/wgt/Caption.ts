@@ -41,7 +41,6 @@ export class Caption extends zul.LabelImageWidget<HTMLDivElement> {
 			title = this.parent ? this.parent._title : '',
 			iconSclass = this.domIcon_();
 		if (title) label = label ? title + ' - ' + label : title;
-		label = zUtl.encodeXML(label);
 		if (!img && !iconSclass) return label;
 
 		if (!img) img = iconSclass;

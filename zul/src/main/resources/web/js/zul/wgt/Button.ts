@@ -368,7 +368,7 @@ export class Button extends zul.LabelImageWidget<HTMLButtonElement> implements z
 
 	/** @internal */
 	override domContent_(): string {
-		var label = zUtl.encodeXML(this.getLabel()),
+		var label = this.getLabel(),
 			img = this.getImage(),
 			iconSclass = this.domIcon_();
 		if (!img && !iconSclass) return label;
