@@ -211,11 +211,16 @@ export class Tree extends zul.sel.SelectWidget {
 		}
 		this._onTreechildrenRemoved(item.treechildren);
 		if (fixSel) this._fixSelected();
-		const upperItem = item.previousSibling || item.getParentItem();
-		if (upperItem) {
-			this._shallSyncFocus = upperItem;
+		// ZK-5529: Tree focus is lost after loading new rows
+		if (item.isSelected()) {
+			const upperItem = item.previousSibling || item.getParentItem();
+			if (upperItem) {
+				this._shallSyncFocus = upperItem;
+			} else {
+				this._shallSyncFocus = true; // reset the anchor to the top;
+			}
 		} else {
-			this._shallSyncFocus = true; // reset the anchor to the top;
+			this._shallSyncFocus = this._sel;
 		}
 	}
 
