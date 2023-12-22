@@ -20,6 +20,7 @@ ZK 10.0.0
   ZK-5569: Radiogroup onCheck event type mismatch
   ZK-5161: page directive's attributes are not encoded before rendering into HTML
   ZK-5598: CKEditor requests ExecutionImpl.encodeURL with null value, causes NPE in embedded mode
+  ZK-5593: inputWidget bind_ accesses input dom node may not exist
 
 * Upgrade Notes
   + Upgrade commons-fileupload to commons-fileupload2-javax 2.0.0-M1 and commons-io to 2.13.0 to support jakarta-friendly uploads
