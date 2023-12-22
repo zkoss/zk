@@ -132,6 +132,7 @@ function _setCtrlKeysErr(msg: string): void {
 }
 function _parseParamFunc(event: zk.Event | undefined, funcBody: string): number {
 	if (funcBody.includes('(') && funcBody.includes(')')) {
+		// eslint-disable-next-line no-new-func
 		var func = new Function('event', 'return ' + funcBody + ';');
 		return func(event) as number;
 	} else {

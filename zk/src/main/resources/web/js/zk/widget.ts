@@ -2256,6 +2256,7 @@ new zul.wnd.Window({
 			if (tagEnd) out.push(tagEnd);
 
 			//4. update DOM
+			// eslint-disable-next-line @microsoft/sdl/no-html-method
 			jq(cave).html(out.join(''));
 
 			//5. bind
@@ -4976,6 +4977,7 @@ new zul.wnd.Window({
 		}
 		if (fn) {
 			inf[listener] = bklsns[listener]
+				// eslint-disable-next-line no-new-func
 				= typeof fn != 'function' ? new Function('var event=arguments[0];' + fn) : fn;
 			this.listen(inf);
 		}
@@ -4992,6 +4994,7 @@ new zul.wnd.Window({
 			inf = {};
 		if (fn) {
 			inf[listener0] = bklsns[listener0]
+				// eslint-disable-next-line no-new-func
 				= typeof fn != 'function' ? new Function('var event=arguments[0];' + fn) : fn;
 			this.listen(inf);
 		}

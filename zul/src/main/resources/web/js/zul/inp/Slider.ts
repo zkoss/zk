@@ -445,7 +445,7 @@ export class Slider extends zul.Widget {
 			.append('<div id="zul_slidetip" class="'
 			+ widget.$s('popup')
 			+ (sclass ? ' ' + sclass + '">' : '">')
-			+ widget._slidingtext.replace(/\{0\}/g, widget.slidepos as unknown as string)
+			+ DOMPurify.sanitize(widget._slidingtext.replace(/\{0\}/g, widget.slidepos as unknown as string))
 			+ '</div>');
 
 		widget.slidetip = jq('#zul_slidetip')[0];
@@ -467,7 +467,8 @@ export class Slider extends zul.Widget {
 			widget.slidepos = widget._curpos = pos = widget._constraintPos(pos);
 			var text = isDecimal ? pos.toFixed(Slider._digitsAfterDecimal(Slider._getStep(widget))) : pos;
 			if (widget.slidetip) // B70-ZK-2081: Replace "{0}" with the position.
-				widget.slidetip.innerHTML = widget._slidingtext.replace(/\{0\}/g, text as string);
+				// eslint-disable-next-line @microsoft/sdl/no-inner-html
+				widget.slidetip.innerHTML = DOMPurify.sanitize(widget._slidingtext.replace(/\{0\}/g, text as string));
 			widget.fire('onScrolling', isDecimal ? {decimal: pos} : pos);
 		}
 		widget._fixPos();

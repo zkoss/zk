@@ -106,7 +106,7 @@ export class Listbox extends zul.sel.SelectWidget {
 					emptyContentDiv.addClass(emptyContentClz);
 				else
 					emptyContentDiv.removeClass(emptyContentClz);
-				emptyContentDiv.html(emptyMessage);
+				emptyContentDiv.text(emptyMessage);
 			}
 		}
 
@@ -476,7 +476,7 @@ export class Listbox extends zul.sel.SelectWidget {
 			'<div id="', this.uuid, '-empty-content"');
 		if (this._emptyMessage && this._emptyMessage.trim().length != 0)
 			out.push('class="', this.$s('emptybody-content'), '"');
-		out.push('>', this._emptyMessage!, '</div></td></tr></tbody>');
+		out.push('>', zUtl.encodeXML(this._emptyMessage!), '</div></td></tr></tbody>');
 	}
 
 	/** @internal */

@@ -77,7 +77,7 @@ export class Paging extends zul.Widget {
 				if (!_rerenderIfBothPaging(this)) {
 					const info = this.$n('info');
 					if (info) {
-						info.innerHTML = this.infoText_();
+						info.textContent = this.infoText_();
 					} else if (this._totalSize) {
 						this.rerender(); // recreate infoTag
 					}

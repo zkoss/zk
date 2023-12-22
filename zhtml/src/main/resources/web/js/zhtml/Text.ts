@@ -43,6 +43,7 @@ export class Text extends zhtml.Widget {
 			var n = this.$n();
 			if (n) {
 				var val = this._value;
+				// eslint-disable-next-line @microsoft/sdl/no-inner-html
 				n.innerHTML = this._encode ? zUtl.encodeXML(val) : val;
 				// See Bug 2871080 and ZK-294
 			}
@@ -71,6 +72,7 @@ export class Text extends zhtml.Widget {
 			var n = this.$n();
 			if (n) {
 				var val = this._value;
+				// eslint-disable-next-line @microsoft/sdl/no-inner-html
 				n.innerHTML = this._encode ? zUtl.encodeXML(val) : val;
 				// See Bug 2871080 and ZK-294
 			}

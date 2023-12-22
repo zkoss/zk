@@ -168,7 +168,8 @@ export class Option extends zul.Widget<HTMLOptionElement> {
 	/** @internal */
 	updateLabel_(): void {
 		var n = this.$n();
-		if (n) jq(n).html(this.domLabel_());
+		// eslint-disable-next-line @microsoft/sdl/no-inner-html
+		if (n) n.innerHTML = DOMPurify.sanitize(this.domLabel_());
 	}
 
 	/**

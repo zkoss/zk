@@ -192,6 +192,7 @@ function regClass<S extends typeof ZKObject>(jclass: S): S {
 _zk.regClass = regClass;
 
 function defGet(nm: string): Getter {
+	// eslint-disable-next-line no-new-func
 	return new Function('return this.' + nm + ';');
 }
 function defSet00(nm: string): GeneratedSetter {
@@ -2049,7 +2050,7 @@ _zk._Erbx = class _Erbx extends ZKObject { //used in HTML tags
 
 		var id = (_erbx as _Erbx).id;
 		jq('#' + id + ' .errornumbers')
-			.html(++_errcnt + ' Errors');
+			.text(++_errcnt + ' Errors');
 		jq('#' + id + ' .messages')
 			.append('<div class="newmessage">' + zUtl.encodeXML(msg) + '</hr></div>');
 		jq('#' + id + ' .newmessage')
@@ -2157,44 +2158,6 @@ declare namespace _zk {
 	export let resourceURI: string | undefined;
 	export let contextURI: string | undefined;
 	export let dataHandlers: Record<string, string | DataHandler> | undefined;
-
-	// not used in ./zk
-	// eslint-disable-next-line zk/preferStrictBooleanType
-	export let ie6: boolean | undefined;
-	/** @internal */
-	// eslint-disable-next-line zk/preferStrictBooleanType
-	export let ie6_: boolean | undefined;
-	// eslint-disable-next-line zk/preferStrictBooleanType
-	export let ie7: boolean | undefined;
-	/** @internal */
-	// eslint-disable-next-line zk/preferStrictBooleanType
-	export let ie7_: boolean | undefined;
-	// eslint-disable-next-line zk/preferStrictBooleanType
-	export let ie8: boolean | undefined;
-	/** @internal */
-	// eslint-disable-next-line zk/preferStrictBooleanType
-	export let ie8_: boolean | undefined;
-	// eslint-disable-next-line zk/preferStrictBooleanType
-	export let ie8c: boolean | undefined;
-	/**
-	 * Whether it is Internet Exploer 9 or later.
-	 * @since 5.0.5
-	 */
-	// eslint-disable-next-line zk/preferStrictBooleanType
-	export let ie9: boolean | undefined;
-	/** @internal */
-	// eslint-disable-next-line zk/preferStrictBooleanType
-	export let ie9_: boolean | undefined;
-	// eslint-disable-next-line zk/preferStrictBooleanType
-	export let ie10: boolean | undefined;
-	/** @internal */
-	// eslint-disable-next-line zk/preferStrictBooleanType
-	export let ie10_: boolean | undefined;
-	// eslint-disable-next-line zk/preferStrictBooleanType
-	export let ie11: boolean | undefined;
-	/** @internal */
-	// eslint-disable-next-line zk/preferStrictBooleanType
-	export let ie11_: boolean | undefined;
 
 	// zul/db/datefmt
 	export const APM: string[];

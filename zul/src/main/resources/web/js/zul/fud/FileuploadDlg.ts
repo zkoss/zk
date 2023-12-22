@@ -92,10 +92,10 @@ export class ModalFileViewer extends zk.Object {
 	}
 
 	update(sent: number, total: number): void {
-		jq('#' + this._uplder.id + '-sent').html(Math.round((total / 1024) * sent / 100) + msgzk.KBYTES);
+		jq('#' + this._uplder.id + '-sent').text(Math.round((total / 1024) * sent / 100) + msgzk.KBYTES);
 		if (!this.updated) {
 			this.updated = true;
-			jq('#' + this._uplder.id + '-total').html(Math.round(total / 1024) + msgzk.KBYTES);
+			jq('#' + this._uplder.id + '-total').text(Math.round(total / 1024) + msgzk.KBYTES);
 		}
 	}
 

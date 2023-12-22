@@ -82,6 +82,7 @@ window.zkInitCrashTimer = setTimeout(function () {
 				}
 				div = style + div + icon + msg + copyright + btn + '</div>';
 				body.style.background = 'rgb(35,48,64)';
+				// eslint-disable-next-line @microsoft/sdl/no-inner-html
 				body.innerHTML = div;
 			};
 		}

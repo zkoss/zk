@@ -1391,7 +1391,8 @@ export class JQZK {
 			key = newStyle + text;
 		if (!(result = _cache[key])) {
 			// ZK-2181: remove name attritube to prevent the radio has wrong status
-			_txtSizDiv.innerHTML = text.replace(/name="[^"]*"/g, '');
+			// eslint-disable-next-line @microsoft/sdl/no-inner-html
+			_txtSizDiv.innerHTML = DOMPurify.sanitize(text.replace(/name="[^"]*"/g, ''));
 			_txtSizDiv.style.cssText = _defaultStyle + newStyle;
 			_txtSizDiv.style.display = '';
 			result = _cache[key] = [_txtSizDiv.offsetWidth, _txtSizDiv.offsetHeight];

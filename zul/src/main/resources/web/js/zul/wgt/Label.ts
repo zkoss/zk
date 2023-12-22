@@ -48,6 +48,7 @@ export class Label extends zul.Widget {
 
 		if (o !== value || opts?.force) {
 			var n = this.$n();
+			// eslint-disable-next-line @microsoft/sdl/no-inner-html
 			if (n) n.innerHTML = this.getEncodedText();
 		}
 
@@ -72,6 +73,7 @@ export class Label extends zul.Widget {
 
 		if (o !== multiline || opts?.force) {
 			var n = this.$n();
+			// eslint-disable-next-line @microsoft/sdl/no-inner-html
 			if (n) n.innerHTML = this.getEncodedText();
 		}
 
@@ -103,6 +105,7 @@ export class Label extends zul.Widget {
 
 		if (o !== pre || opts?.force) {
 			var n = this.$n();
+			// eslint-disable-next-line @microsoft/sdl/no-inner-html
 			if (n) n.innerHTML = this.getEncodedText();
 		}
 
@@ -126,6 +129,7 @@ export class Label extends zul.Widget {
 
 		if (o !== maxlength || opts?.force) {
 			var n = this.$n();
+			// eslint-disable-next-line @microsoft/sdl/no-inner-html
 			if (n) n.innerHTML = this.getEncodedText();
 		}
 

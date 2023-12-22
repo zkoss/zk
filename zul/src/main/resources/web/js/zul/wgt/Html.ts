@@ -45,6 +45,7 @@ export class Html extends zul.Widget<HTMLHtmlElement> {
 
 		if (o !== content || opts?.force) {
 			var n = this.$n();
+			// eslint-disable-next-line @microsoft/sdl/no-inner-html
 			if (n) n.innerHTML = content || '';
 		}
 

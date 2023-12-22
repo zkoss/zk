@@ -21,39 +21,40 @@ it will be useful, but WITHOUT ANY WARRANTY.
 export class Script extends zk.Widget {
 	/** @internal */
 	_src?: string;
-    /** @internal */
-    _content?: string;
+	/** @internal */
+	_content?: string;
 	/** @internal */
 	_charset?: string;
 	/** @internal */
 	_srcrun?: boolean;
 	/** @internal */
-	// eslint-disable-next-line @typescript-eslint/ban-types
+		// eslint-disable-next-line @typescript-eslint/ban-types
 	_fn?: Function;
 	packages?: string;
 
-    /**
+	/**
 	 * @returns the content of the script element.
-     * By content we mean the JavaScript codes that will be enclosed
-     * by the HTML SCRIPT element.
-     *
-     * @defaultValue `null`.
-     */
-    getContent(): string | undefined {
-        return this._content;
-    }
+	 * By content we mean the JavaScript codes that will be enclosed
+	 * by the HTML SCRIPT element.
+	 *
+	 * @defaultValue `null`.
+	 */
+	getContent(): string | undefined {
+		return this._content;
+	}
 
-    /**
+	/**
 	 * Sets the content of the script element.
-     * By content we mean the JavaScript codes that will be enclosed
-     * by the HTML SCRIPT element.
-     */
-    setContent(content: string, opts?: Record<string, boolean>): this {
-        const o = this._content;
-        this._content = content;
+	 * By content we mean the JavaScript codes that will be enclosed
+	 * by the HTML SCRIPT element.
+	 */
+	setContent(content: string, opts?: Record<string, boolean>): this {
+		const o = this._content;
+		this._content = content;
 
-        if (o !== content || opts?.force) {
+		if (o !== content || opts?.force) {
 			if (content) {
+				// eslint-disable-next-line no-new-func
 				this._fn = typeof content == 'function' ? content : new Function(content);
 				if (this.desktop) //check parent since no this.$n()
 					this._exec();
@@ -61,32 +62,32 @@ export class Script extends zk.Widget {
 				delete this._fn;
 		}
 
-        return this;
-    }
+		return this;
+	}
 
-    /**
+	/**
 	 * @returns the URI of the source that contains the script codes.
-     * @defaultValue `null`.
-     */
-    getSrc(): string | undefined {
-        return this._src;
-    }
+	 * @defaultValue `null`.
+	 */
+	getSrc(): string | undefined {
+		return this._src;
+	}
 
-    /**
-     * Sets the URI of the source that contains the script codes.
-     *
-     * <p>You either add the script codes directly with the {@link Label}
-     * children, or
-     * set the URI to load the script codes with {@link setSrc}.
-     * But, not both.
-     *
-     * @param src - the URI of the source that contains the script codes
-     */
-    setSrc(src: string, opts?: Record<string, boolean>): this {
-        const o = this._src;
-        this._src = src;
+	/**
+	 * Sets the URI of the source that contains the script codes.
+	 *
+	 * <p>You either add the script codes directly with the {@link Label}
+	 * children, or
+	 * set the URI to load the script codes with {@link setSrc}.
+	 * But, not both.
+	 *
+	 * @param src - the URI of the source that contains the script codes
+	 */
+	setSrc(src: string, opts?: Record<string, boolean>): this {
+		const o = this._src;
+		this._src = src;
 
-        if (o !== src || opts?.force) {
+		if (o !== src || opts?.force) {
 			if (src) {
 				this._srcrun = false;
 				if (this.desktop)
@@ -94,30 +95,30 @@ export class Script extends zk.Widget {
 			}
 		}
 
-        return this;
-    }
+		return this;
+	}
 
-    /**
+	/**
 	 * @returns the character enconding of the source.
-     * It is used with {@link getSrc}.
-     *
-     * @defaultValue `null`.
-     */
-    getCharset(): string | undefined {
-        return this._charset;
-    }
+	 * It is used with {@link getSrc}.
+	 *
+	 * @defaultValue `null`.
+	 */
+	getCharset(): string | undefined {
+		return this._charset;
+	}
 
-    /**
+	/**
 	 * Sets the character encoding of the source.
-     * It is used with {@link setSrc}.
-     */
-    setCharset(charset: string): this {
-        this._charset = charset;
-        return this;
-    }
+	 * It is used with {@link setSrc}.
+	 */
+	setCharset(charset: string): this {
+		this._charset = charset;
+		return this;
+	}
 
-    /** @internal */
-    _exec(): void {
+	/** @internal */
+	_exec(): void {
 		var pkgs = this.packages; //not visible to client (since meaningless)
 		if (!pkgs) return this._exec0();
 
@@ -130,12 +131,14 @@ export class Script extends zk.Widget {
 			this._exec0();
 	}
 
-    /** @internal */
-    _exec0(): void {
+	/** @internal */
+	_exec0(): void {
 		var wgt = this, fn = this._fn;
 		if (fn) {
 			delete this._fn; //run only once
-			zk.afterMount(function () {fn!.call(wgt);});
+			zk.afterMount(function () {
+				fn!.call(wgt);
+			});
 		}
 		if (this._src && !this._srcrun) {
 			this._srcrun = true; //run only once
@@ -167,7 +170,7 @@ export class Script extends zk.Widget {
 		// ZK-2248: ignore widget dimension in vflex/hflex calculation
 		return true;
 	}
-    
+
 	override redraw(out: string[], skipper?: zk.Skipper): void {
 		// empty
 	}

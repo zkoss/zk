@@ -4,7 +4,8 @@ module.exports = {
   'parser': '@typescript-eslint/parser',
   'plugins': [
     '@typescript-eslint',
-    'zk'
+    'zk',
+    '@microsoft/eslint-plugin-sdl'
   ],
   'parserOptions': {
     'ecmaVersion': 5,
@@ -22,6 +23,7 @@ module.exports = {
       'globals': {
         '$eval': 'readonly',
         'JQuery': 'readonly',
+        'DOMPurify': 'writable',
         'jq': 'writable',
         'JQ': 'writable',
         'zjq': 'writable',
@@ -149,7 +151,9 @@ module.exports = {
         'plugin:@typescript-eslint/recommended',
         'plugin:@typescript-eslint/recommended-requiring-type-checking',
         'plugin:@typescript-eslint/strict',
-        'plugin:zk/recommended'
+        'plugin:zk/recommended',
+        'plugin:@microsoft/sdl/required',
+        'plugin:@microsoft/sdl/typescript'
       ],
       'rules': {
         // Recommended

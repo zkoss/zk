@@ -102,7 +102,8 @@ export class A extends zul.LabelImageWidget<HTMLAnchorElement> implements zul.La
 
 		if (o !== dir || opts?.force) {
 			var n = this.$n();
-			if (n) n.innerHTML = this.domContent_();
+			// eslint-disable-next-line @microsoft/sdl/no-inner-html
+			if (n) n.innerHTML = DOMPurify.sanitize(this.domContent_());
 		}
 
 		return this;

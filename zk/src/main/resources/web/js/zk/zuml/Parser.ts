@@ -168,6 +168,7 @@ function _eval(wgt: zk.Widget, s: string | null, args: unknown): string | null {
 			t = s.substring(k + 2, l); //EL
 
 			try {
+				// eslint-disable-next-line no-new-func
 				var fn = new Function('var _=arguments[0];return ' + t) as (args) => string;
 				t = wgt ? fn.call(wgt, args) : fn(args);
 			} catch (e) {

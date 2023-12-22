@@ -1144,7 +1144,8 @@ export class Calendar extends zul.Widget {
 
 			out = []; // reset
 			Renderer.titleHTML(this, out, localizedSymbols);
-			jq(this.$n('title')).html(out.join(''));
+			// eslint-disable-next-line @microsoft/sdl/no-html-method
+			jq(this.$n('title')).html(DOMPurify.sanitize(out.join('')));
 			jq(this.$n('mid')).transition({scale: 0}, 0).transition({scale: 1}, this.animationSpeed_() as number);
 
 			_updateArrow(this);
@@ -1205,7 +1206,8 @@ export class Calendar extends zul.Widget {
 					self.domListen_(newMid, 'onClick', '_clickDate');
 					var out = []; // reset
 					Renderer.titleHTML(self, out, localizedSymbols);
-					jq(self.$n('title')).html(out.join(''));
+					// eslint-disable-next-line @microsoft/sdl/no-html-method
+					jq(self.$n('title')).html(DOMPurify.sanitize(out.join('')));
 					self.clearCache();
 					if (todayBtn) todayBtn.css('display', '');
 				}
@@ -1345,7 +1347,8 @@ export class Calendar extends zul.Widget {
 								if (isSelectDisabled) {
 									$cell.addClass(disdClass);
 								}
-								$cell[0].innerHTML = Renderer.cellHTML(this, y, m + monofs, v, monofs) as unknown as string;
+								// eslint-disable-next-line @microsoft/sdl/no-inner-html
+								$cell[0].innerHTML = DOMPurify.sanitize(Renderer.cellHTML(this, y, m + monofs, v, monofs)) as unknown as string;
 								$cell[0].setAttribute('aria-label', Renderer.cellAriaLabel(this, y, m + monofs, v, monofs, k));
 								$cell.data('value', v);
 							}
