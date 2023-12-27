@@ -112,11 +112,11 @@ export class Progressmeter extends zul.Widget {
 
 	/** @internal */
 	override domClass_(no?: zk.DomClassOptions): string {
-		var scls = super.domClass_(no);
+		var sclsHTML = super.domClass_(no);
 		if (!no || !no.zclass) {
 			if (this._indeterminate)
-				scls += ' ' + this.$s('indeterminate');
+				sclsHTML += ' ' + this.$s('indeterminate');
 		}
-		return scls;
+		return sclsHTML;
 	}
 }

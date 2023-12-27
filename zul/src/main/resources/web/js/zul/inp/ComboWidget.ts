@@ -321,7 +321,7 @@ export class ComboWidget extends zul.inp.InputWidget<string> {
 		this.setFloating_(true, {node: pp});
 		zWatch.fire('onFloatUp', this); //notify all
 		var topZIndex = this.setTopmost(),
-			sclass = this.getSclass();
+			/*safe*/ sclass = this.getSclass();
 		pp.className = this.$s('popup') + (sclass ? ' ' + sclass : ''); // ZK-4234: updated sclass on combobox doesn't update popup
 
 		pp.style.zIndex = (topZIndex > 0 ? topZIndex : 1) as unknown as string; //on-top of everything

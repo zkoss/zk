@@ -45,7 +45,7 @@ export class Errorbox extends zul.wgt.Notification {
 	/** @internal */
 	override domClass_(no?: zk.DomClassOptions): string {
 		var sclass = this.sclass,
-			s = super.domClass_(no);
+			/*safe*/ s = super.domClass_(no);
 		if (sclass)
 			s += ' ' + sclass;
 		return s;

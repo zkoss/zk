@@ -1,11 +1,11 @@
-/* B100_ZK_5161Test.java
+/* B100_ZK_5182Test.java
 
 	Purpose:
 		
 	Description:
 		
 	History:
-		5:14 PM 2023/12/11, Created by jumperchen
+		5:11 PM 2023/12/27, Created by jumperchen
 
 Copyright (C) 2023 Potix Corporation. All Rights Reserved.
 */
@@ -21,14 +21,24 @@ import org.zkoss.test.webdriver.WebDriverTestCase;
 /**
  * @author jumperchen
  */
-public class B100_ZK_5161Test extends WebDriverTestCase {
+public class B100_ZK_5182Test extends WebDriverTestCase {
 	@Test
-	public void test() {
+	public void testXSS() {
 		connect();
 		try {
 			driver.switchTo().alert();
 			fail("Should not be here");
-		} catch (NoAlertPresentException ex) {
+		} catch (NoAlertPresentException e)  {
+			// ignore
+		}
+	}
+	@Test
+	public void testSetContentXSS() {
+		connect("/test2/B100-ZK-5182-1.zul");
+		try {
+			driver.switchTo().alert();
+			fail("Should not be here");
+		} catch (NoAlertPresentException e)  {
 			// ignore
 		}
 	}

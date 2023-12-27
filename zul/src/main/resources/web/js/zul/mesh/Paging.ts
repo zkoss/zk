@@ -468,13 +468,13 @@ export class Paging extends zul.Widget {
 		if (seld)
 			cls += ' ' + this.$s('selected');
 
-		out.push('<li', navCls, '><a name="', this.uuid, '-button" class="', cls,
+		out.push('<li', navCls, '><a name="', this.uuid, '-button" class="', /*safe*/ cls,
 			'" href="javascript:;" data-paging="', val as unknown as string, '"', seld ? ' aria-current="page"' : '', '>', label as string, '</a></li>');
 	}
 
 	/** @internal */
 	override domClass_(no?: zk.DomClassOptions): string {
-		const cls = super.domClass_(no),
+		const /*safe*/ cls = super.domClass_(no),
 			added = 'os' == this.getMold() ? ' ' + this.$s('os') : '';
 		return cls + added;
 	}

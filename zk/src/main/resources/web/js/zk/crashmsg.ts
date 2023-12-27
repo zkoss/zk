@@ -56,7 +56,7 @@ window.zkInitCrashTimer = setTimeout(function () {
 					div = '<div style="background: rgb(35,48,64); text-align: center; color: white; position: absolute; \
 						top: 0; left: 0; right: 0; bottom: 0; margin: auto; width: 50%; height: 300px; font-size: 20px;">',
 					icon = '<i class="z-icon-frown-o" style="font-size: 5em; display: block;"></i>',
-					msg = '<p>Something went wrong while loading the page.</p> \
+					msgHTML = '<p>Something went wrong while loading the page.</p> \
 						<p>Please try to reload or visit another page. If you are the administrator, \
 						try to check your Javascript or Network console.</p>',
 					copyright = '<div style="text-align: right; margin-top: -18px">\
@@ -65,22 +65,22 @@ window.zkInitCrashTimer = setTimeout(function () {
 					btn = '<button style="margin-top: 10px" onclick="location.reload();">Reload page</button>';
 				switch (zkErrorCode) {
 					case 1:
-						msg = '<p>Error code 1: ZK error, before mounting. </p>' + msg;
+						msgHTML = '<p>Error code 1: ZK error, before mounting. </p>' + msgHTML;
 						break;
 					case 2:
-						msg = '<p>Error code 2: ZK error, mounting. </p>' + msg;
+						msgHTML = '<p>Error code 2: ZK error, mounting. </p>' + msgHTML;
 						break;
 					case 3:
-						msg = '<p>Error code 3: ZK error, after mounting. </p>' + msg;
+						msgHTML = '<p>Error code 3: ZK error, after mounting. </p>' + msgHTML;
 						break;
 					case 4:
-						msg = '<p>Error code 4: user error, wrong script. </p>' + msg;
+						msgHTML = '<p>Error code 4: user error, wrong script. </p>' + msgHTML;
 						break;
 					case 5:
-						msg = '<p>Error code 5: user error, server response. </p>' + msg;
+						msgHTML = '<p>Error code 5: user error, server response. </p>' + msgHTML;
 						break;
 				}
-				div = style + div + icon + msg + copyright + btn + '</div>';
+				div = style + div + icon + msgHTML + copyright + btn + '</div>';
 				body.style.background = 'rgb(35,48,64)';
 				// eslint-disable-next-line @microsoft/sdl/no-inner-html
 				body.innerHTML = div;

@@ -124,14 +124,14 @@ export class Treechildren extends zul.Widget {
 			ben = this.getCaveNode() ?? this.parent!.getCaveNode();
 
 		if (before)
-			jq(before).before(child.redrawHTML_());
+			jq(before).before(/*safe*/ child.redrawHTML_());
 		else if (ben)
-			jq(ben).after(child.redrawHTML_());
+			jq(ben).after(/*safe*/child.redrawHTML_());
 		else {
 			if (isTopmost)
-				jq(this.parent!.$n_('rows')).append(child.redrawHTML_());
+				jq(this.parent!.$n_('rows')).append(/*safe*/child.redrawHTML_());
 			else
-				jq(this).append(child.redrawHTML_());
+				jq(this).append(/*safe*/child.redrawHTML_());
 		}
 		child.bind(desktop);
 	}
@@ -277,9 +277,7 @@ export class Treechildren extends zul.Widget {
 		if (oldwgt) oldwgt.unbind(skipper); //unbind first (w/o removal)
 		else if (this.shallChildROD_(child))
 			(this.$class as typeof Treechildren)._unbindrod(child); //possible (e.g., Errorbox: jq().replaceWith)
-		var content = child.redrawHTML_(skipper, _trim_);
-
-		jq(n).replaceWith(content);
+		jq(n).replaceWith(/*safe*/ child.redrawHTML_(skipper, _trim_));
 		child.bind(desktop, skipper);
 	}
 

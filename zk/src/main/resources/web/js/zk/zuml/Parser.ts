@@ -15,13 +15,13 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
  * @internal
  */
 //zk.$package('zk.zuml');
-function _innerText(node: HTMLElement): string | undefined {
-	var txt = node.innerHTML,
+function /*safe*/ _innerText(node: HTMLElement): string | undefined {
+	let /*safe*/ txt = node.innerHTML,
 		j = txt.indexOf('<!--');
 	if (j >= 0)
 		txt = txt.substring(j + 4, txt.lastIndexOf('-->'));
 	txt = txt.trim();
-	return txt ? '<div>' + txt.trim() + '</div>' : undefined;
+	return txt ? ('<div>' + /*safe*/ txt.trim() + '</div>') : undefined;
 }
 function _aftCreate(wgt: zk.Widget | undefined, cwgts: zk.Widget[], node: HTMLElement, opts?: {replaceHTML?}): undefined | zk.Widget | zk.Widget[] {
 	let c: zk.Widget | undefined;

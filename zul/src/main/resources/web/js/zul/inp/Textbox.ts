@@ -141,9 +141,9 @@ export class Textbox extends zul.inp.InputWidget<string> {
 
 	/** @internal */
 	override textAttrs_(): string {
-		var html = super.textAttrs_();
+		var html = /*safe*/ super.textAttrs_();
 		if (this._multiline)
-			html += ' rows="' + this._rows + '"';
+			html += ' rows="' + /*safe*/ zk.parseInt(this._rows) + '"';
 		return html;
 	}
 

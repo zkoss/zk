@@ -191,12 +191,12 @@ export class Groupbox extends zul.ContainerWidget {
 			s = 'display:none;' + (s || '');
 		if (s)
 			html += ' style="' + s + '"';
-		return html;
+		return DOMPurify.sanitize(html);
 	}
 
 	/** @internal */
 	_redrawCave(out: string[], skipper?: zk.Skipper): void { //reserve for customizing
-		out.push('<div id="', this.uuid, '-cave"', this._contentAttrs(), '>');
+		out.push('<div id="', this.uuid, '-cave"', /*safe*/ this._contentAttrs(), '>');
 
 		if (!skipper)
 			for (var w = this.firstChild, cap = this.caption; w; w = w.nextSibling)
@@ -336,22 +336,22 @@ export class Groupbox extends zul.ContainerWidget {
 
 	/** @internal */
 	override domClass_(no?: zk.DomClassOptions): string {
-		var cls = super.domClass_(no);
+		var clsHTML = super.domClass_(no);
 		if (!this._isDefault()) {
-			if (cls) cls += ' ';
-			cls += this.$s('3d');
+			if (clsHTML) clsHTML += ' ';
+			clsHTML += this.$s('3d');
 		}
 
 		if (!this.caption && !this.getTitle()) {
-			if (cls) cls += ' ';
-			cls += ' ' + this.$s('notitle');
+			if (clsHTML) clsHTML += ' ';
+			clsHTML += ' ' + this.$s('notitle');
 		}
 
 		if (!this._open && this._isDefault()) {
-			if (cls) cls += ' ';
-			cls += this.$s('collapsed');
+			if (clsHTML) clsHTML += ' ';
+			clsHTML += this.$s('collapsed');
 		}
-		return cls;
+		return clsHTML;
 	}
 
 	/** @internal */

@@ -298,19 +298,19 @@ export class Grid extends zul.mesh.MeshWidget {
 			this.rows = child;
 			var fakerows = this.$n('rows');
 			if (fakerows) {
-				jq(fakerows).replaceWith(child.redrawHTML_());
+				jq(fakerows).replaceWith(/*safe*/ child.redrawHTML_());
 				child.bind(desktop);
 				this.ebodyrows = child.$n();
 				return;
 			} else {
 				var tpad = this.$n('tpad');
 				if (tpad) {
-					jq(tpad).after(child.redrawHTML_());
+					jq(tpad).after(/*safe*/ child.redrawHTML_());
 					child.bind(desktop);
 					this.ebodyrows = child.$n();
 					return;
 				} else if (this.ebodytbl) {
-					jq(this.ebodytbl).append(child.redrawHTML_());
+					jq(this.ebodytbl).append(/*safe*/ child.redrawHTML_());
 					child.bind(desktop);
 					this.ebodyrows = child.$n();
 					return;

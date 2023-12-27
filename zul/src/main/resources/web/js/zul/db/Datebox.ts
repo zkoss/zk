@@ -918,8 +918,10 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 			out.push('<div class="', this.$s('timezone'), '">',
 				this.getTimeZoneLabel(),
 				'<select id="', this.uuid, '-dtzones">');
-			for (var i = 0, len = timezones.length; i < len; i++)
-				out.push('<option value="', timezones[i], '">', timezones[i], '</option>');
+			for (var i = 0, len = timezones.length; i < len; i++) {
+				const timezoneHTML = zUtl.encodeXML(timezones[i]);
+				out.push('<option value="', timezoneHTML, '">', timezoneHTML, '</option>');
+			}
 			out.push('</select></div>');
 			// B50-ZK-577: Rendering Issue using Datebox with displayedTimeZones
 		}
@@ -1047,7 +1049,7 @@ export class CalendarPop extends zul.db.Calendar {
 		zWatch.fire('onFloatUp', db); //notify all
 		var topZIndex = this.setTopmost();
 		this._setView(db._selectLevel);
-		var zcls = db.getZclass();
+		var /*safe*/ zcls = db.getZclass();
 
 		pp.className = dbn.className + ' ' + pp.className;
 		jq(pp).removeClass(zcls);

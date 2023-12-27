@@ -132,14 +132,14 @@ export class Listcell extends zul.LabelImageWidget<HTMLTableCellElement> {
 
 	/** @internal */
 	override domContent_(): string {
-		var s1 = super.domContent_(),
+		var /*safe*/ s1 = super.domContent_(),
 			s2 = this._colHtmlPre();
 		return s1 ? s2 ? s2 + '&nbsp;' + s1 : s1 : s2;
 	}
 
 	/** @internal */
 	override domClass_(no?: zk.DomClassOptions): string {
-		var scls = super.domClass_(no),
+		var /*safe*/ scls = super.domClass_(no),
 			p = this.parent!,
 			head = this.getListheader();
 
@@ -185,7 +185,7 @@ export class Listcell extends zul.LabelImageWidget<HTMLTableCellElement> {
 
 				var chkable = p.isSelectable(),
 					multi = box.isMultiple();
-				s += '<span id="' + p.uuid + '-cm" class="' + p.$s('checkable')
+				/*safe*/ s += '<span id="' + /*safe*/ p.uuid + '-cm" class="' + p.$s('checkable')
 					+ ' ' + (multi ? p.$s('checkbox') : p.$s('radio'));
 
 				if (!chkable || p.isDisabled())
@@ -203,7 +203,7 @@ export class Listcell extends zul.LabelImageWidget<HTMLTableCellElement> {
 				var cls = p._open ?
 					p.getIconOpenClass_() + ' ' + p.$s('icon-open') :
 					p.getIconCloseClass_() + ' ' + p.$s('icon-close');
-				s += '<span id="' + p.uuid + '-img" class="' + p.$s('icon') + '"><i class="' + cls + '"></i></span>';
+				/*safe*/ s += '<span id="' + /*safe*/ p.uuid + '-img" class="' + p.$s('icon') + '"><i class="' + cls + '"></i></span>';
 			}
 			if (s) return s;
 		}

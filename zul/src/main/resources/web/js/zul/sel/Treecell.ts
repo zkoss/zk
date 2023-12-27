@@ -123,7 +123,7 @@ export class Treecell extends zul.LabelImageWidget<HTMLTableCellElement> {
 
 	/** @internal */
 	override domContent_(): string {
-		var s1 = super.domContent_(),
+		var /*safe*/ s1 = super.domContent_(),
 			s2 = this._colHtmlPre();
 		return s1 ? s2 ? s2 + '<span class="' + this.$s('text') + '">' + s1 + '</span>' : s1 : s2;
 	}
@@ -216,7 +216,7 @@ export class Treecell extends zul.LabelImageWidget<HTMLTableCellElement> {
 					sb.push('><i class="', item.$s('icon'), ckCls, '"></i></span>');
 				}
 			}
-			var iconScls = tree ? tree.getZclass() : '',
+			var iconScls = zUtl.encodeXML(tree ? tree.getZclass() : ''),
 				pitems = this._getTreeitems(item, tree);
 			for (var j = 0, k = pitems.length; j < k; ++j) {
 				// ZK-4494: Add information about whether a line should be omitted when decorating
@@ -271,7 +271,7 @@ export class Treecell extends zul.LabelImageWidget<HTMLTableCellElement> {
 			if (name.includes('close'))
 				icon = this.getIconCloseClass_();
 
-			openCloseIcon += '<i id="' + id + '" class="' + icon + ' ' + iconScls
+			/*safe*/ openCloseIcon += '<i id="' + id + '" class="' + icon + ' ' + iconScls
 					+ '-' + name + '"></i>';
 		}
 		if (button) {
@@ -279,7 +279,7 @@ export class Treecell extends zul.LabelImageWidget<HTMLTableCellElement> {
 			if (item)
 				sb.push(' id="', item.uuid, '-open"');
 		}
-		sb.push('>', openCloseIcon, '</span>');
+		/*safe*/ sb.push('>', openCloseIcon, '</span>');
 	}
 
 	/** @internal */
@@ -305,7 +305,7 @@ export class Treecell extends zul.LabelImageWidget<HTMLTableCellElement> {
 
 	/** @internal */
 	override domClass_(no?: zk.DomClassOptions): string {
-		var scls = super.domClass_(no),
+		var /*safe*/ scls = super.domClass_(no),
 			col = this.getTreecol();
 		if (col) {
 			if (!col.isVisible()) scls += ' ' + this.$s('hidden-col');

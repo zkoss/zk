@@ -44,18 +44,18 @@ export class Panelchildren extends zul.ContainerWidget {
 	/** @internal */
 	override domClass_(no?: zk.DomClassOptions): string {
 		const out: string[] = [],
-			scls = super.domClass_(no);
+			/*safe*/ scls = super.domClass_(no);
 		if (scls)
-			out.push(scls);
+			out.push(/*safe*/ scls);
 		if (!no?.zclass) {
-			const zcls = this.getZclass(),
+			const /*safe*/ zcls = this.getZclass(),
 				parent = this.parent!;
 			if (!parent.getTitle() && !parent.caption)
 				out.push(zcls + '-noheader');
 			if (!parent._bordered())
 				out.push(zcls + '-noborder');
 		}
-		return out.join(' ');
+		return DOMPurify.sanitize(out.join(' '));
 	}
 
 	/** @internal */

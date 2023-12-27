@@ -170,16 +170,16 @@ export namespace eff {
 					html = '<div id="' + maskId + '" class="z-modal-mask"';//FF: don't add tabIndex
 				if (opts.zIndex != null || opts.visible == false) {
 					html += ' style="';
-					if (opts.zIndex != null) html += 'z-index:' + opts.zIndex;
+					if (opts.zIndex != null) html += 'z-index:' + /*safe*/ opts.zIndex;
 					if (opts.visible == false) html += ';display:none';
 					html += '"';
 				}
 
 				html += '></div>';
 				if (opts.anchor)
-					jq(opts.anchor, zk).before(html);
+					jq(opts.anchor, zk).before(/*safe*/ html);
 				else
-					jq(document.body).append(html);
+					jq(document.body).append(/*safe*/ html);
 				mask = this.mask = jq(maskId, zk)[0];
 			}
 			if (opts.stackup) {
@@ -287,13 +287,13 @@ export namespace eff {
 			var xy = opts.offset || $anchor.revisedOffset(),
 				w = opts.width || $anchor.offsetWidth(),
 				h = opts.height || $anchor.offsetHeight();
-			jq(n).replaceWith(
+			jq(n).replaceWith(DOMPurify.sanitize(
 			'<div id="' + maskId + '" style="display:none">' //$anchor size changed if using visibility: hidden
-			+ '<div class="z-apply-mask" style="display:block;top:' + xy[1]
-			+ 'px;left:' + xy[0] + 'px;width:' + w + 'px;height:' + h + 'px;"></div>'
+			+ '<div class="z-apply-mask" style="display:block;top:' + jq.px(xy[1])
+			+ ';left:' + jq.px(xy[0]) + ';width:' + w + 'px;height:' + h + 'px;"></div>'
 			+ '<div id="' + maskId + '-z_loading" class="z-apply-loading"><div class="z-apply-loading-indicator">'
 			+ '<span class="z-apply-loading-icon"></span> '
-			+ msg + '</div></div></div>');
+			+ msg + '</div></div></div>'));
 
 			this.mask = jq(maskId, zk)[0];
 			this.wgt = zk.Widget.$(opts.anchor);
@@ -355,12 +355,12 @@ export namespace eff {
 			// along the anchor's ancestor chain, from document body to the highest
 			// non-static node with non-auto z-index.
 			var body = document.body,
-				html = body.parentNode,
+				bodyParent = body.parentNode,
 				rleaf: JQuery = $anchor.jq,
 				zi: string | number = 'auto',
 				zic: string, zicv: number;
 			// find the highest non-static node with non-auto z-index
-			for (var offp = rleaf.offsetParent(); offp[0] != body && offp[0] != html; offp = offp.offsetParent()) {
+			for (var offp = rleaf.offsetParent(); offp[0] != body && offp[0] != bodyParent; offp = offp.offsetParent()) {
 				if ((zic = offp.css('z-index')) && zic != 'auto') {
 					zi = zk.parseInt(zic);
 					rleaf = offp;

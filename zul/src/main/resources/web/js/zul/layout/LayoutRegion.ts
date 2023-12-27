@@ -563,7 +563,7 @@ export class LayoutRegion extends zul.Widget {
 
 	/** @internal */
 	override domClass_(no?: zk.DomClassOptions): string {
-		var scls = super.domClass_(no);
+		var /*safe*/ scls = super.domClass_(no);
 		if (!no || !no.zclass) {
 			var added = 'normal' == this.getBorder() ? '' : this.$s('noborder');
 			if (added) scls += (scls ? ' ' : '') + added;
@@ -668,7 +668,7 @@ export class LayoutRegion extends zul.Widget {
 		if (this.desktop) {
 			var real = this.$n('real');
 			if (real) {
-				real.className = this.domClass_();
+				/*safe*/ real.className = this.domClass_();
 				if (this.parent)
 					this.parent.resize();
 			}
@@ -1446,9 +1446,9 @@ export class LayoutRegion extends zul.Widget {
 	static _ghosting(dg: zk.Draggable, ofs: zk.Offset, evt: zk.Event): HTMLElement {
 		var el = dg.node!, $el = zk(el);
 		jq(document.body).prepend('<div id="zk_layoutghost" class="z-splitter-ghost" style="font-size:0;line-height:0;background:#AAA;position:absolute;top:'
-			+ ofs[1] + 'px;left:' + ofs[0] + 'px;width:'
-			+ $el.offsetWidth() + 'px;height:' + $el.offsetHeight()
-			+ 'px;cursor:' + el.style.cursor + ';"></div>');
+			+ jq.px(ofs[1]) + ';left:' + jq.px(ofs[0]) + ';width:'
+			+ jq.px($el.offsetWidth()) + ';height:' + jq.px($el.offsetHeight())
+			+ ';cursor:' + /*safe*/ el.style.cursor + ';"></div>');
 		return jq('#zk_layoutghost')[0];
 	}
 }

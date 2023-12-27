@@ -287,7 +287,7 @@ export class Toolbar extends zul.Widget {
 	// super
 	/** @internal */
 	override domClass_(no?: zk.DomClassOptions): string {
-		let sc = super.domClass_(no);
+		let /*safe*/ sc = super.domClass_(no);
 		if (!no?.zclass) {
 			const tabs = this.parent && zk.isLoaded('zul.tab') && this.parent instanceof zul.tab.Tabbox ? this.$s('tabs') : '';
 

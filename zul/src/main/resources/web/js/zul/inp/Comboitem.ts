@@ -161,7 +161,7 @@ export class Comboitem extends zul.LabelImageWidget implements zul.LabelImageWid
 
 	/** @internal */
 	override domClass_(no?: zk.DomClassOptions): string {
-		var scls = super.domClass_(no);
+		var /*safe*/ scls = super.domClass_(no);
 		if (this._disabled && (!no || !no.zclass)) {
 			scls += ' ' + this.$s('disabled');
 		}

@@ -346,7 +346,7 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 
 	/** @internal */
 	override domClass_(no?: zk.DomClassOptions): string {
-		var scls = super.domClass_(no);
+		var /*safe*/ scls = super.domClass_(no);
 		if (!no || !no.zclass) {
 			var added = this.isDisabled() ? this.$s('disabled') : '';
 			if (added) scls += (scls ? ' ' : '') + added;
@@ -363,10 +363,10 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 			+ (zUtl.encodeXML(this.getLabel())) + '</span>',
 			icon = '<i class="' + this.$s('icon') + ' z-icon-check" aria-hidden="true"></i>',
 			img = this.getImage(),
-			iconSclass = this.domIcon_();
+			/*safe*/ iconSclass = this.domIcon_();
 
 		if (img)
-			img = '<img src="' + img + '" class="' + this.$s('image') + '" align="absmiddle" alt="" aria-hidden="true" />'
+			/*safe*/ img = '<img src="' + img + '" class="' + this.$s('image') + '" align="absmiddle" alt="" aria-hidden="true" />'
 				+ (iconSclass ? ' ' + iconSclass : '');
 		else {
 			if (iconSclass) {
@@ -376,7 +376,7 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 					+ ' src="data:image/png;base64,R0lGODlhAQABAIAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" class="' + this.$s('image') + '" align="absmiddle" alt="" aria-hidden="true" />';
 			}
 		}
-		return img + (this.isAutocheck() || this.isCheckmark() ? icon : '') + label;
+		return DOMPurify.sanitize(img + (this.isAutocheck() || this.isCheckmark() ? icon : '') + label);
 	}
 
 	/**

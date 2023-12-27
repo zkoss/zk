@@ -66,18 +66,18 @@ export class Inputgroup extends zul.Widget {
 
 	/** @internal */
 	override domClass_(no?: zk.DomClassOptions): string {
-		const classes = super.domClass_(no);
-		return classes + (this._vertical ? ' ' + this.$s('vertical') : '');
+		const classesHTML = super.domClass_(no);
+		return classesHTML + (this._vertical ? ' ' + this.$s('vertical') : '');
 	}
 
 	/** @internal */
 	override insertChildHTML_(child: zk.Widget, before?: zk.Widget, desktop?: zk.Desktop): void {
 		if (before)
 			jq(before.$n('chdex') || before.$n()!).before(
-				this.encloseChildHTML_({ child: child })!);
+				/*safe*/ this.encloseChildHTML_({ child: child })!);
 		else
 			jq(this.getCaveNode()).append(
-				this.encloseChildHTML_({ child: child })!);
+				/*safe*/ this.encloseChildHTML_({ child: child })!);
 
 		child.bind(desktop);
 	}

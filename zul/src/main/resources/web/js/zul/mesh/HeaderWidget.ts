@@ -578,10 +578,10 @@ export abstract class HeaderWidget extends zul.LabelImageWidget<HTMLTableCellEle
 
 		ofs[1] = of[1];
 		ofs[0] += zk(n).offsetWidth();
-		jq(document.body).append(
+		jq(document.body).append(/*safe*/
 			'<div id="zk_hdghost" style="position:absolute;top:'
-			+ ofs[1] + 'px;left:' + ofs[0] + 'px;width:3px;height:' + zk(el.parentNode!.parentNode).offsetHeight()
-			+ 'px;background:darkgray"></div>');
+			+ jq.px(ofs[1]) + ';left:' + jq.px(ofs[0]) + ';width:3px;height:' + jq.px(zk(el.parentNode!.parentNode).offsetHeight())
+			+ ';background:darkgray"></div>');
 		return jq('#zk_hdghost')[0];
 	}
 
@@ -731,7 +731,7 @@ export abstract class HeaderWidget extends zul.LabelImageWidget<HTMLTableCellEle
 
 	static redraw(this: HeaderWidget, out: string[]): void {
 		var uuid = this.uuid,
-			label = this.domContent_();
+			/*safe*/ label = this.domContent_();
 		out.push('<th', this.domAttrs_({ width: true }), ' role="columnheader"><div id="',
 			uuid, '-cave" class="', this.$s('content'), '"',
 			this.domTextStyleAttr_()!, '><div class="', this.$s('sorticon'),

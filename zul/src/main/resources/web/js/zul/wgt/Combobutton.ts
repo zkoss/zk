@@ -142,8 +142,8 @@ export class Combobutton extends zul.wgt.Button {
 	override domContent_(): string {
 		var label = '<span id="' + this.uuid + '-txt" class="' + this.$s('text') + '">'
 			+ zUtl.encodeXML(this.getLabel()) + '</span>',
-			img = this.domImage_(),
-			iconSclass = this.domIcon_();
+			/*safe*/ img = this.domImage_(),
+			/*safe*/ iconSclass = this.domIcon_();
 		if (!img && !iconSclass) return label;
 
 		if (!img) img = iconSclass;
@@ -162,7 +162,7 @@ export class Combobutton extends zul.wgt.Button {
 
 	/** @internal */
 	override domClass_(no?: zk.DomClassOptions): string {
-		var cls = super.domClass_(no);
+		var /*safe*/ cls = super.domClass_(no);
 		if (!this._isDefault())
 			cls += ' z-combobutton-toolbar';
 		return cls;

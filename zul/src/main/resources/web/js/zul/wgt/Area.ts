@@ -95,12 +95,12 @@ export class Area extends zk.Widget<HTMLAreaElement> {
 
 	/** @internal */
 	override domAttrs_(no?: zk.DomAttrsOptions): string {
-		var attr = super.domAttrs_(no)
+		var /*safe*/ attr = super.domAttrs_(no)
 			+ ' href="javascript:;"', v;
 		if (v = this._coords)
 			attr += ' coords="' + v + '"';
 		if (v = this._shape)
 			attr += ' shape="' + v + '"';
-		return attr;
+		return DOMPurify.sanitize(attr);
 	}
 }

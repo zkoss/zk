@@ -472,13 +472,13 @@ export class Treeitem extends zul.sel.ItemWidget {
 			}
 
 			if (mid >= 0)
-				jq(children[mid]).after(childHTML);
+				jq(children[mid]).after(/*safe*/ childHTML);
 			else if (erows.firstChild) // the first one
-				jq(erows.firstChild).before(childHTML);
+				jq(erows.firstChild).before(/*safe*/ childHTML);
 			else
-				jq(erows).append(childHTML);
+				jq(erows).append(/*safe*/ childHTML);
 		} else {
-			jq(erows).append(childHTML);
+			jq(erows).append(/*safe*/ childHTML);
 		}
 	}
 
@@ -486,9 +486,9 @@ export class Treeitem extends zul.sel.ItemWidget {
 	override insertChildHTML_(child: zk.Widget, before?: zk.Widget, desktop?: zk.Desktop): void {
 		const nodeOfBefore = before ? before.getFirstNode_() : undefined;
 		if (nodeOfBefore)
-			jq(nodeOfBefore).before(child.redrawHTML_());
+			jq(nodeOfBefore).before(/*safe*/ child.redrawHTML_());
 		else
-			this._renderChildHTML(child.redrawHTML_());
+			this._renderChildHTML(/*safe*/ child.redrawHTML_());
 
 		child.bind(desktop);
 	}

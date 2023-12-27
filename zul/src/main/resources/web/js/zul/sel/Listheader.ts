@@ -318,10 +318,10 @@ export class Listheader extends zul.mesh.SortWidget {
 
 	/** @internal */
 	override domContent_(): string {
-		var s = super.domContent_(),
+		var /*safe*/ s = super.domContent_(),
 			box = this.getListbox()!;
 		if (this._hasCheckbox())
-			s = '<span id="' + this.uuid + '-cm" class="' + this.$s('checkable')
+			/*safe*/ s = '<span id="' + this.uuid + '-cm" class="' + this.$s('checkable')
 				+ (box.$$selectAll ? ' ' + this.$s('checked') : '') + '"><i class="' + this.$s('icon') + ' z-icon-check"></i></span>'
 				+ (s ? '&nbsp;' + s : '');
 		return s;

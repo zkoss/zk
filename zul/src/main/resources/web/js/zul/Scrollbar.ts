@@ -890,12 +890,12 @@ export class Scrollbar extends zk.Object {
 			hv = isH ? 'horizontal' : 'vertical',
 			lu = isH ? 'left' : 'up',
 			rd = isH ? 'right' : 'down',
-			out = '';
+			outHTML = '';
 
 		if (this.opts.embed) {
-			out += '<div id="' + uid + '-embed" class="z-scrollbar-' + hv + '-embed"></div>';
+			outHTML += '<div id="' + uid + '-embed" class="z-scrollbar-' + hv + '-embed"></div>';
 		}
-		out +=
+		outHTML +=
 			'<div id="' + uid + '" class="z-scrollbar z-scrollbar-' + hv + '">'
 			+ '<div id="' + uid + '-' + lu + '" class="z-scrollbar-' + lu + '">'
 			+ '<i class="z-icon-caret-' + lu + '"></i>'
@@ -909,6 +909,6 @@ export class Scrollbar extends zk.Object {
 			+ '<i class="z-icon-caret-' + rd + '"></i>'
 			+ '</div>'
 			+ '</div>';
-		jq(cave).append(out);
+		jq(cave).append(/*safe*/ outHTML);
 	}
 }

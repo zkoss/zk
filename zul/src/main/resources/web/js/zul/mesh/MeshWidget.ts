@@ -242,7 +242,7 @@ function _fixBodyMinWd(wgt: MeshWidget, fixMesh?: boolean): void {
 			var bdfx = tr.lastChild,
 				bdfxid = wgt.uuid + '-bdflex';
 			if (!bdfx || (bdfx as HTMLElement).id != bdfxid) {
-				jq(tr).append('<td id="' + bdfxid + '"></td>');
+				jq(tr).append(/*safe*/ '<td id="' + bdfxid + '"></td>');
 				bdfx = tr.lastChild;
 			}
 		}
@@ -1746,16 +1746,16 @@ export abstract class MeshWidget extends zul.Widget {
 	/** @internal */
 	domFaker_(out: string[], fakeId: string): void { //used by redraw
 		var head = this.head!;
-		out.push('<colgroup id="', head.uuid, fakeId, '">');
+		out.push('<colgroup id="', /*safe*/ head.uuid, /*safe*/ fakeId, '">');
 		for (var w = head.firstChild; w; w = w.nextSibling) {
 			var wd = MeshWidget._getWidth(w, w._hflexWidth ? `${w._hflexWidth}px` : w.getWidth()),
 				visibility = w.isVisible() ? '' : 'visibility: collapse;';
 			// B70-ZK-2036: Style width should end with 'px'.
 			wd = wd != null ? 'width: ' + wd + ';' : '';
-			out.push('<col id="', w.uuid, fakeId, '" style="', wd, visibility, '"></col>');
+			out.push('<col id="', /*safe*/ w.uuid, /*safe*/ fakeId, '" style="', /*safe*/ wd, /*safe*/ visibility, '"></col>');
 		}
 		if (fakeId.indexOf('hd') > 0 || fakeId.indexOf('ft') > 0)
-			out.push('<col id="', head.uuid, fakeId, '-bar" style="width: 0px" ></col>');
+			out.push('<col id="', /*safe*/ head.uuid, /*safe*/ fakeId, '-bar" style="width: 0px" ></col>');
 		out.push('</colgroup>');
 	}
 
@@ -2109,13 +2109,13 @@ export abstract class MeshWidget extends zul.Widget {
 			if (ncols == length)
 				return cells;
 			else {
-				var out: string | undefined = '';
-				out += '<tr id="' + tbody.id + '-fakeRow" style="visibility:hidden;height:0">';
+				var outHTML: string | undefined = '';
+				outHTML += '<tr id="' + /*safe*/ tbody.id + '-fakeRow" style="visibility:hidden;height:0">';
 				for (var i = 0; i < ncols; i++)
-					out += '<td></td>';
-				out += '</tr>';
-				jq(tbodyrows[0]).before(out);
-				out = undefined;
+					outHTML += '<td></td>';
+				outHTML += '</tr>';
+				jq(tbodyrows[0]).before(/*safe*/ outHTML);
+				outHTML = undefined;
 				return tbodyrows[0].cells;
 			}
 		}

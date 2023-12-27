@@ -316,12 +316,12 @@ export class Radiogroup extends zul.Widget {
 	// ZK-4989
 	/** @internal */
 	override domClass_(no?: zk.DomClassOptions): string {
-		var scls = super.domClass_(no);
+		var sclsHTML = super.domClass_(no);
 		if (!no || !no.zclass) {
 			const added = this.$s(this.getOrient());
-			if (added) scls += (scls ? ' ' : '') + added;
+			if (added) sclsHTML += (sclsHTML ? ' ' : '') + added;
 		}
-		return scls;
+		return sclsHTML;
 	}
 
 	/** @internal */

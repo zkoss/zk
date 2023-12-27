@@ -64,13 +64,13 @@ export class ModalFileViewer extends zk.Object {
 			+ 'arial,sans-serif;font-size: 11px;padding: 2px;'
 			+ 'color: #0F3B82;"><img style="float: left;" src="' + uri + '"/>'
 			+ '<div id="' + id + '-cnt"><a id="' + id + '-cancel" style="float: left;padding-left: 2px; color: #0366AC;'
-			+ ' font-weight: bold;cursor: pointer;">' + msgzul.UPLOAD_CANCEL + ' </a>&nbsp;&nbsp;&nbsp;' + filenm
+			+ ' font-weight: bold;cursor: pointer;">' + /*safe*/ msgzul.UPLOAD_CANCEL + ' </a>&nbsp;&nbsp;&nbsp;' + filenm
 			+ '</div><div style="padding-left: 24px">'
-			+ msgzk.FILE_SIZE + '&nbsp;&nbsp;<span id="' + id + '-sent">0</span> of '
+			+ /*safe*/ msgzk.FILE_SIZE + '&nbsp;&nbsp;<span id="' + id + '-sent">0</span> of '
 			+ '<span id="' + id + '-total">0</span></div></div>';
 
 		uploaded.setVisible(true);
-		jq(uploaded).append(html);
+		jq(uploaded).append(/*safe*/ html);
 
 		if (max > 0 && max <= uploaded.$n_().childNodes.length)
 			uploaded.$f('fileupload')!.setVisible(false); // B50-ZK-340: need to skip rerender

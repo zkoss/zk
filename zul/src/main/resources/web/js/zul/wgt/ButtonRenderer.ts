@@ -33,8 +33,8 @@ export var ButtonRenderer = {
 			collapsibleLabel = isOpen ? msgzul.PANEL_COLLAPSE : msgzul.PANEL_EXPAND;
 		out.push('<button id="', uuid, '-exp" class="', icon, ' ', wgt.$s('expand'), '"');
 		if (tabindex != undefined) out.push(' tabindex="', tabindex as unknown as string, '"');
-		out.push(' title="', collapsibleLabel, '" aria-label="', collapsibleLabel, '">');
-		out.push('<i class="', openIcon, '" aria-hidden="true"></i></button>');
+		out.push(' title="', /*safe*/ collapsibleLabel, '" aria-label="', /*safe*/ collapsibleLabel, '">');
+		out.push('<i class="', /*safe*/ openIcon, '" aria-hidden="true"></i></button>');
 	},
 	/**
 	 * Redraws the minimize button HTML.
@@ -49,8 +49,8 @@ export var ButtonRenderer = {
 			minLabel = msgzul.PANEL_MINIMIZE;
 		out.push('<button id="', uuid, '-min" class="', icon, ' ', wgt.$s('minimize'), '"');
 		if (tabindex != undefined) out.push(' tabindex="', tabindex as unknown as string, '"');
-		out.push(' title="', minLabel, '" aria-label="', minLabel, '">');
-		out.push('<i class="', wgt.getMinimizableIconClass_(), '" aria-hidden="true"></i></button>');
+		out.push(' title="', /*safe*/ minLabel, '" aria-label="', /*safe*/ minLabel, '">');
+		out.push('<i class="', /*safe*/ wgt.getMinimizableIconClass_(), '" aria-hidden="true"></i></button>');
 	},
 	/**
 	 * Redraws the maximize button HTML.
@@ -68,8 +68,8 @@ export var ButtonRenderer = {
 		if (maxd) out.push(' ', wgt.$s('maximized'));
 		var maxIcon = maxd ? wgt.getMaximizedIconClass_() : wgt.getMaximizableIconClass_();
 		if (tabindex != undefined) out.push('" tabindex="', tabindex as unknown as string);
-		out.push('" title="', maxLabel, '" aria-label="', maxLabel, '">');
-		out.push('<i class="', maxIcon, '" aria-hidden="true"></i></button>');
+		out.push('" title="', /*safe*/ maxLabel, '" aria-label="', /*safe*/ maxLabel, '">');
+		out.push('<i class="', /*safe*/ maxIcon, '" aria-hidden="true"></i></button>');
 	},
 	/**
 	 * Redraws the close button HTML.
@@ -84,8 +84,8 @@ export var ButtonRenderer = {
 			closeLabel = msgzul.PANEL_CLOSE;
 		out.push('<button id="', uuid, '-close" class="', icon, ' ', wgt.$s('close'), '"');
 		if (tabindex != undefined) out.push(' tabindex="', tabindex as unknown as string, '"');
-		out.push(' title="', closeLabel, '" aria-label="', closeLabel, '">');
-		out.push('<i class="', wgt.getClosableIconClass_(), '" aria-hidden="true"></i></button>');
+		out.push(' title="', /*safe*/ closeLabel, '" aria-label="', /*safe*/ closeLabel, '">');
+		out.push('<i class="', /*safe*/ wgt.getClosableIconClass_(), '" aria-hidden="true"></i></button>');
 	}
 };
 zul.wgt.ButtonRenderer = ButtonRenderer;

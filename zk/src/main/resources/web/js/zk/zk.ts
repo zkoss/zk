@@ -2020,7 +2020,7 @@ _zk._Erbx = class _Erbx extends ZKObject { //used in HTML tags
 			+ '<div class="messagecontent"><div class="messages">'
 			+ zUtl.encodeXML(msg, {multiline: true}) + '</div></div></div>';
 
-		jq(document.body).append(html);
+		jq(document.body).append(/*safe*/ html);
 		_erbx = this;
 		this.id = id;
 		try {
@@ -2052,7 +2052,7 @@ _zk._Erbx = class _Erbx extends ZKObject { //used in HTML tags
 		jq('#' + id + ' .errornumbers')
 			.text(++_errcnt + ' Errors');
 		jq('#' + id + ' .messages')
-			.append('<div class="newmessage">' + zUtl.encodeXML(msg) + '</hr></div>');
+			.append(/*safe*/ '<div class="newmessage">' + zUtl.encodeXML(msg) + '</hr></div>');
 		jq('#' + id + ' .newmessage')
 			.removeClass('newmessage').addClass('message').slideDown(600);
 	}

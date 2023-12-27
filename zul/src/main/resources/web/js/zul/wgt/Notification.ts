@@ -67,24 +67,24 @@ export class Notification extends zul.wgt.Popup {
 	}
 
 	override redraw(out: string[]): void {
-		var uuid = this.uuid,
-			icon = this.$s('icon');
+		var uuidHTML = this.uuid,
+			iconHTML = this.$s('icon');
 		out.push('<div', this.domAttrs_(), '>');
 		if (this._ref) //output arrow if reference exist
-			out.push('<div id="', uuid, '-p" class="', this.$s('pointer'), '"></div>');
-		out.push('<i id="', uuid, '-icon" class="', icon, ' ', (_iconMap[this._type!]), '"></i>');
-		out.push('<div id="', uuid, '-cave" class="', this.$s('content'), '">',
+			out.push('<div id="', uuidHTML, '-p" class="', this.$s('pointer'), '"></div>');
+		out.push('<i id="', uuidHTML, '-icon" class="', iconHTML, ' ', (/*safe*/ _iconMap[this._type!]), '"></i>');
+		out.push('<div id="', uuidHTML, '-cave" class="', this.$s('content'), '">',
 				this._msg, '</div>');
 		if (this._closable)
-			out.push('<div id="', uuid, '-cls" class="', this.$s('close'),
-					'"><i id="', uuid, '-clsIcon" class="', icon, ' z-icon-times"></i></div>');
+			out.push('<div id="', uuidHTML, '-cls" class="', this.$s('close'),
+					'"><i id="', uuidHTML, '-clsIcon" class="', iconHTML, ' z-icon-times"></i></div>');
 		out.push('</div>'); // not encoded to support HTML
 	}
 
 	/** @internal */
 	override domClass_(no?: zk.DomClassOptions): string {
 		var type = this._type,
-			s = super.domClass_(no);
+			/*safe*/ s = super.domClass_(no);
 		if (type)
 			s += ' ' + this.$s(zUtl.encodeXML(type));
 		return s;
@@ -201,7 +201,7 @@ export class Notification extends zul.wgt.Popup {
 		if (!p)
 			return;
 
-		var pzcls = this.$s('pointer'),
+		var /*safe*/ pzcls = this.$s('pointer'),
 			n = this.$n()!,
 			refn = ref.$n()!,
 			dir = this._dir,
@@ -230,7 +230,7 @@ export class Notification extends zul.wgt.Popup {
 				p.style[b ? 'right' : 'left'] = '';
 			}
 
-			p.className = pzcls + (_dirMap[dir!] ? ' ' + this.$s(_dirMap[dir!]) : '');
+			/*safe*/ p.className = pzcls + (_dirMap[dir!] ? ' ' + this.$s(_dirMap[dir!]) : '');
 			jq(p).show();
 
 		} else {

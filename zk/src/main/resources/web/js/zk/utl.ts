@@ -221,6 +221,21 @@ export namespace utl_global {
 			}
 			return map;
 		}
+
+		/**
+		 * Encodes the string to a valid URL string.
+		 * @param url - the url to encode
+		 * @since 10.0.0
+		 */
+		static encodeURL(url: string): string {
+			// eslint-disable-next-line @microsoft/sdl/no-insecure-url
+			if (url.startsWith('https://') || url.startsWith('http://')) {
+				return new URL(url).href;
+			} else {
+				return zUtl.encodeXML(url);
+			}
+		}
+
 		/**
 		 * Encodes the string to a valid XML attribute string.
 		 * Refer to {@link Utl} for more XML utilities.
@@ -272,7 +287,7 @@ export namespace utl_global {
 						out += txt.substring(k, j) + '&' + enc + ';';
 						k = j + 1;
 					} else if (multiline && cc == '\n') {
-						out += txt.substring(k, j) + '<br/>\n';
+						/*safe*/ out += /*safe*/ txt.substring(k, j) + '<br/>\n';
 						k = j + 1;
 					} else if (pre && (cc == ' ' || cc == '\t')) {
 						out += txt.substring(k, j) + '&nbsp;';
@@ -427,7 +442,7 @@ export namespace utl_global {
 				+ msg + '</div></div>';
 			if (icon)
 				html += '<div class="' + icon + '"></div>';
-			jq(document.body).append(html + '</div>');
+			jq(document.body).append(/*safe*/ html + '</div>');
 
 			var $n = jq(id, zk),
 				n: HTMLElement & {z_mask?} = $n[0],
@@ -529,7 +544,7 @@ export namespace utl_global {
 				location.replace(url ? url : location.href);
 			} else {
 				if (url) {
-					location.href = url;
+					location.href = zUtl.encodeURL(url);
 
 					var j = url.indexOf('#');
 					//bug 3363687, only if '#" exist, has to reload()
@@ -611,11 +626,11 @@ export namespace utl_global {
 		static mapToString(map: Record<string, string>, assign?: string, separator?: string): string {
 			assign = assign || '=';
 			separator = separator || ' ';
-			var out: string[] = [];
+			var output: string[] = [];
 			for (var v in map)
-				out.push(separator, v, assign, map[v]);
-			out[0] = '';
-			return out.join('');
+				output.push(separator, v, assign, map[v]);
+			output[0] = '';
+			return output.join('');
 		}
 		/**
 		 * Appends an attribute.

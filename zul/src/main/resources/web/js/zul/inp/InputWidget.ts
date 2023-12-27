@@ -598,10 +598,10 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 
 	/** @internal */
 	override domAttrs_(no?: zk.DomAttrsOptions): string {
-		var attr = super.domAttrs_(no);
+		var attrHTML = super.domAttrs_(no);
 		if (!no || !no.text)
-			attr += this.textAttrs_();
-		return attr;
+			attrHTML += /*safe*/ this.textAttrs_();
+		return attrHTML;
 	}
 
 	/**
@@ -616,8 +616,8 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 			v = this._cols;
 			if (v > 0) html += ' cols="' + v + '"';
 		} else {
-			html += ' value="' + this._areaText() + '"';
-			html += ' type="' + this.getType() + '"';
+			html += ' value="' + /*safe*/ this._areaText() + '"';
+			html += ' type="' + zUtl.encodeXML(this.getType()) + '"';
 			v = this._cols;
 			if (v > 0) html += ' size="' + v + '"';
 			v = this._maxlength;
@@ -637,7 +637,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 			}
 		}
 
-		var s = jq.filterTextStyle(this.domStyle_({width: true, height: true, top: true, left: true}));
+		var /*safe*/ s = jq.filterTextStyle(this.domStyle_({width: true, height: true, top: true, left: true}));
 		if (s) html += ' style="' + s + '"';
 
 		return html;
@@ -1093,7 +1093,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 
 	/** @internal */
 	override domClass_(no?: zk.DomClassOptions): string {
-		var sc = super.domClass_(no);
+		var /*safe*/ sc = super.domClass_(no);
 		if ((!no || !no.zclass) && this._disabled)
 			sc += ' ' + this.$s('disabled');
 

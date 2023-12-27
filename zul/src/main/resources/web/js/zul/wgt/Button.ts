@@ -370,15 +370,15 @@ export class Button extends zul.LabelImageWidget<HTMLButtonElement> implements z
 	override domContent_(): string {
 		var label = zUtl.encodeXML(this.getLabel()),
 			img = this.getImage(),
-			iconSclass = this.domIcon_();
+			/*safe*/ iconSclass = this.domIcon_();
 		if (!img && !iconSclass) return label;
 
 		if (!img) img = iconSclass;
 		else
 			img = `<img class="${this.$s('image')}" src="${img}" alt="" aria-hidden="true" />${iconSclass ? ' ' + iconSclass : ''}`;
 		var space = 'vertical' == this.getOrient() ? '<br/>' : ' ';
-		return this.getDir() == 'reverse' ?
-			label + space + img : img + space + label;
+		return DOMPurify.sanitize(this.getDir() == 'reverse' ?
+			label + space + img : img + space + label);
 	}
 
 	onShow(): void {

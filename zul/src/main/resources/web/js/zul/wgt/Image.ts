@@ -190,10 +190,10 @@ export class Image extends zul.Widget<HTMLImageElement> {
 
 	/** @internal */
 	override domAttrs_(no?: zk.DomAttrsOptions): string {
-		var attr = super.domAttrs_(no);
+		var attrHTML = super.domAttrs_(no);
 		if (!no || !no.content)
-			attr += this.contentAttrs_();
-		return attr;
+			attrHTML += /*safe*/ this.contentAttrs_();
+		return attrHTML;
 	}
 
 	/**
@@ -209,6 +209,6 @@ export class Image extends zul.Widget<HTMLImageElement> {
 			attr += ' hspace="' + v + '"';
 		if (v = this._vspace)
 			attr += ' vspace="' + v + '"';
-		return attr;
+		return DOMPurify.sanitize(attr);
 	}
 }

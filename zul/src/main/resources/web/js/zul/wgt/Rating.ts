@@ -147,11 +147,11 @@ export class Rating extends zul.Widget {
 
 	/** @internal */
 	override domClass_(no?: zk.DomClassOptions): string {
-		var sc = super.domClass_(no);
+		var scHTML = super.domClass_(no);
 		if (!no || !no.zclass) {
-			sc += ' ' + this.$s(this._orient);
+			scHTML += ' ' + this.$s(zUtl.encodeXML(this._orient));
 		}
-		return sc;
+		return scHTML;
 	}
 
 	/** @internal */
@@ -186,7 +186,7 @@ export class Rating extends zul.Widget {
 
 	/** @internal */
 	_toggleClass(name: string, rate: number): void {
-		var wgt = this;
+		const wgt = this;
 		jq(wgt).children().each(function () {
 			var jqCh = jq(this);
 			jqCh.toggleClass(wgt.$s(name), jqCh.data('rate') <= rate);

@@ -350,9 +350,9 @@ export class Listbox extends zul.sel.SelectWidget {
 	override insertChildHTML_(child: zk.Widget, before?: zk.Widget, desktop?: zk.Desktop): void {
 		const nodeOfBefore = before && (!(child instanceof zul.sel.Listitem) || before instanceof zul.sel.Listitem) ? before.getFirstNode_() : undefined;
 		if (nodeOfBefore)
-			jq(nodeOfBefore).before(child.redrawHTML_());
+			jq(nodeOfBefore).before(/*safe*/ child.redrawHTML_());
 		else
-			jq(this.getCaveNode()).append(child.redrawHTML_());
+			jq(this.getCaveNode()).append(/*safe*/ child.redrawHTML_());
 		child.bind(desktop);
 	}
 
