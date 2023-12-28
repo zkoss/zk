@@ -294,7 +294,7 @@ function doLog(): void {
 	if (_logmsg) {
 		var console = document.getElementById('zk_log') as HTMLTextAreaElement;
 		if (!console) {
-			jq(document.body).append(
+			jq(document.body).append(/*safe*/
 '<div id="zk_logbox" class="z-log">'
 + '<button class="z-button" onclick="jq(\'#zk_logbox\').remove()">X</button><br/>'
 + '<textarea id="zk_log" rows="10"></textarea></div>');

@@ -442,7 +442,7 @@ export class Slider extends zul.Widget {
 		widget.slidepos = widget._curpos;
 
 		jq(document.body)
-			.append('<div id="zul_slidetip" class="'
+			.append(/*safe*/ '<div id="zul_slidetip" class="'
 			+ widget.$s('popup')
 			+ (sclassHTML ? ' ' + sclassHTML + '">' : '">')
 			+ DOMPurify.sanitize(widget._slidingtext.replace(/\{0\}/g, widget.slidepos as unknown as string))

@@ -251,6 +251,14 @@ ruleTester.run('no-mixed-html', noMixedHtml, {
 		'text',
 		'"use strict"',
 		'"<div>"',
+		// This should be safe as the variable is not used in HTML context.
+		{
+			code: 'x( "<div>" )'
+		},
+		// This should be safe as the variable is not used in HTML context.
+		{
+			code: 'foo.x( "<div>" )',
+		},
 	],
 
 	invalid: [
@@ -427,18 +435,18 @@ ruleTester.run('no-mixed-html', noMixedHtml, {
 				message: 'Non-HTML variable \'x\' is used to store raw HTML',
 			}]
 		},
-		{
-			code: 'x( "<div>" )',
-			errors: [{
-				message: 'HTML passed in to function \'x\'',
-			}]
-		},
-		{
-			code: 'foo.x( "<div>" )',
-			errors: [{
-				message: 'HTML passed in to function \'foo.x\'',
-			}]
-		},
+		// This should be safe as the variable is not used in HTML context.{
+		// 	code: 'x( "<div>" )',
+		// 	errors: [{
+		// 		message: 'HTML passed in to function \'x\'',
+		// 	}]
+		// },
+		// This should be safe as the variable is not used in HTML context.{
+		// 	code: 'foo.x( "<div>" )',
+		// 	errors: [{
+		// 		message: 'HTML passed in to function \'foo.x\'',
+		// 	}]
+		// },
 
 		{
 			code: 'foo.stuff( doc.html( text ) )',

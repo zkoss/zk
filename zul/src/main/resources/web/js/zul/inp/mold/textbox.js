@@ -13,11 +13,10 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 function textbox$mold$(out) {
-	var uuid = this.uuid;
 	// ZK-679: Textbox multi-line start with new-line failed in onCreate event
 	// browser will ignore first newline
-	if(this.isMultiline()) 
-		out.push('<textarea', this.domAttrs_(), '>\n', this._areaText(), '</textarea>');
-	else 
+	if (this.isMultiline())
+		out.push('<textarea', this.domAttrs_(), '>\n', /*safe*/ this._areaText(), '</textarea>');
+	else
 		out.push('<input', this.domAttrs_(), '/>');
 }

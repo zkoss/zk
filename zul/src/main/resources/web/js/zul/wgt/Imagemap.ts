@@ -111,8 +111,8 @@ export class Imagemap extends zul.wgt.Image {
 				attr += 'height:' + h + ';';
 			attr += '"';
 		}
-		return attr + (this.firstChild ? ' usemap="#' + this.uuid + '-map"' :
-			' ismap="ismap"');
+		return DOMPurify.sanitize(attr + (this.firstChild ? ' usemap="#' + this.uuid + '-map"' :
+			' ismap="ismap"'));
 	}
 
 	override fromPageCoord(x: number, y: number): zk.Offset {

@@ -18,24 +18,24 @@ function layoutregion$mold$(out) {
 		BL = zul.layout.Borderlayout,
 		noCenter = pos != BL.CENTER,
 		parent = this.parent;
-	out.push('<div id="', uuid,  '" role="none"><div id="', uuid, '-real"',
-			this.domAttrs_({id: 1}), ' role="none">');
-	
+	out.push('<div id="', uuid, '" role="none"><div id="', uuid, '-real"',
+		this.domAttrs_({id: 1}), ' role="none">');
+
 	this.titleRenderer_(out);
 	out.push('<div id="', uuid, '-cave" class="', this.$s('body'), '"');
 	if (zk.ios && this._nativebar)
 		out.push(' style="-webkit-overflow-scrolling:touch;"');
 	out.push(' role="none">');
-	
+
 	var firstChild = this.getFirstChild();
 	if (firstChild)
 		firstChild.redraw(out);
-	
+
 	out.push('</div></div>');
-	
+
 	if (noCenter) {
-		var icon = this.$s('icon'),
-			doticon = ' z-icon-ellipsis-' +
+		let iconHTML = this.$s('icon'),
+			doticonHTML = ' z-icon-ellipsis-' +
 				(BL.WEST == pos || BL.EAST == pos ? 'v' : 'h'),
 			splitIcon = '';
 
@@ -59,17 +59,18 @@ function layoutregion$mold$(out) {
 		if (!this._collapsible || !this._closable)
 			out.push(' ', this.$s('splitter-button-disabled'));
 		out.push('" aria-hidden="true">',
-			'<i class="', icon, doticon, '"></i>',
-			'<i class="', icon, ' ', splitIcon, '"></i>',
-			'<i class="', icon, doticon, '"></i>',
+			'<i class="', iconHTML, doticonHTML, '"></i>',
+			'<i class="', iconHTML, ' ', splitIcon, '"></i>',
+			'<i class="', iconHTML, doticonHTML, '"></i>',
 			'</span></div>', '<div id="', uuid, '-colled" class="',
-				this.$s('collapsed'), '" style="display:none"');
+			this.$s('collapsed'), '" style="display:none"');
 		var title = this._title;
-		if (title) out.push(' title="', title, '"');
-		out.push(' role="button" tabindex="0" aria-expanded="false"><i id="', uuid, '-btned" class="', parent.$s('icon'), ' ', this.getIconClass_(true), '"');
+		if (title) out.push(' title="', zUtl.encodeXML(title), '"');
+		out.push(' role="button" tabindex="0" aria-expanded="false"><i id="', uuid,
+			'-btned" class="', parent.$s('icon'), ' ', /*safe*/ this.getIconClass_(true), '"');
 		if (!this._collapsible || !this._closable)
 			out.push(' style="display:none;"');
-		out.push('></i><div id="', this.uuid, '-title" class="', this.$s('title'), '">', this._title, '</div></div>');
+		out.push('></i><div id="', this.uuid, '-title" class="', this.$s('title'), '">', zUtl.encodeXML(this._title), '</div></div>');
 	}
 	out.push('</div>');
 }

@@ -14,10 +14,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 function listbox$mold$(out) {
 	var uuid = this.uuid,
-		zcls = this.getZclass(),
-		innerWidth = this.getInnerWidth(),
-		wdAttr = innerWidth == '100%' ? ' width="100%"' : '',
-		wdStyle =  innerWidth != '100%' ? 'width:' + innerWidth : '',
+		zclsHTML = this.getZclass(),
+		innerWidth = zUtl.encodeXML(this.getInnerWidth()),
+		wdAttr = innerWidth === '100%' ? ' width="100%"' : '',
+		wdStyle = innerWidth !== '100%' ? 'width:' + innerWidth : '',
 		inPaging = this.inPagingMold(), pgpos,
 		tag = zk.ie < 11 ? 'a' : 'button';
 
@@ -25,7 +25,7 @@ function listbox$mold$(out) {
 
 	if (inPaging && this.paging) {
 		pgpos = this.getPagingPosition();
-		if (pgpos == 'top' || pgpos == 'both') {
+		if (pgpos === 'top' || pgpos === 'both') {
 			out.push('<div id="', uuid, '-pgit" class="', this.$s('paging-top'), '">');
 			this.paging.redraw(out);
 			out.push('</div>');
@@ -35,7 +35,7 @@ function listbox$mold$(out) {
 	if (this.listhead) {
 		out.push('<div id="', uuid, '-head" class="', this.$s('header'), '">',
 			'<table id="', uuid, '-headtbl"', wdAttr, ' style="table-layout:fixed;',
-			wdStyle,'">');
+			/*safe*/ wdStyle, '">');
 		this.domFaker_(out, '-hdfaker');
 
 		out.push('<tbody id="', uuid, '-headrows">');
@@ -52,18 +52,18 @@ function listbox$mold$(out) {
 	var hgh = this.getHeight(),
 		iOSNativeBar = zk.ios && this._nativebar;
 	if (hgh || iOSNativeBar)
-		out.push(' style="overflow:hidden;', hgh ? 'height:' + hgh + ';' : '', iOSNativeBar ? '-webkit-overflow-scrolling:touch;' : '', '"');
+		out.push(' style="overflow:hidden;', hgh ? 'height:' + zUtl.encodeXML(hgh) + ';' : '', iOSNativeBar ? '-webkit-overflow-scrolling:touch;' : '', '"');
 	out.push('>');
 
 	if (this.domPad_ && !inPaging)
 		this.domPad_(out, '-tpad');
 
-	out.push('<table', wdAttr, ' id="', uuid, '-cave"', ' style="table-layout:fixed;', wdStyle,'">');
+	out.push('<table', wdAttr, ' id="', uuid, '-cave"', ' style="table-layout:fixed;', /*safe*/ wdStyle, '">');
 
 	if (this.listhead)
-		this.domFaker_(out, '-bdfaker', zcls);
+		this.domFaker_(/*safe*/ out, '-bdfaker', zclsHTML);
 
-	out.push('<tbody id="',uuid,'-rows">');
+	out.push('<tbody id="', uuid, '-rows">');
 
 	var iter = this.getBodyWidgetIterator({
 		skipHidden: true,
@@ -82,12 +82,12 @@ function listbox$mold$(out) {
 	if (this.domPad_ && !inPaging)
 		this.domPad_(out, '-bpad');
 
-	out.push('<', tag, ' id="', uuid, '-a" style="top:',jq.px0(this._anchorTop),';left:',jq.px0(this._anchorLeft),
-			 '" onclick="return false;" href="javascript:;" class="z-focus-a"');
+	out.push('<', tag, ' id="', uuid, '-a" style="top:', jq.px(this._anchorTop), ';left:', jq.px(this._anchorLeft),
+		'" onclick="return false;" href="javascript:;" class="z-focus-a"');
 	var tabindex = this._tabindex; // Feature ZK-2531
 	if (tabindex != undefined)
-		out.push(' tabindex="' + tabindex + '"');
-	out.push('></', tag, '>', "</div>");
+		out.push(' tabindex="' + /*safe*/ tabindex + '"');
+	out.push('></', tag, '>', '</div>');
 
 	if (this._nativebar && this.frozen) {
 		out.push('<div id="', uuid, '-frozen" class="', this.$s('frozen'), '">');
@@ -97,7 +97,7 @@ function listbox$mold$(out) {
 
 	if (this.listfoot) {
 		out.push('<div id="', uuid, '-foot" class="', this.$s('footer'), '">',
-			'<table id="', uuid, '-foottbl"', wdAttr, ' style="table-layout:fixed;', wdStyle,'">');
+			'<table id="', uuid, '-foottbl"', wdAttr, ' style="table-layout:fixed;', /*safe*/ wdStyle, '">');
 		if (this.listhead)
 			this.domFaker_(out, '-ftfaker');
 
@@ -106,7 +106,7 @@ function listbox$mold$(out) {
 		out.push('</tbody></table></div>');
 	}
 
-	if (pgpos == 'bottom' || pgpos == 'both') {
+	if (pgpos === 'bottom' || pgpos === 'both') {
 		out.push('<div id="', uuid, '-pgib" class="', this.$s('paging-bottom'), '">');
 		this.paging.redraw(out);
 		out.push('</div>');

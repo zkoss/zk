@@ -16,20 +16,17 @@ function toolbar$mold$(out) {
 	var uuid = this.uuid;
 
 	out.push('<div ', this.domAttrs_(), '><div id="', uuid, '-cave"',
-			' class="', this.$s('content'), ' ', this.$s(this.getAlign()), '" role="none" >');
+		' class="', this.$s('content'), ' ', this.$s(this.getAlign()), '" role="none" >');
 
-	this._tabindexTargetChild = null;
+	this._tabindexTargetChild = undefined;
 	for (var w = this.firstChild; w; w = w.nextSibling) {
 		w.redraw(out);
-		// ZK-1706: the width of empty space does not always equal 3px in ie9
-		if ('horizontal' == this.getOrient() && zk.ie9)
-			out.push('<span></span>');
 	}
 	out.push('</div>');
 
 	if (this.isOverflowPopup()) {
 		out.push('<i id="', uuid, '-overflowpopup-button"',
-				' class="', this._getOverflowPopupBtnClass(), '" aria-hidden="true"></i>');
+			' class="', zUtl.encodeXML(this._getOverflowPopupBtnClass()), '" aria-hidden="true"></i>');
 		out.push('<div id="', uuid, '-pp" class="', this.$s('popup'), ' ', this.$s('popup-close'), '"></div>');
 	}
 	out.push('<div class="z-clear" aria-hidden="true"></div></div>');

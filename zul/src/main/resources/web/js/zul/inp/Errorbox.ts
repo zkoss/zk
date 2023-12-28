@@ -176,19 +176,19 @@ export class Errorbox extends zul.wgt.Notification {
 	}
 
 	override redraw(out: string[]): void {
-		var uuid = this.uuid,
+		var uuidHTML = this.uuid,
 			icon = this.$s('icon'),
 			iconSclass = this.iconSclass;
-		out.push('<div', this.domAttrs_(), '><div id="', uuid, '-p" class="',
-			this.$s('pointer'), '"></div><i id="', uuid, '-icon" class="',
+		out.push('<div', this.domAttrs_(), '><div id="', uuidHTML, '-p" class="',
+			this.$s('pointer'), '"></div><i id="', uuidHTML, '-icon" class="',
 			//ZK-2677 use either default or self-defined icon, do not rely on CSS overwrite
-			icon, ' ', iconSclass, '"></i><div id="', uuid,
+			/*safe*/ icon, ' ', zUtl.encodeXML(iconSclass), '"></i><div id="', uuidHTML,
 			'-cave" class="', this.$s('content'), '" title="',
 			(zUtl.encodeXML(msgzk.GOTO_ERROR_FIELD)), '">',
 			zUtl.encodeXML(this.msg, { multiline: true }),
-			'</div><div id="', uuid, '-cls" class="',
+			'</div><div id="', uuidHTML, '-cls" class="',
 			// Bug ZK-2952: added missing id for the "x" icon
-			this.$s('close'), '"><i id="', uuid, '-clsIcon" class="', icon,
+			this.$s('close'), '"><i id="', uuidHTML, '-clsIcon" class="', /*safe*/ icon,
 			' z-icon-times"></i></div></div>');
 	}
 

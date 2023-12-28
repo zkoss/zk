@@ -161,7 +161,7 @@ export class Layout extends zul.Widget {
 			vert = this.isVertical_(),
 			spc = this._spacing;
 
-		oo.push('<div id="' + child.uuid + '-chdex" class="' + this.$s('inner') + '"');
+		oo.push('<div id="' + /*safe*/ child.uuid + '-chdex" class="' + this.$s('inner') + '"');
 		if (spc && spc != 'auto') {
 			oo.push(' style="', !child.isVisible() ? 'display:none;' : ''); //Bug ZK-1650: set chdex display style according to child widget
 			var next = child.nextSibling; //Bug ZK-1526: popup should not consider spacing

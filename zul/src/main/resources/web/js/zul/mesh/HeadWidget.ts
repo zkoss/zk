@@ -230,7 +230,7 @@ export class HeadWidget extends zul.Widget<HTMLTableRowElement> {
 					if (!$faker.find(child.$n_(faker)).length) {
 						var wd = _getWidth(child, child._hflexWidth ? child._hflexWidth + 'px' : child.getWidth());
 						wd = wd ? 'width:' + wd + ';' : '';
-						var html = '<col id="' + /*safe*/ child.uuid + '-' + faker + '" style="' + wd + '"></col>',
+						var html = '<col id="' + /*safe*/ child.uuid + '-' + /*safe*/ faker + '" style="' +/*safe*/ wd + '"></col>',
 							index = child.getChildIndex();
 						// B30-1926480: child can be added after any brother node
 						if (index > 0)
@@ -249,7 +249,7 @@ export class HeadWidget extends zul.Widget<HTMLTableRowElement> {
 						if (!hdfakerbar)
 							jq(head.$n_('hdfaker')).append(/*safe*/ '<col id="' + /*safe*/ head.uuid +
 								'-hdfaker-bar" style="' + hdfakerbarstyle + '" ></col>');
-						jq(head).append('<th id="' + head.uuid + '-bar" class="' + head.$s('bar') + '" style="' + barstyle + '" ></th>');
+						jq(head).append(/*safe*/ '<th id="' + /*safe*/ head.uuid + '-bar" class="' + head.$s('bar') + '" style="' + /*safe*/ barstyle + '" ></th>');
 					}
 				}
 			}

@@ -434,14 +434,14 @@ export namespace utl_global {
 				style = ' style="left:' + x + 'px;top:' + y + 'px"',
 				idtxt = id + '-t',
 				idmsk = id + '-m',
-				html = '<div id="' + id + '" role="alert"';
+				html = '<div id="' + /*safe*/ id + '" role="alert"';
 			if (mask)
-				html += '><div id="' + idmsk + '" class="z-modal-mask"' + style + '></div';
-			html += '><div id="' + idtxt + '" class="z-loading"' + style
+				html += '><div id="' + /*safe*/ idmsk + '" class="z-modal-mask"' + /*safe*/ style + '></div';
+			html += '><div id="' + /*safe*/ idtxt + '" class="z-loading"' + /*safe*/ style
 				+ '><div class="z-loading-indicator"><span class="z-loading-icon"></span> '
-				+ msg + '</div></div>';
+				+ DOMPurify.sanitize(msg) + '</div></div>';
 			if (icon)
-				html += '<div class="' + icon + '"></div>';
+				html += '<div class="' + /*safe*/ icon + '"></div>';
 			jq(document.body).append(/*safe*/ html + '</div>');
 
 			var $n = jq(id, zk),

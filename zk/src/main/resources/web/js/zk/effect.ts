@@ -167,7 +167,7 @@ export namespace eff {
 				if (opts.visible == false) mask.style.display = 'none';
 			} else {
 				var maskId = opts.id || 'z_mask',
-					html = '<div id="' + maskId + '" class="z-modal-mask"';//FF: don't add tabIndex
+					html = '<div id="' + /*safe*/ maskId + '" class="z-modal-mask"';//FF: don't add tabIndex
 				if (opts.zIndex != null || opts.visible == false) {
 					html += ' style="';
 					if (opts.zIndex != null) html += 'z-index:' + /*safe*/ opts.zIndex;

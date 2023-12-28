@@ -21,8 +21,8 @@ function tabbox$mold$(out) {
 		tabs = this.tabs,
 		tabpanels = this.tabpanels,
 		toolbar = this.toolbar,
-		getIcon = function(fontIconCls) {
-			return '<i class="z-icon-chevron-' + fontIconCls + '"></i>';
+		domIconHTML = function (fontIconCls) {
+			return '<i class="z-icon-chevron-' + /*safe*/ fontIconCls + '"></i>';
 		};
 	out.push('<div ', this.domAttrs_(), '>');
 	if (this.isHorizontal()) { // horizontal
@@ -39,8 +39,8 @@ function tabbox$mold$(out) {
 		}
 		if (tabscroll) {
 			out.push(
-				'<div id="', uuid , '-left" class="', icon, ' ', this.$s('left-scroll'), '">', getIcon('left'), '</div>',
-				'<div id="', uuid , '-right" class="', icon, ' ', this.$s('right-scroll'), '">' , getIcon('right'),  '</div>');
+				'<div id="', uuid, '-left" class="', /*safe*/ icon, ' ', this.$s('left-scroll'), '">', domIconHTML('left'), '</div>',
+				'<div id="', uuid, '-right" class="', /*safe*/ icon, ' ', this.$s('right-scroll'), '">', domIconHTML('right'), '</div>');
 		}
 		if (tabscroll && toolbar)
 			toolbar.redraw(out);
@@ -52,11 +52,11 @@ function tabbox$mold$(out) {
 		if (this.isVertical()) { // only vertical allow tabscroll
 			if (tabscroll) {
 				out.push(
-					'<div id="', uuid , '-up" class="', icon, ' ', this.$s('up-scroll'), '">', getIcon('up'), '</div>',
-					'<div id="', uuid , '-down" class="', icon, ' ', this.$s('down-scroll'), '">' , getIcon('down'),  '</div>');
+					'<div id="', uuid, '-up" class="', /*safe*/ icon, ' ', this.$s('up-scroll'), '">', domIconHTML('up'), '</div>',
+					'<div id="', uuid, '-down" class="', /*safe*/ icon, ' ', this.$s('down-scroll'), '">', domIconHTML('down'), '</div>');
 			}
 			out.push('<div class="z-clear"></div>');
 		}
 	}
-	out.push("</div>");
+	out.push('</div>');
 }

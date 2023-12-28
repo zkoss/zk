@@ -196,24 +196,24 @@ export class Treecell extends zul.LabelImageWidget<HTMLTableCellElement> {
 		if (this.parent!.firstChild == this) {
 			var item = this.parent!.parent!,
 				tree = item.getTree(),
-				sb = new zk.Buffer();
+				out = new zk.Buffer();
 			if (tree) {
 				if (tree.isCheckmark()) {
 					var chkable = item.isSelectable(),
 						multi = tree.isMultiple(),
 						cmCls = multi ? item.$s('checkbox') : item.$s('radio'),
 						ckCls = multi ? ' z-icon-check' : ' z-icon-radio';
-					sb.push('<span id="', this.parent!.uuid, '-cm" class="',
-							item.$s('checkable'), ' ', cmCls);
+					out.push('<span id="', /*safe*/ this.parent!.uuid, '-cm" class="',
+							item.$s('checkable'), ' ', /*safe*/ cmCls);
 
 					if (!chkable || item.isDisabled())
-						sb.push(' ', item.$s('disabled'));
+						out.push(' ', item.$s('disabled'));
 
-					sb.push('"');
+					out.push('"');
 					if (!chkable)
-						sb.push(' style="visibility:hidden"');
+						out.push(' style="visibility:hidden"');
 
-					sb.push('><i class="', item.$s('icon'), ckCls, '"></i></span>');
+					out.push('><i class="', item.$s('icon'), /*safe*/ ckCls, '"></i></span>');
 				}
 			}
 			var iconScls = zUtl.encodeXML(tree ? tree.getZclass() : ''),
@@ -221,15 +221,15 @@ export class Treecell extends zul.LabelImageWidget<HTMLTableCellElement> {
 			for (var j = 0, k = pitems.length; j < k; ++j) {
 				// ZK-4494: Add information about whether a line should be omitted when decorating
 				const omit = j < k - 1 && pitems[j + 1].treerow?.isLastVisibleChild_();
-				this._appendIcon(sb, iconScls, 'spacer', false, omit);
+				this._appendIcon(out, iconScls, 'spacer', false, omit);
 			}
 			if (item.isContainer()) {
 				var name = item.isOpen() ? 'open' : 'close';
-				this._appendIcon(sb, iconScls, name, true);
+				this._appendIcon(out, iconScls, name, true);
 			} else {
-				this._appendIcon(sb, iconScls, 'spacer', false);
+				this._appendIcon(out, iconScls, 'spacer', false);
 			}
-			return sb.join('');
+			return out.join('');
 		} else {
 			// ZK-4679: We don't have to generate &nbsp; for empty cell to correct the tree's height in IE anymore
 			return '';
@@ -271,8 +271,8 @@ export class Treecell extends zul.LabelImageWidget<HTMLTableCellElement> {
 			if (name.includes('close'))
 				icon = this.getIconCloseClass_();
 
-			/*safe*/ openCloseIcon += '<i id="' + id + '" class="' + icon + ' ' + iconScls
-					+ '-' + name + '"></i>';
+			/*safe*/ openCloseIcon += '<i id="' + /*safe*/ id + '" class="' + /*safe*/ icon + ' ' + /*safe*/ iconScls
+					+ '-' + /*safe*/ name + '"></i>';
 		}
 		if (button) {
 			var item = this.parent; // B65-ZK-1608, appendChild() will invoke before treeitem._fixOnAdd()

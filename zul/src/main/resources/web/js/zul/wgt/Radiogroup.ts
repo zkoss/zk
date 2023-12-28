@@ -319,7 +319,7 @@ export class Radiogroup extends zul.Widget {
 		var sclsHTML = super.domClass_(no);
 		if (!no || !no.zclass) {
 			const added = this.$s(this.getOrient());
-			if (added) sclsHTML += (sclsHTML ? ' ' : '') + added;
+			if (added) sclsHTML += (sclsHTML ? ' ' : '') + /*safe*/ added;
 		}
 		return sclsHTML;
 	}

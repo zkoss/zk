@@ -636,7 +636,7 @@ export class Combobox extends zul.inp.ComboWidget {
 				'">', zUtl.encodeXML(msg), '</div>');
 		}
 
-		out.push('<ul id="', uuid, '-cave" class="', this.$s('content'), '" >');
+		out.push('<ul id="', /*safe*/ uuid, '-cave" class="', this.$s('content'), '" >');
 
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);

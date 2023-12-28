@@ -45,7 +45,7 @@ export class Caption extends zul.LabelImageWidget<HTMLDivElement> {
 		if (!img && !iconSclass) return label;
 
 		if (!img) img = iconSclass;
-		else /*safe*/ img = '<img id="' + this.uuid + '-img" src="' + img + '" class="' + this.$s('image') + '" alt="" aria-hidden="true" />' + (iconSclass ? ' ' + iconSclass : '');
+		else /*safe*/ img = '<img id="' + this.uuid + '-img" src="' + /*safe*/ img + '" class="' + this.$s('image') + '" alt="" aria-hidden="true" />' + (iconSclass ? ' ' + iconSclass : '');
 		return DOMPurify.sanitize(label ? img + ' ' + '<span class="' + this.$s('label') + '">' + label + '</span>' : img);
 	}
 

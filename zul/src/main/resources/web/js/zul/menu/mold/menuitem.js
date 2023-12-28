@@ -16,13 +16,13 @@ function menuitem$mold$(out) {
 	var uuid = this.uuid,
 		target = this.getTarget(),
 		chechmark = this._checkmark;
-	
+
 	out.push('<li', this.domAttrs_(), ' role="none">');
-	
-	out.push('<a role="' + (chechmark ? 'menuitemcheckbox' : 'menuitem') + '" href="', this.getHref() ? this.getHref() : 'javascript:;', '"');
+
+	out.push('<a role="' + (chechmark ? 'menuitemcheckbox' : 'menuitem') + '" href="', this.getHref() ? DOMPurify.sanitize(this.getHref()) : 'javascript:;', '"');
 	if (target)
-		out.push(' target="', target, '"');
+		out.push(' target="', zUtl.encodeXML(target), '"');
 	out.push(' id="', uuid, '-a" class="', this.$s('content'), '"',
-			this._disabled ? ' disabled="disabled"' : '',
-			'>', this.domContent_(), '</a></li>'); //Merge breeze
+		this._disabled ? ' disabled="disabled"' : '',
+		'>', this.domContent_(), '</a></li>'); //Merge breeze
 }

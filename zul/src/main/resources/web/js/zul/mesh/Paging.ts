@@ -406,10 +406,10 @@ export class Paging extends zul.Widget {
 	_infoTags(out: string[]): void {
 		if (this.getTotalSize() == 0)
 			return;
-		const uuid = this.uuid,
+		const uuidHTML = this.uuid,
 			nameOrId = _rerenderIfBothPaging(this) ? 'name' : 'id'; // Bug ZK-2280
-		out.push('<div ', nameOrId, '="', uuid, '-detail" class="', this.$s('info'), '"><span ',
-			nameOrId, '="', uuid, '-info" aria-hidden="true">', this.infoText_(), '</span></div>');
+		out.push('<div ', nameOrId, '="', uuidHTML, '-detail" class="', this.$s('info'), '"><span ',
+			nameOrId, '="', uuidHTML, '-info" aria-hidden="true">', DOMPurify.sanitize(this.infoText_()), '</span></div>');
 	}
 
 	/** @internal */

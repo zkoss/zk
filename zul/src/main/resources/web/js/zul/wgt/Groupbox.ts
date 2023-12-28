@@ -181,7 +181,7 @@ export class Groupbox extends zul.ContainerWidget {
 	_contentAttrs(): string {
 		var html = ' class="', s = this._contentSclass;
 		if (s)
-			html += s + ' ';
+			html += /*safe*/ s + ' ';
 		html += this.$s('content') + '"';
 
 		s = this._contentStyle;
@@ -190,7 +190,7 @@ export class Groupbox extends zul.ContainerWidget {
 		if (!this._open)
 			s = 'display:none;' + (s || '');
 		if (s)
-			html += ' style="' + s + '"';
+			html += ' style="' + /*safe*/ s + '"';
 		return DOMPurify.sanitize(html);
 	}
 

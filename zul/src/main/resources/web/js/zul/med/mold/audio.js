@@ -16,5 +16,5 @@ function audio$mold$(out) {
 	out.push('<audio', this.domAttrs_(), '>', this.domContent_());
 	for (var w = this.firstChild; w; w = w.nextSibling)
 		w.redraw(out);
-	out.push('</audio>')
+	out.push('</audio>');
 }

@@ -14,8 +14,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 
 function slider$mold$(out) {
-	var isVer = this.isVertical(),
-		uuid = this.uuid;
+	const uuid = this.uuid;
 	out.push('<div', this.domAttrs_(), ' role="slider">' +
 		'<div id="', uuid, '-inner" class="', this.$s('center'), '" aria-hidden="true">' +
 		'<div id="', uuid, '-area" class="', this.$s('area'), '" style="position: absolute"></div>' +

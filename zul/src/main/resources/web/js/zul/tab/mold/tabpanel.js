@@ -15,23 +15,27 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 */
 function tabpanel$mold$(out) {
-	var uuid = this.uuid,
+	let w;
+	const uuid = this.uuid,
 		tabbox = this.getTabbox();
 	if (tabbox.inAccordionMold()) {//Accordion
 		var tab = this.getLinkedTab();
-		
-		out.push('<div class="', this.getZclass() , '" id="', uuid, '" role="none">');
+
+		out.push('<div class="', this.getZclass(), '" id="', uuid, '" role="none">');
 		// only draw tab if it is not rendered
 		if (tab && !tab.$n())
 			tab.redraw(out);
-		out.push('<div id="', uuid, '-cave"', this.domAttrs_({id:1, zclass:1}), ' role="region">');
-		for (var w = this.firstChild; w; w = w.nextSibling)
+		out.push('<div id="', uuid, '-cave"', this.domAttrs_({
+			id: 1,
+			zclass: 1
+		}), ' role="region">');
+		for (w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
 		out.push('</div></div>');
 
 	} else {//Default Mold
 		out.push('<div ', this.domAttrs_(), ' role="tabpanel">');
-		for (var w = this.firstChild; w; w = w.nextSibling)
+		for (w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
 		out.push('</div>');
 	}

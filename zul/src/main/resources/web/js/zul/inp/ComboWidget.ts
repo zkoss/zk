@@ -834,23 +834,23 @@ export class ComboWidget extends zul.inp.InputWidget<string> {
 	 * @internal
 	 */
 	redraw_(out: string[]): void {
-		var uuid = this.uuid,
+		var uuidHTML = this.uuid,
 			isButtonVisible = this._buttonVisible;
 
-		out.push('<span', this.domAttrs_({text: true, tabindex: true}), ' role="combobox" aria-expanded="false" aria-owns="', uuid, '-pp" aria-haspopup="dialog"><input id="',
-			uuid, '-real" class="', this.$s('input'));
+		out.push('<span', this.domAttrs_({text: true, tabindex: true}), ' role="combobox" aria-expanded="false" aria-owns="', uuidHTML, '-pp" aria-haspopup="dialog"><input id="',
+			uuidHTML, '-real" class="', this.$s('input'));
 
 		if (!isButtonVisible)
 			out.push(' ', this.$s('input-full'));
 
-		out.push('" autocomplete="off" aria-autocomplete="none" aria-controls="', uuid, '-pp"',
-			this.textAttrs_(), '/><a id="', uuid, '-btn" tabindex="-1" role="button" aria-label="', msgzul.PANEL_EXPAND, '" class="',
+		out.push('" autocomplete="off" aria-autocomplete="none" aria-controls="', uuidHTML, '-pp"',
+			/*safe*/ this.textAttrs_(), '/><a id="', uuidHTML, '-btn" tabindex="-1" role="button" aria-label="', /*safe*/ msgzul.PANEL_EXPAND, '" class="',
 			this.$s('button'));
 
 		if (!isButtonVisible)
 			out.push(' ', this.$s('disabled'));
 
-		out.push('" aria-hidden="true"><i id="', uuid, '-icon" class="', this.$s('icon'), ' ', this.getIconSclass()!, '"></i></a>');
+		out.push('" aria-hidden="true"><i id="', /*safe*/ uuidHTML, '-icon" class="', this.$s('icon'), ' ', /*safe*/ this.getIconSclass()!, '"></i></a>');
 
 		this.redrawpp_(out);
 

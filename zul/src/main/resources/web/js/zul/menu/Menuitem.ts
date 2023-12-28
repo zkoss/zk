@@ -366,8 +366,8 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 			/*safe*/ iconSclass = this.domIcon_();
 
 		if (img)
-			/*safe*/ img = '<img src="' + img + '" class="' + this.$s('image') + '" align="absmiddle" alt="" aria-hidden="true" />'
-				+ (iconSclass ? ' ' + iconSclass : '');
+			/*safe*/ img = '<img src="' + /*safe*/ img + '" class="' + this.$s('image') + '" align="absmiddle" alt="" aria-hidden="true" />'
+				+ (iconSclass ? ' ' + /*safe*/ iconSclass : '');
 		else {
 			if (iconSclass) {
 				img = iconSclass;

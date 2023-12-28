@@ -11,14 +11,14 @@ Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 
 */
 function include$mold$(out) {
-	out.push('<', this._enclosingTag, this.domAttrs_(), '>');
+	out.push('<', zUtl.encodeXML(this._enclosingTag), this.domAttrs_(), '>');
 	for (var w = this.firstChild; w; w = w.nextSibling)
 		w.redraw(out);
 	if (this._comment)
 		out.push('<!--\n');
-	if ((w=this._xcnt) && !jq.isArray(w)) //array -> zk().detachChildren() is used
-		out.push(w); //not: zk().detachChildren() is used
+	if ((w = this._xcnt) && !Array.isArray(w)) //array -> zk().detachChildren() is used
+		out.push(/*safe*/ w); //not: zk().detachChildren() is used
 	if (this._comment)
 		out.push('\n-->');
-	out.push('</', this._enclosingTag, '>');
+	out.push('</', zUtl.encodeXML(this._enclosingTag), '>');
 }

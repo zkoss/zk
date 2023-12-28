@@ -203,7 +203,7 @@ export class Listcell extends zul.LabelImageWidget<HTMLTableCellElement> {
 				var cls = p._open ?
 					p.getIconOpenClass_() + ' ' + p.$s('icon-open') :
 					p.getIconCloseClass_() + ' ' + p.$s('icon-close');
-				/*safe*/ s += '<span id="' + /*safe*/ p.uuid + '-img" class="' + p.$s('icon') + '"><i class="' + cls + '"></i></span>';
+				/*safe*/ s += '<span id="' + /*safe*/ p.uuid + '-img" class="' + p.$s('icon') + '"><i class="' + /*safe*/ cls + '"></i></span>';
 			}
 			if (s) return s;
 		}

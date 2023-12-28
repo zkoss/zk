@@ -94,7 +94,7 @@ export class Inputgroup extends zul.Widget {
 			w = opts.child;
 		if (!(w instanceof zul.wgt.Button) && !(w instanceof zul.wgt.Toolbarbutton)
 			&& (!zul.inp || !(w instanceof zul.inp.InputWidget))) {
-			out.push('<div id="', w.uuid, '-chdex" class="', this.$s('text'), '">');
+			out.push('<div id="', /*safe*/ w.uuid, '-chdex" class="', this.$s('text'), '">');
 			w.redraw(out);
 			out.push('</div>');
 		} else {

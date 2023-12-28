@@ -214,7 +214,7 @@ export class Tabbox extends zul.Widget {
 		if (!no || !no.zclass) {
 			var cls = this.inAccordionMold() ?
 					this.$s('accordion') : this.$s(this.getOrient());
-			scHTML += ' ' + cls;
+			scHTML += ' ' + /*safe*/ cls;
 		}
 		return scHTML;
 	}

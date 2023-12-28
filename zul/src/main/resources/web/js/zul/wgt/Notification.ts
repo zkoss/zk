@@ -74,7 +74,7 @@ export class Notification extends zul.wgt.Popup {
 			out.push('<div id="', uuidHTML, '-p" class="', this.$s('pointer'), '"></div>');
 		out.push('<i id="', uuidHTML, '-icon" class="', iconHTML, ' ', (/*safe*/ _iconMap[this._type!]), '"></i>');
 		out.push('<div id="', uuidHTML, '-cave" class="', this.$s('content'), '">',
-				this._msg, '</div>');
+			zUtl.encodeXML(this._msg), '</div>');
 		if (this._closable)
 			out.push('<div id="', uuidHTML, '-cls" class="', this.$s('close'),
 					'"><i id="', uuidHTML, '-clsIcon" class="', iconHTML, ' z-icon-times"></i></div>');

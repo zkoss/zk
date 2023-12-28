@@ -196,7 +196,7 @@ export class Treecol extends zul.mesh.SortWidget {
 		if (this._hasCheckbox())
 			/*safe*/ s = '<span id="' + this.uuid + '-cm" class="' + this.$s('checkable')
 				+ (tree.$$selectAll ? ' ' + this.$s('checked') : '') + '"><i class="' + this.$s('icon') + ' z-icon-check"></i></span>'
-				+ (s ? '&nbsp;' + s : '');
+				+ (s ? '&nbsp;' + /*safe*/ s : '');
 		return s;
 	}
 

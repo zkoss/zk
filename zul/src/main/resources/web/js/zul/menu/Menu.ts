@@ -221,8 +221,8 @@ export class Menu extends zul.LabelImageWidget implements zul.LabelImageWidgetWi
 		/*safe*/ iconSclass = this.domIcon_();
 
 		if (img)
-			/*safe*/ img = '<img id="' + this.uuid + '-img" src="' + img + '" class="' + this.$s('image') + '" align="absmiddle" alt="" aria-hidden="true" />'
-				+ (iconSclass ? ' ' + iconSclass : '');
+			/*safe*/ img = '<img id="' + this.uuid + '-img" src="' + /*safe*/ img + '" class="' + this.$s('image') + '" align="absmiddle" alt="" aria-hidden="true" />'
+				+ (iconSclass ? ' ' + /*safe*/ iconSclass : '');
 		else {
 			if (iconSclass) {
 				img = iconSclass;
@@ -670,8 +670,8 @@ export class ContentHandler extends zk.Object {
 	redraw(out: string[]): void {
 		var wgt = this._wgt;
 
-		out.push('<div id="', wgt.uuid, '-cnt-pp" class="', wgt.$s('content-popup'),
-			'" style=""><div class="', wgt.$s('content-body'), '">', this._content!, '</div></div>');
+		out.push('<div id="', /*safe*/ wgt.uuid, '-cnt-pp" class="', wgt.$s('content-popup'),
+			'" style=""><div class="', wgt.$s('content-body'), '">', DOMPurify.sanitize(this._content!), '</div></div>');
 	}
 
 	bind(): void {

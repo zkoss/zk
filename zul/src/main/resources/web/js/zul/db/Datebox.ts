@@ -903,7 +903,7 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 	/** @internal */
 	redrawpp_(out: string[]): void {
 		out.push('<div id="', this.uuid, '-pp" class="', this.$s('popup'),
-			'" style="display:none" role="dialog" aria-labelledby="', this._pop.uuid, '-title" tabindex="-1">');
+			'" style="display:none" role="dialog" aria-labelledby="', /*safe*/ this._pop.uuid, '-title" tabindex="-1">');
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
 
@@ -916,7 +916,7 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 		var timezones = this._dtzones;
 		if (timezones) {
 			out.push('<div class="', this.$s('timezone'), '">',
-				this.getTimeZoneLabel(),
+				DOMPurify.sanitize(this.getTimeZoneLabel()),
 				'<select id="', this.uuid, '-dtzones">');
 			for (var i = 0, len = timezones.length; i < len; i++) {
 				const timezoneHTML = zUtl.encodeXML(timezones[i]);

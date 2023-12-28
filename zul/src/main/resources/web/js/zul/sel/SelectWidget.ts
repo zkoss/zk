@@ -344,7 +344,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	updateFormData(): void {
 		if (this._name) {
 			if (!this.efield)
-				this.efield = jq(this.$n()).append('<div style="display:none;"></div>').find('> div:last-child')[0];
+				this.efield = jq(this.$n()).append(/*safe*/ '<div style="display:none;"></div>').find('> div:last-child')[0];
 
 			jq(this.efield).children().remove();
 

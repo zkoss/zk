@@ -52,17 +52,17 @@ window.zkInitCrashTimer = setTimeout(function () {
 		
 		if (!window.zkShowCrashMessage) {
 			window.zkShowCrashMessage = function () {
-				var style = '<style> a:visited {color: white;} </style>',
-					div = '<div style="background: rgb(35,48,64); text-align: center; color: white; position: absolute; \
+				var styleHTML = '<style> a:visited {color: white;} </style>',
+					divHTML = '<div style="background: rgb(35,48,64); text-align: center; color: white; position: absolute; \
 						top: 0; left: 0; right: 0; bottom: 0; margin: auto; width: 50%; height: 300px; font-size: 20px;">',
-					icon = '<i class="z-icon-frown-o" style="font-size: 5em; display: block;"></i>',
+					iconHTML = '<i class="z-icon-frown-o" style="font-size: 5em; display: block;"></i>',
 					msgHTML = '<p>Something went wrong while loading the page.</p> \
 						<p>Please try to reload or visit another page. If you are the administrator, \
 						try to check your Javascript or Network console.</p>',
-					copyright = '<div style="text-align: right; margin-top: -18px">\
+					copyrightHTML = '<div style="text-align: right; margin-top: -18px">\
 						<span style="font-size: 10px;">powered by </span>\
 						<span style="font-size: 14px;"><a href="http://www.zkoss.org/">ZK</a></span></div>',
-					btn = '<button style="margin-top: 10px" onclick="location.reload();">Reload page</button>';
+					btnHTML = '<button style="margin-top: 10px" onclick="location.reload();">Reload page</button>';
 				switch (zkErrorCode) {
 					case 1:
 						msgHTML = '<p>Error code 1: ZK error, before mounting. </p>' + msgHTML;
@@ -80,10 +80,10 @@ window.zkInitCrashTimer = setTimeout(function () {
 						msgHTML = '<p>Error code 5: user error, server response. </p>' + msgHTML;
 						break;
 				}
-				div = style + div + icon + msgHTML + copyright + btn + '</div>';
+				divHTML = styleHTML + divHTML + iconHTML + msgHTML + copyrightHTML + btnHTML + '</div>';
 				body.style.background = 'rgb(35,48,64)';
 				// eslint-disable-next-line @microsoft/sdl/no-inner-html
-				body.innerHTML = div;
+				body.innerHTML = divHTML;
 			};
 		}
 		window.zkShowCrashMessage(zkErrorCode);

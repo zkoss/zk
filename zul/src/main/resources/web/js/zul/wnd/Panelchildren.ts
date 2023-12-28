@@ -51,9 +51,9 @@ export class Panelchildren extends zul.ContainerWidget {
 			const /*safe*/ zcls = this.getZclass(),
 				parent = this.parent!;
 			if (!parent.getTitle() && !parent.caption)
-				out.push(zcls + '-noheader');
+				out.push(/*safe*/ zcls + '-noheader');
 			if (!parent._bordered())
-				out.push(zcls + '-noborder');
+				out.push(/*safe*/ zcls + '-noborder');
 		}
 		return DOMPurify.sanitize(out.join(' '));
 	}

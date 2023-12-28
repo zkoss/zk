@@ -232,9 +232,10 @@ export const noMixedHtml = function (context) {
 			if (node.type === 'Identifier') {
 				if (node.name === 'undefined' || node.name === 'null') return true;
 
-				// if the variable is initialized with a literal, it is safe
+				// if the variable is initialized with a literal but not with Html, it is safe
 				const parent = context.getScope().variables.find(v => v.name === node.name)?.identifiers[0]?.parent;
-				if (parent && parent.init && (parent.init.type === 'Literal' ||
+				if (parent && parent.init && (
+					(parent.init.type === 'Literal'&& !isHTMLLiteral(parent.init)) ||
 					(parent.init.type === 'ConditionalExpression' &&
 						parent.init.consequent.type === 'Literal' &&
 						parent.init.alternate.type === 'Literal'))) {
@@ -251,7 +252,7 @@ export const noMixedHtml = function (context) {
 				}
 
 				// ignore check condition expression
-				if (node.parent.type === 'BinaryExpression') {
+				if (node.parent.type === 'BinaryExpression' && node.parent.operator.includes('=')) {
 					return true;
 				}
 			}
@@ -516,7 +517,9 @@ export const noMixedHtml = function (context) {
 
 			// ignore namespace type, for example zhtml.xxx
 			if (parent && parent.property && parent.property.type === 'Identifier') {
-				return false;
+				if (parent.parent.type !== 'CallExpression' && parent.object.name === 'zhtml') {
+					return false;
+				}
 			}
 			if (htmlVariableRules.some(function (rule) {
 				if (rule.object && rule.property) {
@@ -633,6 +636,10 @@ export const noMixedHtml = function (context) {
 		exprStack.push({ node: node });
 	};
 
+	var isHTMLLiteral = function (node) {
+		return !isCommentedSafe(node) && /<\/?[a-z]/.exec(node.value);
+	}
+
 	/**
 	 * Pops a node from the expression stack and checks it for XSS issues.
 	 */
@@ -651,16 +658,24 @@ export const noMixedHtml = function (context) {
 
 		// Check the node based on its type.
 		if (expr.node.type === 'CallExpression') {
-			if (allRules.get(expr.node).sanitized || expr.sanitized)
+			if (allRules.get(expr.node).sanitized)
 				return;
 
-			const unSafeHTML = expr.node.arguments.map((x) => getDescendants((x))).flat()
-				.some((x) => x.type !== 'Literal');
+			const nodes = expr.node.arguments.map((x) => getDescendants((x))).flat();
+			const hasUnSafeHTML = nodes.some((x) => x.type === 'Literal' && isHTMLLiteral(x));
+
+			// more check if arguments are not literal or sanitized
+			if (expr.sanitized)  {
+				if (!hasUnSafeHTML || !nodes.some((x) => x.type !== 'Literal' && !allRules.get(x).sanitized)) {
+					return;
+				}
+			}
+
 			// Call expression.
 			//
 			// Ensure the function accepts HTML and none of the arguments have
 			// XSS issues.
-			if (unSafeHTML) {
+			if (hasUnSafeHTML || !nodes.some(x => x.type === 'Literal') /*if all variables, we should check*/) {
 				checkFunctionAcceptsHtml(expr.node.callee);
 			}
 			expr.node.arguments.forEach(function (a) {
@@ -674,8 +689,7 @@ export const noMixedHtml = function (context) {
 			// more check if right side is not literal or sanitized
 			if (expr.sanitized)  {
 				const nodes = getDescendants(expr.node.right);
-				const hasUnSafeHTML = nodes.some((x) => x.type === 'Literal' && !isCommentedSafe(x) &&
-					/<\/?[a-z]/.exec(x.value));
+				const hasUnSafeHTML = nodes.some((x) => x.type === 'Literal' && isHTMLLiteral(x));
 				if (!hasUnSafeHTML || !nodes.some((x) => x.type !== 'Literal' && !allRules.get(x).sanitized)) {
 					return;
 				}
@@ -872,8 +886,23 @@ export const noMixedHtml = function (context) {
 	var nodeHasSafeComment = function (node) {
 
 		// Check all the comments in front of the node for comment 'safe'
-		var isSafe = false;
-		var comments = context.getSourceCode().getCommentsBefore(node);
+		let isSafe = false;
+		const sourceCode = context.getSourceCode();
+		let comments = sourceCode.getCommentsBefore(node);
+		if (node.type !== 'Identifier') {
+			const insideComments = sourceCode.getCommentsInside(node.parent);
+			if (insideComments.length > 0) {
+				const left = node.parent.left;
+				const right = node.parent.right;
+				if (left && right) {
+					insideComments.forEach((comment) => {
+						if (comment.range[0] >= left.range[1] && comment.range[1] <= right.range[0]) {
+							comments.push(comment);
+						}
+					});
+				}
+			}
+		}
 		comments.forEach(function (comment) {
 			if (/^\s*safe\s*$/i.exec(comment.value))
 				isSafe = true;
@@ -963,7 +992,23 @@ export const noMixedHtml = function (context) {
 			condition(node)) {
 			// ignore pure literal HTML
 			if (node.type === 'Literal' && node.parent.type === 'CallExpression' &&
-				node.parent.arguments.length === 1) return;
+				node.parent.arguments.length === 1) {
+				let hasUnsafeHTML = isHTMLLiteral(node);
+				if (hasUnsafeHTML) {
+					hasUnsafeHTML = false;
+					var parent = node.parent;
+					while (parent != null) {
+						if (parent.type === 'AssignmentExpression' || parent.type === 'VariableDeclarator') {
+							hasUnsafeHTML = true;
+							break;
+						}
+						parent = parent.parent;
+					}
+				}
+				if (!hasUnsafeHTML) {
+					return;// ignore pure literal HTML with any assignment
+				}
+			}
 
 			// ignore TSTypeReference and boolean type
 			if (node.type === 'Identifier' && (
@@ -1016,9 +1061,7 @@ export const noMixedHtml = function (context) {
 
 			// Skip regex and /*safe*/ strings. Remaining strings infect parent
 			// if they contain <html or </html tags.
-			return !node.regex &&
-				!isCommentedSafe(node) &&
-				/<\/?[a-z]/.exec(node.value);
+			return !node.regex && isHTMLLiteral(node);
 		}),
 
 		// Identifiers infect parents if they refer to HTML in their name.

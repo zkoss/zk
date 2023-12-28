@@ -21,8 +21,8 @@ function panel$mold$(out, skipper) {
 
 	out.push('<div', this.domAttrs_({tabindex: 1}), '>');//tabindex attribute will be set in the child elements
 	if (caption || title) {
-		out.push('<div id="', uuid, '-head" class="', this.$s('head'), '">', 
-				'<div id="', uuid, '-cap" class="', this.$s('header'), '">');
+		out.push('<div id="', uuid, '-head" class="', this.$s('head'), '">',
+			'<div id="', uuid, '-cap" class="', this.$s('header'), '">');
 		if (caption) caption.redraw(out);
 		else {
 			out.push(zUtl.encodeXML(title));
@@ -39,36 +39,36 @@ function panel$mold$(out, skipper) {
 		}
 		out.push('</div></div>');
 	} else {
-		out.push('<div id="', uuid, '-drag-button" class="', this.$s('drag-button'), " z-icon-minus", '"></div>');
+		out.push('<div id="', uuid, '-drag-button" class="', this.$s('drag-button'), ' z-icon-minus', '"></div>');
 	}
-	
+
 	out.push('<div id="', uuid, '-body" class="', this.$s('body'), '"');
-	if (!this._open) 
+	if (!this._open)
 		out.push(' style="display:none;"');
 	out.push('>');
-	
+
 	if (!skipper) {
 		if (this.tbar) {
 			out.push('<div id="', uuid, '-tb" class="', this.$s('top'), '">');
 			this.tbar.redraw(out);
 			out.push('</div>');
 		}
-		
+
 		if (this.panelchildren)
 			this.panelchildren.redraw(out);
-			
+
 		if (this.bbar) {
 			out.push('<div id="', uuid, '-bb" class="', this.$s('bottom'), '">');
 			this.bbar.redraw(out);
 			out.push('</div>');
 		}
-		
+
 		if (this.fbar) {
 			out.push('<div id="', uuid, '-fb" class="', this.$s('footer'), '">');
 			this.fbar.redraw(out);
 			out.push('</div>');
 		}
 	}
-	
+
 	out.push('</div></div>');
 }
