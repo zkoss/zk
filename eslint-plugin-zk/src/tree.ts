@@ -1,6 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
-/* tree.js
+/* tree.ts
 
 	Purpose:
 		
@@ -11,10 +9,9 @@
 
 Copyright (C) 2023 Potix Corporation. All Rights Reserved.
 */
+import {TSESTree} from '@typescript-eslint/utils';
 
-'use strict';
-
-var tree = module.exports = {
+export const tree = {
 
 	/**
 	 * Gets the identifier from the node.
@@ -23,21 +20,21 @@ var tree = module.exports = {
 	 *
 	 * @returns {Identifier} - The identifier node.
 	 */
-	getIdentifier: function( node ) {
+	getIdentifier: function (node: TSESTree.Node) {
 
 		// Function calls use the callee as name.
-		if( node.type === 'CallExpression' )
+		if (node.type === 'CallExpression')
 			node = node.callee;
 
 		// Get the member property.
-		if( node.type === 'MemberExpression' ) {
-			if( node.computed )
+		if (node.type === 'MemberExpression') {
+			if (node.computed)
 				node = node.object;
 			else
 				node = node.property;
 		}
 
-		if( node.type !== 'Identifier' )
+		if (node.type !== 'Identifier')
 			return null;
 
 		return node;
@@ -50,14 +47,14 @@ var tree = module.exports = {
 	 *
 	 * @returns {string} Node name.
 	 */
-	getNodeName: function( node ) {
+	getNodeName: function (node: TSESTree.Node): string {
 
 		// Check the 'this' expression.
-		if( node.type === 'ThisExpression' )
+		if (node.type === 'ThisExpression')
 			return 'this';
 
 		// Expect identifier or similar node.
-		var id = tree.getIdentifier( node );
+		const id = tree.getIdentifier(node);
 		return id ? id.name : '';
 	},
 
@@ -68,31 +65,29 @@ var tree = module.exports = {
 	 *
 	 * @returns {string} Function name with optional '.' for member functions.
 	 */
-	getFullItemName: function( func ) {
+	getFullItemName: function (func: TSESTree.Node): string {
 
 		// Unwrap the possible call expression.
-		if( func.type === 'CallExpression' )
+		if (func.type === 'CallExpression')
 			func = func.callee;
 
 		// Resolve the name stack from the member expression.
 		// This gathers it in reverse.
-		var name = [];
-		while( func.type === 'MemberExpression' ) {
-			name.push( func.property.name );
+		const name = [];
+		while (func.type === 'MemberExpression') {
+			name.push(((func as TSESTree.MemberExpression).property as TSESTree.Identifier).name);
 			func = func.object;
 		}
 
 		// Ensure the last object name is an identifier at this point.
 		// We don't support [] indexed access for encoders.
-		if( func.type === 'Identifier' )
-			name.push( func.name );
+		if (func.type === 'Identifier')
+			name.push(func.name);
 
 		// Reverse the stack to get it in correct order and join functio names
 		// using '.'
 		name.reverse();
-		name = name.join( '.' );
-
-		return name;
+		return name.join('.');
 	},
 
 	/**
@@ -102,30 +97,33 @@ var tree = module.exports = {
 	 *
 	 * @returns {string} Names of rules that affect this function.
 	 */
-	getRuleNames: function( func ) {
+	getRuleNames: function (func: TSESTree.Node): string[] {
 
 		// Unwrap the possible call expression.
-		if( func.type === 'CallExpression' )
+		if (func.type === 'CallExpression')
 			func = func.callee;
 
 		// Unwrap the member expressions and get the last identifier.
-		var names = [];
-		var memberIdentifiers = [];
-		for( ; func; func = func.object ) {
+		const names = [];
+		const memberIdentifiers = [];
+		for (let fc: undefined | TSESTree.Node & {
+			object?: TSESTree.Node,
+			computed?: boolean
+		} = func; fc; fc = fc.object) {
 
 			// Skip computed properties.
-			if( func.computed )
+			if (fc.computed)
 				continue;
 
-			var identifier = tree.getIdentifier( func );
-			if( !identifier )
+			const identifier = tree.getIdentifier(fc);
+			if (!identifier)
 				break;
 
-			memberIdentifiers.unshift( identifier.name );
+			memberIdentifiers.unshift(identifier.name);
 
 			// Add '.' prefix is this is part of a member function.
-			var prefix = ( func.object ? '.' : '' );
-			names.unshift( prefix + memberIdentifiers.join( '.' ) );
+			const prefix = (fc.object ? '.' : '');
+			names.unshift(prefix + memberIdentifiers.join('.'));
 		}
 
 		return names;
@@ -138,33 +136,33 @@ var tree = module.exports = {
 	 *
 	 * @returns {Identifier} - The function identifier or null.
 	 */
-	getParentFunctionIdentifier: function( node ) {
+	getParentFunctionIdentifier: function (node: TSESTree.Node): TSESTree.Node | null {
 
 		// We'll want to get the closest function.
-		var func = node;
+		let func: TSESTree.Node | undefined = node;
 
-		while( func &&
+		while (func &&
 		func.type !== 'FunctionExpression' &&
 		func.type !== 'FunctionDeclaration' &&
-		func.type !== 'ArrowFunctionExpression' ) {
+		func.type !== 'ArrowFunctionExpression') {
 
 			// Continue getting the parent.
 			func = func.parent;
 		}
 
 		// Not everything is inside functions.
-		if( !func )
+		if (!func)
 			return null;
 
 		// If the function is named, return the function name.
-		if( func.id )
+		if (func.id)
 			return func.id;
 
 		// Otherwise see if it is being assigned to a variable.
-		var parent = func.parent;
-		if( parent && parent.type === 'VariableDeclarator' )
+		const parent = func.parent;
+		if (parent && parent.type === 'VariableDeclarator')
 			return parent.id;
-		if( parent && parent.type === 'AssignmentExpression' )
+		if (parent && parent.type === 'AssignmentExpression')
 			return parent.left;
 
 		return null;
@@ -178,57 +176,57 @@ var tree = module.exports = {
 	 *
 	 * @returns {bool} True, if the node is a parameter.
 	 */
-	isParameter: function( node, expr ) {
+	isParameter: function (node: TSESTree.Node, expr: TSESTree.Node) {
 
-		if( expr.type === 'CallExpression' ) {
+		if (expr.type === 'CallExpression') {
 
 			// Check whether any of the call arguments equals the node.
-			var isParameter = false;
-			expr.arguments.forEach( function( a ) {
-				if( a === node )
+			let isParameter = false;
+			expr.arguments.forEach(function (a) {
+				if (a === node)
 					isParameter = true;
-			} );
+			});
 
 			// Return the result.
 			return isParameter;
 
-		} else if( expr.type === 'AssignmentExpression' ) {
+		} else if (expr.type === 'AssignmentExpression') {
 
 			// Assignments count the right side as the paramter.
 			return expr.right === node;
 
-		} else if( expr.type === 'VariableDeclarator' ) {
+		} else if (expr.type === 'VariableDeclarator') {
 
 			// Declaration count the init expression as the paramter.
 			return expr.init === node;
 
-		} else if( expr.type === 'Property' ) {
+		} else if (expr.type === 'Property') {
 
 			// Properties consider the property value as the parameter.
 			return expr.value === node;
 
-		} else if( expr.type === 'ArrayExpression' ) {
+		} else if (expr.type === 'ArrayExpression') {
 
 			// For arrays check whether the node is any of the elements.
-			var isElement = false;
-			expr.elements.forEach( function( e ) {
-				if( e === node )
+			let isElement = false;
+			expr.elements.forEach(function (e) {
+				if (e === node)
 					isElement = true;
-			} );
+			});
 			return isElement;
 
-		} else if( expr.type === 'FunctionExpression' ) {
+		} else if (expr.type === 'FunctionExpression') {
 
 			// Function expression has no 'parameters'.
 			// None of the fields end up directly into the HTML (that we know
 			// of without solving the halting problem...)
 			return false;
 
-		} else if( expr.type === 'ConditionalExpression' ) {
+		} else if (expr.type === 'ConditionalExpression') {
 
 			return node === expr.alternate || node === expr.consequent;
 
-		} else if( expr.type === 'ArrowFunctionExpression' ) {
+		} else if (expr.type === 'ArrowFunctionExpression') {
 
 			return node === expr.body;
 		}

@@ -1,7 +1,6 @@
 /* eslint-disable */
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-/* no-mixed-html.js
+/* noMixedHtml.ts
 
 	Purpose:
 		
@@ -17,24 +16,24 @@ Copyright (C) 2023 Potix Corporation. All Rights Reserved.
  * @fileoverview Checks for missing encoding when concatenating HTML strings
  * @author Mikko Rantanen
  */
-'use strict';
-
-import tree from '../tree';
+import { TSESTree } from '@typescript-eslint/utils';
+import {tree} from '../tree';
 import re from '../re';
-import {RulesJs} from '../RulesJs';
+import {RulesJs, PassThroughRule} from '../RulesJs';
+import {type Rule} from 'eslint';
 
 // -----------------------------------------------------------------------------
 // Rule Definition
 // -----------------------------------------------------------------------------
 
 
-export const noMixedHtml = function (context) {
+export const noMixedHtml = function (context: Rule.RuleContext) {
 
 	// Default options.
-	var htmlVariableRules = ['html/i'];
-	var htmlFunctionRules = ['AsHtml'];
-	var sanitizedVariableRules = [];
-	var functionRules = {
+	let htmlVariableRules = ['html/i'] as RegExp[] | any[];
+	let htmlFunctionRules = ['AsHtml'] as RegExp[] | any[];
+	let sanitizedVariableRules = [] as RegExp[] | any[];
+	let functionRules = {
 		'.join': { passthrough: { obj: true, args: true } },
 		'.toString': { passthrough: { obj: true } },
 		'.substr': { passthrough: { obj: true } },
@@ -43,7 +42,7 @@ export const noMixedHtml = function (context) {
 
 	// Read the user specified options.
 	if (context.options.length > 0) {
-		var opts = context.options[0];
+		const opts = context.options[0];
 
 		htmlVariableRules = opts.htmlVariableRules || htmlVariableRules;
 		htmlFunctionRules = opts.htmlFunctionRules || htmlFunctionRules;
@@ -53,7 +52,7 @@ export const noMixedHtml = function (context) {
 
 	// Turn the name rules from string/string array to regexp.
 	// htmlVariableRules = htmlVariableRules.map(re.toRegexp);
-	htmlVariableRules = htmlVariableRules.map(function (rule) {
+	htmlVariableRules = htmlVariableRules.map(function (rule: string | {object: string, property: string}) {
 		if (typeof rule === 'string') {
 			return re.toRegexp(rule);
 		} else if (typeof rule === 'object' && rule.property) {
@@ -65,7 +64,7 @@ export const noMixedHtml = function (context) {
 		return rule;
 	});
 	htmlFunctionRules = htmlFunctionRules.map(re.toRegexp);
-	sanitizedVariableRules = sanitizedVariableRules.map(function (rule) {
+	sanitizedVariableRules = sanitizedVariableRules.map(function (rule: string | {object: string, property: string}) {
 		if (typeof rule === 'string') {
 			return re.toRegexp(rule);
 		} else if (typeof rule === 'object' && rule.property) {
@@ -77,13 +76,14 @@ export const noMixedHtml = function (context) {
 		return rule;
 	});
 
-	var allRules = new RulesJs({
+	// @ts-ignore
+	const allRules = new RulesJs({
 		functionRules: functionRules
 	});
 
 	// Expression stack for tracking the topmost expression that is marked
 	// XSS-candidate when we find '<html>' strings.
-	var exprStack = [];
+	const exprStack = [] as {node: TSESTree.Node, xss?: boolean, sanitized?: boolean | undefined}[];
 
 	// -------------------------------------------------------------------------
 	// Helpers
@@ -97,13 +97,13 @@ export const noMixedHtml = function (context) {
 	 *
 	 * @returns {bool} - True, if the node is an array join.
 	 */
-	var getPassthrough = function (node) {
+	const getPassthrough = function (node: TSESTree.Node): PassThroughRule | false {
 
 		if (node.type !== 'CallExpression')
 			return false;
 
-		var rules = allRules.getFunctionRules(node);
-		return rules.passthrough;
+		const rules = allRules.getFunctionRules(node);
+		return rules.passthrough as PassThroughRule;
 	};
 
 	/**
@@ -117,23 +117,23 @@ export const noMixedHtml = function (context) {
 	 *
 	 * @returns {Node[]} - Flat list of descendant nodes.
 	 */
-	var getDescendants = function (node, _children, _hasRecursed) {
+	const getDescendants = function (node: TSESTree.Node, _children?: undefined | TSESTree.Node[], _hasRecursed?: boolean): TSESTree.Node[] {
 
 		// The children array may be passed during recursion.
 		if (_children === undefined)
 			_children = [];
 
 		// Handle the special case of .join() function.
-		var passthrough = getPassthrough(node);
+		const passthrough = getPassthrough(node);
 		if (passthrough) {
-
+			const cn = node as TSESTree.CallExpression;
 			// Get the descedants from the array and the function argument.
 			if (passthrough.obj) {
-				getDescendants(node.callee.object, _children, _hasRecursed);
+				getDescendants((cn.callee as TSESTree.MemberExpression).object, _children, _hasRecursed);
 			}
 
 			if (passthrough.args) {
-				node.arguments.forEach(function (a) {
+				cn.arguments.forEach(function (a) {
 					getDescendants(a, _children, _hasRecursed);
 				});
 			}
@@ -163,7 +163,7 @@ export const noMixedHtml = function (context) {
 
 			// For array nodes, get the descendant nodes.
 			node.elements.forEach(function (e) {
-				getDescendants(e, _children, true);
+				getDescendants(e as never, _children, true);
 			});
 
 		} else if (node.type === 'BinaryExpression') {
@@ -209,7 +209,7 @@ export const noMixedHtml = function (context) {
 	 *
 	 * @returns {bool} - True, if the node is XSS safe.
 	 */
-	var isXssSafe = function (node) {
+	const isXssSafe = function (node: TSESTree.Node) {
 
 		// See if the item is commented to be safe.
 		if (isCommentedSafe(node))
@@ -233,7 +233,7 @@ export const noMixedHtml = function (context) {
 				if (node.name === 'undefined' || node.name === 'null') return true;
 
 				// if the variable is initialized with a literal but not with Html, it is safe
-				const parent = context.getScope().variables.find(v => v.name === node.name)?.identifiers[0]?.parent;
+				const parent = (context.getScope().variables.find(v => v.name === node.name)?.identifiers[0] as {parent?})?.parent;
 				if (parent && parent.init && (
 					(parent.init.type === 'Literal'&& !isHTMLLiteral(parent.init)) ||
 					(parent.init.type === 'ConditionalExpression' &&
@@ -284,7 +284,7 @@ export const noMixedHtml = function (context) {
 	 *
 	 * @returns {bool} True, if the function is an encoding function.
 	 */
-	var isHtmlOutputFunction = function (func) {
+	var isHtmlOutputFunction = function (func: TSESTree.Node) {
 
 		return allRules.getFunctionRules(func).htmlOutput ||
 			re.any(tree.getFullItemName(func), htmlFunctionRules);
@@ -298,7 +298,7 @@ export const noMixedHtml = function (context) {
 	 *
 	 * @returns {bool} True, if the function is unsafe.
 	 */
-	var functionAcceptsHtml = function (func) {
+	const functionAcceptsHtml = function (func) {
 		return allRules.getFunctionRules(func).htmlInput;
 	};
 
@@ -311,7 +311,7 @@ export const noMixedHtml = function (context) {
 	 * @param {Node} target
 	 *      Target node the root is used for. Affects some XSS checks.
 	 */
-	var checkForXss = function (node, target) {
+	const checkForXss = function (node, target) {
 
 		// Skip functions.
 		// This stops the following from giving errors:
@@ -321,10 +321,10 @@ export const noMixedHtml = function (context) {
 			return;
 
 		// Get the rules.
-		var targetRules = allRules.get(target);
+		const targetRules = allRules.get(target);
 
 		// Get the descendants.
-		var nodes = getDescendants(node);
+		const nodes = getDescendants(node);
 
 		// Check each descendant.
 		nodes.forEach(function (childNode) {
@@ -332,7 +332,7 @@ export const noMixedHtml = function (context) {
 			// Return if the parameter is marked as safe in the current context.
 			if (targetRules.safe === true) {
 				return;
-			} else if (targetRules.safe && targetRules.safe.indexOf &&
+			} else if (Array.isArray(targetRules.safe) &&
 				targetRules.safe.indexOf(tree.getNodeName(childNode)) !== -1) {
 				return;
 			}
@@ -342,20 +342,20 @@ export const noMixedHtml = function (context) {
 				return;
 
 			// Node wasn't deemed okay. Report error.
-			var msg = 'Unencoded input \'{{ identifier }}\' used in HTML context';
+			let msg = 'Unencoded input \'{{ identifier }}\' used in HTML context';
 			if (childNode.type === 'CallExpression') {
 				msg = 'Unencoded return value from function \'{{ identifier }}\' ' +
 					'used in HTML context';
 				childNode = childNode.callee;
 			}
 
-			var identifier = null;
+			let identifier = null;
 			if (childNode.type === 'ObjectExpression')
 				identifier = '[Object]';
 			else if (childNode.type === 'ArrayExpression')
 				identifier = '[Array]';
 			else
-				identifier = context.getSource(childNode);
+				identifier = context.sourceCode.getText(childNode);
 
 			context.report({
 				node: childNode,
@@ -372,7 +372,7 @@ export const noMixedHtml = function (context) {
 	 *
 	 * @returns {bool} True, if the node uses HTML.
 	 */
-	var usesHtml = function (node) {
+	const usesHtml = function (node) {
 
 		// Check the node type.
 		if (node.type === 'CallExpression') {
@@ -410,7 +410,7 @@ export const noMixedHtml = function (context) {
 		} else if (node.type === 'ReturnStatement') {
 
 			// Return statement.
-			let func = tree.getParentFunctionIdentifier(node);
+			const func = tree.getParentFunctionIdentifier(node);
 			if (!func) return false;
 
 			return isHtmlFunction(func);
@@ -418,7 +418,7 @@ export const noMixedHtml = function (context) {
 		} else if (node.type === 'ArrowFunctionExpression') {
 
 			// Return statement.
-			let func = tree.getParentFunctionIdentifier(node);
+			const func = tree.getParentFunctionIdentifier(node);
 			if (!func) return false;
 
 			return isHtmlFunction(func);
@@ -434,15 +434,15 @@ export const noMixedHtml = function (context) {
 	 *
 	 * @param {Node} node - The node to check.
 	 */
-	var checkHtmlVariable = function (node) {
+	const checkHtmlVariable = function (node) {
 
-		var msg = 'Non-HTML variable \'{{ identifier }}\' is used to store raw HTML';
+		const msg = 'Non-HTML variable \'{{ identifier }}\' is used to store raw HTML';
 		if (!isXssSafe(node)) {
 			context.report({
 				node: node,
 				message: msg,
 				data: {
-					identifier: context.getSource(node)
+					identifier: context.sourceCode.getText(node)
 				}
 			});
 		}
@@ -457,15 +457,15 @@ export const noMixedHtml = function (context) {
 	 * @param {Node} fault
 	 *      The node that causes the fail and should be reported as error location.
 	 */
-	var checkHtmlFunction = function (node, fault) {
+	const checkHtmlFunction = function (node, fault) {
 
-		var msg = 'Non-HTML function \'{{ identifier }}\' returns HTML content';
+		const msg = 'Non-HTML function \'{{ identifier }}\' returns HTML content';
 		if (!isXssSafe(node)) {
 			context.report({
 				node: fault,
 				message: msg,
 				data: {
-					identifier: context.getSource(node)
+					identifier: context.sourceCode.getText(node)
 				}
 			});
 		}
@@ -478,14 +478,14 @@ export const noMixedHtml = function (context) {
 	 *
 	 * @param {Node} node - The node to check.
 	 */
-	var checkFunctionAcceptsHtml = function (node) {
+	const checkFunctionAcceptsHtml = function (node) {
 
 		if (!functionAcceptsHtml(node)) {
 			context.report({
 				node: node,
 				message: 'HTML passed in to function \'{{ identifier }}\'',
 				data: {
-					identifier: context.getSource(node)
+					identifier: context.sourceCode.getText(node)
 				}
 			});
 		}
@@ -513,7 +513,7 @@ export const noMixedHtml = function (context) {
 		if (!node) return false;
 		if (node.type === 'Identifier' && node.parent.type === 'MemberExpression') {
 
-			var parent = node.parent;
+			const parent = node.parent;
 
 			// ignore namespace type, for example zhtml.xxx
 			if (parent && parent.property && parent.property.type === 'Identifier') {
@@ -523,10 +523,10 @@ export const noMixedHtml = function (context) {
 			}
 			if (htmlVariableRules.some(function (rule) {
 				if (rule.object && rule.property) {
-					var objectMatch = parent.object.name === rule.object ||
+					const objectMatch = parent.object.name === rule.object ||
 							rule.object == 'this' && parent.object.type === 'ThisExpression';
 
-					var propertyMatch = rule.property.test(parent.property.name);
+					const propertyMatch = rule.property.test(parent.property.name);
 					return objectMatch && propertyMatch;
 				}
 				return false;
@@ -548,13 +548,13 @@ export const noMixedHtml = function (context) {
 		if (!node) return false;
 		if (node.type === 'Identifier' && node.parent.type === 'MemberExpression') {
 
-			var parent = node.parent;
+			const parent = node.parent;
 			if (sanitizedVariableRules.some(function (rule) {
 				if (rule.object && rule.property) {
-					var objectMatch = parent.object.name === rule.object ||
+					const objectMatch = parent.object.name === rule.object ||
 						rule.object == 'this' && parent.object.type === 'ThisExpression';
 
-					var propertyMatch = rule.property.test(parent.property.name);
+					const propertyMatch = rule.property.test(parent.property.name);
 					return objectMatch && propertyMatch;
 				}
 				return false;
@@ -593,7 +593,7 @@ export const noMixedHtml = function (context) {
 	 *
 	 * @returns {bool} True, if the node can infect the stack.
 	 */
-	var canInfectXss = function (node) {
+	const canInfectXss = function (node: TSESTree.Node) {
 
 		// If we got nothing in the stack, there's nothing to infect.
 		if (exprStack.length === 0)
@@ -610,10 +610,10 @@ export const noMixedHtml = function (context) {
 		// is the parent object of a function call expression for
 		// example:
 		// > html.encode( text )
-		var top = exprStack[exprStack.length - 1].node;
-		var parent = node;
+		const top = exprStack[exprStack.length - 1].node;
+		let parent = node;
 		do {
-			var child = parent;
+			const child = parent;
 			parent = parent.parent;
 
 			if (!tree.isParameter(child, parent)) {
@@ -631,22 +631,22 @@ export const noMixedHtml = function (context) {
 	 *
 	 * @param {Node} node - Node to push.
 	 */
-	var pushNode = function (node) {
+	const pushNode = function (node) {
 
 		exprStack.push({ node: node });
 	};
 
-	var isHTMLLiteral = function (node) {
-		return !isCommentedSafe(node) && /<\/?[a-z]/.exec(node.value);
-	}
+	var isHTMLLiteral = function (node: TSESTree.Literal): boolean {
+		return !isCommentedSafe(node) && !!/<\/?[a-z]/.exec(node.value as string);
+	};
 
 	/**
 	 * Pops a node from the expression stack and checks it for XSS issues.
 	 */
-	var exitNode = function () {
+	const exitNode = function () {
 
 		// Quick checks for whether the node is even vulnerable to XSS.
-		var expr = exprStack.pop();
+		const expr = exprStack.pop();
 		if (!expr.xss && !usesHtml(expr.node))
 			return;
 
@@ -735,7 +735,7 @@ export const noMixedHtml = function (context) {
 			// value returned.
 
 			// Get the closest function scope.
-			let func = tree.getParentFunctionIdentifier(expr.node);
+			const func = tree.getParentFunctionIdentifier(expr.node);
 			if (!func) return;
 
 			if (expr.sanitized) return; // false alarm
@@ -752,7 +752,7 @@ export const noMixedHtml = function (context) {
 			// value returned.
 
 			// Get the closest function scope.
-			let func = tree.getParentFunctionIdentifier(expr.node);
+			const func = tree.getParentFunctionIdentifier(expr.node);
 			if (!func) return;
 
 			checkHtmlFunction(func, func);
@@ -760,15 +760,15 @@ export const noMixedHtml = function (context) {
 		}
 	};
 
-	var markParentXSS = function () {
+	const markParentXSS = function () {
 
 		// Ensure the current node is XSS candidate.
-		var expr = exprStack.pop();
+		const expr = exprStack.pop();
 		if (!expr.xss && !usesHtml(expr.node))
 			return;
 
 		// Mark the parent element as XSS candidate.
-		var candidate = getXssCandidateParent(expr.node);
+		const candidate = getXssCandidateParent(expr.node);
 		if (candidate) {
 			candidate.xss = true;
 			candidate.sanitized = expr.sanitized;
@@ -825,7 +825,7 @@ export const noMixedHtml = function (context) {
 	 */
 	var getCommentParent = function (node) {
 
-		var parent = node.parent;
+		let parent = node.parent;
 		if (!parent) return parent;
 
 		// Call expressions don't cause comment inheritance:
@@ -871,7 +871,7 @@ export const noMixedHtml = function (context) {
 	 * @returns {bool} True, if the node is surrounded with parentheses.
 	 */
 	var hasParentheses = function (node) {
-		var prevToken = context.getTokenBefore(node);
+		const prevToken = context.sourceCode.getTokenBefore(node);
 
 		return (prevToken.type === 'Punctuator' && prevToken.value === '(');
 	};
@@ -887,15 +887,15 @@ export const noMixedHtml = function (context) {
 
 		// Check all the comments in front of the node for comment 'safe'
 		let isSafe = false;
-		const sourceCode = context.getSourceCode();
-		let comments = sourceCode.getCommentsBefore(node);
+		const sourceCode = context.sourceCode;
+		const comments = sourceCode.getCommentsBefore(node);
 		if (node.type !== 'Identifier') {
 			const insideComments = sourceCode.getCommentsInside(node.parent);
 			if (insideComments.length > 0) {
 				const left = node.parent.left;
 				const right = node.parent.right;
 				if (left && right) {
-					insideComments.forEach((comment) => {
+					insideComments.forEach((comment: TSESTree.Comment) => {
 						if (comment.range[0] >= left.range[1] && comment.range[1] <= right.range[0]) {
 							comments.push(comment);
 						}
@@ -920,9 +920,9 @@ export const noMixedHtml = function (context) {
 	 *
 	 * @returns {Node} The closest node of the correct type.
 	 */
-	var getPathFromParent = function (node, parentType) {
+	const getPathFromParent = function (node, parentType): TSESTree.Node[] | null {
 
-		var path = [node];
+		const path = [node];
 		while (node && node.type !== parentType) {
 			node = node.parent;
 			path.push(node);
@@ -942,15 +942,15 @@ export const noMixedHtml = function (context) {
 		// This takes care of call expressions that might use
 		// passthrough functions. Here we need to check whether the
 		// current node is in a passthrough position.
-		for (var ptr = exprStack.length - 1; ptr >= 0; ptr--) {
+		for (let ptr = exprStack.length - 1; ptr >= 0; ptr--) {
 
 			// Only CallExpressions may pass through the parameters.
-			var candidate = exprStack[ptr];
+			const candidate = exprStack[ptr];
 			if (candidate.node.type !== 'CallExpression')
 				return candidate;
 
 			// Quick check for whether this is an passthrough at all.
-			var functionRules = allRules.get(candidate.node);
+			const functionRules = allRules.get(candidate.node);
 			if (!functionRules.passthrough)
 				return candidate;
 
@@ -961,12 +961,12 @@ export const noMixedHtml = function (context) {
 
 			// Only obj OR args is passed through. Figure out which one the
 			// current node is.
-			var path = getPathFromParent(node, 'CallExpression');
-			var callExpr = path[0];
-			var callImmediateChild = path[1];
+			const path = getPathFromParent(node, 'CallExpression')!;
+			const callExpr = path[0] as {callee?: TSESTree.Node};
+			const callImmediateChild = path[1];
 
-			var isCallee = callImmediateChild === callExpr.callee;
-			var isParam = !isCallee;
+			const isCallee = callImmediateChild === callExpr.callee;
+			const isParam = !isCallee;
 
 			// Continue to next stack part if the function passes the obj through
 			// and the current node is the obj.
@@ -984,7 +984,7 @@ export const noMixedHtml = function (context) {
 		return null;
 	};
 
-	var infectParentConditional = function (condition, node) {
+	const infectParentConditional = function (condition, node: TSESTree.Node) {
 
 		if (exprStack.length > 0 &&
 			!isCommentedSafe(node) &&
@@ -996,7 +996,7 @@ export const noMixedHtml = function (context) {
 				let hasUnsafeHTML = isHTMLLiteral(node);
 				if (hasUnsafeHTML) {
 					hasUnsafeHTML = false;
-					var parent = node.parent;
+					let parent = node.parent as TSESTree.Node;
 					while (parent != null) {
 						if (parent.type === 'AssignmentExpression' || parent.type === 'VariableDeclarator') {
 							hasUnsafeHTML = true;
@@ -1015,7 +1015,7 @@ export const noMixedHtml = function (context) {
 				node.parent.type === 'TSTypeReference' || node.parent.type === 'UnaryExpression'
 			)) return;
 
-			var infectable = getXssCandidateParent(node);
+			const infectable = getXssCandidateParent(node);
 			if (infectable) {
 				infectable.xss = true;
 				if (node.type === 'CallExpression') {
@@ -1046,10 +1046,10 @@ export const noMixedHtml = function (context) {
 
 		// Call expressions have a dual nature. They can either infect their
 		// parents with XSS vulnerabilities or then they can suffer from them.
-		'CallExpression': function (node) {
+		'CallExpression': function (node: TSESTree.CallExpression) {
 
 			// First check whether this expression marks the parent as dirty.
-			infectParentConditional(function (node) {
+			infectParentConditional(function (node: TSESTree.CallExpression) {
 				return isHtmlOutputFunction(node.callee);
 			}, node);
 			pushNode(node);
@@ -1057,15 +1057,15 @@ export const noMixedHtml = function (context) {
 		'CallExpression:exit': exitNode,
 
 		// Literals infect parents if they contain <html> tags or fragments.
-		'Literal': infectParentConditional.bind(null, function (node) {
+		'Literal': infectParentConditional.bind(null, function (node: TSESTree.Literal) {
 
 			// Skip regex and /*safe*/ strings. Remaining strings infect parent
 			// if they contain <html or </html tags.
-			return !node.regex && isHTMLLiteral(node);
+			return !(node as unknown as {regex?: RegExp}).regex && isHTMLLiteral(node);
 		}),
 
 		// Identifiers infect parents if they refer to HTML in their name.
-		'Identifier': infectParentConditional.bind(null, function (node) {
+		'Identifier': infectParentConditional.bind(null, function (node: TSESTree.Identifier) {
 			return isHtmlVariable(node);
 		}),
 	};

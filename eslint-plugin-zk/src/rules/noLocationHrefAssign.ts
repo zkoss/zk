@@ -13,8 +13,6 @@ Copyright (C) 2023 Potix Corporation. All Rights Reserved.
  * @fileoverview prevents xss by assignment to location href javascript url string
  * @author Alexander Mostovenko
  */
-'use strict';
-
 import { createRule } from '../util';
 import { TSESTree} from '@typescript-eslint/utils';
 

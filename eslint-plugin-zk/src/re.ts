@@ -1,6 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
-/* re.js
+/* re.ts
 
 	Purpose:
 		
@@ -11,20 +9,17 @@
 
 Copyright (C) 2023 Potix Corporation. All Rights Reserved.
 */
-
-'use strict';
-
 module.exports = {
 
-	toRegexp: function( str ) {
-		var pair = str.split( '/' );
-		return new RegExp( pair[ 0 ], pair[ 1 ] );
+	toRegexp: function (str: string): RegExp {
+		const [first, second] = str.split('/');
+		return new RegExp(first as string, second);
 	},
 
-	any: function( input, regexps ) {
+	any: function (input: string, regexps: (RegExp)[]): boolean {
 
-		for( var i = 0; i < regexps.length; i++ ) {
-			if( regexps[ i ].exec( input ) )
+		for (const item of regexps) {
+			if (item.exec(input))
 				return true;
 		}
 
