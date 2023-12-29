@@ -532,6 +532,11 @@ export class Listbox extends zul.sel.SelectWidget {
 	getBodyWidgetIterator = Listbox.prototype.itemIterator;
 
 	/** @internal */
+	_getListitemIterator(): zul.sel.ItemIter {
+		return this.getBodyWidgetIterator();
+	}
+
+	/** @internal */
 	override _updHeaderCM(): void {
 		// B50-3322970: need to clear Listheader _check cache
 		var lh = this.listhead?.firstChild;
