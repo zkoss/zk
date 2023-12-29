@@ -1498,7 +1498,7 @@ export namespace au_global {
 			export function alert(msg: string, title: string, icon: string, disabledAuRequest: boolean): void {
 				if (disabledAuRequest)
 					zAu.disabledRequest = true;
-				jq.alert(DOMPurify.sanitize(msg), { icon: icon || 'ERROR', title: title });
+				jq.alert(msg, { icon: icon || 'ERROR', title: title });
 			}
 			/**
 			 * Redirects to the specified URL.
