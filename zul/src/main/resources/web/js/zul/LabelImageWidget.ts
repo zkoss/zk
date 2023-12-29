@@ -270,7 +270,7 @@ export abstract class LabelImageWidget<TElement extends HTMLElement = HTMLElemen
 	 */
 	domImage_(): string {
 		var img = this._image;
-		return img ? '<img src="' + img + '" align="absmiddle" alt="" aria-hidden="true">' : '';
+		return DOMPurify.sanitize(img ? '<img src="' + img + '" align="absmiddle" alt="" aria-hidden="true">' : '');
 	}
 
 	/**
@@ -287,20 +287,20 @@ export abstract class LabelImageWidget<TElement extends HTMLElement = HTMLElemen
 			tooltip = iconTooltips ? iconTooltips : iconTooltip ? [iconTooltip] : undefined;
 		if (icon) {
 			if (icon.length > 1) {
-				let res = '<span class="z-icon-stack" aria-hidden="true">';
+				let html = '<span class="z-icon-stack" aria-hidden="true">';
 				for (let i = 0, icon_length = icon.length; i < icon_length; i++) {
 					if (icon[i]) { // add icon if icon[i] not undefined
-						res += '<i class="' + icon[i] + '"';
+						html += '<i class="' + /*safe*/ icon[i] + '"';
 						if (tooltip?.[i]) { // add iconTooltip if iconTooltip[i] not undefined
-							res += ' title="' + tooltip[i] + '"';
+							html += ' title="' + /*safe*/ tooltip[i] + '"';
 						}
-						res += '></i>';
+						html += '></i>';
 					}
 				}
-				res += '</span>';
-				return res;
+				html += '</span>';
+				return DOMPurify.sanitize(html);
 			} else {
-				return '<i class="' + icon[0] + '"' + (tooltip?.[0] ? ' title="' + tooltip[0] + '"' : '') + ' aria-hidden="true"></i>';
+				return DOMPurify.sanitize('<i class="' + icon[0] + '"' + (tooltip?.[0] ? ' title="' + tooltip[0] + '"' : '') + ' aria-hidden="true"></i>');
 			}
 		}
 		return '';
@@ -323,18 +323,18 @@ export abstract class LabelImageWidget<TElement extends HTMLElement = HTMLElemen
 	 * @internal
 	 */
 	domContent_(): string {
-		const label = this.domLabel_(),
-			icon = this.domIcon_(),
-			img = this.domImage_();
+		const labelHTML = this.domLabel_(),
+			iconHTML = this.domIcon_(),
+			imgHTML = this.domImage_();
 
-		if (img) {
-			if (icon) {
-				return img + ' ' + icon + (label ? ' ' + label : '');
+		if (imgHTML) {
+			if (iconHTML) {
+				return imgHTML + ' ' + iconHTML + (labelHTML ? ' ' + labelHTML : '');
 			} else {
-				return label ? img + ' ' + label : img;
+				return labelHTML ? imgHTML + ' ' + labelHTML : imgHTML;
 			}
 		} else {
-			return icon ? label ? icon + ' ' + label : icon : label;
+			return iconHTML ? labelHTML ? iconHTML + ' ' + labelHTML : iconHTML : labelHTML;
 		}
 	}
 

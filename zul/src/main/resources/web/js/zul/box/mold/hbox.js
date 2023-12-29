@@ -13,32 +13,33 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 function hbox$mold$(out) {
-	delete this._splitterKid; 
-	for (var w = this.firstChild; w; w = w.nextSibling)
-		if (w.$instanceof(zul.box.Splitter)) {
+	let w;
+	delete this._splitterKid;
+	for (w = this.firstChild; w; w = w.nextSibling)
+		if ((w instanceof zul.box.Splitter)) {
 			this._splitterKid = true;
 			break;
 		}
 	this._configPack();
-	
-	out.push('<table', this.domAttrs_(), zUtl.cellps0, '><tr');
-	
-	var	v = this.getAlign();
-	if (v && v != 'stretch') out.push(' valign="', zul.box.Box._toValign(v), '"');
+
+	out.push('<table', this.domAttrs_(), /*safe*/ zUtl.cellps0, '><tr');
+
+	var v = this.getAlign();
+	if (v && v !== 'stretch') out.push(' valign="', /*safe*/ zul.box.Box._toValign(v), '"');
 	//IE && FF2 need to set height, or the table height will shrink to as high as inner table.
 	//FF3 is OK to set or not set
 	out.push('><td id="', this.uuid, '-frame" style="width:100%;height:100%"');
-	
-	if (!this._isStretchPack() && this._pack2) out.push(' align="', zul.box.Box._toHalign(this._pack2), '"');
-	out.push('><table id="', this.uuid, '-real" height="100%" ', zUtl.cellps0, 'style="text-align:left');
+
+	if (!this._isStretchPack() && this._pack2) out.push(' align="', /*safe*/ zul.box.Box._toHalign(this._pack2), '"');
+	out.push('><table id="', this.uuid, '-real" height="100%" ', /*safe*/ zUtl.cellps0, 'style="text-align:left');
 	if (!this.isSizedByContent()) out.push(';table-layout:fixed');
-	if (v == 'stretch') out.push(';height:100%');
+	if (v === 'stretch') out.push(';height:100%');
 	if (this._isStretchPack()) out.push(';width:100%');
 
 	//follow xul hbox spec.
-	out.push('"><tr valign="', v && v != 'stretch' ? zul.box.Box._toValign(v) : 'top', '">');
-	
-	for (var w = this.firstChild; w; w = w.nextSibling)
+	out.push('"><tr valign="', v && v !== 'stretch' ? /*safe*/ zul.box.Box._toValign(v) : 'top', '">');
+
+	for (w = this.firstChild; w; w = w.nextSibling)
 		this.encloseChildHTML_(w, false, out);
 
 	out.push('</tr></table></td></tr></table>');

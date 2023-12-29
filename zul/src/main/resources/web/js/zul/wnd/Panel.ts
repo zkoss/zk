@@ -1291,7 +1291,7 @@ export class Panel extends zul.Widget {
 
 	/** @internal */
 	override domClass_(no?: zk.DomClassOptions): string {
-		var scls = super.domClass_(no);
+		var /*safe*/ scls = super.domClass_(no);
 		if (!no || !no.zclass) {
 			var added = this._bordered() ? '' : this.$s('noborder');
 			if (added) scls += (scls ? ' ' : '') + added;

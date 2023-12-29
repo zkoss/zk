@@ -16,7 +16,7 @@ function rating$mold$(out) {
 
 	out.push('<div', this.domAttrs_(), ' role="slider">');
 	for (var i = 0; i < this._max; i++) {
-		out.push('<i class="', this.$s('icon'), ' ', sclass ? sclass : 'z-icon-star');
+		out.push('<i class="', this.$s('icon'), ' ', sclass ? zUtl.encodeXML(sclass) : 'z-icon-star');
 		if (isVert) {
 			if (this._max - 1 - i < this._rating)
 				out.push(' ', this.$s('selected'));

@@ -77,20 +77,20 @@ export class Tabs extends zul.Widget {
 	/** @internal */
 	override insertChildHTML_(child: zk.Widget, before?: zk.Widget, desktop?: zk.Desktop): void {
 		var last = child.previousSibling,
-			out;
+			outHTML;
 		if (before)
-			jq(before).before(out = child.redrawHTML_());
+			jq(before).before(outHTML = child.redrawHTML_());
 		else if (last)
-			jq(last).after(out = child.redrawHTML_());
+			jq(last).after(outHTML = child.redrawHTML_());
 		else {
 			var edge = this.$n('edge');
 			if (edge)
-				jq(edge).before(out = child.redrawHTML_());
+				jq(edge).before(outHTML = child.redrawHTML_());
 			else
-				jq(this.getCaveNode()).append(out = child.redrawHTML_());
+				jq(this.getCaveNode()).append(outHTML = child.redrawHTML_());
 		}
 		// ZK-5009, if out is empty, ignore for bind()
-		if (out) {
+		if (outHTML) {
 			child.bind(desktop);
 		}
 	}

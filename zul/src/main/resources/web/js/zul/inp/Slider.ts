@@ -303,21 +303,21 @@ export class Slider extends zul.Widget {
 
 	/** @internal */
 	override domClass_(no?: zk.DomClassOptions): string {
-		var scls = super.domClass_(no);
+		var sclsHTML = super.domClass_(no);
 		if (this._mold == 'knob')
-			return scls;
+			return sclsHTML;
 
 		var isVertical = this.isVertical();
 		if (isVertical)
-			scls += ' ' + this.$s('vertical');
+			sclsHTML += ' ' + this.$s('vertical');
 		else
-			scls += ' ' + this.$s('horizontal');
+			sclsHTML += ' ' + this.$s('horizontal');
 		if (this.inSphereMold())
-			scls += ' ' + this.$s('sphere');
+			sclsHTML += ' ' + this.$s('sphere');
 		else if (this.inScaleMold() && !isVertical)
-			scls += ' ' + this.$s('scale');
+			sclsHTML += ' ' + this.$s('scale');
 
-		return scls;
+		return sclsHTML;
 	}
 
 	/** @internal */
@@ -437,15 +437,15 @@ export class Slider extends zul.Widget {
 	/** @internal */
 	_startDrag(dg: zk.Draggable): void {
 		var widget = dg.control as Slider,
-			sclass = widget.getSclass();
+			sclassHTML = widget.getSclass();
 		widget.$n_('btn').title = ''; //to avoid annoying effect
 		widget.slidepos = widget._curpos;
 
 		jq(document.body)
-			.append('<div id="zul_slidetip" class="'
+			.append(/*safe*/ '<div id="zul_slidetip" class="'
 			+ widget.$s('popup')
-			+ (sclass ? ' ' + sclass + '">' : '">')
-			+ widget._slidingtext.replace(/\{0\}/g, widget.slidepos as unknown as string)
+			+ (sclassHTML ? ' ' + sclassHTML + '">' : '">')
+			+ DOMPurify.sanitize(widget._slidingtext.replace(/\{0\}/g, widget.slidepos as unknown as string))
 			+ '</div>');
 
 		widget.slidetip = jq('#zul_slidetip')[0];
@@ -467,7 +467,8 @@ export class Slider extends zul.Widget {
 			widget.slidepos = widget._curpos = pos = widget._constraintPos(pos);
 			var text = isDecimal ? pos.toFixed(Slider._digitsAfterDecimal(Slider._getStep(widget))) : pos;
 			if (widget.slidetip) // B70-ZK-2081: Replace "{0}" with the position.
-				widget.slidetip.innerHTML = widget._slidingtext.replace(/\{0\}/g, text as string);
+				// eslint-disable-next-line @microsoft/sdl/no-inner-html
+				widget.slidetip.innerHTML = DOMPurify.sanitize(widget._slidingtext.replace(/\{0\}/g, text as string));
 			widget.fire('onScrolling', isDecimal ? {decimal: pos} : pos);
 		}
 		widget._fixPos();

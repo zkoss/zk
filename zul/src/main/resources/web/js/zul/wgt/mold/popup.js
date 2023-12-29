@@ -14,12 +14,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 function popup$mold$(out) {
 	var uuid = this.uuid;
-		
+
 	out.push('<div', this.domAttrs_(), ' role="tooltip">');
-	
-	if(this._fixarrow)	// Merge breeze: a div for pointer in Errorbox
+
+	if (this._fixarrow)	// Merge breeze: a div for pointer in Errorbox
 		out.push('<div id=', uuid, '-p class="z-pointer"></div>');
-			
+
 	out.push('<div id="', uuid, '-cave" class="', this.$s('content'), '">');
 	this.prologHTML_(out);
 	for (var w = this.firstChild; w; w = w.nextSibling)

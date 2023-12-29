@@ -233,7 +233,7 @@ export class ItemWidget extends zul.Widget<HTMLTableRowElement> implements zul.m
 
 	/** @internal */
 	override domClass_(no?: zk.DomClassOptions): string {
-		let scls = super.domClass_(no);
+		let /*safe*/ scls = super.domClass_(no);
 		if (!no || !no.zclass) {
 			if (this.isDisabled())
 				scls += (scls ? ' ' : '') + this.$s('disabled');
@@ -324,7 +324,7 @@ export class ItemWidget extends zul.Widget<HTMLTableRowElement> implements zul.m
 				if (!msg)
 					msg = label;
 				else
-					msg += '</div><div class="z-drop-content">' +
+					/*safe*/ msg += '</div><div class="z-drop-content">' +
 						`<span id="zk_ddghost-img${cnt++}" class="z-drop-icon"></span>&nbsp;${label}`;
 			}
 		}

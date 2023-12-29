@@ -13,7 +13,7 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 function button$mold$(out) {
-	out.push('<button type="', this._type, '"', this.domAttrs_());
+	out.push('<button type="', zUtl.encodeXML(this._type), '"', this.domAttrs_());
 	if (this._disabled) out.push(' disabled="disabled"');
 	out.push('>', this.domContent_(), '</button>');
 }

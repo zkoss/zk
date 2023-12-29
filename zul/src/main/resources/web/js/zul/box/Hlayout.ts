@@ -68,7 +68,7 @@ export class Hlayout extends zul.box.Layout {
 	// set it to parent directly
 	/** @internal */
 	override domClass_(no?: Partial<zk.DomClassOptions>): string {
-		var clsnm = super.domClass_(no),
+		var /*safe*/ clsnm = super.domClass_(no),
 			v;
 		if ((v = this._valign) == 'middle')
 			clsnm += ' z-valign-middle';

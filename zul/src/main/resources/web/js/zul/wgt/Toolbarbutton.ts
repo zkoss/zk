@@ -385,37 +385,37 @@ export class Toolbarbutton extends zul.LabelImageWidget implements zul.LabelImag
 
 	/** @internal */
 	override domContent_(): string {
-		var label = zUtl.encodeXML(this.getLabel()), img = this.domImage_(),
-			iconSclass = this.domIcon_();
-		if (!img && !iconSclass)
-			return label;
+		let labelHTML = zUtl.encodeXML(this.getLabel()), imgHTML = this.domImage_(),
+			iconSclassHTML = this.domIcon_();
+		if (!imgHTML && !iconSclassHTML)
+			return labelHTML;
 
-		if (!img) img = iconSclass;
-		else img += (iconSclass ? ' ' + iconSclass : '');
+		if (!imgHTML) imgHTML = iconSclassHTML;
+		else imgHTML += (iconSclassHTML ? ' ' + iconSclassHTML : '');
 		// B50-ZK-640: toolbarbutton with no label will display larger width blur box
-		var space = label ? 'vertical' == this.getOrient() ? '<br/>' : '&nbsp;' : '';
-		return this.getDir() == 'reverse' ? label + space + img : img + space + label;
+		const spaceHTML = labelHTML ? 'vertical' == this.getOrient() ? '<br/>' : '&nbsp;' : '';
+		return this.getDir() == 'reverse' ? labelHTML + spaceHTML + imgHTML : imgHTML + spaceHTML + labelHTML;
 	}
 
 	/** @internal */
 	override domClass_(no?: zk.DomClassOptions): string {
-		var scls = super.domClass_(no),
-			zcls = this.getZclass(),
+		var sclsHTML = super.domClass_(no),
+			zclsHTML = this.getZclass(),
 			nozcls = (!no || !no.zclass);
 
-		if (this._mode == 'toggle' && this._checked && nozcls && zcls) {
-			scls += ' ' + this.$s('checked');
+		if (this._mode == 'toggle' && this._checked && nozcls && zclsHTML) {
+			sclsHTML += ' ' + this.$s('checked');
 		}
 
-		return scls;
+		return sclsHTML;
 	}
 
 	/** @internal */
 	override domAttrs_(no?: zk.DomAttrsOptions): string {
-		var attr = super.domAttrs_(no);
+		var attrHTML = super.domAttrs_(no);
 		if (this._disabled)
-			attr += ' disabled="disabled"';
-		return attr;
+			attrHTML += ' disabled="disabled"';
+		return attrHTML;
 	}
 
 	override onSize(): void {

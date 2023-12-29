@@ -310,7 +310,7 @@ export class WScroll extends zk.Object {
 		this.anchor = this.opts.anchor || control.parentNode as HTMLElement;
 		this.widget = zk.Widget.$(control)!;
 		this.uid = this.widget.uuid;
-		this.zcls = this.widget.getZclass();
+		this.zcls = /*safe*/ this.widget.getZclass();
 		this._isVer = opts.orient == 'vertical';
 		// ZK-2178: viewportSize is 0 if biglistbox has not model
 		if (!opts.viewportSize && opts.viewportSize != 0)
@@ -753,13 +753,13 @@ export class WScroll extends zk.Object {
 			ocls = this._isVer ? 'vertical' : 'horizontal',
 			uuid = this.uid + '-' + orient + 'bar',
 			zcls = this.widget.$s('wscroll');
-		jq(p).append('<div id="' + uuid + '" class="' + zcls + '-' + ocls + '">'
+		jq(p).append(/*safe*/ '<div id="' + uuid + '" class="' + zcls + '-' + ocls + '">'
 			+ '<div class="' + zcls + '-drag">'
-			+ '<div class="' + zcls + '-home" title="' + msgzul.WS_HOME + '"></div>'
-			+ '<div class="' + zcls + '-up" title="' + msgzul.WS_PREV + '"></div>'
+			+ '<div class="' + zcls + '-home" title="' + /*safe*/ msgzul.WS_HOME + '"></div>'
+			+ '<div class="' + zcls + '-up" title="' + /*safe*/ msgzul.WS_PREV + '"></div>'
 			+ '<div class="' + zcls + '-body"></div>'
-			+ '<div class="' + zcls + '-down" title="' + msgzul.WS_NEXT + '"></div>'
-			+ '<div class="' + zcls + '-end" title="' + msgzul.WS_END + '"></div>'
+			+ '<div class="' + zcls + '-down" title="' + /*safe*/ msgzul.WS_NEXT + '"></div>'
+			+ '<div class="' + zcls + '-end" title="' + /*safe*/ msgzul.WS_END + '"></div>'
 			+ '</div>'
 			+ '<div class="' + zcls + '-pos"></div>'
 			+ '<div class="' + zcls + '-endbar"></div>'

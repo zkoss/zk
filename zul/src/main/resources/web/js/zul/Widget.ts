@@ -132,6 +132,7 @@ function _setCtrlKeysErr(msg: string): void {
 }
 function _parseParamFunc(event: zk.Event | undefined, funcBody: string): number {
 	if (funcBody.includes('(') && funcBody.includes(')')) {
+		// eslint-disable-next-line no-new-func
 		var func = new Function('event', 'return ' + funcBody + ';');
 		return func(event) as number;
 	} else {
@@ -533,6 +534,7 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Widge
 					else if ('del' == s) cc = 46;
 					else if ('bak' == s) cc = 8;
 					else if ('tab' == s) cc = 9;
+					else if ('space' == s) cc = 32;
 					else if (s.length > 1 && s.startsWith('f')) {
 						var v = zk.parseInt(s.substring(1));
 						if (v == 0 || v > 12) {
@@ -746,6 +748,7 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Widge
 			case 46: //Del
 			case 8: //Backspace
 			case 9: //Tab
+			case 32: //Space
 				break;
 			default:
 				if ((keyCode >= 33 && keyCode <= 40) //PgUp, PgDn, End, Home, L, U, R, D

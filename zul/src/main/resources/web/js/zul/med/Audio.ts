@@ -265,11 +265,11 @@ export class Audio extends zul.Widget<HTMLAudioElement> {
 
 	/** @internal */
 	override domAttrs_(no?: zk.DomAttrsOptions): string {
-		var attr = super.domAttrs_(no);
+		var /*safe*/ attr = super.domAttrs_(no);
 		if (this._autoplay)
 			attr += ' autoplay';
 		if (this._preload !== undefined)
-			attr += ' preload="' + this._preload + '"';
+			attr += ' preload="' + zUtl.encodeXML(this._preload) + '"';
 		if (this._controls)
 			attr += ' controls';
 		if (this._loop)
@@ -285,7 +285,7 @@ export class Audio extends zul.Widget<HTMLAudioElement> {
 			length = src.length,
 			result = '';
 		for (var i = 0; i < length; i++) {
-			result += '<source src="' + src[i] + '" type="' + this._MIMEtype(src[i]) + '">';
+			/*safe*/ result += '<source src="' + /*safe*/ src[i] + '" type="' + /*safe*/ this._MIMEtype(src[i]) + '">';
 		}
 		return result;
 	}

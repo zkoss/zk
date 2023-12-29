@@ -78,7 +78,7 @@ export class Grid extends zul.mesh.MeshWidget {
 					emptyContentDiv.addClass(emptyContentClz);
 				else
 					emptyContentDiv.removeClass(emptyContentClz);
-				emptyContentDiv.html(emptyMessage);
+				emptyContentDiv.text(emptyMessage);
 			}
 		}
 
@@ -230,7 +230,7 @@ export class Grid extends zul.mesh.MeshWidget {
 			'<div id="', this.uuid, '-empty-content"');
 		if (this._emptyMessage && this._emptyMessage.trim().length != 0)
 			out.push('class="', this.$s('emptybody-content'), '"');
-		out.push('>', this._emptyMessage!, '</div></td></tr></tbody>');
+		out.push('>', zUtl.encodeXML(this._emptyMessage!), '</div></td></tr></tbody>');
 	}
 
 	/** @internal */
@@ -298,19 +298,19 @@ export class Grid extends zul.mesh.MeshWidget {
 			this.rows = child;
 			var fakerows = this.$n('rows');
 			if (fakerows) {
-				jq(fakerows).replaceWith(child.redrawHTML_());
+				jq(fakerows).replaceWith(/*safe*/ child.redrawHTML_());
 				child.bind(desktop);
 				this.ebodyrows = child.$n();
 				return;
 			} else {
 				var tpad = this.$n('tpad');
 				if (tpad) {
-					jq(tpad).after(child.redrawHTML_());
+					jq(tpad).after(/*safe*/ child.redrawHTML_());
 					child.bind(desktop);
 					this.ebodyrows = child.$n();
 					return;
 				} else if (this.ebodytbl) {
-					jq(this.ebodytbl).append(child.redrawHTML_());
+					jq(this.ebodytbl).append(/*safe*/ child.redrawHTML_());
 					child.bind(desktop);
 					this.ebodyrows = child.$n();
 					return;

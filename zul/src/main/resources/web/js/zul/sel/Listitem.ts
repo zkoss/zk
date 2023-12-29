@@ -108,18 +108,18 @@ export class Listitem extends zul.sel.ItemWidget {
 			|| no?.visible)
 			return super.domStyle_(no);
 
-		const style = super.domStyle_(no),
+		const /*safe*/ style = super.domStyle_(no),
 			group = this.getListgroup();
 		return group && !group.isOpen() ? style + 'display:none;' : style;
 	}
 
 	/** @internal */
 	override domClass_(no?: zk.DomClassOptions): string {
-		const cls = super.domClass_(no),
+		const /*safe*/ cls = super.domClass_(no),
 			list = this.getListbox();
 		// NOTE: The following `this.$n()` could be null. This behavior is verified on old code.
 		if (list) {
-			const sclass = list.getOddRowSclass();
+			const sclass = zUtl.encodeXML(list.getOddRowSclass());
 			if (jq(this.$n()).hasClass(sclass))
 				return cls + ' ' + sclass;
 		}

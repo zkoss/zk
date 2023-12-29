@@ -13,7 +13,7 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 function rows$mold$(out) {
-	out.push('<tbody', this.domAttrs_() , ' role="rowgroup">');
+	out.push('<tbody', this.domAttrs_(), ' role="rowgroup">');
 	for (var w = this.firstChild; w; w = w.nextSibling)
 		w.redraw(out);
 	out.push('</tbody>');

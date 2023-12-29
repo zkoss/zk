@@ -42,7 +42,7 @@ function _updHeaderCM(box: SelectWidget): void { //update header's checkmark
 
 	if (--box._nUpdHeaderCM! <= 0 && box.desktop && box._headercm && box._multiple) {
 		var headerWgt = zk.Widget.$<zul.mesh.HeaderWidget>(box._headercm)!,
-			zcls = headerWgt.getZclass() + '-checked',
+			/*safe*/ zcls = headerWgt.getZclass() + '-checked',
 			$headercm = jq(box._headercm),
 			isAllSelected = box._isAllSelected();
 		$headercm[isAllSelected ? 'addClass' : 'removeClass'](zcls);
@@ -344,7 +344,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 	updateFormData(): void {
 		if (this._name) {
 			if (!this.efield)
-				this.efield = jq(this.$n()).append('<div style="display:none;"></div>').find('> div:last-child')[0];
+				this.efield = jq(this.$n()).append(/*safe*/ '<div style="display:none;"></div>').find('> div:last-child')[0];
 
 			jq(this.efield).children().remove();
 
@@ -352,7 +352,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 			var data = '',
 				tmp = '<input type="hidden" name="' + zUtl.encodeXML(this._name) + '" value="';
 			for (var i = 0, j = this._selItems.length; i < j; i++)
-				data += tmp + zUtl.encodeXML(this._selItems[i].getValue()!) + '"/>';
+				/*safe*/ data += tmp + zUtl.encodeXML(this._selItems[i].getValue()!) + '"/>';
 
 			jq(this.efield).append(data);
 		} else if (this.efield) {
@@ -1315,7 +1315,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		if (!this._selItems.length) {
 			if (this._headercm && this._model && !this.$hasService('onUpdateSelectAll')) {
 				var headerWgt = zk.Widget.$<zul.mesh.HeaderWidget>(this._headercm)!,
-					zcls = headerWgt.getZclass() + '-checked',
+					/*safe*/ zcls = headerWgt.getZclass() + '-checked',
 					$headercm = jq(this._headercm);
 				$headercm.removeClass(zcls);
 				headerWgt._checked = false;
@@ -1327,7 +1327,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 				this.$fireService('onUpdateSelectAll', undefined, function (this: SelectWidget, v: boolean) {
 					if (this.desktop && this._headercm && this._multiple) {
 						var headerWgt = zk.Widget.$<zul.mesh.HeaderWidget>(this._headercm)!,
-							zcls = headerWgt.getZclass() + '-checked',
+							/*safe*/ zcls = headerWgt.getZclass() + '-checked',
 							$headercm = jq(this._headercm);
 						$headercm[v ? 'addClass' : 'removeClass'](zcls);
 						headerWgt._checked = v;

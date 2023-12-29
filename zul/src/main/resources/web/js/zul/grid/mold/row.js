@@ -14,14 +14,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 function row$mold$(out) {
 	out.push('<tr', this.domAttrs_(), '>');
-	var zcls = this.getZclass(),
+	var /*safe*/ zcls = this.getZclass(),
 		grid = this.getGrid(),
 		head = grid.getHeadWidget();
-	var h;
+	let h;
 	if (head)
 		h = head.firstChild;
 	for (var j = 0, w = this.firstChild; w; w = w.nextSibling, j++) {
-		var opts = {child:w, index: j, zclass: zcls, out: out};
+		var opts = {child: w, index: j, zclass: zcls, out: out};
 		if (h)
 			opts.visible = h.isVisible();
 		this.encloseChildHTML_(opts);

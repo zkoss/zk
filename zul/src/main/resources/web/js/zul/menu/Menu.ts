@@ -218,21 +218,21 @@ export class Menu extends zul.LabelImageWidget implements zul.LabelImageWidgetWi
 		icon = '<i class="' + this.$s('icon') + ' z-icon-caret-'
 				+ (this.isTopmost() && !this.isVertical_() ? 'down' : 'right') + '" aria-hidden="true"></i>',
 		separator = '<div class="' + this.$s('separator') + '" aria-hidden="true"></div>',
-		iconSclass = this.domIcon_();
+		/*safe*/ iconSclass = this.domIcon_();
 
 		if (img)
-			img = '<img id="' + this.uuid + '-img" src="' + img + '" class="' + this.$s('image') + '" align="absmiddle" alt="" aria-hidden="true" />'
-				+ (iconSclass ? ' ' + iconSclass : '');
+			/*safe*/ img = '<img id="' + this.uuid + '-img" src="' + /*safe*/ img + '" class="' + this.$s('image') + '" align="absmiddle" alt="" aria-hidden="true" />'
+				+ (iconSclass ? ' ' + /*safe*/ iconSclass : '');
 		else {
 			if (iconSclass) {
 				img = iconSclass;
 			} else {
-				img = '<img id="' + this.uuid + '-img" ' + (this.isTopmost() ? 'style="display:none"' : '')
+				/*safe*/ img = '<img id="' + this.uuid + '-img" ' + (this.isTopmost() ? 'style="display:none"' : '')
 					+ ' src="data:image/png;base64,R0lGODlhAQABAIAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" class="'
 					+ this.$s('image') + '" align="absmiddle" alt="" aria-hidden="true" />';
 			}
 		}
-		return img + label + separator + icon;
+		return DOMPurify.sanitize(img + label + separator + icon);
 	}
 
 	/**
@@ -670,8 +670,8 @@ export class ContentHandler extends zk.Object {
 	redraw(out: string[]): void {
 		var wgt = this._wgt;
 
-		out.push('<div id="', wgt.uuid, '-cnt-pp" class="', wgt.$s('content-popup'),
-			'" style=""><div class="', wgt.$s('content-body'), '">', this._content!, '</div></div>');
+		out.push('<div id="', /*safe*/ wgt.uuid, '-cnt-pp" class="', wgt.$s('content-popup'),
+			'" style=""><div class="', wgt.$s('content-body'), '">', DOMPurify.sanitize(this._content!), '</div></div>');
 	}
 
 	bind(): void {

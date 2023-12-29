@@ -166,7 +166,7 @@ export class Cell extends zul.Widget<HTMLTableCellElement> {
 
 	/** @internal */
 	override domClass_(no?: zk.DomClassOptions): string {
-		var scls = super.domClass_(no);
+		var /*safe*/ scls = super.domClass_(no);
 		if (this._getParentType() == this._rowType) {
 			if (this._headerVisible === false) scls += ' ' + this.$s('hidden-column');
 		}
@@ -187,7 +187,7 @@ export class Cell extends zul.Widget<HTMLTableCellElement> {
 
 	/** @internal */
 	override domAttrs_(no?: zk.DomAttrsOptions): string {
-		var s = super.domAttrs_(no), v;
+		var /*safe*/ s = super.domAttrs_(no), v;
 		if ((v = this._colspan) != 1)
 			s += ' colspan="' + v + '"';
 		if ((v = this._rowspan) != 1)
@@ -218,7 +218,7 @@ export class Cell extends zul.Widget<HTMLTableCellElement> {
 			if (style)
 				m1.style = '"' + style + '"';
 		}
-		return ' ' + zUtl.mapToString(m1!); // FIXME: m1 could be undefined
+		return DOMPurify.sanitize(' ' + zUtl.mapToString(m1!)); // FIXME: m1 could be undefined
 	}
 
 	/** @internal */

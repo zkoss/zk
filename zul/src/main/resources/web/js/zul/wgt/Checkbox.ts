@@ -331,7 +331,7 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 		const value = this.getValue();
 		if (value)
 			out.push(`value="${value}"`);
-		return out.join(' ');
+		return DOMPurify.sanitize(out.join(' '));
 	}
 
 	/** @internal */

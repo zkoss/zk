@@ -120,6 +120,8 @@ public class Comboitem extends LabelImageElement implements org.zkoss.zk.ui.ext.
 	 * Thus, it is better not to have something input by the user to avoid
 	 * any <a href="http://books.zkoss.org/wiki/ZK_Developer%27s_Reference/Security_Tips/Cross-site_scripting">XSS</a>
 	 * attach.
+	 * <p>Note: since 10.0.0, the content is sanitized by default to avoid XSS attack, and
+	 * please don't use JavaScript in the content.
 	 * @see #setDescription
 	 * @since 3.0.0
 	 */

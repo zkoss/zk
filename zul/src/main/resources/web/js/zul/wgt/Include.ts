@@ -70,15 +70,15 @@ export class Include extends zul.Widget {
 
 	/** @internal */
 	override domStyle_(no?: zk.DomStyleOptions): string {
-		var style = super.domStyle_(no);
+		var styleHTML = super.domStyle_(no);
 		if (!this.previousSibling && !this.nextSibling) {
 		//if it is only child, the default is 100%
 			if ((!no || !no.width) && !this.getWidth())
-				style += 'width:100%;';
+				styleHTML += 'width:100%;';
 			if ((!no || !no.height) && !this.getHeight())
-				style += 'height:100%;';
+				styleHTML += 'height:100%;';
 		}
-		return style;
+		return styleHTML;
 	}
 
 	/** @internal */

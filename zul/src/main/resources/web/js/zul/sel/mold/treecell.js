@@ -18,8 +18,8 @@ function treecell$mold$(out, skipper) {
 		this.domTextStyleAttr_(), '>', this.domContent_());
 
 	if (!skipper)
-    	for (var w = this.firstChild; w; w = w.nextSibling)
-    		w.redraw(out);
+		for (var w = this.firstChild; w; w = w.nextSibling)
+			w.redraw(out);
 
 	out.push('</div></td>');
 }

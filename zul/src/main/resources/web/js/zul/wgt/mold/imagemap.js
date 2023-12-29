@@ -13,10 +13,10 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 function imagemap$mold$(out) {
-	var uuid = this.uuid, mapid = uuid + '-map';
-	out.push('<span', this.domAttrs_({content:1}), '><img id="',
-		uuid, '-real"', this.contentAttrs_(),
-		'/><map name="', mapid, '" id="', mapid, '">');
+	var uuid = this.uuid, mapidHTML = uuid + '-map';
+	out.push('<span', this.domAttrs_({content: 1}), '><img id="',
+		uuid, '-real"', /*safe*/ this.contentAttrs_(),
+		'/><map name="', mapidHTML, '" id="', mapidHTML, '">');
 
 	for (var w = this.firstChild; w; w = w.nextSibling)
 		w.redraw(out);

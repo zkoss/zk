@@ -13,8 +13,8 @@ This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 function anchorlayout$mold$(out) {
-	out.push('<div', this.domAttrs_(), '>'); 
-		for (var w = this.firstChild; w; w = w.nextSibling)
-			w.redraw(out);
+	out.push('<div', this.domAttrs_(), '>');
+	for (var w = this.firstChild; w; w = w.nextSibling)
+		w.redraw(out);
 	out.push('</div>');
 }

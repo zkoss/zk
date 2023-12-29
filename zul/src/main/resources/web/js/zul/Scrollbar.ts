@@ -886,29 +886,29 @@ export class Scrollbar extends zk.Object {
 
 	redraw(cave: HTMLElement, orient: string): void {
 		var isH = orient == 'hor',
-			uid = this.uid + '-' + orient,
-			hv = isH ? 'horizontal' : 'vertical',
-			lu = isH ? 'left' : 'up',
-			rd = isH ? 'right' : 'down',
-			out = '';
+			uidHTML = /*safe*/ this.uid + '-' + /*safe*/ orient,
+			hvHTML = isH ? 'horizontal' : 'vertical',
+			luHTML = isH ? 'left' : 'up',
+			rdHTML = isH ? 'right' : 'down',
+			outHTML = '';
 
 		if (this.opts.embed) {
-			out += '<div id="' + uid + '-embed" class="z-scrollbar-' + hv + '-embed"></div>';
+			outHTML += '<div id="' + uidHTML + '-embed" class="z-scrollbar-' + hvHTML + '-embed"></div>';
 		}
-		out +=
-			'<div id="' + uid + '" class="z-scrollbar z-scrollbar-' + hv + '">'
-			+ '<div id="' + uid + '-' + lu + '" class="z-scrollbar-' + lu + '">'
-			+ '<i class="z-icon-caret-' + lu + '"></i>'
+		outHTML +=
+			'<div id="' + uidHTML + '" class="z-scrollbar z-scrollbar-' + hvHTML + '">'
+			+ '<div id="' + uidHTML + '-' + luHTML + '" class="z-scrollbar-' + luHTML + '">'
+			+ '<i class="z-icon-caret-' + luHTML + '"></i>'
 			+ '</div>'
-			+ '<div id="' + uid + '-wrapper" class="z-scrollbar-wrapper">'
-			+ '<div id="' + uid + '-indicator" class="z-scrollbar-indicator">'
+			+ '<div id="' + uidHTML + '-wrapper" class="z-scrollbar-wrapper">'
+			+ '<div id="' + uidHTML + '-indicator" class="z-scrollbar-indicator">'
 			+ '<i class="z-scrollbar-icon z-icon-reorder"></i></div>'
-			+ '<div id="' + uid + '-rail" class="z-scrollbar-rail"></div>'
+			+ '<div id="' + uidHTML + '-rail" class="z-scrollbar-rail"></div>'
 			+ '</div>'
-			+ '<div id="' + uid + '-' + rd + '" class="z-scrollbar-' + rd + '">'
-			+ '<i class="z-icon-caret-' + rd + '"></i>'
+			+ '<div id="' + uidHTML + '-' + rdHTML + '" class="z-scrollbar-' + rdHTML + '">'
+			+ '<i class="z-icon-caret-' + rdHTML + '"></i>'
 			+ '</div>'
 			+ '</div>';
-		jq(cave).append(out);
+		jq(cave).append(/*safe*/ outHTML);
 	}
 }

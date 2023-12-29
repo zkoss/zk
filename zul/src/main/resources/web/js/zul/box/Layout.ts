@@ -63,12 +63,12 @@ export class Layout extends zul.Widget {
 	/** @internal */
 	override insertChildHTML_(child: zk.Widget, before?: zk.Widget, desktop?: zk.Desktop): void {
 		if (before)
-			jq(this._chdextr(before)).before(this.encloseChildHTML_(child));
+			jq(this._chdextr(before)).before(/*safe*/ this.encloseChildHTML_(child));
 		else {
 			var jqn = jq(this.$n()),
 			spc = this._spacing;
 			jqn.children('div:last-child').css('padding-' + (this.isVertical_() ? 'bottom' : 'right'), (spc && spc != 'auto') ? spc : '');
-			jqn.append(this.encloseChildHTML_(child));
+			jqn.append(/*safe*/ this.encloseChildHTML_(child));
 		}
 		child.bind(desktop);
 	}
@@ -161,7 +161,7 @@ export class Layout extends zul.Widget {
 			vert = this.isVertical_(),
 			spc = this._spacing;
 
-		oo.push('<div id="' + child.uuid + '-chdex" class="' + this.$s('inner') + '"');
+		oo.push('<div id="' + /*safe*/ child.uuid + '-chdex" class="' + this.$s('inner') + '"');
 		if (spc && spc != 'auto') {
 			oo.push(' style="', !child.isVisible() ? 'display:none;' : ''); //Bug ZK-1650: set chdex display style according to child widget
 			var next = child.nextSibling; //Bug ZK-1526: popup should not consider spacing
@@ -177,7 +177,7 @@ export class Layout extends zul.Widget {
 			return oo.join('');
 		} else {
 			const output = oo.join('');
-			out.push(output);
+			out.push(/*safe*/ output);
 			return output;
 		}
 

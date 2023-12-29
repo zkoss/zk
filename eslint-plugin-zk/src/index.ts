@@ -14,6 +14,8 @@ export = {
 				'zk/preferStrictBooleanType': 'error',
 				'zk/noPropertyFunction': 'error',
 				'zk/tsdocValidation': 'error',
+				'zk/noMixedHtml': 'error',
+				'zk/noLocationHrefAssign': 'error',
 			},
 		},
 	},

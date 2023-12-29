@@ -10,4 +10,5 @@
 Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 
 */
+// eslint-disable-next-line semi
 zul.inp.Spinner.molds['default']

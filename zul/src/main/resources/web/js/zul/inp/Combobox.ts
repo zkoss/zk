@@ -625,18 +625,18 @@ export class Combobox extends zul.inp.ComboWidget {
 	override redrawpp_(out: string[]): void {
 		var uuid = this.uuid,
 			msg = this._emptySearchMessage;
-		out.push('<div id="', uuid, '-pp" class="', this.$s('popup'),
+		out.push('<div id="', /*safe*/ uuid, '-pp" class="', this.$s('popup'),
 			// tabindex=0 to prevent a11y scrollable popup issue, see https://dequeuniversity.com/rules/axe/3.5/scrollable-region-focusable?application=AxeChrome
-			' ', this.getSclass()!, '" style="display:none" tabindex="0">');
+			' ', zUtl.encodeXML(this.getSclass()!), '" style="display:none" tabindex="0">');
 
 		// F85-ZK-3827: Combobox empty search message
 		if (msg) {
-			out.push('<div id="', uuid, '-empty-search-message" class="',
+			out.push('<div id="', /*safe*/ uuid, '-empty-search-message" class="',
 				this.$s('empty-search-message'), ' ', this.$s('empty-search-message-hidden'),
-				'">', msg, '</div>');
+				'">', zUtl.encodeXML(msg), '</div>');
 		}
 
-		out.push('<ul id="', uuid, '-cave" class="', this.$s('content'), '" >');
+		out.push('<ul id="', /*safe*/ uuid, '-cave" class="', this.$s('content'), '" >');
 
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);

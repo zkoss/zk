@@ -52,7 +52,7 @@ export class Div extends zul.Widget {
 	/** @internal */
 	override domAttrs_(no?: zk.DomAttrsOptions): string {
 		var align = this._align,
-			attr = super.domAttrs_(no);
-		return align != null ? attr + ' align="' + align + '"' : attr;
+			/*safe*/ attr = super.domAttrs_(no);
+		return align != null ? attr + ' align="' + zUtl.encodeXML(align) + '"' : attr;
 	}
 }

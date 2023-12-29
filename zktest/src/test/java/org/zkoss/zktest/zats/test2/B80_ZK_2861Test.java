@@ -14,6 +14,8 @@ public class B80_ZK_2861Test extends WebDriverTestCase {
 	public void test() {
 		connect();
 		waitResponse();
-		assertEquals("{\"id1\":\"<value1>\",\"id2\":\"value2\",\"id3\":\"value2\"}", getZKLog());
+//		assertEquals("{\"id1\":\"<value1>\",\"id2\":\"value2\",\"id3\":\"value2\"}", getZKLog());
+		// <value1> is not encoded and not allow in ZK 10.
+		assertEquals("{\"id2\":\"value2\",\"id3\":\"value2\"}", getZKLog());
 	}
 }

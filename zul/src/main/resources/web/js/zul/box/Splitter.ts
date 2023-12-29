@@ -178,7 +178,7 @@ export class Splitter extends zul.Widget {
 
 	/** @internal */
 	override domClass_(no?: Partial<zk.DomClassOptions>): string {
-		var sc = super.domClass_(no);
+		var /*safe*/ sc = super.domClass_(no);
 		if (!no || !no.zclass) {
 			sc += ' ' + this.$s('vertical' == this.getOrient() ? 'vertical' : 'horizontal');
 		}
@@ -370,11 +370,11 @@ export class Splitter extends zul.Widget {
 	/** @internal */
 	static _ghostsizing(draggable: zk.Draggable, ofs: number[], evt: zk.Event): HTMLElement {
 		var $node = zk(draggable.node!.parentNode);
-		jq(document.body).append(
-			'<div id="zk_ddghost" class="z-splitter-ghost" style="font-size:0;line-height:0;background:#AAA;position:absolute;top:'
-			+ ofs[1] + 'px;left:' + ofs[0] + 'px;width:'
-			+ $node.offsetWidth() + 'px;height:' + $node.offsetHeight()
-			+ 'px;"></div>');
+		jq(document.body).append(/*safe*/
+		'<div id="zk_ddghost" class="z-splitter-ghost" style="font-size:0;line-height:0;background:#AAA;position:absolute;top:'
+			+ jq.px(ofs[1]) + ';left:' + jq.px(ofs[0]) + ';width:'
+			+ jq.px($node.offsetWidth()) + ';height:' + jq.px($node.offsetHeight())
+			+ ';"></div>');
 		return jq('#zk_ddghost')[0];
 	}
 

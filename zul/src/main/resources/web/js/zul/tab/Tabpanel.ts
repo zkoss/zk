@@ -44,7 +44,7 @@ export class Tabpanel extends zul.ContainerWidget {
 
 	/** @internal */
 	override domClass_(no?: zk.DomClassOptions): string {
-		var cls = super.domClass_(no),
+		var /*safe*/ cls = super.domClass_(no),
 			tabbox = this.getTabbox()!;
 		if (tabbox.inAccordionMold())
 			cls += ' ' + this.$s('content');

@@ -2,13 +2,11 @@ package org.zkoss.zktest.zats.test2;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.Duration;
 
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Alert;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -37,7 +35,7 @@ public class B96_ZK_5260Test extends WebDriverTestCase {
 	}
 
 	@Test
-	public void testAllowScripts() {
+	public void testNotAllowScripts() {
 		Actions act = new Actions(connect());
 		click(jq("@chosenbox").find("input"));
 		waitResponse();
@@ -45,17 +43,6 @@ public class B96_ZK_5260Test extends WebDriverTestCase {
 		assertFalse(showAlert());
 		act.moveToElement(toElement(jq(".z-chosenbox-option:eq(6)").children())).perform();
 		assertFalse(showAlert());
-
-		act.sendKeys(Keys.ESCAPE).perform();
-		waitResponse();
-		click(jq("@button"));
-		waitResponse();
-		click(jq("@chosenbox").find("input"));
-		waitResponse();
-		act.moveToElement(toElement(jq(".z-chosenbox-option:eq(5)").children())).perform();
-		assertTrue(showAlert());
-		act.moveToElement(toElement(jq(".z-chosenbox-option:eq(6)").children())).perform();
-		assertTrue(showAlert());
 	}
 
 	private boolean showAlert() {

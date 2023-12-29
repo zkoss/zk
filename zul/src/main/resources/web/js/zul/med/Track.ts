@@ -167,11 +167,11 @@ export class Track extends zul.Widget<HTMLTrackElement> {
 
 	/** @internal */
 	override domAttrs_(no?: zk.DomAttrsOptions): string {
-		let attr = super.domAttrs_(no)
-			+ zUtl.appendAttr('kind', this._kind)
-			+ zUtl.appendAttr('label', this._label)
-			+ zUtl.appendAttr('src', this._src)
-			+ zUtl.appendAttr('srclang', this._srclang);
+		let /*safe*/ attr = super.domAttrs_(no)
+			+ /*safe*/ zUtl.appendAttr('kind', this._kind)
+			+ /*safe*/ zUtl.appendAttr('label', this._label)
+			+ /*safe*/ zUtl.appendAttr('src', this._src)
+			+ /*safe*/ zUtl.appendAttr('srclang', this._srclang);
 		if (this._default)
 			attr += ' default="default"';
 		return attr;
