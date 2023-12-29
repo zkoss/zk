@@ -58,6 +58,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.WebApps;
 import org.zkoss.zk.ui.ext.Includer;
+import org.zkoss.zk.ui.http.WpdExtendlet;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.util.DataHandlerInfo;
@@ -254,9 +255,12 @@ public class HtmlPageRenders {
 
 		final StringBuffer sb = new StringBuffer(1536);
 
-		final Set<JavaScript> jses = new LinkedHashSet<JavaScript>(32);
+		Set<JavaScript> jses = new LinkedHashSet<JavaScript>(32);
 		for (LanguageDefinition langdef : LanguageDefinition.getByDeviceType(deviceType))
 			jses.addAll(langdef.getJavaScripts());
+		if (wapp.getConfiguration().isSourceMapEnabled()) { // use divided javascript
+			jses = (Set<JavaScript>) wapp.getAttribute(WpdExtendlet.SOURCE_MAP_JAVASCRIPT_PATH);
+		}
 		for (JavaScript js : jses)
 			append(sb, js);
 
@@ -646,6 +650,7 @@ public class HtmlPageRenders {
 						}
 						out.write("zkdh('" + me.getKey() + "', " + script + ");\n");
 					}
+					out.write("zk.afterLoad(function(){");
 					out.write(divRequired ? "zkmx(" : "zkx(");
 				}
 			} else if (order > 0) //not first child
@@ -822,6 +827,7 @@ public class HtmlPageRenders {
 			out.write(");\n");
 
 			out.write(extra);
+			out.write("});");
 		}
 	}
 

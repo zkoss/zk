@@ -12,7 +12,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 -->
 
 <package name="zul.med" language="xul/html" depends="zul">
-	<script src="index.js"/>
+	<script src="index.js" sourceMap="true"/>
 	<widget name="Audio" moldOnly="true"/>
 	<widget name="Track" moldOnly="true"/>
 </package>

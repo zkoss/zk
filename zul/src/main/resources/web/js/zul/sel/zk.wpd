@@ -12,7 +12,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 -->
 
 <package name="zul.sel" language="xul/html" depends="zul.mesh">
-	<script src="index.js"/>
+	<script src="index.js" sourceMap="true"/>
 	<widget name="Listbox" moldOnly="true"/>
 	<widget name="Listitem" moldOnly="true"/>
 	<widget name="Listcell" moldOnly="true"/>

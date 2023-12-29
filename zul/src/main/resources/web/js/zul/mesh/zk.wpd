@@ -12,7 +12,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 -->
 
 <package name="zul.mesh" language="xul/html" depends="zul,zul.menu">
-	<script src="index.js"/>
+	<script src="index.js" sourceMap="true"/>
 	<widget name="Paging" moldOnly="true"/>	
 	<widget name="Auxhead" moldOnly="true"/>
 	<widget name="Auxheader" moldOnly="true"/>
