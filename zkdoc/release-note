@@ -21,6 +21,7 @@ ZK 10.0.0
   ZK-5569: Radiogroup onCheck event type mismatch
   ZK-5161: page directive's attributes are not encoded before rendering into HTML
   ZK-5598: CKEditor requests ExecutionImpl.encodeURL with null value, causes NPE in embedded mode
+  ZK-5593: inputWidget bind_ accesses input dom node may not exist
   ZK-5605: client-bind fails for zk.$extends created widget classes, without ClientBindComposer declared
 
 * Upgrade Notes
