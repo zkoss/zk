@@ -9,7 +9,7 @@
 
 Copyright (C) 2023 Potix Corporation. All Rights Reserved.
 */
-module.exports = {
+export const re = {
 
 	toRegexp: function (str: string): RegExp {
 		const [first, second] = str.split('/');

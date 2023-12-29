@@ -259,6 +259,12 @@ ruleTester.run('no-mixed-html', noMixedHtml, {
 		{
 			code: 'foo.x( "<div>" )',
 		},
+		{
+			code: 'var s = test as HTMLDivElement',
+		},
+		{
+			code: 'const widgett = zk.$extends(zhtml.wgt.HTML, {})',
+		},
 	],
 
 	invalid: [

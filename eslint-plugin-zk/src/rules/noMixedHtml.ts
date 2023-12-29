@@ -1,5 +1,3 @@
-/* eslint-disable */
-// @ts-nocheck
 /* noMixedHtml.ts
 
 	Purpose:
@@ -18,8 +16,8 @@ Copyright (C) 2023 Potix Corporation. All Rights Reserved.
  */
 import { TSESTree } from '@typescript-eslint/utils';
 import {tree} from '../tree';
-import re from '../re';
-import {RulesJs, PassThroughRule} from '../RulesJs';
+import {re} from '../re';
+import {RulesJs, PassThroughRule, FunctionRule} from '../RulesJs';
 import {type Rule} from 'eslint';
 
 // -----------------------------------------------------------------------------
@@ -30,19 +28,22 @@ import {type Rule} from 'eslint';
 export const noMixedHtml = function (context: Rule.RuleContext) {
 
 	// Default options.
-	let htmlVariableRules = ['html/i'] as RegExp[] | any[];
-	let htmlFunctionRules = ['AsHtml'] as RegExp[] | any[];
-	let sanitizedVariableRules = [] as RegExp[] | any[];
+	let htmlVariableRules = ['html/i'] as (RegExp| string | {object: string, property: string | RegExp})[];
+	let htmlFunctionRules = ['AsHtml'] as (RegExp| string)[];
+	let sanitizedVariableRules = [] as (RegExp| string | {object: string, property: string | RegExp})[];
 	let functionRules = {
 		'.join': { passthrough: { obj: true, args: true } },
 		'.toString': { passthrough: { obj: true } },
 		'.substr': { passthrough: { obj: true } },
 		'.substring': { passthrough: { obj: true } },
-	};
+	} as Record<string, FunctionRule>;
 
 	// Read the user specified options.
 	if (context.options.length > 0) {
-		const opts = context.options[0];
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+		const opts = context.options[0] as {
+			htmlVariableRules?: (RegExp | string)[], htmlFunctionRules?: (RegExp| string)[],
+			sanitizedVariableRules?: (RegExp | string)[], functions?: Record<string, FunctionRule>};
 
 		htmlVariableRules = opts.htmlVariableRules || htmlVariableRules;
 		htmlFunctionRules = opts.htmlFunctionRules || htmlFunctionRules;
@@ -52,33 +53,32 @@ export const noMixedHtml = function (context: Rule.RuleContext) {
 
 	// Turn the name rules from string/string array to regexp.
 	// htmlVariableRules = htmlVariableRules.map(re.toRegexp);
-	htmlVariableRules = htmlVariableRules.map(function (rule: string | {object: string, property: string}) {
+	htmlVariableRules = htmlVariableRules.map((rule, _, __) => {
 		if (typeof rule === 'string') {
 			return re.toRegexp(rule);
-		} else if (typeof rule === 'object' && rule.property) {
+		} else if (!(rule instanceof RegExp) && rule.property) {
 			return {
 				object: rule.object,  // Assuming object is always a string
-				property: re.toRegexp(rule.property)
+				property: re.toRegexp(rule.property as never)
 			};
 		}
 		return rule;
-	});
-	htmlFunctionRules = htmlFunctionRules.map(re.toRegexp);
-	sanitizedVariableRules = sanitizedVariableRules.map(function (rule: string | {object: string, property: string}) {
+	}) as never;
+	htmlFunctionRules = htmlFunctionRules.map(re.toRegexp as never);
+	sanitizedVariableRules = sanitizedVariableRules.map((rule, _, __) => {
 		if (typeof rule === 'string') {
 			return re.toRegexp(rule);
-		} else if (typeof rule === 'object' && rule.property) {
+		} else if (!(rule instanceof RegExp) && rule.property) {
 			return {
 				object: rule.object,  // Assuming object is always a string
-				property: re.toRegexp(rule.property)
+				property: re.toRegexp(rule.property as never)
 			};
 		}
 		return rule;
-	});
+	}) as never;
 
-	// @ts-ignore
 	const allRules = new RulesJs({
-		functionRules: functionRules
+		functionRules: functionRules as never
 	});
 
 	// Expression stack for tracking the topmost expression that is marked
@@ -233,7 +233,9 @@ export const noMixedHtml = function (context: Rule.RuleContext) {
 				if (node.name === 'undefined' || node.name === 'null') return true;
 
 				// if the variable is initialized with a literal but not with Html, it is safe
-				const parent = (context.getScope().variables.find(v => v.name === node.name)?.identifiers[0] as {parent?})?.parent;
+				const parent: TSESTree.VariableDeclarator | undefined = (context.getScope().variables.find(v => v.name === node.name)?.identifiers[0] as {
+					parent?: TSESTree.VariableDeclarator
+				})?.parent;
 				if (parent && parent.init && (
 					(parent.init.type === 'Literal'&& !isHTMLLiteral(parent.init)) ||
 					(parent.init.type === 'ConditionalExpression' &&
@@ -241,18 +243,18 @@ export const noMixedHtml = function (context: Rule.RuleContext) {
 						parent.init.alternate.type === 'Literal'))) {
 					return true;
 				}
-
-				if (node.parent.type === 'VariableDeclarator' &&
-					node.parent.init && (
-					node.parent.init.type == 'UnaryExpression' || (
-						node.parent.init.type == 'LogicalExpression'
-						&& node.parent.init.left.type == 'UnaryExpression')
+				const nodeParent = node.parent as TSESTree.VariableDeclarator;
+				if (nodeParent.type === 'VariableDeclarator' &&
+					nodeParent.init && (
+					nodeParent.init.type == 'UnaryExpression' || (
+						nodeParent.init.type == 'LogicalExpression'
+						&& nodeParent.init.left.type == 'UnaryExpression')
 				)) {
 					return true;
 				}
 
 				// ignore check condition expression
-				if (node.parent.type === 'BinaryExpression' && node.parent.operator.includes('=')) {
+				if (node.parent!.type === 'BinaryExpression' && (node.parent as TSESTree.BinaryExpression).operator.includes('=')) {
 					return true;
 				}
 			}
@@ -264,7 +266,7 @@ export const noMixedHtml = function (context: Rule.RuleContext) {
 		if (node.type === 'ThisExpression') {
 			if (isSanitizedVariable(node)) return true;
 
-			return isHtmlVariable(node.parent);
+			return isHtmlVariable(node.parent as never);
 		}
 
 		// Encode calls are okay.
@@ -284,10 +286,10 @@ export const noMixedHtml = function (context: Rule.RuleContext) {
 	 *
 	 * @returns {bool} True, if the function is an encoding function.
 	 */
-	var isHtmlOutputFunction = function (func: TSESTree.Node) {
+	const isHtmlOutputFunction = function (func: TSESTree.Node) {
 
 		return allRules.getFunctionRules(func).htmlOutput ||
-			re.any(tree.getFullItemName(func), htmlFunctionRules);
+			re.any(tree.getFullItemName(func), htmlFunctionRules as never);
 	};
 
 
@@ -298,8 +300,8 @@ export const noMixedHtml = function (context: Rule.RuleContext) {
 	 *
 	 * @returns {bool} True, if the function is unsafe.
 	 */
-	const functionAcceptsHtml = function (func) {
-		return allRules.getFunctionRules(func).htmlInput;
+	const functionAcceptsHtml = function (func: TSESTree.Node): boolean {
+		return !!allRules.getFunctionRules(func).htmlInput;
 	};
 
 	/**
@@ -311,7 +313,7 @@ export const noMixedHtml = function (context: Rule.RuleContext) {
 	 * @param {Node} target
 	 *      Target node the root is used for. Affects some XSS checks.
 	 */
-	const checkForXss = function (node, target) {
+	const checkForXss = function (node: TSESTree.Node, target: TSESTree.Node) {
 
 		// Skip functions.
 		// This stops the following from giving errors:
@@ -327,7 +329,7 @@ export const noMixedHtml = function (context: Rule.RuleContext) {
 		const nodes = getDescendants(node);
 
 		// Check each descendant.
-		nodes.forEach(function (childNode) {
+		nodes.forEach(function (childNode: TSESTree.Node) {
 
 			// Return if the parameter is marked as safe in the current context.
 			if (targetRules.safe === true) {
@@ -355,10 +357,10 @@ export const noMixedHtml = function (context: Rule.RuleContext) {
 			else if (childNode.type === 'ArrayExpression')
 				identifier = '[Array]';
 			else
-				identifier = context.sourceCode.getText(childNode);
+				identifier = context.sourceCode.getText(childNode as never);
 
 			context.report({
-				node: childNode,
+				node: childNode as never,
 				message: msg,
 				data: { identifier: identifier }
 			});
@@ -372,7 +374,7 @@ export const noMixedHtml = function (context: Rule.RuleContext) {
 	 *
 	 * @returns {bool} True, if the node uses HTML.
 	 */
-	const usesHtml = function (node) {
+	const usesHtml = function (node: TSESTree.Node): boolean {
 
 		// Check the node type.
 		if (node.type === 'CallExpression') {
@@ -405,7 +407,7 @@ export const noMixedHtml = function (context: Rule.RuleContext) {
 
 			// Array expression.
 			// [ a, b, c ]
-			return usesHtml(node.parent);
+			return usesHtml(node.parent as never);
 
 		} else if (node.type === 'ReturnStatement') {
 
@@ -434,15 +436,15 @@ export const noMixedHtml = function (context: Rule.RuleContext) {
 	 *
 	 * @param {Node} node - The node to check.
 	 */
-	const checkHtmlVariable = function (node) {
+	const checkHtmlVariable = function (node: TSESTree.Node) {
 
 		const msg = 'Non-HTML variable \'{{ identifier }}\' is used to store raw HTML';
 		if (!isXssSafe(node)) {
 			context.report({
-				node: node,
+				node: node as never,
 				message: msg,
 				data: {
-					identifier: context.sourceCode.getText(node)
+					identifier: context.sourceCode.getText(node as never)
 				}
 			});
 		}
@@ -457,15 +459,15 @@ export const noMixedHtml = function (context: Rule.RuleContext) {
 	 * @param {Node} fault
 	 *      The node that causes the fail and should be reported as error location.
 	 */
-	const checkHtmlFunction = function (node, fault) {
+	const checkHtmlFunction = function (node: TSESTree.Node, fault: TSESTree.Node) {
 
 		const msg = 'Non-HTML function \'{{ identifier }}\' returns HTML content';
 		if (!isXssSafe(node)) {
 			context.report({
-				node: fault,
+				node: fault as never,
 				message: msg,
 				data: {
-					identifier: context.sourceCode.getText(node)
+					identifier: context.sourceCode.getText(node as never)
 				}
 			});
 		}
@@ -478,14 +480,14 @@ export const noMixedHtml = function (context: Rule.RuleContext) {
 	 *
 	 * @param {Node} node - The node to check.
 	 */
-	const checkFunctionAcceptsHtml = function (node) {
+	const checkFunctionAcceptsHtml = function (node: TSESTree.Node) {
 
 		if (!functionAcceptsHtml(node)) {
 			context.report({
-				node: node,
+				node: node as never,
 				message: 'HTML passed in to function \'{{ identifier }}\'',
 				data: {
-					identifier: context.sourceCode.getText(node)
+					identifier: context.sourceCode.getText(node as never)
 				}
 			});
 		}
@@ -498,35 +500,25 @@ export const noMixedHtml = function (context: Rule.RuleContext) {
 	 *
 	 * @returns {bool} True, if the node matches HTML variable naming.
 	 */
-	// var isHtmlVariable = function( node ) {
+	const isHtmlVariable = function (node: TSESTree.Node) {
 
-	//     // Ensure we can get the identifier.
-	//     node = tree.getIdentifier( node );
-	//     if( !node ) return false;
+		const identifierNode = tree.getIdentifier(node);
+		if (!identifierNode) return false;
+		if (identifierNode.type === 'Identifier' && identifierNode.parent!.type === 'MemberExpression') {
 
-	//     // Make the check against the htmlVariableRules regexp.
-	//     return re.any( node.name, htmlVariableRules );
-	// };
-	var isHtmlVariable = function (node) {
+			const parent = identifierNode.parent as TSESTree.MemberExpression;
 
-		node = tree.getIdentifier(node);
-		if (!node) return false;
-		if (node.type === 'Identifier' && node.parent.type === 'MemberExpression') {
-
-			const parent = node.parent;
-
-			// ignore namespace type, for example zhtml.xxx
-			if (parent && parent.property && parent.property.type === 'Identifier') {
-				if (parent.parent.type !== 'CallExpression' && parent.object.name === 'zhtml') {
-					return false;
-				}
+			// ignore namespace type, for example zhtml.xxx or zul.wgt.HTML
+			const source = context.sourceCode.getText(parent as never);
+			if (source.startsWith('zhtml.') || source.startsWith('zul.') || source.startsWith('zk.')) {
+				return false;
 			}
 			if (htmlVariableRules.some(function (rule) {
-				if (rule.object && rule.property) {
-					const objectMatch = parent.object.name === rule.object ||
+				if (typeof rule === 'object' && !(rule instanceof RegExp) && rule.object && rule.property) {
+					const objectMatch = (parent.object as TSESTree.Identifier).name === rule.object ||
 							rule.object == 'this' && parent.object.type === 'ThisExpression';
 
-					const propertyMatch = rule.property.test(parent.property.name);
+					const propertyMatch = (rule.property as RegExp).test((parent.object as TSESTree.Identifier).name);
 					return objectMatch && propertyMatch;
 				}
 				return false;
@@ -535,26 +527,27 @@ export const noMixedHtml = function (context: Rule.RuleContext) {
 			}
 		}
 
-		return htmlVariableRules.some(function (rule) {
-			if (!rule.property) {
-				return rule.test(node.name);
+		return htmlVariableRules.some(rule => {
+			if (rule instanceof RegExp) {
+				return rule.test(identifierNode.name);
 			}
+			return false;
 		});
 	};
 
-	var isSanitizedVariable = function (node) {
+	const isSanitizedVariable = function (node: TSESTree.Node | undefined): boolean {
 
-		node = tree.getIdentifier(node);
+		node = tree.getIdentifier(node!) as unknown as TSESTree.Identifier | undefined;
 		if (!node) return false;
-		if (node.type === 'Identifier' && node.parent.type === 'MemberExpression') {
+		if (node.type === 'Identifier' && node.parent!.type === 'MemberExpression') {
 
 			const parent = node.parent;
-			if (sanitizedVariableRules.some(function (rule) {
-				if (rule.object && rule.property) {
-					const objectMatch = parent.object.name === rule.object ||
-						rule.object == 'this' && parent.object.type === 'ThisExpression';
+			if (sanitizedVariableRules.some(rule => {
+				if (typeof rule === 'object' && !(rule instanceof  RegExp) && rule.object && rule.property) {
+					const objectMatch = ((parent as TSESTree.MemberExpression).object as TSESTree.Identifier).name === rule.object ||
+						rule.object == 'this' && (parent as TSESTree.MemberExpression).object.type === 'ThisExpression';
 
-					const propertyMatch = rule.property.test(parent.property.name);
+					const propertyMatch = (rule.property as RegExp).test(((parent as TSESTree.MemberExpression).property as TSESTree.Identifier).name);
 					return objectMatch && propertyMatch;
 				}
 				return false;
@@ -563,10 +556,11 @@ export const noMixedHtml = function (context: Rule.RuleContext) {
 			}
 		}
 
-		return sanitizedVariableRules.some(function (rule) {
-			if (!rule.property) {
-				return rule.test(node.name);
+		return sanitizedVariableRules.some(rule => {
+			if (rule instanceof RegExp) {
+				return rule.test((node as TSESTree.Identifier).name);
 			}
+			return false;
 		});
 	};
 	/**
@@ -576,14 +570,14 @@ export const noMixedHtml = function (context: Rule.RuleContext) {
 	 *
 	 * @returns {bool} True, if the node matches HTML function naming.
 	 */
-	var isHtmlFunction = function (node) {
+	const isHtmlFunction = function (node: TSESTree.Node | undefined): boolean {
 
 		// Ensure we can get the identifier.
-		node = tree.getIdentifier(node);
+		node = tree.getIdentifier(node!) as TSESTree.Identifier | undefined;
 		if (!node) return false;
 
 		// Make the check against the function naming rule.
-		return re.any(node.name, htmlFunctionRules);
+		return re.any(node.name, htmlFunctionRules as never);
 	};
 
 	/**
@@ -610,11 +604,11 @@ export const noMixedHtml = function (context: Rule.RuleContext) {
 		// is the parent object of a function call expression for
 		// example:
 		// > html.encode( text )
-		const top = exprStack[exprStack.length - 1].node;
+		const top = exprStack[exprStack.length - 1]!.node;
 		let parent = node;
 		do {
 			const child = parent;
-			parent = parent.parent;
+			parent = parent.parent!;
 
 			if (!tree.isParameter(child, parent)) {
 				return false;
@@ -631,12 +625,12 @@ export const noMixedHtml = function (context: Rule.RuleContext) {
 	 *
 	 * @param {Node} node - Node to push.
 	 */
-	const pushNode = function (node) {
+	const pushNode = function (node: TSESTree.Node): void {
 
 		exprStack.push({ node: node });
 	};
 
-	var isHTMLLiteral = function (node: TSESTree.Literal): boolean {
+	const isHTMLLiteral = function (node: TSESTree.Literal): boolean {
 		return !isCommentedSafe(node) && !!/<\/?[a-z]/.exec(node.value as string);
 	};
 
@@ -646,7 +640,7 @@ export const noMixedHtml = function (context: Rule.RuleContext) {
 	const exitNode = function () {
 
 		// Quick checks for whether the node is even vulnerable to XSS.
-		const expr = exprStack.pop();
+		const expr = exprStack.pop()!;
 		if (!expr.xss && !usesHtml(expr.node))
 			return;
 
@@ -741,7 +735,7 @@ export const noMixedHtml = function (context: Rule.RuleContext) {
 			if (expr.sanitized) return; // false alarm
 
 			checkHtmlFunction(func, expr.node);
-			checkForXss(expr.node.argument, expr.node);
+			checkForXss(expr.node.argument!, expr.node);
 
 		} else if (expr.node.type === 'ArrowFunctionExpression') {
 
@@ -763,7 +757,7 @@ export const noMixedHtml = function (context: Rule.RuleContext) {
 	const markParentXSS = function () {
 
 		// Ensure the current node is XSS candidate.
-		const expr = exprStack.pop();
+		const expr = exprStack.pop()!;
 		if (!expr.xss && !usesHtml(expr.node))
 			return;
 
@@ -782,7 +776,7 @@ export const noMixedHtml = function (context: Rule.RuleContext) {
 	 *
 	 * @returns {bool} True, if the node is commented safe.
 	 */
-	var isCommentedSafe = function (node) {
+	const isCommentedSafe = function (node: TSESTree.Node) {
 
 		while (node && (
 			node.type === 'ArrayExpression' ||
@@ -795,7 +789,7 @@ export const noMixedHtml = function (context: Rule.RuleContext) {
 			if (nodeHasSafeComment(node))
 				return true;
 
-			node = getCommentParent(node);
+			node = getCommentParent(node)!;
 		}
 
 		return false;
@@ -823,7 +817,7 @@ export const noMixedHtml = function (context: Rule.RuleContext) {
 	 *
 	 * @returns {Node} The practical parent node.
 	 */
-	var getCommentParent = function (node) {
+	const getCommentParent = function (node: TSESTree.Node) {
 
 		let parent = node.parent;
 		if (!parent) return parent;
@@ -870,8 +864,8 @@ export const noMixedHtml = function (context: Rule.RuleContext) {
 	 *
 	 * @returns {bool} True, if the node is surrounded with parentheses.
 	 */
-	var hasParentheses = function (node) {
-		const prevToken = context.sourceCode.getTokenBefore(node);
+	const hasParentheses = function (node: TSESTree.Node) {
+		const prevToken = context.sourceCode.getTokenBefore(node as never)!;
 
 		return (prevToken.type === 'Punctuator' && prevToken.value === '(');
 	};
@@ -883,20 +877,20 @@ export const noMixedHtml = function (context: Rule.RuleContext) {
 	 *
 	 * @returns {bool} True, if this specific node has a /safe/ comment.
 	 */
-	var nodeHasSafeComment = function (node) {
+	const nodeHasSafeComment = function (node: TSESTree.Node) {
 
 		// Check all the comments in front of the node for comment 'safe'
 		let isSafe = false;
 		const sourceCode = context.sourceCode;
-		const comments = sourceCode.getCommentsBefore(node);
+		const comments = sourceCode.getCommentsBefore(node as never);
 		if (node.type !== 'Identifier') {
-			const insideComments = sourceCode.getCommentsInside(node.parent);
+			const insideComments = sourceCode.getCommentsInside(node.parent as never);
 			if (insideComments.length > 0) {
-				const left = node.parent.left;
-				const right = node.parent.right;
+				const left = (node.parent as TSESTree.AssignmentExpression).left;
+				const right = (node.parent as TSESTree.AssignmentExpression).right;
 				if (left && right) {
-					insideComments.forEach((comment: TSESTree.Comment) => {
-						if (comment.range[0] >= left.range[1] && comment.range[1] <= right.range[0]) {
+					insideComments.forEach((comment, _, __) => {
+						if ((comment as TSESTree.Comment).range[0] >= left.range[1] && (comment as TSESTree.Comment).range[1] <= right.range[0]) {
 							comments.push(comment);
 						}
 					});
@@ -920,11 +914,11 @@ export const noMixedHtml = function (context: Rule.RuleContext) {
 	 *
 	 * @returns {Node} The closest node of the correct type.
 	 */
-	const getPathFromParent = function (node, parentType): TSESTree.Node[] | null {
+	const getPathFromParent = function (node: TSESTree.Node, parentType: string): TSESTree.Node[] | null {
 
 		const path = [node];
 		while (node && node.type !== parentType) {
-			node = node.parent;
+			node = node.parent!;
 			path.push(node);
 		}
 
@@ -935,7 +929,7 @@ export const noMixedHtml = function (context: Rule.RuleContext) {
 		return path;
 	};
 
-	var getXssCandidateParent = function (node) {
+	const getXssCandidateParent = function (node: TSESTree.Node) {
 
 		// Find the infectable node.
 		//
@@ -945,7 +939,7 @@ export const noMixedHtml = function (context: Rule.RuleContext) {
 		for (let ptr = exprStack.length - 1; ptr >= 0; ptr--) {
 
 			// Only CallExpressions may pass through the parameters.
-			const candidate = exprStack[ptr];
+			const candidate = exprStack[ptr]!;
 			if (candidate.node.type !== 'CallExpression')
 				return candidate;
 
@@ -984,15 +978,15 @@ export const noMixedHtml = function (context: Rule.RuleContext) {
 		return null;
 	};
 
-	const infectParentConditional = function (condition, node: TSESTree.Node) {
+	const infectParentConditional = function (condition: CallableFunction, node: TSESTree.Node) {
 
 		if (exprStack.length > 0 &&
 			!isCommentedSafe(node) &&
 			canInfectXss(node) &&
 			condition(node)) {
 			// ignore pure literal HTML
-			if (node.type === 'Literal' && node.parent.type === 'CallExpression' &&
-				node.parent.arguments.length === 1) {
+			if (node.type === 'Literal' && node.parent!.type === 'CallExpression' &&
+				(node.parent! as TSESTree.CallExpression).arguments.length === 1) {
 				let hasUnsafeHTML = isHTMLLiteral(node);
 				if (hasUnsafeHTML) {
 					hasUnsafeHTML = false;
@@ -1002,7 +996,7 @@ export const noMixedHtml = function (context: Rule.RuleContext) {
 							hasUnsafeHTML = true;
 							break;
 						}
-						parent = parent.parent;
+						parent = parent.parent!;
 					}
 				}
 				if (!hasUnsafeHTML) {
@@ -1012,7 +1006,7 @@ export const noMixedHtml = function (context: Rule.RuleContext) {
 
 			// ignore TSTypeReference and boolean type
 			if (node.type === 'Identifier' && (
-				node.parent.type === 'TSTypeReference' || node.parent.type === 'UnaryExpression'
+				node.parent!.type === 'TSTypeReference' || node.parent!.type === 'UnaryExpression'
 			)) return;
 
 			const infectable = getXssCandidateParent(node);
