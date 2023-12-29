@@ -210,13 +210,13 @@ export class Tabbox extends zul.Widget {
 
 	/** @internal */
 	override domClass_(no?: zk.DomClassOptions): string {
-		var sc = super.domClass_(no);
+		let scHTML = super.domClass_(no);
 		if (!no || !no.zclass) {
 			var cls = this.inAccordionMold() ?
 					this.$s('accordion') : this.$s(this.getOrient());
-			sc += ' ' + cls;
+			scHTML += ' ' + /*safe*/ cls;
 		}
-		return sc;
+		return scHTML;
 	}
 
 	/**

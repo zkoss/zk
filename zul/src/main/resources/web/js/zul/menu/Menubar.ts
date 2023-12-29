@@ -124,7 +124,7 @@ export class Menubar extends zul.Widget {
 
 	/** @internal */
 	override domClass_(no?: zk.DomClassOptions): string {
-		var sc = super.domClass_(no);
+		var /*safe*/ sc = super.domClass_(no);
 		if (!no || !no.zclass) {
 			sc += ' ' + this.$s(this.isVertical() ? 'vertical' : 'horizontal');
 		}
@@ -352,10 +352,10 @@ export class Menubar extends zul.Widget {
 	override insertChildHTML_(child: zul.menu.Menu, before?: zk.Widget, desktop?: zk.Desktop): void {
 		var vert = this.isVertical();
 		if (before)
-			jq(before.$n_()).before(
+			jq(before.$n_()).before(/*safe*/
 				this.encloseChildHTML_({ child: child, vertical: vert })!);
 		else
-			jq(this.$n_('cave')).append(
+			jq(this.$n_('cave')).append(/*safe*/
 				this.encloseChildHTML_({ child: child, vertical: vert })!);
 
 		child.bind(desktop);

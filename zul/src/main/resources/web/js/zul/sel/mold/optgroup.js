@@ -13,12 +13,12 @@ This program is distributed under LGPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 function optgroup$mold$(out) {
-	var visible = this.isVisible();
+	const visible = this.isVisible();
 	if (visible) out.push('<optgroup', this.domAttrs_(), '>');
-	for (var w = this.nextSibling; w ; w = w.nextSibling) {
-		if (w.$instanceof(zul.sel.Optgroup))
+	for (let w = this.nextSibling; w; w = w.nextSibling) {
+		if ((w instanceof zul.sel.Optgroup))
 			break;
-		if (w.$instanceof(zul.sel.Option) && this.isOpen() && w.isVisible())
+		if ((w instanceof zul.sel.Option) && this.isOpen() && w.isVisible())
 			w.redraw(out);
 	}
 	if (visible) out.push('</optgroup>');

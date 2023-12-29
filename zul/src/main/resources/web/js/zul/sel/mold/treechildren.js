@@ -13,12 +13,12 @@ This program is distributed under LGPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 function treechildren$mold$(out) {
-	if (this.parent.$instanceof(zul.sel.Tree)) {
-		out.push('<tbody id="',this.parent.uuid,'-rows" ', this.domAttrs_({id: 1}), '>');
-		for (var w = this.firstChild; w; w = w.nextSibling)
+	if ((this.parent instanceof zul.sel.Tree)) {
+		out.push('<tbody id="', this.parent.uuid, '-rows" ', this.domAttrs_({id: 1}), '>');
+		for (let w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
 		out.push('</tbody>');
 	} else
-		for (var w = this.firstChild; w; w = w.nextSibling)
+		for (let w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
 }

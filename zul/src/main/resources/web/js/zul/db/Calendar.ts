@@ -146,7 +146,7 @@ export var Renderer = {
 	 * @since 6.5.3
 	 */
 	titleHTML(wgt: zul.db.Calendar, out: string[], localizedSymbols: zk.LocalizedSymbols): void {
-		var uuid = wgt.uuid,
+		var uuidHTML = /*safe*/ wgt.uuid,
 			view = wgt._view,
 			val = wgt.getTime(),
 			m = val.getMonth(),
@@ -156,7 +156,7 @@ export var Renderer = {
 			displayYear = this._getDisplayYear(date, localizedSymbols, localeDateTimeFormat),
 			yofs = y - (y % 10 + 1),
 			ydec = zk.parseInt(y / 100),
-			text = wgt.$s('text'),
+			textHTML = wgt.$s('text'),
 			minyear = wgt._minyear,
 			maxyear = wgt._maxyear,
 			endYearLength = this._getPadYearLength(wgt, localizedSymbols, localeDateTimeFormat);
@@ -164,13 +164,13 @@ export var Renderer = {
 
 		switch (view) {
 		case 'day':
-			out.push('<span id="', uuid, '-tm" class="', text, '">',
-					localizedSymbols.SMON![m], '</span> <span id="', uuid,
-					'-ty" class="', text, '">', displayYear, '</span>');
+			out.push('<span id="', uuidHTML, '-tm" class="', textHTML, '">',
+				/*safe*/ localizedSymbols.SMON![m], '</span> <span id="', uuidHTML,
+					'-ty" class="', textHTML, '">', /*safe*/ displayYear, '</span>');
 			break;
 		case 'month':
-			out.push('<span id="', uuid,
-					'-ty" class="', text, '">', displayYear, '</span>');
+			out.push('<span id="', uuidHTML,
+					'-ty" class="', textHTML, '">', /*safe*/ displayYear, '</span>');
 			break;
 		case 'year':
 			var yearGap = 11,
@@ -181,8 +181,8 @@ export var Renderer = {
 				endYear = expectedEndYear > maxyear ? maxyear : expectedEndYear,
 				endDate = new Date(endYear, m),
 				displayEndYear = this._getDisplayYear(endDate, localizedSymbols, localeDateTimeFormat, endYearLength);
-			out.push('<span id="', uuid, '-tyd" class="', text, '">',
-					displayStartYear, ' - ', displayEndYear, '</span>');
+			out.push('<span id="', uuidHTML, '-tyd" class="', textHTML, '">',
+				/*safe*/ displayStartYear, ' - ', /*safe*/ displayEndYear, '</span>');
 			break;
 		case 'decade':
 			// each start year of cell is ten more than previous one,
@@ -196,8 +196,8 @@ export var Renderer = {
 				endYear = expectedEndYear > maxyear ? maxyear : expectedEndYear,
 				endDate = new Date(endYear, m),
 				displayEndYear = this._getDisplayYear(endDate, localizedSymbols, localeDateTimeFormat, endYearLength);
-			out.push('<span id="', uuid, '-tyd" class="', text, '">',
-					displayStartYear, ' - ', displayEndYear, '</span>');
+			out.push('<span id="', uuidHTML, '-tyd" class="', textHTML, '">',
+				/*safe*/ displayStartYear, ' - ', /*safe*/ displayEndYear, '</span>');
 			break;
 		}
 	},
@@ -209,22 +209,22 @@ export var Renderer = {
 	 * @since 6.5.0
 	 */
 	dayView(wgt: zul.db.Calendar, out: string[], localizedSymbols: zk.LocalizedSymbols): void {
-		var uuid = wgt.uuid,
+		var uuidHTML = /*safe*/ wgt.uuid,
 			sun = (7 - localizedSymbols.DOW_1ST!) % 7, sat = (6 + sun) % 7,
 			wkend = wgt.$s('weekend'),
 			wkday = wgt.$s('weekday'),
 			cell = wgt.$s('cell');
 
-		out.push('<table role="grid" class="', wgt.$s('body'), '" id="', uuid, '-mid"',
-				zUtl.cellps0, '>', '<thead><tr>');
+		out.push('<table role="grid" class="', wgt.$s('body'), '" id="', uuidHTML, '-mid"',
+				/*safe*/ zUtl.cellps0, '>', '<thead><tr>');
 		for (var j = 0; j < 7; ++j)
-			out.push('<th class="', (j == sun || j == sat) ? wkend : wkday,
-					'" aria-label="', localizedSymbols.FDOW![j], '">', localizedSymbols.S2DOW![j], '</th>');
+			out.push('<th class="', (j == sun || j == sat) ? /*safe*/ wkend : /*safe*/ wkday,
+					'" aria-label="', /*safe*/ localizedSymbols.FDOW![j], '">', /*safe*/ localizedSymbols.S2DOW![j], '</th>');
 		out.push('</tr></thead><tbody>');
 		for (var j = 0; j < 6; ++j) { //at most 7 rows
-			out.push('<tr id="', uuid, '-w', j as unknown as string, '">');
+			out.push('<tr id="', uuidHTML, '-w', j as unknown as string, '">');
 			for (var k = 0; k < 7; ++k)
-				out.push('<td id="', uuid, '-w', j as unknown as string, '-p', k as unknown as string, '" class="', cell, ' ', (k == sun || k == sat) ? wkend : wkday,
+				out.push('<td id="', uuidHTML, '-w', j as unknown as string, '-p', k as unknown as string, '" class="', /*safe*/ cell, ' ', (k == sun || k == sat) ? /*safe*/ wkend : /*safe*/ wkday,
 						'"></td>');
 			out.push('</tr>');
 		}
@@ -241,11 +241,13 @@ export var Renderer = {
 		var uuid = wgt.uuid,
 			cell = wgt.$s('cell');
 		out.push('<table role="grid" class="', wgt.$s('body'), ' ', wgt.$s('month'),
-				'" id="', uuid, '-mid"', zUtl.cellps0, '><tbody>');
+				'" id="', /*safe*/ uuid, '-mid"', /*safe*/ zUtl.cellps0, '><tbody>');
 		for (var j = 0; j < 12; ++j) {
 			if (!(j % 4)) out.push('<tr>');
-			out.push('<td class="', cell, '" id="', uuid, '-m', j as unknown as string, '" data-value="', j as unknown as string, '" aria-label="', localizedSymbols.FMON![j], '">',
-					localizedSymbols.SMON![j], '</td>');
+			out.push('<td class="', /*safe*/ cell, '" id="', /*safe*/ uuid, '-m',
+				j as unknown as string, '" data-value="', j as unknown as string,
+				'" aria-label="', /*safe*/ localizedSymbols.FMON![j], '">',
+				/*safe*/ localizedSymbols.SMON![j], '</td>');
 			if (!((j + 1) % 4)) out.push('</tr>');
 		}
 		out.push('</tbody></table>');
@@ -268,21 +270,21 @@ export var Renderer = {
 			maxyear = wgt._maxyear,
 			localeDateTimeFormat = new Intl.DateTimeFormat(localizedSymbols.LAN_TAG, {year: 'numeric'}),
 			endYearLength = this._getPadYearLength(wgt, localizedSymbols, localeDateTimeFormat);
-		out.push('<table role="grid" class="', wgt.$s('body'), ' ', wgt.$s('year'), '" id="', uuid, '-mid"',
-				zUtl.cellps0, '><tbody>');
+		out.push('<table role="grid" class="', wgt.$s('body'), ' ', wgt.$s('year'), '" id="', /*safe*/ uuid, '-mid"',
+				/*safe*/ zUtl.cellps0, '><tbody>');
 
 		for (var j = 0; j < 12; ++j) {
 			if (!(j % 4)) out.push('<tr>');
 			if (yofs < minyear || yofs > maxyear) {
-				out.push('<td class="', disd, '">&nbsp;</td>');
+				out.push('<td class="', /*safe*/ disd, '">&nbsp;</td>');
 				if (j + 1 == 12)
 					out.push('</tr>');
 				yofs++;
 				continue;
 			}
 			var date = new Date(yofs, 0);
-			out.push('<td class="', cell, '" data-value="', yofs as unknown as string, '" id="', uuid, '-y', j as unknown as string, '" >',
-					this._getDisplayYear(date, localizedSymbols, localeDateTimeFormat, endYearLength), '</td>');
+			out.push('<td class="', /*safe*/ cell, '" data-value="', yofs as unknown as string, '" id="', /*safe*/ uuid, '-y', j as unknown as string, '" >',
+				/*safe*/ this._getDisplayYear(date, localizedSymbols, localeDateTimeFormat, endYearLength), '</td>');
 			if (!((j + 1) % 4)) out.push('</tr>');
 			yofs++;
 		}
@@ -311,14 +313,14 @@ export var Renderer = {
 
 
 		out.push('<table role="grid" class="', wgt.$s('body'), ' ', wgt.$s('decade'),
-				'" id="', uuid, '-mid"',
-				zUtl.cellps0, '><tbody>');
+				'" id="', /*safe*/ uuid, '-mid"',
+			/*safe*/ zUtl.cellps0, '><tbody>');
 		var temp = ydec * 100 - 10,
 			selected = wgt.$s('selected');
 		for (var j = 0; j < 12; ++j, temp += 10) {
 			if (!(j % 4)) out.push('<tr>');
 			if (temp < mindec || temp > maxdec) {
-				out.push('<td class="', disd, '">&nbsp;</td>');
+				out.push('<td class="', /*safe*/ disd, '">&nbsp;</td>');
 				if (j + 1 == 12)
 					out.push('</tr>');
 				continue;
@@ -326,10 +328,10 @@ export var Renderer = {
 
 			var startDate = new Date(temp < minyear ? minyear : temp, 0),
 				endDate = new Date(temp + 9 > maxyear ? maxyear : temp + 9, 11);
-			out.push('<td data-value="', temp as unknown as string, '" id="', uuid, '-de', j as unknown as string, '" class="',
-					cell, (y >= temp && y <= (temp + 9)) ? ' ' + selected : '', '" >',
-							this._getDisplayYear(startDate, localizedSymbols, localeDateTimeFormat, endYearLength) + ' -<br aria-hidden="true" />'
-							+ this._getDisplayYear(endDate, localizedSymbols, localeDateTimeFormat, endYearLength) + '</td>');
+			out.push('<td data-value="', temp as unknown as string, '" id="', /*safe*/ uuid, '-de', j as unknown as string, '" class="',
+				/*safe*/ cell, (y >= temp && y <= (temp + 9)) ? ' ' + /*safe*/ selected : '', '" >',
+				/*safe*/ this._getDisplayYear(startDate, localizedSymbols, localeDateTimeFormat, endYearLength) + ' -<br aria-hidden="true" />'
+							+ /*safe*/ this._getDisplayYear(endDate, localizedSymbols, localeDateTimeFormat, endYearLength) + '</td>');
 			if (!((j + 1) % 4)) out.push('</tr>');
 		}
 		out.push('</tbody></table>');
@@ -347,7 +349,7 @@ export var Renderer = {
 			var tz = _getTimeZone(wgt);
 			val = new zk.fmt.Calendar().formatDate(zUtl.today(!!wgt.parent, tz), wgt.getFormat(), localizedSymbols);
 		}
-		out.push(val);
+		out.push(zUtl.encodeXML(val));
 	},
 	/** @internal */
 	_getDisplayYear(date: Date, localizedSymbols: zk.LocalizedSymbols, localeDateTimeFormat: Intl.DateTimeFormat, padLength?: number): string { // override
@@ -1144,7 +1146,8 @@ export class Calendar extends zul.Widget {
 
 			out = []; // reset
 			Renderer.titleHTML(this, out, localizedSymbols);
-			jq(this.$n('title')).html(out.join(''));
+			// eslint-disable-next-line @microsoft/sdl/no-html-method
+			jq(this.$n('title')).html(DOMPurify.sanitize(out.join('')));
 			jq(this.$n('mid')).transition({scale: 0}, 0).transition({scale: 1}, this.animationSpeed_() as number);
 
 			_updateArrow(this);
@@ -1161,16 +1164,16 @@ export class Calendar extends zul.Widget {
 				width = oldMid.offsetWidth,
 				x = width * -1,
 				self = this,
-				animaCSS = this.$s('anima'),
+				animaCSSHTML = this.$s('anima'),
 				todayBtn = this.isShowTodayLink() ? jq(this.$n('today')).parent() : undefined;
 
 			if (todayBtn) todayBtn.is(':hidden') && todayBtn.css('display', 'none');
 
 			(Renderer[view + 'View'] as ComputedView)(this, out, localizedSymbols);
 
-			jq(oldMid).after('<div style="height:' + oldMid.offsetHeight
-					+ 'px;width:' + width + 'px" class="' + animaCSS
-					+ '"><div class="' + animaCSS + '-inner"></div');
+			jq(oldMid).after(/*safe*/ '<div style="height:' + jq.px(oldMid.offsetHeight)
+					+ ';width:' + jq.px(width) + '" class="' + animaCSSHTML
+					+ '"><div class="' + animaCSSHTML + '-inner"></div');
 
 			var animaInner = oldMid.nextSibling!.firstChild!;
 			jq(animaInner).append(oldMid);
@@ -1205,7 +1208,8 @@ export class Calendar extends zul.Widget {
 					self.domListen_(newMid, 'onClick', '_clickDate');
 					var out = []; // reset
 					Renderer.titleHTML(self, out, localizedSymbols);
-					jq(self.$n('title')).html(out.join(''));
+					// eslint-disable-next-line @microsoft/sdl/no-html-method
+					jq(self.$n('title')).html(DOMPurify.sanitize(out.join('')));
 					self.clearCache();
 					if (todayBtn) todayBtn.css('display', '');
 				}
@@ -1345,7 +1349,8 @@ export class Calendar extends zul.Widget {
 								if (isSelectDisabled) {
 									$cell.addClass(disdClass);
 								}
-								$cell[0].innerHTML = Renderer.cellHTML(this, y, m + monofs, v, monofs) as unknown as string;
+								// eslint-disable-next-line @microsoft/sdl/no-inner-html
+								$cell[0].innerHTML = DOMPurify.sanitize(Renderer.cellHTML(this, y, m + monofs, v, monofs)) as unknown as string;
 								$cell[0].setAttribute('aria-label', Renderer.cellAriaLabel(this, y, m + monofs, v, monofs, k));
 								$cell.data('value', v);
 							}

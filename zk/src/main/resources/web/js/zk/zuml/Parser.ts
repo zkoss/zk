@@ -15,13 +15,13 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
  * @internal
  */
 //zk.$package('zk.zuml');
-function _innerText(node: HTMLElement): string | undefined {
-	var txt = node.innerHTML,
+function /*safe*/ _innerText(node: HTMLElement): string | undefined {
+	let /*safe*/ txt = node.innerHTML,
 		j = txt.indexOf('<!--');
 	if (j >= 0)
 		txt = txt.substring(j + 4, txt.lastIndexOf('-->'));
 	txt = txt.trim();
-	return txt ? '<div>' + txt.trim() + '</div>' : undefined;
+	return txt ? ('<div>' + /*safe*/ txt.trim() + '</div>') : undefined;
 }
 function _aftCreate(wgt: zk.Widget | undefined, cwgts: zk.Widget[], node: HTMLElement, opts?: {replaceHTML?}): undefined | zk.Widget | zk.Widget[] {
 	let c: zk.Widget | undefined;
@@ -168,6 +168,7 @@ function _eval(wgt: zk.Widget, s: string | null, args: unknown): string | null {
 			t = s.substring(k + 2, l); //EL
 
 			try {
+				// eslint-disable-next-line no-new-func
 				var fn = new Function('var _=arguments[0];return ' + t) as (args) => string;
 				t = wgt ? fn.call(wgt, args) : fn(args);
 			} catch (e) {

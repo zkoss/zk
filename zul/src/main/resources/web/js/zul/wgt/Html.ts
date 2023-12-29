@@ -45,7 +45,9 @@ export class Html extends zul.Widget<HTMLHtmlElement> {
 
 		if (o !== content || opts?.force) {
 			var n = this.$n();
-			if (n) n.innerHTML = content || '';
+			// Allow HTML and Script tag here according to Component reference guide.
+			// eslint-disable-next-line @microsoft/sdl/no-inner-html
+			if (n) n.innerHTML = /*safe*/ content || '';
 		}
 
 		return this;

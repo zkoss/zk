@@ -103,7 +103,7 @@ export class Separator extends zul.Widget {
 	}
 	/** @internal */
 	override domClass_(no?: zk.DomClassOptions): string {
-		var sc = super.domClass_(no),
+		var /*safe*/ sc = super.domClass_(no),
 			bar = this.isBar();
 		if (!no || !no.zclass) {
 			sc += ' ' + this.$s((this.isVertical() ? 'vertical' + (bar ? '-bar' : '') :
@@ -113,7 +113,7 @@ export class Separator extends zul.Widget {
 	}
 	/** @internal */
 	override domStyle_(no?: zk.DomStyleOptions): string {
-		var s = super.domStyle_(no);
+		var /*safe*/ s = super.domStyle_(no);
 		if (!_shallFixPercent(this))
 			return s;
 

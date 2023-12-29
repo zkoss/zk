@@ -66,18 +66,18 @@ export class Inputgroup extends zul.Widget {
 
 	/** @internal */
 	override domClass_(no?: zk.DomClassOptions): string {
-		const classes = super.domClass_(no);
-		return classes + (this._vertical ? ' ' + this.$s('vertical') : '');
+		const classesHTML = super.domClass_(no);
+		return classesHTML + (this._vertical ? ' ' + this.$s('vertical') : '');
 	}
 
 	/** @internal */
 	override insertChildHTML_(child: zk.Widget, before?: zk.Widget, desktop?: zk.Desktop): void {
 		if (before)
 			jq(before.$n('chdex') || before.$n()!).before(
-				this.encloseChildHTML_({ child: child })!);
+				/*safe*/ this.encloseChildHTML_({ child: child })!);
 		else
 			jq(this.getCaveNode()).append(
-				this.encloseChildHTML_({ child: child })!);
+				/*safe*/ this.encloseChildHTML_({ child: child })!);
 
 		child.bind(desktop);
 	}
@@ -94,7 +94,7 @@ export class Inputgroup extends zul.Widget {
 			w = opts.child;
 		if (!(w instanceof zul.wgt.Button) && !(w instanceof zul.wgt.Toolbarbutton)
 			&& (!zul.inp || !(w instanceof zul.inp.InputWidget))) {
-			out.push('<div id="', w.uuid, '-chdex" class="', this.$s('text'), '">');
+			out.push('<div id="', /*safe*/ w.uuid, '-chdex" class="', this.$s('text'), '">');
 			w.redraw(out);
 			out.push('</div>');
 		} else {

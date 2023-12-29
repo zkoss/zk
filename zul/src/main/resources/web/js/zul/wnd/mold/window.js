@@ -16,18 +16,18 @@ function window$mold$(out, skipper) {
 	var uuid = this.uuid,
 		title = this.getTitle(),
 		caption = this.caption,
-		contentStyle = this.getContentStyle(),
-		contentSclass = this.getContentSclass(),
+		contentStyleHTML = zUtl.encodeXML(this.getContentStyle()),
+		contentSclassHTML = zUtl.encodeXML(this.getContentSclass()),
 		tabi = this._tabindex,
 		btnRenderer = zul.wgt.ButtonRenderer;
 
 	out.push('<div', this.domAttrs_({tabindex: 1}), '>');//tabindex attribute will be set in the child elements
-	
+
 	if (caption || title) {
 		out.push('<div id="',
 			uuid, '-cap" class="', this.$s('header'), '">');
 
-		
+
 		if (caption) caption.redraw(out);
 		else {
 			out.push(zUtl.encodeXML(title));
@@ -41,20 +41,20 @@ function window$mold$(out, skipper) {
 			out.push('</div>');
 		}
 		out.push('</div>');
-	} 
+	}
 	out.push('<div id="', uuid, '-cave" class="');
-	
-	if (contentSclass)
-		out.push(contentSclass, ' ');
+
+	if (contentSclassHTML)
+		out.push(contentSclassHTML, ' ');
 	out.push(this.$s('content'), '" ');
-	
-	if (contentStyle)
-		out.push(' style="', contentStyle, '"');
+
+	if (contentStyleHTML)
+		out.push(' style="', contentStyleHTML, '"');
 	out.push('>');
 
 	if (!skipper)
 		for (var w = this.firstChild; w; w = w.nextSibling)
-			if (w != caption)
+			if (w !== caption)
 				w.redraw(out);
 	out.push('</div></div>');
 }

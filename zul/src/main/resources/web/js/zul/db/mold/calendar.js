@@ -17,8 +17,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 function calendar$mold$(out) {
 	var renderer = zul.db.Renderer,
 		uuid = this.uuid,
-		view = this._view, 
-		tagnm = zk.ie < 11 ? 'a' : 'button',
+		view = this._view,
+		tagnm = 'button',
 		localizedSymbols = this.getLocalizedSymbols(),
 		icon = this.$s('icon'),
 		outRangeL = this.isOutOfRange(true) ? ' disabled="disabled" aria-disabled="true"' : '',
@@ -29,26 +29,26 @@ function calendar$mold$(out) {
 	out.push('<div id="', uuid, '"', this.domAttrs_(), '><', tagnm, ' id="', uuid,
 			'-a" tabindex="-1" onclick="return false;" href="javascript:;" class="z-focus-a"></',
 			tagnm, '><div class="',
-			this.$s('header'), '"><a id="', uuid, '-left" href="javascript:;" class="', icon, ' ',
+			this.$s('header'), '"><a id="', uuid, '-left" href="javascript:;" class="', /*safe*/ icon, ' ',
 			this.$s('left'), '"', outRangeL, '><i class="z-icon-angle-left" aria-label="', msgzul.PREV, '"></i></a>',
 			'<a id="', uuid, '-title" href="javascript:;" class="', this.$s('title'), '">');
 
 	renderer.titleHTML(this, out, localizedSymbols);
 
-	out.push('</a><a id="', uuid, '-right" href="javascript:;" class="', icon, ' ',
+	out.push('</a><a id="', uuid, '-right" href="javascript:;" class="', /*safe*/ icon, ' ',
 			this.$s('right'), '"', outRangeR, '><i class="z-icon-angle-right" aria-label="', msgzul.NEXT, '"></i></a></div>');
 	
-	switch(view) {
-	case "day" :
+	switch (view) {
+	case 'day':
 		renderer.dayView(this, out, localizedSymbols);
 		break;
-	case "month" :
+	case 'month':
 		renderer.monthView(this, out, localizedSymbols);
 		break;
-	case "year" :
+	case 'year':
 		renderer.yearView(this, out, localizedSymbols);
 		break;
-	case "decade" :
+	case 'decade':
 		renderer.decadeView(this, out, localizedSymbols);
 		break;
 	}

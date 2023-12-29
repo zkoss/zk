@@ -33,12 +33,12 @@ export class Content extends zhtml.Widget {
 
 	override redraw(out: string[]): void {
 		var s = this.prolog;
-		if (s) out.push(s);
+		if (s) out.push(/*safe*/ s);
 
 		// B65-ZK-1836
 		out.push((this._content ?? '').replace(/<\/(?=script>)/ig, '<\\/'));
 
 		s = this.epilog;
-		if (s) out.push(s);
+		if (s) out.push(/*safe*/ s);
 	}
 }

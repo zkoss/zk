@@ -4,7 +4,8 @@ module.exports = {
   'parser': '@typescript-eslint/parser',
   'plugins': [
     '@typescript-eslint',
-    'zk'
+    'zk',
+    '@microsoft/eslint-plugin-sdl'
   ],
   'parserOptions': {
     'ecmaVersion': 5,
@@ -22,6 +23,7 @@ module.exports = {
       'globals': {
         '$eval': 'readonly',
         'JQuery': 'readonly',
+        'DOMPurify': 'writable',
         'jq': 'writable',
         'JQ': 'writable',
         'zjq': 'writable',
@@ -57,6 +59,10 @@ module.exports = {
         '_zkf': 'writable',
         'Moment': 'readonly'
       },
+      'extends': [
+        'eslint:recommended',
+        'plugin:zk/recommended'
+      ],
       'rules': {
         // Recommended
         'for-direction': 'error',
@@ -134,7 +140,95 @@ module.exports = {
         'comma-spacing': 'error',
         'comma-style': 'error',
         'quotes': ['error', 'single', { 'avoidEscape': true }],
-        'unicode-bom': 'error'
+        'unicode-bom': 'error',
+        'zk/noMixedHtml': [ 2, {
+          'htmlVariableRules': [ '^uuid$', 'html/i', {
+            object: 'msgzul',
+            property: '.*'
+          } ],
+          'htmlFunctionRules': [
+            'dom(?:(?!Evt|Target).)', 'getStyle', 'getSclass', 'getZclass', 'HTML_$',
+          ],
+          'sanitizedVariableRules': [ {
+            object: 'this',
+            property: '^uuid$'
+          }],
+          'functions': {
+            'zUtl.encodeXML': { // zUtl.encodeXML()
+              'htmlInput': true,
+              'safe': true,
+              'htmlOutput': true, // true to indicate that the function returns encoded HTML
+              'sanitized': true // true to indicate that the function returns sanitized HTML
+            },
+            '.$s': {
+              'htmlInput': true,
+              'htmlOutput': true,
+              'safe': true,
+              'sanitized': true // true to indicate that the function returns sanitized HTML
+            },
+            'out.push': {
+              'htmlInput': true// out.push()
+            },
+            'jq': {
+              'htmlInput': true,
+              'safe': true
+            },
+            'jq.parseStyle': {
+              'htmlInput': true,
+              'safe': true
+            },
+            'Widget.$': {
+              'htmlInput': true,
+              'safe': true
+            },
+            'zk.error': {
+              'htmlInput': true,
+              'safe': true
+            },
+            '.startsWith': {
+              'htmlInput': true,
+              'safe': true
+            },
+            '.replace': {
+              'htmlInput': true,
+              'htmlOutput': true,
+              'safe': true,
+              'sanitized': true // true to indicate that the function returns sanitized HTML
+            },
+            '.removeClass': {
+              'htmlInput': true,
+              'safe': true
+            },
+            '.addClass': {
+              'htmlInput': true,
+              'safe': true
+            },
+            'DOMPurify.sanitize': {
+              'htmlOutput': true,
+              'htmlInput': true,
+              'safe': true,
+              'sanitized': true // true to indicate that the function returns sanitized HTML
+            },
+            'jq.filterTextStyle': {
+              'htmlOutput': true,
+              'htmlInput': true,
+              'safe': true
+            },
+            'jq.px': {
+              'htmlInput': true,
+              'htmlOutput': true,
+              'safe': true,
+              'sanitized': true // true to indicate that the function returns sanitized HTML
+            },
+            'zUtl.appendAttr': {
+              'htmlInput': true,
+              'safe': true
+            }
+          }
+        }],
+        'zk/noLocationHrefAssign': [ 2, {
+          'escapeFunc': 'zUtl.encodeURL'
+        }]
       }
     },
     {
@@ -149,7 +243,9 @@ module.exports = {
         'plugin:@typescript-eslint/recommended',
         'plugin:@typescript-eslint/recommended-requiring-type-checking',
         'plugin:@typescript-eslint/strict',
-        'plugin:zk/recommended'
+        'plugin:zk/recommended',
+        'plugin:@microsoft/sdl/required',
+        'plugin:@microsoft/sdl/typescript'
       ],
       'rules': {
         // Recommended
@@ -313,7 +409,91 @@ module.exports = {
         ],
         '@typescript-eslint/type-annotation-spacing': 'error',
         '@typescript-eslint/unbound-method': 'off',
-        '@typescript-eslint/unified-signatures': 'off' // TSDoc overloaded functions
+        '@typescript-eslint/unified-signatures': 'off', // TSDoc overloaded functions
+        'zk/noMixedHtml': [ 2, {
+          'htmlFunctionRules': [
+            'dom(?:(?!Evt|Target).)', 'getStyle', 'getSclass', 'getZclass', 'HTML_$',
+          ],
+          'sanitizedVariableRules': [ {
+            object: 'this',
+            property: '^uuid$'
+          }],
+          'functions': {
+            'zUtl.encodeXML': { // zUtl.encodeXML()
+              'htmlInput': true,
+              'safe': true,
+              'htmlOutput': true, // true to indicate that the function returns encoded HTML
+              'sanitized': true // true to indicate that the function returns sanitized HTML
+            },
+            '.$s': {
+              'htmlInput': true,
+              'htmlOutput': true,
+              'safe': true,
+              'sanitized': true // true to indicate that the function returns sanitized HTML
+            },
+            'out.push': {
+              'htmlInput': true// out.push()
+            },
+            'jq': {
+              'htmlInput': true,
+              'safe': true
+            },
+            'jq.parseStyle': {
+              'htmlInput': true,
+              'safe': true
+            },
+            'Widget.$': {
+              'htmlInput': true,
+              'safe': true
+            },
+            'zk.error': {
+              'htmlInput': true,
+              'safe': true
+            },
+            '.startsWith': {
+              'htmlInput': true,
+              'safe': true
+            },
+            '.replace': {
+              'htmlInput': true,
+              'htmlOutput': true,
+              'safe': true,
+              'sanitized': true // true to indicate that the function returns sanitized HTML
+            },
+            '.removeClass': {
+              'htmlInput': true,
+              'safe': true
+            },
+            '.addClass': {
+              'htmlInput': true,
+              'safe': true
+            },
+            'DOMPurify.sanitize': {
+              'htmlOutput': true,
+              'htmlInput': true,
+              'safe': true,
+              'sanitized': true // true to indicate that the function returns sanitized HTML
+            },
+            'jq.filterTextStyle': {
+              'htmlOutput': true,
+              'htmlInput': true,
+              'safe': true
+            },
+            'jq.px': {
+              'htmlInput': true,
+              'htmlOutput': true,
+              'safe': true,
+              'sanitized': true // true to indicate that the function returns sanitized HTML
+            },
+            'zUtl.appendAttr': {
+              'htmlInput': true,
+              'safe': true
+            }
+          }
+        }],
+        'zk/noLocationHrefAssign': [ 2, {
+          'escapeFunc': 'zUtl.encodeURL'
+        }]
       }
     },
     {

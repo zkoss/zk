@@ -15,6 +15,7 @@ import './crashmsg';  // side-effect-only import
 require('./ext/jquery'); // side-effect-only import
 // workaround for FileUpload with fetch() API.
 require('./ext/fetch.js'); // before ./au
+require('./ext/purify.js');
 export * from './zk';
 import './js'; // side-effect-only import
 export * from './dom';

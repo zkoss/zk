@@ -29,14 +29,14 @@ function _spacingHTML(box: zul.box.Box, child: zk.Widget): string {
 		vert = box.isVertical(),
 		spstyle = spacing && spacing != 'auto' ? (vert ? 'height:' : 'width:') + spacing : '';
 
-	oo += '<t' + (vert ? 'r' : 'd') + ' id="' + child.uuid
+	oo += '<t' + (vert ? 'r' : 'd') + ' id="' + /*safe*/ child.uuid
 		+ '-chdex2" class="' + box.$s('separator') + '"';
 
 	var s = spstyle;
 	if (spacing0 || !child.isVisible()) s = 'display:none;' + s;
 	if (s) oo += ' style="' + s + '"';
 
-	oo += '>' + (vert ? '<td>' : '') + zUtl.img0 + (vert ? '</td></tr>' : '</td>');
+	oo += '>' + (vert ? '<td>' : '') + /*safe*/ zUtl.img0 + (vert ? '</td></tr>' : '</td>');
 	return oo;
 }
 
@@ -400,13 +400,13 @@ export class Box extends zul.Widget {
 	/** @internal */
 	override insertChildHTML_(child: zk.Widget, before?: zk.Widget, desktop?: zk.Desktop): void {
 		if (before) {
-			jq(this._chdextr(before)).before(this.encloseChildHTML_(child)!);
+			jq(this._chdextr(before)).before(/*safe*/ this.encloseChildHTML_(child)!);
 		} else {
 			var n = this.$n<HTMLTableElement>('real')!, tbs = n.tBodies;
 			if (!tbs || !tbs.length)
 				n.appendChild(document.createElement('tbody'));
 			jq(this.isVertical() ? tbs[0] : tbs[0].rows[0]).append(
-				this.encloseChildHTML_(child, true)!);
+				/*safe*/ this.encloseChildHTML_(child, true)!);
 		}
 		child.bind(desktop);
 	}
@@ -434,11 +434,11 @@ export class Box extends zul.Widget {
 		var oo: string[] = [],
 			isCell = child instanceof zul.wgt.Cell;
 		if (this.isVertical()) {
-			oo.push('<tr id="', child.uuid, '-chdex"',
-				this._childOuterAttrs(child), '>');
+			/*safe*/ oo.push('<tr id="', /*safe*/ child.uuid, '-chdex"',
+				/*safe*/ this._childOuterAttrs(child), '>');
 
 			if (!isCell) {
-				oo.push('<td', this._childInnerAttrs(child));
+				/*safe*/ oo.push('<td', /*safe*/ this._childInnerAttrs(child));
 				//follow xul vbox spec.
 				var v = this.getAlign();
 				if (v && v != 'stretch') oo.push(' align="', zul.box.Box._toHalign(v)!, '"');
@@ -453,9 +453,9 @@ export class Box extends zul.Widget {
 
 		} else {
 			if (!isCell) {
-				oo.push('<td id="', child.uuid, '-chdex"',
-				this._childOuterAttrs(child),
-				this._childInnerAttrs(child),
+				/*safe*/ oo.push('<td id="', /*safe*/ child.uuid, '-chdex"',
+					/*safe*/ this._childOuterAttrs(child),
+					/*safe*/ this._childInnerAttrs(child),
 				'>');
 			}
 			child.redraw(oo);
@@ -473,7 +473,7 @@ export class Box extends zul.Widget {
 		if (!out) return oo.join('');
 
 		for (var j = 0, len = oo.length; j < len; ++j)
-			out.push(oo[j]);
+			out.push(/*safe*/ oo[j]);
 	}
 
 	/** @internal */
@@ -781,13 +781,13 @@ export class Box extends zul.Widget {
 		else if (this.isVertical()) {
 			if (this._isStretchPack()) {
 				var v = this._pack2;
-				html = ' valign="' + (v ? zul.box.Box._toValign(v) : 'top') + '"';
+				html = ' valign="' + (v ? /*safe*/ zul.box.Box._toValign(v) : 'top') + '"';
 			} else html = ' valign="top"';
 		} else
 			return ''; //if hoz and not splitter, display handled in _childInnerAttrs
 
 		if (!child.isVisible()) html += ' style="display:none"';
-		return html;
+		return DOMPurify.sanitize(html);
 	}
 
 	/** @internal */
@@ -800,7 +800,7 @@ export class Box extends zul.Widget {
 
 		if (this._isStretchPack()) {
 			var v = vert ? this.getAlign() : this._pack2;
-			if (v) html += ' align="' + zul.box.Box._toHalign(v) + '"';
+			if (v) html += ' align="' + /*safe*/ zul.box.Box._toHalign(v) + '"';
 		}
 
 		var style = '', szes = this._sizes;
@@ -818,7 +818,7 @@ export class Box extends zul.Widget {
 
 		if (!vert && !child.isVisible()) style += style ? ';display:none' : 'display:none';
 		if (!vert) style += style ? ';height:100%' : 'height:100%';
-		return style ? html + ' style="' + style + '"' : html;
+		return DOMPurify.sanitize(style ? html + ' style="' + style + '"' : html);
 	}
 
 	/** @internal */

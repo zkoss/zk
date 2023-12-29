@@ -1214,17 +1214,17 @@ export class JQZK {
 	 */
 	offsetHeight(): number {
 		var n = this.jq[0];
-		// span will causes a special gap between top and bottom
+		// span will cause a special gap between top and bottom
 		// when use HTML5 doctype
 		if (isHTML5DocType()
 			&& jq.nodeName(n, 'SPAN') && this.jq.css('display') != 'block') {
-			var text = n.outerHTML;
+			var textHTML = /*safe*/ n.outerHTML;
 
 			// replace uuid to speed up the calculation
 			if (zk.Widget.$(n, {exact: 1 as unknown as boolean})) {
-				text = text.replace(/id="[^"]*"/g, '');
+				textHTML = textHTML.replace(/id="[^"]*"/g, '');
 			}
-			return zk(document.body).textSize(text)[1];
+			return zk(document.body).textSize(/*safe*/ textHTML)[1];
 		}
 		return n.offsetHeight;
 	}
@@ -1372,7 +1372,7 @@ export class JQZK {
 	 */
 	textSize(text?: string): zk.Offset {
 		const jq = this.jq;
-		text = text || jq[0].innerHTML;
+		/*safe*/ text = /*safe*/ text || jq[0].innerHTML;
 		if (!_txtSizDiv) {
 			_txtSizDiv = document.createElement('div');
 			_txtSizDiv.style.cssText = _defaultStyle;
@@ -1391,7 +1391,8 @@ export class JQZK {
 			key = newStyle + text;
 		if (!(result = _cache[key])) {
 			// ZK-2181: remove name attritube to prevent the radio has wrong status
-			_txtSizDiv.innerHTML = text.replace(/name="[^"]*"/g, '');
+			// eslint-disable-next-line @microsoft/sdl/no-inner-html
+			_txtSizDiv.innerHTML = DOMPurify.sanitize(text.replace(/name="[^"]*"/g, ''));
 			_txtSizDiv.style.cssText = _defaultStyle + newStyle;
 			_txtSizDiv.style.display = '';
 			result = _cache[key] = [_txtSizDiv.offsetWidth, _txtSizDiv.offsetHeight];
@@ -2049,7 +2050,7 @@ jq.each(['before', 'after', 'append', 'prepend'], function (i, nm) {
 		if (!this.length) return this;
 		if (!zk.Desktop._ndt) zk.stateless();
 
-		var ret = (_jq[nm] as CallableFunction).bind(this)(w.redrawHTML_()) as JQuery;
+		var ret = (_jq[nm] as CallableFunction).bind(this)(/*safe*/ w.redrawHTML_()) as JQuery;
 		if (!w.z_rod) {
 			w.bind(desktop);
 			zUtl.fireSized(w as zk.Widget);
@@ -2323,10 +2324,12 @@ Object.assign(jq, {
 		if (!src) src = zjq.src0;
 			//IE: prevent secure/nonsecure warning with HTTPS
 
+		// eslint-disable-next-line zk/noMixedHtml
 		var html = '<iframe id="' + id + '" name="' + id + '" src="' + src + '"';
 		if (style == null) style = 'display:none';
+		// eslint-disable-next-line zk/noMixedHtml
 		html += ' style="' + style + '"></iframe>';
-		jq(document.body).append(html);
+		jq(document.body).append(DOMPurify.sanitize(html));
 		return zk(id).jq[0] as HTMLIFrameElement;
 	},
 	/**
@@ -2554,9 +2557,9 @@ Object.assign(jq, {
 		var a = jq('#z_focusOut')[0];
 		if (!a) {
 			// for Chrome and Safari, we can't set "display:none;"
-			jq(document.body).append('<a href="javascript:;" style="position:absolute;'
-					+ 'left:' + zk.clickPointer[0] + 'px;top:' + zk.clickPointer[1]
-					+ 'px;" id="z_focusOut"/>');
+			jq(document.body).append(/*safe*/ '<a href="javascript:;" style="position:absolute;'
+					+ 'left:' + jq.px(zk.clickPointer[0]) + ';top:' + jq.px(zk.clickPointer[1])
+					+ ';" id="z_focusOut"/>');
 			a = jq('#z_focusOut')[0];
 		}
 		a.focus();

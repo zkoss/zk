@@ -189,8 +189,8 @@ export class Iframe extends zul.Widget<HTMLIFrameElement> {
 
 	/** @internal */
 	override domAttrs_(no?: zk.DomAttrsOptions): string {
-		var attr = super.domAttrs_(no)
-				+ ' src="' + zjq.src0 + '" frameborder="0"',
+		var /*safe*/ attr = super.domAttrs_(no)
+				+ ' src="' + /*safe*/ zjq.src0 + '" frameborder="0"',
 		v: string | undefined | boolean = this._scrolling;
 		if ('auto' != v)
 			attr += ' scrolling="' + ('true' === v ? 'yes' : 'false' === v ? 'no' : v) + '"';
@@ -200,6 +200,6 @@ export class Iframe extends zul.Widget<HTMLIFrameElement> {
 			attr += ' name="' + v + '"';
 		if ((v = this._autohide))
 			attr += ' z_autohide="' + v + '"';
-		return attr;
+		return DOMPurify.sanitize(attr);
 	}
 }

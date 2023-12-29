@@ -7,3 +7,5 @@ export * from './noNull';
 export * from './preferStrictBooleanType';
 export * from './noPropertyFunction';
 export * from './tsdocValidation';
+export * from './noLocationHrefAssign';
+export * from './noMixedHtml';

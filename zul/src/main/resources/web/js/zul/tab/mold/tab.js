@@ -18,14 +18,15 @@ function tab$mold$(out) {
 	var tbx = this.getTabbox(),
 		uuid = this.uuid,
 		icon = this.$s('icon'),
-		removeIcon = '<i id="' + uuid + '-cls" class="z-icon-times ' + icon + '" role="button" aria-label="' + msgzul.PANEL_CLOSE + '"></i>',
+		/*safe*/
+		removeIcon = '<i id="' + uuid + '-cls" class="z-icon-times ' + /*safe*/ icon + '" role="button" aria-label="' + msgzul.PANEL_CLOSE + '"></i>',
 		isAccordion = tbx.inAccordionMold(),
-		tag = isAccordion ? 'div' : 'li', 
-		panel = isAccordion ? this.getLinkedPanel() : null,
-		n = panel? panel.$n() : null;
-	 
-	if (isAccordion) {//Accordion		
-		var c = n? n.firstChild : null;
+		tag = isAccordion ? 'div' : 'li',
+		panel = isAccordion ? this.getLinkedPanel() : undefined,
+		n = panel ? panel.$n() : undefined;
+
+	if (isAccordion) { //Accordion
+		var c = n ? n.firstChild : undefined;
 		// Bug ZK-419
 		// no linked panel
 		// Bug ZK-674
@@ -34,24 +35,24 @@ function tab$mold$(out) {
 		// or the LinkedPanel already Linked to another tab
 		// this._oldId is from Tab.js#_logId
 		if (!panel || (c && c != panel.$n('cave')
-			&& (this._oldId? c.id != this._oldId : c != this.$n()))) 
+			&& (this._oldId ? c.id != this._oldId : c != this.$n())))
 			return;
 		// push to new array to insert if panel already rendered
-		out = n? [] : out;
+		out = n ? [] : out;
 	}
 
 	out.push('<', tag, ' ', this.domAttrs_(), '>');
 	out.push('<div id="', uuid, '-cave" class="', this.$s('content'), '">');
 
 	if (this.isClosable())
-		out.push('<div id="', uuid , '-btn" class="', this.$s('button'), '">', removeIcon, '</div>');
+		out.push('<div id="', uuid, '-btn" class="', this.$s('button'), '">', /*safe*/ removeIcon, '</div>');
 
 	this.contentRenderer_(out);
-		
+
 	out.push('</div>');
 	out.push('</', tag, '>');
 
 	if (isAccordion && n) // panel already rendered, do insert
 		jq(n).prepend(out.join(''));
-	
+
 }

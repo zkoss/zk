@@ -102,7 +102,8 @@ export class A extends zul.LabelImageWidget<HTMLAnchorElement> implements zul.La
 
 		if (o !== dir || opts?.force) {
 			var n = this.$n();
-			if (n) n.innerHTML = this.domContent_();
+			// eslint-disable-next-line @microsoft/sdl/no-inner-html
+			if (n) n.innerHTML = DOMPurify.sanitize(this.domContent_());
 		}
 
 		return this;
@@ -236,8 +237,8 @@ export class A extends zul.LabelImageWidget<HTMLAnchorElement> implements zul.La
 	/** @internal */
 	override domContent_(): string {
 		var label = zUtl.encodeXML(this.getLabel()),
-			img = this.domImage_(),
-			iconSclass = this.domIcon_();
+			/*safe*/ img = this.domImage_(),
+			/*safe*/ iconSclass = this.domIcon_();
 		if (!img && !iconSclass)
 			return label;
 
@@ -250,7 +251,7 @@ export class A extends zul.LabelImageWidget<HTMLAnchorElement> implements zul.La
 
 	/** @internal */
 	override domAttrs_(no?: zk.DomAttrsOptions): string {
-		var attr = super.domAttrs_(no),
+		var /*safe*/ attr = super.domAttrs_(no),
 			v: string | undefined;
 		if (v = this.getTarget())
 			attr += ` target="${v}"`;
@@ -260,7 +261,7 @@ export class A extends zul.LabelImageWidget<HTMLAnchorElement> implements zul.La
 			attr += ' href="javascript:;"';
 		if (this._disabled)
 			attr += ' disabled="disabled"';
-		return attr;
+		return DOMPurify.sanitize(attr);
 	}
 
 	/** @internal */

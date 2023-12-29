@@ -49,7 +49,7 @@ export class Treerow extends zul.Widget<HTMLTableRowElement> {
 
 	/** @internal */
 	override domClass_(no?: zk.DomClassOptions): string {
-		var scls = super.domClass_(no),
+		var /*safe*/ scls = super.domClass_(no),
 			p = this.parent;
 		if (p && (!no || !no.zclass)) {
 			if (p.isDisabled())

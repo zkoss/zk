@@ -14,4 +14,5 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
+// eslint-disable-next-line semi
 zul.inp.ComboWidget.$redraw

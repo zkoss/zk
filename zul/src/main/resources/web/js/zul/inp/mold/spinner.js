@@ -13,27 +13,30 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 function spinner$mold$(out) {
-	var uuid = this.uuid,
+	const uuid = this.uuid,
 		isButtonVisible = this._buttonVisible;
-	
-	out.push('<span', this.domAttrs_({text: true, tabindex: true}), ' role="none">',
-			'<input id="', uuid,'-real"', 'class="', this.$s('input'));
+
+	out.push('<span', this.domAttrs_({
+			text: true,
+			tabindex: true
+		}), ' role="none">',
+		'<input id="', uuid, '-real"', 'class="', this.$s('input'));
 
 	if (!isButtonVisible)
 		out.push(' ', this.$s('input-full'));
 
 	out.push('" autocomplete="off"',
-			this.textAttrs_(),' role="spinbutton"/>', '<span id="', uuid,'-btn"',
-			'class="', this.$s('button'));
-	
+		/*safe*/ this.textAttrs_(), ' role="spinbutton"/>', '<span id="', uuid, '-btn"',
+		'class="', this.$s('button'));
+
 	if (!isButtonVisible)
 		out.push(' ', this.$s('disabled'));
-		
-	var iconClass = this.$s('icon') + ' ';
-	out.push('" aria-hidden="true"><a id="', uuid, '-btn-up" class="', iconClass, this.$s('up'),
-			'"><i class="', this.getBtnUpIconClass_(), '"></i></a><i class="', this.$s('separator'),
-			'"></i><a id="', uuid, '-btn-down" class="', iconClass, this.$s('down'),
-			'"><i class="', this.getBtnDownIconClass_(), '"></i></a>');
+
+	var iconClassHTML = this.$s('icon') + ' ';
+	out.push('" aria-hidden="true"><a id="', uuid, '-btn-up" class="', iconClassHTML, this.$s('up'),
+		'"><i class="', /*safe*/ this.getBtnUpIconClass_(), '"></i></a><i class="', this.$s('separator'),
+		'"></i><a id="', uuid, '-btn-down" class="', iconClassHTML, this.$s('down'),
+		'"><i class="', /*safe*/ this.getBtnDownIconClass_(), '"></i></a>');
 
 	out.push('</span></span>');
 }

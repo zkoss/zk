@@ -14,14 +14,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 function selectbox$mold$(out) {
 	out.push('<select', this.domAttrs_(), '>');
-	var s = $eval(this.items) || [] ;
+	var s = $eval(this.items) || [];
 	for (var i = 0, j = s.length; i < j; i++) {
 		out.push('<option');
 		if (this._selectedIndex > -1 && this._selectedIndex == i)
 			out.push(' selected="selected"');
 		if (this._maxlength)
 			out.push('>', zUtl.encodeXML(s[i], {maxlength: this._maxlength}), '</option>');
-		else out.push('>', s[i], '</option>');
+		else out.push('>', zUtl.encodeXML(s[i]), '</option>');
 	}
 	out.push('</select>');
 }

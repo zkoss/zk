@@ -34,6 +34,7 @@ import { utl_global } from './utl';
 import { keys_global } from './keys';
 import * as websocket_global from '@zkmax/websocket';
 import moment_global from 'moment-timezone';
+import * as DOMPurify from 'dompurify';
 
 // JQ should only be used in this file. Thus, it is not exported through zk or global.
 declare namespace JQ {
@@ -425,6 +426,7 @@ declare global {
 
 	type ZKStatic = typeof zk;
 
+	export import DOMPurify = DOMPurify;
 	export import Moment = moment_global.Moment;
 	export import MomentFormatSpecification = moment_global.MomentFormatSpecification;
 	export import DateImpl = dateImpl_global.DateImpl;

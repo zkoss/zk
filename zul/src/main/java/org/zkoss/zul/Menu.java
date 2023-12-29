@@ -94,6 +94,9 @@ public class Menu extends LabelImageElement implements org.zkoss.zk.ui.ext.Disab
 	 * <p>There is a way to create Colorbox automatically by using
 	 * #color=#RRGGBB, usage example <code>setContent("#color=#FFFFFF")</code>
 	 *
+	 * <p>Note: since 10.0.0, the content is sanitized by default to avoid XSS attack, and
+	 * please don't use JavaScript in the content.
+	 * 
 	 * @since 5.0.0
 	 */
 	public void setContent(String content) {

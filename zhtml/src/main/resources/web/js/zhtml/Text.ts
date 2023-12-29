@@ -43,7 +43,8 @@ export class Text extends zhtml.Widget {
 			var n = this.$n();
 			if (n) {
 				var val = this._value;
-				n.innerHTML = this._encode ? zUtl.encodeXML(val) : val;
+				// eslint-disable-next-line @microsoft/sdl/no-inner-html
+				n.innerHTML = this._encode ? zUtl.encodeXML(val) : /*safe*/ val;
 				// See Bug 2871080 and ZK-294
 			}
 		}
@@ -71,7 +72,8 @@ export class Text extends zhtml.Widget {
 			var n = this.$n();
 			if (n) {
 				var val = this._value;
-				n.innerHTML = this._encode ? zUtl.encodeXML(val) : val;
+				// eslint-disable-next-line @microsoft/sdl/no-inner-html
+				n.innerHTML = this._encode ? zUtl.encodeXML(val) : /*safe*/ val;
 				// See Bug 2871080 and ZK-294
 			}
 		}
@@ -94,12 +96,12 @@ export class Text extends zhtml.Widget {
 	}
 
 	override redraw(out: string[]): void {
-		var attrs = this.domAttrs_({ id: true, zclass: true }),
+		var attrsHTML = this.domAttrs_({ id: true, zclass: true }),
 			val = this._value,
-			span = attrs || (this.idRequired && this._checkContentRequired(val));
+			span = !!attrsHTML || (this.idRequired && this._checkContentRequired(val));
 		// Bug 3245960: enclosed text was wrapped with <span>
-		if (span) out.push('<span', ' id="', this.uuid, '"', attrs, '>');
-		out.push(this._encode ? zUtl.encodeXML(val) : val);
+		if (span) out.push('<span', ' id="', this.uuid, '"', attrsHTML, '>');
+		out.push(this._encode ? zUtl.encodeXML(val) : /*safe*/ val);
 		// See Bug 2871080 and ZK-294
 		if (span) out.push('</span>');
 	}

@@ -258,28 +258,28 @@ export class Tab extends zul.LabelImageWidget implements zul.LabelImageWidgetWit
 
 	/** @internal */
 	override domClass_(no?: zk.DomClassOptions): string {
-		let scls = super.domClass_(no);
+		let sclsHTML = super.domClass_(no);
 		if (!no || !no.zclass) {
-			if (this.isDisabled()) scls += ' ' + this.$s('disabled');
-			if (this.isSelected()) scls += ' ' + this.$s('selected');
+			if (this.isDisabled()) sclsHTML += ' ' + this.$s('disabled');
+			if (this.isSelected()) sclsHTML += ' ' + this.$s('selected');
 		}
-		return scls;
+		return sclsHTML;
 	}
 
 	/** @internal */
 	override domContent_(): string {
 		let label = zUtl.encodeXML(this.getLabel()),
 			img = this.getImage();
-		const iconSclass = this.domIcon_();
+		const /*safe*/ iconSclass = this.domIcon_();
 
 		if (!label) label = '&nbsp;';
 		if (!img && !iconSclass) return label;
 		if (!img) {
 			img = iconSclass;
 		} else
-			img = '<img src="' + img + '" class="' + this.$s('image') + '" alt="" aria-hidden="true"/>'
-				+ (iconSclass ? ' ' + iconSclass : '');
-		return label ? img + ' ' + label : img;
+			/*safe*/ img = '<img src="' + /*safe*/ img + '" class="' + this.$s('image') + '" alt="" aria-hidden="true"/>'
+				+ (iconSclass ? ' ' + /*safe*/ iconSclass : '');
+		return DOMPurify.sanitize(label ? img + ' ' + label : img);
 	}
 
 	//bug #3014664

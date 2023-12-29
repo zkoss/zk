@@ -191,9 +191,9 @@ export class Upload extends zk.Object {
 				 + ref.offsetHeight + 'px"/></form></span>';
 
 		if (parent)
-			jq(parent).append(html);
+			jq(parent).append(DOMPurify.sanitize(html));
 		else
-			jq(wgt).after(html);
+			jq(wgt).after(DOMPurify.sanitize(html));
 		delete this._formDetached;
 
 		//B50-3304877: autodisable and Upload

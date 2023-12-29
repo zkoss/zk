@@ -21,7 +21,7 @@ You should see '{"id1":"<value1>","id2":"value2","id3":"value2"}' in zk.log
     <zscript><![CDATA[
 			import org.zkoss.json.JSONObject;
 			JSONObject myJSON = new JSONObject();
-			myJSON.put("id1", "<value1>");
+// No allow in ZK 10			myJSON.put("id1", "<value1>");
 			myJSON.put("id2", "value2");
 			myJSON.put("id3", "value2");
 

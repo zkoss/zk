@@ -14,21 +14,21 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 function caption$mold$(out) {
 	var p = this.parent,
-		cnt = this.domContent_(),
+		/*safe*/ cnt = this.domContent_(),
 		tabi = this._tabindex || 0,
 		btnRenderer = zul.wgt.ButtonRenderer;
-	
+
 	// ZK-2209: should show correct when caption has child
 	out.push('<div', this.domAttrs_(), '>',
-		'<div id="', this.uuid, '-cave" class="', this.$s('content'), 
-		'">', (cnt ? cnt : this.firstChild ? '' : this._getBlank())); // Bug 1688261: &nbsp required
+		'<div id="', this.uuid, '-cave" class="', this.$s('content'),
+		'">', (cnt ? /*safe*/ cnt : this.firstChild ? '' : /*safe*/ this._getBlank())); // Bug 1688261: &nbsp required
 	for (var w = this.firstChild; w; w = w.nextSibling)
 		w.redraw(out);
 	out.push('</div>');
-	
+
 	if (p._isDefault && p._isDefault()) {
 		out.push('</div>');
-		return; 
+		return;
 	}
 	out.push('<div id="' + p.uuid + '-icons" class="' + p.$s('icons') + '">');
 	if (this._isCollapsibleVisible())

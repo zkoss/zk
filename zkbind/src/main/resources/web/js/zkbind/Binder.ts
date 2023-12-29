@@ -129,10 +129,13 @@ function _matchMedia(event: MediaQueryListEvent | MediaQueryList, binder: Binder
 		// $ZKCLIENTINFO$ refers to CLIENT_INFO string in BinderCtrl.java
 		binder.command(value, { '$ZKCLIENTINFO$': ci });
 		if (!cookies.$contains(value)) cookies.push(value);
+		// eslint-disable-next-line @microsoft/sdl/no-cookies
 		document.cookie = 'ZKMatchMedia=' + encodeRFC5987ValueChars(cookies);
+		// eslint-disable-next-line @microsoft/sdl/no-cookies
 		document.cookie = 'ZKClientInfo=' + encodeRFC5987ValueChars(JSON.stringify(ci));
 	} else {
 		cookies.$remove(value);
+		// eslint-disable-next-line @microsoft/sdl/no-cookies
 		document.cookie = 'ZKMatchMedia=' + encodeRFC5987ValueChars(cookies);
 	}
 }
@@ -173,6 +176,7 @@ export class Binder extends zk.Object {
 		//ZK-3133
 		if (widget.$ZKMATCHMEDIA$) {
 			var cookies: string[] = [],
+				// eslint-disable-next-line @microsoft/sdl/no-cookies
 				matched = _zkMatchMediaRegexPattern.exec(document.cookie);
 			if (matched) {
 				var m = matched[1];

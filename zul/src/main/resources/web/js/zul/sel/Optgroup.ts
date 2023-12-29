@@ -116,11 +116,11 @@ export class Optgroup extends zul.Widget<HTMLOptGroupElement> {
 
 	/** @internal */
 	override domAttrs_(no?: zk.DomAttrsOptions): string {
-		var attr = super.domAttrs_(no),
+		var /*safe*/ attr = super.domAttrs_(no),
 			label = this.getLabel(),
 			disabled = this.isDisabled();
 		if (label)
-			attr += ' label="' + label + '"';
+			attr += ' label="' + zUtl.encodeXML(label) + '"';
 		if (disabled)
 			attr += ' disabled="disabled"';
 		return attr;

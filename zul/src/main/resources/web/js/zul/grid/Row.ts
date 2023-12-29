@@ -199,7 +199,7 @@ export class Row extends zul.Widget<HTMLTableRowElement> implements zul.mesh.Ite
 	}
 
 	override getSclass(): string | undefined {
-		var sclass = super.getSclass();
+		var /*safe*/ sclass = super.getSclass();
 		if (sclass != null)
 			return sclass;
 
@@ -228,12 +228,12 @@ export class Row extends zul.Widget<HTMLTableRowElement> implements zul.mesh.Ite
 		var childHTML = this.encloseChildHTML_({
 			child: child,
 			index: child.getChildIndex(),
-			zclass: this.getZclass()
+			zclass: /*safe*/ this.getZclass()
 		})!;
 		if (before)
-			jq(this._getChdextr(before)).before(childHTML);
+			jq(this._getChdextr(before)).before(/*safe*/ childHTML);
 		else
-			jq(this).append(childHTML);
+			jq(this).append(/*safe*/ childHTML);
 		child.bind(desktop);
 	}
 
@@ -255,9 +255,9 @@ export class Row extends zul.Widget<HTMLTableRowElement> implements zul.mesh.Ite
 		if (child instanceof zul.wgt.Cell)
 			child._headerVisible = opts.visible;
 		else {
-			out.push('<td id="', child.uuid, '-chdextr"',
-				this._childAttrs(child, opts.index), ' tabindex="-1" role="gridcell"><div id="', child.uuid,
-				'-cell" class="', opts.zclass, '-content">');
+			out.push('<td id="', /*safe*/ child.uuid, '-chdextr"',
+				/*safe*/ this._childAttrs(child, opts.index), ' tabindex="-1" role="gridcell"><div id="', /*safe*/ child.uuid,
+				'-cell" class="', zUtl.encodeXML(opts.zclass), '-content">');
 		}
 		child.redraw(out);
 		if (!(child instanceof zul.wgt.Cell))
@@ -295,7 +295,7 @@ export class Row extends zul.Widget<HTMLTableRowElement> implements zul.mesh.Ite
 				}
 			}
 		}
-		var style = this.domStyle_({ visible: true, width: true, height: true }),
+		var /*safe*/ style = this.domStyle_({ visible: true, width: true, height: true }),
 			isDetail = zk.isLoaded('zkex.grid') && child instanceof zkex.grid.Detail;
 		if (isDetail) {
 			var wd = child.getWidth();
@@ -323,7 +323,7 @@ export class Row extends zul.Widget<HTMLTableRowElement> implements zul.mesh.Ite
 				attrs += ' aria-hidden="true"';
 			clx += ' ' + this.$s('hidden-column');
 		}
-		return attrs + ' class="' + clx + '"';
+		return DOMPurify.sanitize(attrs + ' class="' + clx + '"');
 	}
 
 	/**
@@ -342,7 +342,7 @@ export class Row extends zul.Widget<HTMLTableRowElement> implements zul.mesh.Ite
 			|| no?.visible)
 			return super.domStyle_(no);
 
-		var style = super.domStyle_(no),
+		var /*safe*/ style = super.domStyle_(no),
 			group = this.getGroup();
 		if (this._align)
 			style += ' text-align:' + this._align + ';';
@@ -422,7 +422,7 @@ export class Row extends zul.Widget<HTMLTableRowElement> implements zul.mesh.Ite
 
 	/** @internal */
 	override domClass_(no?: zk.DomClassOptions): string {
-		var cls = super.domClass_(no),
+		var /*safe*/ cls = super.domClass_(no),
 			grid = this.getGrid(),
 			sclass: string;
 		// NOTE: It has always been the case that the following `this.$n()` possibly

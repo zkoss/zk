@@ -21,6 +21,8 @@ ZK 10.0.0
   ZK-5569: Radiogroup onCheck event type mismatch
   ZK-5161: page directive's attributes are not encoded before rendering into HTML
   ZK-5598: CKEditor requests ExecutionImpl.encodeURL with null value, causes NPE in embedded mode
+  ZK-5162: emptyMessage is not escaped with HTML characters
+  ZK-5182: Prevent XSS issue in component attributes
   ZK-5529: Tree focus is lost after loading new rows
   ZK-5593: inputWidget bind_ accesses input dom node may not exist
   ZK-5605: client-bind fails for zk.$extends created widget classes, without ClientBindComposer declared
@@ -33,7 +35,8 @@ ZK 10.0.0
   + Remove all deprecated Java APIs and the legacy module "zkplus-legacy".
   + Use /zkEmbedded url (or specify yourself) to simply include embedded.js, instead of specify the real path to embedded.js,
     simplifying the source to enable embedded mode.
-
+  + The setContent() method of Comboitem, Menu, and Navitem now only accepts a safe HTML content.
+    i.e. The content will be sanitized before rendering, please don't use JavaScript content.
    --------
 ZK 10.0.0-Beta
 Oct 17, 2023
@@ -178,7 +181,6 @@ ZK 9.6.4
   ZK-5430: Camera uses incorrect aspect ratio during snapshot if canvas has height / width
   ZK-3246: File download doesn't work with Chrome in iOS
   ZK-5374: Elements with an ARIA that require children to contain a specific role are missing some or all of those required children
-  ZK-5260: chosenbox options don't escape HTML characters
   ZK-5399: Number of NoDOM increases unexpectedly
   ZK-4194: ZK cannot clear disconnected desktops reliably by remove-desktop requests
   ZK-4955: Combobox fires a duplicate onChange event

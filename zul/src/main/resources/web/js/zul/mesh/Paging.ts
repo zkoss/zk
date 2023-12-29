@@ -77,7 +77,7 @@ export class Paging extends zul.Widget {
 				if (!_rerenderIfBothPaging(this)) {
 					const info = this.$n('info');
 					if (info) {
-						info.innerHTML = this.infoText_();
+						info.textContent = this.infoText_();
 					} else if (this._totalSize) {
 						this.rerender(); // recreate infoTag
 					}
@@ -406,10 +406,10 @@ export class Paging extends zul.Widget {
 	_infoTags(out: string[]): void {
 		if (this.getTotalSize() == 0)
 			return;
-		const uuid = this.uuid,
+		const uuidHTML = this.uuid,
 			nameOrId = _rerenderIfBothPaging(this) ? 'name' : 'id'; // Bug ZK-2280
-		out.push('<div ', nameOrId, '="', uuid, '-detail" class="', this.$s('info'), '"><span ',
-			nameOrId, '="', uuid, '-info" aria-hidden="true">', this.infoText_(), '</span></div>');
+		out.push('<div ', nameOrId, '="', uuidHTML, '-detail" class="', this.$s('info'), '"><span ',
+			nameOrId, '="', uuidHTML, '-info" aria-hidden="true">', DOMPurify.sanitize(this.infoText_()), '</span></div>');
 	}
 
 	/** @internal */
@@ -468,13 +468,13 @@ export class Paging extends zul.Widget {
 		if (seld)
 			cls += ' ' + this.$s('selected');
 
-		out.push('<li', navCls, '><a name="', this.uuid, '-button" class="', cls,
+		out.push('<li', navCls, '><a name="', this.uuid, '-button" class="', /*safe*/ cls,
 			'" href="javascript:;" data-paging="', val as unknown as string, '"', seld ? ' aria-current="page"' : '', '>', label as string, '</a></li>');
 	}
 
 	/** @internal */
 	override domClass_(no?: zk.DomClassOptions): string {
-		const cls = super.domClass_(no),
+		const /*safe*/ cls = super.domClass_(no),
 			added = 'os' == this.getMold() ? ' ' + this.$s('os') : '';
 		return cls + added;
 	}

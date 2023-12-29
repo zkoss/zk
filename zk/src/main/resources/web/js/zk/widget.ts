@@ -428,15 +428,15 @@ export var DnD = class { //for easy overriding
 	/** Ghost the DOM element being dragged.
 	 * @param drag - the draggable controller
 	 * @param ofs - the offset of the returned element (left/top)
-	 * @param msg - the message to show inside the returned element
+	 * @param msg - the message to show inside the returned element (a safe HTML string)
 	 */
 	static ghost(drag: zk.Draggable, ofs: zk.Offset, msg?: string): HTMLElement {
 		if (msg != null) {
 			if (msg)
-				msg = '<span class="z-drop-text">' + msg + '</span>';
-			jq(document.body).append(
+				/*safe*/ msg = '<span class="z-drop-text">' + DOMPurify.sanitize(msg) + '</span>';
+			jq(document.body).append(/*safe*/
 				'<div id="zk_ddghost" class="z-drop-ghost z-drop-disallow" style="position:absolute;top:'
-				+ ofs[1] + 'px;left:' + ofs[0] + 'px;"><div class="z-drop-content"><span id="zk_ddghost-img" class="z-drop-icon"></span>' + msg + '</div></div>');
+				+ jq.px0(ofs[1]) + ';left:' + jq.px(ofs[0]) + ';"><div class="z-drop-content"><span id="zk_ddghost-img" class="z-drop-icon"></span>' + /*safe*/ msg + '</div></div>');
 			drag._dragImg = jq('#zk_ddghost-img')[0];
 			return jq('#zk_ddghost')[0];
 		}
@@ -2255,12 +2255,13 @@ new zul.wnd.Window({
 		if (fc = this.desktop) {
 			//3. generate HTML
 			var out = new zk.Buffer();
-			if (tagBeg) out.push(tagBeg);
+			if (tagBeg) out.push(DOMPurify.sanitize(tagBeg));
 			for (var j = 0, len = wgts.length; j < len; ++j)
 				wgts[j].redraw(out);
-			if (tagEnd) out.push(tagEnd);
+			if (tagEnd) out.push(DOMPurify.sanitize(tagEnd));
 
 			//4. update DOM
+			// eslint-disable-next-line @microsoft/sdl/no-html-method
 			jq(cave).html(out.join(''));
 
 			//5. bind
@@ -2895,7 +2896,7 @@ new zul.wnd.Window({
 		if (!this.deferRedraw_(out)) {
 			var f: string | undefined | typeof Widget | Record<string, CallableFunction>;
 			if (f = this.prolog)
-				out.push(f);
+				out.push(DOMPurify.sanitize(f)); // unlike Native and ZHTML, we should sanitize the html content here.
 
 			let fn: CallableFunction | undefined;
 			if ((f = this.get$Class<typeof Widget>().molds) && (fn = f[this._mold])) {
@@ -2983,7 +2984,7 @@ new zul.wnd.Window({
 	updateDomClass_(): void {
 		if (this.desktop) {
 			var n = this.$n();
-			if (n) n.className = this.domClass_();
+			if (n) /*safe*/ n.className = this.domClass_();
 			this.zsync();
 		}
 	}
@@ -3009,7 +3010,7 @@ new zul.wnd.Window({
 
 			var t = this.getTextNode();
 			if (t && t != n) {
-				s = this._domTextStyle(t, s);
+				s = /*safe*/ this._domTextStyle(t, s);
 				zk(t).clearStyles().jq.css(s);
 			}
 			this.zsync();
@@ -3018,7 +3019,7 @@ new zul.wnd.Window({
 	/** @internal */
 	_domTextStyle(t: HTMLElement, s: Record<string, string>): Record<string, string> {
 		// B50-3355680
-		const style = jq.filterTextStyle(s);
+		const style = /*safe*/ jq.filterTextStyle(s);
 		// B70-ZK-1807: reserve style width and height,it will make sure that textnode has correct size.
 		if (t.style.width)
 			style.width = t.style.width;
@@ -3069,7 +3070,7 @@ new zul.wnd.Window({
 		else if (!this.isVisible() && (!no || !no.visible))
 			out += 'display:none;';
 
-		if ((!no || !no.style) && (s = this.getStyle())) {
+		if ((!no || !no.style) && (s = /*safe*/ this.getStyle())) {
 			s = s.replace(REGEX_DQUOT, '\'');  // B50-ZK-647
 			out += s;
 			if (!s.endsWith(';'))
@@ -3086,7 +3087,7 @@ new zul.wnd.Window({
 		let zIndex;
 		if ((!no || !no.zIndex) && (zIndex = this.getZIndex()) >= 0)
 			out += 'z-index:' + zIndex + ';';
-		return out;
+		return DOMPurify.sanitize(out);
 	}
 
 	/**
@@ -3109,9 +3110,9 @@ new zul.wnd.Window({
 	domClass_(no?: DomClassOptions): string {
 		var s: undefined | string, z: undefined | string;
 		if (!no || !no.sclass)
-			s = this.getSclass();
+			s = /*safe*/ this.getSclass();
 		if (!no || !no.zclass)
-			z = this.getZclass();
+			z = /*safe*/ this.getZclass();
 		let domClass = s ? z ? s + ' ' + z : s : z || '',
 			n = this.$n();
 		// FIX ZK-5137: modifying sclass clears vflex="1 here to avoid circular dependency issue in ZK 10
@@ -3125,7 +3126,7 @@ new zul.wnd.Window({
 				}
 			}
 		}
-		return domClass;
+		return DOMPurify.sanitize(domClass);
 	}
 
 	/**
@@ -3156,34 +3157,34 @@ new zul.wnd.Window({
 	 * @internal
 	 */
 	domAttrs_(no?: DomAttrsOptions): string {
-		var out = '', s: undefined | string, tabIndex: undefined | number;
+		var outHtml = '', tempHtml: undefined | string, tabIndexHtml: undefined | number;
 		if (!no) {
-			if ((s = this.uuid))
-				out += ' id="' + s + '"';
-			if ((s = this.domStyle_(no)))
-				out += ' style="' + s + '"';
-			if ((s = this.domClass_(no)))
-				out += ' class="' + s + '"';
-			if ((s = this.domTooltiptext_()))
-				out += ' title="' + zUtl.encodeXML(s) + '"'; // ZK-676
-			if ((tabIndex = this.getTabindex()) != undefined)
-				out += ' tabindex="' + tabIndex + '"';
+			if ((tempHtml = this.uuid))
+				outHtml += ' id="' + tempHtml + '"';
+			if ((tempHtml = this.domStyle_(no)))
+				outHtml += ' style="' + tempHtml + '"';
+			if ((tempHtml = this.domClass_(no)))
+				outHtml += ' class="' + tempHtml + '"';
+			if ((tempHtml = this.domTooltiptext_()))
+				outHtml += ' title="' + tempHtml + '"'; // ZK-676
+			if ((tabIndexHtml = /*safe*/ this.getTabindex()) != undefined)
+				outHtml += ' tabindex="' + tabIndexHtml + '"';
 		} else {
-			if (!no.id && (s = this.uuid))
-				out += ' id="' + s + '"';
-			if (!no.domStyle && (s = this.domStyle_(no)))
-				out += ' style="' + s + '"';
-			if (!no.domClass && (s = this.domClass_(no)))
-				out += ' class="' + s + '"';
-			if (!no.tooltiptext && (s = this.domTooltiptext_()))
-				out += ' title="' + zUtl.encodeXML(s) + '"'; // ZK-676
-			if (!no.tabindex && (tabIndex = this.getTabindex()) != undefined)
-				out += ' tabindex="' + tabIndex + '"';
+			if (!no.id && (tempHtml = this.uuid))
+				outHtml += ' id="' + tempHtml + '"';
+			if (!no.domStyle && (tempHtml = this.domStyle_(no)))
+				outHtml += ' style="' + tempHtml + '"';
+			if (!no.domClass && (tempHtml = this.domClass_(no)))
+				outHtml += ' class="' + tempHtml + '"';
+			if (!no.tooltiptext && (tempHtml = this.domTooltiptext_()))
+				outHtml += ' title="' + tempHtml + '"'; // ZK-676
+			if (!no.tabindex && (tabIndexHtml = /*safe*/ this.getTabindex()) != undefined)
+				outHtml += ' tabindex="' + tabIndexHtml + '"';
 		}
 		if (this.domExtraAttrs) {
-			out += this.domExtraAttrs_();
+			outHtml += this.domExtraAttrs_();
 		}
-		return out;
+		return DOMPurify.sanitize(outHtml);
 	}
 
 	// B80-ZK-2957
@@ -3231,8 +3232,8 @@ new zul.wnd.Window({
 	 * @internal
 	 */
 	domTextStyleAttr_(): string | undefined {
-		const s = this.getStyle();
-		return s ? zUtl.appendAttr('style', jq.filterTextStyle(s)) : s;
+		const html = this.getStyle();
+		return DOMPurify.sanitize(html ? zUtl.appendAttr('style', jq.filterTextStyle(html)) : (html ?? ''));
 	}
 
 	/** Replaces the specified DOM element with the HTML content generated this widget.
@@ -3272,7 +3273,7 @@ new zul.wnd.Window({
 			var oldwgt = this.getOldWidget_(n);
 			if (oldwgt) oldwgt.unbind(skipper); //unbind first (w/o removal)
 			else if (this.z_rod) this.get$Class<typeof Widget>()._unbindrod(this); //possible (if replace directly)
-			jq(n).replaceWith(this.redrawHTML_(skipper, _trim_));
+			jq(n).replaceWith(/*safe*/ this.redrawHTML_(skipper, _trim_));
 			this.bind(desktop, skipper);
 		}
 
@@ -3318,7 +3319,7 @@ new zul.wnd.Window({
 	redrawHTML_(skipper?: Skipper, trim?: boolean): string {
 		var out = new zk.Buffer(); // Due to the side-effect of B65-ZK-1628, we remove the optimization of the array's join() for chrome.
 		this.redraw(out, skipper);
-		var html = out.join('');
+		var html = /*safe*/ out.join('');
 		return trim ? html.trim() : html;
 		//To avoid the prolog being added repeatedly if keep invalidated:
 		//<div><textbox/> <button label="Click!" onClick="self.invalidate()"/></div>
@@ -3440,7 +3441,7 @@ new zul.wnd.Window({
 		} else if (this.shallChildROD_(child))
 			this.get$Class<typeof Widget>()._unbindrod(child); //possible (e.g., Errorbox: jq().replaceWith)
 
-		jq(n).replaceWith(child.redrawHTML_(skipper, _trim_));
+		jq(n).replaceWith(/*safe*/ child.redrawHTML_(skipper, _trim_));
 		if (skipInfo) {
 			skipper?.restore(child, skipInfo);
 		}
@@ -3468,7 +3469,7 @@ new zul.wnd.Window({
 					if (ben == child) //always true (since link ready), but to be safe
 						ben = ben.previousSibling;
 					if (ben && (ben = ben.$n())) {
-						jq(ben).after(html);
+						jq(ben).after(/*safe*/ html);
 						child.bind(desktop);
 						return;
 					}
@@ -3495,7 +3496,7 @@ new zul.wnd.Window({
 		if (before0) {
 			const sib = (before0).previousSibling;
 			if (_isProlog(sib)) before0 = sib as HTMLElement;
-			jq(before0).before(html);
+			jq(before0).before(/*safe*/ html);
 		} else {
 			// fix for B70-ZK-2128.zul on client mvvm that the HeadWidget creates a
 			// '-bar' element as the last child of the HeadWidget element, if the
@@ -3504,9 +3505,9 @@ new zul.wnd.Window({
 			if (this.lastChild === child && ben!.lastChild != null && !(ben!.lastChild as HTMLElement).id
 						// Fix F80_ZK_327Test.java
 					&& (ben!.lastChild as HTMLElement).nodeType == 1) {
-				jq(ben!.lastChild).before(html);
+				jq(ben!.lastChild).before(/*safe*/ html);
 			} else {
-				jq(ben as HTMLElement).append(html);
+				jq(ben as HTMLElement).append(/*safe*/ html);
 			}
 		}
 		child.bind(desktop);
@@ -3716,7 +3717,7 @@ new zul.wnd.Window({
 		if (subclass) {
 			var subcls = this._subzcls[subclass];
 			if (!subcls) {
-				subcls = this._subzcls[subclass] = this.getZclass() + '-' + subclass;
+				subcls = /*safe*/ this._subzcls[subclass] = zUtl.encodeXML(this.getZclass()) + '-' + /*safe*/ subclass;
 			}
 			return subcls;
 		}
@@ -4981,6 +4982,7 @@ new zul.wnd.Window({
 		}
 		if (fn) {
 			inf[listener] = bklsns[listener]
+				// eslint-disable-next-line no-new-func
 				= typeof fn != 'function' ? new Function('var event=arguments[0];' + fn) : fn;
 			this.listen(inf);
 		}
@@ -4997,6 +4999,7 @@ new zul.wnd.Window({
 			inf = {};
 		if (fn) {
 			inf[listener0] = bklsns[listener0]
+				// eslint-disable-next-line no-new-func
 				= typeof fn != 'function' ? new Function('var event=arguments[0];' + fn) : fn;
 			this.listen(inf);
 		}
@@ -6543,11 +6546,11 @@ export class Native extends Widget {
 			}
 			// B80-ZK-2957
 			if (this.domExtraAttrs) {
-				var postTag = !s.includes('/>') ? '>' : '/>';
-				s = s.replace(postTag, this.domExtraAttrs_() + postTag);
+				var postHTMLTag = !s.includes('/>') ? '>' : '/>';
+				s = s.replace(postHTMLTag, this.domExtraAttrs_() + postHTMLTag);
 			}
 			// B65-ZK-1836 and B70-ZK-2622
-			out.push(zk.Native.replaceScriptContent(s.replace(/ sclass=/ig, ' class=')));
+			out.push(s.replace(/ sclass=/ig, ' class='));
 			if (this.value && s.startsWith('<textarea'))
 				out.push(this.value as string);
 		}
@@ -6556,7 +6559,7 @@ export class Native extends Widget {
 			w.redraw(out);
 
 		s = this.epilog;
-		if (s) out.push(s);
+		if (s) out.push(/*safe*/ s);
 	}
 
 	static $redraw = Native.prototype.redraw;
@@ -6567,7 +6570,7 @@ export class Native extends Widget {
 }
 
 /** A macro widget.
- * It is used mainly to represent the macro componet created at the server.
+ * It is used mainly to represent the macro component created at the server.
  */
 // zk scope
 @WrapClass('zk.Macro')
@@ -6620,10 +6623,10 @@ export class Macro extends Widget {
 	 * @param out - an array of HTML fragments (String).
 	 */
 	override redraw(out: string[]): void {
-		out.push('<', this._enclosingTag, this.domAttrs_(), '>');
+		out.push('<', zUtl.encodeXML(this._enclosingTag), this.domAttrs_(), '>');
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
-		out.push('</', this._enclosingTag, '>');
+		out.push('</', zUtl.encodeXML(this._enclosingTag), '>');
 	}
 }
 
@@ -6925,7 +6928,7 @@ export var NoDOM = class NoDOM {
 			var context = this.$getInterceptorContext$();
 			this.$supers('bind_', context.args);
 			var node = this.$n('tmp'),
-				desc = this.getZclass() + ' ' + this.uuid,
+				/*safe*/ desc = zUtl.encodeXML(this.getZclass() + ' ' + this.uuid),
 				startDesc = desc + ' start',
 				endDesc = desc + ' end';
 			if (node) {
@@ -7021,7 +7024,7 @@ export var NoDOM = class NoDOM {
 	static insertChildHTML_(this: NoDOMInterceptor, child: zk.Widget, before?: zk.Widget, desktop?: Desktop): void {
 		if (this.getMold() == 'nodom' && !before) {
 			var context = this.$getInterceptorContext$();
-			jq(this._endNode!).before(child.redrawHTML_());
+			jq(this._endNode!).before(/*safe*/ child.redrawHTML_());
 			child.bind(desktop);
 			context.stop = true;
 		}
@@ -7072,7 +7075,7 @@ export var NoDOM = class NoDOM {
 			}
 			jq(this._endNode!).remove();
 			jq(n as Element).remove();
-			jq(this._startNode!).replaceWith(this.redrawHTML_(skipper, _trim_));
+			jq(this._startNode!).replaceWith(/*safe*/ this.redrawHTML_(skipper, _trim_));
 			this.bind(desktop, skipper);
 
 			if (!skipper) {

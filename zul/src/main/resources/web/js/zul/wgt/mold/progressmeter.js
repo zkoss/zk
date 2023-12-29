@@ -14,5 +14,5 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 function progressmeter$mold$(out) {
 	out.push('<div', this.domAttrs_(), '><span id="',
-			this.uuid,'-img"', 'class="', this.$s('image'),'"></span></div>');
+		this.uuid, '-img"', 'class="', this.$s('image'), '"></span></div>');
 }

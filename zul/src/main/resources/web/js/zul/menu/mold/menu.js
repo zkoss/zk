@@ -13,10 +13,9 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 function menu$mold$(out) {
-	var uuid = this.uuid,
-		zcls = this.getZclass(),
+	const uuid = this.uuid,
 		contentHandler = this._contentHandler;
-	
+
 	out.push('<li', this.domAttrs_(), ' role="none"><a role="menuitem" aria-haspopup="true" href="javascript:;" id="', uuid,
 			'-a" class="', this.$s('content'), '"', this._disabled ? ' disabled="disabled" tabindex="-1"' : '', '>', this.domContent_(), '</a>');
 	if (this.menupopup)

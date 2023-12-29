@@ -13,19 +13,20 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 function toolbarpanel$mold$(out) {
+	let w;
 	out.push('<div ', this.domAttrs_(), '><table id="', this.uuid,
-			'-cave" class="', this.$s('content'), ' ', this.$s(this.getAlign()),
-			'"', zUtl.cellps0, '><tbody>');
+		'-cave" class="', this.$s('content'), ' ', this.$s(this.getAlign()),
+		'"', /*safe*/ zUtl.cellps0, '><tbody>');
 	if ('horizontal' == this.getOrient()) {
-		out.push("<tr>");
-		for (var w = this.firstChild; w; w = w.nextSibling) {
+		out.push('<tr>');
+		for (w = this.firstChild; w; w = w.nextSibling) {
 			out.push('<td class="', this.$s('horizontal'), '">');
 			w.redraw(out);
-			out.push("</td>");
+			out.push('</td>');
 		}
-		out.push("</tr>");
+		out.push('</tr>');
 	} else {
-		for (var w = this.firstChild; w; w = w.nextSibling) {
+		for (w = this.firstChild; w; w = w.nextSibling) {
 			out.push('<tr><td class="', this.$s('vertical'), '">');
 			w.redraw(out);
 			out.push('</td></tr>');

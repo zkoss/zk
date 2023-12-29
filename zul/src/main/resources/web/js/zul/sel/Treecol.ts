@@ -104,7 +104,7 @@ export class Treecol extends zul.mesh.SortWidget {
 			mesh._syncingbodyrows = true;
 			try {
 				mesh.clearCache();
-				jq(mesh.$n_('rows')).replaceWith(body.redrawHTML_());
+				jq(mesh.$n_('rows')).replaceWith(/*safe*/ body.redrawHTML_());
 				body.bind(desktop);
 				mesh._bindDomNode();
 			} finally {
@@ -191,12 +191,12 @@ export class Treecol extends zul.mesh.SortWidget {
 
 	/** @internal */
 	override domContent_(): string {
-		var s = super.domContent_(),
+		var /*safe*/ s = super.domContent_(),
 			tree = this.getTree()!;
 		if (this._hasCheckbox())
-			s = '<span id="' + this.uuid + '-cm" class="' + this.$s('checkable')
+			/*safe*/ s = '<span id="' + this.uuid + '-cm" class="' + this.$s('checkable')
 				+ (tree.$$selectAll ? ' ' + this.$s('checked') : '') + '"><i class="' + this.$s('icon') + ' z-icon-check"></i></span>'
-				+ (s ? '&nbsp;' + s : '');
+				+ (s ? '&nbsp;' + /*safe*/ s : '');
 		return s;
 	}
 

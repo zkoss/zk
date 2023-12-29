@@ -598,10 +598,10 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 
 	/** @internal */
 	override domAttrs_(no?: zk.DomAttrsOptions): string {
-		var attr = super.domAttrs_(no);
+		var attrHTML = super.domAttrs_(no);
 		if (!no || !no.text)
-			attr += this.textAttrs_();
-		return attr;
+			attrHTML += /*safe*/ this.textAttrs_();
+		return attrHTML;
 	}
 
 	/**
@@ -611,36 +611,36 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	 * @internal
 	 */
 	textAttrs_(): string {
-		var html = '', v;
+		var html = '', vHTML;
 		if (this.isMultiline()) {
-			v = this._cols;
-			if (v > 0) html += ' cols="' + v + '"';
+			vHTML = /*safe*/ this._cols;
+			if (vHTML > 0) html += ' cols="' + vHTML + '"';
 		} else {
-			html += ' value="' + this._areaText() + '"';
-			html += ' type="' + this.getType() + '"';
-			v = this._cols;
-			if (v > 0) html += ' size="' + v + '"';
-			v = this._maxlength;
-			if (v > 0) html += ' maxlength="' + v + '"';
+			html += ' value="' + /*safe*/ this._areaText() + '"';
+			html += ' type="' + zUtl.encodeXML(this.getType()) + '"';
+			vHTML = /*safe*/ this._cols;
+			if (vHTML > 0) html += ' size="' + vHTML + '"';
+			vHTML = /*safe*/ this._maxlength;
+			if (vHTML > 0) html += ' maxlength="' + vHTML + '"';
 		}
-		v = this._tabindex;
-		if (v != undefined) html += ' tabindex="' + v + '"';
-		v = this._name;
-		if (v) html += ' name="' + v + '"';
+		vHTML = /*safe*/ this._tabindex;
+		if (vHTML != undefined) html += ' tabindex="' + vHTML + '"';
+		vHTML = /*safe*/ this._name;
+		if (vHTML) html += ' name="' + vHTML + '"';
 		if (this._disabled) html += ' disabled="disabled"';
 		if (this._readonly) html += ' readonly="readonly"';
 		if (this._placeholder) html += ' placeholder="' + zUtl.encodeXML(this._placeholder) + '"';
 		if (this._inputAttributes) {
 			for (var key in this._inputAttributes) {
 				var val = this._inputAttributes[key];
-				html += (' ' + key + '="' + val + '"');
+				html += (' ' + /*safe*/ key + '="' + /*safe*/ val + '"');
 			}
 		}
 
-		var s = jq.filterTextStyle(this.domStyle_({width: true, height: true, top: true, left: true}));
-		if (s) html += ' style="' + s + '"';
+		var /*safe*/ s = jq.filterTextStyle(this.domStyle_({width: true, height: true, top: true, left: true}));
+		if (s) html += ' style="' + /*safe*/ s + '"';
 
-		return html;
+		return DOMPurify.sanitize(html);
 	}
 
 	/** @internal */
@@ -1093,7 +1093,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 
 	/** @internal */
 	override domClass_(no?: zk.DomClassOptions): string {
-		var sc = super.domClass_(no);
+		var /*safe*/ sc = super.domClass_(no);
 		if ((!no || !no.zclass) && this._disabled)
 			sc += ' ' + this.$s('disabled');
 

@@ -14,5 +14,5 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 function html$mold$(out) {
 	out.push('<span', this.domAttrs_(), '>',
-		(jq.isArray(this._content) ? '' /*zk().detachChildren()*/ : this._content), '</span>');
+		(Array.isArray(this._content) ? '' /*zk().detachChildren()*/ : /*safe*/ this._content), '</span>');
 }

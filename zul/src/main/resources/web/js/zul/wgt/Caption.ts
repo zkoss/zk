@@ -39,19 +39,19 @@ export class Caption extends zul.LabelImageWidget<HTMLDivElement> {
 		var label = this.getLabel(),
 			img = this.getImage(),
 			title = this.parent ? this.parent._title : '',
-			iconSclass = this.domIcon_();
+			/*safe*/ iconSclass = this.domIcon_();
 		if (title) label = label ? title + ' - ' + label : title;
 		label = zUtl.encodeXML(label);
 		if (!img && !iconSclass) return label;
 
 		if (!img) img = iconSclass;
-		else img = '<img id="' + this.uuid + '-img" src="' + img + '" class="' + this.$s('image') + '" alt="" aria-hidden="true" />' + (iconSclass ? ' ' + iconSclass : '');
-		return label ? img + ' ' + '<span class="' + this.$s('label') + '">' + label + '</span>' : img;
+		else /*safe*/ img = '<img id="' + this.uuid + '-img" src="' + /*safe*/ img + '" class="' + this.$s('image') + '" alt="" aria-hidden="true" />' + (iconSclass ? ' ' + iconSclass : '');
+		return DOMPurify.sanitize(label ? img + ' ' + '<span class="' + this.$s('label') + '">' + label + '</span>' : img);
 	}
 
 	/** @internal */
 	override updateDomContent_(): void {
-		var cnt = this.domContent_(),
+		var /*safe*/ cnt = this.domContent_(),
 			dn = this.$n('cave');
 		if (dn) {
 			var firstWgtDom;
@@ -70,7 +70,7 @@ export class Caption extends zul.LabelImageWidget<HTMLDivElement> {
 
 	/** @internal */
 	override domClass_(no?: zk.DomClassOptions): string {
-		var sc = super.domClass_(no),
+		var /*safe*/ sc = super.domClass_(no),
 			parent = this.parent;
 
 		if (!(parent instanceof zul.wgt.Groupbox))
