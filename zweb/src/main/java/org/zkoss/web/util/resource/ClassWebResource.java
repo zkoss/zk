@@ -27,8 +27,6 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -37,7 +35,6 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -99,6 +96,7 @@ public class ClassWebResource {
 	private String _encURLPrefix;
 	/** Whether to debug JavaScript files. */
 	private boolean _debugJS;
+	private boolean _sourceMapEnabled;
 
 	/** The prefix of path of web resources ("/web"). */
 	public static final String PATH_PREFIX = "/web";
@@ -117,13 +115,6 @@ public class ClassWebResource {
 	 * @since 3.5.1
 	 */
 	public static final int FILTER_INCLUDE = 0x2;
-
-	/**
-	 * Internal used only.
-	 *
-	 * @since 9.6.0
-	 */
-	private ConcurrentMap<String, String> _sourceFromSourceMap; //js path -> js content
 
 	/** Returns the URL of the resource of the specified URI by searching
 	 * only the class path (with {@link #PATH_PREFIX}).
@@ -604,18 +595,7 @@ public class ClassWebResource {
 		//How it work: client engine prefix URI with /_zv123, where
 		//123 is the build version that changes once reload is required
 		//Then, the server eliminate such prefix before locating resource
-		if (pi.startsWith(ZVER)) {
-			final int j = pi.indexOf('/', ZVER.length());
-			if (j >= 0)
-				pi = pi.substring(j);
-			else
-				log.warn("Unknown path info: " + Encodes.encodeURI(pi));
-		} else if (_encURLPrefix != null && pi.startsWith(_encURLPrefix)) {
-			final int len1 = pi.length(), len2 = _encURLPrefix.length();
-			if (len1 > len2 && pi.charAt(len2) == '/')
-				pi = pi.substring(len2);
-		}
-
+		pi = modifyPath(pi);
 		final String ext = Servlets.getExtension(pi, false); //complete extension
 		final Filter[] filters = getFilters(ext, Servlets.isIncluded(request) ? FILTER_INCLUDE : FILTER_REQUEST);
 		if (filters == null) {
@@ -662,56 +642,45 @@ public class ClassWebResource {
 
 		InputStream is = null;
 
-		HttpSession session = request.getSession();
-		byte[] data = new byte[0];
-		boolean resolved = false;
+		byte[] data;
 		boolean compressed = false;
 		if (_debugJS) {
-			if ("js".equals(ext)) {
+			if ("js".equals(ext) && !_sourceMapEnabled) {
 				final String orgpi = Servlets.locate(_ctx, request, pi.substring(0, pi.length() - 3) + ".src.js",
 						_cwc.getLocator());
 				is = getResourceAsStream(orgpi);
 				if (is != null)
 					pi = orgpi;
-			} else if (ext != null && ext.endsWith("src.js") && session.getAttribute("zk$sourcemapsupported") != null) {
-				String cachedSource = _sourceFromSourceMap.get(pi);
-				if (cachedSource != null) {
-					data = cachedSource.getBytes();
-					resolved = true;
-				} else
-					log.debug("No cached source loaded. (" + pi + ")");
 			}
 		}
 
-		if (!resolved) {
-			if (is == null) {
-				final String p = Servlets.locate(_ctx, request, pi, _cwc.getLocator());
-				is = getResourceAsStream(p);
-			}
+		if (is == null) {
+			final String p = Servlets.locate(_ctx, request, pi, _cwc.getLocator());
+			is = getResourceAsStream(p);
+		}
 
-			if (is == null) {
-				if ("js".equals(ext)) {
-					//Don't sendError. Reason: 1) IE waits and no onerror fired
-					//2) better to debug (user will tell us what went wrong)
-					// B65-ZK-1897 Sanitizing pi to prevent possible cross-site scripting vulnerability
-					data = ("(window.zk&&zk.error?zk.error:alert)('" + HTMLs.encodeJavaScript(XMLs.encodeText(pi)) + " not found');")
-							.getBytes("UTF-8");
-					//FUTURE: zweb shall not depend on zk
-				} else {
-					if (Servlets.isIncluded(request))
-						log.error("Resource not found: " + Encodes.encodeURI(pi));
-					response.sendError(HttpServletResponse.SC_NOT_FOUND, HTMLs.encodeJavaScript(XMLs.escapeXML(pi)));
-					return;
-				}
+		if (is == null) {
+			if ("js".equals(ext)) {
+				//Don't sendError. Reason: 1) IE waits and no onerror fired
+				//2) better to debug (user will tell us what went wrong)
+				// B65-ZK-1897 Sanitizing pi to prevent possible cross-site scripting vulnerability
+				data = ("(window.zk&&zk.error?zk.error:alert)('" + HTMLs.encodeJavaScript(XMLs.encodeText(pi)) + " not found');")
+						.getBytes("UTF-8");
+				//FUTURE: zweb shall not depend on zk
 			} else {
-				//Note: don't compress images
-				data = shallCompress(request, ext) ? Https.gzip(request, response, is, null) : null;
-				if (!(compressed = (data != null)))
-					data = Files.readAll(is);
-				//since what is embedded in the jar is not big, so load completely
-
-				Files.close(is);
+				if (Servlets.isIncluded(request))
+					log.error("Resource not found: " + Encodes.encodeURI(pi));
+				response.sendError(HttpServletResponse.SC_NOT_FOUND, HTMLs.encodeJavaScript(XMLs.escapeXML(pi)));
+				return;
 			}
+		} else {
+			//Note: don't compress images
+			data = shallCompress(request, ext) ? Https.gzip(request, response, is, null) : null;
+			if (!(compressed = (data != null)))
+				data = Files.readAll(is);
+			//since what is embedded in the jar is not big, so load completely
+
+			Files.close(is);
 		}
 
 		int len = data.length;
@@ -940,11 +909,37 @@ public class ClassWebResource {
 
 	/**
 	 * Internal used only.
-	 *
-	 * @since 9.6.0
+	 * @since 10.0.0
 	 */
-	public ConcurrentMap<String, String> initSourceCache(int size) {
-		_sourceFromSourceMap = new ConcurrentHashMap<>(size);
-		return _sourceFromSourceMap;
+	public String modifyPath(String path) throws UnsupportedEncodingException {
+		if (path.startsWith(ZVER)) {
+			final int j = path.indexOf('/', ZVER.length());
+			if (j >= 0)
+				path = path.substring(j);
+			else
+				log.warn("Unknown path info: " + Encodes.encodeURI(path));
+		} else if (_encURLPrefix != null && path.startsWith(_encURLPrefix)) {
+			final int len1 = path.length(), len2 = _encURLPrefix.length();
+			if (len1 > len2 && path.charAt(len2) == '/')
+				path = path.substring(len2);
+		}
+		return path;
 	}
+	/**
+	 * Returns whether source map is enabled or not.
+	 * @since 10.0.0
+	 */
+	public boolean isSourceMapEnabled() {
+		return _sourceMapEnabled;
+	}
+
+	/**
+	 * Internal use only
+	 * @since 10.0.0
+	 * @hidden
+	 */
+	public void setSourceMapEnabled(boolean sourceMapEnabled) {
+		this._sourceMapEnabled = sourceMapEnabled;
+	}
+
 }

@@ -12,5 +12,5 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 -->
 
 <package name="zk.fmt" language="xul/html" depends="zul.lang">
-	<script src="index.js"/>
+	<script src="index.js" sourceMap="true"/>
 </package>

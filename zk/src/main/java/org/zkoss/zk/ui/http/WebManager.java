@@ -20,9 +20,11 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
@@ -34,6 +36,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.zkoss.html.JavaScript;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
@@ -267,6 +270,34 @@ public class WebManager {
 				checkAndAddExtendlet(exts.get(0), extlet);
 				//Add to the first extension only (the main one)
 			}
+		}
+
+		// handle source map in the beginning
+		WebApp webApp = getWebApp();
+		boolean sourceMapEnabled = webApp.getConfiguration().isSourceMapEnabled();
+		_cwr.setSourceMapEnabled(sourceMapEnabled);
+		if (sourceMapEnabled) {
+			final Set<JavaScript> jsSet = new LinkedHashSet<>(32);
+			for (LanguageDefinition langdef : LanguageDefinition.getByDeviceType("ajax")) {
+				jsSet.addAll(langdef.getJavaScripts());
+			}
+			final Set<JavaScript> modifiedJsSet = new LinkedHashSet<>(32);
+			for (JavaScript js : jsSet) {
+				String src = js.getSrc();
+				if (src != null && src.endsWith("wpd") && !src.endsWith("lang.wpd")) {
+					try {
+						List<String> jsPaths = ((WpdExtendlet) wpdExtendlet).splitSourceMapJsPathIfAny(src);
+						for (String jsPath : jsPaths) {
+							modifiedJsSet.add(new JavaScript(jsPath, js.getCharset()));
+						}
+					} catch (Exception ex) {
+						throw new UiException(ex);
+					}
+				} else {
+					modifiedJsSet.add(js);
+				}
+			}
+			webApp.setAttribute(WpdExtendlet.SOURCE_MAP_JAVASCRIPT_PATH, modifiedJsSet); // for basic script in PageRenderer
 		}
 
 		final List<WebManagerActivationListener> listeners = _actListeners.remove(_ctx); //called and drop

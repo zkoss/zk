@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F100-ZK-5590.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Dec 11 12:43:22 2023, Created by jameschu
+
+Copyright (C) 2023 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Open in the browser which supports source map
+		2. set the client-config "debug-js" and "enable-source-map" true (in zk.xml)
+		3. Enable source map, then you could see it works in browser devTool.
+	</label>
+	<label id="lb"/>
+	<button label="click" onClick='lb.value="Clicked"'/>
+	<rangeslider id="rs1" onRangeValueChange='Clients.log(rs1.getStartValue() + "," + rs1.getEndValue())'/>
+</zk>
