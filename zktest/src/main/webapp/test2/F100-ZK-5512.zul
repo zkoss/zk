@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F100-ZK-5512.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Mon Dec 18 16:40:37 CST 2023, Created by rebeccalai
+
+Copyright (C) 2023 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<window ctrlKeys="#space" onCtrlKey='Clients.log("Key pressed: " + event.getKeyCode())'>
+		<label multiline="true">
+			1. focus on the textbox
+			2. press the space bar
+			3. zk log should show the key code for space (32)
+		</label>
+		<textbox/>
+	</window>
+</zk>
