@@ -1834,13 +1834,18 @@ new zul.wnd.Window({
 	 * since it iterates all children one by one.
 	 * @param j - the index of the child widget to return. 0 means the first
 	 * child, 1 for the second and so on.
+	 * @param skipHidden - whether to skip hidden child widgets, defaults to false.
 	 * @see {@link getChildIndex}
 	 */
-	getChildAt<T extends Widget>(j: number): T | undefined {
-		if (j >= 0 && j < this.nChildren)
-			for (var w = this.firstChild; w; w = w.nextSibling)
-				if (--j < 0)
+	getChildAt<T extends Widget>(j: number, skipHidden?: boolean): T | undefined {
+		if (j >= 0 && j < this.nChildren) {
+			for (var w = this.firstChild; w; w = w.nextSibling) {
+				if (!skipHidden || w.isVisible())
+					j--;
+				if (j < 0)
 					return w as T;
+			}
+		}
 	}
 
 	/**

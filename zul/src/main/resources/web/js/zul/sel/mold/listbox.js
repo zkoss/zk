@@ -65,10 +65,8 @@ function listbox$mold$(out) {
 
 	out.push('<tbody id="', uuid, '-rows">');
 
-	var iter = this.getBodyWidgetIterator({
-		skipHidden: true,
-		z_rod: true
-	});
+	// ZK-5593: inputWidget bind_ accesses input dom node may not exist
+	const iter = this._getListitemIterator();
 	while (iter.hasNext()) {
 		iter.next().redraw(out, iter);
 	}

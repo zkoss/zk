@@ -7,6 +7,7 @@ ZK 10.0.0
   ZK-5048: MVVM DebuggerFactory should log via SLF4J
   ZK-5595: Upgrade Servlet version from 2.4 to 3.1 aligned with Java EE 7
   ZK-5596: Simplify the JavaScript url when enable embedded mode
+  ZK-5512: Support for Listening to Space Key Pressed
 
 * Bugs
   ZK-5393: Update ZK jars to jakarta-friendly uploads
@@ -22,6 +23,9 @@ ZK 10.0.0
   ZK-5598: CKEditor requests ExecutionImpl.encodeURL with null value, causes NPE in embedded mode
   ZK-5162: emptyMessage is not escaped with HTML characters
   ZK-5182: Prevent XSS issue in component attributes
+  ZK-5529: Tree focus is lost after loading new rows
+  ZK-5593: inputWidget bind_ accesses input dom node may not exist
+  ZK-5605: client-bind fails for zk.$extends created widget classes, without ClientBindComposer declared
 
 * Upgrade Notes
   + Upgrade commons-fileupload to commons-fileupload2-javax 2.0.0-M1 and commons-io to 2.13.0 to support jakarta-friendly uploads
