@@ -126,12 +126,18 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 		byte[] data;
 		String pkg = null;
 		boolean sourceMapEnabled = sourceMapEnabled();
-		if (isDebugJS() && sourceMapEnabled && path.endsWith(".map")) { // try to get *.js.map
-			if (path.endsWith("js/index.js.map")) { // special case, inside zk
-				path = path.replace("js/index.js.map", "js/zk/index.js.map");
+		if (path.endsWith(".map")) {
+			if (isDebugJS() && sourceMapEnabled) { // try to get *.js.map
+				if (path.endsWith("js/index.js.map")) { // special case, inside zk
+					path = path.replace("js/index.js.map", "js/zk/index.js.map");
+				}
+				InputStream resourceAsStream = _webctx.getResourceAsStream(path);
+				if (resourceAsStream != null) {
+					return resourceAsStream.readAllBytes();
+				}
 			}
-			InputStream resourceAsStream = _webctx.getResourceAsStream(path);
-			return resourceAsStream.readAllBytes();
+			response.sendError(HttpServletResponse.SC_NOT_FOUND, path);
+			return null;
 		}
 		/* 2011/4/27 Tony:
 		 * Here we don't use "org.zkoss.web.classWebResource.cache" directly,
