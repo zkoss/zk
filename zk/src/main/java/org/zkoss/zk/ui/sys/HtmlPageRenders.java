@@ -694,7 +694,7 @@ public class HtmlPageRenders {
 		}
 
 		if (order < 0) {
-			outEndJavaScriptFunc(exec, out, extra, aupg);
+			outEndJavaScriptFunc(exec, out, extra, aupg, true);
 		}
 
 		if (standalone) {
@@ -790,7 +790,7 @@ public class HtmlPageRenders {
 	 * It assumes the function name and the first parenthesis has been generated.
 	 * @param aupg whether the current page is caused by AU request
 	 */
-	private static void outEndJavaScriptFunc(Execution exec, Writer out, String extra, boolean aupg)
+	private static void outEndJavaScriptFunc(Execution exec, Writer out, String extra, boolean aupg, boolean afterLoad)
 			throws IOException {
 		final String ac = outResponseJavaScripts(exec, true);
 		if (aupg) {
@@ -825,9 +825,10 @@ public class HtmlPageRenders {
 				}
 			}
 			out.write(");\n");
-
+			if (afterLoad) {
+				out.write("});");
+			}
 			out.write(extra);
-			out.write("});");
 		}
 	}
 
@@ -994,7 +995,7 @@ public class HtmlPageRenders {
 			extra = ComponentRedraws.afterRedraw();
 		}
 
-		outEndJavaScriptFunc(exec, out, extra, false);
+		outEndJavaScriptFunc(exec, out, extra, false, false);
 		//generate extra, responses and ");"
 		out.write("\n</script>\n");
 	}
