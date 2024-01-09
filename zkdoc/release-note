@@ -9,6 +9,7 @@ ZK 10.0.0
   ZK-5596: Simplify the JavaScript url when enable embedded mode
   ZK-5590: Reimplement sourcemap in ZK 10
   ZK-5512: Support for Listening to Space Key Pressed
+  ZK-5096: Consider deprecate Anchorlayout and Anchorchildren
 
 * Bugs
   ZK-5393: Update ZK jars to jakarta-friendly uploads
