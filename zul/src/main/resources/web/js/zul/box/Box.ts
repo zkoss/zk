@@ -541,6 +541,11 @@ export class Box extends zul.Widget {
 	override resetSize_(orient: zk.FlexOrient): void { //@Overrid zk.Widget#resetSize_, called when beforeSize
 		super.resetSize_(orient);
 
+		// B85-ZK-3516: remove size of frame
+		var n = this.$n()!;
+		if (!n.scrollTop && !n.scrollLeft)
+			this.$n('frame')!.style[orient == 'w' ? 'width' : 'height'] = '';
+
 		var	vert = this.isVertical(),
 		k = -1,
 		szes = this._sizes;
