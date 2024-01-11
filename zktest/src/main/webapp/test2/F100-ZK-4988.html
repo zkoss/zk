@@ -1,0 +1,46 @@
+<!--
+F100-ZK-4988.html
+
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Dec 28 15:40:10 CST 2023, Created by rebeccalai
+
+Copyright (C) 2023 Potix Corporation. All Rights Reserved.
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>F100-ZK-4988</title>
+</head>
+<body>
+	<div>
+		1. enable embedded with<br>
+			&lt;library-property&gt;<br>
+				&lt;name&gt;org.zkoss.web.servlet.http.embedded.enabled&lt;/name&gt;<br>
+				&lt;value&gt;true&lt;/value&gt;<br>
+			&lt;/library-property&gt;<br>
+		2. enable websocket connection with<br>
+			&lt;listener&gt;<br>
+				&lt;listener-class&gt;org.zkoss.zkmax.au.websocket.WebSocketWebAppInit&lt;/listener-class&gt;<br>
+			&lt;/listener&gt;<br>
+		3. run two other zktest instances on port 8081 and 8082<br>
+		4. click the load zkapp1 button<br>
+		5. click the start button in the loaded zkapp1<br>
+		6. inspect the websocket message exchange using the browser devtools network tab<br>
+		7. click the destroy zkapp1 button<br>
+		8. repeat step 4-7 for zkapp2<br>
+	</div>
+	<script src="/zktest/zkEmbedded"></script>
+	<button onclick="zEmbedded.load('zkapp1', 'http://localhost:8081/zktest/test2/F100-ZK-4988.zul')">load zkapp1</button>
+	<button onclick="zEmbedded.destroy('zkapp1', false)">destroy zkapp1</button>
+	<div id="zkapp1"></div>
+	<button onclick="zEmbedded.load('zkapp2', 'http://localhost:8082/zktest/test2/F100-ZK-4988.zul')">load zkapp2</button>
+	<button onclick="zEmbedded.destroy('zkapp2', false)">destroy zkapp2</button>
+	<div id="zkapp2"></div>
+</body>
+</html>

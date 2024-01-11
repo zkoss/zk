@@ -10,6 +10,7 @@ ZK 10.0.0
   ZK-5590: Reimplement sourcemap in ZK 10
   ZK-5512: Support for Listening to Space Key Pressed
   ZK-5096: Consider deprecate Anchorlayout and Anchorchildren
+  ZK-4988: zEmbedded support for websocket
 
 * Bugs
   ZK-5393: Update ZK jars to jakarta-friendly uploads
@@ -40,6 +41,8 @@ ZK 10.0.0
     simplifying the source to enable embedded mode.
   + The setContent() method of Comboitem, Menu, and Navitem now only accepts a safe HTML content.
     i.e. The content will be sanitized before rendering, please don't use JavaScript content.
+  + When multiple zEmbedded components with WebSocket enabled are present on a page, 
+    the WebSocket endpoint of the last loaded zEmbedded component will be used.
    --------
 ZK 10.0.0-Beta
 Oct 17, 2023
