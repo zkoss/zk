@@ -157,12 +157,12 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 			boolean pkgEnd = path.endsWith("$.wpd");
 			int lastPartIndex = path.lastIndexOf("/") + 1;
 			String lastPart = path.substring(lastPartIndex);
-			String pkgName = lastPart.replaceAll("[\\d\\$]+\\.wpd", "");
+			String pkgName = lastPart.replaceAll("[\\d]+\\.wpd", "");
 			if (pkgStart || pkgEnd) {
 				if (pkgStart) {
 					return ("(function(){zk._p=zkpi('" + pkgName + "');})()").getBytes();
 				} else {
-					return ("(function(){zk.setLoaded('" + pkgName + "');})()").getBytes();
+					return ("(function(){zk.setLoaded('" + lastPart.replace("$.wpd", "") + "');})()").getBytes();
 				}
 			} else {
 				dividedElements = _dividedWpds.get(lastPart);

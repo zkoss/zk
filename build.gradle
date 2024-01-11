@@ -7,6 +7,12 @@ plugins {
 	id 'com.github.node-gradle.node' version '3.1.0'
 	id 'com.github.gmazzo.buildconfig' version '3.0.3'
 	id 'idea'
+	id "org.sonarqube" version "4.4.1.3373"
+}
+sonarqube {
+	properties {
+		property 'sonar.sources', '*/src/main/java,*/src/main/resources/web'
+	}
 }
 
 idea {
