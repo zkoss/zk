@@ -9,11 +9,6 @@ plugins {
 	id 'idea'
 	id "org.sonarqube" version "4.4.1.3373"
 }
-sonarqube {
-	properties {
-		property 'sonar.sources', '*/src/main/java,*/src/main/resources/web'
-	}
-}
 
 idea {
 	module {
@@ -93,6 +88,18 @@ subprojects {
 		maven {
 			name = 'ZK Repository'
 			url = uri('https://mavensync.zkoss.org/maven2')
+		}
+	}
+
+	sonarqube {
+		properties {
+			if (new File("$projectDir/$resources/web").exists()) {
+				property 'sonar.sources', "$projectDir/src/main/java, $projectDir/$resources/web"
+				property 'sonar.sources.exclusions', '**/package.html'
+			} else if (new File("$projectDir/src/main/java").exists()) {
+				property 'sonar.sources', "$projectDir/src/main/java"
+				property 'sonar.sources.exclusions', '**/package.html'
+			}
 		}
 	}
 
