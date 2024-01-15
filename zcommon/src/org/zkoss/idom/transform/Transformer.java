@@ -20,6 +20,7 @@ package org.zkoss.idom.transform;
 
 import java.util.Properties;
 
+import javax.xml.XMLConstants;
 import javax.xml.transform.ErrorListener;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Result;
@@ -30,8 +31,6 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.sax.SAXResult;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.zkoss.idom.DocType;
 import org.zkoss.idom.Document;
 import org.zkoss.idom.Element;
@@ -44,8 +43,6 @@ import org.zkoss.idom.input.SAXHandler;
  * @author tomyeh
  */
 public class Transformer {
-	private static final Logger log = LoggerFactory.getLogger(Transformer.class);
-
 	/** The transformer. */
 	private final javax.xml.transform.Transformer _tfmr;
 	/** Whether to output doc-type. */
@@ -56,7 +53,7 @@ public class Transformer {
 	 */
 	public Transformer()
 	throws TransformerConfigurationException {
-		final TransformerFactory tf = TransformerFactory.newInstance();
+		final TransformerFactory tf = initFactory();
 		_tfmr = tf.newTransformer();
 	}
 	/** Constructs a transformer with a stylesheet in form of Source.
@@ -78,8 +75,28 @@ public class Transformer {
 	 */
 	public Transformer(Source source)
 	throws TransformerConfigurationException {
-		final TransformerFactory tf = TransformerFactory.newInstance();
+		final TransformerFactory tf = initFactory();
 		_tfmr = source != null ? tf.newTransformer(source): tf.newTransformer();
+	}
+
+	// Fix XXE issue
+	private TransformerFactory initFactory() {
+		final TransformerFactory tf = TransformerFactory.newInstance();
+		try {
+			// Prevents external entity attacks (XXE)
+			tf.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+			tf.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
+
+			// Alternatively, you can use the following settings
+			// These settings might be required for some Java versions
+			tf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+			tf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+			tf.setFeature("http://xml.org/sax/features/external-general-entities", false);
+			tf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+		} catch (TransformerConfigurationException e) {
+			// Handle the potential exception here
+		}
+		return tf;
 	}
 
 	/** Sets whether to output the doc type.
