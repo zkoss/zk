@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F100-ZK-5135.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Fri Jan 12 14:53:31 CST 2024, Created by rebeccalai
+
+Copyright (C) 2024 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		1. enable debug-js and send-client-errors with
+			<client-config>
+				<debug-js>true</debug-js>
+				<send-client-errors>true</send-client-errors>
+			</client-config>
+		2. should see 'custom error message' in the error box, else override zk.errorPush not working.
+		3. should see error stack trace in the browser console and the server log.
+	</label>
+	<script><![CDATA[
+		zk.afterLoad('zk', function () {
+			zk.errorPush = function (msg) {
+				zk._Erbx.push('custom error message');
+			};
+		});
+	]]></script>
+	<textbox constraint="//aab\o/"/>
+</zk>

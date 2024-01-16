@@ -1197,17 +1197,23 @@ _zk._noESC = 0; //# of disableESC being called (also used by mount.js)
  * ```ts
  * zk.error('Oops! Something wrong:(');
  * ```
- * @param msg - the error message
+ * @param err - the error or error message
  * @param silent - only show error box
+ * @see {@link errorPush}
  * @see {@link errorDismiss}
  * @see {@link log}
  * @see {@link stamp}
  */
-_zk.error = function (msg: string, silent?: boolean): void {
+_zk.error = function (err: Error | string, silent?: boolean): void {
+	const msg = err instanceof Error ? err.message : err,
+		stack = err instanceof Error ? err.stack : undefined;
 	if (!silent) {
-		zAu.send(new zk.Event(zk.Desktop._dt, 'error', {message: msg}, {ignorable: true}), 800);
+		if (stack)
+			_zk.debugLog(stack);
+		if (_zk.sendClientErrors)
+			zAu.send(new zk.Event(zk.Desktop._dt, 'error', {href: document.location.href, message: stack ?? msg}, {ignorable: true}), 800);
 	}
-	_zk._Erbx.push(msg);
+	_zk.errorPush(msg);
 };
 //DEBUG//
 /**
@@ -1221,6 +1227,19 @@ _zk.error = function (msg: string, silent?: boolean): void {
  */
 _zk.debugLog = function (msg: string): void {
 	if (_zk.debugJS) console.log(msg); // eslint-disable-line no-console
+};
+/**
+ * Push an error message to the error box.
+ * Example:
+ * ```ts
+ * zk.errorPush('Oops! Something wrong:(');
+ * ```
+ * @param msg - the error message
+ * @see {@link zk.error}
+ * @since 10.0.0
+ */
+_zk.errorPush = function (msg: string): void {
+	_zk._Erbx.push(msg);
 };
 /** Closes all error messages shown by {@link error}.
  * Example:
@@ -2154,6 +2173,8 @@ declare namespace _zk {
 	export let processMask: boolean | undefined;
 	// eslint-disable-next-line zk/preferStrictBooleanType
 	export let debugJS: boolean | undefined;
+	// eslint-disable-next-line zk/preferStrictBooleanType
+	export let sendClientErrors: boolean | undefined;
 	export let updateURI: string | undefined;
 	export let resourceURI: string | undefined;
 	export let contextURI: string | undefined;

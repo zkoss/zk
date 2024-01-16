@@ -189,6 +189,7 @@ public class Configuration {
 
 	private boolean _sourceMapEnabled = false;
 	private boolean _historyStateEnabled = true;
+	private boolean _sendClientErrors = false;
 
 	/** Constructor.
 	 */
@@ -3265,4 +3266,23 @@ public class Configuration {
 		return _historyStateEnabled;
 	}
 
+	/**
+	 * Sets whether to send client errors to the server for logging
+	 * the page url where the error occurred and its stack trace.
+	 * <p>Default: false.</p>
+	 * @since 10.0.0
+	 */
+	public void setSendClientErrors(boolean send) {
+		_sendClientErrors = send;
+	}
+
+	/**
+	 * Returns whether to send client errors to the server for logging
+	 * the page url where the error occurred and its stack trace.
+	 * <p>Default: false.</p>
+	 * @since 10.0.0
+	 */
+	public boolean isSendClientErrors() {
+		return _sendClientErrors;
+	}
 }
