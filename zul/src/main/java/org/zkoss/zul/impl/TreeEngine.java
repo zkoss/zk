@@ -17,7 +17,6 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.SelectEvent;
 import org.zkoss.zul.Tree;
-import org.zkoss.zul.TreeModel;
 import org.zkoss.zul.TreeNode;
 import org.zkoss.zul.Treeitem;
 
@@ -44,16 +43,6 @@ public interface TreeEngine {
 	 * Returns the tree this engine belongs to.
 	 */
 	public Tree getTree();
-
-	/**
-	 * Sets the {@link TreeModel} of the tree.
-	 */
-	public void setModel(TreeModel<?> model);
-
-	/**
-	 * Returns the {@link TreeModel} of the tree.
-	 */
-	public TreeModel<?> getModel();
 
 	/** Sets whether the check mark shall be displayed in front
 	 * of each item of the associated tree.

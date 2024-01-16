@@ -17,7 +17,6 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.SelectEvent;
 import org.zkoss.zul.Tree;
-import org.zkoss.zul.TreeModel;
 import org.zkoss.zul.TreeNode;
 import org.zkoss.zul.Treeitem;
 
@@ -33,14 +32,6 @@ public class EmptyTreeEngine implements TreeEngine {
 	}
 
 	public Tree getTree() {
-		return null;
-	}
-
-	public void setModel(TreeModel<?> model) {
-
-	}
-
-	public TreeModel<?> getModel() {
 		return null;
 	}
 

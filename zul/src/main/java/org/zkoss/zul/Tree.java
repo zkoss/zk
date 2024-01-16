@@ -300,8 +300,6 @@ public class Tree extends MeshElement {
 				throw new UiException(TreeEngine.class + " must be implemented by " + v);
 			_engine = (TreeEngine) v;
 			_engine.setTree(this);
-			if (_model != null)
-				_engine.setModel(_model);
 		}
 		return _engine;
 	}
@@ -1937,7 +1935,6 @@ public class Tree extends MeshElement {
 				}
 				setModelDirectly(model);
 				_engine.clearPartialSet();
-				_engine.setModel(model);
 				if (_engine.isTristateModel())
 					setTristate(((TreePartialSelectableModel) model).isTristate());
 				initDataListener();
@@ -1964,7 +1961,6 @@ public class Tree extends MeshElement {
 			if (_treechildren != null)
 				_treechildren.detach();
 			_engine.clearPartialSet();
-			_engine.setModel(null);
 			//don't call getItems().clear(), since it readonly
 			//bug# 3095453: tree can't expand if model is set in button onClick
 			smartUpdate("model", false);
