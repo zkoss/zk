@@ -31,6 +31,7 @@ ZK 10.0.0
   ZK-5593: inputWidget bind_ accesses input dom node may not exist
   ZK-5605: client-bind fails for zk.$extends created widget classes, without ClientBindComposer declared
   ZK-5603: Client-mvvm boolean false handling is different from server-side
+  ZK-5480: Cascader doesn't display selected item if set before render after ZK-5414
 
 * Upgrade Notes
   + Upgrade commons-fileupload to commons-fileupload2-javax 2.0.0-M1 and commons-io to 2.13.0 to support jakarta-friendly uploads
