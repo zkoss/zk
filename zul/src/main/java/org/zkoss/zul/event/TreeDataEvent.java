@@ -41,7 +41,7 @@ public class TreeDataEvent {
 	 * @since 6.0.0
 	 */
 	public static final int MULTIPLE_CHANGED = 6;
-	/** Identified the state of {@link org.zkoss.zul.ext.PartialSelectable#isTristate()} is changed.
+	/** Identified the state of {@link org.zkoss.zul.ext.TreePartialSelectableModel#isTristate()} is changed.
 	 * @since 10.0.0
 	 */
 	public static final int TRISTATE_CHANGED = 8;
