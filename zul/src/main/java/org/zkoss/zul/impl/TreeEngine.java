@@ -28,6 +28,13 @@ import org.zkoss.zul.Treeitem;
  */
 public interface TreeEngine {
 
+	/** States of the tri-state selection. */
+	enum State {
+		SELECTED,
+		UNSELECTED,
+		PARTIAL
+	}
+
 	/**
 	 * Sets the tree this engine belongs to.
 	 */
@@ -140,26 +147,20 @@ public interface TreeEngine {
 
 	/** Update header checkmark's tristate directly by given state.
 	 */
-	public void updateHeadercmTristateDirectly(int state);
+	public void updateHeadercmTristateDirectly(State state);
 
 	/** A recursive method for initializing {@link Treeitem} when changed to tristate mode,
-	 * <p>Returns the selection state of current {@link Treeitem}:
-	 * <p>2 -> partial selected
-	 * <p>1 -> selected
-	 * <p>0 -> un-selected
+	 * <p>Returns the selection state of current {@link Treeitem}.
 	 * <p>If you modify this method, please also modify the TreeNode version of this method {@link #initNodesTristate}
 	 * @param comp might be {@link Tree} (root) or {@link Treeitem} (others).
 	 */
-	public int initItemsTristate(Component comp);
+	public State initItemsTristate(Component comp);
 
 	/** A recursive method for initializing treeNodes when changed to tristate mode,
-	 * <p>Returns the selection state of current TreeNode:
-	 * <p>2 -> partial selected
-	 * <p>1 -> selected
-	 * <p>0 -> un-selected
+	 * <p>Returns the selection state of current {@link TreeNode}.
 	 * <p>If you modify this method, please also modify the Treeitem version of this method {@link #initItemsTristate}
 	 */
-	public int initNodesTristate(TreeNode cur);
+	public State initNodesTristate(TreeNode cur);
 
 	/** Returns whether the tree model is a Tristate model.
 	 */

@@ -120,16 +120,16 @@ public class EmptyTreeEngine implements TreeEngine {
 
 	}
 
-	public void updateHeadercmTristateDirectly(int state) {
+	public void updateHeadercmTristateDirectly(State state) {
 
 	}
 
-	public int initItemsTristate(Component comp) {
-		return 0;
+	public State initItemsTristate(Component comp) {
+		return null;
 	}
 
-	public int initNodesTristate(TreeNode cur) {
-		return 0;
+	public State initNodesTristate(TreeNode cur) {
+		return null;
 	}
 
 	public boolean isTristateModel() {

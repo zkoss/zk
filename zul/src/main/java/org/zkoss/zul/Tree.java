@@ -3039,7 +3039,9 @@ public class Tree extends MeshElement {
 				Set<Treeitem> partials = new LinkedHashSet<>(_engine.getPartialItems());
 				for (Treeitem item : partials)
 					_engine.removeItemFromPartial(item);
-				smartUpdate("headercmIcon", evt.isChecked() ? 1 : 0);
+				smartUpdate("headercmIcon", evt.isChecked()
+						? TreeEngine.State.SELECTED.name()
+						: TreeEngine.State.UNSELECTED.name());
 			}
 			Events.postEvent(evt);
 		} else if (cmd.equals("onUpdateSelectAll") && isSelModel) {
