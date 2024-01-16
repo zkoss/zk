@@ -83,8 +83,10 @@ import org.zkoss.zul.ext.Selectable;
 import org.zkoss.zul.ext.SelectionControl;
 import org.zkoss.zul.ext.Sortable;
 import org.zkoss.zul.ext.TreeOpenableModel;
+import org.zkoss.zul.ext.TreePartialSelectableModel;
 import org.zkoss.zul.ext.TreeSelectableModel;
 import org.zkoss.zul.impl.MeshElement;
+import org.zkoss.zul.impl.TreeEngine;
 import org.zkoss.zul.impl.Utils;
 import org.zkoss.zul.impl.XulElement;
 
@@ -211,13 +213,14 @@ public class Tree extends MeshElement {
 	private int _rows = 0;
 	/** The name. */
 	private String _name;
-	private boolean _multiple, _checkmark;
+	private boolean _multiple, _checkmark, _tristate;
 	private boolean _vflex;
 	private String _innerWidth = "100%";
 
 	private transient TreeModel<Object> _model;
 	private transient TreeitemRenderer<?> _renderer;
 	private transient TreeDataListener _dataListener;
+	private transient TreeEngine _engine;
 
 	private transient Paginal _pgi;
 	private String _nonselTags; //since 5.0.5 for non-selectable tags
@@ -257,6 +260,7 @@ public class Tree extends MeshElement {
 
 	private void init() {
 		_selItems = new LinkedHashSet<Treeitem>(4);
+		getEngine().initPartialSet();
 		_heads = new AbstractCollection<Component>() {
 			public int size() {
 				int sz = getChildren().size();
@@ -275,6 +279,31 @@ public class Tree extends MeshElement {
 				return new Iter();
 			}
 		};
+	}
+
+	/**
+	 * Returns tree engine that implements {@link TreeEngine}.
+	 * @exception UiException if failed to load the engine.
+	 * @since 10.0.0
+	 */
+	public TreeEngine getEngine() throws UiException {
+		if (_engine == null) {
+			final String property = "org.zkoss.zkmax.zul.tree.engine.class";
+			final String klass = Library.getProperty(property, "org.zkoss.zul.impl.EmptyTreeEngine");
+			final Object v;
+			try {
+				v = Classes.newInstanceByThread(klass);
+			} catch (Exception e) {
+				throw UiException.Aide.wrap(e);
+			}
+			if (!(v instanceof TreeEngine))
+				throw new UiException(TreeEngine.class + " must be implomented by " + v);
+			_engine = (TreeEngine) v;
+			_engine.setTree(this);
+			if (_model != null)
+				_engine.setModel(_model);
+		}
+		return _engine;
 	}
 
 	public void onPageAttached(Page newpage, Page oldpage) {
@@ -864,6 +893,8 @@ public class Tree extends MeshElement {
 	public void setCheckmark(boolean checkmark) {
 		if (_checkmark != checkmark) {
 			_checkmark = checkmark;
+			if (!checkmark)
+				setTristate(false);
 			smartUpdate("checkmark", checkmark);
 		}
 	}
@@ -969,13 +1000,16 @@ public class Tree extends MeshElement {
 	public void setMultiple(boolean multiple) {
 		if (_multiple != multiple) {
 			_multiple = multiple;
-			if (!_multiple && _selItems.size() > 1) {
-				final Treeitem item = getSelectedItem();
-				for (Iterator<Treeitem> it = _selItems.iterator(); it.hasNext();) {
-					final Treeitem ti = it.next();
-					if (ti != item) {
-						ti.setSelectedDirectly(false);
-						it.remove();
+			if (!_multiple) {
+				setTristate(false);
+				if (_selItems.size() > 1) {
+					final Treeitem item = getSelectedItem();
+					for (Iterator<Treeitem> it = _selItems.iterator(); it.hasNext();) {
+						final Treeitem ti = it.next();
+						if (ti != item) {
+							ti.setSelectedDirectly(false);
+							it.remove();
+						}
 					}
 				}
 				//No need to update selId because z.multiple will do the job
@@ -983,6 +1017,51 @@ public class Tree extends MeshElement {
 			if (_model != null)
 				((TreeSelectableModel) _model).setMultiple(multiple);
 			smartUpdate("multiple", _multiple);
+		}
+	}
+
+	/** Returns whether tristate mode is activated.
+	 * At the same time, setCheckmark(true) and setMultiple(true) will be called automatically.
+	 * Once this mode is on, setCheckmark(false) and setMultiple(false) will also set tristate to false.
+	 * <p>Default: false.
+	 * @since 10.0.0
+	 */
+	public boolean isTristate() {
+		return _tristate;
+	}
+
+	/** Sets whether tristate mode is activated.
+	 * At the same time, setCheckmark(true) and setMultiple(true) will be called automatically.
+	 * Once this mode is on, setCheckmark(false) and setMultiple(false) will also set tristate to false.
+	 * @since 10.0.0
+	 */
+	public void setTristate(boolean tristate) {
+		if (_tristate != tristate) {
+			_tristate = tristate;
+			if (_engine.isTristateModel())
+				((TreePartialSelectableModel) _model).setTristate(tristate);
+			smartUpdate("tristate", _tristate);
+
+			if (_tristate) {
+				// let engine do the update job, instead of set it directly in Tree
+				_engine.setCheckmark(true);
+				_engine.setMultiple(true);
+
+				_engine.initPartialSet();
+
+				// init tristate from current selections
+				_engine.updateHeadercmTristateDirectly(
+						_engine.isTristateModel()
+						? _engine.initNodesTristate((TreeNode<?>) _model.getRoot())
+						: _engine.initItemsTristate(this)
+				);
+				_engine.addTristateOnSelectEventListener();
+			} else {
+				// partial state has to ALL removed
+				if (!_engine.isPartialEmpty())
+					_engine.clearPartialSet();
+				_engine.removeTristateOnSelectEventListener();
+			}
 		}
 	}
 
@@ -1615,8 +1694,16 @@ public class Tree extends MeshElement {
 			}
 			return;
 		case TreeDataEvent.SELECTION_CHANGED:
-			if (target instanceof Treeitem)
+			if (target instanceof Treeitem) {
 				((Treeitem) target).setSelected(((TreeSelectableModel) _model).isPathSelected(path));
+
+				if (_tristate && _engine.isTristateModel()) {
+					if (((TreePartialSelectableModel) _model).isPathPartial(path))
+						_engine.addItemToPartial((Treeitem) target);
+					else
+						_engine.removeItemFromPartial((Treeitem) target);
+				}
+			}
 			return;
 		case TreeDataEvent.OPEN_CHANGED:
 			if (_model instanceof TreeOpenableModel) {
@@ -1626,6 +1713,10 @@ public class Tree extends MeshElement {
 			return;
 		case TreeDataEvent.MULTIPLE_CHANGED:
 			setMultiple(((TreeSelectableModel) _model).isMultiple());
+			return;
+		case TreeDataEvent.TRISTATE_CHANGED:
+			if (_engine.isTristateModel())
+				setTristate(((TreePartialSelectableModel) _model).isTristate());
 			return;
 		}
 
@@ -1697,6 +1788,11 @@ public class Tree extends MeshElement {
 		Treeitem newTi = newUnloadedItem();
 		Treechildren tc = treechildrenOf(parent);
 
+		if (_tristate) {
+			_engine.updateAncestorsNodesTristate((TreeNode<?>) node);
+			_engine.updateHeadercmTristate();
+		}
+
 		//B50-ZK-721
 		if (!(parent instanceof Treeitem) || ((Treeitem) parent).isLoaded()) {
 			List<? extends Component> siblings = tc.getChildren();
@@ -1718,6 +1814,10 @@ public class Tree extends MeshElement {
 			((Treeitem) items.get(index)).detach();
 		} else if (!(parent instanceof Treeitem) || ((Treeitem) parent).isLoaded()) {
 			tc.detach();
+		}
+		if (_tristate) {
+			_engine.updateAncestorsNodesTristate((TreeNode<?>) node);
+			_engine.updateHeadercmTristate();
 		}
 	}
 
@@ -1836,6 +1936,7 @@ public class Tree extends MeshElement {
 					smartUpdate("model", true);
 				}
 				setModelDirectly(model);
+				_engine.setModel(model);
 				initDataListener();
 				resetPosition(true); //ZK-2712: set different model, reset scroll and anchor position
 				if (inPagingMold()) {
@@ -1859,6 +1960,8 @@ public class Tree extends MeshElement {
 			_model = null;
 			if (_treechildren != null)
 				_treechildren.detach();
+			_engine.clearPartialSet();
+			_engine.setModel(null);
 			//don't call getItems().clear(), since it readonly
 			//bug# 3095453: tree can't expand if model is set in button onClick
 			smartUpdate("model", false);
@@ -2023,6 +2126,12 @@ public class Tree extends MeshElement {
 			if (!model.isSelectionEmpty() && getSelectedCount() != model.getSelectionCount()
 					&& model.isPathSelected(path = getPath0(parent, i)))
 				addItemToSelection(ti);
+		}
+		if (_tristate && _engine.isTristateModel()) {
+			TreePartialSelectableModel model = (TreePartialSelectableModel) _model;
+			if (!model.isPartialEmpty() && _engine.getPartialCount() != model.getPartialCount()
+					&& model.isPathPartial(path = getPath0(parent, i)))
+				_engine.addItemToPartial(ti);
 		}
 		if (_model instanceof Selectable) {
 			Selectable smodel = (Selectable) _model;
@@ -2594,6 +2703,7 @@ public class Tree extends MeshElement {
 
 		render(renderer, "multiple", isMultiple());
 		render(renderer, "checkmark", isCheckmark());
+		render(renderer, "tristate", isTristate());
 		render(renderer, "vflex", isVflex());
 
 		if (_model != null) {
@@ -2606,6 +2716,8 @@ public class Tree extends MeshElement {
 				}
 			}
 		}
+		if (isTristate())
+			render(renderer, "chgPartial", _engine.getPartialItems());
 
 		if (_nonselTags != null)
 			renderer.render("nonselectableTags", _nonselTags);
@@ -2912,14 +3024,23 @@ public class Tree extends MeshElement {
 			final Map<String, Object> data = request.getData();
 			_anchorTop = AuRequests.getInt(data, "top", 0);
 			_anchorLeft = AuRequests.getInt(data, "left", 0);
-		} else if (cmd.equals(Events.ON_CHECK_SELECT_ALL) && isSelModel) {
+		} else if (cmd.equals(Events.ON_CHECK_SELECT_ALL)) {
 			CheckEvent evt = CheckEvent.getCheckEvent(request);
-			final Selectable<Object> selectableModel = (Selectable<Object>) _model;
-			SelectionControl control = selectableModel.getSelectionControl();
-			if (control == null)
-				throw new IllegalStateException(
-						"SelectionControl cannot be null, please implement SelectionControl interface for SelectablModel");
-			control.setSelectAll(evt.isChecked());
+			if (isSelModel) {
+				final Selectable<Object> selectableModel = (Selectable<Object>) _model;
+				SelectionControl control = selectableModel.getSelectionControl();
+				if (control == null)
+					throw new IllegalStateException(
+							"SelectionControl cannot be null, please implement SelectionControl interface for SelectablModel");
+				control.setSelectAll(evt.isChecked());
+			}
+			if (_tristate) { // tristate mode select all
+				// no matter is select-all or clear-all, partial state should all clear
+				Set<Treeitem> partials = new LinkedHashSet<>(_engine.getPartialItems());
+				for (Treeitem item : partials)
+					_engine.removeItemFromPartial(item);
+				smartUpdate("headercmIcon", evt.isChecked() ? 1 : 0);
+			}
 			Events.postEvent(evt);
 		} else if (cmd.equals("onUpdateSelectAll") && isSelModel) {
 			final Selectable<Object> selectableModel = (Selectable<Object>) _model;

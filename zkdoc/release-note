@@ -15,6 +15,7 @@ ZK 10.0.0
   ZK-5592: Deprecate the ancient themes (Breeze, Sapphire, Silvertail, and Atlantic) in ZK 10
   ZK-5527: Upgrade WCAG with the lighthouse 11.x detection tools
   ZK-5459: Allow Configuration.invokeWebAppInits() to throw a Runtime Error
+  ZK-3853: Tree supports 3-states selection
 
 * Bugs
   ZK-5393: Update ZK jars to jakarta-friendly uploads
@@ -51,6 +52,10 @@ ZK 10.0.0
   + zEmbedded supports WebSocket under the condition that only one ZK page can be embedded into a non-ZK page 
     when WebSocket is enabled.
   + Upgrade zkdiffer to 0.8.0.
+  + When multiple zEmbedded components with WebSocket enabled are present on a page, 
+    the WebSocket endpoint of the last loaded zEmbedded component will be used.
+  + Tree now supports tri-state selection, both component and model,
+    for more information, please refer to the Tree component reference.
    --------
 ZK 10.0.0-Beta
 Oct 17, 2023

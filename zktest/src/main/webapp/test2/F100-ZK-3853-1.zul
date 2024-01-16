@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F100-ZK-3853-1.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Tue Jan 02 16:00:24 CST 2024, Created by jamson
+
+Copyright (C) 2024 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns:n="native">
+
+	<n:h1>Tri-State Tree Pure Component Test</n:h1>
+	<label multiline="true">
+		click checkbox and check whether all updates are correct.
+
+		Note: To include Tri-state Tree implementation, set LibraryProperty `org.zkoss.zkmax.zul.tree.engine.class` to `org.zkoss.zkmax.zul.impl.TreeEngineImpl`
+	</label>
+
+	<tree tristate="true">
+		<treecols>
+			<treecol label="treecol" />
+		</treecols>
+		<treechildren>
+			<treeitem open="false">
+				<treerow>
+					<treecell label="0" />
+				</treerow>
+				<treechildren>
+					<treeitem>
+						<treerow>
+							<treecell label="1"/>
+						</treerow>
+					</treeitem>
+					<treeitem>
+						<treerow>
+							<treecell label="2" />
+						</treerow>
+					</treeitem>
+				</treechildren>
+			</treeitem>
+			<treeitem>
+				<treerow>
+					<treecell label="3" />
+				</treerow>
+			</treeitem>
+			<treeitem open="false">
+				<treerow>
+					<treecell label="4" />
+				</treerow>
+				<treechildren>
+					<treeitem open="false">
+						<treerow>
+							<treecell label="5" />
+						</treerow>
+						<treechildren>
+							<treeitem open="false">
+								<treerow>
+									<treecell label="6" />
+								</treerow>
+							</treeitem>
+							<treeitem>
+								<treerow>
+									<treecell label="7" />
+								</treerow>
+							</treeitem>
+							<treeitem open="false">
+								<treerow>
+									<treecell label="8" />
+								</treerow>
+								<treechildren>
+									<treeitem>
+										<treerow>
+											<treecell label="9" />
+										</treerow>
+									</treeitem>
+									<treeitem>
+										<treerow>
+											<treecell label="10" />
+										</treerow>
+									</treeitem>
+									<treeitem>
+										<treerow>
+											<treecell label="11" />
+										</treerow>
+									</treeitem>
+								</treechildren>
+							</treeitem>
+						</treechildren>
+					</treeitem>
+					<treeitem>
+						<treerow>
+							<treecell label="12" />
+						</treerow>
+					</treeitem>
+					<treeitem>
+						<treerow>
+							<treecell label="13" />
+						</treerow>
+					</treeitem>
+				</treechildren>
+			</treeitem>
+		</treechildren>
+	</tree>
+</zk>

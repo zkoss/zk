@@ -166,7 +166,7 @@ public abstract class AbstractTreeModel<E> implements TreeModel<E>, TreeSelectab
 
 	/** Sets the root of the tree model.
 	 */
-	/*package*/ void setRootDirectly(E root) {
+	public void setRootDirectly(E root) {
 		_root = root;
 	}
 
@@ -686,14 +686,14 @@ public abstract class AbstractTreeModel<E> implements TreeModel<E>, TreeSelectab
 	/** Represents a tree path.
 	 * @since 6.0.0
 	 */
-	protected static class Path implements java.io.Serializable, Comparable {
+	public static class Path implements java.io.Serializable, Comparable {
 		public final int[] path;
 
-		protected Path(int[] path) {
+		public Path(int[] path) {
 			this.path = path;
 		}
 
-		protected Path(Path p) {
+		public Path(Path p) {
 			int length = p.path.length;
 			this.path = new int[length];
 			for (int i = 0; i < length; i++) {

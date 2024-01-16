@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F100-ZK-3853-2.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Tue Jan 02 18:38:49 CST 2024, Created by jamson
+
+Copyright (C) 2024 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns:n="native">
+
+	<n:h1>Tri-State Tree Model Test</n:h1>
+	<label multiline="true">
+		1. click checkbox and check whether all updates are correct.
+		2. click `toggle model` button, check the model save all state correctly after un-bind and re-bind.
+
+		Note: To include Tri-state Tree implementation, set LibraryProperty `org.zkoss.zkmax.zul.tree.engine.class` to `org.zkoss.zkmax.zul.impl.TreeEngineImpl`
+	</label>
+
+	<button id="btn" label="toggle model">
+			<attribute name="onClick">
+				tree.setModel(tree.getModel() == null ? model : null);
+			</attribute>
+	</button>
+	<tree id="tree">
+		<treecols>
+			<treecol label="treecol" />
+		</treecols>
+	</tree>
+	<zscript>
+		model = new DefaultTristateTreeModel(
+				new DefaultTreeNode(null,
+					new DefaultTreeNode[] {
+						new DefaultTreeNode("0",
+							new DefaultTreeNode[] {
+								new DefaultTreeNode("1"),
+								new DefaultTreeNode("2")
+							}),
+						new DefaultTreeNode("3"),
+						new DefaultTreeNode("4",
+							new DefaultTreeNode[] {
+								new DefaultTreeNode("5",
+									new DefaultTreeNode[] {
+										new DefaultTreeNode("6"),
+										new DefaultTreeNode("7"),
+										new DefaultTreeNode("8",
+											new DefaultTreeNode[] {
+												new DefaultTreeNode("9"),
+												new DefaultTreeNode("10"),
+												new DefaultTreeNode("11"),
+											}
+										)
+									}
+								),
+								new DefaultTreeNode("12"),
+								new DefaultTreeNode("13")
+							}
+						)
+					}
+				)
+		);
+		tree.setModel(model);
+		tree.setTristate(true);
+	</zscript>
+</zk>

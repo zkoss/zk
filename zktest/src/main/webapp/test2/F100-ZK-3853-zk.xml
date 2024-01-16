@@ -1,0 +1,6 @@
+<zk>
+	<library-property>
+		<name>org.zkoss.zkmax.zul.tree.engine.class</name>
+		<value>org.zkoss.zkmax.zul.impl.TreeEngineImpl</value>
+	</library-property>
+</zk>

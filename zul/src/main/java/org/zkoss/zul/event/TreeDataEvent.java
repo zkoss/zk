@@ -41,6 +41,10 @@ public class TreeDataEvent {
 	 * @since 6.0.0
 	 */
 	public static final int MULTIPLE_CHANGED = 6;
+	/** Identified the state of {@link org.zkoss.zul.ext.PartialSelectable#isTristate()} is changed.
+	 * @since 10.0.0
+	 */
+	public static final int TRISTATE_CHANGED = 8;
 	/**
 	 * Identified the state that Component's client update to be disabled
 	 * @since 8.0.0
@@ -64,12 +68,12 @@ public class TreeDataEvent {
 	 *
 	 * @param type one of {@link #CONTENTS_CHANGED},
 	 * {@link #INTERVAL_ADDED}, {@link #INTERVAL_REMOVED}, {@link #SELECTION_CHANGED},
-	 * {@link #OPEN_CHANGED}, {@link #STRUCTURE_CHANGED} or {@link #MULTIPLE_CHANGED}.
+	 * {@link #OPEN_CHANGED}, {@link #STRUCTURE_CHANGED}, {@link #MULTIPLE_CHANGED} or {@link #TRISTATE_CHANGED}.
 	 * @param nodePath the path of the affected node.
 	 * If {@link #CONTENTS_CHANGED}, {@link #INTERVAL_ADDED} or {@link #INTERVAL_REMOVED},
 	 * it is the parent node. If {@link #SELECTION_CHANGED} or {@link #OPEN_CHANGED},
 	 * it is the node being selected or opened.
-	 * If {@link #STRUCTURE_CHANGED} or {@link #MULTIPLE_CHANGED}, it is null.
+	 * If {@link #STRUCTURE_CHANGED}, {@link #MULTIPLE_CHANGED} or {@link #TRISTATE_CHANGED}, it is null.
 	 * @param indexFrom the lower index of the change range
 	 * @param indexTo the upper index of the change range
 	 */
@@ -87,12 +91,12 @@ public class TreeDataEvent {
 	 *
 	 * @param type one of {@link #CONTENTS_CHANGED},
 	 * {@link #INTERVAL_ADDED}, {@link #INTERVAL_REMOVED}, {@link #SELECTION_CHANGED},
-	 * {@link #OPEN_CHANGED}, {@link #STRUCTURE_CHANGED} or {@link #MULTIPLE_CHANGED}.
+	 * {@link #OPEN_CHANGED}, {@link #STRUCTURE_CHANGED}, {@link #MULTIPLE_CHANGED} or {@link #TRISTATE_CHANGED}.
 	 * @param nodePath the path of the affected node.
 	 * If {@link #CONTENTS_CHANGED}, {@link #INTERVAL_ADDED} or {@link #INTERVAL_REMOVED},
 	 * it is the parent node. If {@link #SELECTION_CHANGED} or {@link #OPEN_CHANGED},
 	 * it is the node being selected or opened.
-	 * If {@link #STRUCTURE_CHANGED} or {@link #MULTIPLE_CHANGED}, it is null.
+	 * If {@link #STRUCTURE_CHANGED}, {@link #MULTIPLE_CHANGED} or {@link #TRISTATE_CHANGED}, it is null.
 	 * @param indexFrom the lower index of the change range
 	 * @param indexTo the upper index of the change range
 	 * @param affectedPath the path to be removed or added
@@ -111,12 +115,12 @@ public class TreeDataEvent {
 	 *
 	 * @param type one of {@link #CONTENTS_CHANGED},
 	 * {@link #INTERVAL_ADDED}, {@link #INTERVAL_REMOVED}, {@link #SELECTION_CHANGED},
-	 * {@link #OPEN_CHANGED}, {@link #STRUCTURE_CHANGED} or {@link #MULTIPLE_CHANGED}.
+	 * {@link #OPEN_CHANGED}, {@link #STRUCTURE_CHANGED}, {@link #MULTIPLE_CHANGED} or {@link #TRISTATE_CHANGED}.
 	 * @param nodePath the path of the affected node.
 	 * If {@link #CONTENTS_CHANGED}, {@link #INTERVAL_ADDED} or {@link #INTERVAL_REMOVED},
 	 * it is the parent node. If {@link #SELECTION_CHANGED} or {@link #OPEN_CHANGED},
 	 * it is the node being selected or opened.
-	 * If {@link #STRUCTURE_CHANGED} or {@link #MULTIPLE_CHANGED}, it is null.
+	 * If {@link #STRUCTURE_CHANGED}, {@link #MULTIPLE_CHANGED} or {@link #TRISTATE_CHANGED}, it is null.
 	 * @param indexFrom the lower index of the change range
 	 * @param indexTo the upper index of the change range
 	 * @param affectedPaths the paths to be removed or added
@@ -154,7 +158,7 @@ public class TreeDataEvent {
 	 * If {@link #CONTENTS_CHANGED}, {@link #INTERVAL_ADDED} or {@link #INTERVAL_REMOVED},
 	 * it is the parent node. If {@link #SELECTION_CHANGED} or {@link #OPEN_CHANGED},
 	 * it is the node being selected or opened.
-	 * If {@link #STRUCTURE_CHANGED} or {@link #MULTIPLE_CHANGED}, it is null.
+	 * If {@link #STRUCTURE_CHANGED}, {@link #MULTIPLE_CHANGED} or {@link #TRISTATE_CHANGED}, it is null.
 	 * @return the parent node that one of its children being modified 
 	 */
 	public int[] getPath() {

@@ -44,6 +44,13 @@ export class Tree extends zul.sel.SelectWidget {
 	_fixhdwcnt?: number; // zul.sel.Treeitem.prototype.setOpen
 	/** @internal */
 	_fixhdoldwd?: number; // zul.sel.Treeitem.prototype.setOpen
+	/** @internal */
+	_partialItems!: zul.sel.Treeitem[]; // to remove all partial icon when tristate mode disable
+
+	constructor() {
+		super();
+		this._partialItems = [];
+	}
 
 	/** @internal */
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {

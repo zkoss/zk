@@ -219,7 +219,7 @@ public class DefaultTreeNode<E>
 		return clone;
 	}
 
-	protected class TreeNodeChildrenList extends AbstractList<TreeNode<E>> implements java.io.Serializable {
+	public class TreeNodeChildrenList extends AbstractList<TreeNode<E>> implements java.io.Serializable {
 		protected final ArrayList<TreeNode<E>> _list = new ArrayList<TreeNode<E>>();
 
 		// required implementation by spec: get, size, add, remove, set
@@ -320,7 +320,7 @@ public class DefaultTreeNode<E>
 		/** Used only internally by DefaultTreeModel.sort0(). it won't fire event INTERVAL_ADDED or INTERVAL_REMOVED */
 		// B50-ZK-566: Set sortDirection to treecol will show an error
 		@SuppressWarnings("unchecked")
-		/*package*/ void treeSort(Comparator cmpr) {
+		public void treeSort(Comparator cmpr) {
 			Collections.sort(_list, cmpr);
 		}
 	}

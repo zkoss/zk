@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F100-ZK-3853-7.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Tue Jan 09 10:09:19 CST 2024, Created by jamson
+
+Copyright (C) 2024 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns:n="native">
+
+	<n:h1>Tri-State Tree Model Insert/remove Node Test</n:h1>
+	<label multiline="true">
+		Input format [a b c d] represents the path you want to insert/remove,
+		enter the path and check whether the insert/remove Node will change ancestors' selection state,
+		the insert value will be "newData".
+
+		~~~~~ Example ~~~~~
+		input: 0 1 3
+		insert result: root.getChildAt(0).getChildAt(1).insert(newNode, 3)
+		remove result: root.getChildAt(0).getChildAt(1).remove(3)
+		~~~~~~~~~~~~~~~~~~~
+
+		Note: To include Tri-state Tree implementation, set LibraryProperty `org.zkoss.zkmax.zul.tree.engine.class` to `org.zkoss.zkmax.zul.impl.TreeEngineImpl`
+	</label>
+
+	<textbox id="insertTb"/>
+	<button label="insert">
+		<attribute name="onClick"><![CDATA[
+			TreeNode cur = (TreeNode) model.getRoot(),
+					newNode = new DefaultTreeNode("newData");
+			String[] cmds = insertTb.getValue().split(" ");
+			for (int i = 0, n = cmds.length; i < n; i++) {
+				int index = Integer.parseInt(cmds[i]);
+				if (i != n-1) cur = cur.getChildAt(index);
+				else cur.insert(newNode, index);
+			}
+		]]></attribute>
+	</button>
+
+	<separator/>
+
+	<textbox id="removeTb"/>
+	<button label="remove">
+		<attribute name="onClick"><![CDATA[
+			TreeNode cur = (TreeNode) model.getRoot();
+			String[] cmds = removeTb.getValue().split(" ");
+			for (int i = 0, n = cmds.length; i < n; i++) {
+				int index = Integer.parseInt(cmds[i]);
+				if (i != n-1) cur = cur.getChildAt(index);
+				else cur.remove(index);
+			}
+		]]></attribute>
+	</button>
+
+	<tree id="tree">
+		<treecols>
+			<treecol label="treecol" />
+		</treecols>
+	</tree>
+
+	<zscript>
+		model = new DefaultTristateTreeModel(
+				new DefaultTreeNode(null,
+					new DefaultTreeNode[] {
+						new DefaultTreeNode("0",
+							new DefaultTreeNode[] {
+								new DefaultTreeNode("1"),
+								new DefaultTreeNode("2")
+							}
+						),
+						new DefaultTreeNode("3"),
+						new DefaultTreeNode("4",
+							new DefaultTreeNode[] {
+								new DefaultTreeNode("5",
+									new DefaultTreeNode[] {
+										new DefaultTreeNode("6"),
+										new DefaultTreeNode("7"),
+										new DefaultTreeNode("8",
+											new DefaultTreeNode[] {
+												new DefaultTreeNode("9"),
+												new DefaultTreeNode("10"),
+												new DefaultTreeNode("11"),
+											}
+										)
+									}
+								),
+								new DefaultTreeNode("12"),
+								new DefaultTreeNode("13")
+							}
+						)
+					}
+				)
+		);
+		tree.setModel(model);
+		tree.setTristate(true);
+	</zscript>
+</zk>

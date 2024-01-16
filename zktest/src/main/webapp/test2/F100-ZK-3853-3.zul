@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F100-ZK-3853-3.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Tue Jan 02 19:14:59 CST 2024, Created by jamson
+
+Copyright (C) 2024 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns:n="native">
+
+	<n:h1>Tri-State Tree Pure Component Mode-Switching Test</n:h1>
+	<label multiline="true">
+		click `toggle checkmark`, `toggle multiple`, `toggle tristate` to see these state switch according to the following rules:
+		* If toggle `tristate` false -> true, `checkmark` and `multiple` will be set to true at the same time.
+		* If toggle `multiple` or `checkmark` true -> false, if `tristate` is true, then it'll be set to false.
+		* If every mode change to `tristate` mode, initially it'll generate 3-state based on current checkmark.
+
+		Note: To include Tri-state Tree implementation, set LibraryProperty `org.zkoss.zkmax.zul.tree.engine.class` to `org.zkoss.zkmax.zul.impl.TreeEngineImpl`
+	</label>
+
+	<button label="toggle checkmark">
+		<attribute name="onClick">
+			tree.setCheckmark(!tree.isCheckmark());
+		</attribute>
+	</button>
+	<button label="toggle multiple">
+		<attribute name="onClick">
+			tree.setMultiple(!tree.isMultiple());
+		</attribute>
+	</button>
+	<button label="toggle tristate">
+		<attribute name="onClick">
+			tree.setTristate(!tree.isTristate());
+		</attribute>
+	</button>
+	<tree id="tree">
+		<treecols>
+			<treecol label="treecol" />
+		</treecols>
+		<treechildren>
+			<treeitem>
+				<treerow>
+					<treecell label="0" />
+				</treerow>
+				<treechildren>
+					<treeitem>
+						<treerow>
+							<treecell label="1"/>
+						</treerow>
+					</treeitem>
+					<treeitem>
+						<treerow>
+							<treecell label="2" />
+						</treerow>
+					</treeitem>
+				</treechildren>
+			</treeitem>
+			<treeitem>
+				<treerow>
+					<treecell label="3" />
+				</treerow>
+			</treeitem>
+			<treeitem>
+				<treerow>
+					<treecell label="4" />
+				</treerow>
+				<treechildren>
+					<treeitem>
+						<treerow>
+							<treecell label="5" />
+						</treerow>
+						<treechildren>
+							<treeitem>
+								<treerow>
+									<treecell label="6" />
+								</treerow>
+							</treeitem>
+							<treeitem>
+								<treerow>
+									<treecell label="7" />
+								</treerow>
+							</treeitem>
+							<treeitem>
+								<treerow>
+									<treecell label="8" />
+								</treerow>
+								<treechildren>
+									<treeitem>
+										<treerow>
+											<treecell label="9" />
+										</treerow>
+									</treeitem>
+									<treeitem>
+										<treerow>
+											<treecell label="10" />
+										</treerow>
+									</treeitem>
+									<treeitem>
+										<treerow>
+											<treecell label="11" />
+										</treerow>
+									</treeitem>
+								</treechildren>
+							</treeitem>
+						</treechildren>
+					</treeitem>
+					<treeitem>
+						<treerow>
+							<treecell label="12" />
+						</treerow>
+					</treeitem>
+					<treeitem>
+						<treerow>
+							<treecell label="13" />
+						</treerow>
+					</treeitem>
+				</treechildren>
+			</treeitem>
+		</treechildren>
+	</tree>
+</zk>
