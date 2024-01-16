@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<zk>
+	<client-config>
+		<debug-js>true</debug-js>
+		<send-client-errors>true</send-client-errors>
+	</client-config>
+</zk>

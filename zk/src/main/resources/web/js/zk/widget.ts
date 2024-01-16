@@ -7171,6 +7171,7 @@ export namespace widget_global {
 				case 'td': zk.tipDelay = val as number; break;
 				case 'art': zk.resendTimeout = val as number; break;
 				case 'dj': zk.debugJS = val as boolean; break;
+				case 'sce': zk.sendClientErrors = val as boolean; break;
 				case 'kd': zk.keepDesktop = val as boolean; break;
 				case 'pf': zk.pfmeter = val as boolean; break;
 				case 'ta': zk.timerAlive = val as boolean; break;
