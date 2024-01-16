@@ -297,7 +297,7 @@ public class Tree extends MeshElement {
 				throw UiException.Aide.wrap(e);
 			}
 			if (!(v instanceof TreeEngine))
-				throw new UiException(TreeEngine.class + " must be implomented by " + v);
+				throw new UiException(TreeEngine.class + " must be implemented by " + v);
 			_engine = (TreeEngine) v;
 			_engine.setTree(this);
 			if (_model != null)
@@ -1936,7 +1936,10 @@ public class Tree extends MeshElement {
 					smartUpdate("model", true);
 				}
 				setModelDirectly(model);
+				_engine.clearPartialSet();
 				_engine.setModel(model);
+				if (_engine.isTristateModel())
+					setTristate(((TreePartialSelectableModel) model).isTristate());
 				initDataListener();
 				resetPosition(true); //ZK-2712: set different model, reset scroll and anchor position
 				if (inPagingMold()) {
