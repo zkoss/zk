@@ -348,6 +348,7 @@ public class ConfigParser {
 				//  resend-delay
 				//  debug-js
 				//  enable-source-map
+				//  send-client-errors
 				//  auto-resend-timeout
 				parseClientConfig(config, el);
 
@@ -765,6 +766,11 @@ public class ConfigParser {
 		s = conf.getElementValue("enable-source-map", true);
 		if (s != null)
 			config.enableSourceMap(!"false".equals(s));
+
+		//F100-ZK-5135: add new config for whether to send client errors to the server
+		s = conf.getElementValue("send-client-errors", true);
+		if (s != null)
+			config.setSendClientErrors(!"false".equals(s));
 
 		//F70-ZK-2495: add new config to customize crash script
 		s = conf.getElementValue("init-crash-script", true);

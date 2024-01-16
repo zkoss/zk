@@ -50,6 +50,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<client-config>
 		<debug-js>true</debug-js>
 		<enable-source-map>false</enable-source-map> <!-- default: false -->
+		<send-client-errors>false</send-client-errors> <!-- default: false -->
 	</client-config>
 
 	<!-- Uncomment if you turn off the caching of resources loaded from

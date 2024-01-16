@@ -688,6 +688,8 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 			sb.append("ta:1,");
 		if (config.isDebugJS())
 			sb.append("dj:1,");
+		if (config.isSendClientErrors())
+			sb.append("sce:1,");
 		if (config.isKeepDesktopAcrossVisits())
 			sb.append("kd:1,");
 		if (config.getPerformanceMeter() != null)

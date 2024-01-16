@@ -579,7 +579,10 @@ export namespace mount_global {
 			doAuCmds(aucmds);
 		} catch (e) {
 			zk.mounting = false;
-			zk.error('Failed to mount: ' + ((e as Error).message ?? e));
+			if (e instanceof Error) {
+				e.message = 'Failed to mount: ' + e.message;
+				zk.error(e);
+			} else zk.error('Failed to mount: ' + (e as string));
 			setTimeout(function () {
 				throw e;
 			}, 0);
