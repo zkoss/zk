@@ -1,0 +1,14 @@
+<zk xmlns:h="native">
+	<h:h1>Basic</h:h1>
+	<zscript><![CDATA[
+	DefaultTreeModel treeModel = new DefaultTreeModel(new DefaultTreeNode("ROOT",
+		Arrays.asList(new DefaultTreeNode[]{
+			new DefaultTreeNode("USA", Arrays.asList(new TreeNode[]{new DefaultTreeNode("New York"),new DefaultTreeNode("Los Angelas")})),
+			new DefaultTreeNode("Japan", Arrays.asList(new TreeNode[]{new DefaultTreeNode("Tokyo"),new DefaultTreeNode("Kyoto")})),
+			new DefaultTreeNode("New Zealand", Arrays.asList(new TreeNode[]{new DefaultTreeNode("Auckland"),new DefaultTreeNode("Queenstown")}))
+		})
+	));
+	treeModel.addToSelection(treeModel.getChild(new int[]{1, 1}));
+    ]]></zscript>
+	<cascader id="cas" width="300px" model="${treeModel}"/>
+</zk>
