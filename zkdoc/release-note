@@ -14,6 +14,7 @@ ZK 10.0.0
   ZK-5135: Make a client error more helpful for debug
   ZK-5592: Deprecate the ancient themes (Breeze, Sapphire, Silvertail, and Atlantic) in ZK 10
   ZK-5527: Upgrade WCAG with the lighthouse 11.x detection tools
+  ZK-5459: Allow Configuration.invokeWebAppInits() to throw a Runtime Error
 
 * Bugs
   ZK-5393: Update ZK jars to jakarta-friendly uploads
