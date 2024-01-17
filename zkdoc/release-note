@@ -45,6 +45,7 @@ ZK 10.0.0
     i.e. The content will be sanitized before rendering, please don't use JavaScript content.
   + zEmbedded supports WebSocket under the condition that only one ZK page can be embedded into a non-ZK page 
     when WebSocket is enabled.
+  + Upgrade zkdiffer to 0.8.0.
    --------
 ZK 10.0.0-Beta
 Oct 17, 2023
