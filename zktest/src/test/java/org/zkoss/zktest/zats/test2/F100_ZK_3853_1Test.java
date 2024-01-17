@@ -22,11 +22,7 @@ import org.zkoss.test.webdriver.ForkJVMTestOnly;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
-@ForkJVMTestOnly
 public class F100_ZK_3853_1Test extends WebDriverTestCase {
-
-	@RegisterExtension
-	public static final ExternalZkXml CONFIG = new ExternalZkXml("/test2/F100-ZK-3853-zk.xml");
 
 	@Test
 	public void test() {

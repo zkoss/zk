@@ -844,10 +844,4 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 <!--		<name>org.zkoss.bind.defaultComposer.class</name>-->
 <!--		<value>org.zkoss.zktest.test2.F100_ZK_BindComposer</value>-->
 <!--	</library-property>-->
-	<!-- Use EmptyTreeEngine instead of TreeEngineImpl in zktest by default,
-		to test old testcases that have Tree component should work correctly with ZK-3853 -->
-	<library-property>
-		<name>org.zkoss.zkmax.zul.tree.engine.class</name>
-		<value>org.zkoss.zul.impl.EmptyTreeEngine</value>
-	</library-property>
 </zk>
