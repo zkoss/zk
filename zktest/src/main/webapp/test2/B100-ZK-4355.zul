@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B100-ZK-4355.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Jan 13 12:26:36 CST 2024, Created by jameschu
+
+Copyright (C) 2024 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript>
+		java.util.Date today = new java.util.Date();
+	</zscript>
+	<label>the default col of timebox should match the value length</label>
+	<timebox value="${today}"/>
+</zk>

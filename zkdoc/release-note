@@ -38,6 +38,7 @@ ZK 10.0.0
   ZK-5480: Cascader doesn't display selected item if set before render after ZK-5414
   ZK-5151: Client MVVM - SelectedItem should be sync in Cascader (getter/setter)
   ZK-5152: Client MVVM - Cascader should use TreeSelectableModel
+  ZK-4355: timebox' default cols is too small
 
 * Upgrade Notes
   + Upgrade commons-fileupload to commons-fileupload2-javax 2.0.0-M2 and commons-io to 2.13.0 to support jakarta-friendly uploads

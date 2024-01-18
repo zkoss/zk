@@ -62,6 +62,9 @@ import org.zkoss.zul.mesg.MZul;
  * by clicking the up or down button (though users cannot type anything
  * in the input box).
  *
+ * <p>Since 10.0.0, if cols is not set by user, it will match the formatted value at the beginning
+ * (or 5 when value is null).</p>
+ *
  * @author Dennis Chen
  * @since 3.0.0
  */
@@ -71,7 +74,7 @@ public class Timebox extends DateTimeFormatInputElement {
 	private static Date _dummyDate = new Date();
 
 	public Timebox() {
-		setCols(5);
+		setCols(-1);
 		setFormat("");
 	}
 
@@ -315,6 +318,16 @@ public class Timebox extends DateTimeFormatInputElement {
 		if (realformat.indexOf("z") != -1) {
 			String timezone = getFormattedTimezone();
 			renderer.render("timezoneAbbr", timezone);
+		}
+
+		if (getCols() == -1) { // try to modify default col by value
+			Date value = getValue();
+			int cols = 5;
+			if (value != null) {
+				cols = coerceToString(value).length();
+			}
+			setCols(cols);
+			renderer.render("cols", getCols());
 		}
 
 		if (!_btnVisible)
