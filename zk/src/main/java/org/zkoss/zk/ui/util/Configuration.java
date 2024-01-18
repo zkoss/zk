@@ -770,8 +770,7 @@ public class Configuration {
 	 * <p>An instance of {@link WebAppInit} is constructed first,
 	 * and then invoke {@link WebAppInit#init}.
 	 *
-	 * <p>Unlike {@link #invokeWebAppInits}, it doesn't throw any exceptions.
-	 * Rather, it only logs them.
+	 * @exception UiException to prevent a webapp from being created
 	 */
 	public void invokeWebAppInits() throws UiException {
 		final Class<?>[] ary = _appInits.toArray();
@@ -780,7 +779,8 @@ public class Configuration {
 			try {
 				((WebAppInit) klass.newInstance()).init(_wapp);
 			} catch (Throwable ex) {
-				log.error("Failed to invoke " + klass, ex);
+				throw UiException.Aide.wrap(ex);
+				//Don't intercept; to prevent the creation of a webapp
 			}
 		}
 	}
