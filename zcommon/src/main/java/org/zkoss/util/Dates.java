@@ -519,6 +519,6 @@ public class Dates {
 	 * @return long
 	 */
 	public static final long getTimezoneOffset(TimeZone timezone, Date date) {
-		return timezone.getRawOffset() + (timezone.inDaylightTime(date) ? timezone.getDSTSavings(): 0);
+		return (long) timezone.getRawOffset() + (timezone.inDaylightTime(date) ? timezone.getDSTSavings(): 0);
 	}
 }

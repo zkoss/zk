@@ -46,7 +46,7 @@ public class WidgetListener extends ConditionValue {
 		if (name == null || script == null)
 			throw new IllegalArgumentException();
 		_name = name;
-		_script = script != null ? new ExValue(script, String.class) : null;
+		_script = new ExValue(script, String.class);
 	}
 
 	/** Returns the event name, such as, onClick.

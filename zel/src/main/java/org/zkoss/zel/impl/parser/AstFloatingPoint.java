@@ -32,12 +32,12 @@ public final class AstFloatingPoint extends SimpleNode {
         super(id);
     }
 
-    private volatile Number number;
+    private Number number;
 
     public Number getFloatingPoint() {
         if (this.number == null) {
             try {
-                this.number = new Double(this.image);
+                this.number = Double.valueOf(this.image);
             } catch (ArithmeticException e0) {
                 this.number = new BigDecimal(this.image);
             }
@@ -45,13 +45,13 @@ public final class AstFloatingPoint extends SimpleNode {
         return this.number;
     }
 
-    
+    @Override
     public Object getValue(EvaluationContext ctx)
             throws ELException {
         return this.getFloatingPoint();
     }
 
-    
+    @Override
     public Class<?> getType(EvaluationContext ctx)
             throws ELException {
         return this.getFloatingPoint().getClass();

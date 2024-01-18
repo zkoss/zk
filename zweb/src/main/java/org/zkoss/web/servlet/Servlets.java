@@ -287,6 +287,8 @@ public class Servlets {
 		public boolean equals(Object o) {
 			if (this == o)
 				return true;
+			if (!(o instanceof URIIndex))
+				return false;
 			//To speed up, don't check whether o is the right class
 			final URIIndex idx = (URIIndex) o;
 			return _uri.equals(idx._uri) && _locale.equals(idx._locale);
@@ -965,7 +967,7 @@ public class Servlets {
 			uri = Encodes.encodeURI(uri);
 			final boolean noQstr = qstr == null;
 			final boolean noParams = mode == PASS_THRU_ATTR || params == null || params.isEmpty();
-			if (noQstr && noParams)
+			if (noQstr && noParams || params == null || params.isEmpty())
 				return uri;
 
 			if (noQstr != noParams)
@@ -998,7 +1000,38 @@ public class Servlets {
 	}
 
 	/** A list of context root paths (e.g., "/abc"). */
-	private static volatile List<String> _ctxroots;
+	private static class ContextRootsHolder {
+		private static final List<String> INSTANCE = Collections.unmodifiableList(
+				myGetContextPaths());
+
+		private static final List<String> myGetContextPaths() {
+			final String APP_XML = "/META-INF/application.xml";
+			final List<String> ctxroots = new LinkedList<String>();
+			final URL xmlURL = Locators.getDefault().getResource(APP_XML);
+			if (xmlURL == null)
+				throw new SystemException("File not found: " + APP_XML);
+			Element root = null;
+			try {
+				//		if (log.isDebugEnabled()) log.debug("Parsing "+APP_XML);
+				root = new SAXBuilder(false, false, true).build(xmlURL).getRootElement();
+
+			} catch (Exception ex) {
+				throw SystemException.Aide.wrap(ex);
+			}
+			for (Element e : root.getElements("module")) {
+				final String ctxroot = (String) e.getContent("web/context-root");
+				if (ctxroot == null) {
+					//				if (log.finerable()) log.finer("Skip non-web: "+e.getContent("java"));
+					continue;
+				}
+
+				ctxroots.add(ctxroot.startsWith("/") ? ctxroot : "/" + ctxroot);
+			}
+
+			//		log.info("Context found: "+ctxroots);
+			return new ArrayList<String>(ctxroots);
+		}
+	}
 
 	/** Returns a list of context paths (e.g., "/abc") that this application
 	 * has. This implementation parse application.xml. For war that doesn't
@@ -1006,43 +1039,9 @@ public class Servlets {
 	 * parse another file to know what context being loaded.
 	 */
 	public static final List<String> getContextPaths() {
-		if (_ctxroots != null)
-			return _ctxroots;
-
-		try {
-			synchronized (Servlets.class) {
-				if (_ctxroots == null)
-					_ctxroots = myGetContextPaths();
-			}
-			return _ctxroots;
-		} catch (Exception ex) {
-			throw SystemException.Aide.wrap(ex);
-		}
+		return ContextRootsHolder.INSTANCE;
 	}
 
-	private static final List<String> myGetContextPaths() throws Exception {
-		final String APP_XML = "/META-INF/application.xml";
-		final List<String> ctxroots = new LinkedList<String>();
-		final URL xmlURL = Locators.getDefault().getResource(APP_XML);
-		if (xmlURL == null)
-			throw new SystemException("File not found: " + APP_XML);
-
-		//		if (log.isDebugEnabled()) log.debug("Parsing "+APP_XML);
-		final Element root = new SAXBuilder(false, false, true).build(xmlURL).getRootElement();
-
-		for (Element e : root.getElements("module")) {
-			final String ctxroot = (String) e.getContent("web/context-root");
-			if (ctxroot == null) {
-				//				if (log.finerable()) log.finer("Skip non-web: "+e.getContent("java"));
-				continue;
-			}
-
-			ctxroots.add(ctxroot.startsWith("/") ? ctxroot : "/" + ctxroot);
-		}
-
-		//		log.info("Context found: "+ctxroots);
-		return new ArrayList<String>(ctxroots);
-	}
 
 	/** Returns a token to represent a limit-time offer.
 	 * It is mainly used as an parameter value (mostlycalled zk_lto), and then
@@ -1057,8 +1056,8 @@ public class Servlets {
 	 * @param timeout how long the office shall expire, unit: seconds.
 	 */
 	public static final boolean isOfferExpired(String lto, int timeout) {
-		final int len = lto != null ? lto.length() : 0;
-		if (len <= 1)
+		int len;
+		if (lto == null || (len = lto.length()) <= 1)
 			return true;
 
 		final char cksm = lto.charAt(len - 1);

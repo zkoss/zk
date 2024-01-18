@@ -52,18 +52,19 @@ import java.util.Map;
  */
 public class BytecodeReadingParanamer implements Paranamer {
 
-    private static final Map<String, String> _primitives = new HashMap<String, String>() {
-        {
-            put("int", "I");
-            put("boolean", "Z");
-            put("byte", "B");
-            put("char", "C");
-            put("short", "S");
-            put("float", "F");
-            put("long", "J");
-            put("double", "D");
-        }
-    };
+    private static final Map<String, String> _primitives;
+
+    static {
+        _primitives = new HashMap<>();
+        _primitives.put("int", "I");
+        _primitives.put("boolean", "Z");
+        _primitives.put("byte", "B");
+        _primitives.put("char", "C");
+        _primitives.put("short", "S");
+        _primitives.put("float", "F");
+        _primitives.put("long", "J");
+        _primitives.put("double", "D");
+    }
 
     public String[] lookupParameterNames(AccessibleObject methodOrConstructor) {
         return lookupParameterNames(methodOrConstructor, true);

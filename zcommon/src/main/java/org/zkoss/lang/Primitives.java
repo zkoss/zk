@@ -224,7 +224,12 @@ public class Primitives {
 			return null;
 		if (primitive.equals(void.class))
 			return Void.class;
-		return getDefaultValue(primitive).getClass();
+		Object defaultValue = getDefaultValue(primitive);
+		if (defaultValue != null) {
+			return defaultValue.getClass();
+		} else {
+			return null;
+		}
 	}
 	/** Tests whether a class name is a primitive class, e.g., int and void.
 	 */

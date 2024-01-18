@@ -12,6 +12,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.bind.validator;
 
 import java.io.Serializable;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.zkoss.bind.ValidationContext;
 import org.zkoss.bind.Validator;
@@ -28,7 +29,7 @@ public class DeferredValidator implements Validator, Serializable {
 	private static final long serialVersionUID = 6545009126528775045L;
 	private String _clzName;
 	private Class<Validator> _clz;
-	private volatile Validator _target;
+	private final AtomicReference<Validator> _target = new AtomicReference<>();
 
 	public DeferredValidator(String clzName) {
 		_clzName = clzName;
@@ -40,17 +41,17 @@ public class DeferredValidator implements Validator, Serializable {
 
 	@SuppressWarnings("unchecked")
 	private Validator getValidator() throws Exception {
-		if (_target == null) {
+		if (_target.get() == null) {
 			synchronized (this) {
-				if (_target == null) {
+				if (_target.get() == null) {
 					if (_clz == null) {
 						_clz = (Class<Validator>) Classes.forNameByThread(_clzName);
 					}
-					_target = (Validator) _clz.newInstance();
+					_target.set(_clz.getDeclaredConstructor().newInstance());
 				}
 			}
 		}
-		return _target;
+		return _target.get();
 	}
 
 	public void validate(ValidationContext ctx) {
@@ -62,8 +63,9 @@ public class DeferredValidator implements Validator, Serializable {
 	}
 
 	public String toString() {
-		return new StringBuilder().append(super.toString()).append("[")
-				.append(_clzName != null ? _clzName : (_target != null ? _target : _clz)).append("]").toString();
+		return super.toString() + "[" + (_clzName != null ?
+				_clzName :
+				(_target.get() != null ? _target.get() : _clz)) + "]";
 	}
 
 }

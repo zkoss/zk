@@ -65,7 +65,7 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 		int desktopMaxInactiveInterval = config.getDesktopMaxInactiveInterval();
 		if (desktopMaxInactiveInterval >= 0) {
 			_cleaner = new Timer();
-			_cleaner.scheduleAtFixedRate(new CleanerTask(), desktopMaxInactiveInterval * 1_000, desktopMaxInactiveInterval * 1_000);
+			_cleaner.scheduleAtFixedRate(new CleanerTask(), desktopMaxInactiveInterval * 1_000L, desktopMaxInactiveInterval * 1_000L);
 		}
 	}
 

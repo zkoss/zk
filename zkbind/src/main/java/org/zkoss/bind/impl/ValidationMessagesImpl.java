@@ -345,7 +345,7 @@ public class ValidationMessagesImpl implements ValidationMessages, Collection<Ob
 	}
 
 	public boolean containsAll(Collection<?> c) {
-		return _messages.contains(c);
+		return _messages.containsAll(c);
 	}
 
 	public boolean addAll(Collection<? extends Object> c) {

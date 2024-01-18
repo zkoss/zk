@@ -397,7 +397,7 @@ public class Input extends AbstractTag {
 	 * @since 8.0.3
 	 */
 	public void setReadonly(Boolean readonly) throws WrongValueException {
-		setDynamicProperty("readonly", readonly ? Boolean.valueOf(readonly) : null);
+		setDynamicProperty("readonly", readonly == Boolean.TRUE ? true : null);
 	}
 	/**
 	 * Returns the required of this input tag.
@@ -407,7 +407,7 @@ public class Input extends AbstractTag {
 	 */
 	public boolean isRequired() {
 		final Boolean b = (Boolean) getDynamicProperty("required");
-		return b != null && b.booleanValue();
+		return b != null && b;
 	}
 
 	/**
@@ -417,7 +417,7 @@ public class Input extends AbstractTag {
 	 * @since 8.0.3
 	 */
 	public void setRequired(boolean required) throws WrongValueException {
-		setDynamicProperty("required", required ? Boolean.valueOf(required) : null);
+		setDynamicProperty("required", required ? true : null);
 	}
 	/**
 	 * Returns the selectiondirection of this input tag.

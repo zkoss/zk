@@ -34,6 +34,7 @@ import org.slf4j.LoggerFactory;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
+import org.zkoss.lang.Strings;
 import org.zkoss.lang.SystemException;
 import org.zkoss.web.servlet.Charsets;
 import org.zkoss.web.servlet.Servlets;
@@ -312,6 +313,10 @@ public class Encodes {
 	public static final StringBuffer removeFromQueryString(StringBuffer sb, String name)
 			throws UnsupportedEncodingException {
 		name = encodeURIComponent(name);
+
+		if (Strings.isEmpty(name))
+			return sb;
+
 		int j = sb.indexOf("?");
 		if (j < 0)
 			return sb; //no '?'

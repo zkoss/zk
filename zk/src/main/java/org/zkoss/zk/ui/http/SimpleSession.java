@@ -413,6 +413,9 @@ public class SimpleSession implements Session, SessionCtrl {
 	 */
 	protected void writeThis(java.io.ObjectOutputStream s) throws java.io.IOException {
 
+		if (!(_cache instanceof Serializable)) {
+			throw new java.io.NotSerializableException(_cache.getClass().getName());
+		}
 		s.writeObject(_cache);
 		s.writeInt(_nextUuid);
 

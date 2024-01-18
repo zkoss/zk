@@ -329,40 +329,40 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 		return response.getNamespace();
 	}
 
-	private static PageRenderPatch getRenderPatch() {
-		if (_prpatch != null)
-			return _prpatch;
-
-		synchronized (DHtmlLayoutPortlet.class) {
-			if (_prpatch != null)
-				return _prpatch;
-
-			final PageRenderPatch patch;
+	// The JVM guarantees that the RenderPatchHolder class will be loaded and initialized
+	// in a thread-safe way the first time it is used. This ensures that PageRenderPatch
+	// is instantiated only once and in a thread-safe manner. Refer to
+	// https://en.wikipedia.org/wiki/Initialization-on-demand_holder_idiom
+	private static class RenderPatchHolder {
+		private static final PageRenderPatch INSTANCE = initializeRenderPatch();
+		private static PageRenderPatch initializeRenderPatch() {
 			final String clsnm = Library.getProperty(org.zkoss.zk.ui.sys.Attributes.PORTLET_RENDER_PATCH_CLASS);
 			if (clsnm == null) {
-				patch = new PageRenderPatch() {
+				return new PageRenderPatch() {
 					public Writer beforeRender(RequestInfo reqInfo) {
 						return null;
 					}
 
 					public void patchRender(RequestInfo reqInfo, Page page, Writer result, Writer out)
 							throws IOException {
+						// ignore
 					}
 				};
 			} else {
 				try {
-					patch = (PageRenderPatch) Classes.newInstanceByThread(clsnm);
+					return (PageRenderPatch) Classes.newInstanceByThread(clsnm);
 				} catch (ClassCastException ex) {
 					throw new UiException(clsnm + " must implement " + PageRenderPatch.class.getName());
 				} catch (Throwable ex) {
 					throw UiException.Aide.wrap(ex, "Unable to instantiate");
 				}
 			}
-			return _prpatch = patch;
 		}
 	}
 
-	private static volatile PageRenderPatch _prpatch;
+	private static PageRenderPatch getRenderPatch() {
+		return RenderPatchHolder.INSTANCE;
+	}
 
 	private static void fixContentType(RenderResponse response) {
 		//Bug 1548478: content-type is required for some implementation (JBoss Portal)
@@ -381,7 +381,7 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 	}
 
 	/** Handles exception being thrown when rendering a page.
-	 * @param ex the exception being throw. If null, it means the page
+	 * @param err the exception being throw. If null, it means the page
 	 * is not found.
 	 */
 	private void handleError(Session sess, RenderRequest request, RenderResponse response, String path, Throwable err,

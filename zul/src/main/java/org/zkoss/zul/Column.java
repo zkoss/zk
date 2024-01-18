@@ -16,6 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -763,7 +764,13 @@ public class Column extends HeaderElement {
 		}
 		if (!written) {
 			s.writeBoolean(false);
-			s.writeObject(_sortAsc);
+			if (_sortAsc instanceof Serializable) {
+				s.writeObject(_sortAsc);
+			} else if (_sortAsc != null) {
+				throw new java.io.NotSerializableException(_sortAsc.getClass().getName());
+			} else {
+				s.writeObject(null);
+			}
 		}
 
 		written = false;
@@ -777,7 +784,13 @@ public class Column extends HeaderElement {
 		}
 		if (!written) {
 			s.writeBoolean(false);
-			s.writeObject(_sortDsc);
+			if (_sortDsc instanceof Serializable) {
+				s.writeObject(_sortDsc);
+			} else if (_sortDsc != null) {
+				throw new java.io.NotSerializableException(_sortDsc.getClass().getName());
+			} else {
+				s.writeObject(null);
+			}
 		}
 	}
 

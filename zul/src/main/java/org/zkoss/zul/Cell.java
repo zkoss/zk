@@ -43,7 +43,7 @@ public class Cell extends XulElement {
 	 */
 	public void setAlign(String align) {
 		if (!Objects.equals(getAlign(), align)) {
-			initAuxInfo().align = align;
+			initAuxInfoForCell().align = align;
 			smartUpdate("align", getAlign());
 		}
 	}
@@ -60,7 +60,7 @@ public class Cell extends XulElement {
 	 */
 	public void setValign(String valign) {
 		if (!Objects.equals(getValign(), valign)) {
-			initAuxInfo().valign = valign;
+			initAuxInfoForCell().valign = valign;
 			smartUpdate("valign", getValign());
 		}
 	}
@@ -79,7 +79,7 @@ public class Cell extends XulElement {
 		if (colspan <= 0)
 			throw new WrongValueException("Positive only");
 		if (getColspan() != colspan) {
-			initAuxInfo().colspan = colspan;
+			initAuxInfoForCell().colspan = colspan;
 			smartUpdate("colspan", getColspan());
 		}
 	}
@@ -98,7 +98,7 @@ public class Cell extends XulElement {
 		if (rowspan <= 0)
 			throw new WrongValueException("Positive only");
 		if (getRowspan() != rowspan) {
-			initAuxInfo().rowspan = rowspan;
+			initAuxInfoForCell().rowspan = rowspan;
 			smartUpdate("rowspan", getRowspan());
 		}
 	}
@@ -128,7 +128,7 @@ public class Cell extends XulElement {
 		renderer.render("valign", getValign());
 	}
 
-	private AuxInfo initAuxInfo() {
+	private AuxInfo initAuxInfoForCell() {
 		if (_auxinf == null)
 			_auxinf = new AuxInfo();
 		return _auxinf;

@@ -113,7 +113,9 @@ public class BeanNameELResolver extends ELResolver {
 
         try {
             if (isNameResolved(context, beanName)) { //ZK-5418, cache bean name and value (cache store in ELContext)
-                Class<?> result = getBean(context, beanName).getClass();
+                Object bean = getBean(context, beanName);
+                if (bean == null) return null;
+                Class<?> result = bean.getClass();
                 context.setPropertyResolved(base, property);
                 return result;
             }

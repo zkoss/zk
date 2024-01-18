@@ -232,7 +232,7 @@ function _fixBodyMinWd(wgt: MeshWidget, fixMesh?: boolean): void {
 			wlen = wds.length;
 		if (fixMesh && meshmin)
 			wgt.setFlexSize_({ width: wd }, true);
-		if (!(tr = tr.firstChild) || !(tr = tr.firstChild))
+		if (!(tr.firstChild) || !(tr = tr.firstChild.firstChild))
 			return; // no first tr
 		// eslint-disable-next-line zk/noNull
 		for (var c: ChildNode | null = tr.firstChild, i = 0; c && (i < wlen); c = c.nextSibling)

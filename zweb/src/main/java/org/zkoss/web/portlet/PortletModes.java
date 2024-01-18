@@ -27,25 +27,20 @@ import javax.portlet.PortletMode;
  * @author tomyeh
  */
 public class PortletModes {
+	private PortletModes() {} //no instance
 	/** Returns the portlet mode of the specified name.
 	 */
-
 	public static final PortletMode toPortletMode(String modeName) {
 		PortletMode mode = _modes.get(modeName);
 		if (mode == null) {
 			synchronized (_modes) {
-				mode = _modes.get(modeName);
-				if (mode == null) {
-					Map<String, PortletMode> modes = new HashMap<String, PortletMode>(_modes);
-					modes.put(modeName, mode = new PortletMode(modeName));
-					_modes = modes;
-				}
+				mode = _modes.computeIfAbsent(modeName, k -> new PortletMode(modeName));
 			}
 		}
 		return mode;
 	}
 
-	private static Map<String, PortletMode> _modes = new HashMap<String, PortletMode>(4);
+	private static final Map<String, PortletMode> _modes = new HashMap<String, PortletMode>(4);
 
 	static {
 		_modes.put("EDIT", PortletMode.EDIT);

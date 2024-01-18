@@ -83,7 +83,7 @@ public class BinderUtil {
 		if (stack != null) {
 			stack.pop();
 			if (stack.empty()) {
-				_ctxStack.set(null);
+				_ctxStack.remove();
 			}
 		} else {
 			throw new IllegalStateException("nothing to popup");

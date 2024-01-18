@@ -18,6 +18,7 @@ package org.zkoss.zk.ui.metainfo;
 
 import static org.zkoss.lang.Generics.cast;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -855,7 +856,11 @@ public class ComponentInfo extends ForEachBranchInfo {
 			s.writeObject(langdef.getName());
 			s.writeObject(_compdef.getName());
 		} else {
-			s.writeObject(_compdef);
+			if (_compdef instanceof Serializable) {
+				s.writeObject(_compdef);
+			} else {
+				throw new java.io.NotSerializableException(_compdef.getClass().getName());
+			}
 		}
 	}
 

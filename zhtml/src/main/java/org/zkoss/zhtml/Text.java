@@ -93,7 +93,7 @@ public class Text extends AbstractComponent implements RawId {
 	 * @param tabindex
 	 */
 	public void setTabindex(Integer tabindex) {
-		if (_tabindex != tabindex) {
+		if (!Objects.equals(_tabindex, tabindex)) {
 			_tabindex = tabindex;
 			smartUpdate("tabindex", tabindex);
 		}
@@ -102,7 +102,7 @@ public class Text extends AbstractComponent implements RawId {
 	/** Whether to generate the value directly without ID. */
 	private boolean isIdRequired() {
 		final Page p = getPage();
-		return p == null || !isVisible() || getId().length() > 0 || !isRawLabel(p);
+		return p == null || !isVisible() || !getId().isEmpty() || !isRawLabel(p);
 	}
 
 	private static boolean isRawLabel(Page page) {
@@ -138,6 +138,7 @@ public class Text extends AbstractComponent implements RawId {
 	 * 
 	 * @since 5.0.0
 	 */
+	@Override
 	public String getWidgetClass() {
 		return "zhtml.Text";
 	}
@@ -146,6 +147,7 @@ public class Text extends AbstractComponent implements RawId {
 		return !(getParent() instanceof Includer) && !isIdRequired();
 	}
 
+	@Override
 	public void setParent(Component parent) {
 		final Component old = getParent();
 		if (old != null && old != parent && invalidateParent())
@@ -158,6 +160,7 @@ public class Text extends AbstractComponent implements RawId {
 			parent.invalidate();
 	}
 
+	@Override
 	public void invalidate() {
 		if (!invalidateParent())
 			super.invalidate();
@@ -165,6 +168,7 @@ public class Text extends AbstractComponent implements RawId {
 			getParent().invalidate();
 	}
 
+	@Override
 	public void redraw(Writer out) throws IOException {
 		final Execution exec = Executions.getCurrent();
 		if (!HtmlPageRenders.isDirectContent(exec)) {
@@ -191,6 +195,7 @@ public class Text extends AbstractComponent implements RawId {
 		}
 	}
 
+	@Override
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 			throws IOException {
 		super.renderProperties(renderer);
@@ -203,6 +208,7 @@ public class Text extends AbstractComponent implements RawId {
 			renderer.render("tabindex", _tabindex);
 	}
 
+	@Override
 	protected boolean isChildable() {
 		return false;
 	}

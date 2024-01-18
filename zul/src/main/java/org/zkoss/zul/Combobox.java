@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -31,7 +32,6 @@ import org.slf4j.LoggerFactory;
 
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Exceptions;
-import org.zkoss.lang.Objects;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.out.AuInvoke;
@@ -225,7 +225,7 @@ public class Combobox extends Textbox {
 	 * @since 8.5.1
 	 */
 	public void setEmptySearchMessage(String msg) {
-		if (_emptySearchMessage != msg) {
+		if (!Objects.equals(_emptySearchMessage, msg)) {
 			_emptySearchMessage = msg;
 			smartUpdate("emptySearchMessage", _emptySearchMessage);
 		}
@@ -921,7 +921,7 @@ public class Combobox extends Textbox {
 	 * @since 8.0.3
      */
 	public void setPopupWidth(String popupWidth) {
-		if (popupWidth != _popupWidth) {
+		if (!Objects.equals(popupWidth, _popupWidth)) {
 			_popupWidth = popupWidth;
 			smartUpdate("popupWidth", popupWidth);
 		}
@@ -1087,7 +1087,9 @@ public class Combobox extends Textbox {
 			_selItem = selItems != null && !selItems.isEmpty() ? (Comboitem) selItems.iterator().next() : null;
 			if (getModel() instanceof ListSubModel && _selItem == null && ((List) request.getData().get("items")).size() != 0) {
 				_selItem = oldSel; // selItem might be missing when new items are created in the same AU, sync back
-				selItems.add(oldSel);
+				if (selItems != null) {
+					selItems.add(oldSel);
+				}
 			}
 			_lastCkVal = getValue(); //onChange is sent before onSelect
 

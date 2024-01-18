@@ -26,6 +26,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -459,7 +460,8 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 			}
 		}
 		if (zk) { // not source map
-			if (!processingPartial || partialNum == totalPartialCount) {
+			if (!processingPartial || Objects.equals(partialNum,
+					totalPartialCount)) {
 				final WebApp wapp = getWebApp();
 				if (wapp != null) {
 					writeAppInfo(reqctx, out, wapp);
@@ -476,7 +478,8 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 				write(out, "\n}catch(error){console.error(error);}finally{");
 				if (!processingSourceMapScript) {
 					write(out, "zk.setLoaded(zk._p.n);");
-					if (processingPartial && partialNum == totalPartialCount) {
+					if (processingPartial && Objects.equals(partialNum,
+							totalPartialCount)) {
 						write(out, "zk.setLoaded('");
 						write(out, name);
 						write(out, "');");
@@ -505,26 +508,28 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 		return new ByteContent(out.toByteArray(), cacheable);
 	}
 
-	private ScriptManager getScriptManager() {
-		if (_smanager == null) {
-			synchronized (this) {
-				if (_smanager == null) {
-					String clsnm = Library.getProperty("org.zkoss.zk.ui.http.ScriptManager.class");
-					if (clsnm != null) {
-						try {
-							_smanager = (ScriptManager) Classes.newInstanceByThread(clsnm);
-						} catch (Throwable ex) {
-							log.error("Unable to instantiate " + clsnm, ex);
-						}
-					}
-					if (_smanager == null) _smanager = new ScriptManagerImpl();
+	// https://en.wikipedia.org/wiki/Initialization-on-demand_holder_idiom
+	private static class ScriptManagerHolder {
+		private static final ScriptManager INSTANCE = initializeScriptManager();
+
+		private static ScriptManager initializeScriptManager() {
+			String clsnm = Library.getProperty("org.zkoss.zk.ui.http.ScriptManager.class");
+			ScriptManager manager = null;
+			if (clsnm != null) {
+				try {
+					manager = (ScriptManager) Classes.newInstanceByThread(clsnm);
+				} catch (Throwable ex) {
+					log.error("Unable to instantiate " + clsnm, ex);
 				}
 			}
+			if (manager == null) manager = new ScriptManagerImpl();
+			return manager;
 		}
-		return _smanager;
 	}
 
-	private static volatile ScriptManager _smanager;
+	public ScriptManager getScriptManager() {
+		return ScriptManagerHolder.INSTANCE;
+	}
 
 	private boolean isWpdContentRequired(String pkg, Element root) {
 		for (LanguageDefinition langdef : LanguageDefinition.getByDeviceType(getDeviceType()))

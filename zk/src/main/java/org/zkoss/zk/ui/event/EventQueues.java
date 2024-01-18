@@ -235,35 +235,43 @@ public class EventQueues {
 		return getProvider().remove(name, wapp);
 	}
 
-	private static final EventQueueProvider getProvider() {
-		if (_provider == null)
-			synchronized (EventQueues.class) {
-				if (_provider == null) {
-					EventQueueProvider provider = null;
-					String clsnm = Library.getProperty("org.zkoss.zk.ui.event.EventQueueProvider.class");
-					if (clsnm == null)
-						clsnm = Library.getProperty("org.zkoss.zkmax.ui.EventQueueProvider.class");
-					//backward compatible
-					if (clsnm != null)
-						try {
-							final Object o = Classes.newInstanceByThread(clsnm);
-							//try zkex first
-							if (!(o instanceof EventQueueProvider))
-								throw new UiException(o.getClass().getName() + " must implement "
-										+ EventQueueProvider.class.getName());
-							provider = (EventQueueProvider) o;
-						} catch (UiException ex) {
-							throw ex;
-						} catch (Throwable ex) {
-							throw UiException.Aide.wrap(ex, "Unable to load " + clsnm);
-						}
-					if (provider == null)
-						provider = new EventQueueProviderImpl();
-					_provider = provider;
-				}
-			}
-		return _provider;
+	private static EventQueueProvider getProvider() {
+		return ProviderHolder.INSTANCE;
 	}
 
-	private static volatile EventQueueProvider _provider;
+	// The JVM guarantees that the ProviderHolder class will be loaded and initialized
+	// in a thread-safe way the first time it is used. This ensures that EventQueueProvider
+	// is instantiated only once and in a thread-safe manner. Refer to
+	// https://en.wikipedia.org/wiki/Initialization-on-demand_holder_idiom
+	private static class ProviderHolder {
+		private static final EventQueueProvider INSTANCE = initializeProvider();
+
+		private static EventQueueProvider initializeProvider() {
+			EventQueueProvider provider = null;
+			String clsnm = Library.getProperty(
+					"org.zkoss.zk.ui.event.EventQueueProvider.class");
+			if (clsnm == null)
+				clsnm = Library.getProperty(
+						"org.zkoss.zkmax.ui.EventQueueProvider.class");
+			//backward compatible
+			if (clsnm != null)
+				try {
+					final Object o = Classes.newInstanceByThread(clsnm);
+					//try zkex first
+					if (!(o instanceof EventQueueProvider))
+						throw new UiException(
+								o.getClass().getName() + " must implement "
+										+ EventQueueProvider.class.getName());
+					provider = (EventQueueProvider) o;
+				} catch (UiException ex) {
+					throw ex;
+				} catch (Throwable ex) {
+					throw UiException.Aide.wrap(ex, "Unable to load " + clsnm);
+				}
+			if (provider == null)
+				provider = new EventQueueProviderImpl();
+			return provider;
+		}
+	}
+
 }

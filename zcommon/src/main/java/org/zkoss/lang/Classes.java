@@ -25,6 +25,7 @@ import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -167,22 +168,22 @@ public class Classes {
 	private static Object looselyCast(Class type, Object arg) {
 		if (type == Integer.class || type == int.class) {
 			if (arg instanceof Number)
-				return new Integer(((Number)arg).intValue());
+				return ((Number) arg).intValue();
 		} else if (type == Long.class || type == long.class) {
 			if (arg instanceof Number)
-				return new Long(((Number)arg).longValue());
+				return ((Number) arg).longValue();
 		} else if (type == Double.class || type == double.class) {
 			if (arg instanceof Number)
-				return new Double(((Number)arg).doubleValue());
+				return ((Number) arg).doubleValue();
 		} else if (type == Short.class || type == short.class) {
 			if (arg instanceof Number)
-				return new Short(((Number)arg).shortValue());
+				return ((Number) arg).shortValue();
 		} else if (type == Float.class || type == float.class) {
 			if (arg instanceof Number)
-				return new Float(((Number)arg).floatValue());
+				return ((Number) arg).floatValue();
 		} else if (type == Byte.class || type == byte.class) {
 			if (arg instanceof Number)
-				return new Byte(((Number)arg).byteValue());
+				return ((Number) arg).byteValue();
 		}
 		return null; //not castable
 	}
@@ -385,15 +386,14 @@ public class Classes {
 		return null;
 	}
 	/** Returns all interfaces that are implemented by the specified class.
-	 * <p>Unlike {@link Class#getInterfaces}, it recursively searches
+	 * <p>Unlike {@link Class#getInterfaces()}, it recursively searches
 	 * for all derived classes.
 	 */
 	public static Class<?>[] getAllInterfaces(Class<?> cls) {
-		final List<Class<?>> l = new LinkedList<Class<?>>();
+		final List<Class<?>> l = new LinkedList<>();
 		while (cls != null) {
 			final Class<?>[] ifs = cls.getInterfaces();
-			for (int j = 0; j < ifs.length; ++j)
-				l.add(ifs[j]);
+			Collections.addAll(l, ifs);
 
 			cls = cls.getSuperclass();
 		}
@@ -429,7 +429,7 @@ public class Classes {
 		if (j < 0)
 			return name; //nothing to change
 
-		for (final StringBuffer sb = new StringBuffer(name);;) {
+		for (final var sb = new StringBuilder(name);;) {
 			sb.deleteCharAt(j);
 			if (sb.length() == j)
 				return sb.toString();
@@ -455,10 +455,10 @@ public class Classes {
 	 * @see #toAttributeName
 	 */
 	public static final String toMethodName(String attrName, String prefix) {
-		if (prefix.length() == 0)
+		if (prefix.isEmpty())
 			return attrName;
 
-		StringBuffer sb = new StringBuffer(prefix);
+		var sb = new StringBuilder(prefix);
 		char[] buf = attrName.toCharArray();
 		buf[0] = Character.toUpperCase(buf[0]);
 		return sb.append(buf).toString();
@@ -594,8 +594,8 @@ public class Classes {
 		}
 		String method = signature.substring(j, k).trim();
 		
-		Collection<String> argTypes = new LinkedList<String>();
-		Collection<String> argNames = new LinkedList<String>();
+		Collection<String> argTypes = new LinkedList<>();
+		Collection<String> argNames = new LinkedList<>();
 		do {
 			j = Strings.skipWhitespaces(signature, k + 1);
 			if (signature.charAt(j) == ')') break;
@@ -1341,9 +1341,9 @@ public class Classes {
 			} else if (val instanceof Integer) { //int.class
 				return val;
 			} else if (val instanceof Number) {
-				return new Integer(((Number)val).intValue());
+				return ((Number) val).intValue();
 			} else if (val instanceof String) {
-				return new Integer((String)val);
+				return Integer.valueOf((String) val);
 			}
 		} else if (Boolean.class == cls || boolean.class == cls) {
 			if (val == null) {
@@ -1353,11 +1353,11 @@ public class Classes {
 			} else if (val instanceof String) {
 				return Boolean.valueOf((String)val);
 			} else if (val instanceof BigDecimal) {
-				return Boolean.valueOf(((BigDecimal)val).signum() != 0);
+				return ((BigDecimal) val).signum() != 0;
 			} else if (val instanceof BigInteger) {
-				return Boolean.valueOf(((BigInteger)val).signum() != 0);
+				return ((BigInteger) val).signum() != 0;
 			} else if (val instanceof Number) {
-				return Boolean.valueOf(((Number)val).intValue() != 0);
+				return ((Number) val).intValue() != 0;
 			} else {
 				return Boolean.TRUE; //non-null is true
 			}
@@ -1367,9 +1367,9 @@ public class Classes {
 			} else if (val instanceof Short) { //short.class
 				return val;
 			} else if (val instanceof Number) {
-				return new Short(((Number)val).shortValue());
+				return ((Number) val).shortValue();
 			} else if (val instanceof String) {
-				return new Short((String)val);
+				return Short.valueOf((String) val);
 			}
 		} else if (Long.class == cls || long.class == cls) {
 			if (val == null) {
@@ -1377,11 +1377,11 @@ public class Classes {
 			} else if (val instanceof Long) { //long.class
 				return val;
 			} else if (val instanceof Number) {
-				return new Long(((Number)val).longValue());
+				return ((Number) val).longValue();
 			} else if (val instanceof String) {
-				return new Long((String)val);
+				return Long.valueOf((String) val);
 			} else if (val instanceof Date) {
-				return new Long(((Date)val).getTime());
+				return ((Date) val).getTime();
 			}
 		} else if (Double.class == cls || double.class == cls) {
 			if (val == null) {
@@ -1389,11 +1389,11 @@ public class Classes {
 			} else if (val instanceof Double) { //double.class
 				return val;
 			} else if (val instanceof Number) {
-				return new Double(((Number)val).doubleValue());
+				return ((Number) val).doubleValue();
 			} else if (val instanceof String) {
-				return new Double((String)val);
+				return Double.valueOf((String)val);
 			} else if (val instanceof Date) {
-				return new Double(((Date)val).getTime());
+				return ((Date) val).getTime();
 			}
 		} else if (BigInteger.class == cls) {
 			if (val == null) {
@@ -1476,9 +1476,8 @@ public class Classes {
 		}
 
 		throw new ClassCastException(
-			Messages.get(MCommon.CLASS_NOT_COMPATIABLE,
-			new Object[] {
-				val != null ? val+"("+val.getClass().getName()+")": "null",
+			Messages.get(MCommon.CLASS_NOT_COMPATIABLE, new Object[] {
+					val+"("+val.getClass().getName()+")",
 				cls}));
 	}
 	/** Converts to the specified type.

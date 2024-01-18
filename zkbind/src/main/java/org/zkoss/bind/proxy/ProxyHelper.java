@@ -48,14 +48,14 @@ import org.zkoss.zul.ListModelSet;
  * @since 8.0.0
  */
 public class ProxyHelper {
-	private static Map<Class<?>, Boolean> _ignoredClasses = new ConcurrentHashMap<Class<?>, Boolean>();
-	private static Map<Class<?>, Boolean> _ignoredSuperClasses = new ConcurrentHashMap<Class<?>, Boolean>();
-	private static List<ProxyTargetHandler> _proxyTargetHandlers;
+	private static final Map<Class<?>, Boolean> _ignoredClasses = new ConcurrentHashMap<>();
+	private static final Map<Class<?>, Boolean> _ignoredSuperClasses = new ConcurrentHashMap<>();
+	private static final List<ProxyTargetHandler> _proxyTargetHandlers;
 	private static ProxyDecorator _proxyDecorator;
 
 	static {
 		List<String> classes = Library.getProperties("org.zkoss.bind.proxy.IgnoredProxyClasses");
-		if (classes != null && classes.size() != 0) {
+		if (classes != null && !classes.isEmpty()) {
 			for (String className : classes) {
 				try {
 					addIgnoredProxyClass(Classes.forNameByThread(className.trim()));
@@ -65,7 +65,7 @@ public class ProxyHelper {
 			}
 		}
 		List<String> superClasses = Library.getProperties("org.zkoss.bind.proxy.IgnoredSuperProxyClasses");
-		if (superClasses != null && superClasses.size() != 0) {
+		if (superClasses != null && !superClasses.isEmpty()) {
 			for (String className : superClasses) {
 				try {
 					addIgnoredSuperProxyClass(Classes.forNameByThread(className.trim()));
@@ -74,7 +74,7 @@ public class ProxyHelper {
 				}
 			}
 		}
-		_proxyTargetHandlers = new LinkedList<ProxyTargetHandler>(ZKProxyTargetHandlers.getSystemProxyTargetHandlers());
+		_proxyTargetHandlers = new LinkedList<>(ZKProxyTargetHandlers.getSystemProxyTargetHandlers());
 
 		String cls = Library.getProperty("org.zkoss.bind.proxy.ProxyDecoratorClass");
 		if (cls != null) {
@@ -87,22 +87,20 @@ public class ProxyHelper {
 	}
 	/**
 	 * Creates a proxy object from the given origin object, if any.
-	 * @param origin
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({"rawtypes" })
 	public static <T extends Object> T createProxyIfAny(T origin) {
 		return createProxyIfAny(origin, null);
 	}
 
 	/**
 	 * Creates a proxy object from the given origin object, if any.
-	 * @param origin
 	 * @param annotations the annotations of the caller method to indicate whether
 	 * the elements of the collection or Map type can proxy deeply, if any. (Optional)
 	 * Like {@link ImmutableElements}
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public static <T extends Object> T createProxyIfAny(T origin, Annotation[] annotations) {
+	public static <T> T createProxyIfAny(T origin, Annotation[] annotations) {
 		if (origin == null)
 			return null;
 		if (origin instanceof FormProxyObject) {
@@ -151,15 +149,15 @@ public class ProxyHelper {
 				factory.setInterfaces(new Class[] { FormProxyObject.class });
 			}
 			Class<?> proxyClass = factory.createClass();
-			Object p1 = null;
+			Object p1;
 			try {
-				p1 = proxyClass.newInstance();
+				p1 = proxyClass.getDeclaredConstructor().newInstance();
 			} catch (Exception e) {
 				throw UiException.Aide.wrap(e,
 						"Cannot create a proxy object:[" + origin.getClass() + "], an empty constructor is needed.");
 			}
 
-			((Proxy) p1).setHandler(new BeanProxyHandler<T>(origin));
+			((Proxy) p1).setHandler(new BeanProxyHandler<>(origin));
 			return _proxyDecorator != null ? (T) _proxyDecorator.decorate((ProxyObject) p1) : (T) p1;
 		}
 	}
@@ -202,7 +200,7 @@ public class ProxyHelper {
 	/**
 	 * Checks if the target class is already proxied
 	 */
-	private static <T> Class<? extends Object> getTargetClassIfProxied(Class<T> clazz) {
+	private static <T> Class<?> getTargetClassIfProxied(Class<T> clazz) {
 		if (ProxyFactory.isProxyClass(clazz))
 			clazz = (Class<T>) clazz.getSuperclass();
 		return clazz;
@@ -211,7 +209,7 @@ public class ProxyHelper {
 	/**
 	 * Internal use only.
 	 */
-	public static <T extends Object> T getOriginObject(T origin) {
+	public static <T> T getOriginObject(T origin) {
 		for (ProxyTargetHandler handlers : _proxyTargetHandlers) {
 			if (handlers != null) {
 				origin = handlers.getOriginObject(origin);
@@ -241,8 +239,8 @@ public class ProxyHelper {
 	 * @param origin the origin data object
 	 * @param type the class type of the data object
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public static <T extends Object> T createFormProxy(T origin, Class<?> type) {
+	@SuppressWarnings({"rawtypes" })
+	public static <T> T createFormProxy(T origin, Class<?> type) {
 		return createFormProxy(origin, type, null);
 	}
 
@@ -254,7 +252,7 @@ public class ProxyHelper {
 	 * @since 8.0.1
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public static <T extends Object> T createFormProxy(T origin, Class<?> type, Class[] interfaces) {
+	public static <T> T createFormProxy(T origin, Class<?> type, Class[] interfaces) {
 
 		if (origin instanceof Form)
 			return origin;
@@ -283,20 +281,21 @@ public class ProxyHelper {
 		newArray[i++] = FormProxyObject.class;
 		newArray[i++] = Form.class;
 		newArray[i++] = FormFieldCleaner.class;
-		if (isTypeInterface)
-			newArray[i++] = type;
+		if (isTypeInterface) {
+			newArray[i] = type;
+		}
 		factory.setInterfaces(newArray);
 
 		Class<?> proxyClass = factory.createClass();
-		Object p1 = null;
+		Object p1;
 		try {
-			p1 = proxyClass.newInstance();
+			p1 = proxyClass.getDeclaredConstructor().newInstance();
 		} catch (Exception e) {
 			throw UiException.Aide.wrap(e,
-					"Cannot create a proxy object:[" + origin.getClass() + "], an empty constructor is needed.");
+					"Cannot create a proxy object:[" + (origin != null ? origin.getClass() : null) + "], an empty constructor is needed.");
 		}
 
-		((Proxy) p1).setHandler(new FormProxyHandler<T>(origin));
+		((Proxy) p1).setHandler(new FormProxyHandler<>(origin));
 		return _proxyDecorator != null ? (T) _proxyDecorator.decorate((ProxyObject) p1) : (T) p1;
 	}
 
@@ -307,11 +306,11 @@ public class ProxyHelper {
 		while (node != null) {
 			ProxyNode parent = node.getParent();
 			if (parent == null) {
-				node.getCachedSavePropertyBinding().add(new Pair<String, SavePropertyBinding>(property, savePropertyBinding));
+				node.getCachedSavePropertyBinding().add(new Pair<>(property, savePropertyBinding));
 				break;
 			} else {
 				String parentProperty = parent.getProperty();
-				if (!property.startsWith("[") && parentProperty != null && parentProperty.length() != 0)
+				if (!property.startsWith("[") && parentProperty != null && !parentProperty.isEmpty())
 					parentProperty += ".";
 				property = parentProperty + property;
 				node = parent;
@@ -359,7 +358,7 @@ public class ProxyHelper {
 	 * since 8.0.3
 	 */
 	public interface ProxyDecorator {
-		public ProxyObject decorate(ProxyObject proxyObject);
+		ProxyObject decorate(ProxyObject proxyObject);
 	}
 
 	/**
@@ -380,8 +379,8 @@ public class ProxyHelper {
 	 * Internal use only.
 	 */
 	public static String capitalize(String prefix, String attr) {
-		return new StringBuilder(prefix).append(Character.toUpperCase(attr.charAt(0))).append(attr.substring(1))
-				.toString();
+		return prefix + Character.toUpperCase(attr.charAt(0)) + attr.substring(
+				1);
 	}
 
 	/**
@@ -410,9 +409,9 @@ public class ProxyHelper {
 	 */
 	public static String toAttrName(Method method, int prefix) {
 		final String name = method.getName();
-		final String attrName = name.substring(prefix, name.length());
-		return new StringBuilder(attrName.length()).append(Character.toLowerCase(attrName.charAt(0)))
-				.append(attrName.substring(1)).toString();
+		final String attrName = name.substring(prefix);
+		return Character.toLowerCase(attrName.charAt(0)) + attrName.substring(
+				1);
 	}
 
 	/**

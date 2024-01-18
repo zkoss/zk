@@ -16,6 +16,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.metainfo;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -141,8 +142,13 @@ public class ComponentDefinitionMap implements Cloneable, java.io.Serializable {
 		if (_compdefs != null) {
 			synchronized (_compdefs) {
 				s.writeInt(_compdefs.size());
-				for (ComponentDefinition compdef : _compdefs.values())
-					s.writeObject(compdef);
+				for (ComponentDefinition compdef : _compdefs.values()) {
+					if (compdef instanceof Serializable) {
+						s.writeObject(compdef);
+					} else {
+						throw new java.io.NotSerializableException(compdef.getClass().getName());
+					}
+				}
 			}
 		} else {
 			s.writeInt(0);
@@ -162,9 +168,9 @@ public class ComponentDefinitionMap implements Cloneable, java.io.Serializable {
 		final ComponentDefinitionMap clone;
 		try {
 			clone = (ComponentDefinitionMap) super.clone();
-			clone._compdefs = Collections.synchronizedMap(new HashMap<String, ComponentDefinition>(_compdefs));
+			clone._compdefs = Collections.synchronizedMap(new HashMap<>(_compdefs));
 			clone._compdefsByClass = Collections
-					.synchronizedMap(new HashMap<String, ComponentDefinition>(_compdefsByClass));
+					.synchronizedMap(new HashMap<>(_compdefsByClass));
 		} catch (CloneNotSupportedException ex) {
 			throw new InternalError();
 		}

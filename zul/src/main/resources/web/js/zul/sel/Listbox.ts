@@ -548,7 +548,7 @@ export class Listbox extends zul.sel.SelectWidget {
 	/** @internal */
 	override checkOnHighlightDisabled_(): boolean {
 		if (this._selectOnHighlightDisabled) {
-			window.getSelection()!.toString().length > 0;
+			return window.getSelection()!.toString().length > 0;
 		}
 		return false;
 	}

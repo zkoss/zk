@@ -25,9 +25,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.zkoss.idom.Element;
 import org.zkoss.idom.input.SAXBuilder;
 import org.zkoss.idom.util.IDOMs;
@@ -241,19 +243,16 @@ public class Taglibs {
 				if ((mtd.getModifiers() & Modifier.STATIC) != 0)
 					tagdef.functions.put(name, new MethodFunction(mtd));
 				else
-					log.error("Not a static method: "+mtd);
+					log.error("Not a static method: {}", mtd);
 			} catch (ClassNotFoundException ex) {
 				log.error("Relavant class not found when loading "+clsnm+", "+e.getLocator(), ex);
 				excp = ex;
-				continue;
 			} catch (NoSuchMethodException ex) {
 				log.error("Method not found in "+clsnm+": "+sig+" "+e.getLocator(), ex);
 				excp = ex;
-				continue;
 			} catch (IllegalSyntaxException ex) {
 				log.error("Illegal Signature: "+sig+" "+e.getLocator(), ex);
 				excp = ex;
-				continue;
 			}
 		}
 
@@ -275,7 +274,7 @@ public class Taglibs {
 
 	static {
 		try {
- 			_reces = new ResourceCache<URL, TaglibDefinition>(new TaglibLoader());
+ 			_reces = new ResourceCache<>(new TaglibLoader());
  			_reces.setCheckPeriod(30*60*1000);
  		} catch (Exception ex) {
 			throw XelException.Aide.wrap(ex);
@@ -294,7 +293,7 @@ public class Taglibs {
 //----------------------------------//
 	//Mapping of URI to TLD files//
 	/** The default TLD files: Map(String uri, URL location). */
-	private static volatile Map<String, URL> _defURLs;
+	private static final AtomicReference<Map<String, URL>> _defURLsRef = new AtomicReference<>();
 
 	/** Returns the URL associated with the specified taglib URI,
 	 * or null if not found.
@@ -310,19 +309,23 @@ public class Taglibs {
 	/** Loads the default TLD files defined in /metainfo/tld/config.xml
 	 */
 	private static final Map<String, URL> getDefaultTLDs() {
-		if (_defURLs != null)
-			return _defURLs;
+		Map<String, URL> defURLs = _defURLsRef.get();
+		if (defURLs != null) {
+			return defURLs;
+		}
 
 		synchronized (Taglibs.class) {
-			if (_defURLs != null)
-				return _defURLs;
+			defURLs = _defURLsRef.get();
+			if (defURLs != null) {
+				return defURLs;
+			}
 
 			final Map<String, URL> urls = new HashMap<String, URL>();
 			try {
 				final ClassLocator loc = new ClassLocator();
 				for (XMLResourcesLocator.Resource res :
 								loc.getDependentXMLResources("metainfo/tld/config.xml", "config-name", "depends")) {
-					if (log.isDebugEnabled()) log.debug("Loading "+ res.url);
+					if (log.isDebugEnabled()) log.debug("Loading {}", res.url);
 					try {
 						if (IDOMs.checkVersion(res.document, res.url))
 							parseConfig(urls, res.document.getRootElement(), loc);
@@ -333,24 +336,27 @@ public class Taglibs {
 			} catch (Exception ex) {
 				log.error("", ex); //keep running
 			}
-			if (urls.isEmpty())
-				return _defURLs = Collections.emptyMap();
-			return _defURLs = urls;
+			if (urls.isEmpty()) {
+				defURLs = Collections.emptyMap();
+			} else {
+				defURLs = urls;
+			}
+			_defURLsRef.set(defURLs);
+			return defURLs;
 		}
 	}
 
 	/** Parse config.xml. */
 	private static void parseConfig(Map<String, URL> urls, Element root, Locator loc) {
-		for (Iterator it = root.getElements("taglib").iterator();
-		it.hasNext();) {
-			final Element el = (Element)it.next();
-			final String s = IDOMs.getRequiredElementValue(el, "taglib-location");
-			final URL url = loc.getResource(s.startsWith("/") ? s.substring(1): s);
+		for (final Element el : root.getElements("taglib")) {
+			final String s = IDOMs.getRequiredElementValue(el,
+					"taglib-location");
+			final URL url = loc.getResource(
+					s.startsWith("/") ? s.substring(1) : s);
 			if (url != null) {
-				urls.put(
-					IDOMs.getRequiredElementValue(el, "taglib-uri"), url);
+				urls.put(IDOMs.getRequiredElementValue(el, "taglib-uri"), url);
 			} else {
-				log.error(s+" not found, "+el.getLocator());
+				log.error("{} not found, {}", s, el.getLocator());
 			}
 		}
 	}

@@ -30,14 +30,14 @@ export class Listfoot extends zul.Widget {
 
 	//bug #3014664
 	override setVflex(vflex?: boolean | string): this { //vflex ignored for Listfoot
-		vflex = false;
-		return super.setVflex(vflex);
+		const vflex0 = false;
+		return super.setVflex(vflex0);
 	}
 
 	//bug #3014664
 	override setHflex(hflex?: boolean | string): this { //hflex ignored for Listfoot
-		hflex = false;
-		return super.setHflex(hflex);
+		const hflex0 = false;
+		return super.setHflex(hflex0);
 	}
 
 	/** @internal */

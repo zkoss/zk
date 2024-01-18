@@ -102,11 +102,11 @@ public class ComponentRedraws {
 			final Context ctx = _ctx.get();
 			ctx.states.remove(0);
 			if (ctx.states.isEmpty()) {
-				_ctx.set(null);
+				_ctx.remove();
 				return ctx.out.getBuffer().toString();
 			}
 		} catch (Throwable ex) {
-			_ctx.set(null); //just in case
+			_ctx.remove(); //just in case
 			throw UiException.Aide.wrap(ex); //internal error
 		}
 		return "";

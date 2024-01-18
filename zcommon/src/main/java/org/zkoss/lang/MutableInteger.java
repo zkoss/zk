@@ -24,7 +24,7 @@ package org.zkoss.lang;
  *
  * @author tomyeh
  */
-public class MutableInteger implements Comparable {
+public class MutableInteger implements Comparable<MutableInteger> {
 	/** The value of the mutable integer. */
 	public int value;
 
@@ -49,19 +49,7 @@ public class MutableInteger implements Comparable {
 	 * and a value greater than 0 if the argument is numerically less than this.
 	 */
 	public int compareTo(MutableInteger o) {
-		if (this.value > o.value) return 1;
-		else if (this.value == o.value) return 0;
-		else return -1;
-	}
-	//Comparable//
-	/** Compares two {@link MutableInteger} objects numerically.
-	 *
-	 * @return the value 0 if the argument is numerically equal to this;
-	 * a value less than 0 if the argument is numerically greater than this;
-	 * and a value greater than 0 if the argument is numerically less than this.
-	 */
-	public int compareTo(Object o) {
-		return compareTo((MutableInteger)o);
+		return Integer.compare(this.value, o.value);
 	}
 	//Object//
 	public String toString() {

@@ -29,6 +29,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.net.URL;
+import java.nio.file.Files;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -170,7 +171,7 @@ public class RepeatableInputStream extends InputStream implements Repeatable,
 		return new RepeatableURLInputStream(url);
 	}
 
-	private OutputStream getOutputStream() throws IOException {
+	private OutputStream getOutputStream() {
 		if (_out == null)
 			return _nobuf ? null: (_out = new ByteArrayOutputStream());
 				//it is possible _membufsz <= 0, but OK to use memory first
@@ -191,7 +192,7 @@ public class RepeatableInputStream extends InputStream implements Repeatable,
 				_out = new BufferedOutputStream(new FileOutputStream(_f));
 				_out.write(bs);
 			} catch (Throwable ex) {
-				log.warn("Ignored: failed to buffer to a file, "+_f+"\nCause: "+ex.getMessage());
+				log.warn("Ignored: failed to buffer to a file, {}\nCause: {}", _f, ex.getMessage());
 				disableBuffering();
 			}
 		}
@@ -208,7 +209,7 @@ public class RepeatableInputStream extends InputStream implements Repeatable,
 		}
 		if (_f != null) {
 			try {
-				_f.delete();
+				Files.delete(_f.toPath());
 			} catch (Throwable ex) { //ignore
 			}
 			_f = null;
@@ -218,12 +219,12 @@ public class RepeatableInputStream extends InputStream implements Repeatable,
 	public int read() throws IOException {
 		if (_org != null) {
 			final int b = _org.read();
-			if (!_nobuf)
-				if (b >= 0) {
-					final OutputStream out = getOutputStream();
-					if (out != null) out.write(b);
-					++_cntsz;
-				}
+			if (!_nobuf && (b >= 0)) {
+				final OutputStream out = getOutputStream();
+				if (out != null)
+					out.write(b);
+				++_cntsz;
+			}
 			return b;
 		} else {
 			if (_in == null)
@@ -233,6 +234,7 @@ public class RepeatableInputStream extends InputStream implements Repeatable,
 		}
 	}
 
+	@Override
 	public int read(byte[] b, int off, int len) throws IOException {
 		if (_org != null) {
 			final int realLen = _org.read(b, off, len);
@@ -287,7 +289,7 @@ public class RepeatableInputStream extends InputStream implements Repeatable,
 
 	// -- Serializable --//
 	// NOTE: they must be declared as private
-	private synchronized void writeObject(java.io.ObjectOutputStream s)
+	private void writeObject(java.io.ObjectOutputStream s)
 			throws java.io.IOException {
 		s.defaultWriteObject();
 		if (_org != null) {
@@ -319,20 +321,7 @@ public class RepeatableInputStream extends InputStream implements Repeatable,
 				readInt = s.readInt();
 			}
 		}
-		_in = new ByteArrayInputStream(
-				((ByteArrayOutputStream) out).toByteArray());
-	}
-
-	//Object//
-	protected void finalize() throws Throwable {
-		disableBuffering();
-		if (_org != null)
-			_org.close();
-		if (_in != null) {
-			_in.close();
-			_in = null;
-		}
-		super.finalize();
+		_in = new ByteArrayInputStream(out.toByteArray());
 	}
 
 	private static class ResetableInputStream extends InputStream
@@ -346,6 +335,7 @@ public class RepeatableInputStream extends InputStream implements Repeatable,
 			return _org.read();
 		}
 
+		@Override
 		public int read(byte[] b, int off, int len) throws IOException {
 			return _org.read(b, off, len);
 		}
@@ -353,14 +343,9 @@ public class RepeatableInputStream extends InputStream implements Repeatable,
 		/** Closes the current access, and the next call of {@link #read}
 		 * re-opens the buffered input stream.
 		 */
+		@Override
 		public void close() throws IOException {
 			_org.reset();
-		}
-
-		//Object//
-		protected void finalize() throws Throwable {
-			_org.close();
-			super.finalize();
 		}
 	}
 	private static class RepeatableFileInputStream extends InputStream
@@ -378,6 +363,7 @@ public class RepeatableInputStream extends InputStream implements Repeatable,
 			return _in.read();
 		}
 
+		@Override
 		public int read(byte[] b, int off, int len) throws IOException {
 			if (_in == null)
 				_in = new BufferedInputStream(new FileInputStream(_file));
@@ -387,17 +373,12 @@ public class RepeatableInputStream extends InputStream implements Repeatable,
 		/** Closes the current access, and the next call of {@link #read}
 		 * re-opens the buffered input stream.
 		 */
+		@Override
 		public void close() throws IOException {
 			if (_in != null) {
 				_in.close();
 				_in = null;
 			}
-		}
-
-		//Object//
-		protected void finalize() throws Throwable {
-			close();
-			super.finalize();
 		}
 	}
 	private static class RepeatableURLInputStream extends InputStream
@@ -412,16 +393,15 @@ public class RepeatableInputStream extends InputStream implements Repeatable,
 		public int read() throws IOException {
 			if (_in == null) {
 				_in = _url.openStream();
-				if (_in == null) throw new FileNotFoundException(_url.toExternalForm());
 				_in = new BufferedInputStream(_in);
 			}
 			return _in.read();
 		}
 
+		@Override
 		public int read(byte[] b, int off, int len) throws IOException {
 			if (_in == null) {
 				_in = _url.openStream();
-				if (_in == null) throw new FileNotFoundException(_url.toExternalForm());
 				_in = new BufferedInputStream(_in);
 			}
 			return _in.read(b, off, len);
@@ -430,17 +410,12 @@ public class RepeatableInputStream extends InputStream implements Repeatable,
 		/** Closes the current access, and the next call of {@link #read}
 		 * re-opens the buffered input stream.
 		 */
+		@Override
 		public void close() throws IOException {
 			if (_in != null) {
 				_in.close();
 				_in = null;
 			}
-		}
-
-		//Object//
-		protected void finalize() throws Throwable {
-			close();
-			super.finalize();
 		}
 	}
 }

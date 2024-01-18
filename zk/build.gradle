@@ -24,12 +24,13 @@ dependencies {
 	api project(':zkwebfragment')
 	api 'org.apache.commons:commons-fileupload2-javax:2.0.0-M1'
 	api 'commons-io:commons-io:2.13.0'
+	api('com.google.guava:guava:32.1.2-jre') {
+		exclude group: '*', module: '*'
+	}
 	compileOnly "javax.servlet:javax.servlet-api:${servletVersion}"
 	compileOnly "javax.portlet:portlet-api:${portletVersion}"
 	compileOnly 'javax.websocket:javax.websocket-api:1.1'
-	implementation('com.google.guava:guava:32.1.2-jre') {
-		exclude group: '*', module: '*'
-	}
+
 	optionalImplementation 'com.google.javascript:closure-compiler-unshaded:v20230802'
 	optionalImplementation 'org.apache.groovy:groovy:5.0.0-alpha-1'
 	optionalImplementation('org.jruby:jruby-core:1.7.27') {

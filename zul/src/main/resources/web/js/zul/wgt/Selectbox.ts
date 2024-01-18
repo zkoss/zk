@@ -263,8 +263,8 @@ export class Selectbox extends zul.Widget<HTMLSelectElement> {
 					selIndexes.push(j);
 				}
 			}
-			selIndexes.sort();
-			oldSelIndexes.sort();
+			selIndexes.sort((a, b) => a - b);
+			oldSelIndexes.sort((a, b) => a - b);
 			if (JSON.stringify(selIndexes) == JSON.stringify(oldSelIndexes)) return;
 			this._selectedIndexes = selIndexes;
 			this.fire('onSelect', selIndexes);

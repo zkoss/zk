@@ -18,13 +18,13 @@ package org.zkoss.zul.impl;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.zkoss.json.JavaScriptValue;
 import org.zkoss.lang.Exceptions;
-import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
 import org.zkoss.zk.au.AuRequests;
 import org.zkoss.zk.au.out.AuInvoke;
@@ -96,7 +96,7 @@ public abstract class InputElement extends XulElement implements Constrainted, R
 	 * @since 6.5.0
 	 */
 	public void setPlaceholder(String placeholder) {
-		if (_placeholder != placeholder) {
+		if (!Objects.equals(_placeholder, placeholder)) {
 			_placeholder = placeholder;
 			smartUpdate("placeholder", _placeholder);
 		}
@@ -182,7 +182,7 @@ public abstract class InputElement extends XulElement implements Constrainted, R
 		if (name != null && name.length() == 0)
 			name = null;
 		if (!Objects.equals(_auxinf != null ? _auxinf.name : null, name)) {
-			initAuxInfo().name = name;
+			initAuxInfoForInputElement().name = name;
 			smartUpdate("name", getName());
 		}
 	}
@@ -214,7 +214,7 @@ public abstract class InputElement extends XulElement implements Constrainted, R
 	 */
 	public void setErrorMessage(String errmsg) {
 		if (errmsg != null && errmsg.length() > 0) {
-			initAuxInfo().errmsg = errmsg;
+			initAuxInfoForInputElement().errmsg = errmsg;
 			response(new AuWrongValue(this, errmsg));
 		} else {
 			clearErrorMessage();
@@ -408,7 +408,7 @@ public abstract class InputElement extends XulElement implements Constrainted, R
 	 */
 	public void setMaxlength(int maxlength) {
 		if ((_auxinf != null ? _auxinf.maxlength : 0) != maxlength) {
-			initAuxInfo().maxlength = maxlength;
+			initAuxInfoForInputElement().maxlength = maxlength;
 			smartUpdate("maxlength", getMaxlength());
 		}
 	}
@@ -456,7 +456,7 @@ public abstract class InputElement extends XulElement implements Constrainted, R
 	 */
 	public void setInstant(boolean instant) {
 		if (getInstant() != instant) {
-			initAuxInfo().instant = instant;
+			initAuxInfoForInputElement().instant = instant;
 			smartUpdate("instant", getInstant());
 		}
 	}
@@ -488,7 +488,7 @@ public abstract class InputElement extends XulElement implements Constrainted, R
 
 	public void setConstraint(Constraint constr) {
 		if (!Objects.equals(_auxinf != null ? _auxinf.constr : null, constr)) {
-			initAuxInfo().constr = constr;
+			initAuxInfoForInputElement().constr = constr;
 			_valided = false;
 
 			if (_auxinf.constr instanceof CustomConstraint) { //client ignored if custom
@@ -754,7 +754,7 @@ public abstract class InputElement extends XulElement implements Constrainted, R
 		if (sclass != null && sclass.length() == 0)
 			sclass = null;
 		if (!Objects.equals(_auxinf != null ? _auxinf.errorboxSclass : null, sclass)) {
-			initAuxInfo().errorboxSclass = sclass;
+			initAuxInfoForInputElement().errorboxSclass = sclass;
 			smartUpdate("errorboxSclass", getErrorboxSclass());
 		}
 	}
@@ -777,7 +777,7 @@ public abstract class InputElement extends XulElement implements Constrainted, R
 		if (iconSclass != null && iconSclass.length() == 0)
 			iconSclass = null;
 		if (!Objects.equals(_auxinf != null ? _auxinf.errorboxSclass : null, iconSclass)) {
-			initAuxInfo().errorboxIconSclass = iconSclass;
+			initAuxInfoForInputElement().errorboxIconSclass = iconSclass;
 			smartUpdate("errorboxIconSclass", getErrorboxIconSclass());
 		}
 	}
@@ -831,7 +831,7 @@ public abstract class InputElement extends XulElement implements Constrainted, R
 
 	//-- ComponentCtrl --//
 	public WrongValueException onWrongValue(WrongValueException ex) {
-		initAuxInfo().errmsg = Exceptions.getMessage(ex);
+		initAuxInfoForInputElement().errmsg = Exceptions.getMessage(ex);
 		return showCustomError(ex);
 	}
 
@@ -915,7 +915,7 @@ public abstract class InputElement extends XulElement implements Constrainted, R
 						AuRequests.getBoolean(data, "bySelectBack"), AuRequests.getInt(data, "start", 0));
 				Events.postEvent(evt);
 			} catch (WrongValueException ex) {
-				initAuxInfo().errmsg = ex.getMessage();
+				initAuxInfoForInputElement().errmsg = ex.getMessage();
 				throw ex; //No need to go through onWrongValue since UiEngine will do it
 			}
 		} else if (cmd.equals(Events.ON_CHANGING)) {
@@ -928,7 +928,7 @@ public abstract class InputElement extends XulElement implements Constrainted, R
 		} else if (cmd.equals(Events.ON_ERROR)) {
 			ErrorEvent evt = ErrorEvent.getErrorEvent(request, _value);
 			final String msg = evt.getMessage();
-			initAuxInfo().errmsg = msg != null && msg.length() > 0 ? msg : null;
+			initAuxInfoForInputElement().errmsg = msg != null && msg.length() > 0 ? msg : null;
 			Events.postEvent(evt);
 		} else if (cmd.equals(Events.ON_SELECTION)) {
 			Events.postEvent(SelectionEvent.getSelectionEvent(request));
@@ -1116,7 +1116,7 @@ public abstract class InputElement extends XulElement implements Constrainted, R
 		return clone;
 	}
 
-	private AuxInfo initAuxInfo() {
+	private AuxInfo initAuxInfoForInputElement() {
 		if (_auxinf == null)
 			_auxinf = new AuxInfo();
 		return _auxinf;

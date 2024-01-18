@@ -382,7 +382,7 @@ public class SimpleConstraint implements Constraint, ClientConstraint, java.io.S
 			final String s = (String) value;
 			if ((_flags & NO_EMPTY) != 0 && s.length() == 0)
 				throw wrongValue(comp, MZul.EMPTY_NOT_ALLOWED);
-			if (_regex != null && !_regex.matcher(s != null ? s : "").matches())
+			if (_regex != null && !_regex.matcher(s).matches())
 				throw wrongValue(comp, MZul.ILLEGAL_VALUE);
 			if ((_flags & STRICT) != 0) {
 				if (s.length() > 0 && comp instanceof Combobox) {

@@ -1783,7 +1783,7 @@ export class JQZK {
 		if (el.offsetHeight) {
 			// just make the browser reflow
 		}
-		el.className.trim();
+		el.className = el.className.trim();
 	}
 	/** @internal */
 	static _cleanVisi(n: HTMLElement): void { //overriden in domopera.js

@@ -77,7 +77,7 @@ public class Label extends XulElement {
 		if (maxlength < 0)
 			maxlength = 0;
 		if ((_auxinf != null ? _auxinf.maxlength : 0) != maxlength) {
-			initAuxInfo().maxlength = maxlength;
+			initAuxInfoForLabel().maxlength = maxlength;
 			smartUpdate("maxlength", getMaxlength());
 		}
 	}
@@ -94,7 +94,7 @@ public class Label extends XulElement {
 	 */
 	public void setMultiline(boolean multiline) {
 		if ((_auxinf != null && _auxinf.multiline) != multiline) {
-			initAuxInfo().multiline = multiline;
+			initAuxInfoForLabel().multiline = multiline;
 			smartUpdate("multiline", isMultiline());
 		}
 	}
@@ -119,7 +119,7 @@ public class Label extends XulElement {
 	 */
 	public void setPre(boolean pre) {
 		if ((_auxinf != null && _auxinf.pre) != pre) {
-			initAuxInfo().pre = pre;
+			initAuxInfoForLabel().pre = pre;
 			smartUpdate("pre", isPre());
 		}
 	}
@@ -198,7 +198,7 @@ public class Label extends XulElement {
 		return false;
 	}
 
-	private AuxInfo initAuxInfo() {
+	private AuxInfo initAuxInfoForLabel() {
 		if (_auxinf == null)
 			_auxinf = new AuxInfo();
 		return _auxinf;

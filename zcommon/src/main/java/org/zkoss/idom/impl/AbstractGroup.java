@@ -15,6 +15,8 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.idom.impl;
 
+import static org.zkoss.idom.DOMException.*;
+
 import java.util.List;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -66,7 +68,7 @@ public abstract class AbstractGroup extends AbstractItem implements Group {
 	 * unexpected child -- read-only, wrong type, undetached...
 	 *
 	 * <p>The default implementation obeys the semantic of Element,
-	 * i.e., it doen't allow any child that cannot be a child of Element.
+	 * i.e., it doesn't allow any child that cannot be a child of Element.
 	 *
 	 * <p>For performance issue, we introduced a map to improve the search 
 	 * speed for Element node associated with a tag name.
@@ -80,9 +82,9 @@ public abstract class AbstractGroup extends AbstractItem implements Group {
 		return _children;
 	}
 	public final List<Item> detachChildren() {
-		List<Item> list = new ArrayList<Item>(_children); //make a copy first
+		List<Item> list = new ArrayList<>(_children); //make a copy first
 
-		for (Iterator it = _children.iterator(); it.hasNext();) {
+		for (Iterator<Item> it = _children.iterator(); it.hasNext();) {
 			it.next();
 			it.remove(); //and detach
 		}
@@ -93,8 +95,7 @@ public abstract class AbstractGroup extends AbstractItem implements Group {
 		if (_elemMap != null)
 			return _elemMap.any();
 
-		for (Iterator it=_children.iterator();it.hasNext();) {
-			final Object o = it.next();
+		for (final Item o : _children) {
 			if (o instanceof Element)
 				return true;
 		}
@@ -104,8 +105,8 @@ public abstract class AbstractGroup extends AbstractItem implements Group {
 		if (_elemMap != null)
 			return _elemMap.names();
 
-		final Set<String> set = new LinkedHashSet<String>();
-		for (final Iterator it = _children.iterator(); it.hasNext();) {
+		final Set<String> set = new LinkedHashSet<>();
+		for (final Iterator<Item> it = _children.iterator(); it.hasNext();) {
 			final Object o = it.next();
 			if (o instanceof Element)
 				set.add(((Element)o).getName());
@@ -113,8 +114,8 @@ public abstract class AbstractGroup extends AbstractItem implements Group {
 		return set;
 	}
 	public final List<Element> getElements() {
-		final List<Element> lst = new LinkedList<Element>();
-		for (final Iterator it = _children.iterator(); it.hasNext();) {
+		final List<Element> lst = new LinkedList<>();
+		for (final Iterator<Item> it = _children.iterator(); it.hasNext();) {
 			final Object o = it.next();
 			if (o instanceof Element)
 				lst.add((Element)o);
@@ -130,7 +131,7 @@ public abstract class AbstractGroup extends AbstractItem implements Group {
 		final Pattern ptn =
 			(mode & FIND_BY_REGEX) != 0 ? Pattern.compile(name): null;
 
-		final Iterator it = _children.listIterator(indexFrom);
+		final Iterator<Item> it = _children.listIterator(indexFrom);
 		for (int j = indexFrom; it.hasNext(); ++j) {
 			final Object o = it.next();
 			if ((o instanceof Element)
@@ -152,10 +153,10 @@ public abstract class AbstractGroup extends AbstractItem implements Group {
 			return (Element)_children.get(j);
 
 		if ((mode & FIND_RECURSIVE) != 0) {
-			for (Iterator it = _children.iterator(); it.hasNext();) {
-				Object o = it.next();
+			for (Item o : _children) {
 				if (o instanceof Group) {
-					Element elem = ((Group)o).getElement(namespace, name, mode);
+					Element elem = ((Group) o).getElement(namespace, name,
+							mode);
 					if (elem != null)
 						return elem;
 				}
@@ -178,7 +179,7 @@ public abstract class AbstractGroup extends AbstractItem implements Group {
 		final Pattern ptn =
 			(mode & FIND_BY_REGEX) != 0 ? Pattern.compile(name): null;
 
-		final List<Element> list = new LinkedList<Element>();
+		final List<Element> list = new LinkedList<>();
 		for (Item item: _children) {
 			if (item instanceof Element) {
 				final Element e = (Element)item;
@@ -188,10 +189,9 @@ public abstract class AbstractGroup extends AbstractItem implements Group {
 		}
 
 		if ((mode & FIND_RECURSIVE) != 0) {
-			for (final Iterator it = _children.iterator(); it.hasNext();) {
-				Object o = it.next();
+			for (Item o : _children) {
 				if (o instanceof Group)
-					list.addAll(((Group)o).getElements(namespace, name, mode));
+					list.addAll(((Group) o).getElements(namespace, name, mode));
 			}
 		}
 		return list;
@@ -216,23 +216,25 @@ public abstract class AbstractGroup extends AbstractItem implements Group {
 	public final int coalesce(boolean recursive) {
 		int count = 0;
 		Item found = null;
-		StringBuffer sb = new StringBuffer();
-		for (final Iterator it = _children.iterator(); it.hasNext();) {
-			Object o = it.next();
+		StringBuilder sb = new StringBuilder();
+		for (final Iterator<Item> it = _children.iterator(); it.hasNext();) {
+			Item o = it.next();
 			Item newFound =
 				(o instanceof Textual) && ((Textual)o).isCoalesceable() ?
-				(Item)o: null;
+						o : null;
 
 			if (newFound != null && found != null
 			&& found.getClass().equals(o.getClass())) {
 				if (sb.length() == 0)
 					sb.append(found.getText());
-				sb.append(((Item)o).getText()); //coalesce text
+				sb.append(o.getText()); //coalesce text
 				it.remove(); //remove this node
 				++count; //# being coalesced and removed
 			} else {
 				if (sb.length() > 0) { //coalesced before?
-					found.setText(sb.toString());
+					if (found != null) {
+						found.setText(sb.toString());
+					}
 					sb.setLength(0);
 				}
 				found = newFound;
@@ -240,61 +242,74 @@ public abstract class AbstractGroup extends AbstractItem implements Group {
 		}
 		if (sb.length() > 0 && found != null)
 			found.setText(sb.toString());
-		sb = null; //no longer useful
 
 		if (recursive) {
-			for (final Iterator it = _children.iterator(); it.hasNext();) {
-				final Object o = it.next();
+			for (final Item o : _children) {
 				if (o instanceof Group)
-					count += ((Group)o).coalesce(recursive);
+					count += ((Group) o).coalesce(recursive);
 			}
 		}
 		return count;
 	}
 
 	//-- Node --//
+	@Override
 	public final NodeList getChildNodes() {
 		return new FacadeNodeList(_children);
 	}
+
+	@Override
 	public final Node getFirstChild() {
 		return _children.isEmpty() ? null: (Node)_children.get(0);
 	}
+
+	@Override
 	public final Node getLastChild() {
 		int sz = _children.size();
 		return sz == 0 ? null: (Node)_children.get(sz - 1);
 	}
+
+	@Override
 	public final boolean hasChildNodes() {
 		return !_children.isEmpty();
 	}
 
+	@Override
 	public final Node insertBefore(Node newChild, Node refChild) {
 		if (refChild == null)
 			return appendChild(newChild);
 
-		int j = _children.indexOf(refChild);
+		int j = _children.indexOf((Item) refChild);
 		if (j < 0)
-			throw new DOMException(DOMException.NOT_FOUND_ERR, getLocator());
+			throw new DOMException(NOT_FOUND_ERR, getLocator());
 		_children.add(j, (Item)newChild);
 		return newChild;
 	}
+
+	@Override
 	public final Node replaceChild(Node newChild, Node oldChild) {
-		int j = _children.indexOf(oldChild);
+		int j = _children.indexOf((Item) oldChild);
 		if (j < 0)
-			throw new DOMException(DOMException.NOT_FOUND_ERR, getLocator());
+			throw new DOMException(NOT_FOUND_ERR, getLocator());
 		return (Node)_children.set(j, (Item)newChild);
 	}
+
+	@Override
 	public final Node removeChild(Node oldChild) {
-		int j = _children.indexOf(oldChild);
+		int j = _children.indexOf((Item) oldChild);
 		if (j < 0)
-			throw new DOMException(DOMException.NOT_FOUND_ERR, getLocator());
+			throw new DOMException(NOT_FOUND_ERR, getLocator());
 		return (Node)_children.remove(j);
 	}
+
+	@Override
 	public final Node appendChild(Node newChild) {
 		_children.add((Item)newChild);
 		return newChild;
 	}
 
 	//Cloneable//
+	@Override
 	public Object clone() {
 		AbstractGroup group = (AbstractGroup)super.clone();
 
@@ -322,7 +337,7 @@ public abstract class AbstractGroup extends AbstractItem implements Group {
 	 */
 	protected static class ElementMap {
 		/** the map of (String elemName, List of Elements). */
-		private final Map<String, List<Element>> _map = new LinkedHashMap<String, List<Element>>();
+		private final Map<String, List<Element>> _map = new LinkedHashMap<>();
 		
 		protected ElementMap() {
 		}
@@ -334,11 +349,8 @@ public abstract class AbstractGroup extends AbstractItem implements Group {
 		 */
 		public final void put(Element e, Element following) {
 			final String name = e.getName();
-			List<Element> valueList = _map.get(name);
-			if (valueList == null) {
-				valueList = new LinkedList<Element>();
-				_map.put(name, valueList);
-			}
+			List<Element> valueList = _map.computeIfAbsent(name,
+					k -> new LinkedList<>());
 
 			if (following != null && name.equals(following.getName())) {
 				//add into list before the following
@@ -414,10 +426,9 @@ public abstract class AbstractGroup extends AbstractItem implements Group {
 		private void afterUnmarshal() {
 			_elemMap = new ElementMap();
 
-			for (Iterator it = this.iterator(); it.hasNext();) {
-				final Object o = it.next();
+			for (final Object o : this) {
 				if (o instanceof Element)
-					_elemMap.put((Element)o, null);
+					_elemMap.put((Element) o, null);
 			}
 		}
 		/** Called after cloning the AbstractGroup instance that owns this object.
@@ -427,9 +438,12 @@ public abstract class AbstractGroup extends AbstractItem implements Group {
 		}
 
 		//-- CheckableTreeArray --//
+		@Override
 		protected void onAdd(Item newElement, Item followingElement) {
 			checkAdd(newElement, followingElement, false);
 		}
+
+		@Override
 		protected void onSet(Item newElement, Item replaced) {
 			assert(replaced != null);
 			checkAdd(newElement, replaced, true);
@@ -440,12 +454,12 @@ public abstract class AbstractGroup extends AbstractItem implements Group {
 			&& !(newVal instanceof CData) && !(newVal instanceof Comment)
 			&& !(newVal instanceof EntityReference) && !(newVal instanceof Binary)
 			&& !(newVal instanceof ProcessingInstruction))
-				throw new DOMException(DOMException.HIERARCHY_REQUEST_ERR, "Invalid type", getLocator());
+				throw new DOMException(HIERARCHY_REQUEST_ERR, "Invalid type", getLocator());
 
 			//to be safe, no auto-detach
 			final Item newItem = newVal;
 			if (newItem.getParent() != null) {
-				throw new DOMException(DOMException.HIERARCHY_REQUEST_ERR,
+				throw new DOMException(HIERARCHY_REQUEST_ERR,
 					"Item, "+newItem.toString()+", owned by "+newItem.getParent()+" "+newItem.getLocator()+"; detach or clone it", getLocator());
 			}
 
@@ -453,7 +467,7 @@ public abstract class AbstractGroup extends AbstractItem implements Group {
 			if (newItem instanceof Group)
 				for (Item p = AbstractGroup.this; p != null; p = p.getParent())
 					if (p == newItem)
-						throw new DOMException(DOMException.HIERARCHY_REQUEST_ERR, "Add to itself", getLocator());
+						throw new DOMException(HIERARCHY_REQUEST_ERR, "Add to itself", getLocator());
 
 			if (newItem instanceof Element) { //Element put into map, this must be done before replaced
 				//try to find the first Element node on the array
@@ -461,16 +475,15 @@ public abstract class AbstractGroup extends AbstractItem implements Group {
 				if ((other != null) && !(other instanceof Element)) {
 					eOther = null;
 					boolean bFirstElemFind = false;
-					for (Iterator it = this.iterator(); it.hasNext();) {
-						Object node = it.next();
+					for (Item node : this) {
 						if (bFirstElemFind) {
 							if (node instanceof Element) {
-								eOther = (Element)node;
+								eOther = (Element) node;
 								break;
 							}
 						} else if (node == other) {
 							bFirstElemFind = true;
-						} 
+						}
 					}
 				} else {
 					eOther = (Element)other;
@@ -482,6 +495,8 @@ public abstract class AbstractGroup extends AbstractItem implements Group {
 				onRemove(other);
 			newItem.setParent(AbstractGroup.this);
 		}
+
+		@Override
 		protected void onRemove(Item item) {
 			final Item removeItem = item;
 			removeItem.setParent(null);

@@ -63,7 +63,7 @@ public class Button extends LabelImageElement implements org.zkoss.zk.ui.ext.Dis
 	 */
 	public void setDisabled(boolean disabled) {
 		if ((_auxinf != null && _auxinf.disabled) != disabled) {
-			initAuxInfo().disabled = disabled;
+			initAuxInfoForButton().disabled = disabled;
 			smartUpdate("disabled", isDisabled());
 		}
 	}
@@ -105,7 +105,7 @@ public class Button extends LabelImageElement implements org.zkoss.zk.ui.ext.Dis
 	 */
 	public void setAutodisable(String autodisable) {
 		if (!Objects.equals(_auxinf != null ? _auxinf.autodisable : null, autodisable)) {
-			initAuxInfo().autodisable = autodisable;
+			initAuxInfoForButton().autodisable = autodisable;
 			smartUpdate("autodisable", getAutodisable());
 		}
 	}
@@ -125,7 +125,7 @@ public class Button extends LabelImageElement implements org.zkoss.zk.ui.ext.Dis
 			throw new WrongValueException(dir);
 
 		if (!Objects.equals(_auxinf != null ? _auxinf.dir : NORMAL, dir)) {
-			initAuxInfo().dir = dir;
+			initAuxInfoForButton().dir = dir;
 			smartUpdate("dir", getDir());
 		}
 	}
@@ -145,7 +145,7 @@ public class Button extends LabelImageElement implements org.zkoss.zk.ui.ext.Dis
 			throw new WrongValueException(orient);
 
 		if (!Objects.equals(_auxinf != null ? _auxinf.orient : HORIZONTAL, orient)) {
-			initAuxInfo().orient = orient;
+			initAuxInfoForButton().orient = orient;
 			smartUpdate("orient", getOrient());
 		}
 	}
@@ -171,7 +171,7 @@ public class Button extends LabelImageElement implements org.zkoss.zk.ui.ext.Dis
 			throw new WrongValueException(type);
 
 		if (!Objects.equals(_auxinf != null ? _auxinf.type : BUTTON, type)) {
-			initAuxInfo().type = type;
+			initAuxInfoForButton().type = type;
 			smartUpdate("type", getType());
 		}
 	}
@@ -192,7 +192,7 @@ public class Button extends LabelImageElement implements org.zkoss.zk.ui.ext.Dis
 		if (href != null && href.length() == 0)
 			href = null;
 		if (!Objects.equals(_auxinf != null ? _auxinf.href : null, href)) {
-			initAuxInfo().href = href;
+			initAuxInfoForButton().href = href;
 			smartUpdate("href", new EncodedHref()); //Bug 1850895
 		}
 	}
@@ -216,7 +216,7 @@ public class Button extends LabelImageElement implements org.zkoss.zk.ui.ext.Dis
 			target = null;
 
 		if (!Objects.equals(_auxinf != null ? _auxinf.target : null, target)) {
-			initAuxInfo().target = target;
+			initAuxInfoForButton().target = target;
 			smartUpdate("target", getTarget());
 		}
 	}
@@ -230,7 +230,7 @@ public class Button extends LabelImageElement implements org.zkoss.zk.ui.ext.Dis
 			upload = null;
 		if (!Objects.equals(upload, _auxinf != null ? _auxinf.upload : null)) {
 			onUploadChanged(upload);
-			initAuxInfo().upload = upload;
+			initAuxInfoForButton().upload = upload;
 			Uploads.parseUpload(this, upload);
 			smartUpdate("upload", Uploads.getRealUpload(this, getUpload()));
 		}
@@ -307,7 +307,7 @@ public class Button extends LabelImageElement implements org.zkoss.zk.ui.ext.Dis
 			super.updateByClient(name, value);
 	}
 
-	private AuxInfo initAuxInfo() {
+	private AuxInfo initAuxInfoForButton() {
 		if (_auxinf == null)
 			_auxinf = new AuxInfo();
 		return _auxinf;

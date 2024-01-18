@@ -16,7 +16,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import org.zkoss.lang.Objects;
+import java.util.Objects;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
@@ -54,7 +54,7 @@ public class Area extends AbstractComponent {
 	 */
 	public void setShape(String shape) throws WrongValueException {
 		if (shape != null)
-			if (shape.length() == 0)
+			if (shape.isEmpty())
 				shape = null;
 			else if (!"rect".equals(shape) && !"rectangle".equals(shape) && !"circle".equals(shape)
 					&& !"circ".equals(shape) && !"polygon".equals(shape) && !"poly".equals(shape))
@@ -79,7 +79,7 @@ public class Area extends AbstractComponent {
 	 * @param tabindex
 	 */
 	public void setTabindex(Integer tabindex) {
-		if (_tabindex != tabindex) {
+		if (!Objects.equals(_tabindex, tabindex)) {
 			_tabindex = tabindex;
 			smartUpdate("tabindex", tabindex);
 		}

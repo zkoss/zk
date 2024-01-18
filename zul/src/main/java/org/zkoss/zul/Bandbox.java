@@ -16,7 +16,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import org.zkoss.lang.Objects;
+import java.util.Objects;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.out.AuInvoke;
 import org.zkoss.zk.ui.Component;
@@ -248,7 +248,7 @@ public class Bandbox extends Textbox {
 	 * @since 8.0.3
 	 */
 	public void setPopupWidth(String popupWidth) {
-		if (popupWidth != _popupWidth) {
+		if (!Objects.equals(popupWidth, _popupWidth)) {
 			_popupWidth = popupWidth;
 			smartUpdate("popupWidth", popupWidth);
 		}

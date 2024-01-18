@@ -112,7 +112,7 @@ public class Treecell extends LabelImageElement {
 	 */
 	public void setSpan(int span) {
 		if (getSpan() != span) {
-			initAuxInfo().span = span;
+			initAuxInfoForTreecell().span = span;
 			smartUpdate("colspan", getSpan());
 		}
 	}
@@ -167,7 +167,7 @@ public class Treecell extends LabelImageElement {
 		super.beforeParentChanged(parent);
 	}
 
-	private AuxInfo initAuxInfo() {
+	private AuxInfo initAuxInfoForTreecell() {
 		if (_auxinf == null)
 			_auxinf = new AuxInfo();
 		return _auxinf;

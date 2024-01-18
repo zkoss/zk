@@ -58,7 +58,7 @@ public class A extends LabelImageElement implements org.zkoss.zk.ui.ext.Disable 
 	 */
 	public void setDisabled(boolean disabled) {
 		if ((_auxinf != null && _auxinf.disabled) != disabled) {
-			initAuxInfo().disabled = disabled;
+			initAuxInfoForA().disabled = disabled;
 			smartUpdate("disabled", isDisabled());
 		}
 	}
@@ -100,7 +100,7 @@ public class A extends LabelImageElement implements org.zkoss.zk.ui.ext.Disable 
 	 */
 	public void setAutodisable(String autodisable) {
 		if (!Objects.equals(_auxinf != null ? _auxinf.autodisable : null, autodisable)) {
-			initAuxInfo().autodisable = autodisable;
+			initAuxInfoForA().autodisable = autodisable;
 			smartUpdate("autodisable", getAutodisable());
 		}
 	}
@@ -120,7 +120,7 @@ public class A extends LabelImageElement implements org.zkoss.zk.ui.ext.Disable 
 			throw new WrongValueException(dir);
 
 		if (!Objects.equals(_auxinf != null ? _auxinf.dir : "normal", dir)) {
-			initAuxInfo().dir = dir;
+			initAuxInfoForA().dir = dir;
 			smartUpdate("dir", getDir());
 		}
 	}
@@ -141,7 +141,7 @@ public class A extends LabelImageElement implements org.zkoss.zk.ui.ext.Disable 
 		if (href != null && href.length() == 0)
 			href = null;
 		if (!Objects.equals(_auxinf != null ? _auxinf.href : null, href)) {
-			initAuxInfo().href = href;
+			initAuxInfoForA().href = href;
 			smartUpdate("href", new EncodedHref()); //Bug 1850895
 		}
 	}
@@ -165,7 +165,7 @@ public class A extends LabelImageElement implements org.zkoss.zk.ui.ext.Disable 
 			target = null;
 
 		if (!Objects.equals(_auxinf != null ? _auxinf.target : null, target)) {
-			initAuxInfo().target = target;
+			initAuxInfoForA().target = target;
 			smartUpdate("target", getTarget());
 		}
 	}
@@ -193,17 +193,19 @@ public class A extends LabelImageElement implements org.zkoss.zk.ui.ext.Disable 
 		org.zkoss.zul.impl.Utils.renderCrawlableA(href, getLabel());
 	}
 
+	@Override
 	protected void renderCrawlable(String label) throws java.io.IOException {
 		//does nothing since generated in renderProperties
 	}
 
-	private AuxInfo initAuxInfo() {
+	private AuxInfo initAuxInfoForA() {
 		if (_auxinf == null)
 			_auxinf = new AuxInfo();
 		return _auxinf;
 	}
 
 	//Component//
+	@Override
 	public String getZclass() {
 		return _zclass != null ? _zclass : "z-a";
 	}

@@ -49,24 +49,27 @@ public class Listgroupfoot extends Listitem {
 	/** Returns the value of the {@link Label} it contains, or null
 	 * if no such cell.
 	 */
+	@Override
 	public String getLabel() {
 		final Component cell = getFirstChild();
-		return cell != null && cell instanceof Label ? ((Label) cell).getValue() : null;
+		return cell instanceof Label ? ((Label) cell).getValue() : null;
 	}
 
 	/** Sets the value of the {@link Label} it contains.
 	 *
 	 * <p>If it is not created, we automatically create it.
 	 */
+	@Override
 	public void setLabel(String label) {
-		autoFirstCell().setLabel(label);
+		autoFirstCell0().setLabel(label);
 	}
 
+	@Override
 	public String getZclass() {
 		return _zclass == null ? "z-listgroupfoot" : _zclass;
 	}
 
-	private Listcell autoFirstCell() {
+	private Listcell autoFirstCell0() {
 		Listcell cell = (Listcell) getFirstChild();
 		if (cell == null) {
 			cell = new Listcell();

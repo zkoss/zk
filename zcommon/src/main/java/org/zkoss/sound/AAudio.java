@@ -196,7 +196,7 @@ public class AAudio implements Audio, java.io.Serializable {
 		try {
 			if (_url != null) {
 				InputStream is = _url.openStream();
-				return is != null ? new BufferedInputStream(is): null;
+				return new BufferedInputStream(is);
 			}
 			if (_file != null)
 				return new BufferedInputStream(new FileInputStream(_file));

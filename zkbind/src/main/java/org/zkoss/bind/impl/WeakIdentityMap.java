@@ -43,6 +43,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * WeakIdentityMap is like WeakHashMap, except it uses a key's identity
@@ -142,7 +143,7 @@ public class WeakIdentityMap<K, V> extends AbstractMap<K, V> implements Map<K, V
 
 	//this field volatile to detect concurrent modification, 
 	//check line if (WeakIdentityMap.this.modCount != this.expectedModCount) {
-	private transient volatile int modCount;
+	private transient AtomicInteger modCount = new AtomicInteger();
 
 	// Views
 
@@ -194,7 +195,7 @@ public class WeakIdentityMap<K, V> extends AbstractMap<K, V> implements Map<K, V
 				for (Entry e = tab[i], prev = null; e != null; e = e.next) {
 					if (e.get() == null) {
 						// Clean up after a cleared Reference.
-						this.modCount++;
+						this.modCount.incrementAndGet();
 						if (prev != null) {
 							prev.next = e.next;
 						} else {
@@ -213,7 +214,7 @@ public class WeakIdentityMap<K, V> extends AbstractMap<K, V> implements Map<K, V
 				for (Entry e = tab[i], prev = null; e != null; e = e.next) {
 					if (e.get() == null) {
 						// Clean up after a cleared Reference.
-						this.modCount++;
+						this.modCount.incrementAndGet();
 						if (prev != null) {
 							prev.next = e.next;
 						} else {
@@ -246,7 +247,7 @@ public class WeakIdentityMap<K, V> extends AbstractMap<K, V> implements Map<K, V
 
 			if (entryKey == null) {
 				// Clean up after a cleared Reference.
-				this.modCount++;
+				this.modCount.incrementAndGet();
 				if (prev != null) {
 					prev.next = e.next;
 				} else {
@@ -277,7 +278,7 @@ public class WeakIdentityMap<K, V> extends AbstractMap<K, V> implements Map<K, V
 
 			if (entryKey == null) {
 				// Clean up after a cleared Reference.
-				this.modCount++;
+				this.modCount.incrementAndGet();
 				if (prev != null) {
 					prev.next = e.next;
 				} else {
@@ -305,7 +306,7 @@ public class WeakIdentityMap<K, V> extends AbstractMap<K, V> implements Map<K, V
 			int index = (((Entry) ref).hash & 0x7fffffff) % tab.length;
 			for (Entry e = tab[index], prev = null; e != null; e = e.next) {
 				if (e.get() == null) {
-					this.modCount++;
+					this.modCount.incrementAndGet();
 					if (prev != null) {
 						prev.next = e.next;
 					} else {
@@ -332,7 +333,7 @@ public class WeakIdentityMap<K, V> extends AbstractMap<K, V> implements Map<K, V
 		}
 		Entry[] newMap = new Entry[newCapacity];
 
-		this.modCount++;
+		this.modCount.incrementAndGet();
 		this.threshold = (int) (newCapacity * this.loadFactor);
 		this.table = newMap;
 
@@ -370,7 +371,7 @@ public class WeakIdentityMap<K, V> extends AbstractMap<K, V> implements Map<K, V
 
 			if (entryKey == null) {
 				// Clean up after a cleared Reference.
-				this.modCount++;
+				this.modCount.incrementAndGet();
 				if (prev != null) {
 					prev.next = e.next;
 				} else {
@@ -386,7 +387,7 @@ public class WeakIdentityMap<K, V> extends AbstractMap<K, V> implements Map<K, V
 			}
 		}
 
-		this.modCount++;
+		this.modCount.incrementAndGet();
 
 		if (this.count >= this.threshold) {
 			// Rehash the table if the threshold is still exceeded.
@@ -416,7 +417,7 @@ public class WeakIdentityMap<K, V> extends AbstractMap<K, V> implements Map<K, V
 
 			if (entryKey == null) {
 				// Clean up after a cleared Reference.
-				this.modCount++;
+				this.modCount.incrementAndGet();
 				if (prev != null) {
 					prev.next = e.next;
 				} else {
@@ -424,7 +425,7 @@ public class WeakIdentityMap<K, V> extends AbstractMap<K, V> implements Map<K, V
 				}
 				this.count--;
 			} else if (e.hash == hash && key == entryKey) {
-				this.modCount++;
+				this.modCount.incrementAndGet();
 				if (prev != null) {
 					prev.next = e.next;
 				} else {
@@ -453,7 +454,7 @@ public class WeakIdentityMap<K, V> extends AbstractMap<K, V> implements Map<K, V
 
 	public void clear() {
 		Entry[] tab = this.table;
-		this.modCount++;
+		this.modCount.incrementAndGet();
 		for (int index = tab.length; --index >= 0;) {
 			tab[index] = null;
 		}
@@ -470,7 +471,7 @@ public class WeakIdentityMap<K, V> extends AbstractMap<K, V> implements Map<K, V
 			t.keySet = null;
 			t.entrySet = null;
 			t.values = null;
-			t.modCount = 0;
+			t.modCount.set(0);
 			return t;
 		} catch (CloneNotSupportedException e) {
 			// this shouldn't happen, since we are Cloneable
@@ -577,7 +578,7 @@ public class WeakIdentityMap<K, V> extends AbstractMap<K, V> implements Map<K, V
 
 						if (entryKey == null) {
 							// Clean up after a cleared Reference.
-							WeakIdentityMap.this.modCount++;
+							WeakIdentityMap.this.modCount.incrementAndGet();
 							if (prev != null) {
 								prev.next = e.next;
 							} else {
@@ -607,7 +608,7 @@ public class WeakIdentityMap<K, V> extends AbstractMap<K, V> implements Map<K, V
 					for (Entry e = tab[index], prev = null; e != null; e = e.next) {
 						if (e.get() == null) {
 							// Clean up after a cleared Reference.
-							WeakIdentityMap.this.modCount++;
+							WeakIdentityMap.this.modCount.incrementAndGet();
 							if (prev != null) {
 								prev.next = e.next;
 							} else {
@@ -615,7 +616,7 @@ public class WeakIdentityMap<K, V> extends AbstractMap<K, V> implements Map<K, V
 							}
 							WeakIdentityMap.this.count--;
 						} else if (e.hash == hash && e.equals(entry)) {
-							WeakIdentityMap.this.modCount++;
+							WeakIdentityMap.this.modCount.incrementAndGet();
 							if (prev != null) {
 								prev.next = e.next;
 							} else {
@@ -744,7 +745,7 @@ public class WeakIdentityMap<K, V> extends AbstractMap<K, V> implements Map<K, V
 		 * List should have. If this expectation is violated, the iterator
 		 * has detected concurrent modification.
 		 */
-		private int expectedModCount = WeakIdentityMap.this.modCount;
+		private int expectedModCount = WeakIdentityMap.this.modCount.get();
 
 		HashIterator(int type) {
 			this.table = WeakIdentityMap.this.table;
@@ -771,7 +772,7 @@ public class WeakIdentityMap<K, V> extends AbstractMap<K, V> implements Map<K, V
 		}
 
 		public Object next() {
-			if (WeakIdentityMap.this.modCount != this.expectedModCount) {
+			if (WeakIdentityMap.this.modCount.get() != this.expectedModCount) {
 				throw new ConcurrentModificationException();
 			}
 
@@ -789,7 +790,7 @@ public class WeakIdentityMap<K, V> extends AbstractMap<K, V> implements Map<K, V
 			if (this.last == null) {
 				throw new IllegalStateException();
 			}
-			if (WeakIdentityMap.this.modCount != this.expectedModCount) {
+			if (WeakIdentityMap.this.modCount.get() != this.expectedModCount) {
 				throw new ConcurrentModificationException();
 			}
 			remove(this.last);
@@ -802,7 +803,7 @@ public class WeakIdentityMap<K, V> extends AbstractMap<K, V> implements Map<K, V
 
 			for (Entry e = tab[index], prev = null; e != null; e = e.next) {
 				if (e == toRemove) {
-					WeakIdentityMap.this.modCount++;
+					WeakIdentityMap.this.modCount.incrementAndGet();
 					expectedModCount++;
 					if (prev == null) {
 						tab[index] = e.next;

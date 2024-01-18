@@ -24,27 +24,19 @@ import javax.validation.ValidatorFactory;
  * @since 6.0.0
  */
 public class BeanValidations {
-	// from javadoc, it is thread safe.
-	private static volatile Validator _validator;
-
-	private static ValidatorFactory buildFactory() {
-		// TODO from configuration
-		return Validation.buildDefaultValidatorFactory();
+	private BeanValidations() {} //no instance
+	private static class ValidatorHolder {
+		private static ValidatorFactory buildFactory() {
+			return Validation.buildDefaultValidatorFactory();
+		}
+		private static final Validator INSTANCE = buildFactory().getValidator();
 	}
 
 	public static Validator getValidator() {
-		if (_validator == null) {
-			synchronized (BeanValidations.class) {
-				if (_validator == null) { // check again
-					_validator = buildFactory().getValidator();
-				}
-			}
-		}
-		return _validator;
+		return ValidatorHolder.INSTANCE;
 	}
 
 	public static <T> Set<ConstraintViolation<T>> validate(Class<T> clazz, String propName, Object value) {
-		Set<ConstraintViolation<T>> set = getValidator().validateValue(clazz, propName, value);
-		return set;
+		return getValidator().validateValue(clazz, propName, value);
 	}
 }

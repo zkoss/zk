@@ -45,34 +45,34 @@ public class Objects {
 
 	/** The zero long.
 	 */
-	public static final Long ZERO_LONG = new Long(0L);
+	public static final Long ZERO_LONG = 0L;
 	/** The zero integer.
 	 */
-	public static final Integer ZERO_INTEGER = new Integer(0);
+	public static final Integer ZERO_INTEGER = 0;
 	/** The zero short.
 	 */
-	public static final Short ZERO_SHORT = new Short((short)0);
+	public static final Short ZERO_SHORT = (short) 0;
 	/** The zero integer.
 	 */
-	public static final Byte ZERO_BYTE = new Byte((byte)0);
+	public static final Byte ZERO_BYTE = (byte) 0;
 	/** The zero float.
 	 */
-	public static final Float ZERO_FLOAT = new Float(0F);
+	public static final Float ZERO_FLOAT = 0F;
 	/** The zero double.
 	 */
-	public static final Double ZERO_DOUBLE = new Double(0D);
+	public static final Double ZERO_DOUBLE = 0D;
 	/** Represents 0 in big decimal.
 	 * The same as {@link org.zkoss.math.BigDecimals#ZERO}.
 	 * @see org.zkoss.math.BigDecimals#ONE
 	 */
-	public static final BigDecimal ZERO_BIG_DECIMAL = new BigDecimal(0D);
+	public static final BigDecimal ZERO_BIG_DECIMAL = BigDecimal.valueOf(0D);
 	/** Represents 0 in big integer.
 	 * Same as {@link org.zkoss.math.BigIntegers#ZERO}.
 	 */
 	public static final BigInteger ZERO_BIG_INTEGER = BigInteger.ZERO;
 	/** The null character.
 	 */
-	public static final Character NULL_CHARACTER = new Character('\u0000');
+	public static final Character NULL_CHARACTER = '\u0000';
 
 	/**
 	 * Returns the next hash value by giving the previous one and a new one.
@@ -196,6 +196,7 @@ public class Objects {
 	 * a.equals(b) might not be the same as Objects.equals(a, b).
 	 *
 	 * <p>If both a and b are Object[], they are compared item-by-item.
+	 * @deprecated As of release 10.0.0, please use {@link java.util.Objects#equals(Object, Object)
 	 */
 	public static final boolean equals(Object a, Object b) {
 		if (a == b || (a != null && b != null && a.equals(b)))

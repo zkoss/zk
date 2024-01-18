@@ -204,6 +204,9 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 			return null; // already been called
 
 		rc = new TagRenderContext();
+		if (exec == null) {
+			exec = Executions.getCurrent();
+		}
 		exec.setAttribute(ATTR_RENDER_CONTEXT, rc);
 		return rc;
 	}

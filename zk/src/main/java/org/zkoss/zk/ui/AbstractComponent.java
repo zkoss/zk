@@ -19,6 +19,8 @@ package org.zkoss.zk.ui;
 import static org.zkoss.lang.Generics.cast;
 
 import java.io.IOException;
+import java.io.NotSerializableException;
+import java.io.Serializable;
 import java.io.Writer;
 import java.lang.reflect.Method;
 import java.util.AbstractSequentialList;
@@ -552,7 +554,7 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 			if (rawId)
 				newUuid = id;
 
-			if (id.length() > 0) {
+			if (!id.isEmpty()) {
 				if (Names.isReserved(id))
 					throw new UiException(
 							"Invalid ID: " + id + ". Cause: reserved words not allowed: " + Names.getReservedNames());
@@ -573,7 +575,7 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 					final Desktop dt = _page.getDesktop();
 					((DesktopCtrl) dt).removeComponent(this);
 
-					if (newUuid.length() == 0)
+					if (newUuid == null || newUuid.isEmpty())
 						newUuid = nextUuid(dt);
 
 					if (!Objects.equals(_uuid, newUuid))
@@ -2440,12 +2442,12 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 		Map<String, Integer> events = _clientEvents.get(cls);
 
 		if (events == null) {
-			synchronized (cls) {
+			synchronized (cls.getClass()) {
 				events = _clientEvents.get(cls);
 				if (events == null) {
 					//for better performance, we pack all event names of super
 					//classes, though it costs more memory
-					events = new ConcurrentHashMap<String, Integer>(8);
+					events = new ConcurrentHashMap<>(8);
 					for (Class c = cls; c != null; c = c.getSuperclass()) {
 						final Map<String, Integer> evts = _clientEvents.get(c);
 						if (evts != null) {
@@ -3421,8 +3423,11 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 			if (langdef != null) {
 				s.writeObject(langdef.getName());
 				s.writeObject(_def.getName());
+			} else if (_def instanceof Serializable) {
+				Serializable def = (Serializable) _def;
+				s.writeObject(def);
 			} else {
-				s.writeObject(_def);
+				throw new NotSerializableException(_def.getClass().getName());
 			}
 		}
 

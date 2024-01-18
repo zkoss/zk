@@ -361,7 +361,7 @@ public class JSCumulativeContentRenderer implements ContentRenderer {
 											? "\nTo listen an event, remember to captalize the third letter, such as onClick"
 											: "\nIt must be a legal JavaScript expression (not statement)"));
 					}
-					sb.append(name).append(":\n").append(value.length() == 0 ? "''" : value).append("\n,");
+					sb.append(name).append(":\n").append(Strings.isEmpty(value) ? "''" : value).append("\n,");
 				}
 				sb.setCharAt(sb.length() - 1, '}');
 			}

@@ -65,8 +65,12 @@ public class Reflections {
 		if (!Collection.class.isAssignableFrom(getClass(type)))
 			return false;
 
-		if (type instanceof ParameterizedType)
-			return getClass(((ParameterizedType) type).getActualTypeArguments()[0]).isAssignableFrom(object.getClass());
+		if (type instanceof ParameterizedType) {
+			Class<?> aClass = getClass(
+					((ParameterizedType) type).getActualTypeArguments()[0]);
+			if (aClass != null)
+				return aClass.isAssignableFrom(object.getClass());
+		}
 
 		return type instanceof Class<?>;
 	}
@@ -80,9 +84,11 @@ public class Reflections {
 		Type[] types = method.getGenericParameterTypes();
 		if (types.length != arguments.length)
 			return false;
-		for (int i = 0; i < types.length; i++)
-			if (!getClass(types[i]).isAssignableFrom(arguments[i].getClass()))
+		for (int i = 0; i < types.length; i++) {
+			Class<?> aClass = getClass(types[i]);
+			if (aClass != null && !aClass.isAssignableFrom(arguments[i].getClass()))
 				return false;
+		}
 		return true;
 	}
 
@@ -108,9 +114,7 @@ public class Reflections {
 	public static Object getFieldValue(Object bean, Field field) {
 		try {
 			return field.get(bean);
-		} catch (IllegalArgumentException e) {
-			throw new IllegalStateException("IllegalStateException @ getFieldValue");
-		} catch (IllegalAccessException e) {
+		} catch (IllegalArgumentException | IllegalAccessException e) {
 			throw new IllegalStateException("IllegalStateException @ getFieldValue");
 		}
 	}

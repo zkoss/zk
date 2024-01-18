@@ -21,6 +21,7 @@ import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import org.zkoss.util.CollectionsX;
 import org.zkoss.zk.ui.Component;
@@ -401,6 +402,9 @@ public class ForEachImpl implements ForEach {
 				}
 
 				public Object next() {
+					if (!hasNext()) {
+						throw new NoSuchElementException();
+					}
 					return ary[_j++];
 				}
 
@@ -418,6 +422,9 @@ public class ForEachImpl implements ForEach {
 				}
 
 				public Object next() {
+					if (!hasNext()) {
+						throw new NoSuchElementException();
+					}
 					return new Integer(ary[_j++]);
 				}
 
@@ -435,6 +442,9 @@ public class ForEachImpl implements ForEach {
 				}
 
 				public Object next() {
+					if (!hasNext()) {
+						throw new NoSuchElementException();
+					}
 					return new Long(ary[_j++]);
 				}
 
@@ -452,6 +462,9 @@ public class ForEachImpl implements ForEach {
 				}
 
 				public Object next() {
+					if (!hasNext()) {
+						throw new NoSuchElementException();
+					}
 					return new Short(ary[_j++]);
 				}
 
@@ -469,6 +482,9 @@ public class ForEachImpl implements ForEach {
 				}
 
 				public Object next() {
+					if (!hasNext()) {
+						throw new NoSuchElementException();
+					}
 					return new Byte(ary[_j++]);
 				}
 
@@ -486,6 +502,9 @@ public class ForEachImpl implements ForEach {
 				}
 
 				public Object next() {
+					if (!hasNext()) {
+						throw new NoSuchElementException();
+					}
 					return new Double(ary[_j++]);
 				}
 
@@ -503,6 +522,9 @@ public class ForEachImpl implements ForEach {
 				}
 
 				public Object next() {
+					if (!hasNext()) {
+						throw new NoSuchElementException();
+					}
 					return new Float(ary[_j++]);
 				}
 
@@ -520,6 +542,9 @@ public class ForEachImpl implements ForEach {
 				}
 
 				public Object next() {
+					if (!hasNext()) {
+						throw new NoSuchElementException();
+					}
 					return new Character(ary[_j++]);
 				}
 
@@ -537,6 +562,9 @@ public class ForEachImpl implements ForEach {
 				}
 
 				public Object next() {
+					if (!hasNext()) {
+						throw new NoSuchElementException();
+					}
 					return Boolean.valueOf(ary[_j++]);
 				}
 

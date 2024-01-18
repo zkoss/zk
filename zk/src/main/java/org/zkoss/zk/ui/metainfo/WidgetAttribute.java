@@ -41,7 +41,7 @@ public class WidgetAttribute extends ConditionValue {
 		if (name == null || value == null)
 			throw new IllegalArgumentException();
 		_name = name;
-		_value = value != null ? new ExValue(value, String.class) : null;
+		_value = new ExValue(value, String.class);
 	}
 
 	/** Returns the event name, such as, onClick.

@@ -17,8 +17,8 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui;
 
 import java.util.HashMap;
+import java.util.Objects;
 
-import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.out.AuFocus;
@@ -99,7 +99,7 @@ public abstract class HtmlBasedComponent extends AbstractComponent {
 	 */
 	public void setLeft(String left) {
 		if (!Objects.equals(_auxinf != null ? _auxinf.left : null, left)) {
-			initAuxInfo().left = left;
+			initAuxInfo0().left = left;
 			smartUpdate("left", left);
 		}
 	}
@@ -117,7 +117,7 @@ public abstract class HtmlBasedComponent extends AbstractComponent {
 	 */
 	public void setTop(String top) {
 		if (!Objects.equals(_auxinf != null ? _auxinf.top : null, top)) {
-			initAuxInfo().top = top;
+			initAuxInfo0().top = top;
 			smartUpdate("top", top);
 		}
 	}
@@ -135,7 +135,7 @@ public abstract class HtmlBasedComponent extends AbstractComponent {
 		if (zIndex < -1)
 			zIndex = -1;
 		if ((_auxinf != null ? _auxinf.zIndex : -1) != zIndex) {
-			initAuxInfo().zIndex = zIndex;
+			initAuxInfo0().zIndex = zIndex;
 			if (zIndex < 0)
 				smartUpdate("zIndex", (Object) null);
 			else
@@ -182,7 +182,7 @@ public abstract class HtmlBasedComponent extends AbstractComponent {
 		if (height != null && height.length() == 0)
 			height = null;
 		if (!Objects.equals(_auxinf != null ? _auxinf.height : null, height)) {
-			initAuxInfo().height = height;
+			initAuxInfo0().height = height;
 			smartUpdate("height", height);
 		}
 	}
@@ -212,7 +212,7 @@ public abstract class HtmlBasedComponent extends AbstractComponent {
 		if (width != null && width.length() == 0)
 			width = null;
 		if (!Objects.equals(_auxinf != null ? _auxinf.width : null, width)) {
-			initAuxInfo().width = width;
+			initAuxInfo0().width = width;
 			smartUpdate("width", width);
 		}
 	}
@@ -222,7 +222,7 @@ public abstract class HtmlBasedComponent extends AbstractComponent {
 	 * @since 5.0.4
 	 */
 	protected void setWidthDirectly(String width) {
-		initAuxInfo().width = width;
+		initAuxInfo0().width = width;
 	}
 
 	/** Sets the height directly without sending back the result
@@ -230,7 +230,7 @@ public abstract class HtmlBasedComponent extends AbstractComponent {
 	 * @since 5.0.4
 	 */
 	protected void setHeightDirectly(String height) {
-		initAuxInfo().height = height;
+		initAuxInfo0().height = height;
 	}
 
 	/** Sets the left directly without sending back the result
@@ -238,7 +238,7 @@ public abstract class HtmlBasedComponent extends AbstractComponent {
 	 * @since 5.0.4
 	 */
 	protected void setLeftDirectly(String left) {
-		initAuxInfo().left = left;
+		initAuxInfo0().left = left;
 	}
 
 	/** Sets the top directly without sending back the result
@@ -246,7 +246,7 @@ public abstract class HtmlBasedComponent extends AbstractComponent {
 	 * @since 5.0.4
 	 */
 	protected void setTopDirectly(String top) {
-		initAuxInfo().top = top;
+		initAuxInfo0().top = top;
 	}
 
 	/** Sets the z-index directly without sending back the result
@@ -254,7 +254,7 @@ public abstract class HtmlBasedComponent extends AbstractComponent {
 	 * @since 5.0.4
 	 */
 	protected void setZIndexDirectly(int zIndex) {
-		initAuxInfo().zIndex = zIndex;
+		initAuxInfo0().zIndex = zIndex;
 	}
 
 	/** Sets the hflex directly without sending back the result
@@ -262,7 +262,7 @@ public abstract class HtmlBasedComponent extends AbstractComponent {
 	 * @since 5.0.6
 	 */
 	protected void setHflexDirectly(String hflex) {
-		initAuxInfo().hflex = hflex;
+		initAuxInfo0().hflex = hflex;
 	}
 
 	/** Sets the vflex directly without sending back the result
@@ -270,7 +270,7 @@ public abstract class HtmlBasedComponent extends AbstractComponent {
 	 * @since 8.0.1
 	 */
 	protected void setVflexDirectly(String vflex) {
-		initAuxInfo().vflex = vflex;
+		initAuxInfo0().vflex = vflex;
 	}
 
 	/** Returns the text as the tooltip.
@@ -286,7 +286,7 @@ public abstract class HtmlBasedComponent extends AbstractComponent {
 		if (tooltiptext != null && tooltiptext.length() == 0)
 			tooltiptext = null;
 		if (!Objects.equals(_auxinf != null ? _auxinf.tooltiptext : null, tooltiptext)) {
-			initAuxInfo().tooltiptext = tooltiptext;
+			initAuxInfo0().tooltiptext = tooltiptext;
 			smartUpdate("tooltiptext", tooltiptext);
 		}
 	}
@@ -355,7 +355,7 @@ public abstract class HtmlBasedComponent extends AbstractComponent {
 		if (sclass != null && sclass.length() == 0)
 			sclass = null;
 		if (!Objects.equals(_auxinf != null ? _auxinf.sclass : null, sclass)) {
-			initAuxInfo().sclass = sclass;
+			initAuxInfo0().sclass = sclass;
 			smartUpdate("sclass", sclass);
 		}
 	}
@@ -435,7 +435,7 @@ public abstract class HtmlBasedComponent extends AbstractComponent {
 		if (style != null && style.length() == 0)
 			style = null;
 		if (!Objects.equals(_auxinf != null ? _auxinf.style : null, style)) {
-			initAuxInfo().style = style;
+			initAuxInfo0().style = style;
 			smartUpdate("style", style);
 		}
 	}
@@ -460,7 +460,7 @@ public abstract class HtmlBasedComponent extends AbstractComponent {
 			draggable = "false";
 
 		if (!Objects.equals(_auxinf != null ? _auxinf.draggable : null, draggable)) {
-			initAuxInfo().draggable = draggable;
+			initAuxInfo0().draggable = draggable;
 			smartUpdate("draggable", draggable); //getDraggable is final
 		}
 	}
@@ -496,7 +496,7 @@ public abstract class HtmlBasedComponent extends AbstractComponent {
 			droppable = null;
 
 		if (!Objects.equals(_auxinf != null ? _auxinf.droppable : null, droppable)) {
-			initAuxInfo().droppable = droppable;
+			initAuxInfo0().droppable = droppable;
 			smartUpdate("droppable", droppable);
 		}
 	}
@@ -568,7 +568,7 @@ public abstract class HtmlBasedComponent extends AbstractComponent {
 		if (flex != null && flex.length() == 0)
 			flex = null;
 		if (!Objects.equals(_auxinf != null ? _auxinf.vflex : null, flex)) {
-			initAuxInfo().vflex = flex;
+			initAuxInfo0().vflex = flex;
 			smartUpdate("vflex", flex);
 		}
 	}
@@ -621,7 +621,7 @@ public abstract class HtmlBasedComponent extends AbstractComponent {
 		if (flex != null && flex.length() == 0)
 			flex = null;
 		if (!Objects.equals(_auxinf != null ? _auxinf.hflex : null, flex)) {
-			initAuxInfo().hflex = flex;
+			initAuxInfo0().hflex = flex;
 			smartUpdate("hflex", flex);
 		}
 	}
@@ -664,7 +664,7 @@ public abstract class HtmlBasedComponent extends AbstractComponent {
 	 * @since 5.0.2
 	 */
 	public void setRenderdefer(int ms) {
-		initAuxInfo().renderdefer = ms;
+		initAuxInfo0().renderdefer = ms;
 	}
 
 	/** Returns the client-side action (CSA).
@@ -732,7 +732,7 @@ public abstract class HtmlBasedComponent extends AbstractComponent {
 		if (action != null && action.length() == 0)
 			action = null;
 		if (!Objects.equals(_auxinf != null ? _auxinf.action : null, action)) {
-			initAuxInfo().action = action;
+			initAuxInfo0().action = action;
 			smartUpdate("action", action);
 		}
 	}
@@ -764,8 +764,9 @@ public abstract class HtmlBasedComponent extends AbstractComponent {
 	 * @param tabindex
 	 */
 	public void setTabindex(Integer tabindex) {
-		if ((_auxinf != null ? _auxinf.tabindex : null) != tabindex) {
-			initAuxInfo().tabindex = tabindex;
+		if (!Objects.equals((_auxinf != null ? _auxinf.tabindex : null),
+				tabindex)) {
+			initAuxInfo0().tabindex = tabindex;
 			smartUpdate("tabindex", tabindex);
 		}
 	}
@@ -1060,7 +1061,7 @@ public abstract class HtmlBasedComponent extends AbstractComponent {
 		return clone;
 	}
 
-	private final AuxInfo initAuxInfo() {
+	private final AuxInfo initAuxInfo0() {
 		if (_auxinf == null)
 			_auxinf = new AuxInfo();
 		return _auxinf;

@@ -489,12 +489,12 @@ export class Menupopup extends zul.wgt.Popup {
 	 * @since 5.0.5
 	 */
 	getMenubar(): zul.menu.Menubar | undefined {
-		for (var p: zk.Widget | undefined = this.parent; p; p = p!.parent) {
+		let p: zk.Widget | undefined = this.parent;
+		if (p) {
 			if (p instanceof zul.menu.Menubar)
 				return p;
 			if (p instanceof zul.menu.Menu)
 				return p.getMenubar();
-			break; // not found
 		}
 		return undefined;
 	}

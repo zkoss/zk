@@ -49,12 +49,12 @@ public abstract class AbstractPage implements Page, PageCtrl, java.io.Serializab
 	private transient Map<String, Component> _fellows;
 
 	protected AbstractPage() {
-		init();
+		initFields();
 	}
 
 	/** Note: it is private, so not related to PageImpl.init()
 	 */
-	private void init() {
+	private void initFields() {
 		_roots = new Roots();
 		_fellows = new HashMap<String, Component>();
 	}
@@ -250,7 +250,7 @@ public abstract class AbstractPage implements Page, PageCtrl, java.io.Serializab
 	private void readObject(java.io.ObjectInputStream s) throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 
-		init();
+		initFields();
 
 		//read children
 		for (AbstractComponent q = null;;) {
@@ -304,11 +304,14 @@ public abstract class AbstractPage implements Page, PageCtrl, java.io.Serializab
 		}
 
 		public Component next() {
+			if (!hasNext())
+				throw new java.util.NoSuchElementException();
 			Component c = _p;
 			_p = _p._next;
 			return c;
 		}
 
+		@Override
 		public void remove() {
 			throw new UnsupportedOperationException();
 		}

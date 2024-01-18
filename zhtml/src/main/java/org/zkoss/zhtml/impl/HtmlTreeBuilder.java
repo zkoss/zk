@@ -55,13 +55,13 @@ import org.zkoss.zsoup.select.Elements;
 public class HtmlTreeBuilder implements TreeBuilder {
 	private static final Logger log = LoggerFactory.getLogger(HtmlTreeBuilder.class.getName());
 
-	private final Map<String, Pair<Element, Namespace>> _nsMap = new HashMap<String, Pair<Element, Namespace>>(
+	private final Map<String, Pair<Element, Namespace>> _nsMap = new HashMap<>(
 			6);
-	private final Map<Element, List<Namespace>> _elNSMap = new HashMap<Element, List<Namespace>>(6);
+	private final Map<Element, List<Namespace>> _elNSMap = new HashMap<>(6);
 
 	private static class UiExceptionX extends UiException {
 		private static final long serialVersionUID = 20140930153033L;
-		private String _keyword;
+		private final String _keyword;
 
 		public UiExceptionX(String msg, String keyword) {
 			super(msg);
@@ -78,20 +78,18 @@ public class HtmlTreeBuilder implements TreeBuilder {
 	}
 
 	private String getLineNumber(Scanner scanner) {
-		try {
+		try (scanner) {
 			int row = 0;
 			while (scanner.hasNextLine()) {
 				scanner.nextLine();
 				row++;
 			}
 			return "line: " + (row + 1) + ", column: 0";
-		} finally {
-			scanner.close();
 		}
 	}
 
 	private String getLineNumber(Scanner scanner, String keyword) {
-		try {
+		try (scanner) {
 			int row = 0;
 			while (scanner.hasNextLine()) {
 				row++;
@@ -100,36 +98,35 @@ public class HtmlTreeBuilder implements TreeBuilder {
 				if (col >= 0)
 					return "line: " + row + ", column: " + (col + 1);
 			}
-		} finally {
-			scanner.close();
 		}
 		return null;
 	}
 
 	private void initNamespaceMap(String filePath, Elements elements) {
+		final String xmlns = "xmlns";
 		// bind "xml" prefix to the XML uri
-		_nsMap.put("xml", new Pair<Element, Namespace>(null, Namespace.getSpecial("xml")));
+		_nsMap.put("xml", new Pair<>(null, Namespace.getSpecial("xml")));
 		// bind "xmlns" prefix to the XMLNS uri
-		_nsMap.put("xmlns", new Pair<Element, Namespace>(null, Namespace.getSpecial("xmlns")));
+		_nsMap.put(xmlns, new Pair<>(null, Namespace.getSpecial(xmlns)));
 
 		for (Element ele : elements) {
 			for (Attribute attr : ele.attributes()) {
 				String key = attr.getOriginalKey();
-				if (key.startsWith("xmlns")) {
+				if (key.startsWith(xmlns)) {
 					String prefix = "";
-					if (key.startsWith("xmlns:")) {
+					if (key.startsWith(xmlns + ":")) {
 						prefix = key.substring(6);
 					} else if (attr.getValue().endsWith("zul")) {
 						log.warn(
-								"The default namespace should not be ZUL, it may cause some potential errors! Please use ZUL file extension instead. [File at: "
-										+ filePath + "]");
+								"The default namespace should not be ZUL, it may cause some potential errors! Please use ZUL file extension instead. [File at: {}]",
+								filePath);
 					}
 					if (!_nsMap.containsKey(prefix)) {
 						Namespace ns = new Namespace(prefix, attr.getValue());
-						_nsMap.put(prefix, new Pair<Element, Namespace>(ele, ns));
+						_nsMap.put(prefix, new Pair<>(ele, ns));
 						List<Namespace> list = _elNSMap.get(ele);
 						if (list == null)
-							list = new LinkedList<Namespace>();
+							list = new LinkedList<>();
 						list.add(ns);
 						_elNSMap.put(ele, list);
 					}
@@ -137,7 +134,7 @@ public class HtmlTreeBuilder implements TreeBuilder {
 			}
 		}
 		if (_nsMap.isEmpty())
-			_nsMap.put("", new Pair<Element, Namespace>(null, new Namespace("", "")));
+			_nsMap.put("", new Pair<>(null, new Namespace("", "")));
 	}
 
 	private Namespace getNamespace(Element el) {
@@ -228,6 +225,7 @@ public class HtmlTreeBuilder implements TreeBuilder {
 	}
 	
 	private org.zkoss.idom.Attribute convert(Attribute attr) {
+		if (attr == null) throw new UiExceptionX("Attribute is null", null);
 		try {
 			return new org.zkoss.idom.Attribute(getNamespace(attr),
 					getLocalName(attr.getOriginalKey()), attr.getValue());
@@ -237,6 +235,7 @@ public class HtmlTreeBuilder implements TreeBuilder {
 	}
 	
 	private org.zkoss.idom.Element convert(Element element) {
+		if (element == null) throw new UiExceptionX("Element is null", null);
 		try {
 			return new org.zkoss.idom.Element(getNamespace(element),
 					getLocalName(element.tagName()));
@@ -294,28 +293,25 @@ public class HtmlTreeBuilder implements TreeBuilder {
 	}
 
 	public org.zkoss.idom.Document parse(URL url) throws Exception {
-		InputStream inStream = null;
-		try {
-			if (log.isDebugEnabled())
-				log.debug("Parsing file: [" + url.toString() + "]");
-			// prevent SSRF warning
-			url = new URL(url.getProtocol(), url.getHost(), url.getPort(), url.getFile());
-			inStream = url.openStream();
-			return convertToIDOM(
-					Zsoup.parse(inStream, "UTF-8", url.getFile(), Parser.xhtmlParser()));
-		} catch (UiExceptionX ue) {
-			throw ue;
+		if (log.isDebugEnabled())
+			log.debug("Parsing file: [{}]", url);
+		// prevent SSRF warning
+		url = new URL(url.getProtocol(), url.getHost(), url.getPort(), url.getFile());
+		try (InputStream inStream = url.openStream()) {
+			return convertToIDOM(Zsoup.parse(inStream, "UTF-8", url.getFile(),
+					Parser.xhtmlParser()));
 		} catch (ExceptionInfo e) {
 			Document currentDocument = e.getCurrentDocument();
 			if (currentDocument != null) {
-				currentDocument.outputSettings(currentDocument.outputSettings().prettyPrint(false));
-				throw new UiException(" at [file:" + url.getFile() + ", "
-						+ getLineNumber(new Scanner(currentDocument.toString())) + "]", e);
-			} else
+				currentDocument.outputSettings(
+						currentDocument.outputSettings().prettyPrint(false));
+				throw new UiException(
+						" at [file:" + url.getFile() + ", " + getLineNumber(
+								new Scanner(currentDocument.toString())) + "]",
+						e);
+			} else {
 				throw new UiException(" at [file:" + url.getFile() + "]", e);
-		} finally {
-			if (inStream != null)
-				inStream.close();
+			}
 		}
 	}
 
@@ -324,9 +320,9 @@ public class HtmlTreeBuilder implements TreeBuilder {
 		try {
 
 			if (log.isDebugEnabled())
-				log.debug("Parsing reader: [" + reader + "]");
+				log.debug("Parsing reader: [{}]", reader);
 
-			inputStream = new ReaderInputStream(reader);
+			inputStream = ReaderInputStream.builder().setReader(reader).get();
 			return convertToIDOM(Zsoup.parse(inputStream, "UTF-8", null, Parser.xhtmlParser()));
 		} catch (UiExceptionX ue) {
 			String lineNumber = getLineNumber(reader, ue.getKeyword());

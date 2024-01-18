@@ -19,6 +19,7 @@ package org.zkoss.zk.au.http;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Date;
+import java.util.concurrent.atomic.AtomicLong;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -54,7 +55,7 @@ import org.zkoss.zk.ui.sys.SessionsCtrl;
  */
 public class DHtmlResourceServlet extends HttpServlet {
 	private static final Logger log = LoggerFactory.getLogger(DHtmlResourceServlet.class);
-	private long _lastModified;
+	private final AtomicLong _lastModified = new AtomicLong();
 
 	//-- super --//
 	protected long getLastModified(HttpServletRequest request) {
@@ -64,10 +65,10 @@ public class DHtmlResourceServlet extends HttpServlet {
 			//If a resource extension is registered for the extension, we assume the content is dynamic
 			final String ext = Servlets.getExtension(pi, false);
 			if (ext == null || getClassWebResource().getExtendlet(ext) == null) {
-				if (_lastModified == 0)
-					_lastModified = new Date().getTime();
+				if (_lastModified.get() == 0)
+					_lastModified.set(new Date().getTime());
 				//Hard to know when it is modified, so cheat it..
-				return _lastModified;
+				return _lastModified.get();
 			}
 		}
 		return -1;

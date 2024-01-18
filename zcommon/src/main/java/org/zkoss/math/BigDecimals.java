@@ -74,7 +74,7 @@ public class BigDecimals {
 	 */
 	public static final BigDecimal
 	toBigDecimal(double v, int scale, int roundingMode) {
-		return new BigDecimal(v).setScale(scale, roundingMode);
+		return BigDecimal.valueOf(v).setScale(scale, roundingMode);
 	}
 	/** Converts a double to a big decimal with a scale.
 	 * It uses {@link BigDecimal#ROUND_HALF_UP}.

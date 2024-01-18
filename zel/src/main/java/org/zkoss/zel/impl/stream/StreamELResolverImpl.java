@@ -20,6 +20,7 @@ import java.beans.FeatureDescriptor;
 import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 import org.zkoss.zel.ELContext;
 import org.zkoss.zel.ELResolver;
@@ -97,10 +98,13 @@ public class StreamELResolverImpl extends ELResolver {
 
         
         public Object next() {
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
             return Array.get(base, index++);
         }
 
-        
+        @Override
         public void remove() {
             throw new UnsupportedOperationException();
         }

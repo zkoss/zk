@@ -25,6 +25,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -110,9 +112,9 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	private static final String ATTR_UPDATE_SERVLET = "org.zkoss.zk.au.http.updateServlet";
 	private static final String ATTR_AU_PROCESSORS = "org.zkoss.zk.au.http.auProcessors";
 
-	private long _lastModified;
+	private final AtomicLong _lastModified = new AtomicLong();
 	/** (String name, AuExtension). */
-	private Map<String, AuExtension> _aues = new HashMap<String, AuExtension>(8);
+	private final Map<String, AuExtension> _aues = new ConcurrentHashMap<>(8);
 	private boolean _compress = true;
 
 	/** Returns the update servlet of the specified application, or
@@ -132,7 +134,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 
 		final WebManager webman = WebManager.getWebManager(ctx);
 		String param = config.getInitParameter("compress");
-		_compress = param == null || param.length() == 0 || "true".equals(param);
+		_compress = param == null || param.isEmpty() || "true".equals(param);
 		if (!_compress)
 			webman.getClassWebResource().setCompress(null); //disable all
 
@@ -166,7 +168,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			try {
 				addAuExtension(prefix, (AuExtension) Classes.newInstanceByThread(clsnm));
 			} catch (ClassNotFoundException ex) {
-				log.warn("Ignore init-param: class not found, " + clsnm);
+				log.warn("Ignore init-param: class not found, {}", clsnm);
 			} catch (ClassCastException ex) {
 				log.warn("Ignore: " + clsnm + " not implement " + AuExtension.class);
 			} catch (Throwable ex) {
@@ -178,6 +180,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			addAuExtension("/view", new AuDynaMediar());
 	}
 
+	@Override
 	public void destroy() {
 		for (AuExtension aue : _aues.values()) {
 			try {
@@ -247,7 +250,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 					checkAuExtension(prefix, extension);
 					Map<String, AuExtension> aues = cast((Map) wapp.getAttribute(ATTR_AU_PROCESSORS));
 					if (aues == null)
-						wapp.setAttribute(ATTR_AU_PROCESSORS, aues = new HashMap<String, AuExtension>(4));
+						wapp.setAttribute(ATTR_AU_PROCESSORS, aues = new HashMap<>(4));
 					return aues.put(prefix, extension);
 				}
 			}
@@ -282,12 +285,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		extension.init(this);
 
 		//To avoid using sync in doGet(), we make a copy here
-		final AuExtension old;
-		synchronized (this) {
-			final Map<String, AuExtension> ps = new HashMap<String, AuExtension>(_aues);
-			old = ps.put(prefix, extension);
-			_aues = ps;
-		}
+		final AuExtension old = _aues.put(prefix, extension);
 		if (old != null)
 			try {
 				old.destroy();
@@ -309,10 +307,9 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	 * or null if not found.
 	 */
 	private AuExtension getAuExtensionByPath(String path) {
-		for (Iterator it = _aues.entrySet().iterator(); it.hasNext();) {
-			final Map.Entry me = (Map.Entry) it.next();
-			if (path.startsWith((String) me.getKey()))
-				return (AuExtension) me.getValue();
+		for (final Map.Entry<String, AuExtension> me : _aues.entrySet()) {
+			if (path.startsWith(me.getKey()))
+				return me.getValue();
 		}
 		return null;
 	}
@@ -326,10 +323,10 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			//we assume the content is dynamic
 			final String ext = Servlets.getExtension(pi, false);
 			if (ext == null || getClassWebResource().getExtendlet(ext) == null) {
-				if (_lastModified == 0)
-					_lastModified = new Date().getTime();
+				if (_lastModified.get() == 0)
+					_lastModified.set(new Date().getTime());
 				//Hard to know when it is modified, so cheat it..
-				return _lastModified;
+				return _lastModified.get();
 			}
 		}
 		return -1;
@@ -350,7 +347,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			final AuExtension aue = getAuExtensionByPath(pi);
 			if (aue == null) {
 				response.sendError(HttpServletResponse.SC_NOT_FOUND);
-				log.debug("Unknown path info: " + pi);
+				log.debug("Unknown path info: {}", pi);
 				return;
 			}
 
@@ -380,7 +377,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		// Fix for ZK-5142
 		if (!("POST".equals(request.getMethod()))) {
 			response.sendError(HttpServletResponse.SC_NOT_FOUND);
-			log.debug("Request method is not POST: " + Servlets.getDetail(request));
+			log.debug("Request method is not POST: {}", Servlets.getDetail(request));
 			return; //done
 		}
 
@@ -578,17 +575,17 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			out.write(new AuConfirmClose(null)); // Bug: B50-3147382
 			final AuResponse resp;
 			if (uri != null) {
-				if (uri.length() != 0)
+				if (!uri.isEmpty())
 					uri = Encodes.encodeURL(getServletContext(), request, response, uri);
 				resp = new AuSendRedirect(uri, null);
 			} else {
-				String msg = wapp.getConfiguration().getTimeoutMessage(deviceType);
+				String msg = wapp != null ? wapp.getConfiguration().getTimeoutMessage(deviceType) : null;
 				dtid = XMLs.encodeText(dtid); // Fix ZK-1862 security issue
 				if (msg != null && msg.startsWith("label:")) {
-					final String key;
-					msg = Labels.getLabel(key = msg.substring(6), new Object[] { dtid });
+					final String key = msg.substring(6);
+					msg = Labels.getLabel(key, new Object[] { dtid });
 					if (msg == null)
-						log.warn("Label not found, " + key);
+						log.warn("Label not found, {}", key);
 				}
 				if (msg == null)
 					msg = Messages.get(MZk.UPDATE_OBSOLETE_PAGE, dtid);
@@ -602,11 +599,11 @@ public class DHtmlUpdateServlet extends HttpServlet {
 
 	private static String getDeviceType(HttpServletRequest request) {
 		final String agt = request.getHeader("user-agent");
-		if (agt != null && agt.length() > 0) {
+		if (agt != null && !agt.isEmpty()) {
 			try {
 				return Devices.getDeviceByClient(agt).getType();
 			} catch (Throwable ex) {
-				log.warn("Unknown device for " + agt);
+				log.warn("Unknown device for {}", agt);
 			}
 		}
 		return "ajax";
@@ -666,7 +663,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 
 		@SuppressWarnings("unchecked")
 		public List<AuRequest> decode(Object request, Desktop desktop) {
-			final List<AuRequest> aureqs = new LinkedList<AuRequest>();
+			final List<AuRequest> aureqs = new LinkedList<>();
 			final HttpServletRequest hreq = (HttpServletRequest) request;
 			for (int j = 0;; ++j) {
 				final String cmdId = hreq.getParameter("cmd_" + j);
@@ -676,7 +673,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 				final String uuid = hreq.getParameter("uuid_" + j);
 				final String data = hreq.getParameter("data_" + j);
 				final Map<String, Object> decdata = (Map) JSONValue.parse(data);
-				aureqs.add(uuid == null || uuid.length() == 0 ? new AuRequest(desktop, cmdId, decdata)
+				aureqs.add(uuid == null || uuid.isEmpty() ? new AuRequest(desktop, cmdId, decdata)
 						: new AuRequest(desktop, uuid, cmdId, decdata));
 			}
 			return aureqs;
@@ -689,7 +686,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 					break;
 
 				final String opt = hreq.getParameter("opt_" + j);
-				if (opt == null || opt.indexOf("i") < 0)
+				if (opt == null || !opt.contains("i"))
 					return false; //not ignorable
 			}
 			return true;

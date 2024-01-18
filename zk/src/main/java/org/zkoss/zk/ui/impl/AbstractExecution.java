@@ -214,29 +214,25 @@ public abstract class AbstractExecution implements Execution, ExecutionCtrl {
 	}
 
 	public Event getNextEvent() {
-		if (!_evtInfos.isEmpty()) {
-			for (Map.Entry<Integer, List<EventInfo>> me : _evtInfos.entrySet()) {
-				List<EventInfo> value = me.getValue();
-				EventInfo remove = value.remove(0);
-				if (value.isEmpty()) {
-					_evtInfos.remove(me.getKey());
-				}
-				return remove.event;
-			}
+		Event event = retrieveNextEvent();
+		if (event != null) {
+			return event;
 		}
-
 		// ZK-770: EventQueue has extra delay if scope is SESSION
 		((DesktopCtrl) _desktop).onPiggyback();
 
+		return retrieveNextEvent();
+	}
+
+	private Event retrieveNextEvent() {
 		if (!_evtInfos.isEmpty()) {
-			for (Map.Entry<Integer, List<EventInfo>> me : _evtInfos.entrySet()) {
-				List<EventInfo> value = me.getValue();
-				EventInfo remove = value.remove(0);
-				if (value.isEmpty()) {
-					_evtInfos.remove(me.getKey());
-				}
-				return remove.event;
+			Map.Entry<Integer, List<EventInfo>> me = _evtInfos.entrySet().iterator().next();
+			List<EventInfo> value = me.getValue();
+			EventInfo remove = value.remove(0);
+			if (value.isEmpty()) {
+				_evtInfos.remove(me.getKey());
 			}
+			return remove.event;
 		}
 		return null;
 	}

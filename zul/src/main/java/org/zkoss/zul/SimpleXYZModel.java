@@ -63,7 +63,7 @@ public class SimpleXYZModel extends SimpleXYModel implements XYZModel {
 	}
 	
 	public void setValue(Comparable<?> series, Number x, Number y, Number z, int index) {
-		removeValue0(series, index);
+		removeValueForXYZ(series, index);
 		int cIndex = addValue0(series, x, y, z, index);
 		fireEvent(ChartDataEvent.CHANGED, series, (Comparable<?>) x, _seriesList.indexOf(series), cIndex,
 				_seriesMap.get(series).get(cIndex).toNumbers());
@@ -97,7 +97,7 @@ public class SimpleXYZModel extends SimpleXYModel implements XYZModel {
 	}
 
 	public void removeValue(Comparable<?> series, int index) {
-		XYZTuple xyz = removeValue0(series, index);
+		XYZTuple xyz = removeValueForXYZ(series, index);
 		if (xyz != null)
 			fireEvent(ChartDataEvent.REMOVED, series, (Comparable<?>) xyz.getX(), _seriesList.indexOf(series), index,
 					xyz.toNumbers());
@@ -105,7 +105,7 @@ public class SimpleXYZModel extends SimpleXYModel implements XYZModel {
 			fireEvent(ChartDataEvent.REMOVED, series, null, _seriesList.indexOf(series), -1, null);
 	}
 
-	private XYZTuple removeValue0(Comparable<?> series, int index) {
+	private XYZTuple removeValueForXYZ(Comparable<?> series, int index) {
 		List<XYPair> xyzTuples = _seriesMap.get(series);
 		if (xyzTuples == null) {
 			return null;

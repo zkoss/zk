@@ -30,7 +30,7 @@ import org.zkoss.zk.xel.ExValue;
  * Like class in Java, a {@link ComponentDefinition} defines the behavior
  * of a component.
  *
- * <p>The implementation need NOT to be thread safe, since the caller
+ * <p>The implementation does not require thread safety, since the caller
  * has to {@link #clone} first if accessed concurrently.
  *
  * @author tomyeh

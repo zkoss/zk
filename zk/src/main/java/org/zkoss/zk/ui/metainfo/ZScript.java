@@ -208,7 +208,7 @@ public class ZScript implements java.io.Serializable {
 		if (_url instanceof ExValue) {
 			final String s = (String) (comp != null ? ((ExValue) _url).getValue(_evalr, comp)
 					: ((ExValue) _url).getValue(_evalr, page));
-			if (s == null || s.length() == 0)
+			if (s == null || s.isEmpty())
 				throw new UiException("The zscript URL, " + _url + ", is evaluated to \"" + s + '"');
 			url = _locator.getResource(s);
 			if (url == null)
@@ -236,13 +236,13 @@ public class ZScript implements java.io.Serializable {
 
 	//Object//
 	public String toString() {
-		final StringBuffer sb = new StringBuffer(40).append("[zscript: ");
+		final StringBuilder sb = new StringBuilder(40).append("[zscript: ");
 		if (_url != null) {
 			sb.append(_url);
 		} else {
 			final int len = _cnt.length();
 			if (len > 20) {
-				sb.append(_cnt.substring(0, 16)).append("...");
+				sb.append(_cnt, 0, 16).append("...");
 			} else {
 				sb.append(_cnt);
 			}
@@ -250,19 +250,18 @@ public class ZScript implements java.io.Serializable {
 		return sb.append(']').toString();
 	}
 
-	private static volatile ResourceCache<Object, String> _cache;
+	private static class CacheHolder {
+		private static final ResourceCache<Object, String> INSTANCE = initializeCache();
 
-	private static final ResourceCache<Object, String> getCache() {
-		if (_cache == null) {
-			synchronized (ZScript.class) {
-				if (_cache == null) {
-					final ResourceCache<Object, String> cache = new ResourceCache<Object, String>(new ContentLoader());
-					cache.setMaxSize(512);
-					cache.setLifetime(60 * 60 * 1000); //1hr
-					_cache = cache;
-				}
-			}
+		private static ResourceCache<Object, String> initializeCache() {
+			final ResourceCache<Object, String> cache = new ResourceCache<>(new ContentLoader());
+			cache.setMaxSize(512);
+			cache.setLifetime(60 * 60 * 1000); // 1hr
+			return cache;
 		}
-		return _cache;
+	}
+
+	private static ResourceCache<Object, String> getCache() {
+		return CacheHolder.INSTANCE;
 	}
 }

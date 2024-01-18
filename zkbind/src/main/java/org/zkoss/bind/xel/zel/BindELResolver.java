@@ -317,7 +317,8 @@ public class BindELResolver extends XelELResolver {
 								BindELContext.addNotifys(base, script, value, bctx);
 								//notify form property whose value equals expression result, 
 								//ex, bean[a.b.c] of fx, if a.b.c is 'prop', them it notify bean.prop of fx 
-								if (!script.equals(formFieldName)) {
+								if (!java.util.Objects.equals(script,
+										formFieldName)) {
 									BindELContext.addNotifys(base, (String) formFieldName, value, bctx);
 								}
 								if (base instanceof FormLegacyExt) // ZK-4501: add SimpleForm back for compatibility

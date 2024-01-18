@@ -370,9 +370,9 @@ public class Https extends Servlets {
 	 */
 	public static final Date toDate(String sdate) throws ParseException {
 		ParseException ex = null;
-		for (int j = 0; j < _dfs.length; ++j) {
+		for (String df : _dfs) {
 			try {
-				return new SimpleDateFormat(_dfs[j], Locale.US).parse(sdate);
+				return new SimpleDateFormat(df, Locale.US).parse(sdate);
 			} catch (ParseException t) {
 				if (ex == null)
 					ex = t;
@@ -432,7 +432,7 @@ public class Https extends Servlets {
 			return false;
 		path = normalizePath(path);
 
-		if (!PATH_PATTERN.matcher(path).matches()) {
+		if (path == null || !PATH_PATTERN.matcher(path).matches()) {
 			return false;
 		}
 		if (path.startsWith("/../") || path.equals("/..")) {

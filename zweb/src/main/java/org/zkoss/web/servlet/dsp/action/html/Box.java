@@ -132,10 +132,11 @@ public class Box extends AbstractAction {
 			attrs.put("caption", _caption);
 		if (_width != null)
 			attrs.put("width", _width);
-		if (ac != null)
+		if (ac != null) {
 			attrs.put("actionContext", ac);
 
-		ac.include("~./dsp/action/html/box.dsp", attrs);
+			ac.include("~./dsp/action/html/box.dsp", attrs);
+		}
 	}
 
 	//-- Object --//

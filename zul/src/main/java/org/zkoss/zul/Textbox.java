@@ -99,7 +99,7 @@ public class Textbox extends InputElement {
 			throw new WrongValueException("Illegal type: " + type);
 
 		if (!type.equals(_auxinf != null ? _auxinf.type : TEXT)) {
-			initAuxInfo().type = type;
+			initAuxInfoForTextbox().type = type;
 			smartUpdate("type", getType());
 		}
 	}
@@ -122,7 +122,7 @@ public class Textbox extends InputElement {
 			throw new WrongValueException("Illegal rows: " + rows);
 
 		if ((_auxinf != null ? _auxinf.rows : 1) != rows) {
-			initAuxInfo().rows = rows;
+			initAuxInfoForTextbox().rows = rows;
 			if (rows > 1)
 				setMultiline(true); //auto-enable
 			smartUpdate("rows", getRows());
@@ -151,7 +151,7 @@ public class Textbox extends InputElement {
 	 */
 	public void setMultiline(boolean multiline) {
 		if ((_auxinf != null && _auxinf.multiline) != multiline) {
-			initAuxInfo().multiline = multiline;
+			initAuxInfoForTextbox().multiline = multiline;
 			smartUpdate("multiline", isMultiline());
 		}
 	}
@@ -174,7 +174,7 @@ public class Textbox extends InputElement {
 	 */
 	public void setTabbable(boolean tabbable) {
 		if ((_auxinf != null && _auxinf.tabbable) != tabbable) {
-			initAuxInfo().tabbable = tabbable;
+			initAuxInfoForTextbox().tabbable = tabbable;
 			smartUpdate("tabbable", isTabbable());
 		}
 	}
@@ -198,7 +198,7 @@ public class Textbox extends InputElement {
 	 */
 	public void setSubmitByEnter(boolean submitByEnter) {
 		if ((_auxinf != null && _auxinf.submitByEnter) != submitByEnter) {
-			initAuxInfo().submitByEnter = submitByEnter;
+			initAuxInfoForTextbox().submitByEnter = submitByEnter;
 			smartUpdate("submitByEnter", isSubmitByEnter());
 		}
 	}
@@ -315,7 +315,7 @@ public class Textbox extends InputElement {
 
 	private static final String TEXT = "text";
 
-	private AuxInfo initAuxInfo() {
+	private AuxInfo initAuxInfoForTextbox() {
 		if (_auxinf == null)
 			_auxinf = new AuxInfo();
 		return _auxinf;

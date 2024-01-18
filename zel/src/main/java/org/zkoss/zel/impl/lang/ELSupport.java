@@ -34,6 +34,7 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.Vector;
@@ -154,21 +155,41 @@ public class ELSupport {
         if (isBigDecimalOp(obj0, obj1)) {
             BigDecimal bd0 = (BigDecimal) coerceToNumber(obj0, BigDecimal.class);
             BigDecimal bd1 = (BigDecimal) coerceToNumber(obj1, BigDecimal.class);
+            if (bd0 == null) {
+                return (bd1 == null) ? 0 : -1;
+            } else if (bd1 == null) {
+                return 1;
+            }
             return bd0.compareTo(bd1);
         }
         if (isDoubleOp(obj0, obj1)) {
             Double d0 = (Double) coerceToNumber(obj0, Double.class);
             Double d1 = (Double) coerceToNumber(obj1, Double.class);
+            if (d0 == null) {
+                return (d1 == null) ? 0 : -1;
+            } else if (d1 == null) {
+                return 1;
+            }
             return d0.compareTo(d1);
         }
         if (isBigIntegerOp(obj0, obj1)) {
             BigInteger bi0 = (BigInteger) coerceToNumber(obj0, BigInteger.class);
             BigInteger bi1 = (BigInteger) coerceToNumber(obj1, BigInteger.class);
+            if (bi0 == null) {
+                return (bi1 == null) ? 0 : -1;
+            } else if (bi1 == null) {
+                return 1;
+            }
             return bi0.compareTo(bi1);
         }
         if (isLongOp(obj0, obj1)) {
             Long l0 = (Long) coerceToNumber(obj0, Long.class);
             Long l1 = (Long) coerceToNumber(obj1, Long.class);
+            if (l0 == null) {
+                return (l1 == null) ? 0 : -1;
+            } else if (l1 == null) {
+                return 1;
+            }
             return l0.compareTo(l1);
         }
         if (obj0 instanceof String || obj1 instanceof String) {
@@ -182,7 +203,17 @@ public class ELSupport {
         if (obj1 instanceof Comparable<?>) {
             @SuppressWarnings("unchecked") // checked above
             final Comparable<Object> comparable = (Comparable<Object>) obj1;
-            return (obj0 != null) ? -comparable.compareTo(obj0) : -1;
+            if (obj0 != null) {
+                int comparisonResult = comparable.compareTo(obj0);
+                if (comparisonResult == Integer.MIN_VALUE) {
+                    comparisonResult = Integer.MAX_VALUE;
+                } else {
+                    comparisonResult = -comparisonResult; // Negate the result
+                }
+                return comparisonResult;
+            } else {
+                return -1;
+            }
         }
         throw new ELException(MessageFactory.get("error.compare", obj0, obj1));
     }
@@ -210,28 +241,28 @@ public class ELSupport {
         } else if (isBigDecimalOp(obj0, obj1)) {
             BigDecimal bd0 = (BigDecimal) coerceToNumber(obj0, BigDecimal.class);
             BigDecimal bd1 = (BigDecimal) coerceToNumber(obj1, BigDecimal.class);
-            return bd0.equals(bd1);
+            return Objects.equals(bd0, bd1);
         } else if (isDoubleOp(obj0, obj1)) {
             Double d0 = (Double) coerceToNumber(obj0, Double.class);
             Double d1 = (Double) coerceToNumber(obj1, Double.class);
-            return d0.equals(d1);
+            return Objects.equals(d0, d1);
         } else if (isBigIntegerOp(obj0, obj1)) {
             BigInteger bi0 = (BigInteger) coerceToNumber(obj0, BigInteger.class);
             BigInteger bi1 = (BigInteger) coerceToNumber(obj1, BigInteger.class);
-            return bi0.equals(bi1);
+            return Objects.equals(bi0, bi1);
         } else         if (isLongOp(obj0, obj1)) {
             Long l0 = (Long) coerceToNumber(obj0, Long.class);
             Long l1 = (Long) coerceToNumber(obj1, Long.class);
-            return l0.equals(l1);
+            return Objects.equals(l0, l1);
         } else if (obj0 instanceof Boolean || obj1 instanceof Boolean) {
-            return coerceToBoolean(obj0, false).equals(coerceToBoolean(obj1, false));
+            return Objects.equals(coerceToBoolean(obj0, false), coerceToBoolean(obj1, false));
         } else if (obj0.getClass().isEnum()) {
             return obj0.equals(coerceToEnum(obj1, obj0.getClass()));
         } else if (obj1.getClass().isEnum()) {
             return obj1.equals(coerceToEnum(obj0, obj1.getClass()));
         } else if (obj0 instanceof String || obj1 instanceof String) {
             int lexCompare = coerceToString(obj0).compareTo(coerceToString(obj1));
-            return (lexCompare == 0) ? true : false;
+            return lexCompare == 0;
         } else {
             return obj0.equals(obj1);
         }
@@ -344,16 +375,16 @@ public class ELSupport {
             if (number instanceof BigInteger) {
                 return new BigDecimal((BigInteger) number);
             }
-            return new BigDecimal(number.doubleValue());
+            return BigDecimal.valueOf(number.doubleValue());
         }
         if (Byte.TYPE == type || Byte.class.equals(type)) {
-            return Byte.valueOf(number.byteValue());
+            return number.byteValue();
         }
         if (Short.TYPE == type || Short.class.equals(type)) {
-            return Short.valueOf(number.shortValue());
+            return number.shortValue();
         }
         if (Float.TYPE == type || Float.class.equals(type)) {
-            return new Float(number.floatValue());
+            return number.floatValue();
         }
         if (Number.class.equals(type)) {
             return number;

@@ -42,9 +42,9 @@ public class Scopes {
 	private static final Logger log = LoggerFactory.getLogger(Scopes.class);
 
 	/** A stack of implicit objects ({@link Implicit}). */
-	private static final ThreadLocal<List<Implicit>> _implicits = new ThreadLocal<List<Implicit>>();
+	private static final ThreadLocal<List<Implicit>> _implicits = new ThreadLocal<>();
 	/** A stack of current scope. */
-	private static final ThreadLocal<List<Scope>> _scopes = new ThreadLocal<List<Scope>>();
+	private static final ThreadLocal<List<Scope>> _scopes = new ThreadLocal<>();
 
 	/** Prepares implicit variable before calling {@link Page#interpret}.
 	 *

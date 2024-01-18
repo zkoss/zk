@@ -662,7 +662,7 @@ public class Include extends XulElement implements Includer, DynamicPropertied, 
 					}
 				}
 
-				renderer.render("_xcnt", incsb.toString());
+				renderer.render("_xcnt", incsb);
 				if (_renderResult != null && _renderResult.length() > 0)
 					renderer.renderDirectly("_childjs",
 							"function(){"

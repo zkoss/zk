@@ -426,8 +426,7 @@ public class ParamCall {
 						//no cookie in protlet 1.0
 					}
 				}
-				Object val = m == null ? null
-						: m.get(getAnnotatedParameterName(CookieParam.class, ((CookieParam) anno).value(), parameterName).toLowerCase(java.util.Locale.ENGLISH));
+				Object val = m.get(getAnnotatedParameterName(CookieParam.class, ((CookieParam) anno).value(), parameterName).toLowerCase(java.util.Locale.ENGLISH));
 				return val == null ? null : Classes.coerce(returnType, val);
 			}
 		});

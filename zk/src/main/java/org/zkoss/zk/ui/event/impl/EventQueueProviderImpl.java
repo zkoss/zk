@@ -16,7 +16,11 @@ import static org.zkoss.lang.Generics.cast;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,6 +53,30 @@ public class EventQueueProviderImpl implements EventQueueProvider {
 	 */
 	protected static final String ATTR_EVENT_QUEUES = "org.zkoss.zk.ui.event.eventQueues";
 
+	private static final Cache<Scope, Object> SCOPE_LOCKS = CacheBuilder.newBuilder()
+			.maximumSize(1_000)
+			.expireAfterAccess(60, TimeUnit.MINUTES)
+			.build();
+
+	private static final Object FALLBACK_LOCK = new Object();
+
+	private Object getLockForScopeIfAny(Scope ctxscope) {
+		try {
+			// Attempt to get the lock from the cache
+			return SCOPE_LOCKS.get(ctxscope, Object::new);
+		} catch (ExecutionException e) {
+			// Handle the exception, e.g., log it
+			log.warn("Error while retrieving lock for scope. Using fallback lock.", e);
+
+			// Fallback: return a predefined static lock object or create a new one
+			// Using a static fallback lock can have implications on concurrency,
+			// as different scopes might end up using the same lock.
+			// Alternatively, you could create a new Object here as a fallback lock
+			// but that won't guarantee the same lock for the same scope across different calls.
+			return FALLBACK_LOCK;
+		}
+	}
+
 	public <T extends Event> EventQueue<T> lookup(String name, String scope, boolean autoCreate) {
 
 		final boolean bAppScope = EventQueues.APPLICATION.equals(scope);
@@ -59,7 +87,7 @@ public class EventQueueProviderImpl implements EventQueueProvider {
 		if (bSessionScope && Sessions.getCurrent() == null) {
 			throw new IllegalStateException("Current session is not available");
 		} else if (bAppScope || bSessionScope) {
-			return lookup0(name, bAppScope ? (Scope) WebApps.getCurrent() : Sessions.getCurrent(), autoCreate);
+			return lookup0(name, bAppScope ? WebApps.getCurrent() : Sessions.getCurrent(), autoCreate);
 		} else if (EventQueues.DESKTOP.equals(scope)) {
 			final Execution exec = Executions.getCurrent();
 
@@ -67,13 +95,17 @@ public class EventQueueProviderImpl implements EventQueueProvider {
 				throw new IllegalStateException("Not in an execution");
 
 			final Desktop desktop = exec.getDesktop();
-			Map<String, EventQueue<T>> eqs = cast((Map) desktop.getAttribute(ATTR_EVENT_QUEUES));
-			if (eqs == null)
-				desktop.setAttribute(ATTR_EVENT_QUEUES, eqs = new HashMap<String, EventQueue<T>>(4));
+			Map<String, EventQueue<T>> eqs = cast(desktop.getAttribute(ATTR_EVENT_QUEUES));
+			if (eqs == null) {
+				eqs = new HashMap<>(4);
+				desktop.setAttribute(ATTR_EVENT_QUEUES, eqs);
+			}
 
 			EventQueue<T> eq = eqs.get(name);
-			if (autoCreate && eq == null)
-				eqs.put(name, eq = new DesktopEventQueue<T>());
+			if (autoCreate && eq == null) {
+				eq = new DesktopEventQueue<>();
+				eqs.put(name, eq);
+			}
 
 			if (log.isDebugEnabled()) {
 				log.debug("Lookup event queue: name [{}], scope [{}], autoCreate [{}]", name, scope, autoCreate);
@@ -93,18 +125,22 @@ public class EventQueueProviderImpl implements EventQueueProvider {
 
 	/** Looks up a session or application scoped event queue. */
 	private <T extends Event> EventQueue<T> lookup0(String name, Scope ctxscope, boolean autoCreate) {
-		Map<String, EventQueue<T>> eqs;
-		synchronized (ctxscope) {
-			eqs = cast((Map) ctxscope.getAttribute(ATTR_EVENT_QUEUES));
-			if (eqs == null)
-				ctxscope.setAttribute(ATTR_EVENT_QUEUES, eqs = new HashMap<String, EventQueue<T>>(4));
-		}
+		Object ctxLock = getLockForScopeIfAny(ctxscope);
 
+		Map<String, EventQueue<T>> eqs;
 		EventQueue<T> eq;
-		synchronized (eqs) {
+		synchronized (ctxLock) {
+			eqs = cast(ctxscope.getAttribute(ATTR_EVENT_QUEUES));
+			if (eqs == null) {
+				eqs = new HashMap<>(4);
+				ctxscope.setAttribute(ATTR_EVENT_QUEUES, eqs);
+			}
+
 			eq = eqs.get(name);
-			if (autoCreate && eq == null)
-				eqs.put(name, eq = new ServerPushEventQueue<T>());
+			if (autoCreate && eq == null) {
+				eq = new ServerPushEventQueue<>();
+				eqs.put(name, eq);
+			}
 		}
 
 		if (log.isDebugEnabled()) {
@@ -137,12 +173,14 @@ public class EventQueueProviderImpl implements EventQueueProvider {
 
 	private boolean remove0(String name, Scope ctxscope) {
 		Map<String, EventQueue> eqs;
-		synchronized (ctxscope) {
-			eqs = cast((Map) ctxscope.getAttribute(ATTR_EVENT_QUEUES));
+		Object ctxLock = getLockForScopeIfAny(ctxscope);
+
+		synchronized (ctxLock) {
+			eqs = cast(ctxscope.getAttribute(ATTR_EVENT_QUEUES));
 		}
 		if (eqs != null) {
 			EventQueue eq;
-			synchronized (eqs) {
+			synchronized (ctxLock) {
 				eq = eqs.remove(name);
 			}
 			if (eq != null) {
@@ -156,11 +194,8 @@ public class EventQueueProviderImpl implements EventQueueProvider {
 				} else {
 					// Bug ZK-2574
 					final EventQueue callbackEq = eq;
-					((ExecutionCtrl) execution).addOnDeactivate(new Callback<Object>() {
-						public void call(Object data) {
-							callbackEq.close();
-						}
-					});
+					((ExecutionCtrl) execution).addOnDeactivate(
+							(Callback<Object>) data -> callbackEq.close());
 				}
 				if (log.isDebugEnabled()) {
 					log.debug("Remove the event queue: name [{}], scope [{}]", name, ctxscope);

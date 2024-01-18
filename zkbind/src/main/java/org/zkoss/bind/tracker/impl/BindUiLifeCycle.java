@@ -62,7 +62,6 @@ public class BindUiLifeCycle implements UiLifeCycle {
 	public static final String REMOVE_MARK = "$$RemoveMark$$";
 	//F80: Speed up render, check component's subBinderAnnotation
 	public static final String SKIP_BIND_INIT = "$$SkipBindInitMark$$";
-	private static Extension _ext;
 
 	public void afterComponentAttached(Component comp, Page page) {
 		handleComponentAttached(comp);
@@ -314,24 +313,24 @@ public class BindUiLifeCycle implements UiLifeCycle {
 			((Map<String, Binder>) vmIdBinderMap).remove(comp.getAttribute(BindComposer.VM_ID));
 	}
 
-	private static Extension getExtension() {
-		if (_ext == null) {
-			synchronized (BindUiLifeCycle.class) {
-				if (_ext == null) {
-					String clsnm = Library.getProperty("org.zkoss.bind.tracker.impl.extension");
-					if (clsnm != null) {
-						try {
-							_ext = (Extension) Classes.newInstanceByThread(clsnm);
-						} catch (Throwable ex) {
-							log.error("Unable to instantiate " + clsnm, ex);
-						}
-					}
-					if (_ext == null)
-						_ext = new DefaultExtension();
+	private static class ExtensionHolder {
+		private static final Extension INSTANCE = initializeExtension();
+
+		private static Extension initializeExtension() {
+			String clsnm = Library.getProperty("org.zkoss.bind.tracker.impl.extension");
+			if (clsnm != null) {
+				try {
+					return (Extension) Classes.newInstanceByThread(clsnm);
+				} catch (Throwable ex) {
+					log.error("Unable to instantiate " + clsnm, ex);
 				}
 			}
+			return new DefaultExtension();
 		}
-		return _ext;
+	}
+
+	private static Extension getExtension() {
+		return ExtensionHolder.INSTANCE;
 	}
 
 	/**

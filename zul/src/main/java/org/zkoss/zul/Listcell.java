@@ -140,7 +140,7 @@ public class Listcell extends LabelImageElement {
 	 */
 	public void setSpan(int span) {
 		if (getSpan() != span) {
-			initAuxInfo().span = span;
+			initAuxInfoForListcell().span = span;
 			smartUpdate("span", getSpan());
 		}
 	}
@@ -172,7 +172,7 @@ public class Listcell extends LabelImageElement {
 		super.beforeParentChanged(parent);
 	}
 
-	private AuxInfo initAuxInfo() {
+	private AuxInfo initAuxInfoForListcell() {
 		if (_auxinf == null)
 			_auxinf = new AuxInfo();
 		return _auxinf;

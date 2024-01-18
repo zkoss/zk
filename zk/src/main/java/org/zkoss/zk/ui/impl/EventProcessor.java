@@ -74,7 +74,7 @@ public class EventProcessor {
 			_inEvt.set(Boolean.TRUE);
 		} else {
 			if (_inEvt != null)
-				_inEvt.set(null);
+				_inEvt.remove();
 		}
 	}
 

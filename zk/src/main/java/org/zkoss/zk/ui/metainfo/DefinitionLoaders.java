@@ -68,10 +68,10 @@ public class DefinitionLoaders {
 	private static final Logger log = LoggerFactory.getLogger(DefinitionLoaders.class);
 
 	/** List<Object[Locator, URL]> */
-	private static volatile List<Object[]> _addons;
-	private static volatile List<Object[]> _langs;
+	private static List<Object[]> _addons;
+	private static List<Object[]> _langs;
 	/** A map of (String ext, String lang). */
-	private static volatile Map<String, String> _exts;
+	private static Map<String, String> _exts;
 	private static volatile boolean _loaded, _loading;
 
 	// Fix ZK-5387
@@ -647,13 +647,17 @@ public class DefinitionLoaders {
 					final char cc = cssURI.charAt(0);
 					if (cc != '/' && cc != '~') {
 						String n = wn != null ? wn : wgtnm;
-						if (!withEL(n)) {
+						if (n != null && !withEL(n)) {
 							int k = n.lastIndexOf('.');
 							cssURI = "~." + device.toAbsolutePath(n.substring(0, k).replace('.', '/') + '/' + cssURI);
 						} else {
-							log.error(
-									"Absolute path required for cssURI, since the widget class contains EL expressions, "
-											+ e.getLocator());
+							if (n == null) {
+								log.error("Widget class is required for cssURI, " + e.getLocator());
+							} else {
+								log.error(
+										"Absolute path required for cssURI, since the widget class contains EL expressions, "
+												+ e.getLocator());
+							}
 						}
 					}
 					langdef.addCSSURI(cssURI);

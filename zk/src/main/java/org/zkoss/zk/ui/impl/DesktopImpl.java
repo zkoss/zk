@@ -1014,7 +1014,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 
 		try {
 			final List<Page> pages = new ArrayList<Page>(_pages);
-			final Configuration config = _wapp.getConfiguration();
+			final Configuration config = _wapp == null ? null : _wapp.getConfiguration();
 			for (Page page : pages) {
 				try {
 					beforeDestroyPage(page, config);
@@ -1200,7 +1200,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		if (_spush == null || _spush instanceof java.io.Serializable || _spush instanceof java.io.Externalizable)
 			s.writeObject(_spush);
 		else
-			s.writeObject(_spush.getClass());
+			s.writeObject(_spush.getClass().getName());
 	}
 
 	private void willSerialize(Collection c) {
@@ -1246,10 +1246,12 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		Object o = s.readObject();
 		if (o != null) {
 			ServerPush sp = null;
-			if (o instanceof Class) {
+			if (o instanceof String) {
 				try {
-					sp = (ServerPush) ((Class) o).newInstance();
+					sp = (ServerPush) Class.forName(
+							(String) o).getDeclaredConstructor().newInstance();
 				} catch (Throwable ignored) {
+					// ignore
 				}
 			} else
 				sp = (ServerPush) o;

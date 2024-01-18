@@ -70,7 +70,7 @@ public class Menuitem extends LabelImageElement implements org.zkoss.zk.ui.ext.D
 	 */
 	public void setCheckmark(boolean checkmark) {
 		if ((_auxinf != null && _auxinf.checkmark) != checkmark) {
-			initAuxInfo().checkmark = checkmark;
+			initAuxInfoForMenuitem().checkmark = checkmark;
 			smartUpdate("checkmark", isCheckmark());
 		}
 	}
@@ -85,7 +85,7 @@ public class Menuitem extends LabelImageElement implements org.zkoss.zk.ui.ext.D
 	 */
 	public void setDisabled(boolean disabled) {
 		if ((_auxinf != null && _auxinf.disabled) != disabled) {
-			initAuxInfo().disabled = disabled;
+			initAuxInfoForMenuitem().disabled = disabled;
 			smartUpdate("disabled", isDisabled());
 		}
 	}
@@ -135,7 +135,7 @@ public class Menuitem extends LabelImageElement implements org.zkoss.zk.ui.ext.D
 	 */
 	public void setAutodisable(String autodisable) {
 		if (!Objects.equals(_auxinf != null ? _auxinf.autodisable : null, autodisable)) {
-			initAuxInfo().autodisable = autodisable;
+			initAuxInfoForMenuitem().autodisable = autodisable;
 			smartUpdate("autodisable", getAutodisable());
 		}
 	}
@@ -153,7 +153,7 @@ public class Menuitem extends LabelImageElement implements org.zkoss.zk.ui.ext.D
 		if (value == null)
 			value = "";
 		if (!Objects.equals(_auxinf != null ? _auxinf.value : "", value)) {
-			initAuxInfo().value = value;
+			initAuxInfoForMenuitem().value = value;
 			smartUpdate("value", getValue());
 		}
 	}
@@ -170,7 +170,7 @@ public class Menuitem extends LabelImageElement implements org.zkoss.zk.ui.ext.D
 	 */
 	public void setChecked(boolean checked) {
 		if ((_auxinf != null && _auxinf.checked) != checked) {
-			initAuxInfo().checked = checked;
+			initAuxInfoForMenuitem().checked = checked;
 			if (_auxinf.checked)
 				_auxinf.checkmark = true;
 			smartUpdate("checked", isChecked());
@@ -191,7 +191,7 @@ public class Menuitem extends LabelImageElement implements org.zkoss.zk.ui.ext.D
 	 */
 	public void setAutocheck(boolean autocheck) {
 		if ((_auxinf != null && _auxinf.autocheck) != autocheck) {
-			initAuxInfo().autocheck = autocheck;
+			initAuxInfoForMenuitem().autocheck = autocheck;
 			smartUpdate("autocheck", isAutocheck());
 		}
 	}
@@ -210,7 +210,7 @@ public class Menuitem extends LabelImageElement implements org.zkoss.zk.ui.ext.D
 		if (href != null && href.length() == 0)
 			href = null;
 		if (!Objects.equals(_auxinf != null ? _auxinf.href : null, href)) {
-			initAuxInfo().href = href;
+			initAuxInfoForMenuitem().href = href;
 			smartUpdate("href", new EncodedHref()); //Bug 1850895
 		}
 	}
@@ -234,7 +234,7 @@ public class Menuitem extends LabelImageElement implements org.zkoss.zk.ui.ext.D
 			target = null;
 
 		if (!Objects.equals(_auxinf != null ? _auxinf.target : null, target)) {
-			initAuxInfo().target = target;
+			initAuxInfoForMenuitem().target = target;
 			smartUpdate("target", getTarget());
 		}
 	}
@@ -254,7 +254,7 @@ public class Menuitem extends LabelImageElement implements org.zkoss.zk.ui.ext.D
 		if (upload != null && (upload.length() == 0 || "false".equals(upload)))
 			upload = null;
 		if (!Objects.equals(upload, _auxinf != null ? _auxinf.upload : null)) {
-			initAuxInfo().upload = upload;
+			initAuxInfoForMenuitem().upload = upload;
 			Uploads.parseUpload(this, upload);
 			smartUpdate("upload", Uploads.getRealUpload(this, getUpload()));
 		}
@@ -320,7 +320,7 @@ public class Menuitem extends LabelImageElement implements org.zkoss.zk.ui.ext.D
 		final String cmd = request.getCommand();
 		if (cmd.equals(Events.ON_CHECK)) {
 			CheckEvent evt = CheckEvent.getCheckEvent(request);
-			initAuxInfo().checked = evt.isChecked();
+			initAuxInfoForMenuitem().checked = evt.isChecked();
 			if (_auxinf.checked)
 				_auxinf.checkmark = true;
 			Events.postEvent(evt);
@@ -345,7 +345,7 @@ public class Menuitem extends LabelImageElement implements org.zkoss.zk.ui.ext.D
 			super.updateByClient(name, value);
 	}
 
-	private AuxInfo initAuxInfo() {
+	private AuxInfo initAuxInfoForMenuitem() {
 		if (_auxinf == null)
 			_auxinf = new AuxInfo();
 		return _auxinf;

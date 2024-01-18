@@ -19,6 +19,7 @@ package org.zkoss.zel.impl.lang;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
 
 import org.zkoss.zel.impl.util.MessageFactory;
 
@@ -42,7 +43,7 @@ public abstract class ELArithmetic {
                 return num;
             if (num instanceof BigInteger)
                 return new BigDecimal((BigInteger) num);
-            return new BigDecimal(num.doubleValue());
+            return BigDecimal.valueOf(num.doubleValue());
         }
 
         
@@ -52,8 +53,7 @@ public abstract class ELArithmetic {
 
         
         protected Number divide(Number num0, Number num1) {
-            return ((BigDecimal) num0).divide((BigDecimal) num1,
-                    BigDecimal.ROUND_HALF_UP);
+            return ((BigDecimal) num0).divide((BigDecimal) num1, RoundingMode.HALF_UP);
         }
 
         
@@ -63,7 +63,7 @@ public abstract class ELArithmetic {
 
         
         protected Number mod(Number num0, Number num1) {
-            return new Double(num0.doubleValue() % num1.doubleValue());
+            return num0.doubleValue() % num1.doubleValue();
         }
 
         
@@ -98,7 +98,8 @@ public abstract class ELArithmetic {
 
         
         protected Number divide(Number num0, Number num1) {
-            return (new BigDecimal((BigInteger) num0)).divide(new BigDecimal((BigInteger) num1), BigDecimal.ROUND_HALF_UP);
+            return new BigDecimal((BigInteger) num0).divide(
+                    new BigDecimal((BigInteger) num1), RoundingMode.HALF_UP);
         }
 
         
@@ -128,11 +129,11 @@ public abstract class ELArithmetic {
         protected Number add(Number num0, Number num1) {
             // could only be one of these
             if (num0 instanceof BigDecimal) {
-                return ((BigDecimal) num0).add(new BigDecimal(num1.doubleValue()));
+                return ((BigDecimal) num0).add(BigDecimal.valueOf(num1.doubleValue()));
             } else if (num1 instanceof BigDecimal) {
-                return ((new BigDecimal(num0.doubleValue()).add((BigDecimal) num1)));
+                return BigDecimal.valueOf(num0.doubleValue()).add((BigDecimal) num1);
             }
-            return new Double(num0.doubleValue() + num1.doubleValue());
+            return num0.doubleValue() + num1.doubleValue();
         }
 
         
@@ -141,44 +142,44 @@ public abstract class ELArithmetic {
                 return num;
             if (num instanceof BigInteger)
                 return new BigDecimal((BigInteger) num);
-            return new Double(num.doubleValue());
+            return num.doubleValue();
         }
 
         
         protected Number coerce(String str) {
-            return new Double(str);
+            return Double.valueOf(str);
         }
 
         
         protected Number divide(Number num0, Number num1) {
-            return new Double(num0.doubleValue() / num1.doubleValue());
+            return num0.doubleValue() / num1.doubleValue();
         }
 
         
         protected Number mod(Number num0, Number num1) {
-            return new Double(num0.doubleValue() % num1.doubleValue());
+            return num0.doubleValue() % num1.doubleValue();
         }
 
         
         protected Number subtract(Number num0, Number num1) {
             // could only be one of these
             if (num0 instanceof BigDecimal) {
-                return ((BigDecimal) num0).subtract(new BigDecimal(num1.doubleValue()));
+                return ((BigDecimal) num0).subtract(BigDecimal.valueOf(num1.doubleValue()));
             } else if (num1 instanceof BigDecimal) {
-                return ((new BigDecimal(num0.doubleValue()).subtract((BigDecimal) num1)));
+                return BigDecimal.valueOf(num0.doubleValue()).subtract((BigDecimal) num1);
             }
-            return new Double(num0.doubleValue() - num1.doubleValue());
+            return num0.doubleValue() - num1.doubleValue();
         }
 
         
         protected Number multiply(Number num0, Number num1) {
             // could only be one of these
             if (num0 instanceof BigDecimal) {
-                return ((BigDecimal) num0).multiply(new BigDecimal(num1.doubleValue()));
+                return ((BigDecimal) num0).multiply(BigDecimal.valueOf(num1.doubleValue()));
             } else if (num1 instanceof BigDecimal) {
-                return ((new BigDecimal(num0.doubleValue()).multiply((BigDecimal) num1)));
+                return BigDecimal.valueOf(num0.doubleValue()).multiply((BigDecimal) num1);
             }
-            return new Double(num0.doubleValue() * num1.doubleValue());
+            return num0.doubleValue() * num1.doubleValue();
         }
 
         
@@ -197,14 +198,14 @@ public abstract class ELArithmetic {
 
         
         protected Number add(Number num0, Number num1) {
-            return Long.valueOf(num0.longValue() + num1.longValue());
+            return num0.longValue() + num1.longValue();
         }
 
         
         protected Number coerce(Number num) {
             if (num instanceof Long)
                 return num;
-            return Long.valueOf(num.longValue());
+            return num.longValue();
         }
 
         
@@ -214,22 +215,22 @@ public abstract class ELArithmetic {
 
         
         protected Number divide(Number num0, Number num1) {
-            return Long.valueOf(num0.longValue() / num1.longValue());
+            return num0.longValue() / num1.longValue();
         }
 
         
         protected Number mod(Number num0, Number num1) {
-            return Long.valueOf(num0.longValue() % num1.longValue());
+            return num0.longValue() % num1.longValue();
         }
 
         
         protected Number subtract(Number num0, Number num1) {
-            return Long.valueOf(num0.longValue() - num1.longValue());
+            return num0.longValue() - num1.longValue();
         }
 
         
         protected Number multiply(Number num0, Number num1) {
-            return Long.valueOf(num0.longValue() * num1.longValue());
+            return num0.longValue() * num1.longValue();
         }
 
         
@@ -246,12 +247,12 @@ public abstract class ELArithmetic {
 
     public static final LongDelegate LONG = new LongDelegate();
 
-    private static final Long ZERO = Long.valueOf(0);
+    private static final Long ZERO = 0L;
 
     public static final Number add(final Object obj0, final Object obj1) {
         final ELArithmetic delegate = findDelegate(obj0, obj1);
         if (delegate == null) {
-            return Long.valueOf(0);
+            return 0L;
         }
 
         Number num0 = delegate.coerce(obj0);
@@ -262,7 +263,7 @@ public abstract class ELArithmetic {
 
     public static final Number mod(final Object obj0, final Object obj1) {
         if (obj0 == null && obj1 == null) {
-            return Long.valueOf(0);
+            return 0L;
         }
 
         final ELArithmetic delegate;
@@ -384,7 +385,7 @@ public abstract class ELArithmetic {
             return coerce((String) obj);
         }
         if (obj instanceof Character) {
-            return coerce(Short.valueOf((short) ((Character) obj).charValue()));
+            return coerce((short) ((Character) obj).charValue());
         }
 
         throw new IllegalArgumentException(MessageFactory.get("error.convert",

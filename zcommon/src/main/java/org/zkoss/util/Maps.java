@@ -21,17 +21,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PushbackInputStream;
-import java.util.LinkedHashSet;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.zkoss.lang.Strings;
 import org.zkoss.mesg.MCommon;
 
@@ -142,7 +144,7 @@ public class Maps {
 					continue;
 				}
 				if (res.separator == '{') {
-					//res.token.lenth() could be zero
+					//res.token.length() could be zero
 					if (Strings.skipWhitespaces(line, res.next) < len) //non-space following '{'
 						throw new IllegalSyntaxException("Invalid nest: '{' must be the last character, line "+lno);
 					prefixes.add(new Integer(res.token.length()));
@@ -155,28 +157,27 @@ public class Maps {
 					if (prefixes.isEmpty())
 						throw new IllegalSyntaxException("Invalid nesting: '}' does have any preceding '{', line "+lno);
 					final Integer i = prefixes.remove(prefixes.size() - 1); //pop
-					prefix = prefixes.isEmpty() ?
-						null: prefix.substring(0, prefix.length() - i.intValue());
+					prefix = prefixes.isEmpty() || prefix == null ?
+						null: prefix.substring(0, prefix.length() - i);
 					continue;
 				}
-				if (res.token.length() == 0) {
-					log.warn(">>Ignored: wihout key, line "+lno);
+				if (res.token.isEmpty()) {
+					log.warn(">>Ignored: without key, line {}", lno);
 					continue;
 				}
 
-	//			assert res.separator == '=': "Wrong separator: "+res.separator;
 				final String val;
 				String key = caseInsensitive ? res.token.toLowerCase(java.util.Locale.ENGLISH): res.token;
 				int j = Strings.skipWhitespaces(line, res.next);
 				int k = Strings.skipWhitespacesBackward(line, len - 1);
 				if (j == k && line.charAt(k) == '{') { //pack multiple lines
-					final StringBuffer sb = new StringBuffer();
+					final StringBuilder sb = new StringBuilder();
 					for (int lnoFrom = lno;;) {
 						line = in.readLine();
 						++lno;
 						if (line == null){
 							log.warn(
-								">>Ignored: invalid multiple-line format: '={' does not have following '}', "+lnoFrom);
+								">>Ignored: invalid multiple-line format: '={' does not have following '}', {}", lnoFrom);
 							break;
 						}
 
@@ -777,15 +778,23 @@ public class Maps {
 	        this.val = value;
 	        return old;
 	    }
-	
-		public boolean equals(Map.Entry<K, V> obj) {
-	        return eq(key, obj.getKey()) && eq(val, obj.getValue());
-	    }
-	
+
+		@Override
+		public boolean equals(Object obj) {
+			if (obj instanceof Map.Entry) {
+				Map.Entry<?, ?> entry = (Map.Entry<?, ?>) obj;
+				return eq(key, entry.getKey()) && eq(val, entry.getValue());
+			} else {
+				return Objects.equals(this, obj);
+			}
+		}
+
+		@Override
 	    public int hashCode() {
 	        return (key == null ? 0 : key.hashCode()) ^ (val == null ? 0 : val.hashCode());
 	    }
-	   
+
+		@Override
 	    public String toString() {
 	        return key + "=" + val;
 	    }

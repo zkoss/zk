@@ -63,8 +63,8 @@ export class SimpleDoubleSpinnerConstraint extends zul.inp.SimpleConstraint {
 			case 'number':
 				if ((this._max && val > this._max) || (this._min && val < this._min)) {
 					var msg: string | undefined = msgzul.OUT_OF_RANGE + ': ';
-					msg += '(' + this._min != null ? this._max != null ?
-							this._min + ' ~ ' + this._max : '>= ' + this._min : '<= ' + this._max + ')';
+					msg += '(' + (this._min != null ? (this._max != null ?
+						this._min + ' ~ ' + this._max : '>= ' + this._min) : '<= ' + this._max) + ')';
 				}
 		}
 		if (msg)

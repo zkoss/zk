@@ -32,6 +32,7 @@ import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WebApp;
+import org.zkoss.zk.ui.WebApps;
 
 /**
  * This class is used to create and hold open EntityManagerFactory objects
@@ -55,12 +56,17 @@ public class JpaUtil {
 	 */
 	@SuppressWarnings("unchecked")
 	private static Map<String, EntityManagerFactory> getEmfMap() {
-		Map map = (Map) getWebApp().getAttribute(JPA_EMF_MAP);
-		if (map == null) {
-			map = new HashMap();
-			getWebApp().setAttribute(JPA_EMF_MAP, map);
+		WebApp webApp = WebApps.getCurrent();
+		if (webApp != null) {
+			Map map = (Map) webApp.getAttribute(JPA_EMF_MAP);
+			if (map == null) {
+				map = new HashMap();
+				webApp.setAttribute(JPA_EMF_MAP, map);
+			}
+			return map;
+		} else {
+			throw new UiException("WebApp not found. Please check if zk.xml is configured correctly.");
 		}
-		return map;
 	}
 
 	/*
@@ -274,25 +280,16 @@ public class JpaUtil {
 		return em;
 	}
 
-	private static WebApp getWebApp() {
-		WebApp app = null;
-		final Execution exec = Executions.getCurrent();
-		if (exec != null) {
-			final Desktop desktop = exec.getDesktop();
-			if (desktop != null) {
-				app = desktop.getWebApp();
-			}
-		}
-		return app;
-	}
-
 	private static String getPersistenceUnitName(String pu) {
-		if (pu == null || pu.equals("")) {
+		if (pu == null || pu.isEmpty()) {
 			/*
 			 * Create EntityManagerFactory by preference in zk.xml
 			 */
-			final org.zkoss.zk.ui.util.Configuration config = getWebApp().getConfiguration();
-			pu = config.getPreference(CONFIG, null);
+			var webApp = WebApps.getCurrent();
+			if (webApp != null) {
+				final org.zkoss.zk.ui.util.Configuration config = webApp.getConfiguration();
+				pu = config.getPreference(CONFIG, null);
+			}
 		}
 		if (pu == null) {
 			throw new UiException("Forget to specify the preference of " + CONFIG + " in WEB-INF/zk.xml?");

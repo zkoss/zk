@@ -1399,7 +1399,10 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 			Component nextInsertion = lastInsertion != null ? lastInsertion.getNextSibling() : null;
 			Component previousInsertion = firstInsertion != null ? firstInsertion.getPreviousSibling() : null;
 			if (_firstInsertion != null) {
-				for (Component next = _firstInsertion, end = _lastInsertion.getNextSibling();
+				for (Component next = _firstInsertion, end =
+					 _lastInsertion != null ?
+							 _lastInsertion.getNextSibling() :
+							 null;
 					 next != end;) {
 					Component tmp = next.getNextSibling();
 					next.detach();
@@ -1641,7 +1644,9 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 					_dynamicValue = Boolean.FALSE;
 			}
 		}
-		return _dynamicValue.booleanValue();
+		return _dynamicValue == null ?
+				Boolean.FALSE :
+				_dynamicValue.booleanValue();
 	}
 
 	/**

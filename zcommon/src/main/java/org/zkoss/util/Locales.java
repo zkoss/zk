@@ -16,9 +16,9 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 package org.zkoss.util;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.zkoss.lang.Objects;
 
@@ -29,7 +29,7 @@ import org.zkoss.lang.Objects;
  */
 public class Locales {
 	private final static
-		InheritableThreadLocal<Locale> _thdLocale = new InheritableThreadLocal<Locale>();
+		InheritableThreadLocal<Locale> _thdLocale = new InheritableThreadLocal<>();
 
 	/** Returns the current locale; never null.
 	 * This is the locale that every other objects shall use,
@@ -149,19 +149,10 @@ public class Locales {
 	 * <p>This method first look for any locale
 	 */
 	public static final Locale getLocale(Locale locale) {
-		final Locale l = _founds.get(locale);
-		if (l != null)
-			return l;
-
-		synchronized  (_founds) {
-			final Map<Locale, Locale> fs = new HashMap<Locale, Locale>(_founds);
-			fs.put(locale, locale);
-			_founds = fs;
-		}
-		return locale;
+		return _founds.computeIfAbsent(locale, locale1 -> locale);
 	}
 	/** Locales that are found so far. */
-	private static Map<Locale, Locale> _founds = new HashMap<Locale, Locale>(16);
+	private static final Map<Locale, Locale> _founds = new ConcurrentHashMap<>(16);
 	static {
 		final Locale[] ls = new Locale[] {
 			Locale.TRADITIONAL_CHINESE, Locale.SIMPLIFIED_CHINESE,
@@ -172,8 +163,8 @@ public class Locales {
 			Locale.GERMANY, Locale.GERMAN,
 			Locale.CHINESE
 		};
-		for (int j = 0; j < ls.length; ++j)
-			_founds.put(ls[j], ls[j]);
+		for (Locale l : ls)
+			_founds.put(l, l);
 	}
 
 	/** Returns any occurrence of the specified Locale or any its fallback
@@ -187,13 +178,13 @@ public class Locales {
 
 		final String lang = locale.getLanguage();
 		final String cnty = locale.getCountry();
-		final String var = locale.getVariant();
-		if (var != null && var.length() > 0) {
+		final String variant = locale.getVariant();
+		if (variant != null && !variant.isEmpty()) {
 			locale = new Locale(lang, cnty);
 			if (values.contains(locale))
 				return locale;
 		}
-		if (cnty != null && cnty.length() > 0) {
+		if (cnty != null && !cnty.isEmpty()) {
 			locale = new Locale(lang, "");
 			if (values.contains(locale))
 				return locale;
@@ -204,7 +195,7 @@ public class Locales {
 		for (Locale l: values) {
 			if (l.getLanguage().equals(lang)) {
 				//case 1: it matches all but the last element -> done
-				if (var == null || var.length() == 0
+				if (variant == null || variant.isEmpty()
 				|| Objects.equals(l.getCountry(), cnty))//country might null
 					return l;
 

@@ -146,9 +146,6 @@ public class UiEngineImpl implements UiEngine {
 	/** # of suspended event processing threads.
 	 */
 	private int _suspCnt;
-	/** the extension.
-	 */
-	private volatile Extension _ext;
 
 	public UiEngineImpl() {
 	}
@@ -695,25 +692,23 @@ public class UiEngineImpl implements UiEngine {
 	protected void afterRenderComponents(Collection<Component> comps) {
 		getExtension().afterRenderComponents(comps);
 	}
+	private static class ExtensionHolder {
+		private static final Extension INSTANCE = initializeExtension();
 
-	private Extension getExtension() {
-		if (_ext == null) {
-			synchronized (this) {
-				if (_ext == null) {
-					String clsnm = Library.getProperty("org.zkoss.zk.ui.impl.UiEngineImpl.extension");
-					if (clsnm != null) {
-						try {
-							_ext = (Extension) Classes.newInstanceByThread(clsnm);
-						} catch (Throwable ex) {
-							log.error("Unable to instantiate " + clsnm, ex);
-						}
-					}
-					if (_ext == null)
-						_ext = new DefaultExtension();
+		private static Extension initializeExtension() {
+			String clsnm = Library.getProperty("org.zkoss.zk.ui.impl.UiEngineImpl.extension");
+			if (clsnm != null) {
+				try {
+					return (Extension) Classes.newInstanceByThread(clsnm);
+				} catch (Throwable ex) {
+					log.error("Unable to instantiate " + clsnm, ex);
 				}
 			}
+			return new DefaultExtension();
 		}
-		return _ext;
+	}
+	private Extension getExtension() {
+		return ExtensionHolder.INSTANCE;
 	}
 
 	private static final Event nextEvent(UiVisualizer uv) {
@@ -1336,7 +1331,7 @@ public class UiEngineImpl implements UiEngine {
 			}
 
 			//Cycle 2a: Handle aborting reason
-			abrn = uv.getAbortingReason();
+			abrn = uv != null ? uv.getAbortingReason(): null;
 			if (abrn != null)
 				abrn.execute(); //always execute even if !isAborting
 

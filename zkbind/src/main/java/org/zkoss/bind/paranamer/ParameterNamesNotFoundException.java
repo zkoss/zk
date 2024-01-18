@@ -53,7 +53,8 @@ public class ParameterNamesNotFoundException extends RuntimeException {
     }
 
 
-    public Throwable getCause() {
+    @Override
+    public synchronized Throwable getCause() {
         return cause;
     }
 }

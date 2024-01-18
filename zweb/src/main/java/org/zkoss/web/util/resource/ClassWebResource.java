@@ -208,11 +208,13 @@ public class ClassWebResource {
 		_expires = cal.getTime().getTime();
 	}
 
+	private static final Object LOCK = new Object();
+
 	/** Returns the instance (singleton in the whole app) for
 	 * handling resources located in class path.
 	 */
 	public static final ClassWebResource getInstance(ServletContext ctx, String mappingURI) {
-		synchronized (ctx) {
+		synchronized (LOCK) {
 			final CWC cwc = (CWC) Servlets.getExtendletContext(ctx, ".");
 			if (cwc != null)
 				return cwc.getClassWebResource();

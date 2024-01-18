@@ -136,7 +136,7 @@ public class InterpreterServlet extends HttpServlet {
 			cnt.interpret(new ServletDspContext(ctx, request, response, out, null));
 
 			if (compress) {
-				final String result = out.toString();
+				final String result = out != null ? out.toString() : "";
 
 				try {
 					final OutputStream os = response.getOutputStream();

@@ -31,6 +31,8 @@ import java.io.IOException;
 import java.io.FileNotFoundException;
 import java.util.Locale;
 
+import org.slf4j.Logger;
+
 import org.zkoss.util.Locales;
 
 /**
@@ -40,6 +42,8 @@ import org.zkoss.util.Locales;
  */
 public class Files {
 	protected Files() {}
+
+	private static final Logger log = org.slf4j.LoggerFactory.getLogger(Files.class);
 
 	/**
 	 * The separator representing the drive in a path. In Windows, it is
@@ -226,8 +230,8 @@ public class Files {
 			close(is);
 		}
 
-		if ((flags & CP_PRESERVE) != 0) {
-			dst.setLastModified(src.lastModified());
+		if ((flags & CP_PRESERVE) != 0 && (!dst.setLastModified(src.lastModified()))) {
+			log.warn("Unable to set the last modified time of {}", dst);
 		}
 	}
 	/** Assumes both dst and src is a directory. */

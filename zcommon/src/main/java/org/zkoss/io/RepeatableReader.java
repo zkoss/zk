@@ -26,6 +26,7 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.net.URL;
+import java.nio.file.Files;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -268,7 +269,7 @@ public class RepeatableReader extends Reader implements Repeatable, Serializable
 		}
 		if (_f != null) {
 			try {
-				_f.delete();
+				Files.delete(_f.toPath());
 			} catch (Throwable ex) { //ignore
 			}
 			_f = null;

@@ -190,8 +190,7 @@ public class AVideo implements Video, java.io.Serializable {
 	public InputStream getStreamData() {
 		try {
 			if (_url != null) {
-				InputStream is = _url.openStream();
-				return is != null ? new BufferedInputStream(is) : null;
+				return new BufferedInputStream(_url.openStream());
 			}
 			if (_file != null)
 				return new BufferedInputStream(new FileInputStream(_file));
