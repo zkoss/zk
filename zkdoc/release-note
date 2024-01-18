@@ -12,6 +12,7 @@ ZK 10.0.0
   ZK-5096: Consider deprecate Anchorlayout and Anchorchildren
   ZK-4988: zEmbedded support for websocket
   ZK-5135: Make a client error more helpful for debug
+  ZK-5592: Deprecate the ancient themes (Breeze, Sapphire, Silvertail, and Atlantic) in ZK 10
 
 * Bugs
   ZK-5393: Update ZK jars to jakarta-friendly uploads
