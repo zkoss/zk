@@ -296,6 +296,15 @@ public class Treeitem extends XulElement implements org.zkoss.zk.ui.ext.Disable 
 		return _selected;
 	}
 
+	/** Returns whether this item is partially selected.
+	 * @since 10.0.0
+	 */
+	public boolean isPartial() {
+		Tree tree = this.getTree();
+		return tree != null && tree.isTristate()
+				&& tree.getEngine().getPartialItems().contains(this);
+	}
+
 	/** Returns whether this item is selected.
 	 */
 	public void setSelected(boolean selected) {

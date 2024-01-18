@@ -11,6 +11,7 @@ Copyright (C) 2024 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul.impl;
 
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.zkoss.zk.ui.Component;
@@ -84,7 +85,7 @@ public class EmptyTreeEngine implements TreeEngine {
 	}
 
 	public Set<Treeitem> getPartialItems() {
-		return null;
+		return new LinkedHashSet<>();
 	}
 
 	public int getPartialCount() {

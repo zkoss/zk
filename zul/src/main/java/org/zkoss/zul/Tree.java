@@ -2715,8 +2715,10 @@ public class Tree extends MeshElement {
 				}
 			}
 		}
-		if (isTristate())
-			render(renderer, "chgPartial", _engine.getPartialItems());
+
+		Set<Treeitem> partialItems = _engine.getPartialItems();
+		if (isTristate() && !partialItems.isEmpty())
+			render(renderer, "chgPartial", partialItems);
 
 		if (_nonselTags != null)
 			renderer.render("nonselectableTags", _nonselTags);
@@ -3039,8 +3041,8 @@ public class Tree extends MeshElement {
 				for (Treeitem item : partials)
 					_engine.removeItemFromPartial(item);
 				smartUpdate("headercmIcon", evt.isChecked()
-						? TreeEngine.State.SELECTED.name()
-						: TreeEngine.State.UNSELECTED.name());
+						? TreeEngine.State.SELECTED
+						: TreeEngine.State.UNSELECTED);
 			}
 			Events.postEvent(evt);
 		} else if (cmd.equals("onUpdateSelectAll") && isSelModel) {

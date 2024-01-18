@@ -52,8 +52,6 @@ ZK 10.0.0
   + zEmbedded supports WebSocket under the condition that only one ZK page can be embedded into a non-ZK page 
     when WebSocket is enabled.
   + Upgrade zkdiffer to 0.8.0.
-  + When multiple zEmbedded components with WebSocket enabled are present on a page, 
-    the WebSocket endpoint of the last loaded zEmbedded component will be used.
   + Tree now supports tri-state selection, both component and model,
     for more information, please refer to the Tree component reference.
    --------

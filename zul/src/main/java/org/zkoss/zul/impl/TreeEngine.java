@@ -29,8 +29,8 @@ public interface TreeEngine {
 
 	/** States of the tri-state selection. */
 	enum State {
-		SELECTED,
 		UNSELECTED,
+		SELECTED,
 		PARTIAL
 	}
 

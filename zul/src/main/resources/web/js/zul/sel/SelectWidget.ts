@@ -1193,9 +1193,7 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 				}
 			}
 		}
-
-		this.fire('onSelect',
-			zk.copy({
+		const _data = zk.copy({
 				items: data,
 				// The shape of `rodItemIndexRange` is the same as `range` in listbox-rod#fireOnSelectByRange
 				rodItemIndexRange: { start: this.firstItem?._index, end: this.lastItem?._index }, // ZK-2658
@@ -1203,7 +1201,13 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 				clearFirst: !keep,
 				selectAll: checkSelectAll,
 			}, edata),
-			{ rtags: { selectAll: checkSelectAll }, toServer: !!this._model });
+			_opts = { rtags: { selectAll: checkSelectAll }, toServer: !!this._model };
+		this._fireOnSelect(ref, _data, _opts, evt);
+	}
+
+	/** @internal */
+	_fireOnSelect(ref: zk.Widget | undefined, data: object, opts: object, evt?: zk.Event<zk.EventMetaData>): void {
+		this.fire('onSelect', data, opts);
 	}
 
 	/* Changes the specified row as focused. */
