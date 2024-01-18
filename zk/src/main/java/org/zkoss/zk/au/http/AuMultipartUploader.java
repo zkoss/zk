@@ -81,9 +81,9 @@ public class AuMultipartUploader {
 	private static final String FILE_DATA = AuMultipartUploader.class.getName() + ".FILE_DATA";
 	private static final Logger log = LoggerFactory.getLogger(AuMultipartUploader.class);
 	private static final String JAVAX_UPLOAD_CLASS = "org.apache.commons.fileupload2.javax.JavaxServletFileUpload";
-	private static final String JAKARTA_UPLOAD_CLASS = "org.apache.commons.fileupload2.jakarta.JakartaServletFileUpload";
+	private static final String JAKARTA_UPLOAD_CLASS = "org.apache.commons.fileupload2.jakarta.servlet5.JakartaServletFileUpload";
 	private static final String JAVAX_DISK_UPLOAD_CLASS = "org.apache.commons.fileupload2.javax.JavaxServletDiskFileUpload";
-	private static final String JAKARTA_DISK_UPLOAD_CLASS = "org.apache.commons.fileupload2.jakarta.JakartaServletDiskFileUpload";
+	private static final String JAKARTA_DISK_UPLOAD_CLASS = "org.apache.commons.fileupload2.jakarta.servlet5.JakartaServletDiskFileUpload";
 
 	private static Class<?> getServletFileUploadClass() {
 		try {
