@@ -196,7 +196,6 @@ public class Objects {
 	 * a.equals(b) might not be the same as Objects.equals(a, b).
 	 *
 	 * <p>If both a and b are Object[], they are compared item-by-item.
-	 * @deprecated As of release 10.0.0, please use {@link java.util.Objects#equals(Object, Object)
 	 */
 	public static final boolean equals(Object a, Object b) {
 		if (a == b || (a != null && b != null && a.equals(b)))

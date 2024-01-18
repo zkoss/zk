@@ -18,13 +18,13 @@ package org.zkoss.zul.impl;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.zkoss.json.JavaScriptValue;
 import org.zkoss.lang.Exceptions;
+import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
 import org.zkoss.zk.au.AuRequests;
 import org.zkoss.zk.au.out.AuInvoke;
@@ -304,6 +304,8 @@ public abstract class InputElement extends XulElement implements Constrainted, R
 			throw new WrongValueException(this, MZul.STRING_TOO_LONG, new Integer(_auxinf.maxlength));
 
 		final Object val = coerceFromString(value);
+
+		// cannot use java.util.Objects.equals() because it will cause BigDecimal with String comparison to be wrong. See B95_ZK_4658Test.
 		final boolean same = Objects.equals(_value, val);
 		boolean errFound = false;
 		if (!same || !_valided || (_auxinf != null && _auxinf.errmsg != null)) { //note: the first time (!_valided) must always validate

@@ -28,7 +28,6 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -785,7 +784,7 @@ public class Maps {
 				Map.Entry<?, ?> entry = (Map.Entry<?, ?>) obj;
 				return eq(key, entry.getKey()) && eq(val, entry.getValue());
 			} else {
-				return Objects.equals(this, obj);
+				return false;
 			}
 		}
 
