@@ -16,11 +16,7 @@ import static org.zkoss.lang.Generics.cast;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,6 +31,7 @@ import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventQueue;
 import org.zkoss.zk.ui.event.EventQueues;
 import org.zkoss.zk.ui.ext.Scope;
+import org.zkoss.zk.ui.ext.Scopes;
 import org.zkoss.zk.ui.impl.DesktopImpl;
 import org.zkoss.zk.ui.impl.PollingServerPush;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
@@ -52,30 +49,6 @@ public class EventQueueProviderImpl implements EventQueueProvider {
 	/** The attribute used to store the map of event queues.
 	 */
 	protected static final String ATTR_EVENT_QUEUES = "org.zkoss.zk.ui.event.eventQueues";
-
-	private static final Cache<Scope, Object> SCOPE_LOCKS = CacheBuilder.newBuilder()
-			.maximumSize(1_000)
-			.expireAfterAccess(60, TimeUnit.MINUTES)
-			.build();
-
-	private static final Object FALLBACK_LOCK = new Object();
-
-	private Object getLockForScopeIfAny(Scope ctxscope) {
-		try {
-			// Attempt to get the lock from the cache
-			return SCOPE_LOCKS.get(ctxscope, Object::new);
-		} catch (ExecutionException e) {
-			// Handle the exception, e.g., log it
-			log.warn("Error while retrieving lock for scope. Using fallback lock.", e);
-
-			// Fallback: return a predefined static lock object or create a new one
-			// Using a static fallback lock can have implications on concurrency,
-			// as different scopes might end up using the same lock.
-			// Alternatively, you could create a new Object here as a fallback lock
-			// but that won't guarantee the same lock for the same scope across different calls.
-			return FALLBACK_LOCK;
-		}
-	}
 
 	public <T extends Event> EventQueue<T> lookup(String name, String scope, boolean autoCreate) {
 
@@ -125,7 +98,7 @@ public class EventQueueProviderImpl implements EventQueueProvider {
 
 	/** Looks up a session or application scoped event queue. */
 	private <T extends Event> EventQueue<T> lookup0(String name, Scope ctxscope, boolean autoCreate) {
-		Object ctxLock = getLockForScopeIfAny(ctxscope);
+		Object ctxLock = Scopes.getLockForScopeIfAny(ctxscope);
 
 		Map<String, EventQueue<T>> eqs;
 		EventQueue<T> eq;
@@ -173,7 +146,7 @@ public class EventQueueProviderImpl implements EventQueueProvider {
 
 	private boolean remove0(String name, Scope ctxscope) {
 		Map<String, EventQueue> eqs;
-		Object ctxLock = getLockForScopeIfAny(ctxscope);
+		Object ctxLock = Scopes.getLockForScopeIfAny(ctxscope);
 
 		synchronized (ctxLock) {
 			eqs = cast(ctxscope.getAttribute(ATTR_EVENT_QUEUES));

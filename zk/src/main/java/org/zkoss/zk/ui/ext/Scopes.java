@@ -20,7 +20,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,6 +49,36 @@ public class Scopes {
 	private static final ThreadLocal<List<Implicit>> _implicits = new ThreadLocal<>();
 	/** A stack of current scope. */
 	private static final ThreadLocal<List<Scope>> _scopes = new ThreadLocal<>();
+
+	private static final Cache<Scope, Object> SCOPE_LOCKS = CacheBuilder.newBuilder()
+			.maximumSize(1_000)
+			.expireAfterAccess(60, TimeUnit.MINUTES)
+			.build();
+
+	private static final Object FALLBACK_LOCK = new Object();
+
+	/**
+	 * Returns a lock object for the given scope.
+	 * @param ctxscope the scope to get the lock for
+	 * @return a lock object for the given scope
+	 * @since 10.0.0
+	 */
+	public static Object getLockForScopeIfAny(Scope ctxscope) {
+		try {
+			// Attempt to get the lock from the cache
+			return SCOPE_LOCKS.get(ctxscope, Object::new);
+		} catch (ExecutionException e) {
+			// Handle the exception, e.g., log it
+			log.warn("Error while retrieving lock for scope. Using fallback lock.", e);
+
+			// Fallback: return a predefined static lock object or create a new one
+			// Using a static fallback lock can have implications on concurrency,
+			// as different scopes might end up using the same lock.
+			// Alternatively, you could create a new Object here as a fallback lock
+			// but that won't guarantee the same lock for the same scope across different calls.
+			return FALLBACK_LOCK;
+		}
+	}
 
 	/** Prepares implicit variable before calling {@link Page#interpret}.
 	 *

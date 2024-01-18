@@ -31,16 +31,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -2170,38 +2166,13 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 		boolean isDefaultMethod(Method m);
 
 	}
-	private static final Cache<Map<Class<?>, Map<String, CachedItem<Method>>>, Object> CACHE_LOCK = CacheBuilder.newBuilder()
-			.maximumSize(1_000)
-			.expireAfterAccess(60, TimeUnit.MINUTES)
-			.build();
-
-	private static final Object FALLBACK_LOCK = new Object();
-
-	private Object getLockForCacheIfAny(Map<Class<?>, Map<String, CachedItem<Method>>> cache) {
-		try {
-			// Attempt to get the lock from the cache
-			return CACHE_LOCK.get(cache, Object::new);
-		} catch (ExecutionException e) {
-			// Handle the exception, e.g., log it
-			_log.warn("Error while retrieving lock for cache. Using fallback lock.", e);
-
-			// Fallback: return a predefined static lock object or create a new one
-			// Using a static fallback lock can have implications on concurrency,
-			// as different scopes might end up using the same lock.
-			// Alternatively, you could create a new Object here as a fallback lock
-			// but that won't guarantee the same lock for the same cache across different calls.
-			return FALLBACK_LOCK;
-		}
-	}
-
 
 	private Method getCommandMethod(Class<?> clz, String command, CommandMethodInfoProvider cmdInfo,
 			Map<Class<?>, Map<String, CachedItem<Method>>> cache, int commandParamCount, boolean isGlobal) {
 		Map<String, CachedItem<Method>> methods;
-		Object lock = getLockForCacheIfAny(cache);
 		Method matchedMethodWithoutAnno = null;
 		CachedItem<Method> method = null;
-		synchronized (lock) {
+		synchronized (cache == _commandMethodCache ? _commandMethodCache : _globalCommandMethodCache) {
 			methods = cache.computeIfAbsent(clz,
 					k -> new HashMap<>());
 			method = methods.get(command);
