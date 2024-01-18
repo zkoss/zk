@@ -109,6 +109,9 @@ public abstract class StringKeysMap<V> extends AbstractMap<String, V> {
 		}
 
 		public Entry next() {
+			if (!hasNext()) {
+				throw new java.util.NoSuchElementException();
+			}
 			_key = _keys.nextElement();
 			return new Entry(_key);
 		}

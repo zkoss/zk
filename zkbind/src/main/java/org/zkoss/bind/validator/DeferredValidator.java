@@ -63,9 +63,8 @@ public class DeferredValidator implements Validator, Serializable {
 	}
 
 	public String toString() {
-		return super.toString() + "[" + (_clzName != null ?
-				_clzName :
-				(_target.get() != null ? _target.get() : _clz)) + "]";
+		return super.toString() + "[" + (_clzName != null
+				? _clzName : (_target.get() != null ? _target.get() : _clz)) + "]";
 	}
 
 }

@@ -24,7 +24,9 @@ import javax.validation.ValidatorFactory;
  * @since 6.0.0
  */
 public class BeanValidations {
-	private BeanValidations() {} //no instance
+	private BeanValidations() {
+		//no instance
+	}
 	private static class ValidatorHolder {
 		private static ValidatorFactory buildFactory() {
 			return Validation.buildDefaultValidatorFactory();

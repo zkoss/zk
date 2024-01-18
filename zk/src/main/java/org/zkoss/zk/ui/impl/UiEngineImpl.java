@@ -28,6 +28,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 import javax.servlet.ServletRequest;
@@ -40,7 +41,6 @@ import org.zkoss.lang.Classes;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Expectable;
 import org.zkoss.lang.Library;
-import org.zkoss.lang.Objects;
 import org.zkoss.util.ArraysX;
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.xel.VariableResolver;
@@ -1331,7 +1331,7 @@ public class UiEngineImpl implements UiEngine {
 			}
 
 			//Cycle 2a: Handle aborting reason
-			abrn = uv != null ? uv.getAbortingReason(): null;
+			abrn = uv != null ? uv.getAbortingReason() : null;
 			if (abrn != null)
 				abrn.execute(); //always execute even if !isAborting
 

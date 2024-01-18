@@ -27,7 +27,10 @@ import javax.portlet.PortletMode;
  * @author tomyeh
  */
 public class PortletModes {
-	private PortletModes() {} //no instance
+	private PortletModes() {
+		//no instance
+	}
+	
 	/** Returns the portlet mode of the specified name.
 	 */
 	public static final PortletMode toPortletMode(String modeName) {
