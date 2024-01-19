@@ -27,10 +27,12 @@ import java.net.URLEncoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.WeakHashMap;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPOutputStream;
 
@@ -492,6 +494,9 @@ public class Https extends Servlets {
 	private static final String[] _dfs = { "EEE, dd MMM yyyy HH:mm:ss zzz", "EEEEEE, dd-MMM-yy HH:mm:ss zzz",
 			"EEE MMMM d HH:mm:ss yyyy" };
 
+	// it's used to lock the media when writing to response.
+	private static final Map<Media, Object> LOCKS = Collections.synchronizedMap(new WeakHashMap<>());
+
 	/** Write the specified media to HTTP response.
 	 *
 	 * @param response the HTTP response to write to
@@ -514,7 +519,11 @@ public class Https extends Servlets {
 		final boolean headOnly = "HEAD".equalsIgnoreCase(request.getMethod());
 		final byte[] data;
 		int from = -1, to = -1;
-		synchronized (media) { //Bug 1896797: media might be accessed concurrently.
+		final Object lock;
+		synchronized (LOCKS) {
+			lock = LOCKS.computeIfAbsent(media, k -> new Object());
+		}
+		synchronized (lock) { //Bug 1896797: media might be accessed concurrently.
 			//reading an image and send it back to client
 			final String ctype = media.getContentType();
 			if (ctype != null)
