@@ -967,7 +967,7 @@ public class Servlets {
 			uri = Encodes.encodeURI(uri);
 			final boolean noQstr = qstr == null;
 			final boolean noParams = mode == PASS_THRU_ATTR || params == null || params.isEmpty();
-			if (noQstr && noParams || params == null || params.isEmpty())
+			if (noQstr && noParams)
 				return uri;
 
 			if (noQstr != noParams)
