@@ -15,6 +15,7 @@ ZK 10.0.0
   ZK-5592: Deprecate the ancient themes (Breeze, Sapphire, Silvertail, and Atlantic) in ZK 10
   ZK-5527: Upgrade WCAG with the lighthouse 11.x detection tools
   ZK-5459: Allow Configuration.invokeWebAppInits() to throw a Runtime Error
+  ZK-4711: Upgrade integrated reset.less
 
 * Bugs
   ZK-5393: Update ZK jars to jakarta-friendly uploads
@@ -51,6 +52,7 @@ ZK 10.0.0
   + zEmbedded supports WebSocket under the condition that only one ZK page can be embedded into a non-ZK page 
     when WebSocket is enabled.
   + Upgrade zkdiffer to 0.8.0.
+  + Upgrade _reset.less to normalize.css v8.0.1
    --------
 ZK 10.0.0-Beta
 Oct 17, 2023
