@@ -42,7 +42,7 @@ public class RequestContexts {
 	} //prevent from instantiated
 
 	/** A list of RequestContext. */
-	private static final ThreadLocal<List<RequestContext>> _elCtxs = new ThreadLocal<List<RequestContext>>();
+	private static final ThreadLocal<List<RequestContext>> _elCtxs = new ThreadLocal<>();
 
 	/** Returns the current page context if this thread is evaluating a page,
 	 * or null if not.
@@ -77,7 +77,7 @@ public class RequestContexts {
 
 		List<RequestContext> jcs = _elCtxs.get();
 		if (jcs == null)
-			_elCtxs.set(jcs = new LinkedList<RequestContext>());
+			_elCtxs.set(jcs = new LinkedList<>());
 		jcs.add(0, jc);
 	}
 
@@ -91,7 +91,7 @@ public class RequestContexts {
 	public static final void pop() {
 		final List<RequestContext> l = _elCtxs.get();
 		if (l.size() == 1)
-			_elCtxs.set(null);
+			_elCtxs.remove();
 		else
 			l.remove(0);
 	}

@@ -31,7 +31,7 @@ import org.zkoss.zk.ui.util.Template;
  * @since 8.0.0
  */
 public class ShadowElementsCtrl {
-	private static final ThreadLocal<Object> _shadowInfo = new ThreadLocal<Object>();
+	private static final ThreadLocal<Object> _shadowInfo = new ThreadLocal<>();
 	private static final ThreadLocal<Map<Component, Object>> _distributedIndexInfo = ThreadLocal.withInitial(
 			HashMap::new);
 
@@ -41,7 +41,11 @@ public class ShadowElementsCtrl {
 	 * <p>Used only internally.
 	 */
 	public static final void setCurrentInfo(Object shadowInfo) {
-		_shadowInfo.set(shadowInfo);
+		if (shadowInfo != null) {
+			_shadowInfo.set(shadowInfo);
+		} else {
+			_shadowInfo.remove();
+		}
 	}
 
 	/** Returns the current shadow element, which is used only by
@@ -58,10 +62,22 @@ public class ShadowElementsCtrl {
 	 * <p>Used only internally.
 	 */
 	public static final void setDistributedIndexInfo(Component host, Object indexMapInfo) {
+		Map<Component, Object> objectMap = _distributedIndexInfo.get();
 		if (indexMapInfo == null) {
-			_distributedIndexInfo.get().remove(host);
+			if (objectMap != null) {
+				objectMap.remove(host);
+				if (objectMap.isEmpty()) {
+					_distributedIndexInfo.remove();
+				}
+			} else {
+				_distributedIndexInfo.remove();
+			}
 		} else {
-			_distributedIndexInfo.get().put(host, indexMapInfo);
+			if (objectMap == null) {
+				objectMap = new HashMap<>();
+				_distributedIndexInfo.set(objectMap);
+			}
+			objectMap.put(host, indexMapInfo);
 		}
 	}
 
@@ -70,7 +86,9 @@ public class ShadowElementsCtrl {
 	 * <p>Used only internally.
 	 */
 	public static final Object getDistributedIndexInfo(Component host) {
-		return _distributedIndexInfo.get().get(host);
+		Map<Component, Object> objectMap = _distributedIndexInfo.get();
+		if (objectMap == null) return null;
+		return objectMap.get(host);
 	}
 
 	/**

@@ -18,9 +18,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.zkoss.zk.ui.UiException;
 
 /**
@@ -36,8 +33,9 @@ import org.zkoss.zk.ui.UiException;
  * @since 5.0.2
  */
 public class ComponentRedraws {
-	private static final Logger log = LoggerFactory.getLogger(ComponentRedraws.class);
-
+	private ComponentRedraws() {
+		// no instance allowed
+	}
 	/** Called before staring the redrawing.
 	 * {@link org.zkoss.zk.ui.AbstractComponent#redraw} calls this method
 	 * before calling {@link org.zkoss.zk.ui.AbstractComponent#renderProperties}
@@ -64,17 +62,18 @@ public class ComponentRedraws {
 		final int order;
 		Context ctx = _ctx.get();
 		if (ctx == null) {
-			_ctx.set(ctx = new Context());
+			ctx = new Context();
+			_ctx.set(ctx);
 			order = -1;
 		} else {
 			if (ctx.states.isEmpty()) {
 				order = -1;
 			} else {
-				order = ctx.states.get(0).intValue();
-				ctx.states.set(0, new Integer(order + 1));
+				order = ctx.states.get(0);
+				ctx.states.set(0, order + 1);
 			}
 		}
-		ctx.states.add(0, new Integer(includingPage ? -1 : 0));
+		ctx.states.add(0, includingPage ? -1 : 0);
 		return order;
 	}
 
@@ -137,6 +136,8 @@ public class ComponentRedraws {
 		if (ctx != null) {
 			ctx.states.clear();
 			ctx.states.addAll(_tempStates.get().pop());
+			if (_tempStates.get().isEmpty())
+				_tempStates.remove();
 		}
 	}
 
@@ -145,10 +146,10 @@ public class ComponentRedraws {
 	 * If Boolean.TRUE, it means it is the first child.
 	 * If Boolean.FALSE, it means other cases.
 	 */
-	private static final ThreadLocal<Context> _ctx = new ThreadLocal<Context>();
+	private static final ThreadLocal<Context> _ctx = new ThreadLocal<>();
 
 	private static class Context {
-		private final List<Integer> states = new LinkedList<Integer>();
+		private final List<Integer> states = new LinkedList<>();
 		private final StringWriter out = new StringWriter();
 	}
 }
