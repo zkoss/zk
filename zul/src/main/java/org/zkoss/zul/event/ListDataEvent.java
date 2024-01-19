@@ -16,14 +16,19 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul.event;
 
+import java.io.Serializable;
+
 import org.zkoss.zul.ListModel;
 
 /**
  * Defines an event that encapsulates changes to a list. 
  *
+ * Note: Since 10.0.0, it should be serializable
  * @author tomyeh
  */
-public class ListDataEvent {
+public class ListDataEvent implements java.io.Serializable {
+	private static final long serialVersionUID = 20240119101433L;
+
 	/** Identifies one or more changes in the lists contents. */
 	public static final int CONTENTS_CHANGED = 0;
 	/** Identifies the addition of one or more contiguous items to the list. */
@@ -54,7 +59,7 @@ public class ListDataEvent {
 	 */
 	public static final int ENABLE_CLIENT_UPDATE = 12;
 
-	private final ListModel _model;
+	private transient ListModel _model;
 	private final int _type, _index0, _index1;
 
 	/** Constructor.
@@ -108,5 +113,22 @@ public class ListDataEvent {
 	//Object//
 	public String toString() {
 		return "[ListDataEvent type=" + _type + ", index=" + _index0 + ", " + _index1 + ']';
+	}
+
+	//Serializable//
+	private void writeObject(java.io.ObjectOutputStream s) throws java.io.IOException {
+		s.defaultWriteObject();
+		if (_model instanceof Serializable) {
+			s.writeObject(_model);
+		} else if (_model != null) {
+			throw new java.io.NotSerializableException(_model.getClass().getName());
+		} else {
+			s.writeObject(null);
+		}
+	}
+
+	private void readObject(java.io.ObjectInputStream s) throws java.io.IOException, ClassNotFoundException {
+		s.defaultReadObject();
+		_model = (ListModel) s.readObject();
 	}
 }
