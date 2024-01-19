@@ -18,8 +18,9 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.test;
 
-import org.zkoss.zk.ui.event.*;
-import org.zkoss.zul.*;
+import org.zkoss.zk.ui.event.MouseEvent;
+import org.zkoss.zul.Button;
+import org.zkoss.zul.Messagebox;
 
 /**
  * For testing the inter-operation between ZUML and Java codes.

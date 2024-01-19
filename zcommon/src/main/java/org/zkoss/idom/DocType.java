@@ -18,7 +18,7 @@ package org.zkoss.idom;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.DocumentType;
 
-import org.zkoss.idom.impl.*;
+import org.zkoss.idom.impl.AbstractItem;
 
 /**
  * The iDOM DocType.

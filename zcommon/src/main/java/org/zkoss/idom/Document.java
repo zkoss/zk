@@ -16,16 +16,18 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 package org.zkoss.idom;
 
 import java.util.List;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+
 import org.w3c.dom.Attr;
-import org.w3c.dom.DocumentType;
 import org.w3c.dom.CDATASection;
 import org.w3c.dom.DOMConfiguration;
+import org.w3c.dom.DocumentType;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
-import org.zkoss.util.NotableLinkedList;
+import org.zkoss.idom.impl.AbstractGroup;
+import org.zkoss.idom.impl.DOMImplementation;
 import org.zkoss.idom.impl.FacadeNodeList;
-import org.zkoss.idom.impl.*;
+import org.zkoss.util.NotableLinkedList;
 
 /**
  * Represents Document which is also W3C/DOM's document,

@@ -13,7 +13,10 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 package org.zkoss.xel.util;
 
 import java.util.Map;
-import org.zkoss.xel.*;
+
+import org.zkoss.xel.FunctionMapper;
+import org.zkoss.xel.VariableResolver;
+import org.zkoss.xel.XelContext;
 
 /**
  * A proxy to replace the variable resolver of a given XEL context.

@@ -18,8 +18,8 @@ package org.zkoss.idom;
 import org.w3c.dom.Attr;
 import org.w3c.dom.TypeInfo;
 
+import org.zkoss.idom.impl.AbstractItem;
 import org.zkoss.lang.Objects;
-import org.zkoss.idom.impl.*;
 
 /**
  * The iDOM attribute.

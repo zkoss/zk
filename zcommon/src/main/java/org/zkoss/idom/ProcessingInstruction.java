@@ -15,17 +15,19 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.idom;
 
-import java.util.Map;
-import java.util.LinkedHashMap;
-import java.util.Iterator;
+import static org.zkoss.lang.Generics.cast;
+
 import java.util.Collections;
-import org.zkoss.mesg.MCommon;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import org.zkoss.idom.impl.AbstractItem;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
-import static org.zkoss.lang.Generics.cast;
 import org.zkoss.lang.SystemException;
+import org.zkoss.mesg.MCommon;
 import org.zkoss.util.Maps;
-import org.zkoss.idom.impl.*;
 
 /**
  * The iDOM processing instruction.

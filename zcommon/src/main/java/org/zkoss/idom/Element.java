@@ -30,9 +30,11 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.TypeInfo;
 
 import static org.zkoss.lang.Generics.cast;
-import org.zkoss.util.NotableLinkedList;
+
+import org.zkoss.idom.impl.AbstractGroup;
+import org.zkoss.idom.impl.AbstractTextual;
 import org.zkoss.idom.impl.FacadeNodeList;
-import org.zkoss.idom.impl.*;
+import org.zkoss.util.NotableLinkedList;
 
 /**
  * The iDOM element.

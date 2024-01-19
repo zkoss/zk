@@ -18,10 +18,14 @@ package org.zkoss.idom.impl;
 import java.util.List;
 import org.w3c.dom.CharacterData;
 
+import org.zkoss.idom.DOMException;
+import org.zkoss.idom.Element;
+import org.zkoss.idom.Item;
+import org.zkoss.idom.Textual;
+import org.zkoss.idom.Verifier;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.SystemException;
-import org.zkoss.idom.*;
 
 /**
  * Represents a textual item.

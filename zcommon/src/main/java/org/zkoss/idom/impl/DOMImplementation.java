@@ -15,7 +15,9 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.idom.impl;
 
-import org.zkoss.idom.*;
+import org.zkoss.idom.DocType;
+import org.zkoss.idom.Document;
+import org.zkoss.idom.Element;
 
 /**
  * The iDOM's implementation of DOMImplementation.

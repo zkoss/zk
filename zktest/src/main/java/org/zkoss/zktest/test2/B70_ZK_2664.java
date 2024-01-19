@@ -1,8 +1,11 @@
 package org.zkoss.zktest.test2;
 
-import java.util.*;
+import java.util.List;
 
-import org.zkoss.bind.annotation.*;
+import org.zkoss.bind.annotation.BindingParam;
+import org.zkoss.bind.annotation.Command;
+import org.zkoss.bind.annotation.Init;
+import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zul.ListModelList;
 
 public class B70_ZK_2664 {

@@ -26,9 +26,13 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.UserDataHandler;
 
+import org.zkoss.idom.DOMException;
+import org.zkoss.idom.Document;
+import org.zkoss.idom.Group;
+import org.zkoss.idom.Item;
+import org.zkoss.idom.Namespaceable;
 import org.zkoss.xml.Locator;
 import org.zkoss.xml.Nodes;
-import org.zkoss.idom.*;
 
 /**
  * A semi-implemented item for leaf vertices.

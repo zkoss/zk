@@ -1,6 +1,7 @@
 package org.zkoss.zktest.test2;
 
-import org.zkoss.bind.annotation.*;
+import org.zkoss.bind.annotation.Command;
+import org.zkoss.bind.annotation.Init;
 
 public class B65_ZK_2428InnerVM {
 	protected String value ="";

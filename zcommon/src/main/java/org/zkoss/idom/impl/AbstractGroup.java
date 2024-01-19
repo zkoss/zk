@@ -15,25 +15,36 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.idom.impl;
 
-import static org.zkoss.idom.DOMException.*;
+import static org.zkoss.idom.DOMException.HIERARCHY_REQUEST_ERR;
+import static org.zkoss.idom.DOMException.NOT_FOUND_ERR;
 
-import java.util.List;
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Set;
-import java.util.LinkedHashSet;
-import java.util.Iterator;
-import java.util.ListIterator;
-import java.util.regex.Pattern;
-import java.util.Map;
-import java.util.LinkedHashMap;
 import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.regex.Pattern;
 
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import org.zkoss.idom.Binary;
+import org.zkoss.idom.CData;
+import org.zkoss.idom.Comment;
+import org.zkoss.idom.DOMException;
+import org.zkoss.idom.Element;
+import org.zkoss.idom.EntityReference;
+import org.zkoss.idom.Group;
+import org.zkoss.idom.Item;
+import org.zkoss.idom.ProcessingInstruction;
+import org.zkoss.idom.Text;
+import org.zkoss.idom.Textual;
 import org.zkoss.util.NotableLinkedList;
-import org.zkoss.idom.*;
 
 /**
  * A semi-implemented item for group. A group is a item that has child items.
@@ -467,7 +478,8 @@ public abstract class AbstractGroup extends AbstractItem implements Group {
 			if (newItem instanceof Group)
 				for (Item p = AbstractGroup.this; p != null; p = p.getParent())
 					if (p == newItem)
-						throw new DOMException(HIERARCHY_REQUEST_ERR, "Add to itself", getLocator());
+						throw new DOMException(
+								HIERARCHY_REQUEST_ERR, "Add to itself", getLocator());
 
 			if (newItem instanceof Element) { //Element put into map, this must be done before replaced
 				//try to find the first Element node on the array

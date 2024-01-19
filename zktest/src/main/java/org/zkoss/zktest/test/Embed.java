@@ -12,16 +12,13 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.test;
 
-import java.util.Map;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
-
-import org.zkoss.json.JSONArray;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zkplus.embed.Bridge;
-
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listitem;
 

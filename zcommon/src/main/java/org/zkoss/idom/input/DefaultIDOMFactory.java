@@ -15,7 +15,16 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.idom.input;
 
-import org.zkoss.idom.*;
+import org.zkoss.idom.Attribute;
+import org.zkoss.idom.CData;
+import org.zkoss.idom.Comment;
+import org.zkoss.idom.DocType;
+import org.zkoss.idom.Document;
+import org.zkoss.idom.Element;
+import org.zkoss.idom.EntityReference;
+import org.zkoss.idom.Namespace;
+import org.zkoss.idom.ProcessingInstruction;
+import org.zkoss.idom.Text;
 
 /**
  * The default iDOM factory.
