@@ -28,6 +28,7 @@ import com.google.common.cache.CacheBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.zkoss.lang.Library;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.Execution;
@@ -38,6 +39,12 @@ import org.zkoss.zk.ui.sys.ExecutionCtrl;
 
 /**
  * Utilities to manage the current scope ({@link Scope}).
+ *
+ * <p> Since 10.0.0, there two library properties to control the scope lock cache:
+ * <ol>
+ *     <li>org.zkoss.zk.ui.ext.Scopes.maxLockSize: the maximum number of locks to be cached. (Default: 10,000)</li>
+ *     <li>org.zkoss.zk.ui.ext.Scopes.maxTimeout: the maximum time a lock can be cached in minutes after accessing it. (Default: 60 minutes)</li>
+ * </ol>
  *
  * @author tomyeh
  * @since 5.0.0
@@ -51,22 +58,36 @@ public class Scopes {
 	private static final ThreadLocal<List<Scope>> _scopes = new ThreadLocal<>();
 
 	private static final Cache<Scope, Object> SCOPE_LOCKS = CacheBuilder.newBuilder()
-			.maximumSize(1_000)
-			.expireAfterAccess(60, TimeUnit.MINUTES)
+			.maximumSize(Library.getIntProperty(
+					"org.zkoss.zk.ui.ext.Scopes.maxLockSize", 10_000))
+			.expireAfterAccess(Library.getIntProperty(
+					"org.zkoss.zk.ui.ext.Scopes.maxTimeout", 60), TimeUnit.MINUTES)
 			.build();
 
 	private static final Object FALLBACK_LOCK = new Object();
 
+	private Scopes() {
+		// no instance
+	}
+
 	/**
-	 * Returns a lock object for the given scope.
-	 * @param ctxscope the scope to get the lock for
-	 * @return a lock object for the given scope
+	 * Returns a consistent lock for a given scope, if available.
+	 *
+	 * <p> The method returns a lock object specific to the provided scope,
+	 * allowing for fine-grained synchronization control. If no lock is associated
+	 * with the scope, the method returns a fallback lock instead.
+	 * <p> Usage of this method is preferred over manual synchronization or lock management,
+	 * as it provides a standardized approach to handling concurrency in a scope-based context.
+	 *
+	 * @param scope The scope for which the lock is to be acquired.
+	 * @return The lock object associated with the given scope, if any; otherwise,
+	 * a static fallback lock.
 	 * @since 10.0.0
 	 */
-	public static Object getLockForScopeIfAny(Scope ctxscope) {
+	public static Object getLockForScopeIfAny(Scope scope) {
 		try {
 			// Attempt to get the lock from the cache
-			return SCOPE_LOCKS.get(ctxscope, Object::new);
+			return SCOPE_LOCKS.get(scope, Object::new);
 		} catch (ExecutionException e) {
 			// Handle the exception, e.g., log it
 			log.warn("Error while retrieving lock for scope. Using fallback lock.", e);

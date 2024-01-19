@@ -19,6 +19,11 @@ import java.util.Map;
 /**
  * Represents a scope of attributes.
  *
+ * <p> In ZK, directly acquiring a lock on a scope for synchronization is uncommon.
+ *  This method {@link Scopes#getLockForScopeIfAny(Scope)} provides a reliable way
+ *  to obtain a consistent lock object associated with a specific scope, ensuring
+ *  that synchronization is consistently managed across different parts of the application.
+ *
  * @author tomyeh
  * @since 3.6.0
  * @see org.zkoss.zk.ui.impl.SimpleScope
