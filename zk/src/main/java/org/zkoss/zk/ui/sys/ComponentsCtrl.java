@@ -57,8 +57,8 @@ import org.zkoss.zk.xel.ExValue;
  * @author tomyeh
  */
 public class ComponentsCtrl {
-	private static final ThreadLocal<Object> _compdef = new ThreadLocal<Object>();
-	private static final ThreadLocal<Component> _rootParent = new ThreadLocal<Component>();
+	private static final ThreadLocal<Object> _compdef = new ThreadLocal<>();
+	private static final ThreadLocal<Component> _rootParent = new ThreadLocal<>();
 
 	/** Returns the automatically generate component's UUID/ID.
 	 */
@@ -166,7 +166,11 @@ public class ComponentsCtrl {
 	 * @since 8.5.1
 	 */
 	public static final void setRootParent(Component comp) {
-		_rootParent.set(comp);
+		if (comp != null) {
+			_rootParent.set(comp);
+		} else {
+			_rootParent.remove();
+		}
 	}
 
 
@@ -187,7 +191,11 @@ public class ComponentsCtrl {
 	 * @since 3.0.0
 	 */
 	public static final void setCurrentInfo(ComponentDefinition compdef) {
-		_compdef.set(compdef);
+		if (compdef != null) {
+			_compdef.set(compdef);
+		} else {
+			_compdef.remove();
+		}
 	}
 
 	/** Sets the current component definition, which is used only by
@@ -197,7 +205,11 @@ public class ComponentsCtrl {
 	 * @since 3.0.0
 	 */
 	public static void setCurrentInfo(ComponentInfo compInfo) {
-		_compdef.set(compInfo);
+		if (compInfo != null) {
+			_compdef.set(compInfo);
+		} else {
+			_compdef.remove();
+		}
 	}
 
 	/** Sets the current shadow definition, which is used only by
@@ -207,7 +219,11 @@ public class ComponentsCtrl {
 	 * @since 8.0.0
 	 */
 	public static void setCurrentInfo(ShadowInfo compInfo) {
-		_compdef.set(compInfo);
+		if (compInfo != null) {
+			_compdef.set(compInfo);
+		} else {
+			_compdef.remove();
+		}
 	}
 
 	/** Pares the event expression.

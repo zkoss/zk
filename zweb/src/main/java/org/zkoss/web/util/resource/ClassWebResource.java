@@ -23,10 +23,10 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -85,11 +85,11 @@ public class ClassWebResource {
 	/** An array of extensions that have to be compressed (with gzip). */
 	private Set<String> _compressExts;
 	/** Map(String ext, Extendlet). */
-	private final Map<String, Extendlet> _extlets = new HashMap<String, Extendlet>();
+	private final Map<String, Extendlet> _extlets = new ConcurrentHashMap<>();
 	/** Filers for requests. Map(String ext, FastReadArray(Filter)). */
-	private final Map<String, FastReadArray<Filter>> _reqfilters = new HashMap<String, FastReadArray<Filter>>(2);
+	private final Map<String, FastReadArray<Filter>> _reqfilters = new ConcurrentHashMap<>(2);
 	/** Filers for includes. Map(String ext, FastReadArray(Filter)). */
-	private final Map<String, FastReadArray<Filter>> _incfilters = new HashMap<String, FastReadArray<Filter>>(2);
+	private final Map<String, FastReadArray<Filter>> _incfilters = new ConcurrentHashMap<>(2);
 	/** Additional locator. */
 	private Locator _extraloc;
 	/** The prefix used to encode URL. */
@@ -318,11 +318,9 @@ public class ClassWebResource {
 
 		ext = ext.toLowerCase(java.util.Locale.ENGLISH);
 		for (;;) {
-			synchronized (_extlets) {
-				Extendlet exlet = _extlets.get(ext);
-				if (!lookup || exlet != null)
-					return exlet;
-			}
+			Extendlet exlet = _extlets.get(ext);
+			if (!lookup || exlet != null)
+				return exlet;
 
 			int j = ext.indexOf('.');
 			if (j < 0)
@@ -372,9 +370,7 @@ public class ClassWebResource {
 		});
 
 		ext = ext.toLowerCase(java.util.Locale.ENGLISH);
-		synchronized (_extlets) {
-			return _extlets.put(ext, extlet);
-		}
+		return _extlets.put(ext, extlet);
 	}
 
 	/** Removes the {@link Extendlet} (a.k.a., resource processor)
@@ -390,9 +386,7 @@ public class ClassWebResource {
 			return null;
 
 		ext = ext.toLowerCase(java.util.Locale.ENGLISH);
-		synchronized (_extlets) {
-			return _extlets.remove(ext);
-		}
+		return _extlets.remove(ext);
 	}
 
 	/** Returns an array of the filters ({@link Filter}) of the specified
@@ -420,10 +414,7 @@ public class ClassWebResource {
 			return null; //optimize
 
 		for (;;) {
-			FastReadArray ary;
-			synchronized (filters) {
-				ary = filters.get(ext);
-			}
+			FastReadArray ary = filters.get(ext);
 			if (ary != null)
 				return (Filter[]) ary.toArray();
 
@@ -466,12 +457,8 @@ public class ClassWebResource {
 	}
 
 	private static void addFilter(Map<String, FastReadArray<Filter>> filters, String ext, Filter filter) {
-		FastReadArray<Filter> ary;
-		synchronized (filters) {
-			ary = filters.get(ext);
-			if (ary == null)
-				filters.put(ext, ary = new FastReadArray<Filter>(Filter.class));
-		}
+		FastReadArray<Filter> ary = filters.computeIfAbsent(ext, k -> new FastReadArray<>(
+				Filter.class));
 		ary.add(filter);
 	}
 
@@ -496,17 +483,12 @@ public class ClassWebResource {
 	}
 
 	private static boolean rmFilter(Map<String, FastReadArray<Filter>> filters, String ext, Filter filter) {
-		FastReadArray<Filter> ary;
-		synchronized (filters) {
-			ary = filters.get(ext);
-		}
+		FastReadArray<Filter> ary = filters.get(ext);
 		if (ary != null && ary.remove(filter)) {
 			if (ary.isEmpty())
-				synchronized (filters) {
-					ary = filters.remove(ext);
-					if (ary != null && !ary.isEmpty())
-						filters.put(ext, ary); //modify by other, so restore
-				}
+				ary = filters.remove(ext);
+				if (ary != null && !ary.isEmpty())
+					filters.put(ext, ary); //modify by other, so restore
 			return true;
 		}
 		return false;

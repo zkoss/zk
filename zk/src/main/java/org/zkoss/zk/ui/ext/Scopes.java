@@ -169,6 +169,12 @@ public class Scopes {
 	public static final void afterInterpret() {
 		_implicits.get().remove(0);
 		pop();
+
+		// free resources
+		if (_implicits.get().isEmpty()) {
+			_implicits.remove();
+			_scopes.remove();
+		}
 	}
 
 	/** Sets an implicit object.
