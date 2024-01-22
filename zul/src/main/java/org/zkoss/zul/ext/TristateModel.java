@@ -20,6 +20,14 @@ import java.util.Set;
  */
 public interface TristateModel<E> {
 
+
+	/** States of the tri-state selection. */
+	enum State {
+		UNSELECTED,
+		SELECTED,
+		PARTIAL
+	}
+
 	/**
 	 * Returns the current partial selection.
 	 */

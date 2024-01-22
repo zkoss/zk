@@ -1684,13 +1684,6 @@ public class Tree extends MeshElement {
 		}
 	}
 
-	/** States of the tri-state selection. */
-	private enum State {
-		UNSELECTED,
-		SELECTED,
-		PARTIAL
-	}
-
 	private void updateHeadercmTristate(Set<?> partialSelections) {
 		if (getTreecols() != null) {
 			boolean treecolShouldBePartial = false;
@@ -1719,9 +1712,9 @@ public class Tree extends MeshElement {
 			}
 			treecolShouldBePartial = treecolShouldBePartial || (selectedChild != numberOfChild && selectedChild != 0);
 			smartUpdate("headercmIcon", treecolShouldBePartial
-					? State.PARTIAL
-					: selectedChild == numberOfChild ? State.SELECTED
-					: State.UNSELECTED);
+					? TristateModel.State.PARTIAL
+					: selectedChild == numberOfChild ? TristateModel.State.SELECTED
+					: TristateModel.State.UNSELECTED);
 		}
 	}
 
