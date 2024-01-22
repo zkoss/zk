@@ -41,6 +41,12 @@ public class TreeDataEvent {
 	 * @since 6.0.0
 	 */
 	public static final int MULTIPLE_CHANGED = 6;
+
+	/**
+	 * Identified the state of partial selection in a tristate checkbox is changed.
+	 * @since 10.0.0
+	 */
+	public static final int TRISTATE_CHANGED = 8;
 	/**
 	 * Identified the state that Component's client update to be disabled
 	 * @since 8.0.0

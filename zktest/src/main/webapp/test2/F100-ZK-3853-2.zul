@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F100-ZK-3853-2.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Tue Jan 16 17:37:40 CST 2024, Created by jamson
+
+Copyright (C) 2024 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns:n="native">
+
+    <n:h1>Tri-State Tree Model Switching Test</n:h1>
+    <label multiline="true">
+        Both 2 model are enabled with tri-state mode.
+        1. click model1 and do some click to change the checkbox state.
+        2. click model2 and do some click to change the checkbox state.
+        3. switch model1 and model2, check whether all updates are correct.
+    </label>
+
+    <button label="model1">
+        <attribute name="onClick">
+            tree.setModel(tree.getModel() != model1 ? model1 : null);
+        </attribute>
+    </button>
+    <button label="model2">
+        <attribute name="onClick">
+            tree.setModel(tree.getModel() != model2 ? model2 : null);
+        </attribute>
+    </button>
+
+    <tree id="tree" checkmark="true" multiple="true">
+        <treecols>
+            <treecol label="treecol" />
+        </treecols>
+    </tree>
+    <zscript><![CDATA[
+model1 = new DefaultTristateTreeModel(
+    new DefaultTreeNode(null,
+        new DefaultTreeNode[] {
+            new DefaultTreeNode("0",
+                new DefaultTreeNode[] {
+                    new DefaultTreeNode("1"),
+                    new DefaultTreeNode("2")
+                }
+            ),
+            new DefaultTreeNode("3"),
+            new DefaultTreeNode("4",
+                new DefaultTreeNode[] {
+                    new DefaultTreeNode("5",
+                        new DefaultTreeNode[] {
+                            new DefaultTreeNode("6"),
+                            new DefaultTreeNode("7"),
+                            new DefaultTreeNode("8",
+                                new DefaultTreeNode[] {
+                                    new DefaultTreeNode("9"),
+                                    new DefaultTreeNode("10"),
+                                    new DefaultTreeNode("11"),
+                                }
+                            )
+                        }
+                    ),
+                    new DefaultTreeNode("12"),
+                    new DefaultTreeNode("13")
+                }
+            )
+        }
+    )
+);
+model1.setMultiple(true);
+model2 = new DefaultTristateTreeModel(
+    new DefaultTreeNode(null,
+        new DefaultTreeNode[] {
+            new DefaultTreeNode("0",
+                new DefaultTreeNode[] {
+                    new DefaultTreeNode("1"),
+                    new DefaultTreeNode("2")
+                }
+            ),
+            new DefaultTreeNode("3"),
+            new DefaultTreeNode("4",
+                new DefaultTreeNode[] {
+                    new DefaultTreeNode("5",
+                        new DefaultTreeNode[] {
+                            new DefaultTreeNode("6"),
+                            new DefaultTreeNode("7"),
+                            new DefaultTreeNode("8",
+                                new DefaultTreeNode[] {
+                                    new DefaultTreeNode("9"),
+                                    new DefaultTreeNode("10"),
+                                    new DefaultTreeNode("11"),
+                                }
+                            )
+                        }
+                    ),
+                    new DefaultTreeNode("12"),
+                    new DefaultTreeNode("13")
+                }
+            )
+        }
+    )
+);
+model2.setMultiple(true);
+    ]]></zscript>
+</zk>

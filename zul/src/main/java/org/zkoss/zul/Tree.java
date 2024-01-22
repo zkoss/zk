@@ -36,6 +36,7 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -84,6 +85,7 @@ import org.zkoss.zul.ext.SelectionControl;
 import org.zkoss.zul.ext.Sortable;
 import org.zkoss.zul.ext.TreeOpenableModel;
 import org.zkoss.zul.ext.TreeSelectableModel;
+import org.zkoss.zul.ext.TristateModel;
 import org.zkoss.zul.impl.MeshElement;
 import org.zkoss.zul.impl.Utils;
 import org.zkoss.zul.impl.XulElement;
@@ -1615,8 +1617,15 @@ public class Tree extends MeshElement {
 			}
 			return;
 		case TreeDataEvent.SELECTION_CHANGED:
-			if (target instanceof Treeitem)
+			if (target instanceof Treeitem) {
 				((Treeitem) target).setSelected(((TreeSelectableModel) _model).isPathSelected(path));
+				if (_model instanceof TristateModel)
+					smartUpdateTristate();
+			}
+			return;
+		case TreeDataEvent.TRISTATE_CHANGED:
+			if (_model instanceof TristateModel)
+				smartUpdateTristate();
 			return;
 		case TreeDataEvent.OPEN_CHANGED:
 			if (_model instanceof TreeOpenableModel) {
@@ -1672,6 +1681,54 @@ public class Tree extends MeshElement {
 					onTreeDataContentChange(target, node, i);
 				break;
 			}
+		}
+	}
+
+	private void updateHeadercmTristate(Set<?> partialSelections) {
+		if (getTreecols() != null) {
+			boolean treecolShouldBePartial = false;
+			int numberOfChild = 0,
+					selectedChild = 0;
+			for (Component cur = getTreechildren().getFirstChild(); cur != null; cur = cur.getNextSibling()) {
+				if (cur instanceof Treeitem) {
+					numberOfChild++;
+					Treeitem curItem = (Treeitem) cur;
+					if (partialSelections.contains(curItem.getValue())) {
+						// if 1 child is partial,
+						// then treecol should be partial, break directly
+						treecolShouldBePartial = true;
+						break;
+					} else {
+						if (curItem.isSelected())
+							selectedChild++;
+						else if (selectedChild != 0) {
+							// if current is empty, and at least 1 selected found,
+							// then treecol should be partial, break directly
+							treecolShouldBePartial = true;
+							break;
+						}
+					}
+				}
+			}
+			treecolShouldBePartial = treecolShouldBePartial || (selectedChild != numberOfChild && selectedChild != 0);
+			smartUpdate("headercmIcon", treecolShouldBePartial
+					? TristateModel.State.PARTIAL
+					: selectedChild == numberOfChild ? TristateModel.State.SELECTED
+					: TristateModel.State.UNSELECTED);
+		}
+	}
+
+	private void smartUpdateTristate() {
+		Set<?> partialSelections = ((TristateModel<?>) _model).getPartials();
+		// force to enable smartUpdate here.
+		boolean original = disableClientUpdate(false);
+		try {
+			smartUpdateSelection();
+			smartUpdate("chgPartial", partialSelections.stream().map(this::getChildByNode)
+					.map(Component::getUuid).collect(Collectors.joining(",")));
+			updateHeadercmTristate(partialSelections);
+		} finally {
+			disableClientUpdate(original);
 		}
 	}
 
@@ -1849,6 +1906,8 @@ public class Tree extends MeshElement {
 						}
 					}
 				}
+				if (_model instanceof TristateModel)
+					smartUpdate("tristate", true);
 			}
 			doSort(this);
 			postOnInitRender();
@@ -1856,6 +1915,8 @@ public class Tree extends MeshElement {
 			_model.removeTreeDataListener(_dataListener);
 			if (_model instanceof PageableModel && _pgListener != null)
 				((PageableModel) _model).removePagingEventListener((PagingListener) _pgListener);
+			if (_model instanceof TristateModel)
+				smartUpdate("tristate", false);
 			_model = null;
 			if (_treechildren != null)
 				_treechildren.detach();
@@ -2598,6 +2659,12 @@ public class Tree extends MeshElement {
 
 		if (_model != null) {
 			render(renderer, "model", true);
+			if (_model instanceof TristateModel) {
+				render(renderer, "tristate", true);
+				Set<?> partialSelections = ((TristateModel<?>) _model).getPartials();
+				render(renderer, "chgPartial", partialSelections.stream().map(this::getChildByNode)
+						.map(Component::getUuid).collect(Collectors.joining(",")));
+			}
 			if (_model instanceof Selectable && isMultiple()) {
 				Selectable smodel = (Selectable) _model;
 				SelectionControl control = smodel.getSelectionControl();
