@@ -159,6 +159,15 @@
 			display: block;
 		}
 	}
+	//partial
+	&-partial {
+		> .z-treecol-icon {
+			color: @checkedColor;
+			display: block;
+
+			&.z-icon-minus {} //for checkbox partial selected state, use font-awesome
+		}
+	}
 }
 //paging
 .z-tree-paging {
@@ -287,6 +296,16 @@
 		* {
 			color: @disabledColor !important;
 			cursor: default !important;
+		}
+	}
+	//partial
+	&-partial {
+		> .z-treecell > .z-treecell-content
+		> .z-treerow-checkable .z-treerow-icon {
+			color: @checkedColor;
+			display: block;
+
+			&.z-icon-minus {} //for checkbox partial selected state, use font-awesome
 		}
 	}
 }

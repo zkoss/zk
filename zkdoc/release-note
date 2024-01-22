@@ -16,6 +16,7 @@ ZK 10.0.0
   ZK-5527: Upgrade WCAG with the lighthouse 11.x detection tools
   ZK-5459: Allow Configuration.invokeWebAppInits() to throw a Runtime Error
   ZK-4711: Upgrade integrated reset.less
+  ZK-3853: Tree supports 3-states selection model
 
 * Bugs
   ZK-5393: Update ZK jars to jakarta-friendly uploads
