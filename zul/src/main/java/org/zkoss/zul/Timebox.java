@@ -72,9 +72,10 @@ public class Timebox extends DateTimeFormatInputElement {
 	public static final String DEFAULT_FORMAT = "HH:mm";
 	private boolean _btnVisible = true;
 	private static Date _dummyDate = new Date();
+	private static int DEFAULT_COLS_VALUE = Integer.MAX_VALUE;
 
 	public Timebox() {
-		setCols(-1);
+		setCols(DEFAULT_COLS_VALUE);
 		setFormat("");
 	}
 
@@ -320,9 +321,9 @@ public class Timebox extends DateTimeFormatInputElement {
 			renderer.render("timezoneAbbr", timezone);
 		}
 
-		if (getCols() == -1) { // try to modify default col by value
-			Date value = getValue();
-			int cols = 5;
+		if (getCols() == DEFAULT_COLS_VALUE) { // try to modify default col by value
+			Date value = (Date) getRawValue();
+			int cols = 5; // original default cols value
 			if (value != null) {
 				cols = coerceToString(value).length();
 			}
