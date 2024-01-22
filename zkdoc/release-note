@@ -54,6 +54,9 @@ ZK 10.0.0
     when WebSocket is enabled.
   + Upgrade zkdiffer to 0.8.0.
   + Upgrade _reset.less to normalize.css v8.0.1
+  + Security Enhancement in XML Parsing:
+    To prevent XML External Entity (XXE) attacks, we've updated our XML parser to
+     disallow Doctype Declarations, enhancing security without affecting normal XML processing.
    --------
 ZK 10.0.0-Beta
 Oct 17, 2023
