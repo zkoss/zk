@@ -73,7 +73,7 @@ public abstract class InputElement extends XulElement implements Constrainted, R
 
 	/** The value. */
 	protected Object _value;
-	private int _cols;
+	protected int _cols;
 	private AuxInfo _auxinf;
 	private boolean _disabled, _readonly;
 	/** Whether this input is validated (Feature 1461209). */
