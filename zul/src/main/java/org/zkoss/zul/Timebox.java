@@ -75,7 +75,7 @@ public class Timebox extends DateTimeFormatInputElement {
 	private static int DEFAULT_COLS_VALUE = Integer.MAX_VALUE;
 
 	public Timebox() {
-		setCols(DEFAULT_COLS_VALUE);
+		_cols = DEFAULT_COLS_VALUE;
 		setFormat("");
 	}
 
@@ -327,7 +327,7 @@ public class Timebox extends DateTimeFormatInputElement {
 			if (value != null) {
 				cols = coerceToString(value).length();
 			}
-			setCols(cols);
+			_cols = cols;
 			renderer.render("cols", getCols());
 		}
 
