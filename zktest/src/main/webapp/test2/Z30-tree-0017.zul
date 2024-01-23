@@ -21,7 +21,7 @@
 		int count = 10;
 	</zscript>
 		
-		<tree id="tree" treeitemRenderer="${renderer}" model="${model}"  >
+		<tree id="tree" itemRenderer="${renderer}" model="${model}"  >
 		</tree>
 		<button label="add" onClick='model.addProcessType(0,0,count,"C");count=count+1;' />
 		<button label="remove" onClick='model.removeProcessType(0,0,0,"C");count=count-1;' />

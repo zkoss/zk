@@ -73,7 +73,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
 
 		<label value="You are using: ${desktop.webApp.version}" />
-		<tree model="${stm}" treeitemRenderer="${tir}" id="tree"
+		<tree model="${stm}" itemRenderer="${tir}" id="tree"
 			checkmark="true" multiple="true" />
 
 	</window>
