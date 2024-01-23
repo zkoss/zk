@@ -44,13 +44,15 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 					User:
 					<textbox name="name" />
 				</row>
-				<row spans="2">
-					<hbox>
-						<button type="submit" label="Login"
-							mold="trendy" />
-						<button type="reset" label="Reset"
-							mold="trendy" />
-					</hbox>
+				<row>
+					<cell colspan="2">
+						<hbox>
+							<button type="submit" label="Login"
+									mold="trendy" />
+							<button type="reset" label="Reset"
+									mold="trendy" />
+						</hbox>
+					</cell>
 				</row>
 			</rows>
 		</grid>
@@ -83,13 +85,15 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 					User:
 					<textbox name="name" />
 				</row>
-				<row spans="2">
-					<hbox>
-						<button type="submit" label="Login"
-							mold="os" />
-						<button type="reset" label="Reset"
-							mold="os" />
-					</hbox>
+				<row>
+					<cell colspan="2">
+						<hbox>
+							<button type="submit" label="Login"
+									mold="os" />
+							<button type="reset" label="Reset"
+									mold="os" />
+						</hbox>
+					</cell>
 				</row>
 			</rows>
 		</grid>

@@ -111,8 +111,7 @@ Copyright (C) 2017 Potix Corporation. All Rights Reserved.
 		</rows>
 	</grid>
 	<label multiline="true">
-		row spans conflict with cell colspan with "visible=false"
-
+		cell colspan with "visible=false"
 	</label>
 	<grid>
 		<columns>
@@ -130,14 +129,18 @@ Copyright (C) 2017 Potix Corporation. All Rights Reserved.
 			<column label="Dec"/>
 		</columns>
 		<rows>
-			<row spans="2,1,1,2,3">
+			<row>
 				<cell colspan="3">
 					<label value="1"/>
 				</cell>
 				<label value="4"/>
 				<label value="5"/>
-				<label value="6"/>
-				<label value="8"/>
+				<cell colspan="2">
+					<label value="6"/>
+				</cell>
+				<cell colspan="3">
+					<label value="8"/>
+				</cell>
 				<label value="11"/>
 				<label value="12"/>
 			</row>

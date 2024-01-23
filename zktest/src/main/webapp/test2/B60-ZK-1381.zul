@@ -12,7 +12,7 @@
 				<borderlayout>
 					<center>
 						<div id="divTwo">
-							<grid id="grid"  width="75%">
+							<grid id="grid" width="75%">
 								<rows>
 									<row>
 										<textbox value="can't edit after click show busy" />

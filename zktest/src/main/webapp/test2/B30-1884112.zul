@@ -12,7 +12,7 @@
 		
 	</zscript>
 		
-		<tree treeitemRenderer="${renderer}" model="${model}"  >
+		<tree itemRenderer="${renderer}" model="${model}"  >
 		</tree>
 		Please open "Group0->host-0" and then test each button.
 		<button label="add process icon at 0/0/3" onClick='model.addProcessType(0,0,3,"C")' />

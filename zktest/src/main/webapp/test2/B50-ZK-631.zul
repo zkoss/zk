@@ -17,7 +17,9 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 	<div>Type "abc" in datebox then press tab, you shoud see the message like</div>
 	<div>You must specify a date, rather than abc. Format: yyyy/MM/dd.</div>
 	<zscript>
-		import org.zkoss.util.logging.Log;
+		import org.slf4j.Logger;
+		import org.slf4j.LoggerFactory;
+
 		import org.zkoss.zk.ui.Component;
 		import org.zkoss.zk.ui.WrongValueException;
 		import org.zkoss.zul.CustomConstraint;
@@ -26,8 +28,8 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		import org.zkoss.zul.SimpleDateConstraint;
 		
 		class MyDateConstraint extends SimpleDateConstraint implements CustomConstraint{
-			
-			private static Log log = Log.lookup(MyDateConstraint.class);
+
+			private static final Logger log = LoggerFactory.getLogger("org.zkoss.zk.log");
 			private Label errfld;
 		
 			public MyDateConstraint(Label errlbl, int flags) {

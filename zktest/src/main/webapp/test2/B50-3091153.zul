@@ -1,14 +1,13 @@
 <?page title="new page title" contentType="text/html;charset=UTF-8"?>
 <zk>
-<html><![CDATA[
+	<html><![CDATA[
 <ol>
  <li>Click the open icon to open the tree item</li>
  <li>Click the deSelectAll button to deselect all. All of them shall be de-selected</li>
  <li>Click the selectAll button and all shall be selected</li>
 </ol>
 ]]></html>
-
-<zscript><![CDATA[
+	<zscript><![CDATA[
 import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.event.ForwardEvent;
 import org.zkoss.zk.ui.ext.AfterCompose;
@@ -28,7 +27,7 @@ public class Test14105Window extends Window implements AfterCompose {
 
 	public void afterCompose() {
 		tree = this.getFellow("tree");
-		tree.setTreeitemRenderer(new MyTreeitemRenderer());
+		tree.setItemRenderer(new MyTreeitemRenderer());
 		tree.setModel(new MyTreeModel());
 	}
 }
@@ -199,12 +198,10 @@ public class MyTreeModel implements TreeModel, TreeOpenableModel, TreeSelectable
 	}
 }
 ]]></zscript>
-<window use="Test14105Window" title="new page title"	
-border="normal">
-<tree id="tree" height="300px" checkmark="true" multiple="true" />
-<button label="selectAll" onClick="tree.selectAll()"/>
-<button label="deSelectAll" onClick="tree.clearSelection()"/>
-</window>
+	<window use="Test14105Window" title="new page title"
+			border="normal">
+		<tree id="tree" height="300px" checkmark="true" multiple="true"/>
+		<button label="selectAll" onClick="tree.selectAll()"/>
+		<button label="deSelectAll" onClick="tree.clearSelection()"/>
+	</window>
 </zk>
-
-

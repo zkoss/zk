@@ -14,21 +14,32 @@
 	Item 2 is not checkable, and it shall NOT be selectable
 	<tree id="tree" multiple="true" checkmark="true">
 		<treecols>
-			<treecol label="Name" />
+			<treecol label="Name"/>
 		</treecols>
 		<treechildren>
-			<treeitem label="Item 1" />
-			<treeitem selectable="false" open="false" label="Item 2">
+			<treeitem id="i1" label="Item 1">
+				<attribute name="onClick">
+					l1.setValue(self.isSelected() + "");
+				</attribute>
+			</treeitem>
+			<treeitem id="i2" selectable="false" open="false" label="Item 2">
+				<attribute name="onClick">
+					l2.setValue(self.isSelected() + "");
+				</attribute>
 				<treechildren>
 					<treeitem label="Item 2.1">
 						<treechildren>
-							<treeitem label="Item 2.1.1" />
-							<treeitem label="Item 2.1.2" />
+							<treeitem label="Item 2.1.1"/>
+							<treeitem label="Item 2.1.2"/>
 						</treechildren>
 					</treeitem>
-					<treeitem label="Item 2.2" />
+					<treeitem label="Item 2.2"/>
 				</treechildren>
 			</treeitem>
 		</treechildren>
 	</tree>
+	item 1 selected?
+	<label id="l1"/>
+	item 2 selected?
+	<label id="l2"/>
 </zk>

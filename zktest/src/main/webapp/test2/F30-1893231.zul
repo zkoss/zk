@@ -14,7 +14,7 @@
 		HostTreeModel model = new HostTreeModel();
 		HostTreeOpenCtrlRenderer2 renderer = new HostTreeOpenCtrlRenderer2();
 	</zscript>
-		<tree id="tree" treeitemRenderer="${renderer}" model="${model}"  >
+		<tree id="tree" itemRenderer="${renderer}" model="${model}"  >
 		</tree>
 	</window>
 </zk>

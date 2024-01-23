@@ -21,7 +21,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
     public void doAfterCompose(Component component) throws java.lang.Exception {
         super.doAfterCompose(component);
 
-        tree.setTreeitemRenderer(new TreeDragDropRender());
+        tree.setItemRenderer(new TreeDragDropRender());
 
         initializeTree();
     }
@@ -69,5 +69,5 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
     </zscript>
     <tree id="tree" apply="TreeComposer" />
-    <button label="Click me, no error is correct." onClick='tree.setModel(new org.zkoss.zktest.test2.tree.BinaryTreeModel(new ArrayList(new org.zkoss.zktest.test2.BigList(10))));'/>
+    <button id="btn" label="Click me, no error is correct." onClick='tree.setModel(new org.zkoss.zktest.test2.tree.BinaryTreeModel(new ArrayList(new org.zkoss.zktest.test2.BigList(10))));'/>
 </zk>
