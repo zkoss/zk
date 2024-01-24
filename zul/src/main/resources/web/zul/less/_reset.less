@@ -15,7 +15,7 @@
  */
 e('<c:if test="${empty c:property(@{browserDefault})}">');
 html {
-  line-height: 1.15; /* 1 */
+  line-height: normal; /* 1 */  /* James chu, Potix, 20240124, reported issue: https://github.com/necolas/normalize.css/issues/865 */
   -webkit-text-size-adjust: 100%; /* 2 */
 }
 /* Sections
