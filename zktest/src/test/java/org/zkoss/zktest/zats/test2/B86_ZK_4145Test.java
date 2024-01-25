@@ -11,6 +11,10 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.lessThan;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Dimension;
@@ -57,7 +61,13 @@ public class B86_ZK_4145Test extends WebDriverTestCase {
 
 		click(menupopupTwo.find(MENU));
 		waitResponse();
-		Assertions.assertTrue(popupTwoLeft > getMenupopup(2).offsetLeft());
+
+		// fix a different minimum width between linux and mac.
+		if (jq("body").width() < 360) {
+			assertThat(popupTwoLeft,  lessThan(getMenupopup(2).offsetLeft()));
+		} else {
+			assertThat(popupTwoLeft, greaterThan(getMenupopup(2).offsetLeft()));
+		}
 	}
 
 	private JQuery getMenupopup(int index) {
