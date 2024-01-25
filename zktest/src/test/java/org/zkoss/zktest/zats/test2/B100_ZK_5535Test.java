@@ -26,7 +26,7 @@ public class B100_ZK_5535Test extends WebDriverTestCase {
 	public void testPerformance() {
 		connect();
 		click(jq("$show"));
-		sleep(35_000);
+		sleep(30_000);
 		waitResponse();
 		click(jq("$clear"));
 		sleep(5_000);
