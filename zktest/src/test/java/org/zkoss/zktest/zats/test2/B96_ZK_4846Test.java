@@ -30,8 +30,8 @@ public class B96_ZK_4846Test extends WebDriverTestCase {
 		JQuery jqListitem = jq("@listitem");
 		for (int i = 0; i < jqListitem.length(); i++) {
 			click(jqListitem.eq(i));
+			waitResponse();
 		}
-		waitResponse();
 		assertEquals(1, jq(".z-listheader-checked").length());
 		click(jq(".z-listheader-checkable"));
 		JQuery jqTreerow = jq("@treerow");
