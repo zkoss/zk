@@ -4,7 +4,7 @@ plugins {
 	id 'java'
 	id 'maven-publish'
 	id 'checkstyle'
-	id 'com.github.node-gradle.node' version '3.1.0'
+	id "com.github.node-gradle.node" version "7.0.1"
 	id 'com.github.gmazzo.buildconfig' version '3.0.3'
 	id 'idea'
 	id "org.sonarqube" version "4.4.1.3373"
@@ -136,6 +136,7 @@ subprojects {
 	java.sourceCompatibility = JavaVersion.VERSION_11
 	tasks.withType(JavaCompile) {
 		options.encoding = 'UTF-8'
+		options.warnings = false
 	}
 
 	checkstyle {
@@ -189,7 +190,7 @@ subprojects {
 		if (new File("$projectDir/$resources/metainfo/mesg").exists()) {
 			doFirst {
 				exec {
-					commandLine 'bash', "$rootDir/bin/genprop", '-x', "$projectDir/$resources/metainfo/mesg/", "$projectDir/src/main/java/"
+					commandLine 'bash', "$rootDir/bin/genprop", '-x', "$projectDir/$resources/metainfo/mesg/", "$projectDir/src/main/java"
 				}
 			}
 		}
