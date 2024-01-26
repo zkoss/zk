@@ -143,7 +143,7 @@ for fn in $cnfpath/*$flext ; do
 		fi
 
 		pkgpath=${codegendir}/${pkgnm//.//}
-		dstfn==$(echo "${pkgpath}/${clsnm}.java" | tr -d '\r')
+		dstfn=$(echo "${pkgpath}/${clsnm}.java" | tr -d '\r')
 
 		#update if newer
 		if [ \( force = 1 \) -o \( ! -f "$dstfn" \) -o \( "$fn" -nt "$dstfn" \) ] ; then
