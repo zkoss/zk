@@ -112,7 +112,11 @@ subprojects {
 
 			doLast {
 				exec {
-					commandLine "$rootDir/node_modules/.bin/gulp", 'build:single', "--src=$projectDir/$resources/web/js", "--dest=$projectDir/$codegen/web/js"
+					if (project.hasProperty("devMode")) {
+						commandLine "$rootDir/node_modules/.bin/gulp", 'build:single', "--src=$projectDir/$resources/web/js", "--dest=$projectDir/$codegen/web/js", "--devMode=true"
+					} else {
+						commandLine "$rootDir/node_modules/.bin/gulp", 'build:single', "--src=$projectDir/$resources/web/js", "--dest=$projectDir/$codegen/web/js"
+					}
 				}
 			}
 		}

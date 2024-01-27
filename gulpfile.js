@@ -57,12 +57,13 @@ const vinylMap = require('vinyl-map');
 const knownOptions = {
 	string: ['src', 'dest'],
 	number: ['port'],
-	boolean: ['force'],
+	boolean: ['force', 'devMode'],
 	default: {
 		src: 'zul/src/main/resources/web/js',
 		dest: 'zul/build/resources/main/web/js',
 		force: false,
 		port: 8080,
+		devMode: false,
 		subprojectPaths: 'zk,zul,../zkcml/zkex,../zkcml/zkmax,../zkcml/client-bind',
 	}
 };
@@ -165,6 +166,7 @@ function typescript_build(src, dest, force, since) {
 			.pipe(gulpIgnore.exclude(
 				file => fs.existsSync(path.join(path.dirname(file.path), 'index.ts'))
 			))
+			.pipe(ignoreSameFile(dest))
 			.pipe(babel({
 				root: __dirname
 			}))
@@ -185,6 +187,7 @@ function typescript_build(src, dest, force, since) {
 			},
 			'js',
 		),
+		options.devMode ? gulp.src('.') :
 		// Bundle `index.ts` with webpack as `index.src.js` without source map
 		bundleWithWebpack( // stream 3
 			tsBundledEntries, {
