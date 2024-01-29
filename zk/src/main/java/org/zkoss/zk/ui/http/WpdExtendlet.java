@@ -27,6 +27,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -94,6 +95,7 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 	private static final String SOURCE_MAP_DIVIDED_WPDS_NUMBER = "$zk$dividedWPDsNum";
 	private ConcurrentMap<String, List<Element>> _dividedWpds = new ConcurrentHashMap<>(1); // store xml node for later parsing (ex. zk1 -> <script> ...)
 	private ConcurrentMap<String, Integer> _dividedPackageCnt = new ConcurrentHashMap<>(1); // store package count for dependency (ex. zul.wgt -> 2)
+	private Set<String> _lastDynamicWpds = ConcurrentHashMap.newKeySet(1); // store last dynamic wpd for not setting loaded
 
 	public void init(ExtendletConfig config) {
 		init(config, new WpdLoader());
@@ -169,7 +171,7 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 				dividedElements = _dividedWpds.get(lastPart);
 				if (dividedElements == null) { // dynamic
 					try {
-						return processDynamicWpdWithSourceMapIfAny(request, response, path);
+						return processDynamicWpdWithSourceMapIfAny(request, response, pkgName, path);
 					} catch (Exception e) {
 						log.error("fail to process source for source map", e);
 						return new byte[]{};
@@ -489,13 +491,15 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 			}
 			if (depends != null) {
 				write(out, "});");
-				write(out, "zk.setLoaded('");
-				if (processingPartial && totalPartialCount > 1 && partialNum < totalPartialCount) {
-					write(out, name + partialNum);
-				} else {
-					write(out, name);
+				if (!processingPartial || !_lastDynamicWpds.contains(name + partialNum + ".wpd")) {
+					write(out, "zk.setLoaded('");
+					if (processingPartial && totalPartialCount > 1 && partialNum < totalPartialCount) {
+						write(out, name + partialNum);
+					} else {
+						write(out, name);
+					}
+					write(out, "',1);");
 				}
-				write(out, "',1);");
 			} else if (!processingPartial) {
 				write(out, "})();");
 			}
@@ -1023,10 +1027,11 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 		return name;
 	}
 
-	private byte[] processDynamicWpdWithSourceMapIfAny(HttpServletRequest request, HttpServletResponse response, String path) throws Exception {
+	private byte[] processDynamicWpdWithSourceMapIfAny(HttpServletRequest request, HttpServletResponse response, String pkgWpd, String path) throws Exception {
 		List<String> dividedPaths = splitSourceMapJsPathIfAny(path);
 		StringBuilder sb = new StringBuilder();
 		int index = 0;
+		String lastWpd = null;
 		for (String dividedPath : dividedPaths) {
 			String scriptVariableName = "script" + index++;
 			sb.append("var ").append(scriptVariableName).append("=document.createElement('script');");
@@ -1039,6 +1044,12 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 			}
 			sb.append(scriptVariableName).append(".src='").append(url).append("';");
 			sb.append("\ndocument.getElementsByTagName('head')[0].appendChild(").append(scriptVariableName).append(");");
+			lastWpd = dividedPath.substring(dividedPath.lastIndexOf("/") + 1);
+		}
+		if (!Strings.isEmpty(lastWpd)) {
+			_lastDynamicWpds.add(lastWpd);
+			// mark loading
+			sb.append("\nzk.setLoaded('").append(pkgWpd.replace(".wpd", "")).append("',1);");
 		}
 		return sb.toString().getBytes();
 	}
