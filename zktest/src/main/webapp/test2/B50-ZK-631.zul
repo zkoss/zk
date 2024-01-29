@@ -74,7 +74,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 					dateValue.setValue(null);
 			</attribute>
 		</datebox>
-		<label id="doberr" />
+		<label id="doberr" value="error message"/>
 		<div />
 		<label id="dateValue" />
 	</window>
