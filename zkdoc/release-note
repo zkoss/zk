@@ -2,6 +2,7 @@ ZK 9.6.5
 * Features
 
 * Bugs
+  ZK-5453: XSS in chosenbox
 
 * Upgrade Notes
 
