@@ -24,7 +24,7 @@ jasperreports.jar
 commons-collections4.jar
 commons-digester.jar
 commons-logging.jar
-itext.jar
+openpdf.jar
 bsh.jar
 mvel.jar
 ognl.jar
