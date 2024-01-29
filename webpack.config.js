@@ -4,8 +4,6 @@ const webpack = require('webpack');
 const tslib = require('tslib');
 const baseDir = path.resolve(__dirname)
 
-// const CircularDependencyPlugin = require('circular-dependency-plugin');
-
 /** @type { import('webpack').Configuration } */
 module.exports = {
 	resolve: {
