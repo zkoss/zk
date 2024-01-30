@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B100-ZK-5629.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		2024/1/30, Created by jumperchen
+
+Copyright (C) 2024 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		You should see the title of the groupbox should be "Drawer's position".
+	</label>
+	<groupbox title="Drawer's position" >
+	</groupbox>
+</zk>

@@ -15,12 +15,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 function groupbox$mold$(out, skipper) {
 	var uuid = this.uuid,
 		cap = this.caption,
-		title = this.getTitle();
-	title = title && !cap ? zUtl.encodeXML(title) : undefined;
+		title = this.getTitle(),
+		titleHTML = title && !cap ? zUtl.encodeXML(title) : undefined;
 
 	out.push('<div ', this.domAttrs_(), '>');
 
-	if (title || cap) {
+	if (titleHTML || cap) {
 		out.push('<div id="', uuid, '-header" class="', this.$s('header'),
 			(this._closable ? '' : ' ' + this.$s('readonly')), '">');
 		if (cap)
@@ -28,7 +28,7 @@ function groupbox$mold$(out, skipper) {
 		else
 			out.push('<div id="', uuid, '-title" class="', this.$s('title'),
 				'" role="none"><div id="', uuid, '-title-cnt" class="',
-				this.$s('title-content'), '" role="none">', zUtl.encodeXML(title), '</div></div>');
+				this.$s('title-content'), '" role="none">', titleHTML, '</div></div>');
 		out.push('</div>');
 	}
 
