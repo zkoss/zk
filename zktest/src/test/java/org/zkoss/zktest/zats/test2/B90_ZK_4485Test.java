@@ -31,6 +31,7 @@ public class B90_ZK_4485Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
+		waitResponse();
 		click(jq("@button"));
 		waitResponse();
 		assertEquals("true", getZKLog());
