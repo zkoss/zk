@@ -3,6 +3,7 @@ ZK 9.6.5
   ZK-5142: Handle GET and POST requests more strictly
 
 * Bugs
+  ZK-5453: XSS in chosenbox
 
 * Upgrade Notes
 
