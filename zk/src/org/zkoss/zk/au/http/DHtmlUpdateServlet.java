@@ -428,6 +428,13 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			return; //done
 		}
 
+		// ZK-5142
+		if (!("POST".equals(request.getMethod()))) {
+			response.sendError(HttpServletResponse.SC_NOT_FOUND);
+			log.debug("Request method is not POST: " + Servlets.getDetail(request));
+			return; //done
+		}
+
 		//AU
 		if (sess == null) {
 			final Object old = Charsets.setup(null, request, response, "UTF-8");
