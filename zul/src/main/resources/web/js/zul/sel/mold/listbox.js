@@ -34,7 +34,7 @@ function listbox$mold$(out) {
 
 	if (this.listhead) {
 		out.push('<div id="', uuid, '-head" class="', this.$s('header'), '">',
-			'<table id="', uuid, '-headtbl"', wdAttr, ' style="table-layout:fixed;',
+			'<table id="', uuid, '-headtbl"', /*safe*/ wdAttr, ' style="table-layout:fixed;',
 			/*safe*/ wdStyle, '">');
 		this.domFaker_(out, '-hdfaker');
 
@@ -95,7 +95,7 @@ function listbox$mold$(out) {
 
 	if (this.listfoot) {
 		out.push('<div id="', uuid, '-foot" class="', this.$s('footer'), '">',
-			'<table id="', uuid, '-foottbl"', wdAttr, ' style="table-layout:fixed;', /*safe*/ wdStyle, '">');
+			'<table id="', uuid, '-foottbl"', /*safe*/ wdAttr, ' style="table-layout:fixed;', /*safe*/ wdStyle, '">');
 		if (this.listhead)
 			this.domFaker_(out, '-ftfaker');
 

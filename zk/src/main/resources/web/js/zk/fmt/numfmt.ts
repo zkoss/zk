@@ -94,7 +94,7 @@ export let Number = {
 		var useMinsuFmt;
 		if (fmt.indexOf(';') != -1) {
 			var fmtArr = fmt.split(';');
-			useMinsuFmt = val < 0;
+			useMinsuFmt = (val as number) < 0;
 			fmt = fmtArr[useMinsuFmt ? 1 : 0];
 		}
 		
@@ -106,7 +106,7 @@ export let Number = {
 		var pureFmtStr = efmt.pureFmtStr,
 			ind = efmt.purejdot,
 			fixed = ind >= 0 ? pureFmtStr.length - ind - 1 : 0,
-			valStr = (val + '').replace(/[^e\-0123456789.]/g, '').substring(val < 0 ? 1 : 0),
+			valStr = (val + '').replace(/[^e\-0123456789.]/g, '').substring((val as number) < 0 ? 1 : 0),
 			ei = valStr.lastIndexOf('e'),
 			indVal = valStr.indexOf('.'),
 			valFixed = indVal >= 0 ? (ei < 0 ? valStr.length : ei) - indVal - 1 : 0,

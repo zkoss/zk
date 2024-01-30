@@ -65,7 +65,7 @@ export class Swipe extends zk.Object {
 		// eslint-disable-next-line @typescript-eslint/dot-notation
 		this.node = node ? jq(node, zk)[0] as HTMLElement | undefined : widget['node'] as HTMLElement | undefined || (widget.$n ? widget.$n() : undefined);
 		if (!this.node)
-			throw 'Handle required for ' + widget;
+			throw 'Handle required for ' + widget.uuid + ' on ' + widget.widgetName;
 
 		this.opts = zk.$default(opts, {
 			scrollThreshold: 5,

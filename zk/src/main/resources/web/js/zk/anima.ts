@@ -104,6 +104,7 @@ zk.animating = animating;
  * @see {@link zk.animating}
  * @since 5.0.6
  */
+// eslint-disable-next-line @typescript-eslint/no-invalid-void-type
 export function afterAnimate(fn: () => void, delay?: number): boolean | void {
 	if (zk.animating())
 		_aftAnims.push(fn);

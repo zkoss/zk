@@ -285,7 +285,7 @@ export class Event<TData = unknown> extends zk.Object {
 	 * @since 9.5.0
 	 * @see {@link zKeys}
 	 */
-	isPressed(...args: string[]): boolean {
+	isPressed(...args: zKeys[]): boolean {
 		let keyCount = 0,
 			result = true;
 		for (var i = 0, len = args.length; i < len; i++) {
@@ -294,7 +294,7 @@ export class Event<TData = unknown> extends zk.Object {
 				keyCount++;
 				if (keyCount > 1)
 					throw 'Invalid key combination';
-				else if (arg != this.key)
+				else if (arg as string != this.key)
 					result = false;
 			} else if ((arg == zKeys.META && !this.metaKey) || (arg == zKeys.ALT && !this.altKey)
 					|| (arg == zKeys.CONTROL && !this.ctrlKey) || (arg == zKeys.SHIFT && !this.shiftKey)) {
@@ -452,7 +452,7 @@ function _target(inf: zk.Widget | [zk.Widget, CallableFunction]): zk.Widget {
 function _fn(inf, o: zk.Widget, name: string): CallableFunction {
 	const fn = (Array.isArray(inf) ? inf[1] : o[name]) as undefined | CallableFunction;
 	if (!fn)
-		throw (o.className || o) + ':' + name + ' not found';
+		throw (o.className || o.widgetName) + ':' + name + ' not found';
 	return fn;
 }
 function _sync(): void {

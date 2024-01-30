@@ -91,7 +91,7 @@ export function $(n: string | HTMLElement | zk.Event | JQuery.Event, opts?: Bind
 	var widget = zk.Widget.$(n, opts);
 	if (widget)
 		return widget.$binder();
-	zk.error('Not found ZK Binder with [' + n + ']');
+	zk.error('Not found ZK Binder with [' + String(n) + ']');
 }
 zkbind.$ = $;
 

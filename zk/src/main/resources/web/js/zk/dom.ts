@@ -1494,11 +1494,12 @@ export class JQZK {
 	vparentNode(real?: boolean): HTMLElement | undefined {
 		var el = this.jq[0];
 		if (el) {
-			var v = el['z_vp'] as undefined | HTMLElement; //might be empty
+			let v = el['z_vp'] as undefined | string; //might be empty
 			if (v) return jq('#' + v)[0];
-			v = el['z_vpagt'] as undefined | HTMLElement;
-			if (v && (v = jq('#' + v)[0]))
-				return v.parentNode as HTMLElement | undefined;
+			v = el['z_vpagt'] as undefined | string;
+			let agt: HTMLElement | undefined;
+			if (v && (agt = jq('#' + v)[0]))
+				return agt.parentNode as HTMLElement | undefined;
 			if (real)
 				return el.parentNode as HTMLElement | undefined;
 		}
@@ -1547,23 +1548,22 @@ export class JQZK {
 	undoVParent(): this {
 		if (this.hasVParent()) {
 			var el = this.jq[0],
-				p = el['z_vp'] as undefined | HTMLElement,
-				agt = el['z_vpagt'] as string | HTMLElement,
+				p = el['z_vp'] as undefined | string,
+				agt = el['z_vpagt'] as string,
 				$agt = jq('#' + agt);
 			el['z_vp'] = el['z_vpagt'] = undefined;
-			agt = $agt[0];
-
-			p = (p ? jq('#' + p)[0] : agt ? agt.parentNode : undefined) as undefined | HTMLElement;
-			if (p) {
+			const agtNode = $agt[0],
+				parent = (p ? jq('#' + p)[0] : agtNode ? agtNode.parentNode : undefined) as undefined | HTMLElement;
+			if (parent) {
 
 				// Bug 3049181
 				zjq._fixedVParent(el);
 
-				if (agt) {
-					p.insertBefore(el, agt);
+				if (agtNode) {
+					parent.insertBefore(el, agtNode);
 					$agt.remove();
 				} else
-					p.appendChild(el);
+					parent.appendChild(el);
 
 				var cf: undefined | zk.Widget, parentWidget: undefined | zk.Widget, a: undefined | HTMLElement;
 				// ZK-851
@@ -1713,7 +1713,7 @@ export class JQZK {
 	 * <p>To parse a style (e.g., 'width:10px;padding:2px') to a map of style names and values, use {@link jq.parseStyle}.
 	 * @deprecated As of release 5.0.2, use jq.css(map) instead
 	 */
-	setStyles(styles: JQuery.PlainObject<string | number | ((this: HTMLElement, index: number, value: string) => string | number | void | undefined)>): this {
+	setStyles(styles: JQuery.PlainObject<string | number | ((this: HTMLElement, index: number, value: string) => string | number | undefined)>): this {
 		this.jq.css(styles);
 		return this;
 	}

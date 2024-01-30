@@ -49,7 +49,7 @@ var _ambit: Ambit = {
 function _getRegionSize(wgt?: zul.layout.LayoutRegion, hor?: boolean, ext?: boolean): number {
 	if (!wgt)
 		return 0;
-	var n = wgt.$n_('real')!,
+	var n = wgt.$n_('real'),
 		sz = hor ? 'offsetWidth' as const : 'offsetHeight' as const,
 		sum = n[sz];
 	if (ext) {
@@ -250,7 +250,7 @@ export class Borderlayout extends zul.Widget {
 			region = this[rs[j]] as zul.layout.LayoutRegion | undefined;
 			if (region && zk(region.$n()).isVisible()) {
 				ambit = region._ambit();
-				_ambit[rs[j]]!(ambit, center, width, height);
+				_ambit[rs[j]](ambit, center, width, height);
 				this._resizeWgt(region, ambit); //might recursive back
 				var directionToCalculate: 'width' | 'height' = region._isVertical() ? 'width' : 'height';
 				jq(region.$n('title')).width((jq(region.$n('colled'))[directionToCalculate]()!) - (jq(region.$n('btned'))[directionToCalculate]()!));

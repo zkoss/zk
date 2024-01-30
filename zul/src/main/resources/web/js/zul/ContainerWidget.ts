@@ -27,6 +27,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.ContainerWidget')
 export class ContainerWidget extends zul.Widget {
+	// eslint-disable-next-line @typescript-eslint/no-useless-constructor
 	constructor(props?: Record<string, unknown> | typeof zkac) {
 		super(props);
 	}

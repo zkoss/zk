@@ -293,6 +293,7 @@ export function afterLoad(func: CallableFunction): boolean
  * @see {@link load}
  */
 export function afterLoad(pkgs: string, func: CallableFunction, front?: boolean): void
+// eslint-disable-next-line @typescript-eslint/no-invalid-void-type
 export function afterLoad(a: string | CallableFunction, b?: CallableFunction, front?: boolean): boolean | void {
 	if (typeof a == 'string') {
 		if (!b) return true;

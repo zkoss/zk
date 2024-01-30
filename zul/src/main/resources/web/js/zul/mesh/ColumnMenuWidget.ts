@@ -295,6 +295,7 @@ export class ColumnMenupopup extends zul.menu.Menupopup {
 		return this;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-useless-constructor
 	constructor(opts: { columns: zul.mesh.ColumnMenuWidget }) {
 		super(opts);
 	}

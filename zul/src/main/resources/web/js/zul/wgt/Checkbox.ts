@@ -20,6 +20,7 @@ function _shallIgnore(evt: zk.Event): boolean {
 	return !!(v && !jq.nodeName(v.target as Node, 'input'));
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export interface Checkbox {
 	$n(subId: 'real'): HTMLInputElement | undefined;
 	$n(subId: 'mold'): HTMLLabelElement | undefined;
@@ -35,6 +36,7 @@ export interface Checkbox {
  * </ol>
  */
 @zk.WrapClass('zul.wgt.Checkbox')
+// eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidgetWithDisable {
 	//_tabindex: 0,
 	/** @internal */
