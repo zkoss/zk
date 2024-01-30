@@ -34,7 +34,7 @@ function tree$mold$(out) {
 	//head
 	if (this.treecols) {
 		out.push('<div id="', uuid, '-head" class="', this.$s('header'), '">',
-			'<table id="', uuid, '-headtbl"', width,
+			'<table id="', uuid, '-headtbl"', /*safe*/ width,
 			' style="table-layout:fixed;', /*safe*/ wdStyle, '">');
 		this.domFaker_(out, '-hdfaker');
 
@@ -93,7 +93,7 @@ function tree$mold$(out) {
 	//foot
 	if (this.treefoot) {
 		out.push('<div id="', uuid, '-foot" class="', this.$s('footer'), '">',
-			'<table id="', uuid, '-foottbl"', width, ' style="table-layout:fixed;', /*safe*/ wdStyle, '">');
+			'<table id="', uuid, '-foottbl"', /*safe*/ width, ' style="table-layout:fixed;', /*safe*/ wdStyle, '">');
 		if (this.treecols)
 			this.domFaker_(out, '-ftfaker');
 

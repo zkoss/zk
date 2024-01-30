@@ -395,7 +395,7 @@ module.exports = {
         '@typescript-eslint/no-non-null-asserted-nullish-coalescing': 'off',
         '@typescript-eslint/no-non-null-asserted-optional-chain': 'off',
         '@typescript-eslint/no-non-null-assertion': 'off',
-        '@typescript-eslint/no-parameter-properties': 'error', // deprecated
+        '@typescript-eslint/parameter-properties': 'error', // deprecated
         '@typescript-eslint/no-require-imports': 'error',
         '@typescript-eslint/no-this-alias': 'warn',
         '@typescript-eslint/restrict-plus-operands': 'warn',
@@ -410,6 +410,9 @@ module.exports = {
         '@typescript-eslint/type-annotation-spacing': 'error',
         '@typescript-eslint/unbound-method': 'off',
         '@typescript-eslint/unified-signatures': 'off', // TSDoc overloaded functions
+        '@typescript-eslint/no-redundant-type-constituents': 'warn',
+        '@typescript-eslint/no-dynamic-delete': 'warn',
+        '@typescript-eslint/no-extraneous-class': 'off',
         'zk/noMixedHtml': [ 2, {
           'htmlFunctionRules': [
             'dom(?:(?!Evt|Target).)', 'getStyle', 'getSclass', 'getZclass', 'HTML_$',

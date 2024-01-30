@@ -32,7 +32,7 @@ function grid$mold$(out) {
 
 	if (this.columns) {
 		out.push('<div id="', uuid, '-head" class="', this.$s('header'), '" role="none">',
-			'<table id="', uuid, '-headtbl"', wdAttr, ' style="table-layout:fixed;', /*safe*/ wdStyle, '" role="none">');
+			'<table id="', uuid, '-headtbl"', /*safe*/ wdAttr, ' style="table-layout:fixed;', /*safe*/ wdStyle, '" role="none">');
 		this.domFaker_(out, '-hdfaker');
 
 		out.push('<tbody id="', uuid, '-headrows" role="rowgroup">');
@@ -82,7 +82,7 @@ function grid$mold$(out) {
 
 	if (this.foot) {
 		out.push('<div id="', uuid, '-foot" class="', this.$s('footer'), '" role="none">',
-			'<table id="', uuid, '-foottbl"', wdAttr, ' style="table-layout:fixed;', /*safe*/ wdStyle, '" role="none">');
+			'<table id="', uuid, '-foottbl"', /*safe*/ wdAttr, ' style="table-layout:fixed;', /*safe*/ wdStyle, '" role="none">');
 		if (this.columns)
 			this.domFaker_(out, '-ftfaker');
 

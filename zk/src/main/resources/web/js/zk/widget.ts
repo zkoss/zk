@@ -392,7 +392,6 @@ function _unlistenFlex(wgt: zk.Widget): void {
  * It is the low-level utility reserved for overriding for advanced customization.
  */
 // zk scope
-// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export var DnD = class { //for easy overriding
 	/**
 	 * @returns the drop target from the event, or the element from the event's
@@ -2818,8 +2817,8 @@ new zul.wnd.Window({
 			this._zIndex = zIndex;
 			var n = this.$n();
 			if (n) {
-				n.style.zIndex = zIndex >= 0 ? (zIndex as string) : '';
-				if (opts && opts.fire) this.fire('onZIndex', (zIndex > 0 || zIndex === 0) ? zIndex : -1, {ignorable: true});
+				n.style.zIndex = (zIndex as number) >= 0 ? (zIndex as string) : '';
+				if (opts && opts.fire) this.fire('onZIndex', ((zIndex as number) > 0 || zIndex === 0) ? zIndex : -1, {ignorable: true});
 			}
 		}
 		return this;
@@ -3085,7 +3084,7 @@ new zul.wnd.Window({
 		if ((!no || !no.top) && (s = this.getTop()))
 			out += 'top:' + s + ';';
 		let zIndex;
-		if ((!no || !no.zIndex) && (zIndex = this.getZIndex()) >= 0)
+		if ((!no || !no.zIndex) && ((zIndex = this.getZIndex() as number)) >= 0)
 			out += 'z-index:' + zIndex + ';';
 		return DOMPurify.sanitize(out);
 	}
@@ -3364,11 +3363,11 @@ new zul.wnd.Window({
 	rerender(skipper?: Skipper | number): this
 	rerender(skipper?: Skipper | number): this {
 		if (this.desktop) {
-			if (!skipper || skipper > 0) { //default: 0
+			if (!skipper || (skipper as number) > 0) { //default: 0
 				_rerender(this, typeof skipper === 'number' ? skipper : 0);
 				return this;
 			}
-			if (skipper < 0)
+			if ((skipper as number) < 0)
 				skipper = undefined; //negative -> immediately
 
 			var n = this.$n();
@@ -4983,7 +4982,7 @@ new zul.wnd.Window({
 		if (fn) {
 			inf[listener] = bklsns[listener]
 				// eslint-disable-next-line no-new-func
-				= typeof fn != 'function' ? new Function('var event=arguments[0];' + fn) : fn;
+				= typeof fn != 'function' ? new Function('var event=arguments[0];' + (fn as string)) : fn;
 			this.listen(inf);
 		}
 		return this;
@@ -5000,7 +4999,7 @@ new zul.wnd.Window({
 		if (fn) {
 			inf[listener0] = bklsns[listener0]
 				// eslint-disable-next-line no-new-func
-				= typeof fn != 'function' ? new Function('var event=arguments[0];' + fn) : fn;
+				= typeof fn != 'function' ? new Function('var event=arguments[0];' + (fn as string)) : fn;
 			this.listen(inf);
 		}
 		return this;
@@ -6666,7 +6665,7 @@ export namespace widget_global {
 			var widget = zk.Widget.$(n, opts);
 			if (widget)
 				return widget.$service();
-			zk.error('Not found ZK Service with [' + n + ']');
+			zk.error('Not found ZK Service with [' + String(n) + ']');
 			return undefined;
 		}
 	};
@@ -6993,7 +6992,7 @@ export var NoDOM = class NoDOM {
 			var context = this.$getInterceptorContext$();
 			for (var w = this.firstChild; w; w = w.nextSibling) {
 				if (visible)
-					w.setDomVisible_(w.$n()!, w.isVisible()!, opts);
+					w.setDomVisible_(w.$n()!, w.isVisible(), opts);
 				else
 					w.setDomVisible_(w.$n()!, visible, opts);
 			}

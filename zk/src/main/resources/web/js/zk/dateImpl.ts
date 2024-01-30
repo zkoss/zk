@@ -202,7 +202,7 @@ export namespace dateImpl_global {
 			return this._getTzMoment().year(year).valueOf();
 		}
 		toString(): string {
-			return this._getTzMoment().toString();
+			return String(this._getTzMoment());
 		}
 		valueOf(): number {
 			return this._moment.valueOf();

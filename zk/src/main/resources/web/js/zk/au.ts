@@ -510,7 +510,7 @@ export namespace au_global {
 				for (var c in code as Record<number | string, string>)
 					zAu.setErrorURI(parseInt(c), code[c] as string);
 			} else
-				zAu._errURIs['' + code] = uri!;
+				zAu._errURIs['' + String(code)] = uri!;
 		}
 		/**
 		 * Sets the URI for the server-push related error.
@@ -538,7 +538,7 @@ export namespace au_global {
 					zAu.setPushErrorURI(parseInt(c), code[c] as string);
 				return;
 			}
-			_perrURIs['' + code] = uri!;
+			_perrURIs['' + String(code)] = uri!;
 		}
 
 		////Ajax Send////
@@ -965,7 +965,7 @@ export namespace au_global {
 				if (!forceAjax && ws) {
 					zk.copy(content, zWs.encode(j, aureq, dt));
 				} else {
-					content += zAu.encode(j, aureq, dt);
+					(content as string) += zAu.encode(j, aureq, dt);
 				}
 				zk.copy(rtags, (aureq.opts || {}).rtags);
 			}

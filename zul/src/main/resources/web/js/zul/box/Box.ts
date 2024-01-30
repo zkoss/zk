@@ -400,7 +400,7 @@ export class Box extends zul.Widget {
 	/** @internal */
 	override insertChildHTML_(child: zk.Widget, before?: zk.Widget, desktop?: zk.Desktop): void {
 		if (before) {
-			jq(this._chdextr(before)).before(/*safe*/ this.encloseChildHTML_(child)!);
+			jq(this._chdextr(before)).before(/*safe*/ this.encloseChildHTML_(child) as string);
 		} else {
 			var n = this.$n<HTMLTableElement>('real')!, tbs = n.tBodies;
 			if (!tbs || !tbs.length)
@@ -430,7 +430,7 @@ export class Box extends zul.Widget {
 	 * @param out - an array of HTML fragments.
 	 * @internal
 	 */
-	encloseChildHTML_(child: zk.Widget, prefixSpace?: boolean, out?: string[]): string | void {
+	encloseChildHTML_(child: zk.Widget, prefixSpace?: boolean, out?: string[]): string | undefined {
 		var oo: string[] = [],
 			isCell = child instanceof zul.wgt.Cell;
 		if (this.isVertical()) {

@@ -175,7 +175,7 @@ export class ItemWidget extends zul.Widget<HTMLTableRowElement> implements zul.m
 		this._selected = selected;
 
 		if (n) {
-			jq(n)[selected ? 'addClass' : 'removeClass'](this.$s('selected')!);
+			jq(n)[selected ? 'addClass' : 'removeClass'](this.$s('selected'));
 			this._updHeaderCM();
 		}
 	}
@@ -263,7 +263,7 @@ export class ItemWidget extends zul.Widget<HTMLTableRowElement> implements zul.m
 		const n = this.$n(),
 			mesh = this.getMeshWidget();
 		if (n) {
-			const cls = this.$s('focus')!,
+			const cls = this.$s('focus'),
 				lastn = mesh?._focusItem?.$n();
 			// ZK-3077: focus out the last focused item first (for draggable issue)
 			if (lastn)
@@ -280,7 +280,7 @@ export class ItemWidget extends zul.Widget<HTMLTableRowElement> implements zul.m
 	_doFocusOut(): void {
 		const n = this.$n();
 		if (n) {
-			const cls = this.$s('focus')!;
+			const cls = this.$s('focus');
 			jq(n).removeClass(cls);
 			jq(n.cells).removeClass(cls);
 		}
@@ -296,7 +296,7 @@ export class ItemWidget extends zul.Widget<HTMLTableRowElement> implements zul.m
 			}
 
 			const headerWgt = zk.Widget.$<zul.mesh.HeaderWidget>(box._headercm)!,
-				zcls = headerWgt.$s('checked')!,
+				zcls = headerWgt.$s('checked'),
 				$headercm = jq(box._headercm);
 
 			// only update for user's selection or sharable model case (ZK-2969 test case)

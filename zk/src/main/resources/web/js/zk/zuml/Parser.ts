@@ -105,7 +105,7 @@ function _create0(parent: zk.Widget, e: HTMLElement, args: unknown, cwgts: zk.Wi
 		} else if ('attribute' == tn) {
 			var attnm = _eval(parent, e.getAttribute('name'), args);
 			if (!attnm)
-				throw 'The name attribute required, ' + e;
+				throw 'The name attribute required, for ' + tn;
 			parent.set(attnm, zk.xml.Utl.getElementValue(e));
 			return;
 		} else {

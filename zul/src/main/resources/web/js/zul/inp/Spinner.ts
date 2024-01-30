@@ -111,7 +111,7 @@ export class Spinner extends zul.inp.NumberInputWidget<number> {
 	override coerceToString_(value: unknown): string {//copy from intbox
 		var fmt = this._format;
 		return fmt ? zk.fmt.Number.format(fmt, value as string, this._rounding!, this._localizedSymbols)
-				: value != null ? '' + value : '';
+				: value != null ? '' + String(value) : '';
 	}
 
 	onHide = undefined;

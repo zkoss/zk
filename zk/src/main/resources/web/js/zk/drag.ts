@@ -47,7 +47,7 @@ export interface DraggableOptions {
 	snap?: zk.Offset | ((dg: Draggable, offset: zk.Offset) => zk.Offset);
 }
 
-	var _dragging = {},
+	var _dragging = new Map(),
 		_actTmout: undefined | number, //if not null, it means _activate() is called but not really activated
 		_stackup: undefined | HTMLIFrameElement, _activedg: undefined | Draggable, _initPt: zk.Offset, _dnEvt: boolean | zk.Event | undefined,
 		_lastPt: zk.Offset | undefined, _lastScrlPt: zk.Offset | undefined;
@@ -121,7 +121,7 @@ export interface DraggableOptions {
 		var node: undefined | HTMLElement & {_$opacity?} = dg.node;
 		if (node) {
 			node._$opacity = jq(node).css('opacity');
-			_dragging[node.toString()] = true;
+			_dragging.set(node, true);
 		}
 		if (node) {
 			jq(node)
@@ -150,7 +150,7 @@ export interface DraggableOptions {
 					duration: 200,
 					queue: '_draggable',
 					complete: function () {
-						delete _dragging[node!.toString()];
+						_dragging.delete(node);
 					}
 				});
 		}
@@ -813,7 +813,7 @@ export class Draggable extends zk.Object {
 		var node = this.node,
 			evt = jq.Event.zk(devt),
 			target = devt.target as HTMLElement;
-		if (_actTmout || (node && _dragging[node.toString()]) || evt.which != 1
+		if (_actTmout || _dragging.has(node) || evt.which != 1
 			|| (zk.webkit && jq.nodeName(target, 'select'))
 			|| (zk(target).isInput() && this.control != zk.Widget.$(target)))
 			return;

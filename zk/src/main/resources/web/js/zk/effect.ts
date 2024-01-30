@@ -375,7 +375,7 @@ export namespace eff {
 				let zic = n.style.zIndex || jq(n).css('z-index');
 				if (zic && zic != 'auto') {
 					zicv = zk.parseInt(zic);
-					if (zi == 'auto' || zicv > zi)
+					if (zi == 'auto' || zicv > (zi as number))
 						zi = zicv;
 				}
 			}

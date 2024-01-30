@@ -79,7 +79,7 @@ function _tt_clearClosing_(): void {
 		clearTimeout(tmClosing);
 	}
 }
-function _tt_open_(event: zk.Event): undefined | undefined {
+function _tt_open_(event: zk.Event): undefined {
 	var inf = _tt_inf;
 	if (inf) {
 		_tt_tip = inf.tip,
@@ -160,6 +160,7 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Widge
 	/** @internal */
 	_parsedCtlKeys?: ParsedCtlKeys;
 
+	// eslint-disable-next-line @typescript-eslint/no-useless-constructor
 	constructor(props?: Record<string, unknown> | typeof zkac) {
 		super(props);
 	}

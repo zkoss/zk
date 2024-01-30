@@ -266,7 +266,7 @@ zk.override(zk.Widget.prototype, _xWidget, {
 					this._holdTimeout = undefined;
 				}
 			};
-			jq(this.$n()!).on('touchstart', this.proxy(this._tapHoldStart))
+			jq(this.$n()).on('touchstart', this.proxy(this._tapHoldStart))
 				.on('touchmove', this.proxy(this._tapHoldMove)) //cancel hold if moved
 				.on('click', this.proxy(this._tapHoldClick))    //prevent click during hold
 				.on('touchend', this.proxy(this._tapHoldEnd));
@@ -276,7 +276,7 @@ zk.override(zk.Widget.prototype, _xWidget, {
 	unbindTapHold_() {
 		if (this.isListen('onRightClick') || (window.zul && this instanceof zul.Widget && this.getContext())) { //also register context menu to tapHold event
 			this._startHold = this._cancelHold = undefined;
-			jq(this.$n()!).off('touchstart', this.proxy(this._tapHoldStart))
+			jq(this.$n()).off('touchstart', this.proxy(this._tapHoldStart))
 				.off('touchmove', this.proxy(this._tapHoldMove)) //cancel hold if moved
 				.off('click', this.proxy(this._tapHoldClick))    //prevent click during hold
 				.off('touchend', this.proxy(this._tapHoldEnd));
