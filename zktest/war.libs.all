@@ -32,7 +32,7 @@ jasperreports.jar
 commons-collections4.jar
 commons-logging.jar
 commons-digester.jar
-itext.jar
+openpdf.jar
 groovy.jar
 jruby.jar
 js.jar
