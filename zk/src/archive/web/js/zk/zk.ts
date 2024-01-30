@@ -1283,7 +1283,7 @@ zk.log('value is", value);
 		var abs = uri.charAt(0) == '/';
 		if (au && !abs) {
 			abs = true;
-			if (uri)
+			if (uri && !(uri.charAt(0) == '?')) // ignore url starts with '?....'
 				uri = '/' + uri; //non-au supports relative path
 		}
 

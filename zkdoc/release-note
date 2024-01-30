@@ -1,5 +1,6 @@
 ZK 9.6.5
 * Features
+  ZK-5142: Handle GET and POST requests more strictly
 
 * Bugs
 
