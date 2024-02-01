@@ -130,7 +130,7 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 		String pkg = null;
 		boolean sourceMapEnabled = sourceMapEnabled();
 		if (path.endsWith(".map")) {
-			if (isDebugJS() && sourceMapEnabled) { // try to get *.js.map
+			if (sourceMapEnabled) { // try to get *.js.map
 				if (path.endsWith("js/index.js.map")) { // special case, inside zk
 					path = path.replace("js/index.js.map", "js/zk/index.js.map");
 				}
@@ -151,7 +151,7 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 		 * @see bug 2898413
 		 */
 		String resourceCache = Library.getProperty("org.zkoss.zk.WPD.cache");
-		if (resourceCache != null && "false".equalsIgnoreCase(resourceCache) || sourceMapEnabled) // if source map is enabled, disable cache
+		if (resourceCache != null && "false".equalsIgnoreCase(resourceCache))
 			_cache.clear();
 
 		List<Element> dividedElements;
@@ -187,7 +187,17 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 			path = path.substring(0, lastPartIndex) + (pkgName.endsWith("wpd") ? pkgName : (pkgName + ".wpd")); // original wpd path
 		}
 		final Content content = (Content) _cache.get(path);
-		if (content == null) {
+		Content latestContent = null; // for source map to prevent cached
+		boolean retrievingLastContent = sourceMapEnabled && !(content._cnt instanceof SourceInfo); // if parsed content cached, get latest one.
+		if (retrievingLastContent) {
+			try {
+				latestContent = (Content) _cache.getLoader().load(path);
+			} catch (Exception e) {
+				log.error("Failed to load the resource: " + path);
+				throw new UiException("Failed to load the resource: " + path, e);
+			}
+		}
+		if (content == null || (retrievingLastContent && latestContent == null)) {
 			if (Servlets.isIncluded(request)) {
 				log.error("Failed to load the resource: " + path);
 				//It might be eaten, so log the error
@@ -201,7 +211,8 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 		final boolean cacheable;
 		final RequestContext reqctx = new RequestContext(this, request, response);
 		synchronized (content) {
-			final Object rawdata = content.parse(reqctx);
+			// if source map is enabled, always not using cache
+			final Object rawdata = sourceMapEnabled ? new Content((SourceInfo) (latestContent == null ? content : latestContent)._cnt).parse(reqctx) : content.parse(reqctx);
 			if (rawdata instanceof ByteContent) {
 				final ByteContent bc = (ByteContent) rawdata;
 				data = bc.content;
