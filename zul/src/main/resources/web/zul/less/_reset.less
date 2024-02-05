@@ -192,6 +192,14 @@ e('</c:if>');
   text-transform: none;
 }
 
+/* James chu, Potix, 20240205, cursor should be pointer */
+@{browserDefaultPrefix}label,
+@{browserDefaultPrefix}select,
+@{browserDefaultPrefix}input[type="radio"],
+@{browserDefaultPrefix}input[type="checkbox"] {
+  cursor: pointer; // Improves usability and consistency of cursor style between image-type `input` and others.
+}
+
 /**
  * Correct the inability to style clickable types in iOS and Safari.
  */
@@ -201,6 +209,8 @@ e('</c:if>');
 @{browserDefaultPrefix}[type="reset"],
 @{browserDefaultPrefix}[type="submit"] {
   -webkit-appearance: button;
+  /* James chu, Potix, 20240205, cursor should be pointer */
+  cursor: pointer; // Improves usability and consistency of cursor style between image-type `input` and others.
 }
 
 /**
