@@ -11,8 +11,8 @@
     <description>ZK Parent POM Module</description>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <slf4j.version>1.7.30</slf4j.version>
-        <jetty.version>10.0.5</jetty.version>
+        <slf4j.version>2.0.7</slf4j.version>
+        <jetty.version>10.0.11</jetty.version>
         <skipNpmInstall>false</skipNpmInstall>
         <skipZklessc>false</skipZklessc>
         <maven.frontend.skip>false</maven.frontend.skip>
@@ -142,7 +142,6 @@
                 <artifactId>jetty-bom</artifactId>
                 <version>${jetty.version}</version>
                 <type>pom</type>
-                <scope>import</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
