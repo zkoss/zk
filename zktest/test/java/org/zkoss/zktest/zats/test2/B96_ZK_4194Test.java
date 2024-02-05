@@ -22,10 +22,8 @@ import org.junit.experimental.categories.Category;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.devtools.DevTools;
-import org.openqa.selenium.devtools.v111.network.Network;
-import org.openqa.selenium.devtools.v111.network.model.ConnectionType;
-import org.openqa.selenium.mobile.NetworkConnection;
-import org.openqa.selenium.remote.CapabilityType;
+import org.openqa.selenium.devtools.v121.network.Network;
+import org.openqa.selenium.devtools.v121.network.model.ConnectionType;
 
 import org.zkoss.zktest.zats.ChromiumHeadlessDriver;
 import org.zkoss.zktest.zats.ExternalZkXml;

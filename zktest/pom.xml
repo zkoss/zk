@@ -186,7 +186,7 @@
 		<dependency>
 			<groupId>com.google.javascript</groupId>
 			<artifactId>closure-compiler-unshaded</artifactId>
-			<version>v20220601</version>
+			<version>v20231112</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -336,7 +336,13 @@
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-java</artifactId>
-			<version>4.9.0</version>
+			<version>4.17.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-devtools-v121</artifactId>
+			<version>4.17.0</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
