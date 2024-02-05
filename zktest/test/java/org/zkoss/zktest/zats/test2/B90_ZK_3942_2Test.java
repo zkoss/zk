@@ -13,7 +13,6 @@ package org.zkoss.zktest.zats.test2;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.openqa.selenium.Dimension;
 
 import org.zkoss.zktest.zats.WebDriverTestCase;
 
@@ -26,7 +25,6 @@ public class B90_ZK_3942_2Test extends WebDriverTestCase {
 		connect();
 		waitResponse();
 
-		final Dimension size = driver.manage().window().getSize();
-		Assert.assertEquals(size.width >> 1, jq("$div1").width(), 3);
+		Assert.assertEquals(jq("body").innerWidth() >> 1, jq("$div1").width(), 3);
 	}
 }

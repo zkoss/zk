@@ -60,7 +60,10 @@ public class ChromiumHeadlessDriver extends ChromeDriver {
 	}
 
 	private static ChromeOptions headlessSettings(ChromeOptions options, boolean headless) {
-		options.setHeadless(headless);
+		if (headless) {
+			options.addArguments(new String[]{"--headless=new"});
+		}
+
 		return options;
 	}
 }
