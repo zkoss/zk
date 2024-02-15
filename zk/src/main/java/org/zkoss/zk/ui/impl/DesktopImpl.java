@@ -1626,14 +1626,17 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			public void schedule(EventListener<T> listener, T event) {
 				if (log.isDebugEnabled()) {
 					log.debug("scheduleServerPush: [{}]", event);
+				}
 
+				synchronized (_schedInfos) {
+					if (!scheduledServerPush()) {
+						// reset write/read count
+						_scheduleInfoReadCount.set(0);
+						_scheduleInfoWriteCount.set(0);
+					}
+					_schedInfos.put(_scheduleInfoWriteCount.getAndIncrement(),
+							new ScheduleInfo<T>(listener, event));
 				}
-				if (!scheduledServerPush()) {
-					// reset write/read count
-					_scheduleInfoReadCount.set(0);
-					_scheduleInfoWriteCount.set(0);
-				}
-				_schedInfos.put(_scheduleInfoWriteCount.getAndIncrement(), new ScheduleInfo<T>(listener, event));
 			}
 		});
 	}
@@ -1834,19 +1837,23 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			}
 			while (scheduledServerPush()) {
 				final Integer key = _scheduleInfoReadCount.getAndIncrement();
-				ScheduleInfo<? extends Event> ifPresent = _schedInfos.getIfPresent(key);
+				ScheduleInfo<? extends Event> ifPresent = _schedInfos.getIfPresent(
+						key);
 				if (ifPresent != null) {
 					ifPresent.invoke();
 					_schedInfos.invalidate(key);
 				} else if (scheduledServerPush()) {
-					// just in case to avoid endless loop
-					List<Integer> keys = new ArrayList<>(_schedInfos.asMap().keySet());
-					if (!keys.isEmpty()) {
-						Collections.sort(keys);
-						_scheduleInfoReadCount.set(keys.get(0));
-						continue;
-					} else {
-						break;
+					synchronized (_schedInfos) {
+						// just in case to avoid endless loop
+						List<Integer> keys = new ArrayList<>(
+								_schedInfos.asMap().keySet());
+						if (!keys.isEmpty()) {
+							Collections.sort(keys);
+							_scheduleInfoReadCount.set(keys.get(0));
+							continue;
+						} else {
+							break;
+						}
 					}
 				}
 				if (System.currentTimeMillis() > max)
