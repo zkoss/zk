@@ -35,9 +35,9 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.groovy</groupId>
+			<groupId>org.codehaus.groovy</groupId>
 			<artifactId>groovy</artifactId>
-			<version>5.0.0-alpha-1</version>
+			<version>3.0.20</version>
 			<optional>true</optional>
 			<exclusions>
 				<exclusion>
