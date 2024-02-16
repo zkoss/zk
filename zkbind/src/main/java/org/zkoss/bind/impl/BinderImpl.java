@@ -350,9 +350,6 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 		}.invokeMethod(this, initArgs);
 
 		initActivator();
-		//F80 - store subtree's binder annotation count
-		if (comp instanceof ComponentCtrl)
-			((ComponentCtrl) comp).enableBindingAnnotation();
 		//ZK-3133
 		_matchMediaValues = initMatchMediaValues(viewModel);
 		if (!_matchMediaValues.isEmpty()) {
@@ -2331,9 +2328,6 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 	}
 	
 	private void removeBindings(Collection<Binding> removed, Component comp) {
-		//F80 - store subtree's binder annotation count
-		if (!_bindings.containsKey(comp) && comp instanceof ComponentCtrl)
-			((ComponentCtrl) comp).disableBindingAnnotation();
 		_formBindingHandler.removeBindings(removed);
 		_propertyBindingHandler.removeBindings(removed);
 		_childrenBindingHandler.removeBindings(removed);
@@ -2434,10 +2428,6 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 		//bug 657, we have to keep the attribute assignment order.
 		attrMap = AllocUtil.inst.putLinkedHashMap(attrMap, attr, bindings);
 		_bindings.put(comp, attrMap);
-
-		//F80 - store subtree's binder annotation count
-		if (comp instanceof ComponentCtrl)
-			((ComponentCtrl) comp).enableBindingAnnotation();
 
 		//associate component with this binder, which means, one component can only bind by one binder
 		BinderUtil.markHandling(comp, this);
