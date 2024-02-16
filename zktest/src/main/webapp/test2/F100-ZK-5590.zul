@@ -21,4 +21,5 @@ Copyright (C) 2023 Potix Corporation. All Rights Reserved.
 	<label id="lb"/>
 	<button label="click" onClick='lb.value="Clicked"'/>
 	<rangeslider id="rs1" onRangeValueChange='Clients.log(rs1.getStartValue() + "," + rs1.getEndValue())'/>
+	<searchbox></searchbox>
 </zk>
