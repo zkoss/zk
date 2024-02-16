@@ -37,7 +37,7 @@
 		<dependency>
 			<groupId>org.codehaus.groovy</groupId>
 			<artifactId>groovy</artifactId>
-			<version>3.0.20</version>
+			<version>3.0.20</version> <!-- Java 8 can only use up to 3.x versions -->
 			<optional>true</optional>
 			<exclusions>
 				<exclusion>
