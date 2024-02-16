@@ -166,7 +166,7 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 				addSharedAnnotationMap(compInfo.getAnnotationMap());
 				//F80 - store subtree's binder annotation count
 				if (compInfo.hasBindingAnnotation())
-					enableBindingAnnotation();
+					initBindingAnnotation();
 			} else if (curInfo instanceof ShadowInfo) {
 				final ShadowInfo compInfo = (ShadowInfo) curInfo;
 				_def = compInfo.getComponentDefinition();
@@ -174,7 +174,7 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 				addSharedAnnotationMap(compInfo.getAnnotationMap());
 				//F80 - store subtree's binder annotation count
 				if (compInfo.hasBindingAnnotation())
-					enableBindingAnnotation();
+					initBindingAnnotation();
 			} else {
 				_def = (ComponentDefinition) curInfo;
 				addSharedAnnotationMap(_def.getAnnotationMap());
@@ -1992,10 +1992,12 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 		//ZK-1148, add a @destroy annotation method.
 		if (parent == null)//detach
 			WebApps.getCurrent().getConfiguration().invokeCallback("destroy", this);
+		disableBindingAnnotation();
 	}
 
 	public void onParentChanged(Component parent) {
 		processCallback(AFTER_PARENT_CHANGED);
+		enableBindingAnnotation();
 	}
 
 	/** Default: handles special event listeners.
@@ -3742,6 +3744,8 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 		private boolean hasBindingAnnot = false;
 		private int subAnnotCnt = 0;
 
+		private boolean hasBindingAnnotInfo = false;
+
 		public Object clone() {
 			final AuxInfo clone;
 			try {
@@ -4227,7 +4231,7 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 
 	//F80 - store subtree's binder annotation count
 	public boolean hasBindingAnnotation() {
-		return _auxinf != null && _auxinf.hasBindingAnnot;
+		return _auxinf != null && _auxinf.hasBindingAnnotInfo;
 	}
 
 	public boolean hasSubBindingAnnotation() {
@@ -4244,7 +4248,18 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 	}
 
 	protected void setSubBindingAnnotationCount(int diff, AbstractComponent node) {
-		node.initAuxInfo().subAnnotCnt += diff;
+		AuxInfo auxInfo = node.initAuxInfo();
+
+		// the minimum value of subAnnotCnt is 1 if hasBindingAnnotInfo is true.
+		auxInfo.subAnnotCnt = Math.max(auxInfo.subAnnotCnt + diff, auxInfo.hasBindingAnnotInfo ? 1 : 0);
+
+	}
+
+	private void initBindingAnnotation() {
+		AuxInfo auxinf = initAuxInfo();
+		auxinf.hasBindingAnnotInfo = true;
+		auxinf.subAnnotCnt = 1; // init to 1 for itself
+		enableBindingAnnotation();
 	}
 
 	public void enableBindingAnnotation() {
@@ -4261,7 +4276,7 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 		if (old != hasBindingAnnot) {
 			int diff = hasBindingAnnot ? 1 : -1;
 			auxinf.hasBindingAnnot = hasBindingAnnot;
-			updateSubBindingAnnotationCount(diff);
+			updateSubBindingAnnotationCount(diff * auxinf.subAnnotCnt);
 		}
 	}
 
