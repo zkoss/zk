@@ -171,7 +171,12 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 				dividedElements = _dividedWpds.get(lastPart);
 				if (dividedElements == null) { // dynamic
 					try {
-						return processDynamicWpdWithSourceMapIfAny(request, response, pkgName, path);
+						byte[] dynamicContent = processDynamicWpdWithSourceMapIfAny(request, response, pkgName, path);
+						if (dynamicContent != null) {
+							return dynamicContent;
+						} else {
+							dividedElements = _dividedWpds.get(lastPart);
+						}
 					} catch (Exception e) {
 						log.error("fail to process source for source map", e);
 						return new byte[]{};
@@ -179,7 +184,7 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 				}
 				request.setAttribute(SOURCE_MAP_DIVIDED_WPDS, dividedElements);
 				Integer packagePartsCnt = _dividedPackageCnt.get(pkgName);
-				if (packagePartsCnt != null && packagePartsCnt > 1) {
+				if (packagePartsCnt != null && packagePartsCnt >= 1) {
 					int num = Integer.parseInt(lastPart.replace(pkgName, "").replace(".wpd", ""));
 					request.setAttribute(SOURCE_MAP_DIVIDED_WPDS_NUMBER, num);
 				}
@@ -1043,6 +1048,11 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 		StringBuilder sb = new StringBuilder();
 		int index = 0;
 		String lastWpd = null;
+		if (dividedPaths.size() == 0) {
+			throw new UiException("Failed to load the resource: " + path);
+		} else if (dividedPaths.size() == 1) {
+			return null; // only one. just add it.
+		}
 		for (String dividedPath : dividedPaths) {
 			String scriptVariableName = "script" + index++;
 			sb.append("var ").append(scriptVariableName).append("=document.createElement('script');");
