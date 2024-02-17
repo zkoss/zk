@@ -1,0 +1,9 @@
+<div sclass="stepbar">
+	<forEach items="@init(stepBarModel.items)" var="step">
+		<div sclass="@load(('step ' += step.status))" 
+			onClick="@command(step.done ? gotoStepCommand : null, step=step)">
+			<span sclass="@init(('step-icon ' += step.icon))"/>
+			<label sclass="step-label" value="@init(step.label)"/>
+		</div>
+	</forEach>
+</div>
