@@ -42,6 +42,7 @@ ZK 10.0.0
   ZK-4355: timebox' default cols is too small
   ZK-5611: Executions.schedule() might fail if it's called by multiple threads
   ZK-5639: stepbox wrong color update
+  ZK-5635: textbox cannot focus on iPad/iPhone
 
 * Upgrade Notes
   + Upgrade commons-fileupload to commons-fileupload2-javax 2.0.0-M2 and commons-io to 2.13.0 to support jakarta-friendly uploads

@@ -730,14 +730,13 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	}
 
 	/** @internal */
-	_doTouch(evt: zk.Event): boolean {
+	_doTouch(evt: zk.Event): undefined {
 		if (!zk.ios) {
-			return false;
+			return;
 		}
 		//B65-ZK-1285: get window offset information before virtual keyboard opened on ipad
 		windowX = window.pageXOffset;
 		windowY = window.pageYOffset;
-		return false;
 	}
 
 	/** @internal */
