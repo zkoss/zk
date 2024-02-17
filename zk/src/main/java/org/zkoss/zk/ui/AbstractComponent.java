@@ -4263,20 +4263,22 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 	}
 
 	public void enableBindingAnnotation() {
-		setBindingAnnotation0(true);
+		toggleBindingAnnotationAndUpdateCount(true);
 	}
 
 	public void disableBindingAnnotation() {
-		setBindingAnnotation0(false);
+		toggleBindingAnnotationAndUpdateCount(false);
 	}
 
-	private void setBindingAnnotation0(boolean hasBindingAnnot) {
+	private void toggleBindingAnnotationAndUpdateCount(boolean hasBindingAnnot) {
 		AuxInfo auxinf = initAuxInfo();
 		boolean old = auxinf.hasBindingAnnot;
 		if (old != hasBindingAnnot) {
 			int diff = hasBindingAnnot ? 1 : -1;
 			auxinf.hasBindingAnnot = hasBindingAnnot;
-			updateSubBindingAnnotationCount(diff * auxinf.subAnnotCnt);
+			if (auxinf.subAnnotCnt > 0) {
+				updateSubBindingAnnotationCount(diff * auxinf.subAnnotCnt);
+			}
 		}
 	}
 
