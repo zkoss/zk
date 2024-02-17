@@ -88,69 +88,69 @@ public class F80_Parser_StoreSubAnnotCntTest extends ZATSTestCase {
 		assertEquals(w3_scnt, l3_scnt + testb2_scnt + testb3_scnt  + l5_scnt + 1);
 		assertEquals(rt_scnt, w1_scnt + w3_scnt + c_scnt);
 				
-		//Event - add bind annotation
-		ComponentAgent add_b = desktop.query("#root #add_bind");
-		add_b.click();
-		ComponentAgent l4 = desktop.query("#root #w3").getLastChild();
-		int l4_scnt = l4.as(Label.class).getSubBindingAnnotationCount();
-		assertEquals(l4_scnt, 1);
-		w3_scnt = w3.as(Window.class).getSubBindingAnnotationCount();
-		assertEquals(w3_scnt, l3_scnt + testb2_scnt + testb3_scnt  + l5_scnt + l4_scnt + 1);
-		rt_scnt = rt.as(Window.class).getSubBindingAnnotationCount();
-		assertEquals(rt_scnt, w1_scnt + w3_scnt + c_scnt);
+		//Event - add bind annotation (not supported since ZK 10)
+//		ComponentAgent add_b = desktop.query("#root #add_bind");
+//		add_b.click();
+//		ComponentAgent l4 = desktop.query("#root #w3").getLastChild();
+//		int l4_scnt = l4.as(Label.class).getSubBindingAnnotationCount();
+//		assertEquals(l4_scnt, 1);
+//		w3_scnt = w3.as(Window.class).getSubBindingAnnotationCount();
+//		assertEquals(w3_scnt, l3_scnt + testb2_scnt + testb3_scnt  + l5_scnt + l4_scnt + 1);
+//		rt_scnt = rt.as(Window.class).getSubBindingAnnotationCount();
+//		assertEquals(rt_scnt, w1_scnt + w3_scnt + c_scnt);
 		
-		//Event - remove binding one
-		ComponentAgent remove_binding_one = desktop.query("#root #remove_binding_one");
-		remove_binding_one.click();
-		testb2_scnt = testb2.as(Button.class).getSubBindingAnnotationCount();
-		assertEquals(testb2_scnt, 1);
-		w3_scnt = w3.as(Window.class).getSubBindingAnnotationCount();
-		assertEquals(w3_scnt, l3_scnt + testb2_scnt + testb3_scnt  + l5_scnt + l4_scnt + 1);
-		rt_scnt = rt.as(Window.class).getSubBindingAnnotationCount();
-		assertEquals(rt_scnt,  w1_scnt + w3_scnt + c_scnt);
+		//Event - remove binding one (not supported since ZK 10)
+//		ComponentAgent remove_binding_one = desktop.query("#root #remove_binding_one");
+//		remove_binding_one.click();
+//		testb2_scnt = testb2.as(Button.class).getSubBindingAnnotationCount();
+//		assertEquals(testb2_scnt, 1);
+//		w3_scnt = w3.as(Window.class).getSubBindingAnnotationCount();
+//		assertEquals(w3_scnt, l3_scnt + testb2_scnt + testb3_scnt  + l5_scnt + l4_scnt + 1);
+//		rt_scnt = rt.as(Window.class).getSubBindingAnnotationCount();
+//		assertEquals(rt_scnt,  w1_scnt + w3_scnt + c_scnt);
 		
 		//Event - remove binding all
-		ComponentAgent remove_binding_all = desktop.query("#root #remove_binding_all");
-		remove_binding_all.click();
-		testb3_scnt = testb3.as(Button.class).getSubBindingAnnotationCount();
-		assertEquals(testb3_scnt, 0);
-		w3_scnt = w3.as(Window.class).getSubBindingAnnotationCount();
-		assertEquals(w3_scnt, l3_scnt + testb2_scnt + testb3_scnt  + l5_scnt + l4_scnt + 1);
-		rt_scnt = rt.as(Window.class).getSubBindingAnnotationCount();
-		assertEquals(rt_scnt,  w1_scnt + w3_scnt + c_scnt);
+//		ComponentAgent remove_binding_all = desktop.query("#root #remove_binding_all");
+//		remove_binding_all.click();
+//		testb3_scnt = testb3.as(Button.class).getSubBindingAnnotationCount();
+//		assertEquals(testb3_scnt, 0);
+//		w3_scnt = w3.as(Window.class).getSubBindingAnnotationCount();
+//		assertEquals(w3_scnt, l3_scnt + testb2_scnt + testb3_scnt  + l5_scnt + l4_scnt + 1);
+//		rt_scnt = rt.as(Window.class).getSubBindingAnnotationCount();
+//		assertEquals(rt_scnt,  w1_scnt + w3_scnt + c_scnt);
 		
 		//Event - more bind annotation
-		add_b.click();
-		l4_scnt = l4.as(Label.class).getSubBindingAnnotationCount();
-		assertEquals(l4_scnt, 1);
-		rt_scnt = rt.as(Window.class).getSubBindingAnnotationCount();
-		assertEquals(rt_scnt, w1_scnt + w3_scnt + c_scnt);
+//		add_b.click();
+//		l4_scnt = l4.as(Label.class).getSubBindingAnnotationCount();
+//		assertEquals(l4_scnt, 1);
+//		rt_scnt = rt.as(Window.class).getSubBindingAnnotationCount();
+//		assertEquals(rt_scnt, w1_scnt + w3_scnt + c_scnt);
 		
 		//Event - add and bind first
-		ComponentAgent add_bf = desktop.query("#root #add_bindfirst");
-		add_bf.click();
-		ComponentAgent w_bf = desktop.query("#root").getLastChild();
-		ComponentAgent l_bf = w_bf.getFirstChild();
-		int l_bf_scnt = l_bf.as(Label.class).getSubBindingAnnotationCount();
-		assertEquals(l_bf_scnt, 1);
-		
-		int w_bf_scnt = w_bf.as(Window.class).getSubBindingAnnotationCount();
-		assertEquals(w_bf_scnt, l_bf_scnt + 1);
-		
-		rt_scnt = rt.as(Window.class).getSubBindingAnnotationCount();
-		assertEquals(rt_scnt, w1_scnt + w3_scnt + c_scnt + w_bf_scnt);
+//		ComponentAgent add_bf = desktop.query("#root #add_bindfirst");
+//		add_bf.click();
+//		ComponentAgent w_bf = desktop.query("#root").getLastChild();
+//		ComponentAgent l_bf = w_bf.getFirstChild();
+//		int l_bf_scnt = l_bf.as(Label.class).getSubBindingAnnotationCount();
+//		assertEquals(l_bf_scnt, 1);
+//
+//		int w_bf_scnt = w_bf.as(Window.class).getSubBindingAnnotationCount();
+//		assertEquals(w_bf_scnt, l_bf_scnt + 1);
+//
+//		rt_scnt = rt.as(Window.class).getSubBindingAnnotationCount();
+//		assertEquals(rt_scnt, w1_scnt + w3_scnt + c_scnt + w_bf_scnt);
 		
 		//Event - add and bind last
-		ComponentAgent add_bl = desktop.query("#root #add_bindlast");
-		add_bl.click();
-		ComponentAgent w_bl = desktop.query("#root").getLastChild();
-		ComponentAgent l_bl = w_bf.getFirstChild();
-		int l_bl_scnt = l_bl.as(Label.class).getSubBindingAnnotationCount();
-		assertEquals(l_bl_scnt, 1);
-		int w_bl_scnt = w_bl.as(Window.class).getSubBindingAnnotationCount();
-		assertEquals(w_bl_scnt, l_bl_scnt + 1);
-		rt_scnt = rt.as(Window.class).getSubBindingAnnotationCount();
-		assertEquals(rt_scnt, w1_scnt + w3_scnt + c_scnt + w_bf_scnt + w_bl_scnt);
+//		ComponentAgent add_bl = desktop.query("#root #add_bindlast");
+//		add_bl.click();
+//		ComponentAgent w_bl = desktop.query("#root").getLastChild();
+//		ComponentAgent l_bl = w_bf.getFirstChild();
+//		int l_bl_scnt = l_bl.as(Label.class).getSubBindingAnnotationCount();
+//		assertEquals(l_bl_scnt, 1);
+//		int w_bl_scnt = w_bl.as(Window.class).getSubBindingAnnotationCount();
+//		assertEquals(w_bl_scnt, l_bl_scnt + 1);
+//		rt_scnt = rt.as(Window.class).getSubBindingAnnotationCount();
+//		assertEquals(rt_scnt, w1_scnt + w3_scnt + c_scnt + w_bf_scnt + w_bl_scnt);
 		
 		//Event - move w2 to root as last child
 		ComponentAgent move_append = desktop.query("#root #move_append");
@@ -162,7 +162,7 @@ public class F80_Parser_StoreSubAnnotCntTest extends ZATSTestCase {
 	   
 		assertEquals(w1_scnt, l1_scnt + dabtn_scnt + 1);
 		assertEquals(w2_scnt, l2_scnt + testb1_scnt + 1);
-		assertEquals(rt_scnt,  w1_scnt + w2_scnt + w3_scnt + c_scnt + w_bf_scnt + w_bl_scnt);
+		assertEquals(rt_scnt,  w1_scnt + w2_scnt + w3_scnt + c_scnt/* + w_bf_scnt + w_bl_scnt*/);
 		
 		//Event - move back
 		ComponentAgent move_setParent = desktop.query("#root #move_setParent");
@@ -173,12 +173,12 @@ public class F80_Parser_StoreSubAnnotCntTest extends ZATSTestCase {
 		rt_scnt = rt.as(Window.class).getSubBindingAnnotationCount();
 		assertEquals(w2_scnt, l2_scnt + testb1_scnt + 1);
 		assertEquals(w1_scnt, l1_scnt + dabtn_scnt + w2_scnt + 1);
-		assertEquals(rt_scnt,  w1_scnt + w3_scnt + c_scnt + w_bf_scnt + w_bl_scnt);
+		assertEquals(rt_scnt,  w1_scnt + w3_scnt + c_scnt/* + w_bf_scnt + w_bl_scnt*/);
 		
 		//Event - remove w3
 		ComponentAgent remove = desktop.query("#root #remove");
 		remove.click();
 		rt_scnt = rt.as(Window.class).getSubBindingAnnotationCount();
-		assertEquals(rt_scnt,  w1_scnt + c_scnt + w_bf_scnt + w_bl_scnt);
+		assertEquals(rt_scnt,  w1_scnt + c_scnt/* + w_bf_scnt + w_bl_scnt*/);
 	}
 }

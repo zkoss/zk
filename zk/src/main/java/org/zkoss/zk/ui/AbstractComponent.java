@@ -1416,8 +1416,6 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 			++_chdinf.nChild;
 			onChildAdded(nc);
 			triggerAfterHostChildAdded(nc);
-			//F80 - store subtree's binder annotation count
-			updateSubBindingAnnotationCount(nc.initAuxInfo().subAnnotCnt);
 		}
 		return true;
 	}
@@ -1589,8 +1587,6 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 		++_chdinf.modCntChd;
 		--_chdinf.nChild;
 		onChildRemoved(child);
-		//F80 - store subtree's binder annotation count
-		updateSubBindingAnnotationCount(-oc.initAuxInfo().subAnnotCnt);
 		triggerAfterHostChildRemoved(child);
 		return true;
 	}
@@ -4250,16 +4246,18 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 	protected void setSubBindingAnnotationCount(int diff, AbstractComponent node) {
 		AuxInfo auxInfo = node.initAuxInfo();
 
-		// the minimum value of subAnnotCnt is 1 if hasBindingAnnotInfo is true.
-		auxInfo.subAnnotCnt = Math.max(auxInfo.subAnnotCnt + diff, auxInfo.hasBindingAnnotInfo ? 1 : 0);
-
+		// Don't update the count for itself
+		if (node != this) {
+			auxInfo.subAnnotCnt += diff;
+		}
 	}
 
 	private void initBindingAnnotation() {
 		AuxInfo auxinf = initAuxInfo();
 		auxinf.hasBindingAnnotInfo = true;
-		auxinf.subAnnotCnt = 1; // init to 1 for itself
-		enableBindingAnnotation();
+		auxinf.subAnnotCnt = 1;
+		auxinf.hasBindingAnnot = true;
+		updateSubBindingAnnotationCount(1); // init to 1 for itself
 	}
 
 	public void enableBindingAnnotation() {
@@ -4274,10 +4272,10 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 		AuxInfo auxinf = initAuxInfo();
 		boolean old = auxinf.hasBindingAnnot;
 		if (old != hasBindingAnnot) {
-			int diff = hasBindingAnnot ? 1 : -1;
+			int multiply = hasBindingAnnot ? 1 : -1;
 			auxinf.hasBindingAnnot = hasBindingAnnot;
 			if (auxinf.subAnnotCnt > 0) {
-				updateSubBindingAnnotationCount(diff * auxinf.subAnnotCnt);
+				updateSubBindingAnnotationCount(multiply * auxinf.subAnnotCnt);
 			}
 		}
 	}
