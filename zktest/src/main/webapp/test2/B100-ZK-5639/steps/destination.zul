@@ -1,0 +1,12 @@
+<zk>
+	<image src="B100-ZK-5639/steps/destination.png" tooltiptext="dummy content"/>
+	<if test="@load(!vm.carAdded)">
+		<hlayout style="position: relative; margin-top: 12px" spacing="8px">
+			<div hflex="1" sclass="highlight">
+				<span sclass="z-icon-car"/>
+				<label zclass=" " value="Do you need a car?"/>
+			</div>
+			<button zclass="stepbar-button" width="245px" sclass="outline" onClick="@command('addCar')" label="Yes, I need a Car!"/>
+		</hlayout>
+	</if>
+</zk>

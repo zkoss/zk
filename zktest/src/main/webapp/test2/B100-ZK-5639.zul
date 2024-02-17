@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B100-ZK-5639.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		2024/2/17, Created by jumperchen
+
+Copyright (C) 2024 Potix Corporation. All Rights Reserved.
+
+-->
+<?component name="stepbar" templateURI="B100-ZK-5639/stepbar.zul"?>
+<zk>
+	<style src="B100-ZK-5639/stepbar.css"/>
+	<div viewModel="@id('vm') @init('org.zkoss.zktest.test2.B100_ZK_5639.B100_ZK_5639_HolidayOrderViewModel')"
+	     validationMessages="@id('vmsgs')">
+		<stepbar stepBarModel="@init(vm.stepBarModel)" gotoStepCommand="gotoStep"/>
+
+		<div style="padding: 0 57px; margin-top: 16px;">
+			<label sclass="page-title" value="@load(vm.stepBarModel.current.label)"/>
+			<div style="margin-top: 26px;" sclass="stepbar-content">
+				<apply templateURI="@load(vm.stepBarModel.current.uri)" step="@load(vm.stepBarModel.current)"/>
+			</div>
+		</div>
+		<div style="padding: 0 57px; position: relative; margin-top: 32px;">
+			<if test="@load(!vm.stepBarModel.first and !vm.stepBarModel.last)">
+				<button zclass="stepbar-button" sclass="secondary" onClick="@command('back')" label="Back"/>
+			</if>
+			<if test="@load(!vm.stepBarModel.last)">
+				<button zclass="stepbar-button pull-right" sclass="primary" onClick="@command('next')" label="Next"/>
+			</if>
+		</div>
+		<div style="clear: both;"/>
+	</div>
+</zk>
