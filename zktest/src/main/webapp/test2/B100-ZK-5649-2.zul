@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B100-ZK-5649-2.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		2024/2/19, Created by jumperchen
+
+Copyright (C) 2024 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Click the button "Call command with postNotifyChange(this, "*")"
+		2. Each time you click the button, the date will be updated and the forEach items will be updated.
+	</label>
+	<zscript>
+		<![CDATA[
+		public class PostNotifyChangeTestVM {
+			private Date date = new Date();
+
+			public Date getDate(){
+			    return date;
+			}
+
+			public void changeDate() {
+				date = new Date();
+				BindUtils.postNotifyChange(this, "*");
+			}
+		}
+	]]>
+	</zscript>
+
+	<template name="mvvm-binding">
+		<label value="@load(date2)"/>
+	</template>
+	<template name="el-binding">
+		<label value="${date2}"/>
+	</template>
+
+	<div viewModel="@id('vm') @init('PostNotifyChangeTestVM')" style="padding:10px;">
+		<div sclass="mvvm-case">
+			<n:div xmlns:n="native" class="z-div">@load binding</n:div>
+			<div>post notify change works with MVVM binding in ZK 9.6.4 and ZK 10</div>
+			<!--	    	<apply template="mvvm-binding" date2="@load(vm.date)"/>-->
+		</div>
+		<div  sclass="el-case" style="margin-top:10px; margin-bottom:10px;">
+			<n:div xmlns:n="native" class="z-div">EL</n:div>
+			<div>post notify change doesn't work with EL binding in ZK 10, but in ZK 9.6.4</div>
+			<apply template="el-binding" date2="@load(vm.date)"/>
+		</div>
+		<separator/>
+		<button onClick="@command('changeDate')" label='Call command with postNotifyChange(this, "*")' style="text-transform:none"/>
+	</div>
+</zk>
