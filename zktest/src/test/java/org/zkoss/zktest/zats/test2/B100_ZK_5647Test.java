@@ -1,13 +1,13 @@
-/* B86_ZK_4201Test.java
+/* B100_ZK_5647Test.java
 
-		Purpose:
-		
-		Description:
-		
-		History:
-				Fri May 10 14:44:18 CST 2019, Created by leon
+        Purpose:
+                
+        Description:
+                
+        History:
+                Tue Feb 20 15:11:13 CST 2024, Created by rebeccalai
 
-Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+Copyright (C) 2024 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
@@ -23,7 +23,7 @@ import org.zkoss.test.webdriver.ForkJVMTestOnly;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
 @ForkJVMTestOnly
-public class B86_ZK_4201Test extends WebDriverTestCase {
+public class B100_ZK_5647Test extends WebDriverTestCase {
 	@RegisterExtension
 	public static final ExternalZkXml CONFIG = new ExternalZkXml("/test2/enable-tablet-ui-zk.xml");
 
@@ -32,15 +32,11 @@ public class B86_ZK_4201Test extends WebDriverTestCase {
 		return super.getWebDriverOptions()
 				.setExperimentalOption("mobileEmulation", Collections.singletonMap("deviceName", "iPad"));
 	}
-	
+
 	@Test
 	public void test() {
 		connect();
 		waitResponse();
-		jq(".z-listbox-body").scrollTop(1000);
-		waitResponse();
-		click(jq("@listcell:last"));
-		waitResponse();
-		Assertions.assertNotEquals(0, jq(".z-listbox-body").scrollTop());
+		Assertions.assertTrue(jq("@groupbox").hasClass("z-groupbox-3d"));
 	}
 }

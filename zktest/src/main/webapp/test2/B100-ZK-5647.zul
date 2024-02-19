@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B100-ZK-5647.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Fri Feb 16 13:21:29 CST 2024, Created by rebeccalai
+
+Copyright (C) 2024 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		1. open the page on touch screen
+		2. the mold of the groupbox should be 3d
+	</label>
+	<groupbox id="root" mold="3d" open="false" width="420px">
+		<caption label="Click me to open the groupbox" />
+		<grid fulfill="root.onOpen">
+			<columns>
+				<column label="Feature" hflex="1" />
+				<column label="Benefits" hflex="3" />
+			</columns>
+			<rows>
+				<row>
+					<label value="Create On Demand" />
+					<label value="Components are created only when they are needed,
+				saving both memory and rendering time." />
+				</row>
+			</rows>
+		</grid>
+	</groupbox>
+	The grid will be created when the open the content of groupbox
+</zk>
