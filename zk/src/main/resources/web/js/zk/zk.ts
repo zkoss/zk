@@ -859,9 +859,30 @@ function override<T extends () => void, U> (dst: T, backup: Record<string, unkno
 		dst[backup] = src;
 		return dst;
 	}
-	for (var nm in src) {
-		backup[nm] = dst[nm as string];
-		dst[nm as string] = src[nm];
+	if (typeof dst['$init'] == 'function') {
+		const props: string[] = [];
+		for (var nm in src) {
+			backup[nm] = dst[nm as string];
+			dst[nm as string] = src[nm];
+			if (backup[nm] == undefined && typeof dst[nm as string] != 'function') {
+				props.push(nm);
+			}
+		}
+		if (props.length) {
+			const oldInit = dst['$init'] as unknown as CallableFunction;
+			dst['$init'] = function (...args: unknown[]) {
+				oldInit.bind(this)(...args);
+				// try to apply the properties again
+				for (var nm of props) {
+					this[nm] = src![nm] as never;
+				}
+			};
+		}
+	} else {
+		for (var nm in src) {
+			backup[nm] = dst[nm as string];
+			dst[nm as string] = src[nm];
+		}
 	}
 	return dst;
 }
@@ -898,9 +919,30 @@ _zk.override = override;
  */
 _zk.augment = function<D extends Pick<S, keyof D & keyof S>, S> (dst: D, src: S & Pick<D, keyof D & keyof S> & ThisType<D & S>) {
 	const backup = {} as Pick<D, keyof D & keyof S>;
-	for (const nm in src) {
-		backup[nm] = dst[nm as keyof D];
-		dst[nm] = src[nm as keyof S];
+	if (typeof dst['$init'] == 'function') {
+		const props: string[] = [];
+		for (var nm in src) {
+			backup[nm] = dst[nm as keyof D];
+			dst[nm] = src[nm as keyof S];
+			if (backup[nm] == undefined && typeof dst[nm as keyof D] != 'function') {
+				props.push(nm);
+			}
+		}
+		if (props.length) {
+			const oldInit = dst['$init'] as unknown as CallableFunction;
+			dst['$init'] = function (...args: unknown[]) {
+				oldInit.bind(this)(...args);
+				// try to apply the properties again
+				for (var nm of props) {
+					this[nm] = src[nm] as never;
+				}
+			};
+		}
+	} else {
+		for (const nm in src) {
+			backup[nm] = dst[nm as keyof D];
+			dst[nm] = src[nm as keyof S];
+		}
 	}
 	return backup;
 };
