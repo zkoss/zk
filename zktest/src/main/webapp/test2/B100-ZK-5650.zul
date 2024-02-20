@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B100-ZK-5650.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Tue Feb 20 09:59:26 CST 2024, Created by rebeccalai
+
+Copyright (C) 2024 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		1. Enable websocket connection with
+			&lt;listener&gt;
+				&lt;listener-class&gt;org.zkoss.zkmax.au.websocket.WebSocketWebAppInit&lt;/listener-class&gt;
+			&lt;/listener&gt;
+		2. Open developer tools to observe network.
+		3. Dropupload a file, should observe an XMLHttpRequest and see its file name in zk log.
+	</label>
+	<dropupload content="Dropupload a file" detection="none">
+		<attribute name="onUpload"><![CDATA[
+			import org.zkoss.util.media.Media;
+			for (Media media : event.getMedias()) {
+				Clients.log(media.getName());
+			}
+		]]></attribute>
+	</dropupload>
+</zk>
