@@ -730,7 +730,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	}
 
 	/** @internal */
-	_doTouch(evt: zk.Event): undefined {
+	_doTouch(evt: zk.Event): void {
 		if (!zk.ios) {
 			return;
 		}
