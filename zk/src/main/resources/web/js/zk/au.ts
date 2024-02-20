@@ -965,7 +965,16 @@ export namespace au_global {
 				if (!forceAjax && ws) {
 					zk.copy(content, zWs.encode(j, aureq, dt));
 				} else {
-					(content as string) += zAu.encode(j, aureq, dt);
+					if (typeof content !== 'string') {
+						let reqContent = '';
+						for (const key in content) {
+							if (Object.hasOwn(content, key)) {
+								reqContent += (reqContent.length ? '&' : '') + key + '=' + encodeURIComponent(content[key] as string);
+							}
+						}
+						content = reqContent;
+					}
+					content += zAu.encode(j, aureq, dt);
 				}
 				zk.copy(rtags, (aureq.opts || {}).rtags);
 			}

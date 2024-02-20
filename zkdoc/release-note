@@ -45,6 +45,7 @@ ZK 10.0.0
   ZK-5635: textbox cannot focus on iPad/iPhone
   ZK-5647: Wrong groupbox layout on touch screen
   ZK-5636: fail to toggle grid's detail on iPad/iPhone
+  ZK-5650: cannot upload an image under websocket
 
 * Upgrade Notes
   + Upgrade commons-fileupload to commons-fileupload2-javax 2.0.0-M2 and commons-io to 2.13.0 to support jakarta-friendly uploads
