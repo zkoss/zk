@@ -87,7 +87,7 @@
         return null;
       
       // touch events may not be supported by this browser at all (eg. IE desktop).
-      if (!('TouchEvent' in global))
+      if (!('TouchEvent' in globalThis)) // cannot use global here for webpack imports.
         return nonTouchDevice;
       
       // Touch events are always generated from devices that fire touch events.
