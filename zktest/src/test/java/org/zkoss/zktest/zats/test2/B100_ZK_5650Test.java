@@ -33,6 +33,7 @@ public class B100_ZK_5650Test extends WebDriverTestCase {
 		waitResponse();
 		dropUploadFile(jq("@dropupload"), Paths.get("src/main/webapp/test2/img/sun.jpg"));
 		waitResponse();
+		assertNoAnyError();
 		assertEquals("sun.jpg", getZKLog());
 	}
 }
