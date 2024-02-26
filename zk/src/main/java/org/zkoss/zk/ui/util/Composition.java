@@ -42,7 +42,7 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
  * design a common page template across multiple pages.<p>
  * <ul>
  * <li>You first design a template with "insert" components telling where the insert points are.
- * Each insert component has to be given a distinguish joinId in a page(e.g. &lt;window self="@{insert(content)}"/>; 
+ * Each insert component has to be given a distinguish joinId in a page(e.g. &lt;window self="@{insert(content)}"/&gt;
  * here the "content" is the joinId).</li>
  * <li>Then in the real page, you have root "define" components telling which "define" 
  *  components are to be attach onto the "insert" component with the same joinId 
@@ -50,7 +50,7 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
  * <li>This Composition class is designed as a page {@link Initiator} and a {@link InitiatorExt}, so 
  * you have to specify in the real page as following to use it.  
  * <pre> 
- * &lt;?init class="org.zkoss.zk.ui.util.Composition" [arg0="TEMPLATE1"[, arg1="TEMPLATE2"]...]?>
+ * &lt;?init class="org.zkoss.zk.ui.util.Composition" [arg0="TEMPLATE1"[, arg1="TEMPLATE2"]...]?&gt;
  * ...
  * </pre>
  * Where the arg0 ~ argx you can give zul template uri. This implementation use Excecutions.createComponents()

@@ -75,8 +75,8 @@ public class A extends LabelImageElement implements org.zkoss.zk.ui.ext.Disable 
 	 * clicks this anchor.
 	 *
 	 * <p>To represent the anchor itself, the developer can specify <code>self</code>.
-	 * For example, <code>&lt;a id="ok" autodisable="self,cancel"/></code>
-	 * is the same as <code>&lt;a id="ok" autodisable="ok,cancel"/></code>
+	 * For example, <code>&lt;a id="ok" autodisable="self,cancel"/&gt;</code>
+	 * is the same as <code>&lt;a id="ok" autodisable="ok,cancel"/&gt;</code>
 	 * that will disable
 	 * both the ok and cancel anchor when an user clicks it.
 	 *
@@ -87,7 +87,7 @@ public class A extends LabelImageElement implements org.zkoss.zk.ui.ext.Disable 
 	 *
 	 * <p>However, if you prefer to enable them later manually, you can
 	 * prefix with '+'. For example,
-	 * <code>&lt;a id="ok" autodisable="+self,+cancel"/></code>
+	 * <code>&lt;a id="ok" autodisable="+self,+cancel"/&gt;</code>
 	 *
 	 * <p>Then, you have to enable them manually such as
 	 * <pre><code>if (something_happened){

@@ -111,7 +111,7 @@ public class Iframe extends HtmlBasedComponent {
 	 * it is possible that it obscures the popup that shall be shown
 	 * above it. To resolve this, you have to specify autohide="true"
 	 * to this component, and specify the following in the page:
-	 * <pre><code>&lt;?script content="zk.useStack='auto';"?>
+	 * <pre><code>&lt;?script content="zk.useStack='auto';"?&gt;
 	 * <p>Please refer to <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/Customization/Stackup_and_Shadow">Stackup and Shadow</a>
 	 * for more information.
 	 */

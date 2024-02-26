@@ -50,7 +50,7 @@ public class AnnotateBinder extends BinderImpl {
 
 	/**
 	 *  {@inheritDoc}
-	 * <b>since 6.0.2</b>, this method will take care of super's {@link Binder#init(Component, Object)} only<br>
+	 * <b>since 6.0.2</b>, this method will take care of super's {@link Binder#init(Component, Object, Map)} only<br>
 	 * If {@link AnnotateBinder} need to be used manually, {@link #initAnnotatedBindings()} need to be invoked for scanning and building binding syntax tree.
 	 *  @see #initAnnotatedBindings()  
 	 */

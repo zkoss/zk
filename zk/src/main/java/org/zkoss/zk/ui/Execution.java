@@ -27,10 +27,10 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 
 import org.zkoss.idom.Document;
+import org.zkoss.util.resource.Locator;
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.xel.ExpressionFactory;
 import org.zkoss.xel.VariableResolver;
-import org.zkoss.xml.Locator;
 import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.au.http.AuRedirect;
 import org.zkoss.zk.ui.event.Event;
@@ -1150,7 +1150,7 @@ public interface Execution extends Scope {
 	 * <p>Notice that, after this method is called, an attribute named zk
 	 * will be stored to the request, such that you can retrieve
 	 * the browser information by use of EL, such as
-	 * <code>${zk.ie > 7}</code>.
+	 * <code>${zk.ie &gt; 7}</code>.
 	 *
 	 * @param name the browser's name. It includes "ie", "ff", "gecko",
 	 * "webkit", "safari" and "opera". And, "ff" is the same as "gecko",

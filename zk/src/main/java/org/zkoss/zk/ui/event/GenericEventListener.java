@@ -31,11 +31,11 @@ import org.zkoss.zk.ui.sys.ComponentsCtrl;
  * respectively. Note how the bindComponent() method bind this event listener to the main
  * window.</p>
  *<pre><code>
- * &lt;window id="main">
+ * &lt;window id="main"&gt;
  *     ...
- * &lt;/window>
+ * &lt;/window&gt;
  * 
- * &lt;zscript>&lt;!-- both OK in zscript or a compiled Java class -->
+ * &lt;zscript&gt;&lt;!-- both OK in zscript or a compiled Java class --&gt;
  * public class MyEventListener extends GenericEventListener {
  *    public void onOK(Event evt) {
  *        //doOK!
@@ -48,7 +48,7 @@ import org.zkoss.zk.ui.sys.ComponentsCtrl;
  * }
  *
  * new MyEventListener().bindComponent(main);
- * &lt;/zscript>
+ * &lt;/zscript&gt;
  * </code></pre>
  * @author robbiecheng
  * @since 3.0.1

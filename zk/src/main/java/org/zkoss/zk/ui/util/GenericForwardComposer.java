@@ -68,10 +68,10 @@ import org.zkoss.zk.ui.Component;
  * 
  * test.zul
  * 
- * &lt;window id="mywin" apply="MyComposer">
- *     &lt;textbox id="mytextbox"/>
- *     &lt;label id="mylabel"/>
- * &lt;/window>
+ * &lt;window id="mywin" apply="MyComposer"&gt;
+ *     &lt;textbox id="mytextbox"/&gt;
+ *     &lt;label id="mylabel"/&gt;
+ * &lt;/window&gt;
  * </code></pre>
  * 
  * @author henrichen

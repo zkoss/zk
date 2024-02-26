@@ -27,11 +27,11 @@ import java.lang.annotation.Target;
  * public class Product {
  *     private int id;
  *     private String label;
- *     // Getters & setters are omitted
+ *     // Getters &amp; setters are omitted
  * }
  *
  * ZUL:
- * &lt;button onClick="&#064;command('addProduct', id=1, label='Water')"/>
+ * &lt;button onClick="&#064;command('addProduct', id=1, label='Water')"/&gt;
  *
  * VM:
  * public class MyVM {

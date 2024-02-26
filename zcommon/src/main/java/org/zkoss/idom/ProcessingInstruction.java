@@ -115,8 +115,8 @@ implements org.w3c.dom.ProcessingInstruction {
 	 * exception '"', '='
 	 *
 	 * <p>For example, the string will cause ("a12", Intger(12)),
-	 * ("b+3", null), ("345", null), ("c6", "abc=125&3?5"):<br>
-	 * a12 =12 b+3 345 c6=\t'abc=125&3?5'
+	 * ("b+3", null), ("345", null), ("c6", "abc=125&amp;3?5"):<br>
+	 * a12 =12 b+3 345 c6=\t'abc=125&amp;3?5'
 	 *
 	 * @return the map (never null)
 	 * @exception org.zkoss.util.IllegalSyntaxException if syntax erros

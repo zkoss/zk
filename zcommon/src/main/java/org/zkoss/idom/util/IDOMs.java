@@ -277,10 +277,10 @@ public class IDOMs {
 	 * the following format:
 	 *
 	 * <pre></code>
-&lt;version>
-	&lt;version-class>org.zkoss.zul.Version&lt;/version-class>
-	&lt;version-uid>3.0.0&lt;/version-uid>
-&lt;/version>
+&lt;version&gt;
+	&lt;version-class&gt;org.zkoss.zul.Version&lt;/version-class&gt;
+	&lt;version-uid&gt;3.0.0&lt;/version-uid&gt;
+&lt;/version&gt;
 </code></pre>
 	 *
 	 * <p>Note: it returns true if the version info is not found.

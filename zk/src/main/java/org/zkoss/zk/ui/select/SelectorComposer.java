@@ -62,10 +62,10 @@ import org.zkoss.zk.ui.util.ConventionWires;
  * &#064;Wire("label[value = 'My Label']") // matches all labels with value "My Label"
  * &#064;Wire(":first-child") // matches all components which are first child
  * &#064;Wire("window textbox") // matches textbox who is a descendant of a window
- * &#064;Wire("window > textbox") // matches textbox who is a child of a window
+ * &#064;Wire("window &gt; textbox") // matches textbox who is a child of a window
  * &#064;Wire("window + textbox") // matches textbox who is the next sibling of a window
  * &#064;Wire("window ~ textbox") // matches textbox who is a younger sibling of a window
- * &#064;Wire("window > textbox.myclass:first-child") // conditions can be mixed
+ * &#064;Wire("window &gt; textbox.myclass:first-child") // conditions can be mixed
  * </code></pre>
  * 
  * @since 6.0.0

@@ -205,7 +205,7 @@ import org.zkoss.zul.impl.XulElement;
  *
  * <p>To turn on ROD for a specific Listbox, you have to specify the Listbox's
  * attribute map with key "org.zkoss.zul.listbox.rod" to true. That is, for
- * example, if in a zul file, you shall specify &lt;custom-attributes> of the
+ * example, if in a zul file, you shall specify &lt;custom-attributes&gt; of the
  * Listbox like this:</p>
  *
  * <pre>{@code
@@ -214,8 +214,8 @@ import org.zkoss.zul.impl.XulElement;
  *  </listbox>
  * }</pre>
  *
- * <p>You can mix the Library Property and &lt;custom-attributes> ways together.
- * The &lt;custom-attributes> way always takes higher priority. So you
+ * <p>You can mix the Library Property and &lt;custom-attributes&gt; ways together.
+ * The &lt;custom-attributes&gt; way always takes higher priority. So you
  * can turn OFF ROD in general and turn ON only some specific Listbox component.
  * Or you can turn ON ROD in general and turn OFF only some specific Listbox
  * component.</P>

@@ -33,7 +33,7 @@ import org.zkoss.zul.impl.XulElement;
  * [Since 6.0.0]
  * <p>To turn on the preload image function for this component, you have to specify the component's
  * attribute map with key "org.zkoss.zul.image.preload" to true. That is, for
- * example, if in a zul file, you shall specify &lt;custom-attributes> of the
+ * example, if in a zul file, you shall specify &lt;custom-attributes&gt; of the
  * component like this:</p>
  *
  * <pre><code> &lt;image ...&gt;

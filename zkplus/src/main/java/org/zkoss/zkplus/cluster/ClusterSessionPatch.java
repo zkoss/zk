@@ -27,9 +27,9 @@ import org.zkoss.zk.ui.util.ExecutionCleanup;
  * or cloud environment (such as Google App Engine).
  * <p>then you have to add following lines in application's WEB-INF/zk.xml:</p>
  * <pre><code>
- * 	&lt;listener>
- *		&lt;listener-class>org.zkoss.zkplus.cluster.ClusterSessionPatch&lt;/listener-class>
- *	&lt;/listener>
+ * 	&lt;listener&gt;
+ *		&lt;listener-class&gt;org.zkoss.zkplus.cluster.ClusterSessionPatch&lt;/listener-class&gt;
+ *	&lt;/listener&gt;
  * </code></pre>
  * @author jimmy
  * @since 5.0.8

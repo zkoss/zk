@@ -27,7 +27,7 @@ public interface Loader<K, V> {
 	 * If false, it assumes the current cached content is up-to-date.
 	 *
 	 * @param expiredMillis how many milli-seconds are expired after the last
-	 * check. In most cases, just return true if expiredMillis > 0
+	 * check. In most cases, just return true if expiredMillis &gt; 0
 	 */
 	public boolean shallCheck(K src, long expiredMillis);
 	/** Returns the last modified time, or -1 if reload is required or not exists.

@@ -60,7 +60,7 @@ public class ForEachImpl implements ForEach {
 	 * <li>length == 1: it iterates thru the content of expr[0].
 	 * For example, if expr[0] is an array, all items in this array will
 	 * be iterated.</li>
-	 * <li>length > 1, it will iterate thru expr[0]</li>
+	 * <li>length &gt; 1, it will iterate thru expr[0]</li>
 	 * <li>length == 0 or expr is null, null is returned</li>
 	 * </ol>
 	 * @since 3.0.6
@@ -77,7 +77,7 @@ public class ForEachImpl implements ForEach {
 	 * <li>length == 1: it iterates thru the content of expr[0].
 	 * For example, if expr[0] is an array, all items in this array will
 	 * be iterated.</li>
-	 * <li>length > 1, it will iterate thru expr[0]</li>
+	 * <li>length &gt; 1, it will iterate thru expr[0]</li>
 	 * <li>length == 0 or expr is null, null is returned</li>
 	 * </ol>
 	 * @since 3.0.6
@@ -94,7 +94,7 @@ public class ForEachImpl implements ForEach {
 	 * <li>length == 1: it iterates thru the content of expr[0].
 	 * For example, if expr[0] is an array, all items in this array will
 	 * be iterated.</li>
-	 * <li>length > 1, it will iterate thru expr[0]</li>
+	 * <li>length &gt; 1, it will iterate thru expr[0]</li>
 	 * <li>length == 0 or expr is null, null is returned</li>
 	 * </ol>
 	 * @since 8.0.0
@@ -114,7 +114,7 @@ public class ForEachImpl implements ForEach {
 	 * <li>length == 1: it iterates thru the content of expr[0].
 	 * For example, if expr[0] is an array, all items in this array will
 	 * be iterated.</li>
-	 * <li>length > 1, it will iterate thru expr[0]</li>
+	 * <li>length &gt; 1, it will iterate thru expr[0]</li>
 	 * <li>length == 0 or expr is null, null is returned</li>
 	 * </ol>
 	 * @since 8.0.0

@@ -84,7 +84,7 @@ public class FileuploadDlg extends Window {
 	}
 
 	/** Returns the result.
-	 * @return an array of media (length >= 1), or null if nothing.
+	 * @return an array of media (length &gt;= 1), or null if nothing.
 	 */
 	public Media[] getResult() {
 		return _result.isEmpty() ? null : _result.toArray(new Media[_result.size()]);

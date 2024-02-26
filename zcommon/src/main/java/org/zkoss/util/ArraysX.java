@@ -310,7 +310,7 @@ public class ArraysX {
 
 	/**
 	 * Shrink the specified array. It is similar to duplicate, except
-	 * it returns the previous instance if je==length && jb==0.
+	 * it returns the previous instance if je==length &amp;&amp; jb==0.
 	 *
 	 * @param ary the array
 	 * @param jb the beginning index (included)
@@ -326,7 +326,7 @@ public class ArraysX {
 	}
 	/**
 	 * Shrink the specified array. It is similar to duplicate, except
-	 * it returns the previous instance if je==length && jb==0.
+	 * it returns the previous instance if je==length &amp;&amp; jb==0.
 	 *
 	 * @param ary the array
 	 * @param jb the beginning index (included)

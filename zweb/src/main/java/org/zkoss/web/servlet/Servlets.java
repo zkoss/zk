@@ -323,7 +323,7 @@ public class Servlets {
 	 * <p>Notice that, after this method is called, an attribute named zk
 	 * will be stored to the request, such that you can retrieve
 	 * the browser information by use of EL, such as
-	 * <code>${zk.ff > 5}</code>.
+	 * <code>${zk.ff &gt; 5}</code>.
 	 *
 	 * @param request the request.
 	 * @param name the browser's name. It includes "ff", "gecko",
@@ -349,7 +349,7 @@ public class Servlets {
 	 * <p>Notice that, after this method is called, an attribute named zk
 	 * will be stored to the request, such that you can retrieve
 	 * the browser information by use of EL, such as
-	 * <code>${zk.ff > 5}</code>.
+	 * <code>${zk.ff &gt; 5}</code>.
 	 *
 	 * @param userAgent the user agent (i.e., the user-agent header in HTTP).
 	 * @param name the browser's name. It includes "ff", "gecko",

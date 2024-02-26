@@ -24,9 +24,9 @@ import org.zkoss.zk.ui.Page;
  * <p>You could specify the class of an implementation of the SEO renderer
  * as a listener in WEB-INF/zk.xml. For example,
  * <pre><code>
-&lt;listener>
-	&lt;listener-class>com.foo.MySEORenderer&lt;/listener-class>
-&lt;/listener></code></pre>
+&lt;listener&gt;
+	&lt;listener-class&gt;com.foo.MySEORenderer&lt;/listener-class&gt;
+&lt;/listener&gt;</code></pre>
  *
  * <p>Also notice that you could generate JavaScript snippet too, since it will
  * be interpreted by the browser. For example, if you'd like to inject some JavaScript

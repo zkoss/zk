@@ -75,8 +75,8 @@ import org.zkoss.zk.ui.util.URIInfo;
  * <p>In additions to loading, WPD allows to bootstrap a JavaScript codes
  * by specifying a parameter called main. For example, the following link
  *
- *<pre><code>&lt;script type="text/javascript" src="/zkdemo/zkau/web/js/zk.wpd?main=foo.Go&what=12&more=xy" charset="UTF-8">
-&lt;/script></code></pre>
+ *<pre><code>&lt;script type="text/javascript" src="/zkdemo/zkau/web/js/zk.wpd?main=foo.Go&amp;what=12&amp;more=xy" charset="UTF-8"&gt;
+&lt;/script&gt;</code></pre>
  *
  * will cause the following to be executed
  *

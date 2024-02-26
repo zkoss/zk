@@ -384,7 +384,6 @@ public class Exceptions {
 	 *
 	 * @param prefix the prefix shown in front of each line of the stack trace;
 	 * null to denote empty
-	 * @see org.zkoss.util.logging.Log#realCause
 	 */
 	public static final String formatStackTrace(Throwable t, String prefix) {
 		return formatStackTrace(null, t, prefix).toString();

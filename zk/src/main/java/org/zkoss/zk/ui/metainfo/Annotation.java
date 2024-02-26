@@ -26,15 +26,14 @@ import org.zkoss.util.resource.Location;
  * {@link #getAttribute}.
  *
  * <p>To get the annotation associated with a component, use
- * {@link org.zkoss.zk.ui.sys.ComponentCtrl#getAnnotation(String)}.
+ * {@link org.zkoss.zk.ui.sys.ComponentCtrl#getAnnotations(String)}.
  * To get the annotation associated with a component's property,
  * use {@link org.zkoss.zk.ui.sys.ComponentCtrl#getAnnotation(String, String)}
  *
  * @author tomyeh
- * @see org.zkoss.zk.ui.sys.ComponentCtrl#getAnnotation(String)
  * @see org.zkoss.zk.ui.sys.ComponentCtrl#getAnnotation(String, String)
- * @see org.zkoss.zk.ui.sys.ComponentCtrl#getAnnotations()
  * @see org.zkoss.zk.ui.sys.ComponentCtrl#getAnnotations(String)
+ * @see org.zkoss.zk.ui.sys.ComponentCtrl#getAnnotations(String, String)
  */
 public interface Annotation extends java.io.Serializable {
 	/** Returns the name of this annotation.

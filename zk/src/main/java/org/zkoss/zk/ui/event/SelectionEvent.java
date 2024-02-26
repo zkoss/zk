@@ -56,7 +56,7 @@ public class SelectionEvent extends Event {
 	/**
 	 * Returns the selected text's end position.
 	 * 
-	 * @return the end position >= 0
+	 * @return the end position &gt;= 0
 	 */
 	public int getEnd() {
 		return _end;
@@ -65,7 +65,7 @@ public class SelectionEvent extends Event {
 	/**
 	 * Returns the selected text's start position.
 	 * 
-	 * @return the start position >= 0
+	 * @return the start position &gt;= 0
 	 */
 	public int getStart() {
 		return _start;

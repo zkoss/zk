@@ -217,7 +217,7 @@ public class Encodes {
 	 * If the query string doesn't contain '?', it is assumed to be a string
 	 * without query's name/value pairs.
 	 *
-	 * @param str The query string like xxx?xxx=xxx&xxx=xxx or null.
+	 * @param str The query string like xxx?xxx=xxx&amp;xxx=xxx or null.
 	 * @param name The get parameter name.
 	 * @param value The value associated with the get parameter name. 
 	 * @return The new or result query string with your name/value.

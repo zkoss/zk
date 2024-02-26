@@ -31,10 +31,10 @@ import org.zkoss.zk.ui.util.ExecutionInit;
  * 
  * <p>In WEB-INF/zk.xml, add following lines:
  * <pre><code>
- * 	&lt;listener>
- *		&lt;description>Hibernate "OpenEntityManagerInView" Listener&lt;/description>
- *		&lt;listener-class>org.zkoss.zkplus.jpa.OpenEntityManagerInViewListener&lt;/listener-class>
- *	&lt;/listener>
+ * 	&lt;listener&gt;
+ *		&lt;description&gt;Hibernate "OpenEntityManagerInView" Listener&lt;/description&gt;
+ *		&lt;listener-class&gt;org.zkoss.zkplus.jpa.OpenEntityManagerInViewListener&lt;/listener-class&gt;
+ *	&lt;/listener&gt;
  * </code></pre>
  * </p>
  * <p>Applicable to EJB version 3.2.ga or later</p>

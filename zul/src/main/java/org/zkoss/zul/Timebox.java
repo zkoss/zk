@@ -45,7 +45,7 @@ import org.zkoss.zul.impl.DateTimeFormatInputElement;
 import org.zkoss.zul.mesg.MZul;
 
 /**
- * An input box for holding a time (a java.util.Date Object), but only Hour & Minute are used.
+ * An input box for holding a time (a java.util.Date Object), but only Hour &amp; Minute are used.
  *
  * <p>Default {@link #getZclass}: z-timebox. (since 3.5.0)
  *
