@@ -729,10 +729,10 @@ public interface Component extends Scope, java.io.Serializable, Cloneable {
 	 * then you can override the default mold by specifying the property
 	 * called "org.zkoss.zul.Button.mold" with the mold you want
 	 * in zk.xml. For example,
-	<pre><code>&lt;library-property>
-	&lt;name>org.zkoss.zul.Button.mold&lt;/name>
-	&lt;value>trendy&lt;/value>
-	&lt;/library-property></code></pre>
+	<pre><code>&lt;library-property&gt;
+	&lt;name&gt;org.zkoss.zul.Button.mold&lt;/name&gt;
+	&lt;value&gt;trendy&lt;/value&gt;
+	&lt;/library-property&gt;</code></pre>
 	 * <p>Notice that it doesn't affect the deriving classes. If you want
 	 * to change the deriving class's default mold, you have to specify
 	 * them explicitly, too.

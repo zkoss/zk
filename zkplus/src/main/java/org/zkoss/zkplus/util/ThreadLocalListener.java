@@ -44,46 +44,46 @@ import org.zkoss.zk.ui.event.EventThreadResume;
  * <p>Listener to make sure servlet thread and ZK event thread got the same ThreadLocal values. You 
  * have to declare this listener in WEB-INF/zk.xml as follows.</p>
  * <pre><code>
- * 	&lt;listener>
- *		&lt;description>ThreadLocal Synchronization Listener&lt;/description>
- *		&lt;listener-class>org.zkoss.zkplus.util.ThreadLocalListener&lt;/listener-class>
- *	&lt;/listener>
+ * 	&lt;listener&gt;
+ *		&lt;description&gt;ThreadLocal Synchronization Listener&lt;/description&gt;
+ *		&lt;listener-class&gt;org.zkoss.zkplus.util.ThreadLocalListener&lt;/listener-class&gt;
+ *	&lt;/listener&gt;
  * </code></pre>
  * <p>Besides that, you have to specify what ThreadLocal variables you want to sync. They are also 
  * specified in WEB-INF/zk.xml file in the form as below.</p>
  * <pre><code>
- *  &lt;preference>
- *    &lt;name>ThreadLocal&lt;/name>
- *    &lt;value>
+ *  &lt;preference&gt;
+ *    &lt;name&gt;ThreadLocal&lt;/name&gt;
+ *    &lt;value&gt;
  *			class1=field1,field2,...;
  *			class2=field1,field2,...;
  *			...
- *    &lt;/value>
- *  &lt;/preference>
+ *    &lt;/value&gt;
+ *  &lt;/preference&gt;
  * </code></pre>
  * <p>For example, to support synchronizing Spring's thread bounded resources, you have to specify the following 
  * ThreadLocal variables:</p>
  * <pre><code>
- *	&lt;preference>
- *		&lt;name>ThreadLocal&lt;/name>
- *		&lt;value>
+ *	&lt;preference&gt;
+ *		&lt;name&gt;ThreadLocal&lt;/name&gt;
+ *		&lt;value&gt;
  *		org.springframework.transaction.support.TransactionSynchronizationManager=resources,synchronizations,currentTransactionName,currentTransactionReadOnly,actualTransactionActive;
  *		org.springframework.orm.hibernate3.SessionFactoryUtils=deferredCloseHolder;
- *		org.springframework.transaction.interceptor.TransactionAspectSupport=transactionInfoHolder; &lt;!-- ver. 2+ -->
- *		&lt;!--org.springframework.transaction.interceptor.TransactionAspectSupport=currentTransactionInfo; ver. 1.28 -->
- *		&lt;/value>
- *	&lt;/preference>
+ *		org.springframework.transaction.interceptor.TransactionAspectSupport=transactionInfoHolder; &lt;!-- ver. 2+ --&gt;
+ *		&lt;!--org.springframework.transaction.interceptor.TransactionAspectSupport=currentTransactionInfo; ver. 1.28 --&gt;
+ *		&lt;/value&gt;
+ *	&lt;/preference&gt;
  * <p>In additions to using the application preference, you can specify it
  * in the library property called <code>zkplus.util.ThreadLocalListener.fieldsMap</code>.
  * The preference has the higher priority.
  * <p>Another example, when you specify the Spring's bean as scope="session", you have to specify the following
  * ThreadLocal variables since Spring 2.0 use RequestContextHolder to handle the bean's scope.</p>
  * <pre><code>
- *	&lt;preference>
- *	&lt;name>ThreadLocal&lt;/name>
- *	&lt;value>
+ *	&lt;preference&gt;
+ *	&lt;name&gt;ThreadLocal&lt;/name&gt;
+ *	&lt;value&gt;
  *		org.springframework.web.context.request.RequestContextHolder=requestAttributesHolder,inheritableRequestAttributesHolder;
- *	&lt;/value>
+ *	&lt;/value&gt;
  * </code></pre>
  *
  * @author henrichen

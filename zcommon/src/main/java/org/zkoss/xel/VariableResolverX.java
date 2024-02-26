@@ -38,7 +38,7 @@ public interface VariableResolverX extends VariableResolver {
 	 * For example, when resolving <code>foo.duke</code>,
 	 * <code>resolveVariable(ctx, null, "foo")</code> is called first.
 	 * And if it returns an non-null object,
-	 * <code>resolveVariable(ctx, foo, "duke"),/code> is called then
+	 * <code>resolveVariable(ctx, foo, "duke")</code> is called then
 	 * (where we assume the returned object in the previous call is <code>foo</code>).
 	 *
 	 * @param ctx the context of this evaluation

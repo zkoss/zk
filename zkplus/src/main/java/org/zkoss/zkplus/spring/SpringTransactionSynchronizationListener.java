@@ -43,10 +43,10 @@ import org.zkoss.zkplus.util.ThreadLocals;
  * resources.
  *
  * <pre><code>
- * 	&lt;listener>
- *		&lt;description>Spring TransactionSynchronizationManager handler&lt;/description>
- *		&lt;listener-class>org.zkoss.zkplus.spring.SpringTransactionSynchronizationListener&lt;/listener-class>
- *	&lt;/listener>
+ * 	&lt;listener&gt;
+ *		&lt;description&gt;Spring TransactionSynchronizationManager handler&lt;/description&gt;
+ *		&lt;listener-class&gt;org.zkoss.zkplus.spring.SpringTransactionSynchronizationListener&lt;/listener-class&gt;
+ *	&lt;/listener&gt;
  * </code></pre>
  * </p>
  * <p>Applicable to Spring Framework version 2.x or later</p>

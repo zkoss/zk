@@ -162,7 +162,7 @@ public abstract class XulElement extends HtmlBasedComponent {
 	 * </ul>
 	 * For example,
 	 * <pre>
-	 * &lt;button label="show" context="id, start_before"/>
+	 * &lt;button label="show" context="id, start_before"/&gt;
 	 * </pre>
 	 * <p> (since 6.5.2) the context menu can also be shown on customized location of <code>x</code> and <code>y</code> by adding parentheses"()", for example,
 	 * <pre>
@@ -255,7 +255,7 @@ public abstract class XulElement extends HtmlBasedComponent {
 	 * </ul>
 	 * For example,
 	 * <pre>
-	 * &lt;button label="show" popup="id, start_before"/>
+	 * &lt;button label="show" popup="id, start_before"/&gt;
 	 * </pre>
 	 * <p> (since 6.5.2) the popup can also be shown on customized location of <code>x</code> and <code>y</code> by adding parentheses"()", for example,
 	 * <pre>
@@ -352,7 +352,7 @@ public abstract class XulElement extends HtmlBasedComponent {
 	 * </ul>
 	 * For example,
 	 * <pre>
-	 * &lt;button label="show" tooltip="id, start_before"/>
+	 * &lt;button label="show" tooltip="id, start_before"/&gt;
 	 * </pre>
 	 * <p> (since 6.5.2) the tooltip can also be shown on customized location of <code>x</code> and <code>y</code> by adding parentheses"()", for example,
 	 * <pre>

@@ -160,11 +160,11 @@ public class XMLs {
 	 * with HTML/XML.
 	 * For example, &lt; is translated to &amp;lt;.
 	 *
-     *    &amp; -> &amp;amp;<br/>
-     *    &lt; -> &amp;lt;<br/>
-     *    &gt; -> &amp;gt;<br/>
-     *    " -> &amp;#034;<br/>
-     *    ' -> &amp;#039;<br/>
+     *    &amp; -&gt; &amp;amp;<br/>
+     *    &lt; -&gt; &amp;lt;<br/>
+     *    &gt; -&gt; &amp;gt;<br/>
+     *    " -&gt; &amp;#034;<br/>
+     *    ' -&gt; &amp;#039;<br/>
 	 *
 	 * @param s the string to quote; null is OK
 	 * @return the escaped string, or an empty string if s is null
@@ -183,11 +183,11 @@ public class XMLs {
 	/** Escapes a character into a string if it is a special XML character,
 	 * returns null if not a special character.
 	 *
-     *    &amp; -> &amp;amp;<br/>
-     *    &lt; -> &amp;lt;<br/>
-     *    &gt; -> &amp;gt;<br/>
-     *    " -> &amp;#034;<br/>
-     *    ' -> &amp;#039;<br/>
+     *    &amp; -&gt; &amp;amp;<br/>
+     *    &lt; -&gt; &amp;lt;<br/>
+     *    &gt; -&gt; &amp;gt;<br/>
+     *    " -&gt; &amp;#034;<br/>
+     *    ' -&gt; &amp;#039;<br/>
 	 */
 	public static final String escapeXML(char cc) {
 		switch (cc) {

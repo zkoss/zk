@@ -146,7 +146,7 @@ public class SimpleGroupsModel<D, H, F, E> extends AbstractGroupsModel<D, Object
 	 * @param foots an array to represent foot data of group, if an element in this array is null, then 
 	 * {@link #hasGroupfoot(int)} will return false in corresponding index.
 	 * @param closes an array of boolean to represent close status of group. If not specified, then
-	 * {@link #isClose(int)} will return false in corresponding index(i.e. group is default to open)  
+	 * {@link #isGroupOpened(int)} will return true in corresponding index(i.e. group is default to open)
 	 */
 	public SimpleGroupsModel(D[][] data, H[] heads, F[] foots, boolean[] closes) {
 		this(data != null ? ArraysX.asList(data) : (List<List<D>>) null,
@@ -219,7 +219,7 @@ public class SimpleGroupsModel<D, H, F, E> extends AbstractGroupsModel<D, Object
 	 * @param foots a list to represent foot data of group, if an element in this list is null, then 
 	 * {@link #hasGroupfoot(int)} will return false in corresponding index.
 	 * @param closes an array of boolean to represent close status of group. If not specified, then
-	 * {@link #isClose(int)} will return false in corresponding index(i.e. group is default to open)
+	 * {@link #isGroupOpened(int)} will return true in corresponding index(i.e. group is default to open)
 	 * @since 6.0.1  
 	 */
 	public SimpleGroupsModel(List<List<D>> data, List<H> heads, List<F> foots, boolean[] closes) {

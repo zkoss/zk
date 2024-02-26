@@ -115,7 +115,7 @@ public class InputEvent extends Event {
 	 * event of Javascript is always fired before <code>onChange</code> is fired. 
 	 * To get the position of cursor, <code>onChanging</code> event is suggested
 	 *  since onblur event of Javascript will not be fired.</p>
-	 * @return the start position >= 0
+	 * @return the start position &gt;= 0
 	 * @since 3.0.1
 	 */
 	public int getStart() {

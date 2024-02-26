@@ -15,7 +15,7 @@ import org.zkoss.zhtml.impl.AbstractTag;
 
 /**
  * The hgroup tag represents a heading and related content.
- * It groups a single {@literal <}h1>–{@literal <}h6> element with one or more {@literal <}p>.
+ * It groups a single {@literal <}h1&gt;–{@literal <}h6&gt; element with one or more {@literal <}p&gt;.
  * @author jumperchen
  * @since 10.0.0
  */

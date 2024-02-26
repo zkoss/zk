@@ -80,8 +80,8 @@ public class Button extends LabelImageElement implements org.zkoss.zk.ui.ext.Dis
 	 * clicks this button.
 	 *
 	 * <p>To represent the button itself, the developer can specify <code>self</code>.
-	 * For example, <code>&lt;button id="ok" autodisable="self,cancel"/></code>
-	 * is the same as <code>&lt;button id="ok" autodisable="ok,cancel"/></code>
+	 * For example, <code>&lt;button id="ok" autodisable="self,cancel"/&gt;</code>
+	 * is the same as <code>&lt;button id="ok" autodisable="ok,cancel"/&gt;</code>
 	 * that will disable
 	 * both the ok and cancel buttons when a user clicks it.
 	 *
@@ -92,7 +92,7 @@ public class Button extends LabelImageElement implements org.zkoss.zk.ui.ext.Dis
 	 *
 	 * <p>However, if you prefer to enable them later manually, you can
 	 * prefix with '+'. For example,
-	 * <code>&lt;button id="ok" autodisable="+self,+cancel"/></code>
+	 * <code>&lt;button id="ok" autodisable="+self,+cancel"/&gt;</code>
 	 *
 	 * <p>Then, you have to enable them manually such as
 	 * <pre><code>if (something_happened){

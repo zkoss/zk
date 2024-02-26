@@ -93,11 +93,11 @@ public interface ComponentDefinition extends Cloneable {
 	 *
 	 * <p>Notice that it is valid to have XML fragment, including XML elements,
 	 * within the element. For example,
-	<pre><code>&lt;html>
-	&lt;ul>
-	&lt;li forEach="apple, orange">${each}&lt;/li>
-	&lt;/ul>
-	&lt;/html></code></pre>
+	<pre><code>&lt;html&gt;
+	&lt;ul&gt;
+	&lt;li forEach="apple, orange"&gt;${each}&lt;/li&gt;
+	&lt;/ul&gt;
+	&lt;/html&gt;</code></pre>
 	 *
 	 * <p>If the component allows child components, it is better not to try
 	 * XML fragment as the plain text. And then, it shall return true

@@ -228,7 +228,7 @@ public class Events {
 	 * to denote a fulfill condition has been applied.
 	 * Developer usually listens to this event to process the
 	 * new created children. For example, you might invoke
-	 * {@link org.zkoss.zk.ui.Components#wireFellows} to process these new components.
+	 * {@link org.zkoss.zk.ui.util.ConventionWires#wireFellows} to process these new components.
 	 * @since 3.0.8
 	 */
 	public static final String ON_FULFILL = "onFulfill";

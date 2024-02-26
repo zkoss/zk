@@ -293,9 +293,9 @@ public interface ComponentCtrl {
 	 * <p>Furthermore, you can declare it as <code>custom-attribute</code>.
 	 * For example, the following is equivalent to the above.
 	 *
-	 * <pre><code>&lt;button>
+	 * <pre><code>&lt;button&gt;
 	 *  &lt;custom-attribute foo="@bind(whatever=123}"&gt;
-	 *&lt;/button></code></pre>
+	 *&lt;/button&gt;</code></pre>
 	 *
 	 * @param propName the property name, e.g., "value".
 	 * If null, this method returns the annotation(s) associated with this
@@ -318,9 +318,9 @@ public interface ComponentCtrl {
 	 * <p>Furthermore, you can declare it as <code>custom-attribute</code>.
 	 * For example, the following is equivalent to the above.
 	 *
-	 * <pre><code>&lt;button>
+	 * <pre><code>&lt;button&gt;
 	 *  &lt;custom-attribute foo="@bind(whatever=123}"&gt;
-	 *&lt;/button></code></pre>
+	 *&lt;/button&gt;</code></pre>
 	 *
 	 * @param propName the property name, e.g., "value".
 	 * If null, this method returns the annotation(s) associated with this

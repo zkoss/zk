@@ -110,8 +110,8 @@ public class Menuitem extends LabelImageElement implements org.zkoss.zk.ui.ext.D
 	 * clicks this menuitem.
 	 *
 	 * <p>To represent the menuitem itself, the developer can specify <code>self</code>.
-	 * For example, <code>&lt;menuitem id="ok" autodisable="self,cancel"/></code>
-	 * is the same as <code>&lt;menuitem id="ok" autodisable="ok,cancel"/></code>
+	 * For example, <code>&lt;menuitem id="ok" autodisable="self,cancel"/&gt;</code>
+	 * is the same as <code>&lt;menuitem id="ok" autodisable="ok,cancel"/&gt;</code>
 	 * that will disable
 	 * both the ok and cancel menuitem when an user clicks it.
 	 *
@@ -122,7 +122,7 @@ public class Menuitem extends LabelImageElement implements org.zkoss.zk.ui.ext.D
 	 *
 	 * <p>However, if you prefer to enable them later manually, you can
 	 * prefix with '+'. For example,
-	 * <code>&lt;menuitem id="ok" autodisable="+self,+cancel"/></code>
+	 * <code>&lt;menuitem id="ok" autodisable="+self,+cancel"/&gt;</code>
 	 *
 	 * <p>Then, you have to enable them manually such as
 	 * <pre><code>if (something_happened){

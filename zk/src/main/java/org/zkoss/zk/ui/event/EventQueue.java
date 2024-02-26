@@ -97,14 +97,14 @@ public interface EventQueue<T extends Event> {
 	 * Refer <a href="#async_sync">here</a> for details.
 	 * <p>Here is an example,
 	<pre><code>
-	&lt;window title="long operation" border="normal">
-	&lt;zscript>
+	&lt;window title="long operation" border="normal"&gt;
+	&lt;zscript&gt;
 	void print(String msg) {
 		new Label(msg).setParent(inf);
 	}
-	&lt;/zscript>
-	&lt;button label="async long op">
-		&lt;attribute name="onClick">&lt;![CDATA[
+	&lt;/zscript&gt;
+	&lt;button label="async long op"&gt;
+		&lt;attribute name="onClick"&gt;&lt;![CDATA[
 	if (EventQueues.exists("longop")) {
 	 print("It is busy. Please wait");
 	 return; //busy
@@ -128,10 +128,10 @@ public interface EventQueue<T extends Event> {
 	
 	print("Wait for 3 seconds");
 	eq.publish(new Event("whatever")); //kick off the long operation
-		]]>&lt;/attribute>
-	&lt;/button>
-	&lt;vbox id="inf"/>
-	&lt;/window>
+		]]&gt;&lt;/attribute&gt;
+	&lt;/button&gt;
+	&lt;vbox id="inf"/&gt;
+	&lt;/window&gt;
 	</code></pre>
 	 *
 	 * <p>Notice that, though an asynchronous listener cannot access

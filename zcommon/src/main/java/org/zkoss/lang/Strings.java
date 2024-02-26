@@ -187,7 +187,7 @@ public class Strings {
 	 * @param delimiters the set of characters to search for
 	 *
 	 * @return the index that is one of delimiters.
-	 * If return >= src.length(), it means no such delimiters
+	 * If return &gt;= src.length(), it means no such delimiters
 	 * @see #lastAnyOf
 	 */
 	public static final int anyOf(String src, String delimiters, int from) {

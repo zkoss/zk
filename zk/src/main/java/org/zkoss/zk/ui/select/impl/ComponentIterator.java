@@ -25,7 +25,7 @@ import org.zkoss.zk.ui.select.impl.Selector.Combinator;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 
 /**
- * An implementation of Iterator&lt;Component> that realizes the selector matching
+ * An implementation of Iterator&lt;Component&gt; that realizes the selector matching
  * algorithm. The iteration is lazily evaluated. i.e. The iterator will not
  * perform extra computation until .next() is called.
  * @since 6.0.0

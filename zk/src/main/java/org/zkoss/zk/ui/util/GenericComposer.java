@@ -44,7 +44,7 @@ import org.zkoss.zk.ui.sys.ExecutionCtrl;
  * the target main window automatically.</p>
  * 
  * <pre><code>
- * &lt;zscript>&lt;!-- both OK in zscript or a compiled Java class -->
+ * &lt;zscript&gt;&lt;!-- both OK in zscript or a compiled Java class --&gt;
  * public class MyComposer extends GenericComposer {
  *    public void onOK() {
  *        //doOK!
@@ -55,11 +55,11 @@ import org.zkoss.zk.ui.sys.ExecutionCtrl;
  *        //...
  *    } 
  * }
- * &lt;/zscript>
+ * &lt;/zscript&gt;
  *
- * &lt;window id="main" apply="MyComposer">
+ * &lt;window id="main" apply="MyComposer"&gt;
  *     ...
- * &lt;/window>
+ * &lt;/window&gt;
  * </code></pre>
  * <p>since 3.6.1, this composer would be assigned as an attribute of the given component 
  * per the naming convention composed of the component id and composer Class name. e.g.

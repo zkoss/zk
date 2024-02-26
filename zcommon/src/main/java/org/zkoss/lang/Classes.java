@@ -314,7 +314,7 @@ public class Classes {
 	}
 
 	/**
-	 * Change class name to internal form (e.g. byte[] -> [B). If already in
+	 * Change class name to internal form (e.g. byte[] -&gt; [B]). If already in
 	 * internal form, then just return it.
 	 */
 	public static final String toInternalForm(String clsName) {
@@ -446,8 +446,8 @@ public class Classes {
 	 * Convert an attribute name, returned by toAttributeName, to
 	 * a method name.
 	 *
-	 * <p>toMethodName("true", "is") => "isTrue"<br>
-	 * toMethodName("true", "") => "true"
+	 * <p>toMethodName("true", "is") =&gt; "isTrue"<br>
+	 * toMethodName("true", "") =&gt; "true"
 	 *
 	 * @param attrName the attribute name
 	 * @param prefix the prefix; one of is, get and set
@@ -1025,7 +1025,7 @@ public class Classes {
 	 * Gets the specified accessible object, either a method or a field, by
 	 * searching the specified name.
 	 *
-	 * <p>The search sequence is: (assume field name is body)><br>
+	 * <p>The search sequence is: (assume field name is body)&gt;<br>
 	 * getBody(...)<br>
 	 * isBody(...)<br>
 	 * body(...)<br>

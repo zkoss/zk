@@ -30,7 +30,7 @@ import org.zkoss.xel.VariableResolver;
  *
  * <p>It is designed to make the signature of XEL functions
  * (see {@link org.zkoss.web.fn.ServletFns}) simpler.
- * For example, {@link org.zkoss.web.fn.ServletFns#isExplorer} requires
+ * For example, {@link org.zkoss.web.fn.ServletFns#getCurrentContext} requires
  * no argument, since it assumes the current context can be retrieved
  * from {@link RequestContexts#getCurrent}.
  *

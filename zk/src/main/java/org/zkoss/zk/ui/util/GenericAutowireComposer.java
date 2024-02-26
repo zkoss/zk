@@ -98,18 +98,18 @@ import org.zkoss.zk.ui.event.SerializableEventListener;
  * 
  * test.zul
  * 
- * &lt;window id="mywin" apply="MyComposer">
- *     &lt;textbox id="mytextbox" value="${mywin$composer.title}"/>
- * &lt;/window>
+ * &lt;window id="mywin" apply="MyComposer"&gt;
+ *     &lt;textbox id="mytextbox" value="${mywin$composer.title}"/&gt;
+ * &lt;/window&gt;
  * </code></pre>
  *
  * <p>Since 5.0.8, you could name the composer by specify a custom attribute
  * called <code>composerName</code>. For example,
  *<pre><code>
- * &lt;window apply="MyComposer">
- * &lt;custom-attribute composerName="mc"/>
- *     &lt;textbox id="mytextbox" value="${mc.title}"/>
- * &lt;/window>
+ * &lt;window apply="MyComposer"&gt;
+ * &lt;custom-attribute composerName="mc"/&gt;
+ *     &lt;textbox id="mytextbox" value="${mc.title}"/&gt;
+ * &lt;/window&gt;
  * </code></pre>
  * 
  * @author henrichen
