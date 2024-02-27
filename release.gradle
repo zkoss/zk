@@ -748,7 +748,7 @@ task peBundles() {
 		dependsOn gradle.includedBuild('zkcml').task(':bundleJar')
 		doLast {
 			zkprojects.each { prjName, dir ->
-				if (prjName != 'za11y' && prjName != 'zkmax' && prjName != 'zuti') {
+				if (prjName != 'za11y' && prjName != 'zkmax' && prjName != 'zuti' && prjName != 'stateless' && prjName != 'stateless-immutable' && prjName != 'client-bind') {
 					copy {
 						includeEmptyDirs false
 						into "$buildDir/maven/proprietary/PE"
