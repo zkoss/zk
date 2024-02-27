@@ -14,11 +14,11 @@
     <url>https://www.zkoss.org/product/zk</url>
     <description>ZK Bill of Materials</description>
     <properties>
-        <zats.version>2.1.1</zats.version>
+        <zats.version>10.0.0</zats.version>
         <zkspringboot.version>3.0.0</zkspringboot.version>
         <zkckeditor.version>4.21.0.0</zkckeditor.version>
         <zkgmaps.version>4.0.0</zkgmaps.version>
-        <zkcharts.version>10.3.3.0</zkcharts.version>
+        <zkcharts.version>11.2.0.0</zkcharts.version>
         <zkpivotable.version>2.5.2</zkpivotable.version>
         <zkpoi.version>3.9.17</zkpoi.version>
         <zss.version>3.9.6</zss.version>
