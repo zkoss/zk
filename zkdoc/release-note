@@ -1,4 +1,5 @@
 ZK 10.0.0
+Feb 27, 2024
 * Features
   ZK-5221: Show websocket close reason
   ZK-5018: Enhance simplified MVVM syntax
