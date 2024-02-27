@@ -475,7 +475,7 @@ task prepareSrc() {
 			into "$buildDir/tmp/cesrc"
 			from("$buildDir/tmp/src") {
 				exclude "**/za11y*.jar", "**/zkmax*.jar", "**/zuti*.jar", "**/zkex*.jar", "**/zml*.jar", "**/stateless*.jar", "**/client-bind*.jar"
-				exclude "**/za11y", "**/zkmax", "**/zuti", "**/zkex", "**/zml", "**/stateless*.jar", "**/client-bind*.jar"
+				exclude "**/za11y", "**/zkmax", "**/zuti", "**/zkex", "**/zml", "**/stateless", "**/stateless-immutable", "**/client-bind"
 				exclude "**/LICENSE"
 			}
 		}
@@ -574,7 +574,7 @@ task zkpeSrcZip(type: Zip) {
 	destinationDirectory = file("$buildDir/bin/proprietary")
 	from("$buildDir/tmp/src") {
 		exclude "**/za11y*.jar", "**/zkmax*.jar", "**/zuti*.jar", "**/stateless*.jar", "**/client-bind*.jar"
-		exclude "**/za11y", "**/zkmax", "**/zuti", "**/stateless", "**/client-bind"
+		exclude "**/za11y", "**/zkmax", "**/zuti", "**/stateless", "**/stateless-immutable", "**/client-bind"
 	}
 	into "zkpe-src-${project.version}"
 }
