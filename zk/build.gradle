@@ -23,7 +23,7 @@ dependencies {
 	api project(':zweb')
 	api project(':zkwebfragment')
 	api 'org.apache.commons:commons-fileupload2-javax:2.0.0-M2'
-	api 'commons-io:commons-io:2.15.1'
+	api 'commons-io:commons-io:2.13.0'
 	api('com.google.guava:guava:32.1.2-jre') {
 		exclude group: '*', module: '*'
 	}

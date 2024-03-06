@@ -63,7 +63,7 @@ dependencies {
 	implementation "org.zkoss.theme:atlantic:${version}"
 	implementation 'commons-logging:commons-logging:1.1.1'
 	implementation 'org.apache.commons:commons-fileupload2-javax:2.0.0-M2'
-	implementation 'commons-io:commons-io:2.15.1'
+	implementation 'commons-io:commons-io:2.13.0'
 	implementation "org.zkoss.zk:zk:${version}"
 	implementation "org.zkoss.zk:zkplus:${version}"
 	implementation "org.zkoss.zk:zkbind:${version}"
