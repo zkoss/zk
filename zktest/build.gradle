@@ -3,6 +3,7 @@ plugins {
 	id "org.gretty" version "3.1.1"
 	id 'idea'
 	id 'com.github.psxpaul.execfork' version '0.2.2'
+	id 'jacoco-report-aggregation'
 }
 
 idea {
@@ -241,6 +242,10 @@ test {
 
 	maxHeapSize = "1024m"
 	jvmArgs '-XX:MaxMetaspaceSize=1024m'
+
+	// jacoco coverage report
+	if (project.ext['zktestWithJacoco'] == 'true')
+		finalizedBy testCodeCoverageReport
 }
 
 task clearNoA11Y(type: Delete) {
@@ -323,6 +328,14 @@ task appRunDev {
 }
 task appRunDebugDev {
 	dependsOn devMode
+}
+
+testCodeCoverageReport {
+	afterEvaluate {
+		classDirectories.setFrom(files(classDirectories.files.collect {
+			fileTree(dir: it, exclude: ['org/zkoss/zktest/**'])
+		}))
+	}
 }
 
 def addClassPath(gradle, beforeClassPath, visitedBuilds, allowedWorkspace, subprojectsWithJS) {
