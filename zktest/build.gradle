@@ -83,6 +83,10 @@ dependencies {
 	} else {
 		testCompileOnly "org.zkoss.zk:za11y:${version}"
 	}
+	implementation "org.zkoss.zk:client-bind:${version}"
+	implementation "org.zkoss.zk:stateless:${version}"
+	implementation "org.zkoss.zk:stateless-immutable:${version}"
+//	implementation "org.zkoss.zk:stateless-ex:${version}"
 	implementation 'org.zkoss.zkforge.el:zcommons-el:1.1.0'
 	implementation 'org.zkoss.addon:flashchart:1.0'
 	implementation 'commons-lang:commons-lang:2.6'
@@ -209,7 +213,13 @@ task testWCAGOnly(type: Test) {
 		events("standardOut", "started", "passed", "skipped", "failed")
 	}
 }
+
+task testStateless {
+	dependsOn(gradle.includedBuild('zkcml').task(':stateless:test'))
+}
+
 test {
+	dependsOn testStateless
 	forkEvery = 0 // reuse the test process for all test classes
 	maxParallelForks = Runtime.runtime.availableProcessors().intdiv(4) ?: 1
 	if (project.hasProperty('maxParallelForks'))

@@ -1,3 +1,4 @@
 rootProject.name = 'zktest'
 
 includeBuild '../../zk'
+includeBuild '../../zkcml'
