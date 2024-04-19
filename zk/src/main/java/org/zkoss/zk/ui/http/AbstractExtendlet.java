@@ -173,8 +173,11 @@ import org.zkoss.zk.ui.WebApp;
 			//Due to Web server might cache the result, we use URL if possible
 			try {
 				URL url = _webctx.getResource(path);
-				if (url != null)
+				if (url != null) {
+					// prevent SSRF warning
+					url = new URL(url.getProtocol(), url.getHost(), url.getPort(), url.getFile());
 					return url.openStream();
+				}
 			} catch (Throwable ex) {
 				log.warn("Unable to read from URL: " + path, ex);
 			}
