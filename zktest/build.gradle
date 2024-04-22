@@ -3,6 +3,7 @@ plugins {
 	id "org.gretty" version "3.1.1"
 	id 'idea'
 	id 'com.github.psxpaul.execfork' version '0.2.2'
+	id 'jacoco'
 }
 
 idea {
@@ -10,6 +11,10 @@ idea {
 		outputDir file("$buildDir/classes/main")
 		testOutputDir file("$buildDir/classes/test")
 	}
+}
+
+jacoco {
+	toolVersion = "0.8.11"
 }
 
 // TODO: don't use gretty since gretty not supporting jetty 10.0.5 and gretty 4.0.0 only support jetty11+
@@ -241,6 +246,10 @@ test {
 
 	maxHeapSize = "1024m"
 	jvmArgs '-XX:MaxMetaspaceSize=1024m'
+
+	// jacoco coverage report
+	if (project.ext['zktestWithJacoco'] == 'true')
+		finalizedBy jacocoTestReport
 }
 
 task clearNoA11Y(type: Delete) {

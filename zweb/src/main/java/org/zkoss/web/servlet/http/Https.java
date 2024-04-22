@@ -396,6 +396,9 @@ public class Https extends Servlets {
 		if (path == null) {
 			return null;
 		}
+		if ("/".equals(path)) {
+			return path;
+		}
 
 		List<String> parts = new ArrayList<>();
 		String[] segments = path.split("/");
