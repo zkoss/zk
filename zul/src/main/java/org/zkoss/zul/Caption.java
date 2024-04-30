@@ -21,9 +21,10 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zul.impl.LabelImageElement;
 
 /**
- *  A header for a {@link Groupbox}.
- * It may contain either a text label, using {@link #setLabel},
- * or child elements for a more complex caption.
+ * Represents a header for various UI components including {@link Groupbox},
+ * {@link Window}, {@link Panel}, {@link Tab}, and {@link LayoutRegion}.
+ * The header can contain a simple text label, set using {@link #setLabel},
+ * or it can contain child elements for a more intricate caption.
  * <p>Default {@link #getZclass}: z-caption.(since 3.5.0)
  *
  * @author tomyeh
