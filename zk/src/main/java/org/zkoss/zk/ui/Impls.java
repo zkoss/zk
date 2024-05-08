@@ -163,7 +163,7 @@ import org.zkoss.zk.ui.sys.ExecutionCtrl;
 		}
 	}
 
-	private static final Pattern _rprop = Pattern.compile(" *([a-zA-Z0-9_$]*) *: *(.*) *");
+	private static final Pattern _rprop = Pattern.compile(" *+([a-zA-Z0-9_$]*) *: *(.*) *");
 
 	/** Returns the property name represents by this method, or null
 	 * if not a setter/getter.
