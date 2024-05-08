@@ -254,9 +254,9 @@ var DateFmt = {
 			hasHour1 = hasAM && (fmt.includes('h') || fmt.includes('K')),
 			isAM,
 			ts = _parseTextToArray(txt, fmt),
-			regexp = /.*\D.*/,
+			regexp = /^\d+$/,
 			// ZK-2026: Don't use isNaN(), it will treat float as number.
-			isNumber = !regexp.test(txt),
+			isNumber = regexp.test(txt),
 			eras = localizedSymbols.ERAS,
 			era: zk.LocalizedSymbols.ErasElementType | undefined,
 			eraKey: string | undefined;
@@ -303,7 +303,7 @@ var DateFmt = {
 						}
 
 						// ZK-1985:	Determine if token contains non-digital word when nonLenient is true.
-						if (nonLenient && token && regexp.test(token))
+						if (nonLenient && token && !regexp.test(token))
 							return;
 
 						if (!isNaN(nv = _parseInt(token))) {
@@ -403,7 +403,7 @@ var DateFmt = {
 							token = _parseToken(token, ts, --i, len);
 
 						// ZK-1985:	Determine if token contains non-digital word when nonLenient is true.
-						if (nonLenient && token && regexp.test(token))
+						if (nonLenient && token && !regexp.test(token))
 							return;
 
 						if (!isNaN(nv = _parseInt(token))) {
@@ -427,7 +427,7 @@ var DateFmt = {
 							token = _parseToken(token, ts, --i, len);
 
 						// ZK-1985:	Determine if token contains non-digital word when nonLenient is true.
-						if (nonLenient && token && regexp.test(token))
+						if (nonLenient && token && !regexp.test(token))
 							return;
 
 						if (!isNaN(nv = _parseInt(token)))
@@ -445,7 +445,7 @@ var DateFmt = {
 							token = _parseToken(token, ts, --i, len);
 
 						// ZK-1985:	Determine if token contains non-digital word when nonLenient is true.
-						if (nonLenient && token && regexp.test(token))
+						if (nonLenient && token && !regexp.test(token))
 							return;
 
 						if (!isNaN(nv = _parseInt(token))) {

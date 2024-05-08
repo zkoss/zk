@@ -73,7 +73,7 @@ public class Servlets {
 
 	private static ClientIdentifier _clientId;
 	private static final Pattern _rwebkit = Pattern.compile(".*(webkit)[ /]([\\w.]+).*"),
-			_ropera = Pattern.compile(".*(opera)(?:.*version)?[ /]([\\w.]+).*"),
+			_ropera = Pattern.compile(".*+(opera)(?:.*version)?[ /]([\\w.]+).*"),
 			_rmozilla = Pattern.compile(".*(mozilla)(?:.*? rv:([\\w.]+))?.*"),
 			_rchrome = Pattern.compile(".*(chrome)[ /]([\\w.]+).*"),
 			_randroid = Pattern.compile(".*(android)[ /]([\\w.]+).*"),
