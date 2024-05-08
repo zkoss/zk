@@ -114,7 +114,7 @@ export class SimpleConstraint extends zk.Object {
 					if (hasEndingSlash) {
 						var restCst = cst.substring(k + 1),
 							// match zero-or-more character, until reaching a comma or a semicolon or end of string.
-							regexFlags: string | undefined = restCst.match(/.*?(?=,|:|$)/)![0].trim();
+							regexFlags: string | undefined = this._extractCst(restCst);
 						if (regexFlags) {
 							if (regexFlags.includes('d') || regexFlags.includes('y'))
 								zk.error('unsupported regex flags in constraint: ' + cst);
@@ -320,6 +320,17 @@ export class SimpleConstraint extends zk.Object {
 		else if (f.NO_TODAY)
 			return msg.NO_TODAY || msgzul.NO_TODAY;
 		return msg || msgzul.ILLEGAL_VALUE;
+	}
+
+	/** @internal */
+	_extractCst(restCst: string): string {
+		for (let i = 0, n = restCst.length; i < n; i++) {
+			const c = restCst.charAt(i);
+			if (',' == c || ':' == c) {
+				return restCst.substring(0, i).trim();
+			}
+		}
+		return restCst.trim();
 	}
 
 	reparseConstraint(): void {

@@ -59,6 +59,7 @@ public class CookieThemeResolver implements ThemeResolver {
 	 */
 	public void setTheme(HttpServletRequest request, HttpServletResponse response, String themeName) {
 		Cookie cookie = new Cookie(THEME_COOKIE_KEY, themeName);
+		cookie.setHttpOnly(true); // prevent XSS attack
 		if (request.isSecure()) {
 			cookie.setSecure(true);
 		}
