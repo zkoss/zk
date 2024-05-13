@@ -5,6 +5,7 @@ ZK 10.0.1
   ZK-5679: RichletMapping with "/" on Class does not work on StatelessRichlet class
 
 * Upgrade Notes
+  + Remove zkplus/liferay because it is designed for ie6 & ie7 which are not supported by ZK10.
 
    --------
 ZK 10.0.0
