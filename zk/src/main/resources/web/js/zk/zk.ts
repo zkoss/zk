@@ -192,8 +192,9 @@ function regClass<S extends typeof ZKObject>(jclass: S): S {
 _zk.regClass = regClass;
 
 function defGet(nm: string): Getter {
-	// eslint-disable-next-line no-new-func
-	return new Function('return this.' + nm + ';');
+	return function (this: zk.Widget): unknown {
+		return this[nm];
+	};
 }
 function defSet00(nm: string): GeneratedSetter {
 	return function (v) {
