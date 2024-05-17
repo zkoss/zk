@@ -31,6 +31,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TimeZone;
 
+import org.zkoss.json.JavaScriptValue;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
@@ -336,7 +337,7 @@ public class Timebox extends DateTimeFormatInputElement {
 
 		String unformater = getUnformater();
 		if (!Strings.isBlank(unformater))
-			renderer.render("unformater", unformater); // TODO: compress
+			renderer.render("unformater", new JavaScriptValue(unformater)); // TODO: compress
 
 		if (_locale != null)
 			renderer.render("localizedSymbols", getRealSymbols());

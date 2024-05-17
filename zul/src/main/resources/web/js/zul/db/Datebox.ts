@@ -296,12 +296,12 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 	 * Sets the unformater function. This method is called from Server side.
 	 * @param unf - the unformater function
 	 */
-	setUnformater(unformater: string, opts?: Record<string, boolean>): this {
+	setUnformater(unformater: zul.db.Unformater, opts?: Record<string, boolean>): this {
 		const o = this._unformater;
-		this._unformater = unformater;
+		this._unformater = unformater.toString();
 
-		if (o !== unformater || opts?.force) {
-			eval('Datebox._unformater = ' + unformater); // eslint-disable-line no-eval
+		if (o !== this._unformater || opts?.force) {
+			Datebox._unformater = unformater;
 		}
 
 		return this;
