@@ -3163,9 +3163,9 @@ new zul.wnd.Window({
 			if ((tempHtml = this.domStyle_(no)))
 				outHtml += ' style="' + tempHtml + '"';
 			if ((tempHtml = this.domClass_(no)))
-				outHtml += ' class="' + zUtl.encodeXMLAttribute(tempHtml) + '"';
+				outHtml += ' class="' + /*safe*/ zUtl.encodeXMLAttribute(tempHtml) + '"';
 			if ((tempHtml = this.domTooltiptext_()))
-				outHtml += ' title="' + zUtl.encodeXMLAttribute(tempHtml) + '"'; // ZK-676
+				outHtml += ' title="' + /*safe*/ zUtl.encodeXMLAttribute(tempHtml) + '"'; // ZK-676
 			if ((tabIndexHtml = /*safe*/ this.getTabindex()) != undefined)
 				outHtml += ' tabindex="' + tabIndexHtml + '"';
 		} else {
