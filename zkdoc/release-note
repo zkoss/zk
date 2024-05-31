@@ -4,6 +4,7 @@ ZK 10.0.1
 * Bugs
   ZK-5679: RichletMapping with "/" on Class does not work on StatelessRichlet class
   ZK-5715: PDFjs cve-2024-4367 arbitrary code execution from pdf document
+  ZK-5722: DomPurify doesn't neutralize double quotes in attribute string, can be used for XSS attacks
 
 * Upgrade Notes
   + Remove zkplus/liferay because it is designed for ie6 & ie7 which are not supported by ZK10.
