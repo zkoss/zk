@@ -33,6 +33,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.hc.core5.net.URIBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -209,7 +210,10 @@ public class InterpreterServlet extends HttpServlet {
 
 		protected Interpretation parse(String path, URL url, Object extra) throws Exception {
 			// prevent SSRF warning
-			url = new URL(url.getProtocol(), url.getHost(), url.getPort(), url.getFile());
+			url = new URIBuilder().setScheme(url.getProtocol())
+					.setHost(url.getHost()).setPort(url.getPort())
+					.setPath(url.getPath()).setCustomQuery(url.getQuery())
+					.build().toURL();
 
 			InputStream is = url.openStream();
 			if (is != null)

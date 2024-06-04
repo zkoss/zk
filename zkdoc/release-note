@@ -9,6 +9,7 @@ ZK 10.0.1
 * Upgrade Notes
   + Remove zkplus/liferay because it is designed for ie6 & ie7 which are not supported by ZK10.
   + Upgrade pdfjs to 4.3.136 to fix ZK-5715
+  + add httpcore5-5.2.4.jar to fix Security Vulnerability for SSRF
 
    --------
 ZK 10.0.0

@@ -166,6 +166,7 @@ task prepareBin() {
 				include "**/slf4j-api.jar"
 				include "**/zsoup.jar"
 				include "**/zkdiffer.jar"
+				include "**/httpcore5.jar"
 			}
 		}
 		// theme jars

@@ -27,6 +27,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.hc.core5.net.URIBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -175,7 +176,10 @@ import org.zkoss.zk.ui.WebApp;
 				URL url = _webctx.getResource(path);
 				if (url != null) {
 					// prevent SSRF warning
-					url = new URL(url.getProtocol(), url.getHost(), url.getPort(), url.getFile());
+					url = new URIBuilder().setScheme(url.getProtocol())
+							.setHost(url.getHost()).setPort(url.getPort())
+							.setPath(url.getPath()).setCustomQuery(url.getQuery())
+							.build().toURL();
 					return url.openStream();
 				}
 			} catch (Throwable ex) {

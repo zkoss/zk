@@ -20,6 +20,7 @@ import java.io.File;
 import java.net.URL;
 import java.net.URLConnection;
 
+import org.apache.hc.core5.net.URIBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,8 +42,10 @@ public abstract class AbstractLoader<K, V> implements Loader<K, V> {
 			URLConnection conn = null;
 			try {
 				URL url = (URL) src;
-				// prevent SSRF warning
-				url = new URL(url.getProtocol(), url.getHost(), url.getPort(), url.getFile());
+				url = new URIBuilder().setScheme(url.getProtocol())
+						.setHost(url.getHost()).setPort(url.getPort())
+						.setPath(url.getPath()).setCustomQuery(url.getQuery())
+						.build().toURL();
 				conn = url.openConnection();
 				final long v = conn.getLastModified();
 				return v != -1 ? v : 0; //not to reload if unknown (5.0.6 for better performance)
