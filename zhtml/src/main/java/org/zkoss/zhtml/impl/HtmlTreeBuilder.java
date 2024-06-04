@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.Scanner;
 
 import org.apache.commons.io.input.ReaderInputStream;
+import org.apache.hc.core5.net.URIBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -296,7 +297,10 @@ public class HtmlTreeBuilder implements TreeBuilder {
 		if (log.isDebugEnabled())
 			log.debug("Parsing file: [{}]", url);
 		// prevent SSRF warning
-		url = new URL(url.getProtocol(), url.getHost(), url.getPort(), url.getFile());
+		url = new URIBuilder().setScheme(url.getProtocol())
+				.setHost(url.getHost()).setPort(url.getPort())
+				.setPath(url.getPath()).setCustomQuery(url.getQuery())
+				.build().toURL();
 		try (InputStream inStream = url.openStream()) {
 			return convertToIDOM(Zsoup.parse(inStream, "UTF-8", url.getFile(),
 					Parser.xhtmlParser()));

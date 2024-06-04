@@ -17,10 +17,12 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.util.resource;
 
 import java.io.File;
-import java.io.InputStream;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+
+import org.apache.hc.core5.net.URIBuilder;
 
 import org.zkoss.io.Files;
 
@@ -36,16 +38,20 @@ public class ContentLoader extends AbstractLoader<Object, String> {
 	public String load(Object src) throws Exception {
 		final InputStream is;
 		if (src instanceof URL) {
+			URL url = (URL) src;
 			// prevent SSRF warning
-			URL url = ((URL)src);
-			url = new URL(url.getProtocol(), url.getHost(), url.getPort(), url.getFile());
+			url = new URIBuilder().setScheme(url.getProtocol())
+					.setHost(url.getHost()).setPort(url.getPort())
+					.setPath(url.getPath()).setCustomQuery(url.getQuery())
+					.build().toURL();
 			is = url.openStream();
 		} else if (src instanceof File) {
-			is = new FileInputStream((File)src);
+			is = new FileInputStream((File) src);
 		} else if (src == null) {
 			throw new NullPointerException();
 		} else {
-			throw new IllegalArgumentException("Unknown soruce: "+src+"\nOnly File and URL are supported");
+			throw new IllegalArgumentException("Unknown soruce: " + src
+					+ "\nOnly File and URL are supported");
 		}
 		try {
 			return Files.readAll(new InputStreamReader(is, "UTF-8")).toString();

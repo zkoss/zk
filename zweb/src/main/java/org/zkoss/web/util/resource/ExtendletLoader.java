@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 
+import org.apache.hc.core5.net.URIBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -81,7 +82,10 @@ public abstract class ExtendletLoader<V> implements Loader<String, V> {
 			URL url = getExtendletContext().getResource(src);
 			if (url != null) {
 				// prevent SSRF warning
-				url = new URL(url.getProtocol(), url.getHost(), url.getPort(), url.getFile());
+				url = new URIBuilder().setScheme(url.getProtocol())
+						.setHost(url.getHost()).setPort(url.getPort())
+						.setPath(url.getPath()).setCustomQuery(url.getQuery())
+						.build().toURL();
 				conn = url.openConnection();
 				final long v = conn.getLastModified();
 				return v != -1 ? v : 0; //not to reload (5.0.6 for better performance)
@@ -111,8 +115,10 @@ public abstract class ExtendletLoader<V> implements Loader<String, V> {
 				URL real = getExtendletContext().getResource(path);
 				if (real != null) {
 					// prevent SSRF warning
-					real = new URL(real.getProtocol(), real.getHost(),
-							real.getPort(), real.getFile());
+					real = new URIBuilder().setScheme(real.getProtocol())
+							.setHost(real.getHost()).setPort(real.getPort())
+							.setPath(real.getPath()).setCustomQuery(real.getQuery())
+							.build().toURL();
 					is = real.openStream();
 				}
 			} catch (Throwable ex) {

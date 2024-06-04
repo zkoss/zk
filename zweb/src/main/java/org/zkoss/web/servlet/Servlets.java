@@ -45,6 +45,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.hc.core5.net.URIBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -853,7 +854,10 @@ public class Servlets {
 			URL url = toURL(uri);
 			if (url != null) {
 				// prevent SSRF warning
-				url = new URL(url.getProtocol(), url.getHost(), url.getPort(), url.getFile());
+				url = new URIBuilder().setScheme(url.getProtocol())
+						.setHost(url.getHost()).setPort(url.getPort())
+						.setPath(url.getPath()).setCustomQuery(url.getQuery())
+						.build().toURL();
 				return url.openStream();
 			}
 			return new ParsedURI(ctx, uri).getResourceAsStream();

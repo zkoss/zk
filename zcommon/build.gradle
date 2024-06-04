@@ -22,6 +22,7 @@ dependencies {
 	api project(':zel')
 	api "org.slf4j:slf4j-api:${slf4jVersion}"
 	api 'org.apache-extras.beanshell:bsh:2.0b6'
+	api 'org.apache.httpcomponents.core5:httpcore5:5.2.4'
 	optionalImplementation 'org.zkoss.zkforge.el:zcommons-el:1.1.0'
 	compileOnly "javax.servlet:javax.servlet-api:${servletVersion}"
 }
