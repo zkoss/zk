@@ -5,11 +5,13 @@ ZK 10.0.1
   ZK-5679: RichletMapping with "/" on Class does not work on StatelessRichlet class
   ZK-5715: PDFjs cve-2024-4367 arbitrary code execution from pdf document
   ZK-5722: DomPurify doesn't neutralize double quotes in attribute string, can be used for XSS attacks
+  ZK-5729: JNDI-Injection detected in JndiVariableResolver.java
 
 * Upgrade Notes
   + Remove zkplus/liferay because it is designed for ie6 & ie7 which are not supported by ZK10.
   + Upgrade pdfjs to 4.3.136 to fix ZK-5715
   + add httpcore5-5.2.4.jar to fix Security Vulnerability for SSRF
+  + Remove JndiVariableResolver.java to fix ZK-5729
 
    --------
 ZK 10.0.0
