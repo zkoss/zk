@@ -22,13 +22,13 @@ import java.util.Map;
 import java.util.Scanner;
 
 import org.apache.commons.io.input.ReaderInputStream;
-import org.apache.hc.core5.net.URIBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.zkoss.idom.Namespace;
 import org.zkoss.idom.ProcessingInstruction;
 import org.zkoss.util.Pair;
+import org.zkoss.util.URLs;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.metainfo.TreeBuilder;
 import org.zkoss.zsoup.Zsoup;
@@ -297,10 +297,7 @@ public class HtmlTreeBuilder implements TreeBuilder {
 		if (log.isDebugEnabled())
 			log.debug("Parsing file: [{}]", url);
 		// prevent SSRF warning
-		url = new URIBuilder().setScheme(url.getProtocol())
-				.setHost(url.getHost()).setPort(url.getPort())
-				.setPath(url.getPath()).setCustomQuery(url.getQuery())
-				.build().toURL();
+		url = URLs.sanitizeURL(url);
 		try (InputStream inStream = url.openStream()) {
 			return convertToIDOM(Zsoup.parse(inStream, "UTF-8", url.getFile(),
 					Parser.xhtmlParser()));

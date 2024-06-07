@@ -22,9 +22,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 
-import org.apache.hc.core5.net.URIBuilder;
-
 import org.zkoss.io.Files;
+import org.zkoss.util.URLs;
 
 /**
  * A {@link Loader} that loads the resource by use URL.getContent()
@@ -40,10 +39,7 @@ public class ContentLoader extends AbstractLoader<Object, String> {
 		if (src instanceof URL) {
 			URL url = (URL) src;
 			// prevent SSRF warning
-			url = new URIBuilder().setScheme(url.getProtocol())
-					.setHost(url.getHost()).setPort(url.getPort())
-					.setPath(url.getPath()).setCustomQuery(url.getQuery())
-					.build().toURL();
+			url = URLs.sanitizeURL(url);
 			is = url.openStream();
 		} else if (src instanceof File) {
 			is = new FileInputStream((File) src);

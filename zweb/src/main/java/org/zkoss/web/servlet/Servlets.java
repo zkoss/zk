@@ -45,7 +45,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.apache.hc.core5.net.URIBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,6 +54,7 @@ import org.zkoss.lang.SystemException;
 import org.zkoss.util.CacheMap;
 import org.zkoss.util.Checksums;
 import org.zkoss.util.Locales;
+import org.zkoss.util.URLs;
 import org.zkoss.util.resource.Locator;
 import org.zkoss.util.resource.Locators;
 import org.zkoss.web.Attributes;
@@ -854,10 +854,7 @@ public class Servlets {
 			URL url = toURL(uri);
 			if (url != null) {
 				// prevent SSRF warning
-				url = new URIBuilder().setScheme(url.getProtocol())
-						.setHost(url.getHost()).setPort(url.getPort())
-						.setPath(url.getPath()).setCustomQuery(url.getQuery())
-						.build().toURL();
+				url = URLs.sanitizeURL(url);
 				return url.openStream();
 			}
 			return new ParsedURI(ctx, uri).getResourceAsStream();

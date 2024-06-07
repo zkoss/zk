@@ -33,13 +33,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.hc.core5.net.URIBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.zkoss.html.HTMLs;
 import org.zkoss.io.Files;
 import org.zkoss.lang.Exceptions;
+import org.zkoss.util.URLs;
 import org.zkoss.util.resource.Locator;
 import org.zkoss.web.servlet.Charsets;
 import org.zkoss.web.servlet.Servlets;
@@ -210,10 +210,7 @@ public class InterpreterServlet extends HttpServlet {
 
 		protected Interpretation parse(String path, URL url, Object extra) throws Exception {
 			// prevent SSRF warning
-			url = new URIBuilder().setScheme(url.getProtocol())
-					.setHost(url.getHost()).setPort(url.getPort())
-					.setPath(url.getPath()).setCustomQuery(url.getQuery())
-					.build().toURL();
+			url = URLs.sanitizeURL(url);
 
 			InputStream is = url.openStream();
 			if (is != null)

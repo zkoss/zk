@@ -18,8 +18,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URL;
 
 import javax.servlet.ServletContext;
@@ -29,7 +27,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.hc.core5.net.URIBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,6 +34,7 @@ import org.zkoss.idom.Element;
 import org.zkoss.idom.util.IDOMs;
 import org.zkoss.lang.ClassResolver;
 import org.zkoss.lang.Classes;
+import org.zkoss.util.URLs;
 import org.zkoss.util.resource.ResourceCache;
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.util.resource.Extendlet;
@@ -177,32 +175,8 @@ import org.zkoss.zk.ui.WebApp;
 			try {
 				URL url = _webctx.getResource(path);
 				if (url != null) {
-					final String urlString = url.getPath();
-					// avoid java.net.MalformedURLException: no !/ in spec
-					if (urlString.contains("!/")) {
-						String[] parts = urlString.split("!/");
-						if (parts.length == 2) {
-							String jarFilePath = parts[0];
-							String internalPath = parts[1];
-
-							// Ensure the jarFilePath is properly formed
-							URL jarURL = new URL(jarFilePath);
-							URI jarURI = new URIBuilder().setScheme(jarURL.getProtocol())
-									.setHost(jarURL.getHost()).setPort(jarURL.getPort())
-									.setPath(jarURL.getPath()).build();
-
-							// Combine the jar URI with the internal path
-							url = new URL("jar:" + jarURI + "!/" + internalPath);
-						} else {
-							throw new MalformedURLException("Invalid JAR URL format");
-						}
-					} else {
-						// prevent SSRF warning
-						url = new URIBuilder().setScheme(url.getProtocol())
-								.setHost(url.getHost()).setPort(url.getPort())
-								.setPath(url.getPath())
-								.setCustomQuery(url.getQuery()).build().toURL();
-					}
+					// prevent SSRF attack
+					url = URLs.sanitizeURL(url);
 					return url.openStream();
 				}
 			} catch (Throwable ex) {
