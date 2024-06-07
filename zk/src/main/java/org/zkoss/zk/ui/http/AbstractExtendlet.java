@@ -18,6 +18,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 
 import javax.servlet.ServletContext;
@@ -175,11 +177,32 @@ import org.zkoss.zk.ui.WebApp;
 			try {
 				URL url = _webctx.getResource(path);
 				if (url != null) {
-					// prevent SSRF warning
-					url = new URIBuilder().setScheme(url.getProtocol())
-							.setHost(url.getHost()).setPort(url.getPort())
-							.setPath(url.getPath()).setCustomQuery(url.getQuery())
-							.build().toURL();
+					final String urlString = url.getPath();
+					// avoid java.net.MalformedURLException: no !/ in spec
+					if (urlString.contains("!/")) {
+						String[] parts = urlString.split("!/");
+						if (parts.length == 2) {
+							String jarFilePath = parts[0];
+							String internalPath = parts[1];
+
+							// Ensure the jarFilePath is properly formed
+							URL jarURL = new URL(jarFilePath);
+							URI jarURI = new URIBuilder().setScheme(jarURL.getProtocol())
+									.setHost(jarURL.getHost()).setPort(jarURL.getPort())
+									.setPath(jarURL.getPath()).build();
+
+							// Combine the jar URI with the internal path
+							url = new URL("jar:" + jarURI + "!/" + internalPath);
+						} else {
+							throw new MalformedURLException("Invalid JAR URL format");
+						}
+					} else {
+						// prevent SSRF warning
+						url = new URIBuilder().setScheme(url.getProtocol())
+								.setHost(url.getHost()).setPort(url.getPort())
+								.setPath(url.getPath())
+								.setCustomQuery(url.getQuery()).build().toURL();
+					}
 					return url.openStream();
 				}
 			} catch (Throwable ex) {
