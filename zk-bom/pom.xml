@@ -17,7 +17,7 @@
         <zats.version>10.0.0</zats.version>
         <zkspringboot.version>3.0.0</zkspringboot.version>
         <zkckeditor.version>4.21.0.0</zkckeditor.version>
-        <zkgmaps.version>4.0.0</zkgmaps.version>
+        <zkgmaps.version>4.0.3</zkgmaps.version>
         <zkcharts.version>11.2.0.0</zkcharts.version>
         <zkpivotable.version>2.5.2</zkpivotable.version>
         <zkpoi.version>3.9.17</zkpoi.version>
