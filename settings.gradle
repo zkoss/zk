@@ -13,5 +13,4 @@ include(':zkwebfragment')
 include(':zul')
 
 includeBuild '../zkcml'
-includeBuild '../zkthemes'
 includeBuild "$rootDir/zksandbox"

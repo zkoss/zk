@@ -120,7 +120,6 @@ task prepareBin() {
 	}
 	if (gradle.includedBuilds.find {it.name == 'zkcml'} != null) {
 		dependsOn gradle.includedBuild('zksandbox').task(":war")
-		dependsOn gradle.includedBuild('zkthemes').task(':release')
 	}
 	doLast {
 		// xsd

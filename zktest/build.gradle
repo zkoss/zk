@@ -62,10 +62,6 @@ repositories {
 }
 
 dependencies {
-	implementation "org.zkoss.theme:breeze:${version}"
-	implementation "org.zkoss.theme:silvertail:${version}"
-	implementation "org.zkoss.theme:sapphire:${version}"
-	implementation "org.zkoss.theme:atlantic:${version}"
 	implementation 'commons-logging:commons-logging:1.1.1'
 	implementation 'org.apache.commons:commons-fileupload2-javax:2.0.0-M2'
 	implementation 'commons-io:commons-io:2.13.0'
