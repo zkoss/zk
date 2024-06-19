@@ -111,7 +111,7 @@ public class ViewModelAnnotationResolvers implements AggregationListener {
 		for (ViewModelAnnotationResolver resolver : resolvers) {
 			m = resolver.getOriginalMethod(base, method);
 			if (m != null)
-				break;
+				return m;
 		}
 		return method;
 	}
