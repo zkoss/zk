@@ -4,6 +4,7 @@ ZK 10.0.1.1
 * Bugs
 
 * Upgrade Notes
+  + Update the correct iceblue_c.jar
 
    --------
 ZK 10.0.1
