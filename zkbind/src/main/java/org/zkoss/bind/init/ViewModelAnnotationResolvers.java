@@ -106,13 +106,13 @@ public class ViewModelAnnotationResolvers implements AggregationListener {
 	 * @since 9.6.0
 	 */
 	public static Method getOriginalMethod(Object base, Method method) {
-		Method m;
+		Method m = null;
 		List<ViewModelAnnotationResolver> resolvers = getResolvers();
 		for (ViewModelAnnotationResolver resolver : resolvers) {
 			m = resolver.getOriginalMethod(base, method);
-			if (m != null)
+			if (m != null && !method.equals(m))
 				break;
 		}
-		return method;
+		return m;
 	}
 }
