@@ -125,14 +125,23 @@ function ignoreSameFile(destDir, force) {
 	});
 }
 
-/**
- * Used by gradle task `compileTypeScript`
- */
-function typescript_build_single() {
+function typescript_build_single(cb) {
 	const sources = stripQuotes(options.src);
 	const destDir = stripQuotes(options.dest);
 	const force = options.force;
-	return typescript_build(sources, destDir, force);
+	typescript_build(sources, destDir, force);
+	cb();
+}
+function typescript_build_single_with_src(cb) {
+	if (options.devMode) {
+		cb();
+		return; // skip when in development mode
+	}
+	const sources = stripQuotes(options.src);
+	const destDir = stripQuotes(options.dest);
+	const force = options.force;
+	typescript_build(sources, destDir, force, undefined, true);
+	cb();
 }
 
 /**
@@ -142,7 +151,7 @@ function typescript_build_single() {
  * @param {boolean} [force] - Force keep. See {@link ignoreSameFile}
  * @param {number | Date} [since] - Only find files that have been modified since the time specified
  */
-function typescript_build(src, dest, force, since) {
+function typescript_build(src, dest, force, since, isSrcOnly/*fix gulp v5 issue*/) {
 	const webpackConfig = require('./webpack.config.js');
 	/** @type {import('vinyl-fs').SrcOptions} */
 	const defaultSrcOptions = {
@@ -156,7 +165,18 @@ function typescript_build(src, dest, force, since) {
 	// have already copied the same `*.ts` into `dest`. Thus, I don't rely on ignoreSameFile.
 	// Fortunately, stream 1 and stream 2 both produces only `*.js` which stream 4 will not
 	// overwrite (stream 4 explicitly ignores `*.js` in `gulp.src()`).
-	return mergeStream(
+	return isSrcOnly ? // Bundle `index.ts` with webpack as `index.src.js` without source map
+		bundleWithWebpack( // stream 3
+			tsBundledEntries, {
+				...webpackConfig,
+				mode: 'development',
+				optimization: {
+					minimize: false,
+				},
+				devtool: false,
+			},
+			'src.js',
+		) : mergeStream(
 		// Transpile single files with babel which are not siblings of some `index.ts`
 		// Only for JS files, because *.ts will be included by `index.ts`
 		gulp.src('/**/@(*.js)', { // stream 1
@@ -186,19 +206,6 @@ function typescript_build(src, dest, force, since) {
 				devtool: 'source-map',
 			},
 			'js',
-		),
-		options.devMode ? gulp.src('.') :
-		// Bundle `index.ts` with webpack as `index.src.js` without source map
-		bundleWithWebpack( // stream 3
-			tsBundledEntries, {
-				...webpackConfig,
-				mode: 'development',
-				optimization: {
-					minimize: false,
-				},
-				devtool: false,
-			},
-			'src.js',
 		),
 		// fix copy resource in zipjs folder
 		gulp.src('/**/!(*.less|*.js|*.d.ts)', { // stream 4
@@ -418,7 +425,7 @@ class Subproject {
 const subprojects = /** @type {string[]} */(options.subprojectPaths)
 	.map(subprojectPath => new Subproject(subprojectPath));
 
-exports['build:single'] = typescript_build_single;
+exports['build:single'] = gulp.series(typescript_build_single, typescript_build_single_with_src);
 exports.watch = gulp.series(
 	browsersync_init,
 	gulp.parallel(...subprojects.map(subproject => subproject.watcher)),

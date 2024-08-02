@@ -28,6 +28,6 @@
   },
   "dependencies": {
     "@typescript-eslint/utils": "^5.30.7",
-    "jscodeshift": "^0.13.1"
+    "jscodeshift": "^0.16.1"
   }
 }
