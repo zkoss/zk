@@ -1,14 +1,6 @@
 plugins {
 	id 'war'
 	id "org.gretty" version "3.1.1"
-	id 'idea'
-}
-
-idea {
-	module {
-		outputDir file("$buildDir/classes/main")
-		testOutputDir file("$buildDir/classes/test")
-	}
 }
 
 java.sourceCompatibility = JavaVersion.VERSION_11

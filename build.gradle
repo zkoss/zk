@@ -6,15 +6,7 @@ plugins {
 	id 'checkstyle'
 	id "com.github.node-gradle.node" version "7.0.1"
 	id 'com.github.gmazzo.buildconfig' version '3.0.3'
-	id 'idea'
 	id "org.sonarqube" version "4.4.1.3373"
-}
-
-idea {
-	module {
-		outputDir file("$buildDir/classes/main")
-		testOutputDir file("$buildDir/classes/test")
-	}
 }
 
 allprojects {
