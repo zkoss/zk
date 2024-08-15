@@ -3163,9 +3163,9 @@ new zul.wnd.Window({
 			if ((tempHtml = this.domStyle_(no)))
 				outHtml += ' style="' + tempHtml + '"';
 			if ((tempHtml = this.domClass_(no)))
-				outHtml += ' class="' + /*safe*/ zUtl.encodeXMLAttribute(tempHtml) + '"';
+				outHtml += ' class="' + /*safe*/ zUtl.encodeXML(tempHtml) + '"';
 			if ((tempHtml = this.domTooltiptext_()))
-				outHtml += ' title="' + /*safe*/ zUtl.encodeXMLAttribute(tempHtml) + '"'; // ZK-676
+				outHtml += ' title="' + /*safe*/ zUtl.encodeXML(tempHtml) + '"'; // ZK-676
 			if ((tabIndexHtml = /*safe*/ this.getTabindex()) != undefined)
 				outHtml += ' tabindex="' + tabIndexHtml + '"';
 		} else {
@@ -3174,9 +3174,9 @@ new zul.wnd.Window({
 			if (!no.domStyle && (tempHtml = this.domStyle_(no)))
 				outHtml += ' style="' + tempHtml + '"';
 			if (!no.domClass && (tempHtml = this.domClass_(no)))
-				outHtml += ' class="' + /*safe*/ zUtl.encodeXMLAttribute(tempHtml) + '"';
+				outHtml += ' class="' + /*safe*/ zUtl.encodeXML(tempHtml) + '"';
 			if (!no.tooltiptext && (tempHtml = this.domTooltiptext_()))
-				outHtml += ' title="' + /*safe*/ zUtl.encodeXMLAttribute(tempHtml) + '"'; // ZK-676
+				outHtml += ' title="' + /*safe*/ zUtl.encodeXML(tempHtml) + '"'; // ZK-676
 			if (!no.tabindex && (tabIndexHtml = /*safe*/ this.getTabindex()) != undefined)
 				outHtml += ' tabindex="' + tabIndexHtml + '"';
 		}
