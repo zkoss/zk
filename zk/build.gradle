@@ -2,14 +2,6 @@ plugins {
 	id 'java-library'
 	id 'checkstyle'
 	id 'com.github.gmazzo.buildconfig'
-	id 'idea'
-}
-
-idea {
-	module {
-		outputDir file("$buildDir/classes/main")
-		testOutputDir file("$buildDir/classes/test")
-	}
 }
 
 java {

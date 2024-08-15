@@ -1,3 +1,26 @@
 rootProject.name = 'zktest'
 
-includeBuild '../../zk'
+includeBuild('../../zk') {
+	dependencySubstitution {
+		substitute module('org.zkoss.zk:zk') using project(':zk')
+		substitute module('org.zkoss.zk:zkplus') using project(':zkplus')
+		substitute module('org.zkoss.zk:zkbind') using project(':zkbind')
+		substitute module('org.zkoss.zk:zul') using project(':zul')
+		substitute module('org.zkoss.zk:zhtml') using project(':zhtml')
+		substitute module('org.zkoss.zk:zkwebfragment') using project(':zkwebfragment')
+		substitute module('org.zkoss.common:zcommon') using project(':zcommon')
+		substitute module('org.zkoss.common:zel') using project(':zel')
+		substitute module('org.zkoss.common:zweb') using project(':zweb')
+		substitute module('org.zkoss.common:zweb-dsp') using project(':zweb-dsp')
+	}
+}
+
+includeBuild('../../zkcml') {
+	dependencySubstitution {
+		substitute module('org.zkoss.zk:zkex') using project(':zkex')
+		substitute module('org.zkoss.zk:zkmax') using project(':zkmax')
+		substitute module('org.zkoss.zk:zuti') using project(':zuti')
+		substitute module('org.zkoss.zk:za11y') using project(':za11y')
+		substitute module('org.zkoss.zk:zhtml') using project(':zhtml')
+	}
+}
