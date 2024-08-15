@@ -140,6 +140,7 @@ subprojects {
 	}
 
 	task tscheck(type: NpmTask) {
+		dependsOn rootProject.tasks.named('npm_install')
 		setOnlyIf { project.ext['gradleFrontendSkip'] == 'false' }
 		enabled = project.file("tsconfig.json").exists()
 		workingDir = rootDir
@@ -148,6 +149,7 @@ subprojects {
 
 	// eslint
 	task jscheck(type: NpmTask) {
+		dependsOn rootProject.tasks.named('npm_install')
 		setOnlyIf { project.ext['gradleFrontendSkip'] == 'false' }
 		workingDir = rootDir
 		def eslintDir = project.file(".eslintrc.js").exists() ? projectDir : rootDir;
@@ -201,6 +203,11 @@ subprojects {
 		dependsOn(compileTypeScript)
 		dependsOn(compileLess)
 		dependsOn(compileCSS)
+
+		compileJava.mustRunAfter(rootProject.tasks.named('npm_install'))
+		compileTypeScript.mustRunAfter(rootProject.tasks.named('npm_install'))
+		compileLess.mustRunAfter(rootProject.tasks.named('npm_install'))
+		compileCSS.mustRunAfter(rootProject.tasks.named('npm_install'))
 
 		from("$projectDir/$codegen") {
 			setDuplicatesStrategy(DuplicatesStrategy.INCLUDE)
@@ -313,7 +320,7 @@ subprojects {
 	}
 }
 
-task tscheck(type: NpmTask) {
+task tscheck(type: NpmTask, dependsOn: 'npm_install') {
 	setOnlyIf { project.ext['gradleFrontendSkip'] == 'false' }
 	args =['run', 'type-check']
 }
