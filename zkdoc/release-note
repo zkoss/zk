@@ -2,7 +2,8 @@ ZK 10.1.0
 * Features
 
 * Bugs
- ZK-5764: Unable to call original method when using custom ViewModelAnnotationResolver
+  ZK-5764: Unable to call original method when using custom ViewModelAnnotationResolver
+  ZK-5766: DomPurify fails with partial html content
 
 * Upgrade Notes
 
