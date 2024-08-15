@@ -85,16 +85,36 @@ public class AuMultipartUploader {
 	private static final String JAVAX_DISK_UPLOAD_CLASS = "org.apache.commons.fileupload2.javax.JavaxServletDiskFileUpload";
 	private static final String JAKARTA_DISK_UPLOAD_CLASS = "org.apache.commons.fileupload2.jakarta.servlet5.JakartaServletDiskFileUpload";
 
-	private static Class<?> getServletFileUploadClass() {
+	private static Class<?> uploadClass = null;
+	private static Class<?> diskUploadClass = null;
+
+	static {
 		try {
-			return Class.forName(JAVAX_UPLOAD_CLASS);
+			uploadClass = Class.forName(JAVAX_UPLOAD_CLASS);
 		} catch (ClassNotFoundException ex0) {
 			try {
-				return Class.forName(JAKARTA_UPLOAD_CLASS);
+				uploadClass = Class.forName(JAKARTA_UPLOAD_CLASS);
 			} catch (ClassNotFoundException ex1) {
-				throw new RuntimeException("Failed to find " + JAVAX_UPLOAD_CLASS + " or " + JAKARTA_UPLOAD_CLASS);
+				// Ignore
 			}
 		}
+
+		try {
+			diskUploadClass = Class.forName(JAVAX_DISK_UPLOAD_CLASS);
+		} catch (ClassNotFoundException ex0) {
+			try {
+				diskUploadClass = Class.forName(JAKARTA_DISK_UPLOAD_CLASS);
+			} catch (ClassNotFoundException ex1) {
+				// Ignore
+			}
+		}
+	}
+
+	private static Class<?> getServletFileUploadClass() {
+		if (uploadClass == null) {
+			throw new RuntimeException("Failed to find " + JAVAX_UPLOAD_CLASS + " or " + JAKARTA_UPLOAD_CLASS);
+		}
+		return uploadClass;
 	}
 
 	public static boolean isMultipartContent(HttpServletRequest request) {
@@ -108,20 +128,13 @@ public class AuMultipartUploader {
 	}
 
 	private static AbstractFileUpload newServletDiskFileUpload(DiskFileItemFactory factory) {
-		Class<?> clazz;
-		try {
-			clazz = Class.forName(JAVAX_DISK_UPLOAD_CLASS);
-		} catch (ClassNotFoundException ex0) {
-			try {
-				clazz = Class.forName(JAKARTA_DISK_UPLOAD_CLASS);
-			} catch (ClassNotFoundException ex1) {
-				throw new RuntimeException("Failed to find " + JAVAX_DISK_UPLOAD_CLASS + " or " + JAKARTA_DISK_UPLOAD_CLASS);
-			}
+		if (diskUploadClass == null) {
+			throw new RuntimeException("Failed to find " + JAVAX_DISK_UPLOAD_CLASS + " or " + JAKARTA_DISK_UPLOAD_CLASS);
 		}
 		try {
-			return (AbstractFileUpload) clazz.getDeclaredConstructor(DiskFileItemFactory.class).newInstance(factory);
+			return (AbstractFileUpload) diskUploadClass.getDeclaredConstructor(DiskFileItemFactory.class).newInstance(factory);
 		} catch (Exception ex) {
-			throw new RuntimeException("Failed to create a new instance of " + clazz.getName(), ex);
+			throw new RuntimeException("Failed to create a new instance of " + diskUploadClass.getName(), ex);
 		}
 	}
 
@@ -179,7 +192,7 @@ public class AuMultipartUploader {
 		}
 	}
 	private static Object reconstructPacket(Object data, Map<String, Object> reqData, Desktop desktop,
-			Map<String, Object> params) throws IOException {
+											Map<String, Object> params) throws IOException {
 		if (data instanceof List) {
 			int i = 0;
 			List listData = (List) data;
@@ -256,8 +269,8 @@ public class AuMultipartUploader {
 			try {
 				Integer compMaxsz = (Integer) comp.getAttribute(Attributes.UPLOAD_MAX_SIZE);
 				maxsz = compMaxsz != null ? compMaxsz :
-							desktop.getWebApp().getConfiguration()
-									.getMaxUploadSize();
+						desktop.getWebApp().getConfiguration()
+								.getMaxUploadSize();
 				params.put("maxSize", maxsz);
 			} catch (NumberFormatException e) {
 				throw new UiException("The upload max size must be a number");
@@ -514,7 +527,7 @@ public class AuMultipartUploader {
 	}
 
 	private static final Media processItem(Desktop desktop, FileItem fi, boolean alwaysNative,
-			org.zkoss.zk.ui.sys.DiskFileItemFactory factory) throws IOException {
+										   org.zkoss.zk.ui.sys.DiskFileItemFactory factory) throws IOException {
 		String name = getBaseName(fi);
 		if (name != null) {
 			//Not sure whether a name might contain ;jsessionid or similar
