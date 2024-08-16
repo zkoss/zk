@@ -66,10 +66,9 @@ task buildESLintPlugin(type: NpmTask) {
 
 if (project.ext['gradleFrontendSkip'] == 'false') {
 	clean {
-		dependsOn npm_install
 		dependsOn buildESLintPlugin
 	}
-	classes.dependsOn npm_install
+	classes.dependsOn buildESLintPlugin
 }
 
 subprojects {
@@ -139,14 +138,6 @@ subprojects {
 		toolVersion '10.11.0'
 	}
 
-	task tscheck(type: NpmTask) {
-		dependsOn rootProject.tasks.named('npm_install')
-		setOnlyIf { project.ext['gradleFrontendSkip'] == 'false' }
-		enabled = project.file("tsconfig.json").exists()
-		workingDir = rootDir
-		args =['run', 'type-check', '--', '--project', "$projectDir"]
-	}
-
 	// eslint
 	task jscheck(type: NpmTask) {
 		dependsOn rootProject.tasks.named('npm_install')
@@ -166,7 +157,6 @@ subprojects {
 	}
 
 	check {
-		dependsOn(tscheck)
 		dependsOn(jscheck)
 	}
 
@@ -203,11 +193,6 @@ subprojects {
 		dependsOn(compileTypeScript)
 		dependsOn(compileLess)
 		dependsOn(compileCSS)
-
-		compileJava.mustRunAfter(rootProject.tasks.named('npm_install'))
-		compileTypeScript.mustRunAfter(rootProject.tasks.named('npm_install'))
-		compileLess.mustRunAfter(rootProject.tasks.named('npm_install'))
-		compileCSS.mustRunAfter(rootProject.tasks.named('npm_install'))
 
 		from("$projectDir/$codegen") {
 			setDuplicatesStrategy(DuplicatesStrategy.INCLUDE)
@@ -318,13 +303,25 @@ subprojects {
 	clean.doFirst {
 		delete "$projectDir/codegen/"
 	}
+
+	compileJava.mustRunAfter(rootProject.tasks.named('npm_install'))
+	compileTypeScript.mustRunAfter(rootProject.tasks.named('npm_install'))
+	compileLess.mustRunAfter(rootProject.tasks.named('npm_install'))
+	compileCSS.mustRunAfter(rootProject.tasks.named('npm_install'))
 }
 
 task tscheck(type: NpmTask, dependsOn: 'npm_install') {
 	setOnlyIf { project.ext['gradleFrontendSkip'] == 'false' }
 	args =['run', 'type-check']
 }
-check.dependsOn(tscheck)
+if (!project.hasProperty("cleanZKOnly") && gradle.includedBuilds.find {it.name == 'zkcml'} != null) {
+	def zkcmlBuildTask = gradle.includedBuild('zkcml').task(':build')
+	tscheck.dependsOn(gradle.includedBuild('zkcml').task(':tscheck'))
+	tscheck.dependsOn(zkcmlBuildTask)
+	tscheck.mustRunAfter(zkcmlBuildTask)
+} else {
+	check.dependsOn(tscheck)
+}
 
 // Version Check
 def fileCheck(file, regex) {
@@ -366,6 +363,16 @@ clean {
 	}
 }
 
+build {
+	// also build cml
+	if (!project.hasProperty("buildZKOnly") && gradle.includedBuilds.find { it.name == 'zkcml' } != null) {
+		def zkcmlBuild = gradle.includedBuild('zkcml').task(':build')
+		dependsOn(zkcmlBuild)
+		zkcmlprojects.each { prjName, dir ->
+			dependsOn(gradle.includedBuild('zkcml').task(":$prjName:build"))
+		}
+	}
+}
 // change all the version in gradle.properties under zk
 // e.g. ./gradlew upVer -PchangeVersionTo=10.0.1-SNAPSHOT
 task upVer() {
