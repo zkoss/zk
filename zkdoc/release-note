@@ -4,6 +4,7 @@ ZK 10.1.0
 * Bugs
   ZK-5764: Unable to call original method when using custom ViewModelAnnotationResolver
   ZK-5766: DomPurify fails with partial html content
+  ZK-5775: Improve ZK-5393 by caching FileUpload classes
 
 * Upgrade Notes
 

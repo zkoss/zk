@@ -85,16 +85,36 @@ public class AuMultipartUploader {
 	private static final String JAVAX_DISK_UPLOAD_CLASS = "org.apache.commons.fileupload2.javax.JavaxServletDiskFileUpload";
 	private static final String JAKARTA_DISK_UPLOAD_CLASS = "org.apache.commons.fileupload2.jakarta.servlet5.JakartaServletDiskFileUpload";
 
-	private static Class<?> getServletFileUploadClass() {
+	private static Class<?> uploadClass = null;
+	private static Class<?> diskUploadClass = null;
+
+	static {
 		try {
-			return Class.forName(JAVAX_UPLOAD_CLASS);
+			uploadClass = Class.forName(JAVAX_UPLOAD_CLASS);
 		} catch (ClassNotFoundException ex0) {
 			try {
-				return Class.forName(JAKARTA_UPLOAD_CLASS);
+				uploadClass = Class.forName(JAKARTA_UPLOAD_CLASS);
 			} catch (ClassNotFoundException ex1) {
-				throw new RuntimeException("Failed to find " + JAVAX_UPLOAD_CLASS + " or " + JAKARTA_UPLOAD_CLASS);
+				// Ignore
 			}
 		}
+
+		try {
+			diskUploadClass = Class.forName(JAVAX_DISK_UPLOAD_CLASS);
+		} catch (ClassNotFoundException ex0) {
+			try {
+				diskUploadClass = Class.forName(JAKARTA_DISK_UPLOAD_CLASS);
+			} catch (ClassNotFoundException ex1) {
+				// Ignore
+			}
+		}
+	}
+
+	private static Class<?> getServletFileUploadClass() {
+		if (uploadClass == null) {
+			throw new RuntimeException("Failed to find " + JAVAX_UPLOAD_CLASS + " or " + JAKARTA_UPLOAD_CLASS);
+		}
+		return uploadClass;
 	}
 
 	public static boolean isMultipartContent(HttpServletRequest request) {
@@ -108,20 +128,13 @@ public class AuMultipartUploader {
 	}
 
 	private static AbstractFileUpload newServletDiskFileUpload(DiskFileItemFactory factory) {
-		Class<?> clazz;
-		try {
-			clazz = Class.forName(JAVAX_DISK_UPLOAD_CLASS);
-		} catch (ClassNotFoundException ex0) {
-			try {
-				clazz = Class.forName(JAKARTA_DISK_UPLOAD_CLASS);
-			} catch (ClassNotFoundException ex1) {
-				throw new RuntimeException("Failed to find " + JAVAX_DISK_UPLOAD_CLASS + " or " + JAKARTA_DISK_UPLOAD_CLASS);
-			}
+		if (diskUploadClass == null) {
+			throw new RuntimeException("Failed to find " + JAVAX_DISK_UPLOAD_CLASS + " or " + JAKARTA_DISK_UPLOAD_CLASS);
 		}
 		try {
-			return (AbstractFileUpload) clazz.getDeclaredConstructor(DiskFileItemFactory.class).newInstance(factory);
+			return (AbstractFileUpload) diskUploadClass.getDeclaredConstructor(DiskFileItemFactory.class).newInstance(factory);
 		} catch (Exception ex) {
-			throw new RuntimeException("Failed to create a new instance of " + clazz.getName(), ex);
+			throw new RuntimeException("Failed to create a new instance of " + diskUploadClass.getName(), ex);
 		}
 	}
 
