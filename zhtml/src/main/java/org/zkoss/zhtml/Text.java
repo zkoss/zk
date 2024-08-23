@@ -23,7 +23,6 @@ import java.util.HashMap;
 import org.owasp.encoder.Encode;
 
 import org.zkoss.lang.Objects;
-import org.zkoss.xml.XMLs;
 import org.zkoss.zhtml.impl.PageRenderer;
 import org.zkoss.zhtml.impl.TagRenderContext;
 import org.zkoss.zk.ui.AbstractComponent;
