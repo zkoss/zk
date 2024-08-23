@@ -1,9 +1,9 @@
 /* Utils.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Wed Mar 14 15:30:49     2007, Created by tomyeh
 
@@ -22,10 +22,11 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.owasp.encoder.Encode;
+
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Strings;
 import org.zkoss.mesg.Messages;
-import org.zkoss.xml.XMLs;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
@@ -352,7 +353,7 @@ public class Utils {
 			if (rc != null && rc.crawlable) {
 				final Writer cwout = rc.temp;
 				cwout.write("<div>");
-				cwout.write(XMLs.encodeText(text));
+				cwout.write(Encode.forHtmlContent(text));
 				//encode required since it might not be valid HTML
 				cwout.write("</div>\n");
 			}

@@ -54,7 +54,7 @@ public class Strings {
 	 * a code not great than <code>'&#92;u0020'</code> (the space character)
 	 *
 	 * @param buf the string buffer to trim the leading and trailing.
-	 * @param index the index of the first character to trim 
+	 * @param index the index of the first character to trim
 	 * (i.e., consider as the leading character).
 	 * If 0, it starts from the beginning.
 	 * @return the same string buffer
@@ -266,7 +266,7 @@ public class Strings {
 	 * It prefix a backslash to any characters specified in the specials
 	 * argument.
 	 *
-	 * <p>Note: specials usually contains '\\'.	
+	 * <p>Note: specials usually contains '\\'.
 	 *
 	 * <p>For example, {@link org.zkoss.util.Maps#parse} will un-quote
 	 * backspace. Thus, if you want to preserve backslash, you have
@@ -316,13 +316,13 @@ public class Strings {
 			j2 = j = k + 1;
 		}
 		if (sb == null)
-			return src; //nothing changed
+			return String.valueOf(chars, 0, chars.length); //nothing changed
 		return sb.append(Arrays.copyOfRange(chars, j, chars.length)).toString();
 	}
 	private static char escapeSpecial(CharSequence src,
 	char cc, int k, String specials) {
 		switch (cc) {
-		case '\n': return 'n'; 
+		case '\n': return 'n';
 		case '\t': return 't';
 		case '\r': return 'r';
 		case '\f': return 'f';
@@ -463,7 +463,7 @@ public class Strings {
 			sb.insert(1, '0');
 		return sb.toString();
 	}
-		
+
 
 	/** Un-escape the quoted string.
 	 * @see #escape
@@ -554,11 +554,11 @@ public class Strings {
 	 *
 	 * @exception IllegalSyntaxException if the quoted string is unclosed.
 	 */
-	public static final 
+	public static final
 	Result nextToken(String src, int from, char[] separators)
 	throws IllegalSyntaxException {
 		return nextToken(src, from, separators, true, true, false);
-	}	
+	}
 	/** Returns the next token with additional options.
 	 * It is the same as nextToken(src, from, separators, escBackslash, quotAsToken, false);
 	 * Refer to {@link #nextToken(String, int, char[], boolean, boolean, boolean)}
@@ -644,7 +644,7 @@ public class Strings {
 			j < len ? src.charAt(j): (char)0);
 			//if the token is nothing but spaces, k < from
 	}
-	
+
 	/** Returns the next separator index in the src string.
 	 *
 	 * @param escQuot whether to escape characters inside quotations
@@ -798,7 +798,7 @@ public class Strings {
 		}
 		return false;
 	}
-	
+
 	/** The result of {@link #substring}.
 	 */
 	public static class Result {

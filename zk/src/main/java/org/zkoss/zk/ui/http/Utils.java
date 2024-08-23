@@ -1,9 +1,9 @@
 /* Utils.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Wed Jul  4 21:36:13     2007, Created by tomyeh
 
@@ -28,10 +28,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.owasp.encoder.Encode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.zkoss.html.HTMLs;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Library;
 import org.zkoss.mesg.Messages;
@@ -39,7 +39,6 @@ import org.zkoss.web.Attributes;
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.util.resource.ClassWebResource;
 import org.zkoss.web.util.resource.Extendlet;
-import org.zkoss.xml.XMLs;
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
@@ -143,7 +142,7 @@ public class Utils {
 	}
 
 	/** Handles exception being thrown when rendering a page.
-	 * @param ex the exception being throw. If null, it means the page
+	 * @param err the exception being thrown. If null, it means the page
 	 * is not found.
 	 */
 	/*package*/ static void handleError(ServletContext ctx, HttpServletRequest request, HttpServletResponse response,
@@ -170,7 +169,7 @@ public class Utils {
 					throw UiException.Aide.wrap(err);
 			}
 			response.sendError(HttpServletResponse.SC_NOT_FOUND,
-					HTMLs.encodeJavaScript(XMLs.escapeXML(path)));
+					Encode.forJavaScript(Encode.forHtml(path)));
 		}
 	}
 

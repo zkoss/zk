@@ -1,9 +1,9 @@
 /* DspExtendlet.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Wed Jul  4 15:57:24     2007, Created by tomyeh
 
@@ -26,10 +26,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.owasp.encoder.Encode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.zkoss.html.HTMLs;
 import org.zkoss.io.Files;
 import org.zkoss.lang.Library;
 import org.zkoss.util.media.ContentTypes;
@@ -40,7 +40,6 @@ import org.zkoss.web.servlet.dsp.Interpretation;
 import org.zkoss.web.servlet.dsp.Interpreter;
 import org.zkoss.web.servlet.http.Encodes;
 import org.zkoss.web.servlet.http.Https;
-import org.zkoss.xml.XMLs;
 
 /**
  * The DSP resource processor ({@link Extendlet}) used to parse
@@ -88,7 +87,7 @@ public class DspExtendlet implements Extendlet {
 				throw new java.io.FileNotFoundException("Failed to load the resource: " + path);
 				//have the includer to handle it
 			}
-			response.sendError(HttpServletResponse.SC_NOT_FOUND, HTMLs.encodeJavaScript(XMLs.escapeXML(path)));
+			response.sendError(HttpServletResponse.SC_NOT_FOUND, Encode.forJavaScript(Encode.forHtml(path)));
 			return;
 		}
 

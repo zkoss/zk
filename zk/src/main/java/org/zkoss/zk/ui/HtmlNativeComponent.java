@@ -1,9 +1,9 @@
 /* HtmlNativeComponent.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Thu Jul 19 18:05:01     2007, Created by tomyeh
 
@@ -25,6 +25,8 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
+import org.owasp.encoder.Encode;
 
 import org.zkoss.html.HTMLs;
 import org.zkoss.idom.Namespace;
@@ -73,7 +75,7 @@ public class HtmlNativeComponent extends AbstractComponent implements DynamicTag
 	private List<Namespace> _dns;
 
 	/** Constructs a {@link HtmlNativeComponent} component.
-	 * 
+	 *
 	 */
 	public HtmlNativeComponent() {
 	}
@@ -277,7 +279,7 @@ public class HtmlNativeComponent extends AbstractComponent implements DynamicTag
 					sb.insert(jhead, zktags);
 			}
 
-			oldout.write(sb.toString());
+			oldout.write(Encode.forHtml(sb.toString()));
 		}
 	}
 

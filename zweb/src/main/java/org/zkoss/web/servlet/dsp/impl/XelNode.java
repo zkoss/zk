@@ -1,9 +1,9 @@
 /* XelNode.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Sat Sep 17 15:47:54     2005, Created by tomyeh
 
@@ -18,6 +18,7 @@ package org.zkoss.web.servlet.dsp.impl;
 
 import java.io.IOException;
 
+import org.owasp.encoder.Encode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,7 +44,7 @@ class XelNode extends Node {
 		try {
 			final String result = (String) _expr.evaluate(ic.xelc);
 			if (result != null)
-				ic.dc.getOut().write(result);
+				ic.dc.getOut().write(Encode.forHtml(result));
 		} catch (XelException ex) {
 			log.error("", ex); //Web server might 'eat'
 			throw ex;

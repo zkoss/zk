@@ -1,9 +1,9 @@
 /* Out.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Tue Sep  6 16:10:51     2005, Created by tomyeh
 
@@ -18,9 +18,10 @@ package org.zkoss.web.servlet.dsp.action;
 
 import java.io.IOException;
 
+import org.owasp.encoder.Encode;
+
 import org.zkoss.web.mesg.MWeb;
 import org.zkoss.web.servlet.dsp.DspException;
-import org.zkoss.xml.XMLs;
 
 /**
  * Generates the specified value into a string.
@@ -97,7 +98,7 @@ public class Out extends AbstractAction {
 	/**
 	 * Returns whether to preserve the white spaces, such as space.
 	 * <p> Default: false;
-	 * 
+	 *
 	 * @since 3.6.3.
 	 */
 	public boolean isPre() {
@@ -137,7 +138,7 @@ public class Out extends AbstractAction {
 				if (_pre && cc == ' ')
 					replace = "&nbsp;";
 				else
-					replace = XMLs.escapeXML(cc);
+					replace = Encode.forHtml(String.valueOf(cc));
 
 				if (replace != null) {
 					if (sb == null) {

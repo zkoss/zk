@@ -1,9 +1,9 @@
 /* Renders.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Tue Aug 10 08:48:59 TST 2010, Created by tomyeh
 
@@ -19,6 +19,8 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.owasp.encoder.Encode;
 
 import org.zkoss.web.servlet.http.Https;
 import org.zkoss.zk.ui.Component;
@@ -185,8 +187,8 @@ public class Renders {
 		}
 
 		public void render(Page page, Writer out) throws IOException {
-			out.write(HtmlPageRenders.outLangStyleSheets(_exec, null, null));
-			out.write(HtmlPageRenders.outLangJavaScripts(_exec, null, null));
+			out.write(Encode.forHtml(HtmlPageRenders.outLangStyleSheets(_exec, null, null)));
+			out.write(Encode.forHtml(HtmlPageRenders.outLangJavaScripts(_exec, null, null)));
 
 			if (_pageDOM) {
 				HtmlPageRenders.outPageContent(_exec, page, out, false);
@@ -199,13 +201,13 @@ public class Renders {
 			out.write("','");
 			out.write(desktop.getId());
 			out.write("','");
-			out.write(getContextURI());
+			out.write(Encode.forJavaScript(getContextURI()));
 			out.write("','");
-			out.write(desktop.getUpdateURI(null));
+			out.write(Encode.forJavaScript(desktop.getUpdateURI(null)));
 			out.write("','");
-			out.write(desktop.getResourceURI(null));
+			out.write(Encode.forJavaScript(desktop.getResourceURI(null)));
 			out.write("','");
-			out.write(desktop.getRequestPath());
+			out.write(Encode.forJavaScript(desktop.getRequestPath()));
 			out.write('\'');
 
 			String style = page.getStyle();

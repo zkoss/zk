@@ -1,9 +1,9 @@
 /* PageRenderer.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Tue Oct 14 17:31:02     2008, Created by tomyeh
 
@@ -19,8 +19,9 @@ package org.zkoss.zul.impl;
 import java.io.IOException;
 import java.io.Writer;
 
+import org.owasp.encoder.Encode;
+
 import org.zkoss.lang.Library;
-import org.zkoss.xml.XMLs;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
@@ -84,12 +85,12 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 
 			String viewport = page.getViewport();
 			if (!"auto".equals(viewport))
-				out.write("<meta name=\"viewport\" content=\"" + XMLs.escapeXML(viewport) + "\" > \n");
+				out.write("<meta name=\"viewport\" content=\"" + Encode.forHtml(viewport) + "\" > \n");
 			else if (!"true".equals(Library.getProperty("org.zkoss.zul.tablet.meta.viewport.disabled", "false")))
 				out.write("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" > \n");
 			out.write("<title>");
 		}
-		write(out, XMLs.escapeXML(page.getTitle()));
+		write(out, Encode.forHtml(page.getTitle()));
 		out.write("</title>\n");
 		outHeaders(exec, page, out);
 		out.write("</head>\n");
@@ -110,8 +111,8 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 		out.write(HtmlPageRenders.outHeaders(exec, page, true));
 		//F70-ZK-2495: place init-crash-script before zk.wpd
 		out.write(HtmlPageRenders.outInitCrashScript(exec, null));
-		out.write(HtmlPageRenders.outLangJavaScripts(exec, null, null));
-		out.write(HtmlPageRenders.outLangStyleSheets(exec, null, null));
+		out.write(Encode.forHtml(HtmlPageRenders.outLangJavaScripts(exec, null, null)));
+		out.write(Encode.forHtml(HtmlPageRenders.outLangStyleSheets(exec, null, null)));
 		out.write(HtmlPageRenders.outHeaders(exec, page, false));
 	}
 
@@ -133,8 +134,8 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 	 */
 	protected void renderPage(Execution exec, Page page, Writer out, boolean au) throws IOException {
 		if (!au) {
-			out.write(HtmlPageRenders.outLangStyleSheets(exec, null, null));
-			out.write(HtmlPageRenders.outLangJavaScripts(exec, null, null));
+			out.write(Encode.forHtml(HtmlPageRenders.outLangStyleSheets(exec, null, null)));
+			out.write(Encode.forHtml(HtmlPageRenders.outLangJavaScripts(exec, null, null)));
 		}
 
 		HtmlPageRenders.outPageContent(exec, page, out, au);
@@ -153,7 +154,7 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 		for (Component root = page.getFirstRoot(); root != null; root = root.getNextSibling())
 			((ComponentCtrl) root).redraw(out);
 
-		write(out, HtmlPageRenders.outHeaderZkTags(exec, page));
+		write(out, Encode.forHtml(HtmlPageRenders.outHeaderZkTags(exec, page)));
 		writeln(out, HtmlPageRenders.outUnavailable(exec));
 	}
 }

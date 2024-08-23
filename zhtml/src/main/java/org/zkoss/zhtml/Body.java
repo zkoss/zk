@@ -1,9 +1,9 @@
 /* Body.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Tue Dec 13 10:50:07     2005, Created by tomyeh
 
@@ -17,6 +17,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zhtml;
 
 import java.io.StringWriter;
+
+import org.owasp.encoder.Encode;
 
 import org.zkoss.zhtml.impl.AbstractTag;
 import org.zkoss.zk.ui.Component;
@@ -51,7 +53,7 @@ public class Body extends AbstractTag {
 		if (exec != null)
 			Utils.addAllZkTags(exec, getPage(), buf, "body");
 
-		out.write(buf.toString());
+		out.write(Encode.forHtml(buf.toString()));
 		out.write('\n');
 	}
 

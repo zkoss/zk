@@ -1,8 +1,8 @@
 /* XMLs.java
 
 
-Purpose: 
-Description: 
+Purpose:
+Description:
 History:
 91/01/07 17:36:07, Create, Tom M. Yeh
 
@@ -15,6 +15,8 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.xml;
 
+import org.owasp.encoder.Encode;
+
 import org.zkoss.idom.Verifier;
 
 /**
@@ -22,6 +24,7 @@ import org.zkoss.idom.Verifier;
  *
  * @author tomyeh
  * @see org.zkoss.idom.Element
+ * @deprecated as of release 10.1.0, replaced with {@link org.owasp.encoder.Encode}
  */
 public class XMLs {
 	/** Converting a name to a valid XML name.
@@ -49,6 +52,7 @@ public class XMLs {
 	}
 
 	/** Encodes a value such that it could be used as XML attribute.
+	 * @deprecated as of release 10.1.0, replaced with {@link org.owasp.encoder.Encode#forXmlAttribute(String)}
 	 */
 	public static final String encodeAttribute(String value) {
 		StringBuffer sb = null;
@@ -77,6 +81,7 @@ public class XMLs {
 	 * <p>Note: It is sometime improper to use CDATA if the text contains
 	 * CDATA, too. The simplest way is NOT to use CDATA but encoding
 	 * the string by this method.
+	 * @deprecated as of release 10.1.0, replaced with {@link org.owasp.encoder.Encode#forXmlContent(String)}
 	 */
 	public static final String encodeText(String value) {
 		StringBuffer sb = null;
@@ -107,6 +112,7 @@ public class XMLs {
 	 * <p>Note: It is sometime improper to use CDATA if the text contains
 	 * CDATA, too. The simplest way is NOT to use CDATA but encoding
 	 * the string by this method.
+	 * @deprecated as of release 10.1.0, replaced with {@link org.owasp.encoder.Encode#forXmlContent(String)}
 	 */
 	public static final
 	StringBuffer encodeText(StringBuffer sb, String value) {
@@ -137,6 +143,7 @@ public class XMLs {
 	 * @param begin the beginning index, inclusive of the string to encode (i.e., value), included
 	 * @param end the ending index, exclusive of the string to encode (i.e., value), excluded
 	 * @since 5.0.0
+	 * @deprecated as of release 10.1.0, replaced with {@link org.owasp.encoder.Encode#forXmlContent(String)}
 	 */
 	public static final
 	StringBuffer encodeText(StringBuffer sb, String value, int begin, int end) {
@@ -168,17 +175,10 @@ public class XMLs {
 	 *
 	 * @param s the string to quote; null is OK
 	 * @return the escaped string, or an empty string if s is null
+	 * @deprecated as of release 10.1.0, replaced with {@link org.owasp.encoder.Encode#forXml(String)}
 	 */
 	public static final String escapeXML(String s) {
-		if (s == null) return "";
-		final StringBuffer sb = new StringBuffer(s.length() + 16);
-		for (int j = 0, len = s.length(); j < len; ++j) {
-			final char cc = s.charAt(j);
-			final String esc = escapeXML(cc);
-			if (esc != null) sb.append(esc);
-			else sb.append(cc);
-		}
-		return s.length() == sb.length() ? s: sb.toString();
+		return Encode.forHtml(s);
 	}
 	/** Escapes a character into a string if it is a special XML character,
 	 * returns null if not a special character.
@@ -188,6 +188,7 @@ public class XMLs {
      *    &gt; -&gt; &amp;gt;<br/>
      *    " -&gt; &amp;#034;<br/>
      *    ' -&gt; &amp;#039;<br/>
+	 * @deprecated as of release 10.1.0, replaced with {@link org.owasp.encoder.Encode#forXml(String)}
 	 */
 	public static final String escapeXML(char cc) {
 		switch (cc) {

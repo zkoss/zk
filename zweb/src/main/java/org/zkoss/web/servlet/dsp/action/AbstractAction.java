@@ -1,9 +1,9 @@
 /* AbstractAction.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Wed Sep  7 14:55:38     2005, Created by tomyeh
 
@@ -18,6 +18,8 @@ package org.zkoss.web.servlet.dsp.action;
 
 import java.io.IOException;
 import java.io.StringWriter;
+
+import org.owasp.encoder.Encode;
 
 import org.zkoss.lang.Strings;
 import org.zkoss.web.servlet.dsp.DspException;
@@ -94,7 +96,7 @@ public abstract class AbstractAction implements Action {
 	 */
 	protected static final void append(StringBuffer sb, String attrName, String attrValue) {
 		if (attrValue != null)
-			sb.append(' ').append(attrName).append("=\"").append(XMLs.encodeAttribute(attrValue)).append('"');
+			sb.append(' ').append(attrName).append("=\"").append(Encode.forHtmlAttribute(attrValue)).append('"');
 		//it might contain " or other special characters
 	}
 

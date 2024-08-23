@@ -1,9 +1,9 @@
 /* Text.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Thu Nov 24 15:17:07     2005, Created by tomyeh
 
@@ -19,6 +19,8 @@ package org.zkoss.zhtml;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.HashMap;
+
+import org.owasp.encoder.Encode;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.xml.XMLs;
@@ -114,7 +116,7 @@ public class Text extends AbstractComponent implements RawId {
 	 * Returns whether to encode the text, such as converting &lt; to &amp;lt;.
 	 * <p>
 	 * Default: true.
-	 * 
+	 *
 	 * @since 5.0.8
 	 */
 	public boolean isEncode() {
@@ -125,7 +127,7 @@ public class Text extends AbstractComponent implements RawId {
 	 * Sets whether to encode the text, such as converting &lt; to &amp;lt;.
 	 * <p>
 	 * Default: true.
-	 * 
+	 *
 	 * @since 5.0.8
 	 */
 	public void setEncode(boolean encode) {
@@ -135,7 +137,7 @@ public class Text extends AbstractComponent implements RawId {
 	// -- Component --//
 	/**
 	 * Returns the widget class, "zhtml.Text".
-	 * 
+	 *
 	 * @since 5.0.0
 	 */
 	@Override
@@ -183,7 +185,7 @@ public class Text extends AbstractComponent implements RawId {
 			out.write("\">");
 		}
 
-		out.write(_encode ? XMLs.encodeText(_value) : _value);
+		out.write(_encode ? Encode.forHtmlContent(_value) : _value);
 
 		if (idRequired)
 			out.write("</span>");
