@@ -1,9 +1,9 @@
 /* Img.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Tue Sep 20 15:13:32     2005, Created by tomyeh
 
@@ -17,6 +17,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.web.servlet.dsp.action.html;
 
 import java.io.IOException;
+
+import org.owasp.encoder.Encode;
 
 import org.zkoss.web.mesg.MWeb;
 import org.zkoss.web.servlet.dsp.DspException;
@@ -224,7 +226,7 @@ public class Img extends AbstractAction {
 		append(sb, "vspace", _vspace);
 		append(sb, "onclick", _onclick);
 		sb.append("/>");
-		ac.getOut().write(sb.toString());
+		ac.getOut().write(Encode.forHtml(sb.toString()));
 	}
 
 	//-- Object --//

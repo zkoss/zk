@@ -1,9 +1,9 @@
 /* Zkhead.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Thu Aug 21 16:16:34     2008, Created by tomyeh
 
@@ -18,6 +18,8 @@ package org.zkoss.zhtml;
 
 import java.io.IOException;
 import java.io.Writer;
+
+import org.owasp.encoder.Encode;
 
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Execution;
@@ -45,7 +47,7 @@ public class Zkhead extends AbstractComponent {
 
 			final String zktags = HtmlPageRenders.outHeaderZkTags(exec, getPage());
 			if (zktags != null)
-				out.write(zktags);
+				out.write(Encode.forHtml(zktags));
 		}
 	}
 

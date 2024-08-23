@@ -1,9 +1,9 @@
 /* DHtmlUpdateServlet.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Mon May 30 21:11:28     2005, Created by tomyeh
 
@@ -35,6 +35,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.owasp.encoder.Encode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,7 +48,6 @@ import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.http.Encodes;
 import org.zkoss.web.servlet.http.Https;
 import org.zkoss.web.util.resource.ClassWebResource;
-import org.zkoss.xml.XMLs;
 import org.zkoss.zk.au.AuDecoder;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuResponse;
@@ -580,7 +580,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 				resp = new AuSendRedirect(uri, null);
 			} else {
 				String msg = wapp != null ? wapp.getConfiguration().getTimeoutMessage(deviceType) : null;
-				dtid = XMLs.encodeText(dtid); // Fix ZK-1862 security issue
+				dtid = Encode.forHtml(dtid); // Fix ZK-1862 security issue
 				if (msg != null && msg.startsWith("label:")) {
 					final String key = msg.substring(6);
 					msg = Labels.getLabel(key, new Object[] { dtid });

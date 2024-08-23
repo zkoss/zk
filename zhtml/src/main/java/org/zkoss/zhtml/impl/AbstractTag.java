@@ -1,9 +1,9 @@
 /* AbstractTag.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Tue Oct  4 09:15:59     2005, Created by tomyeh
 
@@ -22,10 +22,11 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.owasp.encoder.Encode;
+
 import org.zkoss.html.HTMLs;
 import org.zkoss.image.Images;
 import org.zkoss.lang.Objects;
-import org.zkoss.xml.XMLs;
 import org.zkoss.zk.au.DeferredValue;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
@@ -452,7 +453,7 @@ public class AbstractTag extends AbstractComponent implements DynamicPropertied,
 
 	/**
 	 * Returns the widget class, "zhtml.Widget".
-	 * 
+	 *
 	 * @since 5.0.0
 	 */
 	public String getWidgetClass() {
@@ -497,7 +498,7 @@ public class AbstractTag extends AbstractComponent implements DynamicPropertied,
 	 * generate the JavaScript code {@link #redrawChildren} will be called instead.
 	 * <p>
 	 * You have to override this method if the deriving class has additional information to render.
-	 * 
+	 *
 	 * @since 5.0.7
 	 */
 	protected void redrawChildrenDirectly(TagRenderContext rc, Execution exec, java.io.Writer out)
@@ -545,7 +546,7 @@ public class AbstractTag extends AbstractComponent implements DynamicPropertied,
 						v = ((DeferredValue) v).getValue();
 					}
 					sb.append(' ').append(me.getKey()).append("=\"")
-							.append(XMLs.encodeAttribute(Objects.toString(v))).append('"');
+							.append(Encode.forHtmlAttribute(Objects.toString(v))).append('"');
 				}
 			}
 		}
@@ -557,7 +558,7 @@ public class AbstractTag extends AbstractComponent implements DynamicPropertied,
 
 		Object textContent = getDynamicProperty("textContent");
 		if (textContent != null)
-			sb.append(XMLs.escapeXML((String) textContent));
+			sb.append(Encode.forHtml((String) textContent));
 		return sb.toString();
 	}
 
@@ -571,7 +572,7 @@ public class AbstractTag extends AbstractComponent implements DynamicPropertied,
 
 	/**
 	 * Returns whether this tag is an orphan tag, i.e., it shall be in the form of &lt;tag/&gt;.
-	 * 
+	 *
 	 * @since 5.0.8
 	 */
 	protected boolean isOrphanTag() {

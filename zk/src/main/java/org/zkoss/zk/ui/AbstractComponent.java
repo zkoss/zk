@@ -2205,7 +2205,7 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 			if (wgtcls == null)
 				throw new UiException("Widget class required for " + this + " with " + getMold());
 			out.write("\n['");
-			out.write(wgtcls);
+			out.write(org.owasp.encoder.Encode.forJavaScriptBlock(wgtcls));
 			out.write("','");
 			out.write(getUuid());
 			out.write("',{");

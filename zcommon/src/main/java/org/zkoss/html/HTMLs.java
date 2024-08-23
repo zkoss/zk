@@ -1,9 +1,9 @@
 /* HTMLs.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Sat Dec 31 12:46:27     2005, Created by tomyeh
 
@@ -16,8 +16,10 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.html;
 
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
+
+import org.owasp.encoder.Encode;
 
 import org.zkoss.xml.XMLs;
 
@@ -38,7 +40,7 @@ public class HTMLs {
 	void appendAttribute(StringBuffer sb, String name, String val) {
 		if (val != null && val.length() != 0)
 			sb.append(' ').append(name).append("=\"")
-				.append(XMLs.encodeAttribute(val)).append('"');
+				.append(Encode.forHtmlAttribute(val)).append('"');
 	}
 	/** Appends an attribute to the string buffer for HTML/XML (name="val").
 	 * If emptyIgnored is true and val is null or empty (if String),
@@ -55,7 +57,7 @@ public class HTMLs {
 	boolean emptyIgnored) {
 		if (!emptyIgnored || (val != null && val.length() != 0))
 			sb.append(' ').append(name).append("=\"")
-				.append(val != null ? XMLs.encodeAttribute(val): null)
+				.append(val != null ? Encode.forHtmlAttribute(val): null)
 				.append('"');
 	}
 	/** Appends an attribute with a int value to the string buffer for HTML/XML (name="val").
@@ -140,7 +142,7 @@ public class HTMLs {
 			if (k < 0  && cc == ':') k = l; //colon found
 			else if (cc == ';') break; //done
 		}
-		
+
 		return k < 0 ? "": style.substring(k + 1, l).trim();
 	}
 
@@ -257,8 +259,9 @@ public class HTMLs {
 	 * For example, if a javascript attribute, such as onmouseover, contains a
 	 * \" that will close the entire attribute and allow an attacker to inject
 	 * another script attribute.
-	 * 
+	 *
 	 * @since 7.0.2
+	 * @deprecated as of release 10.1.0, replaced by {@link org.owasp.encoder.Encode#forJavaScript(String)}
 	 */
 	public static String encodeJavaScript(String input) {
 		StringBuilder sb = new StringBuilder();
@@ -280,8 +283,9 @@ public class HTMLs {
 	 * For example, if a javascript attribute, such as onmouseover, contains a
 	 * \" that will close the entire attribute and allow an attacker to inject
 	 * another script attribute.
-	 * 
+	 *
 	 * @since 7.0.2
+	 * @deprecated as of release 10.1.0, replaced by {@link org.owasp.encoder.Encode#forJavaScript(String)}
 	 */
 	public static String encodeCharacter(char[] immune, Character c) {
 

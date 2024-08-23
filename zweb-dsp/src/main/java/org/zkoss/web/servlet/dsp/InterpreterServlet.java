@@ -1,9 +1,9 @@
 /* InterpreterServlet.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Mon Sep  5 17:06:34     2005, Created by tomyeh
 
@@ -33,10 +33,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.owasp.encoder.Encode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.zkoss.html.HTMLs;
 import org.zkoss.io.Files;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.util.URLs;
@@ -49,7 +49,6 @@ import org.zkoss.web.util.resource.ResourceCache;
 import org.zkoss.web.util.resource.ResourceCaches;
 import org.zkoss.web.util.resource.ResourceLoader;
 import org.zkoss.xel.taglib.Taglibs;
-import org.zkoss.xml.XMLs;
 
 /**
  * The servlet used to interpret the DSP file (Potix Dynamic Script Page).
@@ -128,7 +127,8 @@ public class InterpreterServlet extends HttpServlet {
 				if (Https.isIncluded(request))
 					log.error("Not found: " + path);
 				//It might be eaten, so log the error
-				response.sendError(HttpServletResponse.SC_NOT_FOUND, HTMLs.encodeJavaScript(XMLs.escapeXML(path)));
+				response.sendError(HttpServletResponse.SC_NOT_FOUND,
+						Encode.forJavaScript(Encode.forHtml(path)));
 				return;
 			}
 

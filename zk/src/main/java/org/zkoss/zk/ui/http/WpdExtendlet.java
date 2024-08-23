@@ -36,7 +36,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.zkoss.html.HTMLs;
+import org.owasp.encoder.Encode;
+
 import org.zkoss.idom.Element;
 import org.zkoss.idom.input.SAXBuilder;
 import org.zkoss.idom.util.IDOMs;
@@ -54,7 +55,6 @@ import org.zkoss.web.util.resource.ClassWebResource;
 import org.zkoss.web.util.resource.ExtendletConfig;
 import org.zkoss.web.util.resource.ExtendletContext;
 import org.zkoss.web.util.resource.ExtendletLoader;
-import org.zkoss.xml.XMLs;
 import org.zkoss.zk.device.Device;
 import org.zkoss.zk.device.Devices;
 import org.zkoss.zk.ui.UiException;
@@ -209,7 +209,7 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 				throw new java.io.FileNotFoundException("Failed to load the resource: " + path);
 				//have the includer to handle it
 			}
-			response.sendError(response.SC_NOT_FOUND, HTMLs.encodeJavaScript(XMLs.escapeXML(path)));
+			response.sendError(response.SC_NOT_FOUND, Encode.forJavaScript(Encode.forHtml(path)));
 			return null;
 		}
 
@@ -441,7 +441,7 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 						write(out, "');");
 						String requestURI = reqctx.request.getRequestURI();
 						String prefixURI = requestURI.substring(0, requestURI.lastIndexOf("/js"));
-						write(out, "};script.src='" + prefixURI + findResourcePath(reqctx, out, jspath, dir, true, false));
+						write(out, "};script.src='" + Encode.forJavaScript(prefixURI + findResourcePath(reqctx, out, jspath, dir, true, false)));
 						write(out, "';\ndocument.getElementsByTagName('head')[0].appendChild(script);");
 					} else {
 						if (wc != null && (browser != null || jspath.indexOf('*') >= 0)) {
@@ -938,7 +938,7 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 			}
 
 			if (main != null && main.length() > 0)
-				write(out, outMain(main, request.getParameterMap()));
+				write(out, outMain(Encode.forJavaScript(main), request.getParameterMap()));
 			return out.toByteArray();
 		}
 	}

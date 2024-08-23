@@ -1,9 +1,9 @@
 /* PageRenderer.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Sat Jan  3 17:58:50     2009, Created by tomyeh
 
@@ -18,6 +18,8 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Iterator;
+
+import org.owasp.encoder.Encode;
 
 import org.zkoss.zhtml.Text;
 import org.zkoss.zk.ui.Component;
@@ -47,7 +49,7 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 	/**
 	 * Returns the render context, or null if not available. The render context is available only if
 	 * the ZHTML page is rendered directly (rather than via inclusion).
-	 * 
+	 *
 	 * @param exec
 	 *            the execution. If null, Executions.getCurrent() is assumed.
 	 */
@@ -100,8 +102,8 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 	protected void renderPage(Execution exec, Page page, Writer out, boolean au)
 			throws IOException {
 		if (!au) {
-			out.write(HtmlPageRenders.outLangStyleSheets(exec, null, null));
-			out.write(HtmlPageRenders.outLangJavaScripts(exec, null, null));
+			out.write(Encode.forHtml(HtmlPageRenders.outLangStyleSheets(exec, null, null)));
+			out.write(Encode.forHtml(HtmlPageRenders.outLangJavaScripts(exec, null, null)));
 		}
 
 		HtmlPageRenders.outPageContent(exec, page, out, au);
@@ -178,7 +180,7 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 			}
 		}
 
-		write(out, HtmlPageRenders.outHeaderZkTags(exec, page));
+		write(out, Encode.forHtml(HtmlPageRenders.outHeaderZkTags(exec, page)));
 		if (rcs.length() == 0) {
 			Object notice = webApp.getAttribute("org.zkoss.zk.ui.client.notice");
 			if (notice instanceof String) {
@@ -213,7 +215,7 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 
 	/**
 	 * Ends and cleans up the rendering of a ZHTML tag.
-	 * 
+	 *
 	 * @param param
 	 *            the value returned by {@link #beforeRenderHtml}.
 	 */
@@ -225,7 +227,7 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 	/**
 	 * Converts the children of the give component into a string-typed content, or null if no
 	 * children at all.
-	 * 
+	 *
 	 * @exception UiException
 	 *                if some of the children is not ZHTML tags (i.e., not {@link AbstractTag}).
 	 * @since 5.0.7

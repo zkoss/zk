@@ -154,18 +154,19 @@ task prepareBin() {
 				include "**/commons-fileupload2-core.jar"
 				include "**/commons-io.jar"
 				include "**/commons-logging.jar"
+				include "**/encoder.jar"
 				include "**/Filters.jar"
 				include "**/gson.jar"
 				include "**/guava.jar"
-				include "**/openpdf.jar"
+				include "**/httpcore5.jar"
 				include "**/jasperreports.jar"
 				include "**/javassist.jar"
 				include "**/jcommon.jar"
 				include "**/jfreechart.jar"
+				include "**/openpdf.jar"
 				include "**/slf4j-api.jar"
 				include "**/zsoup.jar"
 				include "**/zkdiffer.jar"
-				include "**/httpcore5.jar"
 			}
 		}
 		// theme jars

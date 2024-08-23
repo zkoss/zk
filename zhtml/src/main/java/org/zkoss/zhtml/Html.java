@@ -1,9 +1,9 @@
 /* Html.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Tue Dec 13 10:44:36     2005, Created by tomyeh
 
@@ -17,6 +17,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zhtml;
 
 import java.io.StringWriter;
+
+import org.owasp.encoder.Encode;
 
 import org.zkoss.zhtml.impl.AbstractTag;
 import org.zkoss.zhtml.impl.PageRenderer;
@@ -76,7 +78,7 @@ public class Html extends AbstractTag {
 		if (exec != null)
 			Utils.addAllZkTags(exec, getPage(), buf, "html");
 
-		out.write(buf.toString());
+		out.write(Encode.forHtml(buf.toString()));
 	}
 
 	/**
