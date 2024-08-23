@@ -111,8 +111,8 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 		out.write(HtmlPageRenders.outHeaders(exec, page, true));
 		//F70-ZK-2495: place init-crash-script before zk.wpd
 		out.write(HtmlPageRenders.outInitCrashScript(exec, null));
-		out.write(Encode.forHtml(HtmlPageRenders.outLangJavaScripts(exec, null, null)));
-		out.write(Encode.forHtml(HtmlPageRenders.outLangStyleSheets(exec, null, null)));
+		out.write(HtmlPageRenders.outLangJavaScripts(exec, null, null));
+		out.write(HtmlPageRenders.outLangStyleSheets(exec, null, null));
 		out.write(HtmlPageRenders.outHeaders(exec, page, false));
 	}
 
@@ -134,8 +134,8 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 	 */
 	protected void renderPage(Execution exec, Page page, Writer out, boolean au) throws IOException {
 		if (!au) {
-			out.write(Encode.forHtml(HtmlPageRenders.outLangStyleSheets(exec, null, null)));
-			out.write(Encode.forHtml(HtmlPageRenders.outLangJavaScripts(exec, null, null)));
+			out.write(HtmlPageRenders.outLangStyleSheets(exec, null, null));
+			out.write(HtmlPageRenders.outLangJavaScripts(exec, null, null));
 		}
 
 		HtmlPageRenders.outPageContent(exec, page, out, au);
@@ -154,7 +154,7 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 		for (Component root = page.getFirstRoot(); root != null; root = root.getNextSibling())
 			((ComponentCtrl) root).redraw(out);
 
-		write(out, Encode.forHtml(HtmlPageRenders.outHeaderZkTags(exec, page)));
+		write(out, HtmlPageRenders.outHeaderZkTags(exec, page));
 		writeln(out, HtmlPageRenders.outUnavailable(exec));
 	}
 }

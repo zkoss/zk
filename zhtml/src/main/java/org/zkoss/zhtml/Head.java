@@ -18,8 +18,6 @@ package org.zkoss.zhtml;
 
 import java.io.StringWriter;
 
-import org.owasp.encoder.Encode;
-
 import org.zkoss.zhtml.impl.AbstractTag;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
@@ -54,7 +52,7 @@ public class Head extends AbstractTag {
 		if (exec != null)
 			Utils.addHeaderZkTags(exec, getPage(), buf, "head");
 
-		out.write(Encode.forHtml(buf.toString()));
+		out.write(buf.toString());
 		out.write('\n');
 	}
 

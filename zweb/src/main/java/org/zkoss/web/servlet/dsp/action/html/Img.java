@@ -212,7 +212,8 @@ public class Img extends AbstractAction {
 			throw new DspException(MWeb.DSP_NESTED_ACTION_NOT_ALLOWED,
 					new Object[] { this, new Integer(ac.getLineNumber()) });
 
-		final StringBuffer sb = new StringBuffer(64).append("<img src=\"").append(ac.encodeURL(_src)).append('"');
+		final StringBuffer sb = new StringBuffer(64).append("<img src=\"").append(
+				Encode.forHtmlAttribute(ac.encodeURL(_src))).append('"');
 		append(sb, "id", _id);
 		append(sb, "height", _height);
 		append(sb, "width", _width);
@@ -226,7 +227,7 @@ public class Img extends AbstractAction {
 		append(sb, "vspace", _vspace);
 		append(sb, "onclick", _onclick);
 		sb.append("/>");
-		ac.getOut().write(Encode.forHtml(sb.toString()));
+		ac.getOut().write(sb.toString());
 	}
 
 	//-- Object --//

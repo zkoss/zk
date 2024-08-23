@@ -19,8 +19,6 @@ package org.zkoss.zhtml;
 import java.io.IOException;
 import java.io.Writer;
 
-import org.owasp.encoder.Encode;
-
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
@@ -47,7 +45,7 @@ public class Zkhead extends AbstractComponent {
 
 			final String zktags = HtmlPageRenders.outHeaderZkTags(exec, getPage());
 			if (zktags != null)
-				out.write(Encode.forHtml(zktags));
+				out.write(zktags);
 		}
 	}
 

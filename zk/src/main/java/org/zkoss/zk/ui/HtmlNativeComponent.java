@@ -26,8 +26,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.owasp.encoder.Encode;
-
 import org.zkoss.html.HTMLs;
 import org.zkoss.idom.Namespace;
 import org.zkoss.lang.Strings;
@@ -279,7 +277,7 @@ public class HtmlNativeComponent extends AbstractComponent implements DynamicTag
 					sb.insert(jhead, zktags);
 			}
 
-			oldout.write(Encode.forHtml(sb.toString()));
+			oldout.write(sb.toString());
 		}
 	}
 

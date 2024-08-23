@@ -159,7 +159,7 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 			boolean pkgStart = path.endsWith("0.wpd");
 			boolean pkgEnd = path.endsWith("$.wpd");
 			int lastPartIndex = path.lastIndexOf("/") + 1;
-			String lastPart = path.substring(lastPartIndex);
+			String lastPart = Encode.forJavaScript(path.substring(lastPartIndex));
 			String pkgName = lastPart.replaceAll("[\\d]{1,2}\\.wpd", "");
 			if (pkgStart || pkgEnd) {
 				if (pkgStart) {
@@ -678,8 +678,8 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 		if (j >= 0)
 			s = s.substring(0, j) + s.substring(j + 1);
 
-		sb.append("','").append(s).append("','")
-				.append(Encodes.encodeURL(ctx, reqctx.request, reqctx.response, wapp.getUpdateURI(false)));
+		sb.append("','").append(Encode.forJavaScript(s)).append("','")
+				.append(Encode.forJavaScript(Encodes.encodeURL(ctx, reqctx.request, reqctx.response, wapp.getUpdateURI(false))));
 
 		sb.append("',{");
 		for (Iterator it = LanguageDefinition.getByDeviceType(getDeviceType()).iterator(); it.hasNext();) {
@@ -737,7 +737,7 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 		}
 
 		//ZK-4564
-		sb.append("resURI:'").append(Encodes.encodeURL(ctx, reqctx.request, reqctx.response, wapp.getResourceURI(false))).append("'").append("});");
+		sb.append("resURI:'").append(Encode.forJavaScript(Encodes.encodeURL(ctx, reqctx.request, reqctx.response, wapp.getResourceURI(false)))).append("'").append("});");
 		write(out, sb.toString());
 	}
 
@@ -780,7 +780,7 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 			}
 		}
 
-		sb.append(JSONObject.toJSONString(ms)).append(")\n})");
+		sb.append(Encode.forJavaScript(JSONObject.toJSONString(ms))).append(")\n})");
 		return sb.toString();
 	}
 
@@ -797,7 +797,7 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 			sb.append(uri);
 			removeLast(sb, '/');
 		}
-		return sb.append("','").append(wapp.getResourceURI(false)).append("',").append(clientPackages).append(");")
+		return sb.append("','").append(Encode.forJavaScript(wapp.getResourceURI(false))).append("',").append(clientPackages).append(");")
 				.toString();
 	}
 
@@ -1063,7 +1063,7 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 			} catch (javax.servlet.ServletException ex) {
 				throw new UiException(ex);
 			}
-			sb.append(scriptVariableName).append(".src='").append(url).append("';");
+			sb.append(scriptVariableName).append(".src='").append(Encode.forJavaScript(url)).append("';");
 			sb.append("\ndocument.getElementsByTagName('head')[0].appendChild(").append(scriptVariableName).append(");");
 			lastWpd = dividedPath.substring(dividedPath.lastIndexOf("/") + 1);
 		}
