@@ -886,7 +886,7 @@ public class Servlets {
 				final String ctxroot;
 				if (j >= 0) {
 					ctxroot = "/" + uri.substring(1, j);
-					_uri = uri.substring(j);
+					_uri = Https.sanitizePath(uri.substring(j));
 				} else {
 					ctxroot = "/" + uri.substring(1);
 					_uri = "/";
