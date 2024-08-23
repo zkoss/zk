@@ -25,6 +25,7 @@ import javax.servlet.ServletContext;
 import org.zkoss.lang.SystemException;
 import org.zkoss.util.resource.Locator;
 import org.zkoss.web.servlet.Servlets;
+import org.zkoss.web.servlet.http.Https;
 
 /**
  * Locator based on ServletContext.
@@ -172,11 +173,11 @@ public class ServletContextLocator implements Locator {
 	}
 
 	private URL getResource0(String path) throws java.net.MalformedURLException, UnsupportedEncodingException {
-		return _acceptURL ? Servlets.getResource(_ctx, path) : _ctx.getResource(path);
+		return _acceptURL ? Servlets.getResource(_ctx, path) : _ctx.getResource(Https.sanitizePath(path));
 	}
 
 	private InputStream getResourceAsStream0(String path) throws java.io.IOException {
-		return _acceptURL ? Servlets.getResourceAsStream(_ctx, path) : _ctx.getResourceAsStream(path);
+		return _acceptURL ? Servlets.getResourceAsStream(_ctx, path) : _ctx.getResourceAsStream(Https.sanitizePath(path));
 	}
 
 	//-- Object --//

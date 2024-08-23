@@ -1,9 +1,9 @@
 /* CookieThemeResolver.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Mar 14, 2013 04:46:08 PM, Created by neillee
 
@@ -16,13 +16,14 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.zkoss.lang.Strings;
 import org.zkoss.web.theme.ThemeResolver;
 
 /**
  * A standard implementation of ThemeResolver
  * Retrieves and stores theme names via cookie
- * 
- * ZK CE/PE/EE 
+ *
+ * ZK CE/PE/EE
  * @author neillee
  * @since 6.5.2
  */
@@ -43,11 +44,23 @@ public class CookieThemeResolver implements ThemeResolver {
 		for (Cookie c : cookies) {
 			if (THEME_COOKIE_KEY.equals(c.getName())) {
 				String themeName = c.getValue();
-				if (themeName != null)
+				if (isValidName(themeName))
 					return themeName;
 			}
 		}
 		return "";
+	}
+
+	private boolean isValidName(String themeName) {
+		if (Strings.isBlank(themeName)) return false;
+		for (int j = 0, len = themeName.length(); j < len; ++j) {
+			char cc = themeName.charAt(j);
+
+			// check if it is a valid character for a theme name
+			if (cc == '/' || cc == '\\' || cc == '.' || cc == ':' || cc == '?' || cc == '&' || cc == '=' || cc == '%' || cc == '#' || cc == ' ')
+				return false;
+		}
+		return true;
 	}
 
 	/**

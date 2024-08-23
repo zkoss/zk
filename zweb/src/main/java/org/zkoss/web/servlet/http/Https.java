@@ -1,7 +1,7 @@
 /* Https.java
 
-	Purpose: 
-	Description: 
+	Purpose:
+	Description:
 	History:
 	2001/11/29 13:53:05, Create, Tom M. Yeh.
 
@@ -109,7 +109,7 @@ public class Https extends Servlets {
 	}
 
 	/**
-	 * Gets the complete context path, including protocol, server, ports, and 
+	 * Gets the complete context path, including protocol, server, ports, and
 	 * context.
 	 * Example, http://mysite.com:8080/we
 	 */
@@ -460,9 +460,7 @@ public class Https extends Servlets {
 			return null;
 		String normalizedPath;
 		try {
-			normalizedPath = path.startsWith("/")
-					? normalizePath(path) :
-					new URI(path).normalize().toString();
+			normalizedPath = normalizePath(path.startsWith("/") ? path : new URI(path).normalize().toString());
 		} catch (URISyntaxException e) {
 			return null;
 		}

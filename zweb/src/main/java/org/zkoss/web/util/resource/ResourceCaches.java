@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import org.zkoss.lang.SystemException;
 import org.zkoss.web.servlet.Servlets;
+import org.zkoss.web.servlet.http.Https;
 
 /**
  * Utilities to load (and parse) the Servlet resource.
@@ -134,8 +135,12 @@ public class ResourceCaches {
 
 		//try url because some server uses JAR format
 		try {
-			if (url == null)
-				url = ctx.getResource(path);
+			if (url == null) {
+				path = Https.sanitizePath(path);
+				if (path != null) {
+					url = ctx.getResource(path);
+				}
+			}
 			if (url != null)
 				return cache.get(new ResourceInfo(path, url, extra));
 		} catch (Throwable ex) {

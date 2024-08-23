@@ -27,6 +27,7 @@ import java.util.Set;
 import javax.servlet.ServletContext;
 
 import org.zkoss.util.CollectionsX;
+import org.zkoss.web.servlet.http.Https;
 import org.zkoss.web.servlet.xel.AttributesMap;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
@@ -153,7 +154,12 @@ public class SimpleWebApp extends AbstractWebApp {
 		if (path.startsWith("~./"))
 			return getWebManager().getClassWebResource().getResource(path.substring(2));
 		try {
-			return _ctx.getResource(path);
+			// Fix the ccessing paths influenced by users can allow an attacker to access unexpected resources.
+			path = Https.sanitizePath(path);
+			if (path != null) {
+				return _ctx.getResource(path);
+			}
+			return null;
 		} catch (MalformedURLException ex) {
 			throw new UiException("Failed to retrieve " + path, ex);
 		}
@@ -162,7 +168,13 @@ public class SimpleWebApp extends AbstractWebApp {
 	public InputStream getResourceAsStream(String path) {
 		if (path.startsWith("~./"))
 			return getWebManager().getClassWebResource().getResourceAsStream(path.substring(2));
-		return _ctx.getResourceAsStream(path);
+
+		// Fix the ccessing paths influenced by users can allow an attacker to access unexpected resources.
+		path = Https.sanitizePath(path);
+		if (path != null) {
+			return _ctx.getResourceAsStream(path);
+		}
+		return null;
 	}
 
 	public String getInitParameter(String name) {
