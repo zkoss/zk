@@ -23,7 +23,6 @@ import org.owasp.encoder.Encode;
 
 import org.zkoss.lang.Strings;
 import org.zkoss.web.servlet.dsp.DspException;
-import org.zkoss.xml.XMLs;
 
 /**
  * A skeletal implementation to simplify the implementation of actions.
