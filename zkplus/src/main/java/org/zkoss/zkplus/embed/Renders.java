@@ -187,8 +187,8 @@ public class Renders {
 		}
 
 		public void render(Page page, Writer out) throws IOException {
-			out.write(Encode.forHtml(HtmlPageRenders.outLangStyleSheets(_exec, null, null)));
-			out.write(Encode.forHtml(HtmlPageRenders.outLangJavaScripts(_exec, null, null)));
+			out.write(HtmlPageRenders.outLangStyleSheets(_exec, null, null));
+			out.write(HtmlPageRenders.outLangJavaScripts(_exec, null, null));
 
 			if (_pageDOM) {
 				HtmlPageRenders.outPageContent(_exec, page, out, false);

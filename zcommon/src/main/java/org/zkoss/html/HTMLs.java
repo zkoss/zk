@@ -57,7 +57,7 @@ public class HTMLs {
 	boolean emptyIgnored) {
 		if (!emptyIgnored || (val != null && val.length() != 0))
 			sb.append(' ').append(name).append("=\"")
-				.append(val != null ? Encode.forHtmlAttribute(val): null)
+				.append(val != null ? Encode.forHtmlAttribute(val) : null)
 				.append('"');
 	}
 	/** Appends an attribute with a int value to the string buffer for HTML/XML (name="val").

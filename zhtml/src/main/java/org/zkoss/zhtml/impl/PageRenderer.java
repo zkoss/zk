@@ -19,8 +19,6 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Iterator;
 
-import org.owasp.encoder.Encode;
-
 import org.zkoss.zhtml.Text;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
@@ -102,8 +100,8 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 	protected void renderPage(Execution exec, Page page, Writer out, boolean au)
 			throws IOException {
 		if (!au) {
-			out.write(Encode.forHtml(HtmlPageRenders.outLangStyleSheets(exec, null, null)));
-			out.write(Encode.forHtml(HtmlPageRenders.outLangJavaScripts(exec, null, null)));
+			out.write(HtmlPageRenders.outLangStyleSheets(exec, null, null));
+			out.write(HtmlPageRenders.outLangJavaScripts(exec, null, null));
 		}
 
 		HtmlPageRenders.outPageContent(exec, page, out, au);
@@ -180,7 +178,7 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 			}
 		}
 
-		write(out, Encode.forHtml(HtmlPageRenders.outHeaderZkTags(exec, page)));
+		write(out, HtmlPageRenders.outHeaderZkTags(exec, page));
 		if (rcs.length() == 0) {
 			Object notice = webApp.getAttribute("org.zkoss.zk.ui.client.notice");
 			if (notice instanceof String) {

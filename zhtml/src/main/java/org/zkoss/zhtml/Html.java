@@ -18,8 +18,6 @@ package org.zkoss.zhtml;
 
 import java.io.StringWriter;
 
-import org.owasp.encoder.Encode;
-
 import org.zkoss.zhtml.impl.AbstractTag;
 import org.zkoss.zhtml.impl.PageRenderer;
 import org.zkoss.zk.ui.Component;
@@ -78,7 +76,7 @@ public class Html extends AbstractTag {
 		if (exec != null)
 			Utils.addAllZkTags(exec, getPage(), buf, "html");
 
-		out.write(Encode.forHtml(buf.toString()));
+		out.write(buf.toString());
 	}
 
 	/**

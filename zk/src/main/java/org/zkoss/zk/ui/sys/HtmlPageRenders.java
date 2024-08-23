@@ -350,7 +350,7 @@ public class HtmlPageRenders {
 			String src = scriptInfo.getX();
 			sb.append("<script type=\"text/javascript\"");
 			if (src != null && src.length() != 0)
-				sb.append(" src=\"").append(Executions.encodeURL(src)).append("\" charset=\"UTF-8\">");
+				sb.append(" src=\"").append(Encode.forHtmlAttribute(Executions.encodeURL(src))).append("\" charset=\"UTF-8\">");
 			else
 				sb.append(">").append(scriptInfo.getY());
 			sb.append("</script>\n");
@@ -497,7 +497,7 @@ public class HtmlPageRenders {
 
 				if (href != null && href.length() > 0) {
 					sb.append("\n<link rel=\"stylesheet\" type=\"").append(ss.getType()).append("\" href=\"")
-							.append(ServletFns.encodeURL(href));
+							.append(Encode.forHtmlAttribute(ServletFns.encodeURL(href)));
 					if (media != null)
 						sb.append("\" media=\"").append(media);
 					sb.append("\"");
@@ -526,7 +526,7 @@ public class HtmlPageRenders {
 				throw new UiException(ex);
 			}
 
-			sb.append(" src=\"").append(url).append('"');
+			sb.append(" src=\"").append(Encode.forHtmlAttribute(url)).append('"');
 			final String charset = js.getCharset();
 			if (charset != null)
 				sb.append(" charset=\"").append(charset).append('"');
@@ -682,7 +682,7 @@ public class HtmlPageRenders {
 				appendProp(props, "z$rod", Boolean.FALSE);
 			if (contained)
 				appendProp(props, "ct", Boolean.TRUE);
-			out.write(Encode.forJavaScript(props.toString()));
+			out.write(props.toString());
 			out.write("},{"); // preserved for shadow element
 			out.write("},[");
 
@@ -838,14 +838,9 @@ public class HtmlPageRenders {
 			sb.append(',');
 		sb.append(name).append(':');
 		boolean quote = value instanceof String;
-		if (quote) {
-			sb.append('\'');
-			sb.append(Encode.forJavaScript((String) value));
-			if (quote)
-				sb.append('\'');
-		} else {
-			sb.append(value); //no escape, so use with care
-		}
+		if (quote) sb.append('\'');
+		sb.append(Encode.forJavaScript(String.valueOf(value)));
+		if (quote) sb.append('\'');
 	}
 
 	/** Generates the special JavaScript code, such as the application's name.
@@ -1091,9 +1086,9 @@ public class HtmlPageRenders {
 		final Desktop desktop = exec.getDesktop();
 		if (desktop != null && exec.getAttribute(ATTR_DESKTOP_JS_GENED) == null) {
 			sb.append("<script class=\"z-runonce\" type=\"text/javascript\">\nzkdt('").append(desktop.getId())
-					.append("','").append(getContextURI(exec)).append("','").append(desktop.getUpdateURI(null))
-					.append("','").append(desktop.getResourceURI(null))
-					.append("','").append(desktop.getRequestPath()).append("');").append(outSpecialJS(desktop))
+					.append("','").append(Encode.forJavaScript(getContextURI(exec))).append("','").append(Encode.forJavaScript(desktop.getUpdateURI(null)))
+					.append("','").append(Encode.forJavaScript(desktop.getResourceURI(null)))
+					.append("','").append(Encode.forJavaScript(desktop.getRequestPath())).append("');").append(outSpecialJS(desktop))
 					.append("\n</script>\n");
 		}
 
@@ -1110,8 +1105,7 @@ public class HtmlPageRenders {
 
 					final List encdata = response.getEncodedData();
 					if (encdata != null)
-						sb.append(",'").append(Strings.escape(org.zkoss.json.JSONArray.toJSONString(encdata),
-								Strings.ESCAPE_JAVASCRIPT)).append('\'');
+						sb.append(",'").append(Encode.forJavaScript(org.zkoss.json.JSONArray.toJSONString(encdata))).append('\'');
 					sb.append(");\n");
 				}
 				sb.append("});\n</script>\n");
