@@ -1,9 +1,9 @@
 /* B70_ZK_1750Test.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Wed Mar 27 14:19:15 CST 2019, Created by rudyhuang
 
@@ -35,9 +35,9 @@ public class B70_ZK_1750Test extends WebDriverTestCase {
 			String script = runonce.html();
 			if (!script.contains("zkmx("))
 				continue;
-			assertThat(script, containsString(",cu:'\\x2F"));
-			assertThat(script, containsString(",uu:'\\x2F"));
-			assertThat(script, containsString(",ru:'\\x2F"));
+			assertThat(script, containsString(",cu:'\\x27"));
+			assertThat(script, containsString(",uu:'\\x27"));
+			assertThat(script, containsString(",ru:'\\x27"));
 		}
 	}
 }

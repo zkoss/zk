@@ -1,9 +1,9 @@
 /* SimpleConstraint.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Tue Jun 28 13:58:11     2005, Created by tomyeh
 
@@ -21,8 +21,9 @@ import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.owasp.encoder.Encode;
+
 import org.zkoss.lang.Classes;
-import org.zkoss.lang.Strings;
 import org.zkoss.util.Dates;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
@@ -34,7 +35,7 @@ import org.zkoss.zul.mesg.MZul;
  *
  * <p>Depending on the component (such as {@link Intbox} and {@link Datebox},
  * you could combine the flags, such as {@link #NO_POSITIVE} + {@link #NO_ZERO}
- * to accept only negative number. 
+ * to accept only negative number.
  *
  * @author tomyeh
  */
@@ -72,46 +73,46 @@ public class SimpleConstraint implements Constraint, ClientConstraint, java.io.S
 	/** Today is not allowed. (Only date part is compared)
 	 */
 	public static final int NO_TODAY = NO_ZERO;
-	/** The Error-box position. 
+	/** The Error-box position.
 	 */
 	public static final int BEFORE_START = 0x1000;
-	/** The Error-box position. 
+	/** The Error-box position.
 	 */
 	public static final int BEFORE_END = 0x2000;
-	/** The Error-box position. 
+	/** The Error-box position.
 	 */
 	public static final int END_BEFORE = 0x3000;
-	/** The Error-box position. 
+	/** The Error-box position.
 	 */
 	public static final int END_AFTER = 0x4000;
-	/** The Error-box position. 
+	/** The Error-box position.
 	 */
 	public static final int AFTER_END = 0x5000;
-	/** The Error-box position. 
+	/** The Error-box position.
 	 */
 	public static final int AFTER_START = 0x6000;
-	/** The Error-box position. 
+	/** The Error-box position.
 	 */
 	public static final int START_AFTER = 0x7000;
-	/** The Error-box position. 
+	/** The Error-box position.
 	 */
 	public static final int START_BEFORE = 0x8000;
-	/** The Error-box position. 
+	/** The Error-box position.
 	 */
 	public static final int OVERLAP = 0x9000;
-	/** The Error-box position. 
+	/** The Error-box position.
 	 */
 	public static final int OVERLAP_END = 0xa000;
-	/** The Error-box position. 
+	/** The Error-box position.
 	 */
 	public static final int OVERLAP_BEFORE = 0xb000;
-	/** The Error-box position. 
+	/** The Error-box position.
 	 */
 	public static final int OVERLAP_AFTER = 0xc000;
-	/** The Error-box position. 
+	/** The Error-box position.
 	 */
 	public static final int AT_POINTER = 0xd000;
-	/** The Error-box position. 
+	/** The Error-box position.
 	 */
 	public static final int AFTER_POINTER = 0xe000;
 
@@ -464,7 +465,7 @@ public class SimpleConstraint implements Constraint, ClientConstraint, java.io.S
 	//ClientConstraint//
 	public String getClientConstraint() {
 		if (_raw != null)
-			return '\'' + Strings.escape(_raw, Strings.ESCAPE_JAVASCRIPT) + '\'';
+			return '\'' + Encode.forJavaScript(_raw) + '\'';
 
 		final StringBuffer sb = new StringBuffer("new zul.inp.SimpleConstraint(");
 		if (_flags != 0 || _regex != null || _errmsg != null) {
@@ -473,13 +474,13 @@ public class SimpleConstraint implements Constraint, ClientConstraint, java.io.S
 				sb.append(',');
 				if (_regex != null) {
 					sb.append('\'');
-					Strings.escape(sb, _regex.pattern(), Strings.ESCAPE_JAVASCRIPT);
+					sb.append(Encode.forJavaScript(_regex.pattern()));
 					sb.append('\'');
 				} else
 					sb.append("null");
 				if (_errmsg != null) {
 					sb.append(",'");
-					Strings.escape(sb, _errmsg, Strings.ESCAPE_JAVASCRIPT);
+					sb.append(Encode.forJavaScript(_errmsg));
 					sb.append('\'');
 				}
 			}

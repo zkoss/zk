@@ -40,6 +40,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
+import org.owasp.encoder.Encode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -2232,7 +2233,7 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 			if (aupg) {
 				if (extra.length() > 0) {
 					out.write(",0,null,'");
-					out.write(Strings.escape(extra, Strings.ESCAPE_JAVASCRIPT));
+					out.write(Encode.forJavaScript(extra));
 					out.write('\'');
 				}
 				out.write(']');

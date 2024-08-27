@@ -316,7 +316,7 @@ public class Utils {
 
 	private static void addLocaleJS(StringBuffer sb, String name, int mesgCode) {
 		sb.append('\n').append(name).append(":'");
-		Strings.escape(sb, Messages.get(mesgCode), Strings.ESCAPE_JAVASCRIPT);
+		sb.append(Encode.forJavaScript(Messages.get(mesgCode)));
 		sb.append("',");
 	}
 

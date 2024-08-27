@@ -17,7 +17,8 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 package org.zkoss.lang;
 
 import java.io.UnsupportedEncodingException;
-import java.util.Arrays;
+
+import org.owasp.encoder.Encode;
 
 import org.zkoss.mesg.MCommon;
 import org.zkoss.util.IllegalSyntaxException;
@@ -28,10 +29,6 @@ import org.zkoss.util.IllegalSyntaxException;
  * @author tomyeh
  */
 public class Strings {
-	/** Used with {@link #escape} to escape a string in
-	 * JavaScript. It assumes the string will be enclosed with a single quote.
-	 */
-	public static final String ESCAPE_JAVASCRIPT = "'\n\r\t\f\\/!";
 	public static final String EMPTY = "";
 	/**
 	 * Returns true if the string is null or empty.
@@ -274,7 +271,7 @@ public class Strings {
 	 *
 	 * @param src the string to process. If null, null is returned.
 	 * @param specials a string of characters that shall be escaped/quoted
-	 * To escape a string in JavaScript code snippet, you can use {@link #ESCAPE_JAVASCRIPT}.
+	 * To escape a string in JavaScript code snippet, you can use {@link Encode#forJavaScript(String)}.
 	 * @see #unescape
 	 */
 	public static final String escape(String src, String specials) {
@@ -284,10 +281,7 @@ public class Strings {
 
 		int k = 0;
 		for (char c : chars) {
-			if (shallEncodeUnicode(c, specials)) { // Check if it should be Unicode encoded
-				String encoded = encodeUnicode(c);
-				sb.append('\\').append(encoded); // Append encoded form with a backslash
-			} else if (specials.indexOf(c) >= 0) { // Check if char is a special character to escape
+			if (specials.indexOf(c) >= 0) { // Check if char is a special character to escape
 				char escaped = escapeSpecial(src, c, k, specials);
 				if (escaped != (char) 0) {
 					sb.append('\\').append(escaped); // Append escaped character with a backslash
@@ -310,144 +304,9 @@ public class Strings {
 		case '\t': return 't';
 		case '\r': return 'r';
 		case '\f': return 'f';
-		case '/':
-			String key;
-			//escape </script>
-			if (ESCAPE_JAVASCRIPT.equals(specials) // handle it specially
-					&& (k <= 0 || src.charAt(k - 1) != '<'
-							|| k + 8 > src.length() || !("script>"
-							.equalsIgnoreCase((key = src.subSequence(k + 1,
-									k + 8).toString())) || "script "
-							.equalsIgnoreCase(key)))) {
-				return (char) 0; // don't escape
-			}
-			break;
-		case '!':
-			//escape <!-- (ZK-676: it causes problem if used with <script>)
-			if (ESCAPE_JAVASCRIPT.equals(specials) //handle it specially
-			&& (k <= 0 || src.charAt(k - 1) != '<' || k + 3 > src.length()
-				|| !"--".equals(src.subSequence(k+1, k+3)))) {
-				return (char)0; //don't escape
-			}
-			break;
 		}
 		return cc;
 	}
-	/** Escapes (a.k.a. quote) the special characters with backslash
-	 * and appends it the specified string buffer.
-	 *
-	 * @param dst the destination buffer to append to.
-	 * @param src the source to escape from.
-	 * @param specials a string of characters that shall be escaped/quoted
-	 * To escape a string in JavaScript code snippet, you can use {@link #ESCAPE_JAVASCRIPT}.
-	 * @since 5.0.0
-	 */
-	public static final
-	StringBuffer escape(StringBuffer dst, CharSequence src, String specials) {
-		if (src == null)
-			return dst;
-
-		for (int j = 0, j2 = 0, len = src.length();;) {
-			String enc = null;
-			char cc;
-			int k = j2;
-			for (;; ++k) {
-				if (k >= len)
-					return dst.append((Object)src.subSequence(j, src.length()));
-
-				cc = src.charAt(k);
-				if (shallEncodeUnicode(cc, specials)) {
-					enc = encodeUnicode(cc);
-					break;
-				}
-				if (specials.indexOf(cc) >= 0)
-					break;
-			}
-
-			if (enc == null
-			&& (cc = escapeSpecial(src, cc, k, specials)) == (char)0) {
-				j2 = k + 1;
-				continue;
-			}
-
-			dst.append((Object)src.subSequence(j, k)).append('\\');
-			if (enc != null) dst.append(enc);
-			else dst.append(cc);
-			j2 = j = k + 1;
-		}
-	}
-
-	/** Escapes (a.k.a. quote) the special characters with backslash
-	 * and appends it the specified string buffer.
-	 *
-	 * @param dst the destination buffer to append to.
-	 * @param src the source to escape from.
-	 * @param specials a string of characters that shall be escaped/quoted
-	 * To escape a string in JavaScript code snippet, you can use {@link #ESCAPE_JAVASCRIPT}.
-	 * @since 8.0.0
-	 */
-	public static final
-	StringBuilder escape(StringBuilder dst, CharSequence src, String specials) {
-		if (src == null)
-			return dst;
-		String str = src.toString();
-
-		char[] chars = str.toCharArray();
-		for (int j = 0, j2 = 0, len = chars.length;;) {
-			String enc = null;
-			char cc;
-			int k = j2;
-			for (;; ++k) {
-				if (k >= len) {
-					return dst.append(Arrays.copyOfRange(chars, j, len));
-				}
-
-				cc = chars[k];
-				if (shallEncodeUnicode(cc, specials)) {
-					enc = encodeUnicode(cc);
-					break;
-				}
-				if (specials.indexOf(cc) >= 0)
-					break;
-			}
-
-			if (enc == null
-					&& (cc = escapeSpecial(src, cc, k, specials)) == (char)0) {
-				j2 = k + 1;
-				continue;
-			}
-
-			dst.append(Arrays.copyOfRange(chars, j, k)).append('\\');
-			if (enc != null) dst.append(enc);
-			else dst.append(cc);
-			j2 = j = k + 1;
-		}
-	}
-	/** Escapes (a.k.a. quote) the special characters with backslash.
-	 * <p>Note: this implementation is referred from <a href="https://github.com/unbescape/unbescape">unbescape</a></p>
-	 * @since 8.0.0
-	 */
-	public static final String escapeJavaScript(String text) {
-		// We utilize the unbescape project's implementation to do the escape for Javascript value
-		// which license is under Apache License 2.0 - https://github.com/unbescape/unbescape
-		return JavaScriptEscape.escapeJavaScript(text);
-	}
-
-	private static final boolean shallEncodeUnicode(char cc, String specials) {
-		return ESCAPE_JAVASCRIPT.equals(specials) && cc > (char)255
-			&& !Character.isLetterOrDigit(cc);
-			//don't check isSpaceChar since \u2028 will return true and it
-			//is not recognized by Firefox
-	}
-	/** Return "u????". */
-	private static final String encodeUnicode(int cc) {
-		final StringBuilder sb = new StringBuilder(6)
-			.append('u').append(Integer.toHexString(cc));
-		while (sb.length() < 5)
-			sb.insert(1, '0');
-		return sb.toString();
-	}
-
 
 	/** Un-escape the quoted string.
 	 * @see #escape

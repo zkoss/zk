@@ -39,7 +39,6 @@ import org.zkoss.html.StyleSheet;
 import org.zkoss.io.Files;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Library;
-import org.zkoss.lang.Strings;
 import org.zkoss.mesg.Messages;
 import org.zkoss.util.Pair;
 import org.zkoss.web.fn.ServletFns;
@@ -807,7 +806,7 @@ public class HtmlPageRenders {
 
 				if (extra.length() > 0) {
 					out.write(",'");
-					out.write(Strings.escape(extra, Strings.ESCAPE_JAVASCRIPT));
+					out.write(Encode.forJavaScript(extra));
 					out.write('\'');
 				}
 			}
@@ -856,14 +855,14 @@ public class HtmlPageRenders {
 		final String appnm = desktop.getWebApp().getAppName();
 		if (!oldnm.equals(appnm)) {
 			sb.append("zk.appName='");
-			Strings.escape(sb, appnm, Strings.ESCAPE_JAVASCRIPT).append("';");
+			sb.append(Encode.forJavaScript(appnm)).append("';");
 			desktop.setAttribute(ATTR_APPNM, appnm);
 		}
 
 		//output zktheme cookie
 		String themenm = ThemeFns.getCurrentTheme();
 		sb.append("zk.themeName='");
-		Strings.escape(sb, themenm, Strings.ESCAPE_JAVASCRIPT).append("';");
+		sb.append(Encode.forJavaScript(themenm)).append("';");
 		desktop.setAttribute(ATTR_THEMENM, themenm);
 
 		//output ZK ICON
