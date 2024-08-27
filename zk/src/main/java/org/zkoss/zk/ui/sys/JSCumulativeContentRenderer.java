@@ -1,9 +1,9 @@
 /** JSCumulativeContentRenderer.java.
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		10:35:15 AM Apr 22, 2015, Created by jumperchen
 
@@ -18,6 +18,8 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
+import org.owasp.encoder.Encode;
 
 import org.zkoss.json.JSONAware;
 import org.zkoss.json.JSONs;
@@ -95,7 +97,7 @@ public class JSCumulativeContentRenderer implements ContentRenderer {
 		if (value == null)
 			return null;
 		else {
-			return Strings.escapeJavaScript(value);
+			return Encode.forJavaScript(value);
 		}
 	}
 

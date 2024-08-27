@@ -1,9 +1,9 @@
 /* Wpds.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Fri Jul 17 22:10:49     2009, Created by tomyeh
 
@@ -31,6 +31,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.owasp.encoder.Encode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -309,7 +310,7 @@ public class Wpds {
 		//since ZK 8.0.0 default is false
 		if ("true".equals(Library.getProperty("org.zkoss.zk.ui.invokeFirstRootForAfterKeyDown.enabled", "false")))
 			sb.append("if (zk.invokeFirstRootForAfterKeyDown == undefined)zk.invokeFirstRootForAfterKeyDown=true;\n");
-		
+
 		// since ZK 8.6.2 ZK-4235 for 2DigYearStart
 		sb.append("zk.TDYS=").append(twoDigitYearStart).append(";\n");
 
@@ -319,7 +320,7 @@ public class Wpds {
 	private static final void appendJavaScriptArray(StringBuffer sb, String varnm, String[] vals) {
 		sb.append("zk.").append(varnm).append("=[");
 		for (int j = 0;;) {
-			sb.append('\'').append(Strings.escape(vals[j], Strings.ESCAPE_JAVASCRIPT)).append('\'');
+			sb.append('\'').append(Encode.forJavaScript(vals[j])).append('\'');
 			if (++j >= vals.length)
 				break;
 			else
@@ -348,7 +349,7 @@ public class Wpds {
 		public void onDeactivate() {
 		}
 
-		//use PhantomExecution		
+		//use PhantomExecution
 		public Evaluator getEvaluator(Page page, Class<? extends ExpressionFactory> expfcls) {
 			return null;
 		}

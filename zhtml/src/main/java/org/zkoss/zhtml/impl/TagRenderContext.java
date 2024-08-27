@@ -1,9 +1,9 @@
 /* TagRenderContext.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Mon Jan  5 11:48:18     2009, Created by tomyeh
 
@@ -18,6 +18,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
+import org.owasp.encoder.Encode;
 
 import org.zkoss.lang.Strings;
 import org.zkoss.zk.ui.Component;
@@ -97,7 +99,7 @@ public class TagRenderContext {
 			final String id = comp.getId();
 			if (id.length() > 0) {
 				first = false;
-				_jsout.append("id:'").append(Strings.escape(id, Strings.ESCAPE_JAVASCRIPT))
+				_jsout.append("id:'").append(Encode.forJavaScript(id))
 						.append('\'');
 			}
 			if (!comp.isVisible()) {

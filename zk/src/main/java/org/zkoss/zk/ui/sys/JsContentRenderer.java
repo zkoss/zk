@@ -1,9 +1,9 @@
 /* JsContentRenderer.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Wed Oct  1 19:08:57     2008, Created by tomyeh
 
@@ -21,6 +21,8 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import org.owasp.encoder.Encode;
 
 import org.zkoss.json.JSONAware;
 import org.zkoss.json.JSONs;
@@ -153,7 +155,7 @@ public class JsContentRenderer implements ContentRenderer {
 			_buf.append((String) null);
 		else {
 			_buf.append('\'');
-			_buf.append(Strings.escapeJavaScript(value));
+			_buf.append(Encode.forJavaScript(value));
 			_buf.append('\'');
 		}
 	}
