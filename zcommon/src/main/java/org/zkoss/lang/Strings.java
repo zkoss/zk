@@ -282,12 +282,13 @@ public class Strings {
 		final char[] chars = src.toCharArray(); // Convert source string to char array
 		StringBuilder sb = new StringBuilder(src.length()); // Use StringBuilder for efficiency
 
+		int k = 0;
 		for (char c : chars) {
 			if (shallEncodeUnicode(c, specials)) { // Check if it should be Unicode encoded
 				String encoded = encodeUnicode(c);
 				sb.append('\\').append(encoded); // Append encoded form with a backslash
 			} else if (specials.indexOf(c) >= 0) { // Check if char is a special character to escape
-				char escaped = escapeSpecial(src, c, sb.length(), specials);
+				char escaped = escapeSpecial(src, c, k, specials);
 				if (escaped != (char) 0) {
 					sb.append('\\').append(escaped); // Append escaped character with a backslash
 				} else {
@@ -296,6 +297,7 @@ public class Strings {
 			} else {
 				sb.append(c); // Append character as is
 			}
+			k++;
 		}
 
 		return sb.toString(); // Return the string from StringBuilder
