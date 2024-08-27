@@ -278,47 +278,29 @@ public class Strings {
 	 * @see #unescape
 	 */
 	public static final String escape(String src, String specials) {
-		if (src == null)
-			return null;
+		if (src == null) return null; // Return null if src is null
+		final char[] chars = src.toCharArray(); // Convert source string to char array
+		StringBuilder sb = new StringBuilder(src.length()); // Use StringBuilder for efficiency
 
-		final char[] chars = src.toCharArray();
-		StringBuilder sb = null;
-		int j = 0;
-		l_out:
-		for (int j2 = 0, len = chars.length;;) {
-			String enc = null;
-			char cc;
-			int k = j2;
-			for (;; ++k) {
-				if (k >= len)
-					break l_out;
-
-				cc = chars[k];
-				if (shallEncodeUnicode(cc, specials)) {
-					enc = encodeUnicode(cc);
-					break;
+		for (char c : chars) {
+			if (shallEncodeUnicode(c, specials)) { // Check if it should be Unicode encoded
+				String encoded = encodeUnicode(c);
+				sb.append('\\').append(encoded); // Append encoded form with a backslash
+			} else if (specials.indexOf(c) >= 0) { // Check if char is a special character to escape
+				char escaped = escapeSpecial(src, c, sb.length(), specials);
+				if (escaped != (char) 0) {
+					sb.append('\\').append(escaped); // Append escaped character with a backslash
+				} else {
+					sb.append(c); // Append character as is
 				}
-				if (specials.indexOf(cc) >= 0)
-					break;
+			} else {
+				sb.append(c); // Append character as is
 			}
-
-			if (enc == null
-			&& (cc = escapeSpecial(src, cc, k, specials)) == (char)0) {
-				j2 = k + 1;
-				continue;
-			}
-
-			if (sb == null)
-				sb = new StringBuilder(len + 4);
-			sb.append(Arrays.copyOfRange(chars, j, k)).append('\\');
-			if (enc != null) sb.append(enc);
-			else sb.append(cc);
-			j2 = j = k + 1;
 		}
-		if (sb == null)
-			return String.valueOf(chars, 0, chars.length); //nothing changed
-		return sb.append(Arrays.copyOfRange(chars, j, chars.length)).toString();
+
+		return sb.toString(); // Return the string from StringBuilder
 	}
+
 	private static char escapeSpecial(CharSequence src,
 	char cc, int k, String specials) {
 		switch (cc) {
