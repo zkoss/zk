@@ -214,8 +214,7 @@ public class HtmlPageRenders {
 			sb.append('\'').append(response.getCommand()).append("',");
 			final List<?> encdata = response.getEncodedData();
 			if (encdata != null)
-				sb.append('\'').append(
-						Encode.forJavaScript(org.zkoss.json.JSONArray.toJSONString(encdata)))
+				sb.append('\'').append(Encode.forJavaScript(org.zkoss.json.JSONArray.toJSONString(encdata)))
 						.append('\'');
 			else
 				sb.append((String) null);
@@ -800,7 +799,7 @@ public class HtmlPageRenders {
 
 				if (ac.length() > 0) {
 					out.write("\n[");
-					out.write(Encode.forJavaScript(ac));
+					out.write(ac);
 					out.write(']');
 				} else {
 					out.write("null");
@@ -821,7 +820,7 @@ public class HtmlPageRenders {
 
 				if (ac.length() > 0) {
 					out.write(",\n[");
-					out.write(Encode.forJavaScript(ac));
+					out.write(ac);
 					out.write(']');
 				}
 			}
