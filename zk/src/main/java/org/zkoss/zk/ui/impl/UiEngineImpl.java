@@ -1,9 +1,9 @@
 /* UiEngineImpl.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Thu Jun  9 13:05:28     2005, Created by tomyeh
 
@@ -33,6 +33,7 @@ import java.util.regex.Pattern;
 
 import javax.servlet.ServletRequest;
 
+import org.owasp.encoder.Encode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -2594,7 +2595,7 @@ public class UiEngineImpl implements UiEngine {
 		for (String pfReqId : pfReqIds) {
 			if (sb.length() > 0)
 				sb.append(' ');
-			sb.append(pfReqId);
+			sb.append(Encode.forUriComponent(pfReqId));
 
 			try {
 				pfmeter.requestCompleteAtServer(pfReqId, exec, time);

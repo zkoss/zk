@@ -23,7 +23,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -44,6 +43,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.owasp.encoder.Encode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -558,8 +558,12 @@ public class Https extends Servlets {
 					flnm = media.getName();
 				}
 				// ZK-3058: filename for legacy browsers, filename* for modern browsers
-				if (flnm != null && flnm.length() > 0)
-					contentDisposition += ";filename=" + encodeFilename(request, flnm) + ";filename*=UTF-8''" + encodeRfc3986(flnm);
+				if (flnm != null && flnm.length() > 0) {
+					contentDisposition +=
+							";filename=" + encodeFilename(request, flnm)
+									+ ";filename*=UTF-8''" + encodeRfc3986(
+									flnm);
+				}
 				response.setHeader("Content-Disposition", contentDisposition);
 			}
 
@@ -708,7 +712,7 @@ public class Https extends Servlets {
 	}
 
 	private static String encodeRfc3986(String data) throws UnsupportedEncodingException {
-		return URLEncoder.encode(data, "UTF-8").replaceAll("\\+", "%20");
+		return Encode.forUriComponent(data);
 	}
 
 	private static String getCharset(String contentType) {
