@@ -443,7 +443,7 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 			var topmost = this.isTopmost(),
 				anc = this.$n_<HTMLAnchorElement>('a');
 
-			if (anc.href.startsWith('javascript:')) {
+			if (anc.href == 'javascript:void(0);') {
 				if (this.isAutocheck()) {
 					this.setChecked(!this.isChecked());
 					this.fire('onCheck', this.isChecked());
