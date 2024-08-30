@@ -328,6 +328,13 @@ declare global {
 		 * include, such as `['width', 'height']`. Ignored if not specified or null.
 		 */
 		filterTextStyle(style: Record<string, string>, plus?: string[]): Record<string, string>;
+		find<TElement extends HTMLElement = HTMLElement>(html: JQuery.htmlString, ownerDocument_attributes?: Document | JQuery.PlainObject): JQuery<TElement>;
+		find<TElement extends Element = HTMLElement>(selector: JQuery.Selector, context?: Element | Document | JQuery | JQuery.Selector): JQuery<TElement>;
+		find(element: HTMLSelectElement): JQuery<HTMLSelectElement>;
+		find<T extends Element>(element_elementArray: T | ArrayLike<T>): JQuery<T>;
+		find<T>(selection: JQuery<T>): JQuery<T>;
+		find<TElement = HTMLElement>(callback: ((this: Document, $: JQueryStatic) => void)): JQuery<TElement>;
+		find<T extends JQuery.PlainObject>(object: T): JQuery<T>;
 		focusOut(): void;
 		head(): HTMLElement | undefined;
 		innerHeight(): number;
