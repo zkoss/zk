@@ -5,6 +5,7 @@ ZK 10.1.0
   ZK-5764: Unable to call original method when using custom ViewModelAnnotationResolver
   ZK-5766: DomPurify fails with partial html content
   ZK-5775: Improve ZK-5393 by caching FileUpload classes
+  ZK-5780: dompurify Template Injection vulnerability
 
 * Upgrade Notes
   + Remove Htmls.encodeJavaScript(), Strings.encodeJavaScript(), Strings.escape() with Strings.ESCAPE_JAVASCRIPT, and replace them with OWASP Java Encoder APIs instead.
