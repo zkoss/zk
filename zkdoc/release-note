@@ -1,5 +1,6 @@
 ZK 10.1.0
 * Features
+  ZK-5782: Upgrade WCAG with the lighthouse 12.x detection tools
 
 * Bugs
   ZK-5764: Unable to call original method when using custom ViewModelAnnotationResolver

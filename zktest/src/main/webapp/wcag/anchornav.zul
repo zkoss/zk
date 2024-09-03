@@ -5,9 +5,9 @@
 anchornav.zul
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Fri May 29 11:08:38 CST 2020, Created by rudyhuang
 
@@ -34,6 +34,9 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 
     .z-anchornav-link-active {
         font-weight: bold;
+    }
+    ul li {
+        line-height: 1.5;
     }
     ]]></style>
     <n:header>

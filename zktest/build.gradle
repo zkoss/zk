@@ -178,7 +178,7 @@ task testGroupForkJVMTestOnly(type: Test) {
 
 task npmInstallLighthouse(type: Exec) {
 	outputs.dir("${project.buildDir}/lighthouse/")
-	commandLine 'npm', 'install', '-g', 'lighthouse@11.4.0'
+	commandLine 'npm', 'install', '-g', 'lighthouse@12.2.0'
 }
 task testWCAGOnly(type: Test) {
 	dependsOn npmInstallLighthouse
