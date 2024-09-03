@@ -388,6 +388,19 @@ task upVer() {
 						replace: "version=$project.changeVersionTo",
 				)
 			}
+			// Update version in pom.xml files in zk-bom and zk-parent
+			['zk-bom', 'zk-parent'].each { dir ->
+				fileTree("$rootDir/$dir").matching {
+					include "pom.xml"
+				}.each { file ->
+					println "upVer: ${file.path} from ${project.version} to ${project.changeVersionTo}"
+					ant.replaceregexp(
+							file: file,
+							match: "<version>${project.version}</version>",
+							replace: "<version>${project.changeVersionTo}</version>",
+					)
+				}
+			}
 		}
 	}
 }
