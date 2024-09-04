@@ -21,6 +21,5 @@ includeBuild('../../zkcml') {
 		substitute module('org.zkoss.zk:zkmax') using project(':zkmax')
 		substitute module('org.zkoss.zk:zuti') using project(':zuti')
 		substitute module('org.zkoss.zk:za11y') using project(':za11y')
-		substitute module('org.zkoss.zk:zhtml') using project(':zhtml')
 	}
 }
