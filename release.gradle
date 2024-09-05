@@ -861,13 +861,62 @@ task cmlBinsAndBundles {
 	dependsOn cmlBins
 }
 
+task packageBomMavenProjects() {
+	doLast {
+		['zk-bom', 'zk-parent'].each { dir ->
+			def projectDir = file("$rootDir/$dir")
+			if (projectDir.exists()) {
+				println "Executing 'mvn package' in $projectDir"
+				exec {
+					workingDir projectDir
+					commandLine 'mvn', 'clean', 'package'
+				}
+				copy {
+					into "$buildDir/maven/CE"
+					from("$projectDir/debug") {
+						include "*-bundle.jar"
+					}
+				}
+				copy {
+					into "$buildDir/maven/PE-eval"
+					from("$projectDir/debug") {
+						include "*-bundle.jar"
+					}
+				}
+				copy {
+					into "$buildDir/maven/EE-eval"
+					from("$projectDir/debug") {
+						include "*-bundle.jar"
+					}
+				}
+				copy {
+					into "$buildDir/maven/proprietary/PE"
+					from("$projectDir/debug") {
+						include "*-bundle.jar"
+					}
+				}
+				copy {
+					into "$buildDir/maven/proprietary/EE"
+					from("$projectDir/debug") {
+						include "*-bundle.jar"
+					}
+				}
+			} else {
+				println "Directory $projectDir does not exist"
+			}
+		}
+	}
+}
+
 task binsAndBundles {
 	// zksandbox
 	dependsOn(zksandboxZip)
+	dependsOn(packageBomMavenProjects)
 	zksandboxZip.dependsOn(cmlBinsAndBundles)
 	cmlBinsAndBundles.dependsOn(processJar)
 	processJar.dependsOn(processBins)
 	processBins.dependsOn(zkBinsAndBundles)
+	packageBomMavenProjects.dependsOn(cmlBinsAndBundles)
 }
 
 task release() {
