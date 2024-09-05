@@ -62,10 +62,10 @@ repositories {
 }
 
 dependencies {
-	implementation "org.zkoss.theme:breeze:${version}"
-	implementation "org.zkoss.theme:silvertail:${version}"
-	implementation "org.zkoss.theme:sapphire:${version}"
-	implementation "org.zkoss.theme:atlantic:${version}"
+	implementation "org.zkoss.theme:breeze:10.0.1.1-Eval"
+	implementation "org.zkoss.theme:silvertail:10.0.1.1-Eval"
+	implementation "org.zkoss.theme:sapphire:10.0.1.1-Eval"
+	implementation "org.zkoss.theme:atlantic:10.0.1.1-Eval"
 	implementation 'commons-logging:commons-logging:1.1.1'
 	implementation 'org.apache.commons:commons-fileupload2-javax:2.0.0-M2'
 	implementation 'commons-io:commons-io:2.13.0'
@@ -158,7 +158,7 @@ task testGroupForkJVMTestOnly(type: Test) {
 
 
 	exclude 'org/zkoss/zktest/zats/wcag/**'
-	
+
 	if (project.ext['zktestWithoutA11y'] != 'false') {
 		reports.junitXml.destination = file("$buildDir/test-results/no-A11Y/testGroupForkJVMTestOnly")
 		useJUnitPlatform {
