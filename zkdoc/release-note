@@ -8,6 +8,7 @@ ZK 10.1.0
   ZK-5775: Improve ZK-5393 by caching FileUpload classes
   ZK-5780: dompurify Template Injection vulnerability
   ZK-5657: Missing zk-bom version since 10.0.0
+  ZK-5784: a fontawesome bug causes zk to lose all styles in Chrome and Edge
 
 * Upgrade Notes
   + Remove Htmls.encodeJavaScript(), Strings.encodeJavaScript(), Strings.escape() with Strings.ESCAPE_JAVASCRIPT, and replace them with OWASP Java Encoder APIs instead.
