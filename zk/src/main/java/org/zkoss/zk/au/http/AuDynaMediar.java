@@ -1,9 +1,9 @@
 /* AuDynaMediar.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Fri Jan 11 19:14:17     2008, Created by tomyeh
 
@@ -53,7 +53,7 @@ import org.zkoss.zk.ui.util.Configuration;
 
 /**
  * The AU processor used to response the content for {@link DynamicMedia#getMedia}
- * 
+ *
  * @author tomyeh
  * @since 3.0.2
  */
@@ -128,7 +128,9 @@ public class AuDynaMediar implements AuExtension {
 					if (comp == null) { // B65-ZK-1599
 						response.sendError(HttpServletResponse.SC_GONE,
 								Messages.get(MZk.PAGE_NOT_FOUND, pi + " - " + uuid));
-						log.debug("Failed to load media, " + pi);
+						if (log.isDebugEnabled()) {
+							log.debug("Failed to load media, {}", pi);
+						}
 						return;
 					}
 					final Object cc = ((ComponentCtrl) comp).getExtraCtrl();

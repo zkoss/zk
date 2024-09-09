@@ -1,8 +1,8 @@
 /* Locators.java
 
 
-	Purpose: 
-	Description: 
+	Purpose:
+	Description:
 	History:
 	90/12/07 10:34:55, Create, Tom M. Yeh.
 
@@ -120,16 +120,16 @@ public class Locators {
 			locale = Locales.getCurrent();
 
 		final int jslash = file.lastIndexOf('/'); //>= -1
-		final int jdot = 
+		final int jdot =
 			jslash >= 0 ? file.indexOf('.', jslash + 1): file.indexOf('.');
 		final String ext = jdot >= 0 ? file.substring(jdot): "";
 		final int jul = Locales.indexOfUnderline(file, jslash >= 0 ? jslash + 1: 0);
 		final String base = file.substring(0,
 			jul >= 0 && (jdot < 0 || jul < jdot) ? jul:
-			jdot >= 0 ? jdot: file.length());
+			jdot >= 0 ? jdot : file.length());
 
 		if (log.isDebugEnabled())
-			log.debug("svl=" + file + " base=" + base + " ext=" + ext);
+			log.debug("svl={} base={} ext={}", file, base, ext);
 
 		//search the existence based on locale
 		final int baseLen = base.length();

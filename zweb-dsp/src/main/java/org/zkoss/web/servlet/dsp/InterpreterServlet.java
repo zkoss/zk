@@ -117,7 +117,7 @@ public class InterpreterServlet extends HttpServlet {
 
 		final String path = Https.getThisServletPath(request);
 		if (log.isDebugEnabled())
-			log.debug("Get " + path);
+			log.debug("Get {}", path);
 
 		final Object old = Charsets.setup(request, response, _charset);
 		final ServletContext ctx = getServletContext();
@@ -125,7 +125,7 @@ public class InterpreterServlet extends HttpServlet {
 			final Interpretation cnt = (Interpretation) ResourceCaches.get(getCache(), ctx, path, null);
 			if (cnt == null) {
 				if (Https.isIncluded(request))
-					log.error("Not found: " + path);
+					log.error("Not found: {}", path);
 				//It might be eaten, so log the error
 				response.sendError(HttpServletResponse.SC_NOT_FOUND,
 						Encode.forJavaScript(Encode.forHtml(path)));

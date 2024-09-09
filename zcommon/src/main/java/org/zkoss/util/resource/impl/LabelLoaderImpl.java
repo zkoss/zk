@@ -1,9 +1,9 @@
 /* LabelLoader.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Mon Jun 12 13:05:05     2006, Created by tomyeh
 
@@ -52,7 +52,7 @@ import org.zkoss.xel.util.SimpleXelContext;
  * Used to implement {@link org.zkoss.util.resource.Labels}.
  *
  * <p>Notice that the encoding of the Locale dependent file (*.properties)
- * is assumed to be UTF-8. If it is not the case, please refer to 
+ * is assumed to be UTF-8. If it is not the case, please refer to
  * <a href="http://books.zkoss.org/wiki/ZK_Configuration_Reference/zk.xml/The_library-property_Element/Library_Properties#org.zkoss.util.label.web.charset">ZK Configuration Reference</a>
  * for more information.
  * <p> Specify the library property of <code>org.zkoss.util.resource.LabelLoader.class</code>
@@ -109,7 +109,9 @@ public class LabelLoaderImpl implements LabelLoader {
 	 * @since 8.6.0
 	 */
 	protected Object handleMissingLabel(Object key) {
-		log.debug("The key of [{}] is not found in labels!", key);
+		if (log.isDebugEnabled()) {
+			log.debug("The key of [{}] is not found in labels!", key);
+		}
 		return null;
 	}
 
@@ -220,7 +222,7 @@ public class LabelLoaderImpl implements LabelLoader {
 		WaitLock lock = null;
 		for (;;) {
 			final Object o;
-			synchronized (_syncLabels) {	
+			synchronized (_syncLabels) {
 				o = _syncLabels.get(locale);
 				if (o == null)
 					_syncLabels.put(locale, lock = new WaitLock()); //lock it

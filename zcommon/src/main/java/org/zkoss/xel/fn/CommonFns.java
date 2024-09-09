@@ -1,9 +1,9 @@
 /* CommonFns.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Wed Apr 20 18:35:21     2005, Created by tomyeh
 
@@ -119,16 +119,16 @@ public class CommonFns {
 				try {
 					final Class cls = Classes.forNameByThread(clsnm);
 					final Field fld = cls.getField(fldnm);
-					return Messages.get(((Integer)fld.get(null)).intValue());
+					return Messages.get(((Integer) fld.get(null)).intValue());
 				} catch (ClassNotFoundException ex) {
-					log.warn("Class not found: "+clsnm, ex);
+					log.warn("Class not found: {}", clsnm, ex);
 				} catch (NoSuchFieldException ex) {
-					log.warn("Field not found: "+fldnm, ex);
+					log.warn("Field not found: {}", fldnm, ex);
 				} catch (IllegalAccessException ex) {
-					log.warn("Field not accessible: "+fldnm, ex);
+					log.warn("Field not accessible: {}", fldnm, ex);
 				}
 			} else if (log.isDebugEnabled()) {
-				log.debug("Not a valid format: "+key);
+				log.debug("Not a valid format: {}", key);
 			}
 		}
 		return Labels.getLabel(key);

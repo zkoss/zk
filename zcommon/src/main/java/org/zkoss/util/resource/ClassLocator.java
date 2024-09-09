@@ -1,9 +1,9 @@
 /* ClassLocator.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Tue Aug 30 09:56:06     2005, Created by tomyeh
 
@@ -109,7 +109,7 @@ public class ClassLocator implements XMLResourcesLocator {
 	List<Resource> rcs, Map<String, XMLResource> rcmap, Set<String> resolving, String elName) {
 		if (!resolving.add(xr.name))
 			throw new IllegalStateException("Recusrive reference among "+resolving);
-		
+
 		checkCompDenpendency(xr, rcmap, elName);
 
 		for (String nm: xr.depends) {
@@ -121,7 +121,8 @@ public class ClassLocator implements XMLResourcesLocator {
 		rcs.add(new Resource(xr.url, xr.document));
 		resolving.remove(xr.name);
 
-		if (log.isDebugEnabled()) log.debug("Adding resolved resource: "+xr.name);
+		if (log.isDebugEnabled())
+			log.debug("Adding resolved resource: {}", xr.name);
 	}
 
 	private static void checkCompDenpendency(XMLResource xr, Map<String, XMLResource> rcmap, String elName) {

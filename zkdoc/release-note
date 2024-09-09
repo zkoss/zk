@@ -12,6 +12,7 @@ ZK 10.1.0
   ZK-5659: Tree only renders 50 nodes in client mvvm
   ZK-5677: Executions.schedule cause infinite loop if async event causes exception
   ZK-5696: Nested Shadow element fails in ZK 10
+  ZK-5703: Debug messages shouldn't be created if debug is disabled, may cause side effects
 
 * Upgrade Notes
   + Remove Htmls.encodeJavaScript(), Strings.encodeJavaScript(), Strings.escape() with Strings.ESCAPE_JAVASCRIPT, and replace them with OWASP Java Encoder APIs instead.

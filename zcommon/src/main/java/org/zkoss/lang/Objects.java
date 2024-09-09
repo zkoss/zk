@@ -113,7 +113,7 @@ public class Objects {
 			h = nextHashCode(h, v[j]);
 		return h;
 	}
-	/** 
+	/**
 	 * Generates hash codes for an array of bytes up to the specified length.
 	 * It is suggested to cache the hash code.
 	 *
@@ -413,7 +413,8 @@ public class Objects {
 				try {
 					return kls.getMethod("clone").invoke(o);
 				} catch (NoSuchMethodException ex) {
-					if (log.isDebugEnabled()) log.debug("No clone() for "+kls);
+					if (log.isDebugEnabled())
+						log.debug("No clone() for {}", kls);
 				}
 			}
 

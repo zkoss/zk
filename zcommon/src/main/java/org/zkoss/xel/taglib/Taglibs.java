@@ -1,9 +1,9 @@
 /* Taglibs.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Fri Aug 10 16:42:37     2007, Created by tomyeh
 
@@ -330,7 +330,7 @@ public class Taglibs {
 						if (IDOMs.checkVersion(res.document, res.url))
 							parseConfig(urls, res.document.getRootElement(), loc);
 					} catch (Exception ex) {
-						log.error("Failed to parse "+ res.url, ex); //keep running
+						log.error("Failed to parse {}", res.url, ex); //keep running
 					}
 				}
 			} catch (Exception ex) {

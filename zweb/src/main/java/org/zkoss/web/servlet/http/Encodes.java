@@ -1,9 +1,9 @@
 /* Encodes.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Fri Jun 21 14:13:50  2002, Created by tomyeh
 
@@ -210,7 +210,7 @@ public class Encodes {
 	 * If the name already exists in the query string, it will be removed first.
 	 * If your name has appeared in the string, it will replace
 	 * your new value to the query string.
-	 * Otherwise, it will append the name/value to the new string. 
+	 * Otherwise, it will append the name/value to the new string.
 	 *
 	 * <p>The query string might contain servlet path and other parts.
 	 * This method starts the searching from the first '?'.
@@ -219,7 +219,7 @@ public class Encodes {
 	 *
 	 * @param str The query string like xxx?xxx=xxx&amp;xxx=xxx or null.
 	 * @param name The get parameter name.
-	 * @param value The value associated with the get parameter name. 
+	 * @param value The value associated with the get parameter name.
 	 * @return The new or result query string with your name/value.
 	 * @see #addToQueryString
 	 */
@@ -357,7 +357,7 @@ public class Encodes {
 	 * It resolves "*" contained in URI, if any, to the proper Locale,
 	 * and the browser code.
 	 * Refer to {@link Servlets#locate(ServletContext, ServletRequest, String, Locator)}
-	 * for details. 
+	 * for details.
 	 *
 	 * <p>In additions, if uri starts with "/", the context path, e.g.,
 	 * /zkdemo, is prefixed.
@@ -384,7 +384,7 @@ public class Encodes {
 	 * To do that, you can implement {@link URLEncoder}, and then
 	 * specify the class with the library property called
 	 * <code>org.zkoss.web.servlet.http.URLEncoder</code>.
-	 * When {@link #encodeURL} encodes an URL, it will invoke 
+	 * When {@link #encodeURL} encodes an URL, it will invoke
 	 * {@link URLEncoder#encodeURL} such you can do customized encoding,
 	 * such as insert a special prefix.
 	 *
@@ -464,7 +464,7 @@ public class Encodes {
 				if (newctx != null) {
 					ctx = newctx;
 				} else if (log.isDebugEnabled()) {
-					log.debug("Context not found: " + ctxroot);
+					log.debug("Context not found: {}", ctxroot);
 				}
 				ctxpathSpecified = true;
 			} else if (Https.isIncluded(request) || Https.isForwarded(request)) {
@@ -476,7 +476,8 @@ public class Encodes {
 					if (j >= 0) {
 						uri = pgpath.substring(0, j + 1) + uri;
 					} else {
-						log.warn("The current page doesn't contain '/':" + pgpath);
+						log.warn("The current page doesn't contain '/':{}",
+								pgpath);
 					}
 				}
 			}
@@ -525,7 +526,7 @@ public class Encodes {
 	 * To do that, you can implement {@link URLEncoder}, and then
 	 * specify the class with the library property called
 	 * <code>org.zkoss.web.servlet.http.URLEncoder</code>.
-	 * When {@link #encodeURL} encodes an URL, it will invoke 
+	 * When {@link #encodeURL} encodes an URL, it will invoke
 	 * {@link URLEncoder#encodeURL} such you can do customized encoding,
 	 * such as insert a special prefix.
 	 *

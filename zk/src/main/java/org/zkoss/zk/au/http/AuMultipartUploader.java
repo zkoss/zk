@@ -563,21 +563,21 @@ public class AuMultipartUploader {
 					//note: AImage converts stream to binary array
 				} catch (Throwable ex) {
 					if (log.isDebugEnabled())
-						log.debug("Unknown file format: " + ctype);
+						log.debug("Unknown file format: {}", ctype);
 				}
 			} else if (ctypelc.startsWith("audio/")) {
 				try {
 					return fi.isInMemory() ? new AAudio(name, fi.get()) : new StreamAudio(name, fi, ctypelc);
 				} catch (Throwable ex) {
 					if (log.isDebugEnabled())
-						log.debug("Unknown file format: " + ctype);
+						log.debug("Unknown file format: {}", ctype);
 				}
 			} else if (ctypelc.startsWith("video/")) {
 				try {
 					return fi.isInMemory() ? new AVideo(name, fi.get()) : new StreamVideo(name, fi, ctypelc);
 				} catch (Throwable ex) {
 					if (log.isDebugEnabled())
-						log.debug("Unknown file format: " + ctype);
+						log.debug("Unknown file format: {}", ctype);
 				}
 			} else if (ctypelc.startsWith("text/")) {
 				String charset = getCharset(ctype);

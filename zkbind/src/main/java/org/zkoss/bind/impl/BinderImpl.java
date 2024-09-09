@@ -1,9 +1,9 @@
 /* BinderImpl.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Jul 29, 2011 6:08:51 PM, Created by henrichen
 
@@ -175,7 +175,7 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 	private static final Map<Class<?>, Map<String, CachedItem<Method>>> _globalCommandMethodCache = DISABLE_METHOD_CACHE ? new EmptyCacheMap() : new CacheMap<Class<?>, Map<String, CachedItem<Method>>>(
 			200, CacheMap.DEFAULT_LIFETIME); //class,map<command, null-able command method>
 
-	//command and default command method parsing and caching 
+	//command and default command method parsing and caching
 	private static final CachedItem<Method> NULL_METHOD = new CachedItem<Method>(null);
 	private static final String COMMAND_METHOD_MAP_INIT = "$INIT_FLAG$";
 	private static final String COMMAND_METHOD_DEFAULT = "$DEFAULT_FLAG$";
@@ -231,7 +231,7 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 	private final ReferenceBindingHandler _refBindingHandler;
 
 	/* the relation of form and inner save-bindings */
-	private Map<Component, Set<SaveBinding>> _assocFormSaveBindings; //form comp -> savebindings	
+	private Map<Component, Set<SaveBinding>> _assocFormSaveBindings; //form comp -> savebindings
 	private Map<Component, Map<SaveBinding, Set<SaveBinding>>> _reversedAssocFormSaveBindings; //associated comp -> binding -> associated save bindings of _formSaveBindingMap
 
 	private final Map<BindingKey, CommandEventListener> _listenerMap; //comp+evtnm -> eventlistener
@@ -302,8 +302,8 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 		_hasValidators = new HashSet<BindingKey>();
 		_templateResolvers = new HashMap<Component, Map<String, TemplateResolver>>();
 		_listenerMap = new HashMap<BindingKey, CommandEventListener>();
-		//use same queue name if user was not specified, 
-		//this means, binder in same scope, same queue, they will share the notification by "base"."property" 
+		//use same queue name if user was not specified,
+		//this means, binder in same scope, same queue, they will share the notification by "base"."property"
 		_quename = qname != null && !Strings.isEmpty(qname) ? qname : DEFAULT_QUEUE_NAME;
 		_quescope = qscope != null && !Strings.isBlank(qscope) ? qscope : DEFAULT_QUEUE_SCOPE;
 		_queueListener = new QueueListener();
@@ -322,7 +322,7 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 			}
 		}
 	}
-	
+
 	/**
 	 * @since 6.0.1
 	 */
@@ -330,13 +330,13 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 		if (_init)
 			throw new UiException("binder is already initialized");
 		_init = true;
-		
+
 		_rootComp = comp;
 		//initial associated view model
 		setViewModel(viewModel);
 		_dummyTarget.addEventListener(ON_POST_COMMAND, new PostCommandListener());
 		_dummyTarget.addEventListener(ON_VMSGS_CHANGED, new VMsgsChangedListener());
-		
+
 		initQueue();
 
 		if (viewModel instanceof Composer<?> && !(viewModel instanceof BindComposer<?>)) { //do we need to warn this?
@@ -447,12 +447,11 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 
 	//called when onPropertyChange is fired to the subscribed event queue
 	private void doPropertyChange(Object base, String prop) {
-		String debugInfo = MessageFormat.format("doPropertyChange: base=[{0}],prop=[{1}]", base, prop);
 		if (_log.isDebugEnabled()) {
-			_log.debug(debugInfo);
+			_log.debug("doPropertyChange: base=[{}],prop=[{}]", base, prop);
 		}
 
-		//zk-1468, 
+		//zk-1468,
 		//ignore a coming ref-binding if the binder is the same since it was loaded already.
 		if (base instanceof ReferenceBinding && ((ReferenceBinding) base).getBinder() == this) {
 			return;
@@ -508,21 +507,20 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 				BindContextUtil.setConverterArgs(this, comp, ctx, (PropertyBinding) binding);
 			}
 
-			String debugInfo = MessageFormat.format("doPropertyChange:binding.load() "
-					+ "binding=[{0}],context=[{1}]", binding, ctx);
 			try {
 				if (_log.isDebugEnabled()) {
-					_log.debug(debugInfo);
+					_log.debug("doPropertyChange:binding.load() binding=[{}],context=[{}]", binding, ctx);
 				}
 				doPrePhase(Phase.LOAD_BINDING, ctx);
 				binding.load(ctx);
 			} catch (Exception ex) {
-				throw new RuntimeException(debugInfo, ex);
+				throw new RuntimeException(MessageFormat.format("doPropertyChange:binding.load() "
+						+ "binding=[{0}],context=[{1}]", binding, ctx), ex);
 			} finally {
 				doPostPhase(Phase.LOAD_BINDING, ctx);
 			}
 
-			//zk-1468, 
+			//zk-1468,
 			//notify the ref-binding changed since other nested binder might use it
 			if (binding instanceof ReferenceBinding && binding != base) {
 				notifyChange(binding, ".");
@@ -675,7 +673,7 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 		return validator;
 	}
 
-	//Note: assume system renderer is state-less 
+	//Note: assume system renderer is state-less
 	protected Object getRenderer(String name) {
 		Object renderer = RENDERERS.get(name);
 		if (renderer == null && name.indexOf('.') > 0) { //might be a class path
@@ -700,7 +698,7 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 
 	public void storeForm(Component comp, String id, Form form) {
 		final String oldid = (String) comp.getAttribute(FORM_ID, Component.COMPONENT_SCOPE);
-		//check if a form exist already, allow to store a form with same id again for replacing the form 
+		//check if a form exist already, allow to store a form with same id again for replacing the form
 		if (oldid != null && !oldid.equals(id)) {
 			throw new IllegalArgumentException(
 					"try to store 2 forms in same component id : 1st " + oldid + ", 2nd " + id);
@@ -716,7 +714,7 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 		if (form instanceof FormLegacyExt) {
 			final FormLegacyExt fex = (FormLegacyExt) form;
 			comp.setAttribute(id + "Status", fex.getStatus()); //by convention fxStatus
-			
+
 			if (oldForm instanceof FormLegacyExt) { //copy the filed information, this is for a form-init that assign a user form
 				for (String fn : ((FormLegacyExt) oldForm).getLoadFieldNames()) {
 					fex.addLoadFieldName(fn);
@@ -1246,9 +1244,9 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 				final BindingKey bkey = getBindingKey(comp, evtnm);
 				_propertyBindingHandler.addLoadEventBinding(comp, bkey, binding);
 			}
-			//if no command , always add to prompt binding, a prompt binding will be load when , 
+			//if no command , always add to prompt binding, a prompt binding will be load when ,
 			//1.load a component property binding
-			//2.property change (TODO, DENNIS, ISSUE, I think loading of property change is triggered by tracker in doPropertyChange, not by prompt-binding 
+			//2.property change (TODO, DENNIS, ISSUE, I think loading of property change is triggered by tracker in doPropertyChange, not by prompt-binding
 			final BindingKey bkey = getBindingKey(comp, attr);
 			_propertyBindingHandler.addLoadPromptBinding(comp, bkey, binding);
 
@@ -1299,7 +1297,7 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 			Map<String, Object> converterArgs, String validatorExpr, Map<String, Object> validatorArgs) {
 		final boolean prompt = isPrompt(beforeCmds, afterCmds);
 		final BindingExecutionInfoCollector collector = getBindingExecutionInfoCollector();
-		//check attribute _accessInfo natural characteristics to register Command event listener 
+		//check attribute _accessInfo natural characteristics to register Command event listener
 		final ComponentCtrl compCtrl = (ComponentCtrl) comp;
 		final Annotation ann = AnnotationUtil.getSystemAnnotation(compCtrl, attr);
 		//check which attribute of component should fire save on which event.
@@ -1642,7 +1640,7 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 			//command need to be confirmed shall be execute first!
 			//must sort the command sequence?
 
-			//BUG 619, event may come from children of some component, 
+			//BUG 619, event may come from children of some component,
 			//ex tabbox.onSelect is form tab, so we cannot depend on event's target
 			final Component comp = _target; //_target is always equals _commandBinding.getComponent();
 			final String evtnm = event.getName();
@@ -1655,9 +1653,9 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 				_log.debug("====Start command event [{}]", event);
 			}
 			//BUG ZK-757, The timing of saving textbox's value attribute to ViewModel is later than command execution on onChange event
-			//We should save the prompt with validation first. 
+			//We should save the prompt with validation first.
 			//For a prompt binding that also binds with a command, that should not be mixed with command
-			//If user concern the timing of prompt save and validation with command, they should use condition not prompt  
+			//If user concern the timing of prompt save and validation with command, they should use condition not prompt
 			if (_prompt) {
 				promptResult = BinderImpl.this.doSaveEvent(comp, event, notifys); //save on event
 			}
@@ -1797,7 +1795,7 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 	 * @param evt event that fire this command, nullable
 	 * @param commandArgs the passed in argument for executing command
 	 * @param notifys container for properties that is to be notifyChange
-	 * @return the result of the doCommand, COMMAND_SUCCESS or COMMAND_FAIL_VALIDATE 
+	 * @return the result of the doCommand, COMMAND_SUCCESS or COMMAND_FAIL_VALIDATE
 	 */
 	private int doCommand(Component comp, CommandBinding commandBinding, String command, Event evt,
 			Map<String, Object> commandArgs, Set<Property> notifys) {
@@ -1805,7 +1803,7 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 		String debugInfo = MessageFormat.format("doCommand "
 				+ "comp=[{0}],command=[{1}],evtnm=[{2}]", comp, command, evtnm);
 		if (_log.isDebugEnabled()) {
-			_log.debug("Start " + debugInfo);
+			_log.debug("Start {}", debugInfo);
 		}
 		BindContext ctx = BindContextUtil.newBindContext(this, commandBinding, false, command, comp, evt);
 		BindContextUtil.setCommandArgs(this, comp, ctx, commandArgs);
@@ -1858,7 +1856,7 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 			Set<Property> notifys) {
 		String debugInfo = MessageFormat.format("doGlobalCommand comp=[{0}],command=[{1}]", comp, command);
 		if (_log.isDebugEnabled()) {
-			_log.debug("Start " + debugInfo);
+			_log.debug("Start {}", debugInfo);
 		}
 
 		BindContext ctx = BindContextUtil.newBindContext(this, null, false, command, comp, evt);
@@ -1883,10 +1881,10 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 
 	private void doGlobalCommandExecute(Component comp, String command, Map<String, Object> commandArgs,
 			BindContext ctx, Set<Property> notifys) {
-		String debugInfo = MessageFormat.format("doGlobalCommandExecute comp=[{0}],command=[{1}]", comp, command); 
+		String debugInfo = MessageFormat.format("doGlobalCommandExecute comp=[{0}],command=[{1}]", comp, command);
 		try {
 			if (_log.isDebugEnabled()) {
-				_log.debug("before " + debugInfo);
+				_log.debug("before {}", debugInfo);
 			}
 			doPrePhase(Phase.EXECUTE, ctx);
 
@@ -1978,7 +1976,7 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 		}
 	}
 
-	//for event -> prompt only, no command 
+	//for event -> prompt only, no command
 	private boolean doSaveEvent(Component comp, Event evt, Set<Property> notifys) {
 		final String evtnm = evt == null ? null : evt.getName();
 		if (_log.isDebugEnabled()) {
@@ -2000,11 +1998,9 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 	//doCommand -> doValidate
 	protected boolean doValidate(Component comp, String command, Event evt, BindContext ctx, Set<Property> notifys) {
 		final Set<Property> validates = new HashSet<Property>();
-		String debugInfo = MessageFormat.format("doValidate "
-				+ "comp=[{0}],command=[{1}],evt=[{2}],context=[{3}]", comp, command, evt, ctx);
 		try {
 			if (_log.isDebugEnabled()) {
-				_log.debug(debugInfo);
+				_log.debug("doValidate  comp=[{}],command=[{}],evt=[{}],context=[{}]", comp, command, evt, ctx);
 			}
 			doPrePhase(Phase.VALIDATE, ctx);
 
@@ -2042,7 +2038,6 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 				if (_log.isDebugEnabled()) {
 					_log.debug("doValidate validates=[{}]", validates);
 				}
-				debugInfo += MessageFormat.format(",validates=[{0}]", validates);
 				boolean valid = true;
 
 				//ZK-878 Exception if binding a form with errorMessage
@@ -2073,7 +2068,7 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 				return valid;
 			}
 		} catch (Exception e) {
-			_log.error(debugInfo, e);
+			_log.error("doValidate  comp=[{}],command=[{}],evt=[{}],context=[{}],validates=[{}]", comp, command, evt, ctx, validates, e);
 			throw UiException.Aide.wrap(e, e.getMessage());
 		} finally {
 			doPostPhase(Phase.VALIDATE, ctx);
@@ -2098,8 +2093,6 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 
 	protected void doExecute(Component comp, String command, Map<String, Object> commandArgs, BindContext ctx,
 			Set<Property> notifys) {
-		String debugInfo = MessageFormat.format("doExecute "
-				+ "comp=[{0}],command=[{1}],notifys=[{2}]", comp, command, notifys);
 		try {
 			Matcher matcher = CALL_OTHER_VM_COMMAND_PATTERN.matcher(command);
 			if (matcher.find()) {
@@ -2112,7 +2105,7 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 				}
 			}
 			if (_log.isDebugEnabled()) {
-				_log.debug("before " + debugInfo);
+				_log.debug("before doExecute comp=[{}],command=[{}],notifys=[{}]", comp, command, notifys);
 			}
 			doPrePhase(Phase.EXECUTE, ctx);
 
@@ -2147,7 +2140,7 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 				_log.debug("after doExecute notifys=[{}]", notifys);
 			}
 		} catch (Exception ex) {
-			throw new RuntimeException(debugInfo, ex);
+			throw new RuntimeException(MessageFormat.format("doExecute comp=[{0}],command=[{1}],notifys=[{2}]", comp, command, notifys), ex);
 		} finally {
 			doPostPhase(Phase.EXECUTE, ctx);
 		}
@@ -2238,34 +2231,32 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 
 	//doCommand -> doSaveBefore
 	protected void doSaveBefore(Component comp, String command, Event evt, BindContext ctx, Set<Property> notifys) {
-		String debugInfo = MessageFormat.format("doSaveBefore "
-				+ "comp=[{0}],command=[{1}],evt=[{2}],notifys=[{3}]", comp, command, evt, notifys);
 		if (_log.isDebugEnabled()) {
-			_log.debug(debugInfo);
+			_log.debug("doSaveBefore comp=[{}],command=[{}],evt=[{}],notifys=[{}]", comp, command, evt, notifys);
 		}
 		try {
 			doPrePhase(Phase.SAVE_BEFORE, ctx);
 			_propertyBindingHandler.doSaveBefore(comp, command, evt, notifys);
 			_formBindingHandler.doSaveBefore(comp, command, evt, notifys);
 		} catch (Exception ex) {
-			throw new RuntimeException(debugInfo, ex);
+			throw new RuntimeException(MessageFormat.format("doSaveBefore "
+					+ "comp=[{0}],command=[{1}],evt=[{2}],notifys=[{3}]", comp, command, evt, notifys), ex);
 		} finally {
 			doPostPhase(Phase.SAVE_BEFORE, ctx);
 		}
 	}
 
 	protected void doSaveAfter(Component comp, String command, Event evt, BindContext ctx, Set<Property> notifys) {
-		String debugInfo = MessageFormat.format("doSaveAfter "
-				+ "comp=[{0}],command=[{1}],evt=[{2}],notifys=[{3}]", comp, command, evt, notifys);
 		if (_log.isDebugEnabled()) {
-			_log.debug(debugInfo);
+			_log.debug("doSaveAfter comp=[{}],command=[{}],evt=[{}],notifys=[{}]", comp, command, evt, notifys);
 		}
 		try {
 			doPrePhase(Phase.SAVE_AFTER, ctx);
 			_propertyBindingHandler.doSaveAfter(comp, command, evt, notifys);
 			_formBindingHandler.doSaveAfter(comp, command, evt, notifys);
 		} catch (Exception ex) {
-			throw new RuntimeException(debugInfo, ex);
+			throw new RuntimeException(MessageFormat.format("doSaveAfter "
+					+ "comp=[{0}],command=[{1}],evt=[{2}],notifys=[{3}]", comp, command, evt, notifys), ex);
 		} finally {
 			doPostPhase(Phase.SAVE_AFTER, ctx);
 		}
@@ -2273,9 +2264,8 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 	}
 
 	protected void doLoadBefore(Component comp, String command, BindContext ctx) {
-		String debugInfo = MessageFormat.format("doLoadBefore comp=[{0}],command=[{1}]", comp, command);
 		if (_log.isDebugEnabled()) {
-			_log.debug(debugInfo);
+			_log.debug("doLoadBefore comp=[{}],command=[{}]", comp, command);
 		}
 		try {
 			doPrePhase(Phase.LOAD_BEFORE, ctx);
@@ -2283,16 +2273,15 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 			_formBindingHandler.doLoadBefore(comp, command);
 			_childrenBindingHandler.doLoadBefore(comp, command);
 		} catch (Exception ex) {
-			throw new RuntimeException(debugInfo, ex);
+			throw new RuntimeException(MessageFormat.format("doLoadBefore comp=[{0}],command=[{1}]", comp, command), ex);
 		} finally {
 			doPostPhase(Phase.LOAD_BEFORE, ctx);
 		}
 	}
 
 	protected void doLoadAfter(Component comp, String command, BindContext ctx) {
-		String debugInfo = MessageFormat.format("doLoadAfter comp=[{0}],command=[{1}]", comp, command);
 		if (_log.isDebugEnabled()) {
-			_log.debug(debugInfo);
+			_log.debug("doLoadAfter comp=[{}],command=[{}]", comp, command);
 		}
 		try {
 			doPrePhase(Phase.LOAD_AFTER, ctx);
@@ -2300,7 +2289,7 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 			_formBindingHandler.doLoadAfter(comp, command);
 			_childrenBindingHandler.doLoadAfter(comp, command);
 		} catch (Exception ex) {
-			throw new RuntimeException(debugInfo, ex);
+			throw new RuntimeException(MessageFormat.format("doLoadAfter comp=[{0}],command=[{1}]", comp, command), ex);
 		} finally {
 			doPostPhase(Phase.LOAD_AFTER, ctx);
 		}
@@ -2326,13 +2315,13 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 		TrackerImpl tracker = (TrackerImpl) getTracker();
 		tracker.removeTrackings(comp);
 	}
-	
+
 	private void removeBindings(Collection<Binding> removed, Component comp) {
 		_formBindingHandler.removeBindings(removed);
 		_propertyBindingHandler.removeBindings(removed);
 		_childrenBindingHandler.removeBindings(removed);
 	}
-	
+
 	/**
 	 * Remove all bindings that associated with the specified component and key (_fieldExpr|evtnm|formid).
 	 * @param comp the component
@@ -2341,10 +2330,10 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 	public void removeBindings(Component comp, String key) {
 		checkInit();
 		removeEventCommandListenerIfExists(comp, key); //_listenerMap; //comp+evtnm -> eventlistener
-		
+
 		final BindingKey bkey = getBindingKey(comp, key);
 		final Set<Binding> removed = new HashSet<Binding>();
-		
+
 		_formBindingHandler.removeBindings(bkey, removed);
 		_propertyBindingHandler.removeBindings(bkey, removed);
 		_childrenBindingHandler.removeBindings(bkey, removed);
@@ -2352,13 +2341,13 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 			_validationMessages.clearMessages(comp, key);
 		}
 		_hasValidators.remove(bkey);
-		
+
 		removeTemplateResolver(comp, key);
-		
+
 		if (_refBindingHandler != null) {
 			_refBindingHandler.removeReferenceBinding(comp, key);
 		}
-		
+
 		//F80 - store subtree's binder annotation count
 		removeBindings(removed, comp);
 	}
@@ -2547,9 +2536,9 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 				null, null, null, null);
 		addBinding(comp, attr, binding);
 
-		//if no command , always add to prompt binding, a prompt binding will be load when , 
+		//if no command , always add to prompt binding, a prompt binding will be load when ,
 		//1.load a component property binding
-		//2.property change (TODO, DENNIS, ISSUE, I think loading of property change is triggered by tracker in doPropertyChange, not by prompt-binding 
+		//2.property change (TODO, DENNIS, ISSUE, I think loading of property change is triggered by tracker in doPropertyChange, not by prompt-binding
 		final BindingKey bkey = getBindingKey(comp, attr);
 		_propertyBindingHandler.addLoadPromptBinding(comp, bkey, binding);
 
@@ -2618,9 +2607,8 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 
 	private void postGlobalCommand(Component comp, CommandBinding commandBinding, String command, Event evt,
 			Map<String, Object> args) {
-		String debugInfo = MessageFormat.format("postGlobalCommand command=[{0}],args=[{1}]", command, args);
 		if (_log.isDebugEnabled()) {
-			_log.debug(debugInfo);
+			_log.debug("postGlobalCommand command=[{}],args=[{}]", command, args);
 		}
 
 		final BindingExecutionInfoCollector collector = getBindingExecutionInfoCollector();
@@ -2634,7 +2622,7 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 
 			getEventQueue().publish(new GlobalCommandEvent(_rootComp, command, args, evt));
 		} catch (Exception ex) {
-			throw new RuntimeException(debugInfo, ex); 
+			throw new RuntimeException(MessageFormat.format("postGlobalCommand command=[{0}],args=[{1}]", command, args), ex);
 		} finally {
 			if (collector != null) {
 				collector.popStack();
@@ -2814,7 +2802,9 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 	private void didActivate() {
 		_activating = true;
 		try {
-			_log.debug("didActivate : [{}]", BinderImpl.this);
+			if (_log.isDebugEnabled()) {
+				_log.debug("didActivate : [{}]", BinderImpl.this);
+			}
 			//re-tie value to tracker.
 			loadComponent(_rootComp, false);
 		} finally {

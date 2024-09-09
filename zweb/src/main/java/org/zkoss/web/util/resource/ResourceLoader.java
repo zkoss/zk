@@ -1,9 +1,9 @@
 /* ResourceLoader.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Tue Aug 30 18:31:26     2005, Created by tomyeh
 
@@ -99,12 +99,12 @@ public abstract class ResourceLoader<V> implements Loader<ResourceInfo, V> {
 		if (!src.file.exists() && src.extra != null
 				&& ((ServletContextLocator) src.extra).getResourceAsStream(src.path) == null) {
 			if (log.isDebugEnabled())
-				log.debug("Not found: " + src.file);
+				log.debug("Not found: {}", src.file);
 			return null; //File not found
 		}
 
 		if (log.isDebugEnabled())
-			log.debug("Loading " + src.file);
+			log.debug("Loading {}", src.file);
 		try {
 			return parse(src.path, src.file, src.extra);
 		} catch (FileNotFoundException ex) {

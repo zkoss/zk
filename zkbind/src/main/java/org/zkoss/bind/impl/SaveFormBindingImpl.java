@@ -1,9 +1,9 @@
 /* SaveFormBindingImpl.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Aug 9, 2011 6:30:34 PM, Created by henrichen
 
@@ -98,7 +98,7 @@ public class SaveFormBindingImpl extends FormBindingImpl implements SaveFormBind
 			return null;
 
 		//		final BindContext ctx = BindContextUtil.newBindContext(getBinder(), this, false, null, getComponent(), null);
-		//		ctx.setAttribute(BinderImpl.IGNORE_TRACKER, Boolean.TRUE);//ignore tracker when doing el, we don't need to trace validator		
+		//		ctx.setAttribute(BinderImpl.IGNORE_TRACKER, Boolean.TRUE);//ignore tracker when doing el, we don't need to trace validator
 		final BindEvaluatorX eval = getBinder().getEvaluatorX();
 		Object obj = eval.getValue(/*ctx*/null, getComponent(), _validator);
 
@@ -132,7 +132,7 @@ public class SaveFormBindingImpl extends FormBindingImpl implements SaveFormBind
 		final Form form = getFormBean(ctx);
 
 		BindingExecutionInfoCollector collector = ((BinderCtrl) getBinder()).getBindingExecutionInfoCollector();
-		
+
 		//update form field into backing bean
 		if (form instanceof FormLegacy) {
 			if (form instanceof FormLegacyExt) {
@@ -197,7 +197,7 @@ public class SaveFormBindingImpl extends FormBindingImpl implements SaveFormBind
 					}
 				}
 			}
-			
+
 			binder.notifyChange(formStatus, "."); //notify change of fxStatus and fxStatus.*
 		}
 		if (collector != null) {
@@ -220,8 +220,8 @@ public class SaveFormBindingImpl extends FormBindingImpl implements SaveFormBind
 
 	//--SaveBinding--//
 	public Property getValidate(BindContext ctx) {
-		//we should not check this binding need to validate or not here, 
-		//since other validator may want to know the value of porperty of this binding, so just provide it 
+		//we should not check this binding need to validate or not here,
+		//since other validator may want to know the value of porperty of this binding, so just provide it
 		final Binder binder = getBinder();
 		final BindEvaluatorX eval = binder.getEvaluatorX();
 		final Component comp = getComponent(); //ctx.getComponent();
@@ -238,8 +238,8 @@ public class SaveFormBindingImpl extends FormBindingImpl implements SaveFormBind
 	//--SaveFormBinding--//
 	public Set<Property> getValidates(BindContext ctx) {
 		final Set<Property> properties = new HashSet<Property>(2);
-		//we should not check this binding need to validate or not here, 
-		//since other validator may want to know the value of porperty of this binding, so just provide it 
+		//we should not check this binding need to validate or not here,
+		//since other validator may want to know the value of porperty of this binding, so just provide it
 		final Binder binder = getBinder();
 		final BindEvaluatorX eval = binder.getEvaluatorX();
 		final Component comp = getComponent(); //ctx.getComponent();
@@ -261,11 +261,16 @@ public class SaveFormBindingImpl extends FormBindingImpl implements SaveFormBind
 					} catch (PropertyNotFoundException e) {
 						//ignore PropertyNotFoundException, might be new added expression
 					}
-					if (valref == null)
-						log.debug("value reference not found by expression [" + expr.getExpressionString()
-								+ "], check if you are trying to save to a variable only expression");
-					else
-						properties.add(new PropertyImpl(valref.getBase(), (String) valref.getProperty(), value));
+					if (valref == null) {
+						if (log.isDebugEnabled()) {
+							log.debug(
+									"value reference not found by expression [{}], check if you are trying to save to a variable only expression",
+									expr.getExpressionString());
+						}
+					} else {
+						properties.add(new PropertyImpl(valref.getBase(),
+								(String) valref.getProperty(), value));
+					}
 				}
 			}
 		}
@@ -309,7 +314,7 @@ public class SaveFormBindingImpl extends FormBindingImpl implements SaveFormBind
 	//			if (expr != null) {
 	//				final Object base = eval.getValue(vctx.getBindContext(), getComponent(), expr);
 	//				BindELContext.addNotifys(getValidatorMethod(validator.getClass()), base, null, null, vctx.getBindContext());
-	//			}			
+	//			}
 	//		}
 	//	}
 

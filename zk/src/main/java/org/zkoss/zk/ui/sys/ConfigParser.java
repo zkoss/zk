@@ -1,9 +1,9 @@
 /* ConfigParser.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Sun Mar 26 18:09:10     2006, Created by tomyeh
 
@@ -68,7 +68,7 @@ import org.zkoss.zk.ui.util.ThemeURIHandler;
 import org.zkoss.zk.ui.util.URIInfo;
 
 /**
- * Used to parse WEB-INF/zk.xml, metainfo/zk/zk.xml 
+ * Used to parse WEB-INF/zk.xml, metainfo/zk/zk.xml
  * and metainfo/zk/config.xml into {@link Configuration}.
  *
  * @author tomyeh
@@ -174,7 +174,7 @@ public class ConfigParser {
 					"config-name", "depends");
 			for (XMLResourcesLocator.Resource res : xmls) {
 				if (log.isDebugEnabled())
-					log.debug("Loading " + res.url);
+					log.debug("Loading {}", res.url);
 				try {
 					if (checkVersion(res.url, res.document)) {
 						final Element el = res.document.getRootElement();
@@ -295,7 +295,7 @@ public class ConfigParser {
 			final Element el = (Element) it.next();
 			final String elnm = el.getName();
 			// B65-ZK-1671: ThemeProvider specified in metainfo/zk/zk.xml may get overridden by default
-			//   config-name/depends elements were introduced to enforce that default configurations are  
+			//   config-name/depends elements were introduced to enforce that default configurations are
 			//   loaded in the sequence of zul -> zkex -> zkmax. User-supplied ThemeProvider, ThemeRegistry,
 			//   and ThemeResolver will not get overridden by using flag variables. But multiple such
 			//   configurations in different metainfo/zk/zk.xml still needs to be resolved by the assistance
@@ -566,7 +566,7 @@ public class ConfigParser {
 				if (!cls.getName().startsWith("org.zkoss."))
 					config.setCustomThemeProvider(true);
 				if (log.isDebugEnabled())
-					log.debug("ThemeProvider: " + cls.getName());
+					log.debug("ThemeProvider: {}", cls.getName());
 				config.setThemeProvider((ThemeProvider) cls.newInstance());
 			}
 		}
@@ -579,7 +579,7 @@ public class ConfigParser {
 				if (!cls.getName().startsWith("org.zkoss."))
 					config.setCustomThemeRegistry(true);
 				if (log.isDebugEnabled())
-					log.debug("ThemeRegistry: " + cls.getName());
+					log.debug("ThemeRegistry: {}", cls.getName());
 				ThemeFns.setThemeRegistry((ThemeRegistry) cls.newInstance());
 			}
 		}
@@ -592,7 +592,7 @@ public class ConfigParser {
 				if (!cls.getName().startsWith("org.zkoss."))
 					config.setCustomThemeResolver(true);
 				if (log.isDebugEnabled())
-					log.debug("ThemeResolver: " + cls.getName());
+					log.debug("ThemeResolver: {}", cls.getName());
 				ThemeFns.setThemeResolver((ThemeResolver) cls.newInstance());
 			}
 		}
@@ -602,7 +602,7 @@ public class ConfigParser {
 		cls = parseClass(conf, "theme-uri-handler-class", ThemeURIHandler.class);
 		if (cls != null) {
 			if (log.isDebugEnabled())
-				log.debug("ThemeURIHandler: " + cls.getName());
+				log.debug("ThemeURIHandler: {}", cls.getName());
 			config.addThemeURIHandler((ThemeURIHandler) cls.newInstance());
 		}
 

@@ -1,8 +1,8 @@
 /* GenericAutowireComposer.java
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Jun 11, 2008 10:56:06 AM, Created by henrichen
 
@@ -39,27 +39,27 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.SerializableEventListener;
 
 /**
- * <p>A skeletal composer that you can extend and write intuitive onXxx 
+ * <p>A skeletal composer that you can extend and write intuitive onXxx
  * event handler methods with "auto-wired" accessible variable objects such
- * as implicit objects, components, and external resolvable variables in a ZK 
- * zuml page. This class will registers onXxx events to the supervised 
- * component and wire all accessible variable objects to this composer by 
- * calling setXxx() method or set xxx field value directly per the variable 
- * name. Since 3.0.7, this composer has wired all implicit objects 
- * such as self, spaceOwner, page, desktop, session, application, 
- * componentScope, spaceScope, pageScope, desktopScope, sessionScope, 
- * applicationScope, and requestScope, so you can use them directly. Besides 
- * that, it also provides alert(String message) method, so you can call alert() 
- * without problems. Since 3.5.2, the composer itself would be assigned as an 
- * attribute of the supervised component per the naming convention of 
- * the component id and composer class name or of component id and "composer". 
- * e.g. If the component id is "mywin" and the composer class is org.zkoss.MyComposer, 
- * then the composer can be referenced by the variable name of "mywin$MyController" or 
+ * as implicit objects, components, and external resolvable variables in a ZK
+ * zuml page. This class will registers onXxx events to the supervised
+ * component and wire all accessible variable objects to this composer by
+ * calling setXxx() method or set xxx field value directly per the variable
+ * name. Since 3.0.7, this composer has wired all implicit objects
+ * such as self, spaceOwner, page, desktop, session, application,
+ * componentScope, spaceScope, pageScope, desktopScope, sessionScope,
+ * applicationScope, and requestScope, so you can use them directly. Besides
+ * that, it also provides alert(String message) method, so you can call alert()
+ * without problems. Since 3.5.2, the composer itself would be assigned as an
+ * attribute of the supervised component per the naming convention of
+ * the component id and composer class name or of component id and "composer".
+ * e.g. If the component id is "mywin" and the composer class is org.zkoss.MyComposer,
+ * then the composer can be referenced by the variable name of "mywin$MyController" or
  * "mywin$composer". Notice that the '$' separator can be changed to other character
  * such as '_' for Groovy or other environment that '$' is not applicable. Simply
  * extends this class and calling {@link #GenericAutowireComposer(char separator)}
  * constructor with proper separator character.</p>
- * 
+ *
  * <P>Alternatives: in most cases, you don't extend from {@link GenericAutowireComposer} directly.
  * Rather, you can extend from one of the following skeletons.
  * <dl>
@@ -74,19 +74,19 @@ import org.zkoss.zk.ui.event.SerializableEventListener;
  *
  * <p>Notice that since this composer kept references to the components, single
  * instance composer object cannot be shared by multiple components.</p>
- *  
- * <p>The following is an example. The onOK event listener is registered into 
+ *
+ * <p>The following is an example. The onOK event listener is registered into
  * the target window, and the Textbox component with id name "mytextbox" is
- * injected into the "mytextbox" field automatically (so you can use 
- * mytextbox variable directly in onOK). The "value" property of "mytextbox" 
+ * injected into the "mytextbox" field automatically (so you can use
+ * mytextbox variable directly in onOK). The "value" property of "mytextbox"
  * is assigned with composer's getTitle(), i.e. "ZK".</p>
- * 
+ *
  * <pre><code>
  * MyComposer.java
- * 
+ *
  * public class MyComposer extends GenericAutowireComposer {
  *     private Textbox mytextbox;
- *     
+ *
  *     public void onOK() {
  *         mytextbox.setValue("Enter Pressed");
  *         alert("Hi!");
@@ -95,9 +95,9 @@ import org.zkoss.zk.ui.event.SerializableEventListener;
  *         return "ZK";
  *     }
  * }
- * 
+ *
  * test.zul
- * 
+ *
  * &lt;window id="mywin" apply="MyComposer"&gt;
  *     &lt;textbox id="mytextbox" value="${mywin$composer.title}"/&gt;
  * &lt;/window&gt;
@@ -111,7 +111,7 @@ import org.zkoss.zk.ui.event.SerializableEventListener;
  *     &lt;textbox id="mytextbox" value="${mc.title}"/&gt;
  * &lt;/window&gt;
  * </code></pre>
- * 
+ *
  * @author henrichen
  * @since 3.0.6
  * @see ConventionWires
@@ -123,7 +123,7 @@ public abstract class GenericAutowireComposer<T extends Component> extends Gener
 	private static final String ON_CLONE_DO_AFTER_COMPOSE = "onCLONE_DO_AFTER_COMPOSE";
 	private static Logger log = LoggerFactory.getLogger(GenericAutowireComposer.class);
 
-	/** Implicit Object; the applied component itself. 
+	/** Implicit Object; the applied component itself.
 	 * @since 3.0.7
 	 */
 	protected transient T self;
@@ -209,7 +209,7 @@ public abstract class GenericAutowireComposer<T extends Component> extends Gener
 	 * <p>In other words, whether to ignore variables defined in ZSCRIPT and XEL depends
 	 * on the library variables called <code>org.zkoss.zk.ui.composer.autowire.zscript</code>
 	 * and <code>org.zkoss.zk.ui.composer.autowire.xel</code>.
-	 * Furthermore, if not specified, their values are default to <b>false</b>, i.e., 
+	 * Furthermore, if not specified, their values are default to <b>false</b>, i.e.,
 	 * they shall <t>not</t> be wired (i.e., shall be ignored)
 	 * <p>If you want to control whether to wire ZSCRIPT's or XEL's variable
 	 * explicitly, you could use
@@ -234,7 +234,7 @@ public abstract class GenericAutowireComposer<T extends Component> extends Gener
 	 * <p>In other words, whether to ignore variables defined in ZSCRIPT and XEL depends
 	 * on the library variables called <code>org.zkoss.zk.ui.composer.autowire.zscript</code>
 	 * and <code>org.zkoss.zk.ui.composer.autowire.xel</code>.
-	 * Furthermore, if not specified, their values are default to <b>false</b>, i.e., 
+	 * Furthermore, if not specified, their values are default to <b>false</b>, i.e.,
 	 * they shall <t>not</t> be wired (i.e., shall be ignored)
 	 * <p>If you want to control whether to wire ZSCRIPT's or XEL's variable
 	 * explicitly, you could use
@@ -294,9 +294,9 @@ public abstract class GenericAutowireComposer<T extends Component> extends Gener
 	}
 
 	/**
-	 * Auto wire accessible variables of the specified component into a 
-	 * controller Java object; a subclass that 
-	 * override this method should remember to call super.doAfterCompose(comp) 
+	 * Auto wire accessible variables of the specified component into a
+	 * controller Java object; a subclass that
+	 * override this method should remember to call super.doAfterCompose(comp)
 	 * or it will not work.
 	 */
 	public void doAfterCompose(T comp) throws Exception {
@@ -320,7 +320,7 @@ public abstract class GenericAutowireComposer<T extends Component> extends Gener
 	}
 
 	/** Shortcut to call Messagebox.show(String).
-	 * @since 3.0.7 
+	 * @since 3.0.7
 	 */
 	private static Method _alert;
 
@@ -336,7 +336,9 @@ public abstract class GenericAutowireComposer<T extends Component> extends Gener
 				_alert.invoke(null, new Object[] { m });
 				return; //done
 			} catch (Throwable ex) {
-				log.debug("Failed to invoke org.zkoss.zul.Messagebox", ex);
+				if (log.isDebugEnabled()) {
+					log.debug("Failed to invoke org.zkoss.zul.Messagebox", ex);
+				}
 				//Ignore
 			}
 		}
@@ -344,12 +346,12 @@ public abstract class GenericAutowireComposer<T extends Component> extends Gener
 		org.zkoss.zk.ui.util.Clients.alert(m);
 	}
 
-	//ComponentCloneListener	
-	/** Internal use only. Call-back method of CloneComposerListener. You shall 
-	 * not call this method directly. Clone this Composer when its applied 
+	//ComponentCloneListener
+	/** Internal use only. Call-back method of CloneComposerListener. You shall
+	 * not call this method directly. Clone this Composer when its applied
 	 * component is cloned.
 	 * @param comp the clone of the applied component
-	 * @return A clone of this Composer. 
+	 * @return A clone of this Composer.
 	 * @since 3.5.2
 	 */
 	public Object willClone(Component comp) {
@@ -361,7 +363,7 @@ public abstract class GenericAutowireComposer<T extends Component> extends Gener
 				composerClone = (Composer) Classes.newInstance(getClass(), null);
 				exec.setAttribute(COMPOSER_CLONE + idcode, composerClone);
 
-				//cannot call doAfterCompose directly because the clone 
+				//cannot call doAfterCompose directly because the clone
 				//component might not be attach to Page yet
 				comp.addEventListener(ON_CLONE_DO_AFTER_COMPOSE, new CloneDoAfterCompose());
 				Events.postEvent(new Event(ON_CLONE_DO_AFTER_COMPOSE, comp, composerClone));

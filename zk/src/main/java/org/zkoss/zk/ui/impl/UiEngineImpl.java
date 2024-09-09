@@ -1517,8 +1517,9 @@ public class UiEngineImpl implements UiEngine {
 				log.error("", ex); //Briefly(ex);
 		} else {
 			ex = t;
-			if (log.isDebugEnabled())
+			if (log.isDebugEnabled()) {
 				log.debug("", Exceptions.getRealCause(ex));
+			}
 		}
 
 		if (ex instanceof WrongValueException) {
@@ -2029,8 +2030,11 @@ public class UiEngineImpl implements UiEngine {
 		if (seqId != null) {
 			if (log.isDebugEnabled()) {
 				final Object req = exec.getNativeRequest();
-				log.debug("replicate request, SID: " + seqId
-						+ (req instanceof ServletRequest ? "\n" + Servlets.getDetail((ServletRequest) req) : ""));
+				log.debug("replicate request, SID: {}{}", seqId,
+						req instanceof ServletRequest
+								? "\n" + Servlets.getDetail(
+								(ServletRequest) req)
+								: "");
 			}
 			resultOfRepeat[0] = desktopCtrl.getLastResponse(seqId);
 		}

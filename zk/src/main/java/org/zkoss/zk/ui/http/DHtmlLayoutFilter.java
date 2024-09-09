@@ -1,9 +1,9 @@
 /* DHtmlLayoutFilter.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Wed Nov 30 00:49:59     2005, Created by tomyeh
 
@@ -78,7 +78,7 @@ public class DHtmlLayoutFilter implements Filter {
 	protected void process(HttpServletRequest request, HttpServletResponse response, String content)
 			throws ServletException, IOException {
 		if (log.isDebugEnabled())
-			log.debug("Content to filter:\n" + content);
+			log.debug("Content to filter:\n{}", content);
 
 		final WebManager webman = WebManager.getWebManager(_ctx);
 		final WebApp wapp = webman.getWebApp();

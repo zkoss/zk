@@ -752,7 +752,7 @@ public class Https extends Servlets {
 					} catch (Throwable ex) { //ignore
 					}
 					if (log.isDebugEnabled())
-						log.debug("Failed to parse Range: " + range);
+						log.debug("Failed to parse Range: {}", range);
 					return null;
 				}
 			}
