@@ -1,9 +1,9 @@
 /* Evaluators.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Fri Sep 14 12:24:23     2007, Created by tomyeh
 
@@ -16,28 +16,29 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.xel.util;
 
+import static org.zkoss.lang.Generics.cast;
+
+import java.net.URL;
+import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.HashMap;
-import java.util.Enumeration;
-import java.net.URL;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.zkoss.lang.Classes;
-import static org.zkoss.lang.Generics.cast;
-import org.zkoss.lang.SystemException;
 
-import org.zkoss.util.resource.Locator;
-import org.zkoss.util.resource.ClassLocator;
-import org.zkoss.idom.input.SAXBuilder;
 import org.zkoss.idom.Document;
 import org.zkoss.idom.Element;
+import org.zkoss.idom.input.SAXBuilder;
 import org.zkoss.idom.util.IDOMs;
-import org.zkoss.xel.XelContext;
+import org.zkoss.lang.Classes;
+import org.zkoss.lang.SystemException;
+import org.zkoss.util.resource.ClassLocator;
+import org.zkoss.util.resource.Locator;
 import org.zkoss.xel.ExpressionFactory;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.xel.VariableResolverX;
+import org.zkoss.xel.XelContext;
 
 /**
  * It maps a name with an evaluator implementation.
@@ -118,7 +119,8 @@ public class Evaluators {
 		|| evalcls == null || evalcls.length() == 0)
 			throw new IllegalArgumentException("emty or null");
 
-		if (log.isDebugEnabled()) log.debug("Evaluator is added: "+name+", "+evalcls);
+		if (log.isDebugEnabled())
+			log.debug("Evaluator is added: {}, {}", name, evalcls);
 
 		final String evalnm = name.toLowerCase(java.util.Locale.ENGLISH);
 		final Object old;
@@ -162,8 +164,9 @@ public class Evaluators {
 			final ClassLocator loc = new ClassLocator();
 			for (Enumeration en = loc.getResources("metainfo/xel/config.xml");
 			en.hasMoreElements();) {
-				final URL url = (URL)en.nextElement();
-				if (log.isDebugEnabled()) log.debug("Loading "+url);
+				final URL url = (URL) en.nextElement();
+				if (log.isDebugEnabled())
+					log.debug("Loading {}", url);
 				try {
 					final Document doc = new SAXBuilder(false, false, true).build(url);
 					if (IDOMs.checkVersion(doc, url))

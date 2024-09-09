@@ -1,9 +1,9 @@
 /* BindExpressionBuilder.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Aug 15, 2011 11:04:37 AM, Created by henrichen
 
@@ -82,7 +82,7 @@ public class BindExpressionBuilder extends ExpressionBuilder {
 		if (binding != null && series != null && !series.isEmpty()) {
 
 			//to prevent unnecessary from-save in nested expression in from binding and cause save error
-			//e.g @bind(fx.hash[fx.key]) or @bind(vm.hash[fx.key]) 
+			//e.g @bind(fx.hash[fx.key]) or @bind(vm.hash[fx.key])
 
 			final Boolean isVisted = (Boolean) _ctx.getAttribute(_isVisitedKey);
 			if (!Boolean.TRUE.equals(isVisted)) {
@@ -102,14 +102,14 @@ public class BindExpressionBuilder extends ExpressionBuilder {
 			final Component comp = bctx != null ? bctx.getComponent() : binding.getComponent();
 			final Object base = comp.getAttribute(prop, true);
 			final String fieldName = fieldName(it);
-			
+
 			if (fieldName != null) {
 				if (base instanceof FormLegacy) { // ZK-4501: add SimpleForm back for compatibility
 					final FormLegacy formLegacyBean = (FormLegacy) base;
-					
+
 					if (binding instanceof SavePropertyBinding && !Boolean.TRUE.equals(isVisted)) {
 						if (_log.isDebugEnabled()) {
-							_log.debug("add save-field '%s' to form '%s'", fieldName, formLegacyBean);
+							_log.debug("add save-field '{}' to form '{}'", fieldName, formLegacyBean);
 						}
 						if (formLegacyBean instanceof FormLegacyExt) {
 							((FormLegacyExt) formLegacyBean).addSaveFieldName(fieldName);
@@ -118,7 +118,7 @@ public class BindExpressionBuilder extends ExpressionBuilder {
 					} else if (binding instanceof LoadPropertyBinding
 							|| binding instanceof LoadChildrenBinding || binding instanceof ReferenceBinding) {
 						if (_log.isDebugEnabled()) {
-							_log.debug("add load-field '%s' to form '%s'", fieldName, formLegacyBean);
+							_log.debug("add load-field '{}' to form '{}'", fieldName, formLegacyBean);
 						}
 						if (formLegacyBean instanceof FormLegacyExt) {
 							((FormLegacyExt) formLegacyBean).addLoadFieldName(fieldName);
@@ -126,7 +126,7 @@ public class BindExpressionBuilder extends ExpressionBuilder {
 					}
 				} else if (base instanceof Form) {
 					final Form formBean = (Form) base;
-					
+
 					if (binding instanceof SavePropertyBinding && !Boolean.TRUE.equals(isVisted)) {
 						if (_log.isDebugEnabled()) {
 							_log.debug("add save-field '{}' to form '{}'", fieldName, formBean);

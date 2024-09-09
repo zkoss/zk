@@ -1,9 +1,9 @@
 /* Interpreters.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Fri Feb  2 10:48:47     2007, Created by tomyeh
 
@@ -141,7 +141,7 @@ public class Interpreters {
 		}
 
 		if (log.isDebugEnabled())
-			log.debug("Scripting language is added: " + zslang + ", " + ipcls);
+			log.debug("Scripting language is added: {}, {}", zslang, ipcls);
 		_zslangs.add(zslang);
 
 		final String zsl = zslang.toLowerCase(java.util.Locale.ENGLISH);

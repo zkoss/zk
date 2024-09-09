@@ -1,9 +1,9 @@
 /* ExtendletLoader.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Wed May 28 17:01:32     2008, Created by tomyeh
 
@@ -103,7 +103,7 @@ public abstract class ExtendletLoader<V> implements Loader<String, V> {
 
 	public V load(String src) throws Exception {
 		if (log.isDebugEnabled())
-			log.debug("Parse " + src);
+			log.debug("Parse {}", src);
 		final String path = getRealPath(src);
 		InputStream is = null;
 		if (getCheckPeriod() >= 0) {
@@ -116,7 +116,7 @@ public abstract class ExtendletLoader<V> implements Loader<String, V> {
 					is = real.openStream();
 				}
 			} catch (Throwable ex) {
-				log.warn("Unable to read from URL: " + path, ex);
+				log.warn("Unable to read from URL: {}", path, ex);
 			}
 		}
 

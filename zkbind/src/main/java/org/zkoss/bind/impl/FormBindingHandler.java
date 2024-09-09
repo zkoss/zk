@@ -1,9 +1,9 @@
 /* FormBindingHelper.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		2011/11/14 Created by Dennis Chen
 
@@ -31,7 +31,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 
 /**
- * to help form-binding implementation of BinderImpl 
+ * to help form-binding implementation of BinderImpl
  * @author dennis
  * @since 6.0.0
  */
@@ -105,15 +105,14 @@ import org.zkoss.zk.ui.event.Event;
 				evt);
 		BindContextUtil.setValidatorArgs(_binder, binding.getComponent(), ctx, binding);
 		//TODO converter args when we support converter in form
-		String debugInfo = getSaveBindingDebugInfo("doSaveFormBinding", comp, binding, command, evt, notifys);
 		try {
 			if (_log.isDebugEnabled()) {
-				_log.debug(debugInfo);
+				_log.debug(getSaveBindingDebugInfo("doSaveFormBinding", comp, binding, command, evt, notifys));
 			}
 			doPrePhase(Phase.SAVE_BINDING, ctx);
 			binding.save(ctx);
 		} catch (Exception ex) {
-			throw new RuntimeException(debugInfo, ex);
+			throw new RuntimeException(getSaveBindingDebugInfo("doSaveFormBinding", comp, binding, command, evt, notifys), ex);
 		} finally {
 			doPostPhase(Phase.SAVE_BINDING, ctx);
 		}
@@ -132,20 +131,19 @@ import org.zkoss.zk.ui.event.Event;
 			ctx.setAttribute(BinderImpl.IGNORE_TRACKER, Boolean.TRUE); //ignore tracker when doing el , we don't need to track the init
 		}
 		//TODO converter args when we support converter in form
-		String debugInfo = getLoadBindingDebugInfo("doLoadFormBinding", comp, binding, ctx, command);
 		try {
 			if (_log.isDebugEnabled()) {
-				_log.debug(debugInfo);
+				_log.debug(getLoadBindingDebugInfo("doLoadFormBinding", comp, binding, ctx, command));
 			}
 			doPrePhase(Phase.LOAD_BINDING, ctx);
 			binding.load(ctx);
 
-			//if there is a valodator, clear the validation message after load
+			//if there is a validator, clear the validation message after load
 			if (((BinderImpl) binding.getBinder()).hasValidator(binding.getComponent(), binding.getFormId())) {
 				clearValidationMessages(binding.getBinder(), binding.getComponent(), binding.getFormId());
 			}
 		} catch (Exception ex) {
-			throw new RuntimeException(debugInfo, ex);
+			throw new RuntimeException(getLoadBindingDebugInfo("doLoadFormBinding", comp, binding, ctx, command), ex);
 		} finally {
 			doPostPhase(Phase.LOAD_BINDING, ctx);
 		}

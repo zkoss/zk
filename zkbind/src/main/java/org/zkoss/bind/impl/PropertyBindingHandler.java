@@ -1,9 +1,9 @@
 /* PropertyBindingHelper.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		2011/11/14 Created by Dennis Chen
 
@@ -38,7 +38,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Event;
 
 /**
- * to help property-binding implementation of  BinderImpl 
+ * to help property-binding implementation of  BinderImpl
  * @author dennis
  * @since 6.0.0
  */
@@ -106,15 +106,14 @@ import org.zkoss.zk.ui.event.Event;
 				evt);
 		BindContextUtil.setConverterArgs(_binder, binding.getComponent(), ctx, binding);
 		BindContextUtil.setValidatorArgs(_binder, binding.getComponent(), ctx, binding);
-		String debugInfo = getSaveBindingDebugInfo("doSavePropertyBinding", comp, binding, command, evt, notifys);
 		try {
 			if (_log.isDebugEnabled()) {
-				_log.debug(debugInfo);
+				_log.debug(getSaveBindingDebugInfo("doSavePropertyBinding", comp, binding, command, evt, notifys));
 			}
 			doPrePhase(Phase.SAVE_BINDING, ctx);
 			binding.save(ctx);
 		} catch (Exception ex) {
-			throw new RuntimeException(debugInfo, ex);
+			throw new RuntimeException(getSaveBindingDebugInfo("doSavePropertyBinding", comp, binding, command, evt, notifys), ex);
 		} finally {
 			doPostPhase(Phase.SAVE_BINDING, ctx);
 		}
@@ -133,10 +132,9 @@ import org.zkoss.zk.ui.event.Event;
 		if (binding instanceof InitPropertyBindingImpl) {
 			ctx.setAttribute(BinderImpl.IGNORE_TRACKER, Boolean.TRUE); //ignore tracker when doing el , we don't need to track the init
 		}
-		String debugInfo = getLoadBindingDebugInfo("doLoadPropertyBinding", comp, binding, ctx, command);
 		try {
 			if (_log.isDebugEnabled()) {
-				_log.debug(debugInfo);
+				_log.debug(getLoadBindingDebugInfo("doLoadPropertyBinding", comp, binding, ctx, command));
 			}
 			doPrePhase(Phase.LOAD_BINDING, ctx);
 			binding.load(ctx);
@@ -146,7 +144,7 @@ import org.zkoss.zk.ui.event.Event;
 				clearValidationMessages(binding.getBinder(), binding.getComponent(), binding.getFieldName());
 			}
 		} catch (Exception ex) {
-			throw new RuntimeException(debugInfo, ex);
+			throw new RuntimeException(getLoadBindingDebugInfo("doLoadPropertyBinding", comp, binding, ctx, command), ex);
 		} finally {
 			doPostPhase(Phase.LOAD_BINDING, ctx);
 		}
@@ -188,14 +186,13 @@ import org.zkoss.zk.ui.event.Event;
 			BindContextUtil.setConverterArgs(_binder, binding.getComponent(), ctx, binding);
 			BindContextUtil.setValidatorArgs(_binder, binding.getComponent(), ctx, binding);
 
-			String debugInfo = MessageFormat.format("doValidateSaveEvent "
-							+ "comp=[{0}],binding=[{1}],evt=[{2}]", comp, binding, evt);
+			Property p = null;
+			boolean valid = false;
 			try {
 				doPrePhase(Phase.VALIDATE, ctx);
-				final Property p = binding.getValidate(ctx);
-				debugInfo += MessageFormat.format(",validate=[{0}]", p);
+				p = binding.getValidate(ctx);
 				if (_log.isDebugEnabled()) {
-					_log.debug(debugInfo);
+					_log.debug("doValidateSaveEvent comp=[{}],binding=[{}],evt=[{}],validate=[{}]", comp, binding, evt, p);
 				}
 				if (p == null) {
 					throw new UiException("no main property for save-binding " + binding);
@@ -208,11 +205,10 @@ import org.zkoss.zk.ui.event.Event;
 
 				ValidationContext vctx = new ValidationContextImpl(null, p, toCollectedProperties(p), ctx, true);
 				binding.validate(vctx);
-				boolean valid = vctx.isValid();
+				valid = vctx.isValid();
 				if (_log.isDebugEnabled()) {
 					_log.debug("doValidateSaveEvent result=[{}]", valid);
 				}
-				debugInfo += MessageFormat.format(",result=[{0}]", valid);
 
 				final Set<Property> xnotifys = getNotifys(ctx);
 				if (xnotifys != null) {
@@ -221,7 +217,8 @@ import org.zkoss.zk.ui.event.Event;
 
 				return valid;
 			} catch (Exception e) {
-				_log.error(debugInfo);
+				_log.error(MessageFormat.format("doValidateSaveEvent "
+						+ "comp=[{0}],binding=[{1}],evt=[{2}],validate=[{3}],result=[{4}]", comp, binding, evt, p, valid));
 				throw UiException.Aide.wrap(e);
 			} finally {
 				doPostPhase(Phase.VALIDATE, ctx);
@@ -284,7 +281,7 @@ import org.zkoss.zk.ui.event.Event;
 	}
 
 	void doSaveAfter(Component comp, String command, Event evt, Set<Property> notifys) {
-		//		final BindEvaluatorX eval = getEvaluatorX(); 
+		//		final BindEvaluatorX eval = getEvaluatorX();
 		final List<SavePropertyBinding> bindings = _saveAfterBindings.get(command);
 		if (bindings != null) {
 			for (SavePropertyBinding binding : bindings) {

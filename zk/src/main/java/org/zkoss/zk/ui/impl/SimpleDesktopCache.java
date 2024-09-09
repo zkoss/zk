@@ -2,9 +2,9 @@
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Tue Apr 18 13:00:34     2006, Created by tomyeh
 }}IS_NOTE
@@ -220,7 +220,7 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 
 	public void stop() {
 		if (log.isDebugEnabled())
-			log.debug("Invalidated and remove: " + _desktops);
+			log.debug("Invalidated and remove: {}", _desktops);
 		final boolean old = _desktops.disableExpunge(true);
 		try {
 			ArrayList<Desktop> desktops = null;
@@ -277,7 +277,7 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 
 			desktopDestroyed(v.getValue());
 			if (log.isDebugEnabled())
-				log.debug("Expunge desktop: " + v.getValue());
+				log.debug("Expunge desktop: {}", v.getValue());
 		}
 
 		private void readObject(java.io.ObjectInputStream s) throws java.io.IOException, ClassNotFoundException {

@@ -1,9 +1,9 @@
 /* PollingServerPush.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Fri Aug  3 18:53:21     2007, Created by tomyeh
 
@@ -316,7 +316,9 @@ public class PollingServerPush implements ServerPush {
 							return false; //timeout
 						}
 
-						log.debug("Executions.activate() took more than 10 minutes");
+						if (log.isDebugEnabled()) {
+							log.debug("Executions.activate() took more than 10 minutes");
+						}
 						loop = true; //try again
 					}
 				}

@@ -179,7 +179,9 @@ public class ParamCall {
 			if (c == null)
 				c = invokEx;
 			if (c instanceof OperationException) { //ZK-4255: Expectable exceptions
-				_log.debug("", c);
+				if (_log.isDebugEnabled()) {
+					_log.debug("", c);
+				}
 			} else {
 				_log.error("", c);
 			}
@@ -353,7 +355,7 @@ public class ParamCall {
 					}
 				}
 
-				//zk-1469, 
+				//zk-1469,
 				if (val instanceof ReferenceBinding) {
 					val = resolveReferenceBinding(name, (ReferenceBinding) val, returnType);
 				}

@@ -1,9 +1,9 @@
 /* ChildrenBindingHandler.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		2012/1/2 Created by Dennis Chen
 
@@ -28,7 +28,7 @@ import org.zkoss.bind.sys.LoadChildrenBinding;
 import org.zkoss.zk.ui.Component;
 
 /**
- * to help children-binding implementation of  BinderImpl 
+ * to help children-binding implementation of  BinderImpl
  * @author dennis
  * @since 6.0.0
  */
@@ -52,7 +52,7 @@ import org.zkoss.zk.ui.Component;
 	}
 
 	//	void addLoadEventBinding(Component comp, BindingKey bkey, LoadChildrenBinding binding) {
-	//		List<LoadChildrenBinding> bindings = _loadEventBindings.get(bkey); 
+	//		List<LoadChildrenBinding> bindings = _loadEventBindings.get(bkey);
 	//		if (bindings == null) {
 	//			bindings = new ArrayList<LoadChildrenBinding>();
 	//			_loadEventBindings.put(bkey, bindings);
@@ -88,15 +88,14 @@ import org.zkoss.zk.ui.Component;
 		if (binding instanceof InitChildrenBindingImpl) {
 			ctx.setAttribute(BinderImpl.IGNORE_TRACKER, Boolean.TRUE); //ignore tracker when doing el , we don't need to track the init
 		}
-		String debugInfo = getLoadBindingDebugInfo("doLoadChildrenBinding", comp, binding, ctx, command);
 		try {
 			if (_log.isDebugEnabled()) {
-				_log.debug(debugInfo);
+				_log.debug(getLoadBindingDebugInfo("doLoadChildrenBinding", comp, binding, ctx, command));
 			}
 			doPrePhase(Phase.LOAD_BINDING, ctx);
 			binding.load(ctx);
 		} catch (Exception ex) {
-			throw new RuntimeException(debugInfo, ex);
+			throw new RuntimeException(getLoadBindingDebugInfo("doLoadChildrenBinding", comp, binding, ctx, command), ex);
 		} finally {
 			doPostPhase(Phase.LOAD_BINDING, ctx);
 		}

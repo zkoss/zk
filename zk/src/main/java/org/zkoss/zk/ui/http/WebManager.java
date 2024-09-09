@@ -1,9 +1,9 @@
 /* WebManager.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Thu Jun 15 13:28:19     2006, Created by tomyeh
 
@@ -123,15 +123,15 @@ public class WebManager {
 	@SuppressWarnings("deprecation")
 	public WebManager(ServletContext ctx, String updateURI, String resourceURI) {
 		if (log.isDebugEnabled())
-			log.debug("Starting WebManager at " + ctx);
+			log.debug("Starting WebManager at {}", ctx);
 
 		if (ctx == null || updateURI == null)
 			throw new IllegalArgumentException("null");
 		if (getWebManagerIfAny(ctx) != null)
 			throw new UiException("Only one Web manager is allowed in one context: " + ctx);
 
-		log.info("Starting ZK " + org.zkoss.zk.Version.RELEASE + ' ' + WebApps.getEdition() + " (build: "
-				+ org.zkoss.zk.ui.impl.AbstractWebApp.loadBuild() + ')');
+		log.info("Starting ZK {} {} (build: {})", org.zkoss.zk.Version.RELEASE,
+				WebApps.getEdition(), org.zkoss.zk.ui.impl.AbstractWebApp.loadBuild());
 
 		_ctx = ctx;
 		_updateURI = updateURI;
@@ -403,7 +403,7 @@ public class WebManager {
 
 	/** Called by DHtmlLayoutServlet#init when WebManager is created
 	 * by HttpSessionListener#contextInitialized
-	 * 
+	 *
 	 * @param updateURI the URI for asynchronous update.
 	 */
 	/*package*/ void setUpdateUri(String updateURI) {
@@ -540,7 +540,7 @@ public class WebManager {
 		Desktop desktop = (Desktop) request.getAttribute(ATTR_DESKTOP);
 		if (desktop == null && autocreate) {
 			if (log.isDebugEnabled())
-				log.debug("Create desktop for " + path);
+				log.debug("Create desktop for {}", path);
 			request.setAttribute(ATTR_DESKTOP, desktop = newDesktop(sess, request, response, path));
 		}
 		return desktop;

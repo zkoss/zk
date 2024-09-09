@@ -347,7 +347,9 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			final AuExtension aue = getAuExtensionByPath(pi);
 			if (aue == null) {
 				response.sendError(HttpServletResponse.SC_NOT_FOUND);
-				log.debug("Unknown path info: {}", pi);
+				if (log.isDebugEnabled()) {
+					log.debug("Unknown path info: {}", pi);
+				}
 				return;
 			}
 
@@ -377,7 +379,9 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		// Fix for ZK-5142
 		if (!("POST".equals(request.getMethod()))) {
 			response.sendError(HttpServletResponse.SC_NOT_FOUND);
-			log.debug("Request method is not POST: {}", Servlets.getDetail(request));
+			if (log.isDebugEnabled()) {
+				log.debug("Request method is not POST: {}", Servlets.getDetail(request));
+			}
 			return; //done
 		}
 
@@ -436,7 +440,8 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		final String errClient = request.getHeader("ZK-Error-Report");
 		if (errClient != null)
 			if (log.isDebugEnabled())
-				log.debug("Error found at client: " + errClient + "\n" + Servlets.getDetail(request));
+				log.debug("Error found at client: {}\n{}", errClient,
+						Servlets.getDetail(request));
 
 		//parse desktop ID
 		final WebApp wapp = sess.getWebApp();
@@ -451,8 +456,8 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		if (dtid == null) {
 			//Bug 1929139: incomplete request (IE only)
 			if (log.isDebugEnabled()) {
-				final String msg = "Incomplete request\n" + Servlets.getDetail(request);
-				log.debug(msg);
+				log.debug("Incomplete request\n{}",
+						Servlets.getDetail(request));
 			}
 
 			response.sendError(467, "Incomplete request");
@@ -509,7 +514,9 @@ public class DHtmlUpdateServlet extends HttpServlet {
 
 		if (aureqs.isEmpty()) {
 			final String errmsg = "Illegal request: cmd required";
-			log.debug(errmsg);
+			if (log.isDebugEnabled()) {
+				log.debug(errmsg);
+			}
 			responseError(request, response, errmsg);
 			return;
 		}

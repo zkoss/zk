@@ -1,9 +1,9 @@
 /* DesktopEventQueue.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Fri May  2 17:44:12     2008, Created by tomyeh
 
@@ -100,12 +100,12 @@ public class DesktopEventQueue<T extends Event> implements EventQueue<T>, java.i
 			if (exec == null)
 				throw new IllegalStateException("Execution required");
 			((DesktopCtrl) exec.getDesktop()).enableServerPush(true, this);
-			//B65-ZK-1840 make sure the flag is true after enabling (otherwise disabling will fail) 
+			//B65-ZK-1840 make sure the flag is true after enabling (otherwise disabling will fail)
 			_serverPushEnabled = true;
 		}
 
 		if (log.isDebugEnabled()) {
-			log.debug("Subscribe event queue, async is [" + async + "]");
+			log.debug("Subscribe event queue, async is [{}]", async);
 		}
 		_listenerInfos.add(new ListenerInfo<T>(listener, callback, async));
 	}
@@ -120,7 +120,7 @@ public class DesktopEventQueue<T extends Event> implements EventQueue<T>, java.i
 					}
 					it.remove();
 					if (inf.async && --_nAsync == 0 && _serverPushEnabled)
-						//B65-ZK-1840 added enabler argument for reference counting  
+						//B65-ZK-1840 added enabler argument for reference counting
 						((DesktopCtrl) Executions.getCurrent().getDesktop()).enableServerPush(false, this);
 					return true;
 				}
@@ -144,7 +144,7 @@ public class DesktopEventQueue<T extends Event> implements EventQueue<T>, java.i
 		_listenerInfos.clear();
 		if (_serverPushEnabled) {
 			try {
-				//B65-ZK-1840 added enabler argument for reference counting  
+				//B65-ZK-1840 added enabler argument for reference counting
 				((DesktopCtrl) Executions.getCurrent().getDesktop()).enableServerPush(false, this);
 			} catch (Throwable ex) {
 				log.warn("Ingored: unable to stop server push", ex);

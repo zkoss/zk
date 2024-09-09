@@ -1,9 +1,9 @@
 /* EventListenerInfo.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Thu Dec 15 19:29:49 TST 2011, Created by tomyeh
 
@@ -66,11 +66,13 @@ import org.zkoss.zk.ui.util.ComponentSerializationListener;
 						try {
 							s.writeObject(li);
 						} catch (java.io.NotSerializableException ex) {
-							logio.error("Unable to serialize item: " + li.listener);
+							logio.error("Unable to serialize item: {}",
+									li.listener);
 							throw ex;
 						}
 					} else if (debug) {
-						logio.debug("Skip not-serializable item: " + li.listener);
+						logio.debug("Skip not-serializable item: {}",
+								li.listener);
 					}
 				}
 

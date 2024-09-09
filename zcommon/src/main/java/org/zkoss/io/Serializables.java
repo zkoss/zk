@@ -1,9 +1,9 @@
 /* Serializables.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Sun Jun 25 22:54:45     2006, Created by tomyeh
 
@@ -61,11 +61,15 @@ public class Serializables {
 						s.writeObject(nm);
 						s.writeObject(val);
 					} catch (java.io.NotSerializableException ex) {
-						logio.error("Unable to serialize entry: "+nm+'='+val);
+						logio.error("Unable to serialize entry: {}={}", nm,
+								val);
 						throw ex;
 					}
 				} else if (nm != null && debug) {
-					logio.debug("Skip not-serializable entry: "+nm+'='+val);
+					if (logio.isDebugEnabled()) {
+						logio.debug("Skip not-serializable entry: {}={}", nm,
+								val);
+					}
 				}
 			}
 		}
@@ -101,11 +105,13 @@ public class Serializables {
 					try {
 						s.writeObject(val);
 					} catch (java.io.NotSerializableException ex) {
-						logio.error("Unable to serialize item: "+val);
+						logio.error("Unable to serialize item: {}", val);
 						throw ex;
 					}
 				} else if (val != null && debug) {
-					logio.debug("Skip not-serializable item: "+val);
+					if (logio.isDebugEnabled()) {
+						logio.debug("Skip not-serializable item: {}", val);
+					}
 				}
 			}
 		}
@@ -164,11 +170,13 @@ public class Serializables {
 					try {
 						s.writeObject(val);
 					} catch (java.io.NotSerializableException ex) {
-						logio.error("Unable to serialize item: "+val);
+						logio.error("Unable to serialize item: {}", val);
 						throw ex;
 					}
 				} else if (val != null && debug) {
-					logio.debug("Skip not-serializable item: "+val);
+					if (logio.isDebugEnabled()) {
+						logio.debug("Skip not-serializable item: {}", val);
+					}
 				}
 			}
 		}
@@ -182,8 +190,8 @@ public class Serializables {
 	throws IOException {
 		final boolean bser = val instanceof java.io.Serializable
 			|| val instanceof java.io.Externalizable;
-		s.writeObject(bser ? val: null);
+		s.writeObject(bser ? val : null);
 		if (!bser && val != null && logio.isDebugEnabled())
-			logio.debug("Skip not-serializable object: "+val);
+			logio.debug("Skip not-serializable object: {}", val);
 	}
 }

@@ -2,7 +2,7 @@
 
 
 	Purpose: Utilities for Exceptions
-	Description: 
+	Description:
 	History:
 	 2001/4/22, Tom M. Yeh: Created.
 
@@ -80,7 +80,8 @@ public class Exceptions {
 //					return ((javax.servlet.jsp.el.ELException)ex).getRootCause();
 				}
 			} catch (Throwable e2) {
-				if (log.isDebugEnabled()) log.debug("Ignored: unable to resolve " + ex.getClass());
+				if (log.isDebugEnabled())
+					log.debug("Ignored: unable to resolve {}", ex.getClass());
 			}
 		return t;
 	}
@@ -301,7 +302,9 @@ public class Exceptions {
 						if (t != null) ex = t;
 					}
 				} catch (Throwable e2) {
-					if (log.isDebugEnabled()) log.debug("Ignored: unable to resolve " + ex.getClass());
+					if (log.isDebugEnabled())
+						log.debug("Ignored: unable to resolve {}",
+								ex.getClass());
 				}
 //Remove the dependence on EL
 /*				try {

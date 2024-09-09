@@ -1,9 +1,9 @@
 /* DefinitionLoaders.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Mon Aug 29 21:57:08     2005, Created by tomyeh
 
@@ -205,7 +205,7 @@ public class DefinitionLoaders {
 
 			final URL url = res.url;
 			if (log.isDebugEnabled())
-				log.debug("Loading " + url);
+				log.debug("Loading {}", url);
 			try {
 				if (ConfigParser.checkVersion(url, res.document, true))
 					parseLang(res.document, locator, url, false);
@@ -253,7 +253,7 @@ public class DefinitionLoaders {
 			XMLResourcesLocator.Resource res = entry.getValue();
 			final URL url = res.url;
 			if (log.isDebugEnabled())
-				log.debug("Loading " + url);
+				log.debug("Loading {}", url);
 			try {
 				if (ConfigParser.checkVersion(url, res.document, true))
 					parseLang(res.document, locator, url, false);
@@ -315,7 +315,8 @@ public class DefinitionLoaders {
 		}
 		if (addon) {
 			if (log.isDebugEnabled())
-				log.debug("Addon language to " + lang + " from " + root.getElementValue("addon-name", true));
+				log.debug("Addon language to {} from {}", lang,
+						root.getElementValue("addon-name", true));
 			langdef = LanguageDefinition.lookup(lang);
 			device = Devices.getDevice(langdef.getDeviceType());
 
@@ -484,7 +485,9 @@ public class DefinitionLoaders {
 						log.warn("Component " + name + " ignored. Reason: unable to load " + clsnm + " due to "
 								+ ex.getClass().getName() + ": " + ex.getMessage()
 								+ (ex instanceof NoClassDefFoundError ? "" : "\n" + el.getLocator()));
-						log.debug("", ex);
+						if (log.isDebugEnabled()) {
+							log.debug("", ex);
+						}
 						//keep processing (Feature 2060367)
 					}
 				} else {
@@ -751,14 +754,15 @@ public class DefinitionLoaders {
 				final String uri = params.remove("uri");
 				final String prefix = params.remove("prefix");
 				if (!params.isEmpty())
-					log.warn("Ignored unknown attribute: " + params + ", " + pi.getLocator());
+					log.warn("Ignored unknown attribute: {}, {}", params,
+							pi.getLocator());
 				if (uri == null || prefix == null)
 					throw new UiException(message("Both uri and prefix attribute are required", pi));
 				if (log.isDebugEnabled())
-					log.debug("taglib: prefix=" + prefix + " uri=" + uri);
+					log.debug("taglib: prefix={} uri={}", prefix, uri);
 				langdef.addTaglib(new Taglib(prefix, uri));
 			} else {
-				log.warn("Unknown processing instruction: " + target);
+				log.warn("Unknown processing instruction: {}", target);
 			}
 		}
 	}

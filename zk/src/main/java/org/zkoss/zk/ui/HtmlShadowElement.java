@@ -814,7 +814,8 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 
 	public void beforeHostChildRemoved(Component child, int indexOfChild) {
 		if (log.isDebugEnabled()) {
-			log.debug("beforeHostChildRemoved " + child + ", in this shadow " + ShadowElementsCtrl.getCurrentInfo());
+			log.debug("beforeHostChildRemoved {}, in this shadow {}", child,
+					ShadowElementsCtrl.getCurrentInfo());
 		}
 
 		Object currentInfo = ShadowElementsCtrl.getCurrentInfo();
@@ -996,7 +997,8 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 
 	public void beforeHostParentChanged(Component parent) {
 		if (log.isDebugEnabled()) {
-			log.debug("beforeHostParentChanged " + parent + ", in this shadow " + ShadowElementsCtrl.getCurrentInfo());
+			log.debug("beforeHostParentChanged {}, in this shadow {}", parent,
+					ShadowElementsCtrl.getCurrentInfo());
 		}
 		if (parent == null) {
 			((ComponentCtrl) _host).removeShadowRoot(this);
@@ -1007,8 +1009,8 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 
 	public void beforeHostChildAdded(Component child, Component insertBefore, int indexOfInsertBefore) {
 		if (log.isDebugEnabled()) {
-			log.debug("beforeHostChildAdded " + child + ", " + insertBefore + ", in this shadow "
-					+ ShadowElementsCtrl.getCurrentInfo());
+			log.debug("beforeHostChildAdded {}, {}, in this shadow {}", child,
+					insertBefore, ShadowElementsCtrl.getCurrentInfo());
 		}
 
 		Object currentInfo = ShadowElementsCtrl.getCurrentInfo();
@@ -1308,7 +1310,8 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 
 	public void afterHostChildAdded(Component child, int indexOfChild) {
 		if (log.isDebugEnabled()) {
-			log.debug("afterHostChildAdded " + child + ", in this shadow " + ShadowElementsCtrl.getCurrentInfo());
+			log.debug("afterHostChildAdded {}, in this shadow {}", child,
+					ShadowElementsCtrl.getCurrentInfo());
 		}
 		Object currentInfo = ShadowElementsCtrl.getCurrentInfo();
 		if (currentInfo instanceof HtmlShadowElement) { // added as my child in our control code
@@ -1369,7 +1372,8 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 
 	public void afterHostChildRemoved(Component child) {
 		if (log.isDebugEnabled()) {
-			log.debug("afterHostChildRemoved " + child + ", in this shadow " + ShadowElementsCtrl.getCurrentInfo());
+			log.debug("afterHostChildRemoved {}, in this shadow {}", child,
+					ShadowElementsCtrl.getCurrentInfo());
 		}
 	}
 
