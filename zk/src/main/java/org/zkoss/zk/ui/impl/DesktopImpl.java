@@ -1,9 +1,9 @@
 /* DesktopImpl.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Wed Jun 22 09:50:57     2005, Created by tomyeh
 
@@ -1840,8 +1840,11 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 				ScheduleInfo<? extends Event> ifPresent = _schedInfos.getIfPresent(
 						key);
 				if (ifPresent != null) {
-					ifPresent.invoke();
-					_schedInfos.invalidate(key);
+					try {
+						ifPresent.invoke();
+					} finally {
+						_schedInfos.invalidate(key);
+					}
 				} else if (scheduledServerPush()) {
 					synchronized (_schedInfos) {
 						// just in case to avoid endless loop
