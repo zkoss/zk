@@ -1,9 +1,9 @@
 /* ForEachImpl.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Wed Mar  8 14:21:08     2006, Created by tomyeh
 
@@ -126,6 +126,31 @@ public class ForEachImpl implements ForEach {
 		return new ForEachImpl(evalr, page, expr, begin, end, step);
 	}
 
+	/** Returns an instance that represents the iterator for the
+	 * specified collection, or null if expr is null or empty.
+	 *
+	 * @param expr an EL expression that shall return a collection of objects.
+	 * @see #getInstance(EvaluatorRef, Component, ExValue[], ExValue, ExValue)
+	 */
+	public static ForEach getInstance(EvaluatorRef evalr, Component comp, String expr, String begin, String end) {
+		if (expr == null || expr.length() == 0)
+			return null;
+		return new ForEachImpl(evalr, comp, expr, begin, end);
+	}
+
+	/** Returns an instance that represents the iterator for the
+	 * specified collection, or null if expr is null or empty.
+	 *
+	 * @param expr an EL expression that shall return a collection of objects.
+	 * @since 3.0.0
+	 * @see #getInstance(EvaluatorRef, Page, ExValue[], ExValue, ExValue)
+	 */
+	public static ForEach getInstance(EvaluatorRef evalr, Page page, String expr, String begin, String end) {
+		if (expr == null || expr.length() == 0)
+			return null;
+		return new ForEachImpl(evalr, page, expr, begin, end);
+	}
+
 	/** Constructor.
 	 * In most cases, use {@link #getInstance(EvaluatorRef, Component, ExValue[], ExValue, ExValue, ExValue)}
 	 * instead of this constructor.
@@ -200,31 +225,6 @@ public class ForEachImpl implements ForEach {
 		_begin = begin;
 		_end = end;
 		_step = null;
-	}
-
-	/** Returns an instance that represents the iterator for the
-	 * specified collection, or null if expr is null or empty.
-	 *
-	 * @param expr an EL expression that shall return a collection of objects.
-	 * @see #getInstance(EvaluatorRef, Component, ExValue[], ExValue, ExValue)
-	 */
-	public static ForEach getInstance(EvaluatorRef evalr, Component comp, String expr, String begin, String end) {
-		if (expr == null || expr.length() == 0)
-			return null;
-		return new ForEachImpl(evalr, comp, expr, begin, end);
-	}
-
-	/** Returns an instance that represents the iterator for the
-	 * specified collection, or null if expr is null or empty.
-	 *
-	 * @param expr an EL expression that shall return a collection of objects.
-	 * @since 3.0.0
-	 * @see #getInstance(EvaluatorRef, Page, ExValue[], ExValue, ExValue)
-	 */
-	public static ForEach getInstance(EvaluatorRef evalr, Page page, String expr, String begin, String end) {
-		if (expr == null || expr.length() == 0)
-			return null;
-		return new ForEachImpl(evalr, page, expr, begin, end);
 	}
 
 	/** Constructor.

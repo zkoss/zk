@@ -159,21 +159,6 @@ public class DigestUtilsHelper {
 	}
 
 	/**
-	 * Used to build output as Hex
-	 */
-	private static final char[] DIGITS_LOWER;
-
-	/**
-	 * Used to build output as Hex
-	 */
-	private static final char[] DIGITS_UPPER;
-
-	static {
-		DIGITS_LOWER = new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
-		DIGITS_UPPER = new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
-	}
-
-	/**
 	 * Converts an array of bytes into an array of characters representing the hexadecimal values of each byte in order.
 	 * The returned array will be double the length of the passed array, as it takes two characters to represent any
 	 * given byte.
@@ -195,6 +180,21 @@ public class DigestUtilsHelper {
 		}
 
 		return out;
+	}
+
+	/**
+	 * Used to build output as Hex
+	 */
+	private static final char[] DIGITS_LOWER;
+
+	/**
+	 * Used to build output as Hex
+	 */
+	private static final char[] DIGITS_UPPER;
+
+	static {
+		DIGITS_LOWER = new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
+		DIGITS_UPPER = new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
 	}
 
 	/**

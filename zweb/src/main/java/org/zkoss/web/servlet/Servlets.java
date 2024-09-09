@@ -480,8 +480,6 @@ public class Servlets {
 		zk.put("browser", Collections.emptyMap()); //none matched
 	}
 
-	private static final String[] _ios = { "ipod", "iphone", "ipad" };
-
 	private static void browserInfo(Map<String, Object> zk, String name, double version) {
 		final Map<String, Object> bi = new HashMap<String, Object>(4);
 		bi.put("name", name);
@@ -489,6 +487,8 @@ public class Servlets {
 		zk.put("browser", bi);
 		zk.put(name, version);
 	}
+
+	private static final String[] _ios = { "ipod", "iphone", "ipad" };
 
 	private static double getVersion(Matcher m) {
 		return m.groupCount() < 2 ? 1/*ignore it*/ : getVersion(m.group(2));
@@ -1209,11 +1209,11 @@ public class Servlets {
 		public double getVersion();
 	}
 
-	/** Returns the normal path; that is, will elminate the double dots 
-	 * ".."(parent) and single dot "."(current) in the path as possible. e.g. 
+	/** Returns the normal path; that is, will elminate the double dots
+	 * ".."(parent) and single dot "."(current) in the path as possible. e.g.
 	 * /abc/../def would be normalized to /def; /abc/./def would be
 	 * normalized to /abc/def; /abc//def would be normalized to /abc/def.
-	 * <p>Note that if found no way to navigate the path, it is deemed as an illegal path. e.g. 
+	 * <p>Note that if found no way to navigate the path, it is deemed as an illegal path. e.g.
 	 * /../abc or /../../abc is deemed as illegal path since we don't
 	 * know how to continue doing the normalize.
 	 * @since 3.6.2

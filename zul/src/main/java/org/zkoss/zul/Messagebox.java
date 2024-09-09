@@ -1,9 +1,9 @@
 /* Messagebox.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Mon Jul 18 19:07:13     2005, Created by tomyeh
 
@@ -114,6 +114,8 @@ public class Messagebox {
 	 */
 	public static final String ON_CANCEL = Events.ON_CANCEL;
 
+	private static final Messagebox.Button[] DEFAULT_BUTTONS = new Messagebox.Button[] { Messagebox.Button.OK };
+
 	/** Shows a message box and returns what button is pressed.
 	 *
 	 * @param title the title. If null, {@link WebApp#getAppName} is used.
@@ -174,7 +176,7 @@ public class Messagebox {
 
 		if (params != null)
 			arg.putAll(params);
-		
+
 		final MessageboxDlg dlg = (MessageboxDlg) Executions.createComponents(_templ, desktop.getFirstPage(), null, arg)[0];
 		dlg.setEventListener(listener);
 		dlg.setButtons(buttons, btnLabels);
@@ -232,8 +234,6 @@ public class Messagebox {
 			Button focus, EventListener<ClickEvent> listener) {
 		return show(message, title, buttons, btnLabels, icon, focus, listener, null);
 	}
-
-	private static final Messagebox.Button[] DEFAULT_BUTTONS = new Messagebox.Button[] { Messagebox.Button.OK };
 
 	/** Shows a message box and returns what button is pressed.
 	 *
@@ -419,14 +419,14 @@ public class Messagebox {
 				toButtonListener(listener), null);
 		return res != null ? res.id : 0; // B60-ZK-946: NPE
 	}
-	
+
 	/** Shows a message box and returns what button is pressed.
 	 * A shortcut to show(message, null, OK, INFORMATION).
 	 */
 	public static int show(String message) {
 		return show(message, null, OK, INFORMATION, 0, null);
 	}
-	
+
 	/** Shows a message box by specifying a message code, and returns what
 	 * button is pressed.
 	 *
@@ -441,7 +441,7 @@ public class Messagebox {
 	public static int show(int messageCode, Object[] args, int titleCode, int buttons, String icon) {
 		return show(messageCode, args, titleCode, buttons, icon, 0, null);
 	}
-	
+
 	/** Shows a message box by specifying a message code, and returns what
 	 * button is pressed.
 	 *
@@ -461,7 +461,7 @@ public class Messagebox {
 	public static int show(int messageCode, Object[] args, int titleCode, int buttons, String icon, int focus) {
 		return show(messageCode, args, titleCode, buttons, icon, focus, null);
 	}
-	
+
 	/** Shows a message box by specifying a message code, and returns what
 	 * button is pressed.
 	 *
@@ -506,7 +506,7 @@ public class Messagebox {
 		return show(Messages.get(messageCode, args), titleCode > 0 ? Messages.get(titleCode) : null, buttons, icon,
 				focus, listener);
 	}
-	
+
 	/** Shows a message box by specifying a message code, and returns what
 	 * button is pressed.
 	 *
@@ -521,7 +521,7 @@ public class Messagebox {
 	public static int show(int messageCode, Object arg, int titleCode, int buttons, String icon) {
 		return show(messageCode, arg, titleCode, buttons, icon, 0, null);
 	}
-	
+
 	/** Shows a message box by specifying a message code, and returns what
 	 * button is pressed.
 	 *
@@ -541,7 +541,7 @@ public class Messagebox {
 	public static int show(int messageCode, Object arg, int titleCode, int buttons, String icon, int focus) {
 		return show(messageCode, arg, titleCode, buttons, icon, focus, null);
 	}
-	
+
 	/** Shows a message box by specifying a message code, and returns what
 	 * button is pressed.
 	 *
@@ -586,7 +586,7 @@ public class Messagebox {
 		return show(Messages.get(messageCode, arg), titleCode > 0 ? Messages.get(titleCode) : null, buttons, icon,
 				focus, listener);
 	}
-	
+
 	/** Shows a message box by specifying a message code, and returns what
 	 * button is pressed.
 	 *
@@ -596,7 +596,7 @@ public class Messagebox {
 	public static int show(int messageCode, int titleCode, int buttons, String icon) {
 		return show(messageCode, titleCode, buttons, icon, 0);
 	}
-	
+
 	/** Shows a message box by specifying a message code, and returns what
 	 * button is pressed.
 	 *
@@ -611,7 +611,7 @@ public class Messagebox {
 	public static int show(int messageCode, int titleCode, int buttons, String icon, int focus) {
 		return show(messageCode, titleCode, buttons, icon, focus, null);
 	}
-	
+
 	/** Shows a message box by specifying a message code, and returns what
 	 * button is pressed.
 	 *

@@ -1,9 +1,9 @@
 /** HtmlShadowElement.java.
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		12:47:42 PM Oct 22, 2014, Created by jumperchen
 
@@ -36,7 +36,7 @@ import org.zkoss.zk.ui.util.Callback;
 
 /**
  * A skeleton of shadow element that represents as a <i>shadow</i> tree.
- * 
+ *
  * @author jumperchen
  * @since 8.0.0
  */
@@ -285,7 +285,7 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 						prev = lastChild;
 					break;
 				default:
-					// prev is the lastShadowElement 
+					// prev is the lastShadowElement
 				}
 			}
 			_previousInsertion = prev;
@@ -411,7 +411,7 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 				Component nextInsertion = seChild.getNextInsertion();
 				setPrevInsertion(nextInsertion, previousInsertion);
 
-				// sync refChild's insertion				
+				// sync refChild's insertion
 				previousInsertion = seRefChild.getPreviousInsertion();
 				setPrevInsertion(seRefChild, seChild);
 				setPrevInsertion(seChild, previousInsertion);
@@ -443,7 +443,7 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 	// For example,
 	// 		A => {B => {0,1}, 2}
 	//		So A's range is 0~2, if B is removed.
-	// 		
+	//
 	//	public void onChildRemoved(org.zkoss.zk.ui.Component child) {
 	//		super.onChildRemoved(child);
 	//		HtmlShadowElement childSE = asShadow(child);
@@ -466,7 +466,7 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 	}
 
 	private Map<Component, Integer> fillUpIndexMap(Component first, Component last) {
-		if (first == null) // last will be null too 
+		if (first == null) // last will be null too
 			return getIndexMap(getShadowHostIfAny());
 		Component parent = first.getParent();
 		if (parent == null)
@@ -733,7 +733,7 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 	/**
 	 * Merge the host into the current shadow, unlike
 	 * {@link #setShadowHost(Component, Component)}
-	 * 
+	 *
 	 * @param host
 	 */
 	public boolean mergeToHost(Component host) {
@@ -820,7 +820,7 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 		Object currentInfo = ShadowElementsCtrl.getCurrentInfo();
 		if (currentInfo instanceof HtmlShadowElement) { // removed as my child in our control code
 			if (currentInfo == this) {
-				// do it at beginning. 
+				// do it at beginning.
 				adjustInsertionForRemove(this, child);
 
 				boolean isEdge = false;
@@ -1086,7 +1086,7 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 					// Update it when the following conditions:
 					// 1. se is the root tree, update it directly.
 					// 2. check if the old is not the first insertion of parent, that
-					// means still has some children in front of the se. 
+					// means still has some children in front of the se.
 					if (parentSe == null || parentSe._firstInsertion != old) {
 						se._previousInsertion = old.getPreviousSibling();
 					} else {
@@ -1112,7 +1112,7 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 					// Update it when the following conditions:
 					// 1. se is the root tree, update it directly.
 					// 2. check if the old is not the last insertion of parent, that
-					// means still has some children at the end of the se. 
+					// means still has some children at the end of the se.
 					if (parentSe == null || parentSe._lastInsertion != old) {
 						se._nextInsertion = old.getPreviousSibling();
 					} else {
@@ -1626,8 +1626,6 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 		return false;
 	}
 
-	protected Boolean _dynamicValue;
-
 	public boolean isDynamicValue() {
 		if (_dynamicValue == null) {
 			final ComponentCtrl ctrl = this;
@@ -1645,6 +1643,8 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 		}
 		return _dynamicValue == null ? Boolean.FALSE : _dynamicValue.booleanValue();
 	}
+
+	protected Boolean _dynamicValue;
 
 	/**
 	 * Sets whether the shadow element contains a dynamic value, if true means the
