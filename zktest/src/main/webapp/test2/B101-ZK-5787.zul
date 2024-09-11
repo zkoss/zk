@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B101-ZK-5787.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		2024/9/11, Created by jumperchen
+
+Copyright (C) 2024 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:ca="client/attribute">
+	<listbox width="350px" ca:aria-label="a listbox">
+		<listhead>
+			<listheader label="name" sort="auto"/>
+			<listheader label="gender"/>
+			<listheader label="phone"/>
+		</listhead>
+		<listitem>
+			<listcell label="Mary1"/>
+			<listcell label="FEMALE"/>
+			<listcell label="000000000"/>
+		</listitem>
+		<listitem>
+			<listcell label="Mary2"/>
+			<listcell label="FEMALE"/>
+		</listitem>
+		<listitem>
+			<listcell label="Mary3"/>
+			<listcell label="FEMALE"/>
+			<listcell label="000000000"/>
+		</listitem>
+		<listgroup ca:aria-label="Some group">
+			<listcell label="Assignee"/>
+		</listgroup>
+		<listitem>
+			<listcell label="Mary4"/>
+			<listcell label="FEMALE"/>
+		</listitem>
+		<listgroupfoot>
+			<listcell label="Foot1"/>
+			<listcell label="Foot2"/>
+		</listgroupfoot>
+		<listitem>
+			<listcell label="Mary5"/>
+			<listcell label="FEMALE"/>
+			<listcell label="000000000"/>
+		</listitem>
+		<listitem>
+			<listcell label="Mary6"/>
+			<listcell label="FEMALE"/>
+			<listcell label="000000000"/>
+		</listitem>
+		<listitem>
+			<listcell label="Mary7"/>
+			<listcell label="FEMALE"/>
+			<listcell label="000000000"/>
+		</listitem>
+		<listfoot>
+			<listfooter label="footer 1"/>
+			<listfooter label="footer 2"/>
+			<listfooter label="footer 3"/>
+		</listfoot>
+	</listbox>
+</zk>
