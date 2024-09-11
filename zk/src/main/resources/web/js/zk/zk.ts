@@ -295,10 +295,29 @@ function doLog(): void {
 	if (_logmsg) {
 		var console = document.getElementById('zk_log') as HTMLTextAreaElement;
 		if (!console) {
-			jq(document.body).append(/*safe*/
-'<div id="zk_logbox" class="z-log">'
-+ '<button class="z-button" onclick="jq(\'#zk_logbox\').remove()">X</button><br/>'
-+ '<textarea id="zk_log" rows="10"></textarea></div>');
+			const logBox = document.createElement('div'),
+				closeButton = document.createElement('button'),
+				lineBreak = document.createElement('br'),
+				textArea = document.createElement('textarea');
+
+			logBox.id = 'zk_logbox';
+			logBox.className = 'z-log';
+
+			closeButton.className = 'z-button';
+			closeButton.textContent = 'X';
+			closeButton.addEventListener('click', () => {
+				logBox.remove();
+			});
+
+			textArea.id = 'zk_log';
+			textArea.rows = 10;
+
+			logBox.appendChild(closeButton);
+			logBox.appendChild(lineBreak);
+			logBox.appendChild(textArea);
+
+			document.body.appendChild(logBox);
+
 			console = document.getElementById('zk_log') as HTMLTextAreaElement;
 		}
 		console.value += _logmsg;
@@ -2070,19 +2089,26 @@ _zk._Erbx = class _Erbx extends ZKObject { //used in HTML tags
 		super();
 		var id = 'zk_err',
 			$id = '#' + id,
-			click = _zk.mobile ? ' ontouchstart' : ' onclick',
+			click = _zk.mobile ? 'touchstart' : 'click',
 			// Use zUtl.encodeXML -- Bug 1463668: security
 			html = '<div class="z-error" id="' + id + '">'
 			+ '<div id="' + id + '-p">'
 			+ '<div class="errornumbers">' + (++_errcnt) + ' Errors</div>'
-			+ '<div class="button"' + click + '="zk._Erbx.remove()">'
+			+ '<div id="' + id + '-remove-btn" class="button">'
 			+ '<i class="z-icon-times"></i></div>'
-			+ '<div class="button"' + click + '="zk._Erbx.redraw()">'
+			+ '<div id="' + id + '-refresh-btn" class="button">'
 			+ '<i class="z-icon-refresh"></i></div></div>'
 			+ '<div class="messagecontent"><div class="messages">'
 			+ zUtl.encodeXML(msg, {multiline: true}) + '</div></div></div>';
 
 		jq(document.body).append(/*safe*/ html);
+		document.getElementById(id + '-remove-btn')?.addEventListener(click, () => {
+			_Erbx.remove();
+		});
+		document.getElementById(id + '-refresh-btn')?.addEventListener(click, () => {
+			_Erbx.redraw();
+		});
+
 		_erbx = this;
 		this.id = id;
 		try {
@@ -2179,7 +2205,7 @@ declare namespace _zk {
 
 	// ./drag
 	export let dragging: boolean;
-	
+
 	// ./widget
 	export let timeout: number;
 	export let groupingDenied: boolean;

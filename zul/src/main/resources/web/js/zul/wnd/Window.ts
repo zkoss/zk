@@ -175,8 +175,7 @@ function _doModal(wgt: zul.wnd.Window): void {
 			zIndex: wgt._zIndex as number,
 			visible: realVisible
 		});
-		var tag = 'button';
-		jq('#' + wgt.uuid + '-mask').append('<' + tag + ' id="' + wgt.uuid + '-mask-a" style="top:0;left:0" onclick="return false;" href="javascript:;" class="z-focus-a" aria-hidden="true" tabindex="-1"></' + tag + '>');
+		jq('#' + wgt.uuid + '-mask').append(/*safe*/ '<div id="' + /*safe*/ wgt.uuid + '-mask-a" style="top:0;left:0" class="z-focus-a" aria-hidden="true" tabindex="-1"></div>');
 		wgt._anchor = jq('#' + wgt.uuid + '-mask-a')[0];
 	}
 	if (realVisible)

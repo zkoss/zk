@@ -13,12 +13,10 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 function menupopup$mold$(out) {
-	var uuid = this.uuid,
-		tags = 'button';
-	out.push('<div', this.domAttrs_(), ' role="menu"><', tags, ' id="', uuid,
-		'-a" tabindex="-1" onclick="return false;" href="javascript:;"',
-		' class="z-focus-a" aria-hidden="true"></',
-		tags, '><div class="', this.$s('separator'), '"></div><ul role="none" class="', this.$s('content'), '" id="', uuid, '-cave">');
+	var uuid = this.uuid;
+	out.push('<div', this.domAttrs_(), ' role="menu"><div id="', uuid,
+		'-a" tabindex="-1" class="z-focus-a" aria-hidden="true"></div><div class="',
+		this.$s('separator'), '"></div><ul role="none" class="', this.$s('content'), '" id="', uuid, '-cave">');
 
 	for (var w = this.firstChild; w; w = w.nextSibling)
 		w.redraw(out);

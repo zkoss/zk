@@ -18,17 +18,15 @@ function calendar$mold$(out) {
 	var renderer = zul.db.Renderer,
 		uuid = this.uuid,
 		view = this._view,
-		tagnm = 'button',
 		localizedSymbols = this.getLocalizedSymbols(),
 		icon = this.$s('icon'),
 		outRangeL = this.isOutOfRange(true) ? ' disabled="disabled" aria-disabled="true"' : '',
 		outRangeR = this.isOutOfRange() ? ' disabled="disabled" aria-disabled="true"' : '',
 		showTodayLink = this._showTodayLink;
-	
+
 	// header
-	out.push('<div id="', uuid, '"', this.domAttrs_(), '><', tagnm, ' id="', uuid,
-			'-a" tabindex="-1" onclick="return false;" href="javascript:;" class="z-focus-a"></',
-			tagnm, '><div class="',
+	out.push('<div id="', uuid, '"', this.domAttrs_(), '><div id="', uuid,
+			'-a" tabindex="-1" class="z-focus-a"></div><div class="',
 			this.$s('header'), '"><a id="', uuid, '-left" href="javascript:;" class="', /*safe*/ icon, ' ',
 			this.$s('left'), '"', outRangeL, '><i class="z-icon-angle-left" aria-label="', msgzul.PREV, '"></i></a>',
 			'<a id="', uuid, '-title" href="javascript:;" class="', this.$s('title'), '">');
@@ -37,7 +35,7 @@ function calendar$mold$(out) {
 
 	out.push('</a><a id="', uuid, '-right" href="javascript:;" class="', /*safe*/ icon, ' ',
 			this.$s('right'), '"', outRangeR, '><i class="z-icon-angle-right" aria-label="', msgzul.NEXT, '"></i></a></div>');
-	
+
 	switch (view) {
 	case 'day':
 		renderer.dayView(this, out, localizedSymbols);
@@ -52,13 +50,13 @@ function calendar$mold$(out) {
 		renderer.decadeView(this, out, localizedSymbols);
 		break;
 	}
-	
+
 	if (showTodayLink) {
 		out.push('<div class="', this.$s('header'), ' ', this.$s('today'), '"><a id="', uuid, '-today" href="javascript:;" class="',
 				this.$s('title'), '">');
 		renderer.todayView(this, out, localizedSymbols);
 		out.push('</a></div>');
 	}
-	
+
 	out.push('</div>');
 }

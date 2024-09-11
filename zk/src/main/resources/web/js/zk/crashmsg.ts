@@ -1,7 +1,7 @@
 /* crashmsg.ts
 
 	Purpose: To remove "processing" mask and animation if the execution time exceeds the parameterized period
-		
+
 	Description:
 	zkErrorCode has 5 value:
 	* 1 -> before mounting zk
@@ -12,7 +12,7 @@
 	Customization in zk.xml:
 	* init crash page layout by defining window.zkShowCrashMessage function
 	* init crash timeout by giving a number(sec)
-		
+
 	History:
 		Wed, Nov 12, 2014  5:10:36 PM, Created by Chunfu
 
@@ -49,7 +49,7 @@ window.zkInitCrashTimer = setTimeout(function () {
 			else
 				zkErrorCode = 5;
 		}
-		
+
 		if (!window.zkShowCrashMessage) {
 			window.zkShowCrashMessage = function () {
 				var styleHTML = '<style> a:visited {color: white;} </style>',
@@ -62,7 +62,7 @@ window.zkInitCrashTimer = setTimeout(function () {
 					copyrightHTML = '<div style="text-align: right; margin-top: -18px">\
 						<span style="font-size: 10px;">powered by </span>\
 						<span style="font-size: 14px;"><a href="http://www.zkoss.org/">ZK</a></span></div>',
-					btnHTML = '<button style="margin-top: 10px" onclick="location.reload();">Reload page</button>';
+					btnHTML = '<button id="z-crash-button" style="margin-top: 10px">Reload page</button>';
 				switch (zkErrorCode) {
 					case 1:
 						msgHTML = '<p>Error code 1: ZK error, before mounting. </p>' + msgHTML;
@@ -84,6 +84,9 @@ window.zkInitCrashTimer = setTimeout(function () {
 				body.style.background = 'rgb(35,48,64)';
 				// eslint-disable-next-line @microsoft/sdl/no-inner-html
 				body.innerHTML = divHTML;
+				document.getElementById('z-crash-button')?.addEventListener('click', () => {
+					location.reload();
+				});
 			};
 		}
 		window.zkShowCrashMessage(zkErrorCode);
