@@ -739,8 +739,8 @@ export abstract class HeaderWidget extends zul.LabelImageWidget<HTMLTableCellEle
 			((!this.firstChild && label == '') ? '&nbsp;' : /*safe*/ label)); //ZK-805 MenuPopup without columns issue
 
 		if (this.parent!._menupopup && this.parent!._menupopup != 'none')
-			out.push('<a id="', uuidHTML, '-btn" href="javascript:;" class="',
-				this.$s('button'), '" tabindex="-1" aria-hidden="true"><i class="z-icon-caret-down"></i></a>');
+			out.push('<div id="', uuidHTML, '-btn" class="',
+				this.$s('button'), '" tabindex="-1" aria-hidden="true"><i class="z-icon-caret-down"></i></div>');
 
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);

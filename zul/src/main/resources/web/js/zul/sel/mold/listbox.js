@@ -18,8 +18,7 @@ function listbox$mold$(out) {
 		innerWidth = zUtl.encodeXML(this.getInnerWidth()),
 		wdAttr = innerWidth === '100%' ? ' width="100%"' : '',
 		wdStyle = innerWidth !== '100%' ? 'width:' + innerWidth : '',
-		inPaging = this.inPagingMold(), pgpos,
-		tag = zk.ie < 11 ? 'a' : 'button';
+		inPaging = this.inPagingMold(), pgpos;
 
 	out.push('<div', this.domAttrs_({tabindex: 1}), '>');//tabindex attribute will be set in the button
 
@@ -80,12 +79,12 @@ function listbox$mold$(out) {
 	if (this.domPad_ && !inPaging)
 		this.domPad_(out, '-bpad');
 
-	out.push('<', tag, ' id="', uuid, '-a" style="top:', jq.px(this._anchorTop), ';left:', jq.px(this._anchorLeft),
-		'" onclick="return false;" href="javascript:;" class="z-focus-a"');
-	var tabindex = this._tabindex; // Feature ZK-2531
+	out.push('<div id="', uuid, '-a" style="top:', jq.px(this._anchorTop), ';left:', jq.px(this._anchorLeft),
+		'" class="z-focus-a"');
+	var tabindex = this._tabindex ?? -1; // Feature ZK-2531
 	if (tabindex != undefined)
 		out.push(' tabindex="' + /*safe*/ tabindex + '"');
-	out.push('></', tag, '>', '</div>');
+	out.push('></div></div>');
 
 	if (this._nativebar && this.frozen) {
 		out.push('<div id="', uuid, '-frozen" class="', this.$s('frozen'), '">');
