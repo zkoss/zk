@@ -14,6 +14,7 @@ ZK 10.1.0
   ZK-5696: Nested Shadow element fails in ZK 10
   ZK-5703: Debug messages shouldn't be created if debug is disabled, may cause side effects
   ZK-5716: Errorbox contains inline script
+  ZK-5787: aria-hidden elements do not contain focusable elements
 
 * Upgrade Notes
   + Remove Htmls.encodeJavaScript(), Strings.encodeJavaScript(), Strings.escape() with Strings.ESCAPE_JAVASCRIPT, and replace them with OWASP Java Encoder APIs instead.
