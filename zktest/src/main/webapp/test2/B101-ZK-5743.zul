@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B101-ZK-5743.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		2024/9/13, Created by jumperchen
+
+Copyright (C) 2024 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div>
+		<label multiline="true">
+			Clicking menuitem fires 2 onClick events in mobile browser (if disabled debug-js in zk.xml)
+		</label>
+		<menubar autodrop="true">
+			<menuitem onClick="Clients.log(event.toString())" iconSclass="z-icon-cog" label="menuitem1"/>
+		</menubar>
+	</div>
+</zk>
