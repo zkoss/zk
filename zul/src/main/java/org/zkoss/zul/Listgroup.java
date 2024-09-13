@@ -1,9 +1,9 @@
 /* Listgroup.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Apr 23, 2008 10:34:35 AM , Created by jumperchen
 
@@ -28,12 +28,12 @@ import org.zkoss.zul.impl.XulElement;
 /**
  * Adds the ability for single level grouping to the Listbox.
  * <p>Available in ZK PE and EE.
- * 
+ *
  * <p>Event:
  * <ol>
  * 	<li>onOpen is sent when this listgroup is opened or closed by user.</li>
  * </ol>
- * 
+ *
  * <p>Default {@link #getZclass}: z-listgroup (since 5.0.0)
  * @author jumperchen
  * @since 3.5.0
@@ -80,7 +80,7 @@ public class Listgroup extends Listitem {
 		};
 	}
 
-	/** 
+	/**
 	 * Returns a list of all {@link Listitem} are grouped by this listgroup.
 	 */
 	public List<Listitem> getItems() {
@@ -216,8 +216,16 @@ public class Listgroup extends Listitem {
 				listbox.addVisibleItemCount(_open ? getVisibleItemCount() : -getVisibleItemCount());
 				final ListModel model = listbox.getModel();
 				if (model instanceof GroupsListModel) {
+					// Listbox support ROD but Model doesn't support.
+					// So, we have to update the open group manually.
 					int gindex = listbox.getGroupIndex(getIndex());
-					GroupsModel gmodel = ((GroupsListModel) model).getGroupsModel();
+					GroupsListModel groupsListModel = (GroupsListModel) model;
+					GroupsModel gmodel = groupsListModel.getGroupsModel();
+					int offset = listbox.getDataLoader().getOffset();
+					if (offset > 0) {
+						List groupsInfos = groupsListModel.getGroupsInfos();
+						gindex += getGroupIndex(groupsInfos, offset) + 1;
+					}
 					if (_open)
 						gmodel.addOpenGroup(gindex);
 					else
@@ -226,6 +234,21 @@ public class Listgroup extends Listitem {
 			}
 		} else
 			super.service(request, everError);
+	}
+
+	private static int getGroupIndex(List<int[]> groupInfo, int index) {
+		int j = 0, gindex = -1;
+		int[] g = null;
+		for (Iterator<int[]> it = groupInfo.iterator(); it.hasNext(); ++j) {
+			g = it.next();
+			if (index == g[0])
+				gindex = j;
+			else if (index < g[0])
+				break;
+		}
+		return gindex != -1 ? gindex
+				: g != null && index < (g[0] + g[1]) ? (j - 1)
+						: g != null && index == (g[0] + g[1]) && g[2] == -1 ? (j - 1) : gindex;
 	}
 
 	/**

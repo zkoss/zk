@@ -16,6 +16,7 @@ ZK 10.1.0
   ZK-5716: Errorbox contains inline script
   ZK-5787: aria-hidden elements do not contain focusable elements
   ZK-5743: clicking menuitem fires 2 onClick events in mobile browser
+  ZK-5594: ListboxDataLoader doGroupsDataChange finds incorrect offset, causes class cast exception
 
 * Upgrade Notes
   + Remove Htmls.encodeJavaScript(), Strings.encodeJavaScript(), Strings.escape() with Strings.ESCAPE_JAVASCRIPT, and replace them with OWASP Java Encoder APIs instead.

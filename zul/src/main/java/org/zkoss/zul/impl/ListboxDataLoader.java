@@ -1,9 +1,9 @@
 /* ListboxDataLoader.java
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Nov 23, 2009 2:53:30 PM, Created by henrichen
 }}IS_NOTE
@@ -101,7 +101,7 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 			GroupsListModel groupsListModel = ((GroupsListModel) _listbox.getModel());
 			int groupIndex = event.getGroupIndex();
 			int offset = groupsListModel.getGroupOffset(groupIndex);
-			((Listgroup) _listbox.getItems().get(offset)).setOpen(event.getModel().isGroupOpened(groupIndex));
+			((Listgroup) _listbox.getItems().get(offset - getOffset())).setOpen(event.getModel().isGroupOpened(groupIndex));
 		}
 	}
 
@@ -158,7 +158,7 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 			if (min >= 0)
 				max = min + cnt - 1;
 			else if (max < 0)
-				max = cnt - 1; //0 ~ cnt - 1			
+				max = cnt - 1; //0 ~ cnt - 1
 			if (max > oldsz - 1)
 				max = oldsz - 1;
 
@@ -185,8 +185,8 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 
 		default: //CONTENTS_CHANGED
 			syncModel(min, max < 0 ? -1 : (max - min + 1));
-			//TonyQ: B50-ZK-897 , listfoot disappear after clicking run button , 
-			// 		   		sync logic with GridDataLoader 
+			//TonyQ: B50-ZK-897 , listfoot disappear after clicking run button ,
+			// 		   		sync logic with GridDataLoader
 		}
 	}
 
