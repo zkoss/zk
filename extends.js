@@ -1,9 +1,9 @@
 /* extends.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		1:02 PM 2023/8/21, Created by jumperchen
 
@@ -18,8 +18,9 @@ var extendStatics = function(d, b) {
 
 // refer tslib#__extends
 export default function (d, b) {
+	const len = Object.keys(d.prototype).length; // Potix: Jumper Chen adds to support `$supers(foo.Bar, 'bind_')`
 	extendStatics(d, b);
 	function __() { this.constructor = d; }
 	d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	d.prototype._$super = d.name == '$subclass$' && b.prototype._$super ? b.prototype._$super : b.prototype; // Potix: Jumper Chen adds to support `$supers(foo.Bar, 'bind_')`
+	d.prototype._$super = len === 0 && b.prototype._$super ? b.prototype._$super : b.prototype; // Potix: Jumper Chen adds to support `$supers(foo.Bar, 'bind_')`
 }
