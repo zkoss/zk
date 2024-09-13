@@ -1,9 +1,9 @@
 /* GridDataLoader.java
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Oct 29, 2009 10:44:57 AM, Created by henrichen
 }}IS_NOTE
@@ -87,7 +87,7 @@ public class GridDataLoader implements DataLoader, Cropper {
 			GroupsListModel groupsListModel = ((GroupsListModel) _grid.getModel());
 			int groupIndex = event.getGroupIndex();
 			int offset = groupsListModel.getGroupOffset(groupIndex);
-			((Group) _grid.getRows().getChildren().get(offset)).setOpen(event.getModel().isGroupOpened(groupIndex));
+			((Group) _grid.getRows().getChildren().get(offset - getOffset())).setOpen(event.getModel().isGroupOpened(groupIndex));
 		}
 	}
 
@@ -153,7 +153,7 @@ public class GridDataLoader implements DataLoader, Cropper {
 			if (min >= 0)
 				max = min + cnt - 1;
 			else if (max < 0)
-				max = cnt - 1; //0 ~ cnt - 1			
+				max = cnt - 1; //0 ~ cnt - 1
 			if (max > oldsz - 1)
 				max = oldsz - 1;
 

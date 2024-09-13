@@ -1,9 +1,9 @@
 /* Group.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Apr 25, 2008 4:15:11 PM , Created by jumperchen
 
@@ -31,14 +31,14 @@ import org.zkoss.zul.impl.XulElement;
 /**
  * Adds the ability for single level grouping to the Grid.
  * <p>Available in ZK PE and EE.
- * 
+ *
  * <p>Event:
  * <ol>
  * 	<li>onOpen is sent when this listgroup is opened or closed by user.</li>
  * </ol>
- * 
+ *
  * <p>Default {@link #getZclass}: z-group.
- * 
+ *
  * <p>Note: All the child of this component are automatically applied
  * the group-cell CSS, if you don't want this CSS, you can invoke the {@link Label#setSclass(String)}
  * after the child added.
@@ -94,7 +94,7 @@ public class Group extends Row {
 		};
 	}
 
-	/** 
+	/**
 	 * Returns a list of all {@link Row} are grouped by this group.
 	 */
 	public List<Row> getItems() {
@@ -171,8 +171,8 @@ public class Group extends Row {
 	}
 
 	/** Sets whether this container is open.
-	 * 
-	 * <p>Note: if you use a model as the data to render, don't use setOpen(). It'll tangle the lifecycle with model  
+	 *
+	 * <p>Note: if you use a model as the data to render, don't use setOpen(). It'll tangle the lifecycle with model
 	 * You should control the model directly.
 	 * For example, you can use setClose() of GroupsModelArray
 	 */
@@ -283,8 +283,14 @@ public class Group extends Row {
 				if (grid != null) {
 					final ListModel model = grid.getModel();
 					if (model instanceof GroupsListModel) {
-						int gindex = rows.getGroupIndex(getIndex());
-						GroupsModel gmodel = ((GroupsListModel) model).getGroupsModel();
+						int gindex = rows.getGroupIndex(grid.getDataLoader().getOffset() + getIndex());
+						GroupsListModel groupsListModel = (GroupsListModel) model;
+						GroupsModel gmodel = groupsListModel.getGroupsModel();
+						int offset = grid.getDataLoader().getOffset();
+						if (offset > 0) {
+							List groupsInfos = groupsListModel.getGroupsInfos();
+							gindex += getGroupIndex(groupsInfos, offset) + 1;
+						}
 						if (_open)
 							gmodel.addOpenGroup(gindex);
 						else
@@ -294,6 +300,21 @@ public class Group extends Row {
 			}
 		} else
 			super.service(request, everError);
+	}
+
+	private static int getGroupIndex(List<int[]> groupInfo, int index) {
+		int j = 0, gindex = -1;
+		int[] g = null;
+		for (Iterator<int[]> it = groupInfo.iterator(); it.hasNext(); ++j) {
+			g = it.next();
+			if (index == g[0])
+				gindex = j;
+			else if (index < g[0])
+				break;
+		}
+		return gindex != -1 ? gindex
+				: g != null && index < (g[0] + g[1]) ? (j - 1)
+						: g != null && index == (g[0] + g[1]) && g[2] == -1 ? (j - 1) : gindex;
 	}
 
 	/**
