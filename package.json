@@ -60,6 +60,7 @@
     "minimist": "^1.2.8",
     "postcss": "^8.4.33",
     "resolve-options": "^2.0.0",
+    "terser-webpack-plugin": "^5.3.10",
     "ts-loader": "^9.5.1",
     "tslib": "^2.6.2",
     "typedoc": "^0.25.7",

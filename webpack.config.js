@@ -3,6 +3,7 @@ const path = require('path');
 const webpack = require('webpack');
 const tslib = require('tslib');
 const baseDir = path.resolve(__dirname)
+const TerserPlugin = require("terser-webpack-plugin");
 
 /** @type { import('webpack').Configuration } */
 module.exports = {
@@ -36,6 +37,15 @@ module.exports = {
 	externals: {
 		'jquery': 'jq', // for jquery.transit.js
 		'moment': 'zk.mm', // for moment.js
+	},
+	optimization: {
+		minimizer: [
+			new TerserPlugin({
+				terserOptions: {
+					keep_fnames: true,
+				},
+			}),
+		],
 	},
 	plugins: [
 		new webpack.IgnorePlugin({
