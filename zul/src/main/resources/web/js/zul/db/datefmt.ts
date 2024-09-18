@@ -267,6 +267,8 @@ var DateFmt = {
 				era = eras[eraKey];
 		}
 
+		fmt = fmt.replace(/'.*?'/g, ' '); //ZK-5475 remove any string enclosed by single quotes
+
 		var refDate = refval._moment.toDate(),
 			localeDateTimeFormat = new Intl.DateTimeFormat(localizedSymbols.LAN_TAG, { year: 'numeric' }),
 			eraName = localizedSymbols.ERA || (eraKey ? eraKey : this.getEraName(refDate, localizedSymbols, localeDateTimeFormat)),
