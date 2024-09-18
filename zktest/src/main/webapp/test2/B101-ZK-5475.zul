@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B101-ZK-5475.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		2024/9/18, Created by jumperchen
+
+Copyright (C) 2024 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. The datebox should show the date "13 de junho de 2024 00:00:00".
+		2. Please change "00:00:00" to "00:00:01" and then blur the datebox.
+		3. If you see the date "13 de junho de 2024 00:00:01" in the datebox, the test is OK. Otherwise, any error happens it's a bug.
+	</label>
+	<datebox cols="30" format="d 'de' MMMM y HH:mm:ss" onCreate='self.valueInLocalDate = java.time.LocalDate.parse("2024-06-13")' locale="pt" />
+</zk>
+
