@@ -17,6 +17,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.impl;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -238,6 +239,20 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 		// ZK-5435
 		if (_cleaner != null) {
 			_cleaner.cancel();
+		}
+	}
+
+	public List<Desktop> getAllDesktops() {
+		final boolean old = _desktops.disableExpunge(true);
+
+		try {
+			ArrayList<Desktop> desktops = null;
+			synchronized (_desktops) {
+				desktops = new ArrayList<Desktop>(_desktops.values());
+			}
+			return desktops;
+		} finally {
+			_desktops.disableExpunge(old);
 		}
 	}
 
