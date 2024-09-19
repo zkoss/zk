@@ -98,6 +98,7 @@ import org.zkoss.zk.ui.sys.AbortingReason;
 import org.zkoss.zk.ui.sys.Attributes;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
+import org.zkoss.zk.ui.sys.DesktopCache;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.EventProcessingThread;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
@@ -2123,8 +2124,26 @@ public class UiEngineImpl implements UiEngine {
 		}
 
 		final SessionCtrl sessCtrl = (SessionCtrl) desktop.getSession();
-		if (sessCtrl.isInvalidated())
-			sessCtrl.invalidateNow();
+
+		if (sessCtrl.isInvalidated()) {
+
+			// Fix ZK-3729, only invalidate if there is no working desktop in the session.
+			DesktopCache desktopCache = sessCtrl.getDesktopCache();
+			boolean hasWorkingDesktop = false;
+			if (desktopCache != null) {
+				List<Desktop> allDesktops = desktopCache.getAllDesktops();
+
+				for (Desktop d : allDesktops) {
+					if (d != desktop && d.getExecution() != null) {
+						hasWorkingDesktop = true;
+						break;
+					}
+				}
+			}
+
+			if (!hasWorkingDesktop)
+				sessCtrl.invalidateNow();
+		}
 	}
 
 	/** Re-activates for another execution. It is callable only for

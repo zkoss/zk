@@ -1,9 +1,9 @@
 /* DesktopCache.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Tue Apr 18 10:38:22     2006, Created by tomyeh
 
@@ -15,6 +15,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 */
 package org.zkoss.zk.ui.sys;
+
+import java.util.List;
 
 import org.zkoss.zk.ui.ComponentNotFoundException;
 import org.zkoss.zk.ui.Desktop;
@@ -65,4 +67,10 @@ public interface DesktopCache {
 	 * {@link DesktopCacheProvider}.
 	 */
 	public void stop();
+
+	/** Returns all the desktops in this cache.
+	 * It is used only internally.
+	 * @since 10.1.0
+	 */
+	public List<Desktop> getAllDesktops();
 }
