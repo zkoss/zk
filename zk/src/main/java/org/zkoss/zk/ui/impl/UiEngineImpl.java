@@ -63,6 +63,7 @@ import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Richlet;
 import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.SuspendNotAllowedException;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WebApp;
@@ -709,13 +710,14 @@ public class UiEngineImpl implements UiEngine {
 			return new DefaultExtension();
 		}
 	}
+
 	private Extension getExtension() {
 		return ExtensionHolder.INSTANCE;
 	}
 
 	private static final Event nextEvent(UiVisualizer uv) {
 		final Event evt = ((ExecutionCtrl) uv.getExecution()).getNextEvent();
-		return evt != null && !uv.isAborting() ? evt : null;
+		return evt != null && !uv.isAborting()  && !((SessionCtrl) Sessions.getCurrent()).isInvalidated() ? evt : null;
 	}
 
 	/** Cycle 1:
