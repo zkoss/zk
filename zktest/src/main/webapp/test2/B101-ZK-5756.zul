@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B101-ZK-5756.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		2024/9/19, Created by jumperchen
+
+Copyright (C) 2024 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native" xmlns="http://www.zkoss.org/2005/zul">
+	<zscript><![CDATA[
+public class NavigationModel {
+    private String contentUrl = "B101-ZK-5756-a.zul";
+    public String getContentUrl() {
+        return contentUrl;
+    }
+    public void setContentUrl(String contentUrl) {
+        this.contentUrl = contentUrl;
+    }
+}
+
+NavigationModel navigationModel = new NavigationModel();
+
+public void toA(){
+    navigationModel.setContentUrl("B101-ZK-5756-a.zul");
+    BindUtils.postNotifyChange(navigationModel, "contentUrl");
+}
+public void toB(){
+    navigationModel.setContentUrl("B101-ZK-5756-b.zul");
+    BindUtils.postNotifyChange(navigationModel, "contentUrl");
+}
+]]></zscript>
+	<div apply="org.zkoss.bind.BindComposer">
+
+		<div sclass="sidebar">
+
+			<radiogroup>
+				<radio id="r1" label="page a" onCheck="toA()"/>
+				<radio id="r2" label="page b" onCheck="toB()"/>
+			</radiogroup>
+		</div>
+		<apply templateURI="@load(navigationModel.contentUrl)"/>
+	</div>
+</zk>

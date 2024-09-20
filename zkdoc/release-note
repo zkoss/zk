@@ -20,6 +20,8 @@ ZK 10.1.0
   ZK-5475: select a date with time produces an invalid result under locale pt
   ZK-3729: getDesktop() sometimes returns NULL causing NPE
   ZK-5707: avoid invoking an event listener after a session expired
+  ZK-5707: avoid invoking a event listener after a session expired
+  ZK-5756: a MatchMedia request causes java.lang.IllegalArgumentException
 
 * Upgrade Notes
   + Remove Htmls.encodeJavaScript(), Strings.encodeJavaScript(), Strings.escape() with Strings.ESCAPE_JAVASCRIPT, and replace them with OWASP Java Encoder APIs instead.

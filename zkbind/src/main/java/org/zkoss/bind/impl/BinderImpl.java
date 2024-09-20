@@ -1727,7 +1727,7 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 		private static final long serialVersionUID = 1L;
 
 		public void onEvent(Event event) throws Exception {
-			if (_validationMessages != null) {
+			if (_validationMessages != null && _rootComp.getDesktop() != null) {
 				Set<Property> notify = new HashSet<Property>();
 				notify.add(new PropertyImpl(_validationMessages, ".", null));
 				fireNotifyChanges(notify);
@@ -2680,10 +2680,12 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 
 		@SuppressWarnings("unchecked")
 		public void onEvent(Event event) throws Exception {
-			Object[] data = (Object[]) event.getData();
-			String command = (String) data[0];
-			Map<String, Object> args = (Map<String, Object>) data[1];
-			sendCommand(command, args);
+			if (_rootComp.getDesktop() != null) {
+				Object[] data = (Object[]) event.getData();
+				String command = (String) data[0];
+				Map<String, Object> args = (Map<String, Object>) data[1];
+				sendCommand(command, args);
+			}
 		}
 	}
 
