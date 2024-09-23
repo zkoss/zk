@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B101-ZK-5455.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		2024/9/20, Created by jumperchen
+
+Copyright (C) 2024 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<button id="btn" label="Mouseover me if no error, the bug has fixed" tooltip="pp" />
+	<popup id="pp" onOpen="if (event.open)btn.detach(); Clients.resize(pp)">Test</popup>
+</zk>
