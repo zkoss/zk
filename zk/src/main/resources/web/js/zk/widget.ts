@@ -3912,6 +3912,11 @@ new zul.wnd.Window({
 			});
 		}
 
+		// For ZK-5455, we provide a pair of onBindNow and onBindNow event.
+		if (this.isListen('onBindNow')) {
+			this.fire('onBindNow');
+		}
+
 		if (this.isListen('onAfterSize')) //Feature ZK-1672
 			zWatch.listen({onSize: this});
 
@@ -3993,6 +3998,11 @@ new zul.wnd.Window({
 				if (!self.desktop) //might be bound
 					self.fire('onUnbind');
 			});
+		}
+
+		// Fix ZK-5455, unlike onUnbind, this cannot be async calling.
+		if (this.isListen('onUnbindNow')) {
+			this.fire('onUnbindNow');
 		}
 
 		for (var nm in this.effects_) {

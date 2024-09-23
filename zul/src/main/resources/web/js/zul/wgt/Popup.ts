@@ -140,6 +140,7 @@ export class Popup extends zul.Widget {
 	 */
 	open(ref?: Ref, offset?: zk.Offset, position?: string, opts?: PopupOptions): void {
 		this._fakeParent = zk.$(ref);
+		this._fakeParent!.listen({'onUnbindNow': this.proxy(this._fakeParentOnUnbind)});
 		var posInfo = this._posInfo(ref, offset, position),
 			node = this.$n(),
 			$n = jq(node);
@@ -370,6 +371,9 @@ export class Popup extends zul.Widget {
 		// remove visible flag
 		if (!opts || !opts.keepVisible) {
 			this._keepVisible = false;
+			if (this._fakeParent) {
+				this._fakeParent.unlisten({'onUnbindNow': this.proxy(this._fakeParentOnUnbind)});
+			}
 			this._fakeParent = undefined;
 		}
 	}
@@ -417,7 +421,13 @@ export class Popup extends zul.Widget {
 		}
 		this._doFloatUp(ctl);
 	}
-
+	/** @internal */
+	_fakeParentOnUnbind(): void {
+		if (this._fakeParent) {
+			this._fakeParent.unlisten({'onUnbindNow': this.proxy(this._fakeParentOnUnbind)});
+		}
+		this._fakeParent = undefined;
+	}
 	/** @internal */
 	_doFloatUp(ctl: zk.ZWatchController): void {
 		if (!this.isVisible())
