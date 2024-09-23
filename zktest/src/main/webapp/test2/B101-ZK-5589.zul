@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B101-ZK-5589.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		2024/9/23, Created by jumperchen
+
+Copyright (C) 2024 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. run the zul in iceblue theme.
+		2. the checkmark of a checkbox inside a caption should not be shifted unexpectedly.
+	</label>
+<groupbox width="300px" >
+	<caption>
+		<checkbox id="cb" checked="true" />
+		Enable Backups
+	</caption>
+</groupbox>
+</zk>

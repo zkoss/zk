@@ -22,6 +22,7 @@ ZK 10.1.0
   ZK-5707: avoid invoking an event listener after a session expired
   ZK-5707: avoid invoking a event listener after a session expired
   ZK-5756: a MatchMedia request causes java.lang.IllegalArgumentException
+  ZK-5589: a checkmark of a checkbox inside a caption is shifted unexpectedly
 
 * Upgrade Notes
   + Remove Htmls.encodeJavaScript(), Strings.encodeJavaScript(), Strings.escape() with Strings.ESCAPE_JAVASCRIPT, and replace them with OWASP Java Encoder APIs instead.
