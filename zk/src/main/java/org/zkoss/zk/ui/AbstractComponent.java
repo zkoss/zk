@@ -3367,6 +3367,12 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 
 	//Cloneable//
 	public Object clone() {
+		// remove first.
+		Collection<Callback> callbacks = new ArrayList<>(getCallback(AFTER_CLONED));
+		for (Callback callback : new ArrayList<Callback>(callbacks)) {
+			removeCallback(AFTER_CLONED, callback);
+		}
+
 		final AbstractComponent clone;
 		try {
 			clone = (AbstractComponent) super.clone();
@@ -3395,6 +3401,11 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 		//4. init AuxInfo
 		if (_auxinf != null)
 			_auxinf.initClone(clone, clone._auxinf);
+
+		// invoke after cloned.
+		for (Callback callback : new ArrayList<Callback>(callbacks)) {
+			callback.call(clone);
+		}
 
 		return clone;
 	}

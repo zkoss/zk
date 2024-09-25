@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B101-ZK-5792.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		2024/9/25, Created by jumperchen
+
+Copyright (C) 2024 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+        ListModelList model = new ListModelList();
+        int count = 0;
+        class MyComp implements org.zkoss.zk.ui.util.Composer {
+            public void doAfterCompose(Component comp) {
+                String itemLabel = comp.getParent().getAttribute("item");
+                Clients.log("executing composer for " + comp + " " + itemLabel);
+                comp.appendChild(new Label("itemLabel"));
+            }
+        }
+        MyComp myComposer = new MyComp();
+    ]]></zscript>
+
+	<button label="add dynamic item" onClick='model.add("item-" + ++count)'/>
+	<button label="clear model" onClick='model.clear()'/>
+	<button id="renderAll" label="render all"/>
+
+	<div>
+		<forEach items="${model}">
+			<div style="border: 1px solid red; height: 20px;"
+			     fulfill="renderAll.onClick">
+				<custom-attributes item="${each}"/>
+				<div apply="${myComposer}"/>
+			</div>
+		</forEach>
+	</div>
+</zk>
