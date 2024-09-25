@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B101-ZK-5551.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		2024/9/23, Created by jumperchen
+
+Copyright (C) 2024 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+        ListModelList model = new ListModelList();
+        int count = 0;
+    ]]></zscript>
+
+	<button label="add dynamic item" onClick='model.add("item-" + ++count)'/>
+	<button label="clear model" onClick='model.clear()'/>
+	<button id="renderAll" label="render all"/>
+
+	<div>
+		<forEach items="${model}">
+			<div style="border: 1px solid red; height: 20px;"
+			     fulfill="renderAll.onClick">
+				<custom-attributes item="${each}"/>
+				<div apply="org.zkoss.zktest.test2.B101_ZK_5551Composer"/>
+			</div>
+		</forEach>
+	</div>
+</zk>

@@ -2494,6 +2494,10 @@ public class UiEngineImpl implements UiEngine {
 			for (int j = _targets.length; --j >= 0;)
 				_targets[j].removeEventListener(_evtnms[j], this); //one shot only
 
+			// Fix ZK-5551
+			if (_comp.getDesktop() == null && _comp.getPage() == null)
+				return; //already detached
+
 			final Execution exec = Executions.getCurrent();
 			execCreate0(
 					new CreateInfo(((WebAppCtrl) exec.getDesktop().getWebApp()).getUiFactory(), exec, _comp.getPage(),
