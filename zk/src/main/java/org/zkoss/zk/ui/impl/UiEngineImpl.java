@@ -112,6 +112,7 @@ import org.zkoss.zk.ui.sys.SessionCtrl;
 import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.sys.Visualizer;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
+import org.zkoss.zk.ui.util.Callback;
 import org.zkoss.zk.ui.util.ComponentCloneListener;
 import org.zkoss.zk.ui.util.Composer;
 import org.zkoss.zk.ui.util.ComposerExt;
@@ -2443,6 +2444,10 @@ public class UiEngineImpl implements UiEngine {
 			_compInfo = compInfo;
 			_comp = comp;
 
+			// Fix 5792
+			((ComponentCtrl) _comp).addCallback(ComponentCtrl.AFTER_CLONED,
+					(Callback) data -> willClone((Component) data));
+
 			init();
 
 			for (int j = _targets.length; --j >= 0;)
@@ -2523,6 +2528,7 @@ public class UiEngineImpl implements UiEngine {
 			} catch (CloneNotSupportedException e) {
 				throw new InternalError();
 			}
+			// TODO: the original implementation assumed the comp is the _comp, but this listener is added to _targets, not _comp.
 			clone._comp = comp;
 			clone.init();
 			return clone;

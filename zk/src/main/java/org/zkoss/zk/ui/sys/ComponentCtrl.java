@@ -1,9 +1,9 @@
 /* ComponentCtrl.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Mon May 30 21:06:56     2005, Created by tomyeh
 
@@ -74,6 +74,12 @@ public interface ComponentCtrl {
 	 * @since 10.0.0
 	 */
 	public static String AFTER_PARENT_CHANGED = "afterParentChanged";
+
+	/**
+	 * For after cloned callback, use in {@link #addCallback(String, Callback)}
+	 * @since 10.1.0
+	 */
+	public static String AFTER_CLONED = "afterCloned";
 
 	/** Sets the component definition.
 	 *
@@ -234,7 +240,7 @@ public interface ComponentCtrl {
 	 * and the client must send it back even if no listener is registered.
 	 */
 	public static final int CE_IMPORTANT = 0x0001;
-	/** Returned by {@link #getClientEvents} to indicate the event is 
+	/** Returned by {@link #getClientEvents} to indicate the event is
 	 * no deferrable, i.e., the event has to be sent back immediately.
 	 * It is meaningful only used with {@link #CE_IMPORTANT}
 	 */
@@ -247,7 +253,7 @@ public interface ComponentCtrl {
 	 * can be ignored by the server when the server receives the same AU
 	 * requests but not processed yet.
 	 * In other words, the server will remove the duplicate AU requests
-	 * if it was queued. 
+	 * if it was queued.
 	 */
 	public static final int CE_DUPLICATE_IGNORE = 0x2000;
 	/** Returned by {@link #getClientEvents} to indicate the event

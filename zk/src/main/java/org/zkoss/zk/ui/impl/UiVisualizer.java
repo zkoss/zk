@@ -1,9 +1,9 @@
 /* UiVisualizer.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Tue Jun 14 10:57:48     2005, Created by tomyeh
 
@@ -295,15 +295,6 @@ import org.zkoss.zk.ui.sys.Visualizer;
 		_smartUpdated.remove(comp);
 	}
 
-	/** Sets whether to disable the update of the client widget.
-	 * By default, if a component is attached to a page, modifications that
-	 * change the visual representation will be sent to the client to
-	 * ensure the consistency.
-	 *
-	 * @return whether it has been disabled before this invocation, i.e.,
-	 * the previous disable status
-	 * @since 3.6.2
-	 */
 	public boolean disableClientUpdate(Component comp, boolean disable) {
 		if (disable) {
 			if (_updDisabled == null)
@@ -1119,7 +1110,7 @@ import org.zkoss.zk.ui.sys.Visualizer;
 	}
 
 	/** Returns the reason to aborting, or null if no aborting at all.
-	 * 
+	 *
 	 * @see #setAbortingReason
 	 */
 	public AbortingReason getAbortingReason() {
@@ -1127,7 +1118,7 @@ import org.zkoss.zk.ui.sys.Visualizer;
 	}
 
 	/** Returns whether it is aborting.
-	 * 
+	 *
 	 * <p>The execution is aborting if {@link #getAbortingReason} returns
 	 * not null and the returned reason's {@link AbortingReason#isAborting}
 	 * is true.

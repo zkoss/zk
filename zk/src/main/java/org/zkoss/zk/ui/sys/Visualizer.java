@@ -1,9 +1,9 @@
 /* Visualizer.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Fri Jan 20 23:06:03     2006, Created by tomyeh
 
@@ -85,4 +85,15 @@ public interface Visualizer {
 	 * @since 10.0.0
 	 */
 	public void enable();
+
+	/** Sets whether to disable the update of the client widget.
+	 * By default, if a component is attached to a page, modifications that
+	 * change the visual representation will be sent to the client to
+	 * ensure the consistency.
+	 *
+	 * @return whether it has been disabled before this invocation, i.e.,
+	 * the previous disable status
+	 * @since 10.1.0
+	 */
+	public boolean disableClientUpdate(Component comp, boolean disable);
 }
