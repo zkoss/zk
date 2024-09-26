@@ -393,7 +393,7 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 			}
 
 			if (uploadCallbacks.length) {
-				xhr.onprogress = function () {
+				xhr.upload.onprogress = function () {
 					for (var i = 0, j = uploadCallbacks.length; i < j; i++) {
 						if (uploadCallbacks[i]['onprogress']) {
 							uploadCallbacks[i]['onprogress'].apply(xhr, arguments);
