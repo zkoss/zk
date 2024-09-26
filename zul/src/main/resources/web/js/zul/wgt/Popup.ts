@@ -140,7 +140,7 @@ export class Popup extends zul.Widget {
 	 */
 	open(ref?: Ref, offset?: zk.Offset, position?: string, opts?: PopupOptions): void {
 		this._fakeParent = zk.$(ref);
-		this._fakeParent!.listen({'onUnbindNow': this.proxy(this._fakeParentOnUnbind)});
+		this._fakeParent?.listen({'onUnbindNow': this.proxy(this._fakeParentOnUnbind)});
 		var posInfo = this._posInfo(ref, offset, position),
 			node = this.$n(),
 			$n = jq(node);
