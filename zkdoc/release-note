@@ -28,6 +28,8 @@ ZK 10.1.0
   ZK-5792: fullfill doesn't create all components in a forEach
   ZK-5793: upload doesn't show a progressbox
   ZK-5798: Client MVVM: Content missing in Include
+  ZK-5799: Javascript error when using Pdfviewer in Client MVVM
+  ZK-5801: Client MVVM: switching apply template causing javascript error
 
 * Upgrade Notes
   + Remove Htmls.encodeJavaScript(), Strings.encodeJavaScript(), Strings.escape() with Strings.ESCAPE_JAVASCRIPT, and replace them with OWASP Java Encoder APIs instead.
