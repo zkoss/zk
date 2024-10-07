@@ -80,6 +80,14 @@ module.exports = function ({types: t}) {
 						)
 					);
 
+					// replace all private function calls to window.x.x.x._._func()
+					path.traverse({
+						CallExpression(callPath) {
+							const callee = callPath.node.callee;
+							if (t.isIdentifier(callee) && exports[callee.name])
+								callPath.node.callee = createNestedMemberExpression([exports[callee.name], ...dir]);
+						}
+					});
 				}
 			}
 		}
