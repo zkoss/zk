@@ -20,7 +20,8 @@ module.exports = function ({types: t}) {
 					let dir = this.file.opts.filename.replace(/-/g, '_').split('/');
 					const jsLoc = dir.findIndex(x => x === 'js'),
 						file = dir[dir.length - 1],
-						exports = {};
+						privateVars = {},
+						privateFuncs = {};
 
 					// pass if [not in js folder] or [not ts file] or [is global.d.ts] or [is index.ts]
 					if (jsLoc === -1 || !file.endsWith('ts') || file === 'global.d.ts' || file === 'index.ts') return;
@@ -39,18 +40,31 @@ module.exports = function ({types: t}) {
 						if (t.isVariableDeclaration(node)) {
 							node.declarations.forEach((declaration) => {
 								if (t.isIdentifier(declaration.id)) {
-									exports[declaration.id.name] = declaration.id.name;
+									privateVars[declaration.id.name] = declaration.id.name;
 								}
 							});
 						} else if (t.isFunctionDeclaration(node) && t.isIdentifier(node.id)) {
-							exports[node.id.name] = node.id.name;
+							privateFuncs[node.id.name] = node.id.name;
+							const functionExpression = t.functionExpression(
+								null,
+								node.params,
+								node.body,
+								node.generator || false,
+								node.async || false
+							);
+							const assignment = t.assignmentExpression(
+								'=',
+								createNestedMemberExpression([node.id.name, ...dir]),
+								functionExpression
+							);
+							path.get('body')[index].replaceWith(t.expressionStatement(assignment));
 						}
 					});
 
 					// add check-exist if statements
-					for (let i = dir.length - 2; i > 0; i--) {
+					for (let i = 0; i < dir.length - 1; i++) {
 						const nestedExpression = createNestedMemberExpression(dir.slice(i));
-						path.pushContainer('body',
+						path.unshiftContainer('body',
 							t.ifStatement(
 								t.unaryExpression('!', nestedExpression),
 								t.expressionStatement(
@@ -64,7 +78,7 @@ module.exports = function ({types: t}) {
 						);
 					}
 
-					// export all global variables and functions
+					// export all global variables
 					path.pushContainer('body',
 						// window.x.x.x._ = {...}
 						t.expressionStatement(
@@ -72,7 +86,7 @@ module.exports = function ({types: t}) {
 								'=',
 								createNestedMemberExpression(dir),
 								t.objectExpression(
-									Object.entries(exports).map(([k, v]) => {
+									Object.entries(privateVars).map(([k, v]) => {
 										return t.objectProperty(t.identifier(k), t.identifier(v));
 									})
 								)
@@ -80,6 +94,14 @@ module.exports = function ({types: t}) {
 						)
 					);
 
+					// replace all private function calls to window.x.x.x._._func()
+					path.traverse({
+						CallExpression(callPath) {
+							const callee = callPath.node.callee;
+							if (t.isIdentifier(callee) && privateFuncs[callee.name])
+								callPath.node.callee = createNestedMemberExpression([privateFuncs[callee.name], ...dir]);
+						}
+					});
 				}
 			}
 		}
