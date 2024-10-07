@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<zk>
+	<listener>
+		<listener-class>org.zkoss.zkmax.au.websocket.WebSocketWebAppInit</listener-class>
+	</listener>
+
+	<session-config>
+		<max-desktops-per-session>1</max-desktops-per-session>
+		<automatic-timeout/>
+		<timeout-uri>/timeout.zul</timeout-uri>
+	</session-config>
+</zk>
