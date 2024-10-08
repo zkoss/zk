@@ -718,7 +718,11 @@ public class UiEngineImpl implements UiEngine {
 
 	private static final Event nextEvent(UiVisualizer uv) {
 		final Event evt = ((ExecutionCtrl) uv.getExecution()).getNextEvent();
-		return evt != null && !uv.isAborting()  && !((SessionCtrl) Sessions.getCurrent()).isInvalidated() ? evt : null;
+		if (evt != null && !uv.isAborting() && (Sessions.getCurrent() == null
+				|| !((SessionCtrl) Sessions.getCurrent()).isInvalidated())) {
+			return evt;
+		}
+		return null;
 	}
 
 	/** Cycle 1:
