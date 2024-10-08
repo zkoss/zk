@@ -20,8 +20,8 @@ module.exports = function ({types: t}) {
 					let dir = this.file.opts.filename.replace(/-/g, '_').split('/');
 					const jsLoc = dir.findIndex(x => x === 'js'),
 						file = dir[dir.length - 1],
-						privateVars = {},
-						privateFuncs = {};
+						privateVars = new Set(),
+						privateFuncs = new Set();
 
 					// pass if [not in js folder] or [not ts file] or [is global.d.ts] or [is index.ts]
 					if (jsLoc === -1 || !file.endsWith('ts') || file === 'global.d.ts' || file === 'index.ts') return;
@@ -37,49 +37,34 @@ module.exports = function ({types: t}) {
 
 					// visit all nodes
 					path.node.body.forEach((node, index) => {
+						// collect private variables
 						if (t.isVariableDeclaration(node)) {
 							node.declarations.forEach((declaration) => {
-								if (t.isIdentifier(declaration.id)) {
-									privateVars[declaration.id.name] = declaration.id.name;
-								}
+								if (t.isIdentifier(declaration.id))
+									privateVars.add(declaration.id.name);
 							});
+						// collect private functions and replace them with `window.PACKAGE._._func = function (args) {...}`
 						} else if (t.isFunctionDeclaration(node) && t.isIdentifier(node.id)) {
-							privateFuncs[node.id.name] = node.id.name;
-							const functionExpression = t.functionExpression(
-								null,
-								node.params,
-								node.body,
-								node.generator || false,
-								node.async || false
+							privateFuncs.add(node.id.name);
+							path.get('body')[index].replaceWith(
+								t.expressionStatement(
+									t.assignmentExpression(
+										'=',
+										createNestedMemberExpression([node.id.name, ...dir]),
+										t.functionExpression(
+											null,
+											node.params,
+											node.body,
+											node.generator || false,
+											node.async || false
+										)
+									)
+								)
 							);
-							const assignment = t.assignmentExpression(
-								'=',
-								createNestedMemberExpression([node.id.name, ...dir]),
-								functionExpression
-							);
-							path.get('body')[index].replaceWith(t.expressionStatement(assignment));
 						}
 					});
 
-					// handle assignment to private function properties (e.g., _zk.copy)
-					path.traverse({
-						AssignmentExpression(assignPath) {
-							const left = assignPath.node.left,
-								right = assignPath.node.right;
-							// Check if left-hand side is a member expression like _zk.copy
-							if (t.isMemberExpression(left) && t.isIdentifier(left.object) && privateFuncs[left.object.name]) {
-								// Replace _zk with window.zk.zk._._zk
-								assignPath.node.left.object = createNestedMemberExpression([privateFuncs[left.object.name], ...dir]);
-							}
-							// Check if the right-hand side is a private function that needs to be replaced
-							if (t.isIdentifier(right) && privateFuncs[right.name]) {
-								// Replace with window.zk._.regClass or similar
-								assignPath.node.right = createNestedMemberExpression([privateFuncs[right.name], ...dir]);
-							}
-						}
-					});
-
-					// add check-exist if statements
+					// insert check-exist if statements in the start of the file
 					for (let i = 0; i < dir.length - 1; i++) {
 						const nestedExpression = createNestedMemberExpression(dir.slice(i));
 						path.unshiftContainer('body',
@@ -96,28 +81,28 @@ module.exports = function ({types: t}) {
 						);
 					}
 
-					// export all global variables
-					path.pushContainer('body',
-						// window.x.x.x._ = {...}
-						t.expressionStatement(
-							t.assignmentExpression(
-								'=',
-								createNestedMemberExpression(dir),
-								t.objectExpression(
-									Object.entries(privateVars).map(([k, v]) => {
-										return t.objectProperty(t.identifier(k), t.identifier(v));
-									})
+					// export private variable to `window.PACKAGE._._var = _var`
+					privateVars.forEach(v => {
+						path.pushContainer('body',
+							t.expressionStatement(
+								t.assignmentExpression(
+									'=',
+									t.memberExpression(
+										createNestedMemberExpression(dir),
+										t.identifier(v)
+									),
+									t.identifier(v)
 								)
 							)
-						)
-					);
+						);
+					});
 
-					// replace all private function calls to window.x.x.x._._func()
+					// replace private function calls to `window.PACKAGE._._func()`
 					path.traverse({
 						CallExpression(callPath) {
 							const callee = callPath.node.callee;
-							if (t.isIdentifier(callee) && privateFuncs[callee.name])
-								callPath.node.callee = createNestedMemberExpression([privateFuncs[callee.name], ...dir]);
+							if (t.isIdentifier(callee) && privateFuncs.has(callee.name))
+								callPath.node.callee = createNestedMemberExpression([callee.name, ...dir]);
 						}
 					});
 				}
