@@ -64,11 +64,17 @@ module.exports = function ({types: t}) {
 					// handle assignment to private function properties (e.g., _zk.copy)
 					path.traverse({
 						AssignmentExpression(assignPath) {
-							const left = assignPath.node.left;
+							const left = assignPath.node.left,
+								right = assignPath.node.right;
 							// Check if left-hand side is a member expression like _zk.copy
 							if (t.isMemberExpression(left) && t.isIdentifier(left.object) && privateFuncs[left.object.name]) {
 								// Replace _zk with window.zk.zk._._zk
 								assignPath.node.left.object = createNestedMemberExpression([privateFuncs[left.object.name], ...dir]);
+							}
+							// Check if the right-hand side is a private function that needs to be replaced
+							if (t.isIdentifier(right) && privateFuncs[right.name]) {
+								// Replace with window.zk._.regClass or similar
+								assignPath.node.right = createNestedMemberExpression([privateFuncs[right.name], ...dir]);
 							}
 						}
 					});
