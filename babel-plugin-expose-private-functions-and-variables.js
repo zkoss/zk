@@ -61,6 +61,18 @@ module.exports = function ({types: t}) {
 						}
 					});
 
+					// handle assignment to private function properties (e.g., _zk.copy)
+					path.traverse({
+						AssignmentExpression(assignPath) {
+							const left = assignPath.node.left;
+							// Check if left-hand side is a member expression like _zk.copy
+							if (t.isMemberExpression(left) && t.isIdentifier(left.object) && privateFuncs[left.object.name]) {
+								// Replace _zk with window.zk.zk._._zk
+								assignPath.node.left.object = createNestedMemberExpression([privateFuncs[left.object.name], ...dir]);
+							}
+						}
+					});
+
 					// add check-exist if statements
 					for (let i = 0; i < dir.length - 1; i++) {
 						const nestedExpression = createNestedMemberExpression(dir.slice(i));
