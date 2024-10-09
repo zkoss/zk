@@ -45,6 +45,8 @@ module.exports = function ({types: t}) {
 							});
 						// collect private functions and replace them with `window.PACKAGE._._func = function (args) {...}`
 						} else if (t.isFunctionDeclaration(node) && t.isIdentifier(node.id)) {
+							if (node.id.name === '_zk') return;
+							if (node.id.name === 'doLog') return;
 							privateFuncs.add(node.id.name);
 							path.get('body')[index].replaceWith(
 								t.expressionStatement(
@@ -81,6 +83,23 @@ module.exports = function ({types: t}) {
 						);
 					}
 
+					// append check-exist if statements in the end of the file
+					for (let i = dir.length - 2; i >= 0; i--) {
+						const nestedExpression = createNestedMemberExpression(dir.slice(i));
+						path.pushContainer('body',
+							t.ifStatement(
+								t.unaryExpression('!', nestedExpression),
+								t.expressionStatement(
+									t.assignmentExpression(
+										'=',
+										nestedExpression,
+										t.objectExpression([])
+									)
+								)
+							)
+						);
+					}
+
 					// export private variable to `window.PACKAGE._._var = _var`
 					privateVars.forEach(v => {
 						path.pushContainer('body',
@@ -99,10 +118,76 @@ module.exports = function ({types: t}) {
 
 					// replace private function calls to `window.PACKAGE._._func()`
 					path.traverse({
+						AssignmentExpression(assignPath) {
+							const left = assignPath.node.left,
+								right = assignPath.node.right;
+							// 如果賦值的右側是一個私有函式名稱，將其替換成 `window.PACKAGE._._func`
+							if (t.isIdentifier(right) && privateFuncs.has(right.name)) {
+								assignPath.node.right = createNestedMemberExpression([right.name, ...dir]);
+							}
+						},
 						CallExpression(callPath) {
 							const callee = callPath.node.callee;
-							if (t.isIdentifier(callee) && privateFuncs.has(callee.name))
+
+							// 替換直接的函式呼叫
+							if (t.isIdentifier(callee) && privateFuncs.has(callee.name)) {
 								callPath.node.callee = createNestedMemberExpression([callee.name, ...dir]);
+							}
+
+							// 檢查是否是 setTimeout 的函式參數
+							if (t.isIdentifier(callee) && callee.name === 'setTimeout') {
+								const args = callPath.get('arguments');
+								args.forEach(arg => {
+									// 檢查是否為 FunctionExpression
+									if (t.isFunctionExpression(arg.node)) {
+										arg.traverse({
+											CallExpression(innerCallPath) {
+												const innerCallee = innerCallPath.node.callee;
+
+												// 如果內部的呼叫是私有函式
+												if (t.isIdentifier(innerCallee) && privateFuncs.has(innerCallee.name)) {
+													innerCallPath.node.callee = createNestedMemberExpression([innerCallee.name, ...dir]);
+												}
+											}
+										});
+									} else if (t.isConditionalExpression(arg.node)) {
+										// 處理條件運算子
+										const { test, consequent, alternate } = arg.node;
+
+										// 檢查 consequent 和 alternate 是否是 Identifier
+										if (t.isIdentifier(consequent) && privateFuncs.has(consequent.name)) {
+											arg.get('consequent').replaceWith(createNestedMemberExpression([consequent.name, ...dir]));
+										}
+										if (t.isIdentifier(alternate) && privateFuncs.has(alternate.name)) {
+											arg.get('alternate').replaceWith(createNestedMemberExpression([alternate.name, ...dir]));
+										}
+									} else if (t.isIdentifier(arg.node) && privateFuncs.has(arg.node.name)) {
+										// 替換 setTimeout 中的函式參數
+										arg.replaceWith(createNestedMemberExpression([arg.node.name, ...dir]));
+									}
+								});
+							}
+						},
+						FunctionExpression(funcPath) {
+							// 遍歷函式內部的語句，檢查是否使用私有函式
+							funcPath.traverse({
+								CallExpression(innerCallPath) {
+									const callee = innerCallPath.node.callee;
+
+									if (t.isIdentifier(callee) && privateFuncs.has(callee.name)) {
+										innerCallPath.node.callee = createNestedMemberExpression([callee.name, ...dir]);
+									}
+								}
+							});
+						},
+						ObjectExpression(objectPath) {
+							objectPath.node.properties.forEach((property) => {
+								// 確保屬性值是 Identifier，且在私有函式中
+								if (t.isIdentifier(property.value) && privateFuncs.has(property.value.name)) {
+									// 替換屬性值
+									property.value = createNestedMemberExpression([property.value.name, ...dir]);
+								}
+							});
 						}
 					});
 				}
@@ -110,3 +195,4 @@ module.exports = function ({types: t}) {
 		}
 	};
 };
+
