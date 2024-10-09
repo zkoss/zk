@@ -1,9 +1,9 @@
 /* AbstractPage.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Sun Oct 26 17:42:22     2008, Created by tomyeh
 
@@ -233,6 +233,7 @@ public abstract class AbstractPage implements Page, PageCtrl, java.io.Serializab
 	}
 
 	public void destroy() {
+		removeComponents(); // ZK-5730
 		_firstRoot = null;
 		_nRoot = 0;
 		_fellows = new HashMap<String, Component>(2); //not clear() since # of fellows might huge

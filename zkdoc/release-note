@@ -105,6 +105,7 @@ Feb 27, 2024
   ZK-5636: fail to toggle grid's detail on iPad/iPhone
   ZK-5650: cannot upload an image under websocket
   ZK-5633: Client mvvm crashes a browser when model is large
+  ZK-5730: Harden smartUpdate to check for null desktop or null webapp
 
 * Upgrade Notes
   + Upgrade commons-fileupload to commons-fileupload2-javax 2.0.0-M2 and commons-io to 2.13.0 to support jakarta-friendly uploads

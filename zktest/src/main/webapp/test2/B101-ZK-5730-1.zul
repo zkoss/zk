@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B101-ZK-5730-1.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		2024/10/9, Created by jumperchen
+
+Copyright (C) 2024 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<style>
+		.z-label.bg-red {
+		background-color: red;
+		}
+	</style>
+	<div apply="org.zkoss.zktest.test2.B101_ZK_5730_1Composer"/>
+</zk>
