@@ -5,9 +5,9 @@
 B50-ZK-647.zul
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Mon Dec  5 15:20:38 TST 2011, Created by benbai
 
@@ -18,6 +18,6 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 	<div height="10px" />
 	<div height="20px">Check whether all the style of the 'Test' below are correct,</div>
 	<div height="20px">color:#0000CC; font-family:"courier new","times new roman","黑体"; font-size:30px;</div>
-	<label value='Test'
+	<label id="label" value='Test'
 		style='color:#0000CC; font-family:"courier new","times new roman","黑体"; font-size:30px;'/>
 </zk>
