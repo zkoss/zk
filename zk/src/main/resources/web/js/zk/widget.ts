@@ -75,8 +75,7 @@ var _binds: Record<string, Widget> = {}, //{uuid, wgt}: bind but no node
 	_noChildCallback, _noParentCallback, //used by removeChild/appendChild/insertBefore
 	_syncdt: number | undefined, //timer ID to sync destkops
 	_rdque: zk.Widget[] = [], _rdtid: number | undefined, //async rerender's queue and timeout ID
-	_ignCanActivate, //whether canActivate always returns true
-	REGEX_DQUOT = /"/g; //jsdoc can't handle it correctly, so we have to put here
+	_ignCanActivate; //whether canActivate always returns true
 
 
 // cache the naming lookup
@@ -3070,8 +3069,7 @@ new zul.wnd.Window({
 			out += 'display:none;';
 
 		if ((!no || !no.style) && (s = /*safe*/ this.getStyle())) {
-			s = s.replace(REGEX_DQUOT, '\'');  // B50-ZK-647
-			out += s;
+			out += zUtl.encodeXMLAttribute(s);
 			if (!s.endsWith(';'))
 				out += ';';
 		}
