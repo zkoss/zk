@@ -47,7 +47,6 @@ module.exports = function ({types: t}) {
 						// collect private functions and replace them with `window.PACKAGE._._func = function (args) {...}`
 						} else if (t.isFunctionDeclaration(node) && t.isIdentifier(node.id)) {
 							if (node.id.name === '_zk') return;
-							// if (node.id.name === 'echoGx') return;
 							privateFuncs.add(node.id.name);
 							funcCallCount.set(node.id.name, 0);
 							path.get('body')[index].replaceWith(
@@ -124,7 +123,6 @@ module.exports = function ({types: t}) {
 							const left = assignPath.node.left,
 								right = assignPath.node.right;
 							// case: FUNC.x = x -> window.PACKAGE._.FUNC.x = x
-							// FIXME: useless
 							if (t.isMemberExpression(left)) {
 								const object = left.object;
 								if (t.isIdentifier(object) && privateFuncs.has(object.name)) {
@@ -138,16 +136,6 @@ module.exports = function ({types: t}) {
 								assignPath.node.right = createNestedMemberExpression([right.name, ...dir]);
 							}
 						},
-						// FIXME: useless
-						// MemberExpression(memberPath) {
-						// 	const { object, property } = memberPath.node,
-						// 		callee = object.callee;
-						// 	// case: FUNC.x = y -> window.PACKAGE._.FUNC.x = y
-						// 	if (t.isIdentifier(callee) && privateFuncs.has(callee.name)) {
-						// 		funcCallCount.set(callee.name, funcCallCount.get(callee.name) + 1);
-						// 		memberPath = createNestedMemberExpression([callee.name, ...dir]);
-						// 	}
-						// },
 						ConditionalExpression(condPath) {
 							const { test, consequent, alternate } = condPath.node;
 							// TODO: test ?
@@ -183,10 +171,11 @@ module.exports = function ({types: t}) {
 						},
 						ObjectExpression(objectPath) {
 							objectPath.node.properties.forEach((property) => {
+								const {key, value} = property;
 								// case: x = { x: FUNC } -> x = { x: window.PACKAGE._.FUNC }
 								// case: x.x = FUNC -> x.x = window.PACKAGE._.FUNC
-								if (t.isIdentifier(property.value) && privateFuncs.has(property.value.name)) {
-									funcCallCount.set(property.value.name, funcCallCount.get(property.value.name) + 1);
+								if (t.isIdentifier(value) && privateFuncs.has(value.name)) {
+									funcCallCount.set(value.name, funcCallCount.get(value.name) + 1);
 									property.value = createNestedMemberExpression([property.value.name, ...dir]);
 								}
 							});
