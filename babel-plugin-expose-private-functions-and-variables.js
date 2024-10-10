@@ -154,8 +154,19 @@ module.exports = function ({types: t}) {
 					}
 
 					function condExp(condPath) {
-						const { consequent, alternate } = condPath.node;
-						// TODO: test ?
+						// ConditionalExpression (test, consequent, alternate)
+						// x ? y : z -> test: x, consequent: y, alternate: z
+
+						dfs(condPath.get('test'));
+						dfs(condPath.get('consequent'));
+						dfs(condPath.get('alternate'));
+
+						const { test, consequent, alternate } = condPath.node;
+						// case: FUNC ? x : y -> window.PACKAGE._.FUNC ? x : y
+						if (t.isIdentifier(test) && privateFuncs.has(test.name)) {
+							funcCallCount.set(test.name, funcCallCount.get(test.name) + 1);
+							condPath.get('test').replaceWith(createNestedMemberExpression([test.name, ...dir]));
+						}
 						// case: x ? FUNC : x -> x ? window.PACKAGE._.FUNC : x
 						if (t.isIdentifier(consequent) && privateFuncs.has(consequent.name)) {
 							funcCallCount.set(consequent.name, funcCallCount.get(consequent.name) + 1);
