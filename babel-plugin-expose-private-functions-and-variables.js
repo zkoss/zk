@@ -124,8 +124,7 @@ module.exports = function ({types: t}) {
 						dfs(assignPath.get('left'));
 						dfs(assignPath.get('right'));
 
-						const left = assignPath.node.left,
-							right = assignPath.node.right;
+						const { left, right } = assignPath.node;
 						// case: FUNC = x -> window.PACKAGE._.FUNC = x
 						if (t.isIdentifier(left) && privateFuncs.has(left.name)) {
 							funcCallCount.set(left.name, funcCallCount.get(left.name) + 1);
@@ -214,7 +213,7 @@ module.exports = function ({types: t}) {
 
 					function dfs(path) {
 						path.traverse({
-							AssignmentExpression(assignPath) {assExp(assignPath);},
+							AssignmentExpression(assignPath) {assExp(assignPath); },
 							MemberExpression(memPath) { memExp(memPath); },
 							ConditionalExpression(condPath) { condExp(condPath); },
 							CallExpression(callPath) { callExp(callPath); },
