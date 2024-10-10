@@ -118,6 +118,9 @@ module.exports = function ({types: t}) {
 					});
 
 					function assExp(assignPath) {
+						// AssignmentExpression (left, right)
+						// x = y -> left: x, right: y
+
 						dfs(assignPath.get('left'));
 						dfs(assignPath.get('right'));
 
@@ -136,8 +139,14 @@ module.exports = function ({types: t}) {
 					}
 
 					function memExp(memPath) {
+						// MemberExpression (object, property)
+						// x.y.z -> object: x.y, property: z
+						// [NOTE] property cannot replace with window.PACKAGE._.FUNC, so ignore
+
+						dfs(memPath.get('object'));
+
 						const object = memPath.node.object;
-						// case: FUNC.x = x -> window.PACKAGE._.FUNC.x = x
+						// case: FUNC.x -> window.PACKAGE._.FUNC.x
 						if (t.isIdentifier(object) && privateFuncs.has(object.name)) {
 							funcCallCount.set(object.name, funcCallCount.get(object.name) + 1);
 							memPath.get('object').replaceWith(createNestedMemberExpression([object.name, ...dir]));
