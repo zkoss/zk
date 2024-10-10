@@ -47,7 +47,7 @@ module.exports = function ({types: t}) {
 						// collect private functions and replace them with `window.PACKAGE._._func = function (args) {...}`
 						} else if (t.isFunctionDeclaration(node) && t.isIdentifier(node.id)) {
 							if (node.id.name === '_zk') return;
-							// if (node.id.name === 'doLog') return;
+							// if (node.id.name === 'echoGx') return;
 							privateFuncs.add(node.id.name);
 							funcCallCount.set(node.id.name, 0);
 							path.get('body')[index].replaceWith(
@@ -121,14 +121,33 @@ module.exports = function ({types: t}) {
 					// replace private function calls to window.PACKAGE._.FUNC
 					path.traverse({
 						AssignmentExpression(assignPath) {
-							const right = assignPath.node.right;
-							// TODO: assignPath.node.left ?
+							const left = assignPath.node.left,
+								right = assignPath.node.right;
+							// case: FUNC.x = x -> window.PACKAGE._.FUNC.x = x
+							// FIXME: useless
+							if (t.isMemberExpression(left)) {
+								const object = left.object;
+								if (t.isIdentifier(object) && privateFuncs.has(object.name)) {
+									funcCallCount.set(object.name, funcCallCount.get(object.name) + 1);
+									assignPath.get("left.object").replaceWith(createNestedMemberExpression([object.name, ...dir]));
+								}
+							}
 							// case: x = FUNC -> x = window.PACKAGE._.FUNC
 							if (t.isIdentifier(right) && privateFuncs.has(right.name)) {
 								funcCallCount.set(right.name, funcCallCount.get(right.name) + 1);
 								assignPath.node.right = createNestedMemberExpression([right.name, ...dir]);
 							}
 						},
+						// FIXME: useless
+						// MemberExpression(memberPath) {
+						// 	const { object, property } = memberPath.node,
+						// 		callee = object.callee;
+						// 	// case: FUNC.x = y -> window.PACKAGE._.FUNC.x = y
+						// 	if (t.isIdentifier(callee) && privateFuncs.has(callee.name)) {
+						// 		funcCallCount.set(callee.name, funcCallCount.get(callee.name) + 1);
+						// 		memberPath = createNestedMemberExpression([callee.name, ...dir]);
+						// 	}
+						// },
 						ConditionalExpression(condPath) {
 							const { test, consequent, alternate } = condPath.node;
 							// TODO: test ?
