@@ -46,7 +46,7 @@ module.exports = function ({types: t}) {
 							});
 						// collect private functions and replace them with `window.PACKAGE._._func = function (args) {...}`
 						} else if (t.isFunctionDeclaration(node) && t.isIdentifier(node.id)) {
-							if (node.id.name === '_zk') return;
+							// if (node.id.name === '_zk') return;
 							privateFuncs.add(node.id.name);
 							funcCallCount.set(node.id.name, 0);
 							path.get('body')[index].replaceWith(
@@ -55,7 +55,7 @@ module.exports = function ({types: t}) {
 										'=',
 										createNestedMemberExpression([node.id.name, ...dir]),
 										t.functionExpression(
-											null,
+											undefined,
 											node.params,
 											node.body,
 											node.generator || false,
@@ -117,75 +117,87 @@ module.exports = function ({types: t}) {
 						);
 					});
 
-					// replace private function calls to window.PACKAGE._.FUNC
-					path.traverse({
-						AssignmentExpression(assignPath) {
-							const left = assignPath.node.left,
-								right = assignPath.node.right;
-							// case: FUNC.x = x -> window.PACKAGE._.FUNC.x = x
-							if (t.isMemberExpression(left)) {
-								const object = left.object;
-								if (t.isIdentifier(object) && privateFuncs.has(object.name)) {
-									funcCallCount.set(object.name, funcCallCount.get(object.name) + 1);
-									assignPath.get("left.object").replaceWith(createNestedMemberExpression([object.name, ...dir]));
-								}
+					function assExp(assignPath) {
+						const left = assignPath.node.left,
+							right = assignPath.node.right;
+						// case: FUNC.x = x -> window.PACKAGE._.FUNC.x = x
+						if (t.isMemberExpression(left)) {
+							const object = left.object;
+							if (t.isIdentifier(object) && privateFuncs.has(object.name)) {
+								funcCallCount.set(object.name, funcCallCount.get(object.name) + 1);
+								assignPath.get('left.object').replaceWith(createNestedMemberExpression([object.name, ...dir]));
 							}
-							// case: x = FUNC -> x = window.PACKAGE._.FUNC
-							if (t.isIdentifier(right) && privateFuncs.has(right.name)) {
-								funcCallCount.set(right.name, funcCallCount.get(right.name) + 1);
-								assignPath.node.right = createNestedMemberExpression([right.name, ...dir]);
+						}
+						// case: x = FUNC -> x = window.PACKAGE._.FUNC
+						if (t.isIdentifier(right) && privateFuncs.has(right.name)) {
+							funcCallCount.set(right.name, funcCallCount.get(right.name) + 1);
+							assignPath.node.right = createNestedMemberExpression([right.name, ...dir]);
+						}
+					}
+
+					function condExp(condPath) {
+						const { consequent, alternate } = condPath.node;
+						// TODO: test ?
+						// case: x ? FUNC : x -> x ? window.PACKAGE._.FUNC : x
+						if (t.isIdentifier(consequent) && privateFuncs.has(consequent.name)) {
+							funcCallCount.set(consequent.name, funcCallCount.get(consequent.name) + 1);
+							condPath.get('consequent').replaceWith(createNestedMemberExpression([consequent.name, ...dir]));
+						}
+						// case: x ? x : FUNC -> x ? x : window.PACKAGE._.FUNC
+						if (t.isIdentifier(alternate) && privateFuncs.has(alternate.name)) {
+							funcCallCount.set(alternate.name, funcCallCount.get(alternate.name) + 1);
+							condPath.get('alternate').replaceWith(createNestedMemberExpression([alternate.name, ...dir]));
+						}
+					}
+
+					function callExp(callPath) {
+						const callee = callPath.node.callee;
+						if (t.isIdentifier(callee)) {
+							// case: FUNC() -> window.PACKAGE._.FUNC()
+							// this case includes `FUNC() in ?: conditional`
+							if (privateFuncs.has(callee.name)) {
+								funcCallCount.set(callee.name, funcCallCount.get(callee.name) + 1);
+								callPath.node.callee = createNestedMemberExpression([callee.name, ...dir]);
 							}
-						},
-						ConditionalExpression(condPath) {
-							const { test, consequent, alternate } = condPath.node;
-							// TODO: test ?
-							// case: x ? FUNC : x -> x ? window.PACKAGE._.FUNC : x
-							if (t.isIdentifier(consequent) && privateFuncs.has(consequent.name)) {
-								funcCallCount.set(consequent.name, funcCallCount.get(consequent.name) + 1);
-								condPath.get('consequent').replaceWith(createNestedMemberExpression([consequent.name, ...dir]));
-							}
-							// case: x ? x : FUNC -> x ? x : window.PACKAGE._.FUNC
-							if (t.isIdentifier(alternate) && privateFuncs.has(alternate.name)) {
-								funcCallCount.set(alternate.name, funcCallCount.get(alternate.name) + 1);
-								condPath.get('alternate').replaceWith(createNestedMemberExpression([alternate.name, ...dir]));
-							}
-						},
-						CallExpression(callPath) {
-							const callee = callPath.node.callee;
-							if (t.isIdentifier(callee)) {
-								// case: FUNC() -> window.PACKAGE._.FUNC()
-								// this case includes `FUNC() in ?: conditional`
-								if (privateFuncs.has(callee.name)) {
-									funcCallCount.set(callee.name, funcCallCount.get(callee.name) + 1);
-									callPath.node.callee = createNestedMemberExpression([callee.name, ...dir]);
-								}
-								const args = callPath.get('arguments');
-								args.forEach(arg => {
-									// case: xxx(FUNC) -> xxx(window.PACKAGE._.FUNC)
-									if (t.isIdentifier(arg.node) && privateFuncs.has(arg.node.name)) {
-										funcCallCount.set(arg.node.name, funcCallCount.get(arg.node.name) + 1);
-										arg.replaceWith(createNestedMemberExpression([arg.node.name, ...dir]));
-									}
-								});
-							}
-						},
-						ObjectExpression(objectPath) {
-							objectPath.node.properties.forEach((property) => {
-								const {key, value} = property;
-								// case: x = { x: FUNC } -> x = { x: window.PACKAGE._.FUNC }
-								// case: x.x = FUNC -> x.x = window.PACKAGE._.FUNC
-								if (t.isIdentifier(value) && privateFuncs.has(value.name)) {
-									funcCallCount.set(value.name, funcCallCount.get(value.name) + 1);
-									property.value = createNestedMemberExpression([property.value.name, ...dir]);
+							const args = callPath.get('arguments');
+							args.forEach(arg => {
+								// case: xxx(FUNC) -> xxx(window.PACKAGE._.FUNC)
+								if (t.isIdentifier(arg.node) && privateFuncs.has(arg.node.name)) {
+									funcCallCount.set(arg.node.name, funcCallCount.get(arg.node.name) + 1);
+									arg.replaceWith(createNestedMemberExpression([arg.node.name, ...dir]));
 								}
 							});
 						}
-					});
+					}
+
+					function objExp(objectPath) {
+						objectPath.node.properties.forEach((property) => {
+							const {value} = property;
+							// TODO: key ?
+							// case: x = { x: FUNC } -> x = { x: window.PACKAGE._.FUNC }
+							// case: x.x = FUNC -> x.x = window.PACKAGE._.FUNC
+							if (t.isIdentifier(value) && privateFuncs.has(value.name)) {
+								funcCallCount.set(value.name, funcCallCount.get(value.name) + 1);
+								property.value = createNestedMemberExpression([property.value.name, ...dir]);
+							}
+						});
+					}
+
+					function dfs(path) {
+						path.traverse({
+							AssignmentExpression(assignPath) {assExp(assignPath);},
+							ConditionalExpression(condPath) {condExp(condPath);},
+							CallExpression(callPath) {callExp(callPath);},
+							ObjectExpression(objectPath) {objExp(objectPath);}
+						});
+					}
+
+					// replace private function calls to window.PACKAGE._.FUNC
+					dfs(path);
 
 					const callCountArray = Array.from(funcCallCount.entries()).map(([name, count]) =>
 						t.objectProperty(t.identifier(name), t.numericLiteral(count))
-					);
-					const callCountVariable = t.variableDeclaration('var', [
+					), callCountVariable = t.variableDeclaration('var', [
 						t.variableDeclarator(
 							t.identifier('dlwlrma'),
 							t.objectExpression(callCountArray)
