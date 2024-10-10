@@ -121,17 +121,20 @@ module.exports = function ({types: t}) {
 						const left = assignPath.node.left,
 							right = assignPath.node.right;
 						// case: FUNC.x = x -> window.PACKAGE._.FUNC.x = x
-						if (t.isMemberExpression(left)) {
-							const object = left.object;
-							if (t.isIdentifier(object) && privateFuncs.has(object.name)) {
-								funcCallCount.set(object.name, funcCallCount.get(object.name) + 1);
-								assignPath.get('left.object').replaceWith(createNestedMemberExpression([object.name, ...dir]));
-							}
-						}
+						dfs(assignPath.get('left'));
 						// case: x = FUNC -> x = window.PACKAGE._.FUNC
 						if (t.isIdentifier(right) && privateFuncs.has(right.name)) {
 							funcCallCount.set(right.name, funcCallCount.get(right.name) + 1);
 							assignPath.node.right = createNestedMemberExpression([right.name, ...dir]);
+						}
+					}
+
+					function memExp(memPath) {
+						const object = memPath.node.object;
+						// case: FUNC.x = x -> window.PACKAGE._.FUNC.x = x
+						if (t.isIdentifier(object) && privateFuncs.has(object.name)) {
+							funcCallCount.set(object.name, funcCallCount.get(object.name) + 1);
+							memPath.get('object').replaceWith(createNestedMemberExpression([object.name, ...dir]));
 						}
 					}
 
@@ -186,14 +189,16 @@ module.exports = function ({types: t}) {
 					function dfs(path) {
 						path.traverse({
 							AssignmentExpression(assignPath) {assExp(assignPath);},
-							ConditionalExpression(condPath) {condExp(condPath);},
-							CallExpression(callPath) {callExp(callPath);},
-							ObjectExpression(objectPath) {objExp(objectPath);}
+							MemberExpression(memPath) { memExp(memPath); },
+							ConditionalExpression(condPath) { condExp(condPath); },
+							CallExpression(callPath) { callExp(callPath); },
+							ObjectExpression(objectPath) { objExp(objectPath); }
 						});
 					}
 
 					// replace private function calls to window.PACKAGE._.FUNC
 					dfs(path);
+
 
 					const callCountArray = Array.from(funcCallCount.entries()).map(([name, count]) =>
 						t.objectProperty(t.identifier(name), t.numericLiteral(count))
