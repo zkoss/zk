@@ -118,10 +118,16 @@ module.exports = function ({types: t}) {
 					});
 
 					function assExp(assignPath) {
+						dfs(assignPath.get('left'));
+						dfs(assignPath.get('right'));
+
 						const left = assignPath.node.left,
 							right = assignPath.node.right;
-						// case: FUNC.x = x -> window.PACKAGE._.FUNC.x = x
-						dfs(assignPath.get('left'));
+						// case: FUNC = x -> window.PACKAGE._.FUNC = x
+						if (t.isIdentifier(left) && privateFuncs.has(left.name)) {
+							funcCallCount.set(left.name, funcCallCount.get(left.name) + 1);
+							assignPath.node.left = createNestedMemberExpression([left.name, ...dir]);
+						}
 						// case: x = FUNC -> x = window.PACKAGE._.FUNC
 						if (t.isIdentifier(right) && privateFuncs.has(right.name)) {
 							funcCallCount.set(right.name, funcCallCount.get(right.name) + 1);
