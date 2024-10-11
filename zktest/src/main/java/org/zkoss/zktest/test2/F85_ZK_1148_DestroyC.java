@@ -1,9 +1,9 @@
 /* DestroyedVM.java
 
         Purpose:
-                
+
         Description:
-                
+
         History:
                 Fri Mar 09 5:25 PM:54 CST 2018, Created by klyve
 
@@ -31,8 +31,10 @@ public class F85_ZK_1148_DestroyC extends F85_ZK_1148_DestroyB {
 			comp = (Component) itr.next();
 			if (comp.getId().equals("resultLabel")) break;
 		}
-		Label l = (Label) comp;
-		l.setValue(l.getValue() + "DestroyC ");
+		if (comp instanceof Label) {
+			Label l = (Label) comp;
+			l.setValue(l.getValue() + "DestroyC ");
+		}
 		Clients.log("DestroyC");
 		log.warn("execute the DestroyC method");
 		F85_ZK_1148FileDealer.writeMsg("DestroyC is called!");

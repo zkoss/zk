@@ -1,9 +1,9 @@
 /* DestroyVM.java
 
         Purpose:
-                
+
         Description:
-                
+
         History:
                 Fri Mar 09 2:45 PM:52 CST 2018, Created by klyve
 
@@ -25,12 +25,12 @@ import org.zkoss.zul.Label;
 
 public class F85_ZK_1148_DestroyD extends F85_ZK_1148_DestroyC {
 	private static final Logger log = LoggerFactory.getLogger(F85_ZK_1148_DestroyD.class);
-	
+
 	@Init
 	public void init() {
 		Clients.log("init DestroyD");
 	}
-	
+
 	@Destroy(superclass = true)
 	public void destroyD() {
 		Component comp = null;
@@ -38,8 +38,10 @@ public class F85_ZK_1148_DestroyD extends F85_ZK_1148_DestroyC {
 			comp = (Component) itr.next();
 			if (comp.getId().equals("resultLabel")) break;
 		}
-		Label l = (Label) comp;
-		l.setValue(l.getValue() + "DestroyD ");
+		if (comp instanceof Label) {
+			Label l = (Label) comp;
+			l.setValue(l.getValue() + "DestroyD ");
+		}
 		Clients.log("DestroyD");
 		log.warn("execute the DestroyD method");
 		F85_ZK_1148FileDealer.writeMsg("DestroyD is called!");

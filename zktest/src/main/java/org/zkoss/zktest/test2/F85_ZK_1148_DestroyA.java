@@ -1,9 +1,9 @@
 /* DestroyVM.java
 
         Purpose:
-                
+
         Description:
-                
+
         History:
                 Fri Mar 09 2:45 PM:52 CST 2018, Created by klyve
 
@@ -35,9 +35,9 @@ public class F85_ZK_1148_DestroyA {
 	public void toggleMyValue() {
 		myValue = !myValue;
 	}
-	
+
 	public Boolean getMyValue() {
-		return myValue; 
+		return myValue;
 	}
 
 	@Destroy
@@ -47,8 +47,10 @@ public class F85_ZK_1148_DestroyA {
 			comp = (Component) itr.next();
 			if (comp.getId().equals("resultLabel")) break;
 		}
-		Label l = (Label) comp;
-		l.setValue(l.getValue() + "DestroyA ");
+		if (comp instanceof Label) {
+			Label l = (Label) comp;
+			l.setValue(l.getValue() + "DestroyA ");
+		}
 		Clients.log("DestroyA");
 		log.warn("execute the DestroyA method");
 		F85_ZK_1148FileDealer.writeMsg("DestroyA is called!");
