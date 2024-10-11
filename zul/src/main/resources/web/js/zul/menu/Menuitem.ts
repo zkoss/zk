@@ -144,8 +144,6 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 	 */
 	setHref(href: string, opts?: Record<string, boolean>): this {
 		const o = this._href;
-		this._href = href;
-
 		if (o !== href || opts?.force) {
 			this.rerender();
 		}
