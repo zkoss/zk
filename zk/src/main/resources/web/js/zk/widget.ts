@@ -2997,7 +2997,8 @@ new zul.wnd.Window({
 	 */
 	updateDomStyle_(): void {
 		if (this.desktop) {
-			var s = jq.parseStyle(this.domStyle_()),
+			// we need to decode first, because domStyle_() will encode some XML Attributes, which will break for jq.parseStyle
+			var s = jq.parseStyle(zUtl.decodeXML(/*safe*/ this.domStyle_())),
 				n = this.$n()!;
 			// B50-3355680: size is potentially affected when setStyle
 			if (!s.width && this._hflex)
