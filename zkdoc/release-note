@@ -33,10 +33,12 @@ ZK 10.1.0
   ZK-5801: Client MVVM: switching apply template causing javascript error
   ZK-5546: Websocket endpoint doesn't trigger timeout-uri redirect after desktop timeout
   ZK-5807: A side-effect of ZK-5582 for the testSelectRange of B70_ZK_2534_groupTest
+  ZK-5802: _listenFlex, _unlistenFlex declared on static member _ are used directly, cannot be overriden
 
 * Upgrade Notes
   + Remove Htmls.encodeJavaScript(), Strings.encodeJavaScript(), Strings.escape() with Strings.ESCAPE_JAVASCRIPT, and replace them with OWASP Java Encoder APIs instead.
   + Fix some potential security vulnerabilities found by CodeQL code scanning.
+  + JavaScript widget private functions and variables' exposed as public ones object structure has been changed, please refer to the ZK-5802 for more details.
 
    --------
 ZK 10.0.1

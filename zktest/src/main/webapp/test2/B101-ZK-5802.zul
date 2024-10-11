@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B101-ZK-5802.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Tue Oct 15 10:23:57 CST 2024, Created by jamson
+
+Copyright (C) 2024 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<style>
+		.red {
+			border: 1px solid red;
+		}
+	</style>
+	<script><![CDATA[
+		zk.afterLoad("zk", function () {
+			var _x_ = {};
+			zk.override(zk.widget_, _x_, {
+				_listenFlex(wgt) {
+					var lb = new zul.wgt.Label();
+					lb.setValue('_listenFlex() have been overridden');
+					wgt.appendChild(lb);
+				}
+			});
+		});
+	]]></script>
+	<label multiline="true">
+		If you see "_listenFlex() have been overridden" in the red box below,
+		means window.zk.widget_._listenFlex() have been overridden successfully.
+		And window.zk.widget_._listenFlex() is called by widget globlly.
+		NOTE: use div hflex here is because widget.setHflex() will invoke _listenFlex() to trigger the overridden new function.
+	</label>
+	<div class="red" hflex="true"/>
+</zk>
