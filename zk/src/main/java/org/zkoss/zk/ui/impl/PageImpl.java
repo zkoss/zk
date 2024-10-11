@@ -1,9 +1,9 @@
 /* PageImpl.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Fri Jun  3 18:17:32     2005, Created by tomyeh
 
@@ -86,6 +86,7 @@ import org.zkoss.zk.ui.sys.PageConfig;
 import org.zkoss.zk.ui.sys.PageCtrl;
 import org.zkoss.zk.ui.sys.PageRenderer;
 import org.zkoss.zk.ui.sys.UiEngine;
+import org.zkoss.zk.ui.sys.Visualizer;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.util.Condition;
 import org.zkoss.zk.ui.util.PageActivationListener;
@@ -762,31 +763,48 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	}
 
 	public void destroy() {
-		super.destroy();
+		Visualizer visualizer = null;
 		try {
-			if (_ips != null) {
-				final List<Interpreter> ips = new ArrayList<Interpreter>(_ips.values());
-				_ips.clear();
-				_ips = null; //not just clear since it is better to NPE than memory leak
-				for (Interpreter ip : ips) {
-					try {
-						ip.destroy();
-					} catch (Throwable ex) {
-						log.warn("Failed to destroy " + ip, ex);
+			if (_desktop != null) {
+				Execution execution = _desktop.getExecution();
+				if (execution != null) {
+					visualizer = ((ExecutionCtrl) execution).getVisualizer();
+					if (visualizer != null) {
+						visualizer.disable();
 					}
 				}
 			}
-		} catch (Throwable ex) { //avoid racing
-			log.warn("Failed to clean up interpreters of " + this, ex);
-		}
+			super.destroy();
+			try {
+				if (_ips != null) {
+					final List<Interpreter> ips = new ArrayList<Interpreter>(
+							_ips.values());
+					_ips.clear();
+					_ips = null; //not just clear since it is better to NPE than memory leak
+					for (Interpreter ip : ips) {
+						try {
+							ip.destroy();
+						} catch (Throwable ex) {
+							log.warn("Failed to destroy " + ip, ex);
+						}
+					}
+				}
+			} catch (Throwable ex) { //avoid racing
+				log.warn("Failed to clean up interpreters of " + this, ex);
+			}
 
-		//theoretically, the following is not necessary, but, to be safe...
-		_desktop = null;
-		_owner = null;
-		_listeners = null;
-		_resolvers = null;
-		_mappers = null;
-		_attrs.getAttributes().clear();
+			//theoretically, the following is not necessary, but, to be safe...
+			_desktop = null;
+			_owner = null;
+			_listeners = null;
+			_resolvers = null;
+			_mappers = null;
+			_attrs.getAttributes().clear();
+		} finally {
+			if (visualizer != null) {
+				visualizer.enable();
+			}
+		}
 	}
 
 	public boolean isAlive() {
