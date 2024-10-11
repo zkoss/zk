@@ -1014,10 +1014,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 
 		try {
 			final List<Page> pages = new ArrayList<Page>(_pages);
-			final Configuration config = _wapp == null ? null : _wapp.getConfiguration();
 			for (Page page : pages) {
 				try {
-					beforeDestroyPage(page, config);
 					((PageCtrl) page).destroy();
 				} catch (Throwable ex) {
 					log.warn("Failed to destroy " + page, ex);
