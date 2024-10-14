@@ -144,6 +144,14 @@ export class Treeitem extends zul.sel.ItemWidget {
 
 			if (!open)
 				zWatch.fireDown('onHide', this);
+
+			// For B100-ZK-5476, the onOpen should be sent before onDataLoading, which is in side this._showKids.
+			if (tree) {
+				if (!fromServer)
+					this.fire('onOpen', {open: open},
+						{toServer: tree.inPagingMold() || tree.isModel()});
+			}
+
 			this._showKids(open);
 			if (open) {
 				zUtl.fireShown(this);
@@ -151,10 +159,6 @@ export class Treeitem extends zul.sel.ItemWidget {
 			}
 			if (tree) {
 				tree._sizeOnOpen();
-
-				if (!fromServer)
-					this.fire('onOpen', {open: open},
-							{toServer: tree.inPagingMold() || tree.isModel()});
 
 				tree._syncFocus(this);
 
