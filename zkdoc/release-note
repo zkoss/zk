@@ -32,6 +32,7 @@ ZK 10.1.0
   ZK-5799: Javascript error when using Pdfviewer in Client MVVM
   ZK-5801: Client MVVM: switching apply template causing javascript error
   ZK-5546: Websocket endpoint doesn't trigger timeout-uri redirect after desktop timeout
+  ZK-5807: A side-effect of ZK-5582 for the testSelectRange of B70_ZK_2534_groupTest
 
 * Upgrade Notes
   + Remove Htmls.encodeJavaScript(), Strings.encodeJavaScript(), Strings.escape() with Strings.ESCAPE_JAVASCRIPT, and replace them with OWASP Java Encoder APIs instead.
