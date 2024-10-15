@@ -182,6 +182,9 @@ export class Listcell extends zul.LabelImageWidget<HTMLTableCellElement> {
 				// ZK-5035: Remove the old checkmark to prevent duplicate checkmarks
 				if (this.parent?.$n('cm'))
 					this.nextSibling?.rerender();
+				else {
+					this.parent?.clearCache();
+				}
 
 				var chkable = p.isSelectable(),
 					multi = box.isMultiple();
