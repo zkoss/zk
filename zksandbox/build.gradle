@@ -33,7 +33,7 @@ repositories {
 }
 
 dependencies {
-	implementation 'commons-io:commons-io:2.13.0'
+	implementation 'commons-io:commons-io:2.17.0'
 	implementation 'commons-logging:commons-logging:1.1.1'
 	implementation 'org.apache.commons:commons-fileupload2-javax:2.0.0-M2'
 	implementation 'org.zkoss.theme:breeze:10.0.1.1-Eval'
