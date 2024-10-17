@@ -35,6 +35,7 @@ ZK 10.1.0
   ZK-5807: A side-effect of ZK-5582 for the testSelectRange of B70_ZK_2534_groupTest
   ZK-5802: _listenFlex, _unlistenFlex declared on static member _ are used directly, cannot be overriden
   ZK-5819: [CodeQL] Apache Commons IO: Possible denial of service attack on untrusted input to XmlStreamReade
+  ZK-5814: a side effect of ZK-5582 for F02545ChildrenBindingSupportListModelTest
 
 * Upgrade Notes
   + Remove Htmls.encodeJavaScript(), Strings.encodeJavaScript(), Strings.escape() with Strings.ESCAPE_JAVASCRIPT, and replace them with OWASP Java Encoder APIs instead.
