@@ -430,12 +430,12 @@ export class ItemWidget extends zul.Widget<HTMLTableRowElement> implements zul.m
 	/** @internal */
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
-		zWatch.listen({ onResponse: this });
+		zWatch.listen({ onSize: this });
 	}
 
 	/** @internal */
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
-		zWatch.unlisten({ onResponse: this });
+		zWatch.unlisten({ onSize: this });
 		super.unbind_(skipper, after, keepRod);
 	}
 
@@ -453,7 +453,7 @@ export class ItemWidget extends zul.Widget<HTMLTableRowElement> implements zul.m
 		this._shallCheckClearCache = true;
 	}
 
-	onResponse(): void {
+	override onSize(): void {
 		if (this._shallCheckClearCache) {
 			this._shallCheckClearCache = false;
 			if (this.getMeshWidget()?.isCheckmark()) {
