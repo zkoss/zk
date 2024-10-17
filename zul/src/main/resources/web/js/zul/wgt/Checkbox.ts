@@ -323,7 +323,7 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 		const out: string[] = [],
 			name = this.getName(); // cannot use this._name for radio
 		if (name)
-			out.push(`name="${name}"`);
+			out.push(`name="${zUtl.encodeXMLAttribute(name)}"`);
 		if (this._disabled)
 			out.push('disabled="disabled"');
 		if (this._checked)
@@ -332,8 +332,8 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 			out.push(`tabindex="${this._tabindex}"`);
 		const value = this.getValue();
 		if (value)
-			out.push(`value="${value}"`);
-		return DOMPurify.sanitize(out.join(' '));
+			out.push(`value="${zUtl.encodeXMLAttribute(value)}"`);
+		return out.join(' ');
 	}
 
 	/** @internal */

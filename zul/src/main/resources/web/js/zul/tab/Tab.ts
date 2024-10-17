@@ -277,9 +277,9 @@ export class Tab extends zul.LabelImageWidget implements zul.LabelImageWidgetWit
 		if (!img) {
 			img = iconSclass;
 		} else
-			/*safe*/ img = '<img src="' + /*safe*/ img + '" class="' + this.$s('image') + '" alt="" aria-hidden="true"/>'
+			/*safe*/ img = '<img src="' + zUtl.encodeXMLAttribute(img) + '" class="' + this.$s('image') + '" alt="" aria-hidden="true"/>'
 				+ (iconSclass ? ' ' + /*safe*/ iconSclass : '');
-		return DOMPurify.sanitize(label ? img + ' ' + label : img);
+		return label ? img + ' ' + label : img;
 	}
 
 	//bug #3014664

@@ -300,15 +300,15 @@ export class Row extends zul.Widget<HTMLTableRowElement> implements zul.mesh.Ite
 		if (isDetail) {
 			var wd = child.getWidth();
 			if (wd)
-				style += 'width:' + wd + ';';
+				style += 'width:' + zUtl.encodeXMLAttribute(wd) + ';';
 		}
 		if (hgh || align || valign) {
 			if (hgh)
-				style += 'height:' + hgh + ';';
+				style += 'height:' + zUtl.encodeXMLAttribute(hgh) + ';';
 			if (align)
-				style += 'text-align:' + align + ';';
+				style += 'text-align:' + zUtl.encodeXMLAttribute(align) + ';';
 			if (valign)
-				style += 'vertical-align:' + valign + ';';
+				style += 'vertical-align:' + zUtl.encodeXMLAttribute(valign) + ';';
 		}
 		var clx = isDetail ? child.$s('outer') : this.$s('inner'),
 			attrs = '';
@@ -323,7 +323,7 @@ export class Row extends zul.Widget<HTMLTableRowElement> implements zul.mesh.Ite
 				attrs += ' aria-hidden="true"';
 			clx += ' ' + this.$s('hidden-column');
 		}
-		return DOMPurify.sanitize(attrs + ' class="' + clx + '"');
+		return attrs + ' class="' + clx + '"';
 	}
 
 	/**

@@ -221,7 +221,7 @@ export class Menu extends zul.LabelImageWidget implements zul.LabelImageWidgetWi
 		/*safe*/ iconSclass = this.domIcon_();
 
 		if (img)
-			/*safe*/ img = '<img id="' + this.uuid + '-img" src="' + /*safe*/ img + '" class="' + this.$s('image') + '" align="absmiddle" alt="" aria-hidden="true" />'
+			/*safe*/ img = '<img id="' + this.uuid + '-img" src="' + /*safe*/ zUtl.encodeXMLAttribute(img) + '" class="' + this.$s('image') + '" align="absmiddle" alt="" aria-hidden="true" />'
 				+ (iconSclass ? ' ' + /*safe*/ iconSclass : '');
 		else {
 			if (iconSclass) {
@@ -232,7 +232,7 @@ export class Menu extends zul.LabelImageWidget implements zul.LabelImageWidgetWi
 					+ this.$s('image') + '" align="absmiddle" alt="" aria-hidden="true" />';
 			}
 		}
-		return DOMPurify.sanitize(img + label + separator + icon);
+		return img + label + separator + icon;
 	}
 
 	/**

@@ -98,9 +98,9 @@ export class Area extends zk.Widget<HTMLAreaElement> {
 		var /*safe*/ attr = super.domAttrs_(no)
 			+ ' href="javascript:;"', v;
 		if (v = this._coords)
-			attr += ' coords="' + v + '"';
+			attr += ' coords="' + zUtl.encodeXMLAttribute(v as string) + '"';
 		if (v = this._shape)
-			attr += ' shape="' + v + '"';
-		return DOMPurify.sanitize(attr);
+			attr += ' shape="' + zUtl.encodeXMLAttribute(v as string) + '"';
+		return attr;
 	}
 }

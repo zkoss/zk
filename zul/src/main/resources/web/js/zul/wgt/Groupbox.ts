@@ -186,12 +186,12 @@ export class Groupbox extends zul.ContainerWidget {
 
 		s = this._contentStyle;
 		if (this.caption || this.getTitle()) // B60-ZK-987
-			s = 'border-top:0;' + (s || '');
+			s = 'border-top:0;' + (zUtl.encodeXMLAttribute(s as never) || '');
 		if (!this._open)
-			s = 'display:none;' + (s || '');
+			s = 'display:none;' + (zUtl.encodeXMLAttribute(s as never) || '');
 		if (s)
-			html += ' style="' + /*safe*/ s + '"';
-		return DOMPurify.sanitize(html);
+			html += ' style="' + zUtl.encodeXMLAttribute(s) + '"';
+		return html;
 	}
 
 	/** @internal */

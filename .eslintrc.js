@@ -160,6 +160,12 @@ module.exports = {
               'htmlOutput': true, // true to indicate that the function returns encoded HTML
               'sanitized': true // true to indicate that the function returns sanitized HTML
             },
+            'zUtl.encodeXMLAttribute': { // zUtl.encodeXMLAttribute()
+              'htmlInput': true,
+              'safe': true,
+              'htmlOutput': true, // true to indicate that the function returns encoded HTML
+              'sanitized': true // true to indicate that the function returns sanitized HTML
+            },
             '.$s': {
               'htmlInput': true,
               'htmlOutput': true,
@@ -423,6 +429,12 @@ module.exports = {
           }],
           'functions': {
             'zUtl.encodeXML': { // zUtl.encodeXML()
+              'htmlInput': true,
+              'safe': true,
+              'htmlOutput': true, // true to indicate that the function returns encoded HTML
+              'sanitized': true // true to indicate that the function returns sanitized HTML
+            },
+            'zUtl.encodeXMLAttribute': { // zUtl.encodeXMLAttribute()
               'htmlInput': true,
               'safe': true,
               'htmlOutput': true, // true to indicate that the function returns encoded HTML

@@ -254,14 +254,14 @@ export class A extends zul.LabelImageWidget<HTMLAnchorElement> implements zul.La
 		var /*safe*/ attr = super.domAttrs_(no),
 			v: string | undefined;
 		if (v = this.getTarget())
-			attr += ` target="${v}"`;
+			attr += ` target="${zUtl.encodeXMLAttribute(v)}"`;
 		if (v = this.getHref())
-			attr += ` href="${v}"`;
+			attr += ` href="${zUtl.encodeXMLAttribute(v)}"`;
 		else
 			attr += ' href="javascript:;"';
 		if (this._disabled)
 			attr += ' disabled="disabled"';
-		return DOMPurify.sanitize(attr);
+		return attr;
 	}
 
 	/** @internal */

@@ -270,7 +270,7 @@ export abstract class LabelImageWidget<TElement extends HTMLElement = HTMLElemen
 	 */
 	domImage_(): string {
 		var img = this._image;
-		return DOMPurify.sanitize(img ? '<img src="' + img + '" align="absmiddle" alt="" aria-hidden="true">' : '');
+		return img ? '<img src="' + zUtl.encodeXMLAttribute(img) + '" align="absmiddle" alt="" aria-hidden="true">' : '';
 	}
 
 	/**
@@ -290,17 +290,17 @@ export abstract class LabelImageWidget<TElement extends HTMLElement = HTMLElemen
 				let html = '<span class="z-icon-stack" aria-hidden="true">';
 				for (let i = 0, icon_length = icon.length; i < icon_length; i++) {
 					if (icon[i]) { // add icon if icon[i] not undefined
-						html += '<i class="' + /*safe*/ icon[i] + '"';
+						html += '<i class="' + /*safe*/ zUtl.encodeXMLAttribute(icon[i]) + '"';
 						if (tooltip?.[i]) { // add iconTooltip if iconTooltip[i] not undefined
-							html += ' title="' + /*safe*/ tooltip[i] + '"';
+							html += ' title="' + /*safe*/ zUtl.encodeXMLAttribute(tooltip[i]) + '"';
 						}
 						html += '></i>';
 					}
 				}
 				html += '</span>';
-				return DOMPurify.sanitize(html);
+				return html;
 			} else {
-				return DOMPurify.sanitize('<i class="' + icon[0] + '"' + (tooltip?.[0] ? ' title="' + tooltip[0] + '"' : '') + ' aria-hidden="true"></i>');
+				return '<i class="' + zUtl.encodeXMLAttribute(icon[0]) + '"' + (tooltip?.[0] ? ' title="' + zUtl.encodeXMLAttribute(tooltip[0]) + '"' : '') + ' aria-hidden="true"></i>';
 			}
 		}
 		return '';

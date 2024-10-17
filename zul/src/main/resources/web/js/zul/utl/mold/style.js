@@ -1,9 +1,9 @@
 /* style.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Thu Jun 30 14:33:41 TST 2011, Created by tomyeh
 
@@ -15,7 +15,7 @@ function style$mold$(out) {
 
 	out.push('<div style="display:none" id="', this.uuid, '">&#160;');
 	if ((src = this._src))
-		out.push('<link id="', this.uuid, '-real" rel="stylesheet" type="text/css" href="', DOMPurify.sanitize(src), '"');
+		out.push('<link id="', this.uuid, '-real" rel="stylesheet" type="text/css" href="', zUtl.encodeXMLAttribute(src), '"');
 	else
 		out.push('<style id="', this.uuid, '-real"');
 

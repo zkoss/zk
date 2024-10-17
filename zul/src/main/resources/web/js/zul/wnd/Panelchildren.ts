@@ -55,7 +55,7 @@ export class Panelchildren extends zul.ContainerWidget {
 			if (!parent._bordered())
 				out.push(/*safe*/ zcls + '-noborder');
 		}
-		return DOMPurify.sanitize(out.join(' '));
+		return out.join(' ');
 	}
 
 	/** @internal */

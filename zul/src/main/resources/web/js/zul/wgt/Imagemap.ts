@@ -106,13 +106,13 @@ export class Imagemap extends zul.wgt.Image {
 		if (w || h) { // B50-ZK-478
 			attr += ' style="';
 			if (w)
-				attr += 'width:' + w + ';';
+				attr += 'width:' + zUtl.encodeXMLAttribute(w) + ';';
 			if (h)
-				attr += 'height:' + h + ';';
+				attr += 'height:' + zUtl.encodeXMLAttribute(h) + ';';
 			attr += '"';
 		}
-		return DOMPurify.sanitize(attr + (this.firstChild ? ' usemap="#' + this.uuid + '-map"' :
-			' ismap="ismap"'));
+		return attr + (this.firstChild ? ' usemap="#' + this.uuid + '-map"' :
+			' ismap="ismap"');
 	}
 
 	override fromPageCoord(x: number, y: number): zk.Offset {

@@ -366,7 +366,7 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 			/*safe*/ iconSclass = this.domIcon_();
 
 		if (img)
-			/*safe*/ img = '<img src="' + /*safe*/ img + '" class="' + this.$s('image') + '" align="absmiddle" alt="" aria-hidden="true" />'
+			/*safe*/ img = '<img src="' + zUtl.encodeXMLAttribute(img) + '" class="' + this.$s('image') + '" align="absmiddle" alt="" aria-hidden="true" />'
 				+ (iconSclass ? ' ' + /*safe*/ iconSclass : '');
 		else {
 			if (iconSclass) {
@@ -376,7 +376,7 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 					+ ' src="data:image/png;base64,R0lGODlhAQABAIAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" class="' + this.$s('image') + '" align="absmiddle" alt="" aria-hidden="true" />';
 			}
 		}
-		return DOMPurify.sanitize(img + (this.isAutocheck() || this.isCheckmark() ? icon : '') + label);
+		return img + (this.isAutocheck() || this.isCheckmark() ? icon : '') + label;
 	}
 
 	/**

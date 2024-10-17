@@ -2253,10 +2253,10 @@ new zul.wnd.Window({
 		if (fc = this.desktop) {
 			//3. generate HTML
 			var out = new zk.Buffer();
-			if (tagBeg) out.push(DOMPurify.sanitize(tagBeg));
+			if (tagBeg) out.push(/*safe*/tagBeg);
 			for (var j = 0, len = wgts.length; j < len; ++j)
 				wgts[j].redraw(out);
-			if (tagEnd) out.push(DOMPurify.sanitize(tagEnd));
+			if (tagEnd) out.push(/*safe*/tagEnd);
 
 			//4. update DOM
 			// eslint-disable-next-line @microsoft/sdl/no-html-method
@@ -3065,7 +3065,7 @@ new zul.wnd.Window({
 	domStyle_(no?: DomStyleOptions): string {
 		var out = '', s: string | undefined;
 		if (s = this.z$display) //see au.js
-			out += 'display:' + s + ';';
+			out += 'display:' + zUtl.encodeXMLAttribute(s) + ';';
 		else if (!this.isVisible() && (!no || !no.visible))
 			out += 'display:none;';
 
@@ -3075,17 +3075,17 @@ new zul.wnd.Window({
 				out += ';';
 		}
 		if ((!no || !no.width) && (s = this.getWidth()))
-			out += 'width:' + s + ';';
+			out += 'width:' + zUtl.encodeXMLAttribute(s) + ';';
 		if ((!no || !no.height) && (s = this.getHeight()))
-			out += 'height:' + s + ';';
+			out += 'height:' + zUtl.encodeXMLAttribute(s) + ';';
 		if ((!no || !no.left) && (s = this.getLeft()))
-			out += 'left:' + s + ';';
+			out += 'left:' + zUtl.encodeXMLAttribute(s) + ';';
 		if ((!no || !no.top) && (s = this.getTop()))
-			out += 'top:' + s + ';';
+			out += 'top:' + zUtl.encodeXMLAttribute(s) + ';';
 		let zIndex;
 		if ((!no || !no.zIndex) && ((zIndex = this.getZIndex() as number)) >= 0)
 			out += 'z-index:' + zIndex + ';';
-		return DOMPurify.sanitize(out);
+		return out;
 	}
 
 	/**
@@ -3111,7 +3111,7 @@ new zul.wnd.Window({
 			s = /*safe*/ this.getSclass();
 		if (!no || !no.zclass)
 			z = /*safe*/ this.getZclass();
-		let domClass = s ? z ? s + ' ' + z : s : z || '',
+		let domClass = zUtl.encodeXMLAttribute(s ? z ? s + ' ' + z : s : z || ''),
 			n = this.$n();
 		// FIX ZK-5137: modifying sclass clears vflex="1 here to avoid circular dependency issue in ZK 10
 		if (n) {
@@ -3124,7 +3124,7 @@ new zul.wnd.Window({
 				}
 			}
 		}
-		return DOMPurify.sanitize(domClass);
+		return domClass;
 	}
 
 	/**
@@ -3182,7 +3182,7 @@ new zul.wnd.Window({
 		if (this.domExtraAttrs) {
 			outHtml += this.domExtraAttrs_();
 		}
-		return DOMPurify.sanitize(outHtml);
+		return outHtml;
 	}
 
 	// B80-ZK-2957
@@ -3231,7 +3231,7 @@ new zul.wnd.Window({
 	 */
 	domTextStyleAttr_(): string | undefined {
 		const html = this.getStyle();
-		return DOMPurify.sanitize(html ? zUtl.appendAttr('style', jq.filterTextStyle(html)) : (html ?? ''));
+		return html ? zUtl.appendAttr('style', jq.filterTextStyle(zUtl.encodeXMLAttribute(html))) : (html ?? '');
 	}
 
 	/** Replaces the specified DOM element with the HTML content generated this widget.

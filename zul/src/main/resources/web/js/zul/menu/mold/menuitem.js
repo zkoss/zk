@@ -19,7 +19,7 @@ function menuitem$mold$(out) {
 
 	out.push('<li', this.domAttrs_(), ' role="none">');
 
-	out.push('<a role="' + (chechmark ? 'menuitemcheckbox' : 'menuitem') + '" href="', this.getHref() ? /*safe*/ zUtl.encodeXMLAttribute(DOMPurify.sanitize(this.getHref())) : 'javascript:void(0);', '"');
+	out.push('<a role="' + (chechmark ? 'menuitemcheckbox' : 'menuitem') + '" href="', this.getHref() ? /*safe*/ zUtl.encodeXMLAttribute(this.getHref()) : 'javascript:void(0);', '"');
 	if (target)
 		out.push(' target="', zUtl.encodeXML(target), '"');
 	out.push(' id="', uuid, '-a" class="', this.$s('content'), '"',

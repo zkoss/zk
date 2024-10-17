@@ -792,7 +792,7 @@ export class Box extends zul.Widget {
 			return ''; //if hoz and not splitter, display handled in _childInnerAttrs
 
 		if (!child.isVisible()) html += ' style="display:none"';
-		return DOMPurify.sanitize(html);
+		return html;
 	}
 
 	/** @internal */
@@ -823,7 +823,7 @@ export class Box extends zul.Widget {
 
 		if (!vert && !child.isVisible()) style += style ? ';display:none' : 'display:none';
 		if (!vert) style += style ? ';height:100%' : 'height:100%';
-		return DOMPurify.sanitize(style ? html + ' style="' + style + '"' : html);
+		return style ? html + ' style="' + style + '"' : html;
 	}
 
 	/** @internal */

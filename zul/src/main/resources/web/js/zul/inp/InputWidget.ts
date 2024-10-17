@@ -626,21 +626,21 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		vHTML = /*safe*/ this._tabindex;
 		if (vHTML != undefined) html += ' tabindex="' + vHTML + '"';
 		vHTML = /*safe*/ this._name;
-		if (vHTML) html += ' name="' + vHTML + '"';
+		if (vHTML) html += ' name="' + zUtl.encodeXMLAttribute(vHTML as never) + '"';
 		if (this._disabled) html += ' disabled="disabled"';
 		if (this._readonly) html += ' readonly="readonly"';
 		if (this._placeholder) html += ' placeholder="' + zUtl.encodeXML(this._placeholder) + '"';
 		if (this._inputAttributes) {
 			for (var key in this._inputAttributes) {
 				var val = this._inputAttributes[key];
-				html += (' ' + /*safe*/ key + '="' + /*safe*/ val + '"');
+				html += (' ' + /*safe*/ key + '="' + zUtl.encodeXMLAttribute(val) + '"');
 			}
 		}
 
 		var /*safe*/ s = jq.filterTextStyle(this.domStyle_({width: true, height: true, top: true, left: true}));
 		if (s) html += ' style="' + /*safe*/ s + '"';
 
-		return DOMPurify.sanitize(html);
+		return html;
 	}
 
 	/** @internal */
@@ -881,7 +881,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 
 		if (this.desktop) { //err not visible if not attached //B85-ZK-3321
 			jq(this.getInputNode()).addClass(this.$s('invalid'));
-			
+
 			interface CustomConstraint extends zul.inp.SimpleConstraint {
 				showCustomError?: (inp: InputWidget<ValueType>, msg: string) => boolean;
 			}
@@ -1083,7 +1083,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 				//value not reset yet so wait a moment
 		}
 	}
-	
+
 	/** @internal */
 	override focus_(timeout?: number): boolean {
 		zk(this.getInputNode()).focus(timeout);

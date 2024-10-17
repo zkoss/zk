@@ -218,7 +218,7 @@ export class Cell extends zul.Widget<HTMLTableCellElement> {
 			if (style)
 				m1.style = '"' + style + '"';
 		}
-		return DOMPurify.sanitize(' ' + zUtl.mapToString(m1!)); // FIXME: m1 could be undefined
+		return ' ' + zUtl.mapToString(m1!); // FIXME: m1 could be undefined
 	}
 
 	/** @internal */

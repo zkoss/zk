@@ -74,14 +74,14 @@ export abstract class Auxheader extends zul.mesh.HeaderWidget {
 
 		return this;
 	}
-	
+
 	/** @internal */
 	override domAttrs_(no?: zk.DomAttrsOptions): string {
 		var /*safe*/ s = super.domAttrs_(no);
 		if (this._colspan != 1)
-			s += ` colspan="${this._colspan}"`;
+			s += ` colspan="${zUtl.encodeXMLAttribute(this._colspan as never)}"`;
 		if (this._rowspan != 1)
-			s += ` rowspan="${this._rowspan}"`;
-		return DOMPurify.sanitize(s);
+			s += ` rowspan="${zUtl.encodeXMLAttribute(this._rowspan as never)}"`;
+		return s;
 	}
 }

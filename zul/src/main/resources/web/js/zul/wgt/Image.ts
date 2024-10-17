@@ -202,13 +202,13 @@ export class Image extends zul.Widget<HTMLImageElement> {
 	 * @internal
 	 */
 	contentAttrs_(): string {
-		var attr = ' src="' + (this._src || '') + '"', v;
+		var attr = ' src="' + zUtl.encodeXMLAttribute(this._src || '') + '"', v;
 		if (v = this._align)
-			attr += ' align="' + v + '"';
+			attr += ' align="' + zUtl.encodeXMLAttribute(v as never) + '"';
 		if (v = this._hspace)
-			attr += ' hspace="' + v + '"';
+			attr += ' hspace="' + zUtl.encodeXMLAttribute(v as never) + '"';
 		if (v = this._vspace)
-			attr += ' vspace="' + v + '"';
-		return DOMPurify.sanitize(attr);
+			attr += ' vspace="' + zUtl.encodeXMLAttribute(v as never) + '"';
+		return attr;
 	}
 }
