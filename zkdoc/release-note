@@ -37,6 +37,7 @@ ZK 10.1.0
   ZK-5819: [CodeQL] Apache Commons IO: Possible denial of service attack on untrusted input to XmlStreamReade
   ZK-5814: a side effect of ZK-5582 for F02545ChildrenBindingSupportListModelTest
   ZK-5820: a side effect of ZK-5018 for F95_ZK_4552Test
+  ZK-5810: Client MVVM: XEL Methods in include
 
 * Upgrade Notes
   + Remove Htmls.encodeJavaScript(), Strings.encodeJavaScript(), Strings.escape() with Strings.ESCAPE_JAVASCRIPT, and replace them with OWASP Java Encoder APIs instead.
