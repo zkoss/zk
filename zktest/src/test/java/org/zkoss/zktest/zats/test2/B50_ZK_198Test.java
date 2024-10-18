@@ -1,9 +1,9 @@
 /* B50_ZK_198Test.java
 
 		Purpose:
-		
+
 		Description:
-		
+
 		History:
 				Tue Apr 02 18:06:22 CST 2019, Created by leon
 
@@ -22,6 +22,7 @@ public class B50_ZK_198Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		Actions act = new Actions(connect());
+		waitResponse();
 		int heightBefore = jq(".z-center .z-center").height();
 		WebElement splitter = toElement(jq(".z-east-splitter"));
 		act.dragAndDropBy(splitter, 50, 0).build().perform();
