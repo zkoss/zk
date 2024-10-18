@@ -40,8 +40,4 @@ public class B101_ZK_5793Test extends WebDriverTestCase {
 		if (!isUnix()) // ignore to test on Jenkins
 			assertTrue(hasProgress);
 	}
-
-	protected boolean isHeadless() {
-		return false;
-	}
 }
