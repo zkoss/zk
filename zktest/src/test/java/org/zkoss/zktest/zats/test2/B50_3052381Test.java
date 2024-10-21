@@ -1,9 +1,9 @@
 /* B50_3052381Test.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Tue Mar 26 16:03:07 CST 2019, Created by rudyhuang
 
@@ -16,6 +16,7 @@ import static org.hamcrest.Matchers.startsWithIgnoringCase;
 
 import java.util.Collections;
 
+import net.jcip.annotations.NotThreadSafe;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.chrome.ChromeOptions;
 
@@ -25,6 +26,7 @@ import org.zkoss.test.webdriver.ztl.JQuery;
 /**
  * @author rudyhuang
  */
+@NotThreadSafe
 public class B50_3052381Test extends DockerWebDriverTestCase {
 	@Override
 	protected ChromeOptions getWebDriverOptions() {

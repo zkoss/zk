@@ -1,9 +1,9 @@
 /* B50_2946333Test.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Wed Mar 20 17:43:09 CST 2019, Created by rudyhuang
 
@@ -27,7 +27,7 @@ public class B50_2946333Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
-
+		waitResponse();
 		int splitterTop50per = jq(".z-north-splitter").positionTop();
 
 		click(jq("@button:contains(25%)"));
