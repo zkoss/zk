@@ -16,17 +16,17 @@ import static org.hamcrest.Matchers.startsWithIgnoringCase;
 
 import java.util.Collections;
 
-import net.jcip.annotations.NotThreadSafe;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.chrome.ChromeOptions;
 
 import org.zkoss.test.webdriver.DockerWebDriverTestCase;
+import org.zkoss.test.webdriver.ForkJVMTestOnly;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author rudyhuang
  */
-@NotThreadSafe
+@ForkJVMTestOnly
 public class B50_3052381Test extends DockerWebDriverTestCase {
 	@Override
 	protected ChromeOptions getWebDriverOptions() {
