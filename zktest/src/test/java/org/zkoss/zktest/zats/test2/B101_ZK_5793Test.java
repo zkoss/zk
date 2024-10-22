@@ -27,7 +27,6 @@ public class B101_ZK_5793Test extends WebDriverTestCase {
 		waitResponse();
 		sendKeys(jq("input[type=file]"), System.getProperty("user.dir") + "/src/main/webapp/test2/B101_ZK_5793.png");
 
-		// try 3 times
 		int count = 0;
 		boolean hasProgress = false;
 		while (count++ < 200) {
