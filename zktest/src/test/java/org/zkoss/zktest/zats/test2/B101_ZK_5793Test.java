@@ -25,19 +25,19 @@ public class B101_ZK_5793Test extends WebDriverTestCase {
 	public void testFileupload() {
 		connect();
 		waitResponse();
-		sendKeys(jq("input[type=file]"), System.getProperty("user.dir") + "/src/main/webapp/img/wireless.gif");
+		sendKeys(jq("input[type=file]"), System.getProperty("user.dir") + "/src/main/webapp/test2/B101_ZK_5793.png");
 
 		// try 3 times
 		int count = 0;
 		boolean hasProgress = false;
-		while (count++ < 3) {
-			sleep(150);
+		while (count++ < 200) {
+			sleep(10);
 			if (jq(".z-fileupload-manager.z-popup-open").length() > 0) {
 				hasProgress = true;
 				break;
 			}
 		}
-		if (!isUnix()) // ignore to test on Jenkins
-			assertTrue(hasProgress);
+
+		assertTrue(hasProgress);
 	}
 }
