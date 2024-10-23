@@ -1,9 +1,9 @@
 /* F96_ZK_4917Test.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Wed Jun 09 17:03:54 CST 2021, Created by rudyhuang
 
@@ -34,6 +34,7 @@ public class F96_ZK_4917Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
+		waitResponse();
 		waitForPDFLoaded();
 
 		final Widget pdfviewer = widget("$pv");
