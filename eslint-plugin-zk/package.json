@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-zk",
-  "version": "0.5.0-3",
+  "version": "0.5.0-4",
   "description": "ESLint rules for ZK",
   "main": "./dist/src/index.js",
   "scripts": {

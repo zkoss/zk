@@ -30,13 +30,13 @@ const sincePattern = /\s+\d+\.\d+\.\d+\s+/y;
  * ```
  * /\s+\w+(\.\w+)*(\s+-)?\s+(\w+)?/y.exec('  13eee_ee123.1.3\n')
  * ['  13eee_ee123.1.3\n', '.3', undefined, undefined, ... ]
- * 
+ *
  * /\s+\w+(\.\w+)*(\s+-)?\s+(\w+)?/y.exec('  13eee_ee123.1.3 - ')
  * ['  13eee_ee123.1.3 - ', '.3', ' -', undefined, ... ]
- * 
+ *
  * /\s+\w+(\.\w+)*(\s+-)?\s+(\w+)?/y.exec('  13eee_ee123.1.3 - 23')
  * ['  13eee_ee123.1.3 - 23', '.3', ' -', '23', ... ]
- * 
+ *
  * /\s+\w+(\.\w+)*(\s+-)?\s+(\w+)?/y.exec('  13eee_ee123.1.3 23')
  * ['  13eee_ee123.1.3 23', '.3', undefined, '23', ... ]
  * ```
@@ -65,8 +65,8 @@ export const tsdocValidation = createRule({
 			cannotLoadTsdocConfig: 'Cannot load tsdoc.json: {{message}}',
 			cannotApplyTsdocConfig: 'Cannot apply tsdoc.json: {{message}}',
 			multipleTsdocs: 'Found multiple TSDoc associated with me; lines {{tsdocLines}}. Leave at most one TSDoc comment, or consider separating the declaration overloads.',
-			annotateInternal: 'Add @internal to the TSDoc, as a name that starts or ends with an underscore should not be exposed.',
-			noAnnotateInternal: 'Remove @internal from the TSDoc, as a name that does not start nor end with an underscore should be public.',
+			annotateInternal: 'Add @internal to the TSDoc, as a name that starts with an underscore should not be exposed.',
+			noAnnotateInternal: 'Remove @internal from the TSDoc, as a name that does not start with an underscore should be public.',
 			sinceFormat: '@since should be followed by a semver (MAJOR.MINOR.PATCH).',
 			paramFormatUnrecognizable: 'The format for this @param block is plain wrong.',
 			transformJavadocParam: 'Transform the JavaDoc pattern "@param{{from}}" to the TSDoc pattern "@param{{to}}".',
@@ -287,7 +287,7 @@ export const tsdocValidation = createRule({
 			while (tsdoc.buffer[firstNonAsterisk] === '*') {
 				++firstNonAsterisk;
 			}
-			restOfLinePattern.lastIndex = firstNonAsterisk; 
+			restOfLinePattern.lastIndex = firstNonAsterisk;
 			const matchResult = restOfLinePattern.exec(tsdoc.buffer);
 			if (!matchResult) {
 				return;
@@ -318,7 +318,7 @@ export const tsdocValidation = createRule({
 		}
 
 		function markInternal(node: TSESTree.Node & { key?: TSESTree.Node }, name: string) {
-			if (!name.startsWith('_') && !name.endsWith('_')) {
+			if (!name.startsWith('_')) {
 				return;
 			}
 			const {text} = sourceCode;
@@ -344,7 +344,7 @@ export const tsdocValidation = createRule({
 		function ensureInternal(node: PropertyNameNonComputedNode, docComment: DocComment, tsdoc: TextRange): void {
 			const name = getPropertyNameNonComputed(node);
 			const isAnnotatedInternal = docComment.modifierTagSet.isInternal();
-			if (name.startsWith('_') || name.endsWith('_')) {
+			if (name.startsWith('_')) {
 				if (!isAnnotatedInternal) {
 					context.report({
 						node: node.key,
@@ -374,7 +374,7 @@ export const tsdocValidation = createRule({
 						}
 					});
 				}
-			} else if (isAnnotatedInternal) {
+			} else if (isAnnotatedInternal && !name.endsWith('_')) {
 				const internal = docComment.modifierTagSet.tryGetTag(new TSDocTagDefinition({
 					tagName: '@internal',
 					syntaxKind: TSDocTagSyntaxKind.ModifierTag,

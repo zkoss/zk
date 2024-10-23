@@ -1804,7 +1804,6 @@ export abstract class ZKObject {
 	 * fields are ready to use.
 	 * @param props - the properties passed by constructor.
 	 * @since 10.0.0
-	 * @internal
 	 */
 	afterCreated_(props?: Record<string, unknown> | typeof zkac): void {
 		// empty for subclass to override

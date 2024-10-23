@@ -244,7 +244,6 @@ export class ComboWidget extends zul.inp.InputWidget<string> {
 		}
 	}
 
-	/** @internal */
 	fixPopupDimension_(): void {
 		this._shallFixPopupDimension = false;
 		var pp = this.getPopupNode_()!,
@@ -357,7 +356,7 @@ export class ComboWidget extends zul.inp.InputWidget<string> {
 
 		pp.style.display = 'none';
 		pp.style.visibility = '';
-		
+
 		if (jqn.offset()!.top > pptop)
 			this.slideDown_(pp, 'b');
 		else
@@ -623,15 +622,12 @@ export class ComboWidget extends zul.inp.InputWidget<string> {
 		}
 	}
 
-	/** @internal */
 	dnPressed_(evt: zk.Event): void {
 		// empty on purpose
 	}
-	/** @internal */
 	upPressed_(evt: zk.Event): void {
 		// empty on purpose
 	}
-	/** @internal */
 	otherPressed_(evt: zk.Event): void {
 		// empty on purpose
 	}
@@ -642,7 +638,6 @@ export class ComboWidget extends zul.inp.InputWidget<string> {
 	 * @param evt - the widget event.
 	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget}
 	 * @see {@link close}
-	 * @internal
 	 */
 	enterPressed_(evt: zk.Event): void {
 		this.close({sendOnOpen: true});
@@ -656,7 +651,6 @@ export class ComboWidget extends zul.inp.InputWidget<string> {
 	 * @param evt - the widget event.
 	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget}
 	 * @see {@link close}
-	 * @internal
 	 */
 	escPressed_(evt: zk.Event): void {
 		this.close({sendOnOpen: true});
@@ -666,7 +660,6 @@ export class ComboWidget extends zul.inp.InputWidget<string> {
 	/**
 	 * @returns [width, height] for the popup if specified by user.
 	 * @defaultValue ['auto', 'auto']
-	 * @internal
 	 */
 	getPopupSize_(pp: HTMLElement): PopupSize {
 		return ['auto', 'auto'];
@@ -676,7 +669,6 @@ export class ComboWidget extends zul.inp.InputWidget<string> {
 	 * Called by {@link redraw_} to redraw popup.
 	 * @defaultValue does nothing
 	 *  @param out - an array of HTML fragments.
-	 * @internal
 	 */
 	redrawpp_(out: string[]): void {
 		// empty on purpose

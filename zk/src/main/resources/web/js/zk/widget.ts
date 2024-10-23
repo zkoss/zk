@@ -1558,7 +1558,6 @@ new zul.wnd.Window({
 		return this;
 	}
 
-	/** @internal */
 	setHflex_(hflex?: string | boolean): void {
 		this._nhflex = (true === hflex || 'true' == hflex) ? 1 : hflex == 'min' ? -65500 : zk.parseInt(hflex);
 		if (this._nhflex < 0 && hflex != 'min')
@@ -1584,7 +1583,6 @@ new zul.wnd.Window({
 		}
 	}
 
-	/** @internal */
 	setVflex_(vflex?: string | boolean): void {
 		this._nvflex = (true === vflex || 'true' == vflex) ? 1 : vflex == 'min' ? -65500 : zk.parseInt(vflex);
 		if (this._nvflex < 0 && vflex != 'min')
@@ -1613,7 +1611,6 @@ new zul.wnd.Window({
 	 * Notice that, if you override, you have to call back this method.
 	 * @param visible - whether the result of the animation will make the DOM element visible
 	 * @since 5.0.6
-	 * @internal
 	 */
 	afterAnima_(visible: boolean): void {
 		var fn: CallableFunction | undefined;
@@ -1960,7 +1957,6 @@ new zul.wnd.Window({
 	 * @returns whether a new child shall be ROD.
 	 * @defaultValue return true if child.z_rod or this.z_rod
 	 * @since 5.0.1
-	 * @internal
 	 */
 	shallChildROD_(child: zk.Widget): boolean {
 		return !!(child.z_rod || this.z_rod);
@@ -2047,7 +2043,6 @@ new zul.wnd.Window({
 	/** A callback called before removing a child.
 	 * @param child - the child being removed.
 	 * @since 10.0.0
-	 * @internal
 	 */
 	beforeChildRemoved_(child: zk.Widget): void {
 		return;
@@ -2056,7 +2051,6 @@ new zul.wnd.Window({
 	/** A callback called before removing a child for shadow host.
 	 * @param child - the child being removed.
 	 * @since 10.0.0
-	 * @internal
 	 */
 	triggerBeforeHostChildRemoved_(child: zk.Widget): void {
 		return;
@@ -2226,7 +2220,6 @@ new zul.wnd.Window({
 	 * @param tagEnd - the ending of HTML tag, such as `</tbody>`;
 	 * Ignored if null.
 	 * @see zAu#createWidgets
-	 * @internal
 	 */
 	replaceCavedChildren_(subId: string, wgts: zk.Widget[], tagBeg?: string, tagEnd?: string): void {
 		_noChildCallback = true; //no callback
@@ -2280,7 +2273,6 @@ new zul.wnd.Window({
 	 * @see {@link onChildAdded_}
 	 * @see {@link onChildRemoved_}
 	 * @see {@link afterParentChanged_}
-	 * @internal
 	 */
 	beforeParentChanged_(newparent?: zk.Widget): void {
 		return;
@@ -2291,7 +2283,6 @@ new zul.wnd.Window({
 	 * @param newparent - the new parent (null if it is removed)
 	 * The previous parent can be found by {@link parent}.
 	 * @since 10.0.0
-	 * @internal
 	 */
 	triggerBeforeHostParentChanged_(newparent?: zk.Widget): void {
 		return;
@@ -2302,7 +2293,6 @@ new zul.wnd.Window({
 	 * The current parent can be found by {@link parent}.
 	 * @since 5.0.4
 	 * @see {@link beforeParentChanged_}
-	 * @internal
 	 */
 	afterParentChanged_(oldparent?: zk.Widget): void {
 		return;
@@ -2537,7 +2527,6 @@ new zul.wnd.Window({
 	 * <li>display - Modify n.style.display</li>
 	 * <li>visibility - Modify n.style.visibility</li>
 	 * </ul>
-	 * @internal
 	 */
 	setDomVisible_(domVisible: HTMLElement, visible: boolean, opts?: DomVisibleOptions): void {
 		if (!opts || opts.display) {
@@ -2561,7 +2550,6 @@ new zul.wnd.Window({
 	 * last child.
 	 * @returns whether the widget was able to added.
 	 * @since 10.0.0
-	 * @internal
 	 */
 	beforeChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): boolean {
 		return true; //to be overridden
@@ -2570,7 +2558,6 @@ new zul.wnd.Window({
 	/**
 	 * Called before adding a child for shadow host.
 	 * @since 10.0.0
-	 * @internal
 	 */
 	triggerBeforeHostChildAdded_(child: zk.Widget, insertBefore?: zk.Widget): void {
 		return; //to be overridden
@@ -2581,7 +2568,6 @@ new zul.wnd.Window({
 	 * @param child - the child being added
 	 * @see {@link beforeParentChanged_}
 	 * @see {@link onChildRemoved_}
-	 * @internal
 	 */
 	onChildAdded_(child: zk.Widget): void {
 		if (this.desktop)
@@ -2591,7 +2577,6 @@ new zul.wnd.Window({
 	/** A callback called after a child has been added to this widget for shadow host.
 	 * @since 10.0.0
 	 * @param child - the child being added
-	 * @internal
 	 */
 	triggerAfterHostChildAdded_(child: zk.Widget): void {
 		return;
@@ -2602,7 +2587,6 @@ new zul.wnd.Window({
 	 * @param child - the child being removed
 	 * @see {@link beforeParentChanged_}
 	 * @see {@link onChildAdded_}
-	 * @internal
 	 */
 	onChildRemoved_(child: zk.Widget): void {
 		if (this.desktop)
@@ -2613,7 +2597,6 @@ new zul.wnd.Window({
 	 * host.
 	 * @param child - the child being removed
 	 * @since 10.0.0
-	 * @internal
 	 */
 	triggerAfterHostChildRemoved_(child: zk.Widget): void {
 		return;
@@ -2630,7 +2613,6 @@ new zul.wnd.Window({
 	 * the code (such as rerender only once) by checking its value.
 	 * @param oldc - the old child (being removed). Note: it might be null.
 	 * @param newc - the new child (being added). Note: it might be null.
-	 * @internal
 	 */
 	onChildReplaced_(oldc: zk.Widget | undefined, newc: zk.Widget | undefined): void {
 		this.childReplacing_ = true;
@@ -2655,7 +2637,6 @@ new zul.wnd.Window({
 	 * <p>To know if it is becoming visible, you can check {@link isVisible}
 	 * (such as this._visible).
 	 * @param child - the child whose visiblity is changed
-	 * @internal
 	 */
 	onChildVisible_(child: zk.Widget): void {
 		return;
@@ -2665,7 +2646,6 @@ new zul.wnd.Window({
 	 * @param child - the child being rendered
 	 * @see {@link deferRedraw_}
 	 * @since 6.5.1
-	 * @internal
 	 */
 	onChildRenderDefer_(child: zk.Widget): void {
 		return;
@@ -2709,7 +2689,6 @@ new zul.wnd.Window({
 	 * @param zi - the z-index to set
 	 * @see {@link setFloating_}
 	 * @since 5.0.3
-	 * @internal
 	 */
 	// eslint-disable-next-line zk/javaStyleSetterSignature
 	setFloatZIndex_(node: HTMLElement, zi: number): void {
@@ -2726,7 +2705,6 @@ new zul.wnd.Window({
 	 * is called. If not specified, it is the same as {@link Widget.$n}.
 	 * @since 5.0.3
 	 * @see {@link setFloating_}
-	 * @internal
 	 */
 	getFloatZIndex_(node: HTMLElement): number | string {
 		return node != this.$n() ? node.style.zIndex : this._zIndex;
@@ -2747,7 +2725,6 @@ new zul.wnd.Window({
 	 * @returns if this widget is floating.
 	 * <p>We say a widget is floating if the widget floats on top of others, rather than embed inside the parent. For example, an overlapped window is floating, while an embedded window is not.
 	 * @see {@link setFloating_}
-	 * @internal
 	 */
 	isFloating_(): boolean {
 		return this._floating;
@@ -2763,7 +2740,6 @@ new zul.wnd.Window({
 	 * <li>node: the DOM element. If omitted, {@link Widget.$n} is assumed.</li>
 	 * </ul>
 	 * @see {@link isFloating_}
-	 * @internal
 	 */
 	setFloating_(floating: boolean, opts?: Partial<{ node: HTMLElement }>): void {
 		if (this._floating != floating) {
@@ -2919,7 +2895,6 @@ new zul.wnd.Window({
 	 * ```
 	 * @param out - an array to output the HTML fragments.
 	 * @since 5.0.2
-	 * @internal
 	 */
 	deferRedraw_(out: string[] | undefined): boolean {
 		var delay: undefined | number;
@@ -2946,7 +2921,6 @@ new zul.wnd.Window({
 	 * <p>By default, the Div tag is assumed.
 	 * @param out - an array to output the HTML fragments.
 	 * @since 5.0.6
-	 * @internal
 	 */
 	deferRedrawHTML_(out: string[]): void {
 		out.push('<div', this.domAttrs_({domClass: true}), ' class="z-renderdefer"></div>');
@@ -2977,7 +2951,6 @@ new zul.wnd.Window({
 	 * <li>Override it if the class has to be copied to DOM elements other than {@link Widget.$n}.</li>
 	 * </ul>
 	 * @see {@link updateDomStyle_}
-	 * @internal
 	 */
 	updateDomClass_(): void {
 		if (this.desktop) {
@@ -2993,7 +2966,6 @@ new zul.wnd.Window({
 	 * <ul>
 	 * <li>Override it if the CSS style has to be copied to DOM elements other than {@link Widget.$n}.</li>
 	 * </ul>
-	 * @internal
 	 */
 	updateDomStyle_(): void {
 		if (this.desktop) {
@@ -3060,7 +3032,6 @@ new zul.wnd.Window({
 	 * </ul>
 	 * @see {@link domClass_}
 	 * @see {@link domAttrs_}
-	 * @internal
 	 */
 	domStyle_(no?: DomStyleOptions): string {
 		var out = '', s: string | undefined;
@@ -3103,7 +3074,6 @@ new zul.wnd.Window({
 	 * </ul>
 	 * @see {@link domStyle_}
 	 * @see {@link domAttrs_}
-	 * @internal
 	 */
 	domClass_(no?: DomClassOptions): string {
 		var s: undefined | string, z: undefined | string;
@@ -3152,7 +3122,6 @@ new zul.wnd.Window({
 	 * <li>tabindex - exclude {@link getTabindex}</li>
 	 * </ul>
 	 * <p>return the HTML attributes, such as id="z_u7_3" class="z-button"
-	 * @internal
 	 */
 	domAttrs_(no?: DomAttrsOptions): string {
 		var outHtml = '', tempHtml: undefined | string, tabIndexHtml: undefined | number;
@@ -3186,7 +3155,6 @@ new zul.wnd.Window({
 	}
 
 	// B80-ZK-2957
-	/** @internal */
 	domExtraAttrs_(): string {
 		var dh: Record<string, string> = {},
 			has = false,
@@ -3216,7 +3184,6 @@ new zul.wnd.Window({
 	 * <p>Deriving class might override this method if the parent widget
 	 * is not associated with any DOM element, such as treerow's parent: treeitem.
 	 * @since 5.0.2
-	 * @internal
 	 */
 	domTooltiptext_(): string | undefined {
 		return this.getTooltiptext();
@@ -3227,7 +3194,6 @@ new zul.wnd.Window({
 	 * <p>It is usually used with {@link getTextNode} to
 	 * <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/Component_Development/Client-side/Text_Styles_and_Inner_Tags">ZK Client-side Reference: Text Styles and Inner Tags</a>.
 	 * @see {@link getTextNode}
-	 * @internal
 	 */
 	domTextStyleAttr_(): string | undefined {
 		const html = this.getStyle();
@@ -3302,7 +3268,6 @@ new zul.wnd.Window({
 	 * works correctly.
 	 * @param n - the DOM element to match the widget.
 	 * @since 5.0.3
-	 * @internal
 	 */
 	getOldWidget_(n: HTMLElement | string): zk.Widget | undefined {
 		return Widget.$(n, {strict: true});
@@ -3312,7 +3277,6 @@ new zul.wnd.Window({
 	 * @returns the HTML fragment of this widget.
 	 * @param skipper - the skipper. Ignored if null
 	 * @param trim - whether to trim the HTML content before replacing
-	 * @internal
 	 */
 	redrawHTML_(skipper?: Skipper, trim?: boolean): string {
 		var out = new zk.Buffer(); // Due to the side-effect of B65-ZK-1628, we remove the optimization of the array's join() for chrome.
@@ -3409,7 +3373,6 @@ new zul.wnd.Window({
 	 * This avoids rerendering twice or more. It works only in the setAttrs phase,
 	 * otherwise rerender will be invoked immediately.
 	 * @since 8.6.0
-	 * @internal
 	 */
 	rerenderLater_(skipper?: Skipper): void {
 		const processPhase = zAu.processPhase;
@@ -3428,7 +3391,6 @@ new zul.wnd.Window({
 	 * @param dt - [optional the desktop that this widget shall belong to.
 	 * If null, it is decided automatically ( such as the current value of {@link desktop} or the first desktop)
 	 * @param skipper - it is used only if it is called by {@link rerender}
-	 * @internal
 	 */
 	replaceChildHTML_(child: zk.Widget, n: HTMLElement | string, desktop?: Desktop, skipper?: Skipper, _trim_?: boolean): void {
 		var oldwgt = child.getOldWidget_(n),
@@ -3455,7 +3417,6 @@ new zul.wnd.Window({
 	 * @param before - the child widget as the reference to insert the new child before. If null, the HTML content will be appended as the last child.
 	 * The implementation can use before.getFirstNode_() ({@link getFirstNode_}) to retrieve the DOM element
 	 * @see {@link getCaveNode}
-	 * @internal
 	 */
 	insertChildHTML_(child: zk.Widget, before?: zk.Widget, desktop?: Desktop): void {
 		var ben: zk.Widget | undefined | HTMLElement, html = child.redrawHTML_(),
@@ -3527,7 +3488,6 @@ new zul.wnd.Window({
 	 * for its siblings.
 	 * <p>This method is designed to be used with {@link insertChildHTML_}
 	 * for retrieving the DOM element of the `before` widget.
-	 * @internal
 	 */
 	getFirstNode_(): HTMLElement | undefined {
 		for (let w: zk.Widget | undefined = this; w; w = w.nextSibling) {
@@ -3544,7 +3504,6 @@ new zul.wnd.Window({
 	 * remove DOM elements other than child's node (and the descendants).
 	 * @param child - the child widget to remove
 	 * @param ignoreDom - whether to remove the DOM element
-	 * @internal
 	 */
 	removeChildHTML_(child: zk.Widget, ignoreDom?: boolean): void {
 		var cf = zk.currentFocus;
@@ -3575,7 +3534,6 @@ new zul.wnd.Window({
 	 * n is a single element array.
 	 * If this widget is not associated with any DOM element, an array of
 	 * child widget's DOM elements are returned.
-	 * @internal
 	 */
 	removeHTML_(n: HTMLElement | HTMLElement[]): void {
 		_rmDom(this, n);
@@ -3628,7 +3586,6 @@ new zul.wnd.Window({
 	 * @returns the DOM element that this widget is bound to. (Never null)
 	 * @see {@link Widget.$n_}
 	 * @since 10.0.0
-	 * @internal
 	 */
 	$n_(): TElement
 	/**
@@ -3637,10 +3594,8 @@ new zul.wnd.Window({
 	 * @param subId - the sub ID of the child element
 	 * @see {@link Widget.$n_}
 	 * @since 10.0.0
-	 * @internal
 	 */
 	$n_<T extends HTMLElement = HTMLElement>(subId: string | undefined): T
-	/** @internal */
 	$n_(subId?: string): HTMLElement {
 		const n = this.$n(subId);
 		if (n == null) {
@@ -3684,7 +3639,6 @@ new zul.wnd.Window({
 	/**
 	 * @returns whether the widget is in re-rendering phases.
 	 * @since 10.0.0
-	 * @internal
 	 */
 	inRerendering_(): boolean {
 		// Fix a side-effect of https://github.com/zkoss/zk/commit/97407d42c9bebd412dc1e5632728f6c3546ce21d
@@ -3732,7 +3686,6 @@ new zul.wnd.Window({
 	/**
 	 * Unbinds when in rod mode. (internal use for callback)
 	 * @since 10.0.0
-	 * @internal
 	 */
 	unbindRod_(): void {
 		// for override
@@ -3770,7 +3723,6 @@ new zul.wnd.Window({
 	 * Forces the delayed rerendering children or itself to do now.
 	 * @param skipper - used if {@link rerender} is called with a non-null skipper.
 	 * @since 7.0.2
-	 * @internal
 	 */
 	rerenderNow_(skipper?: Skipper): void { // for Bug ZK-2281 and others life cycle issues when the dom of children of itself is undefined.
 		_rerenderNow(this, skipper);
@@ -3885,7 +3837,6 @@ new zul.wnd.Window({
 	 * }
 	 * ```
 	 * @param bindSelfOnly - set to true if one doesn't want to recursively bind descendents.
-	 * @internal
 	 */
 	bind_(desktop?: Desktop, skipper?: Skipper, after?: CallableFunction[], bindSelfOnly?: boolean): void {
 		this.get$Class<typeof Widget>()._bind0(this);
@@ -3937,7 +3888,6 @@ new zul.wnd.Window({
 	 * @param skipper - used if {@link rerender} is called with a non-null skipper.
 	 * @param after - an array of function ({@link Function}) that will be invoked after {@link bind_} has been called. For example,
 	 * @since 5.0.5
-	 * @internal
 	 */
 	bindChildren_(desktop?: Desktop, skipper?: Skipper, after?: CallableFunction[]): void {
 		for (var child: zk.Widget | undefined = this.firstChild, nxt: zk.Widget | undefined; child; child = nxt) {
@@ -3976,7 +3926,6 @@ new zul.wnd.Window({
 	 * }
 	 * ```
 	 * @param keepRod - used if the ROD flag needs to be kept.
-	 * @internal
 	 */
 	unbind_(skipper?: Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		this.get$Class<typeof Widget>()._unbind0(this);
@@ -4019,7 +3968,6 @@ new zul.wnd.Window({
 	 * @param after - an array of function ({@link Function})that will be invoked after {@link unbind_} has been called. For example,
 	 * @param keepRod - used if the ROD flag needs to be kept.
 	 * @since 5.0.5
-	 * @internal
 	 */
 	unbindChildren_(skipper?: Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		for (var child: zk.Widget | undefined = this.firstChild, nxt: zk.Widget | undefined; child; child = nxt) {
@@ -4047,14 +3995,12 @@ new zul.wnd.Window({
 	 * @param uuid - the UUID to assign to the widgtet
 	 * @param add - whether to bind. Specify true if you want to bind;
 	 * false if you want to unbind.
-	 * @internal
 	 */
 	extraBind_(uuid: string, add: boolean): void {
 		if (!add) delete _binds[uuid];
 		else _binds[uuid] = this;
 	}
 
-	/** @internal */
 	setFlexSize_(flexSize: zk.FlexSize, isFlexMin?: boolean): void {
 		if (this._cssflex && this.parent && this.parent.getFlexContainer_() != null && !isFlexMin)
 			return;
@@ -4080,83 +4026,69 @@ new zul.wnd.Window({
 
 
 	// eslint-disable-next-line zk/javaStyleSetterSignature
-	/** @internal */
 	setFlexSizeH_(flexSizeH: HTMLElement, zkn: zk.JQZK, height: number, isFlexMin?: boolean): void {
 		// excluding margin for F50-3000873.zul and B50-3285635.zul
 		flexSizeH.style.height = jq.px0(height - (!isFlexMin ? zkn.marginHeight() : 0));
 	}
 
 	// eslint-disable-next-line zk/javaStyleSetterSignature
-	/** @internal */
 	setFlexSizeW_(flexSizeW: HTMLElement, zkn: zk.JQZK, width: number, isFlexMin?: boolean): void {
 		// excluding margin for F50-3000873.zul and B50-3285635.zul
 		flexSizeW.style.width = jq.px0(width - (!isFlexMin ? zkn.marginWidth() : 0));
 	}
 
 	// ZK-5050
-	/** @internal */
 	beforeChildReplaced_(oldc: zk.Widget, newc: zk.Widget): void {
 		//to be overridden
 	}
 
-	/** @internal */
 	beforeChildrenFlex_(kid: zk.Widget): boolean {
 		//to be overridden
 		return true; //return true to continue children flex fixing
 	}
 
-	/** @internal */
 	afterChildrenFlex_(kid?: zk.Widget): void {
 		//to be overridden
 	}
 
 	// @since 7.0.1
-	/** @internal */
 	afterChildMinFlexChanged_(kid: zk.Widget, attr: zk.FlexOrient): void { //attr 'w' for width or 'h' for height
 		//to be overridden, after each of my children fix the minimum flex (both width and height),
 		// only if when myself is not in min flex.
 	}
 
-	/** @internal */
 	ignoreFlexSize_(attr: zk.FlexOrient): boolean { //'w' for width or 'h' for height calculation
 		//to be overridden, whether ignore widget dimension in vflex/hflex calculation
 		return false;
 	}
 
-	/** @internal */
 	ignoreChildNodeOffset_(attr: zk.FlexOrient): boolean { //'w' for width or 'h' for height calculation
 		//to be overridden, whether ignore child node offset in vflex/hflex calculation
 		return false;
 	}
 
-	/** @internal */
 	beforeMinFlex_(attr: zk.FlexOrient): number | undefined { //'w' for width or 'h' for height
 		//to be overridden, before calculate my minimum flex
 		return undefined;
 	}
 
-	/** @internal */
 	beforeParentMinFlex_(attr: zk.FlexOrient): void { //'w' for width or 'h' for height
 		//to be overridden, before my minimum flex parent ask my natural(not minimized) width/height
 	}
 
-	/** @internal */
 	afterChildrenMinFlex_(orient: zk.FlexOrient): void {
 		//to be overridden, after my children fix the minimum flex (both width and height)
 	}
 
-	/** @internal */
 	afterResetChildSize_(attr: string): void {
 		//to be overridden, after my children reset the size of (both width and height)
 	}
 
-	/** @internal */
 	isExcludedHflex_(): boolean {
 		return jq(this.$n()).css('position') == 'absolute'; // B60-ZK-917
 		//to be overridden, if the widget is excluded for hflex calculation.
 	}
 
-	/** @internal */
 	isExcludedVflex_(): boolean {
 		return jq(this.$n()).css('position') == 'absolute'; // B60-ZK-917
 		//to be overridden, if the widget is excluded for vflex calculation.
@@ -4164,7 +4096,6 @@ new zul.wnd.Window({
 
 	// to overridden this method have to fix the IE9 issue (ZK-483)
 	// you can just add 1 px more for the offsetWidth
-	/** @internal */
 	getChildMinSize_(attr: zk.FlexOrient, wgt: zk.Widget): number { //'w' for width or 'h' for height
 		if (attr == 'w') {
 			return zjq.minWidth(wgt);
@@ -4175,18 +4106,15 @@ new zul.wnd.Window({
 
 	// for v/hflex, if the box-sizing is in border-box mode (like ZK 7+),
 	// we should return the content size only (excluding padding and border)
-	/** @internal */
 	getParentSize_(p: HTMLElement): {width: number; height: number} { //to be overridden
 		var zkp = zk(p);
 		return {height: zkp.contentHeight(), width: zkp.contentWidth()};
 	}
 
-	/** @internal */
 	getMarginSize_(attr: zk.FlexOrient): number { //'w' for width or 'h' for height
 		return zk(this).sumStyles(attr == 'h' ? 'tb' : 'lr', jq.margins);
 	}
 
-	/** @internal */
 	getContentEdgeHeight_(height: number/*current calculated height*/): number {
 		var p = this.$n(),
 			body = document.body,
@@ -4215,7 +4143,6 @@ new zul.wnd.Window({
 		return h;
 	}
 
-	/** @internal */
 	getContentEdgeWidth_(width: number/*current calculated width*/): number {
 		var p = this.$n(),
 			body = document.body,
@@ -4243,23 +4170,19 @@ new zul.wnd.Window({
 		return w;
 	}
 
-	/** @internal */
 	fixFlex_(): void {
 		zFlex.fixFlex(this);
 	}
 
-	/** @internal */
 	fixMinFlex_(n: HTMLElement, orient: zk.FlexOrient): number { //internal use
 		return zFlex.fixMinFlex(this, n, orient);
 	}
 
-	/** @internal */
 	clearCachedSize_(): void {
 		delete this._hflexsz;
 		delete this._vflexsz;
 	}
 
-	/** @internal */
 	resetSize_(orient: zk.FlexOrient): void {
 		var n = this.$n()!,
 			hasScroll = this._beforeSizeHasScroll;
@@ -4268,18 +4191,15 @@ new zul.wnd.Window({
 		n.style[orient == 'w' ? 'width' : 'height'] = '';
 	}
 
-	/** @internal */
 	getFlexContainer_(): HTMLElement | undefined {
 		return this.getCaveNode();
 	}
 
-	/** @internal */
 	getFlexDirection_(): string | undefined { // if it is null, by default it would check this display is block or not
 		//to be overridden
 		return undefined;
 	}
 
-	/** @internal */
 	afterClearFlex_(): void {
 		//to be overridden
 	}
@@ -4290,7 +4210,6 @@ new zul.wnd.Window({
 	 * @defaultValue use {@link zk.Draggable} to implement drag-and-drop,
 	 * and the handle to drag is the element returned by {@link getDragNode}
 	 * @see {@link cleanDrag_}
-	 * @internal
 	 */
 	initDrag_(): void {
 		var n = this.getDragNode();
@@ -4304,7 +4223,6 @@ new zul.wnd.Window({
 	 * is cleaned (or unbound).
 	 * <p>You rarely need to override this method, unless you want to handle drag-and-drop differently.
 	 * @see {@link cleanDrag_}
-	 * @internal
 	 */
 	cleanDrag_(): void {
 		var drag = this._drag;
@@ -4330,7 +4248,6 @@ new zul.wnd.Window({
 	 * <p>Though rarely used, you can override any option passed to
 	 * {@link zk.Draggable}, such as the start effect, ghosting and so on.
 	 * @param map - the default implementation
-	 * @internal
 	 */
 	getDragOptions_(map: zk.DraggableOptions): zk.DraggableOptions {
 		return map;
@@ -4341,7 +4258,6 @@ new zul.wnd.Window({
 	 * @defaultValue it always returns false.
 	 * If the location that an user can drag is static, override {@link getDragNode},
 	 * which is easier to implement.
-	 * @internal
 	 */
 	ignoreDrag_(pt: zk.Offset, evt?: zk.Event, drag?: zk.Draggable): boolean {
 		return false;
@@ -4352,7 +4268,6 @@ new zul.wnd.Window({
 	 * @defaultValue it check if the values of droppable and draggable match. It will check the parent ({@link parent}), parent's parent, and so on until matched, or none of them are matched.
 	 * <p>Notice that the widget to test if droppable might be the same as the widget being dragged (i.e., this == dragged). By default, we consider them as non-matched.
 	 * @param dragged - - the widget being dragged (never null).
-	 * @internal
 	 */
 	getDrop_(dragged: zk.Widget): zk.Widget | undefined {
 		if (this == dragged) {
@@ -4376,7 +4291,6 @@ new zul.wnd.Window({
 	 * Notice it is the effect to indicate a widget is droppable.
 	 * @defaultValue it adds the CSS class named 'z-drag-over' if over is true, and remove it if over is false.
 	 * @param over - whether the user is dragging over (or out, if false)
-	 * @internal
 	 */
 	dropEffect_(over?: boolean): void {
 		jq(this.$n() || [])[over ? 'addClass' : 'removeClass']('z-drag-over');
@@ -4386,7 +4300,6 @@ new zul.wnd.Window({
 	 * @returns the message to show when an user is dragging this widget, or null if it prefers to clone the widget with {@link cloneDrag_}.
 	 * @defaultValue it return the inner text if if {@link Widget.$n} returns a TR, TD, or TH element. Otherwise, it returns null and {@link cloneDrag_} will be called to create a DOM element to indicate dragging.
 	 * <p>Notice that the text would be encoded for XSS issue since 8.0.4.2. It should be considered when overriding.
-	 * @internal
 	 */
 	getDragMessage_(): string | undefined {
 		if (jq.nodeName(this.getDragNode(), 'tr', 'td', 'th')) {
@@ -4402,7 +4315,6 @@ new zul.wnd.Window({
 	 * The subclass can override this method to pass more options such as the coordination where a widget is dropped.
 	 * @param drag - the draggable controller
 	 * @param evt - the event causes the drop
-	 * @internal
 	 */
 	onDrop_(drag: zk.Draggable, evt: zk.Event): void {
 		var data = zk.copy({dragged: drag.control}, evt.data);
@@ -4419,7 +4331,6 @@ new zul.wnd.Window({
 	 * @see {@link uncloneDrag_}
 	 * @param drag - the draggable controller
 	 * @param ofs - the offset of the returned element (left/top)
-	 * @internal
 	 */
 	cloneDrag_(drag: zk.Draggable, ofs: zk.Offset): HTMLElement {
 		//See also bug 1783363 and 1766244
@@ -4438,7 +4349,6 @@ new zul.wnd.Window({
 
 	/** Undo the visual effect created by {@link cloneDrag_}.
 	 * @param drag - the draggable controller
-	 * @internal
 	 */
 	uncloneDrag_(drag: zk.Draggable): void {
 		document.body.style.cursor = drag._orgcursor || '';
@@ -4477,7 +4387,6 @@ new zul.wnd.Window({
 	 * @defaultValue use {@link zk.Swipe} to implement swipe event.
 	 * @see {@link doSwipe_}
 	 * @since 6.5.0
-	 * @internal
 	 */
 	bindSwipe_(): void { return; }
 	/**
@@ -4486,7 +4395,6 @@ new zul.wnd.Window({
 	 * <p>You rarely need to override this method, unless you want to unbind swipe event differently.
 	 * @see {@link doSwipe_}
 	 * @since 6.5.0
-	 * @internal
 	 */
 	unbindSwipe_(): void { return; }
 
@@ -4496,7 +4404,6 @@ new zul.wnd.Window({
 	 * <p>You rarely need to override this method, unless you want to implement double click behavior differently.
 	 * @see {@link doDoubleClick_}
 	 * @since 6.5.0
-	 * @internal
 	 */
 	bindDoubleTap_(): void { return; }
 
@@ -4506,7 +4413,6 @@ new zul.wnd.Window({
 	 * <p>You rarely need to override this method, unless you want to implement double click behavior differently.
 	 * @see {@link doDoubleClick_}
 	 * @since 6.5.0
-	 * @internal
 	 */
 	unbindDoubleTap_(): void { return; }
 
@@ -4516,7 +4422,6 @@ new zul.wnd.Window({
 	 * <p>You rarely need to override this method, unless you want to implement right click behavior differently.
 	 * @see {@link doRightClick_}
 	 * @since 6.5.1
-	 * @internal
 	 */
 	bindTapHold_(): void { return; }
 
@@ -4526,7 +4431,6 @@ new zul.wnd.Window({
 	 * <p>You rarely need to override this method, unless you want to implement right click behavior differently.
 	 * @see {@link doRightClick_}
 	 * @since 6.5.1
-	 * @internal
 	 */
 	unbindTapHold_(): void { return; }
 
@@ -4561,7 +4465,6 @@ new zul.wnd.Window({
 	 * @param timeout - how many milliseconds before changing the focus. If not specified or negative, the focus is changed immediately,
 	 * @returns whether the focus is gained to this widget.
 	 * @since 5.0.5
-	 * @internal
 	 */
 	focus_(timeout?: number): boolean {
 		if (zk(this.$n()).focus(timeout)) {
@@ -4725,7 +4628,6 @@ new zul.wnd.Window({
 	 * Its content will be cloned to the AU request.
 	 * @see {@link sendAU_}
 	 * @since 5.0.2
-	 * @internal
 	 */
 	beforeSendAU_(wgt: zk.Widget, evt: zk.Event): void {
 		var en = evt.name;
@@ -4746,7 +4648,6 @@ new zul.wnd.Window({
 	 * @see {@link beforeSendAU_}
 	 * @see zAu#sendAhead
 	 * @since 5.0.1
-	 * @internal
 	 */
 	sendAU_(evt: zk.Event, timeout: number): void {
 		(evt.target || this).beforeSendAU_(this, evt);
@@ -4772,7 +4673,6 @@ new zul.wnd.Window({
 	 * {@link doRightClick_}, or {@link doDoubleClick_}).
 	 * @returns whether to ignore it
 	 * @since 5.0.1
-	 * @internal
 	 */
 	shallIgnoreClick_(evt: zk.Event): boolean {
 		return false;
@@ -5059,7 +4959,6 @@ new zul.wnd.Window({
 	 * @see {@link doClick_}
 	 * @see {@link doRightClick_}
 	 * @since 5.0.1
-	 * @internal
 	 */
 	doSelect_(evt: zk.Event): void {
 		if (!evt.stopped) {
@@ -5078,7 +4977,6 @@ new zul.wnd.Window({
 	 * not to invoke super's doMouseOver_.
 	 * @since 5.0.5
 	 * @see {@link doTooltipOut_}
-	 * @internal
 	 */
 	doTooltipOver_(evt: zk.Event): void {
 		if (!evt.stopped) {
@@ -5097,7 +4995,6 @@ new zul.wnd.Window({
 	 * not to invoke super's doMouseOut_.
 	 * @since 5.0.5
 	 * @see {@link doTooltipOver_}
-	 * @internal
 	 */
 	doTooltipOut_(evt: zk.Event): void {
 		if (!evt.stopped) {
@@ -5122,7 +5019,6 @@ new zul.wnd.Window({
 	 * @see {@link doDoubleClick_}
 	 * @see {@link doRightClick_}
 	 * @see {@link doSelect_}
-	 * @internal
 	 */
 	doClick_(evt: zk.Event): void {
 		if (_fireClick(this, evt)) {
@@ -5145,7 +5041,6 @@ new zul.wnd.Window({
 	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget}
 	 * @see {@link doClick_}
 	 * @see {@link doRightClick_}
-	 * @internal
 	 */
 	doDoubleClick_(evt: zk.Event): void {
 		if (_fireClick(this, evt)) {
@@ -5168,7 +5063,6 @@ new zul.wnd.Window({
 	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget}
 	 * @see {@link doClick_}
 	 * @see {@link doDoubleClick_}
-	 * @internal
 	 */
 	doRightClick_(evt: zk.Event): void {
 		if (_fireClick(this, evt)) {
@@ -5191,7 +5085,6 @@ new zul.wnd.Window({
 	 * @see {@link doMouseDown_}
 	 * @see {@link doMouseUp_}
 	 * @see {@link doTooltipOver_}
-	 * @internal
 	 */
 	doMouseOver_(evt: zk.Event): void {
 		if (!this.fireX(evt).stopped) {
@@ -5213,7 +5106,6 @@ new zul.wnd.Window({
 	 * @see {@link doMouseDown_}
 	 * @see {@link doMouseUp_}
 	 * @see {@link doTooltipOut_}
-	 * @internal
 	 */
 	doMouseOut_(evt: zk.Event): void {
 		if (!this.fireX(evt).stopped) {
@@ -5235,7 +5127,6 @@ new zul.wnd.Window({
 	 * @see {@link doMouseOut_}
 	 * @see {@link doMouseUp_}
 	 * @see {@link doClick_}
-	 * @internal
 	 */
 	doMouseDown_(evt: zk.Event): void {
 		if (!this.fireX(evt).stopped) {
@@ -5258,7 +5149,6 @@ new zul.wnd.Window({
 	 * @see {@link doMouseOut_}
 	 * @see {@link doMouseDown_}
 	 * @see {@link doClick_}
-	 * @internal
 	 */
 	doMouseUp_(evt: zk.Event): void {
 		if (!this.fireX(evt).stopped) {
@@ -5280,7 +5170,6 @@ new zul.wnd.Window({
 	 * @see {@link doMouseOut_}
 	 * @see {@link doMouseDown_}
 	 * @see {@link doMouseUp_}
-	 * @internal
 	 */
 	doMouseMove_(evt: zk.Event): void {
 		if (!this.fireX(evt).stopped) {
@@ -5301,7 +5190,6 @@ new zul.wnd.Window({
 	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget}
 	 * @see {@link doKeyUp_}
 	 * @see {@link doKeyPress_}
-	 * @internal
 	 */
 	doKeyDown_(evt: zk.Event): void {
 		if (!this.fireX(evt).stopped) {
@@ -5322,7 +5210,6 @@ new zul.wnd.Window({
 	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget}
 	 * @see {@link doKeyDown_}
 	 * @see {@link doKeyPress_}
-	 * @internal
 	 */
 	doKeyUp_(evt: zk.Event): void {
 		if (!this.fireX(evt).stopped) {
@@ -5343,7 +5230,6 @@ new zul.wnd.Window({
 	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget}
 	 * @see {@link doKeyDown_}
 	 * @see {@link doKeyUp_}
-	 * @internal
 	 */
 	doKeyPress_(evt: zk.Event): void {
 		if (!this.fireX(evt).stopped) {
@@ -5365,7 +5251,6 @@ new zul.wnd.Window({
 	 * @see {@link doKeyDown_}
 	 * @see {@link doKeyUp_}
 	 * @see {@link doKeyPress_}
-	 * @internal
 	 */
 	doPaste_(evt: zk.Event): void {
 		if (!this.fireX(evt).stopped) {
@@ -5410,7 +5295,6 @@ if (dispT < 500) {
 	 * It is the so-called event propagation.
 	 * @param evt - the widget event.
 	 * @since 6.5.0
-	 * @internal
 	 */
 	doSwipe_(evt: zk.Event): void {
 		if (!this.fireX(evt).stopped) {
@@ -5437,7 +5321,6 @@ this.domListen_(fn, 'onBlur', 'doBlur_');
 	 * @param evt - the widget event.
 	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget}
 	 * @see {@link doBlur_}
-	 * @internal
 	 */
 	doFocus_(evt: zk.Event): void {
 		if (!this.fireX(evt).stopped) {
@@ -5464,7 +5347,6 @@ this.domListen_(fn, 'onBlur', 'doBlur_');
 	 * @param evt - the widget event.
 	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget}
 	 * @see {@link doFocus_}
-	 * @internal
 	 */
 	doBlur_(evt: zk.Event): void {
 		if (!this.fireX(evt).stopped) {
@@ -5475,7 +5357,6 @@ this.domListen_(fn, 'onBlur', 'doBlur_');
 
 	/** Resize zul.Scrollbar size after child added/removed or hide/show.
 	 * @since 6.5.0
-	 * @internal
 	 */
 	doResizeScroll_(): void {
 		var p = this.parent;
@@ -5523,7 +5404,6 @@ this.domListen_(fn, 'onBlur', 'doBlur_');
 	 * @param keyword - the extra argumenet for the function, which is passed
 	 * into the callback function. (since 7.0)
 	 * @see {@link domUnlisten_}
-	 * @internal
 	 */
 	domListen_(node: HTMLElement | JQuery, evtnm: string, fn?: string | CallableFunction, keyword?: unknown): this {
 		if (!this.$weave) {
@@ -5548,7 +5428,6 @@ this.domListen_(fn, 'onBlur', 'doBlur_');
 	 * @param keyword - the extra argumenet for the function, which is passed
 	 * into the callback function. (since 7.0)
 	 * @see {@link domListen_}
-	 * @internal
 	 */
 	domUnlisten_(n: HTMLElement | JQuery, evtnm: string, fn?: string | CallableFunction, keyword?: unknown): this {
 		if (!this.$weave) {
@@ -5563,7 +5442,6 @@ this.domListen_(fn, 'onBlur', 'doBlur_');
 	 * or have extra processing.
 	 * @see {@link unlistenOnFitSize_}
 	 * @since 5.0.8
-	 * @internal
 	 */
 	listenOnFitSize_(): void {
 		if (!this._fitSizeListened && (this._hflex == 'min' || this._vflex == 'min')) {
@@ -5577,7 +5455,6 @@ this.domListen_(fn, 'onBlur', 'doBlur_');
 	 * or have extra processing.
 	 * @see {@link listenOnFitSize_}
 	 * @since 5.0.8
-	 * @internal
 	 */
 	unlistenOnFitSize_(): void {
 		if (this._fitSizeListened) {
@@ -5608,7 +5485,6 @@ this.domListen_(fn, 'onBlur', 'doBlur_');
 	 * @param cache - a map of cached result (since 5.0.8). Ignored if null.
 	 * If specified, the result will be stored and used to speed up the processing
 	 * @since 5.0.3
-	 * @internal
 	 */
 	isWatchable_(name: string, p?: zk.Widget, cache?: Record<string, unknown>): boolean {
 		//if onShow, we don't check visibility since window uses it for
@@ -5644,14 +5520,12 @@ this.domListen_(fn, 'onBlur', 'doBlur_');
 	 * A widget call this function of its ancestor if it wants to know whether its ancestor prefer ignore float up event of it self.
 	 * @defaultValue `false`.
 	 * @since 6.0.0
-	 * @internal
 	 */
 	ignoreDescendantFloatUp_(des: zk.Widget): boolean {
 		return false;
 	}
 
 	// internal use only in zkmax package
-	/** @internal */
 	getDomEvtInf_(wgt: zk.Widget, evtnm: string, fn?: string | CallableFunction, keyword?: unknown): [string, JQueryEventHandler] {
 		return _domEvtInf(wgt, evtnm, fn, keyword);
 	}
@@ -5659,7 +5533,6 @@ this.domListen_(fn, 'onBlur', 'doBlur_');
 	/**
 	 * @returns whether a widget should fireSized later when addChd was invoked
 	 * @defaultValue `false`.
-	 * @internal
 	 */
 	shallFireSizedLaterWhenAddChd_(): boolean {
 		return false;
@@ -5667,7 +5540,6 @@ this.domListen_(fn, 'onBlur', 'doBlur_');
 
 	/** A callback called after a widget is composed but not yet be bound to DOM tree.
 	 * @since 10.0.0
-	 * @internal
 	 */
 	afterCompose_(): void {
 		return;
