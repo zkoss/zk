@@ -1,9 +1,9 @@
 /* ZKWebSocket.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		6:10 PM 7/9/15, Created by jumperchen
 
@@ -53,7 +53,11 @@ public final class ZKWebSocket extends ServerEndpointConfig.Configurator {
 	 */
 	@Override
 	public void modifyHandshake(ServerEndpointConfig config, HandshakeRequest request, HandshakeResponse response) {
-		org.zkoss.zk.ui.Session zkSession = SessionsCtrl.getSession(WebApps.getCurrent(), request.getHttpSession());
+		Object httpSession = request.getHttpSession();
+		if (httpSession == null) {
+			return; // skip for ZK-5561
+		}
+		org.zkoss.zk.ui.Session zkSession = SessionsCtrl.getSession(WebApps.getCurrent(), httpSession);
 		if (zkSession == null) {
 			return; //skip when session is expired but websocket try to reconnect
 		}
