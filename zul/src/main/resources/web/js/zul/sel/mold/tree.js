@@ -78,8 +78,8 @@ function tree$mold$(out) {
 
 	out.push('<div style="top:', jq.px(this._anchorTop), ';left:', jq.px(this._anchorLeft), '" id="', uuid,
 		'-a" class="z-focus-a"');
-	var tabindex = this._tabindex ?? -1; // Feature ZK-2531
-	if (tabindex != undefined)
+	var tabindex = this._tabindex ?? 0; // Feature ZK-2531
+	if (tabindex !== undefined)
 		out.push(' tabindex="' + /*safe*/ tabindex + '"');
 	out.push('></div></div>');
 
