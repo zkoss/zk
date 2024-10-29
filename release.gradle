@@ -275,7 +275,7 @@ task processJar(type: Jar) {
 		include "**/${elementName}-javadoc.jar"
 		setDuplicatesStrategy(DuplicatesStrategy.INCLUDE)
 	}
-	baseName 'zk'
+	archiveBaseName.set('zk')
 	destinationDirectory.set(file("zk/build/libs"))
 	doLast {
 		copy {
