@@ -64,8 +64,7 @@
     "zk/src/main/resources/web/js",
     "zul/src/main/resources/web/js",
     "zkbind/src/main/resources/web/js",
-    "zhtml/src/main/resources/web/js",
-    "stateless/src/main/resources/web/js"
+    "zhtml/src/main/resources/web/js"
   ],
   "exclude": [
     "node_modules",
