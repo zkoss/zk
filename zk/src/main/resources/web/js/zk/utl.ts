@@ -232,7 +232,17 @@ export namespace utl_global {
 			if (url.startsWith('https://') || url.startsWith('http://')) {
 				return new URL(url).href;
 			} else {
-				return zUtl.encodeXML(url);
+				const [baseUrl, queryString] = url.split('?');
+				if (!queryString) {
+					return baseUrl;
+				}
+
+				const encodedParams = queryString.split('&').map(param => {
+					const [key, value] = param.split('=');
+					return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
+				}).join('&');
+
+				return `${baseUrl}?${encodedParams}`;
 			}
 		}
 
