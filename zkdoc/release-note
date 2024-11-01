@@ -41,6 +41,7 @@ ZK 10.1.0
   ZK-5810: Client MVVM: XEL Methods in include
   ZK-5813: a side effect of ZK-5476 for BookCRUD2Test and BookCRUDTest
   ZK-5777: sendRedirect() doesn't work because of the encoded &
+  ZK-4785: z-errorbox doesn't show in Safari
 
 * Upgrade Notes
   + Remove Htmls.encodeJavaScript(), Strings.encodeJavaScript(), Strings.escape() with Strings.ESCAPE_JAVASCRIPT, and replace them with OWASP Java Encoder APIs instead.

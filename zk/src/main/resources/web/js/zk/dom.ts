@@ -303,7 +303,7 @@ var DocRoot = (function () {
 	var docRoot: undefined | HTMLElement,
 		// document.body may not be initiated.
 		initDocRoot = function (): HTMLElement {
-			return docRoot = (zk.safari || zk.opera) ? document.body : document.documentElement;
+			return docRoot = document.documentElement;
 		};
 	return function (): HTMLElement {
 		return docRoot || initDocRoot();
