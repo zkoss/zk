@@ -392,7 +392,7 @@ export class HeadWidget extends zul.Widget<HTMLTableRowElement> {
 					wgt._calcSize(); // yes, we need to do it again.
 				}
 				// ZK-2551: need to restore scroll pos after flexs are fixed
-				if (zk(ebody).hasHScroll() && currentLeft != ebody.scrollLeft) {
+				if (ebody.scrollWidth > ebody.clientWidth && currentLeft != ebody.scrollLeft) {
 					ebody.scrollLeft = currentLeft;
 					if (ehead)
 						ehead.scrollLeft = currentLeft;
