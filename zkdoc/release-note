@@ -42,6 +42,7 @@ ZK 10.1.0
   ZK-5813: a side effect of ZK-5476 for BookCRUD2Test and BookCRUDTest
   ZK-5777: sendRedirect() doesn't work because of the encoded &
   ZK-4785: z-errorbox doesn't show in Safari
+  ZK-4962: ZK-3975 regression in mobile
 
 * Upgrade Notes
   + Remove Htmls.encodeJavaScript(), Strings.encodeJavaScript(), Strings.escape() with Strings.ESCAPE_JAVASCRIPT, and replace them with OWASP Java Encoder APIs instead.
