@@ -694,7 +694,7 @@ export class ComboWidget extends zul.inp.InputWidget<string> {
 		var btn: HTMLElement | undefined;
 
 		if (btn = this.$n('btn')) {
-			this.domListen_(btn, zk.android ? 'onTouchstart' : 'onClick', '_doBtnClick');
+			this.domListen_(btn, 'onClick', '_doBtnClick');
 			if (this._inplace) this.domListen_(btn, 'onMouseDown', '_doBtnMouseDown');
 		}
 
@@ -710,7 +710,7 @@ export class ComboWidget extends zul.inp.InputWidget<string> {
 
 		var btn = this.$n('btn');
 		if (btn) {
-			this.domUnlisten_(btn, zk.android ? 'onTouchstart' : 'onClick', '_doBtnClick');
+			this.domUnlisten_(btn, 'onClick', '_doBtnClick');
 			if (this._inplace) this.domUnlisten_(btn, 'onMouseDown', '_doBtnMouseDown');
 		}
 
