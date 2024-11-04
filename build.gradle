@@ -20,6 +20,11 @@ dependencyCheck {
 		delay=30000
 	}
 	formats = ['HTML', 'XML']
+    analyzers {
+        nodeAudit {
+            skipDevDependencies = true
+        }
+    }
 }
 
 def zkcmlDir = "$rootDir/../zkcml"
