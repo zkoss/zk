@@ -24,6 +24,9 @@ dependencyCheck {
         nodeAudit {
             skipDevDependencies = true
         }
+        nodePackage {
+			skipDevDependencies = true
+		}
     }
 }
 
