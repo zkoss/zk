@@ -45,6 +45,7 @@ ZK 10.1.0
   ZK-4962: ZK-3975 regression in mobile
   ZK-4964: combobox input should be focused while clicking the drop-down button in Android
   ZK-5825: Clicking bandbox button on Android does not focus input
+  ZK-5833: ZK-423 regression on Android
 
 * Upgrade Notes
   + Remove Htmls.encodeJavaScript(), Strings.encodeJavaScript(), Strings.escape() with Strings.ESCAPE_JAVASCRIPT, and replace them with OWASP Java Encoder APIs instead.
