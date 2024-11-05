@@ -47,6 +47,7 @@ ZK 10.1.0
   ZK-5825: Clicking bandbox button on Android does not focus input
   ZK-5833: ZK-423 regression on Android
   ZK-4960: Listbox doesn't keep scrollbar position when applying hflex="min" on a listheader in mobile
+  ZK-4961: Unable to scroll in grid and listbox when using non-native scrollbar on mobile
 
 * Upgrade Notes
   + Remove Htmls.encodeJavaScript(), Strings.encodeJavaScript(), Strings.escape() with Strings.ESCAPE_JAVASCRIPT, and replace them with OWASP Java Encoder APIs instead.
