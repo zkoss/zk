@@ -1,9 +1,9 @@
 /* B96_ZK_4194Test.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		5:31 PM 2023/4/12, Created by jumperchen
 
@@ -20,8 +20,8 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.devtools.DevTools;
-import org.openqa.selenium.devtools.v125.network.Network;
-import org.openqa.selenium.devtools.v125.network.model.ConnectionType;
+import org.openqa.selenium.devtools.v130.network.Network;
+import org.openqa.selenium.devtools.v130.network.model.ConnectionType;
 
 import org.zkoss.test.webdriver.ChromiumHeadlessDriver;
 import org.zkoss.test.webdriver.ExternalZkXml;
