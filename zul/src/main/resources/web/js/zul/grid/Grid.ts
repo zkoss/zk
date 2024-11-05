@@ -250,11 +250,8 @@ export class Grid extends zul.mesh.MeshWidget {
 	override onSize(): void {
 		super.onSize();
 		var canInitScrollbar = this.desktop && !this._nativebar;
-		// refix ZK-2840: only init scrollbar when height or vflex is set in mobile
 		if (!this._scrollbar && canInitScrollbar) {
-			if (!zk.mobile || (zk.mobile && (this.getHeight() || this.getVflex()))) {
-				this._scrollbar = zul.mesh.Scrollbar.init(this); // 1823278: should show scroll bar here
-			}
+			this._scrollbar = zul.mesh.Scrollbar.init(this); // 1823278: should show scroll bar here
 		}
 		setTimeout(() => {
 			if (canInitScrollbar) {
