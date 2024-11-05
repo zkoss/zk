@@ -19,7 +19,7 @@ dependencyCheck {
 		apiKey=System.getenv("NVD_API_KEY") ?: ""
 		delay=30000
 	}
-	formats = 'ALL'
+	formats = ['ALL']
     analyzers {
         nodeAudit {
             skipDevDependencies = true
