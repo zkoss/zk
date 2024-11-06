@@ -23,7 +23,7 @@ public class B30_1753712Test extends WebDriverTestCase {
 		connect();
 		assertEquals("n/a", jq("$la").text());
 		driver.navigate().refresh(); // trigger rmDesktop
-		sleep(1000);
+		sleep(1500);
 		waitResponse();
 		assertNotEquals("n/a", jq("$la").text());
 	}

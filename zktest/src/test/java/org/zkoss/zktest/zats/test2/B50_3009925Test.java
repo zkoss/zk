@@ -1,9 +1,9 @@
 /* B50_3009925Test.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Fri Mar 22 14:22:56 CST 2019, Created by rudyhuang
 
@@ -25,6 +25,7 @@ import org.zkoss.test.webdriver.WebDriverTestCase;
 public class B50_3009925Test extends WebDriverTestCase {
 	@Test
 	public void test() {
+		disableConnectionWait();
 		connect();
 
 		new WebDriverWait(driver, Duration.ofSeconds(3)).until(ExpectedConditions.alertIsPresent());
