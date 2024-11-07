@@ -4,6 +4,7 @@ ZK 10.2.0
 
 * Bugs
   ZK-5728: ZK-5364 causes external radio to no longer be selected / checked
+  ZK-5839: Follow up on ZK-5696: missing nested shadow element after fix
 
 * Upgrade Notes
   + Remove the Fragment component from the zkmax.jar and use the new Client MVVM  (client-bind.jar) library instead.
