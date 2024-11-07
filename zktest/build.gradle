@@ -205,7 +205,7 @@ task testWCAGOnly(type: Test) {
 	}
 }
 test {
-	forkEvery = 0 // reuse the test process for all test classes
+	forkEvery = 1
 	maxParallelForks = Runtime.runtime.availableProcessors().intdiv(4) ?: 1
 	if (project.hasProperty('maxParallelForks'))
 		maxParallelForks = project.maxParallelForks as int
