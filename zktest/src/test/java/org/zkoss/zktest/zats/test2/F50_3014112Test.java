@@ -1,9 +1,9 @@
 /* F50_3014112Test.java
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Tue Apr 09 10:48:33 CST 2019, Created by rudyhuang
 
@@ -25,6 +25,7 @@ import org.zkoss.test.webdriver.WebDriverTestCase;
 public class F50_3014112Test extends WebDriverTestCase {
 	@Test
 	public void test() {
+		disableConnectionWait();
 		connect();
 
 		new WebDriverWait(driver, Duration.ofSeconds(5)).until(ExpectedConditions.alertIsPresent());
