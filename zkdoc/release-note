@@ -1,4 +1,5 @@
 ZK 10.1.0
+Nov 12, 2024
 * Features
   ZK-5782: Upgrade WCAG with the lighthouse 12.x detection tools
   ZK-5561: ZK Websocket Quarkus compatibility
