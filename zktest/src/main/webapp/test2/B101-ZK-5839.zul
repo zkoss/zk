@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B101-ZK-5839.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		2024/11/7, Created by jumperchen
+
+Copyright (C) 2024 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+        int counter = 0;
+        ListModelList items = new ListModelList();
+    ]]></zscript>
+	<div apply="org.zkoss.bind.BindComposer">
+		<forEach items="@init(items)">
+			<div>
+				<if test="@init(true)">
+					AAA
+					<if test="@init(true)">
+						BBB
+					</if>
+					CCC
+				</if>
+			</div>
+		</forEach>
+	</div>
+	<button onClick="items.add(++counter)" label="add"/>
+</zk>
