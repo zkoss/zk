@@ -722,7 +722,6 @@
 			<xs:element ref="fckeditor" />
 			<xs:element ref="fisheyebar" />
 			<xs:element ref="forEach" />
-			<xs:element ref="fragment" />
 			<xs:element ref="frozen" />
 			<xs:element ref="gmaps" />
 			<xs:element ref="grid" />
@@ -837,7 +836,6 @@
 				<xs:element ref="fckeditor" />
 				<xs:element ref="fisheyebar" />
 				<xs:element ref="forEach" />
-				<xs:element ref="fragment" />
 				<xs:element ref="frozen" />
 				<xs:element ref="gmaps" />
 				<xs:element ref="grid" />
@@ -4117,20 +4115,6 @@
 		<xs:attribute name="onDivisionSize" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
-	<!-- fragment -->
-	<xs:element name="fragment" type="fragmentType" />
-	<xs:complexType name="fragmentType">
-		<xs:sequence>
-			<xs:any maxOccurs="unbounded" processContents="lax" />
-		</xs:sequence>
-		<xs:attributeGroup ref="abstractComponentAttrGroupForFragment" />
-		<xs:attribute name="content" type="xs:string" use="optional" />
-		<xs:attribute name="recoverId" type="xs:string" use="optional" />
-		<xs:attribute name="src" type="xs:string" use="optional" />
-		<xs:attribute name="onRecover" type="xs:string" use="optional" />
-		<xs:attributeGroup ref="rootAttrGroup" />
-		<xs:anyAttribute processContents="skip" />
-	</xs:complexType>
 	<!-- organigram -->
 	<xs:element name="organigram" type="organigramType"/>
 	<xs:complexType name="organigramType">
@@ -4178,30 +4162,4 @@
 		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded"/>
 		<xs:attributeGroup ref="labelImageElementAttrGroup"/>
 	</xs:complexType>
-	<!-- FIXME: Copied from abstractComponentAttrGroup to avoid processContents="lax" -->
-	<xs:attributeGroup name="abstractComponentAttrGroupForFragment">
-		<xs:attribute name="forEach" type="xs:string" use="optional" />
-		<xs:attribute name="forEachBegin" type="xs:string" use="optional" />
-		<xs:attribute name="forEachEnd" type="xs:string" use="optional" />
-		<xs:attribute name="forEachStep" type="intType" use="optional" />
-		<xs:attribute name="if" type="xs:string" use="optional" />
-		<xs:attribute name="self" type="xs:string" use="optional" />
-		<xs:attribute name="unless" type="xs:string" use="optional" />
-		<xs:attribute name="apply" type="xs:string" use="optional" />
-		<xs:attribute name="auService" type="xs:string" use="optional" />
-		<xs:attribute name="autag" type="xs:string" use="optional" />
-		<xs:attribute name="binder" type="xs:string" use="optional" />
-		<xs:attribute name="children" type="xs:string" use="optional" />
-		<xs:attribute name="form" type="xs:string" use="optional" />
-		<xs:attribute name="forward" type="xs:string" use="optional" />
-		<xs:attribute name="fulfill" type="xs:string" use="optional" />
-		<xs:attribute name="id" type="xs:string" use="optional" />
-		<xs:attribute name="mold" type="xs:string" use="optional" />
-		<xs:attribute name="onFulfill" type="xs:string" use="optional" />
-		<xs:attribute name="stubonly" type="xs:string" use="optional" />
-		<xs:attribute name="use" type="xs:string" use="optional" />
-		<xs:attribute name="viewModel" type="xs:string" use="optional" />
-		<xs:attribute name="validationMessages" type="xs:string" use="optional" />
-		<xs:attribute name="visible" type="booleanType" use="optional" />
-	</xs:attributeGroup>
 </xs:schema>

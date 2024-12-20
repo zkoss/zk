@@ -1,9 +1,11 @@
 ZK 10.2.0
 * Features
+  ZK-5824: separate fragment widget into an independent library or another jar
 
 * Bugs
 
 * Upgrade Notes
+  + Remove the Fragment component from the zkmax.jar and use the new Client MVVM  (client-bind.jar) library instead.
 
    --------
 ZK 10.1.0
