@@ -201,7 +201,7 @@ export var Parser = {
 			args = undefined;
 		}
 
-		const root = (typeof doc == 'string' ? zk.xml.Utl.parseXML(DOMPurify.sanitize(doc)) : doc).documentElement;
+		const root = (typeof doc == 'string' ? zk.xml.Utl.parseXML(doc) : doc).documentElement;
 
 		var cwgts = [];
 		zk.load(_getPkgs(root), function () {
