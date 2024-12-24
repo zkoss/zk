@@ -89,8 +89,10 @@ function removeLiteral(str: string, literals: string[]): string {
 	if (literals.length === 0) {
 		return str;
 	}
-	var pattern = new RegExp(literals.join('|'), 'g');
-	return str.replace(pattern, ' ');
+	for (let literal of literals) {
+		str = str.replace('\'' + literal + '\'', ' ');
+	}
+	return str;
 }
 function _digitFixed(val: string | number, digits?: number): string {
 	var s = String(val);
