@@ -6,7 +6,7 @@
 	<artifactId>zkplus</artifactId>
 	<packaging>jar</packaging>
 	<properties>
-		<org.springframework.version>5.2.3.RELEASE</org.springframework.version>
+		<org.springframework.version>5.2.19.RELEASE</org.springframework.version>
 	</properties>
 	<version>8.6.4.1</version>
 	<name>ZK Plus Utilities</name>
@@ -83,7 +83,7 @@
 		<dependency>
 			<groupId>dom4j</groupId>
 			<artifactId>dom4j</artifactId>
-			<version>1.6</version>
+			<version>1.6.1-brew</version>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
