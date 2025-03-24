@@ -311,22 +311,30 @@ export class HeadWidget extends zul.Widget<HTMLTableRowElement> {
 				ehead!.style.display = '';
 				var tblWidth = 0,
 					sizedByContent = wgt.isSizedByContent();
-				for (let i = 0, wd = -1, hwgt = this.firstChild; hwgt; hwgt = hwgt.nextSibling, i++) {
-					var nhwgt = hwgt.$n_();
-					if (hwgt._hflex == 'min' || (!hwgt._nhflex && sizedByContent))
+				for (let i = 0, hwgt = this.firstChild; hwgt; hwgt = hwgt.nextSibling, i++) {
+					let wd = 0,
+						finalWd = '',
+						nhwgt = hwgt.$n_();
+					if (hwgt._hflex == 'min' || (!hwgt._nhflex && sizedByContent)) {
 						wd = wds[i];
-					else if (hwgt._width)
-						wd = parseInt(hwgt._width);
-					else if (hwgt._nhflex! > 0)
+					} else if (hwgt._width) {
+						if (hwgt._width.indexOf('%') == -1) {
+							wd = parseInt(hwgt._width);
+						} else {
+							finalWd = hwgt._width;
+						}
+					} else if (hwgt._nhflex! > 0)
 						isFlex = true;
 
 					if (!hwgt.isVisible())
 						nhwgt.style.display = 'none';
-					if (wd >= 0) {
-						nhwgt.style.flex = '0 0 ' + jq.px(wd);
+					if (wd > 0 || finalWd != '') {
+						if (!finalWd) {
+							finalWd = jq.px(wd);
+						}
+						nhwgt.style.flex = '0 0 ' + finalWd;
 						if (!isFlex)
 							tblWidth += wd;
-						wd = -1; //reset
 					}
 					//check empty head
 					if (hwgt.getLabel() || hwgt.getImage() || hwgt.nChildren)
