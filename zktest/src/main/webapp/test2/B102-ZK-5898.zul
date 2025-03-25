@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B102-ZK-5898.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Mar 25 14:35:41 CST 2025, Created by jameschu
+
+Copyright (C) 2024 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<window border="normal" title="hello">
+		<label>This should be able to scan qr-code</label>
+		<barcodescanner type="qr,code128" continuous="true" interval="500" height="100px" onDetect="result.value = event.result"/>
+		<separator/>
+		QR code scan result: <label id="result"/>
+	</window>
+</zk>
