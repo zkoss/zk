@@ -284,7 +284,9 @@ export class Radiogroup extends zul.Widget {
 			this._fixSelectedIndex();
 		}
 		// handle this disabled state for stateless.
-		child.setDisabled(this.isDisabled());
+		if (this.isDisabled()) {
+			child.setDisabled(true);
+		}
 	}
 
 	/** @internal */
