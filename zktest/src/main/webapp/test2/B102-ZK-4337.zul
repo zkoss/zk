@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B102-ZK-4337.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Mar 26 10:10:12 CST 2025, Created by jameschu
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label>
+		Shall see both barcode scanners work.
+	</label>
+	<barcodescanner id="bcs2" type="qr,code128" continuous="true" interval="1000" height="100px" onDetect='lb2.setValue(event.getResult());Clients.log("bcs2 "+event.getType() + " " + event.getResult())'/>
+	<barcodescanner id="bcs" type="qr,code128" continuous="true" interval="1000" height="100px" onDetect='lb1.setValue(event.getResult());Clients.log("bcs1 "+event.getType() + " " + event.getResult())'/>
+	<label id="lb1"/>
+	<label id="lb2"/>
+</zk>

@@ -5,6 +5,10 @@ ZK 10.2.0
 * Bugs
   ZK-5728: ZK-5364 causes external radio to no longer be selected / checked
   ZK-5839: Follow up on ZK-5696: missing nested shadow element after fix
+  ZK-5230: adding Barcodescanner twice causes javascript errors
+  ZK-5231: removing a barcodescanner immediately right after the browser renders it causes javascript error
+  ZK-5898: QR code scanning does not work in Barcodescanner
+  ZK-4337: barcodescanner can only instantiate reader once per page
 
 * Upgrade Notes
   + Remove the Fragment component from the zkmax.jar and use the new Client MVVM  (client-bind.jar) library instead.
