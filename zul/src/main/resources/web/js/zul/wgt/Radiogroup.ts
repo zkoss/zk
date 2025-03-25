@@ -278,7 +278,7 @@ export class Radiogroup extends zul.Widget {
 
 	/** @internal */
 	_fixOnAdd(child: zul.wgt.Radio): void {
-		if (this._jsel >= 0 && child.isSelected()) {
+		if (this._jsel >= 0 && child.isSelected() && this.getItemAtIndex(this._jsel) != child) {
 			child.setSelected(false); //it will call _fixSelectedIndex()
 		} else {
 			this._fixSelectedIndex();
