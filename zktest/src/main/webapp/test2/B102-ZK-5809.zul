@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B102-ZK-5809.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Tue Mar 25 10:22:40 CST 2025, Created by jameschu
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<radiogroup id="rg"></radiogroup>
+	<radio radiogroup="rg" disabled="true"/>
+	<radiogroup>
+		<radio disabled="true"/>
+	</radiogroup>
+</zk>
