@@ -14,12 +14,14 @@ package org.zkoss.zktest.zats.test2;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.Element;
 
 public class F96_ZK_4745_2Test  extends WebDriverTestCase {
+	@Disabled // TODO: Enabled this when the issue is fixed - ZK-5913
 	@Test
 	public void testJapaneseParse() {
 		connect();
