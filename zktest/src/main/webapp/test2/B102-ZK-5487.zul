@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B102-ZK-5487.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Mon Mar 24 11:39:43 CST 2025, Created by jameschu
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div>
+		<label>
+			The width of second listheader/column shall be 35% (flex: 0 0 35%)
+		</label>
+		<listbox hflex="1">
+			<listhead sizable="true" hflex="1">
+				<listheader style="min-width: 200px" hflex="1" label="foo 1" />
+				<listheader width="35%" label="foo 1">
+					<textbox value="bar" hflex="1"/>
+				</listheader>
+			</listhead>
+		</listbox>
+		<grid hflex="1">
+			<columns sizable="true" hflex="1">
+				<column style="min-width: 200px" hflex="1" label="foo 1" />
+				<column width="35%" label="foo 1">
+					<textbox value="bar" hflex="1"/>
+				</column>
+			</columns>
+		</grid>
+	</div>
+</zk>
