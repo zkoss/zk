@@ -18,7 +18,7 @@ const minimist = require('minimist');
 const babel = require('gulp-babel');
 const rename = require('gulp-rename');
 const uglify = require('gulp-uglify');
-const browserSync = require('browser-sync').create();
+const browserSync = undefined; // require('browser-sync').create();
 /**
  * @typedef {Object} PrintMismatch
  * @property {NodeJS.ReadWriteStream} patch
