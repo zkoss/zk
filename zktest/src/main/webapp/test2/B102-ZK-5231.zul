@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B102-ZK-5231.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Tue Mar 25 14:35:41 CST 2025, Created by jameschu
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+
+<zk>
+	<vlayout>
+		scan result:
+		<label id="lb1"/>
+		<barcodescanner id="bcs" type="qr,code128" continuous="true" interval="1000" height="100px"
+						onDetect='lb1.setValue(event.getResult());Clients.log("bcs1 "+event.getType() + " " + event.getResult())'/>
+		<label multiline="true"><![CDATA[
+		1. click the button within 2 seconds after the browser renders this page
+		2. no exception
+		]]></label>
+		<button label="remove" onClick='bcs.getParent().removeChild(bcs)'/>
+	</vlayout>
+</zk>

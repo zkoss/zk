@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B102-ZK-5230.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Tue Mar 25 14:35:41 CST 2025, Created by jameschu
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+
+<zk>
+	<vlayout id="container">
+		<label multiline="true"><![CDATA[
+			1. click "add" button, wait the camera to start showing the video around 3 seconds
+			2. Click "remove" button
+			3. click "add" button
+			4. no js error
+		]]></label>
+		<button label="remove" onClick="removeScanner()"/>
+		<button label="add" onClick="addScanner()"/>
+	</vlayout>
+	<zscript><![CDATA[
+    import org.zkoss.zkmax.zul.Barcodescanner;
+
+    Barcodescanner scanner;
+
+    public void addScanner() {
+        scanner = new Barcodescanner();
+        scanner.setType("CODE128");
+        scanner.setContinuous(true);
+        scanner.setInterval(1000);
+        scanner.setHeight("100px");
+        container.appendChild(scanner);
+    }
+
+    public void removeScanner(){
+        container.removeChild(scanner);
+    }
+    ]]></zscript>
+</zk>
