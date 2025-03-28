@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B102-ZK-5890.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Fri Mar 28 11:51:21 CST 2025, Created by jameschu
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. open combobox and choose any child
+		2. click save, the Result bean should not be proxied (no $$)
+	</label>
+	<div viewModel="@id('vm') @init('org.zkoss.zktest.test2.B102_ZK_5889ViewModel')">
+		<div form="@id('fx') @load(vm.myPojo) @load(vm.myPojo, after='cancel') @save(vm.myPojo, before='save')">
+			<div>
+				origin ->
+				<label value="@init(vm.myPojo)"/>
+			</div>
+			<div>
+				form proxy ->
+				<label value="@init(fx)"/>
+			</div>
+			<label sclass="label">Country</label>
+			<span sclass="input">
+				<combobox id="cb" model="@load(vm.children)"
+						  selectedItem="@bind(fx.child)" autocomplete="true" constraint="no empty" >
+					<template name="model">
+						<comboitem label="@load(each.name)" description="@load(each.age)"/>
+					</template>
+				</combobox>
+			</span>
+			<button id="saveBtn" sclass="button" label="save" onClick="@command('save', test='testStr')"/>
+			<button sclass="button" label="cancel" onClick="@command('cancel', test='testStr')"/>
+		</div>
+		Result
+		<label id="result" value="@load(vm.myPojo.child)"/>
+	</div>
+</zk>
