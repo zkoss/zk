@@ -7,6 +7,7 @@ ZK 10.2.0
   ZK-5839: Follow up on ZK-5696: missing nested shadow element after fix
   ZK-5809: ZK 10 external radio linked to radiogroup cannot be disabled if Radiogroup is not disabled
   ZK-5889: When saving a form proxy object, zk overrides the original object's property with a proxy object
+  ZK-5736: client-bind.jar on the classpath loads client-bind.wpd and has side effect
 
 * Upgrade Notes
   + Remove the Fragment component from the zkmax.jar and use the new Client MVVM  (client-bind.jar) library instead.
