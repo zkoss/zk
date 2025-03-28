@@ -200,7 +200,7 @@ function ajaxSend(dt: zk.Desktop, aureq: zk.Event, timeout?: number): void {
 		if (wgt instanceof zk.Desktop) {
 			dt = wgt;
 		} else {
-			dt = wgt ? wgt.desktop as never : zk.Desktop._dt as zk.Desktop;
+			dt = wgt?.desktop ?? zk.Desktop._dt as zk.Desktop;
 		}
 		if (!dt) {
 			dt = zk.Desktop._dt as zk.Desktop;
