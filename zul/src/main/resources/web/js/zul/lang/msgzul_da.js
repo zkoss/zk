@@ -21,3 +21,4 @@ msgzul.UNKNOWN_TYPE = 'Ukendt komponenttype: ';
 msgzul.DATE_REQUIRED = 'Du skal angive et datoformat: ';
 msgzul.OUT_OF_RANGE = 'Uden for området';
 msgzul.NO_AUDIO_SUPPORT = 'Din browser understøtter ikke dynamisk lyd';
+msgzul.DATE_DISABLED = 'Denne dato kan ikke vælges';
