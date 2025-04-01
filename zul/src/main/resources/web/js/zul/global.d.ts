@@ -43,6 +43,7 @@ declare global {
 
     const msgzul: Record<
 	| 'DATE_REQUIRED'
+	| 'DATE_DISABLED'
 	| 'EMPTY_NOT_ALLOWED'
 	| 'FIRST' // zul/mesh/Paging
 	| 'GRID_ASC' // zul/mesh/ColumnMenuWidget
