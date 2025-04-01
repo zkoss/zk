@@ -102,7 +102,18 @@ export var Renderer = {
 	disabled(cal: zul.db.Calendar, y: number, m: number, v: number, today: DateImpl): boolean {
 		var d = Dates.newInstance([y, m, v, 0, 0, 0, 0], _getTimeZone(cal)),
 			constraint;
-
+		if (cal._disabledDates) {
+			let disabled = false;
+			cal._disabledDates.some(each => {
+				if (each.getTime() === d.getTime()) {
+					return disabled = true;
+				}
+				return false;
+			});
+			if (disabled) {
+				return disabled;
+			}
+		}
 		if ((constraint = cal._constraint) && typeof constraint == 'string') {
 
 			// Bug ID: 3106676
@@ -387,6 +398,8 @@ export class Calendar extends zul.Widget {
 	_beg?: DateImpl;
 	/** @internal */
 	_end?: DateImpl;
+	/** @internal */
+	_disabledDates?: DateImpl[];
 	/** @internal */
 	_constraint?: string;
 	/** @internal */
@@ -801,6 +814,7 @@ export class Calendar extends zul.Widget {
 		// ZK-4641: Datebox doesn't clean beginning and end at client when removing constraint
 		this._beg = undefined;
 		this._end = undefined;
+		this._disabledDates = [];
 		if (typeof constraint != 'string' || constraint == '') return;
 		// B50-ZK-591: Datebox constraint combination yyyymmdd and
 		// no empty cause javascript error in zksandbox
@@ -832,6 +846,10 @@ export class Calendar extends zul.Widget {
 			} else if (constraint.startsWith('after')) {
 				this._beg = new zk.fmt.Calendar(undefined, this._localizedSymbols).parseDate(constraint.substring(5, 5 + len), format, undefined, undefined, undefined, tz);
 				this._beg!.setHours(0, 0, 0, 0);
+			} else if (constraint.startsWith('not')) {
+				const disabled = new zk.fmt.Calendar(undefined, this._localizedSymbols).parseDate(constraint.substring(3, 3 + len), format, undefined, undefined, undefined, tz);
+				disabled!.setHours(0, 0, 0, 0);
+				this._disabledDates.push(disabled!);
 			}
 		}
 	}
