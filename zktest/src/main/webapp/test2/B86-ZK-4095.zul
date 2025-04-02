@@ -21,7 +21,7 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
     </label>
     <zscript><![CDATA[
     void onDetect(org.zkoss.zkmax.zul.event.DetectEvent e) {
-        if ("qr".equalsIgnoreCase(e.getType()))
+        if (e.getType().contains("QR"))
             resultQR.setValue(e.getResult());
         else
             resultEan.setValue(e.getResult());

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B102-ZK-5230-1.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Tue Jan 14 11:31:22 CST 2025, Created by jameschu
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<window id="win" apply="org.zkoss.zktest.test2.B102_ZK_5230Composer">
+		<label multiline="true">
+			1. run in ios mobile (ios ver 18+)
+			2. Click "detach" then "attach"
+			3. the barcode scanner shall work
+		</label>
+		<button onClick="bs.setEnable(false)" label="disable" />
+		<button onClick="bs.setEnable(true)" label="enable" />
+		<button id="deBtn" label="detach" />
+		<button id="atBtn" label="attach" />
+		<button id="addBtn" label="add new" />
+		<barcodescanner id="bs" width="300px" height="300px" onDetect='Clients.log(event.getType() + " " + event.getResult())'/>
+	</window>
+</zk>
