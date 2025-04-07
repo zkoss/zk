@@ -12,6 +12,7 @@ ZK 10.2.0
   ZK-5487: lishead with headers using flex and percent width cause percent width to collapse
   ZK-5914: vflex will fail if display:flex is set at the same time
   ZK-5915: DOMPurify before 3.2.4 has an incorrect template literal regular expression, sometimes leading to mutation cross-site scripting (mXSS)
+  ZK-5458: zkplus DelegatingVariableResolver not longer works for the normal CDI case or for Quarkus ARC
 
 * Upgrade Notes
   + Remove the Fragment component from the zkmax.jar and use the new Client MVVM  (client-bind.jar) library instead.
