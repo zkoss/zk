@@ -18,6 +18,8 @@ export interface FlexSize {
 	height?: string | number;
 }
 
+const blockLevelComputedDisplays: Set<string> = new Set(['block', 'flex', 'grid', 'flow-root', 'table', 'table-row', 'list-item']);
+
 function _getTextSize(zkc: zk.JQZK, zkp: zk.JQZK, zkpOffset: zk.Offset): zk.Offset {
 	let $zkc = zkc.jq,
 		$prev = $zkc.prev(),
@@ -720,7 +722,9 @@ export namespace flex_global {
 						cwgt._cssFlexApplied = {flexApplied: true};
 						fccs.push(fcc);
 						cwgts.push(cwgt);
-						if (checkColumn && jq(fcc).css('display') === 'block') { // no default direction, check first block
+						// if no default direction (flex container not Hbox, Vbox, Hlayout or Vlayout)
+						// no block-level display child exists, then flex row, otherwise flex column
+						if (checkColumn && blockLevelComputedDisplays.has(jq(fcc).css('display'))) {
 							toColumn = true;
 							checkColumn = false;
 						}
