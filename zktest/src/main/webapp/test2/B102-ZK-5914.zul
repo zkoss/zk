@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B102-ZK-5914.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Sat Mar 29 14:49:34 CST 2025, Created by jamson
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <style>
+        .title { font-size: 36px; }
+        .group { height: 200px; }
+        .container { height: 60px; }
+        .r { background-color: #f9b6b6; }
+        .g { background-color: #d3f3c0; }
+        .b { background-color: #c0cff3; }
+    </style>
+
+    <label multiline="true">
+        1. All Block Level Display Modes' children should have the height ratio 1:2:3 from top to bottom
+        2. All Inline Level Display Modes' children should be either height == 0 or width == 0
+    </label>
+
+    <div id="blockLevelDisplayModes">
+
+        <label class="title">Block Level Display Modes</label>
+
+        <div class="group">
+            children display: block
+            <div class="container">
+                <div vflex="1" class="r" style="display: block"/>
+                <div vflex="2" class="g" style="display: block"/>
+                <div vflex="3" class="b" style="display: block"/>
+            </div>
+        </div>
+
+        <div class="group">
+            children display: flex
+            <div class="container">
+                <div vflex="1" class="r" style="display: flex"/>
+                <div vflex="2" class="g" style="display: flex"/>
+                <div vflex="3" class="b" style="display: flex"/>
+            </div>
+        </div>
+
+        <div class="group">
+            children display: grid
+            <div class="container">
+                <div vflex="1" class="r" style="display: grid"/>
+                <div vflex="2" class="g" style="display: grid"/>
+                <div vflex="3" class="b" style="display: grid"/>
+            </div>
+        </div>
+
+        <div class="group">
+            children display: flow-root
+            <div class="container">
+                <div vflex="1" class="r" style="display: flow-root"/>
+                <div vflex="2" class="g" style="display: flow-root"/>
+                <div vflex="3" class="b" style="display: flow-root"/>
+            </div>
+        </div>
+
+        <div class="group">
+            children display: table
+            <div class="container">
+                <div vflex="1" class="r" style="display: table"/>
+                <div vflex="2" class="g" style="display: table"/>
+                <div vflex="3" class="b" style="display: table"/>
+            </div>
+        </div>
+
+        <div class="group">
+            children display: table-row
+            <div class="container">
+                <div vflex="1" class="r" style="display: table-row"/>
+                <div vflex="2" class="g" style="display: table-row"/>
+                <div vflex="3" class="b" style="display: table-row"/>
+            </div>
+        </div>
+
+        <div class="group">
+            children display: list-item
+            <div class="container">
+                <div vflex="1" class="r" style="display: list-item"/>
+                <div vflex="2" class="g" style="display: list-item"/>
+                <div vflex="3" class="b" style="display: list-item"/>
+            </div>
+        </div>
+
+        <div class="group">
+            children display: block flex
+            <div class="container">
+                <div vflex="1" class="r" style="display: block flex"/>
+                <div vflex="2" class="g" style="display: block flex"/>
+                <div vflex="3" class="b" style="display: block flex"/>
+            </div>
+        </div>
+
+        <div class="group">
+            children display: block flow
+            <div class="container">
+                <div vflex="1" class="r" style="display: block flow"/>
+                <div vflex="2" class="g" style="display: block flow"/>
+                <div vflex="3" class="b" style="display: block flow"/>
+            </div>
+        </div>
+
+        <div class="group">
+            children display: block flow-root
+            <div class="container">
+                <div vflex="1" class="r" style="display: block flow-root"/>
+                <div vflex="2" class="g" style="display: block flow-root"/>
+                <div vflex="3" class="b" style="display: block flow-root"/>
+            </div>
+        </div>
+
+        <div class="group">
+            children display: block grid
+            <div class="container">
+                <div vflex="1" class="r" style="display: block grid"/>
+                <div vflex="2" class="g" style="display: block grid"/>
+                <div vflex="3" class="b" style="display: block grid"/>
+            </div>
+        </div>
+    </div>
+
+    <div id="inlineLevelDisplayModes">
+
+        <label class="title">Inline Level Display Modes</label>
+
+        <div class="group">
+            children display: inline
+            <div class="container">
+                <div vflex="1" class="r" style="display: inline"/>
+                <div vflex="2" class="g" style="display: inline"/>
+                <div vflex="3" class="b" style="display: inline"/>
+            </div>
+        </div>
+
+        <div class="group">
+            children display: inline-block
+            <div class="container">
+                <div vflex="1" class="r" style="display: inline-block"/>
+                <div vflex="2" class="g" style="display: inline-block"/>
+                <div vflex="3" class="b" style="display: inline-block"/>
+            </div>
+        </div>
+
+        <div class="group">
+            children display: inline-flex
+            <div class="container">
+                <div vflex="1" class="r" style="display: inline-flex"/>
+                <div vflex="2" class="g" style="display: inline-flex"/>
+                <div vflex="3" class="b" style="display: inline-flex"/>
+            </div>
+        </div>
+
+        <div class="group">
+            children display: inline-grid
+            <div class="container">
+                <div vflex="1" class="r" style="display: inline-grid"/>
+                <div vflex="2" class="g" style="display: inline-grid"/>
+                <div vflex="3" class="b" style="display: inline-grid"/>
+            </div>
+        </div>
+
+        <div class="group">
+            children display: inline-table
+            <div class="container">
+                <div vflex="1" class="r" style="display: inline-table"/>
+                <div vflex="2" class="g" style="display: inline-table"/>
+                <div vflex="3" class="b" style="display: inline-table"/>
+            </div>
+        </div>
+
+        <div class="group">
+            children display: table-cell
+            <div class="container">
+                <div vflex="1" class="r" style="display: table-cell"/>
+                <div vflex="2" class="g" style="display: table-cell"/>
+                <div vflex="3" class="b" style="display: table-cell"/>
+            </div>
+        </div>
+
+        <div class="group">
+            children display: inline flow
+            <div class="container">
+                <div vflex="1" class="r" style="display: inline flow"/>
+                <div vflex="2" class="g" style="display: inline flow"/>
+                <div vflex="3" class="b" style="display: inline flow"/>
+            </div>
+        </div>
+
+        <div class="group">
+            children display: inline flow-root
+            <div class="container">
+                <div vflex="1" class="r" style="display: inline flow-root"/>
+                <div vflex="2" class="g" style="display: inline flow-root"/>
+                <div vflex="3" class="b" style="display: inline flow-root"/>
+            </div>
+        </div>
+
+        <div class="group">
+            children display: inline flex
+            <div class="container">
+                <div vflex="1" class="r" style="display: inline flex"/>
+                <div vflex="2" class="g" style="display: inline flex"/>
+                <div vflex="3" class="b" style="display: inline flex"/>
+            </div>
+        </div>
+
+        <div class="group">
+            children display: inline grid
+            <div class="container">
+                <div vflex="1" class="r" style="display: inline grid"/>
+                <div vflex="2" class="g" style="display: inline grid"/>
+                <div vflex="3" class="b" style="display: inline grid"/>
+            </div>
+        </div>
+
+        <div class="group">
+            children display: contents
+            <div class="container">
+                <div vflex="1" class="r" style="display: contents"/>
+                <div vflex="2" class="g" style="display: contents"/>
+                <div vflex="3" class="b" style="display: contents"/>
+            </div>
+        </div>
+    </div>
+</zk>
