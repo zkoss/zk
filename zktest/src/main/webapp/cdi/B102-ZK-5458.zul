@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B102-ZK-5458.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		2025/4/7, Created by jumperchen
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+
+-->
+<window title="CDI utility example" border="normal" width="500px"
+        apply="org.zkoss.zktest.cdi.composer.B102_ZK_5458_DynamicComposer">
+	<hlayout>
+		List Special Order:
+		<checkbox id="specialBox" />
+	</hlayout>
+	<button label="List Order" />
+	<separator/>
+	<grid>
+		<rows>
+			<template name="model">
+				<row>${each}</row>
+			</template>
+		</rows>
+	</grid>
+</window>
