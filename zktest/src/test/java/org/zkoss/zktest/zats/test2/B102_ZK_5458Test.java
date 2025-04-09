@@ -30,6 +30,6 @@ public class B102_ZK_5458Test extends WebDriverTestCase {
 		waitResponse();
 		click(jq("@button:contains(List Order)"));
 		waitResponse();
-		assertEquals(jq("@row").length(), 10);
+		assertEquals(10, jq("@row").length());
 	}
 }
