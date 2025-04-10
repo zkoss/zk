@@ -193,14 +193,17 @@ function ajaxSend(dt: zk.Desktop, aureq: zk.Event, timeout?: number): void {
 	if (!dt) {
 		//original dt is decided by aureq.target.desktop, so start by it's parent.
 		var wgt: zk.Widget | undefined = aureq.target.parent;
-		while (!wgt!.desktop) {
-			wgt = wgt!.parent;
+		while (wgt && !wgt.desktop) {
+			wgt = wgt.parent;
 			if (wgt instanceof zk.Desktop) break;
 		}
 		if (wgt instanceof zk.Desktop) {
 			dt = wgt;
 		} else {
-			dt = wgt!.desktop as never;
+			dt = wgt?.desktop ?? zk.Desktop._dt as zk.Desktop;
+		}
+		if (!dt) {
+			dt = zk.Desktop._dt as zk.Desktop;
 		}
 	}
 	////

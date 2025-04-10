@@ -53,6 +53,18 @@ repositories {
 	}
 }
 
+// work for Servlet 3.0
+configurations.all {
+	exclude group: 'org.zkoss.zk', module: 'zkwebfragment'
+}
+// fix CDI(Weld) to scan from META-INF/beans.xml into build/classes/java/main/META-INF
+task copyResources(type: Copy) {
+	from "${projectDir}/src/main/resources/META-INF"
+	into layout.buildDirectory.dir('classes/java/main/META-INF')
+}
+
+processResources.dependsOn copyResources
+
 dependencies {
 	implementation "org.zkoss.theme:breeze:10.0.1.1-Eval"
 	implementation "org.zkoss.theme:silvertail:10.0.1.1-Eval"
@@ -66,7 +78,6 @@ dependencies {
 	implementation "org.zkoss.zk:zkbind:${version}"
 	implementation "org.zkoss.zk:zul:${version}"
 	implementation "org.zkoss.zk:zhtml:${version}"
-	implementation "org.zkoss.zk:zkwebfragment:${version}"
 	implementation "org.zkoss.common:zcommon:${version}"
 	implementation "org.zkoss.common:zweb:${version}"
 	implementation "org.zkoss.common:zweb-dsp:${version}"
@@ -101,6 +112,10 @@ dependencies {
 	implementation 'org.easymock:easymock:3.4'
 	implementation 'de.odysseus.juel:juel-spi:2.2.7'
 	implementation 'de.odysseus.juel:juel-impl:2.2.7'
+
+	// ZK-5458
+	implementation 'org.jboss.weld.servlet:weld-servlet-core:3.1.9.Final'
+
 	runtimeOnly 'org.apache-extras.beanshell:bsh:2.0b6'
 	runtimeOnly 'org.apache.groovy:groovy:5.0.0-alpha-1'
 	runtimeOnly 'org.mozilla:rhino:1.7.14'
@@ -117,7 +132,7 @@ dependencies {
 	testImplementation 'org.eclipse.jetty:apache-jsp:10.0.11'
 	testImplementation 'org.junit.platform:junit-platform-launcher:1.9.0'
 	testImplementation 'xml-apis:xml-apis:1.4.01'
-	testImplementation 'org.zkoss.test:zk-webdriver:1.4.27.0.0'
+	testImplementation 'org.zkoss.test:zk-webdriver:1.4.27.0.2'
 
 	// For B96_ZK_4194Test to use a specific Chrome driver version (this will change to match latest chrome)
 	testImplementation 'org.seleniumhq.selenium:selenium-devtools-v130:4.26.0'

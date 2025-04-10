@@ -17,5 +17,6 @@ msgzul = {
 	DATE_REQUIRED: 'Sie müssen ein Datum angeben. Format: ',
 	OUT_OF_RANGE: 'Nicht im zulässigen Bereich',
 	NO_AUDIO_SUPPORT: 'Ihr Browser unterstützt keine Tonwiedergabe',
-	OUT_OF_RANGE_SEPARATOR: '...'
+	OUT_OF_RANGE_SEPARATOR: '...',
+	DATE_DISABLED: 'Dieses Datum kann nicht ausgewählt werden'
 };

@@ -26,6 +26,8 @@ export class SimpleDateConstraint extends zul.inp.SimpleConstraint {
 	_beg?: DateImpl;
 	/** @internal */
 	_end?: DateImpl;
+	/** @internal */
+	_disabledDates?: DateImpl[];
 
 	/**
 	 * It can be String or number, the number or name of flag,
@@ -37,6 +39,7 @@ export class SimpleDateConstraint extends zul.inp.SimpleConstraint {
 		super(a);
 		this._wgt = wgt;
 		this._localizedSymbols = wgt._localizedSymbols;
+		this._disabledDates = [];
 	}
 
 	/** @internal */
@@ -68,6 +71,11 @@ export class SimpleDateConstraint extends zul.inp.SimpleConstraint {
 			this._beg = new zk.fmt.Calendar(undefined, this._localizedSymbols).parseDate(constraint.substring(5, 5 + len), this.format, undefined, undefined, undefined, tz);
 			this._beg!.setHours(0, 0, 0, 0);
 			arr[arr.length] = 'after';
+		} else if (constraint.startsWith('not')) {
+			const disabled = new zk.fmt.Calendar(undefined, this._localizedSymbols).parseDate(constraint.substring(3, 3 + len), this.format, undefined, undefined, undefined, tz);
+			disabled!.setHours(0, 0, 0, 0);
+			this._disabledDates!.push(disabled!);
+			arr[arr.length] = 'not';
 		}
 		return super.parseConstraint_(constraint);
 	}
@@ -81,6 +89,16 @@ export class SimpleDateConstraint extends zul.inp.SimpleConstraint {
 				return msg.between || msg.after || this.outOfRangeValue();
 			if (this._end != null && this._end.getTime() < v.getTime())
 				return msg.between || msg.before || this.outOfRangeValue();
+			if (this._disabledDates && this._disabledDates.length > 0) {
+				let res = false;
+				this._disabledDates.forEach(each => {
+					if (each.getTime() === v.getTime())
+						res = true;
+				});
+				if (res) {
+					return msgzul.DATE_DISABLED;
+				}
+			}
 		}
 		return result;
 	}

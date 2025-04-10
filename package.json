@@ -32,7 +32,6 @@
     "@babel/preset-env": "^7.16.10",
     "@babel/runtime-corejs3": "^7.23.9",
     "@microsoft/eslint-plugin-sdl": "github:microsoft/eslint-plugin-sdl",
-    "@types/dompurify": "^3.0.5",
     "@types/jquery": "^3.5.13",
     "@types/jquery-mousewheel": "^3.1.9",
     "@types/jquery.transit": "^0.9.31",
@@ -71,7 +70,7 @@
     "zkless-engine": "^1.1.13"
   },
   "dependencies": {
-    "dompurify": "^3.1.7",
+    "dompurify": "^3.2.5",
     "moment": "^2.29.4",
     "moment-timezone": "^0.5.43"
   },

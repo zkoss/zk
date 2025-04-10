@@ -16,5 +16,6 @@ msgzul = {
 	UNKNOWN_TYPE: 'Type inconnue de composant: ',
 	DATE_REQUIRED: 'Vous devez spécifier une date. Format: ',
 	OUT_OF_RANGE: 'Dépassement du rang',
-	NO_AUDIO_SUPPORT: "Votre navigateur ne supporte pas l'audio dynamique"
+	NO_AUDIO_SUPPORT: "Votre navigateur ne supporte pas l'audio dynamique",
+	DATE_DISABLED: 'Cette date ne peut pas être sélectionnée'
 };
