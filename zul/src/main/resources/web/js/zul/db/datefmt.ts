@@ -13,32 +13,45 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 function _parseTextToArray(txt: string, fmt: string): string[] | undefined {
-	//ZK-5423
-	var literals = extractLiteral(fmt); //extract literal token from format
-	//remove literal from format and text
-	fmt = fmt.replace(/'.*?'/g, ' ');  //remove any string enclosed by single quotes
-	txt = removeLiteral(txt, literals);
-	if (fmt.includes('\'')) //Bug ZK-1341: 'long+medium' format with single quote in zh_TW locale failed to parse AM/PM
-		fmt = fmt.replace(/'/g, '');
 	var ts: string[] = [],
 		mindex = fmt.indexOf('MMM'),
 		eindex = fmt.indexOf('E'),
 		fmtlen = fmt.length,
 		ary: string[] = [],
-		//mmindex = mindex + 3,
 		aa = fmt.indexOf('a'),
 		gg = fmt.indexOf('G'),
 		tlen = txt.replace(/[^.]/g, '').length,
-		flen = fmt.replace(/[^.]/g, '').length;
-
+		flen = fmt.replace(/[^.]/g, '').length,
+		literalIndexes: number[] = extractLiteralIndexesIfAny(fmt), // [startIndex1, endIndex1, startIndex2, endIndex2, ...]
+		literalTotalCount = literalIndexes.length / 2,
+		nextLiteralStartIndex = literalTotalCount > 0 ? literalIndexes[0] : -1,
+		nextLiteralEndIndex = literalTotalCount > 0 ? literalIndexes[1] : -1,
+		literalCount = 0,
+		isLiteral = false;
 
 	for (var i = 0, k = 0, j = txt.length; k < j; i++, k++) {
 		var c = txt.charAt(k),
 			f = fmtlen > i ? fmt.charAt(i) : '';
+		if (f == '\'') { // skip single quote
+			if (!isLiteral && c != fmt.charAt(nextLiteralStartIndex + 1) && i == nextLiteralStartIndex) { //enter literal
+				i--;
+			} else {
+				isLiteral = !isLiteral;
+				k--;
+				if (!isLiteral && i == nextLiteralEndIndex) {
+					literalCount++;
+					if (literalCount < literalTotalCount) {
+						nextLiteralStartIndex = literalIndexes[literalCount * 2];
+						nextLiteralEndIndex = literalIndexes[literalCount * 2 + 1];
+					}
+				}
+				continue;
+			}
+		}
 		if (c.match(/\d/)) {
 			ary.push(c);
-		} else if ((mindex >= 0 && mindex <= i /*&& mmindex >= i location French will lose last char */)
-			|| (eindex >= 0 && eindex <= i) || (aa > -1 && aa <= i) || (gg > -1 && gg <= i)) {
+		} else if (!isLiteral && ((mindex >= 0 && mindex <= i /*&& mmindex >= i location French will lose last char */)
+			|| (eindex >= 0 && eindex <= i) || (aa > -1 && aa <= i) || (gg > -1 && gg <= i))) {
 			if (c.match(/\w/)) {
 				ary.push(c);
 			} else {
@@ -58,8 +71,12 @@ function _parseTextToArray(txt: string, fmt: string): string[] | undefined {
 				}
 			ts.push(ary.join(''));
 			ary = [];
-		} else if (c.match(/\w/))
+		} else if (c.match(/\w/)) {
+			if (isLiteral) {
+				continue;
+			}
 			return; //failed
+		}
 	}
 	if (ary.length) ts.push(ary.join(''));
 	return ts;
@@ -75,22 +92,16 @@ function _parseToken(token: string, ts: string[], i: number, len: number): strin
 function _parseInt(v: string): number {
 	return parseInt(v, 10);
 }
-/* extracts any text enclosed by single quote from a string */
-function extractLiteral(str: string): string[] {
-	var pattern = /'(.*?)'/g,
-		matches = [],
+function extractLiteralIndexesIfAny(str: string): number[] {
+	let pattern = /'([^']*?)'/g,
+		matchesIndexes: number[] = [],
 		match: RegExpExecArray | unknown;
 	while ((match = pattern.exec(str)) != undefined && (match as RegExpExecArray)[1].length > 0) {
-		matches.push((match as RegExpExecArray)[1] as never);
+		let index = (match as RegExpExecArray).index;
+		matchesIndexes.push(index);
+		matchesIndexes.push(index + (match as RegExpExecArray)[0].length - 1);
 	}
-	return matches;
-}
-function removeLiteral(str: string, literals: string[]): string {
-	if (literals.length === 0) {
-		return str;
-	}
-	var pattern = new RegExp(literals.join('|'), 'g');
-	return str.replace(pattern, ' ');
+	return matchesIndexes;
 }
 function _digitFixed(val: string | number, digits?: number): string {
 	var s = String(val);

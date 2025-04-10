@@ -8,6 +8,7 @@ ZK 10.2.0
   ZK-5839: Follow up on ZK-5696: missing nested shadow element after fix
   ZK-5809: ZK 10 external radio linked to radiogroup cannot be disabled if Radiogroup is not disabled
   ZK-5889: When saving a form proxy object, zk overrides the original object's property with a proxy object
+  ZK-5861: Select a date in December causes an invalid result under locale pt
   ZK-5736: client-bind.jar on the classpath loads client-bind.wpd and has side effect
   ZK-5487: lishead with headers using flex and percent width cause percent width to collapse
   ZK-5914: vflex will fail if display:flex is set at the same time
