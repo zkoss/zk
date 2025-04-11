@@ -21,6 +21,7 @@ ZK 10.2.0
   ZK-5898: QR code scanning does not work in Barcodescanner
   ZK-4337: barcodescanner can only instantiate reader once per page
   ZK-4861: Inconsistent input options in Android, cause unreliable timebox input
+  ZK-5796: Client MVVM shall support resource directory
 
 * Upgrade Notes
   + Remove the Fragment component from the zkmax.jar and use the new Client MVVM  (client-bind.jar) library instead.
