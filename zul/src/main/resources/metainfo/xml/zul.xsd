@@ -2876,6 +2876,7 @@
 		<xs:attribute name="open" type="booleanType" use="optional" />
 		<xs:attribute name="placeholder" type="xs:string" use="optional" />
 		<xs:attribute name="searchMessage" type="xs:string" use="optional" />
+		<xs:attribute name="searchText" type="xs:string" use="optional" />
 		<xs:attribute name="selectedItem" type="xs:string" use="optional" />
 		<xs:attribute name="selectedItems" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />

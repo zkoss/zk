@@ -2,6 +2,7 @@ ZK 10.2.0
 * Features
   ZK-5824: separate fragment widget into an independent library or another jar
   ZK-5392: support a way to disable dates
+  ZK-5136: Provide API to control the search field value in searchbox
 
 * Bugs
   ZK-5728: ZK-5364 causes external radio to no longer be selected / checked

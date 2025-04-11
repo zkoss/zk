@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F102-ZK-5136-mvvm.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Mar 31 14:23:21 CST 2025, Created by jameschu
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div viewModel="@init('org.zkoss.zktest.test2.F102_ZK_5136VM')">
+		<label multiline="true"><![CDATA[
+			1. change search text by enter any value, you should see last label change to the same value.
+			2. click "clear searchText" and see the search text become empty -> result empty and the last label has no value
+			3. click "set searchText 'A'" and see the search text become "A" -> result appear and the last label shows "A"
+		]]></label>
+		<separator/>
+		<searchbox id="sbox" model="@load(vm.model)" placeholder="An unknown place" autoclose="true" searchText="@bind(vm.searchText)">
+			<template name="model">
+				<html><![CDATA[
+       <i class="z-icon-globe"></i> ${each}
+       ]]></html>
+			</template>
+		</searchbox>
+		<button id="clearBtn" label="clear searchText" onClick="@command('clearSearchText')"/>
+		<button id="changeBtn" label="set searchText 'A'" onClick="@command('updateSearchTextA')"/>
+		<label id="searchTextLabel" value="@load(vm.searchText)" />
+	</div>
+</zk>

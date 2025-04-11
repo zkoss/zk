@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F102-ZK-5136.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Mar 31 14:23:21 CST 2025, Created by jameschu
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript>
+		SimpleListModel model = new SimpleListModel(new String[] {
+		"North America", "South America", "Europe", "Asia", "Africa", "Oceania", "Antarctica"
+		});
+	</zscript>
+	<label multiline="true"><![CDATA[
+			1. Change search text by enter any value and click "show searchText". You should see value shown in the log.
+			2. Click "clear searchText" and click "show searchText". You should see the search text become empty -> empty result and empty the log.
+			3. Click "set searchText 'A'" and click "show searchText". You should see the search text become "A" -> result appear and "A" shown in the log.
+		]]></label>
+	<separator/>
+	<searchbox id="sbox" model="${model}" placeholder="An unknown place" autoclose="true" searchText="A">
+		<template name="model">
+			<html><![CDATA[
+       <i class="z-icon-globe"></i> ${each}
+       ]]></html>
+		</template>
+	</searchbox>
+	<button id="showBtn" label="show searchText" onClick="Clients.log(sbox.getSearchText())"/>
+	<button id="clearBtn" label="clear searchText" onClick='sbox.setSearchText("")'/>
+	<button id="changeBtn" label="set searchText 'A'" onClick='sbox.setSearchText("A")'/>
+</zk>
