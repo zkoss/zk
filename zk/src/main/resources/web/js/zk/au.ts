@@ -224,6 +224,7 @@ function ajaxSendNow(reqInf: AuRequestInfo): void {
 		headers: reqInf.content instanceof FormData ? { 'ZK-SID': '' + reqInf.sid } : { 'Content-Type': zAu.ajaxSettings.contentType, 'ZK-SID': '' + reqInf.sid },
 		body: reqInf.content
 	};
+	Object.assign(fetchOpts.headers!, zAu.getExtraHeaders());
 	zAu.sentTime = Date.now(); //used by server-push (cpsp)
 	zk.ausending = true;
 	if (zk.xhrWithCredentials)
@@ -551,6 +552,15 @@ export namespace au_global {
 		 */
 		export function processing(): boolean {
 			return zk.mounting || !!cmdsQue.length || !!zAu.ajaxReq || !!zAu.pendingReqInf;
+		}
+
+		/**
+		 * @returns extra headers that will be passed for each AU request to the server,
+		 * please note that this will be ignored for requests via websocket and rmDesktop.
+		 * @since 10.2.0
+		 */
+		export function getExtraHeaders(): Record<string, string> {
+			return {};
 		}
 
 		/**
