@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -305,6 +306,7 @@ public class DHtmlLayoutServlet extends HttpServlet {
 			if (errpg != null) {
 				try {
 					request.setAttribute("javax.servlet.error.message", Exceptions.getMessage(err));
+					request.setAttribute("javax.servlet.error.exception_list", List.of(err));
 					request.setAttribute("javax.servlet.error.exception", err);
 					request.setAttribute("javax.servlet.error.exception_type", err.getClass());
 					request.setAttribute("javax.servlet.error.status_code", new Integer(500));

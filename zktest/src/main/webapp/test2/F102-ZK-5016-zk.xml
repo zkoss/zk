@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F102-ZK-5016-zk.xml
+
+        Purpose:
+
+        Description:
+
+        History:
+                Fri Apr 11 17:58:51 CST 2025, Created by rebeccalai
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<error-page>
+		<exception-type>java.lang.Throwable</exception-type>
+		<location>/test2/F102-ZK-5016-error.zul</location>
+	</error-page>
+</zk>
