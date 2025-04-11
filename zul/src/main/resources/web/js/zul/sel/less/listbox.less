@@ -33,6 +33,10 @@
 	border: 1px solid @baseBorderColor;
 	overflow: hidden;
 	zoom: 1;
+	&:focus-visible {
+		box-shadow: 0 0 0 2px @focusBorderColor;
+		transition: unset;
+	}
 	//listbox header
 	&-header {
 		width: 100%;
