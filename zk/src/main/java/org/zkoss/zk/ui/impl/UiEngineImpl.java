@@ -1611,6 +1611,7 @@ public class UiEngineImpl implements UiEngine {
 		if (location != null) {
 			try {
 				exec.setAttribute("javax.servlet.error.message", msg);
+				exec.setAttribute("javax.servlet.error.exception_list", errs);
 				exec.setAttribute("javax.servlet.error.exception", err);
 				exec.setAttribute("javax.servlet.error.exception_type", err.getClass());
 				exec.setAttribute("javax.servlet.error.status_code", new Integer(500));
@@ -1644,6 +1645,7 @@ public class UiEngineImpl implements UiEngine {
 			} finally {
 				// Bug ZK-1144 in JBoss
 				exec.removeAttribute("javax.servlet.error.message");
+				exec.removeAttribute("javax.servlet.error.exception_list");
 				exec.removeAttribute("javax.servlet.error.exception");
 				exec.removeAttribute("javax.servlet.error.exception_type");
 				exec.removeAttribute("javax.servlet.error.status_code");

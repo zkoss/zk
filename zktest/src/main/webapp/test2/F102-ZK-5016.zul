@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F102-ZK-5016.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Fri Apr 11 17:08:38 CST 2025, Created by rebeccalai
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		0. configure error handling page (see F102-ZK-5016-zk.xml)
+		1. click btn1 then click btn2 to trigger two exceptions
+		3. exception_list on error page shows two exceptions
+	</label>
+	<button label="btn1" onBlur='throw new RuntimeException("onBlur")'/>
+	<button label="btn2" onFocus='throw new RuntimeException("onFocus")'/>
+</zk>
