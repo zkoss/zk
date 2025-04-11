@@ -173,6 +173,11 @@ div.z-log {
 		border-color: @checkboxHoverBorderColor;
 	}
 
+	&:focus-visible {
+		box-shadow: 0 0 0 2px @focusBorderColor;
+		transition: unset;
+	}
+
 	&:before {
 		content: '';
 		.displaySize(block, 12px, 12px);
