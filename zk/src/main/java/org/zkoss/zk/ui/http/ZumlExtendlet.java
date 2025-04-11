@@ -21,6 +21,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -186,6 +187,7 @@ public class ZumlExtendlet implements Extendlet {
 			if (errpg != null) {
 				try {
 					request.setAttribute("javax.servlet.error.message", Exceptions.getMessage(err));
+					request.setAttribute("javax.servlet.error.exception_list", List.of(err));
 					request.setAttribute("javax.servlet.error.exception", err);
 					request.setAttribute("javax.servlet.error.exception_type", err.getClass());
 					request.setAttribute("javax.servlet.error.status_code", new Integer(500));
