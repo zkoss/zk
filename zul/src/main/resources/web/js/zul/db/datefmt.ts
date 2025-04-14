@@ -12,75 +12,126 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-function _parseTextToArray(txt: string, fmt: string): string[] | undefined {
-	var ts: string[] = [],
-		mindex = fmt.indexOf('MMM'),
-		eindex = fmt.indexOf('E'),
-		fmtlen = fmt.length,
-		ary: string[] = [],
-		aa = fmt.indexOf('a'),
-		gg = fmt.indexOf('G'),
-		tlen = txt.replace(/[^.]/g, '').length,
-		flen = fmt.replace(/[^.]/g, '').length,
-		literalIndexes: number[] = extractLiteralIndexesIfAny(fmt), // [startIndex1, endIndex1, startIndex2, endIndex2, ...]
-		literalTotalCount = literalIndexes.length / 2,
-		nextLiteralStartIndex = literalTotalCount > 0 ? literalIndexes[0] : -1,
-		nextLiteralEndIndex = literalTotalCount > 0 ? literalIndexes[1] : -1,
-		literalCount = 0,
-		isLiteral = false;
 
-	for (var i = 0, k = 0, j = txt.length; k < j; i++, k++) {
-		var c = txt.charAt(k),
-			f = fmtlen > i ? fmt.charAt(i) : '';
-		if (f == '\'') { // skip single quote
-			if (!isLiteral && c != fmt.charAt(nextLiteralStartIndex + 1) && i == nextLiteralStartIndex) { //enter literal
-				i--;
-			} else {
-				isLiteral = !isLiteral;
-				k--;
-				if (!isLiteral && i == nextLiteralEndIndex) {
-					literalCount++;
-					if (literalCount < literalTotalCount) {
-						nextLiteralStartIndex = literalIndexes[literalCount * 2];
-						nextLiteralEndIndex = literalIndexes[literalCount * 2 + 1];
-					}
-				}
-				continue;
+
+// ZK-5615: Rewrite _parseTextToArray() and add method _buildTrie(), _isLetter() since ZK 10.2
+function _parseTextToArray(txt: string, fmt: string): string[] | undefined {
+
+	//trim the whitespace if exist in String (ex. txt pass from constraint)
+	txt = txt.trim();
+
+	//java Class SimpleDateFormat Date and time formats.
+	const formatTokens = new Set([
+		'G', 'y', 'Y', 'M', 'w', 'L', 'W', 'D', 'd', 'F',
+		'E', 'u', 'a', 'H', 'k', 'K', 'h', 'm', 's',
+		'S', 'z', 'Z', 'X'
+		]),
+	//Remove duplicates
+	allSeparators = new Set<string>();
+
+	let i: number = 0;
+	while (i < fmt.length) {
+		// Handle separators that are wrapped in quotes
+		if (fmt[i] === '\'') {
+			i++; // skip opening quote
+			let literal = '';
+			while (i < fmt.length && fmt[i] !== '\'') {
+				literal += fmt[i];
+				i++;
 			}
-		}
-		if (c.match(/\d/)) {
-			ary.push(c);
-		} else if (!isLiteral && ((mindex >= 0 && mindex <= i /*&& mmindex >= i location French will lose last char */)
-			|| (eindex >= 0 && eindex <= i) || (aa > -1 && aa <= i) || (gg > -1 && gg <= i))) {
-			if (c.match(/\w/)) {
-				ary.push(c);
-			} else {
-				if (c.charCodeAt(0) < 128 && (c.charCodeAt(0) != 46
-					|| tlen == flen || f.charCodeAt(0) == 46)) {
-					if (ary.length) {
-						ts.push(ary.join(''));
-						ary = [];
-					}
-				} else
-					ary.push(c);
+			i++; // skip closing quote
+			if (literal) {
+				allSeparators.add(literal);
 			}
-		} else if (ary.length) {
-			if (txt.charAt(k - 1).match(/\d/))
-				while (f == fmt.charAt(i - 1) && f) {
-					f = fmt.charAt(++i);
-				}
-			ts.push(ary.join(''));
-			ary = [];
-		} else if (c.match(/\w/)) {
-			if (isLiteral) {
-				continue;
+		} else {
+			// Handle single-word separators
+			const char = fmt[i];
+			if (!formatTokens.has(char)) {
+				 allSeparators.add(char);
 			}
-			return; //failed
+			i++;
 		}
 	}
-	if (ary.length) ts.push(ary.join(''));
-	return ts;
+
+	const trie = _buildTrie(Array.from(allSeparators)),
+	result: Array<string> = [];
+	let current: string = '';
+	i = 0;
+
+	while (i < txt.length) {
+		let node: TrieNode = trie,
+			j: number = i,
+		char = txt.charAt(j);
+
+		while (j < txt.length && node.children && node.children[char]) {
+			node = node.children[char];
+			j++;
+			char = txt.charAt(j);
+			if (node.isEnd && !node.children) {
+				break;
+			}
+		}
+		if (node.isEnd) {
+			// For cases like '30 de dezembro de 2024 18:42:39' in the pt locale
+			// Check if there is a letter before or after the separator, meaning it's part of a word and not an actual separator
+			let isValidSeparator = true;
+			if (node.isMultiCharSeparator) {
+				const prevChar = txt[i - 1],
+				nextChar = txt[j];
+				if (_isLetter(prevChar) || _isLetter(nextChar)) {
+					isValidSeparator = false;
+				}
+			}
+			if (isValidSeparator) {
+				if (current !== '') {
+					result.push(current);
+					current = '';
+				}
+				i = j;
+				continue;
+			}
+		}
+		current += txt[i];
+		i++;
+	}
+	if (current !== '') {
+		result.push(current);
+	}
+	return result;
 }
+
+/**
+ * Determines whether a given character is a letter.
+ * Supports both standard Latin letters (a-z, A-Z) and extended Latin characters (e.g., à, é, ç).
+ */
+function _isLetter(char: string | undefined): boolean {
+	return !!char && /[a-zA-Z\u00C0-\u017F]/.test(char);
+}
+
+// Interface definition used by _buildTrie() and _parseTextToArray()
+interface TrieNode {
+	children?: Record<string, TrieNode>;
+	isEnd?: boolean;
+	isMultiCharSeparator?: boolean;
+}
+
+function _buildTrie(separators: string[]): TrieNode {
+	const root: TrieNode = {};
+	for (const sep of separators) {
+		let node = root;
+		for (const char of sep) {
+			if (!node.children) node.children = {};
+			if (!node.children[char]) {
+				node.children[char] = {};
+			}
+			node = node.children[char];
+		}
+		node.isEnd = true;
+		node.isMultiCharSeparator = sep.length > 1;
+	}
+	return root;
+}
+
 function _parseToken(token: string, ts: string[], i: number, len: number): string {
 	if (len < 2) len = 2;
 	if (token && token.length > len) {
@@ -92,17 +143,7 @@ function _parseToken(token: string, ts: string[], i: number, len: number): strin
 function _parseInt(v: string): number {
 	return parseInt(v, 10);
 }
-function extractLiteralIndexesIfAny(str: string): number[] {
-	let pattern = /'([^']*?)'/g,
-		matchesIndexes: number[] = [],
-		match: RegExpExecArray | unknown;
-	while ((match = pattern.exec(str)) != undefined && (match as RegExpExecArray)[1].length > 0) {
-		let index = (match as RegExpExecArray).index;
-		matchesIndexes.push(index);
-		matchesIndexes.push(index + (match as RegExpExecArray)[0].length - 1);
-	}
-	return matchesIndexes;
-}
+
 function _digitFixed(val: string | number, digits?: number): string {
 	var s = String(val);
 	for (var j = digits! - s.length; --j >= 0;)
@@ -419,12 +460,13 @@ var DateFmt = {
 						if (nonLenient && token && !regexp.test(token))
 							return;
 
-						if (!isNaN(nv = _parseInt(token))) {
-							d = nv;
-							dFound = true;
-							if (d < 0 || d > 31) //restrict since user might input year for day (ok to allow 0 and 31 for easy entry)
-								return; //failed
-						}
+						//ZK-5615: Determine if token contains non-digital word when nonLenient is false.
+						nv = _parseInt(token);
+						if (!token || isNaN(nv)) return;
+						d = nv;
+						dFound = true;
+						if (d < 0 || d > 31) //restrict since user might input year for day (ok to allow 0 and 31 for easy entry)
+							return; //failed
 						break;
 					case 'H':
 					case 'h':
