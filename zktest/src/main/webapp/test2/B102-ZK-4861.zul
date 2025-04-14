@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B102-ZK-4861.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Mon Apr 14 12:39:11 CST 2025, Created by jamson
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <script>
+        zk.tabletUIEnabled = false;
+    </script>
+    
+    <label multiline="true">
+        1. Run with Android device, or Android Studio Emulator
+        2. Using backspace to clear the contents in the timebox, and type an invalid value of time (e.g. "foobar")
+        3. The input value shows in the timebox should stay empty (not changed)
+        4. Using backspace to clear the contents in the timebox, and type a valid value of time (e.g. 05:16)
+        5. The input value shows in the timebox should be changed, and the label of a red border should have new content (timebox onChange triggered)
+    </label>
+    <timebox format="hh:mm" onChange='lb.setValue(self.getValue().toString())'/>
+    <label id="lb" style="border: 1px solid red"/>
+</zk>
