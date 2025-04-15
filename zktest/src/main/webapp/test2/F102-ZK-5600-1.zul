@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F102-ZK-5600-1.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Tue Apr 15 11:35:25 CST 2025, Created by rebeccalai
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		1. click "cmd1" and "cmd2" buttons to trigger exceptions
+		2. should log the zul path each exception occurs at
+	</label>
+	<div viewModel="@id('vm') @init('org.zkoss.zktest.test2.F102_ZK_5600VM')">
+		<button label="cmd1" onClick="@command('cmd1')"/>
+		<button label="cmd2" onClick="@command('cmd2', event=event)"/>
+	</div>
+</zk>
