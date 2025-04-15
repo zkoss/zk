@@ -113,7 +113,8 @@ import org.zkoss.zk.ui.event.Event;
 			doPrePhase(Phase.SAVE_BINDING, ctx);
 			binding.save(ctx);
 		} catch (Exception ex) {
-			throw new RuntimeException(getSaveBindingDebugInfo("doSavePropertyBinding", comp, binding, command, evt, notifys), ex);
+			_log.error(getSaveBindingDebugInfo("doSavePropertyBinding", comp, binding, command, evt, notifys), ex);
+			throw ex;
 		} finally {
 			doPostPhase(Phase.SAVE_BINDING, ctx);
 		}
@@ -144,7 +145,8 @@ import org.zkoss.zk.ui.event.Event;
 				clearValidationMessages(binding.getBinder(), binding.getComponent(), binding.getFieldName());
 			}
 		} catch (Exception ex) {
-			throw new RuntimeException(getLoadBindingDebugInfo("doLoadPropertyBinding", comp, binding, ctx, command), ex);
+			_log.error(getLoadBindingDebugInfo("doLoadPropertyBinding", comp, binding, ctx, command), ex);
+			throw ex;
 		} finally {
 			doPostPhase(Phase.LOAD_BINDING, ctx);
 		}
@@ -217,8 +219,7 @@ import org.zkoss.zk.ui.event.Event;
 
 				return valid;
 			} catch (Exception e) {
-				_log.error(MessageFormat.format("doValidateSaveEvent "
-						+ "comp=[{0}],binding=[{1}],evt=[{2}],validate=[{3}],result=[{4}]", comp, binding, evt, p, valid));
+				_log.error("doValidateSaveEvent comp=[{}],binding=[{}],evt=[{}],validate=[{}],result=[{}]", comp, binding, evt, p, valid);
 				throw UiException.Aide.wrap(e);
 			} finally {
 				doPostPhase(Phase.VALIDATE, ctx);

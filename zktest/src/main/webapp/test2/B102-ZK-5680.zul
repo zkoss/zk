@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B102-ZK-5680.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Fri Mar 28 15:25:12 CST 2025, Created by rebeccalai
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		1. click the "error in command method" button
+		2. should see "An application error" in error popup
+		3. configure error handling pages (see B102-ZK-5680-zk.xml)
+		4. click the "error in command method" button again
+		5. should see "custom error: An application error" in error popup
+		6. results should match those from clicking the "error in event listener" button
+	</label>
+	<button label="error in event listener" onClick='throw new NullPointerException("An application error")'/>
+	<button label="error in command method" onClick="@command('error')"
+			viewModel="@id('vm') @init('org.zkoss.zktest.test2.B102_ZK_5680VM')"/>
+</zk>

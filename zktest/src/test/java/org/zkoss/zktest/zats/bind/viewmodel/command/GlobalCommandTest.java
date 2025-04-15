@@ -62,6 +62,6 @@ public class GlobalCommandTest extends ZATSTestCase {
 		final DesktopAgent desktop = connect("/bind/viewmodel/command/global-command-duplicated-default.zul");
 		Throwable t = Assertions.assertThrows(ZatsException.class, () ->
 				desktop.query("button").click());
-		MatcherAssert.assertThat(t.getCause().getCause().getCause().getMessage(), startsWith("there are more than one DefaultGlobalCommand method in class"));
+		MatcherAssert.assertThat(t.getMessage(), startsWith("there are more than one DefaultGlobalCommand method in class"));
 	}
 }

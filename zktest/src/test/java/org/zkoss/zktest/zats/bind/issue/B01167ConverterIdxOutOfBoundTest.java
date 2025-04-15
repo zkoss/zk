@@ -13,7 +13,7 @@ public class B01167ConverterIdxOutOfBoundTest extends ZATSTestCase {
 		try {
 			connect();
 		} catch(ZatsException e) {
-			assertTrue(e.getCause().getCause().toString().contains("UiException: Cannot find converter:something"));
+			assertTrue(e.getCause().toString().contains("UiException: Cannot find converter:something"));
 		}
 	}
 }

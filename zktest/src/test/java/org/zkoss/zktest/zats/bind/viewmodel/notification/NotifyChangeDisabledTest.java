@@ -47,7 +47,7 @@ public class NotifyChangeDisabledTest extends ZATSTestCase {
 		Throwable t = Assertions.assertThrows(AgentException.class, () -> {
 			desktop.query("#inp2").type("ZK");
 		});
-		MatcherAssert.assertThat(t.getCause().getCause().getCause().getMessage(), is("don't use interface" +
+		MatcherAssert.assertThat(t.getCause().getMessage(), is("don't use interface" +
 				" org.zkoss.bind.annotation.NotifyChange with interface" +
 				" org.zkoss.bind.annotation.NotifyChangeDisabled, choose only one"));
 	}
@@ -57,7 +57,7 @@ public class NotifyChangeDisabledTest extends ZATSTestCase {
 		Throwable t = Assertions.assertThrows(AgentException.class, () -> {
 			desktop.query("#inp3").type("ZK");
 		});
-		MatcherAssert.assertThat(t.getCause().getCause().getCause().getMessage(), is("don't use interface" +
+		MatcherAssert.assertThat(t.getCause().getMessage(), is("don't use interface" +
 				" org.zkoss.bind.annotation.SmartNotifyChange with interface" +
 				" org.zkoss.bind.annotation.NotifyChangeDisabled, choose only one"));
 	}
