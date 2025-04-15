@@ -1,8 +1,8 @@
 /**
- * A simple spinner constraint.
+ * A simple NumberInput constraint.
  */
-@zk.WrapClass('zul.inp.SimpleSpinnerConstraint')
-export class SimpleSpinnerConstraint extends zul.inp.SimpleConstraint {
+@zk.WrapClass('zul.inp.SimpleNumberInputConstraint')
+export class SimpleNumberInputConstraint extends zul.inp.SimpleConstraint {
 	/** @internal */
 	_min?: number;
 	/** @internal */

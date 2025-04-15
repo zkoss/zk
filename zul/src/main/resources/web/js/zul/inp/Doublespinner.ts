@@ -116,7 +116,7 @@ export class Doublespinner extends zul.inp.NumberInputWidget<number> {
 
 	override setConstraint(constraint: string): this {
 		if (typeof constraint == 'string' && !constraint.startsWith('[')/*by server*/) {
-			var simpleDoubleSpinnerConstraint = new zul.inp.SimpleDoubleSpinnerConstraint(constraint);
+			var simpleDoubleSpinnerConstraint = new zul.inp.SimpleNumberInputConstraint(constraint);
 			this._min = simpleDoubleSpinnerConstraint._min;
 			this._max = simpleDoubleSpinnerConstraint._max;
 			super.setConstraint(simpleDoubleSpinnerConstraint);
