@@ -65,17 +65,19 @@ export class SimpleNumberInputConstraint extends zul.inp.SimpleConstraint {
 	}
 
 	override validate(wgt: zk.Widget, val: unknown): zul.inp.SimpleConstraintErrorMessages | string | undefined {
-		var result = super.validate(wgt, val);
-		switch (typeof val) {
-			case 'number':
-				var maxErr = this._max && val > this._max,
-					minErr = this._min && val < this._min;
-				if (maxErr || minErr) {
-					var maxminErrMsg = this._errmsg.maxmin,
-						errmsg = maxminErrMsg ? maxminErrMsg : (maxErr ? this._errmsg.max : this._errmsg.min),
-						msg: string | undefined = errmsg ? errmsg : msgzul.OUT_OF_RANGE + ': ' + (this._min != null ? this._max != null ?
-							this._min + ' - ' + this._max : '>= ' + this._min : '<= ' + this._max);
-				}
+		const result = super.validate(wgt, val),
+			isNumber = typeof val === 'number',
+			isZkNumber = val instanceof zk.BigDecimal || val instanceof zk.Long;
+		if (isNumber || isZkNumber) {
+			const realVal = isZkNumber ? val.$toNumber() : val,
+				maxErr = this._max && realVal > this._max,
+				minErr = this._min && realVal < this._min;
+			if (maxErr || minErr) {
+				var maxminErrMsg = this._errmsg.maxmin,
+					errmsg = maxminErrMsg ? maxminErrMsg : (maxErr ? this._errmsg.max : this._errmsg.min),
+					msg: string | undefined = errmsg ? errmsg : msgzul.OUT_OF_RANGE + ': ' + (this._min != null ? this._max != null ?
+						this._min + ' - ' + this._max : '>= ' + this._min : '<= ' + this._max);
+			}
 		}
 		return msg || result;
 	}

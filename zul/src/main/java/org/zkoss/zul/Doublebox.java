@@ -110,6 +110,16 @@ public class Doublebox extends NumberInputElement {
 				? new Double(((Number) value).doubleValue()) : value;
 	}
 
+	/**
+	 * @param constr a list of constraints separated by comma.
+	 * Example: no positive, no zero
+	 * @since 10.2.0
+	 */
+	// -- super --//
+	public void setConstraint(String constr) {
+		setConstraint(constr != null ? SimpleNumberInputConstraint.ofDouble(constr) : null);
+	}
+
 	protected Object coerceFromString(String value) throws WrongValueException {
 		final Object[] vals = toNumberOnly(value);
 		final String val = (String) vals[0];

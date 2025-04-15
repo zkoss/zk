@@ -132,7 +132,7 @@ public class Doublespinner extends NumberInputElement {
 	 */
 	// -- super --//
 	public void setConstraint(String constr) {
-		setConstraint(constr != null ? new SimpleDoubleSpinnerConstraint(constr) : null);
+		setConstraint(constr != null ? SimpleNumberInputConstraint.ofDouble(constr) : null);
 	}
 
 	protected Object coerceFromString(String value) throws WrongValueException {

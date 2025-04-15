@@ -3,6 +3,7 @@ ZK 10.2.0
   ZK-5824: separate fragment widget into an independent library or another jar
   ZK-5392: support a way to disable dates
   ZK-5016: Pass all errors as a List<Throwable> to custom error page
+  ZK-5474: Provide min and max string constraints for number input elements
 
 * Bugs
   ZK-5728: ZK-5364 causes external radio to no longer be selected / checked
@@ -24,6 +25,7 @@ ZK 10.2.0
 
 * Upgrade Notes
   + Remove the Fragment component from the zkmax.jar and use the new Client MVVM  (client-bind.jar) library instead.
+  + decimalbox, intbox, longbox and doublebox support min max constraint
 
    --------
 ZK 10.1.0

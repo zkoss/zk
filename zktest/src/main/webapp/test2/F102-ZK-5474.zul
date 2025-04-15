@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F102-ZK-5474.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Tue Apr 15 13:07:53 CST 2025, Created by jamson
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label multiline="true">
+        The following widgets are decimalbox, intbox, longbox, doublebox
+        The constraint of them are 1 ~ 2
+        If the input value out of range, should show the "custom error" message,
+        if the default error message is shown, the bug is exists
+    </label>
+    <decimalbox constraint="min 1 max 2: custom error"/>
+    <intbox constraint="min 1 max 2: custom error"/>
+    <longbox constraint="min 1 max 2: custom error"/>
+    <doublebox constraint="min 1 max 2: custom error"/>
+</zk>

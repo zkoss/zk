@@ -30,6 +30,10 @@ export class NumberInputWidget<ValueType> extends zul.inp.FormatWidget<ValueType
 	_rounding?: number;
 	/** @internal */
 	_allowKeys?: string;
+	/** @internal */
+	_min?: number;
+	/** @internal */
+	_max?: number;
 
 	/**
 	 * @returns the rounding mode.
@@ -133,5 +137,16 @@ export class NumberInputWidget<ValueType> extends zul.inp.FormatWidget<ValueType
 		if ((!no || !no.text) && zk.mobile)
 			attr += ' inputmode="decimal"';
 		return attr;
+	}
+	
+	override setConstraint(constraint: zul.inp.SimpleConstraint | string | undefined): this {
+		if (typeof constraint === 'string' && !constraint.startsWith('[')/*by server*/) {
+			var spinnerConstraint = new zul.inp.SimpleNumberInputConstraint(constraint);
+			this._min = spinnerConstraint._min;
+			this._max = spinnerConstraint._max;
+			super.setConstraint(spinnerConstraint);
+		} else
+			super.setConstraint(constraint);
+		return this;
 	}
 }

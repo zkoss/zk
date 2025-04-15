@@ -128,7 +128,7 @@ public class Spinner extends NumberInputElement {
 	 */
 	// -- super --//
 	public void setConstraint(String constr) {
-		setConstraint(constr != null ? new SimpleSpinnerConstraint(constr) : null); //Bug 2564298
+		setConstraint(constr != null ? SimpleNumberInputConstraint.ofInteger(constr) : null); //Bug 2564298
 	}
 
 	protected Object coerceFromString(String value) throws WrongValueException {
