@@ -393,6 +393,7 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 			err = cause;
 
 		if (err != null) {
+			log.error("at [{}]", path, err);
 			//Bug 1714094: we have to handle err, because Web container
 			//didn't allow developer to intercept errors caused by inclusion
 			final String errpg = sess.getWebApp().getConfiguration().getErrorPage(sess.getDeviceType(), err);

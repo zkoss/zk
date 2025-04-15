@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F102-ZK-5600-1.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Tue Apr 15 11:35:25 CST 2025, Created by rebeccalai
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		1. click the "expectable" button for MVC and MVVM
+		2. should log the zul path each exception occurs at
+		3. click the "original1" and "original2" button
+		4. should log the zul path each exception occurs at
+	</label>
+
+	<label value="MVC"/>
+	<button label="expectable" onClick='throw new org.zkoss.zktest.test2.F102_ZK_5600Exception();'/>
+	<button label="unexpectable" onClick='throw new RuntimeException("unexpectable exception");'/>
+
+	<div viewModel="@id('vm') @init('org.zkoss.zktest.test2.F102_ZK_5600VM')">
+		<label value="MVVM"/>
+		<button label="expectable" onClick="@command('expectable')"/>
+		<button label="unexpectable" onClick="@command('unexpectable')"/>
+		<button label="original1" onClick="@command('cmd1')"/>
+		<button label="original2" onClick="@command('cmd2', event=event)"/>
+	</div>
+</zk>

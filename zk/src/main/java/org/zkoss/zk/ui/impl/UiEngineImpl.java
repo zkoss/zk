@@ -1518,15 +1518,17 @@ public class UiEngineImpl implements UiEngine {
 	private static final void handleError(Throwable ex, UiVisualizer uv, List<Throwable> errs) {
 		final Throwable t = Exceptions.findCause(ex, Expectable.class);
 		if (t == null) {
+			String requestPath = uv.getExecution().getDesktop().getRequestPath();
 			if (ex instanceof org.xml.sax.SAXException
 					|| ex instanceof org.zkoss.zk.ui.metainfo.PropertyNotFoundException)
-				log.error(Exceptions.getMessage(ex));
+				log.error("{} at [{}]", Exceptions.getMessage(ex), requestPath);
 			else
-				log.error("", ex); //Briefly(ex);
+				log.error("at [{}]", requestPath, ex); //Briefly(ex);
 		} else {
 			ex = t;
 			if (log.isDebugEnabled()) {
-				log.debug("", Exceptions.getRealCause(ex));
+				String requestPath = uv.getExecution().getDesktop().getRequestPath();
+				log.debug("at [{}]", requestPath, Exceptions.getRealCause(ex));
 			}
 		}
 
