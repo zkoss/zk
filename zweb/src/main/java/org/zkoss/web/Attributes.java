@@ -141,4 +141,9 @@ public class Attributes {
 	/** The attribute to hold the exception, if any.
 	 */
 	public static final String ERROR_EXCEPTION = "javax.servlet.error.exception";
+	/**
+	 * The attribute to hold the exception list, if any.
+	 * @since 10.2.0
+	 */
+	public static final String ERROR_EXCEPTION_LIST = "javax.servlet.error.exception_list";
 }

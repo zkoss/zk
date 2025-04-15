@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F102-ZK-5016-error.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Fri Apr 11 17:55:07 CST 2025, Created by rebeccalai
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<window title="Error ${requestScope['javax.servlet.error.status_code']}" width="400px" border="normal" mode="modal">
+	exception_list: ${requestScope['javax.servlet.error.exception_list']}
+</window>
