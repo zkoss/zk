@@ -22,7 +22,7 @@ public class B01059DifferentTypeTest extends ZATSTestCase {
 		try {
 			ib1.type("1");
 		} catch(Exception e) {
-			exceptionMsg = e.getCause().getCause().getCause().toString();
+			exceptionMsg = e.getCause().toString();
 		}
 		assertTrue(exceptionMsg.contains("Property 'value1' not writable"));
 		exceptionMsg = "";
@@ -32,7 +32,7 @@ public class B01059DifferentTypeTest extends ZATSTestCase {
 		try {
 			ib3.type("3");
 		} catch(Exception e) {
-			exceptionMsg = e.getCause().getCause().getCause().toString();
+			exceptionMsg = e.getCause().toString();
 		}
 		assertTrue(exceptionMsg.contains("Property 'value3' not writable"));
 	}

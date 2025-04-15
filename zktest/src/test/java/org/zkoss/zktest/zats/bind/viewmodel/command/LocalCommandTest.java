@@ -48,7 +48,7 @@ public class LocalCommandTest extends ZATSTestCase {
 		final DesktopAgent desktop = connect("/bind/viewmodel/command/local-command-duplicated.zul");
 		Throwable t = Assertions.assertThrows(ZatsException.class, () ->
 				desktop.query("button").click());
-		MatcherAssert.assertThat(t.getCause().getCause().getCause().getMessage(), startsWith("there are more than one Command method command1 in class"));
+		MatcherAssert.assertThat(t.getMessage(), startsWith("there are more than one Command method command1 in class"));
 	}
 
 	@Test
@@ -56,6 +56,6 @@ public class LocalCommandTest extends ZATSTestCase {
 		final DesktopAgent desktop = connect("/bind/viewmodel/command/local-command-duplicated-default.zul");
 		Throwable t = Assertions.assertThrows(ZatsException.class, () ->
 				desktop.query("button").click());
-		MatcherAssert.assertThat(t.getCause().getCause().getCause().getMessage(), startsWith("there are more than one DefaultCommand method in class"));
+		MatcherAssert.assertThat(t.getMessage(), startsWith("there are more than one DefaultCommand method in class"));
 	}
 }
