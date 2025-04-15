@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B102-ZK-5818.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thr Apr 17 10:22:40 CST 2025, Created by cherrylee
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <zscript><![CDATA[
+String[] grades = new String[] {"1", "2", "3"};
+    ]]></zscript>
+    <portallayout orient="vertical" apply="org.zkoss.bind.BindComposer">
+        <portalchildren title="Todo" counterVisible="true" hflex="1">
+            <forEach items="@init(grades)">
+                <panel title="${each}">
+                    <panelchildren>
+                        ${each}
+                    </panelchildren>
+                </panel>
+            </forEach>
+        </portalchildren>
+    </portallayout>
+</zk>

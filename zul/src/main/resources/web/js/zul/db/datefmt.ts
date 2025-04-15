@@ -100,11 +100,9 @@ function _parseTextToArray(txt: string, fmt: string): string[] | undefined {
 	return result;
 }
 
-/**
- * Determines whether a given character is a letter.
- * Supports both standard Latin letters (a-z, A-Z) and extended Latin characters (e.g., à, é, ç).
- */
+/** @internal */
 function _isLetter(char: string | undefined): boolean {
+	// Supports both standard Latin letters (a-z, A-Z) and extended Latin characters (e.g., à, é, ç).
 	return !!char && /[a-zA-Z\u00C0-\u017F]/.test(char);
 }
 
