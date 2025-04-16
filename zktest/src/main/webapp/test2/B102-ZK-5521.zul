@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B102-ZK-5521.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Apr 10 16:15:06 CST 2025, Created by jamson
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label multiline="true">
+        1. press TAB to focus on the first navitem, you should see the first navitem has the border highlight
+        2. press TAB again to focus on the first nav, you should see the nav has the border highlight
+        3. press RIGHT_ARROW to open the nav (it'll focus on the nested navitem meanwhile), and you should see the nested navitem has the border highlight
+    </label>
+    <navbar orient="vertical" width="200px">
+        <navitem label="1" iconSclass="z-icon-home"/>
+        <nav label="2" iconSclass="z-icon-th-list">
+            <navitem label="2-1" />
+            <navitem label="2-2" />
+        </nav>
+    </navbar>
+</zk>

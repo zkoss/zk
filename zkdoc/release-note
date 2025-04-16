@@ -3,6 +3,7 @@ ZK 10.2.0
   ZK-5824: separate fragment widget into an independent library or another jar
   ZK-5392: support a way to disable dates
   ZK-5016: Pass all errors as a List<Throwable> to custom error page
+  ZK-5396: Checkbox and Radio can show the focused state
 
 * Bugs
   ZK-5728: ZK-5364 causes external radio to no longer be selected / checked
@@ -20,6 +21,12 @@ ZK 10.2.0
   ZK-5898: QR code scanning does not work in Barcodescanner
   ZK-4337: barcodescanner can only instantiate reader once per page
   ZK-4861: Inconsistent input options in Android, cause unreliable timebox input
+  ZK-5395: a listbox doesn't show its focused state obviously
+  ZK-5486: za11y: I do not see when a listbox gets focus (by keyboard)
+  ZK-5497: a tree doesn't show its focused state obviously
+  ZK-5499: a tree header doesn't show its focused state obviously
+  ZK-5521: navbar has no focus indicator
+  ZK-5518: The focus on a groupbox doesn't have any visual indicator
 
 * Upgrade Notes
   + Remove the Fragment component from the zkmax.jar and use the new Client MVVM  (client-bind.jar) library instead.
