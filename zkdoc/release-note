@@ -2,6 +2,7 @@ ZK 10.2.0
 * Features
   ZK-5824: separate fragment widget into an independent library or another jar
   ZK-5392: support a way to disable dates
+  ZK-5136: Provide API to control the search field value in searchbox
   ZK-5016: Pass all errors as a List<Throwable> to custom error page
   ZK-5461: Provide easy-to-override headers functions to client-side request emitters
   ZK-5438: Support a way to work with Spring Security CSRF
@@ -21,6 +22,8 @@ ZK 10.2.0
   ZK-5231: removing a barcodescanner immediately right after the browser renders it causes javascript error
   ZK-5898: QR code scanning does not work in Barcodescanner
   ZK-4337: barcodescanner can only instantiate reader once per page
+  ZK-4861: Inconsistent input options in Android, cause unreliable timebox input
+  ZK-5796: Client MVVM shall support resource directory
 
 * Upgrade Notes
   + Remove the Fragment component from the zkmax.jar and use the new Client MVVM  (client-bind.jar) library instead.
