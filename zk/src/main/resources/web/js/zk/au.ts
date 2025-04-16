@@ -243,8 +243,15 @@ function ajaxSendNow(reqInf: AuRequestInfo): void {
 	zAu.ajaxReq = true as unknown as XMLHttpRequest; // processing flag
 	zAu.ajaxReqInf = reqInf;
 
-	if (!forceAjax && typeof zWs != 'undefined' && zWs.ready) {
-		zWs.send(reqInf);
+	if (!forceAjax && typeof zWs != 'undefined' && reqInf.content != undefined && typeof reqInf.content !== 'string') {
+		if (zWs.ready) {
+			zWs.send(reqInf);
+		} else {
+			zAu.ajaxReq = zAu.ajaxReqInf = undefined;
+			if (!reqInf.ignorable && !zk.unloading) {
+				zAu.ajaxReqResend(reqInf);
+			}
+		}
 		return;
 	}
 
