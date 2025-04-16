@@ -69,6 +69,16 @@ public class Intbox extends NumberInputElement {
 		return _zclass == null ? "z-intbox" : _zclass;
 	}
 
+	/**
+	 * @param constr a list of constraints separated by comma.
+	 * Example: no positive, no zero
+	 * @since 10.2.0
+	 */
+	// -- super --//
+	public void setConstraint(String constr) {
+		setConstraint(constr != null ? SimpleNumberInputConstraint.ofInteger(constr) : null);
+	}
+
 	protected Object coerceFromString(String value) throws WrongValueException {
 		final Object[] vals = toNumberOnly(value);
 		final String val = (String) vals[0];

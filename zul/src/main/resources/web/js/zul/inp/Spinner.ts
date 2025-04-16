@@ -24,10 +24,6 @@ export class Spinner extends zul.inp.NumberInputWidget<number> {
 	/** @internal */
 	_buttonVisible = true;
 	/** @internal */
-	_min?: number;
-	/** @internal */
-	_max?: number;
-	/** @internal */
 	_currentbtn?: HTMLElement;
 	/** @internal */
 	_noPreviousValue?: boolean;
@@ -79,17 +75,6 @@ export class Spinner extends zul.inp.NumberInputWidget<number> {
 	 */
 	intValue(): number | undefined {
 		return super.getValue();
-	}
-
-	override setConstraint(constraint: string): this {
-		if (typeof constraint == 'string' && !constraint.startsWith('[')/*by server*/) {
-			var spinnerConstraint = new zul.inp.SimpleSpinnerConstraint(constraint);
-			this._min = spinnerConstraint._min;
-			this._max = spinnerConstraint._max;
-			super.setConstraint(spinnerConstraint);
-		} else
-			super.setConstraint(constraint);
-		return this;
 	}
 
 	/** @internal */
