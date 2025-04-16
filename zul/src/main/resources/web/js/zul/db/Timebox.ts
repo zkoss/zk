@@ -386,29 +386,13 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 	}
 
 	/** @internal */
-	_doBeforeInput(evt: zk.Event): void {
-		var inp = this.getInputNode()!;
-		if (inp.disabled || inp.readOnly)
-			return;
-
-		// control input keys only when no custom unformater is given
-		if (!Timebox._unformater) {
-			var char = (evt.domEvent!.originalEvent as InputEvent).data!;
-			if (/\d/.test(char)) {
-				this._doType(parseInt(char));
-				evt.stop();
-			}
-		}
-	}
-
-	/** @internal */
 	override doKeyDown_(evt: zk.Event): void {
 		var inp = this.getInputNode()!;
 		if (inp.disabled || inp.readOnly)
 			return;
 
 		// control input keys only when no custom unformater is given
-		if (!Timebox._unformater) {
+		if (!Timebox._unformater && !(zk.android && zk.chrome)) { // ZK-4861, ignore key down for android chrome, handle parsing value in doBlur_
 			var code = evt.keyCode;
 			switch (code) {
 			case 48: case 96://0
@@ -686,9 +670,22 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 
 	/** @internal */
 	override doBlur_(evt: zk.Event): void {
+		const inp = this.getInputNode()!;
+		// ZK-4861
+		if (zk.android && zk.chrome && inp.value) {
+			const parsedValue = this.coerceFromString_(inp.value);
+			if (parsedValue) { // If parsing succeed, update the input value
+				inp.value = this.coerceToString_(parsedValue);
+				this._changed = true;
+			} else if (this._value) { // If parsing failed, but we have a previous value, restore it
+				inp.value = this.coerceToString_(this._value);
+			} else { // If parsing failed, and no previous value, clear the input
+				inp.value = this._defRawVal = '';
+			}
+		}
 		// skip onchange, Bug 2936568
 		if (!this._value && !this._changed && !Timebox._unformater)
-			this.getInputNode()!.value = this._defRawVal = '';
+			inp.value = this._defRawVal = '';
 
 		super.doBlur_(evt);
 
@@ -708,8 +705,6 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 		super.bind_(desktop, skipper, after);
 		var btn: HTMLElement | undefined;
 
-		if (zk.android && zk.chrome)
-			this.domListen_(this.getInputNode()!, 'onBeforeInput', '_doBeforeInput');
 		if (btn = this.$n('btn'))
 			this.domListen_(btn, 'onZMouseDown', '_btnDown')
 				.domListen_(btn, 'onZMouseUp', '_btnUp');
@@ -728,8 +723,6 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 			this.domUnlisten_(btn, 'onZMouseDown', '_btnDown')
 				.domUnlisten_(btn, 'onZMouseUp', '_btnUp');
 		}
-		if (zk.android && zk.chrome)
-			this.domUnlisten_(this.getInputNode()!, 'onBeforeInput', '_doBeforeInput');
 		this._changed = false;
 		super.unbind_(skipper, after, keepRod);
 	}

@@ -120,6 +120,15 @@ public class F100_ZK_5213Test extends WebDriverTestCase {
         connect();
         String slt = ".z-datebox .z-datebox-icon.z-icon-calendar";
         test_(slt, MZa11y.DATEBOX_CALENDAR);
+        click_(".z-datebox .z-datebox-icon.z-icon-calendar");
+        String lastMonth = ".z-datebox-popup .z-icon-angle-left",
+                nextMonth = ".z-datebox-popup .z-icon-angle-right",
+                plus = ".z-datebox-popup .z-icon-angle-up",
+                minus = ".z-datebox-popup .z-icon-angle-down";
+        test_(lastMonth, MZa11y.CALENDAR_ANGLE_LEFT);
+        test_(nextMonth, MZa11y.CALENDAR_ANGLE_RIGHT);
+        test_(plus, MZa11y.TIMEBOX_ANGLE_UP);
+        test_(minus, MZa11y.TIMEBOX_ANGLE_DOWN);
     }
     @Test
     public void drawer_test() {
