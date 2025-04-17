@@ -26,6 +26,7 @@ ZK 10.2.0
   ZK-5796: Client MVVM shall support resource directory
   ZK-5922: Doublespinner cannot show custom constraint error message
   ZK-5615: Incorrect date input after selecting a date under traditional chinese locale
+  ZK-5921: Improve visual appearance when there is extra space on the right side of grid, listbox and tree
 
 * Upgrade Notes
   + Remove the Fragment component from the zkmax.jar and use the new Client MVVM  (client-bind.jar) library instead.

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F102-ZK-5921.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Mon Apr 14 16:48:16 CST 2025, Created by jamson
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label multiline="true">
+        0. Do the following steps to listbox, grid and tree
+        1. Drag any header resize bar and drop it to the left of its original position.
+        2. After dropping, the width of the header's background color becomes narrower than the overall width of the listbox, grid and tree.
+    </label>
+    listbox
+    <listbox width="600px">
+        <listhead sizable="true">
+            <listheader label="listheader 1"/>
+            <listheader label="listheader 2"/>
+            <listheader label="listheader 3"/>
+        </listhead>
+        <listitem>
+            <listcell>1</listcell>
+            <listcell>2</listcell>
+            <listcell>3</listcell>
+        </listitem>
+        <listitem>
+            <listcell>1</listcell>
+            <listcell>2</listcell>
+            <listcell>3</listcell>
+        </listitem>
+        <listfoot>
+            <listfooter label="listfooter 1"/>
+            <listfooter label="listfooter 2"/>
+            <listfooter label="listfooter 3"/>
+        </listfoot>
+    </listbox>
+    grid
+    <grid width="600px">
+        <columns sizable="true">
+            <column label="column 1"/>
+            <column label="column 2"/>
+            <column label="column 3"/>
+        </columns>
+        <rows>
+            <row>
+                <cell>1</cell>
+                <cell>2</cell>
+                <cell>3</cell>
+            </row>
+            <row>
+                <cell>1</cell>
+                <cell>2</cell>
+                <cell>3</cell>
+            </row>
+        </rows>
+        <foot>
+            <footer label="footer 1"/>
+            <footer label="footer 2"/>
+            <footer label="footer 3"/>
+        </foot>
+    </grid>
+    tree
+    <tree width="600px">
+        <treecols sizable="true">
+            <treecol label="treecol 1"/>
+            <treecol label="treecol 2"/>
+            <treecol label="treecol 3"/>
+        </treecols>
+        <treechildren>
+            <treeitem>
+                <treerow>
+                    <treecell>1</treecell>
+                    <treecell>2</treecell>
+                    <treecell>3</treecell>
+                </treerow>
+            </treeitem>
+            <treeitem>
+                <treerow>
+                    <treecell>1</treecell>
+                    <treecell>2</treecell>
+                    <treecell>3</treecell>
+                </treerow>
+            </treeitem>
+        </treechildren>
+        <treefoot>
+            <treefooter label="treefooter 1"/>
+            <treefooter label="treefooter 2"/>
+            <treefooter label="treefooter 3"/>
+        </treefoot>
+    </tree>
+</zk>
