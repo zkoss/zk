@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F102-ZK-4999.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Mar 31 14:23:21 CST 2025, Created by jameschu
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript>
+		SimpleListModel model1 = new SimpleListModel(new String[] {
+			"North America", "South America", "Europe", "Asia", "Africa", "Oceania", "Antarctica"
+		});
+		ListModel model2 = new ListModelList(new String[] {
+			"North America", "South America", "Europe", "Asia", "Africa", "Oceania", "Antarctica"
+		});
+	</zscript>
+	<label multiline="true"><![CDATA[
+		1. click on the first searchbox and type "A" in the search input, you should see the first item highlighted.
+		2. clear and type "N", you should see the first item highlighted.
+		3. press enter and see the first item selected
+		4. do it again in the second searchbox
+	]]></label>
+	ListSubModel >>
+	<searchbox model="${model1}" placeholder="An unknown place" autoclose="true">
+		<template name="model">
+			<html><![CDATA[
+       <i class="z-icon-globe"></i> ${each}
+       ]]></html>
+		</template>
+	</searchbox>
+	<separator />
+	ListModel >>
+	<searchbox model="${model2}" placeholder="An unknown place" autoclose="true">
+		<template name="model">
+			<html><![CDATA[
+       <i class="z-icon-globe"></i> ${each}
+       ]]></html>
+		</template>
+	</searchbox>
+</zk>
