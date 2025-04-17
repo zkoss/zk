@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F102-ZK-5642.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Tue Apr 15 11:35:49 CST 2025, Created by jameschu
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label id="testLabel" />
+	<separator />
+	<window id="zkwin" title="Embedded ZK" border="normal" onCustomClientEvent="testLabel.setValue(event.getData())"
+			apply="org.zkoss.zktest.test2.F102_ZK_5642Composer">
+		<button id="btn" label="send something via comet server push" />
+	</window>
+</zk>

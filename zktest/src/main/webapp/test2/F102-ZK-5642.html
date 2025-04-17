@@ -1,0 +1,52 @@
+<!--
+F102-ZK-5642.html
+
+	Purpose:
+
+	Description:
+
+	History:
+		Tue Apr 15 11:35:49 CST 2025, Created by jameschu
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+
+-->
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>F102-ZK-5642</title>
+	</head>
+	<body>
+		<div>
+			1. enable embedded with<br>
+				&lt;library-property&gt;<br>
+					&lt;name&gt;org.zkoss.web.servlet.http.embedded.enabled&lt;/name&gt;<br>
+					&lt;value&gt;true&lt;/value&gt;<br>
+				&lt;/library-property&gt;<br>
+			2. enable cors filter for embbed in web.xml (notice that the Access-Control-Allow-Origin should be http://localhost:8080 - current host)<br>
+				&lt;filter>
+					&lt;filter-name>embeddedCORSFilter&lt;/filter-name>
+						&lt;filter-class>org.zkoss.zktest.http.EmbeddedCorsFilter&lt;/filter-class>
+					<&lt;async-supported>true&lt;/async-supported>
+				&lt;/filter>
+				&lt;filter-mapping>
+					&lt;filter-name>embeddedCORSFilter&lt;/filter-name>
+					&lt;url-pattern>/*&lt;/url-pattern>
+				&lt;/filter-mapping>
+			3. run two other zktest instances on port 8081 and 8082<br>
+			4. click the load zkapp1 button<br>
+			5. click the start button in the loaded zkapp1<br>
+			6. click "send something via comet server push" and check comet server push request works using the browser devtools network tab<br>
+			7. click the destroy zkapp1 button<br>
+			8. repeat step 4-7 for zkapp2<br>
+		</div>
+		<script src="/zktest/zkEmbedded"></script>
+		<button onclick="zEmbedded.load('zkapp1', 'http://localhost:8081/zktest/test2/F102-ZK-5642.zul')">load zkapp1</button>
+		<button onclick="zEmbedded.destroy('zkapp1', false)">destroy zkapp1</button>
+		<div id="zkapp1"></div>
+		<button onclick="zEmbedded.load('zkapp2', 'http://localhost:8082/zktest/test2/F102-ZK-5642.zul')">load zkapp2</button>
+		<button onclick="zEmbedded.destroy('zkapp2', false)">destroy zkapp2</button>
+		<div id="zkapp2"></div>
+	</body>
+</html>

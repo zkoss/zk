@@ -6,6 +6,7 @@ ZK 10.2.0
   ZK-5016: Pass all errors as a List<Throwable> to custom error page
   ZK-5461: Provide easy-to-override headers functions to client-side request emitters
   ZK-5438: Support a way to work with Spring Security CSRF
+  ZK-5642: zEmbedded support for CometServerPush
 
 * Bugs
   ZK-5728: ZK-5364 causes external radio to no longer be selected / checked

@@ -299,6 +299,7 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 <!--	<filter>-->
 <!--		<filter-name>embeddedCORSFilter</filter-name>-->
 <!--		<filter-class>org.zkoss.zktest.http.EmbeddedCorsFilter</filter-class>-->
+<!--		<async-supported>true</async-supported>-->
 <!--	</filter>-->
 <!--	<filter-mapping>-->
 <!--		<filter-name>embeddedCORSFilter</filter-name>-->
