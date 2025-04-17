@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ZK-5615.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Fri Apr 11 12:42:12 CST 2025, Created by cherrylee
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <zscript><![CDATA[
+        import java.util.Calendar;
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, 2025);
+        cal.set(Calendar.MONTH, Calendar.MARCH);
+        cal.set(Calendar.DAY_OF_MONTH, 18);
+        cal.set(Calendar.HOUR_OF_DAY, 13);
+        cal.set(Calendar.MINUTE, 14);
+        cal.set(Calendar.SECOND, 34);
+    ]]></zscript>
+
+    <label multiline="true">
+        1. Click the datebox icon and select any date under a two-digit month (October, November, or December).
+        2. After selection, the datebox input value should display the corresponding date and time.
+    </label>
+
+    <datebox format="long+medium" value="${cal.time}" width="330px" />
+</zk>
