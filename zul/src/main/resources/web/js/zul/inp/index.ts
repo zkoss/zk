@@ -2,6 +2,7 @@ export default {};
 export * from './InputWidget'; // jsdoc="true"
 export * from './Errorbox';
 export * from './SimpleConstraint'; // jsdoc="true"
+export * from './SimpleNumberInputConstraint'; // jsdoc="true"
 export * from './SimpleSpinnerConstraint'; // jsdoc="true"
 export * from './SimpleDoubleSpinnerConstraint'; // jsdoc="true"
 export * from './SimpleDateConstraint'; // jsdoc="true"

@@ -24,6 +24,7 @@ ZK 10.2.0
   ZK-4337: barcodescanner can only instantiate reader once per page
   ZK-4861: Inconsistent input options in Android, cause unreliable timebox input
   ZK-5796: Client MVVM shall support resource directory
+  ZK-5922: Doublespinner cannot show custom constraint error message
   ZK-5615: Incorrect date input after selecting a date under traditional chinese locale
 
 * Upgrade Notes
