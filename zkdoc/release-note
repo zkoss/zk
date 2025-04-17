@@ -3,6 +3,17 @@ ZK 10.2.0
   ZK-5824: separate fragment widget into an independent library or another jar
   ZK-5392: support a way to disable dates
   ZK-5016: Pass all errors as a List<Throwable> to custom error page
+  ZK-5396: Checkbox can show its focused state
+  ZK-5867: Radio can show its focused state
+  ZK-5395: Listbox can show its focused state
+  ZK-5486: za11y: Support showing when a Listbox receives focus via keyboard
+  ZK-5925: Listheader can show its focused state
+  ZK-5497: Tree can show its focused state
+  ZK-5499: Treecol can show its focused state
+  ZK-5926: Column can show its focused state
+  ZK-5518: Groupbox can show its focused state
+  ZK-5521: Nav can show its focused state
+  ZK-5868: Paging can show its focused state
 
 * Bugs
   ZK-5728: ZK-5364 causes external radio to no longer be selected / checked

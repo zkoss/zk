@@ -132,6 +132,10 @@
 	overflow: hidden;
 	white-space: nowrap;
 
+	&:focus-visible {
+		box-shadow: inset 0 0 0 2px @focusBorderColor;
+		transition: unset;
+	}
 	&-button {
 		.iconFontStyle(@fontSizeLarge, @meshTitleColor);
 		display: none;
