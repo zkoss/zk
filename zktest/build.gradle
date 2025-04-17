@@ -283,7 +283,9 @@ description = 'ZK Test'
 
 
 gretty {
-	httpPort = 8080
+	if (project.hasProperty('httpPort')) {
+		httpPort = Integer.parseInt(project.httpPort)
+	}
 	systemProperty 'java.util.logging.config.file', './src/main/webapp/WEB-INF/logging.properties'
 }
 
