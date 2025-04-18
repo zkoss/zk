@@ -480,19 +480,19 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 				return indexMap; //nothing to fill up
 		}
 		int i = 0;
-
-		for (Iterator<Component> it = children.iterator(); it.hasNext(); i++) {
-			Component next = it.next();
-			if (indexMap.isEmpty()) {
-				if (first == next) {
-					indexMap.put(next, i);
-				}
-			} else {
+		//ZK-5818: The indexMap should include both the first and last components. The previous version ensured that indexMap.get(subTree._firstInsertion) was set, but could result in indexMap.get(subTree._lastInsertion) being null.
+		boolean startRecording = false;
+		for (Component next : children) {
+			if (!startRecording && (next == first || next == last)) {
+				startRecording = true;
+			}
+			if (startRecording) {
 				indexMap.put(next, i);
-				if (next == last) {
+				if (indexMap.containsKey(first) && indexMap.containsKey(last)) {
 					break;
 				}
 			}
+			i++;
 		}
 		return indexMap;
 	}
