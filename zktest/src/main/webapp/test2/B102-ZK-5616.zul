@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B102-ZK-5616.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Fri Apr 18 16:06:23 CST 2025, Created by cherrylee
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <grid width="600px">
+        <frozen columns="2"/>
+        <columns>
+            <column width="50px"></column>
+            <column width="50px">ID</column>
+            <column width="100px">Priority</column>
+            <column width="100px">Status</column>
+            <column width="250px">Summary</column>
+            <column width="350px">Detail</column>
+            <column width="150px">Group</column>
+            <column width="100px">Assign</column>
+        </columns>
+        <rows>
+            <row>
+                <detail></detail>
+                <cell>0001</cell>
+                <cell>1</cell>
+                <cell>closed</cell>
+                <cell>Fix login issue</cell>
+                <cell>Login does not work at all</cell>
+                <cell>Account</cell>
+                <cell>Bob</cell>
+            </row>
+            <row>
+                <detail></detail>
+                <cell>0002</cell>
+                <cell>3</cell>
+                <cell>open</cell>
+                <cell>Button style broken</cell>
+                <cell>Check main.css</cell>
+                <cell>Styling</cell>
+                <cell>Alice</cell>
+            </row>
+            <row>
+                <detail></detail>
+                <cell>0003</cell>
+                <cell>2</cell>
+                <cell>open</cell>
+                <cell>Client search result</cell>
+                <cell>Search service returns incomplete result</cell>
+                <cell>Service</cell>
+                <cell>Bob</cell>
+            </row>
+        </rows>
+    </grid>
+</zk>
