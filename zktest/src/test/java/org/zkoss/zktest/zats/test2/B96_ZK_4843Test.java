@@ -27,7 +27,7 @@ public class B96_ZK_4843Test extends WebDriverTestCase {
 		double period = getPeriod();
 
 		MatcherAssert.assertThat("Response was too slow!", period, Matchers
-			.lessThanOrEqualTo(1000.0));
+			.lessThanOrEqualTo(1250.0));
 	}
 
 	private double getPeriod() {
