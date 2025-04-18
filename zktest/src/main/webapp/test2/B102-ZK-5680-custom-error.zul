@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B102-ZK-5680-custom-error.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Wed Apr 16 14:42:01 CST 2025, Created by rebeccalai
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<window title="Error ${requestScope['javax.servlet.error.status_code']}" mode="modal" closable="true">
+	custom error: ${requestScope['javax.servlet.error.message']}
+</window>

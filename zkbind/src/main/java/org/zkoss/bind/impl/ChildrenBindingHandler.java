@@ -95,7 +95,8 @@ import org.zkoss.zk.ui.Component;
 			doPrePhase(Phase.LOAD_BINDING, ctx);
 			binding.load(ctx);
 		} catch (Exception ex) {
-			throw new RuntimeException(getLoadBindingDebugInfo("doLoadChildrenBinding", comp, binding, ctx, command), ex);
+			_log.error(getLoadBindingDebugInfo("doLoadChildrenBinding", comp, binding, ctx, command), ex);
+			throw ex;
 		} finally {
 			doPostPhase(Phase.LOAD_BINDING, ctx);
 		}
