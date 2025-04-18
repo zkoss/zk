@@ -29,14 +29,13 @@
 
 //listbox
 .z-listbox {
-	background: @meshBackgroundColor;
+	background: @maskBackgroundColor;
 	border: 1px solid @baseBorderColor;
 	overflow: hidden;
 	zoom: 1;
 	//listbox header
 	&-header {
 		width: 100%;
-		background: @meshTitleBackgroundColor;
 		position: relative;
 		overflow: hidden;
 		.resetTable();
@@ -60,8 +59,6 @@
 	}
 	//listbox footer
 	&-footer {
-		background: @meshFootBackgroundColor;
-		border-top: 1px solid @baseBorderColor;
 		overflow: hidden;
 		white-space: nowrap;
 		.resetTable();
@@ -69,6 +66,7 @@
 		.z-listfooter {
 			overflow: hidden;
 			background: @meshFootBackgroundColor;
+			border-top: 1px solid @baseBorderColor;
 		}
 
 		.z-listfoot-bar {
@@ -105,7 +103,7 @@
 	}
 }
 .z-listheader {
-	border-left: 1px solid @meshTitleBorderColor;
+	border-right: 1px solid @meshTitleBorderColor;
 	border-bottom: 1px solid @meshTitleBorderColor;
 	padding: 0;
 	background: @meshTitleBackgroundColor;
