@@ -16,14 +16,13 @@
 
 //grid
 .z-grid {
-	background: @meshBackgroundColor;
+	background: @maskBackgroundColor;
 	border: 1px solid @baseBorderColor;
 	overflow: hidden;
 	zoom: 1;
 	//grid header
 	&-header {
 		width: 100%;
-		background: @meshTitleBackgroundColor;
 		position: relative;
 		overflow: hidden;
 		.resetTable();
@@ -48,8 +47,6 @@
 	}
 	//grid footer
 	&-footer {
-		background: @meshFootBackgroundColor;
-		border-top: 1px solid @baseBorderColor;
 		overflow: hidden;
 		white-space: nowrap;
 		.resetTable();
@@ -57,6 +54,7 @@
 		.z-footer {
 			overflow: hidden;
 			background: @meshFootBackgroundColor;
+			border-top: 1px solid @baseBorderColor;
 		}
 
 		.z-foot-bar {
@@ -125,7 +123,7 @@
 
 .z-column {
 	background: @meshTitleBackgroundColor;
-	border-left: 1px solid @meshTitleBorderColor;
+	border-right: 1px solid @meshTitleBorderColor;
 	border-bottom: 1px solid @meshTitleBorderColor;
 	padding: 0;
 	position: relative;

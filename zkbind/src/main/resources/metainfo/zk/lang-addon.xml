@@ -634,7 +634,19 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 				<attribute-name>CONVERTER</attribute-name>
 				<attribute-value>org.zkoss.bind.converter.sys.GridModelConverter</attribute-value>
 			</attribute>
-		</annotation>		
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>activePage</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>both</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>SAVE_EVENT</attribute-name>
+				<attribute-value>onPaging</attribute-value>
+			</attribute>
+		</annotation>
 	</component>
 	<component>
 		<component-name>groupbox</component-name>
@@ -800,6 +812,18 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 			<attribute>
 				<attribute-name>CONVERTER</attribute-name>
 				<attribute-value>org.zkoss.bind.converter.sys.ListboxSelectedIndexConverter</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>activePage</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>both</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>SAVE_EVENT</attribute-name>
+				<attribute-value>onPaging</attribute-value>
 			</attribute>
 		</annotation>
 	</component>
@@ -1595,7 +1619,19 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 				<attribute-name>CONVERTER</attribute-name>
 				<attribute-value>org.zkoss.bind.converter.sys.TreeSelectedItemsConverter</attribute-value>
 			</attribute>
-		</annotation>		
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>activePage</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>both</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>SAVE_EVENT</attribute-name>
+				<attribute-value>onPaging</attribute-value>
+			</attribute>
+		</annotation>
 	</component>
 	<!--component>
 		<component-name>treecell</component-name>
