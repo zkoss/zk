@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B102-ZK-5648.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Apr 17 18:38:27 CST 2025, Created by cherrylee
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <listbox checkmark="true" multiple="true">
+        <listhead>
+            <listheader label="h"/>
+        </listhead>
+        <listitem label="a"/>
+        <listitem label="b"/>
+        <listitem label="c"/>
+    </listbox>
+</zk>
