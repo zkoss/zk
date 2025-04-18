@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B102-ZK-5222.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Wed Apr 16 14:35:41 CST 2025, Created by jameschu
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+	<label multiline="true"><![CDATA[
+		0. Test in tomcat (since its default MaxTextMessageBufferSize is small - 8096)
+		1. Enable WebSocket in zk.xml.
+		<listener>
+			<listener-class>org.zkoss.zkmax.au.websocket.WebSocketWebAppInit</listener-class>
+		</listener>
+		2. open this page with devtool > network
+		3. You should see a dialog shows:
+			the server is temporarily out of service.
+			would you like to try again?
+		4. press "ok" and see no zkau return 467 code
+	]]></label>
+	<script><![CDATA[
+		// simulate the bug, causing websocket retry
+		zk.afterLoad(function() {
+			function send(reqInf) {
+				reqInf.header = zWs._requestHeaders;
+				zWs._requestHeaders = {};
+				zWs._splitAndSend(JSON.stringify(reqInf), undefined, "$ZKPARTIALMESSAGE$", zWs.webSocketEndPoint);
+				if (!reqInf.implicit) zk.startProcessing(zk.procDelay, reqInf.sid);
+			}
+			zWs.send = send;
+		});
+    ]]></script>
+	<zscript><![CDATA[
+		List Items = new ArrayList();
+		for (int i = 0; i < 1500; i++) {
+			Items.add("data "+i);
+		}
+		ListModelList model = new ListModelList(Items);
+	]]></zscript>
+	<custom-attributes org.zkoss.zul.listbox.rod="false"/>
+	<listbox id="lb" model="${model}">
+		<listhead>
+			<listheader label="listbox header"/>
+		</listhead>
+	</listbox>
+</zk>

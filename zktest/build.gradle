@@ -159,7 +159,7 @@ sourceSets {
 task testGroupForkJVMTestOnly(type: Test) {
 
 	forkEvery = 1 // a new test process is started for every test class
-	maxParallelForks = Runtime.runtime.availableProcessors().intdiv(4) ?: 1
+	maxParallelForks = Math.max(1, (Runtime.runtime.availableProcessors() / 4).toInteger())
 	if (project.hasProperty('maxParallelForks'))
 		maxParallelForks = project.maxParallelForks as int
 
