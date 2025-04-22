@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B102-ZK-5705.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		2025/4/22, Created by jumperchen
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div viewModel="@id('vm') @init('org.zkoss.zktest.test2.B102_ZK_5705VM')">
+		<button onClick="@command('refresh')" label="refresh"/>
+		<apply myBean="@load(vm.myBean)">
+			<label value="@init(vm.myBean.text)"/>
+		</apply>
+	</div>
+</zk>
