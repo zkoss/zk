@@ -52,19 +52,3 @@
 		border-color: @inputBorderColor;
 	}
 }
-
-// IE9 cannot hide the native icon, so don't show a custom icon
-.ie9 {
-	.z-selectbox {
-		background-image: none;
-		&:active {
-			background-image: none;
-			// popup close bug workaround
-			color: @inputColor;
-			background-color: @inputBackgroundColor;
-		}
-		&[disabled] {
-			background-image: none;
-		}
-	}
-}
