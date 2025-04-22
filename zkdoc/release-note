@@ -32,6 +32,7 @@ ZK 10.2.0
   ZK-5791: end users cannot draw a line on a signature with a touch and mouse supported device
   ZK-5616: Transparent background in Detail column overlaps non-frozen columns on scroll
   ZK-5668: java.lang.IllegalMonitorStateException when using websocket and server push
+  ZK-5705: <apply> no longer re-rendering when notifying @load binding
 
 * Upgrade Notes
   + Remove the Fragment component from the zkmax.jar and use the new Client MVVM  (client-bind.jar) library instead.
