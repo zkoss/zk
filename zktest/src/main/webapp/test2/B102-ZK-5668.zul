@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B102-ZK-5668.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		2025/4/22, Created by jumperchen
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+
+-->
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<zk>
+	<label multiline="true">
+		Steps to Reproduce
+		1. run with Firefox
+		2. click Start button
+		3. wait for more than 1 minute
+		4. no any error appears
+	</label>
+	<div viewModel="@id('vm') @init('org.zkoss.zktest.test2.B102_ZK_5668RobotTrackViewModel')">
+		<hlayout valign="middle">
+			<button label="@load(vm.running ? 'Stop' : 'Start')"
+			        onClick="@command(vm.running ? 'stop' : 'start')"/>
+			<separator orient="horizontal"/>
+			Push Interval:
+			<slider minpos="200" maxpos="2000" curpos="200" slidingtext="{0} ms" width="160px"
+			        onScroll="@global-command('updateInterval', interval=event.pos)"/>
+		</hlayout>
+		<separator/>
+		<vlayout>
+			<label value="@load(('robot' += (vm.running ? '' : ' idle'))) "/>
+			X: <decimalbox readonly="true" value="@load(vm.x)" format="#.000" width="55px"/>
+			<!--				X: <decimalbox readonly="true" value="@load(vm.x)" format="#.000" width="55px"/>-->
+			<!--				X: <decimalbox readonly="true" value="@load(vm.x)" format="#.000" width="55px"/>-->
+			<!--				X: <decimalbox readonly="true" value="@load(vm.x)" format="#.000" width="55px"/>-->
+			<!--				X: <decimalbox readonly="true" value="@load(vm.x)" format="#.000" width="55px"/>-->
+		</vlayout>
+	</div>
+</zk>
