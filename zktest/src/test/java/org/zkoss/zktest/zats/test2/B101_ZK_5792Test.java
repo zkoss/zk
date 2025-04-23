@@ -27,7 +27,7 @@ public class B101_ZK_5792Test extends WebDriverTestCase {
 		for (int i = 1; i < 6; i++) {
 			click(jq("@button:eq(0)"));
 			waitResponse();
-			assertEquals(1 + i , jq(".z-div").length());
+			assertEquals(i * 2 , jq(".z-div").length());
 			click(jq("@button:eq(2)"));
 			waitResponse();
 			assertEquals(i, jq(".z-label:contains(itemLabel)").length());
