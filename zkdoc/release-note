@@ -40,9 +40,11 @@ ZK 10.2.0
   ZK-5669: ZK embedded doesn't disable tablet stylesheet when loading resources
   ZK-5700: zk ee binary zip has missing 3rd-party jar required at runtime
   ZK-5701: remove IE code and css rules
+  ZK-5261: forEach always re-renders all items
 
 * Upgrade Notes
   + Remove the Fragment component from the zkmax.jar and use the new Client MVVM  (client-bind.jar) library instead.
+  + Revert the fix ZK-5079 to refix ZK-5261, which is a side effect of ZK-5079. However, the issue of ZK-5079 is disappeared in ZK 10.2.0.
 
    --------
 ZK 10.1.0
