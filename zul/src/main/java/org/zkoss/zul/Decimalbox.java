@@ -20,6 +20,11 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import org.zkoss.lang.Classes;
+import org.zkoss.lang.Library;
 import org.zkoss.math.BigDecimals;
 import org.zkoss.zk.ui.ArithmeticWrongValueException;
 import org.zkoss.zk.ui.Component;
@@ -36,6 +41,9 @@ import org.zkoss.zul.mesg.MZul;
  * @author tomyeh
  */
 public class Decimalbox extends NumberInputElement {
+
+	private static final Logger log = LoggerFactory.getLogger(Decimalbox.class);
+	
 	/** Used with {@link #setScale} to denote that the scale is decided by
 	 * what user has entered.
 	 */
@@ -149,6 +157,25 @@ public class Decimalbox extends NumberInputElement {
 			value = ((BigDecimal) value).setScale(_scale, getRoundingMode());
 		}
 		super.setRawValue(value);
+	}
+
+	/**
+	 * @param constr a list of constraints separated by comma.
+	 * Example: no positive, no zero
+	 * @since 10.2.0   
+	 */
+	// -- super --//
+	public void setConstraint(String constr) {
+		String clsnm = Library.getProperty("org.zkoss.zul.Decimalbox.constraint.class");
+		if (clsnm != null) {
+			try {
+				setConstraint((SimpleConstraint) Classes.newInstanceByThread(clsnm, new Class<?>[] {String.class}, new Object[] {constr}));
+				return;
+			} catch (Throwable ex) {
+				log.error("Unable to instantiate " + clsnm, ex);
+			}
+		}
+		super.setConstraint(constr);
 	}
 
 	protected Object coerceFromString(String value) throws WrongValueException {

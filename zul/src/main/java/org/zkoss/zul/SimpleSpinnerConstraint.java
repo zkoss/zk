@@ -16,20 +16,13 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zul.mesg.MZul;
-
 /**
  * A simple spinner constraint.
  * 
  * @author gracelin
  * @since 3.5.0
  */
-public class SimpleSpinnerConstraint extends SimpleConstraint {
-	private Integer _min;
-	private Integer _max;
+public class SimpleSpinnerConstraint extends SimpleNumberInputConstraint<Integer> {
 
 	/** Constraints a constraint.
 	 *
@@ -56,82 +49,8 @@ public class SimpleSpinnerConstraint extends SimpleConstraint {
 		super(constraint);
 	}
 
-	/**
-	 * Returns the minimum value.
-	 */
-	public Integer getMin() {
-		return _min;
-	}
-
-	/**
-	 * Set the minimum value.
-	 */
-	public void setMin(Integer min) {
-		_min = min;
-	}
-
-	/**
-	 * Returns the maximum value.
-	 */
-	public Integer getMax() {
-		return _max;
-	}
-
-	/**
-	 * Set the maximum value.
-	 */
-	public void setMax(Integer max) {
-		_max = max;
-	}
-
-	// super//
-	protected int parseConstraint(String constraint) throws UiException {
-		int minIndex = constraint.indexOf("min");
-		int maxIndex = constraint.indexOf("max");
-
-		try {
-			if (minIndex >= 0 && maxIndex >= 0) { // have "min" & "max"
-				if (maxIndex > minIndex) { // min first
-					_min = new Integer(constraint.substring(minIndex + 3, maxIndex).trim());
-					_max = new Integer(constraint.substring(maxIndex + 3).trim());
-				} else { // max first
-					_min = new Integer(constraint.substring(minIndex + 3).trim());
-					_max = new Integer(constraint.substring(maxIndex + 3, minIndex).trim());
-				}
-				if (_min.compareTo(_max) > 0)
-					throw new UiException("Constraint error: " + _min + " > " + _max);
-				return 0;
-			} else if (minIndex >= 0) { // only have "min"
-				_min = new Integer(constraint.substring(minIndex + 3).trim());
-				return 0;
-			} else if (maxIndex >= 0) { // only have "max"
-				_max = new Integer(constraint.substring(maxIndex + 3).trim());
-				return 0;
-			}
-		} catch (NumberFormatException e) {
-			throw new UiException("Constraint error: " + constraint);
-		}
-		return super.parseConstraint(constraint);
-	}
-
-	public void validate(Component comp, Object value) throws WrongValueException {
-		super.validate(comp, value);
-		if (value instanceof Integer) {
-			final Integer intValue = (Integer) value;
-
-			if (_min != null && _min.compareTo(intValue) > 0)
-				throw outOfRangeValue(comp);
-			if (_max != null && _max.compareTo(intValue) < 0)
-				throw outOfRangeValue(comp);
-		}
-	}
-
-	private WrongValueException outOfRangeValue(Component comp) {
-		final String errmsg = getErrorMessage(comp);
-		if (errmsg != null)
-			return new WrongValueException(comp, errmsg);
-
-		final String s = _min != null ? _max != null ? _min + " ~ " + _max : ">= " + _min : "<= " + _max;
-		return new WrongValueException(comp, MZul.OUT_OF_RANGE, s);
+	@Override
+	protected Integer parseValue(String value) {
+		return Integer.parseInt(value);
 	}
 }

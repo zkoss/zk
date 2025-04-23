@@ -18,6 +18,11 @@ package org.zkoss.zul;
 
 import java.util.HashMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import org.zkoss.lang.Classes;
+import org.zkoss.lang.Library;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.sys.PropertyAccess;
@@ -31,6 +36,9 @@ import org.zkoss.zul.mesg.MZul;
  * @author tomyeh
  */
 public class Longbox extends NumberInputElement {
+
+	private static final Logger log = LoggerFactory.getLogger(Longbox.class);
+
 	public Longbox() {
 		setCols(11);
 	}
@@ -86,6 +94,25 @@ public class Longbox extends NumberInputElement {
 
 	protected Object unmarshall(Object value) {
 		return value != null ? new Long((String) value) : value;
+	}
+
+	/**
+	 * @param constr a list of constraints separated by comma.
+	 * Example: no positive, no zero
+	 * @since 10.2.0
+	 */
+	// -- super --//
+	public void setConstraint(String constr) {
+		String clsnm = Library.getProperty("org.zkoss.zul.Longbox.constraint.class");
+		if (clsnm != null) {
+			try {
+				setConstraint((SimpleConstraint) Classes.newInstanceByThread(clsnm, new Class<?>[] {String.class}, new Object[] {constr}));
+				return;
+			} catch (Throwable ex) {
+				log.error("Unable to instantiate " + clsnm, ex);
+			}
+		}
+		super.setConstraint(constr);
 	}
 
 	protected Object coerceFromString(String value) throws WrongValueException {

@@ -24,10 +24,6 @@ export class Spinner extends zul.inp.NumberInputWidget<number> {
 	/** @internal */
 	_buttonVisible = true;
 	/** @internal */
-	_min?: number;
-	/** @internal */
-	_max?: number;
-	/** @internal */
 	_currentbtn?: HTMLElement;
 	/** @internal */
 	_noPreviousValue?: boolean;
