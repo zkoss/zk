@@ -8,6 +8,7 @@ ZK 10.2.0
   ZK-5438: Support a way to work with Spring Security CSRF
   ZK-5642: zEmbedded support for CometServerPush
   ZK-4999: searchbox can select the first matched items by default
+  ZK-5600: log page URL when an error happens
 
 * Bugs
   ZK-5728: ZK-5364 causes external radio to no longer be selected / checked
@@ -30,6 +31,7 @@ ZK 10.2.0
   ZK-5615: Incorrect date input after selecting a date under traditional chinese locale
   ZK-5921: Improve visual appearance when there is extra space on the right side of grid, listbox and tree
   ZK-5923: Active page is not updated by clicking arrow in paging grid when using MVVM
+  ZK-5680: should not wrap an error thrown from a command method
   ZK-5791: end users cannot draw a line on a signature with a touch and mouse supported device
   ZK-5616: Transparent background in Detail column overlaps non-frozen columns on scroll
   ZK-5668: java.lang.IllegalMonitorStateException when using websocket and server push
