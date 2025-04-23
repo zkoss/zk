@@ -18,6 +18,11 @@ package org.zkoss.zul;
 
 import java.util.HashMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import org.zkoss.lang.Classes;
+import org.zkoss.lang.Library;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.sys.IntegerPropertyAccess;
@@ -32,6 +37,9 @@ import org.zkoss.zul.mesg.MZul;
  * @author tomyeh
  */
 public class Intbox extends NumberInputElement {
+	
+	private static final Logger log = LoggerFactory.getLogger(Intbox.class);
+	
 	public Intbox() {
 		setCols(11);
 	}
@@ -67,6 +75,25 @@ public class Intbox extends NumberInputElement {
 	//-- super --//
 	public String getZclass() {
 		return _zclass == null ? "z-intbox" : _zclass;
+	}
+
+	/**
+	 * @param constr a list of constraints separated by comma.
+	 * Example: no positive, no zero
+	 * @since 10.2.0
+	 */
+	// -- super --//
+	public void setConstraint(String constr) {
+		String clsnm = Library.getProperty("org.zkoss.zul.Intbox.constraint.class");
+		if (clsnm != null) {
+			try {
+				setConstraint((SimpleConstraint) Classes.newInstanceByThread(clsnm, new Class<?>[] {String.class}, new Object[] {constr}));
+				return;
+			} catch (Throwable ex) {
+				log.error("Unable to instantiate " + clsnm, ex);
+			}
+		}
+		super.setConstraint(constr);
 	}
 
 	protected Object coerceFromString(String value) throws WrongValueException {
