@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B102-ZK-5680-zk.xml
+
+        Purpose:
+
+        Description:
+
+        History:
+                Wed Apr 16 14:44:23 CST 2025, Created by rebeccalai
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<error-page>
+		<exception-type>java.lang.NullPointerException</exception-type>
+		<location>/test2/B102-ZK-5680-custom-error.zul</location>
+	</error-page>
+	<error-page>
+		<exception-type>java.lang.Throwable</exception-type>
+		<location>/test2/B102-ZK-5680-default-error.zul</location>
+	</error-page>
+</zk>
