@@ -18,7 +18,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URLDecoder;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -475,7 +474,8 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 			}
 			doPropertyChange0(base, prop, bindings);
 		} catch (Exception ex) {
-			throw new RuntimeException(MessageFormat.format("doPropertyChange: base=[{0}],prop=[{1}]", base, prop), ex);
+			_log.error("doPropertyChange: base=[{}],prop=[{}]", base, prop, ex);
+			throw ex;
 		} finally {
 			if (collector != null) {
 				collector.popStack();
@@ -514,8 +514,8 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 				doPrePhase(Phase.LOAD_BINDING, ctx);
 				binding.load(ctx);
 			} catch (Exception ex) {
-				throw new RuntimeException(MessageFormat.format("doPropertyChange:binding.load() "
-						+ "binding=[{0}],context=[{1}]", binding, ctx), ex);
+				_log.error("doPropertyChange:binding.load() binding=[{}],context=[{}]", binding, ctx, ex);
+				throw ex;
 			} finally {
 				doPostPhase(Phase.LOAD_BINDING, ctx);
 			}
@@ -1800,10 +1800,8 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 	private int doCommand(Component comp, CommandBinding commandBinding, String command, Event evt,
 			Map<String, Object> commandArgs, Set<Property> notifys) {
 		final String evtnm = evt == null ? null : evt.getName();
-		String debugInfo = MessageFormat.format("doCommand "
-				+ "comp=[{0}],command=[{1}],evtnm=[{2}]", comp, command, evtnm);
 		if (_log.isDebugEnabled()) {
-			_log.debug("Start {}", debugInfo);
+			_log.debug("Start doCommand comp=[{}],command=[{}],evtnm=[{}]", comp, command, evtnm);
 		}
 		BindContext ctx = BindContextUtil.newBindContext(this, commandBinding, false, command, comp, evt);
 		BindContextUtil.setCommandArgs(this, comp, ctx, commandArgs);
@@ -1845,7 +1843,8 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 			}
 			return COMMAND_SUCCESS;
 		} catch (Exception ex) {
-			throw new RuntimeException(debugInfo, ex);
+			_log.error("doCommand comp=[{}],command=[{}],evtnm=[{}]", comp, command, evtnm, ex);
+			throw ex;
 		} finally {
 			doPostPhase(Phase.COMMAND, ctx); //end of Command
 		}
@@ -1854,9 +1853,8 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 
 	private void doGlobalCommand(Component comp, String command, Event evt, Map<String, Object> commandArgs,
 			Set<Property> notifys) {
-		String debugInfo = MessageFormat.format("doGlobalCommand comp=[{0}],command=[{1}]", comp, command);
 		if (_log.isDebugEnabled()) {
-			_log.debug("Start {}", debugInfo);
+			_log.debug("Start doGlobalCommand comp=[{}],command=[{}]", comp, command);
 		}
 
 		BindContext ctx = BindContextUtil.newBindContext(this, null, false, command, comp, evt);
@@ -1873,7 +1871,8 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 			//execute command
 			doGlobalCommandExecute(comp, command, commandArgs, ctx, notifys);
 		} catch (Exception ex) {
-			throw new RuntimeException(debugInfo, ex);
+			_log.error("doGlobalCommand comp=[{}],command=[{}]", comp, command, ex);
+			throw ex;
 		} finally {
 			doPostPhase(Phase.GLOBAL_COMMAND, ctx); //end of Command
 		}
@@ -1881,14 +1880,14 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 
 	private void doGlobalCommandExecute(Component comp, String command, Map<String, Object> commandArgs,
 			BindContext ctx, Set<Property> notifys) {
-		String debugInfo = MessageFormat.format("doGlobalCommandExecute comp=[{0}],command=[{1}]", comp, command);
+		Object viewModel = null;
 		try {
 			if (_log.isDebugEnabled()) {
-				_log.debug("before {}", debugInfo);
+				_log.debug("before doGlobalCommandExecute comp=[{}],command=[{}]", comp, command);
 			}
 			doPrePhase(Phase.EXECUTE, ctx);
 
-			final Object viewModel = getViewModelInView();
+			viewModel = getViewModelInView();
 
 			Method method = getCommandMethod(BindUtils.getViewModelClass(viewModel), command, _globalCommandMethodInfoProvider,
 					_globalCommandMethodCache, commandArgs != null ? commandArgs.size() : 0, true);
@@ -1911,13 +1910,13 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 				if (_log.isDebugEnabled()) {
 					_log.debug("no global command method in [{}]", viewModel);
 				}
-				debugInfo += MessageFormat.format(",no global command method in viewModel=[{0}]", viewModel);
 			}
 			if (_log.isDebugEnabled()) {
 				_log.debug("after doGlobalCommandExecute notifys=[{}]", notifys);
 			}
 		} catch (Exception ex) {
-			throw new RuntimeException(debugInfo, ex);
+			_log.error("doGlobalCommandExecute comp=[{}],command=[{}],viewModel=[{}]", comp, command, viewModel, ex);
+			throw ex;
 		} finally {
 			doPostPhase(Phase.EXECUTE, ctx);
 		}
@@ -2068,7 +2067,7 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 				return valid;
 			}
 		} catch (Exception e) {
-			_log.error("doValidate  comp=[{}],command=[{}],evt=[{}],context=[{}],validates=[{}]", comp, command, evt, ctx, validates, e);
+			_log.error("doValidate comp=[{}],command=[{}],evt=[{}],context=[{}],validates=[{}]", comp, command, evt, ctx, validates, e);
 			throw UiException.Aide.wrap(e, e.getMessage());
 		} finally {
 			doPostPhase(Phase.VALIDATE, ctx);
@@ -2140,7 +2139,8 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 				_log.debug("after doExecute notifys=[{}]", notifys);
 			}
 		} catch (Exception ex) {
-			throw new RuntimeException(MessageFormat.format("doExecute comp=[{0}],command=[{1}],notifys=[{2}]", comp, command, notifys), ex);
+			_log.error("doExecute comp=[{}],command=[{}],notifys=[{}]", comp, command, notifys, ex);
+			throw ex;
 		} finally {
 			doPostPhase(Phase.EXECUTE, ctx);
 		}
@@ -2239,8 +2239,8 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 			_propertyBindingHandler.doSaveBefore(comp, command, evt, notifys);
 			_formBindingHandler.doSaveBefore(comp, command, evt, notifys);
 		} catch (Exception ex) {
-			throw new RuntimeException(MessageFormat.format("doSaveBefore "
-					+ "comp=[{0}],command=[{1}],evt=[{2}],notifys=[{3}]", comp, command, evt, notifys), ex);
+			_log.error("doSaveBefore comp=[{}],command=[{}],evt=[{}],notifys=[{}]", comp, command, evt, notifys, ex);
+			throw ex;
 		} finally {
 			doPostPhase(Phase.SAVE_BEFORE, ctx);
 		}
@@ -2255,8 +2255,8 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 			_propertyBindingHandler.doSaveAfter(comp, command, evt, notifys);
 			_formBindingHandler.doSaveAfter(comp, command, evt, notifys);
 		} catch (Exception ex) {
-			throw new RuntimeException(MessageFormat.format("doSaveAfter "
-					+ "comp=[{0}],command=[{1}],evt=[{2}],notifys=[{3}]", comp, command, evt, notifys), ex);
+			_log.error("doSaveAfter comp=[{}],command=[{}],evt=[{}],notifys=[{}]", comp, command, evt, notifys, ex);
+			throw ex;
 		} finally {
 			doPostPhase(Phase.SAVE_AFTER, ctx);
 		}
@@ -2273,7 +2273,8 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 			_formBindingHandler.doLoadBefore(comp, command);
 			_childrenBindingHandler.doLoadBefore(comp, command);
 		} catch (Exception ex) {
-			throw new RuntimeException(MessageFormat.format("doLoadBefore comp=[{0}],command=[{1}]", comp, command), ex);
+			_log.error("doLoadBefore comp=[{}],command=[{}]", comp, command, ex);
+			throw ex;
 		} finally {
 			doPostPhase(Phase.LOAD_BEFORE, ctx);
 		}
@@ -2289,7 +2290,8 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 			_formBindingHandler.doLoadAfter(comp, command);
 			_childrenBindingHandler.doLoadAfter(comp, command);
 		} catch (Exception ex) {
-			throw new RuntimeException(MessageFormat.format("doLoadAfter comp=[{0}],command=[{1}]", comp, command), ex);
+			_log.error("doLoadAfter comp=[{}],command=[{}]", comp, command, ex);
+			throw ex;
 		} finally {
 			doPostPhase(Phase.LOAD_AFTER, ctx);
 		}
@@ -2622,7 +2624,8 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 
 			getEventQueue().publish(new GlobalCommandEvent(_rootComp, command, args, evt));
 		} catch (Exception ex) {
-			throw new RuntimeException(MessageFormat.format("postGlobalCommand command=[{0}],args=[{1}]", command, args), ex);
+			_log.error("postGlobalCommand command=[{}],args=[{}]", command, args, ex);
+			throw ex;
 		} finally {
 			if (collector != null) {
 				collector.popStack();
