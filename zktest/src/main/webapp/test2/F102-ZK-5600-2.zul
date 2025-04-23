@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F102-ZK-5600-2.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Tue Apr 15 11:35:25 CST 2025, Created by rebeccalai
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		1. open this page
+		2. should log the zul path the exception occurs at
+	</label>
+	<combobox>
+		label
+	</combobox>
+</zk>

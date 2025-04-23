@@ -298,25 +298,28 @@ public class DHtmlLayoutServlet extends HttpServlet {
 		if (err instanceof OperationException && (cause = err.getCause()) instanceof Expectable)
 			err = cause;
 
-		//Note: if not included, it is handled by Web container
-		if (err != null && Servlets.isIncluded(request)) {
-			//Bug 1714094: we have to handle err, because Web container
-			//didn't allow developer to intercept errors caused by inclusion
-			final String errpg = sess.getWebApp().getConfiguration().getErrorPage(sess.getDeviceType(), err);
-			if (errpg != null) {
-				try {
-					request.setAttribute("javax.servlet.error.message", Exceptions.getMessage(err));
-					request.setAttribute("javax.servlet.error.exception_list", List.of(err));
-					request.setAttribute("javax.servlet.error.exception", err);
-					request.setAttribute("javax.servlet.error.exception_type", err.getClass());
-					request.setAttribute("javax.servlet.error.status_code", new Integer(500));
-					if (process(sess, request, response, errpg, false))
-						return; //done
+		if (err != null) {
+			log.error("at [{}]", path, err);
+			//Note: if not included, it is handled by Web container
+			if (Servlets.isIncluded(request)) {
+				//Bug 1714094: we have to handle err, because Web container
+				//didn't allow developer to intercept errors caused by inclusion
+				final String errpg = sess.getWebApp().getConfiguration().getErrorPage(sess.getDeviceType(), err);
+				if (errpg != null) {
+					try {
+						request.setAttribute("javax.servlet.error.message", Exceptions.getMessage(err));
+						request.setAttribute("javax.servlet.error.exception_list", List.of(err));
+						request.setAttribute("javax.servlet.error.exception", err);
+						request.setAttribute("javax.servlet.error.exception_type", err.getClass());
+						request.setAttribute("javax.servlet.error.status_code", new Integer(500));
+						if (process(sess, request, response, errpg, false))
+							return; //done
 
-					log.warn("The error page not found: " + errpg);
-				} catch (IOException ex) { //eat it (connection off)
-				} catch (Throwable ex) {
-					log.warn("Failed to load the error page: " + errpg, ex);
+						log.warn("The error page not found: " + errpg);
+					} catch (IOException ex) { //eat it (connection off)
+					} catch (Throwable ex) {
+						log.warn("Failed to load the error page: " + errpg, ex);
+					}
 				}
 			}
 		}
