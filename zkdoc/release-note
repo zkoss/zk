@@ -11,6 +11,7 @@ ZK 10.2.0
   ZK-5600: log page URL when an error happens
   ZK-5474: Provide min and max string constraints for number input elements
   ZK-4966: support a way to avoid loading third-party javascript library
+  ZK-5597: vertical stepbar
 
 * Bugs
   ZK-5728: ZK-5364 causes external radio to no longer be selected / checked
