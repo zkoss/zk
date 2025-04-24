@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B102-ZK-5688.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Apr 24 15:30:00 CST 2025, Created by cherrylee
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <window title="Constraint Test" border="normal">
+        <grid>
+            <rows>
+                <row>
+                    <label value="Only positive number is allowed: (NO_NEGATIVE_ZERO)" />
+                    <intbox id="box1" constraint="no negative, no zero"/>
+                    <button label="set value to 0" onClick="box1.setValue(0)"/>
+                </row>
+                <row>
+                    <label value="Only blank is allowed: (NO_POSITIVE_NEGATIVE_ZERO)" />
+                    <intbox id="box2" constraint="no positive, no negative, no zero"/>
+                    <button label="set value to 3" onClick="box2.setValue(3)"/>
+                </row>
+                <row>
+                    <label value="Enter a date (today only): (NO_FUTURE_PAST)" />
+                    <datebox id="dateInput1" constraint="no future, no past"/>
+                    <button label="set to Tomorrow" onClick='
+                        java.util.Calendar cal = java.util.Calendar.getInstance();
+                        cal.add(java.util.Calendar.DATE, 1);
+                        cal.set(java.util.Calendar.HOUR_OF_DAY, 0);
+                        cal.set(java.util.Calendar.MINUTE, 0);
+                        cal.set(java.util.Calendar.SECOND, 0);
+                        cal.set(java.util.Calendar.MILLISECOND, 0);
+                        dateInput1.setValue(cal.getTime());
+                    '/>
+                </row>
+                <row>
+                    <label value="Enter a date (no today): (NO_TODAY)" />
+                    <datebox id="dateInput2" constraint="no today"/>
+                    <button label="set to today" onClick="dateInput2.setValue(new java.util.Date())"/>
+                </row>
+                <row>
+                    <label value="Upload a file: (UPLOAD_ERROR_UNACCEPTED_FILE_TYPE)" />
+                    <dropupload accept="audio/*, .txt"/>
+                </row>
+            </rows>
+        </grid>
+    </window>
+</zk>
