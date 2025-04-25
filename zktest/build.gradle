@@ -9,6 +9,10 @@ jacoco {
 	toolVersion = "0.8.11"
 }
 
+war {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
 // TODO: don't use gretty since gretty not supporting jetty 10.0.5 and gretty 4.0.0 only support jetty11+
 
 java.sourceCompatibility = JavaVersion.VERSION_11
