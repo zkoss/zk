@@ -36,6 +36,7 @@ ZK 10.2.0
   ZK-5616: Transparent background in Detail column overlaps non-frozen columns on scroll
   ZK-5668: java.lang.IllegalMonitorStateException when using websocket and server push
   ZK-5705: <apply> no longer re-rendering when notifying @load binding
+  ZK-5669: ZK embedded doesn't disable tablet stylesheet when loading resources
   ZK-5700: zk ee binary zip has missing 3rd-party jar required at runtime
   ZK-5701: remove IE code and css rules
 
