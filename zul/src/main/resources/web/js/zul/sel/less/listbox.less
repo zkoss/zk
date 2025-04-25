@@ -103,7 +103,7 @@
 	}
 }
 .z-listheader {
-	border-right: 1px solid @meshTitleBorderColor;
+	border-left: 1px solid @meshTitleBorderColor;
 	border-bottom: 1px solid @meshTitleBorderColor;
 	padding: 0;
 	background: @meshTitleBackgroundColor;
@@ -434,24 +434,3 @@
 	white-space: nowrap;
 	overflow: hidden;
 }
-
-.ie {
-	// Prevent sub-pixel rounding that causes scrollbar appear
-	.z-listbox-body table {
-		overflow: hidden;
-	}
-}
-
-.ie9 {
-	.z-listbox-body {
-		margin-top: auto; // ZK-3985: Listbox size change when click the listitem https://stackoverflow.com/a/6425130
-	}
-
-	.z-listitem {
-		.z-listcell {
-			position: static;
-			z-index: auto;
-		}
-	}
-}
-// ZK-2151: use strict selector to prevent nest problem

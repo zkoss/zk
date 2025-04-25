@@ -180,22 +180,25 @@ public class ZumlExtendlet implements Extendlet {
 		if (err instanceof OperationException && (cause = err.getCause()) instanceof Expectable)
 			err = cause;
 
-		//Note: if not included, it is handled by Web container
-		if (err != null && Servlets.isIncluded(request)) {
-			//Bug 1802487 and 1714094
-			final String errpg = sess.getWebApp().getConfiguration().getErrorPage(sess.getDeviceType(), err);
-			if (errpg != null) {
-				try {
-					request.setAttribute("javax.servlet.error.message", Exceptions.getMessage(err));
-					request.setAttribute("javax.servlet.error.exception_list", List.of(err));
-					request.setAttribute("javax.servlet.error.exception", err);
-					request.setAttribute("javax.servlet.error.exception_type", err.getClass());
-					request.setAttribute("javax.servlet.error.status_code", new Integer(500));
-					Servlets.forward(getServletContext(), request, response, errpg, null, 0);
-					return; //done
-				} catch (IOException ex) { //eat it (connection off)
-				} catch (Throwable ex) {
-					log.warn("Failed to load the error page: " + errpg, ex);
+		if (err != null) {
+			log.error("at [{}]", path, err);
+			//Note: if not included, it is handled by Web container
+			if (Servlets.isIncluded(request)) {
+				//Bug 1802487 and 1714094
+				final String errpg = sess.getWebApp().getConfiguration().getErrorPage(sess.getDeviceType(), err);
+				if (errpg != null) {
+					try {
+						request.setAttribute("javax.servlet.error.message", Exceptions.getMessage(err));
+						request.setAttribute("javax.servlet.error.exception_list", List.of(err));
+						request.setAttribute("javax.servlet.error.exception", err);
+						request.setAttribute("javax.servlet.error.exception_type", err.getClass());
+						request.setAttribute("javax.servlet.error.status_code", new Integer(500));
+						Servlets.forward(getServletContext(), request, response, errpg, null, 0);
+						return; //done
+					} catch (IOException ex) { //eat it (connection off)
+					} catch (Throwable ex) {
+						log.warn("Failed to load the error page: " + errpg, ex);
+					}
 				}
 			}
 		}

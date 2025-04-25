@@ -115,7 +115,7 @@
 }
 .z-treecol {
 	background: @meshTitleBackgroundColor;
-	border-right: 1px solid @meshTitleBorderColor;
+	border-left: 1px solid @meshTitleBorderColor;
 	border-bottom: 1px solid @meshTitleBorderColor;
 	padding: 0;
 	position: relative;
@@ -312,18 +312,3 @@
 	white-space: nowrap;
 	overflow: hidden;
 }
-
-.ie9 {
-	.z-tree-body {
-		margin-top: auto; // ZK-3985: Listbox size change when click the listitem https://stackoverflow.com/a/6425130
-	}
-
-	.z-treerow {
-		/* stylelint-disable-next-line no-descending-specificity */
-		.z-treecell {
-			position: static;
-			z-index: auto;
-		}
-	}
-}
-// ZK-2151: use strict selector to prevent nest problem

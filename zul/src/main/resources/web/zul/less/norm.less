@@ -223,12 +223,6 @@ div.z-log {
 	}
 }
 
-.ie11 {
-	input[type="radio"]::-ms-check {
-		border: 1px solid @checkedBorderColor;
-	}
-}
-
 //checkbox
 @{browserDefaultPrefix}input[type="checkbox"] {
 	.baseIconFont();
@@ -282,12 +276,6 @@ div.z-log {
 	&[disabled]:checked::-ms-check {
 		background-color: @inputDisableBackgroundColor;
 		color: @inputDisableColor;
-	}
-}
-
-.ie11 {
-	input[type="checkbox"]::-ms-check {
-		border: 1px solid @checkedBorderColor;
 	}
 }
 
@@ -560,22 +548,9 @@ span.z-upload input {
 	z-index: -1;
 }
 
-.ie9, .ie10 {
-	span.z-upload input {
-		z-index: 1;
-	}
-}
-
 .z-upload-icon {
 	.encodeThemeURL(background-image, '~./zul/img/misc/prgmeter.png');
 	overflow: hidden;
-}
-
-.ie9, .ie10 {
-	.z-upload-hover {
-		border-color: @hoverBorderColor;
-		.verGradient(@hoverGradientStart, @hoverGradientEnd);
-	}
 }
 
 //fileupload dialog

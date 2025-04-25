@@ -123,7 +123,7 @@
 
 .z-column {
 	background: @meshTitleBackgroundColor;
-	border-right: 1px solid @meshTitleBorderColor;
+	border-left: 1px solid @meshTitleBorderColor;
 	border-bottom: 1px solid @meshTitleBorderColor;
 	padding: 0;
 	position: relative;
@@ -298,21 +298,4 @@
 .z-cell-hidden-column, .z-row-hidden-column {
 	white-space: nowrap;
 	overflow: hidden;
-}
-
-.ie {
-	// Prevent sub-pixel rounding that causes scrollbar appear
-	.z-grid-body table {
-		overflow: hidden;
-	}
-}
-
-.ie9 {
-	.z-row {
-		.z-row-inner,
-		.z-cell {
-			position: static;
-			z-index: auto;
-		}
-	}
 }

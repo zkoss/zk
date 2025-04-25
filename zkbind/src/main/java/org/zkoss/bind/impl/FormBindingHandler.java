@@ -112,7 +112,8 @@ import org.zkoss.zk.ui.event.Event;
 			doPrePhase(Phase.SAVE_BINDING, ctx);
 			binding.save(ctx);
 		} catch (Exception ex) {
-			throw new RuntimeException(getSaveBindingDebugInfo("doSaveFormBinding", comp, binding, command, evt, notifys), ex);
+			_log.error(getSaveBindingDebugInfo("doSaveFormBinding", comp, binding, command, evt, notifys), ex);
+			throw ex;
 		} finally {
 			doPostPhase(Phase.SAVE_BINDING, ctx);
 		}
@@ -143,7 +144,8 @@ import org.zkoss.zk.ui.event.Event;
 				clearValidationMessages(binding.getBinder(), binding.getComponent(), binding.getFormId());
 			}
 		} catch (Exception ex) {
-			throw new RuntimeException(getLoadBindingDebugInfo("doLoadFormBinding", comp, binding, ctx, command), ex);
+			_log.error(getLoadBindingDebugInfo("doLoadFormBinding", comp, binding, ctx, command), ex);
+			throw ex;
 		} finally {
 			doPostPhase(Phase.LOAD_BINDING, ctx);
 		}
