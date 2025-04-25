@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B102-ZK-5614.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Apr 24 18:08:13 CST 2025, Created by jamson
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <zscript><![CDATA[
+        import org.zkoss.web.Attributes;
+        import org.zkoss.util.*;
+        import java.util.*;
+        import java.time.*;
+    
+        ZoneId serverZoneId = ZoneId.of("Canada/Yukon");
+        Sessions.getCurrent().setAttribute(Attributes.PREFERRED_TIME_ZONE, TimeZone.getTimeZone(ZoneId.of("Canada/Yukon")));;
+        TimeZone.setDefault(TimeZone.getTimeZone(ZoneId.of("Canada/Yukon")));
+    ]]></zscript>
+    <label multiline="true">
+        1. select "1967-05-01 00:00:00"
+        2. the label under datebox should be "Mon May 01 00:00:00 PST 1967"
+    </label>
+    <datebox timeZone="Canada/Yukon" width="50%" onChange="day.setValue(self.getValue().toString())" format="yyyy-MM-dd HH:mm:ss"/>
+    <label id="day"/>
+</zk>
