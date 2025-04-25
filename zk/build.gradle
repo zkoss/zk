@@ -16,9 +16,7 @@ dependencies {
 	api project(':zkwebfragment')
 	api 'org.apache.commons:commons-fileupload2-javax:2.0.0-M2'
 	api 'commons-io:commons-io:2.17.0'
-	api('com.google.guava:guava:32.1.2-jre') {
-		exclude group: '*', module: '*'
-	}
+	api 'com.google.guava:guava:33.4.8-jre'
 	compileOnly "javax.servlet:javax.servlet-api:${servletVersion}"
 	compileOnly "javax.portlet:portlet-api:${portletVersion}"
 	compileOnly 'javax.websocket:javax.websocket-api:1.1'

@@ -19,7 +19,6 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import org.zkoss.zats.mimic.ComponentAgent;
@@ -32,7 +31,6 @@ import org.zkoss.zul.Label;
  * @author jumperchen
  *
  */
-@Disabled
 public class F80_ZK_2800Test extends ZATSTestCase {
 	
 	@Test

@@ -14,6 +14,7 @@ package org.zkoss.zk.ui;
 import java.util.AbstractSequentialList;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.List;
@@ -53,7 +54,10 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 
 	protected static String ON_REBUILD_SHADOW_TREE_LATER = "onRebuildShadowTreeLater";
 
-	//internal used only
+	/**internal used only*/
+	public static String FOREACH_IN_RENDER = "$FOREACH$_IN_RENDER";
+
+	/**internal used only*/
 	public static String SKIP_DISTRIBUTED_CHILDREN_PROPERTY_CHANGE = "skipDistributedChildrenPropertyChange";
 
 	public Object resolveVariable(Component child, String name, boolean recurse) {
@@ -1170,11 +1174,16 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 			List<HtmlShadowElement> children = se.getChildren();
 			if (children.isEmpty()) {
 				if (direction == Direction.FIRST) {
-					// update previous sibling
-					old = se._previousInsertion;
-					se._previousInsertion = target;
-					if (old instanceof HtmlShadowElement) {
-						asShadow(old)._nextInsertion = target;
+					// fix ListModelTest issue
+					if (se.hasAttribute(FOREACH_IN_RENDER)) {
+						se._firstInsertion = target;
+					} else {
+						// update previous sibling
+						old = se._previousInsertion;
+						se._previousInsertion = target;
+						if (old instanceof HtmlShadowElement) {
+							asShadow(old)._nextInsertion = target;
+						}
 					}
 					return true;
 
@@ -1486,6 +1495,10 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 		return new AbstractSequentialList<T>() {
 			@SuppressWarnings("unchecked")
 			public ListIterator<T> listIterator(int index) {
+				// Fix B96_ZK_5079Test
+				if (shadowHostIfAny == null) {
+					return Collections.emptyListIterator();
+				}
 				return (ListIterator<T>) new ChildIter((AbstractComponent) shadowHostIfAny, index);
 			}
 
