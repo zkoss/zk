@@ -240,6 +240,7 @@ public class Tree extends MeshElement {
 	private static final int INIT_LIMIT = -1; // since 7.0.0
 	private int _preloadsz = 50; // since 7.0.0
 	private transient LinkedList<Integer> _rodPagingIndex; // since 7.0.0
+	private Boolean SELECTIVE_COMPONENT_UPDATE; // since 10.2.0
 
 	static {
 		addClientEvent(Tree.class, Events.ON_RENDER, CE_DUPLICATE_IGNORE | CE_IMPORTANT | CE_NON_DEFERRABLE);
@@ -1588,6 +1589,12 @@ public class Tree extends MeshElement {
 	 * Handles when the tree model's content changed
 	 */
 	private void onTreeDataChange(TreeDataEvent event) {
+		// ZK-5504
+		if (SELECTIVE_COMPONENT_UPDATE == null) {
+			SELECTIVE_COMPONENT_UPDATE = Utils.testAttribute(this,
+					Attributes.SELECTIVE_COMPONENT_UPDATE, false,
+					true);
+		}
 		final int type = event.getType();
 		final int[] path = event.getPath();
 		final Component target = path != null ? getChildByPath(path) : null;
@@ -1658,10 +1665,12 @@ public class Tree extends MeshElement {
 				for (int i = indexFrom; i <= indexTo; i++)
 					onTreeDataInsert(target, node, i);
 
-				// Fix ZK-5468: the content of the subsequence item might be changed
-				for (int i = indexTo + 1, endSize = _model.getChildCount(node);
-					 i < endSize; i++) {
-					onTreeDataContentChange(target, node, i);
+				if (!SELECTIVE_COMPONENT_UPDATE) {
+					// Fix ZK-5468: the content of the subsequence item might be changed
+					for (int i = indexTo + 1, endSize = _model.getChildCount(
+							node); i < endSize; i++) {
+						onTreeDataContentChange(target, node, i);
+					}
 				}
 
 				break;
@@ -1669,11 +1678,13 @@ public class Tree extends MeshElement {
 				for (int i = indexTo; i >= indexFrom; i--)
 					onTreeDataRemoved(target, node, i);
 
-				// Fix ZK-5468: the content of the subsequence item might be changed
-				// no need to plus one for "indexTo" here for removal
-				for (int i = indexTo, endSize = _model.getChildCount(node);
-					 i < endSize; i++) {
-					onTreeDataContentChange(target, node, i);
+				if (!SELECTIVE_COMPONENT_UPDATE) {
+					// Fix ZK-5468: the content of the subsequence item might be changed
+					// no need to plus one for "indexTo" here for removal
+					for (int i = indexTo, endSize = _model.getChildCount(node);
+						 i < endSize; i++) {
+						onTreeDataContentChange(target, node, i);
+					}
 				}
 				break;
 			case TreeDataEvent.CONTENTS_CHANGED:

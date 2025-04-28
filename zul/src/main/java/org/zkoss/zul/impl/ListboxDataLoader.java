@@ -90,6 +90,7 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 	}
 
 	private int INVALIDATE_THRESHOLD = -1;
+	private Boolean SELECTIVE_COMPONENT_UPDATE = null; // since 10.2.0
 
 	/**
 	 * updates the status of the changed group.
@@ -108,6 +109,13 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 	public void doListDataChange(ListDataEvent event) {
 		if (INVALIDATE_THRESHOLD == -1) {
 			INVALIDATE_THRESHOLD = Utils.getIntAttribute(this.getOwner(), "org.zkoss.zul.invalidateThreshold", 10,
+					true);
+		}
+
+		// ZK-5504
+		if (SELECTIVE_COMPONENT_UPDATE == null) {
+			SELECTIVE_COMPONENT_UPDATE = Utils.testAttribute(this.getOwner(),
+					Attributes.SELECTIVE_COMPONENT_UPDATE, false,
 					true);
 		}
 		//when this is called _model is never null
@@ -144,7 +152,7 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 			}
 
 			// Fix ZK-5468: the content of the subsequence item might be changed
-			if (!isInvalidated && !_listbox.isInvalidated()) {
+			if (!SELECTIVE_COMPONENT_UPDATE && !isInvalidated && !_listbox.isInvalidated()) {
 				syncModel(max, _listbox.getItemCount() - (max - min));
 			}
 			break;
@@ -178,7 +186,7 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 			}
 
 			// Fix ZK-5468: the content of the subsequence item might be changed
-			if (!isInvalidated0 && !_listbox.isInvalidated()) {
+			if (!SELECTIVE_COMPONENT_UPDATE && !isInvalidated0 && !_listbox.isInvalidated()) {
 				syncModel(max, _listbox.getItemCount() - (max - min));
 			}
 			break;
