@@ -21,6 +21,11 @@ import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import org.zkoss.lang.Classes;
+import org.zkoss.lang.Library;
 import org.zkoss.zk.ui.ArithmeticWrongValueException;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.WrongValueException;
@@ -35,6 +40,9 @@ import org.zkoss.zul.mesg.MZul;
  * @author henrichen
  */
 public class Doublebox extends NumberInputElement {
+
+	private static final Logger log = LoggerFactory.getLogger(Doublebox.class);
+
 	public Doublebox() {
 		setCols(11);
 	}
@@ -108,6 +116,25 @@ public class Doublebox extends NumberInputElement {
 	public Object unmarshall(Object value) {
 		return value instanceof Number //sometimes JSON might interpret value to Integer
 				? new Double(((Number) value).doubleValue()) : value;
+	}
+
+	/**
+	 * @param constr a list of constraints separated by comma.
+	 * Example: no positive, no zero
+	 * @since 10.2.0
+	 */
+	// -- super --//
+	public void setConstraint(String constr) {
+		String clsnm = Library.getProperty("org.zkoss.zul.Doublebox.constraint.class");
+		if (clsnm != null) {
+			try {
+				setConstraint((SimpleConstraint) Classes.newInstanceByThread(clsnm, new Class<?>[] {String.class}, new Object[] {constr}));
+				return;
+			} catch (Throwable ex) {
+				log.error("Unable to instantiate " + clsnm, ex);
+			}
+		}
+		super.setConstraint(constr);
 	}
 
 	protected Object coerceFromString(String value) throws WrongValueException {

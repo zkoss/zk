@@ -54,10 +54,6 @@ export class Doublespinner extends zul.inp.NumberInputWidget<number> {
 	/** @internal */
 	_currentbtn?: HTMLElement;
 	/** @internal */
-	_min?: number;
-	/** @internal */
-	_max?: number;
-	/** @internal */
 	_fixedDigits?: number;
 
 	/**

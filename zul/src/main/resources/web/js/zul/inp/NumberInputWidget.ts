@@ -30,6 +30,10 @@ export class NumberInputWidget<ValueType> extends zul.inp.FormatWidget<ValueType
 	_rounding?: number;
 	/** @internal */
 	_allowKeys?: string;
+	/** @internal */
+	_min?: number;
+	/** @internal */
+	_max?: number;
 
 	/**
 	 * @returns the rounding mode.
