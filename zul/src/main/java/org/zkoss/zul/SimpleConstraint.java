@@ -56,12 +56,14 @@ public class SimpleConstraint implements Constraint, ClientConstraint, java.io.S
 	 * The value must match inside the data from ListModel only.
 	 */
 	public static final int STRICT = 0x0200;
-	/** Indicates this constraint requires the server validation.
-	 * It means, after the client validates the value successfully, it
-	 * will send the value to the server for further validation (by calling
-	 * {@link #validate}.
-	 * It is useful if the result of the regular expressions is different
-	 * at the client (with JavaScript) and the server with ava).
+	/**
+	 * Indicates that this constraint requires immediate server validation.
+	 * <p>
+	 * If this flag is set, after client-side validation succeeds, the value
+	 * will be immediately sent to the server for validation by calling {@link #validate}.
+	 * <p>
+	 * If this flag is not set, the validated value will be queued similarly to
+	 * regular unmonitored events and sent to the server at a later time.
 	 */
 	public static final int SERVER = 0x0400;
 	/** Date in the future is not allowed. (Only date part is compared)
