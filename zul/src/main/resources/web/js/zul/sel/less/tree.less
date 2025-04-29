@@ -20,6 +20,10 @@
 	border: 1px solid @baseBorderColor;
 	overflow: hidden;
 	zoom: 1;
+	&:focus-visible {
+		box-shadow: @meshFocusBoxShadow;
+		transition: unset;
+	}
 	//tree header div
 	&-header {
 		width: 100%;
@@ -121,6 +125,10 @@
 	position: relative;
 	overflow: hidden;
 	white-space: nowrap;
+	&:focus-visible {
+		box-shadow: @meshTitleFocusBoxShadow;
+		transition: unset;
+	}
 	&-sort {
 		cursor: pointer;
 
@@ -149,6 +157,10 @@
 		margin-right: 8px;
 		.borderRadius(@baseBorderRadius);
 
+		&:focus-visible {
+			box-shadow: @meshTitleFocusBoxShadow;
+			transition: unset;
+		}
 		.z-treecol-icon {
 			display: none;
 			cursor: default;
@@ -201,7 +213,19 @@
 
 	&-focus {
 		> .z-treecell {
-			background: @meshContentFocusBackgroundColor;
+			.treeitemFocusBorder(@left: 0, @right: 0) {
+				box-shadow: inset 0 2px 0 0 @meshCellFocusBoxShadowColor,
+							inset 0 -2px 0 0 @meshCellFocusBoxShadowColor,
+							inset @left 0 0 0 @meshCellFocusBoxShadowColor,
+							inset -@right 0 0 0 @meshCellFocusBoxShadowColor;
+			}
+			.treeitemFocusBorder();
+			&:first-child {
+				.treeitemFocusBorder(@left: 2px);
+			}
+			&:last-child {
+				.treeitemFocusBorder(@right: 2px);
+			}
 			> .z-treecell-content {
 				color: @hoverColor;
 			}
