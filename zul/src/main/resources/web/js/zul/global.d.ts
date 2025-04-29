@@ -95,6 +95,7 @@ declare global {
 	| 'DETAILED_DESCRIPTION' // zul/mesh-a11y
 	| 'ITEMWIDGET_SELECTED' // zul/sel-a11y
 	| 'LISTBOX_SELECT_ALL' // zul/sel-a11y
+	| 'TREE_SELECT_ALL' // zul/sel-a11y
 	| 'NOTIFICATION_INFO' // zul/wgt-a11y
 	| 'NOTIFICATION_WARNING' // zul/wgt-a11y
 	| 'NOTIFICATION_ERROR' // zul/wgt-a11y

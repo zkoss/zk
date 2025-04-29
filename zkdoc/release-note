@@ -10,6 +10,7 @@ ZK 10.2.0
   ZK-4999: searchbox can select the first matched items by default
   ZK-5600: log page URL when an error happens
   ZK-5474: Provide min and max string constraints for number input elements
+  ZK-5888: can focus on a checkbox in a tree column with a keyboard
 
 * Bugs
   ZK-5728: ZK-5364 causes external radio to no longer be selected / checked
