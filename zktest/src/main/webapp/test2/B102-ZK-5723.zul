@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B102-ZK-5723.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Wed Apr 30 16:32:51 CST 2025, Created by jamson
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns:w="client">
+    <label multiline="true">
+        The div with red border is a draggable element, there 2 tests we need to do
+        Test1:
+        1. Try to select the text of a range via mouse in the draggable div's input element
+        2. The selection range should be created successfully
+        (If the div been drag instead of create a selection range, the bug still exists)
+        Test2:
+        1. Click the "check if textbox is input" button
+        2. The text on the button's right should be "true"
+        (If the text on button's right is "false", the bug still exists)
+    </label>
+    <div draggable="true" style="border: 1px solid red">
+        This is a draggable div
+        <separator/>
+        <textbox id="tb" value="Try to select the text via mouse"/>
+    </div>
+    <button label="check if textbox is input" w:onClick="zk.$('$lb').setValue(zk('$tb').isInput());" />
+    <label id="lb"/>
+</zk>
