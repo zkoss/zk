@@ -45,6 +45,7 @@ ZK 10.2.0
   ZK-5688: wrong translation in msgzul_de.properties
   ZK-5701: remove IE code and css rules
   ZK-5261: forEach always re-renders all items
+  ZK-5934: SimpleConstraint.SERVER flag does not work with Java API
   ZK-5664: Https encoding fail for non-ISO-8859-1 filename, cause IllegalArgumentException
   ZK-5222: websocket fails and resend AU request get a 467 response
   ZK-5693: message key NO_POSITIVE_NEGATIVE_ZERO has wrong values in many locales
