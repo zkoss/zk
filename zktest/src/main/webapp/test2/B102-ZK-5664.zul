@@ -1,0 +1,25 @@
+<!--
+B102-ZK-5664.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu Apr 17 16:44:55 CST 2025, Created by jameschu
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label>
+		0. run this in tomcat
+		1. no exception for images
+		2. click buttons to download, you should see Korean and Chinese files
+	</label>
+	<window apply="org.zkoss.zktest.test2.B102_ZK_5664Composer">
+		<image id="badNameImg"/>
+		<image id="goodNameImg"/>
+		<button id="btn1" label="Download file with Korean file name"/>
+		<button id="btn2" label="Download file with Chinese file name"/>
+	</window>
+</zk>

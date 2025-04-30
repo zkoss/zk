@@ -10,6 +10,8 @@ ZK 10.2.0
   ZK-4999: searchbox can select the first matched items by default
   ZK-5600: log page URL when an error happens
   ZK-5474: Provide min and max string constraints for number input elements
+  ZK-4966: support a way to avoid loading third-party javascript library
+  ZK-5597: vertical stepbar
 
 * Bugs
   ZK-5728: ZK-5364 causes external radio to no longer be selected / checked
@@ -44,11 +46,15 @@ ZK 10.2.0
   ZK-5701: remove IE code and css rules
   ZK-5261: forEach always re-renders all items
   ZK-5934: SimpleConstraint.SERVER flag does not work with Java API
+  ZK-5664: Https encoding fail for non-ISO-8859-1 filename, cause IllegalArgumentException
+  ZK-5222: websocket fails and resend AU request get a 467 response
+  ZK-5693: message key NO_POSITIVE_NEGATIVE_ZERO has wrong values in many locales
 
 * Upgrade Notes
   + Remove the Fragment component from the zkmax.jar and use the new Client MVVM  (client-bind.jar) library instead.
   + Revert the fix ZK-5079 to refix ZK-5261, which is a side effect of ZK-5079. However, the issue of ZK-5079 is disappeared in ZK 10.2.0.
   + Decimalbox, Intbox, Longbox, and Doublebox support the use of min and max constraints.
+  + Move widget Signature from zkmax.wgt to zkmax.signature, Tbeditor from zkmax.inp to zkmax.tbeditor, Cropper from zkmax.med to zkmax.cropper, Goldenlayout from zkmax.layout to zkmax.goldenlayout
 
    --------
 ZK 10.1.0
