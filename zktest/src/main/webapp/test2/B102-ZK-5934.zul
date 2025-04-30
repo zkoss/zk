@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B102-ZK-5934.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Mon Apr 28 15:13:04 CST 2025, Created by jamson
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <zscript><![CDATA[
+		public class MyConstraint extends SimpleConstraint {
+			public MyConstraint(int flags) {
+				super(flags);
+			}
+        	public void validate(Component comp, Object value) throws WrongValueException {
+                super.validate(comp, value);
+                Clients.log("server validate: " + value);
+            }
+		};
+		MyConstraint myc = new MyConstraint(SimpleConstraint.SERVER);
+	]]></zscript>
+    <textbox constraint="${myc}"/>
+</zk>
