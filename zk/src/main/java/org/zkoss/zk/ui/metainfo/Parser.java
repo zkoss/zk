@@ -751,7 +751,7 @@ public class Parser {
 							label = trimLabel;
 						}
 						if (isXHTML && preNativeInfo != null && isEmpty(label.trim())) { //Merge break line between two NativeInfo when using zhtml
-							preNativeInfo.addEpilogChild(new TextInfo(null, label));
+							preNativeInfo.addEpilogChild(new TextInfo((NodeInfo) null, label));
 						} else {
 							final ComponentInfo labelInfo = parentlang.newLabelInfo(parent, label);
 							if (isEmpty(trimLabel))
