@@ -142,7 +142,8 @@ public class NativeInfo extends ComponentInfo {
 					}
 					sb.append(rep);
 				}
-				child = new TextInfo(sb != null ? sb.toString() : value);
+				//ZK-5695: The original approach rebuilds a new TextInfo using sb as the text, but it loses other attribute values originally carried by the child.
+				child = new TextInfo(child.getEvaluatorRef(), sb != null ? sb.toString() : value);
 			}
 		}
 		_prokids.add(child);

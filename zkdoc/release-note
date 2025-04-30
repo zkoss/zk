@@ -50,6 +50,7 @@ ZK 10.2.0
   ZK-5664: Https encoding fail for non-ISO-8859-1 filename, cause IllegalArgumentException
   ZK-5222: websocket fails and resend AU request get a 467 response
   ZK-5693: message key NO_POSITIVE_NEGATIVE_ZERO has wrong values in many locales
+  ZK-5695: unable to use EL in a native script
 
 * Upgrade Notes
   + Remove the Fragment component from the zkmax.jar and use the new Client MVVM  (client-bind.jar) library instead.
