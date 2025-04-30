@@ -559,10 +559,7 @@ public class Https extends Servlets {
 				}
 				// ZK-3058: filename for legacy browsers, filename* for modern browsers
 				if (flnm != null && flnm.length() > 0) {
-					contentDisposition +=
-							";filename=" + encodeFilename(request, flnm)
-									+ ";filename*=UTF-8''" + encodeRfc3986(
-									flnm);
+					contentDisposition += ";filename*=UTF-8''" + encodeRfc3986(flnm);
 				}
 				response.setHeader("Content-Disposition", contentDisposition);
 			}
