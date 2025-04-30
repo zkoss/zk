@@ -1117,27 +1117,29 @@ public class Parser {
 					}
 					char cc = commandProperty.charAt(j);
 					if (quot == (char) 0) {
-						if (cc == ',') {
-							sb.append(cc);
-							modifiedCommandPropertySb.append(modifyAttrValueIfSimplified0(nm, sb.toString().trim(), paramIndex, isNamedParam));
-							if (paramIndex != 0 && !isNamedParam && nm != null) { // named param and un-named parameters together
-								throwCommandSimplifiedErrorUsage();
-							}
-							isNamedParam = nm != null;
-							nm = null; //cleanup
-							sb.setLength(0); //cleanup
-							paramIndex++;
-							continue; //next name=value
-						} else if (cc == '=' && inRoundBrackets == 0) {
-							nm = sb.toString().trim(); //name found
-							sb.setLength(0); //cleanup
-							continue; //parse value
-						} else if (cc == '\'' || cc == '"') {
+						if (cc == '\'' || cc == '"') {
 							quot = cc;
 						} else if (cc == '(') {
 							inRoundBrackets++;
 						} else if (cc == ')') {
 							inRoundBrackets--;
+						} else if (inRoundBrackets == 0) { // not in any method
+							if (cc == ',') {
+								sb.append(cc);
+								modifiedCommandPropertySb.append(modifyAttrValueIfSimplified0(nm, sb.toString().trim(), paramIndex, isNamedParam));
+								if (paramIndex != 0 && !isNamedParam && nm != null) { // named param and un-named parameters together
+									throwCommandSimplifiedErrorUsage();
+								}
+								isNamedParam = nm != null;
+								nm = null; //cleanup
+								sb.setLength(0); //cleanup
+								paramIndex++;
+								continue; //next name=value
+							} else if (cc == '=') {
+								nm = sb.toString().trim(); //name found
+								sb.setLength(0); //cleanup
+								continue; //parse value
+							}
 						}
 					} else if (cc == quot) {
 						quot = (char) 0;
