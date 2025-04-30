@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B102-ZK-4966.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Mon Apr 21 16:58:51 CST 2025, Created by cherrylee
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <window title="Cropper / Jcrop test" border="normal" width="700px">
+        <goldenlayout>
+            <goldenpanel title="My Panel">
+                <label value="Hello GoldenLayout" />
+            </goldenpanel>
+        </goldenlayout>
+        <hlayout>
+            <cropper id="cr1" src="/test2/img/F86-ZK-3962.jpg" x="50" y="100" w="100" h="100" onCrop="img1.setContent(event.getMedia())" toolbarVisible="true" croppedFormat="image/jpeg"/>
+            <image id="img1"/>
+        </hlayout>
+
+        <vlayout spacing="20px" width="400px" style="padding:20px">
+            <label value="please sign up：" />
+            <signature id="sig" width="300px" height="200px"/>
+            <button label="please clean up" onClick="sig.clear()"/>
+        </vlayout>
+
+
+        <tbeditor height="300px" />
+
+
+    </window>
+
+</zk>
