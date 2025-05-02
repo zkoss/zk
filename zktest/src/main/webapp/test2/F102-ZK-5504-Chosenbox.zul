@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F102-ZK-5504-Chosenbox.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		2025/4/17, Created by jumperchen
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+		ListModelList model = new ListModelList();
+		for (int i = 0; i < 3; i++) {
+		model.add("aaa" + i);
+		}
+	]]></zscript>
+	<div id="main">
+		<label multiline="true">
+			1. Click "insert before" button, the new label should be added at first row.
+			2. The second row should be "1 - aaa0" label.
+		</label>
+		<button label="invalidate" onClick='main.invalidate()'/>
+		<button label="add"
+		        onClick='model.add("ddd " + System.currentTimeMillis());'/>
+		<button label="insert before"
+		        onClick='model.add(0, "ddd " + System.currentTimeMillis());'/>
+		<button label="insert middle"
+		        onClick='model.add(((int) model.size() / 2), "ddd " + System.currentTimeMillis());'/>
+		<button label="remove" onClick='model.remove(0);'/>
+		<hlayout>
+			<vlayout hflex="1">
+				Chosenbox with model
+				<chosenbox model="${model}" width="300px">
+					<custom-attributes org.zkoss.model.selectiveComponentUpdate.enable="true"/>
+					<template name="model">
+						<label value="${forEachStatus.index} - ${each}"/>
+					</template>
+				</chosenbox>
+			</vlayout>
+		</hlayout>
+	</div>
+</zk>

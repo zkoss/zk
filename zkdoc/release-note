@@ -10,6 +10,7 @@ ZK 10.2.0
   ZK-4999: searchbox can select the first matched items by default
   ZK-5600: log page URL when an error happens
   ZK-5474: Provide min and max string constraints for number input elements
+  ZK-5504: Components with Model should only update few items or changed data instead of rerendering them all
   ZK-5888: can focus on a checkbox in a tree column with a keyboard
   ZK-4966: support a way to avoid loading third-party javascript library
   ZK-5597: vertical stepbar

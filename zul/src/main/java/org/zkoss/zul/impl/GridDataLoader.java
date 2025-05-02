@@ -82,6 +82,8 @@ public class GridDataLoader implements DataLoader, Cropper {
 
 	private int INVALIDATE_THRESHOLD = -1;
 
+	private Boolean SELECTIVE_COMPONENT_UPDATE = null; // since 10.2.0
+
 	public void doGroupsDataChange(GroupsDataEvent event) {
 		if (event.getType() == GroupsDataEvent.GROUPS_OPENED) {
 			GroupsListModel groupsListModel = ((GroupsListModel) _grid.getModel());
@@ -94,6 +96,13 @@ public class GridDataLoader implements DataLoader, Cropper {
 	public void doListDataChange(ListDataEvent event) {
 		if (INVALIDATE_THRESHOLD == -1) {
 			INVALIDATE_THRESHOLD = Utils.getIntAttribute(this.getOwner(), "org.zkoss.zul.invalidateThreshold", 10,
+					true);
+		}
+
+		// ZK-5504
+		if (SELECTIVE_COMPONENT_UPDATE == null) {
+			SELECTIVE_COMPONENT_UPDATE = Utils.testAttribute(this.getOwner(),
+					Attributes.SELECTIVE_COMPONENT_UPDATE, false,
 					true);
 		}
 		//when this is called _model is never null
@@ -133,8 +142,9 @@ public class GridDataLoader implements DataLoader, Cropper {
 				rows.insertBefore(newUnloadedItem(renderer, min++), next);
 			}
 
+
 			// Fix ZK-5468: the content of the subsequence item might be changed
-			if (!rows.isInvalidated()) {
+			if (!SELECTIVE_COMPONENT_UPDATE && !rows.isInvalidated()) {
 				syncModel(max, rows.getChildren().size() - (max - min));
 			}
 			break;
@@ -166,7 +176,7 @@ public class GridDataLoader implements DataLoader, Cropper {
 			}
 
 			// Fix ZK-5468: the content of the subsequence item might be changed
-			if (!rows.isInvalidated()) {
+			if (!SELECTIVE_COMPONENT_UPDATE && !rows.isInvalidated()) {
 				syncModel(max, rows.getChildren().size() - (max - min));
 			}
 			break;
