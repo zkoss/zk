@@ -307,6 +307,8 @@ public class Utils {
 
 		addLocaleJS(sb, "ITEMWIDGET_SELECTED", MZul.ITEMWIDGET_SELECTED);
 
+		addLocaleJS(sb, "TREE_SELECT_ALL", MZul.TREE_SELECT_ALL);
+
 		int j = sb.length() - 1;
 		if (sb.charAt(j) == ',')
 			sb.setLength(j);

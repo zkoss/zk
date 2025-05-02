@@ -225,6 +225,8 @@ export class SimpleConstraint extends zk.Object {
 			f.NO_EMPTY = true;
 		if (v & 0x200)
 			f.STRICT = true;
+		if (v & 0x400)
+			f.SERVER = true;
 		if (v = (v & 0xf000))
 			this._pos = _posAllowed[(v >> 12) - 1];
 		return f;
