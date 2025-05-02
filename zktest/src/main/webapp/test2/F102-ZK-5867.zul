@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F102-ZK-5867.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Apr 17 17:41:01 CST 2025, Created by jamson
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label multiline="true">
+        press TAB to focus on each radio (or RIGHT ARROW if radiogroup), all of them should have the border highlight
+    </label>
+    <radio id="rd" label="radio"/><separator/>
+    <radiogroup id='rg1' style='border:1px solid red'>
+        <radio id="radiogrouprd1" label='1'/>
+        <radio id="radiogrouprd2" label='2'/>
+    </radiogroup> radiogroup
+
+    <radiogroup id='rg2'/>
+    <grid width="400px">
+        <rows>
+            <row>
+                <radio id="row1rd1" label="radio1"/>
+                <radio id="row1rd2" label="radio2"/>
+            </row>
+            <row>
+                <radio id="row2radiogrouprd1" label="radiogroup2" radiogroup="rg2"/>
+                <radio id="row2radiogrouprd2" label="radiogroup2" radiogroup="rg2"/>
+            </row>
+            <row>
+                <checkbox id="row3cb1" label="checkbox1"/>
+                <checkbox id="row3cb2" label="checkbox2"/>
+            </row>
+        </rows>
+    </grid>
+</zk>

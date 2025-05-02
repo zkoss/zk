@@ -36,6 +36,11 @@
 		text-decoration: none;
 		white-space: nowrap;
 		
+		&:focus-visible {
+			box-shadow: @pagingButtonFocusBoxShadow;
+			transition: unset;
+			border-radius: @pagingButtonFocusBorderRadius;
+		}
 		&:hover {
 			background-color: @pagingItemHoverBackgroundColor;
 		}

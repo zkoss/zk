@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F102-ZK-5868.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Apr 17 17:55:21 CST 2025, Created by jamson
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label multiline="true">
+        1. press TAB 1 time, you should see the first-page-icon have the border highlight
+        2. press TAB again, you should see the previous-page-icon have the border highlight
+        3. press TAB 2 times, you should see the next-page-icon have the border highlight
+        3. press TAB again, you should see the last-page-icon have the border highlight
+    </label>
+    <paging totalSize="3" pageSize="1" activePage="1"/>
+</zk>
