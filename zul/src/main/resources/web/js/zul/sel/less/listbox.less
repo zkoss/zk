@@ -33,6 +33,10 @@
 	border: 1px solid @baseBorderColor;
 	overflow: hidden;
 	zoom: 1;
+	&:focus-visible {
+		box-shadow: @meshFocusBoxShadow;
+		transition: unset;
+	}
 	//listbox header
 	&-header {
 		width: 100%;
@@ -110,6 +114,10 @@
 	position: relative;
 	overflow: hidden;
 	white-space: nowrap;
+	&:focus-visible {
+		box-shadow: @meshTitleFocusBoxShadow;
+		transition: unset;
+	}
 	&-sort {
 		.z-listheader-content {
 			cursor: pointer;
@@ -151,6 +159,10 @@
 	&-checkable {
 		.checkable();
 		
+		&:focus-visible {
+			box-shadow: @meshTitleFocusBoxShadow;
+			transition: unset;
+		}
 		.z-listheader-icon {
 			display: none;
 			cursor: default;
@@ -261,7 +273,19 @@
 	}
 	&-focus {
 		> .z-listcell {
-			background: @meshContentFocusBackgroundColor;
+			.listitemFocusBorder(@left: 0, @right: 0) {
+				box-shadow: inset 0 2px 0 0 @meshCellFocusBoxShadowColor,
+							inset 0 -2px 0 0 @meshCellFocusBoxShadowColor,
+							inset @left 0 0 0 @meshCellFocusBoxShadowColor,
+							inset -@right 0 0 0 @meshCellFocusBoxShadowColor;
+			}
+			.listitemFocusBorder();
+			&:first-child {
+				.listitemFocusBorder(@left: 2px);
+			}
+			&:last-child {
+				.listitemFocusBorder(@right: 2px);
+			}
 		}
 		.z-listcell-content {
 			color: @hoverColor;

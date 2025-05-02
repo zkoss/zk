@@ -64,6 +64,10 @@
 	.z-row-inner, .z-cell {
 		background: @meshBackgroundColor;
 	}
+	.z-cell:focus-visible {
+		box-shadow: @meshCellFocusBoxShadow;
+		transition: unset;
+	}
 	&-odd > .z-row-inner,
 	&-odd > .z-cell {
 		background: @meshStripeBackgroundColor;
@@ -130,6 +134,10 @@
 	overflow: hidden;
 	white-space: nowrap;
 
+	&:focus-visible {
+		box-shadow: @meshTitleFocusBoxShadow;
+		transition: unset;
+	}
 	&-button {
 		.iconFontStyle(@fontSizeLarge, @meshTitleColor);
 		display: none;

@@ -114,6 +114,12 @@
 @treecellContentLineHeight:    @baseLineHeight;
 @listheaderCheckedPositionLeft: 0;
 @listboxRadioIconSize:         10px;
+@meshFocusBoxShadowColor:      @colorAccent;
+@meshTitleFocusBoxShadowColor: @colorAccent;
+@meshCellFocusBoxShadowColor:  @colorPrimary;
+@meshFocusBoxShadow:           0 0 0 2px @meshFocusBoxShadowColor;
+@meshTitleFocusBoxShadow:      inset 0 0 0 2px @meshTitleFocusBoxShadowColor;
+@meshCellFocusBoxShadow:       inset 0 0 0 2px @meshCellFocusBoxShadowColor;
 
 // -------------------------------------
 // Component State
@@ -235,6 +241,9 @@
 @groupboxNotitleContentPadding:@containerPadding;
 @groupbox3DHeaderPadding:      12px 16px;
 @groupbox3DContentPadding:     @containerPadding;
+@groupboxFocusBoxShadowColor:  @colorPrimary;
+@groupboxFocusBoxShadow:       0 0 0 2px @groupboxFocusBoxShadowColor;
+@groupboxFocusBorderRadius:    @baseBorderRadius;
 
 // Toolbar
 @toolbarHorizontalPadding:     16px;
@@ -498,6 +507,9 @@
 @pagingButtonFontSize:         @fontSizeLarge;
 @pagingButtonPadding:          4px;
 @pagingButtonMargin:           5px 0;
+@pagingButtonFocusBoxShadowColor:    @colorPrimary;
+@pagingButtonFocusBoxShadow:         0 0 0 2px @pagingButtonFocusBoxShadowColor;
+@pagingButtonFocusBorderRadius:      @baseBorderRadius;
 @pagingIconSize:               @fontSizeLarge;
 @pagingIconLineHeight:         @baseLineHeight;
 @pagingInputHeight:            36px;
@@ -660,6 +672,8 @@
 @navTextPopupPadding:          4px 18px;
 @navTextPopupLineHeight:       @baseBarHeight;
 @navbarCollapsedInfoPositionTop: -2px;
+@navitemFocusBoxShadowColor:     @colorPrimary;
+@navitemFocusBoxShadow:          0 0 0 2px @navitemFocusBoxShadowColor;
 
 // chosenbox
 @chosenboxIconSize:            @fontSizeMedium;

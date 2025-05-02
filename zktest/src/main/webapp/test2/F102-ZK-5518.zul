@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F102-ZK-5518.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Apr 10 12:38:06 CST 2025, Created by jamson
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label multiline="true">
+        1. press TAB to focus on the first groupbox, you should see the first groupbox's toggle icon has the border highlight
+        2. press TAB 2 times to focus on the second groupbox, you should see the second groupbox has the border highlight
+    </label>
+    <groupbox width="250px">
+        <caption iconSclass="z-icon-angle-down"/>
+        <textbox/>
+    </groupbox>
+    <groupbox width="250px" mold="3d">
+        <caption iconSclass="z-icon-angle-down"/>
+        <textbox/>
+    </groupbox>
+</zk>

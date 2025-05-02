@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B102-ZK-5882.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Apr 24 14:23:29 CST 2025, Created by jamson
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label multiline="true">
+        1. press TAB to focus on the tree
+        2. press and hold COMMAND key (COMMAND for mac, CTRL for windows), and press ARROW_DOWN, and then release COMMAND key, to move focus
+        3. check whether the specific row you focused has the focus border style
+    </label>
+    <tree>
+        <treecols>
+            <treecol label="1"/>
+            <treecol label="2"/>
+            <treecol label="3"/>
+        </treecols>
+        <treechildren>
+            <treeitem>
+                <treerow>
+                    <treecell label="1" />
+                    <treecell label="2" />
+                    <treecell label="3" />
+                </treerow>
+            </treeitem>
+            <treeitem>
+                <treerow>
+                    <treecell label="1" />
+                    <treecell label="2" />
+                    <treecell label="3" />
+                </treerow>
+            </treeitem>
+            <treeitem>
+                <treerow>
+                    <treecell label="1" />
+                    <treecell label="2" />
+                    <treecell label="3" />
+                </treerow>
+            </treeitem>
+        </treechildren>
+    </tree>
+</zk>
