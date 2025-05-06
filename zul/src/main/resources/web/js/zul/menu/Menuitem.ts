@@ -517,6 +517,14 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 	}
 
 	/** @internal */
+	override afterKeyDown_(evt: zk.Event, simulated?: boolean): boolean {
+		// ZK-5805: Ancestor CtrlKeys takes priority over menupopup up/down navigation if menuitem holds onOK listener
+		// super.afterKeyDown_() returns true means event has been stopped and stop propagate to its parent
+		// if event keyCode is arrow keys, we should directly return false to propagate to menupopup
+		return evt.keyCode >= 37 && evt.keyCode <= 40 ? false : super.afterKeyDown_(evt, simulated);
+	}
+
+	/** @internal */
 	_canActivate(evt: zk.Event): boolean {
 		return !this.isDisabled() && (!this.isTopmost() || !!this._uplder
 			|| jq.isAncestor(this.$n('a'), evt.domTarget));
