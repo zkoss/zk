@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B102-ZK-5805.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Tue May 06 15:05:43 CST 2025, Created by jamson
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label multiline="true">
+        1. run this zul with za11y DISABLED
+        2. click the menu
+        3. the navigation between each menuitem should work correctly (doesn't stock in a menuitem)
+        4. each menuitem's functions shows on its label
+        5. test each of them to confirm all of them worked correctly
+    </label>
+    <menubar>
+        <menu label="menu">
+            <menupopup >
+                <menuitem label='menuitemA [onOK -> extends Clients.log with "A"]' onOK='Clients.log("A")'/>
+                <menuitem label='menuitemB [onCancel -> extends Clients.log with "B"]' onCancel='Clients.log("B")'/>
+                <menuitem label='menuitemC [ctrlKeys:Backspace -> extends Clients.log with "C"]' ctrlKeys="#bak" onCtrlKey='Clients.log("C")' />
+            </menupopup>
+        </menu>
+    </menubar>
+</zk>
