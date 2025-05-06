@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B102-ZK-5752.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Tue May 06 11:00:06 CST 2025, Created by jamson
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <script><![CDATA[
+        zk.afterLoad(function() {
+            let originalXHR = window.XMLHttpRequest;
+            window.XMLHttpRequest = function() {
+                let xhr = new originalXHR(),
+                    originalOpen = xhr.open;
+                xhr.open = function(method, url) {
+                    originalOpen.apply(this, arguments);
+                    if (url.indexOf('upload') > -1 || method === 'POST') {
+                        Object.defineProperty(this, 'readyState', { value: 4 });
+                        Object.defineProperty(this, 'status', { value: 400 });
+                        Object.defineProperty(this, 'statusText', { value: 'test _onload() error' });
+                    }
+                };
+                return xhr;
+            };
+
+            window.confirm = function(msg) {
+                return false;
+            }
+        });
+        ]]></script>
+    <label multiline="true">
+        1. click upload button and upload a file
+        2. you should see a error message box with message "test _onload() error"
+    </label>
+    <button label="Upload" upload="true" onUpload="img.setContent(event.media)"/>
+    <image id="img"/>
+</zk>

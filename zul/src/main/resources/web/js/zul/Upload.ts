@@ -527,7 +527,7 @@ export class Uploader extends zk.Object {
 				if (this.status === 200) {
 					wgt._uplder!.finish(uploader._sid);
 				} else {
-					zul.Upload.error('server-out-of-service:' + this.statusText);
+					zul.Upload.error('server-out-of-service:' + this.statusText, wgt.uuid, uploader._sid);
 				}
 			}
 		};
