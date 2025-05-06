@@ -49,19 +49,9 @@ export class SimpleDateConstraint extends zul.inp.SimpleConstraint {
 			wgt = this._wgt,
 			tz = wgt && wgt.getTimeZone && wgt.getTimeZone();
 		if (constraint.startsWith('between')) {
-			var j = constraint.indexOf('and', 7);
-			if (j < 0 && zk.debugJS)
-				zk.error('Unknown constraint: ' + constraint);
-			this._beg = new zk.fmt.Calendar(undefined, this._localizedSymbols).parseDate(constraint.substring(7, j), this.format, undefined, undefined, undefined, tz);
-			this._end = new zk.fmt.Calendar(undefined, this._localizedSymbols).parseDate(constraint.substring(j + 3, j + 3 + len), this.format, undefined, undefined, undefined, tz);
-			if (this._beg!.getTime() > this._end!.getTime()) {
-				var d = this._beg;
-				this._beg = this._end;
-				this._end = d;
-			}
-
-			this._beg!.setHours(0, 0, 0, 0);
-			this._end!.setHours(0, 0, 0, 0);
+			const dates = this._parseBetweenDates(constraint, this.format, len, tz);
+			this._beg = dates[0];
+			this._end = dates[1];
 			arr[arr.length] = 'between';
 		} else if (constraint.startsWith('before') && !constraint.startsWith('before_')) {
 			this._end = new zk.fmt.Calendar(undefined, this._localizedSymbols).parseDate(constraint.substring(6, 6 + len), this.format, undefined, undefined, undefined, tz);
@@ -72,12 +62,42 @@ export class SimpleDateConstraint extends zul.inp.SimpleConstraint {
 			this._beg!.setHours(0, 0, 0, 0);
 			arr[arr.length] = 'after';
 		} else if (constraint.startsWith('not')) {
-			const disabled = new zk.fmt.Calendar(undefined, this._localizedSymbols).parseDate(constraint.substring(3, 3 + len), this.format, undefined, undefined, undefined, tz);
-			disabled!.setHours(0, 0, 0, 0);
-			this._disabledDates!.push(disabled!);
-			arr[arr.length] = 'not';
+			if (constraint.startsWith('not between')) {
+				const dates = this._parseBetweenDates(constraint, this.format, len, tz);
+				let disabled = dates[0];
+				this._disabledDates!.push(disabled);
+				while (disabled.getTime() != dates[1].getTime()) {
+					disabled = Dates.newInstance(disabled.getTime() + 86400 * 1000);
+					this._disabledDates!.push(disabled);
+				}
+				arr[arr.length] = 'not between';
+			} else {
+				const disabled = new zk.fmt.Calendar(undefined, this._localizedSymbols).parseDate(constraint.substring(3, 3 + len), this.format, undefined, undefined, undefined, tz);
+				disabled!.setHours(0, 0, 0, 0);
+				this._disabledDates!.push(disabled!);
+				arr[arr.length] = 'not';
+			}
 		}
 		return super.parseConstraint_(constraint);
+	}
+
+	/** @internal */
+	_parseBetweenDates(constraint: string, format: string, len: number, tz: string | undefined): DateImpl[] {
+		let j = constraint.indexOf('and', 7);
+		if (j < 0 && zk.debugJS) {
+			zk.error('Unknown constraint: ' + constraint);
+		}
+		let datesStrIndex = constraint.indexOf('between') + 7,
+			beg = new zk.fmt.Calendar(undefined, this._localizedSymbols).parseDate(constraint.substring(datesStrIndex, j), format, undefined, undefined, undefined, tz),
+			end = new zk.fmt.Calendar(undefined, this._localizedSymbols).parseDate(constraint.substring(j + 3, j + 3 + len), format, undefined, undefined, undefined, tz);
+		if (beg!.getTime() > end!.getTime()) {
+			const d = beg;
+			beg = end;
+			end = d;
+		}
+		beg!.setHours(0, 0, 0, 0);
+		end!.setHours(0, 0, 0, 0);
+		return [beg!, end!];
 	}
 
 	override validate(wgt: zk.Widget, val: unknown): zul.inp.SimpleConstraintErrorMessages | string | undefined {
