@@ -467,7 +467,8 @@ export class Button extends zul.LabelImageWidget<HTMLButtonElement> implements z
 
 	/** @internal */
 	override shallIgnoreClick_(_evt: zk.Event): boolean {
-		return this.isDisabled();
+		// ZK-5806, if disabled by autodisable, shouldn't ignore click
+		return this.isDisabled() ? !this._adbs : false;
 	}
 }
 

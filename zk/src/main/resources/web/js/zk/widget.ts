@@ -3461,7 +3461,8 @@ new zul.wnd.Window({
 			// '-bar' element as the last child of the HeadWidget element, if the
 			// upcoming added child is appended, the added child will be placed at
 			// the end of the elements, which is a wrong position.
-			if (this.lastChild === child && ben!.lastChild != null && !(ben!.lastChild as HTMLElement).id
+			if (zk.isLoaded('zul.mesh') && this instanceof zul.mesh.HeadWidget &&
+				this.lastChild === child && ben!.lastChild != null && !(ben!.lastChild as HTMLElement).id
 						// Fix F80_ZK_327Test.java
 					&& (ben!.lastChild as HTMLElement).nodeType == 1) {
 				jq(ben!.lastChild).before(/*safe*/ html);
