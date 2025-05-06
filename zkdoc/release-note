@@ -73,6 +73,7 @@ ZK 10.2.0
   ZK-5734: Erratic behavior of disabled Radio elements in RowRenderer
   ZK-5612: combobox popup shows in erratic positions
   ZK-5806: an autodisable button doesn't open a popup
+  ZK-5752: Uploader._onload doesn't show an error message
   ZK-5904: Unexpected exception when using c:cat in @command
 
 * Upgrade Notes
