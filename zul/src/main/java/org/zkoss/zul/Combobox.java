@@ -125,6 +125,9 @@ public class Combobox extends Textbox {
 
 	private static final String ATTR_ON_INIT_RENDER = "org.zkoss.zul.Combobox.onInitRender";
 
+	private int INVALIDATE_THRESHOLD = -1;
+	private Boolean SELECTIVE_COMPONENT_UPDATE = null; // since 10.2.0
+
 	static {
 		addClientEvent(Combobox.class, Events.ON_OPEN, CE_IMPORTANT | CE_DUPLICATE_IGNORE);
 		addClientEvent(Combobox.class, Events.ON_SELECT, CE_IMPORTANT | CE_DUPLICATE_IGNORE);
@@ -240,15 +243,21 @@ public class Combobox extends Textbox {
 		return _emptySearchMessage;
 	}
 
-	private int INVALIDATE_THRESHOLD = -1;
-
 	private void initDataListener() {
 		if (INVALIDATE_THRESHOLD == -1) {
 			INVALIDATE_THRESHOLD = Utils.getIntAttribute(this, "org.zkoss.zul.invalidateThreshold", 10, true);
 		}
+
 		if (_dataListener == null)
 			_dataListener = new ListDataListener() {
 				public void onChange(ListDataEvent event) {
+					// ZK-5504
+					if (SELECTIVE_COMPONENT_UPDATE == null) {
+						SELECTIVE_COMPONENT_UPDATE = Utils.testAttribute(Combobox.this,
+								Attributes.SELECTIVE_COMPONENT_UPDATE, false,
+								true);
+					}
+
 					int type = event.getType();
 					if (getAttribute(Attributes.BEFORE_MODEL_ITEMS_RENDERED) != null
 							&& (type == ListDataEvent.INTERVAL_ADDED || type == ListDataEvent.INTERVAL_REMOVED))
@@ -294,16 +303,21 @@ public class Combobox extends Textbox {
 								renderer.render(item, _model.getElementAt(index), index++);
 							}
 
-							// Fix ZK-5468: the content of the subsequence item might be changed
-							List<Comboitem> comboitems = new ArrayList<>(getItems());
-							Iterator<Comboitem> iterator = comboitems.iterator();
-							int start = 0;
-							for (int i = max + 1, j = comboitems.size(); i < j && iterator.hasNext(); start++) {
-								if (start < i) {
-									iterator.next();
-									continue;
+							if (!SELECTIVE_COMPONENT_UPDATE) {
+								// Fix ZK-5468: the content of the subsequence item might be changed
+								List<Comboitem> comboitems = new ArrayList<>(
+										getItems());
+								Iterator<Comboitem> iterator = comboitems.iterator();
+								int start = 0;
+								for (int i = max + 1, j = comboitems.size();
+									 i < j && iterator.hasNext(); start++) {
+									if (start < i) {
+										iterator.next();
+										continue;
+									}
+									renderer.render(iterator.next(),
+											_model.getElementAt(i), i++);
 								}
-								renderer.render(iterator.next(), _model.getElementAt(i), i++);
 							}
 						} catch (Throwable ex) {
 							renderer.doCatch(ex);
@@ -336,25 +350,29 @@ public class Combobox extends Textbox {
 							comp = p;
 						}
 
-						// Fix ZK-5468: the content of the subsequence item might be changed
-						List<Comboitem> comboitems = new ArrayList<>(getItems());
-						Iterator<Comboitem> iterator = comboitems.iterator();
-						final Renderer renderer1 = new Renderer();
-						try {
-							int start = 0;
-							// no need to plus one for "max" here for removal
-							for (int i = max, j = comboitems.size();
-								 i < j && iterator.hasNext(); start++) {
-								if (start < i) {
-									iterator.next();
-									continue;
+						if (!SELECTIVE_COMPONENT_UPDATE) {
+							// Fix ZK-5468: the content of the subsequence item might be changed
+							List<Comboitem> comboitems = new ArrayList<>(
+									getItems());
+							Iterator<Comboitem> iterator = comboitems.iterator();
+							final Renderer renderer1 = new Renderer();
+							try {
+								int start = 0;
+								// no need to plus one for "max" here for removal
+								for (int i = max, j = comboitems.size();
+									 i < j && iterator.hasNext(); start++) {
+									if (start < i) {
+										iterator.next();
+										continue;
+									}
+									renderer1.render(iterator.next(),
+											_model.getElementAt(i), i++);
 								}
-								renderer1.render(iterator.next(), _model.getElementAt(i), i++);
+							} catch (Throwable ex) {
+								renderer1.doCatch(ex);
+							} finally {
+								renderer1.doFinally();
 							}
-						} catch (Throwable ex) {
-							renderer1.doCatch(ex);
-						} finally {
-							renderer1.doFinally();
 						}
 						break;
 					default:

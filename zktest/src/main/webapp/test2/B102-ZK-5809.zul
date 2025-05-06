@@ -12,6 +12,7 @@ B102-ZK-5809.zul
 Copyright (C) 2025 Potix Corporation. All Rights Reserved.
 -->
 <zk>
+	This issue duplicates ZK-5734.
 	<radiogroup id="rg"></radiogroup>
 	<radio radiogroup="rg" disabled="true"/>
 	<radiogroup>

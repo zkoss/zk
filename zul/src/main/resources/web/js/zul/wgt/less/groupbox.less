@@ -93,6 +93,12 @@
 				top: 0;
 			}
 
+			.z-caption:has(> span:focus-visible) .z-caption-content {
+				box-shadow: @groupboxFocusBoxShadow;
+				transition: unset;
+				border-radius: @groupboxFocusBorderRadius;
+			}
+
 			.z-caption-content, .z-groupbox-title-content {
 				line-height: @baseIconHeight;
 				font-size: @groupboxHeaderFontSize;
@@ -108,5 +114,11 @@
 		> .z-groupbox-content {
 			padding: @groupbox3DContentPadding;
 		}
+	}
+
+	&:not(.z-groupbox-3d) > .z-groupbox-header .z-caption:has(> span:focus-visible) {
+		box-shadow: @groupboxFocusBoxShadow;
+		transition: unset;
+		border-radius: @groupboxFocusBorderRadius;
 	}
 }

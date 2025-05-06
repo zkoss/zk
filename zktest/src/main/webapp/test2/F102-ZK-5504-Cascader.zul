@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F102-ZK-5504-Cascader.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		2025/4/17, Created by jumperchen
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+class ListTreeModel extends org.zkoss.zul.AbstractTreeModel {
+		public ListTreeModel() {
+			super(new ArrayList());
+		}
+		public int getChildCount(Object parent) {
+			if (isLeaf(parent))
+				return -1;
+			else {
+				ArrayList al = (ArrayList) parent;
+				return al.size();
+			}
+		}
+		public boolean isLeaf(Object node) {
+			boolean isLeaf = !(node instanceof ArrayList);
+			if (!isLeaf) {
+				return (((ArrayList) node).size() == 0);
+			}
+			return isLeaf;
+		}
+		public Object getChild(Object parent, int index) {
+			ArrayList al = (ArrayList) parent;
+			return al.get(index);
+		}
+		public Object getRoot() {
+			return super.getRoot();
+		}
+		public void add(Object data) {
+			List root = (List) getRoot();
+			root.add(data);
+			fireEvent(org.zkoss.zul.event.TreeDataEvent.INTERVAL_ADDED, getPath(root), root.size() - 1, root.size() - 1);
+		}
+		public void add(int index, Object data) {
+			List root = (List) getRoot();
+			root.add(index, data);
+			fireEvent(org.zkoss.zul.event.TreeDataEvent.INTERVAL_ADDED, getPath(root), index, index);
+		}
+		public void remove(int index) {
+			List root = (List) getRoot();
+			root.remove(index);
+			fireEvent(org.zkoss.zul.event.TreeDataEvent.INTERVAL_REMOVED, getPath(root), index, index);
+		}
+		public int size() {
+			return getRoot().size();
+		}
+	}
+		ListTreeModel model = new ListTreeModel();
+		for (int i = 0; i < 3; i++) {
+		model.add("aaa" + i);
+		}
+	]]></zscript>
+	<div id="main">
+		<label multiline="true">
+			1. Click "insert before" button, the new label should be added at first row.
+			2. The second row should be "1 - aaa0" label.
+		</label>
+		<button label="invalidate" onClick='main.invalidate()'/>
+		<button label="add"
+		        onClick='model.add("ddd " + System.currentTimeMillis());'/>
+		<button label="insert before"
+		        onClick='model.add(0, "ddd " + System.currentTimeMillis());'/>
+		<button label="insert middle"
+		        onClick='model.add(((int) model.size() / 2), "ddd " + System.currentTimeMillis());'/>
+		<button label="remove" onClick='model.remove(0);'/>
+		<hlayout>
+			<vlayout hflex="1">
+				Cascader with model
+				<cascader model="${model}">
+					<custom-attributes org.zkoss.model.selectiveComponentUpdate.enable="true"/>
+					<template name="model">
+						<label value="${forEachStatus.index} - ${each}"/>
+					</template>
+				</cascader>
+			</vlayout>
+		</hlayout>
+	</div>
+</zk>

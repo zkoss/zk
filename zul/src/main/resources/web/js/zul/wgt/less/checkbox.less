@@ -1,8 +1,16 @@
 @import "~./zul/less/_header.less";
 
 .z-checkbox {
+	&-default > input[type="checkbox"]:focus-visible {
+		box-shadow: 0 0 0 2px @focusBorderColor;
+		transition: unset;
+	}
 	&-default > &-mold {
 		display: none;
+	}
+	&-tristate > input[type="checkbox"]:focus-visible {
+		box-shadow: 0 0 0 2px @focusBorderColor;
+		transition: unset;
 	}
 	&-tristate > &-mold {
 		display: none;

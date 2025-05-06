@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F102-ZK-5930.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Apr 24 15:15:30 CST 2025, Created by jamson
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label multiline="true">
+        1. press TAB to focus on the top-left-cell
+        2. you should see the cell has the border highlight
+        3. press ARROW keys to check the focus border highlight is apply on each cell
+    </label>
+    <grid>
+        <columns>
+            <column>1</column>
+            <column>2</column>
+        </columns>
+        <rows>
+            <row>
+                <cell>1</cell>
+                <cell>2</cell>
+            </row>
+            <row>
+                <cell>1</cell>
+                <cell>2</cell>
+            </row>
+        </rows>
+    </grid>
+</zk>

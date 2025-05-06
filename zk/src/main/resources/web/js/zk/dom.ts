@@ -2060,11 +2060,11 @@ jq.each(['before', 'after', 'append', 'prepend'], function (i, nm) {
 });
 
 Object.assign(jq, {
-	nodeName(el?: Element, ...tags: string[]): boolean {
+	nodeName(el?: Element, ...tags: string[]): boolean | string {
 		var tag = el && el.nodeName ? el.nodeName.toLowerCase() : '',
 			j = arguments.length;
 		if (j <= 1)
-			return !!tag;
+			return tag;
 		while (--j)
 			if (tag == (arguments[j] as string).toLowerCase())
 				return true;
