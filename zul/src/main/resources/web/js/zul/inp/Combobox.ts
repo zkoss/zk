@@ -157,6 +157,11 @@ export class Combobox extends zul.inp.ComboWidget {
 			this._isOnChanging = true;
 		}
 		this.fixPopupDimension_();
+		// ZK-5612: reposition after resizing the popup because its position depends on its size
+		const pp = this.getPopupNode_(), n = this.$n();
+		if (pp && n) {
+			this._checkPopupSpaceAndPosition(pp, n);
+		}
 	}
 
 	/** @internal */
@@ -225,7 +230,7 @@ export class Combobox extends zul.inp.ComboWidget {
 				var pp = this.getPopupNode_();
 				//will update it later in onResponse with _fixsz
 				if (pp) {
-					pp.style.width = 'auto';
+					// ZK-5612: remove pp.style.width = 'auto'; to avoid flickering
 					if (zk.webkit) this._shallRedoCss = true;
 				}
 			}

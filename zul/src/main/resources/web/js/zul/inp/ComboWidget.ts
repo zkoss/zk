@@ -206,8 +206,11 @@ export class ComboWidget extends zul.inp.InputWidget<string> {
 	override onSize(): void {
 		if (this._open) {
 			var pp = this.getPopupNode_();
-			if (pp)
+			if (pp) {
+				// ZK-5612: resize before repositioning the popup because its position depends on its size
+				this.fixPopupDimension_();
 				this._checkPopupSpaceAndPosition(pp, this.$n_());
+			}
 		}
 	}
 
@@ -412,9 +415,9 @@ export class ComboWidget extends zul.inp.InputWidget<string> {
 			vPosition = 'after',
 			opts: zk.PositionOptions | undefined;
 
-		if (screenX + screenWidth - inpLeft - inpWidth > ppWidth) {
+		if (screenX + screenWidth - inpLeft > ppWidth) {
 			hPosition = 'start';
-		} else if (inpLeft - screenX > ppWidth) {
+		} else if (inpLeft + inpWidth - screenX > ppWidth) {
 			hPosition = 'end';
 		} else {
 			opts = {overflow: true};
