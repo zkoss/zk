@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B102-ZK-5612.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Wed Apr 16 17:56:47 CST 2025, Created by rebeccalai
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<zscript><![CDATA[
+		Locale[] availableLocales = Locale.getAvailableLocales();
+		ListModelList allLocales = new ListModelList();
+		for (int i = 0; i < availableLocales.length; i++) {
+			allLocales.add(availableLocales[i].getDisplayName().toLowerCase());
+		}
+		ListModel subModel = ListModels.toListSubModel(allLocales);
+	]]></zscript>
+	<div style="position: relative; height: 100%; width: 100%;">
+		<label multiline="true">
+			1. type "serbian" into each of the 3 comboboxes, one character at a time
+			2. observe the position of the popup after typing each character
+			3. repeat step 1 and 2 with "spanish"
+		</label>
+		<combobox model="${subModel}" autocomplete="true" autodrop="true"
+				  style="position: absolute; right: 15px; top: 100px;"/>
+		<combobox model="${subModel}" autocomplete="true" autodrop="true"
+				  style="position: absolute; right: 15px; top: 50%;"/>
+		<combobox model="${subModel}" autocomplete="true" autodrop="true"
+				  style="position: absolute; right: 15px; bottom: 100px;"/>
+	</div>
+</zk>
