@@ -66,6 +66,7 @@ ZK 10.2.0
   ZK-5222: websocket fails and resend AU request get a 467 response
   ZK-5693: message key NO_POSITIVE_NEGATIVE_ZERO has wrong values in many locales
   ZK-5695: unable to use EL in a native script
+  ZK-5741: appending label as a child of a link (anchor), but the label is rendered before an icon
   ZK-5648: listbox focused item and selected item has the same background color
   ZK-5882: tree focused item and selected item has the same background color
   ZK-5723: zk().isInput returns wrong value
