@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B102-ZK-5681-2.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Mon May 05 15:36:15 CST 2025, Created by cherrylee
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+	1. Click to expand all ROD components that contain child components with renderdefer.
+	2. No errors should occur during the process."
+	</label>
+	<vlayout spacing="20px">
+		<!-- Groupbox (ROD when open="false") -->
+		<groupbox open="false" title="Groupbox ROD Test">
+			<checkbox label="Groupbox defer child" renderdefer="1000"/>
+		</groupbox>
+
+		<!-- Panel (ROD when open="false") -->
+		<panel open="false" height="20%"  style="margin-bottom:10px"
+			   title="Panel ROD Test" border="normal" maximizable="true" closable="true"
+			   collapsible="true">
+			<caption iconSclass="z-icon-home"/>
+			<panelchildren>PanelContent
+				<checkbox label="Panel defer child" renderdefer="1000"/>
+			</panelchildren>
+		</panel>
+
+		<!-- Tabbox (ROD on non-selected tabs) -->
+		<tabbox width="300px">
+			<tabs>
+				<tab label="Tab 1"/>
+				<tab label="Tab 2"/>
+			</tabs>
+			<tabpanels>
+				<tabpanel>
+					<checkbox label="Tab 1 defer child"/>
+				</tabpanel>
+				<tabpanel>
+					<checkbox label="Tab 2 defer child" renderdefer="1000"/>
+				</tabpanel>
+			</tabpanels>
+		</tabbox>
+
+		<!-- Combobox (ROD popup content) -->
+		<combobox id="combo" width="300px">
+			<comboitem renderdefer="1000" label="Item 1"/>
+			<comboitem label="Item 2"/>
+		</combobox>
+
+		<!-- Bandbox (ROD popup content) -->
+		<bandbox>
+			<bandpopup>
+				<checkbox label="Bandbox defer child" renderdefer="1000"/>
+			</bandpopup>
+		</bandbox>
+
+		<menubar>
+			<menu label="Options">
+				<menupopup>
+					<menuitem label="Slow item" renderdefer="1500" onClick="Clients.log('Clicked slow item')"/>
+					<menuitem label="Normal item" onClick="Clients.log('Clicked normal item')"/>
+				</menupopup>
+			</menu>
+		</menubar>
+	</vlayout>
+</zk>
