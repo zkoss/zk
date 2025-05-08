@@ -383,8 +383,8 @@ public class Https extends Servlets {
 		throw ex;
 	}
 
-	private static final String PATH_REGEX = "^(/[-\\w:@&?=+,.!/~*'%$_;\\(\\)]*)?$";
-	private static final Pattern PATH_PATTERN = Pattern.compile(PATH_REGEX);
+	private static final String PATH_REGEX = "^(/[\\p{L}\\p{N}\\-:@&?=+,.!/~*'%$_;() ]*)?$";
+	private static final Pattern PATH_PATTERN = Pattern.compile(PATH_REGEX, Pattern.UNICODE_CHARACTER_CLASS);
 
 	/**
 	 * Returns the normalized path, or null if it is invalid.
