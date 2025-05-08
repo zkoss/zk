@@ -28,6 +28,7 @@ ZK 10.2.0
   ZK-5868: Paging can show its focused state
   ZK-5932: Listheader's checkbox can show its focused state
   ZK-5933: Treecol's checkbox can show its focused state
+  ZK-5945: Update moment-timezone-with-data.js (tzdata 2025b)
 
 * Bugs
   ZK-5728: ZK-5364 causes external radio to no longer be selected / checked
