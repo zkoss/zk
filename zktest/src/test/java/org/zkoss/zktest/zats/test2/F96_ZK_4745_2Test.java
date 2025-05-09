@@ -21,7 +21,6 @@ import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.Element;
 
 public class F96_ZK_4745_2Test  extends WebDriverTestCase {
-	@Disabled // TODO: Enabled this when the issue is fixed - ZK-5913
 	@Test
 	public void testJapaneseParse() {
 		connect();
@@ -37,7 +36,7 @@ public class F96_ZK_4745_2Test  extends WebDriverTestCase {
 		Assertions.assertFalse(hasError());
 		checkDateboxCalendar(db1btn, "7(月)? 大正14", "31");
 
-		type(db2real, "大正 14/07/31");
+		type(db2real, "大正 14-07-31");
 		Assertions.assertFalse(hasError());
 		checkDateboxCalendar(db2btn, "7(月)? 大正14", "31");
 
