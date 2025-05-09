@@ -826,18 +826,9 @@ export class Calendar extends zul.Widget {
 		for (var i = 0; i < constraints.length; i++) {
 			constraint = jq.trim(constraints[i]); //Bug ZK-1718: should trim whitespace
 			if (constraint.startsWith('between')) {
-				var j = constraint.indexOf('and', 7);
-				if (j < 0 && zk.debugJS)
-					zk.error('Unknown constraint: ' + constraint);
-				this._beg = new zk.fmt.Calendar(undefined, this._localizedSymbols).parseDate(constraint.substring(7, j), format, undefined, undefined, undefined, tz);
-				this._end = new zk.fmt.Calendar(undefined, this._localizedSymbols).parseDate(constraint.substring(j + 3, j + 3 + len), format, undefined, undefined, undefined, tz);
-				if (this._beg!.getTime() > this._end!.getTime()) {
-					var d = this._beg;
-					this._beg = this._end;
-					this._end = d;
-				}
-				this._beg!.setHours(0, 0, 0, 0);
-				this._end!.setHours(0, 0, 0, 0);
+				const dates = this._parseBetweenDates(constraint, format, len, tz);
+				this._beg = dates[0];
+				this._end = dates[1];
 			} else if (constraint.startsWith('before_') || constraint.startsWith('after_')) {
 				continue; //Constraint start with 'before_' and 'after_' means errorbox position, skip it
 			} else if (constraint.startsWith('before')) {
@@ -847,11 +838,40 @@ export class Calendar extends zul.Widget {
 				this._beg = new zk.fmt.Calendar(undefined, this._localizedSymbols).parseDate(constraint.substring(5, 5 + len), format, undefined, undefined, undefined, tz);
 				this._beg!.setHours(0, 0, 0, 0);
 			} else if (constraint.startsWith('not')) {
-				const disabled = new zk.fmt.Calendar(undefined, this._localizedSymbols).parseDate(constraint.substring(3, 3 + len), format, undefined, undefined, undefined, tz);
-				disabled!.setHours(0, 0, 0, 0);
-				this._disabledDates.push(disabled!);
+				if (constraint.startsWith('not between')) {
+					const dates = this._parseBetweenDates(constraint, format, len, tz);
+					let disabled = dates[0];
+					this._disabledDates.push(disabled);
+					while (disabled.getTime() != dates[1].getTime()) {
+						disabled = Dates.newInstance(disabled.getTime() + 86400 * 1000);
+						this._disabledDates.push(disabled);
+					}
+				} else {
+					const disabled = new zk.fmt.Calendar(undefined, this._localizedSymbols).parseDate(constraint.substring(3, 3 + len), format, undefined, undefined, undefined, tz);
+					disabled!.setHours(0, 0, 0, 0);
+					this._disabledDates.push(disabled!);
+				}
 			}
 		}
+	}
+	
+	/** @internal */
+	_parseBetweenDates(constraint: string, format: string, len: number, tz: string | undefined): DateImpl[] {
+		let j = constraint.indexOf('and', 7);
+		if (j < 0 && zk.debugJS) {
+			zk.error('Unknown constraint: ' + constraint);
+		}
+		let datesStrIndex = constraint.indexOf('between') + 7,
+			beg = new zk.fmt.Calendar(undefined, this._localizedSymbols).parseDate(constraint.substring(datesStrIndex, j), format, undefined, undefined, undefined, tz),
+			end = new zk.fmt.Calendar(undefined, this._localizedSymbols).parseDate(constraint.substring(j + 3, j + 3 + len), format, undefined, undefined, undefined, tz);
+		if (beg!.getTime() > end!.getTime()) {
+			const d = beg;
+			beg = end;
+			end = d;
+		}
+		beg!.setHours(0, 0, 0, 0);
+		end!.setHours(0, 0, 0, 0);
+		return [beg!, end!];
 	}
 
 	/**

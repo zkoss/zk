@@ -46,8 +46,8 @@ public class EmbeddedCorsFilter implements Filter {
 		res.addHeader("Access-Control-Allow-Origin", "http://localhost:9000");
 		res.addHeader("Access-Control-Allow-Credentials", "true");
 		res.addHeader("Access-Control-Allow-Methods", "GET, OPTIONS, HEAD, PUT, POST");
-		res.addHeader("Access-Control-Allow-Headers", "ZK-SID,ZK-Error");
-		res.addHeader("Access-Control-Expose-Headers", "ZK-SID,ZK-Error");
+		res.addHeader("Access-Control-Allow-Headers", "ZK-SID,ZK-Error,ZK-Comet-Error,ZK-Comet");
+		res.addHeader("Access-Control-Expose-Headers", "ZK-SID,ZK-Error,ZK-Comet-Error,ZK-Comet");
 		// For HTTP OPTIONS, reply with ACCEPTED status code.
 		if (request.getMethod().equals("OPTIONS")) {
 			res.setStatus(HttpServletResponse.SC_ACCEPTED);
