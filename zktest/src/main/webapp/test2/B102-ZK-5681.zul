@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B102-ZK-5681.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Mon May 05 15:35:02 CST 2025, Created by cherrylee
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns:h="native">
+	<div viewModel="@id('vm')@init('org.zkoss.zktest.test2.B102_ZK_5681_VM')">
+		<button label="create tree" onClick="@command('create')"/>
+		<apply template="@load(vm.template)"/>
+	</div>
+
+	<template name="groupbox">
+		<groupbox open="@load(vm.open)" title="groupbox" onCreate='Events.echoEvent("onAfterRender", self, null)' onAfterRender="@command('open')">
+			<apply template="tree"/>
+		</groupbox>
+	</template>
+	<template name="tree">
+		<tree id="tree" rows="5" renderdefer="1000" model="@init(vm.treeModel)">
+			<treecols sizable="true">
+			</treecols>
+			<treefoot>
+				<treefooter label="Count"/>
+				<treefooter label="Summary"/>
+			</treefoot>
+		</tree>
+	</template>
+</zk>
