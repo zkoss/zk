@@ -76,6 +76,7 @@ ZK 10.2.0
   ZK-5806: an autodisable button doesn't open a popup
   ZK-5752: Uploader._onload doesn't show an error message
   ZK-5904: Unexpected exception when using c:cat in @command
+  ZK-5805: Ancestor CtrlKeys takes priority over menupopup up/down navigation if menuitem holds onOK listener
 
 * Upgrade Notes
   + Remove the Fragment component from the zkmax.jar and use the new Client MVVM  (client-bind.jar) library instead.
