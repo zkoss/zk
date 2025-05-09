@@ -13,6 +13,11 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 
 -->
 <zk xmlns:ca="client/attribute">
+    <script><![CDATA[
+        zk.afterMount(function() {
+            zk.TDYS = 1900;
+        });
+    ]]></script>
     <label multiline="true">
         1. Open datebox to choose Jan 1st, 1900
         2. Open datebox again

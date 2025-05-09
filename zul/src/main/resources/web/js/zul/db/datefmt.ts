@@ -360,13 +360,12 @@ var DateFmt = {
 
 						if (!isNaN(nv = _parseInt(token))) {
 							var newY = Math.min(nv, 200000); // Bug B50-3288904: js year limit
-							if (newY < 100 && newY === (y + ydelta) % 100) break; // assume yy is not modified
 							if (ydelta === 0 && newY < 100) { // only handle twoDigitYearStart with ISO calendar for now
 								// ZK-4235: Datefmt parseDate always return date between 1930-2029 when using yy format
 								var twoDigitYearStart = zk.TDYS,
 									lowerBoundary = (Math.floor(twoDigitYearStart / 100) * 100) + newY,
 									upperBoundary = lowerBoundary + 100;
-								y = lowerBoundary > twoDigitYearStart ? lowerBoundary : upperBoundary;
+								y = lowerBoundary >= twoDigitYearStart ? lowerBoundary : upperBoundary;
 							} else {
 								if (cc == 'y') {
 									if (era)
