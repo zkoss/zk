@@ -465,7 +465,7 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 		}
 
 		final Tracker tracker = getTracker();
-		final Set<LoadBinding> bindings = tracker.getLoadBindings(base, prop);
+		final Set<LoadBinding> bindings = tracker.getDirectLoadBindings(base, prop); // only direct, later will do kid bases
 		final BindingExecutionInfoCollector collector = getBindingExecutionInfoCollector();
 		try {
 			if (collector != null) {
@@ -473,6 +473,12 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 				collector.addInfo(new NotifyChangeInfo(_rootComp, base, prop, "Size=" + bindings.size()));
 			}
 			doPropertyChange0(base, prop, bindings);
+			// kid bases bindings
+			Set<LoadBinding> afterBindings = tracker.getKidBaseLoadBindings(base, prop);
+			Set<LoadBinding> intersection = new HashSet<>(afterBindings);
+			intersection.retainAll(bindings);
+			afterBindings.removeAll(intersection);
+			doPropertyChange0(base, prop, afterBindings);
 		} catch (Exception ex) {
 			_log.error("doPropertyChange: base=[{}],prop=[{}]", base, prop, ex);
 			throw ex;

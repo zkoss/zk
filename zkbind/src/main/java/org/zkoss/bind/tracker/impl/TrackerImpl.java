@@ -241,9 +241,26 @@ public class TrackerImpl implements Tracker, Serializable {
 
 	public Set<LoadBinding> getLoadBindings(Object base, String prop) {
 		final LinkedHashSet<LoadBinding> bindings = new LinkedHashSet<LoadBinding>();
+		final LinkedHashSet<LoadBinding> kidBaseBindings = new LinkedHashSet<LoadBinding>();
 		final Set<TrackerNode> visited = new LinkedHashSet<TrackerNode>();
-		collectLoadBindings(base, prop, bindings, visited);
+		collectLoadBindings(base, prop, bindings, kidBaseBindings, visited);
+		bindings.addAll(kidBaseBindings);
 		return bindings;
+	}
+
+	public Set<LoadBinding> getDirectLoadBindings(Object base, String prop) {
+		final LinkedHashSet<LoadBinding> bindings = new LinkedHashSet<LoadBinding>();
+		final Set<TrackerNode> visited = new LinkedHashSet<TrackerNode>();
+		collectLoadBindings(base, prop, bindings, null, visited);
+		return bindings;
+	}
+
+	public Set<LoadBinding> getKidBaseLoadBindings(Object base, String prop) {
+		final LinkedHashSet<LoadBinding> bindings = new LinkedHashSet<LoadBinding>();
+		final LinkedHashSet<LoadBinding> kidBaseBindings = new LinkedHashSet<LoadBinding>();
+		final Set<TrackerNode> visited = new LinkedHashSet<TrackerNode>();
+		collectLoadBindings(base, prop, bindings, kidBaseBindings, visited);
+		return kidBaseBindings;
 	}
 
 	protected Collection<TrackerNode> getAllTrackerNodes() {
@@ -262,7 +279,7 @@ public class TrackerImpl implements Tracker, Serializable {
 	}
 
 	private void collectLoadBindings(Object base, String prop, LinkedHashSet<LoadBinding> bindings,
-			Set<TrackerNode> visited) {
+			 LinkedHashSet<LoadBinding> kidBindings, Set<TrackerNode> visited) {
 		final LinkedHashSet<Object> kidbases = new LinkedHashSet<Object>(); //collect kid as base bean
 		if (base != null) {
 			final Set<TrackerNode> nodes = getAllTrackerNodesByBean(base);
@@ -279,9 +296,10 @@ public class TrackerImpl implements Tracker, Serializable {
 				getNodesLoadBindings(basenodes, bindings, kidbases, visited);
 			}
 		}
-
-		for (Object kidbase : kidbases) {
-			collectLoadBindings(kidbase, "*", bindings, visited); //recursive, for kid base
+		if (kidBindings != null) {
+			for (Object kidbase : kidbases) {
+				collectLoadBindings(kidbase, "*", kidBindings, kidBindings, visited); //recursive, for kid base
+			}
 		}
 	}
 
@@ -473,7 +491,7 @@ public class TrackerImpl implements Tracker, Serializable {
 			refBinding.invalidateCache();
 			//ZK-950: The expression reference doesn't update while change the instant of the reference
 			//Have to load bindings that refer this ReferenceBinding as well
-			collectLoadBindings(refBinding, ".", bindings, visited); //recursive
+			collectLoadBindings(refBinding, ".", bindings, null, visited); //recursive
 		}
 
 		//bug #1: depends-on is not working in nested C->B->A when A changed

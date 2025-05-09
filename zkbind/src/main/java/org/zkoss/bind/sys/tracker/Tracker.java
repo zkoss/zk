@@ -74,4 +74,22 @@ public interface Tracker {
 	 */
 	public Set<LoadBinding> getLoadBindings(Object base, String propName);
 
+	/**
+	 * Returns all direct bindings that associated with the specified property.
+	 * @param base base object
+	 * @param propName property name
+	 * @return all direct LoadBindings that associated with the specified property.
+	 * @since 10.2.0
+	 */
+	public Set<LoadBinding> getDirectLoadBindings(Object base, String propName);
+
+	/**
+	 * Returns all bindings that associated with the kid bases of specified property.
+	 * @param base base object
+	 * @param propName property name
+	 * @return all bindings that associated with the kid bases of specified property.
+	 * @since 10.2.0
+	 */
+	public Set<LoadBinding> getKidBaseLoadBindings(Object base, String propName);
+
 }
