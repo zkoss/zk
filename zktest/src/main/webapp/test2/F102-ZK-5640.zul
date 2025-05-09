@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F102-ZK-5640.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Tue Apr 29 15:56:08 CST 2025, Created by jamson
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label multiline="true">
+        see the server log
+        if JDK time zone date version is different from moment.js's, server should log warning
+        if they are the same, server shouldn't log anything about it
+    </label>
+</zk>
