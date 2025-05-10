@@ -20,6 +20,7 @@ import java.io.Reader;
 import java.io.Writer;
 import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
+import java.time.zone.ZoneRulesProvider;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.Locale;
@@ -37,6 +38,8 @@ import org.slf4j.LoggerFactory;
 
 import org.zkoss.idom.Document;
 import org.zkoss.io.Files;
+import org.zkoss.json.JSONObject;
+import org.zkoss.json.parser.JSONParser;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
@@ -137,12 +140,28 @@ public class Wpds {
 				byte[] bytes = Files.readAll(is);
 				if (bytes.length > 0) {
 					result.append("var tzdata =");
-					result.append(new String(bytes, "UTF-8"));
+					// ZK-5640
+					String jsonFileContent = new String(bytes, "UTF-8");
+					JSONObject json = (JSONObject) new JSONParser().parse(jsonFileContent);
+					if (json.get("version") != null) {
+						Library.setProperty("org.zkoss.zk.moment.timezone.data.version", json.get("version").toString());
+					}
+					result.append(jsonFileContent);
 					result.append("; zk.mm.tz.load(tzdata);");
 				}
 			} finally {
 				Files.close(is);
 			}
+		}
+		// ZK-5640
+		String jsVersion = Library.getProperty("org.zkoss.zk.moment.timezone.data.version"),
+				javaVersion = ZoneRulesProvider.getVersions("UTC").lastEntry().getKey();
+		if (!jsVersion.equals(javaVersion)) {
+			log.warn("Time zone data version mismatch detected:\n"
+					+ " - Client (moment.js) tzdb version: " + jsVersion + "\n"
+					+ " - Server (JDK) tzdb version: " + javaVersion + "\n"
+					+ "Date and time values may be incorrect if time zone rules differ.\n"
+					+ "To resolve, update the moment-timezone data on the client and/or the JDK time zone data (TZUpdater or Java update) on the server so both use the same version.");
 		}
 		return result.toString();
 	}

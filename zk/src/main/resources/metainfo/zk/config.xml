@@ -77,4 +77,10 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
         <name>org.zkoss.zk.ui.impl.UiEngineImpl.extension</name>
         <value>org.zkoss.zk.ui.impl.UiEngineExtension</value>
     </library-property>
+
+	<!-- ZK-5640 -->
+	<library-property>
+		<name>org.zkoss.zk.moment.timezone.data.version</name>
+		<value>2025b</value>
+	</library-property>
 </config>

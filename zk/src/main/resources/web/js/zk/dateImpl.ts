@@ -18,9 +18,7 @@ export namespace dateImpl_global {
 	export const Dates = {
 		newInstance(param?: number | DateImpl | Parameters<DateConstructor['UTC']>, tz?: string): DateImpl {
 			let m: Moment;
-			if (tz)
-				tz = parseTzId(tz);
-			else
+			if (!tz)
 				tz = zk.mm.tz.guess();
 			if (arguments.length == 0) {
 				m = zk.mm();
@@ -33,7 +31,7 @@ export namespace dateImpl_global {
 				var d = new Date(Date.UTC(...param));
 				if (param[0] < 100) d.setUTCFullYear(param[0]); //ZK-4292: incorrect year when the year is less than 100
 				m = zk.mm.tz([d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(),
-					d.getUTCHours(), d.getUTCMinutes(), d.getUTCSeconds(), d.getUTCMilliseconds()], tz);
+					d.getUTCHours(), d.getUTCMinutes(), d.getUTCSeconds(), d.getUTCMilliseconds()], parseTzId(tz));
 			}
 			// Each possible type of `m` are covered by the `if-else` sequence of.
 			return new DateImpl(m!, tz);
@@ -45,12 +43,21 @@ export namespace dateImpl_global {
 		_moment: Moment;
 		/** @internal */
 		_timezone: string;
+		/**
+		 * For GMT non-whole-hour timezone offset,
+		 * @internal
+		 */
+		_offsetted?: boolean;
 		constructor(m: Moment, tz: string) {
 			this._moment = m;
-			this._timezone = tz;
+			this._timezone = parseTzId(tz);
+			this._offsetIfNonWholeHour(tz, false);
 		}
 		tz(v?: string): this {
-			if (v) this._timezone = parseTzId(v);
+			if (v) {
+				this._timezone = parseTzId(v);
+				this._offsetIfNonWholeHour(v, true); // from set
+			}
 			return this;
 		}
 		/** @internal */
@@ -228,16 +235,90 @@ export namespace dateImpl_global {
 		toJSON(key: never): string {
 			return '';
 		}
+		/** @internal */
+		_offsetIfNonWholeHour(id: string, keepLocalTime: boolean): void {
+			if (gmtRegex.nonWholeHour.test(id)) {
+				const sign = id.charAt(3) === '+' ? '-' : '+',
+					offset = sign + id.substring(4);
+				if (this._moment.utcOffset() !== 0)
+					this._offsetted = true;
+				if (!this._offsetted) {
+					this._offsetted = true;
+					this._moment.utcOffset(offset, keepLocalTime);
+				}
+			}
+		}
 	}
 }
 
+/**
+ * Old Java timezone to IANA timezone mapping.
+ * These timezones will be accepted in Java and passed to client side,
+ * so we need to convert them to IANA timezone.
+ */
+const oldJavaTimeZoneToIANAMap = new Map<string, string>([
+	// Java old mappings
+	['ACT', 'Australia/Darwin'],
+	['AET', 'Australia/Sydney'],
+	['AGT', 'America/Argentina/Buenos_Aires'],
+	['ART', 'Africa/Cairo'],
+	['AST', 'America/Anchorage'],
+	['BET', 'America/Sao_Paulo'],
+	['BST', 'Asia/Dhaka'],
+	['CAT', 'Africa/Harare'],
+	['CNT', 'America/St_Johns'],
+	['CST', 'America/Chicago'],
+	['CTT', 'Asia/Shanghai'],
+	['EAT', 'Africa/Addis_Ababa'],
+	['ECT', 'Europe/Paris'],
+	['IET', 'America/Indiana/Indianapolis'],
+	['IST', 'Asia/Kolkata'],
+	['JST', 'Asia/Tokyo'],
+	['MIT', 'Pacific/Apia'],
+	['NET', 'Asia/Yerevan'],
+	['NST', 'Pacific/Auckland'],
+	['PLT', 'Asia/Karachi'],
+	['PNT', 'America/Phoenix'],
+	['PRT', 'America/Puerto_Rico'],
+	['PST', 'America/Los_Angeles'],
+	['SST', 'Pacific/Guadalcanal'],
+	['VST', 'Asia/Ho_Chi_Minh'],
+	// Java SystemV mappings
+	['SystemV/AST4', 'America/Puerto_Rico'],
+	['SystemV/AST4ADT', 'America/Puerto_Rico'],
+	['SystemV/EST5', 'America/New_York'],
+	['SystemV/EST5EDT', 'America/New_York'],
+	['SystemV/CST6', 'America/Chicago'],
+	['SystemV/CST6CDT', 'America/Chicago'],
+	['SystemV/MST7', 'America/Denver'],
+	['SystemV/MST7MDT', 'America/Denver'],
+	['SystemV/PST8', 'America/Los_Angeles'],
+	['SystemV/PST8PDT', 'America/Los_Angeles'],
+	['SystemV/YST9', 'America/Anchorage'],
+	['SystemV/YST9YDT', 'America/Anchorage'],
+	['SystemV/HST10', 'Pacific/Honolulu'],
+]),
+/**
+ * Regex to check if the timezone is GMT with whole hour offset.
+ */
+gmtRegex = {
+	wholeHourPositive: /^GMT\+([0]\d|[1][0-2]):[0]{2}$/i,
+	wholeHourNegative: /^GMT-([0]\d|[1][0-4]):[0]{2}$/i,
+	nonWholeHour: /^GMT([+-])(\d{2}):(?!00$)(\d{2})$/i
+};
+
 function parseTzId(id: string): string {
-	if (/^GMT\+([0]\d|[1][0-2]):[0]{2}$/i.test(id)) {
+	if (oldJavaTimeZoneToIANAMap.has(id))
+		return oldJavaTimeZoneToIANAMap.get(id)!;
+	if (gmtRegex.wholeHourPositive.test(id)) {
 		return 'Etc/GMT-' + parseInt(id.substring(4, 6));
-	} else if (/^GMT-([0]\d|[1][0-4]):[0]{2}$/i.test(id)) {
+	} else if (gmtRegex.wholeHourNegative.test(id)) {
 		return 'Etc/GMT+' + parseInt(id.substring(4, 6));
+	} else if (gmtRegex.nonWholeHour.test(id)) {
+		return 'UTC'; // non-whole-hour GMT case, return UTC and set utcOffset() later
 	} else {
 		return id;
 	}
 }
+
 zk.copy(window, dateImpl_global);
