@@ -1114,7 +1114,7 @@ public class Combobox extends Textbox {
 			syncSelectionToModel();
 			//ZK-1987: Combobox item selection rely items label string
 			String val = _lastCkVal;
-			if (oldSel != null && !oldSel.equals(_selItem) && oldSel.getLabel().equals(val))
+			if (_selItem != null && oldSel != null && !oldSel.equals(_selItem) && oldSel.getLabel().equals(val))
 				Events.postEvent(new InputEvent(Events.ON_CHANGE, this, val, val));
 			Events.postEvent(evt);
 		} else if (cmd.equals(Events.ON_CHANGE)) {
