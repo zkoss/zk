@@ -100,6 +100,7 @@ ZK 10.2.0
   ZK-5699: local dependent resource fails to load in ZK 10, causes exception
   ZK-5910: migrate zk calendar attribute name from onEvent* to onItem* in XSD
   ZK-5901: uncheck a toolbarbutton looks no differences from checked toolbarbutton
+  ZK-5828: combobox invokes onChange listener twice when clearing its value
 
 * Upgrade Notes
   + Remove the Fragment component from the zkmax.jar and use the new Client MVVM  (client-bind.jar) library instead.
