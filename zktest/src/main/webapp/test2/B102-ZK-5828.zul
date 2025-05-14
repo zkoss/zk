@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B102-ZK-5828.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Wed May 14 11:51:14 CST 2025, Created by jameschu
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:h="native">
+	<zscript><![CDATA[
+ListModelList model = new ListModelList(Locale.getAvailableLocales());
+    ]]></zscript>
+	<h:pre>
+		1. select 1st item
+		2. clear the value with backspace
+		3. click outside from the combobox or pressing Tab key
+		4. should only see
+	</h:pre>
+	onChange
+	<combobox model="${model}" onChange='Clients.log("onChange# " + self.uuid + " : " + self.value)'/>
+	<h:br/>
+	onSelect
+	<combobox model="${model}" onSelect='Clients.log("onSelect# " + self.uuid + " : " + self.value)'/>
+</zk>
