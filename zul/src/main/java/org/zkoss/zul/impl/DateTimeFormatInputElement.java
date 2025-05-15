@@ -23,6 +23,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.TimeZone;
+import java.util.regex.Pattern;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.util.Locales;
@@ -94,7 +95,7 @@ public abstract class DateTimeFormatInputElement extends FormatInputElement {
 			Constraint cst = getConstraint();
 			if (cst instanceof AbstractSimpleDateTimeConstraint)
 				((AbstractSimpleDateTimeConstraint) cst).setTimeZone(_tzone);
-			smartUpdate("timeZone", _tzone.getID());
+			smartUpdate("timeZone", getFormattedTimeZone());
 			smartUpdate("_value", marshall(_value));
 		}
 	}
@@ -288,7 +289,7 @@ public abstract class DateTimeFormatInputElement extends FormatInputElement {
 	protected void renderProperties(ContentRenderer renderer) throws IOException {
 		super.renderProperties(renderer);
 		if (_tzone != null)
-			renderer.render("timeZone", _tzone.getID());
+			renderer.render("timeZone", getFormattedTimeZone());
 	}
 
 	private static Map<String, PropertyAccess> _properties = new HashMap<>(5);
@@ -382,5 +383,70 @@ public abstract class DateTimeFormatInputElement extends FormatInputElement {
 		if (pa != null)
 			return pa;
 		return super.getPropertyAccess(prop);
+	}
+
+	private static final Map<String, String> _javaSystemVOldTimeZoneMappings = new HashMap<>(Map.ofEntries(
+		Map.entry("SystemV/AST4", "America/Puerto_Rico"),
+		Map.entry("SystemV/AST4ADT", "America/Puerto_Rico"),
+		Map.entry("SystemV/EST5", "America/New_York"),
+		Map.entry("SystemV/EST5EDT", "America/New_York"),
+		Map.entry("SystemV/CST6", "America/Chicago"),
+		Map.entry("SystemV/CST6CDT", "America/Chicago"),
+		Map.entry("SystemV/MST7", "America/Denver"),
+		Map.entry("SystemV/MST7MDT", "America/Denver"),
+		Map.entry("SystemV/PST8", "America/Los_Angeles"),
+		Map.entry("SystemV/PST8PDT", "America/Los_Angeles"),
+		Map.entry("SystemV/YST9", "America/Anchorage"),
+		Map.entry("SystemV/YST9YDT", "America/Anchorage"),
+		Map.entry("SystemV/HST10", "Pacific/Honolulu")
+	));
+	private static final Pattern _gmtWholeHourPositive = Pattern.compile("^GMT\\+(0\\d|1[0-2]):00$", Pattern.CASE_INSENSITIVE);
+	private static final Pattern _gmtWholeHourNegative = Pattern.compile("^GMT-(0\\d|1[0-4]):00$", Pattern.CASE_INSENSITIVE);
+
+	/**
+	 * Returns the formatted timezone ID,
+	 * convert the timezone IDs for moment.js recognized format.
+	 * <p>
+	 * There are 3 cases we need to handle here, and 1 case will be handled at client side:
+	 * <ol>
+	 *     <li>
+	 *         Java old mappings (refer from sun.util.calendar.ZoneInfoFile.java#oldMappings).
+	 *         <p>
+	 *         Instead of TimeZone.getID(), TimeZone.toZoneId().getId() can get the mapped IANA timezone of Java old mappings,
+	 *         can solve cases below (refer from sun.util.calendar.ZoneInfoFile.java#oldMappings):
+	 *         <pre>
+	 *             "ACT"  "AET"  "AGT"  "ART"  "AST"
+	 *             "BET"  "BST"  "CAT"  "CNT"  "CST"
+	 *             "CTT"  "EAT"  "ECT"  "IET"  "IST"
+	 *             "JST"  "MIT"  "NET"  "NST"  "PLT"
+	 *             "PNT"  "PRT"  "PST"  "SST"  "VST"
+	 *         </pre>
+	 *     </li>
+	 *     <li>
+	 *         Java old timezones "SystemV/*", the old timezone ID is mapped to the IANA timezone ID 
+	 *         by {@link DateTimeFormatInputElement#_javaSystemVOldTimeZoneMappings}.
+	 *     </li>
+	 *     <li>
+	 *         Java GMT whole hour offset timezones "GMT+xx:00" and "GMT-xx:00", it should be converted 
+	 *         to "Etc/GMT+x" and "Etc/GMT-x".
+	 *     </li>
+	 *     <li>
+	 *         Java GMT non-whole hour offset timezones, will be handled at client side.
+	 *     </li>
+	 *     <li>
+	 *         For other cases, the timezone ID is already recognized by moment.js.
+	 *     </li>
+	 * </ol>
+	 */
+	private String getFormattedTimeZone() {
+		String zoneID = _tzone.toZoneId().getId();
+		if (_javaSystemVOldTimeZoneMappings.containsKey(zoneID)) {
+			zoneID = _javaSystemVOldTimeZoneMappings.get(zoneID);
+		} else if (_gmtWholeHourPositive.matcher(zoneID).matches()) {
+			zoneID = "Etc/GMT-" + Integer.parseInt(zoneID.substring(4, 6));
+		} else if (_gmtWholeHourNegative.matcher(zoneID).matches()) {
+			zoneID = "Etc/GMT+" + Integer.parseInt(zoneID.substring(4, 6));
+		}
+		return zoneID;
 	}
 }

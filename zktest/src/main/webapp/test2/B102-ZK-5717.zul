@@ -1,0 +1,40 @@
+<!--
+B102-ZK-5717.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Fri May 09 09:55:12 CST 2025, Created by jameschu
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div>
+		click to open tree item and no error
+		<tree id="myTree" height="800px">
+			<template name="model">
+				<treeitem>
+					<treerow>
+						<treecell>
+							<checkbox></checkbox>
+							<label value="${each}"></label>
+						</treecell>
+					</treerow>
+				</treeitem>
+			</template>
+		</tree>
+	</div>
+	<zscript><![CDATA[
+		DefaultTreeNode root = new DefaultTreeNode("root", Collections.emptyList());
+		TreeModel treeModel = new DefaultTreeModel(root);
+		TreeNode firstLevelNode = new DefaultTreeNode("level 1", Collections.emptyList());
+		root.add(firstLevelNode);
+		treeModel.removeOpenObject(firstLevelNode);
+		for (int i = 0; i < 10; i++) {
+			firstLevelNode.add(new DefaultTreeNode("child"+i));
+		}
+		myTree.setModel(treeModel);
+	]]></zscript>
+</zk>

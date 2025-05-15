@@ -1176,7 +1176,17 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 				if (direction == Direction.FIRST) {
 					// fix ListModelTest issue
 					if (se.hasAttribute(FOREACH_IN_RENDER)) {
+						// ZK-5954, ZK-5955
+						// if shadow ancestor's first insertion is the same as self's, should update them as will
+						// should update shadow ancestors' first insertion if first insertion is the same as self's
+						old = se._firstInsertion;
 						se._firstInsertion = target;
+						Component ancestor = se.getParent();
+						while (ancestor instanceof HtmlShadowElement
+								&& asShadow(ancestor)._firstInsertion == old) {
+							asShadow(ancestor)._firstInsertion = target;
+							ancestor = ancestor.getParent();
+						}
 					} else {
 						// update previous sibling
 						old = se._previousInsertion;

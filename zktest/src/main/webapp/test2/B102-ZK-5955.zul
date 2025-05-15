@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B102-ZK-5955.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Wed May 14 00:27:54 CST 2025, Created by jamson
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label multiline="true">
+        1. click 
+        2. click "1) move second to top" button
+        3. click "2) move third to second" button
+        4. should see NO error and the page should show the content the same as below:
+        
+        b
+        c
+        a
+    </label>
+    <zscript><![CDATA[
+    ListModelList model = new ListModelList(List.of("a", "b", "c"));
+    ]]></zscript>
+    <button label="1) move second to top" onClick='String removed = model.remove(1); model.add(0, removed);'/>
+    <button label="2) move third to second" onClick='String removed = model.remove(2); model.add(1, removed);'/>
+    <div apply="org.zkoss.bind.BindComposer" id="container">
+        <if test="@init(true)">
+            <forEach items="@init(model)" var="item">
+                <div>
+                    <label value="@init(item)"/>
+                </div>
+            </forEach>
+        </if>
+    </div>
+</zk>
