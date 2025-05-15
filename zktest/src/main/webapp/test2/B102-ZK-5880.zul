@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B102-ZK-5880.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Tue Apr 29 10:55:43 CST 2025, Created by jameschu
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<window border="normal" title="hello">
+		<label> click buttons, those file shall be able to download</label>
+		<separator />
+		<button label="download中文" onClick='Filedownload.save("/test2/B102-ZK-5880中文.pdf", "application/pdf");'></button>
+<!--		<button label="download file name with space" onClick='Filedownload.save("/test2/B102-ZK-5880- s.pdf", "application/pdf");'></button>-->
+		<button label="download" onClick='Filedownload.save("/test2/B102-ZK-5880.pdf", "application/pdf");'></button>
+		<separator />
+		<button label="download中文 (input stream)">
+			<attribute name="onClick">{
+				java.io.InputStream is = desktop.getWebApp().getResourceAsStream("/test2/B102-ZK-5880中文.pdf");
+				if (is != null)
+				Filedownload.save(is, "application/pdf", "B102-ZK-5880中文.pdf");
+				else
+				alert("/test2/B102-ZK-5880中文.pdf not found");
+			}</attribute>
+		</button>
+<!--		<button label="download file name with space (input stream)">-->
+<!--			<attribute name="onClick">{-->
+<!--				java.io.InputStream is = desktop.getWebApp().getResourceAsStream("/test2/B102-ZK-5880- s.pdf");-->
+<!--				if (is != null)-->
+<!--				Filedownload.save(is, "application/pdf", "B102-ZK-5880- s.pdf");-->
+<!--				else-->
+<!--				alert("/test2/B102-ZK-5880- s.pdf not found");-->
+<!--				}</attribute>-->
+<!--		</button>-->
+		<button label="download (input stream)">
+			<attribute name="onClick">{
+				java.io.InputStream is = desktop.getWebApp().getResourceAsStream("/test2/B102-ZK-5880.pdf");
+				if (is != null)
+				Filedownload.save(is, "application/pdf", "B102-ZK-5880.pdf");
+				else
+				alert("/test2/B102-ZK-5880.pdf not found");
+				}</attribute>
+		</button>
+	</window>
+</zk>
