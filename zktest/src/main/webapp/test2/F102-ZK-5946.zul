@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F102-ZK-5946.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Thu May 08 17:50:57 CST 2025, Created by jamson
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label multiline="true">
+        Below is a datebox, button and a textbox.
+        button -> set datebox to '2024/01/01 00:00:00'
+        textbox -> input a timezone and press `ENTER` to apply to java, the label below it will update the java timezone status
+        [NOTE: although the java timezone applied successfully, but to trigger client side timezone change, you have to RELOAD the page]
+        
+        There are several timezone to test, including:
+        (a) Java old mappings
+        "ACT", "AET", "AGT", "ART", "AST"
+        "BET", "BST", "CAT", "CNT", "CST"
+        "CTT", "EAT", "ECT", "IET", "IST"
+        "JST", "MIT", "NET", "NST", "PLT"
+        "PNT", "PRT", "PST", "SST", "VST"
+        
+        (b) Java SystemV mappings
+        "SystemV/AST4", "SystemV/AST4ADT"
+        "SystemV/EST5", "SystemV/EST5EDT"
+        "SystemV/CST6", "SystemV/CST6CDT"
+        "SystemV/MST7", "SystemV/MST7MDT"
+        "SystemV/PST8", "SystemV/PST8PDT"
+        "SystemV/YST9", "SystemV/YST9YDT"
+        "SystemV/HST10"
+        
+        (c) None whole hour GMT offset
+        "GMT+00:15", "GMT+05:30", "GMT+6:45", "GMT+11:59"
+        "GMT-01:15", "GMT-08:30", "GMT-11:45", "GMT-13:59"
+        
+        Test all of (a) (b) (a) one by one, follow the Steps:
+        1. input one of a timezone in (a) (b) (c) in the textbox and press `ENTER` to apply to java
+        2. reload the page to apply the timezone change from java to client side
+        3. click button to set the date
+        4. the date should be "2024/01/01 00:00:00"
+        5. check browser devtool's console, we should NOT see any moment.js error "Moment Timezone has no data for ..."
+        (if 4 and 5 are correct, means this timezone apply to client side correctly)
+        
+    </label>
+
+    <zscript><![CDATA[
+    import java.time.*;
+    public void setDate(){
+        dateBox.setValueInLocalDate(LocalDate.of(2024, 1, 1));
+    }
+    public void setTimeZone() {
+        System.setProperty("user.timezone", textbox.getValue());
+        TimeZone.setDefault(null);
+        javaUserTimeZone.setValue(System.getProperty("user.timezone"));
+        javaTimeZoneID.setValue(TimeZone.getDefault().getID());
+    }
+    ]]></zscript>
+    
+    <datebox id="dateBox" width="300px" format="yyyy/MM/dd HH:mm:ss"/>
+    <separator/>
+    <button id="setDateBtn" label="set date to 2024/01/01 00:00:00" onClick="setDate()"/>
+    <separator/>
+    set java timezone: <textbox id="textbox" onOK="setTimeZone()"/>
+    <separator/>
+    current java System.getProperty("user.timezone"): <label id="javaUserTimeZone" value='${System.getProperty("user.timezone")}'/>
+    <separator/>
+    current java TimeZone actual ID: <label id="javaTimeZoneID" value="${TimeZone.getDefault().getID()}"/>
+    
+
+</zk>
