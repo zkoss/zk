@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B102-ZK-5887.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Wed May 14 10:15:04 CST 2025, Created by jamson
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label multiline="true">
+        1. click 'add' button in row 2 -> appends an item in row 3
+        2. click 'add' button in row 1 -> inserts an item in row 2
+        3. click 'refresh', shouldn't see any error
+    </label>
+    <div viewModel="@id('vm') @init('org.zkoss.zktest.test2.B102_ZK_5887_VM')">
+
+        <button label="refresh list" onClick="@command('refresh')"/>
+
+        <apply itemsVMParam="@load(vm.itemListVM)">
+            <div viewModel="@id('itemsVM') @init(itemsVMParam)">
+                <forEach items="@init(itemsVM.nestedItems)">
+                    <div>
+                        <apply template="@bind(each.type)"/>
+                        <button label="add" onClick="@command('addNew', target=each)"/>
+                    </div>
+                </forEach>
+            </div>
+        </apply>
+
+        <template name="simple">
+            <span>
+                ${each.id} SIMPLE NO VM
+            </span>
+        </template>
+
+        <template name="complex">
+            <!-- can be any VM, just apply="org.zkoss.bind.BindComposer" is enough to cause the error -->
+            <span viewModel="@id('vm') @init('java.lang.Object')">
+                ${each.id} COMPLEX WITH VM
+            </span>
+        </template>
+    </div>
+</zk>
