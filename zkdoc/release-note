@@ -81,6 +81,7 @@ ZK 10.2.0
   ZK-5904: Unexpected exception when using c:cat in @command
   ZK-5681: open a groupbox causes js error because of renderdefer
   ZK-5805: Ancestor CtrlKeys takes priority over menupopup up/down navigation if menuitem holds onOK listener
+  ZK-5846: Datebox with time format in mobile cause JS error in 10.0.0+
   ZK-5717: zephyr#66 causes tree row to be removed, causes errors while binding descendants
   ZK-5880: Unable to download file with Chinese file name in File download
 
