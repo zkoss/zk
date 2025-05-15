@@ -80,6 +80,7 @@ ZK 10.2.0
   ZK-5681: open a groupbox causes js error because of renderdefer
   ZK-5805: Ancestor CtrlKeys takes priority over menupopup up/down navigation if menuitem holds onOK listener
   ZK-5717: zephyr#66 causes tree row to be removed, causes errors while binding descendants
+  ZK-5880: Unable to download file with Chinese file name in File download
 
 * Upgrade Notes
   + Remove the Fragment component from the zkmax.jar and use the new Client MVVM  (client-bind.jar) library instead.
