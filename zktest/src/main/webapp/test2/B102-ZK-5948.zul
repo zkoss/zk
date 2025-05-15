@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B102-ZK-5948.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Tue May 13 15:27:14 CST 2025, Created by jamson
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label multiline="true">
+        1. click the button to move 'b' group to the start
+        2. you should see the result is the same as below, otherwise the bug still exists
+        b
+        --b--
+        a
+        --a--
+        c
+        --c--
+        d
+        --d--
+    </label>
+    <zscript><![CDATA[
+        ListModelList model = new ListModelList(List.of("a", "b", "c", "d"));
+    ]]></zscript>
+    <button label="move 'b' to the start" onClick='model.remove("b"); model.add(0, "b")'/>
+    <div id="container">
+        <forEach items="${model}">
+            <div>
+                <label value="${each}"/>
+            </div>
+            <div>
+                <label value="--${each}--"/>
+            </div>
+        </forEach>
+    </div>
+</zk>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F102-ZK-5191.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Fri May 09 12:11:52 CST 2025, Created by cherrylee
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<vlayout>
+		<label value="Textbox should support all input types defined by the MDN input documentation.">
+		</label>
+		<textbox></textbox>
+		<textbox type="password"></textbox>
+		<textbox type="tel"></textbox>
+		<textbox type="email"></textbox>
+		<textbox type="url"></textbox>
+		<textbox type="button"></textbox>
+		<textbox type="radio"></textbox>
+		<textbox type="search"></textbox>
+		<textbox type="date"></textbox>
+		<textbox type="checkbox"></textbox>
+		<textbox type="color"></textbox>
+		<textbox type="datetime-local"></textbox>
+		<textbox type="file"></textbox>
+		<textbox type="hidden"></textbox>
+		<textbox type="image"></textbox>
+		<textbox type="month"></textbox>
+		<textbox type="number"></textbox>
+		<textbox type="range"></textbox>
+		<textbox type="reset"></textbox>
+		<textbox type="submit"></textbox>
+		<textbox type="time"></textbox>
+		<textbox type="week"></textbox>
+	</vlayout>
+</zk>

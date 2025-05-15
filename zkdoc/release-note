@@ -29,6 +29,9 @@ ZK 10.2.0
   ZK-5932: Listheader's checkbox can show its focused state
   ZK-5933: Treecol's checkbox can show its focused state
   ZK-5945: Update moment-timezone-with-data.js (tzdata 2025b)
+  ZK-5640: Log server warning when JDK and moment.js time zone data versions differ
+  ZK-5946: Support additional conversion of Java user.timezone formats for moment.js
+  ZK-5191: Extend textbox type support
 
 * Bugs
   ZK-5728: ZK-5364 causes external radio to no longer be selected / checked
@@ -79,12 +82,15 @@ ZK 10.2.0
   ZK-5681: open a groupbox causes js error because of renderdefer
   ZK-5805: Ancestor CtrlKeys takes priority over menupopup up/down navigation if menuitem holds onOK listener
   ZK-5846: Datebox with time format in mobile cause JS error in 10.0.0+
+  ZK-5717: zephyr#66 causes tree row to be removed, causes errors while binding descendants
+  ZK-5880: Unable to download file with Chinese file name in File download
 
 * Upgrade Notes
   + Remove the Fragment component from the zkmax.jar and use the new Client MVVM  (client-bind.jar) library instead.
   + Revert the fix ZK-5079 to refix ZK-5261, which is a side effect of ZK-5079. However, the issue of ZK-5079 is disappeared in ZK 10.2.0.
   + Decimalbox, Intbox, Longbox, and Doublebox support the use of min and max constraints.
   + Move widget Signature from zkmax.wgt to zkmax.signature, Tbeditor from zkmax.inp to zkmax.tbeditor, Cropper from zkmax.med to zkmax.cropper, Goldenlayout from zkmax.layout to zkmax.goldenlayout
+  + Remove type restriction from Textbox, support all the types defined by the MDN <input> documentation
 
    --------
 ZK 10.1.0

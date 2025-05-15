@@ -94,9 +94,7 @@ public class Textbox extends InputElement {
 	 * onChanging is added. Since 6.5.0 type also support tel, email and url.
 	 */
 	public void setType(String type) throws WrongValueException {
-		if (!TEXT.equals(type) && !"password".equals(type) && !"tel".equals(type) && !"email".equals(type)
-				&& !"url".equals(type))
-			throw new WrongValueException("Illegal type: " + type);
+		// ZK-5191: Remove type restriction from Textbox.
 
 		if (!type.equals(_auxinf != null ? _auxinf.type : TEXT)) {
 			initAuxInfoForTextbox().type = type;
