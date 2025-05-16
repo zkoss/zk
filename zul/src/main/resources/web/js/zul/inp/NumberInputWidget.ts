@@ -121,7 +121,9 @@ export class NumberInputWidget<ValueType> extends zul.inp.FormatWidget<ValueType
 		//Bug ZK-3838: add a paste event dealer
 		var inp = this.getInputNode(),
 			val = (evt.domEvent!.originalEvent as ClipboardEvent).clipboardData!.getData('text').trim();
-		if (new RegExp('^[' + this.getAllowedKeys_().replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&') + ']+$').test(val))
+		// ZK-5848: After ZK-4261, numberInputElement doesn't check for disabled status before pasting content to input
+		if (!this.isDisabled() && !this.isReadonly() && !this._shallIgnore(evt, this.getAllowedKeys_())
+			&& new RegExp('^[' + this.getAllowedKeys_().replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&') + ']+$').test(val))
 			inp!.value = val;
 		evt.stop();
 		super.doPaste_(evt);
