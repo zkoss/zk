@@ -54,7 +54,7 @@ function _invoke2(wgt: zul.med.Audio, fn: 'pause' | 'play' | 'stop'): void {
 @zk.WrapClass('zul.med.Audio')
 export class Audio extends zul.Widget<HTMLAudioElement> {
 	/** @internal */
-	_src?: string;
+	_src?: string[];
 	/** @internal */
 	_autoplay?: boolean;
 	/** @internal */
@@ -72,14 +72,14 @@ export class Audio extends zul.Widget<HTMLAudioElement> {
 	 * @returns the src.
 	 * @defaultValue `null`.
 	 */
-	getSrc(): string | undefined {
+	getSrc(): string[] | undefined {
 		return this._src;
 	}
 
 	/**
 	 * Sets the src.
 	 */
-	setSrc(src: string, opts?: Record<string, boolean>): this {
+	setSrc(src: string[], opts?: Record<string, boolean>): this {
 		const o = this._src;
 		this._src = src;
 
@@ -91,12 +91,12 @@ export class Audio extends zul.Widget<HTMLAudioElement> {
 	}
 
 	// for stateless to treat as "src" attribute at client side
-	getContent(): string | undefined {
+	getContent(): string[] | undefined {
 		return this.getSrc();
 	}
 
 	// for stateless to treat as "src" attribute at client side
-	setContent(content: string, opts?: Record<string, boolean>): this {
+	setContent(content: string[], opts?: Record<string, boolean>): this {
 		return this.setSrc(content, opts);
 	}
 
