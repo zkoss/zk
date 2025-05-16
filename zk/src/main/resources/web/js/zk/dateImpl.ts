@@ -18,9 +18,7 @@ export namespace dateImpl_global {
 	export const Dates = {
 		newInstance(param?: number | DateImpl | Parameters<DateConstructor['UTC']>, tz?: string): DateImpl {
 			let m: Moment;
-			if (tz)
-				tz = parseTzId(tz);
-			else
+			if (!tz)
 				tz = zk.mm.tz.guess();
 			if (arguments.length == 0) {
 				m = zk.mm();
@@ -33,7 +31,7 @@ export namespace dateImpl_global {
 				var d = new Date(Date.UTC(...param));
 				if (param[0] < 100) d.setUTCFullYear(param[0]); //ZK-4292: incorrect year when the year is less than 100
 				m = zk.mm.tz([d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(),
-					d.getUTCHours(), d.getUTCMinutes(), d.getUTCSeconds(), d.getUTCMilliseconds()], tz);
+					d.getUTCHours(), d.getUTCMinutes(), d.getUTCSeconds(), d.getUTCMilliseconds()], parseTzId(tz));
 			}
 			// Each possible type of `m` are covered by the `if-else` sequence of.
 			return new DateImpl(m!, tz);
@@ -47,10 +45,14 @@ export namespace dateImpl_global {
 		_timezone: string;
 		constructor(m: Moment, tz: string) {
 			this._moment = m;
-			this._timezone = tz;
+			this._timezone = parseTzId(tz);
+			this._offsetIfNonWholeHour(tz, false);
 		}
 		tz(v?: string): this {
-			if (v) this._timezone = parseTzId(v);
+			if (v) {
+				this._timezone = parseTzId(v);
+				this._offsetIfNonWholeHour(v, true);
+			}
 			return this;
 		}
 		/** @internal */
@@ -228,16 +230,26 @@ export namespace dateImpl_global {
 		toJSON(key: never): string {
 			return '';
 		}
+		/** @internal */
+		_offsetIfNonWholeHour(id: string, keepLocalTime: boolean): void {
+			if (gmtNonWholeHour.test(id)) {
+				const sign = id.charAt(3) === '+' ? '-' : '+',
+					offset = sign + id.substring(4);
+				if (this._moment.utcOffset() === 0) // offset only if the utcOffset() is NOT set
+					this._moment.utcOffset(offset, keepLocalTime);
+			}
+		}
 	}
 }
 
+/**
+ * Regex to check if the timezone is GMT with whole hour offset.
+ */
+const gmtNonWholeHour = /^GMT([+-])(\d{2}):(?!00$)(\d{2})$/i;
+
 function parseTzId(id: string): string {
-	if (/^GMT\+([0]\d|[1][0-2]):[0]{2}$/i.test(id)) {
-		return 'Etc/GMT-' + parseInt(id.substring(4, 6));
-	} else if (/^GMT-([0]\d|[1][0-4]):[0]{2}$/i.test(id)) {
-		return 'Etc/GMT+' + parseInt(id.substring(4, 6));
-	} else {
-		return id;
-	}
+	// non-whole-hour GMT case, return UTC and set utcOffset() later
+	return gmtNonWholeHour.test(id) ? 'UTC' : id;
 }
+
 zk.copy(window, dateImpl_global);

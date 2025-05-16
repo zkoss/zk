@@ -14,16 +14,21 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 package org.zkoss.zk.ui.http;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
+import java.time.zone.ZoneRulesProvider;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
@@ -37,6 +42,8 @@ import org.slf4j.LoggerFactory;
 
 import org.zkoss.idom.Document;
 import org.zkoss.io.Files;
+import org.zkoss.json.JSONObject;
+import org.zkoss.json.parser.JSONParser;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
@@ -67,6 +74,13 @@ import org.zkoss.zk.xel.Evaluator;
  */
 public class Wpds {
 	private static final Logger log = LoggerFactory.getLogger(Wpds.class);
+	private static final String _jarBuildInClientTZDBVersion;
+	private static String _currentClientTZDBVersion;
+
+	static {
+		_jarBuildInClientTZDBVersion = _currentClientTZDBVersion = extractJarBuildInClientTZDBVersion();
+	}
+
 	/** Generates all widgets in the specified language.
 	 * @param lang the language to look at
 	 */
@@ -128,6 +142,7 @@ public class Wpds {
 			throws IOException {
 		final StringBuffer result = new StringBuffer();
 		String path = Library.getProperty("org.zkoss.zk.moment.timezone.path");
+		_currentClientTZDBVersion = _jarBuildInClientTZDBVersion;
 		if (path != null) {
 				InputStream is = null;
 			try {
@@ -137,14 +152,83 @@ public class Wpds {
 				byte[] bytes = Files.readAll(is);
 				if (bytes.length > 0) {
 					result.append("var tzdata =");
-					result.append(new String(bytes, "UTF-8"));
+					// ZK-5640
+					String jsonFileContent = new String(bytes, "UTF-8"),
+							ver = getClientTZDBVersionFromJSONString(jsonFileContent);
+					if (ver != null)
+						_currentClientTZDBVersion = ver;
+					result.append(jsonFileContent);
 					result.append("; zk.mm.tz.load(tzdata);");
 				}
 			} finally {
 				Files.close(is);
 			}
 		}
+		// ZK-5640
+		String serverTZDBVersion = ZoneRulesProvider.getVersions("UTC").lastEntry().getKey();
+		if (!_currentClientTZDBVersion.equals(serverTZDBVersion)) {
+			log.warn("Time zone data version mismatch detected:\n"
+					+ " - Client (moment.js) tzdb version: " + _currentClientTZDBVersion + "\n"
+					+ " - Server (JDK) tzdb version: " + serverTZDBVersion + "\n"
+					+ "Date and time values may be incorrect if time zone rules differ.\n"
+					+ "To resolve, update the moment-timezone data on the client and/or the JDK time zone data (TZUpdater or Java update) on the server so both use the same version.");
+		}
 		return result.toString();
+	}
+
+	/**
+	 * Returns client timezone database version.
+	 * <p>
+	 * If didn't provide a customized tzdb data, returns the jar build-in timezone data version. 
+	 * @since 10.2.0
+	 */
+	public static String getClientTimeZoneDataBaseVersion() {
+		return _currentClientTZDBVersion;
+	}
+
+	/**
+	 * Extract the timezone database version from the JSON string.
+	 * @param input the JSON string
+	 * @return the timezone database version
+	 */
+	private static String getClientTZDBVersionFromJSONString(String input) {
+		JSONObject json = (JSONObject) new JSONParser().parse(input);
+		return json.get("version") != null ? json.get("version").toString() : null;
+	}
+
+	/**
+	 * Extract the timezone database version from the jar build-in moment-timezone-with-data.src.js file.
+	 * @return the timezone database version
+	 */
+	private static String extractJarBuildInClientTZDBVersion() {
+		try {
+			JarFile jar = new JarFile(new File(Wpds.class.getProtectionDomain().getCodeSource().getLocation().toURI()));
+			JarEntry jarEntry = jar.getJarEntry("web/js/zk/ext/moment-timezone-with-data.src.js");
+			try (InputStream is = jar.getInputStream(jarEntry)) {
+				byte[] bytes = Files.readAll(is);
+				if (bytes.length > 0) {
+					String jsFileContent = new String(bytes, StandardCharsets.UTF_8).replace(" ", "");
+					int targetJsonStartIndex = jsFileContent.indexOf("loadData({") + 9,
+							targetJsonEndIndex = -1,
+							fileEndIndex = jsFileContent.length(),
+							curlyBracketsStack = 0;
+					for (int i = targetJsonStartIndex; i < fileEndIndex; i++) {
+						if (jsFileContent.charAt(i) == '{')
+							curlyBracketsStack++;
+						else if (jsFileContent.charAt(i) == '}')
+							curlyBracketsStack--;
+						if (curlyBracketsStack == 0) {
+							targetJsonEndIndex = i;
+							break;
+						}
+					}
+					return getClientTZDBVersionFromJSONString(jsFileContent.substring(targetJsonStartIndex, targetJsonEndIndex + 1));
+				}
+			}
+		} catch (Exception e) {
+			log.warn("Error extracting moment-timezone-with-data.src.js timezone database version from jar file.", e);
+		}
+		return null;
 	}
 
 	/**

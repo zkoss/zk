@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B102-ZK-5846.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Fri May 09 17:29:06 CST 2025, Created by cherrylee
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		1. Click to open the Datebox
+		2. Expected no JS error in mobile mode
+	</label>
+	<datebox format="MM/dd/yyyy hh:mm:ss"/>
+</zk>
