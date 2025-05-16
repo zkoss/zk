@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B102-ZK-5803.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue May 13 10:44:24 CST 2025, Created by jameschu
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div>
+		<script><![CDATA[
+			Check dev tool -> Elements, the stackup frame (z_ddstkup) should not appear.
+		]]></script>
+		<zscript>
+			String foo = "1";
+		</zscript>
+		<button label="click me"/>
+		<apply>
+			<intbox draggable="true"/>
+		</apply>
+	</div>
+</zk>
