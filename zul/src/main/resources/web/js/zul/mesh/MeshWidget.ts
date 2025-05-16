@@ -976,6 +976,8 @@ export abstract class MeshWidget extends zul.Widget {
 		if (this._nativebar && ebody) {
 			this.domListen_(ebody, 'onScroll', '_doScroll');
 			ebody.style.overflow = 'auto';
+			// ZK-5842: a grid with frozen columns has redundant horizontal scrollbar
+			jq(ebody).css('scrollbar-width', 'none');
 
 			if (this.efrozen && !zk.mobile)
 				jq(ebody).css('overflow-x', 'hidden'); // keep non line break
