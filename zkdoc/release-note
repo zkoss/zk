@@ -86,6 +86,9 @@ ZK 10.2.0
   ZK-5846: Datebox with time format in mobile cause JS error in 10.0.0+
   ZK-5717: zephyr#66 causes tree row to be removed, causes errors while binding descendants
   ZK-5880: Unable to download file with Chinese file name in File download
+  ZK-5848: After ZK-4261, numberInputElement doesn't check for disabled status before pasting content to input
+  ZK-5920: Client MVVM: support properties in Audio and Video
+  ZK-5758: Unrelated load bindings are notified unexpectedly
 
 * Upgrade Notes
   + Remove the Fragment component from the zkmax.jar and use the new Client MVVM  (client-bind.jar) library instead.
