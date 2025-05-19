@@ -12,6 +12,11 @@ B102-ZK-5616.zul
 Copyright (C) 2025 Potix Corporation. All Rights Reserved.
 -->
 <zk>
+    <label multiline="true">
+        [Test this test case both on PC and tablet]
+        1. scroll the non-frozen cells from left to right
+        2. no matter how you scroll, you should see the grid's detail still stick on the same place (left-most-column) 
+    </label>
     <grid width="600px">
         <frozen columns="2"/>
         <columns>
