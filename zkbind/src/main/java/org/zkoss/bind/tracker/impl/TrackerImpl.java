@@ -177,10 +177,10 @@ public class TrackerImpl implements Tracker, Serializable {
 	}
 
 	private void getLoadBindingsPerProperty(Collection<TrackerNode> nodes, String prop,
-			LinkedHashSet<LoadBinding> bindings, LinkedHashSet<Object> kidbases, Set<TrackerNode> visited) {
+			LinkedHashSet<LoadBinding> bindings, LinkedHashSet<LoadBinding> kidBindings, LinkedHashSet<Object> kidbases, Set<TrackerNode> visited) {
 		if (".".equals(prop)) { //all base object
 			for (TrackerNode node : nodes) {
-				getLoadBindings0(node, bindings, kidbases, visited);
+				getLoadBindings0(node, bindings, kidBindings, kidbases, visited);
 			}
 		} else if ("*".equals(prop)) { //all binding properties of the base object
 			for (TrackerNode node : nodes) {
@@ -192,7 +192,7 @@ public class TrackerImpl implements Tracker, Serializable {
 						bindings.add(binding);
 				}
 
-				getNodesLoadBindings(kids, bindings, kidbases, visited);
+				getNodesLoadBindings(kids, bindings, kidBindings, kidbases, visited);
 			}
 		} else {
 			boolean bracket = BindELContext.isBracket(prop);
@@ -213,7 +213,7 @@ public class TrackerImpl implements Tracker, Serializable {
 				} else {
 					for (TrackerNode kid : dependents) {
 						if (kid != null) {
-							getLoadBindings0(kid, bindings, kidbases, visited);
+							getLoadBindings0(kid, bindings, kidBindings, kidbases, visited);
 						}
 					}
 				}
@@ -241,9 +241,26 @@ public class TrackerImpl implements Tracker, Serializable {
 
 	public Set<LoadBinding> getLoadBindings(Object base, String prop) {
 		final LinkedHashSet<LoadBinding> bindings = new LinkedHashSet<LoadBinding>();
+		final LinkedHashSet<LoadBinding> kidBaseBindings = new LinkedHashSet<LoadBinding>();
 		final Set<TrackerNode> visited = new LinkedHashSet<TrackerNode>();
-		collectLoadBindings(base, prop, bindings, visited);
+		collectLoadBindings(base, prop, bindings, kidBaseBindings, visited);
+		bindings.addAll(kidBaseBindings);
 		return bindings;
+	}
+
+	public Set<LoadBinding> getDirectLoadBindings(Object base, String prop) {
+		final LinkedHashSet<LoadBinding> bindings = new LinkedHashSet<LoadBinding>();
+		final Set<TrackerNode> visited = new LinkedHashSet<TrackerNode>();
+		collectLoadBindings(base, prop, bindings, null, visited);
+		return bindings;
+	}
+
+	public Set<LoadBinding> getKidBaseLoadBindings(Object base, String prop) {
+		final LinkedHashSet<LoadBinding> bindings = new LinkedHashSet<LoadBinding>();
+		final LinkedHashSet<LoadBinding> kidBaseBindings = new LinkedHashSet<LoadBinding>();
+		final Set<TrackerNode> visited = new LinkedHashSet<TrackerNode>();
+		collectLoadBindings(base, prop, bindings, kidBaseBindings, visited);
+		return kidBaseBindings;
 	}
 
 	protected Collection<TrackerNode> getAllTrackerNodes() {
@@ -262,26 +279,27 @@ public class TrackerImpl implements Tracker, Serializable {
 	}
 
 	private void collectLoadBindings(Object base, String prop, LinkedHashSet<LoadBinding> bindings,
-			Set<TrackerNode> visited) {
+			 LinkedHashSet<LoadBinding> kidBindings, Set<TrackerNode> visited) {
 		final LinkedHashSet<Object> kidbases = new LinkedHashSet<Object>(); //collect kid as base bean
 		if (base != null) {
 			final Set<TrackerNode> nodes = getAllTrackerNodesByBean(base);
 			if (nodes != null && !nodes.isEmpty()) {
-				getLoadBindingsPerProperty(nodes, prop, bindings, kidbases, visited);
+				getLoadBindingsPerProperty(nodes, prop, bindings, kidBindings, kidbases, visited);
 			}
 		} else { //base == null)
 			if ("*".equals(prop)) {
 				for (Set<TrackerNode> basenodes : _nullMap.values()) {
-					getNodesLoadBindings(basenodes, bindings, kidbases, visited);
+					getNodesLoadBindings(basenodes, kidBindings, kidBindings, kidbases, visited);
 				}
 			} else {
 				final Set<TrackerNode> basenodes = _nullMap.get(prop);
-				getNodesLoadBindings(basenodes, bindings, kidbases, visited);
+				getNodesLoadBindings(basenodes, bindings, kidBindings, kidbases, visited);
 			}
 		}
-
-		for (Object kidbase : kidbases) {
-			collectLoadBindings(kidbase, "*", bindings, visited); //recursive, for kid base
+		if (kidBindings != null) {
+			for (Object kidbase : kidbases) {
+				collectLoadBindings(kidbase, "*", kidBindings, kidBindings, visited); //recursive, for kid base
+			}
 		}
 	}
 
@@ -449,18 +467,18 @@ public class TrackerImpl implements Tracker, Serializable {
 	}
 
 	private void getNodesLoadBindings(Set<TrackerNode> basenodes, LinkedHashSet<LoadBinding> bindings,
-			LinkedHashSet<Object> kidbases, Set<TrackerNode> visited) {
+				LinkedHashSet<LoadBinding> kidBindings, LinkedHashSet<Object> kidbases, Set<TrackerNode> visited) {
 		if (basenodes != null) {
 			for (TrackerNode node : basenodes) {
 				if (node != null) {
-					getLoadBindings0(node, bindings, kidbases, visited);
+					getLoadBindings0(node, bindings, kidBindings, kidbases, visited);
 				}
 			}
 		}
 	}
 
-	private void getLoadBindings0(TrackerNode node, LinkedHashSet<LoadBinding> bindings, Set<Object> kidbases,
-			Set<TrackerNode> visited) {
+	private void getLoadBindings0(TrackerNode node, LinkedHashSet<LoadBinding> bindings, LinkedHashSet<LoadBinding> kidBindings,
+		  Set<Object> kidbases, Set<TrackerNode> visited) {
 		if (visited.contains(node)) { //already visited
 			return;
 		}
@@ -473,22 +491,22 @@ public class TrackerImpl implements Tracker, Serializable {
 			refBinding.invalidateCache();
 			//ZK-950: The expression reference doesn't update while change the instant of the reference
 			//Have to load bindings that refer this ReferenceBinding as well
-			collectLoadBindings(refBinding, ".", bindings, visited); //recursive
+			collectLoadBindings(refBinding, ".", bindings, kidBindings, visited); //recursive
 		}
 
 		//bug #1: depends-on is not working in nested C->B->A when A changed
 		for (TrackerNode associate : node.getAssociates()) {
-			getLoadBindings0(associate, bindings, kidbases, visited); //recursive
+			getLoadBindings0(associate, bindings, kidBindings, kidbases, visited); //recursive
 		}
 
 		final Object kidbase = node.getBean();
 		if (kidbases != null && kidbase != null) {
 			kidbases.add(kidbase);
-		} else {
+		} else if (kidBindings != null) {
 			//check dependents
 			final Set<TrackerNode> nodes = node.getDirectDependents();
 			for (TrackerNode kid : nodes) {
-				getLoadBindings0(kid, bindings, null, visited); //recursive
+				getLoadBindings0(kid, kidBindings, kidBindings, null, visited); //recursive
 			}
 		}
 	}

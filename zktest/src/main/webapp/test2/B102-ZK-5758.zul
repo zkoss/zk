@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B102-ZK-5758.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Apr 23 17:00:55 CST 2025, Created by jameschu
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div viewModel="@id('vm') @init('org.zkoss.zktest.test2.B102_ZK_5758VM')">
+		<label>
+			Click each button, you should only see one label after button changed.
+		</label>
+		last refreshed: <label value="@load(vm.lastRefreshed)"/>
+		<apply template="myBeanContent" myBean="@init(vm.myBean1)"/>
+		<apply template="myBeanContent" myBean="@init(vm.myBean2)"/>
+		<apply template="myBeanContent" myBean="@init(vm.myBean3)"/>
+		<template name="myBeanContent">
+			<separator/>
+			<button onClick="@command('refreshBean', myBean=myBean)" label="refresh"/>
+			<label value="@load(myBean.label)"/>
+		</template>
+	</div>
+</zk>
