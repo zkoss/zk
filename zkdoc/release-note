@@ -32,6 +32,7 @@ ZK 10.2.0
   ZK-5640: Log server warning when JDK and moment.js time zone data versions differ
   ZK-5946: Support additional conversion of Java user.timezone formats for moment.js
   ZK-5191: Extend textbox type support
+  ZK-5959: Row's children can show its focused state
 
 * Bugs
   ZK-5728: ZK-5364 causes external radio to no longer be selected / checked

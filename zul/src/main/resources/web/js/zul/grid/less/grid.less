@@ -64,7 +64,8 @@
 	.z-row-inner, .z-cell {
 		background: @meshBackgroundColor;
 	}
-	.z-cell:focus-visible {
+	.z-cell:focus-visible,
+	.z-row .z-row-inner:focus-visible {
 		box-shadow: @meshCellFocusBoxShadow;
 		transition: unset;
 	}
