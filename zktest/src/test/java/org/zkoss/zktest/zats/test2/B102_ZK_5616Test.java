@@ -20,8 +20,7 @@ public class B102_ZK_5616Test extends WebDriverTestCase {
 
     @Test
     public void testDetailNotOverlappedAfterScroll() {
-        connect();
-
+        connect("/test2/B102-ZK-5616.zul");
         int columnWidth = jq(".z-listheader").outerWidth();
 
         jq(".z-frozen-inner").scrollLeft(8 * columnWidth + 120);
