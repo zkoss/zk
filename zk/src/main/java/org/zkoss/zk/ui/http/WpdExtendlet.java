@@ -95,7 +95,7 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 	private static final String SOURCE_MAP_DIVIDED_WPDS_NUMBER = "$zk$dividedWPDsNum";
 	private ConcurrentMap<String, List<Element>> _dividedWpds = new ConcurrentHashMap<>(1); // store xml node for later parsing (ex. zk1 -> <script> ...)
 	private ConcurrentMap<String, Integer> _dividedPackageCnt = new ConcurrentHashMap<>(1); // store package count for dependency (ex. zul.wgt -> 2)
-	private Set<String> _lastDynamicWpds = ConcurrentHashMap.newKeySet(1); // store last dynamic wpd for not setting loaded
+	private Set<String> _dynamicPackage = ConcurrentHashMap.newKeySet(1); // store dynamic wpd for not setting loaded
 
 	public void init(ExtendletConfig config) {
 		init(config, new WpdLoader());
@@ -156,38 +156,28 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 
 		List<Element> dividedElements;
 		if (sourceMapEnabled && !path.endsWith("lang.wpd")) {
-			boolean pkgStart = path.endsWith("0.wpd");
-			boolean pkgEnd = path.endsWith("$.wpd");
 			int lastPartIndex = path.lastIndexOf("/") + 1;
 			String lastPart = Encode.forJavaScript(path.substring(lastPartIndex));
 			String pkgName = lastPart.replaceAll("[\\d]{1,2}\\.wpd", "");
-			if (pkgStart || pkgEnd) {
-				if (pkgStart) {
-					return ("(function(){zk._p=zkpi('" + pkgName + "');})()").getBytes();
-				} else {
-					return ("(function(){zk.setLoaded('" + lastPart.replace("$.wpd", "") + "');})()").getBytes();
-				}
-			} else {
-				dividedElements = _dividedWpds.get(lastPart);
-				if (dividedElements == null) { // dynamic
-					try {
-						byte[] dynamicContent = processDynamicWpdWithSourceMapIfAny(request, response, pkgName, path);
-						if (dynamicContent != null) {
-							return dynamicContent;
-						} else {
-							dividedElements = _dividedWpds.get(lastPart);
-						}
-					} catch (Exception e) {
-						log.error("fail to process source for source map", e);
-						return new byte[]{};
+			dividedElements = _dividedWpds.get(lastPart);
+			if (dividedElements == null) { // dynamic
+				try {
+					byte[] dynamicContent = processDynamicWpdWithSourceMapIfAny(request, response, pkgName, path);
+					if (dynamicContent != null) {
+						return dynamicContent;
+					} else {
+						dividedElements = _dividedWpds.get(lastPart);
 					}
+				} catch (Exception e) {
+					log.error("fail to process source for source map", e);
+					return new byte[]{};
 				}
-				request.setAttribute(SOURCE_MAP_DIVIDED_WPDS, dividedElements);
-				Integer packagePartsCnt = _dividedPackageCnt.get(pkgName);
-				if (packagePartsCnt != null && packagePartsCnt >= 1) {
-					int num = Integer.parseInt(lastPart.replace(pkgName, "").replace(".wpd", ""));
-					request.setAttribute(SOURCE_MAP_DIVIDED_WPDS_NUMBER, num);
-				}
+			}
+			request.setAttribute(SOURCE_MAP_DIVIDED_WPDS, dividedElements);
+			Integer packagePartsCnt = _dividedPackageCnt.get(pkgName);
+			if (packagePartsCnt != null && packagePartsCnt >= 1) {
+				int num = Integer.parseInt(lastPart.replace(pkgName, "").replace(".wpd", ""));
+				request.setAttribute(SOURCE_MAP_DIVIDED_WPDS_NUMBER, num);
 			}
 			path = path.substring(0, lastPartIndex) + (pkgName.endsWith("wpd") ? pkgName : (pkgName + ".wpd")); // original wpd path
 		}
@@ -316,6 +306,14 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 					write(out, depends);
 				}
 				write(out, "',");
+			} else if (depends == null && processingPartial) {
+				if (partialNum == 1) {
+					write(out, "zk._p=zkpi('" + name + "');");
+				} else if (partialNum > 1 && totalPartialCount > 1) {
+					write(out, "zk.load('");
+					write(out, name + (partialNum - 1));
+					write(out, "', function() {");
+				}
 			} else if (!processingPartial) {
 				write(out, '(');
 			}
@@ -346,6 +344,7 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 		final Map<String, String[]> moldInfos = new HashMap<>();
 		List<Element> elements = processingPartial ? partialElements : root.getElements();
 		boolean processingSourceMapScript = false;
+		boolean noDependsMarkLoaded = false;
 		for (Iterator it = elements.iterator(); it.hasNext();) {
 			final Element el = (Element) it.next();
 			final String elnm = el.getName();
@@ -427,7 +426,7 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 				String browser = el.getAttributeValue("browser");
 				String jspath = el.getAttributeValue("src");
 				if (jspath != null && jspath.length() > 0) {
-					if (!zk && "true".equals(el.getAttribute("sourceMap")) && depends != null && processingPartial) {
+					if (!zk && "true".equals(el.getAttribute("sourceMap")) && processingPartial) {
 						processingSourceMapScript = true;
 						write(out, "var script=document.createElement('script');");
 						write(out, "script.type='text/javascript';");
@@ -437,6 +436,9 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 							write(out, name + partialNum);
 						} else {
 							write(out, name);
+							if (depends == null) {
+								noDependsMarkLoaded = true;
+							}
 						}
 						write(out, "');");
 						String requestURI = reqctx.request.getRequestURI();
@@ -507,17 +509,40 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 			}
 			if (depends != null) {
 				write(out, "});");
-				if (!processingPartial || !_lastDynamicWpds.contains(name + partialNum + ".wpd")) {
-					write(out, "zk.setLoaded('");
-					if (processingPartial && totalPartialCount > 1 && partialNum < totalPartialCount) {
-						write(out, name + partialNum);
-					} else {
+				if (!processingPartial || !_dynamicPackage.contains(name)) {
+					if (!processingPartial || partialNum == 1 || totalPartialCount == 1) {
+						write(out, "zk.setLoaded('");
 						write(out, name);
+						write(out, "',1);");
 					}
-					write(out, "',1);");
+					if (processingPartial && partialNum == 1) {
+						for (int i = partialNum; i < totalPartialCount; i++) {
+							write(out, "zk.setLoaded('");
+							write(out, name + i);
+							write(out, "',1);\n");
+						}
+					}
+				} else {
+					write(out, "zk.setLoaded('");
+					write(out, name + "$" + partialNum); // for triggering loading
+					write(out, "');");
 				}
 			} else if (!processingPartial) {
 				write(out, "})();");
+			} else {
+				if (partialNum > 1 && totalPartialCount > 1) {
+					if (!noDependsMarkLoaded && partialNum == totalPartialCount) {
+						write(out, "zk.setLoaded('");
+						write(out, name);
+						write(out, "');");
+					}
+					write(out, "});");
+				}
+				if (totalPartialCount == 1) {
+					write(out, "zk.setLoaded('");
+					write(out, name);
+					write(out, "', 1);");
+				}
 			}
 		}
 
@@ -989,10 +1014,9 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 		if (name.length() == 0) {
 			throw new UiException("The name attribute must be specified, " + root.getLocator() + ", " + path);
 		}
-		boolean sourceMapProcessed = false;
 		int dividedNum = 1;
-		int pathStartIndex = paths.size();
 		List<Element> elements = new LinkedList<>();
+		String lastDividedPath = null;
 		for (Iterator it = root.getElements().iterator(); it.hasNext();) {
 			final Element el = (Element) it.next();
 			final String elnm = el.getName();
@@ -1012,9 +1036,9 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 					elements.add(el);
 					_dividedWpds.put(dividedPath.substring(dividedPath.lastIndexOf("/") + 1), elements);
 					paths.add(dividedPath);
+					lastDividedPath = dividedPath;
 					dividedNum++;
 					elements = new LinkedList<>(); // clear
-					sourceMapProcessed = true;
 				} else {
 					elements.add(el);
 				}
@@ -1030,15 +1054,17 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 			_dividedWpds.put(dividedPath.substring(dividedPath.lastIndexOf("/") + 1), elements);
 			_dividedPackageCnt.put(name, dividedNum);
 		} else {
-			_dividedPackageCnt.put(name, dividedNum - 1);
-		}
-		String depends = root.getAttributeValue("depends");
-		if (depends != null && depends.length() == 0) {
-			depends = null;
-		}
-		if (!"zk".equals(name) && depends == null && sourceMapProcessed) { // handle zkpi isssue (if no depends)
-			paths.add(pathStartIndex, originalPathPrefix + path.replace(name, name + 0));
-			paths.add(originalPathPrefix + path.replace(name, name + "$"));
+			int totalCount = dividedNum - 1;
+			_dividedPackageCnt.put(name, totalCount);
+			if (totalCount == 1 && lastDividedPath != null) { // no need to divide
+				String onlyOneElementsKey = lastDividedPath.substring(lastDividedPath.lastIndexOf("/") + 1);
+				List<Element> onlyOneElement = _dividedWpds.get(onlyOneElementsKey);
+				_dividedWpds.remove(onlyOneElementsKey);
+				_dividedWpds.put(path.substring(path.lastIndexOf("/") + 1), onlyOneElement);
+				_dividedPackageCnt.remove(onlyOneElementsKey);
+				paths.remove(lastDividedPath);
+				paths.add(originalPathPrefix + path);
+			}
 		}
 		return name;
 	}
@@ -1053,6 +1079,7 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 		} else if (dividedPaths.size() == 1) {
 			return null; // only one. just add it.
 		}
+		List<String> appendedPackages = new ArrayList<>();
 		for (String dividedPath : dividedPaths) {
 			String scriptVariableName = "script" + index++;
 			sb.append("var ").append(scriptVariableName).append("=document.createElement('script');");
@@ -1066,11 +1093,19 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 			sb.append(scriptVariableName).append(".src='").append(Encode.forJavaScript(url)).append("';");
 			sb.append("\ndocument.getElementsByTagName('head')[0].appendChild(").append(scriptVariableName).append(");");
 			lastWpd = dividedPath.substring(dividedPath.lastIndexOf("/") + 1);
+			appendedPackages.add(lastWpd.replace(".wpd", ""));
 		}
 		if (!Strings.isEmpty(lastWpd)) {
-			_lastDynamicWpds.add(lastWpd);
+			String pkgName = pkgWpd.replace(".wpd", "");
+			_dynamicPackage.add(pkgName);
 			// mark loading
-			sb.append("\nzk.setLoaded('").append(pkgWpd.replace(".wpd", "")).append("',1);");
+			sb.append("\nzk.setLoaded('").append(pkgName).append("',1);");
+			String lastPackage = lastWpd.replace(".wpd", "");
+			for (String appendedPackage : appendedPackages) {
+				if (!appendedPackage.equals(lastPackage)) {
+					sb.append("\nzk.setLoaded('").append(appendedPackage).append("',1);");
+				}
+			}
 		}
 		return sb.toString().getBytes();
 	}
