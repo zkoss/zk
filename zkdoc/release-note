@@ -32,6 +32,7 @@ ZK 10.2.0
   ZK-5640: Log server warning when JDK and moment.js time zone data versions differ
   ZK-5946: Support additional conversion of Java user.timezone formats for moment.js
   ZK-5191: Extend textbox type support
+  ZK-5959: Row's children can show its focused state
 
 * Bugs
   ZK-5728: ZK-5364 causes external radio to no longer be selected / checked
@@ -86,6 +87,10 @@ ZK 10.2.0
   ZK-5717: zephyr#66 causes tree row to be removed, causes errors while binding descendants
   ZK-5880: Unable to download file with Chinese file name in File download
   ZK-5842: a grid with frozen columns has redundant horizontal scrollbar
+  ZK-5848: After ZK-4261, numberInputElement doesn't check for disabled status before pasting content to input
+  ZK-5920: Client MVVM: support properties in Audio and Video
+  ZK-5758: Unrelated load bindings are notified unexpectedly
+  ZK-5913: Incorrect parsing for two digit year
 
 * Upgrade Notes
   + Remove the Fragment component from the zkmax.jar and use the new Client MVVM  (client-bind.jar) library instead.
