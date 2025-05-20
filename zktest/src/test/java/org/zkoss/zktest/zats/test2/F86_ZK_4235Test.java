@@ -26,33 +26,33 @@ public class F86_ZK_4235Test extends WebDriverTestCase {
 		WebElement db1 = driver.findElement(By.cssSelector(".db1 .z-datebox-input"));
 		WebElement db2 = driver.findElement(By.cssSelector(".db2 .z-datebox-input"));
 		
-		changeInputValue(db1, db2, "01-01-30" , "01-01-29");
-		checkYear("1930", "2029");
+		changeInputValue(db1, db2, "01-01-29" , "01-01-28");
+		checkYear("1929", "2028");
 		
 		click(jq("@button").eq(0));
 		waitResponse();
-		changeInputValue(db1, db2, "01-02-30" , "01-02-29");
-		checkYear("30", "129");
+		changeInputValue(db1, db2, "01-02-29" , "01-02-28");
+		checkYear("29", "128");
 		
 		click(jq("@button").eq(1));
 		waitResponse();
-		changeInputValue(db1, db2, "01-01-30" , "01-01-29");
-		checkYear("530", "529");
+		changeInputValue(db1, db2, "01-01-29" , "01-01-28");
+		checkYear("529", "528");
 		
 		click(jq("@button").eq(2));
 		waitResponse();
-		changeInputValue(db1, db2, "01-02-30" , "01-02-29");
-		checkYear("1530", "1529");
+		changeInputValue(db1, db2, "01-02-29" , "01-02-28");
+		checkYear("1529", "1528");
 		
 		click(jq("@button").eq(3));
 		waitResponse();
-		changeInputValue(db1, db2, "01-01-30" , "01-01-29");
-		checkYear("2030", "2029");
+		changeInputValue(db1, db2, "01-01-29" , "01-01-28");
+		checkYear("2029", "2028");
 		
 		click(jq("@button").eq(4));
 		waitResponse();
-		changeInputValue(db1, db2, "01-02-30" , "01-02-29");
-		checkYear("200030", "200029");
+		changeInputValue(db1, db2, "01-02-29" , "01-02-28");
+		checkYear("200029", "200028");
 	}
 	
 	private void checkYear(String expect1, String expect2) {

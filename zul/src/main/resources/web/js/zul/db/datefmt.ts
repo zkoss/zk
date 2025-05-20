@@ -370,8 +370,10 @@ var DateFmt = {
 								if (cc == 'y') {
 									if (era)
 										newY = era.firstYear + era.direction * (newY - 1);
-									else
+									else {
+										if (newY < 100 && newY === (y + ydelta) % 100) break; // assume yy is not modified
 										newY = (y + ydelta > 0) ? newY - ydelta : 1 - newY - ydelta;
+									}
 								}
 								y = newY;
 							}
