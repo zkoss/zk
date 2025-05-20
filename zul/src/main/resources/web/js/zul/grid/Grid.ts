@@ -191,6 +191,9 @@ export class Grid extends zul.mesh.MeshWidget {
 			this.rerender();
 		if (!_noSync) //bug#3301498: we have to sync even if child is rows
 			this._syncSize();  //sync-size required
+		// ZK-5847
+		if (zk.mobile && this.frozen)
+			this.frozen._syncColumnBorders();
 	}
 
 	/** @internal */

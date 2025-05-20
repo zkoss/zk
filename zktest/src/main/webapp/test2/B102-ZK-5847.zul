@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B102-ZK-5847.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Fri May 16 17:07:05 CST 2025, Created by jamson
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label multiline="true">
+        [This issue is mobile only, because mobile use different behavior with frozen]
+        Below is a grid with 3 frozen columns
+        1. scroll the non-frozen cells to the right
+        2. click `add` button, will add a new row in the grid
+        4. the frozen columns and cells should stay pinned in the left
+    </label>
+    <zscript><![CDATA[
+		ListModelList model = new ListModelList();
+		model.add("0001");
+		model.add("0002");
+		model.add("0003");
+
+		public void add(){
+		    model.add("0004");
+        }
+	]]></zscript>
+    <button label="add" onClick="add()"/>
+    <grid width="600px" model="${model}" height="300px">
+        <frozen columns="3"/>
+        <columns>
+            <column width="50px">ID</column>
+            <column width="100px">Priority</column>
+            <column width="100px">Status</column>
+            <column width="250px">Summary</column>
+            <column width="350px">Detail</column>
+            <column width="150px">Group</column>
+            <column width="100px">Assign</column>
+        </columns>
+        <template name="model">
+            <row>
+                <cell>${each}</cell>
+                <cell>${each}</cell>
+                <cell>${each}</cell>
+                <cell>${each}</cell>
+                <cell>${each}</cell>
+                <cell>${each}</cell>
+                <cell>${each}</cell>
+            </row>
+        </template>
+    </grid>
+</zk>
