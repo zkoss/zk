@@ -510,8 +510,7 @@ export class Draggable extends zk.Object {
 	 */
 	constructor(control: zk.Object & {node?: HTMLElement} | undefined, node: HTMLElement | undefined, opts: DraggableOptions) {
 		super();
-		if (!_stackup) {
-		//IE: if we don't insert stackup at beginning, dragging is slow
+		if (!_stackup && !!zk.useStackup) {
 			_stackup = jq.newStackup(undefined, 'z_ddstkup');
 			document.body.appendChild(_stackup);
 		}
@@ -636,13 +635,13 @@ export class Draggable extends zk.Object {
 				node.parentNode?.insertBefore(this._clone, node);
 			}
 
-		if (this.opts.stackup) {
+		if (this.opts.stackup && _stackup != undefined) {
 			if (zk(_stackup).isVisible()) //in use
 				this._stackup = jq.newStackup(node, node.id + '-ddstk');
 			else {
 				this._stackup = _stackup;
 				this._syncStackup();
-				node.parentNode?.insertBefore(_stackup!, node);
+				node.parentNode?.insertBefore(_stackup, node);
 			}
 		}
 
