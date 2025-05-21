@@ -476,4 +476,8 @@ export class Frozen extends zul.Widget {
 
 		mesh._restoreFocus();
 	}
+	/** @internal */
+	_syncColumnBorders(): void {
+		// will be overridden by subclass
+	}
 }
