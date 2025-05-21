@@ -19,6 +19,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -622,7 +623,13 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 			}
 		}
 		if (write) {
-			Files.copy(out, is);
+			if (!isDebugJS() && !sourceMapEnabled() && path.endsWith("index.js")) { // remove sourceMappingURL
+				String jsNoSourceMappingURL = new String(is.readAllBytes(), StandardCharsets.UTF_8)
+						.replace("//# sourceMappingURL=index.js.map", "");
+				write(out, jsNoSourceMappingURL);
+			} else {
+				Files.copy(out, is);
+			}
 			Files.close(is);
 			write(out, '\n'); //might terminate with //
 		}
