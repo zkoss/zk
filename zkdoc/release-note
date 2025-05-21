@@ -98,6 +98,7 @@ ZK 10.2.0
   ZK-5847: frozen columns shift when scrolling a grid on mobile devices
   ZK-5899: zk loads a source map file even debug-js is false
   ZK-5910: migrate zk calendar attribute name from onEvent* to onItem* in XSD
+  ZK-5901: uncheck a toolbarbutton looks no differences from checked toolbarbutton
 
 * Upgrade Notes
   + Remove the Fragment component from the zkmax.jar and use the new Client MVVM  (client-bind.jar) library instead.
