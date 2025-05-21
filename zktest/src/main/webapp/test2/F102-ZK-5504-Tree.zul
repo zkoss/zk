@@ -99,7 +99,7 @@ Copyright (C) 2025 Potix Corporation. All Rights Reserved.
 				Tree with model
 				<tree height="400px" model="${model}">
 					<custom-attributes org.zkoss.zul.tree.rod="false"/>
-					<custom-attributes org.zkoss.model.selectiveComponentUpdate.enable="true"/>
+					<custom-attributes org.zkoss.zul.model.selectiveComponentUpdate.enable="true"/>
 					<template name="model">
 						<treeitem>
 							<treerow>
@@ -114,7 +114,7 @@ Copyright (C) 2025 Potix Corporation. All Rights Reserved.
 			<vlayout hflex="1">
 				Tree with model (ROD)
 				<tree height="400px" model="${model}">
-					<custom-attributes org.zkoss.model.selectiveComponentUpdate.enable="true"/>
+					<custom-attributes org.zkoss.zul.model.selectiveComponentUpdate.enable="true"/>
 					<template name="model">
 						<treeitem>
 							<treerow>

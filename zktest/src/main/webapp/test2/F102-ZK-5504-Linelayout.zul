@@ -53,7 +53,7 @@ Copyright (C) 2025 Potix Corporation. All Rights Reserved.
 			<vlayout hflex="1">
 				Linelayout with model
 				<linelayout model="${model}" height="600px">
-					<custom-attributes org.zkoss.model.selectiveComponentUpdate.enable="true"/>
+					<custom-attributes org.zkoss.zul.model.selectiveComponentUpdate.enable="true"/>
 					<template name="model">
 						<lineitem>
 							<label value="${forEachStatus.index} - ${each}"

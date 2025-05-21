@@ -109,7 +109,7 @@ Copyright (C) 2025 Potix Corporation. All Rights Reserved.
 			<vlayout hflex="1">
 				Biglistbox with model
 				<biglistbox model="${model}" colWidth="350px">
-					<custom-attributes org.zkoss.model.selectiveComponentUpdate.enable="true"/>
+					<custom-attributes org.zkoss.zul.model.selectiveComponentUpdate.enable="true"/>
 					<template name="rows">
 						<html>
 							<attribute name="content"><![CDATA[

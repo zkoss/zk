@@ -59,7 +59,7 @@ public class Attributes {
 	 *
 	 * @since 10.2.0
 	 */
-	public static final String SELECTIVE_COMPONENT_UPDATE = "org.zkoss.model.selectiveComponentUpdate.enable";
+	public static final String SELECTIVE_COMPONENT_UPDATE = "org.zkoss.zul.model.selectiveComponentUpdate.enable";
 
 	//Internal use
 	static final String BEFORE_MODEL_ITEMS_RENDERED = "org.zkoss.zul.BeforeModelItemsRendered";
