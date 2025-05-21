@@ -92,6 +92,8 @@ ZK 10.2.0
   ZK-5758: Unrelated load bindings are notified unexpectedly
   ZK-5913: Incorrect parsing for two digit year
   ZK-5803: draggable creates stackup iframes, may no longer be necessary after IE support end
+  ZK-5747: Mold default not found in zul.box.Hlayout
+  ZK-5739: sourcemap fail with client-bind loaded
   ZK-5674: i11n labels does not load in a shadow element in client-mvvm
   ZK-5847: frozen columns shift when scrolling a grid on mobile devices
   ZK-5899: zk loads a source map file even debug-js is false
