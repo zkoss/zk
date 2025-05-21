@@ -53,7 +53,7 @@ Copyright (C) 2025 Potix Corporation. All Rights Reserved.
 			<vlayout hflex="1">
 				Radiogroup with model
 				<radiogroup model="${model}">
-					<custom-attributes org.zkoss.model.selectiveComponentUpdate.enable="true"/>
+					<custom-attributes org.zkoss.zul.model.selectiveComponentUpdate.enable="true"/>
 					<template name="model">
 						<radio label="${forEachStatus.index} - ${each}"
 						       sclass="flash-initially"/>
