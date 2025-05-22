@@ -263,7 +263,7 @@ public class Servlets {
 				path = path.getParent();
 			}
 			final Locators.URLLocation loc = Locators.locate(pgpath, locale,
-					locator != null ? locator : new ServletContextLocator(ctx, path.toString()));
+					locator != null ? locator : new ServletContextLocator(ctx, path.toString().replace('\\', '/')));
 			uri = loc != null ? loc.file : pgpath;
 			map.put(index, uri);
 		}
