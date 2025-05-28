@@ -165,7 +165,7 @@ export class Rows extends zul.Widget<HTMLTableSectionElement> {
 
 		const g = this.getGrid();
 		if (g) {
-			g._syncEmpty();
+			g._fixOnAdd(child);
 		}
 		this._syncStripe();
 

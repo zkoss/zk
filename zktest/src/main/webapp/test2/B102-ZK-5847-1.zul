@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-B102-ZK-5847.zul
+B102-ZK-5847-1.zul
 
         Purpose:
 
         Description:
 
         History:
-                Fri May 16 17:07:05 CST 2025, Created by jamson
+                Wed May 28 12:38:15 CST 2025, Created by jamson
 
 Copyright (C) 2025 Potix Corporation. All Rights Reserved.
 -->
 <zk>
     <label multiline="true">
         [This issue is mobile only, because mobile use different behavior with frozen]
-        Below is a ROD grid with 3 frozen columns
+        Below is a non-ROD grid with 3 frozen columns
         1. scroll the non-frozen cells to the right
         2. click `add` button, will add a new row in the grid
         4. the frozen columns and cells should stay pinned in the left
@@ -30,7 +30,7 @@ Copyright (C) 2025 Potix Corporation. All Rights Reserved.
         }
 	]]></zscript>
     <button label="add" onClick="add()"/>
-    <custom-attributes org.zkoss.zul.grid.rod="true"/>
+    <custom-attributes org.zkoss.zul.grid.rod="false"/>
     <grid width="600px" model="${model}" height="300px">
         <frozen columns="3"/>
         <columns>
