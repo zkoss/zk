@@ -15,7 +15,7 @@ Copyright (C) 2025 Potix Corporation. All Rights Reserved.
     <label multiline="true">
         1. run this zul with za11y DISABLED
         2. click the menu
-        3. the navigation between each menuitem should work correctly (doesn't stock in a menuitem)
+        3. the navigation between each menuitem should work correctly (doesn't get stuck in a menuitem)
         4. each menuitem's functions shows on its label
         5. test each of them to confirm all of them worked correctly
     </label>

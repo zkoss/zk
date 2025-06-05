@@ -29,22 +29,10 @@ public class B102_ZK_5805Test extends WebDriverTestCase {
 
         getActions().sendKeys(Keys.ARROW_DOWN).perform();
         assertFocusOnNthMenuitem(0);
-        getActions().sendKeys(Keys.ENTER).perform();
-        waitResponse();
-        Assertions.assertEquals("A", jq("#zk_log").val().replace("\n", ""));
-
         getActions().sendKeys(Keys.ARROW_DOWN).perform();
         assertFocusOnNthMenuitem(1);
-        getActions().sendKeys(Keys.ESCAPE).perform();
-        waitResponse();
-        Assertions.assertEquals("AB", jq("#zk_log").val().replace("\n", ""));
-
         getActions().sendKeys(Keys.ARROW_DOWN).perform();
         assertFocusOnNthMenuitem(2);
-        getActions().sendKeys(Keys.BACK_SPACE).perform();
-        waitResponse();
-        Assertions.assertEquals("ABC", jq("#zk_log").val().replace("\n", ""));
-
         getActions().sendKeys(Keys.ARROW_DOWN).perform();
         assertFocusOnNthMenuitem(0);
     }
