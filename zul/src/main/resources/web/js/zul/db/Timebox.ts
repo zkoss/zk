@@ -386,13 +386,40 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 	}
 
 	/** @internal */
+	_doBeforeInput(evt: zk.Event): void {
+		var inp = this.getInputNode()!;
+		if (inp.disabled || inp.readOnly)
+			return;
+
+		// control input keys only when no custom unformater is given
+		if (!Timebox._unformater) {
+			var char = (evt.domEvent!.originalEvent as InputEvent).data!;
+			if (char.length <= 1) {
+				if (/\d/.test(char)) { // only accept 0~9
+					this._doType(parseInt(char));
+				}
+				// ZK-4861, android only IME issue
+				// In desktop browser, keys that has real input value will be stopped at doKeyDown_(),
+				// but in android device, keys that has real input value will have the keyCode 229 (evt.key === 'Unidentified'),
+				// so we have to block them here to prevent the further event propagation
+				evt.stop();
+			} else {
+				// if char more than 1 character, might triggered by doPaste_(),
+				// we only handle single-character here,
+				// do nothing to let the event continue to propagate,
+				// the further doInput_() will handle it
+			}
+		}
+	}
+
+	/** @internal */
 	override doKeyDown_(evt: zk.Event): void {
 		var inp = this.getInputNode()!;
 		if (inp.disabled || inp.readOnly)
 			return;
 
 		// control input keys only when no custom unformater is given
-		if (!Timebox._unformater && !(zk.android && zk.chrome)) { // ZK-4861, ignore key down for android chrome, handle parsing value in doBlur_
+		if (!Timebox._unformater) {
 			var code = evt.keyCode;
 			switch (code) {
 			case 48: case 96://0
@@ -405,10 +432,12 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 			case 55: case 103://7
 			case 56: case 104://8
 			case 57: case 105://9
-				code = code - (code >= 96 ? 96 : 48);
-				this._doType(code);
-				evt.stop();
-				return;
+				// should handle all the number input value at _doBeforeInput()
+				break;
+			case 229: // ZK-4861, android only IME issue
+				// 229 (evt.key === 'Unidentified') means the input value is not ready yet, so we should continue the event propagation,
+				// we'll get the actual input value and handle it in _doBeforeInput()
+				break;
 			case 35://end
 				this.lastPos = inp.value.length;
 				return;
@@ -670,22 +699,9 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 
 	/** @internal */
 	override doBlur_(evt: zk.Event): void {
-		const inp = this.getInputNode()!;
-		// ZK-4861
-		if (zk.android && zk.chrome && inp.value) {
-			const parsedValue = this.coerceFromString_(inp.value);
-			if (parsedValue) { // If parsing succeed, update the input value
-				inp.value = this.coerceToString_(parsedValue);
-				this._changed = true;
-			} else if (this._value) { // If parsing failed, but we have a previous value, restore it
-				inp.value = this.coerceToString_(this._value);
-			} else { // If parsing failed, and no previous value, clear the input
-				inp.value = this._defRawVal = '';
-			}
-		}
 		// skip onchange, Bug 2936568
 		if (!this._value && !this._changed && !Timebox._unformater)
-			inp.value = this._defRawVal = '';
+			this.getInputNode()!.value = this._defRawVal = '';
 
 		super.doBlur_(evt);
 
@@ -705,6 +721,7 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 		super.bind_(desktop, skipper, after);
 		var btn: HTMLElement | undefined;
 
+		this.domListen_(this.getInputNode()!, 'onBeforeInput', '_doBeforeInput');
 		if (btn = this.$n('btn'))
 			this.domListen_(btn, 'onZMouseDown', '_btnDown')
 				.domListen_(btn, 'onZMouseUp', '_btnUp');
@@ -723,6 +740,7 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 			this.domUnlisten_(btn, 'onZMouseDown', '_btnDown')
 				.domUnlisten_(btn, 'onZMouseUp', '_btnUp');
 		}
+		this.domUnlisten_(this.getInputNode()!, 'onBeforeInput', '_doBeforeInput');
 		this._changed = false;
 		super.unbind_(skipper, after, keepRod);
 	}
