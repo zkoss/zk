@@ -96,7 +96,7 @@ dependencies {
 	}
 	implementation 'org.zkoss.zkforge.el:zcommons-el:1.1.0'
 	implementation 'commons-lang:commons-lang:2.6'
-	implementation 'commons-beanutils:commons-beanutils:1.9.4'
+	implementation 'commons-beanutils:commons-beanutils:1.11.0'
 	implementation 'com.google.javascript:closure-compiler-unshaded:v20230802'
 	implementation 'net.sf.jasperreports:jasperreports:6.20.5'
 	implementation 'org.jfree:jfreechart:1.0.19'
