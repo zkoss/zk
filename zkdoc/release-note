@@ -1,4 +1,5 @@
 ZK 10.2.0
+Jun 17, 2025
 * Features
   ZK-5824: separate fragment widget into an independent library or another jar
   ZK-5392: support a way to disable dates
