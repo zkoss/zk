@@ -126,9 +126,6 @@ public class Attributes {
 	 * result of a portlet.
 	 * <p>Default: null (means no need of patch).
 	 * <p>If specified, the class must implement {@link PageRenderPatch}.
-	 * An example implementation is {@link org.zkoss.zkplus.liferay.JQueryRenderPatch}
-	 * that delays the rendering of a ZK portlet to avoid the conflicts when
-	 * using IE.
 	 * @since 5.0.0
 	 */
 	public static final String PORTLET_RENDER_PATCH_CLASS = "org.zkoss.zk.portlet.PageRenderPatch.class";

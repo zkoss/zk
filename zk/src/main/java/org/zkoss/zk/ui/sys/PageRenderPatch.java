@@ -21,8 +21,6 @@ import org.zkoss.zk.ui.Page;
  * A patch that is used to process the rendering result of a page.
  * Currently, it is used only by {@link org.zkoss.zk.ui.http.DHtmlLayoutPortlet}
  * to allow the deployer to plug-in a patch for particular portal container.
- * For example, {@link org.zkoss.zkplus.liferay.JQueryRenderPatch} is used
- * to patch that Liferay failed to load zk.wpd under IE.
  *
  * <p>To specify a patch, use a library property called
  * "org.zkoss.zk.portlet.PageRenderPatch.class" (refer to {@link Attributes#PORTLET_RENDER_PATCH_CLASS}.
