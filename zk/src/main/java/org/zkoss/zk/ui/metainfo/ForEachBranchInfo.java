@@ -46,7 +46,7 @@ import org.zkoss.zk.xel.impl.Utils;
 	}
 
 	/** Returns the forEach object if the forEach attribute is defined
-	 * (or {@link #setForEach} is called).
+	 * (or {@link ForEachBranchInfo#setForEach} is called).
 	 *
 	 * <p>If comp is not null, both pagedef and page are ignored.
 	 * If comp is null, page must be specified.
