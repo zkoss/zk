@@ -5,9 +5,11 @@ ZK 9.6.6
   ZK-5729: JNDI-Injection detected in JndiVariableResolver.java
   ZK-5819: [CodeQL] Apache Commons IO: Possible denial of service attack on untrusted input to XmlStreamReade
   ZK-5738: HtmlBasedComponent.setTooltiptext(..) not properly escaped
+  ZK-5715: PDFjs cve-2024-4367 arbitrary code execution from pdf document
 
 * Upgrade Notes
   + Remove JndiVariableResolver.java to fix ZK-5729
+  + Upgrade pdfjs to 4.3.136 to fix ZK-5715
 
    --------
 ZK 9.6.5
