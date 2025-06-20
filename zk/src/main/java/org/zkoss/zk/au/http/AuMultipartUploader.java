@@ -149,7 +149,12 @@ public class AuMultipartUploader {
 			Map<String, Object> dataMap = new HashMap<>(fileItems.size());
 			for (FileItem item: fileItems) {
 				if (item.isFormField()) {
-					dataMap.put(item.getFieldName(), item.getString());
+					try {
+						dataMap.put(item.getFieldName(), item.getString());
+					} catch (IOException e) {
+                        log.warn("Failed to read form field value for field: {}", item.getFieldName(), e);
+						dataMap.put(item.getFieldName(), "");
+					}
 				} else {
 					dataMap.put(item.getFieldName(), item);
 				}
