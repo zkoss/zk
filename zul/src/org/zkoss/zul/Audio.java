@@ -17,7 +17,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.zkoss.util.media.Media;
@@ -129,12 +128,13 @@ public class Audio extends XulElement implements MediaElement {
 	 * @see #setContent
 	 */
 	public void setSrc(String src) {
-		List<String> list = new ArrayList<String>();
-		if (src.contains(",")) {
-			list = new ArrayList<String>(Arrays.asList(src.split("\\s*,\\s*")));
-		} else {
-			list.add(src.trim());
+		String[] split = src.split(",");
+		List<String> list = new ArrayList<>(split.length);
+
+		for (String s : split) {
+			list.add(s.trim());
 		}
+
 		if (_audio != null || !_src.equals(list)) {
 			_audio = null;
 			setSrc(list);

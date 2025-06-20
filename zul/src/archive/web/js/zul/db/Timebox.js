@@ -95,8 +95,10 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		/** Returns the unformater.
 		 * @return String the unformater function
 		 */
-		unformater: function (unf) {
-			eval('Timebox._unformater = ' + unf); // eslint-disable-line no-eval
+		unformater: function (unformater, opts) {
+			if (unformater !== this._unformater || opts?.force) {
+				Timebox._unformater = unformater;
+			}
 		},
 		localizedSymbols: [
 			function (val) {

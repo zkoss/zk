@@ -77,7 +77,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 
 	function defGet(nm: string): Getter {
-		return new Function('return this.' + nm + ';');
+		return function (this: zk.Widget): unknown {
+			return this[nm];
+		};
 	}
 	function defSet00(nm: string): GeneratedSetter {
 		return function (v) {

@@ -218,42 +218,42 @@ public abstract class AbstractWebApp implements WebApp, WebAppCtrl {
 		try {
 			_config.invokeWebAppCleanups();
 		} catch (Throwable ex) {
-			ex.printStackTrace(); //not using log since it might be cleaned up
+			log.warn("Failed to invoke webapp cleanups", ex);
 		}
 		try {
 			_config.detroyRichlets();
 		} catch (Throwable ex) {
-			ex.printStackTrace(); //not using log since it might be cleaned up
+			log.warn("Failed to destroy richlets", ex);
 		}
 
 		try {
 			_sesscache.destroy(this);
 		} catch (NoClassDefFoundError ex) { //Bug 3046360
 		} catch (Throwable ex) {
-			ex.printStackTrace(); //not using log since it might be cleaned up
+			log.warn("Failed to destroy session cache", ex);
 		}
 
 		try {
 			_factory.stop(this);
 		} catch (Throwable ex) {
-			ex.printStackTrace(); //not using log since it might be cleaned up
+			log.warn("Failed to stop factory", ex);
 		}
 		try {
 			_provider.stop(this);
 		} catch (Throwable ex) {
-			ex.printStackTrace(); //not using log since it might be cleaned up
+			log.warn("Failed to stop provider", ex);
 		}
 		try {
 			_engine.stop(this);
 		} catch (Throwable ex) {
-			ex.printStackTrace(); //not using log since it might be cleaned up
+			log.warn("Failed to stop engine", ex);
 		}
 		if (_failover != null) {
 			try {
 				_failover.stop(this);
 			} catch (NoClassDefFoundError ex) { //Bug 3046360
 			} catch (Throwable ex) {
-				ex.printStackTrace(); //not using log since it might be cleaned up
+				log.warn("Failed to stop failover", ex);
 			}
 			_failover = null;
 		}
@@ -267,7 +267,7 @@ public abstract class AbstractWebApp implements WebApp, WebAppCtrl {
 			org.zkoss.util.Cleanups.cleanup();
 		} catch (NoClassDefFoundError ex) { //Bug 3046360
 		} catch (Throwable ex) {
-			ex.printStackTrace(); //not using log since it might be cleaned up
+			log.warn("Failed to cleanup", ex);
 		}
 
 		//we don't reset _config since WebApp cannot be re-inited after stop

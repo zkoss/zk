@@ -171,8 +171,8 @@ public class ThreadLocalListener implements EventThreadInit, EventThreadCleanup,
 	//-- utilities --//
 	private void getThreadLocals() {
 		for (Entry<String, String[]> me : _fieldsMap.entrySet()) {
+			final String clsName = me.getKey();
 			try {
-				final String clsName = me.getKey();
 				final Class cls = Classes.forNameByThread(clsName);
 				final String[] fields = me.getValue();
 				final Object[] threadLocals = new Object[fields.length];
@@ -181,23 +181,19 @@ public class ThreadLocalListener implements EventThreadInit, EventThreadCleanup,
 					try {
 						threadLocals[j] = getThreadLocal(cls, fields[j]).get();
 					} catch (SystemException ex) {
-						ex.printStackTrace();
-						//ignore
-						continue;
+						log.warn("Failed to get ThreadLocal: " + clsName + "." + fields[j], ex);
 					}
 				}
 			} catch (ClassNotFoundException ex) {
-				ex.printStackTrace();
-				//ignore
-				continue;
+				log.warn("Class not found: " + clsName, ex);
 			}
 		}
 	}
 
 	private void setThreadLocals() {
 		for (Entry<String, Object[]> me : _threadLocalsMap.entrySet()) {
+			final String clsName = me.getKey();
 			try {
-				final String clsName = me.getKey();
 				final Class cls = Classes.forNameByThread(clsName);
 				final Object[] threadLocals = me.getValue();
 				final String[] fields = _fieldsMap.get(clsName);
@@ -206,8 +202,7 @@ public class ThreadLocalListener implements EventThreadInit, EventThreadCleanup,
 					getThreadLocal(cls, fields[j]).set(threadLocals[j]);
 				}
 			} catch (ClassNotFoundException ex) {
-				ex.printStackTrace();
-				continue;
+				log.warn("Class not found: " + clsName, ex);
 			}
 		}
 		_threadLocalsMap.clear();

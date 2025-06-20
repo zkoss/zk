@@ -45,6 +45,7 @@ import java.util.TimeZone;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.zkoss.json.JavaScriptValue;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
@@ -1130,7 +1131,7 @@ public class Datebox extends DateTimeFormatInputElement {
 
 		String unformater = getUnformater();
 		if (!Strings.isBlank(unformater))
-			renderer.render("unformater", unformater);
+			renderer.render("unformater", new JavaScriptValue(unformater));
 
 		if (_locale != null)
 			renderer.render("localizedSymbols", getRealSymbols(_locale, this));

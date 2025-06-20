@@ -2,7 +2,7 @@
 ../dist/lib/zel.jar
 ../dist/lib/zweb.jar
 ../dist/lib/ext/commons-fileupload.jar
-../dist/lib/ext/servlet-api.jar
+../dist/lib/ext/javax.servlet-api.jar
 ../dist/lib/ext/portlet-api.jar
 ../dist/lib/ext/bsh.jar
 ../dist/lib/ext/js.jar

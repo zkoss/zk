@@ -88,7 +88,7 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 					if (hasEndingSlash) {
 						var restCst = cst.substring(k + 1),
 							// match zero-or-more character, until reaching a comma or a semicolon or end of string.
-							regexFlags = restCst.match(/.*?(?=,|:|$)/)[0].trim();
+							regexFlags = this._extractCst(restCst);
 						if (regexFlags) {
 							if (regexFlags.indexOf('d') != -1 || regexFlags.indexOf('y') != -1)
 								zk.error('unsupported regex flags in constraint: ' + cst);
@@ -281,6 +281,15 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 		else if (f.NO_TODAY)
 			return msg['NO_TODAY'] || msgzul.NO_TODAY;
 		return msg || msgzul.ILLEGAL_VALUE;
+	},
+	_extractCst(restCst) {
+		for (let i = 0, n = restCst.length; i < n; i++) {
+			const c = restCst.charAt(i);
+			if (',' == c || ':' == c) {
+				return restCst.substring(0, i).trim();
+			}
+		}
+		return restCst.trim();
 	},
 	reparseConstraint: function () {
 		this._finishParseCst = false;

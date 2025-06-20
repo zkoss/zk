@@ -92,7 +92,7 @@ public class OpenEntityManagerInViewListener implements ExecutionCleanup, Execut
 	 */
 	protected void handleException(Execution exec, Throwable ex) {
 		// Rollback only
-		ex.printStackTrace();
+		log.error("Exception occurred during execution cleanup", ex);
 		rollback(exec, ex);
 	}
 
