@@ -179,8 +179,10 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		/** Returns the unformater.
 		 * @return String the unformater function
 		 */
-		unformater: function (unf) {
-			eval('Datebox._unformater = ' + unf); // eslint-disable-line no-eval
+		unformater: function (unformater, opts) {
+			if (unformater !== this._unformater || opts?.force) {
+				Datebox._unformater = unformater;
+			}
 		},
 		/** Sets whether or not date/time parsing is to be lenient.
 		 *

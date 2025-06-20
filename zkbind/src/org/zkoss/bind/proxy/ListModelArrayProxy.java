@@ -20,6 +20,8 @@ import java.util.Set;
 
 import javassist.util.proxy.MethodHandler;
 import javassist.util.proxy.Proxy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.annotation.ImmutableElements;
@@ -40,6 +42,7 @@ import org.zkoss.zul.ext.SelectionControl;
  * @since 9.6.0
  */
 public class ListModelArrayProxy<E> extends ListModelArray<E> implements Proxy, FormProxyObject, Serializable {
+	private static final Logger log = LoggerFactory.getLogger(ListModelArrayProxy.class);
 	private static final long serialVersionUID = 20210608113022L;
 	private ListModelArray<E> _cache;
 	private ListModelArray<E> _origin;
@@ -248,8 +251,8 @@ public class ListModelArrayProxy<E> extends ListModelArray<E> implements Proxy, 
 			m = getCache().getClass().getDeclaredMethod("fireSelectionEvent", e.getClass());
 			m.setAccessible(true);
 			m.invoke(_cache, e);
-		} catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException noSuchMethodException) {
-			noSuchMethodException.printStackTrace();
+		} catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ex) {
+			log.warn("Exception occurred while firing selection event", ex);
 		}
 	}
 

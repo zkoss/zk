@@ -17,6 +17,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import java.awt.Font;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -46,7 +47,7 @@ public class Captcha extends org.zkoss.zul.Image {
 	private boolean _smartDrawCaptcha; //whether post the smartDraw event already?
 	private EventListener<Event> _smartDrawCaptchaListener; //the smartDrawListener
 
-	private static Random _random = new Random(); //random used for various operation
+	private static Random _random = new SecureRandom(); //random used for various operation
 	private static final String EXCLUDE = "0123456789IOilo"; //default exclude list
 	private static final int CHAR_START = '0'; //character start
 	private static final int CHAR_END = 'z'; //character end

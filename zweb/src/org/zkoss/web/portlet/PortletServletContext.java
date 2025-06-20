@@ -20,13 +20,22 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Enumeration;
+import java.util.EventListener;
+import java.util.Map;
 import java.util.Set;
 
 import javax.portlet.PortletContext;
 import javax.portlet.PortletRequestDispatcher;
+import javax.servlet.Filter;
+import javax.servlet.FilterRegistration;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.Servlet;
 import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRegistration;
+import javax.servlet.SessionCookieConfig;
+import javax.servlet.SessionTrackingMode;
+import javax.servlet.descriptor.JspConfigDescriptor;
 
 /**
  * A facade servlet context based on a given portlet context.
@@ -161,7 +170,119 @@ public class PortletServletContext implements ServletContext {
 	}
 
 	public String getContextPath() {
-		// TODO Auto-generated method stub
+		return _ctx.getContextPath();
+	}
+
+	public int getEffectiveMajorVersion() {
+		return _ctx.getEffectiveMajorVersion();
+	}
+
+	public int getEffectiveMinorVersion() {
+		return _ctx.getEffectiveMinorVersion();
+	}
+
+	public boolean setInitParameter(String s, String s1) {
+		return false;
+	}
+
+	public ServletRegistration.Dynamic addServlet(String s, String s1) {
+		return null;
+	}
+
+	public ServletRegistration.Dynamic addServlet(String s, Servlet servlet) {
+		return null;
+	}
+
+	public ServletRegistration.Dynamic addServlet(String s,
+												  Class<? extends Servlet> aClass) {
+		return null;
+	}
+
+	public <T extends Servlet> T createServlet(Class<T> aClass)
+			throws ServletException {
+		return null;
+	}
+
+	public ServletRegistration getServletRegistration(String s) {
+		return null;
+	}
+
+	public Map<String, ? extends ServletRegistration> getServletRegistrations() {
+		return null;
+	}
+
+	public FilterRegistration.Dynamic addFilter(String s, String s1) {
+		return null;
+	}
+
+	public FilterRegistration.Dynamic addFilter(String s, Filter filter) {
+		return null;
+	}
+
+	public FilterRegistration.Dynamic addFilter(String s,
+												Class<? extends Filter> aClass) {
+		return null;
+	}
+
+	public <T extends Filter> T createFilter(Class<T> aClass)
+			throws ServletException {
+		return null;
+	}
+
+	public FilterRegistration getFilterRegistration(String s) {
+		return null;
+	}
+
+	public Map<String, ? extends FilterRegistration> getFilterRegistrations() {
+		return null;
+	}
+
+	public SessionCookieConfig getSessionCookieConfig() {
+		return null;
+	}
+
+	public void setSessionTrackingModes(Set<SessionTrackingMode> set) {
+
+	}
+
+	public Set<SessionTrackingMode> getDefaultSessionTrackingModes() {
+		return null;
+	}
+
+	public Set<SessionTrackingMode> getEffectiveSessionTrackingModes() {
+		return null;
+	}
+
+	public void addListener(String s) {
+
+	}
+
+	public <T extends EventListener> void addListener(T t) {
+
+	}
+
+	public void addListener(Class<? extends EventListener> aClass) {
+
+	}
+
+	public <T extends EventListener> T createListener(Class<T> aClass)
+			throws ServletException {
+		return null;
+	}
+
+	public JspConfigDescriptor getJspConfigDescriptor() {
+		return null;
+	}
+
+	public ClassLoader getClassLoader() {
+		return _ctx.getClassLoader();
+	}
+
+	public void declareRoles(String... strings) {
+
+	}
+
+	public String getVirtualServerName() {
 		return null;
 	}
 }

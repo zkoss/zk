@@ -352,7 +352,9 @@ Object.defineProperties(Array.prototype, {
 		}
 
 		function rand() {
-			return Math.random().toString().substring(2);
+			const array = new Uint32Array(1);
+			window.crypto.getRandomValues(array);
+			return array[0].toString().substring(2);
 		}
 
 
