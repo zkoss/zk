@@ -59,7 +59,7 @@ dependencies {
 	implementation "org.zkoss.theme:sapphire:10.0.1.1-Eval"
 	implementation "org.zkoss.theme:atlantic:10.0.1.1-Eval"
 	implementation 'commons-logging:commons-logging:1.1.1'
-	implementation 'org.apache.commons:commons-fileupload2-javax:2.0.0-M2'
+	implementation 'org.apache.commons:commons-fileupload2-javax:2.0.0-M4'
 	implementation 'commons-io:commons-io:2.17.0'
 	implementation "org.zkoss.zk:zk:${version}"
 	implementation "org.zkoss.zk:zkplus:${version}"
