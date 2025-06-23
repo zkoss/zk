@@ -14,7 +14,7 @@ java {
 dependencies {
 	api project(':zweb')
 	api project(':zkwebfragment')
-	api 'org.apache.commons:commons-fileupload2-javax:2.0.0-M2'
+	api 'org.apache.commons:commons-fileupload2-javax:2.0.0-M4'
 	api 'commons-io:commons-io:2.17.0'
 	api 'com.google.guava:guava:33.4.8-jre'
 	compileOnly "javax.servlet:javax.servlet-api:${servletVersion}"
