@@ -125,7 +125,7 @@ dependencies {
 	testImplementation 'org.eclipse.jetty:apache-jsp:10.0.11'
 	testImplementation 'org.junit.platform:junit-platform-launcher:1.9.0'
 	testImplementation 'xml-apis:xml-apis:1.4.01'
-	testImplementation 'org.zkoss.test:zk-webdriver:1.4.21.0.0'
+	testImplementation 'org.zkoss.test:zk-webdriver:1.4.32.0.0'
 
 	// For B96_ZK_4194Test to use a specific Chrome driver version (this will change to match latest chrome)
 	testImplementation 'org.seleniumhq.selenium:selenium-devtools-v125:4.21.0'
