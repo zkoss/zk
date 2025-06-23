@@ -125,7 +125,7 @@ public class AuMultipartUploader {
 		}
 	}
 
-	public static AuDecoder parseRequest(HttpServletRequest request, AuDecoder decoder) {
+	public static AuDecoder parseRequest(HttpServletRequest request, AuDecoder decoder) throws IOException {
 		Map<String, Object> params = getFileuploadMetaPerWebApp(
 				WebApps.getCurrent());
 		AbstractFileUpload upload = newServletDiskFileUpload(new DiskFileItemFactory.Builder()

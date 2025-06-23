@@ -29,6 +29,7 @@ package org.zkoss.zk.au.http;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -43,6 +44,7 @@ import org.apache.commons.fileupload2.core.RequestContext;
  * @since 9.6.0
  */
 class ServletRequestContext implements RequestContext {
+	private static final Pattern MULTIPART_RELATED = Pattern.compile("^\\s*multipart/related.*", 2);
 	private final HttpServletRequest _request;
 
 	public ServletRequestContext(HttpServletRequest request) {
@@ -80,5 +82,10 @@ class ServletRequestContext implements RequestContext {
 		return String.format("ContentLength=%s, ContentType=%s",
 				this.getContentLength(),
 				this.getContentType());
+	}
+
+	@Override
+	public boolean isMultipartRelated() {
+		return MULTIPART_RELATED.matcher(this.getContentType()).matches();
 	}
 }
