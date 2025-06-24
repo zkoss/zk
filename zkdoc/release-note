@@ -4,6 +4,7 @@ ZK 9.6.6
 * Bugs
   ZK-5729: JNDI-Injection detected in JndiVariableResolver.java
   ZK-5819: [CodeQL] Apache Commons IO: Possible denial of service attack on untrusted input to XmlStreamReade
+  ZK-5738: HtmlBasedComponent.setTooltiptext(..) not properly escaped
 
 * Upgrade Notes
   + Remove JndiVariableResolver.java to fix ZK-5729
