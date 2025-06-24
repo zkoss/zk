@@ -2,6 +2,9 @@ ZK 10.0.3
 * Features
 
 * Bugs
+  ZK-5819: [CodeQL] Apache Commons IO: Possible denial of service attack on untrusted input to XmlStreamReade
+  ZK-5973: Apache Commons FileUpload DoS Vulnerability
+  ZK-5972: Suppress false-positive scanner alerts in PE/EE
 
 * Upgrade Notes
 
