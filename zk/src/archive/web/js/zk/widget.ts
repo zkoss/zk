@@ -2553,9 +2553,9 @@ function () {
 			if ((s = this.domStyle_(no)))
 				out += ' style="' + s + '"';
 			if ((s = this.domClass_(no)))
-				out += ' class="' + s + '"';
+				out += ' class="' + zUtl.encodeXMLAttribute(s) + '"';
 			if ((s = this.domTooltiptext_()))
-				out += ' title="' + zUtl.encodeXML(s) + '"'; // ZK-676
+				out += ' title="' + zUtl.encodeXMLAttribute(s) + '"'; // ZK-676
 			if ((s = this.getTabindex()) != undefined)
 				out += ' tabindex="' + s + '"';
 		} else {
@@ -2564,9 +2564,9 @@ function () {
 			if (!no.domStyle && (s = this.domStyle_(no)))
 				out += ' style="' + s + '"';
 			if (!no.domClass && (s = this.domClass_(no)))
-				out += ' class="' + s + '"';
+				out += ' class="' + zUtl.encodeXMLAttribute(s) + '"';
 			if (!no.tooltiptext && (s = this.domTooltiptext_()))
-				out += ' title="' + zUtl.encodeXML(s) + '"'; // ZK-676
+				out += ' title="' + zUtl.encodeXMLAttribute(s) + '"'; // ZK-676
 			if (!no.tabindex && (s = this.getTabindex()) != undefined)
 				out += ' tabindex="' + s + '"';
 		}
