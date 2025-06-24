@@ -294,8 +294,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 			if (!this._canActivate(evt)) return;
 			if (!this._upload)
 				zul.wgt.ADBS.autodisable(this);
-			else if (!zk.ie || zk.ie > 10) {// ZK-2471
-				if (!zk.chrome || evt.domTarget.type != 'file') //ZK-3089
+			else if (!zk.chrome || evt.domTarget.type != 'file') { //ZK-3089
 					this._uplder.openFileDialog();
 			}
 

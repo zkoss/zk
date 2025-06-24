@@ -197,7 +197,7 @@ var LeapDay = zk.$extends(zk.Object, {
 	}
 });
 zk.fmt.Date = {
-	_isoDateTimeFormat: zk.ie < 11 ? null : new Intl.DateTimeFormat('en-US', {year: 'numeric'}),
+	_isoDateTimeFormat: new Intl.DateTimeFormat('en-US', {year: 'numeric'}),
 	// strictDate: No invalid date allowed (e.g., Jan 0 or Nov 31)
 	// nonLenient: strictDate + inputs must match this object's format (no additional character allowed)
 	parseDate: function (txt, fmt, nonLenient, refval, localizedSymbols, tz, strictDate) {
@@ -245,7 +245,7 @@ zk.fmt.Date = {
 		}
 
 		var refDate = refval._moment.toDate(),
-			localeDateTimeFormat = zk.ie < 11 ? null : new Intl.DateTimeFormat(localizedSymbols.LAN_TAG, {year: 'numeric'}),
+			localeDateTimeFormat = new Intl.DateTimeFormat(localizedSymbols.LAN_TAG, {year: 'numeric'}),
 			eraName = localizedSymbols.ERA || (eraKey ? eraKey : this.getEraName(refDate, localizedSymbols, localeDateTimeFormat)),
 			ydelta = localizedSymbols.YDELTA || (era ? (0 - era.firstYear + era.direction * 1) : this.getYDelta(refDate, localeDateTimeFormat));
 
@@ -510,7 +510,7 @@ zk.fmt.Date = {
 			    APM: zk.APM
 		};
 		var txt = '',
-			localeDateTimeFormat = zk.ie < 11 ? null : new Intl.DateTimeFormat(localizedSymbols.LAN_TAG, {year: 'numeric'}),
+			localeDateTimeFormat = new Intl.DateTimeFormat(localizedSymbols.LAN_TAG, {year: 'numeric'}),
 			singleQuote;
 		for (var j = 0, fl = fmt.length; j < fl; ++j) {
 			var cc = fmt.charAt(j);
@@ -618,7 +618,6 @@ zk.fmt.Date = {
 		return 0;
 	},
 	getEraName: function (date, localizedSymbols, localeDateTimeFormat) { // override
-		if (zk.ie < 11) return ''; // not support ie
 		var langTag = localizedSymbols.LAN_TAG.split('-').slice(0, 2).join('-'),
 			localeDateString = date.toLocaleDateString(langTag, {era: 'short', day: 'numeric'});
 		return localeDateString.split(' ')[0];
@@ -639,7 +638,7 @@ zk.fmt.Calendar = zk.$extends(zk.Object, {
 	$init: function (date, localizedSymbols) {
 		this._date = date;
 		if (localizedSymbols) {
-			var localeDateTimeFormat = zk.ie < 11 ? null : new Intl.DateTimeFormat(localizedSymbols.LAN_TAG, {year: 'numeric'});
+			var localeDateTimeFormat = new Intl.DateTimeFormat(localizedSymbols.LAN_TAG, {year: 'numeric'});
 			this._offset = localizedSymbols.YDELTA || zk.fmt.Date.getYDelta(date ? date._moment.toDate() : null, localeDateTimeFormat);
 		}
 	},
@@ -658,7 +657,7 @@ zk.fmt.Calendar = zk.$extends(zk.Object, {
 	formatDate: function (val, fmt, localizedSymbols) {
 		var d;
 		if (localizedSymbols) {
-			var localeDateTimeFormat = zk.ie < 11 ? null : new Intl.DateTimeFormat(localizedSymbols.LAN_TAG, {year: 'numeric'});
+			var localeDateTimeFormat = new Intl.DateTimeFormat(localizedSymbols.LAN_TAG, {year: 'numeric'});
 			this._offset = localizedSymbols.YDELTA || zk.fmt.Date.getYDelta(val._moment.toDate(), localeDateTimeFormat);
 		}
 
@@ -681,7 +680,7 @@ zk.fmt.Calendar = zk.$extends(zk.Object, {
 	parseDate: function (txt, fmt, strict, refval, localizedSymbols, tz, strictDate) {
 		var d = zk.fmt.Date.parseDate(txt, fmt, strict, refval, localizedSymbols, tz, strictDate);
 		if (localizedSymbols) {
-			var localeDateTimeFormat = zk.ie < 11 ? null : new Intl.DateTimeFormat(localizedSymbols.LAN_TAG, {year: 'numeric'});
+			var localeDateTimeFormat = new Intl.DateTimeFormat(localizedSymbols.LAN_TAG, {year: 'numeric'});
 			this._offset = localizedSymbols.YDELTA || d ? zk.fmt.Date.getYDelta(d._moment.toDate(), localeDateTimeFormat) : 0;
 		}
 

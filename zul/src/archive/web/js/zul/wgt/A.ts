@@ -199,10 +199,6 @@ zul.wgt.A = zk.$extends(zul.LabelImageWidget, {
 				jq(ifrm).remove();
 			evt.stop();
 		}
-		// Bug ZK-2422
-		if (zk.ie && zk.ie < 11 && !href) {
-			evt.stop({dom: true});
-		}
 		if (this._disabled)
 			evt.stop(); // Prevent browser default
 		else {

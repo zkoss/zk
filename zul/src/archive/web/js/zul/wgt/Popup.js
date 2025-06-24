@@ -284,15 +284,12 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 
 		try {
 			//fix firefox, safari and ie issue
-			if ((zk.ie || zk.ff || zk.safari) && zk.currentFocus) {
+			if ((zk.ff || zk.safari) && zk.currentFocus) {
 				 // Bug ZK-2922, check ancestor first.
 				var n = zk.currentFocus.getInputNode ? zk.currentFocus.getInputNode() : zk.currentFocus.$n();
 				if (jq.nodeName(n, 'input')) {
 					if ((zk.ff || zk.safari) && jq.isAncestor(this.$n(), n)) {
 						jq(n).blur(); // trigger a missing blur event.
-					} else if (zk.ie && document.activeElement !== n) {
-						//ZK-3244 popup miss focus on input on IE
-						zk(n).focus();
 					}
 				}
 			}
@@ -329,12 +326,6 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		if (opts && opts.sendOnOpen)
 			this.fire('onOpen', {open: false});
 
-		if (zk.ie < 11) { // re-create dom element to remove :hover state style
-			var that = this;
-			setTimeout(function () {
-				that.replaceHTML(node); // see also ZK-1216, ZK-1124, ZK-318
-			}, 50);
-		}
 		//remove extra CSS class
 		jq(node).removeClass(this.$s('open'));
 	},

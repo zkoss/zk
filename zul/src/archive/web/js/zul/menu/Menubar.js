@@ -146,9 +146,6 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 		for (var i = childrenLen; i--;)
 			totalWidth += jq(children[i]).outerWidth(true); //ZK-3095
 
-		if (zk.ie) // child width (text node) is not integer in IE
-			totalWidth += childrenLen;
-
 		if (totalWidth >= nodeWidth)
 			this._scrolling = true;
 		else {

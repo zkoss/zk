@@ -273,7 +273,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 					zk(item).scrollIntoView(this.ebody);
 			}
 
-			if ((zk.edge_legacy || zk.ff >= 4 || zk.ie == 10) && this.ebody && this._nativebar) { // B50-ZK-293: FF5 misses to fire onScroll
+			if ((zk.ff >= 4) && this.ebody && this._nativebar) { // B50-ZK-293: FF5 misses to fire onScroll
 				// B50-ZK-440: ebody can be null when ROD
 				this._currentTop = this.ebody.scrollTop;
 				this._currentLeft = this.ebody.scrollLeft;
@@ -328,26 +328,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		return tblwd;
 	},
 	_beforeCalcSize: function () {
-		// Bug 279925
-		if (zk.ie9) {
-			var anchor = this.$n('a');
-			this._oldCSS = anchor.style.display;
-			anchor.style.display = 'none';
-		}
-
-		//Bug in B30-1926094-1.zul
-		if (zk.ie < 11)
-			this._syncFocus(this._focusItem);
-
 		this._calcHgh();
-	},
-	_afterCalcSize: function () {
-		// Bug 279925
-		if (zk.ie9) {
-			this.$n('a').style.display = this._oldCSS;
-			delete this._oldCSS;
-		}
-		this.$supers('_afterCalcSize', arguments);
 	},
 	/**
 	 * Returns the index of the ItemWidget

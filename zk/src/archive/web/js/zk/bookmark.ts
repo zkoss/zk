@@ -76,12 +76,7 @@ zk.bmk = (function () { //used internally
 				(zk.bmk.bookmark = _bookmark)(nm, replace);
 		},
 		/** called when bookmark.html is loaded*/
-		onIframeLoaded: zk.ie && zk.ie < 11 ? function (src) {
-			var j = src.indexOf('?'),
-				nm = j >= 0 ? src.substring(j + 1) : '';
-			location.hash = nm ? /*zk.safari ? nm:*/ '#' + nm : '';
-			checkBookmark();
-		} : zk.$void,
+		onIframeLoaded: zk.$void,
 
 		/** check if URL is changed */
 		onURLChange: function () { //called by mount.js

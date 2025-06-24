@@ -137,7 +137,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 				scrollbarWidth = jq.scrollbarWidth();
 			// ZK-2583: native IE bug, add 1px in scroll div's height for workaround
 			this.$n().style.height = this.$n('cave').style.height = this.$n('right').style.height = scroll.style.height
-				 = scroll.firstChild.style.height = jq.px0(zk.ie ? scrollbarWidth + 1 : scrollbarWidth);
+				 = scroll.firstChild.style.height = jq.px0(scrollbarWidth);
 			p._currentLeft = 0;
 			this.domListen_(scroll, 'onScroll');
 
@@ -262,10 +262,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 				}
 			};
 		if (p) {
-			if (zk.ie < 11)
-				setTimeout(fn, 0);
-			else
-				fn();
+			fn();
 		}
 		evt.stop();
 	},
@@ -342,9 +339,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 					continue; //skip column which is hide
 
 				if (cnt-- <= 0) { //show
-					var wd = isVisible ?
-							(zk.ie ? Math.max(jq(n).width(), 0) : n.offsetWidth) // Bug ZK-2690
-							: 0;
+					var wd = isVisible ? n.offsetWidth : 0;
 					// ZK-2071: nativebar behavior should be same as fakebar
 					// ZK-4762: cellWidth should update while scroll into view
 					if (force || (wd < 2)) {
@@ -356,9 +351,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 						hdWgt._origWd = null;
 						shallUpdate = true;
 					}
-				} else if (force ||
-						 // Bug ZK-2690
-						((zk.ie ? Math.max(jq(n).width(), 0) : n.offsetWidth) != 0)) { //hide
+				} else if (force || n.offsetWidth != 0) { //hide
 					faker = jq('#' + n.id + '-hdfaker')[0];
 					//ZK-2776: consider faker's width first for layout consistent
 					if (faker.style.width && zk.parseInt(faker.style.width) > 1)
@@ -418,14 +411,6 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 			foottbl.style.width = jq.px(totalWidth);
 
 		mesh._restoreFocus();
-
-		// Bug ZK-601, Bug ZK-1572
-		if (zk.ie9_) {
-			var n = mesh.$n();
-			n.className += ' ';
-			if (n.offsetHeight);
-			n.className.trim();
-		}
 	}
 });
 

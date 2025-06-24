@@ -1410,10 +1410,7 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	 */
 	download: function (url) {
 		if (url) {
-			var ifr: HTMLIFrameElement = jq('#zk_download')[0] as HTMLIFrameElement,
-				ie = zk.ie,
-				sbu = zk.skipBfUnload;
-			if (ie) zk.skipBfUnload = true;
+			var ifr: HTMLIFrameElement = jq('#zk_download')[0] as HTMLIFrameElement;
 
 			if (!ifr) {
 				ifr = document.createElement('iframe');
@@ -1423,19 +1420,7 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 				document.body.appendChild(ifr);
 			}
 
-			if (ie && ie < 11) { // Since IE11 dropped onreadystatechange support: https://stackoverflow.com/a/26835889
-				// Use onreadystatechange to listen if iframe is loaded
-				ifr['onreadystatechange'] = function () {
-					var state = ifr.contentWindow?.document.readyState;
-					if (state === 'interactive')
-						setTimeout(function () { zk.skipBfUnload = sbu; }, 0);
-				};
-			}
 			ifr.src = url; //It is OK to reuse the same iframe
-
-			// Workaround for IE11: wait a second (not perfect) for iframe loading
-			if (ie === 11)
-				setTimeout(function () { zk.skipBfUnload = sbu; }, 1000);
 		}
 	},
 	/** Prints the content of the browser window.
@@ -1916,10 +1901,7 @@ zAu.cmd1 = /*prototype*/ {
 			// so we have to do the same as that code in Window.js
 			setTimeout(function () {
 				zk.afterAnimate(function () {
-					if (zk.ie9_)
-						wgt.focus(100);
-					else
-						wgt.focus(0); //wgt.focus() failed in FF
+					wgt.focus(0); //wgt.focus() failed in FF
 				}, -1);
 			});
 		}

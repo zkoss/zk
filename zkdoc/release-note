@@ -6,6 +6,7 @@ ZK 9.6.6
   ZK-5819: [CodeQL] Apache Commons IO: Possible denial of service attack on untrusted input to XmlStreamReade
   ZK-5738: HtmlBasedComponent.setTooltiptext(..) not properly escaped
   ZK-5715: PDFjs cve-2024-4367 arbitrary code execution from pdf document
+  ZK-5701: remove IE code and css rules
 
 * Upgrade Notes
   + Remove JndiVariableResolver.java to fix ZK-5729

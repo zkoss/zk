@@ -255,11 +255,6 @@ interface Pcai {
 				return;
 			}
 
-			if (zk.ie && zk.ie < 11 && !jq.isReady) {//3055849: ie6/ie7 has to wait until isReady (tonyq reported ie8 has similar issue)
-				jq(mtBL0);
-				return;
-			}
-
 			var inf = _crInfBL1.shift();
 			if (!inf) break;
 
@@ -634,33 +629,12 @@ jq(function () {
 		if (!wgt) wgt = evt.target;
 
 		var dEvent = evt.domEvent,
-			body = document.body,
-			old = zk.currentFocus;
+			body = document.body;
 		if (dEvent.clientX <= body.clientWidth && dEvent.clientY <= body.clientHeight) //not click on scrollbar
 			// F70-ZK-2007: Add the button information in it.
 			Widget.mimicMouseDown_(wgt, noFocusChange, evt.which); //wgt is null if mask
 
 		_doEvt(evt);
-		
-		//Bug 2799334, 2635555 and 2807475: need to enforce a focus event (IE only)
-		//However, ZK-354: if target is upload, we can NOT focus to it. Thus, focusBackFix was introduced
-		if (old && zk.ie) { // Bug ZK-2795, IE11 still fails in this case.
-			var n = jq(old)[0];
-			if (n)
-				setTimeout(function () {
-					try {
-						var cf = zk.currentFocus;
-						if (cf && cf != old && !n.offsetWidth && !n.offsetHeight) {
-							zk.focusBackFix = true;
-							cf.focus();
-						}
-					} catch (e) {
-						zk.debugLog(e.message || e);
-					} finally {
-						delete zk.focusBackFix;
-					}
-				});
-		}
 	}
 
 	function _docResize(): void {
@@ -753,14 +727,12 @@ jq(function () {
 
 		var wgt = Widget.$(evt, {child: true});
 		if (wgt) {
-			if (zk.ie && zk.ie < 11)
-				evt.which = 3;
 			var wevt = new zk.Event(wgt, 'onRightClick', evt.mouseData(), {}, evt);
 			_doEvt(wevt);
 			if (wevt.domStopped)
 				return false;
 		}
-		return !(zk.ie && zk.ie < 11) || evt['returnValue'];
+		return evt['returnValue'];
 	})
 	.on('zmousedown', function (evt) {
 		if (zk.mobile) {
@@ -838,7 +810,7 @@ jq(function () {
 		zAu._onVisibilityChange();
 	});
 
-	if (zk.scriptErrorHandlerEnabled && !zk.ie9_) {
+	if (zk.scriptErrorHandlerEnabled) {
 		zk.scriptErrorHandler = function (evt) {
 			let errorMsg = evt.originalEvent.message,
 				stack = evt.originalEvent.error.stack,
@@ -872,7 +844,7 @@ jq(function () {
 		if ((_reszInf['lastTime'] && now < _reszInf['lastTime']) || _reszInf['inResize'])
 			return; //ignore resize for a while (since onSize might trigger onsize)
 
-		var delay = (zk.ie && zk.ie < 11) || zk.android ? 250 : 50;
+		var delay = zk.android ? 250 : 50;
 		_reszInf['time'] = now + delay - 1; //handle it later
 		setTimeout(_docResize, delay);
 
@@ -906,7 +878,7 @@ jq(function () {
 		zk.unloading = true; //to disable error message
 
 		// B65-ZK-2051: Remove desktop if is IE.
-		if (zk.ie || !zk.rmDesktoping) {
+		if (!zk.rmDesktoping) {
 			rmDesktop();
 		}
 	});
@@ -954,10 +926,7 @@ jq(function () {
 
 		zk.unloading = true; //FF3 aborts ajax before calling window.onunload
 		
-		// B65-ZK-2051: Remove desktop if not IE.
-		if (!zk.ie) {
-			rmDesktop();
-		}
+		rmDesktop();
 		//Return nothing
 	};
 

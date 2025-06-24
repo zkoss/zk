@@ -699,12 +699,6 @@ zul.Widget = zk.$extends(zk.Widget, {
 		if (jq.nodeName(evt.domTarget, 'select'))
 			evt.stop({dom: true, revoke: true}); //Bug 1756559: don't stop DOM since it affects IE and Opera's SELECT's closing dropdown
 
-		//Bug 2041347
-		if (zk.ie < 11 && keyCode == 112) {
-			zk._oldOnHelp = window.onhelp;
-			window.onhelp = function () {return false;};
-			setTimeout(function () {window.onhelp = zk._oldOnHelp; zk._oldOnHelp = null;}, 200);
-		}
 		return true; //handled
 	},
 	/**

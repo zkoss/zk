@@ -83,14 +83,10 @@ zjq = function (this: zk.JQZK, jq) { //ZK extension
 	function _dissel(this: HTMLElement): void {
 		var $this = jq(this);
 		$this.css('user-select', 'none');
-		if (zk.ie11_ || zk.edge_legacy)
-			$this.on('selectstart', zk.$void);
 	}
 	function _ensel(this: HTMLElement): void {
 		var $this = jq(this);
 		$this.css('user-select', '');
-		if (zk.ie11_ || zk.edge_legacy)
-			$this.off('selectstart', zk.$void);
 	}
 
 	type scrollIntoViewInfo = { oft: zk.Offset; h: number; w: number; el: HTMLElement } | undefined;
@@ -264,24 +260,11 @@ zjq = function (this: zk.JQZK, jq) { //ZK extension
 
 zk.copy(zjq, {
 	//Returns the minimal width to hold the given cell called by getChildMinSize_
-	minWidth: (!zk.ie11_) ? function (el) {
+	minWidth: function (el) {
 		return zk(el).offsetWidth();
-	} : function (el) {
-		// B65-ZK-1526: IE11 required an extra pixel as IE9/IE10
-		return zk(el).offsetWidth() + 1;
 	},
 
-	fixInput: zk.ie == 11 ? function (el) { //ZK-3237: including domie.js for IE 11 will have many side effects
-		try {
-			var $n = zk(el), pos;
-			if ($n.isInput()) {
-				pos = $n.getSelectionRange();
-				$n.setSelectionRange(pos[0], pos[1]);
-			}
-		} catch (e) {
-			zk.debugLog(e.message || e);
-		}
-	} : zk.$void, //overriden in dom.js to fix the focus issue (losing caret...)
+	fixInput: zk.$void, //overriden in dom.js to fix the focus issue (losing caret...)
 	_fixCSS: function (el) { //overriden in domie.js , domsafari.js , domopera.js
 		el.className += ' ';
 		if (el.offsetHeight) {
@@ -901,22 +884,10 @@ jq(el).zk.sumStyles("lr", jq.paddings);
 		var el = this.jq[0];
 		if (!ofs) {
 			if (el.getBoundingClientRect) { // IE and FF3
-				var elst, oldvisi;
-				if (zk.ie && zk.ie < 11 && el.style.display == 'none') {
-				//When popup a window in an iframe, getBoundingClientRect not correct (test case: B36-2851102.zul within iframe)
-					oldvisi = (elst = el.style).visibility;
-					elst.visibility = 'hidden';
-					elst.display = '';
-				}
-
 				var rect = el.getBoundingClientRect(),
 					b = [rect.left + jq.innerX() - el.ownerDocument.documentElement.clientLeft,
 						rect.top + jq.innerY() - el.ownerDocument.documentElement.clientTop] as zk.Offset;
 
-				if (elst) {
-					elst.display = 'none';
-					elst.visibility = oldvisi;
-				}
 				// fix float number issue for ZTL B50-3298164
 				b[0] = Math.ceil(b[0]);
 				b[1] = Math.ceil(b[1]);
@@ -1114,7 +1085,7 @@ jq(el).zk.sumStyles("lr", jq.paddings);
 	toStyleOffset: function (x, y) {
 		var el = this.jq[0],
 			oldx = el.style.left, oldy = el.style.top,
-			resetFirst = zk.webkit || zk.opera || zk.air || zk.ie;
+			resetFirst = zk.webkit || zk.opera || zk.air;
 		//Opera:
 		//1)we have to reset left/top. Or, the second call position wrong
 		//test case: Tooltips and Popups
@@ -2606,9 +2577,7 @@ this._syncShadow(); //synchronize shadow
 	 * because it has no effect for browsers other than IE.
 	 * @since 5.0.1
 	 */
-	focusOut: (zk.ie && zk.ie < 11) ? function () {
-		window.focus();
-	} : function () {
+	focusOut: function () {
 		var a = jq('#z_focusOut')[0];
 		if (!a) {
 			// for Chrome and Safari, we can't set "display:none;"

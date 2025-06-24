@@ -74,9 +74,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		 * onChanging is added.
 		 * @since 8.5.0
 		 */
-		type: zk.ie < 11 ? function () {
-			this.rerender(); //though IE9 allows type to change but value is reset
-		} : function (type) {
+		type: function (type) {
 			var inp = this.getInputNode();
 			if (inp)
 				inp.type = type;
@@ -160,9 +158,6 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 				scrollPos.Top = pp.scrollTop;
 				pp.style.height = 'auto'; // ZK-2086: BandBox popup invalid render if ON_OPEN event listener is attached
 
-				// Bug 2941343, 2936095, and 3189142
-				if (zk.ie9)
-					pp.style.width = pz[0];
 				this._fixsz(pz);
 			} finally {
 				// Bug ZK-2294, restore the scroll position
@@ -228,12 +223,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		pp.style.position = 'absolute'; //just in case
 		pp.style.display = 'block';
 
-		var ppofs = this._getPopupSize(pp, pp2),
-			ie10up = zk.ie10_ || zk.ie11_;
-		if (ie10up) {
-			// B70-ZK-2742: arrange method fixsz execution order
-			this._fixsz(ppofs);//fix size
-		}
+		var ppofs = this._getPopupSize(pp, pp2);
 		// throw out
 		pp.style.visibility = 'hidden';
 		pp.style.left = '-10000px';
@@ -247,8 +237,6 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		$pp.makeVParent();
 		zWatch.fireDown('onVParent', this);
 
-		if (ie10up)
-			pp.style.height = pp.style.width = 'auto';
 		this._fixsz(ppofs);
 
 		// throw in
@@ -644,9 +632,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			else this.open({sendOnOpen: true});
 
 			//FF: if we eat UP/DN, Alt+UP degenerate to Alt (select menubar)
-			var opts = {propagation: true};
-			if (zk.ie < 11) opts.dom = true;
-			evt.stop(opts);
+			evt.stop({propagation: true});
 			return;
 		}
 

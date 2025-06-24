@@ -230,11 +230,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		return null;
 	}
 	function _bkRange(wgt: zk.Widget): [number, number] | null {
-		if (zk.ie && zk.ie < 11 && zk.cfrg) { //Bug ZK-1377
-			var cfrg = zk.cfrg;
-			delete zk.cfrg;
-			return cfrg;
-		}
 		let input: HTMLInputElement = wgt.getInputNode && wgt.getInputNode();
 		return input ? zk(input).getSelectionRange() : null;
 	}
@@ -257,8 +252,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	
 	function _listenFlex(wgt: zk.Widget): void {
 		if (!wgt._flexListened) {
-			if (zk.ie) // not to use css flex in ie
-				wgt._cssflex = false;
 			var parent = wgt.parent,
 				cssFlexEnabled = wgt._cssflex && parent && (parent.$instanceof(zk.Page) || parent.getFlexContainer_() != null);
 			if (cssFlexEnabled)
@@ -319,9 +312,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		getDropTarget: function (evt, drag) {
 			var wgt;
 			// Firefox's bug -  https://bugzilla.mozilla.org/show_bug.cgi?id=1259357
-			if ((zk.ff && jq(evt.domTarget).css('overflow') !== 'visible') ||
-				// IE 9~11 and Edge may receive a wrong target when dragging with an Image.
-				(((zk.ie && zk.ie > 8) || zk.edge_legacy) && jq.nodeName(evt.domTarget, 'img'))) {
+			if (zk.ff && jq(evt.domTarget).css('overflow') !== 'visible') {
 				var n = document.elementFromPoint(evt.domEvent.clientX || 0, evt.domEvent.clientY || 0);
 				if (n)
 					wgt = zk.$(n);
@@ -3399,11 +3390,7 @@ unbind_: function (skipper, after) {
 	getChildMinSize_: function (attr, wgt) { //'w' for width or 'h' for height
 		if (attr == 'w') {
 			// feature #ZK-314: zjq.minWidth function return extra 1px in IE9/10/11
-			var wd = zjq.minWidth(wgt);
-			if (zk.ie && zk.ie > 8 && zk.isLoaded('zul.wgt') && wgt.$instanceof(zul.wgt.Image)) {
-				wd = zk(wgt).offsetWidth();
-			}
-			return wd;
+			return zjq.minWidth(wgt);
 		} else {
 			return zk(wgt).offsetHeight();//See also bug ZK-483
 		}
@@ -3507,9 +3494,6 @@ unbind_: function (skipper, after) {
 		var n = this.getDragNode();
 		if (n) { //ZK-1686: should check if DragNode exist
 			this._drag = new zk.Draggable(this, n, this.getDragOptions_(_dragoptions));
-			// B50-3306835.zul
-			if (zk.ie9 && jq.nodeName(n, 'img'))
-				jq(n).on('mousedown', zk.$void);
 		}
 	},
 	/** Cleans up the widget to make it un-draggable. It is called if {@link #getDraggable}
@@ -3520,10 +3504,6 @@ unbind_: function (skipper, after) {
 	cleanDrag_: function () {
 		var drag = this._drag;
 		if (drag) {
-			var n;
-			if (zk.ie9 && (n = this.getDragNode()) && jq.nodeName(n, 'img'))
-				jq(n).off('mousedown', zk.$void);
-
 			this._drag = null;
 			drag.destroy();
 		}
@@ -5799,9 +5779,6 @@ Object skip(zk.Widget wgt);
 		if (skip && skip.firstChild) {
 			var cf = zk.currentFocus,
 				iscf = cf && cf.getInputNode;
-			
-			if (iscf && zk.ie && zk.ie < 11) //Bug ZK-1377 IE will lost input selection range after remove node
-				zk.cfrg = zk(cf!.getInputNode()).getSelectionRange();
 			
 			skip.parentNode?.removeChild(skip);
 				//don't use jq to remove, since it unlisten events

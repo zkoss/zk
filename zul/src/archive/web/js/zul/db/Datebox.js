@@ -466,7 +466,6 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 
 			//FF: if we eat UP/DN, Alt+UP degenerate to Alt (select menubar)
 			var opts = {propagation: true};
-			if (zk.ie < 11) opts.dom = true;
 			evt.stop(opts);
 			return;
 		}
@@ -867,15 +866,6 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		if (this.parent.getTimeFormat())
 			this.parent._tm.setVisible(val == 'day');
 		this.$supers('_setView', arguments);
-
-		// ZK-2047: when sync shadow, the calendar popup should be above the pdf
-		if (zk.ie > 9) {
-			this.syncShadow();
-		}
-		// fix shadow ghost for ie9
-		if (zk.ie9_ && force) {
-			zk(this.parent.$n('pp')).redoCSS(500); // wait for animation
-		}
 	},
 	// ZK-2308
 	doKeyDown_: function (evt) {
