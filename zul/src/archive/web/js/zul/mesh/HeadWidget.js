@@ -135,13 +135,6 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 		jq(this.ftfaker).remove();
 		this.$supers(HeadWidget, 'unbind_', arguments);
 	},
-	insertChildHTML_: function (child) {
-		//ZK-2461: ie8 will take head-bar as one of columns, and equalize the width with other normal heads
-		if (zk.ie9 && this.$n('bar')) {
-			this.$n('bar').style.display = 'none';
-		}
-		this.$supers('insertChildHTML_', arguments);
-	},
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
 		if (this.desktop) {

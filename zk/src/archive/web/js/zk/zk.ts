@@ -1561,8 +1561,6 @@ zk.$intercepts(zul.inp.Combobox, {
 	zk.android = agent.indexOf('android') >= 0;
 	zk.mobile = zk.ios || zk.android;
 	zk.css3 = true;
-	var ie11 = browser.mozilla && (agent.indexOf('trident') >= 0) && _ver(browser.version);
-	
 	zk.vendor = zk.webkit ? 'webkit' : '';
 
 	var bodycls = '';
@@ -1573,26 +1571,7 @@ zk.$intercepts(zul.inp.Combobox, {
 		bodycls = 'opera';
 		zk.vendor = 'O';
 	} else {
-		zk.iex = browser.msie && _ver(browser.version); //browser version
-			//zk.iex is the Browser Mode (aka., Compatibility View)
-			//while zk.ie is the Document Mode
-		if (!zk.iex && ie11)
-			zk.iex = ie11;
-		
-		if (zk.iex) {
-			zk.ie = document['documentMode'] || zk.iex;
-			if (zk.ie) {
-				// zk.ien: the version n or later but less than 11
-				if (zk.ie < 11 && zk.ie >= 9) {
-					zk.ie9 = zk.ie >= 9;
-					zk.ie10 = zk.ie >= 10;
-				}
-				zk['ie' + zk.ie + '_'] = true;
-				zk.css3 = zk.ie >= 9;
-				bodycls = 'ie ie' + Math.floor(zk.ie);
-			}
-			zk.vendor = 'ms';
-		} else if (zk.edge || zk.edge_legacy) {
+		if (zk.edge || zk.edge_legacy) {
 			bodycls = 'edge';
 		} else {
 			if (zk.chrome) {
@@ -1622,57 +1601,51 @@ zk.$intercepts(zul.inp.Combobox, {
 	zk.vendor_ = zk.vendor.toLowerCase();
 })();
 
-if (!zk.ie && !zk.edge_legacy) {
-	/** @class zk.Buffer
-	 * A string concatenation implementation to speed up the rendering performance
-	 * in the modern browsers, except IE or MS's Edge. The implementation is to
-	 * cheat the mold js of the ZK widgets' implementation that it assumed the
-	 * argument is an array type in the early ZK version.
-	 * <p>Note: if the default implementation breaks the backward compatibility,
-	 * please use the following script to overwrite the implementation as the same
-	 * as the early ZK version. For example,
+/** @class zk.Buffer
+ * A string concatenation implementation to speed up the rendering performance
+ * in the modern browsers, except IE or MS's Edge. The implementation is to
+ * cheat the mold js of the ZK widgets' implementation that it assumed the
+ * argument is an array type in the early ZK version.
+ * <p>Note: if the default implementation breaks the backward compatibility,
+ * please use the following script to overwrite the implementation as the same
+ * as the early ZK version. For example,
 <pre><code>
 zk.Buffer = Array;
 </code></pre>
-	 * </p>
-	 * @since 8.0.0
-	 */
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore
-	zk.Buffer = function () {
-		this['out'] = '';
-	};
+ * </p>
+ * @since 8.0.0
+ */
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+zk.Buffer = function () {
+	this['out'] = '';
+};
 
-	zk.Buffer.prototype = new Array;
-	zk.copy(zk.Buffer.prototype, {
-		push: function () {
-			for (var i = 0, j = arguments.length; i < j; i++)
-				if (arguments[i] != null || arguments[i] != undefined)
-					this['out'] += arguments[i];
-		},
-		join: function (str) {
-			if (str)
-				throw 'Wrong usage here! Please run the script `zk.Buffer = Array;` instead.';
-			return this['out'];
-		},
-		shift: _zkf = function () {throw 'Wrong usage here! Please run the script `zk.Buffer = Array;` instead.';},
-		unshift: _zkf,
-		pop: _zkf,
-		slice: _zkf,
-		sort: _zkf
-	});
-} else {
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore
-	zk.Buffer = Array;
+zk.Buffer.prototype = new Array;
+zk.copy(zk.Buffer.prototype, {
+	push: function () {
+		for (var i = 0, j = arguments.length; i < j; i++)
+			if (arguments[i] != null || arguments[i] != undefined)
+				this['out'] += arguments[i];
+	},
+	join: function (str) {
+		if (str)
+			throw 'Wrong usage here! Please run the script `zk.Buffer = Array;` instead.';
+		return this['out'];
+	},
+	shift: _zkf = function () {throw 'Wrong usage here! Please run the script `zk.Buffer = Array;` instead.';},
+	unshift: _zkf,
+	pop: _zkf,
+	slice: _zkf,
+	sort: _zkf
+});
+
+//zk.Object//
+function getProxy(o, f) { //used by zk.Object
+	return function () {
+			return f.apply(o, arguments);
+		};
 }
-
-	//zk.Object//
-	function getProxy(o, f) { //used by zk.Object
-		return function () {
-				return f.apply(o, arguments);
-			};
-	}
 zk.Class = function () {}; //regClass() requires zk.Class
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore

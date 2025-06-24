@@ -217,8 +217,6 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 					val = sel.getLabel(),
 					selectionRange = null;
 
-				if (zk.ie < 11) // ZK-4588: caret missing after edit input value in IE9/IE10
-					selectionRange = zk(inp).getSelectionRange();
 				this.valueEnter_ = inp.value = val;
 				if (selectionRange)
 					inp.setSelectionRange(selectionRange[0], selectionRange[1]);

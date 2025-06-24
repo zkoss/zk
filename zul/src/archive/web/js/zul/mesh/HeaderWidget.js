@@ -304,12 +304,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			wgt = zk.Widget.$(tg),
 			n = this.$n(),
 			ofs = this._dragsz ? zk(n).revisedOffset() : false,
-			btn = wgt.$n('btn'),
 			ignoreSort = false;
-
-		//IE will trigger doClick during closing menupopup
-		if (zk.ie < 11 && btn && !zk(btn).isRealVisible())
-			ignoreSort = true;
 
 		if (!zk.dragging && (wgt == this || wgt.$instanceof(zul.wgt.Label))
 				&& this.isSortable_() && !jq.nodeName(tg, 'input')
@@ -401,14 +396,6 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			zkp = p ? zk(p) : null;
 		if (zkp) {
 			// Bug #3255116
-			if (mw.ebody) {
-				if (zk.ie < 11) { //Related bugs: ZK-890 and ZK-242
-					if (mw.ebodytbl && !mw.ebodytbl.width) {
-						mw.ebodytbl.width = '100%';
-						// reset the width for IE
-					}
-				}
-			}
 			return {
 				height: zkp.contentHeight(),
 				width: zkp.contentWidth()

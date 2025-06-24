@@ -110,26 +110,7 @@ zul.med.Applet = zk.$extends(zul.Widget, {
 	},
 	/** Invokes the function of the applet running at the client.
 	 */
-	invoke: zk.ie ? function () {
-		var n = this.$n(),
-			len = arguments.length;
-		if (n && len >= 1) {
-			var fn = arguments[0];
-			try {
-				if (len === 1)
-					n[fn]();
-				else if (len === 2)
-					n[fn](arguments[1]);
-				else {
-					var args = Array.apply(null, arguments);
-					args.shift();
-					n[fn](args);
-				}
-			} catch (e) {
-				zk.error('Failed to invoke applet\'s method: ' + fn + '\n' + e.message);
-			}
-		}
-	} : function () {
+	invoke: function () {
 		var n = this.$n();
 		if (n && arguments.length >= 1) {
 			var fn = arguments[0],

@@ -21,9 +21,6 @@ function (out) {
 	this._tabindexTargetChild = null;
 	for (var w = this.firstChild; w; w = w.nextSibling) {
 		w.redraw(out);
-		// ZK-1706: the width of empty space does not always equal 3px in ie9
-		if ('horizontal' == this.getOrient() && zk.ie9)
-			out.push('<span></span>');
 	}
 	out.push('</div>');
 

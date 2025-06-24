@@ -25,8 +25,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		var wgtn = wgt.$n(),
 			ws = wgtn ? wgtn.style.whiteSpace : ''; //bug#3106514: sizedByContent with not visible columns
 		if (wgtn) {
-			if (zk.ie9)
-				wgt._wsbak = ws; // B50-ZK-432
 			wgtn.style.whiteSpace = 'nowrap'; // B50-3316030, B50-3346235: pre cause extra space
 		}
 		var eheadtblw,
@@ -134,7 +132,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					wd = ftwd;
 				wds[i] = wd;
 				// Bug ZK-2772 don't plus one when frozen exists.
-				if (!wgt.frozen && (zk.ff > 4 || zk.ie > 8 || zk.safari)) // firefox4 & IE9, 10, 11 & safari still cause break line in case B50-3147926 column 1
+				if (!wgt.frozen && (zk.ff > 4 || zk.safari)) // firefox4 & IE9, 10, 11 & safari still cause break line in case B50-3147926 column 1
 					++wds[i];
 				width += wds[i]; // using wds[i] instead of wd for B50-3183172.zul
 				if (w)
@@ -151,7 +149,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					wds[i] = wd;
 
 					// Bug ZK-2772 don't plus one when frozen exists.
-					if (!wgt.frozen && (zk.ff > 4 || zk.ie > 8)) // firefox4 & IE9, 10, 11 still cause break line in case B50-3147926 column 1
+					if (!wgt.frozen && zk.ff > 4) // firefox4 & IE9, 10, 11 still cause break line in case B50-3147926 column 1
 						++wds[i];
 					width += wds[i]; // using wds[i] instead of wd for B50-3183172.zul
 				}
@@ -733,7 +731,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		this.$supers(zul.mesh.MeshWidget, 'bind_', arguments);
 
 		this._bindDomNode();
-		if (this.frozen || zk.ie)
+		if (this.frozen)
 			this._cssflex = false; //force to use old flex
 		if (this._cssflex && this.isChildrenFlex()) {//css flex
 			this.ehdfaker.style.display = 'none';
@@ -1096,11 +1094,6 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		if (this.inPagingMold() && this._autopaging && rows && rows.length)
 			if (_fixPageSize(this, rows))
 				return; //need to reload with new page size
-
-		if (zk.ie9 && (this._wsbak !== undefined)) { // B50-ZK-432
-			this.$n().style.whiteSpace = this._wsbak;
-			delete this._wsbak;
-		}
 
 		if (!this.desktop || !this._model || !rows || !rows.length) return;
 
@@ -1911,10 +1904,6 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			if (this.isVflex()) {
 				hgh = this._vflexSize(n.style.height);
 
-				if (zk.ie < 11 && this._cachehgh != hgh) {
-					hgh -= 1; // need to display the bottom border.
-					this._cachehgh = hgh;
-				}
 				if (hgh < 25) hgh = 25;
 
 				var rowhgh = firstVisiRow ? zk(firstVisiRow).offsetHeight() : null;

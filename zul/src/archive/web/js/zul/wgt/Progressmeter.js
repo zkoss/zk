@@ -62,18 +62,7 @@ zul.wgt.Progressmeter = zk.$extends(zul.Widget, {
 			}
 		}
 	},
-	_handleIndeterminateAnimation: zk.ie9 ? function () { // ZK-3629: for ie9 indetermination animation
-		var $img = jq(this.$n('img'));
-		if (this._indeterminate) {
-			$img.css({width: '50%'});
-			this._startIndeterminateAnimation($img);
-			this._indeterminateAnimation = true;
-		} else if (this._indeterminateAnimation) {
-			$img.stop(true);
-			this._indeterminateAnimation = false;
-			this._fixImgWidth();
-		}
-	} : zk.$void,
+	_handleIndeterminateAnimation: zk.$void,
 	_startIndeterminateAnimation: function (target) { // ZK-3629: for ie9 indetermination animation
 		var self = this;
 		target.css({left: '-100%'});

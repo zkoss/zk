@@ -103,12 +103,6 @@ zul.med.Flash = zk.$extends(zul.Widget, {
 			if (n) n.loop = v || '';
 		}
 	},
-	doMouseDown_: function (e) {
-		// Bug 3306281
-		if (zk.ie < 11)
-			this.fire('onClick', e.data, e.opts);
-		this.$supers('doMouseDown_', arguments);
-	},
 	//super//
 	setHeight: function (height) {
 		this._height = height;

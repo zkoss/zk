@@ -317,11 +317,6 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 			case 13: case 27://enter,esc,tab
 				break;
 			case 86: // ctrl + v
-				// Bug ZK-1749
-				if (zk.ie <= 9 && evt.ctrlKey) { // IE9 onpaste not support
-					this._updateChanged();
-					break;
-				}
 				// fallthrough and no need to break here, let it run with 'default' case
 			default:
 				if (!(code >= 112 && code <= 123) //F1-F12
@@ -417,7 +412,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		this._onChanging();
 		this._stopAutoIncProc();
 
-		if ((zk.ie < 11 || zk.webkit) && this._lastPos)
+		if (zk.webkit && this._lastPos)
 			zk(this.getInputNode()).setSelectionRange(this._lastPos, this._lastPos);
 	},
 	_getPos: function () {
@@ -483,7 +478,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		var self = this,
 			fn = up ? '_doUp' : '_doDown';
 		this.timerId = setInterval(function () {
-			if ((zk.ie < 11 || zk.webkit) && self._lastPos)
+			if (zk.webkit && self._lastPos)
 				zk(self.getInputNode()).setSelectionRange(self._lastPos, self._lastPos);
 			self[fn]();
 		}, 300);

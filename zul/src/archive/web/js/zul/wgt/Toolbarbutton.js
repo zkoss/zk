@@ -296,7 +296,7 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 		if (!this._disabled) {
 			if (!this._upload)
 				zul.wgt.ADBS.autodisable(this);
-			else if (!zk.ie || zk.ie > 10) // ZK-2471
+			else // ZK-2471
 				this._uplder.openFileDialog();
 
 			this.fireX(evt);

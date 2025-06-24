@@ -453,7 +453,7 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			arrow1 = self.$n(orient + (isH ? '-left' : '-up')),
 			arrow2 = self.$n(orient + (isH ? '-right' : '-down'));
 
-		if (isH && (!(zk.ie < 11) || !zk.opera)) //IE and Opera does not support mouse wheel
+		if (isH && !zk.opera) //IE and Opera does not support mouse wheel
 			jq(cave).mousewheel(self.proxy(self._mousewheelX));
 		else
 			jq(cave).mousewheel(self.proxy(self._mousewheelY));
@@ -480,7 +480,7 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			arrow1 = self.$n(orient + (isH ? '-left' : '-up')),
 			arrow2 = self.$n(orient + (isH ? '-right' : '-down'));
 
-		if (isH && (!(zk.ie < 11) || !zk.opera)) //IE and Opera does not support mouse wheel
+		if (isH && !zk.opera) //IE and Opera does not support mouse wheel
 			jq(cave).unmousewheel(self.proxy(self._mousewheelX));
 		else
 			jq(cave).unmousewheel(self.proxy(self._mousewheelY));

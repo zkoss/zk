@@ -171,7 +171,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				zIndex: wgt._zIndex,
 				visible: realVisible
 			});
-			var tag = zk.ie < 11 ? 'a' : 'button';
+			var tag = 'button';
 			jq('#' + wgt.uuid + '-mask').append('<' + tag + ' id="' + wgt.uuid + '-mask-a" style="top:0;left:0" onclick="return false;" href="javascript:;" class="z-focus-a" aria-hidden="true" tabindex="-1"></' + tag + '>');
 			wgt._anchor = jq('#' + wgt.uuid + '-mask-a')[0];
 		}
@@ -194,10 +194,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		setTimeout(function () {
 			zk.afterAnimate(function () {
 				if (!zUtl.isAncestor(wgt, zk.currentFocus)) {
-					if (zk.ie9_)
-						wgt.focus(100);
-					else
-						wgt.focus();
+					wgt.focus();
 				}
 			}, -1);
 		});
@@ -1156,7 +1153,7 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 		// at console. It should unbind ckeditor before remove it. Put here can works well on every browser.
 		this.unbindChildren_();
 		// ZK-2247: remove iframe to prevent load twice
-		if (zk.ie > 8 || zk.chrome) {
+		if (zk.chrome) {
 			var $jq = jq(this.$n()).find('iframe');
 			if ($jq.length)
 				$jq.hide().remove();
@@ -1191,13 +1188,6 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 			this._mask = null;
 		}
 
-		// ZK-1951, ZK-2045: Page becomes blank after detaching a modal window having an iframe loaded with PDF in IE > 9
-		// A workaround is to hide the iframe before remove
-		if (zk.ie > 9) {
-			var $jq = jq(this.$n()).find('iframe');
-			if ($jq.length)
-				$jq.hide().remove();
-		}
 		zk(node).undoVParent(); //no need to fire onVParent in unbind_
 		zWatch.unlisten({
 			onFloatUp: this,

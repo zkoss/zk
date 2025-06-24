@@ -141,8 +141,8 @@ zul.db.Renderer = {
 			m = val.getMonth(),
 			y = val.getFullYear(),
 			// to avoid moment using the last day(according to local timezone) of the previous year in ie.
-			date = zk.ie ? new Date(y, m) : val._moment.toDate(),
-			localeDateTimeFormat = zk.ie < 11 ? null : new Intl.DateTimeFormat(localizedSymbols.LAN_TAG, {year: 'numeric'}),
+			date = val._moment.toDate(),
+			localeDateTimeFormat = new Intl.DateTimeFormat(localizedSymbols.LAN_TAG, {year: 'numeric'}),
 			displayYear = this._getDisplayYear(date, localizedSymbols, localeDateTimeFormat),
 			yofs = y - (y % 10 + 1),
 			ydec = zk.parseInt(y / 100),
@@ -256,7 +256,7 @@ zul.db.Renderer = {
 			yofs = y - (y % 10 + 1),
 			minyear = wgt._minyear,
 			maxyear = wgt._maxyear,
-			localeDateTimeFormat = zk.ie < 11 ? null : new Intl.DateTimeFormat(localizedSymbols.LAN_TAG, {year: 'numeric'}),
+			localeDateTimeFormat = new Intl.DateTimeFormat(localizedSymbols.LAN_TAG, {year: 'numeric'}),
 			endYearLength = this._getPadYearLength(wgt, localizedSymbols, localeDateTimeFormat);
 		out.push('<table role="grid" class="', wgt.$s('body'), ' ', wgt.$s('year'), '" id="', uuid, '-mid"',
 				zUtl.cellps0, '><tbody>');
@@ -296,7 +296,7 @@ zul.db.Renderer = {
 			maxyear = wgt._maxyear,
 			mindec = zk.parseInt(minyear / 10) * 10,
 			maxdec = zk.parseInt(maxyear / 10) * 10,
-			localeDateTimeFormat = zk.ie < 11 ? null : new Intl.DateTimeFormat(localizedSymbols.LAN_TAG, {year: 'numeric'}),
+			localeDateTimeFormat = new Intl.DateTimeFormat(localizedSymbols.LAN_TAG, {year: 'numeric'}),
 			endYearLength = this._getPadYearLength(wgt, localizedSymbols, localeDateTimeFormat);
 
 
@@ -887,12 +887,6 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			if (this._view != view) {
 				this._view = view;
 
-				// ie9 and early won't support css3 transition
-				if (zk.ie < 10) {
-					this.rerender(-1);
-					this.focus();
-					return;
-				}
 				var out = new zk.Buffer(),
 					localizedSymbols = this.getLocalizedSymbols();
 

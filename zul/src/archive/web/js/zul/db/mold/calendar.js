@@ -18,7 +18,7 @@ function (out) {
 	var renderer = zul.db.Renderer,
 		uuid = this.uuid,
 		view = this._view, 
-		tagnm = zk.ie < 11 ? 'a' : 'button',
+		tagnm = 'button',
 		localizedSymbols = this.getLocalizedSymbols(),
 		icon = this.$s('icon'),
 		outRangeL = this.isOutOfRange(true) ? ' disabled="disabled" aria-disabled="true"' : '',

@@ -505,10 +505,10 @@ jq(function () {
 			_useSKU = false;
 		else {
 			_callback = zk.webkit || zk.opera;
-			_useSKU = !_callback || zk.ie; // ZK-1748 should include all ie
+			_useSKU = !_callback;
 		}
 	} else if (_useSKU == null)
-		_useSKU = zk.ie; // ZK-1748 should include all ie
+		_useSKU = false;
 
 	//if (_callback) { all browser should support autohide
 		var w2hide = function (name): void {

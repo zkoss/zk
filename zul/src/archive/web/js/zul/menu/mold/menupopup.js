@@ -14,7 +14,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 function (out) {
 	var uuid = this.uuid,
-		tags = zk.ie < 11 ? 'a' : 'button';
+		tags = 'button';
 	out.push('<div', this.domAttrs_(), ' role="menu"><', tags, ' id="', uuid,
 			'-a" tabindex="-1" onclick="return false;" href="javascript:;"',
 			' class="z-focus-a" aria-hidden="true"></',

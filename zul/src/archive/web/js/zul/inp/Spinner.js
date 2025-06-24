@@ -156,12 +156,7 @@ zul.inp.Spinner = zk.$extends(zul.inp.NumberInputWidget, {
 		this._onChanging();
 		this._stopAutoIncProc();
 
-		var inp = this.getInputNode();
-		if (zk.ie < 11) {
-			var len = inp.value.length;
-			zk(inp).setSelectionRange(len, len);
-		}
-		inp.focus();
+		this.getInputNode().focus();
 	},
 	_increase: function (is_add) {
 		var inp = this.getInputNode(),

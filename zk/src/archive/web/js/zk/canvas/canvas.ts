@@ -21,7 +21,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 //zk.$package('zk.canvas');
 
 (function () {
-	var _init = (zk.ie && zk.ie < 11) ? function (el) {window['G_vmlCanvasManager'].initElement(el);} : zk.$void;
+	var _init = zk.$void;
 
 /** @class zk.canvas.Canvas
  * Utilities to create and manipulate the canvas element.

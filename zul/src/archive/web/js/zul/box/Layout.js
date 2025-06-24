@@ -346,8 +346,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 		while (vflexs.length > 1) {
 			var cwgt = vflexs.shift(),
 				vsz = (vert ? (cwgt._nvflex * hgh / vflexsz) : hgh) | 0, //cast to integer
-				offtop = cwgt.$n().offsetTop,
-				isz = vsz - ((zk.ie < 11 && offtop > 0) ? (offtop * 2) : 0),
+				isz = vsz,
 				chdex = cwgt.$n('chdex'),
 				minus = zk(chdex).padBorderHeight();
 
@@ -362,8 +361,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 		//last one with vflex
 		if (vflexs.length) {
 			var cwgt = vflexs.shift(),
-				offtop = cwgt.$n().offsetTop,
-				isz = lastsz - ((zk.ie < 11 && offtop > 0) ? (offtop * 2) : 0),
+				isz = lastsz,
 				chdex = cwgt.$n('chdex'),
 				minus = zk(chdex).padBorderHeight();
 
@@ -455,10 +453,6 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 						total += w.offsetWidth;
 				}
 
-				// IE9+ bug ZK-483
-				if ((zk.ie > 8) && this._hflexsz)
-					total = Math.max(this._hflexsz, total);
-
 				n.style.width = jq.px0(total);
 			} else {
 				var max = 0;
@@ -467,10 +461,6 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 					if (wd > max)
 						max = wd;
 				}
-
-				// IE9+ bug ZK-483
-				if ((zk.ie > 8) && this._hflexsz)
-					max = Math.max(this._hflexsz, max);
 
 				n.style.width = jq.px0(max);
 			}

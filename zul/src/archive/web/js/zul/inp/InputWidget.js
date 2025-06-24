@@ -17,19 +17,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 //zk.$package('zul.inp');
 
 (function () {
-	var _keyIgnorable = zk.ie < 11 ? function () {return true;} :
-		zk.opera ? function (code) {
+	var _keyIgnorable = zk.opera ? function (code) {
 			return code == 32 || code > 46; //DEL
 		} : function (code) {
 			return code >= 32;
 		},
 
-		_fixInput = zk.ie ? function (wgt) { //ZK-426; ZK-3237: IE 11 also have this problem
-			setTimeout(function () { //we have to delay since zk.currentFocus might not be ready
-				if (wgt == zk.currentFocus)
-					zjq.fixInput(wgt.getInputNode());
-			}, 0);
-		} : zk.$void,
+		_fixInput = zk.$void,
 		windowX = 0,
 		windowY = 0;
 
@@ -714,7 +708,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		if (zk.mac && evt.metaKey)
 			return;
 		else {
-			var code = (zk.ie < 11 || zk.opera) ? evt.keyCode : evt.charCode;
+			var code = zk.opera ? evt.keyCode : evt.charCode;
 			if (!evt.altKey && !evt.ctrlKey && _keyIgnorable(code) && keys.indexOf(String.fromCharCode(code)) < 0) {
 				evt.stop();
 				return true;
@@ -812,9 +806,6 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 
 	//super//
 	focus_: function (timeout) {
-		// ZK-2020: should give timeout for ie11
-		if (zk.ie11_ && !timeout)
-			timeout = 0;
 		zk(this.getInputNode()).focus(timeout);
 		return true;
 	},
@@ -843,15 +834,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			.domListen_(n, 'onSelect')
 			.domListen_(n, 'onMouseOver')
 			.domListen_(n, 'onMouseOut');
-		//prevent unexpected onInput bug in IE10 and IE11, see https://connect.microsoft.com/IE/feedback/details/816137
-		if (zk.ie10_ || zk.ie11_) {
-			var self = this;
-			setTimeout(function () {
-				self.domListen_(self.getInputNode(), 'onInput', 'doInput_');
-			}, 100);
-		} else {
-			this.domListen_(n, 'onInput', 'doInput_');
-		}
+		this.domListen_(n, 'onInput', 'doInput_');
 
 		if (zk.ios)
 			this.domListen_(n, 'onTouchStart', '_doTouch');
