@@ -2,8 +2,10 @@ ZK 9.6.6
 * Features
 
 * Bugs
+  ZK-5729: JNDI-Injection detected in JndiVariableResolver.java
 
 * Upgrade Notes
+  + Remove JndiVariableResolver.java to fix ZK-5729
 
    --------
 ZK 9.6.5
