@@ -14,7 +14,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 package org.zkoss.zk.ui.http;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
@@ -27,8 +26,6 @@ import java.util.Calendar;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
@@ -201,10 +198,8 @@ public class Wpds {
 	 * @return the timezone database version
 	 */
 	private static String extractJarBuildInClientTZDBVersion() {
-		try {
-			JarFile jar = new JarFile(new File(Wpds.class.getProtectionDomain().getCodeSource().getLocation().toURI()));
-			JarEntry jarEntry = jar.getJarEntry("web/js/zk/ext/moment-timezone-with-data.src.js");
-			try (InputStream is = jar.getInputStream(jarEntry)) {
+		try (InputStream is = Wpds.class.getClassLoader().getResourceAsStream("web/js/zk/ext/moment-timezone-with-data.src.js")) {
+			if (is != null) {
 				byte[] bytes = Files.readAll(is);
 				if (bytes.length > 0) {
 					String jsFileContent = new String(bytes, StandardCharsets.UTF_8).replace(" ", "");
@@ -225,8 +220,8 @@ public class Wpds {
 					return getClientTZDBVersionFromJSONString(jsFileContent.substring(targetJsonStartIndex, targetJsonEndIndex + 1));
 				}
 			}
-		} catch (Exception e) {
-			log.warn("Error extracting moment-timezone-with-data.src.js timezone database version from jar file.", e);
+		} catch (IOException e) {
+			log.warn("Cannot extracting moment-timezone-with-data.src.js timezone database version from zk jar.");
 		}
 		return null;
 	}

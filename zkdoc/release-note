@@ -2,6 +2,7 @@ ZK 10.2.1
 * Features
 
 * Bugs
+  ZK-5969: Error extracting moment-timezone-with-data.src.js timezone database version from jar file
 
 * Upgrade Notes
 
