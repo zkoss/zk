@@ -223,7 +223,7 @@ public class Wpds {
 		} catch (IOException e) {
 			log.warn("Cannot extracting moment-timezone-with-data.src.js timezone database version from zk jar.");
 		}
-		return null;
+		return "unknown";
 	}
 
 	/**
