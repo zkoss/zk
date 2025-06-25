@@ -3,6 +3,7 @@ ZK 10.2.1
 
 * Bugs
   ZK-5969: Error extracting moment-timezone-with-data.src.js timezone database version from jar file
+  ZK-5968: cannot invoke "String.equals(Object)" because "org.zkoss.zk.ui.http.Wpds._currentClientTZDBVersion" is null
 
 * Upgrade Notes
 
