@@ -17,25 +17,23 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import org.zkoss.lang.Library;
-import org.zkoss.test.webdriver.WebDriverTestCase;
-import org.zkoss.zk.ui.http.Wpds;
+import org.zkoss.zk.au.http.TimeZoneDataBaseVersionChecker;
 
-public class F102_ZK_5640_3Test extends WebDriverTestCase {
+public class F102_ZK_5640_3Test extends F102_ZK_5640Test {
 
     @BeforeAll
-    public static void beforeAll() {
+    public static void beforeAll() throws Exception {
         Library.setProperty("org.zkoss.zk.moment.timezone.path", "/test2/data/2017a.json");
+        beforeAll0();
     }
 
     @AfterAll
-    public static void afterAll() {
+    public static void afterAll0() {
         Library.setProperty("org.zkoss.zk.moment.timezone.path", null);
     }
 
     @Test
     public void test() {
-        connect("/test2/F102-ZK-5640.zul");
-        waitResponse();
-        Assertions.assertEquals("2017a", Wpds.getClientTimeZoneDataBaseVersion());
+        Assertions.assertEquals("2017a", TimeZoneDataBaseVersionChecker.getClientTimeZoneDataBaseVersion());
     }
 }

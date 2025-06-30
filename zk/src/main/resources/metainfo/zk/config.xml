@@ -65,6 +65,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
         <value>org.zkoss.zul.NoDOM</value>
     </library-property>
 
+	<!-- ZK-5640 -->
+	<listener>
+		<listener-class>org.zkoss.zk.au.http.TimeZoneDataBaseVersionChecker</listener-class>
+	</listener>
+
 	<!-- ZK-4914 -->
 	<library-property>
 		<name>org.zkoss.ui.script.ScriptErrorListener.class</name>
