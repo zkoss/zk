@@ -16,33 +16,24 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.util.logging.Logger;
-
 public class F102_ZK_5640_2Test extends F102_ZK_5640Test {
 
     @BeforeAll
-    public static void beforeAll() {
-        beforeAll0("test");
+    public static void beforeAll() throws Exception {
+        createTempTZDBFileAndApplyToLibraryProperty("test");
+        beforeAll0();
     }
 
     @AfterAll
-    public static void afterAll() {
+    public static void afterAll() throws Exception {
         afterAll0();
     }
 
     @Test
     public void test() { // test different version
-        Logger logger = Logger.getLogger("org.zkoss.zk.ui.http.Wpds");
-        TestLogHandler handler = new TestLogHandler();
-        logger.addHandler(handler);
-
-        connect("/test2/F102-ZK-5640.zul");
-        waitResponse();
-
         StringBuilder sb = new StringBuilder();
-        for (String log : handler.getLogs())
+        for (String log : _handler.getLogs())
             sb.append(log);
-
         // if 2 version are the different, should log warning
         Assertions.assertEquals(getDifferentVersionExpectResult(), sb.toString());
     }
