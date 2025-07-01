@@ -4,6 +4,8 @@ ZK 10.3.0
 * Bugs
   ZK-5969: Error extracting moment-timezone-with-data.src.js timezone database version from jar file
   ZK-5968: cannot invoke "String.equals(Object)" because "org.zkoss.zk.ui.http.Wpds._currentClientTZDBVersion" is null
+  ZK-5973: Apache Commons FileUpload DoS Vulnerability
+  ZK-5972: Suppress false-positive scanner alerts in PE/EE
 
 * Upgrade Notes
 
