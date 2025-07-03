@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B96-ZK-5766-2.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		2024/10/11, Created by jumperchen
+
+Copyright (C) 2024 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div>
+		server name <textbox id="tb" value='#" onClick=&apos;alert("XSS")&apos;'/>
+		<menubar>
+			<menuitem label="test" href='http://${tb.value}'/>
+		</menubar>
+		<style src="http://${tb.value}">
+		</style>
+		<imagemap>
+			<area coords="${tb.value}" />
+		</imagemap>
+		<checkbox name="${tb.value}" />
+		<iframe name="${tb.value}" />
+		<grid>
+			<rows>
+				<row align="${tb.value}" />
+			</rows>
+		</grid>
+		<a target="${tb.value}">foo</a>
+	</div>
+</zk>
