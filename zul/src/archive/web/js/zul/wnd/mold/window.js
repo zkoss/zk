@@ -16,8 +16,8 @@ function (out, skipper) {
 	var uuid = this.uuid,
 		title = this.getTitle(),
 		caption = this.caption,
-		contentStyle = this.getContentStyle(),
-		contentSclass = this.getContentSclass(),
+		contentStyleHTML = zUtl.encodeXML(this.getContentStyle()),
+		contentSclassHTML = zUtl.encodeXML(this.getContentSclass()),
 		tabi = this._tabindex,
 		btnRenderer = zul.wgt.ButtonRenderer;
 
@@ -44,17 +44,17 @@ function (out, skipper) {
 	} 
 	out.push('<div id="', uuid, '-cave" class="');
 	
-	if (contentSclass)
-		out.push(contentSclass, ' ');
+	if (contentSclassHTML)
+		out.push(contentSclassHTML, ' ');
 	out.push(this.$s('content'), '" ');
 	
-	if (contentStyle)
-		out.push(' style="', contentStyle, '"');
+	if (contentStyleHTML)
+		out.push(' style="', contentStyleHTML, '"');
 	out.push('>');
 
 	if (!skipper)
 		for (var w = this.firstChild; w; w = w.nextSibling)
-			if (w != caption)
+			if (w !== caption)
 				w.redraw(out);
 	out.push('</div></div>');
 }

@@ -52,7 +52,7 @@ function (out) {
 	var hgh = this.getHeight(),
 		iOSNativeBar = zk.ios && this._nativebar;
 	if (hgh || iOSNativeBar)
-		out.push(' style="overflow:hidden;', hgh ? 'height:' + hgh + ';' : '', iOSNativeBar ? '-webkit-overflow-scrolling:touch;' : '', '"');
+		out.push(' style="overflow:hidden;', hgh ? 'height:' + zUtl.encodeXML(hgh) + ';' : '', iOSNativeBar ? '-webkit-overflow-scrolling:touch;' : '', '"');
 	out.push('>');
 	
 	if (this.domPad_ && !inPaging)

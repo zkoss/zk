@@ -407,7 +407,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			if (v > 0) html += ' cols="' + v + '"';
 		} else {
 			html += ' value="' + this._areaText() + '"';
-			html += ' type="' + this.getType() + '"';
+			html += ' type="' + zUtl.encodeXML(this.getType()) + '"';
 			v = this._cols;
 			if (v > 0) html += ' size="' + v + '"';
 			v = this._maxlength;
@@ -416,14 +416,14 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		v = this._tabindex;
 		if (v != undefined) html += ' tabindex="' + v + '"';
 		v = this._name;
-		if (v) html += ' name="' + v + '"';
+		if (v) html += ' name="' + zUtl.encodeXMLAttribute(v) + '"';
 		if (this._disabled) html += ' disabled="disabled"';
 		if (this._readonly) html += ' readonly="readonly"';
 		if (this._placeholder) html += ' placeholder="' + zUtl.encodeXML(this._placeholder) + '"';
 		if (this._inputAttributes) {
 			for (var key in this._inputAttributes) {
 				var val = this._inputAttributes[key];
-				html += (' ' + key + '="' + val + '"');
+				html += (' ' + key + '="' + zUtl.encodeXMLAttribute(val) + '"');
 			}
 		}
 

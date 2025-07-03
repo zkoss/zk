@@ -39,6 +39,6 @@ zul.wgt.Div = zk.$extends(zul.Widget, {
 	domAttrs_: function (no) {
 		var align = this._align,
 			attr = this.$supers('domAttrs_', arguments);
-		return align != null ? attr + ' align="' + align + '"' : attr;
+		return align != null ? attr + ' align="' + zUtl.encodeXML(align) + '"' : attr;
 	}
 });

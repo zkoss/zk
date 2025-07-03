@@ -180,7 +180,7 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 		else {
 			out.push('<td id="', child.uuid, '-chdextr"',
 				this._childAttrs(child, opts.index), ' tabindex="-1" role="gridcell"><div id="', child.uuid,
-				'-cell" class="', opts.zclass, '-content">');
+				'-cell" class="', zUtl.encodeXML(opts.zclass), '-content">');
 		}
 		child.redraw(out);
 		if (!isCell)
@@ -218,15 +218,15 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 		if (isDetail) {
 			var wd = child.getWidth();
 			if (wd)
-				style += 'width:' + wd + ';';
+				style += 'width:' + zUtl.encodeXMLAttribute(wd) + ';';
 		}
 		if (hgh || align || valign) {
 			if (hgh)
-				style += 'height:' + hgh + ';';
+				style += 'height:' + zUtl.encodeXMLAttribute(hgh) + ';';
 			if (align)
-				style += 'text-align:' + align + ';';
+				style += 'text-align:' + zUtl.encodeXMLAttribute(align) + ';';
 			if (valign)
-				style += 'vertical-align:' + valign + ';';
+				style += 'vertical-align:' + zUtl.encodeXMLAttribute(valign) + ';';
 		}
 		var clx = isDetail ? child.$s('outer') : this.$s('inner'),
 			attrs = '';

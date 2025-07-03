@@ -337,7 +337,7 @@ zul.db.Renderer = {
 			var tz = _getTimeZone(wgt);
 			val = new zk.fmt.Calendar().formatDate(zUtl.today(parent, tz), wgt.getFormat(), localizedSymbols);
 		}
-		out.push(val);
+		out.push(zUtl.encodeXML(val));
 	},
 	_getDisplayYear: function (date, localizedSymbols, localeDateTimeFormat, padLength) { // override
 		return date.getFullYear() + localizedSymbols.YDELTA + '';
@@ -902,7 +902,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 
 				out = []; // reset
 				Renderer.titleHTML(this, out, localizedSymbols);
-				jq(this.$n('title')).html(out.join(''));
+				jq(this.$n('title')).html(DOMPurify.sanitize(out.join('')));
 				jq(this.$n('mid')).transition({scale: 0}, 0).transition({scale: 1}, this.animationSpeed_());
 
 				_updateArrow(this);
@@ -963,7 +963,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 						self.domListen_(newMid, 'onClick', '_clickDate');
 						var out = []; // reset
 						Renderer.titleHTML(self, out, localizedSymbols);
-						jq(self.$n('title')).html(out.join(''));
+						jq(self.$n('title')).html(DOMPurify.sanitize(out.join('')));
 						self.clearCache();
 						todayBtn.css('display', '');
 					}
@@ -1097,7 +1097,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 								if (isSelectDisabled) {
 									$cell.addClass(disdClass);
 								}
-								$cell[0].innerHTML = Renderer.cellHTML(this, y, m + monofs, v, monofs);
+								$cell[0].innerHTML = DOMPurify.sanitize(Renderer.cellHTML(this, y, m + monofs, v, monofs));
 								$cell[0].setAttribute('aria-label', Renderer.cellAriaLabel(this, y, m + monofs, v, monofs, k));
 								$cell.data('value', v);
 							}

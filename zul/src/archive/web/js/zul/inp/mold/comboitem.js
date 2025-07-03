@@ -45,7 +45,7 @@ function (out) {
 		out.push('<br/><span class="', this.$s('inner'), '">',
 			zUtl.encodeXML(v), '</span>');
 	if (v = this._content)
-		out.push('<span class="', this.$s('content'), '">', v, '</span>');
+		out.push('<span class="', this.$s('content'), '">', DOMPurify.sanitize(v), '</span>');
 
 	out.push('</span></li>');
 }

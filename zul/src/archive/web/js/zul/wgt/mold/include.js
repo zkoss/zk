@@ -11,7 +11,7 @@ Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 
 */
 function (out) {
-	out.push('<', this._enclosingTag, this.domAttrs_(), '>');
+	out.push('<', zUtl.encodeXML(this._enclosingTag), this.domAttrs_(), '>');
 	for (var w = this.firstChild; w; w = w.nextSibling)
 		w.redraw(out);
 	if (this._comment)
@@ -20,5 +20,5 @@ function (out) {
 		out.push(w); //not: zk().detachChildren() is used
 	if (this._comment)
 		out.push('\n-->');
-	out.push('</', this._enclosingTag, '>');
+	out.push('</', zUtl.encodeXML(this._enclosingTag), '>');
 }

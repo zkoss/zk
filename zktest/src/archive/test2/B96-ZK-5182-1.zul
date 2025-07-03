@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B96-ZK-5182-1.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		2023/12/27, Created by jumperchen
+
+Copyright (C) 2023 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	If you can see any alert dialog, it is a bug.
+	<zscript><![CDATA[
+String script = "<div>test<script>alert('ComboboxXSS')</script></div>";
+String menu = "<div>test<script>alert('MenuXSS')</script></div>";
+String nav = "<div>test<script>alert('NavXSS')</script></div>";
+    ]]></zscript>
+	<combobox>
+		<comboitem label="test" content="${script}"/>
+	</combobox>
+	<menubar>
+		<menu label="test" content="${menu}"/>
+	</menubar>
+	<navbar>
+		<navitem label="test" content="${nav}"/>
+	</navbar>
+</zk>

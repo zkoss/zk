@@ -51,7 +51,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 				if (!_rerenderIfBothPaging(this)) {
 					var info = this.$n('info');
 					if (info) {
-						info.innerHTML = this.infoText_();
+						info.textContent = this.infoText_();
 					} else if (this._totalSize) {
 						this.rerender(); // recreate infoTag
 					}
@@ -245,7 +245,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 		var uuid = this.uuid,
 			nameOrId = _rerenderIfBothPaging(this) ? 'name' : 'id'; // Bug ZK-2280
 		out.push('<div ', nameOrId, '="', uuid, '-detail" class="', this.$s('info'), '"><span ',
-				nameOrId, '="', uuid, '-info" aria-hidden="true">', this.infoText_(), '</span></div>');
+			nameOrId, '="', uuid, '-info" aria-hidden="true">', DOMPurify.sanitize(this.infoText_()), '</span></div>');
 	},
 	_innerTags: function () {
 		var out = new zk.Buffer(),

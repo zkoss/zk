@@ -97,7 +97,7 @@ zul.wgt.Rating = zk.$extends(zul.Widget, {
 	domClass_: function (no) {
 		var sc = this.$supers('domClass_', arguments);
 		if (!no || !no.zclass) {
-			sc += ' ' + this.$s(this._orient);
+			sc += ' ' + this.$s(zUtl.encodeXML(this._orient));
 		}
 		return sc;
 	},

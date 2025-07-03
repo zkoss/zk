@@ -26,8 +26,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		_noChildCallback, _noParentCallback, //used by removeChild/appendChild/insertBefore
 		_syncdt, //timer ID to sync destkops
 		_rdque: zk.Widget[] = [], _rdtid: number | null, //async rerender's queue and timeout ID
-		_ignCanActivate, //whether canActivate always returns true
-		REGEX_DQUOT = /"/g; //jsdoc can't handle it correctly, so we have to put here
+		_ignCanActivate; //whether canActivate always returns true
 
 	//Check if el is a prolog
 	function _isProlog(el: Node | null): boolean {
@@ -2309,7 +2308,7 @@ out.push('</div>');
 		if (!this.deferRedraw_(out)) {
 			var f;
 			if (f = this.prolog)
-				out.push(f);
+				out.push(DOMPurify.sanitize(f)); // unlike Native and ZHTML, we should sanitize the html content here.
 
 			if ((f = this.$class.molds) && (f = f[this._mold]))
 				return f.apply(this, arguments);
@@ -2467,24 +2466,23 @@ redraw: function (out) {
 	domStyle_: function (no) {
 		var out = '', s;
 		if (s = this.z$display) //see au.js
-			out += 'display:' + s + ';';
+			out += 'display:' + zUtl.encodeXMLAttribute(s) + ';';
 		else if (!this.isVisible() && (!no || !no.visible))
 			out += 'display:none;';
 
 		if ((!no || !no.style) && (s = this.getStyle())) {
-			s = s.replace(REGEX_DQUOT, '\'');  // B50-ZK-647
-			out += s;
+			out += zUtl.encodeXMLAttribute(s);
 			if (s.charAt(s.length - 1) != ';')
 				out += ';';
 		}
 		if ((!no || !no.width) && (s = this.getWidth()))
-			out += 'width:' + s + ';';
+			out += 'width:' + zUtl.encodeXMLAttribute(s) + ';';
 		if ((!no || !no.height) && (s = this.getHeight()))
-			out += 'height:' + s + ';';
+			out += 'height:' + zUtl.encodeXMLAttribute(s) + ';';
 		if ((!no || !no.left) && (s = this.getLeft()))
-			out += 'left:' + s + ';';
+			out += 'left:' + zUtl.encodeXMLAttribute(s) + ';';
 		if ((!no || !no.top) && (s = this.getTop()))
-			out += 'top:' + s + ';';
+			out += 'top:' + zUtl.encodeXMLAttribute(s) + ';';
 		if ((!no || !no.zIndex) && (s = this.getZIndex()) >= 0)
 			out += 'z-index:' + s + ';';
 		return out;
@@ -2511,7 +2509,7 @@ redraw: function (out) {
 			s = this.getSclass();
 		if (!no || !no.zclass)
 			z = this.getZclass();
-		return s ? z ? s + ' ' + z : s : z || '';
+		return zUtl.encodeXMLAttribute(s ? z ? s + ' ' + z : s : z || '');
 	},
 	/** Returns the HTML attributes that is used to generate DOM element of this widget.
 	 * It is usually used to implement a mold ({@link #redraw}):
@@ -2607,7 +2605,7 @@ function () {
 	 */
 	domTextStyleAttr_: function () {
 		var s = this.getStyle();
-		return s ? zUtl.appendAttr('style', jq.filterTextStyle(s)) : s;
+		return s ? zUtl.appendAttr('style', jq.filterTextStyle(zUtl.encodeXMLAttribute(s))) : (s ?? '');
 	},
 
 	/** Replaces the specified DOM element with the HTML content generated this widget.
@@ -3009,7 +3007,7 @@ function () {
 		if (subclass) {
 			var subcls = this._subzcls[subclass];
 			if (!subcls) {
-				subcls = this._subzcls[subclass] = this.getZclass() + '-' + subclass;
+				subcls = this._subzcls[subclass] = zUtl.encodeXML(this.getZclass()) + '-' + subclass;
 			}
 			return subcls;
 		}
@@ -5497,7 +5495,7 @@ zk.Native = zk.$extends(zk.Widget, {
 				s = s.replace(postTag, this.domExtraAttrs_() + postTag);
 			}
 			// B65-ZK-1836 and B70-ZK-2622
-			out.push(zk.Native.replaceScriptContent(s.replace(/ sclass=/ig, ' class=')));
+			out.push(s.replace(/ sclass=/ig, ' class='));
 			if (this.value && s.startsWith('<textarea'))
 				out.push(this.value);
 		}
@@ -5581,10 +5579,10 @@ zk.Macro = zk.$extends(zk.Widget, {
 	 * @param Array out an array of HTML fragments (String).
 	 */
 	redraw: function (out) {
-		out.push('<', this._enclosingTag, this.domAttrs_(), '>');
+		out.push('<', zUtl.encodeXML(this._enclosingTag), this.domAttrs_(), '>');
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
-		out.push('</', this._enclosingTag, '>');
+		out.push('</', zUtl.encodeXML(this._enclosingTag), '>');
 	}
 });
 
@@ -5844,7 +5842,7 @@ zk.NoDOM = {
 			var context = this.$getInterceptorContext$();
 			this.$supers('bind_', context.args);
 			var node = this.$n('tmp'),
-				desc = this.getZclass() + ' ' + this.uuid,
+				desc = zUtl.encodeXML(this.getZclass() + ' ' + this.uuid),
 				startDesc = desc + ' start',
 				endDesc = desc + ' end';
 			if (node) {

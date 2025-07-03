@@ -1656,7 +1656,7 @@ jq(el).zk.center(); //same as 'center'
 				key = newStyle + txt;
 			if (!(result = _cache[key])) {
 				// ZK-2181: remove name attritube to prevent the radio has wrong status
-				_txtSizDiv.innerHTML = txt.replace(/name="[^"]*"/g, '');
+				_txtSizDiv.innerHTML = DOMPurify.sanitize(txt.replace(/name="[^"]*"/g, ''));
 				_txtSizDiv.style.cssText = _defaultStyle + newStyle;
 				_txtSizDiv.style.display = '';
 				result = _cache[key] = [_txtSizDiv.offsetWidth, _txtSizDiv.offsetHeight];

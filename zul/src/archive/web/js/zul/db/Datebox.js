@@ -605,10 +605,12 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		var timezones = this._dtzones;
 		if (timezones) {
 			out.push('<div class="', this.$s('timezone'), '">',
-					this.getTimeZoneLabel(),
+				DOMPurify.sanitize(this.getTimeZoneLabel()),
 					'<select id="', this.uuid, '-dtzones">');
-			for (var i = 0, len = timezones.length; i < len; i++)
-				out.push('<option value="', timezones[i], '">', timezones[i], '</option>');
+			for (var i = 0, len = timezones.length; i < len; i++) {
+				const timezoneHTML = zUtl.encodeXML(timezones[i]);
+				out.push('<option value="', timezoneHTML, '">', timezoneHTML, '</option>');
+			}
 			out.push('</select></div>');
 			// B50-ZK-577: Rendering Issue using Datebox with displayedTimeZones
 		}

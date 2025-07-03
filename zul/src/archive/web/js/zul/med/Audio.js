@@ -165,7 +165,7 @@ zul.med.Audio = zk.$extends(zul.Widget, {
 		if (this._autoplay)
 			attr += ' autoplay';
 		if (this._preload !== undefined)
-			attr += ' preload="' + this._preload + '"';
+			attr += ' preload="' + zUtl.encodeXML(this._preload) + '"';
 		if (this._controls)
 			attr += ' controls';
 		if (this._loop)

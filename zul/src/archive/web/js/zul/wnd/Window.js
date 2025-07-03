@@ -56,12 +56,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			zcls = wnd.getZclass();
 		_hideShadow(wnd);
 
-		jq(document.body).prepend(
+		jq(document.body).prepend(DOMPurify.sanitize(
 			'<div id="zk_wndghost" class="' + zcls + '-move-ghost" style="position:absolute;'
-			+ 'top:' + ofs[1] + 'px; left:' + ofs[0] + 'px;'
-			+ 'width:' + ($el.width() + zk(el).padBorderWidth()) + 'px;'
-			+ 'height:' + ($el.height() + zk(el).padBorderHeight()) + 'px;'
-			+ 'z-index:' + el.style.zIndex + '"><dl></dl></div>');
+			+ 'top:' + jq.px(ofs[1]) + '; left:' + jq.px(ofs[0]) + ';'
+			+ 'width:' + jq.px($el.width() + zk(el).padBorderWidth()) + ';'
+			+ 'height:' + jq.px($el.height() + zk(el).padBorderHeight()) + ';'
+			+ 'z-index:' + /*safe*/ el.style.zIndex + '"><dl></dl></div>'));
+
 		dg._wndoffs = ofs;
 		el.style.visibility = 'hidden';
 		var h = el.offsetHeight - wnd._titleHeight(el);
@@ -1344,12 +1345,12 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 		_hideShadow(wnd);
 		wnd.setTopmost();
 		var $el = jq(el);
-		jq(document.body).append(
+		jq(document.body).append(DOMPurify.sanitize(
 			'<div id="zk_ddghost" class="' + wnd.getZclass() + '-resize-faker"'
 			+ ' style="position:absolute;top:'
-			+ ofs[1] + 'px;left:' + ofs[0] + 'px;width:'
-			+ $el.zk.offsetWidth() + 'px;height:' + $el.zk.offsetHeight()
-			+ 'px;z-index:' + el.style.zIndex + '"><dl></dl></div>');
+			+ jq.px(ofs[1]) + ';left:' + jq.px(ofs[0]) + ';width:'
+			+ jq.px($el.zk.offsetWidth()) + ';height:' + jq.px($el.zk.offsetHeight())
+			+ ';z-index:' + el.style.zIndex + '"><dl></dl></div>'));
 		return jq('#zk_ddghost')[0];
 	},
 	_endghostsizing: function (dg, origin) {

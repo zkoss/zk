@@ -231,7 +231,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 			iconSclass = this.domIcon_();
 
 		if (img)
-			img = '<img src="' + img + '" class="' + this.$s('image') + '" align="absmiddle" alt="" aria-hidden="true" />'
+			img = img = '<img src="' + zUtl.encodeXMLAttribute(img) + '" class="' + this.$s('image') + '" align="absmiddle" alt="" aria-hidden="true" />'
 				+ (iconSclass ? ' ' + iconSclass : '');
 		else {
 			if (iconSclass) {

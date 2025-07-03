@@ -65,7 +65,7 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 					emptyContentDiv.addClass(emptyContentClz);
 				else
 					emptyContentDiv.removeClass(emptyContentClz);
-				emptyContentDiv.html(msg);
+				emptyContentDiv.text(msg);
 			}
 		}
 	},
@@ -180,7 +180,7 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 				'<div id="', this.uuid, '-empty-content"');
 		if (this._emptyMessage && this._emptyMessage.trim().length != 0)
 			out.push('class="', this.$s('emptybody-content'), '"');
-		out.push('>', this._emptyMessage, '</div></td></tr></tbody>');
+		out.push('>', zUtl.encodeXML(this._emptyMessage), '</div></td></tr></tbody>');
 	},
 	bind_: function (desktop, skipper, after) {
 		this.$supers(Grid, 'bind_', arguments);
