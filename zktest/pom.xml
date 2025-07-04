@@ -372,7 +372,7 @@
 		<dependency>
 			<groupId>com.deque.html.axe-core</groupId>
 			<artifactId>selenium</artifactId>
-			<version>4.7.0</version>
+			<version>4.10.0</version>
 			<scope>test</scope>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.easymock/easymock -->
