@@ -4,7 +4,7 @@
 version: "3"
 services:
   chrome:
-    image: selenium/node-chrome:138.0.7151.78-chromedriver-138.0.7151.78
+    image: selenium/node-chrome:137.0-chromedriver-137.0
     shm_size: 2gb
     depends_on:
       - hub
@@ -34,7 +34,7 @@ services:
   #      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
 
   hub:
-    image: selenium/hub:4.34.0-20240630
+    image: selenium/hub:4.33.0-20250606
     container_name: hub
     ports:
       - "4442:4442"
