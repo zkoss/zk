@@ -4,7 +4,7 @@
 version: "3"
 services:
   chrome:
-    image: selenium/node-chrome:137.0-chromedriver-137.0
+    image: selenium/node-chrome:4.6.0-20221104
     shm_size: 2gb
     depends_on:
       - hub
@@ -36,6 +36,7 @@ services:
   hub:
     image: selenium/hub:4.1.4-20220427
     container_name: hub
+    network_mode: "host"
     ports:
       - "4442:4442"
       - "4443:4443"
