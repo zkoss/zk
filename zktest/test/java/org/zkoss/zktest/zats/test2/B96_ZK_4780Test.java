@@ -17,12 +17,13 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.chrome.ChromeOptions;
 
+import org.zkoss.zktest.zats.DockerWebDriverTestCase;
 import org.zkoss.zktest.zats.WebDriverTestCase;
 
 /**
  * @author rudyhuang
  */
-public class B96_ZK_4780Test extends WebDriverTestCase {
+public class B96_ZK_4780Test extends DockerWebDriverTestCase {
 	@Override
 	protected ChromeOptions getWebDriverOptions() {
 		return super.getWebDriverOptions()

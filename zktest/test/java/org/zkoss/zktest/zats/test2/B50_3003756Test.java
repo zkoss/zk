@@ -17,12 +17,13 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.chrome.ChromeOptions;
 
+import org.zkoss.zktest.zats.DockerWebDriverTestCase;
 import org.zkoss.zktest.zats.WebDriverTestCase;
 
 /**
  * @author rudyhuang
  */
-public class B50_3003756Test extends WebDriverTestCase {
+public class B50_3003756Test extends DockerWebDriverTestCase {
 	private ThreadLocal<String> acceptLang = new ThreadLocal<>();
 
 	@Override
