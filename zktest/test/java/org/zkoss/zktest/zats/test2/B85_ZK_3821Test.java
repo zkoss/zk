@@ -28,7 +28,7 @@ import org.zkoss.zktest.zats.WebDriverTestCase;
  * @author rudyhuang
  */
 @NotThreadSafe
-public class B85_ZK_3821Test extends DockerWebDriverTestCase {
+public class B85_ZK_3821Test extends WebDriverTestCase {
 	@Override
 	protected ChromeOptions getWebDriverOptions() {
 		return super.getWebDriverOptions()
