@@ -336,13 +336,13 @@
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-java</artifactId>
-			<version>4.17.0</version>
+			<version>4.34.0</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
-			<artifactId>selenium-devtools-v121</artifactId>
-			<version>4.17.0</version>
+			<artifactId>selenium-devtools-v138</artifactId>
+			<version>4.34.0</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -354,7 +354,7 @@
 		<dependency>
 			<groupId>io.github.bonigarcia</groupId>
 			<artifactId>webdrivermanager</artifactId>
-			<version>5.6.3</version>
+			<version>6.1.0</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
