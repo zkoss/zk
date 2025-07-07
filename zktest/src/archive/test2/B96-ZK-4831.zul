@@ -22,7 +22,7 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 	<div id="div2" width="200px" height="200px" style="border: 1px solid black">div</div>
 	<zscript><![CDATA[
 		void setStyle() {
-			div1.setStyle("width: 200px; height:200px;background-image:url('http://localhost:8080/zktest/test2/img/icon_browser.png')");
+			div1.setStyle("width: 200px; height:200px;background-image:url('zktest/test2/img/icon_browser.png')");
 			div2.setStyle("width: 200px; height: 200px;background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==);");
 		}
 	]]></zscript>
