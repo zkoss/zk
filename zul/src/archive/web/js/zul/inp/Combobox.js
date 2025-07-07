@@ -489,13 +489,13 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 			msg = this._emptySearchMessage;
 		out.push('<div id="', uuid, '-pp" class="', this.$s('popup'),
 		// tabindex=0 to prevent a11y scrollable popup issue, see https://dequeuniversity.com/rules/axe/3.5/scrollable-region-focusable?application=AxeChrome
-		' ', this.getSclass(), '" style="display:none" tabindex="0">');
+		' ', zUtl.encodeXML(this.getSclass()), '" style="display:none" tabindex="0">');
 
 		// F85-ZK-3827: Combobox empty search message
 		if (msg) {
 			out.push('<div id="', uuid, '-emptySearchMessage" class="',
 			this.$s('emptySearchMessage'), ' ', this.$s('emptySearchMessage-hidden'),
-			'">', msg, '</div>');
+			'">', zUtl.encodeXML(msg), '</div>');
 		}
 
 		out.push('<ul id="', uuid, '-cave" class="', this.$s('content'), '" >');

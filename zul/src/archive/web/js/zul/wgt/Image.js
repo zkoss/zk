@@ -120,13 +120,13 @@ zul.wgt.Image = zk.$extends(zul.Widget, {
 	 * And, it also has to specify {content:true} when calling [[#domAttrs_]]
 	 */
 	contentAttrs_: function () {
-		var attr = ' src="' + (this._src || '') + '"', v;
+		var attr = ' src="' + zUtl.encodeXMLAttribute(this._src || '') + '"', v;
 		if (v = this._align)
-			attr += ' align="' + v + '"';
+			attr += ' align="' + zUtl.encodeXMLAttribute(v) + '"';
 		if (v = this._hspace)
-			attr += ' hspace="' + v + '"';
+			attr += ' hspace="' + zUtl.encodeXMLAttribute(v) + '"';
 		if (v = this._vspace)
-			attr += ' vspace="' + v + '"';
+			attr += ' vspace="' + zUtl.encodeXMLAttribute(v) + '"';
 		return attr;
 	}
 });

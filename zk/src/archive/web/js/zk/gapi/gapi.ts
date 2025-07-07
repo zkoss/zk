@@ -37,8 +37,12 @@ zk.gapi.loadAPIs = function (wgt, callback, msg, timeout) {
 		zk.gapi.waitUntil(wgt, opts);
 		if (!zk.gapi['LOADING']) { //avoid double loading Google Ajax APIs
 			zk.gapi['LOADING'] = true;
-			if (!opts['condition'])
-				zk.loadScript('http://www.google.com/jsapi?key=' + zk['googleAPIkey']);
+			if (!opts['condition']) {
+				let url = 'https://www.google.com/jsapi?key=' + zk['googleAPIkey'];
+				if (DOMPurify.isValidAttribute('a', 'href', url)) {
+					zk.loadScript(url);
+				}
+			}
 		}
 	} else
 		callback();

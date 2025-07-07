@@ -52,11 +52,11 @@ zul.mesh.Auxheader = zk.$extends(zul.mesh.HeaderWidget, {
 	},
 	//super//
 	domAttrs_: function () {
-		var s = this.$supers('domAttrs_', arguments), v;
-		if ((v = this._colspan) != 1)
-			s += ' colspan="' + v + '"';
-		if ((v = this._rowspan) != 1)
-			s += ' rowspan="' + v + '"';
+		var s = this.$supers('domAttrs_', arguments);
+		if (this._colspan != 1)
+			s += ` colspan="${zUtl.encodeXMLAttribute(this._colspan)}"`;
+		if (this._rowspan != 1)
+			s += ` rowspan="${zUtl.encodeXMLAttribute(this._rowspan)}"`;
 		return s;
 	}
 });

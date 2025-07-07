@@ -69,9 +69,9 @@ zul.wgt.Imagemap = zk.$extends(zul.wgt.Image, {
 		if (w || h) { // B50-ZK-478
 			attr += ' style="';
 			if (w)
-				attr += 'width:' + w + ';';
+				attr += 'width:' + zUtl.encodeXMLAttribute(w) + ';';
 			if (h)
-				attr += 'height:' + h + ';';
+				attr += 'height:' + zUtl.encodeXMLAttribute(h) + ';';
 			attr += '"';
 		}
 		return attr + (this.firstChild ? ' usemap="#' + this.uuid + '-map"' :

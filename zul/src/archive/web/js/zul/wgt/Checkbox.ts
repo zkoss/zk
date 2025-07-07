@@ -226,19 +226,20 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 		return true;
 	},
 	contentAttrs_() {
-		var html = '',
-			v: string; // cannot use this._name for radio
-		if (v = this.getName())
-			html += ` name="${v}"`;
+		const out: string[] = [],
+			name = this.getName(); // cannot use this._name for radio
+		if (name)
+			out.push(`name="${zUtl.encodeXMLAttribute(name)}"`);
 		if (this._disabled)
-			html += ' disabled="disabled"';
+			out.push('disabled="disabled"');
 		if (this._checked)
-			html += ' checked="checked"';
-		if (v = this._tabindex)
-			html += ` tabindex="${v}"`;
-		if (v = this.getValue())
-			html += ` value="${v}"`;
-		return html;
+			out.push('checked="checked"');
+		if (this._tabindex)
+			out.push(`tabindex="${this._tabindex}"`);
+		const value = this.getValue();
+		if (value)
+			out.push(`value="${zUtl.encodeXMLAttribute(value)}"`);
+		return out.join(' ');
 	},
 	_moldA11yAttrs() {
 		return '';

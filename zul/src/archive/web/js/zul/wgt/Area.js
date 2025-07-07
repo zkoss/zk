@@ -70,9 +70,9 @@ zul.wgt.Area = zk.$extends(zk.Widget, {
 		var attr = this.$supers('domAttrs_', arguments)
 			+ ' href="javascript:;"', v;
 		if (v = this._coords)
-			attr += ' coords="' + v + '"';
+			attr += ' coords="' + zUtl.encodeXMLAttribute(v) + '"';
 		if (v = this._shape)
-			attr += ' shape="' + v + '"';
+			attr += ' shape="' + zUtl.encodeXMLAttribute(v) + '"';
 		return attr;
 	}
 });

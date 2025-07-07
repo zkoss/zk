@@ -71,7 +71,7 @@ zul.wgt.A = zk.$extends(zul.LabelImageWidget, {
 		 */
 		dir: function (this: zk.Widget) {
 			var n = this.$n();
-			if (n) n.innerHTML = this.domContent_();
+			if (n) n.innerHTML = DOMPurify.sanitize(this.domContent_());
 		},
 		/** Returns the href that the browser shall jump to, if an user clicks
 		 * this button.

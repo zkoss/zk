@@ -26,7 +26,7 @@ function (out) {
 
 	if (this.isOverflowPopup()) {
 		out.push('<i id="', uuid, '-overflowpopup-button"',
-				' class="', this._getOverflowPopupBtnClass(), '" aria-hidden="true"></i>');
+			' class="', zUtl.encodeXML(this._getOverflowPopupBtnClass()), '" aria-hidden="true"></i>');
 		out.push('<div id="', uuid, '-pp" class="', this.$s('popup'), ' ', this.$s('popup-close'), '"></div>');
 	}
 	out.push('<div class="z-clear" aria-hidden="true"></div></div>');

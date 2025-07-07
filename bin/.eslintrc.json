@@ -26,6 +26,7 @@
     "Dates": "readonly",
     "DateImpl": "readonly",
     "WeakMap": "readonly",
+    "DOMPurify": "readonly",
     // packages
     "zk": "writable",
     "zhtml": "writable",

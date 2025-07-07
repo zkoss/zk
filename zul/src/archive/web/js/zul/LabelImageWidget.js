@@ -90,7 +90,7 @@ zul.LabelImageWidget = zk.$extends(zul.Widget, {
 	 */
 	domImage_: function () {
 		var img = this._image;
-		return img ? '<img src="' + img + '" align="absmiddle" alt="" aria-hidden="true">' : '';
+		return img ? '<img src="' + zUtl.encodeXMLAttribute(img) + '" align="absmiddle" alt="" aria-hidden="true">' : '';
 	},
 	/**
 	 * Returns the icon font class name with HTML content.
@@ -109,12 +109,12 @@ zul.LabelImageWidget = zk.$extends(zul.Widget, {
 				for (var i = 0; i < length; i++) {
 					var ic = icons[i];
 					if (ic)
-						arr.push('<i class="' + ic + '"></i>');
+						arr.push('<i class="' + zUtl.encodeXMLAttribute(ic) + '"></i>');
 				}
 				arr.push('</span>');
 				result = arr.join('');
 			} else {
-				result = '<i class="' + icon + '" aria-hidden="true"></i>';
+				result = '<i class="' + zUtl.encodeXMLAttribute(icon) + '" aria-hidden="true"></i>';
 			}
 		}
 		return result;

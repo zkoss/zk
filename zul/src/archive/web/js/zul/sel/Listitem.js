@@ -100,8 +100,11 @@ zul.sel.Listitem = zk.$extends(zul.sel.ItemWidget, {
 	domClass_: function () {
 		var cls = this.$supers('domClass_', arguments),
 			list = this.getListbox();
-		if (list && jq(this.$n()).hasClass(list = list.getOddRowSclass()))
-			return cls + ' ' + list;
+		if (list) {
+			var sclass = zUtl.encodeXML(list.getOddRowSclass());
+			if (jq(this.$n()).hasClass(sclass))
+				return cls + ' ' + sclass;
+		}
 		return cls;
 	},
 	replaceWidget: function (newwgt) {

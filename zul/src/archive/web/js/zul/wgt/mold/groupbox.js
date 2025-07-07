@@ -28,7 +28,7 @@ function (out, skipper) {
 		else
 			out.push('<div id="', uuid,'-title" class="', this.$s('title'), 
 					'" role="none"><div id="', uuid,'-title-cnt" class="',
-					this.$s('title-content'), '" role="none">', title, '</div></div>');
+				this.$s('title-content'), '" role="none">', zUtl.encodeXML(title), '</div></div>');
 		out.push('</div>');
 	}
 	

@@ -40,7 +40,7 @@ zul.wgt.Caption = zk.$extends(zul.LabelImageWidget, {
 		if (!img && !iconSclass) return label;
 
 		if (!img) img = iconSclass;
-		else img = '<img id="' + this.uuid + '-img" src="' + img + '" class="' + this.$s('image') + '" alt="" aria-hidden="true" />' + (iconSclass ? ' ' + iconSclass : '');
+		else img = '<img id="' + this.uuid + '-img" src="' + zUtl.encodeXMLAttribute(img) + '" class="' + this.$s('image') + '" alt="" aria-hidden="true" />' + (iconSclass ? ' ' + /*safe*/ iconSclass : '');
 		return label ? img + ' ' + '<span class="' + this.$s('label') + '">' + label + '</span>' : img;
 	},
 	updateDomContent_: function () {

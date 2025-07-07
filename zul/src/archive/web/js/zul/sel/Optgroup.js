@@ -70,7 +70,7 @@ zul.sel.Optgroup = zk.$extends(zul.Widget, {
 			label = this.getLabel(),
 			disabled = this.isDisabled();
 		if (label)
-			attr += ' label="' + label + '"';
+			attr += ' label="' + zUtl.encodeXML(label) + '"';
 		if (disabled)
 			attr += ' disabled="disabled"';
 		return attr;
