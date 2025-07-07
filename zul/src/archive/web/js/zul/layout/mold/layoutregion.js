@@ -65,11 +65,11 @@ function (out) {
 			'</span></div>', '<div id="', uuid, '-colled" class="',
 				this.$s('collapsed'), '" style="display:none"');
 		var title = this._title;
-		if (title) out.push(' title="', title, '"');
+		if (title) out.push(' title="', zUtl.encodeXML(title), '"');
 		out.push(' role="button" tabindex="0" aria-expanded="false"><i id="', uuid, '-btned" class="', parent.$s('icon'), ' ', this.getIconClass_(true), '"');
 		if (!this._collapsible || !this._closable)
 			out.push(' style="display:none;"');
-		out.push('></i><div id="', this.uuid, '-title" class="', this.$s('title'), '">', this._title, '</div></div>');
+		out.push('></i><div id="', this.uuid, '-title" class="', this.$s('title'), '">', zUtl.encodeXML(this._title), '</div></div>');
 	}
 	out.push('</div>');
 }

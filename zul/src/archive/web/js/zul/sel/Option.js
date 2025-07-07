@@ -109,7 +109,7 @@ zul.sel.Option = zk.$extends(zul.Widget, {
 	},
 	updateLabel_: function () {
 		var n = this.$n();
-		if (n) jq(n).html(this.domLabel_());
+		if (n) n.innerHTML = DOMPurify.sanitize(this.domLabel_());
 	},
 	/** Returns the maximal length of each item's label.
 	 * It is a shortcut of {@link Select#getMaxlength}.

@@ -115,10 +115,10 @@ zul.utl.Iframe = zk.$extends(zul.Widget, {
 		v = this._scrolling;
 		if ('auto' != v)
 			attr += ' scrolling="' + ('true' === v ? 'yes' : 'false' === v ? 'no' : v) + '"';
-		if (v = this._align)
-			attr += ' align="' + v + '"';
-		if (v = this._name)
-			attr += ' name="' + v + '"';
+		if ((v = this._align))
+			attr += ' align="' + zUtl.encodeXMLAttribute(v) + '"';
+		if ((v = this._name))
+			attr += ' name="' + zUtl.encodeXMLAttribute(v) + '"';
 		if (v = this._autohide)
 			attr += ' z_autohide="' + v + '"';
 		return attr;

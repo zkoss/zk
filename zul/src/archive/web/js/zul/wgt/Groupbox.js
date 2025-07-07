@@ -105,11 +105,11 @@ zul.wgt.Groupbox = zk.$extends(zul.ContainerWidget, {
 
 		s = this._contentStyle;
 		if (this.caption || this.getTitle()) // B60-ZK-987
-			s = 'border-top:0;' + (s || '');
+			s = 'border-top:0;' + (zUtl.encodeXMLAttribute(s) || '');
 		if (!this._open)
-			s = 'display:none;' + (s || '');
+			s = 'display:none;' + (zUtl.encodeXMLAttribute(s) || '');
 		if (s)
-			html += ' style="' + s + '"';
+			html += ' style="' + zUtl.encodeXMLAttribute(s) + '"';
 		return html;
 	},
 	_redrawCave: function (out, skipper) { //reserve for customizing

@@ -164,7 +164,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		iconSclass = this.domIcon_();
 
 		if (img)
-			img = '<img id="' + this.uuid + '-img" src="' + img + '" class="' + this.$s('image') + '" align="absmiddle" alt="" aria-hidden="true" />'
+			img = img = '<img id="' + this.uuid + '-img" src="' + zUtl.encodeXMLAttribute(img) + '" class="' + this.$s('image') + '" align="absmiddle" alt="" aria-hidden="true" />'
 				+ (iconSclass ? ' ' + iconSclass : '');
 		else {
 			if (iconSclass) {
@@ -542,7 +542,7 @@ zul.menu.ContentHandler = zk.$extends(zk.Object, {
 		var wgt = this._wgt;
 
 		out.push('<div id="', wgt.uuid, '-cnt-pp" class="', wgt.$s('content-popup'),
-			'" style=""><div class="', wgt.$s('content-body'), '">', this._content, '</div></div>');
+			'" style=""><div class="', wgt.$s('content-body'), '">', DOMPurify.sanitize(this._content), '</div></div>');
 	},
 	bind: function () {
 		var wgt = this._wgt;

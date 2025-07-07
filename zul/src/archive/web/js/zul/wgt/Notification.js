@@ -46,7 +46,7 @@ zul.wgt.Notification = zk.$extends(zul.wgt.Popup, {
 			out.push('<div id="', uuid, '-p" class="', this.$s('pointer'), '"></div>');
 		out.push('<i id="', uuid, '-icon" class="', icon, ' ', (_iconMap[this._type]), '"></i>');
 		out.push('<div id="', uuid, '-cave" class="', this.$s('content'), '">',
-				this._msg, '</div>');
+			DOMPurify.sanitize(this._msg), '</div>');
 		if (this._closable)
 			out.push('<div id="', uuid, '-cls" class="', this.$s('close'),
 					'"><i id="', uuid, '-clsIcon" class="', icon, ' z-icon-times"></i></div>');

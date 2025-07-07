@@ -17,7 +17,7 @@ function (out) {
 
 	out.push('<nav name="', uuid, '"', this.domAttrs_(), '>');
 	if (this.getMold() == "os") {
-		out.push(this._innerTags(), '</nav>');
+		out.push(DOMPurify.sanitize(this._innerTags()), '</nav>');
 		return;
 	}
 	

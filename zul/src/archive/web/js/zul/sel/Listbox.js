@@ -87,7 +87,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 					emptyContentDiv.addClass(emptyContentClz);
 				else
 					emptyContentDiv.removeClass(emptyContentClz);
-				emptyContentDiv.html(msg);
+				emptyContentDiv.text(msg);
 			}
 		}
 	},
@@ -420,7 +420,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 				'<div id="', this.uuid, '-empty-content"');
 		if (this._emptyMessage && this._emptyMessage.trim().length != 0)
 			out.push('class="', this.$s('emptybody-content'), '"');
-		out.push('>', this._emptyMessage, '</div></td></tr></tbody>');
+		out.push('>', zUtl.encodeXML(this._emptyMessage), '</div></td></tr></tbody>');
 	},
 	replaceChildHTML_: function (child, n, desktop, skipper, _trim_) {
 		if (child._renderdefer) {
