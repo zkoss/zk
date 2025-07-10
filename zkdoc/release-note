@@ -10,6 +10,7 @@ ZK 9.6.6
   ZK-5182: Prevent XSS issue in component attributes
   ZK-5162: emptyMessage is not escaped with HTML characters
   ZK-5766: DomPurify fails with partial html content
+  ZK-5973: Apache Commons FileUpload DoS Vulnerability
 
 * Upgrade Notes
   + Remove JndiVariableResolver.java to fix ZK-5729
