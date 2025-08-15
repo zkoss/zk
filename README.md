@@ -1,16 +1,28 @@
 # [ZK](http://www.zkoss.org/) [![Build Status](https://github.com/zkoss/zk/workflows/zk-build/badge.svg)](https://github.com/zkoss/zk/actions?query=workflow%3Azk-build) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.zkoss.zk/zk/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.zkoss.zk/zk) [![Code Climate](https://codeclimate.com/github/zkoss/zk/badges/gpa.svg)](https://codeclimate.com/github/zkoss/zk)
-ZK is a highly productive Java framework for building amazing enterprise web
+ZK is a highly productive open source Java framework for building amazing enterprise web
 and mobile applications.
+
+When to Use ZK
+- Backend-heavy Java projects with minimal frontend skills
+- Enterprise apps requiring long-term stability
+- Data-intensive UIs with complex interaction
+- Quick prototypes for internal tools
+
+Why ZK
+- Simply Java: Ajax without Javascript
+- Rapid Development: build web applications 4-16 times faster
+- Enterprise-level Security: no risks of exposing business logic on the client-side
+- Innovative Technology: first Java MVVM, server-client fusion, web spreadsheet
 
 ## Resources
 
 ### Documentation
 
-* [Tutorial](http://books.zkoss.org/wiki/ZK_Getting_Started/Tutorial)
-* [ZK Essentials](http://books.zkoss.org/wiki/ZK_Essentials)
-* [ZK Developer's Reference](http://books.zkoss.org/wiki/ZK_Developer%27s_Reference)
+* [Tutorial](https://docs.zkoss.org/get_started/get_zk_up_and_running_with_mvc)
+* [ZK Essentials](https://docs.zkoss.org/zk_essentials/intro/overview)
+* [ZK Developer's Reference](https://docs.zkoss.org/zk_dev_ref/overture/overture)
 * [Javadoc API](http://www.zkoss.org/javadoc/latest/zk/)
-* [More](http://books.zkoss.org)
+* [More]([http://books.zkoss.org](https://www.zkoss.org/documentation))
 
 ### Download
 
