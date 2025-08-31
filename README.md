@@ -1,4 +1,4 @@
-# [ZK](http://www.zkoss.org/) [![Build Status](https://github.com/zkoss/zk/workflows/zk-build/badge.svg)](https://github.com/zkoss/zk/actions?query=workflow%3Azk-build) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.zkoss.zk/zk/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.zkoss.zk/zk)
+# [ZK](http://www.zkoss.org/) [![Release](https://img.shields.io/github/v/release/zkoss/zk)](https://github.com/zkoss/zk/releases) [![Build Status](https://github.com/zkoss/zk/workflows/zk-build/badge.svg)](https://github.com/zkoss/zk/actions?query=workflow%3Azk-build) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.zkoss.zk/zk/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.zkoss.zk/zk)
 
 ZK is a highly productive Java framework for building amazing enterprise web and mobile applications.
 
