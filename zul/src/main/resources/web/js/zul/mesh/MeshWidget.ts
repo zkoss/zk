@@ -1759,7 +1759,7 @@ export abstract class MeshWidget extends zul.Widget {
 		out.push('</colgroup>');
 	}
 
-	
+
 	/** @internal */
 	override onChildAdded_(child: zk.Widget): void {
 		super.onChildAdded_(child);
@@ -2404,7 +2404,7 @@ export abstract class MeshWidget extends zul.Widget {
 	static _getWidth(wgt: zk.Widget, width: string | undefined): string | undefined {
 		if (wgt.isVisible())
 			return width;
-		return this.WIDTH0;
+		return MeshWidget.WIDTH0;
 	}
 }
 
