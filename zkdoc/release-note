@@ -6,6 +6,7 @@ ZK 10.3.0
   ZK-5968: cannot invoke "String.equals(Object)" because "org.zkoss.zk.ui.http.Wpds._currentClientTZDBVersion" is null
   ZK-5973: Apache Commons FileUpload DoS Vulnerability
   ZK-5972: Suppress false-positive scanner alerts in PE/EE
+  ZK-5731: Nested detail receives onStripe when no fake node exists in ZK 10
 
 * Upgrade Notes
 
